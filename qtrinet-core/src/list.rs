@@ -99,6 +99,8 @@ pub struct BitmapSign {
     pub mask: Vec<u64>,        // 1 bit par poids
     pub signs: Vec<u64>,       // 1 bit par non-nul, dans l'ordre du bitmap
     pub n_events: usize,
+    /// index du premier bit de signe de chaque ligne (pour un décodage direct)
+    pub sign_pos: Vec<u32>,
 }
 
 impl BitmapSign {
@@ -109,7 +111,9 @@ impl BitmapSign {
         let mut cur = 0u64;
         let mut nbits = 0u32;
         let mut n_events = 0usize;
+        let mut sign_pos = Vec::with_capacity(n_rows + 1);
         for (i, &v) in levels.iter().enumerate() {
+            if i % n_cols == 0 { sign_pos.push(n_events as u32); }
             if v != 0 {
                 mask[i / 64] |= 1u64 << (i % 64);
                 if v > 0 { cur |= 1u64 << nbits; }
@@ -119,7 +123,8 @@ impl BitmapSign {
             }
         }
         if nbits > 0 { signs.push(cur); }
-        BitmapSign { n_rows, n_cols, mask, signs, n_events }
+        sign_pos.push(n_events as u32);
+        BitmapSign { n_rows, n_cols, mask, signs, n_events, sign_pos }
     }
 
     pub fn bits(&self) -> u64 {

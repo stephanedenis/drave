@@ -40,17 +40,31 @@ confirmation, en Rust et sur le vrai modèle, de l'analyse faite en Python.
 
 ### Débit du moteur d'événements (variable par construction)
 
-| Densité activations | Événements | G év/s | ms/appel |
-|---|---|---|---|
-| 0 % | 0 | — | 0,484 |
-| 5 % | 217 851 | 0,59 | 0,370 |
-| 25 % | 1 082 120 | 2,16 | 0,501 |
-| 100 % | 4 325 087 | **4,66** | 0,928 |
+| Densité | Événements | scoped (avant) | **pool (après)** | ms/appel | gain |
+|---|---|---|---|---|---|
+| 0 % | 0 | — | — | **0,049** | **×10** |
+| 1 % | 43 560 | 0,11 G év/s | **0,84** | 0,052 | ×7,5 |
+| 5 % | 217 851 | 0,54 | **2,95** | 0,074 | ×5,5 |
+| 10 % | 433 035 | 1,07 | **4,02** | 0,108 | ×3,8 |
+| 25 % | 1 082 120 | 2,31 | **4,91** | 0,220 | ×2,1 |
+| 50 % | 2 163 317 | 3,76 | **5,51** | 0,392 | ×1,5 |
+| 100 % | 4 325 087 | 5,77 | **5,80** | 0,746 | ×1,0 |
 
-- Le **nombre d'événements varie avec les activations** — c'est le débit variable cherché.
-- **Contrôle : listes vs dense → IDENTIQUE** (le moteur est exact).
-- Plancher de 0,48 ms à densité nulle : coût fixe du lancement des threads et de la
-  réduction. **Première optimisation à faire** (pool de threads persistant).
+- **Coût fixe : 0,484 ms → 0,049 ms** grâce au pool persistant (threads et
+  accumulateurs conservés entre les appels). Le gain est maximal là où il fallait :
+  **×8,5 en régime creux**, précisément le régime qui nous intéresse.
+- **Le débit varie de ×15** entre densité nulle (0,049 ms) et pleine (0,746 ms) —
+  c'est le débit variable cherché, mesuré.
+- **Pic : 5,80 G événements/s** (contre 4,66 avant), soit 75 % du banc C de
+  référence (7,79 G) qui utilisait des écarts à largeur fixe, pas des varints.
+- **Contrôle : pool OK | scoped OK | bitmap OK** — les trois chemins donnent le
+  même résultat.
+
+### Bitmap vs varint
+
+À 100 % de densité : bitmap 4,07 G év/s contre **5,80** pour les varints. Le chemin
+rapide « varint d'un octet » est très efficace quand la matrice est dense ; le
+bitmap garde l'avantage de la **taille** (1,99 b/poids contre 7,97).
 
 ### Exécution sans multiplieur
 
@@ -67,9 +81,11 @@ quelques ALM.
 
 ## Suite
 
-1. **Pool de threads persistant** — supprimer le plancher de 0,48 ms/appel.
-2. **Décodage SIMD** des varints et des bitmaps (objectif : 10 G év/s).
-3. **Vecteur d'activation creux explicite** — aujourd'hui on balaie les sources actives ;
-   la vraie cascade construira cette liste en amont.
-4. **Fusion des listes** (le « réseau de combinaison par destination ») : sortir du
-   varint quand le motif le permet.
+1. ~~Pool de threads persistant~~ ✅ fait (×10 sur le coût fixe).
+2. **Réduction incrémentale** : ne réduire que les sorties réellement touchées
+   (le plancher de 0,049 ms reste dominé par la réduction des 896 sorties × 16 threads).
+3. **Traitement par blocs de destination** : la dispersion scalaire plafonne vers
+   5,8 G év/s ; regrouper les événements d'une même plage de destinations
+   permettrait de vectoriser (AVX2 n'a ni gather ni scatter entiers).
+4. **Vecteur d'activation creux explicite** — la vraie cascade le construira en amont.
+5. **Fusion de listes** par compartiments de destination.

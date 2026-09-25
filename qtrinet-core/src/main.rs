@@ -12,7 +12,7 @@ mod engine;
 mod gguf;
 mod list;
 
-use engine::{accumulate_lists, matvec_dense, matvec_shift_add};
+use engine::{accumulate_scoped, matvec_dense, matvec_shift_add, Pool};
 use gguf::Gguf;
 use list::{dense_bits, BitmapSign, SignedDelta, SparseK};
 use std::time::Instant;
@@ -92,57 +92,62 @@ fn main() {
     let n_cols = t.dims[1] as usize;   // sorties
     let n = n_rows * n_cols;
 
-    // matrice ternaire (signes) pour comparer listes et dense à résultat égal
     let tern: Vec<i8> = levels.iter().map(|&v| v.signum()).collect();
     let lists = SignedDelta::build(&tern, n_rows, n_cols);
-    println!(
-        "  {matrix} : {n_rows} entrées × {n_cols} sorties, {} événements potentiels, {:.3} Mo de listes",
-        lists.n_events,
-        lists.data.len() as f64 / 1e6
-    );
+    let bitmap = BitmapSign::build(&tern, n_rows, n_cols);
+    println!("  {matrix} : {n_rows} entrées × {n_cols} sorties, {} événements potentiels",
+             lists.n_events);
+    println!("  listes varint {:.2} Mo | bitmap {:.2} Mo",
+             lists.data.len() as f64 / 1e6, bitmap.bits() as f64 / 8.0 / 1e6);
 
     let mut x = vec![0i32; n_rows];
     for (i, v) in x.iter_mut().enumerate() { *v = ((i * 2654435761usize) % 200) as i32 - 100; }
 
-    print!("  {:>8}  {:>12}  {:>14}  {:>12}  {:>10}\n",
-           "densité", "actifs", "événements", "G év/s", "ms/appel");
+    let mut pool = Pool::new(n_threads, n_cols);
+    println!("  pool de {} threads persistant\n", pool.threads());
+    println!("  {:>8}  {:>12}  {:>16}  {:>16}  {:>14}",
+             "densité", "événements", "scoped G év/s", "POOL G év/s", "POOL ms/appel");
     for dens in [0.0, 0.01, 0.05, 0.10, 0.25, 0.50, 1.00] {
         let mut active = Vec::new();
         let mut xa = x.clone();
         for i in 0..n_rows {
-            let h = (i as f64 * 0.6180339887).fract();
-            if h < dens {
-                active.push(i);
-            } else {
-                xa[i] = 0;
-            }
+            if (i as f64 * 0.6180339887).fract() < dens { active.push(i); } else { xa[i] = 0; }
         }
-        // échauffement
-        let _ = accumulate_lists(&lists, &xa, &active, n_threads);
-        let reps = if dens == 0.0 { 1 } else { 20 };
-        let t0 = Instant::now();
-        let mut out = Vec::new();
-        for _ in 0..reps {
-            out = accumulate_lists(&lists, &xa, &active, n_threads).0;
-        }
-        let dt = t0.elapsed().as_secs_f64() / reps as f64;
-        // comptage exact des événements
         let mut ev = 0usize;
         for &s in &active { lists.row_events(s, |_, _| ev += 1); }
-        println!("  {:>7.1}%  {:>12}  {:>14}  {:>12.2}  {:>10.3}",
-                 dens * 100.0, active.len(), ev, ev as f64 / dt / 1e9, dt * 1e3);
+        let reps = if dens == 0.0 { 5 } else { 20 };
+
+        let (out_scoped, _) = accumulate_scoped(&lists, &xa, &active, n_threads);
+        let t0 = Instant::now();
+        for _ in 0..reps { let _ = accumulate_scoped(&lists, &xa, &active, n_threads); }
+        let dt_old = t0.elapsed().as_secs_f64() / reps as f64;
+
+        let (out_pool, _) = pool.accumulate_lists(&lists, &xa, &active);
+        let (out_bm, _) = pool.accumulate_bitmap(&bitmap, &xa, &active);
+        let t0 = Instant::now();
+        for _ in 0..reps { let _ = pool.accumulate_lists(&lists, &xa, &active); }
+        let dt_new = t0.elapsed().as_secs_f64() / reps as f64;
+        let t0 = Instant::now();
+        for _ in 0..reps { let _ = pool.accumulate_bitmap(&bitmap, &xa, &active); }
+        let dt_bm = t0.elapsed().as_secs_f64() / reps as f64;
+
+        println!("  {:>7.1}%  {:>12}  {:>16.2}  {:>16.2}  {:>14.3}",
+                 dens * 100.0, ev, ev as f64 / dt_old / 1e9, ev as f64 / dt_new / 1e9, dt_new * 1e3);
+        println!("           → bitmap : {:.2} G év/s ({:.3} ms) | gain pool ×{:.1}",
+                 ev as f64 / dt_bm / 1e9, dt_bm * 1e3, dt_old / dt_new);
         if dens == 0.25 {
-            // vérification : listes vs dense, à résultat identique
-            let mut w = vec![0i8; n];
-            for r in 0..n_rows {
-                for c in 0..n_cols { w[r * n_cols + c] = tern[r * n_cols + c]; }
-            }
-            let y_ref = matvec_dense(&w, &xa, n_cols, n_rows);
-            let same = out.iter().zip(y_ref.iter()).all(|(a, b)| a == b);
-            println!("           → contrôle listes vs dense : {}",
-                     if same { "IDENTIQUE ✅" } else { "DIVERGENT ❌" });
+            let y_ref = matvec_dense(&tern, &xa, n_cols, n_rows);
+            let ok_l = out_pool.iter().zip(y_ref.iter()).all(|(a, b)| a == b);
+            let ok_s = out_scoped.iter().zip(y_ref.iter()).all(|(a, b)| a == b);
+            let ok_b = out_bm.iter().zip(y_ref.iter()).all(|(a, b)| a == b);
+            println!("           → contrôle : pool {} | scoped {} | bitmap {}",
+                     if ok_l { "OK" } else { "ÉCHEC" },
+                     if ok_s { "OK" } else { "ÉCHEC" },
+                     if ok_b { "OK" } else { "ÉCHEC" });
         }
     }
+    pool.shutdown();
+    let _ = n;
 
     // ------------------------------------------- exécution sans multiplieur
     println!("\n=== 3. Exécution sans multiplieur (décalages + additions) ===");
