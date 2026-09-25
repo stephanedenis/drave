@@ -15,6 +15,8 @@ Le cahier des charges d'origine est dans [`Qtrinet-bootstrap.md`](Qtrinet-bootst
 | Audit du cahier des charges | ✅ (corrections ci-dessous) |
 | **Test de principe : quantification d'un modèle minimal** | ✅ **fait** → [`reports/rapport-minimal.md`](reports/rapport-minimal.md) |
 | **Élagage et approche par événement** | ✅ **fait** → [`reports/rapport-eparsite.md`](reports/rapport-eparsite.md) |
+| **Sparsité → précision** | ✅ **fait** → [`reports/rapport-precision.md`](reports/rapport-precision.md) |
+| **Encodage de structure (listes signées)** | ✅ **fait** → [`reports/rapport-encodage.md`](reports/rapport-encodage.md) |
 | Modèle ternaire *entraîné* (BitNet b1.58) | ⬜ à faire |
 | Extracteur GGUF → plans ternaires | ⬜ à faire |
 | Format binaire + schéma partagé Python/RTL | ⬜ à faire |
@@ -121,6 +123,49 @@ de blocs entièrement nuls (1 bit par bloc de 64 = 1,6 % de surcoût) est le pre
 > ⚠️ La courbe précision ↔ élagage obtenue est **bruitée** (modèle de 2 688 poids) : elle
 > ne permet pas de conclure sur la dégradation réelle due à l'élagage. Les densités
 > atteignables sur un LLM sont à revérifier sur un vrai modèle.
+
+---
+
+## Encodage de structure : éliminer complètement la valeur (`run_encoding.py`)
+
+**Idée** : avec des poids ±1, la valeur n'a plus besoin d'être stockée. On remplace la
+matrice par **deux listes triées de destinations** par source (les « + » et les « − ») :
+l'appartenance à la liste porte le signe. Il ne reste que des **positions** — la matrice
+devient un **graphe biparti signé**. C'est le « adressage relationnel » du CDC, poussé
+jusqu'au bout.
+
+Ce qui rend l'idée payante : les listes étant triées, on encode des **écarts** (deltas),
+comme les formats de graphes compressés (WebGraph/LLP).
+
+**Coût exact mesuré, lignes de 4 096 poids :**
+
+| Densité | bitmap + signe | **listes signées** | gain | tok/s 7B | vs dense 2 b |
+|---|---|---|---|---|---|
+| 50 % | 1,500 | 1,838 | 0,82× | 6,0 | ×1,09 |
+| 25 % | 1,250 | 1,306 | 0,96× | 8,5 | ×1,53 |
+| **12,5 %** | 1,125 | **0,871** | **×1,29** | 12,7 | **×2,30** |
+| **5 %** | 1,050 | **0,476** | **×2,21** | **23,2** | **×4,20** |
+| 2 % | 1,020 | 0,251 | ×4,06 | 44,0 | ×7,96 |
+| 1 % | 1,010 | 0,151 | ×6,71 | 73,3 | ×13,28 |
+
+➡️ **Bascule vers 20 % de densité.** Au-dessus, le bitmap + signe gagne ; en dessous, les
+listes signées gagnent et l'écart se creuse très vite.
+
+**Croisement avec la précision mesurée** (`run_precision.py`) : à 5 % de densité, le
+ternaire élagué+réentraîné atteint **59,1 %** d'accuracy (contre **49,7 %** pour le
+ternaire dense non élagué) pour **0,476 b/poids au lieu de 2,0** — soit **à la fois plus
+précis et ×4,2 plus rapide**.
+
+**Marge restante** : à 5 %, l'entropie des positions vaut 0,288 b/poids contre 0,476 pour
+les listes — un facteur 1,65 encore disponible dans un codage plus fin.
+
+**Le coût se déplace** vers la collecte d'activation (chaque événement vise un indice
+arbitraire → croisement ou réplication de bancs M20K). Le décodeur, lui, reste LUT-only :
+un accumulateur d'écarts + une FIFO, aucun DSP.
+
+> ⚠️ Les coûts d'encodage sont mesurés exactement ; les *densités atteignables* viennent
+> du MLP jouet. Sur un LLM réel, 5-12 % de densité exige un réentraînement lourd — c'est
+> la question ouverte.
 
 ---
 

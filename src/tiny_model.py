@@ -79,7 +79,9 @@ class MLP:
 
     # -- entraînement ------------------------------------------------------ #
     def train(self, X, y, epochs: int = 300, lr: float = 0.05, batch: int = 128,
-              seed: int = 0, verbose: bool = False):
+              seed: int = 0, verbose: bool = False, masks=None):
+        """SGD. `masks` = (mask1, mask2) appliqués après chaque pas — c'est le
+        réentraînement à masque fixe de la recette prune → retrain → quantize."""
         rng = np.random.default_rng(seed)
         n = X.shape[0]
         n_class = self.b2.size
@@ -102,6 +104,9 @@ class MLP:
                 db1 = dz1.sum(axis=0)
                 for p_, g in ((self.W1, dW1), (self.b1, db1), (self.W2, dW2), (self.b2, db2)):
                     p_ -= lr * g.astype(np.float32)
+                if masks is not None:                    # masque fixe (élagage)
+                    self.W1 *= masks[0]
+                    self.W2 *= masks[1]
                 tot += float(-np.log(np.clip(p[np.arange(m), yb], 1e-12, None)).mean())
             if ep % 50 == 0 or ep == epochs - 1:
                 hist.append((ep, tot / max(1, n // batch)))
