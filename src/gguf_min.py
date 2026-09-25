@@ -115,14 +115,37 @@ class GGUF:
                 a = (blk["q"].astype(np.float32) * blk["d"].astype(np.float32)[:, None]).ravel()
             else:   # Q4_0 : 16 octets = 32 valeurs 4 bits, avec décalage de 8
                 blk = np.frombuffer(raw, dtype=np.dtype([("d", "<f2"), ("qs", "u1", 16)]))
-                lo = (blk["qs"] & 0x0F).astype(np.int8) - 8
-                hi = (blk["qs"] >> 4).astype(np.int8) - 8
-                q = np.empty((blk.shape[0], bs), dtype=np.int8)
-                q[:, 0::2], q[:, 1::2] = lo, hi
+                lo = (blk["qs"] & 0x0F).astype(np.int16) - 8
+                hi = (blk["qs"] >> 4).astype(np.int16) - 8
+                # ggml : les bs/2 premiers niveaux viennent des nibbles BAS
+                q = np.concatenate([lo, hi], axis=1)
                 a = (q.astype(np.float32) * blk["d"].astype(np.float32)[:, None]).ravel()
         else:
             raise NotImplementedError(f"type ggml {t.ttype} non géré ({name})")
         return a.reshape(t.shape).astype(np.float32)
+
+    def raw_levels(self, name: str) -> np.ndarray:
+        """Niveaux entiers quantifiés AVANT mise à l'échelle (Q4_0 / Q8_0).
+
+        C'est la valeur « telle que stockée » — celle que l'idée de répétition
+        d'adresse cherche à éliminer.
+        """
+        t = self.tensors[name]
+        if t.ttype not in _BLOCK:
+            raise NotImplementedError("niveaux bruts : Q4_0/Q8_0 seulement")
+        bs, nb = _BLOCK[t.ttype]
+        n = int(np.prod(t.shape))
+        self.f.seek(self.data_start + t.offset)
+        raw = self.f.read(n // bs * nb)
+        if t.ttype == GGML_Q8_0:
+            blk = np.frombuffer(raw, dtype=np.dtype([("d", "<f2"), ("q", "i1", bs)]))
+            q = blk["q"].astype(np.int16)
+        else:
+            blk = np.frombuffer(raw, dtype=np.dtype([("d", "<f2"), ("qs", "u1", bs // 2)]))
+            lo = (blk["qs"] & 0x0F).astype(np.int16) - 8
+            hi = (blk["qs"] >> 4).astype(np.int16) - 8
+            q = np.concatenate([lo, hi], axis=1)
+        return q.reshape(-1).reshape(t.shape).astype(np.int8)
 
     def arch(self) -> str:
         return str(self.meta.get("general.architecture", "?"))
