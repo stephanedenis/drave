@@ -217,6 +217,41 @@ carte seule — c'est exactement l'argument du ring.
 
 ---
 
+## Tri et dédoublonnage des contributions (`bench/cpu_merge.c`)
+
+**Intuition** : trier et dédoublonner les contributions avant de les appliquer — une
+seule écriture par destination au lieu d'une par événement.
+
+**Mesure (50 M événements, 4 096 destinations, 16 threads) :**
+
+| Variante | Cadence | Écritures |
+|---|---|---|
+| (a) Dispersion (1 écriture/événement) | 3,36 G év/s | 50 000 000 |
+| **(b) Trié + replié** | **3,89 G év/s** (+16 %) | **4 111** |
+| (c) Coût du tri (radix 2 passes) | 0,06 G év/s = **838 ms** | — |
+| rappel : ordre naturel (écarts décodés) | **7,79 G év/s** | — |
+
+➡️ **Le tri divise les écritures par 12 000 mais ne gagne que 16 %** : les écritures
+n'étaient pas le goulot. Et il coûte 838 ms là où l'accumulation en coûte 15 — environ
+**50× plus cher que ce qu'il rapporte**.
+
+**Ce qu'il faut faire à la place :**
+
+1. **Exploiter l'ordre naturel** (par source, listes de deltas) : 7,79 G év/s, le meilleur
+   résultat mesuré. Pas de tri.
+2. **Multi-plans : décaler l'activation**, pas fusionner les listes. La contribution du
+   plan *b* vaut `x[src] << b` : l'accumulation les somme naturellement, sans aucun
+   dédoublonnage. Un seul accumulateur suffit.
+3. **Le dédoublonnage ne se justifie que pour la sémantique** : fusion de sommes
+   partielles venant de plusieurs cartes (ring), ou déterminisme du résultat. Dans ce cas,
+   utiliser un **réseau de combinaison à compartiments par destination** (ce que font les
+   routeurs AER), jamais un tri global.
+
+> ⚠️ Le tri mesuré est un radix naïf mono-thread ; un tri parallèle irait ~10× plus vite,
+> mais resterait 5× plus cher que l'accumulation qu'il optimise.
+
+---
+
 ## Écarts avec le CDC d'origine
 
 | Point du CDC | Réalité vérifiée |
