@@ -42,35 +42,43 @@ L'unaire gagne si `E[|v|] − 1 < k`, c'est-à-dire `E[|v|] < k + 1` :
 | 6 | 31.5 | 30.5 | 6 | positionnel |
 | 8 | 127.5 | 126.5 | 8 | positionnel |
 
-Sur ce modèle 4 bits réel : `E[|v|] = 3.02` → coût unaire 2.02 contre 4 bits → **unaire gagnant**.
+Sur ce modèle Q4_0 réel : `E[|v|] = 3.02` → coût de la répétition 2.63 b/poids contre 4,00 en dense.
 
 ## Verdict
 
-**Sur un vrai modèle 4 bits, `E[|v|]` ne vaut que 3.02** — pas 7,5 comme
-le suppose une distribution uniforme. La raison : l'échelle Q4_0 est fixée par
-le maximum du bloc, donc la plupart des poids tombent sur les petits niveaux
-(27 % des non-nuls valent ±1). **Le code 4 bits gaspille donc ses bits.**
+1. **L'idée est exacte** : répéter l'adresse v fois reproduit exactement la valeur
+   quantifiée, sans aucune perte au-delà de la quantification d'origine. Le
+   raisonnement est juste — et il élimine bien la valeur du stockage.
 
-Conséquence : l'idée de répétition **gagne** (2.63 b/poids contre 4,00 en dense), et sa forme hybride gagne encore plus (**1.85 b/poids, soit ×2.17**), sans aucune perte.
+2. **C'est de l'encodage unaire** : le coût est proportionnel à `v`, là où le
+   positionnel coûte `log2(v)`. Sur une distribution *uniforme*, l'unaire perd à
+   partir de 4 bits (E[|v|] ≈ 7,5 > k+1).
 
-1. **L'idée est exacte** : répéter l'adresse v fois reproduit exactement la
-   valeur, sans perte au-delà de la quantification d'origine. Le raisonnement
-   est juste.
-2. **Mais c'est de l'encodage unaire**, et l'unaire est exponentiellement plus
-   coûteux que le positionnel : le coût est proportionnel à `v` au lieu de
-   `log2(v)`. C'est la différence entre « ajouter v fois » et « multiplier par v ».
-3. **Le seuil est net** : l'unaire gagne pour k ≤ 3 bits, perd à partir de 4.
-   Sur ce modèle 4 bits réel (`E[|v|]=3.02`), il perd.
-4. **Là où l'idée est optimale — et c'est important** : en **binaire** (k=1) et
-   en **ternaire** (BitNet). Tous les non-nuls valent ±1, donc l'adresse *seule*
-   porte la valeur : zéro bit de valeur, zéro répétition. C'est exactement ce
-   que fait l'encodage « listes signées » déjà mesuré (0,39 b/poids).
-5. **La variante qui gagne à 4 bits** : les **plans binaires**, où le nombre
-   d'opérations vaut `popcount(v)` et non `v` — soit le passage de l'unaire au
-   positionnel, appliqué aux *opérations* au lieu du stockage.
+3. **Mais les distributions réelles ne sont pas uniformes** : sur ce Q4_0,
+   `E[|v|] = 3.02` seulement — l'échelle du bloc est fixée par son maximum,
+   donc 27 % des non-nuls valent ±1 et le code dense gaspille ses bits.
+   La répétition gagne alors **même à 4 bits** : 2.63 contre 4,00 b/poids.
 
-> ⚠️ Mesures sur les niveaux quantifiés d'un Q4_0 réel ; le raisonnement sur les
-> seuils est analytique et indépendant du modèle.
+4. **Sa forme hybride est la meilleure** : unaire pour |v|=1 (gratuit — l'adresse
+   porte le signe), puis plans binaires au-delà (`popcount` au lieu de `v`) →
+   **1.85 b/poids, soit ×2.17**, pour 0.98 opération
+   par poids contre 0.87 en dense : quasi gratuit en calcul aussi.
+
+5. **Là où l'idée est optimale** : en **binaire** (k=1) et en **ternaire** (BitNet
+   b1.58). Tous les non-nuls valent ±1, donc l'adresse *seule* porte la valeur :
+   zéro bit de valeur, zéro répétition. C'est exactement l'encodage « listes
+   signées » déjà mesuré à 0,39 b/poids.
+
+6. **Conséquence matérielle** : le décodeur doit gérer trois cas — ajouter une fois
+   (|v|=1), ajouter v fois (unaire), ou ajouter par plans décalés (`popcount`).
+   Les trois se réduisent à des additions et des décalages : **aucun DSP**, la
+   contrainte du cahier des charges tient.
+
+
+> ⚠️ Mesures sur les niveaux quantifiés d'un Q4_0 réel (Qwen2.5-0.5B). `E[|v|]`
+> dépend de la recette de quantification : Q4_K_M, avec ses échelles de blocs
+> plus fines, donnerait une distribution différente — à mesurer avant de figer
+> le format.
 
 
 ---

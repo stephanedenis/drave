@@ -165,34 +165,36 @@ def main():
         L.append(f"| {kk} | {E:.1f} | {E-1:.1f} | {kk} | "
                  f"{'**unaire**' if E-1 < kk else 'positionnel'} |")
 
-    L += [f"\nSur ce modèle 4 bits réel : `E[|v|] = {E_abs:.2f}` → coût unaire "
-          f"{E_abs-1:.2f} contre 4 bits → **"
-          f"{'unaire gagnant' if E_abs-1 < 4 else 'positionnel gagnant'}**.\n",
-          f"## Verdict\n",
-          f"**Sur un vrai modèle 4 bits, `E[|v|]` ne vaut que {E_abs:.2f}** — pas 7,5 comme",
-          "le suppose une distribution uniforme. La raison : l'échelle Q4_0 est fixée par",
-          "le maximum du bloc, donc la plupart des poids tombent sur les petits niveaux",
-          f"({p1*100:.0f} % des non-nuls valent ±1). **Le code 4 bits gaspille donc ses bits.**\n",
-          f"Conséquence : l'idée de répétition **gagne** ({dens*(addr+E_abs-1):.2f} b/poids contre "
-          f"4,00 en dense), et sa forme hybride gagne encore plus "
-          f"(**{dens*(addr+E_hyb):.2f} b/poids, soit ×{4.0/(dens*(addr+E_hyb)):.2f}**), sans aucune perte.\n",
-          "1. **L'idée est exacte** : répéter l'adresse v fois reproduit exactement la",
-          "   valeur, sans perte au-delà de la quantification d'origine. Le raisonnement",
-          "   est juste.",
-          "2. **Mais c'est de l'encodage unaire**, et l'unaire est exponentiellement plus",
-          "   coûteux que le positionnel : le coût est proportionnel à `v` au lieu de",
-          "   `log2(v)`. C'est la différence entre « ajouter v fois » et « multiplier par v ».",
-          "3. **Le seuil est net** : l'unaire gagne pour k ≤ 3 bits, perd à partir de 4.",
-          f"   Sur ce modèle 4 bits réel (`E[|v|]={E_abs:.2f}`), il perd.",
-          "4. **Là où l'idée est optimale — et c'est important** : en **binaire** (k=1) et",
-          "   en **ternaire** (BitNet). Tous les non-nuls valent ±1, donc l'adresse *seule*",
-          "   porte la valeur : zéro bit de valeur, zéro répétition. C'est exactement ce",
-          "   que fait l'encodage « listes signées » déjà mesuré (0,39 b/poids).",
-          "5. **La variante qui gagne à 4 bits** : les **plans binaires**, où le nombre",
-          "   d'opérations vaut `popcount(v)` et non `v` — soit le passage de l'unaire au",
-          "   positionnel, appliqué aux *opérations* au lieu du stockage.",
-          "\n> ⚠️ Mesures sur les niveaux quantifiés d'un Q4_0 réel ; le raisonnement sur les",
-          "> seuils est analytique et indépendant du modèle.\n",
+    L += [f"\nSur ce modèle Q4_0 réel : `E[|v|] = {E_abs:.2f}` → coût de la répétition "
+          f"{dens*(addr+E_abs-1):.2f} b/poids contre 4,00 en dense.\n",
+          "## Verdict\n",
+          "1. **L'idée est exacte** : répéter l'adresse v fois reproduit exactement la valeur",
+          "   quantifiée, sans aucune perte au-delà de la quantification d'origine. Le",
+          "   raisonnement est juste — et il élimine bien la valeur du stockage.\n",
+          "2. **C'est de l'encodage unaire** : le coût est proportionnel à `v`, là où le",
+          "   positionnel coûte `log2(v)`. Sur une distribution *uniforme*, l'unaire perd à",
+          "   partir de 4 bits (E[|v|] ≈ 7,5 > k+1).\n",
+          "3. **Mais les distributions réelles ne sont pas uniformes** : sur ce Q4_0,",
+          f"   `E[|v|] = {E_abs:.2f}` seulement — l'échelle du bloc est fixée par son maximum,",
+          f"   donc {p1*100:.0f} % des non-nuls valent ±1 et le code dense gaspille ses bits.",
+          f"   La répétition gagne alors **même à 4 bits** : {dens*(addr+E_abs-1):.2f} contre 4,00 b/poids.\n",
+          "4. **Sa forme hybride est la meilleure** : unaire pour |v|=1 (gratuit — l'adresse",
+          "   porte le signe), puis plans binaires au-delà (`popcount` au lieu de `v`) →",
+          f"   **{dens*(addr+E_hyb):.2f} b/poids, soit ×{4.0/(dens*(addr+E_hyb)):.2f}**, pour "
+          f"{dens*E_hyb:.2f} opération",
+          f"   par poids contre {dens:.2f} en dense : quasi gratuit en calcul aussi.\n",
+          "5. **Là où l'idée est optimale** : en **binaire** (k=1) et en **ternaire** (BitNet",
+          "   b1.58). Tous les non-nuls valent ±1, donc l'adresse *seule* porte la valeur :",
+          "   zéro bit de valeur, zéro répétition. C'est exactement l'encodage « listes",
+          "   signées » déjà mesuré à 0,39 b/poids.\n",
+          "6. **Conséquence matérielle** : le décodeur doit gérer trois cas — ajouter une fois",
+          "   (|v|=1), ajouter v fois (unaire), ou ajouter par plans décalés (`popcount`).",
+          "   Les trois se réduisent à des additions et des décalages : **aucun DSP**, la",
+          "   contrainte du cahier des charges tient.\n",
+          "\n> ⚠️ Mesures sur les niveaux quantifiés d'un Q4_0 réel (Qwen2.5-0.5B). `E[|v|]`",
+          "> dépend de la recette de quantification : Q4_K_M, avec ses échelles de blocs",
+          "> plus fines, donnerait une distribution différente — à mesurer avant de figer",
+          "> le format.\n",
           "\n---\n*Généré par `run_value_encoding.py` — Qtrinet.*\n"]
 
     args.out.parent.mkdir(parents=True, exist_ok=True)
