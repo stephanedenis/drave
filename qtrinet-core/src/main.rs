@@ -29,7 +29,11 @@ fn main() {
     }
     let path = &args[1];
     let mut matrix = "blk.0.ffn_gate.weight".to_string();
-    let mut n_threads = std::thread::available_parallelism().map(|n| n.get()).unwrap_or(8);
+    // Par défaut on laisse un quart des CPU au système : l'attente active de la
+    // barrière ne tolère aucune sursouscription (mesuré : ×1,3 de perte à 40+1
+    // threads sur 40 CPU).
+    let cpu = std::thread::available_parallelism().map(|n| n.get()).unwrap_or(8);
+    let mut n_threads = (cpu * 3 / 4).max(1);
     let mut i = 2;
     while i + 1 < args.len() {
         match args[i].as_str() {
@@ -106,6 +110,7 @@ fn main() {
     let mut x = vec![0i32; n_rows];
     for (i, v) in x.iter_mut().enumerate() { *v = ((i * 2654435761usize) % 200) as i32 - 100; }
 
+    let y_ref = matvec_dense(&tern, &x, n_cols, n_rows);
     let mut pool = Pool::new(n_threads, n_cols);
     println!("  pool de {} threads, barrière atomique\n", pool.threads());
     println!("  {:>8}  {:>12}  {:>14}  {:>12}  {:>10}",
@@ -130,7 +135,10 @@ fn main() {
         println!("  {:>7.1}%  {:>12}  fusion {:>6.2} G ({:.4} ms) | 2-listes {:>6.2} G ({:.4} ms)",
                  dens * 100.0, ev, ev as f64 / dt / 1e9, dt * 1e3,
                  ev as f64 / dt_d / 1e9, dt_d * 1e3);
-        if dens == 0.25 {
+        // Exactitude vérifiée à TOUTES les densités, pas seulement à une seule :
+        // c'est la remise à zéro incrémentale et la fenêtre de réduction qui
+        // sont en cause, et elles dépendent de la densité.
+        {
             let y_ref = matvec_dense(&tern, &xa, n_cols, n_rows);
             let rep = |lbl: &str, got: &[i64]| {
                 match got.iter().zip(y_ref.iter()).position(|(a, b)| a != b) {

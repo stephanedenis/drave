@@ -268,7 +268,7 @@ cd qtrinet-core && cargo build --release
 **Les 4 optimisations :**
 
 1. **Réduction incrémentale** — chaque worker ne remet à zéro que les destinations
-   qu'il a touchées. Coût d'un appel à vide : 0,484 ms → **0,0051 ms** (×95).
+   qu'il a touchées. Coût d'un appel à vide : 0,484 ms → **0,011 ms** (×44).
 2. **Décodage SWAR** — 8 écarts d'un octet décodés d'un coup dans un mot de 64 bits
    (un seul test `w & 0x8080…`), sans branche par élément.
 3. **Vecteur creux explicite** (`SparseVec`) — indices triés + valeurs contiguës,
@@ -276,28 +276,35 @@ cd qtrinet-core && cargo build --release
 4. **Listes fusionnées** (`FusedSign`) — une seule liste triée + plan de signe, au
    lieu de deux listes (+, −) : l'accès à l'accumulateur devient monotone.
 
-**Résultats** (16 threads, `blk.0.ffn_gate.weight` 4864×896, 4 303 745 événements) :
+**Résultats** (30 threads, `blk.0.ffn_gate.weight` 4864×896, 4 303 745 événements) :
 
 | Densité | Événements | Fusion | 2 listes |
 |---|---|---|---|
-| 0 % | 0 | 0,0051 ms | 0,0088 ms |
-| 10 % | 430 359 | 2,46 G év/s | 3,09 G év/s |
-| 25 % | 1 076 785 | 2,84 G év/s | 4,20 G év/s |
-| 100 % | 4 303 745 | 3,66 G év/s | 4,99 G év/s |
+| 0 % | 0 | 0,011 ms | 0,011 ms |
+| 10 % | 430 359 | 1,81 G év/s | 2,30 G év/s |
+| 25 % | 1 076 785 | 3,18 G év/s | 3,86 G év/s |
+| 100 % | 4 303 745 | 4,51 G év/s | 5,44 G év/s |
 
-Les deux décodeurs donnent un résultat **identique** au produit matrice-vecteur
-dense de référence. Le débit varie de **0,005 ms à 1,18 ms sur la même matrice**
-(rapport 230) : « on ne paie que ce qui s'active » est vérifié à l'échelle du moteur.
+Les deux décodeurs donnent le résultat **exact** du produit matrice-vecteur dense
+de référence : **14 vérifications sur 14** (7 densités × 2 décodeurs). Le débit
+varie de **0,011 ms à 0,95 ms sur la même matrice** (rapport 86) : « on ne paie que
+ce qui s'active » est vérifié à l'échelle du moteur.
+
+**Montée en charge** (densité 100 %, meilleur de 3 passes) : 1 thread 0,41 G év/s →
+8 threads 2,75 → 16 threads 4,45 → **32 threads 4,84** → 39 threads **2,04** ❌.
+L'attente active ne tolère aucune sursouscription : le pool est borné à `CPU − 1`
+et vaut `3/4 × CPU` par défaut.
 
 **Sans multiplieur** : décalages + additions donnent le résultat exact en 112,3 ms
 contre 2,5 ms pour i8×i8 (×44,9 sur CPU) — mais **sur FPGA le multiplieur n'existe
 pas**, et la contrainte du CDC est satisfaite sans réentraînement ni élagage.
 
-> ⚠️ Une première campagne de mesures annonçait une divergence et un débit de
-> 7,53 G év/s : les deux étaient faux. Le chemin « 2 listes » vidait l'accumulateur
-> par `memset` **puis vidait la liste des destinations touchées**, si bien que
-> l'appel fusion suivant accumulait sur les restes. Corrigé en donnant aux deux
-> décodeurs le même contrat de nettoyage (voir le rapport).
+> ⚠️ Trois pièges ont coûté une campagne de mesures fausses chacun : un état
+> partagé avec **deux contrats de nettoyage** (d'où une « divergence » fantôme et
+> un débit surestimé à 7,53 G év/s), un `&mut` dans la boucle chaude (barrière
+> d'aliasing : 3,09 → 0,97 G év/s), et la **sursouscription** de l'attente active
+> (39+1 threads sur 40 CPU : effondrement ×2,4 — et le `yield_now()` censé le
+> corriger a tout empiré). Détail dans le rapport.
 
 ---
 

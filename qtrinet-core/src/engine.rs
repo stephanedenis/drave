@@ -70,7 +70,8 @@ fn decode8(data: &[u8], p: usize, out: &mut [u32; 8]) -> usize {
 /// aucune remise à zéro globale.
 #[inline]
 pub fn row_fused_into(f: &FusedSign, r: usize, xv: i64, acc: &mut [i64],
-                      touched: &mut Vec<u32>, cap: usize) -> usize {
+                      touched: &mut Vec<u32>, cap: usize,
+                      span: &mut (usize, usize)) -> usize {
     let data = &f.data;
     let n_out = f.n_cols;
     let mut p = f.row_start[r];
@@ -94,6 +95,11 @@ pub fn row_fused_into(f: &FusedSign, r: usize, xv: i64, acc: &mut [i64],
     let mut col = 0usize;
     let mut done = 0usize;
     let mut buf = [0u32; 8];
+    // Étendue de la ligne, tenue en registres : écrite dans `span` une seule
+    // fois, à la sortie. Passer par le pointeur à chaque événement créait une
+    // barrière d'aliasing avec `acc` et coûtait ×3 sur le débit.
+    let mut first = usize::MAX;
+    let mut last = 0usize;
     while done < n_ev {
         let got = if n_ev - done >= 8 { decode8(data, p, &mut buf) } else { 0 };
         if got == 8 {
@@ -107,6 +113,8 @@ pub fn row_fused_into(f: &FusedSign, r: usize, xv: i64, acc: &mut [i64],
                         *slot += if positive { xv } else { -xv };
                     }
                     if touched.len() < cap { touched.push(col as u32); }
+                    if first == usize::MAX { first = col; }
+                    last = col;
                 }
                 sb += 1;
             }
@@ -134,10 +142,16 @@ pub fn row_fused_into(f: &FusedSign, r: usize, xv: i64, acc: &mut [i64],
                     *slot += if positive { xv } else { -xv };
                 }
                 if touched.len() < cap { touched.push(col as u32); }
+                if first == usize::MAX { first = col; }
+                last = col;
             }
             sb += 1;
             done += 1;
         }
+    }
+    if first != usize::MAX {
+        if first < span.0 { span.0 = first; }
+        if last + 1 > span.1 { span.1 = last + 1; }
     }
     n_ev
 }
@@ -158,6 +172,7 @@ struct Shared {
     n_active: AtomicUsize,
     accs: AtomicPtr<Vec<Vec<i64>>>,
     touched: AtomicPtr<Vec<Vec<u32>>>,
+    spans: AtomicPtr<Vec<(usize, usize)>>,
 }
 
 pub struct Pool {
@@ -167,13 +182,18 @@ pub struct Pool {
     n_out: usize,
     accs: Vec<Vec<i64>>,
     touched: Vec<Vec<u32>>,
-    /// vrai si le dernier appel utilisait la liste fusionnée (sinon la fenêtre
-    /// de réduction doit couvrir toute la sortie)
-    fused_last: bool,
+    /// étendue EXACTE des destinations écrites par chaque worker au dernier
+    /// appel : la réduction ne balaie que l'union de ces fenêtres.
+    spans: Vec<(usize, usize)>,
 }
 
 impl Pool {
+    /// Crée un pool de `n` workers. `n` est **borné** à `CPU logiques − 1` :
+    /// le thread appelant participe à l'attente active, et une machine
+    /// sursouscrite effondre le débit (cf. commentaire dans la boucle d'attente).
     pub fn new(n: usize, n_out: usize) -> Self {
+        let cpu = std::thread::available_parallelism().map(|p| p.get()).unwrap_or(1);
+        let n = n.max(1).min(cpu.saturating_sub(1).max(1));
         let shared = Arc::new(Shared {
             gen: AtomicUsize::new(0),
             done: AtomicUsize::new(0),
@@ -186,6 +206,7 @@ impl Pool {
             n_active: AtomicUsize::new(0),
             accs: AtomicPtr::new(std::ptr::null_mut()),
             touched: AtomicPtr::new(std::ptr::null_mut()),
+            spans: AtomicPtr::new(std::ptr::null_mut()),
         });
         let mut handles = Vec::with_capacity(n);
         for id in 0..n {
@@ -193,7 +214,12 @@ impl Pool {
             handles.push(std::thread::spawn(move || {
                 let mut last = 0usize;
                 loop {
-                    // attente active d'une nouvelle génération
+                    // Attente active d'une nouvelle génération. La barrière
+                    // par *spin* n'est tenable que si le nombre de threads
+                    // tournants reste inférieur au nombre de CPU logiques :
+                    // au-delà, l'ordonnanceur préempte des workers qui tournent
+                    // et le débit s'effondre (mesuré : ×3,3 de perte à 40+1
+                    // threads sur 40 CPU). `Pool::new` borne donc la taille.
                     loop {
                         let g = sh.gen.load(Ordering::Acquire);
                         if g != last { last = g; break; }
@@ -207,6 +233,7 @@ impl Pool {
                     let val = unsafe { std::slice::from_raw_parts(sh.sv_val.load(Ordering::Acquire), sh.n_active.load(Ordering::Relaxed)) };
                     let accs = unsafe { &mut *sh.accs.load(Ordering::Acquire) };
                     let touched = unsafe { &mut *sh.touched.load(Ordering::Acquire) };
+                    let spans = unsafe { &mut *sh.spans.load(Ordering::Acquire) };
                     let acc = &mut accs[id];
                     let tch = &mut touched[id];
                     let cap = f.n_cols;          // au-delà, on repasse au memset
@@ -221,36 +248,36 @@ impl Pool {
                         for &c in tch.iter() { acc[c as usize] = 0; }
                     }
                     tch.clear();
+                    let mut span = (usize::MAX, 0usize);
                     let mut i = id;
                     while i < idx.len() {
                         let src = idx[i] as usize;
                         let xv = val[i] as i64;
                         if use_fused {
-                            row_fused_into(f, src, xv, acc, tch, cap);
+                            row_fused_into(f, src, xv, acc, tch, cap, &mut span);
                         } else {
-                            row_delta_into(dl, src, xv, acc, tch, cap);
+                            row_delta_into(dl, src, xv, acc, tch, cap, &mut span);
                         }
                         i += n;
                     }
+                    spans[id] = span;
                     sh.done.fetch_add(1, Ordering::Release);
                 }
             }));
         }
         Pool { shared, handles, n, n_out, accs: vec![vec![0i64; n_out]; n],
-               touched: vec![Vec::new(); n], fused_last: true }
+               touched: vec![Vec::new(); n], spans: vec![(usize::MAX, 0usize); n] }
     }
 
     pub fn threads(&self) -> usize { self.n }
 
     pub fn accumulate_delta(&mut self, d: &SignedDelta, sv: &SparseVec) -> (Vec<i64>, usize) {
-        self.fused_last = false;
         self.shared.use_fused.store(0, Ordering::Relaxed);
         self.shared.delta.store(d as *const _ as *mut _, Ordering::Relaxed);
         self.accumulate_common(sv)
     }
 
     pub fn accumulate(&mut self, f: &FusedSign, sv: &SparseVec) -> (Vec<i64>, usize) {
-        self.fused_last = true;
         self.shared.use_fused.store(1, Ordering::Relaxed);
         self.shared.lists.store(f as *const _ as *mut _, Ordering::Relaxed);
         self.accumulate_common(sv)
@@ -264,34 +291,27 @@ impl Pool {
         sh.n_active.store(sv.idx.len(), Ordering::Relaxed);
         sh.accs.store(&mut self.accs as *mut Vec<Vec<i64>>, Ordering::Relaxed);
         sh.touched.store(&mut self.touched as *mut Vec<Vec<u32>>, Ordering::Relaxed);
+        sh.spans.store(&mut self.spans as *mut Vec<(usize, usize)>, Ordering::Relaxed);
         sh.gen.fetch_add(1, Ordering::Release);       // libère les workers
 
         while sh.done.load(Ordering::Acquire) != self.n {
             std::hint::spin_loop();
         }
-        // Réduction : sur la fenêtre réellement touchée si la liste fusionnée a
-        // tenu le compte, sinon sur toute la sortie.
-        let (mut lo, mut hi) = (self.n_out, 0usize);
-        if self.fused_last {
-            for t in &self.touched {
-                if let (Some(&a), Some(&b)) = (t.iter().min(), t.iter().max()) {
-                    lo = lo.min(a as usize);
-                    hi = hi.max(b as usize + 1);
-                }
-            }
-        } else {
-            lo = 0;
-            hi = self.n_out;
+        // Réduction sur l'union des étendues RÉELLEMENT écrites par les workers :
+        // la fenêtre est exacte, quel que soit le décodeur, et ne dépend pas de
+        // la liste des destinations touchées (qui peut avoir débordé).
+        let (mut lo, mut hi) = (usize::MAX, 0usize);
+        for &(a, b) in &self.spans {
+            if a == usize::MAX { continue; }
+            if a < lo { lo = a; }
+            if b > hi { hi = b; }
         }
-        let events: usize = sv.idx.len();       // borne haute (événements potentiels)
         if lo >= hi { return (vec![0i64; self.n_out], 0); }
         let mut out = vec![0i64; self.n_out];
-        let mut ev = 0usize;
         for a in &self.accs {
             for (o, v) in out[lo..hi].iter_mut().zip(a[lo..hi].iter()) { *o += *v; }
         }
-        let _ = &mut ev;
-        (out, events)
+        (out, sv.idx.len())
     }
 
     pub fn shutdown(self) { drop(self) }
@@ -311,7 +331,8 @@ impl Drop for Pool {
 
 #[inline]
 pub fn row_delta_into(lists: &SignedDelta, r: usize, xv: i64, acc: &mut [i64],
-                      touched: &mut Vec<u32>, cap: usize) -> usize {
+                      touched: &mut Vec<u32>, cap: usize,
+                      span: &mut (usize, usize)) -> usize {
     let data = &lists.data;
     let mut p = lists.row_start[r];
     let n_out = lists.n_cols;
@@ -334,15 +355,31 @@ pub fn row_delta_into(lists: &SignedDelta, r: usize, xv: i64, acc: &mut [i64],
     }
     let np = vi(data, &mut p);
     let nn = vi(data, &mut p);
+    let mut first = usize::MAX;
+    let mut last = 0usize;
     let mut c = 0usize;
     for _ in 0..np {
         c += vi(data, &mut p);
-        if c < n_out { acc[c] += xv; if touched.len() < cap { touched.push(c as u32); } }
+        if c < n_out {
+            acc[c] += xv;
+            if touched.len() < cap { touched.push(c as u32); }
+            if first == usize::MAX { first = c; }
+            last = c;
+        }
     }
-    let mut c = 0usize;
+    c = 0;
     for _ in 0..nn {
         c += vi(data, &mut p);
-        if c < n_out { acc[c] -= xv; if touched.len() < cap { touched.push(c as u32); } }
+        if c < n_out {
+            acc[c] -= xv;
+            if touched.len() < cap { touched.push(c as u32); }
+            if first == usize::MAX { first = c; }
+            last = c;
+        }
+    }
+    if first != usize::MAX {
+        if first < span.0 { span.0 = first; }
+        if last + 1 > span.1 { span.1 = last + 1; }
     }
     np + nn
 }
@@ -358,6 +395,7 @@ pub fn matvec_dense(w: &[i8], x: &[i32], n_out: usize, n_in: usize) -> Vec<i64> 
     y
 }
 
+#[allow(dead_code)]
 pub fn matvec_shift_add(w: &[i8], x: &[i32], n_out: usize, n_in: usize) -> (Vec<i64>, u64) {
     let mut y = vec![0i64; n_out];
     let mut ops: u64 = 0;
