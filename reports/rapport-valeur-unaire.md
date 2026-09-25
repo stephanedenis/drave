@@ -44,7 +44,26 @@ L'unaire gagne si `E[|v|] − 1 < k`, c'est-à-dire `E[|v|] < k + 1` :
 
 Sur ce modèle Q4_0 réel : `E[|v|] = 3.02` → coût de la répétition 2.63 b/poids contre 4,00 en dense.
 
-## Verdict
+## ⚠️ Correctif (2026-09-25, plus tard)
+
+**Le ×2,17 annoncé ci-dessous est FAUX.** Le modèle de coût omettait :
+1. le **coût de désambiguïsation** (quel plan ? où s'arrêtent les répétitions ?) —
+   un code de longueur `v−1` viole l'inégalité de Kraft (Σ2^−l ≈ 1,99 > 1) : il
+   n'est **pas décodable** sans marqueur supplémentaire ;
+2. le **signe**, qui n'est gratuit que dans l'encodage à deux listes signées.
+
+Correctement chiffré, l'encodage structurel retombe à ~3,5-4,4 b/poids, soit
+**pas mieux que le code 4 bits fixe**. Le vrai plancher est l'entropie :
+**3,731 b/poids** pour ce Q4_0 (gain maximal ×1,07).
+
+Ce qui survit de l'idée : elle est exacte, et elle est optimale là où la source
+est **réellement structurée** (ternaire à signes gratuits, grappes imposées) —
+pas sur un modèle quantifié a posteriori, dont les niveaux sont quasi uniformes
+par construction. Voir `reports/rapport-8bits.md`.
+
+---
+
+## Verdict (à lire avec le correctif ci-dessus)
 
 1. **L'idée est exacte** : répéter l'adresse v fois reproduit exactement la valeur
    quantifiée, sans aucune perte au-delà de la quantification d'origine. Le
