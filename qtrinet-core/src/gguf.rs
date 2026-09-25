@@ -53,6 +53,9 @@ pub const GGML_F16: u32 = 1;
 pub const GGML_Q4_0: u32 = 2;
 pub const GGML_Q8_0: u32 = 8;
 
+/// Pointeur pré-résolu vers les lignes d'un tenseur Q8_0.
+pub struct Q8View { pub base: usize, pub n_cols: usize, pub nb: usize }
+
 pub struct Gguf {
     pub meta: HashMap<String, Meta>,
     pub tensors: Vec<TensorInfo>,
@@ -144,7 +147,7 @@ impl Gguf {
         self.tensors.iter().find(|t| t.name == name)
     }
 
-    fn f16_to_f32(h: u16) -> f32 {
+    pub fn f16_to_f32(h: u16) -> f32 {
         let sign = ((h >> 15) & 1) as u32;
         let exp = ((h >> 10) & 0x1F) as u32;
         let man = (h & 0x3FF) as u32;
@@ -195,6 +198,97 @@ impl Gguf {
             other => panic!("raw_levels : type {other} non géré"),
         }
         out
+    }
+
+    /// Déquantifie une ligne d'un tenseur 2D, en f32.
+    pub fn row_f32(&self, name: &str, row: usize, n_cols: usize) -> Vec<f32> {
+        let t = self.tensor(name).expect("tenseur absent");
+        let base = self.data_start + t.offset as usize;
+        let mut out = Vec::with_capacity(n_cols);
+        match t.ttype {
+            GGML_F32 => {
+                let p = base + row * n_cols * 4;
+                for i in 0..n_cols {
+                    out.push(f32::from_le_bytes(self.buf[p + 4*i..p + 4*i + 4].try_into().unwrap()));
+                }
+            }
+            GGML_F16 => {
+                let p = base + row * n_cols * 2;
+                for i in 0..n_cols {
+                    out.push(Self::f16_to_f32(u16::from_le_bytes(self.buf[p + 2*i..p + 2*i + 2].try_into().unwrap())));
+                }
+            }
+            GGML_Q8_0 => {
+                let nb = n_cols / 32;
+                for b in 0..nb {
+                    let p = base + (row * nb + b) * 34;
+                    let d = Self::f16_to_f32(u16::from_le_bytes(self.buf[p..p+2].try_into().unwrap()));
+                    for j in 0..32 { out.push(d * (self.buf[p + 2 + j] as i8) as f32); }
+                }
+            }
+            GGML_Q4_0 => {
+                let nb = n_cols / 32;
+                for b in 0..nb {
+                    let p = base + (row * nb + b) * 18;
+                    let d = Self::f16_to_f32(u16::from_le_bytes(self.buf[p..p+2].try_into().unwrap()));
+                    for j in 0..16 { out.push(d * ((self.buf[p + 2 + j] & 0x0F) as i16 - 8) as f32); }
+                    for j in 0..16 { out.push(d * ((self.buf[p + 2 + j] >> 4) as i16 - 8) as f32); }
+                }
+            }
+            other => panic!("row_f32 : type {other} non géré"),
+        }
+        out
+    }
+
+    /// Vue pré-résolue sur un tenseur Q8_0 : évite de rechercher le tenseur
+    /// (parcours linéaire des 290 descripteurs) à chaque ligne. La tête de
+    /// sortie appelle cela 151 936 fois par token.
+    pub fn q8_view(&self, name: &str) -> Q8View {
+        let t = self.tensor(name).expect("tenseur absent");
+        assert_eq!(t.ttype, GGML_Q8_0, "q8_view : tenseur non Q8_0");
+        let n_cols = t.dims[1] as usize;
+        Q8View { base: self.data_start + t.offset as usize, n_cols, nb: n_cols / 32 }
+    }
+
+    /// Produit scalaire d'une ligne via une vue pré-résolue.
+    #[inline]
+    pub fn q8_dot_at(&self, v: &Q8View, row: usize, qx: &[i16]) -> f32 {
+        let mut acc = 0f32;
+        for b in 0..v.nb {
+            let p = v.base + (row * v.nb + b) * 34;
+            let d = Self::f16_to_f32(u16::from_le_bytes(self.buf[p..p+2].try_into().unwrap()));
+            let w = &self.buf[p + 2..p + 34];
+            let x = &qx[b * 32..b * 32 + 32];
+            let mut s = 0i32;
+            for j in 0..32 {
+                s += (w[j] as i8 as i32) * (x[j] as i32);
+            }
+            acc += d * s as f32;
+        }
+        acc
+    }
+
+    /// Produit scalaire d'une ligne **Q8_0** avec une activation int8 :
+    /// `y = Σ_blocs d_bloc · Σ_j q_poids · q_act`. Sert à la tête de sortie
+    /// (vocabulaire de 151 936 lignes), où le mode push coûterait un
+    /// accumulateur de 150 000 sorties par worker.
+    pub fn q8_row_dot(&self, name: &str, row: usize, qx: &[i16]) -> f32 {
+        let t = self.tensor(name).expect("tenseur absent");
+        let n_cols = t.dims[1] as usize;
+        assert_eq!(qx.len(), n_cols, "largeur d'activation inattendue");
+        let base = self.data_start + t.offset as usize;
+        let nb = n_cols / 32;
+        let mut acc = 0f32;
+        for b in 0..nb {
+            let p = base + (row * nb + b) * 34;
+            let d = Self::f16_to_f32(u16::from_le_bytes(self.buf[p..p+2].try_into().unwrap()));
+            let mut s = 0i32;
+            for j in 0..32 {
+                s += (self.buf[p + 2 + j] as i8 as i32) * (qx[b * 32 + j] as i32);
+            }
+            acc += d * s as f32;
+        }
+        acc
     }
 
     /// Déquantification en f32 (F32 / F16 / Q8_0 / Q4_0).

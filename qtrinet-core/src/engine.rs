@@ -14,7 +14,7 @@
 //! Barrière par *spin* (atomiques) au lieu de canaux : le coût fixe d'un appel
 //! passe de quelques dizaines de microsecondes à quelques microsecondes.
 
-use crate::list::{FusedSign, SignedDelta};
+use crate::list::{FusedSign, PushMat, SignedDelta};
 use std::sync::atomic::{AtomicBool, AtomicPtr, AtomicUsize, Ordering};
 use std::sync::Arc;
 
@@ -156,6 +156,64 @@ pub fn row_fused_into(f: &FusedSign, r: usize, xv: i64, acc: &mut [i64],
     n_ev
 }
 
+/// Accumule une ligne en **listes par source avec valeur** (mode push).
+/// Chaque événement est `varint(écart de sortie) + i8(valeur)` ; la contribution
+/// vaut `q_activation × q_poids`. C'est le chemin qu'empruntera le matériel :
+/// une adresse, une valeur, un accumulateur.
+#[inline]
+pub fn row_val_into(m: &PushMat, r: usize, xq: i64, acc: &mut [i64],
+                    touched: &mut Vec<u32>, cap: usize,
+                    span: &mut (usize, usize)) -> usize {
+    let data = &m.data;
+    let n_out = m.n_out;
+    let mut p = m.row_start[r] as usize;
+    let end = m.row_start[r + 1] as usize;
+    let mut col = 0usize;
+    let mut n_ev = 0usize;
+    let mut first = usize::MAX;
+    let mut last = 0usize;
+    while p < end {
+        // chemin rapide : écart d'un octet (le cas de très loin le plus fréquent)
+        let b0 = data[p];
+        if b0 < 0x80 {
+            col += b0 as usize;
+            let q = data[p + 1] as i8 as i64;
+            p += 2;
+            if col < n_out {
+                unsafe { *acc.get_unchecked_mut(col) += xq * q; }
+                if touched.len() < cap { touched.push(col as u32); }
+                if first == usize::MAX { first = col; }
+                last = col;
+            }
+        } else {
+            p += 1;
+            let mut d = (b0 & 0x7F) as usize;
+            let mut sh = 7;
+            loop {
+                let b = data[p]; p += 1;
+                d |= ((b & 0x7F) as usize) << sh;
+                if b < 0x80 { break; }
+                sh += 7;
+            }
+            col += d;
+            let q = data[p] as i8 as i64;
+            p += 1;
+            if col < n_out {
+                unsafe { *acc.get_unchecked_mut(col) += xq * q; }
+                if touched.len() < cap { touched.push(col as u32); }
+                if first == usize::MAX { first = col; }
+                last = col;
+            }
+        }
+        n_ev += 1;
+    }
+    if first != usize::MAX {
+        if first < span.0 { span.0 = first; }
+        if last + 1 > span.1 { span.1 = last + 1; }
+    }
+    n_ev
+}
+
 // --------------------------------------------------------------------------- //
 // Pool à barrière atomique
 // --------------------------------------------------------------------------- //
@@ -166,7 +224,9 @@ struct Shared {
     stop: AtomicBool,
     lists: AtomicPtr<FusedSign>,
     delta: AtomicPtr<SignedDelta>,
-    use_fused: AtomicUsize,
+    push: AtomicPtr<PushMat>,
+    /// 0 = listes signées, 1 = listes fusionnées, 2 = listes par source valuées
+    mode: AtomicUsize,
     sv_idx: AtomicPtr<u32>,
     sv_val: AtomicPtr<i32>,
     n_active: AtomicUsize,
@@ -200,7 +260,8 @@ impl Pool {
             stop: AtomicBool::new(false),
             lists: AtomicPtr::new(std::ptr::null_mut()),
             delta: AtomicPtr::new(std::ptr::null_mut()),
-            use_fused: AtomicUsize::new(1),
+            push: AtomicPtr::new(std::ptr::null_mut()),
+            mode: AtomicUsize::new(1),
             sv_idx: AtomicPtr::new(std::ptr::null_mut()),
             sv_val: AtomicPtr::new(std::ptr::null_mut()),
             n_active: AtomicUsize::new(0),
@@ -226,9 +287,14 @@ impl Pool {
                         if sh.stop.load(Ordering::Relaxed) { return; }
                         std::hint::spin_loop();
                     }
-                    let use_fused = sh.use_fused.load(Ordering::Relaxed) == 1;
+                    // Le réveil peut coïncider avec l'arrêt du pool : sans ce
+                    // test, un worker lirait des pointeurs nuls (les champs ne
+                    // sont publiés qu'avant un vrai travail).
+                    if sh.stop.load(Ordering::Acquire) { return; }
+                    let mode = sh.mode.load(Ordering::Relaxed);
                     let f = unsafe { &*sh.lists.load(Ordering::Acquire) };
                     let dl = unsafe { &*sh.delta.load(Ordering::Acquire) };
+                    let pm = unsafe { &*sh.push.load(Ordering::Acquire) };
                     let idx = unsafe { std::slice::from_raw_parts(sh.sv_idx.load(Ordering::Acquire), sh.n_active.load(Ordering::Relaxed)) };
                     let val = unsafe { std::slice::from_raw_parts(sh.sv_val.load(Ordering::Acquire), sh.n_active.load(Ordering::Relaxed)) };
                     let accs = unsafe { &mut *sh.accs.load(Ordering::Acquire) };
@@ -236,7 +302,7 @@ impl Pool {
                     let spans = unsafe { &mut *sh.spans.load(Ordering::Acquire) };
                     let acc = &mut accs[id];
                     let tch = &mut touched[id];
-                    let cap = f.n_cols;          // au-delà, on repasse au memset
+                    let cap = acc.len();         // au-delà, on repasse au memset
                     // Remise à zéro INCRÉMENTALE. Si le suivi a débordé (plus de
                     // `cap` destinations distinctes touchées), un memset complet est
                     // moins cher que de tenir la liste.
@@ -253,10 +319,10 @@ impl Pool {
                     while i < idx.len() {
                         let src = idx[i] as usize;
                         let xv = val[i] as i64;
-                        if use_fused {
-                            row_fused_into(f, src, xv, acc, tch, cap, &mut span);
-                        } else {
-                            row_delta_into(dl, src, xv, acc, tch, cap, &mut span);
+                        match mode {
+                            1 => { row_fused_into(f, src, xv, acc, tch, cap, &mut span); }
+                            2 => { row_val_into(pm, src, xv, acc, tch, cap, &mut span); }
+                            _ => { row_delta_into(dl, src, xv, acc, tch, cap, &mut span); }
                         }
                         i += n;
                     }
@@ -271,14 +337,34 @@ impl Pool {
 
     pub fn threads(&self) -> usize { self.n }
 
+    /// Accumulation par **listes par source valuées** : le mode de l'inférence.
+    pub fn accumulate_push(&mut self, m: &PushMat, sv: &SparseVec) -> Vec<i64> {
+        self.ensure_width(m.n_out);
+        self.shared.mode.store(2, Ordering::Relaxed);
+        self.shared.push.store(m as *const _ as *mut _, Ordering::Relaxed);
+        self.accumulate_common(sv).0
+    }
+
+    /// Réajuste la largeur des accumulateurs quand la matrice change de forme
+    /// (896, 128, 4864, …). Les listes de destinations touchées deviennent
+    /// caduques : on repart d'accumulateurs vides.
+    pub fn ensure_width(&mut self, n_out: usize) {
+        if n_out == self.n_out { return; }
+        self.n_out = n_out;
+        for a in self.accs.iter_mut() { a.clear(); a.resize(n_out, 0); }
+        for t in self.touched.iter_mut() { t.clear(); }
+        for sp in self.spans.iter_mut() { *sp = (usize::MAX, 0); }
+    }
+
     pub fn accumulate_delta(&mut self, d: &SignedDelta, sv: &SparseVec) -> (Vec<i64>, usize) {
-        self.shared.use_fused.store(0, Ordering::Relaxed);
+        self.shared.mode.store(0, Ordering::Relaxed);
         self.shared.delta.store(d as *const _ as *mut _, Ordering::Relaxed);
         self.accumulate_common(sv)
     }
 
     pub fn accumulate(&mut self, f: &FusedSign, sv: &SparseVec) -> (Vec<i64>, usize) {
-        self.shared.use_fused.store(1, Ordering::Relaxed);
+        self.ensure_width(f.n_cols);
+        self.shared.mode.store(1, Ordering::Relaxed);
         self.shared.lists.store(f as *const _ as *mut _, Ordering::Relaxed);
         self.accumulate_common(sv)
     }

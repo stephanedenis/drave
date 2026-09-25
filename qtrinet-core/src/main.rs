@@ -11,6 +11,8 @@
 mod engine;
 mod gguf;
 mod list;
+mod model;
+mod tokenizer;
 
 use engine::{matvec_dense, matvec_shift_add, Pool, SparseVec};
 use gguf::Gguf;
@@ -25,8 +27,12 @@ fn main() {
     let args: Vec<String> = std::env::args().collect();
     if args.len() < 2 {
         eprintln!("usage: qtrinet-core <modele.gguf> [--matrix NOM] [--threads N]");
+        eprintln!("       qtrinet-core <modele.gguf> --infer (--ids 1,2,3 | --prompt TEXTE)");
+        eprintln!("                    [--n 32] [--temp 0] [--ctx 512] [--threads N]");
         std::process::exit(1);
     }
+    if args.iter().any(|a| a == "--ppl") { run_ppl(&args); return; }
+    if args.iter().any(|a| a == "--infer") { run_infer(&args); return; }
     let path = &args[1];
     let mut matrix = "blk.0.ffn_gate.weight".to_string();
     // Par défaut on laisse un quart des CPU au système : l'attente active de la
@@ -110,7 +116,6 @@ fn main() {
     let mut x = vec![0i32; n_rows];
     for (i, v) in x.iter_mut().enumerate() { *v = ((i * 2654435761usize) % 200) as i32 - 100; }
 
-    let y_ref = matvec_dense(&tern, &x, n_cols, n_rows);
     let mut pool = Pool::new(n_threads, n_cols);
     println!("  pool de {} threads, barrière atomique\n", pool.threads());
     println!("  {:>8}  {:>12}  {:>14}  {:>12}  {:>10}",
@@ -171,4 +176,207 @@ fn main() {
     println!("  résultat identique    : {}", if same { "OUI ✅" } else { "NON ❌" });
     println!("\n  → aucun DSP, aucune multiplication : la contrainte du cahier des charges");
     println!("    est satisfaite pour un modèle 8 bits, sans réentraînement ni élagage.");
+}
+
+
+// --------------------------------------------------------------------------- //
+// Mode inférence : génération autorégressive en listes d'événements
+// --------------------------------------------------------------------------- //
+
+fn run_infer(args: &[String]) {
+    let path = &args[1];
+    let mut ids: Vec<u32> = Vec::new();
+    let mut prompt: Option<String> = None;
+    let mut n_new = 32usize;
+    let mut temp = 0.0f32;
+    let mut ctx = 512usize;
+    let _ = 0;
+    let mut topk = 0usize;
+    let mut abits = 8u32;
+    let mut chat = false;
+    // L'inférence paie une barrière par matrice (168 par token) : l'optimum
+    // mesuré est autour de la moitié des CPU logiques, pas des trois quarts.
+    let cpu = std::thread::available_parallelism().map(|n| n.get()).unwrap_or(8);
+    let mut n_threads = (cpu / 2).max(1);
+    let mut i = 2;
+    while i + 1 < args.len() {
+        match args[i].as_str() {
+            "--infer" => { i += 1; continue; }
+            "--ids" => ids = args[i + 1].split(',').filter_map(|s| s.trim().parse().ok()).collect(),
+            "--prompt" => prompt = Some(args[i + 1].clone()),
+            "--n" => n_new = args[i + 1].parse().unwrap(),
+            "--temp" => temp = args[i + 1].parse().unwrap(),
+            "--ctx" => ctx = args[i + 1].parse().unwrap(),
+            "--topk" => topk = args[i + 1].parse().unwrap(),
+            "--abits" => abits = args[i + 1].parse().unwrap(),
+            "--threads" => n_threads = args[i + 1].parse().unwrap(),
+            "--chat" => { chat = true; i -= 1; }
+            _ => {}
+        }
+        i += 2;
+    }
+    let mut mdl = model::Model::load(path, ctx, n_threads);
+    mdl.act_levels = ((1u32 << (abits - 1)) - 1) as f32;
+    if chat {
+        mdl.stop_id = build_tokenizer(&mdl.g).special_id("<|im_end|>");
+    }
+    let cfg = &mdl.cfg;
+    let _ = &prompt;
+    println!("Qwen2 · {} couches · hidden {} · {} têtes / {} KV · FFN {} · vocab {}",
+             cfg.n_layer, cfg.hidden, cfg.n_head, cfg.n_kv_head, cfg.ffn, cfg.vocab);
+
+    if let Some(p) = &prompt {
+        let tk = build_tokenizer(&mdl.g);
+        if chat {
+            // gabarit Qwen2.5-Instruct, tokens spéciaux insérés tels quels
+            let im_start = tk.special_id("<|im_start|>").unwrap();
+            let im_end = tk.special_id("<|im_end|>").unwrap();
+            ids.push(im_start);
+            ids.extend(tk.encode("user\n"));
+            ids.extend(tk.encode(p));
+            ids.push(im_end);
+            ids.extend(tk.encode("\n"));
+            ids.push(im_start);
+            ids.extend(tk.encode("assistant\n"));
+        } else {
+            ids = tk.encode(p);
+        }
+        println!("prompt : {} tokens", ids.len());
+    }
+    if ids.is_empty() { eprintln!("rien à générer : --ids ou --prompt requis"); return; }
+
+    mdl.reset_events();
+    let (out, st) = if topk > 0 {
+        // pas-à-pas : utile pour confronter les logits à la référence numpy
+        let t0 = Instant::now();
+        let mut last = Vec::new();
+        for (pos, &t) in ids.iter().enumerate() { last = mdl.forward(t, pos); }
+        let mut out = Vec::with_capacity(n_new);
+        for step in 0..n_new {
+            let lg = mdl.logits(&last);
+            let mut rank: Vec<u32> = (0..lg.len() as u32).collect();
+            rank.sort_unstable_by(|&a, &b| lg[b as usize].partial_cmp(&lg[a as usize]).unwrap());
+            print!("  pas {step:2} : ");
+            for &i in &rank[..topk] { print!("{i}({:.4}) ", lg[i as usize]); }
+            println!();
+            let next = rank[0];
+            out.push(next);
+            last = mdl.forward(next, ids.len() + step);
+        }
+        let dt = t0.elapsed().as_secs_f64();
+        let st = model::Stats { events: mdl.events_total(), prompt_s: dt / 2.0, gen_s: dt / 2.0,
+                                n_prompt: ids.len(), n_gen: out.len() };
+        (out, st)
+    } else {
+        mdl.generate(&ids, n_new, temp)
+    };
+    if prompt.is_some() {
+        let tk = build_tokenizer(&mdl.g);
+        let mut all: Vec<u32> = ids.clone();
+        all.extend(all_ids_of(&out));
+        println!("--- texte ---");
+        print!("{}", tk.decode(&all));
+        println!("\n--- ids générés : {:?}", &out);
+    } else {
+        println!("tokens générés : {:?}", &out);
+    }
+    println!("\n--- mesure ---");
+    println!("prompt  : {} tokens en {:.3} s  ({:.1} tok/s, TTFT {:.1} ms)",
+             st.n_prompt, st.prompt_s, st.n_prompt as f64 / st.prompt_s,
+             st.prompt_s * 1e3 / st.n_prompt.max(1) as f64);
+    println!("généré  : {} tokens en {:.3} s  ({:.2} tok/s)",
+             st.n_gen, st.gen_s, st.n_gen as f64 / st.gen_s);
+    println!("événements : {} au total, {:.1} par token",
+             st.events, st.events as f64 / (st.n_prompt + st.n_gen) as f64);
+}
+
+
+// --------------------------------------------------------------------------- //
+// Perplexité : mesure standard de qualité, à travers le moteur d'événements
+// --------------------------------------------------------------------------- //
+
+fn all_ids_of(v: &[u32]) -> Vec<u32> { v.to_vec() }
+
+fn meta_strings(g: &Gguf, key: &str) -> Vec<String> {
+    match g.meta.get(key) {
+        Some(gguf::Meta::Array(a)) => a.iter().map(|m| m.as_str().unwrap_or("").to_string()).collect(),
+        _ => Vec::new(),
+    }
+}
+
+fn meta_ints(g: &Gguf, key: &str) -> Vec<i32> {
+    match g.meta.get(key) {
+        Some(gguf::Meta::Array(a)) => a.iter().map(|m| m.as_u64().unwrap_or(0) as i32).collect(),
+        _ => Vec::new(),
+    }
+}
+
+fn build_tokenizer(g: &Gguf) -> tokenizer::Tokenizer {
+    tokenizer::Tokenizer::new(
+        meta_strings(g, "tokenizer.ggml.tokens"),
+        meta_strings(g, "tokenizer.ggml.merges"),
+        meta_ints(g, "tokenizer.ggml.token_type"),
+    )
+}
+
+fn run_ppl(args: &[String]) {
+    let path = &args[1];
+    let mut idfile = String::new();
+    let mut ctx = 256usize;
+    let mut limit = usize::MAX;
+    let mut abits = 16u32;
+    let cpu = std::thread::available_parallelism().map(|n| n.get()).unwrap_or(8);
+    let mut n_threads = (cpu * 3 / 4).max(1);
+    let mut i = 2;
+    while i + 1 < args.len() {
+        match args[i].as_str() {
+            "--ppl" => idfile = args[i + 1].clone(),
+            "--ctx" => ctx = args[i + 1].parse().unwrap(),
+            "--limit" => limit = args[i + 1].parse().unwrap(),
+            "--abits" => abits = args[i + 1].parse().unwrap(),
+            "--threads" => n_threads = args[i + 1].parse().unwrap(),
+            _ => {}
+        }
+        i += 2;
+    }
+    let raw = std::fs::read_to_string(&idfile).expect("fichier d'identifiants illisible");
+    let ids: Vec<u32> = raw.split(|c: char| c == ',' || c.is_whitespace())
+        .filter(|s| !s.is_empty())
+        .filter_map(|s| s.parse().ok())
+        .take(limit)
+        .collect();
+    println!("{idfile} : {} tokens, fenêtres de {ctx}", ids.len());
+
+    let mut mdl = model::Model::load(path, ctx, n_threads);
+    mdl.act_levels = ((1u32 << (abits - 1)) - 1) as f32;
+    mdl.reset_events();
+    let t0 = Instant::now();
+    let mut nll = 0f64;
+    let mut n = 0usize;
+    let mut start = 0usize;
+    while start + 1 < ids.len() {
+        let end = (start + ctx).min(ids.len());
+        let chunk = &ids[start..end];
+        for pos in 0..chunk.len() {
+            let h = mdl.forward(chunk[pos], pos);
+            if pos + 1 < chunk.len() {
+                let lg = mdl.logits(&h);
+                let mut mx = f32::NEG_INFINITY;
+                for &v in &lg { if v > mx { mx = v; } }
+                let mut sum = 0f64;
+                for &v in &lg { sum += ((v - mx) as f64).exp(); }
+                let lse = mx as f64 + sum.ln();
+                nll += lse - lg[chunk[pos + 1] as usize] as f64;
+                n += 1;
+            }
+        }
+        start = end;
+        let ppl = (nll / n as f64).exp();
+        println!("  {:6} tokens notés — perplexité cumulée {:.3}  ({:.1} tok/s)",
+                 n, ppl, n as f64 / t0.elapsed().as_secs_f64());
+    }
+    let ppl = (nll / n as f64).exp();
+    println!("\n=== perplexité {:.4} sur {} tokens ({} événements, {:.1} s) ===",
+             ppl, n, mdl.events_total(), t0.elapsed().as_secs_f64());
+    println!("    {:.1} tok/s effectifs (avant + tête)", n as f64 / t0.elapsed().as_secs_f64());
 }

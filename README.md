@@ -19,6 +19,7 @@ Le cahier des charges d'origine est dans [`Qtrinet-bootstrap.md`](Qtrinet-bootst
 | **Encodage de structure (listes signées)** | ✅ **fait** → [`reports/rapport-encodage.md`](reports/rapport-encodage.md) |
 | **Architecture push (AER) + faisabilité CPU** | ✅ **fait** → [`reports/rapport-cpu-aer.md`](reports/rapport-cpu-aer.md) |
 | **Moteur d'événements Rust (4 optimisations)** | ✅ **fait** → [`reports/rapport-optimisations.md`](reports/rapport-optimisations.md) |
+| **Inférence complète en Rust, sans GPU** | ✅ **fait** → [`reports/rapport-inference.md`](reports/rapport-inference.md) |
 | Modèle ternaire *entraîné* (BitNet b1.58) | ⬜ à faire |
 | Extracteur GGUF → plans ternaires | ⬜ à faire |
 | Format binaire + schéma partagé Python/RTL | ⬜ à faire |
@@ -308,6 +309,44 @@ pas**, et la contrainte du CDC est satisfaite sans réentraînement ni élagage.
 
 ---
 
+## Inférence complète en Rust (`--infer`)
+
+Qwen2.5-0.5B-Instruct Q8_0 tourne **en mode listes d'événements**, sans GPU, sans
+BLAS, sans aucune dépendance : **2 319 lignes de Rust, `std` seul**. Détail :
+[`reports/rapport-inference.md`](reports/rapport-inference.md).
+
+```bash
+cd qtrinet-core && cargo build --release
+./target/release/qtrinet-core ../models/Qwen2.5-0.5B-Q8_0.gguf \
+    --infer --chat --prompt "Explain in one sentence why the sky is blue."
+```
+
+> `<|im_start|>assistant`
+> The sky is blue because it reflects sunlight, which contains colors such as
+> red, orange, yellow, green, blue, and indigo, which are all visible in the
+> spectrum.
+
+| | |
+|---|---|
+| Génération | **10,0 tok/s** (16 threads), TTFT 74–95 ms |
+| Événements par token | 352,8 M à 3,9 G év/s — le forward est **entièrement** borné par les événements |
+| Mémoire | 1,27 Go (0,71 Go de listes), chargement 6,3 s |
+| Justesse | **16 tokens sur 16 identiques** à la référence numpy float32 |
+| Perplexité WikiText-2 | **24,90** contre **25,00** pour numpy + OpenBLAS |
+| Comparaison | 132 ms/token pour numpy + OpenBLAS (40 threads) contre **100 ms** ici (16 threads) |
+
+**Deux compromis assumés :** la tête de sortie (151 936 sorties) est calculée par
+produits scalaires sur les lignes Q8_0 d'origine — en mode push il faudrait un
+accumulateur de 36 Mo *par worker* et chaque sortie serait écrite 896 fois ; et les
+activations sont quantifiées (int16 par défaut : 16/16 identiques ; int8 : 0,3 % plus
+rapide mais les courses serrées basculent).
+
+**Ce que ça ne démontre pas :** le débit variable. 352 M événements par token, à tous
+les tokens, parce qu'un LLM dense n'a **jamais** d'activation nulle. Le mode
+événementiel ne paiera que sur des activations creuses **par construction**.
+
+---
+
 ## Écarts avec le CDC d'origine
 
 | Point du CDC | Réalité vérifiée |
@@ -331,9 +370,11 @@ src/roofline.py         projection matérielle (constantes mesurées de la carte
 run_quantify.py         orchestrateur : entraîne, quantifie, mesure, écrit le rapport
 qtrinet-core/           moteur d'événements en Rust (std seul, 0 dépendance)
   src/gguf.rs             lecture GGUF + déquantification Q4_0/Q8_0/F16/F32
-  src/list.rs             encodages : deltas signés, bitmap+signe, creux k, fusion
+  src/list.rs             encodages : deltas signés, bitmap+signe, creux k, fusion, push
   src/engine.rs           pool de threads, décodage SWAR, accumulation creuse
-  src/main.rs             mesures : tailles d'encodage, débit, sans multiplieur
+  src/tokenizer.rs        BPE byte-level Qwen2 (pré-tokenizer réécrit à la main)
+  src/model.rs            forward Qwen2 complet + cache KV + génération
+  src/main.rs             mesures du moteur, inférence, perplexité
 reports/                rapports générés
 ```
 
@@ -363,3 +404,7 @@ plus tard, pour les modèles réels — pas pour le test de principe.)
 4. **Moteur** : traitement par blocs de destination (AVX2 n'a ni gather ni scatter
    entier — il faut transposer le parcours, pas la boucle) et fusion par
    compartiments de destination pour le multi-cartes.
+5. **Sparsité imposée** : c'est le point qui décide de l'avenir du mode
+   événementiel. Mesurer la perplexité de Qwen2.5-0.5B avec un seuil / top-k sur
+   les activations (10 %, 25 %, 50 % de densité) — sans sparsité, le débit reste
+   constant quel que soit le matériel.

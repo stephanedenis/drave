@@ -249,3 +249,73 @@ impl FusedSign {
         };
     }
 }
+
+// --------------------------------------------------------------------------- //
+// 4. Listes par SOURCE, valeur incluse (mode « push » du moteur d'inférence)
+// --------------------------------------------------------------------------- //
+
+/// Matrice quantifiée int8, transposée en **listes par source** : pour chaque
+/// entrée `i`, la liste triée des sorties `o` qu'elle alimente, avec la valeur du
+/// poids. Chaque événement est `varint(écart de sortie) + i8(valeur)` — soit
+/// exactement ce que consommera le PE matériel : une adresse et une valeur.
+///
+/// L'échelle est **par sortie** (`scale[o]`) : la contribution d'un événement est
+/// `q_poids × q_activation × scale[o] × scale_activation`.
+pub struct PushMat {
+    pub n_in: usize,
+    pub n_out: usize,
+    pub row_start: Vec<u32>,    // n_in + 1
+    pub row_ev: Vec<u32>,       // événements par source
+    pub data: Vec<u8>,
+    pub scale: Vec<f32>,        // une par destination
+    pub n_events: usize,
+}
+
+impl PushMat {
+    /// Quantifie en int8 une matrice f32 `[n_out × n_in]` (row-major) et la
+    /// transpose en listes par source. Les zéros ne produisent aucun événement.
+    pub fn build(w: &[f32], n_out: usize, n_in: usize) -> Self {
+        assert_eq!(w.len(), n_out * n_in);
+        let mut scale = vec![0f32; n_out];
+        let cap = (n_out as f32 * 1.02) as usize + 4;
+        let mut lists: Vec<Vec<u8>> = (0..n_in).map(|_| Vec::with_capacity(cap)).collect();
+        let mut last_o = vec![0usize; n_in];
+        let mut row_ev = vec![0u32; n_in];
+        let mut n_events = 0usize;
+        for o in 0..n_out {
+            let row = &w[o * n_in..(o + 1) * n_in];
+            let mut mx = 0f32;
+            for &v in row { let a = v.abs(); if a > mx { mx = a; } }
+            // échelle de la ligne de sortie : 127 niveaux signés
+            let s = if mx > 0.0 { mx / 127.0 } else { 1.0 };
+            scale[o] = s;
+            let inv = 1.0 / s;
+            for (i, &v) in row.iter().enumerate() {
+                let q = (v * inv).round();
+                if q == 0.0 { continue; }
+                let q = if q > 127.0 { 127i8 } else if q < -127.0 { -127i8 } else { q as i8 };
+                let l = &mut lists[i];
+                put_varint(l, (o - last_o[i]) as u64);
+                l.push(q as u8);
+                last_o[i] = o;
+                row_ev[i] += 1;
+                n_events += 1;
+            }
+        }
+        let mut data = Vec::with_capacity(n_events * 2 + n_in);
+        let mut row_start = Vec::with_capacity(n_in + 1);
+        for i in 0..n_in {
+            row_start.push(data.len() as u32);
+            data.extend_from_slice(&lists[i]);
+        }
+        row_start.push(data.len() as u32);
+        PushMat { n_in, n_out, row_start, row_ev, data, scale, n_events }
+    }
+
+    /// Taille occupée par les listes, en bits par poids de la matrice d'origine.
+    pub fn bits(&self) -> u64 { self.data.len() as u64 * 8 }
+
+    pub fn bits_per_weight(&self) -> f64 {
+        self.data.len() as f64 * 8.0 / (self.n_in as f64 * self.n_out as f64)
+    }
+}
