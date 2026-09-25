@@ -17,6 +17,7 @@ Le cahier des charges d'origine est dans [`Qtrinet-bootstrap.md`](Qtrinet-bootst
 | **Élagage et approche par événement** | ✅ **fait** → [`reports/rapport-eparsite.md`](reports/rapport-eparsite.md) |
 | **Sparsité → précision** | ✅ **fait** → [`reports/rapport-precision.md`](reports/rapport-precision.md) |
 | **Encodage de structure (listes signées)** | ✅ **fait** → [`reports/rapport-encodage.md`](reports/rapport-encodage.md) |
+| **Architecture push (AER) + faisabilité CPU** | ✅ **fait** → [`reports/rapport-cpu-aer.md`](reports/rapport-cpu-aer.md) |
 | Modèle ternaire *entraîné* (BitNet b1.58) | ⬜ à faire |
 | Extracteur GGUF → plans ternaires | ⬜ à faire |
 | Format binaire + schéma partagé Python/RTL | ⬜ à faire |
@@ -166,6 +167,53 @@ un accumulateur d'écarts + une FIFO, aucun DSP.
 > ⚠️ Les coûts d'encodage sont mesurés exactement ; les *densités atteignables* viennent
 > du MLP jouet. Sur un LLM réel, 5-12 % de densité exige un réentraînement lourd — c'est
 > la question ouverte.
+
+---
+
+## Architecture « push » (AER) et exécution CPU (`run_cpu.py`, `bench/cpu_aer.c`)
+
+**Le problème** : dans l'architecture « tirer » (gather), chaque poids non nul doit aller
+chercher son activation à un indice arbitraire — accès irrégulier, coûteux.
+
+**La solution** : **pousser**. Chaque source dont l'activation est non nulle émet un
+événement ; sa liste de destinations se lit **séquentiellement** ; on disperse
+`acc[dest] += signe · x[src]`. C'est l'**AER** (Address Event Representation) du
+neuromorphique. L'accès aléatoire se déplace de l'entrée (activation, large) vers la
+sortie (accumulateur 4096 × 24 bits = **12 Kio**, tient dans les M20K). Les poids se
+lisent en flux : plus aucun gather.
+
+**Mesures C/OpenMP sur ce bi-Xeon (`bench/cpu_aer.c`, 16 threads) :**
+
+| Test | 1 th | 8 th | 16 th | 32 th |
+|---|---|---|---|---|
+| Lecture séquentielle | 4,1 Go/s | 23,4 | **28,7** | 28,2 |
+| Dispersion pure | 0,96 G év/s | 3,46 | 3,20 | 3,22 |
+| **Écarts + dispersion** | 0,87 | 4,55 | **7,79** | 6,79 |
+
+➡️ La dispersion sature vers 8 threads (accès aléatoire à l'accumulateur). **Le décodage
+par écarts est quasi gratuit** : le noyau complet est *plus rapide* que la dispersion pure.
+
+**Projection 7B (densité 5 %, 0,476 b/poids, 416 Mo et 350 M événements par token) :**
+
+| Cible | ms/token | tok/s |
+|---|---|---|
+| CPU borné bande passante | 14,5 | 68,9 |
+| CPU borné noyau | 44,9 | 22,3 |
+| **CPU réaliste** | **44,9** | **22,3** |
+| 1 carte FPGA | 43,1 | 23,2 |
+| **4 cartes FPGA** (modèle réparti) | **10,8** | **92,8** |
+
+➡️ **Une carte FPGA ≈ ce CPU** (23 contre 22 tok/s) : le CPU a 3× la bande passante mais
+est limité par sa cadence d'événements ; la carte est limitée par sa DDR3. L'avantage du
+FPGA est le **passage à l'échelle** (4 mémoires et 4 jeux de voies indépendants), pas la
+carte seule — c'est exactement l'argument du ring.
+
+**Conséquence pratique** : écrire d'abord l'implémentation **CPU**. Elle est immédiate
+(aucun bitstream, aucun DMA, aucun JTAG), elle valide le format et la sémantique des
+événements, et elle fournit le **modèle d'or** que le RTL devra reproduire.
+
+> ⚠️ Projection sur la partie GEMM seule : attention, KV cache, non-linéarités et
+> échantillonnage ne sont pas comptés. À confronter à une vraie implémentation.
 
 ---
 
