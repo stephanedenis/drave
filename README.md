@@ -14,6 +14,7 @@ Le cahier des charges d'origine est dans [`Qtrinet-bootstrap.md`](Qtrinet-bootst
 |-------|------|
 | Audit du cahier des charges | ✅ (corrections ci-dessous) |
 | **Test de principe : quantification d'un modèle minimal** | ✅ **fait** → [`reports/rapport-minimal.md`](reports/rapport-minimal.md) |
+| **Élagage et approche par événement** | ✅ **fait** → [`reports/rapport-eparsite.md`](reports/rapport-eparsite.md) |
 | Modèle ternaire *entraîné* (BitNet b1.58) | ⬜ à faire |
 | Extracteur GGUF → plans ternaires | ⬜ à faire |
 | Format binaire + schéma partagé Python/RTL | ⬜ à faire |
@@ -72,6 +73,54 @@ DDR3, cela divise directement le débit.
 
 ➡️ **312 voies de MAC suffisent** (≈ 9 400 ALM, 5 % du FPGA) pour saturer la DDR3.
 Le projet est un projet **système mémoire**, pas un projet de PE.
+
+---
+
+## Élagage et approche par événement (`run_sparsity.py`)
+
+**Question** : un modèle quantifié peut-il être élagué assez pour qu'une exécution
+« par événement » (ne traiter que les non-nuls) soit rentable ?
+
+**Le point clé** : un poids ternaire non nul ne porte **qu'un signe**. Le meilleur
+encodage événementiel est donc *bitmap + signe* = **1 + d bits/poids** (d = densité),
+à comparer aux 2 bits du code dense. Il n'est **jamais pire**, et jusqu'à 2× meilleur.
+
+| Encodage | Coût (b/poids) | À d = 50 % | À d = 25 % |
+|---|---|---|---|
+| dense 2 bits | 2,00 | 2,00 | 2,00 |
+| **bitmap + signe** | **1 + d** | **1,50** | **1,25** |
+| CSR bloc 16 b | 17·d | 8,50 | 4,25 |
+| CSR plat 32 b | 33·d | 16,50 | 8,25 |
+
+**Densités de rentabilité** (mesurées par le modèle de coût) :
+
+| Comparaison | Égalité à | Gagnant en dessous |
+|---|---|---|
+| bitmap vs dense | 100 % | **bitmap (toujours)** |
+| CSR 16 b vs dense | **11,8 %** | CSR |
+| CSR 32 b vs dense | **6,1 %** | CSR |
+| CSR 32 b vs bitmap | 3,1 % | CSR |
+
+➡️ **Le CSR n'est rentable que sous ~6 % de densité** — un régime qu'un LLM
+généraliste n'atteint pas (SparseGPT/Wanda : 50-60 % en *one-shot* ; le 2:4 structuré
+= 50 % est la forme supportée par le matériel).
+
+**Mesuré sur notre modèle** : densité naturelle du ternaire **26,3 %**, activations
+non nulles après ReLU **52,8 %**, donc **13,9 % d'événements réels**. Le bitmap y
+donne **×1,58** de débit : un 7B passe de **5,5 à 8,7 tok/s** par carte.
+
+**Le vrai coût est ailleurs** : un événement n'existe que si le poids *et* l'activation
+sont non nuls, et récupérer l'activation à un index arbitraire impose une fenêtre de
+lecture + un multiplexeur par voie (~21 LUT pour un 64:1, soit ≈ 3 400 ALM pour
+312 voies = **2 % du FPGA**). C'est payable.
+
+**Recommandation** : garder le dense 2 bits comme chemin nominal (simple, déterministe,
+déjà validé) et ajouter un encodage bitmap + signe là où la densité est faible. Le saut
+de blocs entièrement nuls (1 bit par bloc de 64 = 1,6 % de surcoût) est le premier pas.
+
+> ⚠️ La courbe précision ↔ élagage obtenue est **bruitée** (modèle de 2 688 poids) : elle
+> ne permet pas de conclure sur la dégradation réelle due à l'élagage. Les densités
+> atteignables sur un LLM sont à revérifier sur un vrai modèle.
 
 ---
 
