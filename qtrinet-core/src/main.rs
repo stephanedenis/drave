@@ -12,9 +12,9 @@ mod engine;
 mod gguf;
 mod list;
 
-use engine::{accumulate_scoped, matvec_dense, matvec_shift_add, Pool};
+use engine::{matvec_dense, matvec_shift_add, Pool, SparseVec};
 use gguf::Gguf;
-use list::{dense_bits, BitmapSign, SignedDelta, SparseK};
+use list::{dense_bits, BitmapSign, FusedSign, SignedDelta, SparseK};
 use std::time::Instant;
 
 fn fmt_bits(b: u64, n: usize) -> String {
@@ -85,69 +85,65 @@ fn main() {
     }
 
     // -------------------------------------------------- moteur d'événements
-    println!("\n=== 2. Moteur d'événements : débit selon la densité des activations ===");
+    println!("\n=== 2. Moteur d'événements optimisé (4 optimisations) ===");
+    println!("     réduction incrémentale · décodage SWAR · vecteur creux · listes fusionnées");
     let t = g.tensor(&matrix).expect("matrice absente");
     let levels = g.raw_levels(&matrix);
-    let n_rows = t.dims[0] as usize;   // entrées
-    let n_cols = t.dims[1] as usize;   // sorties
+    let n_rows = t.dims[0] as usize;
+    let n_cols = t.dims[1] as usize;
     let n = n_rows * n_cols;
-
     let tern: Vec<i8> = levels.iter().map(|&v| v.signum()).collect();
-    let lists = SignedDelta::build(&tern, n_rows, n_cols);
+
+    let fused = FusedSign::build(&tern, n_rows, n_cols);
+    let old = SignedDelta::build(&tern, n_rows, n_cols);
     let bitmap = BitmapSign::build(&tern, n_rows, n_cols);
-    println!("  {matrix} : {n_rows} entrées × {n_cols} sorties, {} événements potentiels",
-             lists.n_events);
-    println!("  listes varint {:.2} Mo | bitmap {:.2} Mo",
-             lists.data.len() as f64 / 1e6, bitmap.bits() as f64 / 8.0 / 1e6);
+    println!("  {matrix} : {n_rows} entrées × {n_cols} sorties, {} événements", fused.n_events);
+    println!("  listes fusionnées {:.2} Mo ({:.2} b/poids) | anciennes {:.2} Mo ({:.2}) | bitmap {:.2} Mo ({:.2})\n",
+             fused.bits() as f64 / 8.0 / 1e6, fused.bits_per_weight(),
+             old.bits() as f64 / 8.0 / 1e6, old.bits_per_weight(),
+             bitmap.bits() as f64 / 8.0 / 1e6, bitmap.bits_per_weight());
 
     let mut x = vec![0i32; n_rows];
     for (i, v) in x.iter_mut().enumerate() { *v = ((i * 2654435761usize) % 200) as i32 - 100; }
 
     let mut pool = Pool::new(n_threads, n_cols);
-    println!("  pool de {} threads persistant\n", pool.threads());
-    println!("  {:>8}  {:>12}  {:>16}  {:>16}  {:>14}",
-             "densité", "événements", "scoped G év/s", "POOL G év/s", "POOL ms/appel");
+    println!("  pool de {} threads, barrière atomique\n", pool.threads());
+    println!("  {:>8}  {:>12}  {:>14}  {:>12}  {:>10}",
+             "densité", "événements", "G év/s", "ms/appel", "M év/s/thread");
     for dens in [0.0, 0.01, 0.05, 0.10, 0.25, 0.50, 1.00] {
-        let mut active = Vec::new();
         let mut xa = x.clone();
         for i in 0..n_rows {
-            if (i as f64 * 0.6180339887).fract() < dens { active.push(i); } else { xa[i] = 0; }
+            if (i as f64 * 0.6180339887).fract() >= dens { xa[i] = 0; }
         }
+        let sv = SparseVec::from_dense(&xa);
+        let reps = if dens == 0.0 { 50 } else { 30 };
+        let (out, _) = pool.accumulate(&fused, &sv);
+        let t0 = Instant::now();
+        for _ in 0..reps { let _ = pool.accumulate(&fused, &sv); }
+        let dt = t0.elapsed().as_secs_f64() / reps as f64;
+        let (out_d, _) = pool.accumulate_delta(&old, &sv);
+        let t0 = Instant::now();
+        for _ in 0..reps { let _ = pool.accumulate_delta(&old, &sv); }
+        let dt_d = t0.elapsed().as_secs_f64() / reps as f64;
         let mut ev = 0usize;
-        for &s in &active { lists.row_events(s, |_, _| ev += 1); }
-        let reps = if dens == 0.0 { 5 } else { 20 };
-
-        let (out_scoped, _) = accumulate_scoped(&lists, &xa, &active, n_threads);
-        let t0 = Instant::now();
-        for _ in 0..reps { let _ = accumulate_scoped(&lists, &xa, &active, n_threads); }
-        let dt_old = t0.elapsed().as_secs_f64() / reps as f64;
-
-        let (out_pool, _) = pool.accumulate_lists(&lists, &xa, &active);
-        let (out_bm, _) = pool.accumulate_bitmap(&bitmap, &xa, &active);
-        let t0 = Instant::now();
-        for _ in 0..reps { let _ = pool.accumulate_lists(&lists, &xa, &active); }
-        let dt_new = t0.elapsed().as_secs_f64() / reps as f64;
-        let t0 = Instant::now();
-        for _ in 0..reps { let _ = pool.accumulate_bitmap(&bitmap, &xa, &active); }
-        let dt_bm = t0.elapsed().as_secs_f64() / reps as f64;
-
-        println!("  {:>7.1}%  {:>12}  {:>16.2}  {:>16.2}  {:>14.3}",
-                 dens * 100.0, ev, ev as f64 / dt_old / 1e9, ev as f64 / dt_new / 1e9, dt_new * 1e3);
-        println!("           → bitmap : {:.2} G év/s ({:.3} ms) | gain pool ×{:.1}",
-                 ev as f64 / dt_bm / 1e9, dt_bm * 1e3, dt_old / dt_new);
+        for &s in &sv.idx { fused.row_events_count(s as usize, &mut ev); }
+        println!("  {:>7.1}%  {:>12}  fusion {:>6.2} G ({:.4} ms) | 2-listes {:>6.2} G ({:.4} ms)",
+                 dens * 100.0, ev, ev as f64 / dt / 1e9, dt * 1e3,
+                 ev as f64 / dt_d / 1e9, dt_d * 1e3);
         if dens == 0.25 {
             let y_ref = matvec_dense(&tern, &xa, n_cols, n_rows);
-            let ok_l = out_pool.iter().zip(y_ref.iter()).all(|(a, b)| a == b);
-            let ok_s = out_scoped.iter().zip(y_ref.iter()).all(|(a, b)| a == b);
-            let ok_b = out_bm.iter().zip(y_ref.iter()).all(|(a, b)| a == b);
-            println!("           → contrôle : pool {} | scoped {} | bitmap {}",
-                     if ok_l { "OK" } else { "ÉCHEC" },
-                     if ok_s { "OK" } else { "ÉCHEC" },
-                     if ok_b { "OK" } else { "ÉCHEC" });
+            let rep = |lbl: &str, got: &[i64]| {
+                match got.iter().zip(y_ref.iter()).position(|(a, b)| a != b) {
+                    None => println!("           → {lbl} : IDENTIQUE ✅"),
+                    Some(i) => println!("           → {lbl} : DIVERGENT au rang {i} : {} vs {}",
+                                        got[i], y_ref[i]),
+                }
+            };
+            rep("fusion", &out);
+            rep("2-listes", &out_d);
         }
     }
     pool.shutdown();
-    let _ = n;
 
     // ------------------------------------------- exécution sans multiplieur
     println!("\n=== 3. Exécution sans multiplieur (décalages + additions) ===");

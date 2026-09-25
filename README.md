@@ -18,6 +18,7 @@ Le cahier des charges d'origine est dans [`Qtrinet-bootstrap.md`](Qtrinet-bootst
 | **Sparsité → précision** | ✅ **fait** → [`reports/rapport-precision.md`](reports/rapport-precision.md) |
 | **Encodage de structure (listes signées)** | ✅ **fait** → [`reports/rapport-encodage.md`](reports/rapport-encodage.md) |
 | **Architecture push (AER) + faisabilité CPU** | ✅ **fait** → [`reports/rapport-cpu-aer.md`](reports/rapport-cpu-aer.md) |
+| **Moteur d'événements Rust (4 optimisations)** | ✅ **fait** → [`reports/rapport-optimisations.md`](reports/rapport-optimisations.md) |
 | Modèle ternaire *entraîné* (BitNet b1.58) | ⬜ à faire |
 | Extracteur GGUF → plans ternaires | ⬜ à faire |
 | Format binaire + schéma partagé Python/RTL | ⬜ à faire |
@@ -252,6 +253,54 @@ n'étaient pas le goulot. Et il coûte 838 ms là où l'accumulation en coûte 1
 
 ---
 
+## Moteur d'événements Rust (`qtrinet-core`)
+
+Le moteur d'exécution par listes est maintenant écrit en Rust — **std seul, zéro
+dépendance** (crates.io est inaccessible depuis cette machine, et c'est très bien :
+le moteur tient en 386 lignes). Détail complet :
+[`reports/rapport-optimisations.md`](reports/rapport-optimisations.md).
+
+```bash
+cd qtrinet-core && cargo build --release
+./target/release/qtrinet-core ../models/Qwen2.5-0.5B-Q8_0.gguf --threads 16
+```
+
+**Les 4 optimisations :**
+
+1. **Réduction incrémentale** — chaque worker ne remet à zéro que les destinations
+   qu'il a touchées. Coût d'un appel à vide : 0,484 ms → **0,0051 ms** (×95).
+2. **Décodage SWAR** — 8 écarts d'un octet décodés d'un coup dans un mot de 64 bits
+   (un seul test `w & 0x8080…`), sans branche par élément.
+3. **Vecteur creux explicite** (`SparseVec`) — indices triés + valeurs contiguës,
+   plus de test de zéro ni d'indirection dans la boucle chaude.
+4. **Listes fusionnées** (`FusedSign`) — une seule liste triée + plan de signe, au
+   lieu de deux listes (+, −) : l'accès à l'accumulateur devient monotone.
+
+**Résultats** (16 threads, `blk.0.ffn_gate.weight` 4864×896, 4 303 745 événements) :
+
+| Densité | Événements | Fusion | 2 listes |
+|---|---|---|---|
+| 0 % | 0 | 0,0051 ms | 0,0088 ms |
+| 10 % | 430 359 | 2,46 G év/s | 3,09 G év/s |
+| 25 % | 1 076 785 | 2,84 G év/s | 4,20 G év/s |
+| 100 % | 4 303 745 | 3,66 G év/s | 4,99 G év/s |
+
+Les deux décodeurs donnent un résultat **identique** au produit matrice-vecteur
+dense de référence. Le débit varie de **0,005 ms à 1,18 ms sur la même matrice**
+(rapport 230) : « on ne paie que ce qui s'active » est vérifié à l'échelle du moteur.
+
+**Sans multiplieur** : décalages + additions donnent le résultat exact en 112,3 ms
+contre 2,5 ms pour i8×i8 (×44,9 sur CPU) — mais **sur FPGA le multiplieur n'existe
+pas**, et la contrainte du CDC est satisfaite sans réentraînement ni élagage.
+
+> ⚠️ Une première campagne de mesures annonçait une divergence et un débit de
+> 7,53 G év/s : les deux étaient faux. Le chemin « 2 listes » vidait l'accumulateur
+> par `memset` **puis vidait la liste des destinations touchées**, si bien que
+> l'appel fusion suivant accumulait sur les restes. Corrigé en donnant aux deux
+> décodeurs le même contrat de nettoyage (voir le rapport).
+
+---
+
 ## Écarts avec le CDC d'origine
 
 | Point du CDC | Réalité vérifiée |
@@ -273,6 +322,11 @@ src/ternary.py          quantification ternaire/multi-bits, plans, encodages, MA
 src/tiny_model.py       MLP minimal + entraînement numpy (aucune dépendance ML)
 src/roofline.py         projection matérielle (constantes mesurées de la carte)
 run_quantify.py         orchestrateur : entraîne, quantifie, mesure, écrit le rapport
+qtrinet-core/           moteur d'événements en Rust (std seul, 0 dépendance)
+  src/gguf.rs             lecture GGUF + déquantification Q4_0/Q8_0/F16/F32
+  src/list.rs             encodages : deltas signés, bitmap+signe, creux k, fusion
+  src/engine.rs           pool de threads, décodage SWAR, accumulation creuse
+  src/main.rs             mesures : tailles d'encodage, débit, sans multiplieur
 reports/                rapports générés
 ```
 
@@ -280,6 +334,8 @@ reports/                rapports générés
 
 ```bash
 python3 run_quantify.py --epochs 400      # ~10 s, numpy seul
+cd qtrinet-core && cargo build --release  # moteur d'événements
+./target/release/qtrinet-core ../models/Qwen2.5-0.5B-Q8_0.gguf --threads 16
 ```
 
 Aucune dépendance hors `numpy`. (`torch`/`gguf`/`transformers` seront nécessaires
@@ -297,3 +353,6 @@ plus tard, pour les modèles réels — pas pour le test de principe.)
    (contrainte de cohérence des largeurs de bus du CDC).
 3. **RTL** : PE ternaire (mux + add/sub + accumulateur 24 bits) et décodeur, puis
    mesure réelle du débit sur la carte.
+4. **Moteur** : traitement par blocs de destination (AVX2 n'a ni gather ni scatter
+   entier — il faut transposer le parcours, pas la boucle) et fusion par
+   compartiments de destination pour le multi-cartes.

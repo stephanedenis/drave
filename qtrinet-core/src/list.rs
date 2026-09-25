@@ -131,6 +131,7 @@ impl BitmapSign {
         (self.mask.len() as u64 + self.signs.len() as u64) * 64
     }
     pub fn bits_per_weight(&self) -> f64 { self.bits() as f64 / (self.n_rows * self.n_cols) as f64 }
+
 }
 
 // --------------------------------------------------------------------------- //
@@ -170,3 +171,81 @@ impl SparseK {
 // --------------------------------------------------------------------------- //
 
 pub fn dense_bits(n_weights: usize, k: u32) -> u64 { n_weights as u64 * k as u64 }
+
+// --------------------------------------------------------------------------- //
+// 5. Liste FUSIONNÉE : une seule liste triée + bits de signe
+// --------------------------------------------------------------------------- //
+
+/// Au lieu de deux listes (+, −) parcourues séparément, une **seule** liste
+/// triée par destination, accompagnée d'un plan de signes (1 bit par événement).
+///
+/// Avantage décisif pour le moteur : l'accès à l'accumulateur devient
+/// **monotone croissant**, donc séquentiel — au lieu de sauter entre deux
+/// moitiés de la matrice.
+pub struct FusedSign {
+    pub n_rows: usize,
+    pub n_cols: usize,
+    pub row_start: Vec<usize>,
+    pub data: Vec<u8>,          // varint(n_ev) puis les écarts triés
+    pub signs: Vec<u64>,        // 1 bit par événement (1 = positif)
+    pub sign_pos: Vec<u32>,     // index du premier bit de signe de chaque ligne
+    pub n_events: usize,
+}
+
+impl FusedSign {
+    pub fn build(levels: &[i8], n_rows: usize, n_cols: usize) -> Self {
+        let mut data = Vec::with_capacity(n_rows * 24);
+        let mut row_start = Vec::with_capacity(n_rows + 1);
+        let mut sign_pos = Vec::with_capacity(n_rows + 1);
+        let mut signs: Vec<u64> = Vec::with_capacity(n_rows * 4);
+        let mut cur = 0u64;
+        let mut nbits = 0u32;
+        let mut n_events = 0usize;
+
+        for r in 0..n_rows {
+            row_start.push(data.len());
+            sign_pos.push(n_events as u32);
+            let row = &levels[r * n_cols..(r + 1) * n_cols];
+            let n_ev = row.iter().filter(|&&v| v != 0).count();
+            put_varint(&mut data, n_ev as u64);
+            let mut prev = 0usize;
+            for (c, &v) in row.iter().enumerate() {
+                if v == 0 { continue; }
+                put_varint(&mut data, (c - prev) as u64);
+                prev = c;
+                if v > 0 { cur |= 1u64 << nbits; }
+                nbits += 1;
+                n_events += 1;
+                if nbits == 64 { signs.push(cur); cur = 0; nbits = 0; }
+            }
+        }
+        if nbits > 0 { signs.push(cur); }
+        row_start.push(data.len());
+        sign_pos.push(n_events as u32);
+        FusedSign { n_rows, n_cols, row_start, data, signs, sign_pos, n_events }
+    }
+
+    pub fn bits(&self) -> u64 {
+        (self.data.len() as u64) * 8 + (self.signs.len() as u64) * 64
+            + (self.row_start.len() as u64 + self.sign_pos.len() as u64) * 8
+    }
+    pub fn bits_per_weight(&self) -> f64 { self.bits() as f64 / (self.n_rows * self.n_cols) as f64 }
+
+    /// Compte les événements d'une ligne (sans les accumuler).
+    pub fn row_events_count(&self, r: usize, acc: &mut usize) {
+        let mut p = self.row_start[r];
+        let b0 = self.data[p];
+        *acc += if b0 < 0x80 { b0 as usize } else {
+            p += 1;
+            let mut v = (b0 & 0x7F) as usize;
+            let mut sh = 7;
+            loop {
+                let b = self.data[p]; p += 1;
+                v |= ((b & 0x7F) as usize) << sh;
+                if b < 0x80 { break; }
+                sh += 7;
+            }
+            v
+        };
+    }
+}
