@@ -11,6 +11,8 @@ embeddings liés (pas de tenseur de sortie séparé).
 
 from __future__ import annotations
 
+import math
+
 import numpy as np
 
 
@@ -95,7 +97,12 @@ class Qwen2:
 
             k = np.repeat(k, self.n_rep, axis=1)       # GQA : 1 KV pour n_rep Q
             v = np.repeat(v, self.n_rep, axis=1)
-            sc = np.einsum("thd,shd->hts", q, k) / np.sqrt(self.head_dim)
+            # ATTENTION : np.sqrt() renvoie un np.float64, qui PROMEUT tout le
+            # calcul en float64 (numpy ne le traite pas comme un scalaire faible,
+            # contrairement à un float Python). Conséquence mesurée : le tenseur
+            # caché passait en float64 et chaque matmul reconvertissait les poids
+            # float32 à la volée → forward 40x plus lent. D'où le float() explicite.
+            sc = np.einsum("thd,shd->hts", q, k) * (1.0 / math.sqrt(self.head_dim))
             mask = np.triu(np.full((T, T), -np.inf, dtype=np.float32), 1)
             p = softmax(sc + mask[None], axis=-1)      # (H, T, T)
             if collect is not None:
@@ -114,6 +121,9 @@ class Qwen2:
 
         if collect is not None:
             collect["final_hidden"] = h
+        if h.dtype != np.float32:      # garde-fou : aucune promotion silencieuse
+            raise TypeError(f"le tenseur caché a dérivé en {h.dtype} — "
+                            "chercher un scalaire numpy (np.float64) dans les opérations")
         return rms_norm(h, self.out_norm, self.eps) @ self.embd.T
 
     # ---------------------------------------------------------------- perplexité

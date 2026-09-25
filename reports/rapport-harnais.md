@@ -1,10 +1,10 @@
 # Qtrinet — harnais de test : qualité et débit variable
 
-Modèle : **qwen2 Q8_0** · corpus : WikiText-2 test (4088 tokens évalués).
+Modèle : **qwen2 Q8_0** · corpus : WikiText-2 test (4080 tokens évalués).
 
 ## 1. Qualité — perplexité
 
-**PPL = 20.29** sur 4088 tokens.
+**PPL = 24.77** sur 4080 tokens.
 
 Référence : un Qwen2.5-0.5B correct tourne autour de 15-25 sur WikiText-2 ;
 cette valeur valide l'implémentation numpy (aucune bibliothèque ML).
