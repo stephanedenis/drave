@@ -1,0 +1,14 @@
+[package]
+name = "qtrinet-core"
+version = "0.1.0"
+edition = "2021"
+description = "Moteur d'exécution par listes d'événements pour modèles quantifiés (Qtrinet)"
+
+[dependencies]
+# aucune : std seul, pour rester sans dépendance réseau
+
+[profile.release]
+opt-level = 3
+lto = true
+codegen-units = 1
+panic = "abort"
