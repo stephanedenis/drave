@@ -112,6 +112,7 @@ impl Tokenizer {
         String::from_utf8_lossy(&bytes).into_owned()
     }
 
+    #[allow(dead_code)] // fait partie de l'API demandée
     pub fn vocab_size(&self) -> usize {
         self.id_to_tok.len()
     }

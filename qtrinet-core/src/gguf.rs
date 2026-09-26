@@ -1,5 +1,7 @@
 //! Lecteur GGUF minimal (std seul).
 //!
+#![allow(dead_code)] // lecteur générique : tous les formats ne servent pas au moteur
+
 //! Ne lit que ce dont le moteur a besoin : métadonnées, descripteurs de tenseurs,
 //! et les niveaux quantifiés (Q8_0 / Q4_0) ou les flottants (F32 / F16).
 
@@ -262,29 +264,6 @@ impl Gguf {
             let mut s = 0i32;
             for j in 0..32 {
                 s += (w[j] as i8 as i32) * (x[j] as i32);
-            }
-            acc += d * s as f32;
-        }
-        acc
-    }
-
-    /// Produit scalaire d'une ligne **Q8_0** avec une activation int8 :
-    /// `y = Σ_blocs d_bloc · Σ_j q_poids · q_act`. Sert à la tête de sortie
-    /// (vocabulaire de 151 936 lignes), où le mode push coûterait un
-    /// accumulateur de 150 000 sorties par worker.
-    pub fn q8_row_dot(&self, name: &str, row: usize, qx: &[i16]) -> f32 {
-        let t = self.tensor(name).expect("tenseur absent");
-        let n_cols = t.dims[1] as usize;
-        assert_eq!(qx.len(), n_cols, "largeur d'activation inattendue");
-        let base = self.data_start + t.offset as usize;
-        let nb = n_cols / 32;
-        let mut acc = 0f32;
-        for b in 0..nb {
-            let p = base + (row * nb + b) * 34;
-            let d = Self::f16_to_f32(u16::from_le_bytes(self.buf[p..p+2].try_into().unwrap()));
-            let mut s = 0i32;
-            for j in 0..32 {
-                s += (self.buf[p + 2 + j] as i8 as i32) * (qx[b * 32 + j] as i32);
             }
             acc += d * s as f32;
         }

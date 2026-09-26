@@ -1,3 +1,5 @@
+#![allow(dead_code)] // catalogue d'encodages : les mesures n'en exercent qu'une partie
+
 //! Encodages de listes pour matrices quantifiées + mesure exacte de leur taille.
 //!
 //! Trois familles, toutes **sans perte** par rapport aux niveaux quantifiés :

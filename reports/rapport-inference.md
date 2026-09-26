@@ -199,7 +199,7 @@ reprise.
 ## 7. Reproductible
 
 ```bash
-cd qtrinet-core && cargo build --release
+cd qtrinet-core && cargo build --release     # 0 avertissement
 
 # génération de texte (gabarit de chat Qwen2.5)
 ./target/release/qtrinet-core ../models/Qwen2.5-0.5B-Q8_0.gguf \
@@ -209,4 +209,17 @@ cd qtrinet-core && cargo build --release
 # perplexité sur une suite d'identifiants
 ./target/release/qtrinet-core ../models/Qwen2.5-0.5B-Q8_0.gguf \
     --ppl /tmp/wt2_ids.txt --ctx 256 --abits 16 --threads 16
+
+# comparaison avec un noyau dense int8 (mêmes poids, mêmes activations)
+./target/release/qtrinet-core ../models/Qwen2.5-0.5B-Q8_0.gguf \
+    --infer --ids 9707,0 --n 16 --threads 16 --abits 16 --dense
+```
+
+Exemple de sortie (le modèle tourne réellement sur le CPU de cette machine) :
+
+```
+<|im_start|>user
+Give the first five prime numbers, separated by commas.<|im_end|>
+<|im_start|>assistant
+3, 5, 7, 11, 13<|im_end|>
 ```

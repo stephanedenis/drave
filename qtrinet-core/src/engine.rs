@@ -40,8 +40,8 @@ impl SparseVec {
         }
         SparseVec { idx, val }
     }
-    pub fn len(&self) -> usize { self.idx.len() }
-    pub fn is_empty(&self) -> bool { self.idx.is_empty() }
+    #[allow(dead_code)] pub fn len(&self) -> usize { self.idx.len() }
+    #[allow(dead_code)] pub fn is_empty(&self) -> bool { self.idx.is_empty() }
 }
 
 // --------------------------------------------------------------------------- //
@@ -251,7 +251,6 @@ pub struct Pool {
     /// appel : la réduction ne balaie que l'union de ces fenêtres.
     spans: Vec<(usize, usize)>,
     outs: Vec<Vec<f32>>,
-    sx_bits: u32,
 }
 
 impl Pool {
@@ -317,10 +316,7 @@ impl Pool {
                         let dst = &mut outs[id];
                         if dst.len() < d.n_out { dst.resize(d.n_out, 0.0); }
                         for o in lo..hi {
-                            let mut s = 0i64;
-                            let row = &d.q[o * d.n_in..(o + 1) * d.n_in];
-                            for i in 0..d.n_in { s += row[i] as i64 * xv[i] as i64; }
-                            dst[o] = s as f32 * d.scale[o] * sx;
+                            dst[o] = d.dot(o, xv) as f32 * d.scale[o] * sx;
                         }
                         sh.done.fetch_add(1, Ordering::Release);
                         continue;
@@ -366,7 +362,7 @@ impl Pool {
         }
         Pool { shared, handles, n, n_out, accs: vec![vec![0i64; n_out]; n],
                touched: vec![Vec::new(); n], spans: vec![(usize::MAX, 0usize); n],
-               outs: vec![Vec::new(); n], sx_bits: 0f32.to_bits() }
+               outs: vec![Vec::new(); n] }
     }
 
     pub fn threads(&self) -> usize { self.n }
