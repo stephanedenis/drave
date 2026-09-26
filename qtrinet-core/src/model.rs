@@ -67,12 +67,53 @@ pub struct Stats {
 // Chargement
 // --------------------------------------------------------------------------- //
 
+/// Élague chaque ligne de sortie en ne gardant que la fraction `keep` des poids
+/// de plus grande magnitude. C'est le levier qui compte pour le moteur : son
+/// coût est proportionnel au nombre de **non-zéros**, pas à la largeur des
+/// valeurs. `keep = 1.0` ne touche à rien.
+fn prune_rows(w: &mut [f32], n_out: usize, n_in: usize, keep: f32) {
+    if keep >= 1.0 { return; }
+    let k = ((n_in as f32 * keep) as usize).max(1);
+    let mut abs = vec![0f32; n_in];
+    for o in 0..n_out {
+        let row = &mut w[o * n_in..(o + 1) * n_in];
+        for (i, &v) in row.iter().enumerate() { abs[i] = v.abs(); }
+        // seuil = k-ième plus grande magnitude (sélection en O(n))
+        let (_, &mut seuil, _) = abs.select_nth_unstable_by(n_in - k, |a, b| a.partial_cmp(b).unwrap());
+        for v in row.iter_mut() { if v.abs() < seuil { *v = 0.0; } }
+    }
+}
+
+/// Élagage **structuré** : pour chaque source (entrée), on ne garde qu'une
+/// fenêtre contiguë de destinations, centrée sur la plus forte. Les listes
+/// d'événements deviennent des suites d'écarts de 1 — c'est la forme que
+/// produiraient des grappes efférentes imposées à l'entraînement.
+fn prune_structured(w: &mut [f32], n_out: usize, n_in: usize, keep: f32) {
+    if keep >= 1.0 { return; }
+    let win = ((n_out as f32 * keep) as usize).max(1);
+    for i in 0..n_in {
+        let mut best_o = 0usize;
+        let mut best = 0f32;
+        for o in 0..n_out {
+            let a = w[o * n_in + i].abs();
+            if a > best { best = a; best_o = o; }
+        }
+        let lo = best_o.saturating_sub(win / 2);
+        let hi = (lo + win).min(n_out);
+        for o in 0..n_out {
+            if o < lo || o >= hi { w[o * n_in + i] = 0.0; }
+        }
+    }
+}
+
 impl Proj {
-    fn load(g: &Gguf, name: &str, bias: Option<&str>, dense: bool) -> Self {
+    fn load(g: &Gguf, name: &str, bias: Option<&str>, dense: bool, keep: f32) -> Self {
         let t = g.tensor(name).unwrap_or_else(|| panic!("tenseur {name} absent"));
         let n_out = t.dims[0] as usize;
         let n_in = t.dims[1] as usize;
-        let w = g.dequant(name);
+        let mut w = g.dequant(name);
+        if keep < 0.0 { prune_structured(&mut w, n_out, n_in, -keep); }
+        else { prune_rows(&mut w, n_out, n_in, keep); }
         let (m, d) = if dense {
             (None, Some(DenseQ8::build(&w, n_out, n_in)))
         } else {
@@ -100,10 +141,12 @@ pub struct Model {
     pub act_levels: f32,
     /// Token d'arrêt (EOS / <|im_end|>) : la génération s'interrompt dessus.
     pub stop_id: Option<u32>,
+    /// Postes de temps cumulés, en secondes (diagnostic).
+    pub prof: [f64; 6],
 }
 
 impl Model {
-    pub fn load(path: &str, ctx: usize, n_threads: usize, dense: bool) -> Model {
+    pub fn load(path: &str, ctx: usize, n_threads: usize, dense: bool, keep: f32) -> Model {
         let t0 = Instant::now();
         let g = Gguf::open(path).expect("ouverture du GGUF");
         let cfg = Cfg {
@@ -129,14 +172,14 @@ impl Model {
             let p = |s: &str| format!("blk.{l}.{s}");
             let lay = Layer {
                 attn_norm: g.dequant(&p("attn_norm.weight")),
-                wq: Proj::load(&g, &p("attn_q.weight"), Some(&p("attn_q.bias")), dense),
-                wk: Proj::load(&g, &p("attn_k.weight"), Some(&p("attn_k.bias")), dense),
-                wv: Proj::load(&g, &p("attn_v.weight"), Some(&p("attn_v.bias")), dense),
-                wo: Proj::load(&g, &p("attn_output.weight"), None, dense),
+                wq: Proj::load(&g, &p("attn_q.weight"), Some(&p("attn_q.bias")), dense, keep),
+                wk: Proj::load(&g, &p("attn_k.weight"), Some(&p("attn_k.bias")), dense, keep),
+                wv: Proj::load(&g, &p("attn_v.weight"), Some(&p("attn_v.bias")), dense, keep),
+                wo: Proj::load(&g, &p("attn_output.weight"), None, dense, keep),
                 ffn_norm: g.dequant(&p("ffn_norm.weight")),
-                wgate: Proj::load(&g, &p("ffn_gate.weight"), None, dense),
-                wup: Proj::load(&g, &p("ffn_up.weight"), None, dense),
-                wdown: Proj::load(&g, &p("ffn_down.weight"), None, dense),
+                wgate: Proj::load(&g, &p("ffn_gate.weight"), None, dense, keep),
+                wup: Proj::load(&g, &p("ffn_up.weight"), None, dense, keep),
+                wdown: Proj::load(&g, &p("ffn_down.weight"), None, dense, keep),
             };
             for pj in [&lay.wq, &lay.wk, &lay.wv, &lay.wo, &lay.wgate, &lay.wup, &lay.wdown] {
                 if let Some(m) = &pj.m { bytes += m.data.len() as u64; }
@@ -147,13 +190,17 @@ impl Model {
         let out_norm = g.dequant("output_norm.weight");
         let kv = vec![0f32; cfg.n_kv_head * ctx * cfg.head_dim];
         let pool = Pool::new(n_threads, cfg.hidden);
-        eprintln!("[modele] {} couches chargées en {:?} — listes {:.2} Go, {} threads",
-                  cfg.n_layer, t0.elapsed(), bytes as f64 / 1e9, pool.threads());
+        eprintln!("[modele] {} couches chargées en {:?} — listes {:.2} Go{} , {} threads",
+                  cfg.n_layer, t0.elapsed(), bytes as f64 / 1e9,
+                  if keep < 0.0 { format!(" (poids gardés : {:.0} % structuré)", -keep * 100.0) }
+                  else if keep < 1.0 { format!(" (poids gardés : {:.0} %)", keep * 100.0) }
+                  else { String::new() },
+                  pool.threads());
         let n_layer = cfg.n_layer;
         Model {
             g, cfg, layers, out_norm, pool,
             kv_k: vec![kv.clone(); n_layer], kv_v: vec![kv; n_layer],
-            ctx, events: 0, act_levels: 127.0, stop_id: None,
+            ctx, events: 0, act_levels: 127.0, stop_id: None, prof: [0.0; 6],
         }
     }
 
@@ -255,12 +302,17 @@ impl Model {
 
         for l in 0..cfg.n_layer {
             let lay = &layers[l];
+            let tm = Instant::now();
             Self::rmsnorm(&x, &lay.attn_norm, cfg.eps, &mut hn);
             Self::matvec(pool, &lay.wq, &hn, &mut q, events, self.act_levels);
             Self::matvec(pool, &lay.wk, &hn, &mut k, events, self.act_levels);
             Self::matvec(pool, &lay.wv, &hn, &mut v, events, self.act_levels);
+            self.prof[0] += tm.elapsed().as_secs_f64();
+            let tr = Instant::now();
             Self::rope(&mut q, nh, hd, pos, cfg.rope_base);
             Self::rope(&mut k, nkv, hd, pos, cfg.rope_base);
+            self.prof[1] += tr.elapsed().as_secs_f64();
+            let ta = Instant::now();
             // écriture du cache KV à la position courante
             {
                 let kc = &mut kv_k[l];
@@ -297,15 +349,17 @@ impl Model {
                     att[hh * hd + d] = s;
                 }
             }
+            self.prof[2] += ta.elapsed().as_secs_f64();
+            let tf = Instant::now();
             Self::matvec(pool, &lay.wo, &att, &mut o, events, self.act_levels);
             for i in 0..h { o[i] += x[i]; }
-
             Self::rmsnorm(&o, &lay.ffn_norm, cfg.eps, &mut hn);
             Self::matvec(pool, &lay.wgate, &hn, &mut gate, events, self.act_levels);
             Self::matvec(pool, &lay.wup, &hn, &mut up, events, self.act_levels);
             for i in 0..cfg.ffn { gate[i] = (gate[i] / (1.0 + (-gate[i]).exp())) * up[i]; }
             Self::matvec(pool, &lay.wdown, &gate, &mut down, events, self.act_levels);
             for i in 0..h { x[i] = o[i] + down[i]; }
+            self.prof[3] += tf.elapsed().as_secs_f64();
         }
         Self::rmsnorm(&x, out_norm, cfg.eps, &mut hn);
         hn

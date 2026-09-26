@@ -195,6 +195,7 @@ fn run_infer(args: &[String]) {
     let mut abits = 8u32;
     let mut chat = false;
     let mut dense = false;
+    let mut keep = 1.0f32;
     // L'inférence paie une barrière par matrice (168 par token) : l'optimum
     // mesuré est autour de la moitié des CPU logiques, pas des trois quarts.
     let cpu = std::thread::available_parallelism().map(|n| n.get()).unwrap_or(8);
@@ -213,11 +214,12 @@ fn run_infer(args: &[String]) {
             "--threads" => n_threads = args[i + 1].parse().unwrap(),
             "--chat" => { chat = true; i -= 1; }
             "--dense" => { dense = true; i -= 1; }
+            "--keep" => keep = args[i + 1].parse().unwrap(),
             _ => {}
         }
         i += 2;
     }
-    let mut mdl = model::Model::load(path, ctx, n_threads, dense);
+    let mut mdl = model::Model::load(path, ctx, n_threads, dense, keep);
     mdl.act_levels = ((1u32 << (abits - 1)) - 1) as f32;
     if chat {
         mdl.stop_id = build_tokenizer(&mdl.g).special_id("<|im_end|>");
@@ -290,6 +292,11 @@ fn run_infer(args: &[String]) {
              st.n_gen, st.gen_s, st.n_gen as f64 / st.gen_s);
     println!("événements : {} au total, {:.1} par token",
              st.events, st.events as f64 / (st.n_prompt + st.n_gen) as f64);
+    let n_tok = (st.n_prompt + st.n_gen) as f64;
+    let p = mdl.prof;
+    println!("postes (ms/token) : matvec-attn {:.1} | rope {:.1} | attention {:.1} | matvec+mlp {:.1} | total mesuré {:.1}",
+             p[0] / n_tok * 1e3, p[1] / n_tok * 1e3, p[2] / n_tok * 1e3, p[3] / n_tok * 1e3,
+             (p[0] + p[1] + p[2] + p[3]) / n_tok * 1e3);
 }
 
 
@@ -349,7 +356,7 @@ fn run_ppl(args: &[String]) {
         .collect();
     println!("{idfile} : {} tokens, fenêtres de {ctx}", ids.len());
 
-    let mut mdl = model::Model::load(path, ctx, n_threads, false);
+    let mut mdl = model::Model::load(path, ctx, n_threads, false, 1.0);
     mdl.act_levels = ((1u32 << (abits - 1)) - 1) as f32;
     mdl.reset_events();
     let t0 = Instant::now();

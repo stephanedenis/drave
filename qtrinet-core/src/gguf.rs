@@ -53,10 +53,11 @@ impl TensorInfo {
 pub const GGML_F32: u32 = 0;
 pub const GGML_F16: u32 = 1;
 pub const GGML_Q4_0: u32 = 2;
+pub const GGML_Q4_1: u32 = 3;
 pub const GGML_Q8_0: u32 = 8;
 
-/// Pointeur pré-résolu vers les lignes d'un tenseur Q8_0.
-pub struct Q8View { pub base: usize, pub n_cols: usize, pub nb: usize }
+/// Pointeur pré-résolu vers les lignes d'un tenseur quantifié (Q8_0 ou Q4_0).
+pub struct Q8View { pub base: usize, pub n_cols: usize, pub nb: usize, pub q4: bool }
 
 pub struct Gguf {
     pub meta: HashMap<String, Meta>,
@@ -237,6 +238,16 @@ impl Gguf {
                     for j in 0..16 { out.push(d * ((self.buf[p + 2 + j] >> 4) as i16 - 8) as f32); }
                 }
             }
+            GGML_Q4_1 => {
+                let nb = n_cols / 32;
+                for b in 0..nb {
+                    let p = base + (row * nb + b) * 20;
+                    let d = Self::f16_to_f32(u16::from_le_bytes(self.buf[p..p+2].try_into().unwrap()));
+                    let m = Self::f16_to_f32(u16::from_le_bytes(self.buf[p+2..p+4].try_into().unwrap()));
+                    for j in 0..16 { out.push(d * (self.buf[p + 4 + j] & 0x0F) as f32 + m); }
+                    for j in 0..16 { out.push(d * (self.buf[p + 4 + j] >> 4) as f32 + m); }
+                }
+            }
             other => panic!("row_f32 : type {other} non géré"),
         }
         out
@@ -247,25 +258,46 @@ impl Gguf {
     /// sortie appelle cela 151 936 fois par token.
     pub fn q8_view(&self, name: &str) -> Q8View {
         let t = self.tensor(name).expect("tenseur absent");
-        assert_eq!(t.ttype, GGML_Q8_0, "q8_view : tenseur non Q8_0");
+        let q4 = match t.ttype {
+            GGML_Q8_0 => false,
+            GGML_Q4_0 => true,
+            other => panic!("q8_view : type {other} non géré"),
+        };
         let n_cols = t.dims[1] as usize;
-        Q8View { base: self.data_start + t.offset as usize, n_cols, nb: n_cols / 32 }
+        Q8View { base: self.data_start + t.offset as usize, n_cols, nb: n_cols / 32, q4 }
     }
 
-    /// Produit scalaire d'une ligne via une vue pré-résolue.
+    /// Produit scalaire d'une ligne via une vue pré-résolue (Q8_0 ou Q4_0).
     #[inline]
     pub fn q8_dot_at(&self, v: &Q8View, row: usize, qx: &[i16]) -> f32 {
         let mut acc = 0f32;
-        for b in 0..v.nb {
-            let p = v.base + (row * v.nb + b) * 34;
-            let d = Self::f16_to_f32(u16::from_le_bytes(self.buf[p..p+2].try_into().unwrap()));
-            let w = &self.buf[p + 2..p + 34];
-            let x = &qx[b * 32..b * 32 + 32];
-            let mut s = 0i32;
-            for j in 0..32 {
-                s += (w[j] as i8 as i32) * (x[j] as i32);
+        if v.q4 {
+            // bloc Q4_0 : 2 octets d'échelle + 16 octets = 32 niveaux (4 bits)
+            // les 16 premiers sont les nibbles BAS, les 16 suivants les HAUTS
+            for b in 0..v.nb {
+                let p = v.base + (row * v.nb + b) * 18;
+                let d = Self::f16_to_f32(u16::from_le_bytes(self.buf[p..p+2].try_into().unwrap()));
+                let w = &self.buf[p + 2..p + 18];
+                let x = &qx[b * 32..b * 32 + 32];
+                let mut s = 0i32;
+                for j in 0..16 {
+                    s += (((w[j] & 0x0F) as i32) - 8) * (x[j] as i32);
+                    s += (((w[j] >> 4) as i32) - 8) * (x[j + 16] as i32);
+                }
+                acc += d * s as f32;
             }
-            acc += d * s as f32;
+        } else {
+            for b in 0..v.nb {
+                let p = v.base + (row * v.nb + b) * 34;
+                let d = Self::f16_to_f32(u16::from_le_bytes(self.buf[p..p+2].try_into().unwrap()));
+                let w = &self.buf[p + 2..p + 34];
+                let x = &qx[b * 32..b * 32 + 32];
+                let mut s = 0i32;
+                for j in 0..32 {
+                    s += (w[j] as i8 as i32) * (x[j] as i32);
+                }
+                acc += d * s as f32;
+            }
         }
         acc
     }
@@ -302,6 +334,18 @@ impl Gguf {
                     let d = Self::f16_to_f32(u16::from_le_bytes(self.buf[p..p+2].try_into().unwrap()));
                     for j in 0..16 { out.push(d * ((self.buf[p + 2 + j] & 0x0F) as i16 - 8) as f32); }
                     for j in 0..16 { out.push(d * ((self.buf[p + 2 + j] >> 4) as i16 - 8) as f32); }
+                }
+            }
+            GGML_Q4_1 => {
+                // bloc de 20 octets : échelle f16, décalage f16, 16 octets de nibbles
+                // valeur = d · q + m, q ∈ 0..15 (pas de niveau zéro central)
+                let nb = n / 32;
+                for b in 0..nb {
+                    let p = base + b * 20;
+                    let d = Self::f16_to_f32(u16::from_le_bytes(self.buf[p..p+2].try_into().unwrap()));
+                    let m = Self::f16_to_f32(u16::from_le_bytes(self.buf[p+2..p+4].try_into().unwrap()));
+                    for j in 0..16 { out.push(d * (self.buf[p + 4 + j] & 0x0F) as f32 + m); }
+                    for j in 0..16 { out.push(d * (self.buf[p + 4 + j] >> 4) as f32 + m); }
                 }
             }
             other => panic!("dequant : type {other} non géré"),

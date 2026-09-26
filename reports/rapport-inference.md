@@ -196,7 +196,80 @@ reprise.
    1,44 octet par poids — contre 1,06 pour Q8_0 dense. À 99 % de densité, les listes
    coûtent 36 % de mémoire en plus et n'économisent rien.
 
-## 7. Reproductible
+## 7. Le 4 bits ne paie pas — et pourquoi
+
+*Réponse mesurée à la question « est-ce que ça permet de faire tourner des modèles
+4 bits efficacement sur CPU ? »*
+
+Le même moteur, le même code, deux modèles du même réseau :
+
+| | Q8_0 | Q4_0/Q4_1 | écart |
+|---|---|---|---|
+| Fichier GGUF | 506 Mo | 337 Mo | **−33 %** |
+| Listes en mémoire | 0,71 Go | 0,63 Go | **−11 %** |
+| Événements par token | 352,7 M | 312,5 M | −12 % |
+| RSS | 1,27 Go | 1,02 Go | −20 % |
+| Débit | 10,33 tok/s | 11,78 tok/s | +14 % |
+| **Perplexité WikiText-2** | **24,90** | **27,83** | **+12 %** |
+
+➡️ **Non.** Le fichier perd un tiers de sa taille, mais notre représentation n'en
+gagne que 11 % : chaque événement coûte `varint(écart) + i8(valeur)`, soit ~2 octets,
+**quelle que soit la précision de la source**. Le 4 bits est élargi à 8 bits au
+chargement. Et la vitesse suit le *nombre d'événements*, pas le nombre de bits :
+−12 % d'événements, +14 % de débit. On échange 12 % de perplexité contre 11 % de
+mémoire — un mauvais marché.
+
+*(Même en empaquetant idéalement la valeur sur 4 bits, on serait à 1,5 octet par
+événement contre 0,56 octet par poids en Q4 dense : le format liste reste 2,7× plus
+gros, parce qu'à 99 % de densité chaque poids a besoin de son octet d'écart.)*
+
+### Le vrai résultat : le coût d'un événement n'est pas constant
+
+En élaguant par magnitude (le levier qui, lui, réduit réellement le nombre
+d'événements) :
+
+| poids gardés | événements/token | tok/s | débit par événement |
+|---|---|---|---|
+| 100 % | 352,7 M | 10,33 | 3,56 G év/s |
+| 50 % | 178,6 M | 12,17 | 2,28 G év/s |
+| 25 % | 89,5 M | 15,64 | 1,43 G év/s |
+| 10 % | 35,6 M | 21,40 | 0,88 G év/s |
+
+**10× moins d'événements ne donnent que 2× de vitesse.** Le débit par événement
+s'effondre quand la matrice s'éclaircit. Deux causes identifiées :
+
+**1. La localité du accumulateur.** À pleine densité, 8 événements consécutifs
+tombent dans la même ligne de cache : une seule transaction mémoire pour huit. À
+10 %, chaque événement touche une ligne différente. L'élagage par magnitude disperse
+les poids ; un élagage **contigu** (fenêtre de destinations par source, la forme que
+produiraient des grappes efférentes) est **30 % plus rapide à taux égal** :
+
+| élagage à 25 % | événements | matvec | tok/s |
+|---|---|---|---|
+| dispersé (magnitude) | 89,5 M | 66,1 ms | 13,77 |
+| **contigu (fenêtre)** | 85,8 M | **50,1 ms** | **17,91** |
+
+**2. La taille de l'accumulateur — et c'est le résultat le plus important.** Chaque
+worker tient un accumulateur de `n_out` entiers de 64 bits (39 Ko pour une matrice
+4864 × 896). En densité pleine, l'accès est séquentiel et le préchargeur masque tout.
+En densité faible, il est dispersé et chaque worker promène son propre accumulateur :
+
+| threads | 4 | 8 | 16 | 32 |
+|---|---|---|---|---|
+| matvec, 100 % de poids | 186,6 ms | 120,6 ms | 99,1 ms | **90,4 ms** |
+| matvec, 10 % de poids | **31,3 ms** | 35,7 ms | 40,6 ms | 52,9 ms ❌ |
+
+➡️ **Sur des événements épars, ajouter des threads *ralentit*.** À 32 workers il faut
+1,2 Mo d'accumulateurs, qui débordent le cache L2 de chaque cœur : chaque écriture
+devient un accès L3. Le mode événementiel n'est parallélisable que si l'accumulateur
+par worker tient dans son cache.
+
+**Conséquence pour la carte :** le dimensionnement de l'accumulateur sur puce n'est
+pas un détail d'implémentation, c'est le paramètre qui décide du débit en régime
+creux. Il plaide pour un **tuilage de la dimension de sortie** (traiter 512–1024
+destinations à la fois) plutôt qu'un accumulateur large par PE.
+
+## 8. Reproductible
 
 ```bash
 cd qtrinet-core && cargo build --release     # 0 avertissement
@@ -213,6 +286,14 @@ cd qtrinet-core && cargo build --release     # 0 avertissement
 # comparaison avec un noyau dense int8 (mêmes poids, mêmes activations)
 ./target/release/qtrinet-core ../models/Qwen2.5-0.5B-Q8_0.gguf \
     --infer --ids 9707,0 --n 16 --threads 16 --abits 16 --dense
+
+# modèle 4 bits (le fichier est mixte Q4_0/Q4_1) et élagage
+./target/release/qtrinet-core ../models/Qwen2.5-0.5B-Q4_0.gguf \
+    --infer --ids 9707,0 --n 16 --threads 16 --abits 16
+./target/release/qtrinet-core ../models/Qwen2.5-0.5B-Q8_0.gguf \
+    --infer --ids 9707,0 --n 16 --threads 16 --keep 0.25    # dispersé
+./target/release/qtrinet-core ../models/Qwen2.5-0.5B-Q8_0.gguf \
+    --infer --ids 9707,0 --n 16 --threads 16 --keep -0.25   # contigu
 ```
 
 Exemple de sortie (le modèle tourne réellement sur le CPU de cette machine) :
