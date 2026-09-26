@@ -14,7 +14,7 @@
 //! Barrière par *spin* (atomiques) au lieu de canaux : le coût fixe d'un appel
 //! passe de quelques dizaines de microsecondes à quelques microsecondes.
 
-use crate::list::{FusedSign, PushMat, SignedDelta};
+use crate::list::{DenseQ8, FusedSign, PushMat, SignedDelta};
 use std::sync::atomic::{AtomicBool, AtomicPtr, AtomicUsize, Ordering};
 use std::sync::Arc;
 
@@ -225,6 +225,11 @@ struct Shared {
     lists: AtomicPtr<FusedSign>,
     delta: AtomicPtr<SignedDelta>,
     push: AtomicPtr<PushMat>,
+    dense: AtomicPtr<DenseQ8>,
+    /// activation dense pour le mode 3 (produit scalaire par ligne de sortie)
+    xv: AtomicPtr<i32>,
+    sx: AtomicUsize,
+    outs: AtomicPtr<Vec<Vec<f32>>>,
     /// 0 = listes signées, 1 = listes fusionnées, 2 = listes par source valuées
     mode: AtomicUsize,
     sv_idx: AtomicPtr<u32>,
@@ -245,6 +250,8 @@ pub struct Pool {
     /// étendue EXACTE des destinations écrites par chaque worker au dernier
     /// appel : la réduction ne balaie que l'union de ces fenêtres.
     spans: Vec<(usize, usize)>,
+    outs: Vec<Vec<f32>>,
+    sx_bits: u32,
 }
 
 impl Pool {
@@ -261,6 +268,10 @@ impl Pool {
             lists: AtomicPtr::new(std::ptr::null_mut()),
             delta: AtomicPtr::new(std::ptr::null_mut()),
             push: AtomicPtr::new(std::ptr::null_mut()),
+            dense: AtomicPtr::new(std::ptr::null_mut()),
+            xv: AtomicPtr::new(std::ptr::null_mut()),
+            sx: AtomicUsize::new(0),
+            outs: AtomicPtr::new(std::ptr::null_mut()),
             mode: AtomicUsize::new(1),
             sv_idx: AtomicPtr::new(std::ptr::null_mut()),
             sv_val: AtomicPtr::new(std::ptr::null_mut()),
@@ -292,6 +303,28 @@ impl Pool {
                     // sont publiés qu'avant un vrai travail).
                     if sh.stop.load(Ordering::Acquire) { return; }
                     let mode = sh.mode.load(Ordering::Relaxed);
+                    if mode == 3 {
+                        // Mode dense : chaque worker calcule une tranche
+                        // contiguë de sorties, sans dispersion ni réduction.
+                        let d = unsafe { &*sh.dense.load(Ordering::Acquire) };
+                        let xv = unsafe { std::slice::from_raw_parts(
+                            sh.xv.load(Ordering::Acquire), d.n_in) };
+                        let sx = f32::from_bits(sh.sx.load(Ordering::Relaxed) as u32);
+                        let outs = unsafe { &mut *sh.outs.load(Ordering::Acquire) };
+                        let per = (d.n_out + n - 1) / n;
+                        let lo = id * per;
+                        let hi = (lo + per).min(d.n_out);
+                        let dst = &mut outs[id];
+                        if dst.len() < d.n_out { dst.resize(d.n_out, 0.0); }
+                        for o in lo..hi {
+                            let mut s = 0i64;
+                            let row = &d.q[o * d.n_in..(o + 1) * d.n_in];
+                            for i in 0..d.n_in { s += row[i] as i64 * xv[i] as i64; }
+                            dst[o] = s as f32 * d.scale[o] * sx;
+                        }
+                        sh.done.fetch_add(1, Ordering::Release);
+                        continue;
+                    }
                     let f = unsafe { &*sh.lists.load(Ordering::Acquire) };
                     let dl = unsafe { &*sh.delta.load(Ordering::Acquire) };
                     let pm = unsafe { &*sh.push.load(Ordering::Acquire) };
@@ -332,10 +365,30 @@ impl Pool {
             }));
         }
         Pool { shared, handles, n, n_out, accs: vec![vec![0i64; n_out]; n],
-               touched: vec![Vec::new(); n], spans: vec![(usize::MAX, 0usize); n] }
+               touched: vec![Vec::new(); n], spans: vec![(usize::MAX, 0usize); n],
+               outs: vec![Vec::new(); n], sx_bits: 0f32.to_bits() }
     }
 
     pub fn threads(&self) -> usize { self.n }
+
+    /// Produit matrice-vecteur **dense** (référence sans événements).
+    pub fn matvec_dense_i8(&mut self, d: &DenseQ8, x: &[i32], sx: f32) -> Vec<f32> {
+        self.ensure_width(d.n_out);
+        let sh = &self.shared;
+        sh.mode.store(3, Ordering::Relaxed);
+        sh.dense.store(d as *const _ as *mut _, Ordering::Relaxed);
+        sh.xv.store(x.as_ptr() as *mut i32, Ordering::Relaxed);
+        sh.sx.store(sx.to_bits() as usize, Ordering::Relaxed);
+        sh.outs.store(&mut self.outs as *mut Vec<Vec<f32>>, Ordering::Relaxed);
+        sh.done.store(0, Ordering::Relaxed);
+        sh.gen.fetch_add(1, Ordering::Release);
+        while sh.done.load(Ordering::Acquire) != self.n { std::hint::spin_loop(); }
+        let mut out = vec![0f32; d.n_out];
+        for w in &self.outs {
+            for (o, &v) in out.iter_mut().zip(w.iter()) { *o += v; }
+        }
+        out
+    }
 
     /// Accumulation par **listes par source valuées** : le mode de l'inférence.
     pub fn accumulate_push(&mut self, m: &PushMat, sv: &SparseVec) -> Vec<i64> {

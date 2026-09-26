@@ -15,7 +15,7 @@
 
 use crate::engine::{Pool, SparseVec};
 use crate::gguf::Gguf;
-use crate::list::PushMat;
+use crate::list::{DenseQ8, PushMat};
 use std::time::Instant;
 
 // --------------------------------------------------------------------------- //
@@ -34,9 +34,12 @@ pub struct Cfg {
     pub vocab: usize,
 }
 
-/// Une projection : listes d'événements + biais optionnel.
+/// Une projection, dans l'un des deux formats, plus son biais éventuel.
+/// `m` = listes d'événements (architecture du projet) ;
+/// `d` = matrice dense int8 (référence de comparaison, sans événements).
 pub struct Proj {
-    pub m: PushMat,
+    pub m: Option<PushMat>,
+    pub d: Option<DenseQ8>,
     pub bias: Option<Vec<f32>>,
 }
 
@@ -65,14 +68,18 @@ pub struct Stats {
 // --------------------------------------------------------------------------- //
 
 impl Proj {
-    fn load(g: &Gguf, name: &str, bias: Option<&str>) -> Self {
+    fn load(g: &Gguf, name: &str, bias: Option<&str>, dense: bool) -> Self {
         let t = g.tensor(name).unwrap_or_else(|| panic!("tenseur {name} absent"));
         let n_out = t.dims[0] as usize;
         let n_in = t.dims[1] as usize;
         let w = g.dequant(name);
-        let m = PushMat::build(&w, n_out, n_in);
+        let (m, d) = if dense {
+            (None, Some(DenseQ8::build(&w, n_out, n_in)))
+        } else {
+            (Some(PushMat::build(&w, n_out, n_in)), None)
+        };
         let bias = bias.map(|b| g.dequant(b));
-        Proj { m, bias }
+        Proj { m, d, bias }
     }
 }
 
@@ -96,7 +103,7 @@ pub struct Model {
 }
 
 impl Model {
-    pub fn load(path: &str, ctx: usize, n_threads: usize) -> Model {
+    pub fn load(path: &str, ctx: usize, n_threads: usize, dense: bool) -> Model {
         let t0 = Instant::now();
         let g = Gguf::open(path).expect("ouverture du GGUF");
         let cfg = Cfg {
@@ -122,18 +129,18 @@ impl Model {
             let p = |s: &str| format!("blk.{l}.{s}");
             let lay = Layer {
                 attn_norm: g.dequant(&p("attn_norm.weight")),
-                wq: Proj::load(&g, &p("attn_q.weight"), Some(&p("attn_q.bias"))),
-                wk: Proj::load(&g, &p("attn_k.weight"), Some(&p("attn_k.bias"))),
-                wv: Proj::load(&g, &p("attn_v.weight"), Some(&p("attn_v.bias"))),
-                wo: Proj::load(&g, &p("attn_output.weight"), None),
+                wq: Proj::load(&g, &p("attn_q.weight"), Some(&p("attn_q.bias")), dense),
+                wk: Proj::load(&g, &p("attn_k.weight"), Some(&p("attn_k.bias")), dense),
+                wv: Proj::load(&g, &p("attn_v.weight"), Some(&p("attn_v.bias")), dense),
+                wo: Proj::load(&g, &p("attn_output.weight"), None, dense),
                 ffn_norm: g.dequant(&p("ffn_norm.weight")),
-                wgate: Proj::load(&g, &p("ffn_gate.weight"), None),
-                wup: Proj::load(&g, &p("ffn_up.weight"), None),
-                wdown: Proj::load(&g, &p("ffn_down.weight"), None),
+                wgate: Proj::load(&g, &p("ffn_gate.weight"), None, dense),
+                wup: Proj::load(&g, &p("ffn_up.weight"), None, dense),
+                wdown: Proj::load(&g, &p("ffn_down.weight"), None, dense),
             };
-            for m in [&lay.wq.m, &lay.wk.m, &lay.wv.m, &lay.wo.m,
-                      &lay.wgate.m, &lay.wup.m, &lay.wdown.m] {
-                bytes += m.data.len() as u64;
+            for pj in [&lay.wq, &lay.wk, &lay.wv, &lay.wo, &lay.wgate, &lay.wup, &lay.wdown] {
+                if let Some(m) = &pj.m { bytes += m.data.len() as u64; }
+                if let Some(d) = &pj.d { bytes += d.q.len() as u64 + d.scale.len() as u64 * 4; }
             }
             layers.push(lay);
         }
@@ -173,20 +180,29 @@ impl Model {
     /// Produit matrice-vecteur **par événements** : les activations actives
     /// poussent leur contribution dans les sorties de leur liste.
     fn matvec(pool: &mut Pool, p: &Proj, x: &[f32], out: &mut [f32], events: &mut u64, levels: f32) {
-        match Self::quant(x, levels) {
-            None => {
-                for (o, v) in out.iter_mut().enumerate() {
-                    *v = p.bias.as_ref().map_or(0.0, |b| b[o]);
-                }
+        let Some((sv, sx)) = Self::quant(x, levels) else {
+            for (o, v) in out.iter_mut().enumerate() {
+                *v = p.bias.as_ref().map_or(0.0, |b| b[o]);
             }
-            Some((sv, sx)) => {
-                for &i in &sv.idx { *events += p.m.row_ev[i as usize] as u64; }
-                let acc = pool.accumulate_push(&p.m, &sv);
-                for o in 0..p.m.n_out {
-                    let mut y = acc[o] as f32 * (sx * p.m.scale[o]);
-                    if let Some(b) = &p.bias { y += b[o]; }
-                    out[o] = y;
-                }
+            return;
+        };
+        if let Some(d) = &p.d {
+            // référence dense : pas d'événement, chaque sortie est un produit
+            // scalaire complet sur la ligne de poids
+            let mut xd = vec![0i32; x.len()];
+            for (&i, &v) in sv.idx.iter().zip(sv.val.iter()) { xd[i as usize] = v; }
+            let y = pool.matvec_dense_i8(d, &xd, sx);
+            for o in 0..d.n_out {
+                out[o] = y[o] + p.bias.as_ref().map_or(0.0, |b| b[o]);
+            }
+        } else {
+            let m = p.m.as_ref().expect("projection sans format");
+            for &i in &sv.idx { *events += m.row_ev[i as usize] as u64; }
+            let acc = pool.accumulate_push(m, &sv);
+            for o in 0..m.n_out {
+                let mut y = acc[o] as f32 * (sx * m.scale[o]);
+                if let Some(b) = &p.bias { y += b[o]; }
+                out[o] = y;
             }
         }
     }

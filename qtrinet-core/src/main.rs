@@ -194,6 +194,7 @@ fn run_infer(args: &[String]) {
     let mut topk = 0usize;
     let mut abits = 8u32;
     let mut chat = false;
+    let mut dense = false;
     // L'inférence paie une barrière par matrice (168 par token) : l'optimum
     // mesuré est autour de la moitié des CPU logiques, pas des trois quarts.
     let cpu = std::thread::available_parallelism().map(|n| n.get()).unwrap_or(8);
@@ -211,11 +212,12 @@ fn run_infer(args: &[String]) {
             "--abits" => abits = args[i + 1].parse().unwrap(),
             "--threads" => n_threads = args[i + 1].parse().unwrap(),
             "--chat" => { chat = true; i -= 1; }
+            "--dense" => { dense = true; i -= 1; }
             _ => {}
         }
         i += 2;
     }
-    let mut mdl = model::Model::load(path, ctx, n_threads);
+    let mut mdl = model::Model::load(path, ctx, n_threads, dense);
     mdl.act_levels = ((1u32 << (abits - 1)) - 1) as f32;
     if chat {
         mdl.stop_id = build_tokenizer(&mdl.g).special_id("<|im_end|>");
@@ -347,7 +349,7 @@ fn run_ppl(args: &[String]) {
         .collect();
     println!("{idfile} : {} tokens, fenêtres de {ctx}", ids.len());
 
-    let mut mdl = model::Model::load(path, ctx, n_threads);
+    let mut mdl = model::Model::load(path, ctx, n_threads, false);
     mdl.act_levels = ((1u32 << (abits - 1)) - 1) as f32;
     mdl.reset_events();
     let t0 = Instant::now();

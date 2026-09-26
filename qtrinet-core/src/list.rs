@@ -319,3 +319,61 @@ impl PushMat {
         self.data.len() as f64 * 8.0 / (self.n_in as f64 * self.n_out as f64)
     }
 }
+
+
+// --------------------------------------------------------------------------- //
+// 5. Matrice dense int8 par ligne de sortie (référence « sans événements »)
+// --------------------------------------------------------------------------- //
+
+/// Même quantification que `PushMat` (int8, une échelle par sortie), mais
+/// conservée **en clair, ligne par ligne** : le produit scalaire se fait alors
+/// par ligne de sortie, sans dispersion ni réduction. C'est la référence contre
+/// laquelle mesurer ce que coûte l'architecture événementielle sur CPU.
+pub struct DenseQ8 {
+    pub n_in: usize,
+    pub n_out: usize,
+    pub q: Vec<i8>,        // n_out × n_in, row-major
+    pub scale: Vec<f32>,   // une par sortie
+}
+
+impl DenseQ8 {
+    pub fn build(w: &[f32], n_out: usize, n_in: usize) -> Self {
+        let mut q = vec![0i8; n_out * n_in];
+        let mut scale = vec![0f32; n_out];
+        for o in 0..n_out {
+            let row = &w[o * n_in..(o + 1) * n_in];
+            let mut mx = 0f32;
+            for &v in row { let a = v.abs(); if a > mx { mx = a; } }
+            let s = if mx > 0.0 { mx / 127.0 } else { 1.0 };
+            scale[o] = s;
+            let inv = 1.0 / s;
+            for (i, &v) in row.iter().enumerate() {
+                let r = (v * inv).round();
+                q[o * n_in + i] = if r > 127.0 { 127 } else if r < -127.0 { -127 } else { r as i8 };
+            }
+        }
+        DenseQ8 { n_in, n_out, q, scale }
+    }
+
+    /// Produit scalaire d'une ligne. Déroulé 4× avec quatre accumulateurs :
+    /// une seule chaîne d'accumulation i64 coûte ~3 cycles par élément et
+    /// domine tout le reste (mesuré : 8,5 tok/s contre 10,7 pour le moteur
+    /// d'événements avant déroulage).
+    #[inline]
+    pub fn dot(&self, o: usize, x: &[i32]) -> i64 {
+        let row = &self.q[o * self.n_in..(o + 1) * self.n_in];
+        let n = self.n_in;
+        let (mut a0, mut a1, mut a2, mut a3) = (0i64, 0i64, 0i64, 0i64);
+        let mut i = 0usize;
+        while i + 4 <= n {
+            a0 += row[i] as i64 * x[i] as i64;
+            a1 += row[i + 1] as i64 * x[i + 1] as i64;
+            a2 += row[i + 2] as i64 * x[i + 2] as i64;
+            a3 += row[i + 3] as i64 * x[i + 3] as i64;
+            i += 4;
+        }
+        let mut s = a0 + a1 + a2 + a3;
+        while i < n { s += row[i] as i64 * x[i] as i64; i += 1; }
+        s
+    }
+}

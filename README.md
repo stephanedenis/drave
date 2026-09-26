@@ -328,12 +328,13 @@ cd qtrinet-core && cargo build --release
 
 | | |
 |---|---|
-| Génération | **10,0 tok/s** (16 threads), TTFT 74–95 ms |
+| Génération | **10,5 tok/s** (16 threads), TTFT 74–95 ms |
 | Événements par token | 352,8 M à 3,9 G év/s — le forward est **entièrement** borné par les événements |
 | Mémoire | 1,27 Go (0,71 Go de listes), chargement 6,3 s |
 | Justesse | **16 tokens sur 16 identiques** à la référence numpy float32 |
 | Perplexité WikiText-2 | **24,90** contre **25,00** pour numpy + OpenBLAS |
-| Comparaison | 132 ms/token pour numpy + OpenBLAS (40 threads) contre **100 ms** ici (16 threads) |
+| Comparaison | 132 ms/token pour numpy + OpenBLAS (40 threads) contre **95 ms** ici (16 threads) |
+| Coût de l'architecture | **+8 %** face à un noyau dense int8 équivalent (11,4 tok/s) — en lisant 36 % de mémoire en plus |
 
 **Deux compromis assumés :** la tête de sortie (151 936 sorties) est calculée par
 produits scalaires sur les lignes Q8_0 d'origine — en mode push il faudrait un

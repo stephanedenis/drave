@@ -78,7 +78,7 @@ Machine : 2 × Xeon E5-2687W v3 (20 cœurs / 40 CPU logiques), bureau actif.
 | Chargement du modèle (quantification + transposition) | 6,3 s |
 | Mémoire résidente | **1,27 Go** (dont 0,71 Go de listes) |
 | Événements par token | **352,8 M** |
-| **Débit de génération** | **10,0 tok/s** (int16) · 10,3 tok/s (int8) |
+| **Débit de génération** | **10,5 tok/s** (int16) · 10,6 (int8) · **11,4 en dense** |
 | Temps par token | 100 ms = 90 ms de forward + 10 ms de tête |
 | TTFT | 74–95 ms |
 | Débit pendant le forward | **3,9 G événements/s** |
@@ -87,15 +87,41 @@ Montée en charge de l'inférence (meilleur de 2, densité 100 %) :
 
 | Threads | 1 | 8 | 16 | 24 | 32 |
 |---|---|---|---|---|---|
-| tok/s | 1,51 | 8,22 | **10,39** | 10,13 | 9,98 |
+| tok/s | 1,51 | 8,22 | **10,52** | 10,15 | 9,83 |
 
 ➡️ L'optimum est vers **16 threads** — la moitié des CPU — et non 32 : un token paie
 **168 barrières** (7 matrices × 24 couches), donc le coût fixe compte plus que dans le
 microbanc. Le défaut du mode `--infer` est réglé sur `CPU/2`.
 
 Pour comparaison, la référence numpy + OpenBLAS (40 threads) faisait 132 ms par token,
-soit 7,6 tok/s. **Le moteur d'événements est 30 % plus rapide que numpy+BLAS** — sans
+soit 7,6 tok/s. **Le moteur d'événements est 38 % plus rapide que numpy+BLAS** — sans
 BLAS, sans GPU, et en arithmétique entière exacte.
+
+### Combien coûte l'architecture événementielle sur CPU ?
+
+Question centrale du projet, et elle a maintenant une réponse mesurée. Le même modèle,
+la même quantification (int8 par ligne), les mêmes activations (int16), les mêmes
+tokens générés — seule change la façon de parcourir les poids :
+
+| | mémoire des poids | tok/s (16 threads) |
+|---|---|---|
+| **Listes d'événements** (push, dispersion, réduction) | 0,71 Go — **1,44 o/poids** | **10,52** |
+| Matrice dense int8 (produit scalaire par ligne) | 0,49 Go — **1,06 o/poids** | **11,42** |
+
+➡️ **L'architecture événementielle coûte 8 % sur CPU** — alors qu'elle lit 36 % de
+mémoire en plus, décode des écarts en varint et disperse dans 16 accumulateurs avant
+réduction. Elle est déjà au niveau du dense.
+
+*Pour être honnête sur le protocole : le dense a d'abord été 20 % plus **lent*
+(8,5 tok/s) parce que sa boucle de produit scalaire était limitée par une chaîne
+d'accumulation i64 unique. Déroulée 4× avec quatre accumulateurs, elle passe à
+11,4 tok/s. La comparaison ci-dessus est celle de deux implémentations soignées.*
+
+*Et sur ce CPU (AVX2 disponible), un noyau dense écrit à la main en intrinsèques
+irait encore plus vite — ce que le moteur d'événements ne peut pas se permettre, sa
+dispersion n'étant pas vectorisable (AVX2 n'a ni gather ni scatter entier). C'est
+précisément le pari matériel : le FPGA ne paie pas ce coût, et n'a pas de
+multiplieur du tout.*
 
 ## 4. Deux compromis assumés
 
