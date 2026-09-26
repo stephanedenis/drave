@@ -346,6 +346,20 @@ rapide mais les courses serrées basculent).
 les tokens, parce qu'un LLM dense n'a **jamais** d'activation nulle. Le mode
 événementiel ne paiera que sur des activations creuses **par construction**.
 
+**Le 4 bits ne paie pas** (mesuré, même moteur, même réseau) : le fichier Q4 fait 33 %
+de moins, mais les listes seulement 11 % de moins et le débit ne gagne que 14 %, pour
+12 % de perplexité en plus. Chaque événement coûte `varint(écart) + i8(valeur)` ≈
+2 octets **quelle que soit la précision de la source** — la vitesse suit le nombre
+d'événements, pas le nombre de bits.
+
+**Et le coût d'un événement n'est pas constant.** 10× moins d'événements ne donnent
+que 2× de vitesse, pour deux raisons mesurées : la **localité** (un élagage *contigu*
+est 30 % plus rapide qu'un élagage dispersé à taux égal — c'est l'argument des grappes
+efférentes), et la **taille de l'accumulateur** : sur des événements épars, ajouter des
+threads *ralentit* (31 ms à 4 threads contre 53 ms à 32, les accumulateurs débordant le
+L2). ➡️ Le tuilage de la dimension de sortie n'est pas un détail d'optimisation,
+c'est le paramètre qui décide du débit en régime creux.
+
 ---
 
 ## Écarts avec le CDC d'origine
