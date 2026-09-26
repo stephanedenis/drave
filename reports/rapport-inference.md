@@ -196,7 +196,45 @@ reprise.
    1,44 octet par poids — contre 1,06 pour Q8_0 dense. À 99 % de densité, les listes
    coûtent 36 % de mémoire en plus et n'économisent rien.
 
-## 7. Le 4 bits ne paie pas — et pourquoi
+## 7. Le gain le moins cher : la liste des destinations touchées
+
+Le moteur lisait 706 Mo par token en 95 ms, soit **7,4 Go/s sur les 28,7 Go/s
+mesurés de la machine** : il n'était donc pas borné par la mémoire, mais par le
+nombre de cycles par événement (13,7). Chercher ce qui restait a donné le gain le
+plus rentable du projet.
+
+**La cause** : pour ne vider que les destinations réellement écrites,
+l'accumulateur tenait une **liste des destinations touchées**, alimentée à chaque
+événement — soit une comparaison, une écriture et une mise à jour de longueur,
+environ six micro-opérations **par événement**. Or vider l'accumulateur entier
+par fenêtre coûte… 0,2 % du temps de token.
+
+| Version | tok/s | matvec+MLP |
+|---|---|---|
+| liste des destinations touchées | 10,96 | 92,2 ms |
+| + accumulateur i32 | 11,38 | 92,2 ms |
+| **sans la liste (borne haute cumulative)** | **14,74** | **69,4 ms** |
+
+➡️ **+35 %**, perplexité **identique au chiffre près** (24,8995) et tokens
+identiques. Le débit par événement passe de 3,6 à **5,3 G év/s**.
+
+**Deux bugs révélés par la suppression**, tous deux trouvés par les bancs :
+
+1. Les chemins fusion et 2-listes écrivent dans un accumulateur i64 tandis que
+   le mode push utilise un i32 ; la réduction lisait toujours le second. Le banc
+   signalait « DIVERGENT au rang 0 : 0 vs 3513 » — la réduction d'un
+   accumulateur jamais écrit.
+2. Remettre à zéro la seule fenêtre du travail précédent ne suffit pas : **si
+   elle rétrécit**, des valeurs plus anciennes survivent au-delà. D'où une
+   **borne haute cumulative** par worker, remise à zéro seulement lors d'un
+   changement de largeur. C'est ce que le banc signalait au rang 895.
+
+**Ce qui reste sur la table** : 10,4 Go/s utilisés sur 28,7 → **2,8× avant
+d'être borné par la mémoire**. Mais attention au sens de la comparaison : à
+14,8 tok/s le moteur d'événements est maintenant **plus rapide que le noyau dense
+int8** (11,4 tok/s) sur la même machine.
+
+## 8. Le 4 bits ne paie pas — et pourquoi
 
 *Réponse mesurée à la question « est-ce que ça permet de faire tourner des modèles
 4 bits efficacement sur CPU ? »*
@@ -269,7 +307,7 @@ pas un détail d'implémentation, c'est le paramètre qui décide du débit en r
 creux. Il plaide pour un **tuilage de la dimension de sortie** (traiter 512–1024
 destinations à la fois) plutôt qu'un accumulateur large par PE.
 
-## 8. Reproductible
+## 9. Reproductible
 
 ```bash
 cd qtrinet-core && cargo build --release     # 0 avertissement

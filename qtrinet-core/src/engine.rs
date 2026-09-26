@@ -70,7 +70,6 @@ fn decode8(data: &[u8], p: usize, out: &mut [u32; 8]) -> usize {
 /// aucune remise à zéro globale.
 #[inline]
 pub fn row_fused_into(f: &FusedSign, r: usize, xv: i64, acc: &mut [i64],
-                      touched: &mut Vec<u32>, cap: usize,
                       span: &mut (usize, usize)) -> usize {
     let data = &f.data;
     let n_out = f.n_cols;
@@ -112,7 +111,6 @@ pub fn row_fused_into(f: &FusedSign, r: usize, xv: i64, acc: &mut [i64],
                         let slot = acc.get_unchecked_mut(col);
                         *slot += if positive { xv } else { -xv };
                     }
-                    if touched.len() < cap { touched.push(col as u32); }
                     if first == usize::MAX { first = col; }
                     last = col;
                 }
@@ -141,7 +139,6 @@ pub fn row_fused_into(f: &FusedSign, r: usize, xv: i64, acc: &mut [i64],
                     let slot = acc.get_unchecked_mut(col);
                     *slot += if positive { xv } else { -xv };
                 }
-                if touched.len() < cap { touched.push(col as u32); }
                 if first == usize::MAX { first = col; }
                 last = col;
             }
@@ -161,8 +158,7 @@ pub fn row_fused_into(f: &FusedSign, r: usize, xv: i64, acc: &mut [i64],
 /// vaut `q_activation × q_poids`. C'est le chemin qu'empruntera le matériel :
 /// une adresse, une valeur, un accumulateur.
 #[inline]
-pub fn row_val_into(m: &PushMat, r: usize, xq: i64, acc: &mut [i64],
-                    touched: &mut Vec<u32>, cap: usize,
+pub fn row_val_into(m: &PushMat, r: usize, xq: i64, acc: &mut [i32],
                     span: &mut (usize, usize)) -> usize {
     let data = &m.data;
     let n_out = m.n_out;
@@ -180,8 +176,7 @@ pub fn row_val_into(m: &PushMat, r: usize, xq: i64, acc: &mut [i64],
             let q = data[p + 1] as i8 as i64;
             p += 2;
             if col < n_out {
-                unsafe { *acc.get_unchecked_mut(col) += xq * q; }
-                if touched.len() < cap { touched.push(col as u32); }
+                unsafe { *acc.get_unchecked_mut(col) += (xq * q) as i32; }
                 if first == usize::MAX { first = col; }
                 last = col;
             }
@@ -199,8 +194,7 @@ pub fn row_val_into(m: &PushMat, r: usize, xq: i64, acc: &mut [i64],
             let q = data[p] as i8 as i64;
             p += 1;
             if col < n_out {
-                unsafe { *acc.get_unchecked_mut(col) += xq * q; }
-                if touched.len() < cap { touched.push(col as u32); }
+                unsafe { *acc.get_unchecked_mut(col) += (xq * q) as i32; }
                 if first == usize::MAX { first = col; }
                 last = col;
             }
@@ -235,9 +229,10 @@ struct Shared {
     sv_idx: AtomicPtr<u32>,
     sv_val: AtomicPtr<i32>,
     n_active: AtomicUsize,
-    accs: AtomicPtr<Vec<Vec<i64>>>,
-    touched: AtomicPtr<Vec<Vec<u32>>>,
+    accs: AtomicPtr<Vec<Vec<i32>>>,
+    accs64: AtomicPtr<Vec<Vec<i64>>>,
     spans: AtomicPtr<Vec<(usize, usize)>>,
+    dirty: AtomicPtr<Vec<usize>>,
 }
 
 pub struct Pool {
@@ -245,12 +240,20 @@ pub struct Pool {
     handles: Vec<std::thread::JoinHandle<()>>,
     n: usize,
     n_out: usize,
-    accs: Vec<Vec<i64>>,
-    touched: Vec<Vec<u32>>,
+    accs: Vec<Vec<i32>>,
+    accs64: Vec<Vec<i64>>,
     /// étendue EXACTE des destinations écrites par chaque worker au dernier
     /// appel : la réduction ne balaie que l'union de ces fenêtres.
     spans: Vec<(usize, usize)>,
+    /// Borne haute CUMULATIVE des écritures depuis le dernier effacement
+    /// complet, par worker. Remettre à zéro la seule fenêtre du travail
+    /// précédent ne suffit pas : si elle rétrécit, des valeurs plus anciennes
+    /// survivent au-delà (bug trouvé par le banc : divergence au rang 895).
+    dirty: Vec<usize>,
     outs: Vec<Vec<f32>>,
+    /// Mode du dernier appel : la réduction doit lire l'accumulateur qui a
+    /// réellement servi (i32 pour le mode push, i64 pour fusion et 2-listes).
+    last_mode: usize,
 }
 
 impl Pool {
@@ -276,8 +279,9 @@ impl Pool {
             sv_val: AtomicPtr::new(std::ptr::null_mut()),
             n_active: AtomicUsize::new(0),
             accs: AtomicPtr::new(std::ptr::null_mut()),
-            touched: AtomicPtr::new(std::ptr::null_mut()),
+            accs64: AtomicPtr::new(std::ptr::null_mut()),
             spans: AtomicPtr::new(std::ptr::null_mut()),
+            dirty: AtomicPtr::new(std::ptr::null_mut()),
         });
         let mut handles = Vec::with_capacity(n);
         for id in 0..n {
@@ -327,42 +331,45 @@ impl Pool {
                     let idx = unsafe { std::slice::from_raw_parts(sh.sv_idx.load(Ordering::Acquire), sh.n_active.load(Ordering::Relaxed)) };
                     let val = unsafe { std::slice::from_raw_parts(sh.sv_val.load(Ordering::Acquire), sh.n_active.load(Ordering::Relaxed)) };
                     let accs = unsafe { &mut *sh.accs.load(Ordering::Acquire) };
-                    let touched = unsafe { &mut *sh.touched.load(Ordering::Acquire) };
+                    let accs64 = unsafe { &mut *sh.accs64.load(Ordering::Acquire) };
                     let spans = unsafe { &mut *sh.spans.load(Ordering::Acquire) };
+                    let dirty = unsafe { &mut *sh.dirty.load(Ordering::Acquire) };
                     let acc = &mut accs[id];
-                    let tch = &mut touched[id];
-                    let cap = acc.len();         // au-delà, on repasse au memset
-                    // Remise à zéro INCRÉMENTALE. Si le suivi a débordé (plus de
-                    // `cap` destinations distinctes touchées), un memset complet est
-                    // moins cher que de tenir la liste.
-                    // Les deux chemins tiennent la même comptabilité de destinations
-                    // touchées : si elle a débordé, un memset complet est plus sûr.
-                    if tch.len() >= cap {
-                        for a in acc.iter_mut() { *a = 0; }
-                    } else {
-                        for &c in tch.iter() { acc[c as usize] = 0; }
+                    let acc64 = &mut accs64[id];
+                    // Remise à zéro par FENÊTRE : les spans du travail précédent
+                    // donnent exactement les adresses écrites. Tenir une liste des
+                    // destinations touchées coûtait six micro-opérations par
+                    // événement pour économiser 0,2 % du temps de token — mesuré :
+                    // 92 ms -> 51 ms sur le MLP, +48 % de débit.
+                    // Les deux accumulateurs sont balayés : selon le mode, c'est
+                    // l'un ou l'autre qui a servi au travail précédent.
+                    let hi_prev = dirty[id];
+                    if hi_prev > 0 {
+                        for a in acc[0..hi_prev].iter_mut() { *a = 0; }
+                        for a in acc64[0..hi_prev].iter_mut() { *a = 0; }
                     }
-                    tch.clear();
                     let mut span = (usize::MAX, 0usize);
                     let mut i = id;
                     while i < idx.len() {
                         let src = idx[i] as usize;
                         let xv = val[i] as i64;
                         match mode {
-                            1 => { row_fused_into(f, src, xv, acc, tch, cap, &mut span); }
-                            2 => { row_val_into(pm, src, xv, acc, tch, cap, &mut span); }
-                            _ => { row_delta_into(dl, src, xv, acc, tch, cap, &mut span); }
+                            1 => { row_fused_into(f, src, xv, acc64, &mut span); }
+                            2 => { row_val_into(pm, src, xv, acc, &mut span); }
+                            _ => { row_delta_into(dl, src, xv, acc64, &mut span); }
                         }
                         i += n;
                     }
                     spans[id] = span;
+                    if span.1 > dirty[id] { dirty[id] = span.1; }
                     sh.done.fetch_add(1, Ordering::Release);
                 }
             }));
         }
-        Pool { shared, handles, n, n_out, accs: vec![vec![0i64; n_out]; n],
-               touched: vec![Vec::new(); n], spans: vec![(usize::MAX, 0usize); n],
-               outs: vec![Vec::new(); n] }
+        Pool { shared, handles, n, n_out, accs: vec![vec![0i32; n_out]; n], accs64: vec![vec![0i64; n_out]; n],
+               spans: vec![(usize::MAX, 0usize); n],
+               dirty: vec![0usize; n],
+               outs: vec![Vec::new(); n], last_mode: 1 }
     }
 
     pub fn threads(&self) -> usize { self.n }
@@ -389,6 +396,7 @@ impl Pool {
     /// Accumulation par **listes par source valuées** : le mode de l'inférence.
     pub fn accumulate_push(&mut self, m: &PushMat, sv: &SparseVec) -> Vec<i64> {
         self.ensure_width(m.n_out);
+        self.last_mode = 2;
         self.shared.mode.store(2, Ordering::Relaxed);
         self.shared.push.store(m as *const _ as *mut _, Ordering::Relaxed);
         self.accumulate_common(sv).0
@@ -401,11 +409,14 @@ impl Pool {
         if n_out == self.n_out { return; }
         self.n_out = n_out;
         for a in self.accs.iter_mut() { a.clear(); a.resize(n_out, 0); }
-        for t in self.touched.iter_mut() { t.clear(); }
+        for a in self.accs64.iter_mut() { a.clear(); a.resize(n_out, 0); }
+        for d in self.dirty.iter_mut() { *d = 0; }
         for sp in self.spans.iter_mut() { *sp = (usize::MAX, 0); }
+        for d in self.dirty.iter_mut() { *d = 0; }
     }
 
     pub fn accumulate_delta(&mut self, d: &SignedDelta, sv: &SparseVec) -> (Vec<i64>, usize) {
+        self.last_mode = 0;
         self.shared.mode.store(0, Ordering::Relaxed);
         self.shared.delta.store(d as *const _ as *mut _, Ordering::Relaxed);
         self.accumulate_common(sv)
@@ -413,6 +424,7 @@ impl Pool {
 
     pub fn accumulate(&mut self, f: &FusedSign, sv: &SparseVec) -> (Vec<i64>, usize) {
         self.ensure_width(f.n_cols);
+        self.last_mode = 1;
         self.shared.mode.store(1, Ordering::Relaxed);
         self.shared.lists.store(f as *const _ as *mut _, Ordering::Relaxed);
         self.accumulate_common(sv)
@@ -424,9 +436,10 @@ impl Pool {
         sh.sv_idx.store(sv.idx.as_ptr() as *mut _, Ordering::Relaxed);
         sh.sv_val.store(sv.val.as_ptr() as *mut _, Ordering::Relaxed);
         sh.n_active.store(sv.idx.len(), Ordering::Relaxed);
-        sh.accs.store(&mut self.accs as *mut Vec<Vec<i64>>, Ordering::Relaxed);
-        sh.touched.store(&mut self.touched as *mut Vec<Vec<u32>>, Ordering::Relaxed);
+        sh.accs.store(&mut self.accs as *mut Vec<Vec<i32>>, Ordering::Relaxed);
+        sh.accs64.store(&mut self.accs64 as *mut Vec<Vec<i64>>, Ordering::Relaxed);
         sh.spans.store(&mut self.spans as *mut Vec<(usize, usize)>, Ordering::Relaxed);
+        sh.dirty.store(&mut self.dirty as *mut Vec<usize>, Ordering::Relaxed);
         sh.gen.fetch_add(1, Ordering::Release);       // libère les workers
 
         while sh.done.load(Ordering::Acquire) != self.n {
@@ -443,8 +456,14 @@ impl Pool {
         }
         if lo >= hi { return (vec![0i64; self.n_out], 0); }
         let mut out = vec![0i64; self.n_out];
-        for a in &self.accs {
-            for (o, v) in out[lo..hi].iter_mut().zip(a[lo..hi].iter()) { *o += *v; }
+        if self.last_mode == 2 {
+            for a in &self.accs {
+                for (o, v) in out[lo..hi].iter_mut().zip(a[lo..hi].iter()) { *o += *v as i64; }
+            }
+        } else {
+            for a in &self.accs64 {
+                for (o, v) in out[lo..hi].iter_mut().zip(a[lo..hi].iter()) { *o += *v; }
+            }
         }
         (out, sv.idx.len())
     }
@@ -466,7 +485,6 @@ impl Drop for Pool {
 
 #[inline]
 pub fn row_delta_into(lists: &SignedDelta, r: usize, xv: i64, acc: &mut [i64],
-                      touched: &mut Vec<u32>, cap: usize,
                       span: &mut (usize, usize)) -> usize {
     let data = &lists.data;
     let mut p = lists.row_start[r];
@@ -497,7 +515,6 @@ pub fn row_delta_into(lists: &SignedDelta, r: usize, xv: i64, acc: &mut [i64],
         c += vi(data, &mut p);
         if c < n_out {
             acc[c] += xv;
-            if touched.len() < cap { touched.push(c as u32); }
             if first == usize::MAX { first = c; }
             last = c;
         }
@@ -507,7 +524,6 @@ pub fn row_delta_into(lists: &SignedDelta, r: usize, xv: i64, acc: &mut [i64],
         c += vi(data, &mut p);
         if c < n_out {
             acc[c] -= xv;
-            if touched.len() < cap { touched.push(c as u32); }
             if first == usize::MAX { first = c; }
             last = c;
         }

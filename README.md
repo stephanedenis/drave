@@ -328,13 +328,14 @@ cd qtrinet-core && cargo build --release
 
 | | |
 |---|---|
-| Génération | **10,5 tok/s** (16 threads), TTFT 74–95 ms |
-| Événements par token | 352,8 M à 3,9 G év/s — le forward est **entièrement** borné par les événements |
+| Génération | **14,8 tok/s** (16 threads), TTFT 74–95 ms |
+| Événements par token | 352,8 M à **5,3 G év/s** — le forward reste borné par les événements, mais plus près de la mémoire |
 | Mémoire | 1,27 Go (0,71 Go de listes), chargement 6,3 s |
 | Justesse | **16 tokens sur 16 identiques** à la référence numpy float32 |
 | Perplexité WikiText-2 | **24,90** contre **25,00** pour numpy + OpenBLAS |
 | Comparaison | 132 ms/token pour numpy + OpenBLAS (40 threads) contre **95 ms** ici (16 threads) |
-| Coût de l'architecture | **+8 %** face à un noyau dense int8 équivalent (11,4 tok/s) — en lisant 36 % de mémoire en plus |
+| Coût de l'architecture | **+8 %** face à un noyau dense int8 équivalent, en lisant 36 % de mémoire en plus |
+| Marge restante | 706 Mo/token à 10,4 Go/s sur 28,7 Go/s mesurés : **2,8× avant d'être borné par la mémoire** |
 
 **Deux compromis assumés :** la tête de sortie (151 936 sorties) est calculée par
 produits scalaires sur les lignes Q8_0 d'origine — en mode push il faudrait un
@@ -345,6 +346,14 @@ rapide mais les courses serrées basculent).
 **Ce que ça ne démontre pas :** le débit variable. 352 M événements par token, à tous
 les tokens, parce qu'un LLM dense n'a **jamais** d'activation nulle. Le mode
 événementiel ne paiera que sur des activations creuses **par construction**.
+
+**Le gain le moins cher du projet** a été trouvé en cherchant ce plafond : la
+**liste des destinations touchées** (pour ne vider que ce qui a été écrit) coûtait
+six micro-opérations par événement — soit **45 % du temps des produits
+matriciels**. La remplacer par une borne haute cumulative par worker donne
+**+35 % de débit** (10,96 → 14,8 tok/s), perplexité et tokens inchangés. Le détail
+et les deux bugs que cette suppression a révélés sont dans
+[`reports/rapport-inference.md`](reports/rapport-inference.md).
 
 **Le 4 bits ne paie pas** (mesuré, même moteur, même réseau) : le fichier Q4 fait 33 %
 de moins, mais les listes seulement 11 % de moins et le débit ne gagne que 14 %, pour
