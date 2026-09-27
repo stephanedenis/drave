@@ -18590,3 +18590,99 @@ Updated 1 path from the index
 ⏵ Je consolide les leçons de la campagne dans le programme
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\npython3 - <<'PY'\np='docs/programme-recherche.md'; s=open(p,encoding='utf-8').read(); o=s\ns=s.replace('''## 3. Ce que la mesure interdit d'espérer''','''## 2 ter. Ce que la campagne de parcimonie a appris\n\nCampagne complète : [`rapp … [4085 caractères tronqués]`
+
+  ```
+c1101a2 Programme : lecons de la campagne de parcimonie et regle de methode
+8f70aaf Engine : les controles de bornes ne sont pas le goulot (mesure A/B)
+  ```
+
+### 🤖 Assistant
+
+⏵ Test de l'hypothèse « latence de l'accumulateur » : comparer le débit selon la taille de l'accumulateur
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\nuptime\nfor m in blk.0.attn_k.weight blk.0.attn_q.weight blk.0.ffn_gate.weight blk.0.ffn_down.weight; do\n  r=$(timeout 900 ./target/release/qtrinet-core ../models/Qwen2.5-0.5B-Q8_0.gguf --matrix $m --threads 16 2>/dev/nul … [327 caractères tronqués]`
+
+  ```
+16:09:57  up 6 days  5:22,  2 users,  load average: 11,24, 13,41, 15,18
+  blk.0.attn_k.weight : blk.0.ffn_gate.weight  [4864 × 896]  densité 99.2 % -> fusion   3.20 G
+  blk.0.attn_q.weight : blk.0.ffn_gate.weight  [4864 × 896]  densité 99.2 % -> fusion   3.42 G
+  blk.0.ffn_gate.weight : blk.0.ffn_gate.weight  [4864 × 896]  densité 99.2 % -> fusion   4.71 G
+  blk.0.ffn_down.weight : blk.0.ffn_gate.weight  [4864 × 896]  densité 99.2 % -> fusion   3.68 G
+  ```
+
+### 🤖 Assistant
+
+⏵ Mesures inexploitables sous cette charge (3,2 à 4,7 G pour la même matrice). Je vérifie quand même le drapeau `--matrix`
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\ntimeout 900 ./target/release/qtrinet-core ../models/Qwen2.5-0.5B-Q8_0.gguf --matrix blk.0.attn_k.weight --threads 16 2>/dev/null | head -12", "description": "Check the --matrix flag directly", "timeoutMs": 1000000}`
+
+  ```
+GGUF ouvert en 211.966339ms — 290 tenseurs
+architecture : qwen2 · 24 couches · hidden 896 · intermédiaire 4864
+threads : 16
+
+=== 1. Taille exacte des encodages (mesurée sur les niveaux réels) ===
+
+blk.0.ffn_gate.weight  [4864 × 896]  densité 99.2 %
+  dense 8 bits               8.000 b/poids  (   4.36 Mo)
+  bitmap + signe             1.992 b/poids  (   1.09 Mo)
+  creux k=1 (signe seul)     1.992 b/poids  (   1.09 Mo)
+  creux k=4                  4.970 b/poids  (   2.71 Mo)
+  creux k=8                  8.939 b/poids  (   4.87 Mo)
+  ```
+
+### 🤖 Assistant
+
+⏵ Le drapeau fonctionne (je lisais la section 1, codée en dur). Sous cette charge je me limite aux mesures **déterministes** : nouvelles pistes de qualité
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\necho \"=== parcimonie sur la sortie d'attention (entrée de o_proj), jeu A, réf 23,6125\"\nfor k in 900 800 700; do\n  ppl=$(timeout 900 ./target/release/qtrinet-core ../models/Qwen2.5-0.5B-Q8_0.gguf --ppl /tmp/wt2_a.txt -- … [1034 caractères tronqués]`
+
+  ```
+=== parcimonie sur la sortie d'attention (entrée de o_proj), jeu A, réf 23,6125
+  o à  90.0 % : perplexité    23.6005  ( 0.999x)
+  o à  80.0 % : perplexité    23.6418  ( 1.001x)
+  o à  70.0 % : perplexité    23.7167  ( 1.004x)
+=== configurations combinées prometteuses
+  attn32 + gate85 (retenue)      : perplexité   23.2811  ( 0.986x)
+  attn32 + gate85 + o90          : perplexité   23.3046  ( 0.987x)
+  attn32 + gate85 + q90          : perplexité   23.2923  ( 0.986x)
+  attn32 + gate85 + k95          : perplexité   23.2638  ( 0.985x)
+  ```
+
+### 🤖 Assistant
+
+⏵ Améliorations marginales (−1,48 % contre −1,40 %) — je vérifie sur B avant de retenir quoi que ce soit
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\necho \"=== vérification sur B (référence 26,2565)\"\ness() { lbl=$1; shift\n  out=$(timeout 900 ./target/release/qtrinet-core ../models/Qwen2.5-0.5B-Q8_0.gguf --ppl /tmp/wt2_b.txt --ctx 256 --abits 16 --threads 16 \"$@\" 2 … [671 caractères tronqués]`
+
+  ```
+=== vérification sur B (référence 26,2565)
+  référence                    :   354.3 M évts  perplexité   26.2565  ( 1.000x)
+  attn32                       :   354.3 M évts  perplexité   26.1178  ( 0.995x)
+  attn32+gate85                :   338.8 M évts  perplexité   26.1417  ( 0.996x)
+  attn32+gate85+k95            :   338.7 M évts  perplexité   26.1642  ( 0.996x)
+  attn32+gate85+o90            :   336.9 M évts  perplexité   26.1647  ( 0.997x)
+  ```
+
+### 🤖 Assistant
+
+⏵ Vérification sur B : les ajouts étaient du bruit de A. **La configuration retenue ne change pas.** Validation finale complète
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\necho \"=== 1. banc des trois décodeurs (7 densités)\"\ntimeout 1800 ./target/release/qtrinet-core ../models/Qwen2.5-0.5B-Q8_0.gguf --threads 16 2>&1 | grep -E \"IDENTIQUE|DIVERGENT\" | sort | uniq -c\necho \"=== 2. tokens  … [630 caractères tronqués]`
+
+  ```
+=== 1. banc des trois décodeurs (7 densités)
+      7            → 2-listes : IDENTIQUE ✅
+      7            → fusion : IDENTIQUE ✅
+=== 2. tokens identiques à la référence numpy ?
+tokens générés : [358, 2776, 264, 48948, 304, 13027, 323, 358, 2776, 4460, 311, 1855, 264, 2025, 429, 646]
+   référence numpy : [358, 2776, 264, 48948, 304, 13027, 323, 358, 2776, 4460, 311, 1855, 264, 2025, 429, 646]
+=== 3. perplexité de référence (2040 tokens)
+=== perplexité 24.8995 sur 2040 tokens (722856664851 événements, 141.6 s) ===
+  ```
+
+### 🤖 Assistant
+
+⏵ Validation complète : 14/14, tokens identiques, perplexité 24,8995. Je clôture et je vérifie l'état du dépôt
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\ngit status --short | head -5; echo \"---\"\ngit log --oneline | head -8\necho \"=== journal à jour ?\"\npython3 tools/archive_sessions.py 2>&1 | tail -3\ngit add -A && git commit -q -m \"Journal : rafraîchissement de fin de campagne\"  … [153 caractères tronqués]`
