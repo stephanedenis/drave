@@ -5,14 +5,14 @@
 | Identifiant | `22bcae27-254b-47b2-acda-87467dab060c` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-25 11:56 |
-| Durée | 51.5 h |
+| Durée | 52.0 h |
 | Tours | 35 |
-| Messages | 787 |
-| Appels d'outils | 808 |
-| Fichiers touchés | 64 |
-| Commandes | 584 |
+| Messages | 793 |
+| Appels d'outils | 814 |
+| Fichiers touchés | 65 |
+| Commandes | 589 |
 | Sous-agents | 1 |
-| Commits | 23 |
+| Commits | 24 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -2021,7 +2021,7 @@ a = silu(u · x) · (v ·
 
 ### Tour 35 — attention pour ne pas se perdre à copier les autres et ne pas empiéter non plus sur mon autre programme de recherche htt … [426 caractères tronqués]
 
-*62 appels d'outils.* Actions notables :
+*68 appels d'outils.* Actions notables :
 
 - create_goal
 - bash — Read the activation quantizer
@@ -2037,11 +2037,11 @@ a = silu(u · x) · (v ·
 - bash — Implement and test homeostatic renormalization
 - bash — Retest renormalization with the flag not last
 - bash — Measure the real throughput gain from sparsity
-- … et 48 autres
+- … et 54 autres
 
 **Synthèse produite :**
 
-⏵ **Correction importante** : même à k=1 le temps d'attention ne bouge pas. Le coût est dans le **calcul des scores**, inévitable pour savoir quelles clés garder
+⏵ **Configuration gagnante vérifiée sur B** : −0,44 % de perplexité ET −4,4 % d'événements. Je consigne la campagne complète
 
 ## 3. Travail accompli
 
@@ -2113,6 +2113,7 @@ a = silu(u · x) · (v ·
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/comparaison-spiking.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-parcimonie-imposee.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-attention-creuse.md` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-campagne-parcimonie.md` | 1 | 0 |
 
 ### Sous-agents lancés
 
@@ -2160,7 +2161,7 @@ a = silu(u · x) · (v ·
 - **T3** Test OpenOCD without root and check Pro device support
 - **T3** Make scripts executable and test jtag_scan
 - **T3** Commit JTAG milestone
-- … et 544 autres
+- … et 549 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2288,7 +2289,7 @@ a = silu(u · x) · (v ·
 
 ## 5. Erreurs rencontrées
 
-74 sorties en erreur ou divergentes. Les premières :
+75 sorties en erreur ou divergentes. Les premières :
 
 - **T2** : === LIEN PCIe (sysfs, sans root) === current_link_speed     = 8.0 GT/s PCIe current_link_width     = 8 max_link_speed         = 8.0 GT/s PCIe max_link_width         = 8 secondary_bus_number   =  vendo
 - **T2** : [POPUP: saisissez le mot de passe] === TOUS les événements USB depuis le boot (fin de log) === [ven sep 25 11:52:23 2026] [ T684749] hid-generic 0003:04F2:2159.00ED: hiddev99,hidraw5: USB HID v1.10 De
@@ -2331,4 +2332,5 @@ a = silu(u · x) · (v ·
 - Parcimonie imposee a l'inference : la frontiere mesuree  Campagne sur Qwen2.5-0.5B Q8_0 PREENTRAINE, sans aucun entrainement, avec deux jeux de 1024 tokens (A p
 - Attention creuse : le trou se referme, et par le haut  Une seule modification a l'inference, sans reentrainement : ne garder que les k plus grands scores par re
 - Attention creuse : correction -- le gain est en qualite, pas en temps  J'avais annonce une attention \"meilleure, moins chere et listable\". La mesure corrige l
+- Campagne parcimonie : synthese et configuration gagnante  CONFIGURATION RETENUE (verifiee sur les deux jeux, dont B tenu a l'ecart) : attention a 32 cles + proj
 

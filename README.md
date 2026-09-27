@@ -30,6 +30,7 @@ Le cahier des charges d'origine est dans [`Qtrinet-bootstrap.md`](Qtrinet-bootst
 | **Comparaison Spiking (SpikeGPT / Spikformer / Spikingformer)** | ✅ → [`docs/comparaison-spiking.md`](docs/comparaison-spiking.md) |
 | **Parcimonie imposée à l'inférence (k-WTA)** | ✅ mesuré → [`reports/rapport-parcimonie-imposee.md`](reports/rapport-parcimonie-imposee.md) |
 | **Attention creuse (top-k par requête)** | ✅ mesuré → [`reports/rapport-attention-creuse.md`](reports/rapport-attention-creuse.md) |
+| **Campagne parcimonie : synthèse** | ✅ → [`reports/rapport-campagne-parcimonie.md`](reports/rapport-campagne-parcimonie.md) |
 | Modèle ternaire *entraîné* (BitNet b1.58) | ⬜ à faire |
 | Extracteur GGUF → plans ternaires | ⬜ à faire |
 | Format binaire + schéma partagé Python/RTL | ⬜ à faire |

@@ -162,6 +162,11 @@ pub struct Model {
     /// Événements d'attention : paires (requête, clé) retenues, cumulées.
     /// C'est la taille de la liste d'événements que l'attention creuse produirait.
     pub attn_events: u64,
+    /// Parcimonie de Q et K, en millièmes de la dimension PAR TÊTE. Les scores
+    /// d'attention se calculent sur toutes les clés ; leur coût est donc
+    /// O(d) par clé. Creuser Q et K rend ce produit scalaire creux — c'est la
+    /// seule façon d'attaquer le poste dominant. 0 = désactivé.
+    pub qk_topk: usize,
     /// Token d'arrêt (EOS / <|im_end|>) : la génération s'interrompt dessus.
     pub stop_id: Option<u32>,
     /// Postes de temps cumulés, en secondes (diagnostic).
@@ -313,7 +318,7 @@ impl Model {
             g, cfg, layers, out_norm, pool,
             kv_k: vec![kv.clone(); n_layer], kv_v: vec![kv; n_layer],
             ctx, events: 0, act_levels: 127.0, act_thresh: 0.0, act_topk: 0, act_renorm: false,
-            act_topk_proj: [0; 7], attn_topk: 0, attn_events: 0,
+            act_topk_proj: [0; 7], attn_topk: 0, attn_events: 0, qk_topk: 0,
             stop_id: None, prof: [0.0; 6],
             patch: None, ffn_gain: None, hebb: None,
         }
@@ -422,6 +427,26 @@ impl Model {
         for i in 0..x.len() { out[i] = x[i] * inv * w[i]; }
     }
 
+    /// k-WTA par tête : ne garder que la fraction demandée des composantes les
+    /// plus grandes de chaque tête. Appliqué à Q et K, il rend le produit
+    /// scalaire des scores creux.
+    fn creuse_tetes(v: &mut [f32], n_head: usize, head_dim: usize, milliemes: usize) {
+        let k = ((milliemes as f32 / 1000.0) * head_dim as f32).round() as usize;
+        let k = k.clamp(1, head_dim);
+        if k >= head_dim { return; }
+        let mut tmp = [0f32; 256];
+        for h in 0..n_head {
+            let t = &mut v[h * head_dim..(h + 1) * head_dim];
+            let n = head_dim.min(256);
+            tmp[..n].copy_from_slice(&t[..n]);
+            let (_, &mut cut, _) = tmp[..n].select_nth_unstable_by(n - k, |a, b| {
+                a.abs().partial_cmp(&b.abs()).unwrap()
+            });
+            let cut = cut.abs();
+            for x in t.iter_mut() { if x.abs() < cut { *x = 0.0; } }
+        }
+    }
+
     /// RoPE « neox » (Qwen2) : rotation des deux moitiés de chaque tête.
     fn rope(v: &mut [f32], n_head: usize, head_dim: usize, pos: usize, base: f32) {
         let half = head_dim / 2;
@@ -481,6 +506,10 @@ impl Model {
             let tr = Instant::now();
             Self::rope(&mut q, nh, hd, pos, cfg.rope_base);
             Self::rope(&mut k, nkv, hd, pos, cfg.rope_base);
+            if self.qk_topk > 0 {
+                Self::creuse_tetes(&mut q, nh, hd, self.qk_topk);
+                Self::creuse_tetes(&mut k, nkv, hd, self.qk_topk);
+            }
             self.prof[1] += tr.elapsed().as_secs_f64();
             let ta = Instant::now();
             // écriture du cache KV à la position courante

@@ -18359,3 +18359,91 @@ k=0 : attention 11.5 ms/token
 ⏵ **Correction importante** : même à k=1 le temps d'attention ne bouge pas. Le coût est dans le **calcul des scores**, inévitable pour savoir quelles clés garder
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\npython3 - <<'PY'\np='reports/rapport-attention-creuse.md'; s=open(p,encoding='utf-8').read(); o=s\ns=s.replace('''## 4. Ce qui reste à faire''','''## 3 bis. Correction : le gain est en qualité, pas en temps\n\nJ'avais annoncé que l'att … [4281 caractères tronqués]`
+
+  ```
+18d0f13 Attention creuse : correction -- le gain est en qualite, pas en temps
+44c9cee Attention creuse : le trou se referme, et par le haut
+  ```
+
+### 🤖 Assistant
+
+⏵ Nouvelle cible, mesurée : le coût est dans les **scores**. Or Q et K peuvent être creusés. Je teste jusqu'où
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\npython3 - <<'PY'\np='src/model.rs'; s=open(p,encoding='utf-8').read(); o=s\ns=s.replace('''    pub attn_events: u64,''','''    pub attn_events: u64,\n    /// Parcimonie de Q et K, en millièmes de la dimension PAR TÊTE. Les … [4054 caractères tronqués]`
+
+  ```
+error[E0425]: cannot find value `qk_topk` in this scope
+   --> src/main.rs:239:28
+    |
+239 |             "--qk-topk" => qk_topk = args[i + 1].parse().unwrap(),
+    |                            ^^^^^^^ not found in this scope
+--
+error: could not compile `qtrinet-core` (bin "qtrinet-core") due to 1 previous error; 12 warnings emitted
+--- build
+=== jusqu'où creuser Q et K ? (jeu A, référence 23,6125)
+  Q,K gardent  75.0 % : perplexité    23.6125  ( 1.000x)
+  Q,K gardent  50.0 % : perplexité    23.6125  ( 1.000x)
+  Q,K gardent  25.0 % : perplexité    23.6125  ( 1.000x)
+  Q,K gardent  12.5 % : perplexité    23.6125  ( 1.000x)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\npython3 - <<'PY'\np='src/main.rs'; s=open(p,encoding='utf-8').read()\ni = s.index('fn run_infer'); head, tail = s[:i], s[i:]\ntail = tail.replace('''    let mut ids_file: Option<String> = None;''','''    let mut ids_file:  … [707 caractères tronqués]`
+
+  ```
+0
+=== jusqu'où creuser Q et K ? (jeu A, référence 23,6125)
+  Q,K gardent  75.0 % : perplexité    26.6686  ( 1.129x)
+  Q,K gardent  50.0 % : perplexité    51.5547  ( 2.183x)
+  Q,K gardent  25.0 % : perplexité   848.6320  (35.940x)
+  Q,K gardent  12.5 % : perplexité  2116.9084  (89.652x)
+  Q,K gardent   6.0 % : perplexité  1505.1898  (63.745x)
+  ```
+
+### 🤖 Assistant
+
+⏵ Q et K sont **intouchables** (×2,2 à 50 %, ×36 à 25 %) — le calcul des scores est irréductible. Je teste les combinaisons encore ouvertes
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\necho \"=== combinaisons avec l'attention creuse (jeu A, référence 23,6125)\"\ness() { lbl=$1; shift\n  ppl=$(timeout 900 ./target/release/qtrinet-core ../models/Qwen2.5-0.5B-Q8_0.gguf --ppl /tmp/wt2_a.txt --ctx 256 --abits … [557 caractères tronqués]`
+
+  ```
+=== combinaisons avec l'attention creuse (jeu A, référence 23,6125)
+  attn32 seule                     : perplexité   23.3279  ( 0.988x)
+  attn32 + down 70 %               : perplexité   23.3849  ( 0.990x)
+  attn32 + down 50 %               : perplexité   23.4202  ( 0.992x)
+  attn32 + up 85 %                 : perplexité   23.4382  ( 0.993x)
+  attn32 + gate 85 %               : perplexité   23.2811  ( 0.986x)
+  ```
+
+### 🤖 Assistant
+
+⏵ **Combinaison gagnante : attention 32 clés + gate à 85 % → −1,40 % de perplexité** (mieux que l'attention seule). Vérification et comptage
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\necho \"=== événements et qualité (jeux A et B)\"\nmes() { lbl=$1; jeu=$2; shift 2\n  out=$(timeout 900 ./target/release/qtrinet-core ../models/Qwen2.5-0.5B-Q8_0.gguf --ppl $jeu --ctx 256 --abits 16 --threads 16 \"$@\" 2>/d … [814 caractères tronqués]`
+
+  ```
+=== événements et qualité (jeux A et B)
+  /tmp/wt2_a.txt :
+    base             :   354.3 M évts ( +0.0 %)  perplexité   23.6125  ( 1.000x)
+    attn32           :   354.3 M évts ( -0.0 %)  perplexité   23.3279  ( 0.988x)
+    attn32+gate85    :   338.8 M évts ( -4.4 %)  perplexité   23.2811  ( 0.986x)
+  /tmp/wt2_b.txt :
+    base             :   354.3 M évts ( +0.0 %)  perplexité   26.2565  ( 1.000x)
+    attn32           :   354.3 M évts ( +0.0 %)  perplexité   26.1178  ( 0.995x)
+    attn32+gate85    :   338.8 M évts ( -4.4 %)  perplexité   26.1417  ( 0.996x)
+  ```
+
+### 🤖 Assistant
+
+⏵ **Configuration gagnante vérifiée sur B** : −0,44 % de perplexité ET −4,4 % d'événements. Je consigne la campagne complète
+
+- **write** `{"content": "# Campagne « parcimonie imposée » — synthèse\n\n*Peut-on exécuter un modèle **préentraîné** de façon radicalement plus creuse,\nsans rien réentraîner ?* Campagne complète sur Qwen2.5-0.5B Q8_0, deux jeux de\n1 024 tokens (A pour le réglage, **B tenu à l'écart** pour la vérification), pl … [4371 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-campagne-parcimonie.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\npython3 - <<'PY'\np='README.md'; s=open(p,encoding='utf-8').read(); o=s\ns=s.replace('''| **Attention creuse (top-k par requête)** | ✅ mesuré → [`reports/rapport-attention-creuse.md`](reports/rapport-attention-creuse.md) |''',\n'''| ** … [2163 caractères tronqués]`
