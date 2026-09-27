@@ -362,12 +362,15 @@ fn build_tokenizer(g: &Gguf) -> tokenizer::Tokenizer {
     )
 }
 
+fn cfg_dims(m: &model::Model) -> usize { m.cfg.hidden }
+
 fn run_ppl(args: &[String]) {
     let path = &args[1];
     let mut idfile = String::new();
     let mut ctx = 256usize;
     let mut limit = usize::MAX;
     let mut abits = 16u32;
+    let mut hebb_layer: Option<usize> = None;
     let cpu = std::thread::available_parallelism().map(|n| n.get()).unwrap_or(8);
     let mut n_threads = (cpu * 3 / 4).max(1);
     let mut i = 2;
@@ -377,6 +380,7 @@ fn run_ppl(args: &[String]) {
             "--ctx" => ctx = args[i + 1].parse().unwrap(),
             "--limit" => limit = args[i + 1].parse().unwrap(),
             "--abits" => abits = args[i + 1].parse().unwrap(),
+            "--hebbian" => hebb_layer = Some(args[i + 1].parse().unwrap()),
             "--threads" => n_threads = args[i + 1].parse().unwrap(),
             _ => {}
         }
@@ -392,10 +396,17 @@ fn run_ppl(args: &[String]) {
 
     let mut mdl = model::Model::load(path, ctx, n_threads, false, 1.0);
     mdl.act_levels = ((1u32 << (abits - 1)) - 1) as f32;
+    if let Some(l) = hebb_layer {
+        let mut hb = model::Hebb::new(l, mdl.cfg.ffn, mdl.cfg.hidden, 0.1);
+        hb.log_on = true;
+        mdl.hebb = Some(hb);
+        println!("journalisation : couche {l}, entrée FFN ({} dim)", mdl.cfg.hidden);
+    }
     mdl.reset_events();
     let t0 = Instant::now();
     let mut nll = 0f64;
     let mut n = 0usize;
+    let mut perte: Vec<f32> = Vec::new();
     let mut start = 0usize;
     while start + 1 < ids.len() {
         let end = (start + ctx).min(ids.len());
@@ -409,8 +420,10 @@ fn run_ppl(args: &[String]) {
                 let mut sum = 0f64;
                 for &v in &lg { sum += ((v - mx) as f64).exp(); }
                 let lse = mx as f64 + sum.ln();
-                nll += lse - lg[chunk[pos + 1] as usize] as f64;
+                let nll_tok = lse - lg[chunk[pos + 1] as usize] as f64;
+                nll += nll_tok;
                 n += 1;
+                perte.push(nll_tok as f32);
             }
         }
         start = end;
@@ -419,6 +432,17 @@ fn run_ppl(args: &[String]) {
                  n, ppl, n as f64 / t0.elapsed().as_secs_f64());
     }
     let ppl = (nll / n as f64).exp();
+    if let Some(hb) = mdl.hebb.as_ref() {
+        if hb.log_on {
+            use std::io::Write;
+            let mut fa = std::fs::File::create("/tmp/act_log.bin").unwrap();
+            for v in &hb.log { fa.write_all(&v.to_le_bytes()).unwrap(); }
+            let mut fl = std::fs::File::create("/tmp/loss_log.bin").unwrap();
+            for v in &perte { fl.write_all(&v.to_le_bytes()).unwrap(); }
+            println!("journal : {} vecteurs de {} dim, {} pertes (act_log.bin, loss_log.bin)",
+                     hb.log.len() / cfg_dims(&mdl), cfg_dims(&mdl), perte.len());
+        }
+    }
     println!("\n=== perplexité {:.4} sur {} tokens ({} événements, {:.1} s) ===",
              ppl, n, mdl.events_total(), t0.elapsed().as_secs_f64());
     println!("    {:.1} tok/s effectifs (avant + tête)", n as f64 / t0.elapsed().as_secs_f64());

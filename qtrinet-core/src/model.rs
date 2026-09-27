@@ -160,12 +160,16 @@ pub struct Hebb {
     pub h: Vec<f32>,
     pub n_fire: u64,
     pub n_token: u64,
+    /// Journal : vecteur d'entrée de la couche à chaque token, pour l'analyse
+    /// hors ligne. C'est la « journalisation en vue d'une version ultérieure ».
+    pub log: Vec<f32>,
+    pub log_on: bool,
 }
 
 impl Hebb {
     pub fn new(layer: usize, n_out: usize, n_in: usize, quantile: f32) -> Self {
         Hebb { layer, quantile, n_out, n_in, h: vec![0f32; n_out * n_in],
-               n_fire: 0, n_token: 0 }
+               n_fire: 0, n_token: 0, log: Vec::new(), log_on: false }
     }
 
     /// Accumule une paire (entrée, sortie). Seules les sorties dont |y| dépasse
@@ -404,6 +408,7 @@ impl Model {
             // de la projection gate. Aucun effet sur le calcul.
             if let Some(hb) = self.hebb.as_mut() {
                 if hb.layer == l {
+                    if hb.log_on { hb.log.extend_from_slice(&hn); }
                     let (hn2, gate2) = (&hn, &gate);
                     let mut seuil = std::mem::take(&mut scratch);
                     hb.observe(hn2, gate2, &mut seuil);

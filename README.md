@@ -24,6 +24,7 @@ Le cahier des charges d'origine est dans [`Qtrinet-bootstrap.md`](Qtrinet-bootst
 | **Lecteur DDR3 vérifié de bout en bout** | ✅ **fait** → [`reports/rapport-lecteur-ddr3.md`](reports/rapport-lecteur-ddr3.md) |
 | **Bilan multi-matériel (CPU / FPGA / GPU)** | ✅ → [`reports/bilan-multi-materiel.md`](reports/bilan-multi-materiel.md) |
 | **Capteur hebbien (apprendre des logs d'activation)** | ✅ mesuré → [`reports/rapport-capteur-hebbien.md`](reports/rapport-capteur-hebbien.md) |
+| **Programme évolutif (journaliser, faire évoluer)** | ✅ évalué → [`reports/rapport-programme-evolutif.md`](reports/rapport-programme-evolutif.md) |
 | Modèle ternaire *entraîné* (BitNet b1.58) | ⬜ à faire |
 | Extracteur GGUF → plans ternaires | ⬜ à faire |
 | Format binaire + schéma partagé Python/RTL | ⬜ à faire |
