@@ -143,10 +143,48 @@ pub struct Model {
     pub stop_id: Option<u32>,
     /// Postes de temps cumulés, en secondes (diagnostic).
     pub prof: [f64; 6],
+    /// Greffon : un neurone supplémentaire, chargé sans réentraînement.
+    pub patch: Option<Patch>,
     /// Capteur hebbien : accumule la trace de co-activation d'une projection
     /// pendant l'inférence, sur un cœur séparé en pratique. Il ne modifie
     /// jamais le calcul — c'est un espion, pas un acteur.
     pub hebb: Option<Hebb>,
+}
+
+/// Un neurone ajouté à une couche, sans réentraînement du reste du modèle.
+///
+/// Il suit la forme SwiGLU du réseau : `a = silu(u·x) · (v·x)`, contribution
+/// `a · d` ajoutée au flux résiduel. Le point important : **le produit de deux
+/// formes linéaires est quadratique**. Prendre `u` sur une ligne existante de
+/// `gate` et `v` sur une AUTRE ligne de `up` fabrique une caractéristique que le
+/// réseau n'a jamais calculée — les 4 864 neurones d'origine n'apparient que
+/// `gate[i]` avec `up[i]`.
+///
+/// Format binaire du fichier (little-endian) :
+///   magie "QPAT" | version u32 | couche u32 | n u32 | n f32 (u) | n f32 (v) | n f32 (d)
+pub struct Patch {
+    pub layer: usize,
+    pub u: Vec<f32>,
+    pub v: Vec<f32>,
+    pub d: Vec<f32>,
+}
+
+impl Patch {
+    pub fn load(path: &str) -> std::io::Result<Patch> {
+        use std::io::Read;
+        let mut buf = Vec::new();
+        std::fs::File::open(path)?.read_to_end(&mut buf)?;
+        if buf.len() < 16 || &buf[0..4] != b"QPAT" {
+            return Err(std::io::Error::new(std::io::ErrorKind::InvalidData, "magie QPAT absente"));
+        }
+        let g = |o: usize| u32::from_le_bytes(buf[o..o+4].try_into().unwrap()) as usize;
+        let (layer, n) = (g(8), g(12));
+        let f = |base: usize| (0..n).map(|i| {
+            let o = base + 4*i;
+            f32::from_le_bytes(buf[o..o+4].try_into().unwrap())
+        }).collect::<Vec<f32>>();
+        Ok(Patch { layer, u: f(16), v: f(16 + 4*n), d: f(16 + 8*n) })
+    }
 }
 
 /// Trace hebbienne d'une projection : `H[o][i] += y[o] · x[i]` accumulée sur
@@ -248,7 +286,8 @@ impl Model {
         Model {
             g, cfg, layers, out_norm, pool,
             kv_k: vec![kv.clone(); n_layer], kv_v: vec![kv; n_layer],
-            ctx, events: 0, act_levels: 127.0, stop_id: None, prof: [0.0; 6], hebb: None,
+            ctx, events: 0, act_levels: 127.0, stop_id: None, prof: [0.0; 6],
+            patch: None, hebb: None,
         }
     }
 
@@ -418,6 +457,16 @@ impl Model {
             Self::matvec(pool, &lay.wup, &hn, &mut up, events, self.act_levels);
             for i in 0..cfg.ffn { gate[i] = (gate[i] / (1.0 + (-gate[i]).exp())) * up[i]; }
             Self::matvec(pool, &lay.wdown, &gate, &mut down, events, self.act_levels);
+            // --- greffon : neurone supplémentaire, sans réentraînement
+            if let Some(pt) = self.patch.as_ref() {
+                if pt.layer == l {
+                    let mut g = 0f32;
+                    let mut uu = 0f32;
+                    for i in 0..h { g += pt.u[i] * hn[i]; uu += pt.v[i] * hn[i]; }
+                    let a = (g / (1.0 + (-g).exp())) * uu;
+                    for i in 0..h { down[i] += pt.d[i] * a; }
+                }
+            }
             for i in 0..h { x[i] = o[i] + down[i]; }
             self.prof[3] += tf.elapsed().as_secs_f64();
         }

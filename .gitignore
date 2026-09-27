@@ -4,3 +4,8 @@ reports/*.tmp
 models/
 data/
 qtrinet-core/target/
+
+# Traces de session : la copie brute reste sur disque (volumineuse, binaire),
+# le digest markdown est versionné.
+journal/sessions/*/session.jsonl.zstd
+journal/sessions/archive.log

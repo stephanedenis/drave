@@ -198,6 +198,7 @@ fn run_infer(args: &[String]) {
     let mut hebb_q = 0.1f32;
     let mut hebb_out = String::from("hebb.bin");
     let mut ids_file: Option<String> = None;
+    let mut patch_file: Option<String> = None;
     let mut dense = false;
     let mut keep = 1.0f32;
     // L'inférence paie une barrière par matrice (168 par token) : l'optimum
@@ -219,6 +220,7 @@ fn run_infer(args: &[String]) {
             "--hebbian" => hebb_layer = Some(args[i + 1].parse().unwrap()),
             "--hebb-q" => hebb_q = args[i + 1].parse().unwrap(),
             "--hebb-out" => hebb_out = args[i + 1].clone(),
+            "--patch" => patch_file = Some(args[i + 1].clone()),
             "--threads" => n_threads = args[i + 1].parse().unwrap(),
             "--chat" => { chat = true; i -= 1; }
             "--dense" => { dense = true; i -= 1; }
@@ -262,6 +264,13 @@ fn run_infer(args: &[String]) {
             .filter_map(|t| t.parse().ok())
             .collect();
         println!("ids depuis {f} : {} tokens", ids.len());
+    }
+    if let Some(f) = &patch_file {
+        let pt = model::Patch::load(f).expect("chargement du greffon");
+        let norme = |v: &[f32]| v.iter().map(|x| x * x).sum::<f32>().sqrt();
+        println!("greffon : couche {}, |u|={:.3} |v|={:.3} |d|={:.3}",
+                 pt.layer, norme(&pt.u), norme(&pt.v), norme(&pt.d));
+        mdl.patch = Some(pt);
     }
     if let Some(l) = hebb_layer {
         let n_out = mdl.cfg.ffn;
@@ -371,6 +380,7 @@ fn run_ppl(args: &[String]) {
     let mut limit = usize::MAX;
     let mut abits = 16u32;
     let mut hebb_layer: Option<usize> = None;
+    let mut patch_file: Option<String> = None;
     let cpu = std::thread::available_parallelism().map(|n| n.get()).unwrap_or(8);
     let mut n_threads = (cpu * 3 / 4).max(1);
     let mut i = 2;
@@ -381,6 +391,7 @@ fn run_ppl(args: &[String]) {
             "--limit" => limit = args[i + 1].parse().unwrap(),
             "--abits" => abits = args[i + 1].parse().unwrap(),
             "--hebbian" => hebb_layer = Some(args[i + 1].parse().unwrap()),
+            "--patch" => patch_file = Some(args[i + 1].clone()),
             "--threads" => n_threads = args[i + 1].parse().unwrap(),
             _ => {}
         }
@@ -396,6 +407,13 @@ fn run_ppl(args: &[String]) {
 
     let mut mdl = model::Model::load(path, ctx, n_threads, false, 1.0);
     mdl.act_levels = ((1u32 << (abits - 1)) - 1) as f32;
+    if let Some(f) = &patch_file {
+        let pt = model::Patch::load(f).expect("chargement du greffon");
+        let norme = |v: &[f32]| v.iter().map(|x| x * x).sum::<f32>().sqrt();
+        println!("greffon : couche {}, |u|={:.3} |v|={:.3} |d|={:.3}",
+                 pt.layer, norme(&pt.u), norme(&pt.v), norme(&pt.d));
+        mdl.patch = Some(pt);
+    }
     if let Some(l) = hebb_layer {
         let mut hb = model::Hebb::new(l, mdl.cfg.ffn, mdl.cfg.hidden, 0.1);
         hb.log_on = true;
