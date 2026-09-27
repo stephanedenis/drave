@@ -143,6 +143,50 @@ pub struct Model {
     pub stop_id: Option<u32>,
     /// Postes de temps cumulés, en secondes (diagnostic).
     pub prof: [f64; 6],
+    /// Capteur hebbien : accumule la trace de co-activation d'une projection
+    /// pendant l'inférence, sur un cœur séparé en pratique. Il ne modifie
+    /// jamais le calcul — c'est un espion, pas un acteur.
+    pub hebb: Option<Hebb>,
+}
+
+/// Trace hebbienne d'une projection : `H[o][i] += y[o] · x[i]` accumulée sur
+/// les seules sorties qui « déchargent » (|y| au-dessus du quantile), ce qui est
+/// le principe neuromorphique : seuls les neurones qui tirent apprennent.
+pub struct Hebb {
+    pub layer: usize,
+    pub quantile: f32,
+    pub n_out: usize,
+    pub n_in: usize,
+    pub h: Vec<f32>,
+    pub n_fire: u64,
+    pub n_token: u64,
+}
+
+impl Hebb {
+    pub fn new(layer: usize, n_out: usize, n_in: usize, quantile: f32) -> Self {
+        Hebb { layer, quantile, n_out, n_in, h: vec![0f32; n_out * n_in],
+               n_fire: 0, n_token: 0 }
+    }
+
+    /// Accumule une paire (entrée, sortie). Seules les sorties dont |y| dépasse
+    /// le quantile demandé contribuent : c'est ce qui rend le capteur bon marché.
+    fn observe(&mut self, x: &[f32], y: &[f32], seuil: &mut Vec<f32>) {
+        seuil.clear();
+        seuil.extend_from_slice(y);
+        // k sorties « déchargent » : celles dont |y| dépasse le k-ième plus grand
+        let k = (self.quantile * y.len() as f32) as usize;
+        let k = k.clamp(1, y.len() - 1);
+        seuil.select_nth_unstable_by(k, |a, b| b.abs().partial_cmp(&a.abs()).unwrap());
+        let theta = seuil[k].abs();
+        for o in 0..self.n_out {
+            if y[o].abs() < theta { continue; }
+            let yo = y[o];
+            let row = &mut self.h[o * self.n_in..(o + 1) * self.n_in];
+            for i in 0..self.n_in { row[i] += yo * x[i]; }
+            self.n_fire += 1;
+        }
+        self.n_token += 1;
+    }
 }
 
 impl Model {
@@ -200,7 +244,7 @@ impl Model {
         Model {
             g, cfg, layers, out_norm, pool,
             kv_k: vec![kv.clone(); n_layer], kv_v: vec![kv; n_layer],
-            ctx, events: 0, act_levels: 127.0, stop_id: None, prof: [0.0; 6],
+            ctx, events: 0, act_levels: 127.0, stop_id: None, prof: [0.0; 6], hebb: None,
         }
     }
 
@@ -296,6 +340,7 @@ impl Model {
         let mut att = vec![0f32; h];
         let mut o = vec![0f32; h];
         let mut gate = vec![0f32; cfg.ffn];
+        let mut scratch: Vec<f32> = Vec::with_capacity(cfg.ffn);
         let mut up = vec![0f32; cfg.ffn];
         let mut down = vec![0f32; h];
         let mut sc = vec![0f32; pos + 1];
@@ -355,6 +400,16 @@ impl Model {
             for i in 0..h { o[i] += x[i]; }
             Self::rmsnorm(&o, &lay.ffn_norm, cfg.eps, &mut hn);
             Self::matvec(pool, &lay.wgate, &hn, &mut gate, events, self.act_levels);
+            // --- capteur hebbien : espionne la co-activation (entrée, sortie)
+            // de la projection gate. Aucun effet sur le calcul.
+            if let Some(hb) = self.hebb.as_mut() {
+                if hb.layer == l {
+                    let (hn2, gate2) = (&hn, &gate);
+                    let mut seuil = std::mem::take(&mut scratch);
+                    hb.observe(hn2, gate2, &mut seuil);
+                    scratch = seuil;
+                }
+            }
             Self::matvec(pool, &lay.wup, &hn, &mut up, events, self.act_levels);
             for i in 0..cfg.ffn { gate[i] = (gate[i] / (1.0 + (-gate[i]).exp())) * up[i]; }
             Self::matvec(pool, &lay.wdown, &gate, &mut down, events, self.act_levels);

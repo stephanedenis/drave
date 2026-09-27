@@ -194,6 +194,10 @@ fn run_infer(args: &[String]) {
     let mut topk = 0usize;
     let mut abits = 8u32;
     let mut chat = false;
+    let mut hebb_layer: Option<usize> = None;
+    let mut hebb_q = 0.1f32;
+    let mut hebb_out = String::from("hebb.bin");
+    let mut ids_file: Option<String> = None;
     let mut dense = false;
     let mut keep = 1.0f32;
     // L'inférence paie une barrière par matrice (168 par token) : l'optimum
@@ -211,6 +215,10 @@ fn run_infer(args: &[String]) {
             "--ctx" => ctx = args[i + 1].parse().unwrap(),
             "--topk" => topk = args[i + 1].parse().unwrap(),
             "--abits" => abits = args[i + 1].parse().unwrap(),
+            "--ids-file" => ids_file = Some(args[i + 1].clone()),
+            "--hebbian" => hebb_layer = Some(args[i + 1].parse().unwrap()),
+            "--hebb-q" => hebb_q = args[i + 1].parse().unwrap(),
+            "--hebb-out" => hebb_out = args[i + 1].clone(),
             "--threads" => n_threads = args[i + 1].parse().unwrap(),
             "--chat" => { chat = true; i -= 1; }
             "--dense" => { dense = true; i -= 1; }
@@ -246,6 +254,21 @@ fn run_infer(args: &[String]) {
             ids = tk.encode(p);
         }
         println!("prompt : {} tokens", ids.len());
+    }
+    if let Some(f) = &ids_file {
+        ids = std::fs::read_to_string(f).unwrap_or_default()
+            .split(|c: char| c == ',' || c.is_whitespace())
+            .filter(|t| !t.is_empty())
+            .filter_map(|t| t.parse().ok())
+            .collect();
+        println!("ids depuis {f} : {} tokens", ids.len());
+    }
+    if let Some(l) = hebb_layer {
+        let n_out = mdl.cfg.ffn;
+        let n_in = mdl.cfg.hidden;
+        mdl.hebb = Some(model::Hebb::new(l, n_out, n_in, hebb_q));
+        println!("capteur hebbien : couche {l}, projection gate ({n_out} x {n_in}), \
+                  quantile {hebb_q} -> {hebb_out}");
     }
     if ids.is_empty() { eprintln!("rien à générer : --ids ou --prompt requis"); return; }
 
@@ -292,6 +315,17 @@ fn run_infer(args: &[String]) {
              st.n_gen, st.gen_s, st.n_gen as f64 / st.gen_s);
     println!("événements : {} au total, {:.1} par token",
              st.events, st.events as f64 / (st.n_prompt + st.n_gen) as f64);
+    if let Some(hb) = mdl.hebb.as_ref() {
+        use std::io::Write;
+        let mut f = std::fs::File::create(&hebb_out).expect("création du fichier hebbien");
+        for v in &hb.h { f.write_all(&v.to_le_bytes()).unwrap(); }
+        f.flush().unwrap();
+        let hb_ms = 0.0;   // le coût est mesuré à part
+        let _ = hb_ms;
+        println!("capteur hebbien : {} activations sur {} tokens, trace écrite dans {} ({:.1} Mo)",
+                 hb.n_fire, hb.n_token,
+                 hebb_out, (hb.h.len() * 4) as f64 / 1e6);
+    }
     let n_tok = (st.n_prompt + st.n_gen) as f64;
     let p = mdl.prof;
     println!("postes (ms/token) : matvec-attn {:.1} | rope {:.1} | attention {:.1} | matvec+mlp {:.1} | total mesuré {:.1}",
