@@ -14,7 +14,7 @@
 //! Barrière par *spin* (atomiques) au lieu de canaux : le coût fixe d'un appel
 //! passe de quelques dizaines de microsecondes à quelques microsecondes.
 
-use crate::list::{DenseQ8, FusedSign, PushMat, SignedDelta};
+use crate::list::{DenseQ4, DenseQ8, FusedSign, PushMat, SignedDelta};
 use std::sync::atomic::{AtomicBool, AtomicPtr, AtomicUsize, Ordering};
 use std::sync::Arc;
 
@@ -220,8 +220,11 @@ struct Shared {
     delta: AtomicPtr<SignedDelta>,
     push: AtomicPtr<PushMat>,
     dense: AtomicPtr<DenseQ8>,
+    dense4: AtomicPtr<DenseQ4>,
     /// activation dense pour le mode 3 (produit scalaire par ligne de sortie)
     xv: AtomicPtr<i32>,
+    /// mêmes activations en i16, pour le noyau AVX2 du mode 4
+    xv16: AtomicPtr<i16>,
     sx: AtomicUsize,
     outs: AtomicPtr<Vec<Vec<f32>>>,
     /// 0 = listes signées, 1 = listes fusionnées, 2 = listes par source valuées
@@ -271,7 +274,9 @@ impl Pool {
             delta: AtomicPtr::new(std::ptr::null_mut()),
             push: AtomicPtr::new(std::ptr::null_mut()),
             dense: AtomicPtr::new(std::ptr::null_mut()),
+            dense4: AtomicPtr::new(std::ptr::null_mut()),
             xv: AtomicPtr::new(std::ptr::null_mut()),
+            xv16: AtomicPtr::new(std::ptr::null_mut()),
             sx: AtomicUsize::new(0),
             outs: AtomicPtr::new(std::ptr::null_mut()),
             mode: AtomicUsize::new(1),
@@ -306,6 +311,26 @@ impl Pool {
                     // sont publiés qu'avant un vrai travail).
                     if sh.stop.load(Ordering::Acquire) { return; }
                     let mode = sh.mode.load(Ordering::Relaxed);
+                    if mode == 4 {
+                        // Mode 4 bits : même découpage que le mode 3, mais les
+                        // poids tiennent sur un demi-octet — c'est le seul
+                        // levier qui reste quand le noyau est au mur mémoire.
+                        let d = unsafe { &*sh.dense4.load(Ordering::Acquire) };
+                        let xv = unsafe { std::slice::from_raw_parts(
+                            sh.xv16.load(Ordering::Acquire), d.n_in) };
+                        let sx = f32::from_bits(sh.sx.load(Ordering::Relaxed) as u32);
+                        let outs = unsafe { &mut *sh.outs.load(Ordering::Acquire) };
+                        let per = (d.n_out + n - 1) / n;
+                        let lo = id * per;
+                        let hi = (lo + per).min(d.n_out);
+                        let dst = &mut outs[id];
+                        if dst.len() < d.n_out { dst.resize(d.n_out, 0.0); }
+                        for v in dst[..lo].iter_mut() { *v = 0.0; }
+                        for v in dst[hi..].iter_mut() { *v = 0.0; }
+                        for o in lo..hi { dst[o] = d.dot16(o, xv) * sx; }
+                        sh.done.fetch_add(1, Ordering::Release);
+                        continue;
+                    }
                     if mode == 3 {
                         // Mode dense : chaque worker calcule une tranche
                         // contiguë de sorties, sans dispersion ni réduction.
@@ -319,8 +344,21 @@ impl Pool {
                         let hi = (lo + per).min(d.n_out);
                         let dst = &mut outs[id];
                         if dst.len() < d.n_out { dst.resize(d.n_out, 0.0); }
+                        // Hors de sa tranche, ce worker doit laisser des ZÉROS :
+                        // `matvec_dense_i8` somme les vecteurs de TOUS les
+                        // workers, et une case non écrite garderait la valeur du
+                        // travail précédent (bug mesuré : PPL 4 361 879 au lieu de
+                        // 19,26 — chaque sortie recevait n-1 restes périmés).
+                        for v in dst[..lo].iter_mut() { *v = 0.0; }
+                        for v in dst[hi..].iter_mut() { *v = 0.0; }
                         for o in lo..hi {
-                            dst[o] = d.dot_chunked(o, xv) as f32 * d.scale[o] * sx;
+                            // Même ordre d'opérations que le chemin par
+                            // événements : `acc × (échelle_poids × échelle_act)`.
+                            // Les sommes entières étant exactes des deux côtés,
+                            // cette seule parenthèse rend les deux modes
+                            // **bit à bit identiques** — changer de mode
+                            // d'exécution ne change plus un seul token.
+                            dst[o] = d.dot_chunked(o, xv) as f32 * (d.scale[o] * sx);
                         }
                         sh.done.fetch_add(1, Ordering::Release);
                         continue;
@@ -375,6 +413,28 @@ impl Pool {
     pub fn threads(&self) -> usize { self.n }
 
     /// Produit matrice-vecteur **dense** (référence sans événements).
+    /// Produit matrice-vecteur avec des poids **4 bits** (mode 4).
+    pub fn matvec_dense_q4(&mut self, d: &DenseQ4, x: &[i32], sx: f32) -> Vec<f32> {
+        self.ensure_width(d.n_out);
+        let sh = &self.shared;
+        sh.mode.store(4, Ordering::Relaxed);
+        sh.dense4.store(d as *const _ as *mut _, Ordering::Relaxed);
+        // Conversion i32 → i16 faite UNE fois par appel : les noyaux la
+        // referaient sinon pour chaque ligne de sortie (4 864 fois).
+        let xi: Vec<i16> = x.iter().map(|&v| v.clamp(-32767, 32767) as i16).collect();
+        sh.xv16.store(xi.as_ptr() as *mut i16, Ordering::Relaxed);
+        sh.sx.store(sx.to_bits() as usize, Ordering::Relaxed);
+        sh.outs.store(&mut self.outs as *mut Vec<Vec<f32>>, Ordering::Relaxed);
+        sh.done.store(0, Ordering::Relaxed);
+        sh.gen.fetch_add(1, Ordering::Release);
+        while sh.done.load(Ordering::Acquire) != self.n { std::hint::spin_loop(); }
+        let mut out = vec![0f32; d.n_out];
+        for w in &self.outs {
+            for (o, &v) in out.iter_mut().zip(w.iter()) { *o += v; }
+        }
+        out
+    }
+
     pub fn matvec_dense_i8(&mut self, d: &DenseQ8, x: &[i32], sx: f32) -> Vec<f32> {
         self.ensure_width(d.n_out);
         let sh = &self.shared;

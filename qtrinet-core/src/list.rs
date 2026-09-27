@@ -369,12 +369,27 @@ impl DenseQ8 {
     pub fn dot_chunked(&self, o: usize, x: &[i32]) -> i64 {
         let row = &self.q[o * self.n_in..(o + 1) * self.n_in];
         let mut s = 0i64;
-        for bloc in row.chunks(256) {
-            let mut a = 0i32;
-            for i in 0..bloc.len() {
-                a += bloc[i] as i32 * x[i];
+        for (offset, bloc) in row.chunks(256).enumerate() {
+            let xb = &x[offset * 256..offset * 256 + bloc.len()];
+            // HUIT accumulateurs indépendants, et non un seul : avec une seule
+            // chaîne `a += ...`, chaque addition attend la précédente et le
+            // noyau plafonne à ~1 multiplication par cycle — mesuré 0,54.
+            // Huit chaînes donnent au processeur de quoi remplir ses ports, et
+            // dérouler par 8 expose le motif que LLVM transforme en `vpmaddwd`
+            // (élargissement i8→i16, produits appariés, somme des paires).
+            // Débordement : 32 termes par tranche de 256 et par chaîne, soit
+            // 32 × 127 × 32767 = 1,3e8 < 2^31. Sûr pour toutes les `abits`.
+            let n = bloc.len();
+            let mut a = [0i32; 8];
+            let mut i = 0usize;
+            while i + 8 <= n {
+                for k in 0..8 { a[k] += bloc[i + k] as i32 * xb[i + k]; }
+                i += 8;
             }
-            s += a as i64;
+            let mut t = 0i32;
+            for k in 0..8 { t += a[k]; }
+            while i < n { t += bloc[i] as i32 * xb[i]; i += 1; }
+            s += t as i64;
         }
         s
     }
@@ -395,5 +410,205 @@ impl DenseQ8 {
         let mut s = a0 + a1 + a2 + a3;
         while i < n { s += row[i] as i64 * x[i] as i64; i += 1; }
         s
+    }
+}
+
+// --------------------------------------------------------------------------- //
+// 6. Matrice dense 4 bits (0,5 octet/poids + échelles de bloc)
+// --------------------------------------------------------------------------- //
+
+/// Taille des blocs d'échelle. 32 est le compromis standard (Q4_0) : assez fin
+/// pour que chaque bloc ait une dynamique resserrée, assez gros pour que le
+/// coût des échelles reste marginal.
+pub const BLOC_Q4: usize = 32;
+
+/// Matrice quantifiée sur 4 bits, rangée par ligne de sortie.
+///
+/// Mesuré : le produit scalaire dense lit ses poids à 14–27 Go/s, soit le mur
+/// de la bande passante mémoire de cette machine (repère : ~19 Go/s). Le
+/// vectoriser davantage ne sert donc à rien — **seul le nombre d'octets par
+/// poids compte**. D'où la forme 4 bits : 0,5 octet/poids, plus une échelle
+/// `u8` par bloc de 32 (8/32 = 0,25 bit) → **4,25 bits/poids**, soit ×1,88
+/// moins d'octets que l'int8.
+///
+/// Échelles : chaque bloc a sa propre échelle `s_b = max|w| / 7`, stockée
+/// relativement à l'échelle de ligne (u8 sur 255). Sans échelle de bloc, une
+/// ligne de 4864 poids n'aurait qu'une seule dynamique et les petits poids
+/// seraient écrasés à zéro.
+pub struct DenseQ4 {
+    pub n_in: usize,
+    pub n_out: usize,
+    pub q: Vec<u8>,        // n_out × ⌈n_in/2⌉, deux nibbles biaisés (+8) par octet
+    pub sc: Vec<u16>,      // n_out × ⌈n_in/BLOC_Q4⌉ échelles de bloc, relatives
+    pub scale: Vec<f32>,   // une par sortie : la plus grande échelle de bloc
+}
+
+impl DenseQ4 {
+    pub fn build(w: &[f32], n_out: usize, n_in: usize) -> Self {
+        assert_eq!(w.len(), n_out * n_in);
+        let half = n_in.div_ceil(2);
+        let n_bloc = n_in.div_ceil(BLOC_Q4);
+        let mut q = vec![0u8; n_out * half];
+        let mut sc = vec![1u16; n_out * n_bloc];
+        let mut scale = vec![1f32; n_out];
+        for o in 0..n_out {
+            let row = &w[o * n_in..(o + 1) * n_in];
+            let mut sb = vec![1f32; n_bloc];
+            for (b, s) in sb.iter_mut().enumerate() {
+                let (lo, hi) = (b * BLOC_Q4, ((b + 1) * BLOC_Q4).min(n_in));
+                let mut mx = 0f32;
+                for &v in &row[lo..hi] { let a = v.abs(); if a > mx { mx = a; } }
+                // Bloc entièrement nul : l'échelle n'a pas d'importance, la
+                // valeur reconstruite sera 0 de toute façon.
+                *s = if mx > 0.0 { mx / 7.0 } else { 1.0 };
+            }
+            let rs = sb.iter().cloned().fold(0f32, f32::max);
+            let rs = if rs > 0.0 { rs } else { 1.0 };
+            scale[o] = rs;
+            for b in 0..n_bloc {
+                // Échelle relative sur 16 bits, et non 8 : avec 255 niveaux, un
+                // bloc dix fois plus faible que le maximum de la ligne n'était
+                // décrit qu'à 4 % près — mesuré PPL 17,10 contre 14,70 en int8,
+                // un coût de qualité qui n'a rien à voir avec les 4 bits eux-mêmes.
+                let u = (65535.0 * sb[b] / rs).round().clamp(1.0, 65535.0);
+                sc[o * n_bloc + b] = u as u16;
+                let inv = 1.0 / sb[b];
+                let (lo, hi) = (b * BLOC_Q4, ((b + 1) * BLOC_Q4).min(n_in));
+                for i in lo..hi {
+                    let r = (row[i] * inv).round().clamp(-8.0, 7.0) as i32;
+                    let nib = (r + 8) as u8;          // 0..15, biaisé
+                    let idx = o * half + i / 2;
+                    if i % 2 == 0 { q[idx] |= nib; } else { q[idx] |= nib << 4; }
+                }
+            }
+        }
+        DenseQ4 { n_in, n_out, q, sc, scale }
+    }
+
+    /// Octets réellement occupés, en bits par poids d'origine.
+    pub fn bits_per_weight(&self) -> f64 {
+        (self.q.len() + self.sc.len() * 2) as f64 * 8.0 / (self.n_out * self.n_in) as f64
+    }
+
+    /// Produit scalaire d'une ligne. Accumulation **entière par bloc** (32
+    /// termes au plus : 32 × 8 × 32767 < 2^31), puis une seule mise à
+    /// l'échelle flottante par bloc — la conversion en flottant ne coûte donc
+    /// rien et l'essentiel du travail reste entier.
+    #[inline]
+    pub fn dot(&self, o: usize, x: &[i32]) -> f32 {
+        let half = self.n_in.div_ceil(2);
+        let n_bloc = self.n_in.div_ceil(BLOC_Q4);
+        let row = &self.q[o * half..(o + 1) * half];
+        let scb = &self.sc[o * n_bloc..(o + 1) * n_bloc];
+        let rs = self.scale[o];
+        let mut sum = 0f32;
+        for b in 0..n_bloc {
+            let (lo, hi) = (b * BLOC_Q4, ((b + 1) * BLOC_Q4).min(self.n_in));
+            let mut a = 0i32;
+            let mut i = lo;
+            while i + 1 < hi {
+                let byte = row[i / 2] as u32;
+                a += ((byte & 15) as i32 - 8) * x[i];
+                a += ((byte >> 4) as i32 - 8) * x[i + 1];
+                i += 2;
+            }
+            if i < hi { a += ((row[i / 2] as u32 & 15) as i32 - 8) * x[i]; }
+            sum += a as f32 * (rs * scb[b] as f32 * (1.0 / 65535.0));
+        }
+        sum
+    }
+}
+
+impl DenseQ4 {
+    /// Même produit scalaire, mais à partir d'activations déjà converties en
+    /// i16 (fait **une fois par appel** et non une fois par ligne) : le noyau
+    /// AVX2 peut alors charger poids et activations sans réordonnancement.
+    ///
+    /// Les sommes entières par bloc sont exactes et indépendantes de l'ordre,
+    /// donc le résultat est **bit à bit identique** au chemin scalaire — ce
+    /// n'est pas une approximation, c'est le même calcul.
+    #[inline]
+    pub fn dot16(&self, o: usize, x: &[i16]) -> f32 {
+        #[cfg(target_arch = "x86_64")]
+        {
+            if self.n_in % BLOC_Q4 == 0
+                && x.len() >= self.n_in
+                && std::is_x86_feature_detected!("avx2")
+            {
+                return unsafe { self.dot16_avx2(o, x) };
+            }
+        }
+        let xi: Vec<i32> = x[..self.n_in].iter().map(|&v| v as i32).collect();
+        self.dot(o, &xi)
+    }
+
+    /// Noyau AVX2 : 32 poids (16 octets) par itération.
+    ///
+    /// Le chemin scalaire coûtait ~5 cycles par poids (dépaquetage, masquage,
+    /// décalage, deux chaînes d'accumulation) : mesuré ×1,4 plus LENT que
+    /// l'int8 alors qu'il lit deux fois moins d'octets. Ici 16 poids tiennent
+    /// dans un `vpmaddwd`, soit ~0,5 opération par poids.
+    #[cfg(target_arch = "x86_64")]
+    #[target_feature(enable = "avx2")]
+    unsafe fn dot16_avx2(&self, o: usize, x: &[i16]) -> f32 {
+        use std::arch::x86_64::*;
+        let half = self.n_in / 2;
+        let n_bloc = self.n_in / BLOC_Q4;
+        let row = self.q.as_ptr().add(o * half);
+        let scb = self.sc.as_ptr().add(o * n_bloc);
+        let rs = self.scale[o];
+        let xp = x.as_ptr();
+        let masque = _mm_set1_epi8(0x0f);
+        let biais = _mm_set1_epi8(8);
+        let mut sum = 0f32;
+        let mut tmp = [0i32; 8];
+        for b in 0..n_bloc {
+            let octets = _mm_loadu_si128(row.add(b * 16) as *const __m128i);
+            let lo = _mm_sub_epi8(_mm_and_si128(octets, masque), biais);
+            let hi = _mm_sub_epi8(_mm_and_si128(_mm_srli_epi16(octets, 4), masque), biais);
+            // `lo` contient les poids PAIRS (0,2,4…) et `hi` les impairs : il
+            // faut les réentrelacer AVANT d'élargir, sinon `vpmaddwd` apparie
+            // le poids 2k avec l'activation k (bug trouvé par le test :
+            // scalaire 132,3 contre avx2 −2,5).
+            let w0 = _mm256_cvtepi8_epi16(_mm_unpacklo_epi8(lo, hi));  // poids 0..15
+            let w1 = _mm256_cvtepi8_epi16(_mm_unpackhi_epi8(lo, hi));  // poids 16..31
+            let x0 = _mm256_loadu_si256(xp.add(b * BLOC_Q4) as *const __m256i);
+            let x1 = _mm256_loadu_si256(xp.add(b * BLOC_Q4 + 16) as *const __m256i);
+            let p = _mm256_add_epi32(_mm256_madd_epi16(w0, x0), _mm256_madd_epi16(w1, x1));
+            _mm256_storeu_si256(tmp.as_mut_ptr() as *mut __m256i, p);
+            let a = (tmp[0] + tmp[1] + tmp[2] + tmp[3]
+                   + tmp[4] + tmp[5] + tmp[6] + tmp[7]) as f32;
+            sum += a * (rs * *scb.add(b) as f32 * (1.0 / 65535.0));
+        }
+        sum
+    }
+}
+
+#[cfg(test)]
+mod tests_q4 {
+    use super::*;
+
+    fn melange(n: usize, graine: u64) -> Vec<f32> {
+        let mut s = graine;
+        (0..n).map(|_| {
+            s = s.wrapping_mul(6364136223846793005).wrapping_add(1442695040888963407);
+            ((s >> 33) as f64 / (1u64 << 31) as f64 - 1.0) as f32
+        }).collect()
+    }
+
+    #[test]
+    fn avx2_egale_scalaire() {
+        for &(n_out, n_in) in &[(4usize, 64usize), (7, 96), (3, 32), (5, 160)] {
+            let w = melange(n_out * n_in, 12345);
+            let d = DenseQ4::build(&w, n_out, n_in);
+            let x: Vec<i32> = (0..n_in).map(|i| ((i * 37) % 255) as i32 - 127).collect();
+            let x16: Vec<i16> = x.iter().map(|&v| v as i16).collect();
+            for o in 0..n_out {
+                let a = d.dot(o, &x);
+                let b = d.dot16(o, &x16);
+                assert_eq!(a.to_bits(), b.to_bits(),
+                           "rang {o} ({n_out}×{n_in}) : scalaire {a} vs avx2 {b}");
+            }
+        }
     }
 }

@@ -5,15 +5,15 @@
 | Identifiant | `22bcae27-254b-47b2-acda-87467dab060c` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-25 11:56 |
-| Durée | 54.6 h |
+| Durée | 55.5 h |
 | Tours | 36 |
-| Messages | 827 |
-| Appels d'outils | 846 |
+| Messages | 939 |
+| Appels d'outils | 954 |
 | Fichiers touchés | 66 |
-| Commandes | 618 |
+| Commandes | 717 |
 | Sous-agents | 1 |
-| Commits | 29 |
-| Compactages de contexte | 1 |
+| Commits | 30 |
+| Compactages de contexte | 2 |
 
 ## Objectifs déclarés
 
@@ -2082,7 +2082,7 @@ Les trois papiers neuromorphiques atteignent **R̂ = 0,15** — 6,7× moins d'é
 
 ### Tour 36 — continue les améliorations
 
-*15 appels d'outils.* Actions notables :
+*123 appels d'outils.* Actions notables :
 
 - bash — Implement sliding-window attention with sinks
 - bash — Test sliding-window attention quality
@@ -2098,11 +2098,11 @@ Les trois papiers neuromorphiques atteignent **R̂ = 0,15** — 6,7× moins d'é
 - bash — Measure dense perplexity and final throughput
 - bash — Find the push/pull crossover by activation density
 - write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-croisement-push-pull.md`
-- … et 1 autres
+- … et 105 autres
 
 **Synthèse produite :**
 
-⏵ **Le croisement est à 10 % de densité d'activation.** C'est le résultat qui ordonne tout le projet — je le consigne
+⏵ Dispatch validé en conditions réelles : dense au-dessus de 22 %, push en dessous (×1,47 à 5 % de densité). Je consigne et je commite
 
 ## 3. Travail accompli
 
@@ -2151,7 +2151,7 @@ Les trois papiers neuromorphiques atteignent **R̂ = 0,15** — 6,7× moins d'é
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/run_harness.py` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src/gguf.rs` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src/list.rs` | 1 | 1 |
-| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src/engine.rs` | 4 | 2 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src/engine.rs` | 4 | 5 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src/main.rs` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-optimisations.md` | 2 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src/model.rs` | 1 | 0 |
@@ -2223,7 +2223,7 @@ Les trois papiers neuromorphiques atteignent **R̂ = 0,15** — 6,7× moins d'é
 - **T3** Test OpenOCD without root and check Pro device support
 - **T3** Make scripts executable and test jtag_scan
 - **T3** Commit JTAG milestone
-- … et 578 autres
+- … et 677 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2351,7 +2351,7 @@ Les trois papiers neuromorphiques atteignent **R̂ = 0,15** — 6,7× moins d'é
 
 ## 5. Erreurs rencontrées
 
-76 sorties en erreur ou divergentes. Les premières :
+87 sorties en erreur ou divergentes. Les premières :
 
 - **T2** : === LIEN PCIe (sysfs, sans root) === current_link_speed     = 8.0 GT/s PCIe current_link_width     = 8 max_link_speed         = 8.0 GT/s PCIe max_link_width         = 8 secondary_bus_number   =  vendo
 - **T2** : [POPUP: saisissez le mot de passe] === TOUS les événements USB depuis le boot (fin de log) === [ven sep 25 11:52:23 2026] [ T684749] hid-generic 0003:04F2:2159.00ED: hiddev99,hidraw5: USB HID v1.10 De
@@ -2400,4 +2400,5 @@ Les trois papiers neuromorphiques atteignent **R̂ = 0,15** — 6,7× moins d'é
 - Programme : lecons de la campagne de parcimonie et regle de methode  Quatre enseignements consignes dans le programme de recherche, dont un qui change la method
 - Journal : rafraîchissement de fin de campagne" 2>/dev/null || echo "(rien à committer)" git log --oneline | head -3
 - Croisement push/pull : l'architecture evenementielle est justifiee sous 10 % de densite  Deux facons d'executer le meme modele quantifie, a resultat RIGOUREUSEM
+- Croisement push/pull remesuré, equivalence bit a bit, chemin 4 bits AVX2  Trois bugs corriges, dont deux qui faussaient des conclusions : - while i + 1 < args.l
 

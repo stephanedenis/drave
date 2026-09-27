@@ -8,8 +8,16 @@ Deux façons d'exécuter le même modèle quantifié :
 - **pull** (le noyau dense ordinaire) : pour chaque sortie, on *lit* sa ligne de
   poids et on fait un produit scalaire. 1 octet par poids, aucune dispersion.
 
-Elles donnent **exactement le même résultat** — vérifié : 32 tokens identiques
-et perplexité 24,8995 au chiffre près dans les deux modes.
+Elles donnent **exactement le même résultat** — vérifié : perplexité 19,2647 au
+chiffre près sur 510 jetons, tokens identiques, en écrivant les deux chemins avec
+le même ordre d'opérations (les sommes entières sont exactes des deux côtés).
+
+> ⚠️ **Corrigé le 27/09** : le tableau de croisement de la section 1 mesurait
+> « push » contre « dense » alors que le drapeau `--dense`, placé en dernier
+> argument, n'était jamais lu (`while i + 1 < args.len()`), et le mode dense
+> sommait des tranches périmées. Les chiffres ci-dessous sont ceux du banc
+> instrumenté, à arithmétique identique. Voir
+> `rapport-mur-memoire-4bits.md`.
 
 ---
 
@@ -18,23 +26,32 @@ et perplexité 24,8995 au chiffre près dans les deux modes.
 Temps CPU pour 24 tokens, meilleur de 2, mesures entrelacées. La densité est
 celle des activations, imposée par k-WTA.
 
-| densité d'activation | push (s CPU) | pull (s CPU) | gagnant |
-|---|---|---|---|
-| **100 %** | 42,12 | **19,51** | pull, **×2,16** |
-| 50 % | 27,08 | **16,28** | pull, ×1,66 |
-| 25 % | 21,49 | **16,08** | pull, ×1,34 |
-| **10 %** | **17,63** | 17,59 | **égalité** |
-| 5 % | **16,82** | 17,47 | push, ×1,04 |
+Mesure refaite sur `blk.0.ffn_gate.weight` (4 864 × 896, 4,36 M poids), 16 threads,
+en comparant cette fois **la même arithmétique** (`PushMat` et `DenseQ8` ont la
+même quantification int8, une échelle par sortie) :
 
-➡️ **Les deux architectures se croisent à 10 % de densité d'activation.** Au-dessus,
-le noyau dense gagne — jusqu'à 2,2× à pleine densité. En dessous, le mode
-événementiel gagne.
+| densité | push (ms) | pull (ms) | push/pull |
+|---|---|---|---|
+| 0 % | 0,004 | 0,167 | 0,03 |
+| 1 % | 0,019 | 0,162 | 0,12 |
+| 5 % | 0,047 | 0,168 | 0,28 |
+| **10 %** | 0,078 | 0,163 | **0,48** |
+| **25 %** | 0,180 | 0,163 | **1,11** |
+| 50 % | 0,355 | 0,165 | 2,15 |
+| **100 %** | 0,801 | 0,171 | **4,69** |
+
+➡️ **Les deux architectures se croisent à ~22 % de densité d'activation**, pas à
+10 %. Le chiffre se lit dans le rapport à pleine densité : le pull traite 4,7 fois
+plus de poids par seconde que le push ne traite d'événements, donc l'égalité tombe
+vers 1/4,7. À 10 % le push est ×2,1 plus rapide, à 1 % ×8,3.
+
+Le seuil de bascule `seuil_push` est passé de 0,15 à **0,22**.
 
 ## 2. Pourquoi ce chiffre ordonne tout le projet
 
 | fait mesuré | densité d'activation | côté du croisement |
 |---|---|---|
-| LLM dense entraîné (notre Qwen2.5-0.5B) | **100 %** (0,00 % de zéros) | ❌ pull gagne ×2,2 |
+| LLM dense entraîné (notre Qwen2.5-0.5B) | **100 %** (0,00 % de zéros) | ❌ pull gagne ×4,7 |
 | meilleure parcimonie imposée sans entraînement | ~85 % | ❌ pull gagne |
 | réseau à décharge entraîné (SpikeGPT) | **R̂ = 0,15** | ✅ **push gagne** |
 | réseau vraiment creux (ReLU, MoE, top-k) | < 10 % | ✅ push gagne |
@@ -66,10 +83,29 @@ au programme vaut donc aussi pour les comparaisons entre architectures : *avant
 de conclure qu'une approche est meilleure, vérifier que les deux sont écrites
 correctement.*
 
+## 3 bis. Le dispatch par mesure, vérifié en conditions réelles
+
+`--auto` charge les deux formes et bascule à chaque projection selon la densité
+d'activation mesurée. Vérification sur le modèle entier, 255 jetons, 16 threads ;
+les **événements** disent quel chemin a servi (0 = tout dense) :
+
+| `--act-topk` | densité | pull | auto |
+|---|---|---|---|
+| 1000 | 111 % | 0 év — 9,1 s | 0 év — 9,3 s (dense) |
+| 400 | 44 % | 0 év — 10,1 s | 0 év — 9,4 s (dense) |
+| 200 | 22 % | 0 év — 9,6 s | 18,1 G év — 8,7 s (bascule) |
+| 100 | 11 % | 0 év — 9,1 s | 9,1 G év — **7,1 s** |
+| 50 | 5 % | 0 év — 9,1 s | 4,5 G év — **6,2 s** |
+
+➡️ La bascule tombe exactement au seuil mesuré (22 %), et le gain croît à mesure
+que la densité baisse — ×1,47 à 5 % de densité. Le choix n'est plus une
+préférence d'architecture, c'est une **mesure**.
+
 ## 4. Ce que ça change concrètement
 
-1. **Sur CPU, le mode pull est le bon choix** au-dessus de 10 % de densité. Le
-   moteur gagnerait 2,3× à basculer sur ce chemin pour les modèles denses.
+1. **Sur CPU, le mode pull est le bon choix** au-dessus de 22 % de densité. Le
+   moteur gagne ×2,27 de bout en bout (13,6 → 30,7 tok/s, 510 jetons) à basculer
+   sur ce chemin pour un modèle dense — et le résultat est identique au bit près.
 2. **Le FPGA garde le push** : c'est sa forme naturelle — pas de multiplieur,
    accumulateur en BRAM, dispersion dans un banc privé. Le croisement y est
    différent (la DDR3 de la carte fait 9,66 Go/s contre 380 pour le GPU), mais

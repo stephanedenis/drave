@@ -15,7 +15,7 @@
 
 use crate::engine::{Pool, SparseVec};
 use crate::gguf::Gguf;
-use crate::list::{DenseQ8, PushMat};
+use crate::list::{DenseQ4, DenseQ8, PushMat};
 use std::time::Instant;
 
 // --------------------------------------------------------------------------- //
@@ -40,6 +40,8 @@ pub struct Cfg {
 pub struct Proj {
     pub m: Option<PushMat>,
     pub d: Option<DenseQ8>,
+    /// Variante 4 bits de la forme dense (0,5 octet/poids). Exclusif de `d`.
+    pub q4: Option<DenseQ4>,
     pub bias: Option<Vec<f32>>,
 }
 
@@ -107,20 +109,28 @@ fn prune_structured(w: &mut [f32], n_out: usize, n_in: usize, keep: f32) {
 }
 
 impl Proj {
-    fn load(g: &Gguf, name: &str, bias: Option<&str>, dense: bool, keep: f32) -> Self {
+    fn load(g: &Gguf, name: &str, bias: Option<&str>, dense: bool, auto: bool, keep: f32,
+            q4: bool) -> Self {
         let t = g.tensor(name).unwrap_or_else(|| panic!("tenseur {name} absent"));
         let n_out = t.dims[0] as usize;
         let n_in = t.dims[1] as usize;
         let mut w = g.dequant(name);
         if keep < 0.0 { prune_structured(&mut w, n_out, n_in, -keep); }
         else { prune_rows(&mut w, n_out, n_in, keep); }
-        let (m, d) = if dense {
-            (None, Some(DenseQ8::build(&w, n_out, n_in)))
+        // `auto` charge les DEUX formes : le moteur choisit ensuite, par mesure
+        // de la densité d'activation, entre dispersion (push) et produit
+        // scalaire dense (pull). Le croisement mesuré est à 10 %.
+        let (m, d, q4v) = if q4 {
+            (None, None, Some(DenseQ4::build(&w, n_out, n_in)))
+        } else if dense {
+            (None, Some(DenseQ8::build(&w, n_out, n_in)), None)
+        } else if auto {
+            (Some(PushMat::build(&w, n_out, n_in)), Some(DenseQ8::build(&w, n_out, n_in)), None)
         } else {
-            (Some(PushMat::build(&w, n_out, n_in)), None)
+            (Some(PushMat::build(&w, n_out, n_in)), None, None)
         };
         let bias = bias.map(|b| g.dequant(b));
-        Proj { m, d, bias }
+        Proj { m, d, q4: q4v, bias }
     }
 }
 
@@ -173,10 +183,18 @@ pub struct Model {
     /// d'être O(N) — c'est le seul moyen d'attaquer le poste dominant.
     pub attn_window: usize,
     pub attn_sinks: usize,
+    /// Seuil de bascule push/pull, en fraction de sources actives. Mesuré : les
+    /// deux architectures se croisent à 10 % de densité ; on bascule un peu
+    /// au-dessus pour absorber la marge d'erreur.
+    pub seuil_push: f32,
     /// Token d'arrêt (EOS / <|im_end|>) : la génération s'interrompt dessus.
     pub stop_id: Option<u32>,
     /// Postes de temps cumulés, en secondes (diagnostic).
     pub prof: [f64; 6],
+    /// Tête de sortie en 4 bits (poids liés au plafond d'embedding). C'est la
+    /// plus grosse matrice du modèle — 151 936 × 896 — donc le poste où le
+    /// demi-octet par poids rapporte le plus.
+    pub head4: Option<DenseQ4>,
     /// Greffon : un neurone supplémentaire, chargé sans réentraînement.
     pub patch: Option<Patch>,
     /// Gain appliqué à la sortie du FFN d'une couche : édition structurelle de
@@ -269,7 +287,8 @@ impl Hebb {
 }
 
 impl Model {
-    pub fn load(path: &str, ctx: usize, n_threads: usize, dense: bool, keep: f32) -> Model {
+    pub fn load(path: &str, ctx: usize, n_threads: usize, dense: bool, keep: f32,
+                auto: bool, q4: u8) -> Model {
         let t0 = Instant::now();
         let g = Gguf::open(path).expect("ouverture du GGUF");
         let cfg = Cfg {
@@ -295,14 +314,14 @@ impl Model {
             let p = |s: &str| format!("blk.{l}.{s}");
             let lay = Layer {
                 attn_norm: g.dequant(&p("attn_norm.weight")),
-                wq: Proj::load(&g, &p("attn_q.weight"), Some(&p("attn_q.bias")), dense, keep),
-                wk: Proj::load(&g, &p("attn_k.weight"), Some(&p("attn_k.bias")), dense, keep),
-                wv: Proj::load(&g, &p("attn_v.weight"), Some(&p("attn_v.bias")), dense, keep),
-                wo: Proj::load(&g, &p("attn_output.weight"), None, dense, keep),
+                wq: Proj::load(&g, &p("attn_q.weight"), Some(&p("attn_q.bias")), dense || q4 != 0, auto, keep, q4 & 2 != 0),
+                wk: Proj::load(&g, &p("attn_k.weight"), Some(&p("attn_k.bias")), dense || q4 != 0, auto, keep, q4 & 2 != 0),
+                wv: Proj::load(&g, &p("attn_v.weight"), Some(&p("attn_v.bias")), dense || q4 != 0, auto, keep, q4 & 2 != 0),
+                wo: Proj::load(&g, &p("attn_output.weight"), None, dense || q4 != 0, auto, keep, q4 & 2 != 0),
                 ffn_norm: g.dequant(&p("ffn_norm.weight")),
-                wgate: Proj::load(&g, &p("ffn_gate.weight"), None, dense, keep),
-                wup: Proj::load(&g, &p("ffn_up.weight"), None, dense, keep),
-                wdown: Proj::load(&g, &p("ffn_down.weight"), None, dense, keep),
+                wgate: Proj::load(&g, &p("ffn_gate.weight"), None, dense || q4 != 0, auto, keep, q4 & 1 != 0),
+                wup: Proj::load(&g, &p("ffn_up.weight"), None, dense || q4 != 0, auto, keep, q4 & 1 != 0),
+                wdown: Proj::load(&g, &p("ffn_down.weight"), None, dense || q4 != 0, auto, keep, q4 & 1 != 0),
             };
             for pj in [&lay.wq, &lay.wk, &lay.wv, &lay.wo, &lay.wgate, &lay.wup, &lay.wdown] {
                 if let Some(m) = &pj.m { bytes += m.data.len() as u64; }
@@ -320,13 +339,27 @@ impl Model {
                   else { String::new() },
                   pool.threads());
         let n_layer = cfg.n_layer;
+        // Tête en 4 bits : la plus grosse matrice du modèle, donc le plus gros
+        // gain possible sur un noyau déjà au mur de la bande passante.
+        let head4 = if q4 & 4 != 0 {
+            let t0 = Instant::now();
+            let w = g.dequant("token_embd.weight");
+            let v = cfg.vocab;
+            let h = cfg.hidden;
+            let d = DenseQ4::build(&w, v, h);
+            println!("[tête 4 bits] {} × {} → {:.2} b/poids, {:.0} Mo, {:.1} s",
+                     v, h, d.bits_per_weight(),
+                     (d.q.len() + d.sc.len()) as f64 / 1e6, t0.elapsed().as_secs_f64());
+            Some(d)
+        } else { None };
         Model {
             g, cfg, layers, out_norm, pool,
             kv_k: vec![kv.clone(); n_layer], kv_v: vec![kv; n_layer],
             ctx, events: 0, act_levels: 127.0, act_thresh: 0.0, act_topk: 0, act_renorm: false,
             act_topk_proj: [0; 7], attn_topk: 0, attn_events: 0, qk_topk: 0,
-            attn_window: 0, attn_sinks: 4,
+            attn_window: 0, attn_sinks: 4, seuil_push: 0.22,
             stop_id: None, prof: [0.0; 6],
+            head4,
             patch: None, ffn_gain: None, hebb: None,
         }
     }
@@ -399,14 +432,37 @@ impl Model {
     /// Produit matrice-vecteur **par événements** : les activations actives
     /// poussent leur contribution dans les sorties de leur liste.
     fn matvec(pool: &mut Pool, p: &Proj, x: &[f32], out: &mut [f32], events: &mut u64,
-              levels: f32, thresh: f32, topk: usize, renorm: bool, scratch: &mut Vec<f32>) {
+              levels: f32, thresh: f32, topk: usize, renorm: bool, scratch: &mut Vec<f32>,
+              thresh_auto: f32) {
         let Some((sv, sx)) = Self::quant_scratch(x, levels, thresh, topk, renorm, scratch) else {
             for (o, v) in out.iter_mut().enumerate() {
                 *v = p.bias.as_ref().map_or(0.0, |b| b[o]);
             }
             return;
         };
+        // ---- choix de direction par mesure : sous le seuil, disperser (push) ;
+        // au-dessus, le produit scalaire dense (pull) est plus rapide.
+        // Forme 4 bits : pas d'événements du tout, un seul chemin.
+        if let Some(q) = &p.q4 {
+            let mut xd = vec![0i32; x.len()];
+            for (&i, &v) in sv.idx.iter().zip(sv.val.iter()) { xd[i as usize] = v; }
+            let y = pool.matvec_dense_q4(q, &xd, sx);
+            for o in 0..q.n_out {
+                out[o] = y[o] + p.bias.as_ref().map_or(0.0, |b| b[o]);
+            }
+            return;
+        }
+        let frac = sv.idx.len() as f32 / x.len().max(1) as f32;
+        // le seuil ne tranche que si LES DEUX formes sont chargées ; sinon la
+        // seule forme disponible impose le chemin (sinon : panique).
+        let use_dense = match (&p.d, &p.m) {
+            (Some(_), Some(_)) => frac > thresh_auto,
+            (Some(_), None) => true,
+            (None, Some(_)) => false,
+            (None, None) => panic!("projection sans aucun format"),
+        };
         if let Some(d) = &p.d {
+            if use_dense {
             // référence dense : pas d'événement, chaque sortie est un produit
             // scalaire complet sur la ligne de poids
             let mut xd = vec![0i32; x.len()];
@@ -415,7 +471,10 @@ impl Model {
             for o in 0..d.n_out {
                 out[o] = y[o] + p.bias.as_ref().map_or(0.0, |b| b[o]);
             }
-        } else {
+            return;
+            }
+        }
+        {
             let m = p.m.as_ref().expect("projection sans format");
             for &i in &sv.idx { *events += m.row_ev[i as usize] as u64; }
             let acc = pool.accumulate_push(m, &sv);
@@ -506,9 +565,9 @@ impl Model {
             let lay = &layers[l];
             let tm = Instant::now();
             Self::rmsnorm(&x, &lay.attn_norm, cfg.eps, &mut hn);
-            Self::matvec(pool, &lay.wq, &hn, &mut q, events, self.act_levels, self.act_thresh, tk(0), self.act_renorm, &mut scratch);
-            Self::matvec(pool, &lay.wk, &hn, &mut k, events, self.act_levels, self.act_thresh, tk(1), self.act_renorm, &mut scratch);
-            Self::matvec(pool, &lay.wv, &hn, &mut v, events, self.act_levels, self.act_thresh, tk(2), self.act_renorm, &mut scratch);
+            Self::matvec(pool, &lay.wq, &hn, &mut q, events, self.act_levels, self.act_thresh, tk(0), self.act_renorm, &mut scratch, self.seuil_push);
+            Self::matvec(pool, &lay.wk, &hn, &mut k, events, self.act_levels, self.act_thresh, tk(1), self.act_renorm, &mut scratch, self.seuil_push);
+            Self::matvec(pool, &lay.wv, &hn, &mut v, events, self.act_levels, self.act_thresh, tk(2), self.act_renorm, &mut scratch, self.seuil_push);
             self.prof[0] += tm.elapsed().as_secs_f64();
             let tr = Instant::now();
             Self::rope(&mut q, nh, hd, pos, cfg.rope_base);
@@ -614,10 +673,10 @@ impl Model {
             }
             self.prof[2] += ta.elapsed().as_secs_f64();
             let tf = Instant::now();
-            Self::matvec(pool, &lay.wo, &att, &mut o, events, self.act_levels, self.act_thresh, tk(3), self.act_renorm, &mut scratch);
+            Self::matvec(pool, &lay.wo, &att, &mut o, events, self.act_levels, self.act_thresh, tk(3), self.act_renorm, &mut scratch, self.seuil_push);
             for i in 0..h { o[i] += x[i]; }
             Self::rmsnorm(&o, &lay.ffn_norm, cfg.eps, &mut hn);
-            Self::matvec(pool, &lay.wgate, &hn, &mut gate, events, self.act_levels, self.act_thresh, tk(4), self.act_renorm, &mut scratch);
+            Self::matvec(pool, &lay.wgate, &hn, &mut gate, events, self.act_levels, self.act_thresh, tk(4), self.act_renorm, &mut scratch, self.seuil_push);
             // --- capteur hebbien : espionne la co-activation (entrée, sortie)
             // de la projection gate. Aucun effet sur le calcul.
             if let Some(hb) = self.hebb.as_mut() {
@@ -629,9 +688,9 @@ impl Model {
                     scratch = seuil;
                 }
             }
-            Self::matvec(pool, &lay.wup, &hn, &mut up, events, self.act_levels, self.act_thresh, tk(5), self.act_renorm, &mut scratch);
+            Self::matvec(pool, &lay.wup, &hn, &mut up, events, self.act_levels, self.act_thresh, tk(5), self.act_renorm, &mut scratch, self.seuil_push);
             for i in 0..cfg.ffn { gate[i] = (gate[i] / (1.0 + (-gate[i]).exp())) * up[i]; }
-            Self::matvec(pool, &lay.wdown, &gate, &mut down, events, self.act_levels, self.act_thresh, tk(6), self.act_renorm, &mut scratch);
+            Self::matvec(pool, &lay.wdown, &gate, &mut down, events, self.act_levels, self.act_thresh, tk(6), self.act_renorm, &mut scratch, self.seuil_push);
             // --- greffon : neurone supplémentaire, sans réentraînement
             if let Some(pt) = self.patch.as_ref() {
                 if pt.layer == l {
@@ -654,13 +713,23 @@ impl Model {
 
     /// Tête de sortie : produits scalaires entiers sur les lignes Q8_0 du
     /// plafond d'embedding (poids liés). Parallélisé par tranches de vocabulaire.
-    pub fn logits(&self, h: &[f32]) -> Vec<f32> {
+    pub fn logits(&mut self, h: &[f32]) -> Vec<f32> {
         let mut scratch = Vec::with_capacity(h.len());
         let (sv, sx) = match Self::quant_scratch(h, self.act_levels, self.act_thresh,
                                                 self.act_topk, self.act_renorm, &mut scratch) {
             Some(v) => v,
             None => return vec![0f32; self.cfg.vocab],
         };
+        // Tête 4 bits : passe par le pool (pas de création de threads à chaque
+        // jeton) et lit moitié moins d'octets.
+        if self.head4.is_some() {
+            let mut xd = vec![0i32; h.len()];
+            for (&i, &v) in sv.idx.iter().zip(sv.val.iter()) { xd[i as usize] = v; }
+            let d = self.head4.take().unwrap();
+            let y = self.pool.matvec_dense_q4(&d, &xd, sx);
+            self.head4 = Some(d);
+            return y;
+        }
         // int16 : la troncature en i8 ruinerait une activation quantifiée sur
         // 32767 niveaux (le corps du modèle, lui, n'est pas concerné : il
         // transporte des i32 dans le vecteur creux).

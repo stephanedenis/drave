@@ -16,7 +16,7 @@ mod tokenizer;
 
 use engine::{matvec_dense, matvec_shift_add, Pool, SparseVec};
 use gguf::Gguf;
-use list::{dense_bits, BitmapSign, FusedSign, SignedDelta, SparseK};
+use list::{dense_bits, BitmapSign, DenseQ4, DenseQ8, FusedSign, PushMat, SignedDelta, SparseK};
 use std::time::Instant;
 
 fn fmt_bits(b: u64, n: usize) -> String {
@@ -41,7 +41,7 @@ fn main() {
     let cpu = std::thread::available_parallelism().map(|n| n.get()).unwrap_or(8);
     let mut n_threads = (cpu * 3 / 4).max(1);
     let mut i = 2;
-    while i + 1 < args.len() {
+    while i < args.len() {
         match args[i].as_str() {
             "--matrix" => matrix = args[i + 1].clone(),
             "--threads" => n_threads = args[i + 1].parse().unwrap(),
@@ -116,8 +116,86 @@ fn main() {
     let mut x = vec![0i32; n_rows];
     for (i, v) in x.iter_mut().enumerate() { *v = ((i * 2654435761usize) % 200) as i32 - 100; }
 
+    // ---- croisement push/pull sur la MÊME arithmétique ----
+    // Comparer le ternaire (FusedSign) au dense int8 n'aurait aucun sens : les
+    // deux ne calculent pas la même chose. `PushMat` et `DenseQ8` partagent au
+    // contraire la quantification exacte (int8, une échelle par sortie), donc
+    // l'écart mesuré est un pur effet de la DISPERSION contre le PRODUIT
+    // SCALAIRE. La transposée est nécessaire : PushMat/DenseQ8 sont rangés par
+    // ligne de sortie, le tenseur GGUF par ligne d'entrée.
+    let wf: Vec<f32> = levels.iter().map(|&v| v as f32).collect();
+    let mut wt = vec![0f32; n_rows * n_cols];
+    for i in 0..n_rows { for o in 0..n_cols { wt[o * n_rows + i] = wf[i * n_cols + o]; } }
+    let pm = PushMat::build(&wt, n_cols, n_rows);
+    let dl = DenseQ8::build(&wt, n_cols, n_rows);
+    println!("  push int8 : {:.2} b/poids, {} événements | pull int8 : {:.2} b/poids",
+             pm.bits_per_weight(), pm.n_events, 8.0);
+
+    // ---- repère de bande passante mémoire, mesuré MAINTENANT ----
+    // Sans ce chiffre, on ne peut pas distinguer « noyau mal écrit » de
+    // « noyau déjà au bout de la mémoire ». La charge de fond de cette machine
+    // fait varier les durées du simple au double : le repère est pris dans les
+    // mêmes conditions que les mesures qui suivent.
+    let bp_bytes = 64usize << 20;
+    let bp = vec![1u8; bp_bytes];
+    let t0 = Instant::now();
+    let bp_sum: u64 = std::thread::scope(|sc| {
+        let hs: Vec<_> = (0..n_threads).map(|k| {
+            let b = &bp[..];
+            let lo = k * (bp_bytes / n_threads);
+            let hi = if k + 1 == n_threads { bp_bytes } else { (k + 1) * (bp_bytes / n_threads) };
+            sc.spawn(move || {
+                // Lecture par mots de 64 bits : sommer octet par octet mesure la
+                // latence de la chaîne d'addition, pas la mémoire. Le repère doit
+                // être un vrai plafond de débit, sinon on conclut à tort qu'un
+                // noyau est « au mur » alors qu'il est simplement mal écrit.
+                let mut a = 0u64;
+                for c in b[lo..hi].chunks_exact(8) {
+                    a = a.wrapping_add(u64::from_ne_bytes(c.try_into().unwrap()));
+                }
+                a
+            })
+        }).collect();
+        hs.into_iter().map(|h| h.join().unwrap()).sum()
+    });
+    let bp_dt = t0.elapsed().as_secs_f64();
+    let bp_gbs = bp_bytes as f64 / bp_dt / 1e9;
+    println!("  bande passante mémoire mesurée : {:.1} Go/s ({} Mo lus, {} threads, somme {} )",
+             bp_gbs, bp_bytes >> 20, n_threads, bp_sum % 1000);
+    drop(bp);
+
+    let d4 = DenseQ4::build(&wt, n_cols, n_rows);
+    println!("  4 bits : {:.2} b/poids", d4.bits_per_weight());
+
     let mut pool = Pool::new(n_threads, n_cols);
     println!("  pool de {} threads, barrière atomique\n", pool.threads());
+    {
+        // Le noyau AVX2 et le noyau scalaire doivent donner le MÊME résultat
+        // (les sommes entières par bloc sont exactes quelle que soit l'ordre).
+        let xv: Vec<i32> = x.clone();
+        let x16: Vec<i16> = xv.iter().map(|&v| v as i16).collect();
+        let mut pire = (0usize, 0f32);
+        for o in 0..n_cols {
+            let a = d4.dot(o, &xv);
+            let b = d4.dot16(o, &x16);
+            if a.to_bits() != b.to_bits() {
+                let e = (a - b).abs() / a.abs().max(1.0);
+                if e > pire.1 { pire = (o, e); }
+            }
+        }
+        println!("  noyau 4 bits : scalaire vs AVX2 → {}",
+                 if pire.1 == 0.0 { "BIT À BIT IDENTIQUE ✅".to_string() }
+                 else { format!("DIVERGENT rang {} (écart relatif {:.3}) ❌", pire.0, pire.1) });
+        let y4 = pool.matvec_dense_q4(&d4, &xv, 1.0);
+        let mut pire = (0usize, 0f32);
+        for o in 0..n_cols {
+            let a = d4.dot(o, &xv);
+            if (a - y4[o]).abs() > pire.1 { pire = (o, (a - y4[o]).abs() / a.abs().max(1.0)); }
+        }
+        println!("  pool 4 bits vs scalaire : {}",
+                 if pire.1 == 0.0 { "IDENTIQUE ✅".to_string() }
+                 else { format!("DIVERGENT rang {} (écart relatif {:.3}) ❌", pire.0, pire.1) });
+    }
     println!("  {:>8}  {:>12}  {:>14}  {:>12}  {:>10}",
              "densité", "événements", "G év/s", "ms/appel", "M év/s/thread");
     for dens in [0.0, 0.01, 0.05, 0.10, 0.25, 0.50, 1.00] {
@@ -154,6 +232,34 @@ fn main() {
             };
             rep("fusion", &out);
             rep("2-listes", &out_d);
+        }
+        // ---- même arithmétique int8, deux modes d'exécution
+        let acc = pool.accumulate_push(&pm, &sv);
+        let t0 = Instant::now();
+        for _ in 0..reps { let _ = pool.accumulate_push(&pm, &sv); }
+        let dt_push = t0.elapsed().as_secs_f64() / reps as f64;
+        let t0 = Instant::now();
+        let mut yd = Vec::new();
+        for _ in 0..reps { yd = pool.matvec_dense_i8(&dl, &xa, 1.0); }
+        let dt_pull = t0.elapsed().as_secs_f64() / reps as f64;
+        let mut ev_push = 0usize;
+        for &s in &sv.idx { ev_push += pm.row_ev[s as usize] as usize; }
+        // Les sommes entières sont exactes des deux côtés : si les deux modes
+        // donnent le même f32 bit à bit, alors changer de mode ne peut pas
+        // changer un seul token du modèle.
+        let mut div = None;
+        for o in 0..n_cols {
+            let yp = acc[o] as f32 * pm.scale[o];
+            if yp.to_bits() != yd[o].to_bits() { div = Some((o, yp, yd[o])); break; }
+        }
+        let poids_mo = (n_rows * n_cols) as f64 / 1e6;
+        println!("           push int8 {:>7.2} matvec/s ({:.3} ms, {} év) | pull {:>7.2} matvec/s ({:.3} ms) | push/pull = ×{:.2}",
+                 1.0 / dt_push, dt_push * 1e3, ev_push, 1.0 / dt_pull, dt_pull * 1e3, dt_push / dt_pull);
+        println!("           pull : {:.1} Go/s de poids lus ({:.1} Mo), soit {:.0} % du repère mémoire",
+                 poids_mo / dt_pull / 1e3, poids_mo, 100.0 * (poids_mo / dt_pull / 1e3) / bp_gbs);
+        match div {
+            None => println!("           → push vs pull (même arithmétique) : BIT À BIT IDENTIQUE ✅"),
+            Some((o, a, b)) => println!("           → push vs pull : DIVERGENT au rang {o} : {a:e} vs {b:e} ❌"),
         }
     }
     pool.shutdown();
@@ -208,13 +314,15 @@ fn run_infer(args: &[String]) {
     let mut act_renorm = false;
     let mut topk_proj = [0usize; 7];
     let mut dense = false;
+    let mut auto = false;
+    let mut q4 = 0u8;
     let mut keep = 1.0f32;
     // L'inférence paie une barrière par matrice (168 par token) : l'optimum
     // mesuré est autour de la moitié des CPU logiques, pas des trois quarts.
     let cpu = std::thread::available_parallelism().map(|n| n.get()).unwrap_or(8);
     let mut n_threads = (cpu / 2).max(1);
     let mut i = 2;
-    while i + 1 < args.len() {
+    while i < args.len() {
         match args[i].as_str() {
             "--infer" => { i += 1; continue; }
             "--ids" => ids = args[i + 1].split(',').filter_map(|s| s.trim().parse().ok()).collect(),
@@ -246,12 +354,17 @@ fn run_infer(args: &[String]) {
             "--threads" => n_threads = args[i + 1].parse().unwrap(),
             "--chat" => { chat = true; i -= 1; }
             "--dense" => { dense = true; i -= 1; }
+            "--auto" => { auto = true; i -= 1; }
+            "--q4" => { q4 |= 3; i -= 1; }
+            "--q4-ffn" => { q4 = (q4 & 4) | 1; i -= 1; }
+            "--q4-attn" => { q4 = (q4 & 4) | 2; i -= 1; }
+            "--q4-tout" => { q4 |= 7; i -= 1; }
             "--keep" => keep = args[i + 1].parse().unwrap(),
             _ => {}
         }
         i += 2;
     }
-    let mut mdl = model::Model::load(path, ctx, n_threads, dense, keep);
+    let mut mdl = model::Model::load(path, ctx, n_threads, dense, keep, auto, q4);
     mdl.act_levels = ((1u32 << (abits - 1)) - 1) as f32;
     mdl.act_thresh = act_thresh;
     mdl.act_topk = act_topk;
@@ -421,10 +534,13 @@ fn run_ppl(args: &[String]) {
     let mut qk_topk = 0usize;
     let mut attn_window = 0usize;
     let mut attn_sinks = 4usize;
+    let mut dense = false;
+    let mut auto = false;
+    let mut q4 = 0u8;
     let cpu = std::thread::available_parallelism().map(|n| n.get()).unwrap_or(8);
     let mut n_threads = (cpu * 3 / 4).max(1);
     let mut i = 2;
-    while i + 1 < args.len() {
+    while i < args.len() {
         match args[i].as_str() {
             "--ppl" => idfile = args[i + 1].clone(),
             "--ctx" => ctx = args[i + 1].parse().unwrap(),
@@ -464,6 +580,12 @@ fn run_ppl(args: &[String]) {
             "--attn-window" => attn_window = args[i + 1].parse().unwrap(),
             "--attn-sinks" => attn_sinks = args[i + 1].parse().unwrap(),
             "--threads" => n_threads = args[i + 1].parse().unwrap(),
+            "--dense" => { dense = true; i -= 1; }
+            "--auto" => { auto = true; i -= 1; }
+            "--q4" => { q4 |= 3; i -= 1; }
+            "--q4-ffn" => { q4 = (q4 & 4) | 1; i -= 1; }
+            "--q4-attn" => { q4 = (q4 & 4) | 2; i -= 1; }
+            "--q4-tout" => { q4 |= 7; i -= 1; }
             _ => {}
         }
         i += 2;
@@ -476,7 +598,7 @@ fn run_ppl(args: &[String]) {
         .collect();
     println!("{idfile} : {} tokens, fenêtres de {ctx}", ids.len());
 
-    let mut mdl = model::Model::load(path, ctx, n_threads, false, 1.0);
+    let mut mdl = model::Model::load(path, ctx, n_threads, dense, 1.0, auto, q4);
     mdl.act_levels = ((1u32 << (abits - 1)) - 1) as f32;
     if let Some(f) = &patch_file {
         let pt = model::Patch::load(f).expect("chargement du greffon");
@@ -554,10 +676,24 @@ fn run_ppl(args: &[String]) {
     println!("    {:.1} tok/s effectifs (avant + tête)", n as f64 / t0.elapsed().as_secs_f64());
     let ae = mdl.attn_events as f64 / n.max(1) as f64;
     let fe = mdl.events_total() as f64 / n.max(1) as f64;
-    if ae > 0.0 {
-        println!("    attention : {:.2} M paires (requête, clé) par token", ae / 1e6);
-        println!("    projections : {:.1} M événements par token", fe / 1e6);
+    println!("    attention : {:.2} M paires (requête, clé) par token", ae / 1e6);
+    println!("    projections : {:.1} M événements par token", fe / 1e6);
+    if ae + fe > 0.0 {
         println!("    part de l'attention dans le flux d'événements : {:.1} %",
                  100.0 * ae / (ae + fe));
+    } else {
+        // Aucun événement : le mode dense ne compte rien. Annoncer « 100 % »
+        // serait un artefact de division par zéro, pas une mesure.
+        println!("    part de l'attention dans le flux d'événements : — (aucun événement)");
     }
+    // Où passe VRAIMENT le temps du token : sans ce découpage, on optimise à
+    // l'aveugle. Le poste non compté contient la tête de sortie (151 936 × 896
+    // poids, la plus grosse matrice du modèle) et l'échantillonnage.
+    let sec = t0.elapsed().as_secs_f64();
+    let p = mdl.prof;
+    let tot = p[0] + p[1] + p[2] + p[3];
+    println!("    postes (ms/token) : projets-attn {:.2} | rope {:.2} | attention {:.2} | proj+mlp {:.2} | somme {:.2} | reste (tête + échantillonnage) {:.2}",
+             p[0] / n as f64 * 1e3, p[1] / n as f64 * 1e3, p[2] / n as f64 * 1e3,
+             p[3] / n as f64 * 1e3, tot / n as f64 * 1e3,
+             (sec - tot) / n as f64 * 1e3);
 }
