@@ -18490,3 +18490,88 @@ postes (ms/token) : matvec-attn 6.9 | rope 0.6 | attention 0.3 | matvec+mlp 76.6
 ⏵ Gain validé en mesure entrelacée. Je commite l'optimisation de l'attention
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\npython3 - <<'PY'\np='reports/rapport-attention-creuse.md'; s=open(p,encoding='utf-8').read(); o=s\ns=s.replace('''## 4. Ce qui reste à faire''','''## 3 ter. Ce qui a *effectivement* accéléré l'attention : la vectorisation\n\nEn chercha … [2236 caractères tronqués]`
+
+  ```
+ecdfed5 Attention : divisee par deux par la vectorisation, a perplexite identique
+fc1ec32 Campagne parcimonie : synthese et configuration gagnante
+[stderr]
+<stdin>:14: SyntaxWarning: invalid escape sequence '\|'
+  ```
+
+### 🤖 Assistant
+
+⏵ Leçon à appliquer : auditer le code de base avant d'optimiser. Je retire les contrôles de bornes de la boucle chaude de l'engine
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\nsed -n '/chemin scalaire : écart d.une octet/,/^        }$/p' src/engine.rs | head -22", "description": "Inspect the hot loop of the event decoder"}`
+
+  ```
+(no output)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\ngrep -n \"let b0 = data\\[p\\];\" src/engine.rs\nsed -n '/pub fn row_val_into/,/^}/p' src/engine.rs | sed -n '20,50p'", "description": "Locate the decoder loop"}`
+
+  ```
+79:        let b0 = data[p];
+122:            let b0 = data[p];
+173:        let b0 = data[p];
+                if first == usize::MAX { first = col; }
+                last = col;
+            }
+        } else {
+            p += 1;
+            let mut d = (b0 & 0x7F) as usize;
+            let mut sh = 7;
+            loop {
+                let b = data[p]; p += 1;
+                d |= ((b & 0x7F) as usize) << sh;
+                if b < 0x80 { break; }
+                sh += 7;
+            }
+            col += d;
+            let q = data[p] as i8 as i64;
+            p += 1;
+            if col < n_out {
+                unsafe { *acc.get_unchecked_mut(col) += (xq * q) as i32; }
+                if first == usize::MAX { first = col; }
+                last = col;
+            }
+        }
+        n_ev += 1;
+    }
+    if first != usize::MAX {
+        if first < span.0 { span.0 = first; }
+        if last + 1 > span.1 { span.1 = last + 1; }
+    }
+    n_ev
+}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\ncp src/engine.rs /tmp/engine_bounds_checked.rs\npython3 - <<'PY'\np='src/engine.rs'; s=open(p,encoding='utf-8').read(); o=s\n# le décodeur push : lectures non vérifiées dans la boucle chaude\ns=s.replace('''        // ---- … [2365 caractères tronqués]`
+
+  ```
+0
+=== exactitude (doit être rigoureusement identique)
+  k=0 : 23.6125  (attendu 23,6125 / 23,3279)
+  k=32 : 23.3279  (attendu 23,6125 / 23,3279)
+  config gagnante sur B : 26.1417
+  ```
+
+### 🤖 Assistant
+
+⏵ Exactitude préservée. Comparaison A/B entrelacée des deux binaires pour mesurer l'effet
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\ncp target/release/qtrinet-core /tmp/qc_unchecked\ncp /tmp/engine_bounds_checked.rs src/engine.rs && cargo build --release 2>&1 | grep -cE \"^error\"\ncp target/release/qtrinet-core /tmp/qc_checked\ncp /tmp/engine_bounds_ch … [2323 caractères tronqués]`
+
+  ```
+0
+0
+=== A/B entrelacé : temps CPU pour 24 tokens (contexte 64)
+  avec contrôles de bornes : 36.69 s de CPU
+  sans                     : 37.36 s de CPU  (+1.8 %)
+  ```
+
+### 🤖 Assistant
+
+⏵ Encore un négatif : retirer les contrôles de bornes **ralentit** (1,8 %). Je reviens au code sûr
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\ngit checkout src/engine.rs && cargo build --release 2>&1 | grep -cE \"^error\"\ntimeout 900 ./target/release/qtrinet-core ../models/Qwen2.5-0.5B-Q8_0.gguf --ppl /tmp/wt2_a.txt --ctx 256 --abits 16 --threads 16 --attn-topk  … [1119 caractères tronqués]`

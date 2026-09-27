@@ -5,14 +5,14 @@
 | Identifiant | `22bcae27-254b-47b2-acda-87467dab060c` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-25 11:56 |
-| Durée | 52.1 h |
+| Durée | 52.2 h |
 | Tours | 35 |
-| Messages | 796 |
-| Appels d'outils | 817 |
+| Messages | 801 |
+| Appels d'outils | 822 |
 | Fichiers touchés | 65 |
-| Commandes | 592 |
+| Commandes | 597 |
 | Sous-agents | 1 |
-| Commits | 25 |
+| Commits | 26 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -2021,7 +2021,7 @@ a = silu(u · x) · (v ·
 
 ### Tour 35 — attention pour ne pas se perdre à copier les autres et ne pas empiéter non plus sur mon autre programme de recherche htt … [426 caractères tronqués]
 
-*71 appels d'outils.* Actions notables :
+*76 appels d'outils.* Actions notables :
 
 - create_goal
 - bash — Read the activation quantizer
@@ -2037,11 +2037,11 @@ a = silu(u · x) · (v ·
 - bash — Implement and test homeostatic renormalization
 - bash — Retest renormalization with the flag not last
 - bash — Measure the real throughput gain from sparsity
-- … et 57 autres
+- … et 62 autres
 
 **Synthèse produite :**
 
-⏵ Gain validé en mesure entrelacée. Je commite l'optimisation de l'attention
+⏵ Encore un négatif : retirer les contrôles de bornes **ralentit** (1,8 %). Je reviens au code sûr
 
 ## 3. Travail accompli
 
@@ -2161,7 +2161,7 @@ a = silu(u · x) · (v ·
 - **T3** Test OpenOCD without root and check Pro device support
 - **T3** Make scripts executable and test jtag_scan
 - **T3** Commit JTAG milestone
-- … et 552 autres
+- … et 557 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2334,4 +2334,5 @@ a = silu(u · x) · (v ·
 - Attention creuse : correction -- le gain est en qualite, pas en temps  J'avais annonce une attention \"meilleure, moins chere et listable\". La mesure corrige l
 - Campagne parcimonie : synthese et configuration gagnante  CONFIGURATION RETENUE (verifiee sur les deux jeux, dont B tenu a l'ecart) : attention a 32 cles + proj
 - Attention : divisee par deux par la vectorisation, a perplexite identique  En cherchant pourquoi le top-k ne gagnait pas de temps, j'ai trouve un cout bien plus
+- Engine : les controles de bornes ne sont pas le goulot (mesure A/B)  Hypothese : les deux controles de bornes par evenement (data[p], data[p+1]) couteraient plu
 
