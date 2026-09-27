@@ -21414,3 +21414,176 @@ test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; fini
 ⏵ Résultat de fond : le **vrai** Q4_0 tourne à 38,6 tok/s pour +9,1 % de PPL, et le noyau 4 bits est plus fidèle que l'int8 sur ces mêmes poids. Je consigne
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\npython3 - <<'PY'\np='reports/rapport-mur-memoire-4bits.md'; s=open(p,encoding='utf-8').read()\nold='''## 6. Conclusion honnête'''\nassert s.count(old)==1\ns=s.replace(old,'''## 5 bis. Un VRAI modèle 4 bits, et la leçon de la double qua … [4326 caractères tronqués]`
+
+  ```
+9b3d9ec Import verbatim des blocs Q4_0 : un vrai modele 4 bits dans le moteur
+0a67514 Journal : session du 27/09 (croisement remesure, chemin 4 bits)
+  ```
+
+### 🤖 Assistant
+
+⏵ Le noyau 4 bits corrigé pourrait avoir changé la donne pour la **tête** : je remesure `--q4-tout` sur le vrai Q4_0
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\nQ4=../models/Qwen2.5-0.5B-Q4_0.gguf\nrun() { ./target/release/qtrinet-core $Q4 --ppl /tmp/wt2_ids.txt --ctx 256 --abits 16 --threads 16 \\\n        --limit 256 $2 2>&1 | grep -E \"perplexité [0-9]|postes|tête 4\" | sed \"s … [164 caractères tronqués]`
+
+  ```
+[4b corps ] === perplexité 19.6708 sur 255 tokens (0 événements, 6.8 s) ===
+[4b corps ]     postes (ms/token) : projets-attn 2.03 | rope 0.40 | attention 3.49 | proj+mlp 13.67 | somme 19.60 | reste (tête + échantillonnage) 7.19
+[4b tout  ] [tête 4 bits] 151936 × 896 → 4.50 b/poids, 72 Mo, 1.5 s
+[4b tout  ] === perplexité 19.8797 sur 255 tokens (0 événements, 8.8 s) ===
+[4b tout  ]     postes (ms/token) : projets-attn 4.28 | rope 0.38 | attention 3.14 | proj+mlp 15.67 | somme 23.47 | reste (tête + échantillonnage) 11.21
+  ```
+
+### 🤖 Assistant
+
+⏵ La tête 4 bits passe par le pool (réduction croisée + 10 Mo de tampons) : je lui donne un chemin direct par tranches, comme la tête int8
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\npython3 - <<'PY'\np='src/model.rs'; s=open(p,encoding='utf-8').read(); o=s\nold='''        // Tête 4 bits : passe par le pool (pas de création de threads à chaque\n        // jeton) et lit moitié moins d'octets.\n        i … [2275 caractères tronqués]`
+
+  ```
+error[E0308]: mismatched types
+   --> src/model.rs:757:31
+    |
+757 |             self.head4 = Some(d);
+    |                          ---- ^ expected `DenseQ4`, found `&DenseQ4`
+    |                          |
+    |                          arguments to this enum variant are incorrect
+    |
+help: the type constructed contains `&DenseQ4` due to the type of the argument passed
+--
+error: could not compile `qtrinet-core` (bin "qtrinet-core") due to 1 previous error; 22 warnings emitted
+[4b corps] === perplexité 19.6708 sur 255 tokens (0 événements, 6.7 s) ===
+[4b corps]     postes (ms/token) : projets-attn 2.00 | rope 0.36 | attention 3.06 | proj+mlp 13.85 | somme 19.27 | reste (tête + échantillonnage) 6.83
+[4b tout ] === perplexité 19.8797 sur 255 tokens (0 événements, 8.8 s) ===
+[4b tout ]     postes (ms/token) : projets-attn 4.29 | rope 0.38 | attention 3.05 | proj+mlp 15.82 | somme 23.53 | reste (tête + échantillonnage) 11.09
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\npython3 - <<'PY'\np='src/model.rs'; s=open(p,encoding='utf-8').read()\ns=s.replace('''            let d = self.head4.take().unwrap();\n            let vocab = d.n_out;''','''            let d = self.head4.take().unwrap();\ … [1503 caractères tronqués]`
+
+  ```
+[4b tout ] === perplexité 19.8797 sur 255 tokens (0 événements, 5.8 s) ===
+[4b tout ]     postes (ms/token) : projets-attn 1.81 | rope 0.37 | attention 3.07 | proj+mlp 12.76 | somme 18.01 | reste (tête + échantillonnage) 4.63
+  ```
+
+### 🤖 Assistant
+
+⏵ Tête 4 bits en chemin direct : « reste » 11,1 → **4,6 ms** (mieux que la tête int8 à 6,8 ms). Tableau final sur 512 jetons :
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\nQ8=../models/Qwen2.5-0.5B-Q8_0.gguf; Q4=../models/Qwen2.5-0.5B-Q4_0.gguf\nrun() { ./target/release/qtrinet-core $2 --ppl /tmp/wt2_ids.txt --ctx 256 --abits 16 --threads 16 \\\n        --limit 512 $3 2>&1 | grep -E \"=== pe … [291 caractères tronqués]`
+
+  ```
+[Q8_0 int8        ] === perplexité 19.2647 sur 510 tokens (0 événements, 18.0 s) ===
+[Q4_0 int8        ] === perplexité 21.1971 sur 510 tokens (0 événements, 18.0 s) ===
+[Q4_0 4 bits corps] === perplexité 21.0116 sur 510 tokens (0 événements, 13.1 s) ===
+[Q4_0 4 bits tout ] === perplexité 21.7431 sur 510 tokens (0 événements, 12.0 s) ===
+  ```
+
+### 🤖 Assistant
+
+⏵ Bilan sur 510 jetons. Je corrige le rapport avec ces chiffres définitifs et je vérifie la génération de bout en bout
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\nQ4=../models/Qwen2.5-0.5B-Q4_0.gguf\necho \"=== génération depuis le modèle 4 bits\"\n./target/release/qtrinet-core $Q4 --infer --prompt \"Le chat est un animal domestique qui\" --n 24 --ctx 128 --threads 16 --temp 0 --q4  … [391 caractères tronqués]`
+
+  ```
+=== génération depuis le modèle 4 bits
+prompt : 8 tokens
+--- ids générés : [1788, 24901, 141759, 963, 1346, 3541, 2784, 1735, 13, 7543, 1788, 24901, 141759, 963, 1346, 3541, 59304, 1842, 3541, 86925, 13, 7543, 1788, 27363]
+prompt  : 8 tokens en 0.127 s  (63.2 tok/s, TTFT 15.8 ms)
+généré  : 24 tokens en 0.542 s  (44.24 tok/s)
+=== même chose, noyau int8 (doit donner les mêmes tokens)
+--- ids générés : [1788, 24901, 141759, 963, 1346, 3541, 2784, 1735, 13, 7543, 1788, 24901, 141759, 963, 1346, 3541, 59304, 1842, 3541, 86925, 13, 7543, 1788, 43667]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\npython3 - <<'PY'\np='reports/rapport-mur-memoire-4bits.md'; s=open(p,encoding='utf-8').read()\nold='''| modèle | noyau | PPL | écart | s | tok/s |\n|---|---|---|---|---|---|\n| Qwen2.5-0.5B **Q8_0** | int8 | **19,2647** | — | 17,7 | 28 … [990 caractères tronqués]`
+
+  ```
+Qtrinet-bootstrap.md
+README.md
+
+docs/:
+comparaison-spiking.md
+programme-recherche.md
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\ngrep -n \"q4\\|--dense\\|--auto\\|--attn-topk\" README.md | head -20\necho \"=== sections\"\ngrep -n \"^#\" README.md | head -20", "description": "Check whether README documents the CLI flags"}`
+
+  ```
+=== sections
+1:# Qtrinet
+11:## État du projet
+47:## Test de principe (`run_quantify.py`)
+97:## Élagage et approche par événement (`run_sparsity.py`)
+145:## Encodage de structure : éliminer complètement la valeur (`run_encoding.py`)
+188:## Architecture « push » (AER) et exécution CPU (`run_cpu.py`, `bench/cpu_aer.c`)
+235:## Tri et dédoublonnage des contributions (`bench/cpu_merge.c`)
+270:## Moteur d'événements Rust (`qtrinet-core`)
+325:## Inférence complète en Rust (`--infer`)
+387:## Écarts avec le CDC d'origine
+400:## Structure
+418:## Lancer
+431:## Prochaines étapes
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\nsed -n '325,390p' README.md", "description": "Read the inference section of the README"}`
+
+  ```
+## Inférence complète en Rust (`--infer`)
+
+Qwen2.5-0.5B-Instruct Q8_0 tourne **en mode listes d'événements**, sans GPU, sans
+BLAS, sans aucune dépendance : **2 319 lignes de Rust, `std` seul**. Détail :
+[`reports/rapport-inference.md`](reports/rapport-inference.md).
+
+```bash
+cd qtrinet-core && cargo build --release
+./target/release/qtrinet-core ../models/Qwen2.5-0.5B-Q8_0.gguf \
+    --infer --chat --prompt "Explain in one sentence why the sky is blue."
+```
+
+> `<|im_start|>assistant`
+> The sky is blue because it reflects sunlight, which contains colors such as
+> red, orange, yellow, green, blue, and indigo, which are all visible in the
+> spectrum.
+
+| | |
+|---|---|
+| Génération | **14,8 tok/s** (16 threads), TTFT 74–95 ms |
+| Événements par token | 352,8 M à **5,3 G év/s** — le forward reste borné par les événements, mais plus près de la mémoire |
+| Mémoire | 1,27 Go (0,71 Go de listes), chargement 6,3 s |
+| Justesse | **16 tokens sur 16 identiques** à la référence numpy float32 |
+| Perplexité WikiText-2 | **24,90** contre **25,00** pour numpy + OpenBLAS |
+| Comparaison | 132 ms/token pour numpy + OpenBLAS (40 threads) contre **95 ms** ici (16 threads) |
+| Coût de l'architecture | **
+… [2486 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Le README annonce encore « 14,8 tok/s » et « le 4 bits ne paie pas » : je le mets à jour avec l'état mesuré
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\npython3 - <<'PY'\np='README.md'; s=open(p,encoding='utf-8').read(); o=s\nold='''| | |\n|---|---|\n| Génération | **14,8 tok/s** (16 threads), TTFT 74–95 ms |\n| Événements par token | 352,8 M à **5,3 G év/s** — le forward reste borné p … [3644 caractères tronqués]`
+
+  ```
+Le moteur sait exécuter le même modèle de **trois façons**, et c'est un résultat
+en soi : elles donnent des sorties **bit à bit identiques** (PPL 19,2647 au chiffre
+près sur 510 jetons, mêmes tokens). Le mode est une décision de performance, pas de
+sémantique.
+
+| mode | quand | débit (510 jetons) |
+|---|---|---|
+| **pull** (`--dense`) | densité d'activation > 22 % — le cas d'un LLM dense | **28,3 tok/s** |
+| **push** (défaut) | densité < 22 % — réseau creux, k-WTA, ReLU | 13,6 tok/s à 100 %, 20,6 à 5 % |
+| **auto** (`--auto`) | charge les deux et bascule par projection, sur la densité mesurée | le meilleur des deux |
+| **4 bits** (`--q4`) | modèle 4 bits existant (Q4_0) ou débit prioritaire | **38,9 tok/s** |
+
+| | |
+|---|---|
+| Événements par token | 352,8 M à **5,3 G év/s** en push |
+| Mémoire | 1,27 Go (0,71 Go de listes), chargement 6,3 s |
+| Justesse | **16 tokens sur 16 identiques** à la référence numpy float32 |
+| Perplexité WikiText-2 | **24,90** sur 2 040 jetons contre **25,00** pour numpy + OpenBLAS |
+| Croisement push/pull | **~22 %** de densité d'activation, mesuré — pas 10 % (voir [`reports/rapport-croisement-push-pull.md`](reports/rapport-croisement-push-pull.md)) |
+| 
+… [700 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\npython3 tools/archive_sessions.py --quiet 2>&1 | tail -3\npython3 tools/session_report.py 2>&1 | tail -3\ngit add -A && git commit -q -m \"Tete 4 bits en chemin direct, README et rapport a jour\n\nLa tete 4 bits passait par le pool : s … [883 caractères tronqués]`

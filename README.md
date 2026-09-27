@@ -339,16 +339,34 @@ cd qtrinet-core && cargo build --release
 > red, orange, yellow, green, blue, and indigo, which are all visible in the
 > spectrum.
 
+Le moteur sait exécuter le même modèle de **trois façons**, et c'est un résultat
+en soi : elles donnent des sorties **bit à bit identiques** (PPL 19,2647 au chiffre
+près sur 510 jetons, mêmes tokens). Le mode est une décision de performance, pas de
+sémantique.
+
+| mode | quand | débit (510 jetons) |
+|---|---|---|
+| **pull** (`--dense`) | densité d'activation > 22 % — le cas d'un LLM dense | **28,3 tok/s** |
+| **push** (défaut) | densité < 22 % — réseau creux, k-WTA, ReLU | 13,6 tok/s à 100 %, 20,6 à 5 % |
+| **auto** (`--auto`) | charge les deux et bascule par projection, sur la densité mesurée | le meilleur des deux |
+| **4 bits** (`--q4`) | modèle 4 bits existant (Q4_0) ou débit prioritaire | **38,9 tok/s** |
+
 | | |
 |---|---|
-| Génération | **14,8 tok/s** (16 threads), TTFT 74–95 ms |
-| Événements par token | 352,8 M à **5,3 G év/s** — le forward reste borné par les événements, mais plus près de la mémoire |
+| Événements par token | 352,8 M à **5,3 G év/s** en push |
 | Mémoire | 1,27 Go (0,71 Go de listes), chargement 6,3 s |
 | Justesse | **16 tokens sur 16 identiques** à la référence numpy float32 |
-| Perplexité WikiText-2 | **24,90** contre **25,00** pour numpy + OpenBLAS |
-| Comparaison | 132 ms/token pour numpy + OpenBLAS (40 threads) contre **95 ms** ici (16 threads) |
-| Coût de l'architecture | **×2,2 plus LENT** qu'un noyau dense int8 équivalent — mais **plus rapide en dessous de 10 % de densité d'activation** (voir [`reports/rapport-croisement-push-pull.md`](reports/rapport-croisement-push-pull.md)) |
-| Marge restante | 706 Mo/token à 10,4 Go/s sur 28,7 Go/s mesurés : **2,8× avant d'être borné par la mémoire** |
+| Perplexité WikiText-2 | **24,90** sur 2 040 jetons contre **25,00** pour numpy + OpenBLAS |
+| Croisement push/pull | **~22 %** de densité d'activation, mesuré — pas 10 % (voir [`reports/rapport-croisement-push-pull.md`](reports/rapport-croisement-push-pull.md)) |
+| Mur mémoire | 19–22 Go/s mesurés sur cette machine ; le noyau dense lit ses poids à 14 Go/s : **il est au mur**, pas mal écrit |
+
+**Les 4 bits paient — sur les grosses matrices.** Un noyau AVX2 (`vpmaddwd`) à 4,5
+bits/poids, alimenté par un **import verbatim** des blocs Q4_0 (aucune
+requantification), fait tourner un vrai Qwen2.5-0.5B **Q4_0** à **38,9 tok/s**
+contre 28,3 pour le même fichier lu par le noyau int8 — et avec une perplexité
+légèrement **meilleure**, parce qu'il ne rajoute pas une seconde couche d'erreur.
+Le prix réel des 4 bits est celui du modèle : +9,1 % de perplexité contre Q8_0.
+Détail complet : [`reports/rapport-mur-memoire-4bits.md`](reports/rapport-mur-memoire-4bits.md).
 
 **Deux compromis assumés :** la tête de sortie (151 936 sorties) est calculée par
 produits scalaires sur les lignes Q8_0 d'origine — en mode push il faudrait un
@@ -368,11 +386,10 @@ matriciels**. La remplacer par une borne haute cumulative par worker donne
 et les deux bugs que cette suppression a révélés sont dans
 [`reports/rapport-inference.md`](reports/rapport-inference.md).
 
-**Le 4 bits ne paie pas** (mesuré, même moteur, même réseau) : le fichier Q4 fait 33 %
-de moins, mais les listes seulement 11 % de moins et le débit ne gagne que 14 %, pour
-12 % de perplexité en plus. Chaque événement coûte `varint(écart) + i8(valeur)` ≈
-2 octets **quelle que soit la précision de la source** — la vitesse suit le nombre
-d'événements, pas le nombre de bits.
+**En mode push, le 4 bits ne paie pas** : chaque événement coûte
+`varint(écart) + i8(valeur)` ≈ 2 octets **quelle que soit la précision de la
+source** — la vitesse suit le nombre d'événements, pas le nombre de bits. Le 4 bits
+est un levier du chemin **dense**, celui dont le débit suit les octets lus.
 
 **Et le coût d'un événement n'est pas constant.** 10× moins d'événements ne donnent
 que 2× de vitesse, pour deux raisons mesurées : la **localité** (un élagage *contigu*

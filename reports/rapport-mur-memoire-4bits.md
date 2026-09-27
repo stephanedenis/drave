@@ -140,9 +140,13 @@ sont recopiés dans la disposition interne, sans jamais repasser par les f32.
 
 | modèle | noyau | PPL | écart | s | tok/s |
 |---|---|---|---|---|---|
-| Qwen2.5-0.5B **Q8_0** | int8 | **19,2647** | — | 17,7 | 28,8 |
-| Qwen2.5-0.5B **Q4_0** | int8 (requantifié) | 21,1971 | +10,0 % | 18,2 | 28,0 |
-| Qwen2.5-0.5B **Q4_0** | **4 bits verbatim** | 21,0116 | **+9,1 %** | **13,2** | **38,6** |
+| Qwen2.5-0.5B **Q8_0** | int8 | **19,2647** | — | 18,0 | 28,3 |
+| Qwen2.5-0.5B **Q4_0** | int8 (requantifié) | 21,1971 | +10,0 % | 18,0 | 28,3 |
+| Qwen2.5-0.5B **Q4_0** | **4 bits verbatim** | **21,0116** | **+9,1 %** | **13,1** | **38,9** |
+| Qwen2.5-0.5B **Q4_0** | 4 bits + tête 4 bits | 21,7431 | +12,9 % | 12,0 | **42,5** |
+
+(255 jetons donnaient 19,86 / 19,67 / 19,88 : l'écart de la tête 4 bits n'apparaît
+qu'à 510 jetons — leçon de méthode habituelle, ne pas conclure sur 255.)
 
 Deux résultats :
 

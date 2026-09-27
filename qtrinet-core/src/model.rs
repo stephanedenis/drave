@@ -727,15 +727,35 @@ impl Model {
             Some(v) => v,
             None => return vec![0f32; self.cfg.vocab],
         };
-        // Tête 4 bits : passe par le pool (pas de création de threads à chaque
-        // jeton) et lit moitié moins d'octets.
+        // Tête 4 bits : chemin DIRECT par tranches de vocabulaire, comme la tête
+        // int8 — et non par le pool. Le pool coûtait 4 ms de plus par jeton pour
+        // 72 Mo lus au lieu de 136 : ses seize tampons de sortie (9,7 Mo) sont
+        // écrits, remis à zéro puis réduits, soit plus de trafic que les poids
+        // économisés.
         if self.head4.is_some() {
-            let mut xd = vec![0i32; h.len()];
-            for (&i, &v) in sv.idx.iter().zip(sv.val.iter()) { xd[i as usize] = v; }
+            let xi: Vec<i16> = sv.idx.iter().zip(sv.val.iter())
+                .fold(vec![0i16; h.len()], |mut a, (&i, &v)| {
+                    a[i as usize] = v.clamp(-32767, 32767) as i16; a
+                });
             let d = self.head4.take().unwrap();
-            let y = self.pool.matvec_dense_q4(&d, &xd, sx);
+            let dref = &d;
+            let vocab = d.n_out;
+            let nt = self.pool.threads().max(1);
+            let chunk = vocab.div_ceil(nt);
+            let mut out = vec![0f32; vocab];
+            let xi = &xi;
+            std::thread::scope(|sc| {
+                for (ci, part) in out.chunks_mut(chunk).enumerate() {
+                    sc.spawn(move || {
+                        let base = ci * chunk;
+                        for (j, o) in part.iter_mut().enumerate() {
+                            *o = dref.dot16(base + j, xi) * sx;
+                        }
+                    });
+                }
+            });
             self.head4 = Some(d);
-            return y;
+            return out;
         }
         // int16 : la troncature en i8 ruinerait une activation quantifiée sur
         // 32767 niveaux (le corps du modèle, lui, n'est pas concerné : il

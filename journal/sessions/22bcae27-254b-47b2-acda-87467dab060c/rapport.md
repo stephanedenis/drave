@@ -5,14 +5,14 @@
 | Identifiant | `22bcae27-254b-47b2-acda-87467dab060c` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-25 11:56 |
-| Durée | 55.6 h |
+| Durée | 55.7 h |
 | Tours | 36 |
-| Messages | 951 |
-| Appels d'outils | 966 |
+| Messages | 961 |
+| Appels d'outils | 976 |
 | Fichiers touchés | 66 |
-| Commandes | 729 |
+| Commandes | 739 |
 | Sous-agents | 1 |
-| Commits | 32 |
+| Commits | 33 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -2082,7 +2082,7 @@ Les trois papiers neuromorphiques atteignent **R̂ = 0,15** — 6,7× moins d'é
 
 ### Tour 36 — continue les améliorations
 
-*135 appels d'outils.* Actions notables :
+*145 appels d'outils.* Actions notables :
 
 - bash — Implement sliding-window attention with sinks
 - bash — Test sliding-window attention quality
@@ -2098,11 +2098,11 @@ Les trois papiers neuromorphiques atteignent **R̂ = 0,15** — 6,7× moins d'é
 - bash — Measure dense perplexity and final throughput
 - bash — Find the push/pull crossover by activation density
 - write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-croisement-push-pull.md`
-- … et 117 autres
+- … et 127 autres
 
 **Synthèse produite :**
 
-⏵ Résultat de fond : le **vrai** Q4_0 tourne à 38,6 tok/s pour +9,1 % de PPL, et le noyau 4 bits est plus fidèle que l'int8 sur ces mêmes poids. Je consigne
+⏵ Le README annonce encore « 14,8 tok/s » et « le 4 bits ne paie pas » : je le mets à jour avec l'état mesuré
 
 ## 3. Travail accompli
 
@@ -2223,7 +2223,7 @@ Les trois papiers neuromorphiques atteignent **R̂ = 0,15** — 6,7× moins d'é
 - **T3** Test OpenOCD without root and check Pro device support
 - **T3** Make scripts executable and test jtag_scan
 - **T3** Commit JTAG milestone
-- … et 689 autres
+- … et 699 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2351,7 +2351,7 @@ Les trois papiers neuromorphiques atteignent **R̂ = 0,15** — 6,7× moins d'é
 
 ## 5. Erreurs rencontrées
 
-87 sorties en erreur ou divergentes. Les premières :
+88 sorties en erreur ou divergentes. Les premières :
 
 - **T2** : === LIEN PCIe (sysfs, sans root) === current_link_speed     = 8.0 GT/s PCIe current_link_width     = 8 max_link_speed         = 8.0 GT/s PCIe max_link_width         = 8 secondary_bus_number   =  vendo
 - **T2** : [POPUP: saisissez le mot de passe] === TOUS les événements USB depuis le boot (fin de log) === [ven sep 25 11:52:23 2026] [ T684749] hid-generic 0003:04F2:2159.00ED: hiddev99,hidraw5: USB HID v1.10 De
@@ -2403,4 +2403,5 @@ Les trois papiers neuromorphiques atteignent **R̂ = 0,15** — 6,7× moins d'é
 - Croisement push/pull remesuré, equivalence bit a bit, chemin 4 bits AVX2  Trois bugs corriges, dont deux qui faussaient des conclusions : - while i + 1 < args.l
 - Journal : session du 27/09 (croisement remesure, chemin 4 bits)" && git log --oneline | head -2 cd qtrinet-core grep -n "fn q8_view\|fn dequant\|fn raw_levels\|
 - Import verbatim des blocs Q4_0 : un vrai modele 4 bits dans le moteur  Le lecteur savait decoder Q4_0 mais le moteur requantifiait depuis les f32, ajoutant une 
+- Tete 4 bits en chemin direct, README et rapport a jour  La tete 4 bits passait par le pool : ses seize tampons de sortie (9,7 Mo) etaient ecrits, remis a zero p
 
