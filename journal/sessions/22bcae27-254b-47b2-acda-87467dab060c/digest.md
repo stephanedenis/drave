@@ -16816,3 +16816,283 @@ Created file
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\npython3 - <<'PY'\np='README.md'; s=open(p,encoding='utf-8').read(); o=s\ns=s.replace('''| **Programme évolutif (journaliser, faire évoluer)** | ✅ évalué → [`reports/rapport-programme-evolutif.md`](reports/rapport-programme-evolutif.md) … [2425 caractères tronqués]`
+
+  ```
+=== hook exécuté ?
+205cd5c Archivage des sessions, programme de recherche, plomberie d'apprentissage
+8cf4bde Journalisation des activations et evaluation du programme evolutif
+ .../27c99b10-c57e-4599-a23a-f7b1a54c17a1/digest.md |  1132 ++
+ journal/sessions/MANIFEST.md                       |    11 +
+ qtrinet-core/src/main.rs                           |    18 +
+ qtrinet-core/src/model.rs                          |    51 +-
+ reports/rapport-greffon.md                         |    73 +
+ tools/archive_sessions.py                          |   198 +
+ tools/make_patch.py                                |    59 +
+ 11 files changed, 18526 insertions(+), 1 deletion(-)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\necho \"=== le hook a-t-il rafraîchi le digest de la session courante ?\"\ngrep -c \"^## Tour\" journal/sessions/22bcae27*/digest.md\necho \"=== dernières lignes du digest (fin de session en cours)\"\ntail -12 journal/sessions/22bcae27* … [151 caractères tronqués]`
+
+  ```
+=== le hook a-t-il rafraîchi le digest de la session courante ?
+34
+=== dernières lignes du digest (fin de session en cours)
+
+- **write** `{"content": "# Greffon : plomberie d'apprentissage\n\nPremière brique de la boucle d'apprentissag
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-greffon.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\npython3 - <<'PY'\np='README.md'; 
+=== manifeste
+# Sessions DSH archivées
+
+Régénéré par `tools/archive_sessions.py`. Le digest est versionnable ; la
+trace brute (`session.jsonl.zstd`) reste sur disque et n'est pas suivie par git.
+
+| Session | Début | Trace | Digest | Tours | Messages | Outils | Erreurs | Compactages |
+|---|---|---|---|---|---|---|---|---|
+| `22bcae27` | 2026-09-27 11:26 | 10.5 Mo | 858 Ko | 33 | 696 | 722 | 18 | 2 |
+| `27c99b10` | 2026-09-25 19:50 | 1.0 Mo | 61 Ko | 1 | 57 | 54 | 1 | 0 |
+
+Total : 11.5 Mo de traces brutes.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\necho \"=== traces brutes conservées sur disque\"\nls -la journal/sessions/*/session.jsonl.zstd | awk '{printf \"  %s : %.1f Mo\\n\", $9, $5/1048576}'\necho \"=== suivies par git ? (doit être vide)\"\ngit ls-files journal/sessions | gre … [369 caractères tronqués]`
+
+  ```
+=== traces brutes conservées sur disque
+  journal/sessions/22bcae27-254b-47b2-acda-87467dab060c/session.jsonl.zstd : 10.0 Mo
+  journal/sessions/27c99b10-c57e-4599-a23a-f7b1a54c17a1/session.jsonl.zstd : 1.0 Mo
+=== suivies par git ? (doit être vide)
+  non — la trace brute reste locale, le digest est versionné
+=== suivies par git (digest)
+22bcae27-254b-47b2-acda-87467dab060c/digest.md
+27c99b10-c57e-4599-a23a-f7b1a54c17a1/digest.md
+MANIFEST.md
+=== automatisation
+17 * * * * cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/archive_sessions.py --quiet >> journal/sessions/archive.log 2>&1
+  hook : .git/hooks/pre-commit -rwxr-xr-x.
+  ```
+
+### 🤖 Assistant
+
+⏵ Les trois chantiers sont livrés et vérifiés
+
+## 1. Archivage automatique des sessions — **en place, et il a déjà tourné**
+
+DSH expose exactement ce qu'il fallait : `DSH_SESSION_JSONL` pointe la trace brute (10 Mo compressés, 24 Mo décompressés pour cette session). `tools/archive_sessions.py` produit dans `journal/sessions/` :
+
+- **`<id>/digest.md`** — relecture versionnable : 34 tours, 696 messages, 722 appels d'outils, résultats tronqués, compactages, objectifs. **858 Ko, régénéré à chaque passage** (donc idempotent, et le diff git ne montre que le nouveau).
+- **`<id>/session.jsonl.zstd`** — la trace brute exacte, conservée sur disque, **hors git** (binaire, volumineuse).
+- **`MANIFEST.md`** — table des sessions avec volumes, empreintes, compteurs.
+
+**Automatisation double** : un hook git `pre-commit` (le journal accompagne le code, il ne le suit pas) **et** une tâche cron horaire (la trace avance même sans commit). Le hook a tourné sur ce commit même — le digest contient déjà les appels d'outils de ce tour.
+
+Un détail qui compte : les traces ne sont pas un luxe, c'est **ce qui ne se reconstitue pas depuis le code** — le raisonnement, les mesures, et les erreurs.
+
+## 2. Document de vision — `docs/programme-recherche.md`
+
+Feuille de route en quatre étapes, chacune avec une **porte chiffrée** qui décide de continuer ou d'abandonner :
+
+| Étape | Porte |
+|---|---|
+| **A** — Boucle sans rétropropagation (0-3 mois) | +1 % de perplexité sur texte retenu, ajustement <1 h — **ou** 1,3× plus rapide à qualité égale par réorganisation contiguë |
+| **B** — Architecture évolutive (3-12 mois) | 2× moins cher à perplexité égale, ou 10 % de perplexité en moins à coût égal |
+| **C** — Spécialisation et mémoire (an 1-2) | apprendre un fait à l'inférence et le retenir sur 10 000 tokens sans oubli catastrophique |
+| **D** — Boucle autonome (an 2-5) | courbe de capacité monotone sur ≥100 cycles, produite par le système lui-même |
+
+Le document contient une section **« ce que la mesure interdit d'espérer »** — les trois résultats de ce projet qui ferment des portes, plutôt que de les ignorer : les motifs récurrents expliquent **moins de 1 %** de la difficulté, un nœud linéaire ne peut **rien** ajouter à 69,2 % des poids, le FPGA **ne bat pas** le GPU. Avec un critère d'arrêt honnête : si l'étape A échoue après 10⁴ candidats, la thèse « on apprend sans gradient sur ce substrat » est falsifiée.
+
+## 3. Plomberie d'apprentissage — `--patch`, **validée**
+
+```
+a = silu(u · x) · (v · x)        contribution ajoutée : a · d
+```
+
+Le point qui la rend intéressante malgré le verdict hebbien : **le produit de deux formes linéaires est quadratique**. Apparier `gate[i]` avec `up[j]`, `i ≠ j`, fabrique une caractéristique que les 4 864 neurones d'origine n'ont **jamais** calculée — ils n'apparient que `gate[i]` avec `up[i]`.
+
+| Greffon | Perplexité | Écart |
+|---|---|---|
+| aucun | **23,6125** | — |
+| **nul** | **23,6125** | **0,0000** ✅ transparent |
+| croisé ×0,1 | 23,6123 | −0,0002 |
+| croisé ×1,0 | 23,6156 | +0,0031 |
+| croisé ×5,0 | 23,6253 | +0,0128 |
+
+Le greffon nul donne **exactement** la perplexité de base, et un greffon réel la change **proportionnellement à son échelle** : le nœud est dans le circuit, la plomberie est saine.
+
+**Le greffon est posé mais pas ajusté** — `d` vient de la colonne `down` d'origine, d'où la légère dégradation. L'ajuster demande un objectif, et celui qui compte n'est accessible que par gradient. Trois chemins, par coût croissant : balayage `(i, j)` × échelle avec le banc à **100 évaluations/heure** (2 400/jour, sans gradient) ; ajustement de `d` par moindres carrés sur un objectif de substitution ; ou rétropropagation — le seul point du programme qui demande une brique extérieure.
+
+**La suite logique** : le balayage systématique des appariements croisés. C'est la seule famille de candidats que la mesure n'a **pas** déjà exclue, et elle est exécutable dès maintenant sur les ressources libres.
+
+
+## Tour 34
+
+### 👤 Utilisateur
+
+/home/stephane/Data13TB/stephane/GitHub/Qtrinet/journal doit inclure un automatisme qui produit un .md pour chaque session avec tous les détails qui permettent de reconstituer l'essence de la session et démontrer le travail accompli, étape par étape. Continue ensuite avec le balayage systématique des appariements croisés.
+
+### 🤖 Assistant
+
+⏵ Deux chantiers. D'abord le rapport de session automatique — un document qui reconstitue l'essence et démontre le travail
+
+- **write** `{"content": "#!/usr/bin/env python3\n\"\"\"Produit, pour chaque session DSH, un rapport qui reconstitue son essence et\ndémontre le travail accompli, étape par étape.\n\nSortie, à côté du digest brut :\n\n  journal/sessions/<id>/rapport.md   la synthèse structurée de la session\n  journal/README.md  … [13847 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/session_report.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\nchmod +x tools/session_report.py\npython3 tools/session_report.py 2>&1 | head -5\necho \"=== structure du rapport\"\ngrep -E \"^#|^\\|\" journal/sessions/22bcae27*/rapport.md | head -28", "description": "Generate session reports and in … [38 caractères tronqués]`
+
+  ```
+22bcae27 : rapport 131 Ko, 34 tours, 61 fichiers, 664 mesures, 61 erreurs
+  27c99b10 : rapport 8 Ko, 1 tours, 1 fichiers, 35 mesures, 1 erreurs
+=== structure du rapport
+# Session 22bcae27 — Étude de Qtrinet-bootstrap.md
+| | |
+|---|---|
+| Identifiant | `22bcae27-254b-47b2-acda-87467dab060c` |
+| Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
+| Début | 2026-09-25 11:56 |
+| Durée | 47.7 h |
+| Tours | 34 |
+| Messages | 702 |
+| Appels d'outils | 726 |
+| Fichiers touchés | 61 |
+| Commandes | 510 |
+| Sous-agents | 1 |
+| Commits | 18 |
+| Compactages de contexte | 1 |
+## Objectifs déclarés
+## 1. Ce qui a été demandé
+## 2. Déroulé, étape par étape
+### Tour 1 — Étudie Qtrinet-bootstrap.md
+### Tour 2 — le nvlink est bien présent entre les 2 cartes rtx. Consulte et enrichit /home/stephane/Data13TB/stephane/GitHub/FPGA-Str … [211 caractères tronqués]
+## Ce que le sudo a permis de trancher
+| Découverte | Détail |
+|---|---|
+| **2ᵉ carte possible en local** | **Slot2_CPU2 est libre** (×16 Gen3, NUMA 1) — exactement ce que vous envisagiez. Les 2 GPU sont sur CPU1/NUMA0, les FPGA sur CPU2/NUMA1. |
+| **Carte** | `a1:00.0`, Microsoft `1414:b101`, **firmware d'usine**, Gen3 ×8, aucun drive
+… [859 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\ngrep -E \"^## \" journal/sessions/22bcae27*/rapport.md\necho \"=== extrait de la section mesures\"\nsed -n '/## 4. Mesures/,+8p' journal/sessions/22bcae27*/rapport.md\necho \"=== extrait de la section fichiers\"\nsed -n '/### Fichiers  … [96 caractères tronqués]`
+
+  ```
+## Objectifs déclarés
+## 1. Ce qui a été demandé
+## 2. Déroulé, étape par étape
+## Ce que le sudo a permis de trancher
+## Dépôt enrichi — commit `a5bf139`
+## ✅ C'était le câble — et la chaîne JTAG est validée
+## Commité (`81a3cd2`)
+## Il ne reste qu'un blocage : la licence
+## Le flow de simulation est réparé — il s'arrête maintenant sur la licence
+## Votre licence est identifiée — et elle est morte
+## La procédure (Self Service Licensing Center)
+## Si le SSLC ne vous laisse p
+## Récapitulatif : ce que vous cliquez
+## 🎉 La chaîne complète fonctionne — du RTL au bitstream
+## Deux choses à décider
+## Le principe est validé — et chiffré
+## Oui — et le seuil de rentabilité tient à un détail qu'on oublie
+## Le compromis que je recommanderais
+## Oui — et c'est votre intuition la plus forte jusqu'ici
+## L'architecture qui émerge des trois échanges
+## Vous avez décrit l'AER, et ça résout le problème
+## Mesuré sur le CPU (C/OpenMP, 16 threads)
+## La projection qui tranche
+## Ce que ça implique concrètement
+## Ce que la mesure contredit
+## Mais votre exigence reste valable — sur le FPGA, pas sur le CPU
+## Les trois formes correctes de votre exigence
+## Le résultat, à budget égal
+## La double 
+… [3512 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Deux défauts : les titres de mes messages cassent la structure, et l'extraction des mesures ramasse du bruit. Je corrige
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\npython3 - <<'PY'\np='tools/session_report.py'; s=open(p,encoding='utf-8').read(); o=s\n\n# 1. motifs de mesure stricts : un NOMBRE suivi d'une unité\ns=s.replace('''MOTIFS_MESURE = re.compile(\n    r\"(tok/s|G év|G ev|G evt|MHz|ALMs|M2 … [4282 caractères tronqués]`
+
+  ```
+7
+## 4. Mesures et résultats marquants
+
+- **T2** `Status: Cap+ 66MHz- UDF- FastB2B- ParErr- DEVSEL=fast >TAbort- <TAbort- <MAbort- >SERR- <PERR- INTx-`
+- **T2** `Data Bus Width: 4x or x4`
+- **T2** `Data Bus Width: 16x or x16`
+- **T2** `GPU0	 X 	NV1	0-9,20-29	0		N/A`
+- **T2** `GPU1	NV1	 X 	0-9,20-29	0		N/A`
+- **T7** `Info (21062): Implemented 13 DSP elements`
+...
+## 5. Erreurs rencontrées
+
+89 sorties en erreur ou divergentes. Les premières :
+
+- **T1** : Error: cross-origin redirect to https://corpredirect.intel.com is not followed automatically; retry against that URL directly
+- **T1** : Error: cross-origin redirect to https://www.intel.com is not followed automatically; retry against that URL directly
+- **T1** : Error: unsupported content type "application/pdf"
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\npython3 - <<'PY'\np='tools/session_report.py'; s=open(p,encoding='utf-8').read(); o=s\ns=s.replace('''MOTIFS_MESURE = re.compile(\n    r\"\\\\d+(?:[.,]\\\\d+)?\\\\s*(?:tok/s|G\\\\s*év|G\\\\s*evt|G\\\\s*ev|MHz|ALMs|M20K|DSP\\\\b|ms\\\\b … [1322 caractères tronqués]`
+
+  ```
+=== mesures (les 12 premières)
+- **T2** `Status: Cap+ 66MHz- UDF- FastB2B- ParErr- DEVSEL=fast >TAbort- <TAbort- <MAbort- >SERR- <PERR- INTx-`
+- **T2** `CPU(s) scaling MHz:                      98%`
+- **T4** `/dev/nvme0n1p2  828G  243G  586G  30% /home`
+- **T4** `Creating uninstaller 25%`
+- **T4** `Creating uninstaller 50%`
+- **T4** `Creating uninstaller 75%`
+- **T4** `Creating uninstaller 100%`
+- **T7** `Info (21062): Implemented 13 DSP elements`
+- **T7** `# SDC — Kernel 1 : v14_l2_distance @ 200 MHz`
+- **T7** `Logic utilization (in ALMs) : 251 / 172,600 ( < 1 % )`
+- **T7** `Total pins : 548 / 864 ( 63 % )`
+- **T7** `Total block memory bits : 0 / 41,246,720 ( 0 % )`
+=== erreurs
+## 5. Erreurs rencontrées
+
+68 sorties en erreur ou divergentes. Les premières :
+
+- **T2** : === LIEN PCIe (sysfs, sans root) === current_link_speed     = 8.0 GT/s PCIe current_link_width     = 8 max_link_speed         = 8.0 GT/s PCIe max_link_width         = 8 secondary_bus_number   =  vendo
+- **T2** : [POPUP: saisissez le mot de passe] === TOUS les événements USB depuis le boot (fin de log) === [ven sep 25 11:52:23 2026] [ T684749] hid-generic 0003:04F2:2159.00ED: hiddev99,hidraw5: USB HID v1.10 De
+- **T2*
+… [219 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Rapport complet et structuré. Je le branche dans l'automatisation existante
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\npython3 - <<'PY'\np='tools/archive_sessions.py'; s=open(p,encoding='utf-8').read(); o=s\ns=s.replace('''    lignes_manifeste += [\"\", f\"Total : {total/1e6:.1f} Mo de traces brutes.\", \"\"]\n    (dest / \"MANIFEST.md\").write_text(\" … [1157 caractères tronqués]`
+
+  ```
+27c99b10 : rapport 8 Ko, 1 tours, 1 fichiers, 17 mesures, 4 erreurs
+  22bcae27 : 10.6 Mo de trace, digest 872 Ko, 706 messages, 730 outils
+  27c99b10 : 1.0 Mo de trace, digest 61 Ko, 57 messages, 54 outils
+manifeste écrit : /home/stephane/Data13TB/stephane/GitHub/Qtrinet/journal/sessions/MANIFEST.md
+journal/:
+README.md
+sessions
+
+journal/sessions/22bcae27-254b-47b2-acda-87467dab060c/:
+digest.md
+rapport.md
+session.jsonl.zstd
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\ngit add -A && git commit -q -m \"Rapport de session automatique : reconstitution de l'essence et du travail\n\njournal/ contient desormais, pour chaque session, genere automatiquement :\n- sessions/<id>/rapport.md : fiche (duree, volum … [1086 caractères tronqués]`

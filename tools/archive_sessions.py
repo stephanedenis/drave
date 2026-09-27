@@ -191,6 +191,16 @@ def main() -> int:
     (dest / "MANIFEST.md").write_text("\n".join(lignes_manifeste), encoding="utf-8")
     if not args.quiet:
         print(f"manifeste écrit : {dest/'MANIFEST.md'}")
+
+    # Rapport de synthèse par session : ce qui reconstitue l'essence du travail.
+    rapport = Path(__file__).resolve().parent / "session_report.py"
+    if rapport.is_file():
+        cmd = [sys.executable, str(rapport), "--repo", str(repo)]
+        if args.quiet:
+            cmd.append("--quiet")
+        r = subprocess.run(cmd, check=False)
+        if r.returncode != 0:
+            print("avertissement : le rapport de session a échoué", file=sys.stderr)
     return 0
 
 
