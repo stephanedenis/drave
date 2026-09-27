@@ -159,6 +159,9 @@ pub struct Model {
     /// Cela rend la matrice d'attention **creuse**, donc exprimable en liste
     /// d'événements — au prix d'une approximation, mesurable.
     pub attn_topk: usize,
+    /// Événements d'attention : paires (requête, clé) retenues, cumulées.
+    /// C'est la taille de la liste d'événements que l'attention creuse produirait.
+    pub attn_events: u64,
     /// Token d'arrêt (EOS / <|im_end|>) : la génération s'interrompt dessus.
     pub stop_id: Option<u32>,
     /// Postes de temps cumulés, en secondes (diagnostic).
@@ -310,7 +313,7 @@ impl Model {
             g, cfg, layers, out_norm, pool,
             kv_k: vec![kv.clone(); n_layer], kv_v: vec![kv; n_layer],
             ctx, events: 0, act_levels: 127.0, act_thresh: 0.0, act_topk: 0, act_renorm: false,
-            act_topk_proj: [0; 7], attn_topk: 0,
+            act_topk_proj: [0; 7], attn_topk: 0, attn_events: 0,
             stop_id: None, prof: [0.0; 6],
             patch: None, ffn_gain: None, hebb: None,
         }
@@ -464,7 +467,8 @@ impl Model {
         let mut up = vec![0f32; cfg.ffn];
         let mut down = vec![0f32; h];
         let mut sc = vec![0f32; pos + 1];
-        let mut attn_scratch: Vec<f32> = Vec::with_capacity(pos + 1);
+        let mut attn_idx: Vec<u32> = Vec::with_capacity(ctx);
+        let attn_all: Vec<u32> = (0..ctx as u32).collect();
 
         for l in 0..cfg.n_layer {
             let lay = &layers[l];
@@ -502,26 +506,35 @@ impl Model {
                     for d in 0..hd { s += qh[d] * kt[d]; }
                     sc[t] = s * scale;
                 }
-                // attention à k clés : masquer tout sauf les k plus grands scores
-                if self.attn_topk > 0 && self.attn_topk < pos + 1 {
-                    let k = self.attn_topk;
-                    let n = pos + 1;
-                    attn_scratch.clear();
-                    attn_scratch.extend_from_slice(&sc[..n]);
-                    let (_, &mut cut, _) = attn_scratch
-                        .select_nth_unstable_by(n - k, |a, b| a.partial_cmp(b).unwrap());
-                    for t in 0..n { if sc[t] < cut { sc[t] = f32::NEG_INFINITY; } }
+                // Attention à k clés. Le CALCUL DES SCORES reste sur toutes les
+                // clés — il faut les noter pour savoir lesquelles garder. En
+                // revanche le softmax ET la somme pondérée n'itèrent plus que sur
+                // les k retenues : c'est là qu'est le O(N·k). Masquer sans
+                // réécrire les boucles ne gagnait rien (mesuré : 12,4 → 12,5 ms).
+                let n = pos + 1;
+                let k = if self.attn_topk > 0 { self.attn_topk.min(n) } else { n };
+                attn_idx.clear();
+                if k < n {
+                    attn_idx.extend(0..n as u32);
+                    attn_idx.select_nth_unstable_by(k, |&a, &b| {
+                        sc[b as usize].partial_cmp(&sc[a as usize]).unwrap()
+                    });
+                    attn_idx.truncate(k);
                 }
-                // softmax stable
+                // en mode dense, seules les n premières clés existent : itérer
+                // sur tout le contexte lirait des scores au-delà de pos.
+                let iter: &[u32] = if k < n { &attn_idx } else { &attn_all[..n] };
+                self.attn_events += iter.len() as u64;
+                // softmax stable sur les seules clés retenues
                 let mut mx = f32::NEG_INFINITY;
-                for t in 0..=pos { if sc[t] > mx { mx = sc[t]; } }
+                for &t in iter { let v = sc[t as usize]; if v > mx { mx = v; } }
                 let mut sum = 0f32;
-                for t in 0..=pos { sc[t] = (sc[t] - mx).exp(); sum += sc[t]; }
+                for &t in iter { let e = (sc[t as usize] - mx).exp(); sc[t as usize] = e; sum += e; }
                 let inv = 1.0 / sum;
-                for t in 0..=pos { sc[t] *= inv; }
+                for &t in iter { sc[t as usize] *= inv; }
                 for d in 0..hd {
                     let mut s = 0f32;
-                    for t in 0..=pos { s += sc[t] * vc[(kvh * ctx + t) * hd + d]; }
+                    for &t in iter { s += sc[t as usize] * vc[(kvh * ctx + t as usize) * hd + d]; }
                     att[hh * hd + d] = s;
                 }
             }

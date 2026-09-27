@@ -534,4 +534,12 @@ fn run_ppl(args: &[String]) {
     println!("\n=== perplexité {:.4} sur {} tokens ({} événements, {:.1} s) ===",
              ppl, n, mdl.events_total(), t0.elapsed().as_secs_f64());
     println!("    {:.1} tok/s effectifs (avant + tête)", n as f64 / t0.elapsed().as_secs_f64());
+    let ae = mdl.attn_events as f64 / n.max(1) as f64;
+    let fe = mdl.events_total() as f64 / n.max(1) as f64;
+    if ae > 0.0 {
+        println!("    attention : {:.2} M paires (requête, clé) par token", ae / 1e6);
+        println!("    projections : {:.1} M événements par token", fe / 1e6);
+        println!("    part de l'attention dans le flux d'événements : {:.1} %",
+                 100.0 * ae / (ae + fe));
+    }
 }

@@ -5,14 +5,14 @@
 | Identifiant | `22bcae27-254b-47b2-acda-87467dab060c` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-25 11:56 |
-| Durée | 50.8 h |
+| Durée | 51.5 h |
 | Tours | 35 |
-| Messages | 772 |
-| Appels d'outils | 793 |
+| Messages | 787 |
+| Appels d'outils | 808 |
 | Fichiers touchés | 64 |
-| Commandes | 569 |
+| Commandes | 584 |
 | Sous-agents | 1 |
-| Commits | 22 |
+| Commits | 23 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -2021,7 +2021,7 @@ a = silu(u · x) · (v ·
 
 ### Tour 35 — attention pour ne pas se perdre à copier les autres et ne pas empiéter non plus sur mon autre programme de recherche htt … [426 caractères tronqués]
 
-*47 appels d'outils.* Actions notables :
+*62 appels d'outils.* Actions notables :
 
 - create_goal
 - bash — Read the activation quantizer
@@ -2037,11 +2037,11 @@ a = silu(u · x) · (v ·
 - bash — Implement and test homeostatic renormalization
 - bash — Retest renormalization with the flag not last
 - bash — Measure the real throughput gain from sparsity
-- … et 33 autres
+- … et 48 autres
 
 **Synthèse produite :**
 
-⏵ La charge vient d'un autre projet (node gods-eye-view) et du bureau. Je récupère le dernier point et je commite
+⏵ **Correction importante** : même à k=1 le temps d'attention ne bouge pas. Le coût est dans le **calcul des scores**, inévitable pour savoir quelles clés garder
 
 ## 3. Travail accompli
 
@@ -2160,7 +2160,7 @@ a = silu(u · x) · (v ·
 - **T3** Test OpenOCD without root and check Pro device support
 - **T3** Make scripts executable and test jtag_scan
 - **T3** Commit JTAG milestone
-- … et 529 autres
+- … et 544 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2288,7 +2288,7 @@ a = silu(u · x) · (v ·
 
 ## 5. Erreurs rencontrées
 
-73 sorties en erreur ou divergentes. Les premières :
+74 sorties en erreur ou divergentes. Les premières :
 
 - **T2** : === LIEN PCIe (sysfs, sans root) === current_link_speed     = 8.0 GT/s PCIe current_link_width     = 8 max_link_speed         = 8.0 GT/s PCIe max_link_width         = 8 secondary_bus_number   =  vendo
 - **T2** : [POPUP: saisissez le mot de passe] === TOUS les événements USB depuis le boot (fin de log) === [ven sep 25 11:52:23 2026] [ T684749] hid-generic 0003:04F2:2159.00ED: hiddev99,hidraw5: USB HID v1.10 De
@@ -2330,4 +2330,5 @@ a = silu(u · x) · (v ·
 - Comparaison avec SpikeGPT, Spikformer et Spikingformer  Etude des trois references neuromorphiques et comparaison point par point avec notre architecture. Sourc
 - Parcimonie imposee a l'inference : la frontiere mesuree  Campagne sur Qwen2.5-0.5B Q8_0 PREENTRAINE, sans aucun entrainement, avec deux jeux de 1024 tokens (A p
 - Attention creuse : le trou se referme, et par le haut  Une seule modification a l'inference, sans reentrainement : ne garder que les k plus grands scores par re
+- Attention creuse : correction -- le gain est en qualite, pas en temps  J'avais annonce une attention \"meilleure, moins chere et listable\". La mesure corrige l
 

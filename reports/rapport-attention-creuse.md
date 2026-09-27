@@ -23,7 +23,7 @@ Deux jeux de 1 024 tokens, réglage sur A, vérification sur B.
 |---|---|---|---|---|---|
 | **dense** (référence) | 23,6125 | 26,2565 | 24,8995 | 19,5222 |
 | 128 | 23,5840 (−0,12 %) | — | — |
-| 64 | 23,4621 (−0,64 %) | 26,1959 (−0,23 %) | 24,6867 |
+| 64 | 23,4621 (−0,64 %) | 26,1959 (−0,23 %) | 24,6867 | **19,3700 (−0,78 %)** |
 | **32** | **23,3302 (−1,20 %)** | **26,1199 (−0,52 %)** | **24,6857 (−0,86 %)** | **19,4136 (−0,56 %)** |
 | 24 | — | — | 24,7043 |
 | 16 | 23,6591 (+0,20 %) | 26,5065 (+0,95 %) | — |
@@ -51,8 +51,24 @@ contextes — elle devient l'élément le plus creux du modèle.** Ses poids son
 notre moteur consomme comme n'importe quelle liste de connexions.
 
 Le trou identifié dans le bilan multi-matériel — « attention hors du domaine
-événementiel, et elle croît linéairement » — se referme par le haut : la
-restreindre la rend **meilleure, moins chère, et listable**.
+événementiel » — se referme **du point de vue de la représentation** : ses poids
+deviennent creux, donc listables, et la qualité s'améliore. Il ne se referme pas
+du point de vue du calcul : noter toutes les clés reste inévitable (voir §3 bis).
+
+### L'optimum suit le contexte — mais un k fixe suffit
+
+À contexte 256, k = 32 est optimal (12,5 % des clés) ; à contexte 512, c'est
+k = 64 (12,5 % également). L'optimum est donc une **fraction** du contexte, ce
+qui laisserait la complexité quadratique.
+
+**Un k fixe change la nature du calcul** : le coût devient O(N·k), **linéaire**,
+et la qualité reste meilleure que le dense aux deux contextes testés
+(−1,20 % à 256, −0,56 % à 512). C'est la même complexité qu'une attention
+linéaire à noyau, mais **sans approximer le softmax** — on en garde les k termes
+dominants au lieu de le remplacer par un produit de fonctions.
+
+C'est ce qui compte pour nous : une attention en O(N·k) dont les poids sont
+creux, donc une liste d'événements de taille linéaire.
 
 ## 3. Pourquoi ça améliore la perplexité
 
@@ -66,6 +82,39 @@ C'est le même raisonnement qui avait échoué pour les activations du FFN
 est **exponentielle** : ses petites valeurs sont réellement négligeables, alors
 que les petites activations d'un FFN portent une partie du signal.
 
+## 3 bis. Correction : le gain est en qualité, pas en temps
+
+J'avais annoncé que l'attention creuse la rendrait « meilleure, moins chère et
+listable ». **La partie « moins chère » est fausse en l'état, et la mesure le
+dit.**
+
+J'ai d'abord masqué les scores (`-∞`) sans réécrire les boucles : aucun gain,
+évidemment, puisque le softmax et la somme pondérée parcouraient toujours toutes
+les clés. J'ai ensuite réécrit le softmax et la somme pour n'itérer que sur les k
+clés retenues — complexité O(N·k) — en vérifiant que la perplexité restait
+identique au chiffre près (23,6125 dense, 23,3279 à k=32).
+
+Résultat : **toujours aucun gain.** 11,5 ms en dense, 11,5 ms à k=32, et
+**11,6 ms à k=1** — où la somme pondérée ne fait plus que 14 × 64 opérations au
+lieu de 459 000.
+
+➡️ **Le coût de l'attention n'est donc pas dans le softmax ni dans la somme
+pondérée : il est dans le CALCUL DES SCORES**, qui doit noter toutes les clés
+avant de pouvoir choisir lesquelles garder. Le top-k ne peut pas y échapper.
+
+Ce que l'attention creuse apporte reste réel, mais c'est autre chose :
+
+| apport | statut |
+|---|---|
+| Qualité | ✅ **+0,5 à +1,2 %** de perplexité, vérifié sur A, B et contexte 512 |
+| Poids creux, donc listables | ✅ 12,5 % de densité à 256, 0,8 % à 4 096 |
+| Temps de calcul | ❌ **aucun gain** — les scores restent O(N) par requête |
+| Poids d'attention dans le flux d'événements | ✅ négligeable : 0,04 M paires/token contre 354 M événements |
+
+Baisser le coût demanderait d'éviter le calcul des scores — donc soit un index
+appris (entraînement, hors de ce programme), soit une approximation de type
+noyau ou hachage sensible à la localité.
+
 ## 4. Ce qui reste à faire
 
 1. **Générer les événements d'attention** : le moteur sait consommer des listes,
@@ -76,8 +125,10 @@ que les petites activations d'un FFN portent une partie du signal.
    contexte (mesure en cours à 512).
 3. **Choisir k par tête** : k = 32 est un réglage global ; certaines têtes
    pourraient tolérer bien moins.
-4. **Vérifier l'interaction avec le k-WTA du FFN** : les deux parcimonies
-   s'appliquent à des endroits différents, elles devraient se composer.
+4. ~~Vérifier l'interaction avec le k-WTA du FFN~~ → **mesuré, non additive et
+   défavorable** : attention 32 seule = −0,52 % (B), attention 32 + FFN 90 % =
+   −0,45 %, attention 32 + FFN 85 % = **+0,19 %**. Le FFN mange le gain de
+   l'attention. Retenir l'attention creuse, se méfier du k-WTA du FFN.
 
 ## 5. Reproductible
 
