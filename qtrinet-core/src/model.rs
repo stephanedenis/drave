@@ -145,6 +145,9 @@ pub struct Model {
     pub prof: [f64; 6],
     /// Greffon : un neurone supplémentaire, chargé sans réentraînement.
     pub patch: Option<Patch>,
+    /// Gain appliqué à la sortie du FFN d'une couche : édition structurelle de
+    /// granularité supérieure (elle porte sur les 4 864 neurones à la fois).
+    pub ffn_gain: Option<(usize, f32)>,
     /// Capteur hebbien : accumule la trace de co-activation d'une projection
     /// pendant l'inférence, sur un cœur séparé en pratique. Il ne modifie
     /// jamais le calcul — c'est un espion, pas un acteur.
@@ -287,7 +290,7 @@ impl Model {
             g, cfg, layers, out_norm, pool,
             kv_k: vec![kv.clone(); n_layer], kv_v: vec![kv; n_layer],
             ctx, events: 0, act_levels: 127.0, stop_id: None, prof: [0.0; 6],
-            patch: None, hebb: None,
+            patch: None, ffn_gain: None, hebb: None,
         }
     }
 
@@ -466,6 +469,9 @@ impl Model {
                     let a = (g / (1.0 + (-g).exp())) * uu;
                     for i in 0..h { down[i] += pt.d[i] * a; }
                 }
+            }
+            if let Some((gl, g)) = self.ffn_gain {
+                if gl == l { for v in down.iter_mut() { *v *= g; } }
             }
             for i in 0..h { x[i] = o[i] + down[i]; }
             self.prof[3] += tf.elapsed().as_secs_f64();

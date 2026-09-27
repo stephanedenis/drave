@@ -381,6 +381,7 @@ fn run_ppl(args: &[String]) {
     let mut abits = 16u32;
     let mut hebb_layer: Option<usize> = None;
     let mut patch_file: Option<String> = None;
+    let mut gain: Option<(usize, f32)> = None;
     let cpu = std::thread::available_parallelism().map(|n| n.get()).unwrap_or(8);
     let mut n_threads = (cpu * 3 / 4).max(1);
     let mut i = 2;
@@ -392,6 +393,10 @@ fn run_ppl(args: &[String]) {
             "--abits" => abits = args[i + 1].parse().unwrap(),
             "--hebbian" => hebb_layer = Some(args[i + 1].parse().unwrap()),
             "--patch" => patch_file = Some(args[i + 1].clone()),
+            "--ffn-gain" => {
+                let v: Vec<&str> = args[i + 1].split(':').collect();
+                gain = Some((v[0].parse().unwrap(), v[1].parse().unwrap()));
+            }
             "--threads" => n_threads = args[i + 1].parse().unwrap(),
             _ => {}
         }
@@ -413,6 +418,10 @@ fn run_ppl(args: &[String]) {
         println!("greffon : couche {}, |u|={:.3} |v|={:.3} |d|={:.3}",
                  pt.layer, norme(&pt.u), norme(&pt.v), norme(&pt.d));
         mdl.patch = Some(pt);
+    }
+    if let Some((l, g)) = gain {
+        println!("gain FFN : couche {l} x {g}");
+        mdl.ffn_gain = Some((l, g));
     }
     if let Some(l) = hebb_layer {
         let mut hb = model::Hebb::new(l, mdl.cfg.ffn, mdl.cfg.hidden, 0.1);

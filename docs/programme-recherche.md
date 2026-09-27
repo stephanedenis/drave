@@ -52,6 +52,26 @@ définissent ce que le programme peut tenter que d'autres ne peuvent pas.
 | Capacité d'évaluation | **~100 évaluations de modèle par heure** sur les threads libres, soit 2 400/jour |
 | Ressources libres | 24 threads sur 40, une carte GPU sur deux, 123 Go de RAM sur 125 |
 
+## 2 bis. Ce que la littérature neuromorphique change
+
+Comparaison détaillée dans [`comparaison-spiking.md`](comparaison-spiking.md).
+Trois enseignements qui modifient ce programme :
+
+1. **Les réseaux à spikes résolvent par construction notre problème de débit
+   constant.** Nous mesurons 0,00 % d'activations nulles sur un LLM dense ; un
+   neurone LIF décharge à R̂ ≈ 0,15 (SpikeGPT) — soit **6,7× moins d'événements**
+   dans notre moteur, donc ~100 tok/s sur CPU au lieu de 15,8.
+2. **L'astuce décisive est l'alignement séquence = temps** (SpikeGPT). Chez
+   Spikformer, la parcimonie est par pas de temps et le gain net est R̂×T, pas
+   R̂ : sans cet alignement, les pas de temps mangent le gain.
+3. **L'attention sans softmax et décomposable** (Spikformer) répond à notre trou
+   le plus sérieux : `SN(Q·Kᵀ·V·s)` supprime le softmax, ramène la complexité à
+   O(N·d²) et rend l'attention exprimable en événements.
+
+➡️ **La cible devient « un modèle à décharge parcimonieuse exécuté en listes »**,
+pas « un LLM quantifié exécuté en listes ». Seule la première donne le débit
+variable que le cahier des charges promettait.
+
 ## 3. Ce que la mesure interdit d'espérer
 
 Trois résultats de ce projet ferment des portes. Les ignorer serait la faute

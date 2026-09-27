@@ -5,14 +5,14 @@
 | Identifiant | `22bcae27-254b-47b2-acda-87467dab060c` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-25 11:56 |
-| Durée | 47.7 h |
+| Durée | 48.7 h |
 | Tours | 34 |
-| Messages | 707 |
-| Appels d'outils | 731 |
-| Fichiers touchés | 61 |
-| Commandes | 515 |
+| Messages | 723 |
+| Appels d'outils | 746 |
+| Fichiers touchés | 62 |
+| Commandes | 525 |
 | Sous-agents | 1 |
-| Commits | 19 |
+| Commits | 20 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -1978,7 +1978,7 @@ a = silu(u · x) · (v ·
 
 ### Tour 34 — /home/stephane/Data13TB/stephane/GitHub/Qtrinet/journal doit inclure un automatisme qui produit un .md pour chaque sessi … [203 caractères tronqués]
 
-*7 appels d'outils.* Actions notables :
+*22 appels d'outils.* Actions notables :
 
 - write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/session_report.py`
 - bash — Generate session reports and inspect structure
@@ -1987,10 +1987,18 @@ a = silu(u · x) · (v ·
 - bash — Refine extraction and regenerate
 - bash — Wire report generation into the archiver
 - bash — Commit the session report automation
+- bash — Validate patch semantics with a neuron duplication
+- bash — Rank neurons by their correlation with token loss
+- bash — Run the neuron gain sweep
+- bash — Test global FFN gain — coarser granularity
+- bash — Extend the gain sweep on the tuning set
+- bash — Fine gain curve on the tuning set
+- bash — Verify the gain on held-out data
+- … et 6 autres
 
 **Synthèse produite :**
 
-⏵ Rapport complet et structuré. Je le branche dans l'automatisation existante
+⏵ Les trois papers sont clairs. Je rédige la comparaison avec notre architecture
 
 ## 3. Travail accompli
 
@@ -2059,6 +2067,7 @@ a = silu(u · x) · (v ·
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/programme-recherche.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-greffon.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/session_report.py` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/comparaison-spiking.md` | 1 | 0 |
 
 ### Sous-agents lancés
 
@@ -2106,7 +2115,7 @@ a = silu(u · x) · (v ·
 - **T3** Test OpenOCD without root and check Pro device support
 - **T3** Make scripts executable and test jtag_scan
 - **T3** Commit JTAG milestone
-- … et 475 autres
+- … et 485 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2273,4 +2282,5 @@ a = silu(u · x) · (v ·
 - Journalisation des activations et evaluation du programme evolutif  Ajoute la journalisation par token : vecteur d'entree d'une couche + perte du token suivant.
 - Archivage des sessions, programme de recherche, plomberie d'apprentissage  TROIS LIVRABLES.  1. ARCHIVAGE AUTOMATIQUE DES SESSIONS DSH    tools/archive_sessions
 - Rapport de session automatique : reconstitution de l'essence et du travail  journal/ contient desormais, pour chaque session, genere automatiquement : - session
+- Comparaison avec SpikeGPT, Spikformer et Spikingformer  Etude des trois references neuromorphiques et comparaison point par point avec notre architecture. Sourc
 
