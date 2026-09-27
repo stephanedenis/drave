@@ -20,6 +20,9 @@ Le cahier des charges d'origine est dans [`Qtrinet-bootstrap.md`](Qtrinet-bootst
 | **Architecture push (AER) + faisabilité CPU** | ✅ **fait** → [`reports/rapport-cpu-aer.md`](reports/rapport-cpu-aer.md) |
 | **Moteur d'événements Rust (4 optimisations)** | ✅ **fait** → [`reports/rapport-optimisations.md`](reports/rapport-optimisations.md) |
 | **Inférence complète en Rust, sans GPU** | ✅ **fait** → [`reports/rapport-inference.md`](reports/rapport-inference.md) |
+| **PE événementiel vérifié et synthétisé (Stratix V)** | ✅ **fait** → [`reports/rapport-pe-evenementiel.md`](reports/rapport-pe-evenementiel.md) |
+| **Lecteur DDR3 vérifié de bout en bout** | ✅ **fait** → [`reports/rapport-lecteur-ddr3.md`](reports/rapport-lecteur-ddr3.md) |
+| **Bilan multi-matériel (CPU / FPGA / GPU)** | ✅ → [`reports/bilan-multi-materiel.md`](reports/bilan-multi-materiel.md) |
 | Modèle ternaire *entraîné* (BitNet b1.58) | ⬜ à faire |
 | Extracteur GGUF → plans ternaires | ⬜ à faire |
 | Format binaire + schéma partagé Python/RTL | ⬜ à faire |
