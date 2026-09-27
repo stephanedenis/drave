@@ -154,6 +154,11 @@ pub struct Model {
     /// Parcimonie par projection : 0 = q, 1 = k, 2 = v, 3 = o, 4 = gate,
     /// 5 = up, 6 = down. La valeur 0 signifie « utiliser act_topk ».
     pub act_topk_proj: [usize; 7],
+    /// Attention à k clés : ne garder que les k plus grands scores par requête.
+    /// 0 = attention dense avec softmax (le modèle d'origine).
+    /// Cela rend la matrice d'attention **creuse**, donc exprimable en liste
+    /// d'événements — au prix d'une approximation, mesurable.
+    pub attn_topk: usize,
     /// Token d'arrêt (EOS / <|im_end|>) : la génération s'interrompt dessus.
     pub stop_id: Option<u32>,
     /// Postes de temps cumulés, en secondes (diagnostic).
@@ -305,7 +310,7 @@ impl Model {
             g, cfg, layers, out_norm, pool,
             kv_k: vec![kv.clone(); n_layer], kv_v: vec![kv; n_layer],
             ctx, events: 0, act_levels: 127.0, act_thresh: 0.0, act_topk: 0, act_renorm: false,
-            act_topk_proj: [0; 7],
+            act_topk_proj: [0; 7], attn_topk: 0,
             stop_id: None, prof: [0.0; 6],
             patch: None, ffn_gain: None, hebb: None,
         }
@@ -459,6 +464,7 @@ impl Model {
         let mut up = vec![0f32; cfg.ffn];
         let mut down = vec![0f32; h];
         let mut sc = vec![0f32; pos + 1];
+        let mut attn_scratch: Vec<f32> = Vec::with_capacity(pos + 1);
 
         for l in 0..cfg.n_layer {
             let lay = &layers[l];
@@ -495,6 +501,16 @@ impl Model {
                     let mut s = 0f32;
                     for d in 0..hd { s += qh[d] * kt[d]; }
                     sc[t] = s * scale;
+                }
+                // attention à k clés : masquer tout sauf les k plus grands scores
+                if self.attn_topk > 0 && self.attn_topk < pos + 1 {
+                    let k = self.attn_topk;
+                    let n = pos + 1;
+                    attn_scratch.clear();
+                    attn_scratch.extend_from_slice(&sc[..n]);
+                    let (_, &mut cut, _) = attn_scratch
+                        .select_nth_unstable_by(n - k, |a, b| a.partial_cmp(b).unwrap());
+                    for t in 0..n { if sc[t] < cut { sc[t] = f32::NEG_INFINITY; } }
                 }
                 // softmax stable
                 let mut mx = f32::NEG_INFINITY;

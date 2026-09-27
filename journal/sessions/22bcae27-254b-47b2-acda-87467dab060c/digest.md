@@ -17989,3 +17989,142 @@ Created file
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\npython3 - <<'PY'\np='README.md'; s=open(p,encoding='utf-8').read(); o=s\ns=s.replace('''| **Comparaison Spiking (SpikeGPT / Spikformer / Spikingformer)** | ✅ → [`docs/comparaison-spiking.md`](docs/comparaison-spiking.md) |''',\n'''| ** … [2374 caractères tronqués]`
+
+  ```
+41dbb37 Parcimonie imposee a l'inference : la frontiere mesuree
+addf6f3 Comparaison avec SpikeGPT, Spikformer et Spikingformer
+  ```
+
+### 🤖 Assistant
+
+⏵ Suite du programme : rendre l'attention **exprimable en événements**. Je teste l'attention à k clés (les poids deviennent creux donc listables)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\ngrep -n \"softmax stable\" -A 12 src/model.rs | head -18", "description": "Locate the attention softmax block"}`
+
+  ```
+499:                // softmax stable
+500-                let mut mx = f32::NEG_INFINITY;
+501-                for t in 0..=pos { if sc[t] > mx { mx = sc[t]; } }
+502-                let mut sum = 0f32;
+503-                for t in 0..=pos { sc[t] = (sc[t] - mx).exp(); sum += sc[t]; }
+504-                let inv = 1.0 / sum;
+505-                for t in 0..=pos { sc[t] *= inv; }
+506-                for d in 0..hd {
+507-                    let mut s = 0f32;
+508-                    for t in 0..=pos { s += sc[t] * vc[(kvh * ctx + t) * hd + d]; }
+509-                    att[hh * hd + d] = s;
+510-                }
+511-            }
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\npython3 - <<'PY'\np='src/model.rs'; s=open(p,encoding='utf-8').read(); o=s\ns=s.replace('''    pub act_topk_proj: [usize; 7],''','''    pub act_topk_proj: [usize; 7],\n    /// Attention à k clés : ne garder que les k plus  … [3233 caractères tronqués]`
+
+  ```
+error[E0425]: cannot find value `attn_topk` in this scope
+   --> src/main.rs:237:30
+    |
+237 |             "--attn-topk" => attn_topk = args[i + 1].parse().unwrap(),
+    |                              ^^^^^^^^^
+    |
+--
+error: could not compile `qtrinet-core` (bin "qtrinet-core") due to 1 previous error; 11 warnings emitted
+--- build
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\npython3 - <<'PY'\np='src/main.rs'; s=open(p,encoding='utf-8').read()\ni = s.index('fn run_infer')\nhead, tail = s[:i], s[i:]\ntail = tail.replace('''    let mut ids_file: Option<String> = None;''','''    let mut ids_file:  … [776 caractères tronqués]`
+
+  ```
+0
+=== attention à k clés (jeu A, référence 23,6125)
+  dense (référence)  : perplexité    23.6125  ( 1.000x)
+  k=128 clés         : perplexité    23.5840  ( 0.999x)
+  k=64 clés          : perplexité    23.4621  ( 0.994x)
+  k=32 clés          : perplexité    23.3302  ( 0.988x)
+  k=16 clés          : perplexité    23.6591  ( 1.002x)
+  k=8 clés           : perplexité    24.9071  ( 1.055x)
+  ```
+
+### 🤖 Assistant
+
+⏵ **Résultat inattendu** : l'attention à 32 clés **améliore** la perplexité de 1,2 % en rendant la matrice creuse. Vérification sur B
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\necho \"=== vérification sur B (1024 tokens jamais vus, référence 26,2565)\"\nfor k in 0 64 32 16; do\n  ppl=$(timeout 900 ./target/release/qtrinet-core ../models/Qwen2.5-0.5B-Q8_0.gguf --ppl /tmp/wt2_b.txt --ctx 256 --abit … [394 caractères tronqués]`
+
+  ```
+=== vérification sur B (1024 tokens jamais vus, référence 26,2565)
+  dense (référence)  : perplexité    26.2565  ( 1.000x)
+  k=64 clés          : perplexité    26.1959  ( 0.998x)
+  k=32 clés          : perplexité    26.1199  ( 0.995x)
+  k=16 clés          : perplexité    26.5065  ( 1.010x)
+  ```
+
+### 🤖 Assistant
+
+⏵ **Le gain se généralise** (−0,52 % sur B). Je resserre et je teste en contexte long, là où l'attention domine
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\necho \"=== balayage fin de k (jeux A et B réunis, 2040 tokens)\"\nfor k in 24 32 48; do\n  ppl=$(timeout 1200 ./target/release/qtrinet-core ../models/Qwen2.5-0.5B-Q8_0.gguf --ppl /tmp/wt2_ids.txt --ctx 256 --abits 16 --thr … [540 caractères tronqués]`
+
+  ```
+=== balayage fin de k (jeux A et B réunis, 2040 tokens)
+  k=24 : 24.7043
+  k=32 : 24.6857
+  k=48 : 24.6867
+=== et en contexte 512 (là où l'attention domine)
+[timed out after 600000ms]
+[killed by signal: SIGTERM]
+  ```
+
+### 🤖 Assistant
+
+⏵ Contexte long trop lent pour la fenêtre de commande — je le lance en tâche de fond et je rédige pendant ce temps
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\ncat > /tmp/attn512.sh <<'EOF'\n#!/bin/bash\ncd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\nfor k in 0 32 64; do\n  ppl=$(timeout 2400 ./target/release/qtrinet-core ../models/Qwen2.5-0.5B-Q8_0.gguf --ppl / … [383 caractères tronqués]`
+
+  ```
+lancé en tâche de fond (3 mesures en contexte 512)
+  ```
+
+- **write** `{"content": "# Attention creuse — le trou se referme, et par le haut\n\nLe point faible identifié dans nos bilans : l'attention n'est **pas exprimable en\nlistes d'événements**, parce que ses poids sortent d'un softmax calculé à\nl'exécution, et son coût croît **linéairement avec le contexte** (2,0  … [3591 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-attention-creuse.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "sleep 420; cat /tmp/attn512.txt 2>/dev/null; echo \"---\"; uptime", "description": "Check the long-context attention results", "timeoutMs": 500000}`
+
+  ```
+ctx512 k=0 : 19.5222
+ctx512 k=32 : 19.4136
+---
+ 14:45:00  up 6 days  3:57,  2 users,  load average: 20,35, 20,56, 19,14
+  ```
+
+### 🤖 Assistant
+
+⏵ Contexte 512 : **−0,56 % de plus** avec 32 clés. La machine est très chargée — je vérifie par quoi
+
+- **bash** `{"command": "ps aux --sort=-%cpu | head -8 | cut -c1-140\necho \"---\"; cat /tmp/attn512.txt", "description": "Identify the machine load"}`
+
+  ```
+USER         PID %CPU %MEM    VSZ   RSS TTY      STAT START   TIME COMMAND
+stephane 3367816 1650  0.9 3434492 1270364 ?     Rl   14:43  22:51 ./target/release/qtrinet-core ../models/Qwen2.5-0.5B-Q8_0.gguf --ppl /tmp
+stephane 3382742  100  0.0   7692  4096 ?        Ss   14:45   0:00 bash -c ps aux --sort=-%cpu | head -8 | cut -c1-140 echo "---"; cat /tmp/
+stephane   11117 34.7  0.3 19222128 467088 ?     Rl   sep21 2993:52 node26 /home/stephane/Data13TB/stephane/GitHub/gods-eye-view/node_module
+stephane    3770 20.3  0.4 4527724 650160 ?      Rsl  sep21 1759:58 /usr/bin/plasmashell --no-respawn
+stephane 1066206 16.2  0.3 1518734652 416924 ?   Sl   sep26 293:27 /opt/google/chrome/chrome --type=renderer --crashpad-handler-pid=12409 --
+stephane  710008 12.8  1.1 11459848 1557672 pts/2 Rl+ sep25 392:19 node26 /home/stephane/.local/share/../bin/dsh --profile dsh-tui
+stephane  372484  5.9  0.4 10750288 544952 pts/3 Sl+  sep23 325:43 node /home/stephane/.local/share/../bin/dsh --profile dsh-tui
+---
+ctx512 k=0 : 19.5222
+ctx512 k=32 : 19.4136
+  ```
+
+### 🤖 Assistant
+
+⏵ La charge vient d'un autre projet (node gods-eye-view) et du bureau. Je récupère le dernier point et je commite
+
+- **bash** `{"command": "sleep 240; cat /tmp/attn512.txt\ncd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\npython3 - <<'PY'\np='reports/rapport-attention-creuse.md'; s=open(p,encoding='utf-8').read(); o=s\ns=s.replace('''| k (clés gardées) | PPL (A) | PPL (B) | 2 040 tokens |\n|---|---|---|---|\n| **dense**  … [3213 caractères tronqués]`

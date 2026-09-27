@@ -5,14 +5,14 @@
 | Identifiant | `22bcae27-254b-47b2-acda-87467dab060c` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-25 11:56 |
-| Durée | 50.3 h |
+| Durée | 50.8 h |
 | Tours | 35 |
-| Messages | 762 |
-| Appels d'outils | 783 |
-| Fichiers touchés | 63 |
-| Commandes | 560 |
+| Messages | 772 |
+| Appels d'outils | 793 |
+| Fichiers touchés | 64 |
+| Commandes | 569 |
 | Sous-agents | 1 |
-| Commits | 21 |
+| Commits | 22 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -2021,7 +2021,7 @@ a = silu(u · x) · (v ·
 
 ### Tour 35 — attention pour ne pas se perdre à copier les autres et ne pas empiéter non plus sur mon autre programme de recherche htt … [426 caractères tronqués]
 
-*37 appels d'outils.* Actions notables :
+*47 appels d'outils.* Actions notables :
 
 - create_goal
 - bash — Read the activation quantizer
@@ -2037,11 +2037,11 @@ a = silu(u · x) · (v ·
 - bash — Implement and test homeostatic renormalization
 - bash — Retest renormalization with the flag not last
 - bash — Measure the real throughput gain from sparsity
-- … et 23 autres
+- … et 33 autres
 
 **Synthèse produite :**
 
-⏵ Machine chargée (load 14) : le gain de temps varie de −3 à −13 % selon la contention. Je consigne la campagne
+⏵ La charge vient d'un autre projet (node gods-eye-view) et du bureau. Je récupère le dernier point et je commite
 
 ## 3. Travail accompli
 
@@ -2112,6 +2112,7 @@ a = silu(u · x) · (v ·
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/session_report.py` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/comparaison-spiking.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-parcimonie-imposee.md` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-attention-creuse.md` | 1 | 0 |
 
 ### Sous-agents lancés
 
@@ -2159,7 +2160,7 @@ a = silu(u · x) · (v ·
 - **T3** Test OpenOCD without root and check Pro device support
 - **T3** Make scripts executable and test jtag_scan
 - **T3** Commit JTAG milestone
-- … et 520 autres
+- … et 529 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2287,7 +2288,7 @@ a = silu(u · x) · (v ·
 
 ## 5. Erreurs rencontrées
 
-72 sorties en erreur ou divergentes. Les premières :
+73 sorties en erreur ou divergentes. Les premières :
 
 - **T2** : === LIEN PCIe (sysfs, sans root) === current_link_speed     = 8.0 GT/s PCIe current_link_width     = 8 max_link_speed         = 8.0 GT/s PCIe max_link_width         = 8 secondary_bus_number   =  vendo
 - **T2** : [POPUP: saisissez le mot de passe] === TOUS les événements USB depuis le boot (fin de log) === [ven sep 25 11:52:23 2026] [ T684749] hid-generic 0003:04F2:2159.00ED: hiddev99,hidraw5: USB HID v1.10 De
@@ -2328,4 +2329,5 @@ a = silu(u · x) · (v ·
 - Rapport de session automatique : reconstitution de l'essence et du travail  journal/ contient desormais, pour chaque session, genere automatiquement : - session
 - Comparaison avec SpikeGPT, Spikformer et Spikingformer  Etude des trois references neuromorphiques et comparaison point par point avec notre architecture. Sourc
 - Parcimonie imposee a l'inference : la frontiere mesuree  Campagne sur Qwen2.5-0.5B Q8_0 PREENTRAINE, sans aucun entrainement, avec deux jeux de 1024 tokens (A p
+- Attention creuse : le trou se referme, et par le haut  Une seule modification a l'inference, sans reentrainement : ne garder que les k plus grands scores par re
 
