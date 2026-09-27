@@ -18686,3 +18686,292 @@ tokens générés : [358, 2776, 264, 48948, 304, 13027, 323, 358, 2776, 4460, 31
 ⏵ Validation complète : 14/14, tokens identiques, perplexité 24,8995. Je clôture et je vérifie l'état du dépôt
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\ngit status --short | head -5; echo \"---\"\ngit log --oneline | head -8\necho \"=== journal à jour ?\"\npython3 tools/archive_sessions.py 2>&1 | tail -3\ngit add -A && git commit -q -m \"Journal : rafraîchissement de fin de campagne\"  … [153 caractères tronqués]`
+
+  ```
+M journal/README.md
+ M journal/sessions/22bcae27-254b-47b2-acda-87467dab060c/digest.md
+ M journal/sessions/22bcae27-254b-47b2-acda-87467dab060c/rapport.md
+ M journal/sessions/MANIFEST.md
+---
+c1101a2 Programme : lecons de la campagne de parcimonie et regle de methode
+8f70aaf Engine : les controles de bornes ne sont pas le goulot (mesure A/B)
+ecdfed5 Attention : divisee par deux par la vectorisation, a perplexite identique
+fc1ec32 Campagne parcimonie : synthese et configuration gagnante
+18d0f13 Attention creuse : correction -- le gain est en qualite, pas en temps
+44c9cee Attention creuse : le trou se referme, et par le haut
+41dbb37 Parcimonie imposee a l'inference : la frontiere mesuree
+addf6f3 Comparaison avec SpikeGPT, Spikformer et Spikingformer
+=== journal à jour ?
+  22bcae27 : 11.4 Mo de trace, digest 958 Ko, 808 messages, 829 outils
+  27c99b10 : 1.0 Mo de trace, digest 61 Ko, 57 messages, 54 outils
+manifeste écrit : /home/stephane/Data13TB/stephane/GitHub/Qtrinet/journal/sessions/MANIFEST.md
+d2fe290 Journal : rafraîchissement de fin de campagne
+c1101a2 Programme : lecons de la campagne de parcimonie et regle de methode
+8f70aaf Engine : les controles de bornes ne sont pas le gou
+… [16 caractères tronqués]
+  ```
+
+- **get_goal** `{}`
+
+  ```
+{"goal":{"id":"goal-5efb9bc5-99c3-4b93-8ffe-ca0601b6c82d","revision":1,"objective":"Mener la campagne d'expériences sur l'exécution événementielle du modèle préentraîné Qwen2.5-0.5B : (1) imposer une parcimonie d'activation à l'inférence (seuil et k-WTA) sans aucun entraînement et mesurer la frontière (parcimonie, perplexité, événements/token) ; (2) rendre l'attention exprimable en événements par une forme linéaire sans softmax et mesurer son coût en perplexité ; (3) consigner les résultats, les erreurs et les pistes écartées dans les rapports et le journal, en restant strictement sur les modèles préentraînés et hors du programme neuronspikes.","phase":"active","roundsStarted":0,"maxGoalRounds":20},"activation":"armed"}
+  ```
+
+- **update_goal** `{"action": "complete", "goal_id": "goal-5efb9bc5-99c3-4b93-8ffe-ca0601b6c82d", "revision": 1}`
+
+> **Objectif** (complete) : Mener la campagne d'expériences sur l'exécution événementielle du modèle préentraîné Qwen2.5-0.5B : (1) imposer une parcimonie d'activation à l'inférence (seuil et k-WTA) sans aucun entraînement et mesurer la frontière (parcimonie, perplexité, événements/token) ; (2) rendre l'attention exprimable en événements par une forme linéaire sans softmax et mesurer son coût en perplexité ; (3) consigner les résultats, les erreurs et les pistes écartées dans les rapports et le journal, en restant strictement sur les modèles préentraînés et hors du programme neuronspikes.
+
+
+  ```
+{"goal":{"id":"goal-5efb9bc5-99c3-4b93-8ffe-ca0601b6c82d","revision":2,"objective":"Mener la campagne d'expériences sur l'exécution événementielle du modèle préentraîné Qwen2.5-0.5B : (1) imposer une parcimonie d'activation à l'inférence (seuil et k-WTA) sans aucun entraînement et mesurer la frontière (parcimonie, perplexité, événements/token) ; (2) rendre l'attention exprimable en événements par une forme linéaire sans softmax et mesurer son coût en perplexité ; (3) consigner les résultats, les erreurs et les pistes écartées dans les rapports et le journal, en restant strictement sur les modèles préentraînés et hors du programme neuronspikes.","phase":"complete","roundsStarted":0,"maxGoalRounds":20},"activation":"disarmed"}
+  ```
+
+### 🤖 Assistant
+
+⏵ Campagne terminée, tout est commité et le journal s'est mis à jour seul
+
+J'ai travaillé sur le programme principal : **modèle préentraîné, techniques proches des SNN, exécution radicalement différente, aucun entraînement, aucun empiètement** sur neuronspikes.
+
+## Le résultat net
+
+**Attention à 32 clés + projection `gate` à 85 %** — configuration vérifiée sur un jeu tenu à l'écart :
+
+| | événements/token | PPL (A) | PPL (B) |
+|---|---|---|---|
+| référence | 354,3 M | 23,6125 | 26,2565 |
+| attention 32 clés | 354,3 M | 23,3279 (−1,21 %) | 26,1178 (−0,53 %) |
+| **+ `gate` à 85 %** | **338,8 M (−4,4 %)** | 23,2811 (−1,40 %) | 26,1417 (−0,44 %) |
+
+**On gagne sur les deux tableaux** — qualité *et* flux d'événements. Ce n'est pas un compromis.
+
+## La frontière, mesurée
+
+Ce qui est **surabondant** se coupe gratuitement : les poids d'attention (n'en garder que 32 sur 256 **améliore** la perplexité — leurs petites valeurs sont du bruit, la distribution est exponentielle). Ce qui est **porteur** ne se coupe pas : Q et K (×2,2 à 50 % de rétention, ×36 à 25 %), les activations du FFN au-delà de 85 %, et le seuil absolu est **10× pire** que le k-WTA à sparsité égale.
+
+## Le plus gros gain ne venait pas de la parcimonie
+
+En cherchant pourquoi le top-k ne rapportait aucun temps, j'ai trouvé que **l'attention tournait à 1,9 GFLOP/s sur un cœur** — ses boucles n'étaient pas vectorisées. Réécrites (produit scalaire en itérateurs, somme pondérée accumulée par clé), elle est passée de **11,5 à 5,7 ms** à perplexité rigoureusement identique.
+
+**Et quatre micro-optimisations rejetées par la mesure** : décodage par paquets de 4 (−28 %), accumulateurs i32 (+4 %, dans le bruit), contrôles de bornes retirés (+1,8 %, pire), renormalisation homéostatique (dégrade). La boucle d'événements résiste à tout ce que j'ai essayé — ses ~10 cycles par événement viennent d'ailleurs, probablement de la latence mémoire.
+
+## Le fait qui borne tout
+
+Les trois papiers neuromorphiques atteignent **R̂ = 0,15** — 6,7× moins d'événements — avec une qualité comparable. Nous plafonnons à −4 à −15 % pour +0,5 % de perplexité. **L'écart est exactement le prix de l'entraînement** : un réseau entraîné à décharger place son information dans les quelques neurones qui tirent ; un réseau dense la répartit partout, et couper après coup détruit du signal. C'est cohérent avec tout ce que ce projet a mesuré, et ça confirme le verrou.
+
+## Deux règles de méthode ajoutées au programme
+
+1. **Avant d'imposer une approximation pour gagner du temps, vérifier que le code de base est écrit correctement.** Une réécriture de boucle a rapporté plus que toutes les techniques importées.
+2. **Entrelacer les configurations comparées** — la charge de fond fait varier le temps mur de 30 % — et **préférer les mesures déterministes** (perplexité, comptes d'événements). Cette discipline a évité de retenir deux « gains » qui étaient du bruit du jeu A : vérifiés sur B, ils disparaissaient.
+
+Le journal s'est régénéré tout seul à chaque commit (hook git + tâche horaire) : `journal/sessions/<id>/rapport.md`, 808 messages, 829 appels d'outils, 1,5 Mo de rapport reconstituant la session étape par étape.
+
+
+## Tour 36
+
+### 👤 Utilisateur
+
+continue les améliorations
+
+### 🤖 Assistant
+
+⏵ Nouvelle piste, et elle attaque le goulot mesuré : si une **fenêtre glissante + quelques jetons puits** suffit, les scores cessent d'être O(N)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\npython3 - <<'PY'\np='src/model.rs'; s=open(p,encoding='utf-8').read(); o=s\ns=s.replace('''    pub qk_topk: usize,''','''    pub qk_topk: usize,\n    /// Fenêtre d'attention glissante : ne noter que les `attn_window` derni … [4281 caractères tronqués]`
+
+  ```
+--- build
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\necho \"=== fenêtre glissante + 4 puits (jeu A, réf 23,6125 ; contexte 256)\"\nfor w in 0 128 64 32; do\n  ppl=$(timeout 900 ./target/release/qtrinet-core ../models/Qwen2.5-0.5B-Q8_0.gguf --ppl /tmp/wt2_a.txt --ctx 256 --ab … [394 caractères tronqués]`
+
+  ```
+=== fenêtre glissante + 4 puits (jeu A, réf 23,6125 ; contexte 256)
+  complète (réf)   : perplexité    23.6125  ( 1.000x)
+[stderr]
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+    print(f'  {"fenêtre 128":16s} : perplexité {float(""):10.4f}  ({float("")/23.6125:6.3f}x)')
+                                                ~~~~~^^^^
+ValueError: could not convert string to float: ''
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+    print(f'  {"fenêtre 64":16s} : perplexité {float(""):10.4f}  ({float("")/23.6125:6.3f}x)')
+                                               ~~~~~^^^^
+ValueError: could not convert string to float: ''
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+    print(f'  {"fenêtre 32":16s} : perplexité {float(""):10.4f}  ({float("")/23.6125:6.3f}x)')
+                                               ~~~~~^^^^
+ValueError: could not convert string to float: ''
+[exit code: 1]
+  ```
+
+### 🤖 Assistant
+
+⏵ J'ai laissé un « no-op » qui n'en est pas un (index hors bornes). Je le retire
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\npython3 - <<'PY'\np='src/model.rs'; s=open(p,encoding='utf-8').read(); o=s\ns=s.replace('''                    attn_idx.select_nth_unstable_by(usize::MAX, |a, b| a.cmp(b));  // no-op\n''','''''')\nassert s!=o\nopen(p,'w',e … [703 caractères tronqués]`
+
+  ```
+0
+=== fenêtre glissante + 4 puits (jeu A, réf 23,6125)
+  complète (réf)   : perplexité    23.6125  ( 1.000x)
+  fenêtre 192      : perplexité    84.0833  ( 3.561x)
+  fenêtre 128      : perplexité   361.8134  (15.323x)
+  fenêtre 64       : perplexité  2327.9730  (98.591x)
+  fenêtre 32       : perplexité  7883.5284  (333.871x)
+  ```
+
+### 🤖 Assistant
+
+⏵ Bug : j'ai donné un score arbitraire (0) aux puits au lieu de leur **vrai** score. Je corrige
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\npython3 - <<'PY'\np='src/model.rs'; s=open(p,encoding='utf-8').read(); o=s\ns=s.replace('''                let nw = pos + 1;\n                let (lo, hi_only) = if self.attn_window > 0 && nw > self.attn_window {\n         … [2286 caractères tronqués]`
+
+  ```
+0
+=== fenêtre glissante avec puits NOTÉS (jeu A, réf 23,6125)
+  fenêtre 192  : perplexité    23.8131  ( 1.008x)
+  fenêtre 128  : perplexité    24.0015  ( 1.016x)
+  fenêtre 64   : perplexité    27.5024  ( 1.165x)
+  ```
+
+### 🤖 Assistant
+
+⏵ **Le correctif change tout** : fenêtre 192 = +0,85 % seulement (au lieu de ×3,6). Je teste en contexte long, où le gain est réel
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\ncat > /tmp/fenetre.sh <<'EOF'\n#!/bin/bash\ncd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\nfor w in 0 256 128; do\n  out=$(timeout 2400 ./target/release/qtrinet-core ../models/Qwen2.5-0.5B-Q8_0.gguf --ppl … [421 caractères tronqués]`
+
+  ```
+balayage fenêtre en contexte 512 lancé (~20 min sous cette charge)
+  ```
+
+- **bash** `{"command": "sleep 540; cat /tmp/fenetre.txt; echo \"---\"; uptime", "description": "Wait for the long-context window results", "timeoutMs": 600000}`
+
+  ```
+ctx512 fenetre=0 : 19.5222
+ctx512 fenetre=256 : 21.3141
+ctx512 fenetre=128 : 22.5435
+---
+ 18:19:12  up 6 days  7:31,  2 users,  load average: 6,11, 15,01, 13,15
+  ```
+
+### 🤖 Assistant
+
+⏵ Fenêtre rejetée : **+9,2 % à 512** (le modèle n'a pas de structure de puits). La charge machine est retombée — j'en profite pour mesurer proprement
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\nuptime\necho \"=== débit de génération (meilleur de 5, charge basse)\"\nb=0; for i in 1 2 3 4 5; do\n  g=$(timeout 900 ./target/release/qtrinet-core ../models/Qwen2.5-0.5B-Q8_0.gguf --infer --ids 9707,0 --n 32 --ctx 64 --t … [912 caractères tronqués]`
+
+  ```
+18:19:26  up 6 days  7:31,  2 users,  load average: 4,97, 14,32, 12,96
+=== débit de génération (meilleur de 5, charge basse)
+  référence        : 14.67 tok/s
+=== avec la configuration retenue (attention 32 clés + gate 85 %)
+  config retenue   : 15.18 tok/s
+=== profil
+tokens générés : [358, 2776, 264, 48948, 304, 13027, 323, 358, 2776, 4460, 311, 1855, 264, 2025, 429, 646]
+généré  : 16 tokens en 1.065 s  (15.03 tok/s)
+postes (ms/token) : matvec-attn 5.5 | rope 0.6 | attention 0.3 | matvec+mlp 55.4 | total mesuré 61.7
+  ```
+
+### 🤖 Assistant
+
+⏵ Piste à fort rendement : compiler avec `target-cpu=native` pour qu'LLVM vectorise en AVX2 tout ce qui est auto-vectorisable
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\ncp target/release/qtrinet-core /tmp/qc_generic\nRUSTFLAGS=\"-C target-cpu=native\" cargo build --release 2>&1 | tail -1\ncp target/release/qtrinet-core /tmp/qc_native\necho \"=== exactitude avec le binaire natif\"\ntimeout … [1007 caractères tronqués]`
+
+  ```
+Finished `release` profile [optimized] target(s) in 9.52s
+=== exactitude avec le binaire natif
+  perplexité : 23.6125
+=== A/B entrelacé : temps CPU pour 32 tokens
+  générique : 48.31 s de CPU
+  natif     : 47.84 s de CPU  (-1.0 %)
+  ```
+
+### 🤖 Assistant
+
+⏵ `native` ne donne que −1 % (LLVM ne vectorise pas nos boucles). Piste plus structurante : optimiser le mode **pull** dense et voir si la direction compte
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\npython3 - <<'PY'\np='src/list.rs'; s=open(p,encoding='utf-8').read(); o=s\ns=s.replace('''    #[inline]\n    pub fn dot(&self, o: usize, x: &[i32]) -> i64 {''','''    /// Produit scalaire avec accumulation i32 par tranches … [2530 caractères tronqués]`
+
+  ```
+--- build
+=== exactitude du mode dense
+tokens générés : [358, 2776, 264, 220, 16, 19, 1042, 2310]
+tokens générés : [358, 2776, 264, 220, 16, 19, 1042, 2310]
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 10, in <module>
+AssertionError
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\ngrep -n \"dot_chunked\\|d.dot(o\" src/engine.rs | head -3\npython3 - <<'PY'\np='src/engine.rs'; s=open(p,encoding='utf-8').read()\nif 'd.dot(o, xv)' in s:\n    s=s.replace('dst[o] = d.dot(o, xv) as f32 * d.scale[o] * sx;', … [1143 caractères tronqués]`
+
+  ```
+323:                            dst[o] = d.dot_chunked(o, xv) as f32 * d.scale[o] * sx;
+déjà fait ou introuvable
+0
+=== A/B entrelacé : mode dense (pull) vs mode événements (push), 24 tokens
+  push (événements) : 40.59 s de CPU
+  pull (dense i8)   : 16.33 s de CPU  (-59.8 %)
+  ```
+
+### 🤖 Assistant
+
+⏵ **Résultat majeur** : le mode pull dense est **2,5× plus rapide** que le mode push/événements (40,6 → 16,3 s de CPU). Je vérifie rigoureusement avant de conclure
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\necho \"=== 32 tokens, les deux modes (doivent être identiques)\"\necho -n \"  push : \"; timeout 900 ./target/release/qtrinet-core ../models/Qwen2.5-0.5B-Q8_0.gguf --infer --ids 9707,0 --n 32 --ctx 64 --threads 16 --abits  … [620 caractères tronqués]`
+
+  ```
+=== 32 tokens, les deux modes (doivent être identiques)
+  push : [358, 2776, 264, 220, 16, 19, 1042, 2310, 3743, 13, 358, 614, 264, 3405, 911, 847, 6869, 13, 358, 614, 68103, 6869, 13, 358, 614, 1012, 4460, 311, 3063, 847, 6869, 700]
+  pull : [358, 2776, 264, 220, 16, 19, 1042, 2310, 3743, 13, 358, 614, 264, 3405, 911, 847, 6869, 13, 358, 614, 68103, 6869, 13, 358, 614, 1012, 4460, 311, 3063, 847, 6869, 700]
+=== perplexité (2040 tokens, ctx 256)
+  push : 24.8995
+  ```
+
+### 🤖 Assistant
+
+⏵ **32 tokens identiques** entre les deux modes. Je mesure la perplexité dense et les débits finaux
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\necho -n \"  pull, perplexité : \"; timeout 1800 ./target/release/qtrinet-core ../models/Qwen2.5-0.5B-Q8_0.gguf --ppl /tmp/wt2_ids.txt --ctx 256 --abits 16 --threads 16 --dense 2>/dev/null | sed -nE 's/=== perplexité ([0-9. … [597 caractères tronqués]`
+
+  ```
+pull, perplexité : 24.8995
+=== débit (meilleur de 3, 32 tokens)
+  push (événements) : 15.59 tok/s
+  pull (dense i8)   : 36.43 tok/s
+  ```
+
+### 🤖 Assistant
+
+⏵ **36,4 tok/s en pull contre 15,6 en push, perplexité identique.** Le croisement doit se trouver avec la parcimonie — je le mesure
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\necho \"=== croisement push/pull selon la densité d'activation (temps CPU, 24 tokens)\"\nprintf \"  %-8s %-14s %-14s\\n\" \"densité\" \"push (s CPU)\" \"pull (s CPU)\"\nfor k in 1000 500 250 100 50; do\n  a=99999; b=99999\n … [766 caractères tronqués]`
+
+  ```
+=== croisement push/pull selon la densité d'activation (temps CPU, 24 tokens)
+  densité push (s CPU)   pull (s CPU)  
+  100%     42.12          19.51         
+  50%      27.08          16.28         
+  25%      21.49          16.08         
+  10%      17.63          17.59         
+  5%       16.82          17.47
+  ```
+
+### 🤖 Assistant
+
+⏵ **Le croisement est à 10 % de densité d'activation.** C'est le résultat qui ordonne tout le projet — je le consigne
+
+- **write** `{"content": "# Croisement push / pull — quand l'architecture événementielle est-elle justifiée ?\n\nDeux façons d'exécuter le même modèle quantifié :\n\n- **push** (notre architecture) : pour chaque source active, on *disperse* ses\n  poids dans un accumulateur (`acc[dest] += x·w`). Le flux est inde … [4281 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-croisement-push-pull.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\npython3 - <<'PY'\np='README.md'; s=open(p,encoding='utf-8').read(); o=s\ns=s.replace('''| Coût de l'architecture | **+8 %** face à un noyau dense int8 équivalent, en lisant 36 % de mémoire en plus |''',\n'''| Coût de l'architecture | * … [3241 caractères tronqués]`

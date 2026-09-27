@@ -5,14 +5,14 @@
 | Identifiant | `22bcae27-254b-47b2-acda-87467dab060c` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-25 11:56 |
-| Durée | 52.5 h |
-| Tours | 35 |
-| Messages | 808 |
-| Appels d'outils | 829 |
-| Fichiers touchés | 65 |
-| Commandes | 604 |
+| Durée | 54.6 h |
+| Tours | 36 |
+| Messages | 827 |
+| Appels d'outils | 846 |
+| Fichiers touchés | 66 |
+| Commandes | 618 |
 | Sous-agents | 1 |
-| Commits | 28 |
+| Commits | 29 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -22,6 +22,8 @@
 - **complete** — Implémenter l'inférence complète de Qwen2.5-0.5B dans qtrinet-core (Rust std seul) : forward Qwen2 (RMSNorm, RoPE, GQA + cache KV, MLP SwiGLU, lm_head), tokenizer BPE byte-level qwen2, génération autoregressive et échantillonnage ; valider l'égalité token à token contre la référence numpy (src/trans
 … [89 caractères tronqués]
 - **create** — Mener la campagne d'expériences sur l'exécution événementielle du modèle préentraîné Qwen2.5-0.5B : (1) imposer une parcimonie d'activation à l'inférence (seuil et k-WTA) sans aucun entraînement et mesurer la frontière (parcimonie, perplexité, événements/token) ; (2) rendre l'attention exprimable en
+… [267 caractères tronqués]
+- **complete** — Mener la campagne d'expériences sur l'exécution événementielle du modèle préentraîné Qwen2.5-0.5B : (1) imposer une parcimonie d'activation à l'inférence (seuil et k-WTA) sans aucun entraînement et mesurer la frontière (parcimonie, perplexité, événements/token) ; (2) rendre l'attention exprimable en
 … [267 caractères tronqués]
 
 ## 1. Ce qui a été demandé
@@ -95,6 +97,8 @@
 **Tour 34** — /home/stephane/Data13TB/stephane/GitHub/Qtrinet/journal doit inclure un automatisme qui produit un .md pour chaque session avec tous les détails qui permettent de reconstituer l'essence de la session et démontrer le travail accompli, étape par étape. Continue ensuite avec le balayage systématique des appariements croisés.
 
 **Tour 35** — attention pour ne pas se perdre à copier les autres et ne pas empiéter non plus sur mon autre programme de recherche https://github.com/stephanedenis/neuronspikes nous voulons ici continuer notre expérience avec des modèles préentrainés qui ont fait leur preuves et appliquer des techniques proche des SNN afin de les exécuter de façon radicalement différente. Nous évaluons les opportunités qui émer … [146 caractères tronqués]
+
+**Tour 36** — continue les améliorations
 
 ## 2. Déroulé, étape par étape
 
@@ -2021,7 +2025,7 @@ a = silu(u · x) · (v ·
 
 ### Tour 35 — attention pour ne pas se perdre à copier les autres et ne pas empiéter non plus sur mon autre programme de recherche htt … [426 caractères tronqués]
 
-*83 appels d'outils.* Actions notables :
+*85 appels d'outils.* Actions notables :
 
 - create_goal
 - bash — Read the activation quantizer
@@ -2037,11 +2041,68 @@ a = silu(u · x) · (v ·
 - bash — Implement and test homeostatic renormalization
 - bash — Retest renormalization with the flag not last
 - bash — Measure the real throughput gain from sparsity
-- … et 69 autres
+- … et 71 autres
 
 **Synthèse produite :**
 
-⏵ Validation complète : 14/14, tokens identiques, perplexité 24,8995. Je clôture et je vérifie l'état du dépôt
+⏵ Campagne terminée, tout est commité et le journal s'est mis à jour seul
+
+J'ai travaillé sur le programme principal : **modèle préentraîné, techniques proches des SNN, exécution radicalement différente, aucun entraînement, aucun empiètement** sur neuronspikes.
+
+\## Le résultat net
+
+**Attention à 32 clés + projection `gate` à 85 %** — configuration vérifiée sur un jeu tenu à l'écart :
+
+| | événements/token | PPL (A) | PPL (B) |
+|---|---|---|---|
+| référence | 354,3 M | 23,6125 | 26,2565 |
+| attention 32 clés | 354,3 M | 23,3279 (−1,21 %) | 26,1178 (−0,53 %) |
+| **+ `gate` à 85 %** | **338,8 M (−4,4 %)** | 23,2811 (−1,40 %) | 26,1417 (−0,44 %) |
+
+**On gagne sur les deux tableaux** — qualité *et* flux d'événements. Ce n'est pas un compromis.
+
+\## La frontière, mesurée
+
+Ce qui est **surabondant** se coupe gratuitement : les poids d'attention (n'en garder que 32 sur 256 **améliore** la perplexité — leurs petites valeurs sont du bruit, la distribution est exponentielle). Ce qui est **porteur** ne se coupe pas : Q et K (×2,2 à 50 % de rétention, ×36 à 25 %), les activations du FFN au-delà de 85 %, et le seuil absolu est **10× pire** que le k-WTA à sparsité égale.
+
+\## Le plus gros gain ne venait pas de la parcimonie
+
+En cherchant pourquoi le top-k ne rapportait aucun temps, j'ai trouvé que **l'attention tournait à 1,9 GFLOP/s sur un cœur** — ses boucles n'étaient pas vectorisées. Réécrites (produit scalaire en itérateurs, somme pondérée accumulée par clé), elle est passée de **11,5 à 5,7 ms** à perplexité rigoureusement identique.
+
+**Et quatre micro-optimisations rejetées par la mesure** : décodage par paquets de 4 (−28 %), accumulateurs i32 (+4 %, dans le bruit), contrôles de bornes retirés (+1,8 %, pire), renormalisation homéostatique (dégrade). La boucle d'événements résiste à tout ce que j'ai essayé — ses ~10 cycles par événement viennent d'ailleurs, probablement de la latence mémoire.
+
+\## Le fait qui borne tout
+
+Les trois papiers neuromorphiques atteignent **R̂ = 0,15** — 6,7× moins d'événements — avec une qualité comparable. Nous plafonnons à −4 à −15 % pour +0,5 % de perplexité. **L'écart est exactement le prix de l'entraînement** : un réseau entraîné à décharger place son information dans les quelques neurones qui tirent ; un réseau dense la répartit partout, et couper après coup détruit du signal. C'est cohérent avec tout ce que ce projet a mesuré, et ça confirme le verrou.
+
+\## Deux règles de méthode ajoutées au programme
+
+1. **Avant d'imposer une approxim
+… [673 caractères tronqués]
+
+### Tour 36 — continue les améliorations
+
+*15 appels d'outils.* Actions notables :
+
+- bash — Implement sliding-window attention with sinks
+- bash — Test sliding-window attention quality
+- bash — Fix and test sliding-window attention
+- bash — Score the sinks properly and retest
+- bash — Launch the long-context window sweep
+- bash — Wait for the long-context window results
+- bash — Clean performance measurement at low load
+- bash — Test target-cpu=native compilation
+- bash — Optimize the dense pull dot product and verify
+- bash — Apply and benchmark the dense pull mode
+- bash — Rigorously verify dense vs event mode equivalence
+- bash — Measure dense perplexity and final throughput
+- bash — Find the push/pull crossover by activation density
+- write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-croisement-push-pull.md`
+- … et 1 autres
+
+**Synthèse produite :**
+
+⏵ **Le croisement est à 10 % de densité d'activation.** C'est le résultat qui ordonne tout le projet — je le consigne
 
 ## 3. Travail accompli
 
@@ -2114,6 +2175,7 @@ a = silu(u · x) · (v ·
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-parcimonie-imposee.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-attention-creuse.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-campagne-parcimonie.md` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-croisement-push-pull.md` | 1 | 0 |
 
 ### Sous-agents lancés
 
@@ -2161,7 +2223,7 @@ a = silu(u · x) · (v ·
 - **T3** Test OpenOCD without root and check Pro device support
 - **T3** Make scripts executable and test jtag_scan
 - **T3** Commit JTAG milestone
-- … et 564 autres
+- … et 578 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2289,7 +2351,7 @@ a = silu(u · x) · (v ·
 
 ## 5. Erreurs rencontrées
 
-75 sorties en erreur ou divergentes. Les premières :
+76 sorties en erreur ou divergentes. Les premières :
 
 - **T2** : === LIEN PCIe (sysfs, sans root) === current_link_speed     = 8.0 GT/s PCIe current_link_width     = 8 max_link_speed         = 8.0 GT/s PCIe max_link_width         = 8 secondary_bus_number   =  vendo
 - **T2** : [POPUP: saisissez le mot de passe] === TOUS les événements USB depuis le boot (fin de log) === [ven sep 25 11:52:23 2026] [ T684749] hid-generic 0003:04F2:2159.00ED: hiddev99,hidraw5: USB HID v1.10 De
@@ -2337,4 +2399,5 @@ a = silu(u · x) · (v ·
 - Engine : les controles de bornes ne sont pas le goulot (mesure A/B)  Hypothese : les deux controles de bornes par evenement (data[p], data[p+1]) couteraient plu
 - Programme : lecons de la campagne de parcimonie et regle de methode  Quatre enseignements consignes dans le programme de recherche, dont un qui change la method
 - Journal : rafraîchissement de fin de campagne" 2>/dev/null || echo "(rien à committer)" git log --oneline | head -3
+- Croisement push/pull : l'architecture evenementielle est justifiee sous 10 % de densite  Deux facons d'executer le meme modele quantifie, a resultat RIGOUREUSEM
 

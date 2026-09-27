@@ -320,7 +320,7 @@ impl Pool {
                         let dst = &mut outs[id];
                         if dst.len() < d.n_out { dst.resize(d.n_out, 0.0); }
                         for o in lo..hi {
-                            dst[o] = d.dot(o, xv) as f32 * d.scale[o] * sx;
+                            dst[o] = d.dot_chunked(o, xv) as f32 * d.scale[o] * sx;
                         }
                         sh.done.fetch_add(1, Ordering::Release);
                         continue;

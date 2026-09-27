@@ -33,8 +33,8 @@ Questa ; chaîne Quartus Prime Standard 21.1.1 opérationnelle sur le vrai devic
 | Implémentation | ms/token | tok/s | Statut |
 |---|---|---|---|
 | numpy float32 + OpenBLAS (40 threads) | 132 | 7,6 | mesuré |
-| CPU, noyau dense int8 | 68 | 14,7 | mesuré |
-| **CPU, moteur d'événements** | **63** | **15,8** | **mesuré** |
+| CPU, moteur d'événements (push) | 64 | 15,6 | mesuré |
+| **CPU, noyau dense int8 (pull)** | **27** | **36,4** | **mesuré — après correction du produit scalaire** |
 | FPGA, 1 carte, 51 voies | ~73 | ~13,7 | *projeté* (PE et lecteur vérifiés et synthétisés) |
 | GPU, mode listes (atomics) | ~19,5 | ~51 | *déduit* de la dispersion mesurée |
 | **GPU, dense int8** | **~1,3** | **~770** | *déduit* de la bande passante mesurée |

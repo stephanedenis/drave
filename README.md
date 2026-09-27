@@ -25,6 +25,7 @@ Le cahier des charges d'origine est dans [`Qtrinet-bootstrap.md`](Qtrinet-bootst
 | **Bilan multi-matériel (CPU / FPGA / GPU)** | ✅ → [`reports/bilan-multi-materiel.md`](reports/bilan-multi-materiel.md) |
 | **Capteur hebbien (apprendre des logs d'activation)** | ✅ mesuré → [`reports/rapport-capteur-hebbien.md`](reports/rapport-capteur-hebbien.md) |
 | **Programme évolutif (journaliser, faire évoluer)** | ✅ évalué → [`reports/rapport-programme-evolutif.md`](reports/rapport-programme-evolutif.md) |
+| **Croisement push/pull à 10 % de densité** | ✅ mesuré → [`reports/rapport-croisement-push-pull.md`](reports/rapport-croisement-push-pull.md) |
 | **Greffon : plomberie d'apprentissage** | ✅ validé → [`reports/rapport-greffon.md`](reports/rapport-greffon.md) |
 | **Journal de sessions automatisé** | ✅ `tools/archive_sessions.py` (hook git + cron) |
 | **Comparaison Spiking (SpikeGPT / Spikformer / Spikingformer)** | ✅ → [`docs/comparaison-spiking.md`](docs/comparaison-spiking.md) |
@@ -346,7 +347,7 @@ cd qtrinet-core && cargo build --release
 | Justesse | **16 tokens sur 16 identiques** à la référence numpy float32 |
 | Perplexité WikiText-2 | **24,90** contre **25,00** pour numpy + OpenBLAS |
 | Comparaison | 132 ms/token pour numpy + OpenBLAS (40 threads) contre **95 ms** ici (16 threads) |
-| Coût de l'architecture | **+8 %** face à un noyau dense int8 équivalent, en lisant 36 % de mémoire en plus |
+| Coût de l'architecture | **×2,2 plus LENT** qu'un noyau dense int8 équivalent — mais **plus rapide en dessous de 10 % de densité d'activation** (voir [`reports/rapport-croisement-push-pull.md`](reports/rapport-croisement-push-pull.md)) |
 | Marge restante | 706 Mo/token à 10,4 Go/s sur 28,7 Go/s mesurés : **2,8× avant d'être borné par la mémoire** |
 
 **Deux compromis assumés :** la tête de sortie (151 936 sorties) est calculée par

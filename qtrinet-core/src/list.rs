@@ -361,6 +361,24 @@ impl DenseQ8 {
     /// une seule chaîne d'accumulation i64 coûte ~3 cycles par élément et
     /// domine tout le reste (mesuré : 8,5 tok/s contre 10,7 pour le moteur
     /// d'événements avant déroulage).
+    /// Produit scalaire avec accumulation i32 par tranches de 256, reportée en
+    /// i64 entre tranches. L'accumulation i64 sur toute la ligne empêchait
+    /// LLVM de vectoriser (conversion i8→i64 à chaque produit) ; la borne de
+    /// 256 garantit qu'aucune tranche ne débordé (127 × 32767 × 256 = 1,07e9).
+    #[inline]
+    pub fn dot_chunked(&self, o: usize, x: &[i32]) -> i64 {
+        let row = &self.q[o * self.n_in..(o + 1) * self.n_in];
+        let mut s = 0i64;
+        for bloc in row.chunks(256) {
+            let mut a = 0i32;
+            for i in 0..bloc.len() {
+                a += bloc[i] as i32 * x[i];
+            }
+            s += a as i64;
+        }
+        s
+    }
+
     #[inline]
     pub fn dot(&self, o: usize, x: &[i32]) -> i64 {
         let row = &self.q[o * self.n_in..(o + 1) * self.n_in];

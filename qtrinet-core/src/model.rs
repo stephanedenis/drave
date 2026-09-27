@@ -167,6 +167,12 @@ pub struct Model {
     /// O(d) par clé. Creuser Q et K rend ce produit scalaire creux — c'est la
     /// seule façon d'attaquer le poste dominant. 0 = désactivé.
     pub qk_topk: usize,
+    /// Fenêtre d'attention glissante : ne noter que les `attn_window` dernières
+    /// clés, plus `attn_sinks` jetons puits au début de la séquence.
+    /// 0 = attention complète. Si la qualité tient, le coût des scores cesse
+    /// d'être O(N) — c'est le seul moyen d'attaquer le poste dominant.
+    pub attn_window: usize,
+    pub attn_sinks: usize,
     /// Token d'arrêt (EOS / <|im_end|>) : la génération s'interrompt dessus.
     pub stop_id: Option<u32>,
     /// Postes de temps cumulés, en secondes (diagnostic).
@@ -319,6 +325,7 @@ impl Model {
             kv_k: vec![kv.clone(); n_layer], kv_v: vec![kv; n_layer],
             ctx, events: 0, act_levels: 127.0, act_thresh: 0.0, act_topk: 0, act_renorm: false,
             act_topk_proj: [0; 7], attn_topk: 0, attn_events: 0, qk_topk: 0,
+            attn_window: 0, attn_sinks: 4,
             stop_id: None, prof: [0.0; 6],
             patch: None, ffn_gain: None, hebb: None,
         }
@@ -532,11 +539,21 @@ impl Model {
                 // produit scalaire écrit en itérateurs : la forme indexée
                 // (`for d in 0..hd { s += qh[d]*kt[d] }`) ne se vectorise pas —
                 // mesuré à 1,9 GFLOP/s sur un cœur, soit 0,6 opération par cycle.
-                for t in 0..=pos {
+                // fenêtre glissante : seules les clés de la fenêtre sont notées,
+                // plus quelques puits au début (leur attention sert de drain).
+                let nw = pos + 1;
+                let lo = if self.attn_window > 0 && nw > self.attn_window {
+                    nw - self.attn_window
+                } else { 0 };
+                let ns = if lo > 0 { self.attn_sinks.min(lo) } else { 0 };
+                // les puits sont NOTÉS comme les autres : leur donner un score
+                // arbitraire (0) fausse la distribution au lieu de la drainer.
+                for t in (0..ns).chain(lo..nw) {
                     let kt = &kc[(kvh * ctx + t) * hd..(kvh * ctx + t) * hd + hd];
                     let s: f32 = qh.iter().zip(kt.iter()).map(|(a, b)| a * b).sum();
                     sc[t] = s * scale;
                 }
+                for t in ns..lo { sc[t] = f32::NEG_INFINITY; }
                 // Attention à k clés. Le CALCUL DES SCORES reste sur toutes les
                 // clés — il faut les noter pour savoir lesquelles garder. En
                 // revanche le softmax ET la somme pondérée n'itèrent plus que sur
@@ -544,6 +561,28 @@ impl Model {
                 // réécrire les boucles ne gagnait rien (mesuré : 12,4 → 12,5 ms).
                 let n = pos + 1;
                 let k = if self.attn_topk > 0 { self.attn_topk.min(n) } else { n };
+                if self.attn_window > 0 {
+                    // pas de top-k : on note exactement les clés de la fenêtre
+                    attn_idx.clear();
+                    let ns = if lo > 0 { self.attn_sinks.min(lo) } else { 0 };
+                    attn_idx.extend((0..ns as u32).chain(lo as u32..n as u32));
+                    let iter: &[u32] = &attn_idx;
+                    self.attn_events += iter.len() as u64;
+                    let mut mx = f32::NEG_INFINITY;
+                    for &t in iter { let v = sc[t as usize]; if v > mx { mx = v; } }
+                    let mut sum = 0f32;
+                    for &t in iter { let e = (sc[t as usize] - mx).exp(); sc[t as usize] = e; sum += e; }
+                    let inv = 1.0 / sum;
+                    for &t in iter { sc[t as usize] *= inv; }
+                    let out = &mut att[hh * hd..(hh + 1) * hd];
+                    for v in out.iter_mut() { *v = 0.0; }
+                    for &t in iter {
+                        let w = sc[t as usize];
+                        let vt = &vc[(kvh * ctx + t as usize) * hd..(kvh * ctx + t as usize) * hd + hd];
+                        for (o, x) in out.iter_mut().zip(vt.iter()) { *o += w * x; }
+                    }
+                    continue;
+                }
                 attn_idx.clear();
                 if k < n {
                     attn_idx.extend(0..n as u32);

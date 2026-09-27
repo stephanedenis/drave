@@ -199,6 +199,8 @@ fn run_infer(args: &[String]) {
     let mut hebb_out = String::from("hebb.bin");
     let mut ids_file: Option<String> = None;
     let mut qk_topk = 0usize;
+    let mut attn_window = 0usize;
+    let mut attn_sinks = 4usize;
     let mut attn_topk = 0usize;
     let mut patch_file: Option<String> = None;
     let mut act_thresh = 0.0f32;
@@ -238,6 +240,8 @@ fn run_infer(args: &[String]) {
             "--topk-down" => topk_proj[6] = args[i + 1].parse().unwrap(),
             "--attn-topk" => attn_topk = args[i + 1].parse().unwrap(),
             "--qk-topk" => qk_topk = args[i + 1].parse().unwrap(),
+            "--attn-window" => attn_window = args[i + 1].parse().unwrap(),
+            "--attn-sinks" => attn_sinks = args[i + 1].parse().unwrap(),
             "--patch" => patch_file = Some(args[i + 1].clone()),
             "--threads" => n_threads = args[i + 1].parse().unwrap(),
             "--chat" => { chat = true; i -= 1; }
@@ -415,6 +419,8 @@ fn run_ppl(args: &[String]) {
     let mut topk_proj = [0usize; 7];
     let mut attn_topk = 0usize;
     let mut qk_topk = 0usize;
+    let mut attn_window = 0usize;
+    let mut attn_sinks = 4usize;
     let cpu = std::thread::available_parallelism().map(|n| n.get()).unwrap_or(8);
     let mut n_threads = (cpu * 3 / 4).max(1);
     let mut i = 2;
@@ -434,6 +440,8 @@ fn run_ppl(args: &[String]) {
             "--topk-down" => topk_proj[6] = args[i + 1].parse().unwrap(),
             "--attn-topk" => attn_topk = args[i + 1].parse().unwrap(),
             "--qk-topk" => qk_topk = args[i + 1].parse().unwrap(),
+            "--attn-window" => attn_window = args[i + 1].parse().unwrap(),
+            "--attn-sinks" => attn_sinks = args[i + 1].parse().unwrap(),
             "--abits" => abits = args[i + 1].parse().unwrap(),
             "--hebbian" => hebb_layer = Some(args[i + 1].parse().unwrap()),
             "--patch" => patch_file = Some(args[i + 1].clone()),
@@ -453,6 +461,8 @@ fn run_ppl(args: &[String]) {
             "--topk-down" => topk_proj[6] = args[i + 1].parse().unwrap(),
             "--attn-topk" => attn_topk = args[i + 1].parse().unwrap(),
             "--qk-topk" => qk_topk = args[i + 1].parse().unwrap(),
+            "--attn-window" => attn_window = args[i + 1].parse().unwrap(),
+            "--attn-sinks" => attn_sinks = args[i + 1].parse().unwrap(),
             "--threads" => n_threads = args[i + 1].parse().unwrap(),
             _ => {}
         }
@@ -485,6 +495,8 @@ fn run_ppl(args: &[String]) {
     mdl.act_topk_proj = topk_proj;
     mdl.attn_topk = attn_topk;
     mdl.qk_topk = qk_topk;
+    mdl.attn_window = attn_window;
+    mdl.attn_sinks = attn_sinks;
     if act_thresh > 0.0 || act_topk > 0 {
         println!("parcimonie imposée : seuil {:.1} % du max{}",
                  act_thresh * 100.0,
