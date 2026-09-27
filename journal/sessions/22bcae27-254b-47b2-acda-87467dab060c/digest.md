@@ -21206,3 +21206,54 @@ k=50 (densité 5%)  | pull (0 événements, 9.1 s) | auto (4526494712 événemen
 ⏵ Dispatch validé en conditions réelles : dense au-dessus de 22 %, push en dessous (×1,47 à 5 % de densité). Je consigne et je commite
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\npython3 - <<'PY'\np='reports/rapport-croisement-push-pull.md'; s=open(p,encoding='utf-8').read()\nold='''## 4. Ce que ça change concrètement'''\nassert s.count(old)==1\ns=s.replace(old,'''## 3 bis. Le dispatch par mesure, vérifié en co … [2782 caractères tronqués]`
+
+  ```
+2290ab9 Croisement push/pull remesuré, equivalence bit a bit, chemin 4 bits AVX2
+5d4efca Croisement push/pull : l'architecture evenementielle est justifiee sous 10 % de densite
+d2fe290 Journal : rafraîchissement de fin de campagne
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\nhead -40 journal/README.md 2>/dev/null\necho \"=== archive_sessions usage\"\nhead -30 tools/archive_sessions.py", "description": "Check journal automation usage"}`
+
+  ```
+# Journal des sessions
+
+Un rapport par session, régénéré automatiquement à chaque commit et
+chaque heure (`tools/session_report.py`). Le rapport reconstitue l'essence
+de la session ; le `digest.md` voisin en donne le verbatim complet.
+
+| Session | Titre | Début | Durée | Tours | Outils | Fichiers | Commits | Rapport |
+|---|---|---|---|---|---|---|---|---|
+| `22bcae27` | Étude de Qtrinet-bootstrap.md | 2026-09-25 11:56 | 55.5 h | 36 | 954 | 66 | 30 | [rapport](sessions/22bcae27-254b-47b2-acda-87467dab060c/rapport.md) |
+| `27c99b10` | Tu écris un tokenizer BPE | 2026-09-25 19:40 | 0.2 h | 1 | 54 | 1 | 0 | [rapport](sessions/27c99b10-c57e-4599-a23a-f7b1a54c17a1/rapport.md) |
+=== archive_sessions usage
+#!/usr/bin/env python3
+"""Archive les sessions DSH de ce projet.
+
+Trois sorties, dans `journal/sessions/` :
+
+  <id>/digest.md          relecture lisible et *versionnable* de la session :
+                          tours, messages, appels d'outils, résultats tronqués,
+                          compactages et changements d'objectif. Régénéré à
+                          chaque passage — donc idempotent, et le diff git ne
+                          montre que ce qui est nouveau.
+  <id>/session
+… [638 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\npython3 tools/archive_sessions.py --quiet 2>&1 | tail -5\npython3 tools/session_report.py 2>&1 | tail -8\ngit status --short | head -10", "description": "Run the journal automation", "timeoutMs": 600000}`
+
+  ```
+22bcae27 : rapport 141 Ko, 36 tours, 66 fichiers, 1458 mesures, 87 erreurs
+  27c99b10 : rapport 8 Ko, 1 tours, 1 fichiers, 17 mesures, 4 erreurs
+ M journal/README.md
+ M journal/sessions/22bcae27-254b-47b2-acda-87467dab060c/digest.md
+ M journal/sessions/22bcae27-254b-47b2-acda-87467dab060c/rapport.md
+ M journal/sessions/MANIFEST.md
+  ```
+
+### 🤖 Assistant
+
+⏵ Le journal est à jour. Prochaine étape utile : faire tourner un **vrai** modèle 4 bits (Q4_0 déjà présent) plutôt que notre requantification
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\ngit add -A && git commit -q -m \"Journal : session du 27/09 (croisement remesure, chemin 4 bits)\" && git log --oneline | head -2\ncd qtrinet-core\ngrep -n \"fn q8_view\\|fn dequant\\|fn raw_levels\\|q8_dot_at\\|ggml_type\\|fn qtype\"  … [85 caractères tronqués]`

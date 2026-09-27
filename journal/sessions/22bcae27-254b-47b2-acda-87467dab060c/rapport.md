@@ -7,12 +7,12 @@
 | Début | 2026-09-25 11:56 |
 | Durée | 55.5 h |
 | Tours | 36 |
-| Messages | 939 |
-| Appels d'outils | 954 |
+| Messages | 942 |
+| Appels d'outils | 957 |
 | Fichiers touchés | 66 |
-| Commandes | 717 |
+| Commandes | 720 |
 | Sous-agents | 1 |
-| Commits | 30 |
+| Commits | 31 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -2082,7 +2082,7 @@ Les trois papiers neuromorphiques atteignent **R̂ = 0,15** — 6,7× moins d'é
 
 ### Tour 36 — continue les améliorations
 
-*123 appels d'outils.* Actions notables :
+*126 appels d'outils.* Actions notables :
 
 - bash — Implement sliding-window attention with sinks
 - bash — Test sliding-window attention quality
@@ -2098,11 +2098,11 @@ Les trois papiers neuromorphiques atteignent **R̂ = 0,15** — 6,7× moins d'é
 - bash — Measure dense perplexity and final throughput
 - bash — Find the push/pull crossover by activation density
 - write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-croisement-push-pull.md`
-- … et 105 autres
+- … et 108 autres
 
 **Synthèse produite :**
 
-⏵ Dispatch validé en conditions réelles : dense au-dessus de 22 %, push en dessous (×1,47 à 5 % de densité). Je consigne et je commite
+⏵ Le journal est à jour. Prochaine étape utile : faire tourner un **vrai** modèle 4 bits (Q4_0 déjà présent) plutôt que notre requantification
 
 ## 3. Travail accompli
 
@@ -2223,7 +2223,7 @@ Les trois papiers neuromorphiques atteignent **R̂ = 0,15** — 6,7× moins d'é
 - **T3** Test OpenOCD without root and check Pro device support
 - **T3** Make scripts executable and test jtag_scan
 - **T3** Commit JTAG milestone
-- … et 677 autres
+- … et 680 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2401,4 +2401,5 @@ Les trois papiers neuromorphiques atteignent **R̂ = 0,15** — 6,7× moins d'é
 - Journal : rafraîchissement de fin de campagne" 2>/dev/null || echo "(rien à committer)" git log --oneline | head -3
 - Croisement push/pull : l'architecture evenementielle est justifiee sous 10 % de densite  Deux facons d'executer le meme modele quantifie, a resultat RIGOUREUSEM
 - Croisement push/pull remesuré, equivalence bit a bit, chemin 4 bits AVX2  Trois bugs corriges, dont deux qui faussaient des conclusions : - while i + 1 < args.l
+- Journal : session du 27/09 (croisement remesure, chemin 4 bits)" && git log --oneline | head -2 cd qtrinet-core grep -n "fn q8_view\|fn dequant\|fn raw_levels\|
 
