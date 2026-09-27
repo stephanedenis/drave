@@ -121,7 +121,12 @@ impl Proj {
         // de la densité d'activation, entre dispersion (push) et produit
         // scalaire dense (pull). Le croisement mesuré est à 10 %.
         let (m, d, q4v) = if q4 {
-            (None, None, Some(DenseQ4::build(&w, n_out, n_in)))
+            // Source déjà en Q4_0 : on importe les blocs tels quels. Sinon on
+            // quantifie depuis les f32 (une seule couche d'erreur, pas deux).
+            match g.q4_blocks(name) {
+                Some((buf, nb)) => (None, None, Some(DenseQ4::import_q4_0(buf, n_out, n_in, nb))),
+                None => (None, None, Some(DenseQ4::build(&w, n_out, n_in))),
+            }
         } else if dense {
             (None, Some(DenseQ8::build(&w, n_out, n_in)), None)
         } else if auto {
@@ -343,10 +348,12 @@ impl Model {
         // gain possible sur un noyau déjà au mur de la bande passante.
         let head4 = if q4 & 4 != 0 {
             let t0 = Instant::now();
-            let w = g.dequant("token_embd.weight");
             let v = cfg.vocab;
             let h = cfg.hidden;
-            let d = DenseQ4::build(&w, v, h);
+            let d = match g.q4_blocks("token_embd.weight") {
+                Some((buf, nb)) => DenseQ4::import_q4_0(buf, v, h, nb),
+                None => DenseQ4::build(&g.dequant("token_embd.weight"), v, h),
+            };
             println!("[tête 4 bits] {} × {} → {:.2} b/poids, {:.0} Mo, {:.1} s",
                      v, h, d.bits_per_weight(),
                      (d.q.len() + d.sc.len()) as f64 / 1e6, t0.elapsed().as_secs_f64());

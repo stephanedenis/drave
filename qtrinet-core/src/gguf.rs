@@ -267,6 +267,17 @@ impl Gguf {
         Q8View { base: self.data_start + t.offset as usize, n_cols, nb: n_cols / 32, q4 }
     }
 
+    /// Blocs Q4_0 bruts d'un tenseur : `(octets à partir du premier bloc, nb de
+    /// blocs par ligne)`. Permet d'importer les poids **tels quels**, sans les
+    /// déquantifier puis les requantifier — le double arrondi coûtait +18 % de
+    /// perplexité sur Qwen2.5-0.5B (19,86 → 21,98).
+    pub fn q4_blocks(&self, name: &str) -> Option<(&[u8], usize)> {
+        let t = self.tensor(name)?;
+        if t.ttype != GGML_Q4_0 { return None; }
+        let nb = t.dims[1] as usize / 32;
+        Some((&self.buf[self.data_start + t.offset as usize..], nb))
+    }
+
     /// Produit scalaire d'une ligne via une vue pré-résolue (Q8_0 ou Q4_0).
     #[inline]
     pub fn q8_dot_at(&self, v: &Q8View, row: usize, qx: &[i16]) -> f32 {

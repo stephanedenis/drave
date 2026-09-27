@@ -127,13 +127,50 @@ Trois faits, dont deux contre-intuitifs :
    perplexité**. Sur un modèle de 0,5 G, c'est le prix connu des petits modèles en
    4 bits.
 
+## 5 bis. Un VRAI modèle 4 bits, et la leçon de la double quantification
+
+`models/Qwen2.5-0.5B-Q4_0.gguf` est un modèle 4 bits qui a fait ses preuves ; le
+lecteur GGUF savait déjà décoder Q4_0, mais le moteur le **requantifiait** (f32 →
+int8, ou f32 → notre 4 bits), c'est-à-dire ajoutait une seconde couche d'erreur à
+une source déjà quantifiée.
+
+D'où l'import **verbatim** : les blocs Q4_0 (échelle f16 + 16 octets de nibbles)
+sont recopiés dans la disposition interne, sans jamais repasser par les f32.
+510 jetons, contexte 256, activations int16, 16 threads :
+
+| modèle | noyau | PPL | écart | s | tok/s |
+|---|---|---|---|---|---|
+| Qwen2.5-0.5B **Q8_0** | int8 | **19,2647** | — | 17,7 | 28,8 |
+| Qwen2.5-0.5B **Q4_0** | int8 (requantifié) | 21,1971 | +10,0 % | 18,2 | 28,0 |
+| Qwen2.5-0.5B **Q4_0** | **4 bits verbatim** | 21,0116 | **+9,1 %** | **13,2** | **38,6** |
+
+Deux résultats :
+
+1. **Le prix réel des 4 bits sur ce modèle est +9,1 % de perplexité** — pas les
+   +26 % mesurés en requantifiant depuis Q8_0. La double quantification était le
+   vrai coupable : elle coûtait 12 % de perplexité *en plus* du format.
+2. **Le noyau 4 bits est plus fidèle ET plus rapide que l'int8 sur les mêmes
+   poids** : 21,01 contre 21,20 de perplexité (il ne requantifie pas) et 13,2
+   contre 18,2 s. Un noyau 4 bits n'est pas un compromis ; c'est la
+   représentation **native** de ces poids.
+
+Un détail qui a coûté une mesure : en Q4_0 l'échelle de bloc est **signée**
+(`d = max/−8`, où `max` est la valeur *signée* de plus grande amplitude), donc
+`d < 0` dès que le poids extrême du bloc est positif. Stocker sa valeur absolue
+a donné PPL 3 550 569 avant correction.
+
 ## 6. Conclusion honnête
 
 - Le défaut reste **int8 dense** : c'est le meilleur rapport qualité/débit, et
   c'est désormais le même résultat qu'en mode événementiel, au bit près.
-- `--q4` (corps en 4 bits) est **le seul levier qui reste** une fois le noyau au
-  mur mémoire : ×1,39 sur un CPU dont la mémoire plafonne à 20 Go/s. Il se
-  paiera sur un modèle où le FFN domine davantage, ou avec un noyau AVX-512.
+- **Pour un modèle 4 bits qui existe déjà** (Q4_0), le chemin `--q4` est le bon
+  choix sans hésitation : ×1,34 de débit **et** une perplexité légèrement
+  meilleure que l'int8, parce qu'il ne requantifie pas.
+- **Pour un modèle 8 bits**, requantifier en 4 bits coûte +26 % de perplexité :
+  à ne faire que si le débit est la contrainte, jamais par défaut. Le levier
+  reste réel — c'est le seul qui subsiste quand la mémoire plafonne à 20 Go/s —
+  et il se paiera mieux sur un modèle où le FFN domine davantage, ou avec un
+  noyau AVX-512.
 - `--q4-attn` et `--q4-tout` sont conservés comme **résultats négatifs** : ils
   sont lents et/ou dégradent sans rien acheter.
 
@@ -158,4 +195,12 @@ for f in --dense --q4-attn --q4-ffn --q4; do
   ./target/release/qtrinet-core $B --ppl /tmp/wt2_ids.txt --ctx 256 --abits 16 \
      --threads 16 --limit 256 $f | grep "perplexité"
 done
+```
+
+Et sur le modèle 4 bits lui-même :
+
+```bash
+Q=../models/Qwen2.5-0.5B-Q4_0.gguf
+./target/release/qtrinet-core $Q --ppl /tmp/wt2_ids.txt --ctx 256 --abits 16 --threads 16 --limit 512 --dense
+./target/release/qtrinet-core $Q --ppl /tmp/wt2_ids.txt --ctx 256 --abits 16 --threads 16 --limit 512 --q4
 ```

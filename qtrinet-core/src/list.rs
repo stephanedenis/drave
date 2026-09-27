@@ -439,7 +439,12 @@ pub struct DenseQ4 {
     pub n_in: usize,
     pub n_out: usize,
     pub q: Vec<u8>,        // n_out × ⌈n_in/2⌉, deux nibbles biaisés (+8) par octet
-    pub sc: Vec<u16>,      // n_out × ⌈n_in/BLOC_Q4⌉ échelles de bloc, relatives
+    /// n_out × ⌈n_in/BLOC_Q4⌉ échelles de bloc, **relatives et signées**
+    /// (i16 stocké en u16). Le signe compte : Q4_0 écrit `d = max/−8` où `max`
+    /// est la valeur signée de plus grande amplitude, donc `d` est négatif dès
+    /// que le poids extrême du bloc est positif. Prendre la valeur absolue
+    /// donnait PPL 3 550 569 au lieu de 19,86.
+    pub sc: Vec<u16>,
     pub scale: Vec<f32>,   // une par sortie : la plus grande échelle de bloc
 }
 
@@ -470,7 +475,7 @@ impl DenseQ4 {
                 // bloc dix fois plus faible que le maximum de la ligne n'était
                 // décrit qu'à 4 % près — mesuré PPL 17,10 contre 14,70 en int8,
                 // un coût de qualité qui n'a rien à voir avec les 4 bits eux-mêmes.
-                let u = (65535.0 * sb[b] / rs).round().clamp(1.0, 65535.0);
+                let u = (32767.0 * sb[b] / rs).round().clamp(1.0, 32767.0);
                 sc[o * n_bloc + b] = u as u16;
                 let inv = 1.0 / sb[b];
                 let (lo, hi) = (b * BLOC_Q4, ((b + 1) * BLOC_Q4).min(n_in));
@@ -479,6 +484,53 @@ impl DenseQ4 {
                     let nib = (r + 8) as u8;          // 0..15, biaisé
                     let idx = o * half + i / 2;
                     if i % 2 == 0 { q[idx] |= nib; } else { q[idx] |= nib << 4; }
+                }
+            }
+        }
+        DenseQ4 { n_in, n_out, q, sc, scale }
+    }
+
+    /// Importe des blocs **Q4_0 verbatim** (18 octets : une échelle f16 puis
+    /// 16 octets de nibbles) dans la disposition interne.
+    ///
+    /// Q4_0 range le poids `j` dans le nibble bas de l'octet `j` et le poids
+    /// `j+16` dans le nibble haut du même octet ; ici les nibbles sont
+    /// entrelacés (octet `k` = poids `2k` et `2k+1`). Les échelles f16 sont
+    /// réencodées en u16 relatif (erreur 1/65535, négligeable).
+    ///
+    /// C'est ce qui rend le chemin 4 bits **fidèle** : importer n'ajoute aucune
+    /// erreur de quantification, là où déquantifier en f32 puis requantizer en
+    /// ajoutait une seconde couche.
+    pub fn import_q4_0(buf: &[u8], n_out: usize, n_in: usize, nb_ligne: usize) -> Self {
+        let half = n_in.div_ceil(2);
+        let n_bloc = n_in.div_ceil(BLOC_Q4);
+        let mut q = vec![0u8; n_out * half];
+        let mut sc = vec![1u16; n_out * n_bloc];
+        let mut scale = vec![1f32; n_out];
+        let mut dbloc = vec![0f32; n_bloc];
+        for o in 0..n_out {
+            let mut rs = 0f32;
+            for b in 0..n_bloc.min(nb_ligne) {
+                let p = (o * nb_ligne + b) * 18;
+                let d = crate::gguf::Gguf::f16_to_f32(
+                    u16::from_le_bytes([buf[p], buf[p + 1]]));
+                dbloc[b] = d;
+                if d.abs() > rs { rs = d.abs(); }
+            }
+            if rs <= 0.0 { rs = 1.0; }
+            scale[o] = rs;
+            for b in 0..n_bloc.min(nb_ligne) {
+                // Signe conservé : `d` peut être négatif (cf. Q4_0).
+                let u = (32767.0 * dbloc[b] / rs).round();
+                let u = if u.abs() < 1.0 { if dbloc[b] < 0.0 { -1.0 } else { 1.0 } } else { u };
+                sc[o * n_bloc + b] = u.clamp(-32767.0, 32767.0) as i16 as u16;
+                let p = (o * nb_ligne + b) * 18 + 2;
+                let lo = b * BLOC_Q4;
+                let hi = ((b + 1) * BLOC_Q4).min(n_in);
+                for i in lo..hi {
+                    let src = if i < lo + 16 { buf[p + (i - lo)] & 0x0F } else { buf[p + (i - lo) - 16] >> 4 };
+                    let idx = o * half + i / 2;
+                    if i % 2 == 0 { q[idx] |= src; } else { q[idx] |= src << 4; }
                 }
             }
         }
@@ -513,7 +565,7 @@ impl DenseQ4 {
                 i += 2;
             }
             if i < hi { a += ((row[i / 2] as u32 & 15) as i32 - 8) * x[i]; }
-            sum += a as f32 * (rs * scb[b] as f32 * (1.0 / 65535.0));
+            sum += a as f32 * (rs * scb[b] as i16 as f32 * (1.0 / 32767.0));
         }
         sum
     }
@@ -578,7 +630,7 @@ impl DenseQ4 {
             _mm256_storeu_si256(tmp.as_mut_ptr() as *mut __m256i, p);
             let a = (tmp[0] + tmp[1] + tmp[2] + tmp[3]
                    + tmp[4] + tmp[5] + tmp[6] + tmp[7]) as f32;
-            sum += a * (rs * *scb.add(b) as f32 * (1.0 / 65535.0));
+            sum += a * (rs * *scb.add(b) as i16 as f32 * (1.0 / 32767.0));
         }
         sum
     }

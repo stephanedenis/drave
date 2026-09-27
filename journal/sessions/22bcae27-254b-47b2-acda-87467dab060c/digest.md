@@ -21257,3 +21257,160 @@ Trois sorties, dans `journal/sessions/` :
 ⏵ Le journal est à jour. Prochaine étape utile : faire tourner un **vrai** modèle 4 bits (Q4_0 déjà présent) plutôt que notre requantification
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\ngit add -A && git commit -q -m \"Journal : session du 27/09 (croisement remesure, chemin 4 bits)\" && git log --oneline | head -2\ncd qtrinet-core\ngrep -n \"fn q8_view\\|fn dequant\\|fn raw_levels\\|q8_dot_at\\|ggml_type\\|fn qtype\"  … [85 caractères tronqués]`
+
+  ```
+0a67514 Journal : session du 27/09 (croisement remesure, chemin 4 bits)
+2290ab9 Croisement push/pull remesuré, equivalence bit a bit, chemin 4 bits AVX2
+174:    pub fn raw_levels(&self, name: &str) -> Vec<i8> {
+259:    pub fn q8_view(&self, name: &str) -> Q8View {
+272:    pub fn q8_dot_at(&self, v: &Q8View, row: usize, qx: &[i16]) -> f32 {
+306:    pub fn dequant(&self, name: &str) -> Vec<f32> {
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\nsed -n '160,200p' src/gguf.rs; echo \"...\"; sed -n '250,330p' src/gguf.rs", "description": "Read the Q8_0 accessors and dequant"}`
+
+  ```
+let mut e = 127 - 15 + 1;
+                let mut m = man;
+                while m & 0x400 == 0 { m <<= 1; e -= 1; }
+                (sign << 31) | ((e as u32) << 23) | ((m & 0x3FF) << 13)
+            }
+        } else if exp == 31 {
+            (sign << 31) | (0xFF << 23) | (man << 13)
+        } else {
+            (sign << 31) | ((exp + 127 - 15) << 23) | (man << 13)
+        };
+        f32::from_bits(bits)
+    }
+
+    /// Niveaux entiers bruts (avant mise à l'échelle) pour Q4_0 / Q8_0.
+    pub fn raw_levels(&self, name: &str) -> Vec<i8> {
+        let t = self.tensor(name).expect("tenseur absent");
+        let base = self.data_start + t.offset as usize;
+        let n = t.nelem();
+        let mut out = Vec::with_capacity(n);
+        match t.ttype {
+            GGML_Q8_0 => {
+                let nb = n / 32;
+                for b in 0..nb {
+                    let p = base + b * 34;
+                    for j in 0..32 { out.push(self.buf[p + 2 + j] as i8); }
+                }
+            }
+            GGML_Q4_0 => {
+                let nb = n / 32;
+                for b in 0..nb {
+                    let p = base + b * 18;
+                    for j in 0..16 {
+                        let
+… [3647 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Le lecteur GGUF gère **déjà Q4_0** : je peux faire tourner le vrai modèle 4 bits immédiatement
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\nQ8=../models/Qwen2.5-0.5B-Q8_0.gguf\nQ4=../models/Qwen2.5-0.5B-Q4_0.gguf\nrun() { ./target/release/qtrinet-core $2 --ppl /tmp/wt2_ids.txt --ctx 256 --abits 16 --threads 16 \\\n        --limit 256 $3 2>&1 | grep -E \"perple … [251 caractères tronqués]`
+
+  ```
+[Q8 source, int8 ] === perplexité 17.4092 sur 255 tokens (0 événements, 8.9 s) ===
+[Q8 source, int8 ]     postes (ms/token) : projets-attn 2.52 | rope 0.55 | attention 3.09 | proj+mlp 21.74 | somme 27.91 | reste (tête + échantillonnage) 7.04
+[Q4 source, int8 ] === perplexité 19.8586 sur 255 tokens (0 événements, 9.4 s) ===
+[Q4 source, int8 ]     postes (ms/token) : projets-attn 2.65 | rope 0.57 | attention 3.19 | proj+mlp 23.41 | somme 29.83 | reste (tête + échantillonnage) 6.92
+[Q4 source, 4bits] === perplexité 21.9797 sur 255 tokens (0 événements, 6.4 s) ===
+[Q4 source, 4bits]     postes (ms/token) : projets-attn 1.89 | rope 0.37 | attention 3.16 | proj+mlp 12.98 | somme 18.41 | reste (tête + échantillonnage) 6.88
+  ```
+
+### 🤖 Assistant
+
+⏵ La re-quantification 4 bits coûte +18 % de plus que le vrai Q4_0 : j'importe les blocs Q4_0 **verbatim** au lieu de les requantifier
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\ngrep -n \"GGML_Q4_0\\|fn f16_to_f32\\|pub struct Q8View\" src/gguf.rs | head", "description": "Check visibility of Q4_0 helpers"}`
+
+  ```
+55:pub const GGML_Q4_0: u32 = 2;
+60:pub struct Q8View { pub base: usize, pub n_cols: usize, pub nb: usize, pub q4: bool }
+153:    pub fn f16_to_f32(h: u16) -> f32 {
+187:            GGML_Q4_0 => {
+232:            GGML_Q4_0 => {
+263:            GGML_Q4_0 => true,
+330:            GGML_Q4_0 => {
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\npython3 - <<'PY'\np='src/gguf.rs'; s=open(p,encoding='utf-8').read(); o=s\nold='''    /// Produit scalaire d'une ligne via une vue pré-résolue (Q8_0 ou Q4_0).'''\nassert s.count(old)==1\ns=s.replace(old,'''    /// Blocs Q4 … [3297 caractères tronqués]`
+
+  ```
+=== build
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\npython3 - <<'PY'\np='src/model.rs'; s=open(p,encoding='utf-8').read(); o=s\nold='''        let (m, d, q4v) = if q4 {\n            (None, None, Some(DenseQ4::build(&w, n_out, n_in)))\n        } else if dense {'''\nassert s. … [1639 caractères tronqués]`
+
+  ```
+[Q8 int8       ] === perplexité 17.4092 sur 255 tokens (0 événements, 9.3 s) ===
+[Q4 int8       ] === perplexité 19.8586 sur 255 tokens (0 événements, 9.1 s) ===
+[Q4 4bits imp. ] === perplexité 3550568.9761 sur 255 tokens (0 événements, 6.5 s) ===
+[Q4 4bits tête ] === perplexité 3163803.6732 sur 255 tokens (0 événements, 8.7 s) ===
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\nsed -n '/pub fn import_q4_0/,/^    }/p' src/list.rs", "description": "Print the import function to audit it"}`
+
+  ```
+pub fn import_q4_0(buf: &[u8], n_out: usize, n_in: usize, nb_ligne: usize) -> Self {
+        let half = n_in.div_ceil(2);
+        let n_bloc = n_in.div_ceil(BLOC_Q4);
+        let mut q = vec![0u8; n_out * half];
+        let mut sc = vec![1u16; n_out * n_bloc];
+        let mut scale = vec![1f32; n_out];
+        let mut dbloc = vec![0f32; n_bloc];
+        for o in 0..n_out {
+            let mut rs = 0f32;
+            for b in 0..n_bloc.min(nb_ligne) {
+                let p = (o * nb_ligne + b) * 18;
+                let d = crate::gguf::Gguf::f16_to_f32(
+                    u16::from_le_bytes([buf[p], buf[p + 1]]));
+                dbloc[b] = d;
+                if d.abs() > rs { rs = d.abs(); }
+            }
+            if rs <= 0.0 { rs = 1.0; }
+            scale[o] = rs;
+            for b in 0..n_bloc.min(nb_ligne) {
+                sc[o * n_bloc + b] = (65535.0 * dbloc[b].abs() / rs).round().clamp(1.0, 65535.0) as u16;
+                let p = (o * nb_ligne + b) * 18 + 2;
+                let lo = b * BLOC_Q4;
+                let hi = ((b + 1) * BLOC_Q4).min(n_in);
+                for i in lo..hi {
+                    let src = if i < lo + 16 { buf[p + (i - lo)] & 0x0F } else { buf[p
+… [249 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Bug trouvé : en Q4_0 l'échelle de bloc est **signée** (`d = max/−8`) ; je stockais sa valeur absolue. Je passe les échelles en i16 relatif signé
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\npython3 - <<'PY'\np='src/list.rs'; s=open(p,encoding='utf-8').read(); o=s\ns=s.replace('''    pub sc: Vec<u16>,      // n_out × ⌈n_in/BLOC_Q4⌉ échelles de bloc, relatives''',\n'''    /// n_out × ⌈n_in/BLOC_Q4⌉ échelles de  … [2802 caractères tronqués]`
+
+  ```
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+[Q8 int8       ] === perplexité 17.4092 sur 255 tokens (0 événements, 9.9 s) ===
+[Q4 int8       ] === perplexité 19.8586 sur 255 tokens (0 événements, 9.8 s) ===
+[Q4 4bits imp. ] === perplexité 19.6708 sur 255 tokens (0 événements, 6.9 s) ===
+  ```
+
+### 🤖 Assistant
+
+⏵ Import fidèle : PPL 19,67 (identique à la source) contre 21,98 en requantifiant. Je consolide sur 512 jetons
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\nQ8=../models/Qwen2.5-0.5B-Q8_0.gguf; Q4=../models/Qwen2.5-0.5B-Q4_0.gguf\nrun() { ./target/release/qtrinet-core $2 --ppl /tmp/wt2_ids.txt --ctx 256 --abits 16 --threads 16 \\\n        --limit 512 $3 2>&1 | grep -E \"=== pe … [258 caractères tronqués]`
+
+  ```
+[Q8_0, noyau int8 ] === perplexité 19.2647 sur 510 tokens (0 événements, 17.7 s) ===
+[Q4_0, noyau int8 ] === perplexité 21.1971 sur 510 tokens (0 événements, 18.2 s) ===
+[Q4_0, noyau 4 bits] === perplexité 21.0116 sur 510 tokens (0 événements, 13.2 s) ===
+  ```
+
+### 🤖 Assistant
+
+⏵ Résultat de fond : le **vrai** Q4_0 tourne à 38,6 tok/s pour +9,1 % de PPL, et le noyau 4 bits est plus fidèle que l'int8 sur ces mêmes poids. Je consigne
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\npython3 - <<'PY'\np='reports/rapport-mur-memoire-4bits.md'; s=open(p,encoding='utf-8').read()\nold='''## 6. Conclusion honnête'''\nassert s.count(old)==1\ns=s.replace(old,'''## 5 bis. Un VRAI modèle 4 bits, et la leçon de la double qua … [4326 caractères tronqués]`
