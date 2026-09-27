@@ -28,6 +28,7 @@ Le cahier des charges d'origine est dans [`Qtrinet-bootstrap.md`](Qtrinet-bootst
 | **Greffon : plomberie d'apprentissage** | ✅ validé → [`reports/rapport-greffon.md`](reports/rapport-greffon.md) |
 | **Journal de sessions automatisé** | ✅ `tools/archive_sessions.py` (hook git + cron) |
 | **Comparaison Spiking (SpikeGPT / Spikformer / Spikingformer)** | ✅ → [`docs/comparaison-spiking.md`](docs/comparaison-spiking.md) |
+| **Parcimonie imposée à l'inférence (k-WTA)** | ✅ mesuré → [`reports/rapport-parcimonie-imposee.md`](reports/rapport-parcimonie-imposee.md) |
 | Modèle ternaire *entraîné* (BitNet b1.58) | ⬜ à faire |
 | Extracteur GGUF → plans ternaires | ⬜ à faire |
 | Format binaire + schéma partagé Python/RTL | ⬜ à faire |

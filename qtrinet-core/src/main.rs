@@ -199,6 +199,10 @@ fn run_infer(args: &[String]) {
     let mut hebb_out = String::from("hebb.bin");
     let mut ids_file: Option<String> = None;
     let mut patch_file: Option<String> = None;
+    let mut act_thresh = 0.0f32;
+    let mut act_topk = 0usize;
+    let mut act_renorm = false;
+    let mut topk_proj = [0usize; 7];
     let mut dense = false;
     let mut keep = 1.0f32;
     // L'inférence paie une barrière par matrice (168 par token) : l'optimum
@@ -220,6 +224,16 @@ fn run_infer(args: &[String]) {
             "--hebbian" => hebb_layer = Some(args[i + 1].parse().unwrap()),
             "--hebb-q" => hebb_q = args[i + 1].parse().unwrap(),
             "--hebb-out" => hebb_out = args[i + 1].clone(),
+            "--act-thresh" => act_thresh = args[i + 1].parse().unwrap(),
+            "--act-topk" => act_topk = args[i + 1].parse().unwrap(),
+            "--act-renorm" => { act_renorm = true; i -= 1; }
+            "--topk-q" => topk_proj[0] = args[i + 1].parse().unwrap(),
+            "--topk-k" => topk_proj[1] = args[i + 1].parse().unwrap(),
+            "--topk-v" => topk_proj[2] = args[i + 1].parse().unwrap(),
+            "--topk-o" => topk_proj[3] = args[i + 1].parse().unwrap(),
+            "--topk-gate" => topk_proj[4] = args[i + 1].parse().unwrap(),
+            "--topk-up" => topk_proj[5] = args[i + 1].parse().unwrap(),
+            "--topk-down" => topk_proj[6] = args[i + 1].parse().unwrap(),
             "--patch" => patch_file = Some(args[i + 1].clone()),
             "--threads" => n_threads = args[i + 1].parse().unwrap(),
             "--chat" => { chat = true; i -= 1; }
@@ -231,6 +245,15 @@ fn run_infer(args: &[String]) {
     }
     let mut mdl = model::Model::load(path, ctx, n_threads, dense, keep);
     mdl.act_levels = ((1u32 << (abits - 1)) - 1) as f32;
+    mdl.act_thresh = act_thresh;
+    mdl.act_topk = act_topk;
+    mdl.act_renorm = act_renorm;
+    mdl.act_topk_proj = topk_proj;
+    if act_topk > 0 || act_thresh > 0.0 {
+        println!("parcimonie imposée : k-WTA garde {:.1} %{}",
+                 act_topk as f32 / 10.0,
+                 if act_thresh > 0.0 { format!(", seuil {:.1} %", act_thresh * 100.0) } else { String::new() });
+    }
     if chat {
         mdl.stop_id = build_tokenizer(&mdl.g).special_id("<|im_end|>");
     }
@@ -382,6 +405,10 @@ fn run_ppl(args: &[String]) {
     let mut hebb_layer: Option<usize> = None;
     let mut patch_file: Option<String> = None;
     let mut gain: Option<(usize, f32)> = None;
+    let mut act_thresh = 0.0f32;
+    let mut act_topk = 0usize;
+    let mut act_renorm = false;
+    let mut topk_proj = [0usize; 7];
     let cpu = std::thread::available_parallelism().map(|n| n.get()).unwrap_or(8);
     let mut n_threads = (cpu * 3 / 4).max(1);
     let mut i = 2;
@@ -390,6 +417,15 @@ fn run_ppl(args: &[String]) {
             "--ppl" => idfile = args[i + 1].clone(),
             "--ctx" => ctx = args[i + 1].parse().unwrap(),
             "--limit" => limit = args[i + 1].parse().unwrap(),
+            "--act-topk" => act_topk = args[i + 1].parse().unwrap(),
+            "--act-renorm" => { act_renorm = true; i -= 1; }
+            "--topk-q" => topk_proj[0] = args[i + 1].parse().unwrap(),
+            "--topk-k" => topk_proj[1] = args[i + 1].parse().unwrap(),
+            "--topk-v" => topk_proj[2] = args[i + 1].parse().unwrap(),
+            "--topk-o" => topk_proj[3] = args[i + 1].parse().unwrap(),
+            "--topk-gate" => topk_proj[4] = args[i + 1].parse().unwrap(),
+            "--topk-up" => topk_proj[5] = args[i + 1].parse().unwrap(),
+            "--topk-down" => topk_proj[6] = args[i + 1].parse().unwrap(),
             "--abits" => abits = args[i + 1].parse().unwrap(),
             "--hebbian" => hebb_layer = Some(args[i + 1].parse().unwrap()),
             "--patch" => patch_file = Some(args[i + 1].clone()),
@@ -397,6 +433,16 @@ fn run_ppl(args: &[String]) {
                 let v: Vec<&str> = args[i + 1].split(':').collect();
                 gain = Some((v[0].parse().unwrap(), v[1].parse().unwrap()));
             }
+            "--act-thresh" => act_thresh = args[i + 1].parse().unwrap(),
+            "--act-topk" => act_topk = args[i + 1].parse().unwrap(),
+            "--act-renorm" => { act_renorm = true; i -= 1; }
+            "--topk-q" => topk_proj[0] = args[i + 1].parse().unwrap(),
+            "--topk-k" => topk_proj[1] = args[i + 1].parse().unwrap(),
+            "--topk-v" => topk_proj[2] = args[i + 1].parse().unwrap(),
+            "--topk-o" => topk_proj[3] = args[i + 1].parse().unwrap(),
+            "--topk-gate" => topk_proj[4] = args[i + 1].parse().unwrap(),
+            "--topk-up" => topk_proj[5] = args[i + 1].parse().unwrap(),
+            "--topk-down" => topk_proj[6] = args[i + 1].parse().unwrap(),
             "--threads" => n_threads = args[i + 1].parse().unwrap(),
             _ => {}
         }
@@ -422,6 +468,15 @@ fn run_ppl(args: &[String]) {
     if let Some((l, g)) = gain {
         println!("gain FFN : couche {l} x {g}");
         mdl.ffn_gain = Some((l, g));
+    }
+    mdl.act_thresh = act_thresh;
+    mdl.act_topk = act_topk;
+    mdl.act_renorm = act_renorm;
+    mdl.act_topk_proj = topk_proj;
+    if act_thresh > 0.0 || act_topk > 0 {
+        println!("parcimonie imposée : seuil {:.1} % du max{}",
+                 act_thresh * 100.0,
+                 if act_topk > 0 { format!(", k-WTA k={act_topk}") } else { String::new() });
     }
     if let Some(l) = hebb_layer {
         let mut hb = model::Hebb::new(l, mdl.cfg.ffn, mdl.cfg.hidden, 0.1);

@@ -139,6 +139,21 @@ pub struct Model {
     /// 32767 pour int16). Les poids restent int8 : c'est la précision de
     /// l'activation qui décide de la fidélité au modèle flottant.
     pub act_levels: f32,
+    /// Parcimonie **imposée** à l'inférence, sans aucun entraînement.
+    /// `act_thresh` écarte les activations sous cette fraction du maximum du
+    /// vecteur ; `act_topk` ne garde que les k plus grandes. Les deux imitent
+    /// l'effet du seuil d'un neurone à décharge sur un modèle préentraîné
+    /// ordinaire — c'est la seule façon d'obtenir un débit variable sans
+    /// réentraîner quoi que ce soit.
+    pub act_thresh: f32,
+    pub act_topk: usize,
+    /// Renormalisation homéostatique : après k-WTA, les activations conservées
+    /// sont remises à l'échelle pour que leur norme L1 égale celle du vecteur
+    /// complet. La coupure retire de l'énergie ; ceci la compense.
+    pub act_renorm: bool,
+    /// Parcimonie par projection : 0 = q, 1 = k, 2 = v, 3 = o, 4 = gate,
+    /// 5 = up, 6 = down. La valeur 0 signifie « utiliser act_topk ».
+    pub act_topk_proj: [usize; 7],
     /// Token d'arrêt (EOS / <|im_end|>) : la génération s'interrompt dessus.
     pub stop_id: Option<u32>,
     /// Postes de temps cumulés, en secondes (diagnostic).
@@ -289,7 +304,9 @@ impl Model {
         Model {
             g, cfg, layers, out_norm, pool,
             kv_k: vec![kv.clone(); n_layer], kv_v: vec![kv; n_layer],
-            ctx, events: 0, act_levels: 127.0, stop_id: None, prof: [0.0; 6],
+            ctx, events: 0, act_levels: 127.0, act_thresh: 0.0, act_topk: 0, act_renorm: false,
+            act_topk_proj: [0; 7],
+            stop_id: None, prof: [0.0; 6],
             patch: None, ffn_gain: None, hebb: None,
         }
     }
@@ -300,24 +317,70 @@ impl Model {
 
     /// Quantifie un vecteur (une échelle pour tout le vecteur).
     #[inline]
-    fn quant(x: &[f32], levels: f32) -> Option<(SparseVec, f32)> {
+    /// Parcimonie effective d'une projection : la valeur par projection prime,
+    /// sinon on retombe sur le réglage global.
+    #[inline]
+    pub fn topk_de(&self, proj: usize) -> usize {
+        if self.act_topk_proj[proj] > 0 { self.act_topk_proj[proj] } else { self.act_topk }
+    }
+
+    fn quant_scratch(x: &[f32], levels: f32, thresh: f32, topk: usize, renorm: bool,
+                     scratch: &mut Vec<f32>) -> Option<(SparseVec, f32)> {
         let mut mx = 0f32;
         for &v in x { let a = v.abs(); if a > mx { mx = a; } }
         if mx == 0.0 { return None; }
         let s = mx / levels;
         let inv = 1.0 / s;
+        // seuil absolu correspondant à la fraction demandée du maximum
+        let seuil = (thresh * levels) as i32;
         let mut sv = SparseVec { idx: Vec::with_capacity(x.len()), val: Vec::with_capacity(x.len()) };
-        for (i, &v) in x.iter().enumerate() {
-            let q = (v * inv).round();
-            if q != 0.0 { sv.idx.push(i as u32); sv.val.push(q as i32); }
+        if topk > 0 {
+            // k-WTA : ne garder que les k plus grandes magnitudes (inhibition
+            // latérale). `topk` est une FRACTION de la dimension : sans cela la
+            // même valeur de k ne veut pas dire la même chose pour un vecteur de
+            // 896 et un de 4 864.
+            scratch.clear();
+            scratch.extend(x.iter().map(|v| v.abs()));
+            let mag = &mut *scratch;
+            let k = (((topk as f32) / 1000.0) * x.len() as f32).round() as usize;
+            let k = k.clamp(1, x.len());
+            // l'élément d'indice (n - k) est le k-ième PLUS GRAND : c'est le
+            // seuil du k-WTA. Prendre l'indice (k - 1) revenait à garder les k
+            // plus PETITES — bug attrapé parce que le compte d'événements était
+            // absurde (3,8 M au lieu de 349 M).
+            let (_, &mut cut, _) = mag.select_nth_unstable_by(x.len() - k, |a, b| a.partial_cmp(b).unwrap());
+            for (i, &v) in x.iter().enumerate() {
+                if v.abs() < cut { continue; }
+                let q = (v * inv).round();
+                if q != 0.0 { sv.idx.push(i as u32); sv.val.push(q as i32); }
+            }
+            if renorm && !sv.val.is_empty() {
+                let l1_tot: f64 = x.iter().map(|v| v.abs() as f64).sum();
+                let l1_kept: f64 = sv.val.iter().map(|q| q.abs() as f64).sum::<f64>() * s as f64;
+                if l1_kept > 0.0 {
+                    let f = (l1_tot / l1_kept) as f32;
+                    let lim = levels - 1.0;
+                    for q in sv.val.iter_mut() {
+                        let v = (*q as f32 * f).round().clamp(-lim, lim);
+                        *q = v as i32;
+                    }
+                    sv.idx.retain(|_| true);
+                }
+            }
+        } else {
+            for (i, &v) in x.iter().enumerate() {
+                let q = (v * inv).round();
+                if q != 0.0 && (q as i32).abs() > seuil { sv.idx.push(i as u32); sv.val.push(q as i32); }
+            }
         }
         Some((sv, s))
     }
 
     /// Produit matrice-vecteur **par événements** : les activations actives
     /// poussent leur contribution dans les sorties de leur liste.
-    fn matvec(pool: &mut Pool, p: &Proj, x: &[f32], out: &mut [f32], events: &mut u64, levels: f32) {
-        let Some((sv, sx)) = Self::quant(x, levels) else {
+    fn matvec(pool: &mut Pool, p: &Proj, x: &[f32], out: &mut [f32], events: &mut u64,
+              levels: f32, thresh: f32, topk: usize, renorm: bool, scratch: &mut Vec<f32>) {
+        let Some((sv, sx)) = Self::quant_scratch(x, levels, thresh, topk, renorm, scratch) else {
             for (o, v) in out.iter_mut().enumerate() {
                 *v = p.bias.as_ref().map_or(0.0, |b| b[o]);
             }
@@ -370,6 +433,10 @@ impl Model {
     /// Un token, une position. Retourne l'état caché après la dernière norme.
     pub fn forward(&mut self, tok: u32, pos: usize) -> Vec<f32> {
         assert!(pos < self.ctx, "contexte dépassé ({pos} ≥ {})", self.ctx);
+        // lus AVANT l'emprunt destructuré : la parcimonie par projection
+        let tkp = self.act_topk_proj;
+        let tkg = self.act_topk;
+        let tk = |p: usize| if tkp[p] > 0 { tkp[p] } else { tkg };
         let Model { g, cfg, layers, out_norm, pool, kv_k, kv_v, events, .. } = self;
         let h = cfg.hidden;
         let hd = cfg.head_dim;
@@ -386,6 +453,8 @@ impl Model {
         let mut att = vec![0f32; h];
         let mut o = vec![0f32; h];
         let mut gate = vec![0f32; cfg.ffn];
+        // tampon partagé : sélection k-WTA pendant les produits matriciels, puis
+        // quantiles du capteur hebbien — les deux usages ne se recouvrent pas.
         let mut scratch: Vec<f32> = Vec::with_capacity(cfg.ffn);
         let mut up = vec![0f32; cfg.ffn];
         let mut down = vec![0f32; h];
@@ -395,9 +464,9 @@ impl Model {
             let lay = &layers[l];
             let tm = Instant::now();
             Self::rmsnorm(&x, &lay.attn_norm, cfg.eps, &mut hn);
-            Self::matvec(pool, &lay.wq, &hn, &mut q, events, self.act_levels);
-            Self::matvec(pool, &lay.wk, &hn, &mut k, events, self.act_levels);
-            Self::matvec(pool, &lay.wv, &hn, &mut v, events, self.act_levels);
+            Self::matvec(pool, &lay.wq, &hn, &mut q, events, self.act_levels, self.act_thresh, tk(0), self.act_renorm, &mut scratch);
+            Self::matvec(pool, &lay.wk, &hn, &mut k, events, self.act_levels, self.act_thresh, tk(1), self.act_renorm, &mut scratch);
+            Self::matvec(pool, &lay.wv, &hn, &mut v, events, self.act_levels, self.act_thresh, tk(2), self.act_renorm, &mut scratch);
             self.prof[0] += tm.elapsed().as_secs_f64();
             let tr = Instant::now();
             Self::rope(&mut q, nh, hd, pos, cfg.rope_base);
@@ -442,10 +511,10 @@ impl Model {
             }
             self.prof[2] += ta.elapsed().as_secs_f64();
             let tf = Instant::now();
-            Self::matvec(pool, &lay.wo, &att, &mut o, events, self.act_levels);
+            Self::matvec(pool, &lay.wo, &att, &mut o, events, self.act_levels, self.act_thresh, tk(3), self.act_renorm, &mut scratch);
             for i in 0..h { o[i] += x[i]; }
             Self::rmsnorm(&o, &lay.ffn_norm, cfg.eps, &mut hn);
-            Self::matvec(pool, &lay.wgate, &hn, &mut gate, events, self.act_levels);
+            Self::matvec(pool, &lay.wgate, &hn, &mut gate, events, self.act_levels, self.act_thresh, tk(4), self.act_renorm, &mut scratch);
             // --- capteur hebbien : espionne la co-activation (entrée, sortie)
             // de la projection gate. Aucun effet sur le calcul.
             if let Some(hb) = self.hebb.as_mut() {
@@ -457,9 +526,9 @@ impl Model {
                     scratch = seuil;
                 }
             }
-            Self::matvec(pool, &lay.wup, &hn, &mut up, events, self.act_levels);
+            Self::matvec(pool, &lay.wup, &hn, &mut up, events, self.act_levels, self.act_thresh, tk(5), self.act_renorm, &mut scratch);
             for i in 0..cfg.ffn { gate[i] = (gate[i] / (1.0 + (-gate[i]).exp())) * up[i]; }
-            Self::matvec(pool, &lay.wdown, &gate, &mut down, events, self.act_levels);
+            Self::matvec(pool, &lay.wdown, &gate, &mut down, events, self.act_levels, self.act_thresh, tk(6), self.act_renorm, &mut scratch);
             // --- greffon : neurone supplémentaire, sans réentraînement
             if let Some(pt) = self.patch.as_ref() {
                 if pt.layer == l {
@@ -483,7 +552,9 @@ impl Model {
     /// Tête de sortie : produits scalaires entiers sur les lignes Q8_0 du
     /// plafond d'embedding (poids liés). Parallélisé par tranches de vocabulaire.
     pub fn logits(&self, h: &[f32]) -> Vec<f32> {
-        let (sv, sx) = match Self::quant(h, self.act_levels) {
+        let mut scratch = Vec::with_capacity(h.len());
+        let (sv, sx) = match Self::quant_scratch(h, self.act_levels, self.act_thresh,
+                                                self.act_topk, self.act_renorm, &mut scratch) {
             Some(v) => v,
             None => return vec![0f32; self.cfg.vocab],
         };

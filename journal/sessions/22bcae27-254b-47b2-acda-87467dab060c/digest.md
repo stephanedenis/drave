@@ -17371,3 +17371,621 @@ Created file
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\npython3 - <<'PY'\np='docs/programme-recherche.md'; s=open(p,encoding='utf-8').read(); o=s\ns=s.replace('''## 3. Ce que la mesure interdit d'espérer''','''## 2 bis. Ce que la littérature neuromorphique change\n\nComparaison détaillée da … [3805 caractères tronqués]`
+
+  ```
+addf6f3 Comparaison avec SpikeGPT, Spikformer et Spikingformer
+3aba271 Rapport de session automatique : reconstitution de l'essence et du travail
+205cd5c Archivage des sessions, programme de recherche, plomberie d'apprentissage
+  ```
+
+### 🤖 Assistant
+
+⏵ Étude terminée et commitée. Voici ce qu'elle change
+
+**Deux constats qui nous concernent directement.**
+
+**1. Ils ont résolu par construction le problème qui nous bloque.** Nous avons mesuré que les activations d'un LLM dense ne sont **jamais** exactement nulles — notre débit est donc constant et l'argument « on ne paie que ce qui s'active » reste théorique. Un réseau à spikes **impose** cette parcimonie : le neurone LIF de SpikeGPT décharge à **R̂ = 0,15**, soit **6,7× moins d'événements** dans notre moteur. Notre architecture événementielle est mieux adaptée aux modèles à spikes qu'aux modèles quantifiés denses — c'est un renversement de perspective.
+
+**2. Nous appliquons déjà le principe de Spikingformer sans l'avoir cherché.** Leur correction du défaut structurel de Spikformer/SpikeGPT tient à un **échange d'ordre** : garder le flux résiduel en accumulation et rendre discrète l'entrée de chaque couche linéaire. C'est exactement notre `forward` — `x = o + down` reste flottant, et chaque produit matriciel reçoit un vecteur d'activation quantifié int8. Le principe « spike-driven » est déjà respecté ; nous discrétisons à 8 bits au lieu d'1.
+
+**L'astuce décisive, et elle est contre-intuitive** : l'**alignement séquence = temps** de SpikeGPT. Chez Spikformer, la parcimonie est *par pas de temps* et il en faut T — le gain net est R̂×T, pas R̂. En alignant la dimension séquence sur la dimension temporelle, SpikeGPT travaille à T = 1 effectif et encaisse vraiment les 6,7×. Pour nous, cela veut dire : un modèle **récurrent** à spikes, pas un transformeur à spikes.
+
+**La réponse à notre trou le plus sérieux** vient de Spikformer : l'attention `SN(Q·Kᵀ·V·s)` supprime le softmax (les spikes sont non négatifs, il est redondant), se calcule avec des ET logiques et des additions — **aucune multiplication** — et devient **décomposable** : `Kᵀ·V` d'abord, soit O(N·d²) au lieu de O(N²·d). Consommation théorique de l'attention : **0,594 µJ contre 77-88 µJ**. Et surtout : elle devient **exprimable en événements**. C'est la brique à implémenter après la boucle d'apprentissage.
+
+**Trois autres astuces** : le neurone LIF à état (une mémoire scalaire par neurone, `β = 0,5`, seuil 1, reset 0) ; **BatchNorm au lieu de LayerNorm** — ils rapportent que LN ne s'applique pas aux SNN ; et l'**embedding binaire** par Heaviside, sinon le premier tenseur reste flottant et contamine tout.
+
+**La projection chiffrée** : un modèle à R̂ = 0,15 donnerait ~53 M événements par token au lieu de 352,8 M, soit **~10 ms par token et ~100 tok/s sur CPU** — un facteur 6,7 sans matériel supplémentaire.
+
+**Les réserves, parce qu'il en faut** : les modèles à spikes restent en retard de qualité sur les transformeurs de même taille ; les gains annoncés (32×, 57 %) sont **théoriques**, calculés avec E_AC = 0,9 pJ et E_MAC = 4,5 pJ sur du 45 nm, pas mesurés sur silicium — notre propre mesure donne 6,9× entre CPU et FPGA, du même ordre de grandeur ; et SpikeGPT-216M reste le plus gros SNN entraîné par rétropropagation, très loin de l'échelle des LLM actuels.
+
+**Ce que ça change dans le programme** : la cible n'est plus « un LLM quantifié exécuté en listes » mais **« un modèle à décharge parcimonieuse exécuté en listes »** — seule la seconde donne le débit variable que le cahier des charges promettait. Et le verrou reste le même, confirmé par les trois papiers : **l'entraînement par gradient de substitution**, que notre pile ne sait pas faire.
+
+
+## Tour 35
+
+### 👤 Utilisateur
+
+attention pour ne pas se perdre à copier les autres et ne pas empiéter non plus sur mon autre programme de recherche https://github.com/stephanedenis/neuronspikes nous voulons ici continuer notre expérience avec des modèles préentrainés qui ont fait leur preuves et appliquer des techniques proche des SNN afin de les exécuter de façon radicalement différente. Nous évaluons les opportunités qui émergent, mais sans nous égarer. Continue sur notre programme principal, tu dois pouvoir continuer plusieurs heures sans interaction car je m'absente.
+
+### 🤖 Assistant
+
+⏵ Cadre reçu : modèles préentraînés, techniques proches des SNN, exécution radicalement différente — sans formation ni empiètement. Je pose l'objectif et j'attaque
+
+- **create_goal** `{"objective": "Mener la campagne d'expériences sur l'exécution événementielle du modèle préentraîné Qwen2.5-0.5B : (1) imposer une parcimonie d'activation à l'inférence (seuil et k-WTA) sans aucun entraînement et mesurer la frontière (parcimonie, perplexité, événements/token) ; (2) rendre l'attentio … [307 caractères tronqués]`
+
+> **Objectif** (create) : Mener la campagne d'expériences sur l'exécution événementielle du modèle préentraîné Qwen2.5-0.5B : (1) imposer une parcimonie d'activation à l'inférence (seuil et k-WTA) sans aucun entraînement et mesurer la frontière (parcimonie, perplexité, événements/token) ; (2) rendre l'attention exprimable en événements par une forme linéaire sans softmax et mesurer son coût en perplexité ; (3) consigner les résultats, les erreurs et les pistes écartées dans les rapports et le journal, en restant strictement sur les modèles préentraînés et hors du programme neuronspikes.
+
+
+  ```
+{"goal":{"id":"goal-5efb9bc5-99c3-4b93-8ffe-ca0601b6c82d","revision":1,"objective":"Mener la campagne d'expériences sur l'exécution événementielle du modèle préentraîné Qwen2.5-0.5B : (1) imposer une parcimonie d'activation à l'inférence (seuil et k-WTA) sans aucun entraînement et mesurer la frontière (parcimonie, perplexité, événements/token) ; (2) rendre l'attention exprimable en événements par une forme linéaire sans softmax et mesurer son coût en perplexité ; (3) consigner les résultats, les erreurs et les pistes écartées dans les rapports et le journal, en restant strictement sur les modèles préentraînés et hors du programme neuronspikes.","phase":"active","roundsStarted":0,"maxGoalRounds":20},"activation":"armed"}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\nsed -n '/fn quant(/,/^    }/p' src/model.rs", "description": "Read the activation quantizer"}`
+
+  ```
+fn quant(x: &[f32], levels: f32) -> Option<(SparseVec, f32)> {
+        let mut mx = 0f32;
+        for &v in x { let a = v.abs(); if a > mx { mx = a; } }
+        if mx == 0.0 { return None; }
+        let s = mx / levels;
+        let inv = 1.0 / s;
+        let mut sv = SparseVec { idx: Vec::with_capacity(x.len()), val: Vec::with_capacity(x.len()) };
+        for (i, &v) in x.iter().enumerate() {
+            let q = (v * inv).round();
+            if q != 0.0 { sv.idx.push(i as u32); sv.val.push(q as i32); }
+        }
+        Some((sv, s))
+    }
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\npython3 - <<'PY'\np='src/model.rs'; s=open(p,encoding='utf-8').read(); o=s\n\n# --- parcimonie imposée : seuil relatif et k-WTA\ns=s.replace('''    /// Nombre de niveaux de quantification des **activations** (127 pour int8 … [4196 caractères tronqués]`
+
+  ```
+--- build
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\npython3 - <<'PY'\np='src/main.rs'; s=open(p,encoding='utf-8').read(); o=s\ns=s.replace('''            \"--threads\" => n_threads = args[i + 1].parse().unwrap(),\n            _ => {}\n        }\n        i += 2;\n    }\n     … [1971 caractères tronqués]`
+
+  ```
+=== effet du seuil (512 tokens, référence PPL 19,2647, 352,8 M évts/token)
+  seuil   0.0 % : perplexité 19.2647   événements/token ?
+  seuil   5.0 % : perplexité 2264.8403   événements/token ?
+  seuil  10.0 % : perplexité 65575.2758   événements/token ?
+  seuil  20.0 % : perplexité 168247.7299   événements/token ?
+  seuil  35.0 % : perplexité 346817.3398   événements/token ?
+  ```
+
+### 🤖 Assistant
+
+⏵ Le seuil est **catastrophique** (PPL ×117 dès 5 %). Je vérifie d'abord la parcimonie réellement obtenue avant d'interpréter
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\ntimeout 900 ./target/release/qtrinet-core ../models/Qwen2.5-0.5B-Q8_0.gguf --ppl /tmp/wt2_ids.txt --ctx 256 --abits 16 --threads 16 --limit 512 --act-thresh 0.05 2>&1 | tail -5\necho \"=== et pour 1 % ?\"\ntimeout 900 ./ta … [267 caractères tronqués]`
+
+  ```
+255 tokens notés — perplexité cumulée 3498.525  (20.7 tok/s)
+     510 tokens notés — perplexité cumulée 2264.840  (21.1 tok/s)
+
+=== perplexité 2264.8403 sur 510 tokens (73940474612 événements, 24.1 s) ===
+    21.1 tok/s effectifs (avant + tête)
+=== et pour 1 % ?
+     255 tokens notés — perplexité cumulée 20.807  (15.6 tok/s)
+     510 tokens notés — perplexité cumulée 22.229  (15.6 tok/s)
+=== perplexité 22.2286 sur 510 tokens (143366697921 événements, 32.7 s) ===
+  ```
+
+### 🤖 Assistant
+
+⏵ Résultat central : **−20 % d'événements coûte +15 % de perplexité**. Je mesure la frontière complète, seuil et k-WTA
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\npython3 - <<'PY'\np='src/model.rs'; s=open(p,encoding='utf-8').read(); o=s\ns=s.replace('''        if topk > 0 && topk < x.len() {\n            // k-WTA : ne garder que les k plus grandes magnitudes (inhibition\n           … [2102 caractères tronqués]`
+
+  ```
+frontière lancée en tâche de fond
+--- seuil relatif
+/tmp/frontiere.sh: line 14: printf: 0.1: invalid number
+  seuil   0,0 % :    343.8 M évts/token   perplexité    19.5750
+/tmp/frontiere.sh: line 14: printf: 0.2: invalid number
+  seuil   0,0 % :    334.9 M évts/token   perplexité    19.6502
+/tmp/frontiere.sh: line 14: printf: 0.5: invalid number
+  seuil   0,0 % :    312.3 M évts/token   perplexité    20.1511
+/tmp/frontiere.sh: line 14: printf: 1.0: invalid number
+  seuil   1,0 % :    281.1 M évts/token   perplexité    22.2286
+/tmp/frontiere.sh: line 14: printf: 2.0: invalid number
+  seuil   2,0 % :    230.8 M évts/token   perplexité    30.5837
+/tmp/frontiere.sh: line 14: printf: 5.0: invalid number
+  seuil   5,0 % :    145.0 M évts/token   perplexité  2264.8403
+--- k-WTA (fraction de la dimension conservée)
+/tmp/frontiere.sh: line 16: printf: 99.0: invalid number
+  garde  99,0 % :
+  ```
+
+### 🤖 Assistant
+
+⏵ Frontière du seuil mesurée. Je termine le k-WTA (bug d'affichage, pas de mesure)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\ncat > /tmp/kwta.sh <<'EOF'\n#!/bin/bash\ncd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\nfor k in 990 950 900 800 700 500; do\n  out=$(timeout 900 ./target/release/qtrinet-core ../models/Qwen2.5-0.5B-Q8_0. … [565 caractères tronqués]`
+
+  ```
+k-WTA garde  99.0 % :     3.8 M évts/token   perplexité 62808.5535   (3260.29x)
+  k-WTA garde  95.0 % :    18.1 M évts/token   perplexité 87122.9916   (4522.42x)
+  k-WTA garde  90.0 % :    35.8 M évts/token   perplexité 93461.6270   (4851.44x)
+  k-WTA garde  80.0 % :    71.1 M évts/token   perplexité  5855.2930   (303.94x)
+  k-WTA garde  70.0 % :   106.7 M évts/token   perplexité   451.1822   (23.42x)
+  k-WTA garde  50.0 % :   177.6 M évts/token   perplexité    28.1924   ( 1.46x)
+  ```
+
+### 🤖 Assistant
+
+⏵ Bug : le k-WTA gardait les k **plus petites** au lieu des plus grandes (indice inversé). Je corrige
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\npython3 - <<'PY'\np='src/model.rs'; s=open(p,encoding='utf-8').read(); o=s\ns=s.replace('''            let mut mag: Vec<f32> = x.iter().map(|v| v.abs()).collect();\n            let k = (((topk as f32) / 1000.0) * x.len() a … [1200 caractères tronqués]`
+
+  ```
+0
+  k-WTA garde  99.0 % :   351.1 M évts/token   perplexité    19.2673   ( 1.00x)
+  k-WTA garde  95.0 % :   336.8 M évts/token   perplexité    19.2967   ( 1.00x)
+  k-WTA garde  90.0 % :   319.1 M évts/token   perplexité    19.2878   ( 1.00x)
+  k-WTA garde  80.0 % :   283.7 M évts/token   perplexité    19.1860   ( 1.00x)
+  k-WTA garde  70.0 % :   248.2 M évts/token   perplexité    20.3120   ( 1.05x)
+  k-WTA garde  50.0 % :   177.3 M évts/token   perplexité    30.0079   ( 1.56x)
+  ```
+
+### 🤖 Assistant
+
+⏵ **Résultat majeur** : le k-WTA à 80 % **réduit les événements de 20 % ET améliore la perplexité**. Je resserre autour de l'optimum
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\nfor k in 850 820 800 780 750 600; do\n  out=$(timeout 900 ./target/release/qtrinet-core ../models/Qwen2.5-0.5B-Q8_0.gguf --ppl /tmp/wt2_ids.txt --ctx 256 --abits 16 --threads 16 --limit 512 --act-topk $k 2>/dev/null)\n  pp … [433 caractères tronqués]`
+
+  ```
+garde  85.0 % :   301.5 M évts/token (-14.5 %)  perplexité   19.2709  (1.000x)
+  garde  82.0 % :   290.9 M évts/token (-17.6 %)  perplexité   19.5038  (1.012x)
+  garde  80.0 % :   283.7 M évts/token (-19.6 %)  perplexité   19.1860  (0.996x)
+  garde  78.0 % :   276.6 M évts/token (-21.6 %)  perplexité   19.4895  (1.012x)
+  garde  75.0 % :   266.0 M évts/token (-24.6 %)  perplexité   19.8166  (1.029x)
+  garde  60.0 % :   212.9 M évts/token (-39.7 %)  perplexité   22.0319  (1.144x)
+  ```
+
+### 🤖 Assistant
+
+⏵ Le classement des points voisins n'est pas stable — 512 tokens ne suffisent pas. Protocole propre : réglage sur A, vérification sur B
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\necho \"=== jeu A (1024 tokens)\"\nfor k in 1000 900 850 800; do\n  out=$(timeout 900 ./target/release/qtrinet-core ../models/Qwen2.5-0.5B-Q8_0.gguf --ppl /tmp/wt2_a.txt --ctx 256 --abits 16 --threads 16 --act-topk $k 2>/de … [380 caractères tronqués]`
+
+  ```
+=== jeu A (1024 tokens)
+  garde 100.0 % :   354.3 M évts/token  perplexité   23.6125
+  garde  90.0 % :   319.1 M évts/token  perplexité   23.6790
+  garde  85.0 % :   301.5 M évts/token  perplexité   23.7468
+  garde  80.0 % :   283.7 M évts/token  perplexité   23.8251
+  ```
+
+### 🤖 Assistant
+
+⏵ Sur 1024 tokens la courbe est propre et monotone : **−20 % d'événements pour +0,9 % de perplexité**. Vérification sur B
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\necho \"=== jeu B (1024 tokens jamais vus)\"\nfor k in 1000 900 850 800; do\n  out=$(timeout 900 ./target/release/qtrinet-core ../models/Qwen2.5-0.5B-Q8_0.gguf --ppl /tmp/wt2_b.txt --ctx 256 --abits 16 --threads 16 --act-to … [383 caractères tronqués]`
+
+  ```
+=== jeu B (1024 tokens jamais vus)
+  garde 100.0 % :   354.3 M évts/token  perplexité   26.2565
+  garde  90.0 % :   319.1 M évts/token  perplexité   26.2950
+  garde  85.0 % :   301.5 M évts/token  perplexité   26.5785
+  garde  80.0 % :   283.7 M évts/token  perplexité   26.8586
+  ```
+
+### 🤖 Assistant
+
+⏵ Vérifié sur B : le compromis tient (−10 % d'événements pour +0,2 %). Je teste maintenant la **renormalisation homéostatique**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/gitHub/Qtrinet/qtrinet-core 2>/dev/null || cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\npython3 - <<'PY'\np='src/model.rs'; s=open(p,encoding='utf-8').read(); o=s\ns=s.replace('''    pub act_thresh: f32,\n    pub act_topk: usize,'' … [3916 caractères tronqués]`
+
+  ```
+--- build
+=== k-WTA + renormalisation (jeu A)
+  garde  90.0 % brut   : perplexité   23.6790
+  garde  90.0 % renorm : perplexité   23.6790
+  garde  85.0 % brut   : perplexité   23.7468
+  garde  85.0 % renorm : perplexité   23.7468
+  garde  80.0 % brut   : perplexité   23.8251
+  garde  80.0 % renorm : perplexité   23.8251
+  ```
+
+### 🤖 Assistant
+
+⏵ Effet nul — le drapeau était en dernière position, donc sauté par la boucle d'arguments. Je relance
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\necho \"=== k-WTA avec renormalisation (drapeau suivi d'une option)\"\nfor k in 900 850 800; do\n  out=$(timeout 900 ./target/release/qtrinet-core ../models/Qwen2.5-0.5B-Q8_0.gguf --ppl /tmp/wt2_a.txt --ctx 256 --abits 16 - … [327 caractères tronqués]`
+
+  ```
+=== k-WTA avec renormalisation (drapeau suivi d'une option)
+  garde  90.0 % renorm : perplexité   23.7284
+  garde  85.0 % renorm : perplexité   24.0253
+  garde  80.0 % renorm : perplexité   24.6902
+  ```
+
+### 🤖 Assistant
+
+⏵ La renormalisation **dégrade** (+0,2 à +3,6 %) — résultat négatif de plus. Maintenant l'essentiel : est-ce que ça se traduit en vitesse ?
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\necho \"=== débit réel selon la parcimonie (génération, contexte 64, meilleur de 3)\"\nfor k in 1000 900 850 800; do\n  b=0\n  for i in 1 2 3; do\n    g=$(timeout 900 ./target/release/qtrinet-core ../models/Qwen2.5-0.5B-Q8_ … [406 caractères tronqués]`
+
+  ```
+=== débit réel selon la parcimonie (génération, contexte 64, meilleur de 3)
+  garde 100.0 % :  15.24 tok/s
+  garde  90.0 % :  15.03 tok/s
+  garde  85.0 % :  15.34 tok/s
+  garde  80.0 % :  15.50 tok/s
+  ```
+
+### 🤖 Assistant
+
+⏵ Gain de débit quasi nul (+1,7 % pour −20 % d'événements). Je regarde le profil pour comprendre où part le gain
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\nfor k in 1000 800; do\n  echo \"=== garde $((k/10)) %\"\n  timeout 900 ./target/release/qtrinet-core ../models/Qwen2.5-0.5B-Q8_0.gguf --infer --ids 9707,0 --n 16 --ctx 64 --threads 16 --abits 16 --act-topk $k --threads 16  … [153 caractères tronqués]`
+
+  ```
+=== garde 100 %
+tokens générés : [358, 2776, 264, 48948, 304, 13027, 323, 358, 2776, 4460, 311, 1855, 264, 2025, 429, 646]
+généré  : 16 tokens en 1.063 s  (15.05 tok/s)
+événements : 6347808782 au total, 352656043.4 par token
+postes (ms/token) : matvec-attn 5.5 | rope 0.6 | attention 0.6 | matvec+mlp 56.2 | total mesuré 62.9
+=== garde 80 %
+tokens générés : [358, 2776, 264, 48948, 304, 13027, 323, 358, 2776, 4460, 311, 1855, 264, 2025, 429, 646]
+généré  : 16 tokens en 1.241 s  (12.89 tok/s)
+événements : 6347808782 au total, 352656043.4 par token
+postes (ms/token) : matvec-attn 6.1 | rope 0.6 | attention 0.6 | matvec+mlp 65.5 | total mesuré 72.8
+  ```
+
+### 🤖 Assistant
+
+⏵ Bug : les options de parcimonie n'étaient branchées que sur le mode perplexité, pas sur l'inférence — le « gain nul » était un drapeau ignoré
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\npython3 - <<'PY'\np='src/main.rs'; s=open(p,encoding='utf-8').read(); o=s\n# options de parcimonie dans le mode inférence (elles n'existaient qu'en mode perplexité)\ns=s.replace('''            \"--hebb-out\" => hebb_out =  … [2157 caractères tronqués]`
+
+  ```
+--- build
+=== débit réel avec la parcimonie ACTIVE
+  garde 100.0 % :  11.04 tok/s
+  garde  90.0 % :  16.34 tok/s
+  garde  85.0 % :  17.32 tok/s
+  garde  80.0 % :  17.09 tok/s
+  ```
+
+### 🤖 Assistant
+
+⏵ Parcimonie active : le débit monte. Mais la référence est bruitée — mesure propre du profil, meilleur de 3
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\nfor k in 1000 900 850 800; do\n  best=999; ev=0\n  for i in 1 2 3; do\n    out=$(timeout 900 ./target/release/qtrinet-core ../models/Qwen2.5-0.5B-Q8_0.gguf --infer --ids 9707,0 --n 16 --ctx 64 --threads 16 --abits 16 --act … [585 caractères tronqués]`
+
+  ```
+[stderr]
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+    print(min(999,))
+          ~~~^^^^^^
+TypeError: 'int' object is not iterable
+  File "<string>", line 1
+    print(min(,))
+              ^
+SyntaxError: invalid syntax
+  File "<string>", line 1
+    print(min(,))
+              ^
+SyntaxError: invalid syntax
+Traceback (most recent call last):
+  File "<string>", line 2, in <module>
+    ev=float('352656043.4'); mv=float('')
+                                ~~~~~^^^^
+ValueError: could not convert string to float: ''
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+    print(min(999,))
+          ~~~^^^^^^
+TypeError: 'int' object is not iterable
+  File "<string>", line 1
+    print(min(,))
+              ^
+SyntaxError: invalid syntax
+  File "<string>", line 1
+    print(min(,))
+              ^
+SyntaxError: invalid syntax
+Traceback (most recent call last):
+  File "<string>", line 2, in <module>
+    ev=float('317691197.6'); mv=float('')
+                                ~~~~~^^^^
+ValueError: could not convert string to float: ''
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+    print(min(999,))
+          ~~~^^^^^
+… [979 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\nfor k in 1000 900 850 800; do\n  echo \"--- garde $((k/10)) %\"\n  for i in 1 2 3; do\n    timeout 900 ./target/release/qtrinet-core ../models/Qwen2.5-0.5B-Q8_0.gguf --infer --ids 9707,0 --n 16 --ctx 64 --threads 16 --abit … [190 caractères tronqués]`
+
+  ```
+--- garde 100 %
+    matvec-attn 6.6 | rope 0.6 | attention 0.6 | matvec+mlp 70.2 | total mesuré 77.9
+    matvec-attn 5.4 | rope 0.6 | attention 0.6 | matvec+mlp 52.0 | total mesuré 58.6
+    matvec-attn 5.7 | rope 0.6 | attention 0.5 | matvec+mlp 59.7 | total mesuré 66.5
+--- garde 90 %
+    matvec-attn 5.6 | rope 0.7 | attention 0.6 | matvec+mlp 52.7 | total mesuré 59.6
+    matvec-attn 6.4 | rope 0.6 | attention 0.5 | matvec+mlp 69.9 | total mesuré 77.5
+    matvec-attn 5.3 | rope 0.6 | attention 0.5 | matvec+mlp 51.1 | total mesuré 57.5
+--- garde 85 %
+    matvec-attn 6.1 | rope 0.6 | attention 0.5 | matvec+mlp 64.5 | total mesuré 71.7
+    matvec-attn 5.4 | rope 0.7 | attention 0.5 | matvec+mlp 54.2 | total mesuré 60.8
+    matvec-attn 5.2 | rope 0.6 | attention 0.5 | matvec+mlp 50.5 | total mesuré 56.8
+--- garde 80 %
+    matvec-attn 4.9 | rope 0.6 | attention 0.5 | matvec+mlp 46.6 | total mesuré 52.7
+    matvec-attn 5.1 | rope 0.6 | attention 0.6 | matvec+mlp 47.6 | total mesuré 53.9
+    matvec-attn 6.6 | rope 0.7 | attention 0.9 | matvec+mlp 65.3 | total mesuré 73.5
+  ```
+
+### 🤖 Assistant
+
+⏵ Gain réel : **−20 % d'événements → −10 % de temps**. La moitié du gain est mangée par la sélection. Je regarde le coût de l'allocation
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\npython3 - <<'PY'\np='src/model.rs'; s=open(p,encoding='utf-8').read(); o=s\n# tampon réutilisé pour la sélection k-WTA : une allocation par produit matriciel\n# (168 par token, jusqu'à 19 Ko) coûtait une part notable du ga … [1256 caractères tronqués]`
+
+  ```
+316:    fn quant_scratch(x: &[f32], levels: f32, thresh: f32, topk: usize, renorm: bool,
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core; sed -n '310,375p' src/model.rs", "description": "Inspect the damaged quant section"}`
+
+  ```
+// ----------------------------------------------------------------------- //
+    // Briques de calcul
+    // ----------------------------------------------------------------------- //
+
+    /// Quantifie un vecteur (une échelle pour tout le vecteur).
+    #[inline]
+    fn quant_scratch(x: &[f32], levels: f32, thresh: f32, topk: usize, renorm: bool,
+                     scratch: &mut Vec<f32>) -> Option<(SparseVec, f32)> {
+        let mut mx = 0f32;
+        for &v in x { let a = v.abs(); if a > mx { mx = a; } }
+        if mx == 0.0 { return None; }
+        let s = mx / levels;
+        let inv = 1.0 / s;
+        // seuil absolu correspondant à la fraction demandée du maximum
+        let seuil = (thresh * levels) as i32;
+        let mut sv = SparseVec { idx: Vec::with_capacity(x.len()), val: Vec::with_capacity(x.len()) };
+        if topk > 0 {
+            // k-WTA : ne garder que les k plus grandes magnitudes (inhibition
+            // latérale). `topk` est une FRACTION de la dimension : sans cela la
+            // même valeur de k ne veut pas dire la même chose pour un vecteur de
+            // 896 et un de 4 864.
+            scratch.clear();
+            scratch.extend(x.iter().map(|v
+… [2194 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\npython3 - <<'PY'\np='src/model.rs'; s=open(p,encoding='utf-8').read(); o=s\n# 1. matvec transporte un tampon réutilisable\ns=s.replace('''    fn matvec(pool: &mut Pool, p: &Proj, x: &[f32], out: &mut [f32], events: &mut u6 … [1829 caractères tronqués]`
+
+  ```
+--- build
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\necho \"=== profil après réutilisation du tampon (meilleur de 3)\"\nfor k in 1000 900 850 800; do\n  best=999\n  for i in 1 2 3; do\n    mv=$(timeout 900 ./target/release/qtrinet-core ../models/Qwen2.5-0.5B-Q8_0.gguf --infe … [380 caractères tronqués]`
+
+  ```
+=== profil après réutilisation du tampon (meilleur de 3)
+  garde 100 % : matvec+MLP 54.1 ms
+  garde 90 % : matvec+MLP 47.4 ms
+  garde 85 % : matvec+MLP 50.7 ms
+  garde 80 % : matvec+MLP 53.9 ms
+  ```
+
+### 🤖 Assistant
+
+⏵ Mesures instables — je vérifie la charge machine avant de conclure
+
+- **bash** `{"command": "uptime; ps aux | grep \"[q]trinet-core\" | head -5; echo \"---\"; nproc\ncd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\necho \"=== mesure stabilisée : 5 passes, meilleur\"\nfor k in 1000 850; do\n  best=999\n  for i in 1 2 3 4 5; do\n    mv=$(timeout 900 ./target/relea … [437 caractères tronqués]`
+
+  ```
+13:42:30  up 6 days  2:54,  2 users,  load average: 3,98, 5,59, 10,49
+stephane 2718962  0.0  0.0   7692  4100 ?        Ss   13:42   0:00 bash -c uptime; ps aux | grep "[q]trinet-core" | head -5; echo "---"; nproc cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core echo "=== mesure stabilisée : 5 passes, meilleur" for k in 1000 850; do   best=999   for i in 1 2 3 4 5; do     mv=$(timeout 900 ./target/release/qtrinet-core ../models/Qwen2.5-0.5B-Q8_0.gguf --infer --ids 9707,0 --n 24 --ctx 64 --threads 16 --abits 16 --act-topk $k --threads 16 2>/dev/null | sed -nE 's/.*matvec\+mlp ([0-9.]+) .*/\1/p')     best=$(python3 -c "print(min($best, float('$mv')))" 2>/dev/null || echo $best)   done   echo "  garde $((k/10)) % : matvec+MLP $best ms" done
+---
+40
+=== mesure stabilisée : 5 passes, meilleur
+  garde 100 % : matvec+MLP 54.5 ms
+  garde 85 % : matvec+MLP 54.9 ms
+  ```
+
+### 🤖 Assistant
+
+⏵ La machine est chargée (load 10,5). Je mesure en **temps CPU** plutôt qu'en temps mur — insensible à la charge de fond
+
+- **bash** `{"command": "pkill -f frontiere.sh; pkill -f kwta.sh; sleep 3; uptime\ncd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\necho \"=== temps CPU total (user) pour 32 tokens, meilleur de 3\"\nfor k in 1000 900 850 800; do\n  best=99999\n  for i in 1 2 3; do\n    t=$( { /usr/bin/time -f \" … [499 caractères tronqués]`
+
+  ```
+(no output)
+[killed by signal: SIGTERM]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\nfor k in 1000 900 850 800; do\n  best=99999\n  for i in 1 2 3; do\n    /usr/bin/time -f \"%U\" ./target/release/qtrinet-core ../models/Qwen2.5-0.5B-Q8_0.gguf --infer --ids 9707,0 --n 32 --ctx 64 --threads 16 --abits 16 --a … [342 caractères tronqués]`
+
+  ```
+garde 100 % : 47.98 s de CPU
+  garde 90 % : 43.84 s de CPU
+  garde 85 % : 41.91 s de CPU
+  garde 80 % : 45.63 s de CPU
+  ```
+
+### 🤖 Assistant
+
+⏵ Mesure stable : **−15 % d'événements → −12,7 % de CPU** (85 % du gain réalisé). Je teste maintenant la parcimonie **par projection**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\npython3 - <<'PY'\np='src/model.rs'; s=open(p,encoding='utf-8').read(); o=s\ns=s.replace('''    pub act_renorm: bool,''','''    pub act_renorm: bool,\n    /// Parcimonie par projection : 0 = q, 1 = k, 2 = v, 3 = o, 4 = gate … [2527 caractères tronqués]`
+
+  ```
+error[E0502]: cannot borrow `*self` as immutable because it is also borrowed as mutable
+   --> src/model.rs:463:96
+    |
+436 | ...   let Model { g, cfg, layers, out_norm, pool, kv_k, kv_v, events, .. } = self;
+    |                      --- mutable borrow occurs here
+...
+--
+error[E0502]: cannot borrow `*self` as immutable because it is also borrowed as mutable
+   --> src/model.rs:464:96
+    |
+436 | ...   let Model { g, cfg, layers, out_norm, pool, kv_k, kv_v, events, .. } = self;
+    |                      --- mutable borrow occurs here
+--- build
+8
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\npython3 - <<'PY'\np='src/model.rs'; s=open(p,encoding='utf-8').read(); o=s\ns=s.replace('''        let Model { g, cfg, layers, out_norm, pool, kv_k, kv_v, events, .. } = self;''',\n'''        // lus AVANT l'emprunt destruc … [3277 caractères tronqués]`
+
+  ```
+--- build
+error[E0425]: cannot find value `topk_proj` in this scope
+   --> src/main.rs:229:27
+    |
+229 |             "--topk-q" => topk_proj[0] = args[i + 1].parse().unwrap(),
+    |                           ^^^^^^^^^ not found in this scope
+--
+error[E0425]: cannot find value `topk_proj` in this scope
+   --> src/main.rs:230:27
+--- build final
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\ngrep -n \"let mut topk_proj\" src/main.rs\npython3 - <<'PY'\np='src/main.rs'; s=open(p,encoding='utf-8').read()\nif 'let mut topk_proj = [0usize; 7];' not in s.split('fn run_infer')[1][:3000]:\n    s=s.replace('''    let m … [419 caractères tronqués]`
+
+  ```
+410:    let mut topk_proj = [0usize; 7];
+205:    let mut topk_proj = [0usize; 7];
+411:    let mut topk_proj = [0usize; 7];
+--- build
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\npython3 - <<'PY'\nlines=open('src/main.rs',encoding='utf-8').read().split('\\n')\nout=[]; vu=False\nfor i,l in enumerate(lines):\n    if l.strip()=='let mut topk_proj = [0usize; 7];':\n        if vu: continue\n        vu=T … [1022 caractères tronqués]`
+
+  ```
+1
+16
+=== parcimonie par projection (jeu A, référence 23,6125)
+  uniforme 85 %                          : perplexité   23.7468  (1.006x)
+  seulement down à 70 %                  : perplexité   23.7488  (1.006x)
+  seulement down à 50 %                  : perplexité   23.8148  (1.009x)
+  seulement gate+up à 80 %               : perplexité   23.8530  (1.010x)
+  seulement attention (q,k,v,o) à 90 %   : perplexité   23.6262  (1.001x)
+  ```
+
+### 🤖 Assistant
+
+⏵ 16 erreurs de compilation — les mesures ont utilisé un binaire périmé. Je regarde
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\ncargo build --release 2>&1 | grep -E \"^error\" -A6 | head -30", "description": "Inspect the compilation errors", "timeoutMs": 300000}`
+
+  ```
+error[E0425]: cannot find value `topk_proj` in this scope
+   --> src/main.rs:421:27
+    |
+421 |             "--topk-q" => topk_proj[0] = args[i + 1].parse().unwrap(),
+    |                           ^^^^^^^^^ not found in this scope
+
+error[E0425]: cannot find value `topk_proj` in this scope
+   --> src/main.rs:422:27
+    |
+422 |             "--topk-k" => topk_proj[1] = args[i + 1].parse().unwrap(),
+    |                           ^^^^^^^^^ not found in this scope
+
+error[E0425]: cannot find value `topk_proj` in this scope
+   --> src/main.rs:423:27
+    |
+423 |             "--topk-v" => topk_proj[2] = args[i + 1].parse().unwrap(),
+    |                           ^^^^^^^^^ not found in this scope
+
+error[E0425]: cannot find value `topk_proj` in this scope
+   --> src/main.rs:424:27
+    |
+424 |             "--topk-o" => topk_proj[3] = args[i + 1].parse().unwrap(),
+    |                           ^^^^^^^^^ not found in this scope
+
+error[E0425]: cannot find value `topk_proj` in this scope
+   --> src/main.rs:425:30
+    |
+425 |             "--topk-gate" => topk_proj[4] = args[i + 1].parse().unwrap(),
+    |                              ^^^^^^^^^ not found in this scope
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\npython3 - <<'PY'\np='src/main.rs'; s=open(p,encoding='utf-8').read()\n# la déclaration doit exister dans run_ppl (ligne ~421) : on l'insère juste après\n# la déclaration de act_renorm DANS run_ppl\ni = s.index('fn run_ppl' … [442 caractères tronqués]`
+
+  ```
+2
+0
+    Finished `release` profile [optimized] target(s) in 0.01s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\necho \"=== parcimonie par projection (jeu A, référence 23,6125)\"\ness() { lbl=$1; shift\n  out=$(timeout 900 ./target/release/qtrinet-core ../models/Qwen2.5-0.5B-Q8_0.gguf --ppl /tmp/wt2_a.txt --ctx 256 --abits 16 --threa … [819 caractères tronqués]`
+
+  ```
+=== parcimonie par projection (jeu A, référence 23,6125)
+  référence                          :   354.3 M évts  perplexité   23.6125 (1.000x)
+  uniforme 85 %                      :   301.5 M évts  perplexité   23.7468 (1.006x)
+  attention 90 % seulement           :   350.0 M évts  perplexité   23.6262 (1.001x)
+  down 70 % seulement                :   323.6 M évts  perplexité   23.7488 (1.006x)
+  down 50 % seulement                :   302.9 M évts  perplexité   23.8148 (1.009x)
+  gate+up 80 % seulement             :   312.9 M évts  perplexité   23.8530 (1.010x)
+  ffn complet 85 % (gate,up,down)    :   308.0 M évts  perplexité   23.5712 (0.998x)
+  ```
+
+### 🤖 Assistant
+
+⏵ **Meilleure configuration trouvée** : parcimonie sur le FFN complet seulement, attention intacte — **−13 % d'événements pour −0,2 % de perplexité**. Vérification sur B
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\necho \"=== vérification sur B (1024 tokens jamais vus, référence 26,2565)\"\ness() { lbl=$1; shift\n  out=$(timeout 900 ./target/release/qtrinet-core ../models/Qwen2.5-0.5B-Q8_0.gguf --ppl /tmp/wt2_b.txt --ctx 256 --abits  … [633 caractères tronqués]`
+
+  ```
+=== vérification sur B (1024 tokens jamais vus, référence 26,2565)
+  référence                          :   354.3 M évts  perplexité   26.2565 (1.000x)
+  ffn 85 %                           :   308.0 M évts  perplexité   26.3772 (1.005x)
+  ffn 80 %                           :   292.4 M évts  perplexité   26.6693 (1.016x)
+  uniforme 85 %                      :   301.5 M évts  perplexité   26.5785 (1.012x)
+  ```
+
+### 🤖 Assistant
+
+⏵ Vérifié sur B : **ffn 85 % = −13 % d'événements pour +0,46 %** (contre +1,23 % en uniforme). Je mesure le gain de vitesse réel
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\necho \"=== temps CPU pour 32 tokens (meilleur de 3)\"\nmes_cpu() { lbl=$1; shift\n  best=99999\n  for i in 1 2 3; do\n    /usr/bin/time -f \"%U\" ./target/release/qtrinet-core ../models/Qwen2.5-0.5B-Q8_0.gguf --infer --ids … [646 caractères tronqués]`
+
+  ```
+=== temps CPU pour 32 tokens (meilleur de 3)
+  référence              :  49.62 s de CPU
+  ffn 85 %               :  50.06 s de CPU
+  ffn 80 %               :  50.40 s de CPU
+  uniforme 85 %          :  49.68 s de CPU
+  ```
+
+### 🤖 Assistant
+
+⏵ Mesure contradictoire avec la précédente. Je vérifie la charge et j'interleave les deux configurations pour annuler la dérive
+
+- **bash** `{"command": "uptime; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\necho \"=== mesure entrelacée (5 alternances, minimum de chacune)\"\nb=99999; f=99999\nfor i in 1 2 3 4 5; do\n  /usr/bin/time -f \"%U\" ./target/release/qtrinet-core ../models/Qwen2.5-0.5B-Q8_0.gguf --infer --ids 9 … [669 caractères tronqués]`
+
+  ```
+14:11:04  up 6 days  3:23,  2 users,  load average: 7,72, 13,67, 14,26
+=== mesure entrelacée (5 alternances, minimum de chacune)
+  référence  : 38.29 s de CPU
+  uniforme 85% : 37.14 s de CPU  (-3.0 %)
+  ```
+
+### 🤖 Assistant
+
+⏵ Machine chargée (load 14) : le gain de temps varie de −3 à −13 % selon la contention. Je consigne la campagne
+
+- **write** `{"content": "# Parcimonie imposée à l'inférence — la frontière mesurée\n\n*Peut-on donner à un modèle **préentraîné** le débit variable d'un réseau à\ndécharge, sans rien réentraîner ?* Campagne mesurée sur Qwen2.5-0.5B Q8_0, avec\ndeux jeux de 1 024 tokens : **A** pour le réglage, **B** (jamais vu) … [6176 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-parcimonie-imposee.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\npython3 - <<'PY'\np='README.md'; s=open(p,encoding='utf-8').read(); o=s\ns=s.replace('''| **Comparaison Spiking (SpikeGPT / Spikformer / Spikingformer)** | ✅ → [`docs/comparaison-spiking.md`](docs/comparaison-spiking.md) |''',\n'''| ** … [2374 caractères tronqués]`

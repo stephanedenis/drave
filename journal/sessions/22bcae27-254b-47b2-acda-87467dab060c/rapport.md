@@ -5,14 +5,14 @@
 | Identifiant | `22bcae27-254b-47b2-acda-87467dab060c` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-25 11:56 |
-| Durée | 48.7 h |
-| Tours | 34 |
-| Messages | 723 |
-| Appels d'outils | 746 |
-| Fichiers touchés | 62 |
-| Commandes | 525 |
+| Durée | 50.3 h |
+| Tours | 35 |
+| Messages | 762 |
+| Appels d'outils | 783 |
+| Fichiers touchés | 63 |
+| Commandes | 560 |
 | Sous-agents | 1 |
-| Commits | 20 |
+| Commits | 21 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -21,6 +21,8 @@
 … [89 caractères tronqués]
 - **complete** — Implémenter l'inférence complète de Qwen2.5-0.5B dans qtrinet-core (Rust std seul) : forward Qwen2 (RMSNorm, RoPE, GQA + cache KV, MLP SwiGLU, lm_head), tokenizer BPE byte-level qwen2, génération autoregressive et échantillonnage ; valider l'égalité token à token contre la référence numpy (src/trans
 … [89 caractères tronqués]
+- **create** — Mener la campagne d'expériences sur l'exécution événementielle du modèle préentraîné Qwen2.5-0.5B : (1) imposer une parcimonie d'activation à l'inférence (seuil et k-WTA) sans aucun entraînement et mesurer la frontière (parcimonie, perplexité, événements/token) ; (2) rendre l'attention exprimable en
+… [267 caractères tronqués]
 
 ## 1. Ce qui a été demandé
 
@@ -91,6 +93,8 @@
 **Tour 33** — automatise l'enregistrement de toutes nos sessions dsh pour ce projet car les traces sont importantes. ensuite crée un document de vision de programme de recherche afin d'avoir un roadmap clair vers un agi pouvant fonctionner localement et on enchaine avec la plomberie d'apprentissage.
 
 **Tour 34** — /home/stephane/Data13TB/stephane/GitHub/Qtrinet/journal doit inclure un automatisme qui produit un .md pour chaque session avec tous les détails qui permettent de reconstituer l'essence de la session et démontrer le travail accompli, étape par étape. Continue ensuite avec le balayage systématique des appariements croisés.
+
+**Tour 35** — attention pour ne pas se perdre à copier les autres et ne pas empiéter non plus sur mon autre programme de recherche https://github.com/stephanedenis/neuronspikes nous voulons ici continuer notre expérience avec des modèles préentrainés qui ont fait leur preuves et appliquer des techniques proche des SNN afin de les exécuter de façon radicalement différente. Nous évaluons les opportunités qui émer … [146 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -1998,7 +2002,46 @@ a = silu(u · x) · (v ·
 
 **Synthèse produite :**
 
-⏵ Les trois papers sont clairs. Je rédige la comparaison avec notre architecture
+⏵ Étude terminée et commitée. Voici ce qu'elle change
+
+**Deux constats qui nous concernent directement.**
+
+**1. Ils ont résolu par construction le problème qui nous bloque.** Nous avons mesuré que les activations d'un LLM dense ne sont **jamais** exactement nulles — notre débit est donc constant et l'argument « on ne paie que ce qui s'active » reste théorique. Un réseau à spikes **impose** cette parcimonie : le neurone LIF de SpikeGPT décharge à **R̂ = 0,15**, soit **6,7× moins d'événements** dans notre moteur. Notre architecture événementielle est mieux adaptée aux modèles à spikes qu'aux modèles quantifiés denses — c'est un renversement de perspective.
+
+**2. Nous appliquons déjà le principe de Spikingformer sans l'avoir cherché.** Leur correction du défaut structurel de Spikformer/SpikeGPT tient à un **échange d'ordre** : garder le flux résiduel en accumulation et rendre discrète l'entrée de chaque couche linéaire. C'est exactement notre `forward` — `x = o + down` reste flottant, et chaque produit matriciel reçoit un vecteur d'activation quantifié int8. Le principe « spike-driven » est déjà respecté ; nous discrétisons à 8 bits au lieu d'1.
+
+**L'astuce décisive, et elle est contre-intuitive** : l'**alignement séquence = temps** de SpikeGPT. Chez Spikformer, la parcimonie est *par pas de temps* et il en faut T — le gain net est R̂×T, pas R̂. En alignant la dimension séquence sur la dimension temporelle, SpikeGPT travaille à T = 1 effectif et encaisse vraiment les 6,7×. Pour nous, cela veut dire : un modèle **récurrent** à spikes, pas un transformeur à spikes.
+
+**La réponse à notre trou le plus sérieux** vient de Spikformer : l'attention `SN(Q·Kᵀ·V·s)` supprime le softmax (les spikes sont non négatifs, il est redondant), se calcule avec des ET logiques et des additions — **aucune multiplication** — et devient **décomposable** : `Kᵀ·V` d'abord, soit O(N·d²) au lieu de O(N²·d). Consommation théorique de l'attention : **0,594 µJ contre 77-88 µJ**. Et surtout : elle devient **exprimable en événements**. C'est la brique à implémenter après la boucle d'apprentissage.
+
+**Trois autres astuces** : le neurone LIF à état (une mémoire scalaire par neurone, `β = 0,5`, seuil 1, reset 0) ; **BatchNorm au lieu de LayerNorm** — ils rapportent que LN ne s'applique pas aux SNN ; et l'**embedding binaire** par Heaviside, sinon le premier tenseur reste flottant et contamine tout.
+
+**La projection chiffrée** : un modèle à R̂ = 0,15 donnerait ~53 M événements par token au lieu d
+… [955 caractères tronqués]
+
+### Tour 35 — attention pour ne pas se perdre à copier les autres et ne pas empiéter non plus sur mon autre programme de recherche htt … [426 caractères tronqués]
+
+*37 appels d'outils.* Actions notables :
+
+- create_goal
+- bash — Read the activation quantizer
+- bash — Implement threshold and k-WTA activation sparsity
+- bash — First threshold sparsity sweep
+- bash — Get full output including event counts
+- bash — Measure the full sparsity-quality frontier
+- bash — Run the k-WTA sweep
+- bash — Fix the k-WTA index inversion and re-measure
+- bash — Fine sweep around the k-WTA optimum
+- bash — k-WTA sweep on the 1024-token tuning set
+- bash — Verify k-WTA on the held-out set
+- bash — Implement and test homeostatic renormalization
+- bash — Retest renormalization with the flag not last
+- bash — Measure the real throughput gain from sparsity
+- … et 23 autres
+
+**Synthèse produite :**
+
+⏵ Machine chargée (load 14) : le gain de temps varie de −3 à −13 % selon la contention. Je consigne la campagne
 
 ## 3. Travail accompli
 
@@ -2068,6 +2111,7 @@ a = silu(u · x) · (v ·
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-greffon.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/session_report.py` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/comparaison-spiking.md` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-parcimonie-imposee.md` | 1 | 0 |
 
 ### Sous-agents lancés
 
@@ -2115,7 +2159,7 @@ a = silu(u · x) · (v ·
 - **T3** Test OpenOCD without root and check Pro device support
 - **T3** Make scripts executable and test jtag_scan
 - **T3** Commit JTAG milestone
-- … et 485 autres
+- … et 520 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2243,7 +2287,7 @@ a = silu(u · x) · (v ·
 
 ## 5. Erreurs rencontrées
 
-68 sorties en erreur ou divergentes. Les premières :
+72 sorties en erreur ou divergentes. Les premières :
 
 - **T2** : === LIEN PCIe (sysfs, sans root) === current_link_speed     = 8.0 GT/s PCIe current_link_width     = 8 max_link_speed         = 8.0 GT/s PCIe max_link_width         = 8 secondary_bus_number   =  vendo
 - **T2** : [POPUP: saisissez le mot de passe] === TOUS les événements USB depuis le boot (fin de log) === [ven sep 25 11:52:23 2026] [ T684749] hid-generic 0003:04F2:2159.00ED: hiddev99,hidraw5: USB HID v1.10 De
@@ -2283,4 +2327,5 @@ a = silu(u · x) · (v ·
 - Archivage des sessions, programme de recherche, plomberie d'apprentissage  TROIS LIVRABLES.  1. ARCHIVAGE AUTOMATIQUE DES SESSIONS DSH    tools/archive_sessions
 - Rapport de session automatique : reconstitution de l'essence et du travail  journal/ contient desormais, pour chaque session, genere automatiquement : - session
 - Comparaison avec SpikeGPT, Spikformer et Spikingformer  Etude des trois references neuromorphiques et comparaison point par point avec notre architecture. Sourc
+- Parcimonie imposee a l'inference : la frontiere mesuree  Campagne sur Qwen2.5-0.5B Q8_0 PREENTRAINE, sans aucun entrainement, avec deux jeux de 1024 tokens (A p
 
