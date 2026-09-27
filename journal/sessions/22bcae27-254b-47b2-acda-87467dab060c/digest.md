@@ -18575,3 +18575,18 @@ fc1ec32 Campagne parcimonie : synthese et configuration gagnante
 ⏵ Encore un négatif : retirer les contrôles de bornes **ralentit** (1,8 %). Je reviens au code sûr
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\ngit checkout src/engine.rs && cargo build --release 2>&1 | grep -cE \"^error\"\ntimeout 900 ./target/release/qtrinet-core ../models/Qwen2.5-0.5B-Q8_0.gguf --ppl /tmp/wt2_a.txt --ctx 256 --abits 16 --threads 16 --attn-topk  … [1119 caractères tronqués]`
+
+  ```
+0
+  perplexité après retour au code sûr : 23.3279
+8f70aaf Engine : les controles de bornes ne sont pas le goulot (mesure A/B)
+ecdfed5 Attention : divisee par deux par la vectorisation, a perplexite identique
+[stderr]
+Updated 1 path from the index
+  ```
+
+### 🤖 Assistant
+
+⏵ Je consolide les leçons de la campagne dans le programme
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\npython3 - <<'PY'\np='docs/programme-recherche.md'; s=open(p,encoding='utf-8').read(); o=s\ns=s.replace('''## 3. Ce que la mesure interdit d'espérer''','''## 2 ter. Ce que la campagne de parcimonie a appris\n\nCampagne complète : [`rapp … [4085 caractères tronqués]`

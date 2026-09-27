@@ -72,6 +72,34 @@ Trois enseignements qui modifient ce programme :
 pas « un LLM quantifié exécuté en listes ». Seule la première donne le débit
 variable que le cahier des charges promettait.
 
+## 2 ter. Ce que la campagne de parcimonie a appris
+
+Campagne complète : [`rapport-campagne-parcimonie.md`](../reports/rapport-campagne-parcimonie.md).
+Quatre enseignements, dont un qui change la méthode.
+
+1. **La parcimonie ne s'impose pas, elle s'entraîne.** Nous plafonnons à −4 à
+   −15 % d'événements pour +0,5 % de perplexité, là où un réseau entraîné à
+   décharger atteint R̂ = 0,15 (6,7×). L'écart est exactement le prix de
+   l'entraînement : un réseau dense répartit son information partout, couper
+   après coup détruit du signal.
+2. **Ce qui est surabondant se coupe gratuitement.** Les poids d'attention :
+   n'en garder que 32 par requête **améliore** la perplexité de 0,5 à 1,2 %
+   (vérifié sur trois jeux). Ce qui est porteur — Q, K, les activations du FFN —
+   ne se coupe pas.
+3. **Une configuration gagne des deux côtés** : attention à 32 clés + `gate` à
+   85 % → **−0,44 % de perplexité et −4,4 % d'événements**.
+4. **Le plus gros gain ne venait pas de la parcimonie.** L'attention tournait à
+   1,9 GFLOP/s sur un cœur parce que ses boucles n'étaient pas vectorisées :
+   réécrites, elle a été **divisée par deux** à perplexité identique. Quatre
+   micro-optimisations de la boucle d'événements ont été testées et **rejetées
+   par la mesure** (décodage par paquets, accumulateurs i32, contrôles de
+   bornes, renormalisation).
+
+➡️ **Règle de méthode à ajouter** : avant d'imposer une approximation pour
+gagner du temps, vérifier que le code de base est écrit correctement. Sur cette
+campagne, une réécriture de boucle a rapporté plus que toutes les techniques
+neuromorphiques importées.
+
 ## 3. Ce que la mesure interdit d'espérer
 
 Trois résultats de ce projet ferment des portes. Les ignorer serait la faute
@@ -161,7 +189,11 @@ falsifiée, et le programme doit se replier sur l'objectif de performance
 
 ## 6. Méthode
 
-1. **Tout mesurer sur la machine**, jamais estimer sans le dire.
+1. **Tout mesurer sur la machine**, jamais estimer sans le dire. Et mesurer en
+   **entrelaçant** les configurations comparées : la machine porte une charge de
+   fond (bureau, autres projets) qui fait varier le temps mur de 30 %. Les
+   mesures déterministes — perplexité, comptes d'événements — sont insensibles à
+   cette charge et doivent être préférées.
 2. **Consigner les erreurs** : le journal de session est archivé
    automatiquement (`tools/archive_sessions.py`, hook git + tâche horaire), et
    chaque rectification est datée dans les rapports.
