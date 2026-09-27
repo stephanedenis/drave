@@ -5,14 +5,14 @@
 | Identifiant | `22bcae27-254b-47b2-acda-87467dab060c` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-25 11:56 |
-| Durée | 55.7 h |
+| Durée | 55.8 h |
 | Tours | 36 |
-| Messages | 961 |
-| Appels d'outils | 976 |
+| Messages | 965 |
+| Appels d'outils | 980 |
 | Fichiers touchés | 66 |
-| Commandes | 739 |
+| Commandes | 743 |
 | Sous-agents | 1 |
-| Commits | 33 |
+| Commits | 34 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -2082,7 +2082,7 @@ Les trois papiers neuromorphiques atteignent **R̂ = 0,15** — 6,7× moins d'é
 
 ### Tour 36 — continue les améliorations
 
-*145 appels d'outils.* Actions notables :
+*149 appels d'outils.* Actions notables :
 
 - bash — Implement sliding-window attention with sinks
 - bash — Test sliding-window attention quality
@@ -2098,11 +2098,11 @@ Les trois papiers neuromorphiques atteignent **R̂ = 0,15** — 6,7× moins d'é
 - bash — Measure dense perplexity and final throughput
 - bash — Find the push/pull crossover by activation density
 - write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-croisement-push-pull.md`
-- … et 127 autres
+- … et 131 autres
 
 **Synthèse produite :**
 
-⏵ Le README annonce encore « 14,8 tok/s » et « le 4 bits ne paie pas » : je le mets à jour avec l'état mesuré
+⏵ Entrelacé : `auto` n'est pas plus lent que `dense` (l'écart était du bruit). Validation finale complète :
 
 ## 3. Travail accompli
 
@@ -2223,7 +2223,7 @@ Les trois papiers neuromorphiques atteignent **R̂ = 0,15** — 6,7× moins d'é
 - **T3** Test OpenOCD without root and check Pro device support
 - **T3** Make scripts executable and test jtag_scan
 - **T3** Commit JTAG milestone
-- … et 699 autres
+- … et 703 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2404,4 +2404,5 @@ Les trois papiers neuromorphiques atteignent **R̂ = 0,15** — 6,7× moins d'é
 - Journal : session du 27/09 (croisement remesure, chemin 4 bits)" && git log --oneline | head -2 cd qtrinet-core grep -n "fn q8_view\|fn dequant\|fn raw_levels\|
 - Import verbatim des blocs Q4_0 : un vrai modele 4 bits dans le moteur  Le lecteur savait decoder Q4_0 mais le moteur requantifiait depuis les f32, ajoutant une 
 - Tete 4 bits en chemin direct, README et rapport a jour  La tete 4 bits passait par le pool : ses seize tampons de sortie (9,7 Mo) etaient ecrits, remis a zero p
+- Defaut = auto : le moteur choisit son chemin par mesure  Sur un modele dense le defaut par evenements etait x2,0 plus lent pour un resultat identique au bit pre
 

@@ -21587,3 +21587,53 @@ sémantique.
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\npython3 tools/archive_sessions.py --quiet 2>&1 | tail -3\npython3 tools/session_report.py 2>&1 | tail -3\ngit add -A && git commit -q -m \"Tete 4 bits en chemin direct, README et rapport a jour\n\nLa tete 4 bits passait par le pool : s … [883 caractères tronqués]`
+
+  ```
+22bcae27 : rapport 142 Ko, 36 tours, 66 fichiers, 1507 mesures, 88 erreurs
+  27c99b10 : rapport 8 Ko, 1 tours, 1 fichiers, 17 mesures, 4 erreurs
+5a15046 Tete 4 bits en chemin direct, README et rapport a jour
+9b3d9ec Import verbatim des blocs Q4_0 : un vrai modele 4 bits dans le moteur
+0a67514 Journal : session du 27/09 (croisement remesure, chemin 4 bits)
+  ```
+
+### 🤖 Assistant
+
+⏵ Meilleure amélioration restante, à faible risque : le défaut du moteur devrait être `--auto` (mesure) plutôt que le push, 2× plus lent sur un modèle dense
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\npython3 - <<'PY'\np='src/main.rs'; s=open(p,encoding='utf-8').read(); o=s\n# valeur par défaut : auto (le moteur choisit par mesure)\nn=s.count('''    let mut dense = false;\n    let mut auto = false;''')\ns=s.replace('''  … [1289 caractères tronqués]`
+
+  ```
+=== défaut (doit être ~28 tok/s, 0 événement)
+=== perplexité 19.2647 sur 510 tokens (0 événements, 19.0 s) ===
+=== --push forcé
+=== perplexité 19.2647 sur 510 tokens (180714248024 événements, 37.8 s) ===
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\nQ8=../models/Qwen2.5-0.5B-Q8_0.gguf\nfor r in 1 2; do\n for f in \"--dense:dense\" \"--auto:auto \"; do\n  fl=${f%%:*}; lbl=${f##*:}\n  ./target/release/qtrinet-core $Q8 --ppl /tmp/wt2_ids.txt --ctx 256 --abits 16 --thread … [204 caractères tronqués]`
+
+  ```
+[dense passage 1] 17.7
+[auto  passage 1] 18.2
+[dense passage 2] 19.5
+[auto  passage 2] 18.1
+  ```
+
+### 🤖 Assistant
+
+⏵ Entrelacé : `auto` n'est pas plus lent que `dense` (l'écart était du bruit). Validation finale complète :
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\nQ8=../models/Qwen2.5-0.5B-Q8_0.gguf; Q4=../models/Qwen2.5-0.5B-Q4_0.gguf\necho \"=== 1. test unitaire du noyau 4 bits\"\ncargo test --release 2>&1 | grep \"test result\"\necho \"=== 2. équivalence des trois modes (512 jeto … [746 caractères tronqués]`
+
+  ```
+=== 1. test unitaire du noyau 4 bits
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+=== 2. équivalence des trois modes (512 jetons)
+  push : PPL 19.2647
+  défaut(auto) : PPL 19.2647
+  dense : PPL 19.2647
+=== 3. génération, défaut puis 4 bits
+  Q8 défaut : ids générés : [409, 82391, 645, 7774, 1788, 24901, 141759, 9
+  Q4 4bits : ids générés : [409, 1187, 66528, 939, 48526, 13, 7543, 1788,
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\npython3 - <<'PY'\np='README.md'; s=open(p,encoding='utf-8').read(); o=s\nold='''| mode | quand | débit (510 jetons) |\n|---|---|---|\n| **pull** (`--dense`) | densité d'activation > 22 % — le cas d'un LLM dense | **28,3 tok/s** |\n| ** … [1896 caractères tronqués]`

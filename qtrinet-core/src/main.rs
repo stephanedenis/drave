@@ -313,8 +313,12 @@ fn run_infer(args: &[String]) {
     let mut act_topk = 0usize;
     let mut act_renorm = false;
     let mut topk_proj = [0usize; 7];
+    // Défaut : le moteur CHOISIT par mesure. Les deux formes sont chargées et la
+    // bascule se fait projection par projection sur la densité mesurée — les
+    // sorties sont identiques au bit près, seul le débit change (×2,1 sur un
+    // modèle dense, ×1,5 en faveur du push sous 5 % de densité).
     let mut dense = false;
-    let mut auto = false;
+    let mut auto = true;
     let mut q4 = 0u8;
     let mut keep = 1.0f32;
     // L'inférence paie une barrière par matrice (168 par token) : l'optimum
@@ -355,6 +359,7 @@ fn run_infer(args: &[String]) {
             "--chat" => { chat = true; i -= 1; }
             "--dense" => { dense = true; i -= 1; }
             "--auto" => { auto = true; i -= 1; }
+            "--push" => { auto = false; dense = false; i -= 1; }
             "--q4" => { q4 |= 3; i -= 1; }
             "--q4-ffn" => { q4 = (q4 & 4) | 1; i -= 1; }
             "--q4-attn" => { q4 = (q4 & 4) | 2; i -= 1; }
@@ -534,8 +539,12 @@ fn run_ppl(args: &[String]) {
     let mut qk_topk = 0usize;
     let mut attn_window = 0usize;
     let mut attn_sinks = 4usize;
+    // Défaut : le moteur CHOISIT par mesure. Les deux formes sont chargées et la
+    // bascule se fait projection par projection sur la densité mesurée — les
+    // sorties sont identiques au bit près, seul le débit change (×2,1 sur un
+    // modèle dense, ×1,5 en faveur du push sous 5 % de densité).
     let mut dense = false;
-    let mut auto = false;
+    let mut auto = true;
     let mut q4 = 0u8;
     let cpu = std::thread::available_parallelism().map(|n| n.get()).unwrap_or(8);
     let mut n_threads = (cpu * 3 / 4).max(1);
@@ -582,6 +591,7 @@ fn run_ppl(args: &[String]) {
             "--threads" => n_threads = args[i + 1].parse().unwrap(),
             "--dense" => { dense = true; i -= 1; }
             "--auto" => { auto = true; i -= 1; }
+            "--push" => { auto = false; dense = false; i -= 1; }
             "--q4" => { q4 |= 3; i -= 1; }
             "--q4-ffn" => { q4 = (q4 & 4) | 1; i -= 1; }
             "--q4-attn" => { q4 = (q4 & 4) | 2; i -= 1; }

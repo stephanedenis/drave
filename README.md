@@ -346,10 +346,13 @@ sémantique.
 
 | mode | quand | débit (510 jetons) |
 |---|---|---|
-| **pull** (`--dense`) | densité d'activation > 22 % — le cas d'un LLM dense | **28,3 tok/s** |
-| **push** (défaut) | densité < 22 % — réseau creux, k-WTA, ReLU | 13,6 tok/s à 100 %, 20,6 à 5 % |
-| **auto** (`--auto`) | charge les deux et bascule par projection, sur la densité mesurée | le meilleur des deux |
-| **4 bits** (`--q4`) | modèle 4 bits existant (Q4_0) ou débit prioritaire | **38,9 tok/s** |
+| **auto** — *le défaut* | toujours : charge les deux formes et bascule projection par projection sur la densité mesurée | **le meilleur des deux** |
+| **pull** (`--dense`) | densité d'activation > 22 % — le cas d'un LLM dense | 28,3 tok/s |
+| **push** (`--push`) | densité < 22 % — réseau creux, k-WTA, ReLU | 13,6 tok/s à 100 %, 20,6 à 5 % |
+| **4 bits** (`--q4`, `--q4-tout`) | modèle 4 bits existant (Q4_0) ou débit prioritaire | **38,9 – 42,5 tok/s** |
+
+Le défaut est `auto` : sur un modèle dense il donne ×2,0 sans rien changer aux
+sorties, et sur un réseau creux il bascule tout seul du bon côté.
 
 | | |
 |---|---|
