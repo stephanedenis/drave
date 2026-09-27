@@ -5,14 +5,14 @@
 | Identifiant | `22bcae27-254b-47b2-acda-87467dab060c` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-25 11:56 |
-| Durée | 55.8 h |
+| Durée | 55.9 h |
 | Tours | 36 |
-| Messages | 965 |
-| Appels d'outils | 980 |
+| Messages | 976 |
+| Appels d'outils | 991 |
 | Fichiers touchés | 66 |
-| Commandes | 743 |
+| Commandes | 754 |
 | Sous-agents | 1 |
-| Commits | 34 |
+| Commits | 35 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -2082,7 +2082,7 @@ Les trois papiers neuromorphiques atteignent **R̂ = 0,15** — 6,7× moins d'é
 
 ### Tour 36 — continue les améliorations
 
-*149 appels d'outils.* Actions notables :
+*160 appels d'outils.* Actions notables :
 
 - bash — Implement sliding-window attention with sinks
 - bash — Test sliding-window attention quality
@@ -2098,11 +2098,11 @@ Les trois papiers neuromorphiques atteignent **R̂ = 0,15** — 6,7× moins d'é
 - bash — Measure dense perplexity and final throughput
 - bash — Find the push/pull crossover by activation density
 - write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-croisement-push-pull.md`
-- … et 131 autres
+- … et 142 autres
 
 **Synthèse produite :**
 
-⏵ Entrelacé : `auto` n'est pas plus lent que `dense` (l'écart était du bruit). Validation finale complète :
+⏵ Scores d'attention : 2,16 → **0,65 ms** (×3,3), attention totale ×1,95. Consolidation finale et commit
 
 ## 3. Travail accompli
 
@@ -2223,7 +2223,7 @@ Les trois papiers neuromorphiques atteignent **R̂ = 0,15** — 6,7× moins d'é
 - **T3** Test OpenOCD without root and check Pro device support
 - **T3** Make scripts executable and test jtag_scan
 - **T3** Commit JTAG milestone
-- … et 703 autres
+- … et 714 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2405,4 +2405,5 @@ Les trois papiers neuromorphiques atteignent **R̂ = 0,15** — 6,7× moins d'é
 - Import verbatim des blocs Q4_0 : un vrai modele 4 bits dans le moteur  Le lecteur savait decoder Q4_0 mais le moteur requantifiait depuis les f32, ajoutant une 
 - Tete 4 bits en chemin direct, README et rapport a jour  La tete 4 bits passait par le pool : ses seize tampons de sortie (9,7 Mo) etaient ecrits, remis a zero p
 - Defaut = auto : le moteur choisit son chemin par mesure  Sur un modele dense le defaut par evenements etait x2,0 plus lent pour un resultat identique au bit pre
+- Attention : scores vectorises AVX2+FMA, hypothese du cache KV refutee  Le poste attention coutait 3,1 ms/jeton a contexte 256 pour ~0,5 M de multiplications. Pr
 

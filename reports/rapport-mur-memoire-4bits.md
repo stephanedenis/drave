@@ -163,6 +163,34 @@ Un détail qui a coûté une mesure : en Q4_0 l'échelle de bloc est **signée**
 `d < 0` dès que le poids extrême du bloc est positif. Stocker sa valeur absolue
 a donné PPL 3 550 569 avant correction.
 
+## 5 ter. L'attention : mesurer avant d'optimiser
+
+Le découpage par poste montrait 3,1 ms/jeton pour l'attention à contexte 256,
+pour seulement ~0,5 M de multiplications. Premier réflexe : c'est la relecture du
+cache KV (14 têtes de requête pour 2 têtes KV, donc les mêmes clés lues 7 fois).
+**Hypothèse fausse** — un chemin groupé par tête KV, qui lit les clés une fois par
+groupe, n'a rien changé (3,20 → 3,27 ms), tout en restant bit à bit identique.
+
+L'instrumentation des trois phases a tranché :
+
+| phase | avant | après |
+|---|---|---|
+| scores `q·k` | **2,10 ms** | **0,65 ms** |
+| softmax | 0,28 | 0,27 |
+| somme pondérée + écriture KV | 0,71 | 0,65 |
+| **total** | **3,09** | **1,57** |
+
+Les scores étaient du **calcul scalaire pur** : un `zip().map().sum()` est une
+chaîne d'additions que LLVM n'a pas le droit de réassocier, et le code tenait
+3,3 opérations par cycle — soit la largeur d'émission du processeur. Huit
+accumulateurs indépendants n'ont rien donné non plus (2,10 → 2,16 ms) : il ne
+restait que le SIMD. En AVX2 + FMA, 32 éléments par tour : **×3,3**.
+
+Ni le cache KV, ni la latence d'addition, ni le `exp()` n'étaient le goulot —
+c'était l'absence de vectorisation, et seule l'instrumentation par phase l'a
+montré. La perplexité bouge au 4ᵉ chiffre (21,0116 → 21,0131) : la somme n'est
+plus « dans l'ordre », c'est le prix assumé.
+
 ## 6. Conclusion honnête
 
 - Le défaut reste **int8 dense** : c'est le meilleur rapport qualité/débit, et

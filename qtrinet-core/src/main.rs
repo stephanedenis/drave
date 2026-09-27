@@ -706,4 +706,7 @@ fn run_ppl(args: &[String]) {
              p[0] / n as f64 * 1e3, p[1] / n as f64 * 1e3, p[2] / n as f64 * 1e3,
              p[3] / n as f64 * 1e3, tot / n as f64 * 1e3,
              (sec - tot) / n as f64 * 1e3);
+    println!("    dont attention : scores {:.2} | softmax {:.2} | somme pondérée + écriture KV {:.2}",
+             p[4] / n as f64 * 1e3, p[5] / n as f64 * 1e3,
+             (p[2] - p[4] - p[5]) / n as f64 * 1e3);
 }

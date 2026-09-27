@@ -347,9 +347,9 @@ sémantique.
 | mode | quand | débit (510 jetons) |
 |---|---|---|
 | **auto** — *le défaut* | toujours : charge les deux formes et bascule projection par projection sur la densité mesurée | **le meilleur des deux** |
-| **pull** (`--dense`) | densité d'activation > 22 % — le cas d'un LLM dense | 28,3 tok/s |
+| **pull** (`--dense`) | densité d'activation > 22 % — le cas d'un LLM dense | 29,5 tok/s |
 | **push** (`--push`) | densité < 22 % — réseau creux, k-WTA, ReLU | 13,6 tok/s à 100 %, 20,6 à 5 % |
-| **4 bits** (`--q4`, `--q4-tout`) | modèle 4 bits existant (Q4_0) ou débit prioritaire | **38,9 – 42,5 tok/s** |
+| **4 bits** (`--q4`, `--q4-tout`) | modèle 4 bits existant (Q4_0) ou débit prioritaire | **41,6 – 44 tok/s** |
 
 Le défaut est `auto` : sur un modèle dense il donne ×2,0 sans rien changer aux
 sorties, et sur un réseau creux il bascule tout seul du bon côté.
@@ -365,7 +365,7 @@ sorties, et sur un réseau creux il bascule tout seul du bon côté.
 
 **Les 4 bits paient — sur les grosses matrices.** Un noyau AVX2 (`vpmaddwd`) à 4,5
 bits/poids, alimenté par un **import verbatim** des blocs Q4_0 (aucune
-requantification), fait tourner un vrai Qwen2.5-0.5B **Q4_0** à **38,9 tok/s**
+requantification), fait tourner un vrai Qwen2.5-0.5B **Q4_0** à **41,6 tok/s**
 contre 28,3 pour le même fichier lu par le noyau int8 — et avec une perplexité
 légèrement **meilleure**, parce qu'il ne rajoute pas une seconde couche d'erreur.
 Le prix réel des 4 bits est celui du modèle : +9,1 % de perplexité contre Q8_0.

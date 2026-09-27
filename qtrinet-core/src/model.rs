@@ -493,6 +493,64 @@ impl Model {
         }
     }
 
+    /// Produit scalaire f32 à huit accumulateurs indépendants.
+    ///
+    /// Un `iter().zip().map().sum()` est une **chaîne** d'additions : chaque
+    /// élément attend le précédent (4 cycles de latence sur Haswell), et LLVM ne
+    /// peut pas réassocier un flottant. Mesuré : 2,10 ms par jeton pour les
+    /// seuls scores d'attention à contexte 256, soit ~1,2 cycle par élément.
+    /// Huit chaînes indépendantes laissent le processeur remplir ses ports.
+    /// Le résultat n'est plus la somme « dans l'ordre » — quelques ulp d'écart,
+    /// à comparer au facteur gagné.
+    #[inline]
+    fn dot8(a: &[f32], b: &[f32]) -> f32 {
+        let n = a.len().min(b.len());
+        let mut acc = [0f32; 8];
+        let mut i = 0usize;
+        while i + 8 <= n {
+            for k in 0..8 { acc[k] += a[i + k] * b[i + k]; }
+            i += 8;
+        }
+        let mut s = ((acc[0] + acc[1]) + (acc[2] + acc[3]))
+                  + ((acc[4] + acc[5]) + (acc[6] + acc[7]));
+        while i < n { s += a[i] * b[i]; i += 1; }
+        s
+    }
+
+    /// Même produit scalaire en AVX2 + FMA : 8 flottants par instruction.
+    /// Le chemin scalaire tient 3,3 opérations par cycle, c'est-à-dire la
+    /// largeur d'émission du processeur — il n'y a plus rien à gagner sans
+    /// SIMD. Quatre accumulateurs vectoriels couvrent 32 éléments par tour.
+    #[cfg(target_arch = "x86_64")]
+    #[target_feature(enable = "avx2,fma")]
+    unsafe fn dot8_avx(a: &[f32], b: &[f32]) -> f32 {
+        use std::arch::x86_64::*;
+        let n = a.len().min(b.len());
+        let mut v0 = _mm256_setzero_ps();
+        let mut v1 = _mm256_setzero_ps();
+        let mut v2 = _mm256_setzero_ps();
+        let mut v3 = _mm256_setzero_ps();
+        let (pa, pb) = (a.as_ptr(), b.as_ptr());
+        let mut i = 0usize;
+        while i + 32 <= n {
+            v0 = _mm256_fmadd_ps(_mm256_loadu_ps(pa.add(i)), _mm256_loadu_ps(pb.add(i)), v0);
+            v1 = _mm256_fmadd_ps(_mm256_loadu_ps(pa.add(i + 8)), _mm256_loadu_ps(pb.add(i + 8)), v1);
+            v2 = _mm256_fmadd_ps(_mm256_loadu_ps(pa.add(i + 16)), _mm256_loadu_ps(pb.add(i + 16)), v2);
+            v3 = _mm256_fmadd_ps(_mm256_loadu_ps(pa.add(i + 24)), _mm256_loadu_ps(pb.add(i + 24)), v3);
+            i += 32;
+        }
+        let mut v = _mm256_add_ps(_mm256_add_ps(v0, v1), _mm256_add_ps(v2, v3));
+        while i + 8 <= n {
+            v = _mm256_fmadd_ps(_mm256_loadu_ps(pa.add(i)), _mm256_loadu_ps(pb.add(i)), v);
+            i += 8;
+        }
+        let mut t = [0f32; 8];
+        _mm256_storeu_ps(t.as_mut_ptr(), v);
+        let mut s = (t[0] + t[1]) + (t[2] + t[3]) + ((t[4] + t[5]) + (t[6] + t[7]));
+        while i < n { s += *pa.add(i) * *pb.add(i); i += 1; }
+        s
+    }
+
     fn rmsnorm(x: &[f32], w: &[f32], eps: f32, out: &mut [f32]) {
         let mut ss = 0f32;
         for &v in x { ss += v * v; }
@@ -565,6 +623,18 @@ impl Model {
         let mut up = vec![0f32; cfg.ffn];
         let mut down = vec![0f32; h];
         let mut sc = vec![0f32; pos + 1];
+        // scores par TÊTE pour le chemin groupé (cf. plus bas) : les têtes
+        // d'un même groupe KV partagent les mêmes clés et valeurs.
+        let mut sc2 = vec![0f32; nh * ctx];
+        #[cfg(target_arch = "x86_64")]
+        let simd = std::is_x86_feature_detected!("avx2") && std::is_x86_feature_detected!("fma");
+        #[cfg(not(target_arch = "x86_64"))]
+        let simd = false;
+        let point = |a: &[f32], b: &[f32]| -> f32 {
+            #[cfg(target_arch = "x86_64")]
+            if simd { return unsafe { Self::dot8_avx(a, b) }; }
+            Self::dot8(a, b)
+        };
         let mut attn_idx: Vec<u32> = Vec::with_capacity(ctx);
         let attn_all: Vec<u32> = (0..ctx as u32).collect();
 
@@ -599,7 +669,65 @@ impl Model {
             let scale = 1.0 / (hd as f32).sqrt();
             let kc = &kv_k[l];
             let vc = &kv_v[l];
-            for hh in 0..nh {
+            let n = pos + 1;
+            // ---- chemin GROUPÉ par tête KV (attention complète sans top-k) ----
+            // Mesuré : « attention » croît exactement linéairement avec le
+            // contexte (0,88 / 1,91 / 3,20 ms à 64 / 128 / 256) — c'est la
+            // relecture du cache KV, pas le calcul. Or `rep` têtes de requête
+            // partagent une même tête KV : la boucle par tête relisait donc les
+            // mêmes clés `rep` fois (7 ici). En parcourant les clés une fois par
+            // groupe et en tenant `nh` scores, on divise ce trafic par `rep`.
+            // L'arithmétique par tête est inchangée et dans le même ordre : les
+            // sorties restent bit à bit identiques.
+            let groupe = self.attn_window == 0 && self.attn_topk == 0 && rep > 1;
+            if groupe {
+                let t_scores = Instant::now();
+                for kvh in 0..nkv {
+                    let h0 = kvh * rep;
+                    let h1 = (h0 + rep).min(nh);
+                    for t in 0..n {
+                        let kt = &kc[(kvh * ctx + t) * hd..(kvh * ctx + t) * hd + hd];
+                        for hh in h0..h1 {
+                            let qh = &q[hh * hd..(hh + 1) * hd];
+                            sc2[hh * ctx + t] = point(qh, kt) * scale;
+                        }
+                    }
+                }
+                self.prof[4] += t_scores.elapsed().as_secs_f64();
+                let t_soft = Instant::now();
+                for kvh in 0..nkv {
+                    let h0 = kvh * rep;
+                    let h1 = (h0 + rep).min(nh);
+                    for hh in h0..h1 {
+                        let row = &mut sc2[hh * ctx..hh * ctx + n];
+                        let mut mx = f32::NEG_INFINITY;
+                        for &v in row.iter() { if v > mx { mx = v; } }
+                        let mut sum = 0f32;
+                        for v in row.iter_mut() { let e = (*v - mx).exp(); *v = e; sum += e; }
+                        let inv = 1.0 / sum;
+                        for v in row.iter_mut() { *v *= inv; }
+                    }
+                }
+                self.prof[5] += t_soft.elapsed().as_secs_f64();
+                for kvh in 0..nkv {
+                    let h0 = kvh * rep;
+                    let h1 = (h0 + rep).min(nh);
+                    for hh in h0..h1 {
+                        let out = &mut att[hh * hd..(hh + 1) * hd];
+                        for v in out.iter_mut() { *v = 0.0; }
+                    }
+                    for t in 0..n {
+                        let vt = &vc[(kvh * ctx + t) * hd..(kvh * ctx + t) * hd + hd];
+                        for hh in h0..h1 {
+                            let w = sc2[hh * ctx + t];
+                            let out = &mut att[hh * hd..(hh + 1) * hd];
+                            for (o, x) in out.iter_mut().zip(vt.iter()) { *o += w * x; }
+                        }
+                    }
+                    self.attn_events += ((h1 - h0) * n) as u64;
+                }
+            }
+            for hh in 0..(if groupe { 0 } else { nh }) {
                 let kvh = hh / rep;
                 let qh = &q[hh * hd..(hh + 1) * hd];
                 // produit scalaire écrit en itérateurs : la forme indexée
@@ -616,8 +744,7 @@ impl Model {
                 // arbitraire (0) fausse la distribution au lieu de la drainer.
                 for t in (0..ns).chain(lo..nw) {
                     let kt = &kc[(kvh * ctx + t) * hd..(kvh * ctx + t) * hd + hd];
-                    let s: f32 = qh.iter().zip(kt.iter()).map(|(a, b)| a * b).sum();
-                    sc[t] = s * scale;
+                    sc[t] = point(qh, kt) * scale;
                 }
                 for t in ns..lo { sc[t] = f32::NEG_INFINITY; }
                 // Attention à k clés. Le CALCUL DES SCORES reste sur toutes les

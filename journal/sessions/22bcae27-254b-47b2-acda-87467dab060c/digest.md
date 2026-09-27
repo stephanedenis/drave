@@ -21637,3 +21637,192 @@ test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; fini
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\npython3 - <<'PY'\np='README.md'; s=open(p,encoding='utf-8').read(); o=s\nold='''| mode | quand | débit (510 jetons) |\n|---|---|---|\n| **pull** (`--dense`) | densité d'activation > 22 % — le cas d'un LLM dense | **28,3 tok/s** |\n| ** … [1896 caractères tronqués]`
+
+  ```
+22bcae27 : rapport 142 Ko, 36 tours, 66 fichiers, 1512 mesures, 88 erreurs
+  27c99b10 : rapport 8 Ko, 1 tours, 1 fichiers, 17 mesures, 4 erreurs
+caddba3 Defaut = auto : le moteur choisit son chemin par mesure
+5a15046 Tete 4 bits en chemin direct, README et rapport a jour
+9b3d9ec Import verbatim des blocs Q4_0 : un vrai modele 4 bits dans le moteur
+  ```
+
+### 🤖 Assistant
+
+⏵ Un dernier chantier : l'attention coûte 3,1 ms/token pour ~229 k MAC — 10× trop. J'inspecte le code
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\nsed -n '/écriture du cache KV à la position courante/,/self.prof\\[2\\]/p' src/model.rs | head -75", "description": "Read the attention implementation"}`
+
+  ```
+// écriture du cache KV à la position courante
+            {
+                let kc = &mut kv_k[l];
+                let vc = &mut kv_v[l];
+                for hh in 0..nkv {
+                    let dst = (hh * ctx + pos) * hd;
+                    kc[dst..dst + hd].copy_from_slice(&k[hh * hd..(hh + 1) * hd]);
+                    vc[dst..dst + hd].copy_from_slice(&v[hh * hd..(hh + 1) * hd]);
+                }
+            }
+            // attention groupée
+            let scale = 1.0 / (hd as f32).sqrt();
+            let kc = &kv_k[l];
+            let vc = &kv_v[l];
+            for hh in 0..nh {
+                let kvh = hh / rep;
+                let qh = &q[hh * hd..(hh + 1) * hd];
+                // produit scalaire écrit en itérateurs : la forme indexée
+                // (`for d in 0..hd { s += qh[d]*kt[d] }`) ne se vectorise pas —
+                // mesuré à 1,9 GFLOP/s sur un cœur, soit 0,6 opération par cycle.
+                // fenêtre glissante : seules les clés de la fenêtre sont notées,
+                // plus quelques puits au début (leur attention sert de drain).
+                let nw = pos + 1;
+                let lo = if self.attn_window > 0 && nw > self.attn_window {
+
+… [3017 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Hypothèse : l'attention est limitée par la relecture du cache KV (14 têtes pour 2 têtes KV). Test de linéarité :
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\nQ4=../models/Qwen2.5-0.5B-Q4_0.gguf\nfor c in 64 128 256 512; do\n  ./target/release/qtrinet-core $Q4 --ppl /tmp/wt2_ids.txt --ctx $c --abits 16 --threads 16 \\\n     --limit 256 --q4 2>&1 | grep -oP 'postes.*' | sed \"s/^ … [103 caractères tronqués]`
+
+  ```
+ctx=64 postes (ms/token) : projets-attn 1.92 | rope 0.35 | attention 0.88 | proj+mlp 13.35 | somme 16.51 | reste (tête + échantillonnage) 7.13
+ctx=128 postes (ms/token) : projets-attn 2.10 | rope 0.40 | attention 1.91 | proj+mlp 14.08 | somme 18.49 | reste (tête + échantillonnage) 7.18
+ctx=256 postes (ms/token) : projets-attn 1.91 | rope 0.37 | attention 3.20 | proj+mlp 13.22 | somme 18.70 | reste (tête + échantillonnage) 7.05
+ctx=512 postes (ms/token) : projets-attn 1.96 | rope 0.38 | attention 3.25 | proj+mlp 13.29 | somme 18.88 | reste (tête + échantillonnage) 7.05
+  ```
+
+### 🤖 Assistant
+
+⏵ Confirmé : linéaire en contexte (0,88 → 1,91 → 3,20 ms), donc relecture du cache KV. Je groupe les têtes par tête KV
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\nsed -n '/let ta = Instant::now/,/self.prof\\[2\\]/p' src/model.rs | tail -60", "description": "Read the rest of the attention block"}`
+
+  ```
+for t in ns..lo { sc[t] = f32::NEG_INFINITY; }
+                // Attention à k clés. Le CALCUL DES SCORES reste sur toutes les
+                // clés — il faut les noter pour savoir lesquelles garder. En
+                // revanche le softmax ET la somme pondérée n'itèrent plus que sur
+                // les k retenues : c'est là qu'est le O(N·k). Masquer sans
+                // réécrire les boucles ne gagnait rien (mesuré : 12,4 → 12,5 ms).
+                let n = pos + 1;
+                let k = if self.attn_topk > 0 { self.attn_topk.min(n) } else { n };
+                if self.attn_window > 0 {
+                    // pas de top-k : on note exactement les clés de la fenêtre
+                    attn_idx.clear();
+                    let ns = if lo > 0 { self.attn_sinks.min(lo) } else { 0 };
+                    attn_idx.extend((0..ns as u32).chain(lo as u32..n as u32));
+                    let iter: &[u32] = &attn_idx;
+                    self.attn_events += iter.len() as u64;
+                    let mut mx = f32::NEG_INFINITY;
+                    for &t in iter { let v = sc[t as usize]; if v > mx { mx = v; } }
+                    let mut sum = 0f32;
+                    for &t in 
+… [2328 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\nsed -n '/pub fn forward(&mut self, tok: u32, pos: usize)/,/let ta = Instant::now/p' src/model.rs | head -45", "description": "Read the top of forward for bindings"}`
+
+  ```
+pub fn forward(&mut self, tok: u32, pos: usize) -> Vec<f32> {
+        assert!(pos < self.ctx, "contexte dépassé ({pos} ≥ {})", self.ctx);
+        // lus AVANT l'emprunt destructuré : la parcimonie par projection
+        let tkp = self.act_topk_proj;
+        let tkg = self.act_topk;
+        let tk = |p: usize| if tkp[p] > 0 { tkp[p] } else { tkg };
+        let Model { g, cfg, layers, out_norm, pool, kv_k, kv_v, events, .. } = self;
+        let h = cfg.hidden;
+        let hd = cfg.head_dim;
+        let nh = cfg.n_head;
+        let nkv = cfg.n_kv_head;
+        let rep = nh / nkv;
+        let ctx = self.ctx;
+
+        let mut x = g.row_f32("token_embd.weight", tok as usize, h);
+        let mut hn = vec![0f32; h];
+        let mut q = vec![0f32; h];
+        let mut k = vec![0f32; nkv * hd];
+        let mut v = vec![0f32; nkv * hd];
+        let mut att = vec![0f32; h];
+        let mut o = vec![0f32; h];
+        let mut gate = vec![0f32; cfg.ffn];
+        // tampon partagé : sélection k-WTA pendant les produits matriciels, puis
+        // quantiles du capteur hebbien — les deux usages ne se recouvrent pas.
+        let mut scratch: Vec<f32> = Vec::with_capacity(cfg.ffn);
+        let mut up =
+… [1228 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\npython3 - <<'PY'\np='src/model.rs'; s=open(p,encoding='utf-8').read(); o=s\ns=s.replace('''        let mut sc = vec![0f32; pos + 1];''',\n'''        let mut sc = vec![0f32; pos + 1];\n        // scores par TÊTE pour le che … [3611 caractères tronqués]`
+
+  ```
+=== build
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\nQ4=../models/Qwen2.5-0.5B-Q4_0.gguf; Q8=../models/Qwen2.5-0.5B-Q8_0.gguf\necho \"=== PPL (doit être identique à avant : 21,0116 / 19,2647)\"\n./target/release/qtrinet-core $Q4 --ppl /tmp/wt2_ids.txt --ctx 256 --abits 16 -- … [311 caractères tronqués]`
+
+  ```
+=== PPL (doit être identique à avant : 21,0116 / 19,2647)
+=== perplexité 21.0116 sur 510 tokens (0 événements, 13.4 s) ===
+    postes (ms/token) : projets-attn 1.98 | rope 0.40 | attention 3.27 | proj+mlp 13.45 | somme 19.11 | reste (tête + échantillonnage) 7.25
+=== perplexité 19.2647 sur 510 tokens (0 événements, 18.0 s) ===
+    postes (ms/token) : projets-attn 2.62 | rope 0.55 | attention 2.96 | proj+mlp 22.06 | somme 28.19 | reste (tête + échantillonnage) 7.02
+  ```
+
+### 🤖 Assistant
+
+⏵ Le groupement n'a rien changé → ce n'était pas le cache KV. J'instrumente les trois phases de l'attention pour savoir où passent les 3,2 ms
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\npython3 - <<'PY'\np='src/model.rs'; s=open(p,encoding='utf-8').read(); o=s\nold='''            if groupe {\n                for kvh in 0..nkv {\n                    let h0 = kvh * rep;\n                    let h1 = (h0 + r … [4727 caractères tronqués]`
+
+  ```
+=== perplexité 21.0116 sur 510 tokens (0 événements, 13.3 s) ===
+    postes (ms/token) : projets-attn 1.94 | rope 0.39 | attention 3.09 | proj+mlp 13.43 | somme 18.86 | reste (tête + échantillonnage) 7.14
+    dont attention : scores 2.10 | softmax 0.28 | somme pondérée + écriture KV 0.71
+  ```
+
+### 🤖 Assistant
+
+⏵ Le poste « scores » est du calcul scalaire pur (1,2 cycle/élément) : je lui donne huit accumulateurs indépendants
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\npython3 - <<'PY'\np='src/model.rs'; s=open(p,encoding='utf-8').read(); o=s\nold='''    fn rmsnorm(x: &[f32], w: &[f32], eps: f32, out: &mut [f32]) {'''\nassert s.count(old)==1\ns=s.replace(old,'''    /// Produit scalaire f … [1989 caractères tronqués]`
+
+  ```
+=== perplexité 21.0111 sur 510 tokens (0 événements, 13.0 s) ===
+    postes (ms/token) : projets-attn 1.86 | rope 0.38 | attention 3.06 | proj+mlp 13.10 | somme 18.40 | reste (tête + échantillonnage) 7.05
+    dont attention : scores 2.16 | softmax 0.28 | somme pondérée + écriture KV 0.62
+  ```
+
+### 🤖 Assistant
+
+⏵ Le scalaire est à 3,3 opérations/cycle : il ne reste que le SIMD. J'écris le produit scalaire AVX2+FMA pour les scores
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\npython3 - <<'PY'\np='src/model.rs'; s=open(p,encoding='utf-8').read(); o=s\nold='''    fn rmsnorm(x: &[f32], w: &[f32], eps: f32, out: &mut [f32]) {'''\nassert s.count(old)==1\ns=s.replace(old,'''    /// Même produit scala … [2980 caractères tronqués]`
+
+  ```
+=== perplexité 21.0131 sur 510 tokens (0 événements, 12.3 s) ===
+    postes (ms/token) : projets-attn 1.92 | rope 0.37 | attention 1.57 | proj+mlp 13.36 | somme 17.23 | reste (tête + échantillonnage) 6.92
+    dont attention : scores 0.65 | softmax 0.27 | somme pondérée + écriture KV 0.65
+  ```
+
+### 🤖 Assistant
+
+⏵ Scores d'attention : 2,16 → **0,65 ms** (×3,3), attention totale ×1,95. Consolidation finale et commit
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\nQ8=../models/Qwen2.5-0.5B-Q8_0.gguf; Q4=../models/Qwen2.5-0.5B-Q4_0.gguf\necho \"=== équivalence des modes (512 jetons)\"\nfor f in \"--push:push\" \":défaut\" \"--dense:dense\"; do\n  fl=${f%%:*}; lbl=${f##*:}\n  ./target … [764 caractères tronqués]`
+
+  ```
+=== équivalence des modes (512 jetons)
+  push : 19.2641 (180714586188 événements, 37.2 
+  défaut : 19.2641 (0 événements, 17.3 
+  dense : 19.2641 (0 événements, 17.4 
+=== test unitaire 4 bits
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+=== génération, mêmes tokens en push et en pull ?
+  push : ids générés : [409, 1187, 66528, 939, 297, 1064, 11981, 13
+  dense : ids générés : [409, 1187, 66528, 939, 297, 1064, 11981, 13
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\npython3 - <<'PY'\np='reports/rapport-mur-memoire-4bits.md'; s=open(p,encoding='utf-8').read()\nold='''## 6. Conclusion honnête'''\nassert s.count(old)==1\ns=s.replace(old,'''## 5 ter. L'attention : mesurer avant d'optimiser\n\nLe décou … [3537 caractères tronqués]`
