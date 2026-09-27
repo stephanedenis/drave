@@ -5,14 +5,14 @@
 | Identifiant | `22bcae27-254b-47b2-acda-87467dab060c` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-25 11:56 |
-| Durée | 52.0 h |
+| Durée | 52.1 h |
 | Tours | 35 |
-| Messages | 793 |
-| Appels d'outils | 814 |
+| Messages | 796 |
+| Appels d'outils | 817 |
 | Fichiers touchés | 65 |
-| Commandes | 589 |
+| Commandes | 592 |
 | Sous-agents | 1 |
-| Commits | 24 |
+| Commits | 25 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -2021,7 +2021,7 @@ a = silu(u · x) · (v ·
 
 ### Tour 35 — attention pour ne pas se perdre à copier les autres et ne pas empiéter non plus sur mon autre programme de recherche htt … [426 caractères tronqués]
 
-*68 appels d'outils.* Actions notables :
+*71 appels d'outils.* Actions notables :
 
 - create_goal
 - bash — Read the activation quantizer
@@ -2037,11 +2037,11 @@ a = silu(u · x) · (v ·
 - bash — Implement and test homeostatic renormalization
 - bash — Retest renormalization with the flag not last
 - bash — Measure the real throughput gain from sparsity
-- … et 54 autres
+- … et 57 autres
 
 **Synthèse produite :**
 
-⏵ **Configuration gagnante vérifiée sur B** : −0,44 % de perplexité ET −4,4 % d'événements. Je consigne la campagne complète
+⏵ Gain validé en mesure entrelacée. Je commite l'optimisation de l'attention
 
 ## 3. Travail accompli
 
@@ -2161,7 +2161,7 @@ a = silu(u · x) · (v ·
 - **T3** Test OpenOCD without root and check Pro device support
 - **T3** Make scripts executable and test jtag_scan
 - **T3** Commit JTAG milestone
-- … et 549 autres
+- … et 552 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2333,4 +2333,5 @@ a = silu(u · x) · (v ·
 - Attention creuse : le trou se referme, et par le haut  Une seule modification a l'inference, sans reentrainement : ne garder que les k plus grands scores par re
 - Attention creuse : correction -- le gain est en qualite, pas en temps  J'avais annonce une attention \"meilleure, moins chere et listable\". La mesure corrige l
 - Campagne parcimonie : synthese et configuration gagnante  CONFIGURATION RETENUE (verifiee sur les deux jeux, dont B tenu a l'ecart) : attention a 32 cles + proj
+- Attention : divisee par deux par la vectorisation, a perplexite identique  En cherchant pourquoi le top-k ne gagnait pas de temps, j'ai trouve un cout bien plus
 

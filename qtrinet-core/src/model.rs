@@ -529,10 +529,12 @@ impl Model {
             for hh in 0..nh {
                 let kvh = hh / rep;
                 let qh = &q[hh * hd..(hh + 1) * hd];
+                // produit scalaire écrit en itérateurs : la forme indexée
+                // (`for d in 0..hd { s += qh[d]*kt[d] }`) ne se vectorise pas —
+                // mesuré à 1,9 GFLOP/s sur un cœur, soit 0,6 opération par cycle.
                 for t in 0..=pos {
                     let kt = &kc[(kvh * ctx + t) * hd..(kvh * ctx + t) * hd + hd];
-                    let mut s = 0f32;
-                    for d in 0..hd { s += qh[d] * kt[d]; }
+                    let s: f32 = qh.iter().zip(kt.iter()).map(|(a, b)| a * b).sum();
                     sc[t] = s * scale;
                 }
                 // Attention à k clés. Le CALCUL DES SCORES reste sur toutes les
@@ -561,10 +563,14 @@ impl Model {
                 for &t in iter { let e = (sc[t as usize] - mx).exp(); sc[t as usize] = e; sum += e; }
                 let inv = 1.0 / sum;
                 for &t in iter { sc[t as usize] *= inv; }
-                for d in 0..hd {
-                    let mut s = 0f32;
-                    for &t in iter { s += sc[t as usize] * vc[(kvh * ctx + t as usize) * hd + d]; }
-                    att[hh * hd + d] = s;
+                // somme pondérée : on accumule par clé dans le vecteur de sortie,
+                // ce qui lit vc séquentiellement au lieu de le parcourir à stride.
+                let out = &mut att[hh * hd..(hh + 1) * hd];
+                for v in out.iter_mut() { *v = 0.0; }
+                for &t in iter {
+                    let w = sc[t as usize];
+                    let vt = &vc[(kvh * ctx + t as usize) * hd..(kvh * ctx + t as usize) * hd + hd];
+                    for (o, x) in out.iter_mut().zip(vt.iter()) { *o += w * x; }
                 }
             }
             self.prof[2] += ta.elapsed().as_secs_f64();

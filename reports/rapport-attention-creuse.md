@@ -115,6 +115,32 @@ Baisser le coût demanderait d'éviter le calcul des scores — donc soit un ind
 appris (entraînement, hors de ce programme), soit une approximation de type
 noyau ou hachage sensible à la localité.
 
+## 3 ter. Ce qui a *effectivement* accéléré l'attention : la vectorisation
+
+En cherchant pourquoi le top-k ne gagnait rien, j'ai trouvé un coût bien plus
+gros que prévu : l'attention tournait à **1,9 GFLOP/s sur un seul cœur**, soit
+0,6 opération par cycle. Le compilateur ne vectorisait pas les boucles écrites
+sous forme indexée.
+
+Deux réécritures, à perplexité **rigoureusement identique** (23,6125 dense,
+23,3279 à k = 32) :
+
+| boucle | avant | après |
+|---|---|---|
+| produit scalaire des scores | `for d in 0..hd { s += qh[d]*kt[d] }` | `qh.iter().zip(kt.iter()).map(\|(a,b)\| a*b).sum()` |
+| somme pondérée | accumulation par dimension (stride 64) | accumulation **par clé** dans le vecteur de sortie (lecture séquentielle) |
+
+Mesure entrelacée, contexte 512 :
+
+| | temps d'attention |
+|---|---|
+| avant | **11,5 ms/token** |
+| après | **5,7 ms/token** |
+
+➡️ **Divisée par deux**, gratuitement, sans changer un chiffre de la perplexité.
+C'est le gain le plus net de toute la campagne — et il ne vient pas de la
+parcimonie mais de l'écriture des boucles.
+
 ## 4. Ce qui reste à faire
 
 1. **Générer les événements d'attention** : le moteur sait consommer des listes,

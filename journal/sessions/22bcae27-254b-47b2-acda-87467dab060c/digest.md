@@ -18447,3 +18447,46 @@ Created file
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\npython3 - <<'PY'\np='README.md'; s=open(p,encoding='utf-8').read(); o=s\ns=s.replace('''| **Attention creuse (top-k par requête)** | ✅ mesuré → [`reports/rapport-attention-creuse.md`](reports/rapport-attention-creuse.md) |''',\n'''| ** … [2163 caractères tronqués]`
+
+  ```
+fc1ec32 Campagne parcimonie : synthese et configuration gagnante
+18d0f13 Attention creuse : correction -- le gain est en qualite, pas en temps
+44c9cee Attention creuse : le trou se referme, et par le haut
+  ```
+
+### 🤖 Assistant
+
+⏵ Piste plus rentable trouvée : l'attention fait 22 MFLOP par token **sur un seul thread**, à 1,9 GFLOP/s — le compilateur ne vectorise pas. Je réécris les boucles
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\npython3 - <<'PY'\np='src/model.rs'; s=open(p,encoding='utf-8').read(); o=s\ns=s.replace('''                for t in 0..=pos {\n                    let kt = &kc[(kvh * ctx + t) * hd..(kvh * ctx + t) * hd + hd];\n            … [2827 caractères tronqués]`
+
+  ```
+0
+=== exactitude
+  k=0 : 23.6125  (attendu 23,6125 / 23,328)
+  k=32 : 23.3279  (attendu 23,6125 / 23,328)
+=== temps d'attention (entrelacé)
+  dense   5.7 ms | 32 clés   5.7 ms  (avant réécriture : 11,5 / 11,5)
+  ```
+
+### 🤖 Assistant
+
+⏵ **Attention divisée par deux** (11,5 → 5,7 ms) à perplexité identique. Je mesure l'effet global
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\necho \"=== profil complet à 512 tokens de contexte\"\nfor i in 1 2; do\n  timeout 900 ./target/release/qtrinet-core ../models/Qwen2.5-0.5B-Q8_0.gguf --infer --ids-file /tmp/wt2_512.txt --n 1 --ctx 1024 --threads 16 --abits … [419 caractères tronqués]`
+
+  ```
+=== profil complet à 512 tokens de contexte
+  matvec-attn 5.1 | rope 0.7 | attention 5.8 | matvec+mlp 50.1 | total mesuré 61.6
+  matvec-attn 5.1 | rope 0.7 | attention 5.8 | matvec+mlp 51.1 | total mesuré 62.7
+=== et à contexte 64 (génération)
+tokens générés : [358, 2776, 264, 48948, 304, 13027, 323, 358, 2776, 4460, 311, 1855, 264, 2025, 429, 646]
+généré  : 16 tokens en 1.451 s  (11.02 tok/s)
+postes (ms/token) : matvec-attn 6.9 | rope 0.6 | attention 0.3 | matvec+mlp 76.6 | total mesuré 84.5
+  ```
+
+### 🤖 Assistant
+
+⏵ Gain validé en mesure entrelacée. Je commite l'optimisation de l'attention
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\npython3 - <<'PY'\np='reports/rapport-attention-creuse.md'; s=open(p,encoding='utf-8').read(); o=s\ns=s.replace('''## 4. Ce qui reste à faire''','''## 3 ter. Ce qui a *effectivement* accéléré l'attention : la vectorisation\n\nEn chercha … [2236 caractères tronqués]`
