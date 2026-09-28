@@ -5,14 +5,14 @@
 | Identifiant | `22bcae27-254b-47b2-acda-87467dab060c` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-25 11:56 |
-| Durée | 72.8 h |
-| Tours | 44 |
-| Messages | 1171 |
-| Appels d'outils | 1169 |
+| Durée | 73.0 h |
+| Tours | 45 |
+| Messages | 1177 |
+| Appels d'outils | 1173 |
 | Fichiers touchés | 68 |
-| Commandes | 927 |
+| Commandes | 931 |
 | Sous-agents | 1 |
-| Commits | 49 |
+| Commits | 50 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -117,6 +117,8 @@
 **Tour 43** — n'hésites pas à utiliser la plateforme de développement la plus adéquate pour les performances recherchées, cpp, rust, cuda, asm ou autre. tout est permis si c'est fiable et performant.
 
 **Tour 44** — pourrait-on avoir les plus gros modèles déjà chargés en gpu et les petits experts en cpu? Qu'en est-il de notre approche par liste de connexions  positive et liste négative avec répétition (delta zéro) pour les couches qui ont des matrices plus creuses?
+
+**Tour 45** — nos essais en liste séparées portainet sur des poids unitaires (absent, répétition(delta d'adresse =0)  pour aller au delà de 1 comme poid). On pouvait donc utiliser un nombre arbitraire de bits par couche et aller au delà du 4 bits (5, 6 , 7 ou 8 idéalement)
 
 ## 2. Déroulé, étape par étape
 
@@ -2540,7 +2542,51 @@ Trois commits cette session ; le parc CPU reste vert (0,5B 19,3885 · Q4_0 21,01
 
 **Synthèse produite :**
 
-⏵ Chemin CPU bit-exact (19,3885 avec et sans GPU). Je commite et je réponds à vos deux questions.
+⏵ Vos deux intuitions sont bonnes — et les chiffres disent lesquelles tiennent.
+
+\## 1. Gros modèles sur GPU, experts sur CPU
+
+**C'est exactement le bon partage, et je l'ai implémenté pour la première moitié.** Les poids Q8_0 des projections d'attention résident maintenant en mémoire vidéo ; seules les activations (kilo-octets) et le résultat traversent le bus.
+
+| | CPU seul | avec projections sur GPU |
+|---|---|---|
+| gpt-oss-120b, attention | 31,1 ms/jeton | **26,9 ms** |
+| total | 195 ms | **181 ms** |
+
+**Fidélité** : chemin CPU bit-exact (19,3885 avec et sans `QT_GPU`) ; sur gpt-oss l'écart est de 1,2 %, dû à l'ordre de sommation flottant.
+
+**Pourquoi le gain est modeste, et pourquoi les experts doivent rester sur CPU** — c'est le bus qui tranche :
+
+- Les experts de gpt-oss pèsent **61 Go** contre **32 Go de VRAM** au total : ils ne rentrent pas. Et les streamer serait *contre-productif* : 52 Mo par couche × 36 = 1,9 Go par jeton à 6,5 Go/s de PCIe = **292 ms**, contre **148 ms** mesurés pour les calculer sur CPU. Votre intuition est la bonne, pour une raison quantifiée.
+- Le seuil de déport est **fixé par la mesure, pas par le raisonnement** : le FFN du 0,5B (4,6 Mo) *perd* au GPU (123 → 151 µs) ; l'attention de gpt-oss (12,5 Mo) y *gagne* (216 → 187 µs). D'où un seuil à 8 Mo. L'aller-retour coûte ~60 µs, presque tout en latence de lancement — c'est ce qu'il faudra réduire.
+- La **tête** n'est pas déportée : 23 → **159 ms** ✗. Une ligne par fil, donc des adresses distantes de 34 octets : chaque accès d'une warp tombe dans une ligne de cache différente. Il faut une warp par ligne avec réduction. Code écrit, désactivé, mesuré, documenté.
+
+Trois chantiers avant que le GPU gagne vraiment : **noyaux coalescés** (on est loin des 380 Go/s), **lancements groupés ou flux asynchrones** (60 µs de latence par appel tuent les petites matrices), et **noyaux 4 bits** — toute la famille Qwen est en Q4_K/Q6_K, donc aujourd'hui rien de la leur n'est déportable.
+
+\## 2. Listes positive/négative avec delta zéro
+
+C'est notre famille `FusedSign`, et l'arithmétique est nette :
+
+| encodage | octets par événement | seuil de rentabilité face au 4 bits dense (0,53 o/poids) |
+|---|---|---|
+| avec valeur (`PushMat`) | varint(delta) + i8 ≈ **2 o** | **26,5 %** de densité |
+| **signe séparé** (deux listes) | varint(delta) seul ≈ **1 o** | **53 %** de densité |
+
+➡️ **Séparer le signe double le domaine où les listes gagnent** — et le delta zéro est ce qui rend les *runs* de destination
+… [711 caractères tronqués]
+
+### Tour 45 — nos essais en liste séparées portainet sur des poids unitaires (absent, répétition(delta d'adresse =0)  pour aller au de … [139 caractères tronqués]
+
+*4 appels d'outils.* Actions notables :
+
+- bash — Measure the quality/bytes curve by simulated bit reduction
+- bash — Fix the static and measure the bit-width curve
+- bash — Build and run the bit-width quality curve
+- bash — Commit the precision curve measurement
+
+**Synthèse produite :**
+
+⏵ Courbe mesurée. Je commite et je réponds.
 
 ## 3. Travail accompli
 
@@ -2663,7 +2709,7 @@ Trois commits cette session ; le parc CPU reste vert (0,5B 19,3885 · Q4_0 21,01
 - **T3** Test OpenOCD without root and check Pro device support
 - **T3** Make scripts executable and test jtag_scan
 - **T3** Commit JTAG milestone
-- … et 887 autres
+- … et 891 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2791,7 +2837,7 @@ Trois commits cette session ; le parc CPU reste vert (0,5B 19,3885 · Q4_0 21,01
 
 ## 5. Erreurs rencontrées
 
-109 sorties en erreur ou divergentes. Les premières :
+110 sorties en erreur ou divergentes. Les premières :
 
 - **T2** : === LIEN PCIe (sysfs, sans root) === current_link_speed     = 8.0 GT/s PCIe current_link_width     = 8 max_link_speed         = 8.0 GT/s PCIe max_link_width         = 8 secondary_bus_number   =  vendo
 - **T2** : [POPUP: saisissez le mot de passe] === TOUS les événements USB depuis le boot (fin de log) === [ven sep 25 11:52:23 2026] [ T684749] hid-generic 0003:04F2:2159.00ED: hiddev99,hidraw5: USB HID v1.10 De
@@ -2860,4 +2906,5 @@ Trois commits cette session ; le parc CPU reste vert (0,5B 19,3885 · Q4_0 21,01
 - Journal : session du 28/09 (tokenizer o200k, briques gpt-oss, descente de perplexite)" && git log --oneline | head -1 echo "--- état de gpt-oss" grep -n "39,8\|
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core cargo build --release 2>&1 | grep -cE "^warning"  echo "=== contrôle : sans QT_GPU, tout est inc
 - Journal : session du 28/09 (chemin GPU, seuil mesure)" 2>/dev/null; git log --oneline | head -1
+- Journal : courbe de precision" 2>/dev/null echo "--- bilan de la session"; git log --oneline | head -8
 

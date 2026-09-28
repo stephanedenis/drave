@@ -25056,3 +25056,127 @@ pourrait-on avoir les plus gros modèles déjà chargés en gpu et les petits ex
 ⏵ Chemin CPU bit-exact (19,3885 avec et sans GPU). Je commite et je réponds à vos deux questions.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\ncat > /tmp/msg3.txt <<'MSG'\nDeport GPU des projections d'attention : mesure, et ce que le bus decide\n\nReponse mesuree a la question « gros modeles sur GPU, petits experts sur CPU ».\n\nCE QUI EST FAIT\n- Les poids Q8_0 des projectio … [1933 caractères tronqués]`
+
+  ```
+4a3789d Deport GPU des projections d'attention : mesure, et ce que le bus decide
+4270573 Chemin GPU operationnel : noyaux PTX, API pilote, tete de sortie deportee
+e5ac235 Journal : session du 28/09 (chemin GPU, seuil mesure)
+  ```
+
+### 🤖 Assistant
+
+⏵ Vos deux intuitions sont bonnes — et les chiffres disent lesquelles tiennent.
+
+## 1. Gros modèles sur GPU, experts sur CPU
+
+**C'est exactement le bon partage, et je l'ai implémenté pour la première moitié.** Les poids Q8_0 des projections d'attention résident maintenant en mémoire vidéo ; seules les activations (kilo-octets) et le résultat traversent le bus.
+
+| | CPU seul | avec projections sur GPU |
+|---|---|---|
+| gpt-oss-120b, attention | 31,1 ms/jeton | **26,9 ms** |
+| total | 195 ms | **181 ms** |
+
+**Fidélité** : chemin CPU bit-exact (19,3885 avec et sans `QT_GPU`) ; sur gpt-oss l'écart est de 1,2 %, dû à l'ordre de sommation flottant.
+
+**Pourquoi le gain est modeste, et pourquoi les experts doivent rester sur CPU** — c'est le bus qui tranche :
+
+- Les experts de gpt-oss pèsent **61 Go** contre **32 Go de VRAM** au total : ils ne rentrent pas. Et les streamer serait *contre-productif* : 52 Mo par couche × 36 = 1,9 Go par jeton à 6,5 Go/s de PCIe = **292 ms**, contre **148 ms** mesurés pour les calculer sur CPU. Votre intuition est la bonne, pour une raison quantifiée.
+- Le seuil de déport est **fixé par la mesure, pas par le raisonnement** : le FFN du 0,5B (4,6 Mo) *perd* au GPU (123 → 151 µs) ; l'attention de gpt-oss (12,5 Mo) y *gagne* (216 → 187 µs). D'où un seuil à 8 Mo. L'aller-retour coûte ~60 µs, presque tout en latence de lancement — c'est ce qu'il faudra réduire.
+- La **tête** n'est pas déportée : 23 → **159 ms** ✗. Une ligne par fil, donc des adresses distantes de 34 octets : chaque accès d'une warp tombe dans une ligne de cache différente. Il faut une warp par ligne avec réduction. Code écrit, désactivé, mesuré, documenté.
+
+Trois chantiers avant que le GPU gagne vraiment : **noyaux coalescés** (on est loin des 380 Go/s), **lancements groupés ou flux asynchrones** (60 µs de latence par appel tuent les petites matrices), et **noyaux 4 bits** — toute la famille Qwen est en Q4_K/Q6_K, donc aujourd'hui rien de la leur n'est déportable.
+
+## 2. Listes positive/négative avec delta zéro
+
+C'est notre famille `FusedSign`, et l'arithmétique est nette :
+
+| encodage | octets par événement | seuil de rentabilité face au 4 bits dense (0,53 o/poids) |
+|---|---|---|
+| avec valeur (`PushMat`) | varint(delta) + i8 ≈ **2 o** | **26,5 %** de densité |
+| **signe séparé** (deux listes) | varint(delta) seul ≈ **1 o** | **53 %** de densité |
+
+➡️ **Séparer le signe double le domaine où les listes gagnent** — et le delta zéro est ce qui rend les *runs* de destinations consécutives gratuits.
+
+Mais la mesure douche l'espoir sur nos modèles actuels : Q8_0 a **0,76 %** de zéros exacts, MXFP4 **12–18 %**, soit 82–88 % de densité — **au-dessus du croisement de 53 %**. Le 4 bits dense reste devant. Les listes ne paieront que sur des matrices réellement creuses (élaguées ou entraînées creuses).
+
+Là où la parcimonie *est* structurelle chez nous, c'est la **dimension expert** (top-4 sur 128 = 3 %) — mais c'est « quelle matrice », pas « quel poids dedans ». C'est précisément pour ça que le MoE est le bon terrain pour l'architecture événementielle, et pas les matrices denses.
+
+Chemin opt-in (`QT_GPU=1`) ; sans lui, tout est strictement inchangé. Trois commits, journal à jour.
+
+
+## Tour 45
+
+### 👤 Utilisateur
+
+nos essais en liste séparées portainet sur des poids unitaires (absent, répétition(delta d'adresse =0)  pour aller au delà de 1 comme poid). On pouvait donc utiliser un nombre arbitraire de bits par couche et aller au delà du 4 bits (5, 6 , 7 ou 8 idéalement)
+
+### 🤖 Assistant
+
+⏵ Compris — et c'est un point important : l'encodage par répétition est **unaire**, donc son coût est la norme L1, pas le nombre de bits. Je mesure la vraie courbe de précision
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\npython3 - <<'PY'\np='src/list.rs'; s=open(p,encoding='utf-8').read(); o=s\ns=s.replace('''    pub fn dot_q8_source(&self, o: usize, x: &[i32]) -> f32 {''',\n'''    /// Précision simulée : nombre de bits conservés sur les p … [2412 caractères tronqués]`
+
+  ```
+error: associated `static` items are not allowed
+   --> src/list.rs:390:5
+    |
+390 |     pub static BITS_POIDS: std::sync::atomic::AtomicU32 = std::sync::atomic::AtomicU32::new(0);
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: variant `Q4_K` should have an upper camel case name
+--
+error: could not compile `qtrinet-core` (bin "qtrinet-core") due to 1 previous error; 27 warnings emitted
+=== courbe qualité/octets sur le 1,5B Q4_K (poids Q4_K non concernés : on teste sur Q8_0)
+bits=8  19.3885
+bits=7  19.3885
+bits=6  19.3885
+bits=5  19.3885
+bits=4  19.3885
+  ```
+
+### 🤖 Assistant
+
+⏵ La statique doit être au niveau du module, pas dans l'`impl`. Je corrige et relance
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\npython3 - <<'PY'\np='src/list.rs'; s=open(p,encoding='utf-8').read(); o=s\ns=s.replace('''    /// Précision simulée : nombre de bits conservés sur les poids (0 = tous).\n    /// Sert à mesurer la courbe qualité/octets AVAN … [1613 caractères tronqués]`
+
+  ```
+error[E0599]: no associated function or constant named `BITS_POIDS` found for struct `DenseQ8` in the current scope
+   --> src/main.rs:744:32
+    |
+744 |                 list::DenseQ8::BITS_POIDS.store(b, std::sync::atomic::Ordering::Relaxed);
+    |                                ^^^^^^^^^^ associated function or constant not found in `DenseQ8`
+    |
+   ::: src/list.rs:344:1
+--
+error: could not compile `qtrinet-core` (bin "qtrinet-core") due to 1 previous error; 12 warnings emitted
+=== courbe qualité/octets, 0,5B Q8_0, 510 jetons
+bits=8  octets/poids=1,00  19.3885
+bits=7  octets/poids=0,00  19.3885
+bits=6  octets/poids=0,00  19.3885
+bits=5  octets/poids=0,00  19.3885
+bits=4  octets/poids=0,00  19.3885
+[stderr]
+bash: line 28: printf: 1.0: invalid number
+bash: line 28: printf: 0.875: invalid number
+bash: line 28: printf: 0.75: invalid number
+bash: line 28: printf: 0.625: invalid number
+bash: line 28: printf: 0.5: invalid number
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\nsed -i 's|list::DenseQ8::BITS_POIDS.store|list::BITS_POIDS.store|' src/main.rs\ncargo build --release 2>&1 | grep -E \"^error\" -A 6 | head -10\necho \"=== courbe qualite/octets, 0,5B Q8_0, 510 jetons\"\nM=../models/Qwen2. … [331 caractères tronqués]`
+
+  ```
+=== courbe qualite/octets, 0,5B Q8_0, 510 jetons
+bits=8  19.3885
+bits=7  19.7387
+bits=6  19.9623
+bits=5  20.0543
+bits=4  21.4332
+  ```
+
+### 🤖 Assistant
+
+⏵ Courbe mesurée. Je commite et je réponds.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\ncat > /tmp/msg4.txt <<'MSG'\nCourbe qualite/octets par simulation de precision (5, 6, 7, 8 bits)\n\n--bits N arrondit les niveaux des poids int8 a la grille reduite : c'est\nexactement ce qu'un empaquetage sur N bits produirait. Mesure … [1314 caractères tronqués]`

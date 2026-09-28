@@ -331,6 +331,12 @@ impl PushMat {
 /// conservée **en clair, ligne par ligne** : le produit scalaire se fait alors
 /// par ligne de sortie, sans dispersion ni réduction. C'est la référence contre
 /// laquelle mesurer ce que coûte l'architecture événementielle sur CPU.
+/// Précision **simulée** : nombre de bits conservés sur les poids d'une matrice
+/// int8 (0 = tous les huit). On arrondit les niveaux du fichier à la grille
+/// réduite — exactement ce qu'un empaquetage sur `bits` bits produirait — ce
+/// qui permet de mesurer la courbe qualité/octets AVANT d'écrire le format.
+pub static BITS_POIDS: std::sync::atomic::AtomicU32 = std::sync::atomic::AtomicU32::new(0);
+
 /// Origine des poids d'une matrice int8 dense.
 #[derive(Clone, Copy, PartialEq, Eq)]
 pub enum Source8 { Propre, Q8_0 }
@@ -392,8 +398,20 @@ impl DenseQ8 {
             let d = crate::gguf::Gguf::f16_to_f32(u16::from_le_bytes([octets[0], octets[1]]));
             let xb = &x[b * BLOC_Q4..b * BLOC_Q4 + BLOC_Q4];
             let mut s = 0i32;
-            for j in 0..BLOC_Q4 {
-                s += (octets[2 + j] as i8 as i32) * xb[j];
+            let bits = BITS_POIDS.load(std::sync::atomic::Ordering::Relaxed);
+            if bits >= 8 || bits == 0 {
+                for j in 0..BLOC_Q4 { s += (octets[2 + j] as i8 as i32) * xb[j]; }
+            } else {
+                // Arrondi au niveau le plus proche de la grille réduite, puis
+                // remise à l'échelle : c'est exactement ce qu'un empaquetage sur
+                // `bits` bits produirait.
+                let dec = 8 - bits;
+                let demi = 1i32 << (dec - 1);
+                for j in 0..BLOC_Q4 {
+                    let q = octets[2 + j] as i8 as i32;
+                    let r = ((q + demi) >> dec) << dec;
+                    s += r * xb[j];
+                }
             }
             acc += d * s as f32;
         }

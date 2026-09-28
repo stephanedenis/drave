@@ -369,6 +369,11 @@ fn run_infer(args: &[String]) {
             "--chat" => { chat = true; i -= 1; }
             "--dense" => { dense = true; i -= 1; }
             "--moe-topk" => { moe_topk = args[i + 1].parse().unwrap(); i -= 1; }
+            "--bits" => {
+                let b: u32 = args[i + 1].parse().unwrap();
+                list::BITS_POIDS.store(b, std::sync::atomic::Ordering::Relaxed);
+                i -= 1;
+            }
             "--pin" => { engine::EPINGLER.store(true, std::sync::atomic::Ordering::Relaxed); i -= 1; }
             "--auto" => { auto = true; i -= 1; }
             "--push" => { auto = false; dense = false; i -= 1; }
@@ -734,6 +739,11 @@ fn run_ppl(args: &[String]) {
             "--threads" => n_threads = args[i + 1].parse().unwrap(),
             "--dense" => { dense = true; i -= 1; }
             "--moe-topk" => { moe_topk = args[i + 1].parse().unwrap(); i -= 1; }
+            "--bits" => {
+                let b: u32 = args[i + 1].parse().unwrap();
+                list::BITS_POIDS.store(b, std::sync::atomic::Ordering::Relaxed);
+                i -= 1;
+            }
             "--pin" => { engine::EPINGLER.store(true, std::sync::atomic::Ordering::Relaxed); i -= 1; }
             "--auto" => { auto = true; i -= 1; }
             "--push" => { auto = false; dense = false; i -= 1; }
