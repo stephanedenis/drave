@@ -1007,8 +1007,27 @@ impl Model {
                 let freq = 1.0 / base.powf(2.0 * i as f32 / n_rot as f32);
                 let theta_extrap = pos as f32 * freq;
                 let theta_interp = theta_extrap / facteur;
-                let y = (i as f32 - corr0) / (corr1 - corr0).max(0.001);
-                let rampe = 1.0 - y.clamp(0.0, 1.0);
+                // RÉSULTATS NÉGATIFS, mesurés sur gpt-oss (63 jetons) :
+                //   RoPE simple, sans YaRN ........ 39,8   <- le meilleur
+                //   YaRN avec rampe (ext_factor 1)  184,9
+                //   YaRN interpolation pure ........ 1 171
+                // Aucune variante ne bat le RoPE simple aux contextes testés
+                // (<= 512). L'hypothèse la plus probable est que l'étirement ne
+                // doit s'appliquer QU'AU-DELÀ du contexte d'origine (4 096) :
+                // en deçà, le modèle n'a jamais vu de fréquences étirées.
+                // À implémenter ainsi, puis à remesurer.
+                //
+                // Variante d'extrapolation : la rampe mélange extrapolation
+                // (basses dimensions) et interpolation (hautes). Selon les
+                // implémentations, le facteur d'extrapolation vaut 1 (rampe
+                // active) ou 0 (interpolation PURE) — les deux se rencontrent.
+                // QT_YARN_RAMPE=0 force l'interpolation pure.
+                let rampe = if std::env::var("QT_YARN_RAMPE").map_or(false, |v| v == "0") {
+                    0.0
+                } else {
+                    let y = (i as f32 - corr0) / (corr1 - corr0).max(0.001);
+                    1.0 - y.clamp(0.0, 1.0)
+                };
                 let theta = theta_interp * (1.0 - rampe) + theta_extrap * rampe;
                 let (s, c) = theta.sin_cos();
                 let (s, c) = (s * mscale, c * mscale);

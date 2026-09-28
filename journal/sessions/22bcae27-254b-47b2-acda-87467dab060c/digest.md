@@ -25901,3 +25901,81 @@ The capital of Australia is Canberra.
 ⏵ **gpt-oss produit une réponse correcte et cohérente** : « The capital of Australia is Canberra. » Le modèle fonctionne — c'est notre mesure de perplexité qui reste inexpliquée
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\npython3 - <<'PY'\np='reports/rapport-travail-reel.md'; s=open(p,encoding='utf-8').read()\ns=s.replace('''## Ce qui n'est pas prêt\n\n| manque | conséquence | coût du correctif |\n|---|---|---|\n| **gpt-oss-120b** | tourne (5 tok/s) mai … [3323 caractères tronqués]`
+
+  ```
+3ef012d Journal : gpt-oss genere correctement
+198d2e9 gpt-oss : le modele fonctionne, la metrique non
+  ```
+
+### 🤖 Assistant
+
+⏵ Résultat qui change la conclusion sur gpt-oss : **le modèle fonctionne**.
+
+## Le test
+
+```
+invite  : "The capital of Australia is"
+réponse : " Canberra."
+```
+
+Correct, cohérent, **5,5 tok/s sur 117 G paramètres**, 62 Go résidents en lecture en place. Le modèle n'est pas cassé.
+
+Ce qui reste inexpliqué, c'est notre **perplexité de 39,8** sur du wikitext brut là où l'on attendrait de l'ordre de 6. Trois hypothèses, que je ne peux pas départager sans recharge :
+
+1. **notre encodage du corpus de test** — le tokenizer o200k n'a été vérifié que sur sept chaînes pièges, pas sur les 4 424 jetons du fichier ;
+2. **la sensibilité au format** — gpt-oss est entraîné sur son propre format (`<|start|>user<|message|>…`), pas sur de la continuation de texte brut ;
+3. un détail d'architecture encore faux, qu'une réponse de trente jetons ne révèle pas.
+
+Le test qui trancherait tient en une requête de tokenisation sur le fichier entier — mais elle exige de recharger 60 Go.
+
+## Défaut de robustesse corrigé au passage
+
+`--chat` **paniquait** sur gpt-oss : notre gabarit Qwen y faisait un `unwrap` sur un jeton absent. Il retombe maintenant sur une invite brute en le signalant. C'est le genre de faille qui rendait le moteur fragile dès qu'on sortait de la famille Qwen.
+
+## État final du parc
+
+| modèle | état |
+|---|---|
+| Qwen2.5 0,5 B → 30 B MoE | ✅ complet : conversation, flux, échantillonnage |
+| gpt-oss-120b | ✅ génère correctement — réserve : son gabarit `harmony` n'est pas implémenté, et sa perplexité reste inexpliquée |
+| Vision (modèle VL) | ❌ chemin image absent |
+
+Le moteur fait maintenant ce qu'on lui demande : charger en place les formats réels (Q4_K, Q6_K, Q4_0, Q8_0, MXFP4), router les experts, tenir une conversation avec sortie en flux, échantillonner correctement, et déporter au GPU ce qui y gagne. Deux commits (`198d2e9`, `3ef012d`), rapport et journal à jour.
+
+**La prochaine cible, si vous voulez fermer gpt-oss** : tokeniser le corpus des deux côtés et comparer les flux — c'est la seule des trois hypothèses qu'un test tranche net, et elle coûte deux minutes de chargement.
+
+
+## Tour 51
+
+### 👤 Utilisateur
+
+continue
+
+### 🤖 Assistant
+
+⏵ Hypothèse la plus simple, non testée : notre perplexité est **cumulative** et portait sur 63 jetons seulement. Fenêtre plus longue
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\nG=/home/stephane/FastNVMe/models/gpt-oss-120b-MXFP4.gguf\ntimeout 2400 ./target/release/qtrinet-core $G --ppl /tmp/ids_oss.txt --ctx 512 --abits 16 \\\n  --threads 16 --limit 512 --dense 2>&1 | grep -E \"tokens notés|perpl … [96 caractères tronqués]`
+
+  ```
+511 tokens notés — perplexité cumulée 129.891  (5.1 tok/s)
+=== perplexité 129.8911 sur 511 tokens (0 événements, 99.5 s) ===
+  ```
+
+### 🤖 Assistant
+
+⏵ La PPL **monte** avec la fenêtre (39,8 → 129,9) : c'est la signature d'un RoPE faux. Je teste la variante YaRN sans rampe (interpolation pure)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\npython3 - <<'PY'\np='src/model.rs'; s=open(p,encoding='utf-8').read(); o=s\ns=s.replace('''                let y = (i as f32 - corr0) / (corr1 - corr0).max(0.001);\n                let rampe = 1.0 - y.clamp(0.0, 1.0);''',\ … [1222 caractères tronqués]`
+
+  ```
+=== YaRN interpolation pure (référence : 39,8 sans YaRN, 184,9 avec rampe)
+[config] puits appris sur 36/36 couches · n_rot 64 · ffn 2880 · experts 128 · yarn ×32
+=== perplexité 1171.1402 sur 63 tokens (0 événements, 12.4 s) ===
+  ```
+
+### 🤖 Assistant
+
+⏵ Interpolation pure : **1171** — pire encore. Les deux variantes YaRN perdent contre le RoPE simple. Je consigne ces résultats négatifs
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\npython3 - <<'PY'\np='src/model.rs'; s=open(p,encoding='utf-8').read(); o=s\ns=s.replace('''                // Variante d'extrapolation : la rampe mélange extrapolation''',\n'''                // RÉSULTATS NÉGATIFS, mesurés … [2386 caractères tronqués]`

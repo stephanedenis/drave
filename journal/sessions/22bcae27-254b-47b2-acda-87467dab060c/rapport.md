@@ -5,14 +5,14 @@
 | Identifiant | `22bcae27-254b-47b2-acda-87467dab060c` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-25 11:56 |
-| Durée | 74.1 h |
-| Tours | 50 |
-| Messages | 1214 |
-| Appels d'outils | 1200 |
+| Durée | 74.2 h |
+| Tours | 51 |
+| Messages | 1219 |
+| Appels d'outils | 1203 |
 | Fichiers touchés | 68 |
-| Commandes | 958 |
+| Commandes | 961 |
 | Sous-agents | 1 |
-| Commits | 56 |
+| Commits | 57 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -129,6 +129,8 @@
 **Tour 49** — continue jusqu'à ce que ce soit complet.
 
 **Tour 50** — continue
+
+**Tour 51** — continue
 
 ## 2. Déroulé, étape par étape
 
@@ -2836,7 +2838,52 @@ Pour « complet » au sens strict, la prochaine cible est **gpt-oss** : tout le 
 
 **Synthèse produite :**
 
-⏵ **gpt-oss produit une réponse correcte et cohérente** : « The capital of Australia is Canberra. » Le modèle fonctionne — c'est notre mesure de perplexité qui reste inexpliquée
+⏵ Résultat qui change la conclusion sur gpt-oss : **le modèle fonctionne**.
+
+\## Le test
+
+```
+invite  : "The capital of Australia is"
+réponse : " Canberra."
+```
+
+Correct, cohérent, **5,5 tok/s sur 117 G paramètres**, 62 Go résidents en lecture en place. Le modèle n'est pas cassé.
+
+Ce qui reste inexpliqué, c'est notre **perplexité de 39,8** sur du wikitext brut là où l'on attendrait de l'ordre de 6. Trois hypothèses, que je ne peux pas départager sans recharge :
+
+1. **notre encodage du corpus de test** — le tokenizer o200k n'a été vérifié que sur sept chaînes pièges, pas sur les 4 424 jetons du fichier ;
+2. **la sensibilité au format** — gpt-oss est entraîné sur son propre format (`<|start|>user<|message|>…`), pas sur de la continuation de texte brut ;
+3. un détail d'architecture encore faux, qu'une réponse de trente jetons ne révèle pas.
+
+Le test qui trancherait tient en une requête de tokenisation sur le fichier entier — mais elle exige de recharger 60 Go.
+
+\## Défaut de robustesse corrigé au passage
+
+`--chat` **paniquait** sur gpt-oss : notre gabarit Qwen y faisait un `unwrap` sur un jeton absent. Il retombe maintenant sur une invite brute en le signalant. C'est le genre de faille qui rendait le moteur fragile dès qu'on sortait de la famille Qwen.
+
+\## État final du parc
+
+| modèle | état |
+|---|---|
+| Qwen2.5 0,5 B → 30 B MoE | ✅ complet : conversation, flux, échantillonnage |
+| gpt-oss-120b | ✅ génère correctement — réserve : son gabarit `harmony` n'est pas implémenté, et sa perplexité reste inexpliquée |
+| Vision (modèle VL) | ❌ chemin image absent |
+
+Le moteur fait maintenant ce qu'on lui demande : charger en place les formats réels (Q4_K, Q6_K, Q4_0, Q8_0, MXFP4), router les experts, tenir une conversation avec sortie en flux, échantillonner correctement, et déporter au GPU ce qui y gagne. Deux commits (`198d2e9`, `3ef012d`), rapport et journal à jour.
+
+**La prochaine cible, si vous voulez fermer gpt-oss** : tokeniser le corpus des deux côtés et comparer les flux — c'est la seule des trois hypothèses qu'un test tranche net, et elle coûte deux minutes de chargement.
+
+### Tour 51 — continue
+
+*3 appels d'outils.* Actions notables :
+
+- bash — Measure gpt-oss PPL over a longer window
+- bash — Test YaRN pure interpolation
+- bash — Document the negative YaRN results and commit
+
+**Synthèse produite :**
+
+⏵ Interpolation pure : **1171** — pire encore. Les deux variantes YaRN perdent contre le RoPE simple. Je consigne ces résultats négatifs
 
 ## 3. Travail accompli
 
@@ -2959,7 +3006,7 @@ Pour « complet » au sens strict, la prochaine cible est **gpt-oss** : tout le 
 - **T3** Test OpenOCD without root and check Pro device support
 - **T3** Make scripts executable and test jtag_scan
 - **T3** Commit JTAG milestone
-- … et 918 autres
+- … et 921 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -3163,4 +3210,5 @@ Pour « complet » au sens strict, la prochaine cible est **gpt-oss** : tout le 
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core echo "=== régression : glouton inchangé (doit redonner la même fonction mediane)" ./target/relea
 - Journal : session multi-tours" 2>/dev/null git log --oneline | head -3
 - Journal : gpt-oss genere correctement" 2>/dev/null git log --oneline | head -2
+- Journal : YaRN, resultats negatifs" 2>/dev/null git log --oneline | head -2
 
