@@ -536,6 +536,12 @@ fn build_tokenizer(g: &Gguf) -> tokenizer::Tokenizer {
 
 fn cfg_dims(m: &model::Model) -> usize { m.cfg.hidden }
 
+/// Taille du vocabulaire, lue dans l'en-tête du GGUF sans charger le modèle.
+fn mdl_cfg_vocab(path: &str) -> Option<usize> {
+    let g = Gguf::open(path).ok()?;
+    g.tensor("token_embd.weight").map(|t| t.dims[0] as usize)
+}
+
 /// Tokenise un texte et imprime les identifiants — sert à vérifier le
 /// pré-découpage contre une implémentation de référence.
 fn run_tokenize(args: &[String]) {
@@ -546,8 +552,29 @@ fn run_tokenize(args: &[String]) {
         if args[i] == "--texte" && i + 1 < args.len() { texte = args[i + 1].clone(); i += 1; }
         i += 1;
     }
+    let mut fichier = String::new();
+    let mut sortie = String::new();
+    let mut i = 2;
+    while i < args.len() {
+        if args[i] == "--fichier" && i + 1 < args.len() { fichier = args[i + 1].clone(); i += 1; }
+        if args[i] == "--sortie" && i + 1 < args.len() { sortie = args[i + 1].clone(); i += 1; }
+        i += 1;
+    }
     let g = Gguf::open(path).expect("ouverture du GGUF");
     let tk = build_tokenizer(&g);
+    if !fichier.is_empty() {
+        // Encoder un corpus ENTIER avec le tokenizer du modèle : chaque modèle
+        // a le sien, et nourrir un modèle avec les identifiants d'un autre
+        // donne une perplexité qui ne mesure que l'absurdité de l'entrée.
+        let texte = std::fs::read_to_string(&fichier).expect("fichier illisible");
+        let ids = tk.encode(&texte);
+        let cible = if sortie.is_empty() { format!("{fichier}.ids") } else { sortie };
+        let corps: Vec<String> = ids.iter().map(|i| i.to_string()).collect();
+        std::fs::write(&cible, corps.join(",")).expect("écriture impossible");
+        println!("{} tokens écrits dans {cible} (vocabulaire du modèle : {})",
+                 ids.len(), tk.vocab_size());
+        return;
+    }
     let ids = tk.encode(&texte);
     println!("{} tokens", ids.len());
     for id in &ids {
@@ -723,6 +750,16 @@ fn run_ppl(args: &[String]) {
         .filter_map(|s| s.parse().ok())
         .take(limit)
         .collect();
+    // Garde-fou : des identifiants hors vocabulaire signifient qu'on nourrit le
+    // modèle avec le découpage d'un AUTRE modèle. La perplexité ne mesurerait
+    // alors que l'absurdité de l'entrée — vérifié : 42 127 au lieu de 11.
+    let vocab = mdl_cfg_vocab(path);
+    if let Some(v) = vocab {
+        if let Some(&mauvais) = ids.iter().find(|&&i| i as usize >= v) {
+            panic!("identifiant {mauvais} ≥ vocabulaire du modèle ({v}) : \
+                    ce fichier de jetons vient d'un autre tokenizer");
+        }
+    }
     println!("{idfile} : {} tokens, fenêtres de {ctx}", ids.len());
 
     let mut mdl = model::Model::load(path, ctx, n_threads, dense, 1.0, auto, q4);
@@ -744,6 +781,7 @@ fn run_ppl(args: &[String]) {
     mdl.act_topk_proj = topk_proj;
     mdl.attn_topk = attn_topk;
     mdl.qk_topk = qk_topk;
+    if args.iter().any(|a| a == "--sans-yarn") { mdl.cfg_yarn_off(); }
     if attn_window > 0 { mdl.attn_window = attn_window; }
     if attn_sinks > 0 { mdl.attn_sinks = attn_sinks; }
     if act_thresh > 0.0 || act_topk > 0 {

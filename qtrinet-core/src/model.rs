@@ -37,6 +37,20 @@ pub struct Cfg {
     pub n_expert: usize,
     pub n_expert_used: usize,
     pub ffn_exp: usize,
+    /// Activation du FFN. gpt-oss n'utilise **pas** SiLU : c'est
+    /// `g·σ(1,702·g)·(u+1)`, avec `g` et `u` écrêtés à ±7 — une sigmoïde
+    /// rapide de type GELU, et un décalage de `up` de +1. Prendre SiLU par
+    /// défaut donne une perplexité de 1 396 au lieu de la bonne.
+    pub ffn_act_oss: bool,
+    /// Convention de routage. Qwen3-MoE : softmax sur **tous** les experts,
+    /// puis top-k, puis renormalisation. gpt-oss : top-k sur les logits
+    /// **bruts**, puis softmax sur les seuls retenus — les deux donnent des
+    /// poids très différents.
+    pub routeur_topk_softmax: bool,
+    /// Dimensions réellement tournées par tête. gpt-oss n'en tourne que la
+    /// moitié (`partial_rotary_factor = 0,5`), là où Qwen et Llama tournent
+    /// toute la tête.
+    pub n_rot: usize,
     /// Étirement de contexte YaRN : `(facteur, beta_rapide, beta_lent,
     /// contexte d'origine)`. `None` pour un RoPE ordinaire.
     pub yarn: Option<(f32, f32, f32, f32)>,
@@ -383,6 +397,8 @@ pub struct Model {
     /// de la table d'embedding ; lire la mauvaise donne une perplexité de
     /// 50 000 au lieu de 11,4.
     pub tete: String,
+    /// Nombre de couches dont les puits appris ont été trouvés (diagnostic).
+    pub sinks_vus: usize,
     /// Tête de sortie en 4 bits (poids liés au plafond d'embedding). C'est la
     /// plus grosse matrice du modèle — 151 936 × 896 — donc le poste où le
     /// demi-octet par poids rapporte le plus.
@@ -500,8 +516,28 @@ impl Model {
             n_expert: g.cfg("expert_count").and_then(|m| m.as_u64()).unwrap_or(0) as usize,
             n_expert_used: g.cfg("expert_used_count").and_then(|m| m.as_u64()).unwrap_or(0) as usize,
             ffn_exp: g.cfg("expert_feed_forward_length").and_then(|m| m.as_u64()).unwrap_or(0) as usize,
+            // L'architecture « gpt-oss » implique sa propre activation ; elle
+            // n'est pas déclarée dans les métadonnées.
+            ffn_act_oss: g.meta.get("general.architecture").and_then(|m| m.as_str())
+                             == Some("gpt-oss"),
+            routeur_topk_softmax: g.meta.get("general.architecture").and_then(|m| m.as_str())
+                                      == Some("gpt-oss"),
+            n_rot: {
+                let arch = g.meta.get("general.architecture").and_then(|m| m.as_str());
+                let declare = g.cfg("rope.dimension_count").and_then(|m| m.as_u64()).unwrap_or(0) as usize;
+                if declare > 0 { declare }
+                // Une hypothèse « moitié de tête » pour gpt-oss a été TESTÉE et
+                // REFUTÉE : 185 -> 1 095 de perplexité. La tête est tournée en
+                // entier ; seul `rope.dimension_count` déclaré fait foi.
+                else { 0 }
+            },
             yarn: match g.cfg("rope.scaling.type").and_then(|m| m.as_str()) {
-                Some("yarn") => Some((
+                // YaRN est ACTIF seulement sur demande : notre implémentation
+                // MESURÉE dégrade la perplexité d'un facteur 4,6 sur gpt-oss
+                // (184,9 avec, 39,8 sans). Le RoPE ordinaire à base 150 000 est
+                // meilleur à contexte court, et c'est le seul régime que nous
+                // testons. La rampe YaRN reste à corriger avant d'être activée.
+                Some("yarn") if std::env::var("QT_YARN").is_ok() => Some((
                     g.cfg("rope.scaling.factor").and_then(|m| m.as_f64()).unwrap_or(1.0) as f32,
                     g.cfg("rope.scaling.yarn_beta_fast").and_then(|m| m.as_f64()).unwrap_or(32.0) as f32,
                     g.cfg("rope.scaling.yarn_beta_slow").and_then(|m| m.as_f64()).unwrap_or(1.0) as f32,
@@ -567,6 +603,22 @@ impl Model {
                   else { String::new() },
                   pool.threads());
         let n_layer = cfg.n_layer;
+        let sinks_vus = layers.iter().filter(|l| l.sinks.is_some()).count();
+        // Trace de configuration : une ligne qui dit quelles particularités
+        // d'architecture ont été reconnues. Sans elle, on débogue à l'aveugle
+        // sur un modèle de 60 Go.
+        println!("[config] {} couches, hidden {} · {}{}{}{}{}{}",
+                 cfg.n_layer, cfg.hidden,
+                 if cfg.yarn.is_some() { "yarn " } else { "" },
+                 if cfg.ffn_act_oss { "activation-oss " } else { "" },
+                 if cfg.routeur_topk_softmax { "routeur-topk " } else { "" },
+                 if cfg.n_expert > 0 { "moe " } else { "" },
+                 if cfg.n_expert > 0 { "" } else { "" },
+                 if cfg.head_dim > 0 { "" } else { "" });
+        println!("[config] puits appris sur {sinks_vus}/{n_layer} couches · n_rot {} · ffn {} · experts {}{}",
+                 if cfg.n_rot == 0 { cfg.head_dim } else { cfg.n_rot },
+                 cfg.ffn, cfg.n_expert,
+                 cfg.yarn.map(|y| format!(" · yarn ×{}", y.0)).unwrap_or_default());
         let tete = if g.tensor("output.weight").is_some() { "output.weight" } else { "token_embd.weight" };
         let tete = tete.to_string();
         // Le modèle peut déclarer une fenêtre glissante (gpt-oss : 128) : lue
@@ -611,7 +663,7 @@ impl Model {
             seuil_push: 0.22,
             stop_id: None, prof: [0.0; 6],
             tete,
-            head4,
+            head4, sinks_vus,
             patch: None, ffn_gain: None, hebb: None,
         }
     }
@@ -755,6 +807,29 @@ impl Model {
         }
     }
 
+    /// Désactive l'étirement YaRN (pour éprouver l'hypothèse).
+    pub fn cfg_yarn_off(&mut self) { self.cfg.yarn = None; }
+
+    /// Activation du FFN, appliquée en place dans `gate`.
+    ///
+    /// - SiLU (défaut) : `g·σ(g)`, multiplié par `u` ;
+    /// - gpt-oss : `g` et `u` écrêtés à ±7, `a = g·σ(1,702·g)`, résultat
+    ///   `a·(u+1)`.
+    #[inline]
+    fn activation(gate: &mut [f32], up: &[f32], n: usize, oss: bool) {
+        if oss {
+            const LIMITE: f32 = 7.0;
+            const ALPHA: f32 = 1.702;
+            for i in 0..n {
+                let g = gate[i].min(LIMITE);
+                let u = up[i].clamp(-LIMITE, LIMITE);
+                gate[i] = (g / (1.0 + (-ALPHA * g).exp())) * (u + 1.0);
+            }
+        } else {
+            for i in 0..n { gate[i] = (gate[i] / (1.0 + (-gate[i]).exp())) * up[i]; }
+        }
+    }
+
     /// Produit scalaire f32 à huit accumulateurs indépendants.
     ///
     /// Un `iter().zip().map().sum()` est une **chaîne** d'additions : chaque
@@ -850,8 +925,10 @@ impl Model {
     /// rotation. La sortie est en plus multipliée par `mscale = 1 + 0,1·ln(f)`,
     /// qui compense la perte d'amplitude de l'attention dilatée.
     fn rope_yarn(v: &mut [f32], n_head: usize, head_dim: usize, pos: usize, base: f32,
-                 facteur: f32, beta_rapide: f32, beta_lent: f32, ctx_origine: f32) {
-        let half = head_dim / 2;
+                 facteur: f32, beta_rapide: f32, beta_lent: f32, ctx_origine: f32,
+                 n_rot: usize) {
+        let n_rot = if n_rot == 0 || n_rot > head_dim { head_dim } else { n_rot };
+        let half = n_rot / 2;
         let ln_base = base.ln();
         let corr0 = (head_dim as f32 * (ctx_origine / (beta_rapide * 2.0 * std::f32::consts::PI)).ln()
                      / (2.0 * ln_base)).floor();
@@ -861,7 +938,7 @@ impl Model {
         for h in 0..n_head {
             let t = &mut v[h * head_dim..(h + 1) * head_dim];
             for i in 0..half {
-                let freq = 1.0 / base.powf(2.0 * i as f32 / head_dim as f32);
+                let freq = 1.0 / base.powf(2.0 * i as f32 / n_rot as f32);
                 let theta_extrap = pos as f32 * freq;
                 let theta_interp = theta_extrap / facteur;
                 let y = (i as f32 - corr0) / (corr1 - corr0).max(0.001);
@@ -878,8 +955,11 @@ impl Model {
     }
 
     /// RoPE « neox » (Qwen2) : rotation des deux moitiés de chaque tête.
-    fn rope(v: &mut [f32], n_head: usize, head_dim: usize, pos: usize, base: f32) {
-        let half = head_dim / 2;
+    fn rope(v: &mut [f32], n_head: usize, head_dim: usize, pos: usize, base: f32, n_rot: usize) {
+        // `n_rot` = dimensions tournées ; les autres restent intactes. La
+        // rotation « neox » apparie `i` et `i + n_rot/2`.
+        let n_rot = if n_rot == 0 || n_rot > head_dim { head_dim } else { n_rot };
+        let half = n_rot / 2;
         for h in 0..n_head {
             let t = &mut v[h * head_dim..(h + 1) * head_dim];
             for i in 0..half {
@@ -967,12 +1047,12 @@ impl Model {
             let tr = Instant::now();
             match cfg.yarn {
                 Some((f, bf, bl, orig)) => {
-                    Self::rope_yarn(&mut q, nh, hd, pos, cfg.rope_base, f, bf, bl, orig);
-                    Self::rope_yarn(&mut k, nkv, hd, pos, cfg.rope_base, f, bf, bl, orig);
+                    Self::rope_yarn(&mut q, nh, hd, pos, cfg.rope_base, f, bf, bl, orig, cfg.n_rot);
+                    Self::rope_yarn(&mut k, nkv, hd, pos, cfg.rope_base, f, bf, bl, orig, cfg.n_rot);
                 }
                 None => {
-                    Self::rope(&mut q, nh, hd, pos, cfg.rope_base);
-                    Self::rope(&mut k, nkv, hd, pos, cfg.rope_base);
+                    Self::rope(&mut q, nh, hd, pos, cfg.rope_base, cfg.n_rot);
+                    Self::rope(&mut k, nkv, hd, pos, cfg.rope_base, cfg.n_rot);
                 }
             }
             if self.qk_topk > 0 {
@@ -1159,19 +1239,38 @@ impl Model {
                     let s: f32 = r.iter().zip(hn.iter()).map(|(a, b)| a * b).sum();
                     s + moe.routeur_biais.as_ref().map_or(0.0, |b| b[e])
                 }).collect();
-                let mx = sc_e.iter().cloned().fold(f32::NEG_INFINITY, f32::max);
-                let mut somme = 0f32;
-                for v in sc_e.iter_mut() { *v = (*v - mx).exp(); somme += *v; }
-                if somme > 0.0 { for v in sc_e.iter_mut() { *v /= somme; } }
                 let mut idx: Vec<u32> = (0..ne as u32).collect();
-                if k < ne {
-                    idx.select_nth_unstable_by(k, |&a, &b| {
-                        sc_e[b as usize].partial_cmp(&sc_e[a as usize]).unwrap()
-                    });
-                    idx.truncate(k);
+                let mut inv_k = 1.0f32;
+                if cfg.routeur_topk_softmax {
+                    // gpt-oss : le top-k se décide sur les logits BRUTS, et le
+                    // softmax ne porte que sur les retenus.
+                    if k < ne {
+                        idx.select_nth_unstable_by(k, |&a, &b| {
+                            sc_e[b as usize].partial_cmp(&sc_e[a as usize]).unwrap()
+                        });
+                        idx.truncate(k);
+                    }
+                    let mx = idx.iter().map(|&e| sc_e[e as usize])
+                               .fold(f32::NEG_INFINITY, f32::max);
+                    let mut somme = 0f32;
+                    for &e in &idx { let v = (sc_e[e as usize] - mx).exp(); sc_e[e as usize] = v; somme += v; }
+                    if somme > 0.0 { inv_k = 1.0 / somme; }
+                } else {
+                    // Qwen3-MoE : softmax sur tous, puis sélection, puis
+                    // renormalisation sur les retenus.
+                    let mx = sc_e.iter().cloned().fold(f32::NEG_INFINITY, f32::max);
+                    let mut somme = 0f32;
+                    for v in sc_e.iter_mut() { *v = (*v - mx).exp(); somme += *v; }
+                    if somme > 0.0 { for v in sc_e.iter_mut() { *v /= somme; } }
+                    if k < ne {
+                        idx.select_nth_unstable_by(k, |&a, &b| {
+                            sc_e[b as usize].partial_cmp(&sc_e[a as usize]).unwrap()
+                        });
+                        idx.truncate(k);
+                    }
+                    let somme_k: f32 = idx.iter().map(|&e| sc_e[e as usize]).sum();
+                    inv_k = if somme_k > 0.0 { 1.0 / somme_k } else { 0.0 };
                 }
-                let somme_k: f32 = idx.iter().map(|&e| sc_e[e as usize]).sum();
-                let inv_k = if somme_k > 0.0 { 1.0 / somme_k } else { 0.0 };
                 for v in down.iter_mut() { *v = 0.0; }
                 for &e in &idx {
                     let w_exp = sc_e[e as usize] * inv_k;
@@ -1183,9 +1282,7 @@ impl Model {
                     Self::matvec_q4(pool, &mu, &hn, &mut up, self.act_levels,
                                     self.act_thresh, tk(5), self.act_renorm, &mut scratch,
                                     moe.biais_up.as_ref().map(|b| &b[e as usize * moe.n_ff..]));
-                    for i in 0..cfg.ffn_exp {
-                        gate[i] = (gate[i] / (1.0 + (-gate[i]).exp())) * up[i];
-                    }
+                    Self::activation(&mut gate, &up, cfg.ffn_exp, cfg.ffn_act_oss);
                     let md = moe.down.expert(e as usize);
                     Self::matvec_q4(pool, &md, &gate, &mut exp_out, self.act_levels,
                                     self.act_thresh, tk(6), self.act_renorm, &mut scratch,
@@ -1199,9 +1296,7 @@ impl Model {
                     let mu = su.expert(0);
                     Self::matvec_q4(pool, &mu, &hn, &mut up, self.act_levels,
                                     self.act_thresh, tk(5), self.act_renorm, &mut scratch, None);
-                    for i in 0..cfg.ffn_exp {
-                        gate[i] = (gate[i] / (1.0 + (-gate[i]).exp())) * up[i];
-                    }
+                    Self::activation(&mut gate, &up, cfg.ffn_exp, cfg.ffn_act_oss);
                     let md = sd.expert(0);
                     Self::matvec_q4(pool, &md, &gate, &mut exp_out, self.act_levels,
                                     self.act_thresh, tk(6), self.act_renorm, &mut scratch, None);
@@ -1227,7 +1322,7 @@ impl Model {
                 }
             }
             Self::matvec(pool, &lay.wup, &hn, &mut up, events, self.act_levels, self.act_thresh, tk(5), self.act_renorm, &mut scratch, self.seuil_push);
-            for i in 0..cfg.ffn { gate[i] = (gate[i] / (1.0 + (-gate[i]).exp())) * up[i]; }
+            Self::activation(&mut gate, &up, cfg.ffn, cfg.ffn_act_oss);
             Self::matvec(pool, &lay.wdown, &gate, &mut down, events, self.act_levels, self.act_thresh, tk(6), self.act_renorm, &mut scratch, self.seuil_push);
             // --- greffon : neurone supplémentaire, sans réentraînement
             if let Some(pt) = self.patch.as_ref() {

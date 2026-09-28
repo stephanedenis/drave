@@ -6,5 +6,5 @@ de la session ; le `digest.md` voisin en donne le verbatim complet.
 
 | Session | Titre | Début | Durée | Tours | Outils | Fichiers | Commits | Rapport |
 |---|---|---|---|---|---|---|---|---|
-| `22bcae27` | Étude de Qtrinet-bootstrap.md | 2026-09-25 11:56 | 71.4 h | 41 | 1130 | 68 | 44 | [rapport](sessions/22bcae27-254b-47b2-acda-87467dab060c/rapport.md) |
+| `22bcae27` | Étude de Qtrinet-bootstrap.md | 2026-09-25 11:56 | 72.0 h | 42 | 1139 | 68 | 45 | [rapport](sessions/22bcae27-254b-47b2-acda-87467dab060c/rapport.md) |
 | `27c99b10` | Tu écris un tokenizer BPE | 2026-09-25 19:40 | 0.2 h | 1 | 54 | 1 | 0 | [rapport](sessions/27c99b10-c57e-4599-a23a-f7b1a54c17a1/rapport.md) |

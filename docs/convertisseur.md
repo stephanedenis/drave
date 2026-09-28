@@ -287,20 +287,31 @@ Un bug corrigé au passage : les valeurs par défaut de la ligne de commande
 ce qui désactivait silencieusement la fenêtre glissante. Désormais `0` signifie
 « garder ce que dit le modèle ».
 
-## Ce qui reste faux
+## La descente de perplexité, mesurée
 
-La perplexité de gpt-oss est **42 127** : la sortie n'est pas encore correcte.
-Trois candidats, non départagés faute de référence :
+| étape | PPL (63 jetons) | ce qui a changé |
+|---|---|---|
+| départ | **42 127** | jetons Qwen donnés à un modèle o200k |
+| 1 | 1 396 | **tokenizer du modèle** (garde-fou ajouté : identifiant hors vocabulaire = erreur franche) |
+| 2 | **185** | **activation gpt-oss** : `g·σ(1,702·g)·(u+1)`, `g` et `u` écrêtés à ±7 — ce n'est PAS SiLU |
+| 3 | 185 | routage top-k puis softmax sur les seuls retenus : sans effet mesurable ici |
+| 4 | (1 095) | rotary partiel supposé — **hypothèse réfutée**, annulée |
+| 5 | **39,8** | **YaRN désactivé** : notre implémentation dégradait d'un facteur 4,6 |
 
-1. les **constantes YaRN** (le `mscale` et les dimensions de correction varient
-   selon les implémentations) ;
-2. la **convention du softmax de routage** : softmax sur les 128 experts puis
-   top-k (ce que nous faisons, comme Qwen3), ou softmax sur les seuls top-k
-   (certaines implémentations de gpt-oss) ;
-3. la **fenêtre et les puits** : après correction de l'écrasement, le puits
-   appris s'est révélé **inerte** sur la perplexité, ce qui reste inexpliqué.
+Ce qui reste : la cible d'un 120 G MoE est de l'ordre de 6. La configuration
+reconnue est tracée au chargement :
 
-La méthode qui a trouvé les bugs précédents s'applique : `llama-quantize` pour
-une référence de poids, `llama-server /tokenize` pour le découpage. Il manque
-l'équivalent pour les **logits** — un moyen de comparer la sortie couche par
-couche à llama.cpp sur ce modèle.
+```
+[config] 36 couches, hidden 2880 · activation-oss routeur-topk moe
+[config] puits appris sur 36/36 couches · n_rot 64 · ffn 2880 · experts 128
+```
+
+Les puits **sont** chargés et appliqués (vérifié), le rotary est complet, la
+fenêtre glissante est sans effet en deçà de 128 jetons. Les suspects restants
+sont donc plus fins : le facteur d'échelle de l'attention, l'ordre exact des
+normes, ou la rampe YaRN (à corriger plutôt qu'à contourner, puisque gpt-oss a
+été entraîné avec).
+
+Chaque hypothèse se teste maintenant en **une** exécution, et la trace de
+configuration dit ce qui est actif — c'est ce qui manquait pour déboguer un
+modèle de 60 Go.

@@ -5,14 +5,14 @@
 | Identifiant | `22bcae27-254b-47b2-acda-87467dab060c` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-25 11:56 |
-| Durée | 71.4 h |
-| Tours | 41 |
-| Messages | 1126 |
-| Appels d'outils | 1130 |
+| Durée | 72.0 h |
+| Tours | 42 |
+| Messages | 1138 |
+| Appels d'outils | 1140 |
 | Fichiers touchés | 68 |
-| Commandes | 888 |
+| Commandes | 898 |
 | Sous-agents | 1 |
-| Commits | 44 |
+| Commits | 46 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -111,6 +111,8 @@
 **Tour 40** — <goal_round> Objective: "Implémenter et tester le plan du convertisseur Qtrinet : (1) lecteur Q4_K/Q6_K en place, (2) routage MoE + tranches par expert, (3) Q8_0 en place, (4) index de placement et épinglage NUMA, en vérifiant chaque étape par une mesure sur un vrai modèle de /home/stephane/FastNVMe/models." Round: 1/12  Continue working toward the objective in this same session. Treat the current … [451 caractères tronqués]
 
 **Tour 41** — continue
+
+**Tour 42** — tu n'as pas besoin de te comparer à llama. Contente-toi d'optimiser pour réduire la perpelexité. continue d'améliorer notre système à base de listes d'activation pour qu'il puisse rouler tous les modèles en exploitant au besoin plusieurs types de traitements matériels simultanément pour faire un usage optimal utile de toutes les ressources locales disponibles
 
 ## 2. Déroulé, étape par étape
 
@@ -2387,7 +2389,54 @@ Le bug le plus coûteux n'était pas dans la quantification : le 1,5B a un tense
 
 **Synthèse produite :**
 
-⏵ Le puits reste inerte — je m'arrête là sur gpt-oss et je consolide ce qui est acquis et vérifié
+⏵ Session consolidée. Voici l'état, sans enjolivement.
+
+\## Acquis et vérifié ce tour-ci
+
+**Tokenizer o200k (gpt-4o/gpt-oss)** — implémenté et **identique à celui de llama.cpp sur 7 cas pièges sur 7** (CamelCase, nombres par groupes de trois, contractions, accents, tirets cadratins, dates), vérifié via l'API `/tokenize` de `llama-server`. Le motif se choisit maintenant sur `tokenizer.ggml.pre` du GGUF : le moteur tokenise n'importe quel modèle qu'il sait lire.
+
+**Briques d'architecture génériques**, non régressives : biais du routeur, **biais par expert** (gpt-oss en a trois par expert, Qwen3-MoE aucun), **puits d'attention appris**, `post_attention_norm` (le `ffn_norm` de gpt-oss sous un autre nom), fenêtre glissante lue des métadonnées, **RoPE YaRN**.
+
+**Un bug silencieux corrigé** : les valeurs par défaut de la ligne de commande **écrasaient les métadonnées du modèle** (`attn_window ← 0`, `attn_sinks ← 4`) — la fenêtre glissante annoncée par gpt-oss était donc désactivée sans que rien ne le signale. Désormais `0` = « garder ce que dit le modèle ».
+
+\## gpt-oss-120b : la machine tient, le modèle n'est pas encore juste
+
+Il **charge et tourne** : 62,2 Go résidents — exactement la taille du fichier, zéro copie — à ~195 ms/jeton.
+
+| poste | ms/jeton | débit implicite |
+|---|---|---|
+| projections d'attention (Q8_0, 36 couches) | 42 | **21 Go/s — au mur** |
+| experts MoE (4 sur 128, MXFP4) | 148 | 12,4 Go/s |
+| tête de sortie (Q8_0, 579 M poids) | 23 | 27 Go/s |
+
+Mais la perplexité est **42 127** : la sortie est fausse. Trois candidats que je n'ai pas départagés faute de référence : les constantes YaRN, la convention du softmax de routage (sur les 128 experts puis top-k, ou sur les seuls top-k), et les puits appris — qui se sont révélés **inertes** sur la perplexité après correction de l'écrasement, ce qui reste inexpliqué.
+
+Le point de méthode : ce qui a permis de trouver les bugs précédents (`llama-quantize` pour une référence de poids, `/tokenize` pour le découpage) n'a pas d'équivalent ici — **il manque un moyen de comparer les logits couche par couche à llama.cpp**. C'est ce qu'il faudrait construire avant de continuer à tâtons sur gpt-oss.
+
+\## Régressions : toutes inchangées
+
+0,5B Q8_0 **19,3885** | 0,5B Q4_0 **21,0110** | 1,5B **12,9228** | 7B **10,9947** | 30B MoE **7,6139** — 3 tests unitaires verts.
+
+Commits `1082358` et `2f87190` ; `docs/convertisseur.md` porte le détail et la liste des candidats.
+
+### Tour 42 — tu n'as pas besoin de te comparer à llama. Contente-toi d'optimiser pour réduire la perpelexité. continue d'améliorer no … [241 caractères tronqués]
+
+*10 appels d'outils.* Actions notables :
+
+- bash — Add per-model tokenization and a vocabulary guard
+- bash — Run gpt-oss perplexity with its own tokenization
+- bash — Implement the gpt-oss activation and retest
+- bash — Implement partial rotary for gpt-oss and test
+- bash — Implement gpt-oss top-k softmax routing and test
+- bash — Add a config trace and test the YaRN hypothesis
+- bash — Make YaRN opt-in and print the sinks diagnostic
+- bash — Regression check after the gpt-oss work
+- bash — Commit the gpt-oss perplexity reduction
+- bash — Commit with a message file
+
+**Synthèse produite :**
+
+⏵ Le message de commit a cassé sur des guillemets — je recommite via un fichier
 
 ## 3. Travail accompli
 
@@ -2510,7 +2559,7 @@ Le bug le plus coûteux n'était pas dans la quantification : le 1,5B a un tense
 - **T3** Test OpenOCD without root and check Pro device support
 - **T3** Make scripts executable and test jtag_scan
 - **T3** Commit JTAG milestone
-- … et 848 autres
+- … et 858 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2702,4 +2751,6 @@ Le bug le plus coûteux n'était pas dans la quantification : le 1,5B a un tense
 - Journal : session du 28/09 (Q4_K/Q6_K/MXFP4 en place, MoE, 30B-A3B)" && git log --oneline | head -1
 - Q8_0 en place, plan de placement, epinglage NUMA mesure  Q8_0 en place pour les projections (comme la tete le faisait deja) : les blocs du fichier sont lus tels
 - Tokenizer o200k verifie, briques gpt-oss, YaRN ; 120B charge et tourne  TOKENIZER : pre-decoupage gpt-4o/o200k implemente (casse des lettres, nombres par groupe
+- gpt-oss : perplexite 42 127 -> 39,8 en cinq etapes mesurees  1. TOKENIZER. Le modele etait nourri avec des jetons Qwen : sa perplexite ne    mesurait que l'absu
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet cat > /tmp/msg.txt <<'MSG' gpt-oss : perplexite 42 127 -> 39,8 en cinq etapes mesurees  1. TOKENIZER. Le mode
 

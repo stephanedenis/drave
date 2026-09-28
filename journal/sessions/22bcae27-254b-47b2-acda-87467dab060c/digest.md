@@ -24352,3 +24352,161 @@ test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; fini
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\npython3 - <<'PY'\np='docs/convertisseur.md'; s=open(p,encoding='utf-8').read()\ns+='''\n---\n\n# gpt-oss-120b : la machine tient, le modèle n'est pas encore juste\n\n## Ce qui marche\n\n`gpt-oss-120b` **charge et tourne** : 62,2 Go rés … [3929 caractères tronqués]`
+
+  ```
+2f87190 Tokenizer o200k verifie, briques gpt-oss, YaRN ; 120B charge et tourne
+1082358 Q8_0 en place, plan de placement, epinglage NUMA mesure
+23850b9 Journal : session du 28/09 (Q4_K/Q6_K/MXFP4 en place, MoE, 30B-A3B)
+  ```
+
+### 🤖 Assistant
+
+⏵ Session consolidée. Voici l'état, sans enjolivement.
+
+## Acquis et vérifié ce tour-ci
+
+**Tokenizer o200k (gpt-4o/gpt-oss)** — implémenté et **identique à celui de llama.cpp sur 7 cas pièges sur 7** (CamelCase, nombres par groupes de trois, contractions, accents, tirets cadratins, dates), vérifié via l'API `/tokenize` de `llama-server`. Le motif se choisit maintenant sur `tokenizer.ggml.pre` du GGUF : le moteur tokenise n'importe quel modèle qu'il sait lire.
+
+**Briques d'architecture génériques**, non régressives : biais du routeur, **biais par expert** (gpt-oss en a trois par expert, Qwen3-MoE aucun), **puits d'attention appris**, `post_attention_norm` (le `ffn_norm` de gpt-oss sous un autre nom), fenêtre glissante lue des métadonnées, **RoPE YaRN**.
+
+**Un bug silencieux corrigé** : les valeurs par défaut de la ligne de commande **écrasaient les métadonnées du modèle** (`attn_window ← 0`, `attn_sinks ← 4`) — la fenêtre glissante annoncée par gpt-oss était donc désactivée sans que rien ne le signale. Désormais `0` = « garder ce que dit le modèle ».
+
+## gpt-oss-120b : la machine tient, le modèle n'est pas encore juste
+
+Il **charge et tourne** : 62,2 Go résidents — exactement la taille du fichier, zéro copie — à ~195 ms/jeton.
+
+| poste | ms/jeton | débit implicite |
+|---|---|---|
+| projections d'attention (Q8_0, 36 couches) | 42 | **21 Go/s — au mur** |
+| experts MoE (4 sur 128, MXFP4) | 148 | 12,4 Go/s |
+| tête de sortie (Q8_0, 579 M poids) | 23 | 27 Go/s |
+
+Mais la perplexité est **42 127** : la sortie est fausse. Trois candidats que je n'ai pas départagés faute de référence : les constantes YaRN, la convention du softmax de routage (sur les 128 experts puis top-k, ou sur les seuls top-k), et les puits appris — qui se sont révélés **inertes** sur la perplexité après correction de l'écrasement, ce qui reste inexpliqué.
+
+Le point de méthode : ce qui a permis de trouver les bugs précédents (`llama-quantize` pour une référence de poids, `/tokenize` pour le découpage) n'a pas d'équivalent ici — **il manque un moyen de comparer les logits couche par couche à llama.cpp**. C'est ce qu'il faudrait construire avant de continuer à tâtons sur gpt-oss.
+
+## Régressions : toutes inchangées
+
+0,5B Q8_0 **19,3885** | 0,5B Q4_0 **21,0110** | 1,5B **12,9228** | 7B **10,9947** | 30B MoE **7,6139** — 3 tests unitaires verts.
+
+Commits `1082358` et `2f87190` ; `docs/convertisseur.md` porte le détail et la liste des candidats.
+
+
+## Tour 42
+
+### 👤 Utilisateur
+
+tu n'as pas besoin de te comparer à llama. Contente-toi d'optimiser pour réduire la perpelexité. continue d'améliorer notre système à base de listes d'activation pour qu'il puisse rouler tous les modèles en exploitant au besoin plusieurs types de traitements matériels simultanément pour faire un usage optimal utile de toutes les ressources locales disponibles
+
+### 🤖 Assistant
+
+⏵ Arrêt sur image : **je nourrissais gpt-oss avec des jetons Qwen**. Sa perplexité de 42 127 est un artefact de test, pas un bug du moteur. Je corrige l'outillage
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\npython3 - <<'PY'\np='src/main.rs'; s=open(p,encoding='utf-8').read(); o=s\n# mode : encoder un fichier de texte avec le tokenizer DU MODELE\ns=s.replace('''    let g = Gguf::open(path).expect(\"ouverture du GGUF\");\n    l … [3522 caractères tronqués]`
+
+  ```
+=== jetons produits par chaque tokenizer sur le MÊME texte
+4592 tokens écrits dans /tmp/ids_qwen.txt (vocabulaire du modèle : 151936)
+4424 tokens écrits dans /tmp/ids_oss.txt (vocabulaire du modèle : 201088)
+  ```
+
+### 🤖 Assistant
+
+⏵ gpt-oss avec **ses propres jetons** — test décisif :
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\nG=/home/stephane/FastNVMe/models/gpt-oss-120b-MXFP4.gguf\n/usr/bin/time -f \"  %e s / %M Ko\" timeout 2400 ./target/release/qtrinet-core $G --ppl /tmp/ids_oss.txt \\\n  --ctx 256 --abits 16 --threads 16 --limit 64 --dense  … [152 caractères tronqués]`
+
+  ```
+/tmp/ids_oss.txt : 64 tokens, fenêtres de 256
+[modele] 36 couches chargées en 106.330967088s — listes 0.00 Go , 16 threads
+      63 tokens notés — perplexité cumulée 1396.316  (5.3 tok/s)
+=== perplexité 1396.3162 sur 63 tokens (0 événements, 11.8 s) ===
+    postes (ms/token) : projets-attn 30.99 | rope 3.09 | attention 3.21 | proj+mlp 127.36 | somme 164.65 | reste (tête + échantillonnage) 23.13
+  174.74 s / 62206088 Ko
+  ```
+
+### 🤖 Assistant
+
+⏵ Piste sérieuse trouvée : gpt-oss n'utilise **pas** SiLU mais `g·σ(1,702·g)·(u+1)`, avec écrêtage à 7. Je l'implémente
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\npython3 - <<'PY'\np='src/model.rs'; s=open(p,encoding='utf-8').read(); o=s\n# fonction d'activation du FFN dans la config\ns=s.replace('''    /// Étirement de contexte YaRN''','''    /// Activation du FFN. gpt-oss n'utilis … [3051 caractères tronqués]`
+
+  ```
+3
+=== perplexité 185.4126 sur 63 tokens (0 événements, 12.3 s) ===
+  ```
+
+### 🤖 Assistant
+
+⏵ **PPL 1396 → 185** : l'activation était bien un bug majeur. Piste suivante : gpt-oss ne tourne que la **moitié** de chaque tête (rotary partiel)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\npython3 - <<'PY'\np='src/model.rs'; s=open(p,encoding='utf-8').read(); o=s\n# n_rot dans la config\ns=s.replace('''    pub ffn_act_oss: bool,''','''    pub ffn_act_oss: bool,\n    /// Dimensions réellement tournées par têt … [3749 caractères tronqués]`
+
+  ```
+=== perplexité 1094.8128 sur 63 tokens (0 événements, 11.8 s) ===
+  ```
+
+### 🤖 Assistant
+
+⏵ Rotary partiel : **pire** (185 → 1095) — j'annule. Piste suivante, documentée pour gpt-oss : le softmax du routeur porte sur les **k retenus seulement**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\npython3 - <<'PY'\np='src/model.rs'; s=open(p,encoding='utf-8').read(); o=s\n# annuler le rotary partiel devine\ns=s.replace('''                else if arch == Some(\"gpt-oss\") { 32 }   // moitié de head_dim = 64\n         … [4123 caractères tronqués]`
+
+  ```
+=== perplexité 184.9451 sur 63 tokens (0 événements, 11.9 s) ===
+  ```
+
+### 🤖 Assistant
+
+⏵ Routage : sans effet (184,9). J'ajoute un diagnostic de configuration et je teste l'hypothèse YaRN
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\npython3 - <<'PY'\np='src/model.rs'; s=open(p,encoding='utf-8').read(); o=s\ns=s.replace('''        let n_layer = cfg.n_layer;\n        let tete =''','''        let n_layer = cfg.n_layer;\n        // Trace de configuration  … [2573 caractères tronqués]`
+
+  ```
+=== sans YaRN
+[config] 36 couches, hidden 2880 · yarn activation-oss routeur-topk moe 
+=== perplexité 39.7606 sur 63 tokens (0 événements, 12.1 s) ===
+  ```
+
+### 🤖 Assistant
+
+⏵ **YaRN était le coupable** : 184,9 → **39,8** en le désactivant. Je le rends optionnel et j'affiche le diagnostic des puits
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\npython3 - <<'PY'\np='src/model.rs'; s=open(p,encoding='utf-8').read(); o=s\ns=s.replace('''                Some(\"yarn\") => Some((''','''                // YaRN est ACTIF seulement sur demande : notre implémentation\n     … [1321 caractères tronqués]`
+
+  ```
+[config] 36 couches, hidden 2880 · activation-oss routeur-topk moe 
+[config] puits appris sur 36/36 couches · n_rot 64 · ffn 2880 · experts 128
+=== perplexité 39.7606 sur 63 tokens (0 événements, 11.8 s) ===
+    postes (ms/token) : projets-attn 31.14 | rope 2.81 | attention 3.13 | proj+mlp 127.15 | somme 164.22 | reste (tête + échantillonnage) 23.36
+  ```
+
+### 🤖 Assistant
+
+⏵ Puiss appris chargés sur 36/36 couches ✓. Régressions, puis je consolide
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\ncargo test --release 2>&1 | grep \"test result\"\nr() { printf \"%-38s \" \"$1\"; timeout 1800 ./target/release/qtrinet-core \"$2\" --ppl \"$3\" --ctx 256 --abits 16 --threads 16 --limit \"$4\" $5 2>&1 | grep -oP 'perplexi … [639 caractères tronqués]`
+
+  ```
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+Qwen2.5-0.5B Q8_0                      19.3885
+Qwen2.5-0.5B Q4_0                      21.0110
+Qwen2.5-1.5B Q4_K_M                    12.9228
+Qwen3-30B-A3B MoE                      7.6139
+--- (le fichier d'identifiants Qwen est produit par le tokenizer du 0,5B, comme avant)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\npython3 - <<'PY'\np='docs/convertisseur.md'; s=open(p,encoding='utf-8').read()\ns=s.replace('''## Ce qui reste faux\n\nLa perplexité de gpt-oss est **42 127** : la sortie n'est pas encore correcte.\nTrois candidats, non départagés faut … [3849 caractères tronqués]`
+
+  ```
+Parc : gpt-oss-120b 39,8 (etait 42 127) | 0,5B Q8_0 19,3885 | 0,5B Q4_0 21,0110 |
+1,5B 12,9228 | 30B MoE 7,6139. 3 tests verts, aucune regression.' did not match any file(s) known to git
+2f87190 Tokenizer o200k verifie, briques gpt-oss, YaRN ; 120B charge et tourne
+1082358 Q8_0 en place, plan de placement, epinglage NUMA mesure
+  ```
+
+### 🤖 Assistant
+
+⏵ Le message de commit a cassé sur des guillemets — je recommite via un fichier
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\ncat > /tmp/msg.txt <<'MSG'\ngpt-oss : perplexite 42 127 -> 39,8 en cinq etapes mesurees\n\n1. TOKENIZER. Le modele etait nourri avec des jetons Qwen : sa perplexite ne\n   mesurait que l'absurde de l'entree. Ajout de --tokenize --fichi … [1365 caractères tronqués]`
