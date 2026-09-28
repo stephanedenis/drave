@@ -5586,3 +5586,54 @@ The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/.gitignore has been upd
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git status --short | head -15 && git commit -q -m \"gpt-oss : biais attn_output et fenetre par couche corriges, reference llama.cpp\n\nDeux bugs reels, trouves en reprenant REPRISE.md §6.a :\n\n1. attn_output.bias etait … [1599 caractères tronqués]`
+
+  ```
+M  .gitignore
+M  REPRISE.md
+M  journal/README.md
+M  journal/sessions/22bcae27-254b-47b2-acda-87467dab060c/digest.md
+M  journal/sessions/22bcae27-254b-47b2-acda-87467dab060c/rapport.md
+M  journal/sessions/MANIFEST.md
+A  journal/sessions/bbd6969f-0f70-42b2-8951-64d1f2f36d2e/digest.md
+A  journal/sessions/bbd6969f-0f70-42b2-8951-64d1f2f36d2e/rapport.md
+A  journal/sessions/e7dfe34f-d596-4f98-93c2-cad5a92d3b1e/digest.md
+A  journal/sessions/e7dfe34f-d596-4f98-93c2-cad5a92d3b1e/rapport.md
+M  qtrinet-core/src/gguf.rs
+M  qtrinet-core/src/main.rs
+M  qtrinet-core/src/model.rs
+A  reports/rapport-gpt-oss-perplexite.md
+A  tools/compare_logits.py
+72e7dc4 gpt-oss : biais attn_output et fenetre par couche corriges, reference llama.cpp
+  ```
+
+### 🤖 Assistant
+
+⏵ Contrôle final : reproductibilité du chiffre de gpt-oss avec le binaire définitif
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && time ./qtrinet-core/target/release/qtrinet-core /home/stephane/FastNVMe/models/gpt-oss-120b-MXFP4.gguf --ppl /tmp/ids_oss.txt --ctx 256 --dense --threads 16 --limit 512 2>&1 | grep -E \"perplexité|fenêtre glissante\"", "description": … [61 caractères tronqués]`
+
+  ```
+[config] fenêtre glissante 128 sur 18/36 couches (motif 2 alterné)
+     255 tokens notés — perplexité cumulée 13.715  (5.3 tok/s)  [fenêtre 1 : 255 notés, PPL 13.715]
+     510 tokens notés — perplexité cumulée 15.176  (5.2 tok/s)  [fenêtre 2 : 255 notés, PPL 16.792]
+=== perplexité 15.1757 sur 510 tokens (0 événements, 97.3 s) ===
+[stderr]
+
+real	2m20,883s
+user	30m10,907s
+sys	0m41,536s
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/REPRISE.md", "new_string": "| gpt-oss-120b MXFP4 | `--dense --limit 64`, ids_oss | **20,8361** (63 jetons) |\n| gpt-oss-120b MXFP4 | `--dense --limit 512`, ids_oss | **15,1757** (510 jetons, deux fenêtres) |\n| gpt-oss-120b MXFP4 | `--pp … [706 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/REPRISE.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/REPRISE.md", "new_string": "# 3. gpt-oss : le chiffre de contrôle de cette session (≈ 45 s de chargement,\n#    ~100 s pour 510 jetons)\n./target/release/qtrinet-core /home/stephane/FastNVMe/models/gpt-oss-120b-MXFP4.gguf \\\n    --ppl / … [337 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/REPRISE.md has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -m \"REPRISE : chiffres gpt-oss exacts (ids 15,1757 / texte 15,0757)\" && git log --oneline -3 && git status --short | head -3", "description": "Commit REPRISE number fix"}`

@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 2.6 h |
+| Durée | 2.7 h |
 | Tours | 1 |
-| Messages | 299 |
-| Appels d'outils | 311 |
+| Messages | 303 |
+| Appels d'outils | 315 |
 | Fichiers touchés | 18 |
-| Commandes | 175 |
+| Commandes | 177 |
 | Sous-agents | 1 |
-| Commits | 1 |
+| Commits | 2 |
 | Compactages de contexte | 0 |
 
 ## 1. Ce qui a été demandé
@@ -23,7 +23,7 @@
 
 ### Tour 1 — continue avec REPRISE.md
 
-*311 appels d'outils.* Actions notables :
+*315 appels d'outils.* Actions notables :
 
 - bash — List repository root files
 - glob
@@ -39,11 +39,11 @@
 - bash — Check memory and cpu
 - write `/tmp/gguf_meta.py`
 - bash — Dump gpt-oss metadata and harmony tokens
-- … et 239 autres
+- … et 243 autres
 
 **Synthèse produite :**
 
-⏵ Rédaction finale du rapport (harmony + optimisations)
+⏵ Contrôle final : reproductibilité du chiffre de gpt-oss avec le binaire définitif
 
 ## 3. Travail accompli
 
@@ -62,7 +62,7 @@
 | `/tmp/mesures_oss4.sh` | 2 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-gpt-oss-perplexite.md` | 1 | 1 |
 | `/tmp/controles_oss.sh` | 1 | 0 |
-| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/REPRISE.md` | 0 | 5 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/REPRISE.md` | 0 | 7 |
 | `/tmp/controles2_oss.sh` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/harmony_canonique.py` | 1 | 1 |
 | `/tmp/controles3_oss.sh` | 1 | 0 |
@@ -116,7 +116,7 @@
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 135 autres
+- … et 137 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -219,6 +219,9 @@
 - **T1** `=== perplexité 19.3885 sur 510 tokens (0 événements, 16.0 s) ===`
 - **T1** `à      25.8 Go/s (NVLink) :   67.76 tok/s`
 - **T1** `à     380.0 Go/s (GPU local) :  998.76 tok/s`
+- **T1** `255 tokens notés — perplexité cumulée 13.715  (5.3 tok/s)  [fenêtre 1 : 255 notés, PPL 13.715]`
+- **T1** `510 tokens notés — perplexité cumulée 15.176  (5.2 tok/s)  [fenêtre 2 : 255 notés, PPL 16.792]`
+- **T1** `=== perplexité 15.1757 sur 510 tokens (0 événements, 97.3 s) ===`
 
 ## 5. Erreurs rencontrées
 
@@ -232,4 +235,5 @@
 ## 6. Commits
 
 - gpt-oss : biais attn_output et fenetre par couche corriges, reference llama.cpp  Deux bugs reels, trouves en reprenant REPRISE.md §6.a :  1. attn_output.bias et
+- REPRISE : chiffres gpt-oss exacts (ids 15,1757 / texte 15,0757)" && git log --oneline -3 && git status --short | head -3
 

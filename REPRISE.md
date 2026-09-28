@@ -51,7 +51,8 @@ identique à la source) — les deux tokenizers la passent sur ce corpus.
 | Qwen2.5-VL-7B Q4_K_M | défaut, `--limit 128` | **10,9947** |
 | Qwen3-30B-A3B MoE | `--dense --limit 128` | **7,6139** |
 | gpt-oss-120b MXFP4 | `--dense --limit 64`, ids_oss | **20,8361** (63 jetons) |
-| gpt-oss-120b MXFP4 | `--dense --limit 512`, ids_oss | **15,0757** (509 jetons, deux fenêtres) |
+| gpt-oss-120b MXFP4 | `--dense --limit 512`, ids_oss | **15,1757** (510 jetons, deux fenêtres) |
+| gpt-oss-120b MXFP4 | `--ppl-texte`, `--limit 512` (mêmes jetons) | **15,0757** (509 jetons) |
 | gpt-oss-120b MXFP4 | `--dense --ctx 512 --limit 512`, ids_oss | **18,5803** (511 jetons, une fenêtre) |
 | gpt-oss-120b MXFP4, YaRN | `QT_YARN=1`, `--ctx 512 --limit 512` | **174,3375** ← le YaRN statique du modèle |
 
@@ -251,9 +252,10 @@ cd qtrinet-core && cargo build --release && cargo test --release
 
 # 2. si /tmp a été vidé, régénérer le corpus et les identifiants (§2)
 
-# 3. gpt-oss : les deux chiffres de contrôle de cette session
+# 3. gpt-oss : le chiffre de contrôle de cette session (≈ 45 s de chargement,
+#    ~100 s pour 510 jetons)
 ./target/release/qtrinet-core /home/stephane/FastNVMe/models/gpt-oss-120b-MXFP4.gguf \
-    --ppl /tmp/ids_oss.txt --ctx 256 --dense --threads 16 --limit 512   # attendu 15,08
+    --ppl /tmp/ids_oss.txt --ctx 256 --dense --threads 16 --limit 512   # attendu 15,1757
 
 # 4. puis §6.b : YaRN seulement au-delà de 4 096 (protocole dans le rapport)
 ```
