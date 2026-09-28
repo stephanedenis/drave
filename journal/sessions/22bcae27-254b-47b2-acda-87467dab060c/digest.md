@@ -25389,3 +25389,118 @@ int8   : 19.3885 postes (ms/token) : projets-attn 2.49 | rope 0.41 | attention 1
 ⏵ Extraction vectorisée : le 6 bits domine maintenant **les trois axes**. Je nettoie et je commite
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\npython3 - <<'PY'\np='src/list.rs'; s=open(p,encoding='utf-8').read()\ns=s.replace('''        let mut sum = 0f32;\n        let mut deux = [0u8; 32];\n        let mut tmp = [0i32; 8];\n        for b in 0..n_bloc {\n          … [2299 caractères tronqués]`
+
+  ```
+19.3045
+a018f43 6 bits vectorise : il domine l'int8 sur les TROIS axes
+1ae6543 Journal : format 6 bits
+5590c2a Journal : 6 bits vectorise
+  ```
+
+### 🤖 Assistant
+
+⏵ Le 6 bits est maintenant complet : il bat l'int8 sur **les trois axes**.
+
+## Résultat
+
+| 0,5B Q8_0, 510 jetons | int8 (1,00 o/p) | **6 bits (0,75 o/p)** |
+|---|---|---|
+| perplexité | 19,3885 | **19,3045** ✅ |
+| projets-attn | 2,49 ms | **2,27 ms** ✅ |
+| proj+mlp | 20,46 ms | **19,79 ms** ✅ |
+| somme | 24,95 ms | **23,93 ms** ✅ |
+
+Ce qui manquait était l'extraction des deux plans, encore scalaire par poids. Elle se fait maintenant **par octet** (huit tours que le compilateur vectorise), puis recombinaison et produit entier en AVX2 — la même mécanique que le noyau Q4_K. Le poste `projets-attn` passe de 7,44 à 2,27 ms, et la perplexité reste **inchangée au chiffre près** (19,3045), donc la vectorisation est exacte.
+
+## Où on en est sur la précision
+
+| format | octets/poids | perplexité | vitesse |
+|---|---|---|---|
+| int8 (par ligne) | 1,00 | 19,3885 | référence |
+| **6 bits (par bloc de 32)** | **0,75** | **19,3045** | **plus rapide** |
+| 4 bits (par bloc de 32) | 0,50 | 23,1323 | plus rapide |
+
+Le 6 bits s'impose sur tous les critères mesurables. Il reste **opt-in** pour une raison honnête : il construit sa quantification au chargement, donc il **copie les poids** — ce qu'un modèle de 60 Go ne peut pas se permettre. C'est le même arbitrage que partout ailleurs dans ce moteur : le format qui gagne en qualité/octets est celui qui coûte une copie.
+
+## Ce que je n'ai pas fait, et pourquoi
+
+- **Le 5 bits** : la variante est simple (plan de 1 bit au lieu de 2, donc 0,625 o/poids) mais la courbe simulée surestime le coût — elle payait une double quantification. Il faut l'implémenter pour connaître le vrai chiffre, et je préfère laisser cette mesure à un prochain tour plutôt que d'annoncer une extrapolation.
+- **Des échelles par bloc dans `DenseQ8`** : tant qu'elles manquent, la comparaison int8 contre 6 bits n'est pas équitable. C'est probablement là que se trouve le prochain gain de qualité — le 6 bits ne gagne peut-être pas grâce à ses deux bits supplémentaires, mais grâce à ses échelles plus fines. **C'est l'hypothèse à tester en premier.**
+
+Deux commits (`a018f43`, `5590c2a`), journal à jour. Sans les drapeaux `--bits-*`, tout le parc donne exactement les mêmes chiffres qu'avant.
+
+
+## Tour 48
+
+### 👤 Utilisateur
+
+est-on prêt à tester sur unn vrai travail?
+
+### 🤖 Assistant
+
+⏵ La vraie question. Je réponds par un test, pas par une opinion — mais d'abord l'état des lieux de l'interface
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\ngrep -n '\"--infer\"\\|--chat\\|--temp\\|--n \\|--top-p\\|top_k\\|repetic\\|stop_id' src/main.rs | head -12\necho \"=== options d'inférence disponibles\"\nsed -n '/qtrinet-core <modele.gguf> --infer/,/explication/p' src/ma … [67 caractères tronqués]`
+
+  ```
+32:        eprintln!("                    [--n 32] [--temp 0] [--ctx 512] [--threads N]");
+41:    if args.iter().any(|a| a == "--infer") { run_infer(&args); return; }
+342:            "--infer" => { i += 1; continue; }
+346:            "--temp" => temp = args[i + 1].parse().unwrap(),
+370:            "--chat" => { chat = true; i -= 1; }
+413:        mdl.stop_id = build_tokenizer(&mdl.g).special_id("<|im_end|>");
+=== options d'inférence disponibles
+        eprintln!("       qtrinet-core <modele.gguf> --infer (--ids 1,2,3 | --prompt TEXTE)");
+        eprintln!("                    [--n 32] [--temp 0] [--ctx 512] [--threads N]");
+        std::process::exit(1);
+    }
+    if args.iter().any(|a| a == "--pin") {
+        engine::EPINGLER.store(true, std::sync::atomic::Ordering::Relaxed);
+    }
+    if args.iter().any(|a| a == "--plan") { run_plan(&args); return; }
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\nM=/home/stephane/FastNVMe/models/Qwen3-30B-A3B-Instruct-2507-Q4_K_M.gguf\necho \"=== TEST RÉEL 1 : question en français, modèle 30B MoE, glouton, mode conversation\"\ntimeout 900 ./target/release/qtrinet-core $M --infer -- … [241 caractères tronqués]`
+
+  ```
+=== TEST RÉEL 1 : question en français, modèle 30B MoE, glouton, mode conversation
+--- texte ---
+<|im_start|>user
+Explique en trois phrases pourquoi le ciel est bleu.<|im_end|>
+<|im_start|>assistant
+Le ciel est bleu parce que les molécules de l'atmosphère diffusent la lumière du soleil. La lumière bleue a une longueur d'onde plus courte que les autres couleurs, donc elle est diffusée plus efficacement que les autres couleurs. C’est cette diffusion de la lumière bleue dans toutes les directions qui fait que nous voyons le ciel comme bleu.<|im_end|>
+--- ids générés : [2304, 11825, 301, 1788, 12422, 84, 64921, 1709, 3541, 21609, 19667, 2425, 409, 326, 6, 266, 8631, 759, 12068, 3638, 355, 306, 1187, 141096, 3845, 13309, 321, 13, 4929, 141096, 12422, 361, 264, 6185, 1293, 78523, 294, 6, 17231, 5519, 73899, 1709, 3541, 45006, 3933, 76560, 11, 38487, 26451, 1788, 3638, 355, 7888, 5519, 30814, 6346, 1709, 3541, 45006, 3933, 76560, 13, 356, 21402, 20061, 57330, 409, 1187, 141096, 12422, 361, 6866, 39644, 3541, 17961, 7774, 19694, 1709, 16890, 23063, 2382, 512, 11825, 301, 21572, 12422, 84, 13, 151645]
+
+--- mesure ---
+prompt  : 21 tokens en 3.491 s  (6.0 tok/s, TTFT 166.2 ms)
+généré  : 89 to
+… [173 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ **Test réel concluant** : le 30B MoE répond correctement, en français, avec le gabarit de conversation. Deuxième test, à réponse vérifiable
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\nM=/home/stephane/FastNVMe/models/Qwen3-30B-A3B-Instruct-2507-Q4_K_M.gguf\necho \"=== TEST RÉEL 2 : génération de code, réponse vérifiable\"\ntimeout 900 ./target/release/qtrinet-core $M --infer --chat \\\n  --prompt \"Écri … [323 caractères tronqués]`
+
+  ```
+=== TEST RÉEL 2 : génération de code, réponse vérifiable
+--- texte ---
+<|im_start|>user
+Écris une fonction Python qui renvoie la médiane d'une liste de nombres, sans utiliser statistics. Réponds uniquement par le code.<|im_end|>
+<|im_start|>assistant
+def mediane(liste):
+    triee = sorted(liste)
+    n = len(triee)
+    if n % 2 == 1:
+        return triee[n // 2]
+    else:
+        return (triee[n // 2 - 1] + triee[n // 2]) / 2<|im_end|>
+--- ids générés : [750, 22553, 68, 7307, 68, 982, 262, 2406, 2127, 284, 10615, 7307, 68, 340, 262, 308, 284, 2422, 7624, 645, 68, 340, 262, 421, 308, 1018, 220, 17, 621, 220, 16, 510, 286, 470, 2406, 2127, 7669, 442, 220, 17, 921, 262, 770, 510, 286, 470, 320, 8927, 68, 7669, 442, 220, 17, 481, 220, 16, 60, 488, 2406, 2127, 7669, 442, 220, 17, 2467, 608, 220, 17, 151645]
+  ```
+
+### 🤖 Assistant
+
+⏵ Les deux tests réels passent. Je consigne la preuve et l'état de préparation
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\ncat > reports/rapport-travail-reel.md <<'MD'\n# Le moteur est-il prêt pour du vrai travail ?\n\n> Deux tests réels, avec un modèle de 30,5 G paramètres (Qwen3-30B-A3B, MoE\n> top-8, Q4_K_M) sur CPU, 16 fils, lecture en place — aucune c … [3566 caractères tronqués]`

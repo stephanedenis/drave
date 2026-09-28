@@ -6,13 +6,13 @@
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-25 11:56 |
 | Durée | 73.6 h |
-| Tours | 47 |
-| Messages | 1189 |
-| Appels d'outils | 1181 |
+| Tours | 48 |
+| Messages | 1195 |
+| Appels d'outils | 1185 |
 | Fichiers touchés | 68 |
-| Commandes | 939 |
+| Commandes | 943 |
 | Sous-agents | 1 |
-| Commits | 52 |
+| Commits | 53 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -123,6 +123,8 @@
 **Tour 46** — continue
 
 **Tour 47** — continue
+
+**Tour 48** — est-on prêt à tester sur unn vrai travail?
 
 ## 2. Déroulé, étape par étape
 
@@ -2681,7 +2683,48 @@ Trois commits (`6b2e50a`, `8b9cf30`, `1ae6543`), journal à jour. Le défaut res
 
 **Synthèse produite :**
 
-⏵ Extraction vectorisée : le 6 bits domine maintenant **les trois axes**. Je nettoie et je commite
+⏵ Le 6 bits est maintenant complet : il bat l'int8 sur **les trois axes**.
+
+\## Résultat
+
+| 0,5B Q8_0, 510 jetons | int8 (1,00 o/p) | **6 bits (0,75 o/p)** |
+|---|---|---|
+| perplexité | 19,3885 | **19,3045** ✅ |
+| projets-attn | 2,49 ms | **2,27 ms** ✅ |
+| proj+mlp | 20,46 ms | **19,79 ms** ✅ |
+| somme | 24,95 ms | **23,93 ms** ✅ |
+
+Ce qui manquait était l'extraction des deux plans, encore scalaire par poids. Elle se fait maintenant **par octet** (huit tours que le compilateur vectorise), puis recombinaison et produit entier en AVX2 — la même mécanique que le noyau Q4_K. Le poste `projets-attn` passe de 7,44 à 2,27 ms, et la perplexité reste **inchangée au chiffre près** (19,3045), donc la vectorisation est exacte.
+
+\## Où on en est sur la précision
+
+| format | octets/poids | perplexité | vitesse |
+|---|---|---|---|
+| int8 (par ligne) | 1,00 | 19,3885 | référence |
+| **6 bits (par bloc de 32)** | **0,75** | **19,3045** | **plus rapide** |
+| 4 bits (par bloc de 32) | 0,50 | 23,1323 | plus rapide |
+
+Le 6 bits s'impose sur tous les critères mesurables. Il reste **opt-in** pour une raison honnête : il construit sa quantification au chargement, donc il **copie les poids** — ce qu'un modèle de 60 Go ne peut pas se permettre. C'est le même arbitrage que partout ailleurs dans ce moteur : le format qui gagne en qualité/octets est celui qui coûte une copie.
+
+\## Ce que je n'ai pas fait, et pourquoi
+
+- **Le 5 bits** : la variante est simple (plan de 1 bit au lieu de 2, donc 0,625 o/poids) mais la courbe simulée surestime le coût — elle payait une double quantification. Il faut l'implémenter pour connaître le vrai chiffre, et je préfère laisser cette mesure à un prochain tour plutôt que d'annoncer une extrapolation.
+- **Des échelles par bloc dans `DenseQ8`** : tant qu'elles manquent, la comparaison int8 contre 6 bits n'est pas équitable. C'est probablement là que se trouve le prochain gain de qualité — le 6 bits ne gagne peut-être pas grâce à ses deux bits supplémentaires, mais grâce à ses échelles plus fines. **C'est l'hypothèse à tester en premier.**
+
+Deux commits (`a018f43`, `5590c2a`), journal à jour. Sans les drapeaux `--bits-*`, tout le parc donne exactement les mêmes chiffres qu'avant.
+
+### Tour 48 — est-on prêt à tester sur unn vrai travail?
+
+*4 appels d'outils.* Actions notables :
+
+- bash — Check the inference CLI surface
+- bash — First real-work test: French question on the 30B MoE
+- bash — Second real test: verifiable code generation
+- bash — Write and commit the real-work readiness report
+
+**Synthèse produite :**
+
+⏵ Les deux tests réels passent. Je consigne la preuve et l'état de préparation
 
 ## 3. Travail accompli
 
@@ -2804,7 +2847,7 @@ Trois commits (`6b2e50a`, `8b9cf30`, `1ae6543`), journal à jour. Le défaut res
 - **T3** Test OpenOCD without root and check Pro device support
 - **T3** Make scripts executable and test jtag_scan
 - **T3** Commit JTAG milestone
-- … et 899 autres
+- … et 903 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -3004,4 +3047,5 @@ Trois commits (`6b2e50a`, `8b9cf30`, `1ae6543`), journal à jour. Le défaut res
 - Journal : courbe de precision" 2>/dev/null echo "--- bilan de la session"; git log --oneline | head -8
 - Journal : format 6 bits" 2>/dev/null git log --oneline | head -1
 - Journal : 6 bits vectorise" 2>/dev/null; git log --oneline | head -1
+- Rapport : le moteur sur du vrai travail (deux tests reels sur le 30B MoE)  Test 1 : question en francais, gabarit de conversation, trois phrases exactes, arret 
 
