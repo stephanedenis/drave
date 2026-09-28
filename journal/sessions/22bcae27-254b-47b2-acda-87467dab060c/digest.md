@@ -23607,3 +23607,37 @@ f4434b9 MoE : routage top-k et tranches par expert, le 30B-A3B tourne
 ⏵ Je mets à jour la documentation avec les résultats obtenus
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\ncat >> docs/convertisseur.md <<'MD'\n\n---\n\n# État après implémentation (mesuré)\n\n## Ce qui est fait\n\n| # | chantier | état | vérification |\n|---|---|---|---|\n| 1 | emprunt des blocs en place | ✅ | Q4_0, MXFP4, **Q4_K**, **Q6_K … [4519 caractères tronqués]`
+
+  ```
+0317659 Documentation : parc de modeles lisible, methode de verification, MoE
+  ```
+
+### 🤖 Assistant
+
+⏵ Vérification finale de l'ensemble du parc en une passe
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\nlancer() {\n  printf \"%-34s \" \"$1\"\n  timeout 1800 ./target/release/qtrinet-core \"$2\" --ppl /tmp/wt2_ids.txt --ctx 256 --abits 16 \\\n    --threads 16 --limit \"$3\" $4 2>&1 | grep -oP '=== perplexité \\K[0-9.]+ sur  … [650 caractères tronqués]`
+
+  ```
+Qwen2.5-0.5B Q8_0                  19.2641 sur 510 tokens (0 événements, 19.1 s
+Qwen2.5-0.5B Q4_0                  21.0110 sur 510 tokens (0 événements, 13.8 s
+Qwen2.5-1.5B Q4_K_M                12.9228 sur 255 tokens (0 événements, 14.3 s
+Qwen2.5-VL-7B Q4_K_M               10.9947 sur 127 tokens (0 événements, 45.6 s
+Qwen3-30B-A3B Q4_K_M               7.6139 sur 127 tokens (0 événements, 24.6 s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\ngit status --short | head -3; git log --oneline | head -6\necho \"--- taille du moteur\"\nwc -l qtrinet-core/src/*.rs | tail -1", "description": "Final repository state"}`
+
+  ```
+M journal/README.md
+0317659 Documentation : parc de modeles lisible, methode de verification, MoE
+f4434b9 MoE : routage top-k et tranches par expert, le 30B-A3B tourne
+847f9ab Q6_K en place (AVX2) : tete divisee par 5, fidelite gagnee
+6b379f5 Q4_K et Q6_K en place : le 7B et le 1,5B Q4_K_M tournent
+250a1bf Emprunt des blocs 4 bits en place : chargement x3,2, memoire /2, fidelite exacte
+c504ebd Lecteur MXFP4 exact (gpt-oss-120b) et analyse du passage a l'echelle
+--- taille du moteur
+  4800 total
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\npython3 tools/archive_sessions.py --quiet 2>&1 | tail -1\ngit add -A && git commit -q -m \"Journal : session du 28/09 (Q4_K/Q6_K/MXFP4 en place, MoE, 30B-A3B)\" && git log --oneline | head -1", "description": "Final journal update and  … [29 caractères tronqués]`
