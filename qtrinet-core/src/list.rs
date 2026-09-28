@@ -453,7 +453,7 @@ pub const LUT_MXFP4: [i8; 16] = [0, 1, 2, 3, 4, 6, 8, 12, 0, -1, -2, -3, -4, -6,
 /// apparier sont **contiguës** — l'entrelacement était une commodité, pas une
 /// nécessité.
 #[derive(Clone, Copy, PartialEq, Eq)]
-pub enum Source { Propre, Q4_0, Mxfp4 }
+pub enum Source { Propre, Q4_0, Mxfp4, Q4_K }
 
 pub struct DenseQ4 {
     pub n_in: usize,
@@ -587,6 +587,63 @@ impl DenseQ4 {
                   src: Source::Propre, base: std::ptr::null(), nb_ligne: 0 }
     }
 
+    /// **Prête** des super-blocs Q4_K (144 octets pour 256 poids) lus dans le
+    /// fichier. Format de toute la famille Qwen/Llama en `Q4_K_M`.
+    ///
+    /// # Sûreté
+    /// `base` doit pointer sur le premier super-bloc et rester valide.
+    pub unsafe fn emprunter_q4k(base: *const u8, n_out: usize, n_in: usize,
+                                nb_super: usize) -> Self {
+        DenseQ4 {
+            n_in, n_out, lut: LUT_INT4, e8m0: false,
+            q: Vec::new(), sc: Vec::new(), scale: Vec::new(),
+            src: Source::Q4_K, base, nb_ligne: nb_super,
+        }
+    }
+
+    /// Produit scalaire **Q4_K en place** (noyau AVX2).
+    ///
+    /// Q4_K est **asymétrique** : chaque sous-bloc de 32 poids a une échelle
+    /// *et* un minimum, `y = d·sc·q − dmin·m`. La somme se scinde donc en deux
+    /// parties entières exactes :
+    /// `Σ y·x = d·sc·Σ q·x − dmin·m·Σ x`.
+    /// `Σ x` par sous-bloc est précalculé une fois par appel (`sx32`), ce qui
+    /// évite de le refaire pour chaque ligne de sortie — 4 864 fois pour un FFN.
+    #[cfg(target_arch = "x86_64")]
+    #[target_feature(enable = "avx2")]
+    unsafe fn dot16_q4k_avx2(&self, o: usize, x: &[i16], sx32: &[i32]) -> f32 {
+        use std::arch::x86_64::*;
+        let xp = x.as_ptr();
+        let mut sum = 0f32;
+        for sup in 0..self.nb_ligne {
+            let p = self.base.add((o * self.nb_ligne + sup) * crate::gguf::TAILLE_Q4K);
+            let d = crate::gguf::Gguf::f16_to_f32(u16::from_le_bytes([*p, *p.add(1)]));
+            let dmin = crate::gguf::Gguf::f16_to_f32(u16::from_le_bytes([*p.add(2), *p.add(3)]));
+            let sc = std::slice::from_raw_parts(p.add(4), 12);
+            let qs = p.add(16);
+            for g in 0..4usize {
+                let (s0, m0) = crate::gguf::echelle_min_q4k(sc, 2 * g);
+                let (s1, m1) = crate::gguf::echelle_min_q4k(sc, 2 * g + 1);
+                let octets = _mm_loadu_si128(qs.add(g * 32) as *const __m128i);
+                let bas = _mm_and_si128(octets, _mm_set1_epi8(0x0f));
+                let haut = _mm_and_si128(_mm_srli_epi16(octets, 4), _mm_set1_epi8(0x0f));
+                let octets2 = _mm_loadu_si128(qs.add(g * 32 + 16) as *const __m128i);
+                let bas2 = _mm_and_si128(octets2, _mm_set1_epi8(0x0f));
+                let haut2 = _mm_and_si128(_mm_srli_epi16(octets2, 4), _mm_set1_epi8(0x0f));
+                // poids 64g..64g+31 (nibbles bas) puis 64g+32..64g+63 (hauts)
+                let x0 = xp.add(sup * 256 + g * 64);
+                let x1 = xp.add(sup * 256 + g * 64 + 32);
+                let sq0 = somme_produits(bas, bas2, x0);
+                let sq1 = somme_produits(haut, haut2, x1);
+                let sx0 = *sx32.get_unchecked(sup * 8 + 2 * g) as f32;
+                let sx1 = *sx32.get_unchecked(sup * 8 + 2 * g + 1) as f32;
+                sum += d * s0 as f32 * sq0 as f32 - dmin * m0 as f32 * sx0;
+                sum += d * s1 as f32 * sq1 as f32 - dmin * m1 as f32 * sx1;
+            }
+        }
+        sum
+    }
+
     /// Importe des blocs **MXFP4 verbatim** (17 octets : un exposant E8M0 puis
     /// 16 octets de nibbles E2M1).
     ///
@@ -641,13 +698,43 @@ impl DenseQ4 {
         }
     }
 
+    /// Pas et décalage des blocs dans la source empruntée. (Q4_K a son propre
+    /// noyau : ses sous-blocs ne se lisent pas comme des nibbles appariés.)
+    fn dot_source_q4k(&self, o: usize, x: &[i32]) -> f32 {
+        let t = crate::gguf::TAILLE_Q4K;
+        let mut sum = 0f32;
+        for sup in 0..self.nb_ligne {
+            let p = unsafe { self.base.add((o * self.nb_ligne + sup) * t) };
+            let b = unsafe { std::slice::from_raw_parts(p, t) };
+            let d = crate::gguf::Gguf::f16_to_f32(u16::from_le_bytes([b[0], b[1]]));
+            let dmin = crate::gguf::Gguf::f16_to_f32(u16::from_le_bytes([b[2], b[3]]));
+            for g in 0..4usize {
+                let (s0, m0) = crate::gguf::echelle_min_q4k(&b[4..16], 2 * g);
+                let (s1, m1) = crate::gguf::echelle_min_q4k(&b[4..16], 2 * g + 1);
+                for &(sc, mn, decal) in &[(s0, m0, 0usize), (s1, m1, 32usize)] {
+                    let base_x = sup * 256 + g * 64 + decal;
+                    let mut sq = 0i32;
+                    let mut sx = 0i32;
+                    for l in 0..32 {
+                        let octet = b[16 + g * 32 + l] as i32;
+                        let q = if decal == 0 { octet & 15 } else { octet >> 4 };
+                        sq += q * x[base_x + l];
+                        sx += x[base_x + l];
+                    }
+                    sum += d * sc as f32 * sq as f32 - dmin * mn as f32 * sx as f32;
+                }
+            }
+        }
+        sum
+    }
+
     /// Pas et décalage des blocs dans la source empruntée.
     #[inline]
     fn pas_source(&self) -> (usize, usize) {
         match self.src {
             Source::Q4_0 => (18, 2),
             Source::Mxfp4 => (17, 1),
-            Source::Propre => (0, 0),
+            Source::Q4_K | Source::Propre => (0, 0),
         }
     }
 
@@ -746,6 +833,7 @@ impl DenseQ4 {
             Source::Propre => self.q.len() + self.sc.len() * 2,
             Source::Q4_0 => self.n_out * self.nb_ligne * 18,
             Source::Mxfp4 => self.n_out * self.nb_ligne * 17,
+            Source::Q4_K => self.n_out * self.nb_ligne * crate::gguf::TAILLE_Q4K,
         };
         octets as f64 * 8.0 / (self.n_out * self.n_in) as f64
     }
@@ -756,6 +844,7 @@ impl DenseQ4 {
     /// rien et l'essentiel du travail reste entier.
     #[inline]
     pub fn dot(&self, o: usize, x: &[i32]) -> f32 {
+        if self.src == Source::Q4_K { return self.dot_source_q4k(o, x); }
         if self.src != Source::Propre { return self.dot_source(o, x); }
         let half = self.n_in.div_ceil(2);
         let n_bloc = self.n_in.div_ceil(BLOC_Q4);
@@ -787,17 +876,19 @@ impl DenseQ4 {
     /// donc le résultat est **bit à bit identique** au chemin scalaire — ce
     /// n'est pas une approximation, c'est le même calcul.
     #[inline]
-    pub fn dot16(&self, o: usize, x: &[i16]) -> f32 {
+    pub fn dot16(&self, o: usize, x: &[i16], sx32: &[i32]) -> f32 {
         #[cfg(target_arch = "x86_64")]
         {
-            if self.src != Source::Propre && std::is_x86_feature_detected!("avx2") {
-                return unsafe { self.dot16_source_avx2(o, x) };
-            }
-            if self.n_in % BLOC_Q4 == 0
-                && x.len() >= self.n_in
-                && std::is_x86_feature_detected!("avx2")
-            {
-                return unsafe { self.dot16_avx2(o, x) };
+            if std::is_x86_feature_detected!("avx2") {
+                if self.src == Source::Q4_K && sx32.len() * BLOC_Q4 >= self.n_in {
+                    return unsafe { self.dot16_q4k_avx2(o, x, sx32) };
+                }
+                if self.src != Source::Propre && self.src != Source::Q4_K {
+                    return unsafe { self.dot16_source_avx2(o, x) };
+                }
+                if self.n_in % BLOC_Q4 == 0 && x.len() >= self.n_in {
+                    return unsafe { self.dot16_avx2(o, x) };
+                }
             }
         }
         let xi: Vec<i32> = x[..self.n_in].iter().map(|&v| v as i32).collect();
@@ -917,8 +1008,34 @@ mod tests_mxfp4 {
             let got = d4.dot(o, &x) as f64;
             let rel = (got - ref_sum).abs() / ref_sum.abs().max(1e-9);
             assert!(rel < 1e-5, "rang {o} : {got} contre {ref_sum} (rel {rel:e})");
-            assert_eq!(d4.dot(o, &x).to_bits(), d4.dot16(o, &x16).to_bits(),
+            assert_eq!(d4.dot(o, &x).to_bits(), d4.dot16(o, &x16, &sommes32(&x16)).to_bits(),
                        "AVX2 et scalaire doivent être identiques au rang {o}");
         }
     }
+}
+
+/// Sommes des activations par bloc de 32, calculées une fois par appel : le
+/// terme de minimum de Q4_K en a besoin pour **chaque ligne de sortie**, donc
+/// le recalculer dans le noyau coûterait 4 864 fois le même travail.
+pub fn sommes32(x: &[i16]) -> Vec<i32> {
+    x.chunks(BLOC_Q4).map(|c| c.iter().map(|&v| v as i32).sum()).collect()
+}
+
+/// Somme des produits de 32 valeurs 8 bits **non signées** par 32 i16.
+/// `a` porte les valeurs 0–15, `b` les 16 suivantes.
+#[cfg(target_arch = "x86_64")]
+#[inline]
+#[target_feature(enable = "avx2")]
+unsafe fn somme_produits(a: std::arch::x86_64::__m128i,
+                         b: std::arch::x86_64::__m128i,
+                         x: *const i16) -> i32 {
+    use std::arch::x86_64::*;
+    let va = _mm256_cvtepu8_epi16(a);
+    let vb = _mm256_cvtepu8_epi16(b);
+    let xa = _mm256_loadu_si256(x as *const __m256i);
+    let xb = _mm256_loadu_si256(x.add(16) as *const __m256i);
+    let p = _mm256_add_epi32(_mm256_madd_epi16(va, xa), _mm256_madd_epi16(vb, xb));
+    let mut t = [0i32; 8];
+    _mm256_storeu_si256(t.as_mut_ptr() as *mut __m256i, p);
+    t[0] + t[1] + t[2] + t[3] + t[4] + t[5] + t[6] + t[7]
 }

@@ -54,11 +54,39 @@ pub const GGML_F32: u32 = 0;
 pub const GGML_F16: u32 = 1;
 pub const GGML_Q4_0: u32 = 2;
 pub const GGML_MXFP4: u32 = 39;
+pub const GGML_Q4_K: u32 = 12;
+pub const GGML_Q6_K: u32 = 14;
+
+/// Octets par super-bloc : Q4_K = 2+2+12+128 (256 poids), Q6_K = 128+64+16+2.
+pub const TAILLE_Q4K: usize = 144;
+pub const TAILLE_Q6K: usize = 210;
+
+/// Échelles et minima d'un sous-bloc Q4_K : huit paires de 6 bits tassées dans
+/// douze octets. Les quatre premières paires sont dans les octets 0–7, les
+/// quatre suivantes dans les octets 8–11, leurs deux bits hauts repris des
+/// octets 0–7 — c'est le dépaquetage de `get_scale_min_k4` de ggml.
+#[inline]
+pub fn echelle_min_q4k(scales: &[u8], j: usize) -> (u8, u8) {
+    if j < 4 {
+        (scales[j] & 63, scales[j + 4] & 63)
+    } else {
+        ((scales[j + 4] & 0x0F) | ((scales[j - 4] >> 6) << 4),
+         (scales[j + 4] >> 4) | ((scales[j] >> 6) << 4))
+    }
+}
 pub const GGML_Q4_1: u32 = 3;
 pub const GGML_Q8_0: u32 = 8;
 
 /// Pointeur pré-résolu vers les lignes d'un tenseur quantifié (Q8_0 ou Q4_0).
-pub struct Q8View { pub base: usize, pub n_cols: usize, pub nb: usize, pub q4: bool }
+pub struct Q8View {
+    pub base: usize,
+    pub n_cols: usize,
+    pub nb: usize,
+    pub q4: bool,
+    /// Type ggml d'origine : la tête de sortie peut être Q8_0, Q4_0 ou Q4_K
+    /// selon le modèle, et se lit **en place** dans les trois cas.
+    pub ttype: u32,
+}
 
 pub struct Gguf {
     pub meta: HashMap<String, Meta>,
@@ -239,6 +267,51 @@ impl Gguf {
                     for j in 0..16 { out.push(d * ((self.buf[p + 2 + j] >> 4) as i16 - 8) as f32); }
                 }
             }
+            GGML_Q4_K => {
+                let ns = n_cols / 256;
+                for sup in 0..ns {
+                    let p = base + (row * ns + sup) * TAILLE_Q4K;
+                    let d = Self::f16_to_f32(u16::from_le_bytes(self.buf[p..p+2].try_into().unwrap()));
+                    let dmin = Self::f16_to_f32(u16::from_le_bytes(self.buf[p+2..p+4].try_into().unwrap()));
+                    let sc = &self.buf[p + 4..p + 16];
+                    let qs = &self.buf[p + 16..p + 144];
+                    for g in 0..4 {
+                        let (s0, m0) = echelle_min_q4k(sc, 2 * g);
+                        let (s1, m1) = echelle_min_q4k(sc, 2 * g + 1);
+                        let (d0, n0) = (d * s0 as f32, dmin * m0 as f32);
+                        let (d1, n1) = (d * s1 as f32, dmin * m1 as f32);
+                        for l in 0..32 { out.push(d0 * (qs[g*32 + l] & 0x0F) as f32 - n0); }
+                        for l in 0..32 { out.push(d1 * (qs[g*32 + l] >> 4) as f32 - n1); }
+                    }
+                }
+            }
+            GGML_Q6_K => {
+                let ns = n_cols / 256;
+                for sup in 0..ns {
+                    let p = base + (row * ns + sup) * TAILLE_Q6K;
+                    let ql = &self.buf[p..p + 128];
+                    let qh = &self.buf[p + 128..p + 192];
+                    let sc = &self.buf[p + 192..p + 208];
+                    let d = Self::f16_to_f32(u16::from_le_bytes(self.buf[p+208..p+210].try_into().unwrap()));
+                    for moitie in 0..2 {
+                        let (ql, qh, sc) = (&ql[moitie*64..], &qh[moitie*32..], &sc[moitie*8..]);
+                        let mut tmp = [0f32; 128];
+                        for l in 0..32 {
+                            let is = l / 16;
+                            let q1 = ((ql[l] & 0x0F) | ((qh[l] & 3) << 4)) as i16 - 32;
+                            let q2 = ((ql[l + 32] & 0x0F) | (((qh[l] >> 2) & 3) << 4)) as i16 - 32;
+                            let q3 = ((ql[l] >> 4) | (((qh[l] >> 4) & 3) << 4)) as i16 - 32;
+                            let q4 = ((ql[l + 32] >> 4) | (((qh[l] >> 6) & 3) << 4)) as i16 - 32;
+                            let s = |k: usize| d * (sc[is + k] as i8) as f32;
+                            tmp[l] = s(0) * q1 as f32;
+                            tmp[l + 32] = s(2) * q2 as f32;
+                            tmp[l + 64] = s(4) * q3 as f32;
+                            tmp[l + 96] = s(6) * q4 as f32;
+                        }
+                        out.extend_from_slice(&tmp);
+                    }
+                }
+            }
             GGML_Q4_1 => {
                 let nb = n_cols / 32;
                 for b in 0..nb {
@@ -262,10 +335,28 @@ impl Gguf {
         let q4 = match t.ttype {
             GGML_Q8_0 => false,
             GGML_Q4_0 => true,
+            GGML_Q4_K | GGML_Q6_K => true,
             other => panic!("q8_view : type {other} non géré"),
         };
         let n_cols = t.dims[1] as usize;
-        Q8View { base: self.data_start + t.offset as usize, n_cols, nb: n_cols / 32, q4 }
+        let bloc = if t.ttype == GGML_Q4_K || t.ttype == GGML_Q6_K { 256 } else { 32 };
+        Q8View { base: self.data_start + t.offset as usize, n_cols, nb: n_cols / bloc,
+                 q4, ttype: t.ttype }
+    }
+
+    /// Super-blocs **Q4_K** bruts : `(octets, nb de super-blocs de 256 poids par
+    /// ligne)`. C'est le format de toute la famille Qwen/Llama en `Q4_K_M`.
+    pub fn q4k_blocks(&self, name: &str) -> Option<(&[u8], usize)> {
+        let t = self.tensor(name)?;
+        if t.ttype != GGML_Q4_K { return None; }
+        Some((&self.buf[self.data_start + t.offset as usize..], t.dims[1] as usize / 256))
+    }
+
+    /// Super-blocs **Q6_K** bruts (quelques tenseurs des mélanges `Q4_K_M`).
+    pub fn q6k_blocks(&self, name: &str) -> Option<(&[u8], usize)> {
+        let t = self.tensor(name)?;
+        if t.ttype != GGML_Q6_K { return None; }
+        Some((&self.buf[self.data_start + t.offset as usize..], t.dims[1] as usize / 256))
     }
 
     /// Blocs **MXFP4** bruts : `(octets à partir du premier bloc, nb de blocs
@@ -293,6 +384,74 @@ impl Gguf {
     #[inline]
     pub fn q8_dot_at(&self, v: &Q8View, row: usize, qx: &[i16]) -> f32 {
         let mut acc = 0f32;
+        if v.ttype == GGML_Q6_K {
+            // Q6_K : quants signés sur 6 bits, une échelle signée par 16 poids,
+            // aucune asymétrie — donc pas de terme de minimum.
+            let ns = v.nb;
+            for sup in 0..ns {
+                let p = v.base + (row * ns + sup) * TAILLE_Q6K;
+                let ql = &self.buf[p..p + 128];
+                let qh = &self.buf[p + 128..p + 192];
+                let sc = &self.buf[p + 192..p + 208];
+                let d = Self::f16_to_f32(
+                    u16::from_le_bytes(self.buf[p+208..p+210].try_into().unwrap()));
+                for moitie in 0..2usize {
+                    let (ql, qh, sc) = (&ql[moitie*64..], &qh[moitie*32..], &sc[moitie*8..]);
+                    let b = sup * 256 + moitie * 128;
+                    // Les huit groupes de 16 poids d'une moitié ont chacun leur
+                    // échelle et occupent des positions CONTIGUËS : on accumule
+                    // donc en entier par groupe, et on ne paie qu'une
+                    // multiplication flottante par 16 poids au lieu de quatre
+                    // opérations flottantes par poids (mesuré : 137 ms par jeton
+                    // pour la seule tête d'un 7B, soit 42 % du temps).
+                    let mut part = [0i32; 8];
+                    for l in 0..32usize {
+                        let is = l / 16;
+                        let q1 = ((ql[l] & 0x0F) | ((qh[l] & 3) << 4)) as i32 - 32;
+                        let q2 = ((ql[l+32] & 0x0F) | (((qh[l] >> 2) & 3) << 4)) as i32 - 32;
+                        let q3 = ((ql[l] >> 4) | (((qh[l] >> 4) & 3) << 4)) as i32 - 32;
+                        let q4 = ((ql[l+32] >> 4) | (((qh[l] >> 6) & 3) << 4)) as i32 - 32;
+                        part[is] += q1 * qx[b + l] as i32;
+                        part[2 + is] += q2 * qx[b + l + 32] as i32;
+                        part[4 + is] += q3 * qx[b + l + 64] as i32;
+                        part[6 + is] += q4 * qx[b + l + 96] as i32;
+                    }
+                    for (g, &p) in part.iter().enumerate() {
+                        acc += d * (sc[g] as i8) as f32 * p as f32;
+                    }
+                }
+            }
+            return acc;
+        }
+        if v.ttype == GGML_Q4_K {
+            // Tête Q4_K : même arithmétique que le noyau des projections,
+            // mais scalaire — la tête est bornée par la mémoire, pas par le
+            // calcul (130 Mo lus par jeton sur un 1,5B).
+            let ns = v.nb;
+            for sup in 0..ns {
+                let p = v.base + (row * ns + sup) * TAILLE_Q4K;
+                let d = Self::f16_to_f32(u16::from_le_bytes(self.buf[p..p+2].try_into().unwrap()));
+                let dmin = Self::f16_to_f32(u16::from_le_bytes(self.buf[p+2..p+4].try_into().unwrap()));
+                let sc = &self.buf[p + 4..p + 16];
+                let qs = &self.buf[p + 16..p + 144];
+                for g in 0..4usize {
+                    let (s0, m0) = echelle_min_q4k(sc, 2 * g);
+                    let (s1, m1) = echelle_min_q4k(sc, 2 * g + 1);
+                    let mut sq0 = 0i32; let mut sx0 = 0i32;
+                    let mut sq1 = 0i32; let mut sx1 = 0i32;
+                    for l in 0..32 {
+                        let octet = qs[g * 32 + l] as i32;
+                        let x0 = qx[sup * 256 + g * 64 + l] as i32;
+                        let x1 = qx[sup * 256 + g * 64 + 32 + l] as i32;
+                        sq0 += (octet & 15) * x0; sx0 += x0;
+                        sq1 += (octet >> 4) * x1; sx1 += x1;
+                    }
+                    acc += d * s0 as f32 * sq0 as f32 - dmin * m0 as f32 * sx0 as f32;
+                    acc += d * s1 as f32 * sq1 as f32 - dmin * m1 as f32 * sx1 as f32;
+                }
+            }
+            return acc;
+        }
         if v.q4 {
             // bloc Q4_0 : 2 octets d'échelle + 16 octets = 32 niveaux (4 bits)
             // les 16 premiers sont les nibbles BAS, les 16 suivants les HAUTS
@@ -382,6 +541,57 @@ impl Gguf {
                     let d = if e == 0 || e == 255 { 0.0 } else { f32::from_bits((e - 1) << 23) };
                     for j in 0..16 { out.push(KV[(self.buf[p + 1 + j] & 0x0F) as usize] * d); }
                     for j in 0..16 { out.push(KV[(self.buf[p + 1 + j] >> 4) as usize] * d); }
+                }
+            }
+            GGML_Q4_K => {
+                const KV: [f32; 16] = [0.0; 16];
+                let _ = KV;
+                let nb = n / 256;
+                for b in 0..nb {
+                    let p = base + b * TAILLE_Q4K;
+                    let d = Self::f16_to_f32(u16::from_le_bytes(self.buf[p..p+2].try_into().unwrap()));
+                    let dmin = Self::f16_to_f32(u16::from_le_bytes(self.buf[p+2..p+4].try_into().unwrap()));
+                    let sc = &self.buf[p + 4..p + 16];
+                    let qs = &self.buf[p + 16..p + 144];
+                    for g in 0..4 {
+                        let (s0, m0) = echelle_min_q4k(sc, 2 * g);
+                        let (s1, m1) = echelle_min_q4k(sc, 2 * g + 1);
+                        let (d0, n0) = (d * s0 as f32, dmin * m0 as f32);
+                        let (d1, n1) = (d * s1 as f32, dmin * m1 as f32);
+                        for l in 0..32 { out.push(d0 * (qs[g * 32 + l] & 0x0F) as f32 - n0); }
+                        for l in 0..32 { out.push(d1 * (qs[g * 32 + l] >> 4) as f32 - n1); }
+                    }
+                }
+            }
+            GGML_Q6_K => {
+                let nb = n / 256;
+                for b in 0..nb {
+                    let p = base + b * TAILLE_Q6K;
+                    let ql = &self.buf[p..p + 128];
+                    let qh = &self.buf[p + 128..p + 192];
+                    let sc = &self.buf[p + 192..p + 208];
+                    let d = Self::f16_to_f32(u16::from_le_bytes(self.buf[p+208..p+210].try_into().unwrap()));
+                    for moitie in 0..2 {
+                        let (ql, qh, sc) = (&ql[moitie*64..], &qh[moitie*32..], &sc[moitie*8..]);
+                        // ggml écrit les quatre quants en QUARTS SUCCESSIFS :
+                        // q1 remplit [0,32), q2 [32,64), q3 [64,96), q4 [96,128).
+                        // Les entrelacer par `l` donne des poids faux — écart 0,10
+                        // sur une échelle de 0,08, mesuré contre une référence F16.
+                        let mut tmp = [0f32; 128];
+                        for l in 0..32 {
+                            let is = l / 16;
+                            let q1 = ((ql[l] & 0x0F) | ((qh[l] & 3) << 4)) as i16 - 32;
+                            let q2 = ((ql[l + 32] & 0x0F) | (((qh[l] >> 2) & 3) << 4)) as i16 - 32;
+                            let q3 = ((ql[l] >> 4) | (((qh[l] >> 4) & 3) << 4)) as i16 - 32;
+                            let q4 = ((ql[l + 32] >> 4) | (((qh[l] >> 6) & 3) << 4)) as i16 - 32;
+                            let s = |k: usize| d * (sc[is + k] as i8) as f32;
+                            tmp[l] = s(0) * q1 as f32;
+                            tmp[l + 32] = s(2) * q2 as f32;
+                            tmp[l + 64] = s(4) * q3 as f32;
+                            tmp[l + 96] = s(6) * q4 as f32;
+                        }
+                        out.extend_from_slice(&tmp);
+                    }
                 }
             }
             other => panic!("dequant : type {other} non géré"),

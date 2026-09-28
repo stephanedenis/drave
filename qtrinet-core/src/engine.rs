@@ -14,7 +14,7 @@
 //! Barrière par *spin* (atomiques) au lieu de canaux : le coût fixe d'un appel
 //! passe de quelques dizaines de microsecondes à quelques microsecondes.
 
-use crate::list::{DenseQ4, DenseQ8, FusedSign, PushMat, SignedDelta};
+use crate::list::{DenseQ4, DenseQ8, FusedSign, PushMat, SignedDelta, BLOC_Q4};
 use std::sync::atomic::{AtomicBool, AtomicPtr, AtomicUsize, Ordering};
 use std::sync::Arc;
 
@@ -225,6 +225,8 @@ struct Shared {
     xv: AtomicPtr<i32>,
     /// mêmes activations en i16, pour le noyau AVX2 du mode 4
     xv16: AtomicPtr<i16>,
+    /// sommes des activations par bloc de 32 (terme de minimum de Q4_K)
+    xs32: AtomicPtr<i32>,
     sx: AtomicUsize,
     outs: AtomicPtr<Vec<Vec<f32>>>,
     /// 0 = listes signées, 1 = listes fusionnées, 2 = listes par source valuées
@@ -277,6 +279,7 @@ impl Pool {
             dense4: AtomicPtr::new(std::ptr::null_mut()),
             xv: AtomicPtr::new(std::ptr::null_mut()),
             xv16: AtomicPtr::new(std::ptr::null_mut()),
+            xs32: AtomicPtr::new(std::ptr::null_mut()),
             sx: AtomicUsize::new(0),
             outs: AtomicPtr::new(std::ptr::null_mut()),
             mode: AtomicUsize::new(1),
@@ -318,6 +321,8 @@ impl Pool {
                         let d = unsafe { &*sh.dense4.load(Ordering::Acquire) };
                         let xv = unsafe { std::slice::from_raw_parts(
                             sh.xv16.load(Ordering::Acquire), d.n_in) };
+                        let xs = unsafe { std::slice::from_raw_parts(
+                            sh.xs32.load(Ordering::Acquire), d.n_in / BLOC_Q4 + 1) };
                         let sx = f32::from_bits(sh.sx.load(Ordering::Relaxed) as u32);
                         let outs = unsafe { &mut *sh.outs.load(Ordering::Acquire) };
                         let per = (d.n_out + n - 1) / n;
@@ -327,7 +332,7 @@ impl Pool {
                         if dst.len() < d.n_out { dst.resize(d.n_out, 0.0); }
                         for v in dst[..lo].iter_mut() { *v = 0.0; }
                         for v in dst[hi..].iter_mut() { *v = 0.0; }
-                        for o in lo..hi { dst[o] = d.dot16(o, xv) * sx; }
+                        for o in lo..hi { dst[o] = d.dot16(o, xv, xs) * sx; }
                         sh.done.fetch_add(1, Ordering::Release);
                         continue;
                     }
@@ -422,7 +427,9 @@ impl Pool {
         // Conversion i32 → i16 faite UNE fois par appel : les noyaux la
         // referaient sinon pour chaque ligne de sortie (4 864 fois).
         let xi: Vec<i16> = x.iter().map(|&v| v.clamp(-32767, 32767) as i16).collect();
+        let xs = crate::list::sommes32(&xi);
         sh.xv16.store(xi.as_ptr() as *mut i16, Ordering::Relaxed);
+        sh.xs32.store(xs.as_ptr() as *mut i32, Ordering::Relaxed);
         sh.sx.store(sx.to_bits() as usize, Ordering::Relaxed);
         sh.outs.store(&mut self.outs as *mut Vec<Vec<f32>>, Ordering::Relaxed);
         sh.done.store(0, Ordering::Relaxed);

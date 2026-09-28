@@ -5,14 +5,14 @@
 | Identifiant | `22bcae27-254b-47b2-acda-87467dab060c` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-25 11:56 |
-| Durée | 67.4 h |
-| Tours | 38 |
-| Messages | 1011 |
-| Appels d'outils | 1022 |
+| Durée | 67.7 h |
+| Tours | 39 |
+| Messages | 1052 |
+| Appels d'outils | 1061 |
 | Fichiers touchés | 68 |
-| Commandes | 783 |
+| Commandes | 821 |
 | Sous-agents | 1 |
-| Commits | 37 |
+| Commits | 38 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -25,6 +25,7 @@
 … [267 caractères tronqués]
 - **complete** — Mener la campagne d'expériences sur l'exécution événementielle du modèle préentraîné Qwen2.5-0.5B : (1) imposer une parcimonie d'activation à l'inférence (seuil et k-WTA) sans aucun entraînement et mesurer la frontière (parcimonie, perplexité, événements/token) ; (2) rendre l'attention exprimable en
 … [267 caractères tronqués]
+- **create** — Implémenter et tester le plan du convertisseur Qtrinet : (1) lecteur Q4_K/Q6_K en place, (2) routage MoE + tranches par expert, (3) Q8_0 en place, (4) index de placement et épinglage NUMA, en vérifiant chaque étape par une mesure sur un vrai modèle de /home/stephane/FastNVMe/models.
 
 ## 1. Ce qui a été demandé
 
@@ -103,6 +104,8 @@
 **Tour 37** — que reste-t-il à améliorer sur notre modèle événementiel pour pouvoir rouler les plus gros modèles récents accessibles au public
 
 **Tour 38** — il faut donc faire un convertisseur de modèle haute fidèlité afin d'avoir un chargement optimal : abolition des zéros, optimisation par identification des clusters et MoE, tuning cpu/hyperthread/core pour les layers sur CPU et similaires pour les layers sur GPU avec optimisation des layers en fonction des routes pcie
+
+**Tour 39** — vas-y, implémente et teste le tout
 
 ## 2. Déroulé, étape par étape
 
@@ -2221,7 +2224,58 @@ Le moteur lit **une fois chaque poids actif, par jeton** — donc `t = octets_ac
 
 **Synthèse produite :**
 
-⏵ Tableau net : l'emprunt gagne sur les **quatre** axes à la fois. Je commite
+⏵ Directive traitée : le convertisseur est conçu, et j'ai déjà supprimé ce qu'il n'avait pas à faire.
+
+\## Ce que la mesure dit de chacun des quatre points
+
+**1. Abolition des zéros.** J'ai compté : MXFP4 contient **12,0–17,9 % de zéros exacts** (4 tenseurs de gpt-oss-120b), Q8_0 local 0,76 %. Mais un masque de présence coûte 1 bit/poids, donc le seuil de rentabilité est à **25 %** :
+
+| zéros | dense 4 bits | masque + valeurs | gain |
+|---|---|---|---|
+| 12 % | 16,0 o | 18,1 o | **−13 %** |
+| 18 % | 16,0 o | 17,1 o | −7 % |
+| **25 %** | 16,0 o | 16,0 o | 0 % |
+| 70 % | 16,0 o | 8,8 o | +45 % |
+
+➡️ **En dense, abolir les zéros coûte plus que ça ne rapporte.** Là où ça paie déjà : le mode événements (un poids nul ne produit aucun événement — les 15 % de MXFP4 sont gratuits, 0,30 o/poids), et surtout **le MoE** : top-4 sur 128 experts = 3 % des poids du FFN, ce n'est plus de l'abolition de zéros mais du non-chargement.
+
+**2. Chargement optimal — fait, et le convertisseur s'est avéré inutile pour le dense.** Les blocs Q4_0 et MXFP4 se lisent **tels quels** dans le fichier : dans les deux formats, les nibbles bas sont les poids 0–15 et les hauts les poids 16–31, donc les activations à apparier sont contiguës — notre entrelacement était une commodité. Le noyau AVX2 lit le fichier sans rien réarranger, et les sommes par paires restent identiques (test unitaire + PPL).
+
+| Qwen2.5-0.5B Q4_0 | chargement | mémoire crête | PPL | 512 jetons |
+|---|---|---|---|---|
+| **emprunt en place** | **0,87 s** | **413 Mo** | **21,0110** | **12,5 s** |
+| import (avant) | 2,70 s | ~700 Mo | 21,0116 | — |
+| requantification int8 | 2,75 s | 748 Mo | 21,1983 | 18,0 s |
+| Q8_0 dense | 2,73 s | 921 Mo | 19,2641 | 19,1 s |
+
+L'emprunt gagne sur **les quatre axes à la fois** — parce qu'il ne fait rien aux poids. Et il est **plus fidèle** que les deux autres chemins : la requantification int8 coûte 0,9 % de perplexité, l'import 0,0005 % (il réencodait l'échelle de bloc sur 16 bits). Pour gpt-oss-120b, c'est 60 Go au lieu de 121 : la différence entre charger et ne pas charger.
+
+**3. Clusters et MoE.** Les experts **sont déjà** des clusters — le tenseur témoin est en `dims = (2880, 2880, 128)`, 128 experts empilés que nos `Proj` 2D ne savent pas découper. Le convertisseur doit produire des tranches par expert alignées (pour que charger un expert soit une lecture contiguë, et qu'un cache d'experts chauds soit possible) plus une permutation de la dimension de sortie pour les grappes effectives.
+… [2089 caractères tronqués]
+
+### Tour 39 — vas-y, implémente et teste le tout
+
+*39 appels d'outils.* Actions notables :
+
+- create_goal
+- bash — Census Q4_K/Q6_K roles and MoE tensors
+- bash — Check the dimension order in the Rust reader
+- bash — Add Q4_K/Q6_K dequant and cross-check the unpacking
+- bash — Implement the in-place Q4_K kernel
+- bash — Fix the comparison and inspect the bits_per_weight match
+- bash — Check for a duplicated function
+- bash — Add the Q4_K arm and rebuild
+- bash — Plumb the per-block activation sums through
+- bash — Read the current dot16 to patch precisely
+- bash — Complete the sums plumbing and rebuild
+- bash — Fix imports and borrows
+- bash — Find the actual list import line
+- bash — Wire Q4_K into the loader and test on a real model
+- … et 25 autres
+
+**Synthèse produite :**
+
+⏵ Gain déjà acquis (137 → 96 ms). Je commite cet état vérifié avant de continuer
 
 ## 3. Travail accompli
 
@@ -2344,7 +2398,7 @@ Le moteur lit **une fois chaque poids actif, par jeton** — donc `t = octets_ac
 - **T3** Test OpenOCD without root and check Pro device support
 - **T3** Make scripts executable and test jtag_scan
 - **T3** Commit JTAG milestone
-- … et 743 autres
+- … et 781 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2472,7 +2526,7 @@ Le moteur lit **une fois chaque poids actif, par jeton** — donc `t = octets_ac
 
 ## 5. Erreurs rencontrées
 
-89 sorties en erreur ou divergentes. Les premières :
+95 sorties en erreur ou divergentes. Les premières :
 
 - **T2** : === LIEN PCIe (sysfs, sans root) === current_link_speed     = 8.0 GT/s PCIe current_link_width     = 8 max_link_speed         = 8.0 GT/s PCIe max_link_width         = 8 secondary_bus_number   =  vendo
 - **T2** : [POPUP: saisissez le mot de passe] === TOUS les événements USB depuis le boot (fin de log) === [ven sep 25 11:52:23 2026] [ T684749] hid-generic 0003:04F2:2159.00ED: hiddev99,hidraw5: USB HID v1.10 De
@@ -2529,4 +2583,5 @@ Le moteur lit **une fois chaque poids actif, par jeton** — donc `t = octets_ac
 - Attention : scores vectorises AVX2+FMA, hypothese du cache KV refutee  Le poste attention coutait 3,1 ms/jeton a contexte 256 pour ~0,5 M de multiplications. Pr
 - Lecteur MXFP4 exact (gpt-oss-120b) et analyse du passage a l'echelle  MXFP4 : bloc de 17 octets, exposant E8M0 puis nibbles E2M1. Les huit magnitudes du format 
 - Emprunt des blocs 4 bits en place : chargement x3,2, memoire /2, fidelite exacte  Les matrices Q4_0 et MXFP4 ne sont plus recopiees dans notre disposition : ell
+- Q4_K et Q6_K en place : le 7B et le 1,5B Q4_K_M tournent  Lecteur Q4_K (super-blocs de 256 poids, 144 octets) et Q6_K (210 octets) lus DANS LE FICHIER, sans cop
 

@@ -22477,3 +22477,721 @@ Created file
 ⏵ Tableau net : l'emprunt gagne sur les **quatre** axes à la fois. Je commite
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\npython3 tools/archive_sessions.py --quiet 2>&1 | tail -1\npython3 tools/session_report.py 2>&1 | tail -1\ngit add -A && git commit -q -m \"Emprunt des blocs 4 bits en place : chargement x3,2, memoire /2, fidelite exacte\n\nLes matrices … [2125 caractères tronqués]`
+
+  ```
+27c99b10 : rapport 8 Ko, 1 tours, 1 fichiers, 17 mesures, 4 erreurs
+250a1bf Emprunt des blocs 4 bits en place : chargement x3,2, memoire /2, fidelite exacte
+c504ebd Lecteur MXFP4 exact (gpt-oss-120b) et analyse du passage a l'echelle
+745497c Attention : scores vectorises AVX2+FMA, hypothese du cache KV refutee
+  ```
+
+### 🤖 Assistant
+
+⏵ Directive traitée : le convertisseur est conçu, et j'ai déjà supprimé ce qu'il n'avait pas à faire.
+
+## Ce que la mesure dit de chacun des quatre points
+
+**1. Abolition des zéros.** J'ai compté : MXFP4 contient **12,0–17,9 % de zéros exacts** (4 tenseurs de gpt-oss-120b), Q8_0 local 0,76 %. Mais un masque de présence coûte 1 bit/poids, donc le seuil de rentabilité est à **25 %** :
+
+| zéros | dense 4 bits | masque + valeurs | gain |
+|---|---|---|---|
+| 12 % | 16,0 o | 18,1 o | **−13 %** |
+| 18 % | 16,0 o | 17,1 o | −7 % |
+| **25 %** | 16,0 o | 16,0 o | 0 % |
+| 70 % | 16,0 o | 8,8 o | +45 % |
+
+➡️ **En dense, abolir les zéros coûte plus que ça ne rapporte.** Là où ça paie déjà : le mode événements (un poids nul ne produit aucun événement — les 15 % de MXFP4 sont gratuits, 0,30 o/poids), et surtout **le MoE** : top-4 sur 128 experts = 3 % des poids du FFN, ce n'est plus de l'abolition de zéros mais du non-chargement.
+
+**2. Chargement optimal — fait, et le convertisseur s'est avéré inutile pour le dense.** Les blocs Q4_0 et MXFP4 se lisent **tels quels** dans le fichier : dans les deux formats, les nibbles bas sont les poids 0–15 et les hauts les poids 16–31, donc les activations à apparier sont contiguës — notre entrelacement était une commodité. Le noyau AVX2 lit le fichier sans rien réarranger, et les sommes par paires restent identiques (test unitaire + PPL).
+
+| Qwen2.5-0.5B Q4_0 | chargement | mémoire crête | PPL | 512 jetons |
+|---|---|---|---|---|
+| **emprunt en place** | **0,87 s** | **413 Mo** | **21,0110** | **12,5 s** |
+| import (avant) | 2,70 s | ~700 Mo | 21,0116 | — |
+| requantification int8 | 2,75 s | 748 Mo | 21,1983 | 18,0 s |
+| Q8_0 dense | 2,73 s | 921 Mo | 19,2641 | 19,1 s |
+
+L'emprunt gagne sur **les quatre axes à la fois** — parce qu'il ne fait rien aux poids. Et il est **plus fidèle** que les deux autres chemins : la requantification int8 coûte 0,9 % de perplexité, l'import 0,0005 % (il réencodait l'échelle de bloc sur 16 bits). Pour gpt-oss-120b, c'est 60 Go au lieu de 121 : la différence entre charger et ne pas charger.
+
+**3. Clusters et MoE.** Les experts **sont déjà** des clusters — le tenseur témoin est en `dims = (2880, 2880, 128)`, 128 experts empilés que nos `Proj` 2D ne savent pas découper. Le convertisseur doit produire des tranches par expert alignées (pour que charger un expert soit une lecture contiguë, et qu'un cache d'experts chauds soit possible) plus une permutation de la dimension de sortie pour les grappes effectives.
+
+**4. Placement CPU/GPU et PCIe.** Le calcul est net : le CPU sort **10,6 Go/s** de flux d'événements (5,3 G év/s × 2 o) contre **6,5 Go/s** de PCIe x8.
+
+> ➡️ **Envoyer des événements au GPU par PCIe coûte plus cher que les calculer sur CPU.** Le GPU ne se justifie que s'il **garde les poids** et ne reçoit que les activations (380 Go/s en lecture locale), ou par NVLink (25,78 Go/s). Et avant tout ça : NUMA, mesuré au banc à **20,7 → 24,7 Go/s**.
+
+## Le format proposé — `docs/convertisseur.md`
+
+```
+en-tête   magie, version, nb_calques, alignement 2 Mo
+index     par tenseur : rôle, calque, rang d'expert, dimensions, encodage,
+          offset aligné, statistiques (zéros, grappes),
+          placement (cpu|gpu, nœud NUMA, threads conseillés, route pcie|nvlink|qsfp)
+permutation  réordonnancement de la dimension de sortie
+sections  poids dans leur format d'origine, alignés
+```
+
+Trois règles, chacune adossée à une mesure : **(a)** les poids restent dans leur format d'origine quand il est déjà en 4 bits — la fidélité est alors *par construction*, il n'y a rien à convertir ; **(b)** les listes d'événements ne sont **pas** matérialisées (237 Go pour un 120B), elles se dérivent par expert à la demande ; **(c)** l'index est en tête, donc le plan de placement se décide **avant** d'avoir lu les poids.
+
+## Ordre de marche
+
+| # | chantier | état |
+|---|---|---|
+| 1 | emprunt des blocs en place (Q4_0, MXFP4) | ✅ **fait** — chargement ×3,2, mémoire ÷2 |
+| 2 | lecteur **Q4_K / Q6_K** | à faire — ouvre 7B → 32B |
+| 3 | **routeur MoE** + tranches par expert | à faire — gpt-oss : 61 Go/jeton → 2,7 |
+| 4 | conteneur `QTNT` + index de placement | à faire |
+| 5 | épinglage NUMA, threads par calque | à faire — ×1,19 mesuré |
+| 6 | Q8_0 en place (le noyau existe déjà pour la tête) | à faire |
+| 7 | mmap (appel système direct), grosses pages | à faire |
+
+Les points 1 et 6 rendent un 60 Go **chargeable** ; 2 et 3 le rendent **exécutable** ; 4 et 5 le rendent **efficace**. Tout est commité, `docs/convertisseur.md` et `reports/rapport-passage-a-l-echelle.md` détaillent les mesures.
+
+
+## Tour 39
+
+### 👤 Utilisateur
+
+vas-y, implémente et teste le tout
+
+### 🤖 Assistant
+
+⏵ Gros chantier. Je le cadre comme objectif suivi, puis j'attaque par ce qui débloque 4 modèles d'un coup
+
+- **create_goal** `{"objective": "Implémenter et tester le plan du convertisseur Qtrinet : (1) lecteur Q4_K/Q6_K en place, (2) routage MoE + tranches par expert, (3) Q8_0 en place, (4) index de placement et épinglage NUMA, en vérifiant chaque étape par une mesure sur un vrai modèle de /home/stephane/FastNVMe/models.", … [23 caractères tronqués]`
+
+> **Objectif** (create) : Implémenter et tester le plan du convertisseur Qtrinet : (1) lecteur Q4_K/Q6_K en place, (2) routage MoE + tranches par expert, (3) Q8_0 en place, (4) index de placement et épinglage NUMA, en vérifiant chaque étape par une mesure sur un vrai modèle de /home/stephane/FastNVMe/models.
+
+
+  ```
+{"goal":{"id":"goal-f538125d-1811-4425-bdae-b04791b78ffb","revision":1,"objective":"Implémenter et tester le plan du convertisseur Qtrinet : (1) lecteur Q4_K/Q6_K en place, (2) routage MoE + tranches par expert, (3) Q8_0 en place, (4) index de placement et épinglage NUMA, en vérifiant chaque étape par une mesure sur un vrai modèle de /home/stephane/FastNVMe/models.","phase":"active","roundsStarted":0,"maxGoalRounds":12},"activation":"armed"}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/FastNVMe/models\npython3 - <<'PY'\nimport struct, collections\ndef entetes(chemin):\n    f=open(chemin,'rb'); assert f.read(4)==b'GGUF'\n    struct.unpack('<I',f.read(4)); nt,=struct.unpack('<Q',f.read(8)); nkv,=struct.unpack('<Q',f.read(8))\n    def ch():\n        n,= … [1605 caractères tronqués]`
+
+  ```
+=== qwen2.5-coder-32b-instruct-q4_k_m.gguf
+   attn_k.bias                F32          0.1 M  (64 tenseurs)
+   attn_k.weight              Q4_K       335.5 M  (64 tenseurs)
+   attn_norm.weight           F32          0.3 M  (64 tenseurs)
+   attn_output.weight         Q4_K      1677.7 M  (64 tenseurs)
+   attn_q.bias                F32          0.3 M  (64 tenseurs)
+   attn_q.weight              Q4_K      1677.7 M  (64 tenseurs)
+   attn_v.bias                F32          0.1 M  (64 tenseurs)
+   attn_v.weight              Q4_K       167.8 M  (32 tenseurs)
+   attn_v.weight              Q6_K       167.8 M  (32 tenseurs)
+   ffn_down.weight            Q4_K      4529.8 M  (32 tenseurs)
+   ffn_down.weight            Q6_K      4529.8 M  (32 tenseurs)
+   ffn_gate.weight            Q4_K      9059.7 M  (64 tenseurs)
+   ffn_norm.weight            F32          0.3 M  (64 tenseurs)
+   ffn_up.weight              Q4_K      9059.7 M  (64 tenseurs)
+   -> dense
+
+=== Qwen3-30B-A3B-Instruct-2507-Q4_K_M.gguf
+   attn_k.weight              Q4_K        50.3 M  (48 tenseurs)
+   attn_k_norm.weight         F32          0.0 M  (48 tenseurs)
+   attn_norm.weight           F32          0.1 M  (48 tenseurs)
+   attn_outp
+… [879 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Point critique à vérifier avant tout : l'ordre des dimensions dans notre lecteur (il décide de la disposition des experts)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\ngrep -n \"dims\" src/gguf.rs | head -20\necho \"=== ce que le binaire dit pour ffn_gate (Q8_0 0.5B) et attn_q\"\n./target/release/qtrinet-core ../models/Qwen2.5-0.5B-Q8_0.gguf --matrix blk.0.ffn_gate.weight 2>&1 | grep -E  … [85 caractères tronqués]`
+
+  ```
+44:    pub dims: Vec<u64>,     // en convention numpy (le plus lent d'abord)
+50:    pub fn nelem(&self) -> usize { self.dims.iter().product::<u64>() as usize }
+134:            let mut dims: Vec<u64> = (0..nd).map(|_| c.u64()).collect();
+135:            dims.reverse();                       // ggml stocke à l'envers
+138:            tensors.push(TensorInfo { name, dims, ttype, offset });
+267:        let n_cols = t.dims[1] as usize;
+277:        let nb = t.dims[1] as usize / 32;
+288:        let nb = t.dims[1] as usize / 32;
+=== ce que le binaire dit pour ffn_gate (Q8_0 0.5B) et attn_q
+  blk.0.ffn_gate.weight : 4864 entrées × 896 sorties, 4325087 événements
+  ```
+
+### 🤖 Assistant
+
+⏵ Dimensions confirmées (`dims.reverse()`, donc nos `dims` = ne inversé ; les experts sont **contigus**). J'implémente Q4_K/Q6_K en place
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\npython3 - <<'PY'\np='src/gguf.rs'; s=open(p,encoding='utf-8').read(); o=s\ns=s.replace('''pub const GGML_MXFP4: u32 = 39;''','''pub const GGML_MXFP4: u32 = 39;\npub const GGML_Q4_K: u32 = 12;\npub const GGML_Q6_K: u32 = 14 … [6813 caractères tronqués]`
+
+  ```
+=== gguf ok
+types : {'Q6_K': 29, 'Q4_K': 169, 'F32': 141}
+
+tenseur token_embd.weight dims=(1536, 151936)
+  bloc 0 : d=0.00015 dmin=0.00125 |y|max=0.07847 moyenne=-0.001206 zéros=0
+  bloc 1 : d=0.00015 dmin=0.00109 |y|max=0.07280 moyenne=-0.000309 zéros=0
+  ```
+
+### 🤖 Assistant
+
+⏵ Q4_K dépaqueté et vérifié. J'écris le noyau AVX2 en place (les super-blocs Q6_K passeront par la déquantification existante)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\npython3 - <<'PY'\np='src/list.rs'; s=open(p,encoding='utf-8').read(); o=s\n\ns=s.replace('''pub enum Source { Propre, Q4_0, Mxfp4 }''','''pub enum Source { Propre, Q4_0, Mxfp4, Q4_K }''',1)\n\n# constructeur emprunté Q4_K\ … [6864 caractères tronqués]`
+
+  ```
+error[E0277]: can't compare `&usize` with `{integer}`
+   --> src/list.rs:722:42
+    |
+722 |                         let q = if decal == 0 { octet & 15 } else { octet >> 4 };
+    |                                          ^^ no implementation for `&usize == {integer}`
+    |
+    = help: the trait `PartialEq<{integer}>` is not implemented for `&usize`
+--
+error[E0004]: non-exhaustive patterns: `Source::Q4_K` not covered
+   --> src/list.rs:834:28
+    |
+834 |         let octets = match self.src {
+    |                            ^^^^^^^^ pattern `Source::Q4_K` not covered
+    |
+note: `Source` defined here
+--
+error: could not compile `qtrinet-core` (bin "qtrinet-core") due to 2 previous errors; 23 warnings emitted
+=== build
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\nsed -n '828,845p' src/list.rs\npython3 - <<'PY'\np='src/list.rs'; s=open(p,encoding='utf-8').read(); o=s\ns=s.replace('''                for (k, (sc, mn, decal)) in\n                    [(s0, m0, 0usize), (s1, m1, 32usize) … [1402 caractères tronqués]`
+
+  ```
+self.scale[o] * (s as i16 as f32) * (1.0 / 32767.0)
+        }
+    }
+
+    /// Octets réellement occupés, en bits par poids d'origine.
+    pub fn bits_per_weight(&self) -> f64 {
+        let octets = match self.src {
+            Source::Propre => self.q.len() + self.sc.len() * 2,
+            Source::Q4_0 => self.n_out * self.nb_ligne * 18,
+            Source::Mxfp4 => self.n_out * self.nb_ligne * 17,
+        };
+        octets as f64 * 8.0 / (self.n_out * self.n_in) as f64
+    }
+
+    /// Produit scalaire d'une ligne. Accumulation **entière par bloc** (32
+    /// termes au plus : 32 × 8 × 32767 < 2^31), puis une seule mise à
+    /// l'échelle flottante par bloc — la conversion en flottant ne coûte donc
+    /// rien et l'essentiel du travail reste entier.
+    /// Octets réellement occupés, en bits par poids d'origine.
+    pub fn bits_per_weight(&self) -> f64 {
+        let octets = match self.src {
+            Source::Propre => self.q.len() + self.sc.len() * 2,
+            Source::Q4_0 => self.n_out * self.nb_ligne * 18,
+            Source::Mxfp4 => self.n_out * self.nb_ligne * 17,
+        };
+        octets as f64 * 8.0 / (self.n_out * self.n_in) as f64
+    }
+
+    /// Produit scalaire d'u
+… [197 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\ngrep -n \"pub fn bits_per_weight\" src/list.rs\nawk 'NR>=833 && NR<=846 {printf \"%d: %s\\n\", NR, $0}' src/list.rs", "description": "Check for a duplicated function"}`
+
+  ```
+79:    pub fn bits_per_weight(&self) -> f64 { self.bits() as f64 / (self.n_rows * self.n_cols) as f64 }
+135:    pub fn bits_per_weight(&self) -> f64 { self.bits() as f64 / (self.n_rows * self.n_cols) as f64 }
+168:    pub fn bits_per_weight(&self) -> f64 { self.bits() as f64 / self.n_weights as f64 }
+234:    pub fn bits_per_weight(&self) -> f64 { self.bits() as f64 / (self.n_rows * self.n_cols) as f64 }
+320:    pub fn bits_per_weight(&self) -> f64 {
+831:    pub fn bits_per_weight(&self) -> f64 {
+833:             Source::Propre => self.q.len() + self.sc.len() * 2,
+834:             Source::Q4_0 => self.n_out * self.nb_ligne * 18,
+835:             Source::Mxfp4 => self.n_out * self.nb_ligne * 17,
+836:         };
+837:         octets as f64 * 8.0 / (self.n_out * self.n_in) as f64
+838:     }
+839: 
+840:     /// Produit scalaire d'une ligne. Accumulation **entière par bloc** (32
+841:     /// termes au plus : 32 × 8 × 32767 < 2^31), puis une seule mise à
+842:     /// l'échelle flottante par bloc — la conversion en flottant ne coûte donc
+843:     /// rien et l'essentiel du travail reste entier.
+844:     #[inline]
+845:     pub fn dot(&self, o: usize, x: &[i32]) -> f32 {
+846:         if self.sr
+… [55 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\npython3 - <<'PY'\np='src/list.rs'; s=open(p,encoding='utf-8').read()\ns=s.replace('''            Source::Mxfp4 => self.n_out * self.nb_ligne * 17,''',\n            '''            Source::Mxfp4 => self.n_out * self.nb_ligne … [293 caractères tronqués]`
+
+  ```
+=== build
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\npython3 - <<'PY'\np='src/list.rs'; s=open(p,encoding='utf-8').read(); o=s\n# signature dot16 + dispatch Q4_K\nold='''    pub fn dot16(&self, o: usize, x: &[i16]) -> f32 {\n        #[cfg(target_arch = \"x86_64\")]\n         … [4056 caractères tronqués]`
+
+  ```
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 13, in <module>
+AssertionError
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\ngrep -n \"pub fn dot16\" -A 14 src/list.rs | head -18", "description": "Read the current dot16 to patch precisely"}`
+
+  ```
+879:    pub fn dot16(&self, o: usize, x: &[i16]) -> f32 {
+880-        #[cfg(target_arch = "x86_64")]
+881-        {
+882-            if self.src != Source::Propre && std::is_x86_feature_detected!("avx2") {
+883-                return unsafe { self.dot16_source_avx2(o, x) };
+884-            }
+885-            if self.n_in % BLOC_Q4 == 0
+886-                && x.len() >= self.n_in
+887-                && std::is_x86_feature_detected!("avx2")
+888-            {
+889-                return unsafe { self.dot16_avx2(o, x) };
+890-            }
+891-        }
+892-        let xi: Vec<i32> = x[..self.n_in].iter().map(|&v| v as i32).collect();
+893-        self.dot(o, &xi)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\npython3 - <<'PY'\np='src/list.rs'; s=open(p,encoding='utf-8').read(); o=s\nold='''    pub fn dot16(&self, o: usize, x: &[i16]) -> f32 {\n        #[cfg(target_arch = \"x86_64\")]\n        {\n            if self.src != Sourc … [4603 caractères tronqués]`
+
+  ```
+error[E0425]: cannot find value `BLOC_Q4` in this scope
+   --> src/engine.rs:325:71
+    |
+325 | ...                   sh.xs32.load(Ordering::Acquire), d.n_in / BLOC_Q4 + 1) };
+    |                                                                 ^^^^^^^ not found in this scope
+    |
+help: consider importing this constant
+--
+error[E0061]: this method takes 3 arguments but 2 arguments were supplied
+   --> src/main.rs:180:24
+    |
+180 |             let b = d4.dot16(o, &x16);
+    |                        ^^^^^--------- argument #3 of type `&[i32]` is missing
+    |
+note: method defined here
+--
+error[E0382]: use of moved value: `sx32`
+   --> src/model.rs:889:30
+    |
+889 |                     sc.spawn(move || {
+=== build
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\npython3 - <<'PY'\np='src/engine.rs'; s=open(p,encoding='utf-8').read()\ns=s.replace(\"use crate::list::{DenseQ4, DenseQ8, FusedSign, PushMat, SignedDelta, SparseVec};\",\n            \"use crate::list::{DenseQ4, DenseQ8, F … [920 caractères tronqués]`
+
+  ```
+error[E0425]: cannot find value `BLOC_Q4` in this scope
+   --> src/engine.rs:325:71
+    |
+325 | ...                   sh.xs32.load(Ordering::Acquire), d.n_in / BLOC_Q4 + 1) };
+    |                                                                 ^^^^^^^ not found in this scope
+    |
+help: consider importing this constant
+--
+error: could not compile `qtrinet-core` (bin "qtrinet-core") due to 1 previous error; 23 warnings emitted
+=== build
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\nhead -20 src/engine.rs | grep -n \"use crate::list\" || grep -n \"^use crate::list\" src/engine.rs", "description": "Find the actual list import line"}`
+
+  ```
+17:use crate::list::{DenseQ4, DenseQ8, FusedSign, PushMat, SignedDelta};
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\npython3 - <<'PY'\np='src/engine.rs'; s=open(p,encoding='utf-8').read()\ns=s.replace(\"use crate::list::{DenseQ4, DenseQ8, FusedSign, PushMat, SignedDelta};\",\n            \"use crate::list::{DenseQ4, DenseQ8, FusedSign, P … [1281 caractères tronqués]`
+
+  ```
+=== dispatch Q4_K dans Proj::load
+=== essai sur un vrai Q4_K_M (1,5B)
+/tmp/wt2_ids.txt : 128 tokens, fenêtres de 256
+[modele] 28 couches chargées en 4.354417604s — listes 0.00 Go , 16 threads
+
+thread 'main' (1132834) panicked at src/gguf.rs:272:22:
+row_f32 : type 12 non géré
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+timeout: the monitored command dumped core
+  ```
+
+### 🤖 Assistant
+
+⏵ Le modèle se charge (28 couches, zéro copie) mais la **table d'embedding** Q4_K n'est pas lue. J'ajoute `row_f32`
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\nsed -n '/pub fn row_f32/,/^    }/p' src/gguf.rs | head -40", "description": "Read row_f32"}`
+
+  ```
+pub fn row_f32(&self, name: &str, row: usize, n_cols: usize) -> Vec<f32> {
+        let t = self.tensor(name).expect("tenseur absent");
+        let base = self.data_start + t.offset as usize;
+        let mut out = Vec::with_capacity(n_cols);
+        match t.ttype {
+            GGML_F32 => {
+                let p = base + row * n_cols * 4;
+                for i in 0..n_cols {
+                    out.push(f32::from_le_bytes(self.buf[p + 4*i..p + 4*i + 4].try_into().unwrap()));
+                }
+            }
+            GGML_F16 => {
+                let p = base + row * n_cols * 2;
+                for i in 0..n_cols {
+                    out.push(Self::f16_to_f32(u16::from_le_bytes(self.buf[p + 2*i..p + 2*i + 2].try_into().unwrap())));
+                }
+            }
+            GGML_Q8_0 => {
+                let nb = n_cols / 32;
+                for b in 0..nb {
+                    let p = base + (row * nb + b) * 34;
+                    let d = Self::f16_to_f32(u16::from_le_bytes(self.buf[p..p+2].try_into().unwrap()));
+                    for j in 0..32 { out.push(d * (self.buf[p + 2 + j] as i8) as f32); }
+                }
+            }
+            GGML_Q4_0 => {
+                let
+… [811 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\npython3 - <<'PY'\np='src/gguf.rs'; s=open(p,encoding='utf-8').read(); o=s\nold='''            GGML_Q4_1 => {\n                let nb = n_cols / 32;\n                for b in 0..nb {\n                    let p = base + (row … [3260 caractères tronqués]`
+
+  ```
+=== Qwen2.5-1.5B Q4_K_M : PPL et débit
+[modele] 28 couches chargées en 4.537284412s — listes 0.00 Go , 16 threads
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\ntimeout 900 ./target/release/qtrinet-core /home/stephane/FastNVMe/models/qwen2.5-1.5b-instruct-q4_k_m.gguf \\\n  --ppl /tmp/wt2_ids.txt --ctx 256 --abits 16 --threads 16 --limit 128 --q4 2>&1 | tail -12", "description": "F … [55 caractères tronqués]`
+
+  ```
+/tmp/wt2_ids.txt : 128 tokens, fenêtres de 256
+[modele] 28 couches chargées en 4.336294216s — listes 0.00 Go , 16 threads
+
+thread 'main' (1133102) panicked at src/gguf.rs:327:22:
+q8_view : type 12 non géré
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+timeout: the monitored command dumped core
+  ```
+
+### 🤖 Assistant
+
+⏵ La **tête de sortie** passe par `q8_view`, qui ne connaît pas Q4_K. Je l'étends en place (pas de copie)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\npython3 - <<'PY'\np='src/gguf.rs'; s=open(p,encoding='utf-8').read(); o=s\ns=s.replace('''pub struct Q8View { pub base: usize, pub n_cols: usize, pub nb: usize, pub q4: bool }''',\n'''pub struct Q8View {\n    pub base: usi … [3364 caractères tronqués]`
+
+  ```
+=== Qwen2.5-1.5B Q4_K_M, 128 jetons
+[modele] 28 couches chargées en 4.366273204s — listes 0.00 Go , 16 threads
+     127 tokens notés — perplexité cumulée 54732.401  (15.7 tok/s)
+=== perplexité 54732.4014 sur 127 tokens (0 événements, 8.1 s) ===
+    postes (ms/token) : projets-attn 4.41 | rope 1.08 | attention 1.23 | proj+mlp 38.15 | somme 44.87 | reste (tête + échantillonnage) 18.78
+  ```
+
+### 🤖 Assistant
+
+⏵ PPL 54 732 : le noyau Q4_K est faux. Test décisif — comparer au chemin qui déquantifie
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\nM=/home/stephane/FastNVMe/models/qwen2.5-1.5b-instruct-q4_k_m.gguf\necho \"=== chemin qui déquantifie (référence de justesse)\"\ntimeout 900 ./target/release/qtrinet-core $M --ppl /tmp/wt2_ids.txt --ctx 256 --abits 16 --th … [149 caractères tronqués]`
+
+  ```
+=== chemin qui déquantifie (référence de justesse)
+[modele] 28 couches chargées en 10.891088357s — listes 1.31 Go , 16 threads
+=== perplexité 47627.0444 sur 127 tokens (0 événements, 12.3 s) ===
+  ```
+
+### 🤖 Assistant
+
+⏵ Les deux chemins échouent → le bug est commun (déquantification Q4_K). Test discriminant : le **0,5B en Q4_K_M**, dont on connaît la version Q8_0
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\nM=/home/stephane/FastNVMe/models/qwen2.5-0.5b-instruct-q4_k_m.gguf\necho \"=== 0,5B Q4_K_M, chemin emprunt (--q4)\"\ntimeout 600 ./target/release/qtrinet-core $M --ppl /tmp/wt2_ids.txt --ctx 256 --abits 16 --threads 16 --l … [472 caractères tronqués]`
+
+  ```
+=== 0,5B Q4_K_M, chemin emprunt (--q4)
+=== 0,5B Q4_K_M, génération (doit être du français cohérent)
+=== rappel : 0,5B Q8_0 donnait 14,70 à 127 jetons
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\nM=/home/stephane/FastNVMe/models/qwen2.5-0.5b-instruct-q4_k_m.gguf\ntimeout 600 ./target/release/qtrinet-core $M --ppl /tmp/wt2_ids.txt --ctx 256 --abits 16 --threads 16 --limit 128 --q4 2>&1 | tail -6", "description": "Se … [50 caractères tronqués]`
+
+  ```
+/tmp/wt2_ids.txt : 128 tokens, fenêtres de 256
+
+thread 'main' (1137472) panicked at src/gguf.rs:549:22:
+dequant : type 6 non géré
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+timeout: the monitored command dumped core
+  ```
+
+### 🤖 Assistant
+
+⏵ Le 0,5B Q4_K_M contient du Q5_0 (autre sujet). Test discriminant sur le 1,5B : forcer la tête par le chemin déquantifié
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\nM=/home/stephane/FastNVMe/models/qwen2.5-1.5b-instruct-q4_k_m.gguf\necho \"=== tête par déquantification (--q4-tout), corps emprunté\"\ntimeout 900 ./target/release/qtrinet-core $M --ppl /tmp/wt2_ids.txt --ctx 256 --abits  … [1321 caractères tronqués]`
+
+  ```
+=== tête par déquantification (--q4-tout), corps emprunté
+[tête 4 bits] 151936 × 1536 → 4.50 b/poids, 124 Mo, 2.1 s
+=== perplexité 56052.0059 sur 127 tokens (0 événements, 6.5 s) ===
+=== types du 0,5B Q4_K_M
+   attn_k.bias              {'F32': 24}
+   attn_k.weight            {'Q5_0': 24}
+   attn_norm.weight         {'F32': 24}
+   attn_output.weight       {'Q5_0': 24}
+   attn_q.bias              {'F32': 24}
+   attn_q.weight            {'Q5_0': 24}
+   attn_v.bias              {'F32': 24}
+   attn_v.weight            {'Q8_0': 12, 'Q5_0': 12}
+   ffn_down.weight          {'Q6_K': 12, 'Q4_K': 12}
+   ffn_gate.weight          {'Q5_0': 24}
+   ffn_norm.weight          {'F32': 24}
+   ffn_up.weight            {'Q5_0': 24}
+   weight                   {'Q8_0': 1, 'Q5_0': 1, 'F32': 1}
+  ```
+
+### 🤖 Assistant
+
+⏵ La tête n'est pas coupable. Je cherche une implémentation de référence **sur la machine** pour trancher sur la déquantification
+
+- **bash** `{"command": "which ollama llama-cli llama-server llama-quantize llamafile main 2>/dev/null\nls ~/FastNVMe/ 2>/dev/null | head -20\nfind /home/stephane -maxdepth 4 -name \"llama*\" -type f 2>/dev/null | head -10\nfind /home/stephane -maxdepth 5 -iname \"*llama.cpp*\" -o -maxdepth 5 -iname \"*ggml*\"  … [351 caractères tronqués]`
+
+  ```
+/usr/bin/ollama
+/home/stephane/.local/bin/llama-cli
+/home/stephane/.local/bin/llama-server
+/home/stephane/.local/bin/llama-quantize
+Applications
+cargo
+codex
+kld
+lmstudio
+models
+npm
+rustup
+/home/stephane/.cache/drkonqi/crashes/llama-cli.d019fe8ae4da4490b1ae9f6a82cf4663.472044.1790251775000000.ini
+/home/stephane/.cache/drkonqi/crashes/llama-cli.d019fe8ae4da4490b1ae9f6a82cf4663.472134.1790251785000000.ini
+/home/stephane/.cache/drkonqi/crashes/llama-gguf.d019fe8ae4da4490b1ae9f6a82cf4663.484558.1790253892000000.ini
+/home/stephane/.cache/drkonqi/crashes/llama-parallel-decision.d019fe8ae4da4490b1ae9f6a82cf4663.485416.1790254222000000.ini
+/home/stephane/.cache/drkonqi/crashes/llama-parallel-decision.d019fe8ae4da4490b1ae9f6a82cf4663.485452.1790254227000000.ini
+/home/stephane/.cache/drkonqi/crashes/llama-bench.d019fe8ae4da4490b1ae9f6a82cf4663.533310.1790260440000000.ini
+/home/stephane/.config/systemd/user/llama-cpp.service.bak.20260912-190339
+/home/stephane/.config/systemd/user/llama-cpp.service
+/home/stephane/.config/systemd/user/llama-embed.service
+/home/stephane/.config/systemd/user/llama-vision.service
+/home/stephane/.cache/huggingface/hub/models--ggml-org--gemma-3-1b-it-GGUF
+/home/steph
+… [1099 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ **llama.cpp est installé** — j'ai une référence de vérité terrain. Je m'en sers pour trancher
+
+- **bash** `{"command": "ls /home/stephane/.local/bin/ | grep -i llama\nexport LD_LIBRARY_PATH=/home/stephane/.local/lib:${LD_LIBRARY_PATH}\ntimeout 300 /home/stephane/.local/bin/llama-cli --version 2>&1 | head -3\necho \"=== PPL de référence du 1,5B Q4_K_M (llama.cpp, CPU seul)\"\nif [ -x /home/stephane/.local … [676 caractères tronqués]`
+
+  ```
+llama-bench
+llama-cli
+llama-perplexity
+llama-quantize
+llama-serve
+llama-server
+version: 11017 (aca5f933b)
+built with GNU 15.3.0 for Linux x86_64
+=== PPL de référence du 1,5B Q4_K_M (llama.cpp, CPU seul)
+0.01.541.612 I perplexity: calculating perplexity over 334 chunks, n_ctx=256, batch_size=64, n_seq=8
+0.02.674.181 I perplexity: 1.13 seconds per pass - ETA 0.78 minutes
+[1]15.6913,[2]13.1979,[3]14.4879,[4]15.6075,[5]16.0276,[6]14.8261,[7]15.4714,[8]15.0173,[9]14.1357,[10]13.3929,[11]13.5837,[12]13.5076,[13]14.0220,[14]14.3418,[15]14.1209,[16]14.1887,[17]14.8388,[18]15.2324,[19]15.1595,[20]15.3202,[21]15.1307,[22]15.0057,[23]14.7901,[24]14.7487,[25]14.8338,[26]15.2579,[27]15.3197,[28]14.8263,[29]15.2146,[30]14.9783,[31]14.9887,[32]15.2958,[33]14.9740,[34]14.5275,[35]14.6255,[36]14.7960,[37]14.8806,[38]14.9274,[39]14.8281,[40]14.7803,[41]14.6326,[42]14.3282,[43]14.2717,[44]14.1924,[45]13.8267,[46]13.3856,[47]13.2084,[48]12.8591,[49]12.5261,[50]12.4397,[51]12.1440,[52]12.0065,[53]11.7250,[54]11.5273,[55]11.4563,[56]11.2914,[57]11.3645,[58]11.3617,[59]11.4016,[60]11.3176,[61]11.3967,[62]11.3907,[63]11.2848,[64]11.3606,[65]11.4082,[66]11.3536,[67]11.3112,[68]11.3140,[69]11.3957,[70]11.47
+… [3463 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Vérité terrain : **PPL 11,40** avec llama.cpp, contre 50 000 chez nous. Je fabrique une référence F16 des mêmes poids
+
+- **bash** `{"command": "df -h /tmp | tail -1\nexport LD_LIBRARY_PATH=/home/stephane/.local/lib:${LD_LIBRARY_PATH}\ntimeout 1200 /home/stephane/.local/bin/llama-quantize /home/stephane/FastNVMe/models/qwen2.5-1.5b-instruct-q4_k_m.gguf /tmp/ref-f16.gguf F16 2>&1 | tail -3\nls -la /tmp/ref-f16.gguf", "description … [70 caractères tronqués]`
+
+  ```
+tmpfs            63G  1,7G   62G   3% /tmp
+llama_model_loader: - type q6_K:   29 tensors
+[   1/ 339] output.weight                        - [  1536, 151936,      1,      1], type =   q6_K, llama_model_quantize: failed to quantize: requantizing from type q6_K is disabled
+llama_quantize: failed to quantize model from '/home/stephane/FastNVMe/models/qwen2.5-1.5b-instruct-q4_k_m.gguf'
+-rw-r--r--. 1 stephane stephane 5950496 28 sep 07:32 /tmp/ref-f16.gguf
+  ```
+
+### 🤖 Assistant
+
+⏵ Piste sérieuse : llama.cpp signale un tenseur **`output.weight`** distinct. Notre tête est câblée sur `token_embd`
+
+- **bash** `{"command": "python3 - <<'PY'\nimport struct\ndef lire(chemin, cibles):\n    f=open(chemin,'rb'); assert f.read(4)==b'GGUF'\n    ver,=struct.unpack('<I',f.read(4)); nt,=struct.unpack('<Q',f.read(8)); nkv,=struct.unpack('<Q',f.read(8))\n    def ch():\n        n,=struct.unpack('<Q',f.read(8)); return  … [1562 caractères tronqués]`
+
+  ```
+qwen2.5-1.5b-instruct-q4_k_m.gguf
+   tie_word_embeddings : (absent)
+   token_embd.weight      dims=(1536, 151936) type=Q4_K
+   output.weight          dims=(1536, 151936) type=Q6_K
+   output_norm.weight     dims=(1536,) type=F32
+
+Qwen2.5-0.5B-Q8_0.gguf
+   tie_word_embeddings : (absent)
+   token_embd.weight      dims=(896, 151936) type=Q8_0
+   output.weight          ABSENT
+   output_norm.weight     dims=(896,) type=F32
+  ```
+
+### 🤖 Assistant
+
+⏵ **Bug trouvé** : le 1,5B a un `output.weight` **non lié** (Q6_K) ; notre tête lisait `token_embd`. Je corrige
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\npython3 - <<'PY'\np='src/model.rs'; s=open(p,encoding='utf-8').read(); o=s\n# champ\ns=s.replace('''    /// Tête de sortie en 4 bits''','''    /// Nom du tenseur de la tête de sortie : `output.weight` s'il existe,\n    /// … [2501 caractères tronqués]`
+
+  ```
+=== 1,5B Q4_K_M après correction (référence llama.cpp : 11,40)
+[modele] 28 couches chargées en 4.209995904s — listes 0.00 Go , 16 threads
+    postes (ms/token) : projets-attn 4.56 | rope 1.10 | attention 2.33 | proj+mlp 39.51 | somme 47.50 | reste (tête + échantillonnage) 2.91
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\ntimeout 900 ./target/release/qtrinet-core /home/stephane/FastNVMe/models/qwen2.5-1.5b-instruct-q4_k_m.gguf \\\n  --ppl /tmp/wt2_ids.txt --ctx 256 --abits 16 --threads 16 --limit 256 --q4 2>&1 | tail -5", "description": "Re … [53 caractères tronqués]`
+
+  ```
+attention : 0.04 M paires (requête, clé) par token
+    projections : 0.0 M événements par token
+    part de l'attention dans le flux d'événements : 100.0 %
+    postes (ms/token) : projets-attn 4.67 | rope 1.11 | attention 2.35 | proj+mlp 39.81 | somme 47.94 | reste (tête + échantillonnage) 2.93
+    dont attention : scores 0.96 | softmax 0.28 | somme pondérée + écriture KV 1.10
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\ntimeout 900 ./target/release/qtrinet-core /home/stephane/FastNVMe/models/qwen2.5-1.5b-instruct-q4_k_m.gguf \\\n  --ppl /tmp/wt2_ids.txt --ctx 256 --abits 16 --threads 16 --limit 256 --q4 2>&1 | grep -E \"perplexité\"", "de … [64 caractères tronqués]`
+
+  ```
+255 tokens notés — perplexité cumulée NaN  (20.8 tok/s)
+=== perplexité NaN sur 255 tokens (0 événements, 12.3 s) ===
+  ```
+
+### 🤖 Assistant
+
+⏵ La tête du 1,5B est en **Q6_K** : je l'implémente aussi dans `q8_dot_at`
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\npython3 - <<'PY'\np='src/gguf.rs'; s=open(p,encoding='utf-8').read(); o=s\nold='''        if v.ttype == GGML_Q4_K {'''\nassert s.count(old)==1\ns=s.replace(old,'''        if v.ttype == GGML_Q6_K {\n            // Q6_K : qu … [2170 caractères tronqués]`
+
+  ```
+=== 1,5B Q4_K_M (llama.cpp : 11,40)
+[modele] 28 couches chargées en 4.232427789s — listes 0.00 Go , 16 threads
+=== perplexité 100164.9962 sur 255 tokens (0 événements, 26.9 s) ===
+  ```
+
+### 🤖 Assistant
+
+⏵ Toujours faux. Test décisif : je fabrique une référence F16 des mêmes poids et je compare bloc par bloc
+
+- **bash** `{"command": "export LD_LIBRARY_PATH=/home/stephane/.local/lib:${LD_LIBRARY_PATH}\ntimeout 1800 /home/stephane/.local/bin/llama-quantize --allow-requantize \\\n  /home/stephane/FastNVMe/models/qwen2.5-1.5b-instruct-q4_k_m.gguf /tmp/ref-f16.gguf F16 2>&1 | tail -2\nls -la /tmp/ref-f16.gguf", "descript … [76 caractères tronqués]`
+
+  ```
+llama_quantize: quantize time =  4104.79 ms
+llama_quantize:    total time =  4104.79 ms
+-rw-r--r--. 1 stephane stephane 3560416288 28 sep 07:35 /tmp/ref-f16.gguf
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport struct\ndef entetes(chemin):\n    f=open(chemin,'rb'); assert f.read(4)==b'GGUF'\n    struct.unpack('<I',f.read(4)); nt,=struct.unpack('<Q',f.read(8)); nkv,=struct.unpack('<Q',f.read(8))\n    def ch():\n        n,=struct.unpack('<Q',f.read(8)); return f.read(n). … [2906 caractères tronqués]`
+
+  ```
+référence output.weight dims= (1536, 151936) type 1
+source    output.weight dims= (1536, 151936) type 14
+
+Q6_K : écart max sur les 256 premiers poids = 0.079590
+  référence : (3.1458443837458254e-18, 1.1418320111981964e-17, 2.5181688781950482e-19, -1.141701316661413e-17, -6.42446035479315e-17, 3.3701941270179832e-21)
+  calculé   : [0.007151, -0.039173, 0.005596, -0.016614, 0.012514, 0.007462]
+  |réf|max=0.000000  |calc|max=0.079590
+  ```
+
+### 🤖 Assistant
+
+⏵ La référence lue est aberrante (1e-17) : mon calcul d'offset est suspect. Je le valide sur un tenseur connu
+
+- **bash** `{"command": "python3 - <<'PY'\nimport struct\ndef entetes(chemin):\n    f=open(chemin,'rb'); assert f.read(4)==b'GGUF'\n    v,=struct.unpack('<I',f.read(4)); nt,=struct.unpack('<Q',f.read(8)); nkv,=struct.unpack('<Q',f.read(8))\n    def ch():\n        n,=struct.unpack('<Q',f.read(8)); return f.read( … [1414 caractères tronqués]`
+
+  ```
+ref-f16.gguf  alignement=32  data_start=5950496 (calculé) / 5950493 (fin des entêtes)
+   output_norm.weight type=0 dims=(1536,) -> [3.0, 3.3438, 3.1562, 3.5312, 3.4531]  (attendu ≈ 1.0)
+
+qwen2.5-1.5b-instruct-q4_k_m.gguf  alignement=32  data_start=5950496 (calculé) / 5950493 (fin des entêtes)
+   output_norm.weight type=0 dims=(1536,) -> [3.0, 3.3438, 3.1562, 3.5312, 3.4531]  (attendu ≈ 1.0)
+  ```
+
+### 🤖 Assistant
+
+⏵ Mon erreur de lecture (F16 lu comme f32). Je refais la comparaison correctement
+
+- **bash** `{"command": "python3 - <<'PY'\nimport struct\ndef entetes(chemin):\n    f=open(chemin,'rb'); assert f.read(4)==b'GGUF'\n    struct.unpack('<I',f.read(4)); nt,=struct.unpack('<Q',f.read(8)); nkv,=struct.unpack('<Q',f.read(8))\n    def ch():\n        n,=struct.unpack('<Q',f.read(8)); return f.read(n). … [3534 caractères tronqués]`
+
+  ```
+output.weight              Q6_K  écart max 1.020e-01 sur |réf|max 7.959e-02  -> FAUX
+     réf  : [0.007149, 0.012512, -0.010727, 0.014297]
+     calc : [0.007151, -0.039173, 0.005596, -0.016614]
+blk.3.ffn_gate.weight      Q4_K  écart max 5.341e-05 sur |réf|max 1.282e-01  -> OK
+     réf  : [0.071106, -0.033691, 0.036163, 0.012878]
+     calc : [0.071088, -0.033692, 0.036161, 0.012877]
+blk.0.attn_q.weight        Q4_K  écart max 6.676e-06 sur |réf|max 1.918e-02  -> OK
+     réf  : [0.00753, -0.005131, 0.0012, 0.0012]
+     calc : [0.00753, -0.00513, 0.0012, 0.0012]
+token_embd.weight          Q4_K  écart max 2.480e-05 sur |réf|max 7.849e-02  -> OK
+     réf  : [0.003906, 0.011086, -0.01046, 0.011086]
+     calc : [0.003906, 0.011089, -0.010459, 0.011089]
+  ```
+
+### 🤖 Assistant
+
+⏵ **Trouvé** : Q4_K est juste (vérifié sur 3 tenseurs), mais mon Q6_K entrelace `q1..q4` alors que ggml les écrit en **quarts successifs**. Je corrige
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\npython3 - <<'PY'\nimport struct\ndef entetes(chemin):\n    f=open(chemin,'rb'); assert f.read(4)==b'GGUF'\n    struct.unpack('<I',f.read(4)); nt,=struct.unpack('<Q',f.read(8)); nkv,=struct.unpack('<Q',f.read(8))\n    def c … [2673 caractères tronqués]`
+
+  ```
+output.weight            écart max 2.897e-05 sur |réf|max 7.959e-02 -> OK
+   réf  [0.007149, 0.012512, -0.010727, 0.014297]
+   calc [0.007151, 0.012514, -0.010726, 0.014301]
+blk.5.ffn_down.weight    écart max 2.289e-05 sur |réf|max 7.324e-02 -> OK
+   réf  [-0.005543, -0.007759, 0.000554, 0.017731]
+   calc [-0.005543, -0.007761, 0.000554, 0.017738]
+blk.0.attn_v.weight      écart max 8.345e-06 sur |réf|max 4.446e-02 -> OK
+   réf  [0.001042, -0.007294, 0.010422, 0.026047]
+   calc [0.001042, -0.007295, 0.010421, 0.026053]
+  ```
+
+### 🤖 Assistant
+
+⏵ Q6_K corrigé et vérifié contre la référence. Je porte la correction dans `dequant` et `row_f32` (le corps du 1,5B en contient 29)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\npython3 - <<'PY'\nimport re\np='src/gguf.rs'; s=open(p,encoding='utf-8').read(); o=s\n# --- dequant : remplacer le corps Q6_K par la disposition en quarts\nvieux_dequant = '''                    for moitie in 0..2 {\n      … [5083 caractères tronqués]`
+
+  ```
+=== 1,5B Q4_K_M (llama.cpp : 11,40)
+[modele] 28 couches chargées en 3.945918118s — listes 0.00 Go , 16 threads
+=== perplexité 13.0051 sur 255 tokens (0 événements, 27.4 s) ===
+  ```
+
+### 🤖 Assistant
+
+⏵ **PPL 13,01** (llama.cpp : 11,40 sur le fichier entier, ~15,7 sur le premier bloc) — le modèle tourne. Régression + vrai 7B :
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\necho \"=== régression : 0,5B Q8_0 (attendu 19,2641 à 510 jetons)\"\n./target/release/qtrinet-core ../models/Qwen2.5-0.5B-Q8_0.gguf --ppl /tmp/wt2_ids.txt --ctx 256 --abits 16 \\\n  --threads 16 --limit 512 2>&1 | grep -E \ … [395 caractères tronqués]`
+
+  ```
+=== régression : 0,5B Q8_0 (attendu 19,2641 à 510 jetons)
+=== perplexité 19.2641 sur 510 tokens (0 événements, 19.6 s) ===
+=== Qwen2.5-VL-7B Q4_K_M (texte seul), 128 jetons
+[modele] 28 couches chargées en 24.454620055s — listes 0.00 Go , 16 threads
+=== perplexité 11.5889 sur 127 tokens (0 événements, 41.6 s) ===
+    postes (ms/token) : projets-attn 15.61 | rope 2.11 | attention 3.29 | proj+mlp 169.33 | somme 190.34 | reste (tête + échantillonnage) 137.38
+  ```
+
+### 🤖 Assistant
+
+⏵ Le 7B tourne (PPL 11,59) et le corps est **au mur mémoire** (169 ms pour 4,3 Go). Mais la tête Q6_K coûte 137 ms : mon scalaire est trop naïf
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\npython3 - <<'PY'\np='src/gguf.rs'; s=open(p,encoding='utf-8').read(); o=s\nold='''                for moitie in 0..2usize {\n                    let (ql, qh, sc) = (&ql[moitie*64..], &qh[moitie*32..], &sc[moitie*8..]);\n   … [3128 caractères tronqués]`
+
+  ```
+=== 7B Q4_K_M après optimisation de la tête (attendu : PPL 11,59 inchangée)
+=== perplexité 11.5889 sur 127 tokens (0 événements, 35.9 s) ===
+    postes (ms/token) : projets-attn 14.87 | rope 2.04 | attention 2.96 | proj+mlp 166.22 | somme 186.09 | reste (tête + échantillonnage) 96.58
+  ```
+
+### 🤖 Assistant
+
+⏵ Gain déjà acquis (137 → 96 ms). Je commite cet état vérifié avant de continuer
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\npython3 tools/archive_sessions.py --quiet 2>&1 | tail -1\ngit add -A && git commit -q -m \"Q4_K et Q6_K en place : le 7B et le 1,5B Q4_K_M tournent\n\nLecteur Q4_K (super-blocs de 256 poids, 144 octets) et Q6_K (210 octets) lus\nDANS L … [1901 caractères tronqués]`

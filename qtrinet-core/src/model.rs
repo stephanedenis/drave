@@ -129,7 +129,11 @@ impl Proj {
             // EMPRUNT, pas copie : on lit les blocs dans le fichier déjà
             // chargé. Recopier dans notre disposition doublerait la mémoire
             // (60 Go de fichier + 61 Go de copie pour gpt-oss-120b).
-            if let Some((buf, nb)) = g.mxfp4_blocks(name) {
+            if let Some((buf, nb)) = g.q4k_blocks(name) {
+                // Q4_K : super-blocs de 256 poids lus en place. Aucune copie,
+                // aucune requantification — la fidélité est par construction.
+                (None, None, Some(unsafe { DenseQ4::emprunter_q4k(buf.as_ptr(), n_out, n_in, nb) }))
+            } else if let Some((buf, nb)) = g.mxfp4_blocks(name) {
                 (None, None, Some(unsafe { DenseQ4::emprunter(buf.as_ptr(), n_out, n_in, nb, true) }))
             } else if let Some((buf, nb)) = g.q4_blocks(name) {
                 (None, None, Some(unsafe { DenseQ4::emprunter(buf.as_ptr(), n_out, n_in, nb, false) }))
@@ -205,6 +209,12 @@ pub struct Model {
     pub stop_id: Option<u32>,
     /// Postes de temps cumulés, en secondes (diagnostic).
     pub prof: [f64; 6],
+    /// Nom du tenseur de la tête de sortie : `output.weight` s'il existe,
+    /// sinon `token_embd.weight` (poids liés). Les modèles non liés — le
+    /// Qwen2.5-1.5B en fait partie — ont une matrice de sortie **différente**
+    /// de la table d'embedding ; lire la mauvaise donne une perplexité de
+    /// 50 000 au lieu de 11,4.
+    pub tete: String,
     /// Tête de sortie en 4 bits (poids liés au plafond d'embedding). C'est la
     /// plus grosse matrice du modèle — 151 936 × 896 — donc le poste où le
     /// demi-octet par poids rapporte le plus.
@@ -353,18 +363,22 @@ impl Model {
                   else { String::new() },
                   pool.threads());
         let n_layer = cfg.n_layer;
+        let tete = if g.tensor("output.weight").is_some() { "output.weight" } else { "token_embd.weight" };
+        let tete = tete.to_string();
         // Tête en 4 bits : la plus grosse matrice du modèle, donc le plus gros
         // gain possible sur un noyau déjà au mur de la bande passante.
         let head4 = if q4 & 4 != 0 {
             let t0 = Instant::now();
             let v = cfg.vocab;
             let h = cfg.hidden;
-            let d = if let Some((buf, nb)) = g.mxfp4_blocks("token_embd.weight") {
+            let d = if let Some((buf, nb)) = g.q4k_blocks(&tete) {
+                unsafe { DenseQ4::emprunter_q4k(buf.as_ptr(), v, h, nb) }
+            } else if let Some((buf, nb)) = g.mxfp4_blocks(&tete) {
                 unsafe { DenseQ4::emprunter(buf.as_ptr(), v, h, nb, true) }
-            } else if let Some((buf, nb)) = g.q4_blocks("token_embd.weight") {
+            } else if let Some((buf, nb)) = g.q4_blocks(&tete) {
                 unsafe { DenseQ4::emprunter(buf.as_ptr(), v, h, nb, false) }
             } else {
-                DenseQ4::build(&g.dequant("token_embd.weight"), v, h)
+                DenseQ4::build(&g.dequant(&tete), v, h)
             };
             println!("[tête 4 bits] {} × {} → {:.2} b/poids, {:.0} Mo, {:.1} s",
                      v, h, d.bits_per_weight(),
@@ -378,6 +392,7 @@ impl Model {
             act_topk_proj: [0; 7], attn_topk: 0, attn_events: 0, qk_topk: 0,
             attn_window: 0, attn_sinks: 4, seuil_push: 0.22,
             stop_id: None, prof: [0.0; 6],
+            tete,
             head4,
             patch: None, ffn_gain: None, hebb: None,
         }
@@ -883,12 +898,13 @@ impl Model {
             let chunk = vocab.div_ceil(nt);
             let mut out = vec![0f32; vocab];
             let xi = &xi;
+            let sx32 = &crate::list::sommes32(xi);
             std::thread::scope(|sc| {
                 for (ci, part) in out.chunks_mut(chunk).enumerate() {
                     sc.spawn(move || {
                         let base = ci * chunk;
                         for (j, o) in part.iter_mut().enumerate() {
-                            *o = dref.dot16(base + j, xi) * sx;
+                            *o = dref.dot16(base + j, xi, sx32) * sx;
                         }
                     });
                 }
@@ -902,7 +918,7 @@ impl Model {
         let mut qx = vec![0i16; h.len()];
         for (&i, &v) in sv.idx.iter().zip(sv.val.iter()) { qx[i as usize] = v as i16; }
         let vocab = self.cfg.vocab;
-        let view = self.g.q8_view("token_embd.weight");
+        let view = self.g.q8_view(&self.tete);
         let nt = self.pool.threads().max(1);
         let chunk = (vocab + nt - 1) / nt;
         let mut out = vec![0f32; vocab];

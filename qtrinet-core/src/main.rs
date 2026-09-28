@@ -177,7 +177,7 @@ fn main() {
         let mut pire = (0usize, 0f32);
         for o in 0..n_cols {
             let a = d4.dot(o, &xv);
-            let b = d4.dot16(o, &x16);
+            let b = d4.dot16(o, &x16, &list::sommes32(&x16));
             if a.to_bits() != b.to_bits() {
                 let e = (a - b).abs() / a.abs().max(1.0);
                 if e > pire.1 { pire = (o, e); }
