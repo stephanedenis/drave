@@ -50,7 +50,18 @@ identique à la source) — les deux tokenizers la passent sur ce corpus.
 | Qwen2.5-1.5B Q4_K_M | `--q4 --limit 256` | **12,9228** |
 | Qwen2.5-VL-7B Q4_K_M | défaut, `--limit 128` | **10,9947** |
 | Qwen3-30B-A3B MoE | `--dense --limit 128` | **7,6139** |
-| gpt-oss-120b MXFP4 | `--dense --limit 64`, ids_oss | **39,8** ← *inexpliqué, voir §6* |
+| gpt-oss-120b MXFP4 | `--dense --limit 64`, ids_oss | **20,8361** (63 jetons) |
+| gpt-oss-120b MXFP4 | `--dense --limit 512`, ids_oss | **15,0757** (509 jetons, deux fenêtres) |
+| gpt-oss-120b MXFP4 | `--dense --ctx 512 --limit 512`, ids_oss | **18,5803** (511 jetons, une fenêtre) |
+| gpt-oss-120b MXFP4, YaRN | `QT_YARN=1`, `--ctx 512 --limit 512` | **174,3375** ← le YaRN statique du modèle |
+
+> **gpt-oss : les anciens chiffres (39,8 puis 129,9) sont périmés.** Ils ont été
+> mesurés avec deux bugs depuis corrigés : le biais `attn_output` ignoré et la
+> fenêtre glissante appliquée aux 36 couches au lieu d'une sur deux. Le détail
+> est dans `reports/rapport-gpt-oss-perplexite.md` ; la **référence externe**
+> (llama.cpp, mêmes identifiants, sans BOS) donne 38,37 à 63 jetons et 169,67 à
+> 511 en mode YaRN — notre moteur fait **mieux**, parce qu'il sait éteindre
+> YaRN, qui coûte ici un facteur 9.
 
 Toujours `--ctx 256 --abits 16 --threads 16`, et **jamais croiser les fichiers
 d'identifiants** : nourrir un modèle avec le découpage d'un autre donne une
@@ -73,10 +84,15 @@ Un garde-fou le détecte maintenant (identifiant ≥ vocabulaire = erreur franch
 | Encodages | listes d'événements (push), dense int8 par ligne, dense 4 bits par bloc, **6 bits empaqueté par bloc** |
 | GPU | noyaux PTX + API pilote, tête et projections opt-in (`QT_GPU=1`) |
 | Outils | `--ppl`, `--plan` (placement), `--tokenize`, `--bits N` (simulation de précision) |
+| Mesure | `--ppl-texte F` (identifiants du tokenizer du modèle), `--logits-bin F` (logits bruts), `--harmony*` (habillage harmony), `--swa-pattern N`, `--sans-fenetre` |
+| Référence externe | `tools/ref_logits` (llama.cpp, mêmes identifiants, sans BOS) + `tools/compare_logits.py` |
 
 **Vérifications externes déjà faites** (elles ont trouvé les bugs) : déquantification
 Q4_K/Q6_K comparée à une référence F16 des mêmes poids ; tokenizer o200k comparé
-à `/tokenize` ; perplexités recoupées avec `llama-perplexity`.
+à `/tokenize` ; perplexités recoupées avec `llama-perplexity` ; **logits comparés
+un à un à llama.cpp** sur les mêmes identifiants (corrélation 0,999976 au premier
+jeton, top-1 identique sur 63 positions, |ΔNLL| médian 0,076) ; tokenizer o200k
+comparé à `llama-tokenize` sur 4 424 jetons (0 écart).
 
 ---
 
@@ -116,30 +132,59 @@ Q4_K/Q6_K comparée à une référence F16 des mêmes poids ; tokenizer o200k co
 
 ## 6. Chantiers ouverts, par ordre de valeur
 
-### a. Perplexité de gpt-oss (39,8 au lieu de l'ordre de 6)
+### a. gpt-oss : RÉSOLU (deux bugs corrigés), voir `reports/rapport-gpt-oss-perplexite.md`
 
-Sa **génération est correcte** (« The capital of Australia is » → « Canberra. »,
-5,5 tok/s, 62 Go résidents) et son gabarit harmony est maintenant implémenté.
-Pistes restantes, dans l'ordre :
+Ce qui était annoncé « 39,8 au lieu de l'ordre de 6 » n'était pas un problème de
+format ni de codage de position :
 
-1. **Mesurer la perplexité d'un texte présenté en harmony** — c'est désormais
-   possible et cela teste directement l'hypothèse « le modèle est décalibré hors
-   de son format ». C'est le prochain essai à faire, il est simple.
-2. Comparer les logits couche par couche à une référence (le seul test qui
-   trancherait ; aucun n'existe aujourd'hui).
-3. La PPL **croît avec la fenêtre** (39,8 à 63 jetons, 129,9 à 511) : signature
-   d'un codage de position faux. Or **aucune** variante YaRN ne bat le RoPE
-   simple — le principe même est mal placé, pas seulement les constantes.
+1. **`attn_output.bias` était ignoré** (gpt-oss a un biais sur Q, K, V **et O**) :
+   39,80 → **20,84** à 63 jetons.
+2. **La fenêtre glissante s'appliquait aux 36 couches** au lieu d'une sur deux
+   (`layer_types` alterne, comme `set_swa_pattern(2)` de llama.cpp) : 129,9 →
+   **15,08** à 511 jetons. Sans fenêtre du tout : 26,15 ; les deux extrêmes sont
+   pires que le motif réel du modèle.
+3. Un troisième bug latent (puits appris absents du softmax des couches pleines)
+   est corrigé, **effet mesuré nul** sur gpt-oss (le chemin groupé les comptait).
 
-### b. Refactoriser les boucles CLI (trois bugs de la même classe)
+**La prémisse « devrait valoir ~6 » était fausse** : llama.cpp, sur exactement
+les mêmes identifiants et sans BOS, donne 38,37 (63 jetons) et 169,67 (511
+jetons, YaRN) — notre moteur donne 41,11 et 174,34, avec une corrélation de
+logits de 0,999976 et le même top-1 partout.
+
+Deux faits à ne pas réapprendre :
+
+- **YaRN ×32 (la configuration déclarée) coûte un facteur 9** : 174,34 contre
+  18,58 à 511 jetons. Ce n'est pas un bug — HF, llama.cpp et l'implémentation
+  officielle d'OpenAI appliquent le même YaRN statique (vérifié dans les
+  sources). Notre défaut (YaRN éteint) est un choix **mesuré**.
+- **Le format harmony rend le texte MOINS prévisible**, pas plus. Le modèle
+  exige son canal `analysis` : après `<|start|>assistant<|channel|>`, p(analysis)
+  = 0,9999 contre p(final) = 0,0001. Montages mesurés (même corpus) : 443
+  (assistant consécutifs), 3 432 (consigne + texte), 8 463 (tours alternés),
+  677 321 (suite réelle en `final` forcé), **26,0 pour le montage canonique**
+  (système officiel + `analysis` puis `final`) contre **13,7 en brut pour le
+  même texte**. L'hypothèse du §6.a.1 est donc **réfutée**.
+- Effet de bord : `Gguf::open_meta` (en-tête seul) — `--tokenize` sur gpt-oss
+  passe de ~60 s à **0,385 s** et chaque `--ppl` économise une lecture des 62 Go.
+
+### b. YaRN « à retardement » (suite de a)
+
+Appliquer l'étirement **seulement au-delà** de `initial_context_length` (4 096),
+pour garder le gain à contexte court et l'extension longue. Protocole : corpus
+de 8 000 jetons, `--ctx 4096`, quatre passes (simple/YaRN × court/long) ≈ 13 min
+chacune sur le 120B. C'est la seule piste qui reste sur ce modèle.
+
+### c. Refactoriser les boucles CLI (trois bugs de la même classe)
 
 Une seule boucle pour les trois modes. La matière est prête : 50 drapeaux
 dédupliqués, `struct Options` conçue, chaque mode destructurant ce dont il a
 besoin. **À faire à froid**, avec un test après chaque groupe de drapeaux — une
 substitution automatique a déjà corrompu les noms (`"--o.ids"`) et imposé un
-retour en arrière.
+retour en arrière. Cette session a encore trouvé un drapeau ignoré dans un mode
+(`--attn-window` et `--attn-sinks` étaient analysés mais jamais appliqués en
+inférence) : le symptôme est toujours le même.
 
-### c. Noyaux GPU
+### d. Noyaux GPU
 
 Ils fonctionnent et donnent un résultat **identique au chiffre près** au CPU,
 mais lisent une ligne par fil : les accès d'une même warp tombent dans des lignes
@@ -147,20 +192,22 @@ de cache différentes. Il faut une warp par ligne avec réduction, puis des noya
 4 bits (Q4_K, Q6_K, MXFP4) — toute la famille Qwen est en Q4_K/Q6_K, donc
 aujourd'hui rien de la leur n'est déportable.
 
-### d. Échelles par bloc pour `DenseQ8`
+### e. Échelles par bloc pour `DenseQ8`
 
 Notre int8 quantifie avec une seule échelle **par ligne** ; le 6 bits, par bloc
 de 32 — et il gagne. L'hypothèse à tester : le 6 bits ne gagne pas grâce à ses
 deux bits, mais grâce à ses échelles plus fines. Si c'est vrai, l'int8 par bloc
-repasserait devant à qualité égale.
+repasserait devant à qualité égale. **C'est aussi l'écart résiduel avec
+llama.cpp** (|ΔNLL| médian 0,076 sur gpt-oss) : nos activations sont quantifiées
+sur 15 bits, une seule échelle par vecteur.
 
-### e. Contexte long
+### f. Contexte long
 
 Attention en O(contexte), KV en f32 non paginé : 800 Mo à 8 k pour le 30 B, et
 +100 ms/jeton. Il faut KV quantifié et paginé, puis MLA pour les architectures
 DeepSeek.
 
-### f. Vision
+### g. Vision
 
 Le chemin image du modèle VL n'existe pas.
 
@@ -178,7 +225,11 @@ qtrinet-core/src/
   gpu.rs        API pilote CUDA (sans crate), noyaux PTX
   main.rs       modes : inférence, perplexité, plan, tokenize
 gpu/qtrinet_gpu.cu + .ptx    noyaux, compilés par clang
+tools/ref_logits.cpp         référence llama.cpp : mêmes identifiants, sans BOS
+tools/compare_logits.py      comparaison position par position (NLL, top-1, corrélation)
+tools/harmony_canonique.py   montage harmony canonique (analysis puis final)
 reports/rapport-travail-reel.md      ce que le moteur sait faire, tests réels
+reports/rapport-gpt-oss-perplexite.md  les deux bugs de gpt-oss et la référence externe
 docs/convertisseur.md                plan de chargement, résultats négatifs
 reports/rapport-passage-a-l-echelle.md   modèle de coût, faisabilité par modèle
 journal/                             sessions archivées automatiquement
@@ -192,12 +243,17 @@ Le journal s'archive à chaque commit (`tools/archive_sessions.py` +
 ## 8. Premier pas suggéré pour la nouvelle session
 
 ```bash
-# 1. l'état est-il vert ?
+# 1. l'état est-il vert ? (Qwen ne doit pas bouger : les corrections de cette
+#    session ne touchent que les modèles à biais de sortie et à fenêtre par couche)
 cd qtrinet-core && cargo build --release && cargo test --release
 ./target/release/qtrinet-core ../models/Qwen2.5-0.5B-Q8_0.gguf --ppl /tmp/ids_qwen.txt \
     --ctx 256 --abits 16 --threads 16 --limit 512 --dense   # attendu 19,3885
 
 # 2. si /tmp a été vidé, régénérer le corpus et les identifiants (§2)
 
-# 3. puis attaquer §6.a.1 : la perplexité de gpt-oss en format harmony
+# 3. gpt-oss : les deux chiffres de contrôle de cette session
+./target/release/qtrinet-core /home/stephane/FastNVMe/models/gpt-oss-120b-MXFP4.gguf \
+    --ppl /tmp/ids_oss.txt --ctx 256 --dense --threads 16 --limit 512   # attendu 15,08
+
+# 4. puis §6.b : YaRN seulement au-delà de 4 096 (protocole dans le rapport)
 ```

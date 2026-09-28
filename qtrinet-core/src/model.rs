@@ -410,6 +410,13 @@ pub struct Model {
     /// Nombre d'experts allumés par jeton (0 = valeur du modèle).
     pub moe_topk: usize,
     pub attn_window: usize,
+    /// Période du motif fenêtre/plein : la couche `l` est fenêtrée si
+    /// `l % motif < motif - 1`. gpt-oss déclare 128 de fenêtre sur **une couche
+    /// sur deux** (`layer_types` alterne sliding_attention / full_attention,
+    /// et llama.cpp pose `set_swa_pattern(2)`) : appliquer la fenêtre aux
+    /// 36 couches supprimait toute information au-delà de 128 jetons dans la
+    /// moitié du réseau. 0 ou 1 = toutes les couches fenêtrées.
+    pub swa_pattern: usize,
     pub attn_sinks: usize,
     /// Seuil de bascule push/pull, en fraction de sources actives. Mesuré : les
     /// deux architectures se croisent à 10 % de densité ; on bascule un peu
@@ -600,7 +607,11 @@ impl Model {
                 wq: Proj::load(&g, &p("attn_q.weight"), Some(&p("attn_q.bias")), dense || q4 != 0, auto, keep, q4 & 2 != 0, b6 & 2 != 0),
                 wk: Proj::load(&g, &p("attn_k.weight"), Some(&p("attn_k.bias")), dense || q4 != 0, auto, keep, q4 & 2 != 0, b6 & 2 != 0),
                 wv: Proj::load(&g, &p("attn_v.weight"), Some(&p("attn_v.bias")), dense || q4 != 0, auto, keep, q4 & 2 != 0, b6 & 2 != 0),
-                wo: Proj::load(&g, &p("attn_output.weight"), None, dense || q4 != 0, auto, keep, q4 & 2 != 0, b6 & 2 != 0),
+                // gpt-oss porte un biais sur la projection de sortie
+                // (`attention_bias = true` dans sa config : Q, K, V **et** O).
+                // Le passer à `None` l'ignorait silencieusement — un décalage
+                // constant ajouté à chaque couche, donc amplifié 36 fois.
+                wo: Proj::load(&g, &p("attn_output.weight"), Some(&p("attn_output.bias")), dense || q4 != 0, auto, keep, q4 & 2 != 0, b6 & 2 != 0),
                 // gpt-oss nomme `post_attention_norm` la normale d'entrée du
                 // FFN ; c'est le même tenseur sous un autre nom.
                 ffn_norm: if g.tensor(&p("ffn_norm.weight")).is_some() {
@@ -659,6 +670,27 @@ impl Model {
         // Le modèle peut déclarer une fenêtre glissante (gpt-oss : 128) : lue
         // AVANT que `g` ne soit déplacé dans la structure.
         let fenetre = g.cfg("attention.sliding_window").and_then(|m| m.as_u64()).unwrap_or(0) as usize;
+        // Motif fenêtre/plein : gpt-oss alterne une couche sur deux (18 des 36
+        // couches sont « full attention »), et llama.cpp le pose par défaut
+        // (`set_swa_pattern(2)`) faute de clé dans le GGUF. Les appliquer
+        // toutes revenait à amputer la moitié du réseau au-delà de 128 jetons.
+        let arch = g.meta.get("general.architecture").and_then(|m| m.as_str()).unwrap_or("");
+        let motif_declare = g.cfg("attention.sliding_window_pattern")
+            .and_then(|m| m.as_u64()).unwrap_or(0) as usize;
+        let swa_pattern = if motif_declare > 0 { motif_declare }
+                          else if fenetre > 0 && arch == "gpt-oss" { 2 }
+                          else { 0 };
+        // Trace : sans elle, impossible de savoir si la fenêtre est active
+        // partout ou une couche sur deux. C'est exactement ce qui a coûté une
+        // mesure fausse sur gpt-oss (perplexité croissante avec la fenêtre).
+        if fenetre > 0 {
+            let n_fen = if swa_pattern <= 1 { cfg.n_layer } else {
+                (0..cfg.n_layer).filter(|&l| l % swa_pattern < swa_pattern - 1).count()
+            };
+            println!("[config] fenêtre glissante {fenetre} sur {n_fen}/{} couches (motif {swa_pattern}{})",
+                     cfg.n_layer,
+                     if swa_pattern <= 1 { ", toutes" } else { " alterné" });
+        }
         // Tête en 4 bits : la plus grosse matrice du modèle, donc le plus gros
         // gain possible sur un noyau déjà au mur de la bande passante.
         // La tête emprunte dès que la source est déjà quantifiée sur 4 ou
@@ -715,6 +747,7 @@ impl Model {
             act_topk_proj: [0; 7], attn_topk: 0, attn_events: 0, qk_topk: 0,
             moe_topk: 0,
             attn_window: fenetre,
+            swa_pattern,
             attn_sinks: if fenetre > 0 { 0 } else { 4 },
             seuil_push: 0.22,
             stop_id: None, stop_id2: None, prof: [0.0; 6],
@@ -1108,6 +1141,13 @@ impl Model {
 
         for l in 0..cfg.n_layer {
             let lay = &layers[l];
+            // Fenêtre EFFECTIVE de cette couche : le motif déclaré (gpt-oss :
+            // une couche sur deux en attention complète) prime sur le réglage
+            // global. Lue en champs directs : `self` est déjà déstructuré.
+            let fen = if self.attn_window == 0 { 0 }
+                      else if self.swa_pattern <= 1 { self.attn_window }
+                      else if l % self.swa_pattern < self.swa_pattern - 1 { self.attn_window }
+                      else { 0 };
             let tm = Instant::now();
             Self::rmsnorm(&x, &lay.attn_norm, cfg.eps, &mut hn);
             Self::matvec(pool, &lay.wq, &hn, &mut q, events, self.act_levels, self.act_thresh, tk(0), self.act_renorm, &mut scratch, self.seuil_push);
@@ -1173,7 +1213,7 @@ impl Model {
             // groupe et en tenant `nh` scores, on divise ce trafic par `rep`.
             // L'arithmétique par tête est inchangée et dans le même ordre : les
             // sorties restent bit à bit identiques.
-            let groupe = self.attn_window == 0 && self.attn_topk == 0 && rep > 1;
+            let groupe = fen == 0 && self.attn_topk == 0 && rep > 1;
             if groupe {
                 let t_scores = Instant::now();
                 for kvh in 0..nkv {
@@ -1233,8 +1273,8 @@ impl Model {
                 // fenêtre glissante : seules les clés de la fenêtre sont notées,
                 // plus quelques puits au début (leur attention sert de drain).
                 let nw = pos + 1;
-                let lo = if self.attn_window > 0 && nw > self.attn_window {
-                    nw - self.attn_window
+                let lo = if fen > 0 && nw > fen {
+                    nw - fen
                 } else { 0 };
                 let ns = if lo > 0 { self.attn_sinks.min(lo) } else { 0 };
                 // les puits sont NOTÉS comme les autres : leur donner un score
@@ -1251,7 +1291,7 @@ impl Model {
                 // réécrire les boucles ne gagnait rien (mesuré : 12,4 → 12,5 ms).
                 let n = pos + 1;
                 let k = if self.attn_topk > 0 { self.attn_topk.min(n) } else { n };
-                if self.attn_window > 0 {
+                if fen > 0 {
                     // pas de top-k : on note exactement les clés de la fenêtre
                     attn_idx.clear();
                     let ns = if lo > 0 { self.attn_sinks.min(lo) } else { 0 };
@@ -1291,11 +1331,19 @@ impl Model {
                 // sur tout le contexte lirait des scores au-delà de pos.
                 let iter: &[u32] = if k < n { &attn_idx } else { &attn_all[..n] };
                 self.attn_events += iter.len() as u64;
-                // softmax stable sur les seules clés retenues
+                // softmax stable sur les seules clés retenues. Le puits appris
+                // compte dans le dénominateur MÊME en attention complète : c'est
+                // un logit de plus (HF concatène la colonne du puits avant le
+                // softmax, puis la retire du numérateur). L'oublier ici ne
+                // touchait que les couches non fenêtrées — sur gpt-oss, la
+                // moitié du réseau, et précisément celles qui voient loin.
+                let puits = lay.sinks.as_ref().map(|s| s[hh]);
                 let mut mx = f32::NEG_INFINITY;
                 for &t in iter { let v = sc[t as usize]; if v > mx { mx = v; } }
+                if let Some(s) = puits { if s > mx { mx = s; } }
                 let mut sum = 0f32;
                 for &t in iter { let e = (sc[t as usize] - mx).exp(); sc[t as usize] = e; sum += e; }
+                if let Some(s) = puits { sum += (s - mx).exp(); }
                 let inv = 1.0 / sum;
                 for &t in iter { sc[t as usize] *= inv; }
                 // somme pondérée : on accumule par clé dans le vecteur de sortie,

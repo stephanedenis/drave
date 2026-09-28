@@ -7,7 +7,7 @@
 
 use std::collections::HashMap;
 use std::fs::File;
-use std::io::Read;
+use std::io::{Read, Seek, SeekFrom};
 use std::path::Path;
 
 #[derive(Debug, Clone)]
@@ -95,21 +95,38 @@ pub struct Gguf {
     data_start: usize,
 }
 
-struct Cur<'a> { b: &'a [u8], p: usize }
+struct Cur<'a> { b: &'a [u8], p: usize, deborde: bool }
 
 impl<'a> Cur<'a> {
-    fn u8(&mut self) -> u8 { let v = self.b[self.p]; self.p += 1; v }
-    fn u32(&mut self) -> u32 { let v = u32::from_le_bytes(self.b[self.p..self.p+4].try_into().unwrap()); self.p += 4; v }
-    fn u64(&mut self) -> u64 { let v = u64::from_le_bytes(self.b[self.p..self.p+8].try_into().unwrap()); self.p += 8; v }
-    fn i8(&mut self) -> i8 { let v = self.b[self.p] as i8; self.p += 1; v }
-    fn u16(&mut self) -> u16 { let v = u16::from_le_bytes(self.b[self.p..self.p+2].try_into().unwrap()); self.p += 2; v }
-    fn i16(&mut self) -> i16 { let v = i16::from_le_bytes(self.b[self.p..self.p+2].try_into().unwrap()); self.p += 2; v }
-    fn i32(&mut self) -> i32 { let v = i32::from_le_bytes(self.b[self.p..self.p+4].try_into().unwrap()); self.p += 4; v }
-    fn f32(&mut self) -> f32 { let v = f32::from_le_bytes(self.b[self.p..self.p+4].try_into().unwrap()); self.p += 4; v }
-    fn f64(&mut self) -> f64 { let v = f64::from_le_bytes(self.b[self.p..self.p+8].try_into().unwrap()); self.p += 8; v }
-    fn i64(&mut self) -> i64 { let v = i64::from_le_bytes(self.b[self.p..self.p+8].try_into().unwrap()); self.p += 8; v }
+    // Toutes les lectures sont bornées : un en-tête lu dans une tranche trop
+    // courte doit être SIGNALÉ, pas provoquer une panique d'indexation. C'est
+    // ce qui permet à `open_meta` de relire une tranche plus grande.
+    fn reste(&self, n: usize) -> bool { self.p + n <= self.b.len() }
+    fn u8(&mut self) -> u8 {
+        if !self.reste(1) { self.deborde = true; return 0; }
+        let v = self.b[self.p]; self.p += 1; v
+    }
+    fn u32(&mut self) -> u32 {
+        if !self.reste(4) { self.deborde = true; return 0; }
+        let v = u32::from_le_bytes(self.b[self.p..self.p+4].try_into().unwrap()); self.p += 4; v
+    }
+    fn u64(&mut self) -> u64 {
+        if !self.reste(8) { self.deborde = true; return 0; }
+        let v = u64::from_le_bytes(self.b[self.p..self.p+8].try_into().unwrap()); self.p += 8; v
+    }
+    fn i8(&mut self) -> i8 { self.u8() as i8 }
+    fn u16(&mut self) -> u16 {
+        if !self.reste(2) { self.deborde = true; return 0; }
+        let v = u16::from_le_bytes(self.b[self.p..self.p+2].try_into().unwrap()); self.p += 2; v
+    }
+    fn i16(&mut self) -> i16 { self.u16() as i16 }
+    fn i32(&mut self) -> i32 { self.u32() as i32 }
+    fn f32(&mut self) -> f32 { f32::from_bits(self.u32()) }
+    fn f64(&mut self) -> f64 { f64::from_bits(self.u64()) }
+    fn i64(&mut self) -> i64 { self.u64() as i64 }
     fn string(&mut self) -> String {
         let n = self.u64() as usize;
+        if !self.reste(n) { self.deborde = true; return String::new(); }
         let s = String::from_utf8_lossy(&self.b[self.p..self.p + n]).to_string();
         self.p += n;
         s
@@ -142,18 +159,64 @@ impl Gguf {
     pub fn open<P: AsRef<Path>>(path: P) -> std::io::Result<Self> {
         let mut buf = Vec::new();
         File::open(path)?.read_to_end(&mut buf)?;
-        assert_eq!(&buf[0..4], b"GGUF", "ce n'est pas un fichier GGUF");
-        let mut c = Cur { b: &buf, p: 4 };
+        let (meta, tensors, fin) = Self::entete(&buf).ok_or_else(|| {
+            std::io::Error::new(std::io::ErrorKind::UnexpectedEof, "en-tête GGUF incomplet")
+        })?;
+        let data_start = Self::debut_donnees(&meta, fin);
+        Ok(Gguf { meta, tensors, buf, data_start })
+    }
+
+    /// Ouvre un GGUF en ne lisant QUE l'en-tête (métadonnées et descripteurs de
+    /// tenseurs) : `open` lit tout le fichier, soit **62 Go de lecture et de
+    /// mémoire** pour gpt-oss. Le décodage du vocabulaire (`--tokenize`) et le
+    /// garde-fou de vocabulaire de `--ppl` n'ont besoin que de l'en-tête.
+    ///
+    /// Les données de tenseurs ne sont PAS chargées : tout accès aux poids
+    /// paniquera (bruyamment, c'est voulu) — ce constructeur ne sert qu'aux
+    /// métadonnées.
+    pub fn open_meta<P: AsRef<Path>>(path: P) -> std::io::Result<Self> {
+        let mut f = File::open(&path)?;
+        let mut taille = 4usize << 20;              // 4 Mo : l'en-tête usuel tient
+        loop {
+            f.seek(SeekFrom::Start(0))?;
+            let mut buf = vec![0u8; taille];
+            let mut lu = 0usize;
+            while lu < taille {
+                let n = f.read(&mut buf[lu..])?;
+                if n == 0 { break; }
+                lu += n;
+            }
+            buf.truncate(lu);
+            if let Some((meta, tensors, fin)) = Self::entete(&buf) {
+                let data_start = Self::debut_donnees(&meta, fin);
+                return Ok(Gguf { meta, tensors, buf: Vec::new(), data_start });
+            }
+            if lu < taille {
+                return Err(std::io::Error::new(std::io::ErrorKind::UnexpectedEof,
+                                               "en-tête GGUF incomplet"));
+            }
+            taille *= 4;
+        }
+    }
+
+    /// Analyse l'en-tête. Rend `None` si la tranche s'arrête avant la fin :
+    /// l'appelant relit alors une tranche plus grande.
+    fn entete(buf: &[u8]) -> Option<(HashMap<String, Meta>, Vec<TensorInfo>, usize)> {
+        if buf.len() < 4 || &buf[0..4] != b"GGUF" { return None; }
+        let mut c = Cur { b: buf, p: 4, deborde: false };
         let version = c.u32();
         assert!(version >= 2, "version GGUF {version} non gérée");
         let n_tensors = c.u64() as usize;
         let n_kv = c.u64() as usize;
+        if c.deborde { return None; }
 
         let mut meta = HashMap::new();
         for _ in 0..n_kv {
             let k = c.string();
             let vt = c.u32();
-            meta.insert(k, c.value(vt));
+            let v = c.value(vt);
+            if c.deborde { return None; }
+            meta.insert(k, v);
         }
         let mut tensors = Vec::with_capacity(n_tensors);
         for _ in 0..n_tensors {
@@ -163,11 +226,15 @@ impl Gguf {
             dims.reverse();                       // ggml stocke à l'envers
             let ttype = c.u32();
             let offset = c.u64();
+            if c.deborde { return None; }
             tensors.push(TensorInfo { name, dims, ttype, offset });
         }
+        Some((meta, tensors, c.p))
+    }
+
+    fn debut_donnees(meta: &HashMap<String, Meta>, fin_entete: usize) -> usize {
         let align = meta.get("general.alignment").and_then(|m| m.as_u64()).unwrap_or(32) as usize;
-        let data_start = (c.p + align - 1) / align * align;
-        Ok(Gguf { meta, tensors, buf, data_start })
+        (fin_entete + align - 1) / align * align
     }
 
     pub fn cfg(&self, key: &str) -> Option<&Meta> {

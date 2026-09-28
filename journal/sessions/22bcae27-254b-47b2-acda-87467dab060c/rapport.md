@@ -7,7 +7,7 @@
 | Début | 2026-09-25 11:56 |
 | Durée | 74.8 h |
 | Tours | 54 |
-| Messages | 1249 |
+| Messages | 1250 |
 | Appels d'outils | 1227 |
 | Fichiers touchés | 69 |
 | Commandes | 984 |
@@ -3040,7 +3040,32 @@ Deux commits (`df18aef`, `2625a74`), journal à jour.
 
 **Synthèse produite :**
 
-⏵ Je vous prépare une base de reprise autonome, plutôt qu'une compaction qui perdrait les mesures.
+⏵ Base de reprise écrite, vérifiée, commitée. Voici ce qu'elle contient.
+
+\## `REPRISE.md` (203 lignes, à la racine du dépôt)
+
+**Les commandes citées ont été exécutées avant le commit** : 0,5B dense → 19,3885 ✓, 6 bits → 19,3045 ✓, 3 tests verts ✓. Ce n'est pas de la documentation écrite de mémoire.
+
+| section | contenu |
+|---|---|
+| **§1** | le projet en une phrase + la commande de démarrage |
+| **§2** | **références de non-régression** : 7 modèles avec la commande exacte et la perplexité attendue, plus la régénération du corpus si `/tmp` a été vidé |
+| **§3** | ce qui est implémenté et vérifié, et **par quelles vérifications externes** les bugs ont été trouvés |
+| **§4** | **pièges de l'environnement** — tous rencontrés : CUDA 13 et ses symboles non versionnés, nvcc contre glibc, l'épinglage NUMA qui perd, le seuil de déport GPU à 8 Mo, les boucles CLI triplées |
+| **§5** | **règles de méthode**, chacune adossée à une erreur commise : mesurer avant de conclure, la double quantification, les trois hypothèses réfutées, ne pas conclure sur 255 jetons |
+| **§6** | **six chantiers ouverts classés par valeur**, avec pour chacun l'hypothèse et le prochain essai |
+| **§7** | carte du dépôt |
+| **§8** | premier pas suggéré pour la nouvelle session |
+
+\## Les trois choses à retenir
+
+**Le premier essai à faire** est en §6.a.1 : mesurer la perplexité de gpt-oss sur un texte **présenté en harmony**. Le gabarit est maintenant implémenté, l'hypothèse « le modèle est décalibré hors de son format » n'avait jamais pu être testée — elle l'est devenue, et c'est une commande.
+
+**Le piège à ne pas répéter** : la double quantification, qui a coûté 12 % de perplexité sur Q4_0 et fait mentir une simulation de précision (19,96 annoncé contre 19,30 réel). Corollaire : quand un format est déjà quantifié, on le lit **en place**, on ne le retraite pas.
+
+**La dette structurelle identifiée** : les trois boucles de parsing CLI ont produit trois bugs de la même classe cette session. La refactorisation est conçue (50 drapeaux dédupliqués, `struct Options`, destructuration par mode) et volontairement **non faite** — une substitution automatique a déjà corrompu les noms de drapeaux et imposé un retour en arrière. C'est une passe à faire à froid, avec un test après chaque groupe.
+
+Le journal de session est archivé et le dépôt est propre (`f57e151`). Une nouvelle session peut démarrer sur `REPRISE.md` seul.
 
 ## 3. Travail accompli
 

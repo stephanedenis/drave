@@ -37,7 +37,7 @@ fn main() {
     }
     if args.iter().any(|a| a == "--plan") { run_plan(&args); return; }
     if args.iter().any(|a| a == "--tokenize") { run_tokenize(&args); return; }
-    if args.iter().any(|a| a == "--ppl") { run_ppl(&args); return; }
+    if args.iter().any(|a| a == "--ppl" || a == "--ppl-texte") { run_ppl(&args); return; }
     if args.iter().any(|a| a == "--infer") { run_infer(&args); return; }
     let path = &args[1];
     let mut matrix = "blk.0.ffn_gate.weight".to_string();
@@ -317,6 +317,9 @@ fn run_infer(args: &[String]) {
     let mut ids_file: Option<String> = None;
     let mut qk_topk = 0usize;
     let mut attn_window = 0usize;
+    // Motif fenêtre/plein : `None` = valeur du modèle, `Some(n)` = imposé.
+    let mut swa_pattern: Option<usize> = None;
+    let mut sans_fenetre = false;
     // 0 = « garder la valeur du modèle » : les métadonnées déclarent parfois une
     // fenêtre glissante (gpt-oss : 128) et des puits appris, qu'un défaut CLI
     // écraserait silencieusement.
@@ -374,6 +377,8 @@ fn run_infer(args: &[String]) {
             "--attn-topk" => attn_topk = args[i + 1].parse().unwrap(),
             "--qk-topk" => qk_topk = args[i + 1].parse().unwrap(),
             "--attn-window" => attn_window = args[i + 1].parse().unwrap(),
+            "--swa-pattern" => { swa_pattern = Some(args[i + 1].parse().unwrap()); i -= 1; }
+            "--sans-fenetre" => { sans_fenetre = true; i -= 1; }
             "--attn-sinks" => attn_sinks = args[i + 1].parse().unwrap(),
             "--patch" => patch_file = Some(args[i + 1].clone()),
             "--threads" => n_threads = args[i + 1].parse().unwrap(),
@@ -414,6 +419,10 @@ fn run_infer(args: &[String]) {
     mdl.act_topk = act_topk;
     mdl.act_renorm = act_renorm;
     mdl.act_topk_proj = topk_proj;
+    if sans_fenetre { mdl.attn_window = 0; }
+    if attn_window > 0 { mdl.attn_window = attn_window; }
+    if let Some(p) = swa_pattern { mdl.swa_pattern = p; }
+    if attn_sinks > 0 { mdl.attn_sinks = attn_sinks; }
     if act_topk > 0 || act_thresh > 0.0 {
         println!("parcimonie imposée : k-WTA garde {:.1} %{}",
                  act_topk as f32 / 10.0,
@@ -669,7 +678,10 @@ fn cfg_dims(m: &model::Model) -> usize { m.cfg.hidden }
 
 /// Taille du vocabulaire, lue dans l'en-tête du GGUF sans charger le modèle.
 fn mdl_cfg_vocab(path: &str) -> Option<usize> {
-    let g = Gguf::open(path).ok()?;
+    // `open_meta` : le garde-fou n'a besoin que des dimensions du tenseur
+    // d'embedding. Avec `open`, il lisait les 62 Go de gpt-oss AVANT que le
+    // modèle ne soit chargé — deux lectures complètes du fichier par mesure.
+    let g = Gguf::open_meta(path).ok()?;
     g.tensor("token_embd.weight").map(|t| t.dims[0] as usize)
 }
 
@@ -691,7 +703,9 @@ fn run_tokenize(args: &[String]) {
         if args[i] == "--sortie" && i + 1 < args.len() { sortie = args[i + 1].clone(); i += 1; }
         i += 1;
     }
-    let g = Gguf::open(path).expect("ouverture du GGUF");
+    // En-tête seul : le décodage du vocabulaire n'a pas besoin des poids, et
+    // `open` lisait le fichier entier (62 Go pour gpt-oss) à chaque appel.
+    let g = Gguf::open_meta(path).expect("ouverture du GGUF");
     let tk = build_tokenizer(&g);
     if !fichier.is_empty() {
         // Encoder un corpus ENTIER avec le tokenizer du modèle : chaque modèle
@@ -805,9 +819,160 @@ fn run_plan(args: &[String]) {
                       else { "le modèle DÉPASSE la mémoire : il faut un découpage par couche" });
 }
 
+/// Construit les fenêtres de perplexité en **format harmony** (gpt-oss).
+///
+/// Le texte est le même qu'en mode brut, au découpage près : seuls les
+/// marqueurs de tour changent. C'est la façon la plus directe de tester
+/// l'hypothèse « le modèle est décalibré hors de son gabarit » sans toucher aux
+/// poids — si la perplexité s'effondre, c'est l'habillage qui était en cause,
+/// pas le calcul.
+///
+/// Seuls les jetons de contenu sont notés (`masque[i] = true`) : prédire
+/// `<|end|>` ou `<|start|>` mesure la familiarité du gabarit, pas la qualité du
+/// modèle sur le texte. Le premier jeton d'un message, lui, EST noté : il est
+/// prédit après `<|message|>`, ce qui est exactement la tâche posée.
+///
+/// `mode` : `alterne` (user/assistant), `assistant` (tout en canal final),
+/// `user` (tout en rôle user), `suite` (une consigne courte en rôle user, puis
+/// le texte entier en canal assistant — la présentation la plus proche de
+/// l'usage réel : le modèle *écrit* le texte).
+fn fenetres_harmony(tk: &tokenizer::Tokenizer, ids: &[u32], ctx: usize, mode: &str,
+                    contexte: Option<&str>)
+    -> Vec<(Vec<u32>, Vec<bool>)>
+{
+    let deb = tk.special_id("<|start|>").expect("<|start|> absent du vocabulaire");
+    let msg = tk.special_id("<|message|>").expect("<|message|> absent du vocabulaire");
+    let fin = tk.special_id("<|end|>").expect("<|end|> absent du vocabulaire");
+    let canal = tk.special_id("<|channel|>");
+    // Préambule système, identique à celui de l'inférence : c'est le gabarit
+    // réellement utilisé par le modèle en conversation.
+    let systeme = {
+        let mut v = vec![deb];
+        v.extend(tk.encode("system"));
+        v.push(msg);
+        v.extend(tk.encode("You are a helpful assistant."));
+        v.push(fin);
+        v
+    };
+    let entete = |role: &str| -> Vec<u32> {
+        let mut v = vec![deb];
+        v.extend(tk.encode(role));
+        // Un tour d'assistant porte son canal avant le message.
+        if role == "assistant" {
+            if let Some(c) = canal { v.push(c); }
+            v.extend(tk.encode("final"));
+        }
+        v.push(msg);
+        v
+    };
+    let mut fenetres = Vec::new();
+    // ---------------------------------------------------------------- suite
+    // Le texte est la RÉPONSE : consigne courte, puis le texte en canal
+    // assistant final. C'est le seul montage où le modèle est dans la position
+    // exacte qu'il a apprise (écrire de la prose après une demande).
+    if mode == "suite" {
+        let consigne = {
+            let mut v = systeme.clone();
+            v.extend(entete("user"));
+            // Le contexte (si fourni) remplace la consigne générique : c'est le
+            // seul montage où le modèle *continue* un texte qu'il a sous les
+            // yeux, donc le seul où sa perplexité est comparable à celle du mode
+            // brut sans lui demander de deviner le texte à l'aveugle.
+            match contexte {
+                Some(c) => v.extend(tk.encode(c)),
+                None => v.extend(tk.encode("Continue the text below, reproducing it exactly.")),
+            }
+            v.push(fin);
+            v
+        };
+        let tete = entete("assistant");
+        let budget = ctx.saturating_sub(consigne.len() + tete.len() + 1).max(16);
+        let mut i = 0usize;
+        while i < ids.len() {
+            let n = budget.min(ids.len() - i);
+            let mut w = consigne.clone();
+            let mut m = vec![false; consigne.len()];
+            w.extend_from_slice(&tete);
+            m.extend(std::iter::repeat(false).take(tete.len()));
+            w.extend_from_slice(&ids[i..i + n]);
+            m.extend(std::iter::repeat(true).take(n));
+            w.push(fin);
+            m.push(false);
+            fenetres.push((w, m));
+            i += n;
+        }
+        if std::env::var("QT_HARMONY_TRACE").is_ok() {
+            for (i, (w, m)) in fenetres.iter().enumerate() {
+                let apercu: String = tk.decode(w).chars().take(110).collect();
+                eprintln!("[harmony] fenêtre {} : {} jetons, {} notés · |{}|",
+                          i + 1, w.len(), m.iter().filter(|&&b| b).count(), apercu);
+            }
+        }
+        return fenetres;
+    }
+    // Deux messages par fenêtre, pour que la conversation ressemble à une
+    // conversation et non à un seul tour monstre. La marge de 16 couvre les
+    // en-têtes (`<|start|>` + rôle + `<|channel|>final` + `<|message|>`) et le
+    // `<|end|>` : sans elle, le second message ne tenait jamais et chaque
+    // fenêtre se réduisait à UN tour — ce que la première mesure a montré.
+    let piece = ((ctx.saturating_sub(systeme.len() + 16)) / 2).max(16);
+    let mut cur = systeme.clone();
+    let mut masque = vec![false; systeme.len()];
+    let (mut i, mut tour) = (0usize, 0usize);
+    while i < ids.len() {
+        let role = match mode {
+            "assistant" => "assistant",
+            "user" => "user",
+            _ => if tour % 2 == 0 { "user" } else { "assistant" },
+        };
+        let e = entete(role);
+        let n = piece.min(ids.len() - i);
+        // Fenêtre pleine : on la ferme AVANT d'ajouter un tour qui déborderait.
+        if cur.len() + e.len() + n + 1 > ctx && cur.len() > systeme.len() {
+            fenetres.push((std::mem::take(&mut cur), std::mem::take(&mut masque)));
+            cur = systeme.clone();
+            masque = vec![false; systeme.len()];
+        }
+        cur.extend_from_slice(&e);
+        masque.extend(std::iter::repeat(false).take(e.len()));
+        cur.extend_from_slice(&ids[i..i + n]);
+        masque.extend(std::iter::repeat(true).take(n));
+        cur.push(fin);
+        masque.push(false);
+        i += n;
+        tour += 1;
+    }
+    if cur.len() > systeme.len() { fenetres.push((cur, masque)); }
+    // Trace : sans elle, on ne sait pas ce qui a RÉELLEMENT été présenté au
+    // modèle (les identifiants spéciaux sont insérés à la main, une erreur
+    // d'ordre ne se voit nulle part ailleurs).
+    if std::env::var("QT_HARMONY_TRACE").is_ok() {
+        for (i, (w, m)) in fenetres.iter().enumerate() {
+            let apercu: String = tk.decode(w).chars().take(110).collect();
+            eprintln!("[harmony] fenêtre {} : {} jetons, {} notés · |{}|",
+                      i + 1, w.len(), m.iter().filter(|&&b| b).count(), apercu);
+        }
+    }
+    fenetres
+}
+
 fn run_ppl(args: &[String]) {
     let path = &args[1];
     let mut idfile = String::new();
+    // Texte brut : les identifiants sont alors produits par le tokenizer DU
+    // modèle — plus de fichier d'identifiants à tenir à jour, et impossible de
+    // croiser deux découpages.
+    let mut texte_file: Option<String> = None;
+    // Habillage harmony (gpt-oss) : le texte est présenté dans son gabarit
+    // d'entraînement au lieu d'être donné brut.
+    let mut harmony: Option<String> = None;
+    // Texte placé dans le tour « user » du montage harmony `suite` : le contenu
+    // noté est alors la SUITE d'un texte que le modèle a sous les yeux.
+    let mut harmony_contexte: Option<String> = None;
+    // Export des logits bruts, pour comparaison à une référence externe
+    // (llama.cpp). Format : int32 n_vocab, int32 n_pos, puis n_pos lignes de
+    // n_vocab f32, une ligne par position NOTÉE, dans l'ordre.
+    let mut logits_bin: Option<String> = None;
     let mut ctx = 256usize;
     let mut limit = usize::MAX;
     let mut abits = 16u32;
@@ -822,6 +987,9 @@ fn run_ppl(args: &[String]) {
     let mut attn_topk = 0usize;
     let mut qk_topk = 0usize;
     let mut attn_window = 0usize;
+    // Motif fenêtre/plein : `None` = valeur du modèle, `Some(n)` = imposé.
+    let mut swa_pattern: Option<usize> = None;
+    let mut sans_fenetre = false;
     // 0 = « garder la valeur du modèle » : les métadonnées déclarent parfois une
     // fenêtre glissante (gpt-oss : 128) et des puits appris, qu'un défaut CLI
     // écraserait silencieusement.
@@ -840,6 +1008,15 @@ fn run_ppl(args: &[String]) {
     while i < args.len() {
         match args[i].as_str() {
             "--ppl" => idfile = args[i + 1].clone(),
+            "--ppl-texte" => texte_file = Some(args[i + 1].clone()),
+            "--harmony" => { harmony = Some("alterne".into()); i -= 1; }
+            "--logits-bin" => logits_bin = Some(args[i + 1].clone()),
+            "--harmony-assistant" => { harmony = Some("assistant".into()); i -= 1; }
+            "--harmony-user" => { harmony = Some("user".into()); i -= 1; }
+            "--harmony-suite" => { harmony = Some("suite".into()); i -= 1; }
+            "--harmony-contexte" => { harmony_contexte = Some(args[i + 1].clone()); }
+            "--swa-pattern" => { swa_pattern = Some(args[i + 1].parse().unwrap()); i -= 1; }
+            "--sans-fenetre" => { sans_fenetre = true; i -= 1; }
             "--ctx" => ctx = args[i + 1].parse().unwrap(),
             "--limit" => limit = args[i + 1].parse().unwrap(),
             "--act-topk" => act_topk = args[i + 1].parse().unwrap(),
@@ -905,12 +1082,16 @@ fn run_ppl(args: &[String]) {
         }
         i += 2;
     }
-    let raw = std::fs::read_to_string(&idfile).expect("fichier d'identifiants illisible");
-    let ids: Vec<u32> = raw.split(|c: char| c == ',' || c.is_whitespace())
-        .filter(|s| !s.is_empty())
-        .filter_map(|s| s.parse().ok())
-        .take(limit)
-        .collect();
+    let mut ids: Vec<u32> = if idfile.is_empty() {
+        Vec::new()
+    } else {
+        let raw = std::fs::read_to_string(&idfile).expect("fichier d'identifiants illisible");
+        raw.split(|c: char| c == ',' || c.is_whitespace())
+            .filter(|s| !s.is_empty())
+            .filter_map(|s| s.parse().ok())
+            .take(limit)
+            .collect()
+    };
     // Garde-fou : des identifiants hors vocabulaire signifient qu'on nourrit le
     // modèle avec le découpage d'un AUTRE modèle. La perplexité ne mesurerait
     // alors que l'absurdité de l'entrée — vérifié : 42 127 au lieu de 11.
@@ -921,9 +1102,21 @@ fn run_ppl(args: &[String]) {
                     ce fichier de jetons vient d'un autre tokenizer");
         }
     }
-    println!("{idfile} : {} tokens, fenêtres de {ctx}", ids.len());
+    if !idfile.is_empty() {
+        println!("{idfile} : {} tokens, fenêtres de {ctx}", ids.len());
+    }
 
     let mut mdl = model::Model::load(path, ctx, n_threads, dense, 1.0, auto, q4, b6);
+    // Texte brut : les identifiants viennent du tokenizer du modèle, donc du
+    // même découpage que celui qui a servi à l'entraîner. `--limit` compte les
+    // jetons de contenu, comme pour un fichier d'identifiants.
+    if let Some(f) = &texte_file {
+        let brut = std::fs::read_to_string(f).expect("texte illisible");
+        let tk = build_tokenizer(&mdl.g);
+        ids = tk.encode(&brut);
+        if ids.len() > limit { ids.truncate(limit); }
+        println!("{f} : {} jetons (tokenizer du modèle), fenêtres de {ctx}", ids.len());
+    }
     mdl.moe_topk = moe_topk;
     mdl.act_levels = ((1u32 << (abits - 1)) - 1) as f32;
     if let Some(f) = &patch_file {
@@ -945,6 +1138,13 @@ fn run_ppl(args: &[String]) {
     mdl.qk_topk = qk_topk;
     if args.iter().any(|a| a == "--sans-yarn") { mdl.cfg_yarn_off(); }
     if attn_window > 0 { mdl.attn_window = attn_window; }
+    if sans_fenetre { mdl.attn_window = 0; }
+    if let Some(p) = swa_pattern { mdl.swa_pattern = p; }
+    if sans_fenetre || swa_pattern.is_some() {
+        println!("fenêtre : {} · motif {} (imposé par la ligne de commande)",
+                 if mdl.attn_window == 0 { "aucune".to_string() } else { mdl.attn_window.to_string() },
+                 mdl.swa_pattern);
+    }
     if attn_sinks > 0 { mdl.attn_sinks = attn_sinks; }
     if act_thresh > 0.0 || act_topk > 0 {
         println!("parcimonie imposée : seuil {:.1} % du max{}",
@@ -958,17 +1158,51 @@ fn run_ppl(args: &[String]) {
         println!("journalisation : couche {l}, entrée FFN ({} dim)", mdl.cfg.hidden);
     }
     mdl.reset_events();
+    // Fenêtres d'évaluation : soit des tranches brutes de `ctx` jetons (mode
+    // historique, toutes notées), soit des tours harmony dont seuls les jetons
+    // de contenu sont notés.
+    let fenetres: Vec<(Vec<u32>, Vec<bool>)> = match &harmony {
+        None => ids.chunks(ctx).map(|c| (c.to_vec(), vec![true; c.len()])).collect(),
+        Some(mode) => {
+            let tk = build_tokenizer(&mdl.g);
+            // Le contexte est lu ICI : sans cela, c'est le CHEMIN du fichier qui
+            // part dans le tour « user » — mesuré, et cela ne se voit que dans
+            // la trace décodée.
+            let texte_contexte: Option<String> = harmony_contexte.as_ref()
+                .map(|f| std::fs::read_to_string(f).expect("contexte harmony illisible"));
+            let f = fenetres_harmony(&tk, &ids, ctx, mode, texte_contexte.as_deref());
+            let notes: usize = f.iter().map(|(_, m)| m.iter().filter(|&&b| b).count()).sum();
+            println!("harmony ({mode}{}) : {} fenêtres, {notes} jetons de contenu notés \
+                      sur {} (les marqueurs ne sont pas notés)",
+                     if harmony_contexte.is_some() { ", avec contexte" } else { "" },
+                     f.len(), ids.len());
+            f
+        }
+    };
     let t0 = Instant::now();
     let mut nll = 0f64;
     let mut n = 0usize;
     let mut perte: Vec<f32> = Vec::new();
-    let mut start = 0usize;
-    while start + 1 < ids.len() {
-        let end = (start + ctx).min(ids.len());
-        let chunk = &ids[start..end];
+    // Journal de logits : écrit à la volée (une matrice de vocabulaire fait
+    // 800 Mo sur gpt-oss, la garder en mémoire serait absurde).
+    let mut journal = match &logits_bin {
+        Some(f) => {
+            use std::io::Write;
+            let mut w = std::io::BufWriter::new(
+                std::fs::File::create(f).expect("création du fichier de logits"));
+            w.write_all(&(mdl.cfg.vocab as i32).to_le_bytes()).unwrap();
+            w.write_all(&0i32.to_le_bytes()).unwrap();   // n_pos, réécrit à la fin
+            Some(w)
+        }
+        None => None,
+    };
+    let mut n_logits = 0i32;
+    let mut tampon: Vec<u8> = Vec::new();
+    for (i_f, (chunk, masque)) in fenetres.iter().enumerate() {
+        let (mut nll_f, mut n_f) = (0f64, 0usize);
         for pos in 0..chunk.len() {
             let h = mdl.forward(chunk[pos], pos);
-            if pos + 1 < chunk.len() {
+            if pos + 1 < chunk.len() && masque[pos + 1] {
                 let lg = mdl.logits(&h);
                 let mut mx = f32::NEG_INFINITY;
                 for &v in &lg { if v > mx { mx = v; } }
@@ -977,14 +1211,37 @@ fn run_ppl(args: &[String]) {
                 let lse = mx as f64 + sum.ln();
                 let nll_tok = lse - lg[chunk[pos + 1] as usize] as f64;
                 nll += nll_tok;
+                nll_f += nll_tok;
                 n += 1;
+                n_f += 1;
                 perte.push(nll_tok as f32);
+                if let Some(w) = journal.as_mut() {
+                    use std::io::Write;
+                    tampon.clear();
+                    for &v in &lg { tampon.extend_from_slice(&v.to_le_bytes()); }
+                    w.write_all(&tampon).unwrap();
+                    n_logits += 1;
+                }
             }
         }
-        start = end;
         let ppl = (nll / n as f64).exp();
-        println!("  {:6} tokens notés — perplexité cumulée {:.3}  ({:.1} tok/s)",
-                 n, ppl, n as f64 / t0.elapsed().as_secs_f64());
+        // La perplexité PROPRE à la fenêtre dit où le modèle décroche : une
+        // première fenêtre à 900 et les suivantes à 15 ne racontent pas du tout
+        // la même histoire qu'une dégradation régulière.
+        println!("  {:6} tokens notés — perplexité cumulée {:.3}  ({:.1} tok/s){}",
+                 n, ppl, n as f64 / t0.elapsed().as_secs_f64(),
+                 if fenetres.len() > 1 {
+                     format!("  [fenêtre {} : {} notés, PPL {:.3}]",
+                             i_f + 1, n_f, (nll_f / n_f.max(1) as f64).exp())
+                 } else { String::new() });
+    }
+    if let (Some(w), Some(f)) = (journal, &logits_bin) {
+        use std::io::{Seek, SeekFrom, Write};
+        let mut fic = w.into_inner().expect("vidage du journal de logits");
+        fic.seek(SeekFrom::Start(4)).unwrap();
+        fic.write_all(&n_logits.to_le_bytes()).unwrap();
+        fic.sync_all().unwrap();
+        println!("logits exportés : {f} — {n_logits} positions × {} valeurs", mdl.cfg.vocab);
     }
     let ppl = (nll / n as f64).exp();
     if let Some(hb) = mdl.hebb.as_ref() {
