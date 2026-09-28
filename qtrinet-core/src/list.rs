@@ -443,6 +443,18 @@ pub const LUT_MXFP4: [i8; 16] = [0, 1, 2, 3, 4, 6, 8, 12, 0, -1, -2, -3, -4, -6,
 /// relativement à l'échelle de ligne (u8 sur 255). Sans échelle de bloc, une
 /// ligne de 4864 poids n'aurait qu'une seule dynamique et les petits poids
 /// seraient écrasés à zéro.
+/// Origine des poids d'une matrice 4 bits.
+///
+/// `Propre` : les nibbles sont entrelacés dans `q` (octet k = poids 2k et
+/// 2k+1), disposition qui permet à `vpmaddwd` de traiter 32 poids d'un coup.
+/// Les deux autres lisent les blocs **tels quels dans le fichier** : Q4_0 range
+/// les poids 0–15 dans les nibbles bas et 16–31 dans les hauts, MXFP4 fait de
+/// même avec un exposant E8M0 en tête. Dans les deux cas les 16 activations à
+/// apparier sont **contiguës** — l'entrelacement était une commodité, pas une
+/// nécessité.
+#[derive(Clone, Copy, PartialEq, Eq)]
+pub enum Source { Propre, Q4_0, Mxfp4 }
+
 pub struct DenseQ4 {
     pub n_in: usize,
     pub n_out: usize,
@@ -454,15 +466,35 @@ pub struct DenseQ4 {
     /// Vrai si `sc` porte l'octet d'exposant E8M0 du format MXFP4 au lieu
     /// d'une échelle relative sur 16 bits signés.
     pub e8m0: bool,
-    pub q: Vec<u8>,        // n_out × ⌈n_in/2⌉, deux nibbles biaisés (+8) par octet
-    /// n_out × ⌈n_in/BLOC_Q4⌉ échelles de bloc, **relatives et signées**
+    pub q: Vec<u8>,        // n_out × ⌈n_in/2⌉ — vide si `src != Propre`
+    /// n_out × ⌈n_in/BLOC_Q4⌉ échelles de bloc (vide si `src != Propre`),
+    /// **relatives et signées**
     /// (i16 stocké en u16). Le signe compte : Q4_0 écrit `d = max/−8` où `max`
     /// est la valeur signée de plus grande amplitude, donc `d` est négatif dès
     /// que le poids extrême du bloc est positif. Prendre la valeur absolue
     /// donnait PPL 3 550 569 au lieu de 19,86.
     pub sc: Vec<u16>,
-    pub scale: Vec<f32>,   // une par sortie : la plus grande échelle de bloc
+    /// Vide si `src != Propre`.
+    pub scale: Vec<f32>,
+    /// Origine des poids. Hors `Propre`, la matrice ne possède **rien** : elle
+    /// pointe dans le tampon du GGUF, sans copie ni réarrangement.
+    pub src: Source,
+    /// Premier octet du tenseur dans le tampon du GGUF.
+    ///
+    /// # Sûreté
+    /// Le tampon doit vivre plus longtemps que la matrice. `Model` déclare `g`
+    /// **avant** `layers`, et déplacer un `Vec<u8>` ne déplace pas son
+    /// allocation : les pointeurs restent valides. Aucun `Drop` ne déréférence
+    /// `base`.
+    pub base: *const u8,
+    /// Blocs de 32 poids par ligne de sortie (0 si `Propre`).
+    pub nb_ligne: usize,
 }
+
+// La matrice ne fait que prêter des octets : la partager entre threads est sûr
+// dès lors que le tampon emprunté l'est (invariant ci-dessus).
+unsafe impl Send for DenseQ4 {}
+unsafe impl Sync for DenseQ4 {}
 
 impl DenseQ4 {
     pub fn build(w: &[f32], n_out: usize, n_in: usize) -> Self {
@@ -503,7 +535,8 @@ impl DenseQ4 {
                 }
             }
         }
-        DenseQ4 { n_in, n_out, lut: LUT_INT4, e8m0: false, q, sc, scale }
+        DenseQ4 { n_in, n_out, lut: LUT_INT4, e8m0: false, q, sc, scale,
+                  src: Source::Propre, base: std::ptr::null(), nb_ligne: 0 }
     }
 
     /// Importe des blocs **Q4_0 verbatim** (18 octets : une échelle f16 puis
@@ -550,7 +583,8 @@ impl DenseQ4 {
                 }
             }
         }
-        DenseQ4 { n_in, n_out, lut: LUT_INT4, e8m0: false, q, sc, scale }
+        DenseQ4 { n_in, n_out, lut: LUT_INT4, e8m0: false, q, sc, scale,
+                  src: Source::Propre, base: std::ptr::null(), nb_ligne: 0 }
     }
 
     /// Importe des blocs **MXFP4 verbatim** (17 octets : un exposant E8M0 puis
@@ -584,7 +618,109 @@ impl DenseQ4 {
                 }
             }
         }
-        DenseQ4 { n_in, n_out, lut: LUT_MXFP4, e8m0: true, q, sc, scale }
+        DenseQ4 { n_in, n_out, lut: LUT_MXFP4, e8m0: true, q, sc, scale,
+                  src: Source::Propre, base: std::ptr::null(), nb_ligne: 0 }
+    }
+
+    /// **Prête** des blocs Q4_0 ou MXFP4 déjà présents dans le fichier : aucune
+    /// copie, aucun réarrangement, chargement instantané. C'est ce qui rend un
+    /// modèle de 60 Go possible — le recopier dans notre disposition doublerait
+    /// la mémoire exigée (60 Go de fichier + 61 Go de copie sur 108 Go libres).
+    ///
+    /// # Sûreté
+    /// `base` doit pointer sur le premier bloc du tenseur et rester valide
+    /// aussi longtemps que la matrice.
+    pub unsafe fn emprunter(base: *const u8, n_out: usize, n_in: usize,
+                            nb_ligne: usize, mxfp4: bool) -> Self {
+        let (lut, e8m0) = if mxfp4 { (LUT_MXFP4, true) } else { (LUT_INT4, false) };
+        DenseQ4 {
+            n_in, n_out, lut, e8m0,
+            q: Vec::new(), sc: Vec::new(), scale: Vec::new(),
+            src: if mxfp4 { Source::Mxfp4 } else { Source::Q4_0 },
+            base, nb_ligne,
+        }
+    }
+
+    /// Pas et décalage des blocs dans la source empruntée.
+    #[inline]
+    fn pas_source(&self) -> (usize, usize) {
+        match self.src {
+            Source::Q4_0 => (18, 2),
+            Source::Mxfp4 => (17, 1),
+            Source::Propre => (0, 0),
+        }
+    }
+
+    /// Échelle d'un bloc **source** (lue dans le fichier).
+    ///
+    /// MXFP4 : l'exposant E8M0 donne `2^(e−127)` ; la table E2M1 étant
+    /// doublée, le multiplicateur est `2^(e−128)`. Q4_0 : une demi-précision
+    /// classique, appliquée telle quelle à la grille `n − 8`.
+    #[inline]
+    unsafe fn echelle_source(&self, p: *const u8) -> f32 {
+        if self.src == Source::Mxfp4 {
+            match *p {
+                0 => f32::from_bits(0x0020_0000),
+                255 => 0.0,
+                e => f32::from_bits(((e as u32) - 1) << 23),
+            }
+        } else {
+            crate::gguf::Gguf::f16_to_f32(u16::from_le_bytes([*p, *p.add(1)]))
+        }
+    }
+
+    /// Produit scalaire sur une matrice **empruntée** au fichier.
+    fn dot_source(&self, o: usize, x: &[i32]) -> f32 {
+        let (pas, decal) = self.pas_source();
+        let mut sum = 0f32;
+        for b in 0..self.nb_ligne {
+            let p = unsafe { self.base.add((o * self.nb_ligne + b) * pas) };
+            let d = unsafe { self.echelle_source(p) };
+            let qs = unsafe { std::slice::from_raw_parts(p.add(decal), 16) };
+            let lo = b * BLOC_Q4;
+            let hi = ((b + 1) * BLOC_Q4).min(self.n_in);
+            let mut a = 0i32;
+            for j in 0..(hi - lo) {
+                let octet = qs[j % 16] as usize;
+                let nib = if j < 16 { octet & 15 } else { octet >> 4 };
+                a += self.lut[nib] as i32 * x[lo + j];
+            }
+            sum += a as f32 * d;
+        }
+        sum
+    }
+
+    /// Même chose en AVX2. Les nibbles bas d'un bloc source sont les poids
+    /// 0–15 et les hauts les poids 16–31 : les deux groupes d'activations à
+    /// apparier sont **contigus**, donc aucun réentrelacement n'est nécessaire.
+    /// Les sommes par paires sont identiques à celles du chemin entrelacé, et
+    /// le résultat reste **bit à bit identique**.
+    #[cfg(target_arch = "x86_64")]
+    #[target_feature(enable = "avx2")]
+    unsafe fn dot16_source_avx2(&self, o: usize, x: &[i16]) -> f32 {
+        use std::arch::x86_64::*;
+        let (pas, decal) = self.pas_source();
+        let table = _mm_loadu_si128(self.lut.as_ptr() as *const __m128i);
+        let masque = _mm_set1_epi8(0x0f);
+        let xp = x.as_ptr();
+        let mut sum = 0f32;
+        let mut tmp = [0i32; 8];
+        for b in 0..self.nb_ligne {
+            let p = self.base.add((o * self.nb_ligne + b) * pas);
+            let d = self.echelle_source(p);
+            let octets = _mm_loadu_si128(p.add(decal) as *const __m128i);
+            let w0 = _mm256_cvtepi8_epi16(_mm_shuffle_epi8(table, _mm_and_si128(octets, masque)));
+            let w1 = _mm256_cvtepi8_epi16(_mm_shuffle_epi8(
+                table, _mm_and_si128(_mm_srli_epi16(octets, 4), masque)));
+            let x0 = _mm256_loadu_si256(xp.add(b * BLOC_Q4) as *const __m256i);
+            let x1 = _mm256_loadu_si256(xp.add(b * BLOC_Q4 + 16) as *const __m256i);
+            let v = _mm256_add_epi32(_mm256_madd_epi16(w0, x0), _mm256_madd_epi16(w1, x1));
+            _mm256_storeu_si256(tmp.as_mut_ptr() as *mut __m256i, v);
+            let a = (tmp[0] + tmp[1] + tmp[2] + tmp[3]
+                   + tmp[4] + tmp[5] + tmp[6] + tmp[7]) as f32;
+            sum += a * d;
+        }
+        sum
     }
 
     /// Échelle d'un bloc, selon la convention de la matrice.
@@ -606,7 +742,12 @@ impl DenseQ4 {
 
     /// Octets réellement occupés, en bits par poids d'origine.
     pub fn bits_per_weight(&self) -> f64 {
-        (self.q.len() + self.sc.len() * 2) as f64 * 8.0 / (self.n_out * self.n_in) as f64
+        let octets = match self.src {
+            Source::Propre => self.q.len() + self.sc.len() * 2,
+            Source::Q4_0 => self.n_out * self.nb_ligne * 18,
+            Source::Mxfp4 => self.n_out * self.nb_ligne * 17,
+        };
+        octets as f64 * 8.0 / (self.n_out * self.n_in) as f64
     }
 
     /// Produit scalaire d'une ligne. Accumulation **entière par bloc** (32
@@ -615,6 +756,7 @@ impl DenseQ4 {
     /// rien et l'essentiel du travail reste entier.
     #[inline]
     pub fn dot(&self, o: usize, x: &[i32]) -> f32 {
+        if self.src != Source::Propre { return self.dot_source(o, x); }
         let half = self.n_in.div_ceil(2);
         let n_bloc = self.n_in.div_ceil(BLOC_Q4);
         let row = &self.q[o * half..(o + 1) * half];
@@ -648,6 +790,9 @@ impl DenseQ4 {
     pub fn dot16(&self, o: usize, x: &[i16]) -> f32 {
         #[cfg(target_arch = "x86_64")]
         {
+            if self.src != Source::Propre && std::is_x86_feature_detected!("avx2") {
+                return unsafe { self.dot16_source_avx2(o, x) };
+            }
             if self.n_in % BLOC_Q4 == 0
                 && x.len() >= self.n_in
                 && std::is_x86_feature_detected!("avx2")

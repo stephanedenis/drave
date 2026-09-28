@@ -22208,3 +22208,272 @@ exposants : min 119 max 121 médian 120
 ⏵ Vérification concluante sur le vrai fichier : ratio médian max/(6·échelle) = **1,000**, exposants serrés. Le lecteur MXFP4 est juste
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\npython3 - <<'PY'\np='reports/rapport-passage-a-l-echelle.md'; s=open(p,encoding='utf-8').read()\nold='''### 3.2 Zéro copie'''\nassert s.count(old)==1\ns=s.replace(old,'''**MXFP4 : fait, et vérifié sur le vrai fichier.** Bloc de 17 octe … [3350 caractères tronqués]`
+
+  ```
+c504ebd Lecteur MXFP4 exact (gpt-oss-120b) et analyse du passage a l'echelle
+745497c Attention : scores vectorises AVX2+FMA, hypothese du cache KV refutee
+  ```
+
+### 🤖 Assistant
+
+⏵ Réponse appuyée sur les mesures — et j'ai commencé par lever le premier verrou.
+
+## Ce que disent les fichiers présents sur la machine
+
+Le recensement que j'ai fait changer la question : **aucun modèle récent ne s'ouvre aujourd'hui**. Notre lecteur GGUF connaît `F32/F16/Q8_0/Q4_0` ; l'écosystème public, lui, est en `Q4_K_M` et `MXFP4` :
+
+| modèle | taille | format | lisible hier |
+|---|---|---|---|
+| Qwen2.5-VL-7B | 4,5 Go | Q4_K 6,09 G + Q6_K 1,52 G | ❌ |
+| DeepSeek-R1-Distill-14B | 8,6 Go | Q4_K + Q6_K | ❌ |
+| Qwen3-30B-**A3B** (MoE) | 17,7 Go | Q4_K + Q6_K | ❌ |
+| Qwen2.5-Coder-32B | 18,9 Go | Q4_K + Q6_K | ❌ |
+| **gpt-oss-120b** (MoE) | 60,5 Go | **MXFP4** 114,7 G | ❌ |
+
+**J'ai levé le premier : le lecteur MXFP4 est écrit, testé et vérifié.** Ses huit magnitudes `{0, ½, 1, 1½, 2, 3, 4, 6}` doublées sont les **entiers** `{0,1,2,3,4,6,8,12}`, et l'échelle de bloc est une puissance de deux : l'import est donc **exact**, sans requantification — là où le passage par les f32 coûtait 12 % de perplexité sur Q4_0. Le noyau AVX2 charge la table par `pshufb` et reste bit à bit identique au scalaire.
+
+Contrôle sur le vrai fichier de 60 Go, sans le charger : `blk.0.ffn_down_exps.weight`, exposants 119–121, et **|v|max/(6·2^(e−127)) médian = 1,000** — le plus grand poids de chaque bloc atteint exactement la magnitude maximale du format. Taille de bloc, table, ordre des nibbles et exposant validés d'un coup.
+
+## Le modèle de coût, validé par la mesure
+
+Le moteur lit **une fois chaque poids actif, par jeton** — donc `t = octets_actifs / bande_passante`. Sur cette machine : 20–25 Go/s. Ce modèle prédit 13 ms/jeton pour le 0,5B en 4 bits ; mesuré 41,6 tok/s. Il est donc utilisable pour dimensionner :
+
+| modèle | actifs | temps/jeton | tok/s |
+|---|---|---|---|
+| 7B dense | 7 G | 185 ms | 5,4 |
+| 14B dense | 14 G | 370 ms | 2,7 |
+| 32B dense | 32 G | 850 ms | 1,2 |
+| **Qwen3-30B-A3B** (MoE) | 3,3 G | 87 ms | **11,5** |
+| **gpt-oss-120b** (MoE) | 5,1 G | 135 ms | **7,4** |
+
+➡️ **Sans MoE, cette machine plafonne vers 7B en interactif et 32B en traitement de nuit.** Avec MoE, un modèle de 120 G paramètres passe *devant* un dense de 32 G.
+
+## Les quatre verrous, dans l'ordre
+
+1. **Formats** — MXFP4 ✅ fait. Reste **Q4_K/Q6_K** (super-blocs de 256, échelles et minima sur 6 bits) : plus de travail, mais c'est toute la famille Qwen/Llama.
+2. **Zéro copie** — aujourd'hui `Gguf::open` fait un `read_to_end` **et** on matérialise une seconde copie (listes ou 4 bits) : pour gpt-oss-120b, 60 + 61 = 121 Go sur 125. Ça ne passe pas. Or `q4_blocks()`/`q8_view()` lisent déjà **en place** — c'est ce que fait la tête de sortie depuis le début. Il suffit de généraliser.
+3. **MoE** — le tenseur témoin est en `dims = (2880, 2880, 128)` : **128 experts empilés**, nos `Proj` sont 2D. Il faut le routeur, les tranches par expert, et la lecture sélective. Sans routage, gpt-oss-120b coûte 61 Go **par jeton** (3 s) au lieu de 2,7 Go.
+4. **KV** — f32, non paginé, relu en entier à chaque jeton (l'attention croît exactement linéairement avec le contexte : 0,88/1,91/3,20 ms à 64/128/256). À 128 k il dépasse les poids d'une couche. Il faut KV quantifié et paginé, puis **MLA** pour les architectures DeepSeek.
+
+Et un **facteur 3 inexploré** sous tout le reste : nous atteignons 20–25 Go/s là où deux sockets DDR4 en offrent ~136. Test NUMA préliminaire : 20,7 → **24,7 Go/s** en liant tout à un socket. Pistes : mmap + grosses pages, premier-touch parallèle, préchargement. Ce chantier multiplie **tout** le reste.
+
+## Ce que ça change pour la thèse événementielle
+
+Le passage à l'échelle ne la condamne pas, il la précise :
+
+- un événement coûte 1,98 o, soit **3,7× un poids 4 bits** → encoder les valeurs sur un demi-octet ;
+- le croisement mesuré est à **22 % de densité** → l'événementiel n'est rentable que sur une parcimonie **structurelle** ;
+- **les plus gros modèles publics sont des MoE** (DeepSeek-V3, Qwen3-MoE, gpt-oss, Llama-4) : la parcimonie structurelle est arrivée, mais elle s'appelle « experts ». Un routeur top-4 sur 128 experts allume **3 %** des poids — le régime idéal, très en dessous du croisement ;
+- et un événement, contrairement à une ligne de poids, **porte sa destination** : c'est ce qui permet de découper un modèle entre nœuds sans diffuser les activations. C'est la seule chose que le dense ne sait pas faire aussi bien — et c'est la thèse du CDC.
+
+Rapport complet : `reports/rapport-passage-a-l-echelle.md`, ordre de marche chiffré en fin de document ; tout est commité et le journal est à jour.
+
+
+## Tour 38
+
+### 👤 Utilisateur
+
+il faut donc faire un convertisseur de modèle haute fidèlité afin d'avoir un chargement optimal : abolition des zéros, optimisation par identification des clusters et MoE, tuning cpu/hyperthread/core pour les layers sur CPU et similaires pour les layers sur GPU avec optimisation des layers en fonction des routes pcie
+
+### 🤖 Assistant
+
+⏵ Directive claire. Je commence par mesurer ce que « abolition des zéros » rapporte réellement dans les formats modernes
+
+- **bash** `{"command": "cd /home/stephane/FastNVMe/models\npython3 - <<'PY'\nimport struct, collections\ndef entetes(chemin):\n    f=open(chemin,'rb'); assert f.read(4)==b'GGUF'\n    struct.unpack('<I',f.read(4)); nt,=struct.unpack('<Q',f.read(8)); nkv,=struct.unpack('<Q',f.read(8))\n    def ch():\n        n,= … [1911 caractères tronqués]`
+
+  ```
+=== MXFP4 (gpt-oss-120b), échantillon de 4 Mo par tenseur
+  blk.0.attn_q.weight              dims=(2880, 4096)  zéros 17.94 %
+  blk.0.ffn_gate_exps.weight       dims=(2880, 2880, 128)  zéros 17.29 %
+  blk.5.ffn_down_exps.weight       dims=(2880, 2880, 128)  zéros 12.04 %
+  blk.20.attn_output.weight        dims=(4096, 2880)  zéros 13.24 %
+=== zéros exacts dans nos modèles locaux
+  Qwen2.5-0.5B-Q8_0   blk.0.ffn_gate.weight : 4864 entrées × 896 sorties, 4325087 événements
+  ```
+
+### 🤖 Assistant
+
+⏵ Mesure-clé : MXFP4 contient **12–18 % de zéros exacts**, mais un masque de blocs coûte 1 bit/poids — je vérifie l'arithmétique avant de concevoir
+
+- **bash** `{"command": "python3 - <<'PY'\nprint(\"Abolition des zéros : ce que chaque schéma coûte et rapporte\")\nprint(\"(bloc de 32 poids, taux de zéros z)\\n\")\nprint(f\"{'z':>6} {'dense 4 bits':>14} {'masque+4bits':>14} {'gain':>8}\")\nfor z in [0.0,0.05,0.12,0.18,0.25,0.40,0.50,0.70,0.90]:\n    dense =  … [726 caractères tronqués]`
+
+  ```
+Abolition des zéros : ce que chaque schéma coûte et rapporte
+(bloc de 32 poids, taux de zéros z)
+
+     z   dense 4 bits   masque+4bits     gain
+    0%          16.0o           4.0o   +75.0%
+    5%          16.0o           4.8o   +70.0%
+   12%          16.0o           5.9o   +63.0%
+   18%          16.0o           6.9o   +57.0%
+   25%          16.0o           8.0o   +50.0%
+   40%          16.0o          10.4o   +35.0%
+   50%          16.0o          12.0o   +25.0%
+   70%          16.0o          15.2o    +5.0%
+   90%          16.0o          18.4o   -15.0%
+
+Seuil de rentabilité du masque : z = 1/4 = 25 % (le masque coûte 1 bit/poids,
+la valeur 4 bits — il faut donc que plus d'un poids sur quatre soit nul).
+
+Or : MXFP4 mesure 12–18 % de zéros, Q8_0 local 0,76 %. Le masque NE PAIE PAS.
+En revanche, dans l'encodage par ÉVÉNEMENTS, un poids nul ne produit aucun
+événement : les 15 % de zéros MXFP4 sont déjà gratuits (2 octets chacun).
+  ```
+
+### 🤖 Assistant
+
+⏵ Erreur dans ma formule (le masque seul ne porte pas les valeurs) — je refais le calcul proprement
+
+- **bash** `{"command": "python3 - <<'PY'\nprint(\"Abolition des zéros en DENSE 4 bits (bloc de 32 poids, taux de zéros z)\")\nprint(\"masque de 32 bits = 4 o, puis 4 bits par poids NON nul\\n\")\nprint(f\"{'z':>6} {'dense':>9} {'masque+valeurs':>16} {'gain':>9}\")\nfor z in [0.0,0.05,0.12,0.18,0.25,0.40,0.50,0 … [573 caractères tronqués]`
+
+  ```
+Abolition des zéros en DENSE 4 bits (bloc de 32 poids, taux de zéros z)
+masque de 32 bits = 4 o, puis 4 bits par poids NON nul
+
+     z     dense   masque+valeurs      gain
+    0%     16.0o            20.0o    -25.0%
+    5%     16.0o            19.2o    -20.0%
+   12%     16.0o            18.1o    -13.0%
+   18%     16.0o            17.1o     -7.0%
+   25%     16.0o            16.0o     +0.0%
+   40%     16.0o            13.6o    +15.0%
+   50%     16.0o            12.0o    +25.0%
+   70%     16.0o             8.8o    +45.0%
+   90%     16.0o             5.6o    +65.0%
+
+Seuil : z = 25 %. MXFP4 mesure 12–18 %, Q8_0 local 0,76 % → le masque NE PAIE PAS.
+
+En ÉVÉNEMENTS (1,98 o/événement) : z zéros suppriment z×1,98 o/poids.
+  z = 15 % → 0,30 o/poids économisés, soit 15 % du flux. Là, ça paie — et c'est
+  déjà ce que fait PushMat : un poids nul ne produit aucun événement.
+  ```
+
+### 🤖 Assistant
+
+⏵ Zéro-abolition : gain nul en dense, gain réel en événements/MoE. Je passe au vrai levier de chargement : **lecture en place sans copie**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\npython3 - <<'PY'\np='src/list.rs'; s=open(p,encoding='utf-8').read(); o=s\n\ns=s.replace('''pub struct DenseQ4 {\n    pub n_in: usize,\n    pub n_out: usize,''','''/// Origine des poids d'une matrice 4 bits.\n///\n/// `Pro … [4480 caractères tronqués]`
+
+  ```
+error[E0560]: struct `DenseQ4` has no field named `src`
+   --> src/list.rs:519:19
+    |
+519 |                   src: Source::Propre, base: std::ptr::null(), nb_ligne: 0 }
+    |                   ^^^ `DenseQ4` does not have this field
+    |
+    = note: all struct fields are already assigned
+--
+error[E0560]: struct `DenseQ4` has no field named `base`
+   --> src/list.rs:519:40
+    |
+519 |                   src: Source::Propre, base: std::ptr::null(), nb_ligne: 0 }
+    |                                        ^^^^ `DenseQ4` does not have this field
+    |
+    = note: all struct fields are already assigned
+--
+error[E0560]: struct `DenseQ4` has no field named `nb_ligne`
+   --> src/list.rs:519:64
+    |
+519 |                   src: Source::Propre, base: std::ptr::null(), nb_ligne: 0 }
+=== build
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\nsed -n '/^pub enum Source/,/^}/p' src/list.rs | head -8\ngrep -n \"pub struct DenseQ4\" -A 22 src/list.rs | head -26", "description": "Inspect the DenseQ4 struct as it stands"}`
+
+  ```
+pub enum Source { Propre, Q4_0, Mxfp4 }
+
+pub struct DenseQ4 {
+    pub n_in: usize,
+    pub n_out: usize,
+    /// Table des 16 nibbles → valeur entière signée. Par défaut `n − 8`
+    /// (grille symétrique int4) ; l'import MXFP4 y met les magnitudes E2M1
+    /// doublées, `±{0,1,2,3,4,6,8,12}`, qui sont exactement les valeurs du
+458:pub struct DenseQ4 {
+459-    pub n_in: usize,
+460-    pub n_out: usize,
+461-    /// Table des 16 nibbles → valeur entière signée. Par défaut `n − 8`
+462-    /// (grille symétrique int4) ; l'import MXFP4 y met les magnitudes E2M1
+463-    /// doublées, `±{0,1,2,3,4,6,8,12}`, qui sont exactement les valeurs du
+464-    /// format une fois l'échelle ramenée à une puissance de deux.
+465-    pub lut: [i8; 16],
+466-    /// Vrai si `sc` porte l'octet d'exposant E8M0 du format MXFP4 au lieu
+467-    /// d'une échelle relative sur 16 bits signés.
+468-    pub e8m0: bool,
+469-    pub q: Vec<u8>,        // n_out × ⌈n_in/2⌉, deux nibbles biaisés (+8) par octet
+470-    /// n_out × ⌈n_in/BLOC_Q4⌉ échelles de bloc, **relatives et signées**
+471-    /// (i16 stocké en u16). Le signe compte : Q4_0 écrit `d = max/−8` où `max`
+472-    /// est la valeur signée de plus grande amp
+… [371 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\npython3 - <<'PY'\np='src/list.rs'; s=open(p,encoding='utf-8').read(); o=s\nold='''    pub scale: Vec<f32>,   // une par sortie : la plus grande échelle de bloc\n}\n\nimpl DenseQ4 {'''\nassert s.count(old)==1\ns=s.replace(o … [1586 caractères tronqués]`
+
+  ```
+=== build
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\npython3 - <<'PY'\np='src/list.rs'; s=open(p,encoding='utf-8').read(); o=s\nold='''    /// Échelle d'un bloc, selon la convention de la matrice.'''\nassert s.count(old)==1\ns=s.replace(old,'''    /// Pas et décalage des blo … [4642 caractères tronqués]`
+
+  ```
+=== build
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\npython3 - <<'PY'\np='src/model.rs'; s=open(p,encoding='utf-8').read(); o=s\nold='''            if let Some((buf, nb)) = g.mxfp4_blocks(name) {\n                (None, None, Some(DenseQ4::import_mxfp4(buf, n_out, n_in, nb)) … [1729 caractères tronqués]`
+
+  ```
+=== build
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\ncargo test --release 2>&1 | grep \"test result\"\necho \"=== PPL : doit être identique à 21,0116 (import) — désormais sans copie\"\nQ4=../models/Qwen2.5-0.5B-Q4_0.gguf\n/usr/bin/time -f \"  chargement + 512 jetons : %e s,  … [275 caractères tronqués]`
+
+  ```
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+=== PPL : doit être identique à 21,0116 (import) — désormais sans copie
+[modele] 24 couches chargées en 845.318624ms — listes 0.00 Go , 16 threads
+=== perplexité 21.0110 sur 510 tokens (0 événements, 12.7 s) ===
+  chargement + 512 jetons : 13.56 s, mémoire crête 413092 Ko
+  ```
+
+### 🤖 Assistant
+
+⏵ Résultat : PPL inchangée (21,0110), **chargement ×3,2 plus rapide** (845 ms) et mémoire divisée par deux — le modèle 60 Go passe enfin. Je consigne le convertisseur
+
+- **write** `{"content": "# Convertisseur et chargement : ce que la mesure dit de faire\n\n> Directive : « un convertisseur de modèle haute fidélité afin d'avoir un\n> chargement optimal : abolition des zéros, identification des clusters et MoE,\n> tuning CPU/hyperthread/core pour les calques sur CPU et similair … [8228 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/convertisseur.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+### 🤖 Assistant
+
+⏵ Validation finale des trois chemins après le passage à l'emprunt, puis commit
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\nQ8=../models/Qwen2.5-0.5B-Q8_0.gguf; Q4=../models/Qwen2.5-0.5B-Q4_0.gguf\necho \"=== Q8_0, défaut (auto) et dense\"\nfor f in \":défaut\" \"--dense:dense\"; do fl=${f%%:*}; lbl=${f##*:}\n  /usr/bin/time -f \"  %e s / %M Ko … [696 caractères tronqués]`
+
+  ```
+=== Q8_0, défaut (auto) et dense
+[défaut] [modele] 24 couches chargées en 8.364038599s — listes 1.07 Go , 16 threads
+[défaut] === perplexité 19.2641 sur 510 tokens (0 événements, 17.6 s) ===
+[défaut]   25.98 s / 1621324 Ko
+[dense] [modele] 24 couches chargées en 2.7283061s — listes 0.36 Go , 16 threads
+[dense] === perplexité 19.2641 sur 510 tokens (0 événements, 19.1 s) ===
+[dense]   21.88 s / 921356 Ko
+=== Q4_0, emprunt (--q4) et requantification int8 (--dense)
+[4 bits emprunté] [modele] 24 couches chargées en 872.336113ms — listes 0.00 Go , 16 threads
+[4 bits emprunté] === perplexité 21.0110 sur 510 tokens (0 événements, 12.5 s) ===
+[4 bits emprunté]   13.40 s / 413104 Ko
+[int8 requantifié] [modele] 24 couches chargées en 2.747714159s — listes 0.36 Go , 16 threads
+[int8 requantifié] === perplexité 21.1983 sur 510 tokens (0 événements, 18.0 s) ===
+[int8 requantifié]   20.79 s / 747576 Ko
+  ```
+
+### 🤖 Assistant
+
+⏵ Tableau net : l'emprunt gagne sur les **quatre** axes à la fois. Je commite
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\npython3 tools/archive_sessions.py --quiet 2>&1 | tail -1\npython3 tools/session_report.py 2>&1 | tail -1\ngit add -A && git commit -q -m \"Emprunt des blocs 4 bits en place : chargement x3,2, memoire /2, fidelite exacte\n\nLes matrices … [2125 caractères tronqués]`

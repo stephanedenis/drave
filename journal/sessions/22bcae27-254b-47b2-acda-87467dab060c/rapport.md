@@ -5,14 +5,14 @@
 | Identifiant | `22bcae27-254b-47b2-acda-87467dab060c` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-25 11:56 |
-| Durée | 66.9 h |
-| Tours | 37 |
-| Messages | 997 |
-| Appels d'outils | 1010 |
-| Fichiers touchés | 67 |
-| Commandes | 772 |
+| Durée | 67.4 h |
+| Tours | 38 |
+| Messages | 1011 |
+| Appels d'outils | 1022 |
+| Fichiers touchés | 68 |
+| Commandes | 783 |
 | Sous-agents | 1 |
-| Commits | 36 |
+| Commits | 37 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -101,6 +101,8 @@
 **Tour 36** — continue les améliorations
 
 **Tour 37** — que reste-t-il à améliorer sur notre modèle événementiel pour pouvoir rouler les plus gros modèles récents accessibles au public
+
+**Tour 38** — il faut donc faire un convertisseur de modèle haute fidèlité afin d'avoir un chargement optimal : abolition des zéros, optimisation par identification des clusters et MoE, tuning cpu/hyperthread/core pour les layers sur CPU et similaires pour les layers sur GPU avec optimisation des layers en fonction des routes pcie
 
 ## 2. Déroulé, étape par étape
 
@@ -2162,7 +2164,64 @@ Le prix réel des 4 bits est **+9,1 %** — pas les +26 % mesurés en requantifi
 
 **Synthèse produite :**
 
-⏵ Vérification concluante sur le vrai fichier : ratio médian max/(6·échelle) = **1,000**, exposants serrés. Le lecteur MXFP4 est juste
+⏵ Réponse appuyée sur les mesures — et j'ai commencé par lever le premier verrou.
+
+\## Ce que disent les fichiers présents sur la machine
+
+Le recensement que j'ai fait changer la question : **aucun modèle récent ne s'ouvre aujourd'hui**. Notre lecteur GGUF connaît `F32/F16/Q8_0/Q4_0` ; l'écosystème public, lui, est en `Q4_K_M` et `MXFP4` :
+
+| modèle | taille | format | lisible hier |
+|---|---|---|---|
+| Qwen2.5-VL-7B | 4,5 Go | Q4_K 6,09 G + Q6_K 1,52 G | ❌ |
+| DeepSeek-R1-Distill-14B | 8,6 Go | Q4_K + Q6_K | ❌ |
+| Qwen3-30B-**A3B** (MoE) | 17,7 Go | Q4_K + Q6_K | ❌ |
+| Qwen2.5-Coder-32B | 18,9 Go | Q4_K + Q6_K | ❌ |
+| **gpt-oss-120b** (MoE) | 60,5 Go | **MXFP4** 114,7 G | ❌ |
+
+**J'ai levé le premier : le lecteur MXFP4 est écrit, testé et vérifié.** Ses huit magnitudes `{0, ½, 1, 1½, 2, 3, 4, 6}` doublées sont les **entiers** `{0,1,2,3,4,6,8,12}`, et l'échelle de bloc est une puissance de deux : l'import est donc **exact**, sans requantification — là où le passage par les f32 coûtait 12 % de perplexité sur Q4_0. Le noyau AVX2 charge la table par `pshufb` et reste bit à bit identique au scalaire.
+
+Contrôle sur le vrai fichier de 60 Go, sans le charger : `blk.0.ffn_down_exps.weight`, exposants 119–121, et **|v|max/(6·2^(e−127)) médian = 1,000** — le plus grand poids de chaque bloc atteint exactement la magnitude maximale du format. Taille de bloc, table, ordre des nibbles et exposant validés d'un coup.
+
+\## Le modèle de coût, validé par la mesure
+
+Le moteur lit **une fois chaque poids actif, par jeton** — donc `t = octets_actifs / bande_passante`. Sur cette machine : 20–25 Go/s. Ce modèle prédit 13 ms/jeton pour le 0,5B en 4 bits ; mesuré 41,6 tok/s. Il est donc utilisable pour dimensionner :
+
+| modèle | actifs | temps/jeton | tok/s |
+|---|---|---|---|
+| 7B dense | 7 G | 185 ms | 5,4 |
+| 14B dense | 14 G | 370 ms | 2,7 |
+| 32B dense | 32 G | 850 ms | 1,2 |
+| **Qwen3-30B-A3B** (MoE) | 3,3 G | 87 ms | **11,5** |
+| **gpt-oss-120b** (MoE) | 5,1 G | 135 ms | **7,4** |
+
+➡️ **Sans MoE, cette machine plafonne vers 7B en interactif et 32B en traitement de nuit.** Avec MoE, un modèle de 120 G paramètres passe *devant* un dense de 32 G.
+
+\## Les quatre verrous, dans l'ordre
+
+1. **Formats** — MXFP4 ✅ fait. Reste **Q4_K/Q6_K** (super-blocs de 256, échelles et minima sur 6 bits) : plus de travail, mais c'est toute la famille Qwen/Llama.
+2. **Zéro copie** — aujourd'hui `Gguf::open` fait un `read_to_end` **et** on matérialise une seconde copie (listes ou 4 bits) : pour gpt-oss
+… [2042 caractères tronqués]
+
+### Tour 38 — il faut donc faire un convertisseur de modèle haute fidèlité afin d'avoir un chargement optimal : abolition des zéros, o … [198 caractères tronqués]
+
+*12 appels d'outils.* Actions notables :
+
+- bash — Measure exact zero rates in MXFP4 and local models
+- bash — Compute the break-even point for zero suppression
+- bash — Correct zero-suppression arithmetic
+- bash — Add zero-copy borrowed source matrices
+- bash — Inspect the DenseQ4 struct as it stands
+- bash — Insert the borrowed-source fields into the struct
+- bash — Implement the in-place kernels for source layouts
+- bash — Use borrowed matrices in the model loader
+- bash — Verify identity and measure the zero-copy load
+- write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/convertisseur.md`
+- bash — Validate all paths after the in-place change
+- bash — Commit the in-place loading and converter design
+
+**Synthèse produite :**
+
+⏵ Tableau net : l'emprunt gagne sur les **quatre** axes à la fois. Je commite
 
 ## 3. Travail accompli
 
@@ -2237,6 +2296,7 @@ Le prix réel des 4 bits est **+9,1 %** — pas les +26 % mesurés en requantifi
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-campagne-parcimonie.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-croisement-push-pull.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-passage-a-l-echelle.md` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/convertisseur.md` | 1 | 0 |
 
 ### Sous-agents lancés
 
@@ -2284,7 +2344,7 @@ Le prix réel des 4 bits est **+9,1 %** — pas les +26 % mesurés en requantifi
 - **T3** Test OpenOCD without root and check Pro device support
 - **T3** Make scripts executable and test jtag_scan
 - **T3** Commit JTAG milestone
-- … et 732 autres
+- … et 743 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2412,7 +2472,7 @@ Le prix réel des 4 bits est **+9,1 %** — pas les +26 % mesurés en requantifi
 
 ## 5. Erreurs rencontrées
 
-88 sorties en erreur ou divergentes. Les premières :
+89 sorties en erreur ou divergentes. Les premières :
 
 - **T2** : === LIEN PCIe (sysfs, sans root) === current_link_speed     = 8.0 GT/s PCIe current_link_width     = 8 max_link_speed         = 8.0 GT/s PCIe max_link_width         = 8 secondary_bus_number   =  vendo
 - **T2** : [POPUP: saisissez le mot de passe] === TOUS les événements USB depuis le boot (fin de log) === [ven sep 25 11:52:23 2026] [ T684749] hid-generic 0003:04F2:2159.00ED: hiddev99,hidraw5: USB HID v1.10 De
@@ -2468,4 +2528,5 @@ Le prix réel des 4 bits est **+9,1 %** — pas les +26 % mesurés en requantifi
 - Defaut = auto : le moteur choisit son chemin par mesure  Sur un modele dense le defaut par evenements etait x2,0 plus lent pour un resultat identique au bit pre
 - Attention : scores vectorises AVX2+FMA, hypothese du cache KV refutee  Le poste attention coutait 3,1 ms/jeton a contexte 256 pour ~0,5 M de multiplications. Pr
 - Lecteur MXFP4 exact (gpt-oss-120b) et analyse du passage a l'echelle  MXFP4 : bloc de 17 octets, exposant E8M0 puis nibbles E2M1. Les huit magnitudes du format 
+- Emprunt des blocs 4 bits en place : chargement x3,2, memoire /2, fidelite exacte  Les matrices Q4_0 et MXFP4 ne sont plus recopiees dans notre disposition : ell
 

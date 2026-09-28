@@ -126,10 +126,13 @@ impl Proj {
             // Import VERBATIM quand la source est déjà en 4 bits : MXFP4
             // (gpt-oss) puis Q4_0 (llama.cpp). Sinon, quantification depuis
             // les f32 — une seule couche d'erreur, jamais deux.
+            // EMPRUNT, pas copie : on lit les blocs dans le fichier déjà
+            // chargé. Recopier dans notre disposition doublerait la mémoire
+            // (60 Go de fichier + 61 Go de copie pour gpt-oss-120b).
             if let Some((buf, nb)) = g.mxfp4_blocks(name) {
-                (None, None, Some(DenseQ4::import_mxfp4(buf, n_out, n_in, nb)))
+                (None, None, Some(unsafe { DenseQ4::emprunter(buf.as_ptr(), n_out, n_in, nb, true) }))
             } else if let Some((buf, nb)) = g.q4_blocks(name) {
-                (None, None, Some(DenseQ4::import_q4_0(buf, n_out, n_in, nb)))
+                (None, None, Some(unsafe { DenseQ4::emprunter(buf.as_ptr(), n_out, n_in, nb, false) }))
             } else {
                 (None, None, Some(DenseQ4::build(&w, n_out, n_in)))
             }
@@ -357,9 +360,9 @@ impl Model {
             let v = cfg.vocab;
             let h = cfg.hidden;
             let d = if let Some((buf, nb)) = g.mxfp4_blocks("token_embd.weight") {
-                DenseQ4::import_mxfp4(buf, v, h, nb)
+                unsafe { DenseQ4::emprunter(buf.as_ptr(), v, h, nb, true) }
             } else if let Some((buf, nb)) = g.q4_blocks("token_embd.weight") {
-                DenseQ4::import_q4_0(buf, v, h, nb)
+                unsafe { DenseQ4::emprunter(buf.as_ptr(), v, h, nb, false) }
             } else {
                 DenseQ4::build(&g.dequant("token_embd.weight"), v, h)
             };
