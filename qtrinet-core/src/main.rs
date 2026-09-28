@@ -329,6 +329,7 @@ fn run_infer(args: &[String]) {
     let mut dense = false;
     let mut auto = true;
     let mut moe_topk = 0usize;
+    let mut b6 = 0u8;
     let mut q4 = 0u8;
     let mut keep = 1.0f32;
     // L'inférence paie une barrière par matrice (168 par token) : l'optimum
@@ -369,6 +370,16 @@ fn run_infer(args: &[String]) {
             "--chat" => { chat = true; i -= 1; }
             "--dense" => { dense = true; i -= 1; }
             "--moe-topk" => { moe_topk = args[i + 1].parse().unwrap(); i -= 1; }
+            "--bits-attn" => {
+                let b: u32 = args[i + 1].parse().unwrap();
+                if b == 6 { b6 |= 2; }
+                i -= 1;
+            }
+            "--bits-ffn" => {
+                let b: u32 = args[i + 1].parse().unwrap();
+                if b == 6 { b6 |= 1; }
+                i -= 1;
+            }
             "--bits" => {
                 let b: u32 = args[i + 1].parse().unwrap();
                 list::BITS_POIDS.store(b, std::sync::atomic::Ordering::Relaxed);
@@ -386,7 +397,7 @@ fn run_infer(args: &[String]) {
         }
         i += 2;
     }
-    let mut mdl = model::Model::load(path, ctx, n_threads, dense, keep, auto, q4);
+    let mut mdl = model::Model::load(path, ctx, n_threads, dense, keep, auto, q4, b6);
     mdl.act_levels = ((1u32 << (abits - 1)) - 1) as f32;
     mdl.moe_topk = moe_topk;
     mdl.act_thresh = act_thresh;
@@ -672,6 +683,7 @@ fn run_ppl(args: &[String]) {
     let mut ctx = 256usize;
     let mut limit = usize::MAX;
     let mut abits = 16u32;
+    let mut b6 = 0u8;
     let mut hebb_layer: Option<usize> = None;
     let mut patch_file: Option<String> = None;
     let mut gain: Option<(usize, f32)> = None;
@@ -739,6 +751,16 @@ fn run_ppl(args: &[String]) {
             "--threads" => n_threads = args[i + 1].parse().unwrap(),
             "--dense" => { dense = true; i -= 1; }
             "--moe-topk" => { moe_topk = args[i + 1].parse().unwrap(); i -= 1; }
+            "--bits-attn" => {
+                let b: u32 = args[i + 1].parse().unwrap();
+                if b == 6 { b6 |= 2; }
+                i -= 1;
+            }
+            "--bits-ffn" => {
+                let b: u32 = args[i + 1].parse().unwrap();
+                if b == 6 { b6 |= 1; }
+                i -= 1;
+            }
             "--bits" => {
                 let b: u32 = args[i + 1].parse().unwrap();
                 list::BITS_POIDS.store(b, std::sync::atomic::Ordering::Relaxed);
@@ -773,7 +795,7 @@ fn run_ppl(args: &[String]) {
     }
     println!("{idfile} : {} tokens, fenêtres de {ctx}", ids.len());
 
-    let mut mdl = model::Model::load(path, ctx, n_threads, dense, 1.0, auto, q4);
+    let mut mdl = model::Model::load(path, ctx, n_threads, dense, 1.0, auto, q4, b6);
     mdl.act_levels = ((1u32 << (abits - 1)) - 1) as f32;
     if let Some(f) = &patch_file {
         let pt = model::Patch::load(f).expect("chargement du greffon");

@@ -276,7 +276,7 @@ impl Proj {
     }
 
     fn load(g: &Gguf, name: &str, bias: Option<&str>, dense: bool, auto: bool, keep: f32,
-            q4: bool) -> Self {
+            q4: bool, bits6: bool) -> Self {
         let t = g.tensor(name).unwrap_or_else(|| panic!("tenseur {name} absent"));
         let n_out = t.dims[0] as usize;
         let n_in = t.dims[1] as usize;
@@ -286,6 +286,13 @@ impl Proj {
         // `auto` charge les DEUX formes : le moteur choisit ensuite, par mesure
         // de la densité d'activation, entre dispersion (push) et produit
         // scalaire dense (pull). Le croisement mesuré est à 10 %.
+        // Six bits empaquetés : même déquantification que les autres chemins,
+        // mais la quantification vise la grille [-32, 31] au lieu de [-8, 7].
+        if bits6 {
+            let z = DenseQ4::build6(&w, n_out, n_in);
+            let bias = bias.filter(|b| g.tensor(b).is_some()).map(|b| g.dequant(b));
+            return Proj { gpu: None, m: None, d: None, q4: Some(z), bias };
+        }
         let (m, d, q4v) = if q4 {
             // Source déjà en Q4_0 : on importe les blocs tels quels. Sinon on
             // quantifie depuis les f32 (une seule couche d'erreur, pas deux).
@@ -521,7 +528,7 @@ impl Hebb {
 
 impl Model {
     pub fn load(path: &str, ctx: usize, n_threads: usize, dense: bool, keep: f32,
-                auto: bool, q4: u8) -> Model {
+                auto: bool, q4: u8, b6: u8) -> Model {
         let t0 = Instant::now();
         let g = Gguf::open(path).expect("ouverture du GGUF");
         let cfg = Cfg {
@@ -587,10 +594,10 @@ impl Model {
             let p = |s: &str| format!("blk.{l}.{s}");
             let lay = Layer {
                 attn_norm: g.dequant(&p("attn_norm.weight")),
-                wq: Proj::load(&g, &p("attn_q.weight"), Some(&p("attn_q.bias")), dense || q4 != 0, auto, keep, q4 & 2 != 0),
-                wk: Proj::load(&g, &p("attn_k.weight"), Some(&p("attn_k.bias")), dense || q4 != 0, auto, keep, q4 & 2 != 0),
-                wv: Proj::load(&g, &p("attn_v.weight"), Some(&p("attn_v.bias")), dense || q4 != 0, auto, keep, q4 & 2 != 0),
-                wo: Proj::load(&g, &p("attn_output.weight"), None, dense || q4 != 0, auto, keep, q4 & 2 != 0),
+                wq: Proj::load(&g, &p("attn_q.weight"), Some(&p("attn_q.bias")), dense || q4 != 0, auto, keep, q4 & 2 != 0, b6 & 2 != 0),
+                wk: Proj::load(&g, &p("attn_k.weight"), Some(&p("attn_k.bias")), dense || q4 != 0, auto, keep, q4 & 2 != 0, b6 & 2 != 0),
+                wv: Proj::load(&g, &p("attn_v.weight"), Some(&p("attn_v.bias")), dense || q4 != 0, auto, keep, q4 & 2 != 0, b6 & 2 != 0),
+                wo: Proj::load(&g, &p("attn_output.weight"), None, dense || q4 != 0, auto, keep, q4 & 2 != 0, b6 & 2 != 0),
                 // gpt-oss nomme `post_attention_norm` la normale d'entrée du
                 // FFN ; c'est le même tenseur sous un autre nom.
                 ffn_norm: if g.tensor(&p("ffn_norm.weight")).is_some() {
@@ -605,11 +612,11 @@ impl Model {
                 sinks: if g.tensor(&p("attn_sinks.weight")).is_some() {
                     Some(g.dequant(&p("attn_sinks.weight"))) } else { None },
                 wgate: if cfg.n_expert > 0 { Proj::vide() } else {
-                    Proj::load(&g, &p("ffn_gate.weight"), None, dense || q4 != 0, auto, keep, q4 & 1 != 0) },
+                    Proj::load(&g, &p("ffn_gate.weight"), None, dense || q4 != 0, auto, keep, q4 & 1 != 0, b6 & 1 != 0) },
                 wup: if cfg.n_expert > 0 { Proj::vide() } else {
-                    Proj::load(&g, &p("ffn_up.weight"), None, dense || q4 != 0, auto, keep, q4 & 1 != 0) },
+                    Proj::load(&g, &p("ffn_up.weight"), None, dense || q4 != 0, auto, keep, q4 & 1 != 0, b6 & 1 != 0) },
                 wdown: if cfg.n_expert > 0 { Proj::vide() } else {
-                    Proj::load(&g, &p("ffn_down.weight"), None, dense || q4 != 0, auto, keep, q4 & 1 != 0) },
+                    Proj::load(&g, &p("ffn_down.weight"), None, dense || q4 != 0, auto, keep, q4 & 1 != 0, b6 & 1 != 0) },
                 moe: charger_moe(&g, l, cfg.n_expert),
             };
             for pj in [&lay.wq, &lay.wk, &lay.wv, &lay.wo, &lay.wgate, &lay.wup, &lay.wdown] {

@@ -5,14 +5,14 @@
 | Identifiant | `22bcae27-254b-47b2-acda-87467dab060c` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-25 11:56 |
-| Durée | 73.0 h |
-| Tours | 45 |
-| Messages | 1177 |
-| Appels d'outils | 1173 |
+| Durée | 73.5 h |
+| Tours | 46 |
+| Messages | 1185 |
+| Appels d'outils | 1179 |
 | Fichiers touchés | 68 |
-| Commandes | 931 |
+| Commandes | 937 |
 | Sous-agents | 1 |
-| Commits | 50 |
+| Commits | 51 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -119,6 +119,8 @@
 **Tour 44** — pourrait-on avoir les plus gros modèles déjà chargés en gpu et les petits experts en cpu? Qu'en est-il de notre approche par liste de connexions  positive et liste négative avec répétition (delta zéro) pour les couches qui ont des matrices plus creuses?
 
 **Tour 45** — nos essais en liste séparées portainet sur des poids unitaires (absent, répétition(delta d'adresse =0)  pour aller au delà de 1 comme poid). On pouvait donc utiliser un nombre arbitraire de bits par couche et aller au delà du 4 bits (5, 6 , 7 ou 8 idéalement)
+
+**Tour 46** — continue
 
 ## 2. Déroulé, étape par étape
 
@@ -2586,7 +2588,62 @@ C'est notre famille `FusedSign`, et l'arithmétique est nette :
 
 **Synthèse produite :**
 
-⏵ Courbe mesurée. Je commite et je réponds.
+⏵ Vous avez raison sur le principe — et la mesure précise où il paie.
+
+\## Le point clé : la répétition est **unaire**
+
+Un poids de magnitude 3 coûte 3 événements, pas log₂(3). Donc le coût de cet encodage n'est pas le nombre de bits, c'est la **norme L1** de la matrice (Σ|w|). Les magnitudes mesurées dans MXFP4 tournent autour de **1,3** → ~1,3 octet/poids, contre **0,53** pour du 4 bits empaqueté. La répétition gagne donc sur des poids proches de l'unité — c'était bien le sens de nos essais ternaires — mais au-delà, chaque bit de magnitude se paie plein pot.
+
+\## Ce que votre idée débloque vraiment : le binaire empaqueté
+
+J'ai mesuré la courbe en **simulant** la précision (`--bits N` arrondit les niveaux à la grille réduite — exactement ce qu'un empaquetage produirait), sur 510 jetons :
+
+| bits | octets/poids | perplexité | écart |
+|---|---|---|---|
+| 8 | 1,00 | 19,3885 | référence |
+| 7 | 0,875 | 19,7387 | +1,8 % |
+| **6** | **0,75** | **19,9623** | **+3,0 %** |
+| **5** | **0,625** | **20,0543** | **+3,4 %** |
+| 4 | 0,50 | 21,4332 | +10,5 % |
+
+**La courbe est plate de 8 à 5 bits** : 37 % d'octets en moins pour 3,4 % de perplexité. Le genou est à **5–6 bits**. La falaise est entre 5 et 4 : +3,4 % → +10,5 %. Le 4 bits est donc bien le minimum raisonnable, pas un optimum.
+
+➡️ **Le 6 bits est le meilleur compromis** : 0,75 o/poids, soit 25 % de moins que l'int8, pour +3 % de perplexité. C'est votre intuition, chiffrée.
+
+\## Et la répartition par couche
+
+La mesure précédente disait déjà qui peut descendre : à 4 bits, l'**attention** ne coûte que +5,4 % alors que le **FFN** coûte +24 %. Croisée avec la courbe ci-dessus, la politique d'allocation s'écrit d'elle-même :
+
+| partie | part des poids (7B) | bits conseillés |
+|---|---|---|
+| attention (Q/K/V/O) | 12 % | 4–5 bits |
+| FFN (gate/up/down) | 88 % | **6–7 bits** |
+
+Sur un 7B, ça donne ≈ 0,80 o/poids au lieu de 1,00 — **20 % d'octets en moins pour ~2 % de perplexité**, au lieu de +10 % si on mettait tout à 4 bits.
+
+\## Ce qu'il reste à écrire
+
+`DenseQ6` : empaquetage 6 bits (valeurs signées sur 6 bits, échelle par bloc de 32) et son noyau AVX2 — la même structure que `DenseQ4`, dont l'empaquetage et les tables sont déjà en place. Puis un drapeau par projection (`--bits-attn`, `--bits-ffn`) pour appliquer la répartition ci-dessus.
+
+La simulation est déjà dans le moteur (`--bits N`) : la courbe est reproductible en une commande, et le noyau 6 bits n'aura plus qu'à confirmer ce que la simulation annonce.
+
+Deux com
+… [145 caractères tronqués]
+
+### Tour 46 — continue
+
+*6 appels d'outils.* Actions notables :
+
+- bash — Implement the packed 6-bit format
+- bash — Fix the duplicate field and wire the 6-bit option
+- bash — Wire the CLI and validate the 6-bit format against the simulation
+- bash — Declare b6 in run_ppl and validate the 6-bit path
+- bash — Compare the bit allocation strategies
+- bash — Commit the 6-bit format
+
+**Synthèse produite :**
+
+⏵ Résultat net : **6 bits partout domine notre int8** sur les deux axes. Je commite
 
 ## 3. Travail accompli
 
@@ -2709,7 +2766,7 @@ C'est notre famille `FusedSign`, et l'arithmétique est nette :
 - **T3** Test OpenOCD without root and check Pro device support
 - **T3** Make scripts executable and test jtag_scan
 - **T3** Commit JTAG milestone
-- … et 891 autres
+- … et 897 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2837,7 +2894,7 @@ C'est notre famille `FusedSign`, et l'arithmétique est nette :
 
 ## 5. Erreurs rencontrées
 
-110 sorties en erreur ou divergentes. Les premières :
+112 sorties en erreur ou divergentes. Les premières :
 
 - **T2** : === LIEN PCIe (sysfs, sans root) === current_link_speed     = 8.0 GT/s PCIe current_link_width     = 8 max_link_speed         = 8.0 GT/s PCIe max_link_width         = 8 secondary_bus_number   =  vendo
 - **T2** : [POPUP: saisissez le mot de passe] === TOUS les événements USB depuis le boot (fin de log) === [ven sep 25 11:52:23 2026] [ T684749] hid-generic 0003:04F2:2159.00ED: hiddev99,hidraw5: USB HID v1.10 De
@@ -2907,4 +2964,5 @@ C'est notre famille `FusedSign`, et l'arithmétique est nette :
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core cargo build --release 2>&1 | grep -cE "^warning"  echo "=== contrôle : sans QT_GPU, tout est inc
 - Journal : session du 28/09 (chemin GPU, seuil mesure)" 2>/dev/null; git log --oneline | head -1
 - Journal : courbe de precision" 2>/dev/null echo "--- bilan de la session"; git log --oneline | head -8
+- Journal : format 6 bits" 2>/dev/null git log --oneline | head -1
 
