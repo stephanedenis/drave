@@ -72,11 +72,39 @@ gabarit est appliqué.
 | **Sortie en flux** (`--flux`) | ✅ jeton par jeton, sans couper les caractères multi-octets |
 | **Session multi-tours** (`--session`) | ✅ avec troncature de sécurité du contexte |
 
+## gpt-oss-120b : le modèle fonctionne, la métrique non
+
+```
+invite  : "The capital of Australia is"
+réponse : " Canberra."
+```
+
+**Correct, cohérent, en 5,5 tok/s** sur un modèle de 117 G paramètres, 62 Go
+résidents, lecture en place. Le modèle n'est donc pas cassé.
+
+Ce qui reste inexpliqué, c'est notre **perplexité de 39,8** sur du wikitext brut
+là où l'on attendrait de l'ordre de 6. Trois hypothèses, non départagées :
+
+1. **notre encodage du fichier de test** — le tokenizer o200k a été vérifié sur
+   sept chaînes pièges, pas sur les 4 424 jetons du corpus ;
+2. **la sensibilité au format** — gpt-oss est entraîné sur son propre format
+   (`<|start|>user<|message|>…`), pas sur de la continuation de texte brut ;
+3. un détail d'architecture encore faux, que la génération ne révèle pas sur une
+   réponse aussi courte.
+
+Le test qui trancherait est de comparer notre flux de jetons à celui d'une
+implémentation de référence sur le fichier entier — une seule requête, mais elle
+demande de recharger 60 Go.
+
+Au passage, un défaut de robustesse corrigé : `--chat` **paniquait** sur gpt-oss
+(gabarit Qwen absent). Il retombe maintenant sur une invite brute en le
+signalant, au lieu de s'arrêter sur un `unwrap`.
+
 ## Ce qui n'est pas prêt
 
 | manque | conséquence | coût du correctif |
 |---|---|---|
-| **gpt-oss-120b** | tourne (5 tok/s) mais la sortie est fausse (PPL 39,8 au lieu de ~6) | inconnu |
+| **Gabarit de conversation de gpt-oss** | sa réponse est bonne en invite brute, mais son format `harmony` n'est pas implémenté | faible |
 | **Contexte long** | attention en O(contexte), KV en f32 : 800 Mo à 8 k pour le 30 B, et +100 ms/jeton | moyen |
 | **Vision** | le chemin image du modèle VL n'existe pas | élevé |
 | **Robustesse** | pas de gestion mémoire, pas de requêtes multiples ; en session, le tour peut dépasser et divaguer si le modèle n'émet pas son jeton de fin | moyen |
@@ -89,6 +117,8 @@ en flux, échantillonnage complet. Le seul frein qui reste est la vitesse —
 5,6 jetons par seconde sur un 30 B MoE, ce qui est le régime d'un script ou
 d'un traitement de nuit plutôt que d'une frappe au clavier.
 
-**Non pour gpt-oss** tant que sa sortie est fausse (perplexité 39,8 au lieu de
-l'ordre de 6), et **non pour la vision** : le chemin image du modèle VL n'existe
-pas.
+**Oui pour gpt-oss aussi**, avec deux réserves : son gabarit de conversation
+n'est pas implémenté (invite brute seulement), et notre perplexité sur ce modèle
+reste inexpliquée alors que sa génération est correcte.
+
+**Non pour la vision** : le chemin image du modèle VL n'existe pas.

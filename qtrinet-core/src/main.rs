@@ -429,7 +429,16 @@ fn run_infer(args: &[String]) {
 
     if let Some(p) = &prompt {
         let tk = build_tokenizer(&mdl.g);
-        if chat {
+        // Le gabarit de conversation n'est appliqué que si le modèle possède
+        // les jetons correspondants. gpt-oss utilise un autre format
+        // (<|start|>user<|message|>…) : faute de l'implémenter, mieux vaut une
+        // invite brute qu'une panique.
+        let gabarit_qwen = chat && tk.special_id("<|im_start|>").is_some()
+                                  && tk.special_id("<|im_end|>").is_some();
+        if chat && !gabarit_qwen {
+            eprintln!("[chat] ce modèle n'a pas le gabarit Qwen : invite brute");
+        }
+        if gabarit_qwen {
             // gabarit Qwen2.5-Instruct, tokens spéciaux insérés tels quels
             let im_start = tk.special_id("<|im_start|>").unwrap();
             let im_end = tk.special_id("<|im_end|>").unwrap();

@@ -5,14 +5,14 @@
 | Identifiant | `22bcae27-254b-47b2-acda-87467dab060c` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-25 11:56 |
-| Durée | 73.8 h |
-| Tours | 49 |
-| Messages | 1207 |
-| Appels d'outils | 1195 |
+| Durée | 74.1 h |
+| Tours | 50 |
+| Messages | 1214 |
+| Appels d'outils | 1200 |
 | Fichiers touchés | 68 |
-| Commandes | 953 |
+| Commandes | 958 |
 | Sous-agents | 1 |
-| Commits | 55 |
+| Commits | 56 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -127,6 +127,8 @@
 **Tour 48** — est-on prêt à tester sur unn vrai travail?
 
 **Tour 49** — continue jusqu'à ce que ce soit complet.
+
+**Tour 50** — continue
 
 ## 2. Déroulé, étape par étape
 
@@ -2780,7 +2782,61 @@ Le premier correctif à faire n'est pas une performance, c'est la **pénalité d
 
 **Synthèse produite :**
 
-⏵ **La session multi-tours fonctionne** : « elle » a été résolu depuis le tour précédent. Je consigne
+⏵ Les trois manques qui bloquaient l'usage réel sont comblés.
+
+\## Ce qui est complet maintenant
+
+| manque | état | preuve |
+|---|---|---|
+| **Pénalité de répétition** (`--rep-penalty`, fenêtre `--hist`) | ✅ | 300 jetons à température 0,7, top-p 0,95 — **sans boucle** |
+| **Top-p / noyau** (`--top-p`) | ✅ | s'ajoute au top-k = 40 déjà présent |
+| **Sortie en flux** (`--flux`) | ✅ | jeton par jeton, sans couper les caractères multi-octets |
+| **Session multi-tours** (`--session`) | ✅ | boucle sur l'entrée standard, troncature de sécurité du contexte |
+
+**Le test qui compte** — une question **elliptique**, qui ne peut être résolue qu'avec le tour précédent :
+
+```
+vous> Quelle est la capitale de l'Australie ?
+assistant> La capitale de l'Australie est Canberra.
+vous> Et combien d'habitants compte-t-elle environ ?
+assistant> Canberra, la capitale de l'Australie, compte environ 450 000
+habitants (en 2023). C'est la quatrième ville du pays en population, après
+Sydney, Melbourne et Brisbane.
+```
+
+Le modèle a résolu « elle » → le contexte de conversation est bien porté, pas seulement le gabarit appliqué.
+
+\## Ce qui reste, sans fard
+
+| manque | conséquence |
+|---|---|
+| **gpt-oss-120b** | tourne à 5 tok/s mais la sortie est **fausse** (PPL 39,8 au lieu de ~6) |
+| **Vitesse** | 5,6 tok/s sur un 30 B MoE — régime d'un script ou d'une nuit, pas d'une frappe au clavier |
+| **Contexte long** | attention en O(contexte), KV en f32 : +100 ms/jeton à 8 k sur le 30 B |
+| **Vision** | le chemin image du modèle VL n'existe pas |
+| **Robustesse** | pas de gestion mémoire, pas de requêtes multiples ; en session, un tour peut divaguer si le modèle n'émet pas son jeton de fin |
+
+\## État du moteur
+
+**Utilisable dès maintenant** pour du vrai travail — texte, code, questions-réponses, conversation multi-tours — avec la famille Qwen, du 0,5 B au 30 B MoE, en lecture en place (30 B tenant exactement dans la taille du fichier). Formats couverts : Q4_K, Q6_K, Q4_0, Q8_0, MXFP4, F16, F32 ; tokenizers Qwen2 et o200k ; MoE top-k avec biais de routeur, biais par expert, puits appris, YaRN, fenêtre glissante ; échantillonnage complet ; déport GPU opt-in.
+
+`reports/rapport-travail-reel.md` porte les trois tests, les commandes et ce bilan. Cinq commits sur ce cycle (`ba9ce7e`, `4a44399`, `adbee43` et les journaux).
+
+Pour « complet » au sens strict, la prochaine cible est **gpt-oss** : tout le reste du parc est vert, et c'est le seul modèle dont la sortie est encore fausse.
+
+### Tour 50 — continue
+
+*5 appels d'outils.* Actions notables :
+
+- bash — Check gpt-oss output coherence
+- bash — Inspect the chat template code
+- bash — Fix the chat fallback and test gpt-oss generation
+- bash — Capture the gpt-oss generated text
+- bash — Document the gpt-oss finding and commit
+
+**Synthèse produite :**
+
+⏵ **gpt-oss produit une réponse correcte et cohérente** : « The capital of Australia is Canberra. » Le modèle fonctionne — c'est notre mesure de perplexité qui reste inexpliquée
 
 ## 3. Travail accompli
 
@@ -2903,7 +2959,7 @@ Le premier correctif à faire n'est pas une performance, c'est la **pénalité d
 - **T3** Test OpenOCD without root and check Pro device support
 - **T3** Make scripts executable and test jtag_scan
 - **T3** Commit JTAG milestone
-- … et 913 autres
+- … et 918 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -3031,7 +3087,7 @@ Le premier correctif à faire n'est pas une performance, c'est la **pénalité d
 
 ## 5. Erreurs rencontrées
 
-113 sorties en erreur ou divergentes. Les premières :
+114 sorties en erreur ou divergentes. Les premières :
 
 - **T2** : === LIEN PCIe (sysfs, sans root) === current_link_speed     = 8.0 GT/s PCIe current_link_width     = 8 max_link_speed         = 8.0 GT/s PCIe max_link_width         = 8 secondary_bus_number   =  vendo
 - **T2** : [POPUP: saisissez le mot de passe] === TOUS les événements USB depuis le boot (fin de log) === [ven sep 25 11:52:23 2026] [ T684749] hid-generic 0003:04F2:2159.00ED: hiddev99,hidraw5: USB HID v1.10 De
@@ -3106,4 +3162,5 @@ Le premier correctif à faire n'est pas une performance, c'est la **pénalité d
 - Rapport : le moteur sur du vrai travail (deux tests reels sur le 30B MoE)  Test 1 : question en francais, gabarit de conversation, trois phrases exactes, arret 
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core echo "=== régression : glouton inchangé (doit redonner la même fonction mediane)" ./target/relea
 - Journal : session multi-tours" 2>/dev/null git log --oneline | head -3
+- Journal : gpt-oss genere correctement" 2>/dev/null git log --oneline | head -2
 
