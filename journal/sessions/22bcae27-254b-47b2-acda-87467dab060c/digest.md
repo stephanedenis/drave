@@ -23195,3 +23195,132 @@ blk.0.attn_v.weight      écart max 8.345e-06 sur |réf|max 4.446e-02 -> OK
 ⏵ Gain déjà acquis (137 → 96 ms). Je commite cet état vérifié avant de continuer
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\npython3 tools/archive_sessions.py --quiet 2>&1 | tail -1\ngit add -A && git commit -q -m \"Q4_K et Q6_K en place : le 7B et le 1,5B Q4_K_M tournent\n\nLecteur Q4_K (super-blocs de 256 poids, 144 octets) et Q6_K (210 octets) lus\nDANS L … [1901 caractères tronqués]`
+
+  ```
+6b379f5 Q4_K et Q6_K en place : le 7B et le 1,5B Q4_K_M tournent
+250a1bf Emprunt des blocs 4 bits en place : chargement x3,2, memoire /2, fidelite exacte
+c504ebd Lecteur MXFP4 exact (gpt-oss-120b) et analyse du passage a l'echelle
+  ```
+
+### 🤖 Assistant
+
+⏵ Suite du plan : **MoE**. D'abord les clés de métadonnées réelles du Qwen3-30B-A3B
+
+- **bash** `{"command": "python3 - <<'PY'\nimport struct\nf=open(\"/home/stephane/FastNVMe/models/Qwen3-30B-A3B-Instruct-2507-Q4_K_M.gguf\",'rb')\nassert f.read(4)==b'GGUF'\nprint(\"version\", struct.unpack('<I',f.read(4))[0])\nnt,=struct.unpack('<Q',f.read(8)); nkv,=struct.unpack('<Q',f.read(8))\ndef ch():\n   … [1391 caractères tronqués]`
+
+  ```
+version 3
+
+=== métadonnées MoE / architecture
+   qwen3moe.block_count                         = 48
+   qwen3moe.context_length                      = 262144
+   qwen3moe.embedding_length                    = 2048
+   qwen3moe.feed_forward_length                 = 6144
+   qwen3moe.attention.head_count                = 32
+   qwen3moe.attention.head_count_kv             = 4
+   qwen3moe.rope.freq_base                      = 10000000.0
+   qwen3moe.attention.layer_norm_rms_epsilon    = 9.999999974752427e-07
+   qwen3moe.expert_used_count                   = 8
+   qwen3moe.expert_count                        = 128
+   qwen3moe.expert_feed_forward_length          = 768
+
+=== tenseurs MoE d'une couche
+   blk.0.ffn_down_exps.weight       ne=(768, 2048, 128) type=14 offset=441187328
+   blk.0.ffn_gate_exps.weight       ne=(2048, 768, 128) type=12 offset=606338048
+   blk.0.ffn_gate_inp.weight        ne=(2048, 128) type=0 offset=719584256
+   blk.0.ffn_up_exps.weight         ne=(2048, 768, 128) type=12 offset=720641024
+  ```
+
+### 🤖 Assistant
+
+⏵ Qwen3-30B-A3B : 128 experts, **top-8**, et `ffn_down_exps` est en **Q6_K** — il me faut donc le noyau Q6_K en place. Je l'écris (AVX2, groupes de 16)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\npython3 - <<'PY'\np='src/list.rs'; s=open(p,encoding='utf-8').read(); o=s\ns=s.replace(\"pub enum Source { Propre, Q4_0, Mxfp4, Q4_K }\",\n            \"pub enum Source { Propre, Q4_0, Mxfp4, Q4_K, Q6_K }\",1)\nold='''     … [7160 caractères tronqués]`
+
+  ```
+error[E0435]: attempt to use a non-constant value in a constant
+   --> src/list.rs:657:75
+    |
+652 |                 for (k, &(ql16, qh16, dec, haut)) in plan.iter().enumerate() {
+    |                                       --- this would need to be a `const`
+...
+657 |                         _mm_slli_epi16(_mm_and_si128(_mm_srli_epi16(qh16, dec), masque_deux), 4),
+--
+error[E0004]: non-exhaustive patterns: `Source::Q6_K` not covered
+   --> src/list.rs:835:15
+    |
+835 |         match self.src {
+    |               ^^^^^^^^ pattern `Source::Q6_K` not covered
+    |
+note: `Source` defined here
+--
+error: could not compile `qtrinet-core` (bin "qtrinet-core") due to 2 previous errors; 24 warnings emitted
+=== build
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\npython3 - <<'PY'\np='src/list.rs'; s=open(p,encoding='utf-8').read(); o=s\n# _mm_srli_epi16 exige une constante : dérouler les 8 groupes explicitement\nold='''                let plan: [(__m128i, __m128i, i32, bool); 8] =  … [4365 caractères tronqués]`
+
+  ```
+=== build
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\npython3 - <<'PY'\np='src/model.rs'; s=open(p,encoding='utf-8').read(); o=s\n# projections Q6_K en place\nold='''            if let Some((buf, nb)) = g.q4k_blocks(name) {'''\nassert s.count(old)==1\ns=s.replace(old,'''      … [1735 caractères tronqués]`
+
+  ```
+=== 7B : PPL attendue 11,5889 et tête bien plus rapide
+=== perplexité 10.9947 sur 127 tokens (0 événements, 46.6 s) ===
+    postes (ms/token) : projets-attn 27.14 | rope 2.00 | attention 2.70 | proj+mlp 315.95 | somme 347.78 | reste (tête + échantillonnage) 18.90
+  ```
+
+### 🤖 Assistant
+
+⏵ Tête : 96,6 → **18,9 ms**, et PPL **10,99** (contre 11,59) car les Q6_K du corps sont désormais lus exactement. Régressions :
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\necho \"=== 0,5B Q8_0 (attendu 19,2641)\"\n./target/release/qtrinet-core ../models/Qwen2.5-0.5B-Q8_0.gguf --ppl /tmp/wt2_ids.txt --ctx 256 --abits 16 --threads 16 --limit 512 2>&1 | grep -E \"perplexité [0-9]\"\necho \"===  … [399 caractères tronqués]`
+
+  ```
+=== 0,5B Q8_0 (attendu 19,2641)
+=== perplexité 19.2641 sur 510 tokens (0 événements, 17.3 s) ===
+=== 1,5B Q4_K_M (avant : 13,0051)
+=== perplexité 12.9228 sur 255 tokens (0 événements, 14.1 s) ===
+    postes (ms/token) : projets-attn 4.33 | rope 1.09 | attention 2.39 | proj+mlp 38.55 | somme 46.37 | reste (tête + échantillonnage) 8.86
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\ncargo test --release 2>&1 | grep -E \"error|test result|panicked|FAILED\" -A 3 | head -20", "description": "Diagnose the test failure", "timeoutMs": 600000}`
+
+  ```
+= warning: this was previously accepted by the compiler but is being phased out; it will become a hard error in a future release!
+    = note: `#[warn(unused_attributes)]` (part of `#[warn(unused)]`) on by default
+
+error[E0061]: this method takes 3 arguments but 2 arguments were supplied
+    --> src/list.rs:1080:27
+     |
+1080 |                 let b = d.dot16(o, &x16);
+--
+For more information about this error, try `rustc --explain E0061`.
+warning: `qtrinet-core` (bin "qtrinet-core" test) generated 24 warnings
+error: could not compile `qtrinet-core` (bin "qtrinet-core" test) due to 1 previous error; 24 warnings emitted
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\npython3 - <<'PY'\np='src/list.rs'; s=open(p,encoding='utf-8').read()\ns=s.replace(\"                let b = d.dot16(o, &x16);\",\"                let b = d.dot16(o, &x16, &sommes32(&x16));\",1)\nopen(p,'w',encoding='utf-8' … [160 caractères tronqués]`
+
+  ```
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+  ```
+
+### 🤖 Assistant
+
+⏵ Test de non-régression sur la disposition Q6_K (le bug corrigé), en synthétique :
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\ncat >> src/list.rs <<'RUST'\n\n#[cfg(test)]\nmod tests_q6k {\n    use super::*;\n\n    /// La disposition Q6_K a coûté une perplexité de 100 000 : ggml écrit les\n    /// quatre quants en **quarts successifs** (q1 → [0,32) … [1958 caractères tronqués]`
+
+  ```
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+  ```
+
+### 🤖 Assistant
+
+⏵ 3 tests verts. Je commite avant d'attaquer le MoE
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\npython3 tools/archive_sessions.py --quiet 2>&1 | tail -1\ngit add -A && git commit -q -m \"Q6_K en place (AVX2) : tete divisee par 5, fidelite gagnee\n\nNoyau Q6_K AVX2 : seize valeurs extraites par groupe (nibble de ql + 2 bits de\nqh … [959 caractères tronqués]`

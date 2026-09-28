@@ -129,7 +129,9 @@ impl Proj {
             // EMPRUNT, pas copie : on lit les blocs dans le fichier déjà
             // chargé. Recopier dans notre disposition doublerait la mémoire
             // (60 Go de fichier + 61 Go de copie pour gpt-oss-120b).
-            if let Some((buf, nb)) = g.q4k_blocks(name) {
+            if let Some((buf, nb)) = g.q6k_blocks(name) {
+                (None, None, Some(unsafe { DenseQ4::emprunter_q6k(buf.as_ptr(), n_out, n_in, nb) }))
+            } else if let Some((buf, nb)) = g.q4k_blocks(name) {
                 // Q4_K : super-blocs de 256 poids lus en place. Aucune copie,
                 // aucune requantification — la fidélité est par construction.
                 (None, None, Some(unsafe { DenseQ4::emprunter_q4k(buf.as_ptr(), n_out, n_in, nb) }))
@@ -367,11 +369,19 @@ impl Model {
         let tete = tete.to_string();
         // Tête en 4 bits : la plus grosse matrice du modèle, donc le plus gros
         // gain possible sur un noyau déjà au mur de la bande passante.
-        let head4 = if q4 & 4 != 0 {
+        // La tête emprunte dès que la source est déjà quantifiée sur 4 ou
+        // 6 bits : c'est exact (aucune requantification) et six fois plus
+        // rapide que le chemin scalaire Q6_K, qui coûtait 42 % du temps par
+        // jeton sur un 7B.
+        let tete_quantifiee = g.q6k_blocks(&tete).is_some() || g.q4k_blocks(&tete).is_some()
+            || g.mxfp4_blocks(&tete).is_some() || g.q4_blocks(&tete).is_some();
+        let head4 = if q4 & 4 != 0 || tete_quantifiee {
             let t0 = Instant::now();
             let v = cfg.vocab;
             let h = cfg.hidden;
-            let d = if let Some((buf, nb)) = g.q4k_blocks(&tete) {
+            let d = if let Some((buf, nb)) = g.q6k_blocks(&tete) {
+                unsafe { DenseQ4::emprunter_q6k(buf.as_ptr(), v, h, nb) }
+            } else if let Some((buf, nb)) = g.q4k_blocks(&tete) {
                 unsafe { DenseQ4::emprunter_q4k(buf.as_ptr(), v, h, nb) }
             } else if let Some((buf, nb)) = g.mxfp4_blocks(&tete) {
                 unsafe { DenseQ4::emprunter(buf.as_ptr(), v, h, nb, true) }

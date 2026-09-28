@@ -453,7 +453,7 @@ pub const LUT_MXFP4: [i8; 16] = [0, 1, 2, 3, 4, 6, 8, 12, 0, -1, -2, -3, -4, -6,
 /// apparier sont **contiguës** — l'entrelacement était une commodité, pas une
 /// nécessité.
 #[derive(Clone, Copy, PartialEq, Eq)]
-pub enum Source { Propre, Q4_0, Mxfp4, Q4_K }
+pub enum Source { Propre, Q4_0, Mxfp4, Q4_K, Q6_K }
 
 pub struct DenseQ4 {
     pub n_in: usize,
@@ -601,6 +601,84 @@ impl DenseQ4 {
         }
     }
 
+    /// **Prête** des super-blocs Q6_K (210 octets pour 256 poids).
+    ///
+    /// # Sûreté
+    /// `base` doit pointer sur le premier super-bloc et rester valide.
+    pub unsafe fn emprunter_q6k(base: *const u8, n_out: usize, n_in: usize,
+                                nb_super: usize) -> Self {
+        DenseQ4 {
+            n_in, n_out, lut: LUT_INT4, e8m0: false,
+            q: Vec::new(), sc: Vec::new(), scale: Vec::new(),
+            src: Source::Q6_K, base, nb_ligne: nb_super,
+        }
+    }
+
+    /// Produit scalaire **Q6_K en place**. Les huit groupes de seize poids ont
+    /// chacun leur échelle et occupent des positions contiguës : on extrait
+    /// seize valeurs, on les élève en i16, un `vpmaddwd` les apparie aux
+    /// activations, et une seule multiplication flottante applique `d × sc`.
+    #[cfg(target_arch = "x86_64")]
+    #[target_feature(enable = "avx2")]
+    unsafe fn dot16_q6k_avx2(&self, o: usize, x: &[i16]) -> f32 {
+        use std::arch::x86_64::*;
+        let xp = x.as_ptr();
+        let masque_nib = _mm_set1_epi8(0x0f);
+        let masque_deux = _mm_set1_epi8(0x03);
+        let masque_haut = _mm_set1_epi8(0x30);
+        let biais = _mm_set1_epi8(32);
+        let mut sum = 0f32;
+        for sup in 0..self.nb_ligne {
+            let p = self.base.add((o * self.nb_ligne + sup) * crate::gguf::TAILLE_Q6K);
+            let d = crate::gguf::Gguf::f16_to_f32(u16::from_le_bytes([*p.add(208), *p.add(209)]));
+            for moitie in 0..2usize {
+                let ql = p.add(moitie * 64);
+                let qh = p.add(128 + moitie * 32);
+                let sc = std::slice::from_raw_parts(p.add(192 + moitie * 8), 8);
+                let qh_a = _mm_loadu_si128(qh as *const __m128i);
+                let qh_b = _mm_loadu_si128(qh.add(16) as *const __m128i);
+                let ql_0 = _mm_loadu_si128(ql as *const __m128i);
+                let ql_1 = _mm_loadu_si128(ql.add(16) as *const __m128i);
+                let ql_2 = _mm_loadu_si128(ql.add(32) as *const __m128i);
+                let ql_3 = _mm_loadu_si128(ql.add(48) as *const __m128i);
+                let xb = xp.add(sup * 256 + moitie * 128);
+                // (octets de ql, octets de qh, décalage des 2 bits, nibble haut ?)
+                // Les huit groupes, déroulés : `_mm_srli_epi16` exige un
+                // décalage constant. Les quatre premiers lisent les nibbles
+                // BAS de ql, les quatre suivants les HAUTS.
+                let groupes: [__m128i; 8] = [
+                    _mm_or_si128(_mm_and_si128(ql_0, masque_nib),
+                                 _mm_and_si128(_mm_slli_epi16(_mm_and_si128(qh_a, masque_deux), 4), masque_haut)),
+                    _mm_or_si128(_mm_and_si128(ql_1, masque_nib),
+                                 _mm_and_si128(_mm_slli_epi16(_mm_and_si128(qh_b, masque_deux), 4), masque_haut)),
+                    _mm_or_si128(_mm_and_si128(ql_2, masque_nib),
+                                 _mm_and_si128(_mm_slli_epi16(_mm_and_si128(_mm_srli_epi16(qh_a, 2), masque_deux), 4), masque_haut)),
+                    _mm_or_si128(_mm_and_si128(ql_3, masque_nib),
+                                 _mm_and_si128(_mm_slli_epi16(_mm_and_si128(_mm_srli_epi16(qh_b, 2), masque_deux), 4), masque_haut)),
+                    _mm_or_si128(_mm_and_si128(_mm_srli_epi16(ql_0, 4), masque_nib),
+                                 _mm_and_si128(_mm_slli_epi16(_mm_and_si128(_mm_srli_epi16(qh_a, 4), masque_deux), 4), masque_haut)),
+                    _mm_or_si128(_mm_and_si128(_mm_srli_epi16(ql_1, 4), masque_nib),
+                                 _mm_and_si128(_mm_slli_epi16(_mm_and_si128(_mm_srli_epi16(qh_b, 4), masque_deux), 4), masque_haut)),
+                    _mm_or_si128(_mm_and_si128(_mm_srli_epi16(ql_2, 4), masque_nib),
+                                 _mm_and_si128(_mm_slli_epi16(_mm_and_si128(_mm_srli_epi16(qh_a, 6), masque_deux), 4), masque_haut)),
+                    _mm_or_si128(_mm_and_si128(_mm_srli_epi16(ql_3, 4), masque_nib),
+                                 _mm_and_si128(_mm_slli_epi16(_mm_and_si128(_mm_srli_epi16(qh_b, 6), masque_deux), 4), masque_haut)),
+                ];
+                for (k, &gr) in groupes.iter().enumerate() {
+                    let q = _mm_sub_epi8(gr, biais);            // −32…31
+                    let w = _mm256_cvtepi8_epi16(q);
+                    let xv = _mm256_loadu_si256(xb.add(k * 16) as *const __m256i);
+                    let pr = _mm256_madd_epi16(w, xv);
+                    let mut t = [0i32; 8];
+                    _mm256_storeu_si256(t.as_mut_ptr() as *mut __m256i, pr);
+                    let s16 = t[0]+t[1]+t[2]+t[3]+t[4]+t[5]+t[6]+t[7];
+                    sum += d * (sc[k] as i8) as f32 * s16 as f32;
+                }
+            }
+        }
+        sum
+    }
+
     /// Produit scalaire **Q4_K en place** (noyau AVX2).
     ///
     /// Q4_K est **asymétrique** : chaque sous-bloc de 32 poids a une échelle
@@ -700,6 +778,38 @@ impl DenseQ4 {
 
     /// Pas et décalage des blocs dans la source empruntée. (Q4_K a son propre
     /// noyau : ses sous-blocs ne se lisent pas comme des nibbles appariés.)
+    fn dot_source_q6k(&self, o: usize, x: &[i32]) -> f32 {
+        let t = crate::gguf::TAILLE_Q6K;
+        let mut sum = 0f32;
+        for sup in 0..self.nb_ligne {
+            let p = unsafe { self.base.add((o * self.nb_ligne + sup) * t) };
+            let b = unsafe { std::slice::from_raw_parts(p, t) };
+            let d = crate::gguf::Gguf::f16_to_f32(u16::from_le_bytes([b[208], b[209]]));
+            for moitie in 0..2usize {
+                let ql = &b[moitie*64..];
+                let qh = &b[128 + moitie*32..];
+                let sc = &b[192 + moitie*8..];
+                let base = sup * 256 + moitie * 128;
+                let mut part = [0i32; 8];
+                for l in 0..32usize {
+                    let is = l / 16;
+                    let q1 = ((ql[l] & 0x0F) | ((qh[l] & 3) << 4)) as i32 - 32;
+                    let q2 = ((ql[l+32] & 0x0F) | (((qh[l] >> 2) & 3) << 4)) as i32 - 32;
+                    let q3 = ((ql[l] >> 4) | (((qh[l] >> 4) & 3) << 4)) as i32 - 32;
+                    let q4 = ((ql[l+32] >> 4) | (((qh[l] >> 6) & 3) << 4)) as i32 - 32;
+                    part[is] += q1 * x[base + l];
+                    part[2 + is] += q2 * x[base + l + 32];
+                    part[4 + is] += q3 * x[base + l + 64];
+                    part[6 + is] += q4 * x[base + l + 96];
+                }
+                for (g, &q) in part.iter().enumerate() {
+                    sum += d * (sc[g] as i8) as f32 * q as f32;
+                }
+            }
+        }
+        sum
+    }
+
     fn dot_source_q4k(&self, o: usize, x: &[i32]) -> f32 {
         let t = crate::gguf::TAILLE_Q4K;
         let mut sum = 0f32;
@@ -734,7 +844,7 @@ impl DenseQ4 {
         match self.src {
             Source::Q4_0 => (18, 2),
             Source::Mxfp4 => (17, 1),
-            Source::Q4_K | Source::Propre => (0, 0),
+            Source::Q4_K | Source::Q6_K | Source::Propre => (0, 0),
         }
     }
 
@@ -834,6 +944,7 @@ impl DenseQ4 {
             Source::Q4_0 => self.n_out * self.nb_ligne * 18,
             Source::Mxfp4 => self.n_out * self.nb_ligne * 17,
             Source::Q4_K => self.n_out * self.nb_ligne * crate::gguf::TAILLE_Q4K,
+            Source::Q6_K => self.n_out * self.nb_ligne * crate::gguf::TAILLE_Q6K,
         };
         octets as f64 * 8.0 / (self.n_out * self.n_in) as f64
     }
@@ -845,6 +956,7 @@ impl DenseQ4 {
     #[inline]
     pub fn dot(&self, o: usize, x: &[i32]) -> f32 {
         if self.src == Source::Q4_K { return self.dot_source_q4k(o, x); }
+        if self.src == Source::Q6_K { return self.dot_source_q6k(o, x); }
         if self.src != Source::Propre { return self.dot_source(o, x); }
         let half = self.n_in.div_ceil(2);
         let n_bloc = self.n_in.div_ceil(BLOC_Q4);
@@ -883,7 +995,11 @@ impl DenseQ4 {
                 if self.src == Source::Q4_K && sx32.len() * BLOC_Q4 >= self.n_in {
                     return unsafe { self.dot16_q4k_avx2(o, x, sx32) };
                 }
-                if self.src != Source::Propre && self.src != Source::Q4_K {
+                if self.src == Source::Q6_K {
+                    return unsafe { self.dot16_q6k_avx2(o, x) };
+                }
+                if self.src != Source::Propre && self.src != Source::Q4_K
+                    && self.src != Source::Q6_K {
                     return unsafe { self.dot16_source_avx2(o, x) };
                 }
                 if self.n_in % BLOC_Q4 == 0 && x.len() >= self.n_in {
@@ -961,7 +1077,7 @@ mod tests_q4 {
             let x16: Vec<i16> = x.iter().map(|&v| v as i16).collect();
             for o in 0..n_out {
                 let a = d.dot(o, &x);
-                let b = d.dot16(o, &x16);
+                let b = d.dot16(o, &x16, &sommes32(&x16));
                 assert_eq!(a.to_bits(), b.to_bits(),
                            "rang {o} ({n_out}×{n_in}) : scalaire {a} vs avx2 {b}");
             }
@@ -1038,4 +1154,44 @@ unsafe fn somme_produits(a: std::arch::x86_64::__m128i,
     let mut t = [0i32; 8];
     _mm256_storeu_si256(t.as_mut_ptr() as *mut __m256i, p);
     t[0] + t[1] + t[2] + t[3] + t[4] + t[5] + t[6] + t[7]
+}
+
+#[cfg(test)]
+mod tests_q6k {
+    use super::*;
+
+    /// La disposition Q6_K a coûté une perplexité de 100 000 : ggml écrit les
+    /// quatre quants en **quarts successifs** (q1 → [0,32), q2 → [32,64),
+    /// q3 → [64,96), q4 → [96,128)), pas entrelacés par indice. Ce test le
+    /// verrouille sur un bloc synthétique où les quatre quants sont distincts.
+    #[test]
+    fn quarts_successifs() {
+        let n_in = 256usize;
+        let mut bloc = vec![0u8; crate::gguf::TAILLE_Q6K];
+        // échelle f16 = 1.0
+        bloc[208] = 0x00; bloc[209] = 0x3C;
+        // échelles signées des seize groupes de 16 : toutes à 1
+        for k in 0..16 { bloc[192 + k] = 1; }
+        // q1 = 1 (nibble bas de ql[l], 2 bits bas de qh[l])
+        // q2 = 2, q3 = 3, q4 = 4 : on les code sur les quatre premiers indices
+        for l in 0..4 {
+            bloc[l] = 1 | (3 << 4);          // poids l : q1 = 1, q3 = 3
+            bloc[32 + l] = 2 | (4 << 4);     // poids l+32 : q2 = 2, q4 = 4
+            bloc[128 + l] = 0;               // qh : 2 bits par quant, tous nuls → valeurs 1,2,3,4
+        }
+        let d = unsafe { DenseQ4::emprunter_q6k(bloc.as_ptr(), 1, n_in, 1) };
+        let mut x = vec![0i32; n_in];
+        // on isole chaque position : dot avec un vecteur unitaire
+        for (pos, attendu) in [(0usize, 1i32), (32, 2), (64, 3), (96, 4)] {
+            x.iter_mut().for_each(|v| *v = 0);
+            x[pos] = 1000;                    // q − 32 = attendu − 32 → écart connu
+            let attendu_v = (attendu as f32 - 32.0) * 1000.0;
+            let got = d.dot(0, &x);
+            assert!((got - attendu_v).abs() < 1e-3,
+                    "position {pos} : {got} au lieu de {attendu_v}");
+            let x16: Vec<i16> = x.iter().map(|&v| v as i16).collect();
+            let got16 = d.dot16(0, &x16, &sommes32(&x16));
+            assert_eq!(got.to_bits(), got16.to_bits(), "AVX2 ≠ scalaire en {pos}");
+        }
+    }
 }
