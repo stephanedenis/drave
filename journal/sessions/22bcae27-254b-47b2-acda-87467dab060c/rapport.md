@@ -7,12 +7,12 @@
 | Début | 2026-09-25 11:56 |
 | Durée | 73.8 h |
 | Tours | 49 |
-| Messages | 1203 |
-| Appels d'outils | 1191 |
+| Messages | 1207 |
+| Appels d'outils | 1195 |
 | Fichiers touchés | 68 |
-| Commandes | 949 |
+| Commandes | 953 |
 | Sous-agents | 1 |
-| Commits | 54 |
+| Commits | 55 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -2765,7 +2765,7 @@ Le premier correctif à faire n'est pas une performance, c'est la **pénalité d
 
 ### Tour 49 — continue jusqu'à ce que ce soit complet.
 
-*6 appels d'outils.* Actions notables :
+*10 appels d'outils.* Actions notables :
 
 - bash — Read the generation loop
 - bash — Read the sampler and the infer call site
@@ -2773,10 +2773,14 @@ Le premier correctif à faire n'est pas une performance, c'est la **pénalité d
 - bash — Inspect the infer call site context
 - bash — Fix the tokenizer scope and test long generation with streaming
 - bash — Verify greedy regression and commit the sampling work
+- bash — Implement and test the multi-turn interactive session
+- bash — Allow session mode without a prompt and test
+- bash — Fix the guard and test the session
+- bash — Update the readiness report and commit the session mode
 
 **Synthèse produite :**
 
-⏵ Échantillonnage et flux validés en génération longue. Régression et commit
+⏵ **La session multi-tours fonctionne** : « elle » a été résolu depuis le tour précédent. Je consigne
 
 ## 3. Travail accompli
 
@@ -2899,7 +2903,7 @@ Le premier correctif à faire n'est pas une performance, c'est la **pénalité d
 - **T3** Test OpenOCD without root and check Pro device support
 - **T3** Make scripts executable and test jtag_scan
 - **T3** Commit JTAG milestone
-- … et 909 autres
+- … et 913 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -3101,4 +3105,5 @@ Le premier correctif à faire n'est pas une performance, c'est la **pénalité d
 - Journal : 6 bits vectorise" 2>/dev/null; git log --oneline | head -1
 - Rapport : le moteur sur du vrai travail (deux tests reels sur le 30B MoE)  Test 1 : question en francais, gabarit de conversation, trois phrases exactes, arret 
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core echo "=== régression : glouton inchangé (doit redonner la même fonction mediane)" ./target/relea
+- Journal : session multi-tours" 2>/dev/null git log --oneline | head -3
 

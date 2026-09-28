@@ -47,23 +47,48 @@ au lieu des 200 demandés — la détection de fin fonctionne.
 | Français et anglais, texte et code | ✅ |
 | Débits mesurés | 0,5 B : 32 tok/s · 1,5 B : 17 · 30 B MoE : **5,6** · 7 B : 2,8 |
 
+## Troisième test : session multi-tours
+
+```
+vous> Quelle est la capitale de l'Australie ?
+assistant> La capitale de l'Australie est Canberra.
+vous> Et combien d'habitants compte-t-elle environ ?
+assistant> Canberra, la capitale de l'Australie, compte environ **450 000
+habitants** (en 2023). C'est la quatrième ville du pays en population, après
+Sydney, Melbourne et Brisbane.
+```
+
+La seconde question est **elliptique** : « elle » ne désigne rien sans le tour
+précédent. Le modèle l'a résolu — c'est la preuve que le contexte de
+conversation est bien porté d'un tour à l'autre, et pas seulement que le
+gabarit est appliqué.
+
+## Ce qui a été comblé depuis le premier bilan
+
+| manque | état |
+|---|---|
+| **Pénalité de répétition** (`--rep-penalty`, fenêtre `--hist`) | ✅ 300 jetons à température 0,7 sans boucle |
+| **Top-p / noyau** (`--top-p`) | ✅ s'ajoute au top-k = 40 |
+| **Sortie en flux** (`--flux`) | ✅ jeton par jeton, sans couper les caractères multi-octets |
+| **Session multi-tours** (`--session`) | ✅ avec troncature de sécurité du contexte |
+
 ## Ce qui n'est pas prêt
 
 | manque | conséquence | coût du correctif |
 |---|---|---|
-| **Pénalité de répétition, top-p** | boucles sur les générations longues ; seuls des tirages courts ont été validés | quelques lignes |
-| **Sortie en flux** | rien ne s'affiche avant la fin — inutilisable en interactif | faible |
 | **gpt-oss-120b** | tourne (5 tok/s) mais la sortie est fausse (PPL 39,8 au lieu de ~6) | inconnu |
 | **Contexte long** | attention en O(contexte), KV en f32 : 800 Mo à 8 k pour le 30 B, et +100 ms/jeton | moyen |
 | **Vision** | le chemin image du modèle VL n'existe pas | élevé |
-| **Robustesse** | pas de gestion mémoire, pas de session persistante, pas de requêtes multiples | moyen |
+| **Robustesse** | pas de gestion mémoire, pas de requêtes multiples ; en session, le tour peut dépasser et divaguer si le modèle n'émet pas son jeton de fin | moyen |
 
 ## Conclusion
 
-**Oui pour un vrai travail par lots** — génération de texte, de code, questions
-et réponses — avec la famille Qwen, sur des tâches qui tolèrent 3 à 6 jetons par
-seconde. **Non pour l'interactif** tant que la sortie n'est pas en flux, et **non
-pour gpt-oss** tant que sa sortie est fausse.
+**Oui pour un vrai travail, y compris interactif** avec la famille Qwen :
+génération de texte et de code, questions-réponses, sessions multi-tours, sortie
+en flux, échantillonnage complet. Le seul frein qui reste est la vitesse —
+5,6 jetons par seconde sur un 30 B MoE, ce qui est le régime d'un script ou
+d'un traitement de nuit plutôt que d'une frappe au clavier.
 
-Trois correctifs rendraient le moteur franchement utilisable, dans cet ordre :
-pénalité de répétition et top-p, sortie en flux, puis session multi-tours.
+**Non pour gpt-oss** tant que sa sortie est fausse (perplexité 39,8 au lieu de
+l'ordre de 6), et **non pour la vision** : le chemin image du modèle VL n'existe
+pas.

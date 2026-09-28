@@ -305,6 +305,7 @@ fn run_infer(args: &[String]) {
     let mut rep_pen = 1.0f32;
     let mut hist = 64usize;
     let mut flux = false;
+    let mut session = false;
     let mut ctx = 512usize;
     let _ = 0;
     let mut topk = 0usize;
@@ -352,6 +353,7 @@ fn run_infer(args: &[String]) {
             "--rep-penalty" => rep_pen = args[i + 1].parse().unwrap(),
             "--hist" => hist = args[i + 1].parse().unwrap(),
             "--flux" => { flux = true; i -= 1; }
+            "--session" => { session = true; flux = true; i -= 1; }
             "--ctx" => ctx = args[i + 1].parse().unwrap(),
             "--topk" => topk = args[i + 1].parse().unwrap(),
             "--abits" => abits = args[i + 1].parse().unwrap(),
@@ -465,9 +467,66 @@ fn run_infer(args: &[String]) {
         println!("capteur hebbien : couche {l}, projection gate ({n_out} x {n_in}), \
                   quantile {hebb_q} -> {hebb_out}");
     }
-    if ids.is_empty() { eprintln!("rien à générer : --ids ou --prompt requis"); return; }
+    if ids.is_empty() && !session {
+        eprintln!("rien à générer : --ids ou --prompt requis");
+        return;
+    }
 
     mdl.reset_events();
+
+    // ---------------------------------------------------------------- session
+    // Boucle interactive : chaque tour est ajouté à la conversation et
+    // retraité en entier. L'invite complète repasse donc par le modèle à chaque
+    // tour (coût quadratique en nombre de tours), mais c'est exact, et le cache
+    // KV n'a pas à être découpé par tour.
+    if session {
+        let tks = build_tokenizer(&mdl.g);
+        let mut conversation = String::new();
+        let mut n_tour = 0usize;
+        loop {
+            eprint!("vous> ");
+            let _ = std::io::Write::flush(&mut std::io::stderr());
+            let mut ligne = String::new();
+            if std::io::stdin().read_line(&mut ligne).unwrap_or(0) == 0 { break; }
+            let q = ligne.trim();
+            if q.is_empty() { continue; }
+            if q == "/quit" || q == "/q" { break; }
+            conversation.push_str(&format!(
+                "<|im_start|>user\n{q}<|im_end|>\n<|im_start|>assistant\n"));
+            let ids = tks.encode(&conversation);
+            // Garde-fou : la conversation doit tenir dans le contexte, avec de
+            // quoi générer. On garde la fin, on jette le début.
+            let ids = if ids.len() + n_new + 8 > ctx {
+                let garde = ctx.saturating_sub(n_new + 8);
+                let mut tronque = tks.encode("<|im_start|>system\n[conversation tronquée]<|im_end|>\n");
+                tronque.extend_from_slice(&ids[ids.len().saturating_sub(garde)..]);
+                tronque
+            } else { ids };
+            print!("assistant> ");
+            let _ = std::io::Write::flush(&mut std::io::stdout());
+            let mut accumules: Vec<u32> = Vec::new();
+            let mut deja = String::new();
+            let mut affiche = |t: u32| {
+                accumules.push(t);
+                let texte = tks.decode(&accumules);
+                if texte.len() > deja.len() {
+                    print!("{}", &texte[deja.len()..]);
+                    let _ = std::io::Write::flush(&mut std::io::stdout());
+                    deja = texte;
+                }
+            };
+            let (out, st) = mdl.generate(&ids, n_new, temp, top_p, rep_pen, hist,
+                                         Some(&mut affiche));
+            println!();
+            eprintln!("  [{:.1} tok/s, {} jetons]", st.n_gen as f64 / st.gen_s.max(1e-9), st.n_gen);
+            conversation.push_str(&tks.decode(&out));
+            conversation.push('\n');
+            n_tour += 1;
+            if n_tour >= 50 { break; }
+        }
+        return;
+    }
+
     let (out, st) = if topk > 0 {
         // pas-à-pas : utile pour confronter les logits à la référence numpy
         let t0 = Instant::now();
