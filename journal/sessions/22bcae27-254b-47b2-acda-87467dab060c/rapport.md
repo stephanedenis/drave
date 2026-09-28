@@ -5,14 +5,14 @@
 | Identifiant | `22bcae27-254b-47b2-acda-87467dab060c` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-25 11:56 |
-| Durée | 74.5 h |
-| Tours | 52 |
-| Messages | 1226 |
-| Appels d'outils | 1208 |
+| Durée | 74.7 h |
+| Tours | 53 |
+| Messages | 1245 |
+| Appels d'outils | 1225 |
 | Fichiers touchés | 68 |
-| Commandes | 966 |
+| Commandes | 983 |
 | Sous-agents | 1 |
-| Commits | 58 |
+| Commits | 59 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -133,6 +133,8 @@
 **Tour 51** — continue
 
 **Tour 52** — vas-y
+
+**Tour 53** — fais 1 et 2
 
 ## 2. Déroulé, étape par étape
 
@@ -2936,7 +2938,64 @@ Deux commits (`163a53e`, `b819c8d`), rapport et journal à jour.
 
 **Synthèse produite :**
 
-⏵ Budget épuisé. Je corrige, je consigne et je clos honnêtement.
+⏵ J'arrête ici, budget épuisé, et je clos sans enjoliver.
+
+\## Ce que ce cycle a établi
+
+**1. Les deux tokenizers sont réversibles.** J'ai ajouté un contrôle : le texte est reconstruit depuis les identifiants et comparé à la source. Qwen2 **et** o200k reconstruisent les 20 000 octets du corpus **à l'octet près**. L'hypothèse « notre encodage du corpus est faux » s'affaiblit nettement.
+
+**2. Un bug de câblage CLI trouvé et corrigé.** `--moe-topk` était analysé dans le chemin de perplexité mais **jamais assigné** au modèle : le drapeau n'avait aucun effet. Révélé par un test qui donnait un résultat *identique* avec 4 et avec 128 experts — ce qui est impossible. C'est le troisième bug de ce type dans ce moteur (`--dense`, `--pin`, `--moe-topk`) : les boucles de parsing sont dupliquées par mode et divergent.
+
+**3. La perplexité de gpt-oss, cernée mais pas expliquée :**
+
+| configuration | PPL |
+|---|---|
+| 63 jetons, RoPE simple | 39,8 |
+| 511 jetons, RoPE simple | 129,9 |
+| YaRN avec rampe | 184,9 |
+| YaRN interpolation pure | 1 171 |
+
+Une PPL qui **croît** avec la longueur désigne le codage de position — mais aucune variante YaRN ne bat le RoPE simple, donc le principe même est mal placé.
+
+**4. Un test que j'ai mal conçu, et je le note noir sur blanc** : utiliser les 128 experts au lieu du top-4 ne peut pas isoler le routage, puisque le modèle a été *entraîné* avec top-4 — changer k change la fonction, pas seulement sa précision. Les chiffres obtenus (1 752 contre 3 313 sur 7 jetons) ne mesurent rien. J'ai consigné l'erreur dans le commit.
+
+\## Où en est le moteur
+
+Régression verte (0,5B : 17,43 sur 256 jetons, conforme). Tout le parc Qwen fonctionne — conversation, flux, échantillonnage, formats réels en place. gpt-oss **génère correctement** mais sa perplexité reste inexpliquée ; les deux pistes restantes sont la sensibilité du modèle à son format `harmony`, puis un détail numérique qu'une comparaison de logits couche par couche révélerait.
+
+\## Ce que je recommande pour la suite
+
+Deux choses valent plus que de continuer à tâtons sur gpt-oss :
+
+1. **Factoriser les boucles de parsing CLI** — trois bugs du même type en une session, c'est un défaut de structure, pas de la malchance.
+2. **Implémenter le format `harmony` de gpt-oss** (son gabarit de conversation) : c'est peu de travail, ça rend le modèle utilisable en conversation, et ça teste directement l'hypothèse « le modèle est décalibré hors de son format ».
+
+Neuf commits sur ce cycle ; `reports/rapport-trava
+… [47 caractères tronqués]
+
+### Tour 53 — fais 1 et 2
+
+*17 appels d'outils.* Actions notables :
+
+- bash — Locate the declaration and loop blocks
+- bash — Extract the distinct flags from both parse loops
+- bash — Perform the CLI parsing refactor
+- bash — Inspect the refactored region
+- bash — Find the unbalanced brace
+- bash — Remove the stray braces and rebuild
+- bash — Fix the three refactor issues
+- bash — Revert to the last valid state and verify
+- bash — Implement the harmony chat template
+- bash — Test the harmony format on gpt-oss
+- bash — Inspect special_id
+- bash — Relax special_id and test harmony on gpt-oss
+- bash — Find the exact special token spellings in the o200k vocab
+- bash — Fix the diagnostic and confirm harmony works
+- … et 3 autres
+
+**Synthèse produite :**
+
+⏵ Bilan des deux tâches. Je commite et je clos honnêtement.
 
 ## 3. Travail accompli
 
@@ -3059,7 +3118,7 @@ Deux commits (`163a53e`, `b819c8d`), rapport et journal à jour.
 - **T3** Test OpenOCD without root and check Pro device support
 - **T3** Make scripts executable and test jtag_scan
 - **T3** Commit JTAG milestone
-- … et 926 autres
+- … et 943 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -3187,7 +3246,7 @@ Deux commits (`163a53e`, `b819c8d`), rapport et journal à jour.
 
 ## 5. Erreurs rencontrées
 
-114 sorties en erreur ou divergentes. Les premières :
+117 sorties en erreur ou divergentes. Les premières :
 
 - **T2** : === LIEN PCIe (sysfs, sans root) === current_link_speed     = 8.0 GT/s PCIe current_link_width     = 8 max_link_speed         = 8.0 GT/s PCIe max_link_width         = 8 secondary_bus_number   =  vendo
 - **T2** : [POPUP: saisissez le mot de passe] === TOUS les événements USB depuis le boot (fin de log) === [ven sep 25 11:52:23 2026] [ T684749] hid-generic 0003:04F2:2159.00ED: hiddev99,hidraw5: USB HID v1.10 De
@@ -3265,4 +3324,5 @@ Deux commits (`163a53e`, `b819c8d`), rapport et journal à jour.
 - Journal : gpt-oss genere correctement" 2>/dev/null git log --oneline | head -2
 - Journal : YaRN, resultats negatifs" 2>/dev/null git log --oneline | head -2
 - Journal : diagnostics gpt-oss" 2>/dev/null git log --oneline | head -1 cd qtrinet-core && ./target/release/qtrinet-core ../models/Qwen2.5-0.5B-Q8_0.gguf --ppl /
+- Journal : gabarit harmony" 2>/dev/null git log --oneline | head -3
 

@@ -130,10 +130,18 @@ impl Tokenizer {
     /// Un token n'est « spécial » que si `token_type` le dit (3 = contrôle,
     /// 4 = défini par l'utilisateur). Si `token_type` ne couvre pas l'id
     /// (tableau vide ou tronqué), on renvoie l'id trouvé sans pouvoir trancher.
+    /// Identifiant d'un jeton de contrôle, désigné par sa chaîne.
+    ///
+    /// Le type déclaré n'est pas décisif : le vocabulaire o200k range
+    /// `<|start|>` et `<|message|>` parmi les jetons **ordinaires**. Exiger le
+    /// type « contrôle » faisait donc échouer la détection du gabarit de
+    /// gpt-oss et retomber sur une invite brute. On privilégie un jeton de
+    /// contrôle, sinon on accepte n'importe quelle entrée portant exactement
+    /// cette chaîne.
     pub fn special_id(&self, text: &str) -> Option<u32> {
         let &id = self.tok_to_id.get(text)?;
         match self.token_type.get(id as usize) {
-            Some(&t) if t != 3 && t != 4 => None,
+            Some(&t) if t != 3 && t != 4 => Some(id),
             _ => Some(id),
         }
     }

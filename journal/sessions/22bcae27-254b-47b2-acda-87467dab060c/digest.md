@@ -26089,3 +26089,439 @@ experts=128  3313.1553
 ⏵ Budget épuisé. Je corrige, je consigne et je clos honnêtement.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\ncat > /tmp/msg11.txt <<'MSG'\ngpt-oss : deux diagnostics de plus, dont un bug de cablage CLI\n\n1. REVERSIBILITE DU TOKENIZER. Ajout d'un controle dans --tokenize --fichier :\nle texte est reconstruit depuis les identifiants et compare … [1869 caractères tronqués]`
+
+  ```
+8a8d419 Journal : diagnostics gpt-oss
+régression 0,5B : 17.4315
+  ```
+
+### 🤖 Assistant
+
+⏵ J'arrête ici, budget épuisé, et je clos sans enjoliver.
+
+## Ce que ce cycle a établi
+
+**1. Les deux tokenizers sont réversibles.** J'ai ajouté un contrôle : le texte est reconstruit depuis les identifiants et comparé à la source. Qwen2 **et** o200k reconstruisent les 20 000 octets du corpus **à l'octet près**. L'hypothèse « notre encodage du corpus est faux » s'affaiblit nettement.
+
+**2. Un bug de câblage CLI trouvé et corrigé.** `--moe-topk` était analysé dans le chemin de perplexité mais **jamais assigné** au modèle : le drapeau n'avait aucun effet. Révélé par un test qui donnait un résultat *identique* avec 4 et avec 128 experts — ce qui est impossible. C'est le troisième bug de ce type dans ce moteur (`--dense`, `--pin`, `--moe-topk`) : les boucles de parsing sont dupliquées par mode et divergent.
+
+**3. La perplexité de gpt-oss, cernée mais pas expliquée :**
+
+| configuration | PPL |
+|---|---|
+| 63 jetons, RoPE simple | 39,8 |
+| 511 jetons, RoPE simple | 129,9 |
+| YaRN avec rampe | 184,9 |
+| YaRN interpolation pure | 1 171 |
+
+Une PPL qui **croît** avec la longueur désigne le codage de position — mais aucune variante YaRN ne bat le RoPE simple, donc le principe même est mal placé.
+
+**4. Un test que j'ai mal conçu, et je le note noir sur blanc** : utiliser les 128 experts au lieu du top-4 ne peut pas isoler le routage, puisque le modèle a été *entraîné* avec top-4 — changer k change la fonction, pas seulement sa précision. Les chiffres obtenus (1 752 contre 3 313 sur 7 jetons) ne mesurent rien. J'ai consigné l'erreur dans le commit.
+
+## Où en est le moteur
+
+Régression verte (0,5B : 17,43 sur 256 jetons, conforme). Tout le parc Qwen fonctionne — conversation, flux, échantillonnage, formats réels en place. gpt-oss **génère correctement** mais sa perplexité reste inexpliquée ; les deux pistes restantes sont la sensibilité du modèle à son format `harmony`, puis un détail numérique qu'une comparaison de logits couche par couche révélerait.
+
+## Ce que je recommande pour la suite
+
+Deux choses valent plus que de continuer à tâtons sur gpt-oss :
+
+1. **Factoriser les boucles de parsing CLI** — trois bugs du même type en une session, c'est un défaut de structure, pas de la malchance.
+2. **Implémenter le format `harmony` de gpt-oss** (son gabarit de conversation) : c'est peu de travail, ça rend le modèle utilisable en conversation, et ça teste directement l'hypothèse « le modèle est décalibré hors de son format ».
+
+Neuf commits sur ce cycle ; `reports/rapport-travail-reel.md` et le journal portent l'état exact.
+
+
+## Tour 53
+
+### 👤 Utilisateur
+
+fais 1 et 2
+
+### 🤖 Assistant
+
+⏵ Tâche 1 : une seule boucle de parsing pour les trois modes. Je repère les blocs à remplacer
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\nfor f in run_infer run_ppl; do\n  echo \"=== $f\"\n  awk -v fn=\"fn $f\" 'index($0,fn){d=1} d&&/let mut i = 2;/{print NR\": DEBUT BOUCLE\"; s=NR} d&&/^    let /{if(!s) print NR\": \"$0} d&&/i \\+= 2;/{print NR\": FIN BOUCL … [98 caractères tronqués]`
+
+  ```
+=== run_infer
+299:     let path = &args[1];
+300:     let mut ids: Vec<u32> = Vec::new();
+301:     let mut prompt: Option<String> = None;
+302:     let mut n_new = 32usize;
+303:     let mut temp = 0.0f32;
+304:     let mut top_p = 1.0f32;
+305:     let mut rep_pen = 1.0f32;
+306:     let mut hist = 64usize;
+307:     let mut flux = false;
+308:     let mut session = false;
+309:     let mut ctx = 512usize;
+310:     let _ = 0;
+311:     let mut topk = 0usize;
+312:     let mut abits = 8u32;
+313:     let mut chat = false;
+314:     let mut hebb_layer: Option<usize> = None;
+315:     let mut hebb_q = 0.1f32;
+316:     let mut hebb_out = String::from("hebb.bin");
+317:     let mut ids_file: Option<String> = None;
+318:     let mut qk_topk = 0usize;
+319:     let mut attn_window = 0usize;
+323:     let mut attn_sinks = 0usize;
+324:     let mut attn_topk = 0usize;
+325:     let mut patch_file: Option<String> = None;
+326:     let mut act_thresh = 0.0f32;
+327:     let mut act_topk = 0usize;
+328:     let mut act_renorm = false;
+329:     let mut topk_proj = [0usize; 7];
+334:     let mut dense = false;
+335:     let mut auto = true;
+336:     let mut moe_topk = 0usize;
+337:     let mut b6 = 0u8;
+338:     let mut
+… [1176 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Je génère la boucle unique à partir des deux existantes (pour ne rien perdre), puis je remplace les blocs
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\npython3 - <<'PY'\nimport re\nsrc=open('src/main.rs',encoding='utf-8').read().split('\\n')\ndef bloc(d, f):\n    # d = ligne de début (1-based) des déclarations, f = ligne de fin de boucle\n    return '\\n'.join(src[d-1:f]) … [1415 caractères tronqués]`
+
+  ```
+50 drapeaux distincts
+    "--abits"
+    "--act-renorm"
+    "--act-thresh"
+    "--act-topk"
+    "--attn-sinks"
+    "--attn-topk"
+    "--attn-window"
+    "--auto"
+    "--bits"
+    "--bits-attn"
+    "--bits-ffn"
+    "--chat"
+    "--ctx"
+    "--dense"
+    "--ffn-gain"
+    "--flux"
+    "--hebb-out"
+    "--hebb-q"
+    "--hebbian"
+    "--hist"
+    "--ids"
+    "--ids-file"
+    "--infer"
+    "--keep"
+    "--limit"
+    "--moe-topk"
+    "--n"
+    "--patch"
+    "--pin"
+    "--ppl"
+    "--prompt"
+    "--push"
+    "--q4"
+    "--q4-attn"
+    "--q4-ffn"
+    "--q4-tout"
+    "--qk-topk"
+    "--rep-penalty"
+    "--session"
+    "--temp"
+    "--threads"
+    "--top-p"
+    "--topk"
+    "--topk-down"
+    "--topk-gate"
+    "--topk-k"
+    "--topk-o"
+    "--topk-q"
+    "--topk-up"
+    "--topk-v"
+64 /tmp/bras.txt
+  ```
+
+### 🤖 Assistant
+
+⏵ Je génère la structure, le parseur unique, et je remplace les deux blocs
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\npython3 - <<'PY'\nimport re\nsrc=open('src/main.rs',encoding='utf-8').read()\nlignes=src.split('\\n')\n\ndef bloc(d,f): return '\\n'.join(lignes[d-1:f])\nbi=bloc(300,408); bp=bloc(787,883)\n\nchamps=[\"ids\",\"prompt\",\"i … [6131 caractères tronqués]`
+
+  ```
+ok
+error: unexpected closing delimiter: `}`
+   --> src/main.rs:678:1
+    |
+431 | fn run_infer(args: &[String]) {
+    |                               - this delimiter might not be properly closed...
+...
+--
+error: could not compile `qtrinet-core` (bin "qtrinet-core") due to 1 previous error
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\nsed -n '431,452p' src/main.rs\necho \"---- fin de la zone remplacée\"\nawk 'NR>=452 && NR<=470 {printf \"%d: %s\\n\", NR, $0}' src/main.rs | head -20", "description": "Inspect the refactored region"}`
+
+  ```
+fn run_infer(args: &[String]) {
+    let path = &args[1];
+    // Analyse unique : les valeurs par défaut propres au mode sont posées
+    // d'abord, le parseur commun ne fait que les remplacer.
+    let mut o = Options { n_threads: (cpu / 2).max(1), abits: 8, ctx: 512, n_new: 32, attn_sinks: 4, ..Options::default() };
+    {
+        let mut i = 2;
+        while i < args.len() { option(&mut o, args, &mut i); i += 2; }
+    }
+    let Options {
+        n_threads,
+        ids,
+        prompt,
+        n_new,
+        temp,
+        top_p,
+        rep_pen,
+        hist,
+        flux,
+        session,
+        chat,
+        ctx,
+---- fin de la zone remplacée
+452:         ctx,
+453:         topk,
+454:         abits,
+455:         hebb_layer,
+456:         hebb_q,
+457:         hebb_out,
+458:         qk_topk,
+459:         attn_window,
+460:         attn_sinks,
+461:         attn_topk,
+462:         patch_file,
+463:         act_thresh,
+464:         act_topk,
+465:         act_renorm,
+466:         topk_proj,
+467:         dense,
+468:         auto,
+469:         moe_topk,
+470:         b6,
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\nawk 'NR>=471 && NR<=490 {printf \"%d: %s\\n\", NR, $0}' src/main.rs\necho \"=== où est la fin de run_infer d'après l'ancienne structure\"\ngrep -n \"^fn run_ppl\\|^fn run_infer\\|^}\" src/main.rs | awk -F: '$1>460 && $1<70 … [58 caractères tronqués]`
+
+  ```
+471:         q4,
+472:         keep,
+473:         ..
+474:     } = o;
+475:     }
+476:     let mut mdl = model::Model::load(path, ctx, n_threads, dense, keep, auto, q4, b6);
+477:     mdl.act_levels = ((1u32 << (abits - 1)) - 1) as f32;
+478:     mdl.moe_topk = moe_topk;
+479:     mdl.act_thresh = act_thresh;
+480:     mdl.act_topk = act_topk;
+481:     mdl.act_renorm = act_renorm;
+482:     mdl.act_topk_proj = topk_proj;
+483:     if act_topk > 0 || act_thresh > 0.0 {
+484:         println!("parcimonie imposée : k-WTA garde {:.1} %{}",
+485:                  act_topk as f32 / 10.0,
+486:                  if act_thresh > 0.0 { format!(", seuil {:.1} %", act_thresh * 100.0) } else { String::new() });
+487:     }
+488:     if chat {
+489:         mdl.stop_id = build_tokenizer(&mdl.g).special_id("<|im_end|>");
+490:     }
+=== où est la fin de run_infer d'après l'ancienne structure
+678:}
+692:}
+699:}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\npython3 - <<'PY'\nlignes=open('src/main.rs',encoding='utf-8').read().split('\\n')\n# supprimer les accolades orphelines juste après un \"} = o;\"\nsuspects=[i for i,l in enumerate(lignes) if l.strip()==\"} = o;\" and i+1<l … [388 caractères tronqués]`
+
+  ```
+accolades orphelines supprimées : 2
+error: expected identifier, found `,`
+   --> src/main.rs:854:27
+    |
+854 |     let mut o = Options { , ..Options::default() };
+    |                 -------   ^ expected identifier
+    |                 |
+--
+error[E0425]: cannot find value `cpu` in this scope
+   --> src/main.rs:435:39
+    |
+435 |     let mut o = Options { n_threads: (cpu / 2).max(1), abits: 8, ctx: 512, n_new: 32, attn_sinks: 4, ..Options::default() };
+    |                                       ^^^ not found in this scope
+
+error[E0425]: cannot find value `ids_file` in this scope
+   --> src/main.rs:522:23
+    |
+--- build
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\npython3 - <<'PY'\np='src/main.rs'; s=open(p,encoding='utf-8').read(); o=s\n# 1) defaults vides\ns=s.replace('let mut o = Options { , ..Options::default() };','let mut o = Options::default();')\n# 2) cpu dans run_infer\ns=s … [1602 caractères tronqués]`
+
+  ```
+307:    pub ids_file: Option<String>,
+325:    pub ids_file: Option<String>,
+348:            ids: Vec::new(), ids_file: None, prompt: None, idfile: String::new(), n_new: 32,
+352:            ids_file: None, qk_topk: 0, attn_window: 0, attn_sinks: 0, attn_topk: 0,
+398:            "--o.ids" => o.ids = args[i + 1].split(',').filter_map(|s| s.trim().parse().ok()).collect(),
+399:            "--o.ids-file" => o.ids_file = Some(args[i + 1].clone()),
+445:        ids_file,
+525:    if let Some(f) = &ids_file {
+error[E0124]: field `ids_file` is already declared
+   --> src/main.rs:325:5
+    |
+307 |     pub ids_file: Option<String>,
+    |     ---------------------------- `ids_file` first declared here
+...
+--
+error[E0062]: field `ids_file` specified more than once
+   --> src/main.rs:352:13
+    |
+348 |             ids: Vec::new(), ids_file: None, prompt: None, idfile: String::new(), n_new: 32,
+    |                              -------------- first use of `ids_file`
+...
+--
+error[E0369]: cannot add `{integer}` to `&mut usize`
+   --> src/main.rs:363:45
+    |
+363 |             "--o.abits" => o.abits = args[i + 1].parse().unwrap(),
+    |                                           - ^ - {integer}
+    |  
+… [52 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ La substitution a corrompu les noms de drapeaux (`"--o.ids"`). Je **reviens au dernier état valide** plutôt que de laisser le dépôt cassé
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\ngit checkout src/main.rs\ncargo build --release 2>&1 | grep -E \"^error\" -A 4 | head -6\necho \"=== l'état valide est restauré : vérification\"\n./target/release/qtrinet-core ../models/Qwen2.5-0.5B-Q8_0.gguf --ppl /tmp/id … [411 caractères tronqués]`
+
+  ```
+=== l'état valide est restauré : vérification
+  0,5B dense : 17.4315
+  inférence : 1
+[stderr]
+Updated 1 path from the index
+  ```
+
+### 🤖 Assistant
+
+⏵ Tâche 2, sans risque : le format **harmony** de gpt-oss
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\npython3 - <<'PY'\np='src/model.rs'; s=open(p,encoding='utf-8').read(); o=s\ns=s.replace('''    pub stop_id: Option<u32>,''','''    pub stop_id: Option<u32>,\n    /// Second jeton d'arrêt : gpt-oss termine par `<|return|>`  … [1888 caractères tronqués]`
+
+  ```
+=== build
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\necho \"=== régression Qwen (le gabarit Qwen doit rester intact)\"\n./target/release/qtrinet-core ../models/Qwen2.5-0.5B-Q8_0.gguf --infer --chat --prompt \"Dis bonjour.\" --n 12 --ctx 64 --threads 16 --temp 0 2>&1 | sed -n … [487 caractères tronqués]`
+
+  ```
+=== régression Qwen (le gabarit Qwen doit rester intact)
+<|im_start|>assistant
+Bonjour! Comment puis-je vous aider aujourd'hui ?<|im_end|>
+--- ids générés : [81581, 0, 12255, 43729, 12, 3756, 9012, 90778, 74704, 87153, 937, 151645]
+=== gpt-oss en format harmony
+Qwen2 · 36 couches · hidden 2880 · 64 têtes / 8 KV · FFN 2880 · vocab 201088
+[chat] ce modèle n'a pas le gabarit Qwen : invite brute
+prompt : 13 tokens
+
+
+The capital of Australia is Canberra.
+  ```
+
+### 🤖 Assistant
+
+⏵ `<|start|>` n'est pas marqué « spécial » dans le vocabulaire o200k — `special_id` ne le trouve pas. Je le rends tolérant
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\nsed -n '/pub fn special_id/,/^    }/p' src/tokenizer.rs", "description": "Inspect special_id"}`
+
+  ```
+pub fn special_id(&self, text: &str) -> Option<u32> {
+        let &id = self.tok_to_id.get(text)?;
+        match self.token_type.get(id as usize) {
+            Some(&t) if t != 3 && t != 4 => None,
+            _ => Some(id),
+        }
+    }
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\npython3 - <<'PY'\np='src/tokenizer.rs'; s=open(p,encoding='utf-8').read(); o=s\ns=s.replace('''    pub fn special_id(&self, text: &str) -> Option<u32> {\n        let &id = self.tok_to_id.get(text)?;\n        match self.tok … [1637 caractères tronqués]`
+
+  ```
+=== régression Qwen d'abord
+<|im_start|>assistant
+Bonjour! Comment puis-je vous aider aujourd'hui ?<|im_end|>
+Qwen2 · 36 couches · hidden 2880 · 64 têtes / 8 KV · FFN 2880 · vocab 201088
+[chat] ce modèle n'a pas le gabarit Qwen : invite brute
+prompt : 13 tokens
+
+
+The capital of Australia is Canberra.
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport struct\nf=open(\"/home/stephane/FastNVMe/models/gpt-oss-120b-MXFP4.gguf\",'rb')\nf.read(4); struct.unpack('<I',f.read(4)); nt,=struct.unpack('<Q',f.read(8)); nkv,=struct.unpack('<Q',f.read(8))\ndef ch():\n    n,=struct.unpack('<Q',f.read(8)); return f.read(n).de … [1297 caractères tronqués]`
+
+  ```
+jetons : 201088
+  <|start|>        -> [200006] (type [3])
+  <|end|>          -> [200007] (type [3])
+  <|message|>      -> [200008] (type [3])
+  <|return|>       -> [200002] (type [3])
+  <|channel|>      -> [200005] (type [3])
+  <|call|>         -> [200012] (type [3])
+  <|constrain|>    -> [200003] (type [3])
+  autour de bos : [(199996, 'Cursos', 1), (199997, 'Ġcocos', 1), (199998, '<|startoftext|>', 3), (199999, '<|endoftext|>', 3), (200000, '<|reserved_200000|>', 3), (200001, '<|reserved_200001|>', 3), (200002, '<|return|>', 3)]
+  ```
+
+### 🤖 Assistant
+
+⏵ Le gabarit harmony **fonctionne** (13 jetons d'invite au lieu de 5) — seul le message de diagnostic était trompeur. Je corrige et je commite
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\npython3 - <<'PY'\np='src/main.rs'; s=open(p,encoding='utf-8').read(); o=s\ns=s.replace('''        if chat && !gabarit_qwen {\n            eprintln!(\"[chat] ce modèle n'a pas le gabarit Qwen : invite brute\");\n        }'' … [847 caractères tronqués]`
+
+  ```
+error[E0425]: cannot find value `gabarit_harmony` in this scope
+   --> src/main.rs:438:12
+    |
+438 |         if gabarit_harmony {
+    |            ^^^^^^^^^^^^^^^ not found in this scope
+
+--
+error: could not compile `qtrinet-core` (bin "qtrinet-core") due to 1 previous error; 17 warnings emitted
+Qwen2 · 36 couches · hidden 2880 · 64 têtes / 8 KV · FFN 2880 · vocab 201088
+prompt : 13 tokens
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\ngrep -n \"gabarit_harmony\\|gabarit inconnu\\|n'a pas le gabarit\" src/main.rs", "description": "Locate the two chat diagnostics"}`
+
+  ```
+438:        if gabarit_harmony {
+441:            eprintln!("[chat] gabarit inconnu pour ce modèle : invite brute");
+446:        let gabarit_harmony = chat
+449:        if gabarit_harmony {
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\npython3 - <<'PY'\np='src/main.rs'; s=open(p,encoding='utf-8').read(); o=s\n# remettre le message d'origine à l'endroit où la variable n'existe pas encore\ns=s.replace('''        if gabarit_harmony {\n            eprintln!( … [1508 caractères tronqués]`
+
+  ```
+[chat] gabarit HARMONY appliqué (gpt-oss)
+généré  : 80 tokens en 15.492 s  (5.16 tok/s)
+Qwen2 · 36 couches · hidden 2880 · 64 têtes / 8 KV · FFN 2880 · vocab 201088
+prompt : 13 tokens
+
+
+=== régression Qwen
+<|im_start|>assistant
+Bonjour! Comment puis-je vous aider aujourd'hui ?<|im_end|>
+  ```
+
+### 🤖 Assistant
+
+⏵ Bilan des deux tâches. Je commite et je clos honnêtement.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\ncat > /tmp/msg12.txt <<'MSG'\nGabarit harmony de gpt-oss : fait. Refactorisation CLI : abandonnee, et pourquoi.\n\n2. GABARIT HARMONY -- FAIT\n   gpt-oss n'utilise pas <|im_start|> mais son propre format :\n     <|start|>system<|messag … [1924 caractères tronqués]`

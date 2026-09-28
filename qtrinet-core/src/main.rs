@@ -436,7 +436,30 @@ fn run_infer(args: &[String]) {
         let gabarit_qwen = chat && tk.special_id("<|im_start|>").is_some()
                                   && tk.special_id("<|im_end|>").is_some();
         if chat && !gabarit_qwen {
-            eprintln!("[chat] ce modèle n'a pas le gabarit Qwen : invite brute");
+            eprintln!("[chat] gabarit inconnu pour ce modèle : invite brute");
+        }
+        // Gabarit **harmony** (gpt-oss) : canaux et marqueurs dédiés. Le modèle
+        // est entraîné dessus ; une invite brute le fait répondre, mais hors de
+        // sa distribution.
+        let gabarit_harmony = chat
+            && tk.special_id("<|start|>").is_some()
+            && tk.special_id("<|message|>").is_some();
+        if gabarit_harmony {
+            let deb = tk.special_id("<|start|>").unwrap();
+            let msg = tk.special_id("<|message|>").unwrap();
+            let fin = tk.special_id("<|end|>").unwrap();
+            for (role, texte) in [("system", "You are a helpful assistant."), ("user", p.as_str())] {
+                ids.push(deb);
+                ids.extend(tk.encode(role));
+                ids.push(msg);
+                ids.extend(tk.encode(texte));
+                ids.push(fin);
+            }
+            ids.push(deb);
+            ids.extend(tk.encode("assistant"));
+            mdl.stop_id = tk.special_id("<|return|>");
+            mdl.stop_id2 = Some(fin);
+            eprintln!("[chat] gabarit HARMONY appliqué (gpt-oss)");
         }
         if gabarit_qwen {
             // gabarit Qwen2.5-Instruct, tokens spéciaux insérés tels quels

@@ -417,6 +417,9 @@ pub struct Model {
     pub seuil_push: f32,
     /// Token d'arrêt (EOS / <|im_end|>) : la génération s'interrompt dessus.
     pub stop_id: Option<u32>,
+    /// Second jeton d'arrêt : gpt-oss termine par `<|return|>` **ou**
+    /// `<|end|>` selon le canal.
+    pub stop_id2: Option<u32>,
     /// Postes de temps cumulés, en secondes (diagnostic).
     pub prof: [f64; 6],
     /// Nom du tenseur de la tête de sortie : `output.weight` s'il existe,
@@ -714,7 +717,7 @@ impl Model {
             attn_window: fenetre,
             attn_sinks: if fenetre > 0 { 0 } else { 4 },
             seuil_push: 0.22,
-            stop_id: None, prof: [0.0; 6],
+            stop_id: None, stop_id2: None, prof: [0.0; 6],
             tete,
             tete_gpu, head4, sinks_vus,
             patch: None, ffn_gain: None, hebb: None,
@@ -1539,7 +1542,7 @@ impl Model {
             };
             out.push(next);
             if let Some(f) = flux.as_mut() { f(next); }
-            if Some(next) == self.stop_id { break; }
+            if Some(next) == self.stop_id || Some(next) == self.stop_id2 { break; }
             let pos = ids.len() + step;
             last = self.forward(next, pos);
         }
