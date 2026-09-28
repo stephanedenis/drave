@@ -7,12 +7,12 @@
 | Début | 2026-09-25 11:56 |
 | Durée | 72.0 h |
 | Tours | 42 |
-| Messages | 1138 |
-| Appels d'outils | 1140 |
+| Messages | 1139 |
+| Appels d'outils | 1141 |
 | Fichiers touchés | 68 |
-| Commandes | 898 |
+| Commandes | 899 |
 | Sous-agents | 1 |
-| Commits | 46 |
+| Commits | 47 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -2421,7 +2421,7 @@ Commits `1082358` et `2f87190` ; `docs/convertisseur.md` porte le détail et la 
 
 ### Tour 42 — tu n'as pas besoin de te comparer à llama. Contente-toi d'optimiser pour réduire la perpelexité. continue d'améliorer no … [241 caractères tronqués]
 
-*10 appels d'outils.* Actions notables :
+*11 appels d'outils.* Actions notables :
 
 - bash — Add per-model tokenization and a vocabulary guard
 - bash — Run gpt-oss perplexity with its own tokenization
@@ -2433,6 +2433,7 @@ Commits `1082358` et `2f87190` ; `docs/convertisseur.md` porte le détail et la 
 - bash — Regression check after the gpt-oss work
 - bash — Commit the gpt-oss perplexity reduction
 - bash — Commit with a message file
+- bash — Commit the journal and check the documentation
 
 **Synthèse produite :**
 
@@ -2559,7 +2560,7 @@ Commits `1082358` et `2f87190` ; `docs/convertisseur.md` porte le détail et la 
 - **T3** Test OpenOCD without root and check Pro device support
 - **T3** Make scripts executable and test jtag_scan
 - **T3** Commit JTAG milestone
-- … et 858 autres
+- … et 859 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2753,4 +2754,5 @@ Commits `1082358` et `2f87190` ; `docs/convertisseur.md` porte le détail et la 
 - Tokenizer o200k verifie, briques gpt-oss, YaRN ; 120B charge et tourne  TOKENIZER : pre-decoupage gpt-4o/o200k implemente (casse des lettres, nombres par groupe
 - gpt-oss : perplexite 42 127 -> 39,8 en cinq etapes mesurees  1. TOKENIZER. Le modele etait nourri avec des jetons Qwen : sa perplexite ne    mesurait que l'absu
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet cat > /tmp/msg.txt <<'MSG' gpt-oss : perplexite 42 127 -> 39,8 en cinq etapes mesurees  1. TOKENIZER. Le mode
+- Journal : session du 28/09 (tokenizer o200k, briques gpt-oss, descente de perplexite)" && git log --oneline | head -1 echo "--- état de gpt-oss" grep -n "39,8\|
 

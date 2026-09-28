@@ -24510,3 +24510,11 @@ Parc : gpt-oss-120b 39,8 (etait 42 127) | 0,5B Q8_0 19,3885 | 0,5B Q4_0 21,0110 
 ⏵ Le message de commit a cassé sur des guillemets — je recommite via un fichier
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\ncat > /tmp/msg.txt <<'MSG'\ngpt-oss : perplexite 42 127 -> 39,8 en cinq etapes mesurees\n\n1. TOKENIZER. Le modele etait nourri avec des jetons Qwen : sa perplexite ne\n   mesurait que l'absurde de l'entree. Ajout de --tokenize --fichi … [1365 caractères tronqués]`
+
+  ```
+fb44671 gpt-oss : perplexite 42 127 -> 39,8 en cinq etapes mesurees
+2f87190 Tokenizer o200k verifie, briques gpt-oss, YaRN ; 120B charge et tourne
+ M journal/README.md
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\ngit add -A && git commit -q -m \"Journal : session du 28/09 (tokenizer o200k, briques gpt-oss, descente de perplexite)\" && git log --oneline | head -1\necho \"--- état de gpt-oss\"\ngrep -n \"39,8\\|42 127\" docs/convertisseur.md | he … [93 caractères tronqués]`
