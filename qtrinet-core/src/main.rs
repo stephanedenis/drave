@@ -319,6 +319,7 @@ fn run_infer(args: &[String]) {
     // modèle dense, ×1,5 en faveur du push sous 5 % de densité).
     let mut dense = false;
     let mut auto = true;
+    let mut moe_topk = 0usize;
     let mut q4 = 0u8;
     let mut keep = 1.0f32;
     // L'inférence paie une barrière par matrice (168 par token) : l'optimum
@@ -358,6 +359,7 @@ fn run_infer(args: &[String]) {
             "--threads" => n_threads = args[i + 1].parse().unwrap(),
             "--chat" => { chat = true; i -= 1; }
             "--dense" => { dense = true; i -= 1; }
+            "--moe-topk" => { moe_topk = args[i + 1].parse().unwrap(); i -= 1; }
             "--auto" => { auto = true; i -= 1; }
             "--push" => { auto = false; dense = false; i -= 1; }
             "--q4" => { q4 |= 3; i -= 1; }
@@ -371,6 +373,7 @@ fn run_infer(args: &[String]) {
     }
     let mut mdl = model::Model::load(path, ctx, n_threads, dense, keep, auto, q4);
     mdl.act_levels = ((1u32 << (abits - 1)) - 1) as f32;
+    mdl.moe_topk = moe_topk;
     mdl.act_thresh = act_thresh;
     mdl.act_topk = act_topk;
     mdl.act_renorm = act_renorm;
@@ -545,6 +548,7 @@ fn run_ppl(args: &[String]) {
     // modèle dense, ×1,5 en faveur du push sous 5 % de densité).
     let mut dense = false;
     let mut auto = true;
+    let mut moe_topk = 0usize;
     let mut q4 = 0u8;
     let cpu = std::thread::available_parallelism().map(|n| n.get()).unwrap_or(8);
     let mut n_threads = (cpu * 3 / 4).max(1);
@@ -590,6 +594,7 @@ fn run_ppl(args: &[String]) {
             "--attn-sinks" => attn_sinks = args[i + 1].parse().unwrap(),
             "--threads" => n_threads = args[i + 1].parse().unwrap(),
             "--dense" => { dense = true; i -= 1; }
+            "--moe-topk" => { moe_topk = args[i + 1].parse().unwrap(); i -= 1; }
             "--auto" => { auto = true; i -= 1; }
             "--push" => { auto = false; dense = false; i -= 1; }
             "--q4" => { q4 |= 3; i -= 1; }

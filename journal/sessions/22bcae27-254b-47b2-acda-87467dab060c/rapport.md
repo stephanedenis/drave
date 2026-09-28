@@ -5,14 +5,14 @@
 | Identifiant | `22bcae27-254b-47b2-acda-87467dab060c` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-25 11:56 |
-| Durée | 67.9 h |
+| Durée | 68.5 h |
 | Tours | 39 |
-| Messages | 1061 |
-| Appels d'outils | 1070 |
+| Messages | 1082 |
+| Appels d'outils | 1091 |
 | Fichiers touchés | 68 |
-| Commandes | 830 |
+| Commandes | 851 |
 | Sous-agents | 1 |
-| Commits | 39 |
+| Commits | 40 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -2255,7 +2255,7 @@ L'emprunt gagne sur **les quatre axes à la fois** — parce qu'il ne fait rien 
 
 ### Tour 39 — vas-y, implémente et teste le tout
 
-*48 appels d'outils.* Actions notables :
+*69 appels d'outils.* Actions notables :
 
 - create_goal
 - bash — Census Q4_K/Q6_K roles and MoE tensors
@@ -2271,11 +2271,11 @@ L'emprunt gagne sur **les quatre axes à la fois** — parce qu'il ne fait rien 
 - bash — Fix imports and borrows
 - bash — Find the actual list import line
 - bash — Wire Q4_K into the loader and test on a real model
-- … et 34 autres
+- … et 55 autres
 
 **Synthèse produite :**
 
-⏵ 3 tests verts. Je commite avant d'attaquer le MoE
+⏵ Threads : 16 bat 32 (confirmé). Référence llama.cpp : 10,57 sur un court extrait. Régression puis commit
 
 ## 3. Travail accompli
 
@@ -2398,7 +2398,7 @@ L'emprunt gagne sur **les quatre axes à la fois** — parce qu'il ne fait rien 
 - **T3** Test OpenOCD without root and check Pro device support
 - **T3** Make scripts executable and test jtag_scan
 - **T3** Commit JTAG milestone
-- … et 790 autres
+- … et 811 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2526,7 +2526,7 @@ L'emprunt gagne sur **les quatre axes à la fois** — parce qu'il ne fait rien 
 
 ## 5. Erreurs rencontrées
 
-98 sorties en erreur ou divergentes. Les premières :
+102 sorties en erreur ou divergentes. Les premières :
 
 - **T2** : === LIEN PCIe (sysfs, sans root) === current_link_speed     = 8.0 GT/s PCIe current_link_width     = 8 max_link_speed         = 8.0 GT/s PCIe max_link_width         = 8 secondary_bus_number   =  vendo
 - **T2** : [POPUP: saisissez le mot de passe] === TOUS les événements USB depuis le boot (fin de log) === [ven sep 25 11:52:23 2026] [ T684749] hid-generic 0003:04F2:2159.00ED: hiddev99,hidraw5: USB HID v1.10 De
@@ -2585,4 +2585,5 @@ L'emprunt gagne sur **les quatre axes à la fois** — parce qu'il ne fait rien 
 - Emprunt des blocs 4 bits en place : chargement x3,2, memoire /2, fidelite exacte  Les matrices Q4_0 et MXFP4 ne sont plus recopiees dans notre disposition : ell
 - Q4_K et Q6_K en place : le 7B et le 1,5B Q4_K_M tournent  Lecteur Q4_K (super-blocs de 256 poids, 144 octets) et Q6_K (210 octets) lus DANS LE FICHIER, sans cop
 - Q6_K en place (AVX2) : tete divisee par 5, fidelite gagnee  Noyau Q6_K AVX2 : seize valeurs extraites par groupe (nibble de ql + 2 bits de qh), elevees en i16, 
+- MoE : routage top-k et tranches par expert, le 30B-A3B tourne  Le routeur (ffn_gate_inp, f32) note les 128 experts, softmax sur tous, top-k, renormalisation ; s
 

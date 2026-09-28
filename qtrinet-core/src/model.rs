@@ -32,6 +32,11 @@ pub struct Cfg {
     pub eps: f32,
     pub rope_base: f32,
     pub vocab: usize,
+    /// MoE : nombre d'experts, combien sont allumés par jeton, et leur taille
+    /// intermédiaire. `n_expert = 0` pour un modèle dense.
+    pub n_expert: usize,
+    pub n_expert_used: usize,
+    pub ffn_exp: usize,
 }
 
 /// Une projection, dans l'un des deux formats, plus son biais éventuel.
@@ -45,6 +50,105 @@ pub struct Proj {
     pub bias: Option<Vec<f32>>,
 }
 
+/// Type ggml → origine des blocs pour `Vue4`.
+fn source_de(t: u32) -> Option<crate::list::Source> {
+    use crate::gguf::{GGML_MXFP4, GGML_Q4_0, GGML_Q4_K, GGML_Q6_K};
+    use crate::list::Source;
+    match t {
+        GGML_Q4_K => Some(Source::Q4_K),
+        GGML_Q6_K => Some(Source::Q6_K),
+        GGML_MXFP4 => Some(Source::Mxfp4),
+        GGML_Q4_0 => Some(Source::Q4_0),
+        _ => None,
+    }
+}
+
+/// Charge le mélange d'experts d'une couche, s'il existe.
+///
+/// Les trois tenseurs `ffn_*_exps` sont des tenseurs **3D** dont la première
+/// dimension (la plus lente) est l'expert : chaque expert est donc un bloc
+/// contigu, et le moteur n'a besoin que d'un pointeur et d'un pas.
+fn charger_moe(g: &Gguf, l: usize, n_expert: usize) -> Option<Moe> {
+    if n_expert == 0 { return None; }
+    let p = |s: &str| format!("blk.{l}.{s}");
+    let vue = |nom: &str| -> Option<Vue4> {
+        let t = g.tensor(nom)?;
+        if t.dims.len() < 3 || t.dims[0] as usize != n_expert { return None; }
+        let src = source_de(t.ttype)?;
+        let (n_out, n_in) = (t.dims[1] as usize, t.dims[2] as usize);
+        let bloc = if t.ttype == crate::gguf::GGML_Q4_K || t.ttype == crate::gguf::GGML_Q6_K { 256 } else { 32 };
+        if n_in % bloc != 0 { return None; }
+        Some(Vue4 { base: g.data_ptr(nom)?, n_out, n_in, nb: n_in / bloc, src })
+    };
+    let gate = vue(&p("ffn_gate_exps.weight"))?;
+    let up = vue(&p("ffn_up_exps.weight"))?;
+    let down = vue(&p("ffn_down_exps.weight"))?;
+    let routeur = g.dequant(&p("ffn_gate_inp.weight"));
+    assert_eq!(routeur.len(), n_expert * gate.n_in, "routeur de taille inattendue");
+    // Expert partagé (Qwen3-MoE d'origine, DeepSeek) : toujours actif.
+    let shexp = match (vue(&p("ffn_gate_shexp.weight")), vue(&p("ffn_up_shexp.weight")),
+                       vue(&p("ffn_down_shexp.weight"))) {
+        (Some(a), Some(b), Some(c)) => Some((a, b, c)),
+        _ => None,
+    };
+    Some(Moe { routeur, gate, up, down, shexp })
+}
+
+/// Vue sur un tenseur déjà quantifié, découpable **par expert**. Les experts
+/// sont empilés dans un tenseur 3D et **contigus** : l'expert `e` commence à
+/// `base + e × n_out × nb × pas`. Aucune copie, aucun découpage préalable.
+#[derive(Clone, Copy)]
+pub struct Vue4 {
+    pub base: *const u8,
+    pub n_out: usize,
+    pub n_in: usize,
+    pub nb: usize,
+    pub src: crate::list::Source,
+}
+
+impl Vue4 {
+    fn pas(&self) -> usize {
+        use crate::list::Source::*;
+        match self.src {
+            Q4_K => crate::gguf::TAILLE_Q4K,
+            Q6_K => crate::gguf::TAILLE_Q6K,
+            Mxfp4 => 17,
+            Q4_0 => 18,
+            Propre => 0,
+        }
+    }
+
+    /// Matrice 4 bits de l'expert `e`, **empruntée** au fichier.
+    fn expert(&self, e: usize) -> crate::list::DenseQ4 {
+        let base = unsafe { self.base.add(e * self.n_out * self.nb * self.pas()) };
+        unsafe {
+            match self.src {
+                crate::list::Source::Q4_K =>
+                    crate::list::DenseQ4::emprunter_q4k(base, self.n_out, self.n_in, self.nb),
+                crate::list::Source::Q6_K =>
+                    crate::list::DenseQ4::emprunter_q6k(base, self.n_out, self.n_in, self.nb),
+                crate::list::Source::Mxfp4 =>
+                    crate::list::DenseQ4::emprunter(base, self.n_out, self.n_in, self.nb, true),
+                _ => crate::list::DenseQ4::emprunter(base, self.n_out, self.n_in, self.nb, false),
+            }
+        }
+    }
+}
+
+unsafe impl Send for Vue4 {}
+unsafe impl Sync for Vue4 {}
+
+/// Mélange d'experts : un routeur (petit, en f32) et trois tenseurs empilés.
+pub struct Moe {
+    /// Routeur `[n_expert × n_embd]`, rangée par expert, en f32.
+    pub routeur: Vec<f32>,
+    pub gate: Vue4,
+    pub up: Vue4,
+    pub down: Vue4,
+    /// Expert partagé, toujours actif (certains modèles seulement).
+    pub shexp: Option<(Vue4, Vue4, Vue4)>,
+}
+
 pub struct Layer {
     pub attn_norm: Vec<f32>,
     pub wq: Proj,
@@ -52,9 +156,16 @@ pub struct Layer {
     pub wv: Proj,
     pub wo: Proj,
     pub ffn_norm: Vec<f32>,
+    /// RMSNorm appliquée à chaque tête de Q et de K après projection
+    /// (Qwen3, Gemma 3…). Absente ailleurs.
+    pub q_norm: Option<Vec<f32>>,
+    pub k_norm: Option<Vec<f32>>,
     pub wgate: Proj,
     pub wup: Proj,
     pub wdown: Proj,
+    /// Rempli pour les modèles à mélange d'experts ; `wgate/wup/wdown` sont
+    /// alors vides.
+    pub moe: Option<Moe>,
 }
 
 pub struct Stats {
@@ -109,6 +220,12 @@ fn prune_structured(w: &mut [f32], n_out: usize, n_in: usize, keep: f32) {
 }
 
 impl Proj {
+    /// Projection vide : les modèles à experts n'ont **pas** de tenseur FFN
+    /// dense, et le moteur ne doit pas le chercher.
+    pub fn vide() -> Self {
+        Proj { m: None, d: None, q4: None, bias: None }
+    }
+
     fn load(g: &Gguf, name: &str, bias: Option<&str>, dense: bool, auto: bool, keep: f32,
             q4: bool) -> Self {
         let t = g.tensor(name).unwrap_or_else(|| panic!("tenseur {name} absent"));
@@ -149,7 +266,9 @@ impl Proj {
         } else {
             (Some(PushMat::build(&w, n_out, n_in)), None, None)
         };
-        let bias = bias.map(|b| g.dequant(b));
+        // Tous les modèles n'ont pas de biais QKV (Qwen3 n'en a pas) : son
+        // absence est normale, pas une erreur.
+        let bias = bias.filter(|b| g.tensor(b).is_some()).map(|b| g.dequant(b));
         Proj { m, d, q4: q4v, bias }
     }
 }
@@ -201,6 +320,8 @@ pub struct Model {
     /// clés, plus `attn_sinks` jetons puits au début de la séquence.
     /// 0 = attention complète. Si la qualité tient, le coût des scores cesse
     /// d'être O(N) — c'est le seul moyen d'attaquer le poste dominant.
+    /// Nombre d'experts allumés par jeton (0 = valeur du modèle).
+    pub moe_topk: usize,
     pub attn_window: usize,
     pub attn_sinks: usize,
     /// Seuil de bascule push/pull, en fraction de sources actives. Mesuré : les
@@ -325,15 +446,25 @@ impl Model {
             ffn: g.cfg("feed_forward_length").and_then(|m| m.as_u64()).unwrap_or(0) as usize,
             eps: g.cfg("attention.layer_norm_rms_epsilon").and_then(|m| m.as_f64()).unwrap_or(1e-6) as f32,
             rope_base: g.cfg("rope.freq_base").and_then(|m| m.as_f64()).unwrap_or(10000.0) as f32,
+            // `attention.key_length` donne la dimension de tête réelle. Elle
+            // n'est PAS toujours hidden/n_head : Qwen3-30B-A3B a 2048 cachés,
+            // 32 têtes et 128 par tête, soit 4096 en sortie de Q — l'ancien
+            // calcul (64) débordait le tampon de Q.
+            head_dim: g.cfg("attention.key_length").and_then(|m| m.as_u64()).unwrap_or(0) as usize,
             vocab: g.tensor("token_embd.weight").map(|t| t.dims[0] as usize).unwrap_or(0),
-            head_dim: 0,
+            n_expert: g.cfg("expert_count").and_then(|m| m.as_u64()).unwrap_or(0) as usize,
+            n_expert_used: g.cfg("expert_used_count").and_then(|m| m.as_u64()).unwrap_or(0) as usize,
+            ffn_exp: g.cfg("expert_feed_forward_length").and_then(|m| m.as_u64()).unwrap_or(0) as usize,
         };
+
         let cfg = {
             let mut c = cfg;
-            c.head_dim = c.hidden / c.n_head.max(1);
+            if c.head_dim == 0 { c.head_dim = c.hidden / c.n_head.max(1); }
             c
         };
-        assert_eq!(cfg.head_dim * cfg.n_head, cfg.hidden, "hidden doit être n_head × head_dim");
+        assert!(cfg.head_dim > 0, "dimension de tête indéterminée");
+        assert!(cfg.head_dim * cfg.n_head >= cfg.hidden,
+                "n_head × head_dim doit couvrir hidden");
         let mut layers = Vec::with_capacity(cfg.n_layer);
         let mut bytes = 0u64;
         for l in 0..cfg.n_layer {
@@ -345,9 +476,17 @@ impl Model {
                 wv: Proj::load(&g, &p("attn_v.weight"), Some(&p("attn_v.bias")), dense || q4 != 0, auto, keep, q4 & 2 != 0),
                 wo: Proj::load(&g, &p("attn_output.weight"), None, dense || q4 != 0, auto, keep, q4 & 2 != 0),
                 ffn_norm: g.dequant(&p("ffn_norm.weight")),
-                wgate: Proj::load(&g, &p("ffn_gate.weight"), None, dense || q4 != 0, auto, keep, q4 & 1 != 0),
-                wup: Proj::load(&g, &p("ffn_up.weight"), None, dense || q4 != 0, auto, keep, q4 & 1 != 0),
-                wdown: Proj::load(&g, &p("ffn_down.weight"), None, dense || q4 != 0, auto, keep, q4 & 1 != 0),
+                q_norm: if g.tensor(&p("attn_q_norm.weight")).is_some() {
+                    Some(g.dequant(&p("attn_q_norm.weight"))) } else { None },
+                k_norm: if g.tensor(&p("attn_k_norm.weight")).is_some() {
+                    Some(g.dequant(&p("attn_k_norm.weight"))) } else { None },
+                wgate: if cfg.n_expert > 0 { Proj::vide() } else {
+                    Proj::load(&g, &p("ffn_gate.weight"), None, dense || q4 != 0, auto, keep, q4 & 1 != 0) },
+                wup: if cfg.n_expert > 0 { Proj::vide() } else {
+                    Proj::load(&g, &p("ffn_up.weight"), None, dense || q4 != 0, auto, keep, q4 & 1 != 0) },
+                wdown: if cfg.n_expert > 0 { Proj::vide() } else {
+                    Proj::load(&g, &p("ffn_down.weight"), None, dense || q4 != 0, auto, keep, q4 & 1 != 0) },
+                moe: charger_moe(&g, l, cfg.n_expert),
             };
             for pj in [&lay.wq, &lay.wk, &lay.wv, &lay.wo, &lay.wgate, &lay.wup, &lay.wdown] {
                 if let Some(m) = &pj.m { bytes += m.data.len() as u64; }
@@ -400,7 +539,7 @@ impl Model {
             kv_k: vec![kv.clone(); n_layer], kv_v: vec![kv; n_layer],
             ctx, events: 0, act_levels: 127.0, act_thresh: 0.0, act_topk: 0, act_renorm: false,
             act_topk_proj: [0; 7], attn_topk: 0, attn_events: 0, qk_topk: 0,
-            attn_window: 0, attn_sinks: 4, seuil_push: 0.22,
+            moe_topk: 0, attn_window: 0, attn_sinks: 4, seuil_push: 0.22,
             stop_id: None, prof: [0.0; 6],
             tete,
             head4,
@@ -530,6 +669,20 @@ impl Model {
         }
     }
 
+    /// Produit matrice-vecteur sur une matrice 4 bits empruntée (experts).
+    fn matvec_q4(pool: &mut Pool, m: &crate::list::DenseQ4, x: &[f32], out: &mut [f32],
+                 levels: f32, thresh: f32, topk: usize, renorm: bool,
+                 scratch: &mut Vec<f32>) {
+        let Some((sv, sx)) = Self::quant_scratch(x, levels, thresh, topk, renorm, scratch) else {
+            for v in out[..m.n_out].iter_mut() { *v = 0.0; }
+            return;
+        };
+        let mut xd = vec![0i32; x.len()];
+        for (&i, &v) in sv.idx.iter().zip(sv.val.iter()) { xd[i as usize] = v; }
+        let y = pool.matvec_dense_q4(m, &xd, sx);
+        out[..m.n_out].copy_from_slice(&y[..m.n_out]);
+    }
+
     /// Produit scalaire f32 à huit accumulateurs indépendants.
     ///
     /// Un `iter().zip().map().sum()` est une **chaîne** d'additions : chaque
@@ -648,16 +801,17 @@ impl Model {
 
         let mut x = g.row_f32("token_embd.weight", tok as usize, h);
         let mut hn = vec![0f32; h];
-        let mut q = vec![0f32; h];
+        let mut q = vec![0f32; nh * hd];
         let mut k = vec![0f32; nkv * hd];
         let mut v = vec![0f32; nkv * hd];
-        let mut att = vec![0f32; h];
+        let mut att = vec![0f32; nh * hd];
         let mut o = vec![0f32; h];
-        let mut gate = vec![0f32; cfg.ffn];
+        let mut gate = vec![0f32; cfg.ffn.max(cfg.ffn_exp)];
         // tampon partagé : sélection k-WTA pendant les produits matriciels, puis
         // quantiles du capteur hebbien — les deux usages ne se recouvrent pas.
         let mut scratch: Vec<f32> = Vec::with_capacity(cfg.ffn);
-        let mut up = vec![0f32; cfg.ffn];
+        let mut up = vec![0f32; cfg.ffn.max(cfg.ffn_exp)];
+        let mut exp_out = vec![0f32; h];
         let mut down = vec![0f32; h];
         let mut sc = vec![0f32; pos + 1];
         // scores par TÊTE pour le chemin groupé (cf. plus bas) : les têtes
@@ -683,6 +837,24 @@ impl Model {
             Self::matvec(pool, &lay.wk, &hn, &mut k, events, self.act_levels, self.act_thresh, tk(1), self.act_renorm, &mut scratch, self.seuil_push);
             Self::matvec(pool, &lay.wv, &hn, &mut v, events, self.act_levels, self.act_thresh, tk(2), self.act_renorm, &mut scratch, self.seuil_push);
             self.prof[0] += tm.elapsed().as_secs_f64();
+            // Qwen3 normalise chaque tête de Q et K avant la rotation.
+            if lay.q_norm.is_some() || lay.k_norm.is_some() {
+                let mut tmp = vec![0f32; hd];
+                if let Some(w) = lay.q_norm.as_ref() {
+                    for hh in 0..nh {
+                        let t = &mut q[hh * hd..(hh + 1) * hd];
+                        Self::rmsnorm(t, w, cfg.eps, &mut tmp);
+                        t.copy_from_slice(&tmp);
+                    }
+                }
+                if let Some(w) = lay.k_norm.as_ref() {
+                    for hh in 0..nkv {
+                        let t = &mut k[hh * hd..(hh + 1) * hd];
+                        Self::rmsnorm(t, w, cfg.eps, &mut tmp);
+                        t.copy_from_slice(&tmp);
+                    }
+                }
+            }
             let tr = Instant::now();
             Self::rope(&mut q, nh, hd, pos, cfg.rope_base);
             Self::rope(&mut k, nkv, hd, pos, cfg.rope_base);
@@ -847,6 +1019,71 @@ impl Model {
             Self::matvec(pool, &lay.wo, &att, &mut o, events, self.act_levels, self.act_thresh, tk(3), self.act_renorm, &mut scratch, self.seuil_push);
             for i in 0..h { o[i] += x[i]; }
             Self::rmsnorm(&o, &lay.ffn_norm, cfg.eps, &mut hn);
+            // ------------------------------------------------------ MoE
+            // Un routeur linéaire choisit `k` experts parmi `n` ; seuls leurs
+            // poids sont lus. C'est la parcimonie **structurelle** — 8 experts
+            // sur 128, soit 6 % du FFN — et c'est le régime où l'architecture
+            // événementielle cesse d'être un coût.
+            if let Some(moe) = lay.moe.as_ref() {
+                let ne = cfg.n_expert;
+                let k = if self.moe_topk > 0 { self.moe_topk } else { cfg.n_expert_used };
+                let k = k.clamp(1, ne);
+                let mut sc_e: Vec<f32> = (0..ne).map(|e| {
+                    let r = &moe.routeur[e * h..(e + 1) * h];
+                    r.iter().zip(hn.iter()).map(|(a, b)| a * b).sum()
+                }).collect();
+                let mx = sc_e.iter().cloned().fold(f32::NEG_INFINITY, f32::max);
+                let mut somme = 0f32;
+                for v in sc_e.iter_mut() { *v = (*v - mx).exp(); somme += *v; }
+                if somme > 0.0 { for v in sc_e.iter_mut() { *v /= somme; } }
+                let mut idx: Vec<u32> = (0..ne as u32).collect();
+                if k < ne {
+                    idx.select_nth_unstable_by(k, |&a, &b| {
+                        sc_e[b as usize].partial_cmp(&sc_e[a as usize]).unwrap()
+                    });
+                    idx.truncate(k);
+                }
+                let somme_k: f32 = idx.iter().map(|&e| sc_e[e as usize]).sum();
+                let inv_k = if somme_k > 0.0 { 1.0 / somme_k } else { 0.0 };
+                for v in down.iter_mut() { *v = 0.0; }
+                for &e in &idx {
+                    let w_exp = sc_e[e as usize] * inv_k;
+                    let mg = moe.gate.expert(e as usize);
+                    Self::matvec_q4(pool, &mg, &hn, &mut gate, self.act_levels,
+                                    self.act_thresh, tk(4), self.act_renorm, &mut scratch);
+                    let mu = moe.up.expert(e as usize);
+                    Self::matvec_q4(pool, &mu, &hn, &mut up, self.act_levels,
+                                    self.act_thresh, tk(5), self.act_renorm, &mut scratch);
+                    for i in 0..cfg.ffn_exp {
+                        gate[i] = (gate[i] / (1.0 + (-gate[i]).exp())) * up[i];
+                    }
+                    let md = moe.down.expert(e as usize);
+                    Self::matvec_q4(pool, &md, &gate, &mut exp_out, self.act_levels,
+                                    self.act_thresh, tk(6), self.act_renorm, &mut scratch);
+                    for i in 0..h { down[i] += w_exp * exp_out[i]; }
+                }
+                if let Some((sg, su, sd)) = moe.shexp.as_ref() {
+                    let mg = sg.expert(0);
+                    Self::matvec_q4(pool, &mg, &hn, &mut gate, self.act_levels,
+                                    self.act_thresh, tk(4), self.act_renorm, &mut scratch);
+                    let mu = su.expert(0);
+                    Self::matvec_q4(pool, &mu, &hn, &mut up, self.act_levels,
+                                    self.act_thresh, tk(5), self.act_renorm, &mut scratch);
+                    for i in 0..cfg.ffn_exp {
+                        gate[i] = (gate[i] / (1.0 + (-gate[i]).exp())) * up[i];
+                    }
+                    let md = sd.expert(0);
+                    Self::matvec_q4(pool, &md, &gate, &mut exp_out, self.act_levels,
+                                    self.act_thresh, tk(6), self.act_renorm, &mut scratch);
+                    for i in 0..h { down[i] += exp_out[i]; }
+                }
+                if let Some((gl, gg)) = self.ffn_gain {
+                    if gl == l { for v in down.iter_mut() { *v *= gg; } }
+                }
+                for i in 0..h { x[i] = o[i] + down[i]; }
+                self.prof[3] += tf.elapsed().as_secs_f64();
+                continue;
+            }
             Self::matvec(pool, &lay.wgate, &hn, &mut gate, events, self.act_levels, self.act_thresh, tk(4), self.act_renorm, &mut scratch, self.seuil_push);
             // --- capteur hebbien : espionne la co-activation (entrée, sortie)
             // de la projection gate. Aucun effet sur le calcul.

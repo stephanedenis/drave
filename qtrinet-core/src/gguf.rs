@@ -201,7 +201,7 @@ impl Gguf {
 
     /// Niveaux entiers bruts (avant mise à l'échelle) pour Q4_0 / Q8_0.
     pub fn raw_levels(&self, name: &str) -> Vec<i8> {
-        let t = self.tensor(name).expect("tenseur absent");
+        let t = self.tensor(name).unwrap_or_else(|| panic!("tenseur {name} absent"));
         let base = self.data_start + t.offset as usize;
         let n = t.nelem();
         let mut out = Vec::with_capacity(n);
@@ -234,7 +234,7 @@ impl Gguf {
 
     /// Déquantifie une ligne d'un tenseur 2D, en f32.
     pub fn row_f32(&self, name: &str, row: usize, n_cols: usize) -> Vec<f32> {
-        let t = self.tensor(name).expect("tenseur absent");
+        let t = self.tensor(name).unwrap_or_else(|| panic!("tenseur {name} absent"));
         let base = self.data_start + t.offset as usize;
         let mut out = Vec::with_capacity(n_cols);
         match t.ttype {
@@ -331,7 +331,7 @@ impl Gguf {
     /// (parcours linéaire des 290 descripteurs) à chaque ligne. La tête de
     /// sortie appelle cela 151 936 fois par token.
     pub fn q8_view(&self, name: &str) -> Q8View {
-        let t = self.tensor(name).expect("tenseur absent");
+        let t = self.tensor(name).unwrap_or_else(|| panic!("tenseur {name} absent"));
         let q4 = match t.ttype {
             GGML_Q8_0 => false,
             GGML_Q4_0 => true,
@@ -342,6 +342,17 @@ impl Gguf {
         let bloc = if t.ttype == GGML_Q4_K || t.ttype == GGML_Q6_K { 256 } else { 32 };
         Q8View { base: self.data_start + t.offset as usize, n_cols, nb: n_cols / bloc,
                  q4, ttype: t.ttype }
+    }
+
+    /// Pointeur sur le premier octet des données d'un tenseur.
+    pub fn data_ptr(&self, name: &str) -> Option<*const u8> {
+        let t = self.tensor(name)?;
+        Some(unsafe { self.buf.as_ptr().add(self.data_start + t.offset as usize) })
+    }
+
+    /// Type ggml d'un tenseur.
+    pub fn type_de(&self, name: &str) -> Option<u32> {
+        self.tensor(name).map(|t| t.ttype)
     }
 
     /// Super-blocs **Q4_K** bruts : `(octets, nb de super-blocs de 256 poids par
@@ -485,7 +496,7 @@ impl Gguf {
 
     /// Déquantification en f32 (F32 / F16 / Q8_0 / Q4_0).
     pub fn dequant(&self, name: &str) -> Vec<f32> {
-        let t = self.tensor(name).expect("tenseur absent");
+        let t = self.tensor(name).unwrap_or_else(|| panic!("tenseur {name} absent"));
         let base = self.data_start + t.offset as usize;
         let n = t.nelem();
         let mut out = Vec::with_capacity(n);

@@ -23324,3 +23324,274 @@ test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; fini
 ⏵ 3 tests verts. Je commite avant d'attaquer le MoE
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\npython3 tools/archive_sessions.py --quiet 2>&1 | tail -1\ngit add -A && git commit -q -m \"Q6_K en place (AVX2) : tete divisee par 5, fidelite gagnee\n\nNoyau Q6_K AVX2 : seize valeurs extraites par groupe (nibble de ql + 2 bits de\nqh … [959 caractères tronqués]`
+
+  ```
+847f9ab Q6_K en place (AVX2) : tete divisee par 5, fidelite gagnee
+6b379f5 Q4_K et Q6_K en place : le 7B et le 1,5B Q4_K_M tournent
+  ```
+
+### 🤖 Assistant
+
+⏵ MoE maintenant. Je lis le bloc FFN à remplacer
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\nsed -n '/let tf = Instant::now();/,/self.prof\\[3\\]/p' src/model.rs | head -32\necho \"=== struct Cfg\"\ngrep -n \"pub struct Cfg\" -A 12 src/model.rs\necho \"=== struct Layer\"\ngrep -n \"pub struct Layer\" -A 12 src/mod … [59 caractères tronqués]`
+
+  ```
+let tf = Instant::now();
+            Self::matvec(pool, &lay.wo, &att, &mut o, events, self.act_levels, self.act_thresh, tk(3), self.act_renorm, &mut scratch, self.seuil_push);
+            for i in 0..h { o[i] += x[i]; }
+            Self::rmsnorm(&o, &lay.ffn_norm, cfg.eps, &mut hn);
+            Self::matvec(pool, &lay.wgate, &hn, &mut gate, events, self.act_levels, self.act_thresh, tk(4), self.act_renorm, &mut scratch, self.seuil_push);
+            // --- capteur hebbien : espionne la co-activation (entrée, sortie)
+            // de la projection gate. Aucun effet sur le calcul.
+            if let Some(hb) = self.hebb.as_mut() {
+                if hb.layer == l {
+                    if hb.log_on { hb.log.extend_from_slice(&hn); }
+                    let (hn2, gate2) = (&hn, &gate);
+                    let mut seuil = std::mem::take(&mut scratch);
+                    hb.observe(hn2, gate2, &mut seuil);
+                    scratch = seuil;
+                }
+            }
+            Self::matvec(pool, &lay.wup, &hn, &mut up, events, self.act_levels, self.act_thresh, tk(5), self.act_renorm, &mut scratch, self.seuil_push);
+            for i in 0..cfg.ffn { gate[i] = (gate[i] / (1.0 + 
+… [1434 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\npython3 - <<'PY'\np='src/model.rs'; s=open(p,encoding='utf-8').read(); o=s\n\n# 1) Cfg : champs MoE\ns=s.replace('''    pub rope_base: f32,\n    pub vocab: usize,\n}''','''    pub rope_base: f32,\n    pub vocab: usize,\n   … [2755 caractères tronqués]`
+
+  ```
+57:pub struct Vue4 {
+98:pub struct Moe {
+120:    pub moe: Option<Moe>,
+  ```
+
+### 🤖 Assistant
+
+⏵ J'écris le routage MoE, les vues par expert et le chemin de calcul
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\npython3 - <<'PY'\np='src/gguf.rs'; s=open(p,encoding='utf-8').read(); o=s\ns=s.replace('''    /// Super-blocs **Q4_K** bruts''','''    /// Pointeur sur le premier octet des données d'un tenseur.\n    pub fn data_ptr(&self, … [1632 caractères tronqués]`
+
+  ```
+36:    /// intermédiaire. `n_expert = 0` pour un modèle dense.
+37:    pub n_expert: usize,
+99:    /// Routeur `[n_expert × n_embd]`, rangée par expert, en f32.
+394:            n_expert: g.cfg("expert_count").and_then(|m| m.as_u64()).unwrap_or(0) as usize,
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\npython3 - <<'PY'\np='src/model.rs'; s=open(p,encoding='utf-8').read(); o=s\n\n# --- chargement des experts, juste après la construction de la couche\nold = '''                wdown: Proj::load(&g, &p(\"ffn_down.weight\"),  … [3649 caractères tronqués]`
+
+  ```
+(no output)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\npython3 - <<'PY'\np='src/model.rs'; s=open(p,encoding='utf-8').read(); o=s\n# tampons dimensionnés pour le plus grand des deux\ns=s.replace('''        let mut gate = vec![0f32; cfg.ffn];''','''        let mut gate = vec![0 … [4766 caractères tronqués]`
+
+  ```
+(no output)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\ncargo build --release 2>&1 | tail -3\npython3 - <<'PY'\np='src/main.rs'; s=open(p,encoding='utf-8').read(); o=s\nn=s.count('''            \"--dense\" => { dense = true; i -= 1; }''')\ns=s.replace('''            \"--dense\" … [1100 caractères tronqués]`
+
+  ```
+warning: `qtrinet-core` (bin "qtrinet-core") generated 25 warnings (run `cargo fix --bin "qtrinet-core" -p qtrinet-core` to apply 1 suggestion)
+    Finished `release` profile [optimized] target(s) in 0.01s
+5
+=== build
+  ```
+
+### 🤖 Assistant
+
+⏵ MoE implémenté. Test sur le **Qwen3-30B-A3B** (128 experts, top-8) :
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\ntimeout 1800 ./target/release/qtrinet-core /home/stephane/FastNVMe/models/Qwen3-30B-A3B-Instruct-2507-Q4_K_M.gguf \\\n  --ppl /tmp/wt2_ids.txt --ctx 256 --abits 16 --threads 16 --limit 128 2>&1 | tail -8", "description": " … [54 caractères tronqués]`
+
+  ```
+/tmp/wt2_ids.txt : 128 tokens, fenêtres de 256
+
+thread 'main' (1230564) panicked at src/gguf.rs:499:35:
+tenseur absent
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+timeout: the monitored command dumped core
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\npython3 - <<'PY'\np='src/model.rs'; s=open(p,encoding='utf-8').read(); o=s\n# Proj vide\ns=s.replace('''    fn load(g: &Gguf, name: &str, bias: Option<&str>, dense: bool, auto: bool, keep: f32,\n            q4: bool) -> Se … [1707 caractères tronqués]`
+
+  ```
+/tmp/wt2_ids.txt : 128 tokens, fenêtres de 256
+
+thread 'main' (1230830) panicked at src/gguf.rs:499:35:
+tenseur absent
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+timeout: the monitored command dumped core
+  ```
+
+### 🤖 Assistant
+
+⏵ Qwen3 n'a **pas** de biais QKV mais a des **normes par tête**. Je rends le biais tolérant, j'ajoute les q/k-norm, et je nomme les tenseurs manquants
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\npython3 - <<'PY'\np='src/gguf.rs'; s=open(p,encoding='utf-8').read(); o=s\nn=s.count('self.tensor(name).expect(\"tenseur absent\")')\ns=s.replace('self.tensor(name).expect(\"tenseur absent\")',\n            'self.tensor(na … [2828 caractères tronqués]`
+
+  ```
+expect nommés : 4
+[tête 4 bits] 151936 × 2048 → 6.56 b/poids, 0 Mo, 0.0 s
+
+thread 'main' (1231042) panicked at src/model.rs:648:17:
+index out of bounds: the len is 2048 but the index is 2048
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+timeout: the monitored command dumped core
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\nawk 'NR>=640 && NR<=656 {printf \"%d: %s\\n\", NR, $0}' src/model.rs", "description": "Inspect the panic site"}`
+
+  ```
+640:         if let Some(d) = &p.d {
+641:             if use_dense {
+642:             // référence dense : pas d'événement, chaque sortie est un produit
+643:             // scalaire complet sur la ligne de poids
+644:             let mut xd = vec![0i32; x.len()];
+645:             for (&i, &v) in sv.idx.iter().zip(sv.val.iter()) { xd[i as usize] = v; }
+646:             let y = pool.matvec_dense_i8(d, &xd, sx);
+647:             for o in 0..d.n_out {
+648:                 out[o] = y[o] + p.bias.as_ref().map_or(0.0, |b| b[o]);
+649:             }
+650:             return;
+651:             }
+652:         }
+653:         {
+654:             let m = p.m.as_ref().expect("projection sans format");
+655:             for &i in &sv.idx { *events += m.row_ev[i as usize] as u64; }
+656:             let acc = pool.accumulate_push(m, &sv);
+  ```
+
+### 🤖 Assistant
+
+⏵ Qwen3 a `head_dim = 128` alors que `hidden/n_head = 64` : je lis la vraie valeur et j'ajuste les tampons
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\npython3 - <<'PY'\np='src/model.rs'; s=open(p,encoding='utf-8').read(); o=s\ns=s.replace('''            rope_base: g.cfg(\"rope.freq_base\").and_then(|m| m.as_f64()).unwrap_or(10000.0) as f32,''',\n'''            rope_base: … [1767 caractères tronqués]`
+
+  ```
+453:            head_dim: g.cfg("attention.key_length").and_then(|m| m.as_u64()).unwrap_or(0) as usize,
+        let cfg = Cfg {
+            n_layer: g.cfg("block_count").and_then(|m| m.as_u64()).unwrap_or(0) as usize,
+            hidden: g.cfg("embedding_length").and_then(|m| m.as_u64()).unwrap_or(0) as usize,
+            n_head: g.cfg("attention.head_count").and_then(|m| m.as_u64()).unwrap_or(0) as usize,
+            n_kv_head: g.cfg("attention.head_count_kv").and_then(|m| m.as_u64()).unwrap_or(0) as usize,
+            ffn: g.cfg("feed_forward_length").and_then(|m| m.as_u64()).unwrap_or(0) as usize,
+            eps: g.cfg("attention.layer_norm_rms_epsilon").and_then(|m| m.as_f64()).unwrap_or(1e-6) as f32,
+            rope_base: g.cfg("rope.freq_base").and_then(|m| m.as_f64()).unwrap_or(10000.0) as f32,
+            // `attention.key_length` donne la dimension de tête réelle. Elle
+            // n'est PAS toujours hidden/n_head : Qwen3-30B-A3B a 2048 cachés,
+            // 32 têtes et 128 par tête, soit 4096 en sortie de Q — l'ancien
+            // calcul (64) débordait le tampon de Q.
+            head_dim: g.cfg("attention.key_length").and_then(|m| m.as_u64()).unwrap_or(0) as usize
+… [560 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\npython3 - <<'PY'\np='src/model.rs'; s=open(p,encoding='utf-8').read()\ns=s.replace('''            ffn_exp: g.cfg(\"expert_feed_forward_length\").and_then(|m| m.as_u64()).unwrap_or(0) as usize,\n            head_dim: 0,\n   … [540 caractères tronqués]`
+
+  ```
+attention : 0.10 M paires (requête, clé) par token
+    projections : 0.0 M événements par token
+    part de l'attention dans le flux d'événements : 100.0 %
+    postes (ms/token) : projets-attn 31.26 | rope 3.62 | attention 5.65 | proj+mlp 135.83 | somme 176.37 | reste (tête + échantillonnage) 11.50
+    dont attention : scores 2.18 | softmax 0.64 | somme pondérée + écriture KV 2.83
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\ntimeout 1800 ./target/release/qtrinet-core /home/stephane/FastNVMe/models/Qwen3-30B-A3B-Instruct-2507-Q4_K_M.gguf \\\n  --ppl /tmp/wt2_ids.txt --ctx 256 --abits 16 --threads 16 --limit 128 2>&1 | grep -E \"couches|perplexi … [75 caractères tronqués]`
+
+  ```
+[modele] 48 couches chargées en 32.966940184s — listes 2.69 Go , 16 threads
+=== perplexité 7.6139 sur 127 tokens (0 événements, 23.8 s) ===
+  ```
+
+### 🤖 Assistant
+
+⏵ **PPL 7,61** sur le 30B MoE. Validation croisée avec llama.cpp sur la génération (mêmes invites, glouton) :
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\nM=/home/stephane/FastNVMe/models/Qwen3-30B-A3B-Instruct-2507-Q4_K_M.gguf\nexport LD_LIBRARY_PATH=/home/stephane/.local/lib:${LD_LIBRARY_PATH}\necho \"=== notre moteur (MoE, top-8, greedy)\"\ntimeout 900 ./target/release/qt … [475 caractères tronqués]`
+
+  ```
+=== notre moteur (MoE, top-8, greedy)
+--- ids générés : [1788, 24901, 2420, 73675, 6866, 512, 37800, 1197, 1268, 13]
+=== llama.cpp (mêmes réglages)
+[ Prompt: 44,0 t/s | Generation: 11,0 t/s ]
+
+
+Exiting...
+  ```
+
+- **bash** `{"command": "export LD_LIBRARY_PATH=/home/stephane/.local/lib:${LD_LIBRARY_PATH}\nM=/home/stephane/FastNVMe/models/Qwen3-30B-A3B-Instruct-2507-Q4_K_M.gguf\ntimeout 900 /home/stephane/.local/bin/llama-cli -m $M -p \"Le chat est un animal domestique qui\" \\\n  -n 10 --temp 0 -ngl 0 -t 16 --no-convers … [242 caractères tronqués]`
+
+  ```
+Loading model... |-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\| 
+▄▄ ▄▄
+██ ██
+██ ██  ▀▀█▄ ███▄███▄  ▀▀█▄    ▄████ ████▄ ████▄
+██ ██ ▄█▀██ ██ ██ ██ ▄█▀██    ██    ██ ██ ██ ██
+██ ██ ▀█▄██ ██ ██ ██ ▀█▄██ ██ ▀████ ████▀ ████▀
+                                    ██    ██
+                                    ▀▀    ▀▀
+ftype      : Q4_K - Medium
+modalities : text
+available commands:
+  /exit or Ctrl+C     stop or exit
+[timed out after 600000ms]
+[killed by signal: SIGTERM]
+  ```
+
+- **bash** `{"command": "export LD_LIBRARY_PATH=/home/stephane/.local/lib:${LD_LIBRARY_PATH}\nM=/home/stephane/FastNVMe/models/Qwen3-30B-A3B-Instruct-2507-Q4_K_M.gguf\ntimeout 600 /home/stephane/.local/bin/llama-cli -m $M -p \"Le chat est un animal domestique qui\" \\\n  -n 10 --temp 0 -ngl 0 -t 16 -no-cnv --lo … [109 caractères tronqués]`
+
+  ```
+(no output)
+[timed out after 600000ms]
+[killed by signal: SIGTERM]
+  ```
+
+### 🤖 Assistant
+
+⏵ llama-cli est interactif ; je passe par `llama-perplexity` (non interactif) en tâche de fond et je commite le MoE
+
+- **bash** `{"command": "head -c 6000 /home/stephane/Data13TB/stephane/GitHub/Qtrinet/data/wikitext2_test.txt > /tmp/wt2_court.txt\nwc -c /tmp/wt2_court.txt\nexport LD_LIBRARY_PATH=/home/stephane/.local/lib:${LD_LIBRARY_PATH}\nnohup timeout 3000 /home/stephane/.local/bin/llama-perplexity \\\n  -m /home/stephane … [239 caractères tronqués]`
+
+  ```
+6000 /tmp/wt2_court.txt
+référence lancée en fond
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\necho \"=== MoE avec --dense (pas de listes) : chargement et débit\"\ntimeout 1800 ./target/release/qtrinet-core /home/stephane/FastNVMe/models/Qwen3-30B-A3B-Instruct-2507-Q4_K_M.gguf \\\n  --ppl /tmp/wt2_ids.txt --ctx 256  … [168 caractères tronqués]`
+
+  ```
+=== MoE avec --dense (pas de listes) : chargement et débit
+[modele] 48 couches chargées en 13.297739124s — listes 0.91 Go , 16 threads
+=== perplexité 7.6139 sur 127 tokens (0 événements, 23.9 s) ===
+  ```
+
+### 🤖 Assistant
+
+⏵ Notre MoE est à 13 Go/s (mur ≈ 20). Test avec plus de threads :
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\nfor t in 16 32; do\n  timeout 1800 ./target/release/qtrinet-core /home/stephane/FastNVMe/models/Qwen3-30B-A3B-Instruct-2507-Q4_K_M.gguf \\\n    --ppl /tmp/wt2_ids.txt --ctx 256 --abits 16 --threads $t --limit 128 --dense 2 … [294 caractères tronqués]`
+
+  ```
+threads=16 : PPL 7.6139 , 24.6 s) 
+threads=32 : PPL 7.6139 , 30.7 s) 
+=== référence llama.cpp (fond)
+0.11.551.309 I Final estimate: PPL = 10.5658 +/- 1.36439
+  ```
+
+### 🤖 Assistant
+
+⏵ Threads : 16 bat 32 (confirmé). Référence llama.cpp : 10,57 sur un court extrait. Régression puis commit
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\necho \"=== régression 0,5B Q8_0 (attendu 19,2641)\"\n./target/release/qtrinet-core ../models/Qwen2.5-0.5B-Q8_0.gguf --ppl /tmp/wt2_ids.txt --ctx 256 --abits 16 --threads 16 --limit 512 2>&1 | grep -E \"perplexité [0-9]\"\n … [383 caractères tronqués]`
+
+  ```
+=== régression 0,5B Q8_0 (attendu 19,2641)
+=== perplexité 19.2641 sur 510 tokens (0 événements, 17.7 s) ===
+=== 1,5B Q4_K_M (attendu 12,9228)
+=== perplexité 12.9228 sur 255 tokens (0 événements, 15.2 s) ===
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\npython3 tools/archive_sessions.py --quiet 2>&1 | tail -1\ngit add -A && git commit -q -m \"MoE : routage top-k et tranches par expert, le 30B-A3B tourne\n\nLe routeur (ffn_gate_inp, f32) note les 128 experts, softmax sur tous, top-k,\n … [1442 caractères tronqués]`
