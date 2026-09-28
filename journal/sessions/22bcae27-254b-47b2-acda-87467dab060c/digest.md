@@ -26525,3 +26525,68 @@ Bonjour! Comment puis-je vous aider aujourd'hui ?<|im_end|>
 ⏵ Bilan des deux tâches. Je commite et je clos honnêtement.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\ncat > /tmp/msg12.txt <<'MSG'\nGabarit harmony de gpt-oss : fait. Refactorisation CLI : abandonnee, et pourquoi.\n\n2. GABARIT HARMONY -- FAIT\n   gpt-oss n'utilise pas <|im_start|> mais son propre format :\n     <|start|>system<|messag … [1924 caractères tronqués]`
+
+  ```
+2625a74 Journal : gabarit harmony
+df18aef Gabarit harmony de gpt-oss : fait. Refactorisation CLI : abandonnee, et pourquoi.
+8a8d419 Journal : diagnostics gpt-oss
+  ```
+
+### 🤖 Assistant
+
+⏵ Voici le bilan des deux tâches — une réussie, une abandonnée proprement.
+
+## 2. Gabarit harmony de gpt-oss — **fait**
+
+gpt-oss n'utilise pas `<|im_start|>` mais son propre format :
+
+```
+<|start|>system<|message|>…<|end|>
+<|start|>user<|message|>…<|end|>
+<|start|>assistant          →  …<|return|>
+```
+
+Implémenté, avec un **second jeton d'arrêt** (`stop_id2`) que la boucle de génération teste — le modèle termine par `<|return|>` *ou* `<|end|>` selon le canal.
+
+**Vérification** : l'invite passe de 5 à **13 jetons** (les marqueurs de rôle), la trace annonce `[chat] gabarit HARMONY appliqué (gpt-oss)`, et la **régression Qwen est intacte** (« Bonjour! Comment puis-je vous aider aujourd'hui ? » avec son propre gabarit).
+
+Corrigé au passage : `special_id` exigeait un type de jeton « contrôle », ce qui le rendait fragile sur d'autres vocabulaires ; il accepte désormais toute entrée portant exactement la chaîne demandée.
+
+## 1. Refactorisation des boucles CLI — **abandonnée, dépôt intact**
+
+J'ai extrait les **50 drapeaux** des deux boucles, généré la structure et le parseur unique, puis substitué les blocs. **La substitution automatique a corrompu les noms des drapeaux** (`"--o.ids"`, `"--o.abits"`) en préfixant les littéraux eux-mêmes.
+
+J'ai préféré **revenir au dernier état valide** plutôt que de laisser un dépôt cassé ou de réparer à l'aveugle en fin de budget. Vérifié après retour : PPL 17,4315 et inférence fonctionnelle.
+
+La matière première est gardée — les 50 bras dédupliqués, et la conception est posée (`struct Options` + `fn option()`, chaque mode destructurant ce dont il a besoin). **C'est une passe à faire à froid**, pas en fin de session : le risque n'est pas la difficulté, c'est que 50 drapeaux touchés en aveugle cassent silencieusement un mode pendant qu'on regarde ailleurs.
+
+## Ce que ça change
+
+gpt-oss est maintenant utilisable **en conversation avec son format** — la réserve qui restait sur son usage est levée. Sa perplexité sur du texte brut reste inexpliquée, mais la piste « le modèle est décalibré hors de son format » est maintenant **testable** : il suffit de mesurer la perplexité d'un texte présenté en harmony.
+
+Les trois bugs CLI trouvés cette session (`--dense`, `--pin`, `--moe-topk`) restent corrigés individuellement ; la refactorisation éviterait la quatrième occurrence.
+
+Deux commits (`df18aef`, `2625a74`), journal à jour.
+
+
+## Tour 54
+
+### 👤 Utilisateur
+
+compacte au besoin ou donne moi une base pour une nouvelle session
+
+### 🤖 Assistant
+
+⏵ Je vous prépare une base de reprise autonome, plutôt qu'une compaction qui perdrait les mesures.
+
+- **write** `{"content": "# Reprise — état du projet et mode d'emploi pour une nouvelle session\n\n> Rédigé à la fin d'une session longue. Tout ce qui suit est **mesuré**, pas\n> déduit. Les valeurs de perplexité sont des **références de non-régression** :\n> si une modification les change, c'est qu'elle a chang … [9896 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/REPRISE.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\n# vérifier que les commandes du document fonctionnent réellement\ncd qtrinet-core\ncargo test --release 2>&1 | grep \"test result\"\n./target/release/qtrinet-core ../models/Qwen2.5-0.5B-Q8_0.gguf --ppl /tmp/ids_qwen.txt --ctx 256 --abi … [1049 caractères tronqués]`

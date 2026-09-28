@@ -5,14 +5,14 @@
 | Identifiant | `22bcae27-254b-47b2-acda-87467dab060c` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-25 11:56 |
-| Durée | 74.7 h |
-| Tours | 53 |
-| Messages | 1245 |
-| Appels d'outils | 1225 |
-| Fichiers touchés | 68 |
-| Commandes | 983 |
+| Durée | 74.8 h |
+| Tours | 54 |
+| Messages | 1249 |
+| Appels d'outils | 1227 |
+| Fichiers touchés | 69 |
+| Commandes | 984 |
 | Sous-agents | 1 |
-| Commits | 59 |
+| Commits | 60 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -135,6 +135,8 @@
 **Tour 52** — vas-y
 
 **Tour 53** — fais 1 et 2
+
+**Tour 54** — compacte au besoin ou donne moi une base pour une nouvelle session
 
 ## 2. Déroulé, étape par étape
 
@@ -2995,7 +2997,50 @@ Neuf commits sur ce cycle ; `reports/rapport-trava
 
 **Synthèse produite :**
 
-⏵ Bilan des deux tâches. Je commite et je clos honnêtement.
+⏵ Voici le bilan des deux tâches — une réussie, une abandonnée proprement.
+
+\## 2. Gabarit harmony de gpt-oss — **fait**
+
+gpt-oss n'utilise pas `<|im_start|>` mais son propre format :
+
+```
+<|start|>system<|message|>…<|end|>
+<|start|>user<|message|>…<|end|>
+<|start|>assistant          →  …<|return|>
+```
+
+Implémenté, avec un **second jeton d'arrêt** (`stop_id2`) que la boucle de génération teste — le modèle termine par `<|return|>` *ou* `<|end|>` selon le canal.
+
+**Vérification** : l'invite passe de 5 à **13 jetons** (les marqueurs de rôle), la trace annonce `[chat] gabarit HARMONY appliqué (gpt-oss)`, et la **régression Qwen est intacte** (« Bonjour! Comment puis-je vous aider aujourd'hui ? » avec son propre gabarit).
+
+Corrigé au passage : `special_id` exigeait un type de jeton « contrôle », ce qui le rendait fragile sur d'autres vocabulaires ; il accepte désormais toute entrée portant exactement la chaîne demandée.
+
+\## 1. Refactorisation des boucles CLI — **abandonnée, dépôt intact**
+
+J'ai extrait les **50 drapeaux** des deux boucles, généré la structure et le parseur unique, puis substitué les blocs. **La substitution automatique a corrompu les noms des drapeaux** (`"--o.ids"`, `"--o.abits"`) en préfixant les littéraux eux-mêmes.
+
+J'ai préféré **revenir au dernier état valide** plutôt que de laisser un dépôt cassé ou de réparer à l'aveugle en fin de budget. Vérifié après retour : PPL 17,4315 et inférence fonctionnelle.
+
+La matière première est gardée — les 50 bras dédupliqués, et la conception est posée (`struct Options` + `fn option()`, chaque mode destructurant ce dont il a besoin). **C'est une passe à faire à froid**, pas en fin de session : le risque n'est pas la difficulté, c'est que 50 drapeaux touchés en aveugle cassent silencieusement un mode pendant qu'on regarde ailleurs.
+
+\## Ce que ça change
+
+gpt-oss est maintenant utilisable **en conversation avec son format** — la réserve qui restait sur son usage est levée. Sa perplexité sur du texte brut reste inexpliquée, mais la piste « le modèle est décalibré hors de son format » est maintenant **testable** : il suffit de mesurer la perplexité d'un texte présenté en harmony.
+
+Les trois bugs CLI trouvés cette session (`--dense`, `--pin`, `--moe-topk`) restent corrigés individuellement ; la refactorisation éviterait la quatrième occurrence.
+
+Deux commits (`df18aef`, `2625a74`), journal à jour.
+
+### Tour 54 — compacte au besoin ou donne moi une base pour une nouvelle session
+
+*2 appels d'outils.* Actions notables :
+
+- write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/REPRISE.md`
+- bash — Verify the documented commands and commit REPRISE.md
+
+**Synthèse produite :**
+
+⏵ Je vous prépare une base de reprise autonome, plutôt qu'une compaction qui perdrait les mesures.
 
 ## 3. Travail accompli
 
@@ -3071,6 +3116,7 @@ Neuf commits sur ce cycle ; `reports/rapport-trava
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-croisement-push-pull.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-passage-a-l-echelle.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/convertisseur.md` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/REPRISE.md` | 1 | 0 |
 
 ### Sous-agents lancés
 
@@ -3118,7 +3164,7 @@ Neuf commits sur ce cycle ; `reports/rapport-trava
 - **T3** Test OpenOCD without root and check Pro device support
 - **T3** Make scripts executable and test jtag_scan
 - **T3** Commit JTAG milestone
-- … et 943 autres
+- … et 944 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -3325,4 +3371,5 @@ Neuf commits sur ce cycle ; `reports/rapport-trava
 - Journal : YaRN, resultats negatifs" 2>/dev/null git log --oneline | head -2
 - Journal : diagnostics gpt-oss" 2>/dev/null git log --oneline | head -1 cd qtrinet-core && ./target/release/qtrinet-core ../models/Qwen2.5-0.5B-Q8_0.gguf --ppl /
 - Journal : gabarit harmony" 2>/dev/null git log --oneline | head -3
+- REPRISE.md : base de reprise autonome  Etat mesure, references de non-regression avec les commandes exactes, pieges de l'environnement (CUDA 13 et ses symboles 
 
