@@ -170,3 +170,67 @@ coûté : **12 % de perplexité** sur Q4_0 avant qu'on s'en aperçoive.
 
 Les points 1 et 6 sont ce qui rend un modèle de 60 Go **chargeable** ; 2 et 3
 sont ce qui le rend **exécutable** ; 4 et 5 sont ce qui le rend **efficace**.
+
+---
+
+# État après implémentation (mesuré)
+
+## Ce qui est fait
+
+| # | chantier | état | vérification |
+|---|---|---|---|
+| 1 | emprunt des blocs en place | ✅ | Q4_0, MXFP4, **Q4_K**, **Q6_K**, Q8_0 (tête) |
+| 2 | lecteur **Q4_K / Q6_K** | ✅ | comparé à une référence **F16 des mêmes poids** produite par `llama-quantize`, tenseur par tenseur |
+| 3 | **routeur MoE** + tranches par expert | ✅ | Qwen3-30B-A3B (128 experts, top-8) : PPL 7,61 |
+| 4 | index de placement / NUMA | ⬜ | piste mesurée : 20,7 → 24,7 Go/s |
+| 5 | Q8_0 en place (projections) | ⬜ | la tête le fait déjà |
+
+## Le parc de modèles, maintenant
+
+| modèle | format | PPL (notre jeu) | tok/s | chargement | mémoire |
+|---|---|---|---|---|---|
+| Qwen2.5-0.5B | Q8_0 | 19,2641 | 29 | 2,7 s | 0,9 Go |
+| Qwen2.5-0.5B | Q4_0 | 21,0110 | 39 | **0,87 s** | 0,41 Go |
+| Qwen2.5-1.5B | Q4_K_M | 12,9228 | 17 | 4,2 s | 1,1 Go |
+| Qwen2.5-VL-7B | Q4_K_M | 10,9947 | 2,8 | 24 s | 4,5 Go |
+| **Qwen3-30B-A3B** | Q4_K_M | **7,6139** | 5,4 | 13,3 s | **17,7 Go** |
+| gpt-oss-120b | MXFP4 | — | — | lit les blocs | 60 Go |
+
+La chaîne est cohérente : 19,3 → 12,9 → 11,0 → 7,6 de perplexité pour
+0,5 → 1,5 → 7 → 30 G paramètres. **Le 30B tient en 17,7 Go, soit exactement la
+taille du fichier** : aucune copie, aucune requantification.
+
+## La méthode qui a trouvé les bugs
+
+`llama.cpp` est installé sur la machine (`llama-cli`, `llama-perplexity`,
+`llama-quantize`). C'est la référence qui manquait :
+
+1. **`llama-perplexity`** donne la vérité terrain sur un modèle :
+   11,3954 pour le 1,5B Q4_K_M sur le fichier entier — contre 50 000 chez nous,
+   ce qui a rendu le bug incontestable.
+2. **`llama-quantize --allow-requantize … F16`** fabrique une référence des
+   **mêmes poids** en demi-précision. Comparer notre déquantification bloc par
+   bloc à ce fichier a montré : Q4_K exact à 1e-5 (bruit f16), Q6_K **faux** —
+   ggml écrit les quatre quants en quarts successifs, je les entrelaçais.
+3. **Le bug le plus coûteux n'était pas dans la quantification** : le
+   Qwen2.5-1.5B a un tenseur `output.weight` **distinct** de `token_embd.weight`
+   (poids non liés) ; notre tête était câblée sur la table d'embedding. Perplexité
+   50 000 au lieu de 11,4 — et le 0,5B, qui a des poids liés, ne pouvait pas le
+   révéler.
+
+## Ce que le MoE change à la thèse
+
+Un routeur top-8 sur 128 experts n'allume que **6 %** du FFN. C'est très en
+dessous du croisement mesuré à 22 % de densité : le régime où l'architecture
+événementielle cesse d'être un coût est **exactement celui des grands modèles
+publics actuels**. Le 30B-A3B lit 1,8 G poids par jeton au lieu de 30 G.
+
+## Reste à faire
+
+1. **Q4_K sur FPGA** : le format des modèles réels, à porter dans `event_reader`.
+2. **Épinglage NUMA** : 20 % mesurés, mais `sched_setaffinity` n'est pas dans
+   `std` — il faut un appel système direct.
+3. **Q8_0 en place** pour les projections (la tête le fait déjà).
+4. **gpt-oss-120b** : le routeur MoE fonctionne (top-4 sur 128) mais le modèle
+   pèse 60 Go et son encodage d'expert est en MXFP4 avec des tenseurs Q8_0 ;
+   c'est l'étape suivante naturelle.

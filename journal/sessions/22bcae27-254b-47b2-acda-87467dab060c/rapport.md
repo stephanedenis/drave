@@ -7,12 +7,12 @@
 | Début | 2026-09-25 11:56 |
 | Durée | 68.5 h |
 | Tours | 39 |
-| Messages | 1082 |
-| Appels d'outils | 1091 |
+| Messages | 1083 |
+| Appels d'outils | 1092 |
 | Fichiers touchés | 68 |
-| Commandes | 851 |
+| Commandes | 852 |
 | Sous-agents | 1 |
-| Commits | 40 |
+| Commits | 41 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -2255,7 +2255,7 @@ L'emprunt gagne sur **les quatre axes à la fois** — parce qu'il ne fait rien 
 
 ### Tour 39 — vas-y, implémente et teste le tout
 
-*69 appels d'outils.* Actions notables :
+*70 appels d'outils.* Actions notables :
 
 - create_goal
 - bash — Census Q4_K/Q6_K roles and MoE tensors
@@ -2271,11 +2271,11 @@ L'emprunt gagne sur **les quatre axes à la fois** — parce qu'il ne fait rien 
 - bash — Fix imports and borrows
 - bash — Find the actual list import line
 - bash — Wire Q4_K into the loader and test on a real model
-- … et 55 autres
+- … et 56 autres
 
 **Synthèse produite :**
 
-⏵ Threads : 16 bat 32 (confirmé). Référence llama.cpp : 10,57 sur un court extrait. Régression puis commit
+⏵ Je mets à jour la documentation avec les résultats obtenus
 
 ## 3. Travail accompli
 
@@ -2398,7 +2398,7 @@ L'emprunt gagne sur **les quatre axes à la fois** — parce qu'il ne fait rien 
 - **T3** Test OpenOCD without root and check Pro device support
 - **T3** Make scripts executable and test jtag_scan
 - **T3** Commit JTAG milestone
-- … et 811 autres
+- … et 812 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2586,4 +2586,5 @@ L'emprunt gagne sur **les quatre axes à la fois** — parce qu'il ne fait rien 
 - Q4_K et Q6_K en place : le 7B et le 1,5B Q4_K_M tournent  Lecteur Q4_K (super-blocs de 256 poids, 144 octets) et Q6_K (210 octets) lus DANS LE FICHIER, sans cop
 - Q6_K en place (AVX2) : tete divisee par 5, fidelite gagnee  Noyau Q6_K AVX2 : seize valeurs extraites par groupe (nibble de ql + 2 bits de qh), elevees en i16, 
 - MoE : routage top-k et tranches par expert, le 30B-A3B tourne  Le routeur (ffn_gate_inp, f32) note les 128 experts, softmax sur tous, top-k, renormalisation ; s
+- Documentation : parc de modeles lisible, methode de verification, MoE" && git log --oneline | head -1
 

@@ -23595,3 +23595,15 @@ test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; fini
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\npython3 tools/archive_sessions.py --quiet 2>&1 | tail -1\ngit add -A && git commit -q -m \"MoE : routage top-k et tranches par expert, le 30B-A3B tourne\n\nLe routeur (ffn_gate_inp, f32) note les 128 experts, softmax sur tous, top-k,\n … [1442 caractères tronqués]`
+
+  ```
+f4434b9 MoE : routage top-k et tranches par expert, le 30B-A3B tourne
+847f9ab Q6_K en place (AVX2) : tete divisee par 5, fidelite gagnee
+6b379f5 Q4_K et Q6_K en place : le 7B et le 1,5B Q4_K_M tournent
+  ```
+
+### 🤖 Assistant
+
+⏵ Je mets à jour la documentation avec les résultats obtenus
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\ncat >> docs/convertisseur.md <<'MD'\n\n---\n\n# État après implémentation (mesuré)\n\n## Ce qui est fait\n\n| # | chantier | état | vérification |\n|---|---|---|---|\n| 1 | emprunt des blocs en place | ✅ | Q4_0, MXFP4, **Q4_K**, **Q6_K … [4519 caractères tronqués]`
