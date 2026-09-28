@@ -37,6 +37,11 @@ extern "C" {
 /// PTX compilé depuis `gpu/qtrinet_gpu.cu` par clang.
 const PTX: &str = include_str!("../gpu/qtrinet_gpu.ptx");
 
+#[inline]
+fn cu_ctx(ctx: *mut c_void) {
+    unsafe { cuCtxSetCurrent(ctx) };
+}
+
 fn erreur(code: c_int, ou: &str) -> String {
     let mut nom: *const c_char = std::ptr::null();
     unsafe { cuGetErrorName(code, &mut nom) };
@@ -62,6 +67,7 @@ pub struct Gpu {
     ctx: *mut c_void,
     module: *mut c_void,
     f_tete: *mut c_void,
+    f_proj: *mut c_void,
     pub nom: String,
     pub memoire_libre: usize,
 }
@@ -122,13 +128,20 @@ impl Gpu {
                 eprintln!("{}", erreur(rc, "fonction tete_q8"));
                 return None;
             }
+            let nom_p = std::ffi::CString::new("proj_q8").unwrap();
+            let mut f_proj: *mut c_void = std::ptr::null_mut();
+            let rc = cuModuleGetFunction(&mut f_proj, module, nom_p.as_ptr());
+            if rc != 0 {
+                eprintln!("{}", erreur(rc, "fonction proj_q8"));
+                return None;
+            }
             let mut libre: usize = 0;
             let mut total: usize = 0;
             extern "C" {
                 fn cuMemGetInfo_v2(libre: *mut usize, total: *mut usize) -> c_int;
             }
             cuMemGetInfo_v2(&mut libre, &mut total);
-            Some(Gpu { ctx, module, f_tete, nom: format!("GPU {ordinal}"), memoire_libre: libre })
+            Some(Gpu { ctx, module, f_tete, f_proj, nom: format!("GPU {ordinal}"), memoire_libre: libre })
         }
     }
 
@@ -156,6 +169,49 @@ impl Gpu {
             let mut out_dev: u64 = 0;
             cuMemAlloc_v2(&mut out_dev, n_out * 4);
             Some(MatriceGpu { poids, x_dev, out_dev, n_out, nb, octets_poids })
+        }
+    }
+
+    /// Copie **une fois** les poids d'une projection sur le GPU.
+    pub fn charger_proj(&self, blocs: &[u8], n_out: usize, nb: usize) -> Option<MatriceGpu> {
+        cu_ctx(self.ctx);
+        self.charger_tete(blocs, n_out, 0, nb)
+    }
+
+    /// Une passe de projection : le facteur d'échelle d'activation est appliqué
+    /// par le noyau, côté GPU.
+    pub fn proj(&self, m: &MatriceGpu, x: &[i32], sx: f32) -> Option<Vec<f32>> {
+        cu_ctx(self.ctx);
+        let n_in = m.nb * 32;
+        if x.len() < n_in { return None; }
+        unsafe {
+            let rc = cuMemcpyHtoD_v2(m.x_dev, x.as_ptr() as *const c_void, n_in * 4);
+            if rc != 0 { return None; }
+            let mut p_poids = m.poids;
+            let mut p_x = m.x_dev;
+            let mut p_out = m.out_dev;
+            let n_out = m.n_out as c_int;
+            let nb = m.nb as c_int;
+            let mut params: [*mut c_void; 6] = [
+                &mut p_poids as *mut u64 as *mut c_void,
+                &mut p_x as *mut u64 as *mut c_void,
+                &mut p_out as *mut u64 as *mut c_void,
+                &n_out as *const c_int as *mut c_void,
+                &nb as *const c_int as *mut c_void,
+                &sx as *const f32 as *mut c_void,
+            ];
+            let fils: c_uint = 256;
+            let blocs = ((m.n_out as c_uint) + fils - 1) / fils;
+            let rc = cuLaunchKernel(self.f_proj, blocs.min(65535), 1, 1, fils, 1, 1,
+                                    (n_in * 4) as c_uint, std::ptr::null_mut(),
+                                    params.as_mut_ptr(), std::ptr::null_mut());
+            if rc != 0 { eprintln!("{}", erreur(rc, "lancement proj")); return None; }
+            let rc = cuCtxSynchronize();
+            if rc != 0 { return None; }
+            let mut out = vec![0f32; m.n_out];
+            let rc = cuMemcpyDtoH_v2(out.as_mut_ptr() as *mut c_void, m.out_dev, m.n_out * 4);
+            if rc != 0 { return None; }
+            Some(out)
         }
     }
 
@@ -194,6 +250,17 @@ impl Gpu {
             Some(out)
         }
     }
+}
+
+/// Instance unique du processus. `QT_GPU` active le déport ; sans lui, aucune
+/// ressource vidéo n'est touchée et le moteur reste strictement sur CPU.
+static INSTANCE: std::sync::OnceLock<Option<Gpu>> = std::sync::OnceLock::new();
+
+pub fn instance() -> Option<&'static Gpu> {
+    INSTANCE.get_or_init(|| {
+        if std::env::var("QT_GPU").is_err() { return None; }
+        Gpu::ouvrir_auto()
+    }).as_ref()
 }
 
 unsafe impl Send for Gpu {}

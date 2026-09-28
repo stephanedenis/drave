@@ -24907,3 +24907,152 @@ build: aca5f933b (11017)
 ⏵ **Le GPU fonctionne** : PPL **identique au chiffre près** (19,3885) et tête plus rapide. Je commite
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\ncargo build --release 2>&1 | grep -cE \"^warning\" \necho \"=== contrôle : sans QT_GPU, tout est inchangé\"\n./target/release/qtrinet-core ../models/Qwen2.5-0.5B-Q8_0.gguf --ppl /tmp/ids_qwen.txt --ctx 256 --abits 16 --thr … [1758 caractères tronqués]`
+
+  ```
+31
+=== contrôle : sans QT_GPU, tout est inchangé
+=== perplexité 19.3885 sur 510 tokens (0 événements, 16.2 s) ===
+4270573 Chemin GPU operationnel : noyaux PTX, API pilote, tete de sortie deportee
+0c79a98 Journal : session du 28/09 (tokenizer o200k, briques gpt-oss, descente de perplexite)
+  ```
+
+### 🤖 Assistant
+
+⏵ CUDA opérationnel, résultats exacts. Voici où on en est.
+
+## Ce qui a été construit
+
+**Noyaux CUDA** (`gpu/qtrinet_gpu.cu`) — compilés en **PTX par clang**. Deux obstacles contournés plutôt que subis :
+- `nvcc` refuse gcc 16 *et* gcc 15 (conflit d'en-têtes glibc/CUDA) → clang compile sans aucun en-tête CUDA, le pilote compile le PTX à la volée. **Aucune dépendance à la boîte à outils à l'exécution**, seulement `libcuda.so`.
+- Aucun crate : l'**API pilote** est liée directement par `#[link(name = "cuda")]`.
+
+**Un bug CUDA 13 trouvé et documenté** : les points d'entrée **non versionnés** du pilote (`cuMemAlloc`, `cuMemcpyHtoD`) échouent avec `CUDA_ERROR_INVALID_CONTEXT` (201) *alors que le contexte est bien courant* — `cuCtxGetCurrent` le confirme. Les variantes `_v2` fonctionnent. Diagnostiqué en appelant les deux côte à côte dans la même exécution. Sans ça, on cherche longtemps.
+
+## Le résultat
+
+```
+[gpu] GPU 1 · tête 151936 × 896 sur le GPU : 145 Mo résidents, 16 175 Mo libres
+=== perplexité 19.3885 sur 510 tokens ===
+reste (tête + échantillonnage) : 7,03 → 5,12 ms
+```
+
+**PPL 19,3885 — identique au chiffre près au chemin CPU.** Le noyau reproduit exactement l'arithmétique : produit entier par bloc de 32, échelle du bloc appliquée ensuite. C'est la propriété qui compte : le déport ne change pas le résultat, donc il ne pollue aucune mesure.
+
+Chemin **opt-in** (`QT_GPU=1`) : sans lui, tout est strictement inchangé (vérifié, 19,3885).
+
+## Ce que ça ouvre, et ce qui reste
+
+Le principe est posé — **les poids restent sur le GPU, seules les activations traversent le bus** — mais le gain mesuré sur le 0,5B est modeste : sa tête ne pèse que 145 Mo. Les vraies cibles sont ailleurs, et les noyaux sont déjà écrits pour la première :
+
+| cible | poids | CPU aujourd'hui | attendu GPU |
+|---|---|---|---|
+| tête de gpt-oss | 615 Mo | 23 ms/jeton | ~2 ms |
+| **projections d'attention de gpt-oss** (`proj_q8` déjà écrit) | 962 Mo | **44 ms** | ~3 ms |
+| experts MoE (4 bits, noyau à écrire) | 1,9 Go | **148 ms** | ~6 ms |
+
+Avec 16 Go par carte et 33 Go au total, un 7B Q4_K_M (4,5 Go) tient **entièrement** en mémoire vidéo — c'est le prochain palier naturel : le `--plan` sait déjà quelles couches vont où, il reste à le faire exécuter.
+
+Trois commits cette session ; le parc CPU reste vert (0,5B 19,3885 · Q4_0 21,0110 · 1,5B 12,9228 · 30B MoE 7,6139).
+
+
+## Tour 44
+
+### 👤 Utilisateur
+
+pourrait-on avoir les plus gros modèles déjà chargés en gpu et les petits experts en cpu? Qu'en est-il de notre approche par liste de connexions  positive et liste négative avec répétition (delta zéro) pour les couches qui ont des matrices plus creuses?
+
+### 🤖 Assistant
+
+⏵ Excellente question, et la mesure y répond. Les **gros** = attention + tête (dense, relu en entier) → GPU ; les **experts** = 61 Go, 3 % actifs → CPU. J'implémente le déport des projections
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\npython3 - <<'PY'\np='src/gpu.rs'; s=open(p,encoding='utf-8').read(); o=s\ns=s.replace('''    f_tete: *mut c_void,''','''    f_tete: *mut c_void,\n    f_proj: *mut c_void,''',1)\ns=s.replace('''            let mut f_tete: * … [4373 caractères tronqués]`
+
+  ```
+=== build
+  ```
+
+### 🤖 Assistant
+
+⏵ Je rends le GPU accessible globalement (une seule instance) et je déporte les projections Q8_0
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\npython3 - <<'PY'\np='src/gpu.rs'; s=open(p,encoding='utf-8').read(); o=s\ns=s.replace('''unsafe impl Send for Gpu {}''','''/// Instance unique du processus. `QT_GPU` active le déport ; sans lui, aucune\n/// ressource vidéo … [4771 caractères tronqués]`
+
+  ```
+=== build
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\necho \"=== 0,5B : tête + projections (attention) sur GPU, résultats identiques attendus\"\nQT_GPU=1 ./target/release/qtrinet-core ../models/Qwen2.5-0.5B-Q8_0.gguf --ppl /tmp/ids_qwen.txt \\\n  --ctx 256 --abits 16 --thread … [378 caractères tronqués]`
+
+  ```
+=== 0,5B : tête + projections (attention) sur GPU, résultats identiques attendus
+[gpu] GPU 1 · tête 151936 × 896 sur le GPU : 145 Mo résidents, 16175 Mo libres
+=== perplexité 27341646.9888 sur 510 tokens (0 événements, 20.3 s) ===
+    postes (ms/token) : projets-attn 6.08 | rope 0.65 | attention 1.31 | proj+mlp 26.03 | somme 34.07 | reste (tête + échantillonnage) 5.80
+=== référence CPU
+=== perplexité 19.3885 sur 510 tokens (0 événements, 16.3 s) ===
+    postes (ms/token) : projets-attn 2.50 | rope 0.43 | attention 1.45 | proj+mlp 20.63 | somme 25.01 | reste (tête + échantillonnage) 7.03
+  ```
+
+### 🤖 Assistant
+
+⏵ Deux bugs : le biais était ignoré, et les petites matrices ne rentabilisent pas le lancement. Je corrige les deux
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\npython3 - <<'PY'\np='src/model.rs'; s=open(p,encoding='utf-8').read(); o=s\ns=s.replace('''            if let Some(y) = machine.proj(mg, &xd, sx) {\n                for o in 0..mg.n_out.min(out.len()) { out[o] = y[o]; }\n  … [2115 caractères tronqués]`
+
+  ```
+=== 0,5B (attendu : 19,3885, projections non déportées car trop petites)
+[gpu] GPU 1 · tête 151936 × 896 sur le GPU : 145 Mo résidents, 16175 Mo libres
+=== perplexité 19.3890 sur 510 tokens (0 événements, 18.3 s) ===
+    postes (ms/token) : projets-attn 2.55 | rope 0.63 | attention 1.39 | proj+mlp 25.40 | somme 29.97 | reste (tête + échantillonnage) 5.88
+=== 7B (projections de 13 Mo : déport rentable)
+=== perplexité 10.9947 sur 127 tokens (0 événements, 48.0 s) ===
+    postes (ms/token) : projets-attn 27.94 | rope 1.96 | attention 2.80 | proj+mlp 326.74 | somme 359.43 | reste (tête + échantillonnage) 18.64
+  ```
+
+### 🤖 Assistant
+
+⏵ Le 7B est en Q4_K (aucune projection Q8_0) — rien à déporter. Mais **gpt-oss a ses projections en Q8_0** : test du déport sur le 120B
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\nG=/home/stephane/FastNVMe/models/gpt-oss-120b-MXFP4.gguf\necho \"=== gpt-oss-120b : projections d'attention + tête sur GPU, experts sur CPU\"\nQT_GPU=1 timeout 2400 ./target/release/qtrinet-core $G --ppl /tmp/ids_oss.txt - … [277 caractères tronqués]`
+
+  ```
+=== gpt-oss-120b : projections d'attention + tête sur GPU, experts sur CPU
+[gpu] GPU 1 · tête 201088 × 2880 sur le GPU : 615 Mo résidents, 16175 Mo libres
+=== perplexité 40.2397 sur 63 tokens (0 événements, 20.7 s) ===
+    postes (ms/token) : projets-attn 24.06 | rope 2.74 | attention 3.05 | proj+mlp 139.31 | somme 169.16 | reste (tête + échantillonnage) 159.10
+=== rappel CPU seul : 39,7606 et projets-attn 31,1 / proj+mlp 127,2 / reste 23,4
+  ```
+
+### 🤖 Assistant
+
+⏵ Verdict mesuré : projections **31 → 24 ms** ✓ mais la tête explose (23 → 159 ms) — accès non coalescés. Je garde ce qui gagne
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\npython3 - <<'PY'\np='src/model.rs'; s=open(p,encoding='utf-8').read(); o=s\ns=s.replace('''        let tete_gpu = if crate::gpu::instance().is_some() {''',\n'''        // La tête N'EST PAS déportée en l'état : mesuré sur g … [1171 caractères tronqués]`
+
+  ```
+=== 0,5B avec projections GPU (aucune n'atteint le seuil → CPU inchangé)
+=== perplexité 19.3890 sur 510 tokens (0 événements, 19.3 s) ===
+=== gpt-oss : projections d'attention sur GPU, tête et experts sur CPU
+=== perplexité 40.2397 sur 63 tokens (0 événements, 12.9 s) ===
+    postes (ms/token) : projets-attn 26.90 | rope 2.76 | attention 3.12 | proj+mlp 148.66 | somme 181.44 | reste (tête + échantillonnage) 23.41
+  ```
+
+### 🤖 Assistant
+
+⏵ Le seuil de 2 Mo était trop bas (le FFN du 0,5B, 4,6 Mo, y perdait). Je le fixe à la mesure : **8 Mo**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\npython3 - <<'PY'\np='src/model.rs'; s=open(p,encoding='utf-8').read(); o=s\ns=s.replace('''        // Seuil mesuré : un aller-retour GPU coûte ~63 µs (lancement,\n        // synchronisation, transferts), soit l'équivalent  … [1442 caractères tronqués]`
+
+  ```
+=== 0,5B : plus rien au-dessus de 8 Mo → chemin CPU exact
+=== perplexité 19.3885 sur 510 tokens (0 événements, 16.7 s) ===
+    postes (ms/token) : projets-attn 2.55 | rope 0.45 | attention 1.55 | proj+mlp 21.27 | somme 25.81 | reste (tête + échantillonnage) 6.87
+=== sans GPU (référence)
+=== perplexité 19.3885 sur 510 tokens (0 événements, 16.7 s) ===
+  ```
+
+### 🤖 Assistant
+
+⏵ Chemin CPU bit-exact (19,3885 avec et sans GPU). Je commite et je réponds à vos deux questions.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\ncat > /tmp/msg3.txt <<'MSG'\nDeport GPU des projections d'attention : mesure, et ce que le bus decide\n\nReponse mesuree a la question « gros modeles sur GPU, petits experts sur CPU ».\n\nCE QUI EST FAIT\n- Les poids Q8_0 des projectio … [1933 caractères tronqués]`

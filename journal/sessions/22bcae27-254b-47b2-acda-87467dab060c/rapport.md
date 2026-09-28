@@ -5,14 +5,14 @@
 | Identifiant | `22bcae27-254b-47b2-acda-87467dab060c` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-25 11:56 |
-| Durée | 72.2 h |
-| Tours | 43 |
-| Messages | 1161 |
-| Appels d'outils | 1161 |
+| Durée | 72.8 h |
+| Tours | 44 |
+| Messages | 1171 |
+| Appels d'outils | 1169 |
 | Fichiers touchés | 68 |
-| Commandes | 919 |
+| Commandes | 927 |
 | Sous-agents | 1 |
-| Commits | 48 |
+| Commits | 49 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -115,6 +115,8 @@
 **Tour 42** — tu n'as pas besoin de te comparer à llama. Contente-toi d'optimiser pour réduire la perpelexité. continue d'améliorer notre système à base de listes d'activation pour qu'il puisse rouler tous les modèles en exploitant au besoin plusieurs types de traitements matériels simultanément pour faire un usage optimal utile de toutes les ressources locales disponibles
 
 **Tour 43** — n'hésites pas à utiliser la plateforme de développement la plus adéquate pour les performances recherchées, cpp, rust, cuda, asm ou autre. tout est permis si c'est fiable et performant.
+
+**Tour 44** — pourrait-on avoir les plus gros modèles déjà chargés en gpu et les petits experts en cpu? Qu'en est-il de notre approche par liste de connexions  positive et liste négative avec répétition (delta zéro) pour les couches qui ont des matrices plus creuses?
 
 ## 2. Déroulé, étape par étape
 
@@ -2487,7 +2489,58 @@ Six commits cette session, `
 
 **Synthèse produite :**
 
-⏵ **Le GPU fonctionne** : PPL **identique au chiffre près** (19,3885) et tête plus rapide. Je commite
+⏵ CUDA opérationnel, résultats exacts. Voici où on en est.
+
+\## Ce qui a été construit
+
+**Noyaux CUDA** (`gpu/qtrinet_gpu.cu`) — compilés en **PTX par clang**. Deux obstacles contournés plutôt que subis :
+- `nvcc` refuse gcc 16 *et* gcc 15 (conflit d'en-têtes glibc/CUDA) → clang compile sans aucun en-tête CUDA, le pilote compile le PTX à la volée. **Aucune dépendance à la boîte à outils à l'exécution**, seulement `libcuda.so`.
+- Aucun crate : l'**API pilote** est liée directement par `#[link(name = "cuda")]`.
+
+**Un bug CUDA 13 trouvé et documenté** : les points d'entrée **non versionnés** du pilote (`cuMemAlloc`, `cuMemcpyHtoD`) échouent avec `CUDA_ERROR_INVALID_CONTEXT` (201) *alors que le contexte est bien courant* — `cuCtxGetCurrent` le confirme. Les variantes `_v2` fonctionnent. Diagnostiqué en appelant les deux côte à côte dans la même exécution. Sans ça, on cherche longtemps.
+
+\## Le résultat
+
+```
+[gpu] GPU 1 · tête 151936 × 896 sur le GPU : 145 Mo résidents, 16 175 Mo libres
+=== perplexité 19.3885 sur 510 tokens ===
+reste (tête + échantillonnage) : 7,03 → 5,12 ms
+```
+
+**PPL 19,3885 — identique au chiffre près au chemin CPU.** Le noyau reproduit exactement l'arithmétique : produit entier par bloc de 32, échelle du bloc appliquée ensuite. C'est la propriété qui compte : le déport ne change pas le résultat, donc il ne pollue aucune mesure.
+
+Chemin **opt-in** (`QT_GPU=1`) : sans lui, tout est strictement inchangé (vérifié, 19,3885).
+
+\## Ce que ça ouvre, et ce qui reste
+
+Le principe est posé — **les poids restent sur le GPU, seules les activations traversent le bus** — mais le gain mesuré sur le 0,5B est modeste : sa tête ne pèse que 145 Mo. Les vraies cibles sont ailleurs, et les noyaux sont déjà écrits pour la première :
+
+| cible | poids | CPU aujourd'hui | attendu GPU |
+|---|---|---|---|
+| tête de gpt-oss | 615 Mo | 23 ms/jeton | ~2 ms |
+| **projections d'attention de gpt-oss** (`proj_q8` déjà écrit) | 962 Mo | **44 ms** | ~3 ms |
+| experts MoE (4 bits, noyau à écrire) | 1,9 Go | **148 ms** | ~6 ms |
+
+Avec 16 Go par carte et 33 Go au total, un 7B Q4_K_M (4,5 Go) tient **entièrement** en mémoire vidéo — c'est le prochain palier naturel : le `--plan` sait déjà quelles couches vont où, il reste à le faire exécuter.
+
+Trois commits cette session ; le parc CPU reste vert (0,5B 19,3885 · Q4_0 21,0110 · 1,5B 12,9228 · 30B MoE 7,6139).
+
+### Tour 44 — pourrait-on avoir les plus gros modèles déjà chargés en gpu et les petits experts en cpu? Qu'en est-il de notre approche … [133 caractères tronqués]
+
+*8 appels d'outils.* Actions notables :
+
+- bash — Add the GPU projection path
+- bash — Wire the GPU global instance and offload projections
+- bash — Test GPU projections against the CPU reference
+- bash — Fix the bias, add the size threshold, test 0.5B and 7B
+- bash — Offload gpt-oss attention and head to the GPU
+- bash — Disable the GPU head and re-measure gpt-oss
+- bash — Set the measured threshold and verify the CPU path is exact
+- bash — Commit the GPU offload work and refresh the journal
+
+**Synthèse produite :**
+
+⏵ Chemin CPU bit-exact (19,3885 avec et sans GPU). Je commite et je réponds à vos deux questions.
 
 ## 3. Travail accompli
 
@@ -2610,7 +2663,7 @@ Six commits cette session, `
 - **T3** Test OpenOCD without root and check Pro device support
 - **T3** Make scripts executable and test jtag_scan
 - **T3** Commit JTAG milestone
-- … et 879 autres
+- … et 887 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2806,4 +2859,5 @@ Six commits cette session, `
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet cat > /tmp/msg.txt <<'MSG' gpt-oss : perplexite 42 127 -> 39,8 en cinq etapes mesurees  1. TOKENIZER. Le mode
 - Journal : session du 28/09 (tokenizer o200k, briques gpt-oss, descente de perplexite)" && git log --oneline | head -1 echo "--- état de gpt-oss" grep -n "39,8\|
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core cargo build --release 2>&1 | grep -cE "^warning"  echo "=== contrôle : sans QT_GPU, tout est inc
+- Journal : session du 28/09 (chemin GPU, seuil mesure)" 2>/dev/null; git log --oneline | head -1
 

@@ -60,6 +60,8 @@ pub struct Cfg {
 /// `m` = listes d'événements (architecture du projet) ;
 /// `d` = matrice dense int8 (référence de comparaison, sans événements).
 pub struct Proj {
+    /// Copie GPU des poids (sources Q8_0), si le déport est actif.
+    pub gpu: Option<crate::gpu::MatriceGpu>,
     pub m: Option<PushMat>,
     pub d: Option<DenseQ8>,
     /// Variante 4 bits de la forme dense (0,5 octet/poids). Exclusif de `d`.
@@ -270,7 +272,7 @@ impl Proj {
     /// Projection vide : les modèles à experts n'ont **pas** de tenseur FFN
     /// dense, et le moteur ne doit pas le chercher.
     pub fn vide() -> Self {
-        Proj { m: None, d: None, q4: None, bias: None }
+        Proj { gpu: None, m: None, d: None, q4: None, bias: None }
     }
 
     fn load(g: &Gguf, name: &str, bias: Option<&str>, dense: bool, auto: bool, keep: f32,
@@ -328,7 +330,26 @@ impl Proj {
         // Tous les modèles n'ont pas de biais QKV (Qwen3 n'en a pas) : son
         // absence est normale, pas une erreur.
         let bias = bias.filter(|b| g.tensor(b).is_some()).map(|b| g.dequant(b));
-        Proj { m, d, q4: q4v, bias }
+        // Déport GPU : les poids Q8_0 montent UNE fois ; ensuite chaque jeton
+        // ne fait traverser que les activations.
+        // Seuil fixé par la mesure, pas par le raisonnement :
+        //   FFN du 0,5B, 4,6 Mo : CPU 123 µs, GPU 151 µs → le CPU gagne ;
+        //   attention de gpt-oss, 12,5 Mo : CPU 216 µs, GPU 187 µs → le GPU gagne.
+        // Le croisement est entre les deux. L'aller-retour coûte ~60 µs, presque
+        // tout en latence de lancement et de synchronisation : c'est ce qu'il
+        // faudra réduire (lancements groupés, flux) avant de descendre le seuil.
+        const SEUIL_GPU: usize = 8 << 20;
+        let gpu = match (&d, crate::gpu::instance()) {
+            (Some(d8), Some(machine))
+                if d8.src == crate::list::Source8::Q8_0 && keep >= 1.0
+                   && n_out * d8.nb_ligne * 34 >= SEUIL_GPU => {
+                let octets = n_out * d8.nb_ligne * 34;
+                let blocs = unsafe { std::slice::from_raw_parts(d8.base, octets) };
+                machine.charger_proj(blocs, n_out, d8.nb_ligne)
+            }
+            _ => None,
+        };
+        Proj { gpu, m, d, q4: q4v, bias }
     }
 }
 
@@ -399,10 +420,9 @@ pub struct Model {
     pub tete: String,
     /// Nombre de couches dont les puits appris ont été trouvés (diagnostic).
     pub sinks_vus: usize,
-    /// Chemin GPU : la tête de sortie y réside en permanence. Les poids ne
-    /// traversent le bus qu'une fois ; seules les activations font l'aller-retour
-    /// à chaque jeton.
-    pub gpu: Option<crate::gpu::Gpu>,
+    /// Chemin GPU : la tête et les projections y résident en permanence. Les
+    /// poids ne traversent le bus qu'une fois ; seules les activations font
+    /// l'aller-retour à chaque jeton.
     pub tete_gpu: Option<crate::gpu::MatriceGpu>,
     /// Tête de sortie en 4 bits (poids liés au plafond d'embedding). C'est la
     /// plus grosse matrice du modèle — 151 936 × 896 — donc le poste où le
@@ -638,24 +658,26 @@ impl Model {
         let tete_quantifiee = g.q6k_blocks(&tete).is_some() || g.q4k_blocks(&tete).is_some()
             || g.mxfp4_blocks(&tete).is_some() || g.q4_blocks(&tete).is_some();
         // --- chemin GPU : la tête Q8_0 est copiée UNE fois dans la mémoire vidéo
-        let (gpu, tete_gpu) = if std::env::var("QT_GPU").is_ok() {
-            match (crate::gpu::Gpu::ouvrir_auto(), g.q8_blocks(&tete)) {
+        // La tête N'EST PAS déportée en l'état : mesuré sur gpt-oss, elle passe
+        // de 23 à 159 ms. Le noyau lit une ligne par fil, donc des adresses
+        // distantes de 34 octets : chaque accès d'une même warp tombe dans une
+        // ligne de cache différente. Il faut une warp par ligne avec réduction
+        // — à écrire avant de réactiver.
+        let tete_gpu = if false && crate::gpu::instance().is_some() {
+            match (crate::gpu::instance(), g.q8_blocks(&tete)) {
                 (Some(machine), Some((blocs, nb))) => {
                     let m = machine.charger_tete(blocs, cfg.vocab, cfg.hidden, nb);
-                    match m {
-                        Some(m) => {
-                            println!("[gpu] {} · tête {} × {} sur le GPU : {:.0} Mo resident, \
-                                      {:.0} Mo libres", machine.nom, cfg.vocab, cfg.hidden,
-                                     m.octets_poids as f64 / 1e6,
-                                     machine.memoire_libre as f64 / 1e6);
-                            (Some(machine), Some(m))
-                        }
-                        None => (None, None),
+                    if let Some(m) = m.as_ref() {
+                        println!("[gpu] {} · tête {} × {} sur le GPU : {:.0} Mo résidents, \
+                                  {:.0} Mo libres", machine.nom, cfg.vocab, cfg.hidden,
+                                 m.octets_poids as f64 / 1e6,
+                                 machine.memoire_libre as f64 / 1e6);
                     }
+                    m
                 }
-                _ => (None, None),
+                _ => None,
             }
-        } else { (None, None) };
+        } else { None };
         let head4 = if q4 & 4 != 0 || tete_quantifiee {
             let t0 = Instant::now();
             let v = cfg.vocab;
@@ -687,7 +709,7 @@ impl Model {
             seuil_push: 0.22,
             stop_id: None, prof: [0.0; 6],
             tete,
-            gpu, tete_gpu, head4, sinks_vus,
+            tete_gpu, head4, sinks_vus,
             patch: None, ffn_gain: None, hebb: None,
         }
     }
@@ -789,6 +811,19 @@ impl Model {
             (None, Some(_)) => false,
             (None, None) => panic!("projection sans aucun format"),
         };
+        if let (Some(machine), Some(mg)) = (crate::gpu::instance(), p.gpu.as_ref()) {
+            // Le noyau applique déjà l'échelle d'activation : rien à reprendre.
+            let mut xd = vec![0i32; x.len()];
+            for (&i, &v) in sv.idx.iter().zip(sv.val.iter()) { xd[i as usize] = v; }
+            if let Some(y) = machine.proj(mg, &xd, sx) {
+                // Le biais fait partie de la projection : l'oublier donnait une
+                // perplexité de 27 millions sur un modèle à biais QKV.
+                for o in 0..mg.n_out.min(out.len()) {
+                    out[o] = y[o] + p.bias.as_ref().map_or(0.0, |b| b[o]);
+                }
+                return;
+            }
+        }
         if let Some(d) = &p.d {
             if use_dense {
             // référence dense : pas d'événement, chaque sortie est un produit
@@ -1379,7 +1414,7 @@ impl Model {
         };
         // Chemin GPU : les poids de la tête sont déjà en mémoire vidéo ; seules
         // les activations montent et les logits descendent.
-        if let (Some(machine), Some(m)) = (self.gpu.as_ref(), self.tete_gpu.as_ref()) {
+        if let (Some(machine), Some(m)) = (crate::gpu::instance(), self.tete_gpu.as_ref()) {
             let mut xd = vec![0i32; h.len()];
             for (&i, &v) in sv.idx.iter().zip(sv.val.iter()) { xd[i as usize] = v; }
             if let Some(y) = machine.tete(m, &xd) {
