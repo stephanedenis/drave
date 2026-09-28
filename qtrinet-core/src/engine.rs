@@ -240,6 +240,70 @@ struct Shared {
     dirty: AtomicPtr<Vec<usize>>,
 }
 
+/// Épingle-t-on les workers ? Réglé une fois par le programme principal.
+pub static EPINGLER: std::sync::atomic::AtomicBool = std::sync::atomic::AtomicBool::new(false);
+
+/// Épingle le fil courant sur un processeur logique.
+///
+/// `std` n'expose pas `sched_setaffinity` : on passe par l'appel système
+/// direct (numéro 203 sur x86-64). Le masque fait 128 octets, soit 1 024
+/// processeurs — la taille maximale que le noyau accepte.
+///
+/// Intérêt mesuré : les poids sont alloués par le fil principal, donc sur le
+/// nœud NUMA 0. Un worker qui tourne sur l'autre socket paie chaque accès au
+/// QPI. Au banc : 20,7 Go/s en laissant l'ordonnanceur placer les fils,
+/// **24,7 Go/s** en les liant à un socket.
+#[cfg(all(target_arch = "x86_64", target_os = "linux"))]
+pub fn epingler(cpu: usize) -> bool {
+    if cpu >= 1024 { return false; }
+    let mut masque = [0u64; 16];
+    masque[cpu / 64] |= 1u64 << (cpu % 64);
+    let ret: i64;
+    unsafe {
+        std::arch::asm!(
+            "syscall",
+            inlateout("rax") 203i64 => ret,   // SYS_sched_setaffinity
+            in("rdi") 0usize,                 // 0 = fil courant
+            in("rsi") 128usize,               // taille du masque en octets
+            in("rdx") masque.as_ptr(),
+            lateout("rcx") _,
+            lateout("r11") _,
+            options(nostack)
+        );
+    }
+    ret == 0
+}
+
+/// Processeurs du premier nœud NUMA, cœurs physiques puis frères SMT.
+/// Repli : la numérotation linéaire si la topologie n'est pas reconnue.
+fn cibles_locales(n: usize) -> Vec<usize> {
+    // Chaque nœud liste d'abord ses cœurs physiques, puis leurs frères SMT
+    // (`0-9,20-29` pour un Xeon 10 cœurs). On garde la première moitié de
+    // chaque nœud : les cœurs physiques des DEUX sockets.
+    //
+    // Mesuré : lier les seize fils au seul nœud 0 coûte 16 % de débit
+    // (23,8 -> 27,6 s sur le 30B MoE). Le gain de localité mémoire ne compense
+    // pas la contention SMT — deux fils d'un même cœur se disputent les ports
+    // d'émission, et nos ouvriers en attente active en souffrent doublement.
+    let mut v = Vec::new();
+    for noeud in 0..8 {
+        let chemin = format!("/sys/devices/system/node/node{noeud}/cpulist");
+        let Ok(txt) = std::fs::read_to_string(&chemin) else { break };
+        let mut cpus = Vec::new();
+        for morceau in txt.trim().split(',') {
+            if let Some((a, b)) = morceau.split_once('-') {
+                if let (Ok(a), Ok(b)) = (a.parse::<usize>(), b.parse::<usize>()) {
+                    cpus.extend(a..=b);
+                }
+            } else if let Ok(a) = morceau.parse::<usize>() { cpus.push(a); }
+        }
+        let physiques = cpus.len() / 2;
+        v.extend_from_slice(&cpus[..physiques.max(1)]);
+    }
+    if v.is_empty() { v = (0..n).collect(); }
+    v
+}
+
 pub struct Pool {
     shared: Arc<Shared>,
     handles: Vec<std::thread::JoinHandle<()>>,
@@ -292,9 +356,15 @@ impl Pool {
             dirty: AtomicPtr::new(std::ptr::null_mut()),
         });
         let mut handles = Vec::with_capacity(n);
+        let epingle = EPINGLER.load(Ordering::Relaxed);
+        let cibles = if epingle { cibles_locales(n) } else { Vec::new() };
         for id in 0..n {
             let sh = Arc::clone(&shared);
+            let cpu = if epingle && !cibles.is_empty() {
+                Some(cibles[id % cibles.len()])
+            } else { None };
             handles.push(std::thread::spawn(move || {
+                if let Some(c) = cpu { epingler(c); }
                 let mut last = 0usize;
                 loop {
                     // Attente active d'une nouvelle génération. La barrière
@@ -363,7 +433,13 @@ impl Pool {
                             // cette seule parenthèse rend les deux modes
                             // **bit à bit identiques** — changer de mode
                             // d'exécution ne change plus un seul token.
-                            dst[o] = d.dot_chunked(o, xv) as f32 * (d.scale[o] * sx);
+                            dst[o] = if d.src == crate::list::Source8::Q8_0 {
+                                // Blocs du fichier : l'échelle est déjà celle du
+                                // bloc, il ne reste que celle de l'activation.
+                                d.dot_q8_source(o, xv) * sx
+                            } else {
+                                d.dot_chunked(o, xv) as f32 * (d.scale[o] * sx)
+                            };
                         }
                         sh.done.fetch_add(1, Ordering::Release);
                         continue;

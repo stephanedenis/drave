@@ -355,6 +355,13 @@ impl Gguf {
         self.tensor(name).map(|t| t.ttype)
     }
 
+    /// Blocs **Q8_0** bruts : `(octets, nb de blocs de 32 par ligne)`.
+    pub fn q8_blocks(&self, name: &str) -> Option<(&[u8], usize)> {
+        let t = self.tensor(name)?;
+        if t.ttype != GGML_Q8_0 { return None; }
+        Some((&self.buf[self.data_start + t.offset as usize..], t.dims[1] as usize / 32))
+    }
+
     /// Super-blocs **Q4_K** bruts : `(octets, nb de super-blocs de 256 poids par
     /// ligne)`. C'est le format de toute la famille Qwen/Llama en `Q4_K_M`.
     pub fn q4k_blocks(&self, name: &str) -> Option<(&[u8], usize)> {

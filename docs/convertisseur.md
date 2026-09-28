@@ -182,14 +182,15 @@ sont ce qui le rend **exécutable** ; 4 et 5 sont ce qui le rend **efficace**.
 | 1 | emprunt des blocs en place | ✅ | Q4_0, MXFP4, **Q4_K**, **Q6_K**, Q8_0 (tête) |
 | 2 | lecteur **Q4_K / Q6_K** | ✅ | comparé à une référence **F16 des mêmes poids** produite par `llama-quantize`, tenseur par tenseur |
 | 3 | **routeur MoE** + tranches par expert | ✅ | Qwen3-30B-A3B (128 experts, top-8) : PPL 7,61 |
-| 4 | index de placement / NUMA | ⬜ | piste mesurée : 20,7 → 24,7 Go/s |
-| 5 | Q8_0 en place (projections) | ⬜ | la tête le fait déjà |
+| 4 | **index de placement** (`--plan`) | ✅ | poids par couche, octets actifs par jeton, débit prévu par support |
+| 4 bis | **épinglage NUMA** (`--pin`) | ✅ mesuré, **négatif** | 23,2 → 25,5 s (cœurs physiques) et → 27,6 s (un socket) sur le 30B MoE |
+| 5 | **Q8_0 en place** (projections) | ✅ | chargement 2,73 → 0,81 s, mémoire 921 → 566 Mo |
 
 ## Le parc de modèles, maintenant
 
 | modèle | format | PPL (notre jeu) | tok/s | chargement | mémoire |
 |---|---|---|---|---|---|
-| Qwen2.5-0.5B | Q8_0 | 19,2641 | 29 | 2,7 s | 0,9 Go |
+| Qwen2.5-0.5B | Q8_0 | 19,3885 | 32 | **0,81 s** | **0,57 Go** |
 | Qwen2.5-0.5B | Q4_0 | 21,0110 | 39 | **0,87 s** | 0,41 Go |
 | Qwen2.5-1.5B | Q4_K_M | 12,9228 | 17 | 4,2 s | 1,1 Go |
 | Qwen2.5-VL-7B | Q4_K_M | 10,9947 | 2,8 | 24 s | 4,5 Go |
@@ -224,6 +225,21 @@ Un routeur top-8 sur 128 experts n'allume que **6 %** du FFN. C'est très en
 dessous du croisement mesuré à 22 % de densité : le régime où l'architecture
 événementielle cesse d'être un coût est **exactement celui des grands modèles
 publics actuels**. Le 30B-A3B lit 1,8 G poids par jeton au lieu de 30 G.
+
+## Deux résultats négatifs, mesurés
+
+**L'épinglage NUMA ne paie pas.** Le banc de bande passante montrait 20,7 → 24,7
+Go/s en liant les fils à un socket ; sur la charge réelle c'est une **perte** :
+23,2 → 27,6 s sur le 30B MoE. Lier les seize fils à dix cœurs physiques met deux
+fils par cœur, et la barrière tournante souffre doublement de la contention SMT.
+Même en se limitant aux cœurs physiques des deux sockets : 25,5 s. L'ordonnanceur
+fait mieux seul. Le drapeau `--pin` reste disponible, documenté comme perdant ici.
+
+**Le plan surestime le débit des MoE d'un facteur 2.** Il annonçait 12 tok/s pour
+le 30B-A3B à 20 Go/s ; nous en mesurons 5,4. Les tranches d'experts sont lues à
+**8 Go/s**, pas 20 : dix-huit mille tranches de 900 Ko dispersées sur 18 Go
+coûtent en TLB et en localité ce que la lecture séquentielle ne paie pas. Le plan
+chiffre maintenant aussi ce régime — 4,81 tok/s prévus contre 5,4 mesurés.
 
 ## Reste à faire
 

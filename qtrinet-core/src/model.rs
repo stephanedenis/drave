@@ -260,9 +260,21 @@ impl Proj {
                 (None, None, Some(DenseQ4::build(&w, n_out, n_in)))
             }
         } else if dense {
-            (None, Some(DenseQ8::build(&w, n_out, n_in)), None)
+            // Source déjà en Q8_0 et aucun élagage : on EMPRUNTE les blocs au
+            // lieu de les reconstruire depuis les f32 (copie == taille du
+            // modèle, plus un transitoire f32 de quatre fois cette taille).
+            match (keep >= 1.0, g.q8_blocks(name)) {
+                (true, Some((buf, nb))) =>
+                    (None, Some(unsafe { DenseQ8::emprunter_q8(buf.as_ptr(), n_out, n_in, nb) }), None),
+                _ => (None, Some(DenseQ8::build(&w, n_out, n_in)), None),
+            }
         } else if auto {
-            (Some(PushMat::build(&w, n_out, n_in)), Some(DenseQ8::build(&w, n_out, n_in)), None)
+            let dense8 = match (keep >= 1.0, g.q8_blocks(name)) {
+                (true, Some((buf, nb))) =>
+                    unsafe { DenseQ8::emprunter_q8(buf.as_ptr(), n_out, n_in, nb) },
+                _ => DenseQ8::build(&w, n_out, n_in),
+            };
+            (Some(PushMat::build(&w, n_out, n_in)), Some(dense8), None)
         } else {
             (Some(PushMat::build(&w, n_out, n_in)), None, None)
         };

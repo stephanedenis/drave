@@ -31,6 +31,10 @@ fn main() {
         eprintln!("                    [--n 32] [--temp 0] [--ctx 512] [--threads N]");
         std::process::exit(1);
     }
+    if args.iter().any(|a| a == "--pin") {
+        engine::EPINGLER.store(true, std::sync::atomic::Ordering::Relaxed);
+    }
+    if args.iter().any(|a| a == "--plan") { run_plan(&args); return; }
     if args.iter().any(|a| a == "--ppl") { run_ppl(&args); return; }
     if args.iter().any(|a| a == "--infer") { run_infer(&args); return; }
     let path = &args[1];
@@ -360,6 +364,7 @@ fn run_infer(args: &[String]) {
             "--chat" => { chat = true; i -= 1; }
             "--dense" => { dense = true; i -= 1; }
             "--moe-topk" => { moe_topk = args[i + 1].parse().unwrap(); i -= 1; }
+            "--pin" => { engine::EPINGLER.store(true, std::sync::atomic::Ordering::Relaxed); i -= 1; }
             "--auto" => { auto = true; i -= 1; }
             "--push" => { auto = false; dense = false; i -= 1; }
             "--q4" => { q4 |= 3; i -= 1; }
@@ -525,6 +530,82 @@ fn build_tokenizer(g: &Gguf) -> tokenizer::Tokenizer {
 
 fn cfg_dims(m: &model::Model) -> usize { m.cfg.hidden }
 
+/// Plan de placement : ce que pèse chaque couche, et où la mettre.
+///
+/// C'est l'« index » du conteneur : on le lit **avant** les poids, donc on
+/// décide sans avoir rien chargé. Les seuils viennent des débits mesurés sur
+/// cette machine : CPU 14–25 Go/s, PCIe x8 6,5 Go/s, NVLink 25,78 Go/s,
+/// GPU 380 Go/s en lecture locale.
+fn run_plan(args: &[String]) {
+    let path = &args[1];
+    let g = Gguf::open(path).expect("ouverture du GGUF");
+    let arch = g.meta.get("general.architecture").and_then(|m| m.as_str()).unwrap_or("?");
+    let n_layer = g.cfg("block_count").and_then(|m| m.as_u64()).unwrap_or(0) as usize;
+    let n_expert = g.cfg("expert_count").and_then(|m| m.as_u64()).unwrap_or(0) as usize;
+    let n_used = g.cfg("expert_used_count").and_then(|m| m.as_u64()).unwrap_or(0) as usize;
+    // octets par poids, par type ggml
+    let octets = |t: u32| -> f64 {
+        match t {
+            0 => 4.0, 1 => 2.0, 2 => 18.0/32.0, 8 => 34.0/32.0,
+            12 => 144.0/256.0, 14 => 210.0/256.0, 39 => 17.0/32.0,
+            _ => 4.0,
+        }
+    };
+    println!("plan de placement — {arch}, {n_layer} couches{}",
+             if n_expert > 0 { format!(", {n_expert} experts (top-{n_used})") } else { String::new() });
+    println!("\n  {:>5}  {:>12}  {:>12}  {:>12}  {:>13}  {}",
+             "couche", "attention", "ffn", "experts", "cumul", "placement");
+    let mut cumul = 0f64;
+    let mut total = 0f64;
+    let mut actifs = 0f64;
+    for l in 0..n_layer {
+        let mut attn = 0f64;
+        let mut ffn = 0f64;
+        let mut exp = 0f64;
+        let mut exp_actif = 0f64;
+        for t in &g.tensors {
+            let Some(reste) = t.name.strip_prefix(&format!("blk.{l}.")) else { continue };
+            let oct = octets(t.ttype) * t.nelem() as f64;
+            if reste.starts_with("attn") { attn += oct; }
+            else if reste.contains("_exps") {
+                exp += oct;
+                // un tenseur d'experts est 3D : la part active est
+                // n_used / n_expert de son volume
+                exp_actif += oct * (n_used as f64 / n_expert.max(1) as f64);
+            } else if reste.starts_with("ffn") { ffn += oct; }
+        }
+        cumul += attn + ffn + exp;
+        total += attn + ffn + exp;
+        actifs += attn + ffn + exp_actif;
+        // Placement : on conseille le GPU seulement quand la couche ne tient
+        // pas confortablement, et NVLink quand deux GPU se partagent le modèle.
+        let placement = if exp + ffn + attn < 512.0 * 1e6 { "CPU" }
+                        else if n_expert > 0 { "CPU (MoE creux)" }
+                        else { "GPU (PCIe 6,5 Go/s)" };
+        println!("  {:>5}  {:>9.1} Mo  {:>9.1} Mo  {:>9.1} Mo  {:>10.2} Go  {}",
+                 l, attn / 1e6, ffn / 1e6, exp / 1e6, cumul / 1e9, placement);
+    }
+    println!("\n  total du fichier      : {:.2} Go", total / 1e9);
+    println!("  lu par jeton (actifs) : {:.2} Go", actifs / 1e9);
+    for (nom, debit) in [("CPU 16 fils", 20.0), ("PCIe x8", 6.5), ("NVLink", 25.78), ("GPU local", 380.0)] {
+        println!("  à {:>9.1} Go/s ({nom}) : {:>7.2} tok/s", debit, debit / (actifs / 1e9));
+    }
+    if n_expert > 0 {
+        // Mesuré sur le 30B-A3B : les tranches d'experts sont lues à 8 Go/s,
+        // pas 20 — dix-huit mille tranches de 900 Ko dispersées sur 18 Go
+        // coûtent en TLB et en localité ce que la lecture séquentielle ne paie
+        // pas. Le plan doit chiffrer le régime réel, pas le régime idéal.
+        println!("  à       8.0 Go/s (MoE épars, mesuré) : {:>7.2} tok/s",
+                 8.0 / (actifs / 1e9));
+    }
+    let libre = std::fs::read_to_string("/proc/meminfo").ok()
+        .and_then(|t| t.lines().find(|l| l.starts_with("MemAvailable")).map(|l| l.to_string()))
+        .unwrap_or_default();
+    println!("  {}", libre.trim());
+    println!("  → {}", if total / 1e9 < 100.0 { "le modèle tient en mémoire, sans copie" }
+                      else { "le modèle DÉPASSE la mémoire : il faut un découpage par couche" });
+}
+
 fn run_ppl(args: &[String]) {
     let path = &args[1];
     let mut idfile = String::new();
@@ -595,6 +676,7 @@ fn run_ppl(args: &[String]) {
             "--threads" => n_threads = args[i + 1].parse().unwrap(),
             "--dense" => { dense = true; i -= 1; }
             "--moe-topk" => { moe_topk = args[i + 1].parse().unwrap(); i -= 1; }
+            "--pin" => { engine::EPINGLER.store(true, std::sync::atomic::Ordering::Relaxed); i -= 1; }
             "--auto" => { auto = true; i -= 1; }
             "--push" => { auto = false; dense = false; i -= 1; }
             "--q4" => { q4 |= 3; i -= 1; }

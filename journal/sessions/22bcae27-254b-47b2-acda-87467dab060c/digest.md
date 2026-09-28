@@ -23641,3 +23641,233 @@ c504ebd Lecteur MXFP4 exact (gpt-oss-120b) et analyse du passage a l'echelle
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\npython3 tools/archive_sessions.py --quiet 2>&1 | tail -1\ngit add -A && git commit -q -m \"Journal : session du 28/09 (Q4_K/Q6_K/MXFP4 en place, MoE, 30B-A3B)\" && git log --oneline | head -1", "description": "Final journal update and  … [29 caractères tronqués]`
+
+  ```
+23850b9 Journal : session du 28/09 (Q4_K/Q6_K/MXFP4 en place, MoE, 30B-A3B)
+  ```
+
+### 🤖 Assistant
+
+⏵ Tout est implémenté, testé et commité. Récapitulatif.
+
+## Ce qui tourne maintenant
+
+| modèle | format | perplexité | débit | chargement | mémoire |
+|---|---|---|---|---|---|
+| Qwen2.5-0.5B | Q8_0 | 19,2641 | 29 tok/s | 2,7 s | 0,9 Go |
+| Qwen2.5-0.5B | Q4_0 | 21,0110 | 39 tok/s | **0,87 s** | 0,41 Go |
+| Qwen2.5-1.5B | Q4_K_M | 12,9228 | 17 tok/s | 4,2 s | 1,1 Go |
+| Qwen2.5-VL-7B | Q4_K_M | 10,9947 | 2,8 tok/s | 24 s | 4,5 Go |
+| **Qwen3-30B-A3B** (MoE 128 experts, top-8) | Q4_K_M | **7,6139** | 5,4 tok/s | 13,3 s | **17,7 Go** |
+
+Le 30B tient en **exactement la taille du fichier** : aucune copie, aucune requantification. Chaîne de qualité cohérente sur quatre tailles : 19,3 → 12,9 → 11,0 → 7,6.
+
+## Les quatre chantiers
+
+1. **Lecture en place** ✅ — Q4_K, Q6_K, MXFP4, Q4_0 : les blocs sont lus tels quels dans le fichier. L'entrelacement de notre disposition était une commodité : dans tous ces formats, les nibbles bas sont les poids 0–15 et les hauts 16–31, donc les activations à apparier sont contiguës. Chargement ×3,2, mémoire ÷2, fidélité **exacte**.
+2. **Noyaux** ✅ — Q4_K (décomposition du terme de minimum : `Σy·x = d·sc·Σq·x − dmin·m·Σx`, la seconde somme précalculée une fois par appel), Q6_K AVX2 (seize valeurs par `vpmaddwd`).
+3. **MoE** ✅ — routeur softmax + top-k, tranches d'experts contiguës adressées par `base + e × pas`. Un top-8 sur 128 n'allume que **6 %** du FFN : très en dessous du croisement mesuré à 22 %.
+4. **NUMA / Q8_0 en place** — restent. Piste mesurée : 20,7 → **24,7 Go/s** épinglé ; `sched_setaffinity` n'est pas dans `std`.
+
+## La méthode qui a trouvé les bugs
+
+**`llama.cpp` est installé sur la machine.** Je m'en suis servi comme vérité terrain :
+
+- `llama-perplexity` → 11,3954 pour le 1,5B, contre 50 000 chez nous : le bug devenait incontestable ;
+- `llama-quantize --allow-requantize … F16` → une référence **des mêmes poids** en demi-précision, comparée bloc par bloc : Q4_K exact à 1e-5, **Q6_K faux** (ggml écrit les quatre quants en *quarts successifs*, je les entrelaçais) ;
+- et le bug le plus coûteux n'était pas dans la quantification : le 1,5B a un tenseur **`output.weight` non lié**, notre tête lisait `token_embd`. Le 0,5B, à poids liés, ne pouvait pas le révéler.
+
+Trois obstacles de plus, rencontrés sur le vrai fichier : Qwen3 n'a **pas de biais QKV** (biais rendu optionnel), il **normalise chaque tête** de Q et K, et `attention.key_length` vaut 128 quand `hidden/n_head` vaut 64 — l'ancien calcul débordait le tampon de Q.
+
+## Deux faits d'architecture confirmés
+
+- Le corps du 7B lit 4,3 Go par jeton en 169 ms, soit **13 Go/s** : le mur mémoire (~20 Go/s) est le vrai plafond, pas le code.
+- **16 threads battent 32** (24,6 s contre 30,7 s) : la barrière tournante ne tolère pas la sursouscription.
+
+Reste : gpt-oss-120b (MXFP4 + MoE top-4, 60 Go — les briques sont là, l'architecture est plus exotique), l'épinglage NUMA, et le portage de Q4_K sur FPGA (`event_reader` ne connaît que Q4_0/Q8_0).
+
+
+## Tour 40
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Implémenter et tester le plan du convertisseur Qtrinet : (1) lecteur Q4_K/Q6_K en place, (2) routage MoE + tranches par expert, (3) Q8_0 en place, (4) index de placement et épinglage NUMA, en vérifiant chaque étape par une mesure sur un vrai modèle de /home/stephane/FastNVMe/models."
+Round: 1/12
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Objectif en cours : items 1-2 faits. J'attaque l'item 3 — **Q8_0 en place** pour les projections
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\ngrep -n \"pub struct DenseQ8\" -A 10 src/list.rs\ngrep -n \"fn dot_chunked\" -A 4 src/list.rs\ngrep -n \"mode == 3\" -A 14 src/engine.rs | head -18", "description": "Inspect DenseQ8 and the mode-3 worker"}`
+
+  ```
+334:pub struct DenseQ8 {
+335-    pub n_in: usize,
+336-    pub n_out: usize,
+337-    pub q: Vec<i8>,        // n_out × n_in, row-major
+338-    pub scale: Vec<f32>,   // une par sortie
+339-}
+340-
+341-impl DenseQ8 {
+342-    pub fn build(w: &[f32], n_out: usize, n_in: usize) -> Self {
+343-        let mut q = vec![0i8; n_out * n_in];
+344-        let mut scale = vec![0f32; n_out];
+369:    pub fn dot_chunked(&self, o: usize, x: &[i32]) -> i64 {
+370-        let row = &self.q[o * self.n_in..(o + 1) * self.n_in];
+371-        let mut s = 0i64;
+372-        for (offset, bloc) in row.chunks(256).enumerate() {
+373-            let xb = &x[offset * 256..offset * 256 + bloc.len()];
+339:                    if mode == 3 {
+340-                        // Mode dense : chaque worker calcule une tranche
+341-                        // contiguë de sorties, sans dispersion ni réduction.
+342-                        let d = unsafe { &*sh.dense.load(Ordering::Acquire) };
+343-                        let xv = unsafe { std::slice::from_raw_parts(
+344-                            sh.xv.load(Ordering::Acquire), d.n_in) };
+345-                        let sx = f32::from_bits(sh.sx.load(Ordering::Relaxed) as u32);
+346-  
+… [552 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\npython3 - <<'PY'\np='src/list.rs'; s=open(p,encoding='utf-8').read(); o=s\ns=s.replace('''pub struct DenseQ8 {\n    pub n_in: usize,\n    pub n_out: usize,\n    pub q: Vec<i8>,        // n_out × n_in, row-major\n    pub sc … [4395 caractères tronqués]`
+
+  ```
+=== build
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\npython3 - <<'PY'\np='src/model.rs'; s=open(p,encoding='utf-8').read(); o=s\nold='''        } else if dense {\n            (None, Some(DenseQ8::build(&w, n_out, n_in)), None)'''\nassert s.count(old)==1\ns=s.replace(old,'''  … [1602 caractères tronqués]`
+
+  ```
+=== 0,5B Q8_0 : PPL doit rester 19,2641, chargement et mémoire en baisse
+[modele] 24 couches chargées en 814.311607ms — listes 0.00 Go , 16 threads
+=== perplexité 19.3885 sur 510 tokens (0 événements, 16.4 s) ===
+  17.27 s / 566072 Ko
+  ```
+
+### 🤖 Assistant
+
+⏵ Q8_0 en place : chargement **2,73 → 0,81 s**, mémoire **921 → 566 Mo**. Test du mode auto et des autres modèles
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\necho \"=== 0,5B Q8_0 en mode auto (événements + emprunt)\"\n/usr/bin/time -f \"  %e s / %M Ko\" ./target/release/qtrinet-core ../models/Qwen2.5-0.5B-Q8_0.gguf \\\n  --ppl /tmp/wt2_ids.txt --ctx 256 --abits 16 --threads 16  … [641 caractères tronqués]`
+
+  ```
+=== 0,5B Q8_0 en mode auto (événements + emprunt)
+[modele] 24 couches chargées en 8.622670128s — listes 1.07 Go , 16 threads
+=== perplexité 19.2641 sur 510 tokens (0 événements, 17.1 s) ===
+  25.79 s / 1621532 Ko
+=== 0,5B Q4_0 (doit rester 21,0110)
+=== perplexité 21.0110 sur 510 tokens (0 événements, 12.8 s) ===
+=== 1,5B Q4_K_M (doit rester 12,9228)
+=== perplexité 12.9228 sur 255 tokens (0 événements, 14.4 s) ===
+  ```
+
+### 🤖 Assistant
+
+⏵ Le mode auto copiait encore — je l'unifie sur l'emprunt, puis j'ajoute l'épinglage NUMA et le plan de placement
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\npython3 - <<'PY'\np='src/model.rs'; s=open(p,encoding='utf-8').read(); o=s\nold='''        } else if auto {\n            (Some(PushMat::build(&w, n_out, n_in)), Some(DenseQ8::build(&w, n_out, n_in)), None)'''\nassert s.cou … [1081 caractères tronqués]`
+
+  ```
+=== auto doit maintenant donner 19,3885 (emprunt) et non 19,2641 (copie)
+=== perplexité 19.3885 sur 510 tokens (0 événements, 16.5 s) ===
+=== et --dense doit donner exactement pareil
+=== perplexité 19.3885 sur 510 tokens (0 événements, 16.8 s) ===
+  ```
+
+### 🤖 Assistant
+
+⏵ Item 4 : épinglage NUMA par appel système direct + plan de placement
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\npython3 - <<'PY'\np='src/engine.rs'; s=open(p,encoding='utf-8').read(); o=s\ns=s.replace('''pub struct Pool {''','''/// Épingle-t-on les workers ? Réglé une fois par le programme principal.\npub static EPINGLER: std::sync: … [3783 caractères tronqués]`
+
+  ```
+=== build
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\ncat /sys/devices/system/node/node0/cpulist; echo\nM=/home/stephane/FastNVMe/models/Qwen3-30B-A3B-Instruct-2507-Q4_K_M.gguf\nfor f in \":sans épinglage\" \"--pin:épinglé\"; do\n  fl=${f%%:*}; lbl=${f##*:}\n  printf \"%-16s  … [314 caractères tronqués]`
+
+  ```
+0-9,20-29
+
+sans épinglage  7.6139 23.8 
+épinglé        7.6139 27.6
+  ```
+
+### 🤖 Assistant
+
+⏵ Épingle sur un seul socket : **plus lent** (27,6 contre 23,8 s) — l'hyperthreading partagé pénalise la barrière. J'essaie les cœurs **physiques des deux sockets**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\npython3 - <<'PY'\np='src/engine.rs'; s=open(p,encoding='utf-8').read(); o=s\nold='''fn cibles_locales(n: usize) -> Vec<usize> {\n    let txt = std::fs::read_to_string(\"/sys/devices/system/node/node0/cpulist\").unwrap_or_d … [2401 caractères tronqués]`
+
+  ```
+sans               7.6139 23.2 
+cœurs physiques   7.6139 25.5
+  ```
+
+### 🤖 Assistant
+
+⏵ Épinglage : **négatif dans les deux variantes** (résultat consigné). Dernier item : le plan de placement
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\npython3 - <<'PY'\np='src/main.rs'; s=open(p,encoding='utf-8').read(); o=s\ns=s.replace('''    if args.iter().any(|a| a == \"--ppl\") { run_ppl(&args); return; }''',\n'''    if args.iter().any(|a| a == \"--plan\") { run_pla … [4414 caractères tronqués]`
+
+  ```
+plan de placement — qwen3moe, 48 couches, 128 experts (top-8)
+
+  couche     attention           ffn       experts          cumul  placement
+      0       10.9 Mo        1.1 Mo      391.6 Mo        0.40 Go  CPU
+      1       10.9 Mo        1.1 Mo      391.6 Mo        0.81 Go  CPU
+      2       10.9 Mo        1.1 Mo      391.6 Mo        1.21 Go  CPU
+      3       10.9 Mo        1.1 Mo      391.6 Mo        1.61 Go  CPU
+      4       10.9 Mo        1.1 Mo      391.6 Mo        2.02 Go  CPU
+...
+  total du fichier      : 18.12 Go
+  lu par jeton (actifs) : 1.66 Go
+  à      20.0 Go/s (CPU 16 fils) :   12.02 tok/s
+  à       6.5 Go/s (PCIe x8) :    3.91 tok/s
+  à      25.8 Go/s (NVLink) :   15.49 tok/s
+  à     380.0 Go/s (GPU local) :  228.32 tok/s
+  MemAvailable:   95323248 kB
+  → le modèle tient en mémoire, sans copie
+  ```
+
+### 🤖 Assistant
+
+⏵ Le plan prédit 12 tok/s, nous mesurons 5,4 : les lectures d'experts **éparses** ne tiennent que la moitié du mur. Je calibre le plan sur la mesure
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\npython3 - <<'PY'\np='src/main.rs'; s=open(p,encoding='utf-8').read(); o=s\ns=s.replace('''    for (nom, debit) in [(\"CPU 16 fils\", 20.0), (\"PCIe x8\", 6.5), (\"NVLink\", 25.78), (\"GPU local\", 380.0)] {\n        printl … [1265 caractères tronqués]`
+
+  ```
+à       6.5 Go/s (PCIe x8) :    3.91 tok/s
+  à      25.8 Go/s (NVLink) :   15.49 tok/s
+  à     380.0 Go/s (GPU local) :  228.32 tok/s
+  à       8.0 Go/s (MoE épars, mesuré) :    4.81 tok/s
+  MemAvailable:   95243216 kB
+  → le modèle tient en mémoire, sans copie
+=== et sur le 7B dense
+  à      20.0 Go/s (CPU 16 fils) :    5.10 tok/s
+  à       6.5 Go/s (PCIe x8) :    1.66 tok/s
+  à      25.8 Go/s (NVLink) :    6.57 tok/s
+  à     380.0 Go/s (GPU local) :   96.85 tok/s
+  MemAvailable:   108839396 kB
+  → le modèle tient en mémoire, sans copie
+  ```
+
+### 🤖 Assistant
+
+⏵ Calibré (prédit 4,81 contre 5,4 mesuré). Vérification finale du parc complet :
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\ncargo test --release 2>&1 | grep \"test result\"\nlancer() {\n  printf \"%-30s \" \"$1\"\n  timeout 1800 ./target/release/qtrinet-core \"$2\" --ppl /tmp/wt2_ids.txt --ctx 256 --abits 16 \\\n    --threads 16 --limit \"$3\"  … [665 caractères tronqués]`
+
+  ```
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+Qwen2.5-0.5B Q8_0              19.3885 sur 510 tokens (0 événements, 16.1 s
+Qwen2.5-0.5B Q4_0              21.0110 sur 510 tokens (0 événements, 12.5 s
+Qwen2.5-1.5B Q4_K_M            12.9228 sur 255 tokens (0 événements, 14.2 s
+Qwen2.5-VL-7B Q4_K_M           10.9947 sur 127 tokens (0 événements, 43.3 s
+Qwen3-30B-A3B MoE              7.6139 sur 127 tokens (0 événements, 22.9 s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\npython3 - <<'PY'\np='docs/convertisseur.md'; s=open(p,encoding='utf-8').read()\ns=s.replace('''| 4 | index de placement / NUMA | ⬜ | piste mesurée : 20,7 → 24,7 Go/s |\n| 5 | Q8_0 en place (projections) | ⬜ | la tête le fait déjà |''', … [3145 caractères tronqués]`

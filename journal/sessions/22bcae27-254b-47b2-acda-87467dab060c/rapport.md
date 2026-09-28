@@ -5,14 +5,14 @@
 | Identifiant | `22bcae27-254b-47b2-acda-87467dab060c` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-25 11:56 |
-| Durée | 68.6 h |
-| Tours | 39 |
-| Messages | 1086 |
-| Appels d'outils | 1095 |
+| Durée | 68.8 h |
+| Tours | 40 |
+| Messages | 1100 |
+| Appels d'outils | 1107 |
 | Fichiers touchés | 68 |
-| Commandes | 855 |
+| Commandes | 867 |
 | Sous-agents | 1 |
-| Commits | 42 |
+| Commits | 43 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -106,6 +106,8 @@
 **Tour 38** — il faut donc faire un convertisseur de modèle haute fidèlité afin d'avoir un chargement optimal : abolition des zéros, optimisation par identification des clusters et MoE, tuning cpu/hyperthread/core pour les layers sur CPU et similaires pour les layers sur GPU avec optimisation des layers en fonction des routes pcie
 
 **Tour 39** — vas-y, implémente et teste le tout
+
+**Tour 40** — <goal_round> Objective: "Implémenter et tester le plan du convertisseur Qtrinet : (1) lecteur Q4_K/Q6_K en place, (2) routage MoE + tranches par expert, (3) Q8_0 en place, (4) index de placement et épinglage NUMA, en vérifiant chaque étape par une mesure sur un vrai modèle de /home/stephane/FastNVMe/models." Round: 1/12  Continue working toward the objective in this same session. Treat the current … [451 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -2275,7 +2277,60 @@ L'emprunt gagne sur **les quatre axes à la fois** — parce qu'il ne fait rien 
 
 **Synthèse produite :**
 
-⏵ Vérification finale de l'ensemble du parc en une passe
+⏵ Tout est implémenté, testé et commité. Récapitulatif.
+
+\## Ce qui tourne maintenant
+
+| modèle | format | perplexité | débit | chargement | mémoire |
+|---|---|---|---|---|---|
+| Qwen2.5-0.5B | Q8_0 | 19,2641 | 29 tok/s | 2,7 s | 0,9 Go |
+| Qwen2.5-0.5B | Q4_0 | 21,0110 | 39 tok/s | **0,87 s** | 0,41 Go |
+| Qwen2.5-1.5B | Q4_K_M | 12,9228 | 17 tok/s | 4,2 s | 1,1 Go |
+| Qwen2.5-VL-7B | Q4_K_M | 10,9947 | 2,8 tok/s | 24 s | 4,5 Go |
+| **Qwen3-30B-A3B** (MoE 128 experts, top-8) | Q4_K_M | **7,6139** | 5,4 tok/s | 13,3 s | **17,7 Go** |
+
+Le 30B tient en **exactement la taille du fichier** : aucune copie, aucune requantification. Chaîne de qualité cohérente sur quatre tailles : 19,3 → 12,9 → 11,0 → 7,6.
+
+\## Les quatre chantiers
+
+1. **Lecture en place** ✅ — Q4_K, Q6_K, MXFP4, Q4_0 : les blocs sont lus tels quels dans le fichier. L'entrelacement de notre disposition était une commodité : dans tous ces formats, les nibbles bas sont les poids 0–15 et les hauts 16–31, donc les activations à apparier sont contiguës. Chargement ×3,2, mémoire ÷2, fidélité **exacte**.
+2. **Noyaux** ✅ — Q4_K (décomposition du terme de minimum : `Σy·x = d·sc·Σq·x − dmin·m·Σx`, la seconde somme précalculée une fois par appel), Q6_K AVX2 (seize valeurs par `vpmaddwd`).
+3. **MoE** ✅ — routeur softmax + top-k, tranches d'experts contiguës adressées par `base + e × pas`. Un top-8 sur 128 n'allume que **6 %** du FFN : très en dessous du croisement mesuré à 22 %.
+4. **NUMA / Q8_0 en place** — restent. Piste mesurée : 20,7 → **24,7 Go/s** épinglé ; `sched_setaffinity` n'est pas dans `std`.
+
+\## La méthode qui a trouvé les bugs
+
+**`llama.cpp` est installé sur la machine.** Je m'en suis servi comme vérité terrain :
+
+- `llama-perplexity` → 11,3954 pour le 1,5B, contre 50 000 chez nous : le bug devenait incontestable ;
+- `llama-quantize --allow-requantize … F16` → une référence **des mêmes poids** en demi-précision, comparée bloc par bloc : Q4_K exact à 1e-5, **Q6_K faux** (ggml écrit les quatre quants en *quarts successifs*, je les entrelaçais) ;
+- et le bug le plus coûteux n'était pas dans la quantification : le 1,5B a un tenseur **`output.weight` non lié**, notre tête lisait `token_embd`. Le 0,5B, à poids liés, ne pouvait pas le révéler.
+
+Trois obstacles de plus, rencontrés sur le vrai fichier : Qwen3 n'a **pas de biais QKV** (biais rendu optionnel), il **normalise chaque tête** de Q et K, et `attention.key_length` vaut 128 quand `hidden/n_head` vaut 64 — l'ancien calcul débordait le tampon de Q.
+
+
+… [474 caractères tronqués]
+
+### Tour 40 — <goal_round> Objective: "Implémenter et tester le plan du convertisseur Qtrinet : (1) lecteur Q4_K/Q6_K en place, (2) ro … [731 caractères tronqués]
+
+*12 appels d'outils.* Actions notables :
+
+- bash — Inspect DenseQ8 and the mode-3 worker
+- bash — Implement in-place Q8_0 for dense projections
+- bash — Wire Q8_0 in place and measure
+- bash — Verify auto mode and regressions after Q8_0 in place
+- bash — Unify auto on the borrowed Q8_0 path
+- bash — Implement NUMA pinning via direct syscall
+- bash — Measure the NUMA pinning effect
+- bash — Pin to physical cores of both sockets and measure
+- bash — Implement and test the placement plan
+- bash — Calibrate the plan on measured effective bandwidth
+- bash — Final verification of the whole model zoo
+- bash — Document and commit the final items
+
+**Synthèse produite :**
+
+⏵ Calibré (prédit 4,81 contre 5,4 mesuré). Vérification finale du parc complet :
 
 ## 3. Travail accompli
 
@@ -2398,7 +2453,7 @@ L'emprunt gagne sur **les quatre axes à la fois** — parce qu'il ne fait rien 
 - **T3** Test OpenOCD without root and check Pro device support
 - **T3** Make scripts executable and test jtag_scan
 - **T3** Commit JTAG milestone
-- … et 815 autres
+- … et 827 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2588,4 +2643,5 @@ L'emprunt gagne sur **les quatre axes à la fois** — parce qu'il ne fait rien 
 - MoE : routage top-k et tranches par expert, le 30B-A3B tourne  Le routeur (ffn_gate_inp, f32) note les 128 experts, softmax sur tous, top-k, renormalisation ; s
 - Documentation : parc de modeles lisible, methode de verification, MoE" && git log --oneline | head -1
 - Journal : session du 28/09 (Q4_K/Q6_K/MXFP4 en place, MoE, 30B-A3B)" && git log --oneline | head -1
+- Q8_0 en place, plan de placement, epinglage NUMA mesure  Q8_0 en place pour les projections (comme la tete le faisait deja) : les blocs du fichier sont lus tels
 

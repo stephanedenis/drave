@@ -331,12 +331,26 @@ impl PushMat {
 /// conservée **en clair, ligne par ligne** : le produit scalaire se fait alors
 /// par ligne de sortie, sans dispersion ni réduction. C'est la référence contre
 /// laquelle mesurer ce que coûte l'architecture événementielle sur CPU.
+/// Origine des poids d'une matrice int8 dense.
+#[derive(Clone, Copy, PartialEq, Eq)]
+pub enum Source8 { Propre, Q8_0 }
+
 pub struct DenseQ8 {
     pub n_in: usize,
     pub n_out: usize,
-    pub q: Vec<i8>,        // n_out × n_in, row-major
-    pub scale: Vec<f32>,   // une par sortie
+    pub q: Vec<i8>,        // n_out × n_in — vide si `src == Q8_0`
+    pub scale: Vec<f32>,   // une par sortie — vide si `src == Q8_0`
+    /// `Q8_0` : les blocs sont lus **en place** dans le fichier (34 octets par
+    /// bloc de 32 : une échelle f16 puis trente-deux niveaux signés). Aucune
+    /// copie, et l'échelle est celle du fichier — donc plus fidèle que la
+    /// nôtre, qui est unique par ligne.
+    pub src: Source8,
+    pub base: *const u8,
+    pub nb_ligne: usize,
 }
+
+unsafe impl Send for DenseQ8 {}
+unsafe impl Sync for DenseQ8 {}
 
 impl DenseQ8 {
     pub fn build(w: &[f32], n_out: usize, n_in: usize) -> Self {
@@ -354,7 +368,36 @@ impl DenseQ8 {
                 q[o * n_in + i] = if r > 127.0 { 127 } else if r < -127.0 { -127 } else { r as i8 };
             }
         }
-        DenseQ8 { n_in, n_out, q, scale }
+        DenseQ8 { n_in, n_out, q, scale, src: Source8::Propre,
+                  base: std::ptr::null(), nb_ligne: 0 }
+    }
+
+    /// **Prête** les blocs Q8_0 d'un tenseur.
+    ///
+    /// # Sûreté
+    /// `base` doit pointer sur le premier bloc et rester valide.
+    pub unsafe fn emprunter_q8(base: *const u8, n_out: usize, n_in: usize,
+                               nb_ligne: usize) -> Self {
+        DenseQ8 { n_in, n_out, q: Vec::new(), scale: Vec::new(),
+                  src: Source8::Q8_0, base, nb_ligne }
+    }
+
+    /// Produit scalaire sur une matrice Q8_0 **empruntée** : l'échelle du bloc
+    /// est appliquée à la somme entière du bloc, comme dans le fichier.
+    pub fn dot_q8_source(&self, o: usize, x: &[i32]) -> f32 {
+        let mut acc = 0f32;
+        for b in 0..self.nb_ligne {
+            let p = unsafe { self.base.add((o * self.nb_ligne + b) * 34) };
+            let octets = unsafe { std::slice::from_raw_parts(p, 34) };
+            let d = crate::gguf::Gguf::f16_to_f32(u16::from_le_bytes([octets[0], octets[1]]));
+            let xb = &x[b * BLOC_Q4..b * BLOC_Q4 + BLOC_Q4];
+            let mut s = 0i32;
+            for j in 0..BLOC_Q4 {
+                s += (octets[2 + j] as i8 as i32) * xb[j];
+            }
+            acc += d * s as f32;
+        }
+        acc
     }
 
     /// Produit scalaire d'une ligne. Déroulé 4× avec quatre accumulateurs :
