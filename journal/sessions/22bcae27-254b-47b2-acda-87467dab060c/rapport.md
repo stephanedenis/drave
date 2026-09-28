@@ -5,14 +5,14 @@
 | Identifiant | `22bcae27-254b-47b2-acda-87467dab060c` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-25 11:56 |
-| Durée | 55.9 h |
-| Tours | 36 |
-| Messages | 976 |
-| Appels d'outils | 991 |
-| Fichiers touchés | 66 |
-| Commandes | 754 |
+| Durée | 66.9 h |
+| Tours | 37 |
+| Messages | 997 |
+| Appels d'outils | 1010 |
+| Fichiers touchés | 67 |
+| Commandes | 772 |
 | Sous-agents | 1 |
-| Commits | 35 |
+| Commits | 36 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -99,6 +99,8 @@
 **Tour 35** — attention pour ne pas se perdre à copier les autres et ne pas empiéter non plus sur mon autre programme de recherche https://github.com/stephanedenis/neuronspikes nous voulons ici continuer notre expérience avec des modèles préentrainés qui ont fait leur preuves et appliquer des techniques proche des SNN afin de les exécuter de façon radicalement différente. Nous évaluons les opportunités qui émer … [146 caractères tronqués]
 
 **Tour 36** — continue les améliorations
+
+**Tour 37** — que reste-t-il à améliorer sur notre modèle événementiel pour pouvoir rouler les plus gros modèles récents accessibles au public
 
 ## 2. Déroulé, étape par étape
 
@@ -2082,7 +2084,7 @@ Les trois papiers neuromorphiques atteignent **R̂ = 0,15** — 6,7× moins d'é
 
 ### Tour 36 — continue les améliorations
 
-*160 appels d'outils.* Actions notables :
+*161 appels d'outils.* Actions notables :
 
 - bash — Implement sliding-window attention with sinks
 - bash — Test sliding-window attention quality
@@ -2098,11 +2100,69 @@ Les trois papiers neuromorphiques atteignent **R̂ = 0,15** — 6,7× moins d'é
 - bash — Measure dense perplexity and final throughput
 - bash — Find the push/pull crossover by activation density
 - write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-croisement-push-pull.md`
-- … et 142 autres
+- … et 143 autres
 
 **Synthèse produite :**
 
-⏵ Scores d'attention : 2,16 → **0,65 ms** (×3,3), attention totale ×1,95. Consolidation finale et commit
+⏵ Session terminée : tout est commité, le journal est à jour.
+
+\## Ce qui a été fait
+
+**Trois bugs de mesure, dont deux qui avaient produit des conclusions fausses**
+
+| bug | symptôme | cause |
+|---|---|---|
+| drapeau final ignoré | `--dense` « identique » à push | `while i + 1 < args.len()` : un drapeau en **dernière** position n'était jamais lu |
+| tranches périmées | PPL **4 361 879** au lieu de 19,26 | en mode dense, la somme des 16 workers récupérait les restes du travail précédent |
+| parenthésage flottant | push/pull divergeaient d'un token | `(dot×s)×sx` contre `acc×(sx×s)` |
+
+Le troisième est devenu une **propriété forte** : écrits avec le même ordre d'opérations, push / pull int8 / auto donnent des sorties **bit à bit identiques** — PPL 19,2641 au chiffre près sur 510 jetons, tokens identiques, avec 0 contre 180,7 G événements. Le mode est une décision de performance, plus de sémantique.
+
+**Le croisement push/pull est à ~22 %, pas 10 %.** Mesuré sur banc à arithmétique identique : à pleine densité le pull traite 4,7× plus de poids par seconde, donc l'égalité tombe vers 1/4,7. Le seuil de bascule est passé à 0,22 et vérifié sur le modèle : bascule exacte à 22 %, ×1,47 à 5 % de densité.
+
+**Le noyau dense est au mur mémoire, pas mal écrit.** Le banc mesure désormais un repère de bande passante (19–22 Go/s) : le pull lit à 14 Go/s. Dérouler `dot_chunked` à huit accumulateurs ne donne **rien** (21,98 contre 21,94 ms) — la preuve par l'expérience que seul le nombre d'octets par poids compte.
+
+**D'où le chemin 4 bits**, avec import **verbatim** des blocs Q4_0 (aucune requantification) :
+
+| modèle | noyau | PPL | tok/s |
+|---|---|---|---|
+| Q8_0 | int8 | **19,2641** | 29,5 |
+| Q4_0 | int8 | 21,1971 | 28,3 |
+| Q4_0 | **4 bits** | 21,0116 | **38,9** |
+| Q4_0 | 4 bits + tête 4 bits | 21,7431 | 42,5 |
+
+Le prix réel des 4 bits est **+9,1 %** — pas les +26 % mesurés en requantifiant depuis Q8_0 : c'est la **double quantification** qui coûtait 12 % de plus. Sur les mêmes poids, le noyau 4 bits est même *plus fidèle* que l'int8.
+
+**Attention** : l'hypothèse « relecture du cache KV » a été **réfutée** par la mesure (chemin groupé par tête KV : 3,20 → 3,27 ms). L'instrumentation des trois phases a montré que les scores coûtaient 2,10 des 3,09 ms, en calcul scalaire déjà à 3,3 opérations/cycle. En AVX2+FMA : **3,09 → 1,57 ms**.
+
+**Défaut = `auto`** : le moteur charge les deux formes et bascule par mesure. Sur un modèle dense c'est ×2,0 gratuit, à sortie identique.
+
+
+… [164 caractères tronqués]
+
+### Tour 37 — que reste-t-il à améliorer sur notre modèle événementiel pour pouvoir rouler les plus gros modèles récents accessibles a … [8 caractères tronqués]
+
+*18 appels d'outils.* Actions notables :
+
+- bash — Survey available models and machine memory config
+- bash — Census of tensor types in the big local models
+- bash — Check GGUF loading mode and re-measure bandwidth
+- bash — Test whether NUMA explains the bandwidth ceiling
+- write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-passage-a-l-echelle.md`
+- bash — Add LUT and E8M0 support to DenseQ4
+- bash — Locate the DenseQ4 constructors and dot functions
+- bash — Inspect the region to patch
+- bash — Add MXFP4 import and LUT-based scalar dot
+- bash — Wire the LUT into AVX2 and add MXFP4 block access
+- bash — Add MXFP4 dequantization to the GGUF reader
+- bash — Find the exact dequant Q4_0 block text
+- bash — Add MXFP4 dequant and an exactness unit test
+- bash — Check MXFP4 support in dequant
+- … et 4 autres
+
+**Synthèse produite :**
+
+⏵ Vérification concluante sur le vrai fichier : ratio médian max/(6·échelle) = **1,000**, exposants serrés. Le lecteur MXFP4 est juste
 
 ## 3. Travail accompli
 
@@ -2176,6 +2236,7 @@ Les trois papiers neuromorphiques atteignent **R̂ = 0,15** — 6,7× moins d'é
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-attention-creuse.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-campagne-parcimonie.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-croisement-push-pull.md` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-passage-a-l-echelle.md` | 1 | 0 |
 
 ### Sous-agents lancés
 
@@ -2223,7 +2284,7 @@ Les trois papiers neuromorphiques atteignent **R̂ = 0,15** — 6,7× moins d'é
 - **T3** Test OpenOCD without root and check Pro device support
 - **T3** Make scripts executable and test jtag_scan
 - **T3** Commit JTAG milestone
-- … et 714 autres
+- … et 732 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2406,4 +2467,5 @@ Les trois papiers neuromorphiques atteignent **R̂ = 0,15** — 6,7× moins d'é
 - Tete 4 bits en chemin direct, README et rapport a jour  La tete 4 bits passait par le pool : ses seize tampons de sortie (9,7 Mo) etaient ecrits, remis a zero p
 - Defaut = auto : le moteur choisit son chemin par mesure  Sur un modele dense le defaut par evenements etait x2,0 plus lent pour un resultat identique au bit pre
 - Attention : scores vectorises AVX2+FMA, hypothese du cache KV refutee  Le poste attention coutait 3,1 ms/jeton a contexte 256 pour ~0,5 M de multiplications. Pr
+- Lecteur MXFP4 exact (gpt-oss-120b) et analyse du passage a l'echelle  MXFP4 : bloc de 17 octets, exposant E8M0 puis nibbles E2M1. Les huit magnitudes du format 
 

@@ -422,6 +422,14 @@ impl DenseQ8 {
 /// coût des échelles reste marginal.
 pub const BLOC_Q4: usize = 32;
 
+/// Grille int4 symétrique : le nibble `n` vaut `n − 8`.
+pub const LUT_INT4: [i8; 16] = [-8, -7, -6, -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6, 7];
+
+/// Table E2M1 du format MXFP4, magnitudes **doublées** pour rester entières.
+/// Le bit de poids fort est le signe ; l'échelle de bloc (une puissance de
+/// deux) est divisée par deux en compensation — l'import est donc exact.
+pub const LUT_MXFP4: [i8; 16] = [0, 1, 2, 3, 4, 6, 8, 12, 0, -1, -2, -3, -4, -6, -8, -12];
+
 /// Matrice quantifiée sur 4 bits, rangée par ligne de sortie.
 ///
 /// Mesuré : le produit scalaire dense lit ses poids à 14–27 Go/s, soit le mur
@@ -438,6 +446,14 @@ pub const BLOC_Q4: usize = 32;
 pub struct DenseQ4 {
     pub n_in: usize,
     pub n_out: usize,
+    /// Table des 16 nibbles → valeur entière signée. Par défaut `n − 8`
+    /// (grille symétrique int4) ; l'import MXFP4 y met les magnitudes E2M1
+    /// doublées, `±{0,1,2,3,4,6,8,12}`, qui sont exactement les valeurs du
+    /// format une fois l'échelle ramenée à une puissance de deux.
+    pub lut: [i8; 16],
+    /// Vrai si `sc` porte l'octet d'exposant E8M0 du format MXFP4 au lieu
+    /// d'une échelle relative sur 16 bits signés.
+    pub e8m0: bool,
     pub q: Vec<u8>,        // n_out × ⌈n_in/2⌉, deux nibbles biaisés (+8) par octet
     /// n_out × ⌈n_in/BLOC_Q4⌉ échelles de bloc, **relatives et signées**
     /// (i16 stocké en u16). Le signe compte : Q4_0 écrit `d = max/−8` où `max`
@@ -487,7 +503,7 @@ impl DenseQ4 {
                 }
             }
         }
-        DenseQ4 { n_in, n_out, q, sc, scale }
+        DenseQ4 { n_in, n_out, lut: LUT_INT4, e8m0: false, q, sc, scale }
     }
 
     /// Importe des blocs **Q4_0 verbatim** (18 octets : une échelle f16 puis
@@ -534,7 +550,58 @@ impl DenseQ4 {
                 }
             }
         }
-        DenseQ4 { n_in, n_out, q, sc, scale }
+        DenseQ4 { n_in, n_out, lut: LUT_INT4, e8m0: false, q, sc, scale }
+    }
+
+    /// Importe des blocs **MXFP4 verbatim** (17 octets : un exposant E8M0 puis
+    /// 16 octets de nibbles E2M1).
+    ///
+    /// Le format stocke des flottants, mais ses huit magnitudes sont
+    /// `{0, ½, 1, 1½, 2, 3, 4, 6}` : doublées, ce sont les **entiers**
+    /// `{0,1,2,3,4,6,8,12}`, et l'échelle de bloc est une puissance de deux.
+    /// L'import est donc **exact** — aucune requantification.
+    pub fn import_mxfp4(buf: &[u8], n_out: usize, n_in: usize, nb_ligne: usize) -> Self {
+        let half = n_in.div_ceil(2);
+        let n_bloc = n_in.div_ceil(BLOC_Q4);
+        let mut q = vec![0u8; n_out * half];
+        let mut sc = vec![1u16; n_out * n_bloc];
+        let scale = vec![1f32; n_out];
+        for o in 0..n_out {
+            for b in 0..n_bloc.min(nb_ligne) {
+                let p = (o * nb_ligne + b) * 17;
+                let e = buf[p];
+                // e = 0 ou 255 : bloc dégénéré (2^-127, NaN) → zéro.
+                sc[o * n_bloc + b] = if e == 0 || e == 255 { 0 } else { e as u16 };
+                let lo = b * BLOC_Q4;
+                let hi = ((b + 1) * BLOC_Q4).min(n_in);
+                for i in lo..hi {
+                    // Même disposition que Q4_0 : nibble bas = poids j,
+                    // nibble haut = poids j + 16.
+                    let src = if i < lo + 16 { buf[p + 1 + (i - lo)] & 0x0F }
+                              else { buf[p + 1 + (i - lo) - 16] >> 4 };
+                    let idx = o * half + i / 2;
+                    if i % 2 == 0 { q[idx] |= src; } else { q[idx] |= src << 4; }
+                }
+            }
+        }
+        DenseQ4 { n_in, n_out, lut: LUT_MXFP4, e8m0: true, q, sc, scale }
+    }
+
+    /// Échelle d'un bloc, selon la convention de la matrice.
+    #[inline]
+    fn echelle_bloc(&self, o: usize, b: usize, n_bloc: usize) -> f32 {
+        let s = self.sc[o * n_bloc + b];
+        if self.e8m0 {
+            // Mêmes conventions que ggml : e = 0 vaut 2^-127 (sous-normal),
+            // e ≥ 255 est dégénéré et traité comme un bloc nul.
+            match s {
+                0 => f32::from_bits(0x0020_0000),
+                255 => 0.0,
+                e => f32::from_bits(((e as u32) - 1) << 23),
+            }
+        } else {
+            self.scale[o] * (s as i16 as f32) * (1.0 / 32767.0)
+        }
     }
 
     /// Octets réellement occupés, en bits par poids d'origine.
@@ -551,21 +618,19 @@ impl DenseQ4 {
         let half = self.n_in.div_ceil(2);
         let n_bloc = self.n_in.div_ceil(BLOC_Q4);
         let row = &self.q[o * half..(o + 1) * half];
-        let scb = &self.sc[o * n_bloc..(o + 1) * n_bloc];
-        let rs = self.scale[o];
         let mut sum = 0f32;
         for b in 0..n_bloc {
             let (lo, hi) = (b * BLOC_Q4, ((b + 1) * BLOC_Q4).min(self.n_in));
             let mut a = 0i32;
             let mut i = lo;
             while i + 1 < hi {
-                let byte = row[i / 2] as u32;
-                a += ((byte & 15) as i32 - 8) * x[i];
-                a += ((byte >> 4) as i32 - 8) * x[i + 1];
+                let byte = row[i / 2] as usize;
+                a += self.lut[byte & 15] as i32 * x[i];
+                a += self.lut[byte >> 4] as i32 * x[i + 1];
                 i += 2;
             }
-            if i < hi { a += ((row[i / 2] as u32 & 15) as i32 - 8) * x[i]; }
-            sum += a as f32 * (rs * scb[b] as i16 as f32 * (1.0 / 32767.0));
+            if i < hi { a += self.lut[row[i / 2] as usize & 15] as i32 * x[i]; }
+            sum += a as f32 * self.echelle_bloc(o, b, n_bloc);
         }
         sum
     }
@@ -607,17 +672,18 @@ impl DenseQ4 {
         let half = self.n_in / 2;
         let n_bloc = self.n_in / BLOC_Q4;
         let row = self.q.as_ptr().add(o * half);
-        let scb = self.sc.as_ptr().add(o * n_bloc);
-        let rs = self.scale[o];
         let xp = x.as_ptr();
         let masque = _mm_set1_epi8(0x0f);
-        let biais = _mm_set1_epi8(8);
+        // La conversion nibble → valeur passe par une table de 16 octets
+        // (`pshufb`), ce qui sert les deux formats : `n − 8` pour la grille
+        // int4, les magnitudes E2M1 doublées pour MXFP4.
+        let table = _mm_loadu_si128(self.lut.as_ptr() as *const __m128i);
         let mut sum = 0f32;
         let mut tmp = [0i32; 8];
         for b in 0..n_bloc {
             let octets = _mm_loadu_si128(row.add(b * 16) as *const __m128i);
-            let lo = _mm_sub_epi8(_mm_and_si128(octets, masque), biais);
-            let hi = _mm_sub_epi8(_mm_and_si128(_mm_srli_epi16(octets, 4), masque), biais);
+            let lo = _mm_shuffle_epi8(table, _mm_and_si128(octets, masque));
+            let hi = _mm_shuffle_epi8(table, _mm_and_si128(_mm_srli_epi16(octets, 4), masque));
             // `lo` contient les poids PAIRS (0,2,4…) et `hi` les impairs : il
             // faut les réentrelacer AVANT d'élargir, sinon `vpmaddwd` apparie
             // le poids 2k avec l'activation k (bug trouvé par le test :
@@ -630,7 +696,9 @@ impl DenseQ4 {
             _mm256_storeu_si256(tmp.as_mut_ptr() as *mut __m256i, p);
             let a = (tmp[0] + tmp[1] + tmp[2] + tmp[3]
                    + tmp[4] + tmp[5] + tmp[6] + tmp[7]) as f32;
-            sum += a * (rs * *scb.add(b) as i16 as f32 * (1.0 / 32767.0));
+            // `echelle_bloc` est un appel par bloc (152 par ligne de 4 864) :
+            // le coût est négligeable devant les 32 multiplications.
+            sum += a * self.echelle_bloc(o, b, n_bloc);
         }
         sum
     }
@@ -661,6 +729,51 @@ mod tests_q4 {
                 assert_eq!(a.to_bits(), b.to_bits(),
                            "rang {o} ({n_out}×{n_in}) : scalaire {a} vs avx2 {b}");
             }
+        }
+    }
+}
+
+#[cfg(test)]
+mod tests_mxfp4 {
+    use super::*;
+
+    /// Le format MXFP4 doit s'importer **exactement** : les magnitudes E2M1
+    /// doublées sont entières et l'échelle de bloc est une puissance de deux.
+    /// Toute erreur ici serait une requantification déguisée.
+    #[test]
+    fn import_exact() {
+        let (n_out, n_in) = (3usize, 64usize);
+        let nl = n_in / 32;                     // 2 blocs par ligne
+        let mut buf = vec![0u8; n_out * nl * 17];
+        let mut attendu = vec![0f64; n_out * n_in];
+        let kv = [0.0f64, 0.5, 1.0, 1.5, 2.0, 3.0, 4.0, 6.0,
+                  0.0, -0.5, -1.0, -1.5, -2.0, -3.0, -4.0, -6.0];
+        for o in 0..n_out {
+            for b in 0..nl {
+                let p = (o * nl + b) * 17;
+                let e = 120 + ((o + b) % 12) as u8;   // exposants variés
+                buf[p] = e;
+                let d = (2f64).powi(e as i32 - 127);
+                for j in 0..16 {
+                    let bas = ((o * n_out + 0) as u8).wrapping_add((j * 7 + o * 3 + b * 5) as u8);
+                    let lo = bas & 0x0F;
+                    let hi = (bas >> 1) & 0x0F;
+                    buf[p + 1 + j] = lo | (hi << 4);
+                    attendu[o * n_in + b * 32 + j] = kv[lo as usize] * d;
+                    attendu[o * n_in + b * 32 + 16 + j] = kv[hi as usize] * d;
+                }
+            }
+        }
+        let d4 = DenseQ4::import_mxfp4(&buf, n_out, n_in, nl);
+        let x: Vec<i32> = (0..n_in).map(|i| ((i * 29) % 200) as i32 - 100).collect();
+        let x16: Vec<i16> = x.iter().map(|&v| v as i16).collect();
+        for o in 0..n_out {
+            let ref_sum: f64 = (0..n_in).map(|i| attendu[o * n_in + i] * x[i] as f64).sum();
+            let got = d4.dot(o, &x) as f64;
+            let rel = (got - ref_sum).abs() / ref_sum.abs().max(1e-9);
+            assert!(rel < 1e-5, "rang {o} : {got} contre {ref_sum} (rel {rel:e})");
+            assert_eq!(d4.dot(o, &x).to_bits(), d4.dot16(o, &x16).to_bits(),
+                       "AVX2 et scalaire doivent être identiques au rang {o}");
         }
     }
 }

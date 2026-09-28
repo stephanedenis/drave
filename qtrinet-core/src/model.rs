@@ -123,9 +123,15 @@ impl Proj {
         let (m, d, q4v) = if q4 {
             // Source déjà en Q4_0 : on importe les blocs tels quels. Sinon on
             // quantifie depuis les f32 (une seule couche d'erreur, pas deux).
-            match g.q4_blocks(name) {
-                Some((buf, nb)) => (None, None, Some(DenseQ4::import_q4_0(buf, n_out, n_in, nb))),
-                None => (None, None, Some(DenseQ4::build(&w, n_out, n_in))),
+            // Import VERBATIM quand la source est déjà en 4 bits : MXFP4
+            // (gpt-oss) puis Q4_0 (llama.cpp). Sinon, quantification depuis
+            // les f32 — une seule couche d'erreur, jamais deux.
+            if let Some((buf, nb)) = g.mxfp4_blocks(name) {
+                (None, None, Some(DenseQ4::import_mxfp4(buf, n_out, n_in, nb)))
+            } else if let Some((buf, nb)) = g.q4_blocks(name) {
+                (None, None, Some(DenseQ4::import_q4_0(buf, n_out, n_in, nb)))
+            } else {
+                (None, None, Some(DenseQ4::build(&w, n_out, n_in)))
             }
         } else if dense {
             (None, Some(DenseQ8::build(&w, n_out, n_in)), None)
@@ -350,9 +356,12 @@ impl Model {
             let t0 = Instant::now();
             let v = cfg.vocab;
             let h = cfg.hidden;
-            let d = match g.q4_blocks("token_embd.weight") {
-                Some((buf, nb)) => DenseQ4::import_q4_0(buf, v, h, nb),
-                None => DenseQ4::build(&g.dequant("token_embd.weight"), v, h),
+            let d = if let Some((buf, nb)) = g.mxfp4_blocks("token_embd.weight") {
+                DenseQ4::import_mxfp4(buf, v, h, nb)
+            } else if let Some((buf, nb)) = g.q4_blocks("token_embd.weight") {
+                DenseQ4::import_q4_0(buf, v, h, nb)
+            } else {
+                DenseQ4::build(&g.dequant("token_embd.weight"), v, h)
             };
             println!("[tête 4 bits] {} × {} → {:.2} b/poids, {:.0} Mo, {:.1} s",
                      v, h, d.bits_per_weight(),

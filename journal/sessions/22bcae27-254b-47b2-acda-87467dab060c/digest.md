@@ -21826,3 +21826,385 @@ test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; fini
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\npython3 - <<'PY'\np='reports/rapport-mur-memoire-4bits.md'; s=open(p,encoding='utf-8').read()\nold='''## 6. Conclusion honnête'''\nassert s.count(old)==1\ns=s.replace(old,'''## 5 ter. L'attention : mesurer avant d'optimiser\n\nLe décou … [3537 caractères tronqués]`
+
+  ```
+22bcae27 : rapport 142 Ko, 36 tours, 66 fichiers, 1521 mesures, 88 erreurs
+  27c99b10 : rapport 8 Ko, 1 tours, 1 fichiers, 17 mesures, 4 erreurs
+745497c Attention : scores vectorises AVX2+FMA, hypothese du cache KV refutee
+caddba3 Defaut = auto : le moteur choisit son chemin par mesure
+5a15046 Tete 4 bits en chemin direct, README et rapport a jour
+9b3d9ec Import verbatim des blocs Q4_0 : un vrai modele 4 bits dans le moteur
+  ```
+
+### 🤖 Assistant
+
+⏵ Vérification finale de l'état du dépôt et récapitulatif
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\ngit status --short | head -5; echo \"--- commits de la session :\"; git log --oneline | head -6\necho \"--- état des rapports\"; ls reports/ | tail -5\necho \"--- dernière mesure de référence (Q4_0, 4 bits, 512 jetons)\"\ncd qtrinet-co … [275 caractères tronqués]`
+
+  ```
+--- commits de la session :
+745497c Attention : scores vectorises AVX2+FMA, hypothese du cache KV refutee
+caddba3 Defaut = auto : le moteur choisit son chemin par mesure
+5a15046 Tete 4 bits en chemin direct, README et rapport a jour
+9b3d9ec Import verbatim des blocs Q4_0 : un vrai modele 4 bits dans le moteur
+0a67514 Journal : session du 27/09 (croisement remesure, chemin 4 bits)
+2290ab9 Croisement push/pull remesuré, equivalence bit a bit, chemin 4 bits AVX2
+--- état des rapports
+rapport-optimisations.md
+rapport-parcimonie-imposee.md
+rapport-precision.md
+rapport-programme-evolutif.md
+rapport-valeur-unaire.md
+--- dernière mesure de référence (Q4_0, 4 bits, 512 jetons)
+=== perplexité 21.0131 sur 510 tokens (0 événements, 12.3 s) ===
+    postes (ms/token) : projets-attn 1.91 | rope 0.39 | attention 1.57 | proj+mlp 13.26 | somme 17.11 | reste (tête + échantillonnage) 6.97
+  ```
+
+### 🤖 Assistant
+
+⏵ Session terminée : tout est commité, le journal est à jour.
+
+## Ce qui a été fait
+
+**Trois bugs de mesure, dont deux qui avaient produit des conclusions fausses**
+
+| bug | symptôme | cause |
+|---|---|---|
+| drapeau final ignoré | `--dense` « identique » à push | `while i + 1 < args.len()` : un drapeau en **dernière** position n'était jamais lu |
+| tranches périmées | PPL **4 361 879** au lieu de 19,26 | en mode dense, la somme des 16 workers récupérait les restes du travail précédent |
+| parenthésage flottant | push/pull divergeaient d'un token | `(dot×s)×sx` contre `acc×(sx×s)` |
+
+Le troisième est devenu une **propriété forte** : écrits avec le même ordre d'opérations, push / pull int8 / auto donnent des sorties **bit à bit identiques** — PPL 19,2641 au chiffre près sur 510 jetons, tokens identiques, avec 0 contre 180,7 G événements. Le mode est une décision de performance, plus de sémantique.
+
+**Le croisement push/pull est à ~22 %, pas 10 %.** Mesuré sur banc à arithmétique identique : à pleine densité le pull traite 4,7× plus de poids par seconde, donc l'égalité tombe vers 1/4,7. Le seuil de bascule est passé à 0,22 et vérifié sur le modèle : bascule exacte à 22 %, ×1,47 à 5 % de densité.
+
+**Le noyau dense est au mur mémoire, pas mal écrit.** Le banc mesure désormais un repère de bande passante (19–22 Go/s) : le pull lit à 14 Go/s. Dérouler `dot_chunked` à huit accumulateurs ne donne **rien** (21,98 contre 21,94 ms) — la preuve par l'expérience que seul le nombre d'octets par poids compte.
+
+**D'où le chemin 4 bits**, avec import **verbatim** des blocs Q4_0 (aucune requantification) :
+
+| modèle | noyau | PPL | tok/s |
+|---|---|---|---|
+| Q8_0 | int8 | **19,2641** | 29,5 |
+| Q4_0 | int8 | 21,1971 | 28,3 |
+| Q4_0 | **4 bits** | 21,0116 | **38,9** |
+| Q4_0 | 4 bits + tête 4 bits | 21,7431 | 42,5 |
+
+Le prix réel des 4 bits est **+9,1 %** — pas les +26 % mesurés en requantifiant depuis Q8_0 : c'est la **double quantification** qui coûtait 12 % de plus. Sur les mêmes poids, le noyau 4 bits est même *plus fidèle* que l'int8.
+
+**Attention** : l'hypothèse « relecture du cache KV » a été **réfutée** par la mesure (chemin groupé par tête KV : 3,20 → 3,27 ms). L'instrumentation des trois phases a montré que les scores coûtaient 2,10 des 3,09 ms, en calcul scalaire déjà à 3,3 opérations/cycle. En AVX2+FMA : **3,09 → 1,57 ms**.
+
+**Défaut = `auto`** : le moteur charge les deux formes et bascule par mesure. Sur un modèle dense c'est ×2,0 gratuit, à sortie identique.
+
+Rapports : `reports/rapport-mur-memoire-4bits.md` (nouveau), `rapport-croisement-push-pull.md` (corrigé et daté), README remis à jour, journal régénéré — 6 commits.
+
+
+## Tour 37
+
+### 👤 Utilisateur
+
+que reste-t-il à améliorer sur notre modèle événementiel pour pouvoir rouler les plus gros modèles récents accessibles au public
+
+### 🤖 Assistant
+
+⏵ Question de fond : je vais la traiter par les mesures, pas par intuition. D'abord l'inventaire machine
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\necho \"=== modèles disponibles\"\nfind / -name \"*.gguf\" -size +100M 2>/dev/null | head -20\necho \"=== mémoire et canaux\"\nlscpu | grep -E \"^Nom de modèle|^Model name|NUMA|Socket|Cœur|Core|Thread|MHz\" | head -12\nfree -g | head -2 … [129 caractères tronqués]`
+
+  ```
+=== modèles disponibles
+/home/stephane/Data13TB/stephane/GitHub/Qtrinet/models/Qwen2.5-0.5B-Q8_0.gguf
+/home/stephane/Data13TB/stephane/GitHub/Qtrinet/models/Qwen2.5-0.5B-Q4_0.gguf
+/home/stephane/FastNVMe/models/Qwen2.5-VL-7B-Instruct-Q4_K_M.gguf
+/home/stephane/FastNVMe/models/bge-m3-FP16.gguf
+/home/stephane/FastNVMe/models/mmproj-Qwen2.5-VL-7B-Instruct-f16.gguf
+/home/stephane/FastNVMe/models/codestral-22b-v0.1-q4_k_m.gguf
+/home/stephane/FastNVMe/models/deepseek-r1-distill-qwen-14b-q4_k_m.gguf
+/home/stephane/FastNVMe/models/qwen2.5-coder-32b-instruct-q4_k_m.gguf
+/home/stephane/FastNVMe/models/qwen2.5-1.5b-instruct-q4_k_m.gguf
+/home/stephane/FastNVMe/models/qwen2.5-0.5b-instruct-q4_k_m.gguf
+/home/stephane/FastNVMe/models/qwen2.5-coder-0.5b-instruct-q4_k_m.gguf
+/home/stephane/FastNVMe/models/deepseek-r1-distill-qwen-1.5b-q4_k_m.gguf
+/home/stephane/FastNVMe/models/gpt-oss-120b-MXFP4.gguf
+/home/stephane/FastNVMe/models/eagle3-gpt-oss-120b-Q8_0.gguf
+/home/stephane/FastNVMe/models/Qwen3-30B-A3B-Instruct-2507-Q4_K_M.gguf
+/home/stephane/FastNVMe/models/Muse-Glimmer-30B-AD-Q4_K_M.gguf
+=== mémoire et canaux
+Model name:                              Intel(R) Xeon(R) CPU E5-2687W v3 @ 3.10GHz
+Th
+… [673 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Il y a du gros gibier sur le disque (Qwen3-30B-A3B, gpt-oss-120B). Je regarde ce que nos lecteurs savent réellement ouvrir
+
+- **bash** `{"command": "cd /home/stephane/FastNVMe/models 2>/dev/null && ls -la --block-size=M *.gguf | awk '{print $5, $9}'\npython3 - <<'PY'\nimport struct, os, glob, collections\nTYPES = {0:\"F32\",1:\"F16\",2:\"Q4_0\",3:\"Q4_1\",6:\"Q5_0\",7:\"Q5_1\",8:\"Q8_0\",9:\"Q8_1\",\n         10:\"Q2_K\",11:\"Q3_K\" … [1859 caractères tronqués]`
+
+  ```
+1105M bge-m3-FP16.gguf
+12724M codestral-22b-v0.1-q4_k_m.gguf
+8572M deepseek-r1-distill-qwen-14b-q4_k_m.gguf
+1066M deepseek-r1-distill-qwen-1.5b-q4_k_m.gguf
+810M eagle3-gpt-oss-120b-Q8_0.gguf
+60451M gpt-oss-120b-MXFP4.gguf
+1292M mmproj-Qwen2.5-VL-7B-Instruct-f16.gguf
+18178M Muse-Glimmer-30B-AD-Q4_K_M.gguf
+469M qwen2.5-0.5b-instruct-q4_k_m.gguf
+1066M qwen2.5-1.5b-instruct-q4_k_m.gguf
+469M qwen2.5-coder-0.5b-instruct-q4_k_m.gguf
+18932M qwen2.5-coder-32b-instruct-q4_k_m.gguf
+4467M Qwen2.5-VL-7B-Instruct-Q4_K_M.gguf
+17698M Qwen3-30B-A3B-Instruct-2507-Q4_K_M.gguf
+
+Qwen3-30B-A3B-Instruct-2507-Q4_K_M.gguf
+  Counter({'Q4_K': 25351159808, 'Q6_K': 5168168960, 'F32': 12793856})
+
+gpt-oss-120b-MXFP4.gguf
+  Counter({'MXFP4': 114661785600, 'Q8_0': 2113781760, 'F32': 53589312})
+
+qwen2.5-coder-32b-instruct-q4_k_m.gguf
+  Counter({'Q4_K': 27286568960, 'Q6_K': 5476188160, 'F32': 1119232})
+
+Qwen2.5-VL-7B-Instruct-Q4_K_M.gguf
+  Counter({'Q4_K': 6094061568, 'Q6_K': 1521221632, 'F32': 333312})
+  ```
+
+### 🤖 Assistant
+
+⏵ Voilà qui change la question : les modèles réels sont en Q4_K et MXFP4, formats que nous ne savons pas lire. Je vérifie la bande passante et le mode de chargement
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\ngrep -n \"fn open\" -A 12 src/gguf.rs | head -20\necho \"=== bande passante à charge faible (3,1)\"\nfor t in 16 32; do\n  ./target/release/qtrinet-core ../models/Qwen2.5-0.5B-Q8_0.gguf --matrix blk.0.ffn_gate.weight --thr … [177 caractères tronqués]`
+
+  ```
+113:    pub fn open<P: AsRef<Path>>(path: P) -> std::io::Result<Self> {
+114-        let mut buf = Vec::new();
+115-        File::open(path)?.read_to_end(&mut buf)?;
+116-        assert_eq!(&buf[0..4], b"GGUF", "ce n'est pas un fichier GGUF");
+117-        let mut c = Cur { b: &buf, p: 4 };
+118-        let version = c.u32();
+119-        assert!(version >= 2, "version GGUF {version} non gérée");
+120-        let n_tensors = c.u64() as usize;
+121-        let n_kv = c.u64() as usize;
+122-
+123-        let mut meta = HashMap::new();
+124-        for _ in 0..n_kv {
+125-            let k = c.string();
+=== bande passante à charge faible (3,1)
+  t=16   bande passante mémoire mesurée : 23.2 Go/s (64 Mo lus, 16 threads, somme 248 )
+  t=16            pull : 17.2 Go/s de poids lus (4.4 Mo), soit 74 % du repère mémoire
+  t=32   bande passante mémoire mesurée : 21.0 Go/s (64 Mo lus, 32 threads, somme 248 )
+  t=32            pull : 25.0 Go/s de poids lus (4.4 Mo), soit 119 % du repère mémoire
+  ```
+
+### 🤖 Assistant
+
+⏵ La bande passante plafonne à 22 Go/s pour 136 théoriques. Test NUMA (deux sockets, allocation *first-touch* sur une seule)
+
+- **bash** `{"command": "which numactl taskset 2>/dev/null\ncd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\necho \"=== référence (deux sockets, libre)\"\n./target/release/qtrinet-core ../models/Qwen2.5-0.5B-Q8_0.gguf --matrix blk.0.ffn_gate.weight --threads 8 2>&1 | grep -E \"bande passante|pul … [390 caractères tronqués]`
+
+  ```
+/usr/bin/numactl
+/usr/bin/taskset
+=== référence (deux sockets, libre)
+  bande passante mémoire mesurée : 20.7 Go/s (64 Mo lus, 8 threads, somme 248 )
+           pull : 13.2 Go/s de poids lus (4.4 Mo), soit 64 % du repère mémoire
+=== un seul socket, mémoire liée
+  bande passante mémoire mesurée : 24.7 Go/s (64 Mo lus, 8 threads, somme 248 )
+           pull : 10.4 Go/s de poids lus (4.4 Mo), soit 42 % du repère mémoire
+  ```
+
+### 🤖 Assistant
+
+⏵ J'ai les faits. Je consigne l'analyse de passage à l'échelle, chiffrée sur les modèles réellement présents sur le disque
+
+- **write** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-passage-a-l-echelle.md", "content": "# Passer aux gros modèles : ce qui bloque, chiffré\n\n> Question posée : que reste-t-il à améliorer sur le moteur événementiel pour\n> faire tourner les plus gros modèles récents acces … [9618 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-passage-a-l-echelle.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+### 🤖 Assistant
+
+⏵ Je passe du plan au premier chantier : le lecteur **MXFP4** (gpt-oss-120b), avec import exact — table de 16 entrées et échelle puissance de deux
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\npython3 - <<'PY'\np='src/list.rs'; s=open(p,encoding='utf-8').read(); o=s\n\n# 1) champs lut + e8m0\ns=s.replace('''pub struct DenseQ4 {\n    pub n_in: usize,\n    pub n_out: usize,''','''pub struct DenseQ4 {\n    pub n_in … [3599 caractères tronqués]`
+
+  ```
+1
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\ngrep -n \"DenseQ4 { n_in, n_out\\|pub fn dot16\\|pub fn dot(\\|pub fn import_q4_0\\|pub const BLOC_Q4\\|/// Même produit scalaire\" src/list.rs", "description": "Locate the DenseQ4 constructors and dot functions"}`
+
+  ```
+398:    pub fn dot(&self, o: usize, x: &[i32]) -> i64 {
+423:pub const BLOC_Q4: usize = 32;
+498:        DenseQ4 { n_in, n_out, lut: LUT_INT4, e8m0: false, q, sc, scale }
+512:    pub fn import_q4_0(buf: &[u8], n_out: usize, n_in: usize, nb_ligne: usize) -> Self {
+545:        DenseQ4 { n_in, n_out, q, sc, scale }
+558:    pub fn dot(&self, o: usize, x: &[i32]) -> f32 {
+583:    /// Même produit scalaire, mais à partir d'activations déjà converties en
+591:    pub fn dot16(&self, o: usize, x: &[i16]) -> f32 {
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\nsed -n '543,582p' src/list.rs", "description": "Inspect the region to patch"}`
+
+  ```
+}
+        }
+        DenseQ4 { n_in, n_out, q, sc, scale }
+    }
+
+    /// Octets réellement occupés, en bits par poids d'origine.
+    pub fn bits_per_weight(&self) -> f64 {
+        (self.q.len() + self.sc.len() * 2) as f64 * 8.0 / (self.n_out * self.n_in) as f64
+    }
+
+    /// Produit scalaire d'une ligne. Accumulation **entière par bloc** (32
+    /// termes au plus : 32 × 8 × 32767 < 2^31), puis une seule mise à
+    /// l'échelle flottante par bloc — la conversion en flottant ne coûte donc
+    /// rien et l'essentiel du travail reste entier.
+    #[inline]
+    pub fn dot(&self, o: usize, x: &[i32]) -> f32 {
+        let half = self.n_in.div_ceil(2);
+        let n_bloc = self.n_in.div_ceil(BLOC_Q4);
+        let row = &self.q[o * half..(o + 1) * half];
+        let scb = &self.sc[o * n_bloc..(o + 1) * n_bloc];
+        let rs = self.scale[o];
+        let mut sum = 0f32;
+        for b in 0..n_bloc {
+            let (lo, hi) = (b * BLOC_Q4, ((b + 1) * BLOC_Q4).min(self.n_in));
+            let mut a = 0i32;
+            let mut i = lo;
+            while i + 1 < hi {
+                let byte = row[i / 2] as u32;
+                a += ((byte & 15) as i32 - 8) * x[i];
+                a += ((byte
+… [268 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\npython3 - <<'PY'\np='src/list.rs'; s=open(p,encoding='utf-8').read(); o=s\n\n# constantes de tables\ns=s.replace('''pub const BLOC_Q4: usize = 32;''','''pub const BLOC_Q4: usize = 32;\n\n/// Grille int4 symétrique : le nib … [4537 caractères tronqués]`
+
+  ```
+=== build
+  ```
+
+### 🤖 Assistant
+
+Maintenant le noyau AVX2 (table via `pshufb`) et la lecture des blocs MXFP4 :
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\npython3 - <<'PY'\np='src/list.rs'; s=open(p,encoding='utf-8').read(); o=s\nold='''        let row = self.q.as_ptr().add(o * half);\n        let scb = self.sc.as_ptr().add(o * n_bloc);\n        let rs = self.scale[o];\n     … [2659 caractères tronqués]`
+
+  ```
+=== build
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\npython3 - <<'PY'\np='src/gguf.rs'; s=open(p,encoding='utf-8').read(); o=s\n# dequant MXFP4 (pour --dense et le banc)\nold='''            GGML_Q4_0 => {\n                let nb = n / 32;'''\nassert s.count(old)>=1\n# ajoute … [2438 caractères tronqués]`
+
+  ```
+56:pub const GGML_MXFP4: u32 = 39;
+276:        if t.ttype != GGML_MXFP4 { return None; }
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 50, in <module>
+AssertionError
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\nsed -n '/GGML_Q4_0 => {/,/^            }/p' src/gguf.rs | sed -n '20,60p'", "description": "Find the exact dequant Q4_0 block text"}`
+
+  ```
+for j in 0..16 { out.push(d * ((self.buf[p + 2 + j] & 0x0F) as i16 - 8) as f32); }
+                    for j in 0..16 { out.push(d * ((self.buf[p + 2 + j] >> 4) as i16 - 8) as f32); }
+                }
+            }
+            GGML_Q4_0 => {
+                let nb = n / 32;
+                for b in 0..nb {
+                    let p = base + b * 18;
+                    let d = Self::f16_to_f32(u16::from_le_bytes(self.buf[p..p+2].try_into().unwrap()));
+                    for j in 0..16 { out.push(d * ((self.buf[p + 2 + j] & 0x0F) as i16 - 8) as f32); }
+                    for j in 0..16 { out.push(d * ((self.buf[p + 2 + j] >> 4) as i16 - 8) as f32); }
+                }
+            }
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\npython3 - <<'PY'\np='src/gguf.rs'; s=open(p,encoding='utf-8').read(); o=s\nold='''                    for j in 0..16 { out.push(d * ((self.buf[p + 2 + j] & 0x0F) as i16 - 8) as f32); }\n                    for j in 0..16 { … [3563 caractères tronqués]`
+
+  ```
+running 2 tests
+test list::tests_mxfp4::import_exact ... ok
+test list::tests_q4::avx2_egale_scalaire ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 6, in <module>
+AssertionError
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\ngrep -n \"GGML_MXFP4\\|KV\\[\" src/gguf.rs | head\ngrep -n \"other => panic\" src/gguf.rs | head", "description": "Check MXFP4 support in dequant"}`
+
+  ```
+56:pub const GGML_MXFP4: u32 = 39;
+276:        if t.ttype != GGML_MXFP4 { return None; }
+202:            other => panic!("raw_levels : type {other} non géré"),
+252:            other => panic!("row_f32 : type {other} non géré"),
+265:            other => panic!("q8_view : type {other} non géré"),
+373:            other => panic!("dequant : type {other} non géré"),
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\nsed -n '355,375p' src/gguf.rs", "description": "Read the dequant tail to patch cleanly"}`
+
+  ```
+let p = base + b * 18;
+                    let d = Self::f16_to_f32(u16::from_le_bytes(self.buf[p..p+2].try_into().unwrap()));
+                    for j in 0..16 { out.push(d * ((self.buf[p + 2 + j] & 0x0F) as i16 - 8) as f32); }
+                    for j in 0..16 { out.push(d * ((self.buf[p + 2 + j] >> 4) as i16 - 8) as f32); }
+                }
+            }
+            GGML_Q4_1 => {
+                // bloc de 20 octets : échelle f16, décalage f16, 16 octets de nibbles
+                // valeur = d · q + m, q ∈ 0..15 (pas de niveau zéro central)
+                let nb = n / 32;
+                for b in 0..nb {
+                    let p = base + b * 20;
+                    let d = Self::f16_to_f32(u16::from_le_bytes(self.buf[p..p+2].try_into().unwrap()));
+                    let m = Self::f16_to_f32(u16::from_le_bytes(self.buf[p+2..p+4].try_into().unwrap()));
+                    for j in 0..16 { out.push(d * (self.buf[p + 4 + j] & 0x0F) as f32 + m); }
+                    for j in 0..16 { out.push(d * (self.buf[p + 4 + j] >> 4) as f32 + m); }
+                }
+            }
+            other => panic!("dequant : type {other} non géré"),
+        }
+        out
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\npython3 - <<'PY'\np='src/gguf.rs'; s=open(p,encoding='utf-8').read()\nold='''            other => panic!(\"dequant : type {other} non géré\"),'''\nassert s.count(old)==1\ns=s.replace(old,'''            GGML_MXFP4 => {\n    … [2897 caractères tronqués]`
+
+  ```
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+  ```
+
+### 🤖 Assistant
+
+⏵ Import MXFP4 exact (test unitaire ✅). Je vérifie maintenant sur le **vrai** fichier gpt-oss-120b, sans le charger
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\npython3 - <<'PY'\np='src/list.rs'; s=open(p,encoding='utf-8').read()\ns=s.replace('''        if self.e8m0 {\n            if s == 0 { 0.0 } else { f32::from_bits(((s as u32) - 1) << 23) }\n        } else {''','''        if  … [2607 caractères tronqués]`
+
+  ```
+tenseur témoin : blk.0.ffn_down_exps.weight  dims=(2880, 2880, 128)  type=39
+exposants : min 119 max 121 médian 120
+|v|max / (6·2^(e-127)) : médian 1.000  min 0.667  (proche de 1 = bloc bien rempli)
+20 valeurs les plus fréquentes (en unités d'échelle) : [(0.0, 213), (-1.0, 196), (2.0, 190), (-2.0, 187), (0.5, 180), (1.0, 171), (-0.5, 157), (-3.0, 141)]
+  ```
+
+### 🤖 Assistant
+
+⏵ Vérification concluante sur le vrai fichier : ratio médian max/(6·échelle) = **1,000**, exposants serrés. Le lecteur MXFP4 est juste
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\npython3 - <<'PY'\np='reports/rapport-passage-a-l-echelle.md'; s=open(p,encoding='utf-8').read()\nold='''### 3.2 Zéro copie'''\nassert s.count(old)==1\ns=s.replace(old,'''**MXFP4 : fait, et vérifié sur le vrai fichier.** Bloc de 17 octe … [3350 caractères tronqués]`

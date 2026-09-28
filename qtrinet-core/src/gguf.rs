@@ -53,6 +53,7 @@ impl TensorInfo {
 pub const GGML_F32: u32 = 0;
 pub const GGML_F16: u32 = 1;
 pub const GGML_Q4_0: u32 = 2;
+pub const GGML_MXFP4: u32 = 39;
 pub const GGML_Q4_1: u32 = 3;
 pub const GGML_Q8_0: u32 = 8;
 
@@ -267,6 +268,16 @@ impl Gguf {
         Q8View { base: self.data_start + t.offset as usize, n_cols, nb: n_cols / 32, q4 }
     }
 
+    /// Blocs **MXFP4** bruts : `(octets à partir du premier bloc, nb de blocs
+    /// par ligne)`. Bloc de 17 octets : un exposant E8M0 puis 16 octets de
+    /// nibbles E2M1. C'est le format de gpt-oss-120b.
+    pub fn mxfp4_blocks(&self, name: &str) -> Option<(&[u8], usize)> {
+        let t = self.tensor(name)?;
+        if t.ttype != GGML_MXFP4 { return None; }
+        let nb = t.dims[1] as usize / 32;
+        Some((&self.buf[self.data_start + t.offset as usize..], nb))
+    }
+
     /// Blocs Q4_0 bruts d'un tenseur : `(octets à partir du premier bloc, nb de
     /// blocs par ligne)`. Permet d'importer les poids **tels quels**, sans les
     /// déquantifier puis les requantifier — le double arrondi coûtait +18 % de
@@ -357,6 +368,20 @@ impl Gguf {
                     let m = Self::f16_to_f32(u16::from_le_bytes(self.buf[p+2..p+4].try_into().unwrap()));
                     for j in 0..16 { out.push(d * (self.buf[p + 4 + j] & 0x0F) as f32 + m); }
                     for j in 0..16 { out.push(d * (self.buf[p + 4 + j] >> 4) as f32 + m); }
+                }
+            }
+            GGML_MXFP4 => {
+                // 17 octets par bloc de 32 : exposant E8M0 puis nibbles E2M1.
+                // L'échelle vaut 2^(e−127) ; e = 0 et e = 255 sont dégénérés.
+                const KV: [f32; 16] = [0.0, 0.5, 1.0, 1.5, 2.0, 3.0, 4.0, 6.0,
+                                       0.0, -0.5, -1.0, -1.5, -2.0, -3.0, -4.0, -6.0];
+                let nb = n / 32;
+                for b in 0..nb {
+                    let p = base + b * 17;
+                    let e = self.buf[p] as u32;
+                    let d = if e == 0 || e == 255 { 0.0 } else { f32::from_bits((e - 1) << 23) };
+                    for j in 0..16 { out.push(KV[(self.buf[p + 1 + j] & 0x0F) as usize] * d); }
+                    for j in 0..16 { out.push(KV[(self.buf[p + 1 + j] >> 4) as usize] * d); }
                 }
             }
             other => panic!("dequant : type {other} non géré"),
