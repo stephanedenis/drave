@@ -41,6 +41,9 @@ pub struct Tokenizer {
     /// types GGUF des tokens (1 = normal, 3 = contrôle, 4 = défini par
     /// l'utilisateur, 5 = inutilisé…), utilisés par `special_id`.
     token_type: Vec<i32>,
+    /// Motif de pré-découpage : `tokenizer.ggml.pre` du GGUF. « qwen2 » et
+    /// « gpt-4o » (o200k) sont implémentés ; les autres retombent sur qwen2.
+    motif_gpt4o: bool,
 }
 
 impl Tokenizer {
@@ -49,7 +52,8 @@ impl Tokenizer {
     /// `merges` contient des chaînes « a b » : la coupure se fait au **premier**
     /// espace (comme `str.partition(" ")` en Python), le reste — espaces
     /// compris — formant le second symbole.
-    pub fn new(tokens: Vec<String>, merges: Vec<String>, token_type: Vec<i32>) -> Self {
+    pub fn new(tokens: Vec<String>, merges: Vec<String>, token_type: Vec<i32>,
+               pre: &str) -> Self {
         let mut tok_to_id = HashMap::with_capacity(tokens.len());
         for (i, t) in tokens.iter().enumerate() {
             tok_to_id.insert(t.clone(), i as u32);
@@ -68,7 +72,11 @@ impl Tokenizer {
         }
         let byte_enc = bytes_to_unicode();
         let byte_dec = byte_enc.iter().enumerate().map(|(b, &c)| (c, b as u8)).collect();
-        Tokenizer { id_to_tok: tokens, tok_to_id, ranks, byte_enc, byte_dec, token_type }
+        // o200k (gpt-4o, gpt-oss) découpe les lettres selon la CASSE, les
+        // nombres par groupes de trois, et rattache « / » à la ponctuation.
+        let motif_gpt4o = pre.starts_with("gpt-4o") || pre.starts_with("o200k");
+        Tokenizer { id_to_tok: tokens, tok_to_id, ranks, byte_enc, byte_dec, token_type,
+                    motif_gpt4o }
     }
 
     /// Encode un texte en ids.
@@ -77,7 +85,7 @@ impl Tokenizer {
         let mut out = Vec::new();
         let mut i = 0;
         while i < cs.len() {
-            let j = next_piece(&cs, i);
+            let j = if self.motif_gpt4o { next_piece_gpt4o(&cs, i) } else { next_piece(&cs, i) };
             // encodage byte-level du morceau, puis BPE
             let mut word = String::with_capacity(j - i);
             let mut buf = [0u8; 4];
@@ -231,6 +239,125 @@ fn next_piece(cs: &[char], i: usize) -> usize {
         // caractère (lettre, nombre, espace, ou ponctuation). Garde-fou
         // contre une boucle infinie.
         .unwrap_or(i + 1)
+}
+
+// --------------------------------------------------------------------------- //
+// Pré-tokenizer o200k (gpt-4o, gpt-oss)
+// --------------------------------------------------------------------------- //
+
+/// `[\p{Lu}\p{Lt}\p{Lm}\p{Lo}\p{M}]` — lettres **non minuscules**.
+///
+/// La std n'expose pas les catégories Unicode. `!is_lowercase()` classe
+/// exactement comme il faut les capitales et les caseless (Lm, Lo : CJK,
+/// arabe, hébreu…), et range avec elles les marques combinantes `\p{M}`, qui
+/// appartiennent justement à cette classe dans le motif.
+fn is_majuscule(c: char) -> bool {
+    c.is_alphabetic() && !c.is_lowercase()
+}
+
+/// `[\p{Ll}\p{Lm}\p{Lo}\p{M}]` — lettres **non majuscules** (les caseless
+/// appartiennent aux deux classes, comme dans le motif).
+fn is_minuscule(c: char) -> bool {
+    c.is_alphabetic() && !c.is_uppercase()
+}
+
+/// ni retour à la ligne, ni lettre, ni nombre — le préfixe optionnel.
+fn prefixe_possible(c: char) -> bool {
+    c != '\r' && c != '\n' && !is_letter(c) && !is_number(c)
+}
+
+/// Pré-tokenizer **o200k** (gpt-4o, gpt-oss) :
+/// `[^\r\n\p{L}\p{N}]?[\p{Lu}\p{Lt}\p{Lm}\p{Lo}\p{M}]*[\p{Ll}\p{Lm}\p{Lo}\p{M}]+(?i:'s|'t|'re|'ve|'m|'ll|'d)?`
+/// `|[^\r\n\p{L}\p{N}]?[\p{Lu}\p{Lt}\p{Lm}\p{Lo}\p{M}]+[\p{Ll}\p{Lm}\p{Lo}\p{M}]*(?i:'s|'t|'re|'ve|'m|'ll|'d)?`
+/// `|\p{N}{1,3}| ?[^\s\p{L}\p{N}]+[\r\n/]*|\s*[\r\n]+|\s+(?!\S)|\s+`
+///
+/// La différence avec Qwen2 tient à trois choses : les lettres se coupent
+/// selon la casse (`Hello` → `Hello`, mais `hEllo` → `h` puis `Ello`), les
+/// nombres par groupes de trois, et `[\r\n/]*` rattache aussi la barre oblique.
+fn next_piece_gpt4o(cs: &[char], i: usize) -> usize {
+    match_casse_decroissante(cs, i)
+        .or_else(|| match_casse_croissante(cs, i))
+        .or_else(|| match_nombre_trois(cs, i))
+        .or_else(|| match_ponctuation_gpt4o(cs, i))
+        .or_else(|| match_line_breaks(cs, i))
+        .or_else(|| match_spaces_before_word(cs, i))
+        .or_else(|| match_spaces(cs, i))
+        .unwrap_or(i + 1)
+}
+
+/// Fin du morceau après une éventuelle contraction finale (`(?i:'s|'t|…)`).
+fn avec_contraction(cs: &[char], fin: usize) -> usize {
+    if fin < cs.len() && cs[fin] == '\'' {
+        if let Some(f) = match_contraction(cs, fin) { return f; }
+    }
+    fin
+}
+
+/// 1) `[^…]? U* L+ (?i:'…)?` — majuscules puis minuscules.
+///
+/// Le retour arrière du motif se traduit ainsi : `U*` est glouton, donc on
+/// cherche le **plus grand** `k` tel que `[p, k)` ne contienne que des
+/// non-minuscules et que `cs[k]` soit une non-majuscule ; `L+` consomme alors
+/// la suite de non-majuscules.
+fn match_casse_decroissante(cs: &[char], i: usize) -> Option<usize> {
+    let mut p = i;
+    if prefixe_possible(cs[i]) && i + 1 < cs.len() && is_letter(cs[i + 1]) {
+        p = i + 1;
+    } else if !is_letter(cs[i]) {
+        return None;
+    }
+    let mut e = p;
+    while e < cs.len() && is_letter(cs[e]) { e += 1; }
+    let mut k = e;
+    while k > p && !is_minuscule(cs[k - 1]) { k -= 1; }
+    if k == p { return None; }              // aucun `L+` possible
+    // `U*` ne peut pas absorber une minuscule : on recule jusqu'à la première.
+    while k > p && is_minuscule(cs[k - 1]) { k -= 1; }
+    let mut fin = k;
+    while fin < e && is_minuscule(cs[fin]) { fin += 1; }
+    if fin == k { return None; }
+    Some(avec_contraction(cs, fin))
+}
+
+/// 2) `[^…]? U+ L* (?i:'…)?` — l'inverse : majuscules d'abord, minuscules
+/// ensuite, mais au moins une majuscule.
+fn match_casse_croissante(cs: &[char], i: usize) -> Option<usize> {
+    let mut p = i;
+    if prefixe_possible(cs[i]) && i + 1 < cs.len() && is_letter(cs[i + 1]) {
+        p = i + 1;
+    } else if !is_letter(cs[i]) {
+        return None;
+    }
+    let mut k = p;
+    while k < cs.len() && is_majuscule(cs[k]) { k += 1; }
+    if k == p { return None; }              // `U+` exige au moins une
+    let mut fin = k;
+    while fin < cs.len() && is_minuscule(cs[fin]) { fin += 1; }
+    Some(avec_contraction(cs, fin))
+}
+
+/// 3) `\p{N}{1,3}` — les nombres par groupes de trois.
+fn match_nombre_trois(cs: &[char], i: usize) -> Option<usize> {
+    if !is_number(cs[i]) { return None; }
+    let mut j = i;
+    let mut n = 0;
+    while j < cs.len() && n < 3 && is_number(cs[j]) { j += 1; n += 1; }
+    Some(j)
+}
+
+/// 4) ` ?[^\s\p{L}\p{N}]+[\r\n/]*` — comme Qwen2, plus la barre oblique.
+fn match_ponctuation_gpt4o(cs: &[char], i: usize) -> Option<usize> {
+    let mut j = i;
+    if cs[i] == ' ' && i + 1 < cs.len() && !is_space(cs[i + 1])
+        && !is_letter(cs[i + 1]) && !is_number(cs[i + 1])
+    {
+        j = i + 1;
+    }
+    let debut = j;
+    while j < cs.len() && !is_space(cs[j]) && !is_letter(cs[j]) && !is_number(cs[j]) { j += 1; }
+    if j == debut { return None; }
+    while j < cs.len() && (cs[j] == '\r' || cs[j] == '\n' || cs[j] == '/') { j += 1; }
+    Some(j)
 }
 
 /// 1) `(?i:'s|'t|'re|'ve|'m|'ll|'d)` — insensible à la casse (`I'LL`, `we'VE`).

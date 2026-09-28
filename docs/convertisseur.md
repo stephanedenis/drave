@@ -250,3 +250,57 @@ chiffre maintenant aussi ce régime — 4,81 tok/s prévus contre 5,4 mesurés.
 4. **gpt-oss-120b** : le routeur MoE fonctionne (top-4 sur 128) mais le modèle
    pèse 60 Go et son encodage d'expert est en MXFP4 avec des tenseurs Q8_0 ;
    c'est l'étape suivante naturelle.
+
+---
+
+# gpt-oss-120b : la machine tient, le modèle n'est pas encore juste
+
+## Ce qui marche
+
+`gpt-oss-120b` **charge et tourne** : 62,2 Go résidents — la taille du fichier,
+aucune copie — pour 62,2 Go de mémoire crête, à **~195 ms par jeton (5 tok/s)** :
+
+| poste | ms/jeton | débit implicite |
+|---|---|---|
+| projections d'attention (Q8_0, 36 couches) | 42 | **21 Go/s — au mur** |
+| experts MoE (4 sur 128, MXFP4) | 148 | 12,4 Go/s |
+| tête de sortie (Q8_0, 579 M poids) | 23 | 27 Go/s |
+| attention (fenêtre 128) | 1,1 | — |
+
+Le **tokenizer o200k** est vérifié : identique à celui de llama.cpp sur 7 cas
+pièges (CamelCase, nombres par groupes de trois, contractions, accents, tirets
+cadratins, dates), via l'API `/tokenize` de `llama-server`.
+
+## Ce qui a été ajouté pour lui (et sert aux autres)
+
+- **biais du routeur** (`ffn_gate_inp.bias`) et **biais par expert** (gpt-oss en a
+  trois par expert, Qwen3-MoE aucun) ;
+- **puits d'attention appris** (`attn_sinks.weight`) : une clé virtuelle de
+  valeur nulle qui ne compte que dans le dénominateur du softmax ;
+- **`post_attention_norm`** — c'est le `ffn_norm` de gpt-oss sous un autre nom ;
+- **fenêtre glissante lue des métadonnées** (`attention.sliding_window = 128`) ;
+- **RoPE YaRN** : rampe entre extrapolation (basses dimensions) et interpolation
+  (hautes), `mscale = 1 + 0,1·ln(facteur)`.
+
+Un bug corrigé au passage : les valeurs par défaut de la ligne de commande
+**écrasaient** les métadonnées du modèle (`attn_window ← 0`, `attn_sinks ← 4`),
+ce qui désactivait silencieusement la fenêtre glissante. Désormais `0` signifie
+« garder ce que dit le modèle ».
+
+## Ce qui reste faux
+
+La perplexité de gpt-oss est **42 127** : la sortie n'est pas encore correcte.
+Trois candidats, non départagés faute de référence :
+
+1. les **constantes YaRN** (le `mscale` et les dimensions de correction varient
+   selon les implémentations) ;
+2. la **convention du softmax de routage** : softmax sur les 128 experts puis
+   top-k (ce que nous faisons, comme Qwen3), ou softmax sur les seuls top-k
+   (certaines implémentations de gpt-oss) ;
+3. la **fenêtre et les puits** : après correction de l'écrasement, le puits
+   appris s'est révélé **inerte** sur la perplexité, ce qui reste inexpliqué.
+
+La méthode qui a trouvé les bugs précédents s'applique : `llama-quantize` pour
+une référence de poids, `llama-server /tokenize` pour le découpage. Il manque
+l'équivalent pour les **logits** — un moyen de comparer la sortie couche par
+couche à llama.cpp sur ce modèle.

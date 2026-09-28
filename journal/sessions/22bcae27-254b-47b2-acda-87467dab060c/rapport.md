@@ -5,14 +5,14 @@
 | Identifiant | `22bcae27-254b-47b2-acda-87467dab060c` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-25 11:56 |
-| Durée | 68.8 h |
-| Tours | 40 |
-| Messages | 1100 |
-| Appels d'outils | 1107 |
+| Durée | 71.4 h |
+| Tours | 41 |
+| Messages | 1126 |
+| Appels d'outils | 1130 |
 | Fichiers touchés | 68 |
-| Commandes | 867 |
+| Commandes | 888 |
 | Sous-agents | 1 |
-| Commits | 43 |
+| Commits | 44 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -26,6 +26,7 @@
 - **complete** — Mener la campagne d'expériences sur l'exécution événementielle du modèle préentraîné Qwen2.5-0.5B : (1) imposer une parcimonie d'activation à l'inférence (seuil et k-WTA) sans aucun entraînement et mesurer la frontière (parcimonie, perplexité, événements/token) ; (2) rendre l'attention exprimable en
 … [267 caractères tronqués]
 - **create** — Implémenter et tester le plan du convertisseur Qtrinet : (1) lecteur Q4_K/Q6_K en place, (2) routage MoE + tranches par expert, (3) Q8_0 en place, (4) index de placement et épinglage NUMA, en vérifiant chaque étape par une mesure sur un vrai modèle de /home/stephane/FastNVMe/models.
+- **complete** — Implémenter et tester le plan du convertisseur Qtrinet : (1) lecteur Q4_K/Q6_K en place, (2) routage MoE + tranches par expert, (3) Q8_0 en place, (4) index de placement et épinglage NUMA, en vérifiant chaque étape par une mesure sur un vrai modèle de /home/stephane/FastNVMe/models.
 
 ## 1. Ce qui a été demandé
 
@@ -108,6 +109,8 @@
 **Tour 39** — vas-y, implémente et teste le tout
 
 **Tour 40** — <goal_round> Objective: "Implémenter et tester le plan du convertisseur Qtrinet : (1) lecteur Q4_K/Q6_K en place, (2) routage MoE + tranches par expert, (3) Q8_0 en place, (4) index de placement et épinglage NUMA, en vérifiant chaque étape par une mesure sur un vrai modèle de /home/stephane/FastNVMe/models." Round: 1/12  Continue working toward the objective in this same session. Treat the current … [451 caractères tronqués]
+
+**Tour 41** — continue
 
 ## 2. Déroulé, étape par étape
 
@@ -2313,7 +2316,7 @@ Trois obstacles de plus, rencontrés sur le vrai fichier : Qwen3 n'a **pas de bi
 
 ### Tour 40 — <goal_round> Objective: "Implémenter et tester le plan du convertisseur Qtrinet : (1) lecteur Q4_K/Q6_K en place, (2) ro … [731 caractères tronqués]
 
-*12 appels d'outils.* Actions notables :
+*14 appels d'outils.* Actions notables :
 
 - bash — Inspect DenseQ8 and the mode-3 worker
 - bash — Implement in-place Q8_0 for dense projections
@@ -2327,10 +2330,64 @@ Trois obstacles de plus, rencontrés sur le vrai fichier : Qwen3 n'a **pas de bi
 - bash — Calibrate the plan on measured effective bandwidth
 - bash — Final verification of the whole model zoo
 - bash — Document and commit the final items
+- get_goal
+- update_goal
 
 **Synthèse produite :**
 
-⏵ Calibré (prédit 4,81 contre 5,4 mesuré). Vérification finale du parc complet :
+⏵ Objectif clos : les quatre items sont implémentés, mesurés et commités.
+
+\## Résultat
+
+Le moteur lit maintenant **tous les formats que l'écosystème public distribue** — Q4_K, Q6_K, MXFP4, Q4_0, Q8_0, F16, F32 — **sans copie ni requantification** : les blocs sont lus tels quels dans le fichier, les experts d'un MoE sont des tranches contiguës adressées par un pointeur et un pas.
+
+| modèle | format | perplexité | débit | chargement | mémoire |
+|---|---|---|---|---|---|
+| Qwen2.5-0.5B | Q8_0 | 19,3885 | 32 tok/s | **0,81 s** | **0,57 Go** |
+| Qwen2.5-0.5B | Q4_0 | 21,0110 | 41 tok/s | 0,87 s | 0,41 Go |
+| Qwen2.5-1.5B | Q4_K_M | 12,9228 | 17 tok/s | 4,2 s | 1,1 Go |
+| Qwen2.5-VL-7B | Q4_K_M | 10,9947 | 2,8 tok/s | 24 s | 4,5 Go |
+| **Qwen3-30B-A3B** (MoE, top-8) | Q4_K_M | **7,6139** | 5,4 tok/s | 13,3 s | **17,7 Go** |
+
+Le 30B tient en exactement la taille du fichier. Chaîne de qualité monotone : 19,4 → 12,9 → 11,0 → 7,6.
+
+\## Comment chaque étape a été vérifiée
+
+1. **Q4_K / Q6_K** — `llama-quantize --allow-requantize … F16` produit une référence **des mêmes poids** en demi-précision ; comparaison bloc par bloc : Q4_K exact à 1e-5 (bruit f16) sur trois tenseurs, Q6_K **faux** — ggml écrit les quatre quants en *quarts successifs*, je les entrelaçais. Corrigé, revérifié, puis verrouillé par un test unitaire synthétique.
+2. **MoE** — routage softmax + top-k sur `Qwen3-30B-A3B` ; trois obstacles rencontrés sur le vrai fichier : Qwen3 n'a pas de biais QKV, il normalise chaque tête de Q et K, et `attention.key_length` vaut 128 quand `hidden/n_head` vaut 64 (l'ancien calcul débordait le tampon de Q).
+3. **Q8_0 en place** — chargement 2,73 → 0,81 s, mémoire 921 → 566 Mo ; le mode `auto` emprunte désormais lui aussi, donc `auto` et `dense` donnent la même perplexité au chiffre près.
+4. **`--plan`** — index de placement lu avant les poids : 18,12 Go de fichier, 1,66 Go lus par jeton, débit prévu par support. **`--pin`** — épinglage NUMA par appel système direct ; **résultat négatif mesuré** : 23,2 → 27,6 s en liant à un socket, 25,5 s sur les cœurs physiques. Le gain du banc de bande passante (20,7 → 24,7 Go/s) ne se transmet pas.
+
+Le bug le plus coûteux n'était pas dans la quantification : le 1,5B a un tenseur `output.weight` **non lié**, et notre tête lisait `token_embd`. Perplexité 50 000 au lieu de 11,4 — et le 0,5B, à poids liés, ne pouvait pas le révéler.
+
+\## Artefacts
+
+- Commits : `c504ebd` (MXFP4) → `250a1bf` (emprunt) → `6b379f5` (Q4_K/Q6_K) → `847f9ab` (Q6_K
+… [1011 caractères tronqués]
+
+### Tour 41 — continue
+
+*21 appels d'outils.* Actions notables :
+
+- bash — Reconnaissance of gpt-oss-120b architecture
+- bash — Inspect the tokenizer implementation
+- bash — Read the tokenizer structure and split function
+- bash — Read next_piece (the pretokenizer)
+- bash — Implement the o200k pretokenizer
+- bash — Inspect the build_tokenizer call
+- bash — Fix the call and check the Qwen tokenizer regression
+- bash — Add a tokenize mode and start llama-server
+- bash — Add router bias and per-expert biases
+- bash — Add learned sinks, post-norm, sliding window; check regression
+- bash — Fix the borrow and check regressions plus the server
+- bash — Compare our o200k tokenizer with llama.cpp
+- bash — Compare tokenizers with a valid shell variable
+- bash — Try running gpt-oss-120b as-is
+- … et 7 autres
+
+**Synthèse produite :**
+
+⏵ Le puits reste inerte — je m'arrête là sur gpt-oss et je consolide ce qui est acquis et vérifié
 
 ## 3. Travail accompli
 
@@ -2453,7 +2510,7 @@ Trois obstacles de plus, rencontrés sur le vrai fichier : Qwen3 n'a **pas de bi
 - **T3** Test OpenOCD without root and check Pro device support
 - **T3** Make scripts executable and test jtag_scan
 - **T3** Commit JTAG milestone
-- … et 827 autres
+- … et 848 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2581,7 +2638,7 @@ Trois obstacles de plus, rencontrés sur le vrai fichier : Qwen3 n'a **pas de bi
 
 ## 5. Erreurs rencontrées
 
-102 sorties en erreur ou divergentes. Les premières :
+104 sorties en erreur ou divergentes. Les premières :
 
 - **T2** : === LIEN PCIe (sysfs, sans root) === current_link_speed     = 8.0 GT/s PCIe current_link_width     = 8 max_link_speed         = 8.0 GT/s PCIe max_link_width         = 8 secondary_bus_number   =  vendo
 - **T2** : [POPUP: saisissez le mot de passe] === TOUS les événements USB depuis le boot (fin de log) === [ven sep 25 11:52:23 2026] [ T684749] hid-generic 0003:04F2:2159.00ED: hiddev99,hidraw5: USB HID v1.10 De
@@ -2644,4 +2701,5 @@ Trois obstacles de plus, rencontrés sur le vrai fichier : Qwen3 n'a **pas de bi
 - Documentation : parc de modeles lisible, methode de verification, MoE" && git log --oneline | head -1
 - Journal : session du 28/09 (Q4_K/Q6_K/MXFP4 en place, MoE, 30B-A3B)" && git log --oneline | head -1
 - Q8_0 en place, plan de placement, epinglage NUMA mesure  Q8_0 en place pour les projections (comme la tete le faisait deja) : les blocs du fichier sont lus tels
+- Tokenizer o200k verifie, briques gpt-oss, YaRN ; 120B charge et tourne  TOKENIZER : pre-decoupage gpt-4o/o200k implemente (casse des lettres, nombres par groupe
 

@@ -23871,3 +23871,484 @@ Qwen3-30B-A3B MoE              7.6139 sur 127 tokens (0 événements, 22.9 s
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\npython3 - <<'PY'\np='docs/convertisseur.md'; s=open(p,encoding='utf-8').read()\ns=s.replace('''| 4 | index de placement / NUMA | ⬜ | piste mesurée : 20,7 → 24,7 Go/s |\n| 5 | Q8_0 en place (projections) | ⬜ | la tête le fait déjà |''', … [3145 caractères tronqués]`
+
+  ```
+1082358 Q8_0 en place, plan de placement, epinglage NUMA mesure
+23850b9 Journal : session du 28/09 (Q4_K/Q6_K/MXFP4 en place, MoE, 30B-A3B)
+  ```
+
+### 🤖 Assistant
+
+⏵ Les quatre items sont implémentés et vérifiés. Je clos l'objectif.
+
+- **get_goal** `{}`
+
+  ```
+{"goal":{"id":"goal-f538125d-1811-4425-bdae-b04791b78ffb","revision":1,"objective":"Implémenter et tester le plan du convertisseur Qtrinet : (1) lecteur Q4_K/Q6_K en place, (2) routage MoE + tranches par expert, (3) Q8_0 en place, (4) index de placement et épinglage NUMA, en vérifiant chaque étape par une mesure sur un vrai modèle de /home/stephane/FastNVMe/models.","phase":"active","roundsStarted":1,"maxGoalRounds":12},"activation":"armed"}
+  ```
+
+- **update_goal** `{"goal_id": "goal-f538125d-1811-4425-bdae-b04791b78ffb", "revision": 1, "action": "complete"}`
+
+> **Objectif** (complete) : Implémenter et tester le plan du convertisseur Qtrinet : (1) lecteur Q4_K/Q6_K en place, (2) routage MoE + tranches par expert, (3) Q8_0 en place, (4) index de placement et épinglage NUMA, en vérifiant chaque étape par une mesure sur un vrai modèle de /home/stephane/FastNVMe/models.
+
+
+  ```
+{"goal":{"id":"goal-f538125d-1811-4425-bdae-b04791b78ffb","revision":2,"objective":"Implémenter et tester le plan du convertisseur Qtrinet : (1) lecteur Q4_K/Q6_K en place, (2) routage MoE + tranches par expert, (3) Q8_0 en place, (4) index de placement et épinglage NUMA, en vérifiant chaque étape par une mesure sur un vrai modèle de /home/stephane/FastNVMe/models.","phase":"complete","roundsStarted":1,"maxGoalRounds":12},"activation":"disarmed"}
+  ```
+
+### 👤 Utilisateur
+
+<goal_complete>
+Objective: "Implémenter et tester le plan du convertisseur Qtrinet : (1) lecteur Q4_K/Q6_K en place, (2) routage MoE + tranches par expert, (3) Q8_0 en place, (4) index de placement et épinglage NUMA, en vérifiant chaque étape par une mesure sur un vrai modèle de /home/stephane/FastNVMe/models."
+The goal is marked complete and this autonomous run is ending. Write the closing message to the user now: state the outcome, summarize what was done and how it was verified, and point to the concrete results (files, commits, or other artifacts). Report only what earlier rounds and tool results in this session actually establish; when a detail is not in the session, say so instead of inventing it. Note anything the user should review or do next. Address the user directly. Do not call any more tools in this run; further work waits for the user's next instruction.
+</goal_complete>
+
+### 🤖 Assistant
+
+⏵ Objectif clos : les quatre items sont implémentés, mesurés et commités.
+
+## Résultat
+
+Le moteur lit maintenant **tous les formats que l'écosystème public distribue** — Q4_K, Q6_K, MXFP4, Q4_0, Q8_0, F16, F32 — **sans copie ni requantification** : les blocs sont lus tels quels dans le fichier, les experts d'un MoE sont des tranches contiguës adressées par un pointeur et un pas.
+
+| modèle | format | perplexité | débit | chargement | mémoire |
+|---|---|---|---|---|---|
+| Qwen2.5-0.5B | Q8_0 | 19,3885 | 32 tok/s | **0,81 s** | **0,57 Go** |
+| Qwen2.5-0.5B | Q4_0 | 21,0110 | 41 tok/s | 0,87 s | 0,41 Go |
+| Qwen2.5-1.5B | Q4_K_M | 12,9228 | 17 tok/s | 4,2 s | 1,1 Go |
+| Qwen2.5-VL-7B | Q4_K_M | 10,9947 | 2,8 tok/s | 24 s | 4,5 Go |
+| **Qwen3-30B-A3B** (MoE, top-8) | Q4_K_M | **7,6139** | 5,4 tok/s | 13,3 s | **17,7 Go** |
+
+Le 30B tient en exactement la taille du fichier. Chaîne de qualité monotone : 19,4 → 12,9 → 11,0 → 7,6.
+
+## Comment chaque étape a été vérifiée
+
+1. **Q4_K / Q6_K** — `llama-quantize --allow-requantize … F16` produit une référence **des mêmes poids** en demi-précision ; comparaison bloc par bloc : Q4_K exact à 1e-5 (bruit f16) sur trois tenseurs, Q6_K **faux** — ggml écrit les quatre quants en *quarts successifs*, je les entrelaçais. Corrigé, revérifié, puis verrouillé par un test unitaire synthétique.
+2. **MoE** — routage softmax + top-k sur `Qwen3-30B-A3B` ; trois obstacles rencontrés sur le vrai fichier : Qwen3 n'a pas de biais QKV, il normalise chaque tête de Q et K, et `attention.key_length` vaut 128 quand `hidden/n_head` vaut 64 (l'ancien calcul débordait le tampon de Q).
+3. **Q8_0 en place** — chargement 2,73 → 0,81 s, mémoire 921 → 566 Mo ; le mode `auto` emprunte désormais lui aussi, donc `auto` et `dense` donnent la même perplexité au chiffre près.
+4. **`--plan`** — index de placement lu avant les poids : 18,12 Go de fichier, 1,66 Go lus par jeton, débit prévu par support. **`--pin`** — épinglage NUMA par appel système direct ; **résultat négatif mesuré** : 23,2 → 27,6 s en liant à un socket, 25,5 s sur les cœurs physiques. Le gain du banc de bande passante (20,7 → 24,7 Go/s) ne se transmet pas.
+
+Le bug le plus coûteux n'était pas dans la quantification : le 1,5B a un tenseur `output.weight` **non lié**, et notre tête lisait `token_embd`. Perplexité 50 000 au lieu de 11,4 — et le 0,5B, à poids liés, ne pouvait pas le révéler.
+
+## Artefacts
+
+- Commits : `c504ebd` (MXFP4) → `250a1bf` (emprunt) → `6b379f5` (Q4_K/Q6_K) → `847f9ab` (Q6_K AVX2) → `f4434b9` (MoE) → `0317659` (docs) → `1082358` (Q8_0, plan, pinning).
+- `docs/convertisseur.md` — plan, résultats, deux résultats négatifs ; `reports/rapport-passage-a-l-echelle.md` ; README remis à jour ; journal de session régénéré.
+- 3 tests unitaires verts, dont un sur la disposition Q6_K.
+
+## À votre attention
+
+- **La comparaison absolue avec llama.cpp n'est pas au chiffre** : notre jeu de jetons (`/tmp/wt2_ids.txt`) diffère du leur, d'où un écart de ~20 % sur les perplexités. La vérification solide est la comparaison F16 tenseur par tenseur ; la comparaison de PPL est un contrôle d'ordre.
+- **`--pin` est perdant ici** : conservé mais à ne pas utiliser par défaut.
+- Restent ouverts : gpt-oss-120b (les briques sont là — MXFP4 et MoE — mais son architecture diffère : top-4, biais de routeur, attention à puits), le portage de Q4_K sur FPGA (`event_reader` ne connaît que Q4_0/Q8_0), et la calibration du plan pour les modèles denses (il prédit 5,1 tok/s pour le 7B, nous en mesurons 2,8).
+
+
+## Tour 41
+
+### 👤 Utilisateur
+
+continue
+
+### 🤖 Assistant
+
+⏵ Je continue par le gros morceau restant : **gpt-oss-120b**. D'abord la reconnaissance de son architecture
+
+- **bash** `{"command": "python3 - <<'PY'\nimport struct, collections\nf=open(\"/home/stephane/FastNVMe/models/gpt-oss-120b-MXFP4.gguf\",'rb')\nassert f.read(4)==b'GGUF'\nprint(\"version\", struct.unpack('<I',f.read(4))[0])\nnt,=struct.unpack('<Q',f.read(8)); nkv,=struct.unpack('<Q',f.read(8))\ndef ch():\n    n … [1389 caractères tronqués]`
+
+  ```
+version 3
+
+=== métadonnées
+   general.architecture                             = gpt-oss
+   general.type                                     = model
+   general.name                                     = gpt-oss-120b
+   general.size_label                               = 128x3.1B
+   general.license                                  = apache-2.0
+   general.tags                                     = ['vllm', 'text-generation']
+   gpt-oss.block_count                              = 36
+   gpt-oss.context_length                           = 131072
+   gpt-oss.embedding_length                         = 2880
+   gpt-oss.feed_forward_length                      = 2880
+   gpt-oss.attention.head_count                     = 64
+   gpt-oss.attention.head_count_kv                  = 8
+   gpt-oss.rope.scaling.type                        = yarn
+   gpt-oss.rope.scaling.factor                      = 32.0
+   gpt-oss.rope.scaling.original_context_length     = 4096
+   gpt-oss.rope.scaling.yarn_beta_fast              = 32.0
+   gpt-oss.rope.scaling.yarn_beta_slow              = 1.0
+   gpt-oss.rope.freq_base                           = 150000.0
+   gpt-oss.attention.layer_norm_rms_epsilon         = 9.999999747378
+… [19057 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ gpt-oss demande sept briques absentes (sinks appris, YaRN, fenêtre 128, biais par expert, post-norm…). Je vérifie d'abord le tokenizer, sans quoi rien n'est validable
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\nhead -40 src/tokenizer.rs\ngrep -n \"pub fn\\|tokenizer.json\\|tokens\\|merges\" src/tokenizer.rs | head -20\ngrep -rn \"Tokenizer\\|tokenizer\" src/main.rs | head -8", "description": "Inspect the tokenizer implementation" … [1 caractères tronqués]`
+
+  ```
+//! Tokenizer BPE byte-level d'un modèle Qwen2.5, reconstruit depuis les
+//! métadonnées GGUF (`tokenizer.ggml.tokens`, `.merges`, `.token_type`).
+//!
+//! Std seul : aucune dépendance. Chaîne de traitement, identique à celle de
+//! Qwen2 / llama.cpp :
+//!   1. découpage du texte par le pré-tokenizer, motif `qwen2` :
+//!      `(?i:'s|'t|'re|'ve|'m|'ll|'d)|[^\r\n\p{L}\p{N}]?\p{L}+|\p{N}`
+//!      `| ?[^\s\p{L}\p{N}]+[\r\n]*|\s*[\r\n]+|\s+(?!\S)|\s+`
+//!      écrit à la main (l'ORDRE des alternatives et le lookahead `(?!\S)`
+//!      font partie de la spécification) ;
+//!   2. encodage byte-level de chaque morceau (table octet ↔ caractère de GPT-2) ;
+//!   3. BPE : fusion répétée de la paire de rangs minimaux, puis conversion en ids.
+//!
+//! Les classes `\p{L}` et `\p{N}` sont approchées par `char::is_alphabetic()` et
+//! `char::is_numeric()` : voir la nuance documentée sur `is_letter`.
+//!
+//! Vérification (hors dépôt, 737 cas : 300 lignes de wikitext2 avec et sans
+//! retour à la ligne, cas pièges, plus 20 000 cas aléatoires) : les morceaux
+//! produits ici sont identiques à ceux du moteur regex de Perl exécutant le
+//! motif ci-dessus, à la seule exception des marques combinantes s
+… [2300 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Le tokenizer lit déjà tokens+merges du GGUF — il ne manque que le motif **gpt-4o**. Je l'ajoute, puis je vérifierai via `llama-server /tokenize`
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\nsed -n '40,95p' src/tokenizer.rs\ngrep -n \"fn decouper\\|fn is_letter\\|pre_tok\\|qwen2\" src/tokenizer.rs | head", "description": "Read the tokenizer structure and split function"}`
+
+  ```
+byte_dec: HashMap<char, u8>,
+    /// types GGUF des tokens (1 = normal, 3 = contrôle, 4 = défini par
+    /// l'utilisateur, 5 = inutilisé…), utilisés par `special_id`.
+    token_type: Vec<i32>,
+}
+
+impl Tokenizer {
+    /// `tokens`, `merges` et `token_type` viennent des métadonnées GGUF.
+    ///
+    /// `merges` contient des chaînes « a b » : la coupure se fait au **premier**
+    /// espace (comme `str.partition(" ")` en Python), le reste — espaces
+    /// compris — formant le second symbole.
+    pub fn new(tokens: Vec<String>, merges: Vec<String>, token_type: Vec<i32>) -> Self {
+        let mut tok_to_id = HashMap::with_capacity(tokens.len());
+        for (i, t) in tokens.iter().enumerate() {
+            tok_to_id.insert(t.clone(), i as u32);
+        }
+        let mut ranks = HashMap::with_capacity(merges.len());
+        for (i, m) in merges.iter().enumerate() {
+            let (a, b) = match m.find(' ') {
+                Some(p) => (&m[..p], &m[p + 1..]),
+                None => (m.as_str(), ""),
+            };
+            let mut key = String::with_capacity(a.len() + b.len() + 1);
+            key.push_str(a);
+            key.push(SEP);
+            key.push_str(b);
+            ran
+… [1148 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\nsed -n '190,265p' src/tokenizer.rs", "description": "Read next_piece (the pretokenizer)"}`
+
+  ```
+/// `\p{L}` du motif.
+///
+/// La std n'expose pas les catégories Unicode, seulement la propriété dérivée
+/// `Alphabetic` (`char::is_alphabetic`), qui contient EN PLUS ~1 700 marques
+/// combinantes (`Mn`/`Mc` de `Other_Alphabetic` : matras indiens, voyelles
+/// thaïes, harakat arabes, points hébreux…). Conséquence : sur du texte qui
+/// contient ces marques (hindi, thaï, arabe vocalisé, accents décomposés), les
+/// morceaux diffèrent du vrai Qwen2 ; sur du texte NFC (latin, grec,
+/// cyrillique, CJK, emoji) les deux coïncident exactement.
+fn is_letter(c: char) -> bool {
+    c.is_alphabetic()
+}
+
+/// `\p{N}` : `char::is_numeric` couvre exactement les catégories Nd, Nl et No.
+fn is_number(c: char) -> bool {
+    c.is_numeric()
+}
+
+/// `\s` : la propriété Unicode White_Space, exactement `char::is_whitespace`.
+fn is_space(c: char) -> bool {
+    c.is_whitespace()
+}
+
+/// Pré-tokenizer Qwen2, appliqué au caractère `i` :
+/// `(?i:'s|'t|'re|'ve|'m|'ll|'d)|[^\r\n\p{L}\p{N}]?\p{L}+|\p{N}| ?[^\s\p{L}\p{N}]+[\r\n]*|\s*[\r\n]+|\s+(?!\S)|\s+`
+///
+/// L'ORDRE des alternatives est significatif : à gauche, tout ce qui peut
+/// démarrer plus tôt ou plus loin l'emporte (un « 's » final, une espace
+/// r
+… [1645 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ J'implémente le pré-tokenizer **gpt-4o (o200k)** avec le retour arrière glouton exact du motif
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\npython3 - <<'PY'\np='src/tokenizer.rs'; s=open(p,encoding='utf-8').read(); o=s\ns=s.replace('''    /// types GGUF des tokens (1 = normal, 3 = contrôle, 4 = défini par\n    /// l'utilisateur, 5 = inutilisé…), utilisés par ` … [7752 caractères tronqués]`
+
+  ```
+error[E0061]: this function takes 4 arguments but 3 arguments were supplied
+   --> src/main.rs:525:5
+    |
+525 |       tokenizer::Tokenizer::new(
+    |  _____^^^^^^^^^^^^^^^^^^^^^^^^^-
+526 | |         meta_strings(g, "tokenizer.ggml.tokens"),
+527 | |         meta_strings(g, "tokenizer.ggml.merges"),
+--
+error: could not compile `qtrinet-core` (bin "qtrinet-core") due to 1 previous error; 26 warnings emitted
+=== build
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\nsed -n '520,535p' src/main.rs", "description": "Inspect the build_tokenizer call"}`
+
+  ```
+}
+}
+
+fn build_tokenizer(g: &Gguf) -> tokenizer::Tokenizer {
+    let pre = g.meta.get("tokenizer.ggml.pre").and_then(|m| m.as_str()).unwrap_or("").to_string();
+    tokenizer::Tokenizer::new(
+        meta_strings(g, "tokenizer.ggml.tokens"),
+        meta_strings(g, "tokenizer.ggml.merges"),
+        meta_ints(g, "tokenizer.ggml.token_type"),
+    )
+}
+
+fn cfg_dims(m: &model::Model) -> usize { m.cfg.hidden }
+
+/// Plan de placement : ce que pèse chaque couche, et où la mettre.
+///
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\npython3 - <<'PY'\np='src/main.rs'; s=open(p,encoding='utf-8').read()\ns=s.replace('''        meta_ints(g, \"tokenizer.ggml.token_type\"),\n    )\n}''','''        meta_ints(g, \"tokenizer.ggml.token_type\"),\n        &pre,\ … [606 caractères tronqués]`
+
+  ```
+=== régression tokenizer Qwen2 (le 0,5B doit toujours tokenizer pareil)
+prompt : 20 tokens
+prompt  : 20 tokens en 0.660 s  (30.3 tok/s, TTFT 33.0 ms)
+  ```
+
+### 🤖 Assistant
+
+⏵ J'ajoute un mode `--tokenize` et je lance `llama-server` sur gpt-oss pour comparer
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\npython3 - <<'PY'\np='src/main.rs'; s=open(p,encoding='utf-8').read(); o=s\ns=s.replace('''    if args.iter().any(|a| a == \"--plan\") { run_plan(&args); return; }''',\n'''    if args.iter().any(|a| a == \"--plan\") { run_p … [1625 caractères tronqués]`
+
+  ```
+=== notre tokenizer Qwen2 sur un texte témoin
+20 tokens
+2304 6236 52434 13 37657 1593 1879 220 16 17 18 19 20 21 22 23 24 15 856 26491 
+recolle : "Le chat dort. HELLO world 1234567890 x/y"
+llama-server lancé
+  ```
+
+### 🤖 Assistant
+
+⏵ Pendant le chargement, j'ajoute les briques génériques manquantes (biais de routeur, biais par expert, sinks **appris**, fenêtre glissante, post-norm)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\npython3 - <<'PY'\np='src/model.rs'; s=open(p,encoding='utf-8').read(); o=s\n\n# --- Moe : biais de routeur + biais par expert\ns=s.replace('''pub struct Moe {\n    /// Routeur `[n_expert × n_embd]`, rangée par expert, en f … [6406 caractères tronqués]`
+
+  ```
+=== build
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\npython3 - <<'PY'\np='src/model.rs'; s=open(p,encoding='utf-8').read(); o=s\n# --- sinks appris + post_attention_norm + fenêtre lue des métadonnées\ns=s.replace('''    pub q_norm: Option<Vec<f32>>,\n    pub k_norm: Option<V … [3717 caractères tronqués]`
+
+  ```
+error[E0382]: borrow of moved value: `g`
+   --> src/model.rs:594:26
+    |
+482 |         let g = Gguf::open(path).expect("ouverture du GGUF");
+    |             - move occurs because `g` has type `Gguf`, which does not implement the `Copy` trait
+...
+588 |             g, cfg, layers, out_norm, pool,
+--
+error: could not compile `qtrinet-core` (bin "qtrinet-core") due to 1 previous error; 26 warnings emitted
+=== régression : Qwen3-30B MoE doit rester 7,6139
+=== perplexité 7.6139 sur 127 tokens (0 événements, 23.0 s) ===
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\npython3 - <<'PY'\np='src/model.rs'; s=open(p,encoding='utf-8').read(); o=s\ns=s.replace('''        let tete = if g.tensor(\"output.weight\").is_some() { \"output.weight\" } else { \"token_embd.weight\" };\n        let tete … [1791 caractères tronqués]`
+
+  ```
+=== régression Qwen3-30B MoE (attendu 7,6139)
+=== perplexité 7.6139 sur 127 tokens (0 événements, 22.9 s) ===
+=== et le 7B (attendu 10,9947)
+=== perplexité 10.9947 sur 127 tokens (0 événements, 42.6 s) ===
+=== llama-server prêt ?
+{"status":"ok"}0.29.293.806 I srv  llama_server: model loaded
+0.29.293.817 I srv  llama_server: listening on http://127.0.0.1:8123
+  ```
+
+### 🤖 Assistant
+
+⏵ llama-server est prêt. Comparaison de notre tokenizer o200k avec celui de llama.cpp :
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\nG=/home/stephane/FastNVMe/models/gpt-oss-120b-MXFP4.gguf\ncompare() {\n  ref=$(curl -s --max-time 60 http://127.0.0.1:8123/tokenize -H 'Content-Type: application/json' \\\n        -d \"{\\\"content\\\": $(python3 -c \"impo … [924 caractères tronqués]`
+
+  ```
+DIVERGE ❌  « Le chat dort. »
+    llama.cpp : 2486 7999 29710 13
+    nôtre     : ôtre
+  DIVERGE ❌  « Le chat dort. HELLO world 1234567890 x/y »
+    llama.cpp : 2486 7999 29710 13 58527 2699 2375 220 7633 19354 29338 15 1215 52534
+    nôtre     : ôtre
+  DIVERGE ❌  « I'll be there, don't worry — it's 42.5% su »
+    llama.cpp : 67504 413 1354 11 4128 14479 2733 4275 220 4689 13 20 4 3239 13
+    nôtre     : ôtre
+  DIVERGE ❌  « Élève à l'université, Größe, niño. »
+    llama.cpp : 5859 75 41151 1221 305 123763 3761 11 74095 11 61895 13
+    nôtre     : ôtre
+  DIVERGE ❌  « 12345678901234567890 »
+    llama.cpp : 7633 19354 29338 19267 22901 30833 2744
+    nôtre     : ôtre
+  DIVERGE ❌  « l'école d'abord, puis 2024-09-28 »
+    llama.cpp : 75 118825 272 89989 11 18766 220 1323 19 12 3114 12 2029
+    nôtre     : ôtre
+  DIVERGE ❌  « CamelCaseIdentifier and snake_case_name »
+    llama.cpp : 137910 6187 12966 326 46964 43667 2483
+    nôtre     : ôtre
+[stderr]
+bash: line 7: nôtre=2486: command not found
+bash: line 7: nôtre=2486: command not found
+bash: line 7: nôtre=67504: command not found
+bash: line 7: nôtre=5859: command not found
+bash: line 7: nôtre=7633: command not found
+bash: line 7: nôtre=75
+… [65 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Bug de shell (accent dans un nom de variable) — je refais la comparaison
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\nG=/home/stephane/FastNVMe/models/gpt-oss-120b-MXFP4.gguf\ncompare() {\n  ref=$(curl -s --max-time 60 http://127.0.0.1:8123/tokenize -H 'Content-Type: application/json' \\\n        -d \"{\\\"content\\\": $(python3 -c \"impo … [927 caractères tronqués]`
+
+  ```
+IDENTIQUE ✅  « Le chat dort. »
+  IDENTIQUE ✅  « Le chat dort. HELLO world 1234567890 x/y »
+  IDENTIQUE ✅  « I'll be there, don't worry — it's 42.5% sure »
+  IDENTIQUE ✅  « Élève à l'université, Größe, niño. »
+  IDENTIQUE ✅  « 12345678901234567890 »
+  IDENTIQUE ✅  « l'école d'abord, puis 2024-09-28 »
+  IDENTIQUE ✅  « CamelCaseIdentifier and snake_case_name »
+  ```
+
+### 🤖 Assistant
+
+⏵ Tokenizer o200k **identique à llama.cpp sur 7 cas pièges**. Je libère la mémoire du serveur et j'essaie gpt-oss tel quel
+
+- **bash** `{"command": "pkill -f llama-server; sleep 3; free -g | head -2\ncd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\nG=/home/stephane/FastNVMe/models/gpt-oss-120b-MXFP4.gguf\necho \"=== gpt-oss-120b, sans YaRN (le RoPE sera faux, mais on voit si tout le reste tient)\"\ntimeout 1800 ./tar … [183 caractères tronqués]`
+
+  ```
+(no output)
+[killed by signal: SIGTERM]
+  ```
+
+### 🤖 Assistant
+
+⏵ Le défaut `auto` construisait des listes d'événements pour un modèle de 60 Go. Je relance en `--dense`
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\nG=/home/stephane/FastNVMe/models/gpt-oss-120b-MXFP4.gguf\n/usr/bin/time -f \"  %e s / %M Ko\" timeout 2400 ./target/release/qtrinet-core $G --ppl /tmp/wt2_ids.txt \\\n  --ctx 128 --abits 16 --threads 16 --limit 8 --dense 2 … [92 caractères tronqués]`
+
+  ```
+attention : 0.01 M paires (requête, clé) par token
+    projections : 0.0 M événements par token
+    part de l'attention dans le flux d'événements : 100.0 %
+    postes (ms/token) : projets-attn 44.60 | rope 2.95 | attention 0.95 | proj+mlp 153.25 | somme 201.75 | reste (tête + échantillonnage) 23.32
+    dont attention : scores 0.43 | softmax 0.14 | somme pondérée + écriture KV 0.39
+  115.41 s / 62207132 Ko
+  ```
+
+### 🤖 Assistant
+
+⏵ **gpt-oss-120b tourne !** 62 Go résidents, 202 ms/jeton (~5 tok/s). Il manque YaRN — je l'implémente
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\npython3 - <<'PY'\np='src/model.rs'; s=open(p,encoding='utf-8').read(); o=s\n# Cfg : paramètres YaRN\ns=s.replace('''    pub n_expert: usize,\n    pub n_expert_used: usize,\n    pub ffn_exp: usize,\n}''','''    pub n_expert … [4651 caractères tronqués]`
+
+  ```
+=== build
+=== gpt-oss avec YaRN (l'ancien essai, sans YaRN, n'avait pas été jusqu'au bout)
+[modele] 36 couches chargées en 117.902510974s — listes 0.00 Go , 16 threads
+      15 tokens notés — perplexité cumulée 42127.336  (4.6 tok/s)
+=== perplexité 42127.3362 sur 15 tokens (0 événements, 3.3 s) ===
+    postes (ms/token) : projets-attn 42.22 | rope 3.48 | attention 1.34 | proj+mlp 148.24 | somme 195.28 | reste (tête + échantillonnage) 24.12
+  122.02 s / 62206336 Ko
+  ```
+
+### 🤖 Assistant
+
+⏵ PPL encore fausse : les **puits appris** ne s'appliquent pas dans le chemin à fenêtre (or gpt-oss en dépend). Je corrige
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\npython3 - <<'PY'\np='src/model.rs'; s=open(p,encoding='utf-8').read(); o=s\nold='''                    let mut mx = f32::NEG_INFINITY;\n                    for &t in iter { let v = sc[t as usize]; if v > mx { mx = v; } }\n … [2483 caractères tronqués]`
+
+  ```
+=== perplexité 42127.3362 sur 15 tokens (0 événements, 3.1 s) ===
+    postes (ms/token) : projets-attn 38.09 | rope 3.03 | attention 1.16 | proj+mlp 138.14 | somme 180.43 | reste (tête + échantillonnage) 23.25
+  ```
+
+### 🤖 Assistant
+
+⏵ Bug trouvé : les valeurs CLI écrasent celles lues dans le modèle (`attn_window` ← 0, `attn_sinks` ← 4). Je corrige
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\npython3 - <<'PY'\np='src/main.rs'; s=open(p,encoding='utf-8').read(); o=s\n# 0 = « garder ce que dit le modèle »\ns=s.replace('''    let mut attn_sinks = 4usize;''','''    // 0 = « garder la valeur du modèle » : les métado … [912 caractères tronqués]`
+
+  ```
+313:    let mut attn_window = 0usize;
+317:    let mut attn_sinks = 0usize;
+364:            "--attn-window" => attn_window = args[i + 1].parse().unwrap(),
+365:            "--attn-sinks" => attn_sinks = args[i + 1].parse().unwrap(),
+651:    let mut attn_window = 0usize;
+655:    let mut attn_sinks = 0usize;
+683:            "--attn-window" => attn_window = args[i + 1].parse().unwrap(),
+684:            "--attn-sinks" => attn_sinks = args[i + 1].parse().unwrap(),
+704:            "--attn-window" => attn_window = args[i + 1].parse().unwrap(),
+705:            "--attn-sinks" => attn_sinks = args[i + 1].parse().unwrap(),
+747:    if attn_window > 0 { mdl.attn_window = attn_window; }
+748:    if attn_sinks > 0 { mdl.attn_sinks = attn_sinks; }
+=== perplexité 42127.3362 sur 15 tokens (0 événements, 2.9 s) ===
+    postes (ms/token) : projets-attn 32.29 | rope 2.96 | attention 1.09 | proj+mlp 133.20 | somme 169.54 | reste (tête + échantillonnage) 23.07
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\ngrep -n \"sinks\" src/model.rs | head -12\ngrep -n \"sinks\" src/main.rs | head -6", "description": "Verify the sinks plumbing in the source"}`
+
+  ```
+195:    pub sinks: Option<Vec<f32>>,
+365:    /// clés, plus `attn_sinks` jetons puits au début de la séquence.
+371:    pub attn_sinks: usize,
+544:                sinks: if g.tensor(&p("attn_sinks.weight")).is_some() {
+545:                    Some(g.dequant(&p("attn_sinks.weight"))) } else { None },
+610:            attn_sinks: if fenetre > 0 { 0 } else { 4 },
+1031:                        let puits = lay.sinks.as_ref().map(|s| s[hh]);
+1071:                let ns = if lo > 0 { self.attn_sinks.min(lo) } else { 0 };
+1089:                    let ns = if lo > 0 { self.attn_sinks.min(lo) } else { 0 };
+1098:                    let puits = lay.sinks.as_ref().map(|s| s[hh]);
+317:    let mut attn_sinks = 0usize;
+365:            "--attn-sinks" => attn_sinks = args[i + 1].parse().unwrap(),
+655:    let mut attn_sinks = 0usize;
+684:            "--attn-sinks" => attn_sinks = args[i + 1].parse().unwrap(),
+705:            "--attn-sinks" => attn_sinks = args[i + 1].parse().unwrap(),
+748:    if attn_sinks > 0 { mdl.attn_sinks = attn_sinks; }
+  ```
+
+### 🤖 Assistant
+
+⏵ Le puits reste inerte — je m'arrête là sur gpt-oss et je consolide ce qui est acquis et vérifié
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\necho \"=== régressions complètes\"\nfor m in \"../models/Qwen2.5-0.5B-Q8_0.gguf:512:\" \"../models/Qwen2.5-0.5B-Q4_0.gguf:512:--q4\" \\\n         \"/home/stephane/FastNVMe/models/qwen2.5-1.5b-instruct-q4_k_m.gguf:256:--q4\ … [963 caractères tronqués]`
+
+  ```
+=== régressions complètes
+Qwen2.5-0.5B-Q8_0.gguf                     19.3885
+Qwen2.5-0.5B-Q4_0.gguf                     21.0110
+qwen2.5-1.5b-instruct-q4_k_m.gguf          12.9228
+qwen3-30b-a3b                              7.6139
+qwen2.5-vl-7b                              10.9947
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\npython3 - <<'PY'\np='docs/convertisseur.md'; s=open(p,encoding='utf-8').read()\ns+='''\n---\n\n# gpt-oss-120b : la machine tient, le modèle n'est pas encore juste\n\n## Ce qui marche\n\n`gpt-oss-120b` **charge et tourne** : 62,2 Go rés … [3929 caractères tronqués]`

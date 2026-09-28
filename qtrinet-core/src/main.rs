@@ -35,6 +35,7 @@ fn main() {
         engine::EPINGLER.store(true, std::sync::atomic::Ordering::Relaxed);
     }
     if args.iter().any(|a| a == "--plan") { run_plan(&args); return; }
+    if args.iter().any(|a| a == "--tokenize") { run_tokenize(&args); return; }
     if args.iter().any(|a| a == "--ppl") { run_ppl(&args); return; }
     if args.iter().any(|a| a == "--infer") { run_infer(&args); return; }
     let path = &args[1];
@@ -310,7 +311,10 @@ fn run_infer(args: &[String]) {
     let mut ids_file: Option<String> = None;
     let mut qk_topk = 0usize;
     let mut attn_window = 0usize;
-    let mut attn_sinks = 4usize;
+    // 0 = « garder la valeur du modèle » : les métadonnées déclarent parfois une
+    // fenêtre glissante (gpt-oss : 128) et des puits appris, qu'un défaut CLI
+    // écraserait silencieusement.
+    let mut attn_sinks = 0usize;
     let mut attn_topk = 0usize;
     let mut patch_file: Option<String> = None;
     let mut act_thresh = 0.0f32;
@@ -521,14 +525,37 @@ fn meta_ints(g: &Gguf, key: &str) -> Vec<i32> {
 }
 
 fn build_tokenizer(g: &Gguf) -> tokenizer::Tokenizer {
+    let pre = g.meta.get("tokenizer.ggml.pre").and_then(|m| m.as_str()).unwrap_or("").to_string();
     tokenizer::Tokenizer::new(
         meta_strings(g, "tokenizer.ggml.tokens"),
         meta_strings(g, "tokenizer.ggml.merges"),
         meta_ints(g, "tokenizer.ggml.token_type"),
+        &pre,
     )
 }
 
 fn cfg_dims(m: &model::Model) -> usize { m.cfg.hidden }
+
+/// Tokenise un texte et imprime les identifiants — sert à vérifier le
+/// pré-découpage contre une implémentation de référence.
+fn run_tokenize(args: &[String]) {
+    let path = &args[1];
+    let mut texte = String::new();
+    let mut i = 2;
+    while i < args.len() {
+        if args[i] == "--texte" && i + 1 < args.len() { texte = args[i + 1].clone(); i += 1; }
+        i += 1;
+    }
+    let g = Gguf::open(path).expect("ouverture du GGUF");
+    let tk = build_tokenizer(&g);
+    let ids = tk.encode(&texte);
+    println!("{} tokens", ids.len());
+    for id in &ids {
+        print!("{id} ");
+    }
+    println!();
+    println!("recolle : {:?}", tk.decode(&ids));
+}
 
 /// Plan de placement : ce que pèse chaque couche, et où la mettre.
 ///
@@ -622,7 +649,10 @@ fn run_ppl(args: &[String]) {
     let mut attn_topk = 0usize;
     let mut qk_topk = 0usize;
     let mut attn_window = 0usize;
-    let mut attn_sinks = 4usize;
+    // 0 = « garder la valeur du modèle » : les métadonnées déclarent parfois une
+    // fenêtre glissante (gpt-oss : 128) et des puits appris, qu'un défaut CLI
+    // écraserait silencieusement.
+    let mut attn_sinks = 0usize;
     // Défaut : le moteur CHOISIT par mesure. Les deux formes sont chargées et la
     // bascule se fait projection par projection sur la densité mesurée — les
     // sorties sont identiques au bit près, seul le débit change (×2,1 sur un
@@ -714,8 +744,8 @@ fn run_ppl(args: &[String]) {
     mdl.act_topk_proj = topk_proj;
     mdl.attn_topk = attn_topk;
     mdl.qk_topk = qk_topk;
-    mdl.attn_window = attn_window;
-    mdl.attn_sinks = attn_sinks;
+    if attn_window > 0 { mdl.attn_window = attn_window; }
+    if attn_sinks > 0 { mdl.attn_sinks = attn_sinks; }
     if act_thresh > 0.0 || act_topk > 0 {
         println!("parcimonie imposée : seuil {:.1} % du max{}",
                  act_thresh * 100.0,

@@ -37,6 +37,9 @@ pub struct Cfg {
     pub n_expert: usize,
     pub n_expert_used: usize,
     pub ffn_exp: usize,
+    /// Étirement de contexte YaRN : `(facteur, beta_rapide, beta_lent,
+    /// contexte d'origine)`. `None` pour un RoPE ordinaire.
+    pub yarn: Option<(f32, f32, f32, f32)>,
 }
 
 /// Une projection, dans l'un des deux formats, plus son biais éventuel.
@@ -91,7 +94,23 @@ fn charger_moe(g: &Gguf, l: usize, n_expert: usize) -> Option<Moe> {
         (Some(a), Some(b), Some(c)) => Some((a, b, c)),
         _ => None,
     };
-    Some(Moe { routeur, gate, up, down, shexp })
+    let n_ff = gate.n_out;
+    let biais = |nom: &str| -> Option<Vec<f32>> {
+        let t = g.tensor(nom)?;
+        // ne = (n_ff, n_expert) : l'expert est la dimension la plus lente.
+        if t.dims.len() != 2 || t.dims[0] as usize != n_expert { return None; }
+        Some(g.dequant(nom))
+    };
+    let routeur_biais = if g.tensor(&p("ffn_gate_inp.bias")).is_some() {
+        Some(g.dequant(&p("ffn_gate_inp.bias")))
+    } else { None };
+    Some(Moe {
+        routeur, routeur_biais,
+        biais_gate: biais(&p("ffn_gate_exps.bias")),
+        biais_up: biais(&p("ffn_up_exps.bias")),
+        biais_down: biais(&p("ffn_down_exps.bias")),
+        n_ff, gate, up, down, shexp,
+    })
 }
 
 /// Vue sur un tenseur déjà quantifié, découpable **par expert**. Les experts
@@ -142,6 +161,15 @@ unsafe impl Sync for Vue4 {}
 pub struct Moe {
     /// Routeur `[n_expert × n_embd]`, rangée par expert, en f32.
     pub routeur: Vec<f32>,
+    /// Biais du routeur (gpt-oss en a un) : ajouté aux logits **avant** le
+    /// softmax.
+    pub routeur_biais: Option<Vec<f32>>,
+    /// Biais par expert, `[n_expert × n_ff]` : chaque expert a les siens, pour
+    /// ses trois projections. Absents chez Qwen3-MoE, présents chez gpt-oss.
+    pub biais_gate: Option<Vec<f32>>,
+    pub biais_up: Option<Vec<f32>>,
+    pub biais_down: Option<Vec<f32>>,
+    pub n_ff: usize,
     pub gate: Vue4,
     pub up: Vue4,
     pub down: Vue4,
@@ -160,6 +188,11 @@ pub struct Layer {
     /// (Qwen3, Gemma 3…). Absente ailleurs.
     pub q_norm: Option<Vec<f32>>,
     pub k_norm: Option<Vec<f32>>,
+    /// Puits d'attention **appris** : un logit par tête, ajouté aux scores
+    /// comme une clé virtuelle dont la valeur est nulle. Elle ne contribue
+    /// qu'au dénominateur du softmax — c'est le « drain » que les modèles
+    /// récents (gpt-oss) apprennent au lieu de le bricoler.
+    pub sinks: Option<Vec<f32>>,
     pub wgate: Proj,
     pub wup: Proj,
     pub wdown: Proj,
@@ -467,6 +500,16 @@ impl Model {
             n_expert: g.cfg("expert_count").and_then(|m| m.as_u64()).unwrap_or(0) as usize,
             n_expert_used: g.cfg("expert_used_count").and_then(|m| m.as_u64()).unwrap_or(0) as usize,
             ffn_exp: g.cfg("expert_feed_forward_length").and_then(|m| m.as_u64()).unwrap_or(0) as usize,
+            yarn: match g.cfg("rope.scaling.type").and_then(|m| m.as_str()) {
+                Some("yarn") => Some((
+                    g.cfg("rope.scaling.factor").and_then(|m| m.as_f64()).unwrap_or(1.0) as f32,
+                    g.cfg("rope.scaling.yarn_beta_fast").and_then(|m| m.as_f64()).unwrap_or(32.0) as f32,
+                    g.cfg("rope.scaling.yarn_beta_slow").and_then(|m| m.as_f64()).unwrap_or(1.0) as f32,
+                    g.cfg("rope.scaling.original_context_length")
+                        .and_then(|m| m.as_u64()).unwrap_or(4096) as f32,
+                )),
+                _ => None,
+            },
         };
 
         let cfg = {
@@ -487,11 +530,19 @@ impl Model {
                 wk: Proj::load(&g, &p("attn_k.weight"), Some(&p("attn_k.bias")), dense || q4 != 0, auto, keep, q4 & 2 != 0),
                 wv: Proj::load(&g, &p("attn_v.weight"), Some(&p("attn_v.bias")), dense || q4 != 0, auto, keep, q4 & 2 != 0),
                 wo: Proj::load(&g, &p("attn_output.weight"), None, dense || q4 != 0, auto, keep, q4 & 2 != 0),
-                ffn_norm: g.dequant(&p("ffn_norm.weight")),
+                // gpt-oss nomme `post_attention_norm` la normale d'entrée du
+                // FFN ; c'est le même tenseur sous un autre nom.
+                ffn_norm: if g.tensor(&p("ffn_norm.weight")).is_some() {
+                    g.dequant(&p("ffn_norm.weight"))
+                } else {
+                    g.dequant(&p("post_attention_norm.weight"))
+                },
                 q_norm: if g.tensor(&p("attn_q_norm.weight")).is_some() {
                     Some(g.dequant(&p("attn_q_norm.weight"))) } else { None },
                 k_norm: if g.tensor(&p("attn_k_norm.weight")).is_some() {
                     Some(g.dequant(&p("attn_k_norm.weight"))) } else { None },
+                sinks: if g.tensor(&p("attn_sinks.weight")).is_some() {
+                    Some(g.dequant(&p("attn_sinks.weight"))) } else { None },
                 wgate: if cfg.n_expert > 0 { Proj::vide() } else {
                     Proj::load(&g, &p("ffn_gate.weight"), None, dense || q4 != 0, auto, keep, q4 & 1 != 0) },
                 wup: if cfg.n_expert > 0 { Proj::vide() } else {
@@ -518,6 +569,9 @@ impl Model {
         let n_layer = cfg.n_layer;
         let tete = if g.tensor("output.weight").is_some() { "output.weight" } else { "token_embd.weight" };
         let tete = tete.to_string();
+        // Le modèle peut déclarer une fenêtre glissante (gpt-oss : 128) : lue
+        // AVANT que `g` ne soit déplacé dans la structure.
+        let fenetre = g.cfg("attention.sliding_window").and_then(|m| m.as_u64()).unwrap_or(0) as usize;
         // Tête en 4 bits : la plus grosse matrice du modèle, donc le plus gros
         // gain possible sur un noyau déjà au mur de la bande passante.
         // La tête emprunte dès que la source est déjà quantifiée sur 4 ou
@@ -551,7 +605,10 @@ impl Model {
             kv_k: vec![kv.clone(); n_layer], kv_v: vec![kv; n_layer],
             ctx, events: 0, act_levels: 127.0, act_thresh: 0.0, act_topk: 0, act_renorm: false,
             act_topk_proj: [0; 7], attn_topk: 0, attn_events: 0, qk_topk: 0,
-            moe_topk: 0, attn_window: 0, attn_sinks: 4, seuil_push: 0.22,
+            moe_topk: 0,
+            attn_window: fenetre,
+            attn_sinks: if fenetre > 0 { 0 } else { 4 },
+            seuil_push: 0.22,
             stop_id: None, prof: [0.0; 6],
             tete,
             head4,
@@ -684,7 +741,7 @@ impl Model {
     /// Produit matrice-vecteur sur une matrice 4 bits empruntée (experts).
     fn matvec_q4(pool: &mut Pool, m: &crate::list::DenseQ4, x: &[f32], out: &mut [f32],
                  levels: f32, thresh: f32, topk: usize, renorm: bool,
-                 scratch: &mut Vec<f32>) {
+                 scratch: &mut Vec<f32>, biais: Option<&[f32]>) {
         let Some((sv, sx)) = Self::quant_scratch(x, levels, thresh, topk, renorm, scratch) else {
             for v in out[..m.n_out].iter_mut() { *v = 0.0; }
             return;
@@ -692,7 +749,10 @@ impl Model {
         let mut xd = vec![0i32; x.len()];
         for (&i, &v) in sv.idx.iter().zip(sv.val.iter()) { xd[i as usize] = v; }
         let y = pool.matvec_dense_q4(m, &xd, sx);
-        out[..m.n_out].copy_from_slice(&y[..m.n_out]);
+        match biais {
+            Some(b) => for o in 0..m.n_out { out[o] = y[o] + b[o]; },
+            None => out[..m.n_out].copy_from_slice(&y[..m.n_out]),
+        }
     }
 
     /// Produit scalaire f32 à huit accumulateurs indépendants.
@@ -777,6 +837,43 @@ impl Model {
             });
             let cut = cut.abs();
             for x in t.iter_mut() { if x.abs() < cut { *x = 0.0; } }
+        }
+    }
+
+    /// RoPE avec étirement **YaRN** (`rope.scaling.type = yarn`).
+    ///
+    /// YaRN n'interpole pas toutes les fréquences : les basses dimensions
+    /// (longueurs d'onde courtes) sont laissées telles quelles, les hautes sont
+    /// divisées par le facteur, et une rampe relie les deux. Sans cette rampe,
+    /// un modèle entraîné à 4 096 de contexte ne peut pas travailler à 128 000 —
+    /// et même à contexte court, diviser *toutes* les fréquences fausse la
+    /// rotation. La sortie est en plus multipliée par `mscale = 1 + 0,1·ln(f)`,
+    /// qui compense la perte d'amplitude de l'attention dilatée.
+    fn rope_yarn(v: &mut [f32], n_head: usize, head_dim: usize, pos: usize, base: f32,
+                 facteur: f32, beta_rapide: f32, beta_lent: f32, ctx_origine: f32) {
+        let half = head_dim / 2;
+        let ln_base = base.ln();
+        let corr0 = (head_dim as f32 * (ctx_origine / (beta_rapide * 2.0 * std::f32::consts::PI)).ln()
+                     / (2.0 * ln_base)).floor();
+        let corr1 = (head_dim as f32 * (ctx_origine / (beta_lent * 2.0 * std::f32::consts::PI)).ln()
+                     / (2.0 * ln_base)).ceil();
+        let mscale = 1.0 + 0.1 * facteur.ln();
+        for h in 0..n_head {
+            let t = &mut v[h * head_dim..(h + 1) * head_dim];
+            for i in 0..half {
+                let freq = 1.0 / base.powf(2.0 * i as f32 / head_dim as f32);
+                let theta_extrap = pos as f32 * freq;
+                let theta_interp = theta_extrap / facteur;
+                let y = (i as f32 - corr0) / (corr1 - corr0).max(0.001);
+                let rampe = 1.0 - y.clamp(0.0, 1.0);
+                let theta = theta_interp * (1.0 - rampe) + theta_extrap * rampe;
+                let (s, c) = theta.sin_cos();
+                let (s, c) = (s * mscale, c * mscale);
+                let a = t[i];
+                let b = t[i + half];
+                t[i] = a * c - b * s;
+                t[i + half] = b * c + a * s;
+            }
         }
     }
 
@@ -868,8 +965,16 @@ impl Model {
                 }
             }
             let tr = Instant::now();
-            Self::rope(&mut q, nh, hd, pos, cfg.rope_base);
-            Self::rope(&mut k, nkv, hd, pos, cfg.rope_base);
+            match cfg.yarn {
+                Some((f, bf, bl, orig)) => {
+                    Self::rope_yarn(&mut q, nh, hd, pos, cfg.rope_base, f, bf, bl, orig);
+                    Self::rope_yarn(&mut k, nkv, hd, pos, cfg.rope_base, f, bf, bl, orig);
+                }
+                None => {
+                    Self::rope(&mut q, nh, hd, pos, cfg.rope_base);
+                    Self::rope(&mut k, nkv, hd, pos, cfg.rope_base);
+                }
+            }
             if self.qk_topk > 0 {
                 Self::creuse_tetes(&mut q, nh, hd, self.qk_topk);
                 Self::creuse_tetes(&mut k, nkv, hd, self.qk_topk);
@@ -923,8 +1028,11 @@ impl Model {
                         let row = &mut sc2[hh * ctx..hh * ctx + n];
                         let mut mx = f32::NEG_INFINITY;
                         for &v in row.iter() { if v > mx { mx = v; } }
+                        let puits = lay.sinks.as_ref().map(|s| s[hh]);
+                        if let Some(s) = puits { if s > mx { mx = s; } }
                         let mut sum = 0f32;
                         for v in row.iter_mut() { let e = (*v - mx).exp(); *v = e; sum += e; }
+                        if let Some(s) = puits { sum += (s - mx).exp(); }
                         let inv = 1.0 / sum;
                         for v in row.iter_mut() { *v *= inv; }
                     }
@@ -984,8 +1092,14 @@ impl Model {
                     self.attn_events += iter.len() as u64;
                     let mut mx = f32::NEG_INFINITY;
                     for &t in iter { let v = sc[t as usize]; if v > mx { mx = v; } }
+                    // Le puits appris compte dans le dénominateur même quand la
+                    // fenêtre est active — c'est même son rôle : drainer
+                    // l'attention que la fenêtre ne peut pas absorber.
+                    let puits = lay.sinks.as_ref().map(|s| s[hh]);
+                    if let Some(s) = puits { if s > mx { mx = s; } }
                     let mut sum = 0f32;
                     for &t in iter { let e = (sc[t as usize] - mx).exp(); sc[t as usize] = e; sum += e; }
+                    if let Some(s) = puits { sum += (s - mx).exp(); }
                     let inv = 1.0 / sum;
                     for &t in iter { sc[t as usize] *= inv; }
                     let out = &mut att[hh * hd..(hh + 1) * hd];
@@ -1042,7 +1156,8 @@ impl Model {
                 let k = k.clamp(1, ne);
                 let mut sc_e: Vec<f32> = (0..ne).map(|e| {
                     let r = &moe.routeur[e * h..(e + 1) * h];
-                    r.iter().zip(hn.iter()).map(|(a, b)| a * b).sum()
+                    let s: f32 = r.iter().zip(hn.iter()).map(|(a, b)| a * b).sum();
+                    s + moe.routeur_biais.as_ref().map_or(0.0, |b| b[e])
                 }).collect();
                 let mx = sc_e.iter().cloned().fold(f32::NEG_INFINITY, f32::max);
                 let mut somme = 0f32;
@@ -1062,31 +1177,34 @@ impl Model {
                     let w_exp = sc_e[e as usize] * inv_k;
                     let mg = moe.gate.expert(e as usize);
                     Self::matvec_q4(pool, &mg, &hn, &mut gate, self.act_levels,
-                                    self.act_thresh, tk(4), self.act_renorm, &mut scratch);
+                                    self.act_thresh, tk(4), self.act_renorm, &mut scratch,
+                                    moe.biais_gate.as_ref().map(|b| &b[e as usize * moe.n_ff..]));
                     let mu = moe.up.expert(e as usize);
                     Self::matvec_q4(pool, &mu, &hn, &mut up, self.act_levels,
-                                    self.act_thresh, tk(5), self.act_renorm, &mut scratch);
+                                    self.act_thresh, tk(5), self.act_renorm, &mut scratch,
+                                    moe.biais_up.as_ref().map(|b| &b[e as usize * moe.n_ff..]));
                     for i in 0..cfg.ffn_exp {
                         gate[i] = (gate[i] / (1.0 + (-gate[i]).exp())) * up[i];
                     }
                     let md = moe.down.expert(e as usize);
                     Self::matvec_q4(pool, &md, &gate, &mut exp_out, self.act_levels,
-                                    self.act_thresh, tk(6), self.act_renorm, &mut scratch);
+                                    self.act_thresh, tk(6), self.act_renorm, &mut scratch,
+                                    moe.biais_down.as_ref().map(|b| &b[e as usize * moe.n_ff..]));
                     for i in 0..h { down[i] += w_exp * exp_out[i]; }
                 }
                 if let Some((sg, su, sd)) = moe.shexp.as_ref() {
                     let mg = sg.expert(0);
                     Self::matvec_q4(pool, &mg, &hn, &mut gate, self.act_levels,
-                                    self.act_thresh, tk(4), self.act_renorm, &mut scratch);
+                                    self.act_thresh, tk(4), self.act_renorm, &mut scratch, None);
                     let mu = su.expert(0);
                     Self::matvec_q4(pool, &mu, &hn, &mut up, self.act_levels,
-                                    self.act_thresh, tk(5), self.act_renorm, &mut scratch);
+                                    self.act_thresh, tk(5), self.act_renorm, &mut scratch, None);
                     for i in 0..cfg.ffn_exp {
                         gate[i] = (gate[i] / (1.0 + (-gate[i]).exp())) * up[i];
                     }
                     let md = sd.expert(0);
                     Self::matvec_q4(pool, &md, &gate, &mut exp_out, self.act_levels,
-                                    self.act_thresh, tk(6), self.act_renorm, &mut scratch);
+                                    self.act_thresh, tk(6), self.act_renorm, &mut scratch, None);
                     for i in 0..h { down[i] += exp_out[i]; }
                 }
                 if let Some((gl, gg)) = self.ffn_gain {
