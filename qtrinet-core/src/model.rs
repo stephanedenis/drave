@@ -1486,7 +1486,12 @@ impl Model {
     }
 
     /// Génère `n_new` tokens après `ids`. `temp` ≤ 0 ⇒ glouton (déterministe).
-    pub fn generate(&mut self, ids: &[u32], n_new: usize, temp: f32) -> (Vec<u32>, Stats) {
+    /// Génère `n_new` jetons. `flux` reçoit chaque jeton **dès qu'il est
+    /// produit**, ce qui permet de l'afficher sans attendre la fin.
+    #[allow(clippy::too_many_arguments)]
+    pub fn generate(&mut self, ids: &[u32], n_new: usize, temp: f32, top_p: f32,
+                    rep_pen: f32, hist: usize, mut flux: Option<&mut dyn FnMut(u32)>)
+                    -> (Vec<u32>, Stats) {
         let t0 = Instant::now();
         let mut last = Vec::new();
         let mut events0 = self.events;
@@ -1498,15 +1503,23 @@ impl Model {
         let mut out = Vec::with_capacity(n_new);
         let t1 = Instant::now();
         for step in 0..n_new {
-            let logits = self.logits(&last);
-            let next = if temp <= 0.0 {
+            let mut logits = self.logits(&last);
+            // Historique pour la pénalité : les derniers jetons vus, invite
+            // comprise. Sans elle, une génération longue finit en boucle —
+            // c'est le mode d'échec le plus visible en usage réel.
+            let n_hist = if hist == 0 { ids.len() + out.len() } else { hist };
+            let debut = ids.len() + out.len() - n_hist.min(ids.len() + out.len());
+            let recents: Vec<u32> = ids[debut.min(ids.len())..].iter().copied()
+                .chain(out.iter().copied()).collect();
+            let next = if temp <= 0.0 && rep_pen <= 1.0 {
                 let mut best = 0usize;
                 for (i, &v) in logits.iter().enumerate() { if v > logits[best] { best = i; } }
                 best as u32
             } else {
-                sample(&logits, temp)
+                sample_avance(&mut logits, temp.max(1e-4), top_p, &recents, rep_pen)
             };
             out.push(next);
+            if let Some(f) = flux.as_mut() { f(next); }
             if Some(next) == self.stop_id { break; }
             let pos = ids.len() + step;
             last = self.forward(next, pos);
@@ -1528,6 +1541,48 @@ impl Model {
 
 /// Échantillonnage température + top-k (k = 40), avec un générateur xorshift
 /// déterministe : pas de dépendance, pas d'entropie système.
+/// Échantillonnage complet : pénalité de répétition, top-k, top-p (noyau).
+///
+/// La pénalité suit la formule usuelle : un logit positif est divisé, un logit
+/// négatif multiplié — donc dans les deux cas on s'éloigne du jeton déjà vu.
+fn sample_avance(logits: &mut [f32], temp: f32, top_p: f32, recents: &[u32],
+                 rep_pen: f32) -> u32 {
+    if rep_pen > 1.0 {
+        for &t in recents {
+            let v = logits[t as usize];
+            logits[t as usize] = if v > 0.0 { v / rep_pen } else { v * rep_pen };
+        }
+    }
+    let mut idx: Vec<u32> = (0..logits.len() as u32).collect();
+    idx.sort_unstable_by(|&a, &b| logits[b as usize].partial_cmp(&logits[a as usize]).unwrap());
+    let mx = logits[idx[0] as usize];
+    let k = 40.min(idx.len());
+    let mut w = Vec::with_capacity(k);
+    let mut sum = 0f32;
+    for &i in &idx[..k] {
+        let e = ((logits[i as usize] - mx) / temp).exp();
+        w.push(e);
+        sum += e;
+    }
+    // top-p : plus petit ensemble dont la masse dépasse p.
+    if top_p < 1.0 && sum > 0.0 {
+        let mut cum = 0f32;
+        let mut garde = w.len();
+        for (j, &e) in w.iter().enumerate() {
+            cum += e / sum;
+            if cum >= top_p { garde = j + 1; break; }
+        }
+        w.truncate(garde);
+        sum = w.iter().sum();
+    }
+    let mut r = (rand_u64() as f64 / u64::MAX as f64) as f32 * sum;
+    for (j, &e) in w.iter().enumerate() {
+        r -= e;
+        if r <= 0.0 { return idx[j]; }
+    }
+    idx[w.len().saturating_sub(1)]
+}
+
 fn sample(logits: &[f32], temp: f32) -> u32 {
     let mut idx: Vec<u32> = (0..logits.len() as u32).collect();
     idx.sort_unstable_by(|&a, &b| logits[b as usize].partial_cmp(&logits[a as usize]).unwrap());

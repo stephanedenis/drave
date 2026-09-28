@@ -5,14 +5,14 @@
 | Identifiant | `22bcae27-254b-47b2-acda-87467dab060c` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-25 11:56 |
-| Durée | 73.6 h |
-| Tours | 48 |
-| Messages | 1195 |
-| Appels d'outils | 1185 |
+| Durée | 73.8 h |
+| Tours | 49 |
+| Messages | 1203 |
+| Appels d'outils | 1191 |
 | Fichiers touchés | 68 |
-| Commandes | 943 |
+| Commandes | 949 |
 | Sous-agents | 1 |
-| Commits | 53 |
+| Commits | 54 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -125,6 +125,8 @@
 **Tour 47** — continue
 
 **Tour 48** — est-on prêt à tester sur unn vrai travail?
+
+**Tour 49** — continue jusqu'à ce que ce soit complet.
 
 ## 2. Déroulé, étape par étape
 
@@ -2724,7 +2726,57 @@ Deux commits (`a018f43`, `5590c2a`), journal à jour. Sans les drapeaux `--bits-
 
 **Synthèse produite :**
 
-⏵ Les deux tests réels passent. Je consigne la preuve et l'état de préparation
+⏵ Réponse par les tests, pas par l'opinion : **oui pour du travail par lots, non pour l'interactif.**
+
+\## Les deux tests, sur un 30 B (MoE top-8, Q4_K_M, CPU, 16 fils, zéro copie)
+
+**Question en français, gabarit de conversation** — trois phrases exactes, arrêt propre sur `<|im_end|>`. 89 jetons en 15,8 s, **5,62 tok/s**, premier jeton en 166 ms.
+
+**Génération de code, réponse vérifiable** — fonction `mediane` correcte, idiomatique, sans `statistics`, et **arrêt spontané après 67 jetons** au lieu des 200 demandés : la détection de fin fonctionne.
+
+\## Ce qui est prêt
+
+| | |
+|---|---|
+| Famille Qwen 0,5 B → 30 B MoE, formats Q4_K / Q6_K / Q8_0 / Q4_0 / MXFP4 | ✅ |
+| Lecture en place — 30 B en 17,7 Go, exactement la taille du fichier | ✅ |
+| Tokenizer du modèle, gabarit de conversation, arrêt sur fin de tour | ✅ |
+| Déterministe (glouton) : reproductible au jeton près | ✅ |
+| Débits | 0,5 B : 32 tok/s · 1,5 B : 17 · **30 B MoE : 5,6** · 7 B : 2,8 |
+
+\## Ce qui n'est pas prêt
+
+| manque | conséquence | coût |
+|---|---|---|
+| **Pénalité de répétition, top-p** | boucles sur les générations longues — je n'ai validé que des tirages courts | quelques lignes |
+| **Sortie en flux** | rien ne s'affiche avant la fin : inutilisable en interactif | faible |
+| **gpt-oss-120b** | tourne à 5 tok/s mais la sortie est **fausse** (PPL 39,8 au lieu de ~6) | inconnu |
+| **Contexte long** | attention en O(contexte), KV en f32 : 800 Mo à 8 k pour le 30 B, et +100 ms/jeton | moyen |
+| **Vision** | le chemin image du modèle VL n'existe pas | élevé |
+| **Robustesse** | pas de gestion mémoire, pas de session, pas de requêtes multiples | moyen |
+
+\## Mon avis franc
+
+Pour du **travail par lots** — générer du texte, du code, répondre à des questions en français ou en anglais — le moteur est utilisable **dès maintenant** avec la famille Qwen, à condition d'accepter 3 à 6 jetons/seconde. C'est le régime d'un traitement de nuit ou d'un script, pas d'une conversation.
+
+Le premier correctif à faire n'est pas une performance, c'est la **pénalité de répétition et le top-p** : sans eux, toute génération longue finit en boucle, et c'est le mode d'échec le plus visible en usage réel. Ensuite la **sortie en flux**, qui change complètement la perception de vitesse même à débit constant.
+
+`reports/rapport-travail-reel.md` documente les deux tests et ce tableau ; commit `31c057c`.
+
+### Tour 49 — continue jusqu'à ce que ce soit complet.
+
+*6 appels d'outils.* Actions notables :
+
+- bash — Read the generation loop
+- bash — Read the sampler and the infer call site
+- bash — Implement repetition penalty, top-p and streaming
+- bash — Inspect the infer call site context
+- bash — Fix the tokenizer scope and test long generation with streaming
+- bash — Verify greedy regression and commit the sampling work
+
+**Synthèse produite :**
+
+⏵ Échantillonnage et flux validés en génération longue. Régression et commit
 
 ## 3. Travail accompli
 
@@ -2847,7 +2899,7 @@ Deux commits (`a018f43`, `5590c2a`), journal à jour. Sans les drapeaux `--bits-
 - **T3** Test OpenOCD without root and check Pro device support
 - **T3** Make scripts executable and test jtag_scan
 - **T3** Commit JTAG milestone
-- … et 903 autres
+- … et 909 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2975,7 +3027,7 @@ Deux commits (`a018f43`, `5590c2a`), journal à jour. Sans les drapeaux `--bits-
 
 ## 5. Erreurs rencontrées
 
-112 sorties en erreur ou divergentes. Les premières :
+113 sorties en erreur ou divergentes. Les premières :
 
 - **T2** : === LIEN PCIe (sysfs, sans root) === current_link_speed     = 8.0 GT/s PCIe current_link_width     = 8 max_link_speed         = 8.0 GT/s PCIe max_link_width         = 8 secondary_bus_number   =  vendo
 - **T2** : [POPUP: saisissez le mot de passe] === TOUS les événements USB depuis le boot (fin de log) === [ven sep 25 11:52:23 2026] [ T684749] hid-generic 0003:04F2:2159.00ED: hiddev99,hidraw5: USB HID v1.10 De
@@ -3048,4 +3100,5 @@ Deux commits (`a018f43`, `5590c2a`), journal à jour. Sans les drapeaux `--bits-
 - Journal : format 6 bits" 2>/dev/null git log --oneline | head -1
 - Journal : 6 bits vectorise" 2>/dev/null; git log --oneline | head -1
 - Rapport : le moteur sur du vrai travail (deux tests reels sur le 30B MoE)  Test 1 : question en francais, gabarit de conversation, trois phrases exactes, arret 
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core echo "=== régression : glouton inchangé (doit redonner la même fonction mediane)" ./target/relea
 

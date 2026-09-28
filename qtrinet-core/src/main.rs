@@ -301,6 +301,10 @@ fn run_infer(args: &[String]) {
     let mut prompt: Option<String> = None;
     let mut n_new = 32usize;
     let mut temp = 0.0f32;
+    let mut top_p = 1.0f32;
+    let mut rep_pen = 1.0f32;
+    let mut hist = 64usize;
+    let mut flux = false;
     let mut ctx = 512usize;
     let _ = 0;
     let mut topk = 0usize;
@@ -344,6 +348,10 @@ fn run_infer(args: &[String]) {
             "--prompt" => prompt = Some(args[i + 1].clone()),
             "--n" => n_new = args[i + 1].parse().unwrap(),
             "--temp" => temp = args[i + 1].parse().unwrap(),
+            "--top-p" => top_p = args[i + 1].parse().unwrap(),
+            "--rep-penalty" => rep_pen = args[i + 1].parse().unwrap(),
+            "--hist" => hist = args[i + 1].parse().unwrap(),
+            "--flux" => { flux = true; i -= 1; }
             "--ctx" => ctx = args[i + 1].parse().unwrap(),
             "--topk" => topk = args[i + 1].parse().unwrap(),
             "--abits" => abits = args[i + 1].parse().unwrap(),
@@ -482,7 +490,22 @@ fn run_infer(args: &[String]) {
                                 n_prompt: ids.len(), n_gen: out.len() };
         (out, st)
     } else {
-        mdl.generate(&ids, n_new, temp)
+        // Sortie en flux : on décode le texte produit jusqu'ici et on n'imprime
+        // que le delta — c'est ce qui évite de couper un caractère multi-octets.
+        let tk = build_tokenizer(&mdl.g);
+        let mut accumules: Vec<u32> = Vec::new();
+        let mut deja = String::new();
+        let mut affiche = |t: u32| {
+            accumules.push(t);
+            let texte = tk.decode(&accumules);
+            if texte.len() > deja.len() {
+                print!("{}", &texte[deja.len()..]);
+                let _ = std::io::Write::flush(&mut std::io::stdout());
+                deja = texte;
+            }
+        };
+        let cb: Option<&mut dyn FnMut(u32)> = if flux { Some(&mut affiche) } else { None };
+        mdl.generate(&ids, n_new, temp, top_p, rep_pen, hist, cb)
     };
     if prompt.is_some() {
         let tk = build_tokenizer(&mdl.g);
