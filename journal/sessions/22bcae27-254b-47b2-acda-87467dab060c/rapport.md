@@ -5,14 +5,14 @@
 | Identifiant | `22bcae27-254b-47b2-acda-87467dab060c` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-25 11:56 |
-| Durée | 74.2 h |
-| Tours | 51 |
-| Messages | 1219 |
-| Appels d'outils | 1203 |
+| Durée | 74.5 h |
+| Tours | 52 |
+| Messages | 1226 |
+| Appels d'outils | 1208 |
 | Fichiers touchés | 68 |
-| Commandes | 961 |
+| Commandes | 966 |
 | Sous-agents | 1 |
-| Commits | 57 |
+| Commits | 58 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -131,6 +131,8 @@
 **Tour 50** — continue
 
 **Tour 51** — continue
+
+**Tour 52** — vas-y
 
 ## 2. Déroulé, étape par étape
 
@@ -2883,7 +2885,58 @@ Le moteur fait maintenant ce qu'on lui demande : charger en place les formats r�
 
 **Synthèse produite :**
 
-⏵ Interpolation pure : **1171** — pire encore. Les deux variantes YaRN perdent contre le RoPE simple. Je consigne ces résultats négatifs
+⏵ Cycle terminé. Voici l'état, et ce que la mesure a établi.
+
+\## Ce que j'ai fait ce tour-ci
+
+**1. gpt-oss génère correctement.** « The capital of Australia is » → « Canberra. » — 5,5 tok/s, 62 Go résidents, zéro copie. Le modèle n'est pas cassé.
+
+**2. Un défaut de robustesse corrigé** : `--chat` **paniquait** sur tout modèle sans gabarit Qwen (un `unwrap` sur un jeton absent). Il retombe maintenant sur une invite brute en le signalant.
+
+**3. La perplexité monte avec la fenêtre** — et c'est un indice, pas un détail :
+
+| fenêtre | perplexité |
+|---|---|
+| 63 jetons | 39,8 |
+| 511 jetons | **129,9** |
+
+Une perplexité qui **croît** avec la longueur est la signature d'un **codage de position faux**.
+
+\## Trois variantes de RoPE éprouvées, trois résultats
+
+| variante | PPL (63 jetons) |
+|---|---|
+| **RoPE simple, sans YaRN** | **39,8** ← le meilleur |
+| YaRN avec rampe (`ext_factor` 1) | 184,9 |
+| YaRN interpolation pure | 1 171 |
+
+Aucune ne bat le RoPE simple. Ce n'est donc pas une constante à ajuster : c'est le **principe** qui est mal placé.
+
+**L'hypothèse la plus probable, et la prochaine étape** : l'étirement YaRN ne doit s'appliquer **qu'au-delà du contexte d'origine (4 096)**. En deçà, le modèle n'a jamais vu de fréquences étirées — le RoPE doit rester simple. Cela expliquerait pourquoi *toutes* mes variantes perdent, y compris avec des constantes justes, et pourquoi la PPL se dégrade avec la longueur au lieu de se corriger.
+
+Le mécanisme d'essai est en place (`QT_YARN`, `QT_YARN_RAMPE=0`) : l'hypothèse se teste en **une exécution**.
+
+\## État du moteur
+
+Tout le reste est vert et vérifié : famille Qwen complète (0,5 B → 30 B MoE) avec conversation, flux, échantillonnage ; formats réels lus en place (Q4_K, Q6_K, Q4_0, Q8_0, MXFP4) ; MoE avec biais de routeur et par expert, puits appris, fenêtre glissante ; déport GPU opt-in ; 6 bits empaqueté qui domine l'int8 sur les trois axes.
+
+Deux commits (`163a53e`, `b819c8d`), rapport et journal à jour.
+
+**En un mot** : le moteur fait le travail ; il reste une inconnue sur gpt-oss, et elle est maintenant cernée — ce n'est plus « quelque chose ne va pas » mais « le positionnel est faux, voici la règle à implémenter et le moyen de la tester en une exécution ».
+
+### Tour 52 — vas-y
+
+*5 appels d'outils.* Actions notables :
+
+- bash — Check tokenization reversibility on the corpus
+- bash — Test with all experts to isolate the routing
+- bash — Locate the moe-topk wiring bug
+- bash — Fix the wiring and rerun the all-experts test
+- bash — Commit the diagnostics and verify the regression
+
+**Synthèse produite :**
+
+⏵ Budget épuisé. Je corrige, je consigne et je clos honnêtement.
 
 ## 3. Travail accompli
 
@@ -3006,7 +3059,7 @@ Le moteur fait maintenant ce qu'on lui demande : charger en place les formats r�
 - **T3** Test OpenOCD without root and check Pro device support
 - **T3** Make scripts executable and test jtag_scan
 - **T3** Commit JTAG milestone
-- … et 921 autres
+- … et 926 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -3211,4 +3264,5 @@ Le moteur fait maintenant ce qu'on lui demande : charger en place les formats r�
 - Journal : session multi-tours" 2>/dev/null git log --oneline | head -3
 - Journal : gpt-oss genere correctement" 2>/dev/null git log --oneline | head -2
 - Journal : YaRN, resultats negatifs" 2>/dev/null git log --oneline | head -2
+- Journal : diagnostics gpt-oss" 2>/dev/null git log --oneline | head -1 cd qtrinet-core && ./target/release/qtrinet-core ../models/Qwen2.5-0.5B-Q8_0.gguf --ppl /
 

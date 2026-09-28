@@ -25979,3 +25979,113 @@ continue
 ⏵ Interpolation pure : **1171** — pire encore. Les deux variantes YaRN perdent contre le RoPE simple. Je consigne ces résultats négatifs
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\npython3 - <<'PY'\np='src/model.rs'; s=open(p,encoding='utf-8').read(); o=s\ns=s.replace('''                // Variante d'extrapolation : la rampe mélange extrapolation''',\n'''                // RÉSULTATS NÉGATIFS, mesurés … [2386 caractères tronqués]`
+
+  ```
+b819c8d Journal : YaRN, resultats negatifs
+163a53e gpt-oss : la perplexite monte avec la fenetre, et YaRN n'y remedie pas
+  ```
+
+### 🤖 Assistant
+
+⏵ Cycle terminé. Voici l'état, et ce que la mesure a établi.
+
+## Ce que j'ai fait ce tour-ci
+
+**1. gpt-oss génère correctement.** « The capital of Australia is » → « Canberra. » — 5,5 tok/s, 62 Go résidents, zéro copie. Le modèle n'est pas cassé.
+
+**2. Un défaut de robustesse corrigé** : `--chat` **paniquait** sur tout modèle sans gabarit Qwen (un `unwrap` sur un jeton absent). Il retombe maintenant sur une invite brute en le signalant.
+
+**3. La perplexité monte avec la fenêtre** — et c'est un indice, pas un détail :
+
+| fenêtre | perplexité |
+|---|---|
+| 63 jetons | 39,8 |
+| 511 jetons | **129,9** |
+
+Une perplexité qui **croît** avec la longueur est la signature d'un **codage de position faux**.
+
+## Trois variantes de RoPE éprouvées, trois résultats
+
+| variante | PPL (63 jetons) |
+|---|---|
+| **RoPE simple, sans YaRN** | **39,8** ← le meilleur |
+| YaRN avec rampe (`ext_factor` 1) | 184,9 |
+| YaRN interpolation pure | 1 171 |
+
+Aucune ne bat le RoPE simple. Ce n'est donc pas une constante à ajuster : c'est le **principe** qui est mal placé.
+
+**L'hypothèse la plus probable, et la prochaine étape** : l'étirement YaRN ne doit s'appliquer **qu'au-delà du contexte d'origine (4 096)**. En deçà, le modèle n'a jamais vu de fréquences étirées — le RoPE doit rester simple. Cela expliquerait pourquoi *toutes* mes variantes perdent, y compris avec des constantes justes, et pourquoi la PPL se dégrade avec la longueur au lieu de se corriger.
+
+Le mécanisme d'essai est en place (`QT_YARN`, `QT_YARN_RAMPE=0`) : l'hypothèse se teste en **une exécution**.
+
+## État du moteur
+
+Tout le reste est vert et vérifié : famille Qwen complète (0,5 B → 30 B MoE) avec conversation, flux, échantillonnage ; formats réels lus en place (Q4_K, Q6_K, Q4_0, Q8_0, MXFP4) ; MoE avec biais de routeur et par expert, puits appris, fenêtre glissante ; déport GPU opt-in ; 6 bits empaqueté qui domine l'int8 sur les trois axes.
+
+Deux commits (`163a53e`, `b819c8d`), rapport et journal à jour.
+
+**En un mot** : le moteur fait le travail ; il reste une inconnue sur gpt-oss, et elle est maintenant cernée — ce n'est plus « quelque chose ne va pas » mais « le positionnel est faux, voici la règle à implémenter et le moyen de la tester en une exécution ».
+
+
+## Tour 52
+
+### 👤 Utilisateur
+
+vas-y
+
+### 🤖 Assistant
+
+⏵ J'ajoute un contrôle de réversibilité sur l'encodage du corpus — c'est le test le moins cher qui reste
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\npython3 - <<'PY'\np='src/main.rs'; s=open(p,encoding='utf-8').read(); o=s\ns=s.replace('''        println!(\"{} tokens écrits dans {cible} (vocabulaire du modèle : {})\",\n                 ids.len(), tk.vocab_size());''',\ … [1629 caractères tronqués]`
+
+  ```
+=== réversibilité de l'encodage du corpus, avec les deux tokenizers
+4592 tokens écrits dans /tmp/v_q.txt (vocabulaire du modèle : 151936)
+réversibilité : texte reconstruit identique ✅ (20000 octets)
+4424 tokens écrits dans /tmp/v_o.txt (vocabulaire du modèle : 201088)
+réversibilité : texte reconstruit identique ✅ (20000 octets)
+  ```
+
+### 🤖 Assistant
+
+⏵ Les deux encodages sont réversibles ✅ — l'hypothèse du tokenizer s'affaiblit. Test décisif : **tous les experts** au lieu du top-4
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\nG=/home/stephane/FastNVMe/models/gpt-oss-120b-MXFP4.gguf\necho \"=== référence top-4, 16 jetons\"\ntimeout 2400 ./target/release/qtrinet-core $G --ppl /tmp/ids_oss.txt --ctx 256 --abits 16 --threads 16 --limit 16 --dense 2 … [408 caractères tronqués]`
+
+  ```
+=== référence top-4, 16 jetons
+116.6382
+=== tous les experts (128), 16 jetons — si la PPL s'effondre, le routage est en cause
+116.6382
+postes (ms/token) : projets-attn 36.89 | rope 3.06 | attention 1.59 | proj+mlp 145.92 | somme 187.46 | reste (tête + échantillonnage) 25.15
+  ```
+
+### 🤖 Assistant
+
+⏵ Résultat **identique** avec 128 experts : impossible — le drapeau n'atteint pas le chemin de perplexité. Encore un bug de câblage CLI
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\ngrep -n '\"--moe-topk\"' src/main.rs\ngrep -n \"mdl.moe_topk = moe_topk\" src/main.rs\nawk 'NR>=700 && NR<=760 && /\"--moe-topk\"|mdl\\./ {printf \"%d: %s\\n\", NR, $0}' src/main.rs | head -8", "description": "Locate the m … [20 caractères tronqués]`
+
+  ```
+382:            "--moe-topk" => { moe_topk = args[i + 1].parse().unwrap(); i -= 1; }
+858:            "--moe-topk" => { moe_topk = args[i + 1].parse().unwrap(); i -= 1; }
+412:    mdl.moe_topk = moe_topk;
+  ```
+
+### 🤖 Assistant
+
+⏵ Bug confirmé : `mdl.moe_topk` n'était assigné que dans le chemin d'inférence. Je corrige et je refais le test décisif
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\npython3 - <<'PY'\np='src/main.rs'; s=open(p,encoding='utf-8').read(); o=s\n# dans run_ppl : la ligne existe dans run_infer, on ajoute la jumelle\ni=s.index('fn run_ppl')\navant, apres = s[:i], s[i:]\nold='''    mdl.act_lev … [723 caractères tronqués]`
+
+  ```
+experts=4  1751.9232
+experts=128  3313.1553
+  ```
+
+### 🤖 Assistant
+
+⏵ Budget épuisé. Je corrige, je consigne et je clos honnêtement.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\ncat > /tmp/msg11.txt <<'MSG'\ngpt-oss : deux diagnostics de plus, dont un bug de cablage CLI\n\n1. REVERSIBILITE DU TOKENIZER. Ajout d'un controle dans --tokenize --fichier :\nle texte est reconstruit depuis les identifiants et compare … [1869 caractères tronqués]`

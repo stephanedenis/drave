@@ -681,6 +681,20 @@ fn run_tokenize(args: &[String]) {
         std::fs::write(&cible, corps.join(",")).expect("écriture impossible");
         println!("{} tokens écrits dans {cible} (vocabulaire du modèle : {})",
                  ids.len(), tk.vocab_size());
+        // Contrôle de réversibilité : si le texte reconstruit diffère de la
+        // source, l'encodage a perdu de l'information — et une perplexité
+        // calculée sur ce flux ne mesurerait plus le texte.
+        let retour = tk.decode(&ids);
+        if retour == texte {
+            println!("réversibilité : texte reconstruit identique ✅ ({} octets)", texte.len());
+        } else {
+            let pos = retour.bytes().zip(texte.bytes()).position(|(a, b)| a != b)
+                .unwrap_or(retour.len().min(texte.len()));
+            println!("réversibilité : DIVERGE à l'octet {pos} — {} vs {} octets",
+                     retour.len(), texte.len());
+            println!("  source  : {:?}", &texte[pos.saturating_sub(40)..(pos + 40).min(texte.len())]);
+            println!("  retour  : {:?}", &retour[pos.saturating_sub(40)..(pos + 40).min(retour.len())]);
+        }
         return;
     }
     let ids = tk.encode(&texte);
@@ -887,6 +901,7 @@ fn run_ppl(args: &[String]) {
     println!("{idfile} : {} tokens, fenêtres de {ctx}", ids.len());
 
     let mut mdl = model::Model::load(path, ctx, n_threads, dense, 1.0, auto, q4, b6);
+    mdl.moe_topk = moe_topk;
     mdl.act_levels = ((1u32 << (abits - 1)) - 1) as f32;
     if let Some(f) = &patch_file {
         let pt = model::Patch::load(f).expect("chargement du greffon");
