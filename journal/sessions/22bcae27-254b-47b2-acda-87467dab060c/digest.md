@@ -24518,3 +24518,392 @@ fb44671 gpt-oss : perplexite 42 127 -> 39,8 en cinq etapes mesurees
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\ngit add -A && git commit -q -m \"Journal : session du 28/09 (tokenizer o200k, briques gpt-oss, descente de perplexite)\" && git log --oneline | head -1\necho \"--- état de gpt-oss\"\ngrep -n \"39,8\\|42 127\" docs/convertisseur.md | he … [93 caractères tronqués]`
+
+  ```
+0c79a98 Journal : session du 28/09 (tokenizer o200k, briques gpt-oss, descente de perplexite)
+--- état de gpt-oss
+294:| départ | **42 127** | jetons Qwen donnés à un modèle o200k |
+299:| 5 | **39,8** | **YaRN désactivé** : notre implémentation dégradait d'un facteur 4,6 |
+  ```
+
+### 🤖 Assistant
+
+⏵ Appliqué votre consigne : plus de comparaison externe, uniquement la perplexité comme boussole.
+
+## La descente, mesurée étape par étape
+
+| étape | PPL (63 jetons) | ce qui a changé |
+|---|---|---|
+| départ | **42 127** | on donnait des jetons **Qwen** à un modèle o200k |
+| 1 | 1 396 | **tokenizer du modèle** — plus un garde-fou : un identifiant hors vocabulaire arrête net au lieu de produire un chiffre trompeur |
+| 2 | **185** | **activation gpt-oss** : `g·σ(1,702·g)·(u+1)`, `g` et `u` écrêtés à ±7 — ce n'est **pas** SiLU |
+| 3 | 185 | routage : top-k sur les logits bruts puis softmax sur les seuls retenus — sans effet mesurable ici |
+| 4 | *(1 095)* | rotary partiel supposé — **hypothèse réfutée**, annulée et documentée |
+| 5 | **39,8** | **YaRN désactivé** : notre implémentation dégradait d'un facteur 4,6 |
+
+Facteur **1 059** sur la journée, chaque étape validée par une exécution, aucune régression sur le parc (0,5B Q8_0 19,3885 · Q4_0 21,0110 · 1,5B 12,9228 · 30B MoE 7,6139).
+
+**Ce qui a rendu ça possible** : une trace de configuration au chargement — `[config] puits appris sur 36/36 couches · n_rot 64 · ffn 2880 · experts 128`. Sans elle on déboguait à l'aveugle sur 60 Go ; avec elle, chaque hypothèse se teste en une exécution et on sait ce qui est réellement actif. C'est ce qui manquait, pas la comparaison externe.
+
+**Deux résultats négatifs consignés** dans le code avec leur chiffre : le rotary partiel (185 → 1 095) et YaRN (184,9 avec, 39,8 sans). Le second est un aveu : notre rampe YaRN est fausse, et puisque gpt-oss a été entraîné avec, il faut la corriger — pas la contourner. C'est le suspect n°1 pour la suite, avec le facteur d'échelle de l'attention et l'ordre exact des normes.
+
+## Ce que je n'ai pas encore touché
+
+Votre seconde consigne — **exploiter plusieurs matériels simultanément**. Les chiffres sont là, mesurés : PCIe x8 **6,5 Go/s**, NVLink **25,78 Go/s**, GPU **380 Go/s** en lecture locale, CPU **20 Go/s**. Le calcul est net : déplacer les *poids* par PCIe coûte plus cher que de les lire sur CPU (6,5 contre 20 Go/s), donc le seul montage qui gagne est de **garder les poids résidents sur le GPU** et de ne faire traverser que les activations — 11 Ko par frontière de couche, soit rien. Le plan de placement (`--plan`) sait déjà dire quelles couches vont où ; il reste à exécuter le plan : noyau CUDA chargé par l'API driver (sans crate, `#[link(name = "cuda")]`), découpage par couches, et recouvrement CPU/GPU.
+
+Six commits cette session, `docs/convertisseur.md` porte la descente et les hypothèses réfutées.
+
+
+## Tour 43
+
+### 👤 Utilisateur
+
+n'hésites pas à utiliser la plateforme de développement la plus adéquate pour les performances recherchées, cpp, rust, cuda, asm ou autre. tout est permis si c'est fiable et performant.
+
+### 🤖 Assistant
+
+⏵ Nouvelle liberté : je vais donc viser le GPU. Reconnaissance de l'outillage CUDA disponible
+
+- **bash** `{"command": "which nvcc nvcc-* 2>/dev/null; ls /usr/local/ | head -20\nnvcc --version 2>/dev/null | tail -2\nnvidia-smi 2>/dev/null | head -12\necho \"=== bibliothèques CUDA présentes\"\nls /usr/lib64/libcuda.so* /usr/lib64/libcudart.so* 2>/dev/null | head -5\necho \"=== code GPU déjà dans le dépôt\ … [337 caractères tronqués]`
+
+  ```
+/usr/local/cuda-13/bin/nvcc
+bin
+cuda
+cuda-13
+cuda-13.0
+include
+lib
+lib64
+libexec
+man
+sbin
+share
+src
+Cuda compilation tools, release 13.0, V13.0.88
+Build cuda_13.0.r13.0/compiler.36424714_0
+Mon Sep 28 11:58:24 2026       
++-----------------------------------------------------------------------------------------+
+| NVIDIA-SMI 580.178.04             Driver Version: 580.178.04     CUDA Version: 13.0     |
++-----------------------------------------+------------------------+----------------------+
+| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |
+|                                         |                        |               MIG M. |
+|=========================================+========================+======================|
+|   0  Quadro RTX 5000                On  |   00000000:03:00.0  On |                  Off |
+| 33%   34C    P8             29W /  230W |    2103MiB /  16384MiB |     33%      Default |
+|                                         |                        |                  N/A |
++-----------------------------------------+----------------
+… [401 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ CUDA 13 + nvcc sont là. J'attaque par la **tête de sortie** — la plus grosse matrice, un seul point d'appel, gain borné et vérifiable
+
+- **bash** `{"command": "mkdir -p /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/gpu\ncat > /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/gpu/qtrinet_gpu.cu <<'CU'\n// Noyaux GPU de Qtrinet.\n//\n// Principe : les POIDS RESTENT SUR LE GPU. La bande passante est locale\n// (380 Go/s  … [3117 caractères tronqués]`
+
+  ```
+In file included from /usr/local/cuda-13/bin/../targets/x86_64-linux/include/cuda_runtime.h:82,
+                 from <command-line>:
+/usr/local/cuda-13/bin/../targets/x86_64-linux/include/crt/host_config.h:137:2: error: #error -- unsupported GNU version! gcc versions later than 15 are not supported! The nvcc flag '-allow-unsupported-compiler' can be used to override this version check; however, using an unsupported host compiler may cause compilation failure or incorrect run time execution. Use at your own risk.
+  137 | #error -- unsupported GNU version! gcc versions later than 15 are not supported! The nvcc flag '-allow-unsupported-compiler' can be used to override this version check; however, using an unsupported host compiler may cause compilation failure or incorrect run time execution. Use at your own risk.
+      |  ^~~~~
+[stderr]
+ls: cannot access 'qtrinet_gpu.cubin': No such file or directory
+[exit code: 2]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/gpu\n/usr/local/cuda-13/bin/nvcc -cubin -arch=sm_75 -O3 -allow-unsupported-compiler -o qtrinet_gpu.cubin qtrinet_gpu.cu 2>&1 | head -5\nls -la qtrinet_gpu.cubin 2>/dev/null && /usr/local/cuda-13/bin/cuobjdump -symbols qtrin … [141 caractères tronqués]`
+
+  ```
+/usr/include/c++/16/type_traits(393): error: identifier "char8_t" is undefined
+      struct __is_integral_helper<char8_t>
+                                  ^
+
+/usr/include/c++/16/type_traits(1448): error: identifier "__f" is undefined
+[exit code: 2]
+  ```
+
+### 🤖 Assistant
+
+⏵ gcc 16 est trop récent pour CUDA 13. Je cherche un compilateur hôte plus ancien
+
+- **bash** `{"command": "ls /usr/bin/g++* /usr/bin/gcc* 2>/dev/null | head -10\nls /usr/bin/clang* 2>/dev/null | head -5\ng++ --version | head -1\ncd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/gpu\nfor cc in g++-14 g++-13 g++-12; do\n  if command -v $cc >/dev/null; then\n    echo \"essai avec  … [312 caractères tronqués]`
+
+  ```
+/usr/bin/g++
+/usr/bin/g++-15
+/usr/bin/g++-16
+/usr/bin/gcc
+/usr/bin/gcc-15
+/usr/bin/gcc-16
+/usr/bin/gcc-ar
+/usr/bin/gcc-ar-15
+/usr/bin/gcc-ar-16
+/usr/bin/gcc-nm
+/usr/bin/clang
+/usr/bin/clang++
+/usr/bin/clang++-22
+/usr/bin/clang-22
+/usr/bin/clang++-23
+g++ (SUSE Linux) 16.2.0
+[exit code: 2]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/gpu\n/usr/local/cuda-13/bin/nvcc -cubin -arch=sm_75 -O3 -ccbin g++-15 -o qtrinet_gpu.cubin qtrinet_gpu.cu 2>&1 | head -5\nls -la qtrinet_gpu.cubin 2>/dev/null && /usr/local/cuda-13/bin/cuobjdump -symbols qtrinet_gpu.cubin 2 … [121 caractères tronqués]`
+
+  ```
+/usr/include/bits/mathcalls.h(207): error: exception specification is incompatible with that of previous function "rsqrt" (declared at line 629 of /usr/local/cuda-13/bin/../targets/x86_64-linux/include/crt/math_functions.h)
+   extern double rsqrt (double __x) noexcept (true); extern double __rsqrt (double __x) noexcept (true);
+                                    ^
+
+/usr/include/bits/mathcalls.h(207): error: exception specification is incompatible with that of previous function "rsqrtf" (declared at line 653 of /usr/local/cuda-13/bin/../targets/x86_64-linux/include/crt/math_functions.h)
+[exit code: 2]
+  ```
+
+### 🤖 Assistant
+
+⏵ Conflit d'en-têtes glibc/CUDA. Je passe par **clang → PTX** (JIT par le driver), sans aucun en-tête
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/gpu\npython3 - <<'PY'\np='qtrinet_gpu.cu'; s=open(p,encoding='utf-8').read()\ns=s.replace('''#include <cuda_fp16.h>\n\nextern \"C\" {''','''// Aucun en-tête : le noyau se compile en PTX avec clang, puis le pilote le\n// com … [1533 caractères tronqués]`
+
+  ```
+clang++-22: warning: CUDA version is newer than the latest partially supported version 12.9 [-Wunknown-cuda-version]
+-rw-r--r--. 1 stephane stephane 12189 28 sep 11:59 qtrinet_gpu.ptx
+2
+.visible .entry tete_q8(
+.visible .entry proj_q8(
+  ```
+
+### 🤖 Assistant
+
+⏵ PTX obtenu. J'écris la liaison **API pilote CUDA** en Rust (sans crate) et je branche la tête
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\ncat > src/gpu.rs <<'RS'\n//! Chemin GPU : noyaux PTX chargés par l'API **pilote** de CUDA.\n//!\n//! Rien n'est lié à l'édition : le noyau est du PTX, compilé à la volée par le\n//! pilote. Le programme ne dépend donc que  … [7702 caractères tronqués]`
+
+  ```
+warning: unused attribute
+   --> src/model.rs:679:5
+    |
+679 |     #[inline]
+    |     ^^^^^^^^^ help: remove this attribute
+    |
+note: attribute also specified here
+--
+warning: unused variable: `arch`
+   --> src/model.rs:526:21
+    |
+526 |                 let arch = g.meta.get("general.architecture").and_then(|m| m.as_str());
+    |                     ^^^^ help: if this is intentional, prefix it with an underscore: `_arch`
+    |
+    = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+=== build
+  ```
+
+### 🤖 Assistant
+
+⏵ Liaison compilée. Je branche le chemin GPU dans la tête de sortie
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\npython3 - <<'PY'\np='src/model.rs'; s=open(p,encoding='utf-8').read(); o=s\ns=s.replace('''    /// Nombre de couches dont les puits appris ont été trouvés (diagnostic).\n    pub sinks_vus: usize,''','''    /// Nombre de co … [2522 caractères tronqués]`
+
+  ```
+error[E0425]: cannot find value `v` in this scope
+   --> src/model.rs:644:57
+    |
+644 |                     let m = machine.charger_tete(blocs, v, nb);
+    |                                                         ^
+    |
+help: a local variable with a similar name exists
+    |
+644 -                     let m = machine.charger_tete(blocs, v, nb);
+--
+error[E0425]: cannot find value `v` in this scope
+   --> src/model.rs:648:70
+    |
+648 | ...                   {:.0} Mo libres", machine.nom, v, h,
+    |                                                      ^
+    |
+help: a local variable with a similar name exists
+    |
+648 -                                       {:.0} Mo libres", machine.nom, v, h,
+--
+=== build
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\npython3 - <<'PY'\np='src/model.rs'; s=open(p,encoding='utf-8').read()\ns=s.replace('''                    let m = machine.charger_tete(blocs, v, nb);''',\n            '''                    let m = machine.charger_tete(blo … [1266 caractères tronqués]`
+
+  ```
+=== essai GPU sur le 0,5B : PPL doit être identique, la tête bien plus rapide
+=== perplexité 17.4315 sur 255 tokens (0 événements, 8.3 s) ===
+    postes (ms/token) : projets-attn 2.55 | rope 0.45 | attention 1.55 | proj+mlp 21.11 | somme 25.67 | reste (tête + échantillonnage) 7.03
+  ```
+
+### 🤖 Assistant
+
+⏵ Le GPU ne s'active pas — j'instrumente les points d'échec et je teste sur le petit modèle
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\npython3 - <<'PY'\np='src/gpu.rs'; s=open(p,encoding='utf-8').read()\ns=s.replace('''            if cuInit(0) != 0 { return None; }\n            let mut dev: c_int = 0;\n            if cuDeviceGet(&mut dev, ordinal) != 0 {  … [1890 caractères tronqués]`
+
+  ```
+[gpu] CUDA initialisé (périphérique 0)
+CUDA allocation des poids : CUDA_ERROR_INVALID_CONTEXT (201)
+      31 tokens notés — perplexité cumulée 56.764  (33.7 tok/s)
+=== perplexité 56.7642 sur 31 tokens (0 événements, 0.9 s) ===
+    postes (ms/token) : projets-attn 2.45 | rope 0.33 | attention 0.22 | proj+mlp 19.82 | somme 22.82 | reste (tête + échantillonnage) 6.85
+  ```
+
+### 🤖 Assistant
+
+⏵ `CUDA_ERROR_INVALID_CONTEXT` : le contexte n'est plus courant au moment de l'allocation. Je le réinstalle à chaque appel
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\npython3 - <<'PY'\np='src/gpu.rs'; s=open(p,encoding='utf-8').read(); o=s\ns=s.replace('''pub struct Gpu {\n    module: *mut c_void,''','''pub struct Gpu {\n    ctx: *mut c_void,\n    module: *mut c_void,''',1)\ns=s.replace … [1379 caractères tronqués]`
+
+  ```
+[gpu] CUDA initialisé (périphérique 0)
+CUDA allocation des poids : CUDA_ERROR_INVALID_CONTEXT (201)
+     255 tokens notés — perplexité cumulée 17.431  (32.4 tok/s)
+=== perplexité 17.4315 sur 255 tokens (0 événements, 7.9 s) ===
+    postes (ms/token) : projets-attn 2.39 | rope 0.37 | attention 1.39 | proj+mlp 19.77 | somme 23.92 | reste (tête + échantillonnage) 6.93
+    dont attention : scores 0.53 | softmax 0.26 | somme pondérée + écriture KV 0.59
+  ```
+
+### 🤖 Assistant
+
+⏵ Le contexte reste invalide : je trace chaque appel et sa valeur de retour
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\npython3 - <<'PY'\np='src/gpu.rs'; s=open(p,encoding='utf-8').read()\ns=s.replace('''        unsafe { cuCtxSetCurrent(self.ctx) };\n        let octets_poids = n_out.checked_mul(nb)?.checked_mul(34)?;''',\n'''        unsafe  … [755 caractères tronqués]`
+
+  ```
+[gpu] CUDA initialisé (périphérique 0)
+[gpu] cuCtxSetCurrent(ctx=0x55c63980d0e0) -> 0
+CUDA allocation des poids : CUDA_ERROR_INVALID_CONTEXT (201)
+--- bibliothèque réellement chargée
+	libcuda.so.1 => /lib64/libcuda.so.1 (0x00007fe751800000)
+  ```
+
+### 🤖 Assistant
+
+⏵ Le contexte principal reste inutilisable. J'essaie un contexte créé explicitement
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\npython3 - <<'PY'\np='src/gpu.rs'; s=open(p,encoding='utf-8').read(); o=s\ns=s.replace('''    fn cuDevicePrimaryCtxRetain(ctx: *mut *mut c_void, dev: c_int) -> c_int;''',\n'''    fn cuDevicePrimaryCtxRetain(ctx: *mut *mut c … [1386 caractères tronqués]`
+
+  ```
+[gpu] CUDA initialisé (périphérique 0)
+[gpu] cuCtxSetCurrent(ctx=0x557ccd45a1c0) -> 0
+CUDA allocation des poids : CUDA_ERROR_INVALID_CONTEXT (201)
+     255 tokens notés — perplexité cumulée 17.431  (31.0 tok/s)
+=== perplexité 17.4315 sur 255 tokens (0 événements, 8.2 s) ===
+    postes (ms/token) : projets-attn 2.47 | rope 0.42 | attention 1.50 | proj+mlp 20.94 | somme 25.34 | reste (tête + échantillonnage) 6.97
+  ```
+
+- **bash** `{"command": "nm -D /lib64/libcuda.so.1 2>/dev/null | grep -E \" T (cuMemAlloc|cuCtxSetCurrent|cuCtxCreate|cuInit)\" | head\necho \"--- stub de liaison\"\nnm -D /usr/lib64/libcuda.so 2>/dev/null | grep -E \" T (cuMemAlloc|cuCtxSetCurrent)\" | head\necho \"--- ce que le binaire réclame\"\nnm -D --unde … [214 caractères tronqués]`
+
+  ```
+0000000000378330 T cuCtxCreate
+00000000003783f0 T cuCtxCreate_v2
+00000000003784b0 T cuCtxCreate_v3
+0000000000328b90 T cuCtxCreate_v4
+0000000000328e90 T cuCtxSetCurrent
+0000000000327990 T cuInit
+00000000003786f0 T cuMemAlloc
+00000000003a3230 T cuMemAllocAsync
+000000000034e500 T cuMemAllocAsync_ptsz
+00000000003a32f0 T cuMemAllocFromPoolAsync
+--- stub de liaison
+0000000000328e90 T cuCtxSetCurrent
+00000000003786f0 T cuMemAlloc
+00000000003a3230 T cuMemAllocAsync
+000000000034e500 T cuMemAllocAsync_ptsz
+00000000003a32f0 T cuMemAllocFromPoolAsync
+000000000034ed40 T cuMemAllocFromPoolAsync_ptsz
+00000000003789f0 T cuMemAllocHost
+000000000032bc80 T cuMemAllocHost_v2
+000000000032c040 T cuMemAllocManaged
+00000000003787b0 T cuMemAllocPitch
+--- ce que le binaire réclame
+                 U cuCtxSetCurrent
+                 U cuMemAlloc
+  ```
+
+### 🤖 Assistant
+
+⏵ Diagnostic décisif : je sonde une allocation témoin juste après la création du contexte
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\npython3 - <<'PY'\np='src/gpu.rs'; s=open(p,encoding='utf-8').read(); o=s\ns=s.replace('''            eprintln!(\"[gpu] CUDA initialisé (périphérique {dev})\");''',\n'''            eprintln!(\"[gpu] CUDA initialisé (périphé … [1261 caractères tronqués]`
+
+  ```
+[gpu] CUDA initialisé (périphérique 0)
+[gpu] allocation témoin (avant module) -> 201
+[gpu] allocation témoin (après module) -> 201
+[gpu] cuCtxSetCurrent(ctx=0x55b8cfc41eb0) -> 0
+CUDA allocation des poids : CUDA_ERROR_INVALID_CONTEXT (201)
+  ```
+
+### 🤖 Assistant
+
+⏵ L'allocation échoue dès la première tentative. J'essaie le **second GPU** (le premier pilote l'affichage)
+
+- **bash** `{"command": "nvidia-smi --query-gpu=index,name,memory.used,memory.total,display_active --format=csv 2>/dev/null\ncd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\npython3 - <<'PY'\np='src/gpu.rs'; s=open(p,encoding='utf-8').read()\ns=s.replace('''    pub fn ouvrir(ordinal: c_int) -> O … [1060 caractères tronqués]`
+
+  ```
+index, name, memory.used [MiB], memory.total [MiB], display_active
+0, Quadro RTX 5000, 2105 MiB, 16384 MiB, Enabled
+1, Quadro RTX 5000, 381 MiB, 16384 MiB, Enabled
+[gpu] CUDA initialisé (périphérique 1)
+[gpu] allocation témoin (avant module) -> 201
+[gpu] allocation témoin (après module) -> 201
+[gpu] cuCtxSetCurrent(ctx=0x5574a7e7d170) -> 0
+CUDA allocation des poids : CUDA_ERROR_INVALID_CONTEXT (201)
+  ```
+
+### 🤖 Assistant
+
+⏵ Même échec sur le second GPU. Test décisif : **CUDA fonctionne-t-il depuis cet environnement** ? llama.cpp avec déport GPU
+
+- **bash** `{"command": "export LD_LIBRARY_PATH=/home/stephane/.local/lib:${LD_LIBRARY_PATH}\ntimeout 300 /home/stephane/.local/bin/llama-bench -m /home/stephane/Data13TB/stephane/GitHub/Qtrinet/models/Qwen2.5-0.5B-Q8_0.gguf \\\n  -ngl 99 -p 8 -n 8 2>&1 | tail -8", "description": "Check whether CUDA compute wor … [48 caractères tronqués]`
+
+  ```
+Device 0: Quadro RTX 5000, compute capability 7.5, VMM: yes, VRAM: 15921 MiB
+  Device 1: Quadro RTX 5000, compute capability 7.5, VMM: yes, VRAM: 15927 MiB
+| model                          |       size |     params | backend    | ngl |            test |                  t/s |
+| ------------------------------ | ---------: | ---------: | ---------- | --: | --------------: | -------------------: |
+| qwen2 1B Q8_0                  | 500.79 MiB |   494.03 M | CUDA       |  99 |             pp8 |     1691.42 ± 407.51 |
+| qwen2 1B Q8_0                  | 500.79 MiB |   494.03 M | CUDA       |  99 |             tg8 |        331.79 ± 7.22 |
+
+build: aca5f933b (11017)
+  ```
+
+### 🤖 Assistant
+
+⏵ CUDA **fonctionne** (llama.cpp : 331 tok/s sur GPU) — le bug est donc dans ma liaison. Dernier diagnostic ciblé
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\npython3 - <<'PY'\np='src/gpu.rs'; s=open(p,encoding='utf-8').read(); o=s\ns=s.replace('''    fn cuMemFree(dptr: u64) -> c_int;''','''    fn cuMemFree(dptr: u64) -> c_int;\n    fn cuMemFree_v2(dptr: u64) -> c_int;\n    fn c … [1255 caractères tronqués]`
+
+  ```
+[gpu] CUDA initialisé (périphérique 1)
+[gpu] cuCtxGetCurrent -> 0, contexte 0x56023eed7150 (attendu 0x56023eed7150)
+[gpu] cuMemAlloc -> 201
+[gpu] cuMemAlloc_v2 -> 0
+[gpu] allocation témoin (après module) -> 201
+[gpu] cuCtxSetCurrent(ctx=0x56023eed7150) -> 0
+  ```
+
+### 🤖 Assistant
+
+⏵ **Trouvé : `cuMemAlloc` (non versionné) est cassé en CUDA 13, `cuMemAlloc_v2` fonctionne.** Je passe tout en `_v2`
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\npython3 - <<'PY'\np='src/gpu.rs'; s=open(p,encoding='utf-8').read(); o=s\n# tout en _v2 : les symboles non versionnés du pilote CUDA 13 échouent\ns=s.replace('fn cuMemAlloc(dptr: *mut u64, octets: usize) -> c_int;',\n      … [3010 caractères tronqués]`
+
+  ```
+=== 0,5B avec la tête sur GPU (attendu : PPL 19,3885 à 510 jetons, tête bien plus rapide)
+[gpu] GPU 1 · tête 151936 × 896 sur le GPU : 145 Mo resident, 16175 Mo libres
+=== perplexité 19.3885 sur 510 tokens (0 événements, 14.6 s) ===
+    postes (ms/token) : projets-attn 2.42 | rope 0.37 | attention 1.46 | proj+mlp 19.34 | somme 23.60 | reste (tête + échantillonnage) 5.12
+  ```
+
+### 🤖 Assistant
+
+⏵ **Le GPU fonctionne** : PPL **identique au chiffre près** (19,3885) et tête plus rapide. Je commite
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\ncargo build --release 2>&1 | grep -cE \"^warning\" \necho \"=== contrôle : sans QT_GPU, tout est inchangé\"\n./target/release/qtrinet-core ../models/Qwen2.5-0.5B-Q8_0.gguf --ppl /tmp/ids_qwen.txt --ctx 256 --abits 16 --thr … [1758 caractères tronqués]`

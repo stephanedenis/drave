@@ -5,14 +5,14 @@
 | Identifiant | `22bcae27-254b-47b2-acda-87467dab060c` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-25 11:56 |
-| Durée | 72.0 h |
-| Tours | 42 |
-| Messages | 1139 |
-| Appels d'outils | 1141 |
+| Durée | 72.2 h |
+| Tours | 43 |
+| Messages | 1161 |
+| Appels d'outils | 1161 |
 | Fichiers touchés | 68 |
-| Commandes | 899 |
+| Commandes | 919 |
 | Sous-agents | 1 |
-| Commits | 47 |
+| Commits | 48 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -113,6 +113,8 @@
 **Tour 41** — continue
 
 **Tour 42** — tu n'as pas besoin de te comparer à llama. Contente-toi d'optimiser pour réduire la perpelexité. continue d'améliorer notre système à base de listes d'activation pour qu'il puisse rouler tous les modèles en exploitant au besoin plusieurs types de traitements matériels simultanément pour faire un usage optimal utile de toutes les ressources locales disponibles
+
+**Tour 43** — n'hésites pas à utiliser la plateforme de développement la plus adéquate pour les performances recherchées, cpp, rust, cuda, asm ou autre. tout est permis si c'est fiable et performant.
 
 ## 2. Déroulé, étape par étape
 
@@ -2437,7 +2439,55 @@ Commits `1082358` et `2f87190` ; `docs/convertisseur.md` porte le détail et la 
 
 **Synthèse produite :**
 
-⏵ Le message de commit a cassé sur des guillemets — je recommite via un fichier
+⏵ Appliqué votre consigne : plus de comparaison externe, uniquement la perplexité comme boussole.
+
+\## La descente, mesurée étape par étape
+
+| étape | PPL (63 jetons) | ce qui a changé |
+|---|---|---|
+| départ | **42 127** | on donnait des jetons **Qwen** à un modèle o200k |
+| 1 | 1 396 | **tokenizer du modèle** — plus un garde-fou : un identifiant hors vocabulaire arrête net au lieu de produire un chiffre trompeur |
+| 2 | **185** | **activation gpt-oss** : `g·σ(1,702·g)·(u+1)`, `g` et `u` écrêtés à ±7 — ce n'est **pas** SiLU |
+| 3 | 185 | routage : top-k sur les logits bruts puis softmax sur les seuls retenus — sans effet mesurable ici |
+| 4 | *(1 095)* | rotary partiel supposé — **hypothèse réfutée**, annulée et documentée |
+| 5 | **39,8** | **YaRN désactivé** : notre implémentation dégradait d'un facteur 4,6 |
+
+Facteur **1 059** sur la journée, chaque étape validée par une exécution, aucune régression sur le parc (0,5B Q8_0 19,3885 · Q4_0 21,0110 · 1,5B 12,9228 · 30B MoE 7,6139).
+
+**Ce qui a rendu ça possible** : une trace de configuration au chargement — `[config] puits appris sur 36/36 couches · n_rot 64 · ffn 2880 · experts 128`. Sans elle on déboguait à l'aveugle sur 60 Go ; avec elle, chaque hypothèse se teste en une exécution et on sait ce qui est réellement actif. C'est ce qui manquait, pas la comparaison externe.
+
+**Deux résultats négatifs consignés** dans le code avec leur chiffre : le rotary partiel (185 → 1 095) et YaRN (184,9 avec, 39,8 sans). Le second est un aveu : notre rampe YaRN est fausse, et puisque gpt-oss a été entraîné avec, il faut la corriger — pas la contourner. C'est le suspect n°1 pour la suite, avec le facteur d'échelle de l'attention et l'ordre exact des normes.
+
+\## Ce que je n'ai pas encore touché
+
+Votre seconde consigne — **exploiter plusieurs matériels simultanément**. Les chiffres sont là, mesurés : PCIe x8 **6,5 Go/s**, NVLink **25,78 Go/s**, GPU **380 Go/s** en lecture locale, CPU **20 Go/s**. Le calcul est net : déplacer les *poids* par PCIe coûte plus cher que de les lire sur CPU (6,5 contre 20 Go/s), donc le seul montage qui gagne est de **garder les poids résidents sur le GPU** et de ne faire traverser que les activations — 11 Ko par frontière de couche, soit rien. Le plan de placement (`--plan`) sait déjà dire quelles couches vont où ; il reste à exécuter le plan : noyau CUDA chargé par l'API driver (sans crate, `#[link(name = "cuda")]`), découpage par couches, et recouvrement CPU/GPU.
+
+Six commits cette session, `
+… [68 caractères tronqués]
+
+### Tour 43 — n'hésites pas à utiliser la plateforme de développement la plus adéquate pour les performances recherchées, cpp, rust, c … [65 caractères tronqués]
+
+*20 appels d'outils.* Actions notables :
+
+- bash — Survey the CUDA toolchain and existing GPU code
+- bash — Write and compile the CUDA kernels
+- bash — Compile with the unsupported-compiler flag
+- bash — Find a compatible host compiler
+- bash — Compile the CUDA kernels with g++-15
+- bash — Compile the kernels to PTX with clang
+- bash — Write the CUDA driver-API binding in Rust
+- bash — Wire the GPU head into logits
+- bash — Fix the scope errors and test the GPU head
+- bash — Instrument the CUDA init and test
+- bash — Reinstall the CUDA context per call and test
+- bash — Trace the context calls and check the loaded library
+- bash — Use an explicitly created CUDA context
+- bash — Inspect the CUDA symbol resolution
+- … et 6 autres
+
+**Synthèse produite :**
+
+⏵ **Le GPU fonctionne** : PPL **identique au chiffre près** (19,3885) et tête plus rapide. Je commite
 
 ## 3. Travail accompli
 
@@ -2560,7 +2610,7 @@ Commits `1082358` et `2f87190` ; `docs/convertisseur.md` porte le détail et la 
 - **T3** Test OpenOCD without root and check Pro device support
 - **T3** Make scripts executable and test jtag_scan
 - **T3** Commit JTAG milestone
-- … et 859 autres
+- … et 879 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2688,7 +2738,7 @@ Commits `1082358` et `2f87190` ; `docs/convertisseur.md` porte le détail et la 
 
 ## 5. Erreurs rencontrées
 
-104 sorties en erreur ou divergentes. Les premières :
+109 sorties en erreur ou divergentes. Les premières :
 
 - **T2** : === LIEN PCIe (sysfs, sans root) === current_link_speed     = 8.0 GT/s PCIe current_link_width     = 8 max_link_speed         = 8.0 GT/s PCIe max_link_width         = 8 secondary_bus_number   =  vendo
 - **T2** : [POPUP: saisissez le mot de passe] === TOUS les événements USB depuis le boot (fin de log) === [ven sep 25 11:52:23 2026] [ T684749] hid-generic 0003:04F2:2159.00ED: hiddev99,hidraw5: USB HID v1.10 De
@@ -2755,4 +2805,5 @@ Commits `1082358` et `2f87190` ; `docs/convertisseur.md` porte le détail et la 
 - gpt-oss : perplexite 42 127 -> 39,8 en cinq etapes mesurees  1. TOKENIZER. Le modele etait nourri avec des jetons Qwen : sa perplexite ne    mesurait que l'absu
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet cat > /tmp/msg.txt <<'MSG' gpt-oss : perplexite 42 127 -> 39,8 en cinq etapes mesurees  1. TOKENIZER. Le mode
 - Journal : session du 28/09 (tokenizer o200k, briques gpt-oss, descente de perplexite)" && git log --oneline | head -1 echo "--- état de gpt-oss" grep -n "39,8\|
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core cargo build --release 2>&1 | grep -cE "^warning"  echo "=== contrôle : sans QT_GPU, tout est inc
 

@@ -12,6 +12,7 @@ mod engine;
 mod gguf;
 mod list;
 mod model;
+mod gpu;
 mod tokenizer;
 
 use engine::{matvec_dense, matvec_shift_add, Pool, SparseVec};

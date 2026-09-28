@@ -399,6 +399,11 @@ pub struct Model {
     pub tete: String,
     /// Nombre de couches dont les puits appris ont été trouvés (diagnostic).
     pub sinks_vus: usize,
+    /// Chemin GPU : la tête de sortie y réside en permanence. Les poids ne
+    /// traversent le bus qu'une fois ; seules les activations font l'aller-retour
+    /// à chaque jeton.
+    pub gpu: Option<crate::gpu::Gpu>,
+    pub tete_gpu: Option<crate::gpu::MatriceGpu>,
     /// Tête de sortie en 4 bits (poids liés au plafond d'embedding). C'est la
     /// plus grosse matrice du modèle — 151 936 × 896 — donc le poste où le
     /// demi-octet par poids rapporte le plus.
@@ -632,6 +637,25 @@ impl Model {
         // jeton sur un 7B.
         let tete_quantifiee = g.q6k_blocks(&tete).is_some() || g.q4k_blocks(&tete).is_some()
             || g.mxfp4_blocks(&tete).is_some() || g.q4_blocks(&tete).is_some();
+        // --- chemin GPU : la tête Q8_0 est copiée UNE fois dans la mémoire vidéo
+        let (gpu, tete_gpu) = if std::env::var("QT_GPU").is_ok() {
+            match (crate::gpu::Gpu::ouvrir_auto(), g.q8_blocks(&tete)) {
+                (Some(machine), Some((blocs, nb))) => {
+                    let m = machine.charger_tete(blocs, cfg.vocab, cfg.hidden, nb);
+                    match m {
+                        Some(m) => {
+                            println!("[gpu] {} · tête {} × {} sur le GPU : {:.0} Mo resident, \
+                                      {:.0} Mo libres", machine.nom, cfg.vocab, cfg.hidden,
+                                     m.octets_poids as f64 / 1e6,
+                                     machine.memoire_libre as f64 / 1e6);
+                            (Some(machine), Some(m))
+                        }
+                        None => (None, None),
+                    }
+                }
+                _ => (None, None),
+            }
+        } else { (None, None) };
         let head4 = if q4 & 4 != 0 || tete_quantifiee {
             let t0 = Instant::now();
             let v = cfg.vocab;
@@ -663,7 +687,7 @@ impl Model {
             seuil_push: 0.22,
             stop_id: None, prof: [0.0; 6],
             tete,
-            head4, sinks_vus,
+            gpu, tete_gpu, head4, sinks_vus,
             patch: None, ffn_gain: None, hebb: None,
         }
     }
@@ -1353,6 +1377,15 @@ impl Model {
             Some(v) => v,
             None => return vec![0f32; self.cfg.vocab],
         };
+        // Chemin GPU : les poids de la tête sont déjà en mémoire vidéo ; seules
+        // les activations montent et les logits descendent.
+        if let (Some(machine), Some(m)) = (self.gpu.as_ref(), self.tete_gpu.as_ref()) {
+            let mut xd = vec![0i32; h.len()];
+            for (&i, &v) in sv.idx.iter().zip(sv.val.iter()) { xd[i as usize] = v; }
+            if let Some(y) = machine.tete(m, &xd) {
+                return y.iter().map(|v| v * sx).collect();
+            }
+        }
         // Tête 4 bits : chemin DIRECT par tranches de vocabulaire, comme la tête
         // int8 — et non par le pool. Le pool coûtait 4 ms de plus par jeton pour
         // 72 Mo lus au lieu de 136 : ses seize tampons de sortie (9,7 Mo) sont
