@@ -709,21 +709,38 @@ impl DenseQ4 {
         let q4 = &self.q[o * half..(o + 1) * half];
         let q2 = self.plan6.as_ref().expect("plan 6 bits absent");
         let xp = x.as_ptr();
+        let masque = _mm_set1_epi8(0x0f);
+        let haut_bits = _mm_set1_epi8(0x30);
         let mut sum = 0f32;
-        let mut v = [0u8; 32];
+        let mut deux = [0u8; 32];
         for b in 0..n_bloc {
-            let (lo, hi) = (b * BLOC_Q4, ((b + 1) * BLOC_Q4).min(self.n_in));
-            for k in 0..(hi - lo) {
-                let octet = q4[b * 16 + k / 2];
-                let nib = if k % 2 == 0 { octet & 0x0F } else { octet >> 4 };
-                let deux = (q2[o * n_bloc * 8 + b * 8 + k / 4] >> (2 * (k % 4))) & 3;
-                v[k] = nib | (deux << 4);
+            let lo = b * BLOC_Q4;
+            // Plan des quatre bits : mêmes nibbles entrelacés que le 4 bits.
+            let octets = _mm_loadu_si128(q4.as_ptr().add(b * 16) as *const __m128i);
+            let bas = _mm_and_si128(octets, masque);
+            let haut = _mm_and_si128(_mm_srli_epi16(octets, 4), masque);
+            // Plan des deux bits : huit octets → trente-deux valeurs. Le
+            // dépliage se fait par octet (huit tours) et le compilateur le
+            // vectorise, au lieu d'un décalage par poids.
+            let p2 = q2.as_ptr().add(o * n_bloc * 8 + b * 8);
+            for j in 0..8 {
+                let v = *p2.add(j);
+                deux[4 * j] = v & 3;
+                deux[4 * j + 1] = (v >> 2) & 3;
+                deux[4 * j + 2] = (v >> 4) & 3;
+                deux[4 * j + 3] = (v >> 6) & 3;
             }
-            let va = _mm_loadu_si128(v.as_ptr() as *const __m128i);
-            let vb = _mm_loadu_si128(v.as_ptr().add(16) as *const __m128i);
-            let sq = somme_produits(va, vb, xp.add(lo));
+            let d0 = _mm_loadu_si128(deux.as_ptr() as *const __m128i);
+            let d1 = _mm_loadu_si128(deux.as_ptr().add(16) as *const __m128i);
+            let h0 = _mm_and_si128(_mm_slli_epi16(d0, 4), haut_bits);
+            let h1 = _mm_and_si128(_mm_slli_epi16(d1, 4), haut_bits);
+            // valeurs 0–63 : le biais de 32 se factorise hors du produit.
+            let v0 = _mm_or_si128(_mm_unpacklo_epi8(bas, haut), h0);
+            let v1 = _mm_or_si128(_mm_unpackhi_epi8(bas, haut), h1);
+            let sq = somme_produits(v0, v1, xp.add(lo));
             let sx = *sx32.get_unchecked(b) as f32;
-            sum += self.echelle_bloc(o, b, n_bloc) * (sq as f32 - 32.0 * sx);
+            let echelle = self.echelle_bloc(o, b, n_bloc);
+            sum += echelle * (sq as f32 - 32.0 * sx);
         }
         sum
     }

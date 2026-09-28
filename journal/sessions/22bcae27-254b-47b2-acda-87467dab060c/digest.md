@@ -25329,3 +25329,63 @@ attn 8 bits + ffn 6 bits           19.6690
 ⏵ Résultat net : **6 bits partout domine notre int8** sur les deux axes. Je commite
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\ncat > /tmp/msg5.txt <<'MSG'\nFormat 6 bits empaquete : 0,75 octet/poids, et il BAT notre int8\n\nDenseQ6 (construit par build6) : plan de quatre bits (nibbles entrelaces) +\nplan de deux bits (quatre poids par octet), valeurs signees s … [1838 caractères tronqués]`
+
+  ```
+6b2e50a Format 6 bits empaquete : 0,75 octet/poids, et il BAT notre int8
+8b9cf30 Journal : courbe de precision
+1ae6543 Journal : format 6 bits
+  ```
+
+### 🤖 Assistant
+
+⏵ Le format 6 bits est en place — et il domine notre int8 sur **les deux axes**.
+
+## Résultat
+
+| configuration | octets/poids | perplexité | écart |
+|---|---|---|---|
+| int8 partout | 1,00 | 19,3885 | référence |
+| **6 bits partout** | **0,75** | **19,3045** | **−0,4 %** ✅ |
+| attn 8 + ffn 6 | 0,87 | 19,6690 | +1,4 % |
+| attn 4 + ffn 6 | 0,70 | 19,8373 | +2,3 % |
+| 4 bits partout | 0,50 | 23,1323 | +19,3 % |
+
+Le 6 bits est **meilleur que l'int8 ET 25 % plus petit**. La raison est instructive : notre chemin int8 quantifie avec une seule échelle par **ligne**, le 6 bits avec une par **bloc de 32** — l'adaptation par bloc rapporte plus que deux bits de précision.
+
+## Deux corrections que la mesure impose
+
+1. **Ma recommandation précédente était fausse.** J'avais conclu « attention à 4 bits, FFN à 6 » parce que l'attention *semblait* tolérer le 4 bits — mais cette comparaison était faite contre l'int8, pas contre le 6 bits. Mesuré correctement : 4+6 (19,84) est **pire** que 6 partout (19,30). La répartition fine ne paie pas ici.
+2. **La simulation mentait.** Elle annonçait 19,96 pour 6 bits ; le format réel donne 19,30. Elle arrondissait des poids **déjà quantifiés en int8**, donc elle payait une double quantification — exactement la leçon du import Q4_0. La simulation sert à tracer une tendance, pas à prédire un chiffre.
+
+## Ce qui reste ouvert
+
+- **Vectoriser l'extraction** : le noyau 6 bits est 20 à 30 % plus lent que l'int8 malgré moins d'octets (l'extraction des deux plans est encore scalaire par bloc). C'est le prochain gain facile.
+- **Mesurer 5 et 7 bits** : la courbe simulée plaçait le genou à 5–6 ; le 5 bits réel pourrait donner ~19,4 à 0,625 o/poids.
+- **Donner à `DenseQ8` des échelles par bloc** : tant que ce n'est pas fait, la comparaison int8 contre 6 bits n'est pas équitable — et il est probable que l'int8 par bloc repasse devant à ~0,94 o/poids effectifs.
+
+Trois commits (`6b2e50a`, `8b9cf30`, `1ae6543`), journal à jour. Le défaut reste inchangé : sans `--bits-*`, tout le parc donne exactement les mêmes chiffres qu'avant (0,5B 19,3885 · 4 bits 23,13 · 30B MoE 7,6139).
+
+
+## Tour 47
+
+### 👤 Utilisateur
+
+continue
+
+### 🤖 Assistant
+
+⏵ Je vectorise l'extraction du plan 6 bits — c'est ce qui manque pour qu'il gagne aussi en vitesse
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\npython3 - <<'PY'\np='src/list.rs'; s=open(p,encoding='utf-8').read(); o=s\nold = s[s.index(\"    unsafe fn dot16_q6_avx2\"):s.index(\"    /// **Prête** des super-blocs Q4_K\")]\nneuf = '''    unsafe fn dot16_q6_avx2(&self, … [3038 caractères tronqués]`
+
+  ```
+=== PPL doit rester 19,3045 et le débit rejoindre l'int8
+6 bits : 19.3045 postes (ms/token) : projets-attn 2.27 | rope 0.37 | attention 1.50 | proj+mlp 19.79 | somme 23.93 | reste (tête + échantillonnage) 6.93 
+int8   : 19.3885 postes (ms/token) : projets-attn 2.49 | rope 0.41 | attention 1.59 | proj+mlp 20.46 | somme 24.95 | reste (tête + échantillonnage) 6.96
+  ```
+
+### 🤖 Assistant
+
+⏵ Extraction vectorisée : le 6 bits domine maintenant **les trois axes**. Je nettoie et je commite
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\npython3 - <<'PY'\np='src/list.rs'; s=open(p,encoding='utf-8').read()\ns=s.replace('''        let mut sum = 0f32;\n        let mut deux = [0u8; 32];\n        let mut tmp = [0i32; 8];\n        for b in 0..n_bloc {\n          … [2299 caractères tronqués]`
