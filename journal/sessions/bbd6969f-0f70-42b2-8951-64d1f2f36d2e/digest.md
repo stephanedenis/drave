@@ -10673,3 +10673,17 @@ BUILD
 ⏵ Verdict item 2 : le RoPE simple gagne à tous les contextes mesurés (128→1536 jetons). Je consigne
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='docs/contexte-long.md'\ns=open(p).read()\ns=s.replace(\"\"\"> **Protocole.** Les courbes ci-dessous ont d'abord été mesurées « par\n> longueur » (`--ctx N --limit N`), ce qui **confond la longueur et le contenu** … [3930 caractères tronqués]`
+
+  ```
+72fbe30 Item 2 : le seuil de rotation, tranche par une comparaison appariee
+=== perplexité 578.8586 sur 512 tokens (0 événements, 475.5 s) ===
+
+### contexte 4096 · interpolation seule
+=== batterie ===
+  ```
+
+### 🤖 Assistant
+
+⏵ Item 8 : je mets le plan 1 M à jour avec ce qui est maintenant mesuré et ce qui reste
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='docs/contexte-long.md'\ns=open(p).read()\ns=s.replace(\"\"\"| # | étape | débloque | coût | risque |\n|---|---|---|---|---|\n| E1 | **Préremplissage par lots** (tranches de 256–2 048) | 32 k utilisable (4,5 h → m … [3851 caractères tronqués]`

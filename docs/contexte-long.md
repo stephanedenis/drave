@@ -96,14 +96,15 @@ plus tôt : c'est le préremplissage (§3.a).
 
 ## 4. Plan par étapes
 
-| # | étape | débloque | coût | risque |
+| # | étape | état | débloque | coût |
 |---|---|---|---|---|
-| E1 | **Préremplissage par lots** (tranches de 256–2 048) | 32 k utilisable (4,5 h → minutes) ; TTFT | gros (noyau GEMM + graphe) | refonte du chemin de calcul |
-| E2 | ~~**KV int8**~~ **FAIT** (échelle par vecteur) — ÷4 sur le KV | 128 k confortable | — | mesuré : +7,1 % de perplexité (llama.cpp q8_0 : +3,1 %) |
-| E3 | ~~**KV int4**~~ **FAIT** (nibbles empaquetés) + fenêtre par couche | 1 M tient en RAM (9,7 Go) et en VRAM | — | mesuré : **+384 %** — llama.cpp q4_0 : +411 %. À réserver aux cas où la mémoire manque |
-| E4 | **KV déporté sur les 2 GPU** (pagination, préchargement) | décodage 13 ms/jeton à 1 M | moyen (déjà des noyaux PTX) | PCIe si les couches restent au CPU |
-| E5 | **Attention creuse** (top-k par similarité, ou fenêtre+sinks par couche) | casse le O(N) du décodage | moyen (`attn_topk` existe déjà) | qualité — à mesurer |
-| E6 | **MLA** (DeepSeek) | compression structurelle du KV | gros | architecture |
+| E1 | **Préremplissage par lots** | **fait** : `gemm_dense_i8` et `gemm_dense_q4` (produits matrice-matrice par tranches), `forward_lot` juste sur dense **et** sur MoE avec regroupement des jetons par expert ; débit bout en bout à chiffrer | 32 k utilisable ; TTFT | le noyau est là ; reste à mesurer et à élargir les tranches |
+| E2 | **KV int8** | **fait** (échelle par vecteur, dequantification à la lecture) | ÷4 sur le KV ; 128 k confortable | mesuré : +7,1 % de perplexité (llama.cpp q8_0 : +3,1 %) |
+| E3 | **KV int4** | **fait** (nibbles empaquetés) | 1 M tient en RAM (9,7 Go) et en VRAM | mesuré : **+384 %** — llama.cpp q4_0 : +411 % ; à réserver aux cas où la mémoire manque |
+| E4 | **KV déporté sur les 2 GPU** (pagination, préchargement) | à faire — les noyaux existent (`tete_q8_warp` fait passer la tête de 15,6 à 6,2 ms/jeton, PPL identique) | décodage 13 ms/jeton à 1 M | moyen |
+| E5 | **Attention creuse** | à faire — `--attn-topk` et `--attn-window` existent et se mesurent au protocole `--depuis` | casse le O(N) du décodage | moyen |
+| E6 | **MLA** (DeepSeek) | **non testable ici** : aucun modèle MLA en GGUF sur cette machine (le « deepseek-r1-distill » local est un Qwen dense) | compression structurelle du KV | gros |
+| E7 | **Vision** | **non testable ici sans le chemin image** : le projecteur `mmproj` est présent, mais rien ne lit les patchs | images | gros |
 
 Ordre recommandé : **E1 d'abord** (sans lui, aucun contexte long n'est
 utilisable), puis E2+E3 ensemble (la qualité se mesure sur un petit modèle en
@@ -213,7 +214,19 @@ discrimine donc rien sur la rotation, et il reste à le refaire avec
 
 
 
-## 6. Rappel de méthode
+## 6. Ce qui se mesure tout de suite
+
+1. **Aiguille dans la botte de foin** (`tools/aiguille.py`) : la perplexité ne dit
+   pas si le modèle RETROUVE une information. Le script plante un code à une
+   profondeur donnée et vérifie qu'il ressort ; c'est la mesure de qualité qui
+   manque au plan.
+2. **Attention creuse** : `--attn-topk N` et `--attn-window N` au protocole
+   `--depuis` (mêmes jetons, contexte long) donnent le prix en perplexité de
+   chaque restriction.
+3. **Débit du préremplissage** : `--lot N` sur un modèle dense et sur gpt-oss,
+   machine au calme ; c'est le chiffre qui dit si E1 tient ses promesses.
+
+## 7. Rappel de méthode
 
 Le contexte long est le seul chantier où **le mur change de nature** : à contexte
 court, tout est bande passante de poids ; à contexte long, c'est le KV puis le

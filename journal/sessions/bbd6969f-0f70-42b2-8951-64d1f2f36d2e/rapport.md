@@ -7,12 +7,12 @@
 | Début | 2026-09-28 14:46 |
 | Durée | 20.3 h |
 | Tours | 5 |
-| Messages | 656 |
-| Appels d'outils | 666 |
+| Messages | 657 |
+| Appels d'outils | 667 |
 | Fichiers touchés | 32 |
-| Commandes | 468 |
+| Commandes | 469 |
 | Sous-agents | 1 |
-| Commits | 14 |
+| Commits | 15 |
 | Compactages de contexte | 0 |
 
 ## Objectifs déclarés
@@ -217,7 +217,7 @@ Retirer `mscale = 1 + 0,1·ln f` divise la perplexité par **8,9 / 5,9 / 3,8**. 
 
 ### Tour 5 — <goal_round> Objective: "Réaliser les 8 chantiers restants du projet qtrinet-core dans l'ordre : (1) protocole de perple … [1122 caractères tronqués]
 
-*63 appels d'outils.* Actions notables :
+*64 appels d'outils.* Actions notables :
 
 - bash — Check rotation series and expert profile
 - bash — End-to-end batched prefill correctness and time
@@ -233,11 +233,11 @@ Retirer `mscale = 1 + 0,1·ln f` divise la perplexité par **8,9 / 5,9 / 3,8**. 
 - bash — Fix the grep pattern and relaunch cleanly
 - bash — Read the MXFP4 CPU kernel for the layout
 - bash — Find the MXFP4 scalar dot path
-- … et 48 autres
+- … et 49 autres
 
 **Synthèse produite :**
 
-⏵ Verdict item 2 : le RoPE simple gagne à tous les contextes mesurés (128→1536 jetons). Je consigne
+⏵ Item 8 : je mets le plan 1 M à jour avec ce qui est maintenant mesuré et ce qui reste
 
 ## 3. Travail accompli
 
@@ -324,7 +324,7 @@ Retirer `mscale = 1 + 0,1·ln f` divise la perplexité par **8,9 / 5,9 / 3,8**. 
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 428 autres
+- … et 429 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -486,4 +486,5 @@ Retirer `mscale = 1 + 0,1·ln f` divise la perplexité par **8,9 / 5,9 / 3,8**. 
 - Item 7 (2/2) : noyaux GPU 4 bits -- MXFP4 et Q4_K, une warp par ligne  - proj_mxfp4_warp : blocs de 17 octets (E8M0 + nibbles), table E2M1 doublee.   Mesure sur
 - Item 4 : MoE par lots -- regroupement des jetons par expert  Les modeles a experts suivent desormais le meme chemin par lots que les denses, avec le regroupemen
 - Item 2 : le seuil de rotation, tranche par une comparaison appariee  Meme jetons notes (1536-2047), contexte croissant, deux regimes :    contexte   RoPE simple
+- Plan 1 M : etat reel des six etapes et ce qui se mesure tout de suite  E1 (prefill par lots) et E2/E3 (KV int8/int4) sont faits et mesures ; E4 (KV sur GPU) et 
 
