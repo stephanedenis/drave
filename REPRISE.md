@@ -140,7 +140,7 @@ comparé à `llama-tokenize` sur 4 424 jetons (0 écart).
 | 1 | protocole de perplexité longue | **fait** | `--depuis N` note les mêmes jetons à contexte variable ; `--depuis 256 --ctx 256` redonne exactement la fenêtre 2 historique (21,565) |
 | 2 | seuil de rotation YaRN | **fait** | comparaison appariée (mêmes 512 jetons, contexte 128→1536) : RoPE simple **39,52 / 49,79 / 49,93 / 298,56** contre interpolation seule 42,13 / 82,02 / 82,15 / 578,86 → **le simple gagne partout**. Reste à mesurer au-delà de 4 096 de contexte (corpus trop court) |
 | 3 | KV int8 puis int4 | **fait** | **échelles par bloc de 32** : int8 +**1,5 %** (était +7,1 %), int4 +219 % (était +384 %) — l'écart avec llama.cpp (+0,8 %) est comblé ; 1 M tient en int4 (9,7 Go) |
-| 4 | préremplissage par lots | **fait, gain faible et attribué** | noyau ×2,4 ; justesse sur dense (13,1359 contre 13,1368) et sur MoE regroupé (13,7205 contre 13,7149) ; bout en bout **−3 %** seulement : le GEMM divise les projections par 2 (1,49 contre 3,05 ms/jeton) mais l'attention non groupée double (8,90 contre 4,05) et la tête reste par jeton. Suite : (a) chemin groupé dans le lot, (b) **la tête en GEMM** — voir `reports/rapport-prefill-par-lots.md` |
+| 4 | préremplissage par lots | **fait, −20 % et attribué** | tuilage, **attention groupée dans le lot** et **tête en lot** (`logits_lot`) : Qwen ctx 512, **17,1 s → 13,6 s (−20 %)** à perplexité égale (13,1368 → 13,1359) ; gpt-oss ctx 256, ≈ 50 s → **34,4 s** (13,7205 partout). Postes : projections ÷2,6, FFN/wo ÷1,43, attention par lots encore **×1,7** (5,59 contre 3,24 ms/jeton), tête inchangée (5,47 contre 5,63 — noyau lié au calcul, pas à la mémoire). Au passage : pointeur gras sur les sommes par bloc (lot > 90 → blocage muet) corrigé et verrouillé par un test — voir `reports/rapport-prefill-par-lots.md` |
 | 5 | échelles par bloc pour `DenseQ8` | **fait, hypothèse réfutée** | 23,696 contre 23,612 : les échelles par bloc n'apportent rien ; l'avantage du 6 bits est son coût (25 % d'octets en moins à qualité égale) |
 | 6 | boucles CLI unifiées | **fait** | `struct Options` + `analyser` ; trois drapeaux de plus trouvés ignorés (`--attn-topk`, `--qk-topk`, `--sans-yarn` en inférence) et un bug de pas de lecture corrigé |
 | 7 | noyaux GPU | **fait** | warp par ligne (tête : 1,8 ms contre 30 ms CPU, PPL identique) ; **MXFP4** warp (0,1 ms, écart 0,00e0 — bit à bit) ; **Q4_K** warp (0,5 contre 1,2 ms, écart 4e-7). Reste le *branchement* dans le moteur (cache d'experts chauds) |
@@ -153,7 +153,10 @@ comparé à `llama-tokenize` sur 4 424 jetons (0 écart).
 | noyau GPU Q8_0 warp (tête Qwen 0.5B, 144,6 Mo) | **1,6 ms** contre 7,3 ms CPU (×4,6), écart 2e-7 |
 | noyau GPU MXFP4 warp (expert gpt-oss, 4,4 Mo) | **0,1 ms** contre 7,5 ms CPU (×75), écart **0,00e0** |
 | noyau GPU Q4_K warp (Qwen 1.5B, 7,7 Mo) | 0,5 ms contre 1,2 ms CPU (×2,2), écart 4e-7 |
-| préremplissage par lots (Qwen, ctx 512) | lot 1 = 16,6 s · lot 512 = 40,1 ms/jeton contre 41,5 → **−3 %** |
+| préremplissage par lots (Qwen, ctx 512) | lot 1 = **17,1 s** · lot 512 = **13,6 s** → **−20 %** (perplexité 13,1368 → 13,1359) |
+| préremplissage par lots (gpt-oss, ctx 256, MoE groupé) | ≈ 50 s à lot 1 · **34,4 s** à lot 256 (13,7205 dans tous les cas) |
+| tête de sortie en lot | **aucun gain** (5,47 contre 5,63 ms/jeton) : noyau lié au calcul — il faut AVX2 ou le GPU |
+| attente du pool après panique d'un worker | **échoue en clair** au lieu de boucler (constaté : 10 min d'attente active) |
 | KV int8, échelles par bloc | +1,5 % (512 jetons) et +3,4 % (4 591) — était +7,1 % et +5,2 % |
 | KV int4, échelles par bloc | +219 % (512) et +287 % (4 591) — était +384 % et +450 % |
 | attention creuse (gpt-oss, ctx 2 048) | sans restriction 298,56 · **top-256 : 234,88** · fenêtre 512 : 3 269,34 |
@@ -161,13 +164,11 @@ comparé à `llama-tokenize` sur 4 424 jetons (0 écart).
 
 ### Ce qu'il faut faire ensuite, dans l'ordre
 
-1. **Le préremplissage, suite** (chantier 4) : le GEMM divise les projections par
-   deux, mais il ne porte que sur 8 % du coût. Deux corrections identifiées et
-   mesurées : (a) passer l'attention du chemin par tête au chemin **groupé**
-   (×2,2 sur ce poste), (b) **traiter la tête de sortie comme un GEMM** — elle
-   représente 30 fois le travail des projections d'attention et reste calculée
-   jeton par jeton. Le regroupement des experts, lui, est fait mais ne paie
-   qu'à partir de très gros lots (t × 4 / 128 jetons par expert : ~2 à t = 64).
+1. ~~Le préremplissage, suite (chantier 4)~~ **FAIT** : (a) attention groupée
+   dans le lot et (b) tête en lot sont en place et mesurés (17,1 s → 13,6 s sur
+   Qwen ctx 512). Ce qui reste sur ce poste : le **noyau de la tête** (le lot n'y
+   change rien, il est lié au calcul) et l'**attention par lots**, encore 1,7 ×
+   le chemin par jeton.
 3. **Brancher le noyau MXFP4** : il est bit à bit identique et 40× plus rapide
    que le CPU ; il manque un cache d'experts chauds en VRAM (voir
    `reports/rapport-localite-activation.md`).

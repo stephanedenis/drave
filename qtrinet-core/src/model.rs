@@ -1550,6 +1550,8 @@ impl Model {
         let mut gi = vec![0i32; t * self.cfg.ffn];
         let mut sg = vec![0f32; t];
         let mut sc = vec![0f32; pos0 + t];
+        // Scores groupés : `nh × ctx`, comme dans le chemin jeton par jeton.
+        let mut sc2 = vec![0f32; nh * self.ctx];
         let mut kd = vec![0f32; hd];
         let mut vd = vec![0f32; hd];
         let attn_all: Vec<u32> = (0..ctx as u32).collect();
@@ -1660,6 +1662,48 @@ impl Model {
                 let kvc = &self.kv[l];
                 let n = pos + 1;
                 let lo = if fen > 0 && n > fen { n - fen } else { 0 };
+                // Chemin GROUPÉ dès que possible : `rep` têtes de requête
+                // partagent une tête KV, donc la clé (et la valeur) ne doivent
+                // être déquantifiées qu'UNE fois par groupe. Le chemin par tête
+                // les relisait `rep` fois — mesuré ×2,2 sur ce poste.
+                let groupe = fen == 0 && self.attn_topk == 0 && rep > 1;
+                if groupe {
+                    for kvh in 0..nkv {
+                        let h0 = kvh * rep;
+                        let h1 = (h0 + rep).min(nh);
+                        for tt in 0..n {
+                            kvc.cle(kvh, tt, &mut kd);
+                            for hh in h0..h1 {
+                                let qh = &qi[hh * hd..(hh + 1) * hd];
+                                sc2[hh * ctx + tt] = Self::dot8(qh, &kd) * scale;
+                            }
+                        }
+                        for hh in h0..h1 {
+                            let row = &mut sc2[hh * ctx..hh * ctx + n];
+                            let mut mx = f32::NEG_INFINITY;
+                            for &val in row.iter() { if val > mx { mx = val; } }
+                            let puits = lay.sinks.as_ref().map(|s| s[hh]);
+                            if let Some(s) = puits { if s > mx { mx = s; } }
+                            let mut somme = 0f32;
+                            for val in row.iter_mut() { let e = (*val - mx).exp(); *val = e; somme += e; }
+                            if let Some(s) = puits { somme += (s - mx).exp(); }
+                            let inv = 1.0 / somme;
+                            for val in row.iter_mut() { *val *= inv; }
+                        }
+                        for hh in h0..h1 {
+                            let out = &mut att[i * nq + hh * hd..i * nq + (hh + 1) * hd];
+                            for val in out.iter_mut() { *val = 0.0; }
+                        }
+                        for tt in 0..n {
+                            kvc.valeur(kvh, tt, &mut vd);
+                            for hh in h0..h1 {
+                                let w = sc2[hh * ctx + tt];
+                                let out = &mut att[i * nq + hh * hd..i * nq + (hh + 1) * hd];
+                                for (oo, xx) in out.iter_mut().zip(vd.iter()) { *oo += w * xx; }
+                            }
+                        }
+                    }
+                } else {
                 for hh in 0..nh {
                     let kvh = hh / rep;
                     let qh = &qi[hh * hd..(hh + 1) * hd];
@@ -1682,6 +1726,7 @@ impl Model {
                         kvc.valeur(kvh, tt, &mut vd);
                         for (oo, xx) in out.iter_mut().zip(vd.iter()) { *oo += w * xx; }
                     }
+                }
                 }
                 self.attn_events += (nh * (n - lo)) as u64;
             }
@@ -2279,6 +2324,86 @@ impl Model {
         }
         Self::rmsnorm(&x, out_norm, cfg.eps, &mut hn);
         hn
+    }
+
+    /// **Tête de sortie par lots** : la même matrice pour `t` états cachés.
+    ///
+    /// La tête est la plus grosse matrice du modèle (151 936 × 896 pour Qwen
+    /// 0.5B, 145 Mo lus par jeton) et elle restait calculée jeton par jeton dans
+    /// le chemin par lots : c'était 25 % du temps. Ici la ligne de poids reste au
+    /// chaud pendant qu'elle sert `TUILE_TETE` jetons.
+    pub fn logits_lot(&mut self, hs: &[Vec<f32>]) -> Vec<Vec<f32>> {
+        const TUILE_TETE: usize = 16;
+        let t = hs.len();
+        if t == 0 { return Vec::new(); }
+        if t == 1 { return vec![self.logits(&hs[0])]; }
+        let h = self.cfg.hidden;
+        // 1. quantification de chaque état caché (mêmes règles que `logits`)
+        let mut qx: Vec<i16> = vec![0i16; t * h];
+        let mut sxs = vec![0f32; t];
+        let mut scratch: Vec<f32> = Vec::with_capacity(h);
+        for (i, hi) in hs.iter().enumerate() {
+            let (sv, sx) = match Self::quant_scratch(hi, self.act_levels, self.act_thresh,
+                                                     self.act_topk, self.act_renorm, &mut scratch) {
+                Some(v) => v,
+                None => (SparseVec { idx: Vec::new(), val: Vec::new() }, 1.0),
+            };
+            sxs[i] = sx;
+            for (&j, &val) in sv.idx.iter().zip(sv.val.iter()) {
+                qx[i * h + j as usize] = val.clamp(-32767, 32767) as i16;
+            }
+        }
+        let vocab = self.cfg.vocab;
+        let nt = self.pool.threads().max(1);
+        let chunk = vocab.div_ceil(nt);
+        let mut out = vec![0f32; vocab * t];
+        if let Some(d) = self.head4.take() {
+            let dref = &d;
+            let s32: Vec<Vec<i32>> = (0..t)
+                .map(|i| crate::list::sommes32(&qx[i * h..(i + 1) * h])).collect();
+            let (qxr, s32r, sxsr) = (&qx, &s32, &sxs);
+            std::thread::scope(|sc| {
+                for (ci, part) in out.chunks_mut(chunk * t).enumerate() {
+                    let base = ci * chunk;
+                    sc.spawn(move || {
+                        for i0 in (0..t).step_by(TUILE_TETE) {
+                            let i1 = (i0 + TUILE_TETE).min(t);
+                            for j in 0..(part.len() / t) {
+                                let o = base + j;
+                                for i in i0..i1 {
+                                    part[j * t + i] = dref.dot16(o, &qxr[i * h..(i + 1) * h],
+                                                                 &s32r[i]) * sxsr[i];
+                                }
+                            }
+                        }
+                    });
+                }
+            });
+            self.head4 = Some(d);
+        } else {
+            let view = self.g.q8_view(&self.tete);
+            let g = &self.g;
+            let view = &view;
+            let (qxr, sxsr) = (&qx, &sxs);
+            std::thread::scope(|sc| {
+                for (ci, part) in out.chunks_mut(chunk * t).enumerate() {
+                    let base = ci * chunk;
+                    sc.spawn(move || {
+                        for i0 in (0..t).step_by(TUILE_TETE) {
+                            let i1 = (i0 + TUILE_TETE).min(t);
+                            for j in 0..(part.len() / t) {
+                                let o = base + j;
+                                for i in i0..i1 {
+                                    part[j * t + i] =
+                                        g.q8_dot_at(view, o, &qxr[i * h..(i + 1) * h]) * sxsr[i];
+                                }
+                            }
+                        }
+                    });
+                }
+            });
+        }
+        (0..t).map(|i| (0..vocab).map(|o| out[o * t + i]).collect()).collect()
     }
 
     /// Tête de sortie : produits scalaires entiers sur les lignes Q8_0 du

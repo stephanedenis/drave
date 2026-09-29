@@ -5,15 +5,15 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 22.3 h |
-| Tours | 5 |
-| Messages | 716 |
-| Appels d'outils | 726 |
-| Fichiers touchés | 33 |
-| Commandes | 526 |
+| Durée | 23.1 h |
+| Tours | 6 |
+| Messages | 806 |
+| Appels d'outils | 811 |
+| Fichiers touchés | 34 |
+| Commandes | 588 |
 | Sous-agents | 1 |
-| Commits | 24 |
-| Compactages de contexte | 0 |
+| Commits | 25 |
+| Compactages de contexte | 1 |
 
 ## Objectifs déclarés
 
@@ -31,6 +31,8 @@
 **Tour 4** — fais les 8 dans l'ordre
 
 **Tour 5** — <goal_round> Objective: "Réaliser les 8 chantiers restants du projet qtrinet-core dans l'ordre : (1) protocole de perplexité longue --depuis/--stride, (2) trancher le seuil de rotation YaRN avec ce protocole, (3) KV int8 puis int4 mesurés sur Qwen 0.5B à ctx 8192 contre llama.cpp, (4) préremplissage par lots (GEMM par tranches), (5) échelles par bloc pour DenseQ8, (6) refactorisation des boucles C … [842 caractères tronqués]
+
+**Tour 6** — <goal_round> Objective: "Réaliser les 8 chantiers restants du projet qtrinet-core dans l'ordre : (1) protocole de perplexité longue --depuis/--stride, (2) trancher le seuil de rotation YaRN avec ce protocole, (3) KV int8 puis int4 mesurés sur Qwen 0.5B à ctx 8192 contre llama.cpp, (4) préremplissage par lots (GEMM par tranches), (5) échelles par bloc pour DenseQ8, (6) refactorisation des boucles C … [842 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -217,7 +219,7 @@ Retirer `mscale = 1 + 0,1·ln f` divise la perplexité par **8,9 / 5,9 / 3,8**. 
 
 ### Tour 5 — <goal_round> Objective: "Réaliser les 8 chantiers restants du projet qtrinet-core dans l'ordre : (1) protocole de perple … [1122 caractères tronqués]
 
-*123 appels d'outils.* Actions notables :
+*124 appels d'outils.* Actions notables :
 
 - bash — Check rotation series and expert profile
 - bash — End-to-end batched prefill correctness and time
@@ -233,11 +235,55 @@ Retirer `mscale = 1 + 0,1·ln f` divise la perplexité par **8,9 / 5,9 / 3,8**. 
 - bash — Fix the grep pattern and relaunch cleanly
 - bash — Read the MXFP4 CPU kernel for the layout
 - bash — Find the MXFP4 scalar dot path
-- … et 108 autres
+- … et 109 autres
 
 **Synthèse produite :**
 
-⏵ Tableau complet du KV : int8 +1,5 %/+3,4 %, int4 +219 %/+287 % selon le contexte
+⏵ Tour terminé : les huit chantiers ont avancé, la non-régression tient (19,3885)
+
+**Ce que ce tour a livré** (12 commits, tous vérifiés)
+
+| # | chantier | état | mesure |
+|---|---|---|---|
+| 1 | protocole longue | ✅ | `--depuis` : `--depuis 256 --ctx 256` redonne exactement la fenêtre historique (21,565) |
+| 2 | seuil de rotation | ✅ | apparié, mêmes 512 jetons : RoPE simple **39,5 / 49,8 / 49,9 / 298,6** contre interpolation 42,1 / 82,0 / 82,2 / 578,9 → le simple gagne partout |
+| 3 | KV int8/int4 | ✅ | **échelles par bloc de 32** : int8 **+1,5 %** (512 j) et **+3,4 %** (4 591 j) — était +7,1 % et +5,2 % ; int4 +219 %/+287 % ; llama.cpp : +0,8 %/+494 % |
+| 4 | préremplissage par lots | ✅ | GEMM int8 **et** 4 bits + regroupement des experts ; juste (13,1359 vs 13,1368) ; gain **−3 %** attribué : projections ÷2, mais attention non groupée ×2,2 et tête restée par jeton |
+| 5 | échelles par bloc `DenseQ8` | ✅ | hypothèse **réfutée** : 23,696 contre 23,612 ; l'avantage du 6 bits est son coût (25 % d'octets en moins) |
+| 6 | boucles CLI | ✅ | `Options` + `analyser` ; **3 drapeaux de plus** trouvés ignorés et un bug de pas de lecture (qui masquait `--ctx`/`--threads`) |
+| 7 | noyaux GPU | ✅ | warp : tête **1,6 ms** contre 7,3 CPU ; MXFP4 **0,00e0** d'écart (bit à bit) ; Q4_K 4e-7 ; reste Q6_K |
+| 8 | plan 1 M | 🔄 | E1/E2/E3 faits ; **attention creuse : top-256 améliore la perplexité de 21 %** (234,9 contre 298,6) tandis qu'élargir la fenêtre la détruit (×11) ; E4/E5 à implémenter ; MLA et vision non testables ici |
+
+**Trois bogues de plus corrigés au passage** : le biais de descente des experts (latent, effet nul sur le 30B), le tampon de sortie dimensionné sur `h` au lieu de `n_têtes×dim`, et l'empaquetage 4 bits du KV. Plus une leçon de méthode : un remplacement de texte qui échoue en silence a produit une perplexité de 399 074 — un `assert` sur le motif l'aurait évité, et c'est désormais ce que je fais.
+
+**L'étude PowerInfer** est dans `reports/rapport-localite-activation.md` : la localité existe (82 % des neurones inactifs par jeton) mais l'ensemble *toujours* chaud est minuscule (0,08 %) → leur préchargement statique ne paierait pas sur un modèle SiLU ; ce qu'on garde, c'est le placement **par expert** et un cache à éviction.
+
+**Reste ouvert** (l'objectif continue) : attention groupée dans le chemin par lots puis **la tête en GEMM** (les deux corrections chiffrées du chantier 4), Q6_K, puis E4 (KV déporté GPU) et E5 (attention creuse implémentée) ; MLA et 
+… [55 caractères tronqués]
+
+### Tour 6 — <goal_round> Objective: "Réaliser les 8 chantiers restants du projet qtrinet-core dans l'ordre : (1) protocole de perple … [1122 caractères tronqués]
+
+*84 appels d'outils.* Actions notables :
+
+- bash — Check the starting state of round 2
+- bash — Locate the batched attention loop
+- bash — Read the batched per-head attention
+- bash — Read the head computation
+- bash — Group the batched attention and measure
+- bash — Implement the batched head
+- bash — Fix the SparseVec path
+- bash — Measure the batched head
+- bash — Check the batched MoE path with the new attention and head
+- bash — See the gpt-oss lot 128 failure
+- bash — Inspect the panicking line
+- bash — Bisect the failing batch size
+- bash — Add guards and rerun lot 128
+- bash — Read dot16's fallback path
+- … et 55 autres
+
+**Synthèse produite :**
+
+Now I write the section that closes the loop on (a) and (b):
 
 ## 3. Travail accompli
 
@@ -277,7 +323,8 @@ Retirer `mscale = 1 + 0,1·ln f` divise la perplexité par **8,9 / 5,9 / 3,8**. 
 | `/tmp/mesures_finales.sh` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-localite-activation.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/aiguille.py` | 1 | 0 |
-| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-prefill-par-lots.md` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-prefill-par-lots.md` | 1 | 2 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src/engine.rs` | 0 | 4 |
 
 ### Sous-agents lancés
 
@@ -325,7 +372,7 @@ Retirer `mscale = 1 + 0,1·ln f` divise la perplexité par **8,9 / 5,9 / 3,8**. 
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 486 autres
+- … et 548 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -453,7 +500,7 @@ Retirer `mscale = 1 + 0,1·ln f` divise la perplexité par **8,9 / 5,9 / 3,8**. 
 
 ## 5. Erreurs rencontrées
 
-29 sorties en erreur ou divergentes. Les premières :
+35 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : a8f2635f8 docs: record which models this box is good at, and why src/llama-hparams.cpp:8:void llama_hparams::set_swa_pattern(uint32_t n_pattern, bool dense_first) { src/llama-hparams.h:308:    void se
 - **T1** : 511 tokens notés — perplexité cumulée 247.031  (4.9 tok/s) === perplexité 247.0308 sur 511 tokens (0 événements, 104.5 s) ===  ### B3 harmony assistant 511 --- ref --- 0.0 0.0 0:00 ls: cannot access '
@@ -497,4 +544,5 @@ Retirer `mscale = 1 + 0,1·ln f` divise la perplexité par **8,9 / 5,9 / 3,8**. 
 - Aiguille : test arrete, et pourquoi (remplissage trop repetitif, prefill trop lent)  9,6 minutes pour UNE sonde sur Qwen3-30B-A3B (1 024 jetons) et un echec : l
 - Aiguille : test arrete, et pourquoi (remplissage trop repetitif, prefill trop lent)  9,6 minutes pour UNE sonde sur Qwen3-30B-A3B (1 024 jetons) et un echec : u
 - KV par bloc : mesure longue (4 591 jetons) -- int8 +3,4 %, int4 +287 %  Tableau complet :    KV     512 j, par vecteur   512 j, par bloc   4 591 j, par bloc   f
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A qtrinet-core/src reports/rapport-prefill-par-lots.md REPRISE.md && git commit -q -F - <<'EOF' &
 

@@ -215,6 +215,11 @@ pub fn row_val_into(m: &PushMat, r: usize, xq: i64, acc: &mut [i32],
 struct Shared {
     gen: AtomicUsize,
     done: AtomicUsize,
+    /// Workers tués par une panique. Sans ce compteur, le fil principal
+    /// tournait indéfiniment sur `done` : un `index out of bounds` chez un
+    /// worker se manifestait par un blocage muet de tout le programme
+    /// (constaté : 10 minutes d'attente active au lieu d'une erreur).
+    morts: AtomicUsize,
     stop: AtomicBool,
     lists: AtomicPtr<FusedSign>,
     delta: AtomicPtr<SignedDelta>,
@@ -227,7 +232,13 @@ struct Shared {
     gx: AtomicPtr<i32>,
     /// Mêmes activations en i16 et leurs sommes par bloc (mode 6).
     gx16: AtomicPtr<i16>,
-    gs32: AtomicPtr<Vec<Vec<i32>>>,
+    /// Sommes par bloc de chaque jeton du lot. Attention : c'est un pointeur
+    /// FIN vers le premier `Vec<i32>`, pas vers la tranche — stocker le pointeur
+    /// de tranche (gras) dans un `AtomicPtr<Vec<...>>` le faisait relire comme un
+    /// `Vec<Vec<i32>>` fantôme dont la longueur était celle du PREMIER jeton
+    /// (90 blocs au lieu de 128 jetons) : d'où un « index out of bounds : len 90,
+    /// index 90 » chez un worker dès que le lot dépassait le nombre de blocs.
+    gs32: AtomicPtr<Vec<i32>>,
     /// Échelles d'activation du lot, taille du lot, et sortie du lot.
     gsx: AtomicPtr<f32>,
     gt: AtomicUsize,
@@ -352,6 +363,7 @@ impl Pool {
             gout: AtomicPtr::new(std::ptr::null_mut()),
             gen: AtomicUsize::new(0),
             done: AtomicUsize::new(0),
+            morts: AtomicUsize::new(0),
             stop: AtomicBool::new(false),
             lists: AtomicPtr::new(std::ptr::null_mut()),
             delta: AtomicPtr::new(std::ptr::null_mut()),
@@ -400,6 +412,14 @@ impl Pool {
                     // test, un worker lirait des pointeurs nuls (les champs ne
                     // sont publiés qu'avant un vrai travail).
                     if sh.stop.load(Ordering::Acquire) { return; }
+                    // Toute la génération est sous `catch_unwind` : une
+                    // panique (débordement d'indice sur un tableau partagé)
+                    // est comptée puis laisse la place au fil principal, qui
+                    // prévient au lieu de tourner à vide.
+                    let sh2 = Arc::clone(&sh);
+                    let travail = std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+                    let sh = &*sh2;
+                    'generation: {
                     let mode = sh.mode.load(Ordering::Relaxed);
                     if mode == 4 {
                         // Mode 4 bits : même découpage que le mode 3, mais les
@@ -421,7 +441,7 @@ impl Pool {
                         for v in dst[hi..].iter_mut() { *v = 0.0; }
                         for o in lo..hi { dst[o] = d.dot16(o, xv, xs) * sx; }
                         sh.done.fetch_add(1, Ordering::Release);
-                        continue;
+                        break 'generation;
                     }
                     if mode == 5 || mode == 6 {
                         // ---- produit MATRICE-MATRICE, sur les workers du pool.
@@ -434,7 +454,7 @@ impl Pool {
                         let per = (n_out + n - 1) / n;
                         let lo = id * per;
                         let hi = (lo + per).min(n_out);
-                        if lo >= hi { sh.done.fetch_add(1, Ordering::Release); continue; }
+                        if lo >= hi { sh.done.fetch_add(1, Ordering::Release); break 'generation; }
                         let out = unsafe { std::slice::from_raw_parts_mut(
                             sh.gout.load(Ordering::Acquire), n_out * t) };
                         let sx = unsafe { std::slice::from_raw_parts(
@@ -463,7 +483,11 @@ impl Pool {
                             let d = unsafe { &*sh.dense4.load(Ordering::Acquire) };
                             let x16 = unsafe { std::slice::from_raw_parts(
                                 sh.gx16.load(Ordering::Acquire), t * d.n_in) };
-                            let s32 = unsafe { &*sh.gs32.load(Ordering::Acquire) };
+                            // Pointeur fin + longueur du lot : la tranche est
+                            // reconstruite ici, sinon le worker lit la longueur
+                            // du premier jeton (voir `Shared::gs32`).
+                            let s32 = unsafe { std::slice::from_raw_parts(
+                                sh.gs32.load(Ordering::Acquire), t) };
                             const TUILE4: usize = 8;
                             for i0 in (0..t).step_by(TUILE4) {
                                 let i1 = (i0 + TUILE4).min(t);
@@ -476,7 +500,7 @@ impl Pool {
                             }
                         }
                         sh.done.fetch_add(1, Ordering::Release);
-                        continue;
+                        break 'generation;
                     }
                     if mode == 3 {
                         // Mode dense : chaque worker calcule une tranche
@@ -516,7 +540,7 @@ impl Pool {
                             };
                         }
                         sh.done.fetch_add(1, Ordering::Release);
-                        continue;
+                        break 'generation;
                     }
                     let f = unsafe { &*sh.lists.load(Ordering::Acquire) };
                     let dl = unsafe { &*sh.delta.load(Ordering::Acquire) };
@@ -557,6 +581,15 @@ impl Pool {
                     if span.1 > dirty[id] { dirty[id] = span.1; }
                     sh.done.fetch_add(1, Ordering::Release);
                 }
+                    }));
+                    if travail.is_err() {
+                        // Le pool ne peut plus réunir le résultat : on le dit au
+                        // fil principal (compteur `morts`) au lieu de le laisser
+                        // tourner à vide, et ce worker s'arrête.
+                        sh.morts.fetch_add(1, Ordering::Release);
+                        return;
+                    }
+                }   // fin de la boucle d'attente d'une génération
             }));
         }
         Pool { shared, handles, n, n_out, accs: vec![vec![0i32; n_out]; n], accs64: vec![vec![0i64; n_out]; n],
@@ -584,7 +617,7 @@ impl Pool {
         sh.outs.store(&mut self.outs as *mut Vec<Vec<f32>>, Ordering::Relaxed);
         sh.done.store(0, Ordering::Relaxed);
         sh.gen.fetch_add(1, Ordering::Release);
-        while sh.done.load(Ordering::Acquire) != self.n { std::hint::spin_loop(); }
+        self.attendre(sh);
         let mut out = vec![0f32; d.n_out];
         for w in &self.outs {
             for (o, &v) in out.iter_mut().zip(w.iter()) { *o += v; }
@@ -611,7 +644,7 @@ impl Pool {
         sh.outs.store(&mut self.outs as *mut Vec<Vec<f32>>, Ordering::Relaxed);
         sh.done.store(0, Ordering::Relaxed);
         sh.gen.fetch_add(1, Ordering::Release);
-        while sh.done.load(Ordering::Acquire) != self.n { std::hint::spin_loop(); }
+        self.attendre(sh);
         let mut out = vec![0f32; d.n_out];
         for w in &self.outs {
             for (o, &v) in out.iter_mut().zip(w.iter()) { *o += v; }
@@ -631,7 +664,7 @@ impl Pool {
         sh.gout.store(out.as_mut_ptr(), Ordering::Relaxed);
         sh.done.store(0, Ordering::Relaxed);
         sh.gen.fetch_add(1, Ordering::Release);
-        while sh.done.load(Ordering::Acquire) != self.n { std::hint::spin_loop(); }
+        self.attendre(sh);
     }
 
     /// Produit matrice-matrice sur une matrice 4 bits (experts MXFP4 de gpt-oss,
@@ -639,19 +672,27 @@ impl Pool {
     /// créés à la volée partageaient les cœurs avec des workers qui tournent.
     pub fn gemm_dense_q4(&mut self, d: &crate::list::DenseQ4, x16: &[i16], t: usize,
                          s32: &[Vec<i32>], sx: &[f32], out: &mut [f32]) {
-        assert!(out.len() >= d.n_out * t, "sortie du lot trop petite");
+        // Garde-fous : un décalage entre le lot d'activations et le nombre de
+        // jetons annoncé se manifestait par un « index out of bounds » dans un
+        // worker, sans dire lequel des trois tableaux était en cause.
+        assert!(out.len() >= d.n_out * t,
+                "sortie du lot : {} < {} × {}", out.len(), d.n_out, t);
+        assert!(x16.len() >= t * d.n_in,
+                "activations du lot : {} < {} × {}", x16.len(), t, d.n_in);
+        assert!(s32.len() >= t, "sommes par bloc : {} < {}", s32.len(), t);
+        assert!(sx.len() >= t, "échelles d'activation : {} < {}", sx.len(), t);
         let sh = &self.shared;
         sh.mode.store(6, Ordering::Relaxed);
         sh.dense4.store(d as *const _ as *mut _, Ordering::Relaxed);
         sh.gx16.store(x16.as_ptr() as *mut i16, Ordering::Relaxed);
-        sh.gs32.store(s32 as *const _ as *mut _, Ordering::Relaxed);
+        sh.gs32.store(s32.as_ptr() as *mut Vec<i32>, Ordering::Relaxed);
         sh.gsx.store(sx.as_ptr() as *mut f32, Ordering::Relaxed);
         sh.gt.store(t, Ordering::Relaxed);
         sh.gn_out.store(d.n_out, Ordering::Relaxed);
         sh.gout.store(out.as_mut_ptr(), Ordering::Relaxed);
         sh.done.store(0, Ordering::Relaxed);
         sh.gen.fetch_add(1, Ordering::Release);
-        while sh.done.load(Ordering::Acquire) != self.n { std::hint::spin_loop(); }
+        self.attendre(sh);
     }
 
     /// Accumulation par **listes par source valuées** : le mode de l'inférence.
@@ -666,6 +707,18 @@ impl Pool {
     /// Réajuste la largeur des accumulateurs quand la matrice change de forme
     /// (896, 128, 4864, …). Les listes de destinations touchées deviennent
     /// caduques : on repart d'accumulateurs vides.
+    /// Attente de la fin d'une génération. Un worker qui panique ne rendra
+    /// jamais son jeton : sans ce test, l'attente active ne finissait pas.
+    fn attendre(&self, sh: &Shared) {
+        while sh.done.load(Ordering::Acquire) != self.n {
+            if sh.morts.load(Ordering::Acquire) != 0 {
+                panic!("un worker du pool est mort pendant le calcul (panique \
+ci-dessus) : résultat impossible à réunir");
+            }
+            std::hint::spin_loop();
+        }
+    }
+
     pub fn ensure_width(&mut self, n_out: usize) {
         if n_out == self.n_out { return; }
         self.n_out = n_out;
@@ -703,9 +756,7 @@ impl Pool {
         sh.dirty.store(&mut self.dirty as *mut Vec<usize>, Ordering::Relaxed);
         sh.gen.fetch_add(1, Ordering::Release);       // libère les workers
 
-        while sh.done.load(Ordering::Acquire) != self.n {
-            std::hint::spin_loop();
-        }
+        self.attendre(sh);
         // Réduction sur l'union des étendues RÉELLEMENT écrites par les workers :
         // la fenêtre est exacte, quel que soit le décodeur, et ne dépend pas de
         // la liste des destinations touchées (qui peut avoir débordé).
@@ -893,25 +944,32 @@ mod tests_gemm_q4 {
     #[test]
     fn gemm_q4_egale_matvec() {
         // Matrice 4 bits construite par `build` : 4 bits propres, échelle par ligne.
-        let (n_out, n_in, t) = (128usize, 256usize, 8usize);
+        let (n_out, n_in) = (128usize, 256usize);
         let w: Vec<f32> = (0..n_out * n_in)
             .map(|k| (((k * 1103515245 + 12345) % 2000) as f32 / 1000.0) - 1.0).collect();
         let d = DenseQ4::build(&w, n_out, n_in);
         let mut pool = Pool::new(4, n_in);
-        let x: Vec<i32> = (0..t * n_in).map(|k| ((k * 7919) % 101) as i32 - 50).collect();
-        let x16: Vec<Vec<i16>> = (0..t).map(|i| {
-            x[i * n_in..(i + 1) * n_in].iter().map(|&v| v as i16).collect()
-        }).collect();
-        let s32: Vec<Vec<i32>> = x16.iter().map(|v| crate::list::sommes32(v)).collect();
-        let sx: Vec<f32> = (0..t).map(|i| 0.002 * (i + 1) as f32).collect();
-        let plat: Vec<i16> = x16.concat();
-        let mut out = vec![0f32; n_out * t];
-        pool.gemm_dense_q4(&d, &plat, t, &s32, &sx, &mut out);
-        for i in 0..t {
-            for o in 0..n_out {
-                let attendu = d.dot16(o, &x16[i], &s32[i]) * sx[i];
-                assert!((out[o * t + i] - attendu).abs() <= 1e-4 * attendu.abs().max(1.0),
-                        "ligne {o} jeton {i} : {} contre {}", out[o * t + i], attendu);
+        // Les tailles de lot DÉPASSENT volontairement le nombre de blocs de 32
+        // (256 / 32 = 8) : c'est là que le passage du tableau des sommes par un
+        // pointeur gras faisait relire la longueur du premier jeton et partait en
+        // « index out of bounds : len 8, index 8 » chez un worker.
+        for t in [1usize, 8, 9, 17, 40] {
+            let x: Vec<i32> = (0..t * n_in).map(|k| ((k * 7919) % 101) as i32 - 50).collect();
+            let x16: Vec<Vec<i16>> = (0..t).map(|i| {
+                x[i * n_in..(i + 1) * n_in].iter().map(|&v| v as i16).collect()
+            }).collect();
+            let s32: Vec<Vec<i32>> = x16.iter().map(|v| crate::list::sommes32(v)).collect();
+            let sx: Vec<f32> = (0..t).map(|i| 0.002 * (i + 1) as f32).collect();
+            let plat: Vec<i16> = x16.concat();
+            let mut out = vec![0f32; n_out * t];
+            pool.gemm_dense_q4(&d, &plat, t, &s32, &sx, &mut out);
+            for i in 0..t {
+                for o in 0..n_out {
+                    let attendu = d.dot16(o, &x16[i], &s32[i]) * sx[i];
+                    assert!((out[o * t + i] - attendu).abs() <= 1e-4 * attendu.abs().max(1.0),
+                            "lot {t}, ligne {o} jeton {i} : {} contre {}",
+                            out[o * t + i], attendu);
+                }
             }
         }
     }

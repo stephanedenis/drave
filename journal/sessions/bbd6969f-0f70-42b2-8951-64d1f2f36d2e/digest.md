@@ -11431,3 +11431,1824 @@ KV 4  bits (4 591 jetons) : perplexité 49.9438 sur 4591 tokens
 ⏵ Tableau complet du KV : int8 +1,5 %/+3,4 %, int4 +219 %/+287 % selon le contexte
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='docs/contexte-long.md'\ns=open(p).read()\nvieux = \"\"\"| KV (512 jetons) | échelle par vecteur | **échelle par bloc de 32** |\n|---|---|---|\n| f32 | 13,14 | 13,14 |\n| int8 | 14,07 (+7,1 %) | **13,34 (+1,5 %)** … [2135 caractères tronqués]`
+
+  ```
+tableau KV mis à jour
+98cdf1b KV par bloc : mesure longue (4 591 jetons) -- int8 +3,4 %, int4 +287 %
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log --oneline -12 | cat; echo \"--- état ---\"; git status --short | head -3; echo \"--- tests + non-régression ---\"; cd qtrinet-core && cargo test --release 2>&1 | grep \"test result\"; cd .. && ./qtrinet-core/target/release/qt … [236 caractères tronqués]`
+
+  ```
+98cdf1b KV par bloc : mesure longue (4 591 jetons) -- int8 +3,4 %, int4 +287 %
+833a843 Aiguille : test arrete, et pourquoi (remplissage trop repetitif, prefill trop lent)
+26b7587 KV a echelles par bloc de 32 : int8 de +7,1 % a +1,5 %, int4 de +384 % a +219 %
+2589330 Aiguille : le 0.5B echoue 6 fois sur 6 (limite du modele, pas du moteur)
+b9ba6ce REPRISE : toutes les mesures du tour huit chantiers, et la suite ordonnee
+71dbcf5 Item 4 : le GEMM sur le pool, et le gain reel attribue poste par poste
+fd695bc Item 8 : premiers resultats d'attention creuse (et ils sont opposes)
+6a64b35 Item 3 : KV quantifie mesure aussi a 4 600 jetons, et compare a llama.cpp
+aef0b8a Plan 1 M : etat reel des six etapes et ce qui se mesure tout de suite
+72fbe30 Item 2 : le seuil de rotation, tranche par une comparaison appariee
+5719501 Item 4 : MoE par lots -- regroupement des jetons par expert
+3091473 Item 7 (2/2) : noyaux GPU 4 bits -- MXFP4 et Q4_K, une warp par ligne
+--- état ---
+ M journal/README.md
+--- tests + non-régression ---
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.09s
+perplexité 19.3885 sur 510
+  ```
+
+### 🤖 Assistant
+
+⏵ Tour terminé : les huit chantiers ont avancé, la non-régression tient (19,3885)
+
+**Ce que ce tour a livré** (12 commits, tous vérifiés)
+
+| # | chantier | état | mesure |
+|---|---|---|---|
+| 1 | protocole longue | ✅ | `--depuis` : `--depuis 256 --ctx 256` redonne exactement la fenêtre historique (21,565) |
+| 2 | seuil de rotation | ✅ | apparié, mêmes 512 jetons : RoPE simple **39,5 / 49,8 / 49,9 / 298,6** contre interpolation 42,1 / 82,0 / 82,2 / 578,9 → le simple gagne partout |
+| 3 | KV int8/int4 | ✅ | **échelles par bloc de 32** : int8 **+1,5 %** (512 j) et **+3,4 %** (4 591 j) — était +7,1 % et +5,2 % ; int4 +219 %/+287 % ; llama.cpp : +0,8 %/+494 % |
+| 4 | préremplissage par lots | ✅ | GEMM int8 **et** 4 bits + regroupement des experts ; juste (13,1359 vs 13,1368) ; gain **−3 %** attribué : projections ÷2, mais attention non groupée ×2,2 et tête restée par jeton |
+| 5 | échelles par bloc `DenseQ8` | ✅ | hypothèse **réfutée** : 23,696 contre 23,612 ; l'avantage du 6 bits est son coût (25 % d'octets en moins) |
+| 6 | boucles CLI | ✅ | `Options` + `analyser` ; **3 drapeaux de plus** trouvés ignorés et un bug de pas de lecture (qui masquait `--ctx`/`--threads`) |
+| 7 | noyaux GPU | ✅ | warp : tête **1,6 ms** contre 7,3 CPU ; MXFP4 **0,00e0** d'écart (bit à bit) ; Q4_K 4e-7 ; reste Q6_K |
+| 8 | plan 1 M | 🔄 | E1/E2/E3 faits ; **attention creuse : top-256 améliore la perplexité de 21 %** (234,9 contre 298,6) tandis qu'élargir la fenêtre la détruit (×11) ; E4/E5 à implémenter ; MLA et vision non testables ici |
+
+**Trois bogues de plus corrigés au passage** : le biais de descente des experts (latent, effet nul sur le 30B), le tampon de sortie dimensionné sur `h` au lieu de `n_têtes×dim`, et l'empaquetage 4 bits du KV. Plus une leçon de méthode : un remplacement de texte qui échoue en silence a produit une perplexité de 399 074 — un `assert` sur le motif l'aurait évité, et c'est désormais ce que je fais.
+
+**L'étude PowerInfer** est dans `reports/rapport-localite-activation.md` : la localité existe (82 % des neurones inactifs par jeton) mais l'ensemble *toujours* chaud est minuscule (0,08 %) → leur préchargement statique ne paierait pas sur un modèle SiLU ; ce qu'on garde, c'est le placement **par expert** et un cache à éviction.
+
+**Reste ouvert** (l'objectif continue) : attention groupée dans le chemin par lots puis **la tête en GEMM** (les deux corrections chiffrées du chantier 4), Q6_K, puis E4 (KV déporté GPU) et E5 (attention creuse implémentée) ; MLA et vision demandent des modèles que cette machine n'a pas.
+
+
+## Tour 6
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Réaliser les 8 chantiers restants du projet qtrinet-core dans l'ordre : (1) protocole de perplexité longue --depuis/--stride, (2) trancher le seuil de rotation YaRN avec ce protocole, (3) KV int8 puis int4 mesurés sur Qwen 0.5B à ctx 8192 contre llama.cpp, (4) préremplissage par lots (GEMM par tranches), (5) échelles par bloc pour DenseQ8, (6) refactorisation des boucles CLI en une seule, (7) noyaux GPU warp par ligne puis formats 4 bits, (8) suite du plan 1 M (KV paginé + déport GPU, attention creuse, MLA, vision). Chaque chantier doit être implémenté, mesuré (non-régression Qwen 19,3885 et gpt-oss 15,1757 quand c'est pertinent), documenté dans le dépôt et commité."
+Round: 2/24
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Tour 2 : je reprends l'item 4 par ses deux corrections chiffrées (attention groupée, tête en GEMM)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log --oneline -3 | cat; git status --short | head -3; ps -eo comm | grep -c qtrinet || echo \"aucun moteur\"; cd qtrinet-core && cargo test --release 2>&1 | grep \"test result\"", "description": "Check the starting state of round … [25 caractères tronqués]`
+
+  ```
+98cdf1b KV par bloc : mesure longue (4 591 jetons) -- int8 +3,4 %, int4 +287 %
+833a843 Aiguille : test arrete, et pourquoi (remplissage trop repetitif, prefill trop lent)
+26b7587 KV a echelles par bloc de 32 : int8 de +7,1 % a +1,5 %, int4 de +384 % a +219 %
+ M journal/README.md
+0
+aucun moteur
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.08s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src && grep -n \"// 3. normes de tête, rotation, écriture du cache, attention\" -A 12 model.rs | head -20; grep -n \"for hh in 0..nh {\" model.rs | head -4", "description": "Locate the batched attention loop"}`
+
+  ```
+1617:            // 3. normes de tête, rotation, écriture du cache, attention
+1618-            for i in 0..t {
+1619-                let pos = pos0 + i;
+1620-                let qi = &mut q[i * nq..(i + 1) * nq];
+1621-                let ki = &mut k[i * nkv * hd..(i + 1) * nkv * hd];
+1622-                let vi = &v[i * nkv * hd..(i + 1) * nkv * hd];
+1623-                if lay.q_norm.is_some() || lay.k_norm.is_some() {
+1624-                    if let Some(w) = lay.q_norm.as_ref() {
+1625-                        for hh in 0..nh {
+1626-                            let tt = &mut qi[hh * hd..(hh + 1) * hd];
+1627-                            Self::rmsnorm(tt, w, self.cfg.eps, &mut tmp);
+1628-                            tt.copy_from_slice(&tmp);
+1629-                        }
+1625:                        for hh in 0..nh {
+1663:                for hh in 0..nh {
+1949:                    for hh in 0..nh {
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src && sed -n '1655,1685p' model.rs", "description": "Read the batched per-head attention"}`
+
+  ```
+}
+                let fen = if self.attn_window == 0 { 0 }
+                          else if self.swa_pattern <= 1 { self.attn_window }
+                          else if l % self.swa_pattern < self.swa_pattern - 1 { self.attn_window }
+                          else { 0 };
+                let kvc = &self.kv[l];
+                let n = pos + 1;
+                let lo = if fen > 0 && n > fen { n - fen } else { 0 };
+                for hh in 0..nh {
+                    let kvh = hh / rep;
+                    let qh = &qi[hh * hd..(hh + 1) * hd];
+                    for tt in lo..n {
+                        kvc.cle(kvh, tt, &mut kd);
+                        sc[tt] = Self::dot8(&qh, &kd) * scale;
+                    }
+                    let puits = lay.sinks.as_ref().map(|s| s[hh]);
+                    let mut mx = f32::NEG_INFINITY;
+                    for tt in lo..n { if sc[tt] > mx { mx = sc[tt]; } }
+                    if let Some(s) = puits { if s > mx { mx = s; } }
+                    let mut somme = 0f32;
+                    for tt in lo..n { let e = (sc[tt] - mx).exp(); sc[tt] = e; somme += e; }
+                    if let Some(s) = puits { somme += (s - mx).exp(); }
+           
+… [442 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src && sed -n '/^    pub fn logits/,/^    }$/p' model.rs | tail -45", "description": "Read the head computation"}`
+
+  ```
+let dref = &d;
+            let vocab = d.n_out;
+            let nt = self.pool.threads().max(1);
+            let chunk = vocab.div_ceil(nt);
+            let mut out = vec![0f32; vocab];
+            let xi = &xi;
+            let sx32 = &crate::list::sommes32(xi);
+            std::thread::scope(|sc| {
+                for (ci, part) in out.chunks_mut(chunk).enumerate() {
+                    sc.spawn(move || {
+                        let base = ci * chunk;
+                        for (j, o) in part.iter_mut().enumerate() {
+                            *o = dref.dot16(base + j, xi, sx32) * sx;
+                        }
+                    });
+                }
+            });
+            self.head4 = Some(d);
+            return out;
+        }
+        // int16 : la troncature en i8 ruinerait une activation quantifiée sur
+        // 32767 niveaux (le corps du modèle, lui, n'est pas concerné : il
+        // transporte des i32 dans le vecteur creux).
+        let mut qx = vec![0i16; h.len()];
+        for (&i, &v) in sv.idx.iter().zip(sv.val.iter()) { qx[i as usize] = v as i16; }
+        let vocab = self.cfg.vocab;
+        let view = self.g.q8_view(&self.tete);
+        let nt = self.pool.threa
+… [570 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ D'abord l'attention groupée dans le chemin par lots (les clés étaient déquantifiées une fois par tête)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src && python3 - <<'PY'\np='model.rs'\ns=open(p).read()\nvieux = \"\"\"                let kvc = &self.kv[l];\n                let n = pos + 1;\n                let lo = if fen > 0 && n > fen { n - fen } else { 0 };\n       … [6122 caractères tronqués]`
+
+  ```
+BUILD
+lot 1   : perplexité 13.1368 sur 511 tokens (0 événements, 16.8 s)
+postes (ms/token) : projets-attn 2.49 | rope 0.43 | attention 2.76 | proj+mlp 20.24 | somme 25.92 | reste (tête + échantillonnage) 7.00
+lot 512 : perplexité 13.1359 sur 511 tokens (0 événements, 14.4 s)
+postes (ms/token) : projets-attn 1.02 | rope 0.00 | attention 5.52 | proj+mlp 14.51 | somme 21.05 | reste (tête + échantillonnage) 7.21
+  ```
+
+### 🤖 Assistant
+
+⏵ Le lot passe devant (−14 %) ; maintenant la tête en GEMM (25 % du temps restant)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src && python3 - <<'PY'\np='model.rs'\ns=open(p).read()\ns=s.replace(\"\"\"    /// Tête de sortie : produits scalaires entiers sur les lignes Q8_0 du\n    /// plafond d'embedding (poids liés). Parallélisé par tranches de vo … [5058 caractères tronqués]`
+
+  ```
+error[E0422]: cannot find struct, variant or union type `SparseVec` in module `crate::list`
+    --> src/model.rs:2349:39
+     |
+2349 |                 None => (crate::list::SparseVec { idx: Vec::new(), val: Vec::new() }, 1.0),
+     |                                       ^^^^^^^^^
+     |
+    ::: src/list.rs:143:1
+     |
+ 143 | pub struct SparseK {
+--
+error: could not compile `qtrinet-core` (bin "qtrinet-core") due to 1 previous error; 8 warnings emitted
+BUILD
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src && grep -n \"pub struct SparseVec\" *.rs | head -2 && python3 - <<'PY'\np='model.rs'\ns=open(p).read()\ns=s.replace(\"\"\"                None => (crate::list::SparseVec { idx: Vec::new(), val: Vec::new() }, 1.0),\"\"\" … [345 caractères tronqués]`
+
+  ```
+engine.rs:29:pub struct SparseVec {
+16:use crate::engine::{Pool, SparseVec};
+BUILD
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for l in 1 512; do printf \"lot %-3s : \" $l; timeout 400 ./qtrinet-core/target/release/qtrinet-core models/Qwen2.5-0.5B-Q8_0.gguf --ppl /tmp/ids_qwen.txt --ctx 512 --limit 512 --dense --threads 16 --lot $l 2>&1 | grep -oE \"perplexi … [164 caractères tronqués]`
+
+  ```
+lot 1   : perplexité 13.1368 sur 511 tokens (0 événements, 17.1 s)
+postes (ms/token) : projets-attn 2.52 | rope 0.46 | attention 2.84 | proj+mlp 20.51 | somme 26.34 | reste (tête + échantillonnage) 7.08
+lot 512 : perplexité 13.1359 sur 511 tokens (0 événements, 13.5 s)
+postes (ms/token) : projets-attn 0.93 | rope 0.00 | attention 5.48 | proj+mlp 13.26 | somme 19.67 | reste (tête + échantillonnage) 6.77
+  ```
+
+### 🤖 Assistant
+
+⏵ Lot 512 : 13,5 s contre 17,1 (−21 %). Je vérifie sur gpt-oss (MoE)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for l in 1 128; do printf \"gpt-oss lot %-3s : \" $l; timeout 900 ./qtrinet-core/target/release/qtrinet-core /home/stephane/FastNVMe/models/gpt-oss-120b-MXFP4.gguf --ppl /tmp/ids_oss.txt --ctx 256 --limit 256 --dense --threads 16 --l … [231 caractères tronqués]`
+
+  ```
+gpt-oss lot 1   : perplexité 13.7149 sur 255 tokens (0 événements, 51.6 s)
+postes (ms/token) : projets-attn 31.83 | rope 2.92 | attention 16.36 | proj+mlp 126.83 | somme 177.95 | reste (tête + échantillonnage) 24.38
+gpt-oss lot 128 : 
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 900 ./qtrinet-core/target/release/qtrinet-core /home/stephane/FastNVMe/models/gpt-oss-120b-MXFP4.gguf --ppl /tmp/ids_oss.txt --ctx 256 --limit 256 --dense --threads 16 --lot 128 2>&1 | tail -5", "description": "See the gpt-os … [41 caractères tronqués]`
+
+  ```
+index out of bounds: the len is 90 but the index is 90
+
+thread '<unnamed>' (3350642) panicked at src/engine.rs:473:77:
+index out of bounds: the len is 90 but the index is 90
+timeout: the monitored command dumped core
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src && sed -n '466,478p' engine.rs", "description": "Inspect the panicking line"}`
+
+  ```
+let s32 = unsafe { &*sh.gs32.load(Ordering::Acquire) };
+                            const TUILE4: usize = 8;
+                            for i0 in (0..t).step_by(TUILE4) {
+                                let i1 = (i0 + TUILE4).min(t);
+                                for o in lo..hi {
+                                    for i in i0..i1 {
+                                        let xi = &x16[i * d.n_in..(i + 1) * d.n_in];
+                                        out[o * t + i] = d.dot16(o, xi, &s32[i]) * sx[i];
+                                    }
+                                }
+                            }
+                        }
+                        sh.done.fetch_add(1, Ordering::Release);
+  ```
+
+### 🤖 Assistant
+
+⏵ Panique à lot 128 sur gpt-oss : je bissecte la taille du lot
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for l in 8 16 32 64; do printf \"lot %-3s : \" $l; timeout 600 ./qtrinet-core/target/release/qtrinet-core /home/stephane/FastNVMe/models/gpt-oss-120b-MXFP4.gguf --ppl /tmp/ids_oss.txt --ctx 256 --limit 256 --dense --threads 16 --lot  … [193 caractères tronqués]`
+
+  ```
+lot 8   : perplexité 13.7205 sur 255 tokens (0 événements, 36.6 s)
+lot 16  : perplexité 13.7205 sur 255 tokens (0 événements, 35.7 s)
+lot 32  : perplexité 13.7205 sur 255 tokens (0 événements, 35.5 s)
+lot 64  : perplexité 13.7205 sur 255 tokens (0 événements, 34.4 s)
+  ```
+
+### 🤖 Assistant
+
+⏵ J'ajoute des garde-fous dans les lanceurs de GEMM pour localiser précisément
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src && python3 - <<'PY'\np='engine.rs'\ns=open(p).read()\ns=s.replace(\"\"\"    pub fn gemm_dense_q4(&mut self, d: &crate::list::DenseQ4, x16: &[i16], t: usize,\n                         s32: &[Vec<i32>], sx: &[f32], out: & … [1400 caractères tronqués]`
+
+  ```
+622:    pub fn gemm_dense_i8(&mut self, d: &DenseQ8, x: &[i32], t: usize, sx: &[f32], out: &mut [f32]) {
+623-        assert!(out.len() >= d.n_out * t, "sortie du lot trop petite");
+624-        let sh = &self.shared;
+thread '<unnamed>' (3353276) panicked at src/engine.rs:473:77:
+thread '<unnamed>' (3353272) panicked at src/engine.rs:473:77:
+thread '<unnamed>' (3353273) panicked at src/engine.rs:473:77:
+thread '<unnamed>' (3353266) panicked at src/engine.rs:473:77:
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src && sed -n '/pub fn dot16(/,/^    }$/p' list.rs | tail -25", "description": "Read dot16's fallback path"}`
+
+  ```
+pub fn dot16(&self, o: usize, x: &[i16], sx32: &[i32]) -> f32 {
+        #[cfg(target_arch = "x86_64")]
+        {
+            if std::is_x86_feature_detected!("avx2") {
+                if self.src == Source::Q4_K && sx32.len() * BLOC_Q4 >= self.n_in {
+                    return unsafe { self.dot16_q4k_avx2(o, x, sx32) };
+                }
+                if self.src == Source::Q6_K {
+                    return unsafe { self.dot16_q6k_avx2(o, x) };
+                }
+                if self.plan6.is_some() && self.n_in % BLOC_Q4 == 0 {
+                    return unsafe { self.dot16_q6_avx2(o, x, sx32) };
+                }
+                if self.src != Source::Propre && self.src != Source::Q4_K
+                    && self.src != Source::Q6_K {
+                    return unsafe { self.dot16_source_avx2(o, x) };
+                }
+                if self.n_in % BLOC_Q4 == 0 && x.len() >= self.n_in {
+                    return unsafe { self.dot16_avx2(o, x) };
+                }
+            }
+        }
+        let xi: Vec<i32> = x[..self.n_in].iter().map(|&v| v as i32).collect();
+        self.dot(o, &xi)
+    }
+  ```
+
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/REPRISE.md</path>
+<type>file</type>
+<content>
+1: # Reprise — état du projet et mode d'emploi pour une nouvelle session
+2: 
+3: > Rédigé à la fin d'une session longue. Tout ce qui suit est **mesuré**, pas
+4: > déduit. Les valeurs de perplexité sont des **références de non-régression** :
+5: > si une modification les change, c'est qu'elle a changé le calcul.
+6: 
+7: ---
+8: 
+9: ## 1. En une phrase
+10: 
+11: `qtrinet-core` est un moteur d'inférence Rust (~5 000 lignes, `std` seul) qui
+12: charge les GGUF **en place** (aucune copie, aucune requantification), exécute les
+13: projections soit en listes d'événements, soit en produit scalaire dense, gère les
+14: MoE, tient une conversation, et déporte au GPU ce qui y gagne. Il fait tourner du
+15: 0,5 B au 120 B sur le CPU de cette machine.
+16: 
+17: ```bash
+18: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && cargo build --release
+19: ./target/release/qtrinet-core ../models/Qwen2.5-0.5B-Q8_0.gguf \
+20:     --infer --chat --flux --prompt "Explique le ciel bleu en une phrase." \
+21:     --n 64 --ctx 512 --threads 16 --temp 0
+22: ```
+23: 
+24: ---
+25: 
+26: ## 2. Références de no
+… [3959 caractères tronqués]
+  ```
+
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src/main.rs</path>
+<type>file</type>
+<content>
+808: fn run_ppl(args: &[String]) {
+809:     let path = &args[1];
+810:     let mut idfile = String::new();
+811:     let mut ctx = 256usize;
+812:     let mut limit = usize::MAX;
+813:     let mut abits = 16u32;
+814:     let mut b6 = 0u8;
+815:     let mut hebb_layer: Option<usize> = None;
+816:     let mut patch_file: Option<String> = None;
+817:     let mut gain: Option<(usize, f32)> = None;
+818:     let mut act_thresh = 0.0f32;
+819:     let mut act_topk = 0usize;
+820:     let mut act_renorm = false;
+821:     let mut topk_proj = [0usize; 7];
+822:     let mut attn_topk = 0usize;
+823:     let mut qk_topk = 0usize;
+824:     let mut attn_window = 0usize;
+825:     // 0 = « garder la valeur du modèle » : les métadonnées déclarent parfois une
+826:     // fenêtre glissante (gpt-oss : 128) et des puits appris, qu'un défaut CLI
+827:     // écraserait silencieusement.
+828:     let mut attn_sinks = 0usize;
+829:     // Défaut : le moteur CHOISIT par mesure. Les deux formes sont chargées et la
+830:     // bascule se fait projection par projection sur la densité mesurée — les
+831:     // s
+… [3959 caractères tronqués]
+  ```
+
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src/model.rs</path>
+<type>file</type>
+<content>
+600:                 wq: Proj::load(&g, &p("attn_q.weight"), Some(&p("attn_q.bias")), dense || q4 != 0, auto, keep, q4 & 2 != 0, b6 & 2 != 0),
+601:                 wk: Proj::load(&g, &p("attn_k.weight"), Some(&p("attn_k.bias")), dense || q4 != 0, auto, keep, q4 & 2 != 0, b6 & 2 != 0),
+602:                 wv: Proj::load(&g, &p("attn_v.weight"), Some(&p("attn_v.bias")), dense || q4 != 0, auto, keep, q4 & 2 != 0, b6 & 2 != 0),
+603:                 wo: Proj::load(&g, &p("attn_output.weight"), None, dense || q4 != 0, auto, keep, q4 & 2 != 0, b6 & 2 != 0),
+604:                 // gpt-oss nomme `post_attention_norm` la normale d'entrée du
+605:                 // FFN ; c'est le même tenseur sous un autre nom.
+606:                 ffn_norm: if g.tensor(&p("ffn_norm.weight")).is_some() {
+607:                     g.dequant(&p("ffn_norm.weight"))
+608:                 } else {
+609:                     g.dequant(&p("post_attention_norm.weight"))
+610:                 },
+611:                 q_norm: if g.tensor(&p("attn_q_norm.weight")).is_some() {
+612:                     Some(g.deq
+… [3959 caractères tronqués]
+  ```
+
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/ref_logits.cpp</path>
+<type>file</type>
+<content>
+1: // ref_logits.cpp — référence externe llama.cpp pour comparer les logits d'un moteur maison.
+2: //
+3: // Usage : ref_logits <modele.gguf> <ids.txt> <sortie.bin> [n_max]
+4: //
+5: //   - lit la liste d'identifiants (entiers séparés par des virgules et/ou des espaces)
+6: //   - évalue la séquence EXACTE : positions 0..N-1, aucun BOS ajouté, une seule
+7: //     séquence, un seul batch (n_ctx = N + marge, n_batch = n_ubatch = N)
+8: //   - écrit <sortie.bin> en petit-boutiste :
+9: //         int32 n_vocab
+10: //         int32 n_pos
+11: //         n_pos * n_vocab float32, ligne par position
+12: //     la ligne i contient la distribution qui prédit ids[i+1] (donc n_pos = N-1)
+13: //   - affiche n_pos, n_vocab, la NLL moyenne et la perplexité (log-softmax sur
+14: //     les mêmes lignes, cible de la ligne i = ids[i+1])
+15: //
+16: // Compilation (voir ref_logits.md) :
+17: //   g++ -O2 -std=c++17 tools/ref_logits.cpp -o tools/ref_logits \
+18: //       -I /home/stephane/Data13TB/stephane/GitHub/llama.cpp/include \
+19: //       -I /home/stephane/Data13TB/stephane/GitHub/llama.cpp/ggm
+… [3959 caractères tronqués]
+  ```
+
+
+  ```
+337:    logits_bin: Option<String>, ppl_profil: bool,
+379:            "--logits-bin" => o.logits_bin = Some(suivant(i).clone()),
+431:            "--ppl-profil" => o.ppl_profil = true,
+1097:        topk_proj, moe_topk, patch: patch_file, hebb_layer, ffn_gain, logits_bin,
+1098:        ppl_profil, lot, harmony, harmony_contexte, sans_yarn, ..
+    // --- mesure
+    logits_bin: Option<String>, ppl_profil: bool,
+    harmony: Option<String>, harmony_contexte: Option<String>,
+    // --- rotation
+    println!("\n--- mesure ---");
+    println!("prompt  : {} tokens en {:.3} s  ({:.1} tok/s, TTFT {:.1} ms)",
+             st.n_prompt, st.prompt_s, st.n_prompt as f64 / st.prompt_s,
+             st.prompt_s * 1e3 / st.n_prompt.max(1) as f64);
+    println!("généré  : {} tokens en {:.3} s  ({:.2} tok/s)",
+             st.n_gen, st.gen_s, st.n_gen as f64 / st.gen_s);
+    println!("événements : {} au total, {:.1} par token",
+             st.events, st.events as f64 / (st.n_prompt + st.n_gen) as f64);
+    if let Some(hb) = mdl.hebb.as_ref() {
+        use std::io::Write;
+        let mut f = std::fs::File::create(&hebb_out).expect("création du fichier hebbien");
+        for v in &hb.h { f.write_all(&v.t
+… [3958 caractères tronqués]
+  ```
+
+
+> **Compactage de contexte** — résumé conservé :
+
+```
+## Primary Request and Intent
+- Initial: "continue avec REPRISE.md" — resume the qtrinet-core project from its handoff doc.
+- Then: "prochaine étape?" → I proposed options; user chose item A (quantification gap), then redirected: "YaRN à retardement, prévoit aussi des contextes ultra longs 1M".
+- Then: "que reste-t-il à faire" → I listed 8 chantiers; user said: **"fais les 8 dans l'ordre"** (do the 8 in order).
+- Goal created (`goal-7beedcd4-55c3-4592-a3f6-f99085e458f1`, active, round 2/24, max 24): "Réaliser les 8 chantiers restants du projet qtrinet-core dans l'ordre : (1) protocole de perplexité longue --depuis/--stride, (2) trancher le seuil de rotation YaRN avec ce protocole, (3) KV int8 puis int4 mesurés sur Qwen 0.5B à ctx 8192 contre llama.cpp, (4) préremplissage par lots (GEMM par tranches), (5) échelles par bloc pour DenseQ8, (6) refactorisation des boucles CLI en une seule, (7) noyaux GPU warp par ligne puis formats 4 bits, (8) suite du plan 1 M (KV paginé + déport GPU, attention creuse, MLA, vision). Chaque chantier doit être implémenté, mesuré (non-régression Qwen 19,3885 et gpt-oss 15,1757 quand c'est pertinent), documenté dans le dépôt et commité."
+- Also: "Étudie https://github.com/Tiiny-AI/PowerInfer pour voir si tu peux améliorer notre solution avec leurs idées".
+
+## Key Technical Concepts
+- Rust engine `qtrinet-core` (std only), reads GGUF in place, event-list (push) sparse matvec vs dense int8, MoE (4/128 experts gpt-oss), harmony chat template, YaRN/RoPE, sliding-window per-layer pattern (`swa_pattern`, gpt-oss = 2 alternating).
+- Machine: 2× Xeon E5-2687W v3 (40 threads), 125 GB RAM, 2× Quadro RTX 5000 16 GB (sm_75), NVMe ~3.5 GB/s.
+- Reference harness `tools/ref_logits` (llama.cpp, same ids, no BOS) + `tools/compare_logits.py`.
+- PTX chain: `clang++ -x cuda --cuda-device-only --cuda-gpu-arch=sm_75 -nocudalib -nocudainc -O3 -S -include $(clang -print-resource-dir)/include/__clang_cuda_builtin_vars.h -include cuda_stub.h -o qtrinet_gpu.ptx qtrinet_gpu.cu` (in `qtrinet-core/gpu/compiler.sh`).
+- Method rules: measure before concluding; verify which path is active via `[config]` traces; no conclusions on 255 tokens; don't leave the repo broken.
+
+## Files and Code
+- `qtrinet-core/src/model.rs`: `KvCache` (f32/int8/int4 packed, now **per-32-block scales**, `nb`), `forward_lot` (batched dense + grouped MoE), `logits_lot` (batched head with `TUILE_TETE=16`), neuron/expert profiler (`profil_neurones`, `profil_experts`, `SEUIL_PROFIL=0.05`, `rapport_neurones`, `ecrire_neurones`), rotation selection + `[config] rotation` trace, `rope_yarn(..., mscale_actif, ...)`.
+- `qtrinet-core/src/engine.rs`: `Shared` + modes 3 (int8 matvec), 4 (q4 matvec), **5 (int8 GEMM)**, **6 (q4 GEMM)** on pool workers; `gemm_dense_i8`/`gemm_dense_q4` (row split, tiling TUILE=16/TUILE_Q4=8, guards asserting out/x16/s32/sx lengths); unit tests `tests_gemm`, `tests_gemm_q4`.
+- `qtrinet-core/src/main.rs`: `struct Options` + `fn analyser` (single parse loop returning consumed-arg count `pas`), `run_infer/run_ppl/run_plan/run_tokenize/run_gpu_banc/banc_mxfp4/banc_q4k`, `--depuis`, `--lot`, `--ppl-profil`, `--logits-bin`, `--profil-neurones`, `--neurones-sortie`, `--kv-bits` via `QT_KV_BITS`, per-mode defaults via `ctx_impose/threads_impose/abits_impose`.
+- `qtrinet-core/src/list.rs`: `Source8::{Propre, PropreBloc, Q8_0}`, `DenseQ8::build_blocs`/`dot_blocs`, `DenseQ4`, `sommes32`.
+- `qtrinet-core/src/gguf.rs`: `Gguf::open_meta` (header-only read; `--tokenize` 60 s → 0,385 s), `echelle_min_q4k`, `TAILLE_Q4K=144`.
+- `qtrinet-core/gpu/qtrinet_gpu.cu` + `.ptx`: `tete_q8`, `proj_q8`, `tete_q8_warp`, `proj_q8_warp`, `proj_mxfp4_warp`, `proj_q4k_warp`; `cuda_stub.h`, `compiler.sh`.
+- `tools/aiguille.py` (needle test), `tools/harmony_canonique.py`, `tools/ref_logits.cpp/.md`, `tools/compare_logits.py`.
+- Docs: `REPRISE.md` (status of 8 chantiers + measurements table), `docs/contexte-long.md` (1M plan, E1–E7, KV tables, rotation curves), `reports/rapport-g
+… [6060 caractères tronqués]
+```
+
+### 👤 Utilisateur
+
+This is an automatically generated checkpoint condensing an earlier span of the conversation to free up context. Treat the captured context as established background and build on it without restating it. Continue the task directly from the messages that follow, without acknowledging this checkpoint.
+
+<compacted-summary>
+## Primary Request and Intent
+- Initial: "continue avec REPRISE.md" — resume the qtrinet-core project from its handoff doc.
+- Then: "prochaine étape?" → I proposed options; user chose item A (quantification gap), then redirected: "YaRN à retardement, prévoit aussi des contextes ultra longs 1M".
+- Then: "que reste-t-il à faire" → I listed 8 chantiers; user said: **"fais les 8 dans l'ordre"** (do the 8 in order).
+- Goal created (`goal-7beedcd4-55c3-4592-a3f6-f99085e458f1`, active, round 2/24, max 24): "Réaliser les 8 chantiers restants du projet qtrinet-core dans l'ordre : (1) protocole de perplexité longue --depuis/--stride, (2) trancher le seuil de rotation YaRN avec ce protocole, (3) KV int8 puis int4 mesurés sur Qwen 0.5B à ctx 8192 contre llama.cpp, (4) préremplissage par lots (GEMM par tranches), (5) échelles par bloc pour DenseQ8, (6) refactorisation des boucles CLI en une seule, (7) noyaux GPU warp par ligne puis formats 4 bits, (8) suite du plan 1 M (KV paginé + déport GPU, attention creuse, MLA, vision). Chaque chantier doit être implémenté, mesuré (non-régression Qwen 19,3885 et gpt-oss 15,1757 quand c'est pertinent), documenté dans le dépôt et commité."
+- Also: "Étudie https://github.com/Tiiny-AI/PowerInfer pour voir si tu peux améliorer notre solution avec leurs idées".
+
+## Key Technical Concepts
+- Rust engine `qtrinet-core` (std only), reads GGUF in place, event-list (push) sparse matvec vs dense int8, MoE (4/128 experts gpt-oss), harmony chat template, YaRN/RoPE, sliding-window per-layer pattern (`swa_pattern`, gpt-oss = 2 alternating).
+- Machine: 2× Xeon E5-2687W v3 (40 threads), 125 GB RAM, 2× Quadro RTX 5000 16 GB (sm_75), NVMe ~3.5 GB/s.
+- Reference harness `tools/ref_logits` (llama.cpp, same ids, no BOS) + `tools/compare_logits.py`.
+- PTX chain: `clang++ -x cuda --cuda-device-only --cuda-gpu-arch=sm_75 -nocudalib -nocudainc -O3 -S -include $(clang -print-resource-dir)/include/__clang_cuda_builtin_vars.h -include cuda_stub.h -o qtrinet_gpu.ptx qtrinet_gpu.cu` (in `qtrinet-core/gpu/compiler.sh`).
+- Method rules: measure before concluding; verify which path is active via `[config]` traces; no conclusions on 255 tokens; don't leave the repo broken.
+
+## Files and Code
+- `qtrinet-core/src/model.rs`: `KvCache` (f32/int8/int4 packed, now **per-32-block scales**, `nb`), `forward_lot` (batched dense + grouped MoE), `logits_lot` (batched head with `TUILE_TETE=16`), neuron/expert profiler (`profil_neurones`, `profil_experts`, `SEUIL_PROFIL=0.05`, `rapport_neurones`, `ecrire_neurones`), rotation selection + `[config] rotation` trace, `rope_yarn(..., mscale_actif, ...)`.
+- `qtrinet-core/src/engine.rs`: `Shared` + modes 3 (int8 matvec), 4 (q4 matvec), **5 (int8 GEMM)**, **6 (q4 GEMM)** on pool workers; `gemm_dense_i8`/`gemm_dense_q4` (row split, tiling TUILE=16/TUILE_Q4=8, guards asserting out/x16/s32/sx lengths); unit tests `tests_gemm`, `tests_gemm_q4`.
+- `qtrinet-core/src/main.rs`: `struct Options` + `fn analyser` (single parse loop returning consumed-arg count `pas`), `run_infer/run_ppl/run_plan/run_tokenize/run_gpu_banc/banc_mxfp4/banc_q4k`, `--depuis`, `--lot`, `--ppl-profil`, `--logits-bin`, `--profil-neurones`, `--neurones-sortie`, `--kv-bits` via `QT_KV_BITS`, per-mode defaults via `ctx_impose/threads_impose/abits_impose`.
+- `qtrinet-core/src/list.rs`: `Source8::{Propre, PropreBloc, Q8_0}`, `DenseQ8::build_blocs`/`dot_blocs`, `DenseQ4`, `sommes32`.
+- `qtrinet-core/src/gguf.rs`: `Gguf::open_meta` (header-only read; `--tokenize` 60 s → 0,385 s), `echelle_min_q4k`, `TAILLE_Q4K=144`.
+- `qtrinet-core/gpu/qtrinet_gpu.cu` + `.ptx`: `tete_q8`, `proj_q8`, `tete_q8_warp`, `proj_q8_warp`, `proj_mxfp4_warp`, `proj_q4k_warp`; `cuda_stub.h`, `compiler.sh`.
+- `tools/aiguille.py` (needle test), `tools/harmony_canonique.py`, `tools/ref_logits.cpp/.md`, `tools/compare_logits.py`.
+- Docs: `REPRISE.md` (status of 8 chantiers + measurements table), `docs/contexte-long.md` (1M plan, E1–E7, KV tables, rotation curves), `reports/rapport-gpt-oss-perplexite.md`, `reports/rapport-localite-activation.md` (PowerInfer), `reports/rapport-prefill-par-lots.md`.
+
+## Errors and Fixes
+- `attn_output.bias` ignored → 39,80 → 20,84 (63 tokens); window applied to all 36 layers instead of every other → 129,9 → 15,08 (511 tokens); learned sinks missing in full-attention softmax (latent, no effect).
+- CLI parser: boolean arms advanced `i += 2` → `--ctx`/`--threads` silently skipped (30 threads, ctx 256, spin-barrier livelock: 27 min for a 2-min pass) → rewrote `analyser` with explicit `pas` (1 or 2).
+- Same class: `--attn-topk`, `--qk-topk`, `--sans-yarn` were ignored in inference.
+- GPU: stub declared `threadIdx`/`blockDim` as extern globals → PTX `ld.global` → 0 → `pas=0` infinite kernel loop; fix = include `__clang_cuda_builtin_vars.h`.
+- KV: bit-selection bug (`bits > 8` → 8 mapped to 4) and `|=` nibble packing keeping stale window nibbles.
+- KV per-block change applied only to read path (silent failed string replace) → PPL 399 074; fixed with `assert motif in s`.
+- `forward_lot`: q/k/v shared buffer with different strides → PPL 1 614 183; wo input sized `h` instead of `nh*hd` → index panic; expert `ffn_down_exps.bias` sliced by `n_ff` instead of `h` (latent; Qwen3-30B unchanged at 7,6139).
+- Batched path slower than per-token: diagnosis = activations re-read per output row → tiling (TUILE 16/8); pool workers spin on `gen` → GEMM moved onto pool workers (modes 5/6).
+- Needle test on Qwen 0.5B: 6/6 failed (model too weak); 30B probe: 9.6 min and failed → test stopped (repetitive filler + slow sequential prefill).
+
+## Pending Jobs
+- Item 4: batched prefill gain now real on Qwen (−21 %: 17,1 → 13,5 s) and gpt-oss (lot 64 = 34,4 s vs 51,6 s); **lot 128 on gpt-oss panics** ("index out of bounds: the len is 90 but the index is 90" at `engine.rs:473` in a worker) — under investigation; guards added but the run still panicked before they reported (need to see the guard message).
+- Item 7: Q6_K GPU kernel (optional remainder).
+- Item 8: E4 (KV paged + GPU residency), E5 (sparse attention implementation), MLA and vision declared not testable on this machine.
+- Documentation/commit of the latest batched-attention + batched-head changes.
+
+## Current Work
+- Round 2, item 4 continuation: added **grouped attention** inside `forward_lot` (key/value dequantized once per KV-head group; `sc2` buffer `nh × ctx`) and **`logits_lot`** (batched head, tiled rows) wired into `run_ppl` scoring loop.
+- Measured Qwen2.5-0.5B ctx 512, 511 tokens: lot 1 = 17,1 s; lot 512 = **13,5 s (−21 %)**; PPL identical (13,1368 vs 13,1359); postes lot 512: projets-attn 0,93, attention 5,48, proj+mlp 13,26, somme 19,67, reste 6,77.
+- gpt-oss ctx 256, 255 tokens: lot 1 = 51,6 s; lots 8/16/32/64 = 36,6/35,7/35,5/**34,4 s** all PPL 13,7205; **lot 128 panics** (currently bisecting).
+- Just added length guards in `gemm_dense_q4` (`out`, `x16`, `s32`, `sx` vs `t`); rerun of lot 128 still showed `panicked at src/engine.rs:473:77` (guards for `gemm_dense_i8` not yet added; guard message not captured).
+
+## Next Step
+- Inspect `engine.rs:473` (`out[o * t + i] = d.dot16(o, xi, &s32[i]) * sx[i];` in the mode-6 worker) and the guards' output to find which buffer mismatch triggers at t=128 (likely a batch-size vs `s32`/`sx` length mismatch in the MoE grouped path), fix it, re-verify gpt-oss PPL (expect 13,7205) and lot-128 timing, then commit the batched-attention + batched-head work with updated docs (`reports/rapport-prefill-par-lots.md`, `REPRISE.md`).
+
+## Critical Context
+- Reference numbers: Qwen2.5-0.5B Q8_0 PPL **19,3885** (ctx 256, limit 512, `--dense`); gpt-oss 120B **20,8361** (63 tokens), **15,1757** (510 tokens, ids file), **15,0757** (`--ppl-texte`, 509), **18,5803** (ctx 512 single window); YaRN 174,3375 (ctx 512).
+- External reference (llama.cpp, same ids, no BOS): gpt-oss 38,37 (63 tokens) and 714,83 (2048, YaRN) vs ours 41,11/722,56; Qwen 13,1482 vs ours 13,1367, |ΔNLL| median 0,0193.
+- Rotation verdict (paired, same 512 tokens): plain RoPE 39,52/49,79/49,93/298,56 at contexts 128/512/1024/1536 vs interpolation-only 42,13/82,02/82,15/578,86 → plain wins everywhere; mscale is the harmful half (removal ×8,9 at 512); default = plain below 4096, interpolation-only above (`QT_YARN=1` = full reference, `QT_YARN_NON=1`/`--sans-yarn` = never, `QT_YARN_MSCALE=0/1`).
+- KV results with per-block scales: 512 tokens f32 13,1368 / int8 **13,3360 (+1,5 %)** / int4 41,9442; 4 591 tokens f32 12,9080 / int8 **13,3459 (+3,4 %)** / int4 49,9438; llama.cpp q8_0 +0,8 %, q4_0 +494 % (8192).
+- Item 5 verdict: per-block scales for built DenseQ8 change nothing (23,6964 vs 23,6123); 6-bit (0,75 o/p) = 23,6176 ≈ int8 at 25 % fewer bytes; rebuilding Q8_0 blocks reproduces borrowed PPL exactly (13,1368 = 13,1368).
+- GPU kernels measured (`--gpu-banc`, quiet): head Q8_0 warp 1,6 ms vs 7,3 ms CPU (écart 2e-7); MXFP4 expert 0,1 ms vs 7,5 ms CPU, écart **0,00e0** (bit-exact); Q4_K 0,5 vs 1,2 ms, écart 3,98e-7; head offload via `QT_GPU_TETE=1` drops "tête + échantillonnage" from 15,6 to 6,2 ms/token with identical PPL.
+- Sparse attention (gpt-oss, ctx 2048, same 512 tokens): none 298,56; `--attn-topk 256` **234,88 (better)**; `--attn-window 512` 3 269,34 (destroys: local layers were trained with 128).
+- PowerInfer study: activation density 17,9 % (Qwen 0.5B, 512 tokens), top 10 % neurons carry 33,1 % magnitude, only 0,08 % hot >90 % of time → static preload unhelpful on SiLU; adopt per-expert placement + eviction cache + predictor only when cold weights are off-RAM.
+- Repo workflow: commit each chantier with measured numbers; `cargo test --release` (6 tests) and Qwen 19,3885 as regression gates; journal auto-archived (`journal/README.md` often shows as modified).
+- Measurement hygiene: heavy runs must be sequential (62 GB engine = 124 GB if doubled; concurrent runs caused contention and one livelock); queued scripts live in `/tmp/*.sh` with `pgrep -x qtrinet-core` guards; avoid `pkill -f <name>` that matches the invoking shell's own command line (use bracket patterns).
+</compacted-summary>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && awk 'NR>=455 && NR<=482 {printf \"%4d|%s\\n\", NR, $0}' src/engine.rs && echo \"--- colonne 77 ligne 473 ---\" && awk 'NR==473' src/engine.rs | cut -c60-100 && echo \"--- timestamps ---\" && ls -l --time-style=+%H:%M:%S  … [204 caractères tronqués]`
+
+  ```
+455|                                            crate::list::Source8::Propre =>
+ 456|                                                d.dot_chunked(o, xi) as f32 * d.scale[o],
+ 457|                                        };
+ 458|                                        out[o * t + i] = v * sx[i];
+ 459|                                    }
+ 460|                                }
+ 461|                            }
+ 462|                        } else {
+ 463|                            let d = unsafe { &*sh.dense4.load(Ordering::Acquire) };
+ 464|                            let x16 = unsafe { std::slice::from_raw_parts(
+ 465|                                sh.gx16.load(Ordering::Acquire), t * d.n_in) };
+ 466|                            let s32 = unsafe { &*sh.gs32.load(Ordering::Acquire) };
+ 467|                            const TUILE4: usize = 8;
+ 468|                            for i0 in (0..t).step_by(TUILE4) {
+ 469|                                let i1 = (i0 + TUILE4).min(t);
+ 470|                                for o in lo..hi {
+ 471|                                    for i in i0..i1 {
+ 472|                                        let xi = &x16[i * d.n_in..(i + 1) * d.n_in];
+ 473|   
+… [993 caractères tronqués]
+  ```
+
+### 👤 Utilisateur
+
+Current runtime context. This snapshot supersedes earlier runtime-context snapshots.
+
+Current DSH file policy: danger-full-access. The DSH file sandbox does not restrict file modifications by available operations.
+
+Approval prompts are disabled in this session: actions that require approval are rejected automatically — do not request sandbox escalation (do not set `sandbox_permissions`).
+
+### 👤 Utilisateur
+
+<system-reminder>
+The available skill catalog changed. This complete catalog replaces every earlier available-skills list in this session:
+
+<available_skills>
+- `microsoft-foundry`: Deploy, evaluate, fine-tune, and manage Foundry agents end-to-end with azd: hosted agent scaffold/run/deploy, prompt agent create, batch eval, continuous eval, prompt optimizer, Agent Optimizer scaffold, agent.yaml, dataset curation from traces, model fine-tuning (SFT/DPO/RFT). USE FOR: azd ai agent, azd provision/deploy, deploy agent, hosted agent, create agent, add tool to agent, invoke agent, evaluate agent, continuous eval, continuous monitoring, agent CI/CD, optimize prompt, improve prom...
+</available_skills>
+
+Use only names in this replacement catalog. If the user names a listed skill, or the task clearly matches its description, call the `skill` tool with the exact name before acting.
+A user may also invoke a skill directly; its <skill_content> block then appears in this conversation. Follow it, and do not call the `skill` tool again for that skill.
+</system-reminder>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && grep -n \"gs32\\|gx16\\|gsx\" src/engine.rs src/model.rs | head -40", "description": "Find gs32 setup sites"}`
+
+  ```
+src/engine.rs:229:    gx16: AtomicPtr<i16>,
+src/engine.rs:230:    gs32: AtomicPtr<Vec<Vec<i32>>>,
+src/engine.rs:232:    gsx: AtomicPtr<f32>,
+src/engine.rs:347:            gx16: AtomicPtr::new(std::ptr::null_mut()),
+src/engine.rs:348:            gs32: AtomicPtr::new(std::ptr::null_mut()),
+src/engine.rs:349:            gsx: AtomicPtr::new(std::ptr::null_mut()),
+src/engine.rs:441:                            sh.gsx.load(Ordering::Acquire), t) };
+src/engine.rs:465:                                sh.gx16.load(Ordering::Acquire), t * d.n_in) };
+src/engine.rs:466:                            let s32 = unsafe { &*sh.gs32.load(Ordering::Acquire) };
+src/engine.rs:628:        sh.gsx.store(sx.as_ptr() as *mut f32, Ordering::Relaxed);
+src/engine.rs:654:        sh.gx16.store(x16.as_ptr() as *mut i16, Ordering::Relaxed);
+src/engine.rs:655:        sh.gs32.store(s32 as *const _ as *mut _, Ordering::Relaxed);
+src/engine.rs:656:        sh.gsx.store(sx.as_ptr() as *mut f32, Ordering::Relaxed);
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src/engine.rs", "offset": 596, "limit": 110}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src/engine.rs</path>
+<type>file</type>
+<content>
+596:     ///
+597:     /// C'est tout le préremplissage par lots : un produit matrice-vecteur relit
+598:     /// la matrice entière pour CHAQUE jeton, alors qu'ici chaque ligne de poids
+599:     /// est lue une fois et sert à tout le lot. Le décodage reste au matvec (il
+600:     /// n'a qu'un jeton), le préremplissage passe par ici.
+601:     ///
+602:     /// `x` est le lot d'activations (t × n_in), `sx` les t échelles, `out` reçoit
+603:     /// t × n_out en disposition jeton-majeur.
+604:     pub fn matvec_dense_i8(&mut self, d: &DenseQ8, x: &[i32], sx: f32) -> Vec<f32> {
+605:         self.ensure_width(d.n_out);
+606:         let sh = &self.shared;
+607:         sh.mode.store(3, Ordering::Relaxed);
+608:         sh.dense.store(d as *const _ as *mut _, Ordering::Relaxed);
+609:         sh.xv.store(x.as_ptr() as *mut i32, Ordering::Relaxed);
+610:         sh.sx.store(sx.to_bits() as usize, Ordering::Relaxed);
+611:         sh.outs.store(&mut self.outs as *mut Vec<Vec<f32>>, Ordering::Relaxed);
+612:         sh.done.store(0, Ordering::Relaxed);
+613:         sh.gen.fetch_add(1, Or
+… [5190 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && grep -n \"gemm_dense_q4\\|gemm_dense_i8\" src/*.rs && echo \"=== 380-470 ===\" && awk 'NR>=400 && NR<=470 {printf \"%4d|%s\\n\", NR, $0}' src/engine.rs", "description": "Find gemm_dense_q4 call sites"}`
+
+  ```
+src/engine.rs:622:    pub fn gemm_dense_i8(&mut self, d: &DenseQ8, x: &[i32], t: usize, sx: &[f32], out: &mut [f32]) {
+src/engine.rs:640:    pub fn gemm_dense_q4(&mut self, d: &crate::list::DenseQ4, x16: &[i16], t: usize,
+src/engine.rs:876:            pool.gemm_dense_i8(&d, &x, t, &sx, &mut out);
+src/engine.rs:917:        pool.gemm_dense_q4(&d, &plat, t, &s32, &sx, &mut out);
+src/model.rs:1596:                    self.pool.gemm_dense_i8(d8, &xi, t, &sx, &mut yl[..d8.n_out * t]);
+src/model.rs:1747:                    self.pool.gemm_dense_i8(d8, &ai[..t * n_in_wo], t, &sa, &mut yl[..d8.n_out * t]);
+src/model.rs:1835:                    self.pool.gemm_dense_q4(&mg, &xg[..g * h], g, &s32g, &sxg,
+src/model.rs:1844:                    self.pool.gemm_dense_q4(&mu, &xg[..g * h], g, &s32g, &sxg,
+src/model.rs:1875:                    self.pool.gemm_dense_q4(&md, &ga[..g * nff], g, &s32a, &sxa, &mut yd);
+src/model.rs:1893:                        self.pool.gemm_dense_i8(d8, &xi, t, &sx, &mut yl[..d8.n_out * t]);
+src/model.rs:1909:                    self.pool.gemm_dense_i8(d8, &gi, t, &sg, &mut yl[..d8.n_out * t]);
+=== 380-470 ===
+ 400|                    // test, un worker lirait des pointeur
+… [4958 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && python3 - <<'EOF'\nl = open('src/engine.rs').read().split('\\n')[472]\nprint(repr(l))\nfor pat in ['out[', 's32[', 'sx[', 'dot16(']:\n    i = l.find(pat)\n    print(pat, '=> colonne', i+1)\nEOF", "description": "Locate e … [27 caractères tronqués]`
+
+  ```
+'                                        out[o * t + i] = d.dot16(o, xi, &s32[i]) * sx[i];'
+out[ => colonne 41
+s32[ => colonne 74
+sx[ => colonne 84
+dot16( => colonne 60
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && strings target/release/qtrinet-core | grep -c \"sommes par bloc\" ; awk 'NR>=1790 && NR<=1900 {printf \"%4d|%s\\n\", NR, $0}' src/model.rs", "description": "Check guard presence and MoE grouped calls"}`
+
+  ```
+1
+1790|                        }
+1791|                        let mx = idx.iter().map(|&e| sc_e[e as usize])
+1792|                                   .fold(f32::NEG_INFINITY, f32::max);
+1793|                        let mut somme = 0f32;
+1794|                        for &e in &idx {
+1795|                            let v = (sc_e[e as usize] - mx).exp(); sc_e[e as usize] = v; somme += v;
+1796|                        }
+1797|                        if somme > 0.0 { inv_k = 1.0 / somme; }
+1798|                    } else {
+1799|                        let mx = sc_e.iter().cloned().fold(f32::NEG_INFINITY, f32::max);
+1800|                        let mut somme = 0f32;
+1801|                        for v in sc_e.iter_mut() { *v = (*v - mx).exp(); somme += *v; }
+1802|                        if somme > 0.0 { for v in sc_e.iter_mut() { *v /= somme; } }
+1803|                        if k < ne {
+1804|                            idx.select_nth_unstable_by(k, |&a, &b| {
+1805|                                sc_e[b as usize].partial_cmp(&sc_e[a as usize]).unwrap()
+1806|                            });
+1807|                            idx.truncate(k);
+1808|                        }
+1809|                  
+… [5457 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && grep -n \"as \\*const _ as \\*mut _\\|as \\*mut _\\|\\.store(\" src/engine.rs | head -50 && echo \"=== champs AtomicPtr ===\" && grep -n \"AtomicPtr<\" src/engine.rs", "description": "Audit all AtomicPtr store/load pairs … [2 caractères tronqués]`
+
+  ```
+575:        sh.mode.store(4, Ordering::Relaxed);
+576:        sh.dense4.store(d as *const _ as *mut _, Ordering::Relaxed);
+581:        sh.xv16.store(xi.as_ptr() as *mut i16, Ordering::Relaxed);
+582:        sh.xs32.store(xs.as_ptr() as *mut i32, Ordering::Relaxed);
+583:        sh.sx.store(sx.to_bits() as usize, Ordering::Relaxed);
+584:        sh.outs.store(&mut self.outs as *mut Vec<Vec<f32>>, Ordering::Relaxed);
+585:        sh.done.store(0, Ordering::Relaxed);
+607:        sh.mode.store(3, Ordering::Relaxed);
+608:        sh.dense.store(d as *const _ as *mut _, Ordering::Relaxed);
+609:        sh.xv.store(x.as_ptr() as *mut i32, Ordering::Relaxed);
+610:        sh.sx.store(sx.to_bits() as usize, Ordering::Relaxed);
+611:        sh.outs.store(&mut self.outs as *mut Vec<Vec<f32>>, Ordering::Relaxed);
+612:        sh.done.store(0, Ordering::Relaxed);
+625:        sh.mode.store(5, Ordering::Relaxed);
+626:        sh.dense.store(d as *const _ as *mut _, Ordering::Relaxed);
+627:        sh.gx.store(x.as_ptr() as *mut i32, Ordering::Relaxed);
+628:        sh.gsx.store(sx.as_ptr() as *mut f32, Ordering::Relaxed);
+629:        sh.gt.store(t, Ordering::Relaxed);
+630:        sh.gn_out.store(d.n_out, Orde
+… [2491 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /tmp && cat > bugptr.rs <<'EOF'\nuse std::sync::atomic::{AtomicPtr, Ordering};\nfn main() {\n    let s32: Vec<Vec<i32>> = (0..128).map(|i| vec![i as i32; 90]).collect();\n    let p: &[Vec<i32>] = &s32;\n    let a: AtomicPtr<Vec<Vec<i32>>> = AtomicPtr::new(std::ptr::null_mut());\n     … [302 caractères tronqués]`
+
+  ```
+len vue par le worker = 90 (attendu 128)
+  ```
+
+### 🤖 Assistant
+
+⏵ Root cause found: slice fat pointer read back as `Vec<Vec<i32>>` (len 90)
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src/engine.rs", "offset": 214, "limit": 40}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src/engine.rs</path>
+<type>file</type>
+<content>
+214: 
+215: struct Shared {
+216:     gen: AtomicUsize,
+217:     done: AtomicUsize,
+218:     stop: AtomicBool,
+219:     lists: AtomicPtr<FusedSign>,
+220:     delta: AtomicPtr<SignedDelta>,
+221:     push: AtomicPtr<PushMat>,
+222:     dense: AtomicPtr<DenseQ8>,
+223:     dense4: AtomicPtr<DenseQ4>,
+224:     /// activation dense pour le mode 3 (produit scalaire par ligne de sortie)
+225:     xv: AtomicPtr<i32>,
+226:     /// Lot d'activations du produit matrice-matrice (modes 5 et 6).
+227:     gx: AtomicPtr<i32>,
+228:     /// Mêmes activations en i16 et leurs sommes par bloc (mode 6).
+229:     gx16: AtomicPtr<i16>,
+230:     gs32: AtomicPtr<Vec<Vec<i32>>>,
+231:     /// Échelles d'activation du lot, taille du lot, et sortie du lot.
+232:     gsx: AtomicPtr<f32>,
+233:     gt: AtomicUsize,
+234:     gn_out: AtomicUsize,
+235:     gout: AtomicPtr<f32>,
+236:     /// mêmes activations en i16, pour le noyau AVX2 du mode 4
+237:     xv16: AtomicPtr<i16>,
+238:     /// sommes des activations par bloc de 32 (terme de minimum de Q4_K)
+239:     xs32: AtomicPtr<i32>,
+240:     sx: AtomicUsize,
+2
+… [586 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+Now the fix — thin pointer plus slice rebuilt in the worker:
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src/engine.rs", "old_string": "    gs32: AtomicPtr<Vec<Vec<i32>>>,", "new_string": "    /// Sommes par bloc de chaque jeton du lot. Attention : c'est un pointeur\n    /// FIN vers le premier `Vec<i32>`, pas vers la tranche — … [381 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src/engine.rs has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src/engine.rs", "new_string": "        sh.gs32.store(s32.as_ptr() as *mut Vec<i32>, Ordering::Relaxed);", "old_string": "        sh.gs32.store(s32 as *const _ as *mut _, Ordering::Relaxed);"}`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src/engine.rs has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src/engine.rs", "new_string": "                            // Pointeur fin + longueur du lot : la tranche est\n                            // reconstruite ici, sinon le worker lit la longueur\n                            //  … [290 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src/engine.rs has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && cargo build --release 2>&1 | tail -5 && cargo test --release 2>&1 | tail -12", "description": "Rebuild and run unit tests", "timeoutMs": 600000}`
+
+  ```
+|
+    = note: `#[warn(non_shorthand_field_patterns)]` on by default
+
+warning: `qtrinet-core` (bin "qtrinet-core") generated 14 warnings (run `cargo fix --bin "qtrinet-core" -p qtrinet-core` to apply 6 suggestions)
+    Finished `release` profile [optimized] target(s) in 18.08s
+     Running unittests src/main.rs (target/release/deps/qtrinet_core-87504f33cf9039c3)
+
+running 6 tests
+test list::tests_mxfp4::import_exact ... ok
+test list::tests_q6k::quarts_successifs ... ok
+test list::tests_q4::avx2_egale_scalaire ... ok
+test model::tests_kv::aller_retour_kv ... ok
+test engine::tests_gemm_q4::gemm_q4_egale_matvec ... ok
+test engine::tests_gemm::gemm_bat_le_matvec ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.08s
+  ```
+
+- **bash** `{"command": "ls -t /tmp/*.sh 2>/dev/null | head -20 && echo \"=== dernier script lot ===\" && grep -l \"lot\" /tmp/*.sh 2>/dev/null | head -5", "description": "Find previous lot measurement scripts"}`
+
+  ```
+/tmp/kv_blocs.sh
+/tmp/aiguille30b.sh
+/tmp/aiguille_lance.sh
+/tmp/lot_final.sh
+/tmp/mesures_finales.sh
+/tmp/seuil_rotation2.sh
+/tmp/profil_experts.sh
+/tmp/kv_gptoss.sh
+/tmp/seuil_rotation.sh
+/tmp/contexte_ou_contenu.sh
+/tmp/audela_4096.sh
+/tmp/interp_long.sh
+/tmp/ref2048.sh
+/tmp/mscale_yarn.sh
+/tmp/ref_long.sh
+/tmp/contenu_ou_profondeur.sh
+/tmp/profil_profondeur.sh
+/tmp/croisement_yarn.sh
+/tmp/bascule_yarn.sh
+/tmp/controles4_oss.sh
+=== dernier script lot ===
+/tmp/aiguille_lance.sh
+/tmp/lot_final.sh
+/tmp/mesures_finales.sh
+/tmp/ref2048.sh
+/tmp/ref_long.sh
+  ```
+
+- **bash** `{"command": "cat /tmp/lot_final.sh", "description": "Read previous lot script"}`
+
+  ```
+#!/bin/bash
+# Re-mesure du préremplissage par lots APRÈS tuilage, machine au calme (la
+# première série avait été faite avant, et le lot était plus lent que le jeton
+# par jeton : les activations étaient relues pour chaque ligne de sortie).
+set -u
+cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet
+Q=./qtrinet-core/target/release/qtrinet-core
+MQ=models/Qwen2.5-0.5B-Q8_0.gguf
+M=/home/stephane/FastNVMe/models/gpt-oss-120b-MXFP4.gguf
+J=/tmp/lot_final.log
+: > "$J"
+
+while pgrep -f "mesures_finales" > /dev/null; do sleep 30; done
+while pgrep -x qtrinet-core > /dev/null; do sleep 20; done
+
+echo "### Qwen 0.5B, ctx 512, 511 jetons notés" | tee -a "$J"
+for l in 1 4 16 64; do
+    printf "lot %-3s : " $l | tee -a "$J"
+    $Q $MQ --ppl /tmp/ids_qwen.txt --ctx 512 --limit 512 --dense --threads 16 --lot $l 2>&1 \
+        | grep -oE "perplexité [0-9.]+ sur [0-9]+ tokens \([0-9]+ événements, [0-9.]+ s\)" | tee -a "$J"
+done
+
+echo "" | tee -a "$J"
+echo "### gpt-oss, ctx 256, 255 jetons notés (MoE : regroupement par expert)" | tee -a "$J"
+for l in 1 16 64 128; do
+    printf "lot %-3s : " $l | tee -a "$J"
+    $Q $M --ppl /tmp/ids_oss.txt --ctx 256 --limit 256 --dense --threads 16 --lot $l 2>&1 \
+      
+… [153 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cat > /tmp/lot128.sh <<'EOF'\n#!/bin/bash\n# Vérification du correctif de pointeur (gs32) : lot 128 sur gpt-oss doit passer,\n# et les lots déjà mesurés ne doivent pas bouger.\nset -u\ncd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\nQ=./qtrinet-core/target/release/qtrinet-core\nMQ=m … [1038 caractères tronqués]`
+
+  ```
+prêt
+  ```
+
+- **bash** `{"command": "/tmp/lot128.sh", "description": "Run lot verification in background", "run_in_background": true}`
+
+  ```
+started background job bash-22
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && wc -l reports/rapport-prefill-par-lots.md && tail -40 reports/rapport-prefill-par-lots.md", "description": "Read tail of prefill report"}`
+
+  ```
+106 reports/rapport-prefill-par-lots.md
+
+## 4. Le débit, attribué poste par poste
+
+Le profil du chemin par lots (ajouté pour l'occasion : sans lui, aucun poste
+n'était chronométré) donne, par jeton, Qwen2.5-0.5B, contexte 512, 16 fils :
+
+| poste | lot 1 | lot 512 | verdict |
+|---|---|---|---|
+| projections d'attention | 3,05 ms | **1,49 ms** | le GEMM divise par 2 ✓ |
+| attention | 4,05 ms | 8,90 ms | **×2,2** ✗ |
+| FFN + projection de sortie | 25,31 ms | 20,92 ms | ÷1,2 seulement |
+| **somme** | 33,14 ms | 31,31 ms | −5 % |
+| tête + échantillonnage | 8,36 ms | 8,75 ms | inchangé (la tête est par jeton) |
+| **total** | 41,5 ms | **40,1 ms** | **−3 %** |
+
+Le mécanisme fonctionne — le produit matrice-matrice divise bien par deux le
+temps des projections — mais **il ne porte que sur 8 % du coût par jeton**, et
+deux postes l'annulent :
+
+1. **l'attention par lots est deux fois plus lente** : elle emprunte le chemin
+   par tête, alors que le chemin jeton par jeton utilise le chemin *groupé* qui
+   relit les clés une fois par groupe de têtes KV (`rep` = 7 sur Qwen) ;
+2. **la tête de sortie reste calculée jeton par jeton** (145 Mo lus par jeton
+   pour Qwen 0.5B) : c'est le premier consomm
+… [900 caractères tronqués]
+  ```
+
+- **bash** `{"command": "ls -t /tmp/*.log 2>/dev/null | head -12 && echo \"=== lot_final ===\" && cat /tmp/lot_final.log 2>/dev/null | tail -20", "description": "Check recent logs for measurements"}`
+
+  ```
+/tmp/lot128.log
+/tmp/kv_blocs.log
+/tmp/aiguille30b.log
+/tmp/aiguille.log
+/tmp/lot_final.log
+/tmp/mesures_finales.log
+/tmp/profil_experts.log
+/tmp/seuil_rotation.log
+/tmp/kv_gptoss.log
+/tmp/contexte_ou_contenu.log
+/tmp/audela_4096.log
+/tmp/interp_long.log
+=== lot_final ===
+### Qwen 0.5B, ctx 512, 511 jetons notés
+lot 1   : perplexité 13.1368 sur 511 tokens (0 événements, 16.9 s)
+lot 4   : perplexité 13.1359 sur 511 tokens (0 événements, 23.9 s)
+lot 16  : perplexité 13.1359 sur 511 tokens (0 événements, 19.2 s)
+lot 64  : perplexité 13.1359 sur 511 tokens (0 événements, 18.1 s)
+
+### gpt-oss, ctx 256, 255 jetons notés (MoE : regroupement par expert)
+lot 1   : perplexité 13.7149 sur 255 tokens (0 événements, 49.6 s)
+lot 16  : perplexité 13.7205 sur 255 tokens (0 événements, 63.5 s)
+lot 64  : perplexité 13.7205 sur 255 tokens (0 événements, 53.0 s)
+lot 128 : perplexité 13.7205 sur 255 tokens (0 événements, 91.0 s)
+  ```
+
+- **bash** `{"command": "cd /tmp && ls -l --time-style=+%m-%d_%H:%M lot_final.log lot128.log mesures_finales.log 2>/dev/null && echo \"=== paniques ===\" && grep -l \"panicked\" *.log 2>/dev/null | head && echo \"=== 34.4 / 13.5 ===\" && grep -rn \"34\\.4 s\\|, 34\\.\\|13\\.5 s\\|, 13\\.\" *.log 2>/dev/null | h … [64 caractères tronqués]`
+
+  ```
+-rw-r--r--. 1 stephane stephane   67 09-29_13:31 lot128.log
+-rw-r--r--. 1 stephane stephane  676 09-29_12:05 lot_final.log
+-rw-r--r--. 1 stephane stephane 1676 09-29_11:52 mesures_finales.log
+=== paniques ===
+=== 34.4 / 13.5 ===
+  ```
+
+- **job_output** `{"job_id": "bash-22", "wait": true, "timeout_ms": 240000}`
+
+  ```
+### gpt-oss ctx 256, 255 jetons (MoE groupé par expert)
+lot 64  : perplexité 13.7205 sur 255 tokens (0 événements, 33.7 s)
+lot 128 : perplexité 13.7205 sur 255 tokens (0 événements, 33.9 s)
+lot 256 : perplexité 13.7205 sur 255 tokens (0 événements, 34.4 s)
+
+### Qwen 0.5B ctx 512, 511 jetons
+lot 1   : perplexité 13.1368 sur 511 tokens (0 événements, 17.1 s)
+lot 512 : perplexité 13.1359 sur 511 tokens (0 événements, 13.6 s)
+=== fin ===
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Lot 128 passe (33,9 s, PPL identique) : le correctif tient
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls -lh models/*.gguf /home/stephane/FastNVMe/models/*.gguf 2>/dev/null | awk '{print $5, $9}' && echo \"=== git ===\" && git status --short | head -20", "description": "List models and git status"}`
+
+  ```
+1,1G /home/stephane/FastNVMe/models/bge-m3-FP16.gguf
+13G /home/stephane/FastNVMe/models/codestral-22b-v0.1-q4_k_m.gguf
+8,4G /home/stephane/FastNVMe/models/deepseek-r1-distill-qwen-14b-q4_k_m.gguf
+1,1G /home/stephane/FastNVMe/models/deepseek-r1-distill-qwen-1.5b-q4_k_m.gguf
+810M /home/stephane/FastNVMe/models/eagle3-gpt-oss-120b-Q8_0.gguf
+60G /home/stephane/FastNVMe/models/gpt-oss-120b-MXFP4.gguf
+1,3G /home/stephane/FastNVMe/models/mmproj-Qwen2.5-VL-7B-Instruct-f16.gguf
+18G /home/stephane/FastNVMe/models/Muse-Glimmer-30B-AD-Q4_K_M.gguf
+469M /home/stephane/FastNVMe/models/qwen2.5-0.5b-instruct-q4_k_m.gguf
+1,1G /home/stephane/FastNVMe/models/qwen2.5-1.5b-instruct-q4_k_m.gguf
+469M /home/stephane/FastNVMe/models/qwen2.5-coder-0.5b-instruct-q4_k_m.gguf
+19G /home/stephane/FastNVMe/models/qwen2.5-coder-32b-instruct-q4_k_m.gguf
+4,4G /home/stephane/FastNVMe/models/Qwen2.5-VL-7B-Instruct-Q4_K_M.gguf
+18G /home/stephane/FastNVMe/models/Qwen3-30B-A3B-Instruct-2507-Q4_K_M.gguf
+337M models/Qwen2.5-0.5B-Q4_0.gguf
+507M models/Qwen2.5-0.5B-Q8_0.gguf
+=== git ===
+ M journal/README.md
+ M journal/sessions/MANIFEST.md
+ M journal/sessions/bbd6969f-0f70-42b2-8951-64d1f2f36d2e/digest.md
+ M journal/sessions/b
+… [133 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && grep -n '\"--q4\"\\|\"--dense\"\\|\"--lot\"\\|\"--ppl\"' src/main.rs | head", "description": "Check q4/dense CLI flags"}`
+
+  ```
+381:            "--ppl" => { o.ppl = true; o.ids_file = Some(suivant(i).clone()); 2 }
+411:            "--lot" => { o.lot = suivant(i).parse().unwrap(); 2 }
+441:            "--dense" => { o.dense = true; 1 }
+454:            "--q4" => { o.q4 |= 3; 1 }
+  ```
+
+- **bash** `{"command": "cat > /tmp/q4k_lot.sh <<'EOF'\n#!/bin/bash\n# Le noyau Q4_K du mode 6 utilise VRAIMENT les sommes par bloc (sx32), là où\n# MXFP4 les ignore : c'est le seul chemin où le pointeur gras se traduisait par\n# des résultats FAUX silencieux, pas seulement par un dépassement de borne.\nset -u\ … [715 caractères tronqués]`
+
+  ```
+lot 1   : lot 128 : === fin /tmp/q4k_lot.log ===
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 600 ./qtrinet-core/target/release/qtrinet-core /home/stephane/FastNVMe/models/qwen2.5-0.5b-instruct-q4_k_m.gguf --ppl /tmp/ids_qwen.txt --ctx 512 --limit 512 --q4 --threads 16 --lot 1 2>&1 | tail -6", "description": "Run Q4_K … [52 caractères tronqués]`
+
+  ```
+/tmp/ids_qwen.txt : 512 tokens, fenêtres de 512
+
+thread 'main' (3363454) panicked at src/gguf.rs:682:22:
+dequant : type 6 non géré
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+timeout: the monitored command dumped core
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && awk 'NR>=655 && NR<=700 {printf \"%4d|%s\\n\", NR, $0}' src/gguf.rs && grep -n \"6 =>\\|=> Q\\|type 6\\|\\\"Q5_0\\\"\\|Q6_K\\b\" src/gguf.rs | head -20", "description": "Inspect gguf dequant type table"}`
+
+  ```
+655|                    let ql = &self.buf[p..p + 128];
+ 656|                    let qh = &self.buf[p + 128..p + 192];
+ 657|                    let sc = &self.buf[p + 192..p + 208];
+ 658|                    let d = Self::f16_to_f32(u16::from_le_bytes(self.buf[p+208..p+210].try_into().unwrap()));
+ 659|                    for moitie in 0..2 {
+ 660|                        let (ql, qh, sc) = (&ql[moitie*64..], &qh[moitie*32..], &sc[moitie*8..]);
+ 661|                        // ggml écrit les quatre quants en QUARTS SUCCESSIFS :
+ 662|                        // q1 remplit [0,32), q2 [32,64), q3 [64,96), q4 [96,128).
+ 663|                        // Les entrelacer par `l` donne des poids faux — écart 0,10
+ 664|                        // sur une échelle de 0,08, mesuré contre une référence F16.
+ 665|                        let mut tmp = [0f32; 128];
+ 666|                        for l in 0..32 {
+ 667|                            let is = l / 16;
+ 668|                            let q1 = ((ql[l] & 0x0F) | ((qh[l] & 3) << 4)) as i16 - 32;
+ 669|                            let q2 = ((ql[l + 32] & 0x0F) | (((qh[l] >> 2) & 3) << 4)) as i16 - 32;
+ 670|                            let q3 = ((ql[l] >> 
+… [1441 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && grep -n \"mod tests_gemm_q4\" -A 80 src/engine.rs | head -100", "description": "Read existing GEMM q4 unit test"}`
+
+  ```
+904:mod tests_gemm_q4 {
+905-    use super::*;
+906-    use crate::list::DenseQ4;
+907-
+908-    /// Le produit matrice-matrice 4 bits doit rendre EXACTEMENT ce que rendent
+909-    /// les produits matrice-vecteur qu'il remplace (mêmes sommes entières, même
+910-    /// ordre par ligne).
+911-    #[test]
+912-    fn gemm_q4_egale_matvec() {
+913-        // Matrice 4 bits construite par `build` : 4 bits propres, échelle par ligne.
+914-        let (n_out, n_in, t) = (128usize, 256usize, 8usize);
+915-        let w: Vec<f32> = (0..n_out * n_in)
+916-            .map(|k| (((k * 1103515245 + 12345) % 2000) as f32 / 1000.0) - 1.0).collect();
+917-        let d = DenseQ4::build(&w, n_out, n_in);
+918-        let mut pool = Pool::new(4, n_in);
+919-        let x: Vec<i32> = (0..t * n_in).map(|k| ((k * 7919) % 101) as i32 - 50).collect();
+920-        let x16: Vec<Vec<i16>> = (0..t).map(|i| {
+921-            x[i * n_in..(i + 1) * n_in].iter().map(|&v| v as i16).collect()
+922-        }).collect();
+923-        let s32: Vec<Vec<i32>> = x16.iter().map(|v| crate::list::sommes32(v)).collect();
+924-        let sx: Vec<f32> = (0..t).map(|i| 0.002 * (i + 1) as f32).collect();
+925-        let plat: Vec<i16> = x16.
+… [496 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && grep -n \"impl DenseQ4\" -A 200 src/list.rs | grep -n \"pub fn \\|src =\\|Source8::\\|plan6\\|sx32\\|dot16\" | head -40", "description": "List DenseQ4 constructors and sources"}`
+
+  ```
+2:621-    pub fn build(w: &[f32], n_out: usize, n_in: usize) -> Self {
+40:659-        DenseQ4 { n_in, n_out, lut: LUT_INT4, e8m0: false, q, sc, scale, plan6: None,
+55:674-    pub fn import_q4_0(buf: &[u8], n_out: usize, n_in: usize, nb_ligne: usize) -> Self {
+82:701-                    let src = if i < lo + 16 { buf[p + (i - lo)] & 0x0F } else { buf[p + (i - lo) - 16] >> 4 };
+89:708-                  plan6: None, src: Source::Propre, base: std::ptr::null(), nb_ligne: 0 }
+95:714-    /// dans `plan6` (quatre poids par octet). Valeurs signées sur six bits,
+97:716-    pub fn build6(w: &[f32], n_out: usize, n_in: usize) -> Self {
+101:720-        let mut plan6 = vec![0u8; n_out * n_bloc * 8];
+126:745-                    plan6[o * n_bloc * 8 + b * 8 + k / 4] |= (v >> 4) << (2 * (k % 4));
+131:750-                  plan6: Some(plan6), src: Source::Propre,
+141:760-    unsafe fn dot16_q6_avx2(&self, o: usize, x: &[i16], sx32: &[i32]) -> f32 {
+146:765-        let q2 = self.plan6.as_ref().expect("plan 6 bits absent");
+177:796-            let sx = *sx32.get_unchecked(b) as f32;
+193:812-            q: Vec::new(), sc: Vec::new(), scale: Vec::new(), plan6: None,
+212:1231-    pub fn dot16(&self, o: 
+… [938 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src/engine.rs", "old_string": "    fn gemm_q4_egale_matvec() {\n        // Matrice 4 bits construite par `build` : 4 bits propres, échelle par ligne.\n        let (n_out, n_in, t) = (128usize, 256usize, 8usize);\n        let … [2926 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src/engine.rs has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && cargo test --release 2>&1 | tail -6", "description": "Run tests with extended GEMM q4 case", "timeoutMs": 600000}`
+
+  ```
+test model::tests_kv::aller_retour_kv ... ok
+test engine::tests_gemm_q4::gemm_q4_egale_matvec ... ok
+test engine::tests_gemm::gemm_bat_le_matvec ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.09s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && cp src/engine.rs /tmp/engine_ok.rs && python3 - <<'EOF'\ns = open('src/engine.rs').read()\na = s.replace(\"    gs32: AtomicPtr<Vec<i32>>,\", \"    gs32: AtomicPtr<Vec<Vec<i32>>>,\", 1)\nassert a != s\nb = a.replace(\"    … [836 caractères tronqués]`
+
+  ```
+bug réintroduit pour vérifier que le test le rattrape
+[timed out after 600000ms]
+[killed by signal: SIGTERM]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && pgrep -a qtrinet_core | head; pgrep -af \"target/release/deps\" | head; cp /tmp/engine_ok.rs src/engine.rs && diff -q /tmp/engine_ok.rs src/engine.rs && echo \"engine.rs restauré\" && grep -n \"gs32: AtomicPtr\" src/engi … [109 caractères tronqués]`
+
+  ```
+3364834 bash -c cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && pgrep -a qtrinet_core | head; pgrep -af "target/release/deps" | head; cp /tmp/engine_ok.rs src/engine.rs && diff -q /tmp/engine_ok.rs src/engine.rs && echo "engine.rs restauré" && grep -n "gs32: AtomicPtr" src/engine.rs && grep -n "gs32.store" src/engine.rs
+engine.rs restauré
+236:    gs32: AtomicPtr<Vec<i32>>,
+354:            gs32: AtomicPtr::new(std::ptr::null_mut()),
+665:        sh.gs32.store(s32.as_ptr() as *mut Vec<i32>, Ordering::Relaxed);
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src/engine.rs", "limit": 70, "offset": 385}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src/engine.rs</path>
+<type>file</type>
+<content>
+385:             let sh = Arc::clone(&shared);
+386:             let cpu = if epingle && !cibles.is_empty() {
+387:                 Some(cibles[id % cibles.len()])
+388:             } else { None };
+389:             handles.push(std::thread::spawn(move || {
+390:                 if let Some(c) = cpu { epingler(c); }
+391:                 let mut last = 0usize;
+392:                 loop {
+393:                     // Attente active d'une nouvelle génération. La barrière
+394:                     // par *spin* n'est tenable que si le nombre de threads
+395:                     // tournants reste inférieur au nombre de CPU logiques :
+396:                     // au-delà, l'ordonnanceur préempte des workers qui tournent
+397:                     // et le débit s'effondre (mesuré : ×3,3 de perte à 40+1
+398:                     // threads sur 40 CPU). `Pool::new` borne donc la taille.
+399:                     loop {
+400:                         let g = sh.gen.load(Ordering::Acquire);
+401:                         if g != last { last = g; break; }
+402:                         if sh.sto
+… [3774 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && rustc --version && grep -n \"done.load(Ordering::Acquire)\" src/*.rs", "description": "Check rustc version and wait loops"}`
+
+  ```
+rustc 1.97.1 (8bab26f4f 2026-07-14)
+src/engine.rs:597:        while sh.done.load(Ordering::Acquire) != self.n { std::hint::spin_loop(); }
+src/engine.rs:624:        while sh.done.load(Ordering::Acquire) != self.n { std::hint::spin_loop(); }
+src/engine.rs:644:        while sh.done.load(Ordering::Acquire) != self.n { std::hint::spin_loop(); }
+src/engine.rs:672:        while sh.done.load(Ordering::Acquire) != self.n { std::hint::spin_loop(); }
+src/engine.rs:724:        while sh.done.load(Ordering::Acquire) != self.n {
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src/engine.rs", "limit": 28, "offset": 715}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src/engine.rs</path>
+<type>file</type>
+<content>
+715:         sh.sv_idx.store(sv.idx.as_ptr() as *mut _, Ordering::Relaxed);
+716:         sh.sv_val.store(sv.val.as_ptr() as *mut _, Ordering::Relaxed);
+717:         sh.n_active.store(sv.idx.len(), Ordering::Relaxed);
+718:         sh.accs.store(&mut self.accs as *mut Vec<Vec<i32>>, Ordering::Relaxed);
+719:         sh.accs64.store(&mut self.accs64 as *mut Vec<Vec<i64>>, Ordering::Relaxed);
+720:         sh.spans.store(&mut self.spans as *mut Vec<(usize, usize)>, Ordering::Relaxed);
+721:         sh.dirty.store(&mut self.dirty as *mut Vec<usize>, Ordering::Relaxed);
+722:         sh.gen.fetch_add(1, Ordering::Release);       // libère les workers
+723: 
+724:         while sh.done.load(Ordering::Acquire) != self.n {
+725:             std::hint::spin_loop();
+726:         }
+727:         // Réduction sur l'union des étendues RÉELLEMENT écrites par les workers :
+728:         // la fenêtre est exacte, quel que soit le décodeur, et ne dépend pas de
+729:         // la liste des destinations touchées (qui peut avoir débordé).
+730:         let (mut lo, mut hi) = (usize::MAX, 0usize);
+7
+… [590 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+Now the panic-detection change:
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && python3 - <<'PY'\np='src/engine.rs'; s=open(p).read(); n0=len(s)\n\n# 1) compteur de workers morts\ns = s.replace(\"\"\"struct Shared {\n    gen: AtomicUsize,\n    done: AtomicUsize,\"\"\",\n\"\"\"struct Shared {\n    ge … [2728 caractères tronqués]`
+
+  ```
+étapes 1-3 posées, delta 1048
+444:                        continue;
+457:                        if lo >= hi { sh.done.fetch_add(1, Ordering::Release); continue; }
+503:                        continue;
+543:                        continue;
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src/engine.rs", "limit": 70, "offset": 500}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src/engine.rs</path>
+<type>file</type>
+<content>
+500:                             }
+501:                         }
+502:                         sh.done.fetch_add(1, Ordering::Release);
+503:                         continue;
+504:                     }
+505:                     if mode == 3 {
+506:                         // Mode dense : chaque worker calcule une tranche
+507:                         // contiguë de sorties, sans dispersion ni réduction.
+508:                         let d = unsafe { &*sh.dense.load(Ordering::Acquire) };
+509:                         let xv = unsafe { std::slice::from_raw_parts(
+510:                             sh.xv.load(Ordering::Acquire), d.n_in) };
+511:                         let sx = f32::from_bits(sh.sx.load(Ordering::Relaxed) as u32);
+512:                         let outs = unsafe { &mut *sh.outs.load(Ordering::Acquire) };
+513:                         let per = (d.n_out + n - 1) / n;
+514:                         let lo = id * per;
+515:                         let hi = (lo + per).min(d.n_out);
+516:                         let dst = &mut outs[id];
+517:                         if dst.l
+… [4040 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src/engine.rs", "limit": 30, "offset": 596}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src/engine.rs</path>
+<type>file</type>
+<content>
+596:     pub fn matvec_dense_q4(&mut self, d: &DenseQ4, x: &[i32], sx: f32) -> Vec<f32> {
+597:         self.ensure_width(d.n_out);
+598:         let sh = &self.shared;
+599:         sh.mode.store(4, Ordering::Relaxed);
+600:         sh.dense4.store(d as *const _ as *mut _, Ordering::Relaxed);
+601:         // Conversion i32 → i16 faite UNE fois par appel : les noyaux la
+602:         // referaient sinon pour chaque ligne de sortie (4 864 fois).
+603:         let xi: Vec<i16> = x.iter().map(|&v| v.clamp(-32767, 32767) as i16).collect();
+604:         let xs = crate::list::sommes32(&xi);
+605:         sh.xv16.store(xi.as_ptr() as *mut i16, Ordering::Relaxed);
+606:         sh.xs32.store(xs.as_ptr() as *mut i32, Ordering::Relaxed);
+607:         sh.sx.store(sx.to_bits() as usize, Ordering::Relaxed);
+608:         sh.outs.store(&mut self.outs as *mut Vec<Vec<f32>>, Ordering::Relaxed);
+609:         sh.done.store(0, Ordering::Relaxed);
+610:         sh.gen.fetch_add(1, Ordering::Release);
+611:         self.attendre(sh);
+612:         let mut out = vec![0f32; d.n_out];
+613:         for w
+… [641 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src/engine.rs", "limit": 28, "offset": 568}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src/engine.rs</path>
+<type>file</type>
+<content>
+568:                     let mut span = (usize::MAX, 0usize);
+569:                     let mut i = id;
+570:                     while i < idx.len() {
+571:                         let src = idx[i] as usize;
+572:                         let xv = val[i] as i64;
+573:                         match mode {
+574:                             1 => { row_fused_into(f, src, xv, acc64, &mut span); }
+575:                             2 => { row_val_into(pm, src, xv, acc, &mut span); }
+576:                             _ => { row_delta_into(dl, src, xv, acc64, &mut span); }
+577:                         }
+578:                         i += n;
+579:                     }
+580:                     spans[id] = span;
+581:                     if span.1 > dirty[id] { dirty[id] = span.1; }
+582:                     sh.done.fetch_add(1, Ordering::Release);
+583:                 }
+584:             }));
+585:         }
+586:         Pool { shared, handles, n, n_out, accs: vec![vec![0i32; n_out]; n], accs64: vec![vec![0i64; n_out]; n],
+587:                spans: vec![(usize::MAX, 0usize); n],
+588:       
+… [389 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && awk 'NR>=418 && NR<=432 {printf \"%4d|%s\\n\", NR, $0}' src/engine.rs && echo ... && awk 'NR>=578 && NR<=590 {printf \"%4d|%s\\n\", NR, $0}' src/engine.rs", "description": "Inspect closure boundaries"}`
+
+  ```
+418|                    // prévient au lieu de tourner à vide.
+ 419|                    let sh2 = Arc::clone(&sh);
+ 420|                    let travail = std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+ 421|                    let sh = &*sh2;
+ 422|                    'generation: {
+ 423|                    let mode = sh.mode.load(Ordering::Relaxed);
+ 424|                    if mode == 4 {
+ 425|                        // Mode 4 bits : même découpage que le mode 3, mais les
+ 426|                        // poids tiennent sur un demi-octet — c'est le seul
+ 427|                        // levier qui reste quand le noyau est au mur mémoire.
+ 428|                        let d = unsafe { &*sh.dense4.load(Ordering::Acquire) };
+ 429|                        let xv = unsafe { std::slice::from_raw_parts(
+ 430|                            sh.xv16.load(Ordering::Acquire), d.n_in) };
+ 431|                        let xs = unsafe { std::slice::from_raw_parts(
+ 432|                            sh.xs32.load(Ordering::Acquire), d.n_in / BLOC_Q4 + 1) };
+...
+ 578|                        i += n;
+ 579|                    }
+ 580|                    spans[id] = span;
+ 581|                    if 
+… [460 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && python3 - <<'PY'\np='src/engine.rs'; L=open(p).read().split('\\n')\ni0 = next(i for i,l in enumerate(L) if 'let travail = std::panic::catch_unwind' in l)\ni1 = next(i for i,l in enumerate(L) if i>i0 and l == '            … [1013 caractères tronqués]`
+
+  ```
+4 branchements détournés, gestion de panique posée
+error: mismatched closing delimiter: `)`
+   --> src/engine.rs:395:53
+error: could not compile `qtrinet-core` (bin "qtrinet-core") due to 1 previous error
+build rc=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && grep -n \"travail\\|'generation\" src/engine.rs | head -20 && echo \"=== équilibre accolades 385-600 ===\" && python3 - <<'PY'\nL=open('src/engine.rs').read().split('\\n')\nd=0\nfor i,l in enumerate(L[384:600], start=385 … [162 caractères tronqués]`
+
+  ```
+339:    /// complet, par worker. Remettre à zéro la seule fenêtre du travail
+413:                    // sont publiés qu'avant un vrai travail).
+420:                    let travail = std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+422:                    'generation: {
+444:                        break 'generation;
+457:                        if lo >= hi { sh.done.fetch_add(1, Ordering::Release); break 'generation; }
+503:                        break 'generation;
+521:                        // travail précédent (bug mesuré : PPL 4 361 879 au lieu de
+543:                        break 'generation;
+556:                    // Remise à zéro par FENÊTRE : les spans du travail précédent
+562:                    // l'un ou l'autre qui a servi au travail précédent.
+585:                    if travail.is_err() {
+=== équilibre accolades 385-600 ===
+négatif à 386         });
+delta final -1
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && awk 'NR>=575 && NR<=600 {printf \"%4d|%s\\n\", NR, $0}' src/engine.rs", "description": "Show insertion region"}`
+
+  ```
+575|                            2 => { row_val_into(pm, src, xv, acc, &mut span); }
+ 576|                            _ => { row_delta_into(dl, src, xv, acc64, &mut span); }
+ 577|                        }
+ 578|                        i += n;
+ 579|                    }
+ 580|                    spans[id] = span;
+ 581|                    if span.1 > dirty[id] { dirty[id] = span.1; }
+ 582|                    sh.done.fetch_add(1, Ordering::Release);
+ 583|                }
+ 584|                    }));
+ 585|                    if travail.is_err() {
+ 586|                        // Le pool ne peut plus réunir le résultat : on le dit au
+ 587|                        // fil principal (compteur `morts`) au lieu de le laisser
+ 588|                        // tourner à vide, et ce worker s'arrête.
+ 589|                        sh.morts.fetch_add(1, Ordering::Release);
+ 590|                        return;
+ 591|                    }
+ 592|            }));
+ 593|        }
+ 594|        Pool { shared, handles, n, n_out, accs: vec![vec![0i32; n_out]; n], accs64: vec![vec![0i64; n_out]; n],
+ 595|               spans: vec![(usize::MAX, 0usize); n],
+ 596|               dirty: vec![0usize; n],
+ 597|           
+… [113 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && cargo build --release 2>&1 | head -40", "description": "Show full compile error", "timeoutMs": 300000}`
+
+  ```
+Compiling qtrinet-core v0.1.0 (/home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core)
+error: mismatched closing delimiter: `)`
+   --> src/engine.rs:395:53
+    |
+395 |             handles.push(std::thread::spawn(move || {
+    |                                            -        ^ unclosed delimiter
+    |                                            |
+    |                                            closing delimiter possibly meant for this
+...
+592 |             }));
+    |              ^ mismatched closing delimiter
+
+error: could not compile `qtrinet-core` (bin "qtrinet-core") due to 1 previous error
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && python3 - <<'PY'\nimport re\nsrc = open('src/engine.rs').read().split('\\n')\nstack=[]\nfor i,l in enumerate(src[394:600], start=395):\n    # retirer commentaires // et littéraux de chaîne simples\n    code = re.sub(r'// … [550 caractères tronqués]`
+
+  ```
+désaccord { ligne 395 vs ) ligne 592
+désaccord ( ligne 395 vs } ligne 593
+désaccord ( ligne 395 vs } ligne 598
+pile restante: []
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && python3 - <<'PY'\np='src/engine.rs'; L=open(p).read().split('\\n')\ni = next(i for i,l in enumerate(L) if 'sh.morts.fetch_add(1, Ordering::Release);' in l)\nj = next(j for j,l in enumerate(L) if j>i and l.strip()=='}' an … [420 caractères tronqués]`
+
+  ```
+boucle refermée après la ligne 591
+ 582|                    sh.done.fetch_add(1, Ordering::Release);
+ 583|                }
+ 584|                    }));
+ 585|                    if travail.is_err() {
+ 586|                        // Le pool ne peut plus réunir le résultat : on le dit au
+ 587|                        // fil principal (compteur `morts`) au lieu de le laisser
+ 588|                        // tourner à vide, et ce worker s'arrête.
+ 589|                        sh.morts.fetch_add(1, Ordering::Release);
+ 590|                        return;
+ 591|                }   // fin de la boucle de attente d'une génération
+ 592|                    }
+ 593|            }));
+ 594|        }
+ 595|        Pool { shared, handles, n, n_out, accs: vec![vec![0i32; n_out]; n], accs64: vec![vec![0i64; n_out]; n],
+ 596|               spans: vec![(usize::MAX, 0usize); n],
+warning: unused attribute
+warning: unused variable: `arch`
+warning: unused variable: `attn_all`
+warning: unused variable: `attn_idx`
+    Finished `release` profile [optimized] target(s) in 17.37s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && python3 - <<'PY'\np='src/engine.rs'; s=open(p).read()\ns = s.replace(\"\"\"                        return;\n                }   // fin de la boucle de attente d'une génération\n                    }\"\"\",\n\"\"\"        … [386 caractères tronqués]`
+
+  ```
+583|                }
+ 584|                    }));
+ 585|                    if travail.is_err() {
+ 586|                        // Le pool ne peut plus réunir le résultat : on le dit au
+ 587|                        // fil principal (compteur `morts`) au lieu de le laisser
+ 588|                        // tourner à vide, et ce worker s'arrête.
+ 589|                        sh.morts.fetch_add(1, Ordering::Release);
+ 590|                        return;
+ 591|                    }
+ 592|                }   // fin de la boucle d'attente d'une génération
+ 593|            }));
+ 594|        }
+0
+test engine::tests_gemm::gemm_bat_le_matvec ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.09s
+  ```
+
+### 🤖 Assistant
+
+⏵ Guarde anti-blocage posée ; je vérifie qu'une panique de worker ne fige plus tout
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && cp src/engine.rs /tmp/engine_ok2.rs && python3 - <<'PY'\ns=open('src/engine.rs').read()\na=s.replace(\"    gs32: AtomicPtr<Vec<i32>>,\",\"    gs32: AtomicPtr<Vec<Vec<i32>>>,\",1)\nb=a.replace(\"        sh.gs32.store(s32. … [801 caractères tronqués]`
+
+  ```
+bug réintroduit
+thread '<unnamed>' (3365321) panicked at src/engine.rs:496:77:
+index out of bounds: the len is 8 but the index is 8
+thread '<unnamed>' (3365322) panicked at src/engine.rs:496:77:
+index out of bounds: the len is 8 but the index is 8
+thread '<unnamed>' (3365323) panicked at src/engine.rs:496:77:
+index out of bounds: the len is 8 but the index is 8
+code=0
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.11s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && python3 - <<'PY'\ns=open('src/engine.rs').read()\na=s.replace(\"    gs32: AtomicPtr<Vec<i32>>,\",\"    gs32: AtomicPtr<Vec<Vec<i32>>>,\",1)\nb=a.replace(\"        sh.gs32.store(s32.as_ptr() as *mut Vec<i32>, Ordering::Re … [675 caractères tronqués]`
+
+  ```
+test engine::tests_gemm_q4::gemm_q4_egale_matvec ... FAILED
+failures:
+un worker du pool est mort pendant le calcul (panique ci-dessus) : résultat impossible à réunir
+failures:
+    Finished `release` profile [optimized] target(s) in 17.30s
+  ```
+
+- **bash** `{"command": "cat > /tmp/regression_apres_catch.sh <<'EOF'\n#!/bin/bash\nset -u\ncd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\nQ=./qtrinet-core/target/release/qtrinet-core\nJ=/tmp/regression_catch.log\n: > \"$J\"\nwhile pgrep -x qtrinet-core > /dev/null; do sleep 20; done\nprintf \"Qwen ctx 256 … [1043 caractères tronqués]`
+
+  ```
+started background job bash-23
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"lot\\|préremplissage\\|4\\.\" REPRISE.md | head -40", "description": "Find item 4 section in REPRISE.md"}`
+
+  ```
+37:qtrinet-core/target/release/qtrinet-core /home/stephane/FastNVMe/models/gpt-oss-120b-MXFP4.gguf \
+86:| GPU | noyaux PTX + API pilote, tête et projections opt-in (`QT_GPU=1`) |
+90:| Budget de contexte | `--plan --ctx N` : KV f32/int8/int4, relecture par jeton, décodage selon les bandes passantes, coût du préremplissage séquentiel, portée du YaRN |
+102:## 4. Pièges de l'environnement (tous rencontrés)
+106:| **CUDA 13 : les symboles non versionnés du pilote échouent** (`cuMemAlloc` → erreur 201 alors que le contexte est courant) | utiliser partout les `_v2` |
+107:| `nvcc` refuse gcc 15/16 (conflit d'en-têtes glibc) | compiler en **PTX avec clang**, le pilote compile à la volée |
+128:4. **Vérifier quel chemin est actif** avant de déboguer un chiffre : la trace
+143:| 4 | préremplissage par lots | **fait, gain faible et attribué** | noyau ×2,4 ; justesse sur dense (13,1359 contre 13,1368) et sur MoE regroupé (13,7205 contre 13,7149) ; bout en bout **−3 %** seulement : le GEMM divise les projections par 2 (1,49 contre 3,05 ms/jeton) mais l'attention non groupée double (8,90 contre 4,05) et la tête reste par jeton. Suite : (a) chemin groupé dans le lot, (b) **la tête en GEMM** — voir `r
+… [1025 caractères tronqués]
+  ```
+
+- **job_output** `{"job_id": "bash-23", "timeout_ms": 300000, "wait": true}`
+
+  ```
+Qwen ctx 256 (porte 19.3885) : perplexité 19.3885 sur 510 tokens (0 événements, 16.2 s)
+Qwen ctx 512 lot 512 : perplexité 13.1359 sur 511 tokens (0 événements, 14.5 s)
+gpt-oss ctx 256 lot 128 : perplexité 13.7205 sur 255 tokens (0 événements, 34.5 s)
+=== fin ===
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cat > /tmp/profil_lot.sh <<'EOF'\n#!/bin/bash\nset -u\ncd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\nQ=./qtrinet-core/target/release/qtrinet-core\nJ=/tmp/profil_lot.log\n: > \"$J\"\nwhile pgrep -x qtrinet-core > /dev/null; do sleep 20; done\nfor l in 1 512; do\n    echo \"##### lo … [430 caractères tronqués]`
+
+  ```
+started background job bash-24
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src/model.rs", "limit": 60, "offset": 1560}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src/model.rs</path>
+<type>file</type>
+<content>
+1560:         // Quantification d'un lot : mêmes règles que `quant_scratch`.
+1561:         let quantifier = |src: &[f32], dst: &mut [i32], ech: &mut [f32],
+1562:                           niveaux: f32, seuil: f32| {
+1563:             let n = src.len() / t;
+1564:             for i in 0..t {
+1565:                 let ligne = &src[i * n..(i + 1) * n];
+1566:                 let mut mx = 0f32;
+1567:                 for &val in ligne { let a = val.abs(); if a > mx { mx = a; } }
+1568:                 let s = if mx > 0.0 { mx / niveaux } else { 1.0 };
+1569:                 ech[i] = s;
+1570:                 let inv = 1.0 / s;
+1571:                 let se = (seuil * niveaux) as i32;
+1572:                 for (j, &val) in ligne.iter().enumerate() {
+1573:                     let r = (val * inv).round() as i32;
+1574:                     dst[i * n + j] = if r.abs() > se { r } else { 0 };
+1575:                 }
+1576:             }
+1577:         };
+1578:         for l in 0..self.cfg.n_layer {
+1579:             let lay = &self.layers[l];
+1580:             // 1. norme d'entrée du lot
+1
+… [2379 caractères tronqués]
+  ```
+
+- **job_output** `{"job_id": "bash-24", "timeout_ms": 180000, "wait": true}`
+
+  ```
+##### lot 1
+     511 tokens notés — perplexité cumulée 13.137  (29.0 tok/s)
+profil par profondeur (perplexité par tranche de 256 positions) :
+=== perplexité 13.1368 sur 511 tokens (0 événements, 17.6 s) ===
+    29.0 tok/s effectifs (avant + tête)
+    attention : 0.09 M paires (requête, clé) par token
+    part de l'attention dans le flux d'événements : 100.0 %
+    postes (ms/token) : projets-attn 2.66 | rope 0.51 | attention 2.78 | proj+mlp 21.49 | somme 27.45 | reste (tête + échantillonnage) 7.02
+    dont attention : scores 1.04 | softmax 0.54 | somme pondérée + écriture KV 1.20
+##### lot 512
+     511 tokens notés — perplexité cumulée 13.136  (32.8 tok/s)
+profil par profondeur (perplexité par tranche de 256 positions) :
+=== perplexité 13.1359 sur 511 tokens (0 événements, 15.6 s) ===
+    32.8 tok/s effectifs (avant + tête)
+    attention : 0.09 M paires (requête, clé) par token
+    part de l'attention dans le flux d'événements : 100.0 %
+    postes (ms/token) : projets-attn 1.07 | rope 0.00 | attention 6.67 | proj+mlp 15.72 | somme 23.45 | reste (tête + échantillonnage) 6.99
+    dont attention : scores 0.00 | softmax 0.00 | somme pondérée + écriture KV 6.67
+=== fin ===
+[status: compl
+… [19 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && grep -n \"logits_lot\\|fn logits\" src/model.rs src/main.rs | head -20", "description": "Check logits_lot usage"}`
+
+  ```
+src/model.rs:2335:    pub fn logits_lot(&mut self, hs: &[Vec<f32>]) -> Vec<Vec<f32>> {
+src/model.rs:2411:    pub fn logits(&mut self, h: &[f32]) -> Vec<f32> {
+src/main.rs:1521:            let lgs = if t > 1 { Some(mdl.logits_lot(&hs)) } else { None };
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src/main.rs", "limit": 80, "offset": 1480}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src/main.rs</path>
+<type>file</type>
+<content>
+1480:                       sur {} (les marqueurs ne sont pas notés)",
+1481:                      if harmony_contexte.is_some() { ", avec contexte" } else { "" },
+1482:                      f.len(), ids.len());
+1483:             f
+1484:         }
+1485:     };
+1486:     let t0 = Instant::now();
+1487:     let mut nll = 0f64;
+1488:     let mut n = 0usize;
+1489:     let mut perte: Vec<f32> = Vec::new();
+1490:     // Journal de logits : écrit à la volée (une matrice de vocabulaire fait
+1491:     // 800 Mo sur gpt-oss, la garder en mémoire serait absurde).
+1492:     let mut journal = match &logits_bin {
+1493:         Some(f) => {
+1494:             use std::io::Write;
+1495:             let mut w = std::io::BufWriter::new(
+1496:                 std::fs::File::create(f).expect("création du fichier de logits"));
+1497:             w.write_all(&(mdl.cfg.vocab as i32).to_le_bytes()).unwrap();
+1498:             w.write_all(&0i32.to_le_bytes()).unwrap();   // n_pos, réécrit à la fin
+1499:             Some(w)
+1500:         }
+1501:         None => None,
+1502:     };
+1503:     let mut n_
+… [3348 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src/model.rs", "limit": 80, "offset": 2335}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src/model.rs</path>
+<type>file</type>
+<content>
+2335:     pub fn logits_lot(&mut self, hs: &[Vec<f32>]) -> Vec<Vec<f32>> {
+2336:         const TUILE_TETE: usize = 16;
+2337:         let t = hs.len();
+2338:         if t == 0 { return Vec::new(); }
+2339:         if t == 1 { return vec![self.logits(&hs[0])]; }
+2340:         let h = self.cfg.hidden;
+2341:         // 1. quantification de chaque état caché (mêmes règles que `logits`)
+2342:         let mut qx: Vec<i16> = vec![0i16; t * h];
+2343:         let mut sxs = vec![0f32; t];
+2344:         let mut scratch: Vec<f32> = Vec::with_capacity(h);
+2345:         for (i, hi) in hs.iter().enumerate() {
+2346:             let (sv, sx) = match Self::quant_scratch(hi, self.act_levels, self.act_thresh,
+2347:                                                      self.act_topk, self.act_renorm, &mut scratch) {
+2348:                 Some(v) => v,
+2349:                 None => (SparseVec { idx: Vec::new(), val: Vec::new() }, 1.0),
+2350:             };
+2351:             sxs[i] = sx;
+2352:             for (&j, &val) in sv.idx.iter().zip(sv.val.iter()) {
+2353:                 qx[i * h + j as
+… [3264 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && grep -n \"reste (tête\\|prof\\[\\|pub prof\" src/main.rs | head -20", "description": "Inspect profiler postes computation"}`
+
+  ```
+1619:    println!("    postes (ms/token) : projets-attn {:.2} | rope {:.2} | attention {:.2} | proj+mlp {:.2} | somme {:.2} | reste (tête + échantillonnage) {:.2}",
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src/main.rs", "limit": 45, "offset": 1596}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src/main.rs</path>
+<type>file</type>
+<content>
+1596:         }
+1597:     }
+1598:     println!("\n=== perplexité {:.4} sur {} tokens ({} événements, {:.1} s) ===",
+1599:              ppl, n, mdl.events_total(), t0.elapsed().as_secs_f64());
+1600:     println!("    {:.1} tok/s effectifs (avant + tête)", n as f64 / t0.elapsed().as_secs_f64());
+1601:     let ae = mdl.attn_events as f64 / n.max(1) as f64;
+1602:     let fe = mdl.events_total() as f64 / n.max(1) as f64;
+1603:     println!("    attention : {:.2} M paires (requête, clé) par token", ae / 1e6);
+1604:     println!("    projections : {:.1} M événements par token", fe / 1e6);
+1605:     if ae + fe > 0.0 {
+1606:         println!("    part de l'attention dans le flux d'événements : {:.1} %",
+1607:                  100.0 * ae / (ae + fe));
+1608:     } else {
+1609:         // Aucun événement : le mode dense ne compte rien. Annoncer « 100 % »
+1610:         // serait un artefact de division par zéro, pas une mesure.
+1611:         println!("    part de l'attention dans le flux d'événements : — (aucun événement)");
+1612:     }
+1613:     // Où passe VRAIMENT le temps du tok
+… [976 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && python3 - <<'PY'\np='src/main.rs'; s=open(p).read()\nold = \"\"\"    let profil = ppl_profil;\n    let mut seaux: Vec<(f64, usize)> = vec![(0.0, 0); ctx.div_ceil(256)];\"\"\"\nnew = \"\"\"    let profil = ppl_profil;\n   … [2108 caractères tronqués]`
+
+  ```
+timers posés
+    Finished `release` profile [optimized] target(s) in 17.39s
+  ```
+
+- **bash** `{"command": "/tmp/profil_lot.sh", "description": "Re-profile lot 1 vs 512 with head timer", "run_in_background": true}`
+
+  ```
+started background job bash-25
+  ```
+
+- **job_output** `{"job_id": "bash-25", "timeout_ms": 240000, "wait": true}`
+
+  ```
+##### lot 1
+     511 tokens notés — perplexité cumulée 13.137  (29.8 tok/s)
+profil par profondeur (perplexité par tranche de 256 positions) :
+=== perplexité 13.1368 sur 511 tokens (0 événements, 17.2 s) ===
+    29.8 tok/s effectifs (avant + tête)
+    attention : 0.09 M paires (requête, clé) par token
+    part de l'attention dans le flux d'événements : 100.0 %
+    postes (ms/token) : projets-attn 2.58 | rope 0.46 | attention 2.78 | proj+mlp 20.75 | somme 26.57 | reste (tête + échantillonnage) 7.05
+    dont tête de sortie 0.00 | notation log-sum-exp 7.01 (le reste du « reste » n'est pas chronométré)
+    dont attention : scores 1.06 | softmax 0.53 | somme pondérée + écriture KV 1.19
+##### lot 512
+     511 tokens notés — perplexité cumulée 13.136  (35.5 tok/s)
+profil par profondeur (perplexité par tranche de 256 positions) :
+=== perplexité 13.1359 sur 511 tokens (0 événements, 14.4 s) ===
+    35.5 tok/s effectifs (avant + tête)
+    attention : 0.09 M paires (requête, clé) par token
+    part de l'attention dans le flux d'événements : 100.0 %
+    postes (ms/token) : projets-attn 0.99 | rope 0.00 | attention 5.59 | proj+mlp 14.54 | somme 21.13 | reste (tête + échantillonnage) 7.07
+    don
+… [225 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ La tête en lot ne gagne rien : noyau lié au calcul, pas à la mémoire — je documente
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-prefill-par-lots.md", "limit": 40, "offset": 60}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-prefill-par-lots.md</path>
+<type>file</type>
+<content>
+60: ligne relisait *tout* le lot d'activations (64 × 896 × 4 = 229 Ko) — 4 864
+61: relectures par projection.
+62: 
+63: Correction : **tuilage** — un groupe de 16 jetons (8 pour le 4 bits) est traité
+64: avant de passer à la ligne suivante, donc les activations du groupe restent en
+65: cache pendant qu'on parcourt les poids. C'est l'arbitrage classique : la ligne est
+66: relue `t / TUILE` fois, mais chaque relecture sert 16 jetons au lieu d'un.
+67: 
+68: ## 4. Le débit, attribué poste par poste
+69: 
+70: Le profil du chemin par lots (ajouté pour l'occasion : sans lui, aucun poste
+71: n'était chronométré) donne, par jeton, Qwen2.5-0.5B, contexte 512, 16 fils :
+72: 
+73: | poste | lot 1 | lot 512 | verdict |
+74: |---|---|---|---|
+75: | projections d'attention | 3,05 ms | **1,49 ms** | le GEMM divise par 2 ✓ |
+76: | attention | 4,05 ms | 8,90 ms | **×2,2** ✗ |
+77: | FFN + projection de sortie | 25,31 ms | 20,92 ms | ÷1,2 seulement |
+78: | **somme** | 33,14 ms | 31,31 ms | −5 % |
+79: | tête + échantillonnage | 8,36 ms | 8,75 ms | inchangé (la tête est par jeton) |
+80
+… [1213 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+Now I write the section that closes the loop on (a) and (b):
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-prefill-par-lots.md", "old_string": "## 5. Ce que ça change pour le contexte long", "new_string": "### 4.bis Les deux suites annoncées, faites et mesurées (réponse à la §4)\n\nLes deux manques de la §4 sont comblés :\n\n* … [4519 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-prefill-par-lots.md has been updated successfully.
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-prefill-par-lots.md", "limit": 30, "offset": 170}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-prefill-par-lots.md</path>
+<type>file</type>
+<content>
+170: 1. `Shared::gs32` est un pointeur **fin** vers `Vec<i32>` ; le worker
+171:    reconstruit la tranche avec la longueur du lot (`from_raw_parts(ptr, t)`).
+172:    Un test le verrouille : `tests_gemm_q4` fait tourner des lots de 1, 8, 9, 17
+173:    et 40 jetons sur une matrice de 256 colonnes — soit des lots **plus grands
+174:    que le nombre de blocs (8)** — et compare au chemin jeton par jeton.
+175: 2. Toute génération de travail est passée sous `catch_unwind` : un worker qui
+176:    panique incrémente `Shared::morts`, et l'attente commune (`Pool::attendre`)
+177:    **panique à son tour avec un message clair** au lieu de boucler. Vérifié en
+178:    réintroduisant le bug : le test échoue en quelques secondes avec
+179:    « un worker du pool est mort pendant le calcul (panique ci-dessus) » là où il
+180:    tournait auparavant indéfiniment.
+181: 
+182: ## 5. Ce que ça change pour le contexte long
+183: 
+184: Le préremplissage séquentiel coûtait un parcours complet des poids **par jeton**.
+185: Un lot de `t` jetons ne le coûte plus qu'une fois par groupe de 16
+… [336 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-prefill-par-lots.md", "new_string": "Le préremplissage séquentiel coûtait un parcours complet des poids **par jeton**.\nUn lot de `t` jetons ne le coûte plus qu'une fois par groupe de 16 (et une fois\npar expert et par gr … [1362 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-prefill-par-lots.md has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && awk 'NR>=133 && NR<=175 {printf \"%4d|%s\\n\", NR, $0}' REPRISE.md", "description": "Read REPRISE table region"}`
+
+  ```
+133|
+ 134|---
+ 135|
+ 136|## 6. Les huit chantiers : où ils en sont
+ 137|
+ 138|| # | chantier | état | mesure |
+ 139||---|---|---|---|
+ 140|| 1 | protocole de perplexité longue | **fait** | `--depuis N` note les mêmes jetons à contexte variable ; `--depuis 256 --ctx 256` redonne exactement la fenêtre 2 historique (21,565) |
+ 141|| 2 | seuil de rotation YaRN | **fait** | comparaison appariée (mêmes 512 jetons, contexte 128→1536) : RoPE simple **39,52 / 49,79 / 49,93 / 298,56** contre interpolation seule 42,13 / 82,02 / 82,15 / 578,86 → **le simple gagne partout**. Reste à mesurer au-delà de 4 096 de contexte (corpus trop court) |
+ 142|| 3 | KV int8 puis int4 | **fait** | **échelles par bloc de 32** : int8 +**1,5 %** (était +7,1 %), int4 +219 % (était +384 %) — l'écart avec llama.cpp (+0,8 %) est comblé ; 1 M tient en int4 (9,7 Go) |
+ 143|| 4 | préremplissage par lots | **fait, gain faible et attribué** | noyau ×2,4 ; justesse sur dense (13,1359 contre 13,1368) et sur MoE regroupé (13,7205 contre 13,7149) ; bout en bout **−3 %** seulement : le GEMM divise les projections par 2 (1,49 contre 3,05 ms/jeton) mais l'attention non groupée double (8,90 contre 4,05) et la tête reste par jeton
+… [3006 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='REPRISE.md'; s=open(p).read()\n\nold4 = \"| 4 | préremplissage par lots | **fait, gain faible et attribué** | noyau ×2,4 ; justesse sur dense (13,1359 contre 13,1368) et sur MoE regroupé (13,7205 contre 13,7149)  … [2825 caractères tronqués]`
+
+  ```
+REPRISE.md mis à jour
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A qtrinet-core/src reports/rapport-prefill-par-lots.md REPRISE.md && git commit -q -F - <<'EOF' && git log --oneline -1\npréremplissage par lots : attention groupée, tête en lot, et un pointeur gras\n\nLe lot 128 tombait sur … [1727 caractères tronqués]`

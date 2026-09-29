@@ -1508,6 +1508,11 @@ fn run_ppl(opt: Options) {
     // moyenne seule ne permet pas de trancher.
     let profil = ppl_profil;
     let mut seaux: Vec<(f64, usize)> = vec![(0.0, 0); ctx.div_ceil(256)];
+    // Deux postes que le profil du moteur ne voit pas : la tête de sortie
+    // (la plus grosse matrice du modèle) et la notation log-sum-exp. Sans eux,
+    // « reste » les mélangeait et on ne pouvait pas dire si la tête par lots
+    // avait servi à quelque chose.
+    let (mut t_tete, mut t_note) = (0f64, 0f64);
     for (i_f, (chunk, masque)) in fenetres.iter().enumerate() {
         let (mut nll_f, mut n_f) = (0f64, 0usize);
         // Préremplissage par lots : `lot` jetons d'un coup. `lot == 1` emprunte
@@ -1516,10 +1521,16 @@ fn run_ppl(opt: Options) {
         while pos < chunk.len() {
             let t = lot.min(chunk.len() - pos);
             let hs = mdl.forward_lot(&chunk[pos..pos + t], pos);
+            // Tête par lots : la matrice la plus lourde du modèle est lue une
+            // fois pour le groupe au lieu d'une fois par jeton.
+            let marque = Instant::now();
+            let lgs = if t > 1 { Some(mdl.logits_lot(&hs)) } else { None };
+            t_tete += marque.elapsed().as_secs_f64();
             for (i, h) in hs.iter().enumerate() {
             let pos = pos + i;
             if pos + 1 < chunk.len() && masque[pos + 1] {
-                let lg = mdl.logits(h);
+                let marque = Instant::now();
+                let lg = match &lgs { Some(v) => v[i].clone(), None => mdl.logits(h) };
                 let mut mx = f32::NEG_INFINITY;
                 for &v in &lg { if v > mx { mx = v; } }
                 let mut sum = 0f64;
@@ -1533,6 +1544,7 @@ fn run_ppl(opt: Options) {
                 let b = (pos + 1) / 256;
                 if b < seaux.len() { seaux[b].0 += nll_tok; seaux[b].1 += 1; }
                 perte.push(nll_tok as f32);
+                t_note += marque.elapsed().as_secs_f64();
                 if let Some(w) = journal.as_mut() {
                     use std::io::Write;
                     tampon.clear();
@@ -1617,6 +1629,8 @@ fn run_ppl(opt: Options) {
              p[0] / n as f64 * 1e3, p[1] / n as f64 * 1e3, p[2] / n as f64 * 1e3,
              p[3] / n as f64 * 1e3, tot / n as f64 * 1e3,
              (sec - tot) / n as f64 * 1e3);
+    println!("    dont tête de sortie {:.2} | notation log-sum-exp {:.2} (le reste du « reste » n'est pas chronométré)",
+             t_tete / n as f64 * 1e3, t_note / n as f64 * 1e3);
     println!("    dont attention : scores {:.2} | softmax {:.2} | somme pondérée + écriture KV {:.2}",
              p[4] / n as f64 * 1e3, p[5] / n as f64 * 1e3,
              (p[2] - p[4] - p[5]) / n as f64 * 1e3);
