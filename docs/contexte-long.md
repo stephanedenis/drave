@@ -99,8 +99,8 @@ plus tôt : c'est le préremplissage (§3.a).
 | # | étape | débloque | coût | risque |
 |---|---|---|---|---|
 | E1 | **Préremplissage par lots** (tranches de 256–2 048) | 32 k utilisable (4,5 h → minutes) ; TTFT | gros (noyau GEMM + graphe) | refonte du chemin de calcul |
-| E2 | **KV int8** (échelle par bloc de 32, comme Q8_0) | ÷4 sur le KV ; 128 k confortable | moyen (boucle d'attention) | qualité — à mesurer |
-| E3 | **KV int4** + fenêtre par couche | 1 M tient en RAM (9,7 Go) et en VRAM | petit après E2 | qualité — à mesurer |
+| E2 | ~~**KV int8**~~ **FAIT** (échelle par vecteur) — ÷4 sur le KV | 128 k confortable | — | mesuré : +7,1 % de perplexité (llama.cpp q8_0 : +3,1 %) |
+| E3 | ~~**KV int4**~~ **FAIT** (nibbles empaquetés) + fenêtre par couche | 1 M tient en RAM (9,7 Go) et en VRAM | — | mesuré : **+384 %** — llama.cpp q4_0 : +411 %. À réserver aux cas où la mémoire manque |
 | E4 | **KV déporté sur les 2 GPU** (pagination, préchargement) | décodage 13 ms/jeton à 1 M | moyen (déjà des noyaux PTX) | PCIe si les couches restent au CPU |
 | E5 | **Attention creuse** (top-k par similarité, ou fenêtre+sinks par couche) | casse le O(N) du décodage | moyen (`attn_topk` existe déjà) | qualité — à mesurer |
 | E6 | **MLA** (DeepSeek) | compression structurelle du KV | gros | architecture |
@@ -109,6 +109,24 @@ Ordre recommandé : **E1 d'abord** (sans lui, aucun contexte long n'est
 utilisable), puis E2+E3 ensemble (la qualité se mesure sur un petit modèle en
 quelques minutes), puis E4/E5 selon l'usage (décodage long ou préremplissage
 long).
+
+## 4.bis KV quantifié : mesuré, et le 4 bits est cher
+
+Cache KV en 8 puis 4 bits, échelle par vecteur (tête, position), nibbles
+empaquetés en 4 bits — `QT_KV_BITS=8` ou `4`, `[config] cache KV` dit ce qui est
+alloué. Banc d'essai : Qwen2.5-0.5B Q8_0, 511 jetons, contexte 512, comparé à
+llama.cpp sur le même texte.
+
+| KV | nous | llama.cpp |
+|---|---|---|
+| f32 / f16 | 13,14 | 14,24 |
+| **int8** | **14,07** (+7,1 %) | 14,68 (+3,1 %) |
+| **int4** | **63,61** (+384 %) | 72,80 (+411 %) |
+
+Les deux moteurs racontent la même histoire : **l'int8 coûte quelques pour cent,
+le 4 bits détruit la perplexité d'un facteur 5**. Le 4 bits reste implémenté
+(c'est lui qui fait tenir 1 M en mémoire et en VRAM), mais il ne doit pas être
+le défaut : il se valide modèle par modèle.
 
 ## 5. YaRN à retardement : ce que la mesure a dit
 

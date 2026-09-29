@@ -7359,3 +7359,431 @@ docs/contexte-long.md:127:> va de 6 à 542 de perplexité selon la tranche. Le p
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -m \"Item 1 : protocole de perplexite longue --depuis N\n\nLe protocole historique (--ctx N --limit N) confond la longueur du contexte et\nle contenu : a 8192 jetons on ne note pas les memes tranches qu'a  … [694 caractères tronqués]`
+
+  ```
+f04f058 Item 1 : protocole de perplexite longue --depuis N
+  ```
+
+- **todo_write** `{"todos": [{"content": "1. Protocole de perplexité longue : --depuis (validé : retrouve 21,565)", "status": "completed"}, {"content": "2. Trancher le seuil de rotation (mêmes jetons, contexte 128→4096, 2 régimes)", "status": "in_progress"}, {"content": "3. KV int8 puis int4, mesurés sur Qwen 0.5B à  … [460 caractères tronqués]`
+
+  ```
+Updated todo list: 6 pending, 1 in progress, 1 completed.
+  ```
+
+- **bash** `{"command": "sleep 240; tail -4 /tmp/contexte_ou_contenu.log 2>/dev/null; echo \"--- seuil ---\"; tail -3 /tmp/seuil_rotation.log 2>/dev/null", "description": "Monitor queued runs", "timeoutMs": 300000}`
+
+  ```
+### ctx 512 sur 8 192 jetons : PPL par fenêtre (contenu seul)
+--- seuil ---
+  ```
+
+### 🤖 Assistant
+
+⏵ Item 3 : je lis le bloc d'attention pour introduire un cache KV quantifié
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src/model.rs", "limit": 75, "offset": 1225}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src/model.rs</path>
+<type>file</type>
+<content>
+1225:                         Self::rmsnorm(t, w, cfg.eps, &mut tmp);
+1226:                         t.copy_from_slice(&tmp);
+1227:                     }
+1228:                 }
+1229:             }
+1230:             let tr = Instant::now();
+1231:             match cfg.yarn {
+1232:                 Some((f, bf, bl, orig, ms)) => {
+1233:                     Self::rope_yarn(&mut q, nh, hd, pos, cfg.rope_base, f, bf, bl, orig, ms, cfg.n_rot);
+1234:                     Self::rope_yarn(&mut k, nkv, hd, pos, cfg.rope_base, f, bf, bl, orig, ms, cfg.n_rot);
+1235:                 }
+1236:                 None => {
+1237:                     Self::rope(&mut q, nh, hd, pos, cfg.rope_base, cfg.n_rot);
+1238:                     Self::rope(&mut k, nkv, hd, pos, cfg.rope_base, cfg.n_rot);
+1239:                 }
+1240:             }
+1241:             if self.qk_topk > 0 {
+1242:                 Self::creuse_tetes(&mut q, nh, hd, self.qk_topk);
+1243:                 Self::creuse_tetes(&mut k, nkv, hd, self.qk_topk);
+1244:             }
+1245:             self.prof[1] += tr.elapsed().as_secs_f
+… [3248 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src/model.rs", "limit": 70, "offset": 1300}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src/model.rs</path>
+<type>file</type>
+<content>
+1300:                         for v in row.iter_mut() { *v *= inv; }
+1301:                     }
+1302:                 }
+1303:                 self.prof[5] += t_soft.elapsed().as_secs_f64();
+1304:                 for kvh in 0..nkv {
+1305:                     let h0 = kvh * rep;
+1306:                     let h1 = (h0 + rep).min(nh);
+1307:                     for hh in h0..h1 {
+1308:                         let out = &mut att[hh * hd..(hh + 1) * hd];
+1309:                         for v in out.iter_mut() { *v = 0.0; }
+1310:                     }
+1311:                     for t in 0..n {
+1312:                         let vt = &vc[(kvh * ctx + t) * hd..(kvh * ctx + t) * hd + hd];
+1313:                         for hh in h0..h1 {
+1314:                             let w = sc2[hh * ctx + t];
+1315:                             let out = &mut att[hh * hd..(hh + 1) * hd];
+1316:                             for (o, x) in out.iter_mut().zip(vt.iter()) { *o += w * x; }
+1317:                         }
+1318:                     }
+1319:                     self.attn_events += ((h1 - h0) *
+… [3482 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src/model.rs", "limit": 50, "offset": 1370}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src/model.rs</path>
+<type>file</type>
+<content>
+1370:                     for &t in iter {
+1371:                         let w = sc[t as usize];
+1372:                         let vt = &vc[(kvh * ctx + t as usize) * hd..(kvh * ctx + t as usize) * hd + hd];
+1373:                         for (o, x) in out.iter_mut().zip(vt.iter()) { *o += w * x; }
+1374:                     }
+1375:                     continue;
+1376:                 }
+1377:                 attn_idx.clear();
+1378:                 if k < n {
+1379:                     attn_idx.extend(0..n as u32);
+1380:                     attn_idx.select_nth_unstable_by(k, |&a, &b| {
+1381:                         sc[b as usize].partial_cmp(&sc[a as usize]).unwrap()
+1382:                     });
+1383:                     attn_idx.truncate(k);
+1384:                 }
+1385:                 // en mode dense, seules les n premières clés existent : itérer
+1386:                 // sur tout le contexte lirait des scores au-delà de pos.
+1387:                 let iter: &[u32] = if k < n { &attn_idx } else { &attn_all[..n] };
+1388:                 self.attn_events += iter.len() as u
+… [2289 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Implémentation du cache KV quantifié (i8, échelle par vecteur)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src && grep -n \"^impl Model {\" model.rs | head -2 && grep -n \"kv_k\\|kv_v\" model.rs | head -20", "description": "Locate KV fields and impl block"}`
+
+  ```
+539:impl Model {
+370:    kv_k: Vec<Vec<f32>>,
+371:    kv_v: Vec<Vec<f32>>,
+797:            kv_k: vec![kv.clone(); n_layer], kv_v: vec![kv; n_layer],
+1159:        let Model { g, cfg, layers, out_norm, pool, kv_k, kv_v, events, .. } = self;
+1249:                let kc = &mut kv_k[l];
+1250:                let vc = &mut kv_v[l];
+1259:            let kc = &kv_k[l];
+1260:            let vc = &kv_v[l];
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src/model.rs", "limit": 14, "offset": 364}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src/model.rs</path>
+<type>file</type>
+<content>
+364:     pub g: Gguf,
+365:     pub cfg: Cfg,
+366:     pub layers: Vec<Layer>,
+367:     pub out_norm: Vec<f32>,
+368:     pub pool: Pool,
+369:     /// cache KV, par couche : `[n_kv_head × ctx × head_dim]`
+370:     kv_k: Vec<Vec<f32>>,
+371:     kv_v: Vec<Vec<f32>>,
+372:     pub ctx: usize,
+373:     pub events: u64,
+374:     /// Nombre de niveaux de quantification des **activations** (127 pour int8,
+375:     /// 32767 pour int16). Les poids restent int8 : c'est la précision de
+376:     /// l'activation qui décide de la fidélité au modèle flottant.
+377:     pub act_levels: f32,
+
+(Showing lines 364-377 of 1740. Use offset=378 to continue.)
+</content>
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src/model.rs", "new_string": "    /// cache KV, par couche : `[n_kv_head × ctx × head_dim]`, en f32 ou quantifié\n    kv: Vec<KvCache>,\n    pub ctx: usize,", "old_string": "    /// cache KV, par couche : `[n_kv_head × ctx × … [86 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src/model.rs has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src/model.rs", "new_string": "impl Model {", "old_string": "impl Model {\n    pub fn load(path: &str, ctx: usize, n_threads: usize, dense: bool, keep: f32,"}`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src/model.rs has been updated successfully.
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src/model.rs", "limit": 10, "offset": 534}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src/model.rs</path>
+<type>file</type>
+<content>
+534:         self.n_token += 1;
+535:     }
+536: }
+537: 
+538: impl Model {
+539:                 auto: bool, q4: u8, b6: u8) -> Model {
+540:         let t0 = Instant::now();
+541:         let g = Gguf::open(path).expect("ouverture du GGUF");
+542:         let cfg = Cfg {
+543:             n_layer: g.cfg("block_count").and_then(|m| m.as_u64()).unwrap_or(0) as usize,
+
+(Showing lines 534-543 of 1738. Use offset=544 to continue.)
+</content>
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src/model.rs", "new_string": "/// Cache KV d'une couche, en f32 ou quantifié.\n///\n/// Le mur du contexte long n'est pas la capacité du cache mais **son trafic de\n/// relecture** : à chaque jeton, l'attention relit toutes  … [3703 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src/model.rs has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src && grep -n \"let kv = vec!\\[0f32\" -A 3 model.rs | head -8 && grep -n \"kv_k: vec!\" model.rs", "description": "Find KV allocation site"}`
+
+  ```
+768:        let kv = vec![0f32; cfg.n_kv_head * ctx * cfg.head_dim];
+769-        let pool = Pool::new(n_threads, cfg.hidden);
+770-        eprintln!("[modele] {} couches chargées en {:?} — listes {:.2} Go{} , {} threads",
+771-                  cfg.n_layer, t0.elapsed(), bytes as f64 / 1e9,
+885:            kv_k: vec![kv.clone(); n_layer], kv_v: vec![kv; n_layer],
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src && python3 - <<'PY'\np='model.rs'\ns=open(p).read()\n\n# 1. Allocation du cache selon la variable d'environnement / le champ global.\ns=s.replace(\"\"\"        let kv = vec![0f32; cfg.n_kv_head * ctx * cfg.head_dim];\"\ … [5548 caractères tronqués]`
+
+  ```
+6
+error[E0382]: borrow of moved value: `cfg`
+   --> src/model.rs:892:34
+    |
+718 |         let cfg = {
+    |             --- move occurs because `cfg` has type `Cfg`, which does not implement the `Copy` trait
+...
+891 |             g, cfg, layers, out_norm, pool,
+    |                --- value moved here
+892 |             kv: (0..n_layer).map(|_| KvCache::new(kv_bits, cfg.n_kv_head, ctx, cfg.head_dim)).collect(),
+    |                                  ^^^ value borrowed here after move            ------------ borrow occurs due to use in closure
+    |
+--
+error: could not compile `qtrinet-core` (bin "qtrinet-core") due to 1 previous error; 21 warnings emitted
+BUILD
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src && python3 - <<'PY'\np='model.rs'\ns=open(p).read()\ns=s.replace(\"\"\"            kv: (0..n_layer).map(|_| KvCache::new(kv_bits, cfg.n_kv_head, ctx, cfg.head_dim)).collect(),\"\"\",\n\"\"\"            kv: {\n           … [333 caractères tronqués]`
+
+  ```
+error[E0382]: use of moved value: `cfg`
+   --> src/model.rs:893:49
+    |
+718 |         let cfg = {
+    |             --- move occurs because `cfg` has type `Cfg`, which does not implement the `Copy` trait
+...
+891 |             g, cfg, layers, out_norm, pool,
+    |                --- value moved here
+892 |             kv: {
+893 |                 let (nkv, hd) = (cfg.n_kv_head, cfg.head_dim);
+    |                                                 ^^^^^^^^^^^^ value used here after move
+--
+error: could not compile `qtrinet-core` (bin "qtrinet-core") due to 1 previous error; 21 warnings emitted
+BUILD
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src && python3 - <<'PY'\np='model.rs'\ns=open(p).read()\ns=s.replace(\"\"\"            kv: {\n                let (nkv, hd) = (cfg.n_kv_head, cfg.head_dim);\n                (0..n_layer).map(|_| KvCache::new(kv_bits, nkv, c … [704 caractères tronqués]`
+
+  ```
+error[E0425]: cannot find value `n_layer` in this scope
+   --> src/model.rs:772:43
+    |
+772 |         let caches_kv: Vec<KvCache> = (0..n_layer)
+    |                                           ^^^^^^^ not found in this scope
+
+warning: variant `Q4_K` should have an upper camel case name
+   --> src/list.rs:517:40
+    |
+517 | pub enum Source { Propre, Q4_0, Mxfp4, Q4_K, Q6_K }
+    |                                        ^^^^ help: convert the identifier to upper camel case: `Q4K`
+--
+error: could not compile `qtrinet-core` (bin "qtrinet-core") due to 1 previous error; 20 warnings emitted
+BUILD
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src && python3 - <<'PY'\np='model.rs'\ns=open(p).read()\ns=s.replace(\"\"\"        let caches_kv: Vec<KvCache> = (0..n_layer)\n            .map(|_| KvCache::new(kv_bits, cfg.n_kv_head, ctx, cfg.head_dim)).collect();\"\"\",\ … [565 caractères tronqués]`
+
+  ```
+BUILD
+     510 tokens notés — perplexité cumulée 19.388  (19.1 tok/s)  [fenêtre 2 : 255 notés, PPL 21.565]
+=== perplexité 19.3885 sur 510 tokens (0 événements, 26.7 s) ===
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ./qtrinet-core/target/release/qtrinet-core models/Qwen2.5-0.5B-Q8_0.gguf --ppl /tmp/ids_qwen.txt --ctx 256 --abits 16 --threads 16 --limit 512 --dense 2>&1 | grep -E \"cache KV\" ; ps -o pid,etime,pcpu -C qtrinet-core 2>/dev/null | t … [79 caractères tronqués]`
+
+  ```
+[config] cache KV : 32 bits, 0.01 Go pour 256 jetons
+    PID     ELAPSED %CPU
+2878767       15:42 1755
+  ```
+
+### 🤖 Assistant
+
+⏵ Item 3 : j'ajoute l'empaquetage 4 bits et le drapeau CLI
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src && python3 - <<'PY'\np='model.rs'\ns=open(p).read()\n\n# --- stockage unifié : un octet par valeur en 8 bits, deux nibbles en 4 bits ---\ns=s.replace(\"\"\"    kf: Vec<f32>,\n    vf: Vec<f32>,\n    k8: Vec<i8>,\n    v8: … [6625 caractères tronqués]`
+
+  ```
+BUILD
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for b in 32 8 4; do echo \"=== kv-bits $b ===\"; QT_KV_BITS=$b ./qtrinet-core/target/release/qtrinet-core models/Qwen2.5-0.5B-Q8_0.gguf --ppl /tmp/ids_qwen.txt --ctx 512 --limit 512 --abits 16 --threads 16 --dense 2>&1 | grep -E \"ca … [104 caractères tronqués]`
+
+  ```
+=== kv-bits 32 ===
+[config] cache KV : 32 bits, 0.01 Go pour 512 jetons
+=== kv-bits 8 ===
+[config] cache KV : 8 bits, 0.00 Go pour 512 jetons
+=== kv-bits 4 ===
+[config] cache KV : 4 bits, 0.00 Go pour 512 jetons
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for b in 32 8 4; do printf \"kv-bits %-2s : \" $b; QT_KV_BITS=$b ./qtrinet-core/target/release/qtrinet-core models/Qwen2.5-0.5B-Q8_0.gguf --ppl /tmp/ids_qwen.txt --ctx 512 --limit 512 --abits 16 --threads 16 --dense 2>&1 | grep -oE \ … [125 caractères tronqués]`
+
+  ```
+kv-bits 32 : === perplexité 13.1368 sur 511 tokens
+kv-bits 8  : === perplexité 63.6107 sur 511 tokens
+kv-bits 4  : === perplexité 63.6107 sur 511 tokens
+  ```
+
+### 🤖 Assistant
+
+⏵ Deux bugs trouvés : `8` retombait sur 4 bits, et l'empaquetage faisait un OR sur l'ancienne valeur
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src && python3 - <<'PY'\np='model.rs'\ns=open(p).read()\n# 1. La sélection du mode : « > 8 » envoyait 8 bits sur le chemin 4 bits.\ns=s.replace(\"\"\"        let bits = if bits >= 32 { 32 } else if bits > 8 { 8 } else { 4 } … [2568 caractères tronqués]`
+
+  ```
+BUILD
+kv-bits 32 : perplexité 13.1368 sur 511 tokens
+kv-bits 8  : perplexité 14.0707 sur 511 tokens
+kv-bits 4  : perplexité 63.6107 sur 511 tokens
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src && cat >> model.rs <<'EOF'\n\n#[cfg(test)]\nmod tests_kv {\n    use super::KvCache;\n\n    /// Aller-retour : ce qui est écrit doit se relire à l'erreur de\n    /// quantification près, **aux deux précisions**, et une r … [1837 caractères tronqués]`
+
+  ```
+failures:
+    model::tests_kv::aller_retour_kv
+
+test result: FAILED. 3 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `--bin qtrinet-core`
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && cargo test --release 2>&1 | grep -A 6 \"panicked\\|assertion\" | head -12", "description": "See the KV test failure detail", "timeoutMs": 600000}`
+
+  ```
+thread 'model::tests_kv::aller_retour_kv' (3097033) panicked at src/model.rs:1909:17:
+valeur 6 bits 8 : 0.2952756 contre 0.29999995
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    model::tests_kv::aller_retour_kv
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src && python3 - <<'PY'\np='model.rs'\ns=open(p).read()\ns=s.replace(\"\"\"            let niv = if bits == 4 { 7.0 } else if bits == 8 { 127.0 } else { 1e9 };\n            for i in 0..hd {\n                let ek = (k[i] - … [1895 caractères tronqués]`
+
+  ```
+test list::tests_q6k::quarts_successifs ... ok
+test model::tests_kv::aller_retour_kv ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+  ```
+
+### 🤖 Assistant
+
+⏵ Le stockage est validé par test unitaire ; je compare la dégradation 4 bits à llama.cpp
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for kv in \"f16\" \"q8_0\" \"q4_0\"; do printf \"llama.cpp KV %-5s : \" $kv; if [ \"$kv\" = \"f16\" ]; then A=\"\"; else A=\"--ctk $kv --ctv $kv\"; fi; timeout 600 ~/.local/bin/llama-perplexity -m models/Qwen2.5-0.5B-Q8_0.gguf -f /tm … [182 caractères tronqués]`
+
+  ```
+llama.cpp KV f16   : llama.cpp KV q8_0  : llama.cpp KV q4_0  :
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 600 ~/.local/bin/llama-perplexity -m models/Qwen2.5-0.5B-Q8_0.gguf -f /tmp/wt2_long.txt -c 512 --chunks 2 2>&1 | tail -12", "description": "Run llama-perplexity directly to see output", "timeoutMs": 900000}`
+
+  ```
+0.01.521.923 W load: control-looking token: 128247 '</s>' was not control-type; this is probably a bug in the model. its type will be overridden
+0.01.846.125 I 
+0.01.846.316 I system_info: n_threads = 20 (n_threads_batch = 20) / 40 | CUDA : ARCHS = 750 | USE_GRAPHS = 1 | CPU : SSE3 = 1 | SSSE3 = 1 | AVX = 1 | AVX2 = 1 | F16C = 1 | FMA = 1 | BMI2 = 1 | LLAMAFILE = 1 | OPENMP = 1 | REPACK = 1 | 
+0.01.846.339 I perplexity: tokenizing the input ..
+0.01.896.743 I perplexity: tokenization took 50.391 ms
+0.01.896.810 I perplexity: calculating perplexity over 2 chunks, n_ctx=512, batch_size=128, n_seq=4
+0.02.167.991 I perplexity: 0.27 seconds per pass - ETA 0.00 minutes
+[1]9.9625,[2]14.2411,
+0.02.168.007 I Final estimate: PPL = 14.2411 +/- 2.07145
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for kv in \"f16\" \"q8_0\" \"q4_0\"; do printf \"llama.cpp KV %-5s : \" $kv; if [ \"$kv\" = \"f16\" ]; then A=\"\"; else A=\"--ctk $kv --ctv $kv\"; fi; timeout 600 ~/.local/bin/llama-perplexity -m models/Qwen2.5-0.5B-Q8_0.gguf -f /tm … [176 caractères tronqués]`
+
+  ```
+llama.cpp KV f16   : Final estimate: PPL = 14.2411
+llama.cpp KV q8_0  : llama.cpp KV q4_0  :
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for kv in q8_0 q4_0; do echo \"=== $kv ===\"; timeout 600 ~/.local/bin/llama-perplexity -m models/Qwen2.5-0.5B-Q8_0.gguf -f /tmp/wt2_long.txt -c 512 --chunks 2 --ctk $kv --ctv $kv 2>&1 | tail -4; done", "description": "Debug llama.cp … [42 caractères tronqués]`
+
+  ```
+=== q8_0 ===
+error: invalid argument: --ctk
+=== q4_0 ===
+error: invalid argument: --ctk
+  ```
+
+- **bash** `{"command": "~/.local/bin/llama-perplexity --help 2>&1 | grep -iE \"cache|type-k|ctk\" | head -8", "description": "Find KV cache type flags"}`
+
+  ```
+-cl,   --cache-list                     show list of models in cache
+--swa-full                              use full-size SWA cache (default: false)
+                                        whether to enable KV cache offloading (default: enabled)
+-ctk,  --cache-type-k TYPE              KV cache data type for K
+                                        (env: LLAMA_ARG_CACHE_TYPE_K)
+-ctv,  --cache-type-v TYPE              KV cache data type for V
+                                        (env: LLAMA_ARG_CACHE_TYPE_V)
+--kv-tail-tokens SPEC                   exact KV-cache tail: 0, auto, N, positional list, or named group list
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for kv in q8_0 q4_0; do printf \"llama.cpp KV %-5s : \" $kv; timeout 600 ~/.local/bin/llama-perplexity -m models/Qwen2.5-0.5B-Q8_0.gguf -f /tmp/wt2_long.txt -c 512 --chunks 2 -ctk $kv -ctv $kv 2>&1 | grep -oE \"Final estimate: PPL =  … [108 caractères tronqués]`
+
+  ```
+llama.cpp KV q8_0  : Final estimate: PPL = 14.6805
+llama.cpp KV q4_0  : Final estimate: PPL = 72.8023
+  ```
+
+### 🤖 Assistant
+
+⏵ Référence llama.cpp : q8_0 +3,1 % · q4_0 **+411 %** — le nôtre : +7,1 % et +384 %. Validé
+
+- **bash** `{"command": "tail -6 /tmp/contexte_ou_contenu.log 2>/dev/null; echo \"--- seuil ---\"; tail -4 /tmp/seuil_rotation.log 2>/dev/null; ps -o pid,etime,pcpu -C qtrinet-core 2>/dev/null | tail -1", "description": "Check queued gpt-oss runs"}`
+
+  ```
+### ctx 512 sur 8 192 jetons : PPL par fenêtre (contenu seul)
+--- seuil ---
+2878767       23:16 1764
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/kv_gptoss.sh <<'EOF'\n#!/bin/bash\n# Item 3 (suite) — ce que coûte le KV quantifié sur gpt-oss, à deux longueurs.\nset -u\ncd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\nQ=./qtrinet-core/target/release/qtrinet-core\nM … [649 caractères tronqués]`
+
+  ```
+en file (attendra la série en cours)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='docs/contexte-long.md'\ns=open(p).read()\ns=s.replace(\"\"\"| E2 | **KV int8** (échelle par bloc de 32, comme Q8_0) | ÷4 sur le KV ; 128 k confortable | moyen (boucle d'attention) | qualité — à mesurer |\n| E3 |  … [2812 caractères tronqués]`

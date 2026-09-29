@@ -366,9 +366,8 @@ pub struct Model {
     pub layers: Vec<Layer>,
     pub out_norm: Vec<f32>,
     pub pool: Pool,
-    /// cache KV, par couche : `[n_kv_head × ctx × head_dim]`
-    kv_k: Vec<Vec<f32>>,
-    kv_v: Vec<Vec<f32>>,
+    /// cache KV, par couche : `[n_kv_head × ctx × head_dim]`, en f32 ou quantifié
+    kv: Vec<KvCache>,
     pub ctx: usize,
     pub events: u64,
     /// Nombre de niveaux de quantification des **activations** (127 pour int8,
@@ -536,6 +535,140 @@ impl Hebb {
     }
 }
 
+/// Cache KV d'une couche, en f32 ou quantifié.
+///
+/// Le mur du contexte long n'est pas la capacité du cache mais **son trafic de
+/// relecture** : à chaque jeton, l'attention relit toutes les clés des couches
+/// pleines. Mesuré sur gpt-oss à 1 M de contexte : 77 Go par jeton en f32 (3,9 s
+/// depuis la RAM), 19 Go en int8, 9,7 Go en int4 (13 ms depuis les deux GPU).
+///
+/// La quantification est **par vecteur** (une échelle par tête et par position),
+/// comme pour les activations : c'est le même compromis, et l'échelle coûte
+/// 4 octets pour 64 valeurs (3 % en int8). Les clés et les valeurs sont
+/// déquantifiées à la lecture, dans un tampon réutilisé — la structure de
+/// l'attention ne change pas.
+pub struct KvCache {
+    pub bits: u32,          // 32 = f32 (défaut), 8 = i8
+    pub n_kv: usize,
+    pub ctx: usize,
+    pub hd: usize,
+    kf: Vec<f32>,
+    vf: Vec<f32>,
+    /// Quantifié : un octet par valeur en 8 bits, **deux nibbles par octet en
+    /// 4 bits** (même disposition que Q4_0/MXFP4 : nibble bas = indice pair).
+    kq: Vec<u8>,
+    vq: Vec<u8>,
+    sk: Vec<f32>,
+    sv: Vec<f32>,
+}
+
+impl KvCache {
+    pub fn new(bits: u32, n_kv: usize, ctx: usize, hd: usize) -> Self {
+        let bits = if bits >= 32 { 32 } else if bits > 4 { 8 } else { 4 };
+        let n = n_kv * ctx * hd;
+        let nv = n_kv * ctx;
+        if bits >= 32 {
+            KvCache { bits, n_kv, ctx, hd, kf: vec![0.0; n], vf: vec![0.0; n],
+                      kq: Vec::new(), vq: Vec::new(), sk: Vec::new(), sv: Vec::new() }
+        } else {
+            assert!(hd % 2 == 0, "4 bits empaquetés : dimension de tête paire requise");
+            let nq = if bits == 8 { n } else { n / 2 };
+            KvCache { bits, n_kv, ctx, hd, kf: Vec::new(), vf: Vec::new(),
+                      kq: vec![0u8; nq], vq: vec![0u8; nq],
+                      sk: vec![0.0; nv], sv: vec![0.0; nv] }
+        }
+    }
+
+    /// Octets par vecteur (tête, position) dans le tableau quantifié.
+    #[inline]
+    fn pas(&self) -> usize { if self.bits == 8 { self.hd } else { self.hd / 2 } }
+
+    /// Octets réellement occupés (diagnostic).
+    pub fn octets(&self) -> u64 {
+        (self.kf.len() + self.vf.len()) as u64 * 4
+            + (self.kq.len() + self.vq.len()) as u64
+            + (self.sk.len() + self.sv.len()) as u64 * 4
+    }
+
+    /// Écrit un vecteur de clé et un de valeur à la position `pos`.
+    #[inline]
+    pub fn ecrire(&mut self, kvh: usize, pos: usize, k: &[f32], v: &[f32]) {
+        let d = (kvh * self.ctx + pos) * self.hd;
+        if self.bits >= 32 {
+            self.kf[d..d + self.hd].copy_from_slice(&k[..self.hd]);
+            self.vf[d..d + self.hd].copy_from_slice(&v[..self.hd]);
+            return;
+        }
+        let niv = if self.bits == 4 { 7.0 } else { 127.0 };
+        let mut mk = 0f32;
+        let mut mv = 0f32;
+        for i in 0..self.hd { mk = mk.max(k[i].abs()); mv = mv.max(v[i].abs()); }
+        let sk = if mk > 0.0 { mk / niv } else { 1.0 };
+        let sv = if mv > 0.0 { mv / niv } else { 1.0 };
+        let base = (kvh * self.ctx + pos) * self.pas();
+        if self.bits == 8 {
+            for i in 0..self.hd {
+                self.kq[base + i] = (k[i] / sk).round().clamp(-niv, niv) as i8 as u8;
+                self.vq[base + i] = (v[i] / sv).round().clamp(-niv, niv) as i8 as u8;
+            }
+        } else {
+            // Nibble bas = indice pair, haut = impair, écrits ENSEMBLE : un `|=`
+            // laisserait les nibbles de la fenêtre précédente, la même position
+            // étant réécrite à chaque fenêtre.
+            for j in 0..self.hd / 2 {
+                let qk0 = (k[2 * j] / sk).round().clamp(-niv, niv) as i32 as u8 & 0x0F;
+                let qk1 = (k[2 * j + 1] / sk).round().clamp(-niv, niv) as i32 as u8 & 0x0F;
+                let qv0 = (v[2 * j] / sv).round().clamp(-niv, niv) as i32 as u8 & 0x0F;
+                let qv1 = (v[2 * j + 1] / sv).round().clamp(-niv, niv) as i32 as u8 & 0x0F;
+                self.kq[base + j] = qk0 | (qk1 << 4);
+                self.vq[base + j] = qv0 | (qv1 << 4);
+            }
+        }
+        let s = kvh * self.ctx + pos;
+        self.sk[s] = sk;
+        self.sv[s] = sv;
+    }
+
+    /// Déquantifie la clé `(kvh, t)` dans `dst`.
+    #[inline]
+    pub fn cle(&self, kvh: usize, t: usize, dst: &mut [f32]) {
+        let d = (kvh * self.ctx + t) * self.hd;
+        if self.bits >= 32 { dst[..self.hd].copy_from_slice(&self.kf[d..d + self.hd]); return; }
+        let s = self.sk[kvh * self.ctx + t];
+        let base = (kvh * self.ctx + t) * self.pas();
+        if self.bits == 8 {
+            for i in 0..self.hd { dst[i] = self.kq[base + i] as i8 as f32 * s; }
+        } else {
+            for i in 0..self.hd {
+                let o = self.kq[base + i / 2];
+                // Extension de signe du nibble : 0..7 tel quel, 8..15 -> -8..-1.
+                let q = if i % 2 == 0 { (o & 0x0F) as i32 } else { (o >> 4) as i32 };
+                let q = if q >= 8 { q - 16 } else { q };
+                dst[i] = q as f32 * s;
+            }
+        }
+    }
+
+    /// Déquantifie la valeur `(kvh, t)` dans `dst`.
+    #[inline]
+    pub fn valeur(&self, kvh: usize, t: usize, dst: &mut [f32]) {
+        let d = (kvh * self.ctx + t) * self.hd;
+        if self.bits >= 32 { dst[..self.hd].copy_from_slice(&self.vf[d..d + self.hd]); return; }
+        let s = self.sv[kvh * self.ctx + t];
+        let base = (kvh * self.ctx + t) * self.pas();
+        if self.bits == 8 {
+            for i in 0..self.hd { dst[i] = self.vq[base + i] as i8 as f32 * s; }
+        } else {
+            for i in 0..self.hd {
+                let o = self.vq[base + i / 2];
+                let q = if i % 2 == 0 { (o & 0x0F) as i32 } else { (o >> 4) as i32 };
+                let q = if q >= 8 { q - 16 } else { q };
+                dst[i] = q as f32 * s;
+            }
+        }
+    }
+}
+
 impl Model {
     pub fn load(path: &str, ctx: usize, n_threads: usize, dense: bool, keep: f32,
                 auto: bool, q4: u8, b6: u8) -> Model {
@@ -677,7 +810,16 @@ impl Model {
             layers.push(lay);
         }
         let out_norm = g.dequant("output_norm.weight");
-        let kv = vec![0f32; cfg.n_kv_head * ctx * cfg.head_dim];
+        // Précision du cache KV : 32 (f32, défaut), 8 ou 4. Le trafic de
+        // relecture est LE mur du contexte long ; la trace le dit au chargement.
+        let kv_bits: u32 = std::env::var("QT_KV_BITS").ok()
+            .and_then(|v| v.parse().ok()).unwrap_or(32);
+        let caches_kv: Vec<KvCache> = (0..cfg.n_layer)
+            .map(|_| KvCache::new(kv_bits, cfg.n_kv_head, ctx, cfg.head_dim)).collect();
+        let kv_octets = cfg.n_layer as u64
+            * KvCache::new(kv_bits, cfg.n_kv_head, ctx, cfg.head_dim).octets();
+        println!("[config] cache KV : {} bits, {:.2} Go pour {ctx} jetons",
+                 if kv_bits >= 32 { 32 } else { kv_bits }, kv_octets as f64 / 1e9);
         let pool = Pool::new(n_threads, cfg.hidden);
         eprintln!("[modele] {} couches chargées en {:?} — listes {:.2} Go{} , {} threads",
                   cfg.n_layer, t0.elapsed(), bytes as f64 / 1e9,
@@ -794,7 +936,7 @@ impl Model {
         } else { None };
         Model {
             g, cfg, layers, out_norm, pool,
-            kv_k: vec![kv.clone(); n_layer], kv_v: vec![kv; n_layer],
+            kv: caches_kv,
             ctx, events: 0, act_levels: 127.0, act_thresh: 0.0, act_topk: 0, act_renorm: false,
             act_topk_proj: [0; 7], attn_topk: 0, attn_events: 0, qk_topk: 0,
             moe_topk: 0,
@@ -1156,7 +1298,7 @@ impl Model {
         let tkp = self.act_topk_proj;
         let tkg = self.act_topk;
         let tk = |p: usize| if tkp[p] > 0 { tkp[p] } else { tkg };
-        let Model { g, cfg, layers, out_norm, pool, kv_k, kv_v, events, .. } = self;
+        let Model { g, cfg, layers, out_norm, pool, kv, events, .. } = self;
         let h = cfg.hidden;
         let hd = cfg.head_dim;
         let nh = cfg.n_head;
@@ -1246,18 +1388,18 @@ impl Model {
             let ta = Instant::now();
             // écriture du cache KV à la position courante
             {
-                let kc = &mut kv_k[l];
-                let vc = &mut kv_v[l];
+                let kvc = &mut kv[l];
                 for hh in 0..nkv {
-                    let dst = (hh * ctx + pos) * hd;
-                    kc[dst..dst + hd].copy_from_slice(&k[hh * hd..(hh + 1) * hd]);
-                    vc[dst..dst + hd].copy_from_slice(&v[hh * hd..(hh + 1) * hd]);
+                    kvc.ecrire(hh, pos, &k[hh * hd..(hh + 1) * hd], &v[hh * hd..(hh + 1) * hd]);
                 }
             }
             // attention groupée
             let scale = 1.0 / (hd as f32).sqrt();
-            let kc = &kv_k[l];
-            let vc = &kv_v[l];
+            let kvc = &kv[l];
+            // Tampons de déquantification : en f32 ils ne servent pas, en 8 bits
+            // la clé (ou la valeur) y est reconstruite une fois par groupe.
+            let mut kd = vec![0f32; hd];
+            let mut vd = vec![0f32; hd];
             let n = pos + 1;
             // ---- chemin GROUPÉ par tête KV (attention complète sans top-k) ----
             // Mesuré : « attention » croît exactement linéairement avec le
@@ -1275,10 +1417,10 @@ impl Model {
                     let h0 = kvh * rep;
                     let h1 = (h0 + rep).min(nh);
                     for t in 0..n {
-                        let kt = &kc[(kvh * ctx + t) * hd..(kvh * ctx + t) * hd + hd];
+                        kvc.cle(kvh, t, &mut kd);
                         for hh in h0..h1 {
                             let qh = &q[hh * hd..(hh + 1) * hd];
-                            sc2[hh * ctx + t] = point(qh, kt) * scale;
+                            sc2[hh * ctx + t] = point(qh, &kd) * scale;
                         }
                     }
                 }
@@ -1309,11 +1451,11 @@ impl Model {
                         for v in out.iter_mut() { *v = 0.0; }
                     }
                     for t in 0..n {
-                        let vt = &vc[(kvh * ctx + t) * hd..(kvh * ctx + t) * hd + hd];
+                        kvc.valeur(kvh, t, &mut vd);
                         for hh in h0..h1 {
                             let w = sc2[hh * ctx + t];
                             let out = &mut att[hh * hd..(hh + 1) * hd];
-                            for (o, x) in out.iter_mut().zip(vt.iter()) { *o += w * x; }
+                            for (o, x) in out.iter_mut().zip(vd.iter()) { *o += w * x; }
                         }
                     }
                     self.attn_events += ((h1 - h0) * n) as u64;
@@ -1335,8 +1477,8 @@ impl Model {
                 // les puits sont NOTÉS comme les autres : leur donner un score
                 // arbitraire (0) fausse la distribution au lieu de la drainer.
                 for t in (0..ns).chain(lo..nw) {
-                    let kt = &kc[(kvh * ctx + t) * hd..(kvh * ctx + t) * hd + hd];
-                    sc[t] = point(qh, kt) * scale;
+                    kvc.cle(kvh, t, &mut kd);
+                    sc[t] = point(qh, &kd) * scale;
                 }
                 for t in ns..lo { sc[t] = f32::NEG_INFINITY; }
                 // Attention à k clés. Le CALCUL DES SCORES reste sur toutes les
@@ -1369,8 +1511,8 @@ impl Model {
                     for v in out.iter_mut() { *v = 0.0; }
                     for &t in iter {
                         let w = sc[t as usize];
-                        let vt = &vc[(kvh * ctx + t as usize) * hd..(kvh * ctx + t as usize) * hd + hd];
-                        for (o, x) in out.iter_mut().zip(vt.iter()) { *o += w * x; }
+                        kvc.valeur(kvh, t as usize, &mut vd);
+                        for (o, x) in out.iter_mut().zip(vd.iter()) { *o += w * x; }
                     }
                     continue;
                 }
@@ -1407,8 +1549,8 @@ impl Model {
                 for v in out.iter_mut() { *v = 0.0; }
                 for &t in iter {
                     let w = sc[t as usize];
-                    let vt = &vc[(kvh * ctx + t as usize) * hd..(kvh * ctx + t as usize) * hd + hd];
-                    for (o, x) in out.iter_mut().zip(vt.iter()) { *o += w * x; }
+                    kvc.valeur(kvh, t as usize, &mut vd);
+                    for (o, x) in out.iter_mut().zip(vd.iter()) { *o += w * x; }
                 }
             }
             self.prof[2] += ta.elapsed().as_secs_f64();
@@ -1737,4 +1879,48 @@ fn rand_u64() -> u64 {
     x ^= x << 17;
     S.store(x, Ordering::Relaxed);
     x
+}
+
+#[cfg(test)]
+mod tests_kv {
+    use super::KvCache;
+
+    /// Aller-retour : ce qui est écrit doit se relire à l'erreur de
+    /// quantification près, **aux deux précisions**, et une réécriture de la
+    /// même position doit effacer l'ancienne valeur (le cache est réutilisé
+    /// d'une fenêtre à l'autre).
+    #[test]
+    fn aller_retour_kv() {
+        for bits in [32u32, 8, 4] {
+            let (nkv, ctx, hd) = (2usize, 4usize, 8usize);
+            let mut c = KvCache::new(bits, nkv, ctx, hd);
+            let k: Vec<f32> = (0..hd).map(|i| (i as f32 - 3.5) * 0.7).collect();
+            let v: Vec<f32> = (0..hd).map(|i| 1.5 - i as f32 * 0.2).collect();
+            c.ecrire(1, 2, &k, &v);
+            let mut tk = vec![0f32; hd];
+            let mut tv = vec![0f32; hd];
+            c.cle(1, 2, &mut tk);
+            c.valeur(1, 2, &mut tv);
+            // L'erreur permise est d'une DEMI-marche d'arrondi, en absolu :
+            // l'échelle est celle du vecteur (max/niveaux), pas celle de chaque
+            // composante. Exiger une erreur relative d'un niveau rejetait des
+            // arrondis parfaitement corrects.
+            let niv = if bits == 4 { 7.0f32 } else if bits == 8 { 127.0 } else { 1e9 };
+            let (mk, mv) = (k.iter().fold(0f32, |a, x| a.max(x.abs())),
+                            v.iter().fold(0f32, |a, x| a.max(x.abs())));
+            let (dk, dv) = (0.5 * mk / niv + 1e-6, 0.5 * mv / niv + 1e-6);
+            for i in 0..hd {
+                assert!((k[i] - tk[i]).abs() <= dk, "clé {i} bits {bits} : {} contre {}", tk[i], k[i]);
+                assert!((v[i] - tv[i]).abs() <= dv, "valeur {i} bits {bits} : {} contre {}", tv[i], v[i]);
+            }
+            // Réécriture : les nibbles de l'ancienne valeur ne doivent pas rester.
+            let k2: Vec<f32> = k.iter().map(|x| -x).collect();
+            c.ecrire(1, 2, &k2, &v);
+            c.cle(1, 2, &mut tk);
+            for i in 0..hd {
+                assert!((k2[i] - tk[i]).abs() <= dk,
+                        "réécriture {i} bits {bits} : {} contre {}", tk[i], k2[i]);
+            }
+        }
+    }
 }

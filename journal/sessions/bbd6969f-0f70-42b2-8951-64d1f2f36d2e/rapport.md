@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 16.4 h |
+| Durée | 16.6 h |
 | Tours | 4 |
-| Messages | 441 |
-| Appels d'outils | 451 |
+| Messages | 473 |
+| Appels d'outils | 484 |
 | Fichiers touchés | 29 |
-| Commandes | 268 |
+| Commandes | 292 |
 | Sous-agents | 1 |
-| Commits | 5 |
+| Commits | 6 |
 | Compactages de contexte | 0 |
 
 ## Objectifs déclarés
@@ -169,7 +169,7 @@ Retirer `mscale = 1 + 0,1·ln f` divise la perplexité par **8,9 / 5,9 / 3,8**. 
 
 ### Tour 4 — fais les 8 dans l'ordre
 
-*16 appels d'outils.* Actions notables :
+*49 appels d'outils.* Actions notables :
 
 - create_goal
 - todo_write
@@ -185,11 +185,11 @@ Retirer `mscale = 1 + 0,1·ln f` divise la perplexité par **8,9 / 5,9 / 3,8**. 
 - bash — Validate overlapping windows and non-regression
 - write `/tmp/seuil_rotation.sh`
 - bash — Launch rotation threshold measurement
-- … et 2 autres
+- … et 29 autres
 
 **Synthèse produite :**
 
-⏵ Item 2 en file ; je documente l'item 1 pendant les passes
+⏵ Référence llama.cpp : q8_0 +3,1 % · q4_0 **+411 %** — le nôtre : +7,1 % et +384 %. Validé
 
 ## 3. Travail accompli
 
@@ -198,7 +198,7 @@ Retirer `mscale = 1 + 0,1·ln f` divise la perplexité par **8,9 / 5,9 / 3,8**. 
 | Fichier | Écritures | Éditions |
 |---|---|---|
 | `/tmp/gguf_meta.py` | 1 | 0 |
-| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src/model.rs` | 0 | 12 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src/model.rs` | 0 | 15 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src/main.rs` | 0 | 43 |
 | `/tmp/mesures_oss.sh` | 2 | 0 |
 | `/tmp/mesures_oss2.sh` | 1 | 0 |
@@ -273,7 +273,7 @@ Retirer `mscale = 1 + 0,1·ln f` divise la perplexité par **8,9 / 5,9 / 3,8**. 
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 228 autres
+- … et 252 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -401,12 +401,16 @@ Retirer `mscale = 1 + 0,1·ln f` divise la perplexité par **8,9 / 5,9 / 3,8**. 
 
 ## 5. Erreurs rencontrées
 
-4 sorties en erreur ou divergentes. Les premières :
+8 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : a8f2635f8 docs: record which models this box is good at, and why src/llama-hparams.cpp:8:void llama_hparams::set_swa_pattern(uint32_t n_pattern, bool dense_first) { src/llama-hparams.h:308:    void se
 - **T1** : 511 tokens notés — perplexité cumulée 247.031  (4.9 tok/s) === perplexité 247.0308 sur 511 tokens (0 événements, 104.5 s) ===  ### B3 harmony assistant 511 --- ref --- 0.0 0.0 0:00 ls: cannot access '
 - **T1** : dump harmony : 254 lignes · dump brut : 511 lignes · ids : 4424 contenu    1  NLL harmony   16.651   NLL brut   10.270   écart   +6.381 contenu   21  NLL harmony    4.853   NLL brut    3.596   écart  
 - **T1** : error[E0382]: borrow of moved value: `meta`    --> src/gguf.rs:165:71     | 162 |         let (meta, tensors, fin) = Self::entete(&buf).ok_or_else(|| {     |              ---- move occurs because `met
+- **T4** : 6 error[E0382]: borrow of moved value: `cfg`    --> src/model.rs:892:34     | 718 |         let cfg = {     |             --- move occurs because `cfg` has type `Cfg`, which does not implement the `Co
+- **T4** : error[E0382]: use of moved value: `cfg`    --> src/model.rs:893:49     | 718 |         let cfg = {     |             --- move occurs because `cfg` has type `Cfg`, which does not implement the `Copy` t
+- **T4** : error[E0425]: cannot find value `n_layer` in this scope    --> src/model.rs:772:43     | 772 |         let caches_kv: Vec<KvCache> = (0..n_layer)     |                                           ^^^^^^
+- **T4** : thread 'model::tests_kv::aller_retour_kv' (3097033) panicked at src/model.rs:1909:17: valeur 6 bits 8 : 0.2952756 contre 0.29999995 note: run with `RUST_BACKTRACE=1` environment variable to display a 
 
 ## 6. Commits
 
@@ -415,4 +419,5 @@ Retirer `mscale = 1 + 0,1·ln f` divise la perplexité par **8,9 / 5,9 / 3,8**. 
 - Rotation : YaRN a retardement, et la temperature est la moitie nuisible  La politique de rotation se decide desormais par sequence, a la longueur du contexte de
 - Rotation : points 4096 et 4608, et la limite du test de generation  Interpolation seule (sans temperature) : 400,13 a 4 096 et 476,09 a 4 608, contre 1 105,20 p
 - Item 1 : protocole de perplexite longue --depuis N  Le protocole historique (--ctx N --limit N) confond la longueur du contexte et le contenu : a 8192 jetons on
+- Item 3 : cache KV quantifie int8 et int4 empaquete  Le cache KV devient un KvCache : f32 (defaut, comportement inchange), int8 (un octet par valeur) ou int4 (de
 
