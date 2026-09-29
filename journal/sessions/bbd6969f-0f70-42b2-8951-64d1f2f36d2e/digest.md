@@ -7984,3 +7984,353 @@ int8 construit par bloc 32: perplexité 23.6964 sur 1020
 ⏵ Item 5 : échelles par bloc sans effet sur la qualité (23,696 vs 23,612) — hypothèse réfutée
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='REPRISE.md'\ns=open(p).read()\nold = \"\"\"### e. Échelles par bloc pour `DenseQ8`\n\nNotre int8 quantifie avec une seule échelle **par ligne** ; le 6 bits, par bloc\nde 32 — et il gagne. L'hypothèse à tester : l … [2749 caractères tronqués]`
+
+  ```
+37266bd Item 5 : echelles par bloc pour DenseQ8 -- hypothese refutee
+  ```
+
+- **bash** `{"command": "tail -5 /tmp/contexte_ou_contenu.log 2>/dev/null; echo \"--- seuil ---\"; tail -6 /tmp/seuil_rotation.log 2>/dev/null; echo \"--- kv gptoss ---\"; tail -3 /tmp/kv_gptoss.log 2>/dev/null; ps -o pid,etime,pcpu -C qtrinet-core 2>/dev/null | tail -1", "description": "Check all queued runs"}`
+
+  ```
+6643 tokens notés — perplexité cumulée 36.428  (4.6 tok/s)  [fenêtre 13 : 511 notés, PPL 49.724]
+    7154 tokens notés — perplexité cumulée 32.707  (4.7 tok/s)  [fenêtre 14 : 511 notés, PPL 8.060]
+    7665 tokens notés — perplexité cumulée 32.745  (4.7 tok/s)  [fenêtre 15 : 511 notés, PPL 33.281]
+    8176 tokens notés — perplexité cumulée 32.509  (4.7 tok/s)  [fenêtre 16 : 511 notés, PPL 29.176]
+=== perplexité 32.5094 sur 8176 tokens (0 événements, 1737.2 s) ===
+--- seuil ---
+--- kv gptoss ---
+gpt-oss ctx 512, KV 32 bits : perplexité 18.5803 sur 511 tokens
+gpt-oss ctx 512, KV 8  bits : perplexité 16.2722 sur 511 tokens
+gpt-oss ctx 512, KV 4  bits : 3238216       00:27 90.8
+  ```
+
+- **bash** `{"command": "cat /tmp/contexte_ou_contenu.log | head -22; echo \"=== scripts vivants ===\"; ps aux | grep -E \"[s]euil_rotation|[k]v_gptoss|[c]ontexte_ou\" | awk '{print $2, $12}'; ls -la /tmp/seuil_rotation.log 2>/dev/null", "description": "Read content decomposition and check scripts"}`
+
+  ```
+### ctx 512 sur 8 192 jetons : PPL par fenêtre (contenu seul)
+     511 tokens notés — perplexité cumulée 18.580  (5.1 tok/s)  [fenêtre 1 : 511 notés, PPL 18.580]
+    1022 tokens notés — perplexité cumulée 19.249  (5.1 tok/s)  [fenêtre 2 : 511 notés, PPL 19.941]
+    1533 tokens notés — perplexité cumulée 23.842  (5.0 tok/s)  [fenêtre 3 : 511 notés, PPL 36.581]
+    2044 tokens notés — perplexité cumulée 28.707  (4.8 tok/s)  [fenêtre 4 : 511 notés, PPL 50.106]
+    2555 tokens notés — perplexité cumulée 27.278  (4.7 tok/s)  [fenêtre 5 : 511 notés, PPL 22.238]
+    3066 tokens notés — perplexité cumulée 31.232  (4.8 tok/s)  [fenêtre 6 : 511 notés, PPL 61.454]
+    3577 tokens notés — perplexité cumulée 31.949  (4.8 tok/s)  [fenêtre 7 : 511 notés, PPL 36.615]
+    4088 tokens notés — perplexité cumulée 32.963  (4.9 tok/s)  [fenêtre 8 : 511 notés, PPL 41.014]
+    4599 tokens notés — perplexité cumulée 39.242  (4.8 tok/s)  [fenêtre 9 : 511 notés, PPL 158.340]
+    5110 tokens notés — perplexité cumulée 38.337  (4.6 tok/s)  [fenêtre 10 : 511 notés, PPL 31.074]
+    5621 tokens notés — perplexité cumulée 36.914  (4.6 tok/s)  [fenêtre 11 : 511 notés, PPL 25.288]
+    6132 tokens notés — perplexité 
+… [710 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Item 6 : recensement des drapeaux des deux boucles avant de les unifier
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src && awk '/^fn run_infer/,/^    let mut mdl = model::Model::load/' main.rs | grep -oE '\"--[a-z0-9-]+\"' | sort -u | tr '\\n' ' '; echo; echo \"=== run_ppl ===\"; awk '/^fn run_ppl/,/^    let mut ids/' main.rs | grep -oE  … [88 caractères tronqués]`
+
+  ```
+"--abits" "--act-renorm" "--act-thresh" "--act-topk" "--attn-sinks" "--attn-topk" "--attn-window" "--auto" "--bits" "--bits-attn" "--bits-ffn" "--chat" "--ctx" "--dense" "--flux" "--hebbian" "--hebb-out" "--hebb-q" "--hist" "--ids" "--ids-file" "--infer" "--keep" "--moe-topk" "--n" "--patch" "--pin" "--prompt" "--push" "--q4" "--q4-attn" "--q4-ffn" "--q4-tout" "--qk-topk" "--rep-penalty" "--sans-fenetre" "--session" "--swa-pattern" "--temp" "--threads" "--topk" "--topk-down" "--topk-gate" "--topk-k" "--topk-o" "--topk-q" "--topk-up" "--topk-v" "--top-p" 
+=== run_ppl ===
+"--abits" "--act-renorm" "--act-thresh" "--act-topk" "--attn-sinks" "--attn-topk" "--attn-window" "--auto" "--bits" "--bits-attn" "--bits-ffn" "--ctx" "--dense" "--depuis" "--ffn-gain" "--harmony" "--harmony-assistant" "--harmony-contexte" "--harmony-suite" "--harmony-user" "--hebbian" "--limit" "--logits-bin" "--moe-topk" "--patch" "--pin" "--ppl" "--ppl-texte" "--push" "--q4" "--q4-attn" "--q4-ffn" "--q4-tout" "--qk-topk" "--sans-fenetre" "--swa-pattern" "--threads" "--topk-down" "--topk-gate" "--topk-k" "--topk-o" "--topk-q" "--topk-up" "--topk-v"
+  ```
+
+### 🤖 Assistant
+
+⏵ Item 6 : une seule boucle d'analyse pour les trois modes
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src && grep -n \"^fn run_infer\" main.rs && grep -n \"let mut ids: Vec<u32> = \" main.rs | head -2 && grep -n \"fn run_tokenize\\|fn run_plan\\|fn run_ppl\" main.rs", "description": "Locate function boundaries"}`
+
+  ```
+298:fn run_infer(args: &[String]) {
+300:    let mut ids: Vec<u32> = Vec::new();
+1181:    let mut ids: Vec<u32> = if idfile.is_empty() {
+690:fn run_tokenize(args: &[String]) {
+752:fn run_plan(args: &[String]) {
+1048:fn run_ppl(args: &[String]) {
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src && sed -n '298,320p' main.rs && echo \"...\" && sed -n '395,420p' main.rs", "description": "Inspect run_infer head and tail of parsing"}`
+
+  ```
+fn run_infer(args: &[String]) {
+    let path = &args[1];
+    let mut ids: Vec<u32> = Vec::new();
+    let mut prompt: Option<String> = None;
+    let mut n_new = 32usize;
+    let mut temp = 0.0f32;
+    let mut top_p = 1.0f32;
+    let mut rep_pen = 1.0f32;
+    let mut hist = 64usize;
+    let mut flux = false;
+    let mut session = false;
+    let mut ctx = 512usize;
+    let _ = 0;
+    let mut topk = 0usize;
+    let mut abits = 8u32;
+    let mut chat = false;
+    let mut hebb_layer: Option<usize> = None;
+    let mut hebb_q = 0.1f32;
+    let mut hebb_out = String::from("hebb.bin");
+    let mut ids_file: Option<String> = None;
+    let mut qk_topk = 0usize;
+    let mut attn_window = 0usize;
+    // Motif fenêtre/plein : `None` = valeur du modèle, `Some(n)` = imposé.
+...
+                if b == 6 { b6 |= 1; }
+                i -= 1;
+            }
+            "--bits" => {
+                let b: u32 = args[i + 1].parse().unwrap();
+                list::BITS_POIDS.store(b, std::sync::atomic::Ordering::Relaxed);
+                i -= 1;
+            }
+            "--pin" => { engine::EPINGLER.store(true, std::sync::atomic::Ordering::Relaxed); i -= 1; }
+            "--auto" => { auto = true; i -= 
+… [656 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src && python3 - <<'PY'\nimport re\np='main.rs'\ns=open(p).read()\n\noptions_struct = '''\n/// **Toutes** les options de la ligne de commande, dans une seule structure.\n///\n/// Les modes (inférence, perplexité, plan, toke … [7892 caractères tronqués]`
+
+  ```
+308:struct Options {
+339:fn analyser(args: &[String]) -> Options {
+437:fn run_infer(opt: Options) {
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src && python3 - <<'PY'\nimport re\np='main.rs'\ns=open(p).read()\n\n# --- run_infer : remplacer l'en-tête de parsing par une déstructuration ---\ndebut = s.index(\"fn run_infer(opt: Options) {\")\nfin = s.index(\"    let m … [1782 caractères tronqués]`
+
+  ```
+437:fn run_infer(opt: Options) {
+448:    let path = &modele_chemin();
+1082:fn run_ppl(opt: Options) {
+1091:    let path = &modele_chemin();
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src && python3 - <<'PY'\np='main.rs'\ns=open(p).read()\n# Le chemin du modèle : global, posé par main() — les modes n'ont plus à le\n# relire dans argv.\ns=s.replace(\"\"\"/// **Toutes** les options de la ligne de commande\ … [1613 caractères tronqués]`
+
+  ```
+38:    let opt = analyser(&args);
+731:fn run_tokenize(args: &[String]) {
+793:fn run_plan(args: &[String]) {
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src && python3 - <<'PY'\np='main.rs'\ns=open(p).read()\n# run_tokenize\nd=s.index(\"fn run_tokenize(args: &[String]) {\")\nf=s.index(\"\\n\", s.index(\"let path = &args[1];\", d)) if \"let path = &args[1];\" in s[d:d+2000]  … [1787 caractères tronqués]`
+
+  ```
+error[E0425]: cannot find value `gain` in this scope
+    --> src/main.rs:1135:27
+     |
+  27 | fn main() {
+     | --------- similarly named function `main` defined here
+...
+1135 |     if let Some((l, g)) = gain {
+--
+error[E0599]: no method named `is_empty` found for enum `Option<T>` in the current scope
+    --> src/main.rs:1084:39
+     |
+1084 |     let mut ids: Vec<u32> = if idfile.is_empty() {
+     |                                       ^^^^^^^^ method not found in `Option<String>`
+     |
+note: the method `is_empty` exists on the type `String`
+--
+error[E0277]: the trait bound `Option<String>: AsRef<Path>` is not satisfied
+    --> src/main.rs:1087:44
+     |
+1087 |         let raw = std::fs::read_to_string(&idfile).expect("fichier d'identifiants illisible");
+     |                   -----------------------  ^^^^^^ the trait `AsRef<Path>` is not implemented for `Option<String>`
+     |                   |
+     |                   required by a bound introduced by this call
+--
+error[E0599]: no method named `is_empty` found for enum `Option<T>` in the current scope
+    --> src/main.rs:1106:16
+     |
+1106 |     if !idfile.is_empty() {
+     |                ^^^^^^^^ method not found in `
+… [193 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src && python3 - <<'PY'\np='main.rs'\ns=open(p).read()\ns=s.replace(\"\"\"        ids_file: mut idfile, texte_file, ppl_texte: _, limit, depuis, ctx,\"\"\",\n\"\"\"        ids_file, texte_file, ppl_texte: _, limit, depuis,  … [498 caractères tronqués]`
+
+  ```
+error[E0425]: cannot find value `idfile` in this scope
+    --> src/main.rs:1084:18
+     |
+1084 |     let idfile = idfile.unwrap_or_default();
+     |                  ^^^^^^
+     |
+help: a local variable with a similar name exists
+--
+error: could not compile `qtrinet-core` (bin "qtrinet-core") due to 1 previous error; 8 warnings emitted
+BUILD
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src && sed -n '1078,1092p' main.rs", "description": "Inspect the idfile area"}`
+
+  ```
+sans_fenetre, attn_sinks, attn_topk, qk_topk, act_thresh, act_topk, act_renorm,
+        topk_proj, moe_topk, patch: patch_file, hebb_layer, ffn_gain, logits_bin,
+        ppl_profil, harmony, harmony_contexte, sans_yarn, ..
+    } = opt;
+    let args: Vec<String> = Vec::new();          // plus aucun balayage brut
+    let path = &modele_chemin();
+    let idfile = idfile.unwrap_or_default();
+    let mut ids: Vec<u32> = if idfile.is_empty() {
+        Vec::new()
+    } else {
+        let raw = std::fs::read_to_string(&idfile).expect("fichier d'identifiants illisible");
+        raw.split(|c: char| c == ',' || c.is_whitespace())
+            .filter(|s| !s.is_empty())
+            .filter_map(|s| s.parse().ok())
+            // `--depuis N` : on charge N jetons de plus que la limite, pour que
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src && python3 - <<'PY'\np='main.rs'\ns=open(p).read()\ns=s.replace(\"\"\"        ids_file, texte_file, ppl_texte: _, limit, depuis, ctx,\"\"\",\n\"\"\"        ids_file: idfile, texte_file, ppl_texte: _, limit, depuis, ctx, … [191 caractères tronqués]`
+
+  ```
+BUILD
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== non-régression Qwen (19,3885) ===\" && ./qtrinet-core/target/release/qtrinet-core models/Qwen2.5-0.5B-Q8_0.gguf --ppl /tmp/ids_qwen.txt --ctx 256 --abits 16 --threads 16 --limit 512 --dense 2>&1 | grep -oE \"perplexité [0- … [813 caractères tronqués]`
+
+  ```
+=== non-régression Qwen (19,3885) ===
+perplexité 19.3885 sur 510
+=== tokenize ===
+4592 tokens écrits dans /tmp/ids_refontee.txt (vocabulaire du modèle : 151936)
+réversibilité : texte reconstruit identique ✅ (20000 octets)
+ids identiques : True
+=== plan ===
+     2 GPU 760    f32     0.1 ms · int8    0.0 ms · int4    0.0 ms par jeton
+  préremplissage SÉQUENTIEL estimé : 0.1 h (le moteur ne fait pas de lot ; l'attention y est en O(N) par jeton)
+  rotation : base 1000000 · initial — · facteur déclaré — · max_position_embeddings 32768
+=== inférence ===
+généré  : 6 tokens en 0.295 s  (20.35 tok/s)
+événements : 16593373 au total, 1659337.3 par token
+postes (ms/token) : matvec-attn 3.7 | rope 0.7 | attention 0.2 | matvec+mlp 35.4 | total mesuré 40.0
+  ```
+
+### 🤖 Assistant
+
+⏵ Les défauts par mode doivent être préservés (abits 16 en PPL, ctx 256, fils) — je corrige
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src && python3 - <<'PY'\np='main.rs'\ns=open(p).read()\n# Marquer les drapeaux dont le DÉFAUT dépend du mode.\ns=s.replace(\"\"\"    ctx: usize, threads: usize, abits: u32, dense: bool, auto: bool,\"\"\",\n\"\"\"    ctx: us … [4047 caractères tronqués]`
+
+  ```
+BUILD
+perplexité 19.3885 sur 510
+  ```
+
+- **bash** `{"command": "cat /tmp/kv_gptoss.log 2>/dev/null; echo \"--- seuil ---\"; cat /tmp/seuil_rotation.log 2>/dev/null | head -8; echo \"--- moteur ---\"; ps -o pid,etime,pcpu -C qtrinet-core 2>/dev/null | tail -1; ps aux | grep -E \"[s]euil_rotation|[k]v_gptoss\" | awk '{print $2, $12}'", "description":  … [42 caractères tronqués]`
+
+  ```
+gpt-oss ctx 512, KV 32 bits : perplexité 18.5803 sur 511 tokens
+gpt-oss ctx 512, KV 8  bits : perplexité 16.2722 sur 511 tokens
+gpt-oss ctx 512, KV 4  bits : perplexité 100.1174 sur 511 tokens
+--- seuil ---
+=== jetons 1536-2047, contexte croissant, trois régimes ===
+
+### contexte 128 · RoPE simple
+--- moteur ---
+3274378       00:02 95.8
+2947551 /tmp/seuil_rotation.sh
+3274381 -a
+3274382 -c
+  ```
+
+### 🤖 Assistant
+
+⏵ Item 6 fonctionnel ; je nettoie les restes et je vérifie la non-régression complète
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && cargo build --release 2>&1 | grep -E \"warning: unused\" -A 3 | head -30", "description": "List unused warnings after refactor", "timeoutMs": 600000}`
+
+  ```
+warning: unused attribute
+   --> src/model.rs:979:5
+    |
+979 |     #[inline]
+--
+warning: unused variable: `arch`
+   --> src/model.rs:718:21
+    |
+718 |                 let arch = g.meta.get("general.architecture").and_then(|m| m.as_str());
+--
+warning: unused variable: `attn_topk`
+   --> src/main.rs:455:67
+    |
+455 |         keep, attn_window, swa_pattern, sans_fenetre, attn_sinks, attn_topk, qk_topk,
+--
+warning: unused variable: `qk_topk`
+   --> src/main.rs:455:78
+    |
+455 |         keep, attn_window, swa_pattern, sans_fenetre, attn_sinks, attn_topk, qk_topk,
+--
+warning: unused variable: `sans_yarn`
+   --> src/main.rs:457:39
+    |
+457 |         hebb_layer, hebb_q, hebb_out, sans_yarn, ..
+--
+warning: unused variable: `args`
+   --> src/main.rs:459:9
+    |
+459 |     let args: Vec<String> = Vec::new();          // plus aucun balayage brut
+--
+  ```
+
+### 🤖 Assistant
+
+⏵ Le compilateur révèle un 5ᵉ drapeau ignoré (`--attn-topk`, `--qk-topk`, `--sans-yarn` en inférence)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src && python3 - <<'PY'\np='main.rs'\ns=open(p).read()\n# Les trois drapeaux étaient analysés mais jamais appliqués en inférence :\n# le compilateur le dit maintenant, parce que la déstructuration nomme tout.\ns=s.replace(\ … [1497 caractères tronqués]`
+
+  ```
+1168:    if args.iter().any(|a| a == "--sans-yarn") { mdl.cfg_yarn_off(); }
+1259:    let profil = args.iter().any(|a| a == "--ppl-profil");
+error[E0425]: cannot find value `args` in this scope
+    --> src/main.rs:1168:8
+     |
+1168 |     if args.iter().any(|a| a == "--sans-yarn") { mdl.cfg_yarn_off(); }
+     |        ^^^^ not found in this scope
+--
+error[E0425]: cannot find value `args` in this scope
+    --> src/main.rs:1259:18
+     |
+1259 |     let profil = args.iter().any(|a| a == "--ppl-profil");
+     |                  ^^^^ not found in this scope
+--
+warning: unused variable: `arch`
+   --> src/model.rs:718:21
+    |
+718 |                 let arch = g.meta.get("general.architecture").and_then(|m| m.as_str());
+    |                     ^^^^ help: if this is intentional, prefix it with an underscore: `_arch`
+--
+error: could not compile `qtrinet-core` (bin "qtrinet-core") due to 2 previous errors; 4 warnings emitted
+BUILD
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src && python3 - <<'PY'\np='main.rs'\ns=open(p).read()\ns=s.replace(\"\"\"    if args.iter().any(|a| a == \"--sans-yarn\") { mdl.cfg_yarn_off(); }\"\"\",\n\"\"\"    if sans_yarn { mdl.cfg_yarn_off(); }\"\"\",1)\ns=s.replace … [536 caractères tronqués]`
+
+  ```
+warning: unused variable: `arch`
+   --> src/model.rs:718:21
+    |
+718 |                 let arch = g.meta.get("general.architecture").and_then(|m| m.as_str());
+    |                     ^^^^ help: if this is intentional, prefix it with an underscore: `_arch`
+BUILD
+perplexité 19.3885 sur 510
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && cargo test --release 2>&1 | tail -4; cd .. && echo \"=== inférence avec les drapeaux retrouvés ===\" && ./qtrinet-core/target/release/qtrinet-core models/Qwen2.5-0.5B-Q8_0.gguf --infer --ids 9707,11,1879,13 --n 6 --ctx 1 … [230 caractères tronqués]`
+
+  ```
+test list::tests_q6k::quarts_successifs ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+=== inférence avec les drapeaux retrouvés ===
+événements : 17522316 au total, 1752231.6 par token
+postes (ms/token) : matvec-attn 232.4 | rope 1.4 | attention 0.3 | matvec+mlp 343.0 | total mesuré 577.0
+1356 qtrinet-core/src/main.rs
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='REPRISE.md'\ns=open(p).read()\nold_start = s.index(\"### c. Refactoriser les boucles CLI\")\nold_fin = s.index(\"### d. Noyaux GPU\")\nnew = \"\"\"### c. Boucles CLI : FAIT (une seule analyse pour les quatre mode … [2121 caractères tronqués]`

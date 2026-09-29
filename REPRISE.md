@@ -215,15 +215,23 @@ recalcule avec `--plan --ctx N`. Les trois murs, dans l'ordre :
 fenêtre par couche divise déjà le budget par deux — c'est le préremplissage, pas
 la mémoire, qui bloque.
 
-### c. Refactoriser les boucles CLI (trois bugs de la même classe)
+### c. Boucles CLI : FAIT (une seule analyse pour les quatre modes)
 
-Une seule boucle pour les trois modes. La matière est prête : 50 drapeaux
-dédupliqués, `struct Options` conçue, chaque mode destructurant ce dont il a
-besoin. **À faire à froid**, avec un test après chaque groupe de drapeaux — une
-substitution automatique a déjà corrompu les noms (`"--o.ids"`) et imposé un
-retour en arrière. Cette session a encore trouvé un drapeau ignoré dans un mode
-(`--attn-window` et `--attn-sinks` étaient analysés mais jamais appliqués en
-inférence) : le symptôme est toujours le même.
+`struct Options` + `fn analyser` remplacent les deux boucles de 44 drapeaux ;
+`run_infer`, `run_ppl`, `run_plan` et `run_tokenize` déstructurent ce dont ils
+ont besoin. Les défauts **par mode** sont préservés (256 jetons et 16 bits
+d'activation en perplexité, 512 et 8 bits en inférence, moitié des cœurs contre
+trois quarts) via trois drapeaux `*_impose`.
+
+Le gain immédiat n'est pas la ligne de code en moins, c'est ce que le
+compilateur voit : la déstructuration nomme **tous** les champs, donc un drapeau
+analysé mais jamais appliqué devient un avertissement « unused variable ». Trois
+de plus ont été trouvés comme ça dès la refactorisation — `--attn-topk`,
+`--qk-topk` et `--sans-yarn` étaient ignorés en inférence (cinquième occurrence
+de la même classe de bug).
+
+Non-régression après refactorisation : Qwen 19,3885 au chiffre près, `--tokenize`
+identique au jeton près, `--plan` et l'inférence inchangés, tests 4/4.
 
 ### d. Noyaux GPU
 

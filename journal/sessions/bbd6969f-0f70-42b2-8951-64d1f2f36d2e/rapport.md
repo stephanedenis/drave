@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 16.8 h |
+| Durée | 17.0 h |
 | Tours | 4 |
-| Messages | 484 |
-| Appels d'outils | 495 |
+| Messages | 504 |
+| Appels d'outils | 515 |
 | Fichiers touchés | 29 |
-| Commandes | 303 |
+| Commandes | 323 |
 | Sous-agents | 1 |
-| Commits | 7 |
+| Commits | 8 |
 | Compactages de contexte | 0 |
 
 ## Objectifs déclarés
@@ -169,7 +169,7 @@ Retirer `mscale = 1 + 0,1·ln f` divise la perplexité par **8,9 / 5,9 / 3,8**. 
 
 ### Tour 4 — fais les 8 dans l'ordre
 
-*60 appels d'outils.* Actions notables :
+*80 appels d'outils.* Actions notables :
 
 - create_goal
 - todo_write
@@ -185,11 +185,11 @@ Retirer `mscale = 1 + 0,1·ln f` divise la perplexité par **8,9 / 5,9 / 3,8**. 
 - bash — Validate overlapping windows and non-regression
 - write `/tmp/seuil_rotation.sh`
 - bash — Launch rotation threshold measurement
-- … et 40 autres
+- … et 60 autres
 
 **Synthèse produite :**
 
-⏵ Item 5 : échelles par bloc sans effet sur la qualité (23,696 vs 23,612) — hypothèse réfutée
+⏵ Le compilateur révèle un 5ᵉ drapeau ignoré (`--attn-topk`, `--qk-topk`, `--sans-yarn` en inférence)
 
 ## 3. Travail accompli
 
@@ -273,7 +273,7 @@ Retirer `mscale = 1 + 0,1·ln f` divise la perplexité par **8,9 / 5,9 / 3,8**. 
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 263 autres
+- … et 283 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -401,7 +401,7 @@ Retirer `mscale = 1 + 0,1·ln f` divise la perplexité par **8,9 / 5,9 / 3,8**. 
 
 ## 5. Erreurs rencontrées
 
-8 sorties en erreur ou divergentes. Les premières :
+11 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : a8f2635f8 docs: record which models this box is good at, and why src/llama-hparams.cpp:8:void llama_hparams::set_swa_pattern(uint32_t n_pattern, bool dense_first) { src/llama-hparams.h:308:    void se
 - **T1** : 511 tokens notés — perplexité cumulée 247.031  (4.9 tok/s) === perplexité 247.0308 sur 511 tokens (0 événements, 104.5 s) ===  ### B3 harmony assistant 511 --- ref --- 0.0 0.0 0:00 ls: cannot access '
@@ -411,6 +411,9 @@ Retirer `mscale = 1 + 0,1·ln f` divise la perplexité par **8,9 / 5,9 / 3,8**. 
 - **T4** : error[E0382]: use of moved value: `cfg`    --> src/model.rs:893:49     | 718 |         let cfg = {     |             --- move occurs because `cfg` has type `Cfg`, which does not implement the `Copy` t
 - **T4** : error[E0425]: cannot find value `n_layer` in this scope    --> src/model.rs:772:43     | 772 |         let caches_kv: Vec<KvCache> = (0..n_layer)     |                                           ^^^^^^
 - **T4** : thread 'model::tests_kv::aller_retour_kv' (3097033) panicked at src/model.rs:1909:17: valeur 6 bits 8 : 0.2952756 contre 0.29999995 note: run with `RUST_BACKTRACE=1` environment variable to display a 
+- **T4** : error[E0425]: cannot find value `gain` in this scope     --> src/main.rs:1135:27      |   27 | fn main() {      | --------- similarly named function `main` defined here ... 1135 |     if let Some((l, 
+- **T4** : error[E0425]: cannot find value `idfile` in this scope     --> src/main.rs:1084:18      | 1084 |     let idfile = idfile.unwrap_or_default();      |                  ^^^^^^      | help: a local variab
+- **T4** : 1168:    if args.iter().any(|a| a == "--sans-yarn") { mdl.cfg_yarn_off(); } 1259:    let profil = args.iter().any(|a| a == "--ppl-profil"); error[E0425]: cannot find value `args` in this scope     -->
 
 ## 6. Commits
 
@@ -421,4 +424,5 @@ Retirer `mscale = 1 + 0,1·ln f` divise la perplexité par **8,9 / 5,9 / 3,8**. 
 - Item 1 : protocole de perplexite longue --depuis N  Le protocole historique (--ctx N --limit N) confond la longueur du contexte et le contenu : a 8192 jetons on
 - Item 3 : cache KV quantifie int8 et int4 empaquete  Le cache KV devient un KvCache : f32 (defaut, comportement inchange), int8 (un octet par valeur) ou int4 (de
 - Item 5 : echelles par bloc pour DenseQ8 -- hypothese refutee  DenseQ8 sait maintenant se construire avec une echelle par bloc de 32 (QT_Q8_BLOCS=1, Source8::Pro
+- Item 6 : une seule analyse de la ligne de commande pour les quatre modes  struct Options + fn analyser remplacent les deux boucles de 44 drapeaux ; run_infer, r
 

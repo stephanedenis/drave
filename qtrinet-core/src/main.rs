@@ -32,13 +32,15 @@ fn main() {
         eprintln!("                    [--n 32] [--temp 0] [--ctx 512] [--threads N]");
         std::process::exit(1);
     }
-    if args.iter().any(|a| a == "--pin") {
-        engine::EPINGLER.store(true, std::sync::atomic::Ordering::Relaxed);
-    }
-    if args.iter().any(|a| a == "--plan") { run_plan(&args); return; }
-    if args.iter().any(|a| a == "--tokenize") { run_tokenize(&args); return; }
-    if args.iter().any(|a| a == "--ppl" || a == "--ppl-texte") { run_ppl(&args); return; }
-    if args.iter().any(|a| a == "--infer") { run_infer(&args); return; }
+    // Une seule analyse, puis un aiguillage : `--plan`, `--tokenize`,
+    // `--ppl`/`--ppl-texte` et `--infer` partagent désormais la même structure
+    // d'options, donc les mêmes drapeaux.
+    let opt = analyser(&args);
+    let _ = MODELE.set(args[1].clone());
+    if opt.plan { run_plan(opt); return; }
+    if opt.tokenize { run_tokenize(opt); return; }
+    if opt.ppl { run_ppl(opt); return; }
+    if opt.infer { run_infer(opt); return; }
     let path = &args[1];
     let mut matrix = "blk.0.ffn_gate.weight".to_string();
     // Par défaut on laisse un quart des CPU au système : l'attente active de la
@@ -295,123 +297,172 @@ fn main() {
 // Mode inférence : génération autorégressive en listes d'événements
 // --------------------------------------------------------------------------- //
 
-fn run_infer(args: &[String]) {
-    let path = &args[1];
-    let mut ids: Vec<u32> = Vec::new();
-    let mut prompt: Option<String> = None;
-    let mut n_new = 32usize;
-    let mut temp = 0.0f32;
-    let mut top_p = 1.0f32;
-    let mut rep_pen = 1.0f32;
-    let mut hist = 64usize;
-    let mut flux = false;
-    let mut session = false;
-    let mut ctx = 512usize;
-    let _ = 0;
-    let mut topk = 0usize;
-    let mut abits = 8u32;
-    let mut chat = false;
-    let mut hebb_layer: Option<usize> = None;
-    let mut hebb_q = 0.1f32;
-    let mut hebb_out = String::from("hebb.bin");
-    let mut ids_file: Option<String> = None;
-    let mut qk_topk = 0usize;
-    let mut attn_window = 0usize;
-    // Motif fenêtre/plein : `None` = valeur du modèle, `Some(n)` = imposé.
-    let mut swa_pattern: Option<usize> = None;
-    let mut sans_fenetre = false;
-    // 0 = « garder la valeur du modèle » : les métadonnées déclarent parfois une
-    // fenêtre glissante (gpt-oss : 128) et des puits appris, qu'un défaut CLI
-    // écraserait silencieusement.
-    let mut attn_sinks = 0usize;
-    let mut attn_topk = 0usize;
-    let mut patch_file: Option<String> = None;
-    let mut act_thresh = 0.0f32;
-    let mut act_topk = 0usize;
-    let mut act_renorm = false;
-    let mut topk_proj = [0usize; 7];
-    // Défaut : le moteur CHOISIT par mesure. Les deux formes sont chargées et la
-    // bascule se fait projection par projection sur la densité mesurée — les
-    // sorties sont identiques au bit près, seul le débit change (×2,1 sur un
-    // modèle dense, ×1,5 en faveur du push sous 5 % de densité).
-    let mut dense = false;
-    let mut auto = true;
-    let mut moe_topk = 0usize;
-    let mut b6 = 0u8;
-    let mut q4 = 0u8;
-    let mut keep = 1.0f32;
-    // L'inférence paie une barrière par matrice (168 par token) : l'optimum
-    // mesuré est autour de la moitié des CPU logiques, pas des trois quarts.
+
+/// Chemin du modèle, posé une fois par `main` : les modes n'ont plus à fouiller
+/// `argv` ni à supposer que le modèle est en position 1.
+static MODELE: std::sync::OnceLock<String> = std::sync::OnceLock::new();
+fn modele_chemin() -> String { MODELE.get().cloned().unwrap_or_default() }
+
+/// **Toutes** les options de la ligne de commande, dans une seule structure.
+///
+/// Les modes (inférence, perplexité, plan, tokenize) la remplissent par la MÊME
+/// boucle : c'est la seule façon d'éviter qu'un drapeau fonctionne dans un mode
+/// et pas dans l'autre. Le bug est arrivé quatre fois — `--pin`, `--moe-topk`,
+/// `--attn-window` et `--attn-sinks` ont chacun été « analysés mais jamais
+/// appliqués » dans un mode au moins, et un drapeau en dernière position était
+/// ignoré à cause du pas de deux.
+#[derive(Default)]
+struct Options {
+    // --- sélection du mode
+    infer: bool, ppl: bool, plan: bool, tokenize: bool,
+    // --- source des jetons
+    ids: Vec<u32>, ids_file: Option<String>, texte_file: Option<String>,
+    ppl_texte: bool, prompt: Option<String>, limit: usize, depuis: usize,
+    // --- génération
+    n: usize, temp: f32, top_p: f32, topk: usize, rep_pen: f32, hist: usize,
+    flux: bool, session: bool, chat: bool,
+    // --- moteur
+    ctx: usize, threads: usize, abits: u32, dense: bool, auto: bool,
+    /// Vrai si `--ctx`, `--threads` ou `--abits` ont été donnés : leurs défauts
+    /// diffèrent selon le mode (256 jetons et 16 bits en perplexité, 512 et
+    /// 8 bits en inférence, la moitié des cœurs contre les trois quarts).
+    ctx_impose: bool, threads_impose: bool, abits_impose: bool,
+    q4: u8, b6: u8, keep: f32, bits: u32, moe_topk: usize, pin: bool,
+    // --- attention
+    attn_window: usize, swa_pattern: Option<usize>, sans_fenetre: bool,
+    attn_sinks: usize, attn_topk: usize, qk_topk: usize,
+    // --- parcimonie des activations
+    act_thresh: f32, act_topk: usize, act_renorm: bool, topk_proj: [usize; 7],
+    // --- mesure
+    logits_bin: Option<String>, ppl_profil: bool,
+    harmony: Option<String>, harmony_contexte: Option<String>,
+    // --- rotation
+    sans_yarn: bool,
+    // --- expériences
+    patch: Option<String>, hebb_layer: Option<usize>, hebb_q: f32,
+    hebb_out: String, ffn_gain: Option<(usize, f32)>, matrix: String,
+    // --- tokenize / plan
+    texte: Option<String>, fichier: Option<String>, sortie: Option<String>,
+}
+
+/// Analyse la ligne de commande UNE fois. Les drapeaux à valeur consomment
+/// l'argument suivant (`i += 2`) ; les drapeaux booléens non (`i += 1`).
+fn analyser(args: &[String]) -> Options {
+    let mut o = Options {
+        n: 32, temp: 0.0, top_p: 1.0, hist: 64, hebb_q: 0.1,
+        hebb_out: String::from("hebb.bin"), keep: 1.0, abits: 8,
+        auto: true, limit: usize::MAX, harmony_contexte: None,
+        matrix: String::from("blk.0.ffn_gate.weight"),
+        ..Default::default()
+    };
     let cpu = std::thread::available_parallelism().map(|n| n.get()).unwrap_or(8);
-    let mut n_threads = (cpu / 2).max(1);
+    o.ctx = 512;
+    o.threads = (cpu * 3 / 4).max(1);
     let mut i = 2;
     while i < args.len() {
+        let suivant = |i: usize| -> &String {
+            args.get(i + 1).unwrap_or_else(|| panic!("{} attend une valeur", args[i]))
+        };
         match args[i].as_str() {
-            "--infer" => { i += 1; continue; }
-            "--ids" => ids = args[i + 1].split(',').filter_map(|s| s.trim().parse().ok()).collect(),
-            "--prompt" => prompt = Some(args[i + 1].clone()),
-            "--n" => n_new = args[i + 1].parse().unwrap(),
-            "--temp" => temp = args[i + 1].parse().unwrap(),
-            "--top-p" => top_p = args[i + 1].parse().unwrap(),
-            "--rep-penalty" => rep_pen = args[i + 1].parse().unwrap(),
-            "--hist" => hist = args[i + 1].parse().unwrap(),
-            "--flux" => { flux = true; i -= 1; }
-            "--session" => { session = true; flux = true; i -= 1; }
-            "--ctx" => ctx = args[i + 1].parse().unwrap(),
-            "--topk" => topk = args[i + 1].parse().unwrap(),
-            "--abits" => abits = args[i + 1].parse().unwrap(),
-            "--ids-file" => ids_file = Some(args[i + 1].clone()),
-            "--hebbian" => hebb_layer = Some(args[i + 1].parse().unwrap()),
-            "--hebb-q" => hebb_q = args[i + 1].parse().unwrap(),
-            "--hebb-out" => hebb_out = args[i + 1].clone(),
-            "--act-thresh" => act_thresh = args[i + 1].parse().unwrap(),
-            "--act-topk" => act_topk = args[i + 1].parse().unwrap(),
-            "--act-renorm" => { act_renorm = true; i -= 1; }
-            "--topk-q" => topk_proj[0] = args[i + 1].parse().unwrap(),
-            "--topk-k" => topk_proj[1] = args[i + 1].parse().unwrap(),
-            "--topk-v" => topk_proj[2] = args[i + 1].parse().unwrap(),
-            "--topk-o" => topk_proj[3] = args[i + 1].parse().unwrap(),
-            "--topk-gate" => topk_proj[4] = args[i + 1].parse().unwrap(),
-            "--topk-up" => topk_proj[5] = args[i + 1].parse().unwrap(),
-            "--topk-down" => topk_proj[6] = args[i + 1].parse().unwrap(),
-            "--attn-topk" => attn_topk = args[i + 1].parse().unwrap(),
-            "--qk-topk" => qk_topk = args[i + 1].parse().unwrap(),
-            "--attn-window" => attn_window = args[i + 1].parse().unwrap(),
-            "--swa-pattern" => { swa_pattern = Some(args[i + 1].parse().unwrap()); i -= 1; }
-            "--sans-fenetre" => { sans_fenetre = true; i -= 1; }
-            "--attn-sinks" => attn_sinks = args[i + 1].parse().unwrap(),
-            "--patch" => patch_file = Some(args[i + 1].clone()),
-            "--threads" => n_threads = args[i + 1].parse().unwrap(),
-            "--chat" => { chat = true; i -= 1; }
-            "--dense" => { dense = true; i -= 1; }
-            "--moe-topk" => { moe_topk = args[i + 1].parse().unwrap(); i -= 1; }
-            "--bits-attn" => {
-                let b: u32 = args[i + 1].parse().unwrap();
-                if b == 6 { b6 |= 2; }
-                i -= 1;
+            "--infer" => { o.infer = true; i += 1; continue; }
+            "--ppl" => { o.ppl = true; o.ids_file = Some(suivant(i).clone()); }
+            "--ppl-texte" => { o.ppl = true; o.ppl_texte = true; o.texte_file = Some(suivant(i).clone()); }
+            "--plan" => { o.plan = true; i += 1; continue; }
+            "--tokenize" => { o.tokenize = true; i += 1; continue; }
+            "--ids" => o.ids = suivant(i).split(',').filter_map(|s| s.trim().parse().ok()).collect(),
+            "--ids-file" => o.ids_file = Some(suivant(i).clone()),
+            "--prompt" => o.prompt = Some(suivant(i).clone()),
+            "--texte" => o.texte = Some(suivant(i).clone()),
+            "--fichier" => o.fichier = Some(suivant(i).clone()),
+            "--sortie" => o.sortie = Some(suivant(i).clone()),
+            "--matrix" => o.matrix = suivant(i).clone(),
+            "--logits-bin" => o.logits_bin = Some(suivant(i).clone()),
+            "--harmony-contexte" => o.harmony_contexte = Some(suivant(i).clone()),
+            "--patch" => o.patch = Some(suivant(i).clone()),
+            "--n" => o.n = suivant(i).parse().unwrap(),
+            "--temp" => o.temp = suivant(i).parse().unwrap(),
+            "--top-p" => o.top_p = suivant(i).parse().unwrap(),
+            "--topk" => o.topk = suivant(i).parse().unwrap(),
+            "--rep-penalty" => o.rep_pen = suivant(i).parse().unwrap(),
+            "--hist" => o.hist = suivant(i).parse().unwrap(),
+            "--ctx" => { o.ctx = suivant(i).parse().unwrap(); o.ctx_impose = true; }
+            "--threads" => { o.threads = suivant(i).parse().unwrap(); o.threads_impose = true; }
+            "--abits" => { o.abits = suivant(i).parse().unwrap(); o.abits_impose = true; }
+            "--bits" => o.bits = suivant(i).parse().unwrap(),
+            "--limit" => o.limit = suivant(i).parse().unwrap(),
+            "--depuis" => o.depuis = suivant(i).parse().unwrap(),
+            "--keep" => o.keep = suivant(i).parse().unwrap(),
+            "--moe-topk" => o.moe_topk = suivant(i).parse().unwrap(),
+            "--attn-window" => o.attn_window = suivant(i).parse().unwrap(),
+            "--swa-pattern" => o.swa_pattern = Some(suivant(i).parse().unwrap()),
+            "--attn-sinks" => o.attn_sinks = suivant(i).parse().unwrap(),
+            "--attn-topk" => o.attn_topk = suivant(i).parse().unwrap(),
+            "--qk-topk" => o.qk_topk = suivant(i).parse().unwrap(),
+            "--hebbian" => o.hebb_layer = Some(suivant(i).parse().unwrap()),
+            "--hebb-q" => o.hebb_q = suivant(i).parse().unwrap(),
+            "--hebb-out" => o.hebb_out = suivant(i).clone(),
+            "--act-thresh" => o.act_thresh = suivant(i).parse().unwrap(),
+            "--act-topk" => o.act_topk = suivant(i).parse().unwrap(),
+            "--topk-q" => o.topk_proj[0] = suivant(i).parse().unwrap(),
+            "--topk-k" => o.topk_proj[1] = suivant(i).parse().unwrap(),
+            "--topk-v" => o.topk_proj[2] = suivant(i).parse().unwrap(),
+            "--topk-o" => o.topk_proj[3] = suivant(i).parse().unwrap(),
+            "--topk-gate" => o.topk_proj[4] = suivant(i).parse().unwrap(),
+            "--topk-up" => o.topk_proj[5] = suivant(i).parse().unwrap(),
+            "--topk-down" => o.topk_proj[6] = suivant(i).parse().unwrap(),
+            "--ffn-gain" => {
+                let v: Vec<&str> = suivant(i).split(':').collect();
+                o.ffn_gain = Some((v[0].parse().unwrap(), v[1].parse().unwrap()));
             }
-            "--bits-ffn" => {
-                let b: u32 = args[i + 1].parse().unwrap();
-                if b == 6 { b6 |= 1; }
-                i -= 1;
-            }
-            "--bits" => {
-                let b: u32 = args[i + 1].parse().unwrap();
-                list::BITS_POIDS.store(b, std::sync::atomic::Ordering::Relaxed);
-                i -= 1;
-            }
-            "--pin" => { engine::EPINGLER.store(true, std::sync::atomic::Ordering::Relaxed); i -= 1; }
-            "--auto" => { auto = true; i -= 1; }
-            "--push" => { auto = false; dense = false; i -= 1; }
-            "--q4" => { q4 |= 3; i -= 1; }
-            "--q4-ffn" => { q4 = (q4 & 4) | 1; i -= 1; }
-            "--q4-attn" => { q4 = (q4 & 4) | 2; i -= 1; }
-            "--q4-tout" => { q4 |= 7; i -= 1; }
-            "--keep" => keep = args[i + 1].parse().unwrap(),
+            "--bits-attn" => { if suivant(i).parse::<u32>().unwrap() == 6 { o.b6 |= 2; } }
+            "--bits-ffn" => { if suivant(i).parse::<u32>().unwrap() == 6 { o.b6 |= 1; } }
+            // --- booléens
+            "--flux" => o.flux = true,
+            "--session" => { o.session = true; o.flux = true; }
+            "--chat" => o.chat = true,
+            "--dense" => o.dense = true,
+            "--auto" => o.auto = true,
+            "--push" => { o.auto = false; o.dense = false; }
+            "--pin" => o.pin = true,
+            "--sans-fenetre" => o.sans_fenetre = true,
+            "--sans-yarn" => o.sans_yarn = true,
+            "--act-renorm" => o.act_renorm = true,
+            "--ppl-profil" => o.ppl_profil = true,
+            "--harmony" => o.harmony = Some("alterne".into()),
+            "--harmony-assistant" => o.harmony = Some("assistant".into()),
+            "--harmony-user" => o.harmony = Some("user".into()),
+            "--harmony-suite" => o.harmony = Some("suite".into()),
+            "--q4" => o.q4 |= 3,
+            "--q4-ffn" => o.q4 = (o.q4 & 4) | 1,
+            "--q4-attn" => o.q4 = (o.q4 & 4) | 2,
+            "--q4-tout" => o.q4 |= 7,
             _ => {}
         }
         i += 2;
     }
+    if o.pin { engine::EPINGLER.store(true, std::sync::atomic::Ordering::Relaxed); }
+    if o.bits > 0 { list::BITS_POIDS.store(o.bits, std::sync::atomic::Ordering::Relaxed); }
+    o
+}
+
+fn run_infer(opt: Options) {
+    // Une seule analyse de la ligne de commande (voir `analyser`) : chaque mode
+    // ne fait plus que déstructurer ce dont il a besoin.
+    let Options {
+        ids: mut ids, ids_file, prompt, n: n_new, temp, top_p, topk, rep_pen, hist,
+        flux, session, chat, ctx: ctx_opt, threads: threads_opt, abits: abits_opt,
+        ctx_impose, threads_impose, abits_impose, dense, auto, q4, b6,
+        keep, attn_window, swa_pattern, sans_fenetre, attn_sinks, attn_topk, qk_topk,
+        act_thresh, act_topk, act_renorm, topk_proj, moe_topk, patch: patch_file,
+        hebb_layer, hebb_q, hebb_out, sans_yarn, ..
+    } = opt;
+    let path = &modele_chemin();
+    // Défauts du mode INFÉRENCE : 512 jetons, la moitié des cœurs (l'attente
+    // active de la barrière ne tolère pas la sursouscription), 8 bits.
+    let cpu = std::thread::available_parallelism().map(|n| n.get()).unwrap_or(8);
+    let ctx = if ctx_impose { ctx_opt } else { 512 };
+    let n_threads = if threads_impose { threads_opt } else { (cpu / 2).max(1) };
+    let abits = if abits_impose { abits_opt } else { 8 };
     let mut mdl = model::Model::load(path, ctx, n_threads, dense, keep, auto, q4, b6);
     mdl.act_levels = ((1u32 << (abits - 1)) - 1) as f32;
     mdl.moe_topk = moe_topk;
@@ -423,6 +474,11 @@ fn run_infer(args: &[String]) {
     if attn_window > 0 { mdl.attn_window = attn_window; }
     if let Some(p) = swa_pattern { mdl.swa_pattern = p; }
     if attn_sinks > 0 { mdl.attn_sinks = attn_sinks; }
+    // Appliqués en perplexité depuis toujours, oubliés ici : la déstructuration
+    // unique les rend visibles (le compilateur signale tout champ non lu).
+    mdl.attn_topk = attn_topk;
+    mdl.qk_topk = qk_topk;
+    if sans_yarn { mdl.cfg_yarn_off(); }
     if act_topk > 0 || act_thresh > 0.0 {
         println!("parcimonie imposée : k-WTA garde {:.1} %{}",
                  act_topk as f32 / 10.0,
@@ -687,22 +743,11 @@ fn mdl_cfg_vocab(path: &str) -> Option<usize> {
 
 /// Tokenise un texte et imprime les identifiants — sert à vérifier le
 /// pré-découpage contre une implémentation de référence.
-fn run_tokenize(args: &[String]) {
-    let path = &args[1];
-    let mut texte = String::new();
-    let mut i = 2;
-    while i < args.len() {
-        if args[i] == "--texte" && i + 1 < args.len() { texte = args[i + 1].clone(); i += 1; }
-        i += 1;
-    }
-    let mut fichier = String::new();
-    let mut sortie = String::new();
-    let mut i = 2;
-    while i < args.len() {
-        if args[i] == "--fichier" && i + 1 < args.len() { fichier = args[i + 1].clone(); i += 1; }
-        if args[i] == "--sortie" && i + 1 < args.len() { sortie = args[i + 1].clone(); i += 1; }
-        i += 1;
-    }
+fn run_tokenize(opt: Options) {
+    let path = &modele_chemin();
+    let texte = opt.texte.clone().unwrap_or_default();
+    let fichier = opt.fichier.clone().unwrap_or_default();
+    let sortie = opt.sortie.clone().unwrap_or_default();
     // En-tête seul : le décodage du vocabulaire n'a pas besoin des poids, et
     // `open` lisait le fichier entier (62 Go pour gpt-oss) à chaque appel.
     let g = Gguf::open_meta(path).expect("ouverture du GGUF");
@@ -749,8 +794,8 @@ fn run_tokenize(args: &[String]) {
 /// décide sans avoir rien chargé. Les seuils viennent des débits mesurés sur
 /// cette machine : CPU 14–25 Go/s, PCIe x8 6,5 Go/s, NVLink 25,78 Go/s,
 /// GPU 380 Go/s en lecture locale.
-fn run_plan(args: &[String]) {
-    let path = &args[1];
+fn run_plan(opt: Options) {
+    let path = &modele_chemin();
     let g = Gguf::open(path).expect("ouverture du GGUF");
     let arch = g.meta.get("general.architecture").and_then(|m| m.as_str()).unwrap_or("?");
     let n_layer = g.cfg("block_count").and_then(|m| m.as_u64()).unwrap_or(0) as usize;
@@ -824,14 +869,10 @@ fn run_plan(args: &[String]) {
     // 1 M, c'est ce trafic qui décide de tout — d'où ce chiffrage, séparé en
     // f32 / int8 / int4 et tenant compte des couches à fenêtre glissante, qui
     // n'ont jamais besoin de plus de `fenetre` entrées.
-    let ctx_demande = {
-        let mut c = g.cfg("context_length").and_then(|m| m.as_u64()).unwrap_or(4096) as usize;
-        let mut i = 2;
-        while i + 1 < args.len() {
-            if args[i] == "--ctx" { c = args[i + 1].parse().unwrap_or(c); }
-            i += 1;
-        }
-        c
+    let ctx_demande = if opt.ctx > 0 {
+        opt.ctx
+    } else {
+        g.cfg("context_length").and_then(|m| m.as_u64()).unwrap_or(4096) as usize
     };
     let n_kv = g.cfg("attention.head_count_kv").and_then(|m| m.as_u64()).unwrap_or(0) as usize;
     let head_dim = {
@@ -1045,139 +1086,24 @@ fn fenetres_harmony(tk: &tokenizer::Tokenizer, ids: &[u32], ctx: usize, mode: &s
     fenetres
 }
 
-fn run_ppl(args: &[String]) {
-    let path = &args[1];
-    let mut idfile = String::new();
-    // Texte brut : les identifiants sont alors produits par le tokenizer DU
-    // modèle — plus de fichier d'identifiants à tenir à jour, et impossible de
-    // croiser deux découpages.
-    let mut texte_file: Option<String> = None;
-    // Habillage harmony (gpt-oss) : le texte est présenté dans son gabarit
-    // d'entraînement au lieu d'être donné brut.
-    let mut harmony: Option<String> = None;
-    // Texte placé dans le tour « user » du montage harmony `suite` : le contenu
-    // noté est alors la SUITE d'un texte que le modèle a sous les yeux.
-    let mut harmony_contexte: Option<String> = None;
-    // `--depuis N` : ne NOTER qu'à partir du jeton N, en gardant tout ce qui
-    // précède comme contexte. Sans lui, comparer deux longueurs de contexte
-    // revient à comparer deux tranches différentes du corpus — mesuré : de 6 à
-    // 542 de perplexité entre tranches d'un même fichier. Avec lui, les mêmes
-    // jetons sont notés à 512, 1 024, 4 096… de contexte.
-    let mut depuis = 0usize;
-    // Export des logits bruts, pour comparaison à une référence externe
-    // (llama.cpp). Format : int32 n_vocab, int32 n_pos, puis n_pos lignes de
-    // n_vocab f32, une ligne par position NOTÉE, dans l'ordre.
-    let mut logits_bin: Option<String> = None;
-    let mut ctx = 256usize;
-    let mut limit = usize::MAX;
-    let mut abits = 16u32;
-    let mut b6 = 0u8;
-    let mut hebb_layer: Option<usize> = None;
-    let mut patch_file: Option<String> = None;
-    let mut gain: Option<(usize, f32)> = None;
-    let mut act_thresh = 0.0f32;
-    let mut act_topk = 0usize;
-    let mut act_renorm = false;
-    let mut topk_proj = [0usize; 7];
-    let mut attn_topk = 0usize;
-    let mut qk_topk = 0usize;
-    let mut attn_window = 0usize;
-    // Motif fenêtre/plein : `None` = valeur du modèle, `Some(n)` = imposé.
-    let mut swa_pattern: Option<usize> = None;
-    let mut sans_fenetre = false;
-    // 0 = « garder la valeur du modèle » : les métadonnées déclarent parfois une
-    // fenêtre glissante (gpt-oss : 128) et des puits appris, qu'un défaut CLI
-    // écraserait silencieusement.
-    let mut attn_sinks = 0usize;
-    // Défaut : le moteur CHOISIT par mesure. Les deux formes sont chargées et la
-    // bascule se fait projection par projection sur la densité mesurée — les
-    // sorties sont identiques au bit près, seul le débit change (×2,1 sur un
-    // modèle dense, ×1,5 en faveur du push sous 5 % de densité).
-    let mut dense = false;
-    let mut auto = true;
-    let mut moe_topk = 0usize;
-    let mut q4 = 0u8;
+fn run_ppl(opt: Options) {
+    let Options {
+        ids_file: idfile, texte_file, ppl_texte: _, limit, depuis,
+        ctx: ctx_opt, threads: threads_opt, abits: abits_opt,
+        ctx_impose, threads_impose, abits_impose,
+        dense, auto, q4, b6, attn_window, swa_pattern,
+        sans_fenetre, attn_sinks, attn_topk, qk_topk, act_thresh, act_topk, act_renorm,
+        topk_proj, moe_topk, patch: patch_file, hebb_layer, ffn_gain, logits_bin,
+        ppl_profil, harmony, harmony_contexte, sans_yarn, ..
+    } = opt;
+    let path = &modele_chemin();
+    // Défauts du mode PERPLEXITÉ : 256 jetons, trois quarts des cœurs, 16 bits
+    // d'activation (la référence de non-régression en dépend).
     let cpu = std::thread::available_parallelism().map(|n| n.get()).unwrap_or(8);
-    let mut n_threads = (cpu * 3 / 4).max(1);
-    let mut i = 2;
-    while i < args.len() {
-        match args[i].as_str() {
-            "--ppl" => idfile = args[i + 1].clone(),
-            "--ppl-texte" => texte_file = Some(args[i + 1].clone()),
-            "--harmony" => { harmony = Some("alterne".into()); i -= 1; }
-            "--logits-bin" => logits_bin = Some(args[i + 1].clone()),
-            "--harmony-assistant" => { harmony = Some("assistant".into()); i -= 1; }
-            "--harmony-user" => { harmony = Some("user".into()); i -= 1; }
-            "--harmony-suite" => { harmony = Some("suite".into()); i -= 1; }
-            "--harmony-contexte" => { harmony_contexte = Some(args[i + 1].clone()); }
-            "--depuis" => depuis = args[i + 1].parse().unwrap(),
-            "--swa-pattern" => { swa_pattern = Some(args[i + 1].parse().unwrap()); i -= 1; }
-            "--sans-fenetre" => { sans_fenetre = true; i -= 1; }
-            "--ctx" => ctx = args[i + 1].parse().unwrap(),
-            "--limit" => limit = args[i + 1].parse().unwrap(),
-            "--act-topk" => act_topk = args[i + 1].parse().unwrap(),
-            "--act-renorm" => { act_renorm = true; i -= 1; }
-            "--topk-q" => topk_proj[0] = args[i + 1].parse().unwrap(),
-            "--topk-k" => topk_proj[1] = args[i + 1].parse().unwrap(),
-            "--topk-v" => topk_proj[2] = args[i + 1].parse().unwrap(),
-            "--topk-o" => topk_proj[3] = args[i + 1].parse().unwrap(),
-            "--topk-gate" => topk_proj[4] = args[i + 1].parse().unwrap(),
-            "--topk-up" => topk_proj[5] = args[i + 1].parse().unwrap(),
-            "--topk-down" => topk_proj[6] = args[i + 1].parse().unwrap(),
-            "--attn-topk" => attn_topk = args[i + 1].parse().unwrap(),
-            "--qk-topk" => qk_topk = args[i + 1].parse().unwrap(),
-            "--attn-window" => attn_window = args[i + 1].parse().unwrap(),
-            "--attn-sinks" => attn_sinks = args[i + 1].parse().unwrap(),
-            "--abits" => abits = args[i + 1].parse().unwrap(),
-            "--hebbian" => hebb_layer = Some(args[i + 1].parse().unwrap()),
-            "--patch" => patch_file = Some(args[i + 1].clone()),
-            "--ffn-gain" => {
-                let v: Vec<&str> = args[i + 1].split(':').collect();
-                gain = Some((v[0].parse().unwrap(), v[1].parse().unwrap()));
-            }
-            "--act-thresh" => act_thresh = args[i + 1].parse().unwrap(),
-            "--act-topk" => act_topk = args[i + 1].parse().unwrap(),
-            "--act-renorm" => { act_renorm = true; i -= 1; }
-            "--topk-q" => topk_proj[0] = args[i + 1].parse().unwrap(),
-            "--topk-k" => topk_proj[1] = args[i + 1].parse().unwrap(),
-            "--topk-v" => topk_proj[2] = args[i + 1].parse().unwrap(),
-            "--topk-o" => topk_proj[3] = args[i + 1].parse().unwrap(),
-            "--topk-gate" => topk_proj[4] = args[i + 1].parse().unwrap(),
-            "--topk-up" => topk_proj[5] = args[i + 1].parse().unwrap(),
-            "--topk-down" => topk_proj[6] = args[i + 1].parse().unwrap(),
-            "--attn-topk" => attn_topk = args[i + 1].parse().unwrap(),
-            "--qk-topk" => qk_topk = args[i + 1].parse().unwrap(),
-            "--attn-window" => attn_window = args[i + 1].parse().unwrap(),
-            "--attn-sinks" => attn_sinks = args[i + 1].parse().unwrap(),
-            "--threads" => n_threads = args[i + 1].parse().unwrap(),
-            "--dense" => { dense = true; i -= 1; }
-            "--moe-topk" => { moe_topk = args[i + 1].parse().unwrap(); i -= 1; }
-            "--bits-attn" => {
-                let b: u32 = args[i + 1].parse().unwrap();
-                if b == 6 { b6 |= 2; }
-                i -= 1;
-            }
-            "--bits-ffn" => {
-                let b: u32 = args[i + 1].parse().unwrap();
-                if b == 6 { b6 |= 1; }
-                i -= 1;
-            }
-            "--bits" => {
-                let b: u32 = args[i + 1].parse().unwrap();
-                list::BITS_POIDS.store(b, std::sync::atomic::Ordering::Relaxed);
-                i -= 1;
-            }
-            "--pin" => { engine::EPINGLER.store(true, std::sync::atomic::Ordering::Relaxed); i -= 1; }
-            "--auto" => { auto = true; i -= 1; }
-            "--push" => { auto = false; dense = false; i -= 1; }
-            "--q4" => { q4 |= 3; i -= 1; }
-            "--q4-ffn" => { q4 = (q4 & 4) | 1; i -= 1; }
-            "--q4-attn" => { q4 = (q4 & 4) | 2; i -= 1; }
-            "--q4-tout" => { q4 |= 7; i -= 1; }
-            _ => {}
-        }
-        i += 2;
-    }
+    let ctx = if ctx_impose { ctx_opt } else { 256 };
+    let n_threads = if threads_impose { threads_opt } else { (cpu * 3 / 4).max(1) };
+    let abits = if abits_impose { abits_opt } else { 16 };
+    let idfile = idfile.unwrap_or_default();
     let mut ids: Vec<u32> = if idfile.is_empty() {
         Vec::new()
     } else {
@@ -1229,7 +1155,7 @@ fn run_ppl(args: &[String]) {
                  pt.layer, norme(&pt.u), norme(&pt.v), norme(&pt.d));
         mdl.patch = Some(pt);
     }
-    if let Some((l, g)) = gain {
+    if let Some((l, g)) = ffn_gain {
         println!("gain FFN : couche {l} x {g}");
         mdl.ffn_gain = Some((l, g));
     }
@@ -1239,7 +1165,7 @@ fn run_ppl(args: &[String]) {
     mdl.act_topk_proj = topk_proj;
     mdl.attn_topk = attn_topk;
     mdl.qk_topk = qk_topk;
-    if args.iter().any(|a| a == "--sans-yarn") { mdl.cfg_yarn_off(); }
+    if sans_yarn { mdl.cfg_yarn_off(); }
     if attn_window > 0 { mdl.attn_window = attn_window; }
     if sans_fenetre { mdl.attn_window = 0; }
     if let Some(p) = swa_pattern { mdl.swa_pattern = p; }
@@ -1330,7 +1256,7 @@ fn run_ppl(args: &[String]) {
     // Une perplexité qui MONTE avec la position ne dit pas du tout la même
     // chose qu'une perplexité uniformément mauvaise — et à 4 096 jetons, la
     // moyenne seule ne permet pas de trancher.
-    let profil = args.iter().any(|a| a == "--ppl-profil");
+    let profil = ppl_profil;
     let mut seaux: Vec<(f64, usize)> = vec![(0.0, 0); ctx.div_ceil(256)];
     for (i_f, (chunk, masque)) in fenetres.iter().enumerate() {
         let (mut nll_f, mut n_f) = (0f64, 0usize);
