@@ -17544,3 +17544,26 @@ f16 avant=1   perplexité 10.6231 sur 2047 tokens
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='docs/contexte-long.md'; s=open(p).read()\nold = \"\"\"Il reste, sur ce chemin : le **dépaquetage vectorisé** (point 2 ci-dessus), la\nrépartition sur les **deux** GPU (le second est libre : le cache d'une couche  … [2618 caractères tronqués]`
+
+  ```
+docs chantier 3
+bc5aa9a Chantier 3 : cache KV CPU paginé (0,03 Go à ctx 1 M au lieu de 25,77 Go)
+  ```
+
+- **bash** `{"command": "sleep 570; tail -6 /tmp/aiguille_campagne.log; pgrep -x qtrinet-core >/dev/null && echo \"[en cours]\" || echo \"[libre]\"", "description": "Poll needle campaign", "timeoutMs": 600000}`
+
+  ```
+### gpt-oss-120b, contexte 4096, KV déporté
+aiguille v2 : /home/stephane/FastNVMe/models/gpt-oss-120b-MXFP4.gguf
+  remplissage : data/wikitext2_test.txt (353778 caractères), fenêtres décalées
+  lot 512 · 40 jetons de réponse · GPU KV 
+ contexte  profondeur  trouvé  secondes  détail
+     4096        0.10     oui     653.2  prompt 3944 jetons
+[en cours]
+  ```
+
+### 🤖 Assistant
+
+⏵ Chantier 6 : je réécris la feuille de route et les pièges d'environnement
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='REPRISE.md'; s=open(p).read()\nstart = s.index(\"### Ce qu'il faut faire ensuite, dans l'ordre\")\nend = s.index(\"## 7. Carte du dépôt\")\nsection = \"\"\"### Ce qu'il faut faire ensuite, dans l'ordre\n\nÉtat au … [4132 caractères tronqués]`

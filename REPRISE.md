@@ -173,29 +173,52 @@ comparé à `llama-tokenize` sur 4 424 jetons (0 écart).
 
 ### Ce qu'il faut faire ensuite, dans l'ordre
 
-1. ~~Le préremplissage, suite (chantier 4)~~ **FAIT** : (a) attention groupée
-   dans le lot et (b) tête en lot sont en place et mesurés (17,1 s → 13,6 s sur
-   Qwen ctx 512). Ce qui reste sur ce poste : le **noyau de la tête** (le lot n'y
-   change rien, il est lié au calcul) et l'**attention par lots**, encore 1,7 ×
-   le chemin par jeton.
-3. **Brancher le noyau MXFP4** : il est bit à bit identique et 40× plus rapide
-   que le CPU ; il manque un cache d'experts chauds en VRAM (voir
-   `reports/rapport-localite-activation.md`). Attention au piège des deux
-   variables : `QT_GPU_TETE=1` seul ne fait RIEN — c'est `QT_GPU` qui ouvre le
-   pilote (`gpu::instance`), et la première mesure est restée muette pour ça.
-4. ~~**Q6_K** reste à écrire~~ **FAIT** (noyau `proj_q6k_warp`, tête Q6_K
-   branchée : 7,58 → 3,60 ms/jeton sur Qwen 1.5B). Ce qui reste sur le chemin
-   GPU : le **dépaquetage vectorisé** du KV déporté (le noyau d'attention est
-   borné par la déquantification scalaire, pas par la VRAM : 25-40 Go/s contre
-   158 Go/s en f32) et le **cache d'experts chauds** en VRAM pour les MoE.
-4.bis ~~KV à échelles par bloc de 32~~ **FAIT** : int8 +1,5 % au lieu de +7,1 %,
-   int4 +219 % au lieu de +384 %.
-5. **Le seuil de rotation** (chantier 2) : la série en cours le tranche ; si
-   l'interpolation ne gagne jamais, le défaut « simple partout » est à
-   envisager, et le seuil de 4 096 devient une simple borne de sécurité.
-6. Puis le chantier 8 : attention creuse (mesurable dès maintenant avec
-   `--attn-topk` et `--attn-window` au protocole `--depuis`), pagination du KV,
-   déport GPU du KV, MLA, vision.
+État au moment d'écrire : les huit chantiers de la campagne précédente sont clos
+(voir le tableau du §6), et la campagne « six nouveaux chantiers » a livré
+l'aiguille v2, le dépaquetage vectorisé du noyau d'attention, les experts MXFP4
+en VRAM, l'attention par lots déportée et la pagination des deux caches KV. Ce
+qui reste est classé par rentabilité mesurée.
+
+1. **Noyau de la tête Q8_0.** Le chemin CPU de la tête par lots est **lié au
+   calcul** (5,5 ms/jeton pour Qwen 0.5B, le lot n'y change rien). Deux voies :
+   un noyau AVX2 (le déport GPU Q8_0 existe déjà : 15,6 → 6,2 ms/jeton sur
+   gpt-oss). C'est le premier consommateur après le FFN.
+2. **Second GPU.** 16 Go dorment. Le cache d'experts MXFP4 (13,2 Mo par expert,
+   4 608 experts chez gpt-oss) et le KV à 1 M le rempliraient utilement ; il faut
+   un second contexte CUDA et une règle de répartition.
+3. **Rotation au-delà de 5 120 jetons.** Le seuil mesuré (1,25 × la longueur
+   déclarée) n'est qu'une borne basse : une passe à 16 k coûte ~1 h par régime.
+4. **MLA et vision.** MLA : aucun modèle MLA en GGUF sur cette machine — la voie
+   honnête est un modèle MLA **synthétique** (écrit à la main en GGUF) validé
+   contre une référence indépendante. Vision : les poids Qwen2.5-VL et le
+   projecteur `mmproj` sont présents, mais rien ne lit les patchs ; c'est une tour
+   de vision entière à écrire.
+5. **Top-k dans le noyau d'attention.** `--attn-topk 256` AMÉLIORE la perplexité
+   (234,88 contre 298,56 à 2 048) mais repasse aujourd'hui par le CPU : le noyau
+   GPU ne le gère pas.
+6. **Experts MXFP4 dans le préremplissage par lots.** Ils ne sont déportés que
+   dans le chemin par jeton ; en lot, le CPU reste meilleur (il lit l'expert une
+   fois pour tout le groupe).
+7. **Mesure de qualité à contexte long** (`reports/rapport-aiguille.md`) :
+   étendre la grille à 8 192 et 16 384, plusieurs codes par sonde, et croiser avec
+   `--attn-topk`.
+
+### Les variables d'environnement, et leurs pièges
+
+| variable | ce qu'elle fait | le piège |
+|---|---|---|
+| `QT_GPU=1` | ouvre le pilote CUDA (`gpu::instance`) | **c'est elle qui commande tout** ; sans elle, les autres ne font RIEN et rien ne le dit |
+| `QT_GPU_TETE=1` | déporte la tête (Q8_0 ou Q6_K) | inutile sans `QT_GPU` |
+| `QT_GPU_KV=1` | tient le cache KV en VRAM et y calcule l'attention | inutile sans `QT_GPU` ; au-dessous de ~4 000 clés le CPU gagne (lancements + recopies) |
+| `QT_GPU_EXPERTS=1` | cache LRU des experts MXFP4 en VRAM | inutile sans `QT_GPU` ; budget par `QT_GPU_EXPERTS_GO` (défaut 8) |
+| `QT_KV_BITS=8` ou `4` | quantifie le cache KV (défaut f32) | le 4 bits coûte +364 % de perplexité à 8 192 |
+| `QT_KV_F16=1` | arrondit clés/valeurs en f16 avant quantification | mesuré : aucun effet (hypothèse réfutée) |
+| `QT_YARN=1` / `QT_YARN_NON=1` / `QT_YARN_MSCALE=0` | force / interdit / règle la rotation | le défaut ne bascule qu'à 1,25 × la longueur déclarée |
+| `QT_BANC_KV_GPU_SEUL=1` | saute la référence CPU du banc de KV | à 1 M elle coûte 3 à 16 minutes |
+
+Une porte de non-régression se mesure **sans** `QT_GPU` : la variable déporte à
+elle seule les projections Q8_0 de plus de 8 Mo, ce qui change le chiffre de
+0,06 % (15,1757 → 15,1667 sur gpt-oss).
 
 ## 7. Carte du dépôt
 
