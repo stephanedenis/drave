@@ -167,6 +167,11 @@ comparé à `llama-tokenize` sur 4 424 jetons (0 écart).
 | attention creuse (gpt-oss, ctx 2 048) | sans restriction 298,56 · **top-256 : 234,88** · fenêtre 512 : 3 269,34 |
 | KV déporté en VRAM, 1 M de clés (une couche, `--banc-kv`) | f32 165,8 → **13,6 ms** (×12) · int8 510,6 → 15,0 (×34) · int4 968,5 → **13,2 ms (×73)**, écarts 1e-5 à 1e-4 |
 | KV déporté dans le moteur (`QT_GPU_KV=1`, ctx 4 096) | attention **22,16 → 3,29 ms/jeton** (÷6,7) · balayage 219,4 → **136,2 s** · perplexité 12,2177 → 12,2175 |
+| attention déportée dans le PRÉREMPLISSAGE par lots (ctx 4 096, lot 512) | **261,6 → 93,7 s (×2,8)**, perplexité **identique** (12,2175) |
+| dépaquetage vectorisé du noyau (1 M de clés) | f32 13,6 → **7,0 ms** (308 Go/s) · int8 15,0 → **6,5** · int4 13,2 → **7,4 ms** |
+| cache d'experts MXFP4 en VRAM (gpt-oss, 32 jetons) | 5,12 → **5,43 jetons/s (+6 %)**, 53,5 % de succès — verdict : ne pas activer par défaut |
+| cache KV CPU paginé (ctx 1 M, 512 jetons écrits) | **0,03 Go** alloués au lieu de 25,77 Go, perplexité inchangée |
+| aiguille v2 (12 sondes) | **12/12 trouvées** : 1,5B 512/2048, 30B 2048, gpt-oss 4096, profondeurs 0,1/0,5/0,9 |
 | KV déporté, ctx 512 (point de croisement) | attention 2,91 (CPU) contre 3,22 ms (GPU) : le noyau ne paie qu'au-delà de ~4 000 clés |
 | miroir VRAM paginé (capacité doublée à la demande) | à **ctx 1 M** : cache CPU 25,77 Go contre **0,05 Go** de VRAM pour 512 jetons écrits (l'allocation d'un bloc exigeait 25,77 Go et refusait) ; perplexité 13,1369 inchangée |
 | rotation, comparaison appariée | RoPE simple gagne à 128/512/1024/1536 de contexte (39,5 / 49,8 / 49,9 / 298,6) |
@@ -196,9 +201,11 @@ qui reste est classé par rentabilité mesurée.
 5. **Top-k dans le noyau d'attention.** `--attn-topk 256` AMÉLIORE la perplexité
    (234,88 contre 298,56 à 2 048) mais repasse aujourd'hui par le CPU : le noyau
    GPU ne le gère pas.
-6. **Experts MXFP4 dans le préremplissage par lots.** Ils ne sont déportés que
-   dans le chemin par jeton ; en lot, le CPU reste meilleur (il lit l'expert une
-   fois pour tout le groupe).
+6. ~~Experts MXFP4 dans le préremplissage par lots~~ **MESURÉ, À NE PAS FAIRE
+   TEL QUEL** : le cache LRU donne +6 % en décodage (5,12 → 5,43 jetons/s,
+   53,5 % de succès, 10,64 Go montés) — le chemin CPU des experts est déjà AVX2
+   et le coût par expert est faible. Il faudrait supprimer les trois lancements
+   et copies par expert, ou grouper les projections.
 7. **Mesure de qualité à contexte long** (`reports/rapport-aiguille.md`) :
    étendre la grille à 8 192 et 16 384, plusieurs codes par sonde, et croiser avec
    `--attn-topk`.

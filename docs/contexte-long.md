@@ -275,6 +275,38 @@ laissait le cache en RAM. La perplexité ne bouge pas (13,1369, comme à
 contexte 512). Le miroir grandit ensuite par doublement, sans jamais copier plus
 que ce qui est écrit.
 
+### Le préremplissage par lots emprunte le même noyau
+
+`forward_lot` gardait le CPU pour l'attention (mesuré 1,7 × le chemin par jeton) :
+le noyau n'était branché que sur le décodage. Il l'est maintenant aussi en lot,
+avec un miroir VRAM **position par position** — l'attention du jeton `i` a besoin
+des clés de tout le lot déjà écrit, donc la copie doit suivre l'écriture (copier
+le lot à la fin donnerait au noyau un cache amputé de son propre lot).
+
+Qwen2.5-0.5B, contexte 4 096, 4 095 jetons notés, `--lot 512` :
+
+| attention | perplexité | durée |
+|---|---|---|
+| CPU (chemin par lots) | 12,2175 | 261,6 s |
+| **KV déporté (noyau GPU)** | **12,2175** | **93,7 s** |
+
+**×2,8 sur le préremplissage**, perplexité identique au chiffre près. C'est le
+gain le plus net de tout le chantier GPU, parce qu'il porte sur le poste qui
+croît avec la longueur.
+
+### Experts MXFP4 en VRAM : mesuré, et décevant
+
+Le cache LRU d'experts a été écrit et mesuré (`QT_GPU_EXPERTS=1`, budget 12 Go,
+gpt-oss, 32 jetons de décodage) : **5,12 → 5,43 jetons/s, soit +6 %**, avec
+6 192 demandes, 2 880 manques (53,5 % de succès) et 10,64 Go montés sur le bus.
+
+Le noyau MXFP4 reste bit à bit identique au CPU, mais le chemin CPU des experts
+est **déjà vectorisé AVX2** et le coût par expert (4,4 Mo) est faible : le
+déport ne paie que si l'on supprime les allers-retours (trois lancements et trois
+copies par expert et par jeton) ou si l'on groupe les projections. Verdict
+mesuré : **à ne pas activer par défaut**, et `rapport-localite-activation.md`
+explique pourquoi un préchargement statique ne paierait pas davantage.
+
 Il reste, sur ce chemin : la répartition sur les **deux** GPU (le second est
 libre), et l'extension du noyau au top-k (aujourd'hui `--attn-topk` repasse par le
 CPU).

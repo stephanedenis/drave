@@ -17567,3 +17567,153 @@ aiguille v2 : /home/stephane/FastNVMe/models/gpt-oss-120b-MXFP4.gguf
 ⏵ Chantier 6 : je réécris la feuille de route et les pièges d'environnement
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='REPRISE.md'; s=open(p).read()\nstart = s.index(\"### Ce qu'il faut faire ensuite, dans l'ordre\")\nend = s.index(\"## 7. Carte du dépôt\")\nsection = \"\"\"### Ce qu'il faut faire ensuite, dans l'ordre\n\nÉtat au … [4132 caractères tronqués]`
+
+  ```
+REPRISE §6 réécrit
+271
+6664eef REPRISE : feuille de route réécrite et pièges des variables d'environnement
+  ```
+
+- **bash** `{"command": "sleep 570; tail -5 /tmp/aiguille_campagne.log; pgrep -x qtrinet-core >/dev/null && echo \"[en cours]\" || echo \"[libre]\"", "description": "Poll campaign for last probes", "timeoutMs": 600000}`
+
+  ```
+remplissage : data/wikitext2_test.txt (353778 caractères), fenêtres décalées
+  lot 512 · 40 jetons de réponse · GPU KV 
+ contexte  profondeur  trouvé  secondes  détail
+     4096        0.10     oui     653.2  prompt 3944 jetons
+     4096        0.50     oui     566.7  prompt 3944 jetons
+[en cours]
+  ```
+
+- **bash** `{"command": "sleep 480; tail -4 /tmp/aiguille_campagne.log; pgrep -x qtrinet-core >/dev/null && echo \"[en cours]\" || echo \"[libre]\"", "description": "Wait for last needle probe", "timeoutMs": 540000}`
+
+  ```
+4096        0.50     oui     566.7  prompt 3944 jetons
+     4096        0.90     oui     559.3  prompt 3944 jetons
+journal : reports/aiguille-gpt-oss.md
+=== fin ===
+[libre]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-37 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/aiguille_campagne.sh <<'EOF'
+#!/bin/bash
+# Campagne d'aiguille v2 : modèle capable (Qwen3-30B-A3B) puis modèle fort à
+# contexte long (gpt-oss, avec le KV déporté pour rendre l'attention plate).
+set -u
+cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet
+J=/tmp/aiguille_campagne.log
+: > "$J"
+while pgrep -x qtrinet-core > /dev/null; do sleep 20; done
+
+echo "### Qwen3-30B-A3B, contexte 2048, 3 profondeurs" | tee -a "$J"
+python3 tools/aiguille.py /home/stephane/FastNVMe/models/Qwen3-30B-A3B-Instruct-2507-Q4_K_M.gguf \
+    2048 0.1,0.5,0.9 --lot 256 --n 40 --threads 16 \
+    --journal reports/aiguille-30b.md >> "$J" 2>&1
+
+echo "" | tee -a "$J"
+echo "### gpt-oss-120b, contexte 4096, KV déporté" | tee -a "$J"
+python3 tools/aiguille.py /home/stephane/FastNVMe/models/gpt-oss-120b-MXFP4.gguf \
+    4096 0.1,0.5,0.9 --lot 512 --n 40 --threads 16 --gpu-kv \
+    --journal reports/aiguille-gpt-oss.md >> "$J" 2>&1
+
+echo "=== fin ===" | tee -a "$J"
+EOF
+chmod +x /tmp/aiguille_campagne.sh && /tmp/aiguille_campagne.sh) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+### 🤖 Assistant
+
+⏵ Campagne d'aiguille terminée : 30B 3/3 et gpt-oss 3/3 ; je mesure 2b et 2c
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -E \"^\\| [0-9]\" reports/aiguille-30b.md reports/aiguille-gpt-oss.md | sed 's/|/·/g' && cat > /tmp/mesure_2bc.sh <<'EOF'\n#!/bin/bash\n# Chantiers 2b et 2c : ce que valent le cache d'experts et l'attention par lots\n# déportée, … [1557 caractères tronqués]`
+
+  ```
+started background job bash-38
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat reports/aiguille-30b.md | tail -6 && echo \"===\" && cat reports/aiguille-gpt-oss.md | tail -6", "description": "Read needle campaign journals"}`
+
+  ```
+| contexte | profondeur | trouvé | secondes | détail |
+|---|---|---|---|---|
+| 2048 | 0.1 | **oui** | 667.6 | prompt 2147 jetons |
+| 2048 | 0.5 | **oui** | 690.5 | prompt 2147 jetons |
+| 2048 | 0.9 | **oui** | 651.5 | prompt 2147 jetons |
+===
+
+| contexte | profondeur | trouvé | secondes | détail |
+|---|---|---|---|---|
+| 4096 | 0.1 | **oui** | 653.2 | prompt 3944 jetons |
+| 4096 | 0.5 | **oui** | 566.7 | prompt 3944 jetons |
+| 4096 | 0.9 | **oui** | 559.3 | prompt 3944 jetons |
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/rapport-aiguille.md'; s=open(p).read()\nold = \"\"\"Les tableaux complets sont dans les journaux cités ; ce qui compte ici est le\ntaux de réussite par profondeur, parce qu'il dit si le modèle *retrouve*  … [1117 caractères tronqués]`
+
+  ```
+rapport d'aiguille complété
+### 2b : experts MXFP4 en VRAM (gpt-oss, 32 jetons, ctx 512)
+experts sans  : [mesure en cours]
+  ```
+
+- **bash** `{"command": "sleep 420; cat /tmp/mesure_2bc.log 2>/dev/null; pgrep -x qtrinet-core >/dev/null && echo \"[en cours]\" || echo \"[libre]\"", "description": "Poll 2b/2c measurements", "timeoutMs": 480000}`
+
+  ```
+### 2b : experts MXFP4 en VRAM (gpt-oss, 32 jetons, ctx 512)
+experts sans  : généré  : 32 tokens en 6.254 s  (5.12 tok/s)|
+experts avec  : généré  : 32 tokens en 5.889 s  (5.43 tok/s)|[gpu] experts : 6192 demandes, 2880 manques (succès 53.5 %), 0 évictions, 10.64 Go montés sur le bus, 10.64 Go résidents|
+### 2c : attention par lots déportée (Qwen 0.5B, ctx 4096, lot 512)
+attention cpu  : perplexité 12.2175 sur 4095 tokens (0 événements, 261.6 s)
+attention gpu  : [en cours]
+  ```
+
+- **bash** `{"command": "sleep 300; tail -3 /tmp/mesure_2bc.log; pgrep -x qtrinet-core >/dev/null && echo \"[en cours]\" || echo \"[libre]\"", "description": "Wait for 2c result", "timeoutMs": 360000}`
+
+  ```
+attention cpu  : perplexité 12.2175 sur 4095 tokens (0 événements, 261.6 s)
+attention gpu  : perplexité 12.2175 sur 4095 tokens (0 événements, 93.7 s)
+=== fin ===
+[libre]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-38 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -E "^\| [0-9]" reports/aiguille-30b.md reports/aiguille-gpt-oss.md | sed 's/|/·/g' && cat > /tmp/mesure_2bc.sh <<'EOF'
+#!/bin/bash
+# Chantiers 2b et 2c : ce que valent le cache d'experts et l'attention par lots
+# déportée, machine au calme cette fois.
+set -u
+cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet
+Q=./qtrinet-core/target/release/qtrinet-core
+MQ=models/Qwen2.5-0.5B-Q8_0.gguf
+M=/home/stephane/FastNVMe/models/gpt-oss-120b-MXFP4.gguf
+J=/tmp/mesure_2bc.log
+: > "$J"
+PR="Explique en trois phrases pourquoi le ciel est bleu."
+
+echo "### 2b : experts MXFP4 en VRAM (gpt-oss, 32 jetons, ctx 512)" | tee -a "$J"
+for mode in "sans:QT_GPU=1" "avec:QT_GPU=1 QT_GPU_EXPERTS=1 QT_GPU_EXPERTS_GO=12"; do
+    nom=${mode%%:*}; envs=${mode#*:}
+    printf "experts %-5s : " "$nom" | tee -a "$J"
+    env $envs $Q $M --infer --chat --flux --prompt "$PR" --n 32 --ctx 512 --threads 16 --temp 0 2>&1 \
+        | grep -oE "généré  : [0-9]+ tokens en [0-9.]+ s  \([0-9.]+ tok/s\)|\[gpu\] experts : .*" | tr '\n' '|' | tee -a "$J"
+    echo "" | tee -a "$J"
+done
+
+echo "### 2c : attention par lots déportée (Qwen 0.5B, ctx 4096, lot 512)" | tee -a "$J"
+for mode in "cpu:QT_GPU=1" "gpu:QT_GPU=1 QT_GPU_KV=1"; do
+    nom=${mode%%:*}; envs=${mode#*:}
+    printf "attention %-4s : " "$nom" | tee -a "$J"
+    env $envs $Q $MQ --ppl /tmp/ids_qwen_long.txt --ctx 4096 --limit 4096 --dense --threads 16 --lot 512 2>&1 \
+        | grep -oE "perplexité [0-9.]+ sur [0-9]+ tokens \([0-9]+ événements, [0-9.]+ s\)" | tee -a "$J"
+done
+echo "=== fin ===" | tee -a "$J"
+EOF
+chmod +x /tmp/mesure_2bc.sh && /tmp/mesure_2bc.sh) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+### 🤖 Assistant
+
+⏵ 2c mesuré : préremplissage 261,6 → 93,7 s (×2,8), perplexité identique
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='docs/contexte-long.md'; s=open(p).read()\nold = \"\"\"Il reste, sur ce chemin : la répartition sur les **deux** GPU (le second est\nlibre), et l'extension du noyau au top-k (aujourd'hui `--attn-topk` repasse par  … [4776 caractères tronqués]`

@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 28.2 h |
+| Durée | 28.7 h |
 | Tours | 9 |
-| Messages | 1087 |
-| Appels d'outils | 1080 |
+| Messages | 1097 |
+| Appels d'outils | 1088 |
 | Fichiers touchés | 36 |
-| Commandes | 818 |
+| Commandes | 826 |
 | Sous-agents | 1 |
-| Commits | 37 |
+| Commits | 38 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -401,7 +401,7 @@ La section « Ce qu'il faut faire en
 
 ### Tour 9 — fais tous ces 6 nouveaux chantiers
 
-*76 appels d'outils.* Actions notables :
+*84 appels d'outils.* Actions notables :
 
 - create_goal
 - todo_write
@@ -417,11 +417,11 @@ La section « Ce qu'il faut faire en
 - bash — Check lot is in scope in run_infer
 - bash — Build with batched prefill
 - bash — Read run_infer destructuring
-- … et 61 autres
+- … et 69 autres
 
 **Synthèse produite :**
 
-⏵ Chantier 6 : je réécris la feuille de route et les pièges d'environnement
+⏵ 2c mesuré : préremplissage 261,6 → 93,7 s (×2,8), perplexité identique
 
 ## 3. Travail accompli
 
@@ -512,7 +512,7 @@ La section « Ce qu'il faut faire en
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 778 autres
+- … et 786 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -697,4 +697,5 @@ La section « Ce qu'il faut faire en
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A tools/aiguille.py reports/rapport-aiguille.md qtrinet-core/src && git commit -q -F - <<'EOF' &&
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p='docs/contexte-long.md'; s=open(p).read() old = """Il reste, sur ce chemin : le **dépaq
 - REPRISE : feuille de route réécrite et pièges des variables d'environnement  La section « Ce qu'il faut faire ensuite » datait d'avant les deux campagnes : ses 
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p='docs/contexte-long.md'; s=open(p).read() old = """Il reste, sur ce chemin : la réparti
 

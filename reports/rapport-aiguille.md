@@ -64,9 +64,21 @@ Deux campagnes, mêmes profondeurs (0,1 / 0,5 / 0,9), `--n 40` :
   `--lot 512 --gpu-kv` — le KV déporté en VRAM rend l'attention plate et donc la
   passe abordable, journal `reports/aiguille-gpt-oss.md`.
 
-Les tableaux complets sont dans les journaux cités ; ce qui compte ici est le
-taux de réussite par profondeur, parce qu'il dit si le modèle *retrouve* au fond
-de la botte de foin ou seulement au début.
+| modèle | contexte | 0,10 | 0,50 | 0,90 | secondes/sonde |
+|---|---|---|---|---|---|
+| Qwen2.5-1.5B | 512 | ✅ | ✅ | ✅ | 82-87 |
+| Qwen2.5-1.5B | 2 048 | ✅ | ✅ | ✅ | 241-244 |
+| **Qwen3-30B-A3B** | 2 048 | ✅ | ✅ | ✅ | 651-691 |
+| **gpt-oss-120b** (KV déporté) | 4 096 | ✅ | ✅ | ✅ | 559-653 |
+
+**12 sondes sur 12** trouvées, à toutes les profondeurs — y compris à 90 % de la
+botte de foin, c'est-à-dire juste avant la question. Autrement dit : sur ces
+modèles et à ces longueurs, la recherche dans le contexte fonctionne, et la
+perplexité qui se dégrade avec la longueur (14,23 à 8 192 jetons contre 13,14 à
+512) ne dit PAS que le modèle perd ses informations.
+
+Les journaux complets sont `reports/aiguille-30b.md` et
+`reports/aiguille-gpt-oss.md`.
 
 ### Ce que la campagne a coûté, et pourquoi c'est le vrai obstacle
 
