@@ -10844,3 +10844,72 @@ llama.cpp KV q4_0  : Final estimate: PPL = 98.5317
 ⏵ Item 3 complet : int8 +5,2 % chez nous contre +0,8 % pour llama.cpp — piste : échelle par bloc de 32
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='docs/contexte-long.md'\ns=open(p).read()\ns=s.replace(\"\"\"| KV | nous | llama.cpp |\n|---|---|---|\n| f32 / f16 | 13,14 | 14,24 |\n| **int8** | **14,07** (+7,1 %) | 14,68 (+3,1 %) |\n| **int4** | **63,61** (+38 … [2581 caractères tronqués]`
+
+  ```
+6a64b35 Item 3 : KV quantifie mesure aussi a 4 600 jetons, et compare a llama.cpp
+
+### E. attention creuse : mêmes jetons (1536-2047), contexte 2048, fenêtre et top-k
+aucune restriction :
+  ```
+
+- **bash** `{"command": "sleep 300; tail -8 /tmp/mesures_finales.log; echo \"=== lot final ===\"; cat /tmp/lot_final.log 2>/dev/null | tail -6", "description": "Wait for sparse attention results", "timeoutMs": 340000}`
+
+  ```
+### D bis. référence llama.cpp à 8192
+llama.cpp KV f16   : Final estimate: PPL = 16.5904
+llama.cpp KV q8_0  : Final estimate: PPL = 16.7309
+llama.cpp KV q4_0  : Final estimate: PPL = 98.5317
+
+### E. attention creuse : mêmes jetons (1536-2047), contexte 2048, fenêtre et top-k
+aucune restriction : perplexité 298.5631 sur 512 tokens
+--attn-topk 256    : === lot final ===
+  ```
+
+- **bash** `{"command": "sleep 300; tail -5 /tmp/mesures_finales.log", "description": "Wait for the sparse attention comparison", "timeoutMs": 340000}`
+
+  ```
+llama.cpp KV q4_0  : Final estimate: PPL = 98.5317
+
+### E. attention creuse : mêmes jetons (1536-2047), contexte 2048, fenêtre et top-k
+aucune restriction : perplexité 298.5631 sur 512 tokens
+--attn-topk 256    :
+  ```
+
+- **bash** `{"command": "sleep 300; tail -6 /tmp/mesures_finales.log; ps -o pid,etime,pcpu -C qtrinet-core 2>/dev/null | tail -1", "description": "Continue waiting for sparse attention", "timeoutMs": 340000}`
+
+  ```
+llama.cpp KV q4_0  : Final estimate: PPL = 98.5317
+
+### E. attention creuse : mêmes jetons (1536-2047), contexte 2048, fenêtre et top-k
+aucune restriction : perplexité 298.5631 sur 512 tokens
+--attn-topk 256    : perplexité 234.8771 sur 512 tokens
+--attn-window 512  : 1037762       03:43 1040
+  ```
+
+### 🤖 Assistant
+
+⏵ Attention creuse : top-256 **améliore** la perplexité (234,9 contre 298,6) à contexte 2 048
+
+- **bash** `{"command": "sleep 280; tail -4 /tmp/mesures_finales.log; echo \"=== lot final ===\"; tail -8 /tmp/lot_final.log 2>/dev/null", "description": "Wait for the window variant and lot timings", "timeoutMs": 320000}`
+
+  ```
+### E. attention creuse : mêmes jetons (1536-2047), contexte 2048, fenêtre et top-k
+aucune restriction : perplexité 298.5631 sur 512 tokens
+--attn-topk 256    : perplexité 234.8771 sur 512 tokens
+--attn-window 512  : === lot final ===
+  ```
+
+- **bash** `{"command": "sleep 300; tail -3 /tmp/mesures_finales.log; echo \"=== lot final ===\"; cat /tmp/lot_final.log 2>/dev/null", "description": "Check the last battery item and lot timings", "timeoutMs": 340000}`
+
+  ```
+--attn-topk 256    : perplexité 234.8771 sur 512 tokens
+--attn-window 512  : perplexité 3269.3430 sur 512 tokens
+
+=== lot final ===
+  ```
+
+### 🤖 Assistant
+
+⏵ Fenêtre élargie = ×11 de perplexité (les couches locales veulent leurs 128) ; je consigne l'item 8
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='docs/contexte-long.md'\ns=open(p).read()\ns=s.replace(\"\"\"3. **Débit du préremplissage** : `--lot N` sur un modèle dense et sur gpt-oss,\n   machine au calme ; c'est le chiffre qui dit si E1 tient ses promesses … [2075 caractères tronqués]`

@@ -235,6 +235,25 @@ discrimine donc rien sur la rotation, et il reste à le refaire avec
 3. **Débit du préremplissage** : `--lot N` sur un modèle dense et sur gpt-oss,
    machine au calme ; c'est le chiffre qui dit si E1 tient ses promesses.
 
+### Premiers résultats d'attention creuse (gpt-oss, mêmes 512 jetons, contexte 2 048)
+
+| restriction | perplexité |
+|---|---|
+| aucune | 298,56 |
+| **top-256 clés par requête** (`--attn-topk 256`) | **234,88** ← *meilleure* |
+| fenêtre de 512 sur les couches locales (`--attn-window 512`) | 3 269,34 |
+
+Deux enseignements opposés, et tous deux utiles :
+
+- **restreindre aux 256 meilleures clés AMÉLIORE la perplexité** (−21 %) : sur du
+  texte brut, l'attention lointaine de ce modèle ajoute du bruit. C'est le
+  premier gain de qualité du chantier long contexte, et il réduit en plus le
+  travail du softmax et de la somme pondérée ;
+- **élargir la fenêtre des couches locales la détruit** (×11) : ces couches ont
+  été entraînées avec 128 jetons et des puits appris ; les en priver — ou leur en
+  donner plus — les fait sortir de leur régime. La fenêtre déclarée par le modèle
+  n'est pas un réglage, c'est une propriété.
+
 ## 7. Rappel de méthode
 
 Le contexte long est le seul chantier où **le mur change de nature** : à contexte
