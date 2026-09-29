@@ -817,6 +817,95 @@ fn run_plan(args: &[String]) {
     println!("  {}", libre.trim());
     println!("  → {}", if total / 1e9 < 100.0 { "le modèle tient en mémoire, sans copie" }
                       else { "le modèle DÉPASSE la mémoire : il faut un découpage par couche" });
+
+    // ------------------------------------------------------- contexte long
+    // Le mur du contexte n'est pas le même que celui des poids : le KV croît
+    // LINÉAIREMENT avec la longueur et se relit EN ENTIER à chaque jeton. À
+    // 1 M, c'est ce trafic qui décide de tout — d'où ce chiffrage, séparé en
+    // f32 / int8 / int4 et tenant compte des couches à fenêtre glissante, qui
+    // n'ont jamais besoin de plus de `fenetre` entrées.
+    let ctx_demande = {
+        let mut c = g.cfg("context_length").and_then(|m| m.as_u64()).unwrap_or(4096) as usize;
+        let mut i = 2;
+        while i + 1 < args.len() {
+            if args[i] == "--ctx" { c = args[i + 1].parse().unwrap_or(c); }
+            i += 1;
+        }
+        c
+    };
+    let n_kv = g.cfg("attention.head_count_kv").and_then(|m| m.as_u64()).unwrap_or(0) as usize;
+    let head_dim = {
+        let d = g.cfg("attention.key_length").and_then(|m| m.as_u64()).unwrap_or(0) as usize;
+        if d > 0 { d } else {
+            let h = g.cfg("embedding_length").and_then(|m| m.as_u64()).unwrap_or(1) as usize;
+            let nh = g.cfg("attention.head_count").and_then(|m| m.as_u64()).unwrap_or(1) as usize;
+            h / nh.max(1)
+        }
+    };
+    let fenetre = g.cfg("attention.sliding_window").and_then(|m| m.as_u64()).unwrap_or(0) as usize;
+    let motif = if fenetre > 0 && arch == "gpt-oss" { 2 } else { 0 };
+    let n_fenetrees = if fenetre > 0 && motif > 1 {
+        (0..n_layer).filter(|&l| l % motif < motif - 1).count()
+    } else if fenetre > 0 { n_layer } else { 0 };
+    let n_pleines = n_layer - n_fenetrees;
+    println!("\n=== contexte : {} jetons ===", ctx_demande);
+    println!("  KV par jeton et par couche : {} têtes KV × {} dim × 2 (K et V)",
+             n_kv, head_dim);
+    if n_fenetrees > 0 {
+        println!("  couches à fenêtre glissante : {n_fenetrees}/{n_layer} \
+                  (leur KV s'arrête à {fenetre} entrées) · pleines : {n_pleines}");
+    }
+    let par_jeton = |b: f64| (n_kv * head_dim) as f64 * b * 2.0;
+    for (nom, b) in [("f32", 4.0), ("int8", 1.0), ("int4", 0.5)] {
+        let complet = par_jeton(b) * n_layer as f64 * ctx_demande as f64;
+        let econome = par_jeton(b) * n_pleines as f64 * ctx_demande as f64
+                    + par_jeton(b) * n_fenetrees as f64 * fenetre.min(ctx_demande) as f64;
+        println!("  KV {nom:<4} : {:>7.2} Go en attention complète partout · \
+                  {:>7.2} Go avec la fenêtre", complet / 1e9, econome / 1e9);
+    }
+    // Trafic de relecture à chaque jeton : c'est lui qui fixe le débit de
+    // décodage, pas les poids.
+    let trafic = |b: f64| par_jeton(b) * n_pleines as f64 * ctx_demande as f64
+                           + par_jeton(b) * n_fenetrees as f64 * fenetre.min(ctx_demande) as f64;
+    print!("  relecture du KV par jeton :");
+    for (nom, b) in [("f32", 4.0), ("int8", 1.0), ("int4", 0.5)] {
+        print!(" {nom} {:.2} Go ·", trafic(b) / 1e9);
+    }
+    println!();
+    println!("  → décodage (KV seul, poids non compris) :");
+    for (nom, debit) in [("RAM 20 Go/s", 20.0), ("PCIe 6,5", 6.5), ("NVLink 25,8", 25.78),
+                         ("1 GPU 380", 380.0), ("2 GPU 760", 760.0)] {
+        let t = trafic(4.0) / 1e9 / debit;
+        let t8 = trafic(1.0) / 1e9 / debit;
+        let t4 = trafic(0.5) / 1e9 / debit;
+        println!("     {nom:<12} f32 {:>7.1} ms · int8 {:>6.1} ms · int4 {:>6.1} ms par jeton",
+                 t * 1e3, t8 * 1e3, t4 * 1e3);
+    }
+    // Préremplissage : notre moteur traite UN jeton à la fois, donc remplir la
+    // fenêtre coûte ce que coûterait la génération de la même longueur.
+    let par_jeton_ms = trafic(4.0) / 1e9 / 20.0 * 1e3 + actifs / 1e9 / 8.0 * 1e3;
+    let prefill_h = ctx_demande as f64 * par_jeton_ms / 1000.0 / 3600.0;
+    println!("  préremplissage SÉQUENTIEL estimé : {:.1} h (le moteur ne fait pas de lot ; \
+              l'attention y est en O(N) par jeton)", prefill_h);
+    // Portée de la rotation : au-delà de `initial_context_length`, il faut
+    // l'étirement — et au-delà de `max_position_embeddings`, plus rien n'est
+    // garanti par l'entraînement.
+    let initial = g.cfg("rope.scaling.original_context_length").and_then(|m| m.as_u64());
+    let facteur = g.cfg("rope.scaling.factor").and_then(|m| m.as_f64());
+    let max_pos = g.cfg("context_length").and_then(|m| m.as_u64()).unwrap_or(0);
+    println!("  rotation : base {} · initial {} · facteur déclaré {} · max_position_embeddings {}",
+             g.cfg("rope.freq_base").and_then(|m| m.as_f64()).unwrap_or(10000.0),
+             initial.map(|v| v.to_string()).unwrap_or_else(|| "—".into()),
+             facteur.map(|v| format!("×{v}")).unwrap_or_else(|| "—".into()),
+             max_pos);
+    if ctx_demande as u64 > max_pos && max_pos > 0 {
+        println!("  → AU-DELÀ du contexte entraîné : extrapolation, qualité non garantie");
+    }
+    if let (Some(i), Some(f)) = (initial, facteur) {
+        let couvert = i as f64 * f;
+        println!("  → YaRN couvre {} jetons ({i} × {f}) ; à {ctx_demande}, il faudrait un facteur ×{:.0}",
+                 couvert as u64, ctx_demande as f64 / i as f64);
+    }
 }
 
 /// Construit les fenêtres de perplexité en **format harmony** (gpt-oss).
@@ -1198,6 +1287,12 @@ fn run_ppl(args: &[String]) {
     };
     let mut n_logits = 0i32;
     let mut tampon: Vec<u8> = Vec::new();
+    // Profil par profondeur : la perte moyenne par tranche de 256 positions.
+    // Une perplexité qui MONTE avec la position ne dit pas du tout la même
+    // chose qu'une perplexité uniformément mauvaise — et à 4 096 jetons, la
+    // moyenne seule ne permet pas de trancher.
+    let profil = args.iter().any(|a| a == "--ppl-profil");
+    let mut seaux: Vec<(f64, usize)> = vec![(0.0, 0); ctx.div_ceil(256)];
     for (i_f, (chunk, masque)) in fenetres.iter().enumerate() {
         let (mut nll_f, mut n_f) = (0f64, 0usize);
         for pos in 0..chunk.len() {
@@ -1214,6 +1309,8 @@ fn run_ppl(args: &[String]) {
                 nll_f += nll_tok;
                 n += 1;
                 n_f += 1;
+                let b = (pos + 1) / 256;
+                if b < seaux.len() { seaux[b].0 += nll_tok; seaux[b].1 += 1; }
                 perte.push(nll_tok as f32);
                 if let Some(w) = journal.as_mut() {
                     use std::io::Write;
@@ -1242,6 +1339,14 @@ fn run_ppl(args: &[String]) {
         fic.write_all(&n_logits.to_le_bytes()).unwrap();
         fic.sync_all().unwrap();
         println!("logits exportés : {f} — {n_logits} positions × {} valeurs", mdl.cfg.vocab);
+    }
+    if profil {
+        println!("profil par profondeur (perplexité par tranche de 256 positions) :");
+        for (i, (s, c)) in seaux.iter().enumerate() {
+            if *c == 0 { continue; }
+            println!("    {:>6}-{:<6} : {:>9.3}  ({} jetons notés)",
+                     i * 256, i * 256 + 255, (s / *c as f64).exp(), c);
+        }
     }
     let ppl = (nll / n as f64).exp();
     if let Some(hb) = mdl.hebb.as_ref() {

@@ -174,7 +174,63 @@ chemins l'utilisent. Mesuré sur gpt-oss : `--tokenize` passe de ~60 s à
 **0,385 s**, identifiants inchangés, et chaque `--ppl` économise une lecture
 complète. Le contrôle de non-régression Qwen ne bouge pas (19,3885).
 
-## 8. Ce qui reste ouvert
+## 8. Contexte long : la rotation, la température, et ce qui dégrade vraiment
+
+Le chantier suivant était le **YaRN à retardement** : n'appliquer l'étirement
+qu'au-delà du contexte initial. En le mesurant, deux choses sont apparues.
+
+### a. La moitié nuisible de YaRN, c'est la température
+
+YaRN a deux composantes : l'**interpolation des basses fréquences** (qui étend
+la portée) et la **mise à l'échelle de température** `mscale = 1 + 0,1·ln f` (qui
+compense l'entropie du softmax quand les clés se multiplient). Le moteur sait
+maintenant les activer séparément (`QT_YARN_MSCALE`).
+
+| longueur | RoPE simple | YaRN **sans** mscale | YaRN complet (référence) |
+|---|---|---|---|
+| 512 | **18,58** | 19,65 | 174,34 |
+| 1 024 | **46,94** | 71,35 | 417,65 |
+| 2 048 | **121,75** | 192,63 | 722,56 |
+
+Retirer la température divise la perplexité par **8,9** à 512 jetons, 5,9 à
+1 024, 3,8 à 2 048. C'est donc la température — pas l'interpolation — qui rend
+le YaRN déclaré catastrophique sur du texte brut, alors que HF, llama.cpp et
+l'implémentation officielle d'OpenAI l'appliquent toutes telle quelle (et que
+notre moteur les reproduit au chiffre près quand on la garde).
+
+Le défaut du moteur devient donc : **RoPE simple sous la longueur initiale,
+interpolation seule au-delà** ; `QT_YARN=1` rétablit le comportement de
+référence pour qui veut comparer.
+
+### b. La dégradation avec la longueur n'est PAS un bug du moteur
+
+La perplexité grimpe fortement avec la longueur (×9 pour le RoPE simple entre
+512 et 4 096), et le profil par profondeur (`--ppl-profil`, ajouté pour ça) le
+localise :
+
+```
+   0-255 : 13,715      768-1023 : 204,466     2048-2303 : 183,081
+ 256-511 : 25,142     1024-1279 : 292,803     2816-3071 : 212,334
+ 512-767 : 68,511     1536-1791 : 532,616     3584-3839 : 542,885
+```
+
+Deux causes se superposent, et une seule est imputable au moteur :
+
+- **le contenu** : la même tranche de 260 jetons prise plus loin dans le corpus
+  (jetons 1400-1659) donne 59,36 **à la position 0**, contre 13,94 pour la
+  tranche initiale — le corpus n'est pas homogène ;
+- **la position** : la même tranche à sa place réelle (~1400) tombe dans une
+  tranche à ~380-500, soit un facteur ~7 de plus.
+
+La référence tranche : **llama.cpp, mêmes 2 048 identifiants, un seul lot,
+YaRN déclaré, donne 714,83 ; notre moteur 722,56** (1,1 % d'écart, la même
+signature que les 3 à 7 % mesurés à 63 et 512 jetons). La dégradation avec la
+longueur est donc **celle du modèle sur du texte brut hors distribution** — pas
+un défaut de calcul. C'est aussi ce qui rend le chiffrage du 1 M
+(`docs/contexte-long.md`) une affaire d'ingénierie mémoire et de préremplissage,
+pas de rotation.
+
+## 9. Ce qui reste ouvert
 
 1. **YaRN à retardement** : n'appliquer l'étirement qu'au-delà de 4 096
    (`initial_context_length` du modèle). C'est la seule façon de garder le gain à

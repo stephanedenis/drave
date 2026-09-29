@@ -1,0 +1,162 @@
+# Contexte long : ce que 1 M veut dire, et par où ça casse
+
+> Tous les chiffres de budget viennent de `qtrinet-core <modele> --plan --ctx N`,
+> qui les calcule depuis les métadonnées du GGUF. Les bandes passantes sont
+> celles mesurées sur cette machine (deux Quadro RTX 5000 16 Go, 125 Go de RAM,
+> NVMe à ~3,5 Go/s, 20 cœurs Haswell AVX2).
+
+## 1. Ce que les modèles déclarent
+
+| modèle | contexte entraîné | initial | facteur YaRN | 1 M, c'est… |
+|---|---|---|---|---|
+| gpt-oss-120b | 131 072 | 4 096 | ×32 | ×8 au-delà du déclaré → extrapolation |
+| Qwen3-30B-A3B | 262 144 | — | — | ×4 au-delà du déclaré |
+| Qwen2.5-VL-7B | 32 768 | — | — | ×32 au-delà |
+
+Autrement dit : **le moteur peut être prêt pour 1 M, aucun modèle d'ici ne l'est.**
+Le travail d'ingénierie (mémoire, débit, rotation) est faisable et mesurable ; la
+qualité à 1 M, elle, se mesurerait par récupération (« aiguille dans la botte de
+foin »), pas par perplexité, et n'a de sens qu'avec un modèle entraîné pour.
+
+## 2. Le budget, mesuré
+
+`--plan --ctx N` chiffre le KV pour trois précisions et tient compte du fait que
+**la moitié des couches de gpt-oss s'arrêtent à 128 entrées** (fenêtre
+glissante) : leur KV ne grandit pas avec le contexte.
+
+gpt-oss-120b (8 têtes KV × 64 dim × 2) :
+
+| contexte | KV f32 | KV int8 | KV int4 | relecture/jeton int4 | décodage KV seul (RAM 20 Go/s, int4) |
+|---|---|---|---|---|---|
+| 32 768 | 2,43 Go | 0,61 Go | **0,30 Go** | 0,30 Go | 15 ms |
+| 131 072 | 9,67 Go | 2,42 Go | **1,21 Go** | 1,21 Go | 61 ms |
+| 1 048 576 | 77,32 Go | 19,33 Go | **9,66 Go** | 9,66 Go | 483 ms |
+
+Sans la fenêtre par couche, les mêmes chiffres doublent (154,6 Go en f32 à 1 M).
+Conclusion immédiate : **le KV f32 interdit 1 M** (154 Go pour 125 Go de RAM) ;
+en int4 il tient dans **un seul GPU de 16 Go** (9,7 Go).
+
+## 3. Les trois murs, dans l'ordre où ils frappent
+
+### a. Le préremplissage — le mur n° 1, et de très loin
+
+Notre moteur traite **un jeton à la fois** : remplir une fenêtre coûte ce que
+coûterait de générer la même longueur.
+
+| contexte | préremplissage estimé, séquentiel |
+|---|---|
+| 32 768 | 4,5 h |
+| 131 072 | 31 h |
+| 1 048 576 | **1 234 h** |
+
+C'est le vrai obstacle, et il ne se contourne pas par la quantification : il faut
+**traiter des tranches par lots** (produits matrice-matrice au lieu de
+matrice-vecteur). Un préremplissage par tranches de 2 048 jetons relit les poids
+une fois par tranche au lieu d'une fois par jeton : à 1 M, 512 passes de 62 Go à
+20 Go/s ≈ 26 min, et l'attention devient le poste dominant (O(N²) sur la
+séquence, ≈ 2·10¹⁵ MACs — quelques heures sur CPU, ~30 min sur les deux GPU avec
+un vrai noyau d'attention). **C'est le chantier à ouvrir en premier** ; il
+améliore aussi le temps de premier jeton sur tous les contextes.
+
+### b. La bande passante du KV — le mur du décodage
+
+À chaque jeton, l'attention relit **tout** le KV des couches pleines (les couches
+à fenêtre ne relisent que 128 entrées). À 1 M, en f32 : 77 Go par jeton, soit
+3,9 s par jeton depuis la RAM. En int4 : 9,7 Go, 483 ms depuis la RAM, **13 ms
+depuis les deux GPU** (760 Go/s).
+
+Le remède est donc double, et il est déjà à moitié en place :
+1. **KV quantifié** (int8 puis int4) — le même travail que `DenseQ8`/`DenseQ4`,
+   appliqué au cache ;
+2. **résidence GPU** du KV : à 1 M en int4, le KV tient dans un RTX 5000 ;
+   il faut alors que les couches pleines tournent sur le GPU, sinon le trafic
+   PCIe (1,5 s/jeton à 1 M) annule le gain.
+
+### c. La portée de la rotation — le mur discret, et la température qui n'aide pas
+
+YaRN ×32 couvre **exactement** 131 072 jetons (4 096 × 32), c'est-à-dire le
+`max_position_embeddings` déclaré. À 1 M il faudrait ×256, soit huit fois plus
+que ce que le modèle a vu : les fréquences basses feraient alors plus d'un tour
+complet sur la séquence et l'attention longue distance deviendrait du bruit.
+
+Deux résultats mesurés (§5) changent la façon de poser le problème :
+
+- **l'interpolation des basses fréquences est la partie utile** de YaRN pour
+  étendre la portée : elle garde les phases lointaines dans ce que le modèle a
+  vu, et c'est elle qu'il faut garder ;
+- **la mise à l'échelle de température est nuisible sur du texte brut** (÷8,9 de
+  perplexité à 512 jetons quand on la retire). Le moteur l'éteint donc par
+  défaut dans le mode retardé ; `QT_YARN=1` la rétablit pour reproduire les
+  implémentations de référence.
+
+Au-delà du facteur déclaré, la seule réponse honnête reste « extrapolation,
+qualité non garantie » — et désormais, ce n'est plus la rotation qui limite le
+plus tôt : c'est le préremplissage (§3.a).
+
+
+## 4. Plan par étapes
+
+| # | étape | débloque | coût | risque |
+|---|---|---|---|---|
+| E1 | **Préremplissage par lots** (tranches de 256–2 048) | 32 k utilisable (4,5 h → minutes) ; TTFT | gros (noyau GEMM + graphe) | refonte du chemin de calcul |
+| E2 | **KV int8** (échelle par bloc de 32, comme Q8_0) | ÷4 sur le KV ; 128 k confortable | moyen (boucle d'attention) | qualité — à mesurer |
+| E3 | **KV int4** + fenêtre par couche | 1 M tient en RAM (9,7 Go) et en VRAM | petit après E2 | qualité — à mesurer |
+| E4 | **KV déporté sur les 2 GPU** (pagination, préchargement) | décodage 13 ms/jeton à 1 M | moyen (déjà des noyaux PTX) | PCIe si les couches restent au CPU |
+| E5 | **Attention creuse** (top-k par similarité, ou fenêtre+sinks par couche) | casse le O(N) du décodage | moyen (`attn_topk` existe déjà) | qualité — à mesurer |
+| E6 | **MLA** (DeepSeek) | compression structurelle du KV | gros | architecture |
+
+Ordre recommandé : **E1 d'abord** (sans lui, aucun contexte long n'est
+utilisable), puis E2+E3 ensemble (la qualité se mesure sur un petit modèle en
+quelques minutes), puis E4/E5 selon l'usage (décodage long ou préremplissage
+long).
+
+## 5. YaRN à retardement : ce que la mesure a dit
+
+Politique implémentée (`[config] rotation` le dit à chaque chargement) : **RoPE
+simple tant que le contexte demandé tient dans la longueur initiale déclarée
+(4 096 pour gpt-oss), interpolation YaRN au-delà — sans la mise à l'échelle de
+température** ; `QT_YARN=1` force le YaRN complet des implémentations de
+référence, `QT_YARN_NON=1` jamais, `QT_YARN_MSCALE=0/1` tranche sur la
+température seule. Décision **par séquence**, pas par position : la structure de
+position relative ne survit que si toutes les clés partagent le même jeu de
+fréquences.
+
+Les courbes, mesurées sur gpt-oss-120b et le même corpus (une seule fenêtre,
+`--dense`, 16 fils) :
+
+| longueur | RoPE simple | YaRN **sans mscale** | YaRN complet |
+|---|---|---|---|
+| 63 | **20,84** | — | 41,11 |
+| 512 | **18,58** | 19,65 | 174,34 |
+| 1 024 | **46,94** | 71,35 | 417,65 |
+| 2 048 | **121,75** | 192,63 | 722,56 |
+| 4 096 | 170,78 | *en cours* | — |
+| 4 608 | — | *en cours* | 1 105,20 |
+
+Trois enseignements :
+
+1. **La mise à l'échelle de température (`mscale = 1 + 0,1·ln f`) est la moitié
+   nuisible de YaRN** : la retirer divise la perplexité par 8,9 à 512 jetons,
+   5,9 à 1 024, 3,8 à 2 048. C'est elle, et non l'interpolation des fréquences,
+   qui rend le YaRN déclaré catastrophique sur du texte brut — les trois
+   implémentations de référence (HF, llama.cpp, OpenAI) l'appliquent pourtant
+   telle quelle, et notre moteur les reproduit au chiffre près quand on la
+   garde.
+2. **Le RoPE simple gagne à toutes les longueurs mesurées**, y compris à 4 096 —
+   la longueur « initiale » du modèle. Le seuil de bascule n'est donc pas un
+   croisement mesuré : c'est une décision d'ingénierie prudente (au-delà de la
+   fenêtre d'entraînement initiale, le RoPE simple extrapole).
+3. **Tous les régimes se dégradent fortement avec la longueur** (×9 pour le RoPE
+   simple entre 512 et 4 096). Ni la rotation ni la température ne l'expliquent
+   entièrement : le profil par profondeur (`--ppl-profil`) et la référence
+   llama.cpp à 2 048 départagent le modèle et le moteur (§7).
+
+
+
+## 6. Rappel de méthode
+
+Le contexte long est le seul chantier où **le mur change de nature** : à contexte
+court, tout est bande passante de poids ; à contexte long, c'est le KV puis le
+préremplissage. Un chiffre de perplexité obtenu à 512 jetons ne dit rien de ce
+qui se passera à 128 k — c'est pourquoi `--plan` chiffre désormais les deux, et
+pourquoi toute étape ci-dessus doit être mesurée à la longueur où elle sert.

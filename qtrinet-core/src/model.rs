@@ -53,7 +53,7 @@ pub struct Cfg {
     pub n_rot: usize,
     /// Étirement de contexte YaRN : `(facteur, beta_rapide, beta_lent,
     /// contexte d'origine)`. `None` pour un RoPE ordinaire.
-    pub yarn: Option<(f32, f32, f32, f32)>,
+    pub yarn: Option<(f32, f32, f32, f32, bool)>,
 }
 
 /// Une projection, dans l'un des deux formats, plus son biais éventuel.
@@ -573,20 +573,57 @@ impl Model {
                 // entier ; seul `rope.dimension_count` déclaré fait foi.
                 else { 0 }
             },
-            yarn: match g.cfg("rope.scaling.type").and_then(|m| m.as_str()) {
-                // YaRN est ACTIF seulement sur demande : notre implémentation
-                // MESURÉE dégrade la perplexité d'un facteur 4,6 sur gpt-oss
-                // (184,9 avec, 39,8 sans). Le RoPE ordinaire à base 150 000 est
-                // meilleur à contexte court, et c'est le seul régime que nous
-                // testons. La rampe YaRN reste à corriger avant d'être activée.
-                Some("yarn") if std::env::var("QT_YARN").is_ok() => Some((
-                    g.cfg("rope.scaling.factor").and_then(|m| m.as_f64()).unwrap_or(1.0) as f32,
-                    g.cfg("rope.scaling.yarn_beta_fast").and_then(|m| m.as_f64()).unwrap_or(32.0) as f32,
-                    g.cfg("rope.scaling.yarn_beta_slow").and_then(|m| m.as_f64()).unwrap_or(1.0) as f32,
-                    g.cfg("rope.scaling.original_context_length")
-                        .and_then(|m| m.as_u64()).unwrap_or(4096) as f32,
-                )),
-                _ => None,
+            // ------------------------------------------------ rotation (RoPE)
+            // Trois régimes, choisis **par mesure** :
+            //
+            //   `QT_YARN=1`      YaRN à toutes les positions, comme HF, llama.cpp
+            //                    et l'implémentation officielle d'OpenAI ;
+            //   `QT_YARN_NON=1`  jamais de YaRN (ce que fait `--sans-yarn`) ;
+            //   défaut           **YaRN à retardement** : RoPE simple tant que le
+            //                    contexte demandé tient dans la longueur initiale
+            //                    du modèle (4 096 pour gpt-oss), YaRN au-delà.
+            //
+            // Mesuré sur gpt-oss à contexte 512 : YaRN ×32 coûte un facteur 9
+            // (174,34 contre 18,58). Mais l'étirement est indispensable pour
+            // dépasser les 4 096 positions vues à l'entraînement initial : le
+            // retardement garde les deux propriétés.
+            //
+            // Pourquoi une décision par SÉQUENCE et non par position : la
+            // structure de position relative survit tant que toutes les clés
+            // partagent le même jeu de fréquences (le produit q·k ne dépend
+            // alors que de la différence des positions). Changer de jeu de
+            // fréquences en cours de séquence détruit cette propriété pour
+            // toutes les paires qui traversent la frontière — c'est un choix de
+            // conception, pas une simplification.
+            yarn: {
+                let declare = match g.cfg("rope.scaling.type").and_then(|m| m.as_str()) {
+                    Some("yarn") => Some((
+                        g.cfg("rope.scaling.factor").and_then(|m| m.as_f64()).unwrap_or(1.0) as f32,
+                        g.cfg("rope.scaling.yarn_beta_fast").and_then(|m| m.as_f64()).unwrap_or(32.0) as f32,
+                        g.cfg("rope.scaling.yarn_beta_slow").and_then(|m| m.as_f64()).unwrap_or(1.0) as f32,
+                        g.cfg("rope.scaling.original_context_length")
+                            .and_then(|m| m.as_u64()).unwrap_or(4096) as f32,
+                        // La mise à l'échelle de température (`mscale`) est la
+                        // moitié NUISIBLE de YaRN : mesuré sur gpt-oss, la
+                        // retirer fait passer la perplexité de 174,34 à 19,65 à
+                        // 512 jetons, de 417,65 à 71,35 à 1 024, de 722,56 à
+                        // 192,63 à 2 048. Le mode FORCÉ (`QT_YARN=1`) garde donc
+                        // le comportement des implémentations de référence, et
+                        // le mode retardé — celui du moteur — s'en passe.
+                        // `QT_YARN_MSCALE=0/1` tranche explicitement dans les
+                        // deux cas.
+                        std::env::var("QT_YARN_MSCALE").map(|v| v != "0")
+                            .unwrap_or_else(|_| std::env::var("QT_YARN").is_ok()),
+                    )),
+                    _ => None,
+                };
+                let toujours = std::env::var("QT_YARN").is_ok();
+                let jamais = std::env::var("QT_YARN_NON").is_ok();
+                match declare {
+                    Some(y) if toujours => Some(y),
+                    Some(y) if !jamais && ctx as f32 > y.3 => Some(y),
+                    _ => None,
+                }
             },
         };
 
@@ -690,6 +727,21 @@ impl Model {
             println!("[config] fenêtre glissante {fenetre} sur {n_fen}/{} couches (motif {swa_pattern}{})",
                      cfg.n_layer,
                      if swa_pattern <= 1 { ", toutes" } else { " alterné" });
+        }
+        // Trace de rotation : le régime choisi ET la raison. Sans elle, un
+        // chiffre de perplexité ne dit pas s'il vient du RoPE simple ou de YaRN
+        // — et c'est exactement la confusion qui a coûté une session.
+        match (cfg.yarn, g.cfg("rope.scaling.original_context_length").and_then(|m| m.as_u64()),
+               g.cfg("rope.scaling.factor").and_then(|m| m.as_f64())) {
+            (Some((f, _, _, o, ms)), _, _) =>
+                println!("[config] rotation : YaRN ×{f}{} (contexte demandé {ctx} > {o} initial)",
+                         if ms { "" } else { " sans mscale" }),
+            (None, Some(o), Some(f)) if o as usize >= ctx =>
+                println!("[config] rotation : RoPE simple (contexte {ctx} ≤ {o} initial ; \
+                          YaRN ×{f} prendrait le relais au-delà)"),
+            (None, Some(o), Some(f)) =>
+                println!("[config] rotation : RoPE simple (YaRN ×{f} refusé, contexte {ctx} > {o})"),
+            _ => println!("[config] rotation : RoPE simple (le modèle ne déclare pas YaRN)"),
         }
         // Tête en 4 bits : la plus grosse matrice du modèle, donc le plus gros
         // gain possible sur un noyau déjà au mur de la bande passante.
@@ -1028,7 +1080,7 @@ impl Model {
     /// qui compense la perte d'amplitude de l'attention dilatée.
     fn rope_yarn(v: &mut [f32], n_head: usize, head_dim: usize, pos: usize, base: f32,
                  facteur: f32, beta_rapide: f32, beta_lent: f32, ctx_origine: f32,
-                 n_rot: usize) {
+                 mscale_actif: bool, n_rot: usize) {
         let n_rot = if n_rot == 0 || n_rot > head_dim { head_dim } else { n_rot };
         let half = n_rot / 2;
         let ln_base = base.ln();
@@ -1036,7 +1088,10 @@ impl Model {
                      / (2.0 * ln_base)).floor();
         let corr1 = (head_dim as f32 * (ctx_origine / (beta_lent * 2.0 * std::f32::consts::PI)).ln()
                      / (2.0 * ln_base)).ceil();
-        let mscale = 1.0 + 0.1 * facteur.ln();
+        // La mise à l'échelle de température compense l'entropie du softmax
+        // quand le nombre de clés grandit ; à contexte court, elle rend
+        // l'attention trop tranchée. Séparable de l'interpolation.
+        let mscale = if mscale_actif { 1.0 + 0.1 * facteur.ln() } else { 1.0 };
         for h in 0..n_head {
             let t = &mut v[h * head_dim..(h + 1) * head_dim];
             for i in 0..half {
@@ -1174,9 +1229,9 @@ impl Model {
             }
             let tr = Instant::now();
             match cfg.yarn {
-                Some((f, bf, bl, orig)) => {
-                    Self::rope_yarn(&mut q, nh, hd, pos, cfg.rope_base, f, bf, bl, orig, cfg.n_rot);
-                    Self::rope_yarn(&mut k, nkv, hd, pos, cfg.rope_base, f, bf, bl, orig, cfg.n_rot);
+                Some((f, bf, bl, orig, ms)) => {
+                    Self::rope_yarn(&mut q, nh, hd, pos, cfg.rope_base, f, bf, bl, orig, ms, cfg.n_rot);
+                    Self::rope_yarn(&mut k, nkv, hd, pos, cfg.rope_base, f, bf, bl, orig, ms, cfg.n_rot);
                 }
                 None => {
                     Self::rope(&mut q, nh, hd, pos, cfg.rope_base, cfg.n_rot);

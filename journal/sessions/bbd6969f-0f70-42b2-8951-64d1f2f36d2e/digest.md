@@ -5637,3 +5637,1186 @@ The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/REPRISE.md has been upd
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -m \"REPRISE : chiffres gpt-oss exacts (ids 15,1757 / texte 15,0757)\" && git log --oneline -3 && git status --short | head -3", "description": "Commit REPRISE number fix"}`
+
+  ```
+8ca0c58 REPRISE : chiffres gpt-oss exacts (ids 15,1757 / texte 15,0757)
+72e7dc4 gpt-oss : biais attn_output et fenetre par couche corriges, reference llama.cpp
+f57e151 REPRISE.md : base de reprise autonome
+ M journal/README.md
+  ```
+
+- **todo_write** `{"todos": [{"content": "Vérifier l'état vert (build, tests, PPL 19,3885)", "status": "completed"}, {"content": "Corriger le biais attn_output.bias ignoré (gpt-oss)", "status": "completed"}, {"content": "Motif de fenêtre par couche (sliding/full alternés, gpt-oss)", "status": "completed"}, {"content" … [548 caractères tronqués]`
+
+  ```
+Updated todo list: 0 pending, 0 in progress, 9 completed.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log --oneline -3 && echo \"--- état ---\" && git status --short && echo \"--- rapport ---\" && wc -l reports/rapport-gpt-oss-perplexite.md REPRISE.md && ls -la tools/ref_logits.cpp tools/compare_logits.py tools/harmony_canonique. … [51 caractères tronqués]`
+
+  ```
+8ca0c58 REPRISE : chiffres gpt-oss exacts (ids 15,1757 / texte 15,0757)
+72e7dc4 gpt-oss : biais attn_output et fenetre par couche corriges, reference llama.cpp
+f57e151 REPRISE.md : base de reprise autonome
+--- état ---
+ M journal/README.md
+--- rapport ---
+  191 reports/rapport-gpt-oss-perplexite.md
+  261 REPRISE.md
+  452 total
+-rw-------. 1 stephane stephane 3401 28 sep 15:22 tools/compare_logits.py
+-rw-------. 1 stephane stephane 3275 28 sep 17:17 tools/harmony_canonique.py
+-rw-------. 1 stephane stephane 8606 28 sep 15:41 tools/ref_logits.cpp
+  ```
+
+### 🤖 Assistant
+
+Reprise terminée. Voici ce que la session a établi — tout est mesuré, commité, et `REPRISE.md` est à jour.
+
+## Les deux bugs réels de gpt-oss (§6.a)
+
+| | avant | après |
+|---|---|---|
+| `attn_output.bias` ignoré (gpt-oss a un biais sur Q, K, V **et O**) — 63 jetons | 39,80 | **20,84** |
+| fenêtre glissante sur les 36 couches au lieu d'une sur deux — 511 jetons | 129,9 | **15,08** |
+
+Le motif de fenêtre est vérifié dans les sources : `layer_types` de gpt-oss alterne `sliding_attention`/`full_attention`, et llama.cpp pose `set_swa_pattern(2)`. Les deux extrêmes sont pires que le motif réel du modèle : 17,14 (toutes fenêtrées) et 26,15 (aucune). Un troisième bug latent — les puits appris absents du softmax des couches pleines — est corrigé, **effet mesuré nul** sur gpt-oss (le chemin groupé les comptait déjà).
+
+## La prémisse « devrait valoir ~6 » était fausse
+
+Nouvel outil `tools/ref_logits` : llama.cpp évalue **exactement les mêmes identifiants, sans BOS**.
+
+| mêmes prédictions | llama.cpp | qtrinet-core |
+|---|---|---|
+| 63 jetons, YaRN | 38,37 | 41,11 |
+| 511 jetons, YaRN | 169,67 | 174,34 |
+
+Corrélation des logits **0,999976**, **top-1 identique partout**, |ΔNLL| médian 0,076 (notre int15 contre son f32). Notre moteur n'était pas le maillon faible — il fait même mieux, parce qu'il sait éteindre YaRN, qui coûte **×9** ici (18,58 contre 174,34). Ce n'est pas un bug : HF, llama.cpp et l'implémentation officielle d'OpenAI appliquent le même YaRN statique (vérifié dans les trois sources).
+
+## Hypothèse harmony : réfutée, avec le mécanisme
+
+Le modèle **exige son canal `analysis`** : après `<|start|>assistant<|channel|>`, p(analysis) = 0,9999 contre p(final) = 0,0001. Meilleur montage canonique (système officiel + `analysis` puis `final`) : **26,0** — contre **13,7** en brut pour le même texte. Le format rend le texte *moins* prévisible, pas plus.
+
+## Effet de bord utile
+
+`Gguf::open_meta` ne lit plus que l'en-tête : `--tokenize` sur gpt-oss passe de ~60 s à **0,385 s** (identifiants inchangés) et chaque `--ppl` économise une lecture des 62 Go. Non-régression Qwen : **19,3885** exactement, tests 3/3.
+
+Reste ouvert et documenté : le YaRN « à retardement » (au-delà de 4 096), protocole et coût dans `reports/rapport-gpt-oss-perplexite.md`.
+
+
+## Tour 2
+
+### 👤 Utilisateur
+
+prochaine étape?
+
+### 🤖 Assistant
+
+⏵ Proposition de prochaine étape, avec le menu et le coût de chaque option
+
+Ce que la session laisse sur la table, par ordre de valeur mesurable :
+
+**A. Fermer l'écart de quantification (ma recommandation).** On a maintenant la seule chose qui manquait depuis le début : une référence externe au logit près (`tools/ref_logits` + `compare_logits.py`). L'écart résiduel avec llama.cpp est **|ΔNLL| médian 0,076** sur gpt-oss, et on ne sait pas encore s'il vient des **activations** (int15, une échelle par vecteur) ou des **poids** (int8, une échelle par ligne). C'est exactement l'hypothèse §6.e : le 6 bits ne gagne peut-être pas grâce à ses deux bits mais grâce à ses échelles par bloc de 32.
+Protocole : sur Qwen2.5-0.5B Q8_0 (16 s par passe au lieu de 100 s), comparer nos logits à ceux de llama.cpp en faisant varier `--abits` (8/12/16) puis le format de poids — chaque facteur isolé. Ensuite on implémente des échelles par bloc là où c'est payant, et on saura si l'int8 par bloc repasse devant le 6 bits à octets égaux.
+
+**B. YaRN à retardement (§6.b)** — ferme la dernière question gpt-oss, mais ~1 h de mesures sur le 120B pour un gain qui ne concerne que le contexte > 4 096.
+
+**C. Refactoriser les boucles CLI (§6.c)** — pur hygiène, mais le bug « drapeau ignoré dans un des trois modes » a frappé **une quatrième fois** cette session (`--attn-window`/`--attn-sinks` jamais appliqués en inférence). Les contrôles de non-régression existent désormais (Qwen 19,3885 en 16 s, gpt-oss 15,1757).
+
+**D. Noyaux GPU (§6.d)** — warp par ligne puis noyaux Q4_K/Q6_K/MXFP4 : le plus gros levier de débit (toute la famille Qwen est en Q4_K/Q6_K, donc aujourd'hui rien de la leur n'est déportable), mais le chantier le plus long.
+
+- **ask_user_question** `{"questions": [{"id": "prochaine_etape", "header": "Prochaine étape", "question": "Par quoi je commence ?", "options": [{"label": "A. Quantification : isoler puis corriger l'écart avec llama.cpp (Recommandé)", "description": "30-60 min d'expériences sur le 0.5B avec la référence au logit près, puis  … [596 caractères tronqués]`
+
+  ```
+{"answers":[{"id":"prochaine_etape","selected":["A. Quantification : isoler puis corriger l'écart avec llama.cpp (Recommandé)"]}]}
+  ```
+
+### 🤖 Assistant
+
+⏵ Option A : j'isole d'abord l'écart sur Qwen 0.5B, où chaque passe coûte 16 s
+
+- **todo_write** `{"todos": [{"content": "Référence llama.cpp sur Qwen2.5-0.5B Q8_0, 512 jetons, même ids", "status": "in_progress"}, {"content": "Nos logits à --abits 8/12/16 (isoler la quantification d'activation)", "status": "pending"}, {"content": "Attribuer l'écart : activations, poids ou tête", "status": "pendi … [260 caractères tronqués]`
+
+  ```
+Updated todo list: 5 pending, 1 in progress, 0 completed.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && tr -s ' ,\\n' '\\n' < /tmp/ids_qwen.txt | head -512 > /tmp/ids_qwen_512.txt && wc -l < /tmp/ids_qwen_512.txt && LD_LIBRARY_PATH=/home/stephane/Data13TB/stephane/GitHub/llama.cpp/build/bin ./tools/ref_logits models/Qwen2.5-0.5B-Q8_0.g … [146 caractères tronqués]`
+
+  ```
+512
+n_pos    = 511
+n_vocab  = 151936
+NLL moy  = 2.576284
+perplexite = 13.148184
+fichier  = /tmp/ref_qwen_512.bin (511 x 151936 f32 + 8 octets d'en-tete)
+  ```
+
+### 🤖 Assistant
+
+⏵ Référence Qwen : PPL 13,148 sur 511 positions — à nous, en faisant varier les bits d'activation
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for b in 8 12 16; do echo \"=== abits $b ===\"; ./qtrinet-core/target/release/qtrinet-core models/Qwen2.5-0.5B-Q8_0.gguf --ppl /tmp/ids_qwen_512.txt --ctx 512 --abits $b --threads 16 --limit 512 --dense --logits-bin /tmp/nous_qwen_51 … [149 caractères tronqués]`
+
+  ```
+=== abits 8 ===
+     511 tokens notés — perplexité cumulée 13.287  (28.7 tok/s)
+logits exportés : /tmp/nous_qwen_512_a8.bin — 511 positions × 151936 valeurs
+=== perplexité 13.2872 sur 511 tokens (0 événements, 17.8 s) ===
+=== abits 12 ===
+     511 tokens notés — perplexité cumulée 13.135  (30.6 tok/s)
+logits exportés : /tmp/nous_qwen_512_a12.bin — 511 positions × 151936 valeurs
+=== perplexité 13.1348 sur 511 tokens (0 événements, 16.7 s) ===
+=== abits 16 ===
+     511 tokens notés — perplexité cumulée 13.137  (30.2 tok/s)
+logits exportés : /tmp/nous_qwen_512_a16.bin — 511 positions × 151936 valeurs
+=== perplexité 13.1368 sur 511 tokens (0 événements, 16.9 s) ===
+  ```
+
+### 🤖 Assistant
+
+⏵ Qwen : notre moteur à 13,137 contre 13,148 pour llama.cpp — l'écart est propre à gpt-oss
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && LD_PRELOAD=/usr/lib64/libopenblas.so.0 python3 - <<'EOF'\nimport struct, math\nimport numpy as np\ndef lire(p):\n    with open(p,'rb') as f:\n        nv,n=struct.unpack('<ii',f.read(8))\n        return nv,n,np.frombuffer(f.read(n*nv* … [1452 caractères tronqués]`
+
+  ```
+nous 511 positions · référence 511
+|ΔNLL| : moyenne 0.2138 médiane 0.0927 max 7.1205
+  positions avec |ΔNLL| > 0.2 : 144 / 511
+  positions avec |ΔNLL| > 0.5 :  42 / 511
+  positions avec |ΔNLL| > 1.0 :  15 / 511
+  positions avec |ΔNLL| > 2.0 :   4 / 511
+indices des gros écarts : [ 43 143 152 207 233 321 322 351 371 389 395 437 482 491 502] ...
+espacement médian entre gros écarts : 23
+corrélation des NLL par position : 0.98464
+positions où nous sommes bien meilleurs : [321 502 233 482 322] [7.12, 2.96, 2.23, 1.46, 1.4]
+  ```
+
+### 👤 Utilisateur
+
+YaRN à retardement, prévoit aussi des contextes ultra longs 1M
+
+### 🤖 Assistant
+
+⏵ YaRN à retardement + plan 1M : je commence par la politique de rotation, mesurée
+
+- **todo_write** `{"todos": [{"content": "YaRN à retardement : décision par contexte (initial_context_length), trace, drapeaux", "status": "in_progress"}, {"content": "Non-régression courte (Qwen 19,3885 ; gpt-oss 15,1757) puis bascule à ctx 4096", "status": "pending"}, {"content": "Courbe de bascule : PPL à ctx 4096 … [362 caractères tronqués]`
+
+  ```
+Updated todo list: 5 pending, 1 in progress, 0 completed.
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src/model.rs", "limit": 30, "offset": 574}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src/model.rs</path>
+<type>file</type>
+<content>
+574:                 else { 0 }
+575:             },
+576:             yarn: match g.cfg("rope.scaling.type").and_then(|m| m.as_str()) {
+577:                 // YaRN est ACTIF seulement sur demande : notre implémentation
+578:                 // MESURÉE dégrade la perplexité d'un facteur 4,6 sur gpt-oss
+579:                 // (184,9 avec, 39,8 sans). Le RoPE ordinaire à base 150 000 est
+580:                 // meilleur à contexte court, et c'est le seul régime que nous
+581:                 // testons. La rampe YaRN reste à corriger avant d'être activée.
+582:                 Some("yarn") if std::env::var("QT_YARN").is_ok() => Some((
+583:                     g.cfg("rope.scaling.factor").and_then(|m| m.as_f64()).unwrap_or(1.0) as f32,
+584:                     g.cfg("rope.scaling.yarn_beta_fast").and_then(|m| m.as_f64()).unwrap_or(32.0) as f32,
+585:                     g.cfg("rope.scaling.yarn_beta_slow").and_then(|m| m.as_f64()).unwrap_or(1.0) as f32,
+586:                     g.cfg("rope.scaling.original_context_length")
+587:                         .and_then(|m| m.as_u64()
+… [708 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src/model.rs", "new_string": "            // ------------------------------------------------ rotation (RoPE)\n            // Trois régimes, choisis **par mesure** :\n            //\n            //   `QT_YARN=1`      YaRN à  … [3487 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src/model.rs has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src/model.rs", "new_string": "            println!(\"[config] fenêtre glissante {fenetre} sur {n_fen}/{} couches (motif {swa_pattern}{})\",\n                     cfg.n_layer,\n                     if swa_pattern <= 1 { \", t … [1337 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src/model.rs has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && cargo build --release 2>&1 | grep -E \"^(error|warning: unused var)\" -A 8 | head -30; echo \"BUILD\"; cd .. && ./qtrinet-core/target/release/qtrinet-core models/Qwen2.5-0.5B-Q8_0.gguf --ppl /tmp/ids_qwen.txt --ctx 256 - … [171 caractères tronqués]`
+
+  ```
+warning: unused variable: `arch`
+   --> src/model.rs:568:21
+    |
+568 |                 let arch = g.meta.get("general.architecture").and_then(|m| m.as_str());
+    |                     ^^^^ help: if this is intentional, prefix it with an underscore: `_arch`
+    |
+    = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: variable `qk_topk` is assigned to, but never used
+BUILD
+     255 tokens notés — perplexité cumulée 17.431  (32.5 tok/s)  [fenêtre 1 : 255 notés, PPL 17.431]
+     510 tokens notés — perplexité cumulée 19.388  (32.5 tok/s)  [fenêtre 2 : 255 notés, PPL 21.565]
+=== perplexité 19.3885 sur 510 tokens (0 événements, 15.7 s) ===
+  ```
+
+### 🤖 Assistant
+
+⏵ Corpus long + série de bascule (4096 → 8192, RoPE simple contre YaRN)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && wc -c data/wikitext2_test.txt && head -c 70000 data/wikitext2_test.txt > /tmp/wt2_long.txt && wc -c /tmp/wt2_long.txt && ./qtrinet-core/target/release/qtrinet-core /home/stephane/FastNVMe/models/gpt-oss-120b-MXFP4.gguf --tokenize --f … [150 caractères tronqués]`
+
+  ```
+359041 data/wikitext2_test.txt
+70000 /tmp/wt2_long.txt
+16456 tokens écrits dans /tmp/ids_oss_long.txt (vocabulaire du modèle : 201088)
+réversibilité : texte reconstruit identique ✅ (70000 octets)
+  ```
+
+- **write** `{"content": "#!/bin/bash\n# Basculer ou non : à partir de quelle longueur le RoPE simple cesse-t-il de\n# tenir, et YaRN redevient-il nécessaire ? Le corpus fait 16 456 jetons ; le\n# nombre de jetons est fixé par --limit.\nset -u\ncd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\nQ=./qtrinet-core … [1133 caractères tronqués]`
+
+  ```
+<path>/tmp/bascule_yarn.sh</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "chmod +x /tmp/bascule_yarn.sh && (nohup /tmp/bascule_yarn.sh > /tmp/bascule_yarn.out 2>&1 &); sleep 3; echo \"lancé (≈ 2 h pour les 5 passes)\"", "description": "Launch the rotation boundary series"}`
+
+  ```
+lancé (≈ 2 h pour les 5 passes)
+  ```
+
+- **bash** `{"command": "nvidia-smi --query-gpu=name,memory.total,memory.used --format=csv 2>/dev/null | head -3; echo \"--- NVMe ---\"; lsblk -d -o NAME,SIZE,MODEL 2>/dev/null | head -6; df -h /home/stephane/FastNVMe /home/stephane/Data13TB 2>/dev/null | tail -3; echo \"--- CPU/RAM ---\"; lscpu | grep -E \"Mod … [123 caractères tronqués]`
+
+  ```
+name, memory.total [MiB], memory.used [MiB]
+Quadro RTX 5000, 16384 MiB, 1100 MiB
+Quadro RTX 5000, 16384 MiB, 381 MiB
+--- NVMe ---
+NAME      SIZE MODEL
+sda      10,9T WDC WD120EFGX-68CPHN0
+nvme0n1 931,5G Fanxiang S660 1TB
+Filesystem               Size  Used Avail Use% Mounted on
+/dev/nvme0n1p2           828G  268G  561G  33% /home/stephane/FastNVMe
+/dev/mapper/system-root   11T  6,2T  4,7T  57% /home/stephane/Data13TB
+--- CPU/RAM ---
+Model name:                              Intel(R) Xeon(R) CPU E5-2687W v3 @ 3.10GHz
+Thread(s) per core:                      2
+Core(s) per socket:                      10
+Socket(s):                               2
+               total        used        free      shared  buff/cache   available
+Mem:             125          20          50           3          60         105
+  ```
+
+### 🤖 Assistant
+
+⏵ Relevé matériel fait (2× RTX 5000 16 Go, 125 Go de RAM, NVMe 3,5 Go/s) — j'étends `--plan` au budget de contexte
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src && sed -n '/fn run_plan/,/^}/p' main.rs | head -95", "description": "Read run_plan implementation"}`
+
+  ```
+fn run_plan(args: &[String]) {
+    let path = &args[1];
+    let g = Gguf::open(path).expect("ouverture du GGUF");
+    let arch = g.meta.get("general.architecture").and_then(|m| m.as_str()).unwrap_or("?");
+    let n_layer = g.cfg("block_count").and_then(|m| m.as_u64()).unwrap_or(0) as usize;
+    let n_expert = g.cfg("expert_count").and_then(|m| m.as_u64()).unwrap_or(0) as usize;
+    let n_used = g.cfg("expert_used_count").and_then(|m| m.as_u64()).unwrap_or(0) as usize;
+    // octets par poids, par type ggml
+    let octets = |t: u32| -> f64 {
+        match t {
+            0 => 4.0, 1 => 2.0, 2 => 18.0/32.0, 8 => 34.0/32.0,
+            12 => 144.0/256.0, 14 => 210.0/256.0, 39 => 17.0/32.0,
+            _ => 4.0,
+        }
+    };
+    println!("plan de placement — {arch}, {n_layer} couches{}",
+             if n_expert > 0 { format!(", {n_expert} experts (top-{n_used})") } else { String::new() });
+    println!("\n  {:>5}  {:>12}  {:>12}  {:>12}  {:>13}  {}",
+             "couche", "attention", "ffn", "experts", "cumul", "placement");
+    let mut cumul = 0f64;
+    let mut total = 0f64;
+    let mut actifs = 0f64;
+    for l in 0..n_layer {
+        let mut attn = 0f64;
+        let mut ffn = 0
+… [2481 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Extension de `--plan` : budget KV à 32 k / 128 k / 1 M, trafic par jeton, portée RoPE
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src/main.rs", "new_string": "    let libre = std::fs::read_to_string(\"/proc/meminfo\").ok()\n        .and_then(|t| t.lines().find(|l| l.starts_with(\"MemAvailable\")).map(|l| l.to_string()))\n        .unwrap_or_default();\n … [5991 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src/main.rs has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && cargo build --release 2>&1 | grep -E \"^error\" -A 8 | head -30; echo \"BUILD\"; cd .. && ./qtrinet-core/target/release/qtrinet-core /home/stephane/FastNVMe/models/gpt-oss-120b-MXFP4.gguf --plan --ctx 131072 2>&1 | tail  … [93 caractères tronqués]`
+
+  ```
+BUILD
+  à      25.8 Go/s (NVLink) :    8.66 tok/s
+  à     380.0 Go/s (GPU local) :  127.58 tok/s
+  à       8.0 Go/s (MoE épars, mesuré) :    2.69 tok/s
+  MemAvailable:    6905448 kB
+  → le modèle tient en mémoire, sans copie
+
+=== contexte : 131072 jetons ===
+  KV par jeton et par couche : 8 têtes KV × 64 dim × 2 (K et V)
+  couches à fenêtre glissante : 18/36 (leur KV s'arrête à 128 entrées) · pleines : 18
+  KV f32  :   19.33 Go en attention complète partout ·    9.67 Go avec la fenêtre
+  KV int8 :    4.83 Go en attention complète partout ·    2.42 Go avec la fenêtre
+  KV int4 :    2.42 Go en attention complète partout ·    1.21 Go avec la fenêtre
+  relecture du KV par jeton : f32 0.01 Go · int8 0.00 Go · int4 0.00 Go ·
+  → décodage (KV seul, poids non compris) :
+     RAM 20 Go/s  f32     0.5 ms · int8    0.1 ms · int4    0.1 ms par jeton
+     PCIe 6,5     f32     1.5 ms · int8    0.4 ms · int4    0.2 ms par jeton
+     NVLink 25,8  f32     0.4 ms · int8    0.1 ms · int4    0.0 ms par jeton
+     1 GPU 380    f32     0.0 ms · int8    0.0 ms · int4    0.0 ms par jeton
+     2 GPU 760    f32     0.0 ms · int8    0.0 ms · int4    0.0 ms par jeton
+  préremplissage SÉQUENTIEL estimé : 13.6 
+… [246 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src/main.rs", "new_string": "    let trafic = |b: f64| par_jeton(b) * n_pleines as f64 * ctx_demande as f64\n                           + par_jeton(b) * n_fenetrees as f64 * fenetre.min(ctx_demande) as f64;", "old_string": " … [158 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src/main.rs has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && cargo build --release 2>&1 | grep -E \"^error\" -A 6 | head -20; cd .. && for c in 32768 131072 1048576; do echo \"############ ctx $c ############\"; ./qtrinet-core/target/release/qtrinet-core /home/stephane/FastNVMe/mo … [160 caractères tronqués]`
+
+  ```
+############ ctx 32768 ############
+=== contexte : 32768 jetons ===
+  KV par jeton et par couche : 8 têtes KV × 64 dim × 2 (K et V)
+  couches à fenêtre glissante : 18/36 (leur KV s'arrête à 128 entrées) · pleines : 18
+  KV f32  :    4.83 Go en attention complète partout ·    2.43 Go avec la fenêtre
+  KV int8 :    1.21 Go en attention complète partout ·    0.61 Go avec la fenêtre
+  KV int4 :    0.60 Go en attention complète partout ·    0.30 Go avec la fenêtre
+  relecture du KV par jeton : f32 2.43 Go · int8 0.61 Go · int4 0.30 Go ·
+  → décodage (KV seul, poids non compris) :
+     RAM 20 Go/s  f32   121.3 ms · int8   30.3 ms · int4   15.2 ms par jeton
+     PCIe 6,5     f32   373.1 ms · int8   93.3 ms · int4   46.6 ms par jeton
+     NVLink 25,8  f32    94.1 ms · int8   23.5 ms · int4   11.8 ms par jeton
+     1 GPU 380    f32     6.4 ms · int8    1.6 ms · int4    0.8 ms par jeton
+     2 GPU 760    f32     3.2 ms · int8    0.8 ms · int4    0.4 ms par jeton
+  préremplissage SÉQUENTIEL estimé : 4.5 h (le moteur ne fait pas de lot ; l'attention y est en O(N) par jeton)
+  rotation : base 150000 · initial 4096 · facteur déclaré ×32 · max_position_embeddings 131072
+  → YaRN couvre 131072 jet
+… [2647 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Rédaction du plan 1M (`docs/contexte-long.md`) avec les chiffres du nouveau `--plan`
+
+- **write** `{"content": "# Contexte long : ce que 1 M veut dire, et par où ça casse\n\n> Tous les chiffres de budget viennent de `qtrinet-core <modele> --plan --ctx N`,\n> qui les calcule depuis les métadonnées du GGUF. Les bandes passantes sont\n> celles mesurées sur cette machine (deux Quadro RTX 5000 16 Go,  … [6374 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/contexte-long.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cat /tmp/bascule_yarn.out 2>/dev/null | tail -12; echo \"--- processus ---\"; ps -o pid,etime,pcpu,rss -C qtrinet-core 2>/dev/null | tail -2", "description": "Check boundary series progress"}`
+
+  ```
+=== où le RoPE simple cesse-t-il de tenir ? ===
+
+### W1 ctx 4096 (retardement : RoPE simple, 4096 est la limite initiale)
+--- processus ---
+    PID     ELAPSED %CPU   RSS
+1987297       13:25 1427 50398648
+  ```
+
+- **bash** `{"command": "sleep 200; cat /tmp/bascule_yarn.out | tail -10", "description": "Wait for W1 result", "timeoutMs": 260000}`
+
+  ```
+=== où le RoPE simple cesse-t-il de tenir ? ===
+
+### W1 ctx 4096 (retardement : RoPE simple, 4096 est la limite initiale)
+  ```
+
+- **bash** `{"command": "sleep 240; tail -6 /tmp/bascule_yarn.out; ps -o pid,etime,pcpu -C qtrinet-core 2>/dev/null | tail -1", "description": "Wait for W1 completion", "timeoutMs": 300000}`
+
+  ```
+=== où le RoPE simple cesse-t-il de tenir ? ===
+
+### W1 ctx 4096 (retardement : RoPE simple, 4096 est la limite initiale)
+1987297       20:56 1509
+  ```
+
+### 🤖 Assistant
+
+⏵ W1 (4 096 jetons) tourne encore : ~25 min la passe. Je mets à jour REPRISE pendant ce temps
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/REPRISE.md", "new_string": "| Mesure | `--ppl-texte F` (identifiants du tokenizer du modèle), `--logits-bin F` (logits bruts), `--harmony*` (habillage harmony), `--swa-pattern N`, `--sans-fenetre` |\n| Rotation | **YaRN à retardement** : … [602 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/REPRISE.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/REPRISE.md", "new_string": "### b. YaRN à retardement : FAIT, et le contexte long est chiffré\n\n**Politique de rotation** (code + trace `[config] rotation`) : RoPE simple tant\nque le contexte demandé tient dans la longueur initiale du  … [1452 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/REPRISE.md has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\np='REPRISE.md'\ns=open(p).read()\ns=s.replace(\"\"\"reports/rapport-gpt-oss-perplexite.md  les deux bugs de gpt-oss et la référence externe\"\"\",\n\"\"\"reports/rapport-gpt-oss-perplexite.md  les deux bugs de gpt- … [257 caractères tronqués]`
+
+  ```
+182:**Contexte long** : tout le chiffrage est dans `docs/contexte-long.md` et se
+252:docs/contexte-long.md                budget 1 M : KV, préremplissage, rotation
+=== où le RoPE simple cesse-t-il de tenir ? ===
+
+### W1 ctx 4096 (retardement : RoPE simple, 4096 est la limite initiale)
+  ```
+
+- **bash** `{"command": "sleep 280; tail -8 /tmp/bascule_yarn.out; ps -o pid,etime,pcpu -C qtrinet-core 2>/dev/null | tail -1", "description": "Wait for W1/W2 progress", "timeoutMs": 330000}`
+
+  ```
+=== où le RoPE simple cesse-t-il de tenir ? ===
+
+### W1 ctx 4096 (retardement : RoPE simple, 4096 est la limite initiale)
+[config] rotation : RoPE simple (contexte 4096 ≤ 4096 initial ; YaRN ×32 prendrait le relais au-delà)
+    4095 tokens notés — perplexité cumulée 170.782  (2.9 tok/s)
+=== perplexité 170.7823 sur 4095 tokens (0 événements, 1407.3 s) ===
+
+### W2 ctx 4608 (retardement : YaRN prend le relais)
+2054022       01:21 1083
+  ```
+
+### 🤖 Assistant
+
+⏵ Résultat clé : RoPE simple à 4 096 = **170,8** (contre 18,6 à 512) — le seuil de 4 096 est trop haut, je mesure le croisement
+
+- **bash** `{"command": "pkill -f \"bascule_yarn.sh\"; sleep 2; ps -o pid,etime,pcpu,args -C qtrinet-core 2>/dev/null | cut -c1-100 | tail -2; echo \"--- W2 continue seul ---\"", "description": "Stop series after W2, keep current pass"}`
+
+  ```
+(no output)
+[killed by signal: SIGTERM]
+  ```
+
+- **bash** `{"command": "sleep 3; ps -o pid,etime,pcpu -C qtrinet-core 2>/dev/null | tail -2; cat /tmp/bascule_yarn.out | tail -4", "description": "Verify W2 still running"}`
+
+  ```
+PID     ELAPSED %CPU
+2054022       01:38 1213
+    4095 tokens notés — perplexité cumulée 170.782  (2.9 tok/s)
+=== perplexité 170.7823 sur 4095 tokens (0 événements, 1407.3 s) ===
+
+### W2 ctx 4608 (retardement : YaRN prend le relais)
+  ```
+
+- **write** `{"content": "#!/bin/bash\n# Où le RoPE simple cesse-t-il de tenir ? On mesure les DEUX régimes à chaque\n# longueur, parce que le seuil « longueur initiale déclarée » (4 096) s'est\n# révélé trop haut : à 4 096, le RoPE simple donne 170,8 contre 18,6 à 512.\nset -u\ncd /home/stephane/Data13TB/stepha … [969 caractères tronqués]`
+
+  ```
+<path>/tmp/croisement_yarn.sh</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "sleep 280; tail -5 /tmp/bascule_yarn.out; ps -o pid,etime,pcpu -C qtrinet-core 2>/dev/null | tail -1", "description": "Wait for W2 (YaRN at 4608)", "timeoutMs": 330000}`
+
+  ```
+[config] rotation : RoPE simple (contexte 4096 ≤ 4096 initial ; YaRN ×32 prendrait le relais au-delà)
+    4095 tokens notés — perplexité cumulée 170.782  (2.9 tok/s)
+=== perplexité 170.7823 sur 4095 tokens (0 événements, 1407.3 s) ===
+
+### W2 ctx 4608 (retardement : YaRN prend le relais)
+2054022       06:36 1671
+  ```
+
+- **bash** `{"command": "sleep 290; tail -4 /tmp/bascule_yarn.out", "description": "Continue waiting for W2", "timeoutMs": 330000}`
+
+  ```
+4095 tokens notés — perplexité cumulée 170.782  (2.9 tok/s)
+=== perplexité 170.7823 sur 4095 tokens (0 événements, 1407.3 s) ===
+
+### W2 ctx 4608 (retardement : YaRN prend le relais)
+  ```
+
+- **bash** `{"command": "sleep 300; tail -4 /tmp/bascule_yarn.out; ps -o pid,etime,pcpu -C qtrinet-core 2>/dev/null | tail -1", "description": "Wait for W2 result", "timeoutMs": 340000}`
+
+  ```
+4095 tokens notés — perplexité cumulée 170.782  (2.9 tok/s)
+=== perplexité 170.7823 sur 4095 tokens (0 événements, 1407.3 s) ===
+
+### W2 ctx 4608 (retardement : YaRN prend le relais)
+2054022       16:40 1748
+  ```
+
+- **bash** `{"command": "sleep 300; tail -4 /tmp/bascule_yarn.out", "description": "Wait for W2 completion", "timeoutMs": 340000}`
+
+  ```
+4095 tokens notés — perplexité cumulée 170.782  (2.9 tok/s)
+=== perplexité 170.7823 sur 4095 tokens (0 événements, 1407.3 s) ===
+
+### W2 ctx 4608 (retardement : YaRN prend le relais)
+  ```
+
+### 🤖 Assistant
+
+⏵ Série de croisement prête ; elle attend la fin de W2 puis enchaîne 6 passes
+
+- **write** `{"content": "#!/bin/bash\n# Croisement RoPE simple / YaRN : les deux régimes à 1024, 2048 et 3072 jetons.\n# Le seuil « longueur initiale déclarée » (4 096) est trop haut : à 4 096 le\n# RoPE simple donne 170,8 contre 18,6 à 512. On cherche donc où il décroche.\nset -u\ncd /home/stephane/Data13TB/st … [918 caractères tronqués]`
+
+  ```
+<path>/tmp/croisement_yarn.sh</path>
+<type>file</type>
+<content>
+Updated file
+</content>
+  ```
+
+- **bash** `{"command": "chmod +x /tmp/croisement_yarn.sh && (nohup /tmp/croisement_yarn.sh > /tmp/croisement_yarn.out 2>&1 &); sleep 3; echo \"en attente de W2 puis 6 passes\"; tail -3 /tmp/bascule_yarn.out", "description": "Queue the crossover series"}`
+
+  ```
+en attente de W2 puis 6 passes
+[config] rotation : YaRN ×32 (contexte demandé 4608 > 4096 initial)
+    4607 tokens notés — perplexité cumulée 1105.201  (3.6 tok/s)
+=== perplexité 1105.2013 sur 4607 tokens (0 événements, 1278.8 s) ===
+  ```
+
+### 🤖 Assistant
+
+⏵ W2 : YaRN à 4 608 = **1 105** — les deux régimes se dégradent avec la longueur. J'ajoute un profil par profondeur
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src/main.rs", "new_string": "    let mut n_logits = 0i32;\n    let mut tampon: Vec<u8> = Vec::new();\n    // Profil par profondeur : la perte moyenne par tranche de 256 positions.\n    // Une perplexité qui MONTE avec la pos … [517 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src/main.rs has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src/main.rs", "new_string": "                nll += nll_tok;\n                nll_f += nll_tok;\n                n += 1;\n                n_f += 1;\n                let b = (pos + 1) / 256;\n                if b < seaux.len( … [183 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src/main.rs has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src/main.rs", "new_string": "    if let (Some(w), Some(f)) = (journal, &logits_bin) {\n        use std::io::{Seek, SeekFrom, Write};\n        let mut fic = w.into_inner().expect(\"vidage du journal de logits\");\n        fic … [1040 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src/main.rs has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && cargo build --release 2>&1 | grep -E \"^error\" -A 8 | head -20; echo BUILD; ps -o pid,etime,pcpu -C qtrinet-core 2>/dev/null | tail -1; tail -2 /tmp/croisement_yarn.out", "description": "Build depth profile and check qu … [34 caractères tronqués]`
+
+  ```
+BUILD
+2129090       00:22 92.5
+
+### P1024 ctx 1024, RoPE simple
+  ```
+
+### 🤖 Assistant
+
+⏵ File d'attente : profils par profondeur à 512 puis 4 096 après la série de croisement
+
+- **write** `{"content": "#!/bin/bash\n# Après la série de croisement : où, DANS la fenêtre, la perplexité se dégrade ?\n# Une moyenne de 170,8 à 4 096 jetons peut venir de 4 095 jetons médiocres ou de\n# 3 500 bons suivis de 600 catastrophiques — ce n'est pas le même diagnostic.\nset -u\ncd /home/stephane/Data1 … [1034 caractères tronqués]`
+
+  ```
+<path>/tmp/profil_profondeur.sh</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "chmod +x /tmp/profil_profondeur.sh && (nohup /tmp/profil_profondeur.sh > /tmp/profil_profondeur.out 2>&1 &); sleep 3; echo \"en file d'attente\"; tail -3 /tmp/croisement_yarn.out", "description": "Queue depth-profile runs"}`
+
+  ```
+en file d'attente
+
+### P1024 ctx 1024, RoPE simple
+  ```
+
+- **bash** `{"command": "sleep 290; tail -6 /tmp/croisement_yarn.out", "description": "Check P1024 result", "timeoutMs": 330000}`
+
+  ```
+### P1024 ctx 1024, RoPE simple
+    1023 tokens notés — perplexité cumulée 46.937  (4.9 tok/s)
+=== perplexité 46.9369 sur 1023 tokens (0 événements, 209.8 s) ===
+
+### Y1024 ctx 1024, YaRN ×32
+  ```
+
+### 🤖 Assistant
+
+⏵ P1 024 = 46,9 : la dégradation commence tôt. Je prépare un test « contenu lointain en position 0 »
+
+- **bash** `{"command": "cd /tmp && python3 - <<'EOF'\nids=[int(x) for x in open('/tmp/ids_oss_long.txt').read().replace(',',' ').split()]\nprint(\"corpus long :\", len(ids), \"jetons\")\n# Tranche lointaine, mais présentée à la POSITION 0 : sépare la difficulté du\n# contenu de l'effet de profondeur.\nopen('/t … [245 caractères tronqués]`
+
+  ```
+corpus long : 16456 jetons
+tranches écrites : 1400-1659 et 0-259
+  ```
+
+- **write** `{"content": "#!/bin/bash\n# La perplexité qui monte vient-elle du CONTENU ou de la PROFONDEUR ?\n# On présente une tranche lointaine du corpus (jetons 1400-1659) à la position 0,\n# et on la compare à la tranche initiale (0-259) dans les mêmes conditions.\nset -u\ncd /home/stephane/Data13TB/stephane … [1007 caractères tronqués]`
+
+  ```
+<path>/tmp/contenu_ou_profondeur.sh</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "chmod +x /tmp/contenu_ou_profondeur.sh && (nohup /tmp/contenu_ou_profondeur.sh > /tmp/contenu_ou_profondeur.out 2>&1 &); sleep 2; tail -3 /tmp/croisement_yarn.out", "description": "Queue content-vs-depth control"}`
+
+  ```
+=== perplexité 46.9369 sur 1023 tokens (0 événements, 209.8 s) ===
+
+### Y1024 ctx 1024, YaRN ×32
+  ```
+
+- **bash** `{"command": "sleep 300; tail -8 /tmp/croisement_yarn.out", "description": "Check Y1024", "timeoutMs": 340000}`
+
+  ```
+1023 tokens notés — perplexité cumulée 46.937  (4.9 tok/s)
+=== perplexité 46.9369 sur 1023 tokens (0 événements, 209.8 s) ===
+
+### Y1024 ctx 1024, YaRN ×32
+    1023 tokens notés — perplexité cumulée 417.650  (4.7 tok/s)
+=== perplexité 417.6502 sur 1023 tokens (0 événements, 218.7 s) ===
+
+### P2048 ctx 2048, RoPE simple
+  ```
+
+### 🤖 Assistant
+
+⏵ Y1 024 = 417 contre 46,9 pour le RoPE simple : le croisement n'existe pas dans cette plage
+
+- **bash** `{"command": "sleep 300; tail -6 /tmp/croisement_yarn.out; ps -o pid,etime,pcpu -C qtrinet-core 2>/dev/null | tail -1", "description": "Check P2048", "timeoutMs": 340000}`
+
+  ```
+### Y1024 ctx 1024, YaRN ×32
+    1023 tokens notés — perplexité cumulée 417.650  (4.7 tok/s)
+=== perplexité 417.6502 sur 1023 tokens (0 événements, 218.7 s) ===
+
+### P2048 ctx 2048, RoPE simple
+2162332       07:42 1557
+  ```
+
+- **bash** `{"command": "sleep 300; tail -4 /tmp/croisement_yarn.out", "description": "Wait for P2048 result", "timeoutMs": 340000}`
+
+  ```
+2047 tokens notés — perplexité cumulée 121.749  (4.5 tok/s)
+=== perplexité 121.7486 sur 2047 tokens (0 événements, 452.5 s) ===
+
+### Y2048 ctx 2048, YaRN ×32
+  ```
+
+### 🤖 Assistant
+
+⏵ P2 048 = 121,7. Je prépare la comparaison de référence à 2 048 jetons pour trancher
+
+- **write** `{"content": "#!/bin/bash\n# La dégradation avec la longueur est-elle dans notre moteur ou dans le modèle ?\n# llama.cpp, mêmes identifiants, 2 048 jetons, un seul lot — c'est la référence.\nset -u\ncd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\nO=/tmp/ref_long.out\n: > \"$O\"\n\npython3 - <<'EO … [944 caractères tronqués]`
+
+  ```
+<path>/tmp/ref_long.sh</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "chmod +x /tmp/ref_long.sh && (nohup /tmp/ref_long.sh > /tmp/ref_long.out 2>&1 &); sleep 2; tail -3 /tmp/croisement_yarn.out; ps -o pid,etime,pcpu -C qtrinet-core 2>/dev/null | tail -1", "description": "Queue llama.cpp reference at 2048"}`
+
+  ```
+=== perplexité 121.7486 sur 2047 tokens (0 événements, 452.5 s) ===
+
+### Y2048 ctx 2048, YaRN ×32
+2195577       04:24 1581
+  ```
+
+- **bash** `{"command": "sleep 300; tail -4 /tmp/croisement_yarn.out", "description": "Wait for Y2048", "timeoutMs": 340000}`
+
+  ```
+2047 tokens notés — perplexité cumulée 722.560  (4.2 tok/s)
+=== perplexité 722.5598 sur 2047 tokens (0 événements, 481.8 s) ===
+
+### P3072 ctx 3072, RoPE simple
+  ```
+
+### 🤖 Assistant
+
+⏵ Courbes claires (RoPE simple gagne partout) ; je coupe la série et laisse passer les diagnostics
+
+- **bash** `{"command": "pkill -f \"croisement_yarn.sh\"; sleep 2; echo \"série coupée (P3072 en cours termine seul)\"; ps -o pid,etime -C qtrinet-core 2>/dev/null | tail -1", "description": "Stop crossover series, let current pass finish"}`
+
+  ```
+(no output)
+[killed by signal: SIGTERM]
+  ```
+
+- **bash** `{"command": "sleep 5; ps -o pid,etime,pcpu -C qtrinet-core 2>/dev/null | tail -1; tail -2 /tmp/croisement_yarn.out", "description": "Confirm P3072 still running"}`
+
+  ```
+2228803       01:05  854
+
+### P3072 ctx 3072, RoPE simple
+  ```
+
+### 🤖 Assistant
+
+⏵ Pendant les passes : je note les courbes mesurées et j'attends la référence à 2 048
+
+- **bash** `{"command": "sleep 290; tail -3 /tmp/croisement_yarn.out; ls -la /tmp/profil_profondeur.log /tmp/contenu_ou_profondeur.log 2>/dev/null | tail -2", "description": "Wait for P3072 and diagnostics", "timeoutMs": 330000}`
+
+  ```
+=== perplexité 722.5598 sur 2047 tokens (0 événements, 481.8 s) ===
+
+### P3072 ctx 3072, RoPE simple
+-rw-r--r--. 1 stephane stephane 0 28 sep 18:27 /tmp/contenu_ou_profondeur.log
+-rw-r--r--. 1 stephane stephane 0 28 sep 18:22 /tmp/profil_profondeur.log
+  ```
+
+- **bash** `{"command": "sleep 300; tail -12 /tmp/profil_profondeur.log 2>/dev/null; ps -o pid,etime -C qtrinet-core 2>/dev/null | tail -1", "description": "Check depth profile start", "timeoutMs": 340000}`
+
+  ```
+2228803       11:11
+  ```
+
+### 🤖 Assistant
+
+⏵ Rédaction : courbes de rotation mesurées dans le plan long contexte
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/contexte-long.md", "new_string": "## 5. YaRN à retardement : ce que la mesure a dit\n\nPolitique implémentée (`[config] rotation` le dit à chaque chargement) : **RoPE\nsimple tant que le contexte demandé tient dans la longueur initi … [2110 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/contexte-long.md has been updated successfully.
+  ```
+
+- **bash** `{"command": "sleep 280; tail -14 /tmp/profil_profondeur.log 2>/dev/null; echo \"--- contenu ---\"; cat /tmp/contenu_ou_profondeur.log 2>/dev/null | tail -4; ps -o pid,etime -C qtrinet-core 2>/dev/null | tail -1", "description": "Check profile results", "timeoutMs": 320000}`
+
+  ```
+### Q512 ctx 512, RoPE simple, profil par profondeur
+--- contenu ---
+2278782       02:51
+  ```
+
+- **bash** `{"command": "sleep 200; cat /tmp/profil_profondeur.log | head -14", "description": "Read 512 depth profile", "timeoutMs": 240000}`
+
+  ```
+### Q512 ctx 512, RoPE simple, profil par profondeur
+[config] rotation : RoPE simple (contexte 512 ≤ 4096 initial ; YaRN ×32 prendrait le relais au-delà)
+     511 tokens notés — perplexité cumulée 18.580  (5.2 tok/s)
+profil par profondeur (perplexité par tranche de 256 positions) :
+         0-255    :    13.715  (255 jetons notés)
+       256-511    :    25.142  (256 jetons notés)
+=== perplexité 18.5803 sur 511 tokens (0 événements, 98.9 s) ===
+
+### Q4096 ctx 4096, RoPE simple, profil par profondeur
+  ```
+
+### 🤖 Assistant
+
+⏵ Profil à 512 : positions 0-255 → 13,7 ; 256-511 → 25,1. La référence va trancher modèle contre moteur
+
+- **bash** `{"command": "sleep 300; tail -6 /tmp/profil_profondeur.log; ps -o pid,etime -C qtrinet-core 2>/dev/null | tail -1", "description": "Wait for 4096 profile", "timeoutMs": 340000}`
+
+  ```
+profil par profondeur (perplexité par tranche de 256 positions) :
+         0-255    :    13.715  (255 jetons notés)
+       256-511    :    25.142  (256 jetons notés)
+=== perplexité 18.5803 sur 511 tokens (0 événements, 98.9 s) ===
+
+### Q4096 ctx 4096, RoPE simple, profil par profondeur
+2287140       08:40
+  ```
+
+- **bash** `{"command": "sleep 300; tail -4 /tmp/profil_profondeur.log; ps -o pid,etime -C qtrinet-core 2>/dev/null | tail -1", "description": "Continue waiting for profile", "timeoutMs": 340000}`
+
+  ```
+256-511    :    25.142  (256 jetons notés)
+=== perplexité 18.5803 sur 511 tokens (0 événements, 98.9 s) ===
+
+### Q4096 ctx 4096, RoPE simple, profil par profondeur
+2287140       13:44
+  ```
+
+- **bash** `{"command": "sleep 300; sed -n '/Q4096/,$p' /tmp/profil_profondeur.log | head -22", "description": "Read 4096 depth profile", "timeoutMs": 340000}`
+
+  ```
+### Q4096 ctx 4096, RoPE simple, profil par profondeur
+[config] rotation : RoPE simple (contexte 4096 ≤ 4096 initial ; YaRN ×32 prendrait le relais au-delà)
+    4095 tokens notés — perplexité cumulée 170.782  (3.9 tok/s)
+profil par profondeur (perplexité par tranche de 256 positions) :
+         0-255    :    13.715  (255 jetons notés)
+       256-511    :    25.142  (256 jetons notés)
+       512-767    :    68.511  (256 jetons notés)
+       768-1023   :   204.466  (256 jetons notés)
+      1024-1279   :   292.803  (256 jetons notés)
+      1280-1535   :   379.653  (256 jetons notés)
+      1536-1791   :   532.616  (256 jetons notés)
+      1792-2047   :   167.362  (256 jetons notés)
+      2048-2303   :   183.081  (256 jetons notés)
+      2304-2559   :   175.068  (256 jetons notés)
+      2560-2815   :   245.200  (256 jetons notés)
+      2816-3071   :   212.334  (256 jetons notés)
+      3072-3327   :   210.663  (256 jetons notés)
+      3328-3583   :   157.250  (256 jetons notés)
+      3584-3839   :   542.885  (256 jetons notés)
+      3840-4095   :   361.017  (256 jetons notés)
+=== perplexité 170.7823 sur 4095 tokens (0 événements, 1056.7 s) ===
+  ```
+
+### 🤖 Assistant
+
+⏵ Le profil accuse une dégradation par position (×40 de 256 à 1536) : je sépare les deux composantes de YaRN
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src && grep -n \"yarn\" model.rs | head -20", "description": "Locate yarn usages"}`
+
+  ```
+56:    pub yarn: Option<(f32, f32, f32, f32)>,
+581:            //   `QT_YARN_NON=1`  jamais de YaRN (ce que fait `--sans-yarn`) ;
+598:            yarn: {
+600:                    Some("yarn") => Some((
+602:                        g.cfg("rope.scaling.yarn_beta_fast").and_then(|m| m.as_f64()).unwrap_or(32.0) as f32,
+603:                        g.cfg("rope.scaling.yarn_beta_slow").and_then(|m| m.as_f64()).unwrap_or(1.0) as f32,
+684:                 if cfg.yarn.is_some() { "yarn " } else { "" },
+693:                 cfg.yarn.map(|y| format!(" · yarn ×{}", y.0)).unwrap_or_default());
+723:        match (cfg.yarn, g.cfg("rope.scaling.original_context_length").and_then(|m| m.as_u64()),
+953:    pub fn cfg_yarn_off(&mut self) { self.cfg.yarn = None; }
+1060:    /// RoPE avec étirement **YaRN** (`rope.scaling.type = yarn`).
+1069:    fn rope_yarn(v: &mut [f32], n_head: usize, head_dim: usize, pos: usize, base: f32,
+1216:            match cfg.yarn {
+1218:                    Self::rope_yarn(&mut q, nh, hd, pos, cfg.rope_base, f, bf, bl, orig, cfg.n_rot);
+1219:                    Self::rope_yarn(&mut k, nkv, hd, pos, cfg.rope_base, f, bf, bl, orig, cfg.n_rot);
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src && python3 - <<'PY'\np='model.rs'\ns=open(p).read()\n\n# 1. Le champ : (facteur, beta_rapide, beta_lent, contexte d'origine, mscale)\ns=s.replace(\"    pub yarn: Option<(f32, f32, f32, f32)>,\",\n            \"    pub y … [3774 caractères tronqués]`
+
+  ```
+BUILD
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ./qtrinet-core/target/release/qtrinet-core models/Qwen2.5-0.5B-Q8_0.gguf --ppl /tmp/ids_qwen.txt --ctx 256 --abits 16 --threads 16 --limit 512 --dense 2>&1 | grep -E \"perplexité\"; echo \"--- état des files ---\"; tail -2 /tmp/profi … [144 caractères tronqués]`
+
+  ```
+255 tokens notés — perplexité cumulée 17.431  (26.0 tok/s)  [fenêtre 1 : 255 notés, PPL 17.431]
+     510 tokens notés — perplexité cumulée 19.388  (27.7 tok/s)  [fenêtre 2 : 255 notés, PPL 21.565]
+=== perplexité 19.3885 sur 510 tokens (0 événements, 18.4 s) ===
+--- état des files ---
+=== perplexité 170.7823 sur 4095 tokens (0 événements, 1056.7 s) ===
+
+-rw-r--r--. 1 stephane stephane 40 28 sep 18:43 /tmp/ref_long.out
+  ```
+
+### 🤖 Assistant
+
+⏵ Test de la composante température de YaRN (mscale) : 3 passes, 15 min
+
+- **bash** `{"command": "pkill -f \"ref_long.sh\"; cat > /tmp/mscale_yarn.sh <<'EOF'\n#!/bin/bash\n# YaRN a deux composantes : l'interpolation des basses fréquences et la mise à\n# l'échelle de température (mscale = 1 + 0,1·ln f). À contexte court, la seconde\n# rend l'attention trop tranchée ; à contexte long, … [1070 caractères tronqués]`
+
+  ```
+(no output)
+[killed by signal: SIGTERM]
+  ```
+
+- **bash** `{"command": "ls -la /tmp/mscale_yarn.sh 2>/dev/null; pgrep -f mscale_yarn.sh >/dev/null && echo \"mscale en file\" || echo \"script absent\"; cat /tmp/contenu_ou_profondeur.log 2>/dev/null | tail -3", "description": "Verify mscale script queued"}`
+
+  ```
+mscale en file
+=== perplexité 13.9387 sur 258 tokens (0 événements, 50.9 s) ===
+
+### M1 tranche lointaine (jetons 1400-1659) à la POSITION 0
+  ```
+
+### 🤖 Assistant
+
+⏵ M0 = 13,94 (contenu initial) — M1 doit dire si le contenu lointain est intrinsèquement dur
+
+- **bash** `{"command": "sleep 280; cat /tmp/contenu_ou_profondeur.log | tail -6; echo \"=== mscale ===\"; cat /tmp/mscale_yarn.log 2>/dev/null | tail -4", "description": "Read content-vs-depth result", "timeoutMs": 320000}`
+
+  ```
+=== perplexité 13.9387 sur 258 tokens (0 événements, 50.9 s) ===
+
+### M1 tranche lointaine (jetons 1400-1659) à la POSITION 0
+     258 tokens notés — perplexité cumulée 59.361  (5.3 tok/s)  [fenêtre 2 : 3 notés, PPL 916.214]
+=== perplexité 59.3608 sur 258 tokens (0 événements, 48.8 s) ===
+
+=== mscale ===
+  ```
+
+### 🤖 Assistant
+
+⏵ M1 = 59,4 contre M0 = 13,9 : le contenu lointain est plus dur, la position ajoute encore ~7×
+
+- **bash** `{"command": "sleep 290; cat /tmp/mscale_yarn.log 2>/dev/null | tail -8; ps -o pid,etime -C qtrinet-core 2>/dev/null | tail -1", "description": "Check mscale experiment", "timeoutMs": 330000}`
+
+  ```
+PID     ELAPSED
+  ```
+
+- **bash** `{"command": "cat /tmp/mscale_yarn.out 2>/dev/null | tail -6; ls -la /tmp/mscale_yarn.log; pgrep -f mscale_yarn.sh >/dev/null && echo \"script vivant\" || echo \"script fini\"", "description": "Inspect mscale script state"}`
+
+  ```
+script vivant
+[stderr]
+ls: cannot access '/tmp/mscale_yarn.log': No such file or directory
+  ```
+
+- **bash** `{"command": "ls -la /tmp/mscale_yarn.sh 2>&1 | tail -1; head -5 /tmp/mscale_yarn.sh 2>/dev/null; ps aux | grep \"[m]scale_yarn\" | awk '{print $2, $11, $12}'", "description": "Check if mscale script exists and runs"}`
+
+  ```
+ls: cannot access '/tmp/mscale_yarn.sh': No such file or directory
+2370714 bash -c
+  ```
+
+- **write** `{"content": "#!/bin/bash\n# YaRN a deux composantes : l'interpolation des basses fréquences et la mise à\n# l'échelle de température (mscale = 1 + 0,1·ln f). À contexte court, la seconde\n# rend l'attention trop tranchée ; à contexte long, la première garde les phases\n# lointaines dans ce que le mo … [730 caractères tronqués]`
+
+  ```
+<path>/tmp/mscale_yarn.sh</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "chmod +x /tmp/mscale_yarn.sh && (nohup /tmp/mscale_yarn.sh > /tmp/mscale_yarn.out 2>&1 &); sleep 3; ls -la /tmp/mscale_yarn.log | tail -1; ps aux | grep \"[q]trinet-core\" | wc -l", "description": "Relaunch mscale experiment"}`
+
+  ```
+-rw-r--r--. 1 stephane stephane 54 28 sep 19:33 /tmp/mscale_yarn.log
+1
+  ```
+
+- **write** `{"content": "#!/bin/bash\n# La dégradation avec la longueur est-elle dans notre moteur ou dans le modèle ?\n# llama.cpp, mêmes 2 048 identifiants, un seul lot, YaRN (configuration déclarée).\n# Notre moteur, même protocole : 722,56.\nset -u\ncd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\nO=/tmp … [790 caractères tronqués]`
+
+  ```
+<path>/tmp/ref2048.sh</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "chmod +x /tmp/ref2048.sh && (nohup /tmp/ref2048.sh > /tmp/ref2048.out 2>&1 &); sleep 2; head -3 /tmp/ref2048.out; tail -2 /tmp/mscale_yarn.log", "description": "Queue llama.cpp reference at 2048"}`
+
+  ```
+tranche écrite : 2048 jetons
+
+### ctx 512 : YaRN SANS mscale (interpolation seule)
+  ```
+
+- **bash** `{"command": "sleep 290; tail -8 /tmp/mscale_yarn.log", "description": "Read mscale result at 512", "timeoutMs": 330000}`
+
+  ```
+### ctx 512 : YaRN SANS mscale (interpolation seule)
+     511 tokens notés — perplexité cumulée 19.650  (4.9 tok/s)
+=== perplexité 19.6505 sur 511 tokens (0 événements, 105.3 s) ===
+
+### ctx 1024 : YaRN SANS mscale (interpolation seule)
+  ```
+
+### 🤖 Assistant
+
+⏵ Résultat majeur : à 512, YaRN **sans** mscale = 19,65 (contre 18,58 simple et 174,34 YaRN complet)
+
+- **bash** `{"command": "sleep 290; tail -8 /tmp/mscale_yarn.log", "description": "Read mscale result at 1024", "timeoutMs": 330000}`
+
+  ```
+511 tokens notés — perplexité cumulée 19.650  (4.9 tok/s)
+=== perplexité 19.6505 sur 511 tokens (0 événements, 105.3 s) ===
+
+### ctx 1024 : YaRN SANS mscale (interpolation seule)
+    1023 tokens notés — perplexité cumulée 71.347  (4.6 tok/s)
+=== perplexité 71.3468 sur 1023 tokens (0 événements, 220.5 s) ===
+
+### ctx 2048 : YaRN SANS mscale (interpolation seule)
+  ```
+
+### 🤖 Assistant
+
+⏵ À 1 024 : sans mscale 71,3 contre 417,7 (YaRN complet) et 46,9 (simple). Je regarde 2 048
+
+- **bash** `{"command": "sleep 290; tail -6 /tmp/mscale_yarn.log; echo \"=== référence 2048 ===\"; tail -3 /tmp/ref2048.out 2>/dev/null", "description": "Read mscale at 2048", "timeoutMs": 330000}`
+
+  ```
+=== perplexité 71.3468 sur 1023 tokens (0 événements, 220.5 s) ===
+
+### ctx 2048 : YaRN SANS mscale (interpolation seule)
+    2047 tokens notés — perplexité cumulée 192.630  (4.3 tok/s)
+=== perplexité 192.6304 sur 2047 tokens (0 événements, 473.6 s) ===
+
+=== référence 2048 ===
+tranche écrite : 2048 jetons
+  ```
+
+### 🤖 Assistant
+
+⏵ À 2 048 : simple 121,8 · interp. seule 192,6 · YaRN complet 722,6. Je file la suite
+
+- **write** `{"content": "#!/bin/bash\n# Suite : (1) l'interpolation seule finit-elle par battre le RoPE simple au-delà\n# de 4 096 ? (2) la génération est-elle meilleure avec ou sans mscale ?\nset -u\ncd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\nQ=./qtrinet-core/target/release/qtrinet-core\nM=/home/steph … [1526 caractères tronqués]`
+
+  ```
+<path>/tmp/interp_long.sh</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "chmod +x /tmp/interp_long.sh && (nohup /tmp/interp_long.sh > /tmp/interp_long.out 2>&1 &); sleep 2; tail -3 /tmp/ref2048.out; ps -o pid,etime,pcpu -C qtrinet-core 2>/dev/null | tail -1; ps aux | grep \"[r]ef_logits\" | wc -l", "description": "Queue interpolation long runs and generation … [13 caractères tronqués]`
+
+  ```
+tranche écrite : 2048 jetons
+### référence llama.cpp, 2 048 jetons, YaRN
+### référence llama.cpp, 2 048 jetons, YaRN
+    PID     ELAPSED %CPU
+1
+  ```
+
+### 🤖 Assistant
+
+⏵ Je fais du « YaRN à retardement sans mscale » le défaut mesuré (le mode forcé garde la référence)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src && python3 - <<'PY'\np='model.rs'\ns=open(p).read()\ns=s.replace(\"\"\"                        // `QT_YARN_MSCALE=0` : garder l'interpolation des basses\n                        // fréquences mais retirer la mise à l'éc … [1513 caractères tronqués]`
+
+  ```
+BUILD
+=== perplexité 19.3885 sur 510 tokens (0 événements, 18.3 s) ===
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/contexte-long.md", "new_string": "## 5. YaRN à retardement : ce que la mesure a dit\n\nPolitique implémentée (`[config] rotation` le dit à chaque chargement) : **RoPE\nsimple tant que le contexte demandé tient dans la longueur initi … [3477 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/contexte-long.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/contexte-long.md", "new_string": "### c. La portée de la rotation — le mur discret, et la température qui n'aide pas\n\nYaRN ×32 couvre **exactement** 131 072 jetons (4 096 × 32), c'est-à-dire le\n`max_position_embeddings` déclaré.  … [1622 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/contexte-long.md has been updated successfully.
+  ```
+
+- **bash** `{"command": "tail -6 /tmp/ref2048.out 2>/dev/null; ps aux | grep -c \"[r]ef_logits\"; free -g | head -2", "description": "Check llama.cpp reference progress"}`
+
+  ```
+tranche écrite : 2048 jetons
+### référence llama.cpp, 2 048 jetons, YaRN
+### référence llama.cpp, 2 048 jetons, YaRN
+1
+               total        used        free      shared  buff/cache   available
+Mem:             125          70           2           1          55          55
+  ```
+
+- **bash** `{"command": "sleep 300; tail -8 /tmp/ref2048.out", "description": "Wait for reference at 2048", "timeoutMs": 340000}`
+
+  ```
+perplexite = 714.827933
+fichier  = /tmp/ref_oss_2048_yarn.bin (2047 x 201088 f32 + 8 octets d'en-tete)
+
+=== journal : /tmp/ref2048.out ===
+L moy  = 6.572042
+perplexite = 714.827933
+fichier  = /tmp/ref_oss_2048_yarn.bin (2047 x 201088 f32 + 8 octets d'en-tete)
+  ```
+
+### 🤖 Assistant
+
+⏵ Référence à 2 048 : llama.cpp **714,8** contre notre 722,6 (1,1 %) — la dégradation est bien celle du modèle
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-gpt-oss-perplexite.md", "new_string": "## 8. Contexte long : la rotation, la température, et ce qui dégrade vraiment\n\nLe chantier suivant était le **YaRN à retardement** : n'appliquer l'étirement\nqu'au-delà du contexte … [2620 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-gpt-oss-perplexite.md has been updated successfully.
+  ```
+
+- **bash** `{"command": "tail -6 /tmp/interp_long.log 2>/dev/null; ps -o pid,etime,pcpu -C qtrinet-core 2>/dev/null | tail -1", "description": "Check interpolation runs"}`
+
+  ```
+### R4096 interpolation seule (comparer à 170,78 pour le RoPE simple)
+2437450       00:00  100
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/REPRISE.md", "new_string": "### b. YaRN à retardement : FAIT — et la moitié nuisible de YaRN est identifiée\n\n**Politique de rotation** (trace `[config] rotation` à chaque chargement) : RoPE\nsimple tant que le contexte demandé tient da … [3567 caractères tronqués]`
+
+  ```
+Error: cannot edit "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/REPRISE.md": file changed since it was read — re-read the file, then retry
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git status --short REPRISE.md && grep -n \"YaRN à retardement\" REPRISE.md | head -3", "description": "Check REPRISE state"}`
+
+  ```
+M REPRISE.md
+89:| Rotation | **YaRN à retardement** : RoPE simple tant que `--ctx` tient dans `rope.scaling.original_context_length` (4 096), YaRN au-delà. `QT_YARN=1` force YaRN partout, `QT_YARN_NON=1` (ou `--sans-yarn`) jamais. La trace `[config] rotation` dit lequel est actif et pourquoi |
+173:### b. YaRN à retardement : FAIT, et le contexte long est chiffré
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/REPRISE.md", "limit": 30, "offset": 171}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/REPRISE.md</path>
+<type>file</type>
+<content>
+171:   passe de ~60 s à **0,385 s** et chaque `--ppl` économise une lecture des 62 Go.
+172: 
+173: ### b. YaRN à retardement : FAIT, et le contexte long est chiffré
+174: 
+175: **Politique de rotation** (code + trace `[config] rotation`) : RoPE simple tant
+176: que le contexte demandé tient dans la longueur initiale du modèle (4 096 pour
+177: gpt-oss), YaRN ×32 au-delà. `QT_YARN=1` force YaRN partout (ce que font HF et
+178: llama.cpp), `QT_YARN_NON=1` ne l'active jamais. Décision **par séquence** et non
+179: par position : la structure de position relative ne survit que si toutes les clés
+180: partagent le même jeu de fréquences.
+181: 
+182: **Contexte long** : tout le chiffrage est dans `docs/contexte-long.md` et se
+183: recalcule avec `--plan --ctx N`. Les trois murs, dans l'ordre :
+184: 
+185: 1. **préremplissage séquentiel** (notre moteur fait un jeton à la fois) :
+186:    4,5 h à 32 k, 31 h à 128 k, **1 234 h à 1 M** → c'est le chantier n° 1 ;
+187: 2. **bande passante du KV** : 77 Go relus par jeton à 1 M en f32 (3,9 s),
+188:    9,7 Go en int4 (483 ms depuis la RAM, 13 ms depuis les
+… [765 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/REPRISE.md", "new_string": "### b. YaRN à retardement : FAIT — et la moitié nuisible de YaRN est identifiée\n\n**Politique de rotation** (trace `[config] rotation` à chaque chargement) : RoPE\nsimple tant que le contexte demandé tient da … [2304 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/REPRISE.md has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='REPRISE.md'\ns=open(p).read()\ns=s.replace(\"\"\"| Rotation | **YaRN à retardement** : RoPE simple tant que `--ctx` tient dans `rope.scaling.original_context_length` (4 096), YaRN au-delà. `QT_YARN=1` force YaRN  … [733 caractères tronqués]`
+
+  ```
+3
+
+### R4096 interpolation seule (comparer à 170,78 pour le RoPE simple)
+  ```
+
+- **bash** `{"command": "sleep 300; tail -5 /tmp/interp_long.log", "description": "Wait for interpolation-only at 4096", "timeoutMs": 340000}`
+
+  ```
+### R4096 interpolation seule (comparer à 170,78 pour le RoPE simple)
+  ```
+
+- **bash** `{"command": "sleep 300; tail -5 /tmp/interp_long.log; ps -o pid,etime,pcpu -C qtrinet-core 2>/dev/null | tail -1", "description": "Continue waiting for 4096 interpolation", "timeoutMs": 340000}`
+
+  ```
+### R4096 interpolation seule (comparer à 170,78 pour le RoPE simple)
+2437450       10:37 1679
+  ```
+
+### 🤖 Assistant
+
+⏵ Validation et commit de l'étape pendant que la passe 4 096 tourne
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && cargo test --release 2>&1 | tail -4", "description": "Run unit tests", "timeoutMs": 600000}`
+
+  ```
+test list::tests_q6k::quarts_successifs ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -m \"Rotation : YaRN a retardement, et la temperature est la moitie nuisible\n\nLa politique de rotation se decide desormais par sequence, a la longueur du\ncontexte demande : RoPE simple tant que --ctx ti … [2094 caractères tronqués]`

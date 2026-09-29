@@ -5,25 +5,27 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 2.7 h |
-| Tours | 1 |
-| Messages | 303 |
-| Appels d'outils | 315 |
-| Fichiers touchés | 18 |
-| Commandes | 177 |
+| Durée | 5.3 h |
+| Tours | 2 |
+| Messages | 400 |
+| Appels d'outils | 413 |
+| Fichiers touchés | 27 |
+| Commandes | 244 |
 | Sous-agents | 1 |
-| Commits | 2 |
+| Commits | 3 |
 | Compactages de contexte | 0 |
 
 ## 1. Ce qui a été demandé
 
 **Tour 1** — continue avec REPRISE.md
 
+**Tour 2** — prochaine étape?
+
 ## 2. Déroulé, étape par étape
 
 ### Tour 1 — continue avec REPRISE.md
 
-*315 appels d'outils.* Actions notables :
+*317 appels d'outils.* Actions notables :
 
 - bash — List repository root files
 - glob
@@ -39,11 +41,65 @@
 - bash — Check memory and cpu
 - write `/tmp/gguf_meta.py`
 - bash — Dump gpt-oss metadata and harmony tokens
-- … et 243 autres
+- … et 244 autres
 
 **Synthèse produite :**
 
-⏵ Contrôle final : reproductibilité du chiffre de gpt-oss avec le binaire définitif
+Reprise terminée. Voici ce que la session a établi — tout est mesuré, commité, et `REPRISE.md` est à jour.
+
+\## Les deux bugs réels de gpt-oss (§6.a)
+
+| | avant | après |
+|---|---|---|
+| `attn_output.bias` ignoré (gpt-oss a un biais sur Q, K, V **et O**) — 63 jetons | 39,80 | **20,84** |
+| fenêtre glissante sur les 36 couches au lieu d'une sur deux — 511 jetons | 129,9 | **15,08** |
+
+Le motif de fenêtre est vérifié dans les sources : `layer_types` de gpt-oss alterne `sliding_attention`/`full_attention`, et llama.cpp pose `set_swa_pattern(2)`. Les deux extrêmes sont pires que le motif réel du modèle : 17,14 (toutes fenêtrées) et 26,15 (aucune). Un troisième bug latent — les puits appris absents du softmax des couches pleines — est corrigé, **effet mesuré nul** sur gpt-oss (le chemin groupé les comptait déjà).
+
+\## La prémisse « devrait valoir ~6 » était fausse
+
+Nouvel outil `tools/ref_logits` : llama.cpp évalue **exactement les mêmes identifiants, sans BOS**.
+
+| mêmes prédictions | llama.cpp | qtrinet-core |
+|---|---|---|
+| 63 jetons, YaRN | 38,37 | 41,11 |
+| 511 jetons, YaRN | 169,67 | 174,34 |
+
+Corrélation des logits **0,999976**, **top-1 identique partout**, |ΔNLL| médian 0,076 (notre int15 contre son f32). Notre moteur n'était pas le maillon faible — il fait même mieux, parce qu'il sait éteindre YaRN, qui coûte **×9** ici (18,58 contre 174,34). Ce n'est pas un bug : HF, llama.cpp et l'implémentation officielle d'OpenAI appliquent le même YaRN statique (vérifié dans les trois sources).
+
+\## Hypothèse harmony : réfutée, avec le mécanisme
+
+Le modèle **exige son canal `analysis`** : après `<|start|>assistant<|channel|>`, p(analysis) = 0,9999 contre p(final) = 0,0001. Meilleur montage canonique (système officiel + `analysis` puis `final`) : **26,0** — contre **13,7** en brut pour le même texte. Le format rend le texte *moins* prévisible, pas plus.
+
+\## Effet de bord utile
+
+`Gguf::open_meta` ne lit plus que l'en-tête : `--tokenize` sur gpt-oss passe de ~60 s à **0,385 s** (identifiants inchangés) et chaque `--ppl` économise une lecture des 62 Go. Non-régression Qwen : **19,3885** exactement, tests 3/3.
+
+Reste ouvert et documenté : le YaRN « à retardement » (au-delà de 4 096), protocole et coût dans `reports/rapport-gpt-oss-perplexite.md`.
+
+### Tour 2 — prochaine étape?
+
+*96 appels d'outils.* Actions notables :
+
+- ask_user_question
+- todo_write
+- bash — llama.cpp reference on Qwen 512 tokens
+- bash — Our Qwen logits at three activation precisions
+- bash — Analyse the gpt-oss logit gap distribution
+- read
+- edit `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src/model.rs`
+- edit `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src/model.rs`
+- bash — Build and check rotation trace on Qwen
+- bash — Build long corpus and count its tokens
+- write `/tmp/bascule_yarn.sh`
+- bash — Launch the rotation boundary series
+- bash — Collect hardware facts for the 1M plan
+- bash — Read run_plan implementation
+- … et 79 autres
+
+**Synthèse produite :**
+
+⏵ Validation et commit de l'étape pendant que la passe 4 096 tourne
 
 ## 3. Travail accompli
 
@@ -52,23 +108,32 @@
 | Fichier | Écritures | Éditions |
 |---|---|---|
 | `/tmp/gguf_meta.py` | 1 | 0 |
-| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src/model.rs` | 0 | 10 |
-| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src/main.rs` | 0 | 32 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src/model.rs` | 0 | 12 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src/main.rs` | 0 | 37 |
 | `/tmp/mesures_oss.sh` | 2 | 0 |
 | `/tmp/mesures_oss2.sh` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/compare_logits.py` | 1 | 0 |
 | `/tmp/mesures_oss3.sh` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/ref_logits.cpp` | 0 | 3 |
 | `/tmp/mesures_oss4.sh` | 2 | 0 |
-| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-gpt-oss-perplexite.md` | 1 | 1 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-gpt-oss-perplexite.md` | 1 | 2 |
 | `/tmp/controles_oss.sh` | 1 | 0 |
-| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/REPRISE.md` | 0 | 7 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/REPRISE.md` | 0 | 11 |
 | `/tmp/controles2_oss.sh` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/harmony_canonique.py` | 1 | 1 |
 | `/tmp/controles3_oss.sh` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src/gguf.rs` | 0 | 2 |
 | `/tmp/controles4_oss.sh` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/.gitignore` | 0 | 2 |
+| `/tmp/bascule_yarn.sh` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/contexte-long.md` | 1 | 3 |
+| `/tmp/croisement_yarn.sh` | 2 | 0 |
+| `/tmp/profil_profondeur.sh` | 1 | 0 |
+| `/tmp/contenu_ou_profondeur.sh` | 1 | 0 |
+| `/tmp/ref_long.sh` | 1 | 0 |
+| `/tmp/mscale_yarn.sh` | 1 | 0 |
+| `/tmp/ref2048.sh` | 1 | 0 |
+| `/tmp/interp_long.sh` | 1 | 0 |
 
 ### Sous-agents lancés
 
@@ -116,7 +181,7 @@
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 137 autres
+- … et 204 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -222,6 +287,25 @@
 - **T1** `255 tokens notés — perplexité cumulée 13.715  (5.3 tok/s)  [fenêtre 1 : 255 notés, PPL 13.715]`
 - **T1** `510 tokens notés — perplexité cumulée 15.176  (5.2 tok/s)  [fenêtre 2 : 255 notés, PPL 16.792]`
 - **T1** `=== perplexité 15.1757 sur 510 tokens (0 événements, 97.3 s) ===`
+- **T2** `511 tokens notés — perplexité cumulée 13.287  (28.7 tok/s)`
+- **T2** `logits exportés : /tmp/nous_qwen_512_a8.bin — 511 positions × 151936 valeurs`
+- **T2** `=== perplexité 13.2872 sur 511 tokens (0 événements, 17.8 s) ===`
+- **T2** `511 tokens notés — perplexité cumulée 13.135  (30.6 tok/s)`
+- **T2** `logits exportés : /tmp/nous_qwen_512_a12.bin — 511 positions × 151936 valeurs`
+- **T2** `=== perplexité 13.1348 sur 511 tokens (0 événements, 16.7 s) ===`
+- **T2** `511 tokens notés — perplexité cumulée 13.137  (30.2 tok/s)`
+- **T2** `logits exportés : /tmp/nous_qwen_512_a16.bin — 511 positions × 151936 valeurs`
+- **T2** `=== perplexité 13.1368 sur 511 tokens (0 événements, 16.9 s) ===`
+- **T2** `255 tokens notés — perplexité cumulée 17.431  (32.5 tok/s)  [fenêtre 1 : 255 notés, PPL 17.431]`
+- **T2** `510 tokens notés — perplexité cumulée 19.388  (32.5 tok/s)  [fenêtre 2 : 255 notés, PPL 21.565]`
+- **T2** `=== perplexité 19.3885 sur 510 tokens (0 événements, 15.7 s) ===`
+- **T2** `/dev/nvme0n1p2           828G  268G  561G  33% /home/stephane/FastNVMe`
+- **T2** `/dev/mapper/system-root   11T  6,2T  4,7T  57% /home/stephane/Data13TB`
+- **T2** `else { "GPU (PCIe 6,5 Go/s)" };`
+- **T2** `// Mesuré sur le 30B-A3B : les tranches d'experts sont lues à 8 Go/s,`
+- **T2** `// pas 20 — dix-huit mille tranches de 900 Ko dispersées sur 18 Go`
+- **T2** `println!("  à       8.0 Go/s (MoE épars, mesuré) : {:>7.2} tok/s",`
+- … (tronqué)
 
 ## 5. Erreurs rencontrées
 
@@ -236,4 +320,5 @@
 
 - gpt-oss : biais attn_output et fenetre par couche corriges, reference llama.cpp  Deux bugs reels, trouves en reprenant REPRISE.md §6.a :  1. attn_output.bias et
 - REPRISE : chiffres gpt-oss exacts (ids 15,1757 / texte 15,0757)" && git log --oneline -3 && git status --short | head -3
+- Rotation : YaRN a retardement, et la temperature est la moitie nuisible  La politique de rotation se decide desormais par sequence, a la longueur du contexte de
 

@@ -86,6 +86,8 @@ Un garde-fou le détecte maintenant (identifiant ≥ vocabulaire = erreur franch
 | GPU | noyaux PTX + API pilote, tête et projections opt-in (`QT_GPU=1`) |
 | Outils | `--ppl`, `--plan` (placement), `--tokenize`, `--bits N` (simulation de précision) |
 | Mesure | `--ppl-texte F` (identifiants du tokenizer du modèle), `--logits-bin F` (logits bruts), `--harmony*` (habillage harmony), `--swa-pattern N`, `--sans-fenetre` |
+| Rotation | **YaRN à retardement** : RoPE simple tant que `--ctx` tient dans `rope.scaling.original_context_length` (4 096), **interpolation YaRN seule au-delà** (la température `mscale` est la moitié nuisible : divise la perplexité par 8,9 à 512 jetons). `QT_YARN=1` = YaRN complet des références, `QT_YARN_NON=1` (ou `--sans-yarn`) = jamais, `QT_YARN_MSCALE=0/1` = température seule. La trace `[config] rotation` dit lequel est actif |
+| Budget de contexte | `--plan --ctx N` : KV f32/int8/int4, relecture par jeton, décodage selon les bandes passantes, coût du préremplissage séquentiel, portée du YaRN |
 | Référence externe | `tools/ref_logits` (llama.cpp, mêmes identifiants, sans BOS) + `tools/compare_logits.py` |
 
 **Vérifications externes déjà faites** (elles ont trouvé les bugs) : déquantification
@@ -168,12 +170,49 @@ Deux faits à ne pas réapprendre :
 - Effet de bord : `Gguf::open_meta` (en-tête seul) — `--tokenize` sur gpt-oss
   passe de ~60 s à **0,385 s** et chaque `--ppl` économise une lecture des 62 Go.
 
-### b. YaRN « à retardement » (suite de a)
+### b. YaRN à retardement : FAIT — et la moitié nuisible de YaRN est identifiée
 
-Appliquer l'étirement **seulement au-delà** de `initial_context_length` (4 096),
-pour garder le gain à contexte court et l'extension longue. Protocole : corpus
-de 8 000 jetons, `--ctx 4096`, quatre passes (simple/YaRN × court/long) ≈ 13 min
-chacune sur le 120B. C'est la seule piste qui reste sur ce modèle.
+**Politique de rotation** (trace `[config] rotation` à chaque chargement) : RoPE
+simple tant que le contexte demandé tient dans la longueur initiale (4 096 pour
+gpt-oss), **interpolation YaRN seule au-delà** ; `QT_YARN=1` rétablit le YaRN
+complet des implémentations de référence, `QT_YARN_NON=1` (ou `--sans-yarn`)
+n'active jamais rien, `QT_YARN_MSCALE=0/1` tranche sur la température seule.
+Décision **par séquence** et non par position : la structure de position relative
+ne survit que si toutes les clés partagent le même jeu de fréquences.
+
+**Ce que la mesure a montré** (gpt-oss, même corpus, une fenêtre) :
+
+| longueur | RoPE simple | YaRN sans mscale | YaRN complet |
+|---|---|---|---|
+| 512 | **18,58** | 19,65 | 174,34 |
+| 1 024 | **46,94** | 71,35 | 417,65 |
+| 2 048 | **121,75** | 192,63 | 722,56 |
+| 4 096 | 170,78 | (en cours) | — |
+
+1. **La mise à l'échelle de température (`mscale`) est la partie nuisible** : la
+   retirer divise la perplexité par 8,9 / 5,9 / 3,8 selon la longueur. C'est
+   elle, pas l'interpolation, qui rend le YaRN déclaré catastrophique sur du
+   texte brut — et les trois implémentations de référence l'appliquent.
+2. Le RoPE simple gagne à **toutes** les longueurs mesurées, 4 096 compris.
+3. La dégradation avec la longueur **n'est pas un bug du moteur** : llama.cpp,
+   mêmes 2 048 identifiants, un seul lot, YaRN déclaré → **714,83** contre
+   **722,56** chez nous (1,1 %). Le contenu et la position du corpus expliquent
+   le reste (la même tranche vaut 13,94 en tête, 59,36 à la position 0 mais
+   prise plus loin, ~400 à sa place réelle).
+
+**Contexte long** : tout le chiffrage est dans `docs/contexte-long.md` et se
+recalcule avec `--plan --ctx N`. Les trois murs, dans l'ordre :
+
+1. **préremplissage séquentiel** (notre moteur fait un jeton à la fois) :
+   4,5 h à 32 k, 31 h à 128 k, **1 234 h à 1 M** → c'est le chantier n° 1 ;
+2. **bande passante du KV** : 77 Go relus par jeton à 1 M en f32 (3,9 s),
+   9,7 Go en int4 (483 ms depuis la RAM, 13 ms depuis les deux GPU) ;
+3. **portée de la rotation** : YaRN ×32 couvre exactement 131 072 ; à 1 M il
+   faudrait ×256, soit huit fois ce que le modèle a vu.
+
+À noter : le KV int4 à 1 M (9,7 Go) **tient dans un seul RTX 5000** (16 Go) et la
+fenêtre par couche divise déjà le budget par deux — c'est le préremplissage, pas
+la mémoire, qui bloque.
 
 ### c. Refactoriser les boucles CLI (trois bugs de la même classe)
 
@@ -231,6 +270,7 @@ tools/compare_logits.py      comparaison position par position (NLL, top-1, corr
 tools/harmony_canonique.py   montage harmony canonique (analysis puis final)
 reports/rapport-travail-reel.md      ce que le moteur sait faire, tests réels
 reports/rapport-gpt-oss-perplexite.md  les deux bugs de gpt-oss et la référence externe
+docs/contexte-long.md                budget 1 M : KV, préremplissage, rotation
 docs/convertisseur.md                plan de chargement, résultats négatifs
 reports/rapport-passage-a-l-echelle.md   modèle de coût, faisabilité par modèle
 journal/                             sessions archivées automatiquement
