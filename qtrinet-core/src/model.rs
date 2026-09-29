@@ -1744,8 +1744,6 @@ impl Model {
                                           &vi[hh * hd..(hh + 1) * hd]);
                     }
                 }
-                // Miroir VRAM : une seule copie contiguë pour tout le lot.
-                KvCache::miroir_gpu(self.kv_gpu.as_deref(), l, &self.kv[l], pos, t);
                 let fen = if self.attn_window == 0 { 0 }
                           else if self.swa_pattern <= 1 { self.attn_window }
                           else if l % self.swa_pattern < self.swa_pattern - 1 { self.attn_window }
@@ -1821,6 +1819,11 @@ impl Model {
                 }
                 self.attn_events += (nh * (n - lo)) as u64;
             }
+            // Miroir VRAM : UNE copie contiguë par couche pour tout le lot,
+            // après la boucle des jetons. La placer dans la boucle copiait `t`
+            // positions à partir de la position du jeton — recouvrement, et une
+            // copie par jeton au lieu d'une par lot.
+            KvCache::miroir_gpu(self.kv_gpu.as_deref(), l, &self.kv[l], pos0, t);
             self.prof[2] += t_att.elapsed().as_secs_f64();
             let t_ffn = Instant::now();
             // 4. projection de sortie du lot, résidu, norme du FFN

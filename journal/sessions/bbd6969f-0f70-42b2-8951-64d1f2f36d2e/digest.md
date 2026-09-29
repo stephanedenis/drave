@@ -15416,3 +15416,184 @@ started background job bash-32
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='docs/contexte-long.md'; s=open(p).read()\nold = \"\"\"### Dans le moteur (`QT_GPU=1 QT_GPU_KV=1`)\"\"\"\nnew = \"\"\"### Comment le noyau a été validé (et les trois bugs qu'il a fallu sortir)\n\nLe banc `--banc-k … [1500 caractères tronqués]`
+
+  ```
+méthode de validation documentée
+a593603 docs E4 : comment le noyau d'attention a été validé (cas dégénérés, trois bugs)
+  ```
+
+- **bash** `{"command": "sleep 600; cat /tmp/rotation_seuil.log | tail -4; pgrep -x qtrinet-core >/dev/null && echo \"[en cours]\"", "description": "Wait and check threshold measurement", "timeoutMs": 660000}`
+
+  ```
+(no output)
+[timed out after 600000ms]
+[killed by signal: SIGTERM]
+  ```
+
+- **bash** `{"command": "cat /tmp/rotation_seuil.log 2>/dev/null | tail -5; echo \"---\"; pgrep -x qtrinet-core >/dev/null && echo \"[en cours]\" || echo \"[libre]\"", "description": "Check threshold log state"}`
+
+  ```
+ctx 5120  simple  : ---
+[en cours]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && grep -n \"miroir_gpu\" src/model.rs && sed -n '1660,1672p' src/model.rs && grep -n \"for pos in pos0\\|let t = \\|for (i, &tok)\" src/model.rs | sed -n '1,12p'", "description": "Verify mirroring call parameters"}`
+
+  ```
+712:    pub fn miroir_gpu(miroirs: Option<&[crate::gpu::KvGpu]>, l: usize, kvc: &KvCache,
+1748:                KvCache::miroir_gpu(self.kv_gpu.as_deref(), l, &self.kv[l], pos, t);
+2124:            KvCache::miroir_gpu(kv_gpu.as_deref(), l, &kv[l], pos, 1);
+                let se = (seuil * niveaux) as i32;
+                for (j, &val) in ligne.iter().enumerate() {
+                    let r = (val * inv).round() as i32;
+                    dst[i * n + j] = if r.abs() > se { r } else { 0 };
+                }
+            }
+        };
+        for l in 0..self.cfg.n_layer {
+            let lay = &self.layers[l];
+            // 1. norme d'entrée du lot
+            for i in 0..t {
+                let r = &x[i * h..(i + 1) * h];
+                Self::rmsnorm(r, &lay.attn_norm, self.cfg.eps, &mut hn[i * h..(i + 1) * h]);
+94:        let t = g.tensor(nom)?;
+115:        let t = g.tensor(nom)?;
+293:        let t = g.tensor(name).unwrap_or_else(|| panic!("tenseur {name} absent"));
+1332:            let t = &tirs[l * largeur..(l + 1) * largeur];
+1491:            let t = &mut v[h * head_dim..(h + 1) * head_dim];
+1526:            let t = &mut v[h * head_dim..(h + 1) * head_dim];
+1570:            let
+… [304 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && sed -n '1596,1616p' src/model.rs && sed -n '1735,1752p' src/model.rs", "description": "Check forward_lot token loop and mirror position"}`
+
+  ```
+let t = toks.len();
+        if t == 0 { return Vec::new(); }
+        if t == 1 {
+            return vec![self.forward(toks[0], pos0)];
+        }
+        // Les modèles à experts suivent le même chemin par lots, avec en plus le
+        // regroupement des jetons par expert (voir la section MoE plus bas).
+        let h = self.cfg.hidden;
+        let hd = self.cfg.head_dim;
+        let nh = self.cfg.n_head;
+        let nkv = self.cfg.n_kv_head;
+        let rep = nh / nkv;
+        let ctx = self.ctx;
+        // --- activations du lot, en i32 quantifié (une seule quantification de
+        //     l'entrée normative sert à q, k, v ET au FFN)
+        let mut x = vec![0f32; t * h];
+        for (i, &tok) in toks.iter().enumerate() {
+            let r = self.g.row_f32("token_embd.weight", tok as usize, h);
+            x[i * h..(i + 1) * h].copy_from_slice(&r);
+        }
+        let mut hn = vec![0f32; t * h];
+                    None => {
+                        Self::rope(qi, nh, hd, pos, self.cfg.rope_base, self.cfg.n_rot);
+                        Self::rope(ki, nkv, hd, pos, self.cfg.rope_base, self.cfg.n_rot);
+                    }
+                }
+                {
+                    l
+… [681 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && awk 'NR>=1700 && NR<=1740 {printf \"%4d|%s\\n\", NR, $0}' src/model.rs", "description": "Inspect forward_lot attention loop"}`
+
+  ```
+1700|                    }
+1701|                }
+1702|            }
+1703|            q.copy_from_slice(&qa);
+1704|            k.copy_from_slice(&ka);
+1705|            v.copy_from_slice(&va);
+1706|            self.prof[0] += t_proj.elapsed().as_secs_f64();
+1707|            let t_att = Instant::now();
+1708|            // 3. normes de tête, rotation, écriture du cache, attention
+1709|            for i in 0..t {
+1710|                let pos = pos0 + i;
+1711|                let qi = &mut q[i * nq..(i + 1) * nq];
+1712|                let ki = &mut k[i * nkv * hd..(i + 1) * nkv * hd];
+1713|                let vi = &v[i * nkv * hd..(i + 1) * nkv * hd];
+1714|                if lay.q_norm.is_some() || lay.k_norm.is_some() {
+1715|                    if let Some(w) = lay.q_norm.as_ref() {
+1716|                        for hh in 0..nh {
+1717|                            let tt = &mut qi[hh * hd..(hh + 1) * hd];
+1718|                            Self::rmsnorm(tt, w, self.cfg.eps, &mut tmp);
+1719|                            tt.copy_from_slice(&tmp);
+1720|                        }
+1721|                    }
+1722|                    if let Some(w) = lay.k_norm.as_ref() {
+1723|                        
+… [978 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && awk 'NR>=1875 && NR<=1905 {printf \"%4d|%s\\n\", NR, $0}' src/model.rs", "description": "Find end of per-token loop in forward_lot"}`
+
+  ```
+1875|                    if self.cfg.routeur_topk_softmax {
+1876|                        if k < ne {
+1877|                            idx.select_nth_unstable_by(k, |&a, &b| {
+1878|                                sc_e[b as usize].partial_cmp(&sc_e[a as usize]).unwrap()
+1879|                            });
+1880|                            idx.truncate(k);
+1881|                        }
+1882|                        let mx = idx.iter().map(|&e| sc_e[e as usize])
+1883|                                   .fold(f32::NEG_INFINITY, f32::max);
+1884|                        let mut somme = 0f32;
+1885|                        for &e in &idx {
+1886|                            let v = (sc_e[e as usize] - mx).exp(); sc_e[e as usize] = v; somme += v;
+1887|                        }
+1888|                        if somme > 0.0 { inv_k = 1.0 / somme; }
+1889|                    } else {
+1890|                        let mx = sc_e.iter().cloned().fold(f32::NEG_INFINITY, f32::max);
+1891|                        let mut somme = 0f32;
+1892|                        for v in sc_e.iter_mut() { *v = (*v - mx).exp(); somme += *v; }
+1893|                        if somme > 0.0 { for v in sc_e.iter_mut() { *v /= somme; 
+… [759 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && grep -n \"// 4. projection de sortie du lot\" src/model.rs && awk 'NR>=1800 && NR<=1832 {printf \"%4d|%s\\n\", NR, $0}' src/model.rs", "description": "Locate end of token loop"}`
+
+  ```
+1826:            // 4. projection de sortie du lot, résidu, norme du FFN
+1800|                    let qh = &qi[hh * hd..(hh + 1) * hd];
+1801|                    for tt in lo..n {
+1802|                        kvc.cle(kvh, tt, &mut kd);
+1803|                        sc[tt] = Self::dot8(&qh, &kd) * scale;
+1804|                    }
+1805|                    let puits = lay.sinks.as_ref().map(|s| s[hh]);
+1806|                    let mut mx = f32::NEG_INFINITY;
+1807|                    for tt in lo..n { if sc[tt] > mx { mx = sc[tt]; } }
+1808|                    if let Some(s) = puits { if s > mx { mx = s; } }
+1809|                    let mut somme = 0f32;
+1810|                    for tt in lo..n { let e = (sc[tt] - mx).exp(); sc[tt] = e; somme += e; }
+1811|                    if let Some(s) = puits { somme += (s - mx).exp(); }
+1812|                    let inv = 1.0 / somme;
+1813|                    let out = &mut att[i * nq + hh * hd..i * nq + (hh + 1) * hd];
+1814|                    for val in out.iter_mut() { *val = 0.0; }
+1815|                    for tt in lo..n {
+1816|                        let w = sc[tt] * inv;
+1817|                        kvc.valeur(kvh, tt, &mut vd);
+1818|        
+… [818 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && python3 - <<'PY'\np='src/model.rs'; s=open(p).read()\n# la copie par jeton était fausse (elle partait de la position du jeton et\n# copiait t positions) : une seule copie par couche, après la boucle des jetons.\nold = \" … [1282 caractères tronqués]`
+
+  ```
+miroir du lot corrigé (une copie par couche)
+    Finished `release` profile [optimized] target(s) in 0.01s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && QT_GPU=1 QT_GPU_KV=1 timeout 900 ./qtrinet-core/target/release/qtrinet-core models/Qwen2.5-0.5B-Q8_0.gguf --ppl /tmp/ids_qwen.txt --ctx 512 --limit 512 --dense --threads 16 --lot 512 2>&1 | grep -E \"\\[gpu\\]|perplexité\"", "descrip … [65 caractères tronqués]`
+
+  ```
+[gpu] KV déporté : 24 couches, 0.01 Go en VRAM (16.17 Mo libres), cache CPU 0.01 Go
+     511 tokens notés — perplexité cumulée 13.136  (23.5 tok/s)
+=== perplexité 13.1359 sur 511 tokens (0 événements, 21.7 s) ===
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A qtrinet-core/src && git commit -q -m \"KV déporté : corriger la copie du chemin par lots\n\nLe miroir était appelé DANS la boucle des jetons avec la position du jeton et la\ntaille du lot : il copiait t positions à partir  … [364 caractères tronqués]`
