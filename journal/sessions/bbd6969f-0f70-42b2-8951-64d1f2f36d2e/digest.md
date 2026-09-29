@@ -11196,3 +11196,28 @@ longueurs réduites à 1024,2048 (4 096 coûterait ~35 min par sonde)
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='REPRISE.md'\ns=open(p).read()\ns=s.replace(\"\"\"### Ce qu'il faut faire ensuite, dans l'ordre\"\"\",\n\"\"\"### Mesures du tour « huit chantiers » (toutes commitées)\n\n| mesure | valeur |\n|---|---|\n| noyau GP … [3120 caractères tronqués]`
+
+  ```
+b9ba6ce REPRISE : toutes les mesures du tour huit chantiers, et la suite ordonnee
+     1024        0.50     NON      86.5
+     1024        0.90     NON      86.2
+     2048        0.10     NON     122.3
+     2048        0.50     NON     123.3
+  ```
+
+- **bash** `{"command": "sleep 290; tail -5 /tmp/aiguille_lance.out; echo \"=== aiguille 30B ===\"; cat /tmp/aiguille30b.log 2>/dev/null | tail -5", "description": "Check needle test progress", "timeoutMs": 320000}`
+
+  ```
+1024        0.50     NON      86.5
+     1024        0.90     NON      86.2
+     2048        0.10     NON     122.3
+     2048        0.50     NON     123.3
+     2048        0.90     NON     121.8
+=== aiguille 30B ===
+  ```
+
+### 🤖 Assistant
+
+⏵ Aiguille sur le 0.5B : 6 sondes sur 6 échouent (modèle trop petit) ; le 30B tourne
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='docs/contexte-long.md'\ns=open(p).read()\ns=s.replace(\"\"\"1. **Aiguille dans la botte de foin** (`tools/aiguille.py`) : la perplexité ne dit\n   pas si le modèle RETROUVE une information. Le script plante un co … [1332 caractères tronqués]`

@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 21.5 h |
+| Durée | 21.6 h |
 | Tours | 5 |
-| Messages | 694 |
-| Appels d'outils | 704 |
+| Messages | 696 |
+| Appels d'outils | 706 |
 | Fichiers touchés | 33 |
-| Commandes | 505 |
+| Commandes | 507 |
 | Sous-agents | 1 |
-| Commits | 19 |
+| Commits | 20 |
 | Compactages de contexte | 0 |
 
 ## Objectifs déclarés
@@ -217,7 +217,7 @@ Retirer `mscale = 1 + 0,1·ln f` divise la perplexité par **8,9 / 5,9 / 3,8**. 
 
 ### Tour 5 — <goal_round> Objective: "Réaliser les 8 chantiers restants du projet qtrinet-core dans l'ordre : (1) protocole de perple … [1122 caractères tronqués]
 
-*101 appels d'outils.* Actions notables :
+*103 appels d'outils.* Actions notables :
 
 - bash — Check rotation series and expert profile
 - bash — End-to-end batched prefill correctness and time
@@ -233,11 +233,11 @@ Retirer `mscale = 1 + 0,1·ln f` divise la perplexité par **8,9 / 5,9 / 3,8**. 
 - bash — Fix the grep pattern and relaunch cleanly
 - bash — Read the MXFP4 CPU kernel for the layout
 - bash — Find the MXFP4 scalar dot path
-- … et 86 autres
+- … et 88 autres
 
 **Synthèse produite :**
 
-⏵ Aiguille : le 0.5B échoue même à 1 024 (trop petit). J'ajoute le 30B au test
+⏵ Aiguille sur le 0.5B : 6 sondes sur 6 échouent (modèle trop petit) ; le 30B tourne
 
 ## 3. Travail accompli
 
@@ -325,7 +325,7 @@ Retirer `mscale = 1 + 0,1·ln f` divise la perplexité par **8,9 / 5,9 / 3,8**. 
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 465 autres
+- … et 467 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -492,4 +492,5 @@ Retirer `mscale = 1 + 0,1·ln f` divise la perplexité par **8,9 / 5,9 / 3,8**. 
 - Item 8 : premiers resultats d'attention creuse (et ils sont opposes)  gpt-oss, memes 512 jetons (1536-2047), contexte 2 048 :    aucune restriction             
 - Item 4 : le GEMM sur le pool, et le gain reel attribue poste par poste  Le produit matrice-matrice s'execute desormais SUR les workers du pool : les fils crees 
 - REPRISE : toutes les mesures du tour huit chantiers, et la suite ordonnee  Tableau recapitulatif (noyaux GPU, prefill par lots, KV int8/int4 a 4 600 jetons, att
+- Aiguille : le 0.5B echoue 6 fois sur 6 (limite du modele, pas du moteur)  Qwen2.5-0.5B ne retrouve pas un code plante a 1 024 ou 2 048 jetons, a aucune des troi
 

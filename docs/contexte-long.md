@@ -228,7 +228,12 @@ discrimine donc rien sur la rotation, et il reste à le refaire avec
 1. **Aiguille dans la botte de foin** (`tools/aiguille.py`) : la perplexité ne dit
    pas si le modèle RETROUVE une information. Le script plante un code à une
    profondeur donnée et vérifie qu'il ressort ; c'est la mesure de qualité qui
-   manque au plan.
+   manque au plan. Premier essai sur Qwen2.5-0.5B : **6 sondes sur 6 échouent**
+   (1 024 et 2 048 jetons, profondeurs 0,1 / 0,5 / 0,9) — le demi-milliard de
+   paramètres ne sait pas retrouver un code, donc ce modèle ne peut pas servir de
+   référence ; l'essai est relancé sur Qwen3-30B-A3B. Ce n'est pas un défaut du
+   moteur : c'est la limite du modèle, et il valait mieux la mesurer que la
+   supposer.
 2. **Attention creuse** : `--attn-topk N` et `--attn-window N` au protocole
    `--depuis` (mêmes jetons, contexte long) donnent le prix en perplexité de
    chaque restriction.
