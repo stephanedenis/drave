@@ -17927,3 +17927,35 @@ warning: `qtrinet-core` (bin "qtrinet-core") generated 15 warnings (run `cargo f
   ```
 
 - **bash** `{"command": "cat /tmp/rotation_16k.log; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='docs/contexte-long.md'; s=open(p).read()\nold = \"\"\"Il reste, sur ce chemin : la répartition sur les **deux** GPU (le second est\nlibre), et l'extension du noyau au top-k (aujourd'hui … [2237 caractères tronqués]`
+
+  ```
+ctx 16384 simple  : docs 2d/2e
+38d4d8b Chantiers 2d et 2e : noyau de tête AVX2, KV réparti sur les deux GPU
+  ```
+
+- **write** `{"content": "# Plan : MLA et vision (chantier 5)\n\nCes deux-là ne sont pas « à moitié faits » : ils ne sont pas commencés, et ce\ndocument dit exactement par quoi commencer, pour qu'une session suivante n'ait\npas à refaire l'enquête. Rien ici n'est mesuré — c'est une feuille de route, et\nelle est … [5001 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/plan-mla-vision.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "sleep 480; cat /tmp/rotation_16k.log; pgrep -x qtrinet-core >/dev/null && echo \"[en cours]\" || echo \"[libre]\"", "description": "Wait for 16k rotation result", "timeoutMs": 540000}`
+
+  ```
+ctx 16384 simple  : [en cours]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A docs/plan-mla-vision.md && git commit -q -m \"docs : plan détaillé pour MLA et la vision (chantier 5)\n\nMLA n'est pas testable en l'état (aucun modèle MLA en GGUF ici — le\ndeepseek-r1-distill local est un Qwen dense). Le … [876 caractères tronqués]`
+
+  ```
+6778dcd docs : plan détaillé pour MLA et la vision (chantier 5)
+ctx 16384 simple  : 
+[stderr]
+bash: line 1: forward: command not found
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log -1 --format=%B | tail -4 && cat > /tmp/msg_plan.txt <<'EOF'\ndocs : plan détaillé pour MLA et la vision (chantier 5)\n\nMLA n'est pas testable en l'état (aucun modèle MLA en GGUF ici — le\ndeepseek-r1-distill local est un Qwe … [878 caractères tronqués]`
