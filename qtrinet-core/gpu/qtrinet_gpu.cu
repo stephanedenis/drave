@@ -382,9 +382,13 @@ __global__ void proj_q6k_warp(const unsigned char* __restrict__ w,
 // applique les puits appris, exactement comme le fait le CPU.
 //
 // Disposition de la mémoire partagée :
-//   shK[i * 33 + k] : tuile de clés TRANSPOSÉE (33 = 32 + 1 de rembourrage,
-//                     sans quoi les 32 fils d'une même lecture tomberaient
-//                     dans la même banque) ;
+//   shK[k * (hd + 1) + i] : tuile de clés en ligne, rembourrée d'un mot par
+//                     ligne. Le rembourrage suffit à rendre la lecture sans
+//                     conflit de banque (la voie `l` lit `l*(hd+1)+i`, soit
+//                     `l + i` modulo 32 : une banque par voie), et il laisse le
+//                     CHARGEMENT vectorisable — en transposé, quatre éléments
+//                     consécutifs s'écrivaient dans quatre lignes différentes et
+//                     les conversions restaient scalaires ;
 //   shV[k * hd + i] : tuile de valeurs, disposition naturelle (les fils lisent
 //                     des adresses consécutives) ;
 //   shP[w * 32 + k] : poids de la tuile, écrits par la réduction puis relus en
@@ -418,8 +422,8 @@ __global__ void attn_kv_partiels(const void* __restrict__ kdata,
                                  int rep, int bits, float scale) {
     extern __shared__ float sh[];
     float* shQ = sh;                 // rep * hd : la requête ENTIÈRE, partagée
-    float* shK = shQ + rep * hd;     // hd * 33, tuile de clés transposée
-    float* shV = shK + hd * 33;      // 32 * hd
+    float* shK = shQ + rep * hd;     // 32 * (hd + 1), tuile de clés rembourrée
+    float* shV = shK + 32 * (hd + 1); // 32 * hd
     float* shP = shV + 32 * hd;      // rep * 32
     const int tid = threadIdx.x;
     const int lane = tid & 31;
@@ -449,11 +453,55 @@ __global__ void attn_kv_partiels(const void* __restrict__ kdata,
     for (int t0 = debut; t0 < fin; t0 += 32) {
         const int reste = min(32, fin - t0);
         // --- chargement coopératif de la tuile (K transposée, V naturelle)
-        for (int idx = tid; idx < reste * hd; idx += blockDim.x) {
-            const int k = idx / hd, i = idx % hd;
+        const int par4 = hd >> 2;              // groupes de 4 éléments
+        for (int idx = tid; idx < reste * par4; idx += blockDim.x) {
+            const int k = idx / par4, ib = idx % par4;
+            const int i = ib << 2;
             const size_t vec = basekv + t0 + k;
-            shK[i * 33 + k] = kv_lire(kdata, kscale, bits, vec, i, hd, nb);
-            shV[k * hd + i] = kv_lire(vdata, vscale, bits, vec, i, hd, nb);
+            float kv[4], vv[4];
+            if (bits == 8) {
+                // Quatre octets d'un seul coup (un `unsigned int` : pas d'en-tête
+                // CUDA ici, donc pas de `char4`), puis conversion et mise à
+                // l'échelle sur les quatre.
+                const unsigned int q4 = *reinterpret_cast<const unsigned int*>(
+                    reinterpret_cast<const unsigned char*>(kdata) + vec * (size_t)hd + i);
+                const unsigned int w4 = *reinterpret_cast<const unsigned int*>(
+                    reinterpret_cast<const unsigned char*>(vdata) + vec * (size_t)hd + i);
+                const float sk = kscale[vec * nb + (i >> 5)];
+                const float sv = vscale[vec * nb + (i >> 5)];
+                #pragma unroll
+                for (int j = 0; j < 4; ++j) {
+                    kv[j] = (float)(signed char)((q4 >> (8 * j)) & 0xFFu) * sk;
+                    vv[j] = (float)(signed char)((w4 >> (8 * j)) & 0xFFu) * sv;
+                }
+            } else if (bits == 4) {
+                const unsigned char* pk =
+                    reinterpret_cast<const unsigned char*>(kdata) + vec * (size_t)(hd / 2) + (i >> 1);
+                const unsigned char* pv =
+                    reinterpret_cast<const unsigned char*>(vdata) + vec * (size_t)(hd / 2) + (i >> 1);
+                const float sk = kscale[vec * nb + (i >> 5)];
+                const float sv = vscale[vec * nb + (i >> 5)];
+                #pragma unroll
+                for (int j = 0; j < 4; ++j) {
+                    int qk = (pk[j >> 1] >> (4 * (j & 1))) & 0x0F;
+                    int qv = (pv[j >> 1] >> (4 * (j & 1))) & 0x0F;
+                    if (qk >= 8) qk -= 16;
+                    if (qv >= 8) qv -= 16;
+                    kv[j] = (float)qk * sk;
+                    vv[j] = (float)qv * sv;
+                }
+            } else {
+                #pragma unroll
+                for (int j = 0; j < 4; ++j) {
+                    kv[j] = reinterpret_cast<const float*>(kdata)[vec * hd + i + j];
+                    vv[j] = reinterpret_cast<const float*>(vdata)[vec * hd + i + j];
+                }
+            }
+            #pragma unroll
+            for (int j = 0; j < 4; ++j) {
+                shK[k * (hd + 1) + i + j] = kv[j];
+                shV[k * hd + i + j] = vv[j];
+            }
         }
         __syncthreads();
         // --- score de la clé `lane` pour la tête `warp`
@@ -461,8 +509,9 @@ __global__ void attn_kv_partiels(const void* __restrict__ kdata,
         if (lane < reste) {
             s = 0.0f;
             const float* qw = shQ + warp * hd;
+            const float* kl = shK + lane * (hd + 1);
             #pragma unroll 8
-            for (int i = 0; i < hd; ++i) s += qw[i] * shK[i * 33 + lane];
+            for (int i = 0; i < hd; ++i) s += qw[i] * kl[i];
             s *= scale;      // 1/sqrt(hd) : sans lui, la softmax est trop plate
         }
         // --- maximum et somme de la tuile (réduction par warp)

@@ -478,7 +478,7 @@ fn run_infer(opt: Options) {
         ctx_impose, threads_impose, abits_impose, dense, auto, q4, b6,
         keep, attn_window, swa_pattern, sans_fenetre, attn_sinks, attn_topk, qk_topk,
         act_thresh, act_topk, act_renorm, topk_proj, moe_topk, patch: patch_file,
-        hebb_layer, hebb_q, hebb_out, sans_yarn, ..
+        hebb_layer, hebb_q, hebb_out, sans_yarn, lot, ..
     } = opt;
     let path = &modele_chemin();
     // Défauts du mode INFÉRENCE : 512 jetons, la moitié des cœurs (l'attente
@@ -492,6 +492,7 @@ fn run_infer(opt: Options) {
     mdl.moe_topk = moe_topk;
     mdl.act_thresh = act_thresh;
     mdl.act_topk = act_topk;
+    mdl.lot = lot.max(1);
     mdl.act_renorm = act_renorm;
     mdl.act_topk_proj = topk_proj;
     if sans_fenetre { mdl.attn_window = 0; }
@@ -849,6 +850,9 @@ fn run_banc_kv(opt: Options) {
     }
 
     // 2. Référence CPU : le chemin exact du moteur, une tête par fil.
+    //    `QT_BANC_KV_GPU_SEUL=1` la saute : à 1 M de clés elle coûte 3 à 16
+    //    minutes pour un chiffre (la vitesse du noyau) qui n'en a pas besoin.
+    let gpu_seul = std::env::var("QT_BANC_KV_GPU_SEUL").is_ok();
     let threads = if opt.threads_impose { opt.threads } else {
         (std::thread::available_parallelism().map(|x| x.get()).unwrap_or(8) * 3 / 4).max(1)
     };
@@ -887,9 +891,13 @@ fn run_banc_kv(opt: Options) {
     let tc = t0.elapsed().as_secs_f64();
     let octets = cache.octets();
     let _ = threads;
-    println!("  CPU {threads} fils : {:>8.1} ms par passe  ({:.1} Go/s de KV, {:.1} ms × {n_layer} couches = {:.0} ms/jeton)",
-             tc * 1e3, 2.0 * octets as f64 / tc / 1e9, tc * 1e3,
-             tc * 1e3 * n_layer as f64);
+    if gpu_seul {
+        println!("  CPU non mesuré (QT_BANC_KV_GPU_SEUL) · {:.2} Go de KV, une couche", octets as f64 / 1e9);
+    } else {
+        println!("  CPU {threads} fils : {:>8.1} ms par passe  ({:.1} Go/s de KV, {:.1} ms × {n_layer} couches = {:.0} ms/jeton)",
+                 tc * 1e3, 2.0 * octets as f64 / tc / 1e9, tc * 1e3,
+                 tc * 1e3 * n_layer as f64);
+    }
 
     let Some(machine) = gpu::instance() else { println!("  GPU absent"); return };
     let Some(mut m) = machine.kv_allouer(n_kv, n, hd, bits) else {
@@ -922,10 +930,13 @@ fn run_banc_kv(opt: Options) {
         let dt = t2.elapsed().as_secs_f64();
         if passe > 0 && dt < ms { ms = dt; }
     }
-    let mut echelle = 1e-9f32;
-    for o in 0..n_head * hd { echelle = echelle.max(cpu[o].abs()); }
-    let mut ecart = 0f32;
-    for o in 0..n_head * hd { ecart = ecart.max((out[o] - cpu[o]).abs() / echelle); }
+    let mut ecart = f32::NAN;
+    if !gpu_seul {
+        let mut echelle = 1e-9f32;
+        for o in 0..n_head * hd { echelle = echelle.max(cpu[o].abs()); }
+        ecart = 0f32;
+        for o in 0..n_head * hd { ecart = ecart.max((out[o] - cpu[o]).abs() / echelle); }
+    }
     println!("  GPU {nsplit} tranches : {:>8.1} ms par passe  ({:.1} Go/s de KV, {:.1} ms × {n_layer} couches = {:.0} ms/jeton)  écart max {:+.2e}",
              ms * 1e3, 2.0 * octets as f64 / ms / 1e9, ms * 1e3,
              ms * 1e3 * n_layer as f64, ecart);

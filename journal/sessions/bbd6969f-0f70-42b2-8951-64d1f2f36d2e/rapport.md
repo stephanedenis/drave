@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 26.3 h |
-| Tours | 7 |
-| Messages | 1000 |
-| Appels d'outils | 998 |
+| Durée | 27.3 h |
+| Tours | 9 |
+| Messages | 1046 |
+| Appels d'outils | 1039 |
 | Fichiers touchés | 35 |
-| Commandes | 742 |
+| Commandes | 780 |
 | Sous-agents | 1 |
-| Commits | 33 |
+| Commits | 34 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -21,6 +21,8 @@
 … [374 caractères tronqués]
 - **complete** — Réaliser les 8 chantiers restants du projet qtrinet-core dans l'ordre : (1) protocole de perplexité longue --depuis/--stride, (2) trancher le seuil de rotation YaRN avec ce protocole, (3) KV int8 puis int4 mesurés sur Qwen 0.5B à ctx 8192 contre llama.cpp, (4) préremplissage par lots (GEMM par tranc
 … [374 caractères tronqués]
+- **create** — Réaliser les 6 nouveaux chantiers du projet qtrinet-core, dans l'ordre : (1) relancer le test de l'aiguille sur contexte long (remplissage varié en vrai texte, moins de sondes, réponses plus longues) sur un modèle capable, grâce au préremplissage par lots et au KV déporté ; (2) chemin GPU : dépaquet
+… [1023 caractères tronqués]
 
 ## 1. Ce qui a été demandé
 
@@ -37,6 +39,10 @@
 **Tour 6** — <goal_round> Objective: "Réaliser les 8 chantiers restants du projet qtrinet-core dans l'ordre : (1) protocole de perplexité longue --depuis/--stride, (2) trancher le seuil de rotation YaRN avec ce protocole, (3) KV int8 puis int4 mesurés sur Qwen 0.5B à ctx 8192 contre llama.cpp, (4) préremplissage par lots (GEMM par tranches), (5) échelles par bloc pour DenseQ8, (6) refactorisation des boucles C … [842 caractères tronqués]
 
 **Tour 7** — background job bash-35 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && (QT_GPU=1 ./qtrinet-core/target/release/qtrinet-core /home/stephane/FastNVMe/models/gpt-oss-120b-MXFP4.gguf --ppl /tmp/ids_oss.txt --ctx 256 --dense --threads 16 --limit 512 2>&1 | grep -oE "perplexité [0-9.]+ sur [0-9]+ tokens \([0-9]+ événements, [0-9.]+ s\)" > /tmp/gate_oss_final.log; echo "=== fin ===" >> /tmp/ … [98 caractères tronqués]
+
+**Tour 8** — que reste-t-il à faire
+
+**Tour 9** — fais tous ces 6 nouveaux chantiers
 
 ## 2. Déroulé, étape par étape
 
@@ -315,7 +321,7 @@ Les 8 chantiers sont faits : implémentés, mesurés, documentés et commités. 
 
 ### Tour 7 — background job bash-35 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && (QT_GPU=1 ./qtrinet-core/target/rele … [378 caractères tronqués]
 
-*6 appels d'outils.* Actions notables :
+*7 appels d'outils.* Actions notables :
 
 - job_output
 - bash — Read gpt-oss gate result
@@ -323,10 +329,99 @@ Les 8 chantiers sont faits : implémentés, mesurés, documentés et commités. 
 - bash — Find all GPU-availability gates
 - bash — Inspect un-gated GPU paths
 - bash — Document the gate variance and commit
+- bash — Final repo state check
 
 **Synthèse produite :**
 
-⏵ La porte gpt-oss donne 15,1667 au lieu de 15,1757 : je vérifie avant de conclure
+⏵ Fausse alerte levée : l'écart venait de `QT_GPU`, pas d'une régression
+
+La porte gpt-oss qui tournait en arrière-plan affichait **15,1667** au lieu de 15,1757 : ce n'était pas une régression. Mesuré deux fois, même binaire, même commande :
+
+| commande | perplexité |
+|---|---|
+| sans `QT_GPU` | **15,1757** ✓ (le chiffre de contrôle du dépôt) |
+| avec `QT_GPU=1` | 15,1667 |
+
+La cause est dans le moteur : `QT_GPU` ouvre le pilote, et `Proj::charger` déporte alors **de lui-même** toute projection Q8_0 de plus de 8 Mo (seuil `SEUIL_GPU`, fixé par mesure). Les projections de gpt-oss font 8,8 Mo → elles passent par le noyau GPU, même calcul mais ordre de sommation différent, d'où 0,06 % d'écart — ici légèrement *en faveur* du GPU.
+
+J'avais ajouté `QT_GPU=1` par habitude dans la commande d'arrière-plan ; le gate documenté ne le met pas ✓.
+
+C'est maintenant écrit noir sur blanc dans `REPRISE.md` (§8, commande du gate) et dans le tableau des mesures, avec le commit `45948e2`.
+
+État final vérifié : `cargo test --release` 6/6, Qwen ctx 256 = **19,3885**, gpt-oss ctx 256 = **15,1757** (sans `QT_GPU`), arbre propre à l'exception de `journal/README.md` (churn du crochet d'archivage). Les 8 chantiers restent tels que décrits dans mon bilan précédent — rien d'autre à reprendre de ce côté.
+
+### Tour 8 — que reste-t-il à faire
+
+*5 appels d'outils.* Actions notables :
+
+- bash — Read REPRISE next-steps list
+- bash — Read full next-steps section
+- bash — Check gpt-oss head type and MXFP4 wiring
+- bash — Determine gpt-oss head tensor type
+- bash — Read immediate-measurement section
+
+**Synthèse produite :**
+
+⏵ Inventaire des restes, par ordre de rentabilité
+
+Les 8 chantiers sont clos ; voici ce qui reste ouvert, du plus rentable au plus lointain. Tout est chiffré dans `docs/contexte-long.md`, `reports/rapport-prefill-par-lots.md` et `REPRISE.md`.
+
+\## 1. Qualité du contexte long : l'aiguille (le manque le plus visible)
+
+La perplexité ne dit pas si le modèle **retrouve** une information. `tools/aiguille.py` plante un code et vérifie qu'il ressort : 6/6 échecs sur Qwen 0.5B (modèle trop faible) et **9,6 min pour une seule sonde** sur Qwen3-30B-A3B en préremplissage séquentiel → test arrêté. Il faut du remplissage **varié** (vrai texte), moins de sondes, des réponses plus longues. C'est devenu abordable : le préremplissage par lots donne −20 % (Qwen) et −31 % (gpt-oss), et le KV déporté rend l'attention plate.
+
+\## 2. Chemin GPU
+
+| reste | chiffre qui le justifie |
+|---|---|
+| **dépaquetage vectorisé** du noyau d'attention | 13,2 ms/couche à 1 M en int4 (25-40 Go/s) contre 158 Go/s en f32 → viser ~3 ms |
+| **brancher MXFP4 dans le moteur** | noyau bit à bit identique, ×75 sur un expert (0,1 contre 7,5 ms) — mais aucun appel : il faut une politique de résidence, et `rapport-localite-activation.md` dit qu'un préchargement statique ne paie pas |
+| **attention par lots sur GPU** | `forward_lot` garde le CPU, où l'attention par lots est **1,7 ×** le chemin par jeton ; le noyau ne sert qu'au décodage |
+| **noyau de la tête Q8_0** | 5,5 ms/jeton en lot, lié au **calcul** (le lot n'y change rien) → AVX2 ou déport (`QT_GPU_TETE=1` : 15,6 → 6,2 ms/jeton sur gpt-oss) |
+| **second GPU** | 16 Go libres, jamais utilisés : répartir le KV (128 Mo/couche en int4 à 1 M) ou les experts |
+
+\## 3. Mémoire
+
+- **Pagination du cache CPU** : à ctx 1 M, il réserve 25,77 Go pour 512 jetons écrits. Le miroir VRAM est paginé, l'hôte non.
+- **Écart int8 avec llama.cpp** à 8 192 : +3,0 % contre +0,8 %. Hypothèse non testée : leurs clés sont calculées en f16 avant quantification.
+
+\## 4. Rotation
+
+Au-delà de 5 120 jetons : **non mesuré** (≈ 1 h par régime à 16 k, corpus de 17 k). Le seuil actuel (1,25 × longueur déclarée) n'est qu'une borne basse *mesurée*.
+
+\## 5. Structurel, non testable ici
+
+- **MLA** : aucun modèle MLA en GGUF sur la machine (le « deepseek-r1-distill » local est un Qwen dense).
+- **Vision** : les poids Qwen2.5-VL-7B et le projecteur `mmproj` sont présents, mais rien ne lit les patchs — c'est une tour de vision entière à écrire.
+
+\## 6. Hygiène
+
+La section « Ce qu'il faut faire en
+… [573 caractères tronqués]
+
+### Tour 9 — fais tous ces 6 nouveaux chantiers
+
+*35 appels d'outils.* Actions notables :
+
+- create_goal
+- todo_write
+- bash — Inspect needle tool and 30B model
+- bash — Check corpus and 30B chat speed
+- bash — Find a large natural-text corpus
+- bash — Check corpus and lot usage in inference
+- bash — Inspect run_infer prefill
+- bash — Read run_infer decode/prefill loop
+- bash — Check generate prefill path
+- bash — Find where options are applied to the model
+- bash — Wire batched prefill into generate
+- bash — Check lot is in scope in run_infer
+- bash — Build with batched prefill
+- bash — Read run_infer destructuring
+- … et 21 autres
+
+**Synthèse produite :**
+
+⏵ Témoin 1,5B : 6/6 sondes trouvées ; je mesure le noyau vectorisé à 1 M
 
 ## 3. Travail accompli
 
@@ -365,7 +460,7 @@ Les 8 chantiers sont faits : implémentés, mesurés, documentés et commités. 
 | `/tmp/seuil_rotation.sh` | 1 | 0 |
 | `/tmp/mesures_finales.sh` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-localite-activation.md` | 1 | 0 |
-| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/aiguille.py` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/aiguille.py` | 2 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-prefill-par-lots.md` | 1 | 2 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src/engine.rs` | 0 | 4 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/gpu/qtrinet_gpu.cu` | 0 | 1 |
@@ -416,7 +511,7 @@ Les 8 chantiers sont faits : implémentés, mesurés, documentés et commités. 
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 702 autres
+- … et 740 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -544,7 +639,7 @@ Les 8 chantiers sont faits : implémentés, mesurés, documentés et commités. 
 
 ## 5. Erreurs rencontrées
 
-46 sorties en erreur ou divergentes. Les premières :
+47 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : a8f2635f8 docs: record which models this box is good at, and why src/llama-hparams.cpp:8:void llama_hparams::set_swa_pattern(uint32_t n_pattern, bool dense_first) { src/llama-hparams.h:308:    void se
 - **T1** : 511 tokens notés — perplexité cumulée 247.031  (4.9 tok/s) === perplexité 247.0308 sur 511 tokens (0 événements, 104.5 s) ===  ### B3 harmony assistant 511 --- ref --- 0.0 0.0 0:00 ls: cannot access '
@@ -597,4 +692,5 @@ Les 8 chantiers sont faits : implémentés, mesurés, documentés et commités. 
 - journal : archive automatique" 2>/dev/null; cd qtrinet-core && cargo test --release 2>&1 | tail -3 && cd .. && git log --oneline -9 | cat && git status --short 
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p='docs/contexte-long.md'; s=open(p).read() old = """Il reste, sur ce chemin : le **dépaq
 - porte gpt-oss : préciser qu'elle se mesure SANS QT_GPU  Mesuré deux fois, même binaire, même commande :   sans QT_GPU   : 15,1757 (le chiffre de contrôle du dép
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p='docs/contexte-long.md'; s=open(p).read() old = """2. **Le format ne change presque rie
 

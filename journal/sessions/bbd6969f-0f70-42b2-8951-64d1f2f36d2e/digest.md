@@ -16288,3 +16288,699 @@ src/main.rs:1094:    let Some(machine) = gpu::instance() else { print
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='REPRISE.md'; s=open(p).read()\nold = \"\"\"# 3. gpt-oss : le chiffre de contrôle de cette session (≈ 45 s de chargement,\n#    ~100 s pour 510 jetons)\n./target/release/qtrinet-core /home/stephane/FastNVMe/models … [1823 caractères tronqués]`
+
+  ```
+note sur la porte gpt-oss ajoutée
+45948e2 porte gpt-oss : préciser qu'elle se mesure SANS QT_GPU
+b5ff0b1 E4 : miroir VRAM paginé (capacité doublée à la demande)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git status --short | head -5 && git log --oneline -12 | cat", "description": "Final repo state check"}`
+
+  ```
+M journal/README.md
+45948e2 porte gpt-oss : préciser qu'elle se mesure SANS QT_GPU
+b5ff0b1 E4 : miroir VRAM paginé (capacité doublée à la demande)
+91ebee7 journal : archive automatique
+54f9fa6 KV quantifié mesuré à 8 192 jetons, la longueur de la comparaison llama.cpp
+1953575 rotation : le seuil de bascule à 4 096 était trop bas (mesuré à 5 120)
+e6a5eff KV déporté : corriger la copie du chemin par lots
+a593603 docs E4 : comment le noyau d'attention a été validé (cas dégénérés, trois bugs)
+8438883 docs: préciser que QT_GPU_KV exige QT_GPU (le pilote ne s'ouvre que sur QT_GPU)
+bc16897 E4 : KV déporté en VRAM, attention sur le GPU, mesuré à 1 M de clés
+f578862 noyau Q6_K sur GPU, et tête Q6_K déportée dans le moteur
+2383eae préremplissage par lots : attention groupée, tête en lot, et un pointeur gras
+98cdf1b KV par bloc : mesure longue (4 591 jetons) -- int8 +3,4 %, int4 +287 %
+  ```
+
+### 🤖 Assistant
+
+⏵ Fausse alerte levée : l'écart venait de `QT_GPU`, pas d'une régression
+
+La porte gpt-oss qui tournait en arrière-plan affichait **15,1667** au lieu de 15,1757 : ce n'était pas une régression. Mesuré deux fois, même binaire, même commande :
+
+| commande | perplexité |
+|---|---|
+| sans `QT_GPU` | **15,1757** ✓ (le chiffre de contrôle du dépôt) |
+| avec `QT_GPU=1` | 15,1667 |
+
+La cause est dans le moteur : `QT_GPU` ouvre le pilote, et `Proj::charger` déporte alors **de lui-même** toute projection Q8_0 de plus de 8 Mo (seuil `SEUIL_GPU`, fixé par mesure). Les projections de gpt-oss font 8,8 Mo → elles passent par le noyau GPU, même calcul mais ordre de sommation différent, d'où 0,06 % d'écart — ici légèrement *en faveur* du GPU.
+
+J'avais ajouté `QT_GPU=1` par habitude dans la commande d'arrière-plan ; le gate documenté ne le met pas ✓.
+
+C'est maintenant écrit noir sur blanc dans `REPRISE.md` (§8, commande du gate) et dans le tableau des mesures, avec le commit `45948e2`.
+
+État final vérifié : `cargo test --release` 6/6, Qwen ctx 256 = **19,3885**, gpt-oss ctx 256 = **15,1757** (sans `QT_GPU`), arbre propre à l'exception de `journal/README.md` (churn du crochet d'archivage). Les 8 chantiers restent tels que décrits dans mon bilan précédent — rien d'autre à reprendre de ce côté.
+
+
+## Tour 8
+
+### 👤 Utilisateur
+
+que reste-t-il à faire
+
+### 🤖 Assistant
+
+⏵ Je relis les listes de restes dans le dépôt pour répondre précisément
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '/Ce qu.il faut faire ensuite/,/^$/p' REPRISE.md | head -40", "description": "Read REPRISE next-steps list"}`
+
+  ```
+### Ce qu'il faut faire ensuite, dans l'ordre
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && awk '/Ce qu.il faut faire ensuite/,/^## /' REPRISE.md | head -50", "description": "Read full next-steps section"}`
+
+  ```
+### Ce qu'il faut faire ensuite, dans l'ordre
+
+1. ~~Le préremplissage, suite (chantier 4)~~ **FAIT** : (a) attention groupée
+   dans le lot et (b) tête en lot sont en place et mesurés (17,1 s → 13,6 s sur
+   Qwen ctx 512). Ce qui reste sur ce poste : le **noyau de la tête** (le lot n'y
+   change rien, il est lié au calcul) et l'**attention par lots**, encore 1,7 ×
+   le chemin par jeton.
+3. **Brancher le noyau MXFP4** : il est bit à bit identique et 40× plus rapide
+   que le CPU ; il manque un cache d'experts chauds en VRAM (voir
+   `reports/rapport-localite-activation.md`). Attention au piège des deux
+   variables : `QT_GPU_TETE=1` seul ne fait RIEN — c'est `QT_GPU` qui ouvre le
+   pilote (`gpu::instance`), et la première mesure est restée muette pour ça.
+4. ~~**Q6_K** reste à écrire~~ **FAIT** (noyau `proj_q6k_warp`, tête Q6_K
+   branchée : 7,58 → 3,60 ms/jeton sur Qwen 1.5B). Ce qui reste sur le chemin
+   GPU : le **dépaquetage vectorisé** du KV déporté (le noyau d'attention est
+   borné par la déquantification scalaire, pas par la VRAM : 25-40 Go/s contre
+   158 Go/s en f32) et le **cache d'experts chauds** en VRAM pour les MoE.
+4.bis ~~KV à échelles par bloc de 32~~ **FAIT** :
+… [494 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /tmp && timeout 120 python3 gguf_tensors.py /home/stephane/FastNVMe/models/gpt-oss-120b-MXFP4.gguf 2>/dev/null | grep -E \"^Q6_K|^Q8_0|^MXFP4\" | head -3; grep -E \"output.weight|token_embd\" -m2 /dev/null; echo \"=== capots MXFP4 dans le moteur ===\"; cd /home/stephane/Data13TB/step … [204 caractères tronqués]`
+
+  ```
+=== capots MXFP4 dans le moteur ===
+src/model.rs:372:                machine.charger_proj(blocs, n_out, d8.nb_ligne)
+src/main.rs:1096:    let Some(m) = machine.charger_mxfp4(blocs, n_out, nb) else {
+src/main.rs:1103:        let Some(r) = machine.proj_mxfp4(&m, &xi, 1.0) else { println!("  noyau en échec"); return };
+  ```
+
+- **bash** `{"command": "cd /tmp && timeout 300 python3 gguf_tensors.py /home/stephane/FastNVMe/models/gpt-oss-120b-MXFP4.gguf 2>&1 | grep -iE \"error|Traceback|type [0-9]+ inconnu\" | head -3; timeout 300 python3 - <<'EOF'\nimport struct\nf=open('/home/stephane/FastNVMe/models/gpt-oss-120b-MXFP4.gguf','rb')\nd … [1000 caractères tronqués]`
+
+  ```
+Traceback (most recent call last):
+struct.error: bad char in struct format
+Q8_0   output.weight                    (2880, 201088)
+Q8_0   token_embd.weight                (2880, 201088)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && awk '/^## 6\\. Ce qui se mesure tout de suite/,/^## 7\\./' docs/contexte-long.md | head -40", "description": "Read immediate-measurement section"}`
+
+  ```
+## 6. Ce qui se mesure tout de suite
+
+1. **Aiguille dans la botte de foin** (`tools/aiguille.py`) : la perplexité ne dit
+   pas si le modèle RETROUVE une information. Le script plante un code à une
+   profondeur donnée et vérifie qu'il ressort ; c'est la mesure de qualité qui
+   manque au plan. Premier essai sur Qwen2.5-0.5B : **6 sondes sur 6 échouent**
+   (1 024 et 2 048 jetons, profondeurs 0,1 / 0,5 / 0,9) — le demi-milliard de
+   paramètres ne sait pas retrouver un code, donc ce modèle ne peut pas servir de
+   référence ; l'essai est relancé sur Qwen3-30B-A3B. Ce n'est pas un défaut du
+   moteur : c'est la limite du modèle, et il valait mieux la mesurer que la
+   supposer. Second essai sur Qwen3-30B-A3B : **9,6 minutes pour une seule
+   sonde** (1 024 jetons de contexte) et un échec — le remplissage, répété à
+   l'identique, ne fait pas un banc d'essai valable, et le préremplissage
+   séquentiel rend chaque sonde hors de prix (1,8 jeton/s). Le test est donc
+   **arrêté** : il faudra un remplissage varié (du vrai texte), moins de sondes
+   et des réponses plus longues — et c'est le préremplissage par lots qui le
+   rendra abordable.
+2. **Attention creuse** : `--attn-topk N` et `
+… [1162 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Inventaire des restes, par ordre de rentabilité
+
+Les 8 chantiers sont clos ; voici ce qui reste ouvert, du plus rentable au plus lointain. Tout est chiffré dans `docs/contexte-long.md`, `reports/rapport-prefill-par-lots.md` et `REPRISE.md`.
+
+## 1. Qualité du contexte long : l'aiguille (le manque le plus visible)
+
+La perplexité ne dit pas si le modèle **retrouve** une information. `tools/aiguille.py` plante un code et vérifie qu'il ressort : 6/6 échecs sur Qwen 0.5B (modèle trop faible) et **9,6 min pour une seule sonde** sur Qwen3-30B-A3B en préremplissage séquentiel → test arrêté. Il faut du remplissage **varié** (vrai texte), moins de sondes, des réponses plus longues. C'est devenu abordable : le préremplissage par lots donne −20 % (Qwen) et −31 % (gpt-oss), et le KV déporté rend l'attention plate.
+
+## 2. Chemin GPU
+
+| reste | chiffre qui le justifie |
+|---|---|
+| **dépaquetage vectorisé** du noyau d'attention | 13,2 ms/couche à 1 M en int4 (25-40 Go/s) contre 158 Go/s en f32 → viser ~3 ms |
+| **brancher MXFP4 dans le moteur** | noyau bit à bit identique, ×75 sur un expert (0,1 contre 7,5 ms) — mais aucun appel : il faut une politique de résidence, et `rapport-localite-activation.md` dit qu'un préchargement statique ne paie pas |
+| **attention par lots sur GPU** | `forward_lot` garde le CPU, où l'attention par lots est **1,7 ×** le chemin par jeton ; le noyau ne sert qu'au décodage |
+| **noyau de la tête Q8_0** | 5,5 ms/jeton en lot, lié au **calcul** (le lot n'y change rien) → AVX2 ou déport (`QT_GPU_TETE=1` : 15,6 → 6,2 ms/jeton sur gpt-oss) |
+| **second GPU** | 16 Go libres, jamais utilisés : répartir le KV (128 Mo/couche en int4 à 1 M) ou les experts |
+
+## 3. Mémoire
+
+- **Pagination du cache CPU** : à ctx 1 M, il réserve 25,77 Go pour 512 jetons écrits. Le miroir VRAM est paginé, l'hôte non.
+- **Écart int8 avec llama.cpp** à 8 192 : +3,0 % contre +0,8 %. Hypothèse non testée : leurs clés sont calculées en f16 avant quantification.
+
+## 4. Rotation
+
+Au-delà de 5 120 jetons : **non mesuré** (≈ 1 h par régime à 16 k, corpus de 17 k). Le seuil actuel (1,25 × longueur déclarée) n'est qu'une borne basse *mesurée*.
+
+## 5. Structurel, non testable ici
+
+- **MLA** : aucun modèle MLA en GGUF sur la machine (le « deepseek-r1-distill » local est un Qwen dense).
+- **Vision** : les poids Qwen2.5-VL-7B et le projecteur `mmproj` sont présents, mais rien ne lit les patchs — c'est une tour de vision entière à écrire.
+
+## 6. Hygiène
+
+La section « Ce qu'il faut faire ensuite » de `REPRISE.md` §6 est **périmée** (ses points 3 à 6 sont faits ou remplacés depuis cette session) ; je peux la réécrire pour qu'elle reflète la liste ci-dessus, et y ajouter le piège `QT_GPU` / `QT_GPU_TETE` / `QT_GPU_KV`.
+
+---
+
+Mon avis sur l'ordre : **1** d'abord (c'est la seule mesure de *qualité* du long contexte, et le chantier 4 vient justement de la rendre praticable), puis **2** (dépaquetage vectorisé, un facteur ~4 sur le poste dominant à 1 M), puis **3**.
+
+Dites-moi lequel j'attaque — ou si vous préférez que je rafraîchisse d'abord `REPRISE.md` §6.
+
+
+## Tour 9
+
+### 👤 Utilisateur
+
+fais tous ces 6 nouveaux chantiers
+
+### 🤖 Assistant
+
+⏵ Nouveau programme : je crée l'objectif des 6 chantiers puis j'attaque l'aiguille
+
+- **create_goal** `{"objective": "Réaliser les 6 nouveaux chantiers du projet qtrinet-core, dans l'ordre : (1) relancer le test de l'aiguille sur contexte long (remplissage varié en vrai texte, moins de sondes, réponses plus longues) sur un modèle capable, grâce au préremplissage par lots et au KV déporté ; (2) chemin … [1063 caractères tronqués]`
+
+> **Objectif** (create) : Réaliser les 6 nouveaux chantiers du projet qtrinet-core, dans l'ordre : (1) relancer le test de l'aiguille sur contexte long (remplissage varié en vrai texte, moins de sondes, réponses plus longues) sur un modèle capable, grâce au préremplissage par lots et au KV déporté ; (2) chemin GPU : dépaquetage vectorisé du noyau d'attention (13,2 ms/couche à 1 M en int4 vers ~3 ms), brancher MXFP4 dans le moteur avec une politique de résidence des experts, attention par lots sur GPU dans forward_lot, noyau de tête Q8_0 accéléré (AVX2 ou déport), et usage du second GPU ; (3) mémoire : pagination du cache KV côté CPU (25,77 Go réservés à ctx 1 M pour 512 jetons écrits) et test de l'hypothèse « clés en f16 avant quantification » pour l'écart int8 avec llama.cpp à 8 192 (+3,0 % contre +0,8 %) ; (4) rotation au-delà de 5 120 jetons (passe à 16 k) ; (5) structurel : MLA (aucun modèle local — construire un modèle MLA synthétique et valider contre une référence indépendante) et vision (poids Qwen2.5-VL et projecteur mmproj présents) ; (6) hygiène : réécrire la section « Ce qu'il faut faire ensuite » de REPRISE.md et y consigner les pièges QT_GPU/QT_GPU_TETE/QT_GPU_KV. Chaque chantier doit être implémenté, mesuré (portes de non-régression Qwen 19,3885 et gpt-oss 15,1757 sans QT_GPU), documenté dans le dépôt et commité.
+
+
+  ```
+{"goal":{"id":"goal-5fb0695d-fac0-4c3c-85eb-a4bce18c76f3","revision":1,"objective":"Réaliser les 6 nouveaux chantiers du projet qtrinet-core, dans l'ordre : (1) relancer le test de l'aiguille sur contexte long (remplissage varié en vrai texte, moins de sondes, réponses plus longues) sur un modèle capable, grâce au préremplissage par lots et au KV déporté ; (2) chemin GPU : dépaquetage vectorisé du noyau d'attention (13,2 ms/couche à 1 M en int4 vers ~3 ms), brancher MXFP4 dans le moteur avec une politique de résidence des experts, attention par lots sur GPU dans forward_lot, noyau de tête Q8_0 accéléré (AVX2 ou déport), et usage du second GPU ; (3) mémoire : pagination du cache KV côté CPU (25,77 Go réservés à ctx 1 M pour 512 jetons écrits) et test de l'hypothèse « clés en f16 avant quantification » pour l'écart int8 avec llama.cpp à 8 192 (+3,0 % contre +0,8 %) ; (4) rotation au-delà de 5 120 jetons (passe à 16 k) ; (5) structurel : MLA (aucun modèle local — construire un modèle MLA synthétique et valider contre une référence indépendante) et vision (poids Qwen2.5-VL et projecteur mmproj présents) ; (6) hygiène : réécrire la section « Ce qu'il faut faire ensuite » de REPRISE.md e
+… [285 caractères tronqués]
+  ```
+
+- **todo_write** `{"todos": [{"content": "Chantier 1 : aiguille long contexte (remplissage varié, réponses longues)", "status": "in_progress"}, {"content": "Chantier 2a : dépaquetage vectorisé du noyau d'attention", "status": "pending"}, {"content": "Chantier 2b : brancher MXFP4 + résidence des experts", "status": "p … [597 caractères tronqués]`
+
+  ```
+Updated todo list: 9 pending, 1 in progress, 0 completed.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && wc -l tools/aiguille.py && head -60 tools/aiguille.py && echo \"=== modèle 30B : architecture ===\" && timeout 120 ./qtrinet-core/target/release/qtrinet-core /home/stephane/FastNVMe/models/Qwen3-30B-A3B-Instruct-2507-Q4_K_M.gguf --to … [113 caractères tronqués]`
+
+  ```
+53 tools/aiguille.py
+#!/usr/bin/env python3
+"""Aiguille dans la botte de foin : la seule mesure de qualité qui compte à
+contexte long (la perplexité ne dit pas si le modèle RETROUVE une information).
+
+Le contexte est un texte de remplissage ; l'aiguille est une phrase absurde
+plantée à une profondeur donnée ; la question est posée APRÈS le texte. On
+compte le nombre de sondes où le code exact de l'aiguille réapparaît.
+
+Usage : aiguille.py <modele.gguf> <longueurs> <profondeurs> [--n 32]
+"""
+import subprocess, sys, time
+
+Q = "./qtrinet-core/target/release/qtrinet-core"
+REMPLISSAGE = ("Le service de documentation conserve les comptes rendus des "
+               "reunions trimestrielles du comite. Chaque compte rendu rappelle "
+               "les decisions prises et les actions a mener. ")
+
+def sonde(modele, ctx, profondeur, n=32, threads=8):
+    code = "AZUR-7391"
+    aiguille = f" Le code de verification de la reunion est {code}. "
+    # Le texte est découpé en phrases ; l'aiguille est insérée à la profondeur
+    # demandée, puis la question est posée à la fin.
+    cible = int(ctx * profondeur)
+    avant = REMPLISSAGE * (cible // 20 + 1)
+    apres = REMPLISSAGE * ((ctx - cible) // 
+… [1292 caractères tronqués]
+  ```
+
+- **bash** `{"command": "head -c 300 /tmp/dis.txt; echo; echo \"=== test 30B : chat court + vitesse ===\"; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && time (timeout 900 ./qtrinet-core/target/release/qtrinet-core /home/stephane/FastNVMe/models/Qwen3-30B-A3B-Instruct-2507-Q4_K_M.gguf --infer --chat --fl … [204 caractères tronqués]`
+
+  ```
+target/release/qtrinet-core:     file format elf64-x86-64
+
+
+Disassembly of section .text:
+
+000000000001bc90 <_start>:
+   1bc90:	endbr64
+   1bc94:	xor    %ebp,%ebp
+   1bc96:	mov    %rdx,%r9
+   1bc99:	pop    %rsi
+   1bc9a:	mov    %rsp,%rdx
+   1bc9d:	and    $0xfffffffffffffff0,%rsp
+   1bca1:	push   %r
+=== test 30B : chat court + vitesse ===
+prompt  : 25 tokens en 4.159 s  (6.0 tok/s, TTFT 166.4 ms)
+généré  : 10 tokens en 1.636 s  (6.11 tok/s)
+événements : 24921957 au total, 712055.9 par token
+postes (ms/token) : matvec-attn 28.7 | rope 3.1 | attention 1.6 | matvec+mlp 128.9 | total mesuré 162.3
+[stderr]
+
+real	0m39,067s
+user	2m9,914s
+sys	0m9,327s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && head -c 200 /tmp/neurones_qwen.txt; echo; ls -S --block-size=K $(git ls-files | grep -E \"\\.txt$|\\.md$\" | head -50) 2>/dev/null | head -5; echo \"=== fichiers texte > 200 ko ===\"; find . -name \"*.txt\" -size +200k -not -path \". … [126 caractères tronqués]`
+
+  ```
+# couche neurone taux
+23 2539 27.799339
+23 2505 26.634855
+23 1121 24.010912
+23 537 23.320288
+23 4484 18.935585
+23 4144 17.334810
+23 1396 15.864781
+23 4749 12.240378
+23 2228 11.561510
+23 3935 11.332053
+journal/sessions/22bcae27-254b-47b2-acda-87467dab060c/digest.md
+journal/sessions/bbd6969f-0f70-42b2-8951-64d1f2f36d2e/digest.md
+journal/sessions/22bcae27-254b-47b2-acda-87467dab060c/rapport.md
+journal/sessions/27c99b10-c57e-4599-a23a-f7b1a54c17a1/digest.md
+journal/sessions/bbd6969f-0f70-42b2-8951-64d1f2f36d2e/rapport.md
+=== fichiers texte > 200 ko ===
+./data/wikitext2_test.txt
+/tmp/dis.txt
+/tmp/neurones_qwen.txt
+/tmp/rtl_writes.txt
+/tmp/ids_qwen_long.txt
+/tmp/ids_oss_long.txt
+/tmp/wt2_long.txt
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && wc -c data/wikitext2_test.txt && head -c 200 data/wikitext2_test.txt && echo && grep -n \"forward_lot\" qtrinet-core/src/main.rs | head", "description": "Check corpus and lot usage in inference"}`
+
+  ```
+359041 data/wikitext2_test.txt
+
+ = Robert Boulter = 
+
+
+ Robert Boulter is an English film , television and theatre actor . He had a guest @-@ starring role on the television series The Bill in 2000 . This was followed by a starring
+1760:            let hs = mdl.forward_lot(&chunk[pos..pos + t], pos);
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && grep -n \"fn run_infer\" src/main.rs && awk '/fn run_infer/,/for .* in .*0\\.\\.n/ {print NR\": \"$0}' src/main.rs | grep -E \"forward|prefill|for |lot|ids\" | head -20", "description": "Inspect run_infer prefill"}`
+
+  ```
+472:fn run_infer(opt: Options) {
+476:         ids: mut ids, ids_file, prompt, n: n_new, temp, top_p, topk, rep_pen, hist,
+540:             for (role, texte) in [("system", "You are a helpful assistant."), ("user", p.as_str())] {
+541:                 ids.push(deb);
+542:                 ids.extend(tk.encode(role));
+543:                 ids.push(msg);
+544:                 ids.extend(tk.encode(texte));
+545:                 ids.push(fin);
+547:             ids.push(deb);
+548:             ids.extend(tk.encode("assistant"));
+557:             ids.push(im_start);
+558:             ids.extend(tk.encode("user\n"));
+559:             ids.extend(tk.encode(p));
+560:             ids.push(im_end);
+561:             ids.extend(tk.encode("\n"));
+562:             ids.push(im_start);
+563:             ids.extend(tk.encode("assistant\n"));
+565:             ids = tk.encode(p);
+567:         println!("prompt : {} tokens", ids.len());
+569:     if let Some(f) = &ids_file {
+570:         ids = std::fs::read_to_string(f).unwrap_or_default()
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && sed -n '575,640p' src/main.rs", "description": "Read run_infer decode/prefill loop"}`
+
+  ```
+println!("ids depuis {f} : {} tokens", ids.len());
+    }
+    if let Some(f) = &patch_file {
+        let pt = model::Patch::load(f).expect("chargement du greffon");
+        let norme = |v: &[f32]| v.iter().map(|x| x * x).sum::<f32>().sqrt();
+        println!("greffon : couche {}, |u|={:.3} |v|={:.3} |d|={:.3}",
+                 pt.layer, norme(&pt.u), norme(&pt.v), norme(&pt.d));
+        mdl.patch = Some(pt);
+    }
+    if let Some(l) = hebb_layer {
+        let n_out = mdl.cfg.ffn;
+        let n_in = mdl.cfg.hidden;
+        mdl.hebb = Some(model::Hebb::new(l, n_out, n_in, hebb_q));
+        println!("capteur hebbien : couche {l}, projection gate ({n_out} x {n_in}), \
+                  quantile {hebb_q} -> {hebb_out}");
+    }
+    if ids.is_empty() && !session {
+        eprintln!("rien à générer : --ids ou --prompt requis");
+        return;
+    }
+
+    mdl.reset_events();
+
+    // ---------------------------------------------------------------- session
+    // Boucle interactive : chaque tour est ajouté à la conversation et
+    // retraité en entier. L'invite complète repasse donc par le modèle à chaque
+    // tour (coût quadratique en nombre de tours), mais c'est exact, et le cache
+    //
+… [1927 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && grep -n \"fn generate\" -A 30 src/model.rs | sed -n '1,45p'", "description": "Check generate prefill path"}`
+
+  ```
+2644:    pub fn generate(&mut self, ids: &[u32], n_new: usize, temp: f32, top_p: f32,
+2645-                    rep_pen: f32, hist: usize, mut flux: Option<&mut dyn FnMut(u32)>)
+2646-                    -> (Vec<u32>, Stats) {
+2647-        let t0 = Instant::now();
+2648-        let mut last = Vec::new();
+2649-        let mut events0 = self.events;
+2650-        for (pos, &t) in ids.iter().enumerate() {
+2651-            last = self.forward(t, pos);
+2652-        }
+2653-        let prompt_s = t0.elapsed().as_secs_f64();
+2654-        let prompt_events = self.events - events0;
+2655-        let mut out = Vec::with_capacity(n_new);
+2656-        let t1 = Instant::now();
+2657-        for step in 0..n_new {
+2658-            let mut logits = self.logits(&last);
+2659-            // Historique pour la pénalité : les derniers jetons vus, invite
+2660-            // comprise. Sans elle, une génération longue finit en boucle —
+2661-            // c'est le mode d'échec le plus visible en usage réel.
+2662-            let n_hist = if hist == 0 { ids.len() + out.len() } else { hist };
+2663-            let debut = ids.len() + out.len() - n_hist.min(ids.len() + out.len());
+2664-            let recents: Vec<u
+… [579 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && grep -n \"mdl\\.\\(attn_topk\\|attn_window\\|qk_topk\\|act_topk\\) *=\" src/main.rs | head && grep -n \"lot\" src/main.rs | sed -n '1,20p'", "description": "Find where options are applied to the model"}`
+
+  ```
+494:    mdl.act_topk = act_topk;
+497:    if sans_fenetre { mdl.attn_window = 0; }
+498:    if attn_window > 0 { mdl.attn_window = attn_window; }
+503:    mdl.attn_topk = attn_topk;
+504:    mdl.qk_topk = qk_topk;
+1645:    mdl.act_topk = act_topk;
+1648:    mdl.attn_topk = attn_topk;
+1649:    mdl.qk_topk = qk_topk;
+1651:    if attn_window > 0 { mdl.attn_window = attn_window; }
+1652:    if sans_fenetre { mdl.attn_window = 0; }
+345:    /// Taille du lot de préremplissage : 1 = jeton par jeton (défaut).
+346:    lot: usize,
+415:            "--lot" => { o.lot = suivant(i).parse().unwrap(); 2 }
+1409:    println!("  préremplissage SÉQUENTIEL estimé : {:.1} h (le moteur ne fait pas de lot ; \
+1577:        ppl_profil, lot, profil_neurones, neurones_sortie,
+1580:    let lot = lot.max(1);
+1750:    // « reste » les mélangeait et on ne pouvait pas dire si la tête par lots
+1755:        // Préremplissage par lots : `lot` jetons d'un coup. `lot == 1` emprunte
+1759:            let t = lot.min(chunk.len() - pos);
+1760:            let hs = mdl.forward_lot(&chunk[pos..pos + t], pos);
+1761:            // Tête par lots : la matrice la plus lourde du modèle est lue une
+1764:            let lgs = if t > 1 { So
+… [206 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && python3 - <<'PY'\np='src/model.rs'; s=open(p).read()\n# champ lot + préremplissage par lots dans generate\ns = s.replace(\"\"\"    /// Tranches de clés du noyau d'attention, réutilisées d'un jeton à l'autre.\n    pub att … [2289 caractères tronqués]`
+
+  ```
+préremplissage par lots dans generate
+lot transmis depuis les options
+495:    mdl.lot = lot.max(1);
+1581:    let lot = lot.max(1);
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && grep -n \"let lot = lot\" src/main.rs && sed -n '486,500p' src/main.rs", "description": "Check lot is in scope in run_infer"}`
+
+  ```
+1581:    let lot = lot.max(1);
+    let cpu = std::thread::available_parallelism().map(|n| n.get()).unwrap_or(8);
+    let ctx = if ctx_impose { ctx_opt } else { 512 };
+    let n_threads = if threads_impose { threads_opt } else { (cpu / 2).max(1) };
+    let abits = if abits_impose { abits_opt } else { 8 };
+    let mut mdl = model::Model::load(path, ctx, n_threads, dense, keep, auto, q4, b6);
+    mdl.act_levels = ((1u32 << (abits - 1)) - 1) as f32;
+    mdl.moe_topk = moe_topk;
+    mdl.act_thresh = act_thresh;
+    mdl.act_topk = act_topk;
+    mdl.lot = lot.max(1);
+    mdl.act_renorm = act_renorm;
+    mdl.act_topk_proj = topk_proj;
+    if sans_fenetre { mdl.attn_window = 0; }
+    if attn_window > 0 { mdl.attn_window = attn_window; }
+    if let Some(p) = swa_pattern { mdl.swa_pattern = p; }
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && cargo build --release 2>&1 | grep -E \"^error\" -A6 | head -15; cargo build --release 2>&1 | tail -1", "description": "Build with batched prefill", "timeoutMs": 600000}`
+
+  ```
+error[E0425]: cannot find value `lot` in this scope
+   --> src/main.rs:495:15
+    |
+475 |       let Options {
+    |  _________-
+476 | |         ids: mut ids, ids_file, prompt, n: n_new, temp, top_p, topk, rep_pen, hist,
+477 | |         flux, session, chat, ctx: ctx_opt, threads: threads_opt, abits: abits_opt,
+--
+error: could not compile `qtrinet-core` (bin "qtrinet-core") due to 1 previous error; 8 warnings emitted
+error: could not compile `qtrinet-core` (bin "qtrinet-core") due to 1 previous error; 8 warnings emitted
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && sed -n '475,490p' src/main.rs", "description": "Read run_infer destructuring"}`
+
+  ```
+let Options {
+        ids: mut ids, ids_file, prompt, n: n_new, temp, top_p, topk, rep_pen, hist,
+        flux, session, chat, ctx: ctx_opt, threads: threads_opt, abits: abits_opt,
+        ctx_impose, threads_impose, abits_impose, dense, auto, q4, b6,
+        keep, attn_window, swa_pattern, sans_fenetre, attn_sinks, attn_topk, qk_topk,
+        act_thresh, act_topk, act_renorm, topk_proj, moe_topk, patch: patch_file,
+        hebb_layer, hebb_q, hebb_out, sans_yarn, ..
+    } = opt;
+    let path = &modele_chemin();
+    // Défauts du mode INFÉRENCE : 512 jetons, la moitié des cœurs (l'attente
+    // active de la barrière ne tolère pas la sursouscription), 8 bits.
+    let cpu = std::thread::available_parallelism().map(|n| n.get()).unwrap_or(8);
+    let ctx = if ctx_impose { ctx_opt } else { 512 };
+    let n_threads = if threads_impose { threads_opt } else { (cpu / 2).max(1) };
+    let abits = if abits_impose { abits_opt } else { 8 };
+    let mut mdl = model::Model::load(path, ctx, n_threads, dense, keep, auto, q4, b6);
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && python3 - <<'PY'\np='src/main.rs'; s=open(p).read()\ns = s.replace(\"\"\"        hebb_layer, hebb_q, hebb_out, sans_yarn, ..\n    } = opt;\"\"\",\n\"\"\"        hebb_layer, hebb_q, hebb_out, sans_yarn, lot, ..\n    } = o … [252 caractères tronqués]`
+
+  ```
+lot ajouté à la déstructuration
+    Finished `release` profile [optimized] target(s) in 0.01s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && P=$(python3 -c \"\nimport sys\nt=open('data/wikitext2_test.txt').read()\nt=' '.join(t.split())[:9000]\nprint(t)\") && echo \"== lot 1 ==\" && timeout 600 ./qtrinet-core/target/release/qtrinet-core /home/stephane/FastNVMe/models/Qwen3 … [482 caractères tronqués]`
+
+  ```
+== lot 1 ==
+prompt : 2105 tokens
+--- ids générés : [16, 15, 15, 15]
+prompt  : 2105 tokens en 506.175 s  (4.2 tok/s, TTFT 240.5 ms)
+généré  : 4 tokens en 1.324 s  (3.02 tok/s)
+== lot 512 ==
+[timed out after 600000ms]
+[killed by signal: SIGTERM]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && P=$(python3 -c \"\nt=open('data/wikitext2_test.txt').read()\nprint(' '.join(t.split())[:2200])\") && for l in 1 32 128; do printf \"lot %-4s : \" $l; timeout 900 ./qtrinet-core/target/release/qtrinet-core /home/stephane/FastNVMe/mode … [285 caractères tronqués]`
+
+  ```
+lot 1    : prompt  : 554 tokens en 130.337 s  (4.3 tok/s
+lot 32   : prompt  : 554 tokens en 115.030 s  (4.8 tok/s
+lot 128  : prompt  : 554 tokens en 105.704 s  (5.2 tok/s
+  ```
+
+- **write** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/aiguille.py", "content": "#!/usr/bin/env python3\n\"\"\"Aiguille dans la botte de foin — version 2, celle qui mesure vraiment.\n\nLa perplexité ne dit pas si un modèle RETROUVE une information. Ce script plante\nun code à une profo … [6423 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/aiguille.py</path>
+<type>file</type>
+<content>
+Updated file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && chmod +x tools/aiguille.py && timeout 900 python3 tools/aiguille.py models/Qwen2.5-1.5B-Instruct-Q4_K_M.gguf 1024 0.5 --lot 256 --n 40 2>&1 | tail -6", "description": "Smoke-test needle tool on small model", "timeoutMs": 900000}`
+
+  ```
+aiguille v2 : models/Qwen2.5-1.5B-Instruct-Q4_K_M.gguf
+  remplissage : data/wikitext2_test.txt (353778 caractères), fenêtres décalées
+  lot 256 · 40 jetons de réponse · GPU non
+ contexte  profondeur  trouvé  secondes  détail
+     1024        0.50     NON       0.2  prompt 0 jetons
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='tools/aiguille.py'; s=open(p).read()\nold = \"\"\"    m = re.search(r\"prompt\\\\s*:\\\\s*(\\\\d+) tokens\", sortie)\n    n_prompt = int(m.group(1)) if m else 0\"\"\"\nnew = \"\"\"    m = re.search(r\"prompt\\\\s … [810 caractères tronqués]`
+
+  ```
+erreurs du moteur remontées
+[timed out after 600000ms]
+[killed by signal: SIGTERM]
+  ```
+
+- **bash** `{"command": "pgrep -af \"aiguille.py|qtrinet-core\" | head -5; pkill -f \"aiguille.py\"; pkill -x qtrinet-core; sleep 2; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && time (timeout 500 python3 tools/aiguille.py /home/stephane/FastNVMe/models/qwen2.5-1.5b-instruct-q4_k_m.gguf 512 0.5 --lot 25 … [99 caractères tronqués]`
+
+  ```
+3695122 timeout 900 python3 tools/aiguille.py /home/stephane/FastNVMe/models/qwen2.5-1.5b-instruct-q4_k_m.gguf 1024,2048 0.1,0.5,0.9 --lot 256 --n 40 --journal /tmp/aiguille_1.5b.md
+3695124 python3 tools/aiguille.py /home/stephane/FastNVMe/models/qwen2.5-1.5b-instruct-q4_k_m.gguf 1024,2048 0.1,0.5,0.9 --lot 256 --n 40 --journal /tmp/aiguille_1.5b.md
+3696250 ./qtrinet-core/target/release/qtrinet-core /home/stephane/FastNVMe/models/qwen2.5-1.5b-instruct-q4_k_m.gguf --infer --chat --flux --prompt = Robert Boulter = Robert Boulter is an English film , television and theatre actor . He had a guest - starring role on the television series The Bill in 2000 . This was followed by a starring role in the play Herons written by Simon Stephens , which was performed in 2001 at the Royal Court Theatre . He had a guest role in the television series Judge John Deed in 2002 . In 2004 Boulter landed a role as " Craig " in the episode " Teddy 's Story " of the television series The Long Firm ; he starred alongside actors Mark Strong and Derek Jacobi . He was cast in the 2005 theatre productions of the Philip Ridley play Mercury Fur , which was performed at the Drum Theatre in Plymouth and the Menier 
+… [8877 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/aiguille_1p5b.sh <<'EOF'\n#!/bin/bash\nset -u\ncd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\nwhile pgrep -x qtrinet-core > /dev/null; do sleep 20; done\npython3 tools/aiguille.py /home/stephane/FastNVMe/models/qwen2. … [341 caractères tronqués]`
+
+  ```
+started background job bash-36
+  ```
+
+- **bash** `{"command": "sleep 480; tail -6 /tmp/aiguille_1p5b.log 2>/dev/null; pgrep -x qtrinet-core >/dev/null && echo \"[moteur en cours]\"", "description": "Poll needle control run", "timeoutMs": 540000}`
+
+  ```
+remplissage : data/wikitext2_test.txt (353778 caractères), fenêtres décalées
+  lot 256 · 40 jetons de réponse · GPU non
+ contexte  profondeur  trouvé  secondes  détail
+      512        0.10     oui      87.1  prompt 698 jetons
+      512        0.50     oui      82.9  prompt 698 jetons
+      512        0.90     oui      82.4  prompt 698 jetons
+[moteur en cours]
+  ```
+
+### 🤖 Assistant
+
+⏵ Aiguille : 3/3 sur le témoin 1,5B ; je passe au dépaquetage vectorisé du noyau
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && python3 - <<'PY'\np='gpu/qtrinet_gpu.cu'; s=open(p).read()\n\n# 1) disposition de la tuile de clés : ligne-major avec rembourrage (hd+1) plutôt\n#    que transposée — le rembourrage rend AUSSI la lecture sans conflit, et … [5276 caractères tronqués]`
+
+  ```
+chargement vectorisé + nouvelle disposition
+taille partagée ajustée
+      |             ^
+13 errors generated when compiling for sm_75.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && ./gpu/compiler.sh 2>&1 | grep -E \"error\" | head -6", "description": "Show CUDA errors", "timeoutMs": 300000}`
+
+  ```
+qtrinet_gpu.cu:465:23: error: unknown type name 'char4'; did you mean 'char'?
+qtrinet_gpu.cu:465:57: error: unknown type name 'char4'; did you mean 'char'?
+qtrinet_gpu.cu:467:23: error: unknown type name 'char4'; did you mean 'char'?
+qtrinet_gpu.cu:467:57: error: unknown type name 'char4'; did you mean 'char'?
+qtrinet_gpu.cu:471:33: error: member reference base type 'const char' is not a structure or union
+qtrinet_gpu.cu:471:58: error: member reference base type 'const char' is not a structure or union
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && python3 - <<'PY'\np='gpu/qtrinet_gpu.cu'; s=open(p).read()\nold = \"\"\"            if (bits == 8) {\n                // Quatre octets d'un coup : la conversion et la multiplication\n                // par l'échelle se f … [2029 caractères tronqués]`
+
+  ```
+lecture 4 octets en unsigned int
+      |             ^
+1 error generated when compiling for sm_75.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && ./gpu/compiler.sh 2>&1 | grep -B3 -A3 \"error\" | head -20", "description": "Show remaining CUDA error", "timeoutMs": 300000}`
+
+  ```
+qtrinet_gpu.cu:513:13: error: expected a for, while, or do-while loop to follow '#pragma unroll'
+  513 |             const float* kl = shK + lane * (hd + 1);
+      |             ^
+1 error generated when compiling for sm_75.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/githUB/Qtrinet 2>/dev/null; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && sed -n '508,520p' gpu/qtrinet_gpu.cu", "description": "Inspect score loop region"}`
+
+  ```
+float s = -1e30f;
+        if (lane < reste) {
+            s = 0.0f;
+            const float* qw = shQ + warp * hd;
+            #pragma unroll 8
+            const float* kl = shK + lane * (hd + 1);
+            for (int i = 0; i < hd; ++i) s += qw[i] * kl[i];
+            s *= scale;      // 1/sqrt(hd) : sans lui, la softmax est trop plate
+        }
+        // --- maximum et somme de la tuile (réduction par warp)
+        float mt = s;
+        #pragma unroll
+        for (int d = 16; d > 0; d >>= 1) mt = fmaxf(mt, shfl_xor(mt, d));
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && python3 - <<'PY'\np='gpu/qtrinet_gpu.cu'; s=open(p).read()\ns = s.replace(\"\"\"            const float* qw = shQ + warp * hd;\n            #pragma unroll 8\n            const float* kl = shK + lane * (hd + 1);\n         … [460 caractères tronqués]`
+
+  ```
+pragma replacé
+qtrinet_gpu.ptx régénéré (6507 lignes)
+noyaux exportés : 9
+    Finished `release` profile [optimized] target(s) in 20.60s
+  ```
+
+- **bash** `{"command": "sleep 300; tail -4 /tmp/aiguille_1p5b.log; pgrep -x qtrinet-core >/dev/null && echo \"[moteur en cours]\" || echo \"[libre]\"", "description": "Poll needle control and check machine", "timeoutMs": 360000}`
+
+  ```
+512        0.50     oui      82.9  prompt 698 jetons
+      512        0.90     oui      82.4  prompt 698 jetons
+     2048        0.10     oui     241.1  prompt 2147 jetons
+     2048        0.50     oui     244.2  prompt 2147 jetons
+[moteur en cours]
+  ```
+
+- **bash** `{"command": "sleep 300; tail -3 /tmp/aiguille_1p5b.log; pgrep -x qtrinet-core >/dev/null && echo \"[moteur en cours]\" || echo \"[libre]\"", "description": "Wait for control to finish", "timeoutMs": 360000}`
+
+  ```
+2048        0.90     oui     242.4  prompt 2147 jetons
+journal : /tmp/aiguille_1p5b.md
+=== fin ===
+[libre]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-36 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/aiguille_1p5b.sh <<'EOF'
+#!/bin/bash
+set -u
+cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet
+while pgrep -x qtrinet-core > /dev/null; do sleep 20; done
+python3 tools/aiguille.py /home/stephane/FastNVMe/models/qwen2.5-1.5b-instruct-q4_k_m.gguf \
+    512,2048 0.1,0.5,0.9 --lot 256 --n 40 --journal /tmp/aiguille_1p5b.md \
+    > /tmp/aiguille_1p5b.log 2>&1
+echo "=== fin ===" >> /tmp/aiguille_1p5b.log
+EOF
+chmod +x /tmp/aiguille_1p5b.sh && /tmp/aiguille_1p5b.sh) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+### 🤖 Assistant
+
+⏵ Témoin 1,5B : 6/6 sondes trouvées ; je mesure le noyau vectorisé à 1 M
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && python3 - <<'PY'\np='src/main.rs'; s=open(p).read()\nold = \"\"\"    // 2. Référence CPU : le chemin exact du moteur, une tête par fil.\n    let threads = if opt.threads_impose { opt.threads } else {\n        (std::threa … [3220 caractères tronqués]`
+
+  ```
+mode GPU seul ajouté
+0
+--- 4096 : justesse ---
+KV 32  GPU 8 tranches :      0.1 ms par passe  (94.2 Go/s de KV, 0.1 ms × 24 couches = 2 ms/jeton)  écart max +5.12e-6
+KV 8   GPU 8 tranches :      0.1 ms par passe  (25.8 Go/s de KV, 0.1 ms × 24 couches = 2 ms/jeton)  écart max +2.91e-6
+KV 4   GPU 8 tranches :      0.1 ms par passe  (14.7 Go/s de KV, 0.1 ms × 24 couches = 2 ms/jeton)  écart max +4.90e-6
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for b in 32 8 4; do printf \"KV %-3s \" $b; QT_GPU=1 QT_KV_BITS=$b QT_BANC_KV_GPU_SEUL=1 timeout 900 ./qtrinet-core/target/release/qtrinet-core models/Qwen2.5-0.5B-Q8_0.gguf --banc-kv 1048576 --threads 16 2>&1 | grep -oE \"GPU .* tra … [88 caractères tronqués]`
+
+  ```
+KV 32  GPU 256 tranches :      7.0 ms par passe  (308.8 Go/s de KV, 7.0 ms × 24 couches = 167 ms/jeton)  écart max NaN
+KV 8   GPU 256 tranches :      6.5 ms par passe  (92.5 Go/s de KV, 6.5 ms × 24 couches = 157 ms/jeton)  écart max NaN
+KV 4   GPU 256 tranches :      7.4 ms par passe  (45.4 Go/s de KV, 7.4 ms × 24 couches = 178 ms/jeton)  écart max NaN
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && QT_GPU=1 QT_GPU_KV=1 timeout 600 ./qtrinet-core/target/release/qtrinet-core models/Qwen2.5-0.5B-Q8_0.gguf --ppl /tmp/ids_qwen.txt --ctx 512 --limit 512 --dense --threads 16 --lot 1 2>&1 | grep -E \"\\[gpu\\]|perplexité\"", "descripti … [65 caractères tronqués]`
+
+  ```
+[gpu] KV déporté : 24 couches, 0.01 Go en VRAM (16.17 Mo libres), cache CPU 0.01 Go
+     511 tokens notés — perplexité cumulée 13.137  (30.8 tok/s)
+=== perplexité 13.1369 sur 511 tokens (0 événements, 16.6 s) ===
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='docs/contexte-long.md'; s=open(p).read()\nold = \"\"\"2. **Le format ne change presque rien au temps GPU** (13,2 à 15,0 ms à 1 M pour\n   f32, int8 et int4) : le noyau n'est pas borné par la VRAM mais par la\n    … [2688 caractères tronqués]`

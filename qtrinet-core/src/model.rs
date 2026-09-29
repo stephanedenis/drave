@@ -481,6 +481,10 @@ pub struct Model {
     pub kv_gpu: Option<Vec<crate::gpu::KvGpu>>,
     /// Tranches de clés du noyau d'attention, réutilisées d'un jeton à l'autre.
     pub attn_gpu_part: Vec<f32>,
+    /// Taille du lot de PRÉREMPLISSAGE en inférence (1 = jeton par jeton).
+    /// Le préremplissage par lots n'était branché que sur la perplexité : une
+    /// invite de 4 000 jetons se payait donc jeton par jeton en génération.
+    pub lot: usize,
     /// Greffon : un neurone supplémentaire, chargé sans réentraînement.
     pub patch: Option<Patch>,
     /// Gain appliqué à la sortie du FFN d'une couche : édition structurelle de
@@ -1097,6 +1101,7 @@ impl Model {
             stop_id: None, stop_id2: None, prof: [0.0; 6],
             tete,
             tete_gpu, tete_gpu_q6k, head4, sinks_vus, kv_gpu, attn_gpu_part: Vec::new(),
+            lot: 1,
             patch: None, ffn_gain: None, hebb: None,
         }
     }
@@ -2647,8 +2652,20 @@ impl Model {
         let t0 = Instant::now();
         let mut last = Vec::new();
         let mut events0 = self.events;
-        for (pos, &t) in ids.iter().enumerate() {
-            last = self.forward(t, pos);
+        // Préremplissage par lots : `forward_lot` sur des tranches de `self.lot`
+        // jetons. `lot == 1` reprend exactement l'ancienne boucle (forward_lot
+        // délègue à `forward` pour un jeton), donc rien ne change par défaut.
+        let lot = self.lot.max(1);
+        let mut pos = 0usize;
+        while pos < ids.len() {
+            let t = lot.min(ids.len() - pos);
+            if t == 1 {
+                last = self.forward(ids[pos], pos);
+            } else {
+                let hs = self.forward_lot(&ids[pos..pos + t], pos);
+                last = hs.into_iter().next_back().expect("lot non vide");
+            }
+            pos += t;
         }
         let prompt_s = t0.elapsed().as_secs_f64();
         let prompt_events = self.events - events0;

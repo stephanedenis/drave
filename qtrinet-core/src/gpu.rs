@@ -431,7 +431,7 @@ impl Gpu {
         // un partiel par (tranche, tête KV, tête de requête)
         if part.len() < nsplit * m.n_kv * rep * (hd + 2) { return false; }
         let fils = (rep * 32) as c_uint;
-        let partage = ((rep * hd + hd * 33 + 32 * hd + rep * 32) * 4) as c_uint;
+        let partage = ((rep * hd + 32 * (hd + 1) + 32 * hd + rep * 32) * 4) as c_uint;
         unsafe {
             let mut p_k = m.k;
             let mut p_v = m.v;

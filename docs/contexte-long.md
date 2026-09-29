@@ -202,10 +202,14 @@ Trois choses :
 1. **Le noyau tient sa promesse à 1 M** : 13 à 15 ms par couche et par jeton, soit
    ≈ 320-360 ms/jeton pour les 24 couches de Qwen 0.5B, contre 4 à 23 **secondes**
    sur CPU. Le facteur grandit avec le contexte : ×4 à 4 k, ×12 à ×73 à 1 M.
-2. **Le format ne change presque rien au temps GPU** (13,2 à 15,0 ms à 1 M pour
-   f32, int8 et int4) : le noyau n'est pas borné par la VRAM mais par la
-   **déquantification scalaire** (25 à 40 Go/s contre 158 Go/s en f32). C'est le
-   prochain levier : un dépaquetage vectorisé ferait tomber ces 13 ms à ~2 ms.
+2. ~~Le format ne change presque rien au temps GPU (13,2 à 15,0 ms à 1 M) : le
+   noyau est borné par la déquantification scalaire.~~ **CORRIGÉ** — le
+   dépaquetage est maintenant **vectorisé par quatre** (un `unsigned int` par
+   groupe de quatre poids, tuile rangée en ligne rembourrée d'un mot par ligne
+   au lieu d'être transposée) : à 1 M de clés, **7,0 ms en f32 (308 Go/s, 69 %
+   de la VRAM), 6,5 ms en int8 (×2,3) et 7,4 ms en int4 (×1,8)**, soit
+   157 à 178 ms/jeton pour les 24 couches de Qwen 0.5B. Les écarts au CPU sont
+   inchangés au chiffre près (5,12e-6 / 2,91e-6 / 4,90e-6).
 3. Les écarts au CPU restent dans l'ordre de la somme flottante (1e-5 à 1e-4
    relatif au maximum de sortie) — et la perplexité ne bouge pas (voir ci-dessous).
 
