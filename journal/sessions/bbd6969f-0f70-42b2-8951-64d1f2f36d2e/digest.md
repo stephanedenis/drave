@@ -13252,3 +13252,793 @@ REPRISE.md mis à jour
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A qtrinet-core/src reports/rapport-prefill-par-lots.md REPRISE.md && git commit -q -F - <<'EOF' && git log --oneline -1\npréremplissage par lots : attention groupée, tête en lot, et un pointeur gras\n\nLe lot 128 tombait sur … [1727 caractères tronqués]`
+
+  ```
+2383eae préremplissage par lots : attention groupée, tête en lot, et un pointeur gras
+  ```
+
+### 🤖 Assistant
+
+⏵ Chantier 7 : j'attaque le noyau Q6_K manquant sur GPU
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && wc -l gpu/qtrinet_gpu.cu gpu/compiler.sh src/gpu.rs && grep -n \"^__global__\\|^extern \\\"C\\\"\\|^// ---\" gpu/qtrinet_gpu.cu | head -40 && echo \"=== flags ===\" && grep -n '\"--gpu-banc\"\\|banc_q4k\\|banc_mxfp4\\|fn … [93 caractères tronqués]`
+
+  ```
+289 gpu/qtrinet_gpu.cu
+   15 gpu/compiler.sh
+  455 src/gpu.rs
+  759 total
+32:extern "C" {
+37:__global__ void tete_q8(const unsigned char* __restrict__ w,
+64:__global__ void proj_q8(const unsigned char* __restrict__ w,
+89:// ---------------------------------------------------------------------------
+112:__global__ void tete_q8_warp(const unsigned char* __restrict__ w,
+143:__global__ void proj_q8_warp(const unsigned char* __restrict__ w,
+174:// ---------------------------------------------------------------------------
+191:__global__ void proj_mxfp4_warp(const unsigned char* __restrict__ w,
+227:// ---------------------------------------------------------------------------
+243:__global__ void proj_q4k_warp(const unsigned char* __restrict__ w,
+=== flags ===
+386:            "--gpu-banc" => { o.gpu_banc = true; 1 }
+773:fn run_gpu_banc(opt: Options) {
+786:        return banc_q4k(opt, &g, &nom_q4k, threads);
+794:        return banc_mxfp4(opt, &g, nom, threads);
+878:fn banc_mxfp4(opt: Options, g: &Gguf, nom: &str, threads: usize) {
+937:fn banc_q4k(opt: Options, g: &Gguf, nom: &str, threads: usize) {
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/gpu/qtrinet_gpu.cu", "limit": 80, "offset": 210}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/gpu/qtrinet_gpu.cu</path>
+<type>file</type>
+<content>
+210:             const unsigned char* qs = p + 1;
+211:             const int* xb = xs + b * 32;
+212:             int lo = 0, hi = 0;
+213:             #pragma unroll
+214:             for (int j = 0; j < 16; ++j) {
+215:                 const unsigned int octet = (unsigned int)qs[j];
+216:                 lo += lut_mxfp4(octet & 15u) * xb[j];
+217:                 hi += lut_mxfp4(octet >> 4) * xb[16 + j];
+218:             }
+219:             acc += (float)(lo + hi) * d;
+220:         }
+221:         #pragma unroll
+222:         for (int d2 = 16; d2 > 0; d2 >>= 1) acc += shfl_bas(acc, d2);
+223:         if (lane == 0) out[o] = acc * sx;
+224:     }
+225: }
+226: 
+227: // ---------------------------------------------------------------------------
+228: // Q4_K (toute la famille Qwen en Q4_K_M) : super-blocs de 144 octets — deux
+229: // demi-précisions (échelle et minimum), douze octets d'échelles/minimums
+230: // entassés sur 6 bits, puis 128 octets de nibbles (256 poids).
+231: // Le dépaquetage des 6 bits est celui du CPU, recopié à l'identique.
+232: __device__ __forceinline__ 
+… [2820 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/gpu/qtrinet_gpu.cu", "limit": 60, "offset": 174}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/gpu/qtrinet_gpu.cu</path>
+<type>file</type>
+<content>
+174: // ---------------------------------------------------------------------------
+175: // MXFP4 (gpt-oss) : même structure « une warp par ligne ». Un bloc fait
+176: // 17 octets — un exposant E8M0 puis seize octets de nibbles (les BAS sont les
+177: // poids 0–15, les HAUTS les poids 16–31, comme au CPU) — et la table E2M1 est
+178: // doublée, d'où l'exposant décalé de un.
+179: __device__ __forceinline__ int lut_mxfp4(unsigned int nib) {
+180:     // 0, 1, 2, 3, 4, 6, 8, 12 puis les négatifs : la grille E2M1 doublée.
+181:     const int t[16] = {0, 1, 2, 3, 4, 6, 8, 12, 0, -1, -2, -3, -4, -6, -8, -12};
+182:     return t[nib & 15u];
+183: }
+184: 
+185: __device__ __forceinline__ float echelle_e8m0(unsigned int e) {
+186:     if (e == 0u)   return 1.1754944e-38f;          // plus petit normal
+187:     if (e == 255u) return 0.0f;
+188:     return __int_as_float((e - 1u) << 23);
+189: }
+190: 
+191: __global__ void proj_mxfp4_warp(const unsigned char* __restrict__ w,
+192:                                 const int* __restrict__ x,
+193:                                 float* _
+… [2141 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && grep -n \"q6k\" src/list.rs | head -20", "description": "Locate CPU Q6_K kernels"}`
+
+  ```
+821:    pub unsafe fn emprunter_q6k(base: *const u8, n_out: usize, n_in: usize,
+836:    unsafe fn dot16_q6k_avx2(&self, o: usize, x: &[i16]) -> f32 {
+1016:    fn dot_source_q6k(&self, o: usize, x: &[i32]) -> f32 {
+1199:        if self.src == Source::Q6_K { return self.dot_source_q6k(o, x); }
+1239:                    return unsafe { self.dot16_q6k_avx2(o, x) };
+1403:mod tests_q6k {
+1425:        let d = unsafe { DenseQ4::emprunter_q6k(bloc.as_ptr(), 1, n_in, 1) };
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src/list.rs", "limit": 60, "offset": 836}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src/list.rs</path>
+<type>file</type>
+<content>
+836:     unsafe fn dot16_q6k_avx2(&self, o: usize, x: &[i16]) -> f32 {
+837:         use std::arch::x86_64::*;
+838:         let xp = x.as_ptr();
+839:         let masque_nib = _mm_set1_epi8(0x0f);
+840:         let masque_deux = _mm_set1_epi8(0x03);
+841:         let masque_haut = _mm_set1_epi8(0x30);
+842:         let biais = _mm_set1_epi8(32);
+843:         let mut sum = 0f32;
+844:         for sup in 0..self.nb_ligne {
+845:             let p = self.base.add((o * self.nb_ligne + sup) * crate::gguf::TAILLE_Q6K);
+846:             let d = crate::gguf::Gguf::f16_to_f32(u16::from_le_bytes([*p.add(208), *p.add(209)]));
+847:             for moitie in 0..2usize {
+848:                 let ql = p.add(moitie * 64);
+849:                 let qh = p.add(128 + moitie * 32);
+850:                 let sc = std::slice::from_raw_parts(p.add(192 + moitie * 8), 8);
+851:                 let qh_a = _mm_loadu_si128(qh as *const __m128i);
+852:                 let qh_b = _mm_loadu_si128(qh.add(16) as *const __m128i);
+853:                 let ql_0 = _mm_loadu_si128(ql as *const __m128i);
+854:          
+… [3249 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src/main.rs", "limit": 90, "offset": 937}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src/main.rs</path>
+<type>file</type>
+<content>
+937: fn banc_q4k(opt: Options, g: &Gguf, nom: &str, threads: usize) {
+938:     use std::time::Instant;
+939:     let Some((blocs, nb)) = g.q4k_blocks(nom) else { println!("pas une matrice Q4_K"); return };
+940:     let t = g.tensor(nom).unwrap();
+941:     let (n_out, n_in) = (t.dims[0] as usize, t.dims[1] as usize);
+942:     let octets = n_out * nb * 144;
+943:     println!("matrice Q4_K {nom} : {n_out} × {n_in} · {:.1} Mo · {} super-blocs de 256",
+944:              octets as f64 / 1e6, nb);
+945:     let xi: Vec<i32> = (0..n_in).map(|i| ((i * 2654435761usize) % 255) as i32 - 127).collect();
+946:     let x16: Vec<i16> = xi.iter().map(|&v| v.clamp(-32767, 32767) as i16).collect();
+947:     let sx32 = crate::list::sommes32(&x16);
+948:     let d = unsafe { DenseQ4::emprunter_q4k(blocs.as_ptr(), n_out, n_in, nb) };
+949:     let t0 = Instant::now();
+950:     let mut cpu = vec![0f32; n_out];
+951:     let chunk = n_out.div_ceil(threads);
+952:     let dref = &d;
+953:     let (x16ref, sxref) = (&x16, &sx32);
+954:     std::thread::scope(|sc| {
+955:         for (ci, part) in cpu.chun
+… [4038 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src/main.rs", "limit": 40, "offset": 773}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src/main.rs</path>
+<type>file</type>
+<content>
+773: fn run_gpu_banc(opt: Options) {
+774:     use std::time::Instant;
+775:     let path = &modele_chemin();
+776:     let threads = if opt.threads_impose { opt.threads } else {
+777:         (std::thread::available_parallelism().map(|n| n.get()).unwrap_or(8) * 3 / 4).max(1)
+778:     };
+779:     let g = Gguf::open(path).expect("ouverture du GGUF");
+780:     // Le banc porte sur la tête Q8_0, ou sur le tenseur nommé (`--matrix`) quand
+781:     // c'est une matrice d'experts MXFP4 — c'est le poste dominant de gpt-oss.
+782:     let mx = g.mxfp4_blocks(&opt.matrix).is_some();
+783:     let nom_q4k = opt.matrix.clone();
+784:     if !mx && nom_q4k != "output.weight" && nom_q4k != "token_embd.weight"
+785:         && g.q4k_blocks(&nom_q4k).is_some() {
+786:         return banc_q4k(opt, &g, &nom_q4k, threads);
+787:     }
+788:     let nom = if mx { opt.matrix.clone() } else if g.tensor("output.weight").is_some() {
+789:         "output.weight".to_string()
+790:     } else { "token_embd.weight".to_string() };
+791:     let nom = nom.as_str();
+792:     let t = g.tensor(nom).unwrap();
+793: 
+… [1184 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && grep -n \"fn \\|q4k\\|mxfp4\" src/gpu.rs | sed -n '1,80p'", "description": "Survey gpu.rs API"}`
+
+  ```
+18:    fn cuInit(flags: c_uint) -> c_int;
+19:    fn cuDeviceGet(dev: *mut c_int, ordinal: c_int) -> c_int;
+20:    fn cuDevicePrimaryCtxRetain(ctx: *mut *mut c_void, dev: c_int) -> c_int;
+21:    fn cuCtxCreate_v2(ctx: *mut *mut c_void, flags: c_uint, dev: c_int) -> c_int;
+22:    fn cuCtxSetCurrent(ctx: *mut c_void) -> c_int;
+23:    fn cuModuleLoadData(module: *mut *mut c_void, image: *const c_void) -> c_int;
+24:    fn cuModuleGetFunction(f: *mut *mut c_void, module: *mut c_void, name: *const c_char) -> c_int;
+25:    fn cuMemAlloc_v2(dptr: *mut u64, octets: usize) -> c_int;
+26:    fn cuMemcpyHtoD_v2(dst: u64, src: *const c_void, octets: usize) -> c_int;
+27:    fn cuMemcpyDtoH_v2(dst: *mut c_void, src: u64, octets: usize) -> c_int;
+28:    fn cuLaunchKernel(f: *mut c_void, gx: c_uint, gy: c_uint, gz: c_uint,
+32:    fn cuCtxSynchronize() -> c_int;
+33:    fn cuMemFree_v2(dptr: u64) -> c_int;
+34:    fn cuGetErrorName(code: c_int, nom: *mut *const c_char) -> c_int;
+41:fn cu_ctx(ctx: *mut c_void) {
+45:fn erreur(code: c_int, ou: &str) -> String {
+73:    f_mxfp4_warp: *mut c_void,
+74:    f_q4k_warp: *mut c_void,
+84:    pub fn ouvrir_auto() -> Option<Gpu> {
+92:    pub fn ouvrir(ordinal: c_int)
+… [2061 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src/gpu.rs", "limit": 85, "offset": 235}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src/gpu.rs</path>
+<type>file</type>
+<content>
+235:     pub fn charger_q4k(&self, blocs: &[u8], n_out: usize, nb: usize) -> Option<MatriceGpu> {
+236:         cu_ctx(self.ctx);
+237:         let octets_poids = n_out.checked_mul(nb)?.checked_mul(144)?;
+238:         if blocs.len() < octets_poids { return None; }
+239:         unsafe {
+240:             let mut poids: u64 = 0;
+241:             if cuMemAlloc_v2(&mut poids, octets_poids) != 0 { return None; }
+242:             if cuMemcpyHtoD_v2(poids, blocs.as_ptr() as *const c_void, octets_poids) != 0 {
+243:                 return None;
+244:             }
+245:             let mut x_dev: u64 = 0;
+246:             cuMemAlloc_v2(&mut x_dev, nb * 256 * 4);
+247:             let mut out_dev: u64 = 0;
+248:             cuMemAlloc_v2(&mut out_dev, n_out * 4);
+249:             Some(MatriceGpu { poids, x_dev, out_dev, n_out, nb, octets_poids })
+250:         }
+251:     }
+252: 
+253:     /// Une passe Q4_K : une warp par ligne, super-blocs partagés entre les fils.
+254:     pub fn proj_q4k(&self, m: &MatriceGpu, x: &[i32], sx: f32) -> Option<Vec<f32>> {
+255:         cu_ctx(self.ctx);
+256: 
+… [3604 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && grep -n \"TAILLE_Q6K\\|pub fn q6k_blocks\\|pub fn q4k_blocks\\|pub fn mxfp4_blocks\\|pub fn q8_blocks\" src/gguf.rs && sed -n '438,452p' src/gguf.rs && sed -n '818,836p' src/list.rs", "description": "Check Q6_K accessors … [2 caractères tronqués]`
+
+  ```
+62:pub const TAILLE_Q6K: usize = 210;
+358:                    let p = base + (row * ns + sup) * TAILLE_Q6K;
+426:    pub fn q8_blocks(&self, name: &str) -> Option<(&[u8], usize)> {
+434:    pub fn q4k_blocks(&self, name: &str) -> Option<(&[u8], usize)> {
+441:    pub fn q6k_blocks(&self, name: &str) -> Option<(&[u8], usize)> {
+450:    pub fn mxfp4_blocks(&self, name: &str) -> Option<(&[u8], usize)> {
+477:                let p = v.base + (row * ns + sup) * TAILLE_Q6K;
+654:                    let p = base + b * TAILLE_Q6K;
+    }
+
+    /// Super-blocs **Q6_K** bruts (quelques tenseurs des mélanges `Q4_K_M`).
+    pub fn q6k_blocks(&self, name: &str) -> Option<(&[u8], usize)> {
+        let t = self.tensor(name)?;
+        if t.ttype != GGML_Q6_K { return None; }
+        Some((&self.buf[self.data_start + t.offset as usize..], t.dims[1] as usize / 256))
+    }
+
+    /// Blocs **MXFP4** bruts : `(octets à partir du premier bloc, nb de blocs
+    /// par ligne)`. Bloc de 17 octets : un exposant E8M0 puis 16 octets de
+    /// nibbles E2M1. C'est le format de gpt-oss-120b.
+    pub fn mxfp4_blocks(&self, name: &str) -> Option<(&[u8], usize)> {
+        let t = self.tensor(name)?;
+        if t.ttype != 
+… [928 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+Now the CUDA kernel:
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/gpu/qtrinet_gpu.cu", "new_string": "// ---------------------------------------------------------------------------\n// Q6_K (têtes liées et quelques tenseurs des mélanges Q4_K_M) : super-blocs de\n// 210 octets — 128 octets  … [3336 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/gpu/qtrinet_gpu.cu has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && cat gpu/compiler.sh && ./gpu/compiler.sh 2>&1 | tail -5 && grep -c \"proj_q6k_warp\" gpu/qtrinet_gpu.ptx", "description": "Compile the PTX with the new kernel", "timeoutMs": 300000}`
+
+  ```
+#!/bin/bash
+# Compile les noyaux en PTX — la chaîne qui marche sur cette machine.
+#
+# nvcc refuse gcc 15/16 (conflit d'en-têtes glibc) ; on passe donc par le
+# backend NVPTX de clang, et le pilote compile le PTX à la volée. Comme aucun
+# en-tête CUDA n'est disponible sans la boîte à outils, les qualificatifs
+# (`__global__`, `__shared__`, …) viennent de `cuda_stub.h` — c'est la seule
+# pièce à maintenir si les noyaux grossissent.
+set -e
+cd "$(dirname "$0")"
+BUILTINS="$(clang -print-resource-dir)/include/__clang_cuda_builtin_vars.h"
+clang++ -x cuda --cuda-device-only --cuda-gpu-arch=sm_75 -nocudalib -nocudainc \
+    -O3 -S -include "$BUILTINS" -include cuda_stub.h -o qtrinet_gpu.ptx qtrinet_gpu.cu
+echo "qtrinet_gpu.ptx régénéré ($(grep -c '' qtrinet_gpu.ptx) lignes)"
+grep -c 'visible .entry' qtrinet_gpu.ptx | xargs echo "noyaux exportés :"
+qtrinet_gpu.ptx régénéré (4602 lignes)
+noyaux exportés : 7
+15
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src/gpu.rs", "limit": 60, "offset": 62}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src/gpu.rs</path>
+<type>file</type>
+<content>
+62:     pub nb: usize,
+63:     pub octets_poids: usize,
+64: }
+65: 
+66: pub struct Gpu {
+67:     ctx: *mut c_void,
+68:     module: *mut c_void,
+69:     f_tete: *mut c_void,
+70:     f_proj: *mut c_void,
+71:     f_tete_warp: *mut c_void,
+72:     f_proj_warp: *mut c_void,
+73:     f_mxfp4_warp: *mut c_void,
+74:     f_q4k_warp: *mut c_void,
+75:     pub nom: String,
+76:     pub memoire_libre: usize,
+77: }
+78: 
+79: impl Gpu {
+80:     /// Ouvre le périphérique 0 et charge les noyaux. `None` si CUDA est absent
+81:     /// ou si le chargement échoue — le moteur retombe alors sur le CPU.
+82:     /// Essaie les périphériques dans l'ordre donné : celui qui pilote
+83:     /// l'affichage peut refuser les allocations de calcul.
+84:     pub fn ouvrir_auto() -> Option<Gpu> {
+85:         for ord in [1, 0] {
+86:             if let Some(g) = Gpu::ouvrir(ord) { return Some(g); }
+87:             eprintln!("[gpu] périphérique {ord} indisponible, essai du suivant");
+88:         }
+89:         None
+90:     }
+91: 
+92:     pub fn ouvrir(ordinal: c_int) -> Option<Gpu> {
+93:         unsafe {
+94:      
+… [1813 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && python3 - <<'PY'\np='src/gpu.rs'; s=open(p).read()\n\ns = s.replace(\"\"\"    f_q4k_warp: *mut c_void,\"\"\",\n              \"\"\"    f_q4k_warp: *mut c_void,\n    f_q6k_warp: *mut c_void,\"\"\", 1)\n\ns = s.replace(\"\ … [601 caractères tronqués]`
+
+  ```
+if rc != 0 {
+                eprintln!("{}", erreur(rc, "fonction proj_mxfp4_warp"));
+                return None;
+            }
+            let nom_q4k = std::ffi::CString::new("proj_q4k_warp").unwrap();
+            let mut f_q4k_warp: *mut c_void = std::ptr::null_mut();
+            let rc = cuModuleGetFunction(&mut f_q4k_warp, module, nom_q4k.as_ptr());
+            if rc != 0 {
+                eprintln!("{}", erreur(rc, "fonction proj_q4k_warp"));
+                return None;
+            }
+            let mut libre: usize = 0;
+            let mut total: usize = 0;
+            extern "C" {
+                fn cuMemGetInfo_v2(libre: *mut usize, total: *mut usize) -> c_int;
+            }
+            cuMemGetInfo_v2(&mut libre, &mut total);
+            Some(Gpu { ctx, module, f_tete, f_proj, f_tete_warp, f_proj_warp,
+                       f_mxfp4_warp, f_q4k_warp,
+                       nom: format!("GPU {ordinal}"), memoire_libre: libre })
+        }
+    }
+
+    /// Réserve la place d'une matrice de tête et y **copie les poids une fois**.
+    ///
+    /// `blocs` est la tranche du fichier GGUF : les blocs Q8_0 y sont déjà dans
+    /// la disposition attendue par le noyau (34 octets : é
+… [337 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && python3 - <<'PY'\np='src/gpu.rs'; s=open(p).read()\n\ns = s.replace(\"\"\"            let mut libre: usize = 0;\n            let mut total: usize = 0;\"\"\",\n\"\"\"            let nom_q6k = std::ffi::CString::new(\"proj … [4012 caractères tronqués]`
+
+  ```
+gpu.rs : chargement + chargement/proj Q6_K posés
+    Finished `release` profile [optimized] target(s) in 17.26s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && python3 - <<'PY'\np='src/main.rs'; s=open(p).read()\n\ns = s.replace(\"\"\"    let mx = g.mxfp4_blocks(&opt.matrix).is_some();\n    let nom_q4k = opt.matrix.clone();\"\"\",\n\"\"\"    let mx = g.mxfp4_blocks(&opt.matrix) … [3238 caractères tronqués]`
+
+  ```
+banc_q6k posé
+---
+    Finished `release` profile [optimized] target(s) in 0.01s
+  ```
+
+- **bash** `{"command": "cd /tmp && cat > gguf_tensors.py <<'EOF'\nimport struct, sys\nf=open(sys.argv[1],'rb')\ndef r(fmt):\n    n=struct.calcsize(fmt); return struct.unpack(fmt, f.read(n))\nassert f.read(4)==b'GGUF'\nver,=r('<I'); nt,=r('<Q'); nkv,=r('<Q')\ndef rstr():\n    n,=r('<Q'); return f.read(n).decode … [1036 caractères tronqués]`
+
+  ```
+arch = qwen2
+  ```
+
+- **bash** `{"command": "cd /tmp && python3 - <<'EOF'\nimport importlib.util, collections, subprocess, sys\nout = subprocess.run([sys.executable,'gguf_tensors.py','/home/stephane/FastNVMe/models/qwen2.5-1.5b-instruct-q4_k_m.gguf'],capture_output=True,text=True)\nprint(out.stdout[-1500:]); print(\"ERR:\", out.st … [71 caractères tronqués]`
+
+  ```
+ERR: arch = qwen2
+Traceback (most recent call last):
+  File "/tmp/gguf_tensors.py", line 22, in <module>
+    name=rstr(); nd,=r('<I'); dims=r('<Q'*nd); tt,=r('<I'); off,=r('<Q')
+  ```
+
+- **bash** `{"command": "cd /tmp && python3 - <<'EOF'\nimport struct\nf=open('/home/stephane/FastNVMe/models/qwen2.5-1.5b-instruct-q4_k_m.gguf','rb')\ndef r(fmt):\n    n=struct.calcsize(fmt); return struct.unpack(fmt, f.read(n))\nprint(f.read(4)); ver,=r('<I'); nt,=r('<Q'); nkv,=r('<Q'); print(ver,nt,nkv)\ndef  … [615 caractères tronqués]`
+
+  ```
+b'GGUF'
+3 339 26
+position après KV: 5931189
+  ```
+
+- **bash** `{"command": "cd /tmp && python3 - <<'EOF'\nimport struct, collections\nf=open('/home/stephane/FastNVMe/models/qwen2.5-1.5b-instruct-q4_k_m.gguf','rb')\ndef r(fmt):\n    n=struct.calcsize(fmt); return struct.unpack(fmt, f.read(n))\nf.read(4); ver,=r('<I'); nt,=r('<Q'); nkv,=r('<Q')\ndef rstr():\n     … [745 caractères tronqués]`
+
+  ```
+output.weight (1536, 151936) Q6_K
+token_embd.weight (1536, 151936) Q4_K
+blk.0.attn_norm.weight (1536,) F32
+Counter({'Q4_K': 169, 'F32': 141, 'Q6_K': 29})
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 600 ./qtrinet-core/target/release/qtrinet-core /home/stephane/FastNVMe/models/qwen2.5-1.5b-instruct-q4_k_m.gguf --gpu-banc --matrix output.weight 2>&1 | tail -8", "description": "Bench Q6_K head kernel vs CPU", "timeoutMs": 6 … [6 caractères tronqués]`
+
+  ```
+matrice Q6_K output.weight : 151936 × 1536 · 191.4 Mo · 6 super-blocs de 256
+  CPU  30 fils :     7.9 ms  (  24.3 Go/s)
+  GPU absent
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 600 ./qtrinet-core/target/release/qtrinet-core /home/stephane/FastNVMe/models/qwen2.5-1.5b-instruct-q4_k_m.gguf --gpu-banc --matrix output.weight 2>&1 | head -6; nvidia-smi --query-gpu=index,name,memory.used,memory.total --fo … [84 caractères tronqués]`
+
+  ```
+matrice Q6_K output.weight : 151936 × 1536 · 191.4 Mo · 6 super-blocs de 256
+  CPU  30 fils :     9.9 ms  (  19.4 Go/s)
+  GPU absent
+index, name, memory.used [MiB], memory.total [MiB]
+0, Quadro RTX 5000, 1405 MiB, 16384 MiB
+1, Quadro RTX 5000, 381 MiB, 16384 MiB
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && sed -n '440,470p' src/gpu.rs && grep -rn \"gpu-banc\" /tmp/*.sh 2>/dev/null | head -5", "description": "Inspect GPU instance() and prior usage"}`
+
+  ```
+let mut p_poids = m.poids;
+            let mut p_x = m.x_dev;
+            let mut p_out = m.out_dev;
+            let n_out = m.n_out as c_int;
+            let nb = m.nb as c_int;
+            let mut params: [*mut c_void; 5] = [
+                &mut p_poids as *mut u64 as *mut c_void,
+                &mut p_x as *mut u64 as *mut c_void,
+                &mut p_out as *mut u64 as *mut c_void,
+                &n_out as *const c_int as *mut c_void,
+                &nb as *const c_int as *mut c_void,
+            ];
+            let fils: c_uint = 256;
+            let blocs = ((m.n_out as c_uint) + (fils / 32) - 1) / (fils / 32);
+            let partage = (n_in * 4) as c_uint;   // plus de zone de réduction : shuffle
+            let rc = cuLaunchKernel(self.f_tete_warp, blocs.min(65535), 1, 1, fils, 1, 1,
+                                    partage, std::ptr::null_mut(),
+                                    params.as_mut_ptr(), std::ptr::null_mut());
+            if rc != 0 { eprintln!("{}", erreur(rc, "lancement tete_q8_warp")); return None; }
+            let rc = cuCtxSynchronize();
+            if rc != 0 { return None; }
+            let mut out = vec![0f32; m.n_out];
+            let rc = 
+… [567 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && QT_GPU=1 timeout 900 ./qtrinet-core/target/release/qtrinet-core /home/stephane/FastNVMe/models/qwen2.5-1.5b-instruct-q4_k_m.gguf --gpu-banc --matrix output.weight --threads 16 2>&1 | tail -6", "description": "Bench Q6_K kernel with G … [33 caractères tronqués]`
+
+  ```
+matrice Q6_K output.weight : 151936 × 1536 · 191.4 Mo · 6 super-blocs de 256
+  CPU  16 fils :     8.3 ms  (  23.2 Go/s)
+  GPU 1
+  GPU  warp par ligne :     3.6 ms  (  53.6 Go/s)  écart max +3.33e-7
+  ```
+
+- **bash** `{"command": "cd /tmp && python3 - <<'EOF'\nimport struct\nf=open('/home/stephane/FastNVMe/models/qwen2.5-1.5b-instruct-q4_k_m.gguf','rb')\ndef r(fmt):\n    n=struct.calcsize(fmt); return struct.unpack(fmt, f.read(n))\nf.read(4); ver,=r('<I'); nt,=r('<Q'); nkv,=r('<Q')\ndef rstr():\n    n,=r('<Q'); r … [595 caractères tronqués]`
+
+  ```
+output.weight                    (1536, 151936) Mo=191.44
+blk.0.ffn_down.weight            (8960, 1536) Mo=11.29
+blk.0.attn_v.weight              (1536, 256) Mo=0.32
+blk.1.ffn_down.weight            (8960, 1536) Mo=11.29
+blk.1.attn_v.weight              (1536, 256) Mo=0.32
+blk.10.ffn_down.weight           (8960, 1536) Mo=11.29
+blk.10.attn_v.weight             (1536, 256) Mo=0.32
+blk.13.ffn_down.weight           (8960, 1536) Mo=11.29
+blk.13.attn_v.weight             (1536, 256) Mo=0.32
+blk.16.ffn_down.weight           (8960, 1536) Mo=11.29
+blk.16.attn_v.weight             (1536, 256) Mo=0.32
+blk.19.ffn_down.weight           (8960, 1536) Mo=11.29
+blk.19.attn_v.weight             (1536, 256) Mo=0.32
+blk.21.ffn_down.weight           (8960, 1536) Mo=11.29
+blk.21.attn_v.weight             (1536, 256) Mo=0.32
+blk.24.ffn_down.weight           (8960, 1536) Mo=11.29
+blk.24.attn_v.weight             (1536, 256) Mo=0.32
+blk.27.ffn_down.weight           (8960, 1536) Mo=11.29
+blk.27.attn_v.weight             (1536, 256) Mo=0.32
+blk.5.ffn_down.weight            (8960, 1536) Mo=11.29
+blk.5.attn_v.weight              (1536, 256) Mo=0.32
+blk.6.ffn_down.weight            (8960, 1536) Mo=11.29
+blk.6.a
+… [369 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for m in blk.0.ffn_down.weight blk.0.attn_v.weight; do QT_GPU=1 timeout 300 ./qtrinet-core/target/release/qtrinet-core /home/stephane/FastNVMe/models/qwen2.5-1.5b-instruct-q4_k_m.gguf --gpu-banc --matrix $m --threads 16 2>&1 | tail - … [81 caractères tronqués]`
+
+  ```
+matrice Q6_K blk.0.ffn_down.weight : 1536 × 8960 · 11.3 Mo · 35 super-blocs de 256
+  CPU  16 fils :     1.5 ms  (   7.8 Go/s)
+  GPU 1
+  GPU  warp par ligne :     0.3 ms  (  44.1 Go/s)  écart max +7.08e-7
+matrice Q6_K blk.0.attn_v.weight : 256 × 1536 · 0.3 Mo · 6 super-blocs de 256
+  CPU  16 fils :     0.8 ms  (   0.4 Go/s)
+  GPU 1
+  GPU  warp par ligne :     0.0 ms  (  13.1 Go/s)  écart max +2.62e-7
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && grep -n \"QT_GPU_TETE\\|head4\\|head_gpu\\|charger_tete\" src/model.rs | head -20", "description": "Inspect GPU head offload hooks"}`
+
+  ```
+474:    pub head4: Option<DenseQ4>,
+948:        // Opt-in : `QT_GPU_TETE=1`.
+949:        let tete_gpu = if std::env::var("QT_GPU_TETE").is_ok()
+953:                    let m = machine.charger_tete(blocs, cfg.vocab, cfg.hidden, nb);
+965:        let head4 = if q4 & 4 != 0 || tete_quantifiee {
+1000:            tete_gpu, head4, sinks_vus,
+2360:        if let Some(d) = self.head4.take() {
+2382:            self.head4 = Some(d);
+2432:        if self.head4.is_some() {
+2437:            let d = self.head4.take().unwrap();
+2455:            self.head4 = Some(d);
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src/model.rs", "limit": 60, "offset": 944}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src/model.rs</path>
+<type>file</type>
+<content>
+944:         // ligne de cache différente. Il faut une warp par ligne avec réduction
+945:         // — à écrire avant de réactiver.
+946:         // Le noyau « une warp par ligne » rend le déport de la tête enfin
+947:         // rentable : l'ancien lisait une ligne par fil (23 → 159 ms mesurés).
+948:         // Opt-in : `QT_GPU_TETE=1`.
+949:         let tete_gpu = if std::env::var("QT_GPU_TETE").is_ok()
+950:                           && crate::gpu::instance().is_some() {
+951:             match (crate::gpu::instance(), g.q8_blocks(&tete)) {
+952:                 (Some(machine), Some((blocs, nb))) => {
+953:                     let m = machine.charger_tete(blocs, cfg.vocab, cfg.hidden, nb);
+954:                     if let Some(m) = m.as_ref() {
+955:                         println!("[gpu] {} · tête {} × {} sur le GPU : {:.0} Mo résidents, \
+956:                                   {:.0} Mo libres", machine.nom, cfg.vocab, cfg.hidden,
+957:                                  m.octets_poids as f64 / 1e6,
+958:                                  machine.memoire_libre as f64 / 1e6);
+95
+… [2223 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src/model.rs", "limit": 70, "offset": 2420}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src/model.rs</path>
+<type>file</type>
+<content>
+2420:         if let (Some(machine), Some(m)) = (crate::gpu::instance(), self.tete_gpu.as_ref()) {
+2421:             let mut xd = vec![0i32; h.len()];
+2422:             for (&i, &v) in sv.idx.iter().zip(sv.val.iter()) { xd[i as usize] = v; }
+2423:             if let Some(y) = machine.tete_warp(m, &xd) {
+2424:                 return y.iter().map(|v| v * sx).collect();
+2425:             }
+2426:         }
+2427:         // Tête 4 bits : chemin DIRECT par tranches de vocabulaire, comme la tête
+2428:         // int8 — et non par le pool. Le pool coûtait 4 ms de plus par jeton pour
+2429:         // 72 Mo lus au lieu de 136 : ses seize tampons de sortie (9,7 Mo) sont
+2430:         // écrits, remis à zéro puis réduits, soit plus de trafic que les poids
+2431:         // économisés.
+2432:         if self.head4.is_some() {
+2433:             let xi: Vec<i16> = sv.idx.iter().zip(sv.val.iter())
+2434:                 .fold(vec![0i16; h.len()], |mut a, (&i, &v)| {
+2435:                     a[i as usize] = v.clamp(-32767, 32767) as i16; a
+2436:                 });
+2437:             let 
+… [2634 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Q6_K mesuré (×2,3 à ×5) ; je le branche sur la tête du moteur
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && python3 - <<'PY'\np='src/model.rs'; s=open(p).read()\n\n# 1) champ : dire quel noyau correspond à la tête déportée\ns = s.replace(\"\"\"    pub head4: Option<DenseQ4>,\"\"\",\n\"\"\"    pub head4: Option<DenseQ4>,\n    / … [6540 caractères tronqués]`
+
+  ```
+tête Q6_K branchée
+    Finished `release` profile [optimized] target(s) in 0.01s
+  ```
+
+- **bash** `{"command": "cat > /tmp/tete_q6k.sh <<'EOF'\n#!/bin/bash\nset -u\ncd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\nQ=./qtrinet-core/target/release/qtrinet-core\nM=/home/stephane/FastNVMe/models/qwen2.5-1.5b-instruct-q4_k_m.gguf\nJ=/tmp/tete_q6k.log\n: > \"$J\"\nwhile pgrep -x qtrinet-core > /dev/ … [671 caractères tronqués]`
+
+  ```
+started background job bash-26
+  ```
+
+- **job_output** `{"job_id": "bash-26", "timeout_ms": 600000, "wait": true}`
+
+  ```
+tête cpu  lot 1    : perplexité 13.6877 sur 510 tokens (0 événements, 46.1 s)
+tête gpu  lot 1    : perplexité 13.6877 sur 510 tokens (0 événements, 45.2 s)
+tête cpu  lot 512  : perplexité 13.6864 sur 510 tokens (0 événements, 36.2 s)
+tête gpu  lot 512  : perplexité 13.6864 sur 510 tokens (0 événements, 36.5 s)
+=== fin ===
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && QT_GPU_TETE=1 timeout 300 ./qtrinet-core/target/release/qtrinet-core /home/stephane/FastNVMe/models/qwen2.5-1.5b-instruct-q4_k_m.gguf --ppl /tmp/ids_qwen.txt --ctx 256 --limit 64 --dense --threads 16 --lot 1 --ppl-profil 2>&1 | grep  … [129 caractères tronqués]`
+
+  ```
+[tête 4 bits] 151936 × 1536 → 6.56 b/poids, 0 Mo, 0.0 s
+      63 tokens notés — perplexité cumulée 18.974  (11.5 tok/s)
+profil par profondeur (perplexité par tranche de 256 positions) :
+=== perplexité 18.9744 sur 63 tokens (0 événements, 5.5 s) ===
+    11.5 tok/s effectifs (avant + tête)
+    postes (ms/token) : projets-attn 6.69 | rope 1.03 | attention 0.74 | proj+mlp 69.47 | somme 77.93 | reste (tête + échantillonnage) 8.94
+    dont tête de sortie 0.00 | notation log-sum-exp 8.89 (le reste du « reste » n'est pas chronométré)
+    dont attention : scores 0.28 | softmax 0.08 | somme pondérée + écriture KV 0.38
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && grep -n \"tete_gpu\\b\\|tete_gpu_q6k\\|QT_GPU_TETE\\|fn charger\\|fn ouvrir\" src/model.rs src/main.rs | head -25", "description": "Find constructors and GPU head gates"}`
+
+  ```
+src/model.rs:90:fn charger_moe(g: &Gguf, l: usize, n_expert: usize) -> Option<Moe> {
+src/model.rs:470:    pub tete_gpu: Option<crate::gpu::MatriceGpu>,
+src/model.rs:479:    pub tete_gpu_q6k: bool,
+src/model.rs:953:        // Opt-in : `QT_GPU_TETE=1`.
+src/model.rs:955:        // en Q8_0 — sans cette reconnaissance, `QT_GPU_TETE=1` ne faisait rien
+src/model.rs:958:        let mut tete_gpu_q6k = false;
+src/model.rs:959:        let tete_gpu = if std::env::var("QT_GPU_TETE").is_ok()
+src/model.rs:964:                tete_gpu_q6k = true;
+src/model.rs:973:                         if tete_gpu_q6k { "Q6_K" } else { "Q8_0" },
+src/model.rs:1014:            tete_gpu, tete_gpu_q6k, head4, sinks_vus,
+src/model.rs:2374:        if self.tete_gpu.is_some() {
+src/model.rs:2448:        let m = self.tete_gpu.as_ref()?;
+src/model.rs:2449:        if self.tete_gpu_q6k {
+src/model.rs:2467:        if self.tete_gpu.is_some() {
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && grep -rn \"Model {\" src/*.rs | head && grep -n \"pub fn new\\|pub fn charger\\|pub fn ouvrir\" src/model.rs | head", "description": "Find Model constructors"}`
+
+  ```
+src/model.rs:380:pub struct Model {
+src/model.rs:721:impl Model {
+src/model.rs:723:                auto: bool, q4: u8, b6: u8) -> Model {
+src/model.rs:999:        Model {
+src/model.rs:1951:        let Model { g, cfg, layers, out_norm, pool, kv, events, .. } = self;
+545:    pub fn new(layer: usize, n_out: usize, n_in: usize, quantile: f32) -> Self {
+603:    pub fn new(bits: u32, n_kv: usize, ctx: usize, hd: usize) -> Self {
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && sed -n '/^pub fn instance/,/^}/p' src/gpu.rs && grep -n \"QT_GPU\\b\\|QT_GPU=\" src/*.rs | head", "description": "Inspect gpu::instance gating"}`
+
+  ```
+pub fn instance() -> Option<&'static Gpu> {
+    INSTANCE.get_or_init(|| {
+        if std::env::var("QT_GPU").is_err() { return None; }
+        Gpu::ouvrir_auto()
+    }).as_ref()
+}
+src/gpu.rs:505:/// Instance unique du processus. `QT_GPU` active le déport ; sans lui, aucune
+src/gpu.rs:511:        if std::env::var("QT_GPU").is_err() { return None; }
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && python3 - <<'PY'\np='src/main.rs'; s=open(p).read()\nold = \"\"\"                let marque = Instant::now();\n                let lg = match &lgs { Some(v) => v[i].clone(), None => mdl.logits(h) };\n                let  … [1006 caractères tronqués]`
+
+  ```
+timer tête séparé au lot 1
+    Finished `release` profile [optimized] target(s) in 0.01s
+  ```
+
+- **bash** `{"command": "cat > /tmp/tete_q6k2.sh <<'EOF'\n#!/bin/bash\n# La tête Q6_K (151 936 × 1 536, 191 Mo) : CPU 16 fils contre noyau warp sur GPU.\n# `QT_GPU` est nécessaire pour que le pilote soit ouvert — `QT_GPU_TETE` seul ne\n# suffit pas, c'est le piège qui a rendu la première mesure muette.\nset -u\ … [1010 caractères tronqués]`
+
+  ```
+started background job bash-27
+  ```
+
+- **job_output** `{"job_id": "bash-27", "timeout_ms": 900000, "wait": true}`
+
+  ```
+tête cpu  lot 1    : perplexité 13.6877 sur 510 tokens (0 événements, 44.4 s)
+postes (ms/token) : projets-attn 6.50 | rope 1.08 | attention 2.38 | proj+mlp 68.12 | somme 78.08 | reste (tête + échantillonnage) 8.99
+dont tête de sortie 7.58 | notation log-sum-exp 8.93 (le reste du « reste » n'est pas chronométré)
+dont attention : scores 0.93 | softmax 0.27 | somme pondérée + écriture KV 1.17
+tête gpu  lot 1    : [gpu] GPU 1 · tête 151936 × 1536 (Q6_K) sur le GPU : 191 Mo résidents, 16173 Mo libres
+perplexité 13.6877 sur 510 tokens (0 événements, 41.4 s)
+postes (ms/token) : projets-attn 6.38 | rope 1.08 | attention 2.47 | proj+mlp 66.20 | somme 76.13 | reste (tête + échantillonnage) 4.98
+dont tête de sortie 3.60 | notation log-sum-exp 4.95 (le reste du « reste » n'est pas chronométré)
+dont attention : scores 0.99 | softmax 0.27 | somme pondérée + écriture KV 1.20
+tête cpu  lot 512  : perplexité 13.6864 sur 510 tokens (0 événements, 36.0 s)
+postes (ms/token) : projets-attn 3.68 | rope 0.00 | attention 5.56 | proj+mlp 52.03 | somme 61.27 | reste (tête + échantillonnage) 9.25
+dont tête de sortie 7.49 | notation log-sum-exp 1.36 (le reste du « reste » n'est pas chronométré)
+dont attention
+… [591 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && python3 - <<'PY'\np='src/main.rs'; s=open(p).read()\nold = \"\"\"                let marque = Instant::now();\n                // Tête au fil du jeton (lot 1) : chronométrée à part, sinon son\n                // coût se  … [1983 caractères tronqués]`
+
+  ```
+notation ne compte plus la tête
+    Finished `release` profile [optimized] target(s) in 17.08s
+cpu  : perplexité 18.9744 sur 63 tokens (0 événements, 5.8 s)
+dont tête de sortie 7.76 | notation log-sum-exp 1.33 (le reste du « reste » n'est pas chronométré)
+gpu  : perplexité 18.9744 sur 63 tokens (0 événements, 6.4 s)
+dont tête de sortie 3.67 | notation log-sum-exp 1.33 (le reste du « reste » n'est pas chronométré)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls reports/ && grep -rln \"Q4_K\\|MXFP4\" reports/ docs/ | head", "description": "Find GPU documentation to update"}`
+
+  ```
+bilan-multi-materiel.md
+rapport-8bits.md
+rapport-attention-creuse.md
+rapport-campagne-parcimonie.md
+rapport-capteur-hebbien.md
+rapport-cpu-aer.md
+rapport-croisement-push-pull.md
+rapport-encodage.md
+rapport-eparsite.md
+rapport-gpt-oss-perplexite.md
+rapport-grappes.md
+rapport-greffon.md
+rapport-harnais.md
+rapport-inference.md
+rapport-localite-activation.md
+rapport-minimal.md
+rapport-modele-reel.md
+rapport-mode-listes.md
+rapport-mur-memoire-4bits.md
+rapport-optimisations.md
+rapport-parcimonie-imposee.md
+rapport-passage-a-l-echelle.md
+rapport-precision.md
+rapport-prefill-par-lots.md
+rapport-programme-evolutif.md
+rapport-travail-reel.md
+rapport-valeur-unaire.md
+reports/rapport-valeur-unaire.md
+reports/rapport-passage-a-l-echelle.md
+reports/rapport-travail-reel.md
+reports/rapport-gpt-oss-perplexite.md
+reports/rapport-localite-activation.md
+reports/rapport-prefill-par-lots.md
+docs/convertisseur.md
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"Q4_K\\|MXFP4\\|warp\" reports/rapport-localite-activation.md | head -20", "description": "Check GPU section in PowerInfer report"}`
+
+  ```
+63:   rentable, d'autant que le noyau MXFP4 « warp par ligne » tourne maintenant à
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rn \"1,6 ms\\|écart 2e-7\\|tete_q8_warp\\|Q4_K warp\" --include=*.md . | head -10", "description": "Find where GPU kernel results are documented"}`
+
+  ```
+./reports/rapport-attention-creuse.md:98:**11,6 ms à k=1** — où la somme pondérée ne fait plus que 14 × 64 opérations au
+./journal/sessions/22bcae27-254b-47b2-acda-87467dab060c/digest.md:9154:| Harnais | 34 ms/token | **11,6 ms/token** |
+./journal/sessions/22bcae27-254b-47b2-acda-87467dab060c/digest.md:9176:La chaîne de mesure est maintenant complète et rapide : GGUF → tokenizer → forward numpy → perplexité → profil d'événements. **Le prochain jalon utile est le moteur Rust** : il donnera le vrai débit de l'architecture liste (les mesures C donnent 7,79 G événements/s, à comparer aux 11,6 ms/token de numpy), et il est indispensable pour les modèles creux — ceux que numpy ne peut pas exécuter.
+./journal/sessions/22bcae27-254b-47b2-acda-87467dab060c/rapport.md:1260:| Harnais | 34 ms/token | **11,6 ms/token** |
+./journal/sessions/bbd6969f-0f70-42b2-8951-64d1f2f36d2e/digest.md:8879:373:.visible .entry tete_q8_warp(
+./journal/sessions/bbd6969f-0f70-42b2-8951-64d1f2f36d2e/digest.md:9964:370:.visible .entry tete_q8_warp(
+./journal/sessions/bbd6969f-0f70-42b2-8951-64d1f2f36d2e/digest.md:10168:⏵ Item 7 (suite) : noyau Q4_K warp par ligne (toute la famille Qwen est dans ce format)
+./journal/
+… [664 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='REPRISE.md'; s=open(p).read()\nold = \"| 7 | noyaux GPU | **fait** | warp par ligne (tête : 1,8 ms contre 30 ms CPU, PPL identique) ; **MXFP4** warp (0,1 ms, écart 0,00e0 — bit à bit) ; **Q4_K** warp (0,5 contre  … [4045 caractères tronqués]`

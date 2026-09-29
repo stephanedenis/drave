@@ -780,6 +780,10 @@ fn run_gpu_banc(opt: Options) {
     // Le banc porte sur la tête Q8_0, ou sur le tenseur nommé (`--matrix`) quand
     // c'est une matrice d'experts MXFP4 — c'est le poste dominant de gpt-oss.
     let mx = g.mxfp4_blocks(&opt.matrix).is_some();
+    let nom_q6k = opt.matrix.clone();
+    if !mx && g.q6k_blocks(&nom_q6k).is_some() {
+        return banc_q6k(opt, &g, &nom_q6k, threads);
+    }
     let nom_q4k = opt.matrix.clone();
     if !mx && nom_q4k != "output.weight" && nom_q4k != "token_embd.weight"
         && g.q4k_blocks(&nom_q4k).is_some() {
@@ -934,6 +938,60 @@ fn banc_mxfp4(opt: Options, g: &Gguf, nom: &str, threads: usize) {
 
 /// Banc d'essai du noyau **Q4_K** (toute la famille Qwen en Q4_K_M) contre le
 /// chemin AVX2 du CPU.
+/// Banc du noyau **Q6_K** : c'est le format des têtes liées et de quelques
+/// tenseurs des mélanges `Q4_K_M`. Même protocole que les autres bancs — chemin
+/// CPU AVX2 en référence, trois passes GPU, écart relatif au maximum des sorties.
+fn banc_q6k(opt: Options, g: &Gguf, nom: &str, threads: usize) {
+    use std::time::Instant;
+    let Some((blocs, nb)) = g.q6k_blocks(nom) else { println!("pas une matrice Q6_K"); return };
+    let t = g.tensor(nom).unwrap();
+    let (n_out, n_in) = (t.dims[0] as usize, t.dims[1] as usize);
+    let octets = n_out * nb * crate::gguf::TAILLE_Q6K;
+    println!("matrice Q6_K {nom} : {n_out} × {n_in} · {:.1} Mo · {} super-blocs de 256",
+             octets as f64 / 1e6, nb);
+    let xi: Vec<i32> = (0..n_in).map(|i| ((i * 2654435761usize) % 255) as i32 - 127).collect();
+    let x16: Vec<i16> = xi.iter().map(|&v| v.clamp(-32767, 32767) as i16).collect();
+    let d = unsafe { DenseQ4::emprunter_q6k(blocs.as_ptr(), n_out, n_in, nb) };
+    let t0 = Instant::now();
+    let mut cpu = vec![0f32; n_out];
+    let chunk = n_out.div_ceil(threads);
+    let dref = &d;
+    let xref = &x16;
+    std::thread::scope(|sc| {
+        for (ci, part) in cpu.chunks_mut(chunk).enumerate() {
+            let base = ci * chunk;
+            sc.spawn(move || {
+                for (j, o) in part.iter_mut().enumerate() {
+                    *o = dref.dot16(base + j, xref, &[]);
+                }
+            });
+        }
+    });
+    let tc = t0.elapsed().as_secs_f64();
+    println!("  CPU  {threads} fils : {:>7.1} ms  ({:>6.1} Go/s)", tc * 1e3, octets as f64 / tc / 1e9);
+    let Some(machine) = gpu::instance() else { println!("  GPU absent"); return };
+    println!("  {}", machine.nom);
+    let Some(m) = machine.charger_q6k(blocs, n_out, nb) else {
+        println!("  allocation GPU impossible"); return;
+    };
+    let mut ms = f64::MAX;
+    let mut dernier: Vec<f32> = Vec::new();
+    for passe in 0..3 {
+        let t1 = Instant::now();
+        let Some(r) = machine.proj_q6k(&m, &xi, 1.0) else { println!("  noyau en échec"); return };
+        let dt = t1.elapsed().as_secs_f64();
+        if passe > 0 && dt < ms { ms = dt; }
+        dernier = r;
+    }
+    let mut echelle = 1e-9f32;
+    for o in 0..n_out { echelle = echelle.max(cpu[o].abs()); }
+    let mut ecart = 0f32;
+    for o in 0..n_out { ecart = ecart.max((dernier[o] - cpu[o]).abs() / echelle); }
+    println!("  GPU  warp par ligne : {:>7.1} ms  ({:>6.1} Go/s)  écart max {:+.2e}",
+             ms * 1e3, octets as f64 / ms / 1e9, ecart);
+    let _ = opt;
+}
+
 fn banc_q4k(opt: Options, g: &Gguf, nom: &str, threads: usize) {
     use std::time::Instant;
     let Some((blocs, nb)) = g.q4k_blocks(nom) else { println!("pas une matrice Q4_K"); return };
@@ -1529,8 +1587,19 @@ fn run_ppl(opt: Options) {
             for (i, h) in hs.iter().enumerate() {
             let pos = pos + i;
             if pos + 1 < chunk.len() && masque[pos + 1] {
+                // Tête au fil du jeton (lot 1) : chronométrée à part, sinon son
+                // coût se cachait dans « notation log-sum-exp » et la
+                // comparaison avec la tête par lots n'avait plus de sens.
+                let lg = match &lgs {
+                    Some(v) => v[i].clone(),
+                    None => {
+                        let mt = Instant::now();
+                        let r = mdl.logits(h);
+                        t_tete += mt.elapsed().as_secs_f64();
+                        r
+                    }
+                };
                 let marque = Instant::now();
-                let lg = match &lgs { Some(v) => v[i].clone(), None => mdl.logits(h) };
                 let mut mx = f32::NEG_INFINITY;
                 for &v in &lg { if v > mx { mx = v; } }
                 let mut sum = 0f64;

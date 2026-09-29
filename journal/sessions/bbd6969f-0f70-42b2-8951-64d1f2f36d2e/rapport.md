@@ -5,12 +5,12 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 23.1 h |
+| Durée | 23.3 h |
 | Tours | 6 |
-| Messages | 806 |
-| Appels d'outils | 811 |
-| Fichiers touchés | 34 |
-| Commandes | 588 |
+| Messages | 850 |
+| Appels d'outils | 855 |
+| Fichiers touchés | 35 |
+| Commandes | 620 |
 | Sous-agents | 1 |
 | Commits | 25 |
 | Compactages de contexte | 1 |
@@ -263,7 +263,7 @@ Retirer `mscale = 1 + 0,1·ln f` divise la perplexité par **8,9 / 5,9 / 3,8**. 
 
 ### Tour 6 — <goal_round> Objective: "Réaliser les 8 chantiers restants du projet qtrinet-core dans l'ordre : (1) protocole de perple … [1122 caractères tronqués]
 
-*84 appels d'outils.* Actions notables :
+*128 appels d'outils.* Actions notables :
 
 - bash — Check the starting state of round 2
 - bash — Locate the batched attention loop
@@ -279,11 +279,11 @@ Retirer `mscale = 1 + 0,1·ln f` divise la perplexité par **8,9 / 5,9 / 3,8**. 
 - bash — Bisect the failing batch size
 - bash — Add guards and rerun lot 128
 - bash — Read dot16's fallback path
-- … et 55 autres
+- … et 88 autres
 
 **Synthèse produite :**
 
-Now I write the section that closes the loop on (a) and (b):
+⏵ Q6_K mesuré (×2,3 à ×5) ; je le branche sur la tête du moteur
 
 ## 3. Travail accompli
 
@@ -325,6 +325,7 @@ Now I write the section that closes the loop on (a) and (b):
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/aiguille.py` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-prefill-par-lots.md` | 1 | 2 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src/engine.rs` | 0 | 4 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/gpu/qtrinet_gpu.cu` | 0 | 1 |
 
 ### Sous-agents lancés
 
@@ -372,7 +373,7 @@ Now I write the section that closes the loop on (a) and (b):
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 548 autres
+- … et 580 autres
 
 ## 4. Mesures et résultats marquants
 

@@ -472,6 +472,11 @@ pub struct Model {
     /// plus grosse matrice du modèle — 151 936 × 896 — donc le poste où le
     /// demi-octet par poids rapporte le plus.
     pub head4: Option<DenseQ4>,
+    /// Vrai quand la tête déportée est en Q6_K (`proj_q6k_warp`) et non en
+    /// Q8_0 (`tete_q8_warp`) : les deux noyaux ne rendent pas la même chose —
+    /// celui de Q8_0 ne multiplie PAS par l'échelle d'activation, celui de Q6_K
+    /// l'applique.
+    pub tete_gpu_q6k: bool,
     /// Greffon : un neurone supplémentaire, chargé sans réentraînement.
     pub patch: Option<Patch>,
     /// Gain appliqué à la sortie du FFN d'une couche : édition structurelle de
@@ -946,21 +951,30 @@ impl Model {
         // Le noyau « une warp par ligne » rend le déport de la tête enfin
         // rentable : l'ancien lisait une ligne par fil (23 → 159 ms mesurés).
         // Opt-in : `QT_GPU_TETE=1`.
+        // Têtes liées de la famille Qwen en Q4_K_M : elles sont en **Q6_K**, pas
+        // en Q8_0 — sans cette reconnaissance, `QT_GPU_TETE=1` ne faisait rien
+        // sur ces modèles (le noyau existait mais aucune tête ne lui était
+        // présentée).
+        let mut tete_gpu_q6k = false;
         let tete_gpu = if std::env::var("QT_GPU_TETE").is_ok()
                           && crate::gpu::instance().is_some() {
-            match (crate::gpu::instance(), g.q8_blocks(&tete)) {
-                (Some(machine), Some((blocs, nb))) => {
-                    let m = machine.charger_tete(blocs, cfg.vocab, cfg.hidden, nb);
-                    if let Some(m) = m.as_ref() {
-                        println!("[gpu] {} · tête {} × {} sur le GPU : {:.0} Mo résidents, \
-                                  {:.0} Mo libres", machine.nom, cfg.vocab, cfg.hidden,
-                                 m.octets_poids as f64 / 1e6,
-                                 machine.memoire_libre as f64 / 1e6);
-                    }
-                    m
-                }
-                _ => None,
+            let machine = crate::gpu::instance();
+            let charge = if let (Some(machine), Some((blocs, nb))) =
+                (machine, g.q6k_blocks(&tete)) {
+                tete_gpu_q6k = true;
+                machine.charger_q6k(blocs, cfg.vocab, nb)
+            } else if let (Some(machine), Some((blocs, nb))) =
+                (machine, g.q8_blocks(&tete)) {
+                machine.charger_tete(blocs, cfg.vocab, cfg.hidden, nb)
+            } else { None };
+            if let (Some(machine), Some(m)) = (machine, charge.as_ref()) {
+                println!("[gpu] {} · tête {} × {} ({}) sur le GPU : {:.0} Mo résidents, \
+                          {:.0} Mo libres", machine.nom, cfg.vocab, cfg.hidden,
+                         if tete_gpu_q6k { "Q6_K" } else { "Q8_0" },
+                         m.octets_poids as f64 / 1e6,
+                         machine.memoire_libre as f64 / 1e6);
             }
+            charge
         } else { None };
         let head4 = if q4 & 4 != 0 || tete_quantifiee {
             let t0 = Instant::now();
@@ -997,7 +1011,7 @@ impl Model {
             seuil_push: 0.22,
             stop_id: None, stop_id2: None, prof: [0.0; 6],
             tete,
-            tete_gpu, head4, sinks_vus,
+            tete_gpu, tete_gpu_q6k, head4, sinks_vus,
             patch: None, ffn_gain: None, hebb: None,
         }
     }
@@ -2353,6 +2367,25 @@ impl Model {
                 qx[i * h + j as usize] = val.clamp(-32767, 32767) as i16;
             }
         }
+        // Tête déportée : un appel par jeton (le noyau avale une ligne de
+        // vocabulaire entière, il n'a pas besoin du lot pour être efficace).
+        // Sans ce chemin, une mesure de perplexité — qui passe toujours par des
+        // lots — n'aurait jamais touché le GPU.
+        if self.tete_gpu.is_some() {
+            let mut xd = vec![0i32; h];
+            let mut tous: Vec<Vec<f32>> = Vec::with_capacity(t);
+            let mut complet = true;
+            for i in 0..t {
+                for (a, &b) in xd.iter_mut().zip(qx[i * h..(i + 1) * h].iter()) {
+                    *a = b as i32;
+                }
+                match self.logits_gpu(&xd, sxs[i]) {
+                    Some(y) => tous.push(y),
+                    None => { complet = false; break; }
+                }
+            }
+            if complet { return tous; }
+        }
         let vocab = self.cfg.vocab;
         let nt = self.pool.threads().max(1);
         let chunk = vocab.div_ceil(nt);
@@ -2406,6 +2439,20 @@ impl Model {
         (0..t).map(|i| (0..vocab).map(|o| out[o * t + i]).collect()).collect()
     }
 
+    /// Tête sur le GPU. `None` si aucune tête n'est déportée ou si le noyau
+    /// échoue : l'appelant retombe alors sur le CPU. Les deux noyaux ne
+    /// s'appellent pas de la même façon — `proj_q6k` applique l'échelle
+    /// d'activation, `tete_warp` la laisse à l'appelant.
+    fn logits_gpu(&self, xd: &[i32], sx: f32) -> Option<Vec<f32>> {
+        let machine = crate::gpu::instance()?;
+        let m = self.tete_gpu.as_ref()?;
+        if self.tete_gpu_q6k {
+            machine.proj_q6k(m, xd, sx)
+        } else {
+            machine.tete_warp(m, xd).map(|y| y.iter().map(|v| v * sx).collect())
+        }
+    }
+
     /// Tête de sortie : produits scalaires entiers sur les lignes Q8_0 du
     /// plafond d'embedding (poids liés). Parallélisé par tranches de vocabulaire.
     pub fn logits(&mut self, h: &[f32]) -> Vec<f32> {
@@ -2417,12 +2464,10 @@ impl Model {
         };
         // Chemin GPU : les poids de la tête sont déjà en mémoire vidéo ; seules
         // les activations montent et les logits descendent.
-        if let (Some(machine), Some(m)) = (crate::gpu::instance(), self.tete_gpu.as_ref()) {
+        if self.tete_gpu.is_some() {
             let mut xd = vec![0i32; h.len()];
             for (&i, &v) in sv.idx.iter().zip(sv.val.iter()) { xd[i as usize] = v; }
-            if let Some(y) = machine.tete_warp(m, &xd) {
-                return y.iter().map(|v| v * sx).collect();
-            }
+            if let Some(y) = self.logits_gpu(&xd, sx) { return y; }
         }
         // Tête 4 bits : chemin DIRECT par tranches de vocabulaire, comme la tête
         // int8 — et non par le pool. Le pool coûtait 4 ms de plus par jeton pour

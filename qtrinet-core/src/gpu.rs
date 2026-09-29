@@ -72,6 +72,7 @@ pub struct Gpu {
     f_proj_warp: *mut c_void,
     f_mxfp4_warp: *mut c_void,
     f_q4k_warp: *mut c_void,
+    f_q6k_warp: *mut c_void,
     pub nom: String,
     pub memoire_libre: usize,
 }
@@ -167,6 +168,13 @@ impl Gpu {
                 eprintln!("{}", erreur(rc, "fonction proj_q4k_warp"));
                 return None;
             }
+            let nom_q6k = std::ffi::CString::new("proj_q6k_warp").unwrap();
+            let mut f_q6k_warp: *mut c_void = std::ptr::null_mut();
+            let rc = cuModuleGetFunction(&mut f_q6k_warp, module, nom_q6k.as_ptr());
+            if rc != 0 {
+                eprintln!("{}", erreur(rc, "fonction proj_q6k_warp"));
+                return None;
+            }
             let mut libre: usize = 0;
             let mut total: usize = 0;
             extern "C" {
@@ -174,7 +182,7 @@ impl Gpu {
             }
             cuMemGetInfo_v2(&mut libre, &mut total);
             Some(Gpu { ctx, module, f_tete, f_proj, f_tete_warp, f_proj_warp,
-                       f_mxfp4_warp, f_q4k_warp,
+                       f_mxfp4_warp, f_q4k_warp, f_q6k_warp,
                        nom: format!("GPU {ordinal}"), memoire_libre: libre })
         }
     }
@@ -247,6 +255,62 @@ impl Gpu {
             let mut out_dev: u64 = 0;
             cuMemAlloc_v2(&mut out_dev, n_out * 4);
             Some(MatriceGpu { poids, x_dev, out_dev, n_out, nb, octets_poids })
+        }
+    }
+
+    /// Réserve une matrice Q6_K (210 octets par super-bloc de 256 poids).
+    /// Aucune conversion : le fichier est déjà dans la disposition du noyau.
+    pub fn charger_q6k(&self, blocs: &[u8], n_out: usize, nb: usize) -> Option<MatriceGpu> {
+        cu_ctx(self.ctx);
+        let octets_poids = n_out.checked_mul(nb)?.checked_mul(210)?;
+        if blocs.len() < octets_poids { return None; }
+        unsafe {
+            let mut poids: u64 = 0;
+            if cuMemAlloc_v2(&mut poids, octets_poids) != 0 { return None; }
+            if cuMemcpyHtoD_v2(poids, blocs.as_ptr() as *const c_void, octets_poids) != 0 {
+                return None;
+            }
+            let mut x_dev: u64 = 0;
+            cuMemAlloc_v2(&mut x_dev, nb * 256 * 4);
+            let mut out_dev: u64 = 0;
+            cuMemAlloc_v2(&mut out_dev, n_out * 4);
+            Some(MatriceGpu { poids, x_dev, out_dev, n_out, nb, octets_poids })
+        }
+    }
+
+    /// Une passe Q6_K : une warp par ligne, super-blocs partagés entre les fils.
+    pub fn proj_q6k(&self, m: &MatriceGpu, x: &[i32], sx: f32) -> Option<Vec<f32>> {
+        cu_ctx(self.ctx);
+        let n_in = m.nb * 256;
+        if x.len() < n_in { return None; }
+        unsafe {
+            if cuMemcpyHtoD_v2(m.x_dev, x.as_ptr() as *const c_void, n_in * 4) != 0 { return None; }
+            let mut p_poids = m.poids;
+            let mut p_x = m.x_dev;
+            let mut p_out = m.out_dev;
+            let n_out = m.n_out as c_int;
+            let nb = m.nb as c_int;
+            let mut params: [*mut c_void; 6] = [
+                &mut p_poids as *mut u64 as *mut c_void,
+                &mut p_x as *mut u64 as *mut c_void,
+                &mut p_out as *mut u64 as *mut c_void,
+                &n_out as *const c_int as *mut c_void,
+                &nb as *const c_int as *mut c_void,
+                &sx as *const f32 as *mut c_void,
+            ];
+            let fils: c_uint = 256;
+            let blocs = ((m.n_out as c_uint) + (fils / 32) - 1) / (fils / 32);
+            let partage = (n_in * 4) as c_uint;
+            let rc = cuLaunchKernel(self.f_q6k_warp, blocs.min(65535), 1, 1, fils, 1, 1,
+                                    partage, std::ptr::null_mut(),
+                                    params.as_mut_ptr(), std::ptr::null_mut());
+            if rc != 0 { eprintln!("{}", erreur(rc, "lancement proj_q6k_warp")); return None; }
+            if cuCtxSynchronize() != 0 { return None; }
+            let mut out = vec![0f32; m.n_out];
+            if cuMemcpyDtoH_v2(out.as_mut_ptr() as *mut c_void, m.out_dev, m.n_out * 4) != 0 {
+                return None;
+            }
+            Some(out)
         }
     }
 

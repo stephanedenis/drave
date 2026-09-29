@@ -286,4 +286,72 @@ __global__ void proj_q4k_warp(const unsigned char* __restrict__ w,
     }
 }
 
+// ---------------------------------------------------------------------------
+// Q6_K (têtes liées et quelques tenseurs des mélanges Q4_K_M) : super-blocs de
+// 210 octets — 128 octets de nibbles bas, 64 octets portant les DEUX bits de
+// poids, seize échelles signées d'un octet (une par groupe de seize poids) et
+// une demi-précision. Les deux moitiés de 128 poids ont chacune leurs 64 octets
+// de ql, 32 de qh et 8 échelles.
+//
+// Position des huit groupes d'une moitié, telle que le noyau AVX2 du CPU la
+// lit (l'ordre des groupes n'est PAS l'ordre des octets) :
+//   k : (bloc de ql, nibble, bloc de qh, décalage des 2 bits)
+//   0 : (0, bas,  0, 0)   1 : (1, bas,  1, 0)
+//   2 : (2, bas,  0, 2)   3 : (3, bas,  1, 2)
+//   4 : (0, haut, 0, 4)   5 : (1, haut, 1, 4)
+//   6 : (2, haut, 0, 6)   7 : (3, haut, 1, 6)
+__global__ void proj_q6k_warp(const unsigned char* __restrict__ w,
+                              const int* __restrict__ x,
+                              float* __restrict__ out,
+                              int n_out, int nb, float sx) {
+    extern __shared__ int xs[];
+    const int n_in = nb * 256;
+    const int tid = threadIdx.x;
+    const int lane = tid & 31;
+    const int warp = tid >> 5;
+    const int warp_par_bloc = blockDim.x >> 5;
+    for (int i = tid; i < n_in; i += blockDim.x) xs[i] = x[i];
+    __syncthreads();
+    const int warp_grille = (gridDim.x * blockDim.x) >> 5;
+    for (int o = blockIdx.x * warp_par_bloc + warp; o < n_out; o += warp_grille) {
+        const unsigned char* base = w + (size_t)o * (size_t)nb * 210u;
+        float total = 0.0f;
+        for (int sup = lane; sup < nb; sup += 32) {
+            const unsigned char* p = base + (size_t)sup * 210u;
+            const float d = f16_en_f32(*reinterpret_cast<const unsigned short*>(p + 208));
+            const int* xb0 = xs + sup * 256;
+            #pragma unroll
+            for (int moitie = 0; moitie < 2; ++moitie) {
+                const unsigned char* ql = p + moitie * 64;
+                const unsigned char* qh = p + 128 + moitie * 32;
+                const signed char* sc =
+                    reinterpret_cast<const signed char*>(p + 192 + moitie * 8);
+                const int* xb = xb0 + moitie * 128;
+                #pragma unroll
+                for (int k = 0; k < 8; ++k) {
+                    const int bloc_ql = k & 3;                  // constant après déroulage
+                    const int bas = (k < 4) ? 1 : 0;
+                    const int bloc_qh = bloc_ql & 1;
+                    const int dec = 2 * (bloc_ql >> 1) + (bas ? 0 : 4);
+                    const unsigned char* qlb = ql + bloc_ql * 16;
+                    const unsigned char* qhb = qh + bloc_qh * 16;
+                    const int* xg = xb + k * 16;
+                    int sq = 0;
+                    #pragma unroll
+                    for (int l = 0; l < 16; ++l) {
+                        const int octet = (int)qlb[l];
+                        const int nib = bas ? (octet & 15) : (octet >> 4);
+                        const int q = (nib | ((((int)qhb[l] >> dec) & 3) << 4)) - 32;
+                        sq += q * xg[l];
+                    }
+                    total += d * (float)sc[k] * (float)sq;
+                }
+            }
+        }
+        #pragma unroll
+        for (int d2 = 16; d2 > 0; d2 >>= 1) total += shfl_bas(total, d2);
+        if (lane == 0) out[o] = total * sx;
+    }
+}
+
 }  // extern "C"

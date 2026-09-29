@@ -143,7 +143,7 @@ comparé à `llama-tokenize` sur 4 424 jetons (0 écart).
 | 4 | préremplissage par lots | **fait, −20 % et attribué** | tuilage, **attention groupée dans le lot** et **tête en lot** (`logits_lot`) : Qwen ctx 512, **17,1 s → 13,6 s (−20 %)** à perplexité égale (13,1368 → 13,1359) ; gpt-oss ctx 256, ≈ 50 s → **34,4 s** (13,7205 partout). Postes : projections ÷2,6, FFN/wo ÷1,43, attention par lots encore **×1,7** (5,59 contre 3,24 ms/jeton), tête inchangée (5,47 contre 5,63 — noyau lié au calcul, pas à la mémoire). Au passage : pointeur gras sur les sommes par bloc (lot > 90 → blocage muet) corrigé et verrouillé par un test — voir `reports/rapport-prefill-par-lots.md` |
 | 5 | échelles par bloc pour `DenseQ8` | **fait, hypothèse réfutée** | 23,696 contre 23,612 : les échelles par bloc n'apportent rien ; l'avantage du 6 bits est son coût (25 % d'octets en moins à qualité égale) |
 | 6 | boucles CLI unifiées | **fait** | `struct Options` + `analyser` ; trois drapeaux de plus trouvés ignorés (`--attn-topk`, `--qk-topk`, `--sans-yarn` en inférence) et un bug de pas de lecture corrigé |
-| 7 | noyaux GPU | **fait** | warp par ligne (tête : 1,8 ms contre 30 ms CPU, PPL identique) ; **MXFP4** warp (0,1 ms, écart 0,00e0 — bit à bit) ; **Q4_K** warp (0,5 contre 1,2 ms, écart 4e-7). Reste le *branchement* dans le moteur (cache d'experts chauds) |
+| 7 | noyaux GPU | **fait, quatre formats** | warp par ligne : tête **Q8_0** (1,6 ms contre 7,3 CPU, écart 2e-7), **MXFP4** (0,1 ms, écart **0,00e0** — bit à bit), **Q4_K** (0,5 contre 1,2 ms, 4e-7), **Q6_K** (3,6 contre 8,3 ms sur la tête liée de 191 Mo, 3,3e-7 ; ×5 sur un tenseur de 11 Mo). **Tête Q6_K branchée** dans le moteur : `QT_GPU=1 QT_GPU_TETE=1` → 7,58 → **3,60 ms/jeton**, perplexité identique (13,6877). Reste le cache d'experts chauds en VRAM : la mesure d'activation (`rapport-localite-activation.md`) dit qu'un préchargement statique ne paie pas sur SiLU |
 | 8 | suite du plan 1 M | **chiffré, pas commencé** | `docs/contexte-long.md` : préremplissage 1 234 h à 1 M, KV int4 9,7 Go, YaRN ×256 nécessaire ; restent pagination, déport GPU du KV, attention creuse, MLA, vision |
 
 ### Mesures du tour « huit chantiers » (toutes commitées)
@@ -153,6 +153,9 @@ comparé à `llama-tokenize` sur 4 424 jetons (0 écart).
 | noyau GPU Q8_0 warp (tête Qwen 0.5B, 144,6 Mo) | **1,6 ms** contre 7,3 ms CPU (×4,6), écart 2e-7 |
 | noyau GPU MXFP4 warp (expert gpt-oss, 4,4 Mo) | **0,1 ms** contre 7,5 ms CPU (×75), écart **0,00e0** |
 | noyau GPU Q4_K warp (Qwen 1.5B, 7,7 Mo) | 0,5 ms contre 1,2 ms CPU (×2,2), écart 4e-7 |
+| noyau GPU Q6_K warp (tête liée Qwen 1.5B, 191,4 Mo) | **3,6 ms** contre 8,3 ms CPU 16 fils (23,2 → 53,6 Go/s), écart 3,3e-7 |
+| noyau GPU Q6_K warp (ffn_down Qwen 1.5B, 11,3 Mo) | **0,3 ms** contre 1,5 ms CPU (×5), écart 7,1e-7 |
+| tête Q6_K déportée (Qwen 1.5B Q4_K_M, ctx 256, 510 jetons) | 7,58 → **3,60 ms/jeton** ; bout en bout 44,4 → 41,4 s (−7 %) ; lot 512 : 36,0 → 34,0 s ; **perplexité identique** (13,6877 / 13,6864) |
 | préremplissage par lots (Qwen, ctx 512) | lot 1 = **17,1 s** · lot 512 = **13,6 s** → **−20 %** (perplexité 13,1368 → 13,1359) |
 | préremplissage par lots (gpt-oss, ctx 256, MoE groupé) | ≈ 50 s à lot 1 · **34,4 s** à lot 256 (13,7205 dans tous les cas) |
 | tête de sortie en lot | **aucun gain** (5,47 contre 5,63 ms/jeton) : noyau lié au calcul — il faut AVX2 ou le GPU |
@@ -171,7 +174,9 @@ comparé à `llama-tokenize` sur 4 424 jetons (0 écart).
    le chemin par jeton.
 3. **Brancher le noyau MXFP4** : il est bit à bit identique et 40× plus rapide
    que le CPU ; il manque un cache d'experts chauds en VRAM (voir
-   `reports/rapport-localite-activation.md`).
+   `reports/rapport-localite-activation.md`). Attention au piège des deux
+   variables : `QT_GPU_TETE=1` seul ne fait RIEN — c'est `QT_GPU` qui ouvre le
+   pilote (`gpu::instance`), et la première mesure est restée muette pour ça.
 4. **Q6_K** reste à écrire (Q4_K et MXFP4 sont faits et mesurés) : c'est le
    format de certaines têtes et de quelques tenseurs Qwen.
 4.bis ~~KV à échelles par bloc de 32~~ **FAIT** : int8 +1,5 % au lieu de +7,1 %,
