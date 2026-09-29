@@ -25,6 +25,7 @@ extern "C" {
     fn cuMemAlloc_v2(dptr: *mut u64, octets: usize) -> c_int;
     fn cuMemcpyHtoD_v2(dst: u64, src: *const c_void, octets: usize) -> c_int;
     fn cuMemcpyDtoH_v2(dst: *mut c_void, src: u64, octets: usize) -> c_int;
+    fn cuMemcpyDtoD_v2(dst: u64, src: u64, octets: usize) -> c_int;
     fn cuLaunchKernel(f: *mut c_void, gx: c_uint, gy: c_uint, gz: c_uint,
                       bx: c_uint, by: c_uint, bz: c_uint, partage: c_uint,
                       flux: *mut c_void, params: *mut *mut c_void,
@@ -72,7 +73,14 @@ pub struct KvGpu {
     pub sk: u64,
     pub sv: u64,
     pub n_kv: usize,
+    /// Capacité LOGIQUE (positions adressables par le moteur).
     pub ctx: usize,
+    /// Capacité ALLOUÉE (positions réellement en VRAM), doublée à la demande :
+    /// un contexte de 1 M ne réserve plus 24 Go d'un coup alors qu'on n'en a
+    /// écrit que quelques milliers — c'est la « pagination » du plan E4, faite
+    /// par doublement, sans toucher au noyau (il reçoit la capacité courante
+    /// comme pas).
+    pub capacite: usize,
     pub hd: usize,
     pub nb: usize,
     /// 32 = f32, 8 = un octet par valeur, 4 = deux nibbles par octet.
@@ -309,22 +317,64 @@ impl Gpu {
     pub fn kv_allouer(&self, n_kv: usize, ctx: usize, hd: usize, bits: u32) -> Option<KvGpu> {
         cu_ctx(self.ctx);
         let nb = hd.div_ceil(32).max(1);
-        let pas = match bits { 32 => hd * 4, 8 => hd, 4 => hd / 2, _ => return None };
-        let octets_donnees = n_kv.checked_mul(ctx)?.checked_mul(pas)?;
-        let octets_echelles = if bits >= 32 { 0 } else { n_kv * ctx * nb * 4 };
-        let total = octets_donnees * 2 + octets_echelles * 2;
-        if total > self.memoire_libre { return None; }
+        // Première tranche : de quoi couvrir un préremplissage courant. Le
+        // reste s'ajoute par doublement, à la demande.
+        let mut m = KvGpu { k: 0, v: 0, sk: 0, sv: 0, n_kv, ctx, capacite: 0, hd, nb, bits,
+                            octets: 0, q_dev: 0, part_dev: 0, out_dev: 0, sinks_dev: 0,
+                            q_cap: 0, part_cap: 0, out_cap: 0, sinks_cap: 0 };
+        if !self.kv_assurer(&mut m, ctx.min(2048)) { return None; }
+        Some(m)
+    }
+
+    /// Garantit `besoin` positions allouées. Double la capacité (et COPIE ce qui
+    /// était écrit : le cache est déjà rempli) jusqu'à couvrir la demande.
+    pub fn kv_assurer(&self, m: &mut KvGpu, besoin: usize) -> bool {
+        cu_ctx(self.ctx);
+        if besoin <= m.capacite { return true; }
+        let mut cap = m.capacite.max(1);
+        while cap < besoin { cap = (cap * 2).min(m.ctx); }
+        let pas = match m.bits { 32 => m.hd * 4, 8 => m.hd, 4 => m.hd / 2, _ => return false };
+        let donnees = m.n_kv * cap * pas;
+        let echelles = if m.bits >= 32 { 0 } else { m.n_kv * cap * m.nb * 4 };
+        let total = donnees * 2 + echelles * 2;
+        if total > self.memoire_libre { return false; }
         unsafe {
             let (mut k, mut v, mut sk, mut sv) = (0u64, 0u64, 0u64, 0u64);
-            if cuMemAlloc_v2(&mut k, octets_donnees) != 0 { return None; }
-            if cuMemAlloc_v2(&mut v, octets_donnees) != 0 { cuMemFree_v2(k); return None; }
-            if octets_echelles > 0 {
-                if cuMemAlloc_v2(&mut sk, octets_echelles) != 0 { return None; }
-                if cuMemAlloc_v2(&mut sv, octets_echelles) != 0 { return None; }
+            if cuMemAlloc_v2(&mut k, donnees) != 0 { return false; }
+            if cuMemAlloc_v2(&mut v, donnees) != 0 { cuMemFree_v2(k); return false; }
+            if echelles > 0 {
+                if cuMemAlloc_v2(&mut sk, echelles) != 0 { return false; }
+                if cuMemAlloc_v2(&mut sv, echelles) != 0 { return false; }
             }
-            Some(KvGpu { k, v, sk, sv, n_kv, ctx, hd, nb, bits, octets: total,
-                          q_dev: 0, part_dev: 0, out_dev: 0, sinks_dev: 0,
-                          q_cap: 0, part_cap: 0, out_cap: 0, sinks_cap: 0 })
+            // Recopie de l'ancien contenu : les positions sont contiguës par
+            // tête KV, donc chaque tête se recopie d'un bloc.
+            if m.capacite > 0 {
+                let ancien = m.n_kv * m.capacite * pas;
+                for kvh in 0..m.n_kv {
+                    cuMemcpyDtoD_v2(k + (kvh * cap * pas) as u64,
+                                    m.k + (kvh * m.capacite * pas) as u64, ancien / m.n_kv);
+                    cuMemcpyDtoD_v2(v + (kvh * cap * pas) as u64,
+                                    m.v + (kvh * m.capacite * pas) as u64, ancien / m.n_kv);
+                }
+                if echelles > 0 {
+                    let ancien_e = m.n_kv * m.capacite * m.nb * 4;
+                    for kvh in 0..m.n_kv {
+                        cuMemcpyDtoD_v2(sk + (kvh * cap * m.nb * 4) as u64,
+                                        m.sk + (kvh * m.capacite * m.nb * 4) as u64,
+                                        ancien_e / m.n_kv);
+                        cuMemcpyDtoD_v2(sv + (kvh * cap * m.nb * 4) as u64,
+                                        m.sv + (kvh * m.capacite * m.nb * 4) as u64,
+                                        ancien_e / m.n_kv);
+                    }
+                }
+                cuMemFree_v2(m.k); cuMemFree_v2(m.v);
+                if m.sk != 0 { cuMemFree_v2(m.sk); }
+                if m.sv != 0 { cuMemFree_v2(m.sv); }
+            }
+            m.k = k; m.v = v; m.sk = sk; m.sv = sv;
+            m.capacite = cap;
+            m.octets = total;
+            true
         }
     }
 
@@ -332,13 +382,14 @@ impl Gpu {
     /// tels quels) — le cache est contigu en position, donc une seule copie
     /// suffit pour tout un lot : sans cela, un préremplissage de 512 jetons
     /// faisait 24 000 micro-copies et y passait un quart de seconde.
-    pub fn kv_ecrire_tranche(&self, m: &KvGpu, kvh: usize, pos0: usize, t: usize,
+    pub fn kv_ecrire_tranche(&self, m: &mut KvGpu, kvh: usize, pos0: usize, t: usize,
                              k: &[u8], v: &[u8], sk: &[f32], sv: &[f32]) -> bool {
         cu_ctx(self.ctx);
         if kvh >= m.n_kv || t == 0 || pos0 + t > m.ctx { return false; }
+        if !self.kv_assurer(m, pos0 + t) { return false; }
         let pas = match m.bits { 32 => m.hd * 4, 8 => m.hd, 4 => m.hd / 2, _ => return false };
         if k.len() < t * pas || v.len() < t * pas { return false; }
-        let off = (kvh * m.ctx + pos0) * pas;
+        let off = (kvh * m.capacite + pos0) * pas;
         unsafe {
             if cuMemcpyHtoD_v2(m.k + off as u64, k.as_ptr() as *const c_void, t * pas) != 0 {
                 return false;
@@ -347,7 +398,7 @@ impl Gpu {
                 return false;
             }
             if m.bits < 32 {
-                let offs = (kvh * m.ctx + pos0) * m.nb * 4;
+                let offs = (kvh * m.capacite + pos0) * m.nb * 4;
                 if !sk.is_empty()
                     && cuMemcpyHtoD_v2(m.sk + offs as u64, sk.as_ptr() as *const c_void,
                                        t * m.nb * 4) != 0 { return false; }
@@ -360,7 +411,7 @@ impl Gpu {
     }
 
     /// Un seul vecteur (`t = 1`).
-    pub fn kv_ecrire(&self, m: &KvGpu, kvh: usize, pos: usize,
+    pub fn kv_ecrire(&self, m: &mut KvGpu, kvh: usize, pos: usize,
                      k: &[u8], v: &[u8], sk: &[f32], sv: &[f32]) -> bool {
         self.kv_ecrire_tranche(m, kvh, pos, 1, k, v, sk, sv)
     }
@@ -403,8 +454,10 @@ impl Gpu {
                 m.part_cap = part.len();
             }
             let mut p_part = m.part_dev;
+            // `ctx` passé au noyau = la capacité ALLOUÉE : c'est le pas entre
+            // deux têtes KV dans la VRAM, pas la longueur logique.
             let (n_i, nsplit_i, ctx_i, hd_i, nb_i, rep_i, bits_i) =
-                (n as c_int, nsplit as c_int, m.ctx as c_int, hd as c_int,
+                (n as c_int, nsplit as c_int, m.capacite as c_int, hd as c_int,
                  m.nb as c_int, rep as c_int, m.bits as c_int);
             let (mut rep_c, mut bits_c, mut scale_c) = (rep_i, bits_i, scale);
             // treize paramètres : les six premiers sont des adresses, les

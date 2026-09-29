@@ -681,7 +681,7 @@ impl KvCache {
     /// Copie les octets de `t` positions consécutives d'une tête KV vers le
     /// miroir VRAM. Aucune conversion : le noyau lit la même disposition que le
     /// CPU, échelles par bloc comprises.
-    pub fn vers_gpu_tranche(&self, machine: &crate::gpu::Gpu, m: &crate::gpu::KvGpu,
+    pub fn vers_gpu_tranche(&self, machine: &crate::gpu::Gpu, m: &mut crate::gpu::KvGpu,
                             kvh: usize, pos0: usize, t: usize) -> bool {
         let pas = self.pas();
         let d = (kvh * self.ctx + pos0) * self.hd;
@@ -702,16 +702,17 @@ impl KvCache {
     }
 
     /// Un seul vecteur.
-    pub fn vers_gpu(&self, machine: &crate::gpu::Gpu, m: &crate::gpu::KvGpu,
+    pub fn vers_gpu(&self, machine: &crate::gpu::Gpu, m: &mut crate::gpu::KvGpu,
                     kvh: usize, pos: usize) -> bool {
         self.vers_gpu_tranche(machine, m, kvh, pos, 1)
     }
 
     /// Recopie vers la VRAM les `t` positions nouvellement écrites de la couche
     /// `l`. Silencieux quand aucun miroir n'est installé.
-    pub fn miroir_gpu(miroirs: Option<&[crate::gpu::KvGpu]>, l: usize, kvc: &KvCache,
+    pub fn miroir_gpu(miroirs: Option<&mut [crate::gpu::KvGpu]>, l: usize, kvc: &KvCache,
                       pos0: usize, t: usize) {
-        let (Some(machine), Some(m)) = (crate::gpu::instance(), miroirs.and_then(|v| v.get(l)))
+        let (Some(machine), Some(m)) =
+            (crate::gpu::instance(), miroirs.and_then(|v| v.get_mut(l)))
             else { return };
         for kvh in 0..kvc.n_kv {
             kvc.vers_gpu_tranche(machine, m, kvh, pos0, t);
@@ -1832,7 +1833,7 @@ impl Model {
             // après la boucle des jetons. La placer dans la boucle copiait `t`
             // positions à partir de la position du jeton — recouvrement, et une
             // copie par jeton au lieu d'une par lot.
-            KvCache::miroir_gpu(self.kv_gpu.as_deref(), l, &self.kv[l], pos0, t);
+            KvCache::miroir_gpu(self.kv_gpu.as_deref_mut(), l, &self.kv[l], pos0, t);
             self.prof[2] += t_att.elapsed().as_secs_f64();
             let t_ffn = Instant::now();
             // 4. projection de sortie du lot, résidu, norme du FFN
@@ -2133,7 +2134,7 @@ impl Model {
                     kvc.ecrire(hh, pos, &k[hh * hd..(hh + 1) * hd], &v[hh * hd..(hh + 1) * hd]);
                 }
             }
-            KvCache::miroir_gpu(kv_gpu.as_deref(), l, &kv[l], pos, 1);
+            KvCache::miroir_gpu(kv_gpu.as_deref_mut(), l, &kv[l], pos, 1);
             // attention groupée
             let scale = 1.0 / (hd as f32).sqrt();
             let kvc = &kv[l];

@@ -15981,3 +15981,150 @@ e6a5eff KV déporté : corriger la copie du chemin par lots
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A journal && git commit -q -m \"journal : archive automatique\" 2>/dev/null; cd qtrinet-core && cargo test --release 2>&1 | tail -3 && cd .. && git log --oneline -9 | cat && git status --short | head -3", "description": "Fin … [39 caractères tronqués]`
+
+  ```
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.10s
+
+91ebee7 journal : archive automatique
+54f9fa6 KV quantifié mesuré à 8 192 jetons, la longueur de la comparaison llama.cpp
+1953575 rotation : le seuil de bascule à 4 096 était trop bas (mesuré à 5 120)
+e6a5eff KV déporté : corriger la copie du chemin par lots
+a593603 docs E4 : comment le noyau d'attention a été validé (cas dégénérés, trois bugs)
+8438883 docs: préciser que QT_GPU_KV exige QT_GPU (le pilote ne s'ouvre que sur QT_GPU)
+bc16897 E4 : KV déporté en VRAM, attention sur le GPU, mesuré à 1 M de clés
+f578862 noyau Q6_K sur GPU, et tête Q6_K déportée dans le moteur
+2383eae préremplissage par lots : attention groupée, tête en lot, et un pointeur gras
+ M journal/README.md
+  ```
+
+- **get_goal** `{}`
+
+  ```
+{"goal":{"id":"goal-7beedcd4-55c3-4592-a3f6-f99085e458f1","revision":1,"objective":"Réaliser les 8 chantiers restants du projet qtrinet-core dans l'ordre : (1) protocole de perplexité longue --depuis/--stride, (2) trancher le seuil de rotation YaRN avec ce protocole, (3) KV int8 puis int4 mesurés sur Qwen 0.5B à ctx 8192 contre llama.cpp, (4) préremplissage par lots (GEMM par tranches), (5) échelles par bloc pour DenseQ8, (6) refactorisation des boucles CLI en une seule, (7) noyaux GPU warp par ligne puis formats 4 bits, (8) suite du plan 1 M (KV paginé + déport GPU, attention creuse, MLA, vision). Chaque chantier doit être implémenté, mesuré (non-régression Qwen 19,3885 et gpt-oss 15,1757 quand c'est pertinent), documenté dans le dépôt et commité.","phase":"active","roundsStarted":2,"maxGoalRounds":24},"activation":"armed"}
+  ```
+
+### 🤖 Assistant
+
+⏵ Il manque la « pagination » du KV : je rends le miroir VRAM proportionnel à l'usage
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && python3 - <<'PY'\np='src/gpu.rs'; s=open(p).read()\n\n# 1) lier cuMemcpyDtoD_v2 (copie VRAM → VRAM pour l'agrandissement)\ns = s.replace(\"\"\"    fn cuMemcpyDtoH_v2(dst: *mut c_void, src: u64, octets: usize) -> c_int;\" … [7401 caractères tronqués]`
+
+  ```
+miroir à capacité croissante
+error[E0308]: mismatched types
+   --> src/gpu.rs:389:29
+    |
+389 |         if !self.kv_assurer(m, pos0 + t) { return false; }
+    |                  ---------- ^ types differ in mutability
+    |                  |
+    |                  arguments to this method are incorrect
+    |
+    = note: expected mutable reference `&mut KvGpu`
+--
+error: could not compile `qtrinet-core` (bin "qtrinet-core") due to 1 previous error; 8 warnings emitted
+error: could not compile `qtrinet-core` (bin "qtrinet-core") due to 1 previous error; 8 warnings emitted
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && python3 - <<'PY'\np='src/gpu.rs'; s=open(p).read()\ns = s.replace(\"\"\"    pub fn kv_ecrire_tranche(&self, m: &KvGpu, kvh: usize, pos0: usize, t: usize,\"\"\",\n              \"\"\"    pub fn kv_ecrire_tranche(&self, m: … [243 caractères tronqués]`
+
+  ```
+mutabilité
+error[E0308]: mismatched types
+   --> src/model.rs:695:39
+    |
+695 |             machine.kv_ecrire_tranche(m, kvh, pos0, t, ko, vo, &[], &[])
+    |                     ----------------- ^ types differ in mutability
+    |                     |
+    |                     arguments to this method are incorrect
+    |
+    = note: expected mutable reference `&mut KvGpu`
+                       found reference `&KvGpu`
+note: method defined here
+--
+error[E0308]: mismatched types
+   --> src/model.rs:697:39
+    |
+697 |             machine.kv_ecrire_tranche(m, kvh, pos0, t, &self.kq[base..base + t * pas],
+    |                     ----------------- ^ types differ in mutability
+    |                     |
+    |                     arguments to this method are incorrect
+    |
+    = note: expected mutable reference `&mut KvGpu`
+                       found reference `&KvGpu`
+note: method defined here
+--
+error[E0308]: mismatched types
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && python3 - <<'PY'\np='src/model.rs'; s=open(p).read()\ns = s.replace(\"\"\"    pub fn vers_gpu_tranche(&self, machine: &crate::gpu::Gpu, m: &crate::gpu::KvGpu,\n                            kvh: usize, pos0: usize, t: usiz … [1694 caractères tronqués]`
+
+  ```
+emprunts adaptés
+error[E0308]: mismatched types
+    --> src/model.rs:1836:33
+     |
+1836 |             KvCache::miroir_gpu(self.kv_gpu.as_deref(), l, &self.kv[l], pos0, t);
+     |             ------------------- ^^^^^^^^^^^^^^^^^^^^^^ types differ in mutability
+     |             |
+     |             arguments to this function are incorrect
+     |
+     = note: expected enum `Option<&mut _>`
+                found enum `Option<&_>`
+note: associated function defined here
+--
+error[E0308]: mismatched types
+   --> src/gpu.rs:416:32
+    |
+416 |         self.kv_ecrire_tranche(m, kvh, pos, 1, k, v, sk, sv)
+    |              ----------------- ^ types differ in mutability
+    |              |
+    |              arguments to this method are incorrect
+    |
+    = note: expected mutable reference `&mut KvGpu`
+                       found reference `&KvGpu`
+note: method defined here
+--
+error[E0308]: mismatched types
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && python3 - <<'PY'\nimport re\np='src/gpu.rs'; s=open(p).read()\ns = s.replace(\"\"\"    pub fn kv_ecrire(&self, m: &KvGpu, kvh: usize, pos: usize,\"\"\",\n              \"\"\"    pub fn kv_ecrire(&self, m: &mut KvGpu, kvh … [490 caractères tronqués]`
+
+  ```
+ok
+error[E0308]: mismatched types
+   --> src/main.rs:907:41
+    |
+907 |             if !cache.vers_gpu(machine, &m, kvh, pos) { println!("  recopie en échec"); return; }
+    |                       --------          ^^ types differ in mutability
+    |                       |
+    |                       arguments to this method are incorrect
+    |
+    = note: expected mutable reference `&mut KvGpu`
+                       found reference `&KvGpu`
+note: method defined here
+--
+error: could not compile `qtrinet-core` (bin "qtrinet-core") due to 1 previous error; 8 warnings emitted
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && sed -i 's/if !cache.vers_gpu(machine, &m, kvh, pos) { println!(\"  recopie en échec\"); return; }/if !cache.vers_gpu(machine, \\&mut m, kvh, pos) { println!(\"  recopie en échec\"); return; }/' src/main.rs && cargo build … [157 caractères tronqués]`
+
+  ```
+Finished `release` profile [optimized] target(s) in 0.01s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== banc 4096 (capacité croissante) ===\" && QT_GPU=1 QT_KV_BITS=8 timeout 600 ./qtrinet-core/target/release/qtrinet-core models/Qwen2.5-0.5B-Q8_0.gguf --banc-kv 4096 --threads 16 2>&1 | grep -E \"CPU|KV d'une couche|GPU .* tr … [407 caractères tronqués]`
+
+  ```
+=== banc 4096 (capacité croissante) ===
+  CPU 16 fils :      1.9 ms par passe  (1.3 Go/s de KV, 1.9 ms × 24 couches = 45 ms/jeton)
+  GPU 1 · KV d'une couche : 0.00 Go résidents, 16.17 Go libres
+  recopie CPU → VRAM : 0.1 s (0.0 Go/s sur le bus)
+  GPU 8 tranches :      0.1 ms par passe  (16.1 Go/s de KV, 0.1 ms × 24 couches = 4 ms/jeton)  écart max +2.91e-6
+=== moteur : ctx 1 M mais 512 jetons écrits ===
+[config] cache KV : 32 bits, 25.77 Go pour 1048576 jetons
+[gpu] KV déporté : 24 couches, 0.05 Go en VRAM (16.17 Mo libres), cache CPU 25.77 Go
+     511 tokens notés — perplexité cumulée 13.137  (28.5 tok/s)
+=== perplexité 13.1369 sur 511 tokens (0 événements, 17.9 s) ===
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='docs/contexte-long.md'; s=open(p).read()\nold = \"\"\"Il reste, sur ce chemin : le **dépaquetage vectorisé** (point 2 ci-dessus), la\nrépartition sur les **deux** GPU (le second est libre : le cache d'une couche  … [3704 caractères tronqués]`

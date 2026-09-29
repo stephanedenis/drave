@@ -904,7 +904,7 @@ fn run_banc_kv(opt: Options) {
     let t1 = Instant::now();
     for pos in 0..n {
         for kvh in 0..n_kv {
-            if !cache.vers_gpu(machine, &m, kvh, pos) { println!("  recopie en échec"); return; }
+            if !cache.vers_gpu(machine, &mut m, kvh, pos) { println!("  recopie en échec"); return; }
         }
     }
     println!("  recopie CPU → VRAM : {:.1} s ({:.1} Go/s sur le bus)",

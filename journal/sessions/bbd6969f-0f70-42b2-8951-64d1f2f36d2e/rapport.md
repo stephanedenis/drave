@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 26.1 h |
+| Durée | 26.2 h |
 | Tours | 6 |
-| Messages | 980 |
-| Appels d'outils | 981 |
+| Messages | 988 |
+| Appels d'outils | 989 |
 | Fichiers touchés | 35 |
-| Commandes | 728 |
+| Commandes | 735 |
 | Sous-agents | 1 |
-| Commits | 31 |
+| Commits | 32 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -263,7 +263,7 @@ Retirer `mscale = 1 + 0,1·ln f` divise la perplexité par **8,9 / 5,9 / 3,8**. 
 
 ### Tour 6 — <goal_round> Objective: "Réaliser les 8 chantiers restants du projet qtrinet-core dans l'ordre : (1) protocole de perple … [1122 caractères tronqués]
 
-*254 appels d'outils.* Actions notables :
+*262 appels d'outils.* Actions notables :
 
 - bash — Check the starting state of round 2
 - bash — Locate the batched attention loop
@@ -279,11 +279,11 @@ Retirer `mscale = 1 + 0,1·ln f` divise la perplexité par **8,9 / 5,9 / 3,8**. 
 - bash — Bisect the failing batch size
 - bash — Add guards and rerun lot 128
 - bash — Read dot16's fallback path
-- … et 197 autres
+- … et 205 autres
 
 **Synthèse produite :**
 
-⏵ Verdict tranché : à 5 120 jetons, RoPE simple 9,70 contre 1 269 en interpolation
+⏵ Il manque la « pagination » du KV : je rends le miroir VRAM proportionnel à l'usage
 
 ## 3. Travail accompli
 
@@ -373,7 +373,7 @@ Retirer `mscale = 1 + 0,1·ln f` divise la perplexité par **8,9 / 5,9 / 3,8**. 
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 688 autres
+- … et 695 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -501,7 +501,7 @@ Retirer `mscale = 1 + 0,1·ln f` divise la perplexité par **8,9 / 5,9 / 3,8**. 
 
 ## 5. Erreurs rencontrées
 
-42 sorties en erreur ou divergentes. Les premières :
+46 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : a8f2635f8 docs: record which models this box is good at, and why src/llama-hparams.cpp:8:void llama_hparams::set_swa_pattern(uint32_t n_pattern, bool dense_first) { src/llama-hparams.h:308:    void se
 - **T1** : 511 tokens notés — perplexité cumulée 247.031  (4.9 tok/s) === perplexité 247.0308 sur 511 tokens (0 événements, 104.5 s) ===  ### B3 harmony assistant 511 --- ref --- 0.0 0.0 0:00 ls: cannot access '
@@ -552,4 +552,5 @@ Retirer `mscale = 1 + 0,1·ln f` divise la perplexité par **8,9 / 5,9 / 3,8**. 
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p='docs/contexte-long.md'; s=open(p).read() old = """Deux réserves, mesurées elles aussi 
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A docs/contexte-long.md REPRISE.md journal && git commit -q -F - <<'EOF' && git log --oneline -3 
 - journal : archive automatique" 2>/dev/null; cd qtrinet-core && cargo test --release 2>&1 | tail -3 && cd .. && git log --oneline -9 | cat && git status --short 
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p='docs/contexte-long.md'; s=open(p).read() old = """Il reste, sur ce chemin : le **dépaq
 

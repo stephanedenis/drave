@@ -256,10 +256,26 @@ Piège de mesure noté au passage : les tampons du noyau étaient alloués à ch
 appel — 24 couches × 6 appels CUDA par jeton, mesuré **24,5 ms/jeton** à 512
 jetons au lieu de 2,9. Les réutiliser a ramené l'attention déportée à 3,2 ms.
 
+### Pagination du miroir : la VRAM suit l'usage, pas le contexte
+
+Le miroir n'est plus alloué pour `ctx` positions d'un coup : il démarre à
+2 048 positions et **double à la demande** (copie VRAM → VRAM des positions déjà
+écrites, `cuMemcpyDtoD`). C'est la « pagination » du plan E4, faite par
+doublement — le noyau ne change pas, il reçoit simplement la capacité courante
+comme pas entre deux têtes KV.
+
+Ce que ça change, mesuré : à **contexte 1 M** (1 048 576) sur Qwen 0.5B, le cache
+CPU f32 pèse 25,77 Go, et le miroir VRAM n'occupe que **0,05 Go** après 512
+jetons écrits — là où l'allocation d'un bloc exigeait 25,77 Go, refusait, et
+laissait le cache en RAM. La perplexité ne bouge pas (13,1369, comme à
+contexte 512). Le miroir grandit ensuite par doublement, sans jamais copier plus
+que ce qui est écrit.
+
 Il reste, sur ce chemin : le **dépaquetage vectorisé** (point 2 ci-dessus), la
 répartition sur les **deux** GPU (le second est libre : le cache d'une couche en
-int4 à 1 M ne fait que 128 Mo, tout tient sur un seul), et la suppression du
-chemin CPU de l'attention par lots.
+int4 à 1 M ne fait que 128 Mo, tout tient sur un seul), la suppression du chemin
+CPU de l'attention par lots, et la **pagination du cache CPU lui-même** (25,77 Go
+réservés pour 512 jetons écrits : c'est le côté hôte qui reste gourmand).
 
 
 ## 5. YaRN à retardement : ce que la mesure a dit
