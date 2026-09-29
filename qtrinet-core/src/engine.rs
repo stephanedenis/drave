@@ -530,6 +530,9 @@ impl Pool {
     /// `x` est le lot d'activations (t × n_in), `sx` les t échelles, `out` reçoit
     /// t × n_out en disposition jeton-majeur.
     pub fn gemm_dense_i8(&self, d: &DenseQ8, x: &[i32], t: usize, sx: &[f32], out: &mut [f32]) {
+        /// Jeton par groupe : assez pour amortir la lecture d'une ligne de poids,
+        /// assez peu pour que les activations du groupe restent en L1.
+        const TUILE: usize = 16;
         use crate::list::Source8;
         let n_out = d.n_out;
         let n_in = d.n_in;
@@ -549,15 +552,22 @@ impl Pool {
                 let (morceau, suite) = reste.split_at_mut((hi - lo) * t);
                 reste = suite;
                 sc.spawn(move || {
-                    for (j, o) in (lo..hi).enumerate() {
-                        for i in 0..t {
-                            let xi = &x[i * n_in..(i + 1) * n_in];
-                            let v = match d.src {
-                                Source8::Q8_0 => d.dot_q8_source(o, xi),
-                                Source8::PropreBloc => d.dot_blocs(o, xi),
-                                Source8::Propre => d.dot_chunked(o, xi) as f32 * d.scale[o],
-                            };
-                            morceau[j * t + i] = v * sx[i];
+                    // Tuilage : un groupe de `TUILE` jetons tient dans le cache
+                    // pendant qu'on parcourt les lignes. Sans cela, chaque ligne
+                    // relit TOUT le lot d'activations (mesuré : le lot était plus
+                    // LENT que le jeton par jeton, 23 s contre 16,6).
+                    for i0 in (0..t).step_by(TUILE) {
+                        let i1 = (i0 + TUILE).min(t);
+                        for (j, o) in (lo..hi).enumerate() {
+                            for i in i0..i1 {
+                                let xi = &x[i * n_in..(i + 1) * n_in];
+                                let v = match d.src {
+                                    Source8::Q8_0 => d.dot_q8_source(o, xi),
+                                    Source8::PropreBloc => d.dot_blocs(o, xi),
+                                    Source8::Propre => d.dot_chunked(o, xi) as f32 * d.scale[o],
+                                };
+                                morceau[j * t + i] = v * sx[i];
+                            }
                         }
                     }
                 });
@@ -596,6 +606,9 @@ impl Pool {
     /// `sx[i]` l'échelle d'activation du jeton i. Sortie en (n_out × t).
     pub fn gemm_dense_q4(&self, d: &crate::list::DenseQ4, x16: &[i16], t: usize,
                          s32: &[Vec<i32>], sx: &[f32], out: &mut [f32]) {
+        /// Même tuilage que le chemin int8 : les sommes par bloc de 32 du groupe
+        /// restent au chaud pendant la lecture des lignes.
+        const TUILE_Q4: usize = 8;
         let n_out = d.n_out;
         let n_in = d.n_in;
         let nt = self.n.max(1);
@@ -608,10 +621,13 @@ impl Pool {
                 let (morceau, suite) = reste.split_at_mut((hi - base) * t);
                 reste = suite;
                 sc.spawn(move || {
-                    for (j, o) in (base..hi).enumerate() {
-                        for i in 0..t {
-                            let xi = &x16[i * n_in..(i + 1) * n_in];
-                            morceau[j * t + i] = d.dot16(o, xi, &s32[i]) * sx[i];
+                    for i0 in (0..t).step_by(TUILE_Q4) {
+                        let i1 = (i0 + TUILE_Q4).min(t);
+                        for (j, o) in (base..hi).enumerate() {
+                            for i in i0..i1 {
+                                let xi = &x16[i * n_in..(i + 1) * n_in];
+                                morceau[j * t + i] = d.dot16(o, xi, &s32[i]) * sx[i];
+                            }
                         }
                     }
                 });

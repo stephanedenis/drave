@@ -118,16 +118,25 @@ empaquetés en 4 bits — `QT_KV_BITS=8` ou `4`, `[config] cache KV` dit ce qui 
 alloué. Banc d'essai : Qwen2.5-0.5B Q8_0, 511 jetons, contexte 512, comparé à
 llama.cpp sur le même texte.
 
-| KV | nous | llama.cpp |
-|---|---|---|
-| f32 / f16 | 13,14 | 14,24 |
-| **int8** | **14,07** (+7,1 %) | 14,68 (+3,1 %) |
-| **int4** | **63,61** (+384 %) | 72,80 (+411 %) |
+| KV | nous (512 jetons) | llama.cpp (512) | nous (~4 600 jetons) | llama.cpp (8 192) |
+|---|---|---|---|---|
+| f32 / f16 | 13,14 | 14,24 | 12,91 | 16,59 |
+| **int8** | **14,07** (+7,1 %) | 14,68 (+3,1 %) | **13,58** (+5,2 %) | 16,73 (+0,8 %) |
+| **int4** | **63,61** (+384 %) | 72,80 (+411 %) | **71,05** (+450 %) | 98,53 (+494 %) |
 
-Les deux moteurs racontent la même histoire : **l'int8 coûte quelques pour cent,
-le 4 bits détruit la perplexité d'un facteur 5**. Le 4 bits reste implémenté
-(c'est lui qui fait tenir 1 M en mémoire et en VRAM), mais il ne doit pas être
-le défaut : il se valide modèle par modèle.
+Trois choses :
+
+1. **L'int8 coûte quelques pour cent, à contexte court comme à 4 600 jetons** :
+   le coût ne grandit pas avec la longueur, donc le KV int8 est un bon défaut
+   pour le contexte long (et c'est lui qui fait tenir 128 k en mémoire).
+2. **Le 4 bits détruit la perplexité d'un facteur 5**, chez les deux moteurs. Il
+   reste implémenté — c'est lui qui fait tenir 1 M en RAM (9,7 Go) et en VRAM —
+   mais il ne doit pas être le défaut, et il se valide modèle par modèle.
+3. **Notre int8 est un peu plus cher que celui de llama.cpp** (+5,2 % contre
+   +0,8 %). Nos échelles sont **par vecteur** (une par tête et par position),
+   les leurs **par bloc de 32** dans le format Q8_0. C'est la piste
+   d'amélioration la plus directe du cache : passer aux échelles par bloc de 32,
+   comme on l'a fait pour `DenseQ8`.
 
 ## 5. YaRN à retardement : ce que la mesure a dit
 

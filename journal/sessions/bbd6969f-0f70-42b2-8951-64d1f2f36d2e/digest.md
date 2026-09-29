@@ -10687,3 +10687,160 @@ BUILD
 ⏵ Item 8 : je mets le plan 1 M à jour avec ce qui est maintenant mesuré et ce qui reste
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='docs/contexte-long.md'\ns=open(p).read()\ns=s.replace(\"\"\"| # | étape | débloque | coût | risque |\n|---|---|---|---|---|\n| E1 | **Préremplissage par lots** (tranches de 256–2 048) | 32 k utilisable (4,5 h → m … [3851 caractères tronqués]`
+
+  ```
+aef0b8a Plan 1 M : etat reel des six etapes et ce qui se mesure tout de suite
+  ```
+
+- **bash** `{"command": "sleep 290; tail -6 /tmp/seuil_rotation.log; echo \"=== batterie ===\"; tail -6 /tmp/mesures_finales.log 2>/dev/null; ps -o pid,etime,pcpu -C qtrinet-core 2>/dev/null | tail -1", "description": "Check series end and battery start", "timeoutMs": 330000}`
+
+  ```
+=== perplexité 578.8586 sur 512 tokens (0 événements, 475.5 s) ===
+
+### contexte 4096 · interpolation seule
+[config] rotation : YaRN ×32 sans mscale (contexte demandé 4096 > 4096 initial)
+=== perplexité 578.8586 sur 512 tokens (0 événements, 489.9 s) ===
+
+=== batterie ===
+ 274528       00:54  380
+  ```
+
+### 🤖 Assistant
+
+⏵ Série terminée (dernier point identique, comme prévu). La batterie tourne ; je surveille
+
+- **bash** `{"command": "sleep 280; cat /tmp/mesures_finales.log 2>/dev/null | head -30", "description": "Read the first battery results", "timeoutMs": 320000}`
+
+  ```
+### A. noyau Q8_0 warp contre CPU (tête Qwen 0.5B)
+tête token_embd.weight : 151936 × 896 · 144.6 Mo · 28 blocs de 32
+  CPU  16 fils :     7.3 ms  (  19.8 Go/s)
+  GPU 1
+  GPU  ligne par fil  :     3.5 ms  (  41.3 Go/s)  écart max +1.99e-7 (relatif au plus grand logit)
+  GPU  warp par ligne :     1.6 ms  (  87.9 Go/s)  écart max +1.99e-7 (relatif au plus grand logit)
+
+### B. noyau MXFP4 warp contre CPU AVX2 (expert 0 de gpt-oss)
+matrice MXFP4 blk.0.ffn_gate_exps.weight (expert 0) : 2880 × 2880 · 4.4 Mo · 90 blocs de 32
+  CPU  16 fils :     7.5 ms  (   0.6 Go/s)
+  GPU 1
+  GPU  warp par ligne :     0.1 ms  (  41.5 Go/s)  écart max +0.00e0
+
+### C. préremplissage par lots (Qwen 0.5B, ctx 512, 511 jetons notés)
+lot 1   : perplexité 13.1368 sur 511 tokens (0 événements, 16.6 s)
+lot 4   : perplexité 13.1359 sur 511 tokens (0 événements, 23.2 s)
+lot 16  : perplexité 13.1359 sur 511 tokens (0 événements, 20.0 s)
+lot 64  : perplexité 13.1359 sur 511 tokens (0 événements, 18.1 s)
+
+### D. KV quantifié à ctx 8192 (Qwen 0.5B, mêmes 8191 jetons)
+KV 32 bits :
+  ```
+
+### 🤖 Assistant
+
+⏵ Diagnostic du lot : mes activations sont relues pour CHAQUE ligne de sortie → je tulle le lot (16 jetons)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src && python3 - <<'PY'\np='engine.rs'\ns=open(p).read()\n# GEMM int8 : la boucle de tuilage passe AVANT la boucle des lignes, sinon les\n# activations du lot sont relues pour chaque ligne de sortie.\ns=s.replace(\"\"\"     … [4314 caractères tronqués]`
+
+  ```
+BUILD
+=== lot 1 / 16 / 64 après tuilage ===
+lot 1   : perplexité 13.1368 sur 511 tokens (0 événements, 48.2 s)
+lot 16  : perplexité 13.1359 sur 511 tokens (0 événements, 47.8 s)
+lot 64  : perplexité 13.1359 sur 511 tokens (0 événements, 45.8 s)
+  ```
+
+### 🤖 Assistant
+
+⏵ Tuilage en place ; la batterie occupe la machine. Je file la re-mesure propre du lot
+
+- **bash** `{"command": "cat > /tmp/lot_final.sh <<'EOF'\n#!/bin/bash\n# Re-mesure du préremplissage par lots APRÈS tuilage, machine au calme (la\n# première série avait été faite avant, et le lot était plus lent que le jeton\n# par jeton : les activations étaient relues pour chaque ligne de sortie).\nset -u\nc … [1396 caractères tronqués]`
+
+  ```
+re-mesure du lot en file
+lot 64  : perplexité 13.1359 sur 511 tokens (0 événements, 18.1 s)
+
+### D. KV quantifié à ctx 8192 (Qwen 0.5B, mêmes 8191 jetons)
+KV 32 bits :
+  ```
+
+- **bash** `{"command": "sleep 300; tail -8 /tmp/mesures_finales.log", "description": "Wait for the KV at 8192 measurements", "timeoutMs": 340000}`
+
+  ```
+lot 4   : perplexité 13.1359 sur 511 tokens (0 événements, 23.2 s)
+lot 16  : perplexité 13.1359 sur 511 tokens (0 événements, 20.0 s)
+lot 64  : perplexité 13.1359 sur 511 tokens (0 événements, 18.1 s)
+
+### D. KV quantifié à ctx 8192 (Qwen 0.5B, mêmes 8191 jetons)
+KV 32 bits : perplexité 12.9080 sur 4591 tokens
+KV 8  bits : perplexité 13.5795 sur 4591 tokens
+KV 4  bits :
+  ```
+
+### 🤖 Assistant
+
+⏵ KV à 4,6 k de contexte : int8 = +5,2 % (stable). Je rédige le rapport du préremplissage par lots
+
+- **write** `{"content": "# Préremplissage par lots : ce que le GEMM apporte vraiment\n\n> Chantier 4 du plan de reprise. Le préremplissage est le mur n° 1 du contexte\n> long (`docs/contexte-long.md` : 4,5 h à 32 k, 1 234 h à 1 M en séquentiel) : le\n> moteur traitait **un jeton à la fois**, donc chaque matrice … [3530 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-prefill-par-lots.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "sleep 300; tail -10 /tmp/mesures_finales.log", "description": "Check KV int4 at 8192 and llama.cpp reference", "timeoutMs": 340000}`
+
+  ```
+### C. préremplissage par lots (Qwen 0.5B, ctx 512, 511 jetons notés)
+lot 1   : perplexité 13.1368 sur 511 tokens (0 événements, 16.6 s)
+lot 4   : perplexité 13.1359 sur 511 tokens (0 événements, 23.2 s)
+lot 16  : perplexité 13.1359 sur 511 tokens (0 événements, 20.0 s)
+lot 64  : perplexité 13.1359 sur 511 tokens (0 événements, 18.1 s)
+
+### D. KV quantifié à ctx 8192 (Qwen 0.5B, mêmes 8191 jetons)
+KV 32 bits : perplexité 12.9080 sur 4591 tokens
+KV 8  bits : perplexité 13.5795 sur 4591 tokens
+KV 4  bits :
+  ```
+
+- **bash** `{"command": "cat > /tmp/aiguille_lance.sh <<'EOF'\n#!/bin/bash\n# Test « aiguille dans la botte de foin » : la mesure de qualité qui manque au\n# plan long contexte. Qwen2.5-0.5B (rapide) à 3 longueurs et 3 profondeurs.\nset -u\ncd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\nJ=/tmp/aiguille.log … [459 caractères tronqués]`
+
+  ```
+aiguille en file après lot_final
+KV 32 bits : perplexité 12.9080 sur 4591 tokens
+KV 8  bits : perplexité 13.5795 sur 4591 tokens
+KV 4  bits :
+  ```
+
+- **bash** `{"command": "sleep 300; tail -6 /tmp/mesures_finales.log; ps -o pid,etime,pcpu -C qtrinet-core 2>/dev/null | tail -1", "description": "Wait for KV int4 at long context", "timeoutMs": 340000}`
+
+  ```
+llama.cpp KV f16   : Final estimate: PPL = 16.5904
+llama.cpp KV q8_0  : Final estimate: PPL = 16.7309
+llama.cpp KV q4_0  : Final estimate: PPL = 98.5317
+
+### E. attention creuse : mêmes jetons (1536-2047), contexte 2048, fenêtre et top-k
+aucune restriction : 1019795       03:43 1372
+  ```
+
+- **bash** `{"command": "grep -A 8 \"D. KV quantifié\" /tmp/mesures_finales.log", "description": "Read the full KV at 8192 section"}`
+
+  ```
+### D. KV quantifié à ctx 8192 (Qwen 0.5B, mêmes 8191 jetons)
+KV 32 bits : perplexité 12.9080 sur 4591 tokens
+KV 8  bits : perplexité 13.5795 sur 4591 tokens
+KV 4  bits : perplexité 71.0485 sur 4591 tokens
+
+### D bis. référence llama.cpp à 8192
+llama.cpp KV f16   : Final estimate: PPL = 16.5904
+llama.cpp KV q8_0  : Final estimate: PPL = 16.7309
+llama.cpp KV q4_0  : Final estimate: PPL = 98.5317
+  ```
+
+### 🤖 Assistant
+
+⏵ Item 3 complet : int8 +5,2 % chez nous contre +0,8 % pour llama.cpp — piste : échelle par bloc de 32
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='docs/contexte-long.md'\ns=open(p).read()\ns=s.replace(\"\"\"| KV | nous | llama.cpp |\n|---|---|---|\n| f32 / f16 | 13,14 | 14,24 |\n| **int8** | **14,07** (+7,1 %) | 14,68 (+3,1 %) |\n| **int4** | **63,61** (+38 … [2581 caractères tronqués]`
