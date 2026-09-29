@@ -5,21 +5,30 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 6.0 h |
-| Tours | 2 |
-| Messages | 417 |
-| Appels d'outils | 430 |
-| Fichiers touchés | 28 |
-| Commandes | 257 |
+| Durée | 16.4 h |
+| Tours | 4 |
+| Messages | 441 |
+| Appels d'outils | 451 |
+| Fichiers touchés | 29 |
+| Commandes | 268 |
 | Sous-agents | 1 |
-| Commits | 4 |
+| Commits | 5 |
 | Compactages de contexte | 0 |
+
+## Objectifs déclarés
+
+- **create** — Réaliser les 8 chantiers restants du projet qtrinet-core dans l'ordre : (1) protocole de perplexité longue --depuis/--stride, (2) trancher le seuil de rotation YaRN avec ce protocole, (3) KV int8 puis int4 mesurés sur Qwen 0.5B à ctx 8192 contre llama.cpp, (4) préremplissage par lots (GEMM par tranc
+… [374 caractères tronqués]
 
 ## 1. Ce qui a été demandé
 
 **Tour 1** — continue avec REPRISE.md
 
 **Tour 2** — prochaine étape?
+
+**Tour 3** — que reste-t-il à faire
+
+**Tour 4** — fais les 8 dans l'ordre
 
 ## 2. Déroulé, étape par étape
 
@@ -79,7 +88,7 @@ Reste ouvert et documenté : le YaRN « à retardement » (au-delà de 4 096), p
 
 ### Tour 2 — prochaine étape?
 
-*113 appels d'outils.* Actions notables :
+*114 appels d'outils.* Actions notables :
 
 - ask_user_question
 - todo_write
@@ -95,11 +104,92 @@ Reste ouvert et documenté : le YaRN « à retardement » (au-delà de 4 096), p
 - bash — Launch the rotation boundary series
 - bash — Collect hardware facts for the 1M plan
 - bash — Read run_plan implementation
-- … et 95 autres
+- … et 96 autres
 
 **Synthèse produite :**
 
-⏵ Je complète les tableaux avec 4 608 et je consigne la limite du test de génération
+⏵ YaRN à retardement livré ; la mesure à 8 192 tourne. Voici l'état
+
+**Livré et commité**
+
+1. **YaRN à retardement** (`[config] rotation` en dit la raison à chaque chargement) : RoPE simple tant que `--ctx` tient dans `rope.scaling.original_context_length` (4 096), **interpolation seule** au-delà — décision **par séquence**, pas par position, parce que la structure de position relative ne survit que si toutes les clés partagent le même jeu de fréquences. `QT_YARN=1` = YaRN complet des références, `QT_YARN_NON=1` / `--sans-yarn` = jamais, `QT_YARN_MSCALE=0/1` = température seule.
+
+2. **Le résultat qui change la donne : la moitié nuisible de YaRN, c'est la température.**
+
+| longueur | RoPE simple | YaRN **sans** mscale | YaRN complet |
+|---|---|---|---|
+| 512 | **18,58** | 19,65 | 174,34 |
+| 1 024 | **46,94** | 71,35 | 417,65 |
+| 2 048 | **121,75** | 192,63 | 722,56 |
+| 4 096 | **170,78** | 400,13 | — |
+| 4 608 | — | 476,09 | 1 105,20 |
+
+Retirer `mscale = 1 + 0,1·ln f` divise la perplexité par **8,9 / 5,9 / 3,8**. L'interpolation des basses fréquences, elle, ne coûte presque rien. HF, llama.cpp et l'implémentation officielle d'OpenAI appliquent pourtant la température telle quelle — et notre moteur les reproduit au chiffre près quand on la garde. D'où le nouveau défaut : simple sous 4 096, interpolation seule au-delà.
+
+3. **La dégradation avec la longueur n'est pas un bug du moteur** : llama.cpp, mêmes 2 048 identifiants, un seul lot, YaRN déclaré → **714,83** contre **722,56** chez nous (1,1 %). Le `--ppl-profil` ajouté pour ça montre deux causes superposées : le **contenu** (une même tranche vaut 13,94 en tête et 59,36 prise plus loin mais présentée en position 0) et la **position** (~×7 de plus à sa place réelle).
+
+4. **Plan 1 M** : `docs/contexte-long.md` + `--plan --ctx N` qui chiffre tout. Les trois murs : **préremplissage séquentiel** (4,5 h à 32 k, 31 h à 128 k, **1 234 h à 1 M** → chantier n° 1, il faut le préremplissage par lots) ; **bande passante du KV** (77 Go relus par jeton à 1 M en f32, 9,7 Go en int4 — 13 ms depuis les deux GPU, et le KV int4 à 1 M tient dans **un seul RTX 5000**) ; **portée de la rotation** (×32 couvre 131 072, 1 M demanderait ×256, soit huit fois ce que le modèle a vu).
+
+**En cours** (résultats dans `/tmp/audela_4096.log` d'ici ~2 h) : RoPE simple et interpolation seule à **8 192** — c'est la mesure qui tranche le seuil de bascule, puisque le simple gagne encore à 4 096. Restent aussi le test de génération à refaire avec `
+… [256 caractères tronqués]
+
+### Tour 3 — que reste-t-il à faire
+
+*4 appels d'outils.* Actions notables :
+
+- bash — Check running measurements and repo state
+- bash — Read the 8192 results
+- bash — Inspect corpus content in hard and easy regions
+- bash — Launch content-vs-context decomposition run
+
+**Synthèse produite :**
+
+⏵ Point complet : ce qui tourne, ce que la mesure vient de changer, et l'ordre de travail
+
+**En cours** (~30 min) : la déconfusion contenu/contexte — ctx 512 sur 8 192 jetons, PPL par fenêtre → `/tmp/contexte_ou_contenu.log`.
+
+**Le résultat de 8 192 vient de tomber, et il change la lecture** : RoPE simple = **48,7** (meilleur qu'à 4 096, où c'était 170,8), interpolation seule = **835,2**. Le profil par profondeur explique pourquoi : les tranches 4 608-8 191 tournent autour de **10** alors que les tranches 512-4 095 montent jusqu'à 542. Or le corpus est du même genre de prose partout — donc **le protocole actuel confond le contenu et la longueur** : à `--ctx 8192` on ne score pas les mêmes jetons qu'à `--ctx 512`. Tant que ce n'est pas corrigé, aucune courbe « par longueur » n'est interprétable.
+
+\## Ce qu'il reste, par ordre de valeur
+
+**1. Protocole de perplexité longue** (`--depuis N`, ou un `--stride` comme llama-perplexity) — noter **les mêmes jetons** avec des contextes de longueurs différentes. ~30 lignes. C'est le préalable à toute conclusion sur le seuil de rotation, et ça invalide une partie de ce qu'on vient de mesurer.
+
+**2. Trancher le seuil de rotation** avec ce protocole (simple contre interpolation seule, mêmes jetons, 512 → 8 192). Indice actuel : le simple gagne partout, l'interpolation se dégrade régulièrement — le défaut (bascule à 4 096) est donc peut-être à inverser en « simple partout » pour gpt-oss.
+
+**3. KV int8 puis int4** (E2/E3 du plan 1 M) — ÷4 puis ÷8 sur le cache. Banc d'essai : Qwen2.5-0.5B à `--ctx 8192`, 5 min par passe, écart de perplexité à mesurer contre llama.cpp (`--ctk q8_0`). C'est ce qui fait tenir 1 M en mémoire.
+
+**4. Préremplissage par lots** (E1) — le mur n° 1 : 4,5 h à 32 k, 31 h à 128 k, **1 234 h à 1 M** en séquentiel. Un noyau GEMM par tranches débloque tout le contexte long *et* le temps de premier jeton. Gros chantier, mais rien de long ne se fait sans lui.
+
+**5. Échelles par bloc pour `DenseQ8`** — l'écart résiduel avec llama.cpp (|ΔNLL| médian 0,076) vient de là, et ça tranche la question « 6 bits contre int8 par bloc » à octets égaux.
+
+**6. Refactoriser les boucles CLI** (3 modes → 1) — quatrième bug de la même classe rencontré cette session (`--attn-window`/`--attn-sinks` jamais appliqués en inférence).
+
+**7. Noyaux GPU** — une warp par ligne puis les formats 4 bits (Q4_K/Q6_K/MXFP4) : toute la famille Qwen est en Q4_K/Q6_K, donc aujourd'hui rien de la leur n'est déportable. Le plus gros levier de débit
+… [595 caractères tronqués]
+
+### Tour 4 — fais les 8 dans l'ordre
+
+*16 appels d'outils.* Actions notables :
+
+- create_goal
+- todo_write
+- read
+- edit `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src/main.rs`
+- edit `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src/main.rs`
+- edit `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src/main.rs`
+- edit `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src/main.rs`
+- edit `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src/main.rs`
+- bash — Build and check no regression with depuis=0
+- bash — Validate depuis semantics against known window value
+- edit `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src/main.rs`
+- bash — Validate overlapping windows and non-regression
+- write `/tmp/seuil_rotation.sh`
+- bash — Launch rotation threshold measurement
+- … et 2 autres
+
+**Synthèse produite :**
+
+⏵ Item 2 en file ; je documente l'item 1 pendant les passes
 
 ## 3. Travail accompli
 
@@ -109,7 +199,7 @@ Reste ouvert et documenté : le YaRN « à retardement » (au-delà de 4 096), p
 |---|---|---|
 | `/tmp/gguf_meta.py` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src/model.rs` | 0 | 12 |
-| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src/main.rs` | 0 | 37 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src/main.rs` | 0 | 43 |
 | `/tmp/mesures_oss.sh` | 2 | 0 |
 | `/tmp/mesures_oss2.sh` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/compare_logits.py` | 1 | 0 |
@@ -135,6 +225,7 @@ Reste ouvert et documenté : le YaRN « à retardement » (au-delà de 4 096), p
 | `/tmp/ref2048.sh` | 1 | 0 |
 | `/tmp/interp_long.sh` | 1 | 0 |
 | `/tmp/audela_4096.sh` | 1 | 0 |
+| `/tmp/seuil_rotation.sh` | 1 | 0 |
 
 ### Sous-agents lancés
 
@@ -182,7 +273,7 @@ Reste ouvert et documenté : le YaRN « à retardement » (au-delà de 4 096), p
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 217 autres
+- … et 228 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -323,4 +414,5 @@ Reste ouvert et documenté : le YaRN « à retardement » (au-delà de 4 096), p
 - REPRISE : chiffres gpt-oss exacts (ids 15,1757 / texte 15,0757)" && git log --oneline -3 && git status --short | head -3
 - Rotation : YaRN a retardement, et la temperature est la moitie nuisible  La politique de rotation se decide desormais par sequence, a la longueur du contexte de
 - Rotation : points 4096 et 4608, et la limite du test de generation  Interpolation seule (sans temperature) : 400,13 a 4 096 et 476,09 a 4 608, contre 1 105,20 p
+- Item 1 : protocole de perplexite longue --depuis N  Le protocole historique (--ctx N --limit N) confond la longueur du contexte et le contenu : a 8192 jetons on
 

@@ -1058,6 +1058,12 @@ fn run_ppl(args: &[String]) {
     // Texte placé dans le tour « user » du montage harmony `suite` : le contenu
     // noté est alors la SUITE d'un texte que le modèle a sous les yeux.
     let mut harmony_contexte: Option<String> = None;
+    // `--depuis N` : ne NOTER qu'à partir du jeton N, en gardant tout ce qui
+    // précède comme contexte. Sans lui, comparer deux longueurs de contexte
+    // revient à comparer deux tranches différentes du corpus — mesuré : de 6 à
+    // 542 de perplexité entre tranches d'un même fichier. Avec lui, les mêmes
+    // jetons sont notés à 512, 1 024, 4 096… de contexte.
+    let mut depuis = 0usize;
     // Export des logits bruts, pour comparaison à une référence externe
     // (llama.cpp). Format : int32 n_vocab, int32 n_pos, puis n_pos lignes de
     // n_vocab f32, une ligne par position NOTÉE, dans l'ordre.
@@ -1104,6 +1110,7 @@ fn run_ppl(args: &[String]) {
             "--harmony-user" => { harmony = Some("user".into()); i -= 1; }
             "--harmony-suite" => { harmony = Some("suite".into()); i -= 1; }
             "--harmony-contexte" => { harmony_contexte = Some(args[i + 1].clone()); }
+            "--depuis" => depuis = args[i + 1].parse().unwrap(),
             "--swa-pattern" => { swa_pattern = Some(args[i + 1].parse().unwrap()); i -= 1; }
             "--sans-fenetre" => { sans_fenetre = true; i -= 1; }
             "--ctx" => ctx = args[i + 1].parse().unwrap(),
@@ -1178,7 +1185,9 @@ fn run_ppl(args: &[String]) {
         raw.split(|c: char| c == ',' || c.is_whitespace())
             .filter(|s| !s.is_empty())
             .filter_map(|s| s.parse().ok())
-            .take(limit)
+            // `--depuis N` : on charge N jetons de plus que la limite, pour que
+            // le premier jeton noté ait un contexte complet (voir plus bas).
+            .take(limit.saturating_add(depuis))
             .collect()
     };
     // Garde-fou : des identifiants hors vocabulaire signifient qu'on nourrit le
@@ -1203,8 +1212,13 @@ fn run_ppl(args: &[String]) {
         let brut = std::fs::read_to_string(f).expect("texte illisible");
         let tk = build_tokenizer(&mdl.g);
         ids = tk.encode(&brut);
-        if ids.len() > limit { ids.truncate(limit); }
+        let voulu = limit.saturating_add(depuis);
+        if ids.len() > voulu { ids.truncate(voulu); }
         println!("{f} : {} jetons (tokenizer du modèle), fenêtres de {ctx}", ids.len());
+    }
+    if depuis > 0 {
+        println!("notation à partir du jeton {depuis} : les jetons précédents servent de contexte, \
+                  les mêmes jetons sont donc comparables à contexte 512, 1 024, 4 096…");
     }
     mdl.moe_topk = moe_topk;
     mdl.act_levels = ((1u32 << (abits - 1)) - 1) as f32;
@@ -1251,7 +1265,32 @@ fn run_ppl(args: &[String]) {
     // historique, toutes notées), soit des tours harmony dont seuls les jetons
     // de contenu sont notés.
     let fenetres: Vec<(Vec<u32>, Vec<bool>)> = match &harmony {
-        None => ids.chunks(ctx).map(|c| (c.to_vec(), vec![true; c.len()])).collect(),
+        None => {
+            // `--depuis N` : les fenêtres sont ancrées pour que le premier jeton
+            // NOTÉ ait un contexte complet (on recule de ctx-1 jetons, qui ne
+            // sont pas notés). Sans décalage, le protocole historique est
+            // conservé au chiffre près (`chunks`).
+            if depuis == 0 {
+                ids.chunks(ctx).map(|c| (c.to_vec(), vec![true; c.len()])).collect()
+            } else {
+                // Avec décalage, les fenêtres se recouvrent d'UN jeton : chaque
+                // jeton du corpus est ainsi noté exactement une fois, sans le
+                // trou d'un jeton par frontière du découpage en tranches.
+                let deb = depuis.saturating_sub(ctx.saturating_sub(1));
+                let mut fen = Vec::new();
+                let mut base = deb.min(ids.len());
+                loop {
+                    let fin = (base + ctx).min(ids.len());
+                    let c = &ids[base..fin];
+                    let masque: Vec<bool> = (0..c.len()).map(|j| base + j >= depuis).collect();
+                    let dernier = fin == ids.len();
+                    fen.push((c.to_vec(), masque));
+                    if dernier || fin < 2 { break; }
+                    base = fin - 1;
+                }
+                fen
+            }
+        }
         Some(mode) => {
             let tk = build_tokenizer(&mdl.g);
             // Le contexte est lu ICI : sans cela, c'est le CHEMIN du fichier qui

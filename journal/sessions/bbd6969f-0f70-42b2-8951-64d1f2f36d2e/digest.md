@@ -7042,3 +7042,320 @@ REPRISE.md:191:| 4 608 | — | 476,09 | 1 105,20 |
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -m \"Rotation : points 4096 et 4608, et la limite du test de generation\n\nInterpolation seule (sans temperature) : 400,13 a 4 096 et 476,09 a 4 608,\ncontre 1 105,20 pour le YaRN complet a 4 608. Le class … [461 caractères tronqués]`
+
+  ```
+1a13933 Rotation : points 4096 et 4608, et la limite du test de generation
+  ```
+
+- **bash** `{"command": "sleep 60; cat /tmp/audela_4096.log 2>/dev/null | tail -3; ps -o pid,etime,pcpu -C qtrinet-core 2>/dev/null | tail -1; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git status --short | head -3", "description": "Confirm 8192 series started", "timeoutMs": 120000}`
+
+  ```
+### S8192 RoPE simple au-delà de la fenêtre initiale (profil inclus)
+2589911       00:57  604
+ M journal/README.md
+  ```
+
+### 🤖 Assistant
+
+⏵ YaRN à retardement livré ; la mesure à 8 192 tourne. Voici l'état
+
+**Livré et commité**
+
+1. **YaRN à retardement** (`[config] rotation` en dit la raison à chaque chargement) : RoPE simple tant que `--ctx` tient dans `rope.scaling.original_context_length` (4 096), **interpolation seule** au-delà — décision **par séquence**, pas par position, parce que la structure de position relative ne survit que si toutes les clés partagent le même jeu de fréquences. `QT_YARN=1` = YaRN complet des références, `QT_YARN_NON=1` / `--sans-yarn` = jamais, `QT_YARN_MSCALE=0/1` = température seule.
+
+2. **Le résultat qui change la donne : la moitié nuisible de YaRN, c'est la température.**
+
+| longueur | RoPE simple | YaRN **sans** mscale | YaRN complet |
+|---|---|---|---|
+| 512 | **18,58** | 19,65 | 174,34 |
+| 1 024 | **46,94** | 71,35 | 417,65 |
+| 2 048 | **121,75** | 192,63 | 722,56 |
+| 4 096 | **170,78** | 400,13 | — |
+| 4 608 | — | 476,09 | 1 105,20 |
+
+Retirer `mscale = 1 + 0,1·ln f` divise la perplexité par **8,9 / 5,9 / 3,8**. L'interpolation des basses fréquences, elle, ne coûte presque rien. HF, llama.cpp et l'implémentation officielle d'OpenAI appliquent pourtant la température telle quelle — et notre moteur les reproduit au chiffre près quand on la garde. D'où le nouveau défaut : simple sous 4 096, interpolation seule au-delà.
+
+3. **La dégradation avec la longueur n'est pas un bug du moteur** : llama.cpp, mêmes 2 048 identifiants, un seul lot, YaRN déclaré → **714,83** contre **722,56** chez nous (1,1 %). Le `--ppl-profil` ajouté pour ça montre deux causes superposées : le **contenu** (une même tranche vaut 13,94 en tête et 59,36 prise plus loin mais présentée en position 0) et la **position** (~×7 de plus à sa place réelle).
+
+4. **Plan 1 M** : `docs/contexte-long.md` + `--plan --ctx N` qui chiffre tout. Les trois murs : **préremplissage séquentiel** (4,5 h à 32 k, 31 h à 128 k, **1 234 h à 1 M** → chantier n° 1, il faut le préremplissage par lots) ; **bande passante du KV** (77 Go relus par jeton à 1 M en f32, 9,7 Go en int4 — 13 ms depuis les deux GPU, et le KV int4 à 1 M tient dans **un seul RTX 5000**) ; **portée de la rotation** (×32 couvre 131 072, 1 M demanderait ×256, soit huit fois ce que le modèle a vu).
+
+**En cours** (résultats dans `/tmp/audela_4096.log` d'ici ~2 h) : RoPE simple et interpolation seule à **8 192** — c'est la mesure qui tranche le seuil de bascule, puisque le simple gagne encore à 4 096. Restent aussi le test de génération à refaire avec `--rep-penalty` (les trois configurations bouclent en glouton sur la question testée, donc il ne discrimine rien), et un gain facile repéré au passage : `rope_yarn` paie ~10 ms/jeton de `powf` — une table de fréquences précalculée rendrait ~5 % sur gpt-oss.
+
+
+## Tour 3
+
+### 👤 Utilisateur
+
+que reste-t-il à faire
+
+### 🤖 Assistant
+
+⏵ Je fais le point sur ce qui tourne et ce qui reste ouvert
+
+- **bash** `{"command": "tail -4 /tmp/audela_4096.log 2>/dev/null; echo \"--- moteur ---\"; ps -o pid,etime,pcpu -C qtrinet-core 2>/dev/null | tail -1; echo \"--- git ---\"; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log --oneline -3 && git status --short | head -3", "description": "Check running … [30 caractères tronqués]`
+
+  ```
+[config] rotation : YaRN ×32 sans mscale (contexte demandé 8192 > 4096 initial)
+    8191 tokens notés — perplexité cumulée 835.157  (2.9 tok/s)
+=== perplexité 835.1572 sur 8191 tokens (0 événements, 2798.9 s) ===
+
+--- moteur ---
+    PID     ELAPSED %CPU
+--- git ---
+1a13933 Rotation : points 4096 et 4608, et la limite du test de generation
+d56d81f Rotation : YaRN a retardement, et la temperature est la moitie nuisible
+8ca0c58 REPRISE : chiffres gpt-oss exacts (ids 15,1757 / texte 15,0757)
+ M journal/README.md
+ M journal/sessions/MANIFEST.md
+ M journal/sessions/bbd6969f-0f70-42b2-8951-64d1f2f36d2e/digest.md
+  ```
+
+- **bash** `{"command": "cat /tmp/audela_4096.log", "description": "Read the 8192 results"}`
+
+  ```
+### S8192 RoPE simple au-delà de la fenêtre initiale (profil inclus)
+[config] rotation : RoPE simple (YaRN ×32 refusé, contexte 8192 > 4096)
+    8191 tokens notés — perplexité cumulée 48.739  (3.0 tok/s)
+profil par profondeur (perplexité par tranche de 256 positions) :
+         0-255    :    13.715  (255 jetons notés)
+       256-511    :    25.142  (256 jetons notés)
+       512-767    :    68.511  (256 jetons notés)
+       768-1023   :   204.466  (256 jetons notés)
+      1024-1279   :   292.803  (256 jetons notés)
+      1280-1535   :   379.653  (256 jetons notés)
+      1536-1791   :   532.616  (256 jetons notés)
+      1792-2047   :   167.362  (256 jetons notés)
+      2048-2303   :   183.081  (256 jetons notés)
+      2304-2559   :   175.068  (256 jetons notés)
+      2560-2815   :   245.200  (256 jetons notés)
+      2816-3071   :   212.334  (256 jetons notés)
+      3072-3327   :   210.663  (256 jetons notés)
+      3328-3583   :   157.250  (256 jetons notés)
+      3584-3839   :   542.885  (256 jetons notés)
+      3840-4095   :   361.017  (256 jetons notés)
+      4096-4351   :    55.534  (256 jetons notés)
+      4352-4607   :    13.855  (256 jetons notés)
+      4608-4863   :     9.172 
+… [990 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Résultat 8 192 (RoPE simple) : **48,7** — et le profil montre que c'est le contenu qui domine
+
+- **bash** `{"command": "cd /tmp && python3 - <<'PY'\nt=open('/tmp/wt2_long.txt').read()\n# Les jetons ~512-4095 occupent à peu près les octets 2000-18000 ;\n# au-delà de 4096 jetons, on est vers 18 000 octets.\nfor a,b,nom in [(1200,1900,'zone dure (jetons ~300-450)'),(17000,17800,'juste avant 4096 jetons'),\n … [298 caractères tronqués]`
+
+  ```
+--- zone dure (jetons ~300-450) (octets 1200-1900) ---
+rough of Hammersmith and Fulham . Boulter starred in two films in 2008 , Daylight Robbery by filmmaker Paris Leonti , and Donkey Punch directed by Olly Blackburn . In May 2008 , Boulter made a guest appearance on a two @-@ part episode arc of the television series Waking the Dead , followed by an appearance on the television series Survivors in November 2008 . He had a recurring role in ten episod
+
+--- juste avant 4096 jetons (octets 17000-17800) ---
+ynasty , critics have called Du Fu the " poet historian " ( 詩史 shī shǐ ) . The most directly historical of his poems are those commenting on military tactics or the successes and failures of the government , or the poems of advice which he wrote to the emperor . Indirectly , he wrote about the effect of the times in which he lived on himself , and on the ordinary people of China . As Watson notes 
+
+--- juste apres 4096 jetons (octets 19000-19800) ---
+ , " everything in this world is poetry " , Du wrote extensively on subjects such as domestic life , calligraphy , paintings , animals , and other poems . ⏎⏎⏎ = = = Technical excellence = = = ⏎⏎⏎ Du Fu 's work is notable above all for 
+… [623 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cat > /tmp/contexte_ou_contenu.sh <<'EOF'\n#!/bin/bash\n# Déconfusion : mêmes tranches de contenu, contexte de 512 seulement.\n# Les PPL par fenêtre (une fenêtre = 512 jetons, positions 0..511) donnent la\n# difficulté INTRINSÈQUE de chaque tranche, à comparer au profil à 8 192.\nset -u … [817 caractères tronqués]`
+
+  ```
+lancé
+2878767       00:02
+  ```
+
+### 🤖 Assistant
+
+⏵ Point complet : ce qui tourne, ce que la mesure vient de changer, et l'ordre de travail
+
+**En cours** (~30 min) : la déconfusion contenu/contexte — ctx 512 sur 8 192 jetons, PPL par fenêtre → `/tmp/contexte_ou_contenu.log`.
+
+**Le résultat de 8 192 vient de tomber, et il change la lecture** : RoPE simple = **48,7** (meilleur qu'à 4 096, où c'était 170,8), interpolation seule = **835,2**. Le profil par profondeur explique pourquoi : les tranches 4 608-8 191 tournent autour de **10** alors que les tranches 512-4 095 montent jusqu'à 542. Or le corpus est du même genre de prose partout — donc **le protocole actuel confond le contenu et la longueur** : à `--ctx 8192` on ne score pas les mêmes jetons qu'à `--ctx 512`. Tant que ce n'est pas corrigé, aucune courbe « par longueur » n'est interprétable.
+
+## Ce qu'il reste, par ordre de valeur
+
+**1. Protocole de perplexité longue** (`--depuis N`, ou un `--stride` comme llama-perplexity) — noter **les mêmes jetons** avec des contextes de longueurs différentes. ~30 lignes. C'est le préalable à toute conclusion sur le seuil de rotation, et ça invalide une partie de ce qu'on vient de mesurer.
+
+**2. Trancher le seuil de rotation** avec ce protocole (simple contre interpolation seule, mêmes jetons, 512 → 8 192). Indice actuel : le simple gagne partout, l'interpolation se dégrade régulièrement — le défaut (bascule à 4 096) est donc peut-être à inverser en « simple partout » pour gpt-oss.
+
+**3. KV int8 puis int4** (E2/E3 du plan 1 M) — ÷4 puis ÷8 sur le cache. Banc d'essai : Qwen2.5-0.5B à `--ctx 8192`, 5 min par passe, écart de perplexité à mesurer contre llama.cpp (`--ctk q8_0`). C'est ce qui fait tenir 1 M en mémoire.
+
+**4. Préremplissage par lots** (E1) — le mur n° 1 : 4,5 h à 32 k, 31 h à 128 k, **1 234 h à 1 M** en séquentiel. Un noyau GEMM par tranches débloque tout le contexte long *et* le temps de premier jeton. Gros chantier, mais rien de long ne se fait sans lui.
+
+**5. Échelles par bloc pour `DenseQ8`** — l'écart résiduel avec llama.cpp (|ΔNLL| médian 0,076) vient de là, et ça tranche la question « 6 bits contre int8 par bloc » à octets égaux.
+
+**6. Refactoriser les boucles CLI** (3 modes → 1) — quatrième bug de la même classe rencontré cette session (`--attn-window`/`--attn-sinks` jamais appliqués en inférence).
+
+**7. Noyaux GPU** — une warp par ligne puis les formats 4 bits (Q4_K/Q6_K/MXFP4) : toute la famille Qwen est en Q4_K/Q6_K, donc aujourd'hui rien de la leur n'est déportable. Le plus gros levier de débit, le plus long.
+
+**8. Suite du plan 1 M** : KV paginé + déport sur les deux RTX 5000 (E4), attention creuse (E5, `attn_topk` existe déjà), MLA pour DeepSeek (E6), puis la vision.
+
+**Petits gains déjà repérés** : table de fréquences précalculée (~10 ms/jeton perdus en `powf` dans `rope_yarn`), et le test de génération à refaire avec `--rep-penalty` (les trois configurations bouclaient en glouton, donc il ne discrimininait rien).
+
+Si je devais enchaîner seul : **1 puis 2** (une heure, et ça remet la mesure d'aplomb), **3** (une heure, résultat immédiat), puis **4** qui est le vrai chantier.
+
+
+## Tour 4
+
+### 👤 Utilisateur
+
+fais les 8 dans l'ordre
+
+### 🤖 Assistant
+
+⏵ Objectif posé : les 8 chantiers, dans l'ordre. Je commence par le protocole de perplexité
+
+- **create_goal** `{"objective": "Réaliser les 8 chantiers restants du projet qtrinet-core dans l'ordre : (1) protocole de perplexité longue --depuis/--stride, (2) trancher le seuil de rotation YaRN avec ce protocole, (3) KV int8 puis int4 mesurés sur Qwen 0.5B à ctx 8192 contre llama.cpp, (4) préremplissage par lots  … [414 caractères tronqués]`
+
+> **Objectif** (create) : Réaliser les 8 chantiers restants du projet qtrinet-core dans l'ordre : (1) protocole de perplexité longue --depuis/--stride, (2) trancher le seuil de rotation YaRN avec ce protocole, (3) KV int8 puis int4 mesurés sur Qwen 0.5B à ctx 8192 contre llama.cpp, (4) préremplissage par lots (GEMM par tranches), (5) échelles par bloc pour DenseQ8, (6) refactorisation des boucles CLI en une seule, (7) noyaux GPU warp par ligne puis formats 4 bits, (8) suite du plan 1 M (KV paginé + déport GPU, attention creuse, MLA, vision). Chaque chantier doit être implémenté, mesuré (non-régression Qwen 19,3885 et gpt-oss 15,1757 quand c'est pertinent), documenté dans le dépôt et commité.
+
+
+  ```
+{"goal":{"id":"goal-7beedcd4-55c3-4592-a3f6-f99085e458f1","revision":1,"objective":"Réaliser les 8 chantiers restants du projet qtrinet-core dans l'ordre : (1) protocole de perplexité longue --depuis/--stride, (2) trancher le seuil de rotation YaRN avec ce protocole, (3) KV int8 puis int4 mesurés sur Qwen 0.5B à ctx 8192 contre llama.cpp, (4) préremplissage par lots (GEMM par tranches), (5) échelles par bloc pour DenseQ8, (6) refactorisation des boucles CLI en une seule, (7) noyaux GPU warp par ligne puis formats 4 bits, (8) suite du plan 1 M (KV paginé + déport GPU, attention creuse, MLA, vision). Chaque chantier doit être implémenté, mesuré (non-régression Qwen 19,3885 et gpt-oss 15,1757 quand c'est pertinent), documenté dans le dépôt et commité.","phase":"active","roundsStarted":0,"maxGoalRounds":24},"activation":"armed"}
+  ```
+
+- **todo_write** `{"todos": [{"content": "1. Protocole de perplexité longue : --depuis (contexte ancré, mêmes jetons notés)", "status": "in_progress"}, {"content": "2. Trancher le seuil de rotation (simple vs interpolation, mêmes jetons, 512→8192)", "status": "pending"}, {"content": "3. KV int8 puis int4, mesurés sur … [473 caractères tronqués]`
+
+  ```
+Updated todo list: 7 pending, 1 in progress, 0 completed.
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src/main.rs", "limit": 40, "offset": 1155}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src/main.rs</path>
+<type>file</type>
+<content>
+1155:                 if b == 6 { b6 |= 1; }
+1156:                 i -= 1;
+1157:             }
+1158:             "--bits" => {
+1159:                 let b: u32 = args[i + 1].parse().unwrap();
+1160:                 list::BITS_POIDS.store(b, std::sync::atomic::Ordering::Relaxed);
+1161:                 i -= 1;
+1162:             }
+1163:             "--pin" => { engine::EPINGLER.store(true, std::sync::atomic::Ordering::Relaxed); i -= 1; }
+1164:             "--auto" => { auto = true; i -= 1; }
+1165:             "--push" => { auto = false; dense = false; i -= 1; }
+1166:             "--q4" => { q4 |= 3; i -= 1; }
+1167:             "--q4-ffn" => { q4 = (q4 & 4) | 1; i -= 1; }
+1168:             "--q4-attn" => { q4 = (q4 & 4) | 2; i -= 1; }
+1169:             "--q4-tout" => { q4 |= 7; i -= 1; }
+1170:             _ => {}
+1171:         }
+1172:         i += 2;
+1173:     }
+1174:     let mut ids: Vec<u32> = if idfile.is_empty() {
+1175:         Vec::new()
+1176:     } else {
+1177:         let raw = std::fs::read_to_string(&idfile).expect("fichier d'identifiants illisible");
+1178:         
+… [925 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+Maintenant le protocole `--depuis` :
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src/main.rs", "new_string": "    let mut ids: Vec<u32> = if idfile.is_empty() {\n        Vec::new()\n    } else {\n        let raw = std::fs::read_to_string(&idfile).expect(\"fichier d'identifiants illisible\");\n        raw … [779 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src/main.rs has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src/main.rs", "new_string": "    // Texte placé dans le tour « user » du montage harmony `suite` : le contenu\n    // noté est alors la SUITE d'un texte que le modèle a sous les yeux.\n    let mut harmony_contexte: Option<St … [649 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src/main.rs has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src/main.rs", "new_string": "            \"--harmony-contexte\" => { harmony_contexte = Some(args[i + 1].clone()); }\n            \"--depuis\" => depuis = args[i + 1].parse().unwrap(),", "old_string": "            \"--harmon … [67 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src/main.rs has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src/main.rs", "new_string": "    let fenetres: Vec<(Vec<u32>, Vec<bool>)> = match &harmony {\n        None => {\n            // `--depuis N` : les fenêtres sont ancrées pour que le premier jeton\n            // NOTÉ ait un c … [694 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src/main.rs has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src/main.rs", "new_string": "    if let Some(f) = &texte_file {\n        let brut = std::fs::read_to_string(f).expect(\"texte illisible\");\n        let tk = build_tokenizer(&mdl.g);\n        ids = tk.encode(&brut);\n        … [780 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src/main.rs has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && cargo build --release 2>&1 | grep -E \"^error\" -A 8 | head -30; echo BUILD; cd .. && python3 -c \"\nids=[int(x) for x in open('/tmp/ids_oss_long.txt').read().replace(',',' ').split()]\nprint('corpus', len(ids))\n\" && e … [347 caractères tronqués]`
+
+  ```
+BUILD
+corpus 16456
+--- validation : depuis 0 doit reproduire 15,1757 (Qwen) ---
+=== perplexité 19.3885 sur 510 tokens (0 événements, 26.1 s) ===
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== référence : fenêtre 2 du run ctx 256 (jetons 256-511, contexte 255) = 16,792 ===\" && ./qtrinet-core/target/release/qtrinet-core models/Qwen2.5-0.5B-Q8_0.gguf --ppl /tmp/ids_qwen.txt --ctx 256 --abits 16 --threads 16 --lim … [424 caractères tronqués]`
+
+  ```
+=== référence : fenêtre 2 du run ctx 256 (jetons 256-511, contexte 255) = 16,792 ===
+     510 tokens notés — perplexité cumulée 19.388  (19.4 tok/s)  [fenêtre 2 : 255 notés, PPL 21.565]
+=== --depuis 256 (mêmes jetons notés, contexte 255) ===
+notation à partir du jeton 256 : les jetons précédents servent de contexte, les mêmes jetons sont donc comparables à contexte 512, 1 024, 4 096…
+       1 tokens notés — perplexité cumulée 1.569  (0.1 tok/s)  [fenêtre 1 : 1 notés, PPL 1.569]
+     255 tokens notés — perplexité cumulée 21.398  (11.2 tok/s)  [fenêtre 2 : 254 notés, PPL 21.620]
+=== perplexité 21.3983 sur 255 tokens (0 événements, 22.7 s) ===
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src/main.rs", "new_string": "        None => {\n            // `--depuis N` : les fenêtres sont ancrées pour que le premier jeton\n            // NOTÉ ait un contexte complet (on recule de ctx-1 jetons, qui ne\n            / … [1822 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src/main.rs has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && cargo build --release 2>&1 | grep -E \"^error\" -A 8 | head -20; echo BUILD; cd .. && echo \"=== depuis 0 : non-régression ===\" && ./qtrinet-core/target/release/qtrinet-core models/Qwen2.5-0.5B-Q8_0.gguf --ppl /tmp/ids_ … [466 caractères tronqués]`
+
+  ```
+BUILD
+=== depuis 0 : non-régression ===
+=== perplexité 19.3885 sur 510 tokens (0 événements, 25.7 s) ===
+=== depuis 256 : doit retrouver ~21,56 (fenêtre 2 historique) ===
+       1 tokens notés — perplexité cumulée 1.569  (0.1 tok/s)  [fenêtre 1 : 1 notés, PPL 1.569]
+     256 tokens notés — perplexité cumulée 21.346  (11.3 tok/s)  [fenêtre 2 : 255 notés, PPL 21.565]
+=== perplexité 21.3455 sur 256 tokens (0 événements, 22.7 s) ===
+  ```
+
+### 🤖 Assistant
+
+⏵ Item 1 validé (`--depuis 256` retrouve exactement la fenêtre historique 21,565). Je lance l'item 2
+
+- **write** `{"content": "#!/bin/bash\n# Item 2 — le seuil de rotation, mesuré proprement.\n#\n# Le protocole `--depuis` note TOUJOURS les mêmes jetons (1536 à 2047 du corpus)\n# en faisant varier la longueur du contexte : c'est la seule façon de séparer\n# « plus de contexte » de « autre contenu » — le même fic … [1059 caractères tronqués]`
+
+  ```
+<path>/tmp/seuil_rotation.sh</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "chmod +x /tmp/seuil_rotation.sh && (nohup /tmp/seuil_rotation.sh > /tmp/seuil_rotation.out 2>&1 &); sleep 3; tail -3 /tmp/seuil_rotation.log 2>/dev/null; echo \"--- en cours ---\"; tail -2 /tmp/contexte_ou_contenu.log 2>/dev/null", "description": "Launch rotation threshold measurement"}`
+
+  ```
+--- en cours ---
+### ctx 512 sur 8 192 jetons : PPL par fenêtre (contenu seul)
+  ```
+
+### 🤖 Assistant
+
+⏵ Item 2 en file ; je documente l'item 1 pendant les passes
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='REPRISE.md'\ns=open(p).read()\ns=s.replace(\"\"\"| Mesure | `--ppl-texte F` (identifiants du tokenizer du modèle), `--logits-bin F` (logits bruts), `--harmony*` (habillage harmony), `--swa-pattern N`, `--sans-fen … [1457 caractères tronqués]`
+
+  ```
+REPRISE.md:88:| Mesure | `--ppl-texte F` (identifiants du tokenizer du modèle), `--depuis N` (ne noter qu'à partir du jeton N, contexte ancré — les mêmes jetons deviennent comparables à 512, 1 024, 4 096… de contexte), `--ppl-profil` (perte par tranche de 256 positions), `--logits-bin F` (logits bruts), `--harmony*` (habillage harmony), `--swa-pattern N`, `--sans-fenetre` |
+docs/contexte-long.md:127:> va de 6 à 542 de perplexité selon la tranche. Le protocole `--depuis N` corrige
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -m \"Item 1 : protocole de perplexite longue --depuis N\n\nLe protocole historique (--ctx N --limit N) confond la longueur du contexte et\nle contenu : a 8192 jetons on ne note pas les memes tranches qu'a  … [694 caractères tronqués]`

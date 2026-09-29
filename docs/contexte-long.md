@@ -121,6 +121,15 @@ température seule. Décision **par séquence**, pas par position : la structure
 position relative ne survit que si toutes les clés partagent le même jeu de
 fréquences.
 
+> **Protocole.** Les courbes ci-dessous ont d'abord été mesurées « par
+> longueur » (`--ctx N --limit N`), ce qui **confond la longueur et le contenu** :
+> à 8 192 jetons on ne note pas les mêmes tranches qu'à 512, et le même corpus
+> va de 6 à 542 de perplexité selon la tranche. Le protocole `--depuis N` corrige
+> cela : il note **toujours les mêmes jetons** en faisant varier la longueur du
+> contexte. Les chiffres ci-dessous restent valables comme points de repère (le
+> classement des trois régimes est stable), mais la comparaison *entre longueurs*
+> doit se refaire avec `--depuis` (voir §5.bis).
+
 Les courbes, mesurées sur gpt-oss-120b et le même corpus (une seule fenêtre,
 `--dense`, 16 fils) :
 

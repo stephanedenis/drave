@@ -85,7 +85,7 @@ Un garde-fou le détecte maintenant (identifiant ≥ vocabulaire = erreur franch
 | Encodages | listes d'événements (push), dense int8 par ligne, dense 4 bits par bloc, **6 bits empaqueté par bloc** |
 | GPU | noyaux PTX + API pilote, tête et projections opt-in (`QT_GPU=1`) |
 | Outils | `--ppl`, `--plan` (placement), `--tokenize`, `--bits N` (simulation de précision) |
-| Mesure | `--ppl-texte F` (identifiants du tokenizer du modèle), `--logits-bin F` (logits bruts), `--harmony*` (habillage harmony), `--swa-pattern N`, `--sans-fenetre` |
+| Mesure | `--ppl-texte F` (identifiants du tokenizer du modèle), `--depuis N` (ne noter qu'à partir du jeton N, contexte ancré — les mêmes jetons deviennent comparables à 512, 1 024, 4 096… de contexte), `--ppl-profil` (perte par tranche de 256 positions), `--logits-bin F` (logits bruts), `--harmony*` (habillage harmony), `--swa-pattern N`, `--sans-fenetre` |
 | Rotation | **YaRN à retardement** : RoPE simple tant que `--ctx` tient dans `rope.scaling.original_context_length` (4 096), **interpolation YaRN seule au-delà** (la température `mscale` est la moitié nuisible : divise la perplexité par 8,9 à 512 jetons). `QT_YARN=1` = YaRN complet des références, `QT_YARN_NON=1` (ou `--sans-yarn`) = jamais, `QT_YARN_MSCALE=0/1` = température seule. La trace `[config] rotation` dit lequel est actif |
 | Budget de contexte | `--plan --ctx N` : KV f32/int8/int4, relecture par jeton, décodage selon les bandes passantes, coût du préremplissage séquentiel, portée du YaRN |
 | Référence externe | `tools/ref_logits` (llama.cpp, mêmes identifiants, sans BOS) + `tools/compare_logits.py` |
