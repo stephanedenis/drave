@@ -153,6 +153,14 @@ impl Vue4 {
         }
     }
 
+    /// Octets bruts de l'expert `e` (tels qu'ils sont dans le fichier) : c'est
+    /// ce qu'il faut copier en VRAM pour que le noyau y travaille.
+    fn blocs_expert(&self, e: usize) -> &[u8] {
+        let octets = self.n_out * self.nb * self.pas();
+        let p = unsafe { self.base.add(e * octets) };
+        unsafe { std::slice::from_raw_parts(p, octets) }
+    }
+
     /// Matrice 4 bits de l'expert `e`, **empruntée** au fichier.
     fn expert(&self, e: usize) -> crate::list::DenseQ4 {
         let base = unsafe { self.base.add(e * self.n_out * self.nb * self.pas()) };
@@ -377,6 +385,75 @@ impl Proj {
     }
 }
 
+/// Cache VRAM des experts MoE (MXFP4), à éviction LRU.
+///
+/// Pourquoi un cache et pas un simple déport : un expert pèse 4,4 Mo et
+/// gpt-oss en a 4 608 (36 couches × 128) — 60 Go, la VRAM n'en tient pas le
+/// quart. Mais un expert SÉLECTIONNÉ est réutilisé d'un jeton à l'autre : c'est
+/// exactement ce qu'un cache attrape. La mesure d'activation
+/// (`reports/rapport-localite-activation.md`) dit qu'un préchargement STATIQUE
+/// ne paie pas ; une résidence dynamique, si.
+pub struct CacheExperts {
+    /// Une entrée par (couche, expert) : ses trois matrices (gate, up, down).
+    cartes: std::collections::HashMap<(usize, usize), (crate::gpu::MatriceGpu,
+                                                       crate::gpu::MatriceGpu,
+                                                       crate::gpu::MatriceGpu, u64)>,
+    pub octets: usize,
+    pub budget: usize,
+    pub demandes: u64,
+    pub manques: u64,
+    pub evictions: u64,
+    pub octets_envoyes: u64,
+    ticks: u64,
+}
+
+impl CacheExperts {
+    pub fn nouveau(budget: usize) -> Self {
+        CacheExperts { cartes: std::collections::HashMap::new(), octets: 0, budget,
+                       demandes: 0, manques: 0, evictions: 0, octets_envoyes: 0, ticks: 0 }
+    }
+
+    pub fn taux(&self) -> f64 {
+        if self.demandes == 0 { 0.0 } else { 100.0 * (1.0 - self.manques as f64 / self.demandes as f64) }
+    }
+
+    /// Les trois matrices de `(couche, expert)` en VRAM, envoyées si besoin.
+    /// Évince les entrées les moins récemment utilisées tant que le budget est
+    /// dépassé. `None` si même une entrée seule ne tient pas dans le budget.
+    fn obtenir<'a>(&'a mut self, machine: &crate::gpu::Gpu, l: usize, e: usize,
+                   gate: &Vue4, up: &Vue4, down: &Vue4)
+        -> Option<(&'a crate::gpu::MatriceGpu, &'a crate::gpu::MatriceGpu,
+                   &'a crate::gpu::MatriceGpu)> {
+        self.ticks += 1;
+        let t = self.ticks;
+        let cle = (l, e);
+        self.demandes += 1;
+        if !self.cartes.contains_key(&cle) {
+            self.manques += 1;
+            let octets = 3 * gate.n_out * gate.nb * 17;
+            while self.octets + octets > self.budget && !self.cartes.is_empty() {
+                let victime = self.cartes.iter().min_by_key(|(_, v)| v.3).map(|(k, _)| *k)?;
+                if let Some((g, u, d, _)) = self.cartes.remove(&victime) {
+                    self.octets = self.octets
+                        .saturating_sub(g.octets_poids + u.octets_poids + d.octets_poids);
+                    self.evictions += 1;
+                }
+            }
+            if self.octets + octets > self.budget { return None; }
+            let mg = machine.charger_mxfp4(gate.blocs_expert(e), gate.n_out, gate.nb)?;
+            let mu = machine.charger_mxfp4(up.blocs_expert(e), up.n_out, up.nb)?;
+            let md = machine.charger_mxfp4(down.blocs_expert(e), down.n_out, down.nb)?;
+            self.octets += mg.octets_poids + mu.octets_poids + md.octets_poids;
+            self.octets_envoyes +=
+                (mg.octets_poids + mu.octets_poids + md.octets_poids) as u64;
+            self.cartes.insert(cle, (mg, mu, md, t));
+        }
+        let v = self.cartes.get_mut(&cle)?;
+        v.3 = t;
+        Some((&v.0, &v.1, &v.2))
+    }
+}
+
 pub struct Model {
     pub g: Gguf,
     pub cfg: Cfg,
@@ -481,6 +558,8 @@ pub struct Model {
     pub kv_gpu: Option<Vec<crate::gpu::KvGpu>>,
     /// Tranches de clés du noyau d'attention, réutilisées d'un jeton à l'autre.
     pub attn_gpu_part: Vec<f32>,
+    /// Cache VRAM des experts MoE (`QT_GPU_EXPERTS=1`).
+    pub cache_experts: Option<CacheExperts>,
     /// Taille du lot de PRÉREMPLISSAGE en inférence (1 = jeton par jeton).
     /// Le préremplissage par lots n'était branché que sur la perplexité : une
     /// invite de 4 000 jetons se payait donc jeton par jeton en génération.
@@ -1065,6 +1144,18 @@ impl Model {
                 None => None,
             }
         } else { None };
+        // Cache VRAM des experts : opt-in, et seulement sur un modèle à experts
+        // au format MXFP4 (les autres formats ont leurs propres noyaux).
+        let cache_experts = if std::env::var("QT_GPU_EXPERTS").is_ok()
+                               && crate::gpu::instance().is_some()
+                               && cfg.n_expert > 0 {
+            let go: f64 = std::env::var("QT_GPU_EXPERTS_GO").ok()
+                .and_then(|v| v.parse().ok()).unwrap_or(8.0);
+            let budget = (go * 1e9) as usize;
+            println!("[gpu] cache d'experts : budget {:.1} Go de VRAM (LRU), éviction par (couche, expert)",
+                     go);
+            Some(CacheExperts::nouveau(budget))
+        } else { None };
         let head4 = if q4 & 4 != 0 || tete_quantifiee {
             let t0 = Instant::now();
             let v = cfg.vocab;
@@ -1101,7 +1192,7 @@ impl Model {
             stop_id: None, stop_id2: None, prof: [0.0; 6],
             tete,
             tete_gpu, tete_gpu_q6k, head4, sinks_vus, kv_gpu, attn_gpu_part: Vec::new(),
-            lot: 1,
+            cache_experts, lot: 1,
             patch: None, ffn_gain: None, hebb: None,
         }
     }
@@ -1242,6 +1333,45 @@ impl Model {
     }
 
     /// Produit matrice-vecteur sur une matrice 4 bits empruntée (experts).
+    /// Les trois projections d'un expert MXFP4 sur le GPU, avec la MÊME
+    /// quantification des activations que `matvec_q4` (mêmes entiers, même
+    /// échelle) : la sortie doit être identique au chiffre près.
+    #[allow(clippy::too_many_arguments)]
+    fn expert_mxfp4_gpu(machine: &crate::gpu::Gpu,
+                        mg: &crate::gpu::MatriceGpu, mu: &crate::gpu::MatriceGpu,
+                        md: &crate::gpu::MatriceGpu,
+                        hn: &[f32], gate: &mut [f32], up: &mut [f32], exp_out: &mut [f32],
+                        down: &mut [f32], w_exp: f32, moe: &Moe, e: usize,
+                        n_ff: usize, h: usize, levels: f32, thresh: f32,
+                        tk4: usize, tk5: usize, tk6: usize, renorm: bool,
+                        act_oss: bool, scratch: &mut Vec<f32>) -> bool {
+        let quant = |x: &[f32], topk: usize, scratch: &mut Vec<f32>| {
+            Self::quant_scratch(x, levels, thresh, topk, renorm, scratch)
+        };
+        let Some((sv, sx)) = quant(hn, tk4, scratch) else { return false };
+        let mut xd = vec![0i32; hn.len()];
+        for (&i, &v) in sv.idx.iter().zip(sv.val.iter()) { xd[i as usize] = v; }
+        let Some(yg) = machine.proj_mxfp4(mg, &xd, sx) else { return false };
+        let bg = moe.biais_gate.as_ref().map(|b| &b[e * n_ff..]);
+        for o in 0..n_ff { gate[o] = yg[o] + bg.map_or(0.0, |b| b[o]); }
+        // `up` se quantifie à partir de la MÊME activation : une seule
+        // quantification suffit pour gate et up, comme sur le CPU.
+        let Some(yu) = machine.proj_mxfp4(mu, &xd, sx) else { return false };
+        let bu = moe.biais_up.as_ref().map(|b| &b[e * n_ff..]);
+        for o in 0..n_ff { up[o] = yu[o] + bu.map_or(0.0, |b| b[o]); }
+        Self::activation(gate, up, n_ff, act_oss);
+        // La descente part de l'activation (non linéaire) : nouvelle
+        // quantification, exactement comme `matvec_q4` sur la porte activée.
+        let Some((sv2, sx2)) = quant(&gate[..n_ff], tk6, scratch) else { return false };
+        let mut gd = vec![0i32; n_ff];
+        for (&i, &v) in sv2.idx.iter().zip(sv2.val.iter()) { gd[i as usize] = v; }
+        let Some(yd) = machine.proj_mxfp4(md, &gd, sx2) else { return false };
+        let bd = moe.biais_down.as_ref().map(|b| &b[e * h..]);
+        for i in 0..h { exp_out[i] = yd[i] + bd.map_or(0.0, |b| b[i]); }
+        for i in 0..h { down[i] += w_exp * exp_out[i]; }
+        true
+    }
+
     fn matvec_q4(pool: &mut Pool, m: &crate::list::DenseQ4, x: &[f32], out: &mut [f32],
                  levels: f32, thresh: f32, topk: usize, renorm: bool,
                  scratch: &mut Vec<f32>, biais: Option<&[f32]>) {
@@ -1635,6 +1765,10 @@ impl Model {
         let mut k = vec![0f32; t * nkv * hd];
         let mut v = vec![0f32; t * nkv * hd];
         let mut att = vec![0f32; t * nh * hd];
+        // Copie des requêtes APRÈS rotation, pour le noyau GPU : `q` est
+        // emprunté en mutable par la norme et la rotation, et le noyau n'a
+        // besoin que de lire.
+        let mut qgpu = vec![0f32; t * nh * hd];
         let mut o = vec![0f32; t * h];
         let mut scratch: Vec<f32> = Vec::with_capacity(h);
         let mut gate = vec![0f32; t * self.cfg.ffn];
@@ -1752,6 +1886,7 @@ impl Model {
                         Self::rope(ki, nkv, hd, pos, self.cfg.rope_base, self.cfg.n_rot);
                     }
                 }
+                qgpu[i * nq..(i + 1) * nq].copy_from_slice(qi);
                 {
                     let kvc = &mut self.kv[l];
                     for hh in 0..nkv {
@@ -1759,6 +1894,12 @@ impl Model {
                                           &vi[hh * hd..(hh + 1) * hd]);
                     }
                 }
+                // Miroir VRAM, une position à la fois : l'attention du jeton `i`
+                // a besoin des clés de TOUT le lot déjà écrit, donc la copie doit
+                // suivre l'écriture. Quelques centaines d'octets par couche et par
+                // jeton — le contraire (copier le lot à la fin) donnerait au noyau
+                // un cache amputé de son propre lot.
+                KvCache::miroir_gpu(self.kv_gpu.as_deref_mut(), l, &self.kv[l], pos, 1);
                 let fen = if self.attn_window == 0 { 0 }
                           else if self.swa_pattern <= 1 { self.attn_window }
                           else if l % self.swa_pattern < self.swa_pattern - 1 { self.attn_window }
@@ -1771,7 +1912,30 @@ impl Model {
                 // être déquantifiées qu'UNE fois par groupe. Le chemin par tête
                 // les relisait `rep` fois — mesuré ×2,2 sur ce poste.
                 let groupe = fen == 0 && self.attn_topk == 0 && rep > 1;
-                if groupe {
+                // ---- KV déporté : la même attention, calculée en VRAM (E4) ----
+                let mut fait_en_gpu = false;
+                if groupe && self.kv_gpu.is_some() && nkv * rep == nh && n > 1 {
+                    let nsplit = (n / 256).clamp(1, 128);
+                    let besoin = nsplit * nkv * rep * (hd + 2);
+                    if self.attn_gpu_part.len() < besoin { self.attn_gpu_part.resize(besoin, 0.0); }
+                    let puits: Option<Vec<f32>> = lay.sinks.as_ref()
+                        .map(|s| (0..nh).map(|h| s[h]).collect());
+                    let part = &mut self.attn_gpu_part;
+                    // Copie des requêtes du jeton : `qi` emprunte `q` en
+                    // mutable pour la norme et la rotation, qui viennent d'être
+                    // faites — le noyau, lui, n'a besoin que de lire.
+                    let requetes = &qgpu[i * nq..(i + 1) * nq];
+                    let sortie = &mut att[i * nq..(i + 1) * nq];
+                    if let (Some(machine), Some(m)) = (crate::gpu::instance(),
+                                                       self.kv_gpu.as_mut().and_then(|v| v.get_mut(l))) {
+                        if machine.attn_kv(m, requetes, n, scale,
+                                           puits.as_deref(), nsplit, part, sortie) {
+                            self.attn_events += (nh * n) as u64;
+                            fait_en_gpu = true;
+                        }
+                    }
+                }
+                if groupe && !fait_en_gpu {
                     for kvh in 0..nkv {
                         let h0 = kvh * rep;
                         let h1 = (h0 + rep).min(nh);
@@ -1807,7 +1971,7 @@ impl Model {
                             }
                         }
                     }
-                } else {
+                } else if !fait_en_gpu {
                 for hh in 0..nh {
                     let kvh = hh / rep;
                     let qh = &qi[hh * hd..(hh + 1) * hd];
@@ -1834,11 +1998,6 @@ impl Model {
                 }
                 self.attn_events += (nh * (n - lo)) as u64;
             }
-            // Miroir VRAM : UNE copie contiguë par couche pour tout le lot,
-            // après la boucle des jetons. La placer dans la boucle copiait `t`
-            // positions à partir de la position du jeton — recouvrement, et une
-            // copie par jeton au lieu d'une par lot.
-            KvCache::miroir_gpu(self.kv_gpu.as_deref_mut(), l, &self.kv[l], pos0, t);
             self.prof[2] += t_att.elapsed().as_secs_f64();
             let t_ffn = Instant::now();
             // 4. projection de sortie du lot, résidu, norme du FFN
@@ -2378,6 +2537,31 @@ impl Model {
                 for v in down.iter_mut() { *v = 0.0; }
                 for &e in &idx {
                     let w_exp = sc_e[e as usize] * inv_k;
+                    // ---- experts MXFP4 sur le GPU ----
+                    // Le noyau MXFP4 est BIT À BIT identique au chemin CPU
+                    // (écart mesuré 0,00e0 sur un expert) : seule la vitesse
+                    // change, la perplexité ne peut pas bouger. Les poids
+                    // montent une fois et restent (cache LRU), sinon on
+                    // repasserait 4,4 Mo sur le bus à chaque jeton.
+                    let mut fait = false;
+                    if moe.gate.src == crate::list::Source::Mxfp4 {
+                        if let (Some(machine), Some(cache)) =
+                                (crate::gpu::instance(), self.cache_experts.as_mut()) {
+                            if let Some((mg, mu, md)) = cache.obtenir(machine, l, e as usize,
+                                                                      &moe.gate, &moe.up, &moe.down) {
+                                fait = Self::expert_mxfp4_gpu(
+                                    machine, mg, mu, md, &hn, &mut gate, &mut up, &mut exp_out,
+                                    &mut down, w_exp, moe, e as usize, cfg.ffn_exp, h,
+                                    self.act_levels, self.act_thresh, tk(4), tk(5), tk(6),
+                                    self.act_renorm, cfg.ffn_act_oss, &mut scratch);
+                            }
+                        }
+                    }
+                    if fait {
+                        Self::compter_neurones(&mut self.profil_neurones, largeur_profil,
+                                               l, &gate[..cfg.ffn_exp]);
+                        continue;
+                    }
                     let mg = moe.gate.expert(e as usize);
                     Self::matvec_q4(pool, &mg, &hn, &mut gate, self.act_levels,
                                     self.act_thresh, tk(4), self.act_renorm, &mut scratch,

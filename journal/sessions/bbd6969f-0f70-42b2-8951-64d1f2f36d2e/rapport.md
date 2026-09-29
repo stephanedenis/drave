@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 27.3 h |
+| Durée | 27.7 h |
 | Tours | 9 |
-| Messages | 1046 |
-| Appels d'outils | 1039 |
-| Fichiers touchés | 35 |
-| Commandes | 780 |
+| Messages | 1075 |
+| Appels d'outils | 1068 |
+| Fichiers touchés | 36 |
+| Commandes | 806 |
 | Sous-agents | 1 |
-| Commits | 34 |
+| Commits | 35 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -401,7 +401,7 @@ La section « Ce qu'il faut faire en
 
 ### Tour 9 — fais tous ces 6 nouveaux chantiers
 
-*35 appels d'outils.* Actions notables :
+*64 appels d'outils.* Actions notables :
 
 - create_goal
 - todo_write
@@ -417,11 +417,11 @@ La section « Ce qu'il faut faire en
 - bash — Check lot is in scope in run_infer
 - bash — Build with batched prefill
 - bash — Read run_infer destructuring
-- … et 21 autres
+- … et 49 autres
 
 **Synthèse produite :**
 
-⏵ Témoin 1,5B : 6/6 sondes trouvées ; je mesure le noyau vectorisé à 1 M
+⏵ Chantier 2b : cache VRAM des experts MXFP4 avec éviction LRU
 
 ## 3. Travail accompli
 
@@ -464,6 +464,7 @@ La section « Ce qu'il faut faire en
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-prefill-par-lots.md` | 1 | 2 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src/engine.rs` | 0 | 4 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/gpu/qtrinet_gpu.cu` | 0 | 1 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-aiguille.md` | 1 | 0 |
 
 ### Sous-agents lancés
 
@@ -511,7 +512,7 @@ La section « Ce qu'il faut faire en
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 740 autres
+- … et 766 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -639,7 +640,7 @@ La section « Ce qu'il faut faire en
 
 ## 5. Erreurs rencontrées
 
-47 sorties en erreur ou divergentes. Les premières :
+50 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : a8f2635f8 docs: record which models this box is good at, and why src/llama-hparams.cpp:8:void llama_hparams::set_swa_pattern(uint32_t n_pattern, bool dense_first) { src/llama-hparams.h:308:    void se
 - **T1** : 511 tokens notés — perplexité cumulée 247.031  (4.9 tok/s) === perplexité 247.0308 sur 511 tokens (0 événements, 104.5 s) ===  ### B3 harmony assistant 511 --- ref --- 0.0 0.0 0:00 ls: cannot access '
@@ -693,4 +694,5 @@ La section « Ce qu'il faut faire en
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p='docs/contexte-long.md'; s=open(p).read() old = """Il reste, sur ce chemin : le **dépaq
 - porte gpt-oss : préciser qu'elle se mesure SANS QT_GPU  Mesuré deux fois, même binaire, même commande :   sans QT_GPU   : 15,1757 (le chiffre de contrôle du dép
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p='docs/contexte-long.md'; s=open(p).read() old = """2. **Le format ne change presque rie
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A tools/aiguille.py reports/rapport-aiguille.md qtrinet-core/src && git commit -q -F - <<'EOF' &&
 

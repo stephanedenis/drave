@@ -16984,3 +16984,461 @@ KV 4   GPU 256 tranches :      7.4 ms par passe  (45.4 Go/s de KV, 7.4 ms × 24 
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='docs/contexte-long.md'; s=open(p).read()\nold = \"\"\"2. **Le format ne change presque rien au temps GPU** (13,2 à 15,0 ms à 1 M pour\n   f32, int8 et int4) : le noyau n'est pas borné par la VRAM mais par la\n    … [2688 caractères tronqués]`
+
+  ```
+docs mis à jour
+a64328d GPU : dépaquetage vectorisé du noyau d'attention (×1,8 à ×2,3 à 1 M de clés)
+  ```
+
+- **todo_write** `{"todos": [{"content": "Chantier 1 : aiguille long contexte (témoin 1,5B = 6/6 ; reste 30B + gpt-oss)", "status": "in_progress"}, {"content": "Chantier 2a : dépaquetage vectorisé du noyau d'attention", "status": "completed"}, {"content": "Chantier 2b : brancher MXFP4 + résidence des experts", "statu … [607 caractères tronqués]`
+
+  ```
+Updated todo list: 7 pending, 2 in progress, 1 completed.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/aiguille_campagne.sh <<'EOF'\n#!/bin/bash\n# Campagne d'aiguille v2 : modèle capable (Qwen3-30B-A3B) puis modèle fort à\n# contexte long (gpt-oss, avec le KV déporté pour rendre l'attention plate).\nset -u\ncd /home/stepha … [928 caractères tronqués]`
+
+  ```
+started background job bash-37
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && sed -n '90,140p' src/model.rs && grep -n \"expert(e)\\|fn expert\" src/model.rs src/list.rs | head", "description": "Inspect MoE structure and expert accessor"}`
+
+  ```
+fn charger_moe(g: &Gguf, l: usize, n_expert: usize) -> Option<Moe> {
+    if n_expert == 0 { return None; }
+    let p = |s: &str| format!("blk.{l}.{s}");
+    let vue = |nom: &str| -> Option<Vue4> {
+        let t = g.tensor(nom)?;
+        if t.dims.len() < 3 || t.dims[0] as usize != n_expert { return None; }
+        let src = source_de(t.ttype)?;
+        let (n_out, n_in) = (t.dims[1] as usize, t.dims[2] as usize);
+        let bloc = if t.ttype == crate::gguf::GGML_Q4_K || t.ttype == crate::gguf::GGML_Q6_K { 256 } else { 32 };
+        if n_in % bloc != 0 { return None; }
+        Some(Vue4 { base: g.data_ptr(nom)?, n_out, n_in, nb: n_in / bloc, src })
+    };
+    let gate = vue(&p("ffn_gate_exps.weight"))?;
+    let up = vue(&p("ffn_up_exps.weight"))?;
+    let down = vue(&p("ffn_down_exps.weight"))?;
+    let routeur = g.dequant(&p("ffn_gate_inp.weight"));
+    assert_eq!(routeur.len(), n_expert * gate.n_in, "routeur de taille inattendue");
+    // Expert partagé (Qwen3-MoE d'origine, DeepSeek) : toujours actif.
+    let shexp = match (vue(&p("ffn_gate_shexp.weight")), vue(&p("ffn_up_shexp.weight")),
+                       vue(&p("ffn_down_shexp.weight"))) {
+        (Some(a), Some(b), Some(
+… [1375 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && sed -n '140,175p' src/model.rs && grep -n \"fn proj_mxfp4\" -A 3 src/gpu.rs | head -6 && grep -n \"fn charger_mxfp4\" -A 3 src/gpu.rs | head -6", "description": "Read Vue4::expert and MXFP4 API"}`
+
+  ```
+pub nb: usize,
+    pub src: crate::list::Source,
+}
+
+impl Vue4 {
+    fn pas(&self) -> usize {
+        use crate::list::Source::*;
+        match self.src {
+            Q4_K => crate::gguf::TAILLE_Q4K,
+            Q6_K => crate::gguf::TAILLE_Q6K,
+            Mxfp4 => 17,
+            Q4_0 => 18,
+            Propre => 0,
+        }
+    }
+
+    /// Matrice 4 bits de l'expert `e`, **empruntée** au fichier.
+    fn expert(&self, e: usize) -> crate::list::DenseQ4 {
+        let base = unsafe { self.base.add(e * self.n_out * self.nb * self.pas()) };
+        unsafe {
+            match self.src {
+                crate::list::Source::Q4_K =>
+                    crate::list::DenseQ4::emprunter_q4k(base, self.n_out, self.n_in, self.nb),
+                crate::list::Source::Q6_K =>
+                    crate::list::DenseQ4::emprunter_q6k(base, self.n_out, self.n_in, self.nb),
+                crate::list::Source::Mxfp4 =>
+                    crate::list::DenseQ4::emprunter(base, self.n_out, self.n_in, self.nb, true),
+                _ => crate::list::DenseQ4::emprunter(base, self.n_out, self.n_in, self.nb, false),
+            }
+        }
+    }
+}
+
+unsafe impl Send for Vue4 {}
+unsafe impl Sync for Vue4 {}
+… [463 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && awk 'NR>=2380 && NR<=2470 {printf \"%4d|%s\\n\", NR, $0}' src/model.rs | grep -nE \"moe|expert|routeur|groupes|for |Vec\" | head -25", "description": "Find per-token MoE computation"}`
+
+  ```
+2:2381|                    let mg = moe.gate.expert(e as usize);
+5:2384|                                    moe.biais_gate.as_ref().map(|b| &b[e as usize * moe.n_ff..]));
+6:2385|                    let mu = moe.up.expert(e as usize);
+9:2388|                                    moe.biais_up.as_ref().map(|b| &b[e as usize * moe.n_ff..]));
+13:2392|                    let md = moe.down.expert(e as usize);
+20:2399|                                    moe.biais_down.as_ref().map(|b| &b[e as usize * h..]));
+21:2400|                    for i in 0..h { down[i] += w_exp * exp_out[i]; }
+23:2402|                if let Some((sg, su, sd)) = moe.shexp.as_ref() {
+24:2403|                    let mg = sg.expert(0);
+27:2406|                    let mu = su.expert(0);
+31:2410|                    let md = sd.expert(0);
+34:2413|                    for i in 0..h { down[i] += exp_out[i]; }
+37:2416|                    if gl == l { for v in down.iter_mut() { *v *= gg; } }
+39:2418|                for i in 0..h { x[i] = o[i] + down[i]; }
+65:2444|                    for i in 0..h { g += pt.u[i] * hn[i]; uu += pt.v[i] * hn[i]; }
+67:2446|                    for i in 0..h { down[i] += pt.d[i] * a; }
+71:2450|        
+… [247 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src/model.rs", "limit": 30, "offset": 2372}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src/model.rs</path>
+<type>file</type>
+<content>
+2372:                 }
+2373:                 if self.profil_experts.is_some() {
+2374:                     let base = l * ne;
+2375:                     let p = self.profil_experts.as_mut().unwrap();
+2376:                     for &e in &idx { p[base + e as usize] += 1; }
+2377:                 }
+2378:                 for v in down.iter_mut() { *v = 0.0; }
+2379:                 for &e in &idx {
+2380:                     let w_exp = sc_e[e as usize] * inv_k;
+2381:                     let mg = moe.gate.expert(e as usize);
+2382:                     Self::matvec_q4(pool, &mg, &hn, &mut gate, self.act_levels,
+2383:                                     self.act_thresh, tk(4), self.act_renorm, &mut scratch,
+2384:                                     moe.biais_gate.as_ref().map(|b| &b[e as usize * moe.n_ff..]));
+2385:                     let mu = moe.up.expert(e as usize);
+2386:                     Self::matvec_q4(pool, &mu, &hn, &mut up, self.act_levels,
+2387:                                     self.act_thresh, tk(5), self.act_renorm, &mut scratch,
+2388:                          
+… [1193 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && awk 'NR<2400 && /^    (pub )?fn /{l=NR\": \"$0} END{}' src/model.rs; awk 'NR<=2400 && /^    (pub )?fn /{l=NR\": \"$0} END{print l}' src/model.rs; grep -n \"fn matvec_q4\" -A 12 src/model.rs | head -18", "description": "F … [38 caractères tronqués]`
+
+  ```
+2037:     pub fn forward(&mut self, tok: u32, pos: usize) -> Vec<f32> {
+1245:    fn matvec_q4(pool: &mut Pool, m: &crate::list::DenseQ4, x: &[f32], out: &mut [f32],
+1246-                 levels: f32, thresh: f32, topk: usize, renorm: bool,
+1247-                 scratch: &mut Vec<f32>, biais: Option<&[f32]>) {
+1248-        let Some((sv, sx)) = Self::quant_scratch(x, levels, thresh, topk, renorm, scratch) else {
+1249-            for v in out[..m.n_out].iter_mut() { *v = 0.0; }
+1250-            return;
+1251-        };
+1252-        let mut xd = vec![0i32; x.len()];
+1253-        for (&i, &v) in sv.idx.iter().zip(sv.val.iter()) { xd[i as usize] = v; }
+1254-        let y = pool.matvec_dense_q4(m, &xd, sx);
+1255-        match biais {
+1256-            Some(b) => for o in 0..m.n_out { out[o] = y[o] + b[o]; },
+1257-            None => out[..m.n_out].copy_from_slice(&y[..m.n_out]),
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && awk 'NR>=2020 && NR<=2045 {printf \"%4d|%s\\n\", NR, $0}' src/model.rs", "description": "Inspect function boundary"}`
+
+  ```
+2020|                for i in 0..t {
+2021|                    for oo in 0..h {
+2022|                        down[i * h + oo] = yl[oo * t + i];
+2023|                        x[i * h + oo] = o[i * h + oo] + down[i * h + oo];
+2024|                    }
+2025|                }
+2026|            }
+2027|            self.prof[3] += t_ffn.elapsed().as_secs_f64();
+2028|        }
+2029|        for i in 0..t {
+2030|            let r = x[i * h..(i + 1) * h].to_vec();
+2031|            Self::rmsnorm(&r, &self.out_norm, self.cfg.eps, &mut hn[i * h..(i + 1) * h]);
+2032|        }
+2033|        (0..t).map(|i| hn[i * h..(i + 1) * h].to_vec()).collect()
+2034|    }
+2035|
+2036|    /// Un token, une position. Retourne l'état caché après la dernière norme.
+2037|    pub fn forward(&mut self, tok: u32, pos: usize) -> Vec<f32> {
+2038|        assert!(pos < self.ctx, "contexte dépassé ({pos} ≥ {})", self.ctx);
+2039|        // lus AVANT l'emprunt destructuré : la parcimonie par projection
+2040|        let tkp = self.act_topk_proj;
+2041|        let tkg = self.act_topk;
+2042|        let tk = |p: usize| if tkp[p] > 0 { tkp[p] } else { tkg };
+2043|        // Lus AVANT l'emprunt destructuré (comme la parcimonie par proje
+… [115 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Chantier 2b : cache VRAM des experts MXFP4 avec éviction LRU
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && python3 - <<'PY'\np='src/model.rs'; s=open(p).read()\n\n# 1) vue : accès aux octets bruts d'un expert\ns = s.replace(\"\"\"    /// Matrice 4 bits de l'expert `e`, **empruntée** au fichier.\"\"\",\n\"\"\"    /// Octets br … [3714 caractères tronqués]`
+
+  ```
+cache d'experts posé
+    Finished `release` profile [optimized] target(s) in 0.01s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && awk 'NR>=2037 && NR<=2410 && /let Model \\{|self\\.prof/ {print NR\": \"$0}' src/model.rs | head -8", "description": "Check for destructuring inside forward"}`
+
+  ```
+2082:             self.prof[3] += t_ffn.elapsed().as_secs_f64();
+2100:         self.profil_jetons += 1;
+2101:         let Model { g, cfg, layers, out_norm, pool, kv, events, attn_events, kv_gpu,
+2154:             self.prof[0] += tm.elapsed().as_secs_f64();
+2188:             self.prof[1] += tr.elapsed().as_secs_f64();
+2248:                 self.prof[4] += t_scores.elapsed().as_secs_f64();
+2266:                 self.prof[5] += t_soft.elapsed().as_secs_f64();
+2377:             self.prof[2] += ta.elapsed().as_secs_f64();
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && python3 - <<'PY'\np='src/model.rs'; s=open(p).read()\n\n# méthode d'obtention (upload + éviction LRU)\ns = s.replace(\"\"\"    pub fn taux(&self) -> f64 {\n        if self.demandes == 0 { 0.0 } else { 100.0 * (1.0 - self … [10358 caractères tronqués]`
+
+  ```
+branche GPU des experts posée
+error[E0599]: no method named `ffn_act_oss` found for reference `&Moe` in the current scope
+    --> src/model.rs:1362:46
+     |
+1362 |         Self::activation(gate, up, n_ff, moe.ffn_act_oss());
+     |                                              ^^^^^^^^^^^ method not found in `&Moe`
+
+warning: unused variable: `arch`
+   --> src/model.rs:878:21
+    |
+--
+error: could not compile `qtrinet-core` (bin "qtrinet-core") due to 1 previous error; 8 warnings emitted
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && python3 - <<'PY'\np='src/model.rs'; s=open(p).read()\n# passer le drapeau d'activation en paramètre plutôt que de le lire sur Moe\ns = s.replace(\"\"\"                        down: &mut [f32], w_exp: f32, moe: &Moe, e: u … [1326 caractères tronqués]`
+
+  ```
+drapeau d'activation passé
+    Finished `release` profile [optimized] target(s) in 0.01s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && tail -3 /tmp/aiguille_campagne.log 2>/dev/null; pgrep -x qtrinet-core >/dev/null && echo \"[campagne en cours]\" || echo \"[libre]\"", "description": "Check needle campaign progress"}`
+
+  ```
+### Qwen3-30B-A3B, contexte 2048, 3 profondeurs
+[campagne en cours]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && PR=\"Recopie exactement ce texte : le chat dort sur le tapis rouge.\" && echo \"== sans cache d'experts ==\" && timeout 900 ./qtrinet-core/target/release/qtrinet-core /home/stephane/FastNVMe/models/gpt-oss-120b-MXFP4.gguf --infer --c … [522 caractères tronqués]`
+
+  ```
+== sans cache d'experts ==
+--- ids générés : [279, 2486, 7999, 29710, 1512, 505, 131304, 56930, 13, 279, 94691, 505, 279, 8438, 42899, 661]
+généré  : 16 tokens en 11.376 s  (1.41 tok/s)
+postes (ms/token) : matvec-attn 40.3 | rope 3.2 | attention 2.7 | matvec+mlp 243.0 | total mesuré 289.1
+== avec cache d'experts ==
+[gpu] cache d'experts : budget 8.0 Go de VRAM (LRU), éviction par (couche, expert)
+--- ids générés : [279, 2486, 7999, 29710, 1512, 505, 131304, 56930, 13, 279, 94691, 505, 279, 94691, 505, 53492]
+généré  : 16 tokens en 3.201 s  (5.00 tok/s)
+postes (ms/token) : matvec-attn 26.8 | rope 3.2 | attention 2.7 | matvec+mlp 187.2 | total mesuré 219.9
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && grep -n \"généré  : \\|événements : \" src/main.rs | head -5 && sed -n '/généré  : /,+6p' src/main.rs | head -12", "description": "Find generation stats print site"}`
+
+  ```
+705:    println!("généré  : {} tokens en {:.3} s  ({:.2} tok/s)",
+707:    println!("événements : {} au total, {:.1} par token",
+1874:        println!("    part de l'attention dans le flux d'événements : {:.1} %",
+1879:        println!("    part de l'attention dans le flux d'événements : — (aucun événement)");
+    println!("généré  : {} tokens en {:.3} s  ({:.2} tok/s)",
+             st.n_gen, st.gen_s, st.n_gen as f64 / st.gen_s);
+    println!("événements : {} au total, {:.1} par token",
+             st.events, st.events as f64 / (st.n_prompt + st.n_gen) as f64);
+    if let Some(hb) = mdl.hebb.as_ref() {
+        use std::io::Write;
+        let mut f = std::fs::File::create(&hebb_out).expect("création du fichier hebbien");
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && python3 - <<'PY'\np='src/main.rs'; s=open(p).read()\n# un point unique d'impression des statistiques du cache d'experts\ns = s.replace(\"\"\"    println!(\"généré  : {} tokens en {:.3} s  ({:.2} tok/s)\",\n             s … [1375 caractères tronqués]`
+
+  ```
+statistiques du cache imprimées
+    Finished `release` profile [optimized] target(s) in 0.01s
+  ```
+
+- **bash** `{"command": "tail -4 /tmp/aiguille_campagne.log 2>/dev/null; pgrep -x qtrinet-core >/dev/null && echo \"[campagne en cours]\" || echo \"[libre]\"", "description": "Check campaign progress"}`
+
+  ```
+### Qwen3-30B-A3B, contexte 2048, 3 profondeurs
+[campagne en cours]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && awk 'NR>=1740 && NR<=1760 {printf \"%4d|%s\\n\", NR, $0}' src/model.rs && echo \"...\" && awk 'NR>=1795 && NR<=1835 {printf \"%4d|%s\\n\", NR, $0}' src/model.rs", "description": "Read forward_lot attention region"}`
+
+  ```
+1740|    pub fn forward_lot(&mut self, toks: &[u32], pos0: usize) -> Vec<Vec<f32>> {
+1741|        let t = toks.len();
+1742|        if t == 0 { return Vec::new(); }
+1743|        if t == 1 {
+1744|            return vec![self.forward(toks[0], pos0)];
+1745|        }
+1746|        // Les modèles à experts suivent le même chemin par lots, avec en plus le
+1747|        // regroupement des jetons par expert (voir la section MoE plus bas).
+1748|        let h = self.cfg.hidden;
+1749|        let hd = self.cfg.head_dim;
+1750|        let nh = self.cfg.n_head;
+1751|        let nkv = self.cfg.n_kv_head;
+1752|        let rep = nh / nkv;
+1753|        let ctx = self.ctx;
+1754|        // --- activations du lot, en i32 quantifié (une seule quantification de
+1755|        //     l'entrée normative sert à q, k, v ET au FFN)
+1756|        let mut x = vec![0f32; t * h];
+1757|        for (i, &tok) in toks.iter().enumerate() {
+1758|            let r = self.g.row_f32("token_embd.weight", tok as usize, h);
+1759|            x[i * h..(i + 1) * h].copy_from_slice(&r);
+1760|        }
+...
+1795|        let quantifier = |src: &[f32], dst: &mut [i32], ech: &mut [f32],
+1796|                          niveaux: f32, seuil: f
+… [2131 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && awk 'NR>=1856 && NR<=1900 {printf \"%4d|%s\\n\", NR, $0}' src/model.rs", "description": "Locate KV write and attention start in forward_lot"}`
+
+  ```
+1856|                let qi = &mut q[i * nq..(i + 1) * nq];
+1857|                let ki = &mut k[i * nkv * hd..(i + 1) * nkv * hd];
+1858|                let vi = &v[i * nkv * hd..(i + 1) * nkv * hd];
+1859|                if lay.q_norm.is_some() || lay.k_norm.is_some() {
+1860|                    if let Some(w) = lay.q_norm.as_ref() {
+1861|                        for hh in 0..nh {
+1862|                            let tt = &mut qi[hh * hd..(hh + 1) * hd];
+1863|                            Self::rmsnorm(tt, w, self.cfg.eps, &mut tmp);
+1864|                            tt.copy_from_slice(&tmp);
+1865|                        }
+1866|                    }
+1867|                    if let Some(w) = lay.k_norm.as_ref() {
+1868|                        for hh in 0..nkv {
+1869|                            let tt = &mut ki[hh * hd..(hh + 1) * hd];
+1870|                            Self::rmsnorm(tt, w, self.cfg.eps, &mut tmp);
+1871|                            tt.copy_from_slice(&tmp);
+1872|                        }
+1873|                    }
+1874|                }
+1875|                match self.cfg.yarn {
+1876|                    Some((f, bf, bl, orig, ms)) => {
+1877|                        Self::rope_
+… [1439 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && awk 'NR>=1899 && NR<=1945 {printf \"%4d|%s\\n\", NR, $0}' src/model.rs", "description": "Read batched attention branch"}`
+
+  ```
+1899|                // Chemin GROUPÉ dès que possible : `rep` têtes de requête
+1900|                // partagent une tête KV, donc la clé (et la valeur) ne doivent
+1901|                // être déquantifiées qu'UNE fois par groupe. Le chemin par tête
+1902|                // les relisait `rep` fois — mesuré ×2,2 sur ce poste.
+1903|                let groupe = fen == 0 && self.attn_topk == 0 && rep > 1;
+1904|                if groupe {
+1905|                    for kvh in 0..nkv {
+1906|                        let h0 = kvh * rep;
+1907|                        let h1 = (h0 + rep).min(nh);
+1908|                        for tt in 0..n {
+1909|                            kvc.cle(kvh, tt, &mut kd);
+1910|                            for hh in h0..h1 {
+1911|                                let qh = &qi[hh * hd..(hh + 1) * hd];
+1912|                                sc2[hh * ctx + tt] = Self::dot8(qh, &kd) * scale;
+1913|                            }
+1914|                        }
+1915|                        for hh in h0..h1 {
+1916|                            let row = &mut sc2[hh * ctx..hh * ctx + n];
+1917|                            let mut mx = f32::NEG_INFINITY;
+1918|                            f
+… [1673 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && python3 - <<'PY'\np='src/model.rs'; s=open(p).read()\n\n# miroir VRAM position par position dans la boucle des jetons du lot\nold = \"\"\"                {\n                    let kvc = &mut self.kv[l];\n                … [4504 caractères tronqués]`
+
+  ```
+attention par lots sur GPU branchée
+error[E0502]: cannot borrow `q` as immutable because it is also borrowed as mutable
+    --> src/model.rs:1922:48
+     |
+1856 |                 let qi = &mut q[i * nq..(i + 1) * nq];
+     |                               - mutable borrow occurs here
+...
+1922 |                         if machine.attn_kv(m, &q[i * nq..(i + 1) * nq], n, scale,
+     |                                                ^ immutable borrow occurs here
+...
+--
+error: could not compile `qtrinet-core` (bin "qtrinet-core") due to 1 previous error; 9 warnings emitted
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && python3 - <<'PY'\np='src/model.rs'; s=open(p).read()\n# `qi` emprunte q mutuellement : le noyau lit une copie des requêtes du jeton\ns = s.replace(\"\"\"                    let part = &mut self.attn_gpu_part;\n           … [1444 caractères tronqués]`
+
+  ```
+copie des requêtes
+error[E0502]: cannot borrow `q` as immutable because it is also borrowed as mutable
+    --> src/model.rs:1922:46
+     |
+1856 |                 let qi = &mut q[i * nq..(i + 1) * nq];
+     |                               - mutable borrow occurs here
+...
+1922 |                     let requetes: Vec<f32> = q[i * nq..(i + 1) * nq].to_vec();
+     |                                              ^ immutable borrow occurs here
+...
+--
+error: could not compile `qtrinet-core` (bin "qtrinet-core") due to 1 previous error; 9 warnings emitted
+error: could not compile `qtrinet-core` (bin "qtrinet-core") due to 1 previous error; 9 warnings emitted
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && python3 - <<'PY'\np='src/model.rs'; s=open(p).read()\n# 1) tampon dédié aux requêtes du lot (le noyau ne lit que lui)\nold = \"\"\"        let mut att = vec![0f32; t * nh * hd];\"\"\"\nassert old in s\ns = s.replace(old, … [2167 caractères tronqués]`
+
+  ```
+tampon qgpu posé
+    Finished `release` profile [optimized] target(s) in 0.01s
+  ```
+
+- **bash** `{"command": "tail -5 /tmp/aiguille_campagne.log 2>/dev/null; pgrep -x qtrinet-core >/dev/null && echo \"[campagne en cours]\" || echo \"[libre]\"", "description": "Check campaign before measuring"}`
+
+  ```
+### Qwen3-30B-A3B, contexte 2048, 3 profondeurs
+[campagne en cours]
+  ```
+
+- **bash** `{"command": "ps -o pid,etime,time,rss,args -p $(pgrep -x qtrinet-core | head -1) 2>/dev/null | cut -c1-180; ps -o pid,etime,time,args -p $(pgrep -f \"aiguille.py\" | head -1) 2>/dev/null | cut -c1-120", "description": "Check engine process state"}`
+
+  ```
+PID     ELAPSED     TIME   RSS COMMAND
+3708185       08:48 02:18:17 19109136 ./qtrinet-core/target/release/qtrinet-core /home/stephane/FastNVMe/models/Qwen3-30B-A3B-Instruct-2507-Q4_K_M.gguf --infer --chat --flux --prom
+    PID     ELAPSED     TIME COMMAND
+3708184       08:48 00:00:00 python3 tools/aiguille.py /home/stephane/FastNVMe/models/Qwen3-30B-A3B-Instruct-2507-Q4_K_M
+  ```
+
+- **write** `{"content": "# L'aiguille dans la botte de foin : où en est la mesure de qualité\n\nLa perplexité ne dit **pas** si un modèle retrouve une information. Ce rapport\nraconte la remise en route de la seule mesure qui le dise, et ce qu'elle a\nimmédiatement appris.\n\n## 1. Ce qui n'allait pas dans la v … [4385 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-aiguille.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "sleep 540; tail -8 /tmp/aiguille_campagne.log 2>/dev/null; pgrep -x qtrinet-core >/dev/null && echo \"[en cours]\" || echo \"[libre]\"", "description": "Wait for campaign probes", "timeoutMs": 600000}`
+
+  ```
+### Qwen3-30B-A3B, contexte 2048, 3 profondeurs
+aiguille v2 : /home/stephane/FastNVMe/models/Qwen3-30B-A3B-Instruct-2507-Q4_K_M.gguf
+  remplissage : data/wikitext2_test.txt (353778 caractères), fenêtres décalées
+  lot 256 · 40 jetons de réponse · GPU non
+ contexte  profondeur  trouvé  secondes  détail
+     2048        0.10     oui     667.6  prompt 2147 jetons
+[en cours]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && QT_GPU=1 QT_GPU_EXPERTS=1 QT_GPU_EXPERTS_GO=12 timeout 900 ./qtrinet-core/target/release/qtrinet-core /home/stephane/FastNVMe/models/gpt-oss-120b-MXFP4.gguf --ppl /tmp/ids_oss.txt --ctx 256 --dense --threads 16 --limit 512 2>&1 | gre … [108 caractères tronqués]`
+
+  ```
+[gpu] cache d'experts : budget 12.0 Go de VRAM (LRU), éviction par (couche, expert)
+     255 tokens notés — perplexité cumulée 13.711  (4.2 tok/s)  [fenêtre 1 : 255 notés, PPL 13.711]
+     510 tokens notés — perplexité cumulée 15.158  (4.2 tok/s)  [fenêtre 2 : 255 notés, PPL 16.758]
+[gpu] experts : 73728 demandes, 33904 manques (succès 54.0 %), 0 évictions, 10.64 Go montés sur le bus, 10.64 Go résidents
+=== perplexité 15.1584 sur 510 tokens (0 événements, 120.3 s) ===
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A tools/aiguille.py reports/rapport-aiguille.md qtrinet-core/src && git commit -q -F - <<'EOF' && git log --oneline -1\nChantier 1-2 : aiguille v2, experts MXFP4 en VRAM, attention par lots déportée\n\nAiguille (chantier 1)  … [1799 caractères tronqués]`

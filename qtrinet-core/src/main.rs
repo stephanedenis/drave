@@ -469,6 +469,17 @@ fn analyser(args: &[String]) -> Options {
     o
 }
 
+/// Ce que le cache d'experts a réellement attrapé : sans ce chiffre, un gain de
+/// débit ne dit pas si c'est le cache ou le hasard du routage.
+fn stats_experts(mdl: &model::Model) {
+    if let Some(c) = mdl.cache_experts.as_ref() {
+        println!("[gpu] experts : {} demandes, {} manques (succès {:.1} %), {} évictions, \
+{:.2} Go montés sur le bus, {:.2} Go résidents",
+                 c.demandes, c.manques, c.taux(), c.evictions,
+                 c.octets_envoyes as f64 / 1e9, c.octets as f64 / 1e9);
+    }
+}
+
 fn run_infer(opt: Options) {
     // Une seule analyse de la ligne de commande (voir `analyser`) : chaque mode
     // ne fait plus que déstructurer ce dont il a besoin.
@@ -704,6 +715,7 @@ fn run_infer(opt: Options) {
              st.prompt_s * 1e3 / st.n_prompt.max(1) as f64);
     println!("généré  : {} tokens en {:.3} s  ({:.2} tok/s)",
              st.n_gen, st.gen_s, st.n_gen as f64 / st.gen_s);
+    stats_experts(&mdl);
     println!("événements : {} au total, {:.1} par token",
              st.events, st.events as f64 / (st.n_prompt + st.n_gen) as f64);
     if let Some(hb) = mdl.hebb.as_ref() {
@@ -1863,6 +1875,7 @@ fn run_ppl(opt: Options) {
                      hb.log.len() / cfg_dims(&mdl), cfg_dims(&mdl), perte.len());
         }
     }
+    stats_experts(&mdl);
     println!("\n=== perplexité {:.4} sur {} tokens ({} événements, {:.1} s) ===",
              ppl, n, mdl.events_total(), t0.elapsed().as_secs_f64());
     println!("    {:.1} tok/s effectifs (avant + tête)", n as f64 / t0.elapsed().as_secs_f64());
