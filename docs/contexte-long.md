@@ -130,8 +130,8 @@ Les courbes, mesurées sur gpt-oss-120b et le même corpus (une seule fenêtre,
 | 512 | **18,58** | 19,65 | 174,34 |
 | 1 024 | **46,94** | 71,35 | 417,65 |
 | 2 048 | **121,75** | 192,63 | 722,56 |
-| 4 096 | 170,78 | *en cours* | — |
-| 4 608 | — | *en cours* | 1 105,20 |
+| 4 096 | **170,78** | 400,13 | — |
+| 4 608 | — | 476,09 | 1 105,20 |
 
 Trois enseignements :
 
@@ -147,9 +147,18 @@ Trois enseignements :
    croisement mesuré : c'est une décision d'ingénierie prudente (au-delà de la
    fenêtre d'entraînement initiale, le RoPE simple extrapole).
 3. **Tous les régimes se dégradent fortement avec la longueur** (×9 pour le RoPE
-   simple entre 512 et 4 096). Ni la rotation ni la température ne l'expliquent
-   entièrement : le profil par profondeur (`--ppl-profil`) et la référence
-   llama.cpp à 2 048 départagent le modèle et le moteur (§7).
+   simple entre 512 et 4 096). Ce n'est pas le moteur : la référence llama.cpp,
+   mêmes 2 048 identifiants, un seul lot, YaRN déclaré, donne **714,83** contre
+   **722,56** chez nous (1,1 %). Le profil par profondeur (`--ppl-profil`) montre
+   que deux causes se superposent — le contenu du corpus (même tranche : 13,94 en
+   tête, 59,36 prise plus loin mais présentée à la position 0) et la position
+   (~facteur 7 de plus à sa place réelle).
+
+**Ce que la mesure ne dit pas** : la qualité des réponses générées. Sur une
+question à étapes (« 3 pommes par jour pendant 17 semaines »), les trois
+configurations partent en boucle de répétition en décodage glouton — le test ne
+discrimine donc rien sur la rotation, et il reste à le refaire avec
+`--rep-penalty`.
 
 
 

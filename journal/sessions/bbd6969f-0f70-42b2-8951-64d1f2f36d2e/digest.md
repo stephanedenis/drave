@@ -6820,3 +6820,225 @@ test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; fini
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -m \"Rotation : YaRN a retardement, et la temperature est la moitie nuisible\n\nLa politique de rotation se decide desormais par sequence, a la longueur du\ncontexte demande : RoPE simple tant que --ctx ti … [2094 caractères tronqués]`
+
+  ```
+d56d81f Rotation : YaRN a retardement, et la temperature est la moitie nuisible
+  ```
+
+- **bash** `{"command": "sleep 290; tail -4 /tmp/interp_long.log", "description": "Check R4096 result", "timeoutMs": 330000}`
+
+  ```
+### R4096 interpolation seule (comparer à 170,78 pour le RoPE simple)
+  ```
+
+- **bash** `{"command": "sleep 300; tail -4 /tmp/interp_long.log; ps -o pid,etime,pcpu -C qtrinet-core 2>/dev/null | tail -1", "description": "Wait for R4096", "timeoutMs": 340000}`
+
+  ```
+4095 tokens notés — perplexité cumulée 400.134  (3.8 tok/s)
+=== perplexité 400.1341 sur 4095 tokens (0 événements, 1091.2 s) ===
+
+### R4608 interpolation seule (comparer à 1 105,20 pour YaRN complet)
+2503927       02:05 1175
+  ```
+
+### 🤖 Assistant
+
+⏵ À 4 096 : interpolation seule = 400,1 contre 170,8 pour le RoPE simple. Je file la mesure à 8 192
+
+- **write** `{"content": "#!/bin/bash\n# Le RoPE simple survit-il au-delà de la fenêtre initiale (4 096) ? C'est LA\n# question qui fixe le seuil de bascule : jusqu'ici, il gagne à toutes les\n# longueurs mesurées, y compris à 4 096 (170,78 contre 400,13 pour\n# l'interpolation seule).\nset -u\ncd /home/stephane … [956 caractères tronqués]`
+
+  ```
+<path>/tmp/audela_4096.sh</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "chmod +x /tmp/audela_4096.sh && (nohup /tmp/audela_4096.sh > /tmp/audela_4096.out 2>&1 &); sleep 2; echo \"en file après interp_long\"; tail -2 /tmp/interp_long.log", "description": "Queue 8192 measurements"}`
+
+  ```
+en file après interp_long
+
+### R4608 interpolation seule (comparer à 1 105,20 pour YaRN complet)
+  ```
+
+- **bash** `{"command": "sleep 300; tail -8 /tmp/interp_long.log", "description": "Check R4608 and generation runs", "timeoutMs": 340000}`
+
+  ```
+### R4096 interpolation seule (comparer à 170,78 pour le RoPE simple)
+    4095 tokens notés — perplexité cumulée 400.134  (3.8 tok/s)
+=== perplexité 400.1341 sur 4095 tokens (0 événements, 1091.2 s) ===
+
+### R4608 interpolation seule (comparer à 1 105,20 pour YaRN complet)
+  ```
+
+- **bash** `{"command": "sleep 300; tail -6 /tmp/interp_long.log", "description": "Wait for R4608", "timeoutMs": 340000}`
+
+  ```
+### R4096 interpolation seule (comparer à 170,78 pour le RoPE simple)
+    4095 tokens notés — perplexité cumulée 400.134  (3.8 tok/s)
+=== perplexité 400.1341 sur 4095 tokens (0 événements, 1091.2 s) ===
+
+### R4608 interpolation seule (comparer à 1 105,20 pour YaRN complet)
+  ```
+
+- **bash** `{"command": "sleep 300; tail -6 /tmp/interp_long.log; ps -o pid,etime -C qtrinet-core 2>/dev/null | tail -1", "description": "Wait for R4608 completion", "timeoutMs": 340000}`
+
+  ```
+### R4096 interpolation seule (comparer à 170,78 pour le RoPE simple)
+    4095 tokens notés — perplexité cumulée 400.134  (3.8 tok/s)
+=== perplexité 400.1341 sur 4095 tokens (0 événements, 1091.2 s) ===
+
+### R4608 interpolation seule (comparer à 1 105,20 pour YaRN complet)
+2503927       17:43
+  ```
+
+### 🤖 Assistant
+
+⏵ Je complète les tableaux avec le point 4 096 (interpolation 400,1) pendant la passe 4 608
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport re\nfor p in ['docs/contexte-long.md','REPRISE.md','reports/rapport-gpt-oss-perplexite.md']:\n    s=open(p).read()\n    s=s.replace(\"| 4 096 | 170,78 | *en cours* | — |\",\"| 4 096 | **170,78** | 400,13 | —  … [506 caractères tronqués]`
+
+  ```
+docs/contexte-long.md:133:| 4 096 | **170,78** | 400,13 | — |
+REPRISE.md:190:| 4 096 | **170,78** | 400,13 | — |
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"1 024 | \\*\\*46,94\\*\\*\\|2 048 | \\*\\*121,75\\*\\*\\|4096 | \\*\\*170\" docs/contexte-long.md | head -4; grep -n \"interpolation seule\" reports/rapport-gpt-oss-perplexite.md | head -3", "description": "Verify report ta … [14 caractères tronqués]`
+
+  ```
+131:| 1 024 | **46,94** | 71,35 | 417,65 |
+132:| 2 048 | **121,75** | 192,63 | 722,56 |
+202:interpolation seule au-delà** ; `QT_YARN=1` rétablit le comportement de
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-gpt-oss-perplexite.md", "new_string": "| longueur | RoPE simple | YaRN **sans** mscale | YaRN complet (référence) |\n|---|---|---|---|\n| 512 | **18,58** | 19,65 | 174,34 |\n| 1 024 | **46,94** | 71,35 | 417,65 |\n| 2 048 … [1438 caractères tronqués]`
+
+  ```
+Error: cannot edit "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-gpt-oss-perplexite.md": file changed since it was read — re-read the file, then retry
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-gpt-oss-perplexite.md", "limit": 26, "offset": 193}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-gpt-oss-perplexite.md</path>
+<type>file</type>
+<content>
+193: | 2 048 | **121,75** | 192,63 | 722,56 |
+194: 
+195: Retirer la température divise la perplexité par **8,9** à 512 jetons, 5,9 à
+196: 1 024, 3,8 à 2 048. C'est donc la température — pas l'interpolation — qui rend
+197: le YaRN déclaré catastrophique sur du texte brut, alors que HF, llama.cpp et
+198: l'implémentation officielle d'OpenAI l'appliquent toutes telle quelle (et que
+199: notre moteur les reproduit au chiffre près quand on la garde).
+200: 
+201: Le défaut du moteur devient donc : **RoPE simple sous la longueur initiale,
+202: interpolation seule au-delà** ; `QT_YARN=1` rétablit le comportement de
+203: référence pour qui veut comparer.
+204: 
+205: ### b. La dégradation avec la longueur n'est PAS un bug du moteur
+206: 
+207: La perplexité grimpe fortement avec la longueur (×9 pour le RoPE simple entre
+208: 512 et 4 096), et le profil par profondeur (`--ppl-profil`, ajouté pour ça) le
+209: localise :
+210: 
+211: ```
+212:    0-255 : 13,715      768-1023 : 204,466     2048-2303 : 183,081
+213:  256-511 : 25,142     1024-1279 : 292,803     2816-3071 : 212,3
+… [238 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-gpt-oss-perplexite.md", "new_string": "| 2 048 | **121,75** | 192,63 | 722,56 |\n| 4 096 | **170,78** | 400,13 | — |\n\nRetirer la température divise la perplexité par **8,9** à 512 jetons, 5,9 à\n1 024, 3,8 à 2 048. C'es … [1481 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-gpt-oss-perplexite.md has been updated successfully.
+  ```
+
+- **bash** `{"command": "sleep 240; tail -12 /tmp/interp_long.log", "description": "Check R4608 and generation outputs", "timeoutMs": 300000}`
+
+  ```
+### R4096 interpolation seule (comparer à 170,78 pour le RoPE simple)
+    4095 tokens notés — perplexité cumulée 400.134  (3.8 tok/s)
+=== perplexité 400.1341 sur 4095 tokens (0 événements, 1091.2 s) ===
+
+### R4608 interpolation seule (comparer à 1 105,20 pour YaRN complet)
+    4607 tokens notés — perplexité cumulée 476.089  (3.6 tok/s)
+=== perplexité 476.0894 sur 4607 tokens (0 événements, 1271.0 s) ===
+
+### génération : question à plusieurs étapes, trois configurations
+
+--- simple ---
+  ```
+
+### 🤖 Assistant
+
+⏵ Interpolation seule à 4 608 = 476,1 (contre 1 105,2 pour YaRN complet) : la température confirme
+
+- **bash** `{"command": "sleep 290; sed -n '/génération/,$p' /tmp/interp_long.log", "description": "Read generation comparison", "timeoutMs": 330000}`
+
+  ```
+### génération : question à plusieurs étapes, trois configurations
+
+--- simple ---
+
+Je suis désolé, mais je ne suis pas en mesure de répondre à votre question sans plus d'informations. Pouvez-vous s'il vous plaît me donner plus de détails sur ce que vous cherchez à savoir ?
+
+Je suis désolé, mais je ne suis pas en mesure de répondre à votre question sans plus d'informations. Pouvez-vous s'il vous plaît me donner plus de détails sur ce que vous cherchez
+
+Je suis désolé, mais je ne suis pas en mesure de répondre à votre question sans plus d'informations. Pouvez-vous s'il vous plaît me donner plus de détails sur ce que vous cherchez à savoir ?
+
+Je suis désolé, mais je ne suis pas en mesure de répondre à votre question sans plus d'informations.
+
+généré  : 220 tokens en 42.264 s  (5.21 tok/s)
+événements : 6318487 au total, 25895.4 par token
+postes (ms/token) : matvec-attn 30.1 | rope 2.8 | attention 9.1 | matvec+mlp 126.7 | total mesuré 168.7
+
+--- YaRN complet ---
+
+Voici
+
+Voici
+
+Voici
+
+
+
+généré  : 220 tokens en 44.148 s  (4.98 tok/s)
+événements : 8581090 au total, 35168.4 par token
+postes (ms/token) : matvec-attn 30.2 | rope 12.6 | attention 9.1 | matvec+mlp 126.2 | total mesuré 178.1
+
+-
+… [26 caractères tronqués]
+  ```
+
+- **bash** `{"command": "sleep 200; sed -n '/interpolation seule ---/,$p' /tmp/interp_long.log | head -14", "description": "Read third generation output", "timeoutMs": 240000}`
+
+  ```
+--- interpolation seule ---
+
+Je suis
+
+Je suis désolé, mais je ne vois toujours pas de texte à analyser. Pouvez-vous me fournir le texte que vous souhaitez que j'analyse ?
+
+Je
+
+
+
+généré  : 220 tokens en 43.758 s  (5.03 tok/s)
+événements : 6318487 au total, 25895.4 par token
+postes (ms/token) : matvec-attn 29.5 | rope 14.1 | attention 9.0 | matvec+mlp 124.1 | total mesuré 176.8
+  ```
+
+### 🤖 Assistant
+
+⏵ Je complète les tableaux avec 4 608 et je consigne la limite du test de génération
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='docs/contexte-long.md'\ns=open(p).read()\ns=s.replace(\"\"\"| 4 096 | **170,78** | 400,13 | — |\n| 4 608 | — | *en cours* | 1 105,20 |\"\"\",\n\"\"\"| 4 096 | **170,78** | 400,13 | — |\n| 4 608 | — | 476,09 | 1 1 … [1563 caractères tronqués]`
+
+  ```
+docs/contexte-long.md:134:| 4 608 | — | 476,09 | 1 105,20 |
+REPRISE.md:191:| 4 608 | — | 476,09 | 1 105,20 |
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -m \"Rotation : points 4096 et 4608, et la limite du test de generation\n\nInterpolation seule (sans temperature) : 400,13 a 4 096 et 476,09 a 4 608,\ncontre 1 105,20 pour le YaRN complet a 4 608. Le class … [461 caractères tronqués]`

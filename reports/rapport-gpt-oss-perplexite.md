@@ -191,12 +191,19 @@ maintenant les activer séparément (`QT_YARN_MSCALE`).
 | 512 | **18,58** | 19,65 | 174,34 |
 | 1 024 | **46,94** | 71,35 | 417,65 |
 | 2 048 | **121,75** | 192,63 | 722,56 |
+| 4 096 | **170,78** | 400,13 | — |
 
 Retirer la température divise la perplexité par **8,9** à 512 jetons, 5,9 à
 1 024, 3,8 à 2 048. C'est donc la température — pas l'interpolation — qui rend
 le YaRN déclaré catastrophique sur du texte brut, alors que HF, llama.cpp et
 l'implémentation officielle d'OpenAI l'appliquent toutes telle quelle (et que
 notre moteur les reproduit au chiffre près quand on la garde).
+
+Le RoPE simple gagne à **toutes** les longueurs mesurées, y compris à 4 096 —
+la longueur initiale du modèle. Le seuil de bascule du mode retardé n'est donc
+pas un croisement mesuré, mais une décision d'ingénierie prudente (au-delà de la
+fenêtre d'entraînement, le RoPE simple extrapole) ; la mesure qui la trancherait
+— le RoPE simple à 8 192 — est en cours (`/tmp/audela_4096.log`).
 
 Le défaut du moteur devient donc : **RoPE simple sous la longueur initiale,
 interpolation seule au-delà** ; `QT_YARN=1` rétablit le comportement de

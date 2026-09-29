@@ -187,7 +187,8 @@ ne survit que si toutes les clés partagent le même jeu de fréquences.
 | 512 | **18,58** | 19,65 | 174,34 |
 | 1 024 | **46,94** | 71,35 | 417,65 |
 | 2 048 | **121,75** | 192,63 | 722,56 |
-| 4 096 | 170,78 | (en cours) | — |
+| 4 096 | **170,78** | 400,13 | — |
+| 4 608 | — | 476,09 | 1 105,20 |
 
 1. **La mise à l'échelle de température (`mscale`) est la partie nuisible** : la
    retirer divise la perplexité par 8,9 / 5,9 / 3,8 selon la longueur. C'est

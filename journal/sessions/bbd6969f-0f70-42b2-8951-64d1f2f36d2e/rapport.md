@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 5.3 h |
+| Durée | 6.0 h |
 | Tours | 2 |
-| Messages | 400 |
-| Appels d'outils | 413 |
-| Fichiers touchés | 27 |
-| Commandes | 244 |
+| Messages | 417 |
+| Appels d'outils | 430 |
+| Fichiers touchés | 28 |
+| Commandes | 257 |
 | Sous-agents | 1 |
-| Commits | 3 |
+| Commits | 4 |
 | Compactages de contexte | 0 |
 
 ## 1. Ce qui a été demandé
@@ -79,7 +79,7 @@ Reste ouvert et documenté : le YaRN « à retardement » (au-delà de 4 096), p
 
 ### Tour 2 — prochaine étape?
 
-*96 appels d'outils.* Actions notables :
+*113 appels d'outils.* Actions notables :
 
 - ask_user_question
 - todo_write
@@ -95,11 +95,11 @@ Reste ouvert et documenté : le YaRN « à retardement » (au-delà de 4 096), p
 - bash — Launch the rotation boundary series
 - bash — Collect hardware facts for the 1M plan
 - bash — Read run_plan implementation
-- … et 79 autres
+- … et 95 autres
 
 **Synthèse produite :**
 
-⏵ Validation et commit de l'étape pendant que la passe 4 096 tourne
+⏵ Je complète les tableaux avec 4 608 et je consigne la limite du test de génération
 
 ## 3. Travail accompli
 
@@ -116,7 +116,7 @@ Reste ouvert et documenté : le YaRN « à retardement » (au-delà de 4 096), p
 | `/tmp/mesures_oss3.sh` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/ref_logits.cpp` | 0 | 3 |
 | `/tmp/mesures_oss4.sh` | 2 | 0 |
-| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-gpt-oss-perplexite.md` | 1 | 2 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-gpt-oss-perplexite.md` | 1 | 4 |
 | `/tmp/controles_oss.sh` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/REPRISE.md` | 0 | 11 |
 | `/tmp/controles2_oss.sh` | 1 | 0 |
@@ -134,6 +134,7 @@ Reste ouvert et documenté : le YaRN « à retardement » (au-delà de 4 096), p
 | `/tmp/mscale_yarn.sh` | 1 | 0 |
 | `/tmp/ref2048.sh` | 1 | 0 |
 | `/tmp/interp_long.sh` | 1 | 0 |
+| `/tmp/audela_4096.sh` | 1 | 0 |
 
 ### Sous-agents lancés
 
@@ -181,7 +182,7 @@ Reste ouvert et documenté : le YaRN « à retardement » (au-delà de 4 096), p
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 204 autres
+- … et 217 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -321,4 +322,5 @@ Reste ouvert et documenté : le YaRN « à retardement » (au-delà de 4 096), p
 - gpt-oss : biais attn_output et fenetre par couche corriges, reference llama.cpp  Deux bugs reels, trouves en reprenant REPRISE.md §6.a :  1. attn_output.bias et
 - REPRISE : chiffres gpt-oss exacts (ids 15,1757 / texte 15,0757)" && git log --oneline -3 && git status --short | head -3
 - Rotation : YaRN a retardement, et la temperature est la moitie nuisible  La politique de rotation se decide desormais par sequence, a la longueur du contexte de
+- Rotation : points 4096 et 4608, et la limite du test de generation  Interpolation seule (sans temperature) : 400,13 a 4 096 et 476,09 a 4 608, contre 1 105,20 p
 
