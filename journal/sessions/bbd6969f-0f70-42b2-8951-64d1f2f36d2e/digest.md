@@ -17442,3 +17442,105 @@ aiguille v2 : /home/stephane/FastNVMe/models/Qwen3-30B-A3B-Instruct-2507-Q4_K_M.
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A tools/aiguille.py reports/rapport-aiguille.md qtrinet-core/src && git commit -q -F - <<'EOF' && git log --oneline -1\nChantier 1-2 : aiguille v2, experts MXFP4 en VRAM, attention par lots déportée\n\nAiguille (chantier 1)  … [1799 caractères tronqués]`
+
+  ```
+5dfa6b1 Chantier 1-2 : aiguille v2, experts MXFP4 en VRAM, attention par lots déportée
+  ```
+
+- **bash** `{"command": "sleep 570; tail -6 /tmp/aiguille_campagne.log 2>/dev/null; pgrep -x qtrinet-core >/dev/null && echo \"[en cours]\" || echo \"[libre]\"", "description": "Poll campaign", "timeoutMs": 600000}`
+
+  ```
+aiguille v2 : /home/stephane/FastNVMe/models/Qwen3-30B-A3B-Instruct-2507-Q4_K_M.gguf
+  remplissage : data/wikitext2_test.txt (353778 caractères), fenêtres décalées
+  lot 256 · 40 jetons de réponse · GPU non
+ contexte  profondeur  trouvé  secondes  détail
+     2048        0.10     oui     667.6  prompt 2147 jetons
+     2048        0.50     oui     690.5  prompt 2147 jetons
+[en cours]
+  ```
+
+### 🤖 Assistant
+
+⏵ Chantier 3 : je rends le cache KV CPU proportionnel à l'usage
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && python3 - <<'PY'\np='src/model.rs'; s=open(p).read()\n\n# 1) champs : capacité allouée ≠ longueur logique\ns = s.replace(\"\"\"pub struct KvCache {\n    pub bits: u32,          // 32 = f32 (défaut), 8 = i8\n    pub n_kv: … [6613 caractères tronqués]`
+
+  ```
+pagination du cache CPU posée
+    Finished `release` profile [optimized] target(s) in 0.01s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && grep -n \"self\\.ctx + \\|ctx \\* self\\.\\|self\\.ctx \\*\" src/model.rs | head -12", "description": "Check remaining ctx strides in KvCache"}`
+
+  ```
+879:        let base = (kvh * self.ctx + t) * self.pas();
+880:        let sb = (kvh * self.ctx + t) * self.nb;
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && sed -n '872,884p' src/model.rs", "description": "Inspect remaining ctx stride site"}`
+
+  ```
+}
+
+    /// Déquantifie la valeur `(kvh, t)` dans `dst`.
+    #[inline]
+    pub fn valeur(&self, kvh: usize, t: usize, dst: &mut [f32]) {
+        let d = (kvh * self.cap + t) * self.hd;
+        if self.bits >= 32 { dst[..self.hd].copy_from_slice(&self.vf[d..d + self.hd]); return; }
+        let base = (kvh * self.ctx + t) * self.pas();
+        let sb = (kvh * self.ctx + t) * self.nb;
+        if self.bits == 8 {
+            for i in 0..self.hd {
+                dst[i] = self.vq[base + i] as i8 as f32 * self.sv[sb + i / 32];
+            }
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && python3 - <<'PY'\np='src/model.rs'; s=open(p).read()\n# il restait le pas de `valeur` en mode quantifié\ns = s.replace(\"\"\"        if self.bits >= 32 { dst[..self.hd].copy_from_slice(&self.vf[d..d + self.hd]); return;  … [878 caractères tronqués]`
+
+  ```
+pas de valeur corrigé
+    Finished `release` profile [optimized] target(s) in 21.39s
+0
+[config] cache KV : 32 bits, 0.01 Go pour 256 jetons
+     255 tokens notés — perplexité cumulée 17.431  (22.7 tok/s)  [fenêtre 1 : 255 notés, PPL 17.431]
+     510 tokens notés — perplexité cumulée 19.388  (22.4 tok/s)  [fenêtre 2 : 255 notés, PPL 21.565]
+=== perplexité 19.3885 sur 510 tokens (0 événements, 22.8 s) ===
+  ```
+
+- **bash** `{"command": "tail -4 /tmp/aiguille_campagne.log; pgrep -x qtrinet-core >/dev/null && echo \"[en cours]\" || echo \"[libre]\"", "description": "Check campaign status"}`
+
+  ```
+lot 256 · 40 jetons de réponse · GPU non
+ contexte  profondeur  trouvé  secondes  détail
+     2048        0.10     oui     667.6  prompt 2147 jetons
+     2048        0.50     oui     690.5  prompt 2147 jetons
+[en cours]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && python3 - <<'PY'\np='src/model.rs'; s=open(p).read()\ns = s.replace(\"\"\"    /// Écrit un vecteur de clé et un de valeur à la position `pos`.\n    #[inline]\n    pub fn ecrire(&mut self, kvh: usize, pos: usize, k: &[f32 … [2422 caractères tronqués]`
+
+  ```
+arrondi f16 optionnel posé
+    Finished `release` profile [optimized] target(s) in 0.01s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && python3 - <<'PY'\np='src/model.rs'; s=open(p).read()\nold = \"\"\"        // `QT_KV_F16=1` : clés et valeurs arrondies en demi-précision avant\n        // quantification (ce que fait llama.cpp pour son cache q8_0).\n     … [2657 caractères tronqués]`
+
+  ```
+arrondi appliqué dans les boucles
+    Finished `release` profile [optimized] target(s) in 0.01s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"== ctx 1 M, 512 jetons écrits ==\" && QT_GPU=1 timeout 600 ./qtrinet-core/target/release/qtrinet-core models/Qwen2.5-0.5B-Q8_0.gguf --ppl /tmp/ids_qwen.txt --ctx 1048576 --limit 512 --dense --threads 16 2>&1 | grep -E \"\\[con … [496 caractères tronqués]`
+
+  ```
+== ctx 1 M, 512 jetons écrits ==
+[config] cache KV : 32 bits, 0.03 Go pour 1048576 jetons
+     511 tokens notés — perplexité cumulée 13.137  (17.4 tok/s)
+=== perplexité 13.1368 sur 511 tokens (0 événements, 29.4 s) ===
+== hypothèse f16, ctx 2048, KV int8 ==
+f16 avant=non perplexité 10.6231 sur 2047 tokens
+f16 avant=1   perplexité 10.6231 sur 2047 tokens
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='docs/contexte-long.md'; s=open(p).read()\nold = \"\"\"Il reste, sur ce chemin : le **dépaquetage vectorisé** (point 2 ci-dessus), la\nrépartition sur les **deux** GPU (le second est libre : le cache d'une couche  … [2618 caractères tronqués]`

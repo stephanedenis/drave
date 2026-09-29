@@ -275,11 +275,25 @@ laissait le cache en RAM. La perplexité ne bouge pas (13,1369, comme à
 contexte 512). Le miroir grandit ensuite par doublement, sans jamais copier plus
 que ce qui est écrit.
 
-Il reste, sur ce chemin : le **dépaquetage vectorisé** (point 2 ci-dessus), la
-répartition sur les **deux** GPU (le second est libre : le cache d'une couche en
-int4 à 1 M ne fait que 128 Mo, tout tient sur un seul), la suppression du chemin
-CPU de l'attention par lots, et la **pagination du cache CPU lui-même** (25,77 Go
-réservés pour 512 jetons écrits : c'est le côté hôte qui reste gourmand).
+Il reste, sur ce chemin : la répartition sur les **deux** GPU (le second est
+libre), et l'extension du noyau au top-k (aujourd'hui `--attn-topk` repasse par le
+CPU).
+
+### Le cache CPU est paginé lui aussi
+
+Même mécanisme côté hôte : `KvCache` démarre à 1 024 positions et **double à la
+demande**, chaque tête KV recopiant son bloc. Mesuré à **contexte 1 048 576** avec
+512 jetons écrits : **0,03 Go alloués** au lieu de 25,77 Go, perplexité inchangée
+(13,1368, la même qu'à contexte 512). La porte de non-régression Qwen reste à
+19,3885.
+
+Un mot sur ce qui n'était PAS la cause de l'écart avec llama.cpp : l'hypothèse
+« llama.cpp calcule ses clés en f16 avant de les quantifier » a été testée
+(`QT_KV_F16=1`, arrondi à 10 bits de mantisse dans les boucles de
+quantification) — **perplexité identique au chiffre près** (10,6231 avec et sans,
+à 2 048 jetons). L'écart de +3,0 % contre +0,8 % à 8 192 vient donc d'ailleurs :
+probablement la quantification des VALEURS et la précision du softmax, pas
+l'arrondi des clés.
 
 
 ## 5. YaRN à retardement : ce que la mesure a dit

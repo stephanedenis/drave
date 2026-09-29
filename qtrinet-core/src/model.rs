@@ -670,7 +670,14 @@ impl Hebb {
 pub struct KvCache {
     pub bits: u32,          // 32 = f32 (défaut), 8 = i8
     pub n_kv: usize,
+    /// Longueur LOGIQUE (positions adressables par le moteur).
     pub ctx: usize,
+    /// `QT_KV_F16=1` : arrondir clés et valeurs en f16 avant quantification.
+    pub f16_avant: bool,
+    /// Positions réellement allouées, doublées à la demande. Réserver `ctx`
+    /// positions d'un coup coûtait 25,77 Go à contexte 1 M pour 512 jetons
+    /// écrits (mesuré) ; c'est la même pagination que le miroir VRAM, côté hôte.
+    pub cap: usize,
     pub hd: usize,
     kf: Vec<f32>,
     vf: Vec<f32>,
@@ -689,44 +696,106 @@ pub struct KvCache {
 impl KvCache {
     pub fn new(bits: u32, n_kv: usize, ctx: usize, hd: usize) -> Self {
         let bits = if bits >= 32 { 32 } else if bits > 4 { 8 } else { 4 };
-        let n = n_kv * ctx * hd;
-        let nv = n_kv * ctx;
-        let nb = hd.div_ceil(32).max(1);
-        if bits >= 32 {
-            KvCache { bits, n_kv, ctx, hd, kf: vec![0.0; n], vf: vec![0.0; n],
-                      kq: Vec::new(), vq: Vec::new(), sk: Vec::new(), sv: Vec::new(), nb }
-        } else {
+        if bits < 32 {
             assert!(hd % 2 == 0, "4 bits empaquetés : dimension de tête paire requise");
-            let nq = if bits == 8 { n } else { n / 2 };
-            KvCache { bits, n_kv, ctx, hd, kf: Vec::new(), vf: Vec::new(),
-                      kq: vec![0u8; nq], vq: vec![0u8; nq],
-                      sk: vec![0.0; nv * nb], sv: vec![0.0; nv * nb], nb }
         }
+        let nb = hd.div_ceil(32).max(1);
+        let mut c = KvCache { bits, n_kv, ctx, cap: 0, hd,
+                              f16_avant: std::env::var("QT_KV_F16").is_ok(),
+                              kf: Vec::new(), vf: Vec::new(),
+                              kq: Vec::new(), vq: Vec::new(), sk: Vec::new(), sv: Vec::new(),
+                              nb };
+        c.assurer(ctx.min(1024));
+        c
+    }
+
+    /// Garantit `besoin` positions allouées (doublement, avec recopie : les
+    /// positions déjà écrites le restent). Chaque tête KV a son bloc contigu,
+    /// donc la recopie se fait tête par tête.
+    pub fn assurer(&mut self, besoin: usize) {
+        if besoin <= self.cap { return; }
+        let mut cap = self.cap.max(1);
+        while cap < besoin { cap = (cap * 2).min(self.ctx); }
+        let hd = self.hd;
+        let nb = self.nb;
+        let pas = self.pas();
+        let (n_kv, bits) = (self.n_kv, self.bits);
+        if bits >= 32 {
+            let mut kf = vec![0f32; n_kv * cap * hd];
+            let mut vf = vec![0f32; n_kv * cap * hd];
+            for h in 0..n_kv {
+                let (a, b) = (h * self.cap * hd, h * cap * hd);
+                let n = self.cap * hd;
+                kf[b..b + n].copy_from_slice(&self.kf[a..a + n]);
+                vf[b..b + n].copy_from_slice(&self.vf[a..a + n]);
+            }
+            self.kf = kf;
+            self.vf = vf;
+        } else {
+            let mut kq = vec![0u8; n_kv * cap * pas];
+            let mut vq = vec![0u8; n_kv * cap * pas];
+            let mut sk = vec![0f32; n_kv * cap * nb];
+            let mut sv = vec![0f32; n_kv * cap * nb];
+            for h in 0..n_kv {
+                let (a, b) = (h * self.cap * pas, h * cap * pas);
+                let n = self.cap * pas;
+                kq[b..b + n].copy_from_slice(&self.kq[a..a + n]);
+                vq[b..b + n].copy_from_slice(&self.vq[a..a + n]);
+                let (sa, sb) = (h * self.cap * nb, h * cap * nb);
+                sk[sb..sb + self.cap * nb].copy_from_slice(&self.sk[sa..sa + self.cap * nb]);
+                sv[sb..sb + self.cap * nb].copy_from_slice(&self.sv[sa..sa + self.cap * nb]);
+            }
+            self.kq = kq;
+            self.vq = vq;
+            self.sk = sk;
+            self.sv = sv;
+        }
+        self.cap = cap;
     }
 
     /// Octets par vecteur (tête, position) dans le tableau quantifié.
     #[inline]
     fn pas(&self) -> usize { if self.bits == 8 { self.hd } else { self.hd / 2 } }
 
-    /// Octets réellement occupés (diagnostic).
+    /// Octets réellement ALLOUÉS (diagnostic) : c'est ce que le processus
+    /// réserve, pas ce que `ctx` laisse croire.
     pub fn octets(&self) -> u64 {
         (self.kf.len() + self.vf.len()) as u64 * 4
             + (self.kq.len() + self.vq.len()) as u64
             + (self.sk.len() + self.sv.len()) as u64 * 4
     }
 
+    /// Arrondi à la précision d'une demi-précision (10 bits de mantisse).
+    /// Sert à tester l'hypothèse « llama.cpp calcule ses clés en f16 AVANT de
+    /// les quantifier » : c'est peut-être là que se joue son +0,8 % de
+    /// perplexité contre notre +3,0 % (à 8 192 jetons).
+    #[inline]
+    fn arrondi_f16(x: f32) -> f32 {
+        let b = x.to_bits();
+        if (b & 0x7F80_0000) >= 0x7F80_0000 { return x; }        // inf / NaN
+        if (b & 0x7FFF_FFFF) < 0x3880_0000 { return 0.0 * x; }   // sous-normal f16
+        f32::from_bits(b.wrapping_add(0x1000) & !0x1FFF)
+    }
+
     /// Écrit un vecteur de clé et un de valeur à la position `pos`.
     #[inline]
     pub fn ecrire(&mut self, kvh: usize, pos: usize, k: &[f32], v: &[f32]) {
-        let d = (kvh * self.ctx + pos) * self.hd;
+        if pos + 1 > self.cap { self.assurer(pos + 1); }
+        let d = (kvh * self.cap + pos) * self.hd;
         if self.bits >= 32 {
             self.kf[d..d + self.hd].copy_from_slice(&k[..self.hd]);
             self.vf[d..d + self.hd].copy_from_slice(&v[..self.hd]);
             return;
         }
         let niv = if self.bits == 4 { 7.0 } else { 127.0 };
-        let base = (kvh * self.ctx + pos) * self.pas();
-        let sb = (kvh * self.ctx + pos) * self.nb;
+        // `QT_KV_F16=1` : clés et valeurs arrondies en demi-précision avant
+        // quantification (ce que fait llama.cpp pour son cache q8_0). L'arrondi
+        // s'applique DANS les boucles : allouer des tampons ici fuirait à chaque
+        // écriture (une par couche et par jeton).
+        let f16a = self.f16_avant;
+        let arr = |x: f32| if f16a { Self::arrondi_f16(x) } else { x };
+        let base = (kvh * self.cap + pos) * self.pas();
+        let sb = (kvh * self.cap + pos) * self.nb;
         // Une échelle PAR BLOC DE 32, comme Q8_0 : un bloc peut porter une
         // valeur forte et des valeurs faibles, que l'échelle du vecteur entier
         // écrase. C'est la différence mesurée avec llama.cpp (+5,2 % de
@@ -736,24 +805,24 @@ impl KvCache {
             let hi = (lo + 32).min(self.hd);
             let mut mk = 0f32;
             let mut mv = 0f32;
-            for i in lo..hi { mk = mk.max(k[i].abs()); mv = mv.max(v[i].abs()); }
+            for i in lo..hi { mk = mk.max(arr(k[i]).abs()); mv = mv.max(arr(v[i]).abs()); }
             let sk = if mk > 0.0 { mk / niv } else { 1.0 };
             let sv = if mv > 0.0 { mv / niv } else { 1.0 };
             self.sk[sb + b] = sk;
             self.sv[sb + b] = sv;
             if self.bits == 8 {
                 for i in lo..hi {
-                    self.kq[base + i] = (k[i] / sk).round().clamp(-niv, niv) as i8 as u8;
-                    self.vq[base + i] = (v[i] / sv).round().clamp(-niv, niv) as i8 as u8;
+                    self.kq[base + i] = (arr(k[i]) / sk).round().clamp(-niv, niv) as i8 as u8;
+                    self.vq[base + i] = (arr(v[i]) / sv).round().clamp(-niv, niv) as i8 as u8;
                 }
             } else {
                 // Nibble bas = indice pair, haut = impair, écrits ENSEMBLE : un
                 // `|=` laisserait les nibbles de la fenêtre précédente.
                 for j in (lo..hi).step_by(2) {
-                    let qk0 = (k[j] / sk).round().clamp(-niv, niv) as i32 as u8 & 0x0F;
-                    let qk1 = (k[j + 1] / sk).round().clamp(-niv, niv) as i32 as u8 & 0x0F;
-                    let qv0 = (v[j] / sv).round().clamp(-niv, niv) as i32 as u8 & 0x0F;
-                    let qv1 = (v[j + 1] / sv).round().clamp(-niv, niv) as i32 as u8 & 0x0F;
+                    let qk0 = (arr(k[j]) / sk).round().clamp(-niv, niv) as i32 as u8 & 0x0F;
+                    let qk1 = (arr(k[j + 1]) / sk).round().clamp(-niv, niv) as i32 as u8 & 0x0F;
+                    let qv0 = (arr(v[j]) / sv).round().clamp(-niv, niv) as i32 as u8 & 0x0F;
+                    let qv1 = (arr(v[j + 1]) / sv).round().clamp(-niv, niv) as i32 as u8 & 0x0F;
                     self.kq[base + j / 2] = qk0 | (qk1 << 4);
                     self.vq[base + j / 2] = qv0 | (qv1 << 4);
                 }
@@ -767,9 +836,9 @@ impl KvCache {
     pub fn vers_gpu_tranche(&self, machine: &crate::gpu::Gpu, m: &mut crate::gpu::KvGpu,
                             kvh: usize, pos0: usize, t: usize) -> bool {
         let pas = self.pas();
-        let d = (kvh * self.ctx + pos0) * self.hd;
-        let base = (kvh * self.ctx + pos0) * pas;
-        let sb = (kvh * self.ctx + pos0) * self.nb;
+        let d = (kvh * self.cap + pos0) * self.hd;
+        let base = (kvh * self.cap + pos0) * pas;
+        let sb = (kvh * self.cap + pos0) * self.nb;
         if self.bits >= 32 {
             let ko = unsafe { std::slice::from_raw_parts(
                 self.kf[d..].as_ptr() as *const u8, t * self.hd * 4) };
@@ -805,10 +874,10 @@ impl KvCache {
     /// Déquantifie la clé `(kvh, t)` dans `dst`.
     #[inline]
     pub fn cle(&self, kvh: usize, t: usize, dst: &mut [f32]) {
-        let d = (kvh * self.ctx + t) * self.hd;
+        let d = (kvh * self.cap + t) * self.hd;
         if self.bits >= 32 { dst[..self.hd].copy_from_slice(&self.kf[d..d + self.hd]); return; }
-        let base = (kvh * self.ctx + t) * self.pas();
-        let sb = (kvh * self.ctx + t) * self.nb;
+        let base = (kvh * self.cap + t) * self.pas();
+        let sb = (kvh * self.cap + t) * self.nb;
         if self.bits == 8 {
             for i in 0..self.hd {
                 dst[i] = self.kq[base + i] as i8 as f32 * self.sk[sb + i / 32];
@@ -827,10 +896,10 @@ impl KvCache {
     /// Déquantifie la valeur `(kvh, t)` dans `dst`.
     #[inline]
     pub fn valeur(&self, kvh: usize, t: usize, dst: &mut [f32]) {
-        let d = (kvh * self.ctx + t) * self.hd;
+        let d = (kvh * self.cap + t) * self.hd;
         if self.bits >= 32 { dst[..self.hd].copy_from_slice(&self.vf[d..d + self.hd]); return; }
-        let base = (kvh * self.ctx + t) * self.pas();
-        let sb = (kvh * self.ctx + t) * self.nb;
+        let base = (kvh * self.cap + t) * self.pas();
+        let sb = (kvh * self.cap + t) * self.nb;
         if self.bits == 8 {
             for i in 0..self.hd {
                 dst[i] = self.vq[base + i] as i8 as f32 * self.sv[sb + i / 32];

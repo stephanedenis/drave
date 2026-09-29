@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 27.7 h |
+| Durée | 28.0 h |
 | Tours | 9 |
-| Messages | 1075 |
-| Appels d'outils | 1068 |
+| Messages | 1085 |
+| Appels d'outils | 1078 |
 | Fichiers touchés | 36 |
-| Commandes | 806 |
+| Commandes | 816 |
 | Sous-agents | 1 |
-| Commits | 35 |
+| Commits | 36 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -401,7 +401,7 @@ La section « Ce qu'il faut faire en
 
 ### Tour 9 — fais tous ces 6 nouveaux chantiers
 
-*64 appels d'outils.* Actions notables :
+*74 appels d'outils.* Actions notables :
 
 - create_goal
 - todo_write
@@ -417,11 +417,11 @@ La section « Ce qu'il faut faire en
 - bash — Check lot is in scope in run_infer
 - bash — Build with batched prefill
 - bash — Read run_infer destructuring
-- … et 49 autres
+- … et 59 autres
 
 **Synthèse produite :**
 
-⏵ Chantier 2b : cache VRAM des experts MXFP4 avec éviction LRU
+⏵ Chantier 3 : je rends le cache KV CPU proportionnel à l'usage
 
 ## 3. Travail accompli
 
@@ -512,7 +512,7 @@ La section « Ce qu'il faut faire en
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 766 autres
+- … et 776 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -695,4 +695,5 @@ La section « Ce qu'il faut faire en
 - porte gpt-oss : préciser qu'elle se mesure SANS QT_GPU  Mesuré deux fois, même binaire, même commande :   sans QT_GPU   : 15,1757 (le chiffre de contrôle du dép
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p='docs/contexte-long.md'; s=open(p).read() old = """2. **Le format ne change presque rie
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A tools/aiguille.py reports/rapport-aiguille.md qtrinet-core/src && git commit -q -F - <<'EOF' &&
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p='docs/contexte-long.md'; s=open(p).read() old = """Il reste, sur ce chemin : le **dépaq
 
