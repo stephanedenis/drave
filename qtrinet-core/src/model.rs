@@ -477,6 +477,10 @@ pub struct Model {
     /// celui de Q8_0 ne multiplie PAS par l'échelle d'activation, celui de Q6_K
     /// l'applique.
     pub tete_gpu_q6k: bool,
+    /// Miroir VRAM du cache KV, une entrée par couche (`QT_GPU_KV=1`).
+    pub kv_gpu: Option<Vec<crate::gpu::KvGpu>>,
+    /// Tranches de clés du noyau d'attention, réutilisées d'un jeton à l'autre.
+    pub attn_gpu_part: Vec<f32>,
     /// Greffon : un neurone supplémentaire, chargé sans réentraînement.
     pub patch: Option<Patch>,
     /// Gain appliqué à la sortie du FFN d'une couche : édition structurelle de
@@ -671,6 +675,46 @@ impl KvCache {
                     self.vq[base + j / 2] = qv0 | (qv1 << 4);
                 }
             }
+        }
+    }
+
+    /// Copie les octets de `t` positions consécutives d'une tête KV vers le
+    /// miroir VRAM. Aucune conversion : le noyau lit la même disposition que le
+    /// CPU, échelles par bloc comprises.
+    pub fn vers_gpu_tranche(&self, machine: &crate::gpu::Gpu, m: &crate::gpu::KvGpu,
+                            kvh: usize, pos0: usize, t: usize) -> bool {
+        let pas = self.pas();
+        let d = (kvh * self.ctx + pos0) * self.hd;
+        let base = (kvh * self.ctx + pos0) * pas;
+        let sb = (kvh * self.ctx + pos0) * self.nb;
+        if self.bits >= 32 {
+            let ko = unsafe { std::slice::from_raw_parts(
+                self.kf[d..].as_ptr() as *const u8, t * self.hd * 4) };
+            let vo = unsafe { std::slice::from_raw_parts(
+                self.vf[d..].as_ptr() as *const u8, t * self.hd * 4) };
+            machine.kv_ecrire_tranche(m, kvh, pos0, t, ko, vo, &[], &[])
+        } else {
+            machine.kv_ecrire_tranche(m, kvh, pos0, t, &self.kq[base..base + t * pas],
+                                      &self.vq[base..base + t * pas],
+                                      &self.sk[sb..sb + t * self.nb],
+                                      &self.sv[sb..sb + t * self.nb])
+        }
+    }
+
+    /// Un seul vecteur.
+    pub fn vers_gpu(&self, machine: &crate::gpu::Gpu, m: &crate::gpu::KvGpu,
+                    kvh: usize, pos: usize) -> bool {
+        self.vers_gpu_tranche(machine, m, kvh, pos, 1)
+    }
+
+    /// Recopie vers la VRAM les `t` positions nouvellement écrites de la couche
+    /// `l`. Silencieux quand aucun miroir n'est installé.
+    pub fn miroir_gpu(miroirs: Option<&[crate::gpu::KvGpu]>, l: usize, kvc: &KvCache,
+                      pos0: usize, t: usize) {
+        let (Some(machine), Some(m)) = (crate::gpu::instance(), miroirs.and_then(|v| v.get(l)))
+            else { return };
+        for kvh in 0..kvc.n_kv {
+            kvc.vers_gpu_tranche(machine, m, kvh, pos0, t);
         }
     }
 
@@ -976,6 +1020,37 @@ impl Model {
             }
             charge
         } else { None };
+        // Miroir VRAM du cache KV (étape E4) : opt-in, et seulement si TOUTES
+        // les couches tiennent — sinon on le dit et on garde le CPU.
+        let kv_gpu = if std::env::var("QT_GPU_KV").is_ok() {
+            match crate::gpu::instance() {
+                Some(machine) => {
+                    let octets: usize = caches_kv.iter().map(|c| c.octets() as usize).sum();
+                    let mut v = Vec::with_capacity(caches_kv.len());
+                    let mut complet = true;
+                    for c in &caches_kv {
+                        match machine.kv_allouer(c.n_kv, c.ctx, c.hd, c.bits) {
+                            Some(m) => v.push(m),
+                            None => { complet = false; break; }
+                        }
+                    }
+                    if complet {
+                        let total: usize = v.iter().map(|m| m.octets).sum();
+                        println!("[gpu] KV déporté : {} couches, {:.2} Go en VRAM ({:.2} Mo libres), \
+                                  cache CPU {:.2} Go", v.len(), total as f64 / 1e9,
+                                 machine.memoire_libre as f64 / 1e9, octets as f64 / 1e9);
+                        Some(v)
+                    } else {
+                        println!("[gpu] KV déporté impossible : il faudrait {:.2} Go pour les {} \
+                                  couches, {:.2} Go libres — cache KV gardé en RAM",
+                                 octets as f64 / 1e9, caches_kv.len(),
+                                 machine.memoire_libre as f64 / 1e9);
+                        None
+                    }
+                }
+                None => None,
+            }
+        } else { None };
         let head4 = if q4 & 4 != 0 || tete_quantifiee {
             let t0 = Instant::now();
             let v = cfg.vocab;
@@ -1011,7 +1086,7 @@ impl Model {
             seuil_push: 0.22,
             stop_id: None, stop_id2: None, prof: [0.0; 6],
             tete,
-            tete_gpu, tete_gpu_q6k, head4, sinks_vus,
+            tete_gpu, tete_gpu_q6k, head4, sinks_vus, kv_gpu, attn_gpu_part: Vec::new(),
             patch: None, ffn_gain: None, hebb: None,
         }
     }
@@ -1349,7 +1424,7 @@ impl Model {
     /// Le résultat n'est plus la somme « dans l'ordre » — quelques ulp d'écart,
     /// à comparer au facteur gagné.
     #[inline]
-    fn dot8(a: &[f32], b: &[f32]) -> f32 {
+    pub fn dot8(a: &[f32], b: &[f32]) -> f32 {
         let n = a.len().min(b.len());
         let mut acc = [0f32; 8];
         let mut i = 0usize;
@@ -1669,6 +1744,8 @@ impl Model {
                                           &vi[hh * hd..(hh + 1) * hd]);
                     }
                 }
+                // Miroir VRAM : une seule copie contiguë pour tout le lot.
+                KvCache::miroir_gpu(self.kv_gpu.as_deref(), l, &self.kv[l], pos, t);
                 let fen = if self.attn_window == 0 { 0 }
                           else if self.swa_pattern <= 1 { self.attn_window }
                           else if l % self.swa_pattern < self.swa_pattern - 1 { self.attn_window }
@@ -1948,7 +2025,8 @@ impl Model {
         // Lus AVANT l'emprunt destructuré (comme la parcimonie par projection).
         let largeur_profil = self.cfg.ffn.max(self.cfg.ffn_exp);
         self.profil_jetons += 1;
-        let Model { g, cfg, layers, out_norm, pool, kv, events, .. } = self;
+        let Model { g, cfg, layers, out_norm, pool, kv, events, attn_events, kv_gpu,
+                    attn_gpu_part, .. } = self;
         let h = cfg.hidden;
         let hd = cfg.head_dim;
         let nh = cfg.n_head;
@@ -2043,6 +2121,7 @@ impl Model {
                     kvc.ecrire(hh, pos, &k[hh * hd..(hh + 1) * hd], &v[hh * hd..(hh + 1) * hd]);
                 }
             }
+            KvCache::miroir_gpu(kv_gpu.as_deref(), l, &kv[l], pos, 1);
             // attention groupée
             let scale = 1.0 / (hd as f32).sqrt();
             let kvc = &kv[l];
@@ -2061,7 +2140,26 @@ impl Model {
             // L'arithmétique par tête est inchangée et dans le même ordre : les
             // sorties restent bit à bit identiques.
             let groupe = fen == 0 && self.attn_topk == 0 && rep > 1;
-            if groupe {
+            // ---- KV déporté (étape E4) : la MÊME attention, calculée en VRAM.
+            // Le noyau a besoin d'un nombre entier de têtes de requête par tête
+            // KV ; la fenêtre et le top-k gardent le chemin CPU.
+            let mut fait_en_gpu = false;
+            if groupe && kv_gpu.is_some() && nkv * rep == nh && n > 1 {
+                let nsplit = (n / 256).clamp(1, 128);
+                let besoin = nsplit * nkv * rep * (hd + 2);
+                if attn_gpu_part.len() < besoin { attn_gpu_part.resize(besoin, 0.0); }
+                let puits: Option<Vec<f32>> = lay.sinks.as_ref()
+                    .map(|s| (0..nh).map(|h| s[h]).collect());
+                if let (Some(machine), Some(m)) =
+                        (crate::gpu::instance(), kv_gpu.as_mut().and_then(|v| v.get_mut(l))) {
+                    if machine.attn_kv(m, &q[..nh * hd], n, scale, puits.as_deref(),
+                                       nsplit, attn_gpu_part, &mut att[..]) {
+                        *attn_events += (nh * n) as u64;
+                        fait_en_gpu = true;
+                    }
+                }
+            }
+            if groupe && !fait_en_gpu {
                 let t_scores = Instant::now();
                 for kvh in 0..nkv {
                     let h0 = kvh * rep;
@@ -2108,10 +2206,10 @@ impl Model {
                             for (o, x) in out.iter_mut().zip(vd.iter()) { *o += w * x; }
                         }
                     }
-                    self.attn_events += ((h1 - h0) * n) as u64;
+                    *attn_events += ((h1 - h0) * n) as u64;
                 }
             }
-            for hh in 0..(if groupe { 0 } else { nh }) {
+            for hh in 0..(if groupe || fait_en_gpu { 0 } else { nh }) {
                 let kvh = hh / rep;
                 let qh = &q[hh * hd..(hh + 1) * hd];
                 // produit scalaire écrit en itérateurs : la forme indexée
@@ -2144,7 +2242,7 @@ impl Model {
                     let ns = if lo > 0 { self.attn_sinks.min(lo) } else { 0 };
                     attn_idx.extend((0..ns as u32).chain(lo as u32..n as u32));
                     let iter: &[u32] = &attn_idx;
-                    self.attn_events += iter.len() as u64;
+                    *attn_events += iter.len() as u64;
                     let mut mx = f32::NEG_INFINITY;
                     for &t in iter { let v = sc[t as usize]; if v > mx { mx = v; } }
                     // Le puits appris compte dans le dénominateur même quand la
@@ -2177,7 +2275,7 @@ impl Model {
                 // en mode dense, seules les n premières clés existent : itérer
                 // sur tout le contexte lirait des scores au-delà de pos.
                 let iter: &[u32] = if k < n { &attn_idx } else { &attn_all[..n] };
-                self.attn_events += iter.len() as u64;
+                *attn_events += iter.len() as u64;
                 // softmax stable sur les seules clés retenues. Le puits appris
                 // compte dans le dénominateur MÊME en attention complète : c'est
                 // un logit de plus (HF concatène la colonne du puits avant le

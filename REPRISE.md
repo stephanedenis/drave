@@ -144,7 +144,7 @@ comparé à `llama-tokenize` sur 4 424 jetons (0 écart).
 | 5 | échelles par bloc pour `DenseQ8` | **fait, hypothèse réfutée** | 23,696 contre 23,612 : les échelles par bloc n'apportent rien ; l'avantage du 6 bits est son coût (25 % d'octets en moins à qualité égale) |
 | 6 | boucles CLI unifiées | **fait** | `struct Options` + `analyser` ; trois drapeaux de plus trouvés ignorés (`--attn-topk`, `--qk-topk`, `--sans-yarn` en inférence) et un bug de pas de lecture corrigé |
 | 7 | noyaux GPU | **fait, quatre formats** | warp par ligne : tête **Q8_0** (1,6 ms contre 7,3 CPU, écart 2e-7), **MXFP4** (0,1 ms, écart **0,00e0** — bit à bit), **Q4_K** (0,5 contre 1,2 ms, 4e-7), **Q6_K** (3,6 contre 8,3 ms sur la tête liée de 191 Mo, 3,3e-7 ; ×5 sur un tenseur de 11 Mo). **Tête Q6_K branchée** dans le moteur : `QT_GPU=1 QT_GPU_TETE=1` → 7,58 → **3,60 ms/jeton**, perplexité identique (13,6877). Reste le cache d'experts chauds en VRAM : la mesure d'activation (`rapport-localite-activation.md`) dit qu'un préchargement statique ne paie pas sur SiLU |
-| 8 | suite du plan 1 M | **chiffré, pas commencé** | `docs/contexte-long.md` : préremplissage 1 234 h à 1 M, KV int4 9,7 Go, YaRN ×256 nécessaire ; restent pagination, déport GPU du KV, attention creuse, MLA, vision |
+| 8 | suite du plan 1 M | **fait pour E4/E5** | **E4 KV déporté en VRAM** : noyaux `attn_kv_*` (tuiles de 32 clés, softmax en ligne, recombinaison + puits) et miroir du cache (`QT_GPU_KV=1`) — à 1 M de clés l'attention passe de 968 ms à **13,2 ms** par couche (int4, ×73) et, dans le moteur à 4 096 de contexte, de **22,2 à 3,3 ms/jeton** (−38 % de bout en bout) à perplexité identique (12,2177 → 12,2175). **E5 attention creuse** : mesurée (`--attn-topk 256` : 234,9 contre 298,6). MLA et vision restent non testables (aucun modèle MLA ici ; le projecteur `mmproj` est là mais rien ne lit les patchs) |
 
 ### Mesures du tour « huit chantiers » (toutes commitées)
 
@@ -163,6 +163,9 @@ comparé à `llama-tokenize` sur 4 424 jetons (0 écart).
 | KV int8, échelles par bloc | +1,5 % (512 jetons) et +3,4 % (4 591) — était +7,1 % et +5,2 % |
 | KV int4, échelles par bloc | +219 % (512) et +287 % (4 591) — était +384 % et +450 % |
 | attention creuse (gpt-oss, ctx 2 048) | sans restriction 298,56 · **top-256 : 234,88** · fenêtre 512 : 3 269,34 |
+| KV déporté en VRAM, 1 M de clés (une couche, `--banc-kv`) | f32 165,8 → **13,6 ms** (×12) · int8 510,6 → 15,0 (×34) · int4 968,5 → **13,2 ms (×73)**, écarts 1e-5 à 1e-4 |
+| KV déporté dans le moteur (`QT_GPU_KV=1`, ctx 4 096) | attention **22,16 → 3,29 ms/jeton** (÷6,7) · balayage 219,4 → **136,2 s** · perplexité 12,2177 → 12,2175 |
+| KV déporté, ctx 512 (point de croisement) | attention 2,91 (CPU) contre 3,22 ms (GPU) : le noyau ne paie qu'au-delà de ~4 000 clés |
 | rotation, comparaison appariée | RoPE simple gagne à 128/512/1024/1536 de contexte (39,5 / 49,8 / 49,9 / 298,6) |
 
 ### Ce qu'il faut faire ensuite, dans l'ordre
@@ -177,8 +180,11 @@ comparé à `llama-tokenize` sur 4 424 jetons (0 écart).
    `reports/rapport-localite-activation.md`). Attention au piège des deux
    variables : `QT_GPU_TETE=1` seul ne fait RIEN — c'est `QT_GPU` qui ouvre le
    pilote (`gpu::instance`), et la première mesure est restée muette pour ça.
-4. **Q6_K** reste à écrire (Q4_K et MXFP4 sont faits et mesurés) : c'est le
-   format de certaines têtes et de quelques tenseurs Qwen.
+4. ~~**Q6_K** reste à écrire~~ **FAIT** (noyau `proj_q6k_warp`, tête Q6_K
+   branchée : 7,58 → 3,60 ms/jeton sur Qwen 1.5B). Ce qui reste sur le chemin
+   GPU : le **dépaquetage vectorisé** du KV déporté (le noyau d'attention est
+   borné par la déquantification scalaire, pas par la VRAM : 25-40 Go/s contre
+   158 Go/s en f32) et le **cache d'experts chauds** en VRAM pour les MoE.
 4.bis ~~KV à échelles par bloc de 32~~ **FAIT** : int8 +1,5 % au lieu de +7,1 %,
    int4 +219 % au lieu de +384 %.
 5. **Le seuil de rotation** (chantier 2) : la série en cours le tranche ; si

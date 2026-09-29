@@ -14042,3 +14042,1216 @@ docs/convertisseur.md
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='REPRISE.md'; s=open(p).read()\nold = \"| 7 | noyaux GPU | **fait** | warp par ligne (tête : 1,8 ms contre 30 ms CPU, PPL identique) ; **MXFP4** warp (0,1 ms, écart 0,00e0 — bit à bit) ; **Q4_K** warp (0,5 contre  … [4045 caractères tronqués]`
+
+  ```
+REPRISE.md : chantier 7 à jour
+f578862 noyau Q6_K sur GPU, et tête Q6_K déportée dans le moteur
+  ```
+
+### 🤖 Assistant
+
+⏵ Chantier 8 : je lis le plan E4 (KV paginé + déport GPU)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"E4\\|E5\\|E6\\|E7\\|pagin\\|déport\" docs/contexte-long.md | head -30", "description": "Read E4 plan in contexte-long.md"}`
+
+  ```
+104:| E4 | **KV déporté sur les 2 GPU** (pagination, préchargement) | à faire — les noyaux existent (`tete_q8_warp` fait passer la tête de 15,6 à 6,2 ms/jeton, PPL identique) | décodage 13 ms/jeton à 1 M | moyen |
+105:| E5 | **Attention creuse** | à faire — `--attn-topk` et `--attn-window` existent et se mesurent au protocole `--depuis` | casse le O(N) du décodage | moyen |
+106:| E6 | **MLA** (DeepSeek) | **non testable ici** : aucun modèle MLA en GGUF sur cette machine (le « deepseek-r1-distill » local est un Qwen dense) | compression structurelle du KV | gros |
+107:| E7 | **Vision** | **non testable ici sans le chemin image** : le projecteur `mmproj` est présent, mais rien ne lit les patchs | images | gros |
+111:quelques minutes), puis E4/E5 selon l'usage (décodage long ou préremplissage
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/contexte-long.md", "limit": 60, "offset": 85}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/contexte-long.md</path>
+<type>file</type>
+<content>
+85:   étendre la portée : elle garde les phases lointaines dans ce que le modèle a
+86:   vu, et c'est elle qu'il faut garder ;
+87: - **la mise à l'échelle de température est nuisible sur du texte brut** (÷8,9 de
+88:   perplexité à 512 jetons quand on la retire). Le moteur l'éteint donc par
+89:   défaut dans le mode retardé ; `QT_YARN=1` la rétablit pour reproduire les
+90:   implémentations de référence.
+91: 
+92: Au-delà du facteur déclaré, la seule réponse honnête reste « extrapolation,
+93: qualité non garantie » — et désormais, ce n'est plus la rotation qui limite le
+94: plus tôt : c'est le préremplissage (§3.a).
+95: 
+96: 
+97: ## 4. Plan par étapes
+98: 
+99: | # | étape | état | débloque | coût |
+100: |---|---|---|---|---|
+101: | E1 | **Préremplissage par lots** | **fait** : `gemm_dense_i8` et `gemm_dense_q4` (produits matrice-matrice par tranches), `forward_lot` juste sur dense **et** sur MoE avec regroupement des jetons par expert ; débit bout en bout à chiffrer | 32 k utilisable ; TTFT | le noyau est là ; reste à mesurer et à élargir les tranches |
+102: | E2 | **KV int8
+… [3235 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && grep -n \"fn attention\\|struct KvCache\\|impl KvCache\\|fn ecrire\\|fn lire\\|fn dot_kv\\|fn lire_kv\\|sinks\\|attn_window\\|attn_topk\" src/model.rs | sed -n '1,40p'", "description": "Locate attention and KV code"}`
+
+  ```
+211:    pub sinks: Option<Vec<f32>>,
+413:    pub attn_topk: usize,
+422:    /// Fenêtre d'attention glissante : ne noter que les `attn_window` dernières
+423:    /// clés, plus `attn_sinks` jetons puits au début de la séquence.
+439:    pub attn_window: usize,
+447:    pub attn_sinks: usize,
+466:    pub sinks_vus: usize,
+583:pub struct KvCache {
+602:impl KvCache {
+633:    pub fn ecrire(&mut self, kvh: usize, pos: usize, k: &[f32], v: &[f32]) {
+845:                sinks: if g.tensor(&p("attn_sinks.weight")).is_some() {
+846:                    Some(g.dequant(&p("attn_sinks.weight"))) } else { None },
+880:        let sinks_vus = layers.iter().filter(|l| l.sinks.is_some()).count();
+892:        println!("[config] puits appris sur {sinks_vus}/{n_layer} couches · n_rot {} · ffn {} · experts {}{}",
+1003:            act_topk_proj: [0; 7], attn_topk: 0, attn_events: 0, qk_topk: 0,
+1008:            attn_window: fenetre,
+1010:            attn_sinks: if fenetre > 0 { 0 } else { 4 },
+1014:            tete_gpu, tete_gpu_q6k, head4, sinks_vus,
+1308:    pub fn ecrire_neurones(&self, chemin: &str) -> std::io::Result<usize> {
+1672:                let fen = if self.attn_window == 0 { 0 }
+1673:            
+… [1177 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src/model.rs", "limit": 70, "offset": 1690}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src/model.rs</path>
+<type>file</type>
+<content>
+1690:                             for hh in h0..h1 {
+1691:                                 let qh = &qi[hh * hd..(hh + 1) * hd];
+1692:                                 sc2[hh * ctx + tt] = Self::dot8(qh, &kd) * scale;
+1693:                             }
+1694:                         }
+1695:                         for hh in h0..h1 {
+1696:                             let row = &mut sc2[hh * ctx..hh * ctx + n];
+1697:                             let mut mx = f32::NEG_INFINITY;
+1698:                             for &val in row.iter() { if val > mx { mx = val; } }
+1699:                             let puits = lay.sinks.as_ref().map(|s| s[hh]);
+1700:                             if let Some(s) = puits { if s > mx { mx = s; } }
+1701:                             let mut somme = 0f32;
+1702:                             for val in row.iter_mut() { let e = (*val - mx).exp(); *val = e; somme += e; }
+1703:                             if let Some(s) = puits { somme += (s - mx).exp(); }
+1704:                             let inv = 1.0 / somme;
+1705:                             for val in
+… [3220 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src/model.rs", "limit": 115, "offset": 583}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src/model.rs</path>
+<type>file</type>
+<content>
+583: pub struct KvCache {
+584:     pub bits: u32,          // 32 = f32 (défaut), 8 = i8
+585:     pub n_kv: usize,
+586:     pub ctx: usize,
+587:     pub hd: usize,
+588:     kf: Vec<f32>,
+589:     vf: Vec<f32>,
+590:     /// Quantifié : un octet par valeur en 8 bits, **deux nibbles par octet en
+591:     /// 4 bits** (même disposition que Q4_0/MXFP4 : nibble bas = indice pair).
+592:     kq: Vec<u8>,
+593:     vq: Vec<u8>,
+594:     /// Échelles **par bloc de 32**, comme Q8_0 — et non une par vecteur : c'est
+595:     /// ce qui explique l'écart mesuré avec llama.cpp (+5,2 % de perplexité
+596:     /// contre +0,8 % pour son cache q8_0).
+597:     sk: Vec<f32>,
+598:     sv: Vec<f32>,
+599:     nb: usize,
+600: }
+601: 
+602: impl KvCache {
+603:     pub fn new(bits: u32, n_kv: usize, ctx: usize, hd: usize) -> Self {
+604:         let bits = if bits >= 32 { 32 } else if bits > 4 { 8 } else { 4 };
+605:         let n = n_kv * ctx * hd;
+606:         let nv = n_kv * ctx;
+607:         let nb = hd.div_ceil(32).max(1);
+608:         if bits >= 32 {
+609:             KvCache { bits, n_kv, ctx, h
+… [4705 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && grep -n \"fn dot8\" -A 12 src/model.rs && grep -n \"fn valeur\" -A 6 src/model.rs | head -12", "description": "Read dot8 and valeur"}`
+
+  ```
+1352:    fn dot8(a: &[f32], b: &[f32]) -> f32 {
+1353-        let n = a.len().min(b.len());
+1354-        let mut acc = [0f32; 8];
+1355-        let mut i = 0usize;
+1356-        while i + 8 <= n {
+1357-            for k in 0..8 { acc[k] += a[i + k] * b[i + k]; }
+1358-            i += 8;
+1359-        }
+1360-        let mut s = ((acc[0] + acc[1]) + (acc[2] + acc[3]))
+1361-                  + ((acc[4] + acc[5]) + (acc[6] + acc[7]));
+1362-        while i < n { s += a[i] * b[i]; i += 1; }
+1363-        s
+1364-    }
+--
+1372:    unsafe fn dot8_avx(a: &[f32], b: &[f32]) -> f32 {
+1373-        use std::arch::x86_64::*;
+1374-        let n = a.len().min(b.len());
+1375-        let mut v0 = _mm256_setzero_ps();
+1376-        let mut v1 = _mm256_setzero_ps();
+1377-        let mut v2 = _mm256_setzero_ps();
+1378-        let mut v3 = _mm256_setzero_ps();
+1379-        let (pa, pb) = (a.as_ptr(), b.as_ptr());
+1380-        let mut i = 0usize;
+1381-        while i + 32 <= n {
+1382-            v0 = _mm256_fmadd_ps(_mm256_loadu_ps(pa.add(i)), _mm256_loadu_ps(pb.add(i)), v0);
+1383-            v1 = _mm256_fmadd_ps(_mm256_loadu_ps(pa.add(i + 8)), _mm256_loadu_ps(pb.add(i + 8)), v1);
+1384-            v2 = _mm256_f
+… [482 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Chantier 8 / E4 : j'écris le noyau d'attention à KV déporté (tuiles en mémoire partagée)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && sed -n '1,40p' gpu/qtrinet_gpu.cu && grep -n \"shfl_bas\\|f16_en_f32\" gpu/qtrinet_gpu.cu | head -5", "description": "Read CUDA header helpers"}`
+
+  ```
+// Noyaux GPU de Qtrinet.
+//
+// Principe : les POIDS RESTENT SUR LE GPU. La bande passante est locale
+// (380 Go/s mesurés, contre 6,5 Go/s de PCIe x8) ; ne traversent le bus que les
+// activations — quelques kilo-octets par jeton. Déplacer les poids à chaque
+// jeton serait plus lent que de les lire sur CPU (20 Go/s).
+// Aucun en-tête : le noyau se compile en PTX avec clang, puis le pilote le
+// compile à la volée. Cela évite le conflit entre les en-têtes glibc récents et
+// ceux de CUDA, et rend le noyau indépendant de la boîte à outils.
+
+// Demi-précision → simple, écrit à la main (pas de cuda_fp16.h).
+__device__ __forceinline__ float f16_en_f32(unsigned short h) {
+    const unsigned int s = (h >> 15) & 1u;
+    const unsigned int e = (h >> 10) & 0x1Fu;
+    const unsigned int m = h & 0x3FFu;
+    unsigned int bits;
+    if (e == 0) {
+        if (m == 0) { bits = s << 31; }
+        else {
+            unsigned int mm = m; int ex = -1;
+            while ((mm & 0x400u) == 0) { mm <<= 1; ++ex; }
+            bits = (s << 31) | ((unsigned int)(127 - 15 - ex) << 23) | ((mm & 0x3FFu) << 13);
+        }
+    } else if (e == 31) {
+        bits = (s << 31) | 0x7F800000u | (m << 13);
+    } else {
+… [952 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && python3 - <<'PY'\np='gpu/qtrinet_gpu.cu'; s=open(p).read()\nkernels = r'''\n// ---------------------------------------------------------------------------\n// ATTENTION À KV DÉPORTÉ (étape E4 du plan 1 M).\n//\n// Le cac … [7695 caractères tronqués]`
+
+  ```
+noyaux d'attention posés
+  521 |     if (sinks != nullptr) S += expf(sinks[warp] - M);
+      |                                ^~~~
+12 errors generated when compiling for sm_75.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && ./gpu/compiler.sh 2>&1 | grep -E \"^gpu/qtrinet_gpu.cu|error\" | head -15", "description": "Show CUDA compile errors", "timeoutMs": 300000}`
+
+  ```
+qtrinet_gpu.cu:414:21: error: use of undeclared identifier 'min'
+qtrinet_gpu.cu:428:27: error: use of undeclared identifier 'min'
+qtrinet_gpu.cu:459:47: error: use of undeclared identifier 'fmaxf'
+qtrinet_gpu.cu:460:26: error: use of undeclared identifier 'fmaxf'
+qtrinet_gpu.cu:461:25: error: use of undeclared identifier 'expf'
+qtrinet_gpu.cu:462:42: error: use of undeclared identifier 'expf'
+qtrinet_gpu.cu:470:9: error: use of undeclared identifier '__syncwarp'; did you mean '__sync_swap'?
+qtrinet_gpu.cu:470:20: error: too few arguments to function call, expected at least 1, have 0
+qtrinet_gpu.cu:509:13: error: use of undeclared identifier 'fmaxf'
+qtrinet_gpu.cu:511:31: error: use of undeclared identifier 'fmaxf'
+qtrinet_gpu.cu:514:25: error: use of undeclared identifier 'expf'
+qtrinet_gpu.cu:521:32: error: use of undeclared identifier 'expf'
+12 errors generated when compiling for sm_75.
+  ```
+
+- **bash** `{"command": "ls \"$(clang -print-resource-dir)/include/\" | grep -i \"cuda\" | head -20 && cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && cat gpu/cuda_stub.h | head -60", "description": "Inspect clang CUDA headers and stub"}`
+
+  ```
+__clang_cuda_builtin_vars.h
+__clang_cuda_cmath.h
+__clang_cuda_complex_builtins.h
+__clang_cuda_device_functions.h
+__clang_cuda_intrinsics.h
+__clang_cuda_libdevice_declares.h
+__clang_cuda_math_forward_declares.h
+__clang_cuda_math.h
+__clang_cuda_runtime_wrapper.h
+__clang_cuda_texture_intrinsics.h
+cuda_wrappers
+// Sans en-têtes CUDA : les qualificatifs sont des attributs clang, et
+// `__syncthreads` est un builtin du mode CUDA.
+#define __device__ __attribute__((device))
+#define __host__ __attribute__((host))
+#define __global__ __attribute__((global))
+#define __shared__ __attribute__((shared))
+#define __constant__ __attribute__((constant))
+#define __forceinline__ inline __attribute__((always_inline))
+#define __restrict__ __restrict__
+// Les identifiants de bloc et de fil viennent de
+// `__clang_cuda_builtin_vars.h` (voir compiler.sh) : les redéclarer ici, même
+// avec `device_builtin`, entre en conflit. Sans cet en-tête, clang émet
+// `ld.global.b32 %r, [threadIdx]` au lieu des registres `%tid.x` — la lecture
+// vaut 0, `pas = blockDim.x * gridDim.x` vaut 0, et le noyau boucle à l'infini
+// sans le moindre message d'erreur.
+static __attribute__((device)) __attribute__((always_inline)) f
+… [138 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && python3 - <<'PY'\np='gpu/cuda_stub.h'; s=open(p).read()\ns += '''\n// Aucune bibliothèque CUDA n'est incluse : les fonctions mathématiques des\n// noyaux d'attention sont écrites ici. `ex2.approx.f32` est l'instruction d … [937 caractères tronqués]`
+
+  ```
+aide mathématique ajoutée
+./cuda_stub.h:37:5: error: use of undeclared identifier '__builtin_amdgcn_wave_barrier'
+1 error generated when compiling for sm_75.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && python3 - <<'PY'\np='gpu/cuda_stub.h'; s=open(p).read()\nold = \"\"\"static __attribute__((device)) __attribute__((always_inline)) float expf(float x) {\n    return __builtin_elementwise_pow(2.0f, x * 1.4426950408889634f … [808 caractères tronqués]`
+
+  ```
+expf et __syncwarp en PTX
+qtrinet_gpu.ptx régénéré (6430 lignes)
+noyaux exportés : 9
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && python3 - <<'PY'\np='src/gpu.rs'; s=open(p).read()\n\n# 1) champs : pointeurs des deux noyaux d'attention + structure de KV déporté\ns = s.replace(\"\"\"    f_q6k_warp: *mut c_void,\"\"\",\n\"\"\"    f_q6k_warp: *mut c_v … [10055 caractères tronqués]`
+
+  ```
+gpu.rs : KV déporté posé
+error[E0308]: mismatched types
+   --> src/gpu.rs:377:49
+    |
+377 |               let mut params: [*mut c_void; 13] = [
+    |  _____________________________-----------------___^
+    | |                             |
+    | |                             expected due to this
+378 | |                 &mut p_k as *mut u64 as *mut c_void,
+379 | |                 &mut p_sk as *mut u64 as *mut c_void,
+--
+error: could not compile `qtrinet-core` (bin "qtrinet-core") due to 1 previous error; 8 warnings emitted
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && python3 - <<'PY'\np='src/gpu.rs'; s=open(p).read()\nold = \"\"\"            let mut params: [*mut c_void; 13] = [\n                &mut p_k as *mut u64 as *mut c_void,\n                &mut p_sk as *mut u64 as *mut c_voi … [2498 caractères tronqués]`
+
+  ```
+params corrigés
+    Finished `release` profile [optimized] target(s) in 0.01s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && grep -n \"struct Config\\|fn lire\\|impl Config\\|n_kv\\b.*=\\|head_dim\\|n_rot\" src/model.rs | head -20 && grep -n \"fn lire_config\\|cfg = \\|let cfg\" src/model.rs | head -10", "description": "Find config reader"}`
+
+  ```
+30:    pub head_dim: usize,
+53:    pub n_rot: usize,
+386:    /// cache KV, par couche : `[n_kv_head × ctx × head_dim]`, en f32 ou quantifié
+738:            head_dim: g.cfg("attention.key_length").and_then(|m| m.as_u64()).unwrap_or(0) as usize,
+749:            n_rot: {
+814:            if c.head_dim == 0 { c.head_dim = c.hidden / c.n_head.max(1); }
+817:        assert!(cfg.head_dim > 0, "dimension de tête indéterminée");
+818:        assert!(cfg.head_dim * cfg.n_head >= cfg.hidden,
+819:                "n_head × head_dim doit couvrir hidden");
+867:            .map(|_| KvCache::new(kv_bits, cfg.n_kv_head, ctx, cfg.head_dim)).collect();
+869:            * KvCache::new(kv_bits, cfg.n_kv_head, ctx, cfg.head_dim).octets();
+891:                 if cfg.head_dim > 0 { "" } else { "" });
+892:        println!("[config] puits appris sur {sinks_vus}/{n_layer} couches · n_rot {} · ffn {} · experts {}{}",
+893:                 if cfg.n_rot == 0 { cfg.head_dim } else { cfg.n_rot },
+1410:    fn creuse_tetes(v: &mut [f32], n_head: usize, head_dim: usize, milliemes: usize) {
+1411:        let k = ((milliemes as f32 / 1000.0) * head_dim as f32).round() as usize;
+1412:        let k = k.clamp(1, head_dim);
+141
+… [201 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src/model.rs", "limit": 45, "offset": 721}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src/model.rs</path>
+<type>file</type>
+<content>
+721: impl Model {
+722:     pub fn load(path: &str, ctx: usize, n_threads: usize, dense: bool, keep: f32,
+723:                 auto: bool, q4: u8, b6: u8) -> Model {
+724:         let t0 = Instant::now();
+725:         let g = Gguf::open(path).expect("ouverture du GGUF");
+726:         let cfg = Cfg {
+727:             n_layer: g.cfg("block_count").and_then(|m| m.as_u64()).unwrap_or(0) as usize,
+728:             hidden: g.cfg("embedding_length").and_then(|m| m.as_u64()).unwrap_or(0) as usize,
+729:             n_head: g.cfg("attention.head_count").and_then(|m| m.as_u64()).unwrap_or(0) as usize,
+730:             n_kv_head: g.cfg("attention.head_count_kv").and_then(|m| m.as_u64()).unwrap_or(0) as usize,
+731:             ffn: g.cfg("feed_forward_length").and_then(|m| m.as_u64()).unwrap_or(0) as usize,
+732:             eps: g.cfg("attention.layer_norm_rms_epsilon").and_then(|m| m.as_f64()).unwrap_or(1e-6) as f32,
+733:             rope_base: g.cfg("rope.freq_base").and_then(|m| m.as_f64()).unwrap_or(10000.0) as f32,
+734:             // `attention.key_length` donne la dimension de
+… [2457 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && grep -n \"gpu_banc\\|pub struct Options\" -A3 src/main.rs | sed -n '1,25p' && grep -n \"if opt.gpu_banc\" -B3 -A3 src/main.rs", "description": "Locate Options and dispatch"}`
+
+  ```
+40:    if opt.gpu_banc { run_gpu_banc(opt); return; }
+41-    if opt.plan { run_plan(opt); return; }
+42-    if opt.tokenize { run_tokenize(opt); return; }
+43-    if opt.ppl { run_ppl(opt); return; }
+--
+318:    infer: bool, ppl: bool, plan: bool, tokenize: bool, gpu_banc: bool,
+319-    // --- source des jetons
+320-    ids: Vec<u32>, ids_file: Option<String>, texte_file: Option<String>,
+321-    ppl_texte: bool, prompt: Option<String>, limit: usize, depuis: usize,
+--
+386:            "--gpu-banc" => { o.gpu_banc = true; 1 }
+387-            "--ids" => { o.ids = suivant(i).split(',')
+388-                            .filter_map(|s| s.trim().parse().ok()).collect(); 2 }
+389-            "--ids-file" => { o.ids_file = Some(suivant(i).clone()); 2 }
+--
+773:fn run_gpu_banc(opt: Options) {
+774-    use std::time::Instant;
+775-    let path = &modele_chemin();
+776-    let threads = if opt.threads_impose { opt.threads } else {
+37-    // d'options, donc les mêmes drapeaux.
+38-    let opt = analyser(&args);
+39-    let _ = MODELE.set(args[1].clone());
+40:    if opt.gpu_banc { run_gpu_banc(opt); return; }
+41-    if opt.plan { run_plan(opt); return; }
+42-    if opt.tokenize { run_tokenize(opt); return; }
+
+… [43 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && python3 - <<'PY'\np='src/main.rs'; s=open(p).read()\n\n# option : --banc-kv N\ns = s.replace(\"\"\"    infer: bool, ppl: bool, plan: bool, tokenize: bool, gpu_banc: bool,\"\"\",\n\"\"\"    infer: bool, ppl: bool, plan: b … [7405 caractères tronqués]`
+
+  ```
+banc KV posé
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && python3 - <<'PY'\np='src/main.rs'; s=open(p).read()\n\nold = \"\"\"    let qs: Vec<f32> = (0..n_head * hd).map(|_| suivant()).collect();\n    let (mut kd, mut vd) = (vec![0f32; hd], vec![0f32; hd]);\n    let mut sc = vec … [5466 caractères tronqués]`
+
+  ```
+référence CPU, dot8 public, miroir GPU posés
+error[E0433]: cannot find type `KvCache` in this scope
+   --> src/main.rs:803:21
+    |
+803 |     let mut cache = KvCache::new(bits, n_kv, n, hd);
+    |                     ^^^^^^^ use of undeclared type `KvCache`
+    |
+help: consider importing this struct
+    |
+ 18 + use crate::model::KvCache;
+--
+error[E0433]: cannot find type `Model` in this scope
+   --> src/main.rs:837:33
+    |
+837 |                         let s = Model::dot8(qh, &kd) * scale;
+    |                                 ^^^^^ use of undeclared type `Model`
+    |
+help: consider importing this struct
+    |
+ 18 + use crate::model::Model;
+--
+error: could not compile `qtrinet-core` (bin "qtrinet-core") due to 2 previous errors; 8 warnings emitted
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && python3 - <<'PY'\np='src/main.rs'; s=open(p).read()\ns = s.replace(\"\"\"fn run_banc_kv(opt: Options) {\n    use std::time::Instant;\"\"\",\n\"\"\"fn run_banc_kv(opt: Options) {\n    use crate::model::{KvCache, Model};\n … [256 caractères tronqués]`
+
+  ```
+imports du banc
+    Finished `release` profile [optimized] target(s) in 0.01s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && QT_GPU=1 timeout 600 ./qtrinet-core/target/release/qtrinet-core models/Qwen2.5-0.5B-Q8_0.gguf --banc-kv 4096 --threads 16 2>&1 | tail -8", "description": "First KV offload bench at 4k", "timeoutMs": 600000}`
+
+  ```
+banc KV : 4096 clés · 24 couches · 2 têtes KV × 64 dim, 7 têtes de requête par tête KV · KV f32 bits
+  CPU 16 fils :      1.7 ms par passe  (5.1 Go/s de KV, 1.7 ms × 24 couches = 40 ms/jeton)
+  GPU 1 · KV d'une couche : 0.00 Go résidents, 16.17 Go libres
+  recopie CPU → VRAM : 0.1 s (0.1 Go/s sur le bus)
+timeout: the monitored command dumped core
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && python3 - <<'PY'\np='src/gpu.rs'; s=open(p).read()\nold = \"\"\"            let mut params3: [*mut c_void; 5] = [\n                &mut p_part as *mut u64 as *mut c_void,\n                &mut p_sinks as *mut u64 as *mut … [1271 caractères tronqués]`
+
+  ```
+rep ajouté aux paramètres de recombinaison
+    Finished `release` profile [optimized] target(s) in 18.94s
+banc KV : 4096 clés · 24 couches · 2 têtes KV × 64 dim, 7 têtes de requête par tête KV · KV f32 bits
+  CPU 16 fils :      1.9 ms par passe  (4.4 Go/s de KV, 1.9 ms × 24 couches = 46 ms/jeton)
+  GPU 1 · KV d'une couche : 0.00 Go résidents, 16.17 Go libres
+  recopie CPU → VRAM : 0.1 s (0.1 Go/s sur le bus)
+  GPU 8 tranches :      0.3 ms par passe  (25.6 Go/s de KV, 0.3 ms × 24 couches = 8 ms/jeton)  écart max +3.35e0
+  gain par passe : ×5.8
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for n in 32 128 256 512 1024; do QT_GPU=1 timeout 300 ./qtrinet-core/target/release/qtrinet-core models/Qwen2.5-0.5B-Q8_0.gguf --banc-kv $n --threads 16 2>&1 | grep -E \"GPU .* tranches\"; done", "description": "Bisect error by conte … [32 caractères tronqués]`
+
+  ```
+GPU 1 tranches :      0.0 ms par passe  (2.0 Go/s de KV, 0.0 ms × 24 couches = 1 ms/jeton)  écart max +1.00e0
+  GPU 1 tranches :      0.1 ms par passe  (5.2 Go/s de KV, 0.1 ms × 24 couches = 1 ms/jeton)  écart max +1.28e0
+  GPU 1 tranches :      0.1 ms par passe  (6.6 Go/s de KV, 0.1 ms × 24 couches = 2 ms/jeton)  écart max +6.54e0
+  GPU 1 tranches :      0.1 ms par passe  (7.9 Go/s de KV, 0.1 ms × 24 couches = 3 ms/jeton)  écart max +2.46e0
+  GPU 2 tranches :      0.1 ms par passe  (16.2 Go/s de KV, 0.1 ms × 24 couches = 3 ms/jeton)  écart max +3.39e0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && python3 - <<'PY'\np='gpu/qtrinet_gpu.cu'; s=open(p).read()\nold = \"\"\"        float s = -1e30f;\n        if (lane < reste) {\n            s = 0.0f;\n            #pragma unroll 8\n            for (int i = 0; i < hd; ++i … [858 caractères tronqués]`
+
+  ```
+échelle appliquée au score
+    Finished `release` profile [optimized] target(s) in 18.60s
+  GPU 1 tranches :      0.0 ms par passe  (2.1 Go/s de KV, 0.0 ms × 24 couches = 1 ms/jeton)  écart max +1.00e0
+  GPU 1 tranches :      0.1 ms par passe  (8.0 Go/s de KV, 0.1 ms × 24 couches = 3 ms/jeton)  écart max +9.85e-1
+  GPU 8 tranches :      0.4 ms par passe  (23.6 Go/s de KV, 0.4 ms × 24 couches = 9 ms/jeton)  écart max +1.00e0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && sed -n '88,100p' gpu/qtrinet_gpu.cu && grep -n \"__shfl\" gpu/qtrinet_gpu.cu | head", "description": "Check shfl_bas definition"}`
+
+  ```
+// ---------------------------------------------------------------------------
+// Réduction de warp par shuffle. `shfl.sync.down` est écrit en PTX en ligne :
+// les intrinsèques `__shfl_down_sync` viennent des en-têtes CUDA, absents de
+// cette chaîne de compilation.
+__device__ __forceinline__ float shfl_bas(float v, int d) {
+    float r;
+    asm volatile("shfl.sync.down.b32 %0, %1, %2, 0x1f, 0xffffffff;"
+                 : "=f"(r) : "f"(v), "r"(d));
+    return r;
+}
+
+// Version **une warp par ligne**.
+91:// les intrinsèques `__shfl_down_sync` viennent des en-têtes CUDA, absents de
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && python3 - <<'PY'\np='gpu/qtrinet_gpu.cu'; s=open(p).read()\n\n# réduction papillon : toutes les voies obtiennent le résultat\ns = s.replace(\"\"\"// Version **une warp par ligne**.\"\"\",\n\"\"\"// Réduction « papillon » … [2156 caractères tronqués]`
+
+  ```
+réduction papillon + écriture par la voie 0
+    Finished `release` profile [optimized] target(s) in 18.05s
+  GPU 1 tranches :      0.0 ms par passe  (2.0 Go/s de KV, 0.0 ms × 24 couches = 1 ms/jeton)  écart max +1.00e0
+  GPU 1 tranches :      0.1 ms par passe  (8.0 Go/s de KV, 0.1 ms × 24 couches = 3 ms/jeton)  écart max +9.85e-1
+  GPU 8 tranches :      0.3 ms par passe  (24.8 Go/s de KV, 0.3 ms × 24 couches = 8 ms/jeton)  écart max +1.00e0
+  GPU 128 tranches :      1.2 ms par passe  (116.1 Go/s de KV, 1.2 ms × 24 couches = 28 ms/jeton)  écart max +9.99e-1
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && python3 - <<'PY'\np='src/main.rs'; s=open(p).read()\nold = \"\"\"    println!(\"  gain par passe : ×{:.1}\", tc / ms);\"\"\"\nnew = \"\"\"    println!(\"  gain par passe : ×{:.1}\", tc / ms);\n    if std::env::var(\"QT_B … [941 caractères tronqués]`
+
+  ```
+diagnostic ajouté
+    Finished `release` profile [optimized] target(s) in 18.57s
+  GPU 1 tranches :      0.0 ms par passe  (1.7 Go/s de KV, 0.0 ms × 24 couches = 1 ms/jeton)  écart max +1.00e0
+  gain par passe : ×26.6
+  tête  0 écart 4.03e-1 | cpu[0..3] -0.3848 -0.4812 -0.5098 | gpu[0..3] -0.5866 -0.5758 -0.3477
+  tête  1 écart 3.21e-1 | cpu[0..3] -0.3851 -0.4789 -0.5022 | gpu[0..3] -0.5669 -0.5327 -0.4392
+  tête  2 écart 3.69e-1 | cpu[0..3] -0.3790 -0.4831 -0.5036 | gpu[0..3] -0.4344 -0.4454 -0.3961
+  tête  3 écart 3.45e-1 | cpu[0..3] -0.3862 -0.4789 -0.5102 | gpu[0..3] -0.5415 -0.5241 -0.3379
+  tête  4 écart 3.83e-1 | cpu[0..3] -0.3885 -0.4798 -0.5100 | gpu[0..3] -0.5330 -0.5335 -0.3976
+  tête  5 écart 4.41e-1 | cpu[0..3] -0.3812 -0.4850 -0.5038 | gpu[0..3] -0.5070 -0.5176 -0.4195
+  tête  6 écart 3.55e-1 | cpu[0..3] -0.3829 -0.4834 -0.5058 | gpu[0..3] -0.4095 -0.5350 -0.4338
+  tête  7 écart 1.00e0 | cpu[0..3] -0.5106 -0.5253 -0.4353 | gpu[0..3] 0.0000 0.0000 0.0000
+  tête  8 écart 1.00e0 | cpu[0..3] -0.5172 -0.5335 -0.4340 | gpu[0..3] 0.0000 0.0000 0.0000
+  tête  9 écart 1.00e0 | cpu[0..3] -0.5144 -0.5262 -0.4326 | gpu[0..3] 0.0000 0.0000 0.0000
+  tête 10 écart 1.00e0 | cpu[0..3]
+… [333 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && python3 - <<'PY'\np='gpu/qtrinet_gpu.cu'; s=open(p).read()\n\n# les partiels doivent être indexés par (tranche, TÊTE KV) : sinon les blocs\n# d'une même tranche s'écrasent entre eux\ns = s.replace(\"\"\"    float* dst =  … [2916 caractères tronqués]`
+
+  ```
+indexation par tête KV corrigée
+    Finished `release` profile [optimized] target(s) in 18.71s
+  tête  8 écart 1.49e-1 | cpu[0..3] -0.5172 -0.5335 -0.4340 | gpu[0..3] -0.5669 -0.5327 -0.4392
+  tête  9 écart 2.18e-1 | cpu[0..3] -0.5144 -0.5262 -0.4326 | gpu[0..3] -0.4344 -0.4454 -0.3961
+  tête 10 écart 1.65e-1 | cpu[0..3] -0.5137 -0.5262 -0.4403 | gpu[0..3] -0.5415 -0.5241 -0.3379
+  tête 11 écart 1.59e-1 | cpu[0..3] -0.5097 -0.5259 -0.4361 | gpu[0..3] -0.5330 -0.5335 -0.3976
+  tête 12 écart 2.14e-1 | cpu[0..3] -0.5097 -0.5335 -0.4360 | gpu[0..3] -0.5070 -0.5176 -0.4195
+  tête 13 écart 1.64e-1 | cpu[0..3] -0.5132 -0.5311 -0.4386 | gpu[0..3] -0.4095 -0.5350 -0.4338
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && python3 - <<'PY'\np='gpu/qtrinet_gpu.cu'; s=open(p).read()\nold = \"\"\"    float qv[4];\n    #pragma unroll\n    for (int o = 0; o < 4; ++o) {\n        qv[o] = (o < nq) ? q[warp * hd + o * 32 + lane] : 0.0f;\n    }\"\"\ … [843 caractères tronqués]`
+
+  ```
+décalage de requête corrigé
+    Finished `release` profile [optimized] target(s) in 18.39s
+  gain par passe : ×20.4
+  tête  0 écart 1.88e-1 | cpu[0..3] -0.3848 -0.4812 -0.5098 | gpu[0..3] -0.3977 -0.4878 -0.4482
+  tête  1 écart 1.43e-1 | cpu[0..3] -0.3851 -0.4789 -0.5022 | gpu[0..3] -0.4032 -0.4521 -0.5767
+  tête  2 écart 1.61e-1 | cpu[0..3] -0.3790 -0.4831 -0.5036 | gpu[0..3] -0.3880 -0.4732 -0.4817
+  tête  3 écart 1.59e-1 | cpu[0..3] -0.3862 -0.4789 -0.5102 | gpu[0..3] -0.3659 -0.5572 -0.4628
+  tête  4 écart 1.72e-1 | cpu[0..3] -0.3885 -0.4798 -0.5100 | gpu[0..3] -0.3947 -0.4494 -0.5151
+  tête  5 écart 2.04e-1 | cpu[0..3] -0.3812 -0.4850 -0.5038 | gpu[0..3] -0.3946 -0.4595 -0.4592
+  tête  6 écart 1.53e-1 | cpu[0..3] -0.3829 -0.4834 -0.5058 | gpu[0..3] -0.3255 -0.5143 -0.5130
+  tête  7 écart 2.03e-1 | cpu[0..3] -0.5106 -0.5253 -0.4353 | gpu[0..3] -0.6390 -0.5380 -0.5088
+  tête  8 écart 2.03e-1 | cpu[0..3] -0.5172 -0.5335 -0.4340 | gpu[0..3] -0.4898 -0.5385 -0.4400
+  tête  9 écart 1.78e-1 | cpu[0..3] -0.5144 -0.5262 -0.4326 | gpu[0..3] -0.5299 -0.6309 -0.5442
+  tête 10 écart 2.02e-1 | cpu[0..3] -0.5137 -0.5262 -0.4403 | gpu[0..3] -0.4552 -0.4369 -0.4819
+  tête 11 écart 1.27e-1 | cp
+… [259 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && python3 - <<'PY'\np='src/main.rs'; s=open(p).read()\nold = \"\"\"    let (mut k, mut v) = (vec![0f32; hd], vec![0f32; hd]);\n    for pos in 0..n {\n        for kvh in 0..n_kv {\n            for i in 0..hd { k[i] = suivan … [1583 caractères tronqués]`
+
+  ```
+cas dégénérés ajoutés
+    Finished `release` profile [optimized] target(s) in 18.20s
+--- K nul + V unité ---
+  GPU 1 tranches :      0.0 ms par passe  (2.1 Go/s de KV, 0.0 ms × 24 couches = 1 ms/jeton)  écart max +0.00e0
+  tête  0 écart 0.00e0 | cpu[0..3] 1.0000 1.0000 1.0000 | gpu[0..3] 1.0000 1.0000 1.0000
+  tête  1 écart 0.00e0 | cpu[0..3] 1.0000 1.0000 1.0000 | gpu[0..3] 1.0000 1.0000 1.0000
+--- K au hasard + V unité ---
+  GPU 1 tranches :      0.0 ms par passe  (2.0 Go/s de KV, 0.0 ms × 24 couches = 1 ms/jeton)  écart max +3.58e-7
+  tête  0 écart 2.98e-7 | cpu[0..3] 1.0000 1.0000 1.0000 | gpu[0..3] 1.0000 1.0000 1.0000
+  tête  1 écart 1.19e-7 | cpu[0..3] 1.0000 1.0000 1.0000 | gpu[0..3] 1.0000 1.0000 1.0000
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && python3 - <<'PY'\np='src/main.rs'; s=open(p).read()\nold = \"\"\"    let (mut k, mut v) = (vec![0f32; hd], vec![0f32; hd]);\n    for pos in 0..n {\n        for kvh in 0..n_kv {\n            for i in 0..hd {\n             … [1479 caractères tronqués]`
+
+  ```
+cas une-chaude ajouté
+    Finished `release` profile [optimized] target(s) in 18.07s
+  GPU 1 tranches :      0.0 ms par passe  (0.5 Go/s de KV, 0.0 ms × 24 couches = 1 ms/jeton)  écart max +1.84e0
+  tête  0 écart 1.92e0 | cpu[0..3] 0.1237 0.1424 0.1332 | gpu[0..3] 0.0739 0.1082 0.0445
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && python3 - <<'PY'\np='src/main.rs'; s=open(p).read()\nold = \"\"\"    if std::env::var(\"QT_BANC_KV_DEBUG\").is_ok() {\"\"\"\nnew = \"\"\"    if std::env::var(\"QT_BANC_KV_UNIT\").is_ok() && hd >= 32 {\n        let c = &c … [873 caractères tronqués]`
+
+  ```
+dump des poids
+    Finished `release` profile [optimized] target(s) in 18.38s
+  GPU 1 tranches :      0.0 ms par passe  (0.6 Go/s de KV, 0.0 ms × 24 couches = 1 ms/jeton)  écart max +1.84e0
+  poids CPU 0..8 : 0.1237 0.1424 0.1332 0.1245 0.1102 0.1101 0.1449 0.1111
+  poids GPU 0..8 : 0.0739 0.1082 0.0445 0.0843 0.1913 0.0452 0.4235 0.0289
+  somme CPU 1.0000 · somme GPU 1.0000
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && awk '/visible .entry attn_kv_partiels/,/^{/' gpu/qtrinet_gpu.ptx | head -25", "description": "Inspect attention kernel params in PTX"}`
+
+  ```
+.visible .entry attn_kv_partiels(
+	.param .u64 .ptr .align 1 attn_kv_partiels_param_0,
+	.param .u64 .ptr .align 1 attn_kv_partiels_param_1,
+	.param .u64 .ptr .align 1 attn_kv_partiels_param_2,
+	.param .u64 .ptr .align 1 attn_kv_partiels_param_3,
+	.param .u64 .ptr .align 1 attn_kv_partiels_param_4,
+	.param .u64 .ptr .align 1 attn_kv_partiels_param_5,
+	.param .u32 attn_kv_partiels_param_6,
+	.param .u32 attn_kv_partiels_param_7,
+	.param .u32 attn_kv_partiels_param_8,
+	.param .u32 attn_kv_partiels_param_9,
+	.param .u32 attn_kv_partiels_param_10,
+	.param .u32 attn_kv_partiels_param_11,
+	.param .u32 attn_kv_partiels_param_12,
+	.param .f32 attn_kv_partiels_param_13
+)                                       // @attn_kv_partiels
+{
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && awk '/visible .entry attn_kv_partiels/,/visible .entry attn_kv_recombine/' gpu/qtrinet_gpu.ptx | grep -n \"param_13\\|fma.rn.f32\\|mul.f32\" | head -20", "description": "Check scale usage in PTX body"}`
+
+  ```
+15:	.param .f32 attn_kv_partiels_param_13
+109:	ld.param.b32 	%r63, [attn_kv_partiels_param_13];
+534:	fma.rn.f32 	%r418, %r418, %r266, %r409;
+621:	mul.f32 	%r423, %r22, %r422;
+664:	mul.f32 	%r425, %r23, %r424;
+690:	fma.rn.f32 	%r234, %r232, %r233, %r428;
+692:	fma.rn.f32 	%r236, %r232, %r235, %r234;
+694:	fma.rn.f32 	%r238, %r232, %r237, %r236;
+696:	fma.rn.f32 	%r240, %r232, %r239, %r238;
+698:	fma.rn.f32 	%r242, %r232, %r241, %r240;
+700:	fma.rn.f32 	%r244, %r232, %r243, %r242;
+702:	fma.rn.f32 	%r246, %r232, %r245, %r244;
+704:	fma.rn.f32 	%r428, %r232, %r247, %r246;
+728:	fma.rn.f32 	%r428, %r250, %r251, %r428;
+735:	mul.f32 	%r430, %r63, %r428;
+770:	mul.f32 	%r267, %r269, 0f3FB8AA3B;
+778:	mul.f32 	%r271, %r270, 0f3FB8AA3B;
+803:	mul.f32 	%r435, %r266, %r435;
+804:	mul.f32 	%r434, %r266, %r434;
+805:	mul.f32 	%r433, %r266, %r433;
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && python3 - <<'PY'\np='src/main.rs'; s=open(p).read()\nold = \"\"\"    let qs: Vec<f32> = (0..n_head * hd).map(|_| suivant()).collect();\"\"\"\nnew = \"\"\"    // Cas « pente » : une seule composante de requête non nulle e … [1284 caractères tronqués]`
+
+  ```
+cas pente ajouté
+error: could not compile `qtrinet-core` (bin "qtrinet-core") due to 1 previous error; 8 warnings emitted
+  GPU 1 tranches :      0.0 ms par passe  (0.6 Go/s de KV, 0.0 ms × 24 couches = 1 ms/jeton)  écart max +3.13e-1
+  tête  0 écart 2.74e-1 | cpu[0..3] -0.5044 -0.4305 -0.2557 | gpu[0..3] -0.4341 -0.5291 -0.1903
+  tête  7 écart 1.22e-1 | cpu[0..3] -0.5231 -0.4121 -0.2582 | gpu[0..3] -0.5036 -0.3318 -0.2215
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && cargo build --release 2>&1 | grep -E \"^error\" -A12 | head -25", "description": "Show compile error", "timeoutMs": 300000}`
+
+  ```
+error[E0425]: cannot find value `pente` in this scope
+   --> src/main.rs:826:32
+    |
+826 |                        else if pente { if i == 0 { pos as f32 } else { 0.0 } }
+    |                                ^^^^^ not found in this scope
+
+warning: variant `Q4_K` should have an upper camel case name
+   --> src/list.rs:572:40
+    |
+572 | pub enum Source { Propre, Q4_0, Mxfp4, Q4_K, Q6_K }
+    |                                        ^^^^ help: convert the identifier to upper camel case: `Q4K`
+    |
+    = note: `#[warn(non_camel_case_types)]` (part of `#[warn(nonstandard_style)]`) on by default
+--
+error: could not compile `qtrinet-core` (bin "qtrinet-core") due to 1 previous error; 8 warnings emitted
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && python3 - <<'PY'\np='src/main.rs'; s=open(p).read()\nold = \"\"\"    let v_unitaire = std::env::var(\"QT_BANC_KV_UNIT\").is_ok();\"\"\"\nnew = \"\"\"    let v_unitaire = std::env::var(\"QT_BANC_KV_UNIT\").is_ok();\n    / … [1410 caractères tronqués]`
+
+  ```
+drapeau pente déplacé
+0
+  GPU 1 tranches :      0.0 ms par passe  (0.5 Go/s de KV, 0.0 ms × 24 couches = 1 ms/jeton)  écart max +1.00e-1
+  tête  0 écart 1.00e-1 | cpu[0..3] -0.3302 -0.3190 -0.3518 | gpu[0..3] -0.3367 -0.3549 -0.3830
+  tête  7 écart 8.80e-2 | cpu[0..3] -0.4872 -0.6585 -0.3600 | gpu[0..3] -0.5251 -0.6377 -0.3419
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && sed -i 's/else if pente { if i == 0 { pos as f32 } else { 0.0 } }/else if pente { if i == 0 { pos as f32 * 100.0 } else { 0.0 } }/' src/main.rs && cargo build --release 2>&1 | grep -cE \"^error\" && cd /home/stephane/Dat … [288 caractères tronqués]`
+
+  ```
+0
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && QT_GPU=1 QT_BANC_KV_GRAD=1 QT_BANC_KV_DEBUG=1 timeout 300 ./qtrinet-core/target/release/qtrinet-core models/Qwen2.5-0.5B-Q8_0.gguf --banc-kv 8 2>&1 | grep -E \"tête  0|tête  7 |écart max\"", "description": "Run concentrated softmax t … [26 caractères tronqués]`
+
+  ```
+GPU 1 tranches :      0.0 ms par passe  (0.5 Go/s de KV, 0.0 ms × 24 couches = 1 ms/jeton)  écart max +6.19e-1
+  tête  0 écart 6.21e-1 | cpu[0..3] -0.0160 -0.0588 -0.4443 | gpu[0..3] -0.3367 -0.3549 -0.3830
+  tête  7 écart 4.80e-1 | cpu[0..3] -0.0603 -0.8731 -0.1940 | gpu[0..3] -0.5251 -0.6377 -0.3419
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"--- une-chaude, K au hasard ---\" && QT_GPU=1 QT_BANC_KV_UNIT=1 timeout 300 ./qtrinet-core/target/release/qtrinet-core models/Qwen2.5-0.5B-Q8_0.gguf --banc-kv 8 2>&1 | grep -E \"poids\" && echo \"--- une-chaude, K NUL ---\" && … [237 caractères tronqués]`
+
+  ```
+--- une-chaude, K au hasard ---
+  poids CPU 0..8 : 0.1237 0.1424 0.1332 0.1245 0.1102 0.1101 0.1449 0.1111
+  poids GPU 0..8 : 0.0739 0.1082 0.0445 0.0843 0.1913 0.0452 0.4235 0.0289
+--- une-chaude, K NUL ---
+  poids CPU 0..8 : 0.1250 0.1250 0.1250 0.1250 0.1250 0.1250 0.1250 0.1250
+  poids GPU 0..8 : 0.1250 0.1250 0.1250 0.1250 0.1250 0.1250 0.1250 0.1250
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && python3 - <<'PY'\np='src/main.rs'; s=open(p).read()\nold = \"\"\"    let pente = std::env::var(\"QT_BANC_KV_GRAD\").is_ok();\"\"\"\nnew = \"\"\"    let pente = std::env::var(\"QT_BANC_KV_GRAD\").is_ok();\n    // Clés « u … [1204 caractères tronqués]`
+
+  ```
+clés une-chaudes ajoutées
+    Finished `release` profile [optimized] target(s) in 18.70s
+  GPU 1 tranches :      0.0 ms par passe  (0.5 Go/s de KV, 0.0 ms × 24 couches = 1 ms/jeton)  écart max +0.00e0
+  poids CPU 0..8 : 0.1393 0.1230 0.1230 0.1230 0.1230 0.1230 0.1230 0.1230
+  poids GPU 0..8 : 0.1393 0.1230 0.1230 0.1230 0.1230 0.1230 0.1230 0.1230
+  ```
+
+### 🤖 Assistant
+
+⏵ Bug trouvé : la requête était lue par voies, pas en mémoire partagée
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && python3 - <<'PY'\np='gpu/qtrinet_gpu.cu'; s=open(p).read()\n\ns = s.replace(\"\"\"    extern __shared__ float sh[];\n    float* shK = sh;                 // hd * 33\n    float* shV = shK + hd * 33;      // 32 * hd\n    f … [3155 caractères tronqués]`
+
+  ```
+requête en mémoire partagée
+noyaux exportés : 9
+    Finished `release` profile [optimized] target(s) in 17.64s
+aléatoire                                    écart max +1.80e-6
+QT_BANC_KV_UNIT=1                             écart max +5.86e-7
+QT_BANC_KV_KUNIT=1 QT_BANC_KV_UNIT=1 QT_BANC_KV_GRAD=1 écart max +3.90e-6
+  ```
+
+- **bash** `{"command": "cat > /tmp/banc_kv.sh <<'EOF'\n#!/bin/bash\n# KV déporté : courbe CPU contre GPU, par taille de contexte et par format.\nset -u\ncd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\nQ=./qtrinet-core/target/release/qtrinet-core\nM=models/Qwen2.5-0.5B-Q8_0.gguf\nJ=/tmp/banc_kv.log\n: > \"$ … [634 caractères tronqués]`
+
+  ```
+started background job bash-28
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && grep -n \"ecrire(\" src/model.rs | head -20 && grep -n \"pub fn forward\\b\\|pub fn forward_lot\\|fn forward(\" src/model.rs", "description": "Find KV write sites and forward functions"}`
+
+  ```
+633:    pub fn ecrire(&mut self, kvh: usize, pos: usize, k: &[f32], v: &[f32]) {
+691:            machine.kv_ecrire(m, kvh, pos, ko, vo, &[], &[])
+693:            machine.kv_ecrire(m, kvh, pos, &self.kq[base..base + pas],
+1690:                        kvc.ecrire(hh, pos, &ki[hh * hd..(hh + 1) * hd],
+2065:                    kvc.ecrire(hh, pos, &k[hh * hd..(hh + 1) * hd], &v[hh * hd..(hh + 1) * hd]);
+2695:            c.ecrire(1, 2, &k, &v);
+2714:            c.ecrire(1, 2, &k2, &v);
+1542:    pub fn forward_lot(&mut self, toks: &[u32], pos0: usize) -> Vec<Vec<f32>> {
+1964:    pub fn forward(&mut self, tok: u32, pos: usize) -> Vec<f32> {
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src/model.rs", "limit": 40, "offset": 2050}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src/model.rs</path>
+<type>file</type>
+<content>
+2050:                 None => {
+2051:                     Self::rope(&mut q, nh, hd, pos, cfg.rope_base, cfg.n_rot);
+2052:                     Self::rope(&mut k, nkv, hd, pos, cfg.rope_base, cfg.n_rot);
+2053:                 }
+2054:             }
+2055:             if self.qk_topk > 0 {
+2056:                 Self::creuse_tetes(&mut q, nh, hd, self.qk_topk);
+2057:                 Self::creuse_tetes(&mut k, nkv, hd, self.qk_topk);
+2058:             }
+2059:             self.prof[1] += tr.elapsed().as_secs_f64();
+2060:             let ta = Instant::now();
+2061:             // écriture du cache KV à la position courante
+2062:             {
+2063:                 let kvc = &mut kv[l];
+2064:                 for hh in 0..nkv {
+2065:                     kvc.ecrire(hh, pos, &k[hh * hd..(hh + 1) * hd], &v[hh * hd..(hh + 1) * hd]);
+2066:                 }
+2067:             }
+2068:             // attention groupée
+2069:             let scale = 1.0 / (hd as f32).sqrt();
+2070:             let kvc = &kv[l];
+2071:             // Tampons de déquantification : en f32 ils ne servent pas, en
+… [1285 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src/model.rs", "limit": 60, "offset": 2086}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src/model.rs</path>
+<type>file</type>
+<content>
+2086:             if groupe {
+2087:                 let t_scores = Instant::now();
+2088:                 for kvh in 0..nkv {
+2089:                     let h0 = kvh * rep;
+2090:                     let h1 = (h0 + rep).min(nh);
+2091:                     for t in 0..n {
+2092:                         kvc.cle(kvh, t, &mut kd);
+2093:                         for hh in h0..h1 {
+2094:                             let qh = &q[hh * hd..(hh + 1) * hd];
+2095:                             sc2[hh * ctx + t] = point(qh, &kd) * scale;
+2096:                         }
+2097:                     }
+2098:                 }
+2099:                 self.prof[4] += t_scores.elapsed().as_secs_f64();
+2100:                 let t_soft = Instant::now();
+2101:                 for kvh in 0..nkv {
+2102:                     let h0 = kvh * rep;
+2103:                     let h1 = (h0 + rep).min(nh);
+2104:                     for hh in h0..h1 {
+2105:                         let row = &mut sc2[hh * ctx..hh * ctx + n];
+2106:                         let mut mx = f32::NEG_INFINITY;
+2107:                         fo
+… [2356 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && grep -n \"fn point\" -A 8 src/model.rs | head -14 && sed -n '1958,1972p' src/model.rs && grep -n \"let Model {\" src/model.rs", "description": "Check point() and destructuring"}`
+
+  ```
+Self::rmsnorm(&r, &self.out_norm, self.cfg.eps, &mut hn[i * h..(i + 1) * h]);
+        }
+        (0..t).map(|i| hn[i * h..(i + 1) * h].to_vec()).collect()
+    }
+
+    /// Un token, une position. Retourne l'état caché après la dernière norme.
+    pub fn forward(&mut self, tok: u32, pos: usize) -> Vec<f32> {
+        assert!(pos < self.ctx, "contexte dépassé ({pos} ≥ {})", self.ctx);
+        // lus AVANT l'emprunt destructuré : la parcimonie par projection
+        let tkp = self.act_topk_proj;
+        let tkg = self.act_topk;
+        let tk = |p: usize| if tkp[p] > 0 { tkp[p] } else { tkg };
+        // Lus AVANT l'emprunt destructuré (comme la parcimonie par projection).
+        let largeur_profil = self.cfg.ffn.max(self.cfg.ffn_exp);
+        self.profil_jetons += 1;
+1973:        let Model { g, cfg, layers, out_norm, pool, kv, events, .. } = self;
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && grep -n \"point(\" src/model.rs | head -5 && grep -n \"^    fn point\\|    pub fn point\\|fn point<\" src/model.rs | head -3 && sed -n '/fn point/,/^    }/p' src/model.rs | head -12", "description": "Locate point() defin … [7 caractères tronqués]`
+
+  ```
+2095:                            sc2[hh * ctx + t] = point(qh, &kd) * scale;
+2153:                    sc[t] = point(qh, &kd) * scale;
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && grep -rn \"fn point\" src/*.rs | head && grep -rn \"point\\b\" src/model.rs | grep -v \"sc2\\[\\|sc\\[t\\]\" | head -5", "description": "Find point import"}`
+
+  ```
+494:/// `a · d` ajoutée au flux résiduel. Le point important : **le produit de deux
+2003:        let point = |a: &[f32], b: &[f32]| -> f32 {
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src/model.rs", "limit": 18, "offset": 2000}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src/model.rs</path>
+<type>file</type>
+<content>
+2000:         let simd = std::is_x86_feature_detected!("avx2") && std::is_x86_feature_detected!("fma");
+2001:         #[cfg(not(target_arch = "x86_64"))]
+2002:         let simd = false;
+2003:         let point = |a: &[f32], b: &[f32]| -> f32 {
+2004:             #[cfg(target_arch = "x86_64")]
+2005:             if simd { return unsafe { Self::dot8_avx(a, b) }; }
+2006:             Self::dot8(a, b)
+2007:         };
+2008:         let mut attn_idx: Vec<u32> = Vec::with_capacity(ctx);
+2009:         let attn_all: Vec<u32> = (0..ctx as u32).collect();
+2010: 
+2011:         for l in 0..cfg.n_layer {
+2012:             let lay = &layers[l];
+2013:             // Fenêtre EFFECTIVE de cette couche : le motif déclaré (gpt-oss :
+2014:             // une couche sur deux en attention complète) prime sur le réglage
+2015:             // global. Lue en champs directs : `self` est déjà déstructuré.
+2016:             let fen = if self.attn_window == 0 { 0 }
+2017:                       else if self.swa_pattern <= 1 { self.attn_window }
+
+(Showing lines 2000-2017 of 2722. Use offset=2018 to conti
+… [16 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src/model.rs", "limit": 30, "offset": 1678}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src/model.rs</path>
+<type>file</type>
+<content>
+1678:                     Some((f, bf, bl, orig, ms)) => {
+1679:                         Self::rope_yarn(qi, nh, hd, pos, self.cfg.rope_base, f, bf, bl, orig, ms, self.cfg.n_rot);
+1680:                         Self::rope_yarn(ki, nkv, hd, pos, self.cfg.rope_base, f, bf, bl, orig, ms, self.cfg.n_rot);
+1681:                     }
+1682:                     None => {
+1683:                         Self::rope(qi, nh, hd, pos, self.cfg.rope_base, self.cfg.n_rot);
+1684:                         Self::rope(ki, nkv, hd, pos, self.cfg.rope_base, self.cfg.n_rot);
+1685:                     }
+1686:                 }
+1687:                 {
+1688:                     let kvc = &mut self.kv[l];
+1689:                     for hh in 0..nkv {
+1690:                         kvc.ecrire(hh, pos, &ki[hh * hd..(hh + 1) * hd],
+1691:                                           &vi[hh * hd..(hh + 1) * hd]);
+1692:                     }
+1693:                 }
+1694:                 let fen = if self.attn_window == 0 { 0 }
+1695:                           else if self.swa_pattern <= 1 { self.attn_window }
+… [876 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+Now the integration edits:
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && python3 - <<'PY'\np='src/gpu.rs'; s=open(p).read()\n# tranche : une seule copie pour plusieurs positions consécutives\nold = \"\"\"    /// Copie un vecteur de clé et un de valeur — les OCTETS du cache CPU, tels\n    ///  … [6772 caractères tronqués]`
+
+  ```
+tranches posées
+    Finished `release` profile [optimized] target(s) in 0.01s
+  ```
+
+- **job_output** `{"job_id": "bash-28"}`
+
+  ```
+KV 32  n=4096     CPU 16 fils :      1.8 ms par passe  (4.7 Go/s de KV, 1.8 ms × 24 couches = 43 ms/jeton)|GPU 8 tranches :      0.3 ms par passe  (24.0 Go/s de KV, 0.3 ms × 24 couches = 8 ms/jeton)  écart max +5.12e-6|
+KV 32  n=16384    CPU 16 fils :      5.1 ms par passe  (6.6 Go/s de KV, 5.1 ms × 24 couches = 122 ms/jeton)|GPU 32 tranches :      0.5 ms par passe  (67.2 Go/s de KV, 0.5 ms × 24 couches = 12 ms/jeton)  écart max +7.12e-6|
+KV 32  n=65536    CPU 16 fils :     20.4 ms par passe  (6.6 Go/s de KV, 20.4 ms × 24 couches = 490 ms/jeton)|GPU 128 tranches :      1.2 ms par passe  (114.9 Go/s de KV, 1.2 ms × 24 couches = 28 ms/jeton)  écart max +1.45e-5|
+KV 32  n=262144   CPU 16 fils :     59.3 ms par passe  (9.1 Go/s de KV, 59.3 ms × 24 couches = 1423 ms/jeton)|GPU 256 tranches :      3.7 ms par passe  (146.8 Go/s de KV, 3.7 ms × 24 couches = 88 ms/jeton)  écart max +3.23e-5|
+KV 32  n=1048576  CPU 16 fils :    238.7 ms par passe  (9.0 Go/s de KV, 238.7 ms × 24 couches = 5729 ms/jeton)|GPU 256 tranches :     14.3 ms par passe  (150.1 Go/s de KV, 14.3 ms × 24 couches = 343 ms/jeton)  écart max +1.07e-4|
+KV 8   n=4096     CPU 16 fils :      1.9 ms par passe  (1.3 Go/s de KV, 1.
+… [740 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && python3 - <<'PY'\np='gpu/qtrinet_gpu.cu'; s=open(p).read()\nold = \"\"\"__device__ __forceinline__ float kv_lire(const void* data, const float* scales,\n                                         int bits, size_t base, int … [2854 caractères tronqués]`
+
+  ```
+échelles par vecteur corrigées
+qtrinet_gpu.ptx régénéré (6446 lignes)
+noyaux exportés : 9
+  ```
+
+### 👤 Utilisateur
+
+background job bash-28 (bash: cat > /tmp/banc_kv.sh <<'EOF'
+#!/bin/bash
+# KV déporté : courbe CPU contre GPU, par taille de contexte et par format.
+set -u
+cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet
+Q=./qtrinet-core/target/release/qtrinet-core
+M=models/Qwen2.5-0.5B-Q8_0.gguf
+J=/tmp/banc_kv.log
+: > "$J"
+while pgrep -x qtrinet-core > /dev/null; do sleep 20; done
+for bits in 32 8; do
+    for n in 4096 16384 65536 262144 1048576; do
+        printf "KV %-3s n=%-8s " "$bits" "$n" | tee -a "$J"
+        QT_GPU=1 QT_KV_BITS=$bits timeout 1800 $Q $M --banc-kv $n --threads 16 2>&1 \
+            | grep -E "CPU .* fils|GPU .* tranches" \
+            | sed -E 's/^ +//' | tr '\n' '|' | tee -a "$J"
+        echo "" | tee -a "$J"
+    done
+done
+echo "=== fin ===" | tee -a "$J"
+EOF
+chmod +x /tmp/banc_kv.sh && /tmp/banc_kv.sh) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && cargo build --release 2>&1 | tail -1 && cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && QT_GPU=1 QT_KV_BITS=8 timeout 600 ./qtrinet-core/target/release/qtrinet-core models/Qwen2.5-0.5B-Q8_0.gguf --banc-kv 4096 --th … [113 caractères tronqués]`
+
+  ```
+Finished `release` profile [optimized] target(s) in 19.05s
+  CPU 16 fils :      2.0 ms par passe  (1.2 Go/s de KV, 2.0 ms × 24 couches = 48 ms/jeton)
+  GPU 1 · KV d'une couche : 0.00 Go résidents, 16.17 Go libres
+  recopie CPU → VRAM : 0.1 s (0.0 Go/s sur le bus)
+  GPU 8 tranches :      0.2 ms par passe  (15.0 Go/s de KV, 0.2 ms × 24 couches = 4 ms/jeton)  écart max +2.91e-6
+  ```
+
+- **bash** `{"command": "cp /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/target/release/qtrinet-core /tmp/qtrinet-banc && cat > /tmp/banc_kv2.sh <<'EOF'\n#!/bin/bash\n# KV déporté : courbe CPU contre GPU après correction des échelles.\n# Binaire figé dans /tmp pour ne pas dépendre des compilatio … [710 caractères tronqués]`
+
+  ```
+started background job bash-29
+  ```
+
+### 🤖 Assistant
+
+Now the engine integration (mirroring + GPU attention hook):
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && python3 - <<'PY'\np='src/model.rs'; s=open(p).read()\n\n# 1) champs\ns = s.replace(\"\"\"    pub tete_gpu_q6k: bool,\"\"\",\n\"\"\"    pub tete_gpu_q6k: bool,\n    /// Miroir VRAM du cache KV, une entrée par couche (`QT_ … [4093 caractères tronqués]`
+
+  ```
+miroir VRAM branché
+2028:        let Model { g, cfg, layers, out_norm, pool, kv, events, .. } = self;
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && grep -n \"let mut att\\b\\|let mut sc2\\|let mut att =\\|attn_events\" src/model.rs | sed -n '1,20p' && sed -n '2028,2032p' src/model.rs", "description": "Find att buffer and destructuring"}`
+
+  ```
+416:    pub attn_events: u64,
+1078:            act_topk_proj: [0; 7], attn_topk: 0, attn_events: 0, qk_topk: 0,
+1622:        let mut att = vec![0f32; t * nh * hd];
+1643:        let mut sc2 = vec![0f32; nh * self.ctx];
+1822:                self.attn_events += (nh * (n - lo)) as u64;
+2041:        let mut att = vec![0f32; nh * hd];
+2053:        let mut sc2 = vec![0f32; nh * ctx];
+2189:                    self.attn_events += ((h1 - h0) * n) as u64;
+2225:                    self.attn_events += iter.len() as u64;
+2258:                self.attn_events += iter.len() as u64;
+        let Model { g, cfg, layers, out_norm, pool, kv, events, .. } = self;
+        let h = cfg.hidden;
+        let hd = cfg.head_dim;
+        let nh = cfg.n_head;
+        let nkv = cfg.n_kv_head;
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && python3 - <<'PY'\np='src/model.rs'; s=open(p).read()\n\n# déstructuration : ajouter les champs du KV déporté\ns = s.replace(\"\"\"        let Model { g, cfg, layers, out_norm, pool, kv, events, .. } = self;\"\"\",\n\"\"\ … [2347 caractères tronqués]`
+
+  ```
+branche GPU posée dans forward
+error[E0308]: mismatched types
+    --> src/model.rs:2156:63
+     |
+2155 |                     if machine.attn_kv(m, &q[..nh * hd], n, scale, puits.as_deref(),
+     |                                ------- arguments to this method are incorrect
+2156 |                                        nsplit, attn_gpu_part, att) {
+     |                                                               ^^^ expected `&mut [f32]`, found `Vec<f32>`
+     |
+     = note: expected mutable reference `&mut [f32]`
+                           found struct `Vec<f32>`
+note: method defined here
+--
+error: could not compile `qtrinet-core` (bin "qtrinet-core") due to 1 previous error; 8 warnings emitted
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && python3 - <<'PY'\np='src/model.rs'; s=open(p).read()\ns = s.replace(\"\"\"                    if machine.attn_kv(m, &q[..nh * hd], n, scale, puits.as_deref(),\n                                       nsplit, attn_gpu_part … [415 caractères tronqués]`
+
+  ```
+emprunt corrigé
+error[E0503]: cannot use `self.attn_events` because it was mutably borrowed
+    --> src/model.rs:2209:21
+     |
+2028 |         let Model { g, cfg, layers, out_norm, pool, kv, events, attn_events, kv_gpu,
+     |                                                                 ----------- `self.attn_events` is borrowed here
+...
+2157 |                         *attn_events += (nh * n) as u64;
+     |                         ------------------------------- borrow later used here
+...
+2209 |                     self.attn_events += ((h1 - h0) * n) as u64;
+     |                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ use of borrowed `self.attn_events`
+--
+error[E0503]: cannot use `self.attn_events` because it was mutably borrowed
+    --> src/model.rs:2245:21
+     |
+2028 |         let Model { g, cfg, layers, out_norm, pool, kv, events, attn_events, kv_gpu,
+     |                                                                 ----------- `self.attn_events` is borrowed here
+...
+2157 |                         *attn_events += (nh * n) as u64;
+     |                         ------------------------------- borrow later used here
+error: could not compile `qtrinet-core` (bin "q
+… [58 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && awk 'NR>2028 && /^    pub fn |^    fn /{print NR\": \"$0; exit}' src/model.rs && grep -n \"self.attn_events\" src/model.rs", "description": "Find function end and attn_events uses"}`
+
+  ```
+2447:     pub fn logits_lot(&mut self, hs: &[Vec<f32>]) -> Vec<Vec<f32>> {
+1822:                self.attn_events += (nh * (n - lo)) as u64;
+2209:                    self.attn_events += ((h1 - h0) * n) as u64;
+2245:                    self.attn_events += iter.len() as u64;
+2278:                self.attn_events += iter.len() as u64;
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && python3 - <<'PY'\np='src/model.rs'; L=open(p).read().split('\\n')\nfor i in range(2028, 2446):\n    if 'self.attn_events' in L[i]:\n        L[i] = L[i].replace('self.attn_events', '*attn_events')\nopen(p,'w').write('\\n' … [233 caractères tronqués]`
+
+  ```
+accès à attn_events unifié dans forward
+    Finished `release` profile [optimized] target(s) in 0.01s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== CPU ===\" && QT_GPU=1 timeout 600 ./qtrinet-core/target/release/qtrinet-core models/Qwen2.5-0.5B-Q8_0.gguf --ppl /tmp/ids_qwen.txt --ctx 512 --limit 512 --dense --threads 16 --lot 1 --ppl-profil 2>&1 | grep -E \"perplexité … [397 caractères tronqués]`
+
+  ```
+=== CPU ===
+     511 tokens notés — perplexité cumulée 13.137  (28.5 tok/s)
+profil par profondeur (perplexité par tranche de 256 positions) :
+=== perplexité 13.1368 sur 511 tokens (0 événements, 17.9 s) ===
+    postes (ms/token) : projets-attn 2.66 | rope 0.51 | attention 2.94 | proj+mlp 21.69 | somme 27.79 | reste (tête + échantillonnage) 7.25
+    dont attention : scores 1.14 | softmax 0.55 | somme pondérée + écriture KV 1.25
+=== KV déporté ===
+[gpu] KV déporté : 24 couches, 0.01 Go en VRAM (15.88 Mo libres), cache CPU 0.01 Go
+     511 tokens notés — perplexité cumulée 13.137  (17.9 tok/s)
+profil par profondeur (perplexité par tranche de 256 positions) :
+=== perplexité 13.1369 sur 511 tokens (0 événements, 28.5 s) ===
+    postes (ms/token) : projets-attn 2.57 | rope 0.68 | attention 24.46 | proj+mlp 21.17 | somme 48.87 | reste (tête + échantillonnage) 6.94
+    dont attention : scores 0.00 | softmax 0.00 | somme pondérée + écriture KV 24.46
+  ```
+
+### 🤖 Assistant
+
+⏵ L'attention déportée marche (PPL 13,1369) mais alloue à chaque couche : je réutilise les tampons
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && python3 - <<'PY'\np='src/gpu.rs'; s=open(p).read()\n\ns = s.replace(\"\"\"    pub bits: u32,\n    pub octets: usize,\n}\"\"\",\n\"\"\"    pub bits: u32,\n    pub octets: usize,\n    // Tampons de travail RÉUTILISÉS d'un  … [5684 caractères tronqués]`
+
+  ```
+tampons persistants
+appel adapté
+error[E0308]: mismatched types
+   --> src/main.rs:919:29
+    |
+919 |         if !machine.attn_kv(&m, &qs, n, scale, None, nsplit, &mut part, &mut out) {
+    |                     ------- ^^ types differ in mutability
+    |                     |
+    |                     arguments to this method are incorrect
+    |
+    = note: expected mutable reference `&mut KvGpu`
+--
+error: could not compile `qtrinet-core` (bin "qtrinet-core") due to 1 previous error; 8 warnings emitted
+error: could not compile `qtrinet-core` (bin "qtrinet-core") due to 1 previous error; 8 warnings emitted
+  ```
+
+### 👤 Utilisateur
+
+background job bash-29 (bash: cp /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/target/release/qtrinet-core /tmp/qtrinet-banc && cat > /tmp/banc_kv2.sh <<'EOF'
+#!/bin/bash
+# KV déporté : courbe CPU contre GPU après correction des échelles.
+# Binaire figé dans /tmp pour ne pas dépendre des compilations en cours.
+set -u
+cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet
+Q=/tmp/qtrinet-banc
+M=models/Qwen2.5-0.5B-Q8_0.gguf
+J=/tmp/banc_kv2.log
+: > "$J"
+for bits in 32 8 4; do
+    for n in 4096 65536 1048576; do
+        printf "KV %-3s n=%-8s " "$bits" "$n" | tee -a "$J"
+        QT_GPU=1 QT_KV_BITS=$bits timeout 3600 $Q $M --banc-kv $n --threads 16 2>&1 \
+            | grep -E "CPU .* fils|GPU .* tranches" | sed -E 's/^ +//' | tr '\n' '|' | tee -a "$J"
+        echo "" | tee -a "$J"
+    done
+done
+echo "=== fin ===" | tee -a "$J"
+EOF
+chmod +x /tmp/banc_kv2.sh && /tmp/banc_kv2.sh) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && sed -i 's/if !machine.attn_kv(&m, &qs, n, scale, None, nsplit, &mut part, &mut out) {/if !machine.attn_kv(\\&mut m, \\&qs, n, scale, None, nsplit, \\&mut part, \\&mut out) {/' src/main.rs && sed -i 's/    let Some(m) = m … [295 caractères tronqués]`
+
+  ```
+Finished `release` profile [optimized] target(s) in 0.01s
+  ```
+
+- **job_output** `{"job_id": "bash-29"}`
+
+  ```
+KV 32  n=4096     CPU 16 fils :      1.3 ms par passe  (6.4 Go/s de KV, 1.3 ms × 24 couches = 32 ms/jeton)|GPU 8 tranches :      0.3 ms par passe  (24.5 Go/s de KV, 0.3 ms × 24 couches = 8 ms/jeton)  écart max +5.12e-6|
+KV 32  n=65536    CPU 16 fils :     16.0 ms par passe  (8.4 Go/s de KV, 16.0 ms × 24 couches = 385 ms/jeton)|GPU 128 tranches :      1.2 ms par passe  (114.9 Go/s de KV, 1.2 ms × 24 couches = 28 ms/jeton)  écart max +1.45e-5|
+KV 32  n=1048576  CPU 16 fils :    165.8 ms par passe  (13.0 Go/s de KV, 165.8 ms × 24 couches = 3979 ms/jeton)|GPU 256 tranches :     13.6 ms par passe  (158.4 Go/s de KV, 13.6 ms × 24 couches = 325 ms/jeton)  écart max +1.07e-4|
+KV 8   n=4096     CPU 16 fils :      3.1 ms par passe  (0.8 Go/s de KV, 3.1 ms × 24 couches = 73 ms/jeton)|GPU 8 tranches :      0.1 ms par passe  (17.4 Go/s de KV, 0.1 ms × 24 couches = 3 ms/jeton)  écart max +2.91e-6|
+KV 8   n=65536    CPU 16 fils :     31.0 ms par passe  (1.2 Go/s de KV, 31.0 ms × 24 couches = 745 ms/jeton)|GPU 128 tranches :      1.2 ms par passe  (31.3 Go/s de KV, 1.2 ms × 24 couches = 29 ms/jeton)  écart max +1.27e-5|
+KV 8   n=1048576  CPU 16 fils :    510.6 ms par passe  (1.2 Go/s de KV, 510.6 
+… [873 caractères tronqués]
+  ```
+
+- **bash** `{"command": "ls -t /tmp/*.ids /tmp/ids* 2>/dev/null | head && for f in $(ls /tmp/*.ids 2>/dev/null | head -8); do printf \"%-32s %s tokens\\n\" \"$f\" \"$(tr ',' '\\n' < $f | wc -l)\"; done", "description": "Find longer token id files"}`
+
+  ```
+/tmp/ids_qwen3.txt
+/tmp/ids_refontee.txt
+/tmp/ids_oss_2048.txt
+/tmp/ids_oss_4096.txt
+/tmp/ids_oss_debut.txt
+/tmp/ids_oss_mid.txt
+/tmp/ids_oss_long.txt
+/tmp/ids_qwen_512.txt
+/tmp/ids_qwen_v2.txt
+/tmp/harmony_canonique_sans_analysis.ids
+/tmp/harmony_canonique.ids       0 tokens
+/tmp/harmony_canonique_sans_analysis.ids 0 tokens
+/tmp/harmony_piece_analysis.ids  8 tokens
+/tmp/harmony_piece_canal_analysis.ids 0 tokens
+/tmp/harmony_piece_canal_final.ids 0 tokens
+/tmp/harmony_piece_contenu.ids   88 tokens
+/tmp/harmony_piece_prefixe.ids   141 tokens
+/tmp/harmony_piece_role_assistant_analysis.ids 0 tokens
+  ```
+
+- **bash** `{"command": "for f in /tmp/ids_refontee.txt /tmp/ids_qwen3.txt /tmp/ids_qwen_512.txt /tmp/ids_qwen_v2.txt /tmp/ids_oss_4096.txt /tmp/ids_oss_long.txt; do printf \"%-28s %6s tokens\\n\" \"$f\" \"$(tr ',' '\\n' < $f | wc -l)\"; done", "description": "Count tokens in candidate files"}`
+
+  ```
+/tmp/ids_refontee.txt          4591 tokens
+/tmp/ids_qwen3.txt             4591 tokens
+/tmp/ids_qwen_512.txt           512 tokens
+/tmp/ids_qwen_v2.txt           4591 tokens
+/tmp/ids_oss_4096.txt             0 tokens
+/tmp/ids_oss_long.txt         16455 tokens
+  ```
+
+- **bash** `{"command": "cat > /tmp/kv_moteur.sh <<'EOF'\n#!/bin/bash\n# KV déporté DANS LE MOTEUR : même perplexité, et où passe le temps.\nset -u\ncd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\nQ=./qtrinet-core/target/release/qtrinet-core\nM=models/Qwen2.5-0.5B-Q8_0.gguf\nJ=/tmp/kv_moteur.log\n: > \"$J\" … [880 caractères tronqués]`
+
+  ```
+started background job bash-30
+  ```
+
+- **job_output** `{"job_id": "bash-30", "timeout_ms": 900000, "wait": true}`
+
+  ```
+ctx 512   cpu  : perplexité 13.1368 sur 511 tokens (0 événements, 18.4 s)|postes (ms/token) : projets-attn 2.80 | rope 0.57 | attention 2.91 | proj+mlp 22.66 | somme 28.94 | reste (tête + échantillonnage) 7.13|dont attention : scores 1.15 | softmax 0.54 | somme pondérée + écriture KV 1.21|
+ctx 512   gpu  : [gpu] KV déporté : 24 couches, 0.01 Go en VRAM (16.17 Mo libres), cache CPU 0.01 Go|perplexité 13.1369 sur 511 tokens (0 événements, 17.9 s)|postes (ms/token) : projets-attn 2.63 | rope 0.57 | attention 3.22 | proj+mlp 21.74 | somme 28.16 | reste (tête + échantillonnage) 6.94|dont attention : scores 0.00 | softmax 0.00 | somme pondérée + écriture KV 3.22|
+ctx 4096  cpu  : perplexité 12.2177 sur 4095 tokens (0 événements, 219.4 s)|postes (ms/token) : projets-attn 2.53 | rope 0.67 | attention 22.16 | proj+mlp 20.96 | somme 46.32 | reste (tête + échantillonnage) 7.25|dont attention : scores 7.80 | softmax 4.27 | somme pondérée + écriture KV 10.09|
+ctx 4096  gpu  : [gpu] KV déporté : 24 couches, 0.10 Go en VRAM (16.17 Mo libres), cache CPU 0.10 Go|perplexité 12.2175 sur 4095 tokens (0 événements, 136.2 s)|postes (ms/token) : projets-attn 2.52 | rope 0.52 | attention 3.29 | proj+mlp 2
+… [183 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ E4 mesuré dans le moteur : attention 22,2 → 3,3 ms/jeton à 4 k, PPL identique
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='docs/contexte-long.md'; s=open(p).read()\n\nold = \"| E4 | **KV déporté sur les 2 GPU** (pagination, préchargement) | à faire — les noyaux existent (`tete_q8_warp` fait passer la tête de 15,6 à 6,2 ms/jeton, PPL  … [4263 caractères tronqués]`
+
+  ```
+docs/contexte-long.md mis à jour
+97:## 4. Plan par étapes
+114:## 4.bis KV quantifié : mesuré, et le 4 bits est cher
+151:## 4.ter KV déporté en VRAM (E4) : le noyau, et ce qu'il donne
+216:## 5. YaRN à retardement : ce que la mesure a dit
+301:## 6. Ce qui se mesure tout de suite
+343:## 7. Rappel de méthode
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='REPRISE.md'; s=open(p).read()\nold = \"| 8 | suite du plan 1 M | **chiffré, pas commencé** | `docs/contexte-long.md` : préremplissage 1 234 h à 1 M, KV int4 9,7 Go, YaRN ×256 nécessaire ; restent pagination, dépo … [4520 caractères tronqués]`

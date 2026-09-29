@@ -37,6 +37,7 @@ fn main() {
     // d'options, donc les mêmes drapeaux.
     let opt = analyser(&args);
     let _ = MODELE.set(args[1].clone());
+    if opt.banc_kv > 0 { run_banc_kv(opt); return; }
     if opt.gpu_banc { run_gpu_banc(opt); return; }
     if opt.plan { run_plan(opt); return; }
     if opt.tokenize { run_tokenize(opt); return; }
@@ -316,6 +317,8 @@ fn modele_chemin() -> String { MODELE.get().cloned().unwrap_or_default() }
 struct Options {
     // --- sélection du mode
     infer: bool, ppl: bool, plan: bool, tokenize: bool, gpu_banc: bool,
+    /// Banc du KV déporté : nombre de clés à faire tenir en VRAM.
+    banc_kv: usize,
     // --- source des jetons
     ids: Vec<u32>, ids_file: Option<String>, texte_file: Option<String>,
     ppl_texte: bool, prompt: Option<String>, limit: usize, depuis: usize,
@@ -384,6 +387,7 @@ fn analyser(args: &[String]) -> Options {
             "--plan" => { o.plan = true; 1 }
             "--tokenize" => { o.tokenize = true; 1 }
             "--gpu-banc" => { o.gpu_banc = true; 1 }
+            "--banc-kv" => { o.banc_kv = suivant(i).parse().unwrap(); 2 }
             "--ids" => { o.ids = suivant(i).split(',')
                             .filter_map(|s| s.trim().parse().ok()).collect(); 2 }
             "--ids-file" => { o.ids_file = Some(suivant(i).clone()); 2 }
@@ -770,6 +774,181 @@ fn mdl_cfg_vocab(path: &str) -> Option<usize> {
 /// mesure (23 → 159 ms) : sans un banc isolé, on ne sait pas si un changement
 /// de noyau aide, la mesure par jeton mélangeant tête, attention et
 /// échantillonnage.
+/// Banc du **KV déporté** (étape E4) : le cache d'une couche tient en VRAM, une
+/// passe d'attention est calculée par le noyau, et le résultat est comparé au
+/// chemin du moteur (mêmes `cle`/`valeur`, même `dot8`, même softmax).
+///
+/// Ce banc mesure ce que le plan 1 M annonce : à 1 M de contexte, l'attention
+/// n'est plus bornée par la RAM (20 Go/s) mais par la VRAM (≈ 450 Go/s).
+fn run_banc_kv(opt: Options) {
+    use crate::model::{KvCache, Model};
+    use std::time::Instant;
+    let path = &modele_chemin();
+    let g = Gguf::open(path).expect("ouverture du GGUF");
+    let n_kv = g.cfg("attention.head_count_kv").and_then(|m| m.as_u64()).unwrap_or(1) as usize;
+    let n_head = g.cfg("attention.head_count").and_then(|m| m.as_u64()).unwrap_or(1) as usize;
+    let hidden = g.cfg("embedding_length").and_then(|m| m.as_u64()).unwrap_or(0) as usize;
+    let hd = match g.cfg("attention.key_length").and_then(|m| m.as_u64()) {
+        Some(v) if v > 0 => v as usize,
+        _ => hidden / n_head.max(1),
+    };
+    let n_layer = g.cfg("block_count").and_then(|m| m.as_u64()).unwrap_or(0) as usize;
+    let bits = std::env::var("QT_KV_BITS").ok().and_then(|v| v.parse().ok()).unwrap_or(32u32);
+    let n = opt.banc_kv;
+    let rep = (n_head / n_kv.max(1)).max(1);
+    let scale = 1.0 / (hd as f32).sqrt();
+    println!("banc KV : {n} clés · {n_layer} couches · {n_kv} têtes KV × {hd} dim, {rep} têtes de requête par tête KV · KV {} bits",
+             if bits >= 32 { "f32".to_string() } else { bits.to_string() });
+
+    // 1. Cache CPU d'UNE couche, rempli de façon déterministe.
+    let mut cache = KvCache::new(bits, n_kv, n, hd);
+    let mut etat = 12345u64;
+    let mut suivant = move || {
+        etat = etat.wrapping_mul(6364136223846793005).wrapping_add(1442695040888963407);
+        ((etat >> 33) as f32 / (1u64 << 31) as f32) - 1.0
+    };
+    // Deux cas dégénérés pour isoler une erreur du noyau : clés nulles (poids
+    // uniformes) et valeurs constantes (la sortie vaut 1 quelle que soit la
+    // softmax). Les deux doivent être reproduits EXACTEMENT.
+    let k_nul = std::env::var("QT_BANC_KV_K0").is_ok();
+    let v_un = std::env::var("QT_BANC_KV_V1").is_ok();
+    // Troisième cas : valeurs « une chaude » par position — la sortie devient
+    // alors le poids de chaque clé, ce qui montre si les poids sont appariés à
+    // la BONNE ligne de valeurs.
+    let v_unitaire = std::env::var("QT_BANC_KV_UNIT").is_ok();
+    // Cas « pente » : une seule composante de requête non nulle et des clés
+    // croissantes sur cette composante. La softmax se concentre alors sur la
+    // DERNIÈRE clé, et la sortie doit valoir sa ligne de valeurs : le test le
+    // plus lisible de l'appariement poids ↔ valeurs.
+    let pente = std::env::var("QT_BANC_KV_GRAD").is_ok();
+    // Clés « une chaude » : la clé k ne parle qu'à la composante k. Avec une
+    // requête e_0, seule la clé 0 a un score non nul — signature nette.
+    let k_unitaire = std::env::var("QT_BANC_KV_KUNIT").is_ok();
+    let (mut k, mut v) = (vec![0f32; hd], vec![0f32; hd]);
+    for pos in 0..n {
+        for kvh in 0..n_kv {
+            for i in 0..hd {
+                suivant();
+                suivant();
+                k[i] = if k_nul { 0.0 }
+                       else if k_unitaire { if i == pos % hd { 1.0 } else { 0.0 } }
+                       else if pente { if i == 0 { pos as f32 * 100.0 } else { 0.0 } }
+                       else { suivant() };
+                v[i] = if v_un { 1.0 }
+                       else if v_unitaire { if i == pos % hd { 1.0 } else { 0.0 } }
+                       else { suivant() };
+            }
+            cache.ecrire(kvh, pos, &k, &v);
+        }
+    }
+    let mut qs: Vec<f32> = (0..n_head * hd).map(|_| suivant()).collect();
+    if pente {
+        for hh in 0..n_head {
+            for i in 0..hd { qs[hh * hd + i] = if i == 0 { 1.0 } else { 0.0 }; }
+        }
+    }
+
+    // 2. Référence CPU : le chemin exact du moteur, une tête par fil.
+    let threads = if opt.threads_impose { opt.threads } else {
+        (std::thread::available_parallelism().map(|x| x.get()).unwrap_or(8) * 3 / 4).max(1)
+    };
+    let t0 = Instant::now();
+    let mut cpu = vec![0f32; n_head * hd];
+    {
+        let cache = &cache;
+        let qs = &qs;
+        std::thread::scope(|sp| {
+            for (hh, dst) in cpu.chunks_mut(hd).enumerate() {
+                sp.spawn(move || {
+                    let kvh = hh / rep;
+                    let qh = &qs[hh * hd..(hh + 1) * hd];
+                    let (mut kd, mut vd) = (vec![0f32; hd], vec![0f32; hd]);
+                    let mut sc = vec![0f32; n];
+                    let mut mx = f32::NEG_INFINITY;
+                    for tt in 0..n {
+                        cache.cle(kvh, tt, &mut kd);
+                        let s = Model::dot8(qh, &kd) * scale;
+                        sc[tt] = s;
+                        if s > mx { mx = s; }
+                    }
+                    let mut somme = 0f32;
+                    for tt in 0..n { let e = (sc[tt] - mx).exp(); sc[tt] = e; somme += e; }
+                    let inv = 1.0 / somme;
+                    for val in dst.iter_mut() { *val = 0.0; }
+                    for tt in 0..n {
+                        let w = sc[tt] * inv;
+                        cache.valeur(kvh, tt, &mut vd);
+                        for (o, x) in dst.iter_mut().zip(vd.iter()) { *o += w * x; }
+                    }
+                });
+            }
+        });
+    }
+    let tc = t0.elapsed().as_secs_f64();
+    let octets = cache.octets();
+    let _ = threads;
+    println!("  CPU {threads} fils : {:>8.1} ms par passe  ({:.1} Go/s de KV, {:.1} ms × {n_layer} couches = {:.0} ms/jeton)",
+             tc * 1e3, 2.0 * octets as f64 / tc / 1e9, tc * 1e3,
+             tc * 1e3 * n_layer as f64);
+
+    let Some(machine) = gpu::instance() else { println!("  GPU absent"); return };
+    let Some(mut m) = machine.kv_allouer(n_kv, n, hd, bits) else {
+        println!("  KV déporté impossible : {:.2} Go demandés pour une couche, {:.2} Go libres",
+                 (2 * cache.octets() / 8) as f64 / 1e9, machine.memoire_libre as f64 / 1e9);
+        return;
+    };
+    println!("  {} · KV d'une couche : {:.2} Go résidents, {:.2} Go libres", machine.nom,
+             m.octets as f64 / 1e9, machine.memoire_libre as f64 / 1e9);
+    // 3. Recopie du cache CPU vers la VRAM, vecteur par vecteur (les octets sont
+    //    déjà dans la disposition du noyau : aucune conversion).
+    let t1 = Instant::now();
+    for pos in 0..n {
+        for kvh in 0..n_kv {
+            if !cache.vers_gpu(machine, &m, kvh, pos) { println!("  recopie en échec"); return; }
+        }
+    }
+    println!("  recopie CPU → VRAM : {:.1} s ({:.1} Go/s sur le bus)",
+             t1.elapsed().as_secs_f64(),
+             2.0 * octets as f64 / t1.elapsed().as_secs_f64() / 1e9);
+    let nsplit = (n / 512).clamp(1, 256);
+    let mut part = vec![0f32; nsplit * n_kv * rep * (hd + 2)];
+    let mut out = vec![0f32; n_head * hd];
+    let mut ms = f64::MAX;
+    for passe in 0..3 {
+        let t2 = Instant::now();
+        if !machine.attn_kv(&mut m, &qs, n, scale, None, nsplit, &mut part, &mut out) {
+            println!("  noyau d'attention en échec"); return;
+        }
+        let dt = t2.elapsed().as_secs_f64();
+        if passe > 0 && dt < ms { ms = dt; }
+    }
+    let mut echelle = 1e-9f32;
+    for o in 0..n_head * hd { echelle = echelle.max(cpu[o].abs()); }
+    let mut ecart = 0f32;
+    for o in 0..n_head * hd { ecart = ecart.max((out[o] - cpu[o]).abs() / echelle); }
+    println!("  GPU {nsplit} tranches : {:>8.1} ms par passe  ({:.1} Go/s de KV, {:.1} ms × {n_layer} couches = {:.0} ms/jeton)  écart max {:+.2e}",
+             ms * 1e3, 2.0 * octets as f64 / ms / 1e9, ms * 1e3,
+             ms * 1e3 * n_layer as f64, ecart);
+    println!("  gain par passe : ×{:.1}", tc / ms);
+    if std::env::var("QT_BANC_KV_UNIT").is_ok() && hd >= 32 {
+        let c = &cpu[..8];
+        let o = &out[..8];
+        println!("  poids CPU 0..8 : {}", c.iter().map(|v| format!("{v:.4}")).collect::<Vec<_>>().join(" "));
+        println!("  poids GPU 0..8 : {}", o.iter().map(|v| format!("{v:.4}")).collect::<Vec<_>>().join(" "));
+        println!("  somme CPU {:.4} · somme GPU {:.4}", c.iter().sum::<f32>(), o.iter().sum::<f32>());
+    }
+    if std::env::var("QT_BANC_KV_DEBUG").is_ok() {
+        let ech = |v: &[f32]| v.iter().fold(1e-9f32, |a, &b| a.max(b.abs()));
+        for hh in 0..n_head {
+            let c = &cpu[hh * hd..(hh + 1) * hd];
+            let o = &out[hh * hd..(hh + 1) * hd];
+            let e = (0..hd).fold(0f32, |a, i| a.max((o[i] - c[i]).abs())) / ech(c);
+            print!("  tête {hh:2} écart {e:.2e} | cpu[0..3] {:.4} {:.4} {:.4} | gpu[0..3] {:.4} {:.4} {:.4}\n",
+                   c[0], c[1], c[2], o[0], o[1], o[2]);
+        }
+    }
+}
+
 fn run_gpu_banc(opt: Options) {
     use std::time::Instant;
     let path = &modele_chemin();

@@ -97,6 +97,18 @@ __device__ __forceinline__ float shfl_bas(float v, int d) {
     return r;
 }
 
+// Réduction « papillon » : `shfl.sync.bfly` laisse le RÉSULTAT COMPLET dans
+// TOUTES les voies, là où `shfl.sync.down` ne le met que dans la voie 0. Les
+// noyaux de projection s'en moquent (seule la voie 0 écrit), la softmax en ligne
+// de l'attention NON : chaque voie a besoin du même maximum et de la même somme
+// pour ré-échelonner son accumulateur.
+__device__ __forceinline__ float shfl_xor(float v, int d) {
+    float r;
+    asm volatile("shfl.sync.bfly.b32 %0, %1, %2, 0x1f, 0xffffffff;"
+                 : "=f"(r) : "f"(v), "r"(d));
+    return r;
+}
+
 // Version **une warp par ligne**.
 //
 // L'ancien noyau lisait une ligne PAR FIL : deux fils d'une même warp lisaient
@@ -351,6 +363,184 @@ __global__ void proj_q6k_warp(const unsigned char* __restrict__ w,
         #pragma unroll
         for (int d2 = 16; d2 > 0; d2 >>= 1) total += shfl_bas(total, d2);
         if (lane == 0) out[o] = total * sx;
+    }
+}
+
+// ---------------------------------------------------------------------------
+// ATTENTION À KV DÉPORTÉ (étape E4 du plan 1 M).
+//
+// Le cache KV d'une couche vit en VRAM ; une passe calcule, pour `rep` têtes de
+// requête partageant une même tête KV, la somme pondérée sur `n` clés. Chaque
+// élément de K et de V n'est lu qu'UNE fois par tête KV et par passe (tuile de
+// 32 clés en mémoire partagée), au lieu d'une fois par tête de requête : c'est
+// ce qui rend le décodage à 1 M borné par la bande passante VRAM et non par
+// celle de la RAM.
+//
+// Deux noyaux : le premier découpe les clés en `nsplit` tranches (sans quoi il
+// n'y aurait qu'un bloc par tête KV — deux blocs sur 48 SM) et écrit un
+// (max, somme, accumulateur) partiel ; le second recombine les tranches et
+// applique les puits appris, exactement comme le fait le CPU.
+//
+// Disposition de la mémoire partagée :
+//   shK[i * 33 + k] : tuile de clés TRANSPOSÉE (33 = 32 + 1 de rembourrage,
+//                     sans quoi les 32 fils d'une même lecture tomberaient
+//                     dans la même banque) ;
+//   shV[k * hd + i] : tuile de valeurs, disposition naturelle (les fils lisent
+//                     des adresses consécutives) ;
+//   shP[w * 32 + k] : poids de la tuile, écrits par la réduction puis relus en
+//                     diffusion par l'accumulation.
+// ---------------------------------------------------------------------------
+// Lit l'élément `i` du vecteur `vec` (index global de (tête KV, position)).
+// Les échelles sont PAR VECTEUR et par bloc de 32 : `vec * nb + i / 32`, et non
+// un décalage en éléments — s'y tromper multipliait l'indice par `hd/32` et
+// donnait des échelles absurdes (écart mesuré : 7e7).
+__device__ __forceinline__ float kv_lire(const void* data, const float* scales,
+                                         int bits, size_t vec, int i, int hd, int nb) {
+    if (bits >= 32) return reinterpret_cast<const float*>(data)[vec * hd + i];
+    const float sc = scales[vec * nb + i / 32];
+    if (bits == 8) {
+        return (float)(signed char)reinterpret_cast<const unsigned char*>(data)[vec * hd + i] * sc;
+    }
+    const unsigned char o =
+        reinterpret_cast<const unsigned char*>(data)[vec * (hd / 2) + i / 2];
+    int q = (i % 2 == 0) ? (o & 0x0F) : (o >> 4);
+    if (q >= 8) q -= 16;
+    return (float)q * sc;
+}
+
+__global__ void attn_kv_partiels(const void* __restrict__ kdata,
+                                 const float* __restrict__ kscale,
+                                 const void* __restrict__ vdata,
+                                 const float* __restrict__ vscale,
+                                 const float* __restrict__ q,     // [rep][hd]
+                                 float* __restrict__ part,        // [nsplit][rep][hd+2]
+                                 int n, int nsplit, int ctx, int hd, int nb,
+                                 int rep, int bits, float scale) {
+    extern __shared__ float sh[];
+    float* shQ = sh;                 // rep * hd : la requête ENTIÈRE, partagée
+    float* shK = shQ + rep * hd;     // hd * 33, tuile de clés transposée
+    float* shV = shK + hd * 33;      // 32 * hd
+    float* shP = shV + 32 * hd;      // rep * 32
+    const int tid = threadIdx.x;
+    const int lane = tid & 31;
+    const int warp = tid >> 5;
+    const int kvh = blockIdx.x;
+    const int sp = blockIdx.y;
+    const int par_tranche = (n + nsplit - 1) / nsplit;
+    const int debut = sp * par_tranche;
+    const int fin = min(n, debut + par_tranche);
+    const int nq = hd / 32;
+    // La requête passe par la mémoire PARTAGÉE : chaque fil note SA clé et a
+    // donc besoin des hd composantes entières, alors qu'un registre par fil ne
+    // contient que les composantes de sa voie. Les garder en registres
+    // multipliait la composante `lane` par tous les éléments de la clé — un
+    // résultat plausible et faux (mesuré : écart 4e-1 sur des requêtes
+    // aléatoires, et un accord parfait dès que la requête était un vecteur de
+    // base, seule configuration où les deux lectures coïncident).
+    for (int i = tid; i < rep * hd; i += blockDim.x) {
+        shQ[i] = q[kvh * rep * hd + i];
+    }
+    float acc[4];
+    #pragma unroll
+    for (int o = 0; o < 4; ++o) acc[o] = 0.0f;
+    float M = -1e30f, S = 0.0f;
+    __syncthreads();     // la requête partagée est prête
+    const size_t basekv = (size_t)kvh * ctx;
+    for (int t0 = debut; t0 < fin; t0 += 32) {
+        const int reste = min(32, fin - t0);
+        // --- chargement coopératif de la tuile (K transposée, V naturelle)
+        for (int idx = tid; idx < reste * hd; idx += blockDim.x) {
+            const int k = idx / hd, i = idx % hd;
+            const size_t vec = basekv + t0 + k;
+            shK[i * 33 + k] = kv_lire(kdata, kscale, bits, vec, i, hd, nb);
+            shV[k * hd + i] = kv_lire(vdata, vscale, bits, vec, i, hd, nb);
+        }
+        __syncthreads();
+        // --- score de la clé `lane` pour la tête `warp`
+        float s = -1e30f;
+        if (lane < reste) {
+            s = 0.0f;
+            const float* qw = shQ + warp * hd;
+            #pragma unroll 8
+            for (int i = 0; i < hd; ++i) s += qw[i] * shK[i * 33 + lane];
+            s *= scale;      // 1/sqrt(hd) : sans lui, la softmax est trop plate
+        }
+        // --- maximum et somme de la tuile (réduction par warp)
+        float mt = s;
+        #pragma unroll
+        for (int d = 16; d > 0; d >>= 1) mt = fmaxf(mt, shfl_xor(mt, d));
+        const float Mn = fmaxf(M, mt);
+        const float r = expf(M - Mn);
+        const float p = (lane < reste) ? expf(s - Mn) : 0.0f;
+        float st = p;
+        #pragma unroll
+        for (int d = 16; d > 0; d >>= 1) st += shfl_xor(st, d);
+        shP[warp * 32 + lane] = p;
+        S = S * r + st;
+        #pragma unroll
+        for (int o = 0; o < 4; ++o) acc[o] *= r;
+        __syncwarp();
+        // --- somme pondérée des valeurs : chaque fil porte hd/32 composantes
+        #pragma unroll
+        for (int k = 0; k < 32; ++k) {
+            if (k < reste) {
+                const float pj = shP[warp * 32 + k];
+                #pragma unroll
+                for (int o = 0; o < 4; ++o) {
+                    if (o < nq) acc[o] += pj * shV[k * hd + o * 32 + lane];
+                }
+            }
+        }
+        M = Mn;
+        __syncthreads();
+    }
+    // Indexé par (tranche, tête KV, tête de requête) : `gridDim.x` est le
+    // nombre de têtes KV, et l'oublier faisait écrire tous les blocs de la même
+    // tranche au même endroit.
+    float* dst = part + (((size_t)sp * gridDim.x + kvh) * rep + warp) * (hd + 2);
+    if (lane == 0) {
+        dst[0] = M;
+        dst[1] = S;
+    }
+    #pragma unroll
+    for (int o = 0; o < 4; ++o) {
+        if (o < nq) dst[2 + o * 32 + lane] = acc[o];
+    }
+}
+
+// Recombine les tranches et applique les puits appris (facultatif).
+__global__ void attn_kv_recombine(const float* __restrict__ part,
+                                  const float* __restrict__ sinks,
+                                  float* __restrict__ out,
+                                  int nsplit, int hd, int rep) {
+    const int tid = threadIdx.x;
+    const int lane = tid & 31;
+    const int warp = tid >> 5;
+    const int kvh = blockIdx.x;
+    float M = -1e30f, S = 0.0f;
+    const int nq = hd / 32;
+    float acc[4];
+    #pragma unroll
+    for (int o = 0; o < 4; ++o) acc[o] = 0.0f;
+    for (int sp = 0; sp < nsplit; ++sp) {
+        const float* p = part + (((size_t)sp * gridDim.x + kvh) * rep + warp) * (hd + 2);
+        M = fmaxf(M, p[0]);
+    }
+    if (sinks != nullptr) M = fmaxf(M, sinks[warp]);
+    for (int sp = 0; sp < nsplit; ++sp) {
+        const float* p = part + (((size_t)sp * gridDim.x + kvh) * rep + warp) * (hd + 2);
+        const float w = expf(p[0] - M);
+        S += p[1] * w;
+        #pragma unroll
+        for (int o = 0; o < 4; ++o) {
+            if (o < nq) acc[o] += p[2 + o * 32 + lane] * w;
+        }
+    }
+    if (sinks != nullptr) S += expf(sinks[warp] - M);
+    const float inv = (S > 0.0f) ? 1.0f / S : 0.0f;
+    #pragma unroll
+    for (int o = 0; o < 4; ++o) {
+        if (o < nq) out[(kvh * rep + warp) * hd + o * 32 + lane] = acc[o] * inv;
     }
 }
 

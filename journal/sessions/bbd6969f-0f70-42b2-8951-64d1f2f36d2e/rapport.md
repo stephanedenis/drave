@@ -5,12 +5,12 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 23.3 h |
+| Durée | 23.7 h |
 | Tours | 6 |
-| Messages | 850 |
-| Appels d'outils | 855 |
+| Messages | 924 |
+| Appels d'outils | 927 |
 | Fichiers touchés | 35 |
-| Commandes | 620 |
+| Commandes | 681 |
 | Sous-agents | 1 |
 | Commits | 25 |
 | Compactages de contexte | 1 |
@@ -263,7 +263,7 @@ Retirer `mscale = 1 + 0,1·ln f` divise la perplexité par **8,9 / 5,9 / 3,8**. 
 
 ### Tour 6 — <goal_round> Objective: "Réaliser les 8 chantiers restants du projet qtrinet-core dans l'ordre : (1) protocole de perple … [1122 caractères tronqués]
 
-*128 appels d'outils.* Actions notables :
+*200 appels d'outils.* Actions notables :
 
 - bash — Check the starting state of round 2
 - bash — Locate the batched attention loop
@@ -279,11 +279,11 @@ Retirer `mscale = 1 + 0,1·ln f` divise la perplexité par **8,9 / 5,9 / 3,8**. 
 - bash — Bisect the failing batch size
 - bash — Add guards and rerun lot 128
 - bash — Read dot16's fallback path
-- … et 88 autres
+- … et 149 autres
 
 **Synthèse produite :**
 
-⏵ Q6_K mesuré (×2,3 à ×5) ; je le branche sur la tête du moteur
+⏵ E4 mesuré dans le moteur : attention 22,2 → 3,3 ms/jeton à 4 k, PPL identique
 
 ## 3. Travail accompli
 
@@ -373,7 +373,7 @@ Retirer `mscale = 1 + 0,1·ln f` divise la perplexité par **8,9 / 5,9 / 3,8**. 
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 580 autres
+- … et 641 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -501,7 +501,7 @@ Retirer `mscale = 1 + 0,1·ln f` divise la perplexité par **8,9 / 5,9 / 3,8**. 
 
 ## 5. Erreurs rencontrées
 
-35 sorties en erreur ou divergentes. Les premières :
+42 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : a8f2635f8 docs: record which models this box is good at, and why src/llama-hparams.cpp:8:void llama_hparams::set_swa_pattern(uint32_t n_pattern, bool dense_first) { src/llama-hparams.h:308:    void se
 - **T1** : 511 tokens notés — perplexité cumulée 247.031  (4.9 tok/s) === perplexité 247.0308 sur 511 tokens (0 événements, 104.5 s) ===  ### B3 harmony assistant 511 --- ref --- 0.0 0.0 0:00 ls: cannot access '

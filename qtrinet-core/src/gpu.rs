@@ -63,6 +63,35 @@ pub struct MatriceGpu {
     pub octets_poids: usize,
 }
 
+/// Cache KV d'UNE couche, résident en VRAM. Même disposition que `KvCache` :
+/// `(tête KV, position)` puis la dimension de tête — les noyaux lisent donc les
+/// octets du cache CPU tels quels, sans conversion.
+pub struct KvGpu {
+    pub k: u64,
+    pub v: u64,
+    pub sk: u64,
+    pub sv: u64,
+    pub n_kv: usize,
+    pub ctx: usize,
+    pub hd: usize,
+    pub nb: usize,
+    /// 32 = f32, 8 = un octet par valeur, 4 = deux nibbles par octet.
+    pub bits: u32,
+    pub octets: usize,
+    // Tampons de travail RÉUTILISÉS d'un jeton à l'autre. Les allouer à chaque
+    // appel coûtait 24 couches × 6 appels CUDA par jeton : mesuré 24,5 ms/jeton
+    // d'attention à 512 jetons, contre 2,9 ms sur CPU — le noyau n'était pas en
+    // cause, c'étaient les allocations.
+    pub q_dev: u64,
+    pub part_dev: u64,
+    pub out_dev: u64,
+    pub sinks_dev: u64,
+    pub q_cap: usize,
+    pub part_cap: usize,
+    pub out_cap: usize,
+    pub sinks_cap: usize,
+}
+
 pub struct Gpu {
     ctx: *mut c_void,
     module: *mut c_void,
@@ -73,6 +102,8 @@ pub struct Gpu {
     f_mxfp4_warp: *mut c_void,
     f_q4k_warp: *mut c_void,
     f_q6k_warp: *mut c_void,
+    f_attn_part: *mut c_void,
+    f_attn_recombine: *mut c_void,
     pub nom: String,
     pub memoire_libre: usize,
 }
@@ -175,6 +206,20 @@ impl Gpu {
                 eprintln!("{}", erreur(rc, "fonction proj_q6k_warp"));
                 return None;
             }
+            let nom_p = std::ffi::CString::new("attn_kv_partiels").unwrap();
+            let mut f_attn_part: *mut c_void = std::ptr::null_mut();
+            let rc = cuModuleGetFunction(&mut f_attn_part, module, nom_p.as_ptr());
+            if rc != 0 {
+                eprintln!("{}", erreur(rc, "fonction attn_kv_partiels"));
+                return None;
+            }
+            let nom_r = std::ffi::CString::new("attn_kv_recombine").unwrap();
+            let mut f_attn_recombine: *mut c_void = std::ptr::null_mut();
+            let rc = cuModuleGetFunction(&mut f_attn_recombine, module, nom_r.as_ptr());
+            if rc != 0 {
+                eprintln!("{}", erreur(rc, "fonction attn_kv_recombine"));
+                return None;
+            }
             let mut libre: usize = 0;
             let mut total: usize = 0;
             extern "C" {
@@ -183,6 +228,7 @@ impl Gpu {
             cuMemGetInfo_v2(&mut libre, &mut total);
             Some(Gpu { ctx, module, f_tete, f_proj, f_tete_warp, f_proj_warp,
                        f_mxfp4_warp, f_q4k_warp, f_q6k_warp,
+                       f_attn_part, f_attn_recombine,
                        nom: format!("GPU {ordinal}"), memoire_libre: libre })
         }
     }
@@ -255,6 +301,178 @@ impl Gpu {
             let mut out_dev: u64 = 0;
             cuMemAlloc_v2(&mut out_dev, n_out * 4);
             Some(MatriceGpu { poids, x_dev, out_dev, n_out, nb, octets_poids })
+        }
+    }
+
+    /// Réserve le cache KV d'une couche en VRAM. `None` si la VRAM manque :
+    /// le moteur garde alors le cache en RAM, sans erreur.
+    pub fn kv_allouer(&self, n_kv: usize, ctx: usize, hd: usize, bits: u32) -> Option<KvGpu> {
+        cu_ctx(self.ctx);
+        let nb = hd.div_ceil(32).max(1);
+        let pas = match bits { 32 => hd * 4, 8 => hd, 4 => hd / 2, _ => return None };
+        let octets_donnees = n_kv.checked_mul(ctx)?.checked_mul(pas)?;
+        let octets_echelles = if bits >= 32 { 0 } else { n_kv * ctx * nb * 4 };
+        let total = octets_donnees * 2 + octets_echelles * 2;
+        if total > self.memoire_libre { return None; }
+        unsafe {
+            let (mut k, mut v, mut sk, mut sv) = (0u64, 0u64, 0u64, 0u64);
+            if cuMemAlloc_v2(&mut k, octets_donnees) != 0 { return None; }
+            if cuMemAlloc_v2(&mut v, octets_donnees) != 0 { cuMemFree_v2(k); return None; }
+            if octets_echelles > 0 {
+                if cuMemAlloc_v2(&mut sk, octets_echelles) != 0 { return None; }
+                if cuMemAlloc_v2(&mut sv, octets_echelles) != 0 { return None; }
+            }
+            Some(KvGpu { k, v, sk, sv, n_kv, ctx, hd, nb, bits, octets: total,
+                          q_dev: 0, part_dev: 0, out_dev: 0, sinks_dev: 0,
+                          q_cap: 0, part_cap: 0, out_cap: 0, sinks_cap: 0 })
+        }
+    }
+
+    /// Copie `t` positions consécutives d'une tête KV (les OCTETS du cache CPU,
+    /// tels quels) — le cache est contigu en position, donc une seule copie
+    /// suffit pour tout un lot : sans cela, un préremplissage de 512 jetons
+    /// faisait 24 000 micro-copies et y passait un quart de seconde.
+    pub fn kv_ecrire_tranche(&self, m: &KvGpu, kvh: usize, pos0: usize, t: usize,
+                             k: &[u8], v: &[u8], sk: &[f32], sv: &[f32]) -> bool {
+        cu_ctx(self.ctx);
+        if kvh >= m.n_kv || t == 0 || pos0 + t > m.ctx { return false; }
+        let pas = match m.bits { 32 => m.hd * 4, 8 => m.hd, 4 => m.hd / 2, _ => return false };
+        if k.len() < t * pas || v.len() < t * pas { return false; }
+        let off = (kvh * m.ctx + pos0) * pas;
+        unsafe {
+            if cuMemcpyHtoD_v2(m.k + off as u64, k.as_ptr() as *const c_void, t * pas) != 0 {
+                return false;
+            }
+            if cuMemcpyHtoD_v2(m.v + off as u64, v.as_ptr() as *const c_void, t * pas) != 0 {
+                return false;
+            }
+            if m.bits < 32 {
+                let offs = (kvh * m.ctx + pos0) * m.nb * 4;
+                if !sk.is_empty()
+                    && cuMemcpyHtoD_v2(m.sk + offs as u64, sk.as_ptr() as *const c_void,
+                                       t * m.nb * 4) != 0 { return false; }
+                if !sv.is_empty()
+                    && cuMemcpyHtoD_v2(m.sv + offs as u64, sv.as_ptr() as *const c_void,
+                                       t * m.nb * 4) != 0 { return false; }
+            }
+            true
+        }
+    }
+
+    /// Un seul vecteur (`t = 1`).
+    pub fn kv_ecrire(&self, m: &KvGpu, kvh: usize, pos: usize,
+                     k: &[u8], v: &[u8], sk: &[f32], sv: &[f32]) -> bool {
+        self.kv_ecrire_tranche(m, kvh, pos, 1, k, v, sk, sv)
+    }
+
+    /// Une passe d'attention sur le KV déporté : `rep` têtes de requête
+    /// partageant une tête KV, `n` clés notées. `q` est `n_kv × rep × hd`.
+    #[allow(clippy::too_many_arguments)]
+    pub fn attn_kv(&self, m: &mut KvGpu, q: &[f32], n: usize, scale: f32,
+                   sinks: Option<&[f32]>, nsplit: usize,
+                   part: &mut [f32], out: &mut [f32]) -> bool {
+        cu_ctx(self.ctx);
+        let rep = if m.n_kv == 0 { 0 } else { q.len() / (m.n_kv * m.hd) };
+        let hd = m.hd;
+        if rep == 0 || rep > 32 || hd % 32 != 0 || hd / 32 > 4 { return false; }
+        if n == 0 || n > m.ctx { return false; }
+        if out.len() < m.n_kv * rep * hd { return false; }
+        // un partiel par (tranche, tête KV, tête de requête)
+        if part.len() < nsplit * m.n_kv * rep * (hd + 2) { return false; }
+        let fils = (rep * 32) as c_uint;
+        let partage = ((rep * hd + hd * 33 + 32 * hd + rep * 32) * 4) as c_uint;
+        unsafe {
+            let mut p_k = m.k;
+            let mut p_v = m.v;
+            let mut p_sk = m.sk;
+            let mut p_sv = m.sv;
+            if m.q_cap < q.len() {
+                if m.q_dev != 0 { cuMemFree_v2(m.q_dev); }
+                m.q_dev = 0;
+                if cuMemAlloc_v2(&mut m.q_dev, q.len() * 4) != 0 { return false; }
+                m.q_cap = q.len();
+            }
+            let mut p_q = m.q_dev;
+            if cuMemcpyHtoD_v2(p_q, q.as_ptr() as *const c_void, q.len() * 4) != 0 {
+                return false;
+            }
+            if m.part_cap < part.len() {
+                if m.part_dev != 0 { cuMemFree_v2(m.part_dev); }
+                m.part_dev = 0;
+                if cuMemAlloc_v2(&mut m.part_dev, part.len() * 4) != 0 { return false; }
+                m.part_cap = part.len();
+            }
+            let mut p_part = m.part_dev;
+            let (n_i, nsplit_i, ctx_i, hd_i, nb_i, rep_i, bits_i) =
+                (n as c_int, nsplit as c_int, m.ctx as c_int, hd as c_int,
+                 m.nb as c_int, rep as c_int, m.bits as c_int);
+            let (mut rep_c, mut bits_c, mut scale_c) = (rep_i, bits_i, scale);
+            // treize paramètres : les six premiers sont des adresses, les
+            // suivants les tailles, et les trois derniers `rep`, `bits`, `scale`.
+            let mut params2: [*mut c_void; 14] = [
+                &mut p_k as *mut u64 as *mut c_void,
+                &mut p_sk as *mut u64 as *mut c_void,
+                &mut p_v as *mut u64 as *mut c_void,
+                &mut p_sv as *mut u64 as *mut c_void,
+                &mut p_q as *mut u64 as *mut c_void,
+                &mut p_part as *mut u64 as *mut c_void,
+                &n_i as *const c_int as *mut c_void,
+                &nsplit_i as *const c_int as *mut c_void,
+                &ctx_i as *const c_int as *mut c_void,
+                &hd_i as *const c_int as *mut c_void,
+                &nb_i as *const c_int as *mut c_void,
+                &mut rep_c as *mut c_int as *mut c_void,
+                &mut bits_c as *mut c_int as *mut c_void,
+                &mut scale_c as *mut f32 as *mut c_void,
+            ];
+            let rc = cuLaunchKernel(self.f_attn_part, m.n_kv as c_uint, nsplit as c_uint, 1,
+                                    fils, 1, 1, partage, std::ptr::null_mut(),
+                                    params2.as_mut_ptr(), std::ptr::null_mut());
+            if rc != 0 {
+                eprintln!("{}", erreur(rc, "lancement attn_kv_partiels"));
+                return false;
+            }
+            let mut p_sinks = m.sinks_dev;
+            if let Some(s) = sinks {
+                if m.sinks_cap < s.len() {
+                    if m.sinks_dev != 0 { cuMemFree_v2(m.sinks_dev); }
+                    m.sinks_dev = 0;
+                    if cuMemAlloc_v2(&mut m.sinks_dev, s.len() * 4) != 0 { return false; }
+                    m.sinks_cap = s.len();
+                }
+                p_sinks = m.sinks_dev;
+                if cuMemcpyHtoD_v2(p_sinks, s.as_ptr() as *const c_void, s.len() * 4) != 0 {
+                    return false;
+                }
+            }
+            if m.out_cap < out.len() {
+                if m.out_dev != 0 { cuMemFree_v2(m.out_dev); }
+                m.out_dev = 0;
+                if cuMemAlloc_v2(&mut m.out_dev, out.len() * 4) != 0 { return false; }
+                m.out_cap = out.len();
+            }
+            let mut p_out = m.out_dev;
+            // six paramètres : le noyau de recombinaison a besoin de `rep`
+            // (l'oublier faisait lire une valeur au hasard et écrivait hors du
+            // tampon de sortie — plantage immédiat).
+            let mut params3: [*mut c_void; 6] = [
+                &mut p_part as *mut u64 as *mut c_void,
+                &mut p_sinks as *mut u64 as *mut c_void,
+                &mut p_out as *mut u64 as *mut c_void,
+                &nsplit_i as *const c_int as *mut c_void,
+                &hd_i as *const c_int as *mut c_void,
+                &mut rep_c as *mut c_int as *mut c_void,
+            ];
+            let rc = cuLaunchKernel(self.f_attn_recombine, m.n_kv as c_uint, 1, 1,
+                                    fils, 1, 1, 0, std::ptr::null_mut(),
+                                    params3.as_mut_ptr(), std::ptr::null_mut());
+            let ok = rc == 0 && cuCtxSynchronize() == 0;
+            if ok {
+                cuMemcpyDtoH_v2(out.as_mut_ptr() as *mut c_void, p_out, out.len() * 4);
+            } else if rc != 0 {
+                eprintln!("{}", erreur(rc, "lancement attn_kv_recombine"));
+            }
+            ok
         }
     }
 

@@ -101,7 +101,7 @@ plus tôt : c'est le préremplissage (§3.a).
 | E1 | **Préremplissage par lots** | **fait** : `gemm_dense_i8` et `gemm_dense_q4` (produits matrice-matrice par tranches), `forward_lot` juste sur dense **et** sur MoE avec regroupement des jetons par expert ; débit bout en bout à chiffrer | 32 k utilisable ; TTFT | le noyau est là ; reste à mesurer et à élargir les tranches |
 | E2 | **KV int8** | **fait** (échelle par vecteur, dequantification à la lecture) | ÷4 sur le KV ; 128 k confortable | mesuré : +7,1 % de perplexité (llama.cpp q8_0 : +3,1 %) |
 | E3 | **KV int4** | **fait** (nibbles empaquetés) | 1 M tient en RAM (9,7 Go) et en VRAM | mesuré : **+384 %** — llama.cpp q4_0 : +411 % ; à réserver aux cas où la mémoire manque |
-| E4 | **KV déporté sur les 2 GPU** (pagination, préchargement) | à faire — les noyaux existent (`tete_q8_warp` fait passer la tête de 15,6 à 6,2 ms/jeton, PPL identique) | décodage 13 ms/jeton à 1 M | moyen |
+| E4 | **KV déporté sur les 2 GPU** (pagination, préchargement) | **fait** : noyau `attn_kv_*` (tuiles de 32 clés en mémoire partagée, une passe par (tête KV, tranche), recombinaison + puits), miroir VRAM du cache (`QT_GPU_KV=1`) — mesuré **×12 à ×73** sur l'attention selon le format, PPL identique ; voir §4.ter | décodage à 1 M borné par la VRAM et non par la RAM | moyen |
 | E5 | **Attention creuse** | à faire — `--attn-topk` et `--attn-window` existent et se mesurent au protocole `--depuis` | casse le O(N) du décodage | moyen |
 | E6 | **MLA** (DeepSeek) | **non testable ici** : aucun modèle MLA en GGUF sur cette machine (le « deepseek-r1-distill » local est un Qwen dense) | compression structurelle du KV | gros |
 | E7 | **Vision** | **non testable ici sans le chemin image** : le projecteur `mmproj` est présent, mais rien ne lit les patchs | images | gros |
@@ -147,6 +147,71 @@ L'écart avec llama.cpp (+0,8 %) est donc comblé à contexte court, et le 4 bit
 devient deux fois moins destructeur — sans changer la taille du cache. C'est la
 même leçon que pour `DenseQ8` : ce n'est pas le nombre de bits qui compte, c'est
 la finesse des échelles.
+
+## 4.ter KV déporté en VRAM (E4) : le noyau, et ce qu'il donne
+
+Le cache KV d'une couche tient en VRAM ; une passe d'attention le parcourt sur
+place. Deux noyaux : le premier découpe les clés en `nsplit` tranches (sans quoi
+il n'y aurait qu'un bloc par tête KV — deux blocs sur 48 SM) et calcule un
+`(max, somme, accumulateur)` partiel par softmax **en ligne** ; le second
+recombine les tranches et applique les puits appris, exactement comme le CPU.
+
+Chaque tuile de 32 clés est déquantifiée **une fois par tête KV** dans la
+mémoire partagée (clés transposées avec rembourrage — sans lui, les 32 voies
+d'une lecture tombent dans la même banque), puis les `rep` têtes de requête du
+groupe y lisent leurs scores. C'est ce qui fait passer le décodage long de la
+bande passante RAM (≈ 20 Go/s) à celle de la VRAM.
+
+### Courbe mesurée (Qwen2.5-0.5B, une couche, 16 fils CPU, `--banc-kv`)
+
+| KV | clés | CPU (ms/passe) | GPU (ms/passe) | gain | écart max |
+|---|---|---|---|---|---|
+| f32 | 4 096 | 1,3 | **0,3** | ×4 | 5,1e-6 |
+| f32 | 65 536 | 16,0 | **1,2** | ×13 | 1,5e-5 |
+| f32 | 1 048 576 | 165,8 | **13,6** | ×12 | 1,1e-4 |
+| int8 | 1 048 576 | 510,6 | **15,0** | ×34 | 9,6e-5 |
+| int4 | 1 048 576 | 968,5 | **13,2** | **×73** | 5,9e-5 |
+
+Trois choses :
+
+1. **Le noyau tient sa promesse à 1 M** : 13 à 15 ms par couche et par jeton, soit
+   ≈ 320-360 ms/jeton pour les 24 couches de Qwen 0.5B, contre 4 à 23 **secondes**
+   sur CPU. Le facteur grandit avec le contexte : ×4 à 4 k, ×12 à ×73 à 1 M.
+2. **Le format ne change presque rien au temps GPU** (13,2 à 15,0 ms à 1 M pour
+   f32, int8 et int4) : le noyau n'est pas borné par la VRAM mais par la
+   **déquantification scalaire** (25 à 40 Go/s contre 158 Go/s en f32). C'est le
+   prochain levier : un dépaquetage vectorisé ferait tomber ces 13 ms à ~2 ms.
+3. Les écarts au CPU restent dans l'ordre de la somme flottante (1e-5 à 1e-4
+   relatif au maximum de sortie) — et la perplexité ne bouge pas (voir ci-dessous).
+
+### Dans le moteur (`QT_GPU_KV=1`)
+
+Le cache est recopié en VRAM par **tranches contiguës** (une copie par couche et
+par tête KV et par lot, pas une par vecteur), et l'attention par jeton emprunte
+le noyau dès que la couche est en attention complète (ni fenêtre ni top-k). Le
+chemin par lots garde le CPU.
+
+| contexte | mode | perplexité | attention (ms/jeton) | durée du balayage |
+|---|---|---|---|---|
+| 512 | CPU | 13,1368 | 2,91 | 18,4 s |
+| 512 | **KV déporté** | **13,1369** | 3,22 | 17,9 s |
+| 4 096 | CPU | 12,2177 | **22,16** | 219,4 s |
+| 4 096 | **KV déporté** | **12,2175** | **3,29** | **136,2 s** (−38 %) |
+
+Le poste « attention » devient **plat** (3,3 ms/jeton quelle que soit la
+longueur) là où le CPU croît linéairement : à 32 k il serait à ≈ 180 ms/jeton,
+à 1 M à ≈ 5,7 s. Le point de croisement est vers **4 000 clés** (en dessous, les
+lancements et les recopies coûtent plus que le calcul).
+
+Piège de mesure noté au passage : les tampons du noyau étaient alloués à chaque
+appel — 24 couches × 6 appels CUDA par jeton, mesuré **24,5 ms/jeton** à 512
+jetons au lieu de 2,9. Les réutiliser a ramené l'attention déportée à 3,2 ms.
+
+Il reste, sur ce chemin : le **dépaquetage vectorisé** (point 2 ci-dessus), la
+répartition sur les **deux** GPU (le second est libre : le cache d'une couche en
+int4 à 1 M ne fait que 128 Mo, tout tient sur un seul), et la suppression du
+chemin CPU de l'attention par lots.
+
 
 ## 5. YaRN à retardement : ce que la mesure a dit
 
