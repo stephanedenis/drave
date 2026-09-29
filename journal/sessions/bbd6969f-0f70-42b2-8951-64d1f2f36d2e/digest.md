@@ -10557,3 +10557,119 @@ perplexité 7.6139 sur 127 tokens
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='REPRISE.md'\ns=open(p).read()\ns=s.replace(\"\"\"| 4 | préremplissage par lots | **à moitié** | noyau `gemm_dense_i8` ×2,4 au banc ; `forward_lot` juste (13,1359 contre 13,1368) mais **débit bout en bout à mesure … [2441 caractères tronqués]`
+
+  ```
+5719501 Item 4 : MoE par lots -- regroupement des jetons par expert
+  ```
+
+- **bash** `{"command": "tail -12 /tmp/seuil_rotation.log; echo \"=== batterie ===\"; tail -6 /tmp/mesures_finales.log 2>/dev/null", "description": "Check the rotation series results"}`
+
+  ```
+[config] rotation : RoPE simple (contexte 1024 ≤ 4096 initial ; YaRN ×32 prendrait le relais au-delà)
+=== perplexité 49.9330 sur 512 tokens (0 événements, 310.3 s) ===
+
+### contexte 2048 · RoPE simple
+[config] rotation : RoPE simple (contexte 2048 ≤ 4096 initial ; YaRN ×32 prendrait le relais au-delà)
+=== perplexité 298.5631 sur 512 tokens (0 événements, 463.9 s) ===
+
+### contexte 4096 · RoPE simple
+[config] rotation : RoPE simple (contexte 4096 ≤ 4096 initial ; YaRN ×32 prendrait le relais au-delà)
+=== perplexité 298.5631 sur 512 tokens (0 événements, 943.2 s) ===
+
+### contexte 128 · interpolation seule
+=== batterie ===
+  ```
+
+### 🤖 Assistant
+
+⏵ Le protocole propre donne la courbe : 39,5 → 49,8 → 49,9 → 298,6 selon le contexte. Je prépare le test « aiguille »
+
+- **write** `{"content": "#!/usr/bin/env python3\n\"\"\"Aiguille dans la botte de foin : la seule mesure de qualité qui compte à\ncontexte long (la perplexité ne dit pas si le modèle RETROUVE une information).\n\nLe contexte est un texte de remplissage ; l'aiguille est une phrase absurde\nplantée à une profondeu … [2313 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/aiguille.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "sleep 280; tail -6 /tmp/seuil_rotation.log", "description": "Wait for the interpolation-only passes", "timeoutMs": 320000}`
+
+  ```
+### contexte 128 · interpolation seule
+[config] rotation : YaRN ×32 sans mscale (contexte demandé 128 > 4096 initial)
+=== perplexité 42.1285 sur 512 tokens (0 événements, 138.1 s) ===
+
+### contexte 512 · interpolation seule
+  ```
+
+### 🤖 Assistant
+
+⏵ La trace est trompeuse en mode forcé (« 128 > 4096 ») ; je la corrige (les chiffres ne changent pas)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src && python3 - <<'PY'\np='model.rs'\ns=open(p).read()\ns=s.replace(\"\"\"            (Some((f, _, _, o, ms)), _, _) =>\n                println!(\"[config] rotation : YaRN ×{f}{} (contexte demandé {ctx} > {o} initial)\"), … [584 caractères tronqués]`
+
+  ```
+BUILD
+  ```
+
+- **bash** `{"command": "sleep 300; tail -8 /tmp/seuil_rotation.log", "description": "Wait for interpolation results", "timeoutMs": 340000}`
+
+  ```
+[config] rotation : YaRN ×32 sans mscale (contexte demandé 128 > 4096 initial)
+=== perplexité 42.1285 sur 512 tokens (0 événements, 138.1 s) ===
+
+### contexte 512 · interpolation seule
+[config] rotation : YaRN ×32 sans mscale (contexte demandé 512 > 4096 initial)
+=== perplexité 82.0246 sur 512 tokens (0 événements, 218.9 s) ===
+
+### contexte 1024 · interpolation seule
+  ```
+
+### 🤖 Assistant
+
+⏵ Interpolation seule : 42,1 (128) puis 82,0 (512) contre 39,5 et 49,8 pour le simple — le simple mène
+
+- **bash** `{"command": "sleep 300; tail -8 /tmp/seuil_rotation.log", "description": "Wait for context 1024 interpolation", "timeoutMs": 340000}`
+
+  ```
+[config] rotation : YaRN ×32 sans mscale (contexte demandé 512 > 4096 initial)
+=== perplexité 82.0246 sur 512 tokens (0 événements, 218.9 s) ===
+
+### contexte 1024 · interpolation seule
+[config] rotation : YaRN ×32 sans mscale (contexte demandé 1024 > 4096 initial)
+=== perplexité 82.1474 sur 512 tokens (0 événements, 334.1 s) ===
+
+### contexte 2048 · interpolation seule
+  ```
+
+- **bash** `{"command": "sleep 300; tail -6 /tmp/seuil_rotation.log; echo \"=== batterie ===\"; tail -5 /tmp/mesures_finales.log 2>/dev/null", "description": "Wait for the last interpolation points", "timeoutMs": 340000}`
+
+  ```
+### contexte 1024 · interpolation seule
+[config] rotation : YaRN ×32 sans mscale (contexte demandé 1024 > 4096 initial)
+=== perplexité 82.1474 sur 512 tokens (0 événements, 334.1 s) ===
+
+### contexte 2048 · interpolation seule
+=== batterie ===
+  ```
+
+- **bash** `{"command": "sleep 300; tail -8 /tmp/seuil_rotation.log", "description": "Wait for interpolation at 2048/4096", "timeoutMs": 340000}`
+
+  ```
+[config] rotation : YaRN ×32 sans mscale (contexte demandé 1024 > 4096 initial)
+=== perplexité 82.1474 sur 512 tokens (0 événements, 334.1 s) ===
+
+### contexte 2048 · interpolation seule
+[config] rotation : YaRN ×32 sans mscale (contexte demandé 2048 > 4096 initial)
+=== perplexité 578.8586 sur 512 tokens (0 événements, 475.5 s) ===
+
+### contexte 4096 · interpolation seule
+  ```
+
+### 🤖 Assistant
+
+⏵ Verdict item 2 : le RoPE simple gagne à tous les contextes mesurés (128→1536 jetons). Je consigne
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='docs/contexte-long.md'\ns=open(p).read()\ns=s.replace(\"\"\"> **Protocole.** Les courbes ci-dessous ont d'abord été mesurées « par\n> longueur » (`--ctx N --limit N`), ce qui **confond la longueur et le contenu** … [3930 caractères tronqués]`

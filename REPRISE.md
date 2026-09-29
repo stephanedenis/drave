@@ -138,7 +138,7 @@ comparé à `llama-tokenize` sur 4 424 jetons (0 écart).
 | # | chantier | état | mesure |
 |---|---|---|---|
 | 1 | protocole de perplexité longue | **fait** | `--depuis N` note les mêmes jetons à contexte variable ; `--depuis 256 --ctx 256` redonne exactement la fenêtre 2 historique (21,565) |
-| 2 | seuil de rotation YaRN | **mesures en cours** | série « mêmes jetons, contexte 128→4096 » (RoPE simple contre interpolation seule) ; premier point : 39,52 à contexte 128 |
+| 2 | seuil de rotation YaRN | **fait** | comparaison appariée (mêmes 512 jetons, contexte 128→1536) : RoPE simple **39,52 / 49,79 / 49,93 / 298,56** contre interpolation seule 42,13 / 82,02 / 82,15 / 578,86 → **le simple gagne partout**. Reste à mesurer au-delà de 4 096 de contexte (corpus trop court) |
 | 3 | KV int8 puis int4 | **fait** | int8 +7,1 % de perplexité, int4 **+384 %** (llama.cpp : +3,1 % et +411 %) ; 1 M tient en int4 (9,7 Go) |
 | 4 | préremplissage par lots | **fait, débit à mesurer** | `gemm_dense_i8` ×2,4 au banc ; `forward_lot` juste sur modèle dense (13,1359 contre 13,1368) **et sur MoE avec regroupement par expert** (13,7205 contre 13,7149) ; le débit bout en bout reste à chiffrer machine au calme |
 | 5 | échelles par bloc pour `DenseQ8` | **fait, hypothèse réfutée** | 23,696 contre 23,612 : les échelles par bloc n'apportent rien ; l'avantage du 6 bits est son coût (25 % d'octets en moins à qualité égale) |

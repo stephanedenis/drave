@@ -139,14 +139,13 @@ température seule. Décision **par séquence**, pas par position : la structure
 position relative ne survit que si toutes les clés partagent le même jeu de
 fréquences.
 
-> **Protocole.** Les courbes ci-dessous ont d'abord été mesurées « par
-> longueur » (`--ctx N --limit N`), ce qui **confond la longueur et le contenu** :
-> à 8 192 jetons on ne note pas les mêmes tranches qu'à 512, et le même corpus
-> va de 6 à 542 de perplexité selon la tranche. Le protocole `--depuis N` corrige
-> cela : il note **toujours les mêmes jetons** en faisant varier la longueur du
-> contexte. Les chiffres ci-dessous restent valables comme points de repère (le
-> classement des trois régimes est stable), mais la comparaison *entre longueurs*
-> doit se refaire avec `--depuis` (voir §5.bis).
+> **Protocole.** Les courbes ci-dessous ont été mesurées « par longueur »
+> (`--ctx N --limit N`), ce qui **confond la longueur et le contenu** : à
+> 8 192 jetons on ne note pas les mêmes tranches qu'à 512, et le même corpus va
+> de 6 à 542 de perplexité selon la tranche. Le protocole `--depuis N` corrige
+> cela en notant **toujours les mêmes jetons**. La comparaison appariée qui suit
+> (§5.bis) est celle qui tranche ; les chiffres ci-dessous restent des points de
+> repère.
 
 Les courbes, mesurées sur gpt-oss-120b et le même corpus (une seule fenêtre,
 `--dense`, 16 fils) :
@@ -159,6 +158,31 @@ Les courbes, mesurées sur gpt-oss-120b et le même corpus (une seule fenêtre,
 | 2 048 | **121,75** | 192,63 | 722,56 |
 | 4 096 | **170,78** | 400,13 | — |
 | 4 608 | — | 476,09 | 1 105,20 |
+
+### 5.bis Comparaison appariée (mêmes jetons, contexte variable)
+
+Jetons **1536 à 2047** du corpus (512 notés), contexte croissant, deux régimes —
+c'est la mesure qui répond à la question « à partir de quand faut-il étirer ? » :
+
+| contexte réel | RoPE simple | interpolation seule |
+|---|---|---|
+| 128 | **39,52** | 42,13 |
+| 512 | **49,79** | 82,02 |
+| 1 024 | **49,93** | 82,15 |
+| 1 536 | **298,56** | 578,86 |
+
+**Le RoPE simple gagne à toutes les longueurs mesurées**, y compris là où les
+deux régimes décrochent (×6 entre 1 024 et 1 536 jetons de contexte). La
+comparaison étant appariée, les effets de contenu s'annulent : c'est bien la
+rotation qui est jugée, pas le texte.
+
+Deux réserves, mesurées elles aussi :
+
+- le **saut à ~1 500 jetons de contexte** est commun aux deux régimes : il vient
+  du contenu AJOUTÉ (non contrôlé par le protocole), pas forcément de la
+  longueur ;
+- au-delà de 4 096 jetons de contexte, le RoPE simple extrapole : la mesure
+  manque (il faut un corpus plus long que la cible + le contexte).
 
 Trois enseignements :
 
