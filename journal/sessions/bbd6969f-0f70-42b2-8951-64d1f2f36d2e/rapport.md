@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 17.0 h |
+| Durée | 18.2 h |
 | Tours | 4 |
-| Messages | 504 |
-| Appels d'outils | 515 |
+| Messages | 551 |
+| Appels d'outils | 563 |
 | Fichiers touchés | 29 |
-| Commandes | 323 |
+| Commandes | 368 |
 | Sous-agents | 1 |
-| Commits | 8 |
+| Commits | 9 |
 | Compactages de contexte | 0 |
 
 ## Objectifs déclarés
@@ -169,7 +169,7 @@ Retirer `mscale = 1 + 0,1·ln f` divise la perplexité par **8,9 / 5,9 / 3,8**. 
 
 ### Tour 4 — fais les 8 dans l'ordre
 
-*80 appels d'outils.* Actions notables :
+*128 appels d'outils.* Actions notables :
 
 - create_goal
 - todo_write
@@ -185,11 +185,11 @@ Retirer `mscale = 1 + 0,1·ln f` divise la perplexité par **8,9 / 5,9 / 3,8**. 
 - bash — Validate overlapping windows and non-regression
 - write `/tmp/seuil_rotation.sh`
 - bash — Launch rotation threshold measurement
-- … et 60 autres
+- … et 106 autres
 
 **Synthèse produite :**
 
-⏵ Le compilateur révèle un 5ᵉ drapeau ignoré (`--attn-topk`, `--qk-topk`, `--sans-yarn` en inférence)
+⏵ Déport de tête : PPL identique (22,0949) et « reste » de 15,6 à 6,2 ms/jeton. Je consigne
 
 ## 3. Travail accompli
 
@@ -273,7 +273,7 @@ Retirer `mscale = 1 + 0,1·ln f` divise la perplexité par **8,9 / 5,9 / 3,8**. 
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 283 autres
+- … et 328 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -401,7 +401,7 @@ Retirer `mscale = 1 + 0,1·ln f` divise la perplexité par **8,9 / 5,9 / 3,8**. 
 
 ## 5. Erreurs rencontrées
 
-11 sorties en erreur ou divergentes. Les premières :
+15 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : a8f2635f8 docs: record which models this box is good at, and why src/llama-hparams.cpp:8:void llama_hparams::set_swa_pattern(uint32_t n_pattern, bool dense_first) { src/llama-hparams.h:308:    void se
 - **T1** : 511 tokens notés — perplexité cumulée 247.031  (4.9 tok/s) === perplexité 247.0308 sur 511 tokens (0 événements, 104.5 s) ===  ### B3 harmony assistant 511 --- ref --- 0.0 0.0 0:00 ls: cannot access '
@@ -414,6 +414,10 @@ Retirer `mscale = 1 + 0,1·ln f` divise la perplexité par **8,9 / 5,9 / 3,8**. 
 - **T4** : error[E0425]: cannot find value `gain` in this scope     --> src/main.rs:1135:27      |   27 | fn main() {      | --------- similarly named function `main` defined here ... 1135 |     if let Some((l, 
 - **T4** : error[E0425]: cannot find value `idfile` in this scope     --> src/main.rs:1084:18      | 1084 |     let idfile = idfile.unwrap_or_default();      |                  ^^^^^^      | help: a local variab
 - **T4** : 1168:    if args.iter().any(|a| a == "--sans-yarn") { mdl.cfg_yarn_off(); } 1259:    let profil = args.iter().any(|a| a == "--ppl-profil"); error[E0425]: cannot find value `args` in this scope     -->
+- **T4** : error[E0599]: no method named `clone_ref` found for reference `&DenseQ8` in the current scope     --> src/model.rs:1495:82      | 1495 |                 let d8 = self.layers[l].wo.d.as_ref().expect("F
+- **T4** : error[E0609]: no field `lot` on type `Options`    --> src/main.rs:393:26     | 393 |             "--lot" => o.lot = suivant(i).parse().unwrap(),     |                          ^^^ unknown field     | 
+- **T4** : 20:use list::{dense_bits, BitmapSign, DenseQ4, DenseQ8, FusedSign, PushMat, SignedDelta, SparseK}; error[E0382]: use of moved value: `d`    --> src/main.rs:785:22     | 785 |             sc.spawn(move
+- **T4** : /usr/lib64/clang/23/include/__clang_cuda_builtin_vars.h en-tête présent In file included from <built-in>:2: ./cuda_stub.h:16:76: error: redeclaration of 'threadIdx' with a different type: 'const __qua
 
 ## 6. Commits
 
@@ -425,4 +429,5 @@ Retirer `mscale = 1 + 0,1·ln f` divise la perplexité par **8,9 / 5,9 / 3,8**. 
 - Item 3 : cache KV quantifie int8 et int4 empaquete  Le cache KV devient un KvCache : f32 (defaut, comportement inchange), int8 (un octet par valeur) ou int4 (de
 - Item 5 : echelles par bloc pour DenseQ8 -- hypothese refutee  DenseQ8 sait maintenant se construire avec une echelle par bloc de 32 (QT_Q8_BLOCS=1, Source8::Pro
 - Item 6 : une seule analyse de la ligne de commande pour les quatre modes  struct Options + fn analyser remplacent les deux boucles de 44 drapeaux ; run_infer, r
+- Item 7 (1/2) : noyau GPU une warp par ligne, la tete redevient deportable  tete_q8_warp / proj_q8_warp : une warp par ligne, les 32 fils se partagent les blocs 
 

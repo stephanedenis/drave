@@ -916,7 +916,11 @@ impl Model {
         // distantes de 34 octets : chaque accès d'une même warp tombe dans une
         // ligne de cache différente. Il faut une warp par ligne avec réduction
         // — à écrire avant de réactiver.
-        let tete_gpu = if false && crate::gpu::instance().is_some() {
+        // Le noyau « une warp par ligne » rend le déport de la tête enfin
+        // rentable : l'ancien lisait une ligne par fil (23 → 159 ms mesurés).
+        // Opt-in : `QT_GPU_TETE=1`.
+        let tete_gpu = if std::env::var("QT_GPU_TETE").is_ok()
+                          && crate::gpu::instance().is_some() {
             match (crate::gpu::instance(), g.q8_blocks(&tete)) {
                 (Some(machine), Some((blocs, nb))) => {
                     let m = machine.charger_tete(blocs, cfg.vocab, cfg.hidden, nb);
@@ -1306,6 +1310,257 @@ impl Model {
                 t[i + half] = b * c + a * s;
             }
         }
+    }
+
+    /// **Préremplissage par lots** : `t` jetons d'un coup, aux positions
+    /// `pos0..pos0+t`.
+    ///
+    /// Toute la différence avec `forward` est dans les projections : elles
+    /// passent d'un produit matrice-vecteur par jeton à un produit
+    /// matrice-matrice pour le lot, donc chaque ligne de poids n'est lue qu'une
+    /// fois au lieu de `t` fois (mesuré au noyau : ×2,4 à 16 jetons sur une
+    /// matrice 4864 × 896).
+    ///
+    /// L'attention reste par jeton (elle est causale : le jeton i doit voir le
+    /// cache écrit par les jetons < i), mais elle réutilise les Q, K, V calculés
+    /// en lot. Les modèles à experts retombent sur le chemin jeton par jeton :
+    /// leur regroupement par expert est l'étape suivante.
+    pub fn forward_lot(&mut self, toks: &[u32], pos0: usize) -> Vec<Vec<f32>> {
+        let t = toks.len();
+        if t == 0 { return Vec::new(); }
+        if self.cfg.n_expert > 0 || t == 1 {
+            return toks.iter().enumerate()
+                .map(|(i, &tok)| self.forward(tok, pos0 + i)).collect();
+        }
+        let h = self.cfg.hidden;
+        let hd = self.cfg.head_dim;
+        let nh = self.cfg.n_head;
+        let nkv = self.cfg.n_kv_head;
+        let rep = nh / nkv;
+        let ctx = self.ctx;
+        // --- activations du lot, en i32 quantifié (une seule quantification de
+        //     l'entrée normative sert à q, k, v ET au FFN)
+        let mut x = vec![0f32; t * h];
+        for (i, &tok) in toks.iter().enumerate() {
+            let r = self.g.row_f32("token_embd.weight", tok as usize, h);
+            x[i * h..(i + 1) * h].copy_from_slice(&r);
+        }
+        let mut hn = vec![0f32; t * h];
+        let mut xi = vec![0i32; t * h];
+        let mut sx = vec![0f32; t];
+        let mut q = vec![0f32; t * nh * hd];
+        let mut k = vec![0f32; t * nkv * hd];
+        let mut v = vec![0f32; t * nkv * hd];
+        let mut att = vec![0f32; t * nh * hd];
+        let mut o = vec![0f32; t * h];
+        let mut scratch: Vec<f32> = Vec::with_capacity(h);
+        let mut gate = vec![0f32; t * self.cfg.ffn];
+        let mut up = vec![0f32; t * self.cfg.ffn];
+        let mut down = vec![0f32; t * h];
+        let mut tmp = vec![0f32; hd];
+        let mut sc = vec![0f32; pos0 + t];
+        let mut kd = vec![0f32; hd];
+        let mut vd = vec![0f32; hd];
+        let attn_all: Vec<u32> = (0..ctx as u32).collect();
+        let mut attn_idx: Vec<u32> = Vec::with_capacity(ctx);
+        let scale = 1.0 / (hd as f32).sqrt();
+        // Quantification d'un lot : mêmes règles que `quant_scratch`.
+        let quantifier = |src: &[f32], dst: &mut Vec<i32>, ech: &mut Vec<f32>,
+                          niveaux: f32, seuil: f32| {
+            let n = src.len() / t;
+            for i in 0..t {
+                let ligne = &src[i * n..(i + 1) * n];
+                let mut mx = 0f32;
+                for &val in ligne { let a = val.abs(); if a > mx { mx = a; } }
+                let s = if mx > 0.0 { mx / niveaux } else { 1.0 };
+                ech[i] = s;
+                let inv = 1.0 / s;
+                let se = (seuil * niveaux) as i32;
+                for (j, &val) in ligne.iter().enumerate() {
+                    let r = (val * inv).round() as i32;
+                    dst[i * n + j] = if r.abs() > se { r } else { 0 };
+                }
+            }
+        };
+        for l in 0..self.cfg.n_layer {
+            let lay = &self.layers[l];
+            // 1. norme d'entrée du lot
+            for i in 0..t {
+                let r = &x[i * h..(i + 1) * h];
+                Self::rmsnorm(r, &lay.attn_norm, self.cfg.eps, &mut hn[i * h..(i + 1) * h]);
+            }
+            quantifier(&hn, &mut xi, &mut sx, self.act_levels, self.act_thresh);
+            // 2. q, k, v en un produit matrice-matrice chacun
+            let nq = nh * hd;
+            let mut y = vec![0f32; t * nq.max(nkv * hd).max(self.cfg.ffn).max(h)];
+            for (pj, taille) in [(&lay.wq, nq), (&lay.wk, nkv * hd), (&lay.wv, nkv * hd)] {
+                if let Some(d8) = pj.d.as_ref() {
+                    let mut yl = vec![0f32; d8.n_out * t];
+                    self.pool.gemm_dense_i8(d8, &xi, t, &sx, &mut yl);
+                    for i in 0..t {
+                        for oo in 0..d8.n_out {
+                            y[i * taille + oo] = yl[oo * t + i]
+                                + pj.bias.as_ref().map_or(0.0, |b| b[oo]);
+                        }
+                    }
+                } else {
+                    // Pas de forme dense (mode push) : jeton par jeton.
+                    for i in 0..t {
+                        let mut out = vec![0f32; taille];
+                        Self::matvec(&mut self.pool, pj, &hn[i * h..(i + 1) * h], &mut out,
+                                     &mut self.events, self.act_levels, self.act_thresh, 0,
+                                     self.act_renorm, &mut scratch, self.seuil_push);
+                        y[i * taille..(i + 1) * taille].copy_from_slice(&out);
+                    }
+                }
+            }
+            for i in 0..t { q[i * nq..(i + 1) * nq].copy_from_slice(&y[i * nq..(i + 1) * nq]); }
+            for i in 0..t {
+                k[i * nkv * hd..(i + 1) * nkv * hd]
+                    .copy_from_slice(&y[i * nq..i * nq + nkv * hd]);
+            }
+            for i in 0..t {
+                v[i * nkv * hd..(i + 1) * nkv * hd]
+                    .copy_from_slice(&y[i * nq + nkv * hd..i * nq + 2 * nkv * hd]);
+            }
+            // 3. normes de tête, rotation, écriture du cache, attention
+            for i in 0..t {
+                let pos = pos0 + i;
+                let qi = &mut q[i * nq..(i + 1) * nq];
+                let ki = &mut k[i * nkv * hd..(i + 1) * nkv * hd];
+                let vi = &v[i * nkv * hd..(i + 1) * nkv * hd];
+                if lay.q_norm.is_some() || lay.k_norm.is_some() {
+                    if let Some(w) = lay.q_norm.as_ref() {
+                        for hh in 0..nh {
+                            let tt = &mut qi[hh * hd..(hh + 1) * hd];
+                            Self::rmsnorm(tt, w, self.cfg.eps, &mut tmp);
+                            tt.copy_from_slice(&tmp);
+                        }
+                    }
+                    if let Some(w) = lay.k_norm.as_ref() {
+                        for hh in 0..nkv {
+                            let tt = &mut ki[hh * hd..(hh + 1) * hd];
+                            Self::rmsnorm(tt, w, self.cfg.eps, &mut tmp);
+                            tt.copy_from_slice(&tmp);
+                        }
+                    }
+                }
+                match self.cfg.yarn {
+                    Some((f, bf, bl, orig, ms)) => {
+                        Self::rope_yarn(qi, nh, hd, pos, self.cfg.rope_base, f, bf, bl, orig, ms, self.cfg.n_rot);
+                        Self::rope_yarn(ki, nkv, hd, pos, self.cfg.rope_base, f, bf, bl, orig, ms, self.cfg.n_rot);
+                    }
+                    None => {
+                        Self::rope(qi, nh, hd, pos, self.cfg.rope_base, self.cfg.n_rot);
+                        Self::rope(ki, nkv, hd, pos, self.cfg.rope_base, self.cfg.n_rot);
+                    }
+                }
+                {
+                    let kvc = &mut self.kv[l];
+                    for hh in 0..nkv {
+                        kvc.ecrire(hh, pos, &ki[hh * hd..(hh + 1) * hd],
+                                          &vi[hh * hd..(hh + 1) * hd]);
+                    }
+                }
+                let fen = if self.attn_window == 0 { 0 }
+                          else if self.swa_pattern <= 1 { self.attn_window }
+                          else if l % self.swa_pattern < self.swa_pattern - 1 { self.attn_window }
+                          else { 0 };
+                let kvc = &self.kv[l];
+                let n = pos + 1;
+                let lo = if fen > 0 && n > fen { n - fen } else { 0 };
+                for hh in 0..nh {
+                    let kvh = hh / rep;
+                    let qh = &qi[hh * hd..(hh + 1) * hd];
+                    for tt in lo..n {
+                        kvc.cle(kvh, tt, &mut kd);
+                        sc[tt] = Self::dot8(&qh, &kd) * scale;
+                    }
+                    let puits = lay.sinks.as_ref().map(|s| s[hh]);
+                    let mut mx = f32::NEG_INFINITY;
+                    for tt in lo..n { if sc[tt] > mx { mx = sc[tt]; } }
+                    if let Some(s) = puits { if s > mx { mx = s; } }
+                    let mut somme = 0f32;
+                    for tt in lo..n { let e = (sc[tt] - mx).exp(); sc[tt] = e; somme += e; }
+                    if let Some(s) = puits { somme += (s - mx).exp(); }
+                    let inv = 1.0 / somme;
+                    let out = &mut att[i * nq + hh * hd..i * nq + (hh + 1) * hd];
+                    for val in out.iter_mut() { *val = 0.0; }
+                    for tt in lo..n {
+                        let w = sc[tt] * inv;
+                        kvc.valeur(kvh, tt, &mut vd);
+                        for (oo, xx) in out.iter_mut().zip(vd.iter()) { *oo += w * xx; }
+                    }
+                }
+                self.attn_events += (nh * (n - lo)) as u64;
+            }
+            // 4. projection de sortie du lot, résidu, norme du FFN
+            {
+                let mut ai = vec![0i32; t * h];
+                let mut sa = vec![0f32; t];
+                quantifier(&att, &mut ai, &mut sa, self.act_levels, self.act_thresh);
+                let (n_out, mut yl) = {
+                    let d8 = self.layers[l].wo.d.as_ref().expect("projection dense requise");
+                    let mut yl = vec![0f32; d8.n_out * t];
+                    self.pool.gemm_dense_i8(d8, &ai, t, &sa, &mut yl);
+                    (d8.n_out, yl)
+                };
+                let bias = self.layers[l].wo.bias.clone();
+                for i in 0..t {
+                    for oo in 0..n_out {
+                        o[i * h + oo] = yl[oo * t + i]
+                            + bias.as_ref().map_or(0.0, |b| b[oo]) + x[i * h + oo];
+                    }
+                }
+                yl.clear();
+            }
+            for i in 0..t {
+                let r = &o[i * h..(i + 1) * h];
+                Self::rmsnorm(r, &lay.ffn_norm, self.cfg.eps, &mut hn[i * h..(i + 1) * h]);
+            }
+            quantifier(&hn, &mut xi, &mut sx, self.act_levels, self.act_thresh);
+            // 5. FFN dense en lot
+            for (pj, dst, taille) in [(&lay.wgate, &mut gate, self.cfg.ffn),
+                                      (&lay.wup, &mut up, self.cfg.ffn)] {
+                if let Some(d8) = pj.d.as_ref() {
+                    let mut yl = vec![0f32; d8.n_out * t];
+                    self.pool.gemm_dense_i8(d8, &xi, t, &sx, &mut yl);
+                    for i in 0..t {
+                        for oo in 0..taille { dst[i * taille + oo] = yl[oo * t + i]; }
+                    }
+                }
+            }
+            for i in 0..t {
+                let (g, u) = (gate[i * self.cfg.ffn..(i + 1) * self.cfg.ffn].to_vec(),
+                              up[i * self.cfg.ffn..(i + 1) * self.cfg.ffn].to_vec());
+                let mut gg = g;
+                Self::activation(&mut gg, &u, self.cfg.ffn, self.cfg.ffn_act_oss);
+                gate[i * self.cfg.ffn..(i + 1) * self.cfg.ffn].copy_from_slice(&gg);
+            }
+            {
+                let mut gi = vec![0i32; t * self.cfg.ffn];
+                let mut sg = vec![0f32; t];
+                quantifier(&gate, &mut gi, &mut sg, self.act_levels, self.act_thresh);
+                let mut yl = {
+                    let d8 = self.layers[l].wdown.d.as_ref().expect("projection dense requise");
+                    let mut yl = vec![0f32; d8.n_out * t];
+                    self.pool.gemm_dense_i8(d8, &gi, t, &sg, &mut yl);
+                    yl
+                };
+                for i in 0..t {
+                    for oo in 0..h {
+                        down[i * h + oo] = yl[oo * t + i];
+                        x[i * h + oo] = o[i * h + oo] + down[i * h + oo];
+                    }
+                }
+                yl.clear();
+            }
+        }
+        for i in 0..t {
+            let r = x[i * h..(i + 1) * h].to_vec();
+            Self::rmsnorm(&r, &self.out_norm, self.cfg.eps, &mut hn[i * h..(i + 1) * h]);
+        }
+        (0..t).map(|i| hn[i * h..(i + 1) * h].to_vec()).collect()
     }
 
     /// Un token, une position. Retourne l'état caché après la dernière norme.
@@ -1708,7 +1963,7 @@ impl Model {
         if let (Some(machine), Some(m)) = (crate::gpu::instance(), self.tete_gpu.as_ref()) {
             let mut xd = vec![0i32; h.len()];
             for (&i, &v) in sv.idx.iter().zip(sv.val.iter()) { xd[i as usize] = v; }
-            if let Some(y) = machine.tete(m, &xd) {
+            if let Some(y) = machine.tete_warp(m, &xd) {
                 return y.iter().map(|v| v * sx).collect();
             }
         }

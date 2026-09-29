@@ -86,4 +86,89 @@ __global__ void proj_q8(const unsigned char* __restrict__ w,
     }
 }
 
+// ---------------------------------------------------------------------------
+// Réduction de warp par shuffle. `shfl.sync.down` est écrit en PTX en ligne :
+// les intrinsèques `__shfl_down_sync` viennent des en-têtes CUDA, absents de
+// cette chaîne de compilation.
+__device__ __forceinline__ float shfl_bas(float v, int d) {
+    float r;
+    asm volatile("shfl.sync.down.b32 %0, %1, %2, 0x1f, 0xffffffff;"
+                 : "=f"(r) : "f"(v), "r"(d));
+    return r;
+}
+
+// Version **une warp par ligne**.
+//
+// L'ancien noyau lisait une ligne PAR FIL : deux fils d'une même warp lisaient
+// des adresses distantes de `nb × 34` octets, donc chaque accès était une
+// transaction distincte — mesuré : la tête passait de 23 à 159 ms, et le
+// déport n'était pas rentable.
+//
+// Ici les 32 fils d'une warp travaillent sur la MÊME ligne : le fil `lane`
+// traite les blocs `lane, lane+32, …`, et les blocs consécutifs occupent des
+// adresses consécutives (34 octets d'écart), donc une warp couvre ~1 Ko
+// contigu. La réduction se fait en mémoire partagée (pas de shuffle : aucun
+// en-tête CUDA n'est disponible dans cette chaîne de compilation).
+__global__ void tete_q8_warp(const unsigned char* __restrict__ w,
+                             const int* __restrict__ x,
+                             float* __restrict__ out,
+                             int n_out, int nb) {
+    extern __shared__ int xs[];
+    const int n_in = nb * 32;
+    const int tid = threadIdx.x;
+    const int lane = tid & 31;
+    const int warp = tid >> 5;
+    const int warp_par_bloc = blockDim.x >> 5;
+    for (int i = tid; i < n_in; i += blockDim.x) xs[i] = x[i];
+    __syncthreads();
+    const int warp_grille = (gridDim.x * blockDim.x) >> 5;
+    for (int o = blockIdx.x * warp_par_bloc + warp; o < n_out; o += warp_grille) {
+        const unsigned char* p = w + (size_t)o * (size_t)nb * 34u;
+        float acc = 0.0f;
+        for (int b = lane; b < nb; b += 32) {
+            const float d = f16_en_f32(*reinterpret_cast<const unsigned short*>(p + b * 34));
+            const signed char* q = reinterpret_cast<const signed char*>(p + b * 34 + 2);
+            const int* xb = xs + b * 32;
+            int s = 0;
+            #pragma unroll 8
+            for (int j = 0; j < 32; ++j) s += (int)q[j] * xb[j];
+            acc += d * (float)s;
+        }
+        #pragma unroll
+        for (int d = 16; d > 0; d >>= 1) acc += shfl_bas(acc, d);
+        if (lane == 0) out[o] = acc;
+    }
+}
+
+__global__ void proj_q8_warp(const unsigned char* __restrict__ w,
+                             const int* __restrict__ x,
+                             float* __restrict__ out,
+                             int n_out, int nb, float sx) {
+    extern __shared__ int xs[];
+    const int n_in = nb * 32;
+    const int tid = threadIdx.x;
+    const int lane = tid & 31;
+    const int warp = tid >> 5;
+    const int warp_par_bloc = blockDim.x >> 5;
+    for (int i = tid; i < n_in; i += blockDim.x) xs[i] = x[i];
+    __syncthreads();
+    const int warp_grille = (gridDim.x * blockDim.x) >> 5;
+    for (int o = blockIdx.x * warp_par_bloc + warp; o < n_out; o += warp_grille) {
+        const unsigned char* p = w + (size_t)o * (size_t)nb * 34u;
+        float acc = 0.0f;
+        for (int b = lane; b < nb; b += 32) {
+            const float d = f16_en_f32(*reinterpret_cast<const unsigned short*>(p + b * 34));
+            const signed char* q = reinterpret_cast<const signed char*>(p + b * 34 + 2);
+            const int* xb = xs + b * 32;
+            int s = 0;
+            #pragma unroll 8
+            for (int j = 0; j < 32; ++j) s += (int)q[j] * xb[j];
+            acc += d * (float)s;
+        }
+        #pragma unroll
+        for (int d = 16; d > 0; d >>= 1) acc += shfl_bas(acc, d);
+        if (lane == 0) out[o] = acc * sx;
+    }
+}
+
 }  // extern "C"

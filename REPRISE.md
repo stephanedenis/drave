@@ -233,13 +233,33 @@ de la même classe de bug).
 Non-régression après refactorisation : Qwen 19,3885 au chiffre près, `--tokenize`
 identique au jeton près, `--plan` et l'inférence inchangés, tests 4/4.
 
-### d. Noyaux GPU
+### d. Noyaux GPU : warp par ligne FAIT (le déport de la tête redevient rentable)
 
-Ils fonctionnent et donnent un résultat **identique au chiffre près** au CPU,
-mais lisent une ligne par fil : les accès d'une même warp tombent dans des lignes
-de cache différentes. Il faut une warp par ligne avec réduction, puis des noyaux
-4 bits (Q4_K, Q6_K, MXFP4) — toute la famille Qwen est en Q4_K/Q6_K, donc
-aujourd'hui rien de la leur n'est déportable.
+`tete_q8_warp` / `proj_q8_warp` : **une warp par ligne**, les 32 fils se partagent
+les blocs (34 octets d'écart = ~1 Ko contigu par warp) et se réduisent par
+`shfl.sync.down`. Mesuré sur la tête de Qwen2.5-0.5B (151 936 × 896, 144,6 Mo),
+banc `--gpu-banc` :
+
+| chemin | temps | débit | écart au CPU |
+|---|---|---|---|
+| CPU 8 fils | 30,2 ms | 4,8 Go/s | — |
+| GPU, ligne par fil (ancien) | 3,5 ms | 40,8 Go/s | 2e-7 |
+| **GPU, warp par ligne** | **1,8 ms** | **82,3 Go/s** | 2e-7 |
+
+Et bout en bout (`QT_GPU_TETE=1`) : perplexité **identique au chiffre près**
+(22,0949 dans les deux cas) et le poste « tête + échantillonnage » passe de
+**15,6 à 6,2 ms par jeton**. L'ancienne conclusion (« la tête n'est pas
+déportable, 23 → 159 ms ») était celle d'un noyau mal coalescé.
+
+**Piège de la chaîne de compilation** (il a coûté une boucle infinie) : compiler
+le `.cu` avec `clang++ -x cuda … -nocudainc` exige l'en-tête intégré
+`__clang_cuda_builtin_vars.h`. Sans lui, `threadIdx`/`blockDim` deviennent des
+**variables globales externes** : le PTX fait `ld.global.b32 %r, [threadIdx]`,
+lit 0, donc `pas = blockDim.x * gridDim.x = 0` et le noyau boucle sans fin. Tout
+est dans `gpu/compiler.sh` et `gpu/cuda_stub.h`.
+
+Reste à faire : les noyaux **4 bits** (Q4_K, Q6_K, MXFP4) — toute la famille Qwen
+est en Q4_K/Q6_K, donc rien de la leur n'est déportable en l'état.
 
 ### e. Échelles par bloc pour `DenseQ8` : FAIT — hypothèse RÉFUTÉE
 

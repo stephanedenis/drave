@@ -68,6 +68,8 @@ pub struct Gpu {
     module: *mut c_void,
     f_tete: *mut c_void,
     f_proj: *mut c_void,
+    f_tete_warp: *mut c_void,
+    f_proj_warp: *mut c_void,
     pub nom: String,
     pub memoire_libre: usize,
 }
@@ -135,13 +137,28 @@ impl Gpu {
                 eprintln!("{}", erreur(rc, "fonction proj_q8"));
                 return None;
             }
+            let nom_tw = std::ffi::CString::new("tete_q8_warp").unwrap();
+            let mut f_tete_warp: *mut c_void = std::ptr::null_mut();
+            let rc = cuModuleGetFunction(&mut f_tete_warp, module, nom_tw.as_ptr());
+            if rc != 0 {
+                eprintln!("{}", erreur(rc, "fonction tete_q8_warp"));
+                return None;
+            }
+            let nom_pw = std::ffi::CString::new("proj_q8_warp").unwrap();
+            let mut f_proj_warp: *mut c_void = std::ptr::null_mut();
+            let rc = cuModuleGetFunction(&mut f_proj_warp, module, nom_pw.as_ptr());
+            if rc != 0 {
+                eprintln!("{}", erreur(rc, "fonction proj_q8_warp"));
+                return None;
+            }
             let mut libre: usize = 0;
             let mut total: usize = 0;
             extern "C" {
                 fn cuMemGetInfo_v2(libre: *mut usize, total: *mut usize) -> c_int;
             }
             cuMemGetInfo_v2(&mut libre, &mut total);
-            Some(Gpu { ctx, module, f_tete, f_proj, nom: format!("GPU {ordinal}"), memoire_libre: libre })
+            Some(Gpu { ctx, module, f_tete, f_proj, f_tete_warp, f_proj_warp,
+                       nom: format!("GPU {ordinal}"), memoire_libre: libre })
         }
     }
 
@@ -206,6 +223,48 @@ impl Gpu {
                                     (n_in * 4) as c_uint, std::ptr::null_mut(),
                                     params.as_mut_ptr(), std::ptr::null_mut());
             if rc != 0 { eprintln!("{}", erreur(rc, "lancement proj")); return None; }
+            let rc = cuCtxSynchronize();
+            if rc != 0 { return None; }
+            let mut out = vec![0f32; m.n_out];
+            let rc = cuMemcpyDtoH_v2(out.as_mut_ptr() as *mut c_void, m.out_dev, m.n_out * 4);
+            if rc != 0 { return None; }
+            Some(out)
+        }
+    }
+
+    /// Une passe de tête avec le noyau **une warp par ligne**.
+    ///
+    /// Le noyau d'origine lisait une ligne par fil : deux fils d'une même warp
+    /// tombaient dans des lignes de cache différentes et chaque accès coûtait
+    /// une transaction. Ici une warp couvre une ligne, donc ~1 Ko contigu.
+    /// La mémoire partagée contient les activations PUIS les 32 accumulateurs
+    /// par warp.
+    pub fn tete_warp(&self, m: &MatriceGpu, x: &[i32]) -> Option<Vec<f32>> {
+        unsafe { cuCtxSetCurrent(self.ctx) };
+        let n_in = m.nb * 32;
+        if x.len() < n_in { return None; }
+        unsafe {
+            let rc = cuMemcpyHtoD_v2(m.x_dev, x.as_ptr() as *const c_void, n_in * 4);
+            if rc != 0 { return None; }
+            let mut p_poids = m.poids;
+            let mut p_x = m.x_dev;
+            let mut p_out = m.out_dev;
+            let n_out = m.n_out as c_int;
+            let nb = m.nb as c_int;
+            let mut params: [*mut c_void; 5] = [
+                &mut p_poids as *mut u64 as *mut c_void,
+                &mut p_x as *mut u64 as *mut c_void,
+                &mut p_out as *mut u64 as *mut c_void,
+                &n_out as *const c_int as *mut c_void,
+                &nb as *const c_int as *mut c_void,
+            ];
+            let fils: c_uint = 256;
+            let blocs = ((m.n_out as c_uint) + (fils / 32) - 1) / (fils / 32);
+            let partage = (n_in * 4) as c_uint;   // plus de zone de réduction : shuffle
+            let rc = cuLaunchKernel(self.f_tete_warp, blocs.min(65535), 1, 1, fils, 1, 1,
+                                    partage, std::ptr::null_mut(),
+                                    params.as_mut_ptr(), std::ptr::null_mut());
+            if rc != 0 { eprintln!("{}", erreur(rc, "lancement tete_q8_warp")); return None; }
             let rc = cuCtxSynchronize();
             if rc != 0 { return None; }
             let mut out = vec![0f32; m.n_out];

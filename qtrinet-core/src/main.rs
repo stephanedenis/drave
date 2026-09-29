@@ -37,6 +37,7 @@ fn main() {
     // d'options, donc les mêmes drapeaux.
     let opt = analyser(&args);
     let _ = MODELE.set(args[1].clone());
+    if opt.gpu_banc { run_gpu_banc(opt); return; }
     if opt.plan { run_plan(opt); return; }
     if opt.tokenize { run_tokenize(opt); return; }
     if opt.ppl { run_ppl(opt); return; }
@@ -314,7 +315,7 @@ fn modele_chemin() -> String { MODELE.get().cloned().unwrap_or_default() }
 #[derive(Default)]
 struct Options {
     // --- sélection du mode
-    infer: bool, ppl: bool, plan: bool, tokenize: bool,
+    infer: bool, ppl: bool, plan: bool, tokenize: bool, gpu_banc: bool,
     // --- source des jetons
     ids: Vec<u32>, ids_file: Option<String>, texte_file: Option<String>,
     ppl_texte: bool, prompt: Option<String>, limit: usize, depuis: usize,
@@ -335,6 +336,8 @@ struct Options {
     act_thresh: f32, act_topk: usize, act_renorm: bool, topk_proj: [usize; 7],
     // --- mesure
     logits_bin: Option<String>, ppl_profil: bool,
+    /// Taille du lot de préremplissage : 1 = jeton par jeton (défaut).
+    lot: usize,
     harmony: Option<String>, harmony_contexte: Option<String>,
     // --- rotation
     sans_yarn: bool,
@@ -369,6 +372,7 @@ fn analyser(args: &[String]) -> Options {
             "--ppl-texte" => { o.ppl = true; o.ppl_texte = true; o.texte_file = Some(suivant(i).clone()); }
             "--plan" => { o.plan = true; i += 1; continue; }
             "--tokenize" => { o.tokenize = true; i += 1; continue; }
+            "--gpu-banc" => { o.gpu_banc = true; i += 1; continue; }
             "--ids" => o.ids = suivant(i).split(',').filter_map(|s| s.trim().parse().ok()).collect(),
             "--ids-file" => o.ids_file = Some(suivant(i).clone()),
             "--prompt" => o.prompt = Some(suivant(i).clone()),
@@ -390,6 +394,7 @@ fn analyser(args: &[String]) -> Options {
             "--abits" => { o.abits = suivant(i).parse().unwrap(); o.abits_impose = true; }
             "--bits" => o.bits = suivant(i).parse().unwrap(),
             "--limit" => o.limit = suivant(i).parse().unwrap(),
+            "--lot" => o.lot = suivant(i).parse().unwrap(),
             "--depuis" => o.depuis = suivant(i).parse().unwrap(),
             "--keep" => o.keep = suivant(i).parse().unwrap(),
             "--moe-topk" => o.moe_topk = suivant(i).parse().unwrap(),
@@ -743,6 +748,98 @@ fn mdl_cfg_vocab(path: &str) -> Option<usize> {
 
 /// Tokenise un texte et imprime les identifiants — sert à vérifier le
 /// pré-découpage contre une implémentation de référence.
+
+/// Banc d'essai des noyaux GPU : la MÊME tête, trois chemins.
+///
+/// Il existe parce que le déport de la tête a été refusé une fois sur une
+/// mesure (23 → 159 ms) : sans un banc isolé, on ne sait pas si un changement
+/// de noyau aide, la mesure par jeton mélangeant tête, attention et
+/// échantillonnage.
+fn run_gpu_banc(opt: Options) {
+    use std::time::Instant;
+    let path = &modele_chemin();
+    let threads = if opt.threads_impose { opt.threads } else {
+        (std::thread::available_parallelism().map(|n| n.get()).unwrap_or(8) * 3 / 4).max(1)
+    };
+    let g = Gguf::open(path).expect("ouverture du GGUF");
+    let nom = if g.tensor("output.weight").is_some() { "output.weight" } else { "token_embd.weight" };
+    let (blocs, nb) = g.q8_blocks(nom).expect("tête Q8_0 requise pour ce banc");
+    let t = g.tensor(nom).unwrap();
+    let (n_out, n_in) = (t.dims[0] as usize, t.dims[1] as usize);
+    // Taille RÉELLE des poids de la tête (`blocs` couvre la fin du fichier).
+    let octets = n_out * nb * 34;
+    println!("tête {nom} : {n_out} × {n_in} · {:.1} Mo · {} blocs de 32",
+             octets as f64 / 1e6, nb);
+
+    // Activations de test, quantifiées comme dans le moteur. Les noyaux de TÊTE
+    // ne multiplient PAS par l'échelle d'activation (c'est `proj_q8` qui le
+    // fait) : la comparaison doit donc se faire sans `sx`, sinon l'écart
+    // mesuré n'est que le facteur oublié (constaté : 2,5e2).
+    let xi: Vec<i32> = (0..n_in).map(|i| ((i * 2654435761usize) % 255) as i32 - 127).collect();
+
+    // 1. CPU : le chemin de référence.
+    let d = unsafe { DenseQ8::emprunter_q8(blocs.as_ptr(), n_out, n_in, nb) };
+    let t0 = Instant::now();
+    let mut cpu = vec![0f32; n_out];
+    let chunk = n_out.div_ceil(threads);
+    let (dref, xiref) = (&d, &xi);
+    std::thread::scope(|sc| {
+        for (ci, part) in cpu.chunks_mut(chunk).enumerate() {
+            let base = ci * chunk;
+            sc.spawn(move || {
+                for (j, o) in part.iter_mut().enumerate() {
+                    *o = dref.dot_q8_source(base + j, xiref);
+                }
+            });
+        }
+    });
+    let tc = t0.elapsed().as_secs_f64();
+    println!("  CPU  {threads} fils : {:>7.1} ms  ({:>6.1} Go/s)", tc * 1e3, octets as f64 / tc / 1e9);
+
+    // 2 et 3. GPU : ancien noyau (une ligne par fil) puis warp par ligne.
+    let Some(machine) = gpu::instance() else {
+        println!("  GPU absent : banc terminé");
+        return;
+    };
+    println!("  {}", machine.nom);
+    // `--limit N` plafonne le nombre de lignes : c'est ce qui permet de
+    // distinguer un noyau qui boucle d'un transfert qui bloque.
+    let n_out = if opt.limit < n_out { opt.limit } else { n_out };
+    eprintln!("[banc] allocation de {:.1} Mo sur le GPU", (n_out * nb * 34) as f64 / 1e6);
+    let Some(m) = machine.charger_tete(&blocs[..n_out * nb * 34], n_out, n_in, nb) else {
+        println!("  allocation GPU impossible");
+        return;
+    };
+    eprintln!("[banc] poids montés, premier lancement");
+    for (nom_noyau, warp) in [("ligne par fil", false), ("warp par ligne", true)] {
+        // Deux passes : la première paie le transfert, la seconde mesure.
+        let mut ms = f64::MAX;
+        let mut dernier: Vec<f32> = Vec::new();
+        for passe in 0..3 {
+            let t1 = Instant::now();
+            let r = if warp { machine.tete_warp(&m, &xi) } else { machine.tete(&m, &xi) };
+            let dt = t1.elapsed().as_secs_f64();
+            let Some(r) = r else { println!("  {nom_noyau} : échec"); break; };
+            if passe > 0 && dt < ms { ms = dt; }
+            dernier = r;
+        }
+        if dernier.is_empty() { continue; }
+        // Accord avec le CPU : les sommes ne sont pas dans le même ordre, donc
+        // seuls les derniers bits changent. L'écart est rapporté à la PLUS
+        // GRANDE valeur, pas à chaque valeur : une sortie proche de zéro
+        // donnerait sinon un écart relatif absurde.
+        let mut ecart_max = 0f32;
+        let mut echelle = 1e-9f32;
+        for o in 0..n_out { echelle = echelle.max(cpu[o].abs()); }
+        for o in 0..n_out {
+            let e = (dernier[o] - cpu[o]).abs() / echelle;
+            if e > ecart_max { ecart_max = e; }
+        }
+        println!("  GPU  {nom_noyau:<14} : {:>7.1} ms  ({:>6.1} Go/s)  écart max {:+.2e} (relatif au plus grand logit)",
+                 ms * 1e3, octets as f64 / ms / 1e9, ecart_max);
+    }
+}
+
 fn run_tokenize(opt: Options) {
     let path = &modele_chemin();
     let texte = opt.texte.clone().unwrap_or_default();
@@ -1094,8 +1191,9 @@ fn run_ppl(opt: Options) {
         dense, auto, q4, b6, attn_window, swa_pattern,
         sans_fenetre, attn_sinks, attn_topk, qk_topk, act_thresh, act_topk, act_renorm,
         topk_proj, moe_topk, patch: patch_file, hebb_layer, ffn_gain, logits_bin,
-        ppl_profil, harmony, harmony_contexte, sans_yarn, ..
+        ppl_profil, lot, harmony, harmony_contexte, sans_yarn, ..
     } = opt;
+    let lot = lot.max(1);
     let path = &modele_chemin();
     // Défauts du mode PERPLEXITÉ : 256 jetons, trois quarts des cœurs, 16 bits
     // d'activation (la référence de non-régression en dépend).
@@ -1260,10 +1358,16 @@ fn run_ppl(opt: Options) {
     let mut seaux: Vec<(f64, usize)> = vec![(0.0, 0); ctx.div_ceil(256)];
     for (i_f, (chunk, masque)) in fenetres.iter().enumerate() {
         let (mut nll_f, mut n_f) = (0f64, 0usize);
-        for pos in 0..chunk.len() {
-            let h = mdl.forward(chunk[pos], pos);
+        // Préremplissage par lots : `lot` jetons d'un coup. `lot == 1` emprunte
+        // exactement le chemin historique jeton par jeton.
+        let mut pos = 0usize;
+        while pos < chunk.len() {
+            let t = lot.min(chunk.len() - pos);
+            let hs = mdl.forward_lot(&chunk[pos..pos + t], pos);
+            for (i, h) in hs.iter().enumerate() {
+            let pos = pos + i;
             if pos + 1 < chunk.len() && masque[pos + 1] {
-                let lg = mdl.logits(&h);
+                let lg = mdl.logits(h);
                 let mut mx = f32::NEG_INFINITY;
                 for &v in &lg { if v > mx { mx = v; } }
                 let mut sum = 0f64;
@@ -1285,6 +1389,8 @@ fn run_ppl(opt: Options) {
                     n_logits += 1;
                 }
             }
+            }
+            pos += t;
         }
         let ppl = (nll / n as f64).exp();
         // La perplexité PROPRE à la fenêtre dit où le modèle décroche : une

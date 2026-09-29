@@ -520,6 +520,52 @@ impl Pool {
         out
     }
 
+    /// Produit **matrice-matrice** int8 : `t` jetons contre la même matrice.
+    ///
+    /// C'est tout le préremplissage par lots : un produit matrice-vecteur relit
+    /// la matrice entière pour CHAQUE jeton, alors qu'ici chaque ligne de poids
+    /// est lue une fois et sert à tout le lot. Le décodage reste au matvec (il
+    /// n'a qu'un jeton), le préremplissage passe par ici.
+    ///
+    /// `x` est le lot d'activations (t × n_in), `sx` les t échelles, `out` reçoit
+    /// t × n_out en disposition jeton-majeur.
+    pub fn gemm_dense_i8(&self, d: &DenseQ8, x: &[i32], t: usize, sx: &[f32], out: &mut [f32]) {
+        use crate::list::Source8;
+        let n_out = d.n_out;
+        let n_in = d.n_in;
+        let nt = self.n.max(1);
+        let par = n_out.div_ceil(nt);
+        // Chaque fil prend une tranche de LIGNES et parcourt tout le lot : la
+        // ligne reste chaude, le poids n'est lu qu'une fois.
+        std::thread::scope(|sc| {
+            let mut reste = out;
+            let mut base = 0usize;
+            for _ in 0..nt {
+                let lo = base;
+                let hi = (base + par).min(n_out);
+                if lo >= hi { break; }
+                // Disposition en sortie : ligne-majeur (n_out × t), donc la
+                // tranche de lignes d'un fil est contiguë.
+                let (morceau, suite) = reste.split_at_mut((hi - lo) * t);
+                reste = suite;
+                sc.spawn(move || {
+                    for (j, o) in (lo..hi).enumerate() {
+                        for i in 0..t {
+                            let xi = &x[i * n_in..(i + 1) * n_in];
+                            let v = match d.src {
+                                Source8::Q8_0 => d.dot_q8_source(o, xi),
+                                Source8::PropreBloc => d.dot_blocs(o, xi),
+                                Source8::Propre => d.dot_chunked(o, xi) as f32 * d.scale[o],
+                            };
+                            morceau[j * t + i] = v * sx[i];
+                        }
+                    }
+                });
+                base = hi;
+            }
+        });
+    }
+
     pub fn matvec_dense_i8(&mut self, d: &DenseQ8, x: &[i32], sx: f32) -> Vec<f32> {
         self.ensure_width(d.n_out);
         let sh = &self.shared;
@@ -717,4 +763,51 @@ pub fn matvec_shift_add(w: &[i8], x: &[i32], n_out: usize, n_in: usize) -> (Vec<
         }
     }
     (y, ops)
+}
+
+#[cfg(test)]
+mod tests_gemm {
+    use super::*;
+    use crate::list::DenseQ8;
+
+    /// Le préremplissage par lots ne vaut que si le poids est lu UNE fois pour
+    /// tout le lot. On le vérifie au noyau : T produits matrice-vecteur contre
+    /// un produit matrice-matrice de T jetons, sur une matrice de taille réelle.
+    #[test]
+    fn gemm_bat_le_matvec() {
+        let (n_out, n_in, t) = (4864usize, 896usize, 16usize);
+        let w: Vec<f32> = (0..n_out * n_in)
+            .map(|k| ((k * 2654435761) % 1000) as f32 / 500.0 - 1.0).collect();
+        let d = DenseQ8::build(&w, n_out, n_in);
+        let mut pool = Pool::new(8, n_in);
+        let x: Vec<i32> = (0..t * n_in).map(|k| ((k * 7919) % 61) as i32 - 30).collect();
+        let sx: Vec<f32> = (0..t).map(|i| 0.001 * (i + 1) as f32).collect();
+
+        let t0 = std::time::Instant::now();
+        for _ in 0..4 {
+            for i in 0..t {
+                let xi = &x[i * n_in..(i + 1) * n_in];
+                let _ = pool.matvec_dense_i8(&d, xi, sx[i]);
+            }
+        }
+        let par_matvec = t0.elapsed().as_secs_f64() / 4.0;
+
+        let mut out = vec![0f32; n_out * t];
+        let t1 = std::time::Instant::now();
+        for _ in 0..4 {
+            pool.gemm_dense_i8(&d, &x, t, &sx, &mut out);
+        }
+        let par_gemm = t1.elapsed().as_secs_f64() / 4.0;
+        println!("{t} jetons : matvec {:.1} ms · gemm {:.1} ms · gain ×{:.2}",
+                 par_matvec * 1e3, par_gemm * 1e3, par_matvec / par_gemm);
+        // Les deux doivent donner le MÊME résultat (aux arrondis près).
+        for i in 0..t {
+            let xi = &x[i * n_in..(i + 1) * n_in];
+            let r = pool.matvec_dense_i8(&d, xi, sx[i]);
+            for o in 0..n_out {
+                assert!((r[o] - out[o * t + i]).abs() <= 1e-3 * r[o].abs().max(1.0),
+                        "ligne {o} jeton {i} : {} contre {}", r[o], out[o * t + i]);
+            }
+        }
+    }
 }
