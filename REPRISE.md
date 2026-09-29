@@ -133,168 +133,39 @@ comparé à `llama-tokenize` sur 4 424 jetons (0 écart).
 
 ---
 
-## 6. Chantiers ouverts, par ordre de valeur
+## 6. Les huit chantiers : où ils en sont
 
-### a. gpt-oss : RÉSOLU (deux bugs corrigés), voir `reports/rapport-gpt-oss-perplexite.md`
-
-Ce qui était annoncé « 39,8 au lieu de l'ordre de 6 » n'était pas un problème de
-format ni de codage de position :
-
-1. **`attn_output.bias` était ignoré** (gpt-oss a un biais sur Q, K, V **et O**) :
-   39,80 → **20,84** à 63 jetons.
-2. **La fenêtre glissante s'appliquait aux 36 couches** au lieu d'une sur deux
-   (`layer_types` alterne, comme `set_swa_pattern(2)` de llama.cpp) : 129,9 →
-   **15,08** à 511 jetons. Sans fenêtre du tout : 26,15 ; les deux extrêmes sont
-   pires que le motif réel du modèle.
-3. Un troisième bug latent (puits appris absents du softmax des couches pleines)
-   est corrigé, **effet mesuré nul** sur gpt-oss (le chemin groupé les comptait).
-
-**La prémisse « devrait valoir ~6 » était fausse** : llama.cpp, sur exactement
-les mêmes identifiants et sans BOS, donne 38,37 (63 jetons) et 169,67 (511
-jetons, YaRN) — notre moteur donne 41,11 et 174,34, avec une corrélation de
-logits de 0,999976 et le même top-1 partout.
-
-Deux faits à ne pas réapprendre :
-
-- **YaRN ×32 (la configuration déclarée) coûte un facteur 9** : 174,34 contre
-  18,58 à 511 jetons. Ce n'est pas un bug — HF, llama.cpp et l'implémentation
-  officielle d'OpenAI appliquent le même YaRN statique (vérifié dans les
-  sources). Notre défaut (YaRN éteint) est un choix **mesuré**.
-- **Le format harmony rend le texte MOINS prévisible**, pas plus. Le modèle
-  exige son canal `analysis` : après `<|start|>assistant<|channel|>`, p(analysis)
-  = 0,9999 contre p(final) = 0,0001. Montages mesurés (même corpus) : 443
-  (assistant consécutifs), 3 432 (consigne + texte), 8 463 (tours alternés),
-  677 321 (suite réelle en `final` forcé), **26,0 pour le montage canonique**
-  (système officiel + `analysis` puis `final`) contre **13,7 en brut pour le
-  même texte**. L'hypothèse du §6.a.1 est donc **réfutée**.
-- Effet de bord : `Gguf::open_meta` (en-tête seul) — `--tokenize` sur gpt-oss
-  passe de ~60 s à **0,385 s** et chaque `--ppl` économise une lecture des 62 Go.
-
-### b. YaRN à retardement : FAIT — et la moitié nuisible de YaRN est identifiée
-
-**Politique de rotation** (trace `[config] rotation` à chaque chargement) : RoPE
-simple tant que le contexte demandé tient dans la longueur initiale (4 096 pour
-gpt-oss), **interpolation YaRN seule au-delà** ; `QT_YARN=1` rétablit le YaRN
-complet des implémentations de référence, `QT_YARN_NON=1` (ou `--sans-yarn`)
-n'active jamais rien, `QT_YARN_MSCALE=0/1` tranche sur la température seule.
-Décision **par séquence** et non par position : la structure de position relative
-ne survit que si toutes les clés partagent le même jeu de fréquences.
-
-**Ce que la mesure a montré** (gpt-oss, même corpus, une fenêtre) :
-
-| longueur | RoPE simple | YaRN sans mscale | YaRN complet |
+| # | chantier | état | mesure |
 |---|---|---|---|
-| 512 | **18,58** | 19,65 | 174,34 |
-| 1 024 | **46,94** | 71,35 | 417,65 |
-| 2 048 | **121,75** | 192,63 | 722,56 |
-| 4 096 | **170,78** | 400,13 | — |
-| 4 608 | — | 476,09 | 1 105,20 |
+| 1 | protocole de perplexité longue | **fait** | `--depuis N` note les mêmes jetons à contexte variable ; `--depuis 256 --ctx 256` redonne exactement la fenêtre 2 historique (21,565) |
+| 2 | seuil de rotation YaRN | **mesures en cours** | série « mêmes jetons, contexte 128→4096 » (RoPE simple contre interpolation seule) ; premier point : 39,52 à contexte 128 |
+| 3 | KV int8 puis int4 | **fait** | int8 +7,1 % de perplexité, int4 **+384 %** (llama.cpp : +3,1 % et +411 %) ; 1 M tient en int4 (9,7 Go) |
+| 4 | préremplissage par lots | **à moitié** | noyau `gemm_dense_i8` ×2,4 au banc ; `forward_lot` juste (13,1359 contre 13,1368) mais **débit bout en bout à mesurer** ; les modèles MoE retombent encore sur le jeton par jeton |
+| 5 | échelles par bloc pour `DenseQ8` | **fait, hypothèse réfutée** | 23,696 contre 23,612 : les échelles par bloc n'apportent rien ; l'avantage du 6 bits est son coût (25 % d'octets en moins à qualité égale) |
+| 6 | boucles CLI unifiées | **fait** | `struct Options` + `analyser` ; trois drapeaux de plus trouvés ignorés (`--attn-topk`, `--qk-topk`, `--sans-yarn` en inférence) et un bug de pas de lecture corrigé |
+| 7 | noyaux GPU | **presque** | warp par ligne **fait et mesuré** (tête : 1,8 ms contre 30 ms CPU, PPL identique) ; MXFP4 warp **fait** (0,1 ms, écart 0,00e0 au CPU) ; restent Q4_K/Q6_K et le *branchement* du MXFP4 dans le moteur |
+| 8 | suite du plan 1 M | **chiffré, pas commencé** | `docs/contexte-long.md` : préremplissage 1 234 h à 1 M, KV int4 9,7 Go, YaRN ×256 nécessaire ; restent pagination, déport GPU du KV, attention creuse, MLA, vision |
 
-1. **La mise à l'échelle de température (`mscale`) est la partie nuisible** : la
-   retirer divise la perplexité par 8,9 / 5,9 / 3,8 selon la longueur. C'est
-   elle, pas l'interpolation, qui rend le YaRN déclaré catastrophique sur du
-   texte brut — et les trois implémentations de référence l'appliquent.
-2. Le RoPE simple gagne à **toutes** les longueurs mesurées, 4 096 compris.
-3. La dégradation avec la longueur **n'est pas un bug du moteur** : llama.cpp,
-   mêmes 2 048 identifiants, un seul lot, YaRN déclaré → **714,83** contre
-   **722,56** chez nous (1,1 %). Le contenu et la position du corpus expliquent
-   le reste (la même tranche vaut 13,94 en tête, 59,36 à la position 0 mais
-   prise plus loin, ~400 à sa place réelle).
+### Ce qu'il faut faire ensuite, dans l'ordre
 
-**Contexte long** : tout le chiffrage est dans `docs/contexte-long.md` et se
-recalcule avec `--plan --ctx N`. Les trois murs, dans l'ordre :
-
-1. **préremplissage séquentiel** (notre moteur fait un jeton à la fois) :
-   4,5 h à 32 k, 31 h à 128 k, **1 234 h à 1 M** → c'est le chantier n° 1 ;
-2. **bande passante du KV** : 77 Go relus par jeton à 1 M en f32 (3,9 s),
-   9,7 Go en int4 (483 ms depuis la RAM, 13 ms depuis les deux GPU) ;
-3. **portée de la rotation** : YaRN ×32 couvre exactement 131 072 ; à 1 M il
-   faudrait ×256, soit huit fois ce que le modèle a vu.
-
-À noter : le KV int4 à 1 M (9,7 Go) **tient dans un seul RTX 5000** (16 Go) et la
-fenêtre par couche divise déjà le budget par deux — c'est le préremplissage, pas
-la mémoire, qui bloque.
-
-### c. Boucles CLI : FAIT (une seule analyse pour les quatre modes)
-
-`struct Options` + `fn analyser` remplacent les deux boucles de 44 drapeaux ;
-`run_infer`, `run_ppl`, `run_plan` et `run_tokenize` déstructurent ce dont ils
-ont besoin. Les défauts **par mode** sont préservés (256 jetons et 16 bits
-d'activation en perplexité, 512 et 8 bits en inférence, moitié des cœurs contre
-trois quarts) via trois drapeaux `*_impose`.
-
-Le gain immédiat n'est pas la ligne de code en moins, c'est ce que le
-compilateur voit : la déstructuration nomme **tous** les champs, donc un drapeau
-analysé mais jamais appliqué devient un avertissement « unused variable ». Trois
-de plus ont été trouvés comme ça dès la refactorisation — `--attn-topk`,
-`--qk-topk` et `--sans-yarn` étaient ignorés en inférence (cinquième occurrence
-de la même classe de bug).
-
-Non-régression après refactorisation : Qwen 19,3885 au chiffre près, `--tokenize`
-identique au jeton près, `--plan` et l'inférence inchangés, tests 4/4.
-
-### d. Noyaux GPU : warp par ligne FAIT (le déport de la tête redevient rentable)
-
-`tete_q8_warp` / `proj_q8_warp` : **une warp par ligne**, les 32 fils se partagent
-les blocs (34 octets d'écart = ~1 Ko contigu par warp) et se réduisent par
-`shfl.sync.down`. Mesuré sur la tête de Qwen2.5-0.5B (151 936 × 896, 144,6 Mo),
-banc `--gpu-banc` :
-
-| chemin | temps | débit | écart au CPU |
-|---|---|---|---|
-| CPU 8 fils | 30,2 ms | 4,8 Go/s | — |
-| GPU, ligne par fil (ancien) | 3,5 ms | 40,8 Go/s | 2e-7 |
-| **GPU, warp par ligne** | **1,8 ms** | **82,3 Go/s** | 2e-7 |
-
-Et bout en bout (`QT_GPU_TETE=1`) : perplexité **identique au chiffre près**
-(22,0949 dans les deux cas) et le poste « tête + échantillonnage » passe de
-**15,6 à 6,2 ms par jeton**. L'ancienne conclusion (« la tête n'est pas
-déportable, 23 → 159 ms ») était celle d'un noyau mal coalescé.
-
-**Piège de la chaîne de compilation** (il a coûté une boucle infinie) : compiler
-le `.cu` avec `clang++ -x cuda … -nocudainc` exige l'en-tête intégré
-`__clang_cuda_builtin_vars.h`. Sans lui, `threadIdx`/`blockDim` deviennent des
-**variables globales externes** : le PTX fait `ld.global.b32 %r, [threadIdx]`,
-lit 0, donc `pas = blockDim.x * gridDim.x = 0` et le noyau boucle sans fin. Tout
-est dans `gpu/compiler.sh` et `gpu/cuda_stub.h`.
-
-Reste à faire : les noyaux **4 bits** (Q4_K, Q6_K, MXFP4) — toute la famille Qwen
-est en Q4_K/Q6_K, donc rien de la leur n'est déportable en l'état.
-
-### e. Échelles par bloc pour `DenseQ8` : FAIT — hypothèse RÉFUTÉE
-
-Le schéma par bloc de 32 existe maintenant (`QT_Q8_BLOCS=1`, échelles par bloc
-comme Q8_0) et se compare au schéma par ligne sur quatre variantes, à contexte
-256 sur 1 020 jetons notés (Qwen2.5-0.5B Q8_0) :
-
-| schéma | octets/poids | perplexité |
-|---|---|---|
-| int8 emprunté au fichier (blocs de 32) | 1,0625 | 23,6964 |
-| int8 construit, échelle **par ligne** | 1,0 | **23,6123** |
-| int8 construit, échelle **par bloc de 32** | 1,0625 | 23,6964 |
-| **6 bits empaqueté, par bloc** | **0,75** | **23,6176** |
-
-1. **Les échelles par bloc n'apportent rien à l'int8** (23,696 contre 23,612 :
-   l'écart est du bruit, et il est dans l'autre sens). L'avantage du 6 bits n'est
-   donc pas dans ses échelles fines : il tient à son coût, **qualité égale à
-   25 % d'octets en moins**.
-2. Effet de bord utile : reconstruire des blocs Q8_0 depuis les poids
-   déquantifiés redonne **exactement** la perplexité de l'emprunt au fichier
-   (13,1368 contre 13,1368) — la déquantification puis requantification est
-   exacte, ce qui valide les deux chemins.
-3. `QT_SANS_EMPRUNT=1` force la reconstruction : c'est l'outil de comparaison.
-
-### f. Contexte long
-
-Attention en O(contexte), KV en f32 non paginé : 800 Mo à 8 k pour le 30 B, et
-+100 ms/jeton. Il faut KV quantifié et paginé, puis MLA pour les architectures
-DeepSeek.
-
-### g. Vision
-
-Le chemin image du modèle VL n'existe pas.
-
----
+1. **Le débit du préremplissage par lots** (chantier 4) : la justesse est là, le
+   gain neuf n'est pas démontré. Le noyau est 2,4× plus rapide ; si le bout en
+   bout ne suit pas, c'est que les allocations ou le lancement de fils par appel
+   mangent le gain — mesurer, puis corriger.
+2. **Le regroupement des experts par lot** (même chantier) : gpt-oss retombe sur
+   le jeton par jeton, donc le modèle qui compte ne profite de rien. Grouper les
+   jetons par expert est la seule façon d'amortir les 128 matrices d'experts.
+3. **Brancher le noyau MXFP4** : il est bit à bit identique et 40× plus rapide
+   que le CPU ; il manque un cache d'experts chauds en VRAM (voir
+   `reports/rapport-localite-activation.md`).
+4. **Les noyaux Q4_K/Q6_K** : toute la famille Qwen est dans ces formats, donc
+   rien de la leur n'est déportable en l'état.
+5. **Le seuil de rotation** (chantier 2) : la série en cours le tranche ; si
+   l'interpolation ne gagne jamais, le défaut « simple partout » est à
+   envisager, et le seuil de 4 096 devient une simple borne de sécurité.
+6. Puis le chantier 8 : attention creuse (mesurable dès maintenant avec
+   `--attn-topk` et `--attn-window` au protocole `--depuis`), pagination du KV,
+   déport GPU du KV, MLA, vision.
 
 ## 7. Carte du dépôt
 

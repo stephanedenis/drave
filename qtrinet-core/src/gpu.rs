@@ -70,6 +70,7 @@ pub struct Gpu {
     f_proj: *mut c_void,
     f_tete_warp: *mut c_void,
     f_proj_warp: *mut c_void,
+    f_mxfp4_warp: *mut c_void,
     pub nom: String,
     pub memoire_libre: usize,
 }
@@ -151,6 +152,13 @@ impl Gpu {
                 eprintln!("{}", erreur(rc, "fonction proj_q8_warp"));
                 return None;
             }
+            let nom_mx = std::ffi::CString::new("proj_mxfp4_warp").unwrap();
+            let mut f_mxfp4_warp: *mut c_void = std::ptr::null_mut();
+            let rc = cuModuleGetFunction(&mut f_mxfp4_warp, module, nom_mx.as_ptr());
+            if rc != 0 {
+                eprintln!("{}", erreur(rc, "fonction proj_mxfp4_warp"));
+                return None;
+            }
             let mut libre: usize = 0;
             let mut total: usize = 0;
             extern "C" {
@@ -158,7 +166,7 @@ impl Gpu {
             }
             cuMemGetInfo_v2(&mut libre, &mut total);
             Some(Gpu { ctx, module, f_tete, f_proj, f_tete_warp, f_proj_warp,
-                       nom: format!("GPU {ordinal}"), memoire_libre: libre })
+                       f_mxfp4_warp, nom: format!("GPU {ordinal}"), memoire_libre: libre })
         }
     }
 
@@ -193,6 +201,61 @@ impl Gpu {
     pub fn charger_proj(&self, blocs: &[u8], n_out: usize, nb: usize) -> Option<MatriceGpu> {
         cu_ctx(self.ctx);
         self.charger_tete(blocs, n_out, 0, nb)
+    }
+
+    /// Réserve une matrice **MXFP4** (17 octets par bloc de 32 poids).
+    pub fn charger_mxfp4(&self, blocs: &[u8], n_out: usize, nb: usize) -> Option<MatriceGpu> {
+        cu_ctx(self.ctx);
+        let octets_poids = n_out.checked_mul(nb)?.checked_mul(17)?;
+        if blocs.len() < octets_poids { return None; }
+        unsafe {
+            let mut poids: u64 = 0;
+            if cuMemAlloc_v2(&mut poids, octets_poids) != 0 { return None; }
+            if cuMemcpyHtoD_v2(poids, blocs.as_ptr() as *const c_void, octets_poids) != 0 {
+                return None;
+            }
+            let mut x_dev: u64 = 0;
+            cuMemAlloc_v2(&mut x_dev, nb * 32 * 4);
+            let mut out_dev: u64 = 0;
+            cuMemAlloc_v2(&mut out_dev, n_out * 4);
+            Some(MatriceGpu { poids, x_dev, out_dev, n_out, nb, octets_poids })
+        }
+    }
+
+    /// Une passe MXFP4 (experts de gpt-oss) : une warp par ligne.
+    pub fn proj_mxfp4(&self, m: &MatriceGpu, x: &[i32], sx: f32) -> Option<Vec<f32>> {
+        cu_ctx(self.ctx);
+        let n_in = m.nb * 32;
+        if x.len() < n_in { return None; }
+        unsafe {
+            if cuMemcpyHtoD_v2(m.x_dev, x.as_ptr() as *const c_void, n_in * 4) != 0 { return None; }
+            let mut p_poids = m.poids;
+            let mut p_x = m.x_dev;
+            let mut p_out = m.out_dev;
+            let n_out = m.n_out as c_int;
+            let nb = m.nb as c_int;
+            let mut params: [*mut c_void; 6] = [
+                &mut p_poids as *mut u64 as *mut c_void,
+                &mut p_x as *mut u64 as *mut c_void,
+                &mut p_out as *mut u64 as *mut c_void,
+                &n_out as *const c_int as *mut c_void,
+                &nb as *const c_int as *mut c_void,
+                &sx as *const f32 as *mut c_void,
+            ];
+            let fils: c_uint = 256;
+            let blocs = ((m.n_out as c_uint) + (fils / 32) - 1) / (fils / 32);
+            let partage = (n_in * 4) as c_uint;
+            let rc = cuLaunchKernel(self.f_mxfp4_warp, blocs.min(65535), 1, 1, fils, 1, 1,
+                                    partage, std::ptr::null_mut(),
+                                    params.as_mut_ptr(), std::ptr::null_mut());
+            if rc != 0 { eprintln!("{}", erreur(rc, "lancement proj_mxfp4_warp")); return None; }
+            if cuCtxSynchronize() != 0 { return None; }
+            let mut out = vec![0f32; m.n_out];
+            if cuMemcpyDtoH_v2(out.as_mut_ptr() as *mut c_void, m.out_dev, m.n_out * 4) != 0 {
+                return None;
+            }
+            Some(out)
+        }
     }
 
     /// Une passe de projection : le facteur d'échelle d'activation est appliqué

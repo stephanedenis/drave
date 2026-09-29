@@ -777,9 +777,18 @@ fn run_gpu_banc(opt: Options) {
         (std::thread::available_parallelism().map(|n| n.get()).unwrap_or(8) * 3 / 4).max(1)
     };
     let g = Gguf::open(path).expect("ouverture du GGUF");
-    let nom = if g.tensor("output.weight").is_some() { "output.weight" } else { "token_embd.weight" };
-    let (blocs, nb) = g.q8_blocks(nom).expect("tête Q8_0 requise pour ce banc");
+    // Le banc porte sur la tête Q8_0, ou sur le tenseur nommé (`--matrix`) quand
+    // c'est une matrice d'experts MXFP4 — c'est le poste dominant de gpt-oss.
+    let mx = g.mxfp4_blocks(&opt.matrix).is_some();
+    let nom = if mx { opt.matrix.clone() } else if g.tensor("output.weight").is_some() {
+        "output.weight".to_string()
+    } else { "token_embd.weight".to_string() };
+    let nom = nom.as_str();
     let t = g.tensor(nom).unwrap();
+    if mx {
+        return banc_mxfp4(opt, &g, nom, threads);
+    }
+    let (blocs, nb) = g.q8_blocks(nom).expect("tête Q8_0 requise pour ce banc");
     let (n_out, n_in) = (t.dims[0] as usize, t.dims[1] as usize);
     // Taille RÉELLE des poids de la tête (`blocs` couvre la fin du fichier).
     let octets = n_out * nb * 34;
@@ -853,6 +862,68 @@ fn run_gpu_banc(opt: Options) {
         println!("  GPU  {nom_noyau:<14} : {:>7.1} ms  ({:>6.1} Go/s)  écart max {:+.2e} (relatif au plus grand logit)",
                  ms * 1e3, octets as f64 / ms / 1e9, ecart_max);
     }
+}
+
+
+/// Banc d'essai du noyau **MXFP4** (experts de gpt-oss) contre le CPU.
+///
+/// Le format est celui des experts : blocs de 17 octets. Le noyau est « une warp
+/// par ligne », comme les noyaux Q8_0 — c'est le même correctif d'accès mémoire,
+/// appliqué au format qui porte les 120 milliards de paramètres de gpt-oss.
+fn banc_mxfp4(opt: Options, g: &Gguf, nom: &str, threads: usize) {
+    use std::time::Instant;
+    let (blocs, nb) = g.mxfp4_blocks(nom).expect("matrice MXFP4");
+    let t = g.tensor(nom).unwrap();
+    // Un tenseur d'experts est 3D : on mesure le PREMIER expert.
+    let (n_out, n_in) = (t.dims[1] as usize, t.dims[2] as usize);
+    let octets = n_out * nb * 17;
+    println!("matrice MXFP4 {nom} (expert 0) : {n_out} × {n_in} · {:.1} Mo · {} blocs de 32",
+             octets as f64 / 1e6, nb);
+    let xi: Vec<i32> = (0..n_in).map(|i| ((i * 2654435761usize) % 255) as i32 - 127).collect();
+    let d = unsafe { DenseQ4::emprunter(blocs.as_ptr(), n_out, n_in, nb, true) };
+    // Chemin AVX2 de PRODUCTION (celui de `matvec_q4`) : activations en i16 et
+    // sommes par bloc de 32 précalculées. Comparer au chemin scalaire donnait un
+    // facteur flatteur qui ne dit rien du régime réel.
+    let x16: Vec<i16> = xi.iter().map(|&v| v.clamp(-32767, 32767) as i16).collect();
+    let sx32 = crate::list::sommes32(&x16);
+    let t0 = Instant::now();
+    let mut cpu = vec![0f32; n_out];
+    let chunk = n_out.div_ceil(threads);
+    let dref = &d;
+    let (x16ref, sxref) = (&x16, &sx32);
+    std::thread::scope(|sc| {
+        for (ci, part) in cpu.chunks_mut(chunk).enumerate() {
+            let base = ci * chunk;
+            sc.spawn(move || {
+                for (j, o) in part.iter_mut().enumerate() {
+                    *o = dref.dot16(base + j, x16ref, sxref);
+                }
+            });
+        }
+    });
+    let tc = t0.elapsed().as_secs_f64();
+    println!("  CPU  {threads} fils : {:>7.1} ms  ({:>6.1} Go/s)", tc * 1e3, octets as f64 / tc / 1e9);
+    let Some(machine) = gpu::instance() else { println!("  GPU absent"); return };
+    println!("  {}", machine.nom);
+    let Some(m) = machine.charger_mxfp4(blocs, n_out, nb) else {
+        println!("  allocation GPU impossible"); return;
+    };
+    let mut ms = f64::MAX;
+    let mut dernier: Vec<f32> = Vec::new();
+    for passe in 0..3 {
+        let t1 = Instant::now();
+        let Some(r) = machine.proj_mxfp4(&m, &xi, 1.0) else { println!("  noyau en échec"); return };
+        let dt = t1.elapsed().as_secs_f64();
+        if passe > 0 && dt < ms { ms = dt; }
+        dernier = r;
+    }
+    let mut echelle = 1e-9f32;
+    for o in 0..n_out { echelle = echelle.max(cpu[o].abs()); }
+    let mut ecart = 0f32;
+    for o in 0..n_out { ecart = ecart.max((dernier[o] - cpu[o]).abs() / echelle); }
+    println!("  GPU  warp par ligne : {:>7.1} ms  ({:>6.1} Go/s)  écart max {:+.2e}",
+             ms * 1e3, octets as f64 / ms / 1e9, ecart);
+    let _ = opt;
 }
 
 fn run_tokenize(opt: Options) {

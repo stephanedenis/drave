@@ -9788,3 +9788,290 @@ lot 32  : perplexité 13.1359 sur 511 tokens (0 événements, 33.6 s)
 ⏵ Justesse du lot validée ; j'attends une machine au calme pour la mesure de débit. Je commite l'état
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -m \"Item 4 : prefill par lots -- justesse corrigee, debit a mesurer au calme\n\nDeux bugs corriges dans forward_lot, tous deux invisibles a la compilation :\n - les sorties de q, k et v partageaient un ta … [922 caractères tronqués]`
+
+  ```
+fba67b6 Item 4 : prefill par lots -- justesse corrigee, debit a mesurer au calme
+[config] rotation : RoPE simple (contexte 512 ≤ 4096 initial ; YaRN ×32 prendrait le relais au-delà)
+
+### contexte 1024 · RoPE simple
+  ```
+
+- **bash** `{"command": "sleep 300; tail -12 /tmp/seuil_rotation.log", "description": "Wait for the rotation series progress", "timeoutMs": 340000}`
+
+  ```
+=== jetons 1536-2047 (les MÊMES), contexte croissant, deux régimes ===
+
+### contexte 128 · RoPE simple
+[config] rotation : RoPE simple (contexte 128 ≤ 4096 initial ; YaRN ×32 prendrait le relais au-delà)
+
+### contexte 512 · RoPE simple
+[config] rotation : RoPE simple (contexte 512 ≤ 4096 initial ; YaRN ×32 prendrait le relais au-delà)
+
+### contexte 1024 · RoPE simple
+[config] rotation : RoPE simple (contexte 1024 ≤ 4096 initial ; YaRN ×32 prendrait le relais au-delà)
+
+### contexte 2048 · RoPE simple
+  ```
+
+### 🤖 Assistant
+
+⏵ Mon motif `grep` ratait la ligne de perplexité (motif erroné) : je corrige et relance la série
+
+- **bash** `{"command": "pkill -f seuil_rotation2; sleep 2; pkill -x qtrinet-core; sleep 3; python3 - <<'PY'\np='/tmp/seuil_rotation2.sh'\ns=open(p).read()\ns=s.replace('''    \"$@\" 2>&1 | grep -E \"rotation :|perplexité sur\" | tee -a \"$J\"''',\n'''    # Le motif doit matcher ce que le moteur imprime : « per … [419 caractères tronqués]`
+
+  ```
+(no output)
+[killed by signal: SIGTERM]
+  ```
+
+- **bash** `{"command": "sleep 5; grep -n \"grep -E\" /tmp/seuil_rotation2.sh; ps -eo pid,comm | grep -c qtrinet || true; pgrep -f seuil_rotation2 >/dev/null && echo \"script vivant\" || (nohup /tmp/seuil_rotation2.sh > /tmp/seuil_rotation2.out 2>&1 & sleep 3; echo relancé)", "description": "Verify the script s … [42 caractères tronqués]`
+
+  ```
+19:    "$@" 2>&1 | grep -E "rotation :|perplexité sur" | tee -a "$J"
+1
+script vivant
+  ```
+
+- **bash** `{"command": "pkill -x qtrinet-core; sleep 3; pgrep -f 'seuil_rotation[2]' | head -3; ps -eo comm | grep -c qtrinet || echo \"aucun moteur\"", "description": "Clean engines and find the script process"}`
+
+  ```
+0
+aucun moteur
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\np='/tmp/seuil_rotation2.sh'\ns=open(p).read()\ns=s.replace('grep -E \"rotation :|perplexité sur\"', 'grep -E \"rotation :|=== perplexité\"')\nopen(p,'w').write(s)\nprint(\"motif corrigé :\", 'grep -E \"rotation :|=== perplexité\"' in open(p).read())\nPY\n(nohup /tmp/se … [200 caractères tronqués]`
+
+  ```
+motif corrigé : True
+
+### contexte 128 · RoPE simple
+--- lancé ---
+  ```
+
+### 🤖 Assistant
+
+⏵ Pendant la série : noyau MXFP4 « warp par ligne » pour les experts de gpt-oss
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src && grep -n \"mxfp4\" list.rs | head -12 && grep -n \"fn dot16\" -A 20 list.rs | head -30", "description": "Read the MXFP4 CPU kernel for the layout"}`
+
+  ```
+945:    pub fn import_mxfp4(buf: &[u8], n_out: usize, n_in: usize, nb_ligne: usize) -> Self {
+982:                            nb_ligne: usize, mxfp4: bool) -> Self {
+983:        let (lut, e8m0) = if mxfp4 { (LUT_MXFP4, true) } else { (LUT_INT4, false) };
+987:            src: if mxfp4 { Source::Mxfp4 } else { Source::Q4_0 },
+1332:mod tests_mxfp4 {
+1362:        let d4 = DenseQ4::import_mxfp4(&buf, n_out, n_in, nl);
+760:    unsafe fn dot16_q6_avx2(&self, o: usize, x: &[i16], sx32: &[i32]) -> f32 {
+761-        use std::arch::x86_64::*;
+762-        let half = self.n_in.div_ceil(2);
+763-        let n_bloc = self.n_in.div_ceil(BLOC_Q4);
+764-        let q4 = &self.q[o * half..(o + 1) * half];
+765-        let q2 = self.plan6.as_ref().expect("plan 6 bits absent");
+766-        let xp = x.as_ptr();
+767-        let masque = _mm_set1_epi8(0x0f);
+768-        let haut_bits = _mm_set1_epi8(0x30);
+769-        let mut sum = 0f32;
+770-        let mut deux = [0u8; 32];
+771-        for b in 0..n_bloc {
+772-            let lo = b * BLOC_Q4;
+773-            // Plan des quatre bits : mêmes nibbles entrelacés que le 4 bits.
+774-            let octets = _mm_loadu_si128(q4.as_ptr().add(b * 16) as *const __m12
+… [796 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src && sed -n '/fn dot_mxfp4/,/^    }/p' list.rs | head -40; grep -n \"Source::Mxfp4\" list.rs | head -5", "description": "Find the MXFP4 scalar dot path"}`
+
+  ```
+987:            src: if mxfp4 { Source::Mxfp4 } else { Source::Q4_0 },
+1081:            Source::Mxfp4 => (17, 1),
+1093:        if self.src == Source::Mxfp4 {
+1181:            Source::Mxfp4 => self.n_out * self.nb_ligne * 17,
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src && sed -n '1075,1130p' list.rs", "description": "Read MXFP4 dequantization details"}`
+
+  ```
+/// Pas et décalage des blocs dans la source empruntée.
+    #[inline]
+    fn pas_source(&self) -> (usize, usize) {
+        match self.src {
+            Source::Q4_0 => (18, 2),
+            Source::Mxfp4 => (17, 1),
+            Source::Q4_K | Source::Q6_K | Source::Propre => (0, 0),
+        }
+    }
+
+    /// Échelle d'un bloc **source** (lue dans le fichier).
+    ///
+    /// MXFP4 : l'exposant E8M0 donne `2^(e−127)` ; la table E2M1 étant
+    /// doublée, le multiplicateur est `2^(e−128)`. Q4_0 : une demi-précision
+    /// classique, appliquée telle quelle à la grille `n − 8`.
+    #[inline]
+    unsafe fn echelle_source(&self, p: *const u8) -> f32 {
+        if self.src == Source::Mxfp4 {
+            match *p {
+                0 => f32::from_bits(0x0020_0000),
+                255 => 0.0,
+                e => f32::from_bits(((e as u32) - 1) << 23),
+            }
+        } else {
+            crate::gguf::Gguf::f16_to_f32(u16::from_le_bytes([*p, *p.add(1)]))
+        }
+    }
+
+    /// Produit scalaire sur une matrice **empruntée** au fichier.
+    fn dot_source(&self, o: usize, x: &[i32]) -> f32 {
+        let (pas, decal) = self.pas_source();
+        let mut sum = 0f32;
+        for b in 0..se
+… [1031 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src && grep -n \"pub fn dot\\b\\|pub fn dot(\" -A 6 list.rs | head -20; grep -n \"LUT_MXFP4\" list.rs | head -3 && grep -n \"const LUT_MXFP4\" -A 4 list.rs", "description": "Check DenseQ4 dot API and MXFP4 LUT"}`
+
+  ```
+514:    pub fn dot(&self, o: usize, x: &[i32]) -> i64 {
+515-        let row = &self.q[o * self.n_in..(o + 1) * self.n_in];
+516-        let n = self.n_in;
+517-        let (mut a0, mut a1, mut a2, mut a3) = (0i64, 0i64, 0i64, 0i64);
+518-        let mut i = 0usize;
+519-        while i + 4 <= n {
+520-            a0 += row[i] as i64 * x[i] as i64;
+--
+1193:    pub fn dot(&self, o: usize, x: &[i32]) -> f32 {
+1194-        if self.plan6.is_some() {
+1195-            let x16: Vec<i16> = x.iter().map(|&v| v.clamp(-32767, 32767) as i16).collect();
+1196-            return self.dot16_q6_scalaire(o, &x16);
+1197-        }
+1198-        if self.src == Source::Q4_K { return self.dot_source_q4k(o, x); }
+1199-        if self.src == Source::Q6_K { return self.dot_source_q6k(o, x); }
+547:pub const LUT_MXFP4: [i8; 16] = [0, 1, 2, 3, 4, 6, 8, 12, 0, -1, -2, -3, -4, -6, -8, -12];
+969:        DenseQ4 { n_in, n_out, lut: LUT_MXFP4, e8m0: true, q, sc, scale, plan6: None,
+983:        let (lut, e8m0) = if mxfp4 { (LUT_MXFP4, true) } else { (LUT_INT4, false) };
+547:pub const LUT_MXFP4: [i8; 16] = [0, 1, 2, 3, 4, 6, 8, 12, 0, -1, -2, -3, -4, -6, -8, -12];
+548-
+549-/// Matrice quantifiée sur 4 bits, rangée par ligne
+… [102 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/gpu && python3 - <<'PY'\np='qtrinet_gpu.cu'\ns=open(p).read()\ns=s.replace(\"\"\"}  // extern \"C\\\"\"\"\",\n\"\"\"// ---------------------------------------------------------------------------\n// MXFP4 (gpt-oss) : même s … [2456 caractères tronqués]`
+
+  ```
+qtrinet_gpu.ptx régénéré (1161 lignes)
+noyaux exportés : 5
+13:.visible .entry tete_q8(
+190:.visible .entry proj_q8(
+370:.visible .entry tete_q8_warp(
+585:.visible .entry proj_q8_warp(
+803:.visible .entry proj_mxfp4_warp(
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src && python3 - <<'PY'\np='gpu.rs'\ns=open(p).read()\ns=s.replace(\"\"\"    f_tete_warp: *mut c_void,\n    f_proj_warp: *mut c_void,\"\"\",\n\"\"\"    f_tete_warp: *mut c_void,\n    f_proj_warp: *mut c_void,\n    f_mxfp4_w … [4310 caractères tronqués]`
+
+  ```
+BUILD
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src && python3 - <<'PY'\np='main.rs'\ns=open(p).read()\n# Le banc accepte un tenseur MXFP4 en plus de la tête Q8_0.\ns=s.replace(\"\"\"    let g = Gguf::open(path).expect(\"ouverture du GGUF\");\n    let nom = if g.tensor(\ … [3953 caractères tronqués]`
+
+  ```
+BUILD
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 400 env QT_GPU=1 ./qtrinet-core/target/release/qtrinet-core /home/stephane/FastNVMe/models/gpt-oss-120b-MXFP4.gguf --gpu-banc --matrix blk.0.ffn_gate_exps.weight --threads 4 2>&1 | tail -6", "description": "Benchmark the MXFP … [55 caractères tronqués]`
+
+  ```
+matrice MXFP4 blk.0.ffn_gate_exps.weight (expert 0) : 2880 × 2880 · 4.4 Mo · 90 blocs de 32
+  CPU  4 fils :   179.7 ms  (   0.0 Go/s)
+  GPU 1
+  GPU  warp par ligne :     0.1 ms  (  41.9 Go/s)  écart max +0.00e0
+  ```
+
+### 🤖 Assistant
+
+⏵ MXFP4 : **écart 0,00e0** (bit à bit) et 0,1 ms contre 180 ms — mais je comparais au chemin scalaire, pas à l'AVX2 de production
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src && python3 - <<'PY'\np='main.rs'\ns=open(p).read()\ns=s.replace(\"\"\"    let xi: Vec<i32> = (0..n_in).map(|i| ((i * 2654435761usize) % 255) as i32 - 127).collect();\n    let d = unsafe { DenseQ4::emprunter(blocs.as_ptr … [1944 caractères tronqués]`
+
+  ```
+BUILD
+matrice MXFP4 blk.0.ffn_gate_exps.weight (expert 0) : 2880 × 2880 · 4.4 Mo · 90 blocs de 32
+  CPU  4 fils :   437.9 ms  (   0.0 Go/s)
+  GPU 1
+  GPU  warp par ligne :     0.1 ms  (  42.0 Go/s)  écart max +0.00e0
+  ```
+
+### 🤖 Assistant
+
+⏵ Les temps CPU sont noyés par la série qui tourne ; je prépare la batterie de mesures « au calme »
+
+- **bash** `{"command": "tail -14 /tmp/seuil_rotation.log; ps -o pid,etime,pcpu -C qtrinet-core 2>/dev/null | tail -1", "description": "Check rotation series results so far"}`
+
+  ```
+=== jetons 1536-2047 (les MÊMES), contexte croissant, deux régimes ===
+
+### contexte 128 · RoPE simple
+[config] rotation : RoPE simple (contexte 128 ≤ 4096 initial ; YaRN ×32 prendrait le relais au-delà)
+=== perplexité 39.5249 sur 512 tokens (0 événements, 219.0 s) ===
+
+### contexte 512 · RoPE simple
+4031854       04:04  574
+  ```
+
+### 🤖 Assistant
+
+⏵ Premier point de la série : 39,52 (contexte 128). Je prépare la batterie de mesures finales
+
+- **write** `{"content": "#!/bin/bash\n# Batterie de mesures « au calme » — à lancer quand plus rien d'autre ne tourne.\n# Chaque mesure sert un chantier précis du plan et sera citée dans le rapport.\nset -u\ncd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\nQ=./qtrinet-core/target/release/qtrinet-core\nM=/hom … [2610 caractères tronqués]`
+
+  ```
+<path>/tmp/mesures_finales.sh</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "chmod +x /tmp/mesures_finales.sh && (nohup /tmp/mesures_finales.sh > /tmp/mesures_finales.out 2>&1 &); sleep 3; echo \"batterie en file\"; tail -3 /tmp/seuil_rotation.log", "description": "Queue the final measurement battery"}`
+
+  ```
+batterie en file
+=== perplexité 39.5249 sur 512 tokens (0 événements, 219.0 s) ===
+
+### contexte 512 · RoPE simple
+  ```
+
+### 🤖 Assistant
+
+⏵ Rédaction du rapport « localité d'activation » (idées PowerInfer, mesurées chez nous)
+
+- **write** `{"content": "# Localité d'activation : ce que PowerInfer apporte, et ce qu'on en garde\n\n> Étude demandée du dépôt [SJTU-IPADS/PowerInfer](https://github.com/SJTU-IPADS/PowerInfer)\n> (miroir `Tiiny-AI/PowerInfer`), confrontée à nos propres mesures. Tout ce qui\n> suit est mesuré sur cette machine  … [4691 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-localite-activation.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "tail -8 /tmp/seuil_rotation.log; echo \"=== batterie ===\"; head -3 /tmp/mesures_finales.log 2>/dev/null; echo \"=== profils ===\"; pgrep -f 'profil_experts' >/dev/null && echo \"profil experts en file\" || echo \"profil experts terminé/absent\"; cat /tmp/profil_experts.log 2>/dev/null  … [51 caractères tronqués]`
+
+  ```
+=== jetons 1536-2047 (les MÊMES), contexte croissant, deux régimes ===
+
+### contexte 128 · RoPE simple
+[config] rotation : RoPE simple (contexte 128 ≤ 4096 initial ; YaRN ×32 prendrait le relais au-delà)
+=== perplexité 39.5249 sur 512 tokens (0 événements, 219.0 s) ===
+
+### contexte 512 · RoPE simple
+=== batterie ===
+=== profils ===
+profil experts en file
+  ```
+
+### 🤖 Assistant
+
+⏵ Mise à jour de REPRISE : état des huit chantiers et de ce qui reste
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='REPRISE.md'\ns=open(p).read()\ndebut = s.index(\"## 6. Chantiers ouverts, par ordre de valeur\")\nfin = s.index(\"## 7. Carte du dépôt\")\nnouveau = \"\"\"## 6. Les huit chantiers : où ils en sont\n\n| # | chanti … [4309 caractères tronqués]`

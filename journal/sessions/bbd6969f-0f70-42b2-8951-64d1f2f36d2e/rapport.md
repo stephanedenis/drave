@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 19.0 h |
+| Durée | 19.2 h |
 | Tours | 5 |
-| Messages | 600 |
-| Appels d'outils | 610 |
-| Fichiers touchés | 29 |
-| Commandes | 415 |
+| Messages | 620 |
+| Appels d'outils | 630 |
+| Fichiers touchés | 31 |
+| Commandes | 433 |
 | Sous-agents | 1 |
-| Commits | 10 |
+| Commits | 11 |
 | Compactages de contexte | 0 |
 
 ## Objectifs déclarés
@@ -217,7 +217,7 @@ Retirer `mscale = 1 + 0,1·ln f` divise la perplexité par **8,9 / 5,9 / 3,8**. 
 
 ### Tour 5 — <goal_round> Objective: "Réaliser les 8 chantiers restants du projet qtrinet-core dans l'ordre : (1) protocole de perple … [1122 caractères tronqués]
 
-*7 appels d'outils.* Actions notables :
+*27 appels d'outils.* Actions notables :
 
 - bash — Check rotation series and expert profile
 - bash — End-to-end batched prefill correctness and time
@@ -226,10 +226,18 @@ Retirer `mscale = 1 + 0,1·ln f` divise la perplexité par **8,9 / 5,9 / 3,8**. 
 - bash — Hoist batch buffers out of the layer loop
 - bash — Fix closure signature and measure again
 - bash — Commit item 4 correctness fixes
+- bash — Wait for the rotation series progress
+- bash — Fix the grep pattern and relaunch the series
+- bash — Verify the script state after the kill
+- bash — Clean engines and find the script process
+- bash — Fix the grep pattern and relaunch cleanly
+- bash — Read the MXFP4 CPU kernel for the layout
+- bash — Find the MXFP4 scalar dot path
+- … et 13 autres
 
 **Synthèse produite :**
 
-⏵ Justesse du lot validée ; j'attends une machine au calme pour la mesure de débit. Je commite l'état
+⏵ Mise à jour de REPRISE : état des huit chantiers et de ce qui reste
 
 ## 3. Travail accompli
 
@@ -266,6 +274,8 @@ Retirer `mscale = 1 + 0,1·ln f` divise la perplexité par **8,9 / 5,9 / 3,8**. 
 | `/tmp/interp_long.sh` | 1 | 0 |
 | `/tmp/audela_4096.sh` | 1 | 0 |
 | `/tmp/seuil_rotation.sh` | 1 | 0 |
+| `/tmp/mesures_finales.sh` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-localite-activation.md` | 1 | 0 |
 
 ### Sous-agents lancés
 
@@ -313,7 +323,7 @@ Retirer `mscale = 1 + 0,1·ln f` divise la perplexité par **8,9 / 5,9 / 3,8**. 
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 375 autres
+- … et 393 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -471,4 +481,5 @@ Retirer `mscale = 1 + 0,1·ln f` divise la perplexité par **8,9 / 5,9 / 3,8**. 
 - Item 6 : une seule analyse de la ligne de commande pour les quatre modes  struct Options + fn analyser remplacent les deux boucles de 44 drapeaux ; run_infer, r
 - Item 7 (1/2) : noyau GPU une warp par ligne, la tete redevient deportable  tete_q8_warp / proj_q8_warp : une warp par ligne, les 32 fils se partagent les blocs 
 - Item 4 : prefill par lots -- justesse corrigee, debit a mesurer au calme  Deux bugs corriges dans forward_lot, tous deux invisibles a la compilation :  - les so
+- Rapport localite d'activation (idees PowerInfer mesurees) + etat des 8 chantiers  - --profil-neurones / --neurones-sortie : taux de tir et magnitude par neurone
 

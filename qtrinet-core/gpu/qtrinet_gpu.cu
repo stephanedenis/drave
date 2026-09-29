@@ -171,4 +171,57 @@ __global__ void proj_q8_warp(const unsigned char* __restrict__ w,
     }
 }
 
+// ---------------------------------------------------------------------------
+// MXFP4 (gpt-oss) : même structure « une warp par ligne ». Un bloc fait
+// 17 octets — un exposant E8M0 puis seize octets de nibbles (les BAS sont les
+// poids 0–15, les HAUTS les poids 16–31, comme au CPU) — et la table E2M1 est
+// doublée, d'où l'exposant décalé de un.
+__device__ __forceinline__ int lut_mxfp4(unsigned int nib) {
+    // 0, 1, 2, 3, 4, 6, 8, 12 puis les négatifs : la grille E2M1 doublée.
+    const int t[16] = {0, 1, 2, 3, 4, 6, 8, 12, 0, -1, -2, -3, -4, -6, -8, -12};
+    return t[nib & 15u];
+}
+
+__device__ __forceinline__ float echelle_e8m0(unsigned int e) {
+    if (e == 0u)   return 1.1754944e-38f;          // plus petit normal
+    if (e == 255u) return 0.0f;
+    return __int_as_float((e - 1u) << 23);
+}
+
+__global__ void proj_mxfp4_warp(const unsigned char* __restrict__ w,
+                                const int* __restrict__ x,
+                                float* __restrict__ out,
+                                int n_out, int nb, float sx) {
+    extern __shared__ int xs[];
+    const int n_in = nb * 32;
+    const int tid = threadIdx.x;
+    const int lane = tid & 31;
+    const int warp = tid >> 5;
+    const int warp_par_bloc = blockDim.x >> 5;
+    for (int i = tid; i < n_in; i += blockDim.x) xs[i] = x[i];
+    __syncthreads();
+    const int warp_grille = (gridDim.x * blockDim.x) >> 5;
+    for (int o = blockIdx.x * warp_par_bloc + warp; o < n_out; o += warp_grille) {
+        const unsigned char* base = w + (size_t)o * (size_t)nb * 17u;
+        float acc = 0.0f;
+        for (int b = lane; b < nb; b += 32) {
+            const unsigned char* p = base + (size_t)b * 17u;
+            const float d = echelle_e8m0((unsigned int)p[0]);
+            const unsigned char* qs = p + 1;
+            const int* xb = xs + b * 32;
+            int lo = 0, hi = 0;
+            #pragma unroll
+            for (int j = 0; j < 16; ++j) {
+                const unsigned int octet = (unsigned int)qs[j];
+                lo += lut_mxfp4(octet & 15u) * xb[j];
+                hi += lut_mxfp4(octet >> 4) * xb[16 + j];
+            }
+            acc += (float)(lo + hi) * d;
+        }
+        #pragma unroll
+        for (int d2 = 16; d2 > 0; d2 >>= 1) acc += shfl_bas(acc, d2);
+        if (lane == 0) out[o] = acc * sx;
+    }
+}
+
 }  // extern "C"
