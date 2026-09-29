@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 16.6 h |
+| Durée | 16.8 h |
 | Tours | 4 |
-| Messages | 473 |
-| Appels d'outils | 484 |
+| Messages | 484 |
+| Appels d'outils | 495 |
 | Fichiers touchés | 29 |
-| Commandes | 292 |
+| Commandes | 303 |
 | Sous-agents | 1 |
-| Commits | 6 |
+| Commits | 7 |
 | Compactages de contexte | 0 |
 
 ## Objectifs déclarés
@@ -169,7 +169,7 @@ Retirer `mscale = 1 + 0,1·ln f` divise la perplexité par **8,9 / 5,9 / 3,8**. 
 
 ### Tour 4 — fais les 8 dans l'ordre
 
-*49 appels d'outils.* Actions notables :
+*60 appels d'outils.* Actions notables :
 
 - create_goal
 - todo_write
@@ -185,11 +185,11 @@ Retirer `mscale = 1 + 0,1·ln f` divise la perplexité par **8,9 / 5,9 / 3,8**. 
 - bash — Validate overlapping windows and non-regression
 - write `/tmp/seuil_rotation.sh`
 - bash — Launch rotation threshold measurement
-- … et 29 autres
+- … et 40 autres
 
 **Synthèse produite :**
 
-⏵ Référence llama.cpp : q8_0 +3,1 % · q4_0 **+411 %** — le nôtre : +7,1 % et +384 %. Validé
+⏵ Item 5 : échelles par bloc sans effet sur la qualité (23,696 vs 23,612) — hypothèse réfutée
 
 ## 3. Travail accompli
 
@@ -273,7 +273,7 @@ Retirer `mscale = 1 + 0,1·ln f` divise la perplexité par **8,9 / 5,9 / 3,8**. 
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 252 autres
+- … et 263 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -420,4 +420,5 @@ Retirer `mscale = 1 + 0,1·ln f` divise la perplexité par **8,9 / 5,9 / 3,8**. 
 - Rotation : points 4096 et 4608, et la limite du test de generation  Interpolation seule (sans temperature) : 400,13 a 4 096 et 476,09 a 4 608, contre 1 105,20 p
 - Item 1 : protocole de perplexite longue --depuis N  Le protocole historique (--ctx N --limit N) confond la longueur du contexte et le contenu : a 8192 jetons on
 - Item 3 : cache KV quantifie int8 et int4 empaquete  Le cache KV devient un KvCache : f32 (defaut, comportement inchange), int8 (un octet par valeur) ou int4 (de
+- Item 5 : echelles par bloc pour DenseQ8 -- hypothese refutee  DenseQ8 sait maintenant se construire avec une echelle par bloc de 32 (QT_Q8_BLOCS=1, Source8::Pro
 

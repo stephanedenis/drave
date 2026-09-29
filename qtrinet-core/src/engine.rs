@@ -433,12 +433,14 @@ impl Pool {
                             // cette seule parenthèse rend les deux modes
                             // **bit à bit identiques** — changer de mode
                             // d'exécution ne change plus un seul token.
-                            dst[o] = if d.src == crate::list::Source8::Q8_0 {
+                            dst[o] = match d.src {
                                 // Blocs du fichier : l'échelle est déjà celle du
                                 // bloc, il ne reste que celle de l'activation.
-                                d.dot_q8_source(o, xv) * sx
-                            } else {
-                                d.dot_chunked(o, xv) as f32 * (d.scale[o] * sx)
+                                crate::list::Source8::Q8_0 => d.dot_q8_source(o, xv) * sx,
+                                // Échelles par bloc construites par nous.
+                                crate::list::Source8::PropreBloc => d.dot_blocs(o, xv) * sx,
+                                crate::list::Source8::Propre =>
+                                    d.dot_chunked(o, xv) as f32 * (d.scale[o] * sx),
                             };
                         }
                         sh.done.fetch_add(1, Ordering::Release);

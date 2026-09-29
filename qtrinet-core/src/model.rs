@@ -268,6 +268,19 @@ fn prune_structured(w: &mut [f32], n_out: usize, n_in: usize, keep: f32) {
     }
 }
 
+/// Construit une matrice int8 : **une échelle par bloc de 32** (`QT_Q8_BLOCS=1`,
+/// la disposition de Q8_0) ou une par ligne (défaut historique).
+///
+/// L'hypothèse testée : si le 6 bits bat notre int8, c'est peut-être grâce à ses
+/// échelles par bloc de 32 et non grâce à ses deux bits supplémentaires.
+fn construire_q8(w: &[f32], n_out: usize, n_in: usize) -> DenseQ8 {
+    if std::env::var("QT_Q8_BLOCS").is_ok() && n_in % 32 == 0 {
+        DenseQ8::build_blocs(w, n_out, n_in)
+    } else {
+        DenseQ8::build(w, n_out, n_in)
+    }
+}
+
 impl Proj {
     /// Projection vide : les modèles à experts n'ont **pas** de tenseur FFN
     /// dense, et le moteur ne doit pas le chercher.
@@ -319,16 +332,20 @@ impl Proj {
             // Source déjà en Q8_0 et aucun élagage : on EMPRUNTE les blocs au
             // lieu de les reconstruire depuis les f32 (copie == taille du
             // modèle, plus un transitoire f32 de quatre fois cette taille).
-            match (keep >= 1.0, g.q8_blocks(name)) {
+            // `QT_SANS_EMPRUNT=1` force la reconstruction : c'est ce qui permet
+            // de comparer nos deux schémas d'échelle à la référence empruntée.
+            let emprunt = keep >= 1.0 && std::env::var("QT_SANS_EMPRUNT").is_err();
+            match (emprunt, g.q8_blocks(name)) {
                 (true, Some((buf, nb))) =>
                     (None, Some(unsafe { DenseQ8::emprunter_q8(buf.as_ptr(), n_out, n_in, nb) }), None),
-                _ => (None, Some(DenseQ8::build(&w, n_out, n_in)), None),
+                _ => (None, Some(construire_q8(&w, n_out, n_in)), None),
             }
         } else if auto {
-            let dense8 = match (keep >= 1.0, g.q8_blocks(name)) {
+            let emprunt = keep >= 1.0 && std::env::var("QT_SANS_EMPRUNT").is_err();
+            let dense8 = match (emprunt, g.q8_blocks(name)) {
                 (true, Some((buf, nb))) =>
                     unsafe { DenseQ8::emprunter_q8(buf.as_ptr(), n_out, n_in, nb) },
-                _ => DenseQ8::build(&w, n_out, n_in),
+                _ => construire_q8(&w, n_out, n_in),
             };
             (Some(PushMat::build(&w, n_out, n_in)), Some(dense8), None)
         } else {

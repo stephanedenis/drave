@@ -339,7 +339,15 @@ pub static BITS_POIDS: std::sync::atomic::AtomicU32 = std::sync::atomic::AtomicU
 
 /// Origine des poids d'une matrice int8 dense.
 #[derive(Clone, Copy, PartialEq, Eq)]
-pub enum Source8 { Propre, Q8_0 }
+pub enum Source8 {
+    /// Construite par nous : **une échelle par ligne** (historique).
+    Propre,
+    /// Construite par nous : **une échelle par bloc de 32**, comme Q8_0. C'est
+    /// l'hypothèse à tester — le 6 bits gagne peut-être grâce à ses échelles
+    /// fines et non grâce à ses deux bits de plus.
+    PropreBloc,
+    Q8_0,
+}
 
 pub struct DenseQ8 {
     pub n_in: usize,
@@ -351,6 +359,8 @@ pub struct DenseQ8 {
     /// copie, et l'échelle est celle du fichier — donc plus fidèle que la
     /// nôtre, qui est unique par ligne.
     pub src: Source8,
+    /// Échelles par bloc de 32 (une par ligne × n_in/32), pour `PropreBloc`.
+    pub scb: Vec<f32>,
     pub base: *const u8,
     pub nb_ligne: usize,
 }
@@ -374,8 +384,53 @@ impl DenseQ8 {
                 q[o * n_in + i] = if r > 127.0 { 127 } else if r < -127.0 { -127 } else { r as i8 };
             }
         }
-        DenseQ8 { n_in, n_out, q, scale, src: Source8::Propre,
+        DenseQ8 { n_in, n_out, q, scale, scb: Vec::new(), src: Source8::Propre,
                   base: std::ptr::null(), nb_ligne: 0 }
+    }
+
+    /// Construit avec **une échelle par bloc de 32** — la disposition de Q8_0,
+    /// mais depuis nos flottants. À qualité de quantification, c'est ce que
+    /// fait llama.cpp ; notre version par ligne est plus grossière.
+    pub fn build_blocs(w: &[f32], n_out: usize, n_in: usize) -> Self {
+        const B: usize = 32;
+        assert!(n_in % B == 0, "échelles par bloc : n_in multiple de 32");
+        let nb = n_in / B;
+        let mut q = vec![0i8; n_out * n_in];
+        let mut scb = vec![0f32; n_out * nb];
+        for o in 0..n_out {
+            for b in 0..nb {
+                let bloc = &w[o * n_in + b * B..o * n_in + (b + 1) * B];
+                let mut mx = 0f32;
+                for &v in bloc { let a = v.abs(); if a > mx { mx = a; } }
+                let s = if mx > 0.0 { mx / 127.0 } else { 1.0 };
+                scb[o * nb + b] = s;
+                let inv = 1.0 / s;
+                for (j, &v) in bloc.iter().enumerate() {
+                    let r = (v * inv).round();
+                    q[o * n_in + b * B + j] = r.clamp(-127.0, 127.0) as i8;
+                }
+            }
+        }
+        DenseQ8 { n_in, n_out, q, scale: Vec::new(), scb, src: Source8::PropreBloc,
+                  base: std::ptr::null(), nb_ligne: 0 }
+    }
+
+    /// Produit scalaire d'une ligne construite par blocs : la somme entière de
+    /// chaque bloc est multipliée par l'échelle DU BLOC, puis sommée en f32.
+    #[inline]
+    pub fn dot_blocs(&self, o: usize, x: &[i32]) -> f32 {
+        const B: usize = 32;
+        let nb = self.n_in / B;
+        let row = &self.q[o * self.n_in..(o + 1) * self.n_in];
+        let mut acc = 0f32;
+        for b in 0..nb {
+            let qb = &row[b * B..(b + 1) * B];
+            let xb = &x[b * B..(b + 1) * B];
+            let mut s = 0i32;
+            for j in 0..B { s += qb[j] as i32 * xb[j]; }
+            acc += self.scb[o * nb + b] * s as f32;
+        }
+        acc
     }
 
     /// **Prête** les blocs Q8_0 d'un tenseur.
@@ -384,7 +439,7 @@ impl DenseQ8 {
     /// `base` doit pointer sur le premier bloc et rester valide.
     pub unsafe fn emprunter_q8(base: *const u8, n_out: usize, n_in: usize,
                                nb_ligne: usize) -> Self {
-        DenseQ8 { n_in, n_out, q: Vec::new(), scale: Vec::new(),
+        DenseQ8 { n_in, n_out, q: Vec::new(), scale: Vec::new(), scb: Vec::new(),
                   src: Source8::Q8_0, base, nb_ligne }
     }
 

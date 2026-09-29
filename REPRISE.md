@@ -233,14 +233,28 @@ de cache différentes. Il faut une warp par ligne avec réduction, puis des noya
 4 bits (Q4_K, Q6_K, MXFP4) — toute la famille Qwen est en Q4_K/Q6_K, donc
 aujourd'hui rien de la leur n'est déportable.
 
-### e. Échelles par bloc pour `DenseQ8`
+### e. Échelles par bloc pour `DenseQ8` : FAIT — hypothèse RÉFUTÉE
 
-Notre int8 quantifie avec une seule échelle **par ligne** ; le 6 bits, par bloc
-de 32 — et il gagne. L'hypothèse à tester : le 6 bits ne gagne pas grâce à ses
-deux bits, mais grâce à ses échelles plus fines. Si c'est vrai, l'int8 par bloc
-repasserait devant à qualité égale. **C'est aussi l'écart résiduel avec
-llama.cpp** (|ΔNLL| médian 0,076 sur gpt-oss) : nos activations sont quantifiées
-sur 15 bits, une seule échelle par vecteur.
+Le schéma par bloc de 32 existe maintenant (`QT_Q8_BLOCS=1`, échelles par bloc
+comme Q8_0) et se compare au schéma par ligne sur quatre variantes, à contexte
+256 sur 1 020 jetons notés (Qwen2.5-0.5B Q8_0) :
+
+| schéma | octets/poids | perplexité |
+|---|---|---|
+| int8 emprunté au fichier (blocs de 32) | 1,0625 | 23,6964 |
+| int8 construit, échelle **par ligne** | 1,0 | **23,6123** |
+| int8 construit, échelle **par bloc de 32** | 1,0625 | 23,6964 |
+| **6 bits empaqueté, par bloc** | **0,75** | **23,6176** |
+
+1. **Les échelles par bloc n'apportent rien à l'int8** (23,696 contre 23,612 :
+   l'écart est du bruit, et il est dans l'autre sens). L'avantage du 6 bits n'est
+   donc pas dans ses échelles fines : il tient à son coût, **qualité égale à
+   25 % d'octets en moins**.
+2. Effet de bord utile : reconstruire des blocs Q8_0 depuis les poids
+   déquantifiés redonne **exactement** la perplexité de l'emprunt au fichier
+   (13,1368 contre 13,1368) — la déquantification puis requantification est
+   exacte, ce qui valide les deux chemins.
+3. `QT_SANS_EMPRUNT=1` force la reconstruction : c'est l'outil de comparaison.
 
 ### f. Contexte long
 

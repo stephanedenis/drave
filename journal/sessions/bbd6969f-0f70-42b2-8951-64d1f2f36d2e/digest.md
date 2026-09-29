@@ -7787,3 +7787,200 @@ en file (attendra la série en cours)
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='docs/contexte-long.md'\ns=open(p).read()\ns=s.replace(\"\"\"| E2 | **KV int8** (échelle par bloc de 32, comme Q8_0) | ÷4 sur le KV ; 128 k confortable | moyen (boucle d'attention) | qualité — à mesurer |\n| E3 |  … [2812 caractères tronqués]`
+
+  ```
+51a14a0 Item 3 : cache KV quantifie int8 et int4 empaquete
+  ```
+
+- **bash** `{"command": "sleep 300; tail -4 /tmp/contexte_ou_contenu.log 2>/dev/null; echo \"--- seuil rotation ---\"; tail -6 /tmp/seuil_rotation.log 2>/dev/null; ps -o pid,etime,pcpu -C qtrinet-core 2>/dev/null | tail -1", "description": "Monitor content and rotation runs", "timeoutMs": 340000}`
+
+  ```
+### ctx 512 sur 8 192 jetons : PPL par fenêtre (contenu seul)
+--- seuil rotation ---
+2878767       28:41 1779
+  ```
+
+### 🤖 Assistant
+
+⏵ Item 5 : d'abord mesurer où est l'écart (nos logits Q8_0 empruntés contre llama.cpp)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && LD_PRELOAD=/usr/lib64/libopenblas.so.0 python3 tools/compare_logits.py /tmp/nous_qwen_512_a16.bin /tmp/ref_qwen_512.bin /tmp/ids_qwen_512.txt 2>&1 | tail -6", "description": "Compare our Qwen logits with llama.cpp reference", "timeou … [13 caractères tronqués]`
+
+  ```
+448      15    0.0004    0.0004  -0.0000         1         1        15        15     oui
+  480   44777    4.8255    4.6807  +0.1448        17        15       572       572     oui
+
+écart |NLL| : moyenne 0.0376 · médiane 0.0193 · max 0.3659
+perplexité nous : 13.1367   référence : 13.1482   (511 positions)
+corrélation des logits (position 0) : 0.995892
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src && grep -n \"pub struct DenseQ8\" -A 20 list.rs && grep -n \"impl DenseQ8\" -A 60 list.rs | head -80", "description": "Read DenseQ8 structure and build"}`
+
+  ```
+344:pub struct DenseQ8 {
+345-    pub n_in: usize,
+346-    pub n_out: usize,
+347-    pub q: Vec<i8>,        // n_out × n_in — vide si `src == Q8_0`
+348-    pub scale: Vec<f32>,   // une par sortie — vide si `src == Q8_0`
+349-    /// `Q8_0` : les blocs sont lus **en place** dans le fichier (34 octets par
+350-    /// bloc de 32 : une échelle f16 puis trente-deux niveaux signés). Aucune
+351-    /// copie, et l'échelle est celle du fichier — donc plus fidèle que la
+352-    /// nôtre, qui est unique par ligne.
+353-    pub src: Source8,
+354-    pub base: *const u8,
+355-    pub nb_ligne: usize,
+356-}
+357-
+358-unsafe impl Send for DenseQ8 {}
+359-unsafe impl Sync for DenseQ8 {}
+360-
+361-impl DenseQ8 {
+362-    pub fn build(w: &[f32], n_out: usize, n_in: usize) -> Self {
+363-        let mut q = vec![0i8; n_out * n_in];
+364-        let mut scale = vec![0f32; n_out];
+361:impl DenseQ8 {
+362-    pub fn build(w: &[f32], n_out: usize, n_in: usize) -> Self {
+363-        let mut q = vec![0i8; n_out * n_in];
+364-        let mut scale = vec![0f32; n_out];
+365-        for o in 0..n_out {
+366-            let row = &w[o * n_in..(o + 1) * n_in];
+367-            let mut mx = 0f32;
+368-            for &v in r
+… [2596 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src && sed -n '421,480p' list.rs && grep -n \"pub enum Source8\" -A 6 list.rs && grep -n \"matvec_dense_i8\" -A 25 engine.rs | head -40", "description": "Read DenseQ8 dot and matvec"}`
+
+  ```
+/// Produit scalaire d'une ligne. Déroulé 4× avec quatre accumulateurs :
+    /// une seule chaîne d'accumulation i64 coûte ~3 cycles par élément et
+    /// domine tout le reste (mesuré : 8,5 tok/s contre 10,7 pour le moteur
+    /// d'événements avant déroulage).
+    /// Produit scalaire avec accumulation i32 par tranches de 256, reportée en
+    /// i64 entre tranches. L'accumulation i64 sur toute la ligne empêchait
+    /// LLVM de vectoriser (conversion i8→i64 à chaque produit) ; la borne de
+    /// 256 garantit qu'aucune tranche ne débordé (127 × 32767 × 256 = 1,07e9).
+    #[inline]
+    pub fn dot_chunked(&self, o: usize, x: &[i32]) -> i64 {
+        let row = &self.q[o * self.n_in..(o + 1) * self.n_in];
+        let mut s = 0i64;
+        for (offset, bloc) in row.chunks(256).enumerate() {
+            let xb = &x[offset * 256..offset * 256 + bloc.len()];
+            // HUIT accumulateurs indépendants, et non un seul : avec une seule
+            // chaîne `a += ...`, chaque addition attend la précédente et le
+            // noyau plafonne à ~1 multiplication par cycle — mesuré 0,54.
+            // Huit chaînes donnent au processeur de quoi remplir ses ports, et
+            // déroule
+… [4446 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Item 5 : échelles par bloc de 32 pour `DenseQ8` construit (l'emprunt Q8_0 les a déjà)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src && python3 - <<'PY'\np='list.rs'\ns=open(p).read()\ns=s.replace(\"pub enum Source8 { Propre, Q8_0 }\",\n\"\"\"pub enum Source8 {\n    /// Construite par nous : **une échelle par ligne** (historique).\n    Propre,\n    / … [4914 caractères tronqués]`
+
+  ```
+../src/engine.rs:439:                                crate::list::Source8::Q8_0 => d.dot_q8_source(o, xv) * sx,
+../src/engine.rs:441:                                crate::list::Source8::PropreBloc => d.dot_blocs(o, xv) * sx,
+../src/engine.rs:442:                                crate::list::Source8::Propre =>
+../src/list.rs:387:        DenseQ8 { n_in, n_out, q, scale, scb: Vec::new(), src: Source8::Propre,
+../src/list.rs:414:        DenseQ8 { n_in, n_out, q, scale: Vec::new(), scb, src: Source8::PropreBloc,
+../src/list.rs:443:                  src: Source8::Q8_0, base, nb_ligne }
+../src/model.rs:351:                if d8.src == crate::list::Source8::Q8_0 && keep >= 1.0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src && grep -n \"DenseQ8::build\" model.rs | head && sed -n '620,650p' model.rs", "description": "Find DenseQ8::build call sites"}`
+
+  ```
+325:                _ => (None, Some(DenseQ8::build(&w, n_out, n_in)), None),
+331:                _ => DenseQ8::build(&w, n_out, n_in),
+                let qk1 = (k[2 * j + 1] / sk).round().clamp(-niv, niv) as i32 as u8 & 0x0F;
+                let qv0 = (v[2 * j] / sv).round().clamp(-niv, niv) as i32 as u8 & 0x0F;
+                let qv1 = (v[2 * j + 1] / sv).round().clamp(-niv, niv) as i32 as u8 & 0x0F;
+                self.kq[base + j] = qk0 | (qk1 << 4);
+                self.vq[base + j] = qv0 | (qv1 << 4);
+            }
+        }
+        let s = kvh * self.ctx + pos;
+        self.sk[s] = sk;
+        self.sv[s] = sv;
+    }
+
+    /// Déquantifie la clé `(kvh, t)` dans `dst`.
+    #[inline]
+    pub fn cle(&self, kvh: usize, t: usize, dst: &mut [f32]) {
+        let d = (kvh * self.ctx + t) * self.hd;
+        if self.bits >= 32 { dst[..self.hd].copy_from_slice(&self.kf[d..d + self.hd]); return; }
+        let s = self.sk[kvh * self.ctx + t];
+        let base = (kvh * self.ctx + t) * self.pas();
+        if self.bits == 8 {
+            for i in 0..self.hd { dst[i] = self.kq[base + i] as i8 as f32 * s; }
+        } else {
+            for i in 0..self.hd {
+                let o = self.kq[ba
+… [306 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src && sed -n '310,340p' model.rs", "description": "Read Proj::load dense branch"}`
+
+  ```
+(None, None, Some(unsafe { DenseQ4::emprunter_q4k(buf.as_ptr(), n_out, n_in, nb) }))
+            } else if let Some((buf, nb)) = g.mxfp4_blocks(name) {
+                (None, None, Some(unsafe { DenseQ4::emprunter(buf.as_ptr(), n_out, n_in, nb, true) }))
+            } else if let Some((buf, nb)) = g.q4_blocks(name) {
+                (None, None, Some(unsafe { DenseQ4::emprunter(buf.as_ptr(), n_out, n_in, nb, false) }))
+            } else {
+                (None, None, Some(DenseQ4::build(&w, n_out, n_in)))
+            }
+        } else if dense {
+            // Source déjà en Q8_0 et aucun élagage : on EMPRUNTE les blocs au
+            // lieu de les reconstruire depuis les f32 (copie == taille du
+            // modèle, plus un transitoire f32 de quatre fois cette taille).
+            match (keep >= 1.0, g.q8_blocks(name)) {
+                (true, Some((buf, nb))) =>
+                    (None, Some(unsafe { DenseQ8::emprunter_q8(buf.as_ptr(), n_out, n_in, nb) }), None),
+                _ => (None, Some(DenseQ8::build(&w, n_out, n_in)), None),
+            }
+        } else if auto {
+            let dense8 = match (keep >= 1.0, g.q8_blocks(name)) {
+                (true, Some((buf, nb)
+… [607 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src && python3 - <<'PY'\np='model.rs'\ns=open(p).read()\nold = \"\"\"        } else if dense {\n            // Source déjà en Q8_0 et aucun élagage : on EMPRUNTE les blocs au\n            // lieu de les reconstruire depuis  … [2816 caractères tronqués]`
+
+  ```
+BUILD
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"emprunt Q8_0 (référence) :\" && ./qtrinet-core/target/release/qtrinet-core models/Qwen2.5-0.5B-Q8_0.gguf --ppl /tmp/ids_qwen.txt --ctx 512 --limit 512 --abits 16 --threads 16 --dense 2>&1 | grep -oE \"perplexité [0-9.]+ sur [0 … [635 caractères tronqués]`
+
+  ```
+emprunt Q8_0 (référence) :
+perplexité 13.1368 sur 511
+construit, échelle par ligne :
+perplexité 13.0740 sur 511
+construit, échelle par bloc de 32 :
+perplexité 13.1368 sur 511
+  ```
+
+### 🤖 Assistant
+
+⏵ Les échelles par bloc reproduisent Q8_0 au bit près (13,1368) ; je compare au 6 bits
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && P=\"--ppl /tmp/ids_qwen.txt --ctx 256 --limit 1024 --abits 16 --threads 16\"; printf \"int8 emprunte Q8_0        : \"; ./qtrinet-core/target/release/qtrinet-core models/Qwen2.5-0.5B-Q8_0.gguf $P --dense 2>&1 | grep -oE \"perplexité [ … [705 caractères tronqués]`
+
+  ```
+int8 emprunte Q8_0        : perplexité 23.6964 sur 1020
+int8 construit par ligne  : perplexité 23.6123 sur 1020
+int8 construit par bloc 32: perplexité 23.6964 sur 1020
+6 bits empaquete par bloc : perplexité 23.6176 sur 1020
+  ```
+
+### 🤖 Assistant
+
+⏵ Item 5 : échelles par bloc sans effet sur la qualité (23,696 vs 23,612) — hypothèse réfutée
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='REPRISE.md'\ns=open(p).read()\nold = \"\"\"### e. Échelles par bloc pour `DenseQ8`\n\nNotre int8 quantifie avec une seule échelle **par ligne** ; le 6 bits, par bloc\nde 32 — et il gagne. L'hypothèse à tester : l … [2749 caractères tronqués]`
