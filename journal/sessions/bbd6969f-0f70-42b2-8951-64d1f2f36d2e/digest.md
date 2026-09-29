@@ -15255,3 +15255,137 @@ docs/contexte-long.md mis à jour
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='REPRISE.md'; s=open(p).read()\nold = \"| 8 | suite du plan 1 M | **chiffré, pas commencé** | `docs/contexte-long.md` : préremplissage 1 234 h à 1 M, KV int4 9,7 Go, YaRN ×256 nécessaire ; restent pagination, dépo … [4520 caractères tronqués]`
+
+  ```
+REPRISE.md mis à jour
+bc16897 E4 : KV déporté en VRAM, attention sur le GPU, mesuré à 1 M de clés
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls -S --block-size=K *.txt corpus/*.txt 2>/dev/null | head -8; ls -S /tmp/*.txt 2>/dev/null | head -5; du -sh /tmp/ids_oss_long.txt 2>/dev/null; grep -rn \"ids_oss_long\\|ids_refontee\" /tmp/*.sh 2>/dev/null | head -5", "description" … [27 caractères tronqués]`
+
+  ```
+/tmp/dis.txt
+/tmp/neurones_qwen.txt
+/tmp/rtl_writes.txt
+/tmp/ids_oss_long.txt
+/tmp/wt2_long.txt
+80K	/tmp/ids_oss_long.txt
+/tmp/ref2048.sh:11:ids=[int(x) for x in open('/tmp/ids_oss_long.txt').read().replace(',',' ').split()]
+/tmp/ref_long.sh:10:ids=[int(x) for x in open('/tmp/ids_oss_long.txt').read().replace(',',' ').split()]
+  ```
+
+- **bash** `{"command": "cd /tmp && for f in dis.txt wt2_long.txt neurones_qwen.txt rtl_writes.txt; do printf \"%-20s %8s octets\\n\" \"$f\" \"$(stat -c%s $f)\"; done && head -c 200 /tmp/wt2_long.txt", "description": "Inspect candidate corpora"}`
+
+  ```
+dis.txt               5696277 octets
+wt2_long.txt            70000 octets
+neurones_qwen.txt     1909266 octets
+rtl_writes.txt         125372 octets
+
+ = Robert Boulter = 
+
+
+ Robert Boulter is an English film , television and theatre actor . He had a guest @-@ starring role on the television series The Bill in 2000 . This was followed by a starring
+  ```
+
+- **bash** `{"command": "cat /tmp/croisement_yarn.sh 2>/dev/null | head -40; echo ===; grep -n \"depuis\" /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src/main.rs | head -8", "description": "Review prior rotation protocol script"}`
+
+  ```
+#!/bin/bash
+# Croisement RoPE simple / YaRN : les deux régimes à 1024, 2048 et 3072 jetons.
+# Le seuil « longueur initiale déclarée » (4 096) est trop haut : à 4 096 le
+# RoPE simple donne 170,8 contre 18,6 à 512. On cherche donc où il décroche.
+set -u
+cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet
+Q=./qtrinet-core/target/release/qtrinet-core
+M=/home/stephane/FastNVMe/models/gpt-oss-120b-MXFP4.gguf
+T=/tmp/wt2_long.txt
+C="--dense --threads 16"
+J=/tmp/croisement_yarn.log
+: > "$J"
+
+# Ne pas empiler deux moteurs de 62 Go : on attend que la passe en cours finisse.
+while pgrep -x qtrinet-core > /dev/null; do sleep 20; done
+
+mesure() {
+    local titre="$1"; shift
+    echo "" | tee -a "$J"
+    echo "### $titre" | tee -a "$J"
+    "$@" 2>&1 | grep -E "rotation|perplexité" | tail -2 | tee -a "$J"
+}
+
+for n in 1024 2048 3072; do
+    mesure "P$n ctx $n, RoPE simple" \
+        env QT_YARN_NON=1 $Q $M --ppl-texte $T $C --ctx $n --limit $n
+    mesure "Y$n ctx $n, YaRN ×32" \
+        env QT_YARN=1 $Q $M --ppl-texte $T $C --ctx $n --limit $n
+done
+
+echo "" | tee -a "$J"
+echo "=== journal : $J ==="
+===
+324:    ppl_texte: bool, prompt: Option<String>, limit: usize, depuis: usize,
+414:            "--
+… [470 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && sed -n '/rotation/,+6p' src/model.rs | grep -n \"QT_YARN\\|mscale\\|interp\" | head -20 && grep -n \"QT_YARN\" src/model.rs | head -12", "description": "Read rotation env semantics"}`
+
+  ```
+4:            //   `QT_YARN=1`      YaRN à toutes les positions, comme HF, llama.cpp
+6:            //   `QT_YARN_NON=1`  jamais de YaRN (ce que fait `--sans-yarn`) ;
+22:    /// rotation. La sortie est en plus multipliée par `mscale = 1 + 0,1·ln(f)`,
+26:                 mscale_actif: bool, n_rot: usize) {
+805:            //   `QT_YARN=1`      YaRN à toutes les positions, comme HF, llama.cpp
+807:            //   `QT_YARN_NON=1`  jamais de YaRN (ce que fait `--sans-yarn`) ;
+836:                        // 192,63 à 2 048. Le mode FORCÉ (`QT_YARN=1`) garde donc
+839:                        // `QT_YARN_MSCALE=0/1` tranche explicitement dans les
+841:                        std::env::var("QT_YARN_MSCALE").map(|v| v != "0")
+842:                            .unwrap_or_else(|_| std::env::var("QT_YARN").is_ok()),
+846:                let toujours = std::env::var("QT_YARN").is_ok();
+847:                let jamais = std::env::var("QT_YARN_NON").is_ok();
+1545:                // QT_YARN_RAMPE=0 force l'interpolation pure.
+1546:                let rampe = if std::env::var("QT_YARN_RAMPE").map_or(false, |v| v == "0") {
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src/model.rs", "limit": 40, "offset": 820}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src/model.rs</path>
+<type>file</type>
+<content>
+820:             // alors que de la différence des positions). Changer de jeu de
+821:             // fréquences en cours de séquence détruit cette propriété pour
+822:             // toutes les paires qui traversent la frontière — c'est un choix de
+823:             // conception, pas une simplification.
+824:             yarn: {
+825:                 let declare = match g.cfg("rope.scaling.type").and_then(|m| m.as_str()) {
+826:                     Some("yarn") => Some((
+827:                         g.cfg("rope.scaling.factor").and_then(|m| m.as_f64()).unwrap_or(1.0) as f32,
+828:                         g.cfg("rope.scaling.yarn_beta_fast").and_then(|m| m.as_f64()).unwrap_or(32.0) as f32,
+829:                         g.cfg("rope.scaling.yarn_beta_slow").and_then(|m| m.as_f64()).unwrap_or(1.0) as f32,
+830:                         g.cfg("rope.scaling.original_context_length")
+831:                             .and_then(|m| m.as_u64()).unwrap_or(4096) as f32,
+832:                         // La mise à l'échelle de température (`mscale`) est la
+833:                         // moi
+… [1493 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cat > /tmp/rotation_au_dela.sh <<'EOF'\n#!/bin/bash\n# Chantier 2, question restée ouverte : que fait la rotation AU-DELÀ de 4 096 ?\n# gpt-oss déclare yarn (facteur 32, contexte d'origine 4 096). Protocole\n# apparié : les MÊMES 512 jetons notés, à contexte croissant (--depuis).\nset - … [1095 caractères tronqués]`
+
+  ```
+started background job bash-31
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='docs/contexte-long.md'; s=open(p).read()\nold = \"### Dans le moteur (`QT_GPU_KV=1`)\"\nnew = \"### Dans le moteur (`QT_GPU=1 QT_GPU_KV=1`)\\n\\nLes DEUX variables sont nécessaires : c'est `QT_GPU` qui ouvre le p … [423 caractères tronqués]`
+
+  ```
+note env ajoutée
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.08s
+
+ M docs/contexte-long.md
+ M journal/README.md
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A docs/contexte-long.md journal && git commit -q -m \"docs: préciser que QT_GPU_KV exige QT_GPU (le pilote ne s'ouvre que sur QT_GPU)\" && git log --oneline -3 && git status --short | head -3", "description": "Commit doc not … [15 caractères tronqués]`

@@ -184,7 +184,11 @@ Trois choses :
 3. Les écarts au CPU restent dans l'ordre de la somme flottante (1e-5 à 1e-4
    relatif au maximum de sortie) — et la perplexité ne bouge pas (voir ci-dessous).
 
-### Dans le moteur (`QT_GPU_KV=1`)
+### Dans le moteur (`QT_GPU=1 QT_GPU_KV=1`)
+
+Les DEUX variables sont nécessaires : c'est `QT_GPU` qui ouvre le pilote (`gpu::instance`),
+`QT_GPU_KV` qui demande le miroir. Avec la seule seconde, il ne se passe rien — et
+rien ne le dit, d'où la note.
 
 Le cache est recopié en VRAM par **tranches contiguës** (une copie par couche et
 par tête KV et par lot, pas une par vecteur), et l'attention par jeton emprunte
