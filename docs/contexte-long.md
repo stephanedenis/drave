@@ -184,6 +184,26 @@ Trois choses :
 3. Les écarts au CPU restent dans l'ordre de la somme flottante (1e-5 à 1e-4
    relatif au maximum de sortie) — et la perplexité ne bouge pas (voir ci-dessous).
 
+### Comment le noyau a été validé (et les trois bugs qu'il a fallu sortir)
+
+Le banc `--banc-kv` compare au chemin du moteur sur des données **dégénérées**,
+choisies pour que la bonne réponse soit connue d'avance : clés nulles (poids
+uniformes), valeurs constantes (la sortie vaut 1 quelles que soient les
+pondérations), valeurs « une chaude » (la sortie EST le poids de chaque clé) et
+pente sur une composante (la softmax se concentre sur la dernière clé). C'est ce
+qui a permis de distinguer trois erreurs que le cas aléatoire seul ne séparait
+pas :
+
+1. la **requête** était lue par voie (`q[... + lane]`) alors que chaque fil note
+   sa clé et a besoin des `hd` composantes entières : accord parfait dès que la
+   requête était un vecteur de base — la seule configuration où les deux lectures
+   coïncident — et écart de 4e-1 sinon. Elle passe maintenant par la mémoire
+   partagée ;
+2. les partiels n'étaient **pas indexés par tête KV** : les blocs d'une même
+   tranche s'écrivaient au même endroit, et 7 têtes sur 14 restaient à zéro ;
+3. les **échelles** du KV quantifié étaient indexées en éléments au lieu d'être
+   indexées par vecteur (`vec * nb + i/32`) : écart de 7e7 en int8.
+
 ### Dans le moteur (`QT_GPU=1 QT_GPU_KV=1`)
 
 Les DEUX variables sont nécessaires : c'est `QT_GPU` qui ouvre le pilote (`gpu::instance`),

@@ -15389,3 +15389,30 @@ test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; fini
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A docs/contexte-long.md journal && git commit -q -m \"docs: préciser que QT_GPU_KV exige QT_GPU (le pilote ne s'ouvre que sur QT_GPU)\" && git log --oneline -3 && git status --short | head -3", "description": "Commit doc not … [15 caractères tronqués]`
+
+  ```
+8438883 docs: préciser que QT_GPU_KV exige QT_GPU (le pilote ne s'ouvre que sur QT_GPU)
+bc16897 E4 : KV déporté en VRAM, attention sur le GPU, mesuré à 1 M de clés
+f578862 noyau Q6_K sur GPU, et tête Q6_K déportée dans le moteur
+ M journal/README.md
+  ```
+
+- **bash** `{"command": "sleep 120; cat /tmp/rotation_au_dela.log 2>/dev/null | tail -6; pgrep -x qtrinet-core >/dev/null && echo \"[en cours]\"", "description": "Check rotation measurement progress", "timeoutMs": 180000}`
+
+  ```
+ctx 4096  interp  : [en cours]
+  ```
+
+- **job_kill** `{"job_id": "bash-31", "reason": "protocole re-ciblé : mesurer juste au-dessus du seuil (5120) plutôt que 4096"}`
+
+  ```
+requested cancellation of job bash-31
+  ```
+
+- **bash** `{"command": "pkill -x qtrinet-core; sleep 3; cat > /tmp/rotation_seuil.sh <<'EOF'\n#!/bin/bash\n# Chantier 2 : le seuil de 4 096 est-il au bon endroit ? Protocole apparié\n# (--depuis), les mêmes 512 jetons notés AU-DELÀ du contexte d'origine de\n# gpt-oss, où la question se pose vraiment.\nset -u\n … [1071 caractères tronqués]`
+
+  ```
+started background job bash-32
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='docs/contexte-long.md'; s=open(p).read()\nold = \"\"\"### Dans le moteur (`QT_GPU=1 QT_GPU_KV=1`)\"\"\"\nnew = \"\"\"### Comment le noyau a été validé (et les trois bugs qu'il a fallu sortir)\n\nLe banc `--banc-k … [1500 caractères tronqués]`
