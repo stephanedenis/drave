@@ -15597,3 +15597,241 @@ miroir du lot corrigé (une copie par couche)
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A qtrinet-core/src && git commit -q -m \"KV déporté : corriger la copie du chemin par lots\n\nLe miroir était appelé DANS la boucle des jetons avec la position du jeton et la\ntaille du lot : il copiait t positions à partir  … [364 caractères tronqués]`
+
+  ```
+e6a5eff KV déporté : corriger la copie du chemin par lots
+  ```
+
+- **bash** `{"command": "sleep 900; cat /tmp/rotation_seuil.log | tail -4; pgrep -x qtrinet-core >/dev/null && echo \"[en cours]\" || echo \"[libre]\"", "description": "Wait for threshold runs", "timeoutMs": 960000}`
+
+  ```
+(no output)
+[timed out after 600000ms]
+[killed by signal: SIGTERM]
+  ```
+
+- **bash** `{"command": "cat /tmp/rotation_seuil.log 2>/dev/null; echo \"---\"; pgrep -x qtrinet-core >/dev/null && echo \"[en cours]\" || echo \"[libre]\"", "description": "Check threshold log again"}`
+
+  ```
+ctx 5120  simple  : ---
+[en cours]
+  ```
+
+- **bash** `{"command": "sleep 570; cat /tmp/rotation_seuil.log; pgrep -x qtrinet-core >/dev/null && echo \"[en cours]\" || echo \"[libre]\"", "description": "Poll threshold measurement", "timeoutMs": 600000}`
+
+  ```
+ctx 5120  simple  : perplexité 9.6986 sur 512 tokens (0 événements, 1354.5 s)|
+ctx 5120  interp  : [en cours]
+  ```
+
+- **bash** `{"command": "sleep 900; cat /tmp/rotation_seuil.log; pgrep -x qtrinet-core >/dev/null && echo \"[en cours]\" || echo \"[libre]\"", "description": "Wait for interp result at 5120", "timeoutMs": 960000}`
+
+  ```
+(no output)
+[timed out after 600000ms]
+[killed by signal: SIGTERM]
+  ```
+
+- **bash** `{"command": "cat /tmp/rotation_seuil.log; pgrep -x qtrinet-core >/dev/null && echo \"[en cours]\" || echo \"[libre]\"", "description": "Check log state"}`
+
+  ```
+ctx 5120  simple  : perplexité 9.6986 sur 512 tokens (0 événements, 1354.5 s)|
+ctx 5120  interp  : [en cours]
+  ```
+
+- **bash** `{"command": "cat > /tmp/watchdog_rotation.sh <<'EOF'\n#!/bin/bash\n# Arrête la campagne de rotation dès que la paire décisive (ctx 5120, simple\n# puis interp) est écrite : les quatre passes suivantes coûteraient deux heures\n# de plus pour une question déjà tranchée.\nfor i in $(seq 1 400); do\n    … [467 caractères tronqués]`
+
+  ```
+started background job bash-33
+  ```
+
+- **job_output** `{"job_id": "bash-33", "timeout_ms": 900000, "wait": true}`
+
+  ```
+paire 5120 complète — campagne arrêtée
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cat /tmp/rotation_seuil.log; echo \"---\"; pgrep -x qtrinet-core >/dev/null && echo \"[moteur en cours]\" || echo \"[libre]\"", "description": "Read decisive rotation pair"}`
+
+  ```
+ctx 5120  simple  : perplexité 9.6986 sur 512 tokens (0 événements, 1354.5 s)|
+ctx 5120  interp  : ---
+[libre]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-32 (bash: pkill -x qtrinet-core; sleep 3; cat > /tmp/rotation_seuil.sh <<'EOF'
+#!/bin/bash
+# Chantier 2 : le seuil de 4 096 est-il au bon endroit ? Protocole apparié
+# (--depuis), les mêmes 512 jetons notés AU-DELÀ du contexte d'origine de
+# gpt-oss, où la question se pose vraiment.
+set -u
+cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet
+Q=./qtrinet-core/target/release/qtrinet-core
+M=/home/stephane/FastNVMe/models/gpt-oss-120b-MXFP4.gguf
+IDS=/tmp/ids_oss_long.txt
+J=/tmp/rotation_seuil.log
+: > "$J"
+while pgrep -x qtrinet-core > /dev/null; do sleep 20; done
+for ctx in 5120 8192; do
+    depuis=$((ctx - 512))
+    for regime in "simple:QT_YARN_NON=1" "interp:QT_YARN=1 QT_YARN_MSCALE=0" "yarn:QT_YARN=1"; do
+        nom=${regime%%:*}; envs=${regime#*:}
+        printf "ctx %-5s %-7s : " "$ctx" "$nom" | tee -a "$J"
+        env $envs $Q $M --ppl $IDS --ctx $ctx --limit 512 --depuis $depuis \
+            --dense --threads 16 --lot 1 2>&1 \
+            | grep -oE "perplexité [0-9.]+ sur [0-9]+ tokens \([0-9]+ événements, [0-9.]+ s\)" \
+            | tr '\n' '|' | tee -a "$J"
+        echo "" | tee -a "$J"
+    done
+done
+echo "=== fin ===" | tee -a "$J"
+EOF
+chmod +x /tmp/rotation_seuil.sh && /tmp/rotation_seuil.sh) finished [status: killed, signal: SIGTERM]. Read its output with job_output.
+
+- **bash** `{"command": "cat > /tmp/rotation_interp.sh <<'EOF'\n#!/bin/bash\n# La paire décisive : le MÊME contexte de 5 120 jetons, interpolation seule.\n# (`simple` = 9,6986 mesuré.) Le témoin d'arrêt doit porter sur la LIGNE DE\n# RÉSULTAT : la ligne d'étiquette est écrite avant la fin de la passe.\nset -u\n … [768 caractères tronqués]`
+
+  ```
+started background job bash-34
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ./qtrinet-core/target/release/qtrinet-core models/Qwen2.5-0.5B-Q8_0.gguf --tokenize --fichier /tmp/wt2_long.txt --sortie /tmp/ids_qwen_long.txt 2>&1 | tail -3 && wc -c /tmp/ids_qwen_long.txt", "description": "Tokenize long corpus wit … [39 caractères tronqués]`
+
+  ```
+17434 tokens écrits dans /tmp/ids_qwen_long.txt (vocabulaire du modèle : 151936)
+réversibilité : texte reconstruit identique ✅ (70000 octets)
+79500 /tmp/ids_qwen_long.txt
+  ```
+
+- **bash** `{"command": "cat > /tmp/kv_8192.sh <<'EOF'\n#!/bin/bash\n# Chantier 3, complément : les trois formats de KV à 8 192 jetons de contexte,\n# longueur exacte de la comparaison llama.cpp (le corpus de 4 591 jetons ne\n# permettait pas d'aller jusque-là ; 17 434 jetons Qwen sont maintenant\n# disponibles … [736 caractères tronqués]`
+
+  ```
+prêt (à lancer après la passe de rotation)
+  ```
+
+- **job_output** `{"job_id": "bash-34", "timeout_ms": 600000, "wait": true}`
+
+  ```
+ctx 5120 interp : 
+[status: running]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git status --short && git log --oneline -6 && echo \"=== diffstat de la session ===\" && git diff --stat 2383eae~1 HEAD | tail -12", "description": "Review session diff and tree state"}`
+
+  ```
+M journal/README.md
+ M journal/sessions/MANIFEST.md
+ M journal/sessions/bbd6969f-0f70-42b2-8951-64d1f2f36d2e/digest.md
+ M journal/sessions/bbd6969f-0f70-42b2-8951-64d1f2f36d2e/rapport.md
+e6a5eff KV déporté : corriger la copie du chemin par lots
+a593603 docs E4 : comment le noyau d'attention a été validé (cas dégénérés, trois bugs)
+8438883 docs: préciser que QT_GPU_KV exige QT_GPU (le pilote ne s'ouvre que sur QT_GPU)
+bc16897 E4 : KV déporté en VRAM, attention sur le GPU, mesuré à 1 M de clés
+f578862 noyau Q6_K sur GPU, et tête Q6_K déportée dans le moteur
+2383eae préremplissage par lots : attention groupée, tête en lot, et un pointeur gras
+=== diffstat de la session ===
+ journal/sessions/MANIFEST.md                       |    4 +-
+ .../bbd6969f-0f70-42b2-8951-64d1f2f36d2e/digest.md | 4166 ++++++++++++++++++
+ .../rapport.md                                     |   80 +-
+ qtrinet-core/gpu/cuda_stub.h                       |   20 +
+ qtrinet-core/gpu/qtrinet_gpu.cu                    |  258 ++
+ qtrinet-core/gpu/qtrinet_gpu.ptx                   | 4432 ++++++++++++++++++++
+ qtrinet-core/src/engine.rs                         |  118 +-
+ qtrinet-core/src/gpu.rs                            | 
+… [249 caractères tronqués]
+  ```
+
+- **job_output** `{"job_id": "bash-34", "timeout_ms": 900000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "sleep 540; cat /tmp/rotation_interp.log; pgrep -x qtrinet-core >/dev/null && echo \"[en cours]\" || echo \"[libre]\"", "description": "Poll interp run", "timeoutMs": 600000}`
+
+  ```
+ctx 5120 interp : perplexité 1269.1777 sur 512 tokens (0 événements, 1357.3 s)
+
+=== fin ===
+[libre]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-34 (bash: cat > /tmp/rotation_interp.sh <<'EOF'
+#!/bin/bash
+# La paire décisive : le MÊME contexte de 5 120 jetons, interpolation seule.
+# (`simple` = 9,6986 mesuré.) Le témoin d'arrêt doit porter sur la LIGNE DE
+# RÉSULTAT : la ligne d'étiquette est écrite avant la fin de la passe.
+set -u
+cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet
+Q=./qtrinet-core/target/release/qtrinet-core
+M=/home/stephane/FastNVMe/models/gpt-oss-120b-MXFP4.gguf
+J=/tmp/rotation_interp.log
+: > "$J"
+while pgrep -x qtrinet-core > /dev/null; do sleep 20; done
+printf "ctx 5120 interp : " | tee -a "$J"
+env QT_YARN=1 QT_YARN_MSCALE=0 $Q $M --ppl /tmp/ids_oss_long.txt --ctx 5120 --limit 512 \
+    --depuis 4608 --dense --threads 16 --lot 1 2>&1 \
+    | grep -oE "perplexité [0-9.]+ sur [0-9]+ tokens \([0-9]+ événements, [0-9.]+ s\)" | tee -a "$J"
+echo "" | tee -a "$J"
+echo "=== fin ===" | tee -a "$J"
+EOF
+chmod +x /tmp/rotation_interp.sh && /tmp/rotation_interp.sh) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+### 🤖 Assistant
+
+⏵ Verdict tranché : à 5 120 jetons, RoPE simple 9,70 contre 1 269 en interpolation
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && python3 - <<'PY'\np='src/model.rs'; s=open(p).read()\nold = \"\"\"                match declare {\n                    Some(y) if toujours => Some(y),\n                    Some(y) if !jamais && ctx as f32 > y.3 => Some(y … [1266 caractères tronqués]`
+
+  ```
+seuil de bascule relevé à 1,25 × la longueur déclarée
+    Finished `release` profile [optimized] target(s) in 18.32s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"Reste à mesurer au-delà de 4 096\" REPRISE.md && python3 - <<'PY'\np='REPRISE.md'; s=open(p).read()\nold = \"| 2 | seuil de rotation YaRN | **fait** | comparaison appariée (mêmes 512 jetons, contexte 128→1536) : RoPE simple … [889 caractères tronqués]`
+
+  ```
+141:| 2 | seuil de rotation YaRN | **fait** | comparaison appariée (mêmes 512 jetons, contexte 128→1536) : RoPE simple **39,52 / 49,79 / 49,93 / 298,56** contre interpolation seule 42,13 / 82,02 / 82,15 / 578,86 → **le simple gagne partout**. Reste à mesurer au-delà de 4 096 de contexte (corpus trop court) |
+REPRISE row 2 mis à jour
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/contexte-long.md", "limit": 40, "offset": 262}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/contexte-long.md</path>
+<type>file</type>
+<content>
+262: | longueur | RoPE simple | YaRN **sans mscale** | YaRN complet |
+263: |---|---|---|---|
+264: | 63 | **20,84** | — | 41,11 |
+265: | 512 | **18,58** | 19,65 | 174,34 |
+266: | 1 024 | **46,94** | 71,35 | 417,65 |
+267: | 2 048 | **121,75** | 192,63 | 722,56 |
+268: | 4 096 | **170,78** | 400,13 | — |
+269: | 4 608 | — | 476,09 | 1 105,20 |
+270: 
+271: ### 5.bis Comparaison appariée (mêmes jetons, contexte variable)
+272: 
+273: Jetons **1536 à 2047** du corpus (512 notés), contexte croissant, deux régimes —
+274: c'est la mesure qui répond à la question « à partir de quand faut-il étirer ? » :
+275: 
+276: | contexte réel | RoPE simple | interpolation seule |
+277: |---|---|---|
+278: | 128 | **39,52** | 42,13 |
+279: | 512 | **49,79** | 82,02 |
+280: | 1 024 | **49,93** | 82,15 |
+281: | 1 536 | **298,56** | 578,86 |
+282: 
+283: **Le RoPE simple gagne à toutes les longueurs mesurées**, y compris là où les
+284: deux régimes décrochent (×6 entre 1 024 et 1 536 jetons de contexte). La
+285: comparaison étant appariée, les effets de contenu s'annulent : c'est bien la
+286: rotation qui est 
+… [852 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='docs/contexte-long.md'; s=open(p).read()\nold = \"\"\"Deux réserves, mesurées elles aussi :\n\n- le **saut à ~1 500 jetons de contexte** est commun aux deux régimes : il vient\n  du contenu AJOUTÉ (non contrôlé p … [3096 caractères tronqués]`

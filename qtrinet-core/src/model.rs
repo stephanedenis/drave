@@ -845,9 +845,18 @@ impl Model {
                 };
                 let toujours = std::env::var("QT_YARN").is_ok();
                 let jamais = std::env::var("QT_YARN_NON").is_ok();
+                // Seuil de bascule : mesuré à 5 120 jetons sur gpt-oss
+                // (protocole apparié `--depuis`, mêmes 512 jetons notés) —
+                // RoPE simple **9,6986** contre **1 269,1777** en interpolation
+                // seule. Le seuil « longueur d'origine déclarée » (4 096) est
+                // donc TROP BAS : l'interpolation dégrade encore au-delà. On ne
+                // bascule qu'à 1,25 × la longueur déclarée (5 120 ici), la plus
+                // grande longueur où le simple ait été mesuré gagnant ; au-delà,
+                // c'est une extrapolation non mesurée (le corpus disponible
+                // s'arrête à 17 k jetons, une passe à 16 k coûte une heure).
                 match declare {
                     Some(y) if toujours => Some(y),
-                    Some(y) if !jamais && ctx as f32 > y.3 => Some(y),
+                    Some(y) if !jamais && ctx as f32 > y.3 * 1.25 => Some(y),
                     _ => None,
                 }
             },

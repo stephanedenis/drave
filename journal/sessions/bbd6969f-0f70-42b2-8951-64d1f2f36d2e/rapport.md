@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 24.0 h |
+| Durée | 25.0 h |
 | Tours | 6 |
-| Messages | 946 |
-| Appels d'outils | 949 |
+| Messages | 967 |
+| Appels d'outils | 968 |
 | Fichiers touchés | 35 |
-| Commandes | 701 |
+| Commandes | 716 |
 | Sous-agents | 1 |
-| Commits | 28 |
+| Commits | 29 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -263,7 +263,7 @@ Retirer `mscale = 1 + 0,1·ln f` divise la perplexité par **8,9 / 5,9 / 3,8**. 
 
 ### Tour 6 — <goal_round> Objective: "Réaliser les 8 chantiers restants du projet qtrinet-core dans l'ordre : (1) protocole de perple … [1122 caractères tronqués]
 
-*222 appels d'outils.* Actions notables :
+*241 appels d'outils.* Actions notables :
 
 - bash — Check the starting state of round 2
 - bash — Locate the batched attention loop
@@ -279,11 +279,11 @@ Retirer `mscale = 1 + 0,1·ln f` divise la perplexité par **8,9 / 5,9 / 3,8**. 
 - bash — Bisect the failing batch size
 - bash — Add guards and rerun lot 128
 - bash — Read dot16's fallback path
-- … et 170 autres
+- … et 185 autres
 
 **Synthèse produite :**
 
-⏵ E4 mesuré dans le moteur : attention 22,2 → 3,3 ms/jeton à 4 k, PPL identique
+⏵ Verdict tranché : à 5 120 jetons, RoPE simple 9,70 contre 1 269 en interpolation
 
 ## 3. Travail accompli
 
@@ -373,7 +373,7 @@ Retirer `mscale = 1 + 0,1·ln f` divise la perplexité par **8,9 / 5,9 / 3,8**. 
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 661 autres
+- … et 676 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -549,4 +549,5 @@ Retirer `mscale = 1 + 0,1·ln f` divise la perplexité par **8,9 / 5,9 / 3,8**. 
 - docs: préciser que QT_GPU_KV exige QT_GPU (le pilote ne s'ouvre que sur QT_GPU)" && git log --oneline -3 && git status --short | head -3
 - docs E4 : comment le noyau d'attention a été validé (cas dégénérés, trois bugs)" && git log --oneline -1
 - KV déporté : corriger la copie du chemin par lots  Le miroir était appelé DANS la boucle des jetons avec la position du jeton et la taille du lot : il copiait t
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p='docs/contexte-long.md'; s=open(p).read() old = """Deux réserves, mesurées elles aussi 
 

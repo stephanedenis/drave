@@ -290,8 +290,31 @@ Deux réserves, mesurées elles aussi :
 - le **saut à ~1 500 jetons de contexte** est commun aux deux régimes : il vient
   du contenu AJOUTÉ (non contrôlé par le protocole), pas forcément de la
   longueur ;
-- au-delà de 4 096 jetons de contexte, le RoPE simple extrapole : la mesure
-  manque (il faut un corpus plus long que la cible + le contexte).
+- ~~au-delà de 4 096, la mesure manque~~ **MESURÉ DEPUIS** : voir §5.ter.
+
+### 5.ter Au-delà du seuil : la bascule à 4 096 était trop basse
+
+Le corpus de 16 455 jetons (gpt-oss) permet enfin de franchir la longueur
+d'origine déclarée. Mêmes 512 jetons notés (**positions 4 608 à 5 119**),
+contexte 5 120, protocole apparié `--depuis` :
+
+| régime | perplexité |
+|---|---|
+| **RoPE simple** (`QT_YARN_NON=1`) | **9,6986** |
+| interpolation seule (`QT_YARN=1 QT_YARN_MSCALE=0`) | 1 269,1777 |
+
+**L'interpolation dégrade encore au-delà de 4 096** — d'un facteur 131 — alors
+que c'est exactement la zone où le moteur basculait. Le seuil « longueur
+d'origine déclarée » n'est donc pas le bon : il ne bascule plus qu'à **1,25 ×**
+cette longueur (5 120 pour gpt-oss), la plus grande longueur où le RoPE simple
+ait été mesuré gagnant. Plus haut (16 k, 131 k), c'est une extrapolation non
+mesurée : une passe à 16 384 jetons de contexte coûte environ une heure par
+régime sur cette machine, et le corpus s'arrête à 17 k jetons.
+
+Ce que ça dit du plan 1 M : la rotation n'est pas ce qui limite d'abord (c'est le
+préremplissage), et **le YaRN déclaré n'est pas la bonne réponse sur du texte
+brut** — la portée gagnée par l'interpolation se paie d'une perplexité détruite
+partout où on a pu la mesurer.
 
 Trois enseignements :
 
