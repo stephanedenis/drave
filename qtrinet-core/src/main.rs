@@ -780,6 +780,11 @@ fn run_gpu_banc(opt: Options) {
     // Le banc porte sur la tête Q8_0, ou sur le tenseur nommé (`--matrix`) quand
     // c'est une matrice d'experts MXFP4 — c'est le poste dominant de gpt-oss.
     let mx = g.mxfp4_blocks(&opt.matrix).is_some();
+    let nom_q4k = opt.matrix.clone();
+    if !mx && nom_q4k != "output.weight" && nom_q4k != "token_embd.weight"
+        && g.q4k_blocks(&nom_q4k).is_some() {
+        return banc_q4k(opt, &g, &nom_q4k, threads);
+    }
     let nom = if mx { opt.matrix.clone() } else if g.tensor("output.weight").is_some() {
         "output.weight".to_string()
     } else { "token_embd.weight".to_string() };
@@ -913,6 +918,61 @@ fn banc_mxfp4(opt: Options, g: &Gguf, nom: &str, threads: usize) {
     for passe in 0..3 {
         let t1 = Instant::now();
         let Some(r) = machine.proj_mxfp4(&m, &xi, 1.0) else { println!("  noyau en échec"); return };
+        let dt = t1.elapsed().as_secs_f64();
+        if passe > 0 && dt < ms { ms = dt; }
+        dernier = r;
+    }
+    let mut echelle = 1e-9f32;
+    for o in 0..n_out { echelle = echelle.max(cpu[o].abs()); }
+    let mut ecart = 0f32;
+    for o in 0..n_out { ecart = ecart.max((dernier[o] - cpu[o]).abs() / echelle); }
+    println!("  GPU  warp par ligne : {:>7.1} ms  ({:>6.1} Go/s)  écart max {:+.2e}",
+             ms * 1e3, octets as f64 / ms / 1e9, ecart);
+    let _ = opt;
+}
+
+
+/// Banc d'essai du noyau **Q4_K** (toute la famille Qwen en Q4_K_M) contre le
+/// chemin AVX2 du CPU.
+fn banc_q4k(opt: Options, g: &Gguf, nom: &str, threads: usize) {
+    use std::time::Instant;
+    let Some((blocs, nb)) = g.q4k_blocks(nom) else { println!("pas une matrice Q4_K"); return };
+    let t = g.tensor(nom).unwrap();
+    let (n_out, n_in) = (t.dims[0] as usize, t.dims[1] as usize);
+    let octets = n_out * nb * 144;
+    println!("matrice Q4_K {nom} : {n_out} × {n_in} · {:.1} Mo · {} super-blocs de 256",
+             octets as f64 / 1e6, nb);
+    let xi: Vec<i32> = (0..n_in).map(|i| ((i * 2654435761usize) % 255) as i32 - 127).collect();
+    let x16: Vec<i16> = xi.iter().map(|&v| v.clamp(-32767, 32767) as i16).collect();
+    let sx32 = crate::list::sommes32(&x16);
+    let d = unsafe { DenseQ4::emprunter_q4k(blocs.as_ptr(), n_out, n_in, nb) };
+    let t0 = Instant::now();
+    let mut cpu = vec![0f32; n_out];
+    let chunk = n_out.div_ceil(threads);
+    let dref = &d;
+    let (x16ref, sxref) = (&x16, &sx32);
+    std::thread::scope(|sc| {
+        for (ci, part) in cpu.chunks_mut(chunk).enumerate() {
+            let base = ci * chunk;
+            sc.spawn(move || {
+                for (j, o) in part.iter_mut().enumerate() {
+                    *o = dref.dot16(base + j, x16ref, sxref);
+                }
+            });
+        }
+    });
+    let tc = t0.elapsed().as_secs_f64();
+    println!("  CPU  {threads} fils : {:>7.1} ms  ({:>6.1} Go/s)", tc * 1e3, octets as f64 / tc / 1e9);
+    let Some(machine) = gpu::instance() else { println!("  GPU absent"); return };
+    println!("  {}", machine.nom);
+    let Some(m) = machine.charger_q4k(blocs, n_out, nb) else {
+        println!("  allocation GPU impossible"); return;
+    };
+    let mut ms = f64::MAX;
+    let mut dernier: Vec<f32> = Vec::new();
+    for passe in 0..3 {
+        let t1 = Instant::now();
+        let Some(r) = machine.proj_q4k(&m, &xi, 1.0) else { println!("  noyau en échec"); return };
         let dt = t1.elapsed().as_secs_f64();
         if passe > 0 && dt < ms { ms = dt; }
         dernier = r;

@@ -10075,3 +10075,226 @@ profil experts en file
 ⏵ Mise à jour de REPRISE : état des huit chantiers et de ce qui reste
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='REPRISE.md'\ns=open(p).read()\ndebut = s.index(\"## 6. Chantiers ouverts, par ordre de valeur\")\nfin = s.index(\"## 7. Carte du dépôt\")\nnouveau = \"\"\"## 6. Les huit chantiers : où ils en sont\n\n| # | chanti … [4309 caractères tronqués]`
+
+  ```
+215
+0dc505a Rapport localite d'activation (idees PowerInfer mesurees) + etat des 8 chantiers
+  ```
+
+- **bash** `{"command": "sleep 300; tail -10 /tmp/seuil_rotation.log", "description": "Wait for the rotation series", "timeoutMs": 340000}`
+
+  ```
+### contexte 128 · RoPE simple
+[config] rotation : RoPE simple (contexte 128 ≤ 4096 initial ; YaRN ×32 prendrait le relais au-delà)
+=== perplexité 39.5249 sur 512 tokens (0 événements, 219.0 s) ===
+
+### contexte 512 · RoPE simple
+[config] rotation : RoPE simple (contexte 512 ≤ 4096 initial ; YaRN ×32 prendrait le relais au-delà)
+=== perplexité 49.7874 sur 512 tokens (0 événements, 381.6 s) ===
+
+### contexte 1024 · RoPE simple
+  ```
+
+### 🤖 Assistant
+
+⏵ Item 4 (suite) : GEMM par lots pour les experts 4 bits, préalable au regroupement MoE
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src && grep -n \"pub fn dot16\" -A 8 list.rs | head -14 && grep -n \"pub fn sommes32\" -A 6 list.rs | head -10 && grep -n \"pub fn expert\" -A 6 list.rs | head -10", "description": "Check the DenseQ4 batched API pieces"}`
+
+  ```
+1231:    pub fn dot16(&self, o: usize, x: &[i16], sx32: &[i32]) -> f32 {
+1232-        #[cfg(target_arch = "x86_64")]
+1233-        {
+1234-            if std::is_x86_feature_detected!("avx2") {
+1235-                if self.src == Source::Q4_K && sx32.len() * BLOC_Q4 >= self.n_in {
+1236-                    return unsafe { self.dot16_q4k_avx2(o, x, sx32) };
+1237-                }
+1238-                if self.src == Source::Q6_K {
+1239-                    return unsafe { self.dot16_q6k_avx2(o, x) };
+1379:pub fn sommes32(x: &[i16]) -> Vec<i32> {
+1380-    x.chunks(BLOC_Q4).map(|c| c.iter().map(|&v| v as i32).sum()).collect()
+1381-}
+1382-
+1383-/// Somme des produits de 32 valeurs 8 bits **non signées** par 32 i16.
+1384-/// `a` porte les valeurs 0–15, `b` les 16 suivantes.
+1385-#[cfg(target_arch = "x86_64")]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src && grep -n \"pub fn expert\" -A 10 list.rs | head -14; grep -n \"fn matvec_q4\" -A 12 model.rs | head -16", "description": "Check the expert view and matvec_q4 signature"}`
+
+  ```
+1125:    fn matvec_q4(pool: &mut Pool, m: &crate::list::DenseQ4, x: &[f32], out: &mut [f32],
+1126-                 levels: f32, thresh: f32, topk: usize, renorm: bool,
+1127-                 scratch: &mut Vec<f32>, biais: Option<&[f32]>) {
+1128-        let Some((sv, sx)) = Self::quant_scratch(x, levels, thresh, topk, renorm, scratch) else {
+1129-            for v in out[..m.n_out].iter_mut() { *v = 0.0; }
+1130-            return;
+1131-        };
+1132-        let mut xd = vec![0i32; x.len()];
+1133-        for (&i, &v) in sv.idx.iter().zip(sv.val.iter()) { xd[i as usize] = v; }
+1134-        let y = pool.matvec_dense_q4(m, &xd, sx);
+1135-        match biais {
+1136-            Some(b) => for o in 0..m.n_out { out[o] = y[o] + b[o]; },
+1137-            None => out[..m.n_out].copy_from_slice(&y[..m.n_out]),
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src && grep -n \"pub fn matvec_dense_q4\" -A 18 engine.rs | head -24; grep -n \"pub fn expert\" -A 12 list.rs | head -16", "description": "Read the q4 matvec and expert view"}`
+
+  ```
+500:    pub fn matvec_dense_q4(&mut self, d: &DenseQ4, x: &[i32], sx: f32) -> Vec<f32> {
+501-        self.ensure_width(d.n_out);
+502-        let sh = &self.shared;
+503-        sh.mode.store(4, Ordering::Relaxed);
+504-        sh.dense4.store(d as *const _ as *mut _, Ordering::Relaxed);
+505-        // Conversion i32 → i16 faite UNE fois par appel : les noyaux la
+506-        // referaient sinon pour chaque ligne de sortie (4 864 fois).
+507-        let xi: Vec<i16> = x.iter().map(|&v| v.clamp(-32767, 32767) as i16).collect();
+508-        let xs = crate::list::sommes32(&xi);
+509-        sh.xv16.store(xi.as_ptr() as *mut i16, Ordering::Relaxed);
+510-        sh.xs32.store(xs.as_ptr() as *mut i32, Ordering::Relaxed);
+511-        sh.sx.store(sx.to_bits() as usize, Ordering::Relaxed);
+512-        sh.outs.store(&mut self.outs as *mut Vec<Vec<f32>>, Ordering::Relaxed);
+513-        sh.done.store(0, Ordering::Relaxed);
+514-        sh.gen.fetch_add(1, Ordering::Release);
+515-        while sh.done.load(Ordering::Acquire) != self.n { std::hint::spin_loop(); }
+516-        let mut out = vec![0f32; d.n_out];
+517-        for w in &self.outs {
+518-            for (o, &v) in out.iter_mut().zip(w.iter()) 
+… [12 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Item 7 (suite) : noyau Q4_K warp par ligne (toute la famille Qwen est dans ce format)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src && sed -n '/fn dot_source_q4k/,/^    }/p' list.rs | head -45", "description": "Read the Q4_K CPU dot for the layout"}`
+
+  ```
+fn dot_source_q4k(&self, o: usize, x: &[i32]) -> f32 {
+        let t = crate::gguf::TAILLE_Q4K;
+        let mut sum = 0f32;
+        for sup in 0..self.nb_ligne {
+            let p = unsafe { self.base.add((o * self.nb_ligne + sup) * t) };
+            let b = unsafe { std::slice::from_raw_parts(p, t) };
+            let d = crate::gguf::Gguf::f16_to_f32(u16::from_le_bytes([b[0], b[1]]));
+            let dmin = crate::gguf::Gguf::f16_to_f32(u16::from_le_bytes([b[2], b[3]]));
+            for g in 0..4usize {
+                let (s0, m0) = crate::gguf::echelle_min_q4k(&b[4..16], 2 * g);
+                let (s1, m1) = crate::gguf::echelle_min_q4k(&b[4..16], 2 * g + 1);
+                for &(sc, mn, decal) in &[(s0, m0, 0usize), (s1, m1, 32usize)] {
+                    let base_x = sup * 256 + g * 64 + decal;
+                    let mut sq = 0i32;
+                    let mut sx = 0i32;
+                    for l in 0..32 {
+                        let octet = b[16 + g * 32 + l] as i32;
+                        let q = if decal == 0 { octet & 15 } else { octet >> 4 };
+                        sq += q * x[base_x + l];
+                        sx += x[base_x + l];
+                    }
+          
+… [134 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src && grep -n \"pub fn echelle_min_q4k\" -A 22 gguf.rs && grep -n \"TAILLE_Q4K\" gguf.rs | head -3", "description": "Read the Q4_K scale unpacking"}`
+
+  ```
+69:pub fn echelle_min_q4k(scales: &[u8], j: usize) -> (u8, u8) {
+70-    if j < 4 {
+71-        (scales[j] & 63, scales[j + 4] & 63)
+72-    } else {
+73-        ((scales[j + 4] & 0x0F) | ((scales[j - 4] >> 6) << 4),
+74-         (scales[j + 4] >> 4) | ((scales[j] >> 6) << 4))
+75-    }
+76-}
+77-pub const GGML_Q4_1: u32 = 3;
+78-pub const GGML_Q8_0: u32 = 8;
+79-
+80-/// Pointeur pré-résolu vers les lignes d'un tenseur quantifié (Q8_0 ou Q4_0).
+81-pub struct Q8View {
+82-    pub base: usize,
+83-    pub n_cols: usize,
+84-    pub nb: usize,
+85-    pub q4: bool,
+86-    /// Type ggml d'origine : la tête de sortie peut être Q8_0, Q4_0 ou Q4_K
+87-    /// selon le modèle, et se lit **en place** dans les trois cas.
+88-    pub ttype: u32,
+89-}
+90-
+91-pub struct Gguf {
+61:pub const TAILLE_Q4K: usize = 144;
+340:                    let p = base + (row * ns + sup) * TAILLE_Q4K;
+517:                let p = v.base + (row * ns + sup) * TAILLE_Q4K;
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/gpu && python3 - <<'PY'\np='qtrinet_gpu.cu'\ns=open(p).read()\ns=s.replace(\"\"\"}  // extern \"C\\\"\"\"\",\n\"\"\"// ---------------------------------------------------------------------------\n// Q4_K (toute la famille Q … [3003 caractères tronqués]`
+
+  ```
+qtrinet_gpu.ptx régénéré (2014 lignes)
+noyaux exportés : 6
+6
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src && python3 - <<'PY'\np='gpu.rs'\ns=open(p).read()\ns=s.replace(\"\"\"    f_mxfp4_warp: *mut c_void,\"\"\",\n\"\"\"    f_mxfp4_warp: *mut c_void,\n    f_q4k_warp: *mut c_void,\"\"\",1)\ns=s.replace(\"\"\"            let  … [3740 caractères tronqués]`
+
+  ```
+BUILD
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src && python3 - <<'PY'\np='main.rs'\ns=open(p).read()\ns=s.replace(\"\"\"    let mx = g.mxfp4_blocks(&opt.matrix).is_some();\"\"\",\n\"\"\"    let mx = g.mxfp4_blocks(&opt.matrix).is_some();\n    if !mx && opt.matrix != \" … [3062 caractères tronqués]`
+
+  ```
+error[E0599]: no method named `q4_k_blocks` found for struct `Gguf` in the current scope
+   --> src/main.rs:784:14
+    |
+784 |         && g.q4_k_blocks(&opt.matrix).is_some() {
+    |              ^^^^^^^^^^^
+    |
+   ::: src/gguf.rs:91:1
+--
+error[E0599]: no method named `q4_k_blocks` found for reference `&Gguf` in the current scope
+   --> src/main.rs:938:31
+    |
+938 |     let Some((blocs, nb)) = g.q4_k_blocks(nom) else { println!("pas une matrice Q4_K"); return };
+    |                               ^^^^^^^^^^^
+    |
+help: there is a method `q4k_blocks` with a similar name
+--
+error: could not compile `qtrinet-core` (bin "qtrinet-core") due to 2 previous errors; 8 warnings emitted
+BUILD
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src && sed -i 's/g\\.q4_k_blocks(/g.q4k_blocks(/g' main.rs && cd .. && cargo build --release 2>&1 | grep -E \"^error\" -A 6 | head -15; echo BUILD; cd .. && timeout 300 env QT_GPU=1 ./qtrinet-core/target/release/qtrinet-cor … [222 caractères tronqués]`
+
+  ```
+error[E0382]: borrow of moved value: `opt`
+   --> src/main.rs:785:35
+    |
+773 | fn run_gpu_banc(opt: Options) {
+    |                 --- move occurs because `opt` has type `Options`, which does not implement the `Copy` trait
+...
+785 |         return banc_q4k(opt, &g, &opt.matrix.clone(), threads);
+--
+error: could not compile `qtrinet-core` (bin "qtrinet-core") due to 1 previous error; 8 warnings emitted
+BUILD
+
+thread 'main' (4039190) panicked at src/main.rs:791:40:
+tête Q8_0 requise pour ce banc
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+timeout: the monitored command dumped core
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src && python3 - <<'PY'\np='main.rs'\ns=open(p).read()\ns=s.replace(\"\"\"    let mx = g.mxfp4_blocks(&opt.matrix).is_some();\n    if !mx && opt.matrix != \"output.weight\" && opt.matrix != \"token_embd.weight\"\n        && … [819 caractères tronqués]`
+
+  ```
+BUILD
+matrice Q4_K blk.0.ffn_gate.weight : 8960 × 1536 · 7.7 Mo · 6 super-blocs de 256
+  CPU  8 fils :     1.2 ms  (   6.6 Go/s)
+  GPU 1
+  GPU  warp par ligne :     0.5 ms  (  14.6 Go/s)  écart max +3.98e-7
+  ```
+
+### 🤖 Assistant
+
+⏵ Noyau Q4_K validé (écart 4e-7, 2,2× le CPU) — l'item 7 « 4 bits » est complet. Je commite
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='REPRISE.md'\ns=open(p).read()\ns=s.replace(\"\"\"| 7 | noyaux GPU | **presque** | warp par ligne **fait et mesuré** (tête : 1,8 ms contre 30 ms CPU, PPL identique) ; MXFP4 warp **fait** (0,1 ms, écart 0,00e0 au C … [1848 caractères tronqués]`

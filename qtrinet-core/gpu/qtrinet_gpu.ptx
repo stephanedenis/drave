@@ -1159,3 +1159,856 @@ $L__BB4_15:
 	ret;
                                         // -- End function
 }
+	// .globl	proj_q4k_warp           // -- Begin function proj_q4k_warp
+.visible .entry proj_q4k_warp(
+	.param .u64 .ptr .align 1 proj_q4k_warp_param_0,
+	.param .u64 .ptr .align 1 proj_q4k_warp_param_1,
+	.param .u64 .ptr .align 1 proj_q4k_warp_param_2,
+	.param .u32 proj_q4k_warp_param_3,
+	.param .u32 proj_q4k_warp_param_4,
+	.param .f32 proj_q4k_warp_param_5
+)                                       // @proj_q4k_warp
+{
+	.reg .pred 	%p<22>;
+	.reg .b16 	%rs<117>;
+	.reg .b32 	%r<458>;
+	.reg .b64 	%rd<63>;
+
+// %bb.0:
+	ld.param.b32 	%r27, [proj_q4k_warp_param_4];
+	ld.param.b32 	%r26, [proj_q4k_warp_param_3];
+	ld.param.b64 	%rd9, [proj_q4k_warp_param_0];
+	ld.param.b64 	%rd10, [proj_q4k_warp_param_1];
+	cvta.to.global.u64 	%rd1, %rd10;
+	cvta.to.global.u64 	%rd2, %rd9;
+	ld.param.b64 	%rd11, [proj_q4k_warp_param_2];
+	cvta.to.global.u64 	%rd3, %rd11;
+	shl.b32 	%r1, %r27, 8;
+	mov.u32 	%r2, %tid.x;
+	shr.u32 	%r4, %r2, 5;
+	mov.u32 	%r5, %ntid.x;
+	shr.u32 	%r6, %r5, 5;
+	setp.ge.s32 	%p1, %r2, %r1;
+	@%p1 bra 	$L__BB5_3;
+// %bb.1:
+	mov.b64 	%rd14, xs;
+	mov.b32 	%r435, %r2;
+$L__BB5_2:                              // =>This Inner Loop Header: Depth=1
+	mul.wide.s32 	%rd12, %r435, 4;
+	add.s64 	%rd13, %rd1, %rd12;
+	ld.global.nc.b32 	%r29, [%rd13];
+	add.s64 	%rd15, %rd14, %rd12;
+	st.shared.b32 	[%rd15], %r29;
+	add.s32 	%r435, %r435, %r5;
+	setp.lt.s32 	%p2, %r435, %r1;
+	@%p2 bra 	$L__BB5_2;
+$L__BB5_3:
+	bar.sync 	0;
+	mov.u32 	%r31, %ctaid.x;
+	mad.lo.s32 	%r436, %r6, %r31, %r4;
+	setp.ge.s32 	%p3, %r436, %r26;
+	@%p3 bra 	$L__BB5_41;
+// %bb.4:
+	ld.param.b32 	%r28, [proj_q4k_warp_param_5];
+	and.b32 	%r3, %r2, 31;
+	mov.u32 	%r30, %nctaid.x;
+	mul.lo.s32 	%r7, %r30, %r5;
+	shr.u32 	%r8, %r7, 5;
+	cvt.s64.s32 	%rd4, %r27;
+	mul.wide.s32 	%rd16, %r27, %r436;
+	cvt.u64.u32 	%rd17, %r2;
+	and.b64 	%rd18, %rd17, 31;
+	add.s64 	%rd19, %rd16, %rd18;
+	mad.lo.s64 	%rd20, %rd19, 144, %rd2;
+	add.s64 	%rd42, %rd20, 23;
+	cvt.u64.u32 	%rd21, %r7;
+	shr.u64 	%rd22, %rd21, 5;
+	mul.lo.s64 	%rd23, %rd22, %rd4;
+	mul.lo.s64 	%rd5, %rd23, 144;
+	shl.b32 	%r9, %r3, 8;
+	add.s64 	%rd41, %rd20, 55;
+	add.s64 	%rd40, %rd20, 87;
+	add.s64 	%rd39, %rd20, 119;
+	setp.ge.s32 	%p4, %r3, %r27;
+	setp.eq.b32 	%p20, %r3, 0;
+	bra.uni 	$L__BB5_5;
+$L__BB5_38:                             //   in Loop: Header=BB5_5 Depth=1
+	mov.b32 	%r421, 16;
+	// begin inline asm
+	shfl.sync.down.b32 %r420, %r438, %r421, 0x1f, 0xffffffff;
+	// end inline asm
+	add.f32 	%r423, %r438, %r420;
+	mov.b32 	%r424, 8;
+	// begin inline asm
+	shfl.sync.down.b32 %r422, %r423, %r424, 0x1f, 0xffffffff;
+	// end inline asm
+	add.f32 	%r426, %r423, %r422;
+	mov.b32 	%r427, 4;
+	// begin inline asm
+	shfl.sync.down.b32 %r425, %r426, %r427, 0x1f, 0xffffffff;
+	// end inline asm
+	add.f32 	%r429, %r426, %r425;
+	mov.b32 	%r430, 2;
+	// begin inline asm
+	shfl.sync.down.b32 %r428, %r429, %r430, 0x1f, 0xffffffff;
+	// end inline asm
+	add.f32 	%r432, %r429, %r428;
+	mov.b32 	%r433, 1;
+	// begin inline asm
+	shfl.sync.down.b32 %r431, %r432, %r433, 0x1f, 0xffffffff;
+	// end inline asm
+	@%p20 bra 	$L__BB5_39;
+$L__BB5_40:                             //   in Loop: Header=BB5_5 Depth=1
+	add.s32 	%r436, %r436, %r8;
+	add.s64 	%rd42, %rd42, %rd5;
+	add.s64 	%rd41, %rd41, %rd5;
+	add.s64 	%rd40, %rd40, %rd5;
+	add.s64 	%rd39, %rd39, %rd5;
+	setp.lt.s32 	%p21, %r436, %r26;
+	@!%p21 bra 	$L__BB5_41;
+$L__BB5_5:                              // =>This Loop Header: Depth=1
+                                        //     Child Loop BB5_7 Depth 2
+                                        //       Child Loop BB5_22 Depth 3
+                                        //       Child Loop BB5_24 Depth 3
+                                        //       Child Loop BB5_26 Depth 3
+                                        //       Child Loop BB5_28 Depth 3
+                                        //       Child Loop BB5_30 Depth 3
+                                        //       Child Loop BB5_32 Depth 3
+                                        //       Child Loop BB5_34 Depth 3
+                                        //       Child Loop BB5_36 Depth 3
+	mov.b32 	%r438, 0f00000000;
+	@%p4 bra 	$L__BB5_38;
+// %bb.6:                               //   in Loop: Header=BB5_5 Depth=1
+	cvt.s64.s32 	%rd24, %r436;
+	mul.lo.s64 	%rd6, %rd24, %rd4;
+	mov.b32 	%r438, 0f00000000;
+	mov.b64 	%rd43, %rd39;
+	mov.b64 	%rd44, %rd40;
+	mov.b64 	%rd45, %rd41;
+	mov.b32 	%r437, %r9;
+	mov.b64 	%rd46, %rd42;
+	mov.b32 	%r439, %r3;
+$L__BB5_7:                              //   Parent Loop BB5_5 Depth=1
+                                        // =>  This Loop Header: Depth=2
+                                        //       Child Loop BB5_22 Depth 3
+                                        //       Child Loop BB5_24 Depth 3
+                                        //       Child Loop BB5_26 Depth 3
+                                        //       Child Loop BB5_28 Depth 3
+                                        //       Child Loop BB5_30 Depth 3
+                                        //       Child Loop BB5_32 Depth 3
+                                        //       Child Loop BB5_34 Depth 3
+                                        //       Child Loop BB5_36 Depth 3
+	cvt.u64.u32 	%rd28, %r439;
+	add.s64 	%rd29, %rd6, %rd28;
+	mad.lo.s64 	%rd8, %rd29, 144, %rd2;
+	ld.global.nc.b16 	%r11, [%rd8];
+	shr.u32 	%r12, %r11, 15;
+	bfe.u32 	%r13, %r11, 10, 5;
+	setp.eq.b32 	%p5, %r13, 31;
+	@%p5 bra 	$L__BB5_12;
+// %bb.8:                               //   in Loop: Header=BB5_7 Depth=2
+	and.b32 	%r14, %r11, 1023;
+	setp.ne.b32 	%p6, %r13, 0;
+	@%p6 bra 	$L__BB5_13;
+// %bb.9:                               //   in Loop: Header=BB5_7 Depth=2
+	setp.eq.b32 	%p7, %r14, 0;
+	@%p7 bra 	$L__BB5_11;
+// %bb.10:                              //   in Loop: Header=BB5_7 Depth=2
+	clz.b32 	%r35, %r14;
+	xor.b32 	%r36, %r35, 31;
+	sub.s32 	%r37, 9, %r36;
+	shl.b32 	%r38, %r14, %r37;
+	shl.b32 	%r39, %r12, 31;
+	shl.b32 	%r40, %r37, 23;
+	shl.b32 	%r41, %r38, 14;
+	and.b32 	%r42, %r41, 8372224;
+	or.b32 	%r43, %r42, %r39;
+	sub.s32 	%r44, %r43, %r40;
+	add.s32 	%r440, %r44, 939524096;
+	bra.uni 	$L__BB5_14;
+$L__BB5_12:                             //   in Loop: Header=BB5_7 Depth=2
+	shl.b32 	%r32, %r12, 31;
+	shl.b32 	%r33, %r11, 13;
+	or.b32 	%r34, %r32, %r33;
+	or.b32 	%r440, %r34, 2139095040;
+	bra.uni 	$L__BB5_14;
+$L__BB5_13:                             //   in Loop: Header=BB5_7 Depth=2
+	shl.b32 	%r45, %r12, 31;
+	shl.b32 	%r46, %r13, 23;
+	or.b32 	%r47, %r46, %r45;
+	shl.b32 	%r48, %r14, 13;
+	or.b32 	%r49, %r47, %r48;
+	add.s32 	%r440, %r49, 939524096;
+	bra.uni 	$L__BB5_14;
+$L__BB5_11:                             //   in Loop: Header=BB5_7 Depth=2
+	shl.b32 	%r440, %r12, 31;
+$L__BB5_14:                             //   in Loop: Header=BB5_7 Depth=2
+	mul.wide.u32 	%rd25, %r437, 4;
+	mov.b64 	%rd26, xs;
+	add.s64 	%rd27, %rd26, %rd25;
+	ld.global.nc.b16 	%r15, [%rd8+2];
+	shr.u32 	%r16, %r15, 15;
+	bfe.u32 	%r17, %r15, 10, 5;
+	setp.eq.b32 	%p8, %r17, 31;
+	@%p8 bra 	$L__BB5_19;
+// %bb.15:                              //   in Loop: Header=BB5_7 Depth=2
+	and.b32 	%r18, %r15, 1023;
+	setp.ne.b32 	%p9, %r17, 0;
+	@%p9 bra 	$L__BB5_20;
+// %bb.16:                              //   in Loop: Header=BB5_7 Depth=2
+	setp.eq.b32 	%p10, %r18, 0;
+	@%p10 bra 	$L__BB5_18;
+// %bb.17:                              //   in Loop: Header=BB5_7 Depth=2
+	clz.b32 	%r53, %r18;
+	xor.b32 	%r54, %r53, 31;
+	sub.s32 	%r55, 9, %r54;
+	shl.b32 	%r56, %r18, %r55;
+	shl.b32 	%r57, %r16, 31;
+	shl.b32 	%r58, %r55, 23;
+	shl.b32 	%r59, %r56, 14;
+	and.b32 	%r60, %r59, 8372224;
+	or.b32 	%r61, %r60, %r57;
+	sub.s32 	%r62, %r61, %r58;
+	add.s32 	%r441, %r62, 939524096;
+	bra.uni 	$L__BB5_21;
+$L__BB5_19:                             //   in Loop: Header=BB5_7 Depth=2
+	shl.b32 	%r50, %r16, 31;
+	shl.b32 	%r51, %r15, 13;
+	or.b32 	%r52, %r50, %r51;
+	or.b32 	%r441, %r52, 2139095040;
+	bra.uni 	$L__BB5_21;
+$L__BB5_20:                             //   in Loop: Header=BB5_7 Depth=2
+	shl.b32 	%r63, %r16, 31;
+	shl.b32 	%r64, %r17, 23;
+	or.b32 	%r65, %r64, %r63;
+	shl.b32 	%r66, %r18, 13;
+	or.b32 	%r67, %r65, %r66;
+	add.s32 	%r441, %r67, 939524096;
+	bra.uni 	$L__BB5_21;
+$L__BB5_18:                             //   in Loop: Header=BB5_7 Depth=2
+	shl.b32 	%r441, %r16, 31;
+$L__BB5_21:                             //   in Loop: Header=BB5_7 Depth=2
+	add.s64 	%rd59, %rd27, 924;
+	add.s64 	%rd57, %rd27, 796;
+	add.s64 	%rd55, %rd27, 668;
+	add.s64 	%rd53, %rd27, 540;
+	add.s64 	%rd51, %rd27, 412;
+	add.s64 	%rd49, %rd27, 284;
+	add.s64 	%rd47, %rd27, 156;
+	add.s64 	%rd61, %rd27, 16;
+	ld.global.nc.b8 	%rs1, [%rd8+4];
+	and.b16 	%rs2, %rs1, 63;
+	ld.global.nc.b8 	%rs3, [%rd8+8];
+	and.b16 	%rs4, %rs3, 63;
+	mov.b32 	%r456, 0;
+	mov.b64 	%rd62, 0;
+	mov.b32 	%r457, %r456;
+$L__BB5_22:                             //   Parent Loop BB5_5 Depth=1
+                                        //     Parent Loop BB5_7 Depth=2
+                                        // =>    This Inner Loop Header: Depth=3
+	.pragma "nounroll";
+	add.s64 	%rd30, %rd46, %rd62;
+	ld.global.nc.b8 	%r68, [%rd30+-7];
+	and.b32 	%r69, %r68, 15;
+	ld.shared.b32 	%r70, [%rd61+-16];
+	mad.lo.s32 	%r71, %r70, %r69, %r457;
+	add.s32 	%r72, %r70, %r456;
+	ld.global.nc.b8 	%r73, [%rd30+-6];
+	and.b32 	%r74, %r73, 15;
+	ld.shared.b32 	%r75, [%rd61+-12];
+	mad.lo.s32 	%r76, %r75, %r74, %r71;
+	add.s32 	%r77, %r75, %r72;
+	ld.global.nc.b8 	%r78, [%rd30+-5];
+	and.b32 	%r79, %r78, 15;
+	ld.shared.b32 	%r80, [%rd61+-8];
+	mad.lo.s32 	%r81, %r80, %r79, %r76;
+	add.s32 	%r82, %r80, %r77;
+	ld.global.nc.b8 	%r83, [%rd30+-4];
+	and.b32 	%r84, %r83, 15;
+	ld.shared.b32 	%r85, [%rd61+-4];
+	mad.lo.s32 	%r86, %r85, %r84, %r81;
+	add.s32 	%r87, %r85, %r82;
+	ld.global.nc.b8 	%r88, [%rd30+-3];
+	and.b32 	%r89, %r88, 15;
+	ld.shared.b32 	%r90, [%rd61];
+	mad.lo.s32 	%r91, %r90, %r89, %r86;
+	add.s32 	%r92, %r90, %r87;
+	ld.global.nc.b8 	%r93, [%rd30+-2];
+	and.b32 	%r94, %r93, 15;
+	ld.shared.b32 	%r95, [%rd61+4];
+	mad.lo.s32 	%r96, %r95, %r94, %r91;
+	add.s32 	%r97, %r95, %r92;
+	ld.global.nc.b8 	%r98, [%rd30+-1];
+	and.b32 	%r99, %r98, 15;
+	ld.shared.b32 	%r100, [%rd61+8];
+	mad.lo.s32 	%r101, %r100, %r99, %r96;
+	add.s32 	%r102, %r100, %r97;
+	ld.global.nc.b8 	%r103, [%rd30];
+	and.b32 	%r104, %r103, 15;
+	ld.shared.b32 	%r105, [%rd61+12];
+	mad.lo.s32 	%r457, %r105, %r104, %r101;
+	add.s32 	%r456, %r105, %r102;
+	add.s64 	%rd62, %rd62, 8;
+	cvt.u32.u64 	%r106, %rd62;
+	add.s64 	%rd61, %rd61, 32;
+	setp.eq.b32 	%p11, %r106, 32;
+	@!%p11 bra 	$L__BB5_22;
+// %bb.23:                              //   in Loop: Header=BB5_7 Depth=2
+	cvt.rn.f32.u16 	%r107, %rs2;
+	mul.f32 	%r108, %r440, %r107;
+	cvt.rn.f32.s32 	%r109, %r457;
+	cvt.rn.f32.u16 	%r110, %rs4;
+	mul.f32 	%r111, %r441, %r110;
+	cvt.rn.f32.s32 	%r112, %r456;
+	mul.f32 	%r113, %r111, %r112;
+	neg.f32 	%r114, %r113;
+	fma.rn.f32 	%r115, %r108, %r109, %r114;
+	add.f32 	%r19, %r438, %r115;
+	ld.global.nc.b8 	%rs5, [%rd8+5];
+	and.b16 	%rs6, %rs5, 63;
+	ld.global.nc.b8 	%rs7, [%rd8+9];
+	and.b16 	%rs8, %rs7, 63;
+	mov.b32 	%r442, 0;
+	mov.b64 	%rd48, 0;
+	mov.b32 	%r443, %r442;
+$L__BB5_24:                             //   Parent Loop BB5_5 Depth=1
+                                        //     Parent Loop BB5_7 Depth=2
+                                        // =>    This Inner Loop Header: Depth=3
+	.pragma "nounroll";
+	add.s64 	%rd31, %rd46, %rd48;
+	ld.global.nc.b8 	%rs25, [%rd31+-7];
+	shr.u16 	%rs26, %rs25, 4;
+	cvt.u32.u16 	%r116, %rs26;
+	ld.shared.b32 	%r117, [%rd47+-28];
+	mad.lo.s32 	%r118, %r117, %r116, %r443;
+	add.s32 	%r119, %r117, %r442;
+	ld.global.nc.b8 	%rs27, [%rd31+-6];
+	shr.u16 	%rs28, %rs27, 4;
+	cvt.u32.u16 	%r120, %rs28;
+	ld.shared.b32 	%r121, [%rd47+-24];
+	mad.lo.s32 	%r122, %r121, %r120, %r118;
+	add.s32 	%r123, %r121, %r119;
+	ld.global.nc.b8 	%rs29, [%rd31+-5];
+	shr.u16 	%rs30, %rs29, 4;
+	cvt.u32.u16 	%r124, %rs30;
+	ld.shared.b32 	%r125, [%rd47+-20];
+	mad.lo.s32 	%r126, %r125, %r124, %r122;
+	add.s32 	%r127, %r125, %r123;
+	ld.global.nc.b8 	%rs31, [%rd31+-4];
+	shr.u16 	%rs32, %rs31, 4;
+	cvt.u32.u16 	%r128, %rs32;
+	ld.shared.b32 	%r129, [%rd47+-16];
+	mad.lo.s32 	%r130, %r129, %r128, %r126;
+	add.s32 	%r131, %r129, %r127;
+	ld.global.nc.b8 	%rs33, [%rd31+-3];
+	shr.u16 	%rs34, %rs33, 4;
+	cvt.u32.u16 	%r132, %rs34;
+	ld.shared.b32 	%r133, [%rd47+-12];
+	mad.lo.s32 	%r134, %r133, %r132, %r130;
+	add.s32 	%r135, %r133, %r131;
+	ld.global.nc.b8 	%rs35, [%rd31+-2];
+	shr.u16 	%rs36, %rs35, 4;
+	cvt.u32.u16 	%r136, %rs36;
+	ld.shared.b32 	%r137, [%rd47+-8];
+	mad.lo.s32 	%r138, %r137, %r136, %r134;
+	add.s32 	%r139, %r137, %r135;
+	ld.global.nc.b8 	%rs37, [%rd31+-1];
+	shr.u16 	%rs38, %rs37, 4;
+	cvt.u32.u16 	%r140, %rs38;
+	ld.shared.b32 	%r141, [%rd47+-4];
+	mad.lo.s32 	%r142, %r141, %r140, %r138;
+	add.s32 	%r143, %r141, %r139;
+	ld.global.nc.b8 	%rs39, [%rd31];
+	shr.u16 	%rs40, %rs39, 4;
+	cvt.u32.u16 	%r144, %rs40;
+	ld.shared.b32 	%r145, [%rd47];
+	mad.lo.s32 	%r443, %r145, %r144, %r142;
+	add.s32 	%r442, %r145, %r143;
+	add.s64 	%rd48, %rd48, 8;
+	cvt.u32.u64 	%r146, %rd48;
+	add.s64 	%rd47, %rd47, 32;
+	setp.ne.b32 	%p12, %r146, 32;
+	@%p12 bra 	$L__BB5_24;
+// %bb.25:                              //   in Loop: Header=BB5_7 Depth=2
+	cvt.rn.f32.u16 	%r147, %rs6;
+	mul.f32 	%r148, %r440, %r147;
+	cvt.rn.f32.s32 	%r149, %r443;
+	cvt.rn.f32.u16 	%r150, %rs8;
+	mul.f32 	%r151, %r441, %r150;
+	cvt.rn.f32.s32 	%r152, %r442;
+	mul.f32 	%r153, %r151, %r152;
+	neg.f32 	%r154, %r153;
+	fma.rn.f32 	%r155, %r148, %r149, %r154;
+	add.f32 	%r20, %r19, %r155;
+	ld.global.nc.b8 	%rs9, [%rd8+6];
+	and.b16 	%rs10, %rs9, 63;
+	ld.global.nc.b8 	%rs11, [%rd8+10];
+	and.b16 	%rs12, %rs11, 63;
+	mov.b32 	%r444, 0;
+	mov.b64 	%rd50, 0;
+	mov.b32 	%r445, %r444;
+$L__BB5_26:                             //   Parent Loop BB5_5 Depth=1
+                                        //     Parent Loop BB5_7 Depth=2
+                                        // =>    This Inner Loop Header: Depth=3
+	.pragma "nounroll";
+	add.s64 	%rd32, %rd45, %rd50;
+	ld.global.nc.b8 	%r156, [%rd32+-7];
+	and.b32 	%r157, %r156, 15;
+	ld.shared.b32 	%r158, [%rd49+-28];
+	mad.lo.s32 	%r159, %r158, %r157, %r445;
+	add.s32 	%r160, %r158, %r444;
+	ld.global.nc.b8 	%r161, [%rd32+-6];
+	and.b32 	%r162, %r161, 15;
+	ld.shared.b32 	%r163, [%rd49+-24];
+	mad.lo.s32 	%r164, %r163, %r162, %r159;
+	add.s32 	%r165, %r163, %r160;
+	ld.global.nc.b8 	%r166, [%rd32+-5];
+	and.b32 	%r167, %r166, 15;
+	ld.shared.b32 	%r168, [%rd49+-20];
+	mad.lo.s32 	%r169, %r168, %r167, %r164;
+	add.s32 	%r170, %r168, %r165;
+	ld.global.nc.b8 	%r171, [%rd32+-4];
+	and.b32 	%r172, %r171, 15;
+	ld.shared.b32 	%r173, [%rd49+-16];
+	mad.lo.s32 	%r174, %r173, %r172, %r169;
+	add.s32 	%r175, %r173, %r170;
+	ld.global.nc.b8 	%r176, [%rd32+-3];
+	and.b32 	%r177, %r176, 15;
+	ld.shared.b32 	%r178, [%rd49+-12];
+	mad.lo.s32 	%r179, %r178, %r177, %r174;
+	add.s32 	%r180, %r178, %r175;
+	ld.global.nc.b8 	%r181, [%rd32+-2];
+	and.b32 	%r182, %r181, 15;
+	ld.shared.b32 	%r183, [%rd49+-8];
+	mad.lo.s32 	%r184, %r183, %r182, %r179;
+	add.s32 	%r185, %r183, %r180;
+	ld.global.nc.b8 	%r186, [%rd32+-1];
+	and.b32 	%r187, %r186, 15;
+	ld.shared.b32 	%r188, [%rd49+-4];
+	mad.lo.s32 	%r189, %r188, %r187, %r184;
+	add.s32 	%r190, %r188, %r185;
+	ld.global.nc.b8 	%r191, [%rd32];
+	and.b32 	%r192, %r191, 15;
+	ld.shared.b32 	%r193, [%rd49];
+	mad.lo.s32 	%r445, %r193, %r192, %r189;
+	add.s32 	%r444, %r193, %r190;
+	add.s64 	%rd50, %rd50, 8;
+	cvt.u32.u64 	%r194, %rd50;
+	add.s64 	%rd49, %rd49, 32;
+	setp.ne.b32 	%p13, %r194, 32;
+	@%p13 bra 	$L__BB5_26;
+// %bb.27:                              //   in Loop: Header=BB5_7 Depth=2
+	cvt.rn.f32.u16 	%r195, %rs10;
+	mul.f32 	%r196, %r440, %r195;
+	cvt.rn.f32.s32 	%r197, %r445;
+	cvt.rn.f32.u16 	%r198, %rs12;
+	mul.f32 	%r199, %r441, %r198;
+	cvt.rn.f32.s32 	%r200, %r444;
+	mul.f32 	%r201, %r199, %r200;
+	neg.f32 	%r202, %r201;
+	fma.rn.f32 	%r203, %r196, %r197, %r202;
+	add.f32 	%r21, %r20, %r203;
+	ld.global.nc.b8 	%rs13, [%rd8+7];
+	and.b16 	%rs14, %rs13, 63;
+	ld.global.nc.b8 	%rs15, [%rd8+11];
+	and.b16 	%rs16, %rs15, 63;
+	mov.b32 	%r446, 0;
+	mov.b64 	%rd52, 0;
+	mov.b32 	%r447, %r446;
+$L__BB5_28:                             //   Parent Loop BB5_5 Depth=1
+                                        //     Parent Loop BB5_7 Depth=2
+                                        // =>    This Inner Loop Header: Depth=3
+	.pragma "nounroll";
+	add.s64 	%rd33, %rd45, %rd52;
+	ld.global.nc.b8 	%rs41, [%rd33+-7];
+	shr.u16 	%rs42, %rs41, 4;
+	cvt.u32.u16 	%r204, %rs42;
+	ld.shared.b32 	%r205, [%rd51+-28];
+	mad.lo.s32 	%r206, %r205, %r204, %r447;
+	add.s32 	%r207, %r205, %r446;
+	ld.global.nc.b8 	%rs43, [%rd33+-6];
+	shr.u16 	%rs44, %rs43, 4;
+	cvt.u32.u16 	%r208, %rs44;
+	ld.shared.b32 	%r209, [%rd51+-24];
+	mad.lo.s32 	%r210, %r209, %r208, %r206;
+	add.s32 	%r211, %r209, %r207;
+	ld.global.nc.b8 	%rs45, [%rd33+-5];
+	shr.u16 	%rs46, %rs45, 4;
+	cvt.u32.u16 	%r212, %rs46;
+	ld.shared.b32 	%r213, [%rd51+-20];
+	mad.lo.s32 	%r214, %r213, %r212, %r210;
+	add.s32 	%r215, %r213, %r211;
+	ld.global.nc.b8 	%rs47, [%rd33+-4];
+	shr.u16 	%rs48, %rs47, 4;
+	cvt.u32.u16 	%r216, %rs48;
+	ld.shared.b32 	%r217, [%rd51+-16];
+	mad.lo.s32 	%r218, %r217, %r216, %r214;
+	add.s32 	%r219, %r217, %r215;
+	ld.global.nc.b8 	%rs49, [%rd33+-3];
+	shr.u16 	%rs50, %rs49, 4;
+	cvt.u32.u16 	%r220, %rs50;
+	ld.shared.b32 	%r221, [%rd51+-12];
+	mad.lo.s32 	%r222, %r221, %r220, %r218;
+	add.s32 	%r223, %r221, %r219;
+	ld.global.nc.b8 	%rs51, [%rd33+-2];
+	shr.u16 	%rs52, %rs51, 4;
+	cvt.u32.u16 	%r224, %rs52;
+	ld.shared.b32 	%r225, [%rd51+-8];
+	mad.lo.s32 	%r226, %r225, %r224, %r222;
+	add.s32 	%r227, %r225, %r223;
+	ld.global.nc.b8 	%rs53, [%rd33+-1];
+	shr.u16 	%rs54, %rs53, 4;
+	cvt.u32.u16 	%r228, %rs54;
+	ld.shared.b32 	%r229, [%rd51+-4];
+	mad.lo.s32 	%r230, %r229, %r228, %r226;
+	add.s32 	%r231, %r229, %r227;
+	ld.global.nc.b8 	%rs55, [%rd33];
+	shr.u16 	%rs56, %rs55, 4;
+	cvt.u32.u16 	%r232, %rs56;
+	ld.shared.b32 	%r233, [%rd51];
+	mad.lo.s32 	%r447, %r233, %r232, %r230;
+	add.s32 	%r446, %r233, %r231;
+	add.s64 	%rd52, %rd52, 8;
+	cvt.u32.u64 	%r234, %rd52;
+	add.s64 	%rd51, %rd51, 32;
+	setp.ne.b32 	%p14, %r234, 32;
+	@%p14 bra 	$L__BB5_28;
+// %bb.29:                              //   in Loop: Header=BB5_7 Depth=2
+	cvt.rn.f32.u16 	%r235, %rs14;
+	mul.f32 	%r236, %r440, %r235;
+	cvt.rn.f32.s32 	%r237, %r447;
+	cvt.rn.f32.u16 	%r238, %rs16;
+	mul.f32 	%r239, %r441, %r238;
+	cvt.rn.f32.s32 	%r240, %r446;
+	mul.f32 	%r241, %r239, %r240;
+	neg.f32 	%r242, %r241;
+	fma.rn.f32 	%r243, %r236, %r237, %r242;
+	add.f32 	%r22, %r21, %r243;
+	ld.global.nc.b8 	%rs57, [%rd8+12];
+	and.b16 	%rs58, %rs57, 15;
+	shr.u16 	%rs59, %rs1, 2;
+	and.b16 	%rs60, %rs59, 48;
+	or.b16 	%rs17, %rs60, %rs58;
+	shr.u16 	%rs61, %rs57, 4;
+	shr.u16 	%rs62, %rs3, 2;
+	and.b16 	%rs63, %rs62, 48;
+	or.b16 	%rs18, %rs63, %rs61;
+	mov.b32 	%r448, 0;
+	mov.b64 	%rd54, 0;
+	mov.b32 	%r449, %r448;
+$L__BB5_30:                             //   Parent Loop BB5_5 Depth=1
+                                        //     Parent Loop BB5_7 Depth=2
+                                        // =>    This Inner Loop Header: Depth=3
+	.pragma "nounroll";
+	add.s64 	%rd34, %rd44, %rd54;
+	ld.global.nc.b8 	%r244, [%rd34+-7];
+	and.b32 	%r245, %r244, 15;
+	ld.shared.b32 	%r246, [%rd53+-28];
+	mad.lo.s32 	%r247, %r246, %r245, %r449;
+	add.s32 	%r248, %r246, %r448;
+	ld.global.nc.b8 	%r249, [%rd34+-6];
+	and.b32 	%r250, %r249, 15;
+	ld.shared.b32 	%r251, [%rd53+-24];
+	mad.lo.s32 	%r252, %r251, %r250, %r247;
+	add.s32 	%r253, %r251, %r248;
+	ld.global.nc.b8 	%r254, [%rd34+-5];
+	and.b32 	%r255, %r254, 15;
+	ld.shared.b32 	%r256, [%rd53+-20];
+	mad.lo.s32 	%r257, %r256, %r255, %r252;
+	add.s32 	%r258, %r256, %r253;
+	ld.global.nc.b8 	%r259, [%rd34+-4];
+	and.b32 	%r260, %r259, 15;
+	ld.shared.b32 	%r261, [%rd53+-16];
+	mad.lo.s32 	%r262, %r261, %r260, %r257;
+	add.s32 	%r263, %r261, %r258;
+	ld.global.nc.b8 	%r264, [%rd34+-3];
+	and.b32 	%r265, %r264, 15;
+	ld.shared.b32 	%r266, [%rd53+-12];
+	mad.lo.s32 	%r267, %r266, %r265, %r262;
+	add.s32 	%r268, %r266, %r263;
+	ld.global.nc.b8 	%r269, [%rd34+-2];
+	and.b32 	%r270, %r269, 15;
+	ld.shared.b32 	%r271, [%rd53+-8];
+	mad.lo.s32 	%r272, %r271, %r270, %r267;
+	add.s32 	%r273, %r271, %r268;
+	ld.global.nc.b8 	%r274, [%rd34+-1];
+	and.b32 	%r275, %r274, 15;
+	ld.shared.b32 	%r276, [%rd53+-4];
+	mad.lo.s32 	%r277, %r276, %r275, %r272;
+	add.s32 	%r278, %r276, %r273;
+	ld.global.nc.b8 	%r279, [%rd34];
+	and.b32 	%r280, %r279, 15;
+	ld.shared.b32 	%r281, [%rd53];
+	mad.lo.s32 	%r449, %r281, %r280, %r277;
+	add.s32 	%r448, %r281, %r278;
+	add.s64 	%rd54, %rd54, 8;
+	cvt.u32.u64 	%r282, %rd54;
+	add.s64 	%rd53, %rd53, 32;
+	setp.ne.b32 	%p15, %r282, 32;
+	@%p15 bra 	$L__BB5_30;
+// %bb.31:                              //   in Loop: Header=BB5_7 Depth=2
+	cvt.rn.f32.u16 	%r283, %rs17;
+	mul.f32 	%r284, %r440, %r283;
+	cvt.rn.f32.s32 	%r285, %r449;
+	cvt.rn.f32.u16 	%r286, %rs18;
+	mul.f32 	%r287, %r441, %r286;
+	cvt.rn.f32.s32 	%r288, %r448;
+	mul.f32 	%r289, %r287, %r288;
+	neg.f32 	%r290, %r289;
+	fma.rn.f32 	%r291, %r284, %r285, %r290;
+	add.f32 	%r23, %r22, %r291;
+	ld.global.nc.b8 	%rs64, [%rd8+13];
+	and.b16 	%rs65, %rs64, 15;
+	shr.u16 	%rs66, %rs5, 2;
+	and.b16 	%rs67, %rs66, 48;
+	or.b16 	%rs19, %rs67, %rs65;
+	shr.u16 	%rs68, %rs64, 4;
+	shr.u16 	%rs69, %rs7, 2;
+	and.b16 	%rs70, %rs69, 48;
+	or.b16 	%rs20, %rs70, %rs68;
+	mov.b32 	%r450, 0;
+	mov.b64 	%rd56, 0;
+	mov.b32 	%r451, %r450;
+$L__BB5_32:                             //   Parent Loop BB5_5 Depth=1
+                                        //     Parent Loop BB5_7 Depth=2
+                                        // =>    This Inner Loop Header: Depth=3
+	.pragma "nounroll";
+	add.s64 	%rd35, %rd44, %rd56;
+	ld.global.nc.b8 	%rs71, [%rd35+-7];
+	shr.u16 	%rs72, %rs71, 4;
+	cvt.u32.u16 	%r292, %rs72;
+	ld.shared.b32 	%r293, [%rd55+-28];
+	mad.lo.s32 	%r294, %r293, %r292, %r451;
+	add.s32 	%r295, %r293, %r450;
+	ld.global.nc.b8 	%rs73, [%rd35+-6];
+	shr.u16 	%rs74, %rs73, 4;
+	cvt.u32.u16 	%r296, %rs74;
+	ld.shared.b32 	%r297, [%rd55+-24];
+	mad.lo.s32 	%r298, %r297, %r296, %r294;
+	add.s32 	%r299, %r297, %r295;
+	ld.global.nc.b8 	%rs75, [%rd35+-5];
+	shr.u16 	%rs76, %rs75, 4;
+	cvt.u32.u16 	%r300, %rs76;
+	ld.shared.b32 	%r301, [%rd55+-20];
+	mad.lo.s32 	%r302, %r301, %r300, %r298;
+	add.s32 	%r303, %r301, %r299;
+	ld.global.nc.b8 	%rs77, [%rd35+-4];
+	shr.u16 	%rs78, %rs77, 4;
+	cvt.u32.u16 	%r304, %rs78;
+	ld.shared.b32 	%r305, [%rd55+-16];
+	mad.lo.s32 	%r306, %r305, %r304, %r302;
+	add.s32 	%r307, %r305, %r303;
+	ld.global.nc.b8 	%rs79, [%rd35+-3];
+	shr.u16 	%rs80, %rs79, 4;
+	cvt.u32.u16 	%r308, %rs80;
+	ld.shared.b32 	%r309, [%rd55+-12];
+	mad.lo.s32 	%r310, %r309, %r308, %r306;
+	add.s32 	%r311, %r309, %r307;
+	ld.global.nc.b8 	%rs81, [%rd35+-2];
+	shr.u16 	%rs82, %rs81, 4;
+	cvt.u32.u16 	%r312, %rs82;
+	ld.shared.b32 	%r313, [%rd55+-8];
+	mad.lo.s32 	%r314, %r313, %r312, %r310;
+	add.s32 	%r315, %r313, %r311;
+	ld.global.nc.b8 	%rs83, [%rd35+-1];
+	shr.u16 	%rs84, %rs83, 4;
+	cvt.u32.u16 	%r316, %rs84;
+	ld.shared.b32 	%r317, [%rd55+-4];
+	mad.lo.s32 	%r318, %r317, %r316, %r314;
+	add.s32 	%r319, %r317, %r315;
+	ld.global.nc.b8 	%rs85, [%rd35];
+	shr.u16 	%rs86, %rs85, 4;
+	cvt.u32.u16 	%r320, %rs86;
+	ld.shared.b32 	%r321, [%rd55];
+	mad.lo.s32 	%r451, %r321, %r320, %r318;
+	add.s32 	%r450, %r321, %r319;
+	add.s64 	%rd56, %rd56, 8;
+	cvt.u32.u64 	%r322, %rd56;
+	add.s64 	%rd55, %rd55, 32;
+	setp.ne.b32 	%p16, %r322, 32;
+	@%p16 bra 	$L__BB5_32;
+// %bb.33:                              //   in Loop: Header=BB5_7 Depth=2
+	cvt.rn.f32.u16 	%r323, %rs19;
+	mul.f32 	%r324, %r440, %r323;
+	cvt.rn.f32.s32 	%r325, %r451;
+	cvt.rn.f32.u16 	%r326, %rs20;
+	mul.f32 	%r327, %r441, %r326;
+	cvt.rn.f32.s32 	%r328, %r450;
+	mul.f32 	%r329, %r327, %r328;
+	neg.f32 	%r330, %r329;
+	fma.rn.f32 	%r331, %r324, %r325, %r330;
+	add.f32 	%r24, %r23, %r331;
+	ld.global.nc.b8 	%rs87, [%rd8+14];
+	and.b16 	%rs88, %rs87, 15;
+	shr.u16 	%rs89, %rs9, 2;
+	and.b16 	%rs90, %rs89, 48;
+	or.b16 	%rs21, %rs90, %rs88;
+	shr.u16 	%rs91, %rs87, 4;
+	shr.u16 	%rs92, %rs11, 2;
+	and.b16 	%rs93, %rs92, 48;
+	or.b16 	%rs22, %rs93, %rs91;
+	mov.b32 	%r452, 0;
+	mov.b64 	%rd58, 0;
+	mov.b32 	%r453, %r452;
+$L__BB5_34:                             //   Parent Loop BB5_5 Depth=1
+                                        //     Parent Loop BB5_7 Depth=2
+                                        // =>    This Inner Loop Header: Depth=3
+	.pragma "nounroll";
+	add.s64 	%rd36, %rd43, %rd58;
+	ld.global.nc.b8 	%r332, [%rd36+-7];
+	and.b32 	%r333, %r332, 15;
+	ld.shared.b32 	%r334, [%rd57+-28];
+	mad.lo.s32 	%r335, %r334, %r333, %r453;
+	add.s32 	%r336, %r334, %r452;
+	ld.global.nc.b8 	%r337, [%rd36+-6];
+	and.b32 	%r338, %r337, 15;
+	ld.shared.b32 	%r339, [%rd57+-24];
+	mad.lo.s32 	%r340, %r339, %r338, %r335;
+	add.s32 	%r341, %r339, %r336;
+	ld.global.nc.b8 	%r342, [%rd36+-5];
+	and.b32 	%r343, %r342, 15;
+	ld.shared.b32 	%r344, [%rd57+-20];
+	mad.lo.s32 	%r345, %r344, %r343, %r340;
+	add.s32 	%r346, %r344, %r341;
+	ld.global.nc.b8 	%r347, [%rd36+-4];
+	and.b32 	%r348, %r347, 15;
+	ld.shared.b32 	%r349, [%rd57+-16];
+	mad.lo.s32 	%r350, %r349, %r348, %r345;
+	add.s32 	%r351, %r349, %r346;
+	ld.global.nc.b8 	%r352, [%rd36+-3];
+	and.b32 	%r353, %r352, 15;
+	ld.shared.b32 	%r354, [%rd57+-12];
+	mad.lo.s32 	%r355, %r354, %r353, %r350;
+	add.s32 	%r356, %r354, %r351;
+	ld.global.nc.b8 	%r357, [%rd36+-2];
+	and.b32 	%r358, %r357, 15;
+	ld.shared.b32 	%r359, [%rd57+-8];
+	mad.lo.s32 	%r360, %r359, %r358, %r355;
+	add.s32 	%r361, %r359, %r356;
+	ld.global.nc.b8 	%r362, [%rd36+-1];
+	and.b32 	%r363, %r362, 15;
+	ld.shared.b32 	%r364, [%rd57+-4];
+	mad.lo.s32 	%r365, %r364, %r363, %r360;
+	add.s32 	%r366, %r364, %r361;
+	ld.global.nc.b8 	%r367, [%rd36];
+	and.b32 	%r368, %r367, 15;
+	ld.shared.b32 	%r369, [%rd57];
+	mad.lo.s32 	%r453, %r369, %r368, %r365;
+	add.s32 	%r452, %r369, %r366;
+	add.s64 	%rd58, %rd58, 8;
+	cvt.u32.u64 	%r370, %rd58;
+	add.s64 	%rd57, %rd57, 32;
+	setp.ne.b32 	%p17, %r370, 32;
+	@%p17 bra 	$L__BB5_34;
+// %bb.35:                              //   in Loop: Header=BB5_7 Depth=2
+	cvt.rn.f32.u16 	%r371, %rs21;
+	mul.f32 	%r372, %r440, %r371;
+	cvt.rn.f32.s32 	%r373, %r453;
+	cvt.rn.f32.u16 	%r374, %rs22;
+	mul.f32 	%r375, %r441, %r374;
+	cvt.rn.f32.s32 	%r376, %r452;
+	mul.f32 	%r377, %r375, %r376;
+	neg.f32 	%r378, %r377;
+	fma.rn.f32 	%r379, %r372, %r373, %r378;
+	add.f32 	%r25, %r24, %r379;
+	ld.global.nc.b8 	%rs94, [%rd8+15];
+	and.b16 	%rs95, %rs94, 15;
+	shr.u16 	%rs96, %rs13, 2;
+	and.b16 	%rs97, %rs96, 48;
+	or.b16 	%rs23, %rs97, %rs95;
+	shr.u16 	%rs98, %rs94, 4;
+	shr.u16 	%rs99, %rs15, 2;
+	and.b16 	%rs100, %rs99, 48;
+	or.b16 	%rs24, %rs100, %rs98;
+	mov.b32 	%r454, 0;
+	mov.b64 	%rd60, 0;
+	mov.b32 	%r455, %r454;
+$L__BB5_36:                             //   Parent Loop BB5_5 Depth=1
+                                        //     Parent Loop BB5_7 Depth=2
+                                        // =>    This Inner Loop Header: Depth=3
+	.pragma "nounroll";
+	add.s64 	%rd37, %rd43, %rd60;
+	ld.global.nc.b8 	%rs101, [%rd37+-7];
+	shr.u16 	%rs102, %rs101, 4;
+	cvt.u32.u16 	%r380, %rs102;
+	ld.shared.b32 	%r381, [%rd59+-28];
+	mad.lo.s32 	%r382, %r381, %r380, %r455;
+	add.s32 	%r383, %r381, %r454;
+	ld.global.nc.b8 	%rs103, [%rd37+-6];
+	shr.u16 	%rs104, %rs103, 4;
+	cvt.u32.u16 	%r384, %rs104;
+	ld.shared.b32 	%r385, [%rd59+-24];
+	mad.lo.s32 	%r386, %r385, %r384, %r382;
+	add.s32 	%r387, %r385, %r383;
+	ld.global.nc.b8 	%rs105, [%rd37+-5];
+	shr.u16 	%rs106, %rs105, 4;
+	cvt.u32.u16 	%r388, %rs106;
+	ld.shared.b32 	%r389, [%rd59+-20];
+	mad.lo.s32 	%r390, %r389, %r388, %r386;
+	add.s32 	%r391, %r389, %r387;
+	ld.global.nc.b8 	%rs107, [%rd37+-4];
+	shr.u16 	%rs108, %rs107, 4;
+	cvt.u32.u16 	%r392, %rs108;
+	ld.shared.b32 	%r393, [%rd59+-16];
+	mad.lo.s32 	%r394, %r393, %r392, %r390;
+	add.s32 	%r395, %r393, %r391;
+	ld.global.nc.b8 	%rs109, [%rd37+-3];
+	shr.u16 	%rs110, %rs109, 4;
+	cvt.u32.u16 	%r396, %rs110;
+	ld.shared.b32 	%r397, [%rd59+-12];
+	mad.lo.s32 	%r398, %r397, %r396, %r394;
+	add.s32 	%r399, %r397, %r395;
+	ld.global.nc.b8 	%rs111, [%rd37+-2];
+	shr.u16 	%rs112, %rs111, 4;
+	cvt.u32.u16 	%r400, %rs112;
+	ld.shared.b32 	%r401, [%rd59+-8];
+	mad.lo.s32 	%r402, %r401, %r400, %r398;
+	add.s32 	%r403, %r401, %r399;
+	ld.global.nc.b8 	%rs113, [%rd37+-1];
+	shr.u16 	%rs114, %rs113, 4;
+	cvt.u32.u16 	%r404, %rs114;
+	ld.shared.b32 	%r405, [%rd59+-4];
+	mad.lo.s32 	%r406, %r405, %r404, %r402;
+	add.s32 	%r407, %r405, %r403;
+	ld.global.nc.b8 	%rs115, [%rd37];
+	shr.u16 	%rs116, %rs115, 4;
+	cvt.u32.u16 	%r408, %rs116;
+	ld.shared.b32 	%r409, [%rd59];
+	mad.lo.s32 	%r455, %r409, %r408, %r406;
+	add.s32 	%r454, %r409, %r407;
+	add.s64 	%rd60, %rd60, 8;
+	cvt.u32.u64 	%r410, %rd60;
+	add.s64 	%rd59, %rd59, 32;
+	setp.ne.b32 	%p18, %r410, 32;
+	@%p18 bra 	$L__BB5_36;
+// %bb.37:                              //   in Loop: Header=BB5_7 Depth=2
+	cvt.rn.f32.u16 	%r411, %rs23;
+	mul.f32 	%r412, %r440, %r411;
+	cvt.rn.f32.s32 	%r413, %r455;
+	cvt.rn.f32.u16 	%r414, %rs24;
+	mul.f32 	%r415, %r441, %r414;
+	cvt.rn.f32.s32 	%r416, %r454;
+	mul.f32 	%r417, %r415, %r416;
+	neg.f32 	%r418, %r417;
+	fma.rn.f32 	%r419, %r412, %r413, %r418;
+	add.f32 	%r438, %r25, %r419;
+	add.s32 	%r439, %r439, 32;
+	add.s64 	%rd46, %rd46, 4608;
+	add.s32 	%r437, %r437, 8192;
+	add.s64 	%rd45, %rd45, 4608;
+	add.s64 	%rd44, %rd44, 4608;
+	add.s64 	%rd43, %rd43, 4608;
+	setp.lt.s32 	%p19, %r439, %r27;
+	@%p19 bra 	$L__BB5_7;
+	bra.uni 	$L__BB5_38;
+$L__BB5_39:                             //   in Loop: Header=BB5_5 Depth=1
+	add.f32 	%r434, %r432, %r431;
+	mul.wide.s32 	%rd38, %r436, 4;
+	add.s64 	%rd7, %rd3, %rd38;
+	mul.f32 	%r10, %r28, %r434;
+	st.global.b32 	[%rd7], %r10;
+	bra.uni 	$L__BB5_40;
+$L__BB5_41:
+	ret;
+                                        // -- End function
+}

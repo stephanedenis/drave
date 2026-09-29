@@ -143,7 +143,7 @@ comparé à `llama-tokenize` sur 4 424 jetons (0 écart).
 | 4 | préremplissage par lots | **à moitié** | noyau `gemm_dense_i8` ×2,4 au banc ; `forward_lot` juste (13,1359 contre 13,1368) mais **débit bout en bout à mesurer** ; les modèles MoE retombent encore sur le jeton par jeton |
 | 5 | échelles par bloc pour `DenseQ8` | **fait, hypothèse réfutée** | 23,696 contre 23,612 : les échelles par bloc n'apportent rien ; l'avantage du 6 bits est son coût (25 % d'octets en moins à qualité égale) |
 | 6 | boucles CLI unifiées | **fait** | `struct Options` + `analyser` ; trois drapeaux de plus trouvés ignorés (`--attn-topk`, `--qk-topk`, `--sans-yarn` en inférence) et un bug de pas de lecture corrigé |
-| 7 | noyaux GPU | **presque** | warp par ligne **fait et mesuré** (tête : 1,8 ms contre 30 ms CPU, PPL identique) ; MXFP4 warp **fait** (0,1 ms, écart 0,00e0 au CPU) ; restent Q4_K/Q6_K et le *branchement* du MXFP4 dans le moteur |
+| 7 | noyaux GPU | **fait** | warp par ligne (tête : 1,8 ms contre 30 ms CPU, PPL identique) ; **MXFP4** warp (0,1 ms, écart 0,00e0 — bit à bit) ; **Q4_K** warp (0,5 contre 1,2 ms, écart 4e-7). Reste le *branchement* dans le moteur (cache d'experts chauds) |
 | 8 | suite du plan 1 M | **chiffré, pas commencé** | `docs/contexte-long.md` : préremplissage 1 234 h à 1 M, KV int4 9,7 Go, YaRN ×256 nécessaire ; restent pagination, déport GPU du KV, attention creuse, MLA, vision |
 
 ### Ce qu'il faut faire ensuite, dans l'ordre
@@ -158,8 +158,8 @@ comparé à `llama-tokenize` sur 4 424 jetons (0 écart).
 3. **Brancher le noyau MXFP4** : il est bit à bit identique et 40× plus rapide
    que le CPU ; il manque un cache d'experts chauds en VRAM (voir
    `reports/rapport-localite-activation.md`).
-4. **Les noyaux Q4_K/Q6_K** : toute la famille Qwen est dans ces formats, donc
-   rien de la leur n'est déportable en l'état.
+4. **Q6_K** reste à écrire (Q4_K et MXFP4 sont faits et mesurés) : c'est le
+   format de certaines têtes et de quelques tenseurs Qwen.
 5. **Le seuil de rotation** (chantier 2) : la série en cours le tranche ; si
    l'interpolation ne gagne jamais, le défaut « simple partout » est à
    envisager, et le seuil de 4 096 devient une simple borne de sécurité.

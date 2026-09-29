@@ -224,4 +224,66 @@ __global__ void proj_mxfp4_warp(const unsigned char* __restrict__ w,
     }
 }
 
+// ---------------------------------------------------------------------------
+// Q4_K (toute la famille Qwen en Q4_K_M) : super-blocs de 144 octets — deux
+// demi-précisions (échelle et minimum), douze octets d'échelles/minimums
+// entassés sur 6 bits, puis 128 octets de nibbles (256 poids).
+// Le dépaquetage des 6 bits est celui du CPU, recopié à l'identique.
+__device__ __forceinline__ void echelle_min_q4k(const unsigned char* sc, int j,
+                                                int* echelle, int* minimum) {
+    if (j < 4) {
+        *echelle = sc[j] & 63;
+        *minimum = sc[j + 4] & 63;
+    } else {
+        *echelle = (sc[j + 4] & 0x0F) | ((sc[j - 4] >> 6) << 4);
+        *minimum = (sc[j + 4] >> 4)        | ((sc[j] >> 6) << 4);
+    }
+}
+
+__global__ void proj_q4k_warp(const unsigned char* __restrict__ w,
+                              const int* __restrict__ x,
+                              float* __restrict__ out,
+                              int n_out, int nb, float sx) {
+    extern __shared__ int xs[];
+    const int n_in = nb * 256;
+    const int tid = threadIdx.x;
+    const int lane = tid & 31;
+    const int warp = tid >> 5;
+    const int warp_par_bloc = blockDim.x >> 5;
+    for (int i = tid; i < n_in; i += blockDim.x) xs[i] = x[i];
+    __syncthreads();
+    const int warp_grille = (gridDim.x * blockDim.x) >> 5;
+    for (int o = blockIdx.x * warp_par_bloc + warp; o < n_out; o += warp_grille) {
+        float total = 0.0f;
+        for (int sup = lane; sup < nb; sup += 32) {
+            const unsigned char* b = w + ((size_t)o * (size_t)nb + (size_t)sup) * 144u;
+            const float d = f16_en_f32(*reinterpret_cast<const unsigned short*>(b));
+            const float dmin = f16_en_f32(*reinterpret_cast<const unsigned short*>(b + 2));
+            const int* xb0 = xs + sup * 256;
+            #pragma unroll
+            for (int g = 0; g < 4; ++g) {
+                #pragma unroll
+                for (int demi = 0; demi < 2; ++demi) {
+                    int echelle, minimum;
+                    echelle_min_q4k(b + 4, 2 * g + demi, &echelle, &minimum);
+                    const int* xb = xb0 + g * 64 + demi * 32;
+                    int sq = 0, sx_somme = 0;
+                    #pragma unroll 8
+                    for (int l = 0; l < 32; ++l) {
+                        const int octet = (int)b[16 + g * 32 + l];
+                        const int q = (demi == 0) ? (octet & 15) : (octet >> 4);
+                        sq += q * xb[l];
+                        sx_somme += xb[l];
+                    }
+                    total += d * (float)echelle * (float)sq
+                           - dmin * (float)minimum * (float)sx_somme;
+                }
+            }
+        }
+        #pragma unroll
+        for (int d2 = 16; d2 > 0; d2 >>= 1) total += shfl_bas(total, d2);
+        if (lane == 0) out[o] = total * sx;
+    }
+}
+
 }  // extern "C"

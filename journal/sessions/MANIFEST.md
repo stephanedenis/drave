@@ -7,7 +7,7 @@ trace brute (`session.jsonl.zstd`) reste sur disque et n'est pas suivie par git.
 |---|---|---|---|---|---|---|---|---|
 | `22bcae27` | 2026-09-28 14:45 | 14.8 Mo | 1398 Ko | 54 | 1250 | 1227 | 19 | 4 |
 | `27c99b10` | 2026-09-25 19:50 | 1.0 Mo | 61 Ko | 1 | 57 | 54 | 1 | 0 |
-| `bbd6969f` | 2026-09-29 10:01 | 4.8 Mo | 485 Ko | 5 | 620 | 630 | 7 | 0 |
+| `bbd6969f` | 2026-09-29 10:08 | 4.9 Mo | 495 Ko | 5 | 632 | 642 | 7 | 0 |
 | `e7dfe34f` | 2026-09-28 14:59 | 0.2 Mo | 28 Ko | 1 | 20 | 21 | 0 | 0 |
 
-Total : 20.8 Mo de traces brutes.
+Total : 20.9 Mo de traces brutes.
