@@ -163,6 +163,7 @@ comparé à `llama-tokenize` sur 4 424 jetons (0 écart).
 | KV int8, échelles par bloc | +1,5 % (512 jetons) et +3,4 % (4 591) — était +7,1 % et +5,2 % |
 | KV int4, échelles par bloc | +219 % (512) et +287 % (4 591) — était +384 % et +450 % |
 | KV à 8 192 jetons (longueur de la référence llama.cpp) | f32 **14,2339** · int8 **14,6667 (+3,0 %)** contre +0,8 % chez llama.cpp · int4 **66,0369 (+364 %)** contre +494 % chez llama.cpp |
+| porte gpt-oss selon l'ouverture du pilote | sans `QT_GPU` : **15,1757** · avec `QT_GPU=1` : **15,1667** — l'écart vient du déport automatique des projections Q8_0 (> 8 Mo), pas d'une régression |
 | attention creuse (gpt-oss, ctx 2 048) | sans restriction 298,56 · **top-256 : 234,88** · fenêtre 512 : 3 269,34 |
 | KV déporté en VRAM, 1 M de clés (une couche, `--banc-kv`) | f32 165,8 → **13,6 ms** (×12) · int8 510,6 → 15,0 (×34) · int4 968,5 → **13,2 ms (×73)**, écarts 1e-5 à 1e-4 |
 | KV déporté dans le moteur (`QT_GPU_KV=1`, ctx 4 096) | attention **22,16 → 3,29 ms/jeton** (÷6,7) · balayage 219,4 → **136,2 s** · perplexité 12,2177 → 12,2175 |
@@ -236,7 +237,9 @@ cd qtrinet-core && cargo build --release && cargo test --release
 # 2. si /tmp a été vidé, régénérer le corpus et les identifiants (§2)
 
 # 3. gpt-oss : le chiffre de contrôle de cette session (≈ 45 s de chargement,
-#    ~100 s pour 510 jetons)
+#    ~100 s pour 510 jetons). SANS `QT_GPU` : la variable ouvre le pilote, et le
+#    moteur déporte alors tout seul les projections Q8_0 de plus de 8 Mo — le
+#    chiffre devient 15,1667 (même calcul, ordre de sommation du noyau GPU).
 ./target/release/qtrinet-core /home/stephane/FastNVMe/models/gpt-oss-120b-MXFP4.gguf \
     --ppl /tmp/ids_oss.txt --ctx 256 --dense --threads 16 --limit 512   # attendu 15,1757
 

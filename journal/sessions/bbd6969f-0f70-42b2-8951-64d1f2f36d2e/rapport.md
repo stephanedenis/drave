@@ -5,19 +5,21 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 26.2 h |
-| Tours | 6 |
-| Messages | 988 |
-| Appels d'outils | 989 |
+| Durée | 26.3 h |
+| Tours | 7 |
+| Messages | 1000 |
+| Appels d'outils | 998 |
 | Fichiers touchés | 35 |
-| Commandes | 735 |
+| Commandes | 742 |
 | Sous-agents | 1 |
-| Commits | 32 |
+| Commits | 33 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
 
 - **create** — Réaliser les 8 chantiers restants du projet qtrinet-core dans l'ordre : (1) protocole de perplexité longue --depuis/--stride, (2) trancher le seuil de rotation YaRN avec ce protocole, (3) KV int8 puis int4 mesurés sur Qwen 0.5B à ctx 8192 contre llama.cpp, (4) préremplissage par lots (GEMM par tranc
+… [374 caractères tronqués]
+- **complete** — Réaliser les 8 chantiers restants du projet qtrinet-core dans l'ordre : (1) protocole de perplexité longue --depuis/--stride, (2) trancher le seuil de rotation YaRN avec ce protocole, (3) KV int8 puis int4 mesurés sur Qwen 0.5B à ctx 8192 contre llama.cpp, (4) préremplissage par lots (GEMM par tranc
 … [374 caractères tronqués]
 
 ## 1. Ce qui a été demandé
@@ -33,6 +35,8 @@
 **Tour 5** — <goal_round> Objective: "Réaliser les 8 chantiers restants du projet qtrinet-core dans l'ordre : (1) protocole de perplexité longue --depuis/--stride, (2) trancher le seuil de rotation YaRN avec ce protocole, (3) KV int8 puis int4 mesurés sur Qwen 0.5B à ctx 8192 contre llama.cpp, (4) préremplissage par lots (GEMM par tranches), (5) échelles par bloc pour DenseQ8, (6) refactorisation des boucles C … [842 caractères tronqués]
 
 **Tour 6** — <goal_round> Objective: "Réaliser les 8 chantiers restants du projet qtrinet-core dans l'ordre : (1) protocole de perplexité longue --depuis/--stride, (2) trancher le seuil de rotation YaRN avec ce protocole, (3) KV int8 puis int4 mesurés sur Qwen 0.5B à ctx 8192 contre llama.cpp, (4) préremplissage par lots (GEMM par tranches), (5) échelles par bloc pour DenseQ8, (6) refactorisation des boucles C … [842 caractères tronqués]
+
+**Tour 7** — background job bash-35 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && (QT_GPU=1 ./qtrinet-core/target/release/qtrinet-core /home/stephane/FastNVMe/models/gpt-oss-120b-MXFP4.gguf --ppl /tmp/ids_oss.txt --ctx 256 --dense --threads 16 --limit 512 2>&1 | grep -oE "perplexité [0-9.]+ sur [0-9]+ tokens \([0-9]+ événements, [0-9.]+ s\)" > /tmp/gate_oss_final.log; echo "=== fin ===" >> /tmp/ … [98 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -263,7 +267,7 @@ Retirer `mscale = 1 + 0,1·ln f` divise la perplexité par **8,9 / 5,9 / 3,8**. 
 
 ### Tour 6 — <goal_round> Objective: "Réaliser les 8 chantiers restants du projet qtrinet-core dans l'ordre : (1) protocole de perple … [1122 caractères tronqués]
 
-*262 appels d'outils.* Actions notables :
+*265 appels d'outils.* Actions notables :
 
 - bash — Check the starting state of round 2
 - bash — Locate the batched attention loop
@@ -279,11 +283,50 @@ Retirer `mscale = 1 + 0,1·ln f` divise la perplexité par **8,9 / 5,9 / 3,8**. 
 - bash — Bisect the failing batch size
 - bash — Add guards and rerun lot 128
 - bash — Read dot16's fallback path
-- … et 205 autres
+- … et 208 autres
 
 **Synthèse produite :**
 
-⏵ Il manque la « pagination » du KV : je rends le miroir VRAM proportionnel à l'usage
+Les 8 chantiers sont faits : implémentés, mesurés, documentés et commités. Voici le bilan.
+
+\## Les huit chantiers
+
+| # | chantier | résultat mesuré |
+|---|---|---|
+| 1 | protocole de perplexité longue | `--depuis`/`--stride` en place ; utilisés pour toutes les mesures appariées ci-dessous |
+| 2 | seuil de rotation YaRN | **tranché, et le seuil était trop bas** : à contexte 5 120 (positions 4 608-5 119), RoPE simple **9,6986** contre **1 269,1777** en interpolation seule → la bascule passe de « longueur d'origine déclarée » à 1,25 × celle-ci |
+| 3 | KV int8/int4 à ctx 8 192 | f32 14,2339 · int8 **14,6667 (+3,0 %)** contre +0,8 % chez llama.cpp · int4 **66,0369 (+364 %)** contre +494 % chez llama.cpp — meilleur que la référence, à moitié mémoire |
+| 4 | préremplissage par lots | Qwen ctx 512 : **17,1 → 13,6 s (−20 %)** ; gpt-oss : ≈ 50 → 34,4 s ; perplexités identiques |
+| 5 | échelles par bloc `DenseQ8` | hypothèse réfutée (23,6964 contre 23,6123) — le 6 bits garde son avantage de coût |
+| 6 | boucles CLI unifiées | `struct Options` + `analyser` |
+| 7 | noyaux GPU par ligne + 4 bits | warp Q8_0 / MXFP4 (bit à bit) / Q4_K / **Q6_K** (3,6 contre 8,3 ms sur la tête de 191 Mo) ; tête Q6_K branchée : 7,58 → **3,60 ms/jeton** |
+| 8 | plan 1 M | **E4** : `attn_kv_partiels`/`recombine` + miroir VRAM paginé ; **E5** mesuré (`--attn-topk 256` : 234,9 contre 298,6) ; MLA et vision documentés non testables ici |
+
+\## Le gain le plus net (E4)
+
+À 1 M de clés, une couche : CPU **968 ms** → GPU **13,2 ms** (int4, ×73). Dans le moteur, ctx 4 096 : attention **22,16 → 3,29 ms/jeton**, balayage 219 → 136 s (−38 %), perplexité 12,2177 → 12,2175. Le miroir VRAM ne réserve plus `ctx` positions d'un coup : à **ctx 1 M**, 0,05 Go occupés pour 512 jetons écrits (l'allocation en bloc exigeait 25,77 Go et refusait).
+
+\## Trois bugs silencieux, trouvés par la mesure
+
+- `engine.rs` : un **pointeur de tranche (gras)** relu comme `Vec<Vec<i32>>` faisait lire au worker une longueur de 90 (blocs) au lieu du lot — panique, et surtout **blocage muet** du fil principal. Corrigé, test verrouillé (lots 1/8/9/17/40) et `catch_unwind` + compteur `morts` : une panique de worker échoue désormais en clair.
+- noyau d'attention : la **requête** était lue par voie (accord parfait seulement pour un vecteur de base, écart 4e-1 sinon) ; les partiels n'étaient **pas indexés par tête KV** (7 têtes sur 14 à zéro) ; les **échelles** du KV quantifié étaient indexées en éléments (écart 7e7 en int8).
+- miroir du c
+… [1011 caractères tronqués]
+
+### Tour 7 — background job bash-35 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && (QT_GPU=1 ./qtrinet-core/target/rele … [378 caractères tronqués]
+
+*6 appels d'outils.* Actions notables :
+
+- job_output
+- bash — Read gpt-oss gate result
+- bash — Compare gpt-oss gate with and without GPU
+- bash — Find all GPU-availability gates
+- bash — Inspect un-gated GPU paths
+- bash — Document the gate variance and commit
+
+**Synthèse produite :**
+
+⏵ La porte gpt-oss donne 15,1667 au lieu de 15,1757 : je vérifie avant de conclure
 
 ## 3. Travail accompli
 
@@ -373,7 +416,7 @@ Retirer `mscale = 1 + 0,1·ln f` divise la perplexité par **8,9 / 5,9 / 3,8**. 
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 695 autres
+- … et 702 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -553,4 +596,5 @@ Retirer `mscale = 1 + 0,1·ln f` divise la perplexité par **8,9 / 5,9 / 3,8**. 
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A docs/contexte-long.md REPRISE.md journal && git commit -q -F - <<'EOF' && git log --oneline -3 
 - journal : archive automatique" 2>/dev/null; cd qtrinet-core && cargo test --release 2>&1 | tail -3 && cd .. && git log --oneline -9 | cat && git status --short 
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p='docs/contexte-long.md'; s=open(p).read() old = """Il reste, sur ce chemin : le **dépaq
+- porte gpt-oss : préciser qu'elle se mesure SANS QT_GPU  Mesuré deux fois, même binaire, même commande :   sans QT_GPU   : 15,1757 (le chiffre de contrôle du dép
 
