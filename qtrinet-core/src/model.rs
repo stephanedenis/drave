@@ -586,8 +586,12 @@ pub struct KvCache {
     /// 4 bits** (même disposition que Q4_0/MXFP4 : nibble bas = indice pair).
     kq: Vec<u8>,
     vq: Vec<u8>,
+    /// Échelles **par bloc de 32**, comme Q8_0 — et non une par vecteur : c'est
+    /// ce qui explique l'écart mesuré avec llama.cpp (+5,2 % de perplexité
+    /// contre +0,8 % pour son cache q8_0).
     sk: Vec<f32>,
     sv: Vec<f32>,
+    nb: usize,
 }
 
 impl KvCache {
@@ -595,15 +599,16 @@ impl KvCache {
         let bits = if bits >= 32 { 32 } else if bits > 4 { 8 } else { 4 };
         let n = n_kv * ctx * hd;
         let nv = n_kv * ctx;
+        let nb = hd.div_ceil(32).max(1);
         if bits >= 32 {
             KvCache { bits, n_kv, ctx, hd, kf: vec![0.0; n], vf: vec![0.0; n],
-                      kq: Vec::new(), vq: Vec::new(), sk: Vec::new(), sv: Vec::new() }
+                      kq: Vec::new(), vq: Vec::new(), sk: Vec::new(), sv: Vec::new(), nb }
         } else {
             assert!(hd % 2 == 0, "4 bits empaquetés : dimension de tête paire requise");
             let nq = if bits == 8 { n } else { n / 2 };
             KvCache { bits, n_kv, ctx, hd, kf: Vec::new(), vf: Vec::new(),
                       kq: vec![0u8; nq], vq: vec![0u8; nq],
-                      sk: vec![0.0; nv], sv: vec![0.0; nv] }
+                      sk: vec![0.0; nv * nb], sv: vec![0.0; nv * nb], nb }
         }
     }
 
@@ -628,33 +633,40 @@ impl KvCache {
             return;
         }
         let niv = if self.bits == 4 { 7.0 } else { 127.0 };
-        let mut mk = 0f32;
-        let mut mv = 0f32;
-        for i in 0..self.hd { mk = mk.max(k[i].abs()); mv = mv.max(v[i].abs()); }
-        let sk = if mk > 0.0 { mk / niv } else { 1.0 };
-        let sv = if mv > 0.0 { mv / niv } else { 1.0 };
         let base = (kvh * self.ctx + pos) * self.pas();
-        if self.bits == 8 {
-            for i in 0..self.hd {
-                self.kq[base + i] = (k[i] / sk).round().clamp(-niv, niv) as i8 as u8;
-                self.vq[base + i] = (v[i] / sv).round().clamp(-niv, niv) as i8 as u8;
-            }
-        } else {
-            // Nibble bas = indice pair, haut = impair, écrits ENSEMBLE : un `|=`
-            // laisserait les nibbles de la fenêtre précédente, la même position
-            // étant réécrite à chaque fenêtre.
-            for j in 0..self.hd / 2 {
-                let qk0 = (k[2 * j] / sk).round().clamp(-niv, niv) as i32 as u8 & 0x0F;
-                let qk1 = (k[2 * j + 1] / sk).round().clamp(-niv, niv) as i32 as u8 & 0x0F;
-                let qv0 = (v[2 * j] / sv).round().clamp(-niv, niv) as i32 as u8 & 0x0F;
-                let qv1 = (v[2 * j + 1] / sv).round().clamp(-niv, niv) as i32 as u8 & 0x0F;
-                self.kq[base + j] = qk0 | (qk1 << 4);
-                self.vq[base + j] = qv0 | (qv1 << 4);
+        let sb = (kvh * self.ctx + pos) * self.nb;
+        // Une échelle PAR BLOC DE 32, comme Q8_0 : un bloc peut porter une
+        // valeur forte et des valeurs faibles, que l'échelle du vecteur entier
+        // écrase. C'est la différence mesurée avec llama.cpp (+5,2 % de
+        // perplexité contre +0,8 % pour son cache q8_0).
+        for b in 0..self.nb {
+            let lo = b * 32;
+            let hi = (lo + 32).min(self.hd);
+            let mut mk = 0f32;
+            let mut mv = 0f32;
+            for i in lo..hi { mk = mk.max(k[i].abs()); mv = mv.max(v[i].abs()); }
+            let sk = if mk > 0.0 { mk / niv } else { 1.0 };
+            let sv = if mv > 0.0 { mv / niv } else { 1.0 };
+            self.sk[sb + b] = sk;
+            self.sv[sb + b] = sv;
+            if self.bits == 8 {
+                for i in lo..hi {
+                    self.kq[base + i] = (k[i] / sk).round().clamp(-niv, niv) as i8 as u8;
+                    self.vq[base + i] = (v[i] / sv).round().clamp(-niv, niv) as i8 as u8;
+                }
+            } else {
+                // Nibble bas = indice pair, haut = impair, écrits ENSEMBLE : un
+                // `|=` laisserait les nibbles de la fenêtre précédente.
+                for j in (lo..hi).step_by(2) {
+                    let qk0 = (k[j] / sk).round().clamp(-niv, niv) as i32 as u8 & 0x0F;
+                    let qk1 = (k[j + 1] / sk).round().clamp(-niv, niv) as i32 as u8 & 0x0F;
+                    let qv0 = (v[j] / sv).round().clamp(-niv, niv) as i32 as u8 & 0x0F;
+                    let qv1 = (v[j + 1] / sv).round().clamp(-niv, niv) as i32 as u8 & 0x0F;
+                    self.kq[base + j / 2] = qk0 | (qk1 << 4);
+                    self.vq[base + j / 2] = qv0 | (qv1 << 4);
+                }
             }
         }
-        let s = kvh * self.ctx + pos;
-        self.sk[s] = sk;
-        self.sv[s] = sv;
     }
 
     /// Déquantifie la clé `(kvh, t)` dans `dst`.
@@ -662,17 +674,19 @@ impl KvCache {
     pub fn cle(&self, kvh: usize, t: usize, dst: &mut [f32]) {
         let d = (kvh * self.ctx + t) * self.hd;
         if self.bits >= 32 { dst[..self.hd].copy_from_slice(&self.kf[d..d + self.hd]); return; }
-        let s = self.sk[kvh * self.ctx + t];
         let base = (kvh * self.ctx + t) * self.pas();
+        let sb = (kvh * self.ctx + t) * self.nb;
         if self.bits == 8 {
-            for i in 0..self.hd { dst[i] = self.kq[base + i] as i8 as f32 * s; }
+            for i in 0..self.hd {
+                dst[i] = self.kq[base + i] as i8 as f32 * self.sk[sb + i / 32];
+            }
         } else {
             for i in 0..self.hd {
                 let o = self.kq[base + i / 2];
                 // Extension de signe du nibble : 0..7 tel quel, 8..15 -> -8..-1.
                 let q = if i % 2 == 0 { (o & 0x0F) as i32 } else { (o >> 4) as i32 };
                 let q = if q >= 8 { q - 16 } else { q };
-                dst[i] = q as f32 * s;
+                dst[i] = q as f32 * self.sk[sb + i / 32];
             }
         }
     }
@@ -682,16 +696,18 @@ impl KvCache {
     pub fn valeur(&self, kvh: usize, t: usize, dst: &mut [f32]) {
         let d = (kvh * self.ctx + t) * self.hd;
         if self.bits >= 32 { dst[..self.hd].copy_from_slice(&self.vf[d..d + self.hd]); return; }
-        let s = self.sv[kvh * self.ctx + t];
         let base = (kvh * self.ctx + t) * self.pas();
+        let sb = (kvh * self.ctx + t) * self.nb;
         if self.bits == 8 {
-            for i in 0..self.hd { dst[i] = self.vq[base + i] as i8 as f32 * s; }
+            for i in 0..self.hd {
+                dst[i] = self.vq[base + i] as i8 as f32 * self.sv[sb + i / 32];
+            }
         } else {
             for i in 0..self.hd {
                 let o = self.vq[base + i / 2];
                 let q = if i % 2 == 0 { (o & 0x0F) as i32 } else { (o >> 4) as i32 };
                 let q = if q >= 8 { q - 16 } else { q };
-                dst[i] = q as f32 * s;
+                dst[i] = q as f32 * self.sv[sb + i / 32];
             }
         }
     }

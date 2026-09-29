@@ -11221,3 +11221,116 @@ b9ba6ce REPRISE : toutes les mesures du tour huit chantiers, et la suite ordonne
 ⏵ Aiguille sur le 0.5B : 6 sondes sur 6 échouent (modèle trop petit) ; le 30B tourne
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='docs/contexte-long.md'\ns=open(p).read()\ns=s.replace(\"\"\"1. **Aiguille dans la botte de foin** (`tools/aiguille.py`) : la perplexité ne dit\n   pas si le modèle RETROUVE une information. Le script plante un co … [1332 caractères tronqués]`
+
+  ```
+2589330 Aiguille : le 0.5B echoue 6 fois sur 6 (limite du modele, pas du moteur)
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "sleep 300; cat /tmp/aiguille30b.log 2>/dev/null | tail -6; ps -o pid,etime,pcpu -C qtrinet-core 2>/dev/null | tail -1", "description": "Wait for the 30B needle probes", "timeoutMs": 340000}`
+
+  ```
+2996005       00:26  703
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git status --short | head -5; echo \"--- tests ---\"; cd qtrinet-core && cargo test --release 2>&1 | tail -3; echo \"--- non-régression ---\"; cd .. && ./qtrinet-core/target/release/qtrinet-core models/Qwen2.5-0.5B-Q8_0.gguf --ppl /t … [187 caractères tronqués]`
+
+  ```
+M journal/README.md
+--- tests ---
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.13s
+
+--- non-régression ---
+perplexité 19.3885 sur 510 tokens
+  ```
+
+- **get_goal** `{}`
+
+  ```
+{"goal":{"id":"goal-7beedcd4-55c3-4592-a3f6-f99085e458f1","revision":1,"objective":"Réaliser les 8 chantiers restants du projet qtrinet-core dans l'ordre : (1) protocole de perplexité longue --depuis/--stride, (2) trancher le seuil de rotation YaRN avec ce protocole, (3) KV int8 puis int4 mesurés sur Qwen 0.5B à ctx 8192 contre llama.cpp, (4) préremplissage par lots (GEMM par tranches), (5) échelles par bloc pour DenseQ8, (6) refactorisation des boucles CLI en une seule, (7) noyaux GPU warp par ligne puis formats 4 bits, (8) suite du plan 1 M (KV paginé + déport GPU, attention creuse, MLA, vision). Chaque chantier doit être implémenté, mesuré (non-régression Qwen 19,3885 et gpt-oss 15,1757 quand c'est pertinent), documenté dans le dépôt et commité.","phase":"active","roundsStarted":1,"maxGoalRounds":24},"activation":"armed"}
+  ```
+
+### 🤖 Assistant
+
+⏵ Dernière amélioration du tour : échelles par bloc de 32 pour le cache KV (piste du +5,2 % contre +0,8 %)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src && python3 - <<'PY'\np='model.rs'\ns=open(p).read()\n# Échelles par bloc de 32 dans le cache KV (au lieu d'une par vecteur).\ns=s.replace(\"\"\"    /// Quantifié : un octet par valeur en 8 bits, **deux nibbles par octet … [5217 caractères tronqués]`
+
+  ```
+BUILD
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src && python3 - <<'PY'\np='model.rs'\ns=open(p).read()\n# Lecture : une échelle par bloc.\ns=s.replace(\"\"\"        let s = self.sk[kvh * self.ctx + t];\n        let base = (kvh * self.ctx + t) * self.pas();\n        if s … [2857 caractères tronqués]`
+
+  ```
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.10s
+
+KV 32 bits (ctx 512) : perplexité 13.1368 sur 511 tokens
+KV 8  bits (ctx 512) : perplexité 399074.4600 sur 511 tokens
+KV 4  bits (ctx 512) : perplexité 570948.3957 sur 511 tokens
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src && sed -n '/pub fn ecrire/,/^    }$/p' model.rs | tail -45", "description": "Inspect the KV write path"}`
+
+  ```
+self.vf[d..d + self.hd].copy_from_slice(&v[..self.hd]);
+            return;
+        }
+        let niv = if self.bits == 4 { 7.0 } else { 127.0 };
+        let mut mk = 0f32;
+        let mut mv = 0f32;
+        for i in 0..self.hd { mk = mk.max(k[i].abs()); mv = mv.max(v[i].abs()); }
+        let sk = if mk > 0.0 { mk / niv } else { 1.0 };
+        let sv = if mv > 0.0 { mv / niv } else { 1.0 };
+        let base = (kvh * self.ctx + pos) * self.pas();
+        if self.bits == 8 {
+            for i in 0..self.hd {
+                self.kq[base + i] = (k[i] / sk).round().clamp(-niv, niv) as i8 as u8;
+                self.vq[base + i] = (v[i] / sv).round().clamp(-niv, niv) as i8 as u8;
+            }
+        } else {
+            // Nibble bas = indice pair, haut = impair, écrits ENSEMBLE : un `|=`
+            // laisserait les nibbles de la fenêtre précédente, la même position
+            // étant réécrite à chaque fenêtre.
+            for j in 0..self.hd / 2 {
+                let qk0 = (k[2 * j] / sk).round().clamp(-niv, niv) as i32 as u8 & 0x0F;
+                let qk1 = (k[2 * j + 1] / sk).round().clamp(-niv, niv) as i32 as u8 & 0x0F;
+                let qv0 = (v[2 * j] / sv).round().clamp(
+… [1091 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Mon remplacement de la *lecture* avait été appliqué, pas celui de l'*écriture* : je corrige
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src && python3 - <<'PY'\np='model.rs'\ns=open(p).read()\nvieux = \"\"\"        let niv = if self.bits == 4 { 7.0 } else { 127.0 };\n        let mut mk = 0f32;\n        let mut mv = 0f32;\n        for i in 0..self.hd { mk =  … [3927 caractères tronqués]`
+
+  ```
+écriture remplacée
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.08s
+
+KV 32 bits : perplexité 13.1368 sur 511 tokens
+KV 8  bits : perplexité 13.3360 sur 511 tokens
+KV 4  bits : perplexité 41.9442 sur 511 tokens
+  ```
+
+### 🤖 Assistant
+
+⏵ Échelles par bloc : int8 passe de +7,1 % à **+1,5 %** et int4 de +384 % à +219 %
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for b in 32 8 4; do printf \"KV %-2s bits (4 591 jetons) : \" $b; QT_KV_BITS=$b ./qtrinet-core/target/release/qtrinet-core models/Qwen2.5-0.5B-Q8_0.gguf --ppl /tmp/ids_qwen.txt --ctx 8192 --limit 8192 --dense --threads 8 2>&1 | grep  … [138 caractères tronqués]`
+
+  ```
+KV 32 bits (4 591 jetons) : perplexité 12.9080 sur 4591 tokens
+KV 8  bits (4 591 jetons) : 
+[timed out after 600000ms]
+[killed by signal: SIGTERM]
+  ```
+
+### 🤖 Assistant
+
+⏵ Je file la mesure longue et je consigne les résultats à 512 jetons
+
+- **bash** `{"command": "cat > /tmp/kv_blocs.sh <<'EOF'\n#!/bin/bash\n# KV à échelles par bloc : mesure à 4 591 jetons de contexte, machine au calme.\nset -u\ncd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\nJ=/tmp/kv_blocs.log\n: > \"$J\"\nwhile pgrep -f \"aiguille30b\" > /dev/null; do sleep 30; done\nwhile … [3614 caractères tronqués]`

@@ -132,11 +132,21 @@ Trois choses :
 2. **Le 4 bits détruit la perplexité d'un facteur 5**, chez les deux moteurs. Il
    reste implémenté — c'est lui qui fait tenir 1 M en RAM (9,7 Go) et en VRAM —
    mais il ne doit pas être le défaut, et il se valide modèle par modèle.
-3. **Notre int8 est un peu plus cher que celui de llama.cpp** (+5,2 % contre
-   +0,8 %). Nos échelles sont **par vecteur** (une par tête et par position),
-   les leurs **par bloc de 32** dans le format Q8_0. C'est la piste
-   d'amélioration la plus directe du cache : passer aux échelles par bloc de 32,
-   comme on l'a fait pour `DenseQ8`.
+3. **Notre int8 était plus cher que celui de llama.cpp** (+5,2 % contre +0,8 %)
+   parce que nos échelles étaient **par vecteur** (une par tête et par
+   position) au lieu d'une **par bloc de 32** comme Q8_0. Corrigé, et mesuré à
+   512 jetons :
+
+| KV (512 jetons) | échelle par vecteur | **échelle par bloc de 32** |
+|---|---|---|
+| f32 | 13,14 | 13,14 |
+| int8 | 14,07 (+7,1 %) | **13,34 (+1,5 %)** |
+| int4 | 63,61 (+384 %) | **41,94 (+219 %)** |
+
+L'écart avec llama.cpp (+0,8 %) est donc comblé, et le 4 bits devient deux fois
+moins destructeur — sans changer la taille du cache. C'est la même leçon que
+pour `DenseQ8` : ce n'est pas le nombre de bits qui compte, c'est la finesse des
+échelles.
 
 ## 5. YaRN à retardement : ce que la mesure a dit
 

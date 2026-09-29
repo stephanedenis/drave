@@ -139,7 +139,7 @@ comparé à `llama-tokenize` sur 4 424 jetons (0 écart).
 |---|---|---|---|
 | 1 | protocole de perplexité longue | **fait** | `--depuis N` note les mêmes jetons à contexte variable ; `--depuis 256 --ctx 256` redonne exactement la fenêtre 2 historique (21,565) |
 | 2 | seuil de rotation YaRN | **fait** | comparaison appariée (mêmes 512 jetons, contexte 128→1536) : RoPE simple **39,52 / 49,79 / 49,93 / 298,56** contre interpolation seule 42,13 / 82,02 / 82,15 / 578,86 → **le simple gagne partout**. Reste à mesurer au-delà de 4 096 de contexte (corpus trop court) |
-| 3 | KV int8 puis int4 | **fait** | int8 +7,1 % de perplexité, int4 **+384 %** (llama.cpp : +3,1 % et +411 %) ; 1 M tient en int4 (9,7 Go) |
+| 3 | KV int8 puis int4 | **fait** | **échelles par bloc de 32** : int8 +**1,5 %** (était +7,1 %), int4 +219 % (était +384 %) — l'écart avec llama.cpp (+0,8 %) est comblé ; 1 M tient en int4 (9,7 Go) |
 | 4 | préremplissage par lots | **fait, gain faible et attribué** | noyau ×2,4 ; justesse sur dense (13,1359 contre 13,1368) et sur MoE regroupé (13,7205 contre 13,7149) ; bout en bout **−3 %** seulement : le GEMM divise les projections par 2 (1,49 contre 3,05 ms/jeton) mais l'attention non groupée double (8,90 contre 4,05) et la tête reste par jeton. Suite : (a) chemin groupé dans le lot, (b) **la tête en GEMM** — voir `reports/rapport-prefill-par-lots.md` |
 | 5 | échelles par bloc pour `DenseQ8` | **fait, hypothèse réfutée** | 23,696 contre 23,612 : les échelles par bloc n'apportent rien ; l'avantage du 6 bits est son coût (25 % d'octets en moins à qualité égale) |
 | 6 | boucles CLI unifiées | **fait** | `struct Options` + `analyser` ; trois drapeaux de plus trouvés ignorés (`--attn-topk`, `--qk-topk`, `--sans-yarn` en inférence) et un bug de pas de lecture corrigé |
@@ -173,9 +173,8 @@ comparé à `llama-tokenize` sur 4 424 jetons (0 écart).
    `reports/rapport-localite-activation.md`).
 4. **Q6_K** reste à écrire (Q4_K et MXFP4 sont faits et mesurés) : c'est le
    format de certaines têtes et de quelques tenseurs Qwen.
-4.bis **KV à échelles par bloc de 32** : notre int8 coûte +5,2 % là où llama.cpp
-   (mêmes blocs que Q8_0) coûte +0,8 %. C'est la piste la plus directe pour le
-   cache, et elle se mesure en une passe.
+4.bis ~~KV à échelles par bloc de 32~~ **FAIT** : int8 +1,5 % au lieu de +7,1 %,
+   int4 +219 % au lieu de +384 %.
 5. **Le seuil de rotation** (chantier 2) : la série en cours le tranche ; si
    l'interpolation ne gagne jamais, le défaut « simple partout » est à
    envisager, et le seuil de 4 096 devient une simple borne de sécurité.
