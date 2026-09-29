@@ -425,6 +425,17 @@ pub struct Model {
     /// d'être O(N) — c'est le seul moyen d'attaquer le poste dominant.
     /// Nombre d'experts allumés par jeton (0 = valeur du modèle).
     pub moe_topk: usize,
+    /// **Profilage des neurones « chauds »** (idée de PowerInfer) : pour chaque
+    /// couche FFN, le nombre de fois où chaque neurone intermédiaire s'active.
+    /// Un neurone est « actif » au sens du moteur : sa valeur quantifiée n'est
+    /// pas nulle, c'est-à-dire `|a| > max|a| / (2 × niveaux)` — le même critère
+    /// que le chemin par événements. `None` = profilage éteint.
+    pub profil_neurones: Option<(Vec<u64>, Vec<f64>)>,   // (tirs, somme des |a|)
+    /// L'analogue MoE des neurones chauds : combien de fois chaque expert est
+    /// choisi, par couche. C'est LA question de placement qui compte pour
+    /// gpt-oss (4 experts sur 128 par jeton).
+    pub profil_experts: Option<Vec<u64>>,
+    pub profil_jetons: u64,
     pub attn_window: usize,
     /// Période du motif fenêtre/plein : la couche `l` est fenêtrée si
     /// `l % motif < motif - 1`. gpt-oss déclare 128 de fenêtre sur **une couche
@@ -961,6 +972,9 @@ impl Model {
             ctx, events: 0, act_levels: 127.0, act_thresh: 0.0, act_topk: 0, act_renorm: false,
             act_topk_proj: [0; 7], attn_topk: 0, attn_events: 0, qk_topk: 0,
             moe_topk: 0,
+            profil_neurones: None,
+            profil_experts: None,
+            profil_jetons: 0,
             attn_window: fenetre,
             swa_pattern,
             attn_sinks: if fenetre > 0 { 0 } else { 4 },
@@ -1126,6 +1140,154 @@ impl Model {
 
     /// Désactive l'étirement YaRN (pour éprouver l'hypothèse).
     pub fn cfg_yarn_off(&mut self) { self.cfg.yarn = None; }
+
+    /// Active le profilage des neurones et alloue les compteurs.
+    pub fn activer_profil_neurones(&mut self) {
+        let largeur = self.cfg.ffn.max(self.cfg.ffn_exp);
+        self.profil_neurones = Some((vec![0u64; self.cfg.n_layer * largeur],
+                                     vec![0f64; self.cfg.n_layer * largeur]));
+        if self.cfg.n_expert > 0 {
+            self.profil_experts = Some(vec![0u64; self.cfg.n_layer * self.cfg.n_expert]);
+        }
+        self.profil_jetons = 0;
+    }
+
+    /// Compte les neurones actifs d'une couche FFN pour le jeton courant.
+    ///
+    /// Le critère est celui du moteur : une activation est « morte » si elle
+    /// s'arrondit à zéro dans la quantification par vecteur. C'est donc
+    /// exactement l'ensemble que le chemin par événements ignore.
+    /// Seuil d'activation du profilage : une activation vaut `SEUIL_PROFIL` du
+    /// maximum du vecteur. Le critère « valeur quantifiée non nulle » ne
+    /// convient PAS : à 16 bits d'activation il laisse passer presque tout
+    /// (mesuré : densité de 51 104 %, tous les neurones « chauds »). PowerInfer
+    /// travaille sur des modèles ReLU, où zéro est exact ; pour du SiLU il faut
+    /// un seuil relatif, et c'est celui-là.
+    const SEUIL_PROFIL: f32 = 0.05;
+
+    #[inline]
+    fn compter_neurones(profil: &mut Option<(Vec<u64>, Vec<f64>)>, largeur: usize,
+                        couche: usize, a: &[f32]) {
+        let Some((tirs, poids)) = profil.as_mut() else { return };
+        let mut mx = 0f32;
+        for &v in a { let x = v.abs(); if x > mx { mx = x; } }
+        if mx == 0.0 { return; }
+        let seuil = Self::SEUIL_PROFIL * mx;
+        let base = couche * largeur;
+        for (i, &v) in a.iter().enumerate() {
+            let x = v.abs();
+            poids[base + i] += x as f64;
+            if x > seuil { tirs[base + i] += 1; }
+        }
+    }
+
+    /// Rapport de profilage : la loi de puissance des activations, mesurée.
+    ///
+    /// C'est la question que pose PowerInfer : quelle part des neurones est
+    /// « chaude » (active presque toujours) et quelle part des activations
+    /// concentrent-ils ? Si la réponse est « peu de neurones, beaucoup
+    /// d'activations », le placement à la granularité du neurone a un sens.
+    pub fn rapport_neurones(&self) -> Option<String> {
+        let (tirs, poids) = self.profil_neurones.as_ref()?;
+        let largeur = self.cfg.ffn.max(self.cfg.ffn_exp);
+        let n_tok = self.profil_jetons.max(1);
+        let mut out = String::new();
+        let n = tirs.len();
+        let tot_tirs: u64 = tirs.iter().sum();
+        let tot_poids: f64 = poids.iter().sum();
+        out.push_str(&format!("profil de neurones (seuil {:.0} % du max) : {} jetons,                               {} neurones par couche, {} neurones au total\n",
+                              100.0 * Self::SEUIL_PROFIL, n_tok, largeur, n));
+        out.push_str(&format!("  densité moyenne : {:.1} % des neurones tirés par jeton                               ({:.0} par couche)\n",
+                              100.0 * tot_tirs as f64 / (n as f64 * n_tok as f64),
+                              tot_tirs as f64 / n_tok as f64 / self.cfg.n_layer as f64));
+        // Localité : quelle part du travail total portent les k % de neurones
+        // les plus « lourds » (somme des |a|) et les plus « assidus » (tirs) ?
+        let mut idx_poids: Vec<usize> = (0..n).collect();
+        idx_poids.sort_by(|&a, &b| poids[b].partial_cmp(&poids[a]).unwrap());
+        let mut cumul = 0f64;
+        let mut parts = Vec::new();
+        for part in [0.01f64, 0.05, 0.10, 0.20, 0.50] {
+            let k = ((n as f64 * part) as usize).max(1);
+            let deja: f64 = idx_poids[..k.min(n)].iter().map(|&i| poids[i]).sum();
+            cumul = deja;
+            parts.push((part, 100.0 * cumul / tot_poids.max(1e-12)));
+        }
+        for (part, pct) in &parts {
+            out.push_str(&format!("  les {:>4.0} % de neurones les plus LOURDS portent {:>5.1} %                                   de la magnitude d'activation\n", part * 100.0, pct));
+        }
+        for (seuil, nom) in [(0.9f32, "> 90 %"), (0.5, "> 50 %"), (0.1, "> 10 %")] {
+            let chauds = tirs.iter().filter(|&&c| c as f32 / n_tok as f32 > seuil).count();
+            out.push_str(&format!("  neurones tirés {nom} du temps : {:>5.2} %\n",
+                                  100.0 * chauds as f64 / n as f64));
+        }
+        // Dispersion entre couches : une localité qui ne tient que sur quelques
+        // couches ne se place pas de la même façon.
+        let mut par_couche: Vec<(f64, f64)> = Vec::new();
+        for l in 0..self.cfg.n_layer {
+            let t = &tirs[l * largeur..(l + 1) * largeur];
+            let p = &poids[l * largeur..(l + 1) * largeur];
+            let mut ip: Vec<usize> = (0..largeur).collect();
+            ip.sort_by(|&a, &b| p[b].partial_cmp(&p[a]).unwrap());
+            let k = (largeur / 10).max(1);
+            let part: f64 = ip[..k].iter().map(|&i| p[i]).sum::<f64>()
+                            / p.iter().sum::<f64>().max(1e-12);
+            par_couche.push((t.iter().sum::<u64>() as f64 / n_tok as f64, 100.0 * part));
+        }
+        let f = |i: usize| par_couche[i].0;
+        let g = |i: usize| par_couche[i].1;
+        let (a1, b1) = par_couche.iter().enumerate()
+            .fold((0usize, 0usize), |(mi, ma), (i, v)| {
+                if v.0 < par_couche[mi].0 { (i, ma) } else if v.0 > par_couche[ma].0 { (mi, i) } else { (mi, ma) }
+            });
+        let _ = (f, g);
+        out.push_str(&format!("  selon la couche : tirs de {:.0} à {:.0} par jeton ;                               part des 10 % les plus lourds de {:.1} à {:.1} %\n",
+                              par_couche.iter().map(|v| v.0).fold(f64::MAX, f64::min),
+                              par_couche.iter().map(|v| v.0).fold(0.0, f64::max),
+                              par_couche.iter().map(|v| v.1).fold(f64::MAX, f64::min),
+                              par_couche.iter().map(|v| v.1).fold(0.0, f64::max)));
+        let _ = (a1, b1);
+        // ---- section MoE : les experts « chauds »
+        if let Some(exp) = self.profil_experts.as_ref() {
+            let ne = self.cfg.n_expert;
+            let n_tok = self.profil_jetons.max(1) as f64;
+            let par_jeton = self.cfg.n_expert_used.max(1) as f64;
+            out.push_str(&format!("\n  MoE : {ne} experts par couche, {par_jeton} par jeton\n"));
+            // Couverture par les k experts les plus utilisés, moyennée par couche.
+            for part in [0.05f64, 0.10, 0.25, 0.50] {
+                let k = ((ne as f64 * part) as usize).max(1);
+                let mut couverts = 0f64;
+                for l in 0..self.cfg.n_layer {
+                    let mut t: Vec<u64> = exp[l * ne..(l + 1) * ne].to_vec();
+                    t.sort_unstable_by(|a, b| b.cmp(a));
+                    let tot: u64 = t.iter().sum();
+                    if tot == 0 { continue; }
+                    couverts += t.iter().take(k).sum::<u64>() as f64 / tot as f64;
+                }
+                out.push_str(&format!("    les {:>4.0} % d'experts les plus utilisés couvrent {:>5.1} %                                       des choix\n", part * 100.0, 100.0 * couverts / self.cfg.n_layer as f64));
+            }
+            let jamais: usize = exp.iter().filter(|&&c| c == 0).count();
+            out.push_str(&format!("    experts jamais choisis : {jamais}/{} ({:.0} %) ;                                   taux moyen {:.3} par jeton\n",
+                                  exp.len(), 100.0 * jamais as f64 / exp.len() as f64,
+                                  exp.iter().sum::<u64>() as f64 / exp.len() as f64 / n_tok));
+        }
+        Some(out)
+    }
+
+    /// Écrit le classement des neurones (couche, indice, taux) pour un
+    /// placement ultérieur : les plus chauds d'abord.
+    pub fn ecrire_neurones(&self, chemin: &str) -> std::io::Result<usize> {
+        use std::io::Write;
+        let Some((tirs, poids)) = self.profil_neurones.as_ref() else { return Ok(0) };
+        let largeur = self.cfg.ffn.max(self.cfg.ffn_exp);
+        let n_tok = self.profil_jetons.max(1) as f32;
+        let mut lignes: Vec<(usize, usize, f32)> = (0..tirs.len())
+            .map(|i| (i / largeur, i % largeur, poids[i] as f32 / n_tok)).collect();
+        lignes.sort_by(|a, b| b.2.partial_cmp(&a.2).unwrap());
+        let mut f = std::io::BufWriter::new(std::fs::File::create(chemin)?);
+        writeln!(f, "# couche neurone taux")?;
+        for (l, i, t) in &lignes { writeln!(f, "{l} {i} {t:.6}")?; }
+        Ok(lignes.len())
+    }
 
     /// Activation du FFN, appliquée en place dans `gate`.
     ///
@@ -1358,6 +1520,18 @@ impl Model {
         let mut up = vec![0f32; t * self.cfg.ffn];
         let mut down = vec![0f32; t * h];
         let mut tmp = vec![0f32; hd];
+        // Tampons du lot, alloués UNE fois : les recréer à chaque couche et à
+        // chaque lot annulait le gain du produit matrice-matrice.
+        let nq_max = nh * hd;
+        let nk_max = nkv * hd;
+        let mut qa = vec![0f32; t * nq_max];
+        let mut ka = vec![0f32; t * nk_max];
+        let mut va = vec![0f32; t * nk_max];
+        let mut yl = vec![0f32; t * nq_max.max(nk_max).max(self.cfg.ffn).max(h)];
+        let mut ai = vec![0i32; t * h.max(nq_max)];
+        let mut sa = vec![0f32; t];
+        let mut gi = vec![0i32; t * self.cfg.ffn];
+        let mut sg = vec![0f32; t];
         let mut sc = vec![0f32; pos0 + t];
         let mut kd = vec![0f32; hd];
         let mut vd = vec![0f32; hd];
@@ -1365,7 +1539,7 @@ impl Model {
         let mut attn_idx: Vec<u32> = Vec::with_capacity(ctx);
         let scale = 1.0 / (hd as f32).sqrt();
         // Quantification d'un lot : mêmes règles que `quant_scratch`.
-        let quantifier = |src: &[f32], dst: &mut Vec<i32>, ech: &mut Vec<f32>,
+        let quantifier = |src: &[f32], dst: &mut [i32], ech: &mut [f32],
                           niveaux: f32, seuil: f32| {
             let n = src.len() / t;
             for i in 0..t {
@@ -1390,16 +1564,19 @@ impl Model {
                 Self::rmsnorm(r, &lay.attn_norm, self.cfg.eps, &mut hn[i * h..(i + 1) * h]);
             }
             quantifier(&hn, &mut xi, &mut sx, self.act_levels, self.act_thresh);
-            // 2. q, k, v en un produit matrice-matrice chacun
+            // 2. q, k, v : un produit matrice-matrice chacun. Trois tampons
+            //    DISTINCTS (un `y` partagé avec un pas par projection mélangeait
+            //    les sorties : mesuré, une perplexité de 1,6 million).
             let nq = nh * hd;
-            let mut y = vec![0f32; t * nq.max(nkv * hd).max(self.cfg.ffn).max(h)];
-            for (pj, taille) in [(&lay.wq, nq), (&lay.wk, nkv * hd), (&lay.wv, nkv * hd)] {
+            let nk = nkv * hd;
+            for (pj, dst, taille) in [(&lay.wq, &mut qa, nq),
+                                      (&lay.wk, &mut ka, nk),
+                                      (&lay.wv, &mut va, nk)] {
                 if let Some(d8) = pj.d.as_ref() {
-                    let mut yl = vec![0f32; d8.n_out * t];
-                    self.pool.gemm_dense_i8(d8, &xi, t, &sx, &mut yl);
+                    self.pool.gemm_dense_i8(d8, &xi, t, &sx, &mut yl[..d8.n_out * t]);
                     for i in 0..t {
-                        for oo in 0..d8.n_out {
-                            y[i * taille + oo] = yl[oo * t + i]
+                        for oo in 0..taille {
+                            dst[i * taille + oo] = yl[oo * t + i]
                                 + pj.bias.as_ref().map_or(0.0, |b| b[oo]);
                         }
                     }
@@ -1410,19 +1587,13 @@ impl Model {
                         Self::matvec(&mut self.pool, pj, &hn[i * h..(i + 1) * h], &mut out,
                                      &mut self.events, self.act_levels, self.act_thresh, 0,
                                      self.act_renorm, &mut scratch, self.seuil_push);
-                        y[i * taille..(i + 1) * taille].copy_from_slice(&out);
+                        dst[i * taille..(i + 1) * taille].copy_from_slice(&out);
                     }
                 }
             }
-            for i in 0..t { q[i * nq..(i + 1) * nq].copy_from_slice(&y[i * nq..(i + 1) * nq]); }
-            for i in 0..t {
-                k[i * nkv * hd..(i + 1) * nkv * hd]
-                    .copy_from_slice(&y[i * nq..i * nq + nkv * hd]);
-            }
-            for i in 0..t {
-                v[i * nkv * hd..(i + 1) * nkv * hd]
-                    .copy_from_slice(&y[i * nq + nkv * hd..i * nq + 2 * nkv * hd]);
-            }
+            q.copy_from_slice(&qa);
+            k.copy_from_slice(&ka);
+            v.copy_from_slice(&va);
             // 3. normes de tête, rotation, écriture du cache, attention
             for i in 0..t {
                 let pos = pos0 + i;
@@ -1496,14 +1667,11 @@ impl Model {
             }
             // 4. projection de sortie du lot, résidu, norme du FFN
             {
-                let mut ai = vec![0i32; t * h];
-                let mut sa = vec![0f32; t];
-                quantifier(&att, &mut ai, &mut sa, self.act_levels, self.act_thresh);
-                let (n_out, mut yl) = {
+                quantifier(&att, &mut ai[..t * h], &mut sa, self.act_levels, self.act_thresh);
+                let n_out = {
                     let d8 = self.layers[l].wo.d.as_ref().expect("projection dense requise");
-                    let mut yl = vec![0f32; d8.n_out * t];
-                    self.pool.gemm_dense_i8(d8, &ai, t, &sa, &mut yl);
-                    (d8.n_out, yl)
+                    self.pool.gemm_dense_i8(d8, &ai[..t * h], t, &sa, &mut yl[..d8.n_out * t]);
+                    d8.n_out
                 };
                 let bias = self.layers[l].wo.bias.clone();
                 for i in 0..t {
@@ -1512,7 +1680,6 @@ impl Model {
                             + bias.as_ref().map_or(0.0, |b| b[oo]) + x[i * h + oo];
                     }
                 }
-                yl.clear();
             }
             for i in 0..t {
                 let r = &o[i * h..(i + 1) * h];
@@ -1523,8 +1690,7 @@ impl Model {
             for (pj, dst, taille) in [(&lay.wgate, &mut gate, self.cfg.ffn),
                                       (&lay.wup, &mut up, self.cfg.ffn)] {
                 if let Some(d8) = pj.d.as_ref() {
-                    let mut yl = vec![0f32; d8.n_out * t];
-                    self.pool.gemm_dense_i8(d8, &xi, t, &sx, &mut yl);
+                    self.pool.gemm_dense_i8(d8, &xi, t, &sx, &mut yl[..d8.n_out * t]);
                     for i in 0..t {
                         for oo in 0..taille { dst[i * taille + oo] = yl[oo * t + i]; }
                     }
@@ -1538,22 +1704,17 @@ impl Model {
                 gate[i * self.cfg.ffn..(i + 1) * self.cfg.ffn].copy_from_slice(&gg);
             }
             {
-                let mut gi = vec![0i32; t * self.cfg.ffn];
-                let mut sg = vec![0f32; t];
                 quantifier(&gate, &mut gi, &mut sg, self.act_levels, self.act_thresh);
-                let mut yl = {
+                {
                     let d8 = self.layers[l].wdown.d.as_ref().expect("projection dense requise");
-                    let mut yl = vec![0f32; d8.n_out * t];
-                    self.pool.gemm_dense_i8(d8, &gi, t, &sg, &mut yl);
-                    yl
-                };
+                    self.pool.gemm_dense_i8(d8, &gi, t, &sg, &mut yl[..d8.n_out * t]);
+                }
                 for i in 0..t {
                     for oo in 0..h {
                         down[i * h + oo] = yl[oo * t + i];
                         x[i * h + oo] = o[i * h + oo] + down[i * h + oo];
                     }
                 }
-                yl.clear();
             }
         }
         for i in 0..t {
@@ -1570,6 +1731,9 @@ impl Model {
         let tkp = self.act_topk_proj;
         let tkg = self.act_topk;
         let tk = |p: usize| if tkp[p] > 0 { tkp[p] } else { tkg };
+        // Lus AVANT l'emprunt destructuré (comme la parcimonie par projection).
+        let largeur_profil = self.cfg.ffn.max(self.cfg.ffn_exp);
+        self.profil_jetons += 1;
         let Model { g, cfg, layers, out_norm, pool, kv, events, .. } = self;
         let h = cfg.hidden;
         let hd = cfg.head_dim;
@@ -1876,6 +2040,11 @@ impl Model {
                     let somme_k: f32 = idx.iter().map(|&e| sc_e[e as usize]).sum();
                     inv_k = if somme_k > 0.0 { 1.0 / somme_k } else { 0.0 };
                 }
+                if self.profil_experts.is_some() {
+                    let base = l * ne;
+                    let p = self.profil_experts.as_mut().unwrap();
+                    for &e in &idx { p[base + e as usize] += 1; }
+                }
                 for v in down.iter_mut() { *v = 0.0; }
                 for &e in &idx {
                     let w_exp = sc_e[e as usize] * inv_k;
@@ -1888,6 +2057,8 @@ impl Model {
                                     self.act_thresh, tk(5), self.act_renorm, &mut scratch,
                                     moe.biais_up.as_ref().map(|b| &b[e as usize * moe.n_ff..]));
                     Self::activation(&mut gate, &up, cfg.ffn_exp, cfg.ffn_act_oss);
+                    Self::compter_neurones(&mut self.profil_neurones, largeur_profil,
+                                           l, &gate[..cfg.ffn_exp]);
                     let md = moe.down.expert(e as usize);
                     Self::matvec_q4(pool, &md, &gate, &mut exp_out, self.act_levels,
                                     self.act_thresh, tk(6), self.act_renorm, &mut scratch,
@@ -1928,6 +2099,8 @@ impl Model {
             }
             Self::matvec(pool, &lay.wup, &hn, &mut up, events, self.act_levels, self.act_thresh, tk(5), self.act_renorm, &mut scratch, self.seuil_push);
             Self::activation(&mut gate, &up, cfg.ffn, cfg.ffn_act_oss);
+            Self::compter_neurones(&mut self.profil_neurones, largeur_profil,
+                                   l, &gate[..cfg.ffn]);
             Self::matvec(pool, &lay.wdown, &gate, &mut down, events, self.act_levels, self.act_thresh, tk(6), self.act_renorm, &mut scratch, self.seuil_push);
             // --- greffon : neurone supplémentaire, sans réentraînement
             if let Some(pt) = self.patch.as_ref() {

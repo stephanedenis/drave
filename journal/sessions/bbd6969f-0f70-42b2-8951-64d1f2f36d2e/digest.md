@@ -9162,3 +9162,629 @@ tête token_embd.weight : 151936 × 896 · 144.6 Mo · 28 blocs de 32
 ⏵ Déport de tête : PPL identique (22,0949) et « reste » de 15,6 à 6,2 ms/jeton. Je consigne
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='REPRISE.md'\ns=open(p).read()\ns=s.replace(\"\"\"### d. Noyaux GPU\n\nIls fonctionnent et donnent un résultat **identique au chiffre près** au CPU,\nmais lisent une ligne par fil : les accès d'une même warp tombe … [3083 caractères tronqués]`
+
+  ```
+21ac631 Item 7 (1/2) : noyau GPU une warp par ligne, la tete redevient deportable
+=== jetons 1536-2047, contexte croissant, trois régimes ===
+
+### contexte 128 · RoPE simple
+  ```
+
+- **bash** `{"command": "ps -o pid,etime,pcpu,args -C qtrinet-core 2>/dev/null | cut -c1-90 | tail -2; pgrep -f seuil_rotation >/dev/null && echo \"script vivant\"; uptime", "description": "Check the stalled rotation series"}`
+
+  ```
+PID     ELAPSED %CPU COMMAND
+3274378    01:16:09 2580 ./qtrinet-core/target/release/qtrinet-core /home/stephane/FastNVM
+script vivant
+ 08:56:08  up 7 days 22:08,  2 users,  load average: 57,68, 57,01, 49,38
+  ```
+
+### 🤖 Assistant
+
+⏵ Série bloquée par la sursouscription (charge 57 sur 40 fils) : je relance proprement, seuls
+
+- **bash** `{"command": "pkill -f seuil_rotation; sleep 2; pkill -x qtrinet-core; sleep 3; ps -x -o pid,comm | grep -c qtrinet || echo \"aucun moteur\"; uptime", "description": "Kill stalled series and engines"}`
+
+  ```
+(no output)
+[killed by signal: SIGTERM]
+  ```
+
+- **bash** `{"command": "sleep 20; pgrep -x qtrinet-core >/dev/null && echo \"moteur encore là\" || echo \"moteurs arrêtés\"; uptime; cat > /tmp/seuil_rotation2.sh <<'EOF'\n#!/bin/bash\n# Item 2, seconde tentative : la première est morte de sursouscription (charge 57\n# sur 40 fils, barrière tournante en livelo … [1286 caractères tronqués]`
+
+  ```
+moteur encore là
+ 08:56:45  up 7 days 22:08,  2 users,  load average: 47,29, 54,48, 48,81
+relancé avec 8 fils, seul sur la machine
+  ```
+
+- **bash** `{"command": "ps -eo pid,etime,pcpu,comm | grep -i qtrinet | head -5; ps aux | grep \"[q]trinet-core\" | awk '{print $2, $3, $10}' | head -3", "description": "Identify remaining engine processes"}`
+
+  ```
+3274378    01:16:55 2586 qtrinet-core
+3274378 2586 1990:00
+  ```
+
+- **bash** `{"command": "kill -9 3274378 2>/dev/null; sleep 5; ps -eo pid,comm | grep -c qtrinet || true; echo \"---\"; ps -o pid,etime,pcpu -C qtrinet-core 2>/dev/null | tail -1; uptime", "description": "Force-kill the stuck engine"}`
+
+  ```
+0
+---
+    PID     ELAPSED %CPU
+ 08:57:04  up 7 days 22:09,  2 users,  load average: 40,87, 52,60, 48,32
+  ```
+
+### 🤖 Assistant
+
+⏵ PowerInfer : j'implémente leur idée centrale — le profilage hors ligne des neurones « chauds »
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src && grep -n \"pub act_topk_proj\\|pub seuil_push\\|pub moe_topk\" model.rs | head -3 && grep -n \"Self::activation(&mut gate, &up, cfg.ffn_exp, cfg.ffn_act_oss);\" model.rs | head -3 && grep -n \"Self::activation(&mut ga … [126 caractères tronqués]`
+
+  ```
+408:    pub act_topk_proj: [usize; 7],
+427:    pub moe_topk: usize,
+440:    pub seuil_push: f32,
+1890:                    Self::activation(&mut gate, &up, cfg.ffn_exp, cfg.ffn_act_oss);
+1904:                    Self::activation(&mut gate, &up, cfg.ffn_exp, cfg.ffn_act_oss);
+1930:            Self::activation(&mut gate, &up, cfg.ffn, cfg.ffn_act_oss);
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src && python3 - <<'PY'\np='model.rs'\ns=open(p).read()\n\n# 1. Le champ : un compteur par couche × neurone, plus le nombre de jetons vus.\ns=s.replace(\"\"\"    pub moe_topk: usize,\"\"\",\n\"\"\"    pub moe_topk: usize,\n … [8311 caractères tronqués]`
+
+  ```
+error[E0499]: cannot borrow `*self` as mutable more than once at a time
+    --> src/model.rs:2014:21
+     |
+1696 |         let Model { g, cfg, layers, out_norm, pool, kv, events, .. } = self;
+     |                        --- first mutable borrow occurs here
+...
+2014 |                     self.compter_neurones(l, &gate[..cfg.ffn_exp]);
+--
+error[E0499]: cannot borrow `*self` as mutable more than once at a time
+    --> src/model.rs:2055:13
+     |
+1696 |         let Model { g, cfg, layers, out_norm, pool, kv, events, .. } = self;
+     |                        --- first mutable borrow occurs here
+...
+2055 |             self.compter_neurones(l, &gate[..cfg.ffn]);
+--
+error: could not compile `qtrinet-core` (bin "qtrinet-core") due to 2 previous errors; 7 warnings emitted
+BUILD
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src && python3 - <<'PY'\np='model.rs'\ns=open(p).read()\ns=s.replace(\"\"\"    #[inline]\n    fn compter_neurones(&mut self, couche: usize, a: &[f32]) {\n        if self.profil_neurones.is_none() { return; }\n        let la … [2008 caractères tronqués]`
+
+  ```
+error[E0503]: cannot use `self.cfg.ffn` because it was mutably borrowed
+    --> src/model.rs:1696:30
+     |
+1695 |         let Model { g, cfg, layers, out_norm, pool, kv, events, .. } = self;
+     |                        --- `self.cfg` is borrowed here
+1696 |         let largeur_profil = self.cfg.ffn.max(self.cfg.ffn_exp);
+     |                              ^^^^^^^^^^^^ use of borrowed `self.cfg`
+1697 |         self.profil_jetons += 1;
+1698 |         let h = cfg.hidden;
+--
+error[E0503]: cannot use `self.cfg.ffn_exp` because it was mutably borrowed
+    --> src/model.rs:1696:47
+     |
+1695 |         let Model { g, cfg, layers, out_norm, pool, kv, events, .. } = self;
+     |                        --- `self.cfg` is borrowed here
+1696 |         let largeur_profil = self.cfg.ffn.max(self.cfg.ffn_exp);
+     |                                               ^^^^^^^^^^^^^^^^ use of borrowed `self.cfg`
+1697 |         self.profil_jetons += 1;
+1698 |         let h = cfg.hidden;
+--
+error: could not compile `qtrinet-core` (bin "qtrinet-core") due to 2 previous errors; 7 warnings emitted
+BUILD
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src && python3 - <<'PY'\np='model.rs'\ns=open(p).read()\ns=s.replace(\"\"\"        let Model { g, cfg, layers, out_norm, pool, kv, events, .. } = self;\n        let largeur_profil = self.cfg.ffn.max(self.cfg.ffn_exp);\n     … [554 caractères tronqués]`
+
+  ```
+BUILD
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src && python3 - <<'PY'\np='main.rs'\ns=open(p).read()\ns=s.replace(\"\"\"    logits_bin: Option<String>, ppl_profil: bool,\"\"\",\n\"\"\"    logits_bin: Option<String>, ppl_profil: bool,\n    /// Profilage des neurones « c … [2592 caractères tronqués]`
+
+  ```
+BUILD
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 300 ./qtrinet-core/target/release/qtrinet-core models/Qwen2.5-0.5B-Q8_0.gguf --ppl /tmp/ids_qwen.txt --ctx 256 --limit 512 --dense --threads 8 --profil-neurones --neurones-sortie /tmp/neurones_qwen.txt 2>&1 | tail -20", "desc … [76 caractères tronqués]`
+
+  ```
+/tmp/ids_qwen.txt : 512 tokens, fenêtres de 256
+[config] cache KV : 32 bits, 0.01 Go pour 256 jetons
+[modele] 24 couches chargées en 2.123151449s — listes 0.00 Go , 30 threads
+[config] 24 couches, hidden 896 · 
+[config] puits appris sur 0/24 couches · n_rot 64 · ffn 4864 · experts 0
+[config] rotation : RoPE simple (le modèle ne déclare pas YaRN)
+     255 tokens notés — perplexité cumulée 17.431  (1.2 tok/s)  [fenêtre 1 : 255 notés, PPL 17.431]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 400 ./qtrinet-core/target/release/qtrinet-core models/Qwen2.5-0.5B-Q8_0.gguf --ppl /tmp/ids_qwen.txt --ctx 128 --limit 128 --dense --threads 8 --profil-neurones 2>&1 | grep -A 12 \"profil de neurones\"", "description": "Quick … [55 caractères tronqués]`
+
+  ```
+(no output)
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 500 ./qtrinet-core/target/release/qtrinet-core models/Qwen2.5-0.5B-Q8_0.gguf --ppl /tmp/ids_qwen.txt --ctx 128 --limit 128 --dense --threads 8 --profil-neurones > /tmp/prof.out 2>&1; echo \"exit=$?\"; tail -14 /tmp/prof.out", … [81 caractères tronqués]`
+
+  ```
+exit=0
+[config] cache KV : 32 bits, 0.00 Go pour 128 jetons
+[modele] 24 couches chargées en 1.512544157s — listes 0.00 Go , 30 threads
+[config] 24 couches, hidden 896 · 
+[config] puits appris sur 0/24 couches · n_rot 64 · ffn 4864 · experts 0
+[config] rotation : RoPE simple (le modèle ne déclare pas YaRN)
+     127 tokens notés — perplexité cumulée 14.650  (1.3 tok/s)
+
+=== perplexité 14.6496 sur 127 tokens (0 événements, 101.1 s) ===
+    1.3 tok/s effectifs (avant + tête)
+    attention : 0.02 M paires (requête, clé) par token
+    projections : 0.0 M événements par token
+    part de l'attention dans le flux d'événements : 100.0 %
+    postes (ms/token) : projets-attn 314.40 | rope 1.49 | attention 2.89 | proj+mlp 462.09 | somme 780.87 | reste (tête + échantillonnage) 15.43
+    dont attention : scores 1.16 | softmax 0.38 | somme pondérée + écriture KV 1.35
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src && grep -n \"activer_profil_neurones\\|rapport_neurones\\|profilage des neurones\" main.rs", "description": "Check where the profiler wiring landed"}`
+
+  ```
+1294:        mdl.activer_profil_neurones();
+1295:        println!("profilage des neurones actif : un neurone compte comme actif si sa valeur \
+1433:    if let Some(rapport) = mdl.rapport_neurones() {
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src && sed -n '1284,1300p' main.rs", "description": "Inspect the profiler activation context"}`
+
+  ```
+act_thresh * 100.0,
+                 if act_topk > 0 { format!(", k-WTA k={act_topk}") } else { String::new() });
+    }
+    if let Some(l) = hebb_layer {
+        let mut hb = model::Hebb::new(l, mdl.cfg.ffn, mdl.cfg.hidden, 0.1);
+        hb.log_on = true;
+        mdl.hebb = Some(hb);
+        println!("journalisation : couche {l}, entrée FFN ({} dim)", mdl.cfg.hidden);
+    }
+    if profil_neurones {
+        mdl.activer_profil_neurones();
+        println!("profilage des neurones actif : un neurone compte comme actif si sa valeur \
+                  quantifiée n'est pas nulle (même critère que le chemin par événements)");
+    }
+    mdl.reset_events();
+    // Fenêtres d'évaluation : soit des tranches brutes de `ctx` jetons (mode
+    // historique, toutes notées), soit des tours harmony dont seuls les jetons
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src && grep -n '\"--profil-neurones\"' main.rs; grep -n 'profil_neurones: bool' main.rs; grep -n \"let profil = ppl_profil\" main.rs; grep -c \"while i < args.len()\" main.rs", "description": "Verify flag parsing wiring"}`
+
+  ```
+439:            "--profil-neurones" => o.profil_neurones = true,
+341:    profil_neurones: bool, neurones_sortie: Option<String>,
+1368:    let profil = ppl_profil;
+2
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src && sed -n '/^fn run_ppl/,/let lot = lot.max(1)/p' main.rs | head -14 && cd .. && timeout 120 ../qtrinet-core/target/release/qtrinet-core 2>/dev/null; cd .. && timeout 200 ./qtrinet-core/target/release/qtrinet-core model … [236 caractères tronqués]`
+
+  ```
+fn run_ppl(opt: Options) {
+    let Options {
+        ids_file: idfile, texte_file, ppl_texte: _, limit, depuis,
+        ctx: ctx_opt, threads: threads_opt, abits: abits_opt,
+        ctx_impose, threads_impose, abits_impose,
+        dense, auto, q4, b6, attn_window, swa_pattern,
+        sans_fenetre, attn_sinks, attn_topk, qk_topk, act_thresh, act_topk, act_renorm,
+        topk_proj, moe_topk, patch: patch_file, hebb_layer, ffn_gain, logits_bin,
+        ppl_profil, lot, profil_neurones, neurones_sortie,
+        harmony, harmony_contexte, sans_yarn, ..
+    } = opt;
+    let lot = lot.max(1);
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 250 ./qtrinet-core/target/release/qtrinet-core models/Qwen2.5-0.5B-Q8_0.gguf --ppl /tmp/ids_qwen.txt --ctx 64 --limit 64 --dense --threads 4 --profil-neurones > /tmp/prof2.out 2>&1; echo \"exit=$?\"; grep -E \"profilage|profi … [174 caractères tronqués]`
+
+  ```
+exit=0
+    part de l'attention dans le flux d'événements : 100.0 %
+    postes (ms/token) : projets-attn 372.83 | rope 1.18 | attention 0.85 | proj+mlp 520.69 | somme 895.56 | reste (tête + échantillonnage) 17.05
+    dont attention : scores 0.34 | softmax 0.11 | somme pondérée + écriture KV 0.40
+[stderr]
+ls: cannot access 'target/release/qtrinet-core': No such file or directory
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && ls -la target/release/qtrinet-core && cargo build --release 2>&1 | tail -5 && ls -la target/release/qtrinet-core && cd .. && timeout 250 ./qtrinet-core/target/release/qtrinet-core models/Qwen2.5-0.5B-Q8_0.gguf --ppl /tmp … [184 caractères tronqués]`
+
+  ```
+-rwxr-xr-x. 2 stephane stephane 1075992 29 sep 08:58 target/release/qtrinet-core
+    |
+    = note: `#[warn(non_shorthand_field_patterns)]` on by default
+
+warning: `qtrinet-core` (bin "qtrinet-core") generated 13 warnings (run `cargo fix --bin "qtrinet-core" -p qtrinet-core` to apply 6 suggestions)
+    Finished `release` profile [optimized] target(s) in 0.02s
+-rwxr-xr-x. 2 stephane stephane 1075992 29 sep 08:58 target/release/qtrinet-core
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src && sed -n '430,445p' main.rs && echo \"=== test des deux drapeaux ===\" && cd .. && timeout 250 ../Qtrinet/qtrinet-core/target/release/qtrinet-core 2>/dev/null; cd .. && timeout 250 ./qtrinet-core/target/release/qtrinet … [259 caractères tronqués]`
+
+  ```
+"--chat" => o.chat = true,
+            "--dense" => o.dense = true,
+            "--auto" => o.auto = true,
+            "--push" => { o.auto = false; o.dense = false; }
+            "--pin" => o.pin = true,
+            "--sans-fenetre" => o.sans_fenetre = true,
+            "--sans-yarn" => o.sans_yarn = true,
+            "--act-renorm" => o.act_renorm = true,
+            "--ppl-profil" => o.ppl_profil = true,
+            "--profil-neurones" => o.profil_neurones = true,
+            "--neurones-sortie" => o.neurones_sortie = Some(suivant(i).clone()),
+            "--harmony" => o.harmony = Some("alterne".into()),
+            "--harmony-assistant" => o.harmony = Some("assistant".into()),
+            "--harmony-user" => o.harmony = Some("user".into()),
+            "--harmony-suite" => o.harmony = Some("suite".into()),
+            "--q4" => o.q4 |= 3,
+=== test des deux drapeaux ===
+1
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 250 ./qtrinet-core/target/release/qtrinet-core models/Qwen2.5-0.5B-Q8_0.gguf --ppl /tmp/ids_qwen.txt --ctx 64 --limit 64 --dense --threads 4 --ppl-profil --profil-neurones 2>&1 | grep -E \"profil\" ", "description": "See whic … [40 caractères tronqués]`
+
+  ```
+profilage des neurones actif : un neurone compte comme actif si sa valeur quantifiée n'est pas nulle (même critère que le chemin par événements)
+profil de neurones : 64 jetons, 4864 neurones par couche
+  ```
+
+### 🤖 Assistant
+
+⏵ Le profileur fonctionne. Mesure sur Qwen (1 022 jetons) pendant que je rédige l'analyse
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && nohup ./qtrinet-core/target/release/qtrinet-core models/Qwen2.5-0.5B-Q8_0.gguf --ppl /tmp/ids_qwen.txt --ctx 512 --limit 1024 --dense --threads 8 --profil-neurones --neurones-sortie /tmp/neurones_qwen.txt > /tmp/prof_qwen.out 2>&1 &  … [119 caractères tronqués]`
+
+  ```
+profil Qwen lancé
+
+### contexte 128 · RoPE simple
+  ```
+
+- **bash** `{"command": "sleep 240; grep -A 12 \"profil de neurones\" /tmp/prof_qwen.out 2>/dev/null || tail -3 /tmp/prof_qwen.out; echo \"--- seuil ---\"; tail -4 /tmp/seuil_rotation.log", "description": "Read the Qwen neuron profile", "timeoutMs": 300000}`
+
+  ```
+[config] 24 couches, hidden 896 · 
+[config] puits appris sur 0/24 couches · n_rot 64 · ffn 4864 · experts 0
+[config] rotation : RoPE simple (le modèle ne déclare pas YaRN)
+--- seuil ---
+=== jetons 1536-2047 (les MÊMES), contexte croissant, deux régimes ===
+
+### contexte 128 · RoPE simple
+  ```
+
+- **bash** `{"command": "pkill -f \"profil-neurones\" ; sleep 5; ps -o pid,etime,pcpu -C qtrinet-core 2>/dev/null | tail -2; sleep 60; tail -3 /tmp/seuil_rotation.log", "description": "Free the machine for the queued series", "timeoutMs": 120000}`
+
+  ```
+(no output)
+[killed by signal: SIGTERM]
+  ```
+
+- **bash** `{"command": "sleep 30; ps -o pid,etime,pcpu -C qtrinet-core 2>/dev/null | tail -2; echo \"---\"; tail -3 /tmp/seuil_rotation.log; uptime", "description": "Check machine state after cleanup", "timeoutMs": 120000}`
+
+  ```
+PID     ELAPSED %CPU
+3707868       27:39 2019
+---
+=== jetons 1536-2047 (les MÊMES), contexte croissant, deux régimes ===
+
+### contexte 128 · RoPE simple
+ 09:24:44  up 7 days 22:36,  2 users,  load average: 50,50, 59,74, 59,07
+  ```
+
+- **bash** `{"command": "ps -eo pid,ppid,etime,pcpu,rss,comm --sort=-pcpu | head -12; echo \"--- threads du moteur ---\"; ps -o nlwp= -p 3707868 2>/dev/null", "description": "Find what is loading the machine"}`
+
+  ```
+PID    PPID     ELAPSED %CPU   RSS COMMAND
+3707868 3705717       27:45 2024 62271340 qtrinet-core
+3807517  710008       00:00 50.0  4028 bash
+  11117   11106  7-18:24:02 34.3 464088 node-MainThread
+ 710008  332808  3-21:28:32 21.4 1363172 node-MainThread
+   3770    2357  7-18:36:21 19.7 562416 plasmashell
+ 372484  370543  5-14:07:37  4.1 140396 node-MainThread
+3549224    2357       52:20  3.9 507232 chrome
+3742867 3549302       17:49  3.9 261076 chrome
+3782443 3549302       06:32  3.6 239108 chrome
+3553666 3549302       51:51  3.4 494096 chrome
+3552688 3549269       51:55  2.6 296548 chrome
+--- threads du moteur ---
+  31
+  ```
+
+### 🤖 Assistant
+
+⏵ Le moteur part en livelock (31 fils, 27 min pour une passe de 2 min) — je diagnostique
+
+- **bash** `{"command": "pkill -f seuil_rotation2; sleep 2; kill -9 3707868 2>/dev/null; sleep 3; ps -o pid,pcpu -C qtrinet-core 2>/dev/null | tail -1; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== A : protocole historique (sans depuis) ===\" && timeout 300 ./qtrinet-core/target/release/qtrin … [276 caractères tronqués]`
+
+  ```
+(no output)
+[killed by signal: SIGTERM]
+  ```
+
+- **bash** `{"command": "sleep 5; ps -o pid,pcpu -C qtrinet-core 2>/dev/null | tail -1; uptime", "description": "Confirm engines are gone"}`
+
+  ```
+3707868 2039
+ 09:25:14  up 7 days 22:37,  2 users,  load average: 45,83, 57,73, 58,42
+  ```
+
+- **bash** `{"command": "kill -9 3707868; sleep 5; ps -o pid,pcpu -C qtrinet-core 2>/dev/null | tail -1 || echo \"plus de moteur\"; uptime", "description": "Force-kill the livelocked engine", "timeoutMs": 60000}`
+
+  ```
+PID %CPU
+ 09:25:24  up 7 days 22:37,  2 users,  load average: 41,30, 56,38, 57,98
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 400 ./qtrinet-core/target/release/qtrinet-core /home/stephane/FastNVMe/models/gpt-oss-120b-MXFP4.gguf --ppl-texte /tmp/wt2_long.txt --dense --threads 8 --ctx 128 --limit 128 2>&1 | grep -E \"perplexité sur|rotation :\" | tail … [84 caractères tronqués]`
+
+  ```
+[config] rotation : RoPE simple (contexte 256 ≤ 4096 initial ; YaRN ×32 prendrait le relais au-delà)
+  ```
+
+### 🤖 Assistant
+
+⏵ Bug trouvé (le mien) : les drapeaux booléens avançaient de 2 au lieu de 1 → `--ctx` et `--threads` étaient sautés
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src && python3 - <<'PY'\nimport re\np='main.rs'\ns=open(p).read()\ndebut = s.index(\"fn analyser(args: &[String]) -> Options {\")\nfin = s.index(\"\\n}\\n\", s.index(\"if o.bits > 0\", debut)) + 3\nnouveau = '''fn analyser( … [7306 caractères tronqués]`
+
+  ```
+BUILD
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== les drapeaux sont-ils vus ? ===\" && timeout 400 ./qtrinet-core/target/release/qtrinet-core /home/stephane/FastNVMe/models/gpt-oss-120b-MXFP4.gguf --ppl-texte /tmp/wt2_long.txt --dense --threads 8 --ctx 128 --limit 128 2>& … [128 caractères tronqués]`
+
+  ```
+=== les drapeaux sont-ils vus ? ===
+[modele] 36 couches chargées en 55.893974868s — listes 0.00 Go , 8 threads
+[config] rotation : RoPE simple (contexte 128 ≤ 4096 initial ; YaRN ×32 prendrait le relais au-delà)
+  ```
+
+- **bash** `{"command": "uptime; ps -eo pid,pcpu,rss,comm --sort=-pcpu | head -4; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && time timeout 600 ./qtrinet-core/target/release/qtrinet-core /home/stephane/FastNVMe/models/gpt-oss-120b-MXFP4.gguf --ppl-texte /tmp/wt2_long.txt --dense --threads 8 --ctx 128 - … [146 caractères tronqués]`
+
+  ```
+09:34:12  up 7 days 22:46,  2 users,  load average: 9,63, 27,61, 43,30
+    PID %CPU   RSS COMMAND
+3862289 50.0  4040 bash
+  11117 34.3 464860 node-MainThread
+ 710008 21.4 1424604 node-MainThread
+    4.8 tok/s effectifs (avant + tête)
+[stderr]
+
+real	1m12,554s
+user	4m26,655s
+sys	0m39,526s
+  ```
+
+### 🤖 Assistant
+
+⏵ Bug corrigé : 1 min 12 pour la passe (contre 27 min bloquées). Je relance la série d'item 2
+
+- **bash** `{"command": "chmod +x /tmp/seuil_rotation2.sh && (nohup /tmp/seuil_rotation2.sh > /tmp/seuil_rotation2.out 2>&1 &); sleep 10; echo \"relancée\"; tail -2 /tmp/seuil_rotation.log", "description": "Relaunch the rotation series with the fixed parser"}`
+
+  ```
+relancée
+
+### contexte 128 · RoPE simple
+  ```
+
+### 🤖 Assistant
+
+⏵ Pendant la série : profil complet des neurones sur Qwen (idée PowerInfer appliquée à nos modèles)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && nohup ./qtrinet-core/target/release/qtrinet-core models/Qwen2.5-0.5B-Q8_0.gguf --ppl /tmp/ids_qwen.txt --ctx 256 --limit 512 --dense --threads 4 --profil-neurones --neurones-sortie /tmp/neurones_qwen.txt > /tmp/prof_qwen.out 2>&1 & s … [168 caractères tronqués]`
+
+  ```
+profil de neurones : 512 jetons, 4864 neurones par couche
+  activations : 511.042 par neurone et par jeton (densité 51104.2 %)
+  les  1.0 % de neurones les plus chauds portent  24.0 % des activations
+  les  5.0 % de neurones les plus chauds portent 100.0 % des activations
+  les 10.0 % de neurones les plus chauds portent 100.0 % des activations
+  les 20.0 % de neurones les plus chauds portent 100.0 % des activations
+  neurones actifs > 90 % du temps : 100.00 %
+  neurones actifs > 50 % du temps : 100.00 %
+  neurones actifs > 10 % du temps : 100.00 %
+  selon la couche : médiane du taux 1.00–1.00, part de chauds 100.0–100.0 %
+
+classement de 116736 neurones écrit dans /tmp/neurones_qwen.txt
+  ```
+
+### 🤖 Assistant
+
+⏵ Mon critère d'activation était trop permissif (densité >100 %). Je passe à un seuil relatif + part de magnitude
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src && python3 - <<'PY'\np='model.rs'\ns=open(p).read()\ns=s.replace(\"\"\"    pub profil_neurones: Option<Vec<u64>>,\n    pub profil_jetons: u64,\"\"\",\n\"\"\"    pub profil_neurones: Option<(Vec<u64>, Vec<f64>)>,   // (t … [8366 caractères tronqués]`
+
+  ```
+BUILD
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 500 ./qtrinet-core/target/release/qtrinet-core models/Qwen2.5-0.5B-Q8_0.gguf --ppl /tmp/ids_qwen.txt --ctx 256 --limit 512 --dense --threads 4 --profil-neurones --neurones-sortie /tmp/neurones_qwen.txt 2>&1 | grep -A 14 \"pro … [91 caractères tronqués]`
+
+  ```
+profil de neurones (seuil 5 % du max) : 512 jetons,                               4864 neurones par couche, 116736 neurones au total
+  densité moyenne : 17.9 % des neurones tirés par jeton                               (871 par couche)
+  les    1 % de neurones les plus LOURDS portent  12.3 %                                   de la magnitude d'activation
+  les    5 % de neurones les plus LOURDS portent  24.0 %                                   de la magnitude d'activation
+  les   10 % de neurones les plus LOURDS portent  33.1 %                                   de la magnitude d'activation
+  les   20 % de neurones les plus LOURDS portent  46.8 %                                   de la magnitude d'activation
+  les   50 % de neurones les plus LOURDS portent  74.2 %                                   de la magnitude d'activation
+  neurones tirés > 90 % du temps :  0.08 %
+  neurones tirés > 50 % du temps :  2.82 %
+  neurones tirés > 10 % du temps : 69.47 %
+  selon la couche : tirs de 173 à 1579 par jeton ;                               part des 10 % les plus lourds de 16.7 à 51.1 %
+
+classement de 116736 neurones écrit dans /tmp/neurones_qwen.txt
+
+=== perplexité 19.3885 sur 510 tokens (0 
+… [23 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Profil mesuré. J'ajoute le comptage par EXPERT (l'analogue MoE des neurones chauds)
+
+- **bash** `{"command": "tail -4 /tmp/seuil_rotation.log; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src && grep -n \"let k = if self.moe_topk > 0\" -A 3 model.rs | head -6", "description": "Check series and locate MoE routing"}`
+
+  ```
+### contexte 128 · RoPE simple
+[config] rotation : RoPE simple (contexte 128 ≤ 4096 initial ; YaRN ×32 prendrait le relais au-delà)
+
+### contexte 512 · RoPE simple
+1973:                let k = if self.moe_topk > 0 { self.moe_topk } else { cfg.n_expert_used };
+1974-                let k = k.clamp(1, ne);
+1975-                let mut sc_e: Vec<f32> = (0..ne).map(|e| {
+1976-                    let r = &moe.routeur[e * h..(e + 1) * h];
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src && python3 - <<'PY'\np='model.rs'\ns=open(p).read()\ns=s.replace(\"\"\"    pub profil_neurones: Option<(Vec<u64>, Vec<f64>)>,   // (tirs, somme des |a|)\n    pub profil_jetons: u64,\"\"\",\n\"\"\"    pub profil_neurones … [3680 caractères tronqués]`
+
+  ```
+BUILD
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c \"\nimport subprocess\n\" ; cat > /tmp/profil_experts.sh <<'EOF'\n#!/bin/bash\n# Profil des experts de gpt-oss (l'analogue MoE des neurones chauds de PowerInfer).\nset -u\ncd /home/stephane/Data13TB/stephane/GitHub/Qtrinet … [786 caractères tronqués]`
+
+  ```
+profil experts gpt-oss en file (après la série)
+
+### contexte 512 · RoPE simple
+  ```
+
+### 🤖 Assistant
+
+⏵ Analyse PowerInfer prête ; le profil d'experts gpt-oss est en file derrière la série
+
+**Ce que fait PowerInfer** (dépôt SJTU-IPADS, miroir `Tiiny-AI`) : il exploite la **localité d'activation** — la distribution des neurones suit une loi de puissance, donc peu de neurones sont « chauds » (actifs presque toujours) et beaucoup sont « froids » (dépendants de l'entrée). Ils en tirent un moteur hybride : **les neurones chauds résident sur le GPU, les froids sont calculés sur le CPU**, plus un **prédicteur** qui devine l'ensemble actif à l'avance pour précharger, et des **opérateurs creux conscients des neurones**. Leur modèle TurboSparse (90 % de creux) est *entraîné* ainsi, précisément parce qu'imposer la parcimonie à l'inférence coûte cher.
+
+**Ce que notre moteur a déjà, et qui est de la même famille**
+- Le chemin **par listes d'événements** *est* un opérateur creux conscient des neurones : il n'itère que sur les sources actives, avec bascule mesurée vers le produit dense à **22 % de densité** (`seuil_push`).
+- La parcimonie imposable (`--act-topk`, `--act-thresh`) avec sa courbe de qualité — et notre conclusion recoupe la leur : la parcimonie imposée coûte, elle se gagne à l'entraînement.
+- Un capteur hebbien et, depuis aujourd'hui, un **profileur de neurones** (`--profil-neurones`, sortie `--neurones-sortie`).
+
+**Leur idée centrale, mesurée chez nous** (Qwen2.5-0.5B, 512 jetons, seuil 5 % du max) :
+
+| mesure | valeur |
+|---|---|
+| densité d'activation | **17,9 %** des neurones par jeton (82 % ne font rien) |
+| concentration | les 10 % de neurones les plus lourds portent **33 %** de la magnitude |
+| neurones **toujours** chauds (> 90 % du temps) | **0,08 %** |
+| neurones chauds (> 50 % du temps) | 2,8 % |
+| dispersion entre couches | tirs de 173 à 1 579 par jeton (×9) |
+
+**Le verdict honnête** : leur mécanisme de *préchargement statique* repose sur un ensemble chaud **stable**, et sur un modèle SiLU comme Qwen2.5 cet ensemble est minuscule (0,08 %) — la localité existe mais elle est surtout **dynamique**, pas statique. C'est exactement pourquoi leurs gains spectaculaires sont sur des modèles ReLU/TurboSparse, entraînés pour ça. Ce qui se transpose vraiment chez nous :
+
+1. **Le placement par neurone/expert piloté par le profil** — et pour gpt-oss, la vraie question n'est pas les neurones du FFN mais **les experts** : 4 sur 128 par jeton. Je viens d'ajouter ce comptage : le profil d'experts gpt-oss tourne (résultats dans `/tmp/profil_experts.log`). Si un petit noyau d'experts couvre la majorité des routages, un **cache d'experts chauds en VRAM** (32 Go sur les deux RTX 5000, modèle de 62 Go) a du sens — c'est leur idée appliquée à notre modèle le plus lourd.
+2. **Un cache à éviction (LRU) plutôt qu'un préchargement figé**, puisque notre ensemble chaud est instable : garder en VRAM les experts les plus récemment utilisés, ce qui absorbe la localité *dynamique* que le profil statique rate.
+3. **Le prédicteur ne sert que si le froid n'est pas en RAM** : notre cas « modèle > 125 Go » du plan 1 M, où l'activation doit être prévue pour lancer le transfert NVMe assez tôt.
+4. Le noyau GPU warp-par-ligne d'aujourd'hui (tête : **1,8 ms contre 30 ms CPU**, PPL identique) vient de notre propre dette, pas d'eux — mais il rend le point 1 finançable.
+
+La série de mesures de rotation (item 2) est en cours (passes 2/10) ; le profil d'experts gpt-oss enchaîne derrière.
+
+
+## Tour 5
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Réaliser les 8 chantiers restants du projet qtrinet-core dans l'ordre : (1) protocole de perplexité longue --depuis/--stride, (2) trancher le seuil de rotation YaRN avec ce protocole, (3) KV int8 puis int4 mesurés sur Qwen 0.5B à ctx 8192 contre llama.cpp, (4) préremplissage par lots (GEMM par tranches), (5) échelles par bloc pour DenseQ8, (6) refactorisation des boucles CLI en une seule, (7) noyaux GPU warp par ligne puis formats 4 bits, (8) suite du plan 1 M (KV paginé + déport GPU, attention creuse, MLA, vision). Chaque chantier doit être implémenté, mesuré (non-régression Qwen 19,3885 et gpt-oss 15,1757 quand c'est pertinent), documenté dans le dépôt et commité."
+Round: 1/24
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ État des lieux : je regarde les mesures en cours avant de poursuivre les chantiers
+
+- **bash** `{"command": "tail -20 /tmp/seuil_rotation.log 2>/dev/null; echo \"=== experts ===\"; cat /tmp/profil_experts.log 2>/dev/null | tail -12; echo \"=== moteur ===\"; ps -o pid,etime,pcpu -C qtrinet-core 2>/dev/null | tail -1", "description": "Check rotation series and expert profile"}`
+
+  ```
+=== jetons 1536-2047 (les MÊMES), contexte croissant, deux régimes ===
+
+### contexte 128 · RoPE simple
+[config] rotation : RoPE simple (contexte 128 ≤ 4096 initial ; YaRN ×32 prendrait le relais au-delà)
+
+### contexte 512 · RoPE simple
+=== experts ===
+=== moteur ===
+3871434       01:14  500
+  ```
+
+### 🤖 Assistant
+
+⏵ Item 4 : première mesure bout en bout du préremplissage par lots (Qwen, en parallèle léger)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for l in 1 16; do printf \"lot %-3s : \" $l; timeout 400 ./qtrinet-core/target/release/qtrinet-core models/Qwen2.5-0.5B-Q8_0.gguf --ppl /tmp/ids_qwen.txt --ctx 512 --limit 512 --dense --threads 4 --lot $l 2>&1 | grep -oE \"perplexité … [158 caractères tronqués]`
+
+  ```
+lot 1   : perplexité 13.1368 sur 511 tokens (0 événements, 32.4 s)
+lot 16  : perplexité 1614183.1368 sur 511 tokens (0 événements, 33.8 s)
+  ```
+
+### 🤖 Assistant
+
+⏵ Bug dans `forward_lot` : les tampons q/k/v partageaient un `y` avec des pas différents
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src && python3 - <<'PY'\np='model.rs'\ns=open(p).read()\nvieux_debut = s.index(\"            // 2. q, k, v en un produit matrice-matrice chacun\")\nvieux_fin = s.index(\"            // 3. normes de tête, rotation, écriture  … [2166 caractères tronqués]`
+
+  ```
+1513:        let mut q = vec![0f32; t * nh * hd];
+BUILD
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for l in 1 8 32; do printf \"lot %-3s : \" $l; timeout 400 ./qtrinet-core/target/release/qtrinet-core models/Qwen2.5-0.5B-Q8_0.gguf --ppl /tmp/ids_qwen.txt --ctx 512 --limit 512 --dense --threads 4 --lot $l 2>&1 | grep -oE \"perplexi … [148 caractères tronqués]`
+
+  ```
+lot 1   : perplexité 13.1368 sur 511 tokens (0 événements, 34.4 s)
+lot 8   : perplexité 13.1359 sur 511 tokens (0 événements, 39.8 s)
+lot 32  : perplexité 13.1359 sur 511 tokens (0 événements, 33.5 s)
+  ```
+
+### 🤖 Assistant
+
+⏵ Justesse acquise (13,1359 contre 13,1368) ; j'hisse les allocations hors de la boucle de couches
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src && python3 - <<'PY'\np='model.rs'\ns=open(p).read()\n# Hoister les tampons du lot hors de la boucle des couches : les allouer à\n# chaque couche et à chaque lot mangeait le gain du produit matrice-matrice.\ns=s.replace( … [5433 caractères tronqués]`
+
+  ```
+error[E0308]: mismatched types
+    --> src/model.rs:1670:34
+     |
+1670 |                 quantifier(&att, &mut ai[..t * h], &mut sa, self.act_levels, self.act_thresh);
+     |                 ----------       ^^^^^^^^^^^^^^^^ expected `&mut Vec<i32>`, found `&mut [i32]`
+     |                 |
+     |                 arguments to this function are incorrect
+     |
+     = note: expected mutable reference `&mut Vec<i32>`
+--
+error: could not compile `qtrinet-core` (bin "qtrinet-core") due to 1 previous error; 5 warnings emitted
+BUILD
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src && python3 - <<'PY'\np='model.rs'\ns=open(p).read()\ns=s.replace(\"\"\"        let quantifier = |src: &[f32], dst: &mut Vec<i32>, ech: &mut Vec<f32>,\n                          niveaux: f32, seuil: f32| {\"\"\",\n\"\"\" … [644 caractères tronqués]`
+
+  ```
+BUILD
+lot 1   : perplexité 13.1368 sur 511 tokens (0 événements, 33.3 s)
+lot 8   : perplexité 13.1359 sur 511 tokens (0 événements, 34.8 s)
+lot 32  : perplexité 13.1359 sur 511 tokens (0 événements, 33.6 s)
+  ```
+
+### 🤖 Assistant
+
+⏵ Justesse du lot validée ; j'attends une machine au calme pour la mesure de débit. Je commite l'état
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -m \"Item 4 : prefill par lots -- justesse corrigee, debit a mesurer au calme\n\nDeux bugs corriges dans forward_lot, tous deux invisibles a la compilation :\n - les sorties de q, k et v partageaient un ta … [922 caractères tronqués]`

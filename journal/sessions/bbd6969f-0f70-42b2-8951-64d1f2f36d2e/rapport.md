@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 18.2 h |
-| Tours | 4 |
-| Messages | 551 |
-| Appels d'outils | 563 |
+| Durée | 19.0 h |
+| Tours | 5 |
+| Messages | 600 |
+| Appels d'outils | 610 |
 | Fichiers touchés | 29 |
-| Commandes | 368 |
+| Commandes | 415 |
 | Sous-agents | 1 |
-| Commits | 9 |
+| Commits | 10 |
 | Compactages de contexte | 0 |
 
 ## Objectifs déclarés
@@ -29,6 +29,8 @@
 **Tour 3** — que reste-t-il à faire
 
 **Tour 4** — fais les 8 dans l'ordre
+
+**Tour 5** — <goal_round> Objective: "Réaliser les 8 chantiers restants du projet qtrinet-core dans l'ordre : (1) protocole de perplexité longue --depuis/--stride, (2) trancher le seuil de rotation YaRN avec ce protocole, (3) KV int8 puis int4 mesurés sur Qwen 0.5B à ctx 8192 contre llama.cpp, (4) préremplissage par lots (GEMM par tranches), (5) échelles par bloc pour DenseQ8, (6) refactorisation des boucles C … [842 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -169,7 +171,7 @@ Retirer `mscale = 1 + 0,1·ln f` divise la perplexité par **8,9 / 5,9 / 3,8**. 
 
 ### Tour 4 — fais les 8 dans l'ordre
 
-*128 appels d'outils.* Actions notables :
+*168 appels d'outils.* Actions notables :
 
 - create_goal
 - todo_write
@@ -185,11 +187,49 @@ Retirer `mscale = 1 + 0,1·ln f` divise la perplexité par **8,9 / 5,9 / 3,8**. 
 - bash — Validate overlapping windows and non-regression
 - write `/tmp/seuil_rotation.sh`
 - bash — Launch rotation threshold measurement
-- … et 106 autres
+- … et 146 autres
 
 **Synthèse produite :**
 
-⏵ Déport de tête : PPL identique (22,0949) et « reste » de 15,6 à 6,2 ms/jeton. Je consigne
+⏵ Analyse PowerInfer prête ; le profil d'experts gpt-oss est en file derrière la série
+
+**Ce que fait PowerInfer** (dépôt SJTU-IPADS, miroir `Tiiny-AI`) : il exploite la **localité d'activation** — la distribution des neurones suit une loi de puissance, donc peu de neurones sont « chauds » (actifs presque toujours) et beaucoup sont « froids » (dépendants de l'entrée). Ils en tirent un moteur hybride : **les neurones chauds résident sur le GPU, les froids sont calculés sur le CPU**, plus un **prédicteur** qui devine l'ensemble actif à l'avance pour précharger, et des **opérateurs creux conscients des neurones**. Leur modèle TurboSparse (90 % de creux) est *entraîné* ainsi, précisément parce qu'imposer la parcimonie à l'inférence coûte cher.
+
+**Ce que notre moteur a déjà, et qui est de la même famille**
+- Le chemin **par listes d'événements** *est* un opérateur creux conscient des neurones : il n'itère que sur les sources actives, avec bascule mesurée vers le produit dense à **22 % de densité** (`seuil_push`).
+- La parcimonie imposable (`--act-topk`, `--act-thresh`) avec sa courbe de qualité — et notre conclusion recoupe la leur : la parcimonie imposée coûte, elle se gagne à l'entraînement.
+- Un capteur hebbien et, depuis aujourd'hui, un **profileur de neurones** (`--profil-neurones`, sortie `--neurones-sortie`).
+
+**Leur idée centrale, mesurée chez nous** (Qwen2.5-0.5B, 512 jetons, seuil 5 % du max) :
+
+| mesure | valeur |
+|---|---|
+| densité d'activation | **17,9 %** des neurones par jeton (82 % ne font rien) |
+| concentration | les 10 % de neurones les plus lourds portent **33 %** de la magnitude |
+| neurones **toujours** chauds (> 90 % du temps) | **0,08 %** |
+| neurones chauds (> 50 % du temps) | 2,8 % |
+| dispersion entre couches | tirs de 173 à 1 579 par jeton (×9) |
+
+**Le verdict honnête** : leur mécanisme de *préchargement statique* repose sur un ensemble chaud **stable**, et sur un modèle SiLU comme Qwen2.5 cet ensemble est minuscule (0,08 %) — la localité existe mais elle est surtout **dynamique**, pas statique. C'est exactement pourquoi leurs gains spectaculaires sont sur des modèles ReLU/TurboSparse, entraînés pour ça. Ce qui se transpose vraiment chez nous :
+
+1. **Le placement par neurone/expert piloté par le profil** — et pour gpt-oss, la vraie question n'est pas les neurones du FFN mais **les experts** : 4 sur 128 par jeton. Je viens d'ajouter ce comptage : le profil d'experts gpt-oss tourne (résultats dans `/tmp/profil_experts.log`). Si un pet
+… [911 caractères tronqués]
+
+### Tour 5 — <goal_round> Objective: "Réaliser les 8 chantiers restants du projet qtrinet-core dans l'ordre : (1) protocole de perple … [1122 caractères tronqués]
+
+*7 appels d'outils.* Actions notables :
+
+- bash — Check rotation series and expert profile
+- bash — End-to-end batched prefill correctness and time
+- bash — Fix the batched projection buffers
+- bash — Re-test batched prefill correctness
+- bash — Hoist batch buffers out of the layer loop
+- bash — Fix closure signature and measure again
+- bash — Commit item 4 correctness fixes
+
+**Synthèse produite :**
+
+⏵ Justesse du lot validée ; j'attends une machine au calme pour la mesure de débit. Je commite l'état
 
 ## 3. Travail accompli
 
@@ -273,7 +313,7 @@ Retirer `mscale = 1 + 0,1·ln f` divise la perplexité par **8,9 / 5,9 / 3,8**. 
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 328 autres
+- … et 375 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -401,7 +441,7 @@ Retirer `mscale = 1 + 0,1·ln f` divise la perplexité par **8,9 / 5,9 / 3,8**. 
 
 ## 5. Erreurs rencontrées
 
-15 sorties en erreur ou divergentes. Les premières :
+21 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : a8f2635f8 docs: record which models this box is good at, and why src/llama-hparams.cpp:8:void llama_hparams::set_swa_pattern(uint32_t n_pattern, bool dense_first) { src/llama-hparams.h:308:    void se
 - **T1** : 511 tokens notés — perplexité cumulée 247.031  (4.9 tok/s) === perplexité 247.0308 sur 511 tokens (0 événements, 104.5 s) ===  ### B3 harmony assistant 511 --- ref --- 0.0 0.0 0:00 ls: cannot access '
@@ -430,4 +470,5 @@ Retirer `mscale = 1 + 0,1·ln f` divise la perplexité par **8,9 / 5,9 / 3,8**. 
 - Item 5 : echelles par bloc pour DenseQ8 -- hypothese refutee  DenseQ8 sait maintenant se construire avec une echelle par bloc de 32 (QT_Q8_BLOCS=1, Source8::Pro
 - Item 6 : une seule analyse de la ligne de commande pour les quatre modes  struct Options + fn analyser remplacent les deux boucles de 44 drapeaux ; run_infer, r
 - Item 7 (1/2) : noyau GPU une warp par ligne, la tete redevient deportable  tete_q8_warp / proj_q8_warp : une warp par ligne, les 32 fils se partagent les blocs 
+- Item 4 : prefill par lots -- justesse corrigee, debit a mesurer au calme  Deux bugs corriges dans forward_lot, tous deux invisibles a la compilation :  - les so
 

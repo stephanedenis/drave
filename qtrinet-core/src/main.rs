@@ -336,6 +336,9 @@ struct Options {
     act_thresh: f32, act_topk: usize, act_renorm: bool, topk_proj: [usize; 7],
     // --- mesure
     logits_bin: Option<String>, ppl_profil: bool,
+    /// Profilage des neurones « chauds » (idée de PowerInfer) et fichier de
+    /// sortie du classement.
+    profil_neurones: bool, neurones_sortie: Option<String>,
     /// Taille du lot de préremplissage : 1 = jeton par jeton (défaut).
     lot: usize,
     harmony: Option<String>, harmony_contexte: Option<String>,
@@ -354,96 +357,108 @@ fn analyser(args: &[String]) -> Options {
     let mut o = Options {
         n: 32, temp: 0.0, top_p: 1.0, hist: 64, hebb_q: 0.1,
         hebb_out: String::from("hebb.bin"), keep: 1.0, abits: 8,
-        auto: true, limit: usize::MAX, harmony_contexte: None,
+        auto: true, limit: usize::MAX,
         matrix: String::from("blk.0.ffn_gate.weight"),
         ..Default::default()
     };
     let cpu = std::thread::available_parallelism().map(|n| n.get()).unwrap_or(8);
     o.ctx = 512;
     o.threads = (cpu * 3 / 4).max(1);
+    let suivant = |i: usize| -> &String {
+        args.get(i + 1).unwrap_or_else(|| panic!("{} attend une valeur", args[i]))
+    };
     let mut i = 2;
     while i < args.len() {
-        let suivant = |i: usize| -> &String {
-            args.get(i + 1).unwrap_or_else(|| panic!("{} attend une valeur", args[i]))
-        };
-        match args[i].as_str() {
-            "--infer" => { o.infer = true; i += 1; continue; }
-            "--ppl" => { o.ppl = true; o.ids_file = Some(suivant(i).clone()); }
-            "--ppl-texte" => { o.ppl = true; o.ppl_texte = true; o.texte_file = Some(suivant(i).clone()); }
-            "--plan" => { o.plan = true; i += 1; continue; }
-            "--tokenize" => { o.tokenize = true; i += 1; continue; }
-            "--gpu-banc" => { o.gpu_banc = true; i += 1; continue; }
-            "--ids" => o.ids = suivant(i).split(',').filter_map(|s| s.trim().parse().ok()).collect(),
-            "--ids-file" => o.ids_file = Some(suivant(i).clone()),
-            "--prompt" => o.prompt = Some(suivant(i).clone()),
-            "--texte" => o.texte = Some(suivant(i).clone()),
-            "--fichier" => o.fichier = Some(suivant(i).clone()),
-            "--sortie" => o.sortie = Some(suivant(i).clone()),
-            "--matrix" => o.matrix = suivant(i).clone(),
-            "--logits-bin" => o.logits_bin = Some(suivant(i).clone()),
-            "--harmony-contexte" => o.harmony_contexte = Some(suivant(i).clone()),
-            "--patch" => o.patch = Some(suivant(i).clone()),
-            "--n" => o.n = suivant(i).parse().unwrap(),
-            "--temp" => o.temp = suivant(i).parse().unwrap(),
-            "--top-p" => o.top_p = suivant(i).parse().unwrap(),
-            "--topk" => o.topk = suivant(i).parse().unwrap(),
-            "--rep-penalty" => o.rep_pen = suivant(i).parse().unwrap(),
-            "--hist" => o.hist = suivant(i).parse().unwrap(),
-            "--ctx" => { o.ctx = suivant(i).parse().unwrap(); o.ctx_impose = true; }
-            "--threads" => { o.threads = suivant(i).parse().unwrap(); o.threads_impose = true; }
-            "--abits" => { o.abits = suivant(i).parse().unwrap(); o.abits_impose = true; }
-            "--bits" => o.bits = suivant(i).parse().unwrap(),
-            "--limit" => o.limit = suivant(i).parse().unwrap(),
-            "--lot" => o.lot = suivant(i).parse().unwrap(),
-            "--depuis" => o.depuis = suivant(i).parse().unwrap(),
-            "--keep" => o.keep = suivant(i).parse().unwrap(),
-            "--moe-topk" => o.moe_topk = suivant(i).parse().unwrap(),
-            "--attn-window" => o.attn_window = suivant(i).parse().unwrap(),
-            "--swa-pattern" => o.swa_pattern = Some(suivant(i).parse().unwrap()),
-            "--attn-sinks" => o.attn_sinks = suivant(i).parse().unwrap(),
-            "--attn-topk" => o.attn_topk = suivant(i).parse().unwrap(),
-            "--qk-topk" => o.qk_topk = suivant(i).parse().unwrap(),
-            "--hebbian" => o.hebb_layer = Some(suivant(i).parse().unwrap()),
-            "--hebb-q" => o.hebb_q = suivant(i).parse().unwrap(),
-            "--hebb-out" => o.hebb_out = suivant(i).clone(),
-            "--act-thresh" => o.act_thresh = suivant(i).parse().unwrap(),
-            "--act-topk" => o.act_topk = suivant(i).parse().unwrap(),
-            "--topk-q" => o.topk_proj[0] = suivant(i).parse().unwrap(),
-            "--topk-k" => o.topk_proj[1] = suivant(i).parse().unwrap(),
-            "--topk-v" => o.topk_proj[2] = suivant(i).parse().unwrap(),
-            "--topk-o" => o.topk_proj[3] = suivant(i).parse().unwrap(),
-            "--topk-gate" => o.topk_proj[4] = suivant(i).parse().unwrap(),
-            "--topk-up" => o.topk_proj[5] = suivant(i).parse().unwrap(),
-            "--topk-down" => o.topk_proj[6] = suivant(i).parse().unwrap(),
+        // CHAQUE branche rend le nombre d'arguments consommés (1 pour un
+        // drapeau booléen, 2 pour un drapeau à valeur). Un `i += 2` global
+        // sautait le drapeau suivant après un booléen : `--dense --threads 8
+        // --ctx 128` perdait `--threads` ET `--ctx`, donc on mesurait 30 fils
+        // sur un contexte de 256 en croyant mesurer 8 fils sur 128 — et la
+        // barrière tournante partait en livelock. C'est la même classe de bug
+        // que les boucles triplées, en pire : silencieuse.
+        let pas = match args[i].as_str() {
+            "--infer" => { o.infer = true; 1 }
+            "--ppl" => { o.ppl = true; o.ids_file = Some(suivant(i).clone()); 2 }
+            "--ppl-texte" => { o.ppl = true; o.ppl_texte = true;
+                               o.texte_file = Some(suivant(i).clone()); 2 }
+            "--plan" => { o.plan = true; 1 }
+            "--tokenize" => { o.tokenize = true; 1 }
+            "--gpu-banc" => { o.gpu_banc = true; 1 }
+            "--ids" => { o.ids = suivant(i).split(',')
+                            .filter_map(|s| s.trim().parse().ok()).collect(); 2 }
+            "--ids-file" => { o.ids_file = Some(suivant(i).clone()); 2 }
+            "--prompt" => { o.prompt = Some(suivant(i).clone()); 2 }
+            "--texte" => { o.texte = Some(suivant(i).clone()); 2 }
+            "--fichier" => { o.fichier = Some(suivant(i).clone()); 2 }
+            "--sortie" => { o.sortie = Some(suivant(i).clone()); 2 }
+            "--matrix" => { o.matrix = suivant(i).clone(); 2 }
+            "--logits-bin" => { o.logits_bin = Some(suivant(i).clone()); 2 }
+            "--neurones-sortie" => { o.neurones_sortie = Some(suivant(i).clone()); 2 }
+            "--harmony-contexte" => { o.harmony_contexte = Some(suivant(i).clone()); 2 }
+            "--patch" => { o.patch = Some(suivant(i).clone()); 2 }
+            "--n" => { o.n = suivant(i).parse().unwrap(); 2 }
+            "--temp" => { o.temp = suivant(i).parse().unwrap(); 2 }
+            "--top-p" => { o.top_p = suivant(i).parse().unwrap(); 2 }
+            "--topk" => { o.topk = suivant(i).parse().unwrap(); 2 }
+            "--rep-penalty" => { o.rep_pen = suivant(i).parse().unwrap(); 2 }
+            "--hist" => { o.hist = suivant(i).parse().unwrap(); 2 }
+            "--ctx" => { o.ctx = suivant(i).parse().unwrap(); o.ctx_impose = true; 2 }
+            "--threads" => { o.threads = suivant(i).parse().unwrap(); o.threads_impose = true; 2 }
+            "--abits" => { o.abits = suivant(i).parse().unwrap(); o.abits_impose = true; 2 }
+            "--bits" => { o.bits = suivant(i).parse().unwrap(); 2 }
+            "--limit" => { o.limit = suivant(i).parse().unwrap(); 2 }
+            "--depuis" => { o.depuis = suivant(i).parse().unwrap(); 2 }
+            "--lot" => { o.lot = suivant(i).parse().unwrap(); 2 }
+            "--keep" => { o.keep = suivant(i).parse().unwrap(); 2 }
+            "--moe-topk" => { o.moe_topk = suivant(i).parse().unwrap(); 2 }
+            "--attn-window" => { o.attn_window = suivant(i).parse().unwrap(); 2 }
+            "--swa-pattern" => { o.swa_pattern = Some(suivant(i).parse().unwrap()); 2 }
+            "--attn-sinks" => { o.attn_sinks = suivant(i).parse().unwrap(); 2 }
+            "--attn-topk" => { o.attn_topk = suivant(i).parse().unwrap(); 2 }
+            "--qk-topk" => { o.qk_topk = suivant(i).parse().unwrap(); 2 }
+            "--hebbian" => { o.hebb_layer = Some(suivant(i).parse().unwrap()); 2 }
+            "--hebb-q" => { o.hebb_q = suivant(i).parse().unwrap(); 2 }
+            "--hebb-out" => { o.hebb_out = suivant(i).clone(); 2 }
+            "--act-thresh" => { o.act_thresh = suivant(i).parse().unwrap(); 2 }
+            "--act-topk" => { o.act_topk = suivant(i).parse().unwrap(); 2 }
+            "--topk-q" => { o.topk_proj[0] = suivant(i).parse().unwrap(); 2 }
+            "--topk-k" => { o.topk_proj[1] = suivant(i).parse().unwrap(); 2 }
+            "--topk-v" => { o.topk_proj[2] = suivant(i).parse().unwrap(); 2 }
+            "--topk-o" => { o.topk_proj[3] = suivant(i).parse().unwrap(); 2 }
+            "--topk-gate" => { o.topk_proj[4] = suivant(i).parse().unwrap(); 2 }
+            "--topk-up" => { o.topk_proj[5] = suivant(i).parse().unwrap(); 2 }
+            "--topk-down" => { o.topk_proj[6] = suivant(i).parse().unwrap(); 2 }
             "--ffn-gain" => {
                 let v: Vec<&str> = suivant(i).split(':').collect();
-                o.ffn_gain = Some((v[0].parse().unwrap(), v[1].parse().unwrap()));
+                o.ffn_gain = Some((v[0].parse().unwrap(), v[1].parse().unwrap())); 2
             }
-            "--bits-attn" => { if suivant(i).parse::<u32>().unwrap() == 6 { o.b6 |= 2; } }
-            "--bits-ffn" => { if suivant(i).parse::<u32>().unwrap() == 6 { o.b6 |= 1; } }
-            // --- booléens
-            "--flux" => o.flux = true,
-            "--session" => { o.session = true; o.flux = true; }
-            "--chat" => o.chat = true,
-            "--dense" => o.dense = true,
-            "--auto" => o.auto = true,
-            "--push" => { o.auto = false; o.dense = false; }
-            "--pin" => o.pin = true,
-            "--sans-fenetre" => o.sans_fenetre = true,
-            "--sans-yarn" => o.sans_yarn = true,
-            "--act-renorm" => o.act_renorm = true,
-            "--ppl-profil" => o.ppl_profil = true,
-            "--harmony" => o.harmony = Some("alterne".into()),
-            "--harmony-assistant" => o.harmony = Some("assistant".into()),
-            "--harmony-user" => o.harmony = Some("user".into()),
-            "--harmony-suite" => o.harmony = Some("suite".into()),
-            "--q4" => o.q4 |= 3,
-            "--q4-ffn" => o.q4 = (o.q4 & 4) | 1,
-            "--q4-attn" => o.q4 = (o.q4 & 4) | 2,
-            "--q4-tout" => o.q4 |= 7,
-            _ => {}
-        }
-        i += 2;
+            "--bits-attn" => { if suivant(i).parse::<u32>().unwrap() == 6 { o.b6 |= 2; } 2 }
+            "--bits-ffn" => { if suivant(i).parse::<u32>().unwrap() == 6 { o.b6 |= 1; } 2 }
+            // --- drapeaux booléens : UN argument
+            "--flux" => { o.flux = true; 1 }
+            "--session" => { o.session = true; o.flux = true; 1 }
+            "--chat" => { o.chat = true; 1 }
+            "--dense" => { o.dense = true; 1 }
+            "--auto" => { o.auto = true; 1 }
+            "--push" => { o.auto = false; o.dense = false; 1 }
+            "--pin" => { o.pin = true; 1 }
+            "--sans-fenetre" => { o.sans_fenetre = true; 1 }
+            "--sans-yarn" => { o.sans_yarn = true; 1 }
+            "--act-renorm" => { o.act_renorm = true; 1 }
+            "--ppl-profil" => { o.ppl_profil = true; 1 }
+            "--profil-neurones" => { o.profil_neurones = true; 1 }
+            "--harmony" => { o.harmony = Some("alterne".into()); 1 }
+            "--harmony-assistant" => { o.harmony = Some("assistant".into()); 1 }
+            "--harmony-user" => { o.harmony = Some("user".into()); 1 }
+            "--harmony-suite" => { o.harmony = Some("suite".into()); 1 }
+            "--q4" => { o.q4 |= 3; 1 }
+            "--q4-ffn" => { o.q4 = (o.q4 & 4) | 1; 1 }
+            "--q4-attn" => { o.q4 = (o.q4 & 4) | 2; 1 }
+            "--q4-tout" => { o.q4 |= 7; 1 }
+            // Inconnu : on avance d'UN cran, jamais de deux.
+            _ => 1,
+        };
+        i += pas;
     }
     if o.pin { engine::EPINGLER.store(true, std::sync::atomic::Ordering::Relaxed); }
     if o.bits > 0 { list::BITS_POIDS.store(o.bits, std::sync::atomic::Ordering::Relaxed); }
@@ -1191,7 +1206,8 @@ fn run_ppl(opt: Options) {
         dense, auto, q4, b6, attn_window, swa_pattern,
         sans_fenetre, attn_sinks, attn_topk, qk_topk, act_thresh, act_topk, act_renorm,
         topk_proj, moe_topk, patch: patch_file, hebb_layer, ffn_gain, logits_bin,
-        ppl_profil, lot, harmony, harmony_contexte, sans_yarn, ..
+        ppl_profil, lot, profil_neurones, neurones_sortie,
+        harmony, harmony_contexte, sans_yarn, ..
     } = opt;
     let lot = lot.max(1);
     let path = &modele_chemin();
@@ -1283,6 +1299,11 @@ fn run_ppl(opt: Options) {
         hb.log_on = true;
         mdl.hebb = Some(hb);
         println!("journalisation : couche {l}, entrée FFN ({} dim)", mdl.cfg.hidden);
+    }
+    if profil_neurones {
+        mdl.activer_profil_neurones();
+        println!("profilage des neurones actif : un neurone compte comme actif si sa valeur \
+                  quantifiée n'est pas nulle (même critère que le chemin par événements)");
     }
     mdl.reset_events();
     // Fenêtres d'évaluation : soit des tranches brutes de `ctx` jetons (mode
@@ -1417,6 +1438,15 @@ fn run_ppl(opt: Options) {
             if *c == 0 { continue; }
             println!("    {:>6}-{:<6} : {:>9.3}  ({} jetons notés)",
                      i * 256, i * 256 + 255, (s / *c as f64).exp(), c);
+        }
+    }
+    if let Some(rapport) = mdl.rapport_neurones() {
+        println!("\n{rapport}");
+        if let Some(f) = &neurones_sortie {
+            match mdl.ecrire_neurones(f) {
+                Ok(n) => println!("classement de {n} neurones écrit dans {f}"),
+                Err(e) => println!("écriture du classement impossible : {e}"),
+            }
         }
     }
     let ppl = (nll / n as f64).exp();
