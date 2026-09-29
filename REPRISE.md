@@ -140,7 +140,7 @@ comparé à `llama-tokenize` sur 4 424 jetons (0 écart).
 | 1 | protocole de perplexité longue | **fait** | `--depuis N` note les mêmes jetons à contexte variable ; `--depuis 256 --ctx 256` redonne exactement la fenêtre 2 historique (21,565) |
 | 2 | seuil de rotation YaRN | **mesures en cours** | série « mêmes jetons, contexte 128→4096 » (RoPE simple contre interpolation seule) ; premier point : 39,52 à contexte 128 |
 | 3 | KV int8 puis int4 | **fait** | int8 +7,1 % de perplexité, int4 **+384 %** (llama.cpp : +3,1 % et +411 %) ; 1 M tient en int4 (9,7 Go) |
-| 4 | préremplissage par lots | **à moitié** | noyau `gemm_dense_i8` ×2,4 au banc ; `forward_lot` juste (13,1359 contre 13,1368) mais **débit bout en bout à mesurer** ; les modèles MoE retombent encore sur le jeton par jeton |
+| 4 | préremplissage par lots | **fait, débit à mesurer** | `gemm_dense_i8` ×2,4 au banc ; `forward_lot` juste sur modèle dense (13,1359 contre 13,1368) **et sur MoE avec regroupement par expert** (13,7205 contre 13,7149) ; le débit bout en bout reste à chiffrer machine au calme |
 | 5 | échelles par bloc pour `DenseQ8` | **fait, hypothèse réfutée** | 23,696 contre 23,612 : les échelles par bloc n'apportent rien ; l'avantage du 6 bits est son coût (25 % d'octets en moins à qualité égale) |
 | 6 | boucles CLI unifiées | **fait** | `struct Options` + `analyser` ; trois drapeaux de plus trouvés ignorés (`--attn-topk`, `--qk-topk`, `--sans-yarn` en inférence) et un bug de pas de lecture corrigé |
 | 7 | noyaux GPU | **fait** | warp par ligne (tête : 1,8 ms contre 30 ms CPU, PPL identique) ; **MXFP4** warp (0,1 ms, écart 0,00e0 — bit à bit) ; **Q4_K** warp (0,5 contre 1,2 ms, écart 4e-7). Reste le *branchement* dans le moteur (cache d'experts chauds) |

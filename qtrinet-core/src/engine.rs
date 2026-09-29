@@ -584,6 +584,42 @@ impl Pool {
         out
     }
 
+    /// Produit **matrice-matrice** sur une matrice 4 bits (experts MXFP4 de
+    /// gpt-oss, poids Q4_K de la famille Qwen).
+    ///
+    /// Même principe que `gemm_dense_i8` : une tranche de lignes par fil, et
+    /// toute la ligne de poids sert à tout le lot — c'est ce qui amortit la
+    /// lecture des 128 matrices d'experts d'une couche MoE.
+    ///
+    /// `x16` est le lot d'activations en i16, `s32[i]` les sommes par bloc de 32
+    /// du jeton i (précalculées une fois : le noyau les referait 4 864 fois),
+    /// `sx[i]` l'échelle d'activation du jeton i. Sortie en (n_out × t).
+    pub fn gemm_dense_q4(&self, d: &crate::list::DenseQ4, x16: &[i16], t: usize,
+                         s32: &[Vec<i32>], sx: &[f32], out: &mut [f32]) {
+        let n_out = d.n_out;
+        let n_in = d.n_in;
+        let nt = self.n.max(1);
+        let par = n_out.div_ceil(nt);
+        std::thread::scope(|sc| {
+            let mut reste = out;
+            let mut base = 0usize;
+            while base < n_out {
+                let hi = (base + par).min(n_out);
+                let (morceau, suite) = reste.split_at_mut((hi - base) * t);
+                reste = suite;
+                sc.spawn(move || {
+                    for (j, o) in (base..hi).enumerate() {
+                        for i in 0..t {
+                            let xi = &x16[i * n_in..(i + 1) * n_in];
+                            morceau[j * t + i] = d.dot16(o, xi, &s32[i]) * sx[i];
+                        }
+                    }
+                });
+                base = hi;
+            }
+        });
+    }
+
     /// Accumulation par **listes par source valuées** : le mode de l'inférence.
     pub fn accumulate_push(&mut self, m: &PushMat, sv: &SparseVec) -> Vec<i64> {
         self.ensure_width(m.n_out);
@@ -807,6 +843,41 @@ mod tests_gemm {
             for o in 0..n_out {
                 assert!((r[o] - out[o * t + i]).abs() <= 1e-3 * r[o].abs().max(1.0),
                         "ligne {o} jeton {i} : {} contre {}", r[o], out[o * t + i]);
+            }
+        }
+    }
+}
+
+#[cfg(test)]
+mod tests_gemm_q4 {
+    use super::*;
+    use crate::list::DenseQ4;
+
+    /// Le produit matrice-matrice 4 bits doit rendre EXACTEMENT ce que rendent
+    /// les produits matrice-vecteur qu'il remplace (mêmes sommes entières, même
+    /// ordre par ligne).
+    #[test]
+    fn gemm_q4_egale_matvec() {
+        // Matrice 4 bits construite par `build` : 4 bits propres, échelle par ligne.
+        let (n_out, n_in, t) = (128usize, 256usize, 8usize);
+        let w: Vec<f32> = (0..n_out * n_in)
+            .map(|k| (((k * 1103515245 + 12345) % 2000) as f32 / 1000.0) - 1.0).collect();
+        let d = DenseQ4::build(&w, n_out, n_in);
+        let pool = Pool::new(4, n_in);
+        let x: Vec<i32> = (0..t * n_in).map(|k| ((k * 7919) % 101) as i32 - 50).collect();
+        let x16: Vec<Vec<i16>> = (0..t).map(|i| {
+            x[i * n_in..(i + 1) * n_in].iter().map(|&v| v as i16).collect()
+        }).collect();
+        let s32: Vec<Vec<i32>> = x16.iter().map(|v| crate::list::sommes32(v)).collect();
+        let sx: Vec<f32> = (0..t).map(|i| 0.002 * (i + 1) as f32).collect();
+        let plat: Vec<i16> = x16.concat();
+        let mut out = vec![0f32; n_out * t];
+        pool.gemm_dense_q4(&d, &plat, t, &s32, &sx, &mut out);
+        for i in 0..t {
+            for o in 0..n_out {
+                let attendu = d.dot16(o, &x16[i], &s32[i]) * sx[i];
+                assert!((out[o * t + i] - attendu).abs() <= 1e-4 * attendu.abs().max(1.0),
+                        "ligne {o} jeton {i} : {} contre {}", out[o * t + i], attendu);
             }
         }
     }

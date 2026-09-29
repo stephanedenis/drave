@@ -1490,10 +1490,11 @@ impl Model {
     pub fn forward_lot(&mut self, toks: &[u32], pos0: usize) -> Vec<Vec<f32>> {
         let t = toks.len();
         if t == 0 { return Vec::new(); }
-        if self.cfg.n_expert > 0 || t == 1 {
-            return toks.iter().enumerate()
-                .map(|(i, &tok)| self.forward(tok, pos0 + i)).collect();
+        if t == 1 {
+            return vec![self.forward(toks[0], pos0)];
         }
+        // Les modèles à experts suivent le même chemin par lots, avec en plus le
+        // regroupement des jetons par expert (voir la section MoE plus bas).
         let h = self.cfg.hidden;
         let hd = self.cfg.head_dim;
         let nh = self.cfg.n_head;
@@ -1528,7 +1529,7 @@ impl Model {
         let mut ka = vec![0f32; t * nk_max];
         let mut va = vec![0f32; t * nk_max];
         let mut yl = vec![0f32; t * nq_max.max(nk_max).max(self.cfg.ffn).max(h)];
-        let mut ai = vec![0i32; t * h.max(nq_max)];
+        let mut ai = vec![0i32; t * h.max(nq_max)];   // h et n_têtes × dim_tête
         let mut sa = vec![0f32; t];
         let mut gi = vec![0i32; t * self.cfg.ffn];
         let mut sg = vec![0f32; t];
@@ -1667,10 +1668,17 @@ impl Model {
             }
             // 4. projection de sortie du lot, résidu, norme du FFN
             {
-                quantifier(&att, &mut ai[..t * h], &mut sa, self.act_levels, self.act_thresh);
+                // `att` fait t × (n_têtes × dim_tête), qui n'est PAS t × h :
+                // sur gpt-oss c'est 4 096 contre 2 880. Le tampon d'activation
+                // doit suivre la dimension d'ENTRÉE de la projection.
+                let n_in_wo = {
+                    let d8 = self.layers[l].wo.d.as_ref().expect("projection dense requise");
+                    d8.n_in
+                };
+                quantifier(&att, &mut ai[..t * n_in_wo], &mut sa, self.act_levels, self.act_thresh);
                 let n_out = {
                     let d8 = self.layers[l].wo.d.as_ref().expect("projection dense requise");
-                    self.pool.gemm_dense_i8(d8, &ai[..t * h], t, &sa, &mut yl[..d8.n_out * t]);
+                    self.pool.gemm_dense_i8(d8, &ai[..t * n_in_wo], t, &sa, &mut yl[..d8.n_out * t]);
                     d8.n_out
                 };
                 let bias = self.layers[l].wo.bias.clone();
@@ -1686,24 +1694,149 @@ impl Model {
                 Self::rmsnorm(r, &lay.ffn_norm, self.cfg.eps, &mut hn[i * h..(i + 1) * h]);
             }
             quantifier(&hn, &mut xi, &mut sx, self.act_levels, self.act_thresh);
-            // 5. FFN dense en lot
-            for (pj, dst, taille) in [(&lay.wgate, &mut gate, self.cfg.ffn),
-                                      (&lay.wup, &mut up, self.cfg.ffn)] {
-                if let Some(d8) = pj.d.as_ref() {
-                    self.pool.gemm_dense_i8(d8, &xi, t, &sx, &mut yl[..d8.n_out * t]);
-                    for i in 0..t {
-                        for oo in 0..taille { dst[i * taille + oo] = yl[oo * t + i]; }
+            if let Some(moe) = lay.moe.as_ref() {
+                // ---- MoE PAR LOTS : les jetons qui ont choisi le même expert
+                // sont traités ensemble, donc la matrice de l'expert est lue une
+                // fois pour le groupe au lieu d'une fois par jeton.
+                let ne = self.cfg.n_expert;
+                let k = if self.moe_topk > 0 { self.moe_topk } else { self.cfg.n_expert_used };
+                let k = k.clamp(1, ne);
+                let mut x16: Vec<i16> = vec![0i16; t * h];
+                for (j, &v) in xi.iter().enumerate() { x16[j] = v.clamp(-32767, 32767) as i16; }
+                let s32: Vec<Vec<i32>> = (0..t)
+                    .map(|i| crate::list::sommes32(&x16[i * h..(i + 1) * h])).collect();
+                let mut groupes: Vec<Vec<(usize, f32)>> = vec![Vec::new(); ne];
+                for i in 0..t {
+                    let hni = &hn[i * h..(i + 1) * h];
+                    let mut sc_e: Vec<f32> = (0..ne).map(|e| {
+                        let r = &moe.routeur[e * h..(e + 1) * h];
+                        let sc: f32 = r.iter().zip(hni.iter()).map(|(a, b)| a * b).sum();
+                        sc + moe.routeur_biais.as_ref().map_or(0.0, |b| b[e])
+                    }).collect();
+                    let mut idx: Vec<u32> = (0..ne as u32).collect();
+                    let mut inv_k = 1.0f32;
+                    if self.cfg.routeur_topk_softmax {
+                        if k < ne {
+                            idx.select_nth_unstable_by(k, |&a, &b| {
+                                sc_e[b as usize].partial_cmp(&sc_e[a as usize]).unwrap()
+                            });
+                            idx.truncate(k);
+                        }
+                        let mx = idx.iter().map(|&e| sc_e[e as usize])
+                                   .fold(f32::NEG_INFINITY, f32::max);
+                        let mut somme = 0f32;
+                        for &e in &idx {
+                            let v = (sc_e[e as usize] - mx).exp(); sc_e[e as usize] = v; somme += v;
+                        }
+                        if somme > 0.0 { inv_k = 1.0 / somme; }
+                    } else {
+                        let mx = sc_e.iter().cloned().fold(f32::NEG_INFINITY, f32::max);
+                        let mut somme = 0f32;
+                        for v in sc_e.iter_mut() { *v = (*v - mx).exp(); somme += *v; }
+                        if somme > 0.0 { for v in sc_e.iter_mut() { *v /= somme; } }
+                        if k < ne {
+                            idx.select_nth_unstable_by(k, |&a, &b| {
+                                sc_e[b as usize].partial_cmp(&sc_e[a as usize]).unwrap()
+                            });
+                            idx.truncate(k);
+                        }
+                        let somme_k: f32 = idx.iter().map(|&e| sc_e[e as usize]).sum();
+                        inv_k = if somme_k > 0.0 { 1.0 / somme_k } else { 0.0 };
+                    }
+                    for &e in &idx { groupes[e as usize].push((i, sc_e[e as usize] * inv_k)); }
+                }
+                for i in 0..t { down[i * h..(i + 1) * h].iter_mut().for_each(|v| *v = 0.0); }
+                let nff = self.cfg.ffn_exp;
+                let mut xg = vec![0i16; t * h];
+                let mut s32g: Vec<Vec<i32>> = Vec::with_capacity(t);
+                let mut sxg: Vec<f32> = Vec::with_capacity(t);
+                let mut yq = vec![0f32; t * nff];
+                let mut col = vec![0f32; nff];
+                let mut colu = vec![0f32; nff];
+                let mut ga = vec![0i16; t * nff];
+                let mut s32a: Vec<Vec<i32>> = Vec::with_capacity(t);
+                let mut sxa: Vec<f32> = Vec::with_capacity(t);
+                for e in 0..ne {
+                    let g = groupes[e].len();
+                    if g == 0 { continue; }
+                    for (j, &(i, _)) in groupes[e].iter().enumerate() {
+                        xg[j * h..(j + 1) * h].copy_from_slice(&x16[i * h..(i + 1) * h]);
+                    }
+                    s32g.clear();
+                    sxg.clear();
+                    for &(i, _) in groupes[e].iter() { s32g.push(s32[i].clone()); sxg.push(sx[i]); }
+                    let mg = moe.gate.expert(e);
+                    self.pool.gemm_dense_q4(&mg, &xg[..g * h], g, &s32g, &sxg,
+                                            &mut yq[..mg.n_out * g]);
+                    for j in 0..g {
+                        for oo in 0..nff {
+                            gate[oo * g + j] = yq[oo * g + j]
+                                + moe.biais_gate.as_ref().map_or(0.0, |b| b[e * nff + oo]);
+                        }
+                    }
+                    let mu = moe.up.expert(e);
+                    self.pool.gemm_dense_q4(&mu, &xg[..g * h], g, &s32g, &sxg,
+                                            &mut yq[..mu.n_out * g]);
+                    for j in 0..g {
+                        for oo in 0..nff {
+                            up[oo * g + j] = yq[oo * g + j]
+                                + moe.biais_up.as_ref().map_or(0.0, |b| b[e * nff + oo]);
+                        }
+                    }
+                    // Activation jeton par jeton (elle n'est pas linéaire), puis
+                    // descente en lot : la matrice de descente est relue pour tout
+                    // le groupe.
+                    s32a.clear();
+                    sxa.clear();
+                    for j in 0..g {
+                        for oo in 0..nff {
+                            col[oo] = gate[oo * g + j];
+                            colu[oo] = up[oo * g + j];
+                        }
+                        Self::activation(&mut col, &colu, nff, self.cfg.ffn_act_oss);
+                        let mut mx = 0f32;
+                        for &v in col.iter() { mx = mx.max(v.abs()); }
+                        let ech = if mx > 0.0 { mx / self.act_levels } else { 1.0 };
+                        for oo in 0..nff {
+                            ga[j * nff + oo] = ((col[oo] / ech).round())
+                                .clamp(-32767.0, 32767.0) as i16;
+                        }
+                        s32a.push(crate::list::sommes32(&ga[j * nff..(j + 1) * nff]));
+                        sxa.push(ech);
+                    }
+                    let md = moe.down.expert(e);
+                    let mut yd = vec![0f32; md.n_out * g];
+                    self.pool.gemm_dense_q4(&md, &ga[..g * nff], g, &s32a, &sxa, &mut yd);
+                    for (j, &(i, w)) in groupes[e].iter().enumerate() {
+                        for oo in 0..h {
+                            // Le biais de descente est indexé par la LARGEUR DE
+                            // SORTIE (h), pas par la largeur d'expert.
+                            let b = moe.biais_down.as_ref().map_or(0.0, |b| b[e * h + oo]);
+                            down[i * h + oo] += w * (yd[oo * g + j] + b);
+                        }
                     }
                 }
-            }
-            for i in 0..t {
-                let (g, u) = (gate[i * self.cfg.ffn..(i + 1) * self.cfg.ffn].to_vec(),
-                              up[i * self.cfg.ffn..(i + 1) * self.cfg.ffn].to_vec());
-                let mut gg = g;
-                Self::activation(&mut gg, &u, self.cfg.ffn, self.cfg.ffn_act_oss);
-                gate[i * self.cfg.ffn..(i + 1) * self.cfg.ffn].copy_from_slice(&gg);
-            }
-            {
+                for i in 0..t {
+                    for oo in 0..h { x[i * h + oo] = o[i * h + oo] + down[i * h + oo]; }
+                }
+            } else {
+                // ---- FFN DENSE PAR LOTS
+                for (pj, dst, taille) in [(&lay.wgate, &mut gate, self.cfg.ffn),
+                                          (&lay.wup, &mut up, self.cfg.ffn)] {
+                    if let Some(d8) = pj.d.as_ref() {
+                        self.pool.gemm_dense_i8(d8, &xi, t, &sx, &mut yl[..d8.n_out * t]);
+                        for i in 0..t {
+                            for oo in 0..taille { dst[i * taille + oo] = yl[oo * t + i]; }
+                        }
+                    }
+                }
+                for i in 0..t {
+                    let g0 = gate[i * self.cfg.ffn..(i + 1) * self.cfg.ffn].to_vec();
+                    let u0 = up[i * self.cfg.ffn..(i + 1) * self.cfg.ffn].to_vec();
+                    let mut gg = g0;
+                    Self::activation(&mut gg, &u0, self.cfg.ffn, self.cfg.ffn_act_oss);
+                    gate[i * self.cfg.ffn..(i + 1) * self.cfg.ffn].copy_from_slice(&gg);
+                }
                 quantifier(&gate, &mut gi, &mut sg, self.act_levels, self.act_thresh);
                 {
                     let d8 = self.layers[l].wdown.d.as_ref().expect("projection dense requise");
@@ -2062,7 +2195,11 @@ impl Model {
                     let md = moe.down.expert(e as usize);
                     Self::matvec_q4(pool, &md, &gate, &mut exp_out, self.act_levels,
                                     self.act_thresh, tk(6), self.act_renorm, &mut scratch,
-                                    moe.biais_down.as_ref().map(|b| &b[e as usize * moe.n_ff..]));
+                                    // Le biais de descente se découpe par la
+                                    // largeur de SORTIE (h), pas par n_ff : les
+                                    // deux coïncident sur gpt-oss (2 880) mais
+                                    // pas sur Qwen3-MoE (768 contre 2 048).
+                                    moe.biais_down.as_ref().map(|b| &b[e as usize * h..]));
                     for i in 0..h { down[i] += w_exp * exp_out[i]; }
                 }
                 if let Some((sg, su, sd)) = moe.shexp.as_ref() {

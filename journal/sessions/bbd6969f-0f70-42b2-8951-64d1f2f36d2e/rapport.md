@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 19.4 h |
+| Durée | 19.8 h |
 | Tours | 5 |
-| Messages | 632 |
-| Appels d'outils | 642 |
+| Messages | 647 |
+| Appels d'outils | 657 |
 | Fichiers touchés | 31 |
-| Commandes | 445 |
+| Commandes | 460 |
 | Sous-agents | 1 |
-| Commits | 12 |
+| Commits | 13 |
 | Compactages de contexte | 0 |
 
 ## Objectifs déclarés
@@ -217,7 +217,7 @@ Retirer `mscale = 1 + 0,1·ln f` divise la perplexité par **8,9 / 5,9 / 3,8**. 
 
 ### Tour 5 — <goal_round> Objective: "Réaliser les 8 chantiers restants du projet qtrinet-core dans l'ordre : (1) protocole de perple … [1122 caractères tronqués]
 
-*39 appels d'outils.* Actions notables :
+*54 appels d'outils.* Actions notables :
 
 - bash — Check rotation series and expert profile
 - bash — End-to-end batched prefill correctness and time
@@ -233,11 +233,11 @@ Retirer `mscale = 1 + 0,1·ln f` divise la perplexité par **8,9 / 5,9 / 3,8**. 
 - bash — Fix the grep pattern and relaunch cleanly
 - bash — Read the MXFP4 CPU kernel for the layout
 - bash — Find the MXFP4 scalar dot path
-- … et 25 autres
+- … et 39 autres
 
 **Synthèse produite :**
 
-⏵ Noyau Q4_K validé (écart 4e-7, 2,2× le CPU) — l'item 7 « 4 bits » est complet. Je commite
+⏵ Le MoE par lots est juste (13,7149 contre 13,7205). Je vérifie l'effet du correctif de biais sur Qwen3-30B
 
 ## 3. Travail accompli
 
@@ -323,7 +323,7 @@ Retirer `mscale = 1 + 0,1·ln f` divise la perplexité par **8,9 / 5,9 / 3,8**. 
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 405 autres
+- … et 420 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -451,7 +451,7 @@ Retirer `mscale = 1 + 0,1·ln f` divise la perplexité par **8,9 / 5,9 / 3,8**. 
 
 ## 5. Erreurs rencontrées
 
-23 sorties en erreur ou divergentes. Les premières :
+27 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : a8f2635f8 docs: record which models this box is good at, and why src/llama-hparams.cpp:8:void llama_hparams::set_swa_pattern(uint32_t n_pattern, bool dense_first) { src/llama-hparams.h:308:    void se
 - **T1** : 511 tokens notés — perplexité cumulée 247.031  (4.9 tok/s) === perplexité 247.0308 sur 511 tokens (0 événements, 104.5 s) ===  ### B3 harmony assistant 511 --- ref --- 0.0 0.0 0:00 ls: cannot access '
@@ -483,4 +483,5 @@ Retirer `mscale = 1 + 0,1·ln f` divise la perplexité par **8,9 / 5,9 / 3,8**. 
 - Item 4 : prefill par lots -- justesse corrigee, debit a mesurer au calme  Deux bugs corriges dans forward_lot, tous deux invisibles a la compilation :  - les so
 - Rapport localite d'activation (idees PowerInfer mesurees) + etat des 8 chantiers  - --profil-neurones / --neurones-sortie : taux de tir et magnitude par neurone
 - Item 7 (2/2) : noyaux GPU 4 bits -- MXFP4 et Q4_K, une warp par ligne  - proj_mxfp4_warp : blocs de 17 octets (E8M0 + nibbles), table E2M1 doublee.   Mesure sur
+- Item 4 : MoE par lots -- regroupement des jetons par expert  Les modeles a experts suivent desormais le meme chemin par lots que les denses, avec le regroupemen
 

@@ -10298,3 +10298,262 @@ matrice Q4_K blk.0.ffn_gate.weight : 8960 × 1536 · 7.7 Mo · 6 super-blocs de 
 ⏵ Noyau Q4_K validé (écart 4e-7, 2,2× le CPU) — l'item 7 « 4 bits » est complet. Je commite
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='REPRISE.md'\ns=open(p).read()\ns=s.replace(\"\"\"| 7 | noyaux GPU | **presque** | warp par ligne **fait et mesuré** (tête : 1,8 ms contre 30 ms CPU, PPL identique) ; MXFP4 warp **fait** (0,1 ms, écart 0,00e0 au C … [1848 caractères tronqués]`
+
+  ```
+3091473 Item 7 (2/2) : noyaux GPU 4 bits -- MXFP4 et Q4_K, une warp par ligne
+[config] rotation : RoPE simple (contexte 512 ≤ 4096 initial ; YaRN ×32 prendrait le relais au-delà)
+=== perplexité 49.7874 sur 512 tokens (0 événements, 381.6 s) ===
+
+### contexte 1024 · RoPE simple
+  ```
+
+- **bash** `{"command": "sleep 300; tail -8 /tmp/seuil_rotation.log", "description": "Wait for the rotation series", "timeoutMs": 340000}`
+
+  ```
+[config] rotation : RoPE simple (contexte 512 ≤ 4096 initial ; YaRN ×32 prendrait le relais au-delà)
+=== perplexité 49.7874 sur 512 tokens (0 événements, 381.6 s) ===
+
+### contexte 1024 · RoPE simple
+[config] rotation : RoPE simple (contexte 1024 ≤ 4096 initial ; YaRN ×32 prendrait le relais au-delà)
+=== perplexité 49.9330 sur 512 tokens (0 événements, 310.3 s) ===
+
+### contexte 2048 · RoPE simple
+  ```
+
+### 🤖 Assistant
+
+⏵ Pendant la série : GEMM par lots pour les matrices 4 bits (préalable au regroupement MoE)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src && python3 - <<'PY'\np='engine.rs'\ns=open(p).read()\ns=s.replace(\"\"\"    /// Accumulation par **listes par source valuées** : le mode de l'inférence.\"\"\",\n\"\"\"    /// Produit **matrice-matrice** sur une matrice  … [3493 caractères tronqués]`
+
+  ```
+test engine::tests_gemm_q4::gemm_q4_egale_matvec ... ok
+test engine::tests_gemm::gemm_bat_le_matvec ... ok
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 4 filtered out; finished in 0.13s
+  ```
+
+### 🤖 Assistant
+
+⏵ Item 4 (fin) : regroupement des jetons par expert dans le forward par lots
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src && sed -n '/^            if let Some(moe) = lay.moe.as_ref() {/,/^            }$/p' model.rs | sed -n '1,20p'", "description": "Recall the per-token MoE block for reference"}`
+
+  ```
+if let Some(moe) = lay.moe.as_ref() {
+                let ne = cfg.n_expert;
+                let k = if self.moe_topk > 0 { self.moe_topk } else { cfg.n_expert_used };
+                let k = k.clamp(1, ne);
+                let mut sc_e: Vec<f32> = (0..ne).map(|e| {
+                    let r = &moe.routeur[e * h..(e + 1) * h];
+                    let s: f32 = r.iter().zip(hn.iter()).map(|(a, b)| a * b).sum();
+                    s + moe.routeur_biais.as_ref().map_or(0.0, |b| b[e])
+                }).collect();
+                let mut idx: Vec<u32> = (0..ne as u32).collect();
+                let mut inv_k = 1.0f32;
+                if cfg.routeur_topk_softmax {
+                    // gpt-oss : le top-k se décide sur les logits BRUTS, et le
+                    // softmax ne porte que sur les retenus.
+                    if k < ne {
+                        idx.select_nth_unstable_by(k, |&a, &b| {
+                            sc_e[b as usize].partial_cmp(&sc_e[a as usize]).unwrap()
+                        });
+                        idx.truncate(k);
+                    }
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src && python3 - <<'PY'\np='model.rs'\ns=open(p).read()\n# 1. Retirer le repli « MoE → jeton par jeton » du début de forward_lot.\ns=s.replace(\"\"\"        if self.cfg.n_expert > 0 || t == 1 {\n            return toks.iter … [5721 caractères tronqués]`
+
+  ```
+squelette inséré (à compléter)
+  ```
+
+### 🤖 Assistant
+
+⏵ Mon squelette était mal placé (hors de la boucle, mauvais emprunts) — je réécris proprement la fin de la couche
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src && grep -n \"// 4. projection de sortie du lot\" model.rs && grep -n \"Regroupement par expert\" model.rs && grep -n \"for i in 0..t {\" model.rs | tail -3 && sed -n '1660,1720p' model.rs", "description": "Locate the re … [17 caractères tronqués]`
+
+  ```
+1669:            // 4. projection de sortie du lot, résidu, norme du FFN
+1722:        // Regroupement par expert : pour chaque expert choisi, les jetons qui
+1737:            for i in 0..t { down[i * h..(i + 1) * h].iter_mut().for_each(|v| *v = 0.0); }
+1741:            for i in 0..t {
+1802:        for i in 0..t {
+                    for val in out.iter_mut() { *val = 0.0; }
+                    for tt in lo..n {
+                        let w = sc[tt] * inv;
+                        kvc.valeur(kvh, tt, &mut vd);
+                        for (oo, xx) in out.iter_mut().zip(vd.iter()) { *oo += w * xx; }
+                    }
+                }
+                self.attn_events += (nh * (n - lo)) as u64;
+            }
+            // 4. projection de sortie du lot, résidu, norme du FFN
+            {
+                quantifier(&att, &mut ai[..t * h], &mut sa, self.act_levels, self.act_thresh);
+                let n_out = {
+                    let d8 = self.layers[l].wo.d.as_ref().expect("projection dense requise");
+                    self.pool.gemm_dense_i8(d8, &ai[..t * h], t, &sa, &mut yl[..d8.n_out * t]);
+                    d8.n_out
+                };
+                let bias = self.layers
+… [2052 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src && python3 - <<'PY'\np='model.rs'\ns=open(p).read()\n# 1. Retirer le squelette mal placé.\nd = s.index(\"        // ------------------------------------------------------------------ MoE\")\nf = s.index(\"        for i  … [7909 caractères tronqués]`
+
+  ```
+error[E0423]: expected value, found macro `cfg`
+    --> src/model.rs:1694:26
+     |
+1694 |                 let ne = cfg.n_expert;
+     |                          ^^^
+     |
+help: you might have meant to use the available field
+--
+error[E0423]: expected value, found macro `cfg`
+    --> src/model.rs:1695:71
+     |
+1695 |                 let k = if self.moe_topk > 0 { self.moe_topk } else { cfg.n_expert_used };
+     |                                                                       ^^^
+     |
+help: you might have meant to use the available field
+--
+error[E0423]: expected value, found macro `cfg`
+    --> src/model.rs:1711:24
+     |
+1711 |                     if cfg.routeur_topk_softmax {
+     |                        ^^^
+     |
+help: you might have meant to use the available field
+--
+error[E0423]: expected value, found macro `cfg`
+BUILD
+  ```
+
+### 🤖 Assistant
+
+⏵ Correction en cours, et un bug connexe repéré : le biais de descente des experts est indexé avec la mauvaise largeur
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src && python3 - <<'PY'\np='model.rs'\ns=open(p).read()\n# 1. Dans le bloc MoE par lots : self.cfg au lieu de cfg, et le vrai code\n#    d'activation + descente (mon squelette avait des restes).\nd = s.index(\"            i … [8256 caractères tronqués]`
+
+  ```
+error[E0423]: expected value, found macro `cfg`
+    --> src/model.rs:1817:67
+     |
+1817 |                 for (pj, dst, taille) in [(&lay.wgate, &mut gate, cfg.ffn),
+     |                                                                   ^^^
+     |
+help: you might have meant to use the available field
+--
+error[E0423]: expected value, found macro `cfg`
+    --> src/model.rs:1818:63
+     |
+1818 | ...                   (&lay.wup, &mut up, cfg.ffn)] {
+     |                                           ^^^
+     |
+help: you might have meant to use the available field
+--
+error[E0423]: expected value, found macro `cfg`
+    --> src/model.rs:1827:39
+     |
+1827 |                     let g0 = gate[i * cfg.ffn..(i + 1) * cfg.ffn].to_vec();
+     |                                       ^^^
+     |
+help: you might have meant to use the available field
+--
+error[E0423]: expected value, found macro `cfg`
+BUILD
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src && python3 - <<'PY'\np='model.rs'\ns=open(p).read()\ndebut = s.index(\"            } else {\\n                // ---- FFN DENSE PAR LOTS\")\nfin = s.index(\"        }\\n        for i in 0..t {\\n            let r = x[i  … [317 caractères tronqués]`
+
+  ```
+BUILD
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && cargo test --release 2>&1 | tail -3; cd .. && echo \"=== gpt-oss : lot 1 contre lot 16 (les PPL doivent coïncider) ===\" && for l in 1 16; do printf \"lot %-3s : \" $l; timeout 900 ./qtrinet-core/target/release/qtrinet-c … [289 caractères tronqués]`
+
+  ```
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.15s
+
+=== gpt-oss : lot 1 contre lot 16 (les PPL doivent coïncider) ===
+lot 1   : perplexité 13.7149 sur 255 tokens
+lot 16  : 
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 900 ./qtrinet-core/target/release/qtrinet-core /home/stephane/FastNVMe/models/gpt-oss-120b-MXFP4.gguf --ppl /tmp/ids_oss.txt --ctx 256 --limit 256 --dense --threads 8 --lot 16 2>&1 | tail -6; free -g | head -2; tail -2 /tmp/s … [91 caractères tronqués]`
+
+  ```
+[config] rotation : RoPE simple (contexte 256 ≤ 4096 initial ; YaRN ×32 prendrait le relais au-delà)
+
+thread 'main' (4050638) panicked at src/model.rs:1556:21:
+index out of bounds: the len is 46080 but the index is 46080
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+timeout: the monitored command dumped core
+               total        used        free      shared  buff/cache   available
+Mem:             125          59          64           1           3          65
+
+### contexte 4096 · RoPE simple
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src && sed -n '1540,1562p' model.rs", "description": "Inspect the panic line"}`
+
+  ```
+let mut attn_idx: Vec<u32> = Vec::with_capacity(ctx);
+        let scale = 1.0 / (hd as f32).sqrt();
+        // Quantification d'un lot : mêmes règles que `quant_scratch`.
+        let quantifier = |src: &[f32], dst: &mut [i32], ech: &mut [f32],
+                          niveaux: f32, seuil: f32| {
+            let n = src.len() / t;
+            for i in 0..t {
+                let ligne = &src[i * n..(i + 1) * n];
+                let mut mx = 0f32;
+                for &val in ligne { let a = val.abs(); if a > mx { mx = a; } }
+                let s = if mx > 0.0 { mx / niveaux } else { 1.0 };
+                ech[i] = s;
+                let inv = 1.0 / s;
+                let se = (seuil * niveaux) as i32;
+                for (j, &val) in ligne.iter().enumerate() {
+                    let r = (val * inv).round() as i32;
+                    dst[i * n + j] = if r.abs() > se { r } else { 0 };
+                }
+            }
+        };
+        for l in 0..self.cfg.n_layer {
+            let lay = &self.layers[l];
+            // 1. norme d'entrée du lot
+  ```
+
+### 🤖 Assistant
+
+⏵ Bug : le tampon d'activation de la projection de sortie était dimensionné sur `h`, pas sur `nh×hd`
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src && python3 - <<'PY'\np='model.rs'\ns=open(p).read()\ns=s.replace(\"\"\"                quantifier(&att, &mut ai[..t * h], &mut sa, self.act_levels, self.act_thresh);\n                let n_out = {\n                    l … [1803 caractères tronqués]`
+
+  ```
+BUILD
+lot 1   : perplexité 13.7149 sur 255 tokens
+lot 16  : perplexité 13.7205 sur 255 tokens
+  ```
+
+### 🤖 Assistant
+
+⏵ Le MoE par lots est juste (13,7149 contre 13,7205). Je vérifie l'effet du correctif de biais sur Qwen3-30B
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 900 ./qtrinet-core/target/release/qtrinet-core /home/stephane/FastNVMe/models/Qwen3-30B-A3B-Instruct-2507-Q4_K_M.gguf --ppl /tmp/ids_qwen3.txt --ctx 128 --limit 128 --dense --threads 8 2>&1 | grep -oE \"perplexité [0-9.]+ sur … [129 caractères tronqués]`
+
+  ```
+(fichier d'ids absent)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ./qtrinet-core/target/release/qtrinet-core /home/stephane/FastNVMe/models/Qwen3-30B-A3B-Instruct-2507-Q4_K_M.gguf --tokenize --fichier /tmp/wt2_txt.txt --sortie /tmp/ids_qwen3.txt 2>&1 | tail -2 && timeout 900 ./qtrinet-core/target/r … [311 caractères tronqués]`
+
+  ```
+4592 tokens écrits dans /tmp/ids_qwen3.txt (vocabulaire du modèle : 151936)
+réversibilité : texte reconstruit identique ✅ (20000 octets)
+perplexité 7.6139 sur 127 tokens
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='REPRISE.md'\ns=open(p).read()\ns=s.replace(\"\"\"| 4 | préremplissage par lots | **à moitié** | noyau `gemm_dense_i8` ×2,4 au banc ; `forward_lot` juste (13,1359 contre 13,1368) mais **débit bout en bout à mesure … [2441 caractères tronqués]`
