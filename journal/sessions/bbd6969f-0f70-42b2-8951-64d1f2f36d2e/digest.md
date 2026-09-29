@@ -11334,3 +11334,52 @@ KV 8  bits (4 591 jetons) :
 ⏵ Je file la mesure longue et je consigne les résultats à 512 jetons
 
 - **bash** `{"command": "cat > /tmp/kv_blocs.sh <<'EOF'\n#!/bin/bash\n# KV à échelles par bloc : mesure à 4 591 jetons de contexte, machine au calme.\nset -u\ncd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\nJ=/tmp/kv_blocs.log\n: > \"$J\"\nwhile pgrep -f \"aiguille30b\" > /dev/null; do sleep 30; done\nwhile … [3614 caractères tronqués]`
+
+  ```
+26b7587 KV a echelles par bloc de 32 : int8 de +7,1 % a +1,5 %, int4 de +384 % a +219 %
+[stderr]
+bash: line 54: assert: command not found
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -c \"par bloc de 32\" docs/contexte-long.md REPRISE.md; git status --short | head -3; echo \"--- aiguille 30B ---\"; cat /tmp/aiguille30b.log 2>/dev/null | tail -4; echo \"--- kv blocs ---\"; cat /tmp/kv_blocs.log 2>/dev/null",  … [51 caractères tronqués]`
+
+  ```
+docs/contexte-long.md:2
+REPRISE.md:2
+ M journal/README.md
+--- aiguille 30B ---
+aiguille : /home/stephane/FastNVMe/models/Qwen3-30B-A3B-Instruct-2507-Q4_K_M.gguf
+ contexte  profondeur  trouvé  secondes
+     1024        0.10     NON     575.6
+--- kv blocs ---
+  ```
+
+### 🤖 Assistant
+
+⏵ L'aiguille est lente (10 min/sonde) et son remplissage trop répétitif : j'arrête et je consigne la limite
+
+- **bash** `{"command": "pkill -f aiguille30b; sleep 2; pkill -f aiguille_lance; sleep 2; ps -eo comm | grep -c qtrinet || echo \"aucun moteur\"; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='docs/contexte-long.md'\ns=open(p).read()\ns=s.replace(\"\"\"   supposer.\"\"\",\n\"\"\"   s … [1176 caractères tronqués]`
+
+  ```
+(no output)
+[killed by signal: SIGTERM]
+  ```
+
+- **bash** `{"command": "sleep 3; ps -eo comm | grep -c qtrinet || echo \"aucun moteur\"; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log --oneline -1 && grep -c \"arrêté\" docs/contexte-long.md; cat /tmp/kv_blocs.log 2>/dev/null", "description": "Check state after the kill"}`
+
+  ```
+1
+26b7587 KV a echelles par bloc de 32 : int8 de +7,1 % a +1,5 %, int4 de +384 % a +219 %
+0
+  ```
+
+- **bash** `{"command": "pgrep -f 'aiguille[3]0b' | head -2; pgrep -f 'aiguille[_]lance' | head -2; echo \"---\"; pgrep -f 'kv_blocs' | head -2; echo \"scripts vivants ci-dessus\"", "description": "Check which scripts are still alive"}`
+
+  ```
+---
+3092009
+3092141
+scripts vivants ci-dessus
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='docs/contexte-long.md'\ns=open(p).read()\nvieux = \"\"\"   supposer.\"\"\"\nneuf = \"\"\"   supposer. Second essai sur Qwen3-30B-A3B : **9,6 minutes pour une seule\n   sonde** (1 024 jetons de contexte) et un éch … [1099 caractères tronqués]`

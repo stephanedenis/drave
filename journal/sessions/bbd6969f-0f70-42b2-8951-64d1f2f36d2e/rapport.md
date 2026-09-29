@@ -7,12 +7,12 @@
 | Début | 2026-09-28 14:46 |
 | Durée | 21.9 h |
 | Tours | 5 |
-| Messages | 705 |
-| Appels d'outils | 715 |
+| Messages | 710 |
+| Appels d'outils | 720 |
 | Fichiers touchés | 33 |
-| Commandes | 515 |
+| Commandes | 520 |
 | Sous-agents | 1 |
-| Commits | 21 |
+| Commits | 23 |
 | Compactages de contexte | 0 |
 
 ## Objectifs déclarés
@@ -217,7 +217,7 @@ Retirer `mscale = 1 + 0,1·ln f` divise la perplexité par **8,9 / 5,9 / 3,8**. 
 
 ### Tour 5 — <goal_round> Objective: "Réaliser les 8 chantiers restants du projet qtrinet-core dans l'ordre : (1) protocole de perple … [1122 caractères tronqués]
 
-*112 appels d'outils.* Actions notables :
+*117 appels d'outils.* Actions notables :
 
 - bash — Check rotation series and expert profile
 - bash — End-to-end batched prefill correctness and time
@@ -233,11 +233,11 @@ Retirer `mscale = 1 + 0,1·ln f` divise la perplexité par **8,9 / 5,9 / 3,8**. 
 - bash — Fix the grep pattern and relaunch cleanly
 - bash — Read the MXFP4 CPU kernel for the layout
 - bash — Find the MXFP4 scalar dot path
-- … et 97 autres
+- … et 102 autres
 
 **Synthèse produite :**
 
-⏵ Je file la mesure longue et je consigne les résultats à 512 jetons
+⏵ L'aiguille est lente (10 min/sonde) et son remplissage trop répétitif : j'arrête et je consigne la limite
 
 ## 3. Travail accompli
 
@@ -325,7 +325,7 @@ Retirer `mscale = 1 + 0,1·ln f` divise la perplexité par **8,9 / 5,9 / 3,8**. 
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 475 autres
+- … et 480 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -494,4 +494,6 @@ Retirer `mscale = 1 + 0,1·ln f` divise la perplexité par **8,9 / 5,9 / 3,8**. 
 - REPRISE : toutes les mesures du tour huit chantiers, et la suite ordonnee  Tableau recapitulatif (noyaux GPU, prefill par lots, KV int8/int4 a 4 600 jetons, att
 - Aiguille : le 0.5B echoue 6 fois sur 6 (limite du modele, pas du moteur)  Qwen2.5-0.5B ne retrouve pas un code plante a 1 024 ou 2 048 jetons, a aucune des troi
 - KV a echelles par bloc de 32 : int8 de +7,1 % a +1,5 %, int4 de +384 % a +219 %  Le cache KV quantifiait avec UNE echelle par vecteur (tete, position) ; Q8_0 et
+- Aiguille : test arrete, et pourquoi (remplissage trop repetitif, prefill trop lent)  9,6 minutes pour UNE sonde sur Qwen3-30B-A3B (1 024 jetons) et un echec : l
+- Aiguille : test arrete, et pourquoi (remplissage trop repetitif, prefill trop lent)  9,6 minutes pour UNE sonde sur Qwen3-30B-A3B (1 024 jetons) et un echec : u
 

@@ -243,7 +243,13 @@ discrimine donc rien sur la rotation, et il reste à le refaire avec
    paramètres ne sait pas retrouver un code, donc ce modèle ne peut pas servir de
    référence ; l'essai est relancé sur Qwen3-30B-A3B. Ce n'est pas un défaut du
    moteur : c'est la limite du modèle, et il valait mieux la mesurer que la
-   supposer.
+   supposer. Second essai sur Qwen3-30B-A3B : **9,6 minutes pour une seule
+   sonde** (1 024 jetons de contexte) et un échec — le remplissage, répété à
+   l'identique, ne fait pas un banc d'essai valable, et le préremplissage
+   séquentiel rend chaque sonde hors de prix (1,8 jeton/s). Le test est donc
+   **arrêté** : il faudra un remplissage varié (du vrai texte), moins de sondes
+   et des réponses plus longues — et c'est le préremplissage par lots qui le
+   rendra abordable.
 2. **Attention creuse** : `--attn-topk N` et `--attn-window N` au protocole
    `--depuis` (mêmes jetons, contexte long) donnent le prix en perplexité de
    chaque restriction.
