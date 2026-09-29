@@ -307,9 +307,24 @@ copies par expert et par jeton) ou si l'on groupe les projections. Verdict
 mesuré : **à ne pas activer par défaut**, et `rapport-localite-activation.md`
 explique pourquoi un préchargement statique ne paierait pas davantage.
 
-Il reste, sur ce chemin : la répartition sur les **deux** GPU (le second est
-libre), et l'extension du noyau au top-k (aujourd'hui `--attn-topk` repasse par le
-CPU).
+### Deux cartes, et un noyau de tête AVX2
+
+Le miroir KV se **répartit maintenant sur les deux Quadro** : les couches sont
+allouées en tournant (`machines()[l % 2]`), et `[gpu]` annonce la répartition —
+12 couches sur GPU 1, 12 sur GPU 0 pour Qwen 0.5B, perplexité inchangée
+(13,1369). La pagination rend la seconde carte inutile aux longueurs courantes
+(le miroir grandit avec l'usage), mais elle donne la marge des très longs
+contextes : un KV f32 à 1 M pour Qwen 0.5B pèse 24 Go, soit 12 Go par carte — il
+ne tiendrait pas sur une seule.
+
+Le noyau de tête Q8_0 (chemin CPU) est passé en **AVX2** : `vpmaddwd` sur les 32
+niveaux d'un bloc, somme ENTIÈRE donc exacte — le résultat est identique au
+scalaire **au bit près**, ce que la perplexité confirme (19,3885 et 13,1359
+inchangés). Le poste « tête de sortie » du profil en lot tombe de 5,5 ms/jeton à
+mesurer machine au calme.
+
+Il reste, sur ce chemin : l'extension du noyau d'attention au top-k (aujourd'hui
+`--attn-topk` repasse par le CPU).
 
 ### Le cache CPU est paginé lui aussi
 

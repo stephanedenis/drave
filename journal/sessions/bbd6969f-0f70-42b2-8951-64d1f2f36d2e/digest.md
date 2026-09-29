@@ -17717,3 +17717,213 @@ chmod +x /tmp/mesure_2bc.sh && /tmp/mesure_2bc.sh) finished [status: completed, 
 ⏵ 2c mesuré : préremplissage 261,6 → 93,7 s (×2,8), perplexité identique
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='docs/contexte-long.md'; s=open(p).read()\nold = \"\"\"Il reste, sur ce chemin : la répartition sur les **deux** GPU (le second est\nlibre), et l'extension du noyau au top-k (aujourd'hui `--attn-topk` repasse par  … [4776 caractères tronqués]`
+
+  ```
+docs 2b/2c + REPRISE
+4512f69 Chantiers 1, 2b, 2c : aiguille 12/12, attention par lots déportée ×2,8, experts +6 %
+  ```
+
+- **todo_write** `{"todos": [{"content": "Chantier 1 : aiguille long contexte (12/12 sondes trouvées, 3 modèles)", "status": "completed"}, {"content": "Chantier 2a : dépaquetage vectorisé du noyau d'attention (×1,8 à ×2,3)", "status": "completed"}, {"content": "Chantier 2b : experts MXFP4 en VRAM (mesuré +6 %, verdic … [658 caractères tronqués]`
+
+  ```
+Updated todo list: 4 pending, 0 in progress, 6 completed.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && grep -n \"pub fn q8_dot_at\" -A 22 src/gguf.rs | head -30", "description": "Inspect Q8_0 dot implementation"}`
+
+  ```
+470:    pub fn q8_dot_at(&self, v: &Q8View, row: usize, qx: &[i16]) -> f32 {
+471-        let mut acc = 0f32;
+472-        if v.ttype == GGML_Q6_K {
+473-            // Q6_K : quants signés sur 6 bits, une échelle signée par 16 poids,
+474-            // aucune asymétrie — donc pas de terme de minimum.
+475-            let ns = v.nb;
+476-            for sup in 0..ns {
+477-                let p = v.base + (row * ns + sup) * TAILLE_Q6K;
+478-                let ql = &self.buf[p..p + 128];
+479-                let qh = &self.buf[p + 128..p + 192];
+480-                let sc = &self.buf[p + 192..p + 208];
+481-                let d = Self::f16_to_f32(
+482-                    u16::from_le_bytes(self.buf[p+208..p+210].try_into().unwrap()));
+483-                for moitie in 0..2usize {
+484-                    let (ql, qh, sc) = (&ql[moitie*64..], &qh[moitie*32..], &sc[moitie*8..]);
+485-                    let b = sup * 256 + moitie * 128;
+486-                    // Les huit groupes de 16 poids d'une moitié ont chacun leur
+487-                    // échelle et occupent des positions CONTIGUËS : on accumule
+488-                    // donc en entier par groupe, et on ne paie qu'une
+489-            
+… [278 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cat > /tmp/rotation_16k.sh <<'EOF'\n#!/bin/bash\n# Chantier 4 : la rotation à 16 k. Deux régimes, mêmes 512 jetons notés\n# (positions 15 872 à 16 383). Le KV déporté est indispensable ici : sans lui\n# l'attention coûte ~180 ms/jeton et la passe dépasse l'heure par régime.\nset -u\ncd  … [910 caractères tronqués]`
+
+  ```
+started background job bash-39
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git status --short | head -3 && git log --oneline -8 | cat", "description": "Check repo state and log"}`
+
+  ```
+M journal/README.md
+4512f69 Chantiers 1, 2b, 2c : aiguille 12/12, attention par lots déportée ×2,8, experts +6 %
+6664eef REPRISE : feuille de route réécrite et pièges des variables d'environnement
+bc5aa9a Chantier 3 : cache KV CPU paginé (0,03 Go à ctx 1 M au lieu de 25,77 Go)
+5dfa6b1 Chantier 1-2 : aiguille v2, experts MXFP4 en VRAM, attention par lots déportée
+a64328d GPU : dépaquetage vectorisé du noyau d'attention (×1,8 à ×2,3 à 1 M de clés)
+45948e2 porte gpt-oss : préciser qu'elle se mesure SANS QT_GPU
+b5ff0b1 E4 : miroir VRAM paginé (capacité doublée à la demande)
+91ebee7 journal : archive automatique
+  ```
+
+### 🤖 Assistant
+
+⏵ Bilan de la fournée : 6 sous-chantiers sur 10 livrés, la rotation 16 k tourne encore
+
+Six des dix sous-chantiers sont faits, mesurés et commités ; quatre restent, dont un qui tourne en ce moment.
+
+## Livré
+
+| sous-chantier | mesure | commit |
+|---|---|---|
+| **1. Aiguille v2** | **12 sondes sur 12** trouvées (profondeurs 0,1/0,5/0,9) : Qwen1.5B 512+2048, Qwen3-30B 2048, gpt-oss-120b 4096 avec KV déporté — là où la v1 échouait 6/6 | `5dfa6b1`, `4512f69` |
+| **2a. Dépaquetage vectorisé** du noyau d'attention | à 1 M de clés : f32 13,6 → **7,0 ms** (308 Go/s), int8 15,0 → **6,5**, int4 13,2 → **7,4 ms** ; écarts au CPU inchangés | `a64328d` |
+| **2b. Experts MXFP4 en VRAM** | +6 % seulement (5,12 → 5,43 jetons/s), 53,5 % de succès, 10,64 Go montés — **verdict : ne pas activer par défaut**, le chemin CPU est déjà AVX2 | `4512f69` |
+| **2c. Attention par lots déportée** | préremplissage ctx 4096, lot 512 : **261,6 → 93,7 s (×2,8)**, perplexité **identique** (12,2175) | `4512f69` |
+| **3. Pagination + hypothèse f16** | cache CPU à ctx 1 M : **0,03 Go** au lieu de 25,77 Go ; hypothèse « clés en f16 avant quantification » **réfutée** (perplexité identique) | `bc5aa9a` |
+| **6. Hygiène** | feuille de route réécrite, tableau des pièges `QT_GPU*` (`QT_GPU` ouvre le pilote : sans elle, les autres ne font rien et rien ne le dit) | `6664eef` |
+
+Au passage : le préremplissage par lots est branché sur la **génération** (`Model::lot`) — il ne l'était que sur la perplexité, ce qui rendait toute invite longue hors de prix.
+
+## Reste
+
+1. **2d — noyau de tête Q8_0.** Le chemin CPU est lié au calcul (5,5 ms/jeton en lot sur Qwen 0.5B ; la tête de gpt-oss fait 579 Mo, la plus grosse matrice du modèle). Voie AVX2 ou déport.
+2. **2e — second GPU.** 16 Go dorment : à répartir entre KV et experts, avec un second contexte CUDA.
+3. **4 — rotation à 16 k.** **En cours** : deux régimes, mêmes 512 jetons notés (15 872-16 383), KV déporté obligatoire pour que la passe ne dépasse pas l'heure par régime. Journal : `/tmp/rotation_16k.log`.
+4. **5 — MLA et vision.** MLA demande un modèle **synthétique** écrit à la main (aucun modèle MLA local) validé contre une référence indépendante ; la vision demande la tour ViT + le chemin `mmproj`, entièrement à écrire.
+
+L'objectif reste actif : la suite (2d, 2e, résultat du 16 k, puis MLA/vision) est exactement la liste du §6 de `REPRISE.md`, qui a été réécrite pour ça. Rien n'est laissé cassé : `cargo test` 6/6, porte Qwen **19,3885** revérifiée après chaque changement de noyau, et les mesures de cette fournée sont soit dans les rapports, soit dans `REPRISE.md` §6.
+
+
+## Tour 10
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Réaliser les 6 nouveaux chantiers du projet qtrinet-core, dans l'ordre : (1) relancer le test de l'aiguille sur contexte long (remplissage varié en vrai texte, moins de sondes, réponses plus longues) sur un modèle capable, grâce au préremplissage par lots et au KV déporté ; (2) chemin GPU : dépaquetage vectorisé du noyau d'attention (13,2 ms/couche à 1 M en int4 vers ~3 ms), brancher MXFP4 dans le moteur avec une politique de résidence des experts, attention par lots sur GPU dans forward_lot, noyau de tête Q8_0 accéléré (AVX2 ou déport), et usage du second GPU ; (3) mémoire : pagination du cache KV côté CPU (25,77 Go réservés à ctx 1 M pour 512 jetons écrits) et test de l'hypothèse « clés en f16 avant quantification » pour l'écart int8 avec llama.cpp à 8 192 (+3,0 % contre +0,8 %) ; (4) rotation au-delà de 5 120 jetons (passe à 16 k) ; (5) structurel : MLA (aucun modèle local — construire un modèle MLA synthétique et valider contre une référence indépendante) et vision (poids Qwen2.5-VL et projecteur mmproj présents) ; (6) hygiène : réécrire la section « Ce qu'il faut faire ensuite » de REPRISE.md et y consigner les pièges QT_GPU/QT_GPU_TETE/QT_GPU_KV. Chaque chantier doit être implémenté, mesuré (portes de non-régression Qwen 19,3885 et gpt-oss 15,1757 sans QT_GPU), documenté dans le dépôt et commité."
+Round: 1/30
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cat /tmp/rotation_16k.log 2>/dev/null; echo \"---\"; pgrep -x qtrinet-core >/dev/null && echo \"[mesure 16k en cours]\" || echo \"[libre]\"; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log --oneline -1 && git status --short | head -3", "description": "Check 16k rotation jo … [18 caractères tronqués]`
+
+  ```
+ctx 16384 simple  : ---
+[mesure 16k en cours]
+4512f69 Chantiers 1, 2b, 2c : aiguille 12/12, attention par lots déportée ×2,8, experts +6 %
+ M journal/README.md
+  ```
+
+### 🤖 Assistant
+
+⏵ Chantier 2d : j'inspecte le noyau de tête Q8_0 actuel
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && awk 'NR>=505 && NR<=570 {printf \"%4d|%s\\n\", NR, $0}' src/gguf.rs", "description": "Read Q8_0 branch of q8_dot_at"}`
+
+  ```
+505|                        acc += d * (sc[g] as i8) as f32 * p as f32;
+ 506|                    }
+ 507|                }
+ 508|            }
+ 509|            return acc;
+ 510|        }
+ 511|        if v.ttype == GGML_Q4_K {
+ 512|            // Tête Q4_K : même arithmétique que le noyau des projections,
+ 513|            // mais scalaire — la tête est bornée par la mémoire, pas par le
+ 514|            // calcul (130 Mo lus par jeton sur un 1,5B).
+ 515|            let ns = v.nb;
+ 516|            for sup in 0..ns {
+ 517|                let p = v.base + (row * ns + sup) * TAILLE_Q4K;
+ 518|                let d = Self::f16_to_f32(u16::from_le_bytes(self.buf[p..p+2].try_into().unwrap()));
+ 519|                let dmin = Self::f16_to_f32(u16::from_le_bytes(self.buf[p+2..p+4].try_into().unwrap()));
+ 520|                let sc = &self.buf[p + 4..p + 16];
+ 521|                let qs = &self.buf[p + 16..p + 144];
+ 522|                for g in 0..4usize {
+ 523|                    let (s0, m0) = echelle_min_q4k(sc, 2 * g);
+ 524|                    let (s1, m1) = echelle_min_q4k(sc, 2 * g + 1);
+ 525|                    let mut sq0 = 0i32; let mut sx0 = 0i32;
+ 526|                    let mut sq1 =
+… [2143 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && python3 - <<'PY'\np='src/gguf.rs'; s=open(p).read()\nold = \"\"\"        } else {\n            for b in 0..v.nb {\n                let p = v.base + (row * v.nb + b) * 34;\n                let d = Self::f16_to_f32(u16::fr … [3198 caractères tronqués]`
+
+  ```
+noyau AVX2 de la tête posé
+    Finished `release` profile [optimized] target(s) in 0.04s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && QT_GPU=1 timeout 600 ./qtrinet-core/target/release/qtrinet-core models/Qwen2.5-0.5B-Q8_0.gguf --ppl /tmp/ids_qwen.txt --ctx 256 --abits 16 --threads 16 --limit 512 --dense 2>&1 | grep -oE \"perplexité [0-9.]+ sur [0-9]+ tokens\" && Q … [299 caractères tronqués]`
+
+  ```
+perplexité 19.3885 sur 510 tokens
+     511 tokens notés — perplexité cumulée 13.136  (23.4 tok/s)
+profil par profondeur (perplexité par tranche de 256 positions) :
+=== perplexité 13.1359 sur 511 tokens (0 événements, 21.8 s) ===
+    dont tête de sortie 6.62 | notation log-sum-exp 2.07 (le reste du « reste » n'est pas chronométré)
+  ```
+
+- **bash** `{"command": "cat /tmp/rotation_16k.log; grep -n \"pub fn instance\" -A 8 /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src/gpu.rs", "description": "Check rotation progress and GPU singleton"}`
+
+  ```
+ctx 16384 simple  : 780:pub fn instance() -> Option<&'static Gpu> {
+781-    INSTANCE.get_or_init(|| {
+782-        if std::env::var("QT_GPU").is_err() { return None; }
+783-        Gpu::ouvrir_auto()
+784-    }).as_ref()
+785-}
+786-
+787-unsafe impl Send for Gpu {}
+788-unsafe impl Sync for Gpu {}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && python3 - <<'PY'\np='src/gpu.rs'; s=open(p).read()\n\n# ordinal conservé + liste des périphériques\ns = s.replace(\"\"\"    pub nom: String,\n    pub memoire_libre: usize,\n}\"\"\",\n\"\"\"    pub nom: String,\n    /// N … [2242 caractères tronqués]`
+
+  ```
+périphériques multiples exposés
+    Finished `release` profile [optimized] target(s) in 0.01s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && grep -n \"kv_gpu: Option<Vec<crate::gpu::KvGpu>>\\|kv_gpu, attn_gpu_part\\|miroir_gpu(miroirs\\|kv_gpu.as_mut()\\|kv_gpu.as_deref_mut()\\|kv_gpu.is_some()\\|kv_gpu.as_ref()\" src/model.rs | head", "description": "Find KV … [24 caractères tronqués]`
+
+  ```
+558:    pub kv_gpu: Option<Vec<crate::gpu::KvGpu>>,
+864:    pub fn miroir_gpu(miroirs: Option<&mut [crate::gpu::KvGpu]>, l: usize, kvc: &KvCache,
+1263:            tete_gpu, tete_gpu_q6k, head4, sinks_vus, kv_gpu, attn_gpu_part: Vec::new(),
+1971:                KvCache::miroir_gpu(self.kv_gpu.as_deref_mut(), l, &self.kv[l], pos, 1);
+1986:                if groupe && self.kv_gpu.is_some() && nkv * rep == nh && n > 1 {
+1999:                                                       self.kv_gpu.as_mut().and_then(|v| v.get_mut(l))) {
+2370:            KvCache::miroir_gpu(kv_gpu.as_deref_mut(), l, &kv[l], pos, 1);
+2393:            if groupe && kv_gpu.is_some() && nkv * rep == nh && n > 1 {
+2400:                        (crate::gpu::instance(), kv_gpu.as_mut().and_then(|v| v.get_mut(l))) {
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && python3 - <<'PY'\np='src/model.rs'; s=open(p).read()\n\n# le miroir retient désormais SON périphérique\ns = s.replace(\"\"\"    pub kv_gpu: Option<Vec<crate::gpu::KvGpu>>,\"\"\",\n\"\"\"    /// Un miroir VRAM par couche, … [6408 caractères tronqués]`
+
+  ```
+répartition sur deux périphériques
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && cargo build --release 2>&1 | tail -2 && cd .. && QT_GPU=1 QT_GPU_KV=1 timeout 600 ./qtrinet-core/target/release/qtrinet-core models/Qwen2.5-0.5B-Q8_0.gguf --ppl /tmp/ids_qwen.txt --ctx 512 --limit 512 --dense --threads 1 … [114 caractères tronqués]`
+
+  ```
+warning: `qtrinet-core` (bin "qtrinet-core") generated 15 warnings (run `cargo fix --bin "qtrinet-core" -p qtrinet-core` to apply 7 suggestions)
+    Finished `release` profile [optimized] target(s) in 0.01s
+[gpu] KV déporté : 12 couches sur GPU 1, 0.01 Go ici (14.83 Go libres)
+[gpu] KV déporté : 12 couches sur GPU 0, 0.01 Go ici (15.22 Go libres)
+[gpu] KV déporté : 0.01 Go au total pour 24 couches
+     511 tokens notés — perplexité cumulée 13.137  (22.3 tok/s)
+=== perplexité 13.1369 sur 511 tokens (0 événements, 22.9 s) ===
+  ```
+
+- **bash** `{"command": "cat /tmp/rotation_16k.log; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='docs/contexte-long.md'; s=open(p).read()\nold = \"\"\"Il reste, sur ce chemin : la répartition sur les **deux** GPU (le second est\nlibre), et l'extension du noyau au top-k (aujourd'hui … [2237 caractères tronqués]`

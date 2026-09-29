@@ -6,13 +6,13 @@
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
 | Durée | 28.7 h |
-| Tours | 9 |
-| Messages | 1097 |
-| Appels d'outils | 1088 |
+| Tours | 10 |
+| Messages | 1113 |
+| Appels d'outils | 1102 |
 | Fichiers touchés | 36 |
-| Commandes | 826 |
+| Commandes | 839 |
 | Sous-agents | 1 |
-| Commits | 38 |
+| Commits | 39 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -43,6 +43,8 @@
 **Tour 8** — que reste-t-il à faire
 
 **Tour 9** — fais tous ces 6 nouveaux chantiers
+
+**Tour 10** — <goal_round> Objective: "Réaliser les 6 nouveaux chantiers du projet qtrinet-core, dans l'ordre : (1) relancer le test de l'aiguille sur contexte long (remplissage varié en vrai texte, moins de sondes, réponses plus longues) sur un modèle capable, grâce au préremplissage par lots et au KV déporté ; (2) chemin GPU : dépaquetage vectorisé du noyau d'attention (13,2 ms/couche à 1 M en int4 vers ~3 ms … [1491 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -401,7 +403,7 @@ La section « Ce qu'il faut faire en
 
 ### Tour 9 — fais tous ces 6 nouveaux chantiers
 
-*84 appels d'outils.* Actions notables :
+*88 appels d'outils.* Actions notables :
 
 - create_goal
 - todo_write
@@ -417,11 +419,55 @@ La section « Ce qu'il faut faire en
 - bash — Check lot is in scope in run_infer
 - bash — Build with batched prefill
 - bash — Read run_infer destructuring
-- … et 69 autres
+- … et 72 autres
 
 **Synthèse produite :**
 
-⏵ 2c mesuré : préremplissage 261,6 → 93,7 s (×2,8), perplexité identique
+⏵ Bilan de la fournée : 6 sous-chantiers sur 10 livrés, la rotation 16 k tourne encore
+
+Six des dix sous-chantiers sont faits, mesurés et commités ; quatre restent, dont un qui tourne en ce moment.
+
+\## Livré
+
+| sous-chantier | mesure | commit |
+|---|---|---|
+| **1. Aiguille v2** | **12 sondes sur 12** trouvées (profondeurs 0,1/0,5/0,9) : Qwen1.5B 512+2048, Qwen3-30B 2048, gpt-oss-120b 4096 avec KV déporté — là où la v1 échouait 6/6 | `5dfa6b1`, `4512f69` |
+| **2a. Dépaquetage vectorisé** du noyau d'attention | à 1 M de clés : f32 13,6 → **7,0 ms** (308 Go/s), int8 15,0 → **6,5**, int4 13,2 → **7,4 ms** ; écarts au CPU inchangés | `a64328d` |
+| **2b. Experts MXFP4 en VRAM** | +6 % seulement (5,12 → 5,43 jetons/s), 53,5 % de succès, 10,64 Go montés — **verdict : ne pas activer par défaut**, le chemin CPU est déjà AVX2 | `4512f69` |
+| **2c. Attention par lots déportée** | préremplissage ctx 4096, lot 512 : **261,6 → 93,7 s (×2,8)**, perplexité **identique** (12,2175) | `4512f69` |
+| **3. Pagination + hypothèse f16** | cache CPU à ctx 1 M : **0,03 Go** au lieu de 25,77 Go ; hypothèse « clés en f16 avant quantification » **réfutée** (perplexité identique) | `bc5aa9a` |
+| **6. Hygiène** | feuille de route réécrite, tableau des pièges `QT_GPU*` (`QT_GPU` ouvre le pilote : sans elle, les autres ne font rien et rien ne le dit) | `6664eef` |
+
+Au passage : le préremplissage par lots est branché sur la **génération** (`Model::lot`) — il ne l'était que sur la perplexité, ce qui rendait toute invite longue hors de prix.
+
+\## Reste
+
+1. **2d — noyau de tête Q8_0.** Le chemin CPU est lié au calcul (5,5 ms/jeton en lot sur Qwen 0.5B ; la tête de gpt-oss fait 579 Mo, la plus grosse matrice du modèle). Voie AVX2 ou déport.
+2. **2e — second GPU.** 16 Go dorment : à répartir entre KV et experts, avec un second contexte CUDA.
+3. **4 — rotation à 16 k.** **En cours** : deux régimes, mêmes 512 jetons notés (15 872-16 383), KV déporté obligatoire pour que la passe ne dépasse pas l'heure par régime. Journal : `/tmp/rotation_16k.log`.
+4. **5 — MLA et vision.** MLA demande un modèle **synthétique** écrit à la main (aucun modèle MLA local) validé contre une référence indépendante ; la vision demande la tour ViT + le chemin `mmproj`, entièrement à écrire.
+
+L'objectif reste actif : la suite (2d, 2e, résultat du 16 k, puis MLA/vision) est exactement la liste du §6 de `REPRISE.md`, qui a été réécrite pour ça. Rien n'est laissé cassé : `cargo test` 6/6, porte Qwen **19,3885** revérifiée aprè
+… [117 caractères tronqués]
+
+### Tour 10 — <goal_round> Objective: "Réaliser les 6 nouveaux chantiers du projet qtrinet-core, dans l'ordre : (1) relancer le test d … [1771 caractères tronqués]
+
+*10 appels d'outils.* Actions notables :
+
+- bash — Check 16k rotation job and repo state
+- bash — Read Q8_0 branch of q8_dot_at
+- bash — Add AVX2 head kernel
+- bash — Verify PPL unchanged with AVX2 head
+- bash — Check rotation progress and GPU singleton
+- bash — Expose second GPU and machine list
+- bash — Find KV mirror plumbing sites
+- bash — Split KV mirror across GPUs
+- bash — Verify two-GPU KV split
+- bash — Document and commit 2d/2e
+
+**Synthèse produite :**
+
+⏵ Chantier 2d : j'inspecte le noyau de tête Q8_0 actuel
 
 ## 3. Travail accompli
 
@@ -512,7 +558,7 @@ La section « Ce qu'il faut faire en
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 786 autres
+- … et 799 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -698,4 +744,5 @@ La section « Ce qu'il faut faire en
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p='docs/contexte-long.md'; s=open(p).read() old = """Il reste, sur ce chemin : le **dépaq
 - REPRISE : feuille de route réécrite et pièges des variables d'environnement  La section « Ce qu'il faut faire ensuite » datait d'avant les deux campagnes : ses 
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p='docs/contexte-long.md'; s=open(p).read() old = """Il reste, sur ce chemin : la réparti
+- cat /tmp/rotation_16k.log; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p='docs/contexte-long.md'; s=open(p).read() old = """Il reste,
 

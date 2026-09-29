@@ -553,6 +553,10 @@ impl Gguf {
                 acc += d * s as f32;
             }
         } else {
+            #[cfg(target_arch = "x86_64")]
+            if std::is_x86_feature_detected!("avx2") {
+                return unsafe { self.q8_dot_avx2(v, row, qx) };
+            }
             for b in 0..v.nb {
                 let p = v.base + (row * v.nb + b) * 34;
                 let d = Self::f16_to_f32(u16::from_le_bytes(self.buf[p..p+2].try_into().unwrap()));
@@ -564,6 +568,37 @@ impl Gguf {
                 }
                 acc += d * s as f32;
             }
+        }
+        acc
+    }
+
+    /// Même produit scalaire, 32 niveaux par instruction. La somme du bloc est
+    /// ENTIÈRE et exacte (`vpmaddwd` sur des i16), donc le résultat est identique
+    /// au chemin scalaire **au bit près** : seul l'ordre des additions change, et
+    /// sur des entiers cela ne change rien. C'est ce qui permet de remplacer le
+    /// noyau sans toucher à la perplexité.
+    #[cfg(target_arch = "x86_64")]
+    #[target_feature(enable = "avx2")]
+    unsafe fn q8_dot_avx2(&self, v: &Q8View, row: usize, qx: &[i16]) -> f32 {
+        use std::arch::x86_64::*;
+        let mut acc = 0f32;
+        for b in 0..v.nb {
+            let p = v.base + (row * v.nb + b) * 34;
+            let d = Self::f16_to_f32(u16::from_le_bytes(self.buf[p..p+2].try_into().unwrap()));
+            let w = self.buf[p + 2..p + 34].as_ptr();
+            let x = qx.as_ptr().add(b * 32);
+            let q = _mm256_loadu_si256(w as *const __m256i);              // 32 × i8
+            let bas = _mm256_cvtepi8_epi16(_mm256_castsi256_si128(q));    // 16 × i16
+            let haut = _mm256_cvtepi8_epi16(_mm256_extracti128_si256(q, 1));
+            let x0 = _mm256_loadu_si256(x as *const __m256i);
+            let x1 = _mm256_loadu_si256(x.add(16) as *const __m256i);
+            let s = _mm256_add_epi32(_mm256_madd_epi16(bas, x0),
+                                     _mm256_madd_epi16(haut, x1));
+            let s128 = _mm_add_epi32(_mm256_castsi256_si128(s),
+                                     _mm256_extracti128_si256(s, 1));
+            let s64 = _mm_add_epi32(s128, _mm_shuffle_epi32(s128, 0b0000_1110));
+            let s32 = _mm_add_epi32(s64, _mm_shuffle_epi32(s64, 0b0000_0001));
+            acc += d * _mm_cvtsi128_si32(s32) as f32;
         }
         acc
     }

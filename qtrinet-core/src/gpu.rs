@@ -113,6 +113,8 @@ pub struct Gpu {
     f_attn_part: *mut c_void,
     f_attn_recombine: *mut c_void,
     pub nom: String,
+    /// Numéro du périphérique, pour savoir qui est qui quand il y en a deux.
+    pub ordinal: c_int,
     pub memoire_libre: usize,
 }
 
@@ -236,7 +238,7 @@ impl Gpu {
             cuMemGetInfo_v2(&mut libre, &mut total);
             Some(Gpu { ctx, module, f_tete, f_proj, f_tete_warp, f_proj_warp,
                        f_mxfp4_warp, f_q4k_warp, f_q6k_warp,
-                       f_attn_part, f_attn_recombine,
+                       f_attn_part, f_attn_recombine, ordinal,
                        nom: format!("GPU {ordinal}"), memoire_libre: libre })
         }
     }
@@ -776,6 +778,35 @@ impl Gpu {
 /// Instance unique du processus. `QT_GPU` active le déport ; sans lui, aucune
 /// ressource vidéo n'est touchée et le moteur reste strictement sur CPU.
 static INSTANCE: std::sync::OnceLock<Option<Gpu>> = std::sync::OnceLock::new();
+
+/// Le SECOND périphérique, s'il y en a un (deux Quadro sur cette machine). Il
+/// sert au KV déporté : la moitié des couches d'un côté, la moitié de l'autre.
+static SECOND: std::sync::OnceLock<Option<Gpu>> = std::sync::OnceLock::new();
+
+pub fn second() -> Option<&'static Gpu> {
+    SECOND.get_or_init(|| {
+        if std::env::var("QT_GPU").is_err() { return None; }
+        let premier = instance().map(|g| g.ordinal).unwrap_or(0);
+        for ord in 0..4 {
+            if ord == premier { continue; }
+            if let Some(g) = Gpu::ouvrir(ord) { return Some(g); }
+        }
+        None
+    }).as_ref()
+}
+
+static MACHINES: std::sync::OnceLock<Vec<&'static Gpu>> = std::sync::OnceLock::new();
+
+/// Les périphériques disponibles, dans l'ordre — un seul si la seconde carte est
+/// absente ou occupée.
+pub fn machines() -> &'static [&'static Gpu] {
+    MACHINES.get_or_init(|| {
+        let mut v: Vec<&'static Gpu> = Vec::new();
+        if let Some(a) = instance() { v.push(a); }
+        if let Some(b) = second() { v.push(b); }
+        v
+    })
+}
 
 pub fn instance() -> Option<&'static Gpu> {
     INSTANCE.get_or_init(|| {

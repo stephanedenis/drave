@@ -555,7 +555,9 @@ pub struct Model {
     /// l'applique.
     pub tete_gpu_q6k: bool,
     /// Miroir VRAM du cache KV, une entrée par couche (`QT_GPU_KV=1`).
-    pub kv_gpu: Option<Vec<crate::gpu::KvGpu>>,
+    /// Un miroir VRAM par couche, avec l'index du périphérique qui le porte :
+    /// deux cartes se partagent les couches (16 Go chacune).
+    pub kv_gpu: Option<Vec<(usize, crate::gpu::KvGpu)>>,
     /// Tranches de clés du noyau d'attention, réutilisées d'un jeton à l'autre.
     pub attn_gpu_part: Vec<f32>,
     /// Cache VRAM des experts MoE (`QT_GPU_EXPERTS=1`).
@@ -861,11 +863,11 @@ impl KvCache {
 
     /// Recopie vers la VRAM les `t` positions nouvellement écrites de la couche
     /// `l`. Silencieux quand aucun miroir n'est installé.
-    pub fn miroir_gpu(miroirs: Option<&mut [crate::gpu::KvGpu]>, l: usize, kvc: &KvCache,
-                      pos0: usize, t: usize) {
-        let (Some(machine), Some(m)) =
-            (crate::gpu::instance(), miroirs.and_then(|v| v.get_mut(l)))
-            else { return };
+    pub fn miroir_gpu(miroirs: Option<&mut [(usize, crate::gpu::KvGpu)]>, l: usize,
+                      kvc: &KvCache, pos0: usize, t: usize) {
+        let Some((idx, m)) = miroirs.and_then(|v| v.get_mut(l)) else { return };
+        let machines = crate::gpu::machines();
+        let Some(machine) = machines.get(*idx) else { return };
         for kvh in 0..kvc.n_kv {
             kvc.vers_gpu_tranche(machine, m, kvh, pos0, t);
         }
@@ -1185,32 +1187,38 @@ impl Model {
         // Miroir VRAM du cache KV (étape E4) : opt-in, et seulement si TOUTES
         // les couches tiennent — sinon on le dit et on garde le CPU.
         let kv_gpu = if std::env::var("QT_GPU_KV").is_ok() {
-            match crate::gpu::instance() {
-                Some(machine) => {
-                    let octets: usize = caches_kv.iter().map(|c| c.octets() as usize).sum();
-                    let mut v = Vec::with_capacity(caches_kv.len());
-                    let mut complet = true;
-                    for c in &caches_kv {
-                        match machine.kv_allouer(c.n_kv, c.ctx, c.hd, c.bits) {
-                            Some(m) => v.push(m),
-                            None => { complet = false; break; }
-                        }
-                    }
-                    if complet {
-                        let total: usize = v.iter().map(|m| m.octets).sum();
-                        println!("[gpu] KV déporté : {} couches, {:.2} Go en VRAM ({:.2} Mo libres), \
-                                  cache CPU {:.2} Go", v.len(), total as f64 / 1e9,
-                                 machine.memoire_libre as f64 / 1e9, octets as f64 / 1e9);
-                        Some(v)
-                    } else {
-                        println!("[gpu] KV déporté impossible : il faudrait {:.2} Go pour les {} \
-                                  couches, {:.2} Go libres — cache KV gardé en RAM",
-                                 octets as f64 / 1e9, caches_kv.len(),
-                                 machine.memoire_libre as f64 / 1e9);
-                        None
+            let machines = crate::gpu::machines();
+            if machines.is_empty() { None } else {
+                // Les couches sont réparties EN TOURNANT sur les périphériques :
+                // à deux cartes, chacune porte la moitié du cache — c'est ce qui
+                // fait tenir un contexte très long sans rien évincer.
+                let mut v: Vec<(usize, crate::gpu::KvGpu)> = Vec::with_capacity(caches_kv.len());
+                let mut complet = true;
+                for (l, c) in caches_kv.iter().enumerate() {
+                    let idx = l % machines.len();
+                    match machines[idx].kv_allouer(c.n_kv, c.ctx, c.hd, c.bits) {
+                        Some(m) => v.push((idx, m)),
+                        None => { complet = false; break; }
                     }
                 }
-                None => None,
+                if complet {
+                    let total: usize = v.iter().map(|(_, m)| m.octets).sum();
+                    for (i, machine) in machines.iter().enumerate() {
+                        let part: usize = v.iter().filter(|(k, _)| *k == i)
+                            .map(|(_, m)| m.octets).sum();
+                        println!("[gpu] KV déporté : {} couches sur {}, {:.2} Go ici ({:.2} Go libres)",
+                                 v.iter().filter(|(k, _)| *k == i).count(), machine.nom,
+                                 part as f64 / 1e9, machine.memoire_libre as f64 / 1e9);
+                    }
+                    println!("[gpu] KV déporté : {:.2} Go au total pour {} couches", 
+                             total as f64 / 1e9, v.len());
+                    Some(v)
+                } else {
+                    println!("[gpu] KV déporté impossible sur {} périphérique(s) : contexte {} \
+                              trop long pour la VRAM — cache KV gardé en RAM",
+                             machines.len(), caches_kv.first().map(|c| c.ctx).unwrap_or(0));
+                    None
+                }
             }
         } else { None };
         // Cache VRAM des experts : opt-in, et seulement sur un modèle à experts
@@ -1995,8 +2003,9 @@ impl Model {
                     // faites — le noyau, lui, n'a besoin que de lire.
                     let requetes = &qgpu[i * nq..(i + 1) * nq];
                     let sortie = &mut att[i * nq..(i + 1) * nq];
-                    if let (Some(machine), Some(m)) = (crate::gpu::instance(),
-                                                       self.kv_gpu.as_mut().and_then(|v| v.get_mut(l))) {
+                    if let Some((idx, m)) = self.kv_gpu.as_mut().and_then(|v| v.get_mut(l)) {
+                        let machines = crate::gpu::machines();
+                        let machine = machines[*idx];
                         if machine.attn_kv(m, requetes, n, scale,
                                            puits.as_deref(), nsplit, part, sortie) {
                             self.attn_events += (nh * n) as u64;
@@ -2396,8 +2405,8 @@ impl Model {
                 if attn_gpu_part.len() < besoin { attn_gpu_part.resize(besoin, 0.0); }
                 let puits: Option<Vec<f32>> = lay.sinks.as_ref()
                     .map(|s| (0..nh).map(|h| s[h]).collect());
-                if let (Some(machine), Some(m)) =
-                        (crate::gpu::instance(), kv_gpu.as_mut().and_then(|v| v.get_mut(l))) {
+                if let Some((idx, m)) = kv_gpu.as_mut().and_then(|v| v.get_mut(l)) {
+                    let machine = crate::gpu::machines()[*idx];
                     if machine.attn_kv(m, &q[..nh * hd], n, scale, puits.as_deref(),
                                        nsplit, attn_gpu_part, &mut att[..]) {
                         *attn_events += (nh * n) as u64;
