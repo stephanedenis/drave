@@ -148,6 +148,31 @@ devient deux fois moins destructeur — sans changer la taille du cache. C'est l
 même leçon que pour `DenseQ8` : ce n'est pas le nombre de bits qui compte, c'est
 la finesse des échelles.
 
+### 4.bis.2 À 8 192 jetons, la longueur exacte de la comparaison llama.cpp
+
+Le corpus de 16 455 jetons (tokenisé avec le tokenizer du modèle, réversibilité
+vérifiée) permet enfin de mesurer à la longueur de la référence :
+
+| KV | nous, 8 191 jetons notés | Δ | llama.cpp (8 192) | Δ | durée de la passe |
+|---|---|---|---|---|---|
+| f32 | 14,2339 | — | 16,59 | — | 864 s |
+| **int8** | **14,6667** | **+3,0 %** | 16,73 | +0,8 % | 1 144 s |
+| **int4** | **66,0369** | **+364 %** | 98,53 | +494 % | 1 461 s |
+
+Deux choses que la mesure ajoute :
+
+1. **L'int8 reste à +3 %** (contre +1,5 % à 512 et +3,4 % à 4 591) : le coût ne
+   grandit pas avec la longueur, c'est bien le bon défaut du contexte long.
+   llama.cpp reste meilleur (+0,8 %) — son cache q8_0 garde une échelle par bloc
+   de 32 *et* des clés calculées en f16 avant quantification ; l'écart se joue
+   là, pas sur la longueur.
+2. **Le 4 bits est ici MEILLEUR que llama.cpp** (+364 % contre +494 %) tout en
+   coûtant deux fois moins cher en mémoire que lui — c'est le seul compromis qui
+   fait tenir 1 M en RAM (9,7 Go).
+3. Le prix caché du KV quantifié est le **temps** : 864 s en f32, 1 144 s en
+   int8, 1 461 s en int4 pour la même passe. La déquantification se paie par
+   élément ; c'est exactement ce que le noyau GPU du §4.ter supprime.
+
 ## 4.ter KV déporté en VRAM (E4) : le noyau, et ce qu'il donne
 
 Le cache KV d'une couche tient en VRAM ; une passe d'attention le parcourt sur

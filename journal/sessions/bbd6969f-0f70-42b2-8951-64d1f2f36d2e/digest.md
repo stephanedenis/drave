@@ -15835,3 +15835,140 @@ REPRISE row 2 mis à jour
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='docs/contexte-long.md'; s=open(p).read()\nold = \"\"\"Deux réserves, mesurées elles aussi :\n\n- le **saut à ~1 500 jetons de contexte** est commun aux deux régimes : il vient\n  du contenu AJOUTÉ (non contrôlé p … [3096 caractères tronqués]`
+
+  ```
+section 5.ter écrite
+1953575 rotation : le seuil de bascule à 4 096 était trop bas (mesuré à 5 120)
+  ```
+
+- **bash** `{"command": "/tmp/kv_8192.sh > /dev/null 2>&1 &\nsleep 2; echo \"lancé\"; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '215,245p' REPRISE.md", "description": "Launch KV 8192 run, read gate commands"}`
+
+  ```
+lancé
+docs/convertisseur.md                plan de chargement, résultats négatifs
+reports/rapport-passage-a-l-echelle.md   modèle de coût, faisabilité par modèle
+journal/                             sessions archivées automatiquement
+```
+
+Le journal s'archive à chaque commit (`tools/archive_sessions.py` +
+`tools/session_report.py`, crochet git et crontab horaire).
+
+---
+
+## 8. Premier pas suggéré pour la nouvelle session
+
+```bash
+# 1. l'état est-il vert ? (Qwen ne doit pas bouger : les corrections de cette
+#    session ne touchent que les modèles à biais de sortie et à fenêtre par couche)
+cd qtrinet-core && cargo build --release && cargo test --release
+./target/release/qtrinet-core ../models/Qwen2.5-0.5B-Q8_0.gguf --ppl /tmp/ids_qwen.txt \
+    --ctx 256 --abits 16 --threads 16 --limit 512 --dense   # attendu 19,3885
+
+# 2. si /tmp a été vidé, régénérer le corpus et les identifiants (§2)
+
+# 3. gpt-oss : le chiffre de contrôle de cette session (≈ 45 s de chargement,
+#    ~100 s pour 510 jetons)
+./target/release/qtrinet-core /home/stephane/FastNVMe/models/gpt-oss-120b-MXFP4.gguf \
+    --ppl /tmp/ids_oss.txt --ctx 256 --dense --threads 16 --limit 512   # attendu 15,1757
+
+# 4. puis §6.b :
+… [64 caractères tronqués]
+  ```
+
+- **bash** `{"command": "sleep 420; cat /tmp/kv_8192.log 2>/dev/null; pgrep -x qtrinet-core >/dev/null && echo \"[en cours]\" || echo \"[libre]\"", "description": "Poll KV 8192 runs", "timeoutMs": 480000}`
+
+  ```
+KV 32  ctx 8192 : [en cours]
+  ```
+
+- **bash** `{"command": "sleep 560; cat /tmp/kv_8192.log 2>/dev/null; pgrep -x qtrinet-core >/dev/null && echo \"[en cours]\" || echo \"[libre]\"", "description": "Poll KV 8192 again", "timeoutMs": 600000}`
+
+  ```
+KV 32  ctx 8192 : perplexité 14.2339 sur 8191 tokens (0 événements, 863.9 s)
+KV 8   ctx 8192 : [en cours]
+  ```
+
+- **bash** `{"command": "sleep 580; cat /tmp/kv_8192.log 2>/dev/null; pgrep -x qtrinet-core >/dev/null && echo \"[en cours]\" || echo \"[libre]\"", "description": "Poll KV 8192 int8", "timeoutMs": 620000}`
+
+  ```
+KV 32  ctx 8192 : perplexité 14.2339 sur 8191 tokens (0 événements, 863.9 s)
+KV 8   ctx 8192 : [en cours]
+  ```
+
+- **bash** `{"command": "sleep 580; cat /tmp/kv_8192.log 2>/dev/null; pgrep -x qtrinet-core >/dev/null && echo \"[en cours]\" || echo \"[libre]\"", "description": "Poll KV 8192 int8 again", "timeoutMs": 620000}`
+
+  ```
+KV 32  ctx 8192 : perplexité 14.2339 sur 8191 tokens (0 événements, 863.9 s)
+KV 8   ctx 8192 : perplexité 14.6667 sur 8191 tokens (0 événements, 1143.5 s)
+KV 4   ctx 8192 : [en cours]
+  ```
+
+- **bash** `{"command": "sleep 590; cat /tmp/kv_8192.log 2>/dev/null; pgrep -x qtrinet-core >/dev/null && echo \"[en cours]\" || echo \"[libre]\"", "description": "Poll KV 8192 int4", "timeoutMs": 620000}`
+
+  ```
+KV 32  ctx 8192 : perplexité 14.2339 sur 8191 tokens (0 événements, 863.9 s)
+KV 8   ctx 8192 : perplexité 14.6667 sur 8191 tokens (0 événements, 1143.5 s)
+KV 4   ctx 8192 : [en cours]
+  ```
+
+- **bash** `{"command": "sleep 590; cat /tmp/kv_8192.log 2>/dev/null; pgrep -x qtrinet-core >/dev/null && echo \"[en cours]\" || echo \"[libre]\"", "description": "Poll KV 8192 int4 once more", "timeoutMs": 620000}`
+
+  ```
+KV 32  ctx 8192 : perplexité 14.2339 sur 8191 tokens (0 événements, 863.9 s)
+KV 8   ctx 8192 : perplexité 14.6667 sur 8191 tokens (0 événements, 1143.5 s)
+KV 4   ctx 8192 : [en cours]
+  ```
+
+- **bash** `{"command": "sleep 590; cat /tmp/kv_8192.log 2>/dev/null | tail -2; pgrep -x qtrinet-core >/dev/null && echo \"[en cours]\" || echo \"[libre]\"", "description": "Wait for int4 completion", "timeoutMs": 620000}`
+
+  ```
+KV 4   ctx 8192 : perplexité 66.0369 sur 8191 tokens (0 événements, 1461.2 s)
+=== fin ===
+[libre]
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/contexte-long.md", "limit": 40, "offset": 114}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/contexte-long.md</path>
+<type>file</type>
+<content>
+114: ## 4.bis KV quantifié : mesuré, et le 4 bits est cher
+115: 
+116: Cache KV en 8 puis 4 bits, échelle par vecteur (tête, position), nibbles
+117: empaquetés en 4 bits — `QT_KV_BITS=8` ou `4`, `[config] cache KV` dit ce qui est
+118: alloué. Banc d'essai : Qwen2.5-0.5B Q8_0, 511 jetons, contexte 512, comparé à
+119: llama.cpp sur le même texte.
+120: 
+121: | KV | nous (512 jetons) | llama.cpp (512) | nous (~4 600 jetons) | llama.cpp (8 192) |
+122: |---|---|---|---|---|
+123: | f32 / f16 | 13,14 | 14,24 | 12,91 | 16,59 |
+124: | **int8** | **14,07** (+7,1 %) | 14,68 (+3,1 %) | **13,58** (+5,2 %) | 16,73 (+0,8 %) |
+125: | **int4** | **63,61** (+384 %) | 72,80 (+411 %) | **71,05** (+450 %) | 98,53 (+494 %) |
+126: 
+127: Trois choses :
+128: 
+129: 1. **L'int8 coûte quelques pour cent, à contexte court comme à 4 600 jetons** :
+130:    le coût ne grandit pas avec la longueur, donc le KV int8 est un bon défaut
+131:    pour le contexte long (et c'est lui qui fait tenir 128 k en mémoire).
+132: 2. **Le 4 bits détruit la perplexité d'un facteur 5**, chez les deux moteurs. Il
+133:    reste 
+… [1264 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='docs/contexte-long.md'; s=open(p).read()\nold = \"\"\"L'écart avec llama.cpp (+0,8 %) est donc comblé à contexte court, et le 4 bits\ndevient deux fois moins destructeur — sans changer la taille du cache. C'est l … [3425 caractères tronqués]`
+
+  ```
+§4.bis.2 ajouté
+REPRISE mis à jour
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/gates.sh <<'EOF'\n#!/bin/bash\n# Portes de non-régression du dépôt, après tous les changements de la session.\nset -u\ncd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\nQ=./qtrinet-core/target/release/qtrinet-core\nJ=/tm … [772 caractères tronqués]`
+
+  ```
+Qwen  ctx 256 (attendu 19.3885) : perplexité 19.3885 sur 510 tokens (0 événements, 15.7 s)
+gpt-oss ctx 256 (attendu 15.1757) : perplexité 15.1757 sur 510 tokens (0 événements, 98.2 s)
+=== fin ===
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A docs/contexte-long.md REPRISE.md journal && git commit -q -F - <<'EOF' && git log --oneline -3 && git status --short | head -3\nKV quantifié mesuré à 8 192 jetons, la longueur de la comparaison llama.cpp\n\nLe corpus de 4  … [1024 caractères tronqués]`
