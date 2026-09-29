@@ -15972,3 +15972,12 @@ gpt-oss ctx 256 (attendu 15.1757) : perplexité 15.1757 sur 510 tokens (0 évén
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A docs/contexte-long.md REPRISE.md journal && git commit -q -F - <<'EOF' && git log --oneline -3 && git status --short | head -3\nKV quantifié mesuré à 8 192 jetons, la longueur de la comparaison llama.cpp\n\nLe corpus de 4  … [1024 caractères tronqués]`
+
+  ```
+54f9fa6 KV quantifié mesuré à 8 192 jetons, la longueur de la comparaison llama.cpp
+1953575 rotation : le seuil de bascule à 4 096 était trop bas (mesuré à 5 120)
+e6a5eff KV déporté : corriger la copie du chemin par lots
+ M journal/README.md
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A journal && git commit -q -m \"journal : archive automatique\" 2>/dev/null; cd qtrinet-core && cargo test --release 2>&1 | tail -3 && cd .. && git log --oneline -9 | cat && git status --short | head -3", "description": "Fin … [39 caractères tronqués]`

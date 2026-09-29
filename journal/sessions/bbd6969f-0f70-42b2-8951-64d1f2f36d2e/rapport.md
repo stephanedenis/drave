@@ -7,12 +7,12 @@
 | Début | 2026-09-28 14:46 |
 | Durée | 26.1 h |
 | Tours | 6 |
-| Messages | 979 |
-| Appels d'outils | 980 |
+| Messages | 980 |
+| Appels d'outils | 981 |
 | Fichiers touchés | 35 |
-| Commandes | 727 |
+| Commandes | 728 |
 | Sous-agents | 1 |
-| Commits | 30 |
+| Commits | 31 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -263,7 +263,7 @@ Retirer `mscale = 1 + 0,1·ln f` divise la perplexité par **8,9 / 5,9 / 3,8**. 
 
 ### Tour 6 — <goal_round> Objective: "Réaliser les 8 chantiers restants du projet qtrinet-core dans l'ordre : (1) protocole de perple … [1122 caractères tronqués]
 
-*253 appels d'outils.* Actions notables :
+*254 appels d'outils.* Actions notables :
 
 - bash — Check the starting state of round 2
 - bash — Locate the batched attention loop
@@ -279,7 +279,7 @@ Retirer `mscale = 1 + 0,1·ln f` divise la perplexité par **8,9 / 5,9 / 3,8**. 
 - bash — Bisect the failing batch size
 - bash — Add guards and rerun lot 128
 - bash — Read dot16's fallback path
-- … et 196 autres
+- … et 197 autres
 
 **Synthèse produite :**
 
@@ -373,7 +373,7 @@ Retirer `mscale = 1 + 0,1·ln f` divise la perplexité par **8,9 / 5,9 / 3,8**. 
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 687 autres
+- … et 688 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -551,4 +551,5 @@ Retirer `mscale = 1 + 0,1·ln f` divise la perplexité par **8,9 / 5,9 / 3,8**. 
 - KV déporté : corriger la copie du chemin par lots  Le miroir était appelé DANS la boucle des jetons avec la position du jeton et la taille du lot : il copiait t
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p='docs/contexte-long.md'; s=open(p).read() old = """Deux réserves, mesurées elles aussi 
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A docs/contexte-long.md REPRISE.md journal && git commit -q -F - <<'EOF' && git log --oneline -3 
+- journal : archive automatique" 2>/dev/null; cd qtrinet-core && cargo test --release 2>&1 | tail -3 && cd .. && git log --oneline -9 | cat && git status --short 
 
