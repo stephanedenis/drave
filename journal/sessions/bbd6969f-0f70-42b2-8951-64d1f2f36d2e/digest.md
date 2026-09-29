@@ -10913,3 +10913,227 @@ aucune restriction : perplexité 298.5631 sur 512 tokens
 ⏵ Fenêtre élargie = ×11 de perplexité (les couches locales veulent leurs 128) ; je consigne l'item 8
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='docs/contexte-long.md'\ns=open(p).read()\ns=s.replace(\"\"\"3. **Débit du préremplissage** : `--lot N` sur un modèle dense et sur gpt-oss,\n   machine au calme ; c'est le chiffre qui dit si E1 tient ses promesses … [2075 caractères tronqués]`
+
+  ```
+fd695bc Item 8 : premiers resultats d'attention creuse (et ils sont opposes)
+  ```
+
+- **bash** `{"command": "sleep 300; cat /tmp/lot_final.log 2>/dev/null; ps -o pid,etime,pcpu -C qtrinet-core 2>/dev/null | tail -1", "description": "Wait for the clean lot timings", "timeoutMs": 340000}`
+
+  ```
+### Qwen 0.5B, ctx 512, 511 jetons notés
+lot 1   : perplexité 13.1368 sur 511 tokens (0 événements, 16.9 s)
+lot 4   : perplexité 13.1359 sur 511 tokens (0 événements, 23.9 s)
+lot 16  : perplexité 13.1359 sur 511 tokens (0 événements, 19.2 s)
+lot 64  : perplexité 13.1359 sur 511 tokens (0 événements, 18.1 s)
+
+### gpt-oss, ctx 256, 255 jetons notés (MoE : regroupement par expert)
+lot 1   : perplexité 13.7149 sur 255 tokens (0 événements, 49.6 s)
+lot 16  : perplexité 13.7205 sur 255 tokens (0 événements, 63.5 s)
+lot 64  : 2306054       00:32 98.1
+  ```
+
+### 🤖 Assistant
+
+⏵ Le tuilage n'a pas suffi : je soupçonne les fils du pool de tourner à vide pendant le GEMM
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src && sed -n '360,392p' engine.rs", "description": "Inspect the pool worker idle loop"}`
+
+  ```
+let cibles = if epingle { cibles_locales(n) } else { Vec::new() };
+        for id in 0..n {
+            let sh = Arc::clone(&shared);
+            let cpu = if epingle && !cibles.is_empty() {
+                Some(cibles[id % cibles.len()])
+            } else { None };
+            handles.push(std::thread::spawn(move || {
+                if let Some(c) = cpu { epingler(c); }
+                let mut last = 0usize;
+                loop {
+                    // Attente active d'une nouvelle génération. La barrière
+                    // par *spin* n'est tenable que si le nombre de threads
+                    // tournants reste inférieur au nombre de CPU logiques :
+                    // au-delà, l'ordonnanceur préempte des workers qui tournent
+                    // et le débit s'effondre (mesuré : ×3,3 de perte à 40+1
+                    // threads sur 40 CPU). `Pool::new` borne donc la taille.
+                    loop {
+                        let g = sh.gen.load(Ordering::Acquire);
+                        if g != last { last = g; break; }
+                        if sh.stop.load(Ordering::Relaxed) { return; }
+                        std::hint::spin_loop();
+                    }
+      
+… [766 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Cause trouvée : les fils du pool tournent à vide pendant le GEMM. Je fais le GEMM *sur* le pool
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src && grep -n \"mode == 3\" -A 30 engine.rs | head -40", "description": "Read mode 3 worker dispatch as the template"}`
+
+  ```
+409:                    if mode == 3 {
+410-                        // Mode dense : chaque worker calcule une tranche
+411-                        // contiguë de sorties, sans dispersion ni réduction.
+412-                        let d = unsafe { &*sh.dense.load(Ordering::Acquire) };
+413-                        let xv = unsafe { std::slice::from_raw_parts(
+414-                            sh.xv.load(Ordering::Acquire), d.n_in) };
+415-                        let sx = f32::from_bits(sh.sx.load(Ordering::Relaxed) as u32);
+416-                        let outs = unsafe { &mut *sh.outs.load(Ordering::Acquire) };
+417-                        let per = (d.n_out + n - 1) / n;
+418-                        let lo = id * per;
+419-                        let hi = (lo + per).min(d.n_out);
+420-                        let dst = &mut outs[id];
+421-                        if dst.len() < d.n_out { dst.resize(d.n_out, 0.0); }
+422-                        // Hors de sa tranche, ce worker doit laisser des ZÉROS :
+423-                        // `matvec_dense_i8` somme les vecteurs de TOUS les
+424-                        // workers, et une case non écrite garderait la valeur du
+425-                        // tra
+… [1128 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src && python3 - <<'PY'\np='engine.rs'\ns=open(p).read()\n# 1. Champs partagés pour le produit matrice-matrice exécuté SUR le pool.\ns=s.replace(\"\"\"    /// mêmes activations en i16, pour le noyau AVX2 du mode 4\n    xv16 … [4279 caractères tronqués]`
+
+  ```
+395:                    let mode = sh.mode.load(Ordering::Relaxed);
+396-                    if mode == 4 {
+397-                        // Mode 4 bits : même découpage que le mode 3, mais les
+398-                        // poids tiennent sur un demi-octet — c'est le seul
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src && python3 - <<'PY'\np='engine.rs'\ns=open(p).read()\ns=s.replace(\"\"\"    gt: AtomicUsize,\n    gout: AtomicPtr<f32>,\"\"\",\n\"\"\"    gt: AtomicUsize,\n    gn_out: AtomicUsize,\n    gout: AtomicPtr<f32>,\"\"\",1)\ns … [3553 caractères tronqués]`
+
+  ```
+error[E0063]: missing fields `gn_out`, `gout`, `gs32` and 4 other fields in initializer of `Shared`
+   --> src/engine.rs:345:31
+    |
+345 |         let shared = Arc::new(Shared {
+    |                               ^^^^^^ missing `gn_out`, `gout`, `gs32` and 4 other fields
+
+error[E0599]: no method named `matvec_dense_i8` found for mutable reference `&mut Pool` in the current scope
+    --> src/model.rs:1105:26
+     |
+1105 |             let y = pool.matvec_dense_i8(d, &xd, sx);
+     |                          ^^^^^^^^^^^^^^^
+     |
+help: there is a method `matvec_dense_q4` with a similar name
+     |
+1105 -             let y = pool.matvec_dense_i8(d, &xd, sx);
+--
+error[E0599]: no method named `matvec_dense_i8` found for struct `Pool` in the current scope
+   --> src/main.rs:252:38
+    |
+252 |         for _ in 0..reps { yd = pool.matvec_dense_i8(&dl, &xa, 1.0); }
+    |                                      ^^^^^^^^^^^^^^^
+    |
+   ::: src/engine.rs:317:1
+    |
+317 | pub struct Pool {
+--
+error: could not compile `qtrinet-core` (bin "qtrinet-core") due to 3 previous errors; 8 warnings emitted
+BUILD
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git show HEAD:qtrinet-core/src/engine.rs | sed -n '/pub fn matvec_dense_i8/,/^    }$/p' > /tmp/matvec_i8.txt && wc -l /tmp/matvec_i8.txt && cat /tmp/matvec_i8.txt | tail -5", "description": "Recover matvec_dense_i8 from git"}`
+
+  ```
+17 /tmp/matvec_i8.txt
+        for w in &self.outs {
+            for (o, &v) in out.iter_mut().zip(w.iter()) { *o += v; }
+        }
+        out
+    }
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src && python3 - <<'PY'\np='engine.rs'\ns=open(p).read()\n# 1. Restaurer matvec_dense_i8 (mode 3), supprimé par mégarde.\nmatvec = open('/tmp/matvec_i8.txt').read()\ns=s.replace(\"\"\"    pub fn gemm_dense_i8(&mut self, d:  … [911 caractères tronqués]`
+
+  ```
+BUILD
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && cargo test --release 2>&1 | tail -3; cd .. && echo \"=== lot 1 / 16 / 64 (GEMM sur le pool) ===\" && for l in 1 16 64; do printf \"lot %-3s : \" $l; timeout 400 ./qtrinet-core/target/release/qtrinet-core models/Qwen2.5-0 … [254 caractères tronqués]`
+
+  ```
+For more information about this error, try `rustc --explain E0596`.
+warning: `qtrinet-core` (bin "qtrinet-core" test) generated 8 warnings
+error: could not compile `qtrinet-core` (bin "qtrinet-core" test) due to 1 previous error; 8 warnings emitted
+=== lot 1 / 16 / 64 (GEMM sur le pool) ===
+lot 1   : perplexité 13.1368 sur 511 tokens (0 événements, 17.6 s)
+lot 16  : perplexité 13.1359 sur 511 tokens (0 événements, 23.4 s)
+lot 64  : perplexité 13.1359 sur 511 tokens (0 événements, 25.0 s)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for l in 1 64; do printf \"lot %-3s : \" $l; timeout 400 ./qtrinet-core/target/release/qtrinet-core models/Qwen2.5-0.5B-Q8_0.gguf --ppl /tmp/ids_qwen.txt --ctx 512 --limit 512 --dense --threads 16 --lot $l 2>&1 | grep -oE \"postes \\ … [100 caractères tronqués]`
+
+  ```
+lot 1   : postes (ms/token) : projets-attn 6.91 | rope 0.82 | attention 4.30 | proj+mlp 38.36 | somme 50.39 | reste (tête + échantillonnage) 12.33
+lot 64  : postes (ms/token) : projets-attn 0.00 | rope 0.00 | attention 0.00 | proj+mlp 0.00 | somme 0.00 | reste (tête + échantillonnage) 30.30
+  ```
+
+### 🤖 Assistant
+
+⏵ Test décisif : lot 512 (un seul lot par fenêtre) pour séparer l'effet de taille des frais par appel
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src && sed -i 's/        let pool = Pool::new(4, n_in);/        let mut pool = Pool::new(4, n_in);/; s/        let pool = Pool::new(8, n_in);/        let mut pool = Pool::new(8, n_in);/' engine.rs && cd .. && cargo test --r … [418 caractères tronqués]`
+
+  ```
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.10s
+
+lot 1   : perplexité 13.1368 sur 511 tokens (0 événements, 21.9 s)
+lot 128 : perplexité 13.1359 sur 511 tokens (0 événements, 19.5 s)
+lot 512 : perplexité 13.1359 sur 511 tokens (0 événements, 20.8 s)
+  ```
+
+### 🤖 Assistant
+
+⏵ Sans profil dans `forward_lot`, impossible d'attribuer. Je l'ajoute et je mesure
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src && python3 - <<'PY'\np='model.rs'\ns=open(p).read()\n# Chronométrage du chemin par lots : sans lui, on ne sait pas quel poste paie.\ns=s.replace(\"\"\"            quantifier(&hn, &mut xi, &mut sx, self.act_levels, self. … [2000 caractères tronqués]`
+
+  ```
+BUILD
+lot 1   : postes (ms/token) : projets-attn 3.24 | rope 0.75 | attention 4.33 | proj+mlp 26.62 | somme 34.94 | reste (tête + échantillonnage) 8.68
+lot 512 : postes (ms/token) : projets-attn 1.49 | rope 0.00 | attention 8.89 | proj+mlp 0.00 | somme 10.38 | reste (tête + échantillonnage) 29.58
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src && grep -n \"prof\\[3\\] += t_ffn\" model.rs; sed -n '/for i in 0..t {\\n *for oo in 0..h { x\\[i \\* h + oo\\] = o\\[i \\* h + oo\\] + down\\[i \\* h + oo\\]; }/,+8p' model.rs | head -12; grep -n \"x\\[i \\* h + oo\\]  … [124 caractères tronqués]`
+
+  ```
+1825:                    for oo in 0..h { x[i * h + oo] = o[i * h + oo] + down[i * h + oo]; }
+1853:                        x[i * h + oo] = o[i * h + oo] + down[i * h + oo];
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src && sed -n '1848,1862p' model.rs", "description": "Inspect the dense branch ending"}`
+
+  ```
+self.pool.gemm_dense_i8(d8, &gi, t, &sg, &mut yl[..d8.n_out * t]);
+                }
+                for i in 0..t {
+                    for oo in 0..h {
+                        down[i * h + oo] = yl[oo * t + i];
+                        x[i * h + oo] = o[i * h + oo] + down[i * h + oo];
+                    }
+                }
+            }
+        }
+        for i in 0..t {
+            let r = x[i * h..(i + 1) * h].to_vec();
+            Self::rmsnorm(&r, &self.out_norm, self.cfg.eps, &mut hn[i * h..(i + 1) * h]);
+        }
+        (0..t).map(|i| hn[i * h..(i + 1) * h].to_vec()).collect()
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src && python3 - <<'PY'\np='model.rs'\ns=open(p).read()\ns=s.replace(\"\"\"                for i in 0..t {\n                    for oo in 0..h {\n                        down[i * h + oo] = yl[oo * t + i];\n                  … [1304 caractères tronqués]`
+
+  ```
+BUILD
+lot 1   : postes (ms/token) : projets-attn 3.05 | rope 0.74 | attention 4.05 | proj+mlp 25.31 | somme 33.14 | reste (tête + échantillonnage) 8.36
+lot 512 : postes (ms/token) : projets-attn 1.49 | rope 0.00 | attention 8.90 | proj+mlp 20.92 | somme 31.31 | reste (tête + échantillonnage) 8.75
+  ```
+
+### 🤖 Assistant
+
+⏵ Attribution faite : le GEMM divise les projections par 2, mais l'attention non groupée double et la tête reste par jeton
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/rapport-prefill-par-lots.md'\ns=open(p).read()\ns=s.replace(\"\"\"## 4. Ce que ça change pour le contexte long\"\"\",\n\"\"\"## 4. Le débit, attribué poste par poste\n\nLe profil du chemin par lots (ajout … [3866 caractères tronqués]`

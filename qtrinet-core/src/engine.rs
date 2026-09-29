@@ -223,6 +223,16 @@ struct Shared {
     dense4: AtomicPtr<DenseQ4>,
     /// activation dense pour le mode 3 (produit scalaire par ligne de sortie)
     xv: AtomicPtr<i32>,
+    /// Lot d'activations du produit matrice-matrice (modes 5 et 6).
+    gx: AtomicPtr<i32>,
+    /// Mêmes activations en i16 et leurs sommes par bloc (mode 6).
+    gx16: AtomicPtr<i16>,
+    gs32: AtomicPtr<Vec<Vec<i32>>>,
+    /// Échelles d'activation du lot, taille du lot, et sortie du lot.
+    gsx: AtomicPtr<f32>,
+    gt: AtomicUsize,
+    gn_out: AtomicUsize,
+    gout: AtomicPtr<f32>,
     /// mêmes activations en i16, pour le noyau AVX2 du mode 4
     xv16: AtomicPtr<i16>,
     /// sommes des activations par bloc de 32 (terme de minimum de Q4_K)
@@ -333,6 +343,13 @@ impl Pool {
         let cpu = std::thread::available_parallelism().map(|p| p.get()).unwrap_or(1);
         let n = n.max(1).min(cpu.saturating_sub(1).max(1));
         let shared = Arc::new(Shared {
+            gx: AtomicPtr::new(std::ptr::null_mut()),
+            gx16: AtomicPtr::new(std::ptr::null_mut()),
+            gs32: AtomicPtr::new(std::ptr::null_mut()),
+            gsx: AtomicPtr::new(std::ptr::null_mut()),
+            gt: AtomicUsize::new(0),
+            gn_out: AtomicUsize::new(0),
+            gout: AtomicPtr::new(std::ptr::null_mut()),
             gen: AtomicUsize::new(0),
             done: AtomicUsize::new(0),
             stop: AtomicBool::new(false),
@@ -403,6 +420,61 @@ impl Pool {
                         for v in dst[..lo].iter_mut() { *v = 0.0; }
                         for v in dst[hi..].iter_mut() { *v = 0.0; }
                         for o in lo..hi { dst[o] = d.dot16(o, xv, xs) * sx; }
+                        sh.done.fetch_add(1, Ordering::Release);
+                        continue;
+                    }
+                    if mode == 5 || mode == 6 {
+                        // ---- produit MATRICE-MATRICE, sur les workers du pool.
+                        // Le lancer sur des fils créés à la volée ne gagnait
+                        // rien : les workers du pool tournent à vide pendant ce
+                        // temps (attente active sur `gen`), donc les fils du
+                        // GEMM partageaient les cœurs avec eux.
+                        let t = sh.gt.load(Ordering::Acquire);
+                        let n_out = sh.gn_out.load(Ordering::Acquire);
+                        let per = (n_out + n - 1) / n;
+                        let lo = id * per;
+                        let hi = (lo + per).min(n_out);
+                        if lo >= hi { sh.done.fetch_add(1, Ordering::Release); continue; }
+                        let out = unsafe { std::slice::from_raw_parts_mut(
+                            sh.gout.load(Ordering::Acquire), n_out * t) };
+                        let sx = unsafe { std::slice::from_raw_parts(
+                            sh.gsx.load(Ordering::Acquire), t) };
+                        const TUILE: usize = 16;
+                        if mode == 5 {
+                            let d = unsafe { &*sh.dense.load(Ordering::Acquire) };
+                            let x = unsafe { std::slice::from_raw_parts(
+                                sh.gx.load(Ordering::Acquire), t * d.n_in) };
+                            for i0 in (0..t).step_by(TUILE) {
+                                let i1 = (i0 + TUILE).min(t);
+                                for o in lo..hi {
+                                    for i in i0..i1 {
+                                        let xi = &x[i * d.n_in..(i + 1) * d.n_in];
+                                        let v = match d.src {
+                                            crate::list::Source8::Q8_0 => d.dot_q8_source(o, xi),
+                                            crate::list::Source8::PropreBloc => d.dot_blocs(o, xi),
+                                            crate::list::Source8::Propre =>
+                                                d.dot_chunked(o, xi) as f32 * d.scale[o],
+                                        };
+                                        out[o * t + i] = v * sx[i];
+                                    }
+                                }
+                            }
+                        } else {
+                            let d = unsafe { &*sh.dense4.load(Ordering::Acquire) };
+                            let x16 = unsafe { std::slice::from_raw_parts(
+                                sh.gx16.load(Ordering::Acquire), t * d.n_in) };
+                            let s32 = unsafe { &*sh.gs32.load(Ordering::Acquire) };
+                            const TUILE4: usize = 8;
+                            for i0 in (0..t).step_by(TUILE4) {
+                                let i1 = (i0 + TUILE4).min(t);
+                                for o in lo..hi {
+                                    for i in i0..i1 {
+                                        let xi = &x16[i * d.n_in..(i + 1) * d.n_in];
+                                        out[o * t + i] = d.dot16(o, xi, &s32[i]) * sx[i];
+                                    }
+                                }
+                            }
+                        }
                         sh.done.fetch_add(1, Ordering::Release);
                         continue;
                     }
@@ -529,53 +601,6 @@ impl Pool {
     ///
     /// `x` est le lot d'activations (t × n_in), `sx` les t échelles, `out` reçoit
     /// t × n_out en disposition jeton-majeur.
-    pub fn gemm_dense_i8(&self, d: &DenseQ8, x: &[i32], t: usize, sx: &[f32], out: &mut [f32]) {
-        /// Jeton par groupe : assez pour amortir la lecture d'une ligne de poids,
-        /// assez peu pour que les activations du groupe restent en L1.
-        const TUILE: usize = 16;
-        use crate::list::Source8;
-        let n_out = d.n_out;
-        let n_in = d.n_in;
-        let nt = self.n.max(1);
-        let par = n_out.div_ceil(nt);
-        // Chaque fil prend une tranche de LIGNES et parcourt tout le lot : la
-        // ligne reste chaude, le poids n'est lu qu'une fois.
-        std::thread::scope(|sc| {
-            let mut reste = out;
-            let mut base = 0usize;
-            for _ in 0..nt {
-                let lo = base;
-                let hi = (base + par).min(n_out);
-                if lo >= hi { break; }
-                // Disposition en sortie : ligne-majeur (n_out × t), donc la
-                // tranche de lignes d'un fil est contiguë.
-                let (morceau, suite) = reste.split_at_mut((hi - lo) * t);
-                reste = suite;
-                sc.spawn(move || {
-                    // Tuilage : un groupe de `TUILE` jetons tient dans le cache
-                    // pendant qu'on parcourt les lignes. Sans cela, chaque ligne
-                    // relit TOUT le lot d'activations (mesuré : le lot était plus
-                    // LENT que le jeton par jeton, 23 s contre 16,6).
-                    for i0 in (0..t).step_by(TUILE) {
-                        let i1 = (i0 + TUILE).min(t);
-                        for (j, o) in (lo..hi).enumerate() {
-                            for i in i0..i1 {
-                                let xi = &x[i * n_in..(i + 1) * n_in];
-                                let v = match d.src {
-                                    Source8::Q8_0 => d.dot_q8_source(o, xi),
-                                    Source8::PropreBloc => d.dot_blocs(o, xi),
-                                    Source8::Propre => d.dot_chunked(o, xi) as f32 * d.scale[o],
-                                };
-                                morceau[j * t + i] = v * sx[i];
-                            }
-                        }
-                    }
-                });
-                base = hi;
-            }
-        });
-    }
-
     pub fn matvec_dense_i8(&mut self, d: &DenseQ8, x: &[i32], sx: f32) -> Vec<f32> {
         self.ensure_width(d.n_out);
         let sh = &self.shared;
@@ -594,46 +619,39 @@ impl Pool {
         out
     }
 
-    /// Produit **matrice-matrice** sur une matrice 4 bits (experts MXFP4 de
-    /// gpt-oss, poids Q4_K de la famille Qwen).
-    ///
-    /// Même principe que `gemm_dense_i8` : une tranche de lignes par fil, et
-    /// toute la ligne de poids sert à tout le lot — c'est ce qui amortit la
-    /// lecture des 128 matrices d'experts d'une couche MoE.
-    ///
-    /// `x16` est le lot d'activations en i16, `s32[i]` les sommes par bloc de 32
-    /// du jeton i (précalculées une fois : le noyau les referait 4 864 fois),
-    /// `sx[i]` l'échelle d'activation du jeton i. Sortie en (n_out × t).
-    pub fn gemm_dense_q4(&self, d: &crate::list::DenseQ4, x16: &[i16], t: usize,
+    pub fn gemm_dense_i8(&mut self, d: &DenseQ8, x: &[i32], t: usize, sx: &[f32], out: &mut [f32]) {
+        assert!(out.len() >= d.n_out * t, "sortie du lot trop petite");
+        let sh = &self.shared;
+        sh.mode.store(5, Ordering::Relaxed);
+        sh.dense.store(d as *const _ as *mut _, Ordering::Relaxed);
+        sh.gx.store(x.as_ptr() as *mut i32, Ordering::Relaxed);
+        sh.gsx.store(sx.as_ptr() as *mut f32, Ordering::Relaxed);
+        sh.gt.store(t, Ordering::Relaxed);
+        sh.gn_out.store(d.n_out, Ordering::Relaxed);
+        sh.gout.store(out.as_mut_ptr(), Ordering::Relaxed);
+        sh.done.store(0, Ordering::Relaxed);
+        sh.gen.fetch_add(1, Ordering::Release);
+        while sh.done.load(Ordering::Acquire) != self.n { std::hint::spin_loop(); }
+    }
+
+    /// Produit matrice-matrice sur une matrice 4 bits (experts MXFP4 de gpt-oss,
+    /// poids Q4_K de la famille Qwen). Même exécution sur le pool : les fils
+    /// créés à la volée partageaient les cœurs avec des workers qui tournent.
+    pub fn gemm_dense_q4(&mut self, d: &crate::list::DenseQ4, x16: &[i16], t: usize,
                          s32: &[Vec<i32>], sx: &[f32], out: &mut [f32]) {
-        /// Même tuilage que le chemin int8 : les sommes par bloc de 32 du groupe
-        /// restent au chaud pendant la lecture des lignes.
-        const TUILE_Q4: usize = 8;
-        let n_out = d.n_out;
-        let n_in = d.n_in;
-        let nt = self.n.max(1);
-        let par = n_out.div_ceil(nt);
-        std::thread::scope(|sc| {
-            let mut reste = out;
-            let mut base = 0usize;
-            while base < n_out {
-                let hi = (base + par).min(n_out);
-                let (morceau, suite) = reste.split_at_mut((hi - base) * t);
-                reste = suite;
-                sc.spawn(move || {
-                    for i0 in (0..t).step_by(TUILE_Q4) {
-                        let i1 = (i0 + TUILE_Q4).min(t);
-                        for (j, o) in (base..hi).enumerate() {
-                            for i in i0..i1 {
-                                let xi = &x16[i * n_in..(i + 1) * n_in];
-                                morceau[j * t + i] = d.dot16(o, xi, &s32[i]) * sx[i];
-                            }
-                        }
-                    }
-                });
-                base = hi;
-            }
-        });
+        assert!(out.len() >= d.n_out * t, "sortie du lot trop petite");
+        let sh = &self.shared;
+        sh.mode.store(6, Ordering::Relaxed);
+        sh.dense4.store(d as *const _ as *mut _, Ordering::Relaxed);
+        sh.gx16.store(x16.as_ptr() as *mut i16, Ordering::Relaxed);
+        sh.gs32.store(s32 as *const _ as *mut _, Ordering::Relaxed);
+        sh.gsx.store(sx.as_ptr() as *mut f32, Ordering::Relaxed);
+        sh.gt.store(t, Ordering::Relaxed);
+        sh.gn_out.store(d.n_out, Ordering::Relaxed);
+        sh.gout.store(out.as_mut_ptr(), Ordering::Relaxed);
+        sh.done.store(0, Ordering::Relaxed);
+        sh.gen.fetch_add(1, Ordering::Release);
+        while sh.done.load(Ordering::Acquire) != self.n { std::hint::spin_loop(); }
     }
 
     /// Accumulation par **listes par source valuées** : le mode de l'inférence.
@@ -879,7 +897,7 @@ mod tests_gemm_q4 {
         let w: Vec<f32> = (0..n_out * n_in)
             .map(|k| (((k * 1103515245 + 12345) % 2000) as f32 / 1000.0) - 1.0).collect();
         let d = DenseQ4::build(&w, n_out, n_in);
-        let pool = Pool::new(4, n_in);
+        let mut pool = Pool::new(4, n_in);
         let x: Vec<i32> = (0..t * n_in).map(|k| ((k * 7919) % 101) as i32 - 50).collect();
         let x16: Vec<Vec<i16>> = (0..t).map(|i| {
             x[i * n_in..(i + 1) * n_in].iter().map(|&v| v as i16).collect()

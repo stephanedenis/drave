@@ -1565,6 +1565,7 @@ impl Model {
                 Self::rmsnorm(r, &lay.attn_norm, self.cfg.eps, &mut hn[i * h..(i + 1) * h]);
             }
             quantifier(&hn, &mut xi, &mut sx, self.act_levels, self.act_thresh);
+            let t_proj = Instant::now();
             // 2. q, k, v : un produit matrice-matrice chacun. Trois tampons
             //    DISTINCTS (un `y` partagé avec un pas par projection mélangeait
             //    les sorties : mesuré, une perplexité de 1,6 million).
@@ -1595,6 +1596,8 @@ impl Model {
             q.copy_from_slice(&qa);
             k.copy_from_slice(&ka);
             v.copy_from_slice(&va);
+            self.prof[0] += t_proj.elapsed().as_secs_f64();
+            let t_att = Instant::now();
             // 3. normes de tête, rotation, écriture du cache, attention
             for i in 0..t {
                 let pos = pos0 + i;
@@ -1666,6 +1669,8 @@ impl Model {
                 }
                 self.attn_events += (nh * (n - lo)) as u64;
             }
+            self.prof[2] += t_att.elapsed().as_secs_f64();
+            let t_ffn = Instant::now();
             // 4. projection de sortie du lot, résidu, norme du FFN
             {
                 // `att` fait t × (n_têtes × dim_tête), qui n'est PAS t × h :
@@ -1849,6 +1854,7 @@ impl Model {
                     }
                 }
             }
+            self.prof[3] += t_ffn.elapsed().as_secs_f64();
         }
         for i in 0..t {
             let r = x[i * h..(i + 1) * h].to_vec();

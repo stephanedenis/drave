@@ -65,7 +65,38 @@ avant de passer à la ligne suivante, donc les activations du groupe restent en
 cache pendant qu'on parcourt les poids. C'est l'arbitrage classique : la ligne est
 relue `t / TUILE` fois, mais chaque relecture sert 16 jetons au lieu d'un.
 
-## 4. Ce que ça change pour le contexte long
+## 4. Le débit, attribué poste par poste
+
+Le profil du chemin par lots (ajouté pour l'occasion : sans lui, aucun poste
+n'était chronométré) donne, par jeton, Qwen2.5-0.5B, contexte 512, 16 fils :
+
+| poste | lot 1 | lot 512 | verdict |
+|---|---|---|---|
+| projections d'attention | 3,05 ms | **1,49 ms** | le GEMM divise par 2 ✓ |
+| attention | 4,05 ms | 8,90 ms | **×2,2** ✗ |
+| FFN + projection de sortie | 25,31 ms | 20,92 ms | ÷1,2 seulement |
+| **somme** | 33,14 ms | 31,31 ms | −5 % |
+| tête + échantillonnage | 8,36 ms | 8,75 ms | inchangé (la tête est par jeton) |
+| **total** | 41,5 ms | **40,1 ms** | **−3 %** |
+
+Le mécanisme fonctionne — le produit matrice-matrice divise bien par deux le
+temps des projections — mais **il ne porte que sur 8 % du coût par jeton**, et
+deux postes l'annulent :
+
+1. **l'attention par lots est deux fois plus lente** : elle emprunte le chemin
+   par tête, alors que le chemin jeton par jeton utilise le chemin *groupé* qui
+   relit les clés une fois par groupe de têtes KV (`rep` = 7 sur Qwen) ;
+2. **la tête de sortie reste calculée jeton par jeton** (145 Mo lus par jeton
+   pour Qwen 0.5B) : c'est le premier consommateur après le FFN, et il n'est
+   même pas dans le lot.
+
+Conclusion, mesurée : pour que le préremplissage par lots tienne ses promesses,
+il faut **aussi** (a) passer l'attention par le chemin groupé dans le chemin par
+lots, et (b) **traiter la tête comme un GEMM** — même noyau, sortie de
+151 936 lignes, trente fois plus de travail que les projections d'attention.
+Sans (b), le préremplissage restera dominé par la tête et le FFN.
+
+## 5. Ce que ça change pour le contexte long
 
 Le préremplissage séquentiel coûtait un parcours complet des poids **par jeton**.
 Un lot de `t` jetons ne le coûte plus qu'une fois par groupe de 16 (et une fois
