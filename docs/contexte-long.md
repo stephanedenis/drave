@@ -137,16 +137,16 @@ Trois choses :
    position) au lieu d'une **par bloc de 32** comme Q8_0. Corrigé, et mesuré à
    512 jetons :
 
-| KV (512 jetons) | échelle par vecteur | **échelle par bloc de 32** |
-|---|---|---|
-| f32 | 13,14 | 13,14 |
-| int8 | 14,07 (+7,1 %) | **13,34 (+1,5 %)** |
-| int4 | 63,61 (+384 %) | **41,94 (+219 %)** |
+| KV | 512 jetons, par vecteur | **512, par bloc de 32** | **4 591, par bloc de 32** |
+|---|---|---|---|
+| f32 | 13,1368 | 13,1368 | 12,9080 |
+| int8 | 14,0707 (+7,1 %) | **13,3360 (+1,5 %)** | **13,3459 (+3,4 %)** |
+| int4 | 63,6107 (+384 %) | **41,9442 (+219 %)** | **49,9438 (+287 %)** |
 
-L'écart avec llama.cpp (+0,8 %) est donc comblé, et le 4 bits devient deux fois
-moins destructeur — sans changer la taille du cache. C'est la même leçon que
-pour `DenseQ8` : ce n'est pas le nombre de bits qui compte, c'est la finesse des
-échelles.
+L'écart avec llama.cpp (+0,8 %) est donc comblé à contexte court, et le 4 bits
+devient deux fois moins destructeur — sans changer la taille du cache. C'est la
+même leçon que pour `DenseQ8` : ce n'est pas le nombre de bits qui compte, c'est
+la finesse des échelles.
 
 ## 5. YaRN à retardement : ce que la mesure a dit
 

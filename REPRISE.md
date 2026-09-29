@@ -154,8 +154,8 @@ comparé à `llama-tokenize` sur 4 424 jetons (0 écart).
 | noyau GPU MXFP4 warp (expert gpt-oss, 4,4 Mo) | **0,1 ms** contre 7,5 ms CPU (×75), écart **0,00e0** |
 | noyau GPU Q4_K warp (Qwen 1.5B, 7,7 Mo) | 0,5 ms contre 1,2 ms CPU (×2,2), écart 4e-7 |
 | préremplissage par lots (Qwen, ctx 512) | lot 1 = 16,6 s · lot 512 = 40,1 ms/jeton contre 41,5 → **−3 %** |
-| KV int8 (~4 600 jetons) | 13,58 contre 12,91 (+5,2 %) ; llama.cpp q8_0 : +0,8 % |
-| KV int4 (~4 600 jetons) | 71,05 (+450 %) ; llama.cpp q4_0 : +494 % |
+| KV int8, échelles par bloc | +1,5 % (512 jetons) et +3,4 % (4 591) — était +7,1 % et +5,2 % |
+| KV int4, échelles par bloc | +219 % (512) et +287 % (4 591) — était +384 % et +450 % |
 | attention creuse (gpt-oss, ctx 2 048) | sans restriction 298,56 · **top-256 : 234,88** · fenêtre 512 : 3 269,34 |
 | rotation, comparaison appariée | RoPE simple gagne à 128/512/1024/1536 de contexte (39,5 / 49,8 / 49,9 / 298,6) |
 

@@ -11383,3 +11383,51 @@ scripts vivants ci-dessus
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='docs/contexte-long.md'\ns=open(p).read()\nvieux = \"\"\"   supposer.\"\"\"\nneuf = \"\"\"   supposer. Second essai sur Qwen3-30B-A3B : **9,6 minutes pour une seule\n   sonde** (1 024 jetons de contexte) et un éch … [1099 caractères tronqués]`
+
+  ```
+doc mise à jour
+833a843 Aiguille : test arrete, et pourquoi (remplissage trop repetitif, prefill trop lent)
+  ```
+
+- **bash** `{"command": "sleep 280; cat /tmp/kv_blocs.log 2>/dev/null; ps -o pid,etime,pcpu -C qtrinet-core 2>/dev/null | tail -1", "description": "Wait for the long-context KV measurement", "timeoutMs": 320000}`
+
+  ```
+3089821       06:06  823
+  ```
+
+- **bash** `{"command": "sleep 290; cat /tmp/kv_blocs.log 2>/dev/null; echo \"---\"; ps -o pid,etime -C qtrinet-core 2>/dev/null | tail -1", "description": "Wait for the KV long-context results", "timeoutMs": 320000}`
+
+  ```
+KV 32 bits (4 591 jetons) : ---
+3093471       02:13
+  ```
+
+- **bash** `{"command": "sleep 300; cat /tmp/kv_blocs.log 2>/dev/null", "description": "Read the long-context KV results", "timeoutMs": 340000}`
+
+  ```
+KV 32 bits (4 591 jetons) : perplexité 12.9080 sur 4591 tokens
+KV 8  bits (4 591 jetons) :
+  ```
+
+- **bash** `{"command": "sleep 300; cat /tmp/kv_blocs.log 2>/dev/null", "description": "Wait for int8/int4 at long context", "timeoutMs": 340000}`
+
+  ```
+KV 32 bits (4 591 jetons) : perplexité 12.9080 sur 4591 tokens
+KV 8  bits (4 591 jetons) : perplexité 13.3459 sur 4591 tokens
+KV 4  bits (4 591 jetons) :
+  ```
+
+- **bash** `{"command": "sleep 280; cat /tmp/kv_blocs.log 2>/dev/null; ps -o pid,etime -C qtrinet-core 2>/dev/null | tail -1", "description": "Wait for the int4 long-context result", "timeoutMs": 320000}`
+
+  ```
+KV 32 bits (4 591 jetons) : perplexité 12.9080 sur 4591 tokens
+KV 8  bits (4 591 jetons) : perplexité 13.3459 sur 4591 tokens
+KV 4  bits (4 591 jetons) : perplexité 49.9438 sur 4591 tokens
+    PID     ELAPSED
+  ```
+
+### 🤖 Assistant
+
+⏵ Tableau complet du KV : int8 +1,5 %/+3,4 %, int4 +219 %/+287 % selon le contexte
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='docs/contexte-long.md'\ns=open(p).read()\nvieux = \"\"\"| KV (512 jetons) | échelle par vecteur | **échelle par bloc de 32** |\n|---|---|---|\n| f32 | 13,14 | 13,14 |\n| int8 | 14,07 (+7,1 %) | **13,34 (+1,5 %)** … [2135 caractères tronqués]`

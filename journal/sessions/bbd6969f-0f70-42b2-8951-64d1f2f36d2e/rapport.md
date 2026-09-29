@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 21.9 h |
+| Durée | 22.3 h |
 | Tours | 5 |
-| Messages | 710 |
-| Appels d'outils | 720 |
+| Messages | 716 |
+| Appels d'outils | 726 |
 | Fichiers touchés | 33 |
-| Commandes | 520 |
+| Commandes | 526 |
 | Sous-agents | 1 |
-| Commits | 23 |
+| Commits | 24 |
 | Compactages de contexte | 0 |
 
 ## Objectifs déclarés
@@ -217,7 +217,7 @@ Retirer `mscale = 1 + 0,1·ln f` divise la perplexité par **8,9 / 5,9 / 3,8**. 
 
 ### Tour 5 — <goal_round> Objective: "Réaliser les 8 chantiers restants du projet qtrinet-core dans l'ordre : (1) protocole de perple … [1122 caractères tronqués]
 
-*117 appels d'outils.* Actions notables :
+*123 appels d'outils.* Actions notables :
 
 - bash — Check rotation series and expert profile
 - bash — End-to-end batched prefill correctness and time
@@ -233,11 +233,11 @@ Retirer `mscale = 1 + 0,1·ln f` divise la perplexité par **8,9 / 5,9 / 3,8**. 
 - bash — Fix the grep pattern and relaunch cleanly
 - bash — Read the MXFP4 CPU kernel for the layout
 - bash — Find the MXFP4 scalar dot path
-- … et 102 autres
+- … et 108 autres
 
 **Synthèse produite :**
 
-⏵ L'aiguille est lente (10 min/sonde) et son remplissage trop répétitif : j'arrête et je consigne la limite
+⏵ Tableau complet du KV : int8 +1,5 %/+3,4 %, int4 +219 %/+287 % selon le contexte
 
 ## 3. Travail accompli
 
@@ -325,7 +325,7 @@ Retirer `mscale = 1 + 0,1·ln f` divise la perplexité par **8,9 / 5,9 / 3,8**. 
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 480 autres
+- … et 486 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -496,4 +496,5 @@ Retirer `mscale = 1 + 0,1·ln f` divise la perplexité par **8,9 / 5,9 / 3,8**. 
 - KV a echelles par bloc de 32 : int8 de +7,1 % a +1,5 %, int4 de +384 % a +219 %  Le cache KV quantifiait avec UNE echelle par vecteur (tete, position) ; Q8_0 et
 - Aiguille : test arrete, et pourquoi (remplissage trop repetitif, prefill trop lent)  9,6 minutes pour UNE sonde sur Qwen3-30B-A3B (1 024 jetons) et un echec : l
 - Aiguille : test arrete, et pourquoi (remplissage trop repetitif, prefill trop lent)  9,6 minutes pour UNE sonde sur Qwen3-30B-A3B (1 024 jetons) et un echec : u
+- KV par bloc : mesure longue (4 591 jetons) -- int8 +3,4 %, int4 +287 %  Tableau complet :    KV     512 j, par vecteur   512 j, par bloc   4 591 j, par bloc   f
 
