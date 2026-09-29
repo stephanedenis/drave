@@ -146,20 +146,36 @@ comparé à `llama-tokenize` sur 4 424 jetons (0 écart).
 | 7 | noyaux GPU | **fait** | warp par ligne (tête : 1,8 ms contre 30 ms CPU, PPL identique) ; **MXFP4** warp (0,1 ms, écart 0,00e0 — bit à bit) ; **Q4_K** warp (0,5 contre 1,2 ms, écart 4e-7). Reste le *branchement* dans le moteur (cache d'experts chauds) |
 | 8 | suite du plan 1 M | **chiffré, pas commencé** | `docs/contexte-long.md` : préremplissage 1 234 h à 1 M, KV int4 9,7 Go, YaRN ×256 nécessaire ; restent pagination, déport GPU du KV, attention creuse, MLA, vision |
 
+### Mesures du tour « huit chantiers » (toutes commitées)
+
+| mesure | valeur |
+|---|---|
+| noyau GPU Q8_0 warp (tête Qwen 0.5B, 144,6 Mo) | **1,6 ms** contre 7,3 ms CPU (×4,6), écart 2e-7 |
+| noyau GPU MXFP4 warp (expert gpt-oss, 4,4 Mo) | **0,1 ms** contre 7,5 ms CPU (×75), écart **0,00e0** |
+| noyau GPU Q4_K warp (Qwen 1.5B, 7,7 Mo) | 0,5 ms contre 1,2 ms CPU (×2,2), écart 4e-7 |
+| préremplissage par lots (Qwen, ctx 512) | lot 1 = 16,6 s · lot 512 = 40,1 ms/jeton contre 41,5 → **−3 %** |
+| KV int8 (~4 600 jetons) | 13,58 contre 12,91 (+5,2 %) ; llama.cpp q8_0 : +0,8 % |
+| KV int4 (~4 600 jetons) | 71,05 (+450 %) ; llama.cpp q4_0 : +494 % |
+| attention creuse (gpt-oss, ctx 2 048) | sans restriction 298,56 · **top-256 : 234,88** · fenêtre 512 : 3 269,34 |
+| rotation, comparaison appariée | RoPE simple gagne à 128/512/1024/1536 de contexte (39,5 / 49,8 / 49,9 / 298,6) |
+
 ### Ce qu'il faut faire ensuite, dans l'ordre
 
-1. **Le débit du préremplissage par lots** (chantier 4) : la justesse est là, le
-   gain neuf n'est pas démontré. Le noyau est 2,4× plus rapide ; si le bout en
-   bout ne suit pas, c'est que les allocations ou le lancement de fils par appel
-   mangent le gain — mesurer, puis corriger.
-2. **Le regroupement des experts par lot** (même chantier) : gpt-oss retombe sur
-   le jeton par jeton, donc le modèle qui compte ne profite de rien. Grouper les
-   jetons par expert est la seule façon d'amortir les 128 matrices d'experts.
+1. **Le préremplissage, suite** (chantier 4) : le GEMM divise les projections par
+   deux, mais il ne porte que sur 8 % du coût. Deux corrections identifiées et
+   mesurées : (a) passer l'attention du chemin par tête au chemin **groupé**
+   (×2,2 sur ce poste), (b) **traiter la tête de sortie comme un GEMM** — elle
+   représente 30 fois le travail des projections d'attention et reste calculée
+   jeton par jeton. Le regroupement des experts, lui, est fait mais ne paie
+   qu'à partir de très gros lots (t × 4 / 128 jetons par expert : ~2 à t = 64).
 3. **Brancher le noyau MXFP4** : il est bit à bit identique et 40× plus rapide
    que le CPU ; il manque un cache d'experts chauds en VRAM (voir
    `reports/rapport-localite-activation.md`).
 4. **Q6_K** reste à écrire (Q4_K et MXFP4 sont faits et mesurés) : c'est le
    format de certaines têtes et de quelques tenseurs Qwen.
+4.bis **KV à échelles par bloc de 32** : notre int8 coûte +5,2 % là où llama.cpp
+   (mêmes blocs que Q8_0) coûte +0,8 %. C'est la piste la plus directe pour le
+   cache, et elle se mesure en une passe.
 5. **Le seuil de rotation** (chantier 2) : la série en cours le tranche ; si
    l'interpolation ne gagne jamais, le défaut « simple partout » est à
    envisager, et le seuil de 4 096 devient une simple borne de sécurité.

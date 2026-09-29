@@ -11137,3 +11137,62 @@ lot 512 : postes (ms/token) : projets-attn 1.49 | rope 0.00 | attention 8.90 | p
 ⏵ Attribution faite : le GEMM divise les projections par 2, mais l'attention non groupée double et la tête reste par jeton
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/rapport-prefill-par-lots.md'\ns=open(p).read()\ns=s.replace(\"\"\"## 4. Ce que ça change pour le contexte long\"\"\",\n\"\"\"## 4. Le débit, attribué poste par poste\n\nLe profil du chemin par lots (ajout … [3866 caractères tronqués]`
+
+  ```
+71dbcf5 Item 4 : le GEMM sur le pool, et le gain reel attribue poste par poste
+  ```
+
+- **bash** `{"command": "tail -6 /tmp/lot_final.log; echo \"=== aiguille ===\"; cat /tmp/aiguille_lance.out 2>/dev/null | tail -6; ps -o pid,etime,pcpu -C qtrinet-core 2>/dev/null | tail -1", "description": "Check the queued lot and needle runs"}`
+
+  ```
+### gpt-oss, ctx 256, 255 jetons notés (MoE : regroupement par expert)
+lot 1   : perplexité 13.7149 sur 255 tokens (0 événements, 49.6 s)
+lot 16  : perplexité 13.7205 sur 255 tokens (0 événements, 63.5 s)
+lot 64  : perplexité 13.7205 sur 255 tokens (0 événements, 53.0 s)
+lot 128 : perplexité 13.7205 sur 255 tokens (0 événements, 91.0 s)
+
+=== aiguille ===
+aiguille : models/Qwen2.5-0.5B-Q8_0.gguf
+ contexte  profondeur  trouvé  secondes
+     1024        0.10     NON      91.8
+     1024        0.50     NON      86.5
+2976705       01:08  823
+  ```
+
+### 🤖 Assistant
+
+⏵ Aiguille : le 0.5B échoue même à 1 024 (trop petit). J'ajoute le 30B au test
+
+- **bash** `{"command": "cat > /tmp/aiguille30b.sh <<'EOF'\n#!/bin/bash\n# L'aiguille sur un modèle qui a une chance de la trouver : Qwen3-30B-A3B.\n# Le 0.5B echoue meme a 1 024 jetons de contexte, donc il ne discrimine rien.\nset -u\ncd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\nJ=/tmp/aiguille30b.log\n … [500 caractères tronqués]`
+
+  ```
+aiguille 30B en file
+aiguille : models/Qwen2.5-0.5B-Q8_0.gguf
+ contexte  profondeur  trouvé  secondes
+     1024        0.10     NON      91.8
+     1024        0.50     NON      86.5
+  ```
+
+- **bash** `{"command": "sleep 300; cat /tmp/aiguille_lance.out 2>/dev/null | tail -8; echo \"=== 30B ===\"; cat /tmp/aiguille30b.log 2>/dev/null | tail -4", "description": "Wait for needle results", "timeoutMs": 340000}`
+
+  ```
+aiguille : models/Qwen2.5-0.5B-Q8_0.gguf
+ contexte  profondeur  trouvé  secondes
+     1024        0.10     NON      91.8
+     1024        0.50     NON      86.5
+     1024        0.90     NON      86.2
+     2048        0.10     NON     122.3
+     2048        0.50     NON     123.3
+=== 30B ===
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\np='/tmp/aiguille30b.sh'\ns=open(p).read()\ns=s.replace(\"    1024,2048,4096 0.1,0.5,0.9\", \"    1024,2048 0.1,0.5,0.9\")\nopen(p,'w').write(s)\nprint(\"longueurs réduites à 1024,2048 (4 096 coûterait ~35 min par sonde)\")\nPY\ntail -3 /tmp/aiguille_lance.out", "descri … [35 caractères tronqués]`
+
+  ```
+longueurs réduites à 1024,2048 (4 096 coûterait ~35 min par sonde)
+     1024        0.90     NON      86.2
+     2048        0.10     NON     122.3
+     2048        0.50     NON     123.3
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='REPRISE.md'\ns=open(p).read()\ns=s.replace(\"\"\"### Ce qu'il faut faire ensuite, dans l'ordre\"\"\",\n\"\"\"### Mesures du tour « huit chantiers » (toutes commitées)\n\n| mesure | valeur |\n|---|---|\n| noyau GP … [3120 caractères tronqués]`
