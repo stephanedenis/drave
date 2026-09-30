@@ -28428,3 +28428,182 @@ gain FFN : couche 0 × 4
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A drave-core/src/main.rs drave-core/src/model.rs && git commit -q -F - <<'EOF' && git log --oneline -1 | cat; (cd drave-core && cargo test --release 2>&1 | grep -E \"^test result\"); date +\"%H:%M:%S\"; cat /tmp/kv_cles.log\ … [1457 caractères tronqués]`
+
+  ```
+1a4beb3 `--options-actives` : le tableau de bord des réglages qui agissent
+test result: ok. 11 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.12s
+13:04:40
+cles_f32_valeurs_int4      : perplexité 14.2994 sur 8191 tokens (0 événements, 1665.6 s)
+cles_int4_valeurs_f32      : perplexité 69.0464 sur 8191 tokens (0 événements, 1482.6 s)
+int4_int4                  :
+  ```
+
+### 🤖 Assistant
+
+⏵ Dernière brique d'hygiène : un drapeau inconnu (faute de frappe) passe aujourd'hui en silence. Je le fais dire.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n 396,410p drave-core/src/main.rs; grep -n \"_ => {\" drave-core/src/main.rs | head -5; sed -n 524,540p drave-core/src/main.rs", "description": "Inspect analyser loop and fallback arm"}`
+
+  ```
+infer: bool, ppl: bool, plan: bool, tokenize: bool, gpu_banc: bool,
+    /// Banc du KV déporté : nombre de clés à faire tenir en VRAM.
+    banc_kv: usize,
+    /// Banc MLA : écrit les logits `(n_pos × vocab)` en f32 pour les comparer à
+    /// la référence numpy du modèle synthétique.
+    banc_mla: Option<String>,
+    /// Trace du flux d'activation : fichier de sortie.
+    trace_flux: Option<String>,
+    /// Relecture d'une trace : les activations enregistrées remplacent celles
+    /// calculées (rejeu).
+    flux_forcer: Option<String>,
+    /// Phase 3 : nœud MOTEUR qui écoute et applique sa plage de couches.
+    /// `--options-actives` : imprime, APRÈS toutes les affectations, les réglages
+    /// que le moteur utilise réellement. C'est la réponse au mode d'échec le plus
+    /// coûteux du dépôt — huit drapeaux « analysés mais jamais appliqués » en une
+1720:        _ => {}
+            "--topk" => { o.topk = suivant(i).parse().unwrap(); 2 }
+            "--rep-penalty" => { o.rep_pen = suivant(i).parse().unwrap(); 2 }
+            "--hist" => { o.hist = suivant(i).parse().unwrap(); 2 }
+            "--ctx" => { o.ctx = suivant(i).parse().unwrap(); o.ctx_impose = true; 2 }
+            
+… [1001 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"fn analyser\" -A 8 drave-core/src/main.rs | head -12; awk 'NR>=1790 && NR<=1810' drave-core/src/main.rs", "description": "Find analyser loop end"}`
+
+  ```
+466:fn analyser(args: &[String]) -> Options {
+467-    let mut o = Options {
+468-        n: 32, temp: 0.0, top_p: 1.0, hist: 64, hebb_q: 0.1,
+469-        hebb_out: String::from("hebb.bin"), keep: 1.0, abits: 8,
+470-        auto: true, limit: usize::MAX,
+471-        matrix: String::from("blk.0.ffn_gate.weight"),
+472-        ..Default::default()
+473-    };
+474-    let cpu = std::thread::available_parallelism().map(|n| n.get()).unwrap_or(8);
+                    // les identifiants de jetons — il n'en a pas besoin, les
+                    // états entrent directement dans SA première couche.
+                    let t = f.n;
+                    // Refus EXPLICITE plutôt qu'une boucle sans fin : au-delà de
+                    // son contexte, `KvCache::assurer` ne peut pas agrandir et
+                    // tournerait indéfiniment (relevé dans `docs/plan-prefill-reparti.md`).
+                    if f.pos as usize + t > mdl.ctx {
+                        println!("[flux] lot refusé : {t} états à partir de la position {} \
+                                  dépassent le contexte {} de ce nœud",
+                                 f.pos, mdl.ctx);
+                        break;
+                  
+… [600 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n '            _ => {' drave-core/src/main.rs | head -3; sed -n 630,645p drave-core/src/main.rs", "description": "Locate analyser fallback arm precisely"}`
+
+  ```
+mdl.act_renorm = act_renorm;
+    mdl.act_topk_proj = topk_proj;
+    if sans_fenetre { mdl.attn_window = 0; }
+    if attn_window > 0 { mdl.attn_window = attn_window; }
+    if let Some(p) = swa_pattern { mdl.swa_pattern = p; }
+    if attn_sinks > 0 { mdl.attn_sinks = attn_sinks; }
+    // `--trace-flux` était ignoré en inférence : on le branche, comme en
+    // perplexité — une trace est un enregistrement du flux, elle n'a rien de
+    // spécifique à la mesure de perplexité.
+    if let Some(chemin) = trace_flux.as_deref() {
+        match model::TraceFlux::nouveau(chemin, trace_couches.clone(), mdl.cfg.hidden,
+                                        mdl.cfg.n_layer) {
+            Ok(t) => { println!("[trace] flux enregistré dans {chemin}"); mdl.trace = Some(t); }
+            Err(e) => eprintln!("[trace] impossible d'écrire {chemin} : {e}"),
+        }
+    }
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n 'inconnus\\|// drapeau inconnu\\|_ => 1' drave-core/src/main.rs | head -5; sed -n 596,606p drave-core/src/main.rs", "description": "Find the unknown-flag handling in analyser"}`
+
+  ```
+583:            _ => 1,
+        println!("[gpu] experts : {} demandes, {} manques (succès {:.1} %), {} évictions, \
+{:.2} Go montés sur le bus, {:.2} Go résidents",
+                 c.demandes, c.manques, c.taux(), c.evictions,
+                 c.octets_envoyes as f64 / 1e9, c.octets as f64 / 1e9);
+    }
+}
+
+fn run_infer(opt: Options) {
+    // Lu AVANT la déstructuration, qui consomme `opt`.
+    let montre_options = opt.options_actives;
+    // Une seule analyse de la ligne de commande (voir `analyser`) : chaque mode
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n 576,590p drave-core/src/main.rs", "description": "Read the analyser loop tail"}`
+
+  ```
+"--harmony-user" => { o.harmony = Some("user".into()); 1 }
+            "--harmony-suite" => { o.harmony = Some("suite".into()); 1 }
+            "--q4" => { o.q4 |= 3; 1 }
+            "--q4-ffn" => { o.q4 = (o.q4 & 4) | 1; 1 }
+            "--q4-attn" => { o.q4 = (o.q4 & 4) | 2; 1 }
+            "--q4-tout" => { o.q4 |= 7; 1 }
+            // Inconnu : on avance d'UN cran, jamais de deux.
+            _ => 1,
+        };
+        i += pas;
+    }
+    if o.pin { engine::EPINGLER.store(true, std::sync::atomic::Ordering::Relaxed); }
+    if o.bits > 0 { list::BITS_POIDS.store(o.bits, std::sync::atomic::Ordering::Relaxed); }
+    o
+}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/main.rs'; s=open(p).read()\n# 1. un champ pour les drapeaux inconnus\nv = \"\"\"    options_actives: bool,\"\"\"\nassert s.count(v) == 1\ns = s.replace(v, \"\"\"    options_actives: bool,\n    ///  … [1894 caractères tronqués]`
+
+  ```
+drapeaux inconnus signalés
+    Finished `release` profile [optimized] target(s) in 0.01s
+=== faute de frappe ===
+[options] 1 drapeau(x) INCONNU(S), donc sans effet : --keeep
+[options] (une faute de frappe suffit — `--options-actives` montre ce que le moteur applique vraiment)
+=== sans faute : aucun message ===
+0
+13:05:55
+cles_f32_valeurs_int4      : perplexité 14.2994 sur 8191 tokens (0 événements, 1665.6 s)
+cles_int4_valeurs_f32      : perplexité 69.0464 sur 8191 tokens (0 événements, 1482.6 s)
+int4_int4                  : perplexité 66.0369 sur 8191 tokens (0 événements, 1578.6 s)
+=== couloir A terminé ===
+13:05:54
+  ```
+
+### 👤 Utilisateur
+
+background job bash-56 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/campagne_cles.sh <<'EOF'
+#!/bin/bash
+# Couloir A — « où mettre les bits du cache KV ? »
+# Références déjà mesurées à ctx 8192 : f32 14,2339 · int8/int8 14,6667 (+3,04 %)
+# · clés f32 + valeurs int8 14,2372 (+0,023 %) · clés int8 + valeurs f32 14,6622.
+# Ce qui manque : les variantes 4 bits, et le quantificateur de clés.
+set -u
+cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet
+D=./drave-core/target/release/drave
+M=models/Qwen2.5-0.5B-Q8_0.gguf
+J=/tmp/kv_cles.log
+: > "$J"
+while pgrep -x drave > /dev/null; do sleep 15; done   # un seul job lourd à la fois
+run() {
+    nom=$1; shift
+    printf "%-26s : " "$nom" | tee -a "$J"
+    env "$@" timeout 5400 $D $M --ppl /tmp/ids_qwen_long.txt --ctx 8192 \
+        --limit 8192 --dense --threads 16 --lot 512 2>&1 \
+        | grep -oE "perplexité [0-9.]+ sur [0-9]+ tokens \([0-9]+ événements, [0-9.]+ s\)" | tee -a "$J"
+}
+run "cles_f32_valeurs_int4" DRAVE_KV_BITS=4 DRAVE_KV_K_F32=1
+run "cles_int4_valeurs_f32" DRAVE_KV_BITS=4 DRAVE_KV_V_F32=1
+run "int4_int4"             DRAVE_KV_BITS=4
+echo "=== couloir A terminé ===" | tee -a "$J"
+date +"%H:%M:%S" | tee -a "$J"
+EOF
+chmod +x /tmp/campagne_cles.sh && /tmp/campagne_cles.sh) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+### 🤖 Assistant
+
+La campagne principale est finie : **int4/int4 = 66,0369 (+364 %)** — cohérent avec la mesure d'une session antérieure. La suite f16 démarre. Je commit et je mets le rapport à jour.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A drave-core/src/main.rs && git commit -q -m \"Un drapeau inconnu n'est plus avalé en silence\n\n\\`--keeep 0.05\\` (une faute de frappe) faisait tourner le modèle entier sans\nélagage et sans un mot. L'analyse retient maint … [1919 caractères tronqués]`

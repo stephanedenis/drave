@@ -410,6 +410,10 @@ struct Options {
     /// coûteux du dépôt — huit drapeaux « analysés mais jamais appliqués » en une
     /// seule session : une valeur affichée ici est une valeur qui agit.
     options_actives: bool,
+    /// Drapeaux `--xxx` que l'analyse n'a PAS reconnus. Ils étaient ignorés en
+    /// silence : `--keeep 0.05` (une faute de frappe) faisait tourner le modèle
+    /// entier sans élagage et sans un mot.
+    inconnus: Vec<String>,
     /// Adresse d'écoute du nœud moteur : `port`, ou `hôte:port` pour écouter
     /// au-delà de localhost (un pair distant, un tunnel, une autre machine).
     flux_serveur: Option<String>,
@@ -579,10 +583,20 @@ fn analyser(args: &[String]) -> Options {
             "--q4-ffn" => { o.q4 = (o.q4 & 4) | 1; 1 }
             "--q4-attn" => { o.q4 = (o.q4 & 4) | 2; 1 }
             "--q4-tout" => { o.q4 |= 7; 1 }
-            // Inconnu : on avance d'UN cran, jamais de deux.
-            _ => 1,
+            // Inconnu : on avance d'UN cran, jamais de deux — et on le RETIENT,
+            // pour le dire à la fin plutôt que de l'avaler.
+            _ => {
+                if args[i].starts_with("--") { o.inconnus.push(args[i].clone()); }
+                1
+            }
         };
         i += pas;
+    }
+    if !o.inconnus.is_empty() {
+        eprintln!("[options] {} drapeau(x) INCONNU(S), donc sans effet : {}",
+                  o.inconnus.len(), o.inconnus.join(" "));
+        eprintln!("[options] (une faute de frappe suffit — `--options-actives` montre \
+ce que le moteur applique vraiment)");
     }
     if o.pin { engine::EPINGLER.store(true, std::sync::atomic::Ordering::Relaxed); }
     if o.bits > 0 { list::BITS_POIDS.store(o.bits, std::sync::atomic::Ordering::Relaxed); }
