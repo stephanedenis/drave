@@ -363,3 +363,39 @@ Deux points identifiés pour la suite, tous deux dans MON code d'appel :
 Une fois ces deux points corrigés, `mtmd_get_output_embd` donnera les embeddings
 d'image de la référence, à comparer aux valeurs du projecteur du moteur — la
 comparaison qui tranche la rotation 2-D et la fenêtre locale.
+
+### libmtmd : état exact après ce tour
+
+Tout ce qui précède `mtmd_tokenize` fonctionne, vérifié pas à pas :
+
+```
+contexte mtmd : ok
+bitmap : ok
+marqueur d'image : b'<__media__>'
+conteneur de morceaux : ok
+mtmd_tokenize: error: std::bad_alloc     (invite = marqueur seul)
+mtmd_tokenize: error: basic_string::_M_replace  (invite complète)
+tokenize rc=2 · 0 morceaux
+```
+
+Autrement dit : le modèle de texte se charge, le projecteur se charge (519
+tenseurs), le contexte multimodal s'instancie, le bitmap aussi, le marqueur est
+rendu par la bibliothèque — et c'est **`mtmd_tokenize`** qui échoue, en levant une
+exception C++ (`std::bad_alloc`, puis `basic_string::_M_replace`) au lieu de
+rendre un code d'erreur.
+
+Hypothèses, par ordre de plausibilité, pour la suite :
+
+1. **mélange de runtimes C++** : la bibliothèque d'ollama est liée à son propre
+   `libstdc++`, l'appelant est un `python3` système. Écrire le programme en **C**
+   (ou en C++ compilé avec le même runtime) est l'essai le moins coûteux ;
+2. déclaration d'un paramètre mal typé (le 3e de `tokenize` est `const char *`,
+   le 2e `mtmd_input_chunks *` — c'est ce que déclare le script, mais sans
+   en-tête rien ne le garantit) ;
+3. `mtmd_context_params` : la valeur par défaut rendue par la bibliothèque est
+   passée telle quelle (les octets au-delà de la taille réelle sont à zéro) ;
+   un champ non couvert par le sondage pourrait manquer.
+
+Le reste du chemin (`mtmd_encode_chunk`, `mtmd_get_output_embd`) n'a pas encore
+été atteint — mais il est prêt, et c'est la comparaison qui trancherait la
+rotation 2-D et la fenêtre locale.

@@ -73,12 +73,12 @@ def charger():
     return (llama, mtmd, m, ctx)
 
 
-def image_deterministe(cote=28):
+def image_deterministe(cote=84):
     """Exactement l'image du banc Rust : dégradé + carré central."""
     buf = (ctypes.c_ubyte * (cote * cote * 3))()
     for y in range(cote):
         for x in range(cote):
-            carre = 10 <= x < 18 and 10 <= y < 18
+            carre = cote // 3 <= x < 2 * cote // 3 and cote // 3 <= y < 2 * cote // 3
             for c in range(3):
                 v = 1.0 if carre else (x + y + c) / (2.0 * cote)
                 buf[(y * cote + x) * 3 + c] = max(0, min(255, int(v * 255)))
@@ -99,15 +99,19 @@ def main():
     mtmd.mtmd_default_marker.restype = ctypes.c_char_p
     marqueur = mtmd.mtmd_default_marker()
     print("marqueur d'image :", marqueur)
-    chunks = ctypes.c_void_p()
-    mtmd.mtmd_input_chunks_init.argtypes = [ctypes.POINTER(ctypes.c_void_p)]
-    mtmd.mtmd_input_chunks_init(ctypes.byref(chunks))
+    mtmd.mtmd_input_chunks_init.restype = ctypes.c_void_p
+    mtmd.mtmd_input_chunks_init.argtypes = []
+    chunks = mtmd.mtmd_input_chunks_init()
+    print("conteneur de morceaux :", "ok" if chunks else "ÉCHEC")
     bitmaps = (ctypes.c_void_p * 1)(bmp)
     mtmd.mtmd_tokenize.restype = ctypes.c_int32
-    mtmd.mtmd_tokenize.argtypes = [ctypes.c_void_p, ctypes.POINTER(ctypes.c_void_p),
+    mtmd.mtmd_tokenize.argtypes = [ctypes.c_void_p, ctypes.c_void_p,
                                    ctypes.c_char_p, ctypes.POINTER(ctypes.c_void_p),
                                    ctypes.c_size_t]
-    rc = mtmd.mtmd_tokenize(ctx, ctypes.byref(chunks), marqueur, bitmaps, 1)
+    # Le seul marqueur ne suffit pas (tokenize rendait std::bad_alloc, rc=2) :
+    # on lui donne une invite complète, marqueur compris.
+    invite = b"<|im_start|>user\n" + marqueur + b"\ndecris cette image<|im_end|>\n<|im_start|>assistant\n"
+    rc = mtmd.mtmd_tokenize(ctx, chunks, invite, bitmaps, 1)
     mtmd.mtmd_input_chunks_size.restype = ctypes.c_size_t
     mtmd.mtmd_input_chunks_size.argtypes = [ctypes.c_void_p]
     n = mtmd.mtmd_input_chunks_size(chunks)

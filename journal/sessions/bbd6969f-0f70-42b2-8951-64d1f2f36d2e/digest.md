@@ -19772,3 +19772,90 @@ timeout: the monitored command dumped core
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/vision_etat.txt <<'EOF'\n### libmtmd : où en est le programme de référence\n\nLe programme `tools/vision_mtmd.py` (ctypes, sans en-têtes) va jusqu'au bout du\nchargement :\n\n* il faut charger un backend ggml EXPLICITEMENT … [2640 caractères tronqués]`
+
+  ```
+état libmtmd documenté
+0a6bca2 vision : le programme de référence va jusqu'au chargement du projecteur
+  ```
+
+### 🤖 Assistant
+
+⏵ Tour 14 : le programme de référence charge la tour de vision de llama.cpp
+
+## Fait dans ce tour
+
+`tools/vision_mtmd.py` — la référence `libmtmd` par `ctypes`, sans en-têtes — a progressé jusqu'au bout du chemin de chargement :
+
+- **premier obstacle levé** : llama.cpp ne charge plus ggml tout seul. `ggml_backend_load_all()` cherche les greffons à côté de l'**exécutable** — ici `python3` — et n'en trouve aucun ; `ggml_backend_load("/usr/lib/ollama/libggml-cpu-haswell.so")` fonctionne (Xeon E5 v3 = haswell) ;
+- le **modèle de texte se charge**, le **projecteur aussi** (« 519 tenseurs »), et le warmup du ViT s'exécute sur 1288 × 1288 — donc toute la tour de référence est bien vivante dans le processus.
+
+Deux points restants, tous deux dans **mon** code d'appel, identifiés précisément :
+
+1. `mtmd_input_chunks_init()` **rend** un pointeur (elle ne prend pas de paramètre de sortie) — ma déclaration passait un pointeur de sortie, `chunks` restait nul, d'où le plantage ;
+2. `image_min_pixels = 6272` : l'image 28 × 28 du banc (784 pixels) est **refusée par le modèle**. Il faut au moins 84 × 84 (7 056 pixels, 6 × 6 patchs) — et le banc Rust devra prendre la même taille pour que la comparaison porte sur la même entrée.
+
+## État
+
+| # | chantier | état |
+|---|---|---|
+| 1-4, 6 | aiguille · GPU (5 sous-items) · mémoire KV · rotation 16 k · hygiène | ✅ mesurés |
+| 5 | MLA ✅ (5,2e-7) · vision : tour complète qui tourne, 4 tranches validées, **référence llama.cpp chargée** | en cours |
+
+`cargo test` 6/6, arbre propre, portes Qwen **19,3885** / gpt-oss **15,1757** intactes.
+
+L'objectif reste **actif** : les deux corrections sont écrites noir sur blanc dans `docs/plan-mla-vision.md`, et une fois faites, `mtmd_get_output_embd` donnera les embeddings de la référence à comparer au projecteur du moteur — la comparaison qui tranche la rotation 2-D et la fenêtre locale, et donc la dernière inconnue du chantier.
+
+
+## Tour 24
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Réaliser les 6 nouveaux chantiers du projet qtrinet-core, dans l'ordre : (1) relancer le test de l'aiguille sur contexte long (remplissage varié en vrai texte, moins de sondes, réponses plus longues) sur un modèle capable, grâce au préremplissage par lots et au KV déporté ; (2) chemin GPU : dépaquetage vectorisé du noyau d'attention (13,2 ms/couche à 1 M en int4 vers ~3 ms), brancher MXFP4 dans le moteur avec une politique de résidence des experts, attention par lots sur GPU dans forward_lot, noyau de tête Q8_0 accéléré (AVX2 ou déport), et usage du second GPU ; (3) mémoire : pagination du cache KV côté CPU (25,77 Go réservés à ctx 1 M pour 512 jetons écrits) et test de l'hypothèse « clés en f16 avant quantification » pour l'écart int8 avec llama.cpp à 8 192 (+3,0 % contre +0,8 %) ; (4) rotation au-delà de 5 120 jetons (passe à 16 k) ; (5) structurel : MLA (aucun modèle local — construire un modèle MLA synthétique et valider contre une référence indépendante) et vision (poids Qwen2.5-VL et projecteur mmproj présents) ; (6) hygiène : réécrire la section « Ce qu'il faut faire ensuite » de REPRISE.md et y consigner les pièges QT_GPU/QT_GPU_TETE/QT_GPU_KV. Chaque chantier doit être implémenté, mesuré (portes de non-régression Qwen 19,3885 et gpt-oss 15,1757 sans QT_GPU), documenté dans le dépôt et commité."
+Round: 15/30
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='tools/vision_mtmd.py'; s=open(p).read()\n# 1) image 84 x 84 (le modèle exige >= 6272 pixels ; 84 = 6 x 14, soit 6 x 6 patchs)\ns = s.replace(\"\"\"def image_deterministe(cote=28):\"\"\", \"\"\"def image_determini … [1806 caractères tronqués]`
+
+  ```
+trois corrections appliquées
+load_hparams: metadata size:      0.18 MiB
+load_tensors: loaded 519 tensors from /home/stephane/FastNVMe/models/mmproj-Qwen2.5-VL-7B-Instruct-f16.gguf
+get_dummy_batch: warmup with image size = 1288 x 1288
+get_dummy_batch: warmup with image size = 1288 x 1288
+reserve_compute_meta:        CPU compute buffer size =   704.79 MiB
+reserve_compute_meta: graph splits = 1, nodes = 1119
+warmup: flash attention is enabled
+timeout: the monitored command dumped core
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && LD_LIBRARY_PATH=/usr/lib/ollama timeout 900 python3 -u tools/vision_mtmd.py 2>&1 | grep -vE \"^load_|^get_dummy|^reserve_|^warmup|^print_info|^llama_\" | tail -8", "description": "Identify crash point with unbuffered output", "timeou … [13 caractères tronqués]`
+
+  ```
+--- vision hparams ---
+
+contexte mtmd : ok
+bitmap : ok
+marqueur d'image : b'<__media__>'
+conteneur de morceaux : ok
+mtmd_tokenize: error: std::bad_alloc
+tokenize rc=2 · 0 morceaux
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='tools/vision_mtmd.py'; s=open(p).read()\ns = s.replace(\"\"\"    rc = mtmd.mtmd_tokenize(ctx, chunks, marqueur, bitmaps, 1)\"\"\",\n\"\"\"    # Le seul marqueur ne suffit pas (tokenize rendait std::bad_alloc, rc= … [546 caractères tronqués]`
+
+  ```
+invite complète
+--- vision hparams ---
+
+contexte mtmd : ok
+bitmap : ok
+marqueur d'image : b'<__media__>'
+conteneur de morceaux : ok
+mtmd_tokenize: error: basic_string::_M_replace
+tokenize rc=2 · 0 morceaux
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/mtmd_etat2.txt <<'EOF'\n\n### libmtmd : état exact après ce tour\n\nTout ce qui précède `mtmd_tokenize` fonctionne, vérifié pas à pas :\n\n```\ncontexte mtmd : ok\nbitmap : ok\nmarqueur d'image : b'<__media__>'\nconteneur  … [2795 caractères tronqués]`

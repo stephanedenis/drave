@@ -6,13 +6,13 @@
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
 | Durée | 30.4 h |
-| Tours | 23 |
-| Messages | 1249 |
-| Appels d'outils | 1211 |
+| Tours | 24 |
+| Messages | 1255 |
+| Appels d'outils | 1215 |
 | Fichiers touchés | 39 |
-| Commandes | 942 |
+| Commandes | 946 |
 | Sous-agents | 1 |
-| Commits | 56 |
+| Commits | 57 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -71,6 +71,8 @@
 **Tour 22** — <goal_round> Objective: "Réaliser les 6 nouveaux chantiers du projet qtrinet-core, dans l'ordre : (1) relancer le test de l'aiguille sur contexte long (remplissage varié en vrai texte, moins de sondes, réponses plus longues) sur un modèle capable, grâce au préremplissage par lots et au KV déporté ; (2) chemin GPU : dépaquetage vectorisé du noyau d'attention (13,2 ms/couche à 1 M en int4 vers ~3 ms … [1492 caractères tronqués]
 
 **Tour 23** — <goal_round> Objective: "Réaliser les 6 nouveaux chantiers du projet qtrinet-core, dans l'ordre : (1) relancer le test de l'aiguille sur contexte long (remplissage varié en vrai texte, moins de sondes, réponses plus longues) sur un modèle capable, grâce au préremplissage par lots et au KV déporté ; (2) chemin GPU : dépaquetage vectorisé du noyau d'attention (13,2 ms/couche à 1 M en int4 vers ~3 ms … [1492 caractères tronqués]
+
+**Tour 24** — <goal_round> Objective: "Réaliser les 6 nouveaux chantiers du projet qtrinet-core, dans l'ordre : (1) relancer le test de l'aiguille sur contexte long (remplissage varié en vrai texte, moins de sondes, réponses plus longues) sur un modèle capable, grâce au préremplissage par lots et au KV déporté ; (2) chemin GPU : dépaquetage vectorisé du noyau d'attention (13,2 ms/couche à 1 M en int4 vers ~3 ms … [1492 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -1075,6 +1077,42 @@ L'objectif reste **actif** : le prochain tour écrit le programme de comparaison
 - bash — Load CPU backend explicitly and retry
 - bash — Document mtmd program state and commit
 
+**Synthèse produite :**
+
+⏵ Tour 14 : le programme de référence charge la tour de vision de llama.cpp
+
+\## Fait dans ce tour
+
+`tools/vision_mtmd.py` — la référence `libmtmd` par `ctypes`, sans en-têtes — a progressé jusqu'au bout du chemin de chargement :
+
+- **premier obstacle levé** : llama.cpp ne charge plus ggml tout seul. `ggml_backend_load_all()` cherche les greffons à côté de l'**exécutable** — ici `python3` — et n'en trouve aucun ; `ggml_backend_load("/usr/lib/ollama/libggml-cpu-haswell.so")` fonctionne (Xeon E5 v3 = haswell) ;
+- le **modèle de texte se charge**, le **projecteur aussi** (« 519 tenseurs »), et le warmup du ViT s'exécute sur 1288 × 1288 — donc toute la tour de référence est bien vivante dans le processus.
+
+Deux points restants, tous deux dans **mon** code d'appel, identifiés précisément :
+
+1. `mtmd_input_chunks_init()` **rend** un pointeur (elle ne prend pas de paramètre de sortie) — ma déclaration passait un pointeur de sortie, `chunks` restait nul, d'où le plantage ;
+2. `image_min_pixels = 6272` : l'image 28 × 28 du banc (784 pixels) est **refusée par le modèle**. Il faut au moins 84 × 84 (7 056 pixels, 6 × 6 patchs) — et le banc Rust devra prendre la même taille pour que la comparaison porte sur la même entrée.
+
+\## État
+
+| # | chantier | état |
+|---|---|---|
+| 1-4, 6 | aiguille · GPU (5 sous-items) · mémoire KV · rotation 16 k · hygiène | ✅ mesurés |
+| 5 | MLA ✅ (5,2e-7) · vision : tour complète qui tourne, 4 tranches validées, **référence llama.cpp chargée** | en cours |
+
+`cargo test` 6/6, arbre propre, portes Qwen **19,3885** / gpt-oss **15,1757** intactes.
+
+L'objectif reste **actif** : les deux corrections sont écrites noir sur blanc dans `docs/plan-mla-vision.md`, et une fois faites, `mtmd_get_output_embd` donnera les embeddings de la référence à comparer au projecteur du moteur — la comparaison qui tranche la rotation 2-D et la fenêtre locale, et donc la dernière inconnue du chantier.
+
+### Tour 24 — <goal_round> Objective: "Réaliser les 6 nouveaux chantiers du projet qtrinet-core, dans l'ordre : (1) relancer le test d … [1772 caractères tronqués]
+
+*4 appels d'outils.* Actions notables :
+
+- bash — Fix API calls and run reference
+- bash — Identify crash point with unbuffered output
+- bash — Try full prompt for tokenize
+- bash — Document exact mtmd state and commit
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -1167,7 +1205,7 @@ L'objectif reste **actif** : le prochain tour écrit le programme de comparaison
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 902 autres
+- … et 906 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1371,4 +1409,5 @@ L'objectif reste **actif** : le prochain tour écrit le programme de comparaison
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p='docs/plan-mla-vision.md'; s=open(p).read() add = """ ### Le point d'injection est en p
 - vision : la structure de paramètres de libmtmd est sondée (l'ABI n'est plus un obstacle)  mtmd_context_params_default rend la structure par pointeur caché : on 
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/vision_etat.txt <<'EOF' ### libmtmd : où en est le programme de référence  Le programme `tools/
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/mtmd_etat2.txt <<'EOF'  ### libmtmd : état exact après ce tour  Tout ce qui précède `mtmd_token
 
