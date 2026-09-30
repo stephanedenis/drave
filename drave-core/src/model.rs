@@ -2157,6 +2157,8 @@ impl Model {
                 Self::rmsnorm(r, &lay.attn_norm, self.cfg.eps, &mut hn[i * h..(i + 1) * h]);
             }
             quantifier(&hn, &mut xi, &mut sx, self.act_levels, self.act_thresh);
+            Self::flux_lot(&mut self.trace, &mut self.flux_force, &mut self.jeton_trace,
+                           0, l, t, &mut xi, &mut sx, h);
             let t_proj = Instant::now();
             // 2. q, k, v : un produit matrice-matrice chacun. Trois tampons
             //    DISTINCTS (un `y` partagé avec un pas par projection mélangeait
@@ -2365,6 +2367,8 @@ impl Model {
                 Self::rmsnorm(r, &lay.ffn_norm, self.cfg.eps, &mut hn[i * h..(i + 1) * h]);
             }
             quantifier(&hn, &mut xi, &mut sx, self.act_levels, self.act_thresh);
+            Self::flux_lot(&mut self.trace, &mut self.flux_force, &mut self.jeton_trace,
+                           1000, l, t, &mut xi, &mut sx, h);
             if let Some(moe) = lay.moe.as_ref() {
                 // ---- MoE PAR LOTS : les jetons qui ont choisi le même expert
                 // sont traités ensemble, donc la matrice de l'expert est lue une
@@ -2527,6 +2531,38 @@ impl Model {
             Self::rmsnorm(&r, &self.out_norm, self.cfg.eps, &mut hn[i * h..(i + 1) * h]);
         }
         (0..t).map(|i| hn[i * h..(i + 1) * h].to_vec()).collect()
+    }
+
+    /// Trace OU impose le flux d'un LOT : `xi` porte les entiers quantifiés du
+    /// lot (t × h) et `sx` une échelle par jeton. Sur ce chemin, le rejeu est
+    /// EXACT — on remplace les entiers et l'échelle, sans repasser par une
+    /// déquantification suivie d'une requantification.
+    #[allow(clippy::too_many_arguments)]
+    fn flux_lot(trace: &mut Option<TraceFlux>, force: &mut Option<FluxRelecteur>,
+                jeton: &mut u64, base: usize, l: usize, t: usize,
+                xi: &mut [i32], sx: &mut [f32], h: usize) {
+        if trace.is_none() && force.is_none() { return; }
+        let mut j0 = *jeton;
+        for i in 0..t {
+            if let Some(r) = force.as_mut() {
+                if let Some((ech, paires)) = r.listes.get(&((base + l) as u16, j0 as u32)).cloned() {
+                    for v in xi[i * h..(i + 1) * h].iter_mut() { *v = 0; }
+                    for (idx, q) in paires {
+                        if (idx as usize) < h { xi[i * h + idx as usize] = q as i32; }
+                    }
+                    sx[i] = ech;
+                    r.servies += 1;
+                } else {
+                    r.manquantes += 1;
+                }
+            } else if let Some(tr) = trace.as_mut() {
+                let actifs: Vec<i32> = xi[i * h..(i + 1) * h].to_vec();
+                let e = sx[i];
+                tr.ecrire(base + l, j0 as usize, &actifs, e);
+            }
+            j0 += 1;
+        }
+        *jeton = j0;
     }
 
     /// Passe avant d'un modèle **MLA**, un jeton à la fois, avec le cache

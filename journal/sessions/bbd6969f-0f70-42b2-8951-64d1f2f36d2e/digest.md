@@ -22278,3 +22278,84 @@ started background job bash-40
   ```
 
 - **bash** `{"command": "date +\"%H:%M:%S\"; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A drave-core/src && git commit -q -F - <<'EOF' && git log --oneline -1\nPhase 1.4 : les deux variantes d'attribution de l'écart int8\n\n`DRAVE_KV_K_F32=1` garde les CLÉS en f32 (l'erreur qui passe par les … [763 caractères tronqués]`
+
+  ```
+10:14:46
+2cb7b46 Phase 1.4 : les deux variantes d'attribution de l'écart int8
+  ```
+
+### 🤖 Assistant
+
+⏵ 10:15 — trace et rejeu sur le chemin par lots (le chemin rapide)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && grep -n \"quantifier(&hn, &mut xi, &mut sx\" src/model.rs | head -4 && grep -n \"for i in 0..t {\" src/model.rs | awk -F: '$1>1900 && $1<2100' | head -3", "description": "Locate quantization sites in forward_lot"}`
+
+  ```
+2159:            quantifier(&hn, &mut xi, &mut sx, self.act_levels, self.act_thresh);
+2367:            quantifier(&hn, &mut xi, &mut sx, self.act_levels, self.act_thresh);
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && sed -n '2155,2162p' src/model.rs && echo \"---\" && sed -n '2363,2370p' src/model.rs && grep -n \"fn forward_lot\" src/model.rs", "description": "Inspect the two quantization sites"}`
+
+  ```
+for i in 0..t {
+                let r = &x[i * h..(i + 1) * h];
+                Self::rmsnorm(r, &lay.attn_norm, self.cfg.eps, &mut hn[i * h..(i + 1) * h]);
+            }
+            quantifier(&hn, &mut xi, &mut sx, self.act_levels, self.act_thresh);
+            let t_proj = Instant::now();
+            // 2. q, k, v : un produit matrice-matrice chacun. Trois tampons
+            //    DISTINCTS (un `y` partagé avec un pas par projection mélangeait
+---
+            for i in 0..t {
+                let r = &o[i * h..(i + 1) * h];
+                Self::rmsnorm(r, &lay.ffn_norm, self.cfg.eps, &mut hn[i * h..(i + 1) * h]);
+            }
+            quantifier(&hn, &mut xi, &mut sx, self.act_levels, self.act_thresh);
+            if let Some(moe) = lay.moe.as_ref() {
+                // ---- MoE PAR LOTS : les jetons qui ont choisi le même expert
+                // sont traités ensemble, donc la matrice de l'expert est lue une
+2076:    pub fn forward_lot(&mut self, toks: &[u32], pos0: usize) -> Vec<Vec<f32>> {
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && python3 - <<'PY'\np='src/model.rs'; s=open(p).read()\n# trace ET rejeu sur le chemin par lots : même clé (couche, compteur global),\n# mais ici on manipule directement les ENTIERS et leur échelle — donc sans\n# aller-retou … [2661 caractères tronqués]`
+
+  ```
+trace et rejeu par lots posés
+error[E0502]: cannot borrow `*self` as mutable because it is also borrowed as immutable
+    --> src/model.rs:2160:13
+     |
+2153 |             let lay = &self.layers[l];
+     |                        ----------- immutable borrow occurs here
+...
+2160 |             self.flux_lot(0, l, t, &mut xi, &mut sx, h);
+--
+error[E0502]: cannot borrow `*self` as mutable because it is also borrowed as immutable
+    --> src/model.rs:2369:13
+     |
+2153 |             let lay = &self.layers[l];
+     |                        ----------- immutable borrow occurs here
+...
+error: could not compile `drave-core` (bin "drave") due to 2 previous errors; 9 warnings emitted
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && python3 - <<'PY'\np='src/model.rs'; s=open(p).read()\ns = s.replace(\"\"\"    fn flux_lot(&mut self, base: usize, l: usize, t: usize, xi: &mut [i32], sx: &mut [f32], h: usize) {\n        if self.trace.is_none() && self.flu … [2214 caractères tronqués]`
+
+  ```
+flux_lot en fonction associée
+    Finished `release` profile [optimized] target(s) in 0.01s
+  ```
+
+- **bash** `{"command": "date +\"%H:%M:%S\"; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"== trace sur le chemin par lots ==\" && timeout 300 ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf --ppl /tmp/ids_qwen.txt --ctx 256 --threads 16 --limit 256 --dense --abits 16 --lot 256 -- … [560 caractères tronqués]`
+
+  ```
+10:15:53
+== trace sur le chemin par lots ==
+[trace] 12288 listes · 11004360 neurones actifs · 66 Mo
+=== perplexité 17.4294 sur 255 tokens (0 événements, 8.6 s) ===
+== rejeu de cette trace (chemin par lots) ==
+perplexité 17.4294 sur 255 tokens (0 événements, 8.6 s)
+cles_f32     :
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A drave-core/src && git commit -q -F - <<'EOF' && git log --oneline -1 && date +\"%H:%M:%S\"\nPhase 0.3ter : trace et rejeu sur le chemin par LOTS\n\nLes hooks n'existaient que dans le chemin par jeton, donc toute trace exig … [697 caractères tronqués]`

@@ -7,12 +7,12 @@
 | Début | 2026-09-28 14:46 |
 | Durée | 43.5 h |
 | Tours | 43 |
-| Messages | 1404 |
-| Appels d'outils | 1325 |
+| Messages | 1410 |
+| Appels d'outils | 1331 |
 | Fichiers touchés | 42 |
-| Commandes | 1051 |
+| Commandes | 1057 |
 | Sous-agents | 1 |
-| Commits | 81 |
+| Commits | 82 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -1946,7 +1946,7 @@ Le résultat qui répond le mieux à votre vision : **la taille de la trace suit
 
 ### Tour 43 — ne te fie pas à tes estimés pour le temps. fais un 2h de travail autonome en vérifiant l'heure du système à chaque itéra … [82 caractères tronqués]
 
-*18 appels d'outils.* Actions notables :
+*24 appels d'outils.* Actions notables :
 
 - bash — Set the 2-hour deadline and recon
 - bash — Implement flux replay reader
@@ -1962,11 +1962,11 @@ Le résultat qui répond le mieux à votre vision : **la taille de la trace suit
 - bash — Commit replay work
 - bash — Add mixed K/V storage flags (part 1)
 - bash — Wire the mixed storage into read/write (part 2)
-- … et 4 autres
+- … et 10 autres
 
 **Synthèse produite :**
 
-⏵ 10:15 — phase 1.4 : les deux variantes d'attribution (clés ou valeurs en f32)
+⏵ 10:15 — trace et rejeu sur le chemin par lots (le chemin rapide)
 
 ## 3. Travail accompli
 
@@ -2063,7 +2063,7 @@ Le résultat qui répond le mieux à votre vision : **la taille de la trace suit
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 1011 autres
+- … et 1017 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2191,7 +2191,7 @@ Le résultat qui répond le mieux à votre vision : **la taille de la trace suit
 
 ## 5. Erreurs rencontrées
 
-68 sorties en erreur ou divergentes. Les premières :
+69 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : a8f2635f8 docs: record which models this box is good at, and why src/llama-hparams.cpp:8:void llama_hparams::set_swa_pattern(uint32_t n_pattern, bool dense_first) { src/llama-hparams.h:308:    void se
 - **T1** : 511 tokens notés — perplexité cumulée 247.031  (4.9 tok/s) === perplexité 247.0308 sur 511 tokens (0 événements, 104.5 s) ===  ### B3 harmony assistant 511 --- ref --- 0.0 0.0 0:00 ls: cannot access '
@@ -2292,4 +2292,5 @@ Le résultat qui répond le mieux à votre vision : **la taille de la trace suit
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && printf 'target/\n' >> .gitignore && git rm -r -q --cached drave-core/target 2>/dev/null; git ls-files | gr
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p='docs/roadmap.md'; s=open(p).read() s = s.replace("""| 0.3 | **Le format EST le contrat
 - date +"%H:%M:%S"; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A drave-core/src && git commit -q -F - <<'EOF' && git log --oneline -1 Phase 1.
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A drave-core/src && git commit -q -F - <<'EOF' && git log --oneline -1 && date +"%H:%M:%S" Phase 
 
