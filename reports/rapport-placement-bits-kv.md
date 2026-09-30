@@ -18,9 +18,9 @@ par bloc de 32 comprise).
 | f32 | int4 | 4,625 | 58 % | 14,2994 | +0,46 % |
 | int4 | f32 | 4,625 | 58 % | 69,0464 | **+385 %** |
 | int8 | int8 | 2,25 | 28 % | 14,6667 | +3,04 % |
+| int4 | int4 | 1,25 | 16 % | 66,0369 | **+364 %** |
 | f16 | int8 | 3,125 | 39 % | *en cours* | |
 | f16 | int4 | 2,625 | 33 % | *en cours* | |
-| int4 | int4 | 1,25 | 16 % | *en cours* | |
 
 ## Ce que la courbe dit
 
@@ -32,6 +32,9 @@ par bloc de 32 comprise).
 2. **Le pire cas est spectaculaire** : à 4,625 octets, clés f32 + valeurs int4
    coûte +0,46 %, clés int4 + valeurs f32 coûte **+385 %** (perplexité 69 au lieu
    de 14,2). Même taille, même modèle, facteur **840**.
+   Et le 4 bits des DEUX côtés (1,25 octet, 16 % du f32) coûte **+364 %** : c'est
+   le même ordre que les clés seules en 4 bits, ce qui confirme que ce sont bien
+   les clés qui décident.
 3. **La bonne politique est donc asymétrique** : garder les clés précises et
    rogner les valeurs. `DRAVE_KV_K_F32=1` (clés f32, valeurs int8) donne 64 % de
    la taille f32 pour +0,023 % — utilisable aujourd'hui.
