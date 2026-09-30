@@ -134,13 +134,31 @@ sur **256 jetons de WikiText-2**, où la référence locale vaut 18,02 :
 
 Trois choses y sont nettes : le mode dense reste **exact** ; les blocs battent
 toujours les listes à sparsité égale (1 745 contre 2 159 octets, et 14 % contre
-16 % d'écart) ; mais **l'écart croît avec la longueur** — 0,2 % à 40 jetons
-synthétiques, 2,7 % à 256 jetons de vrai texte à seuil 0,01, 14 % à 0,02. Une
-erreur de flux se compose sur douze couches ET sur toute la séquence.
+16 % d'écart) ; et l'écart dépend du **corpus** bien plus que du seuil — 0,2 % sur
+identifiants synthétiques à 40 jetons, 2,7 % sur du vrai texte à 256.
 
-Donc la revendication honnête est : **÷1,6 sur le fil pour 2,7 %** à seuil 0,01,
-et non « ÷2 pour 0,2 % ». Le vrai remède n'est pas le seuil, c'est le signal
-transmis (voir les deux suites ci-dessus).
+### L'écart selon la longueur : il DÉCROÎT
+
+J'avais écrit que l'écart croissait avec la longueur. La courbe dit le contraire
+(blocs, seuil 0,01, WikiText-2, contexte 512) :
+
+| jetons | écart | octets/flux | activité |
+|---|---|---|---|
+| 64 | 1,37e-1 | 2 249 | 77,9 % |
+| 128 | 6,37e-2 | 2 257 | 78,2 % |
+| 256 | 2,74e-2 | 2 268 | 78,6 % |
+
+Il décroît, et c'est logique : la perturbation est à peu près stationnaire par
+jeton, donc son effet sur une perplexité *moyennée* se dilue quand la séquence
+s'allonge. Ce qui change vraiment d'un banc à l'autre, c'est le **corpus** —
+sur des identifiants synthétiques la perplexité se compte en milliers et la
+sensibilité relative n'a rien à voir.
+
+Donc la revendication honnête est : **÷1,6 sur le fil pour 2,7 % à 256 jetons de
+vrai texte** (et 13,7 % à 64 jetons : sur une séquence courte, l'erreur est
+chère). Ni le « ÷2 pour 0,2 % » que j'avais tiré du banc synthétique, ni le
+« ça empire avec la longueur » que j'en avais déduit à tort — les deux ont été
+écrits puis corrigés par la mesure.
 
 ## Ajout — le coût réel du découpage, et Nagle
 

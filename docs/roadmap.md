@@ -243,10 +243,12 @@ s'améliore : à sparsité égale (seuil 0,02, 59 % d'activité) les blocs font
 **1 745 octets contre 2 159** pour la liste i16, et 14 % d'écart contre 16 % —
 l'échelle par bloc borne l'erreur *relative*, l'échelle unique borne l'erreur
 *absolue*. Sur 256 jetons de vrai texte, le réglage recommandé est le seuil
-**0,01** : ÷1,6 sur le fil pour 2,7 % d'écart. Et l'écart CROÎT avec la longueur
-(0,2 % à 40 jetons synthétiques, 2,7 % à 256 jetons de WikiText-2) : une erreur
-de flux se compose sur douze couches et sur toute la séquence. C'est écrit comme
-tel dans le rapport, à la place d'un « ÷2 pour 0,2 % » trop optimiste.
+**0,01** : ÷1,6 sur le fil pour 2,7 % d'écart — et l'écart DÉCROÎT avec la
+longueur (13,7 % à 64 jetons, 6,4 % à 128, 2,7 % à 256) : la perturbation est
+stationnaire par jeton, donc elle se dilue dans une perplexité moyennée. Ce qui
+change d'un banc à l'autre, c'est le corpus, pas la longueur. Le rapport porte la
+courbe et les deux formulations que la mesure a corrigées (« ÷2 pour 0,2 % »,
+puis « ça empire avec la longueur »).
 
 Et le coût réel du découpage, mesuré à 200 jetons sur localhost : le calcul local
 de 12 couches prend 15,9 ms par jeton, l'attente du pair 16,1 ms — soit **1,01×**.

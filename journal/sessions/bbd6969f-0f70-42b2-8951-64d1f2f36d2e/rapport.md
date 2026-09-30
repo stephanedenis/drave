@@ -7,12 +7,12 @@
 | Début | 2026-09-28 14:46 |
 | Durée | 44.5 h |
 | Tours | 44 |
-| Messages | 1546 |
-| Appels d'outils | 1461 |
+| Messages | 1549 |
+| Appels d'outils | 1464 |
 | Fichiers touchés | 44 |
-| Commandes | 1162 |
+| Commandes | 1164 |
 | Sous-agents | 1 |
-| Commits | 92 |
+| Commits | 93 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -1995,7 +1995,7 @@ Je vérifie l'heure à chaque itération et j'arrête à 12:06, en laissant un p
 
 ### Tour 44 — pendant que les charges locales s'executent, peux-tu avancer des chantiers légers sur les ressources loçcale ou d'analys … [7 caractères tronqués]
 
-*115 appels d'outils.* Actions notables :
+*118 appels d'outils.* Actions notables :
 
 - bash — Write and run the pure flux analysis tool
 - bash — Document the flux analysis and commit
@@ -2011,11 +2011,11 @@ Je vérifie l'heure à chaque itération et j'arrête à 12:06, en laissant un p
 - bash — Inspect state after timeout
 - bash — Rerun pre-fix distributed test in background
 - bash — Inspect all final-norm condition sites
-- … et 85 autres
+- … et 87 autres
 
 **Synthèse produite :**
 
-Le mode « entrée normée » est **faux** (dense : 5,61e0 au lieu de 0,00e0) : le résidu sert aussi à la connexion résiduelle. Je reviens en arrière et je documente la réfutation.
+La courbe dit l'inverse de ce que j'avais écrit : l'écart **décroît** avec la longueur (13,7 % → 2,7 %) — la différence venait du corpus, pas de la longueur. Je corrige les deux documents.
 
 ## 3. Travail accompli
 
@@ -2114,7 +2114,7 @@ Le mode « entrée normée » est **faux** (dense : 5,61e0 au lieu de 0,00e0) : 
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 1122 autres
+- … et 1124 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2354,4 +2354,5 @@ Le mode « entrée normée » est **faux** (dense : 5,61e0 au lieu de 0,00e0) : 
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p='reports/rapport-transport-liste.md'; s=open(p).read() v = """Configuration utilisable 
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p='reports/rapport-transport-liste.md'; s=open(p).read() v = """D'où les deux suites poss
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p='REPRISE.md'; s=open(p).read() ancre = "## 7. Carte du dépôt" assert s.count(ancre) == 
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p='reports/rapport-transport-liste.md'; s=open(p).read() v = """Trois choses y sont nette
 

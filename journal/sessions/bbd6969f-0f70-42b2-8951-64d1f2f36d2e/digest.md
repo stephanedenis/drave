@@ -24588,3 +24588,46 @@ qui reste est classé par rentabilité mesurée.
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='REPRISE.md'; s=open(p).read()\nancre = \"## 7. Carte du dépôt\"\nassert s.count(ancre) == 1\nneuf = \"\"\"## 6bis. Session « Drave » — le calcul réparti tient debout\n\nTout est mesuré, tout est commité. Détail c … [5677 caractères tronqués]`
+
+  ```
+REPRISE §6bis + §8 à jour
+4396f25 REPRISE : le calcul réparti tient debout (§6bis) et les commandes pour le rejouer
+11:14:50
+  ```
+
+### 🤖 Assistant
+
+⏵ Courbe de dérive : comment l'écart du transport croît avec la longueur (mesure courte, réutilisable).
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/courbe_derive.sh <<'EOF'\n#!/bin/bash\ncd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\np=45840\nfor n in 64 128 256 384; do\n    IDS=$(head -$n /tmp/ids_qwen_512.txt | tr '\\n' ',' | sed 's/,$//')\n    echo \"=== blocs … [544 caractères tronqués]`
+
+  ```
+started background job bash-54
+  ```
+
+- **job_output** `{"job_id": "bash-54", "timeout_ms": 300000, "wait": true}`
+
+  ```
+=== blocs 0,01 · 64 jetons de WikiText-2 ===
+  deux nœuds        : perplexité 37.5453  (2.7 s)
+  écart             : 1.37e-1
+  transport         : listes à échelle par bloc (3 octets/actif) · 2249 octets par flux (aller) · 3024 au retour · 77.9 % d'activité (698 neurones par flux) · 64 flux
+  temps             : 15.6 ms par jeton en local · 16.3 ms à attendre le pair (son calcul + l'aller-retour) · soit 1.04× le calcul local seul
+=== blocs 0,01 · 128 jetons de WikiText-2 ===
+  deux nœuds        : perplexité 18.3967  (5.4 s)
+  écart             : 6.37e-2
+  transport         : listes à échelle par bloc (3 octets/actif) · 2257 octets par flux (aller) · 2977 au retour · 78.2 % d'activité (701 neurones par flux) · 128 flux
+  temps             : 15.9 ms par jeton en local · 16.1 ms à attendre le pair (son calcul + l'aller-retour) · soit 1.01× le calcul local seul
+=== blocs 0,01 · 256 jetons de WikiText-2 ===
+  deux nœuds        : perplexité 21.8873  (11.2 s)
+  écart             : 2.74e-2
+  transport         : listes à échelle par bloc (3 octets/actif) · 2268 octets par flux (aller) · 2971 au retour · 78.6 % d'activité (704 neurones par flux) · 256 flux
+  temps             : 16.8 ms par j
+… [588 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+La courbe dit l'inverse de ce que j'avais écrit : l'écart **décroît** avec la longueur (13,7 % → 2,7 %) — la différence venait du corpus, pas de la longueur. Je corrige les deux documents.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/rapport-transport-liste.md'; s=open(p).read()\nv = \"\"\"Trois choses y sont nettes : le mode dense reste **exact** ; les blocs battent\ntoujours les listes à sparsité égale (1 745 contre 2 159 octets, et … [4180 caractères tronqués]`
