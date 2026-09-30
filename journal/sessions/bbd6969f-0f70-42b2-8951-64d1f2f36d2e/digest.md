@@ -24772,3 +24772,123 @@ localisée**, pas seulement constatée. La première version de l'outil comparai
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='docs/roadmap.md'; s=open(p).read()\nv = \"| 2026-09-30 | diff KV f32 contre KV int8 (perplexité 19,3885 contre 19,8059) | première divergence couche 1 jeton 0 · couche la plus touchée FFN 2 (3,9 × la dynamique) · … [1851 caractères tronqués]`
+
+  ```
+journal des mesures complété
+9fe0c80 Feuille de route : les cinq mesures de la session au journal
+11:29:27
+9fe0c80 Feuille de route : les cinq mesures de la session au journal
+cb37c83 Transport : indices par écarts — 3 623 → 1 568 octets par flux, à quantification identique
+976cb81 Transport : l'écart DÉCROÎT avec la longueur (la courbe le dit, pas moi)
+4396f25 REPRISE : le calcul réparti tient debout (§6bis) et les commandes pour le rejouer
+fb8183a L'entrée normée sur le fil : hypothèse RÉFUTÉE par la mesure
+2c7271b Transport : les chiffres du VRAI texte, plus sobres que ceux des identifiants synthétiques
+27f46c1 Répétition Colab : nœud moteur écoutable au-delà de localhost + recette
+5ea06f9 Phase 3 : échelles par bloc, TCP_NODELAY, et l'écart KV attribué aux clés
+7b88131 Phase 3.2 : le flux voyage en LISTE — courbe taille/fidélité
+8037ba8 Phase 3 : le calcul réparti redevient fidèle — écart 0,00e0
+0fdd4c9 Spécification du format de flux, et modèle de coût par couche
+7e028da Analyse pure du flux : densité, persistance et recouvrement par couche
+  ```
+
+### 🤖 Assistant
+
+⏵ Je teste les commandes telles qu'elles sont écrites dans REPRISE §8 (un mode d'emploi non testé est un mode d'emploi faux).
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='tools/pair_factice.py'; s=open(p).read()\nv = \"\"\"        corps = lire_tout(sock, n * 4)\"\"\"\nn = \"\"\"        # Le corps dépend du MODE : dense et listes i16 font 4 octets par\n        # élément, les blocs  … [2227 caractères tronqués]`
+
+  ```
+pair factice : les trois modes
+syntaxe ok
+=== test 1 : commande du §8 (banc dense) ===
+  écart             : 0.00e0
+  transport         : dense f32 · 3623 octets par flux (aller) · 3623 au retour · 100.0 % d'activité (896 neurones par flux) · 40 flux
+  temps             : 16.1 ms par jeton en local · 16.7 ms à attendre le pair (son calcul + l'aller-retour) · soit 1.04× le calcul local seul
+[killed by signal: SIGTERM]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && (python3 tools/pair_factice.py 45760 896 > /tmp/factice2.log 2>&1 &) ; sleep 1; timeout 120 ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf --ppl-reparti 127.0.0.1:45760 --couches-locales 12 --limit 4 --ctx 256 --flux … [347 caractères tronqués]`
+
+  ```
+réception du flux: Custom { kind: InvalidData, error: "corps de flux tronqué" }
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+timeout: the monitored command dumped core
+--- ce que le pair a vu ---
+[factice] écoute sur 127.0.0.1:45760 · je réponds 896 canaux
+[factice] client ('127.0.0.1', 53358)
+[factice] flux 1 : couches 12..24 pos 0 · version 2 · mode blocs (i8 + écarts) · n=23 · échelle 0 · niveaux 127 seuil 0.01 topk 0 renorm 0 · corps 158 octets
+[factice] 1 flux · n min 23 max 23 moyen 23.0
+--- serveurs restants ---
+fin
+11:29:50
+  ```
+
+### 🤖 Assistant
+
+Le pair factice est cohérent en lecture (28 blocs, 46 octets de paires pour 23 actifs) ; c'est sa **réponse** qui annonçait 896 paires pour un corps de 0. Je corrige.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='tools/pair_factice.py'; s=open(p).read()\nv = \"\"\"        # réponse : un flux de la dimension attendue, valeurs nulles\n        reponse = struct.pack(\"<IBBIIIIfffIB\", MAGIE, version, mode, debut, fin, pos,\n  … [1301 caractères tronqués]`
+
+  ```
+réponse cohérente par mode
+--- mode : dense ---
+  transport         : dense f32 · 3623 octets par flux (aller) · 3623 au retour · 100.0 % d'activité (896 neurones par flux) · 2 flux
+  temps             : 13.8 ms par jeton en local · 0.2 ms à attendre le pair (son calcul + l'aller-retour) · soit 0.01× le calcul local seul
+--- mode : --flux-liste ---
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+timeout: the monitored command dumped core
+--- mode : --flux-blocs ---
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+timeout: the monitored command dumped core
+--- vu par le pair ---
+[factice] écoute sur 127.0.0.1:45761 · je réponds 896 canaux
+[factice] client ('127.0.0.1', 39218)
+[factice] flux 1 : couches 12..24 pos 0 · version 2 · mode dense f32 · n=896 · échelle 0 · niveaux 127 seuil 0 topk 0 renorm 0 · corps 3584 octets
+[factice] flux 2 : couches 12..24 pos 1 · version 2 · mode dense f32 · n=896 · échelle 0 · niveaux 127 seuil 0 topk 0 renorm 0 · corps 3584 octets
+[factice] 2 flux · n min 896 max 896 moyen 896.0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='tools/pair_factice.py'; s=open(p).read()\nv = \"\"\"    sock, pair = ecoute.accept()\n    print(f\"[factice] client {pair}\", flush=True)\n    vus = []\n    while True:\"\"\"\nn = \"\"\"    while True:            … [1464 caractères tronqués]`
+
+  ```
+pair factice : plusieurs clients
+--- dense ---
+  référence locale  : perplexité 23791.1726  (0.1 s)
+  deux nœuds        : perplexité 151936.0000  (0.0 s)
+  transport         : dense f32 · 3623 octets par flux (aller) · 3623 au retour · 100.0 % d'activité (896 neurones par flux) · 2 flux
+--- --flux-liste ---
+  référence locale  : perplexité 23791.1726  (0.1 s)
+--- --flux-blocs ---
+  référence locale  : perplexité 23791.1726  (0.1 s)
+--- vu par le pair ---
+[factice] écoute sur 127.0.0.1:45762 · je réponds 896 canaux
+[factice] client ('127.0.0.1', 49206)
+[factice] flux 1 : couches 12..24 pos 0 · version 2 · mode dense f32 · n=896 · échelle 0 · niveaux 127 seuil 0 topk 0 renorm 0 · corps 3584 octets
+[factice] flux 2 : couches 12..24 pos 1 · version 2 · mode dense f32 · n=896 · échelle 0 · niveaux 127 seuil 0 topk 0 renorm 0 · corps 3584 octets
+[factice] client ('127.0.0.1', 49220)
+[factice] flux 1 : couches 12..24 pos 0 · version 2 · mode listes quantifiées · n=890 · échelle 0.0408652 · niveaux 127 seuil 0 topk 0 renorm 0 · corps 3560 octets
+[factice] flux 2 : couches 12..24 pos 1 · version 2 · mode listes quantifiées · n=896 · échelle 0.000183506 · niveaux 127 seuil 0 topk 0 renorm 0 
+… [670 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && (python3 tools/pair_factice.py 45763 896 > /tmp/factice5.log 2>&1 &) ; sleep 1; timeout 60 ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf --ppl-reparti 127.0.0.1:45763 --couches-locales 12 --limit 2 --ctx 256 --flux- … [152 caractères tronqués]`
+
+  ```
+[flux] pilote : 12 couches en local, 12 chez le pair, 2 jetons
+  référence locale  : perplexité 23791.1726  (0.1 s)
+  deux nœuds        : perplexité 151936.0000  (0.0 s)
+  écart             : 5.39e0
+  transport         : listes à échelle par bloc (2 octets/actif, écarts) · 1868 octets par flux (aller) · 159 au retour · 95.4 % d'activité (854 neurones par flux) · 2 flux
+  temps             : 14.4 ms par jeton en local · 0.4 ms à attendre le pair (son calcul + l'aller-retour) · soit 0.03× le calcul local seul
+--- pair ---
+[factice] écoute sur 127.0.0.1:45763 · je réponds 896 canaux
+[factice] client ('127.0.0.1', 39734)
+[factice] flux 1 : couches 12..24 pos 0 · version 2 · mode blocs (i8 + écarts) · n=823 · échelle 0 · niveaux 127 seuil 0 topk 0 renorm 0 · corps 1758 octets
+[factice] flux 2 : couches 12..24 pos 1 · version 2 · mode blocs (i8 + écarts) · n=886 · échelle 0 · niveaux 127 seuil 0 topk 0 renorm 0 · corps 1884 octets
+  ```
+
+### 🤖 Assistant
+
+Le pair factice est cohérent dans les trois modes (et le moteur n'a pas de bug). Dernière validation : le découpage reste-t-il **exact** sur 1 024 jetons ?
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add tools/pair_factice.py && git commit -q -F - <<'EOF' && echo \"--- validation à 1024 jetons ---\" && IDS=$(head -1024 /tmp/ids_qwen_long.txt | tr '\\n' ',' | sed 's/,$//'); TAG=long1024 PORT=45880 CTX=1024 IDS=\"$IDS\" EXTRA=\ … [690 caractères tronqués]`

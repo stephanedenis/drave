@@ -7,12 +7,12 @@
 | Début | 2026-09-28 14:46 |
 | Durée | 44.7 h |
 | Tours | 44 |
-| Messages | 1559 |
-| Appels d'outils | 1474 |
+| Messages | 1565 |
+| Appels d'outils | 1480 |
 | Fichiers touchés | 44 |
-| Commandes | 1173 |
+| Commandes | 1179 |
 | Sous-agents | 1 |
-| Commits | 95 |
+| Commits | 96 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -1995,7 +1995,7 @@ Je vérifie l'heure à chaque itération et j'arrête à 12:06, en laissant un p
 
 ### Tour 44 — pendant que les charges locales s'executent, peux-tu avancer des chantiers légers sur les ressources loçcale ou d'analys … [7 caractères tronqués]
 
-*128 appels d'outils.* Actions notables :
+*134 appels d'outils.* Actions notables :
 
 - bash — Write and run the pure flux analysis tool
 - bash — Document the flux analysis and commit
@@ -2011,11 +2011,11 @@ Je vérifie l'heure à chaque itération et j'arrête à 12:06, en laissant un p
 - bash — Inspect state after timeout
 - bash — Rerun pre-fix distributed test in background
 - bash — Inspect all final-norm condition sites
-- … et 96 autres
+- … et 102 autres
 
 **Synthèse produite :**
 
-⏵ Dernière ligne droite : j'inscris les mesures de la session au journal de la feuille de route.
+Le pair factice est cohérent dans les trois modes (et le moteur n'a pas de bug). Dernière validation : le découpage reste-t-il **exact** sur 1 024 jetons ?
 
 ## 3. Travail accompli
 
@@ -2114,7 +2114,7 @@ Je vérifie l'heure à chaque itération et j'arrête à 12:06, en laissant un p
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 1133 autres
+- … et 1139 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2357,4 +2357,5 @@ Je vérifie l'heure à chaque itération et j'arrête à 12:06, en laissant un p
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p='reports/rapport-transport-liste.md'; s=open(p).read() v = """Trois choses y sont nette
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p='reports/rapport-transport-liste.md'; s=open(p).read() v = """Donc la revendication hon
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p='docs/roadmap.md'; s=open(p).read() v = "| 2026-09-30 | diff KV f32 contre KV int8 (per
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add tools/pair_factice.py && git commit -q -F - <<'EOF' && echo "--- validation à 1024 jetons ---" && 
 

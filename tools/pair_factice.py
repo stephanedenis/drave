@@ -13,7 +13,7 @@ import socket, struct, sys
 
 MAGIE = 0x44525631
 TETE = 39
-MODES = {0: "dense f32", 1: "listes quantifiées"}
+MODES = {0: "dense f32", 1: "listes quantifiées", 2: "blocs (i8 + écarts)"}
 
 
 def lire_tout(sock, n):
@@ -34,8 +34,17 @@ def main():
     ecoute.bind(("127.0.0.1", port))
     ecoute.listen(1)
     print(f"[factice] écoute sur 127.0.0.1:{port} · je réponds {dimension} canaux", flush=True)
-    sock, pair = ecoute.accept()
-    print(f"[factice] client {pair}", flush=True)
+    while True:                      # un client après l'autre : un banc se relance
+        sock, pair = ecoute.accept()
+        print(f"[factice] client {pair}", flush=True)
+        vus = []
+        servir(sock, dimension)
+        if vus:
+            print(f"[factice] {len(vus)} flux · n min {min(vus)} max {max(vus)} "
+                  f"moyen {sum(vus)/len(vus):.1f}", flush=True)
+
+
+def servir(sock, dimension):
     vus = []
     while True:
         try:
@@ -46,7 +55,17 @@ def main():
         debut, fin, pos, n = struct.unpack("<IIII", tete[6:22])
         echelle, levels, thresh = struct.unpack("<fff", tete[22:34])
         topk, renorm = struct.unpack("<IB", tete[34:39])
-        corps = lire_tout(sock, n * 4)
+        # Le corps dépend du MODE : dense et listes i16 font 4 octets par
+        # élément, les blocs font 2 octets par actif plus les échelles et les
+        # échappements. Un pair factice qui suppose une seule disposition mentirait
+        # exactement là où on l'interroge.
+        if mode == 2:
+            nb = struct.unpack("<I", lire_tout(sock, 4))[0]
+            echelles = lire_tout(sock, nb * 4)
+            longueur = struct.unpack("<I", lire_tout(sock, 4))[0]
+            corps = echelles + lire_tout(sock, longueur)
+        else:
+            corps = lire_tout(sock, n * 4)
         if magie != MAGIE:
             print(f"[factice] MAGIE INCONNUE {magie:#x}", flush=True)
             break
@@ -56,14 +75,22 @@ def main():
                   f"version {version} · mode {MODES.get(mode, mode)} · n={n} · "
                   f"échelle {echelle:g} · niveaux {levels:g} seuil {thresh:g} "
                   f"topk {topk} renorm {renorm} · corps {len(corps)} octets", flush=True)
-        # réponse : un flux de la dimension attendue, valeurs nulles
+        # Réponse : en mode dense, `n` est la DIMENSION et le corps fait 4 octets
+        # par canal ; dans les modes « listes », `n` est le nombre de paires et il
+        # n'y en a aucune (le pair factice ne calcule rien). Annoncer la dimension
+        # dans un mode liste ferait lire au pilote un corps tronqué — c'est
+        # exactement l'erreur que ce fichier a commise, et le moteur l'a dite.
+        n_paires = dimension if mode == 0 else 0
         reponse = struct.pack("<IBBIIIIfffIB", MAGIE, version, mode, debut, fin, pos,
-                              dimension, 0.0, levels, thresh, topk, renorm)
-        reponse += b"\0" * (dimension * 4 if mode == 0 else 4 * dimension)
+                              n_paires, 0.0, levels, thresh, topk, renorm)
+        if mode == 2:
+            # réponse : aucune valeur active (n=0), une échelle par bloc
+            nb = (dimension + 31) // 32
+            reponse += struct.pack("<I", nb) + struct.pack("<f", 0.0) * nb + struct.pack("<I", 0)
+        else:
+            reponse += b"\0" * (dimension * 4)
         sock.sendall(reponse)
-    if vus:
-        print(f"[factice] {len(vus)} flux · n min {min(vus)} max {max(vus)} "
-              f"moyen {sum(vus)/len(vus):.1f}", flush=True)
+    return vus
 
 
 if __name__ == "__main__":
