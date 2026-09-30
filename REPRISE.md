@@ -357,6 +357,27 @@ le pas de 2 du mode par défaut (`--dense --threads 4` annonçait 30 fils),
 recommandation de fond — un `--options-actives` qui imprime les réglages
 réellement en vigueur.
 
+### La frontière du cache KV, mesurée en entier
+
+| réglage | octets/élément | % du f32 | écart |
+|---|---|---|---|
+| clés f16 · valeurs int8 | 3,125 | **39 %** | **+0,018 %** ← le meilleur point |
+| clés f32 · valeurs int8 | 5,125 | 64 % | +0,023 % |
+| clés f32 · valeurs int4 | 4,625 | 58 % | +0,46 % |
+| clés f16 · valeurs int4 | 2,625 | 33 % | +0,61 % |
+| int8 · int8 | 2,25 | 28 % | +3,04 % |
+| int4 · int4 | 1,25 | 16 % | +364 % |
+
+Réglage recommandé : **`DRAVE_KV_BITS=8 DRAVE_KV_K_F16=1`** — 2,5× plus petit que le
+f32 pour deux centièmes de pour cent. Détail et reproduction :
+`reports/rapport-placement-bits-kv.md`.
+
+### Le mode lot gagne sur les deux tableaux
+
+Chronométré sur 256 jetons, machine au repos : **116,7 ms par jeton** en flux simple
+contre **16,6 ms en un seul lot** (7×, par le produit matrice-matrice), et **18×**
+sur un lien à 20 ms par message (2,6 s contre 47,6 s). `reports/rapport-prefill-reparti.md`.
+
 ### Hygiène et garde-fous ajoutés depuis (13h)
 
 - **`--options-actives`** : un tableau de bord qui imprime, APRÈS toutes les

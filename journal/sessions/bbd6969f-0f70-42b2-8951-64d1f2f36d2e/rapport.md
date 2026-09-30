@@ -7,12 +7,12 @@
 | Début | 2026-09-28 14:46 |
 | Durée | 47.4 h |
 | Tours | 45 |
-| Messages | 1833 |
-| Appels d'outils | 1732 |
+| Messages | 1835 |
+| Appels d'outils | 1734 |
 | Fichiers touchés | 44 |
-| Commandes | 1411 |
+| Commandes | 1413 |
 | Sous-agents | 7 |
-| Commits | 141 |
+| Commits | 142 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -2055,7 +2055,7 @@ Je vérifie l'heure à chaque itération et j'arrête à 12:06, en laissant un p
 
 ### Tour 45 — as-tu ce qu'il te faut pour te rendre à 15h en travaillaint avec un maximum d'autonomie et de parallélisme d'activités?
 
-*233 appels d'outils.* Actions notables :
+*235 appels d'outils.* Actions notables :
 
 - bash — Probe machine, GPU, disk, network state
 - bash — Identify GPU users and stray processes
@@ -2071,7 +2071,7 @@ Je vérifie l'heure à chaque itération et j'arrête à 12:06, en laissant un p
 - bash — Understand batched PPL reference path
 - bash — Add batched imposed states to forward_lot
 - list_agents
-- … et 210 autres
+- … et 212 autres
 
 **Synthèse produite :**
 
@@ -2180,7 +2180,7 @@ Deux derniers résultats : **clés f16 + valeurs int4 = 14,3209 (+0,61 %, 33 % d
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 1371 autres
+- … et 1373 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2469,4 +2469,5 @@ Deux derniers résultats : **clés f16 + valeurs int4 = 14,3209 (+0,61 %, 33 % d
 - Feuille de route : les clés f16 mesurées (+0,018 % pour 39 % de la taille du f32)" && git log --oneline -1 | cat; sleep 60; cat /tmp/kv_cles_f16.log; date +"%H:
 - Tests de trame forgée : un délai de lecture, pour qu'ils échouent au lieu de pendre  Sans délai, si le plafond disparaissait, le test attendrait les 358 Go du c
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p='reports/rapport-placement-bits-kv.md'; s=open(p).read() v = """| f16 | int4 | 2,625 | 
+- REPRISE : la frontière du cache KV et les deux gains du mode lot  Le handoff porte maintenant les deux résultats qui décident : le meilleur réglage du cache KV 
 

@@ -29481,3 +29481,37 @@ un seul lot        : temps             : 4255.6 ms par LOT en local · 4367.2 ms
 Deux derniers résultats : **clés f16 + valeurs int4 = 14,3209 (+0,61 %, 33 % de la taille)** et les chronos machine au repos — le mode lot est **7× plus rapide par jeton** (116,7 → 16,6 ms). Je documente et je clôture.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/rapport-placement-bits-kv.md'; s=open(p).read()\nv = \"\"\"| f16 | int4 | 2,625 | 33 % | *en cours* | |\"\"\"\nn = \"\"\"| f16 | int4 | 2,625 | 33 % | 14,3209 | +0,61 % |\"\"\"\nassert s.count(v) == 1\ns  … [3458 caractères tronqués]`
+
+  ```
+rapport KV : f16/int4 + la frontière complète
+rapport 3.4 : les chronos
+0fb9c93 Dernières mesures : clés f16 + valeurs int4, et le mode lot 7× plus rapide par jeton
+14:08:04
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && /tmp/porte_finale.sh 2>&1 | tail -22", "description": "Run final verification suite", "timeoutMs": 900000}`
+
+  ```
+=== 1. tests ===
+test result: ok. 13 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.09s
+=== 2. porte Qwen ctx 256 (attendu 19,3885) ===
+perplexité 19.3885 sur 510 tokens
+=== 3. trace v2 : rejeu identique (19,3885) ===
+  rejeu             : 24576 listes servies, 0 manquantes
+=== perplexité 19.3885 sur 510 tokens (0 événements, 15.9 s) ===
+=== 4. banc réparti, 40 jetons (attendu 0,00e0) ===
+  écart             : 0.00e0
+  transport         : dense f32 · 3663 octets par flux (aller) · 3663 au retour · 100.0 % d'activité (896 neurones par flux) · 39 flux
+  temps             : 127.6 ms par jeton en local · 169.7 ms à attendre le pair (son calcul + l'aller-retour) · soit 1.33× le calcul local seul
+=== 5. banc réparti par LOTS de 8 (attendu 0,00e0) ===
+  deux nœuds        : perplexité 148.1267  (2.8 s)
+  écart             : 0.00e0
+  transport         : LOTS de 8 jetons · 28751 octets par lot (aller) · 3.5 ko par jeton · 5 lots (au lieu de 39 flux)
+  temps             : 238.2 ms par LOT en local · 235.6 ms à attendre le pair · soit 0.99× le calcul local seul
+=== 6. git ===
+0fb9c93 Dernières mesures : clés f16 + valeurs int4, et le mode lot 7× plus rapide par jeton
+ M
+… [27 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='REPRISE.md'; s=open(p).read()\nv = \"\"\"### Hygiène et garde-fous ajoutés depuis (13h)\"\"\"\nn = \"\"\"### La frontière du cache KV, mesurée en entier\n\n| réglage | octets/élément | % du f32 | écart |\n|---|-- … [1484 caractères tronqués]`
