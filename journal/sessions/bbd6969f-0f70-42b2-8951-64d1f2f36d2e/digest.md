@@ -19489,3 +19489,128 @@ perplexité 19.3885 sur 510 tokens
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='docs/plan-mla-vision.md'; s=open(p).read()\nadd = \"\"\"\n### Le point d'injection est en place (le seul ajout d'architecture)\n\n`Model::emb_imposee` : un vecteur imposé remplace, pour UN appel, la ligne\n`token … [2266 caractères tronqués]`
+
+  ```
+état ajouté au plan
+43eee82 Vision : le point d'injection des embeddings est en place
+  ```
+
+### 🤖 Assistant
+
+⏵ Tour 12 : le point d'injection des embeddings est en place
+
+## Fait dans ce tour
+
+**Le seul ajout d'architecture que la vision demandait au moteur est fait.** `Model::emb_imposee` : un vecteur imposé remplace, **pour un seul appel**, la ligne `token_embd.weight` que `forward` lisait toujours. C'est ce qui permettra d'injecter les embeddings d'image à la place des jetons `<|image_pad|>` — tout le reste (MLA, tour ViT) vit dans des chemins séparés, ce qui a préservé les portes de non-régression.
+
+Vérifié : `cargo test` **6/6** et porte Qwen **19,3885** (le vecteur imposé est consommé une fois puis oublié, le chemin standard est intact).
+
+J'ai aussi cherché à trancher les deux dernières conventions du ViT par une source locale : **ni torch ni transformers ne sont installés** sur cette machine, et la recherche web n'a pas rendu le fragment de code voulu dans le budget disponible. Le chemin qui reste est donc `libmtmd` d'ollama — dont la recette est écrite dans le plan depuis deux tours.
+
+## Où en est exactement la vision
+
+| élément | état |
+|---|---|
+| embedding de patchs | ✅ validé (5,4e-7) |
+| plomberie d'une couche (LayerNorm, biais, résidus, MLP SiLU) | ✅ validée (1,8e-6) |
+| 32 couches empilées + `v.post_ln` | ✅ tourne |
+| projecteur (fusion 2 × 2 → `mm.0` → GELU → `mm.2`) | ✅ validé (1,7e-6) |
+| **point d'injection des embeddings** | ✅ **fait ce tour** |
+| rotation 2-D (mRoPE) | ⏳ convention non tranchée |
+| fenêtre locale une couche sur huit | ⏳ convention non tranchée |
+
+## Les six chantiers
+
+1, 2, 3, 4, 6 sont **clos et mesurés** ; le 5 a sa moitié **MLA validée** (5,2e-7) et sa moitié vision à **six septièmes** — il ne reste que deux conventions d'attention, dont la vérification est outillée (référence `libmtmd` identifiée, symboles confirmés, recette écrite).
+
+L'objectif reste **actif** : le prochain tour peut soit écrire le petit programme C contre `libmtmd` pour trancher les conventions d'un coup, soit implémenter les deux conventions candidates et les départager par la comparaison.
+
+
+## Tour 22
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Réaliser les 6 nouveaux chantiers du projet qtrinet-core, dans l'ordre : (1) relancer le test de l'aiguille sur contexte long (remplissage varié en vrai texte, moins de sondes, réponses plus longues) sur un modèle capable, grâce au préremplissage par lots et au KV déporté ; (2) chemin GPU : dépaquetage vectorisé du noyau d'attention (13,2 ms/couche à 1 M en int4 vers ~3 ms), brancher MXFP4 dans le moteur avec une politique de résidence des experts, attention par lots sur GPU dans forward_lot, noyau de tête Q8_0 accéléré (AVX2 ou déport), et usage du second GPU ; (3) mémoire : pagination du cache KV côté CPU (25,77 Go réservés à ctx 1 M pour 512 jetons écrits) et test de l'hypothèse « clés en f16 avant quantification » pour l'écart int8 avec llama.cpp à 8 192 (+3,0 % contre +0,8 %) ; (4) rotation au-delà de 5 120 jetons (passe à 16 k) ; (5) structurel : MLA (aucun modèle local — construire un modèle MLA synthétique et valider contre une référence indépendante) et vision (poids Qwen2.5-VL et projecteur mmproj présents) ; (6) hygiène : réécrire la section « Ce qu'il faut faire ensuite » de REPRISE.md et y consigner les pièges QT_GPU/QT_GPU_TETE/QT_GPU_KV. Chaque chantier doit être implémenté, mesuré (portes de non-régression Qwen 19,3885 et gpt-oss 15,1757 sans QT_GPU), documenté dans le dépôt et commité."
+Round: 13/30
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "nm -D --defined-only /usr/lib/ollama/libmtmd.so | grep -E \" T mtmd_\" | awk '{print $3}' | head -40", "description": "List all mtmd exported symbols"}`
+
+  ```
+mtmd_batch_add_chunk
+mtmd_batch_encode
+mtmd_batch_free
+mtmd_batch_get_output_embd
+mtmd_batch_init
+mtmd_bitmap_free
+mtmd_bitmap_get_data
+mtmd_bitmap_get_id
+mtmd_bitmap_get_n_bytes
+mtmd_bitmap_get_nx
+mtmd_bitmap_get_ny
+mtmd_bitmap_init
+mtmd_bitmap_init_from_audio
+mtmd_bitmap_init_lazy
+mtmd_bitmap_is_audio
+mtmd_bitmap_set_id
+mtmd_context_params_default
+mtmd_decode_use_mrope
+mtmd_decode_use_non_causal
+mtmd_default_marker
+mtmd_encode
+mtmd_encode_chunk
+mtmd_free
+mtmd_gen_audio_get_info
+mtmd_gen_audio_process
+mtmd_get_audio_sample_rate
+mtmd_get_cap_from_file
+mtmd_get_marker
+mtmd_get_output_embd
+mtmd_helper_bitmap_init_from_buf
+mtmd_helper_bitmap_init_from_file
+mtmd_helper_decode_image_chunk
+mtmd_helper_eval_chunks
+mtmd_helper_eval_chunk_single
+mtmd_helper_gen_audio_free
+mtmd_helper_gen_audio_get_output
+mtmd_helper_gen_audio_init
+mtmd_helper_gen_audio_reset
+mtmd_helper_gen_audio_set_input
+mtmd_helper_gen_audio_step_gen
+  ```
+
+- **bash** `{"command": "objdump -d --no-show-raw-insn /usr/lib/ollama/libmtmd.so 2>/dev/null | awk '/<mtmd_context_params_default>:/,/^$/' | head -20", "description": "Disassemble params default to get struct size", "timeoutMs": 300000}`
+
+  ```
+(no output)
+  ```
+
+- **bash** `{"command": "objdump -d --no-show-raw-insn /usr/lib/ollama/libmtmd.so 2>/dev/null | grep -A 18 \"mtmd_context_params_default>:\" | head -22", "description": "Disassemble params default (retry)", "timeoutMs": 300000}`
+
+  ```
+(no output)
+  ```
+
+- **bash** `{"command": "readelf -S /usr/lib/ollama/libmtmd.so 2>/dev/null | grep -c debug; nm -D /usr/lib/ollama/libmtmd.so | grep -i \"params_default\"; command -v pahole gdb dwarfdump 2>/dev/null | head -3", "description": "Check debug info and tools for struct size", "timeoutMs": 120000}`
+
+  ```
+0
+000000000004fdb0 T mtmd_context_params_default
+00000000000d23c0 T mtmd_helper_video_init_params_default
+/usr/bin/pahole
+/usr/bin/gdb
+  ```
+
+- **bash** `{"command": "cd /tmp && LD_LIBRARY_PATH=/usr/lib/ollama python3 - <<'PY'\nimport ctypes, os\nlib = ctypes.CDLL(\"/usr/lib/ollama/libmtmd.so\")\n# La fonction rend la structure par pointeur caché (sret) : un tampon large est\n# donc sans danger, et les octets écrits révèlent la taille RÉELLE.\nbuf =  … [627 caractères tronqués]`
+
+  ```
+octets non nuls : [(0, 1), (1, 1), (4, 4), (16, 49), (17, 32), (18, 236), (19, 246), (20, 238), (21, 127), (24, 255), (25, 255), (26, 255), (27, 255), (28, 1), (32, 255), (33, 255), (34, 255), (35, 255), (36, 255), (37, 255), (38, 255), (39, 255), (57, 4)]
+dernier non nul à l'offset 57
+comme u32 : [257, 4, 0, 0, 4142669873, 32750, 4294967295, 1, 4294967295, 4294967295]
+comme u64 : [17179869441, 0, 140664321613873, 8589934591, 18446744073709551615]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='docs/plan-mla-vision.md'; s=open(p).read()\nadd = \"\"\"\n### libmtmd : la structure de paramètres est SONDÉE (l'ABI n'est plus un obstacle)\n\n`mtmd_context_params_default` existe et rend la structure par pointe … [2871 caractères tronqués]`

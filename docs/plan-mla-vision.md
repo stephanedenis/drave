@@ -306,3 +306,35 @@ référence numpy, qui les partage. Ce qui les trancherait : `libmtmd` d'ollama
 référence. Une recherche du source de `transformers` sur cette machine n'a rien
 donné (ni torch ni transformers installés), et la recherche web n'a pas rendu le
 fragment de code dans le budget disponible.
+
+### libmtmd : la structure de paramètres est SONDÉE (l'ABI n'est plus un obstacle)
+
+`mtmd_context_params_default` existe et rend la structure par pointeur caché : on
+peut donc la sonder en l'appelant avec un tampon large, depuis Python, sans
+connaître sa taille à l'avance. Résultat du sondage (`ctypes`, tampon de 256
+octets, octets écrits) :
+
+| offset | contenu | lecture |
+|---|---|---|
+| 0-1 | `01 01` | deux booléens à vrai (`use_gpu`, `print_timings`) |
+| 4 | `04 00 00 00` | `n_threads = 4` |
+| 8 | zéro | champ aligné sur 8 octets |
+| 16 | pointeur | marqueur d'image (chaîne statique) |
+| 24-31 | `ff ff ff ff 01 00 00 00` | deux entiers, dont un `-1` |
+| 32-39 | `ff … ff` | un entier 64 bits à `-1` |
+| 57 | `04` | un champ d'un octet |
+
+La structure fait donc **une soixantaine d'octets**. Conséquence pratique : une
+structure opaque déclarée à **64 octets** et remise à zéro est un appel
+ABI-correct — au-delà de 16 octets, SysV passe la structure sur la PILE, et
+l'appelé ne lit que ce dont il a besoin ; une déclaration plus grande que la
+réelle est donc sans danger. Tout-à-zéro donne `use_gpu = false`,
+`print_timings = false`, `n_threads = 0` (automatique) et des marqueurs nuls, ce
+qui correspond aux valeurs par défaut.
+
+Reste à écrire le programme (C ou ctypes) : `llama_model_load_from_file` avec une
+structure de paramètres généreuse et remise à zéro, `mtmd_init_from_file`,
+`mtmd_bitmap_init` sur l'image déterministe du banc, `mtmd_tokenize`,
+`mtmd_encode`, puis `mtmd_get_output_embd` — les 3 584 valeurs à comparer au
+projecteur du moteur. C'est ce qui trancherait la rotation 2-D et la fenêtre
+locale d'un seul coup.

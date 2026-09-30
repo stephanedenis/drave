@@ -6,13 +6,13 @@
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
 | Durée | 30.3 h |
-| Tours | 21 |
-| Messages | 1231 |
-| Appels d'outils | 1197 |
+| Tours | 22 |
+| Messages | 1239 |
+| Appels d'outils | 1203 |
 | Fichiers touchés | 38 |
-| Commandes | 929 |
+| Commandes | 935 |
 | Sous-agents | 1 |
-| Commits | 54 |
+| Commits | 55 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -67,6 +67,8 @@
 **Tour 20** — <goal_round> Objective: "Réaliser les 6 nouveaux chantiers du projet qtrinet-core, dans l'ordre : (1) relancer le test de l'aiguille sur contexte long (remplissage varié en vrai texte, moins de sondes, réponses plus longues) sur un modèle capable, grâce au préremplissage par lots et au KV déporté ; (2) chemin GPU : dépaquetage vectorisé du noyau d'attention (13,2 ms/couche à 1 M en int4 vers ~3 ms … [1492 caractères tronqués]
 
 **Tour 21** — <goal_round> Objective: "Réaliser les 6 nouveaux chantiers du projet qtrinet-core, dans l'ordre : (1) relancer le test de l'aiguille sur contexte long (remplissage varié en vrai texte, moins de sondes, réponses plus longues) sur un modèle capable, grâce au préremplissage par lots et au KV déporté ; (2) chemin GPU : dépaquetage vectorisé du noyau d'attention (13,2 ms/couche à 1 M en int4 vers ~3 ms … [1492 caractères tronqués]
+
+**Tour 22** — <goal_round> Objective: "Réaliser les 6 nouveaux chantiers du projet qtrinet-core, dans l'ordre : (1) relancer le test de l'aiguille sur contexte long (remplissage varié en vrai texte, moins de sondes, réponses plus longues) sur un modèle capable, grâce au préremplissage par lots et au KV déporté ; (2) chemin GPU : dépaquetage vectorisé du noyau d'attention (13,2 ms/couche à 1 M en int4 vers ~3 ms … [1492 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -980,6 +982,47 @@ L'objectif reste **actif** : il se réduit maintenant à deux conventions d'atte
 - bash — Verify tests and gate after injection
 - bash — Document injection point and commit
 
+**Synthèse produite :**
+
+⏵ Tour 12 : le point d'injection des embeddings est en place
+
+\## Fait dans ce tour
+
+**Le seul ajout d'architecture que la vision demandait au moteur est fait.** `Model::emb_imposee` : un vecteur imposé remplace, **pour un seul appel**, la ligne `token_embd.weight` que `forward` lisait toujours. C'est ce qui permettra d'injecter les embeddings d'image à la place des jetons `<|image_pad|>` — tout le reste (MLA, tour ViT) vit dans des chemins séparés, ce qui a préservé les portes de non-régression.
+
+Vérifié : `cargo test` **6/6** et porte Qwen **19,3885** (le vecteur imposé est consommé une fois puis oublié, le chemin standard est intact).
+
+J'ai aussi cherché à trancher les deux dernières conventions du ViT par une source locale : **ni torch ni transformers ne sont installés** sur cette machine, et la recherche web n'a pas rendu le fragment de code voulu dans le budget disponible. Le chemin qui reste est donc `libmtmd` d'ollama — dont la recette est écrite dans le plan depuis deux tours.
+
+\## Où en est exactement la vision
+
+| élément | état |
+|---|---|
+| embedding de patchs | ✅ validé (5,4e-7) |
+| plomberie d'une couche (LayerNorm, biais, résidus, MLP SiLU) | ✅ validée (1,8e-6) |
+| 32 couches empilées + `v.post_ln` | ✅ tourne |
+| projecteur (fusion 2 × 2 → `mm.0` → GELU → `mm.2`) | ✅ validé (1,7e-6) |
+| **point d'injection des embeddings** | ✅ **fait ce tour** |
+| rotation 2-D (mRoPE) | ⏳ convention non tranchée |
+| fenêtre locale une couche sur huit | ⏳ convention non tranchée |
+
+\## Les six chantiers
+
+1, 2, 3, 4, 6 sont **clos et mesurés** ; le 5 a sa moitié **MLA validée** (5,2e-7) et sa moitié vision à **six septièmes** — il ne reste que deux conventions d'attention, dont la vérification est outillée (référence `libmtmd` identifiée, symboles confirmés, recette écrite).
+
+L'objectif reste **actif** : le prochain tour peut soit écrire le petit programme C contre `libmtmd` pour trancher les conventions d'un coup, soit implémenter les deux conventions candidates et les départager par la comparaison.
+
+### Tour 22 — <goal_round> Objective: "Réaliser les 6 nouveaux chantiers du projet qtrinet-core, dans l'ordre : (1) relancer le test d … [1772 caractères tronqués]
+
+*6 appels d'outils.* Actions notables :
+
+- bash — List all mtmd exported symbols
+- bash — Disassemble params default to get struct size
+- bash — Disassemble params default (retry)
+- bash — Check debug info and tools for struct size
+- bash — Probe mtmd params struct layout
+- bash — Document ABI probe and commit
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -1071,7 +1114,7 @@ L'objectif reste **actif** : il se réduit maintenant à deux conventions d'atte
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 889 autres
+- … et 895 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1273,4 +1316,5 @@ L'objectif reste **actif** : il se réduit maintenant à deux conventions d'atte
 - vision : une RÉFÉRENCE existe sur la machine (libmtmd d'ollama)  Le plan pariait sur llama-mtmd-cli ; il n'y est pas, mais ollama embarque la bibliothèque multi
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p='docs/plan-mla-vision.md'; s=open(p).read() old = """Ce qui n'y est pas encore : la rot
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p='docs/plan-mla-vision.md'; s=open(p).read() add = """ ### Le point d'injection est en p
+- vision : la structure de paramètres de libmtmd est sondée (l'ABI n'est plus un obstacle)  mtmd_context_params_default rend la structure par pointeur caché : on 
 
