@@ -21026,3 +21026,20 @@ perplexité 19.3885 sur 510 tokens
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='REPRISE.md'; s=open(p).read()\nold = \"\"\"4. ~~**MLA et vision.**~~ **MLA FAIT ET VALIDÉ** (modèle synthétique + référence\n   numpy : écart 5,2e-7). **Vision** : première tranche faite et validée\n   (embedding … [1750 caractères tronqués]`
+
+  ```
+a42ebb3 REPRISE : MLA et vision tous deux faits, avec leurs réserves nommées
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 17, in <module>
+AssertionError
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"MLA FAIT ET VALIDÉ\\|première tranche\" REPRISE.md | head -3", "description": "Locate stale REPRISE text"}`
+
+  ```
+196:4. ~~**MLA et vision.**~~ **MLA FAIT ET VALIDÉ** (modèle synthétique + référence
+197:   numpy : écart 5,2e-7). **Vision** : première tranche faite et validée
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nlignes = open('REPRISE.md').read().split('\\n')\n# lignes 196-199 (index 195..) : on remplace le paragraphe par son état final\ndeb = 195\nfin = deb\nwhile fin < len(lignes) and not lignes[fin].strip().startswith('5 … [1211 caractères tronqués]`

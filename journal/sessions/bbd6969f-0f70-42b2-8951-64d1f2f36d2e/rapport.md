@@ -7,12 +7,12 @@
 | Début | 2026-09-28 14:46 |
 | Durée | 31.0 h |
 | Tours | 35 |
-| Messages | 1322 |
-| Appels d'outils | 1260 |
+| Messages | 1324 |
+| Appels d'outils | 1262 |
 | Fichiers touchés | 39 |
-| Commandes | 991 |
+| Commandes | 993 |
 | Sous-agents | 1 |
-| Commits | 69 |
+| Commits | 70 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -1600,13 +1600,15 @@ Le chantier vision est **fonctionnellement complet et démontré** ; ce qui rest
 
 ### Tour 35 — <goal_round> Objective: "Réaliser les 6 nouveaux chantiers du projet qtrinet-core, dans l'ordre : (1) relancer le test d … [1772 caractères tronqués]
 
-*5 appels d'outils.* Actions notables :
+*7 appels d'outils.* Actions notables :
 
 - bash — Find rope_multi sections in clip.cpp
 - bash — Read rope_multi layout comment and sections
 - bash — Document rotation confirmation and window variant
 - bash — Final verification before closing
 - bash — Update REPRISE and commit
+- bash — Locate stale REPRISE text
+- bash — Fix stale REPRISE item and commit
 
 ## 3. Travail accompli
 
@@ -1700,7 +1702,7 @@ Le chantier vision est **fonctionnellement complet et démontré** ; ce qui rest
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 951 autres
+- … et 953 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1917,4 +1919,5 @@ Le chantier vision est **fonctionnellement complet et démontré** ; ce qui rest
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat >> docs/plan-mla-vision.md <<'EOF'  ### La chaîne complète est DÉMONTRÉE, de l'image aux logits  `QT_V
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat >> docs/plan-mla-vision.md <<'EOF'  ### La rotation est CONFIRMÉE par la source (et une variante de fe
 - REPRISE : MLA et vision tous deux faits, avec leurs réserves nommées  MLA : validé (5,2e-7). Vision : chaîne complète et démontrée de bout en bout, de l'image a
+- REPRISE : l'item 5 reflète l'état final (chaîne vision démontrée, réserves nommées)" && git log --oneline -1 && git status --short | head -2
 

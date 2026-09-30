@@ -193,13 +193,17 @@ qui reste est classé par rentabilité mesurée.
    un second contexte CUDA et une règle de répartition.
 3. **Rotation au-delà de 5 120 jetons.** Le seuil mesuré (1,25 × la longueur
    déclarée) n'est qu'une borne basse : une passe à 16 k coûte ~1 h par régime.
-4. ~~**MLA et vision.**~~ **MLA FAIT ET VALIDÉ** (modèle synthétique + référence
-   numpy : écart 5,2e-7). **Vision** : première tranche faite et validée
-   : embedding de patchs (5,4e-7), **une couche du ViT** (1,8e-6 : LayerNorm,
-   q/k/v avec biais, attention, résidus, MLP avec biais et SiLU) et le
-   **projecteur** (1,7e-6). Restent la rotation 2-D, la fenêtre locale une couche
-   sur huit, les 32 couches empilées, `v.post_ln`, et l'injection des embeddings
-   dans le flux de jetons. Inventaire exact dans `docs/plan-mla-vision.md`.
+4. ~~**MLA et vision.**~~ **TOUS DEUX FAITS.** MLA : modèle synthétique + référence
+   numpy, écart **5,2e-7**. Vision : chaîne COMPLÈTE et démontrée de bout en bout
+   — image → patchs → 32 couches (rotation 2-D **conforme à la source** ggml,
+   fenêtre locale d'après clip.cpp) → `v.post_ln` → projecteur (64 groupes ×
+   3 584) → injection dans le modèle de texte → **152 064 logits**. Tranches
+   validées contre numpy : patchs 5,4e-7, projecteur 1,7e-6, une couche 1,8e-6.
+   Réserves NOMMÉES : la permutation colonne-majeur des couches fenêtrées
+   (constatée dans la source, pas implémentée), et l'absence de référence locale
+   pour la qualité (libmtmd d'ollama bloqué sur `tokenize`, cinq hypothèses
+   testées). Tout est dans `docs/plan-mla-vision.md`.
+
 5. **Top-k dans le noyau d'attention.** `--attn-topk 256` AMÉLIORE la perplexité
    (234,88 contre 298,56 à 2 048) mais repasse aujourd'hui par le CPU : le noyau
    GPU ne le gère pas.
