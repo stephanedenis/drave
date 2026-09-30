@@ -700,6 +700,13 @@ extern "C" __global__ void attn_scores(const void* __restrict__ kdata,
 // fort. L'hôte descend les seaux jusqu'à dépasser k : c'est le seuil, et il est
 // exact — c'est le tri radix à deux passes du plan, dont la seconde (la collecte)
 // vient après.
+// ⚠️ Limite connue du contrat « l'ordre des entiers est l'ordre des scores » :
+// elle est vraie pour deux valeurs DISTINCTES, pas pour ±0,0 — `monotone(-0,0)`
+// vaut 0x7FFFFFFF et `monotone(+0,0)` vaut 0x80000000, alors que le f32 les
+// déclare égaux — ni pour les NaN, rangés par leur bit de signe. Conséquence :
+// si le k-ième score est un zéro signé, le départage des ex æquo peut différer
+// de celui d'une référence f32. Relevé par un relecteur ; non observé en
+// pratique (il faut une clé nulle et une échelle négative pour produire -0,0).
 __device__ __forceinline__ unsigned int monotone(float f) {
     // Pas de `__float_as_uint` sans en-têtes CUDA : le reinterpret_cast fait le
     // même travail, et `__builtin_bit_cast` est disponible (voir cuda_stub.h).

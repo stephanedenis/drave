@@ -114,6 +114,22 @@ plus grand gardait un tampon de sortie trop petit et le noyau écrivait **au-del
   (0,0004 ms pour 14,7 Mo lus). Un affichage mal étiqueté est un affichage qui
   ment — et il a bien failli faire chercher un faux défaut dans le noyau.
 
+## Limites connues du contrat
+
+Le radix select s'appuie sur la transformation monotone du f32. Elle est
+**strictement croissante pour deux valeurs distinctes**, mais :
+
+* `monotone(-0,0) = 0x7FFFFFFF` et `monotone(+0,0) = 0x80000000` : deux scores que
+  le f32 déclare **égaux** ont deux entiers différents, donc si le k-ième score est
+  un zéro signé, le départage des ex æquo peut différer du CPU ;
+* les **NaN** sont rangés par leur bit de signe (au-dessus de +inf ou en dessous de
+  -inf) au lieu de n'être comparables à rien.
+
+Aucune des deux n'a été observée : il faut une clé nulle et une échelle négative
+pour produire -0,0, et les scores NaN n'apparaissent pas dans un modèle sain. Le
+contrat est corrigé dans le noyau plutôt que tu ; la normalisation de -0,0 des deux
+côtés est le correctif si le cas se présente un jour.
+
 ## Ce qui reste
 
 | # | étape du plan | état |

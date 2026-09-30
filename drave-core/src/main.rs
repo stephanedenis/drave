@@ -2616,14 +2616,17 @@ l'entrelace — c'est le seul écart attendu)");
     // seul chemin qui réutilise les tampons de la collecte avec une taille de
     // sortie différente. Défaut trouvé à la relecture (pas par ce banc) : le
     // tampon de sortie n'était réalloué que si (lignes, tranches) grandissait,
-    // donc un k plus grand écrivait AU-DELÀ du tampon — un débordement VRAM
-    // silencieux. Ce passage le rend visible.
+    // donc un k plus grand écrivait AU-DELÀ du tampon.
+    //
+    // ⚠️ Ce passage VÉRIFIE la réutilisation, il ne prouve pas qu'un
+    // débordement serait visible : `cuMemAlloc` arrondit à la granule du
+    // pilote (≥ 64 ko), donc 14 ko d'écriture hors bornes peuvent passer
+    // inaperçus. Ce qui l'empêche, c'est le garde piloté par les CAPACITÉS
+    // dans `attn_topk_collecte` — pas ce banc (relevé par le relecteur).
     if 2 * k <= n {
         let k2 = 2 * k;
         let mut prefixes2 = vec![0u32; lignes];
         let mut dessus2 = vec![0usize; lignes];
-        let mut egaux2 = vec![0usize; lignes];
-        let mut seuils2 = vec![0f32; lignes];
         let mut ok2 = true;
         let t7 = Instant::now();
         for decalage in [24i32, 16, 8, 0] {
@@ -2641,13 +2644,6 @@ l'entrelace — c'est le seul écart attendu)");
             }
         }
         let t2_k2 = t7.elapsed().as_secs_f64();
-        // Le seuil FLOTTANT du nouveau k, pour la référence CPU.
-        for l in 0..lignes {
-            let mut tri: Vec<f32> = obtenu[l * n..(l + 1) * n].to_vec();
-            tri.sort_unstable_by(|a, b| b.partial_cmp(a).unwrap());
-            seuils2[l] = tri[k2 - 1];
-            let _ = egaux2[l];
-        }
         let besoin2: Vec<i32> = (0..lignes).map(|l| (k2 - dessus2[l]) as i32).collect();
         let mut sortie2 = vec![-1i32; lignes * k2];
         let t6 = Instant::now();
@@ -2659,9 +2655,18 @@ l'entrelace — c'est le seul écart attendu)");
             let mut ok_lignes = 0usize;
             let mut vides = 0usize;
             for l in 0..lignes {
-                let mut att: Vec<u32> = (0..n as u32)
-                    .filter(|&j| obtenu[l * n + j as usize] >= seuils2[l])
-                    .collect();
+                // Même référence que le premier passage : tri (score décroissant,
+                // indice croissant) puis troncature à k2. Un simple filtre
+                // « ≥ seuil » ramasserait TOUS les égaux au k2-ième score — plus
+                // de k2 indices — et le banc accuserait la réutilisation des
+                // tampons alors que le noyau aurait raison (relevé par le
+                // relecteur).
+                let ligne = &obtenu[l * n..(l + 1) * n];
+                let mut att: Vec<u32> = (0..n as u32).collect();
+                att.sort_unstable_by(|&a, &b| {
+                    ligne[b as usize].partial_cmp(&ligne[a as usize]).unwrap().then(a.cmp(&b))
+                });
+                att.truncate(k2);
                 att.sort_unstable();
                 let mut set: Vec<u32> = sortie2[l * k2..(l + 1) * k2]
                     .iter().map(|&v| v as u32).collect();

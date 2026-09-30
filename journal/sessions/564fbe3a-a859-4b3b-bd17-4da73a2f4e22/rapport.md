@@ -7,10 +7,10 @@
 | Début | 2026-09-30 18:07 |
 | Durée | 0.1 h |
 | Tours | 1 |
-| Messages | 21 |
-| Appels d'outils | 31 |
+| Messages | 25 |
+| Appels d'outils | 35 |
 | Fichiers touchés | 0 |
-| Commandes | 18 |
+| Commandes | 21 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -23,7 +23,7 @@
 
 ### Tour 1 — Tu es relecteur ADVERSARIAL de code dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (moteur d'inférence Ru … [4207 caractères tronqués]
 
-*31 appels d'outils.* Actions notables :
+*35 appels d'outils.* Actions notables :
 
 - bash — Count lines in target files
 - bash — Locate relevant symbols
@@ -39,11 +39,36 @@
 - bash — Locate run_banc_topk in snapshot
 - bash — List all copy calls to spot unchecked returns
 - bash — Check generated PTX contains new kernels
-- … et 5 autres
+- … et 9 autres
 
 **Synthèse produite :**
 
-⏵ Files changed under me — re-reading current state to avoid stale findings
+⏵ Rapport final : défauts classés par gravité
+
+Aucun fichier n'a été modifié. Révision relue (instantané gelé, sha256) : `drave_gpu.cu c0bc8d1f…` · `cuda_stub.h c711f52b…` · `gpu.rs dbd53a5e…` · `main.rs 3c53723f…` (mtime 18:10:29). **Attention : `gpu.rs` et `main.rs` ont été édités pendant ma relecture** (18:08 et 18:10) ; mon instantané contient le correctif `t.k < k` (gpu.rs:694) et le second passage k2 du banc. Ce correctif est correct pour la croissance ; il reste un trou sur le chemin d'échec (D1).
+
+\## Défauts affirmés
+
+\### D1 — `gpu.rs:694-704` : réallocation partielle + métadonnées non mises à jour (le plus grave)
+```rust
+if t.lignes < lignes || t.ntr < ntr || t.k < k {
+    if !vram_assurer(&mut t.comptes, …) || !vram_assurer(&mut t.bases, …)
+        || !vram_assurer(&mut t.meta, …) || !vram_assurer(&mut t.sortie, …)
+    { eprintln!(…); return false; }
+    t.lignes = lignes; t.ntr = ntr; t.k = k; t.chunk = CHUNK;
+}
+```
+**(b)** Le `||` court-circuite : un tampon déjà réalloué le reste, celui qui échoue est libéré **et mis à 0** par `vram_assurer` (gpu.rs:55-57), mais `t.lignes/t.ntr/t.k` gardent les anciennes valeurs (ligne 703 non atteinte). L'appel suivant, avec des dimensions ≤ anciennes, saute la réallocation et utilise le pointeur 0.
+**(c)** Appel A (lignes=14, n=8192→ntr=2, k=256) OK ; appel B même dimensions, k=512 : `vram_assurer(&mut t.sortie, …, 14*512*4)` échoue (VRAM pleine) → `sortie=0`, `cap_sortie=0`, `return false`, `t` inchangé (14/2/256) ; appel C (k=256) : garde faux → `p_sortie = 0` → `attn_topk_ecrit` écrit à l'adresse 0 → défaut d'adresse illégale, **contexte CUDA empoisonné** pour tout le processus. Seul le banc appelle aujourd'hui `attn_topk_collecte` (2 appels, il s'arrête au refus) : non déclenchable par le banc actuel, mais l'API publique le permet et l'état incohérent est silencieux.
+**(d)** Grave (chemin d'échec d'allocation uniquement). **(e)** Avant `return false` : `t.lignes = 0; t.ntr = 0; t.k = 0;` — mieux : piloter le garde par les capacités (`t.cap_sortie < lignes*k*4 || …`), chaque échec devient auto-réparateur.
+
+\### D2 — `gpu.rs:435-436` : fuite VRAM dans `kv_assurer`
+```rust
+if cuMemAlloc_v2(&mut sk, echelles) != 0 { return false; }
+if cuMemAlloc_v2(&mut sv, echelles) != 0 { return false; }
+```
+**(b)** Sur échec de `sk` (ou `sv`), `k` et `v` (et `sk`) restent alloués et les pointeurs sortent de portée : VRAM perdue définitivement, en plus de l'ancien cache conservé. **(c)** bits=8, n_kv=8, hd=128, ctx=1e6 → pal
+… [7632 caractères tronqués]
 
 ## 3. Travail accompli
 
@@ -72,6 +97,9 @@
 - **T1** Inspect model.rs GPU cache allocation path
 - **T1** Trace KV GPU mirror usage in model.rs
 - **T1** Check machine index use for KV mirror
+- **T1** Verify callers across whole repo
+- **T1** Quote exact stale-cap lines
+- **T1** Verify exact quoted lines in snapshot
 
 ## 4. Mesures et résultats marquants
 

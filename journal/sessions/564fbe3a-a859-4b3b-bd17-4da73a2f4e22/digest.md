@@ -876,3 +876,155 @@ let part = &mut self.attn_gpu_part;
 … [3369 caractères tronqués]
   ```
 
+- **bash** `{"command": "grep -rn \"attn_topk_collecte\\|attn_topk_histo(\\|attn_scores(\" --include=*.rs . | grep -v \"^./drave-core/src/main.rs\" | head; echo \"=== compte ===\"; grep -rn \"attn_topk\" --include=*.rs . | wc -l", "description": "Verify callers across whole repo", "workdir": "/home/stephane/Dat … [31 caractères tronqués]`
+
+  ```
+./drave-core/src/gpu.rs:114:    /// Tampons de la collecte des k indices (`attn_topk_collecte`).
+./drave-core/src/gpu.rs:516:    pub fn attn_scores(&self, m: &mut KvGpu, q: &[f32], n: usize, scale: f32,
+./drave-core/src/gpu.rs:593:    pub fn attn_topk_histo(&self, m: &mut KvGpu, lignes: usize, n: usize,
+./drave-core/src/gpu.rs:669:    pub fn attn_topk_collecte(&self, m: &mut KvGpu, lignes: usize, n: usize, k: usize,
+=== compte ===
+51
+  ```
+
+- **bash** `{"command": "sed -n '519,522p;539,547p;610,632p' /tmp/relecture_adv/gpu.rs | cat -A | sed 's/\\$$//' | head -0; sed -n '539,547p' /tmp/relecture_adv/gpu.rs; echo \"---610---\"; sed -n '610,632p' /tmp/relecture_adv/gpu.rs", "description": "Quote exact stale-cap lines"}`
+
+  ```
+let p_sc = m.scores_dev;
+            if m.scores_cap < sc.len() {
+                if m.scores_dev != 0 { cuMemFree_v2(m.scores_dev); }
+                m.scores_dev = 0;
+                if cuMemAlloc_v2(&mut m.scores_dev, sc.len() * 4) != 0 { return false; }
+                m.scores_cap = sc.len();
+            }
+            let mut p_sc = if m.scores_cap >= sc.len() { m.scores_dev } else { p_sc };
+            // Le même découpage que le noyau complet : ~256 clés par tranche,
+---610---
+        }
+        unsafe {
+            if m.histo_cap < besoin {
+                if m.histo_dev != 0 { cuMemFree_v2(m.histo_dev); }
+                m.histo_dev = 0;
+                let rc = cuMemAlloc_v2(&mut m.histo_dev, besoin);
+                if rc != 0 { eprintln!("{}", erreur(rc, "histogrammes en VRAM")); return false; }
+                m.histo_cap = besoin;
+            }
+            // Compteurs à zéro : le noyau ADDITIONNE (il ne peut pas zéroter une
+            // case que personne ne visite).
+            let rc = cuMemsetD32_v2(m.histo_dev, 0, lignes * 256);
+            if rc != 0 { eprintln!("{}", erreur(rc, "remise à zéro des histogrammes")); return false; }
+            let besoin_p = ligne
+… [517 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /tmp/relecture_adv && for spec in \"gpu.rs:647,649\" \"gpu.rs:420,425\" \"gpu.rs:432,437\" \"gpu.rs:443,447\" \"gpu.rs:451,457\" \"gpu.rs:459,465\" \"gpu.rs:612,618\" \"gpu.rs:624,630\" \"gpu.rs:519,520\"; do f=${spec%%:*}; r=${spec##*:}; echo \"=== $f:$r ===\"; sed -n \"${r/,/,}p\"  … [94 caractères tronqués]`
+
+  ```
+=== gpu.rs:647,649 ===
+        1	            let rc = cuLaunchKernel(self.f_attn_topk_histo, lignes as c_uint, ns_i as c_uint, 1,
+        2	                                    256, 1, 1, 256 * 4, std::ptr::null_mut(),
+        3	                                    params.as_mut_ptr(), std::ptr::null_mut());
+=== gpu.rs:420,425 ===
+        1	    pub fn kv_assurer(&self, m: &mut KvGpu, besoin: usize) -> bool {
+        2	        cu_ctx(self.ctx);
+        3	        if besoin <= m.capacite { return true; }
+        4	        let mut cap = m.capacite.max(1);
+        5	        while cap < besoin { cap = (cap * 2).min(m.ctx); }
+        6	        let pas = match m.bits { 32 => m.hd * 4, 8 => m.hd, 4 => m.hd / 2, _ => return false };
+=== gpu.rs:432,437 ===
+        1	            if cuMemAlloc_v2(&mut k, donnees) != 0 { return false; }
+        2	            if cuMemAlloc_v2(&mut v, donnees) != 0 { cuMemFree_v2(k); return false; }
+        3	            if echelles > 0 {
+        4	                if cuMemAlloc_v2(&mut sk, echelles) != 0 { return false; }
+        5	                if cuMemAlloc_v2(&mut sv, echelles) != 0 { return false; }
+        6	            }
+=== gpu.rs:443,447 ===
+        1	    
+… [2362 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Rédaction du rapport adversarial et envoi au parent
+
+J'ai terminé la relecture. J'envoie le résultat complet à l'agent parent, puis je le restitue ici.
+
+- **send_message** `{"agent_id": "bbd6969f-0f70-42b2-8951-64d1f2f36d2e", "message": "RELECTURE ADVERSARIALE — noyaux top-k GPU (drave-core). Aucun fichier modifié.\n\nRÉVISION RELUE (instantané gelé, sha256) : drave_gpu.cu c0bc8d1f… · cuda_stub.h c711f52b… · gpu.rs dbd53a5e… · main.rs 3c53723f… (mtime 18:10:29). ATTENT … [17905 caractères tronqués]`
+
+  ```
+message delivered to agent bbd6969f-0f70-42b2-8951-64d1f2f36d2e
+  ```
+
+### 🤖 Assistant
+
+⏵ Rapport final : défauts classés par gravité
+
+Aucun fichier n'a été modifié. Révision relue (instantané gelé, sha256) : `drave_gpu.cu c0bc8d1f…` · `cuda_stub.h c711f52b…` · `gpu.rs dbd53a5e…` · `main.rs 3c53723f…` (mtime 18:10:29). **Attention : `gpu.rs` et `main.rs` ont été édités pendant ma relecture** (18:08 et 18:10) ; mon instantané contient le correctif `t.k < k` (gpu.rs:694) et le second passage k2 du banc. Ce correctif est correct pour la croissance ; il reste un trou sur le chemin d'échec (D1).
+
+## Défauts affirmés
+
+### D1 — `gpu.rs:694-704` : réallocation partielle + métadonnées non mises à jour (le plus grave)
+```rust
+if t.lignes < lignes || t.ntr < ntr || t.k < k {
+    if !vram_assurer(&mut t.comptes, …) || !vram_assurer(&mut t.bases, …)
+        || !vram_assurer(&mut t.meta, …) || !vram_assurer(&mut t.sortie, …)
+    { eprintln!(…); return false; }
+    t.lignes = lignes; t.ntr = ntr; t.k = k; t.chunk = CHUNK;
+}
+```
+**(b)** Le `||` court-circuite : un tampon déjà réalloué le reste, celui qui échoue est libéré **et mis à 0** par `vram_assurer` (gpu.rs:55-57), mais `t.lignes/t.ntr/t.k` gardent les anciennes valeurs (ligne 703 non atteinte). L'appel suivant, avec des dimensions ≤ anciennes, saute la réallocation et utilise le pointeur 0.
+**(c)** Appel A (lignes=14, n=8192→ntr=2, k=256) OK ; appel B même dimensions, k=512 : `vram_assurer(&mut t.sortie, …, 14*512*4)` échoue (VRAM pleine) → `sortie=0`, `cap_sortie=0`, `return false`, `t` inchangé (14/2/256) ; appel C (k=256) : garde faux → `p_sortie = 0` → `attn_topk_ecrit` écrit à l'adresse 0 → défaut d'adresse illégale, **contexte CUDA empoisonné** pour tout le processus. Seul le banc appelle aujourd'hui `attn_topk_collecte` (2 appels, il s'arrête au refus) : non déclenchable par le banc actuel, mais l'API publique le permet et l'état incohérent est silencieux.
+**(d)** Grave (chemin d'échec d'allocation uniquement). **(e)** Avant `return false` : `t.lignes = 0; t.ntr = 0; t.k = 0;` — mieux : piloter le garde par les capacités (`t.cap_sortie < lignes*k*4 || …`), chaque échec devient auto-réparateur.
+
+### D2 — `gpu.rs:435-436` : fuite VRAM dans `kv_assurer`
+```rust
+if cuMemAlloc_v2(&mut sk, echelles) != 0 { return false; }
+if cuMemAlloc_v2(&mut sv, echelles) != 0 { return false; }
+```
+**(b)** Sur échec de `sk` (ou `sv`), `k` et `v` (et `sk`) restent alloués et les pointeurs sortent de portée : VRAM perdue définitivement, en plus de l'ancien cache conservé. **(c)** bits=8, n_kv=8, hd=128, ctx=1e6 → palier cap=524 288 : `donnees`=512 Mo, `echelles`=64 Mo ; sur ~1,2 Go libres, k et v (1 Go) réussissent, sk échoue → `kv_allouer` rend `None`, ~1 Go inaccessible, et chaque nouvelle tentative refuite (model.rs:1645). **(d)** Grave (chemin d'échec). **(e)** `if cuMemAlloc_v2(&mut sk, echelles) != 0 { cuMemFree_v2(k); cuMemFree_v2(v); return false; }` et idem pour sv en libérant aussi sk.
+
+### D3 — `gpu.rs:541-544`, `613-617`, `625-629` : capacité périmée → pointeur de périphérique NULL
+```rust
+m.scores_dev = 0;
+if cuMemAlloc_v2(&mut m.scores_dev, sc.len() * 4) != 0 { return false; }
+m.scores_cap = sc.len();
+```
+**(b)** Contrairement à `vram_assurer` (`*cap = 0;`, ligne 56), la capacité n'est remise à jour qu'après succès : après un échec, `scores_dev = 0` mais `scores_cap` garde l'ancienne valeur ; un appel ultérieur plus petit passe le test et le noyau écrit à l'adresse 0. Même motif pour `histo_cap` (`cuMemsetD32_v2` puis noyau sur 0) et `prefixes_cap`. **(c)** `attn_scores` sc.len()=5000 OK, puis 6000 → alloc échoue (dev=0, cap 5000), puis 4000 → garde faux → `p_sc = 0`. **(d)** Modéré (échec d'allocation requis), mais motif déjà traité correctement deux écrans plus haut. **(e)** `m.scores_cap = 0;` (resp. `histo_cap`, `prefixes_cap`) avant l'allocation, ou réutiliser `vram_assurer`.
+
+### D4 — `gpu.rs:443-446`, `451-456` : retours de `cuMemcpyDtoD_v2` ignorés
+**(b)** Une copie qui échoue laisse le nouveau tampon non initialisé, puis 459-464 libèrent l'ancien et publient `m.k/m.v/m.sk/m.sv/m.capacite` : les positions déjà écrites deviennent du bruit. **(c)** Toute erreur pilote pendant la recopie d'un cache de 512 Mo → scores faux, silencieux. **(d)** Faux résultat silencieux (déclenchement non déterministe). **(e)** Tester chaque `rc` ; sur échec, libérer les nouveaux tampons et garder les anciens.
+
+### D5 — `main.rs:2669-2671` + `2681-2683` : la référence du second passage n'est pas le contrat
+`.filter(|&j| obtenu[l * n + j as usize] >= seuils2[l])` prend **tous** les scores ≥ au k2-ième, alors que le noyau en écrit exactement k2 (au-dessus puis premiers égaux par indice). Dès qu'il y a égalité au seuil → faux « ÉCART : la réutilisation des tampons … suspecte ». Le premier passage utilise la bonne référence (2536-2545) ; `egaux2` est morte (`let _ = egaux2[l];`). **(c)** deux clés identiques → « 13/14 lignes · ÉCART ». **(d)** Mineur (faux positif du banc). **(e)** Reprendre la référence d'`idx_cpu` (tri (score desc, indice asc) + troncature à k2).
+
+### D6 — `main.rs:2615-2620` : « Ce passage le rend visible » n'est pas garanti — **à vérifier par la mesure**
+Le dépassement vaut 14 336 o au-delà d'une allocation de 14 336 o ; `cuMemAlloc` arrondit à la granule (≥ 64 Ko, souvent 2 Mo), donc l'écriture noyau hors bornes ne faute pas et la relecture DtoH peut réussir : le passage aurait pu afficher 14/14 **avec** le bug. Test : reconstruire l'état sans `|| t.k < k` et lancer `--banc-topk 8192 --attn-topk 256` (je n'ai pas de GPU ici). **(d)** Mineur (qualité du banc). **(e)** Assertion hôte `t.cap_sortie >= lignes*k*4`, ou refus explicite si `vram_assurer` échoue.
+
+### D7 — `gpu.rs:423-424` : boucle infinie si `besoin > m.ctx`
+`while cap < besoin { cap = (cap * 2).min(m.ctx); }` : `cap` plafonne à `m.ctx` et la condition reste vraie → processus pendu. Inatteignable par les deux appelants actuels (pré-contrôles), mais `pub` et `KvGpu.ctx` est un champ public mutable. **(d)** Latent/mineur. **(e)** `if besoin > m.ctx { return false; }` en tête.
+
+### D8 — `drave_gpu.cu:703-712` + `main.rs:2490-2493` : le contrat « l'ordre des entiers est l'ordre des scores » est faux pour ±0.0 et NaN
+`monotone(-0.0)=0x7FFFFFFF` vs `monotone(+0.0)=0x80000000` : deux scores f32 **égaux** ont des entiers différents, donc « strictement au-dessus »/« égaux » peuvent différer d'une référence f32 (main.rs:2453-2455) et le départage entre ex æquo peut différer du CPU. Un NaN positif est rangé au-dessus de +inf. **(c)** ligne où tous les q·k sont nuls avec des signes donnant -0.0 pour certaines clés et +0.0 pour d'autres (clé nulle + échelle négative). Probabilité faible, **à vérifier**. **(d)** Cosmétique/contractuel. **(e)** Documenter l'exception, ou normaliser `-0.0 → +0.0` des deux côtés.
+
+### D9 — cosmétiques
+`gpu.rs:519` (`rep` tronqué sans contrôle de divisibilité → pas de ligne faux ; panique si `hd == 0`) · `gpu.rs:648` (1 Ko de partagé dynamique vestigial alors que `sh[256]` est statique) · `drave_gpu.cu:780/789`, `816/825` (`cs[t]`/`ce[t]` sans borne, suppose 256 fils — latent) · `drave_gpu.cu:706` (type-punning alors que le commentaire cite `__builtin_bit_cast`) · `TamponsTopk.chunk` mort · `scores_cap` en éléments vs `histo_cap`/`prefixes_cap` en octets · ni `KvGpu` ni `TamponsTopk` n'ont de `Drop`.
+
+## Points vérifiés sans défaut
+1. **Découpage `par`/`d0`/`d1`** (cu:780-782, 816-818) : partition exacte (contiguë, disjointe, clip à `fin`), y compris `len < 256`, multiples de 256 et dernière tranche partielle ; `tr*chunk < n` garanti par `ntr = n.div_ceil(CHUNK)`, donc `par ≥ 1`. Les deux noyaux calculent `par` identiquement → comptes et rangs cohérents.
+2. **`nsplit = (n/256).clamp(1,128)`** : tranches contiguës/disjointes et `par*nsplit ≥ n` → toutes les clés comptées, y compris n = 1 000 000 (128 × 7813). Le clamp n'affecte que le parallélisme.
+3. **Descente radix hôte** : `au_dessus < k` est un invariant à chaque passe ; le franchissement existe toujours (le groupe retenu contient ≥ `besoin` clés) → `h[b]` jamais indexé à 256, `prefixes` final = k-ième entier exact, `egaux = h[b]` en `decalage == 0` = nombre d'égaux exacts. La construction `prefixes = (prefixes << 8) | b` correspond exactement au filtre `((cle >> decalage) >> 8) == prefixe`.
+4. **`attn_topk_ecrit`** : chaque fil a une plage contiguë, `cs`/`ce` sont des scans exclusifs de plages disjointes, les écritures « au-dessus » couvrent exactement [0, a) et les « égaux » [a, k) (a = k − besoin vérifié hôte) ; le plafond `(oeq + re) < combien` garde bien les **premiers** égaux par indice. Aucun doublon, aucune case vide, aucun atomique → déterministe.
+5. **Stub PTX** : correct, confirmé dans le PTX généré (`cvta.shared` → `cvta.to.shared.u64` → `cvt.u32.u64` → `atom.shared.add.u32` en 32 bits ; `cvta.global.u64` → `atom.global.add.u32`), asm `volatile` + clobber `memory`, `bar.sync` après la remise à zéro et avant le vidage, `__syncthreads()` présents dans compte/ecrit. Seuls sites : cu:741 (partagé) et cu:745 (global) → **aucun mauvais espace d'adressage**. Le `.ptx` embarqué contient les 4 noyaux.
+6. **Bornes/casts** : tous les `(size_t)` nécessaires sont présents dans les quatre noyaux ; à n = 1e6 et 14 lignes, tout reste très loin de 2^31.
+
+## Liste courte classée
+1. **BLOQUANT (échec d'allocation)** — gpu.rs:694-704 : réallocation partielle, dims non mises à jour → écriture dans un tampon libéré/NULL, contexte empoisonné.
+2. **GRAVE** — gpu.rs:435-436 : fuite de k/v/sk dans `kv_assurer`.
+3. **MODÉRÉ** — gpu.rs:541-544 / 613-617 / 625-629 : capacité périmée → pointeur 0 utilisé par `attn_scores`/`attn_topk_histo`.
+4. **MODÉRÉ (à confirmer)** — gpu.rs:443-456 : `cuMemcpyDtoD_v2` non vérifiés → cache KV publié non initialisé.
+5. **MINEUR (banc)** — main.rs:2669-2671 : référence `≥ seuil` au lieu du contrat → faux ÉCART sur égalité.
+6. **MINEUR/À VÉRIFIER** — main.rs:2615-2620 : la sonde k2 ne prouve pas la visibilité du débordement.
+7. **LATENT** — gpu.rs:423-424 : boucle infinie si `besoin > m.ctx`.
+8. **CONTRAT** — cu:703-712 + main.rs:2490-2493 : ±0.0 et NaN.
+9. **COSMÉTIQUE** — gpu.rs:519, 648, unités de capacité, `chunk` mort, `Drop` absent.
+

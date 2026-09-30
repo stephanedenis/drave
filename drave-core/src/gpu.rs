@@ -420,6 +420,10 @@ impl Gpu {
     pub fn kv_assurer(&self, m: &mut KvGpu, besoin: usize) -> bool {
         cu_ctx(self.ctx);
         if besoin <= m.capacite { return true; }
+        // Sans ce garde, `cap` plafonne à `m.ctx` et la boucle de doublement ne
+        // termine jamais : un appelant qui demande plus que le contexte déclaré
+        // pendait le processus au lieu de recevoir `false`.
+        if besoin > m.ctx { return false; }
         let mut cap = m.capacite.max(1);
         while cap < besoin { cap = (cap * 2).min(m.ctx); }
         let pas = match m.bits { 32 => m.hd * 4, 8 => m.hd, 4 => m.hd / 2, _ => return false };
@@ -431,30 +435,51 @@ impl Gpu {
             let (mut k, mut v, mut sk, mut sv) = (0u64, 0u64, 0u64, 0u64);
             if cuMemAlloc_v2(&mut k, donnees) != 0 { return false; }
             if cuMemAlloc_v2(&mut v, donnees) != 0 { cuMemFree_v2(k); return false; }
+            // Échec d'allocation des échelles : libérer k, v (et sk) avant de
+            // rendre la main. Sans ces libérations, la VRAM déjà réservée
+            // sortait de portée — et l'ancien cache restait alloué, donc la
+            // consommation DOUBLAIT à chaque tentative (relevé par un relecteur).
             if echelles > 0 {
-                if cuMemAlloc_v2(&mut sk, echelles) != 0 { return false; }
-                if cuMemAlloc_v2(&mut sv, echelles) != 0 { return false; }
+                if cuMemAlloc_v2(&mut sk, echelles) != 0 {
+                    cuMemFree_v2(k); cuMemFree_v2(v); return false;
+                }
+                if cuMemAlloc_v2(&mut sv, echelles) != 0 {
+                    cuMemFree_v2(k); cuMemFree_v2(v); cuMemFree_v2(sk); return false;
+                }
             }
             // Recopie de l'ancien contenu : les positions sont contiguës par
             // tête KV, donc chaque tête se recopie d'un bloc.
+            // La recopie est la SEULE chose qui sauve le cache déjà écrit lors
+            // du doublement : son code de retour ne peut pas être ignoré, sinon
+            // un tampon de VRAM non initialisée est publié comme valide.
             if m.capacite > 0 {
                 let ancien = m.n_kv * m.capacite * pas;
+                let ancien_e = m.n_kv * m.capacite * m.nb * 4;
+                let mut recopie = true;
                 for kvh in 0..m.n_kv {
-                    cuMemcpyDtoD_v2(k + (kvh * cap * pas) as u64,
-                                    m.k + (kvh * m.capacite * pas) as u64, ancien / m.n_kv);
-                    cuMemcpyDtoD_v2(v + (kvh * cap * pas) as u64,
-                                    m.v + (kvh * m.capacite * pas) as u64, ancien / m.n_kv);
+                    if cuMemcpyDtoD_v2(k + (kvh * cap * pas) as u64,
+                                       m.k + (kvh * m.capacite * pas) as u64,
+                                       ancien / m.n_kv) != 0 { recopie = false; }
+                    if cuMemcpyDtoD_v2(v + (kvh * cap * pas) as u64,
+                                       m.v + (kvh * m.capacite * pas) as u64,
+                                       ancien / m.n_kv) != 0 { recopie = false; }
                 }
                 if echelles > 0 {
-                    let ancien_e = m.n_kv * m.capacite * m.nb * 4;
                     for kvh in 0..m.n_kv {
-                        cuMemcpyDtoD_v2(sk + (kvh * cap * m.nb * 4) as u64,
-                                        m.sk + (kvh * m.capacite * m.nb * 4) as u64,
-                                        ancien_e / m.n_kv);
-                        cuMemcpyDtoD_v2(sv + (kvh * cap * m.nb * 4) as u64,
-                                        m.sv + (kvh * m.capacite * m.nb * 4) as u64,
-                                        ancien_e / m.n_kv);
+                        if cuMemcpyDtoD_v2(sk + (kvh * cap * m.nb * 4) as u64,
+                                           m.sk + (kvh * m.capacite * m.nb * 4) as u64,
+                                           ancien_e / m.n_kv) != 0 { recopie = false; }
+                        if cuMemcpyDtoD_v2(sv + (kvh * cap * m.nb * 4) as u64,
+                                           m.sv + (kvh * m.capacite * m.nb * 4) as u64,
+                                           ancien_e / m.n_kv) != 0 { recopie = false; }
                     }
+                }
+                if !recopie {
+                    eprintln!("[gpu] recopie du cache KV en échec : l'ancien cache est gardé");
+                    cuMemFree_v2(k); cuMemFree_v2(v);
+                    if sk != 0 { cuMemFree_v2(sk); }
+                    if sv != 0 { cuMemFree_v2(sv); }
+                    return false;
                 }
                 cuMemFree_v2(m.k); cuMemFree_v2(m.v);
                 if m.sk != 0 { cuMemFree_v2(m.sk); }
@@ -516,9 +541,13 @@ impl Gpu {
     pub fn attn_scores(&self, m: &mut KvGpu, q: &[f32], n: usize, scale: f32,
                        sc: &mut [f32]) -> bool {
         cu_ctx(self.ctx);
-        let rep = if m.n_kv == 0 { 0 } else { q.len() / (m.n_kv * m.hd) };
+        let rep = if m.n_kv == 0 || m.hd == 0 { 0 } else { q.len() / (m.n_kv * m.hd) };
         let hd = m.hd;
         if rep == 0 || rep > 32 || hd % 32 != 0 { return false; }
+        // `q` doit être un multiple exact de n_kv × hd : une division tronquée
+        // donnerait un `rep` faux, donc un PAS de ligne faux dans le noyau —
+        // des scores silencieusement faux.
+        if q.len() % (m.n_kv * m.hd) != 0 { return false; }
         if n == 0 || n > m.capacite || sc.len() < m.n_kv * rep * n { return false; }
         let fils = (rep * 32) as c_uint;
         let partage = ((rep * hd + 32 * (hd + 1)) * 4) as c_uint;
@@ -540,6 +569,10 @@ impl Gpu {
             if m.scores_cap < sc.len() {
                 if m.scores_dev != 0 { cuMemFree_v2(m.scores_dev); }
                 m.scores_dev = 0;
+                // Capacité remise à ZÉRO avant l'allocation : si celle-ci
+                // échoue, le prochain appel doit réessayer. La laisser à son
+                // ancienne valeur faisait passer un pointeur 0 au noyau.
+                m.scores_cap = 0;
                 if cuMemAlloc_v2(&mut m.scores_dev, sc.len() * 4) != 0 { return false; }
                 m.scores_cap = sc.len();
             }
@@ -612,6 +645,7 @@ hist {}, préfixes {}", hist.len(), prefixes.len());
             if m.histo_cap < besoin {
                 if m.histo_dev != 0 { cuMemFree_v2(m.histo_dev); }
                 m.histo_dev = 0;
+                m.histo_cap = 0;
                 let rc = cuMemAlloc_v2(&mut m.histo_dev, besoin);
                 if rc != 0 { eprintln!("{}", erreur(rc, "histogrammes en VRAM")); return false; }
                 m.histo_cap = besoin;
@@ -624,6 +658,7 @@ hist {}, préfixes {}", hist.len(), prefixes.len());
             if m.prefixes_cap < besoin_p {
                 if m.prefixes_dev != 0 { cuMemFree_v2(m.prefixes_dev); }
                 m.prefixes_dev = 0;
+                m.prefixes_cap = 0;
                 let rc = cuMemAlloc_v2(&mut m.prefixes_dev, besoin_p);
                 if rc != 0 { eprintln!("{}", erreur(rc, "préfixes en VRAM")); return false; }
                 m.prefixes_cap = besoin_p;
@@ -686,18 +721,26 @@ hist {}, préfixes {}", hist.len(), prefixes.len());
                 comptes: 0, cap_comptes: 0, bases: 0, cap_bases: 0,
                 meta: 0, cap_meta: 0, sortie: 0, cap_sortie: 0,
             });
-            // `t.k < k` est dans la condition, et pas seulement (lignes, ntr) :
-            // un même contexte avec un k plus grand (256 puis 4 096 à n = 4 096)
-            // gardait un tampon de sortie trop petit, et le noyau aurait écrit
-            // AU-DELÀ — un débordement en VRAM, pas une erreur propre. Les
-            // tampons de comptes, eux, ne dépendent que de (lignes, ntr).
-            if t.lignes < lignes || t.ntr < ntr || t.k < k {
-                if !vram_assurer(&mut t.comptes, &mut t.cap_comptes, 2 * lignes * ntr * 4)
-                    || !vram_assurer(&mut t.bases, &mut t.cap_bases, 2 * lignes * ntr * 4)
-                    || !vram_assurer(&mut t.meta, &mut t.cap_meta, 3 * lignes * 4)
-                    || !vram_assurer(&mut t.sortie, &mut t.cap_sortie, lignes * k * 4)
+            // Le garde est piloté par les CAPACITÉS, pas par le triplet
+            // (lignes, tranches, k) : c'est ce qui rend chaque échec
+            // auto-réparateur. Avec un drapeau « dimensions déjà vues », un
+            // `vram_assurer` qui échouait au milieu du `||` — il libère le
+            // tampon et met sa capacité à zéro — laissait les dimensions
+            // enregistrées INCHANGÉES : l'appel suivant, plus petit, sautait la
+            // réallocation et passait un pointeur 0 au noyau. Trouvé par un
+            // relecteur adversarial, sur le chemin d'échec d'allocation.
+            let (besoin_c, besoin_b, besoin_m, besoin_s) =
+                (2 * lignes * ntr * 4, 2 * lignes * ntr * 4, 3 * lignes * 4, lignes * k * 4);
+            if t.cap_comptes < besoin_c || t.cap_bases < besoin_b
+                || t.cap_meta < besoin_m || t.cap_sortie < besoin_s
+            {
+                if !vram_assurer(&mut t.comptes, &mut t.cap_comptes, besoin_c)
+                    || !vram_assurer(&mut t.bases, &mut t.cap_bases, besoin_b)
+                    || !vram_assurer(&mut t.meta, &mut t.cap_meta, besoin_m)
+                    || !vram_assurer(&mut t.sortie, &mut t.cap_sortie, besoin_s)
                 {
-                    eprintln!("[topk] allocation VRAM de la collecte impossible");
+                    eprintln!("[topk] allocation VRAM de la collecte impossible \
+({lignes} lignes, {ntr} tranches, k = {k})");
                     return false;
                 }
                 t.lignes = lignes; t.ntr = ntr; t.k = k; t.chunk = CHUNK;

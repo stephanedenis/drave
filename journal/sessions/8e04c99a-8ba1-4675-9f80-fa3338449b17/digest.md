@@ -1383,3 +1383,512 @@ journal/sessions/bbd6969f-0f70-42b2-8951-64d1f2f36d2e/digest.md:33528:=== Qwen2.
 journal/sessions/bbd6969f-0f70-42b2-8951-64d1f2f36d2e/digest.md:33762:=== Qwen2.5-0.5B Q4_0 ctx 256 (attendu 21,01) ===
   ```
 
+### 🤖 Assistant
+
+⏵ Vérification de la fin du banc dans la version commitée
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git show HEAD:drave-core/src/main.rs | grep -n \"l'ensemble retenu est le MÊME\\|second passage\\|sondes\" | head -5; echo \"---\"; git show HEAD:drave-core/src/main.rs | sed -n '2595,2615p'", "description": "Check committed bench en … [6 caractères tronqués]`
+
+  ```
+2605:        println!("    → l'ensemble retenu est le MÊME que celui du CPU, et l'ordre est celui qui \
+2675:            println!("    second passage k = {k2}, mêmes tampons : {ok_lignes}/{lignes} lignes · \
+2682:            println!("    second passage k = {k2} : REFUSÉ (la réutilisation des tampons est \
+---
+        }
+        if ok { ordre_ok += 1; }
+    }
+    println!("    collecte GPU {:8.2} ms · CPU tri complet {:8.2} ms ({:.1}× plus rapide)",
+             t_gpu_col * 1e3, t_cpu_col * 1e3, t_cpu_col / t_gpu_col.max(1e-9));
+    println!("    ensembles identiques au CPU : {set_ok}/{lignes} lignes · différence symétrique \
+{diff_sym} indices");
+    println!("    ordre documenté (au-dessus puis égaux, croissants) : {ordre_ok}/{lignes} lignes · \
+doublons {doublons} · hors bornes {hors_bornes} · cases non écrites {cases_vides}");
+    if set_ok == lignes && diff_sym == 0 && doublons == 0 && hors_bornes == 0 && cases_vides == 0 {
+        println!("    → l'ensemble retenu est le MÊME que celui du CPU, et l'ordre est celui qui \
+est écrit dans le noyau");
+        if ordre_ok != lignes {
+            println!("    → (l'ordre croissant GLOBAL n'est pas garanti : le tri CPU ci-dessus \
+l'e
+… [200 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Diff exact des ajouts non commités dans main.rs
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git diff drave-core/src/main.rs | head -100", "description": "Show uncommitted main.rs diff"}`
+
+  ```
+(no output)
+  ```
+
+### 🤖 Assistant
+
+⏵ Revérification de l'état git (dépôt peut-être en cours d'édition)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git status --porcelain; echo \"=== HEAD ===\"; git log --oneline -1 | cat; echo \"=== mtimes ===\"; ls -la --time-style=+%H:%M:%S drave-core/src/main.rs drave-core/src/gpu.rs README.md reports/rapport-gpu-topk-selection.md | cat; dat … [61 caractères tronqués]`
+
+  ```
+M journal/README.md
+=== HEAD ===
+a891c31 Rapport de sélection : le second passage k doublé, et la durée mal étiquetée
+=== mtimes ===
+-rw-r--r--. 1 stephane stephane  58642 18:08:03 drave-core/src/gpu.rs
+-rw-r--r--. 1 stephane stephane 212627 18:11:42 drave-core/src/main.rs
+-rw-------. 1 stephane stephane  28916 18:06:46 README.md
+-rw-------. 1 stephane stephane   8073 18:13:05 reports/rapport-gpu-topk-selection.md
+18:13:24
+  ```
+
+### 🤖 Assistant
+
+⏵ Le dépôt a bougé : nouvelle version du rapport, je la relis
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-gpu-topk-selection.md"}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-gpu-topk-selection.md</path>
+<type>file</type>
+<content>
+1: # Rapport — la sélection top-k sur GPU (noyaux 2a et 2b du plan)
+2: 
+3: **En une ligne** : la sélection du top-k de l'attention tourne maintenant sur GPU en
+4: **quatre passes d'histogramme + deux noyaux de collecte**, elle rend le **même
+5: ensemble d'indices que le CPU** (14/14 lignes, différence symétrique 0 à toutes les
+6: tailles testées) et coûte **0,89 ms** là où le tri CPU en coûte **497 ms** à
+7: 262 144 clés.
+8: 
+9: Plan suivi : [`docs/plan-gpu-topk.md`](../docs/plan-gpu-topk.md), étape 2.
+10: Noyau 1 (les scores) : [`reports/rapport-gpu-scores.md`](rapport-gpu-scores.md).
+11: 
+12: ## Ce qui a été écrit
+13: 
+14: Trois noyaux dans `drave-core/gpu/drave_gpu.cu` (11 → 13 noyaux) :
+15: 
+16: | noyau | rôle |
+17: |---|---|
+18: | `attn_topk_histo` | histogramme d'un OCTET des scores, pour les seuls scores dont les octets au-dessus valent le préfixe de leur ligne |
+19: | `attn_topk_compte` | par (ligne, tranche) : combien de scores au-dessus du seuil, combien égaux |
+20: | `attn_topk_ecrit` | écrit les indices retenus, **dans l'ordre croissant des indi
+… [7384 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git show a891c31 --stat | cat; echo \"=== DIFF ===\"; git show a891c31 -- reports/rapport-gpu-topk-selection.md README.md docs/plan-gpu-topk.md REPRISE.md | cat", "description": "Show the new commit changes"}`
+
+  ```
+commit a891c310994505841c24de061a443ad3f231ac9b
+Author: Stéphane <stephane@localhost>
+Date:   Wed Sep 30 18:13:05 2026 -0400
+
+    Rapport de sélection : le second passage k doublé, et la durée mal étiquetée
+
+ journal/README.md                                  |  4 +-
+ .../8e04c99a-8ba1-4675-9f80-fa3338449b17/digest.md | 94 ++++++++++++++++++++++
+ .../rapport.md                                     | 15 ++--
+ journal/sessions/MANIFEST.md                       |  8 +-
+ .../bbd6969f-0f70-42b2-8951-64d1f2f36d2e/digest.md | 26 ++++++
+ .../rapport.md                                     | 15 ++--
+ reports/rapport-gpu-topk-selection.md              | 14 ++++
+ 7 files changed, 157 insertions(+), 19 deletions(-)
+=== DIFF ===
+commit a891c310994505841c24de061a443ad3f231ac9b
+Author: Stéphane <stephane@localhost>
+Date:   Wed Sep 30 18:13:05 2026 -0400
+
+    Rapport de sélection : le second passage k doublé, et la durée mal étiquetée
+
+diff --git a/reports/rapport-gpu-topk-selection.md b/reports/rapport-gpu-topk-selection.md
+index 71f29e1..6d3111d 100644
+--- a/reports/rapport-gpu-topk-selection.md
++++ b/reports/rapport-gpu-topk-selection.md
+@@ -81,6 +81,16 @@ ordre que l'exactitude du noyau 1, donc 
+… [1595 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Nouveaux commits : je relis l'historique récent et cherche la trace du second passage
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log --oneline --since=\"2026-09-30 18:00\" | cat; echo \"=== show ===\"; git log --format='%h %ci %s' -8 | cat", "description": "Show newest commits with times"}`
+
+  ```
+a891c31 Rapport de sélection : le second passage k doublé, et la durée mal étiquetée
+fa6a4f3 Collecte top-k : réallouer quand k GRANDIT, et un banc qui le prouve
+e950075 Noyaux 2b : collecte des k indices — même ensemble que le CPU, 896× le tri à 262 k clés
+=== show ===
+a891c31 2026-09-30 18:13:05 -0400 Rapport de sélection : le second passage k doublé, et la durée mal étiquetée
+fa6a4f3 2026-09-30 18:12:33 -0400 Collecte top-k : réallouer quand k GRANDIT, et un banc qui le prouve
+e950075 2026-09-30 18:07:06 -0400 Noyaux 2b : collecte des k indices — même ensemble que le CPU, 896× le tri à 262 k clés
+d00c01c 2026-09-30 17:52:23 -0400 Noyau 2a du top-k GPU : histogramme d'octet, seuil exact sur 14/14 lignes
+5e8bf48 2026-09-30 17:46:44 -0400 Sprint 1 : noyau GPU de scores d'attention — exact à 1,03e-7, 40× plus rapide
+e7cb848 2026-09-30 17:40:07 -0400 Cadence de sprints de 2 h : charte et outil de boxing temps réel
+645c3ee 2026-09-30 17:34:20 -0400 Quatrième relecture : deux défauts graves (client et nœud tués par 83 octets) — corrigés
+f1c265e 2026-09-30 17:08:49 -0400 README : les prochaines étapes étaient restées à l'époque du FPGA
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 60 grep -rn \"second passage k = 512\" journal/sessions/ 2>/dev/null | head -12", "description": "Find second-passage traces in journals"}`
+
+  ```
+journal/sessions/bbd6969f-0f70-42b2-8951-64d1f2f36d2e/digest.md:34022:    second passage k = 512, mêmes tampons : 14/14 lignes · 0.00 ms · cases non écrites 0
+journal/sessions/bbd6969f-0f70-42b2-8951-64d1f2f36d2e/digest.md:34027:    second passage k = 512, mêmes tampons : 14/14 lignes · 0.00 ms · cases non écrites 0
+journal/sessions/bbd6969f-0f70-42b2-8951-64d1f2f36d2e/digest.md:34035:    second passage k = 512, mêmes tampons : 14/14 lignes · 0.0005 ms (0.0003 ms de seuil) · cases non écrites 0
+journal/sessions/bbd6969f-0f70-42b2-8951-64d1f2f36d2e/digest.md:34078:    second passage k = 512, mêmes tampons : 14/14 lignes · 0.0004 ms (0.0003 ms de seuil) · cases non écrites 0
+journal/sessions/bbd6969f-0f70-42b2-8951-64d1f2f36d2e/digest.md:34087:    second passage k = 512, mêmes tampons : 14/14 lignes · 0.0004 ms (0.0003 ms de seuil) · cases non écrites 0
+journal/sessions/bbd6969f-0f70-42b2-8951-64d1f2f36d2e/digest.md:34100:    second passage k = 512, mêmes tampons : 14/14 lignes · 0.0004 ms (0.0003 ms de seuil) · cases non écrites 0
+journal/sessions/bbd6969f-0f70-42b2-8951-64d1f2f36d2e/digest.md:34108:    second passage k = 512, mêmes tampons : 14/14 lignes · 0.45 ms (0.27 ms de seuil
+… [705 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Lecture de la trace du second passage et du calcul « 1 500× »
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '34000,34120p' journal/sessions/bbd6969f-0f70-42b2-8951-64d1f2f36d2e/digest.md", "description": "Read digest 34000-34120"}`
+
+  ```
+```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/gpu.rs", "new_string": "            // `t.k < k` est dans la condition, et pas seulement (lignes, ntr) :\n            // un même contexte avec un k plus grand (256 puis 4 096 à n = 4 096)\n            // gardait un tampon  … [330 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/gpu.rs has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/main.rs'; s=open(p).read()\nancre = \"\"\"    } else {\n        println!(\"    → ÉCART sur la sélection\");\n    }\n}\"\"\"\nneuf = \"\"\"    } else {\n        println!(\"    → ÉCART sur la sélecti … [3505 caractères tronqués]`
+
+  ```
+second passage ajouté
+build fini
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for n in 4096 262144; do echo \"### n=$n\"; DRAVE_GPU=1 timeout 600 ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q4_0.gguf --banc-topk $n 2>&1 | tail -4; done", "description": "Run bench with k-growth regression test", "time … [15 caractères tronqués]
+… [6478 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Recherche du calcul « 1 500× » dans le journal
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 60 grep -n \"1 500\\|1500×\\|1500 x\\|14,7 Mo\" journal/sessions/bbd6969f-0f70-42b2-8951-64d1f2f36d2e/digest.md | head -12", "description": "Grep digest for 1500x reasoning"}`
+
+  ```
+15837:- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='docs/contexte-long.md'; s=open(p).read()\nold = \"\"\"Deux réserves, mesurées elles aussi :\n\n- le **saut à ~1 500 jetons de contexte** est commun aux deux régimes : il vient\n  du contenu AJOUTÉ (non contrôlé p … [3096 caractères tronqués]`
+29962:4. **Version 5 obligatoire** : dans `recevoir_flux` un mode inconnu n'est refusé qu'APRÈS lecture de `n×4` octets (repli `_ => {}`, puis `autre => Err`) ; un pair v4 lirait `4t` octets d'un corps de ~1 500/état et dirait « mode inconnu », exact mais tardif et muet sur la cause. Critère 3.5. Durcissement ajouté au plan : refuser les modes inconnus juste après l'en-tête, avant tout octet de corps.
+31608:| **lot en listes (mode 4)** | **1 500** | 3,03e-2 à 256 jetons |
+32306:- Measured results to reuse: mode 4 lot-en-listes 1 500 B/token vs 3 663 dense (écart 3.03e-2 at 256 tokens, criterion ≤1.5× mode 2's 2.74e-2); lot mode 18× faster over a 20 ms link, 7× per-token locally; DRVF v2 66 370 408 B (lossless) / v3 45 079 930 B (+0.074 % PPL); KV frontier at 8 192/4 096: f16 keys+int8 values **+0.018 %/+0.011 %** (39 % of f32), int8/int8 +
+… [511 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Recherche du calcul dans la session sœur
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 60 grep -n \"1500\\|1 500\" journal/sessions/8e04c99a-8ba1-4675-9f80-fa3338449b17/digest.md journal/sessions/8e04c99a-8ba1-4675-9f80-fa3338449b17/rapport.md 2>/dev/null | head -12", "description": "Grep sibling session for 15 … [5 caractères tronqués]`
+
+  ```
+journal/sessions/8e04c99a-8ba1-4675-9f80-fa3338449b17/digest.md:818:32306:- Measured results to reuse: mode 4 lot-en-listes 1 500 B/token vs 3 663 dense (écart 3.03e-2 at 256 tokens, criterion ≤1.5× mode 2's 2.74e-2); lot mode 18× faster over a 20 ms link, 7× per-token locally; DRVF v2 66 370 408 B (lossless) / v3 45 079 930 B (+0.074 % PPL); KV frontier at 8 192/4 096: f16 keys+int8 values **+0.018 %/+0.011 %** (39 % of f32), int8/int8 +3.04 %/+2.25 %; f16 keys cost 2.3× CPU time (162 vs 70 ms/pass at 262 144 keys); needle 9/9 in all three KV variants; kernel 1 scores écart 1.03e-7, 29–40.6× CPU.
+journal/sessions/8e04c99a-8ba1-4675-9f80-fa3338449b17/rapport.md:138:- **T1** `32306:- Measured results to reuse: mode 4 lot-en-listes 1 500 B/token vs 3 663 dense (écart 3.03e-2 at 256 tokens, criterion ≤1.5× mode 2's 2.74e-2); lot mode 18× faster over a 20 ms link, 7× per-toke`
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 60 grep -rn \"0,0003\\|0.0003\\|14,7 Mo\\|14.7 Mo\" journal/sessions/8e04c99a-8ba1-4675-9f80-fa3338449b17/rapport.md | head -12", "description": "Grep sibling report for 0.0003"}`
+
+  ```
+179:- **T1** `second passage k = 512, mêmes tampons : 14/14 lignes · 0.0004 ms (0.0003 ms de seuil) · cases non écrites 0`
+  ```
+
+### 🤖 Assistant
+
+⏵ Lecture du rapport de la session sœur (vérification du second passage)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '150,200p' journal/sessions/8e04c99a-8ba1-4675-9f80-fa3338449b17/rapport.md", "description": "Read sibling session report"}`
+
+  ```
+- **T1** `[262144]   GPU  scores  :     6.36 ms  (40.6× plus rapide)`
+- **T1** `CPU  20 fils :     3.88 ms`
+- **T1** `GPU  scores  :     0.12 ms  (31.6× plus rapide)`
+- **T1** `CPU  20 fils :    63.06 ms`
+- **T1** `GPU  scores  :     2.36 ms  (26.7× plus rapide)`
+- **T1** `CPU  20 fils :   243.82 ms`
+- **T1** `GPU  scores  :     6.09 ms  (40.0× plus rapide)`
+- **T1** `6:tailles testées) et coûte **0,89 ms** là où le tri CPU en coûte **497 ms** à`
+- **T1** `reports/rapport-gpu-scores.md:27:| 256 | 0,25 ms | 0,07 ms | 3,8× | 1,03e-7 |`
+- **T1** `reports/rapport-gpu-scores.md:28:| 4 096 | 3,98 ms | **0,14 ms** | **29×** | 1,03e-7 |`
+- **T1** `reports/rapport-gpu-scores.md:29:| 65 536 | 65,3 ms | 7,4 ms | 8,9× | 1,03e-7 |`
+- **T1** `reports/rapport-gpu-scores.md:30:| **262 144** | 257,9 ms | **6,36 ms** | **40,6×** | 1,03e-7 |`
+- **T1** `./reports/rapport-gpu-scores.md:35:| 256 | 0,25 ms | 0,07 ms | 3,8× | 1,03e-7 |`
+- **T1** `./reports/rapport-gpu-scores.md:36:| 4 096 | 3,98 ms | **0,14 ms** | **29×** | 1,03e-7 |`
+- **T1** `./reports/rapport-gpu-scores.md:37:| 65 536 | 65,3 ms | 7,4 ms | 8,9× | 1,03e-7 |`
+- **T1** `./reports/rapport-gpu-scores.md:38:| **262 144** | 257,9 ms | **6,36 m
+… [2719 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Lecture du code du second passage (formatage des durées)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && awk 'NR>=2636 && NR<=2700 {printf \"%d: %s\\n\", NR, $0}' drave-core/src/main.rs", "description": "Read second-passage code and prints"}`
+
+  ```
+2636:                 let mut cum = dessus2[l];
+2637:                 let mut b = 256usize;
+2638:                 while b > 0 && cum < k2 { b -= 1; cum += h[b] as usize; }
+2639:                 dessus2[l] = cum - h[b] as usize;
+2640:                 prefixes2[l] = (prefixes2[l] << 8) | b as u32;
+2641:             }
+2642:         }
+2643:         let t2_k2 = t7.elapsed().as_secs_f64();
+2644:         // Le seuil FLOTTANT du nouveau k, pour la référence CPU.
+2645:         for l in 0..lignes {
+2646:             let mut tri: Vec<f32> = obtenu[l * n..(l + 1) * n].to_vec();
+2647:             tri.sort_unstable_by(|a, b| b.partial_cmp(a).unwrap());
+2648:             seuils2[l] = tri[k2 - 1];
+2649:             let _ = egaux2[l];
+2650:         }
+2651:         let besoin2: Vec<i32> = (0..lignes).map(|l| (k2 - dessus2[l]) as i32).collect();
+2652:         let mut sortie2 = vec![-1i32; lignes * k2];
+2653:         let t6 = Instant::now();
+2654:         let fait = ok2
+2655:             && machine.attn_topk_collecte(&mut miroir, lignes, n, k2, &prefixes2, &besoin2,
+2656:                                           &mut sortie2);
+2657:         let t_k2 = t6.elapsed().as_secs_f64();
+2658:         if fait
+… [2402 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Nouvel état du dépôt : recomptage des lignes et noyaux
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"HEAD: $(git log --oneline -1 | cat)\"; echo \"=== wc -l src/*.rs ===\"; wc -l drave-core/src/*.rs; echo \"=== cu ===\"; wc -l drave-core/gpu/drave_gpu.cu; grep -c \"__global__ void\" drave-core/gpu/drave_gpu.cu; echo \"=== REA … [161 caractères tronqués]`
+
+  ```
+HEAD: a891c31 Rapport de sélection : le second passage k doublé, et la durée mal étiquetée
+=== wc -l src/*.rs ===
+   976 drave-core/src/engine.rs
+   721 drave-core/src/gguf.rs
+  1200 drave-core/src/gpu.rs
+  1440 drave-core/src/list.rs
+  4171 drave-core/src/main.rs
+  3932 drave-core/src/model.rs
+   507 drave-core/src/tokenizer.rs
+ 12947 total
+=== cu ===
+853 drave-core/gpu/drave_gpu.cu
+13
+=== README/REPRISE counts ===
+README.md:299:le moteur tenait en 386 lignes à ses débuts ; il en fait 12 171 aujourd'hui). Détail complet :
+README.md:373:BLAS, sans aucune dépendance : **12 840 lignes de Rust, `std` seul** au 30/09 (2 319 au premier prototype). Détail :
+REPRISE.md:16:`drave-core` est un moteur d'inférence Rust (~12 171 lignes, `std` seul) qui
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git show fa6a4f3 --stat | cat; echo \"=== git status ===\"; git status --porcelain", "description": "Show fa6a4f3 stat and status"}`
+
+  ```
+commit fa6a4f380738e2230b0422751af044b8e805b5a9
+Author: Stéphane <stephane@localhost>
+Date:   Wed Sep 30 18:12:33 2026 -0400
+
+    Collecte top-k : réallouer quand k GRANDIT, et un banc qui le prouve
+    
+    Défaut trouvé à la relecture (pas par un banc) : `TamponsTopk` n'était réalloué
+    que si (lignes, tranches) grandissait. Un même contexte avec un k plus grand —
+    256 puis 4 096 sur 4 096 clés — gardait donc un tampon de sortie de 14×256
+    entiers pendant que le noyau en écrivait 14×4 096 : un DÉBORDEMENT en VRAM
+    silencieux, qui aurait écrasé les tampons voisins de la même allocation.
+    
+    `t.k < k` entre dans la condition, et le banc fait maintenant un SECOND passage
+    avec k doublé, dans le même processus, avec vérification d'ensemble contre le
+    CPU : 14/14 lignes identiques, 0 case non écrite, 0,45 ms de collecte et 0,27 ms
+    de seuil à 262 144 clés (k = 512).
+    
+    Au passage, un affichage faux corrigé : les deux durées du second passage sont
+    en secondes et étaient étiquetées « ms » sans conversion — elles annonçaient un
+    noyau 1 500× trop rapide. Un affichage mal étiqueté est un affichage qui ment.
+
+ drave-core/src/gpu.rs                     
+… [704 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Vérification de la porte Q4_0 : corpus et conclusion de la session sœur
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls -la /tmp/wt2_ids.txt /tmp/ids_qwen.txt; md5sum /tmp/wt2_ids.txt /tmp/ids_qwen.txt; echo \"=== sibling findings ===\"; timeout 60 grep -n \"21,01\\|21.198\\|21,198\\|Q4_0\" journal/sessions/8e04c99a-8ba1-4675-9f80-fa3338449b17/rapp … [84 caractères tronqués]`
+
+  ```
+-rw-r--r--. 1 stephane stephane 21380 30 sep 17:11 /tmp/ids_qwen.txt
+-rw-r--r--. 1 stephane stephane  9532 26 sep 10:22 /tmp/wt2_ids.txt
+b38ecafab5ea9050f165b35531025f11  /tmp/wt2_ids.txt
+6a548c82022e2a19970025fecd2bd22a  /tmp/ids_qwen.txt
+=== sibling findings ===
+46:⏵ Recherche de la commande Q4_0 avec --ppl
+94:- **T1** Find Q4_0 expected gate value
+95:- **T1** Find Q4_0 gate value history
+96:- **T1** Read digest around the 18:00 Q4_0 gate
+107:- **T1** `510 tokens notés — perplexité cumulée 21.198  (21.9 tok/s)  [fenêtre 2 : 255 notés, PPL 22.628]`
+113:- **T1** `397:| **4 bits** (`--q4`, `--q4-tout`) | modèle 4 bits existant (Q4_0) ou débit prioritaire | **41,6 – 44 tok/s** |`
+114:- **T1** `413:requantification), fait tourner un vrai Qwen2.5-0.5B **Q4_0** à **41,6 tok/s**`
+187:- **T1** `359:| Qwen2.5-0.5B | Q4_0 | 21,01 | 39 tok/s | 0,41 Go |`
+188:- **T1** `31313:       7 tokens notés — perplexité cumulée 821.198  (21.8 tok/s)`
+189:- **T1** `33635:     510 tokens notés — perplexité cumulée 21.198  (21.9 tok/s)  [fenêtre 2 : 255 notés, PPL 22.628]`
+190:- **T1** `33764:     510 tokens notés — perplexité cumulée 21.198  (21.9 tok/s)  [fenêtre 2 : 255 notés, PPL 22.628]`
+  ```
+
+### 🤖 Assistant
+
+⏵ Sémantique de --q4 et charge machine avant un test PPL
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n '\"--q4\"\\|q4_tout\\|--q4-tout\\|fn q4' drave-core/src/main.rs | head -12; echo \"=== load ===\"; uptime; nproc", "description": "Check --q4 flag and machine load"}`
+
+  ```
+591:            "--q4" => { o.q4 |= 3; 1 }
+594:            "--q4-tout" => { o.q4 |= 7; 1 }
+=== load ===
+ 18:14:54  up 9 days  7:27,  2 users,  load average: 3,04, 5,96, 12,43
+40
+  ```
+
+### 🤖 Assistant
+
+⏵ Test de la porte Q4_0 native (≈30 s) pour trancher l'écart 21,198/21,01
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && time timeout 115 ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q4_0.gguf --ppl /tmp/wt2_ids.txt --ctx 256 --limit 512 --threads 16 2>&1 | tail -4", "description": "Run native Q4_0 PPL gate", "timeoutMs": 120000}`
+
+  ```
+part de l'attention dans le flux d'événements : 100.0 %
+    postes (ms/token) : projets-attn 2.70 | rope 0.50 | attention 1.59 | proj+mlp 22.53 | somme 27.32 | reste (tête + échantillonnage) 7.13
+    dont tête de sortie 5.74 | notation log-sum-exp 1.34 (le reste du « reste » n'est pas chronométré)
+    dont attention : scores 0.67 | softmax 0.27 | somme pondérée + écriture KV 0.65
+[stderr]
+
+real	0m25,944s
+user	5m39,136s
+sys	0m1,410s
+  ```
+
+### 🤖 Assistant
+
+⏵ Relance ciblée pour lire la perplexité Q4_0
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 115 ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q4_0.gguf --ppl /tmp/wt2_ids.txt --ctx 256 --limit 512 --threads 16 2>&1 | grep -E \"perplexité|tokens notés\"", "description": "Extract Q4_0 perplexity values", "time … [15 caractères tronqués]`
+
+  ```
+255 tokens notés — perplexité cumulée 19.859  (26.5 tok/s)  [fenêtre 1 : 255 notés, PPL 19.859]
+     510 tokens notés — perplexité cumulée 21.198  (27.5 tok/s)  [fenêtre 2 : 255 notés, PPL 22.628]
+=== perplexité 21.1983 sur 510 tokens (0 événements, 18.6 s) ===
+  ```
+
+### 🤖 Assistant
+
+⏵ Test du mode --q4 pour expliquer la référence 21,0110
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 115 ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q4_0.gguf --ppl /tmp/wt2_ids.txt --ctx 256 --limit 512 --threads 16 --q4 2>&1 | grep -E \"perplexité 2|perplexité cumulée 21|\\[q4\"", "description": "Run Q4_0 with -- … [30 caractères tronqués]`
+
+  ```
+510 tokens notés — perplexité cumulée 21.011  (41.0 tok/s)  [fenêtre 2 : 255 notés, PPL 22.442]
+=== perplexité 21.0110 sur 510 tokens (0 événements, 12.4 s) ===
+  ```
+
+### 🤖 Assistant
+
+⏵ Capture finale de l'état des fichiers audités (révision, empreintes, lignes)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; git log --oneline -1 | cat; git status --porcelain; echo \"=== md5 ===\"; md5sum reports/rapport-gpu-topk-selection.md reports/rapport-gpu-scores.md docs/plan-gpu-topk.md README.md REPRISE.md sprints/01-premier-des- … [155 caractères tronqués]`
+
+  ```
+18:16:39
+a891c31 Rapport de sélection : le second passage k doublé, et la durée mal étiquetée
+ M drave-core/gpu/drave_gpu.cu
+ M drave-core/src/gpu.rs
+ M drave-core/src/main.rs
+ M journal/README.md
+ M reports/rapport-gpu-topk-selection.md
+=== md5 ===
+24a1ffdc979514db3b7ceb87168d322f  reports/rapport-gpu-topk-selection.md
+5a90810dd9db62b45e377c8fa2a203a1  reports/rapport-gpu-scores.md
+27fe8b21b84b02af8793b8e2c11d1b8a  docs/plan-gpu-topk.md
+0d89762e70bd701a210b8d8f92b4af22  README.md
+0325617c1a852671531c0886d8e73fe9  REPRISE.md
+c65038a7f63f8162de7cfffc40125fec  sprints/01-premier-des-trois-noyaux-gpu-du-top-k-le.md
+=== a4735aa time ===
+a4735aa 2026-09-30 17:03:17 -0400 Compteurs de lignes : 12 171 au 30/09 (le mode 4 et ses correctifs ont ajouté 270 lignes)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"1,6–2,3e-7\\|1,6 à 2,3e-7\\|1,60 à 2,25e-7\\|27–40×\\|27 à 40×\" README.md docs/plan-gpu-topk.md reports/rapport-gpu-topk-selection.md reports/rapport-gpu-scores.md | cat; echo \"=== kernels per commit ===\"; for r in 5e8bf … [210 caractères tronqués]`
+
+  ```
+README.md:505:   (`reports/rapport-gpu-scores.md`, écart 1,6–2,3e-7, 27–40× le CPU) et la sélection
+docs/plan-gpu-topk.md:86:| 1 | `attn_scores` + FFI + banc `--banc-topk` sur 4 k de contexte | ✅ **fait** : écart **1,6 à 2,3e-7** à toutes les longueurs (256 à 262 144 clés, clés distinctes — la valeur de 1,03e-7 venait d'un banc dégénéré), **27 à 40× plus rapide** que le CPU — `reports/rapport-gpu-scores.md` |
+reports/rapport-gpu-topk-selection.md:73:**1,60 à 2,25e-7** selon la taille — c'est la même mesure faite sur des données non
+reports/rapport-gpu-topk-selection.md:137:| 1 | `attn_scores` | ✅ 1,6–2,3e-7 · 27–40× |
+reports/rapport-gpu-scores.md:4:un écart de **1,6 à 2,3e-7** sur la référence CPU et **40× plus vite** à 262 144 clés —
+=== kernels per commit ===
+5e8bf48~1: 9
+5e8bf48: 10
+d00c01c: 11
+e950075: 13
+a891c31: 13
+  ```
+
+### 🤖 Assistant
+
+⏵ Le rapport est encore en cours d'édition : diff des dernières retouches
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git diff -- reports/rapport-gpu-topk-selection.md | cat; echo \"=== mtime ===\"; ls -la --time-style=+%H:%M:%S reports/rapport-gpu-topk-selection.md README.md docs/plan-gpu-topk.md REPRISE.md reports/rapport-gpu-scores.md", "descript … [38 caractères tronqués]`
+
+  ```
+diff --git a/reports/rapport-gpu-topk-selection.md b/reports/rapport-gpu-topk-selection.md
+index 6d3111d..d1d0dc2 100644
+--- a/reports/rapport-gpu-topk-selection.md
++++ b/reports/rapport-gpu-topk-selection.md
+@@ -114,6 +114,22 @@ plus grand gardait un tampon de sortie trop petit et le noyau écrivait **au-del
+   (0,0004 ms pour 14,7 Mo lus). Un affichage mal étiqueté est un affichage qui
+   ment — et il a bien failli faire chercher un faux défaut dans le noyau.
+ 
++## Limites connues du contrat
++
++Le radix select s'appuie sur la transformation monotone du f32. Elle est
++**strictement croissante pour deux valeurs distinctes**, mais :
++
++* `monotone(-0,0) = 0x7FFFFFFF` et `monotone(+0,0) = 0x80000000` : deux scores que
++  le f32 déclare **égaux** ont deux entiers différents, donc si le k-ième score est
++  un zéro signé, le départage des ex æquo peut différer du CPU ;
++* les **NaN** sont rangés par leur bit de signe (au-dessus de +inf ou en dessous de
++  -inf) au lieu de n'être comparables à rien.
++
++Aucune des deux n'a été observée : il faut une clé nulle et une échelle négative
++pour produire -0,0, et les scores NaN n'apparaissent pas dans un modèle sain. Le
++contrat est corrigé dans 
+… [524 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Vérification de la transformation monotone dans le noyau et des dernières lignes
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"monotone\\|0x80000000\\|0x7FFFFFFF\\|i += 256\\|contigu\" drave-core/gpu/drave_gpu.cu | head -20; echo \"=== python check ===\"; python3 -c \"\nimport struct\ndef mono(x):\n    b=struct.unpack('<I',struct.pack('<f',x))[0]\n … [352 caractères tronqués]`
+
+  ```
+122:// contigu. La réduction se fait en mémoire partagée (pas de shuffle : aucun
+704:// elle est vraie pour deux valeurs DISTINCTES, pas pour ±0,0 — `monotone(-0,0)`
+705:// vaut 0x7FFFFFFF et `monotone(+0,0)` vaut 0x80000000, alors que le f32 les
+710:__device__ __forceinline__ unsigned int monotone(float f) {
+714:    return (b & 0x80000000u) ? ~b : (b | 0x80000000u);
+716:__device__ __forceinline__ float depuis_monotone(unsigned int u) {
+717:    const unsigned int b = (u & 0x80000000u) ? (u & 0x7FFFFFFFu) : ~u;
+721:// Histogramme d'un OCTET du score transformé en entier monotone. Un seul noyau
+746:        const unsigned int cle = monotone(row[i]);
+770:// partent du bon pied. Une plage entrelacée (i += 256) casserait cet ordre.
+792:        const unsigned int cle = monotone(row[i]);
+828:        const unsigned int cle = monotone(row[i]);
+851:        const unsigned int cle = monotone(row[i]);
+=== python check ===
++0.0 -> 0x80000000
+-0.0 -> 0x7fffffff
++inf -> 0xff800000
+nan  -> 0xffc00000
+-inf -> 0x7fffff
+-nan -> 0x3fffff
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"1 500×\\|5 à 7 des 14\\|11 → 13\\|27–40×\\|dernière ligne dit\" reports/rapport-gpu-topk-selection.md; echo \"=== scores note line ===\"; grep -n \"Le temps du noyau\" reports/rapport-gpu-scores.md", "description": "Get cur … [31 caractères tronqués]`

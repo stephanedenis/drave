@@ -5,12 +5,12 @@
 | Identifiant | `8e04c99a-8ba1-4675-9f80-fa3338449b17` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-30 18:07 |
-| Durée | 0.1 h |
+| Durée | 0.2 h |
 | Tours | 1 |
-| Messages | 36 |
-| Appels d'outils | 57 |
+| Messages | 55 |
+| Appels d'outils | 82 |
 | Fichiers touchés | 0 |
-| Commandes | 48 |
+| Commandes | 72 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -23,7 +23,7 @@
 
 ### Tour 1 — Tu es VÉRIFICATEUR de documentation dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (moteur d'inférence «  … [3755 caractères tronqués]
 
-*57 appels d'outils.* Actions notables :
+*82 appels d'outils.* Actions notables :
 
 - bash — List repo root and measurement traces
 - bash — Show today's git log
@@ -39,11 +39,11 @@
 - bash — Show recent commits touching sources
 - bash — Diff docs in last commit
 - bash — Find line-count methodology references
-- … et 35 autres
+- … et 59 autres
 
 **Synthèse produite :**
 
-⏵ Recherche de la commande Q4_0 avec --ppl
+⏵ Vérification de la transformation monotone dans le noyau et des dernières lignes
 
 ## 3. Travail accompli
 
@@ -94,7 +94,7 @@
 - **T1** Find Q4_0 expected gate value
 - **T1** Find Q4_0 gate value history
 - **T1** Read digest around the 18:00 Q4_0 gate
-- … et 8 autres
+- … et 32 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -199,4 +199,24 @@
 - **T1** `GPU  4 passes d'histogramme :     0.74 ms  (36.5× plus rapide)`
 - **T1** `collecte GPU     0.36 ms · CPU tri complet    16.55 ms (46.1× plus rapide)`
 - **T1** `31489:AUTRES : (3) plafond R4 = par message, pas par session : 8 flux de 35,4 Mo (282,9 Mo cumulés > 256) tous acceptés — mais la RAM ne s'accumule PAS (RSS 593 Mo stable, HWM 698 Mo) ; la vérif du cu`
+- **T1** `+0,45 ms de collecte et 0,27 ms de seuil à 262 144 clés. Ce passage existe pour un`
+- **T1** `+  (0,0004 ms pour 14,7 Mo lus). Un affichage mal étiqueté est un affichage qui`
+- **T1** `journal/sessions/bbd6969f-0f70-42b2-8951-64d1f2f36d2e/digest.md:34022:    second passage k = 512, mêmes tampons : 14/14 lignes · 0.00 ms · cases non écrites 0`
+- **T1** `journal/sessions/bbd6969f-0f70-42b2-8951-64d1f2f36d2e/digest.md:34027:    second passage k = 512, mêmes tampons : 14/14 lignes · 0.00 ms · cases non écrites 0`
+- **T1** `journal/sessions/bbd6969f-0f70-42b2-8951-64d1f2f36d2e/digest.md:34035:    second passage k = 512, mêmes tampons : 14/14 lignes · 0.0005 ms (0.0003 ms de seuil) · cases non écrites 0`
+- **T1** `journal/sessions/bbd6969f-0f70-42b2-8951-64d1f2f36d2e/digest.md:34078:    second passage k = 512, mêmes tampons : 14/14 lignes · 0.0004 ms (0.0003 ms de seuil) · cases non écrites 0`
+- **T1** `journal/sessions/bbd6969f-0f70-42b2-8951-64d1f2f36d2e/digest.md:34087:    second passage k = 512, mêmes tampons : 14/14 lignes · 0.0004 ms (0.0003 ms de seuil) · cases non écrites 0`
+- **T1** `journal/sessions/bbd6969f-0f70-42b2-8951-64d1f2f36d2e/digest.md:34100:    second passage k = 512, mêmes tampons : 14/14 lignes · 0.0004 ms (0.0003 ms de seuil) · cases non écrites 0`
+- **T1** `journal/sessions/bbd6969f-0f70-42b2-8951-64d1f2f36d2e/digest.md:34108:    second passage k = 512, mêmes tampons : 14/14 lignes · 0.45 ms (0.27 ms de seuil) · cases non écrites 0`
+- **T1** `journal/sessions/8e04c99a-8ba1-4675-9f80-fa3338449b17/digest.md:953:    second passage k = 512, mêmes tampons : 14/14 lignes · 0.0001 ms (0.0001 ms de seuil) · cases non écrites 0`
+- **T1** `journal/sessions/8e04c99a-8ba1-4675-9f80-fa3338449b17/rapport.md:172:- **T1** `second passage k = 512, mêmes tampons : 14/14 lignes · 0.0001 ms (0.0001 ms de seuil) · cases non écrites 0``
+- **T1** `journal/sessions/8e04c99a-8ba1-4675-9f80-fa3338449b17/rapport.md:179:- **T1** `second passage k = 512, mêmes tampons : 14/14 lignes · 0.0004 ms (0.0003 ms de seuil) · cases non écrites 0``
+- **T1** `second passage k = 512, mêmes tampons : 14/14 lignes · 0.00 ms · cases non écrites 0`
+- **T1** `second passage k = 512, mêmes tampons : 14/14 lignes · 0.0005 ms (0.0003 ms de seuil) · cases non écrites 0`
+- **T1** `collecte GPU     0.48 ms · CPU tri complet   394.64 ms (829.0× plus rapide)`
+- **T1** `[sondes] 1 passe = 0.0834 ms, ok = true`
+- **T1** `[sondes] 1 passe = 0.0725 ms, ok = true`
+- **T1** `[boucle] decalage 24 : 0.0646 ms, ok = true`
+- **T1** `[boucle] decalage 16 : 0.0612 ms, ok = true`
+- … (tronqué)
 
