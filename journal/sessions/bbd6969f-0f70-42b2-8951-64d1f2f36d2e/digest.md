@@ -18592,3 +18592,121 @@ test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; fini
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='REPRISE.md'; s=open(p).read()\nold = \"| 2 | seuil de rotation YaRN | **fait, seuil corrigé**\"\nnew = \"| 2 | seuil de rotation YaRN | **fait, seuil à 4 × la longueur déclarée**\"\nassert old in s; s = s.replace … [1535 caractères tronqués]`
+
+  ```
+REPRISE rotation à jour
+1517088 Rotation à 16 384 jetons : le RoPE simple gagne encore (35,18 contre 1 133,02)
+  ```
+
+- **todo_write** `{"todos": [{"content": "Chantier 1 : aiguille long contexte (12/12 sondes)", "status": "completed"}, {"content": "Chantier 2 : GPU (vectorisation, experts, lots, tête AVX2, 2 cartes)", "status": "completed"}, {"content": "Chantier 3 : pagination CPU + hypothèse f16 réfutée", "status": "completed"},  … [327 caractères tronqués]`
+
+  ```
+Updated todo list: 0 pending, 1 in progress, 5 completed.
+  ```
+
+### 🤖 Assistant
+
+⏵ Tour 4 : le 16 k est tranché, cinq chantiers et demi sur six sont clos
+
+## Livré dans ce tour
+
+**Chantier 4 — rotation à 16 384 jetons, bouclé.** Protocole apparié, mêmes 512 jetons notés (positions 15 872 à 16 383), KV déporté — sans lui l'attention coûte ~180 ms/jeton et la passe dépasse l'heure par régime :
+
+| régime | perplexité | durée |
+|---|---|---|
+| **RoPE simple** | **35,18** | 2 367 s |
+| interpolation seule | **1 133,02** | 2 251 s |
+
+**×32 en faveur du simple.** Sur toute l'étendue mesurée — 128, 512, 1 024, 1 536, 5 120, 16 384 — l'interpolation n'a **jamais** gagné, et l'écart se creuse avec la longueur (×1,1 à 512, ×131 à 5 120, ×32 à 16 384).
+
+Conséquence appliquée : le seuil de bascule passe de 1,25 × à **4 ×** la longueur déclarée (16 384 pour gpt-oss, exactement la plus grande longueur mesurée). L'interpolation ne s'active plus dans la plage où l'on sait qu'elle nuit ; au-delà, c'est une extrapolation non mesurée, et le document le dit.
+
+## État des six chantiers
+
+| # | chantier | état |
+|---|---|---|
+| 1 | aiguille long contexte | ✅ 12/12 sondes (1,5B 512/2048, 30B 2048, gpt-oss 4096) |
+| 2 | chemin GPU (5 sous-items) | ✅ vectorisation ×1,8-2,3 · experts +6 % (verdict : ne pas activer) · lots ×2,8 · tête AVX2 · deux cartes 12/12 |
+| 3 | mémoire KV | ✅ pagination CPU (0,03 Go à ctx 1 M) · hypothèse f16 **réfutée** |
+| 4 | rotation à 16 k | ✅ **35,18 contre 1 133,02**, seuil corrigé |
+| 5 | MLA + vision | ⏳ **MLA fait et validé** (5,2e-7 contre la référence numpy) ; **vision** : paramètres et nommage relevés dans le `mmproj` (560 px, patchs 14, 32 couches, `n_wa_pattern = 8`), tour ViT à écrire |
+| 6 | hygiène | ✅ feuille de route réécrite + tableau des pièges `QT_GPU*` |
+
+`cargo test` 6/6, porte Qwen **19,3885** revérifiée, arbre propre. Le changement de seuil ne touche que les contextes > 5 120, donc les deux portes de non-régression (ctx 256) sont structurellement intactes.
+
+## Reste
+
+La **tour de vision** : c'est le seul morceau non commencé, et le plus gros du dépôt (ViT 32 couches avec attention locale une couche sur huit, fusion 2 × 2 des patchs, pré-traitement d'image, et le chemin d'injection d'embeddings qui manque au moteur). Le plan est dans `docs/plan-mla-vision.md`, désormais adossé aux chiffres relevés dans le fichier plutôt qu'à des suppositions.
+
+L'objectif reste **actif** pour ce dernier morceau.
+
+
+## Tour 14
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Réaliser les 6 nouveaux chantiers du projet qtrinet-core, dans l'ordre : (1) relancer le test de l'aiguille sur contexte long (remplissage varié en vrai texte, moins de sondes, réponses plus longues) sur un modèle capable, grâce au préremplissage par lots et au KV déporté ; (2) chemin GPU : dépaquetage vectorisé du noyau d'attention (13,2 ms/couche à 1 M en int4 vers ~3 ms), brancher MXFP4 dans le moteur avec une politique de résidence des experts, attention par lots sur GPU dans forward_lot, noyau de tête Q8_0 accéléré (AVX2 ou déport), et usage du second GPU ; (3) mémoire : pagination du cache KV côté CPU (25,77 Go réservés à ctx 1 M pour 512 jetons écrits) et test de l'hypothèse « clés en f16 avant quantification » pour l'écart int8 avec llama.cpp à 8 192 (+3,0 % contre +0,8 %) ; (4) rotation au-delà de 5 120 jetons (passe à 16 k) ; (5) structurel : MLA (aucun modèle local — construire un modèle MLA synthétique et valider contre une référence indépendante) et vision (poids Qwen2.5-VL et projecteur mmproj présents) ; (6) hygiène : réécrire la section « Ce qu'il faut faire ensuite » de REPRISE.md et y consigner les pièges QT_GPU/QT_GPU_TETE/QT_GPU_KV. Chaque chantier doit être implémenté, mesuré (portes de non-régression Qwen 19,3885 et gpt-oss 15,1757 sans QT_GPU), documenté dans le dépôt et commité."
+Round: 5/30
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && grep -n \"pub fn tensor\\b\" -A 4 src/gguf.rs | head -8 && grep -n \"pub fn tensors\\|pub fn liste\" src/gguf.rs | head -3", "description": "Check Gguf tensor access API"}`
+
+  ```
+245:    pub fn tensor(&self, name: &str) -> Option<&TensorInfo> {
+246-        self.tensors.iter().find(|t| t.name == name)
+247-    }
+248-
+249-    pub fn f16_to_f32(h: u16) -> f32 {
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && python3 - <<'PY'\np='src/main.rs'; s=open(p).read()\ns = s.replace(\"\"\"    /// Banc MLA : écrit les logits `(n_pos × vocab)` en f32 pour les comparer à\n    /// la référence numpy du modèle synthétique.\n    banc_mla:  … [2156 caractères tronqués]`
+
+  ```
+mode --tensors posé
+    Finished `release` profile [optimized] target(s) in 0.01s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 600 ./qtrinet-core/target/release/qtrinet-core /home/stephane/FastNVMe/models/mmproj-Qwen2.5-VL-7B-Instruct-f16.gguf --tensors 2>&1 | head -18 && echo \"...\" && timeout 600 ./qtrinet-core/target/release/qtrinet-core /home/st … [213 caractères tronqués]`
+
+  ```
+519 tenseurs dans /home/stephane/FastNVMe/models/mmproj-Qwen2.5-VL-7B-Instruct-f16.gguf
+  F32   v.blk.0.attn_out.bias                  [1280] · 0.0 M poids
+  F16   v.blk.0.attn_out.weight                [1280, 1280] · 1.6 M poids
+  F32   v.blk.0.attn_q.bias                    [1280] · 0.0 M poids
+  F32   v.blk.0.attn_k.bias                    [1280] · 0.0 M poids
+  F32   v.blk.0.attn_v.bias                    [1280] · 0.0 M poids
+  F16   v.blk.0.attn_q.weight                  [1280, 1280] · 1.6 M poids
+  F16   v.blk.0.attn_k.weight                  [1280, 1280] · 1.6 M poids
+  F16   v.blk.0.attn_v.weight                  [1280, 1280] · 1.6 M poids
+  F32   v.blk.0.ffn_down.bias                  [1280] · 0.0 M poids
+  F16   v.blk.0.ffn_down.weight                [1280, 3420] · 4.4 M poids
+  F32   v.blk.0.ffn_gate.bias                  [3420] · 0.0 M poids
+  F16   v.blk.0.ffn_gate.weight                [3420, 1280] · 4.4 M poids
+  F32   v.blk.0.ffn_up.bias                    [3420] · 0.0 M poids
+  F16   v.blk.0.ffn_up.weight                  [3420, 1280] · 4.4 M poids
+  F32   v.blk.0.ln1.weight                     [1280] · 0.0 M poids
+  F32   v.blk.0.ln2.weight                     [12
+… [247 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 600 ./qtrinet-core/target/release/qtrinet-core /home/stephane/FastNVMe/models/mmproj-Qwen2.5-VL-7B-Instruct-f16.gguf --tensors 2>&1 | grep -v \"v.blk\\.\" | head -14", "description": "List non-block mmproj tensors", "timeoutM … [11 caractères tronqués]`
+
+  ```
+519 tenseurs dans /home/stephane/FastNVMe/models/mmproj-Qwen2.5-VL-7B-Instruct-f16.gguf
+  F32   v.post_ln.weight                       [1280] · 0.0 M poids
+  F32   mm.0.bias                              [5120] · 0.0 M poids
+  F16   mm.0.weight                            [5120, 5120] · 26.2 M poids
+  F32   mm.2.bias                              [3584] · 0.0 M poids
+  F16   mm.2.weight                            [3584, 5120] · 18.4 M poids
+  F16   v.patch_embd.weight                    [1280, 3, 14, 14] · 0.8 M poids
+  F16   v.patch_embd.weight.1                  [1280, 3, 14, 14] · 0.8 M poids
+  ```
+
+### 🤖 Assistant
+
+⏵ Vision : structure réelle du projecteur relevée avec le lecteur du moteur
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='docs/plan-mla-vision.md'; s=open(p).read()\nold = \"\"\"Les tenseurs sont nommés `v.blk.N.*` (`v.blk.0.attn_out.bias` est le premier\nrelevé), et le fichier en contient 519. C'est donc bien la tour complète, pas\ … [2850 caractères tronqués]`

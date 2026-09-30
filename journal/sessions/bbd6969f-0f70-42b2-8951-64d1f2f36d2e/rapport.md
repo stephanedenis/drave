@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 30.0 h |
-| Tours | 13 |
-| Messages | 1168 |
-| Appels d'outils | 1150 |
+| Durée | 30.1 h |
+| Tours | 14 |
+| Messages | 1176 |
+| Appels d'outils | 1156 |
 | Fichiers touchés | 38 |
-| Commandes | 884 |
+| Commandes | 889 |
 | Sous-agents | 1 |
-| Commits | 46 |
+| Commits | 47 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -51,6 +51,8 @@
 **Tour 12** — <goal_round> Objective: "Réaliser les 6 nouveaux chantiers du projet qtrinet-core, dans l'ordre : (1) relancer le test de l'aiguille sur contexte long (remplissage varié en vrai texte, moins de sondes, réponses plus longues) sur un modèle capable, grâce au préremplissage par lots et au KV déporté ; (2) chemin GPU : dépaquetage vectorisé du noyau d'attention (13,2 ms/couche à 1 M en int4 vers ~3 ms … [1491 caractères tronqués]
 
 **Tour 13** — <goal_round> Objective: "Réaliser les 6 nouveaux chantiers du projet qtrinet-core, dans l'ordre : (1) relancer le test de l'aiguille sur contexte long (remplissage varié en vrai texte, moins de sondes, réponses plus longues) sur un modèle capable, grâce au préremplissage par lots et au KV déporté ; (2) chemin GPU : dépaquetage vectorisé du noyau d'attention (13,2 ms/couche à 1 M en int4 vers ~3 ms … [1491 caractères tronqués]
+
+**Tour 14** — <goal_round> Objective: "Réaliser les 6 nouveaux chantiers du projet qtrinet-core, dans l'ordre : (1) relancer le test de l'aiguille sur contexte long (remplissage varié en vrai texte, moins de sondes, réponses plus longues) sur un modèle capable, grâce au préremplissage par lots et au KV déporté ; (2) chemin GPU : dépaquetage vectorisé du noyau d'attention (13,2 ms/couche à 1 M en int4 vers ~3 ms … [1491 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -592,7 +594,7 @@ Bilan des six chantiers : **1, 2 (cinq sous-items), 3, 4 (première passe), 6 te
 
 ### Tour 13 — <goal_round> Objective: "Réaliser les 6 nouveaux chantiers du projet qtrinet-core, dans l'ordre : (1) relancer le test d … [1771 caractères tronqués]
 
-*8 appels d'outils.* Actions notables :
+*9 appels d'outils.* Actions notables :
 
 - bash — Collect 16k interp result
 - bash — List distinct ViT tensor patterns
@@ -602,10 +604,57 @@ Bilan des six chantiers : **1, 2 (cinq sous-items), 3, 4 (première passe), 6 te
 - bash — Poll interp run once more
 - bash — Document 16k verdict and raise threshold
 - bash — Commit 16k verdict and threshold change
+- todo_write
 
 **Synthèse produite :**
 
-⏵ 16 k tranché : RoPE simple 35,18 contre 1 133 en interpolation
+⏵ Tour 4 : le 16 k est tranché, cinq chantiers et demi sur six sont clos
+
+\## Livré dans ce tour
+
+**Chantier 4 — rotation à 16 384 jetons, bouclé.** Protocole apparié, mêmes 512 jetons notés (positions 15 872 à 16 383), KV déporté — sans lui l'attention coûte ~180 ms/jeton et la passe dépasse l'heure par régime :
+
+| régime | perplexité | durée |
+|---|---|---|
+| **RoPE simple** | **35,18** | 2 367 s |
+| interpolation seule | **1 133,02** | 2 251 s |
+
+**×32 en faveur du simple.** Sur toute l'étendue mesurée — 128, 512, 1 024, 1 536, 5 120, 16 384 — l'interpolation n'a **jamais** gagné, et l'écart se creuse avec la longueur (×1,1 à 512, ×131 à 5 120, ×32 à 16 384).
+
+Conséquence appliquée : le seuil de bascule passe de 1,25 × à **4 ×** la longueur déclarée (16 384 pour gpt-oss, exactement la plus grande longueur mesurée). L'interpolation ne s'active plus dans la plage où l'on sait qu'elle nuit ; au-delà, c'est une extrapolation non mesurée, et le document le dit.
+
+\## État des six chantiers
+
+| # | chantier | état |
+|---|---|---|
+| 1 | aiguille long contexte | ✅ 12/12 sondes (1,5B 512/2048, 30B 2048, gpt-oss 4096) |
+| 2 | chemin GPU (5 sous-items) | ✅ vectorisation ×1,8-2,3 · experts +6 % (verdict : ne pas activer) · lots ×2,8 · tête AVX2 · deux cartes 12/12 |
+| 3 | mémoire KV | ✅ pagination CPU (0,03 Go à ctx 1 M) · hypothèse f16 **réfutée** |
+| 4 | rotation à 16 k | ✅ **35,18 contre 1 133,02**, seuil corrigé |
+| 5 | MLA + vision | ⏳ **MLA fait et validé** (5,2e-7 contre la référence numpy) ; **vision** : paramètres et nommage relevés dans le `mmproj` (560 px, patchs 14, 32 couches, `n_wa_pattern = 8`), tour ViT à écrire |
+| 6 | hygiène | ✅ feuille de route réécrite + tableau des pièges `QT_GPU*` |
+
+`cargo test` 6/6, porte Qwen **19,3885** revérifiée, arbre propre. Le changement de seuil ne touche que les contextes > 5 120, donc les deux portes de non-régression (ctx 256) sont structurellement intactes.
+
+\## Reste
+
+La **tour de vision** : c'est le seul morceau non commencé, et le plus gros du dépôt (ViT 32 couches avec attention locale une couche sur huit, fusion 2 × 2 des patchs, pré-traitement d'image, et le chemin d'injection d'embeddings qui manque au moteur). Le plan est dans `docs/plan-mla-vision.md`, désormais adossé aux chiffres relevés dans le fichier plutôt qu'à des suppositions.
+
+L'objectif reste **actif** pour ce dernier morceau.
+
+### Tour 14 — <goal_round> Objective: "Réaliser les 6 nouveaux chantiers du projet qtrinet-core, dans l'ordre : (1) relancer le test d … [1771 caractères tronqués]
+
+*5 appels d'outils.* Actions notables :
+
+- bash — Check Gguf tensor access API
+- bash — Add tensor listing mode
+- bash — List mmproj tensors with engine reader
+- bash — List non-block mmproj tensors
+- bash — Document verified vision inventory
+
+**Synthèse produite :**
+
+⏵ Vision : structure réelle du projecteur relevée avec le lecteur du moteur
 
 ## 3. Travail accompli
 
@@ -698,7 +747,7 @@ Bilan des six chantiers : **1, 2 (cinq sous-items), 3, 4 (première passe), 6 te
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 844 autres
+- … et 849 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -892,4 +941,5 @@ Bilan des six chantiers : **1, 2 (cinq sous-items), 3, 4 (première passe), 6 te
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p='docs/plan-mla-vision.md'; s=open(p).read() old = """### État du harnais : FAIT""" new 
 - vision : relevé du projecteur mmproj (paramètres et nommage réels)  Le fichier est en architecture \`clip\` et contient la tour COMPLÈTE (519 tenseurs, \`v.blk.
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p='REPRISE.md'; s=open(p).read() old = "| 2 | seuil de rotation YaRN | **fait, seuil corr
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p='docs/plan-mla-vision.md'; s=open(p).read() old = """Les tenseurs sont nommés `v.blk.N.
 

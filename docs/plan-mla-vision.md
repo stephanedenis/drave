@@ -139,9 +139,34 @@ Le projecteur `mmproj-Qwen2.5-VL-7B-Instruct-f16.gguf` est en architecture
 | `clip.vision.projection_dim` | 3 584 | dimension de sortie (celle du modèle) |
 | `clip.vision.image_mean` / `image_std` | 0,4815/0,4579/0,4084 · 0,2686/0,2613/0,2758 | normalisation |
 
-Les tenseurs sont nommés `v.blk.N.*` (`v.blk.0.attn_out.bias` est le premier
-relevé), et le fichier en contient 519. C'est donc bien la tour complète, pas
-seulement le projecteur : le chemin image peut se construire sur ce fichier seul.
+### Inventaire exact des tenseurs (relevé par `--tensors`)
+
+Le moteur sait désormais LISTER un GGUF (`--tensors`, nom, dimensions, type) —
+ce qui a permis de relever la structure au lieu de la supposer :
+
+| tenseur | dimensions | rôle |
+|---|---|---|
+| `v.patch_embd.weight` | [1280, 3, 14, 14] | convolution des patchs |
+| `v.patch_embd.weight.1` | [1280, 3, 14, 14] | **second** embedding de patchs (Qwen2.5-VL en a deux) |
+| `v.blk.N.attn_q/k/v.weight` | [1280, 1280] | projections, **avec biais** (`attn_q.bias`…) |
+| `v.blk.N.attn_out.weight` | [1280, 1280] | sortie d'attention (+ biais) |
+| `v.blk.N.ffn_gate/up.weight` | [3420, 1280] | MLP (+ biais) |
+| `v.blk.N.ffn_down.weight` | [1280, 3420] | MLP (+ biais) |
+| `v.blk.N.ln1.weight`, `ln2.weight` | [1280] | LayerNorm avant attention et avant MLP |
+| `v.post_ln.weight` | [1280] | norme finale de la tour |
+| `mm.0.weight` | [5120, 5120] | projecteur : 5120 = 1280 × 4 (fusion 2 × 2) |
+| `mm.2.weight` | [3584, 5120] | projecteur : sortie 3584 (largeur du modèle) |
+
+Deux faits qui changent le plan :
+
+1. **il n'y a AUCUN `position_embd`** — Qwen2.5-VL n'utilise pas d'embedding de
+   position absolu dans le ViT, mais une rotation 2-D (mRoPE). Mon plan initial
+   supposait un embedding de position : c'était faux ;
+2. **les biais sont partout** (q, k, v, sortie, MLP) : les oublier est l'erreur
+   classique de ce dépôt (elle a déjà coûté 39,80 → 20,84 sur gpt-oss).
+
+Les 519 tenseurs couvrent donc la tour complète et son projecteur : le chemin
+image peut se construire sur ce fichier seul, sans le modèle de langage.
 
 `n_wa_pattern = 8` confirme le point délicat annoncé : **toutes les 8 couches,
 l'attention est locale** — il faut la même fenêtre que llama.cpp, sinon les

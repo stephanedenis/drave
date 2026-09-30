@@ -37,6 +37,7 @@ fn main() {
     // d'options, donc les mêmes drapeaux.
     let opt = analyser(&args);
     let _ = MODELE.set(args[1].clone());
+    if opt.tensors { run_tensors(); return; }
     if let Some(f) = opt.banc_mla.clone() { run_banc_mla(opt, &f); return; }
     if opt.banc_kv > 0 { run_banc_kv(opt); return; }
     if opt.gpu_banc { run_gpu_banc(opt); return; }
@@ -323,6 +324,10 @@ struct Options {
     /// Banc MLA : écrit les logits `(n_pos × vocab)` en f32 pour les comparer à
     /// la référence numpy du modèle synthétique.
     banc_mla: Option<String>,
+    /// `--tensors` : liste les tenseurs du fichier (nom, dimensions, type) et
+    /// s'arrête. Sert à préparer un chemin qu'on ne sait pas encore lire — le
+    /// projecteur de vision, par exemple.
+    tensors: bool,
     // --- source des jetons
     ids: Vec<u32>, ids_file: Option<String>, texte_file: Option<String>,
     ppl_texte: bool, prompt: Option<String>, limit: usize, depuis: usize,
@@ -393,6 +398,7 @@ fn analyser(args: &[String]) -> Options {
             "--gpu-banc" => { o.gpu_banc = true; 1 }
             "--banc-kv" => { o.banc_kv = suivant(i).parse().unwrap(); 2 }
             "--banc-mla" => { o.banc_mla = Some(suivant(i).clone()); 2 }
+            "--tensors" => { o.tensors = true; 1 }
             "--ids" => { o.ids = suivant(i).split(',')
                             .filter_map(|s| s.trim().parse().ok()).collect(); 2 }
             "--ids-file" => { o.ids_file = Some(suivant(i).clone()); 2 }
@@ -792,6 +798,24 @@ fn mdl_cfg_vocab(path: &str) -> Option<usize> {
 /// mesure (23 → 159 ms) : sans un banc isolé, on ne sait pas si un changement
 /// de noyau aide, la mesure par jeton mélangeant tête, attention et
 /// échantillonnage.
+/// Liste les tenseurs d'un GGUF : nom, dimensions, type, taille. Utile pour
+/// écrire un chemin de lecture (vision) sans deviner les noms.
+fn run_tensors() {
+    let path = &modele_chemin();
+    let g = Gguf::open(path).expect("ouverture du GGUF");
+    let nom_type = |t: u32| match t {
+        0 => "F32", 1 => "F16", 2 => "Q4_0", 3 => "Q4_1", 6 => "Q5_0", 7 => "Q5_1",
+        8 => "Q8_0", 9 => "Q8_1", 10 => "Q2_K", 11 => "Q3_K", 12 => "Q4_K", 13 => "Q5_K",
+        14 => "Q6_K", 30 => "BF16", 39 => "MXFP4", _ => "?",
+    };
+    println!("{} tenseurs dans {}", g.tensors.len(), path);
+    for t in &g.tensors {
+        let poids: u64 = t.dims.iter().product();
+        println!("  {:5} {:38} {:?} · {:.1} M poids", nom_type(t.ttype), t.name, t.dims,
+                 poids as f64 / 1e6);
+    }
+}
+
 /// Banc **MLA** : passe avant du modèle synthétique, logits écrits en binaire
 /// pour être comparés à `logits.npy` (référence numpy indépendante).
 fn run_banc_mla(opt: Options, sortie: &str) {
