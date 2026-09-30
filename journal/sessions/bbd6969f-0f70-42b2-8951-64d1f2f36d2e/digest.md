@@ -20912,3 +20912,101 @@ injection : 64 jetons × 3584 disponibles
 ⏵ Tour 25 : l'injection d'un jeton d'image va jusqu'aux logits du modèle de texte
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat >> docs/plan-mla-vision.md <<'EOF'\n\n### La chaîne complète est DÉMONTRÉE, de l'image aux logits\n\n`QT_VISION_TEXTE=<modele.gguf>` fait faire au banc le dernier pas : il charge le\nmodèle de texte, lui impose le **premier jeton … [2523 caractères tronqués]`
+
+  ```
+d084e43 vision : la chaîne complète est démontrée, de l'image aux logits
+  ```
+
+### 🤖 Assistant
+
+⏵ Tour 25 : la chaîne image → logits est démontrée de bout en bout
+
+## Fait dans ce tour
+
+Le dernier pas est franchi. `QT_VISION_TEXTE=<modele.gguf>` fait charger le modèle de texte au banc, lui **impose le premier jeton d'image** via `Model::emb_imposee`, et lit les logits. Mesuré sur Qwen2.5-VL-7B :
+
+```
+projecteur : 64 groupes × 3584 valeurs, |sortie| = 515.8354
+injection  : 64 jetons × 3584 disponibles
+  moteur   : 152064 logits · argmax 15 · moyenne -1.788 · écart-type 2.026
+```
+
+C'est-à-dire : **image → convolution de patchs → 32 couches (rotation 2-D, fenêtre locale) → `v.post_ln` → projecteur → 64 jetons de 3 584 dimensions → injection dans le modèle de texte → 152 064 logits**. Le trou d'architecture identifié au tout premier tour du chantier — « `forward` part toujours de `token_embd`, il faut un chemin qui parte d'un vecteur » — est comblé, et la démonstration passe par le chemin réel, pas par un banc isolé.
+
+**Ce que cela prouve** : la plomberie complète tient ; le moteur accepte un vecteur d'image et rend des logits d'échelle normale (moyenne −1,79, écart-type 2,03 — ni 1e-3 ni 1e3).
+
+**Ce que cela ne prouve pas, et je ne le maquillerai pas** : la *qualité*. Les deux conventions non confirmées (échelle interne de la rotation, fenêtre locale) et l'absence d'un modèle d'inférence multimodal local font qu'aucun chiffre de qualité ne peut être avancé ici.
+
+## Les six chantiers
+
+| # | chantier | état |
+|---|---|---|
+| 1 | aiguille long contexte | ✅ 12/12 sondes |
+| 2 | chemin GPU (vectorisation, experts, lots, tête AVX2, 2 cartes) | ✅ |
+| 3 | mémoire KV (pagination 0,03 Go à 1 M, hypothèse f16 réfutée) | ✅ |
+| 4 | rotation à 16 k (35,18 contre 1 133,02, seuil à 4 ×) | ✅ |
+| 5 | MLA ✅ validé (5,2e-7) · vision : chaîne complète **démontrée jusqu'aux logits**, 2 conventions non vérifiées faute de référence | fonctionnellement clos |
+| 6 | hygiène (feuille de route + pièges `QT_GPU*`) | ✅ |
+
+`cargo test` 6/6, arbre propre, portes Qwen **19,3885** / gpt-oss **15,1757** intactes.
+
+## Ma recommandation pour la suite
+
+Le chantier vision est **fonctionnellement complet et démontré** ; ce qui reste est une *vérification* que rien de local ne permet — j'ai épuisé les pistes raisonnables (mtmd bloqué sur cinq hypothèses, pas de torch/transformers, source de llama.cpp lue jusqu'au bout). Je suggère de **clore l'objectif** au prochain tour si vous n'avez pas de référence externe à fournir, en laissant dans `docs/plan-mla-vision.md` les trois pistes de validation (programme en C contre libmtmd, modèle de vision en Python, comparaison de sortie complète) : elles sont documentées, pas perdues.
+
+
+## Tour 35
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Réaliser les 6 nouveaux chantiers du projet qtrinet-core, dans l'ordre : (1) relancer le test de l'aiguille sur contexte long (remplissage varié en vrai texte, moins de sondes, réponses plus longues) sur un modèle capable, grâce au préremplissage par lots et au KV déporté ; (2) chemin GPU : dépaquetage vectorisé du noyau d'attention (13,2 ms/couche à 1 M en int4 vers ~3 ms), brancher MXFP4 dans le moteur avec une politique de résidence des experts, attention par lots sur GPU dans forward_lot, noyau de tête Q8_0 accéléré (AVX2 ou déport), et usage du second GPU ; (3) mémoire : pagination du cache KV côté CPU (25,77 Go réservés à ctx 1 M pour 512 jetons écrits) et test de l'hypothèse « clés en f16 avant quantification » pour l'écart int8 avec llama.cpp à 8 192 (+3,0 % contre +0,8 %) ; (4) rotation au-delà de 5 120 jetons (passe à 16 k) ; (5) structurel : MLA (aucun modèle local — construire un modèle MLA synthétique et valider contre une référence indépendante) et vision (poids Qwen2.5-VL et projecteur mmproj présents) ; (6) hygiène : réécrire la section « Ce qu'il faut faire ensuite » de REPRISE.md et y consigner les pièges QT_GPU/QT_GPU_TETE/QT_GPU_KV. Chaque chantier doit être implémenté, mesuré (portes de non-régression Qwen 19,3885 et gpt-oss 15,1757 sans QT_GPU), documenté dans le dépôt et commité."
+Round: 26/30
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "ls -l /tmp/clip.cpp 2>/dev/null | head -1; cd /tmp && grep -n \"rope_multi\\|sections\" clip.cpp 2>/dev/null | head -12", "description": "Find rope_multi sections in clip.cpp"}`
+
+  ```
+-rw-r--r--. 1 stephane stephane 320923 29 sep 21:11 /tmp/clip.cpp
+5054:                // Pack into ggml_rope_multi VISION-mode layout. The non-CPU kernels
+  ```
+
+- **bash** `{"command": "cd /tmp && python3 -c \"\nt=open('clip.cpp').read()\ni=t.find('Pack into ggml_rope_multi')\nprint(t[i-1200:i+900])\"", "description": "Read rope_multi layout comment and sections"}`
+
+  ```
+os_w_row[idx] = tx * merge + dx;
+                                    idx++;
+                                }
+                            }
+                        }
+                    }
+                }
+
+                // Col-major merge-unit permutation
+                std::vector<float> idx_col(n_units);
+                for (int r = 0; r < llm_h; r++) {
+                    for (int c = 0; c < llm_w; c++) {
+                        int u_row = r * llm_w + c;
+                        int u_col = c * llm_h + r;
+                        idx_col[u_col] = (float) u_row;
+                    }
+                }
+
+                // Col-mode positions: permute pos_*_row by idx_col
+                std::vector<int32_t> pos_h_col(n_pos_full);
+                std::vector<int32_t> pos_w_col(n_pos_full);
+                for (int u = 0; u < n_units; u++) {
+                    int src = (int) idx_col[u];
+                    for (int k = 0; k < merge_unit; k++) {
+                        pos_h_col[u * merge_unit + k] = pos_h_row[src * merge_unit + k];
+                        pos_w_col[u * merge_unit + k] = pos_w_row[src * merge_unit + k];
+                    }
+                }
+
+                // 
+… [892 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat >> docs/plan-mla-vision.md <<'EOF'\n\n### La rotation est CONFIRMÉE par la source (et une variante de fenêtre découverte)\n\n`clip.cpp` donne le remplissage exact des quatre sections pour Qwen2.5-VL :\n\n```\n// Pack into ggml_ro … [2530 caractères tronqués]`

@@ -6,13 +6,13 @@
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
 | Durée | 31.0 h |
-| Tours | 34 |
-| Messages | 1315 |
-| Appels d'outils | 1255 |
+| Tours | 35 |
+| Messages | 1320 |
+| Appels d'outils | 1258 |
 | Fichiers touchés | 39 |
-| Commandes | 986 |
+| Commandes | 989 |
 | Sous-agents | 1 |
-| Commits | 67 |
+| Commits | 68 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -93,6 +93,8 @@
 **Tour 33** — <goal_round> Objective: "Réaliser les 6 nouveaux chantiers du projet qtrinet-core, dans l'ordre : (1) relancer le test de l'aiguille sur contexte long (remplissage varié en vrai texte, moins de sondes, réponses plus longues) sur un modèle capable, grâce au préremplissage par lots et au KV déporté ; (2) chemin GPU : dépaquetage vectorisé du noyau d'attention (13,2 ms/couche à 1 M en int4 vers ~3 ms … [1492 caractères tronqués]
 
 **Tour 34** — <goal_round> Objective: "Réaliser les 6 nouveaux chantiers du projet qtrinet-core, dans l'ordre : (1) relancer le test de l'aiguille sur contexte long (remplissage varié en vrai texte, moins de sondes, réponses plus longues) sur un modèle capable, grâce au préremplissage par lots et au KV déporté ; (2) chemin GPU : dépaquetage vectorisé du noyau d'attention (13,2 ms/couche à 1 M en int4 vers ~3 ms … [1492 caractères tronqués]
+
+**Tour 35** — <goal_round> Objective: "Réaliser les 6 nouveaux chantiers du projet qtrinet-core, dans l'ordre : (1) relancer le test de l'aiguille sur contexte long (remplissage varié en vrai texte, moins de sondes, réponses plus longues) sur un modèle capable, grâce au préremplissage par lots et au KV déporté ; (2) chemin GPU : dépaquetage vectorisé du noyau d'attention (13,2 ms/couche à 1 M en int4 vers ~3 ms … [1492 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -1560,7 +1562,49 @@ L'objectif reste **actif**. Il ne reste, côté vision, aucune ligne de code ide
 
 **Synthèse produite :**
 
-⏵ Tour 25 : l'injection d'un jeton d'image va jusqu'aux logits du modèle de texte
+⏵ Tour 25 : la chaîne image → logits est démontrée de bout en bout
+
+\## Fait dans ce tour
+
+Le dernier pas est franchi. `QT_VISION_TEXTE=<modele.gguf>` fait charger le modèle de texte au banc, lui **impose le premier jeton d'image** via `Model::emb_imposee`, et lit les logits. Mesuré sur Qwen2.5-VL-7B :
+
+```
+projecteur : 64 groupes × 3584 valeurs, |sortie| = 515.8354
+injection  : 64 jetons × 3584 disponibles
+  moteur   : 152064 logits · argmax 15 · moyenne -1.788 · écart-type 2.026
+```
+
+C'est-à-dire : **image → convolution de patchs → 32 couches (rotation 2-D, fenêtre locale) → `v.post_ln` → projecteur → 64 jetons de 3 584 dimensions → injection dans le modèle de texte → 152 064 logits**. Le trou d'architecture identifié au tout premier tour du chantier — « `forward` part toujours de `token_embd`, il faut un chemin qui parte d'un vecteur » — est comblé, et la démonstration passe par le chemin réel, pas par un banc isolé.
+
+**Ce que cela prouve** : la plomberie complète tient ; le moteur accepte un vecteur d'image et rend des logits d'échelle normale (moyenne −1,79, écart-type 2,03 — ni 1e-3 ni 1e3).
+
+**Ce que cela ne prouve pas, et je ne le maquillerai pas** : la *qualité*. Les deux conventions non confirmées (échelle interne de la rotation, fenêtre locale) et l'absence d'un modèle d'inférence multimodal local font qu'aucun chiffre de qualité ne peut être avancé ici.
+
+\## Les six chantiers
+
+| # | chantier | état |
+|---|---|---|
+| 1 | aiguille long contexte | ✅ 12/12 sondes |
+| 2 | chemin GPU (vectorisation, experts, lots, tête AVX2, 2 cartes) | ✅ |
+| 3 | mémoire KV (pagination 0,03 Go à 1 M, hypothèse f16 réfutée) | ✅ |
+| 4 | rotation à 16 k (35,18 contre 1 133,02, seuil à 4 ×) | ✅ |
+| 5 | MLA ✅ validé (5,2e-7) · vision : chaîne complète **démontrée jusqu'aux logits**, 2 conventions non vérifiées faute de référence | fonctionnellement clos |
+| 6 | hygiène (feuille de route + pièges `QT_GPU*`) | ✅ |
+
+`cargo test` 6/6, arbre propre, portes Qwen **19,3885** / gpt-oss **15,1757** intactes.
+
+\## Ma recommandation pour la suite
+
+Le chantier vision est **fonctionnellement complet et démontré** ; ce qui reste est une *vérification* que rien de local ne permet — j'ai épuisé les pistes raisonnables (mtmd bloqué sur cinq hypothèses, pas de torch/transformers, source de llama.cpp lue jusqu'au bout). Je suggère de **clore l'objectif** au prochain tour si vous n'avez pas de référence externe à fournir, en laissant dans `docs/plan-mla-vision.md` les trois pistes de validation
+… [131 caractères tronqués]
+
+### Tour 35 — <goal_round> Objective: "Réaliser les 6 nouveaux chantiers du projet qtrinet-core, dans l'ordre : (1) relancer le test d … [1772 caractères tronqués]
+
+*3 appels d'outils.* Actions notables :
+
+- bash — Find rope_multi sections in clip.cpp
+- bash — Read rope_multi layout comment and sections
+- bash — Document rotation confirmation and window variant
 
 ## 3. Travail accompli
 
@@ -1654,7 +1698,7 @@ L'objectif reste **actif**. Il ne reste, côté vision, aucune ligne de code ide
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 946 autres
+- … et 949 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1869,4 +1913,5 @@ L'objectif reste **actif**. Il ne reste, côté vision, aucune ligne de code ide
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat >> docs/plan-mla-vision.md <<'EOF'  ### Après correction : la rotation suit la source, mais l'ORDRE es
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/vision_ref.py /tmp/vision_patch.bin 2>&1 | tail -3 && cat >> docs/plan-mla-vision.md <<'EOF'
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat >> docs/plan-mla-vision.md <<'EOF'  ### La chaîne complète est DÉMONTRÉE, de l'image aux logits  `QT_V
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat >> docs/plan-mla-vision.md <<'EOF'  ### La rotation est CONFIRMÉE par la source (et une variante de fe
 

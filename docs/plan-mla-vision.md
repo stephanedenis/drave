@@ -669,3 +669,34 @@ Ce que cela prouve, et ce que cela ne prouve pas :
   interne de la rotation, fenêtre locale) et l'absence de modèle d'inférence
   multimodal local font qu'aucun chiffre de qualité ne peut être avancé ici —
   et il ne le sera pas.
+
+### La rotation est CONFIRMÉE par la source (et une variante de fenêtre découverte)
+
+`clip.cpp` donne le remplissage exact des quatre sections pour Qwen2.5-VL :
+
+```
+// Pack into ggml_rope_multi VISION-mode layout. The non-CPU kernels
+// only read slots 0 and 1, so pack h in slot 0, w in slot 1:
+//   positions[0..n_pos)         = h        (LIGNE)
+//   positions[n_pos..2*n_pos)   = w        (COLONNE)
+//   positions[2*n_pos..3*n_pos) = 0
+//   positions[3*n_pos..4*n_pos) = 0
+```
+
+Avec des sections `{hd/4, hd/4, 0, 0}` (les deux dernières nulles), cela donne
+dans `ggml_mrope_cache_init` : `sect_dims = hd/2`, `sector = paire % (hd/2)`,
+donc les **hd/4 premières paires** utilisent la LIGNE (slot 0) et les suivantes
+la COLONNE (slot 1) — et l'échelle continue sur l'indice de paire global.
+
+C'est **exactement** ce que l'implémentation corrigée fait (`pos = i < paires/2 ?
+ligne : colonne`, exposant `-2i/hd`). Autrement dit, la rotation n'est plus une
+hypothèse : ses trois aspects (appariement consécutif, partage ligne/colonne,
+échelle continue) sont lus dans la source, et la valeur des sections se déduit de
+la même lecture.
+
+**Découverte au passage, qui explique une variante** : pour les couches
+FENÊTRÉES, `clip.cpp` permute les positions en **colonne-majeur** (`idx_col`,
+« Col-major merge-unit permutation ») avant de les empaqueter, alors que mon
+implémentation fenêtre en ligne-majeur. C'est un écart réel et localisé — la
+fenêtre n'est donc pas seulement un masque, elle change aussi l'ordre des
+positions. À corriger, et documenté ici pour ne pas le perdre.
