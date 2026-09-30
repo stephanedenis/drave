@@ -332,6 +332,10 @@ struct Options {
     /// Banc MLA : écrit les logits `(n_pos × vocab)` en f32 pour les comparer à
     /// la référence numpy du modèle synthétique.
     banc_mla: Option<String>,
+    /// Trace du flux d'activation : fichier de sortie.
+    trace_flux: Option<String>,
+    /// Couches à tracer (vide = toutes).
+    trace_couches: Vec<usize>,
     /// Banc vision : embedding de patchs, écrit en binaire pour comparaison
     /// avec la référence numpy.
     banc_vision: Option<String>,
@@ -410,6 +414,9 @@ fn analyser(args: &[String]) -> Options {
             "--banc-kv" => { o.banc_kv = suivant(i).parse().unwrap(); 2 }
             "--banc-mla" => { o.banc_mla = Some(suivant(i).clone()); 2 }
             "--tensors" => { o.tensors = true; 1 }
+            "--trace-flux" => { o.trace_flux = Some(suivant(i).clone()); 2 }
+            "--trace-couches" => { o.trace_couches = suivant(i).split(',')
+                                     .filter_map(|x| x.trim().parse().ok()).collect(); 2 }
             "--banc-vision" => { o.banc_vision = Some(suivant(i).clone()); 2 }
             "--ids" => { o.ids = suivant(i).split(',')
                             .filter_map(|s| s.trim().parse().ok()).collect(); 2 }
@@ -2019,7 +2026,7 @@ fn run_ppl(opt: Options) {
         dense, auto, q4, b6, attn_window, swa_pattern,
         sans_fenetre, attn_sinks, attn_topk, qk_topk, act_thresh, act_topk, act_renorm,
         topk_proj, moe_topk, patch: patch_file, hebb_layer, ffn_gain, logits_bin,
-        ppl_profil, lot, profil_neurones, neurones_sortie,
+        ppl_profil, lot, profil_neurones, neurones_sortie, trace_flux, trace_couches,
         harmony, harmony_contexte, sans_yarn, ..
     } = opt;
     let lot = lot.max(1);
@@ -2058,6 +2065,13 @@ fn run_ppl(opt: Options) {
     }
 
     let mut mdl = model::Model::load(path, ctx, n_threads, dense, 1.0, auto, q4, b6);
+    if let Some(chemin) = trace_flux.as_deref() {
+        match model::TraceFlux::nouveau(chemin, trace_couches.clone(), mdl.cfg.hidden,
+                                        mdl.cfg.n_layer) {
+            Ok(t) => { println!("[trace] flux enregistré dans {chemin}"); mdl.trace = Some(t); }
+            Err(e) => eprintln!("[trace] impossible d'écrire {chemin} : {e}"),
+        }
+    }
     // Texte brut : les identifiants viennent du tokenizer du modèle, donc du
     // même découpage que celui qui a servi à l'entraîner. `--limit` compte les
     // jetons de contenu, comme pour un fichier d'identifiants.

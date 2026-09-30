@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 42.0 h |
-| Tours | 39 |
-| Messages | 1355 |
-| Appels d'outils | 1284 |
-| Fichiers touchés | 41 |
-| Commandes | 1011 |
+| Durée | 42.2 h |
+| Tours | 40 |
+| Messages | 1369 |
+| Appels d'outils | 1296 |
+| Fichiers touchés | 42 |
+| Commandes | 1022 |
 | Sous-agents | 1 |
-| Commits | 75 |
+| Commits | 76 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -105,6 +105,8 @@
 **Tour 38** — Au delà des défis techniques, il nou faut un vrai document de vision de ce projet. Je serais porté à renommer le projet "Drave" dans le sens Stream of logs, et ça sonne aussi bien en français car la drave fait partie du patrimoine québecois. Ces flux de listes d'activation sont le coeur de la vision et on doit en explorer toutes les implications et bénéfices sur tous les axes. Cette approche perme … [164 caractères tronqués]
 
 **Tour 39** — 3 tout tout de suite, préserve l'historique dans un document et là ou ça permet d'être cohérent, mais tout le reste prend la teinte de la vision.
+
+**Tour 40** — fais un roadmap ambitieux et commence les travaux qui ne nécessitent pas d'infra supplémentaire. on pourra terter avec colab pour le volet distribué
 
 ## 2. Déroulé, étape par étape
 
@@ -1759,7 +1761,56 @@ Je fais le rafraîchissement de `REPRISE.md` §6 dans la foulée : ses items 1 (
 
 **Synthèse produite :**
 
-⏵ Renommage complet : je recense d'abord tout ce qui porte l'ancien nom
+⏵ Renommage fait : tout le dépôt s'appelle Drave, l'historique est préservé
+
+\## 1. Vision — `docs/vision.md`
+
+Un vrai document de vision, adossé aux mesures du dépôt (chaque chiffre cité a été vérifié comme présent dans un rapport) : les listes d'activation **par source**, poussées vers leurs destinations (AER) — le coût devient proportionnel à l'**activité**, pas à la taille du modèle.
+
+Cinq axes explorés, avec ce qui est mesuré et ce qui est hypothèse :
+1. **observer et régler neurone par neurone** (`--profil-neurones`, `--profil-experts`, `[config]`, journal ; top 10 % des neurones = 33,1 % de la magnitude ; 0,08 % chauds >90 % du temps) — ce que la vision ajoute : un format de trace stable et le **diff par couche** ;
+2. **répartir sur les composants** — le plus avancé, tout mesuré (KV en VRAM sur deux cartes, attention ÷6,7, préremplissage ×2,8, tête Q6_K ×2,1, experts +6 % → verdict) ; la règle : *placer un opérateur là où son flux coûte le moins cher* ;
+3. **répartir sur plusieurs machines** — **rien n'existe**, écrit comme hypothèse de travail avec les cinq choses à définir ; le décodage reste séquentiel, c'est le préremplissage qu'il faut distribuer ;
+4. **rejouer/comparer** — les portes de non-régression et les références indépendantes (MLA 5,2e-7, vision 5,4e-7) sont déjà cette idée en petit ;
+5. **formats, matériels, énergie** — trois matériels (SIMD, PTX, FPGA), et l'argument *on ne lit que ce qui parle*.
+
+Plus une section « ce que la vision n'est pas » : le croisement push/pull à 10 % de densité est mesuré, le sparse ne gagne pas toujours.
+
+\## 2. Renommage — option 3, tout de suite
+
+| avant | après |
+|---|---|
+| crate `qtrinet-core/` | `drave-core/` |
+| binaire `qtrinet-core` | **`drave`** |
+| `gpu/qtrinet_gpu.{cu,ptx}` | `gpu/drave_gpu.{cu,ptx}` |
+| variables `QT_*` | **`DRAVE_*`** |
+| « Qtrinet » dans 61 fichiers de contenu | « Drave » |
+
+**Préservé, volontairement** : le **journal de sessions** (un journal réécrit n'est plus un journal), **`Qtrinet-bootstrap.md`** (le cahier des charges d'origine, pièce datée), et l'**historique Git**.
+
+**`docs/histoire.md`** porte les trois âges du projet (le Qtrinet ternaire des Stratix V, le virage événementiel à 7,79 G événements/s, Drave) et la **table de conversion** des anciens noms — variables et chemins — pour que vos anciens scripts aient une réponse au lieu d'un mystère. Les vieilles variables ne font plus rien, mais **le moteur le dit** (vérifié : `[attention] QT_GPU est l'ancien nom… Rien n'a é
+… [687 caractères tronqués]
+
+### Tour 40 — fais un roadmap ambitieux et commence les travaux qui ne nécessitent pas d'infra supplémentaire. on pourra terter avec c … [28 caractères tronqués]
+
+*12 appels d'outils.* Actions notables :
+
+- write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/roadmap.md`
+- bash — Find trace hook sites in forward
+- bash — Implement flux tracing
+- bash — Wire trace CLI options
+- bash — Locate the misplaced trace block
+- bash — Move trace block and run a trace
+- bash — Insert trace in run_ppl and produce a trace
+- bash — Find the model variable name in run_ppl
+- bash — Place trace after model load and produce trace
+- bash — Write diff tool and run the KV demo
+- bash — Fix diff tool to compare dequantized values
+- bash — Document phase 0 results and commit
+
+**Synthèse produite :**
+
+⏵ Roadmap ambitieuse, puis j'attaque la phase qui ne demande aucune infra
 
 ## 3. Travail accompli
 
@@ -1808,6 +1859,7 @@ Je fais le rafraîchissement de `REPRISE.md` §6 dans la foulée : ses items 1 (
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/vision_mtmd.py` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/vision.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/histoire.md` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/roadmap.md` | 1 | 0 |
 
 ### Sous-agents lancés
 
@@ -1855,7 +1907,7 @@ Je fais le rafraîchissement de `REPRISE.md` §6 dans la foulée : ses items 1 (
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 971 autres
+- … et 982 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1983,7 +2035,7 @@ Je fais le rafraîchissement de `REPRISE.md` §6 dans la foulée : ses items 1 (
 
 ## 5. Erreurs rencontrées
 
-61 sorties en erreur ou divergentes. Les premières :
+64 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : a8f2635f8 docs: record which models this box is good at, and why src/llama-hparams.cpp:8:void llama_hparams::set_swa_pattern(uint32_t n_pattern, bool dense_first) { src/llama-hparams.h:308:    void se
 - **T1** : 511 tokens notés — perplexité cumulée 247.031  (4.9 tok/s) === perplexité 247.0308 sur 511 tokens (0 événements, 104.5 s) ===  ### B3 harmony assistant 511 --- ref --- 0.0 0.0 0:00 ls: cannot access '
@@ -2078,4 +2130,5 @@ Je fais le rafraîchissement de `REPRISE.md` §6 dans la foulée : ses items 1 (
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p='docs/plan-mla-vision.md'; s=open(p).read() add = """ ### La permutation colonne-majeur
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p='README.md'; s=open(p).read() old = """# Qtrinet  Inférence de LLM en **ternaire / mult
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -F - <<'EOF' && git log --oneline -1 && git status --short | head -3 Drave : r
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p='docs/roadmap.md'; s=open(p).read() s = s.replace("""| 0.1 | **Format de trace du flux*
 

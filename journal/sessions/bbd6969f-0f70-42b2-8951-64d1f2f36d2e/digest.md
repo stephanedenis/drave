@@ -21522,3 +21522,233 @@ perplexité 15.1757 sur 510 tokens
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -F - <<'EOF' && git log --oneline -1 && git status --short | head -3\nDrave : renommage complet (crate, binaire, variables, documents)\n\nLe projet s'appelait Qtrinet du nom de son origine — inférence tern … [1202 caractères tronqués]`
+
+  ```
+b97d129 Drave : renommage complet (crate, binaire, variables, documents)
+ M journal/README.md
+  ```
+
+### 🤖 Assistant
+
+⏵ Renommage fait : tout le dépôt s'appelle Drave, l'historique est préservé
+
+## 1. Vision — `docs/vision.md`
+
+Un vrai document de vision, adossé aux mesures du dépôt (chaque chiffre cité a été vérifié comme présent dans un rapport) : les listes d'activation **par source**, poussées vers leurs destinations (AER) — le coût devient proportionnel à l'**activité**, pas à la taille du modèle.
+
+Cinq axes explorés, avec ce qui est mesuré et ce qui est hypothèse :
+1. **observer et régler neurone par neurone** (`--profil-neurones`, `--profil-experts`, `[config]`, journal ; top 10 % des neurones = 33,1 % de la magnitude ; 0,08 % chauds >90 % du temps) — ce que la vision ajoute : un format de trace stable et le **diff par couche** ;
+2. **répartir sur les composants** — le plus avancé, tout mesuré (KV en VRAM sur deux cartes, attention ÷6,7, préremplissage ×2,8, tête Q6_K ×2,1, experts +6 % → verdict) ; la règle : *placer un opérateur là où son flux coûte le moins cher* ;
+3. **répartir sur plusieurs machines** — **rien n'existe**, écrit comme hypothèse de travail avec les cinq choses à définir ; le décodage reste séquentiel, c'est le préremplissage qu'il faut distribuer ;
+4. **rejouer/comparer** — les portes de non-régression et les références indépendantes (MLA 5,2e-7, vision 5,4e-7) sont déjà cette idée en petit ;
+5. **formats, matériels, énergie** — trois matériels (SIMD, PTX, FPGA), et l'argument *on ne lit que ce qui parle*.
+
+Plus une section « ce que la vision n'est pas » : le croisement push/pull à 10 % de densité est mesuré, le sparse ne gagne pas toujours.
+
+## 2. Renommage — option 3, tout de suite
+
+| avant | après |
+|---|---|
+| crate `qtrinet-core/` | `drave-core/` |
+| binaire `qtrinet-core` | **`drave`** |
+| `gpu/qtrinet_gpu.{cu,ptx}` | `gpu/drave_gpu.{cu,ptx}` |
+| variables `QT_*` | **`DRAVE_*`** |
+| « Qtrinet » dans 61 fichiers de contenu | « Drave » |
+
+**Préservé, volontairement** : le **journal de sessions** (un journal réécrit n'est plus un journal), **`Qtrinet-bootstrap.md`** (le cahier des charges d'origine, pièce datée), et l'**historique Git**.
+
+**`docs/histoire.md`** porte les trois âges du projet (le Qtrinet ternaire des Stratix V, le virage événementiel à 7,79 G événements/s, Drave) et la **table de conversion** des anciens noms — variables et chemins — pour que vos anciens scripts aient une réponse au lieu d'un mystère. Les vieilles variables ne font plus rien, mais **le moteur le dit** (vérifié : `[attention] QT_GPU est l'ancien nom… Rien n'a été appliqué.`).
+
+## 3. Vérifications après renommage
+
+`cargo test --release` **6/6**, porte Qwen **19,3885**, porte gpt-oss **15,1757** — inchangées. Commit `b97d129`.
+
+## À faire de votre côté
+
+Les scripts **hors dépôt** (vos `/tmp/*.sh`, une éventuelle tâche `crontab`) pointent encore vers `qtrinet-core/target/release/qtrinet-core` et `QT_*` : la table de conversion est dans `docs/histoire.md` §4. Le crochet Git du dépôt, lui, utilisait un chemin relatif et n'a pas eu besoin d'être touché.
+
+Reste la **feuille de route** (`REPRISE.md` §6) : je m'en occupe maintenant si vous voulez — elle a deux items périmés et l'axe multi-machines de la vision mérite d'y entrer comme chantier.
+
+
+## Tour 40
+
+### 👤 Utilisateur
+
+fais un roadmap ambitieux et commence les travaux qui ne nécessitent pas d'infra supplémentaire. on pourra terter avec colab pour le volet distribué
+
+### 🤖 Assistant
+
+⏵ Roadmap ambitieuse, puis j'attaque la phase qui ne demande aucune infra
+
+- **write** `{"content": "# Roadmap\n\n> Suite de [`docs/vision.md`](vision.md). Cinq phases, de ce qui se fait **tout de\n> suite sur cette machine** à ce qui demande une infra (Colab, FPGA). Chaque\n> phase a un critère de succès **mesurable**, et l'état de chaque chantier est\n> marqué : ✅ fait · 🔬 en cours · … [6340 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/roadmap.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && awk 'NR>=2500 && NR<=2560 && (/attn_norm|ffn_norm|rmsnorm|quant_scratch/)' src/model.rs | head -8 && grep -n \"lay.ffn_norm\" src/model.rs | head -4", "description": "Find trace hook sites in forward"}`
+
+  ```
+Self::rmsnorm(&x, &lay.attn_norm, cfg.eps, &mut hn);
+                        Self::rmsnorm(t, w, cfg.eps, &mut tmp);
+2197:                Self::rmsnorm(r, &lay.ffn_norm, self.cfg.eps, &mut hn[i * h..(i + 1) * h]);
+2774:            Self::rmsnorm(&o, &lay.ffn_norm, cfg.eps, &mut hn);
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && python3 - <<'PY'\np='src/model.rs'; s=open(p).read()\n\n# 1) la structure de trace\ns = s.replace(\"\"\"pub struct Model {\"\"\",\n\"\"\"/// Trace du **flux d'activation** : par (couche, position), la liste des\n/// neuron … [4459 caractères tronqués]`
+
+  ```
+trace du flux posée
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && cargo build --release 2>&1 | tail -1 && python3 - <<'PY'\np='src/main.rs'; s=open(p).read()\n# options\ns = s.replace(\"\"\"    /// Banc vision : embedding de patchs\"\"\",\n\"\"\"    /// Trace du flux d'activation : fichi … [1663 caractères tronqués]`
+
+  ```
+Finished `release` profile [optimized] target(s) in 0.01s
+occurrences de trace_flux : 4
+error[E0425]: cannot find value `mdl` in this scope
+    --> src/main.rs:2034:72
+     |
+2034 |         match model::TraceFlux::nouveau(chemin, trace_couches.clone(), mdl.cfg.hidden,
+     |                                                                        ^^^ not found in this scope
+
+error[E0425]: cannot find value `mdl` in this scope
+    --> src/main.rs:2035:41
+     |
+2035 | ...                   mdl.cfg.n_layer) {
+     |                       ^^^ not found in this scope
+
+error[E0425]: cannot find value `mdl` in this scope
+    --> src/main.rs:2036:75
+error: could not compile `drave-core` (bin "drave") due to 3 previous errors; 9 warnings emitted
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && grep -n \"let lot = lot.max(1);\" src/main.rs && sed -n '2028,2045p' src/main.rs && echo \"=== contexte de l'autre ===\" && grep -n \"profil_neurones = \\|let mut mdl = model::Model::load\" src/main.rs | head -4", "descrip … [42 caractères tronqués]`
+
+  ```
+2032:    let lot = lot.max(1);
+        topk_proj, moe_topk, patch: patch_file, hebb_layer, ffn_gain, logits_bin,
+        ppl_profil, lot, profil_neurones, neurones_sortie, trace_flux, trace_couches,
+        harmony, harmony_contexte, sans_yarn, ..
+    } = opt;
+    let lot = lot.max(1);
+    if let Some(chemin) = trace_flux.as_deref() {
+        match model::TraceFlux::nouveau(chemin, trace_couches.clone(), mdl.cfg.hidden,
+                                        mdl.cfg.n_layer) {
+            Ok(t) => { println!("[trace] flux enregistré dans {chemin}"); mdl.trace = Some(t); }
+            Err(e) => eprintln!("[trace] impossible d'écrire {chemin} : {e}"),
+        }
+    }
+    let path = &modele_chemin();
+    // Défauts du mode PERPLEXITÉ : 256 jetons, trois quarts des cœurs, 16 bits
+    // d'activation (la référence de non-régression en dépend).
+    let cpu = std::thread::available_parallelism().map(|n| n.get()).unwrap_or(8);
+    let ctx = if ctx_impose { ctx_opt } else { 256 };
+    let n_threads = if threads_impose { threads_opt } else { (cpu * 3 / 4).max(1) };
+=== contexte de l'autre ===
+483:            "--profil-neurones" => { o.profil_neurones = true; 1 }
+531:    let mut mdl = model:
+… [243 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && python3 - <<'PY'\np='src/main.rs'; s=open(p).read()\n# le bloc de trace doit vivre APRÈS le chargement du modèle (dans run_ppl)\nbloc = \"\"\"    if let Some(chemin) = trace_flux.as_deref() {\n        match model::TraceFlu … [1156 caractères tronqués]`
+
+  ```
+bloc de trace déplacé dans run_ppl
+error[E0425]: cannot find value `trace_flux` in this scope
+   --> src/main.rs:537:27
+    |
+516 |       let Options {
+    |  _________-
+517 | |         ids: mut ids, ids_file, prompt, n: n_new, temp, top_p, topk, rep_pen, hist,
+518 | |         flux, session, chat, ctx: ctx_opt, threads: threads_opt, abits: abits_opt,
+--
+error[E0425]: cannot find value `trace_couches` in this scope
+   --> src/main.rs:538:49
+    |
+516 |       let Options {
+error: could not compile `drave-core` (bin "drave") due to 2 previous errors; 11 warnings emitted
+     510 tokens notés — perplexité cumulée 19.388  (32.0 tok/s)  [fenêtre 2 : 255 notés, PPL 21.565]
+=== perplexité 19.3885 sur 510 tokens (0 événements, 15.9 s) ===
+[stderr]
+ls: cannot access '/tmp/flux_f32.bin': No such file or directory
+[exit code: 2]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && python3 - <<'PY'\np='src/main.rs'; s=open(p).read()\nbloc = \"\"\"    if let Some(chemin) = trace_flux.as_deref() {\n        match model::TraceFlux::nouveau(chemin, trace_couches.clone(), mdl.cfg.hidden,\n                  … [1302 caractères tronqués]`
+
+  ```
+bloc inséré à la ligne 2032 (run_ppl)
+error[E0425]: cannot find value `mdl` in this scope
+    --> src/main.rs:2034:72
+     |
+2034 |         match model::TraceFlux::nouveau(chemin, trace_couches.clone(), mdl.cfg.hidden,
+     |                                                                        ^^^ not found in this scope
+
+error[E0425]: cannot find value `mdl` in this scope
+    --> src/main.rs:2035:41
+     |
+2035 | ...                   mdl.cfg.n_layer) {
+error: could not compile `drave-core` (bin "drave") due to 3 previous errors; 9 warnings emitted
+     510 tokens notés — perplexité cumulée 19.388  (30.7 tok/s)  [fenêtre 2 : 255 notés, PPL 21.565]
+=== perplexité 19.3885 sur 510 tokens (0 événements, 16.6 s) ===
+[stderr]
+ls: cannot access '/tmp/flux_f32.bin': No such file or directory
+[exit code: 2]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && grep -n \"Model::load\" src/main.rs | head -5 && sed -n '2040,2060p' src/main.rs | grep -n \"load\\|= model::\" | head -3", "description": "Find the model variable name in run_ppl"}`
+
+  ```
+531:    let mut mdl = model::Model::load(path, ctx, n_threads, dense, keep, auto, q4, b6);
+1153:            let mut mdl = model::Model::load(&chemin, 512, 16, true, 1.0, false, 0, 0);
+1195:    let mut mdl = model::Model::load(path, 4096, 16, opt.dense, 1.0, false, 0, 0);
+2074:    let mut mdl = model::Model::load(path, ctx, n_threads, dense, 1.0, auto, q4, b6);
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && python3 - <<'PY'\np='src/main.rs'; s=open(p).read()\nbloc = \"\"\"    if let Some(chemin) = trace_flux.as_deref() {\n        match model::TraceFlux::nouveau(chemin, trace_couches.clone(), mdl.cfg.hidden,\n                  … [1129 caractères tronqués]`
+
+  ```
+bloc inséré après le chargement (ligne 2068 )
+    Finished `release` profile [optimized] target(s) in 0.01s
+     510 tokens notés — perplexité cumulée 19.388  (29.7 tok/s)  [fenêtre 2 : 255 notés, PPL 21.565]
+=== perplexité 19.3885 sur 510 tokens (0 événements, 17.2 s) ===
+-rw-r--r--. 1 stephane stephane 132396734 30 sep 08:57 /tmp/flux_f32.bin
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > tools/diff_flux.py <<'EOF'\n#!/usr/bin/env python3\n\"\"\"Diff de deux traces de **flux d'activation** (format DRVF).\n\nC'est l'outil qui manquait à la vision : deux exécutions du même modèle, et on\nveut savoir non pas « la p … [3409 caractères tronqués]`
+
+  ```
+perplexité 19.8059 sur 510 tokens
+-rw-r--r--. 1 stephane stephane 132396464 30 sep 08:57 /tmp/flux_i8.bin
+trace A : 12288 listes · trace B : 12288 listes · version 1 · 24 couches · 896 cachés
+première divergence : couche 1 · jeton 0 · 847 neurones · écart max 3.146e+05 (relatif à l'échelle)
+  couche  neurones changés   écart max relatif  1er jeton
+       1            228949           4.141e+08          0
+       2            228888           1.781e+08          0
+   FFN 2            228645           1.255e+08          0
+       3            228235           9.446e+07          0
+   FFN 1            228793           9.371e+07          0
+   FFN 3            227841           9.164e+07          0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='tools/diff_flux.py'; s=open(p).read()\nold = \"\"\"        n = 0\n        mx = 0.0\n        for i in set(aa) | set(ab):\n            d = abs(aa.get(i, 0) - ab.get(i, 0))\n            if d:\n                n += 1 … [2064 caractères tronqués]`
+
+  ```
+comparaison sur les valeurs déquantifiées
+trace A : 12288 listes · trace B : 12288 listes · version 1 · 24 couches · 896 cachés
+première divergence : couche 1 · jeton 0 · 896 neurones · écart max 2.864e-03 (de la dynamique)
+  couche  neurones changés   écart / dynamique  1er jeton
+   FFN 2            229120           3.896e+00          0
+       1            229376           1.569e+00          0
+       2            229376           1.353e+00          0
+   FFN 1            229376           1.074e+00          0
+       6            229369           7.864e-01          0
+       3            229375           7.344e-01          0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='docs/roadmap.md'; s=open(p).read()\ns = s.replace(\"\"\"| 0.1 | **Format de trace du flux** : par (couche, position), la liste des neurones actifs (indice + valeur), l'échelle, le nombre | 🔬 | écrit et relu sans  … [3215 caractères tronqués]`

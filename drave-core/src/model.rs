@@ -486,6 +486,59 @@ fn matvec_f32(w: &[f32], x: &[f32], n_in: usize, n_out: usize, y: &mut [f32]) {
     }
 }
 
+/// Trace du **flux d'activation** : par (couche, position), la liste des
+/// neurones actifs — indice, valeur — avec son échelle. C'est le cœur de la
+/// vision mis sur disque : on peut rejouer, comparer, et c'est aussi le format
+/// qu'un nœud distant devrait recevoir pour continuer le calcul.
+pub struct TraceFlux {
+    pub fichier: std::io::BufWriter<std::fs::File>,
+    /// Couches à tracer (toutes si vide).
+    pub couches: Vec<usize>,
+    pub octets: u64,
+    pub enregistrements: u64,
+    pub actifs: u64,
+}
+
+impl TraceFlux {
+    pub fn nouveau(chemin: &str, couches: Vec<usize>, hidden: usize, n_layer: usize)
+        -> std::io::Result<Self> {
+        use std::io::Write;
+        let mut f = std::io::BufWriter::new(std::fs::File::create(chemin)?);
+        f.write_all(b"DRVF")?;
+        f.write_all(&1u16.to_le_bytes())?;
+        f.write_all(&(n_layer as u32).to_le_bytes())?;
+        f.write_all(&(hidden as u32).to_le_bytes())?;
+        Ok(TraceFlux { fichier: f, couches, octets: 16, enregistrements: 0, actifs: 0 })
+    }
+
+    /// Une liste : ce qui est réellement poussé dans la couche.
+    pub fn ecrire(&mut self, couche: usize, pos: usize, actifs: &[i32], echelle: f32) {
+        use std::io::Write;
+        if !self.couches.is_empty() && !self.couches.contains(&couche) { return; }
+        let liste: Vec<(u32, i16)> = actifs.iter().enumerate()
+            .filter(|(_, &v)| v != 0)
+            .map(|(i, &v)| (i as u32, v.clamp(-32767, 32767) as i16))
+            .collect();
+        let _ = self.fichier.write_all(&(couche as u16).to_le_bytes());
+        let _ = self.fichier.write_all(&(pos as u32).to_le_bytes());
+        let _ = self.fichier.write_all(&(liste.len() as u32).to_le_bytes());
+        let _ = self.fichier.write_all(&echelle.to_le_bytes());
+        for (i, v) in &liste {
+            let _ = self.fichier.write_all(&i.to_le_bytes());
+            let _ = self.fichier.write_all(&v.to_le_bytes());
+        }
+        self.octets += 14 + 6 * liste.len() as u64;
+        self.enregistrements += 1;
+        self.actifs += liste.len() as u64;
+    }
+
+    pub fn terminer(&mut self) {
+        use std::io::Write;
+        let _ = self.fichier.write_all(&0xFFFFu16.to_le_bytes());
+        let _ = self.fichier.flush();
+    }
+}
+
 pub struct Model {
     pub g: Gguf,
     pub cfg: Cfg,
@@ -592,6 +645,8 @@ pub struct Model {
     pub kv_gpu: Option<Vec<(usize, crate::gpu::KvGpu)>>,
     /// Tranches de clés du noyau d'attention, réutilisées d'un jeton à l'autre.
     pub attn_gpu_part: Vec<f32>,
+    /// Trace du flux d'activation (`--trace-flux`).
+    pub trace: Option<TraceFlux>,
     /// Embedding imposé pour le prochain appel à `forward` : c'est le point
     /// d'injection des vecteurs d'image (ou de tout autre vecteur), le seul
     /// ajout d'architecture que la vision demande au moteur — `forward` partait
@@ -1360,7 +1415,7 @@ impl Model {
             stop_id: None, stop_id2: None, prof: [0.0; 6],
             tete,
             tete_gpu, tete_gpu_q6k, head4, sinks_vus, kv_gpu, attn_gpu_part: Vec::new(),
-            cache_experts, mla, mla_cache, emb_imposee: None, lot: 1,
+            cache_experts, mla, mla_cache, trace: None, emb_imposee: None, lot: 1,
             patch: None, ffn_gain: None, hebb: None,
         }
     }
@@ -2541,6 +2596,15 @@ impl Model {
                       else { 0 };
             let tm = Instant::now();
             Self::rmsnorm(&x, &lay.attn_norm, cfg.eps, &mut hn);
+            if self.trace.is_some() {
+                let mut tmp = Vec::with_capacity(h);
+                if let Some((sv, sx)) = Self::quant_scratch(&hn, self.act_levels, self.act_thresh,
+                                                            tk(0), self.act_renorm, &mut tmp) {
+                    let mut actifs = vec![0i32; h];
+                    for (&i, &v) in sv.idx.iter().zip(sv.val.iter()) { actifs[i as usize] = v; }
+                    self.trace.as_mut().unwrap().ecrire(l, pos, &actifs, sx);
+                }
+            }
             Self::matvec(pool, &lay.wq, &hn, &mut q, events, self.act_levels, self.act_thresh, tk(0), self.act_renorm, &mut scratch, self.seuil_push);
             Self::matvec(pool, &lay.wk, &hn, &mut k, events, self.act_levels, self.act_thresh, tk(1), self.act_renorm, &mut scratch, self.seuil_push);
             Self::matvec(pool, &lay.wv, &hn, &mut v, events, self.act_levels, self.act_thresh, tk(2), self.act_renorm, &mut scratch, self.seuil_push);
@@ -2772,6 +2836,15 @@ impl Model {
             Self::matvec(pool, &lay.wo, &att, &mut o, events, self.act_levels, self.act_thresh, tk(3), self.act_renorm, &mut scratch, self.seuil_push);
             for i in 0..h { o[i] += x[i]; }
             Self::rmsnorm(&o, &lay.ffn_norm, cfg.eps, &mut hn);
+            if self.trace.is_some() {
+                let mut tmp = Vec::with_capacity(h);
+                if let Some((sv, sx)) = Self::quant_scratch(&hn, self.act_levels, self.act_thresh,
+                                                            tk(3), self.act_renorm, &mut tmp) {
+                    let mut actifs = vec![0i32; h];
+                    for (&i, &v) in sv.idx.iter().zip(sv.val.iter()) { actifs[i as usize] = v; }
+                    self.trace.as_mut().unwrap().ecrire(l + 1000, pos, &actifs, sx);
+                }
+            }
             // ------------------------------------------------------ MoE
             // Un routeur linéaire choisit `k` experts parmi `n` ; seuls leurs
             // poids sont lus. C'est la parcimonie **structurelle** — 8 experts
