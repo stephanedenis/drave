@@ -370,7 +370,7 @@ et [`reports/rapport-passage-a-l-echelle.md`](reports/rapport-passage-a-l-echell
 ## Inférence complète en Rust (`--infer`)
 
 Qwen2.5-0.5B-Instruct Q8_0 tourne **en mode listes d'événements**, sans GPU, sans
-BLAS, sans aucune dépendance : **12 171 lignes de Rust, `std` seul** au 30/09 (2 319 au premier prototype). Détail :
+BLAS, sans aucune dépendance : **12 840 lignes de Rust, `std` seul** au 30/09 (2 319 au premier prototype). Détail :
 [`reports/rapport-inference.md`](reports/rapport-inference.md).
 
 ```bash
@@ -501,8 +501,12 @@ est ouvert aujourd'hui, par ordre de valeur mesurée :
 1. **Noyau GPU de top-k** (phase 1.1) : c'est le seul poste GPU neuf. Le chemin GPU
    de l'attention est conditionné à `attn_topk == 0`, donc le mode creux retombe
    sur le CPU où il coûte 968 ms par couche à 1 M de clés, contre 13,2 ms avec le
-   miroir VRAM. Trois noyaux, six étapes, contrat d'exactitude — le plan est écrit
-   et chiffré : [`docs/plan-gpu-topk.md`](docs/plan-gpu-topk.md).
+   miroir VRAM. **Deux des trois noyaux sont écrits et mesurés** : les scores
+   (`reports/rapport-gpu-scores.md`, écart 1,6–2,3e-7, 27–40× le CPU) et la sélection
+   radix (`reports/rapport-gpu-topk-selection.md`, ensemble identique au CPU sur
+   14/14 lignes). Reste `attn_topk_somme` (softmax sur les k + puits, Σ pondérée
+   des V), le branchement dans `model.rs` et la mesure à 1 M de clés — plan
+   chiffré : [`docs/plan-gpu-topk.md`](docs/plan-gpu-topk.md).
 2. **Second GPU** : 16 Go dorment. Le cache d'experts MXFP4 et le KV paginé à 1 M
    les rempliraient utilement ; il faut un second contexte CUDA et une règle de
    répartition.

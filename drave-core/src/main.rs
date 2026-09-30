@@ -2355,11 +2355,17 @@ par tête KV · KV {bits} bits");
         etat ^= etat << 13; etat ^= etat >> 7; etat ^= etat << 17;
         ((etat >> 11) as f64 / (1u64 << 53) as f64) as f32 * 2.0 - 1.0
     };
-    let k: Vec<f32> = (0..n_kv * hd).map(|_| suivant()).collect();
-    let v: Vec<f32> = (0..n_kv * hd).map(|_| suivant()).collect();
+    // Une clé PROPRE à chaque position. La version d'avant réutilisait le même
+    // vecteur partout : tous les scores d'une ligne étaient alors EXACTEMENT
+    // égaux, l'histogramme n'avait qu'un seul seau non vide et la descente radix
+    // n'était jamais exercée — le banc aurait validé un cas dégénéré en ayant
+    // l'air de valider la sélection. Trouvé en relisant le banc, pas en le
+    // faisant échouer.
     for pos in 0..n {
         for kvh in 0..n_kv {
-            cache.ecrire(kvh, pos, &k, &v);
+            let kp: Vec<f32> = (0..n_kv * hd).map(|_| suivant()).collect();
+            let vp: Vec<f32> = (0..n_kv * hd).map(|_| suivant()).collect();
+            cache.ecrire(kvh, pos, &kp, &vp);
         }
     }
     let machine = match crate::gpu::machines().first() {
@@ -2518,6 +2524,92 @@ d'avoir compris");
         println!("    → la descente trouve le seuil EXACT : la collecte peut être écrite");
     } else {
         println!("    → ÉCART : ne pas écrire la collecte avant d'avoir compris");
+    }
+
+    // ---------------------------------------- noyaux 2b : la collecte des k indices
+    // Référence : tri complet par (score décroissant, index croissant) puis
+    // troncature à k. C'est le départage que les noyaux doivent reproduire —
+    // ensemble identique, ordre des indices croissant, donc reproductible.
+    let besoin: Vec<i32> = (0..lignes).map(|l| (k - au_dessus[l]) as i32).collect();
+    let t4 = Instant::now();
+    let mut idx_cpu = vec![-1i32; lignes * k];
+    for l in 0..lignes {
+        let ligne = &obtenu[l * n..(l + 1) * n];
+        let mut ord: Vec<u32> = (0..n as u32).collect();
+        ord.sort_unstable_by(|&a, &b| {
+            ligne[b as usize].partial_cmp(&ligne[a as usize]).unwrap().then(a.cmp(&b))
+        });
+        ord.truncate(k);
+        ord.sort_unstable();
+        for (i, &v) in ord.iter().enumerate() { idx_cpu[l * k + i] = v as i32; }
+    }
+    let t_cpu_col = t4.elapsed().as_secs_f64();
+
+    let mut sortie = vec![-1i32; lignes * k];
+    let t5 = Instant::now();
+    if !machine.attn_topk_collecte(&mut miroir, lignes, n, k, &prefixes, &besoin, &mut sortie) {
+        println!("  la collecte a refusé la configuration");
+        return;
+    }
+    let t_gpu_col = t5.elapsed().as_secs_f64();
+
+    // Trois vérifications distinctes, parce qu'elles peuvent échouer
+    // séparément : l'ENSEMBLE (le contrat du plan), l'ORDRE (le GPU écrit les
+    // scores au-dessus du seuil puis les égaux, chaque groupe par indices
+    // croissants — ce n'est PAS l'ordre croissant global, qui entrelace les deux
+    // groupes), et l'absence de doublon ou d'indice hors borne.
+    let mut set_ok = 0usize;
+    let mut ordre_ok = 0usize;
+    let mut cases_vides = 0usize;
+    let mut diff_sym = 0usize;
+    let mut doublons = 0usize;
+    let mut hors_bornes = 0usize;
+    for l in 0..lignes {
+        let (a, b) = (&idx_cpu[l * k..(l + 1) * k], &sortie[l * k..(l + 1) * k]);
+        cases_vides += b.iter().filter(|&&v| v < 0).count();
+        hors_bornes += b.iter().filter(|&&v| v < 0 || v as usize >= n).count();
+        // différence symétrique des deux ensembles (indépendante de l'ordre)
+        let (mut sa, mut sb) = (a.to_vec(), b.to_vec());
+        sa.sort_unstable(); sb.sort_unstable();
+        if sb.windows(2).any(|w| w[0] == w[1]) { doublons += 1; }
+        if sa == sb { set_ok += 1; }
+        let (mut i, mut j) = (0usize, 0usize);
+        while i < sa.len() && j < sb.len() {
+            match sa[i].cmp(&sb[j]) {
+                std::cmp::Ordering::Equal => { i += 1; j += 1; }
+                std::cmp::Ordering::Less => { diff_sym += 1; i += 1; }
+                std::cmp::Ordering::Greater => { diff_sym += 1; j += 1; }
+            }
+        }
+        diff_sym += (sa.len() - i) + (sb.len() - j);
+        // L'ordre documenté : [au-dessus, indices croissants] puis [égaux,
+        // indices croissants], et chaque indice dans le bon groupe.
+        let dep = au_dessus[l];
+        let seuil = seuils[l];
+        let mut ok = true;
+        for (i, &v) in b.iter().enumerate() {
+            if i > 0 && i != dep && b[i - 1] >= v { ok = false; }
+            let s = obtenu[l * n + v.max(0) as usize];
+            if i < dep { if !(s > seuil) { ok = false; } }
+            else if s != seuil { ok = false; }
+        }
+        if ok { ordre_ok += 1; }
+    }
+    println!("    collecte GPU {:8.2} ms · CPU tri complet {:8.2} ms ({:.1}× plus rapide)",
+             t_gpu_col * 1e3, t_cpu_col * 1e3, t_cpu_col / t_gpu_col.max(1e-9));
+    println!("    ensembles identiques au CPU : {set_ok}/{lignes} lignes · différence symétrique \
+{diff_sym} indices");
+    println!("    ordre documenté (au-dessus puis égaux, croissants) : {ordre_ok}/{lignes} lignes · \
+doublons {doublons} · hors bornes {hors_bornes} · cases non écrites {cases_vides}");
+    if set_ok == lignes && diff_sym == 0 && doublons == 0 && hors_bornes == 0 && cases_vides == 0 {
+        println!("    → l'ensemble retenu est le MÊME que celui du CPU, et l'ordre est celui qui \
+est écrit dans le noyau");
+        if ordre_ok != lignes {
+            println!("    → (l'ordre croissant GLOBAL n'est pas garanti : le tri CPU ci-dessus \
+l'entrelace — c'est le seul écart attendu)");
+        }
+    } else {
+        println!("    → ÉCART sur la sélection");
     }
 }
 

@@ -1,7 +1,7 @@
 # Noyau GPU de scores d'attention — le premier des trois du top-k
 
 **En une ligne** : les scores d'attention se calculent maintenant **en VRAM**, avec
-un écart de **1,03e-7** sur la référence CPU et **40× plus vite** à 262 144 clés —
+un écart de **1,6 à 2,3e-7** sur la référence CPU et **40× plus vite** à 262 144 clés —
 c'est la brique qui manquait pour que le mode creux (`--attn-topk`) cesse de
 retomber sur le CPU au long contexte.
 
@@ -24,6 +24,14 @@ Quadro RTX 5000 :
 
 | clés | CPU (20 fils) | GPU | accélération | écart relatif |
 |---|---|---|---|---|
+> ⚠️ **Correction du 30/09 (même journée)** : les écarts de 1,03e-7 ci-dessous ont
+> été mesurés avec, pour toutes les positions, **la même clé** — un banc dégénéré
+> (voir `reports/rapport-gpu-topk-selection.md`, § « Le banc mentait »). Sur des clés
+> distinctes, l'écart relatif est de **1,60e-7 (4 096 clés)**, **2,13e-7 (65 536)** et
+> **2,25e-7 (262 144)** : le critère de 1e-6 tient toujours, avec 4× de marge au
+> lieu de 10×. Le temps du noyau, lui, ne change pas (les valeurs ci-dessous sont
+> conservées telles quelles pour la traçabilité).
+
 | 256 | 0,25 ms | 0,07 ms | 3,8× | 1,03e-7 |
 | 4 096 | 3,98 ms | **0,14 ms** | **29×** | 1,03e-7 |
 | 65 536 | 65,3 ms | 7,4 ms | 8,9× | 1,03e-7 |

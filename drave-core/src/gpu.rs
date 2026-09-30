@@ -44,6 +44,21 @@ fn cu_ctx(ctx: *mut c_void) {
     unsafe { cuCtxSetCurrent(ctx) };
 }
 
+/// Garantit `octets` dans un tampon VRAM : n'alloue QUE si la capacité actuelle
+/// ne suffit pas, et libère l'ancien tampon alors. Les quatre tampons du top-k
+/// (quelques kilo-octets) ne sont donc alloués qu'une fois.
+///
+/// # Safety
+/// `p` doit être un pointeur de périphérique valide ou 0, et `cap` sa capacité.
+unsafe fn vram_assurer(p: &mut u64, cap: &mut usize, octets: usize) -> bool {
+    if *cap >= octets { return true; }
+    if *p != 0 { cuMemFree_v2(*p); *p = 0; }
+    *cap = 0;
+    if cuMemAlloc_v2(p, octets) != 0 { return false; }
+    *cap = octets;
+    true
+}
+
 fn erreur(code: c_int, ou: &str) -> String {
     let mut nom: *const c_char = std::ptr::null();
     unsafe { cuGetErrorName(code, &mut nom) };
@@ -96,6 +111,8 @@ pub struct KvGpu {
     /// Préfixes du radix select, un u32 par ligne (téléversés à chaque passe).
     pub prefixes_dev: u64,
     pub prefixes_cap: usize,
+    /// Tampons de la collecte des k indices (`attn_topk_collecte`).
+    pub topk: Option<TamponsTopk>,
     pub octets: usize,
     // Tampons de travail RÉUTILISÉS d'un jeton à l'autre. Les allouer à chaque
     // appel coûtait 24 couches × 6 appels CUDA par jeton : mesuré 24,5 ms/jeton
@@ -109,6 +126,27 @@ pub struct KvGpu {
     pub part_cap: usize,
     pub out_cap: usize,
     pub sinks_cap: usize,
+}
+
+/// Tampons VRAM de la COLLECTE du top-k (noyaux 2b). Dimensionnés pour un
+/// triplet (lignes, tranches, k) ; réalloués seulement quand l'un grandit.
+pub struct TamponsTopk {
+    pub lignes: usize,
+    pub ntr: usize,
+    pub k: usize,
+    pub chunk: usize,
+    /// `compte_sup[l][t]` puis `compte_eq[l][t]` — sortie du premier noyau.
+    pub comptes: u64,
+    pub cap_comptes: usize,
+    /// `base_sup[l][t]` puis `base_eq[l][t]` — sommes préfixées par l'hôte.
+    pub bases: u64,
+    pub cap_bases: usize,
+    /// `prefixes[l]`, puis `debut_egaux[l]`, puis `besoin[l]`.
+    pub meta: u64,
+    pub cap_meta: usize,
+    /// `sortie[l][k]` : les indices retenus, par ordre croissant.
+    pub sortie: u64,
+    pub cap_sortie: usize,
 }
 
 pub struct Gpu {
@@ -127,6 +165,9 @@ pub struct Gpu {
     f_attn_scores: *mut c_void,
     /// Histogramme d'octet du radix select (noyau 2a du plan).
     f_attn_topk_histo: *mut c_void,
+    /// Collecte des k indices : comptage par tranche puis écriture ordonnée.
+    f_attn_topk_compte: *mut c_void,
+    f_attn_topk_ecrit: *mut c_void,
     pub nom: String,
     /// Numéro du périphérique, pour savoir qui est qui quand il y en a deux.
     pub ordinal: c_int,
@@ -252,6 +293,20 @@ impl Gpu {
                 eprintln!("{}", erreur(rc, "fonction attn_topk_histo"));
                 return None;
             }
+            let nom_tc = std::ffi::CString::new("attn_topk_compte").unwrap();
+            let mut f_attn_topk_compte: *mut c_void = std::ptr::null_mut();
+            let rc = cuModuleGetFunction(&mut f_attn_topk_compte, module, nom_tc.as_ptr());
+            if rc != 0 {
+                eprintln!("{}", erreur(rc, "fonction attn_topk_compte"));
+                return None;
+            }
+            let nom_te = std::ffi::CString::new("attn_topk_ecrit").unwrap();
+            let mut f_attn_topk_ecrit: *mut c_void = std::ptr::null_mut();
+            let rc = cuModuleGetFunction(&mut f_attn_topk_ecrit, module, nom_te.as_ptr());
+            if rc != 0 {
+                eprintln!("{}", erreur(rc, "fonction attn_topk_ecrit"));
+                return None;
+            }
             let nom_r = std::ffi::CString::new("attn_kv_recombine").unwrap();
             let mut f_attn_recombine: *mut c_void = std::ptr::null_mut();
             let rc = cuModuleGetFunction(&mut f_attn_recombine, module, nom_r.as_ptr());
@@ -267,7 +322,7 @@ impl Gpu {
             cuMemGetInfo_v2(&mut libre, &mut total);
             Some(Gpu { ctx, module, f_tete, f_proj, f_tete_warp, f_proj_warp,
                        f_mxfp4_warp, f_q4k_warp, f_q6k_warp, f_attn_scores,
-                       f_attn_topk_histo,
+                       f_attn_topk_histo, f_attn_topk_compte, f_attn_topk_ecrit,
                        f_attn_part, f_attn_recombine, ordinal,
                        nom: format!("GPU {ordinal}"), memoire_libre: libre })
         }
@@ -353,7 +408,7 @@ impl Gpu {
         // reste s'ajoute par doublement, à la demande.
         let mut m = KvGpu { k: 0, v: 0, sk: 0, sv: 0, n_kv, ctx, capacite: 0, hd, nb, bits,
                             scores_dev: 0, scores_cap: 0, histo_dev: 0, histo_cap: 0,
-                            prefixes_dev: 0, prefixes_cap: 0,
+                            prefixes_dev: 0, prefixes_cap: 0, topk: None,
                             octets: 0, q_dev: 0, part_dev: 0, out_dev: 0, sinks_dev: 0,
                             q_cap: 0, part_cap: 0, out_cap: 0, sinks_cap: 0 };
         if !self.kv_assurer(&mut m, ctx.min(2048)) { return None; }
@@ -598,6 +653,144 @@ hist {}, préfixes {}", hist.len(), prefixes.len());
             }
             let rc = cuMemcpyDtoH_v2(hist.as_mut_ptr() as *mut c_void, m.histo_dev, besoin);
             if rc != 0 { eprintln!("{}", erreur(rc, "relecture des histogrammes")); return false; }
+        }
+        true
+    }
+
+    /// **Collecte des k indices retenus** (noyaux 2b, `docs/plan-gpu-topk.md`).
+    ///
+    /// `prefixes[l]` est le score k-ième EXACT de la ligne (entier monotone),
+    /// rendu par les quatre passes de [`Gpu::attn_topk_histo`], et
+    /// `besoin[l] = k − (nombre de scores strictement au-dessus)`. La sortie
+    /// contient, pour chaque ligne, les `k` indices **par ordre croissant** :
+    /// les scores strictement au-dessus du seuil, puis les premiers égaux au
+    /// seuil par ordre d'index — le même départage que le CPU, donc le même
+    /// ensemble, reproductible.
+    pub fn attn_topk_collecte(&self, m: &mut KvGpu, lignes: usize, n: usize, k: usize,
+                              prefixes: &[u32], besoin: &[i32],
+                              sortie: &mut [i32]) -> bool {
+        cu_ctx(self.ctx);
+        const CHUNK: usize = 4096;
+        if lignes == 0 || n == 0 || k == 0 || k > n { return false; }
+        if prefixes.len() < lignes || besoin.len() < lignes || sortie.len() < lignes * k {
+            eprintln!("[topk] tampons hôtes trop courts pour la collecte");
+            return false;
+        }
+        if m.scores_cap < lignes * n { return false; }
+        let ntr = n.div_ceil(CHUNK);
+        unsafe {
+            // (Ré)allocation : les tampons ne grandissent que si un banc plus
+            // long arrive — ils ne sont jamais libérés entre deux jetons.
+            let t = m.topk.get_or_insert_with(|| TamponsTopk {
+                lignes: 0, ntr: 0, k: 0, chunk: CHUNK,
+                comptes: 0, cap_comptes: 0, bases: 0, cap_bases: 0,
+                meta: 0, cap_meta: 0, sortie: 0, cap_sortie: 0,
+            });
+            if t.lignes < lignes || t.ntr < ntr {
+                if !vram_assurer(&mut t.comptes, &mut t.cap_comptes, 2 * lignes * ntr * 4)
+                    || !vram_assurer(&mut t.bases, &mut t.cap_bases, 2 * lignes * ntr * 4)
+                    || !vram_assurer(&mut t.meta, &mut t.cap_meta, 3 * lignes * 4)
+                    || !vram_assurer(&mut t.sortie, &mut t.cap_sortie, lignes * k * 4)
+                {
+                    eprintln!("[topk] allocation VRAM de la collecte impossible");
+                    return false;
+                }
+                t.lignes = lignes; t.ntr = ntr; t.k = k; t.chunk = CHUNK;
+            }
+            let (p_comptes, p_bases, p_meta, mut p_sortie) =
+                (t.comptes, t.bases, t.meta, t.sortie);
+            // Métadonnées : préfixes | debut_egaux (= k − besoin) | besoin.
+            let mut meta = vec![0i32; 3 * lignes];
+            for l in 0..lignes {
+                meta[l] = prefixes[l] as i32;
+                meta[lignes + l] = (k as i32) - besoin[l];
+                meta[2 * lignes + l] = besoin[l];
+            }
+            if cuMemcpyHtoD_v2(p_meta, meta.as_ptr() as *const c_void, lignes * 4) != 0 {
+                return false;
+            }
+            if cuMemcpyHtoD_v2(p_meta + (lignes * 4) as u64,
+                               meta[lignes..].as_ptr() as *const c_void, lignes * 4) != 0 {
+                return false;
+            }
+            if cuMemcpyHtoD_v2(p_meta + (2 * lignes * 4) as u64,
+                               meta[2 * lignes..].as_ptr() as *const c_void, lignes * 4) != 0 {
+                return false;
+            }
+            let (n_i, chunk_i, k_i) = (n as c_int, CHUNK as c_int, k as c_int);
+            let mut p_sc = m.scores_dev;
+            let mut p_pref = p_meta;
+            let mut p_cs = p_comptes;
+            let mut p_ce = p_comptes + (lignes * ntr * 4) as u64;
+            let mut params: [*mut c_void; 6] = [
+                &mut p_sc as *mut u64 as *mut c_void,
+                &mut p_pref as *mut u64 as *mut c_void,
+                &mut p_cs as *mut u64 as *mut c_void,
+                &mut p_ce as *mut u64 as *mut c_void,
+                &n_i as *const c_int as *mut c_void,
+                &chunk_i as *const c_int as *mut c_void,
+            ];
+            let rc = cuLaunchKernel(self.f_attn_topk_compte, lignes as c_uint, ntr as c_uint, 1,
+                                    256, 1, 1, 0, std::ptr::null_mut(),
+                                    params.as_mut_ptr(), std::ptr::null_mut());
+            if rc != 0 {
+                eprintln!("{}", erreur(rc, "lancement attn_topk_compte"));
+                return false;
+            }
+            // Sommes préfixées par ligne, sur l'hôte : ntr × lignes entiers.
+            let mut sup = vec![0i32; lignes * ntr];
+            let mut eq = vec![0i32; lignes * ntr];
+            let octets = lignes * ntr * 4;
+            if cuMemcpyDtoH_v2(sup.as_mut_ptr() as *mut c_void, p_comptes, octets) != 0
+                || cuMemcpyDtoH_v2(eq.as_mut_ptr() as *mut c_void,
+                                   p_comptes + octets as u64, octets) != 0 { return false; }
+            let mut bases = vec![0i32; 2 * lignes * ntr];
+            for l in 0..lignes {
+                let (mut a, mut b) = (0i32, 0i32);
+                for c in 0..ntr {
+                    bases[l * ntr + c] = a;
+                    bases[lignes * ntr + l * ntr + c] = b;
+                    a += sup[l * ntr + c];
+                    b += eq[l * ntr + c];
+                }
+                // Invariant : le seuil a été choisi pour que le compte tombe
+                // exactement sur k. S'il ne tombe pas, la collecte écrirait
+                // ailleurs que dans les k places — on refuse.
+                if a != k as i32 - besoin[l] || b < besoin[l] {
+                    eprintln!("[topk] ligne {l} : {a} au-dessus et {b} égaux pour besoin {} \
+(k = {k}) — collecte refusée", besoin[l]);
+                    return false;
+                }
+            }
+            if cuMemcpyHtoD_v2(p_bases, bases.as_ptr() as *const c_void, 2 * octets) != 0 {
+                return false;
+            }
+            let mut p_bs = p_bases;
+            let mut p_be = p_bases + (lignes * ntr * 4) as u64;
+            let mut p_de = p_meta + (lignes * 4) as u64;
+            let mut p_be2 = p_meta + (2 * lignes * 4) as u64;
+            let mut params2: [*mut c_void; 10] = [
+                &mut p_sc as *mut u64 as *mut c_void,
+                &mut p_pref as *mut u64 as *mut c_void,
+                &mut p_bs as *mut u64 as *mut c_void,
+                &mut p_be as *mut u64 as *mut c_void,
+                &mut p_de as *mut u64 as *mut c_void,
+                &mut p_be2 as *mut u64 as *mut c_void,
+                &mut p_sortie as *mut u64 as *mut c_void,
+                &n_i as *const c_int as *mut c_void,
+                &chunk_i as *const c_int as *mut c_void,
+                &k_i as *const c_int as *mut c_void,
+            ];
+            let rc = cuLaunchKernel(self.f_attn_topk_ecrit, lignes as c_uint, ntr as c_uint, 1,
+                                    256, 1, 1, 0, std::ptr::null_mut(),
+                                    params2.as_mut_ptr(), std::ptr::null_mut());
+            if rc != 0 {
+                eprintln!("{}", erreur(rc, "lancement attn_topk_ecrit"));
+                return false;
+            }
+            let rc = cuMemcpyDtoH_v2(sortie.as_mut_ptr() as *mut c_void, p_sortie,
+                                     lignes * k * 4);
+            if rc != 0 { eprintln!("{}", erreur(rc, "relecture de la sélection")); return false; }
         }
         true
     }

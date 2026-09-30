@@ -514,7 +514,7 @@ cd drave-core && cargo build --release && cargo test --release
 #    moteur déporte alors tout seul les projections Q8_0 de plus de 8 Mo — le
 #    chiffre devient 15,1667 (même calcul, ordre de sommation du noyau GPU).
 ./target/release/drave /home/stephane/FastNVMe/models/gpt-oss-120b-MXFP4.gguf \
-    --ppl /tmp/ids_oss.txt --ctx 256 --dense --threads 16 --limit 512   # attendu 15,1757
+    --ppl /tmp/ids_oss_512.txt --ctx 256 --dense --threads 16 --limit 512  # attendu 15,1757
 
 # 4. puis §6.b : la rotation ne bascule plus qu'au-delà de 1,25 × la longueur
 #    d'origine déclarée (5 120 pour gpt-oss) — mesuré, voir docs/contexte-long.md §5.ter

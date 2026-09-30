@@ -745,3 +745,109 @@ extern "C" __global__ void attn_topk_histo(const float* __restrict__ sc,
         if (sh[i]) atomicAdd(&histo[(size_t)ligne * 256 + i], sh[i]);
     }
 }
+
+// ---------------------------------------------------------------------------
+// Noyaux 2b : la COLLECTE des k indices retenus.
+//
+// Après les quatre passes d'histogramme, chaque ligne connaît le score k-ième
+// EXACT (`prefixe`) et le nombre de scores strictement au-dessus. Il reste à
+// écrire les indices : tous ceux strictement au-dessus, puis, parmi les égaux au
+// seuil, les premiers par ORDRE D'INDEX — c'est ce départage qui rend le
+// résultat reproductible, et il doit être le même que côté CPU.
+//
+// Deux temps, parce qu'un bloc ne peut pas connaître sa place globale avant que
+// les blocs précédents aient compté : `attn_topk_compte` écrit les comptes par
+// (ligne, tranche), l'hôte en fait la somme préfixée, `attn_topk_ecrit` écrit
+// les indices. Chaque fil possède une plage CONTIGUË de la tranche : les
+// écritures d'un fil sont donc déjà dans l'ordre des indices, et les rangs
+// partent du bon pied. Une plage entrelacée (i += 256) casserait cet ordre.
+// ---------------------------------------------------------------------------
+
+extern "C" __global__ void attn_topk_compte(const float* __restrict__ sc,
+                                            const unsigned int* __restrict__ prefixes,
+                                            int* __restrict__ compte_sup, // [lignes][ntr]
+                                            int* __restrict__ compte_eq,
+                                            int n, int chunk) {
+    __shared__ int cs[256];
+    __shared__ int ce[256];
+    const int ligne = blockIdx.x;
+    const int tr = blockIdx.y;
+    const int deb = tr * chunk;
+    const int fin = min(n, deb + chunk);
+    const unsigned int pref = prefixes[ligne];
+    const float* row = sc + (size_t)ligne * n;
+    const int t = threadIdx.x;
+    const int par = (fin - deb + 255) / 256;
+    const int d0 = deb + t * par;
+    const int d1 = min(fin, d0 + par);
+    int s = 0, e = 0;
+    for (int i = d0; i < d1; i++) {
+        const unsigned int cle = monotone(row[i]);
+        if (cle > pref) s++;
+        else if (cle == pref) e++;
+    }
+    cs[t] = s; ce[t] = e;
+    __syncthreads();
+    if (t == 0) {
+        int a = 0, b = 0;
+        for (int i = 0; i < 256; i++) { a += cs[i]; b += ce[i]; }
+        compte_sup[(size_t)ligne * gridDim.y + tr] = a;
+        compte_eq[(size_t)ligne * gridDim.y + tr] = b;
+    }
+}
+
+extern "C" __global__ void attn_topk_ecrit(const float* __restrict__ sc,
+                                           const unsigned int* __restrict__ prefixes,
+                                           const int* __restrict__ base_sup,  // [lignes][ntr]
+                                           const int* __restrict__ base_eq,
+                                           const int* __restrict__ debut_egaux, // [lignes]
+                                           const int* __restrict__ besoin,      // [lignes]
+                                           int* __restrict__ sortie,            // [lignes][k]
+                                           int n, int chunk, int k) {
+    __shared__ int cs[256];
+    __shared__ int ce[256];
+    const int ligne = blockIdx.x;
+    const int tr = blockIdx.y;
+    const int deb = tr * chunk;
+    const int fin = min(n, deb + chunk);
+    const unsigned int pref = prefixes[ligne];
+    const float* row = sc + (size_t)ligne * n;
+    const int t = threadIdx.x;
+    const int par = (fin - deb + 255) / 256;
+    const int d0 = deb + t * par;
+    const int d1 = min(fin, d0 + par);
+    int s = 0, e = 0;
+    for (int i = d0; i < d1; i++) {
+        const unsigned int cle = monotone(row[i]);
+        if (cle > pref) s++;
+        else if (cle == pref) e++;
+    }
+    cs[t] = s; ce[t] = e;
+    __syncthreads();
+    // Balayage exclusif par le fil 0 : 256 additions, une seule fois par bloc.
+    if (t == 0) {
+        int a = 0, b = 0;
+        for (int i = 0; i < 256; i++) {
+            const int si = cs[i], ei = ce[i];
+            cs[i] = a; ce[i] = b;
+            a += si; b += ei;
+        }
+    }
+    __syncthreads();
+    const int osup = base_sup[(size_t)ligne * gridDim.y + tr] + cs[t];
+    const int oeq = base_eq[(size_t)ligne * gridDim.y + tr] + ce[t];
+    const int depart = debut_egaux[ligne];
+    const int combien = besoin[ligne];
+    int* dst = sortie + (size_t)ligne * k;
+    int rs = 0, re = 0;
+    for (int i = d0; i < d1; i++) {
+        const unsigned int cle = monotone(row[i]);
+        if (cle > pref) {
+            dst[osup + rs] = i;
+            rs++;
+        } else if (cle == pref && (oeq + re) < combien) {
+            dst[depart + oeq + re] = i;
+            re++;
+        }
+    }
+}

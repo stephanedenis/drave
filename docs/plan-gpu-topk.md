@@ -25,9 +25,9 @@ peu » : c'est rendre le mode creux **utilisable** au-delà de ~32 k de contexte
 
 ## Ce qui existe
 
-* `drave-core/gpu/drave_gpu.cu` (596 lignes, 9 noyaux) : `attn_kv_partiels` (scores
-  et partiels par tranche, softmax en ligne) et `attn_kv_recombine` (fusion des
-  tranches + puits) ;
+* `drave-core/gpu/drave_gpu.cu` (853 lignes, 13 noyaux) : `attn_kv_partiels` (scores
+  et partiels par tranche, softmax en ligne), `attn_kv_recombine` (fusion des
+  tranches + puits), puis `attn_scores` + les trois noyaux de la sélection ;
 * `drave-core/src/gpu.rs` : `Machine::attn_kv(...)` (FFI, allocations, partiels) ;
 * côté moteur : `kv_gpu` (le miroir paginé), `attn_gpu_part` (le tampon de
   partiels), le repli propre (`fait_en_gpu`) ;
@@ -46,13 +46,19 @@ peu » : c'est rendre le mode creux **utilisable** au-delà de ~32 k de contexte
    partagé, sélectionne localement, et n'écrit que ses k candidats (voir 2).
 2. **`attn_topk_select`** — la sélection, par tête. Méthode retenue : **radix select
    sur les scores transformés en entiers monotones** (le classique : pour un f32
-   positif, les bits sont déjà ordonnés ; pour un négatif, on inverse). Deux passes
-   de 8 bits suffisent en pratique pour k = 256 :
-   * passe 1 : histogramme des 8 bits de poids fort (256 compteurs en partagé) ;
-   * on descend les buckets jusqu'à dépasser k → le bucket frontière ;
-   * passe 2 : sur le bucket frontière seulement, second histogramme ;
-   * collecte des k indices retenus, triés par index (l'ordre des indices est ce
-     qui rend la somme pondérée déterministe).
+   positif, les bits sont déjà ordonnés ; pour un négatif, on inverse) :
+   * **quatre** passes de 8 bits — et non deux : avec deux passes, l'ensemble des
+     scores partageant les 16 bits de tête peut dépasser k, et il faudrait alors
+     choisir *dans* le paquet, ce qui n'est plus un top-k ; quatre passes donnent
+     le score k-ième **au bit près** (`attn_topk_histo`) ;
+   * la descente des seaux se fait sur l'hôte, avec **un préfixe par ligne** ;
+   * la collecte des indices est **deux noyaux** (`attn_topk_compte` puis
+     `attn_topk_ecrit`, séparés par une somme préfixée sur l'hôte) : un bloc ne
+     peut pas connaître son rang global avant que les précédents aient compté ;
+   * les indices sortent **par ordre croissant** — c'est ce qui rend la somme
+     pondérée déterministe, et c'est le départage des ex æquo du CPU.
+   ✅ **fait** : ensemble identique au CPU sur 14/14 lignes (différence symétrique
+   0) à 4 096, 65 536 et 262 144 clés — `reports/rapport-gpu-topk-selection.md`
 3. **`attn_topk_somme`** — softmax sur les k scores retenus (le max et le
    dénominateur se calculent sur ces k seulement, plus les **puits** qui comptent
    dans le dénominateur comme aujourd'hui), puis somme pondérée des V lus en VRAM
@@ -77,8 +83,8 @@ doit montrer l'effet cherché : **968 ms → quelques dizaines de ms par couche*
 
 | # | étape | critère de succès |
 |---|---|---|
-| 1 | `attn_scores` + FFI + banc `--banc-topk` sur 4 k de contexte | ✅ **fait** : écart **1,03e-7** à toutes les longueurs (256 à 262 144 clés), **29 à 40× plus rapide** que le CPU — `reports/rapport-gpu-scores.md` |
-| 2 | `attn_topk_select` (radix 2 passes) | ensemble retenu identique hors ex æquo |
+| 1 | `attn_scores` + FFI + banc `--banc-topk` sur 4 k de contexte | ✅ **fait** : écart **1,6 à 2,3e-7** à toutes les longueurs (256 à 262 144 clés, clés distinctes — la valeur de 1,03e-7 venait d'un banc dégénéré), **27 à 40× plus rapide** que le CPU — `reports/rapport-gpu-scores.md` |
+| 2 | `attn_topk_select` (radix, 3 noyaux) | ✅ **fait** : ensemble retenu identique au CPU, 14/14 lignes (différence symétrique 0) — `reports/rapport-gpu-topk-selection.md` |
 | 3 | `attn_topk_somme` (softmax sur k + puits) | sortie identique au CPU à 1e-6 |
 | 4 | branchement dans `model.rs` (autoriser le GPU quand `attn_topk > 0` **et** que le noyau rend `true`, garder le repli CPU sinon) | perplexité 2 048 = 234,88 ± tolérance |
 | 5 | mesure 1 M : ms/layer avec et sans top-k, sur GPU | le top-k GPU ne doit pas coûter plus de ~2× le complet |

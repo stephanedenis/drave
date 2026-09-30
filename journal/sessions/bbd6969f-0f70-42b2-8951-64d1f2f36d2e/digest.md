@@ -32883,3 +32883,1012 @@ index 34252f6..5194d78 100644
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -F - <<'EOF' && git log --oneline -1\nNoyau 2a du top-k GPU : histogramme d'octet, seuil exact sur 14/14 lignes\n\nLe radix select du plan a sa première brique : `attn_topk_histo` histogramme\nl'octet `dec … [1084 caractères tronqués]`
+
+  ```
+d00c01c Noyau 2a du top-k GPU : histogramme d'octet, seuil exact sur 14/14 lignes
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat /tmp/banc_topk_262k.log 2>/dev/null | tail -12; echo \"=== 65k ===\"; cat /tmp/banc_topk_65k.log 2>/dev/null | tail -10", "description": "Check background bench results"}`
+
+  ```
+GPU  scores  :     6.76 ms  (38.3× plus rapide)
+  écart max 2.235e-8 sur une dynamique de 2.172e-1 (relatif 1.03e-7)
+  → conforme au critère du plan (1e-6) : la sélection peut s'appuyer dessus
+  top-k k = 256 :
+    CPU  tri + comptage :    11.87 ms
+    GPU  4 passes d'histogramme :     0.61 ms  (19.6× plus rapide)
+    k-ième score identique au bit près : 14/14 lignes (écart entier max 0)
+    comptes « strictement au-dessus » et « égaux » : 14/14 lignes
+    encadrement au_dessus < k ≤ au_dessus+égaux : 14/14 lignes
+    k-ième score qui change entre scores CPU et GPU : 10/14 lignes (attendu : noyau 1 à 2e-8)
+    → la descente trouve le seuil EXACT : la collecte peut être écrite
+FINI
+=== 65k ===
+  écart max 2.235e-8 sur une dynamique de 2.172e-1 (relatif 1.03e-7)
+  → conforme au critère du plan (1e-6) : la sélection peut s'appuyer dessus
+  top-k k = 256 :
+    CPU  tri + comptage :     2.69 ms
+    GPU  4 passes d'histogramme :     0.26 ms  (10.4× plus rapide)
+    k-ième score identique au bit près : 14/14 lignes (écart entier max 0)
+    comptes « strictement au-dessus » et « égaux » : 14/14 lignes
+    encadrement au_dessus < k ≤ au_dessus+égaux : 14/14 lignes
+    k-ième score qui chang
+… [138 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rn \"19,3885\\|19.3885\\|15,1757\\|15.1757\" README.md docs/*.md 2>/dev/null | head -8", "description": "Find gate commands"}`
+
+  ```
+README.md:363:| **gpt-oss-120b** (MoE, MXFP4) | MXFP4 | **15,1757** (ctx 256) | blocs lus | 60 Go |
+docs/contexte-long.md:358:scalaire **au bit près**, ce que la perplexité confirme (19,3885 et 13,1359
+docs/contexte-long.md:371:19,3885.
+docs/convertisseur.md:193:| Qwen2.5-0.5B | Q8_0 | 19,3885 | 32 | **0,81 s** | **0,57 Go** |
+docs/format-flux.md:48:| rejeu (`--flux-forcer`) | 19,3885 | **19,3885 — identique** |
+docs/format-flux.md:59:| rejeu `--flux-forcer` | 19,3885 | **19,4029 (+0,074 %)** |
+docs/format-flux.md:176:| un rejeu redonne le même résultat | `--flux-forcer` : perplexité **19,3885** avec et sans rejeu (chemin par jeton), **17,4294** (chemin par lots) |
+docs/plan-gpu-topk.md:85:| 6 | porte de non-régression : les deux valeurs restent 19,3885 et 15,1757 | inchangées |
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rn \"ppl\" README.md | grep -i \"ctx 256\\|--ppl\" | head -8; ls ~/models 2>/dev/null | head; ls /data*/models 2>/dev/null | head; grep -rn \"gpt-oss\" README.md | head -3", "description": "Find gate invocation and models"}`
+
+  ```
+363:| **gpt-oss-120b** (MoE, MXFP4) | MXFP4 | **15,1757** (ctx 256) | blocs lus | 60 Go |
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '330,400p' README.md", "description": "Read README gates section"}`
+
+  ```
+ce qui s'active » est vérifié à l'échelle du moteur.
+
+**Montée en charge** (densité 100 %, meilleur de 3 passes) : 1 thread 0,41 G év/s →
+8 threads 2,75 → 16 threads 4,45 → **32 threads 4,84** → 39 threads **2,04** ❌.
+L'attente active ne tolère aucune sursouscription : le pool est borné à `CPU − 1`
+et vaut `3/4 × CPU` par défaut.
+
+**Sans multiplieur** : décalages + additions donnent le résultat exact en 112,3 ms
+contre 2,5 ms pour i8×i8 (×44,9 sur CPU) — mais **sur FPGA le multiplieur n'existe
+pas**, et la contrainte du CDC est satisfaite sans réentraînement ni élagage.
+
+> ⚠️ Trois pièges ont coûté une campagne de mesures fausses chacun : un état
+> partagé avec **deux contrats de nettoyage** (d'où une « divergence » fantôme et
+> un débit surestimé à 7,53 G év/s), un `&mut` dans la boucle chaude (barrière
+> d'aliasing : 3,09 → 0,97 G év/s), et la **sursouscription** de l'attente active
+> (39+1 threads sur 40 CPU : effondrement ×2,4 — et le `yield_now()` censé le
+> corriger a tout empiré). Détail dans le rapport.
+
+---
+
+## Formats et modèles réellement lisibles
+
+Le moteur lit **Q4_K, Q6_K, Q4_0, Q8_0, MXFP4, F16 et F32** — soit tout ce que
+l'écosystème public distribue — **sans copie 
+… [2499 caractères tronqués]
+  ```
+
+- **bash** `{"command": "ls -la /home/stephane/Data13TB/stephane/GitHub/Qtrinet/*.gguf 2>/dev/null; find /home/stephane/Data13TB -maxdepth 3 -name \"*.gguf\" -size +1G 2>/dev/null | head -5; ls /home/stephane/Data13TB/stephane/ 2>/dev/null | head", "description": "Search for large gguf models"}`
+
+  ```
+adobe_account_backup_uuid_d79a3839-50e8-4906-bb1a-e8c3954711b2.zip
+agent-kit
+altera_pro
+archives
+Arduino
+Biblio_large
+data
+Desktop
+Documents
+Downloads
+  ```
+
+- **bash** `{"command": "timeout 120 find /home/stephane -maxdepth 4 -name \"gpt-oss*\" 2>/dev/null | head -5; timeout 120 find / -maxdepth 4 -name \"gpt-oss-120b*\" 2>/dev/null | head -3", "description": "Locate gpt-oss model file", "timeoutMs": 300000}`
+
+  ```
+/home/stephane/FastNVMe/models/gpt-oss-120b-MXFP4.gguf
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls tools/ && grep -rn \"portes\\|gates\" tools/*.sh 2>/dev/null | head -10", "description": "List tools and gate scripts"}`
+
+  ```
+aiguille.py
+analyse_flux.py
+archive_sessions.py
+colab_cote_local.sh
+compare_logits.py
+diff_flux.py
+flux_codec.py
+harmony_canonique.py
+make_patch.py
+mla_synthetique.py
+pair_factice.py
+preparer_colab.sh
+profil_flux.py
+proxy_latence.py
+__pycache__
+ref_logits
+ref_logits.cpp
+ref_logits.md
+session_report.py
+sprint.sh
+trace_compacite.py
+vision_mtmd.py
+vision_ref.py
+tools/sprint.sh:40:        printf -- "- **Engagement de fin** : dépôt vert (tests + portes), machine rendue, tout commité.\n\n"
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rn \"ctx 256\\|--ctx 256\" reports/rapport-session-2026-09-30.md 2>/dev/null | head -10; grep -rn \"ppl\" reports/rapport-session-2026-09-30.md | head -10", "description": "Find PPL gate command in session report"}`
+
+  ```
+92:Qwen ctx 256 = **19,3885** · gpt-oss ctx 256 = **15,1757** · gpt-oss avec
+32:- la norme finale appliquée deux fois ;
+43:  flux — la classe « analysé mais jamais appliqué », huit fois ;
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rn \"banc-ppl\\|--ppl \" reports/*.md REPRISE.md 2>/dev/null | head -12", "description": "Find ppl invocation examples"}`
+
+  ```
+reports/rapport-attention-creuse.md:163:./target/release/drave ../models/Qwen2.5-0.5B-Q8_0.gguf --ppl /tmp/wt2_a.txt \
+reports/rapport-attribution-kv.md:22:    --ppl /tmp/ids_qwen_long.txt --ctx 8192 --limit 8192 --dense --threads 16 --lot 512
+reports/rapport-campagne-parcimonie.md:89:./target/release/drave ../models/Qwen2.5-0.5B-Q8_0.gguf --ppl /tmp/wt2_b.txt \
+reports/rapport-coherence-docs-2.md:29:   pendant qu'une campagne de mesure tournait (`--ppl … --ctx 4096 --limit 4096
+reports/rapport-drapeaux-ignores.md:53:| `--infer` `--ppl` `--ppl-texte` `--plan` `--tokenize` `--gpu-banc` `--banc-kv` `--banc-mla` `--tensors` `--banc-vision` `--flux-serveur` `--ppl-reparti` | Aiguillage main.rs:47-57 | Si plusieurs sont donnés, **le premier de l'ordre d'aiguillage gagne en silence** (`--ppl f --tensors` fait `--tensors`) | 🟡 |
+reports/rapport-drapeaux-ignores.md:55:| `--ids` | I (main.rs:536, 630) · PR (1683) · BM (1840) | **P** : `run_ppl` ne lit que `ids_file` (2681-2690) ; `--ppl f --ids 1,2,3` ignore `--ids` | 🟡 |
+reports/rapport-drapeaux-ignores.md:214:[options] --keep 0.05      : IGNORÉ dans ce mode (--ppl charge toujours le modèle entier)
+reports/rapport-greffon.md:72:    --ppl /
+… [549 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rn \"gpt-oss-120b-MXFP4\" reports/*.md docs/*.md README.md 2>/dev/null | grep -i \"ppl\\|drave\" | head -8; ls -la /tmp/wt2_ids.txt /tmp/ids_qwen_long.txt 2>/dev/null", "description": "Find gpt-oss ppl command"}`
+
+  ```
+-rw-r--r--. 1 stephane stephane 43220 30 sep 17:13 /tmp/ids_qwen_long.txt
+-rw-r--r--. 1 stephane stephane  9532 26 sep 10:22 /tmp/wt2_ids.txt
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rln \"15,1757\\|15.1757\\|15,1667\" reports/ journal/ docs/ 2>/dev/null | head; grep -rn \"FastNVMe\" reports/*.md REPRISE.md 2>/dev/null | head -5", "description": "Find gpt-oss gate provenance"}`
+
+  ```
+reports/rapport-coherence-docs.md
+reports/rapport-session-2026-09-30.md
+reports/rapport-coherence-docs-2.md
+journal/sessions/bbd6969f-0f70-42b2-8951-64d1f2f36d2e/digest.md
+journal/sessions/bbd6969f-0f70-42b2-8951-64d1f2f36d2e/rapport.md
+journal/sessions/c25f97d1-9a4d-41da-b983-004f793afe43/rapport.md
+journal/sessions/42059fde-f06f-4e2c-9a23-8292d887fb6e/digest.md
+journal/sessions/bcfe0b97-1795-4610-8e8b-b598ca1ba6cb/digest.md
+journal/sessions/7c876089-605c-4836-930e-925a66028509/digest.md
+journal/sessions/aa5f9fc5-9450-4118-b65f-e8b99a28519d/digest.md
+reports/aiguille-30b.md:1:# aiguille v2 — /home/stephane/FastNVMe/models/Qwen3-30B-A3B-Instruct-2507-Q4_K_M.gguf
+reports/aiguille-gpt-oss.md:1:# aiguille v2 — /home/stephane/FastNVMe/models/gpt-oss-120b-MXFP4.gguf
+REPRISE.md:53:drave-core/target/release/drave /home/stephane/FastNVMe/models/gpt-oss-120b-MXFP4.gguf \
+REPRISE.md:516:./target/release/drave /home/stephane/FastNVMe/models/gpt-oss-120b-MXFP4.gguf \
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"gpt-oss-120b-MXFP4\" -A 4 REPRISE.md | head -30", "description": "Read gpt-oss gate commands"}`
+
+  ```
+53:drave-core/target/release/drave /home/stephane/FastNVMe/models/gpt-oss-120b-MXFP4.gguf \
+54-    --tokenize --fichier /tmp/wt2_txt.txt --sortie /tmp/ids_oss.txt
+55-```
+56-
+57-Le mode `--tokenize --fichier` **vérifie la réversibilité** (texte reconstruit
+--
+516:./target/release/drave /home/stephane/FastNVMe/models/gpt-oss-120b-MXFP4.gguf \
+517-    --ppl /tmp/ids_oss.txt --ctx 256 --dense --threads 16 --limit 512   # attendu 15,1757
+518-
+519-# 4. puis §6.b : la rotation ne bascule plus qu'au-delà de 1,25 × la longueur
+520-#    d'origine déclarée (5 120 pour gpt-oss) — mesuré, voir docs/contexte-long.md §5.ter
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls -la /tmp/ids_oss.txt 2>/dev/null; pgrep -x drave | wc -l; nohup bash -c '\ncd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\n{\necho \"=== cargo test --release ===\"\ncargo test --release --manifest-path drave-core/Cargo.toml 2> … [620 caractères tronqués]`
+
+  ```
+-rw-r--r--. 1 stephane stephane 21489 28 sep 11:32 /tmp/ids_oss.txt
+1
+portes lancées
+  ```
+
+- **bash** `{"command": "ps -o pid,etime,pcpu,args -C drave | head -5; echo ---; pgrep -af \"campagne\" | head -5", "description": "Inspect running drave processes"}`
+
+  ```
+PID     ELAPSED %CPU COMMAND
+ 793153       11:59 1735 ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf --ppl /tmp/ids_qwen_long.txt --ctx 16384 --limit 16384 --dense --threads 16 --lot 512
+---
+793144 /bin/bash /tmp/campagne_kv16k.sh
+797917 bash -c ps -o pid,etime,pcpu,args -C drave | head -5; echo ---; pgrep -af "campagne" | head -5
+  ```
+
+- **bash** `{"command": "tail -6 /tmp/kv_16k.log 2>/dev/null; echo \"=== script ===\"; cat /tmp/campagne_kv16k.sh 2>/dev/null | head -30", "description": "Check KV campaign progress"}`
+
+  ```
+f32_f32 (reference)      : === script ===
+#!/bin/bash
+# Le réglage recommandé tient-il à 16 384 jetons ? Deux points seulement : la
+# référence f32 et les clés f16 (le meilleur compromis mesuré).
+set -u
+cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet
+D=./drave-core/target/release/drave
+M=models/Qwen2.5-0.5B-Q8_0.gguf
+IDS=/tmp/ids_qwen_long.txt   # 17 434 jetons disponibles
+J=/tmp/kv_16k.log
+: > "$J"
+run() {
+    nom=$1; shift
+    printf "%-24s : " "$nom" | tee -a "$J"
+    env "$@" timeout 7200 $D $M --ppl $IDS --ctx 16384 --limit 16384 \
+        --dense --threads 16 --lot 512 2>&1 \
+        | grep -oE "perplexité [0-9.]+ sur [0-9]+ tokens \([0-9]+ événements, [0-9.]+ s\)" | tee -a "$J"
+}
+run "f32_f32 (reference)"   DRAVE_KV_BITS=32
+run "cles_f16_valeurs_int8" DRAVE_KV_BITS=8 DRAVE_KV_K_F16=1
+echo "=== fin ===" | tee -a "$J"
+date +"%H:%M:%S" | tee -a "$J"
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"monotone\" drave-core/gpu/drave_gpu.cu | head && tail -5 drave-core/gpu/drave_gpu.cu", "description": "Locate monotone helpers and file end"}`
+
+  ```
+703:__device__ __forceinline__ unsigned int monotone(float f) {
+709:__device__ __forceinline__ float depuis_monotone(unsigned int u) {
+714:// Histogramme d'un OCTET du score transformé en entier monotone. Un seul noyau
+739:        const unsigned int cle = monotone(row[i]);
+    __syncthreads();
+    for (int i = threadIdx.x; i < 256; i += blockDim.x) {
+        if (sh[i]) atomicAdd(&histo[(size_t)ligne * 256 + i], sh[i]);
+    }
+}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat >> drave-core/gpu/drave_gpu.cu <<'EOF'\n\n// ---------------------------------------------------------------------------\n// Noyaux 2b : la COLLECTE des k indices retenus.\n//\n// Après les quatre passes d'histogramme, chaque lig … [4624 caractères tronqués]`
+
+  ```
+drave_gpu.ptx régénéré (7321 lignes)
+noyaux exportés : 13
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/gpu.rs'; s=open(p).read()\n\n# --- helper d'allocation croissante, juste après cu_ctx ---\ns = s.replace(\"\"\"fn erreur(code: c_int, ou: &str) -> String {\"\"\",\n\"\"\"/// Garantit `octets` dans  … [4085 caractères tronqués]`
+
+  ```
+champs et chargement posés
+115:    pub topk: Option<TamponsTopk>,
+169:    f_attn_topk_compte: *mut c_void,
+297:            let mut f_attn_topk_compte: *mut c_void = std::ptr::null_mut();
+298:            let rc = cuModuleGetFunction(&mut f_attn_topk_compte, module, nom_tc.as_ptr());
+325:                       f_attn_topk_histo, f_attn_topk_compte, f_attn_topk_ecrit,
+  ```
+
+### 🤖 Assistant
+
+Maintenant la méthode de collecte côté hôte :
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/gpu.rs'; s=open(p).read()\nancre = \"\"\"    pub fn attn_kv(&self, m: &mut KvGpu, q: &[f32], n: usize, scale: f32,\"\"\"\nmethode = '''    /// **Collecte des k indices retenus** (noyaux 2b, `docs/p … [8056 caractères tronqués]`
+
+  ```
+méthode posée
+error[E0596]: cannot borrow `p_sortie` as mutable, as it is not declared as mutable
+   --> src/gpu.rs:783:17
+    |
+783 |                 &mut p_sortie as *mut u64 as *mut c_void,
+    |                 ^^^^^^^^^^^^^ cannot borrow as mutable
+    |
+help: consider changing this to be mutable
+    |
+704 |             let (p_comptes, p_bases, p_meta, mut p_sortie) =
+--
+error: could not compile `drave-core` (bin "drave") due to 1 previous error; 11 warnings emitted
+fin build
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/gpu.rs'; s=open(p).read()\ns = s.replace(\"\"\"            let (p_comptes, p_bases, p_meta, p_sortie) =\n                (t.comptes, t.bases, t.meta, t.sortie);\"\"\",\n\"\"\"            let (p_com … [358 caractères tronqués]`
+
+  ```
+build ok
+test result: ok. 17 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.13s
+
+=== porte Qwen2.5-0.5B Q8_0 ctx 256 (attendu 19,3885) ===
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/main.rs'; s=open(p).read()\nancre = \"\"\"    if exacts == lignes && comptes == lignes && encadre == lignes {\n        println!(\"    → la descente trouve le seuil EXACT : la collecte peut être écr … [3578 caractères tronqués]`
+
+  ```
+banc collecte posé
+  GPU  scores  :     0.23 ms  (23.6× plus rapide)
+  écart max 2.235e-8 sur une dynamique de 2.172e-1 (relatif 1.03e-7)
+  → conforme au critère du plan (1e-6) : la sélection peut s'appuyer dessus
+  top-k k = 256 :
+    CPU  tri + comptage :     0.18 ms
+    GPU  4 passes d'histogramme :     0.15 ms  (1.2× plus rapide)
+    k-ième score identique au bit près : 14/14 lignes (écart entier max 0)
+    comptes « strictement au-dessus » et « égaux » : 14/14 lignes
+    encadrement au_dessus < k ≤ au_dessus+égaux : 14/14 lignes
+    k-ième score qui change entre scores CPU et GPU : 10/14 lignes (attendu : noyau 1 à 2e-8)
+    → la descente trouve le seuil EXACT : la collecte peut être écrite
+    collecte GPU     0.12 ms · CPU tri complet     0.14 ms (1.2× plus rapide)
+    ensembles identiques au CPU : 14/14 lignes · différence symétrique 0 indices · cases non écrites 0
+    → l'ensemble retenu est le MÊME, dans l'ordre des indices
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat /tmp/portes.log | tail -6; uptime", "description": "Check gates log and load"}`
+
+  ```
+=== porte Qwen2.5-0.5B Q8_0 ctx 256 (attendu 19,3885) ===
+    part de l'attention dans le flux d'événements : 100.0 %
+    postes (ms/token) : projets-attn 3.50 | rope 0.75 | attention 2.19 | proj+mlp 26.94 | somme 33.39 | reste (tête + échantillonnage) 10.40
+    dont tête de sortie 8.41 | notation log-sum-exp 1.94 (le reste du « reste » n'est pas chronométré)
+    dont attention : scores 0.80 | softmax 0.38 | somme pondérée + écriture KV 1.02
+=== porte gpt-oss-120b MXFP4 ctx 256 (attendu 15,1757) ===
+ 17:55:44  up 9 days  7:07,  2 users,  load average: 28,64, 23,34, 15,61
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '/porte Qwen/,/porte gpt-oss/p' /tmp/portes.log | grep -iE \"perplex|tokens\" | head -5", "description": "Extract Qwen gate perplexity"}`
+
+  ```
+(no output)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '/porte Qwen/,/porte gpt-oss/p' /tmp/portes.log | head -40", "description": "Show Qwen gate output"}`
+
+  ```
+=== porte Qwen2.5-0.5B Q8_0 ctx 256 (attendu 19,3885) ===
+    part de l'attention dans le flux d'événements : 100.0 %
+    postes (ms/token) : projets-attn 3.50 | rope 0.75 | attention 2.19 | proj+mlp 26.94 | somme 33.39 | reste (tête + échantillonnage) 10.40
+    dont tête de sortie 8.41 | notation log-sum-exp 1.94 (le reste du « reste » n'est pas chronométré)
+    dont attention : scores 0.80 | softmax 0.38 | somme pondérée + écriture KV 1.02
+=== porte gpt-oss-120b MXFP4 ctx 256 (attendu 15,1757) ===
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && nohup bash -c '\ncd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\necho \"=== Qwen2.5-0.5B Q8_0 ctx 256 (attendu 19,3885) ===\"\n./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf --ppl /tmp/wt2_ids.txt --ctx 256 --abi … [404 caractères tronqués]`
+
+  ```
+lancé
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && DRAVE_GPU=1 ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q4_0.gguf --banc-topk 262144 > /tmp/banc_topk_262k_b.log 2>&1; tail -14 /tmp/banc_topk_262k_b.log", "description": "Run collect bench at 262144 keys", "timeoutMs": 900 … [4 caractères tronqués]`
+
+  ```
+GPU  scores  :    61.36 ms  (12.9× plus rapide)
+  écart max 2.235e-8 sur une dynamique de 2.172e-1 (relatif 1.03e-7)
+  → conforme au critère du plan (1e-6) : la sélection peut s'appuyer dessus
+  top-k k = 256 :
+    CPU  tri + comptage :    27.12 ms
+    GPU  4 passes d'histogramme :     0.74 ms  (36.5× plus rapide)
+    k-ième score identique au bit près : 14/14 lignes (écart entier max 0)
+    comptes « strictement au-dessus » et « égaux » : 14/14 lignes
+    encadrement au_dessus < k ≤ au_dessus+égaux : 14/14 lignes
+    k-ième score qui change entre scores CPU et GPU : 10/14 lignes (attendu : noyau 1 à 2e-8)
+    → la descente trouve le seuil EXACT : la collecte peut être écrite
+    collecte GPU     0.36 ms · CPU tri complet    16.55 ms (46.1× plus rapide)
+    ensembles identiques au CPU : 14/14 lignes · différence symétrique 0 indices · cases non écrites 0
+    → l'ensemble retenu est le MÊME, dans l'ordre des indices
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat /tmp/portes_qwen.log 2>/dev/null; echo \"=== gpt-oss ===\"; sed -n '/porte gpt-oss/,$p' /tmp/portes.log | head -5; uptime", "description": "Check gate progress"}`
+
+  ```
+=== Qwen2.5-0.5B Q8_0 ctx 256 (attendu 19,3885) ===
+=== gpt-oss ===
+=== porte gpt-oss-120b MXFP4 ctx 256 (attendu 15,1757) ===
+ 17:56:31  up 9 days  7:08,  2 users,  load average: 36,13, 25,73, 16,76
+  ```
+
+- **write** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-gpu-topk-selection.md", "content": "# Rapport — la sélection top-k sur GPU (noyaux 2a et 2b du plan)\n\n**En une ligne** : la sélection du top-k de l'attention tourne maintenant sur GPU en\n**quatre passes d'histogramme + … [5666 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-gpu-topk-selection.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat /tmp/portes_qwen.log; echo \"=== gpt-oss ===\"; sed -n '/porte gpt-oss/,$p' /tmp/portes.log; echo \"=== campagne ===\"; tail -3 /tmp/kv_16k.log; uptime", "description": "Check all background jobs"}`
+
+  ```
+=== Qwen2.5-0.5B Q8_0 ctx 256 (attendu 19,3885) ===
+=== gpt-oss ===
+=== porte gpt-oss-120b MXFP4 ctx 256 (attendu 15,1757) ===
+=== campagne ===
+f32_f32 (reference)      :  17:57:05  up 9 days  7:09,  2 users,  load average: 43,96, 28,84, 18,14
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && pkill -f campagne_kv16k.sh; sleep 1; pkill -f \"ids_qwen_long.txt --ctx 16384\"; sleep 2; pgrep -af drave | head -3; echo \"--- charge ---\"; uptime", "description": "Stop KV campaign to free CPUs"}`
+
+  ```
+(no output)
+[killed by signal: SIGTERM]
+  ```
+
+- **bash** `{"command": "sleep 3; pgrep -af \"drave|portes\" | head -5; echo \"---\"; uptime; tail -2 /tmp/kv_16k.log", "description": "Verify campaign stopped, gates alive"}`
+
+  ```
+793149 timeout 7200 ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf --ppl /tmp/ids_qwen_long.txt --ctx 16384 --limit 16384 --dense --threads 16 --lot 512
+793153 ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf --ppl /tmp/ids_qwen_long.txt --ctx 16384 --limit 16384 --dense --threads 16 --lot 512
+797886 bash -c  cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet { echo "=== cargo test --release ===" cargo test --release --manifest-path drave-core/Cargo.toml 2>&1 | tail -6 echo "=== porte Qwen2.5-0.5B Q8_0 ctx 256 (attendu 19,3885) ===" ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf --ppl /tmp/wt2_ids.txt --ctx 256 --abits 16 --threads 16 2>&1 | tail -4 echo "=== porte gpt-oss-120b MXFP4 ctx 256 (attendu 15,1757) ===" ./drave-core/target/release/drave /home/stephane/FastNVMe/models/gpt-oss-120b-MXFP4.gguf --ppl /tmp/ids_oss.txt --ctx 256 --dense --threads 16 --limit 512 2>&1 | tail -4 echo "=== PORTES FINIES ===" } > /tmp/portes.log 2>&1 
+831227 ./drave-core/target/release/drave /home/stephane/FastNVMe/models/gpt-oss-120b-MXFP4.gguf --ppl /tmp/ids_oss.txt --ctx 256 --dense --threads 16 --limit 512
+831556 bash -c cd /home/stephane/Data13T
+… [693 caractères tronqués]
+  ```
+
+- **bash** `{"command": "kill 793153 793149 2>/dev/null; sleep 2; pgrep -af \"ctx 16384\" | head -3; echo \"--- restants ---\"; pgrep -c -x drave; uptime", "description": "Kill leftover campaign processes"}`
+
+  ```
+835390 bash -c kill 793153 793149 2>/dev/null; sleep 2; pgrep -af "ctx 16384" | head -3; echo "--- restants ---"; pgrep -c -x drave; uptime
+--- restants ---
+2
+ 17:57:43  up 9 days  7:09,  2 users,  load average: 46,85, 31,55, 19,51
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && wc -l drave-core/gpu/drave_gpu.cu && grep -c \"extern \\\"C\\\" __global__\" drave-core/gpu/drave_gpu.cu && wc -l drave-core/src/*.rs | tail -1", "description": "Count lines and kernels"}`
+
+  ```
+853 drave-core/gpu/drave_gpu.cu
+4
+ 12840 total
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -c \"__global__ void\" drave-core/gpu/drave_gpu.cu; grep -n \"__global__ void\" drave-core/gpu/drave_gpu.cu | head -15", "description": "List kernels precisely"}`
+
+  ```
+13
+37:__global__ void tete_q8(const unsigned char* __restrict__ w,
+64:__global__ void proj_q8(const unsigned char* __restrict__ w,
+124:__global__ void tete_q8_warp(const unsigned char* __restrict__ w,
+155:__global__ void proj_q8_warp(const unsigned char* __restrict__ w,
+203:__global__ void proj_mxfp4_warp(const unsigned char* __restrict__ w,
+255:__global__ void proj_q4k_warp(const unsigned char* __restrict__ w,
+315:__global__ void proj_q6k_warp(const unsigned char* __restrict__ w,
+415:__global__ void attn_kv_partiels(const void* __restrict__ kdata,
+561:__global__ void attn_kv_recombine(const float* __restrict__ part,
+616:extern "C" __global__ void attn_scores(const void* __restrict__ kdata,
+719:extern "C" __global__ void attn_topk_histo(const float* __restrict__ sc,
+766:extern "C" __global__ void attn_topk_compte(const float* __restrict__ sc,
+799:extern "C" __global__ void attn_topk_ecrit(const float* __restrict__ sc,
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='docs/plan-gpu-topk.md'; s=open(p).read()\n\ns = s.replace(\"\"\"* `drave-core/gpu/drave_gpu.cu` (596 lignes, 9 noyaux) : `attn_kv_partiels` (scores\n  et partiels par tranche, softmax en ligne) et `attn_kv_recomb … [2630 caractères tronqués]`
+
+  ```
+plan à jour
+60:   ✅ **fait** : ensemble identique au CPU sur 14/14 lignes (différence symétrique
+86:| 1 | `attn_scores` + FFI + banc `--banc-topk` sur 4 k de contexte | ✅ **fait** : écart **1,03e-7** à toutes les longueurs (256 à 262 144 clés), **29 à 40× plus rapide** que le CPU — `reports/rapport-gpu-scores.md` |
+87:| 2 | `attn_topk_select` (radix, 3 noyaux) | ✅ **fait** : ensemble retenu identique au CPU, 14/14 lignes (différence symétrique 0) — `reports/rapport-gpu-topk-selection.md` |
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat /tmp/portes_qwen.log; echo \"=== gpt-oss ===\"; sed -n '/porte gpt-oss/,$p' /tmp/portes.log; uptime", "description": "Check gate progress again"}`
+
+  ```
+=== Qwen2.5-0.5B Q8_0 ctx 256 (attendu 19,3885) ===
+=== gpt-oss ===
+=== porte gpt-oss-120b MXFP4 ctx 256 (attendu 15,1757) ===
+ 17:58:17  up 9 days  7:10,  2 users,  load average: 43,37, 32,37, 20,23
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"top-k GPU\\|plan-gpu-topk\\|GPU\" README.md | head -20", "description": "Find README GPU references"}`
+
+  ```
+47:| **Inférence complète en Rust, sans GPU** | ✅ **fait** → [`reports/rapport-inference.md`](reports/rapport-inference.md) |
+50:| **Bilan multi-matériel (CPU / FPGA / GPU)** | ✅ → [`reports/bilan-multi-materiel.md`](reports/bilan-multi-materiel.md) |
+372:Qwen2.5-0.5B-Instruct Q8_0 tourne **en mode listes d'événements**, sans GPU, sans
+501:1. **Noyau GPU de top-k** (phase 1.1) : c'est le seul poste GPU neuf. Le chemin GPU
+505:   et chiffré : [`docs/plan-gpu-topk.md`](docs/plan-gpu-topk.md).
+506:2. **Second GPU** : 16 Go dorment. Le cache d'experts MXFP4 et le KV paginé à 1 M
+511:4. **Phase 2 locale** : ordonnanceur de flux (2 GPU, CPU, VRAM, RAM, NVMe),
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/README.md", "limit": 40, "offset": 494}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/README.md</path>
+<type>file</type>
+<content>
+494: ---
+495: 
+496: ## Prochaines étapes
+497: 
+498: La feuille de route complète est dans [`docs/roadmap.md`](docs/roadmap.md). Ce qui
+499: est ouvert aujourd'hui, par ordre de valeur mesurée :
+500: 
+501: 1. **Noyau GPU de top-k** (phase 1.1) : c'est le seul poste GPU neuf. Le chemin GPU
+502:    de l'attention est conditionné à `attn_topk == 0`, donc le mode creux retombe
+503:    sur le CPU où il coûte 968 ms par couche à 1 M de clés, contre 13,2 ms avec le
+504:    miroir VRAM. Trois noyaux, six étapes, contrat d'exactitude — le plan est écrit
+505:    et chiffré : [`docs/plan-gpu-topk.md`](docs/plan-gpu-topk.md).
+506: 2. **Second GPU** : 16 Go dorment. Le cache d'experts MXFP4 et le KV paginé à 1 M
+507:    les rempliraient utilement ; il faut un second contexte CUDA et une règle de
+508:    répartition.
+509: 3. **Démonstration Colab** : tout est prêt côté code
+510:    ([`colab/`](colab/README.md)), la manipulation demande un compte et un tunnel.
+511: 4. **Phase 2 locale** : ordonnanceur de flux (2 GPU, CPU, VRAM, RAM, NVMe),
+512:    streaming des poids depuis le NVMe (3,5 Go/s) pour ce
+… [500 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/README.md", "old_string": "1. **Noyau GPU de top-k** (phase 1.1) : c'est le seul poste GPU neuf. Le chemin GPU\n   de l'attention est conditionné à `attn_topk == 0`, donc le mode creux retombe\n   sur le CPU où il coûte 968 ms par couche … [925 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/README.md has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"12 171 lignes\\|12 840\" README.md reports/rapport-session-2026-09-30.md | head -5; grep -n \"créneau\\|15h\" REPRISE.md | head -10", "description": "Find line count and REPRISE sections"}`
+
+  ```
+README.md:373:BLAS, sans aucune dépendance : **12 171 lignes de Rust, `std` seul** au 30/09 (2 319 au premier prototype). Détail :
+320:### Session « autonomie jusqu'à 15h » — ce qui s'ajoute (12h → 15h)
+360:### Créneau 15h07 → 18h00 : le mode 4, et la frontière KV confirmée
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -i 's/\\*\\*12 171 lignes de Rust, `std` seul\\*\\* au 30\\/09/**12 840 lignes de Rust, `std` seul** au 30\\/09/' README.md && grep -n \"12 840\" README.md && sed -n '355,400p' REPRISE.md", "description": "Update line count and r … [13 caractères tronqués]`
+
+  ```
+373:BLAS, sans aucune dépendance : **12 840 lignes de Rust, `std` seul** au 30/09 (2 319 au premier prototype). Détail :
+`--trace-flux` en inférence (muet), les modes multiples (silencieux). Restent :
+`--banc-vision` (ne reçoit aucune `Options`), `--bits` du noyau GPU, et la
+recommandation de fond — un `--options-actives` qui imprime les réglages
+réellement en vigueur.
+
+### Créneau 15h07 → 18h00 : le mode 4, et la frontière KV confirmée
+
+**Le protocole est en version 5** avec un cinquième mode : le **mode 4 « lot en
+listes »**. Chaque état d'un lot est encodé comme le mode 2 et auto-délimité par
+ses trois tailles (`a_j · n_blocs_j · longueur_j`). Mesuré, 256 jetons, lots de 16,
+seuil 0,01 : **1,5 ko par jeton au lieu de 3,5** (÷2,3) pour un écart de 3,03e-2 —
+sous le critère (1,5 × les 2,74e-2 du mode 2 par jeton). Plan :
+`docs/plan-mode4-lot-listes.md`.
+
+Trois choses apprises en le faisant : la construction de l'en-tête est maintenant
+UNE fonction (`tete_flux`) pour les trois émetteurs (sa duplication avait produit
+l'en-tête d'un octet trop long) ; le serveur ne traitait que le mode 3 dans sa
+branche lot, donc un flux de listes paniquait ; et le refus d'un mode inconnu est
+devenu 
+… [1476 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat /tmp/portes_qwen.log; echo \"=== gpt-oss ===\"; sed -n '/porte gpt-oss/,$p' /tmp/portes.log; uptime; pgrep -c -x drave", "description": "Check gates after load drop"}`
+
+  ```
+=== Qwen2.5-0.5B Q8_0 ctx 256 (attendu 19,3885) ===
+=== gpt-oss ===
+=== porte gpt-oss-120b MXFP4 ctx 256 (attendu 15,1757) ===
+ 17:59:11  up 9 days  7:11,  2 users,  load average: 45,38, 34,42, 21,55
+2
+  ```
+
+- **bash** `{"command": "ps -eo pcpu,etime,comm --sort=-pcpu | head -8", "description": "Top CPU consumers"}`
+
+  ```
+%CPU     ELAPSED COMMAND
+1419       03:24 drave
+1229       04:11 drave
+ 300       00:00 ps
+66.6       00:00 bash
+33.9  9-02:58:31 node-MainThread
+26.6  5-06:03:01 node-MainThread
+19.6  9-03:10:50 plasmashell
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat sprints/01-premier-des-trois-noyaux-gpu-du-top-k-le.md && sed -n '1,80p' tools/sprint.sh", "description": "Read sprint file and script"}`
+
+  ```
+# Sprint 1 — Premier des trois noyaux GPU du top-k : les scores d'attention calculés en VRAM, vérifiés contre la référence CPU à 1e-6, avec leur banc
+
+- **Début** : 17:41 · **Fin prévue** : 19:41 (boxing de 120 min)
+- **Objectif** : Premier des trois noyaux GPU du top-k : les scores d'attention calculés en VRAM, vérifiés contre la référence CPU à 1e-6, avec leur banc
+- **Engagement de fin** : dépôt vert (tests + portes), machine rendue, tout commité.
+
+#!/bin/bash
+# Boxing temps réel d'un sprint de 2 h : démarrage, état, clôture avec la trame
+# de cérémonie (revue · rétrospective · planning).
+#
+#   tools/sprint.sh start "<objectif du sprint>"
+#   tools/sprint.sh status
+#   tools/sprint.sh close
+#   tools/sprint.sh list
+#
+# Le sprint vit dans `sprints/` : un fichier par sprint, et `COURANT` qui dit
+# lequel tourne. La durée est de 2 h (SCRUM_DUREE pour un autre boxing, en
+# secondes : SCRUM_DUREE=3600 pour une heure).
+set -u
+cd "$(dirname "$0")/.."
+DUREE=${SCRUM_DUREE:-7200}
+COURANT=sprints/COURANT
+
+maintenant() { date +%s; }
+hm() { date -d "@$1" +"%H:%M"; }
+restant() { # secondes → « 1 h 07 »
+    local s=$1
+    if [ "$s" -lt 0 ]; then echo "dépassé de $(( -s / 60 )) min"; return; fi
+… [2646 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat /tmp/portes_qwen.log; echo \"=== gpt-oss ===\"; sed -n '/porte gpt-oss/,$p' /tmp/portes.log; date +%H:%M:%S", "description": "Check Qwen gate result"}`
+
+  ```
+=== Qwen2.5-0.5B Q8_0 ctx 256 (attendu 19,3885) ===
+     255 tokens notés — perplexité cumulée 17.431  (2.5 tok/s)  [fenêtre 1 : 255 notés, PPL 17.431]
+     510 tokens notés — perplexité cumulée 19.388  (4.5 tok/s)  [fenêtre 2 : 255 notés, PPL 21.565]
+     765 tokens notés — perplexité cumulée 21.374  (6.0 tok/s)  [fenêtre 3 : 255 notés, PPL 25.977]
+=== Qwen2.5-0.5B Q4_0 ctx 256 (attendu 21,01) ===
+=== gpt-oss ===
+=== porte gpt-oss-120b MXFP4 ctx 256 (attendu 15,1757) ===
+17:59:34
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/gpu.rs'; s=open(p).read()\nvieux = \"\"\"        let ntr = n.div_ceil(CHUNK);\n        let (o_sup, o_eq, o_bsup, o_beq, o_meta, o_sortie) =\n            (0usize, lignes * ntr * 4, 2 * lignes * ntr  … [959 caractères tronqués]`
+
+  ```
+nettoyé
+build fini
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat /tmp/portes_qwen.log | tail -4; echo \"=== gpt-oss ===\"; sed -n '/porte gpt-oss/,$p' /tmp/portes.log; date +%H:%M:%S; pgrep -c -x drave", "description": "Check gates status"}`
+
+  ```
+255 tokens notés — perplexité cumulée 17.431  (2.5 tok/s)  [fenêtre 1 : 255 notés, PPL 17.431]
+     510 tokens notés — perplexité cumulée 19.388  (4.5 tok/s)  [fenêtre 2 : 255 notés, PPL 21.565]
+     765 tokens notés — perplexité cumulée 21.374  (6.0 tok/s)  [fenêtre 3 : 255 notés, PPL 25.977]
+=== Qwen2.5-0.5B Q4_0 ctx 256 (attendu 21,01) ===
+=== gpt-oss ===
+=== porte gpt-oss-120b MXFP4 ctx 256 (attendu 15,1757) ===
+    part de l'attention dans le flux d'événements : 100.0 %
+    postes (ms/token) : projets-attn 76.98 | rope 3.59 | attention 15.13 | proj+mlp 302.82 | somme 398.52 | reste (tête + échantillonnage) 35.48
+    dont tête de sortie 32.84 | notation log-sum-exp 2.52 (le reste du « reste » n'est pas chronométré)
+    dont attention : scores 2.85 | softmax 1.26 | somme pondérée + écriture KV 11.02
+=== PORTES FINIES ===
+18:00:18
+1
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && nohup bash -c '\ncd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\necho \"=== gpt-oss-120b MXFP4 ctx 256 dense (attendu 15,1757) ===\"\n./drave-core/target/release/drave /home/stephane/FastNVMe/models/gpt-oss-120b-MXFP4.gguf --ppl  … [281 caractères tronqués]`
+
+  ```
+relancé
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for spec in \"1 1\" \"100 3\" \"4097 256\" \"5000 256\" \"8191 4096\"; do set -- $spec; n=$1; k=$2; echo \"### n=$n k=$k\"; DRAVE_GPU=1 timeout 300 ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q4_0.gguf --banc-topk $n --attn … [165 caractères tronqués]`
+
+  ```
+### n=1 k=1
+  écart max 2.235e-8 sur une dynamique de 2.172e-1 (relatif 1.03e-7)
+  → conforme au critère du plan (1e-6) : la sélection peut s'appuyer dessus
+    k-ième score identique au bit près : 14/14 lignes (écart entier max 0)
+    → la descente trouve le seuil EXACT : la collecte peut être écrite
+    ensembles identiques au CPU : 14/14 lignes · différence symétrique 0 indices · cases non écrites 0
+    → l'ensemble retenu est le MÊME, dans l'ordre des indices
+### n=100 k=3
+  écart max 2.235e-8 sur une dynamique de 2.172e-1 (relatif 1.03e-7)
+  → conforme au critère du plan (1e-6) : la sélection peut s'appuyer dessus
+    k-ième score identique au bit près : 14/14 lignes (écart entier max 0)
+    → la descente trouve le seuil EXACT : la collecte peut être écrite
+    ensembles identiques au CPU : 14/14 lignes · différence symétrique 0 indices · cases non écrites 0
+    → l'ensemble retenu est le MÊME, dans l'ordre des indices
+### n=4097 k=256
+  écart max 2.235e-8 sur une dynamique de 2.172e-1 (relatif 1.03e-7)
+  → conforme au critère du plan (1e-6) : la sélection peut s'appuyer dessus
+    k-ième score identique au bit près : 14/14 lignes (écart entier max 0)
+    → la descente trouve 
+… [1157 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"pub fn ecrire\" -A 25 drave-core/src/model.rs | head -40", "description": "Check KvCache::ecrire semantics"}`
+
+  ```
+566:    pub fn ecrire(&mut self, couche: usize, pos: usize, actifs: &[i32], echelle: f32) {
+567-        use std::io::Write;
+568-        if !self.couches.is_empty() && !self.couches.contains(&couche) { return; }
+569-
+570-        let (n, ech_liste, corps): (u32, f32, Vec<u8>) = if self.version == 3 {
+571-            // v3 : une échelle f16 par bloc de 32 canaux, valeurs i8. L'échelle
+572-            // par bloc borne l'erreur RELATIVE (celle par vecteur borne l'absolue,
+573-            // catastrophique sur les canaux faibles) et permet un octet par valeur.
+574-            let n_blocs = actifs.len().div_ceil(self.bloc);
+575-            let mut echelles = vec![0f32; n_blocs];
+576-            let mut idx: Vec<u32> = Vec::new();
+577-            let mut val: Vec<i8> = Vec::new();
+578-            for b in 0..n_blocs {
+579-                let lo = b * self.bloc;
+580-                let hi = (lo + self.bloc).min(actifs.len());
+581-                let mut mb = 0f32;
+582-                for &q in &actifs[lo..hi] {
+583-                    let a = (q as f32 * echelle).abs();
+584-                    if a > mb { mb = a; }
+585-                }
+586-                if mb == 0.0 { continue; }
+587-  
+… [1083 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/main.rs'; s=open(p).read()\nvieux = \"\"\"    let k: Vec<f32> = (0..n_kv * hd).map(|_| suivant()).collect();\n    let v: Vec<f32> = (0..n_kv * hd).map(|_| suivant()).collect();\n    for pos in 0..n … [1234 caractères tronqués]`
+
+  ```
+clés distinctes
+  → conforme au critère du plan (1e-6) : la sélection peut s'appuyer dessus
+  top-k k = 256 :
+    CPU  tri + comptage :     1.29 ms
+    GPU  4 passes d'histogramme :     0.15 ms  (8.7× plus rapide)
+    k-ième score identique au bit près : 14/14 lignes (écart entier max 0)
+    comptes « strictement au-dessus » et « égaux » : 14/14 lignes
+    encadrement au_dessus < k ≤ au_dessus+égaux : 14/14 lignes
+    k-ième score qui change entre scores CPU et GPU : 7/14 lignes (attendu : noyau 1 à 1e-7)
+    → la descente trouve le seuil EXACT : la collecte peut être écrite
+    collecte GPU     0.14 ms · CPU tri complet     4.31 ms (30.0× plus rapide)
+    ensembles identiques au CPU : 0/14 lignes · différence symétrique 0 indices · cases non écrites 0
+    → ÉCART sur la sélection
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/main.rs'; s=open(p).read()\nvieux = \"\"\"    let mut lignes_ok = 0usize;\n    let mut cases_vides = 0usize;\n    let mut diff_sym = 0usize;\n    for l in 0..lignes {\n        let (a, b) = (&idx_cp … [4887 caractères tronqués]`
+
+  ```
+comparaison affinée
+    comptes « strictement au-dessus » et « égaux » : 14/14 lignes
+    encadrement au_dessus < k ≤ au_dessus+égaux : 14/14 lignes
+    k-ième score qui change entre scores CPU et GPU : 7/14 lignes (attendu : noyau 1 à 1e-7)
+    → la descente trouve le seuil EXACT : la collecte peut être écrite
+    collecte GPU     0.15 ms · CPU tri complet     4.30 ms (29.0× plus rapide)
+    ensembles identiques au CPU : 14/14 lignes · différence symétrique 0 indices
+    ordre documenté (au-dessus puis égaux, croissants) : 14/14 lignes · doublons 0 · hors bornes 0 · cases non écrites 0
+    → l'ensemble retenu est le MÊME que celui du CPU, et l'ordre est celui qui est écrit dans le noyau
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat /tmp/porte_oss.log 2>/dev/null; tail -3 /tmp/portes_qwen.log; pgrep -c -x drave", "description": "Check both gates"}`
+
+  ```
+=== gpt-oss-120b MXFP4 ctx 256 dense (attendu 15,1757) ===
+     510 tokens notés — perplexité cumulée 21.198  (21.9 tok/s)  [fenêtre 2 : 255 notés, PPL 22.628]
+     765 tokens notés — perplexité cumulée 23.671  (24.0 tok/s)  [fenêtre 3 : 255 notés, PPL 29.515]
+=== PORTE QWEN FINIE ===
+1
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rn \"15,1757\\|15.1757\" journal/sessions/bbd6969f-0f70-42b2-8951-64d1f2f36d2e/digest.md | head -5", "description": "Find provenance of gpt-oss gate value"}`
+
+  ```
+3663:=== perplexité 15.1757 sur 510 tokens (0 événements, 98.0 s) ===
+5619:=== perplexité 15.1757 sur 510 tokens (0 événements, 97.3 s) ===
+5627:- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/REPRISE.md", "new_string": "| gpt-oss-120b MXFP4 | `--dense --limit 64`, ids_oss | **20,8361** (63 jetons) |\n| gpt-oss-120b MXFP4 | `--dense --limit 512`, ids_oss | **15,1757** (510 jetons, deux fenêtres) |\n| gpt-oss-120b MXFP4 | `--pp … [706 caractères tronqués]`
+5639:- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -m \"REPRISE : chiffres gpt-oss exacts (ids 15,1757 / texte 15,0757)\" && git log --oneline -3 && git status --short | head -3", "description": "Commit REPRISE number fix"}`
+5642:8ca0c58 REPRISE : chiffres gpt-oss exacts (ids 15,1757 / texte 15,0757)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '3655,3670p' journal/sessions/bbd6969f-0f70-42b2-8951-64d1f2f36d2e/digest.md", "description": "Read context of the 15.1757 measurement"}`
+
+  ```
+```
+
+- **job_output** `{"job_id": "bash-17", "timeout_ms": 400000, "wait": true}`
+
+  ```
+255 tokens notés — perplexité cumulée 13.715  (5.2 tok/s)  [fenêtre 1 : 255 notés, PPL 13.715]
+     510 tokens notés — perplexité cumulée 15.176  (5.2 tok/s)  [fenêtre 2 : 255 notés, PPL 16.792]
+logits exportés : /tmp/nous_oss_512_brut.bin — 510 positions × 201088 valeurs
+=== perplexité 15.1757 sur 510 tokens (0 événements, 98.0 s) ===
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Lancement de la référence llama.cpp sans YaRN sur 512 positions (long)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"ids_oss\" journal/sessions/bbd6969f-0f70-42b2-8951-64d1f2f36d2e/digest.md | head -20", "description": "Find ids_oss commands in digest"}`
+
+  ```
+112:- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log --oneline | head -20 && echo \"--- status ---\" && git status --short | head -30 && echo \"--- tmp ---\" && ls -la /tmp/wt2_txt.txt /tmp/ids_qwen.txt /tmp/ids_oss.txt 2>&1 && echo \"--- models ---\" && ls -la models/ && ls -l … [113 caractères tronqués]`
+2331:95.6 42.0 1:00 ./qtrinet-core/target/release/qtrinet-core /home/stephane/FastNVMe/models/gpt-oss-120b-MXFP4.gguf --ppl /tmp/ids_oss.txt --ctx 256 --limit 64 --dense --threads
+2414:/tmp/ids_oss.txt : 64 tokens, fenêtres de 256
+3181:- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && head -64 /tmp/ids_oss.txt > /tmp/ids_oss_64.txt && wc -l /tmp/ids_oss_64.txt && free -g | head -2 && tail -3 /tmp/mesures_oss2.out", "description": "Prepare 64-token ids file"}`
+3184:0 /tmp/ids_oss_64.txt
+3192:- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && tr -s ' ,\\n' '\\n' < /tmp/ids_oss.txt | head -64 > /tmp/ids_oss_64.txt && wc -l < /tmp/ids_oss_64.txt && LD_LIBRARY_PATH=/home/stephane/Data13TB/stephane/GitHub/llama.cpp/build/bin timeout 1800 ./tools/ref_logits /home/stephane/Fast … [181 caractère
+… [4713 caractères tronqués]
+  ```
+
+- **bash** `{"command": "ls -la /tmp/ids_oss*.txt 2>/dev/null; echo ---; head -c 200 /tmp/ids_oss_512.txt 2>/dev/null; echo; echo \"--- v2 ---\"; head -c 200 /tmp/ids_oss_v2.txt 2>/dev/null; echo; for f in /tmp/ids_oss.txt /tmp/ids_oss_512.txt; do echo -n \"$f : \"; tr -s ' ,\\n' ' ' < $f | wc -w; done", "descr … [29 caractères tronqués]`
+
+  ```
+-rw-r--r--. 1 stephane stephane  9896 28 sep 19:34 /tmp/ids_oss_2048.txt
+-rw-r--r--. 1 stephane stephane  1166 28 sep 16:25 /tmp/ids_oss_240.txt
+-rw-r--r--. 1 stephane stephane 19880 28 sep 18:43 /tmp/ids_oss_4096.txt
+-rw-r--r--. 1 stephane stephane  2437 28 sep 15:41 /tmp/ids_oss_512.txt
+-rw-r--r--. 1 stephane stephane   302 28 sep 15:02 /tmp/ids_oss_64.txt
+-rw-r--r--. 1 stephane stephane  1258 28 sep 18:27 /tmp/ids_oss_debut.txt
+-rw-r--r--. 1 stephane stephane 79365 28 sep 17:34 /tmp/ids_oss_long.txt
+-rw-r--r--. 1 stephane stephane  1285 28 sep 18:27 /tmp/ids_oss_mid.txt
+-rw-r--r--. 1 stephane stephane  1255 28 sep 16:25 /tmp/ids_oss_prefixe.txt
+-rw-r--r--. 1 stephane stephane 21489 28 sep 11:32 /tmp/ids_oss.txt
+-rw-r--r--. 1 stephane stephane 21489 28 sep 17:12 /tmp/ids_oss_v2.txt
+---
+198
+314
+13169
+418
+9826
+399
+314
+25980
+13169
+418
+9826
+399
+382
+448
+7725
+5586
+1366
+19123
+326
+42149
+19556
+887
+1679
+1458
+261
+15489
+759
+12
+31
+63822
+5430
+402
+290
+19123
+5594
+623
+13971
+306
+220
+1179
+15
+887
+1328
+
+--- v2 ---
+198,314,13169,418,9826,399,314,25980,13169,418,9826,399,382,448,7725,5586,1366,19123,326,42149,19556,887,1679,1458,261,15489,759,12,31,63822,5430,402,290,19123,5594,623,13971,306,220,1179,1
+… [62 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 1200 ./drave-core/target/release/drave /home/stephane/FastNVMe/models/gpt-oss-120b-MXFP4.gguf --ppl /tmp/ids_oss_512.txt --ctx 256 --dense --threads 16 --limit 512 2>&1 | grep -iE \"perplex\" | head -4", "description": "Run g … [57 caractères tronqués]`
+
+  ```
+255 tokens notés — perplexité cumulée 13.715  (5.1 tok/s)  [fenêtre 1 : 255 notés, PPL 13.715]
+     510 tokens notés — perplexité cumulée 15.176  (5.2 tok/s)  [fenêtre 2 : 255 notés, PPL 16.792]
+=== perplexité 15.1757 sur 510 tokens (0 événements, 98.5 s) ===
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat /tmp/portes_qwen.log; pgrep -c -x drave", "description": "Check Qwen Q4_0 gate result"}`
+
+  ```
+=== Qwen2.5-0.5B Q8_0 ctx 256 (attendu 19,3885) ===
+     255 tokens notés — perplexité cumulée 17.431  (2.5 tok/s)  [fenêtre 1 : 255 notés, PPL 17.431]
+     510 tokens notés — perplexité cumulée 19.388  (4.5 tok/s)  [fenêtre 2 : 255 notés, PPL 21.565]
+     765 tokens notés — perplexité cumulée 21.374  (6.0 tok/s)  [fenêtre 3 : 255 notés, PPL 25.977]
+=== Qwen2.5-0.5B Q4_0 ctx 256 (attendu 21,01) ===
+     255 tokens notés — perplexité cumulée 19.859  (17.9 tok/s)  [fenêtre 1 : 255 notés, PPL 19.859]
+     510 tokens notés — perplexité cumulée 21.198  (21.9 tok/s)  [fenêtre 2 : 255 notés, PPL 22.628]
+     765 tokens notés — perplexité cumulée 23.671  (24.0 tok/s)  [fenêtre 3 : 255 notés, PPL 29.515]
+=== PORTE QWEN FINIE ===
+0
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && nohup bash -c '\ncd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\nD=./drave-core/target/release/drave\nM=models/Qwen2.5-0.5B-Q4_0.gguf\nJ=/tmp/banc_topk_final.log\n: > $J\nfor n in 4096 65536 262144; do\n  echo \"########## n=$n k … [475 caractères tronqués]`
+
+  ```
+banc lancé
+    ensembles identiques au CPU : 14/14 lignes · différence symétrique 0 indices
+    ordre documenté (au-dessus puis égaux, croissants) : 14/14 lignes · doublons 0 · hors bornes 0 · cases non écrites 0
+    → l'ensemble retenu est le MÊME que celui du CPU, et l'ordre est celui qui est écrit dans le noyau
+########## n=5000 k=256
+    encadrement au_dessus < k ≤ au_dessus+égaux : 14/14 lignes
+    k-ième score qui change entre scores CPU et GPU : 7/14 lignes (attendu : noyau 1 à 2e-7)
+    → la descente trouve le seuil EXACT : la collecte peut être écrite
+    collecte GPU     0.09 ms · CPU tri complet     4.88 ms (56.4× plus rapide)
+    ensembles identiques au CPU : 14/14 lignes · différence symétrique 0 indices
+    ordre documenté (au-dessus puis égaux, croissants) : 14/14 lignes · doublons 0 · hors bornes 0 · cases non écrites 0
+    → l'ensemble retenu est le MÊME que celui du CPU, et l'ordre est celui qui est écrit dans le noyau
+########## n=8191 k=4096
+    encadrement au_dessus < k ≤ au_dessus+égaux : 14/14 lignes
+    k-ième score qui change entre scores CPU et GPU : 14/14 lignes (attendu : noyau 1 à 1e-7)
+    → la descente trouve le seuil EXACT : la collecte peut être écr
+… [405 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -E \"^#####|GPU  scores|CPU  tri|4 passes|collecte GPU|ensembles identiques|ordre documenté|k-ième score identique|comptes « |k-ième score qui change\" /tmp/banc_topk_final.log", "description": "Extract clean bench figures"}`
+
+  ```
+########## n=4096 k=256
+    CPU  tri + comptage :     1.31 ms
+    GPU  4 passes d'histogramme :     0.14 ms  (9.1× plus rapide)
+    k-ième score identique au bit près : 14/14 lignes (écart entier max 0)
+    comptes « strictement au-dessus » et « égaux » : 14/14 lignes
+    k-ième score qui change entre scores CPU et GPU : 7/14 lignes (attendu : noyau 1 à 1e-7)
+    collecte GPU     0.13 ms · CPU tri complet     4.33 ms (34.6× plus rapide)
+    ensembles identiques au CPU : 14/14 lignes · différence symétrique 0 indices
+    ordre documenté (au-dessus puis égaux, croissants) : 14/14 lignes · doublons 0 · hors bornes 0 · cases non écrites 0
+########## n=65536 k=256
+    CPU  tri + comptage :    22.17 ms
+    GPU  4 passes d'histogramme :     0.32 ms  (68.5× plus rapide)
+    k-ième score identique au bit près : 14/14 lignes (écart entier max 0)
+    comptes « strictement au-dessus » et « égaux » : 14/14 lignes
+    k-ième score qui change entre scores CPU et GPU : 6/14 lignes (attendu : noyau 1 à 2e-7)
+    collecte GPU     0.34 ms · CPU tri complet    86.53 ms (258.0× plus rapide)
+    ensembles identiques au CPU : 14/14 lignes · différence symétrique 0 indices
+    ordre documenté (au-dessus p
+… [2720 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -E \"GPU  scores|écart max|CPU  [0-9]+ fils\" /tmp/banc_topk_final.log", "description": "Extract score kernel timings"}`
+
+  ```
+écart max 1.192e-7 sur une dynamique de 7.449e-1 (relatif 1.60e-7)
+  écart max 1.788e-7 sur une dynamique de 8.385e-1 (relatif 2.13e-7)
+  écart max 1.788e-7 sur une dynamique de 7.951e-1 (relatif 2.25e-7)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -E \"scores|fils\" /tmp/banc_topk_final.log | head -8", "description": "Find score timings lines"}`
+
+  ```
+k-ième score qui change entre scores CPU et GPU : 7/14 lignes (attendu : noyau 1 à 1e-7)
+    k-ième score qui change entre scores CPU et GPU : 6/14 lignes (attendu : noyau 1 à 2e-7)
+    k-ième score qui change entre scores CPU et GPU : 5/14 lignes (attendu : noyau 1 à 2e-7)
+    k-ième score qui change entre scores CPU et GPU : 12/14 lignes (attendu : noyau 1 à 3e-8)
+    k-ième score qui change entre scores CPU et GPU : 10/14 lignes (attendu : noyau 1 à 1e-7)
+    k-ième score qui change entre scores CPU et GPU : 7/14 lignes (attendu : noyau 1 à 1e-7)
+    k-ième score qui change entre scores CPU et GPU : 7/14 lignes (attendu : noyau 1 à 2e-7)
+    k-ième score qui change entre scores CPU et GPU : 14/14 lignes (attendu : noyau 1 à 1e-7)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for n in 4096 65536 262144; do echo \"##### n=$n\"; DRAVE_GPU=1 ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q4_0.gguf --banc-topk $n 2>&1 | grep -E \"CPU  [0-9]+ fils|GPU  scores|écart max\"; done", "description": "Measure  … [46 caractères tronqués]`
+
+  ```
+##### n=4096
+  CPU  20 fils :     3.88 ms
+  GPU  scores  :     0.12 ms  (31.6× plus rapide)
+  écart max 1.192e-7 sur une dynamique de 7.449e-1 (relatif 1.60e-7)
+##### n=65536
+  CPU  20 fils :    63.06 ms
+  GPU  scores  :     2.36 ms  (26.7× plus rapide)
+  écart max 1.788e-7 sur une dynamique de 8.385e-1 (relatif 2.13e-7)
+##### n=262144
+  CPU  20 fils :   243.82 ms
+  GPU  scores  :     6.09 ms  (40.0× plus rapide)
+  écart max 1.788e-7 sur une dynamique de 7.951e-1 (relatif 2.25e-7)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport re\np='reports/rapport-gpu-topk-selection.md'; s=open(p).read()\n\ns = s.replace(\"\"\"**En une ligne** : la sélection du top-k de l'attention tourne maintenant sur GPU en\n**quatre passes d'histogramme + deu … [3640 caractères tronqués]`
+
+  ```
+rapport à jour
+6:tailles testées) et coûte **0,89 ms** là où le tri CPU en coûte **497 ms** à
+73:**1,60 à 2,25e-7** selon la taille — c'est la même mesure faite sur des données non
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"1,03e-7\\|1.03e-7\\|29 à 40\\|40,6\\|29–40\" reports/rapport-gpu-scores.md docs/plan-gpu-topk.md README.md REPRISE.md | head -20", "description": "Find all 1.03e-7 mentions"}`
+
+  ```
+reports/rapport-gpu-scores.md:4:un écart de **1,03e-7** sur la référence CPU et **40× plus vite** à 262 144 clés —
+reports/rapport-gpu-scores.md:27:| 256 | 0,25 ms | 0,07 ms | 3,8× | 1,03e-7 |
+reports/rapport-gpu-scores.md:28:| 4 096 | 3,98 ms | **0,14 ms** | **29×** | 1,03e-7 |
+reports/rapport-gpu-scores.md:29:| 65 536 | 65,3 ms | 7,4 ms | 8,9× | 1,03e-7 |
+reports/rapport-gpu-scores.md:30:| **262 144** | 257,9 ms | **6,36 ms** | **40,6×** | 1,03e-7 |
+docs/plan-gpu-topk.md:86:| 1 | `attn_scores` + FFI + banc `--banc-topk` sur 4 k de contexte | ✅ **fait** : écart **1,03e-7** à toutes les longueurs (256 à 262 144 clés), **29 à 40× plus rapide** que le CPU — `reports/rapport-gpu-scores.md` |
+README.md:505:   (`reports/rapport-gpu-scores.md`, écart 1,03e-7, 29–40× le CPU) et la sélection
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\n# 1) rapport-gpu-scores.md : ajouter la note de correction en tête de section\np='reports/rapport-gpu-scores.md'; s=open(p).read()\ns = s.replace(\"\"\"un écart de **1,03e-7** sur la référence CPU et **40× plus vite … [2354 caractères tronqués]`
+
+  ```
+corrections écrites
+517:    --ppl /tmp/ids_oss_512.txt --ctx 256 --dense --threads 16 --limit 512  # attendu 15,1757
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rn \"1,03e-7\\|1.03e-7\" --include=\"*.md\" . | grep -v \"^./journal/\" | head -10", "description": "Check remaining stale figures"}`
+
+  ```
+./reports/rapport-gpu-scores.md:27:> ⚠️ **Correction du 30/09 (même journée)** : les écarts de 1,03e-7 ci-dessous ont
+./reports/rapport-gpu-scores.md:35:| 256 | 0,25 ms | 0,07 ms | 3,8× | 1,03e-7 |
+./reports/rapport-gpu-scores.md:36:| 4 096 | 3,98 ms | **0,14 ms** | **29×** | 1,03e-7 |
+./reports/rapport-gpu-scores.md:37:| 65 536 | 65,3 ms | 7,4 ms | 8,9× | 1,03e-7 |
+./reports/rapport-gpu-scores.md:38:| **262 144** | 257,9 ms | **6,36 ms** | **40,6×** | 1,03e-7 |
+./reports/rapport-gpu-topk-selection.md:72:Effet secondaire de la correction : l'écart du **noyau 1** n'est plus 1,03e-7 mais
+./docs/plan-gpu-topk.md:86:| 1 | `attn_scores` + FFI + banc `--banc-topk` sur 4 k de contexte | ✅ **fait** : écart **1,6 à 2,3e-7** à toutes les longueurs (256 à 262 144 clés, clés distinctes — la valeur de 1,03e-7 venait d'un banc dégénéré), **27 à 40× plus rapide** que le CPU — `reports/rapport-gpu-scores.md` |
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cargo test --release --manifest-path drave-core/Cargo.toml 2>&1 | tail -3 && git add -A && git commit -q -F - <<'EOF' && git log --oneline -2\nNoyaux 2b : collecte des k indices — même ensemble que le CPU, 896× le tri à 262 k clés\n\ … [1664 caractères tronqués]`
