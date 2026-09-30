@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 30.5 h |
-| Tours | 29 |
-| Messages | 1285 |
-| Appels d'outils | 1235 |
+| Durée | 30.6 h |
+| Tours | 30 |
+| Messages | 1291 |
+| Appels d'outils | 1239 |
 | Fichiers touchés | 39 |
-| Commandes | 966 |
+| Commandes | 970 |
 | Sous-agents | 1 |
-| Commits | 62 |
+| Commits | 63 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -83,6 +83,8 @@
 **Tour 28** — <goal_round> Objective: "Réaliser les 6 nouveaux chantiers du projet qtrinet-core, dans l'ordre : (1) relancer le test de l'aiguille sur contexte long (remplissage varié en vrai texte, moins de sondes, réponses plus longues) sur un modèle capable, grâce au préremplissage par lots et au KV déporté ; (2) chemin GPU : dépaquetage vectorisé du noyau d'attention (13,2 ms/couche à 1 M en int4 vers ~3 ms … [1492 caractères tronqués]
 
 **Tour 29** — <goal_round> Objective: "Réaliser les 6 nouveaux chantiers du projet qtrinet-core, dans l'ordre : (1) relancer le test de l'aiguille sur contexte long (remplissage varié en vrai texte, moins de sondes, réponses plus longues) sur un modèle capable, grâce au préremplissage par lots et au KV déporté ; (2) chemin GPU : dépaquetage vectorisé du noyau d'attention (13,2 ms/couche à 1 M en int4 vers ~3 ms … [1492 caractères tronqués]
+
+**Tour 30** — <goal_round> Objective: "Réaliser les 6 nouveaux chantiers du projet qtrinet-core, dans l'ordre : (1) relancer le test de l'aiguille sur contexte long (remplissage varié en vrai texte, moins de sondes, réponses plus longues) sur un modèle capable, grâce au préremplissage par lots et au KV déporté ; (2) chemin GPU : dépaquetage vectorisé du noyau d'attention (13,2 ms/couche à 1 M en int4 vers ~3 ms … [1492 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -1334,6 +1336,45 @@ L'objectif reste **actif**. La voie est maintenant tracée : implémenter la fen
 - bash — Add rotation to reference and compare
 - bash — Make reference tolerant and commit rotation
 
+**Synthèse produite :**
+
+⏵ Tour 20 : la rotation 2-D est implémentée d'après la source
+
+\## Fait dans ce tour
+
+**La rotation mRoPE est en place**, écrite d'après `clip.cpp` et non devinée : quatre blocs de la dimension de tête, **blocs 0 et 2 selon la ligne, blocs 1 et 3 selon la colonne**, chaque bloc tourné par paires `(i, i + quart/2)` avec l'échelle RoPE usuelle. La sortie de la tour change en conséquence (|sortie| 35,55 → **42,62**), donc la rotation agit bien.
+
+Deux réserves, écrites dans le document plutôt que passées sous silence :
+
+1. l'**échelle interne de chaque bloc** reste une hypothèse — la source montre le tenseur `positions` (quatre sections ligne/colonne/ligne/colonne) mais pas l'opération GGML qui le consomme ;
+2. la **référence numpy ne couvre plus la tour** : depuis que le banc écrit sa seule sortie, le fichier `.bloc` ne permet plus de rejouer les 32 couches. J'ai rendu l'outil tolérant — il l'annonce au lieu de planter — et les deux tranches encore comparables le restent : **patchs 5,37e-7** et **projecteur 1,73e-6**.
+
+Restent, pour clore la vision : la **fenêtre locale**, inexprimable sur les images du banc (28 × 28 et 84 × 84 tiennent dans une seule fenêtre de 8 × 8 après fusion — il faudrait ≥ 224 × 224 pour en avoir plusieurs), et l'alimentation de l'injection `Model::emb_imposee` par une tour complète.
+
+\## État des six chantiers
+
+| # | chantier | état |
+|---|---|---|
+| 1 | aiguille long contexte | ✅ 12/12 |
+| 2 | chemin GPU (5 sous-items) | ✅ |
+| 3 | mémoire KV | ✅ |
+| 4 | rotation à 16 k | ✅ |
+| 5 | MLA ✅ (5,2e-7) · vision : patch embedding, blocs, 32 couches, rotation 2-D, projecteur, injection — **fenêtre locale non testable sur ces images** | en cours |
+| 6 | hygiène | ✅ |
+
+`cargo test` 6/6, portes Qwen **19,3885** / gpt-oss **15,1757** intactes, arbre propre.
+
+L'objectif reste **actif**. Le chantier vision est désormais complet dans sa structure, avec deux points explicitement non vérifiés (échelle interne de la rotation, fenêtre locale) faute de référence exploitable — et la raison de chaque lacune est documentée, ce qui vaut mieux qu'un chiffre inventé.
+
+### Tour 30 — <goal_round> Objective: "Réaliser les 6 nouveaux chantiers du projet qtrinet-core, dans l'ordre : (1) relancer le test d … [1772 caractères tronqués]
+
+*4 appels d'outils.* Actions notables :
+
+- bash — Add local window and run 224px bench
+- bash — Fix projector for multiple merge groups
+- bash — Build and run complete vision path
+- bash — Document complete vision path and commit
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -1426,7 +1467,7 @@ L'objectif reste **actif**. La voie est maintenant tracée : implémenter la fen
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 926 autres
+- … et 930 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1554,7 +1595,7 @@ L'objectif reste **actif**. La voie est maintenant tracée : implémenter la fen
 
 ## 5. Erreurs rencontrées
 
-58 sorties en erreur ou divergentes. Les premières :
+59 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : a8f2635f8 docs: record which models this box is good at, and why src/llama-hparams.cpp:8:void llama_hparams::set_swa_pattern(uint32_t n_pattern, bool dense_first) { src/llama-hparams.h:308:    void se
 - **T1** : 511 tokens notés — perplexité cumulée 247.031  (4.9 tok/s) === perplexité 247.0308 sur 511 tokens (0 événements, 104.5 s) ===  ### B3 harmony assistant 511 --- ref --- 0.0 0.0 0:00 ls: cannot access '
@@ -1636,4 +1677,5 @@ L'objectif reste **actif**. La voie est maintenant tracée : implémenter la fen
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat >> docs/plan-mla-vision.md <<'EOF'  ### Les deux conventions, lues dans la SOURCE de llama.cpp (clip.c
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat >> docs/plan-mla-vision.md <<'EOF'  ### La convention de rotation 2-D, lue dans la source  `clip.cpp`,
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p='tools/vision_ref.py'; s=open(p).read() # le fichier .bloc ne contient plus les poids (
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p='tools/vision_ref.py'; s=open(p).read() s = s.replace("""    ecart = float(np.abs(out -
 

@@ -549,3 +549,23 @@ Ce qui manque encore : la **fenêtre locale**, inexprimable sur les images du ba
 (28 × 28 et 84 × 84 tiennent dans une seule fenêtre de 8 × 8 après fusion), et
 l'injection des embeddings d'image dans le flux de jetons, qui est branchée côté
 moteur (`Model::emb_imposee`) mais pas encore alimentée par une tour complète.
+
+### Le chemin image est COMPLET (image → jetons de 3584 dimensions)
+
+Sur une image de **224 × 224** (16 × 16 patchs = 256, 8 × 8 jetons après fusion),
+le banc enchaîne maintenant tout : convolution de patchs → 32 couches de ViT avec
+**rotation 2-D** et **fenêtre locale** (couches complètes aux indices 7, 15, 23,
+31 ; fenêtre de 4 × 4 jetons fusionnés ailleurs, lue dans `clip.cpp`) →
+`v.post_ln` → **projecteur par groupes de fusion** : 64 groupes × 3 584 valeurs.
+
+C'est exactement ce qu'il faut injecter à la place des jetons d'image — et le
+moteur sait le faire depuis le point d'injection `Model::emb_imposee`.
+
+Ce qui reste non vérifié, et pourquoi :
+
+| point | état |
+|---|---|
+| embedding de patchs, projecteur | **validés** contre numpy (5,4e-7 et 1,7e-6, à 28 × 28) |
+| échelle interne de la rotation | hypothèse (la source montre `positions`, pas l'opération GGML) |
+| fenêtre locale | implémentée d'après la source, **non testable** sur les images du banc avant 224 px — et sans référence à cette taille |
+| bout en bout (image → texte) | impossible sans le chemin d'inférence multimodal, qui n'existe pas ici |

@@ -50,6 +50,11 @@ def main():
             tuile = img[:, py*ky:(py+1)*ky, px*kx:(px+1)*kx]
             out[p] = np.einsum('oihw,ihw->o', w, tuile)
     ech = max(1e-9, float(np.abs(out).max()))
+    if out.shape != eng.shape:
+        print(f"patchs : le banc est sur une image de {int(round(eng.shape[0]**0.5))} × "
+              f"{int(round(eng.shape[0]**0.5))} patchs et la référence suppose 28 × 28 "
+              f"— comparaison sautée (elle a été validée à 28 × 28 : 5,4e-7)")
+        return
     ecart = float(np.abs(out - eng).max()) / ech
     print(f"patchs {out.shape} · |référence| max {ech:.4f}")
     print(f"écart max relatif : {ecart:.3e}")

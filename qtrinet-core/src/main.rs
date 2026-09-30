@@ -838,7 +838,7 @@ fn run_banc_vision(sortie: &str) {
     assert_eq!(w.len(), cout * cin * ky * kx, "poids de patch inattendus");
     // Image 28 × 28 déterministe : dégradé + carré central, pour que la
     // référence numpy puisse la reconstruire sans lire de fichier.
-    let (cote, cotes) = (28usize, 2usize);
+    let (cote, cotes) = (224usize, 8usize);
     let mut img = vec![0f32; cin * cote * cote];
     for y in 0..cote {
         for x in 0..cote {
@@ -876,8 +876,6 @@ fn run_banc_vision(sortie: &str) {
     // concaténés ligne par ligne) : c'est la convention de llama.cpp, et c'est
     // la seule hypothèse non vérifiable ici — elle ne se confirmerait qu'en
     // comparant la SORTIE complète à une implémentation de référence.
-    let mut fusion = vec![0f32; n_patch * cout];
-    fusion.copy_from_slice(&out);
     if let (Some(t0), Some(t2)) = (g.tensor("mm.0.weight"), g.tensor("mm.2.weight")) {
         let (n0, n1) = (t0.dims[0] as usize, t0.dims[1] as usize);
         let (n2, n3) = (t2.dims[0] as usize, t2.dims[1] as usize);
@@ -888,17 +886,34 @@ fn run_banc_vision(sortie: &str) {
         println!("projecteur : mm.0 {n1}→{n0} · mm.2 {n3}→{n2}");
         // GELU exact (erf), comme dans la tour de vision.
         let gelu = |x: f32| 0.5 * x * (1.0 + erf(x / std::f32::consts::SQRT_2));
-        let mut h = vec![0f32; n0];
-        for o in 0..n0 {
-            let mut acc = b0[o];
-            for i in 0..n1 { acc += w0[o * n1 + i] * fusion[i]; }
-            h[o] = gelu(acc);
-        }
-        let mut y = vec![0f32; n2];
-        for o in 0..n2 {
-            let mut acc = b2[o];
-            for i in 0..n3 { acc += w2[o * n3 + i] * h[i]; }
-            y[o] = acc;
+        // Un groupe de fusion 2 × 2 = quatre patchs concaténés (4 × 1280 = 5120),
+        // puis mm.0 → GELU → mm.2 → 3584 valeurs PAR GROUPE. Sur une image de
+        // 224 px il y a 64 groupes : la version qui ne traitait qu'un groupe
+        // (celle du banc 28 × 28) ne veut plus rien dire.
+        let n_cote_p = (n_patch as f64).sqrt().round() as usize;
+        let n_groupe = (n_cote_p / 2) * (n_cote_p / 2);
+        let mut y = vec![0f32; n_groupe * n2];
+        let mut fusion = vec![0f32; n1];
+        for g in 0..n_groupe {
+            let (gy, gx) = (2 * (g / (n_cote_p / 2)), 2 * (g % (n_cote_p / 2)));
+            for dy in 0..2 {
+                for dx in 0..2 {
+                    let p = (gy + dy) * n_cote_p + (gx + dx);
+                    fusion[(dy * 2 + dx) * cout..(dy * 2 + dx + 1) * cout]
+                        .copy_from_slice(&out[p * cout..(p + 1) * cout]);
+                }
+            }
+            let mut h = vec![0f32; n0];
+            for o in 0..n0 {
+                let mut acc = b0[o];
+                for i in 0..n1 { acc += w0[o * n1 + i] * fusion[i]; }
+                h[o] = gelu(acc);
+            }
+            for o in 0..n2 {
+                let mut acc = b2[o];
+                for i in 0..n3 { acc += w2[o * n3 + i] * h[i]; }
+                y[g * n2 + o] = acc;
+            }
         }
         {
             let mut f2 = std::io::BufWriter::new(
@@ -910,10 +925,10 @@ fn run_banc_vision(sortie: &str) {
                 f2.write_all(&v.to_le_bytes()).unwrap();
             }
         }
-        println!("projecteur : {n2} valeurs, |sortie| = {:.4}, 4 premières {:?}",
+        println!("projecteur : {n_groupe} groupes × {n2} valeurs, |sortie| = {:.4}, 4 premières {:?}",
                  y.iter().map(|v| v * v).sum::<f32>().sqrt(),
                  &y[..4].iter().map(|v| (v * 1e4).round() / 1e4).collect::<Vec<_>>());
-        proj = Some((h, y));
+        proj = Some((Vec::new(), y));
     }
 
     let mut f = std::io::BufWriter::new(std::fs::File::create(sortie).expect("création"));
@@ -1024,9 +1039,23 @@ fn run_banc_vision(sortie: &str) {
             let scale = 1.0 / (e as f32).sqrt();
             let mut att = vec![0f32; n_patch * e];
             let mut sc = vec![0f32; n_patch];
+            // Fenêtre locale : Qwen2.5-VL a une couche COMPLÈTE toutes les huit
+            // (indices 7, 15, 23, 31) et des couches LOCALES ailleurs ; la
+            // fenêtre est un bloc de 4 × 4 jetons fusionnés, soit 8 × 8 patchs.
+            let complete = (l + 1) % 8 == 0;
+            let n_cote_grille = (n_patch as f64).sqrt().round() as usize;
             for pi in 0..n_patch {
                 let q = &qq[pi * e..(pi + 1) * e];
                 for t in 0..n_patch {
+                    if !complete {
+                        let (ly, lx) = (pi / n_cote_grille, pi % n_cote_grille);
+                        let (ty, tx) = (t / n_cote_grille, t % n_cote_grille);
+                        let (w, h) = (4usize, 4usize);
+                        if (ly / (2 * h)) != (ty / (2 * h)) || (lx / (2 * w)) != (tx / (2 * w)) {
+                            sc[t] = f32::NEG_INFINITY;
+                            continue;
+                        }
+                    }
                     let mut acc = 0f32;
                     for i in 0..e { acc += q[i] * kk[t * e + i]; }
                     sc[t] = acc * scale;
