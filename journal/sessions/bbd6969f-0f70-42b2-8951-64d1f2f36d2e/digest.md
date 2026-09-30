@@ -31334,3 +31334,13 @@ b04dfd0 La politique du cache KV selon le régime : le meilleur réglage en octe
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/rapport-placement-bits-kv.md'; s=open(p).read()\nv = \"\"\"## Reproductible\"\"\"\nn = \"\"\"## Et l'aiguille ? 9/9 dans les trois cas\n\nLa perplexité n'est pas tout : un modèle qui retrouve une informat … [2930 caractères tronqués]`
+
+  ```
+rapport KV : l'aiguille
+index : vérifications de fin de journée
+80ba3d6 Aiguille 9/9 dans les trois variantes de cache KV, et les vérifications de fin de journée
+17:01:46
+94
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='REPRISE.md'; s=open(p).read()\nv = \"\"\"Réglage recommandé : **`DRAVE_KV_BITS=8 DRAVE_KV_K_F16=1`** — 2,5× plus petit que le\nf32 pour deux centièmes de pour cent. Détail et reproduction :\n`reports/rapport-plac … [1730 caractères tronqués]`

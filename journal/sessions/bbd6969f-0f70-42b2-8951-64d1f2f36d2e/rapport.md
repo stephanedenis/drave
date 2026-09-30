@@ -7,12 +7,12 @@
 | Début | 2026-09-28 14:46 |
 | Durée | 50.3 h |
 | Tours | 46 |
-| Messages | 1945 |
-| Appels d'outils | 1836 |
+| Messages | 1946 |
+| Appels d'outils | 1837 |
 | Fichiers touchés | 44 |
-| Commandes | 1508 |
+| Commandes | 1509 |
 | Sous-agents | 10 |
-| Commits | 165 |
+| Commits | 166 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -2117,7 +2117,7 @@ L'**audit des drapeaux** a trouvé que **46 options sur 110** étaient ignorées
 
 ### Tour 46 — continue jusqu'à 18h HAE
 
-*98 appels d'outils.* Actions notables :
+*99 appels d'outils.* Actions notables :
 
 - bash — Check time, timezone and remaining budget
 - create_goal
@@ -2133,7 +2133,7 @@ L'**audit des drapeaux** a trouvé que **46 options sur 110** étaient ignorées
 - bash — Improve notebook with real text cell
 - bash — Kill test node safely and check notebook
 - bash — Add notebook real-text cell and commit
-- … et 84 autres
+- … et 85 autres
 
 **Synthèse produite :**
 
@@ -2245,7 +2245,7 @@ Point crucial : **toute variante d'attribution désactive le miroir VRAM** (il e
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 1468 autres
+- … et 1469 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2558,4 +2558,5 @@ Point crucial : **toute variante d'attribution désactive le miroir VRAM** (il e
 - REPRISE : dix-sept tests, et ce qu'ils verrouillent" && git log --oneline -1 | cat; sleep 420; tail -6 /tmp/aiguille_kv2048.log; date +"%H:%M:%S"
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p='reports/rapport-placement-bits-kv.md'; s=open(p).read() v = """## Reproductible""" n =
 - Aiguille 9/9 dans les trois variantes de cache KV, et les vérifications de fin de journée  L'aiguille v2 (Qwen2.5-1.5B, contexte 2 048, trois profondeurs) retro
+- REPRISE : la politique du cache KV complète (taille ET temps), et l'aiguille 9/9" && git log --oneline -1 | cat
 

@@ -401,6 +401,15 @@ Réglage recommandé : **`DRAVE_KV_BITS=8 DRAVE_KV_K_F16=1`** — 2,5× plus pet
 f32 pour deux centièmes de pour cent. Détail et reproduction :
 `reports/rapport-placement-bits-kv.md`.
 
+⚠️ **Mais le temps change le conseil** (mesuré au banc à 262 144 clés) : les clés
+f16 coûtent **2,3× le temps CPU** des clés f32 (162 contre 70 ms par passe), et le
+miroir VRAM — qui ramène l'attention à 1,7 ms par passe — **exige une disposition
+homogène**, donc toute variante d'attribution le désactive. Par régime : clés f16
+à contexte court ou moyen sur CPU ; **int8/int8 homogène** dès qu'on veut le miroir
+ou qu'on est à très long contexte. Et l'aiguille v2 retrouve **9/9** sondes dans
+les trois variantes, int8/int8 compris : la tâche est plus robuste que la
+perplexité ne le suggère.
+
 ### Le mode lot gagne sur les deux tableaux
 
 Chronométré sur 256 jetons, machine au repos : **116,7 ms par jeton** en flux simple
