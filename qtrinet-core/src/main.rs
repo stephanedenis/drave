@@ -974,8 +974,18 @@ fn run_banc_vision(sortie: &str) {
                     v[2 * i + 1] = a * sn + b * c;
                 }
             };
+            // Permutation « colonne-majeur » des couches FENÊTRÉES : clip.cpp
+            // transpose la grille des unités de fusion avant d'empaqueter les
+            // positions (`idx_col[u_col] = u_row`), si bien qu'un patch (r, c)
+            // reçoit les positions de (c, r). Ce n'est donc pas qu'un masque :
+            // la fenêtre change aussi l'ordre des positions.
+            let complete_rot = (l + 1) % 8 == 0;
             for pi in 0..n_patch {
-                let (ligne, colonne) = ((pi / n_cote) as f32, (pi % n_cote) as f32);
+                let (ligne, colonne) = if complete_rot {
+                    ((pi / n_cote) as f32, (pi % n_cote) as f32)
+                } else {
+                    ((pi % n_cote) as f32, (pi / n_cote) as f32)
+                };
                 for hh in 0..nh_t {
                     let deb = pi * e + hh * hd_t;
                     let v = &mut qq[deb..deb + hd_t];
@@ -990,7 +1000,7 @@ fn run_banc_vision(sortie: &str) {
             // Fenêtre locale : Qwen2.5-VL a une couche COMPLÈTE toutes les huit
             // (indices 7, 15, 23, 31) et des couches LOCALES ailleurs ; la
             // fenêtre est un bloc de 4 × 4 jetons fusionnés, soit 8 × 8 patchs.
-            let complete = (l + 1) % 8 == 0;
+            let complete = complete_rot;
             let n_cote_grille = (n_patch as f64).sqrt().round() as usize;
             for pi in 0..n_patch {
                 let q = &qq[pi * e..(pi + 1) * e];

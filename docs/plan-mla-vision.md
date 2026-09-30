@@ -700,3 +700,26 @@ FENÊTRÉES, `clip.cpp` permute les positions en **colonne-majeur** (`idx_col`,
 implémentation fenêtre en ligne-majeur. C'est un écart réel et localisé — la
 fenêtre n'est donc pas seulement un masque, elle change aussi l'ordre des
 positions. À corriger, et documenté ici pour ne pas le perdre.
+
+### La permutation colonne-majeur est IMPLÉMENTÉE (le dernier écart connu)
+
+Sur les couches FENÊTRÉES, `clip.cpp` transpose la grille des unités de fusion
+avant d'empaqueter les positions (`idx_col[u_col] = u_row`, donc pour une grille
+carrée `pos_col[c*n + r] = pos_row[r*n + c]`). Un patch (r, c) reçoit donc les
+positions de (c, r) : la fenêtre n'est pas qu'un masque, elle change aussi
+l'ORDRE DES POSITIONS.
+
+C'est implémenté : `complete_rot` (couches 7, 15, 23, 31 en attention complète)
+choisit entre (ligne, colonne) et (colonne, ligne). Vérification par le
+changement des chiffres — c'est le contrôle qui avait manqué une fois :
+
+| | avant permutation | après |
+|---|---|---|
+| sortie de la tour | 234,53 | **244,38** |
+| sortie du projecteur | 515,84 | **465,84** |
+
+Le chemin image suit donc maintenant la source sur ses trois points d'attention :
+rotation en quatre blocs (ggml), échelle continue (ggml), et permutation
+colonne-majeur des couches fenêtrées (clip.cpp). Ce qui reste sans référence
+n'est plus une ligne de code identifiée, mais la qualité globale — et les trois
+pistes de validation écrites plus haut.

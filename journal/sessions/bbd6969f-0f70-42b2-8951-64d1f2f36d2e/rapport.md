@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 31.0 h |
-| Tours | 35 |
-| Messages | 1326 |
-| Appels d'outils | 1264 |
+| Durée | 40.5 h |
+| Tours | 37 |
+| Messages | 1339 |
+| Appels d'outils | 1272 |
 | Fichiers touchés | 39 |
-| Commandes | 995 |
+| Commandes | 1001 |
 | Sous-agents | 1 |
-| Commits | 72 |
+| Commits | 73 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -22,6 +22,8 @@
 - **complete** — Réaliser les 8 chantiers restants du projet qtrinet-core dans l'ordre : (1) protocole de perplexité longue --depuis/--stride, (2) trancher le seuil de rotation YaRN avec ce protocole, (3) KV int8 puis int4 mesurés sur Qwen 0.5B à ctx 8192 contre llama.cpp, (4) préremplissage par lots (GEMM par tranc
 … [374 caractères tronqués]
 - **create** — Réaliser les 6 nouveaux chantiers du projet qtrinet-core, dans l'ordre : (1) relancer le test de l'aiguille sur contexte long (remplissage varié en vrai texte, moins de sondes, réponses plus longues) sur un modèle capable, grâce au préremplissage par lots et au KV déporté ; (2) chemin GPU : dépaquet
+… [1023 caractères tronqués]
+- **complete** — Réaliser les 6 nouveaux chantiers du projet qtrinet-core, dans l'ordre : (1) relancer le test de l'aiguille sur contexte long (remplissage varié en vrai texte, moins de sondes, réponses plus longues) sur un modèle capable, grâce au préremplissage par lots et au KV déporté ; (2) chemin GPU : dépaquet
 … [1023 caractères tronqués]
 
 ## 1. Ce qui a été demandé
@@ -95,6 +97,10 @@
 **Tour 34** — <goal_round> Objective: "Réaliser les 6 nouveaux chantiers du projet qtrinet-core, dans l'ordre : (1) relancer le test de l'aiguille sur contexte long (remplissage varié en vrai texte, moins de sondes, réponses plus longues) sur un modèle capable, grâce au préremplissage par lots et au KV déporté ; (2) chemin GPU : dépaquetage vectorisé du noyau d'attention (13,2 ms/couche à 1 M en int4 vers ~3 ms … [1492 caractères tronqués]
 
 **Tour 35** — <goal_round> Objective: "Réaliser les 6 nouveaux chantiers du projet qtrinet-core, dans l'ordre : (1) relancer le test de l'aiguille sur contexte long (remplissage varié en vrai texte, moins de sondes, réponses plus longues) sur un modèle capable, grâce au préremplissage par lots et au KV déporté ; (2) chemin GPU : dépaquetage vectorisé du noyau d'attention (13,2 ms/couche à 1 M en int4 vers ~3 ms … [1492 caractères tronqués]
+
+**Tour 36** — prochaine étape?
+
+**Tour 37** — vision d'abord, puis roadmap
 
 ## 2. Déroulé, étape par étape
 
@@ -1600,7 +1606,7 @@ Le chantier vision est **fonctionnellement complet et démontré** ; ce qui rest
 
 ### Tour 35 — <goal_round> Objective: "Réaliser les 6 nouveaux chantiers du projet qtrinet-core, dans l'ordre : (1) relancer le test d … [1772 caractères tronqués]
 
-*9 appels d'outils.* Actions notables :
+*11 appels d'outils.* Actions notables :
 
 - bash — Find rope_multi sections in clip.cpp
 - bash — Read rope_multi layout comment and sections
@@ -1611,6 +1617,74 @@ Le chantier vision est **fonctionnellement complet et démontré** ; ce qui rest
 - bash — Fix stale REPRISE item and commit
 - bash — Verify REPRISE item and finalize
 - bash — Fix stale rotation item in REPRISE
+- get_goal
+- update_goal
+
+**Synthèse produite :**
+
+⏵ Les six chantiers sont clos, l'objectif est marqué terminé
+
+\## Ce qui a été fait
+
+| # | chantier | résultat mesuré |
+|---|---|---|
+| 1 | **aiguille long contexte** | **12 sondes sur 12** trouvées (profondeurs 0,1/0,5/0,9) : Qwen2.5-1.5B à 512 et 2 048, Qwen3-30B-A3B à 2 048, gpt-oss-120b à 4 096 avec KV déporté. Le protocole est passé au remplissage WikiText-2 **varié** (une fenêtre différente par sonde) et à 40 jetons de réponse — les deux défauts qui faisaient échouer la v1 |
+| 2 | **chemin GPU** | dépaquetage vectorisé : à 1 M de clés, f32 13,6 → **7,0 ms** (308 Go/s), int8 15,0 → **6,5**, int4 13,2 → **7,4** — écarts au CPU inchangés (5,1e-6 / 2,9e-6 / 4,9e-6) · experts MXFP4 en VRAM : **+6 %** seulement, verdict « ne pas activer » · attention par lots déportée : préremplissage 261,6 → **93,7 s (×2,8)**, perplexité **identique** · tête Q8_0 en **AVX2**, bit-identique · KV réparti **12 couches sur chaque Quadro** |
+| 3 | **mémoire** | cache CPU paginé : à contexte 1 M, **0,03 Go** alloués au lieu de 25,77 Go · hypothèse « clés en f16 avant quantification » **réfutée** (perplexité identique) |
+| 4 | **rotation à 16 k** | RoPE simple **35,18** contre **1 133,02** en interpolation — le simple gagne à *toutes* les longueurs mesurées (128 → 16 384) ; seuil porté à **4 ×** la longueur déclarée |
+| 5 | **MLA et vision** | **MLA** : modèle synthétique + référence numpy, écart **5,2e-7** · **Vision** : chaîne complète démontrée de bout en bout — image → patchs → 32 couches (rotation 2-D **conforme à la source ggml**, fenêtre locale d'après `clip.cpp`) → `v.post_ln` → projecteur (64 groupes × 3 584) → injection → **152 064 logits**. Tranches validées : patchs 5,4e-7, projecteur 1,7e-6, une couche 1,8e-6 |
+| 6 | **hygiène** | feuille de route réécrite, tableau des pièges `QT_GPU` / `QT_GPU_TETE` / `QT_GPU_KV` / `QT_KV_*` / `QT_BANC_*` |
+
+**Vérification** : `cargo test --release` **6/6**, portes de non-régression Qwen **19,3885** et gpt-oss **15,1757** (sans `QT_GPU`) revérifiées à plusieurs reprises, dont après le dernier changement de noyau. Arbre propre.
+
+\## Deux erreurs que la mesure a attrapées, et qui méritent d'être connues
+
+- **Le chiffre qui ne bouge pas est un signal.** Le projecteur affichait exactement la même valeur avant et après correction de la rotation : c'était la trace d'un **ordre de pipeline faux** (il consommait les embeddings de patchs au lieu de la sortie de la tour). La correction s'est vérifiée par le *changement* du chiffre (131,54 → 51
+… [1358 caractères tronqués]
+
+### Tour 36 — prochaine étape?
+
+*1 appels d'outils.* Actions notables :
+
+- bash — Read the current next-steps list
+
+**Synthèse produite :**
+
+⏵ Je relis la feuille de route et je propose l'ordre suivant
+
+Le dépôt est propre et l'objectif est clos. Voici ce qui reste, par rentabilité — en signalant d'abord que **deux items de la liste `REPRISE.md` §6 sont périmés** :
+
+- son item 1 (noyau de tête Q8_0) est **fait** (AVX2, bit-identique) ;
+- son item 2 (second GPU) est **fait** pour le KV (12 couches par carte) — il reste à lui confier les experts.
+
+\## Ce qui reste, par ordre de rentabilité
+
+| priorité | chantier | pourquoi maintenant | coût |
+|---|---|---|---|
+| **1** | **Top-k dans le noyau d'attention GPU** | `--attn-topk 256` **améliore** la perplexité (234,88 contre 298,56 à 2 048) mais retombe sur le CPU : c'est le dernier repli du chemin long contexte. Contenu, mesurable, et il débloque la mesure de qualité croisée | ~1 tour |
+| **2** | **Permutation colonne-majeur des couches fenêtrées** | Dernier écart *connu* entre la vision et la source `clip.cpp` (la fenêtre n'est pas qu'un masque : les positions changent d'ordre). Une vingtaine de lignes | ~1 tour |
+| **3** | **Écart int8 résiduel** (+3,0 % contre +0,8 % chez llama.cpp à 8 192) | L'hypothèse des clés f16 est réfutée ; restent la quantification des **valeurs** et la précision du **softmax** — deux variantes à tester, faciles à mesurer | ~2 tours |
+| **4** | **Aiguille étendue** (8 192 / 16 384, plusieurs codes par sonde, croisement avec `--attn-topk`) | C'est la seule mesure de *qualité* du contexte long ; le préremplissage par lots et le KV déporté la rendent abordable | plusieurs heures machine |
+| **5** | **Rendre le déport des experts rentable** | Mesuré à +6 % seulement : il faudrait grouper les trois projections par expert et supprimer les copies par appel — sinon on abandonne, ce qui est déjà écrit | ~2 tours |
+| **6** | **Valider la vision contre une référence** | Le seul chiffre qui manque vraiment, et le seul bloqué : `mtmd_tokenize` (rc=2) après cinq hypothèses. Trois pistes écrites, dont un programme en C | incertain |
+| — | **Rafraîchir `REPRISE.md` §6** | Les items 1 et 2 y sont périmés, ce qui induit en erreur la prochaine session | 5 min |
+
+\## Ma recommandation
+
+**Commencer par le top-k dans le noyau** (priorité 1) : c'est le seul point où une *amélioration de qualité déjà mesurée* (+21 % de perplexité à 2 048) est aujourd'hui inutilisable à contexte long parce qu'elle repasse par le CPU. Il est contenu, vérifiable par les portes habituelles, et il ouvre la priorité 4.
+
+Puis le **rafraîchissement de `REPRISE.md` §6** dan
+… [174 caractères tronqués]
+
+### Tour 37 — vision d'abord, puis roadmap
+
+*5 appels d'outils.* Actions notables :
+
+- bash — Locate rotation call site
+- bash — Apply col-major permutation for windowed layers
+- bash — Inspect broken region
+- bash — Repair and run with col-major permutation
+- bash — Document and commit col-major permutation
 
 ## 3. Travail accompli
 
@@ -1704,7 +1778,7 @@ Le chantier vision est **fonctionnellement complet et démontré** ; ce qui rest
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 955 autres
+- … et 961 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1832,7 +1906,7 @@ Le chantier vision est **fonctionnellement complet et démontré** ; ce qui rest
 
 ## 5. Erreurs rencontrées
 
-60 sorties en erreur ou divergentes. Les premières :
+61 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : a8f2635f8 docs: record which models this box is good at, and why src/llama-hparams.cpp:8:void llama_hparams::set_swa_pattern(uint32_t n_pattern, bool dense_first) { src/llama-hparams.h:308:    void se
 - **T1** : 511 tokens notés — perplexité cumulée 247.031  (4.9 tok/s) === perplexité 247.0308 sur 511 tokens (0 événements, 104.5 s) ===  ### B3 harmony assistant 511 --- ref --- 0.0 0.0 0:00 ls: cannot access '
@@ -1924,4 +1998,5 @@ Le chantier vision est **fonctionnellement complet et démontré** ; ce qui rest
 - REPRISE : l'item 5 reflète l'état final (chaîne vision démontrée, réserves nommées)" && git log --oneline -1 && git status --short | head -2
 - journal : archive automatique" 2>/dev/null; git log --oneline -3 | cat
 - REPRISE : l'item 3 (rotation) reflète la mesure à 16 k et le seuil porté à 4 ×" && git log --oneline -1
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p='docs/plan-mla-vision.md'; s=open(p).read() add = """ ### La permutation colonne-majeur
 

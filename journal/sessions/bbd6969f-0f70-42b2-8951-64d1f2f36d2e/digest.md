@@ -21072,3 +21072,210 @@ a42ebb3 REPRISE : MLA et vision tous deux faits, avec leurs réserves nommées
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\ns = open('REPRISE.md').read()\nold = \"\"\"3. **Rotation au-delà de 5 120 jetons.** Le seuil mesuré (1,25 × la longueur\n   déclarée) n'est qu'une borne basse : une passe à 16 k coûte ~1 h par régime.\"\"\"\nnew = \ … [552 caractères tronqués]`
+
+  ```
+item 3 corrigé
+26af06b REPRISE : l'item 3 (rotation) reflète la mesure à 16 k et le seuil porté à 4 ×
+  ```
+
+- **get_goal** `{}`
+
+  ```
+{"goal":{"id":"goal-5fb0695d-fac0-4c3c-85eb-a4bce18c76f3","revision":1,"objective":"Réaliser les 6 nouveaux chantiers du projet qtrinet-core, dans l'ordre : (1) relancer le test de l'aiguille sur contexte long (remplissage varié en vrai texte, moins de sondes, réponses plus longues) sur un modèle capable, grâce au préremplissage par lots et au KV déporté ; (2) chemin GPU : dépaquetage vectorisé du noyau d'attention (13,2 ms/couche à 1 M en int4 vers ~3 ms), brancher MXFP4 dans le moteur avec une politique de résidence des experts, attention par lots sur GPU dans forward_lot, noyau de tête Q8_0 accéléré (AVX2 ou déport), et usage du second GPU ; (3) mémoire : pagination du cache KV côté CPU (25,77 Go réservés à ctx 1 M pour 512 jetons écrits) et test de l'hypothèse « clés en f16 avant quantification » pour l'écart int8 avec llama.cpp à 8 192 (+3,0 % contre +0,8 %) ; (4) rotation au-delà de 5 120 jetons (passe à 16 k) ; (5) structurel : MLA (aucun modèle local — construire un modèle MLA synthétique et valider contre une référence indépendante) et vision (poids Qwen2.5-VL et projecteur mmproj présents) ; (6) hygiène : réécrire la section « Ce qu'il faut faire ensuite » de REPRISE.md e
+… [286 caractères tronqués]
+  ```
+
+- **update_goal** `{"action": "complete", "goal_id": "goal-5fb0695d-fac0-4c3c-85eb-a4bce18c76f3", "revision": 1}`
+
+> **Objectif** (complete) : Réaliser les 6 nouveaux chantiers du projet qtrinet-core, dans l'ordre : (1) relancer le test de l'aiguille sur contexte long (remplissage varié en vrai texte, moins de sondes, réponses plus longues) sur un modèle capable, grâce au préremplissage par lots et au KV déporté ; (2) chemin GPU : dépaquetage vectorisé du noyau d'attention (13,2 ms/couche à 1 M en int4 vers ~3 ms), brancher MXFP4 dans le moteur avec une politique de résidence des experts, attention par lots sur GPU dans forward_lot, noyau de tête Q8_0 accéléré (AVX2 ou déport), et usage du second GPU ; (3) mémoire : pagination du cache KV côté CPU (25,77 Go réservés à ctx 1 M pour 512 jetons écrits) et test de l'hypothèse « clés en f16 avant quantification » pour l'écart int8 avec llama.cpp à 8 192 (+3,0 % contre +0,8 %) ; (4) rotation au-delà de 5 120 jetons (passe à 16 k) ; (5) structurel : MLA (aucun modèle local — construire un modèle MLA synthétique et valider contre une référence indépendante) et vision (poids Qwen2.5-VL et projecteur mmproj présents) ; (6) hygiène : réécrire la section « Ce qu'il faut faire ensuite » de REPRISE.md et y consigner les pièges QT_GPU/QT_GPU_TETE/QT_GPU_KV. Chaque chantier doit être implémenté, mesuré (portes de non-régression Qwen 19,3885 et gpt-oss 15,1757 sans QT_GPU), documenté dans le dépôt et commité.
+
+
+  ```
+{"goal":{"id":"goal-5fb0695d-fac0-4c3c-85eb-a4bce18c76f3","revision":2,"objective":"Réaliser les 6 nouveaux chantiers du projet qtrinet-core, dans l'ordre : (1) relancer le test de l'aiguille sur contexte long (remplissage varié en vrai texte, moins de sondes, réponses plus longues) sur un modèle capable, grâce au préremplissage par lots et au KV déporté ; (2) chemin GPU : dépaquetage vectorisé du noyau d'attention (13,2 ms/couche à 1 M en int4 vers ~3 ms), brancher MXFP4 dans le moteur avec une politique de résidence des experts, attention par lots sur GPU dans forward_lot, noyau de tête Q8_0 accéléré (AVX2 ou déport), et usage du second GPU ; (3) mémoire : pagination du cache KV côté CPU (25,77 Go réservés à ctx 1 M pour 512 jetons écrits) et test de l'hypothèse « clés en f16 avant quantification » pour l'écart int8 avec llama.cpp à 8 192 (+3,0 % contre +0,8 %) ; (4) rotation au-delà de 5 120 jetons (passe à 16 k) ; (5) structurel : MLA (aucun modèle local — construire un modèle MLA synthétique et valider contre une référence indépendante) et vision (poids Qwen2.5-VL et projecteur mmproj présents) ; (6) hygiène : réécrire la section « Ce qu'il faut faire ensuite » de REPRISE.md e
+… [291 caractères tronqués]
+  ```
+
+### 👤 Utilisateur
+
+<goal_complete>
+Objective: "Réaliser les 6 nouveaux chantiers du projet qtrinet-core, dans l'ordre : (1) relancer le test de l'aiguille sur contexte long (remplissage varié en vrai texte, moins de sondes, réponses plus longues) sur un modèle capable, grâce au préremplissage par lots et au KV déporté ; (2) chemin GPU : dépaquetage vectorisé du noyau d'attention (13,2 ms/couche à 1 M en int4 vers ~3 ms), brancher MXFP4 dans le moteur avec une politique de résidence des experts, attention par lots sur GPU dans forward_lot, noyau de tête Q8_0 accéléré (AVX2 ou déport), et usage du second GPU ; (3) mémoire : pagination du cache KV côté CPU (25,77 Go réservés à ctx 1 M pour 512 jetons écrits) et test de l'hypothèse « clés en f16 avant quantification » pour l'écart int8 avec llama.cpp à 8 192 (+3,0 % contre +0,8 %) ; (4) rotation au-delà de 5 120 jetons (passe à 16 k) ; (5) structurel : MLA (aucun modèle local — construire un modèle MLA synthétique et valider contre une référence indépendante) et vision (poids Qwen2.5-VL et projecteur mmproj présents) ; (6) hygiène : réécrire la section « Ce qu'il faut faire ensuite » de REPRISE.md et y consigner les pièges QT_GPU/QT_GPU_TETE/QT_GPU_KV. Chaque chantier doit être implémenté, mesuré (portes de non-régression Qwen 19,3885 et gpt-oss 15,1757 sans QT_GPU), documenté dans le dépôt et commité."
+The goal is marked complete and this autonomous run is ending. Write the closing message to the user now: state the outcome, summarize what was done and how it was verified, and point to the concrete results (files, commits, or other artifacts). Report only what earlier rounds and tool results in this session actually establish; when a detail is not in the session, say so instead of inventing it. Note anything the user should review or do next. Address the user directly. Do not call any more tools in this run; further work waits for the user's next instruction.
+</goal_complete>
+
+### 🤖 Assistant
+
+⏵ Les six chantiers sont clos, l'objectif est marqué terminé
+
+## Ce qui a été fait
+
+| # | chantier | résultat mesuré |
+|---|---|---|
+| 1 | **aiguille long contexte** | **12 sondes sur 12** trouvées (profondeurs 0,1/0,5/0,9) : Qwen2.5-1.5B à 512 et 2 048, Qwen3-30B-A3B à 2 048, gpt-oss-120b à 4 096 avec KV déporté. Le protocole est passé au remplissage WikiText-2 **varié** (une fenêtre différente par sonde) et à 40 jetons de réponse — les deux défauts qui faisaient échouer la v1 |
+| 2 | **chemin GPU** | dépaquetage vectorisé : à 1 M de clés, f32 13,6 → **7,0 ms** (308 Go/s), int8 15,0 → **6,5**, int4 13,2 → **7,4** — écarts au CPU inchangés (5,1e-6 / 2,9e-6 / 4,9e-6) · experts MXFP4 en VRAM : **+6 %** seulement, verdict « ne pas activer » · attention par lots déportée : préremplissage 261,6 → **93,7 s (×2,8)**, perplexité **identique** · tête Q8_0 en **AVX2**, bit-identique · KV réparti **12 couches sur chaque Quadro** |
+| 3 | **mémoire** | cache CPU paginé : à contexte 1 M, **0,03 Go** alloués au lieu de 25,77 Go · hypothèse « clés en f16 avant quantification » **réfutée** (perplexité identique) |
+| 4 | **rotation à 16 k** | RoPE simple **35,18** contre **1 133,02** en interpolation — le simple gagne à *toutes* les longueurs mesurées (128 → 16 384) ; seuil porté à **4 ×** la longueur déclarée |
+| 5 | **MLA et vision** | **MLA** : modèle synthétique + référence numpy, écart **5,2e-7** · **Vision** : chaîne complète démontrée de bout en bout — image → patchs → 32 couches (rotation 2-D **conforme à la source ggml**, fenêtre locale d'après `clip.cpp`) → `v.post_ln` → projecteur (64 groupes × 3 584) → injection → **152 064 logits**. Tranches validées : patchs 5,4e-7, projecteur 1,7e-6, une couche 1,8e-6 |
+| 6 | **hygiène** | feuille de route réécrite, tableau des pièges `QT_GPU` / `QT_GPU_TETE` / `QT_GPU_KV` / `QT_KV_*` / `QT_BANC_*` |
+
+**Vérification** : `cargo test --release` **6/6**, portes de non-régression Qwen **19,3885** et gpt-oss **15,1757** (sans `QT_GPU`) revérifiées à plusieurs reprises, dont après le dernier changement de noyau. Arbre propre.
+
+## Deux erreurs que la mesure a attrapées, et qui méritent d'être connues
+
+- **Le chiffre qui ne bouge pas est un signal.** Le projecteur affichait exactement la même valeur avant et après correction de la rotation : c'était la trace d'un **ordre de pipeline faux** (il consommait les embeddings de patchs au lieu de la sortie de la tour). La correction s'est vérifiée par le *changement* du chiffre (131,54 → 515,84), pas par sa plausibilité.
+- **Mon implémentation de la rotation était fausse** (appariement « moitié tournée » au lieu de paires consécutives, échelle recalculée par bloc au lieu de continue). Le code tournait, les valeurs étaient plausibles. C'est la lecture de `ggml_mrope_cache_init` qui l'a montré — la structure était bonne, le détail non.
+
+## Ce que je vous laisse à relire, et les réserves
+
+- `docs/plan-mla-vision.md` : tout l'état de la vision, y compris **la permutation colonne-majeur des couches fenêtrées**, constatée dans `clip.cpp` mais **pas implémentée** ;
+- `reports/rapport-aiguille.md` + `reports/aiguille-30b.md` / `aiguille-gpt-oss.md` ;
+- `docs/contexte-long.md` §4.bis.2, §4.ter, §5.ter ; `reports/rapport-prefill-par-lots.md` ; `REPRISE.md` §6.
+
+**Réserves nommées, non maquillées** : la qualité de la vision n'a **aucun chiffre** — les deux conventions (échelle interne de la rotation, permutation de fenêtre) sont dérivées de la source mais non confirmées par une référence, et le seul vérificateur local (`libmtmd` d'ollama) reste bloqué sur `mtmd_tokenize` (rc=2) après cinq hypothèses testées, toutes documentées. Les trois pistes de validation restantes sont écrites dans le plan. Si vous disposez d'une référence externe (un `llama-mtmd-cli` avec ses en-têtes, ou `transformers`+`torch`), c'est le seul chaînon manquant.
+
+
+## Tour 36
+
+### 👤 Utilisateur
+
+prochaine étape?
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && awk '/Ce qu.il faut faire ensuite/,/Les variables/' REPRISE.md | head -42 && git status --short | head -3", "description": "Read the current next-steps list"}`
+
+  ```
+### Ce qu'il faut faire ensuite, dans l'ordre
+
+État au moment d'écrire : les huit chantiers de la campagne précédente sont clos
+(voir le tableau du §6), et la campagne « six nouveaux chantiers » a livré
+l'aiguille v2, le dépaquetage vectorisé du noyau d'attention, les experts MXFP4
+en VRAM, l'attention par lots déportée et la pagination des deux caches KV. Ce
+qui reste est classé par rentabilité mesurée.
+
+1. **Noyau de la tête Q8_0.** Le chemin CPU de la tête par lots est **lié au
+   calcul** (5,5 ms/jeton pour Qwen 0.5B, le lot n'y change rien). Deux voies :
+   un noyau AVX2 (le déport GPU Q8_0 existe déjà : 15,6 → 6,2 ms/jeton sur
+   gpt-oss). C'est le premier consommateur après le FFN.
+2. **Second GPU.** 16 Go dorment. Le cache d'experts MXFP4 (13,2 Mo par expert,
+   4 608 experts chez gpt-oss) et le KV à 1 M le rempliraient utilement ; il faut
+   un second contexte CUDA et une règle de répartition.
+3. ~~**Rotation au-delà de 5 120 jetons.**~~ **MESURÉ À 16 k** : RoPE simple
+   **35,18** contre **1 133,02** en interpolation seule, et le seuil est passé à
+   **4 ×** la longueur déclarée (16 384, la plus grande longueur mesurée).
+4. ~~**MLA et vision.**~~ **TOUS DEUX FAITS.** MLA 
+… [1611 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Je relis la feuille de route et je propose l'ordre suivant
+
+Le dépôt est propre et l'objectif est clos. Voici ce qui reste, par rentabilité — en signalant d'abord que **deux items de la liste `REPRISE.md` §6 sont périmés** :
+
+- son item 1 (noyau de tête Q8_0) est **fait** (AVX2, bit-identique) ;
+- son item 2 (second GPU) est **fait** pour le KV (12 couches par carte) — il reste à lui confier les experts.
+
+## Ce qui reste, par ordre de rentabilité
+
+| priorité | chantier | pourquoi maintenant | coût |
+|---|---|---|---|
+| **1** | **Top-k dans le noyau d'attention GPU** | `--attn-topk 256` **améliore** la perplexité (234,88 contre 298,56 à 2 048) mais retombe sur le CPU : c'est le dernier repli du chemin long contexte. Contenu, mesurable, et il débloque la mesure de qualité croisée | ~1 tour |
+| **2** | **Permutation colonne-majeur des couches fenêtrées** | Dernier écart *connu* entre la vision et la source `clip.cpp` (la fenêtre n'est pas qu'un masque : les positions changent d'ordre). Une vingtaine de lignes | ~1 tour |
+| **3** | **Écart int8 résiduel** (+3,0 % contre +0,8 % chez llama.cpp à 8 192) | L'hypothèse des clés f16 est réfutée ; restent la quantification des **valeurs** et la précision du **softmax** — deux variantes à tester, faciles à mesurer | ~2 tours |
+| **4** | **Aiguille étendue** (8 192 / 16 384, plusieurs codes par sonde, croisement avec `--attn-topk`) | C'est la seule mesure de *qualité* du contexte long ; le préremplissage par lots et le KV déporté la rendent abordable | plusieurs heures machine |
+| **5** | **Rendre le déport des experts rentable** | Mesuré à +6 % seulement : il faudrait grouper les trois projections par expert et supprimer les copies par appel — sinon on abandonne, ce qui est déjà écrit | ~2 tours |
+| **6** | **Valider la vision contre une référence** | Le seul chiffre qui manque vraiment, et le seul bloqué : `mtmd_tokenize` (rc=2) après cinq hypothèses. Trois pistes écrites, dont un programme en C | incertain |
+| — | **Rafraîchir `REPRISE.md` §6** | Les items 1 et 2 y sont périmés, ce qui induit en erreur la prochaine session | 5 min |
+
+## Ma recommandation
+
+**Commencer par le top-k dans le noyau** (priorité 1) : c'est le seul point où une *amélioration de qualité déjà mesurée* (+21 % de perplexité à 2 048) est aujourd'hui inutilisable à contexte long parce qu'elle repasse par le CPU. Il est contenu, vérifiable par les portes habituelles, et il ouvre la priorité 4.
+
+Puis le **rafraîchissement de `REPRISE.md` §6** dans le même mouvement, pour que la liste ne mente plus.
+
+Dites-moi si je pars là-dessus — ou si vous préférez que j'attaque la vision (priorité 2) ou l'écart int8 (priorité 3).
+
+
+## Tour 37
+
+### 👤 Utilisateur
+
+vision d'abord, puis roadmap
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && grep -n \"let (ligne, colonne) = \" src/main.rs | head -3 && sed -n '/Rotation 2-D (mRoPE)/,/^            for pi in 0..n_patch/p' src/main.rs | tail -12", "description": "Locate rotation call site"}`
+
+  ```
+978:                let (ligne, colonne) = ((pi / n_cote) as f32, (pi % n_cote) as f32);
+                let paires = hd_t / 2;
+                for i in 0..paires {
+                    let pos = if i < paires / 2 { ligne } else { colonne };
+                    let theta = pos * base_rot.powf(-2.0 * i as f32 / hd_t as f32);
+                    let (c, sn) = (theta.cos(), theta.sin());
+                    let a = v[2 * i];
+                    let b = v[2 * i + 1];
+                    v[2 * i] = a * c - b * sn;
+                    v[2 * i + 1] = a * sn + b * c;
+                }
+            };
+            for pi in 0..n_patch {
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && python3 - <<'PY'\np='src/main.rs'; s=open(p).read()\nold = \"\"\"            for pi in 0..n_patch {\n                let (ligne, colonne) = ((pi / n_cote) as f32, (pi % n_cote) as f32);\"\"\"\nnew = \"\"\"            //  … [1231 caractères tronqués]`
+
+  ```
+permutation colonne-majeur posée
+error[E0425]: cannot find value `complete` in this scope
+   --> src/main.rs:982:39
+    |
+982 |             let (ligne, colonne) = if complete {
+    |                                       ^^^^^^^^ not found in this scope
+
+error[E0425]: cannot find value `pi` in this scope
+   --> src/main.rs:983:19
+    |
+983 |                 ((pi / n_cote) as f32, (pi % n_cote) as f32)
+    |                   ^^
+    |
+error: could not compile `qtrinet-core` (bin "qtrinet-core") due to 6 previous errors; 9 warnings emitted
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && sed -n '975,1000p' src/main.rs", "description": "Inspect broken region"}`
+
+  ```
+}
+            };
+            // Permutation « colonne-majeur » des couches FENÊTRÉES : clip.cpp
+            // transpose la grille des unités de fusion avant d'empaqueter les
+            // positions (`idx_col[u_col] = u_row`), si bien qu'un patch (r, c)
+            // reçoit les positions de (c, r). Ce n'est donc pas qu'un masque :
+            // la fenêtre change aussi l'ordre des positions.
+            let (ligne, colonne) = if complete {
+                ((pi / n_cote) as f32, (pi % n_cote) as f32)
+            } else {
+                ((pi % n_cote) as f32, (pi / n_cote) as f32)
+            };
+            {
+                for hh in 0..nh_t {
+                    let deb = pi * e + hh * hd_t;
+                    let v = &mut qq[deb..deb + hd_t];
+                    tourner(v, ligne, colonne);
+                    let vk = &mut kk[deb..deb + hd_t];
+                    tourner(vk, ligne, colonne);
+                }
+            }
+            let scale = 1.0 / (e as f32).sqrt();
+            let mut att = vec![0f32; n_patch * e];
+            let mut sc = vec![0f32; n_patch];
+            // Fenêtre locale : Qwen2.5-VL a une couche COMPLÈTE toutes les huit
+            // (indices 7, 15, 
+… [44 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && python3 - <<'PY'\np='src/main.rs'; s=open(p).read()\n# la permutation doit vivre DANS la boucle des patchs, et `complete` doit être\n# calculé avant la rotation\nold = \"\"\"            let (ligne, colonne) = if complete … [1370 caractères tronqués]`
+
+  ```
+structure réparée
+    Finished `release` profile [optimized] target(s) in 0.01s
+tour : 32 couches × 256 patchs × 1280 · |sortie| = 244.3826 · 4 premières [0.1052, -0.0858, 0.3615, 0.15]
+projecteur : 64 groupes × 3584 valeurs, |sortie| = 465.8422, 4 premières [-1.6493, 0.0247, 0.2258, 0.2213]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='docs/plan-mla-vision.md'; s=open(p).read()\nadd = \"\"\"\n### La permutation colonne-majeur est IMPLÉMENTÉE (le dernier écart connu)\n\nSur les couches FENÊTRÉES, `clip.cpp` transpose la grille des unités de fusi … [2433 caractères tronqués]`
