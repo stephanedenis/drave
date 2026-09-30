@@ -96,9 +96,13 @@ def main():
                                       ctypes.POINTER(ctypes.c_ubyte)]
     bmp = mtmd.mtmd_bitmap_init(cote, cote, buf)
     print("bitmap :", "ok" if bmp else "ÉCHEC")
+    # Le marqueur du CONTEXTE, pas celui par défaut : c'est celui du modèle
+    # chargé, et c'est lui que la substitution de chaîne de `tokenize` attend.
+    mtmd.mtmd_get_marker.restype = ctypes.c_char_p
+    mtmd.mtmd_get_marker.argtypes = [ctypes.c_void_p]
+    marqueur = mtmd.mtmd_get_marker(ctx)
     mtmd.mtmd_default_marker.restype = ctypes.c_char_p
-    marqueur = mtmd.mtmd_default_marker()
-    print("marqueur d'image :", marqueur)
+    print("marqueur du contexte :", marqueur, "· par défaut :", mtmd.mtmd_default_marker())
     mtmd.mtmd_input_chunks_init.restype = ctypes.c_void_p
     mtmd.mtmd_input_chunks_init.argtypes = []
     chunks = mtmd.mtmd_input_chunks_init()

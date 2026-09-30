@@ -19859,3 +19859,94 @@ tokenize rc=2 · 0 morceaux
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/mtmd_etat2.txt <<'EOF'\n\n### libmtmd : état exact après ce tour\n\nTout ce qui précède `mtmd_tokenize` fonctionne, vérifié pas à pas :\n\n```\ncontexte mtmd : ok\nbitmap : ok\nmarqueur d'image : b'<__media__>'\nconteneur  … [2795 caractères tronqués]`
+
+  ```
+état exact documenté
+defd5fe vision : mtmd va jusqu'au tokenize, qui échoue (état exact et hypothèses)
+  ```
+
+### 🤖 Assistant
+
+⏵ Tour 15 : la référence mtmd va jusqu'au `tokenize`, qui lève une exception C++
+
+## Fait dans ce tour
+
+Les trois corrections identifiées au tour précédent ont été appliquées — `mtmd_input_chunks_init()` qui **rend** un pointeur, `mtmd_tokenize` qui reçoit le conteneur, et une image 84 × 84 conforme au minimum du modèle (`image_min_pixels = 6272`) — et le programme avance maintenant **pas à pas** jusqu'à la dernière étape :
+
+```
+contexte mtmd : ok
+bitmap : ok
+marqueur d'image : b'<__media__>'
+conteneur de morceaux : ok
+mtmd_tokenize: error: std::bad_alloc          (marqueur seul)
+mtmd_tokenize: error: basic_string::_M_replace (invite complète)
+tokenize rc=2 · 0 morceaux
+```
+
+Donc : modèle de texte chargé, projecteur chargé (519 tenseurs), contexte multimodal instancié, bitmap accepté, marqueur rendu par la bibliothèque elle-même. C'est **`mtmd_tokenize`** qui échoue, en levant une exception C++ au lieu de rendre un code d'erreur.
+
+Trois hypothèses sont écrites dans le plan, par ordre de plausibilité :
+1. **mélange de runtimes C++** — ollama embarque son propre `libstdc++`, l'appelant est le `python3` système ; écrire le programme en **C** est l'essai le moins coûteux ;
+2. un paramètre mal typé faute d'en-têtes ;
+3. un champ de `mtmd_context_params` non couvert par le sondage.
+
+`mtmd_encode_chunk` et `mtmd_get_output_embd` sont le dernier maillon : c'est cette comparaison qui trancherait la rotation 2-D et la fenêtre locale.
+
+## État
+
+| # | chantier | état |
+|---|---|---|
+| 1-4, 6 | aiguille · GPU (5 sous-items) · mémoire KV · rotation 16 k · hygiène | ✅ mesurés |
+| 5 | MLA ✅ (5,2e-7) · vision : 4 tranches validées, tour complète qui tourne, référence à un appel de la fin | en cours |
+
+`cargo test` 6/6, arbre propre, portes Qwen **19,3885** / gpt-oss **15,1757** intactes.
+
+L'objectif reste **actif**. Le prochain tour peut tenter le programme en C (hypothèse n° 1) — c'est une trentaine de lignes, et le chemin est balisé : charger le backend ggml explicitement, le modèle, `mtmd_init_from_file`, un bitmap, `mtmd_tokenize`, `mtmd_encode_chunk`, `mtmd_get_output_embd`.
+
+
+## Tour 25
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Réaliser les 6 nouveaux chantiers du projet qtrinet-core, dans l'ordre : (1) relancer le test de l'aiguille sur contexte long (remplissage varié en vrai texte, moins de sondes, réponses plus longues) sur un modèle capable, grâce au préremplissage par lots et au KV déporté ; (2) chemin GPU : dépaquetage vectorisé du noyau d'attention (13,2 ms/couche à 1 M en int4 vers ~3 ms), brancher MXFP4 dans le moteur avec une politique de résidence des experts, attention par lots sur GPU dans forward_lot, noyau de tête Q8_0 accéléré (AVX2 ou déport), et usage du second GPU ; (3) mémoire : pagination du cache KV côté CPU (25,77 Go réservés à ctx 1 M pour 512 jetons écrits) et test de l'hypothèse « clés en f16 avant quantification » pour l'écart int8 avec llama.cpp à 8 192 (+3,0 % contre +0,8 %) ; (4) rotation au-delà de 5 120 jetons (passe à 16 k) ; (5) structurel : MLA (aucun modèle local — construire un modèle MLA synthétique et valider contre une référence indépendante) et vision (poids Qwen2.5-VL et projecteur mmproj présents) ; (6) hygiène : réécrire la section « Ce qu'il faut faire ensuite » de REPRISE.md et y consigner les pièges QT_GPU/QT_GPU_TETE/QT_GPU_KV. Chaque chantier doit être implémenté, mesuré (portes de non-régression Qwen 19,3885 et gpt-oss 15,1757 sans QT_GPU), documenté dans le dépôt et commité."
+Round: 16/30
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='tools/vision_mtmd.py'; s=open(p).read()\ns = s.replace(\"\"\"    mtmd.mtmd_default_marker.restype = ctypes.c_char_p\n    marqueur = mtmd.mtmd_default_marker()\n    print(\"marqueur d'image :\", marqueur)\"\"\",\n … [776 caractères tronqués]`
+
+  ```
+marqueur du contexte utilisé
+--- vision hparams ---
+
+contexte mtmd : ok
+bitmap : ok
+marqueur du contexte : b'<__media__>' · par défaut : b'<__media__>'
+conteneur de morceaux : ok
+mtmd_tokenize: error: basic_string::_M_replace
+tokenize rc=2 · 0 morceaux
+  ```
+
+### 🤖 Assistant
+
+⏵ Piste sérieuse : `mtmd_tokenize` attend une STRUCT, pas une chaîne
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='tools/vision_mtmd.py'; s=open(p).read()\ns = s.replace(\"\"\"    mtmd.mtmd_tokenize.argtypes = [ctypes.c_void_p, ctypes.c_void_p,\n                                   ctypes.c_char_p, ctypes.POINTER(ctypes.c_void_ … [1417 caractères tronqués]`
+
+  ```
+structure d'entrée utilisée
+
+
+--- vision hparams ---
+
+contexte mtmd : ok
+bitmap : ok
+marqueur du contexte : b'<__media__>' · par défaut : b'<__media__>'
+conteneur de morceaux : ok
+mtmd_tokenize: error: basic_string::_M_replace
+tokenize rc=2 · 0 morceaux
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat >> docs/plan-mla-vision.md <<'EOF'\n\n### tokenize : deux hypothèses testées, aucune ne suffit\n\nAprès le sondage et les corrections (conteneur de morceaux rendu par\n`mtmd_input_chunks_init`, image 84 × 84 conforme à `image_min … [2297 caractères tronqués]`

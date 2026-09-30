@@ -6,13 +6,13 @@
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
 | Durée | 30.4 h |
-| Tours | 24 |
-| Messages | 1255 |
-| Appels d'outils | 1215 |
+| Tours | 25 |
+| Messages | 1260 |
+| Appels d'outils | 1218 |
 | Fichiers touchés | 39 |
-| Commandes | 946 |
+| Commandes | 949 |
 | Sous-agents | 1 |
-| Commits | 57 |
+| Commits | 58 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -73,6 +73,8 @@
 **Tour 23** — <goal_round> Objective: "Réaliser les 6 nouveaux chantiers du projet qtrinet-core, dans l'ordre : (1) relancer le test de l'aiguille sur contexte long (remplissage varié en vrai texte, moins de sondes, réponses plus longues) sur un modèle capable, grâce au préremplissage par lots et au KV déporté ; (2) chemin GPU : dépaquetage vectorisé du noyau d'attention (13,2 ms/couche à 1 M en int4 vers ~3 ms … [1492 caractères tronqués]
 
 **Tour 24** — <goal_round> Objective: "Réaliser les 6 nouveaux chantiers du projet qtrinet-core, dans l'ordre : (1) relancer le test de l'aiguille sur contexte long (remplissage varié en vrai texte, moins de sondes, réponses plus longues) sur un modèle capable, grâce au préremplissage par lots et au KV déporté ; (2) chemin GPU : dépaquetage vectorisé du noyau d'attention (13,2 ms/couche à 1 M en int4 vers ~3 ms … [1492 caractères tronqués]
+
+**Tour 25** — <goal_round> Objective: "Réaliser les 6 nouveaux chantiers du projet qtrinet-core, dans l'ordre : (1) relancer le test de l'aiguille sur contexte long (remplissage varié en vrai texte, moins de sondes, réponses plus longues) sur un modèle capable, grâce au préremplissage par lots et au KV déporté ; (2) chemin GPU : dépaquetage vectorisé du noyau d'attention (13,2 ms/couche à 1 M en int4 vers ~3 ms … [1492 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -1113,6 +1115,56 @@ L'objectif reste **actif** : les deux corrections sont écrites noir sur blanc d
 - bash — Try full prompt for tokenize
 - bash — Document exact mtmd state and commit
 
+**Synthèse produite :**
+
+⏵ Tour 15 : la référence mtmd va jusqu'au `tokenize`, qui lève une exception C++
+
+\## Fait dans ce tour
+
+Les trois corrections identifiées au tour précédent ont été appliquées — `mtmd_input_chunks_init()` qui **rend** un pointeur, `mtmd_tokenize` qui reçoit le conteneur, et une image 84 × 84 conforme au minimum du modèle (`image_min_pixels = 6272`) — et le programme avance maintenant **pas à pas** jusqu'à la dernière étape :
+
+```
+contexte mtmd : ok
+bitmap : ok
+marqueur d'image : b'<__media__>'
+conteneur de morceaux : ok
+mtmd_tokenize: error: std::bad_alloc          (marqueur seul)
+mtmd_tokenize: error: basic_string::_M_replace (invite complète)
+tokenize rc=2 · 0 morceaux
+```
+
+Donc : modèle de texte chargé, projecteur chargé (519 tenseurs), contexte multimodal instancié, bitmap accepté, marqueur rendu par la bibliothèque elle-même. C'est **`mtmd_tokenize`** qui échoue, en levant une exception C++ au lieu de rendre un code d'erreur.
+
+Trois hypothèses sont écrites dans le plan, par ordre de plausibilité :
+1. **mélange de runtimes C++** — ollama embarque son propre `libstdc++`, l'appelant est le `python3` système ; écrire le programme en **C** est l'essai le moins coûteux ;
+2. un paramètre mal typé faute d'en-têtes ;
+3. un champ de `mtmd_context_params` non couvert par le sondage.
+
+`mtmd_encode_chunk` et `mtmd_get_output_embd` sont le dernier maillon : c'est cette comparaison qui trancherait la rotation 2-D et la fenêtre locale.
+
+\## État
+
+| # | chantier | état |
+|---|---|---|
+| 1-4, 6 | aiguille · GPU (5 sous-items) · mémoire KV · rotation 16 k · hygiène | ✅ mesurés |
+| 5 | MLA ✅ (5,2e-7) · vision : 4 tranches validées, tour complète qui tourne, référence à un appel de la fin | en cours |
+
+`cargo test` 6/6, arbre propre, portes Qwen **19,3885** / gpt-oss **15,1757** intactes.
+
+L'objectif reste **actif**. Le prochain tour peut tenter le programme en C (hypothèse n° 1) — c'est une trentaine de lignes, et le chemin est balisé : charger le backend ggml explicitement, le modèle, `mtmd_init_from_file`, un bitmap, `mtmd_tokenize`, `mtmd_encode_chunk`, `mtmd_get_output_embd`.
+
+### Tour 25 — <goal_round> Objective: "Réaliser les 6 nouveaux chantiers du projet qtrinet-core, dans l'ordre : (1) relancer le test d … [1772 caractères tronqués]
+
+*3 appels d'outils.* Actions notables :
+
+- bash — Use context marker for tokenize
+- bash — Pass input struct to tokenize
+- bash — Document tokenize findings and commit
+
+**Synthèse produite :**
+
+⏵ Piste sérieuse : `mtmd_tokenize` attend une STRUCT, pas une chaîne
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -1205,7 +1257,7 @@ L'objectif reste **actif** : les deux corrections sont écrites noir sur blanc d
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 906 autres
+- … et 909 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1410,4 +1462,5 @@ L'objectif reste **actif** : les deux corrections sont écrites noir sur blanc d
 - vision : la structure de paramètres de libmtmd est sondée (l'ABI n'est plus un obstacle)  mtmd_context_params_default rend la structure par pointeur caché : on 
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/vision_etat.txt <<'EOF' ### libmtmd : où en est le programme de référence  Le programme `tools/
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/mtmd_etat2.txt <<'EOF'  ### libmtmd : état exact après ce tour  Tout ce qui précède `mtmd_token
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat >> docs/plan-mla-vision.md <<'EOF'  ### tokenize : deux hypothèses testées, aucune ne suffit  Après le
 

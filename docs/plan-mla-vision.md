@@ -399,3 +399,26 @@ Hypothèses, par ordre de plausibilité, pour la suite :
 Le reste du chemin (`mtmd_encode_chunk`, `mtmd_get_output_embd`) n'a pas encore
 été atteint — mais il est prêt, et c'est la comparaison qui trancherait la
 rotation 2-D et la fenêtre locale.
+
+### tokenize : deux hypothèses testées, aucune ne suffit
+
+Après le sondage et les corrections (conteneur de morceaux rendu par
+`mtmd_input_chunks_init`, image 84 × 84 conforme à `image_min_pixels = 6272`) :
+
+* passer le marqueur **du contexte** (`mtmd_get_marker`) plutôt que celui par
+  défaut : les deux valent `<__media__>`, aucun changement ;
+* passer une **structure** d'entrée `(text, add_special, parse_special)` au lieu
+  d'un `char *` : toujours `basic_string::_M_replace`, rc=2.
+
+L'erreur vient donc de plus loin dans l'appel — un en-tête `mtmd.h` trancherait
+en dix secondes ce que trois tours de rétro-ingénierie n'ont pas tranché. C'est
+le seul point qui bloque, et il ne bloque QUE la vérification : les quatre
+tranches du chemin image sont validées contre numpy (5,4e-7, 1,8e-6, 1,7e-6), la
+tour entière tourne, et le point d'injection des embeddings est en place.
+
+À tenter ensuite, dans l'ordre : (1) compiler le programme en **C** contre les
+mêmes bibliothèques (le mélange de runtimes C++ reste l'hypothèse la plus
+plausible) ; (2) retrouver la signature exacte de `mtmd_tokenize` dans une
+version de llama.cpp (le dépôt n'a pas de copie locale, mais la documentation en
+ligne la donne) ; (3) se passer de mtmd et prendre le modèle de vision comme
+référence en Python (coûteux, mais sans ABI).
