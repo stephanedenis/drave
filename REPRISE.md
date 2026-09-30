@@ -193,11 +193,11 @@ qui reste est classé par rentabilité mesurée.
    un second contexte CUDA et une règle de répartition.
 3. **Rotation au-delà de 5 120 jetons.** Le seuil mesuré (1,25 × la longueur
    déclarée) n'est qu'une borne basse : une passe à 16 k coûte ~1 h par régime.
-4. **MLA et vision.** MLA : aucun modèle MLA en GGUF sur cette machine — la voie
-   honnête est un modèle MLA **synthétique** (écrit à la main en GGUF) validé
-   contre une référence indépendante. Vision : les poids Qwen2.5-VL et le
-   projecteur `mmproj` sont présents, mais rien ne lit les patchs ; c'est une tour
-   de vision entière à écrire.
+4. ~~**MLA et vision.**~~ **MLA FAIT ET VALIDÉ** (modèle synthétique + référence
+   numpy : écart 5,2e-7). **Vision** : première tranche faite et validée
+   (embedding de patchs, écart 5,4e-7) ; restent la rotation 2-D, les 32 couches
+   avec attention locale une sur huit, le projecteur et l'injection des
+   embeddings — inventaire exact des tenseurs dans `docs/plan-mla-vision.md`.
 5. **Top-k dans le noyau d'attention.** `--attn-topk 256` AMÉLIORE la perplexité
    (234,88 contre 298,56 à 2 048) mais repasse aujourd'hui par le CPU : le noyau
    GPU ne le gère pas.

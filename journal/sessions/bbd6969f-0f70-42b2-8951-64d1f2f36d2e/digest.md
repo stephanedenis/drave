@@ -18710,3 +18710,93 @@ mode --tensors posé
 ⏵ Vision : structure réelle du projecteur relevée avec le lecteur du moteur
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='docs/plan-mla-vision.md'; s=open(p).read()\nold = \"\"\"Les tenseurs sont nommés `v.blk.N.*` (`v.blk.0.attn_out.bias` est le premier\nrelevé), et le fichier en contient 519. C'est donc bien la tour complète, pas\ … [2850 caractères tronqués]`
+
+  ```
+inventaire vision documenté
+a50a5a5 vision : inventaire exact des tenseurs (et deux corrections du plan)
+  ```
+
+### 🤖 Assistant
+
+⏵ Tour 5 : inventaire vision relevé ; le plan est corrigé par les faits
+
+## Fait dans ce tour
+
+**La vision n'est plus une supposition : elle est relevée.**
+
+J'ai ajouté au moteur un mode `--tensors` (nom, dimensions, type de chaque tenseur d'un GGUF) — un outil qui servira à tout chemin qu'on ne sait pas encore lire — et il a donné la structure exacte du projecteur :
+
+| tenseur | dimensions | rôle |
+|---|---|---|
+| `v.patch_embd.weight` **et** `.1` | [1280, 3, 14, 14] | **deux** convolutions de patchs |
+| `v.blk.N.attn_q/k/v/out.weight` | [1280, 1280] | **avec biais** (`attn_q.bias`…) |
+| `v.blk.N.ffn_gate/up.weight` | [3420, 1280] | MLP, **avec biais** |
+| `v.blk.N.ffn_down.weight` | [1280, 3420] | MLP |
+| `v.blk.N.ln1.weight`, `ln2.weight` | [1280] | LayerNorm |
+| `v.post_ln.weight` | [1280] | norme finale |
+| `mm.0.weight` | [5120, 5120] | projecteur : 5120 = 1280 × 4 → fusion 2 × 2 |
+| `mm.2.weight` | [3584, 5120] | sortie 3584 = largeur du modèle |
+
+Deux corrections au plan, toutes deux issues du relevé :
+
+1. **aucun `position_embd`** — Qwen2.5-VL n'ajoute pas de position absolue, il tourne ses patchs en 2-D (mRoPE). Mon plan initial en supposait un : c'était faux ;
+2. **les biais sont partout** (q, k, v, sortie, MLP) — l'erreur classique de ce dépôt, qui a déjà coûté 39,80 → 20,84 sur gpt-oss.
+
+Les 519 tenseurs couvrent la tour complète et son projecteur : le chemin image peut se construire sur ce fichier seul, sans le modèle de langage.
+
+## État
+
+`cargo test` 6/6, portes de non-régression intactes (le mode `--tensors` et le chemin MLA sont des ajouts, le seuil de rotation ne touche que les contextes > 5 120), arbre propre.
+
+**Cinq chantiers et demi sur six :** 1 (aiguille 12/12), 2 (cinq sous-items GPU), 3 (pagination + hypothèse f16 réfutée), 4 (rotation à 16 k : 35,18 contre 1 133,02, seuil porté à 4 ×), 6 (hygiène) sont clos ; le **5** a sa moitié MLA **validée** (5,2e-7 contre la référence numpy) et sa moitié vision **relevée et planifiée**, l'implémentation de la tour ViT restant à écrire — c'est le seul morceau ouvert.
+
+L'objectif reste **actif** pour ce dernier morceau : le prochain tour peut attaquer directement le pré-traitement d'image et l'embedding de patchs, dont les formes exactes sont maintenant dans `docs/plan-mla-vision.md`.
+
+
+## Tour 15
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Réaliser les 6 nouveaux chantiers du projet qtrinet-core, dans l'ordre : (1) relancer le test de l'aiguille sur contexte long (remplissage varié en vrai texte, moins de sondes, réponses plus longues) sur un modèle capable, grâce au préremplissage par lots et au KV déporté ; (2) chemin GPU : dépaquetage vectorisé du noyau d'attention (13,2 ms/couche à 1 M en int4 vers ~3 ms), brancher MXFP4 dans le moteur avec une politique de résidence des experts, attention par lots sur GPU dans forward_lot, noyau de tête Q8_0 accéléré (AVX2 ou déport), et usage du second GPU ; (3) mémoire : pagination du cache KV côté CPU (25,77 Go réservés à ctx 1 M pour 512 jetons écrits) et test de l'hypothèse « clés en f16 avant quantification » pour l'écart int8 avec llama.cpp à 8 192 (+3,0 % contre +0,8 %) ; (4) rotation au-delà de 5 120 jetons (passe à 16 k) ; (5) structurel : MLA (aucun modèle local — construire un modèle MLA synthétique et valider contre une référence indépendante) et vision (poids Qwen2.5-VL et projecteur mmproj présents) ; (6) hygiène : réécrire la section « Ce qu'il faut faire ensuite » de REPRISE.md et y consigner les pièges QT_GPU/QT_GPU_TETE/QT_GPU_KV. Chaque chantier doit être implémenté, mesuré (portes de non-régression Qwen 19,3885 et gpt-oss 15,1757 sans QT_GPU), documenté dans le dépôt et commité."
+Round: 6/30
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Vision : première tranche — embedding de patchs + référence numpy
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && python3 - <<'PY'\np='src/main.rs'; s=open(p).read()\ns = s.replace(\"\"\"    /// `--tensors` : liste les tenseurs du fichier\"\"\",\n\"\"\"    /// Banc vision : embedding de patchs, écrit en binaire pour comparaison\n    … [4117 caractères tronqués]`
+
+  ```
+banc vision posé
+    Finished `release` profile [optimized] target(s) in 0.01s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 900 ./qtrinet-core/target/release/qtrinet-core /home/stephane/FastNVMe/models/mmproj-Qwen2.5-VL-7B-Instruct-f16.gguf --banc-vision /tmp/vision_patch.bin 2>&1 | tail -4", "description": "Run vision patch embedding bench", "tim … [16 caractères tronqués]`
+
+  ```
+v.patch_embd.weight : sortie 1280 · entrée 3 · noyau 14×14
+4 patchs × 1280 canaux écrits dans /tmp/vision_patch.bin (|sortie| = 6.7559)
+premier patch, 4 premiers canaux : [-0.02613, -0.04087, 0.04828, -0.08782]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='qtrinet-core/src/main.rs'; s=open(p).read()\ns = s.replace(\"\"\"    let norme: f32 = out.iter().map(|v| v * v).sum::<f32>().sqrt();\"\"\",\n\"\"\"    // Les poids partent à côté : la référence numpy refait le CA … [3099 caractères tronqués]`
+
+  ```
+dump des poids ajouté
+    Finished `release` profile [optimized] target(s) in 19.43s
+4 patchs × 1280 canaux écrits dans /tmp/vision_patch.bin (|sortie| = 6.7559)
+premier patch, 4 premiers canaux : [-0.02613, -0.04087, 0.04828, -0.08782]
+patchs (4, 1280) · |référence| max 1.7769
+écart max relatif : 5.367e-07
+accord (bruit de virgule flottante)
+  ```
+
+### 🤖 Assistant
+
+⏵ Embedding de patchs validé : 5,4e-7 contre la référence numpy
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='docs/plan-mla-vision.md'; s=open(p).read()\nold = \"\"\"### Ce qu'il faut écrire, dans l'ordre\"\"\"\nnew = \"\"\"### ÉTAT : première tranche FAITE et validée (embedding de patchs)\n\n`--banc-vision` fait tourner … [3021 caractères tronqués]`

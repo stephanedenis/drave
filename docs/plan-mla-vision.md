@@ -172,6 +172,24 @@ image peut se construire sur ce fichier seul, sans le modèle de langage.
 l'attention est locale** — il faut la même fenêtre que llama.cpp, sinon les
 embeddings d'image divergent sans que rien ne le signale.
 
+### ÉTAT : première tranche FAITE et validée (embedding de patchs)
+
+`--banc-vision` fait tourner la convolution 14 × 14 du ViT sur une image 28 × 28
+déterministe (dégradé + carré central) et écrit les 4 patchs × 1 280 canaux ;
+`tools/vision_ref.py` refait le calcul en numpy à partir des mêmes poids. Le
+partage des rôles est le même que pour MLA : la référence refait la FORMULE,
+l'extraction des tenseurs étant vérifiée par `--tensors`.
+
+Mesure : **écart max relatif 5,4e-7** — le bruit de virgule flottante du moteur,
+comme pour MLA. La tranche est isolée à dessein : si l'embedding de patchs est
+faux, tout ce qui suit l'est aussi, et le comparer seul évite d'attribuer au
+modèle une erreur de découpage.
+
+Reste, dans l'ordre : la rotation 2-D (mRoPE) des patchs, les 32 couches avec
+l'attention locale une sur huit, la norme finale, le projecteur `mm.0`/`mm.2`
+(fusion 2 × 2), et enfin l'injection des embeddings dans le flux de jetons — le
+point d'architecture qui manque au moteur.
+
 ### Ce qu'il faut écrire, dans l'ordre
 
 1. **pré-traitement** : redimensionnement (le ViT de Qwen2.5-VL accepte des

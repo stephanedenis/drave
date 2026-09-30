@@ -6,13 +6,13 @@
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
 | Durée | 30.1 h |
-| Tours | 14 |
-| Messages | 1176 |
-| Appels d'outils | 1156 |
+| Tours | 15 |
+| Messages | 1182 |
+| Appels d'outils | 1160 |
 | Fichiers touchés | 38 |
-| Commandes | 889 |
+| Commandes | 893 |
 | Sous-agents | 1 |
-| Commits | 47 |
+| Commits | 48 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -53,6 +53,8 @@
 **Tour 13** — <goal_round> Objective: "Réaliser les 6 nouveaux chantiers du projet qtrinet-core, dans l'ordre : (1) relancer le test de l'aiguille sur contexte long (remplissage varié en vrai texte, moins de sondes, réponses plus longues) sur un modèle capable, grâce au préremplissage par lots et au KV déporté ; (2) chemin GPU : dépaquetage vectorisé du noyau d'attention (13,2 ms/couche à 1 M en int4 vers ~3 ms … [1491 caractères tronqués]
 
 **Tour 14** — <goal_round> Objective: "Réaliser les 6 nouveaux chantiers du projet qtrinet-core, dans l'ordre : (1) relancer le test de l'aiguille sur contexte long (remplissage varié en vrai texte, moins de sondes, réponses plus longues) sur un modèle capable, grâce au préremplissage par lots et au KV déporté ; (2) chemin GPU : dépaquetage vectorisé du noyau d'attention (13,2 ms/couche à 1 M en int4 vers ~3 ms … [1491 caractères tronqués]
+
+**Tour 15** — <goal_round> Objective: "Réaliser les 6 nouveaux chantiers du projet qtrinet-core, dans l'ordre : (1) relancer le test de l'aiguille sur contexte long (remplissage varié en vrai texte, moins de sondes, réponses plus longues) sur un modèle capable, grâce au préremplissage par lots et au KV déporté ; (2) chemin GPU : dépaquetage vectorisé du noyau d'attention (13,2 ms/couche à 1 M en int4 vers ~3 ms … [1491 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -654,7 +656,52 @@ L'objectif reste **actif** pour ce dernier morceau.
 
 **Synthèse produite :**
 
-⏵ Vision : structure réelle du projecteur relevée avec le lecteur du moteur
+⏵ Tour 5 : inventaire vision relevé ; le plan est corrigé par les faits
+
+\## Fait dans ce tour
+
+**La vision n'est plus une supposition : elle est relevée.**
+
+J'ai ajouté au moteur un mode `--tensors` (nom, dimensions, type de chaque tenseur d'un GGUF) — un outil qui servira à tout chemin qu'on ne sait pas encore lire — et il a donné la structure exacte du projecteur :
+
+| tenseur | dimensions | rôle |
+|---|---|---|
+| `v.patch_embd.weight` **et** `.1` | [1280, 3, 14, 14] | **deux** convolutions de patchs |
+| `v.blk.N.attn_q/k/v/out.weight` | [1280, 1280] | **avec biais** (`attn_q.bias`…) |
+| `v.blk.N.ffn_gate/up.weight` | [3420, 1280] | MLP, **avec biais** |
+| `v.blk.N.ffn_down.weight` | [1280, 3420] | MLP |
+| `v.blk.N.ln1.weight`, `ln2.weight` | [1280] | LayerNorm |
+| `v.post_ln.weight` | [1280] | norme finale |
+| `mm.0.weight` | [5120, 5120] | projecteur : 5120 = 1280 × 4 → fusion 2 × 2 |
+| `mm.2.weight` | [3584, 5120] | sortie 3584 = largeur du modèle |
+
+Deux corrections au plan, toutes deux issues du relevé :
+
+1. **aucun `position_embd`** — Qwen2.5-VL n'ajoute pas de position absolue, il tourne ses patchs en 2-D (mRoPE). Mon plan initial en supposait un : c'était faux ;
+2. **les biais sont partout** (q, k, v, sortie, MLP) — l'erreur classique de ce dépôt, qui a déjà coûté 39,80 → 20,84 sur gpt-oss.
+
+Les 519 tenseurs couvrent la tour complète et son projecteur : le chemin image peut se construire sur ce fichier seul, sans le modèle de langage.
+
+\## État
+
+`cargo test` 6/6, portes de non-régression intactes (le mode `--tensors` et le chemin MLA sont des ajouts, le seuil de rotation ne touche que les contextes > 5 120), arbre propre.
+
+**Cinq chantiers et demi sur six :** 1 (aiguille 12/12), 2 (cinq sous-items GPU), 3 (pagination + hypothèse f16 réfutée), 4 (rotation à 16 k : 35,18 contre 1 133,02, seuil porté à 4 ×), 6 (hygiène) sont clos ; le **5** a sa moitié MLA **validée** (5,2e-7 contre la référence numpy) et sa moitié vision **relevée et planifiée**, l'implémentation de la tour ViT restant à écrire — c'est le seul morceau ouvert.
+
+L'objectif reste **actif** pour ce dernier morceau : le prochain tour peut attaquer directement le pré-traitement d'image et l'embedding de patchs, dont les formes exactes sont maintenant dans `docs/plan-mla-vision.md`.
+
+### Tour 15 — <goal_round> Objective: "Réaliser les 6 nouveaux chantiers du projet qtrinet-core, dans l'ordre : (1) relancer le test d … [1771 caractères tronqués]
+
+*4 appels d'outils.* Actions notables :
+
+- bash — Add patch embedding bench
+- bash — Run vision patch embedding bench
+- bash — Compare patch embedding with numpy reference
+- bash — Document and commit vision first slice
+
+**Synthèse produite :**
+
+⏵ Embedding de patchs validé : 5,4e-7 contre la référence numpy
 
 ## 3. Travail accompli
 
@@ -747,7 +794,7 @@ L'objectif reste **actif** pour ce dernier morceau.
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 849 autres
+- … et 853 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -942,4 +989,5 @@ L'objectif reste **actif** pour ce dernier morceau.
 - vision : relevé du projecteur mmproj (paramètres et nommage réels)  Le fichier est en architecture \`clip\` et contient la tour COMPLÈTE (519 tenseurs, \`v.blk.
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p='REPRISE.md'; s=open(p).read() old = "| 2 | seuil de rotation YaRN | **fait, seuil corr
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p='docs/plan-mla-vision.md'; s=open(p).read() old = """Les tenseurs sont nommés `v.blk.N.
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p='docs/plan-mla-vision.md'; s=open(p).read() old = """### Ce qu'il faut écrire, dans l'o
 

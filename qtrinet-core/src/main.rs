@@ -37,6 +37,7 @@ fn main() {
     // d'options, donc les mêmes drapeaux.
     let opt = analyser(&args);
     let _ = MODELE.set(args[1].clone());
+    if let Some(f) = opt.banc_vision.clone() { run_banc_vision(&f); return; }
     if opt.tensors { run_tensors(); return; }
     if let Some(f) = opt.banc_mla.clone() { run_banc_mla(opt, &f); return; }
     if opt.banc_kv > 0 { run_banc_kv(opt); return; }
@@ -324,6 +325,9 @@ struct Options {
     /// Banc MLA : écrit les logits `(n_pos × vocab)` en f32 pour les comparer à
     /// la référence numpy du modèle synthétique.
     banc_mla: Option<String>,
+    /// Banc vision : embedding de patchs, écrit en binaire pour comparaison
+    /// avec la référence numpy.
+    banc_vision: Option<String>,
     /// `--tensors` : liste les tenseurs du fichier (nom, dimensions, type) et
     /// s'arrête. Sert à préparer un chemin qu'on ne sait pas encore lire — le
     /// projecteur de vision, par exemple.
@@ -399,6 +403,7 @@ fn analyser(args: &[String]) -> Options {
             "--banc-kv" => { o.banc_kv = suivant(i).parse().unwrap(); 2 }
             "--banc-mla" => { o.banc_mla = Some(suivant(i).clone()); 2 }
             "--tensors" => { o.tensors = true; 1 }
+            "--banc-vision" => { o.banc_vision = Some(suivant(i).clone()); 2 }
             "--ids" => { o.ids = suivant(i).split(',')
                             .filter_map(|s| s.trim().parse().ok()).collect(); 2 }
             "--ids-file" => { o.ids_file = Some(suivant(i).clone()); 2 }
@@ -798,6 +803,83 @@ fn mdl_cfg_vocab(path: &str) -> Option<usize> {
 /// mesure (23 → 159 ms) : sans un banc isolé, on ne sait pas si un changement
 /// de noyau aide, la mesure par jeton mélangeant tête, attention et
 /// échantillonnage.
+/// **Première tranche du chemin image** : l'embedding de patchs.
+///
+/// Le ViT de Qwen2.5-VL commence par une convolution 14 × 14 sur une image
+/// 28 × 28 (deux patchs par côté, la taille minimale d'une fusion 2 × 2). Cette
+/// tranche est isolée à dessein : si l'embedding de patchs est faux, tout ce qui
+/// suit l'est aussi, et le comparer seul évite d'attribuer au modèle une erreur
+/// de découpage.
+fn run_banc_vision(sortie: &str) {
+    use std::io::Write;
+    let path = &modele_chemin();
+    let g = Gguf::open(path).expect("ouverture du GGUF");
+    let Some(t) = g.tensor("v.patch_embd.weight") else {
+        println!("pas de v.patch_embd.weight dans ce fichier");
+        return;
+    };
+    // dims du moteur : (sortie, entrée, ky, kx)
+    let (cout, cin, ky, kx) = (t.dims[0] as usize, t.dims[1] as usize,
+                               t.dims[2] as usize, t.dims[3] as usize);
+    println!("v.patch_embd.weight : sortie {cout} · entrée {cin} · noyau {ky}×{kx}");
+    let w = g.dequant("v.patch_embd.weight");
+    assert_eq!(w.len(), cout * cin * ky * kx, "poids de patch inattendus");
+    // Image 28 × 28 déterministe : dégradé + carré central, pour que la
+    // référence numpy puisse la reconstruire sans lire de fichier.
+    let (cote, cotes) = (28usize, 2usize);
+    let mut img = vec![0f32; cin * cote * cote];
+    for y in 0..cote {
+        for x in 0..cote {
+            let carre = x >= 10 && x < 18 && y >= 10 && y < 18;
+            for ic in 0..cin {
+                let v = if carre { 1.0 }
+                        else { (x as f32 + y as f32 + ic as f32) / (2.0 * cote as f32) };
+                img[(ic * cote + y) * cote + x] = v;
+            }
+        }
+    }
+    // Convolution : une sortie par position de patch, sans rembourrage.
+    let n_patch_cote = (cote - ky) / kx + 1;
+    let n_patch = n_patch_cote * n_patch_cote;
+    let mut out = vec![0f32; n_patch * cout];
+    for py in 0..n_patch_cote {
+        for px in 0..n_patch_cote {
+            let p = py * n_patch_cote + px;
+            for c in 0..cout {
+                let mut acc = 0f32;
+                for ic in 0..cin {
+                    for yy in 0..ky {
+                        for xx in 0..kx {
+                            let v = img[(ic * cote + py * ky + yy) * cote + px * kx + xx];
+                            acc += w[((c * cin + ic) * ky + yy) * kx + xx] * v;
+                        }
+                    }
+                }
+                out[p * cout + c] = acc;
+            }
+        }
+    }
+    let mut f = std::io::BufWriter::new(std::fs::File::create(sortie).expect("création"));
+    f.write_all(&(n_patch as i32).to_le_bytes()).unwrap();
+    f.write_all(&(cout as i32).to_le_bytes()).unwrap();
+    for v in out.iter() { f.write_all(&v.to_le_bytes()).unwrap(); }
+    // Les poids partent à côté : la référence numpy refait le CALCUL, pas
+    // l'extraction du GGUF (la lecture des tenseurs est vérifiée par --tensors).
+    {
+        let mut fp = std::io::BufWriter::new(
+            std::fs::File::create(format!("{sortie}.poids")).expect("création des poids"));
+        for v in [(cout as i32), (cin as i32), (ky as i32), (kx as i32)] {
+            fp.write_all(&v.to_le_bytes()).unwrap();
+        }
+        for v in w.iter() { fp.write_all(&v.to_le_bytes()).unwrap(); }
+    }
+    let norme: f32 = out.iter().map(|v| v * v).sum::<f32>().sqrt();
+    println!("{n_patch} patchs × {cout} canaux écrits dans {sortie} (|sortie| = {norme:.4})");
+    println!("premier patch, 4 premiers canaux : {:?}",
+             &out[..4.min(out.len())].iter().map(|v| (v * 1e5).round() / 1e5).collect::<Vec<_>>());
+    let _ = cotes;
+}
+
 /// Liste les tenseurs d'un GGUF : nom, dimensions, type, taille. Utile pour
 /// écrire un chemin de lecture (vision) sans deviner les noms.
 fn run_tensors() {
