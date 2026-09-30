@@ -637,12 +637,27 @@ impl Gpu {
         if q.len() % (m.n_kv * m.hd) != 0 { return false; }
         if n == 0 || n > m.capacite { return false; }
         let besoin = m.n_kv * rep * n;
+        // Le tampon de scores est le plus gros du dépôt : nh × n × 4 octets PAR
+        // COUCHE — 56 Mo à 1 M pour 14 têtes, 9,2 Go pour gpt-oss. Le plan le
+        // déclarait « trop » et il n'est budgété nulle part : une allocation qui
+        // échoue faisait retomber le top-k sur le CPU (~100× plus lent) sans un
+        // mot. Ici il se refuse explicitement, et on le dit.
+        if besoin * 4 > self.memoire_libre / 4 {
+            eprintln!("[topk] scores refusés : {:.2} Go par couche pour {} têtes × {} clés \
+({:.2} Go libres) — repli CPU", (besoin * 4) as f64 / 1e9, m.n_kv * rep, n,
+                      self.memoire_libre as f64 / 1e9);
+            return false;
+        }
         unsafe {
             if m.scores_cap < besoin {
                 if m.scores_dev != 0 { cuMemFree_v2(m.scores_dev); }
                 m.scores_dev = 0;
                 m.scores_cap = 0;
-                if cuMemAlloc_v2(&mut m.scores_dev, besoin * 4) != 0 { return false; }
+                if cuMemAlloc_v2(&mut m.scores_dev, besoin * 4) != 0 {
+                    eprintln!("[topk] allocation des scores impossible : {:.2} Go par couche",
+                              (besoin * 4) as f64 / 1e9);
+                    return false;
+                }
                 m.scores_cap = besoin;
             }
             let mut p_k = m.k;
@@ -688,11 +703,11 @@ impl Gpu {
                 eprintln!("{}", erreur(rc, "lancement attn_scores (sans relecture)"));
                 return false;
             }
-            // Pas de synchronisation explicite : la copie DtoH de l'appel
-            // suivant (ou la lecture de l'histogramme) la force. En revanche on
-            // ne peut PAS mesurer le noyau seul sans elle — c'est pourquoi la
-            // mesure du chemin moteur inclut la première lecture qui suit.
-            cuCtxSynchronize();
+            // Aucune synchronisation ici : le premier appel qui suit fait une
+            // copie DtoH bloquante (histogramme, comptes ou sélection), et
+            // l'ordre du flux suffit. Le `cuCtxSynchronize()` qui traînait là
+            // contredisait son propre commentaire et coûtait un vidage de
+            // pipeline par couche et par jeton (relevé par un relecteur).
         }
         true
     }

@@ -1361,6 +1361,10 @@ impl KvCache {
     }
 }
 
+/// Un seul message pour un échec de la chaîne top-k déportée, quel que soit le
+/// nombre de couches et de jetons (voir la branche `DRAVE_GPU_TOPK`).
+static TOPK_GPU_ECHEC: std::sync::atomic::AtomicBool = std::sync::atomic::AtomicBool::new(false);
+
 impl Model {
     pub fn load(path: &str, ctx: usize, n_threads: usize, dense: bool, keep: f32,
                 auto: bool, q4: u8, b6: u8) -> Model {
@@ -3302,6 +3306,12 @@ dynamique de {dyn_:.3e} (relatif {:.2e})", mx / dyn_.max(1e-9));
                         // d'un facteur n/k selon le drapeau, à calcul identique.
                         *attn_events += (nh * k) as u64;
                         fait_en_gpu = true;
+                    } else if !TOPK_GPU_ECHEC.swap(true, std::sync::atomic::Ordering::Relaxed) {
+                        // Un échec par couche et par jeton ferait des milliers de
+                        // lignes : on le dit UNE fois, et le repli CPU est
+                        // silencieux ensuite (les raisons, elles, sont imprimées
+                        // par le noyau fautif).
+                        eprintln!("[topk] chaîne déportée en échec : repli CPU (message unique)");
                     }
                 }
             }

@@ -35906,3 +35906,30 @@ REPRISE.md ok
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cargo test --release --manifest-path drave-core/Cargo.toml 2>&1 | tail -2 && git add -A && git commit -q -m \"Plan et REPRISE : l'étape 6 est verte, et la prochaine étape est la FUSION de la chaîne, pas un noyau de plus\" && git log  … [90 caractères tronqués]`
+
+  ```
+test result: ok. 17 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.09s
+
+b58f441 Plan et REPRISE : l'étape 6 est verte, et la prochaine étape est la FUSION de la chaîne, pas un noyau de plus
+18:59:45
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/gpu.rs'; s=open(p).read()\ndef rep(v,n,nom):\n    global s\n    assert s.count(v)==1, f\"{nom}::{s.count(v)}\"\n    s=s.replace(v,n,1)\n\n# (c) la synchro n'est pas nécessaire : la copie qui suit f … [5113 caractères tronqués]`
+
+  ```
+gpu.rs : synchro + budget
+model.rs : message unique
+build
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && DRAVE_GPU=1 timeout 300 ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q4_0.gguf --banc-topk 4096 2>&1 | grep -E \"étape 5|noyau 3|ensembles\" | head -4; echo \"=== A/B ctx 2048 limit 256 ===\"; for mode in cpu gpu; do echo -n … [600 caractères tronqués]`
+
+  ```
+ensembles identiques au CPU : 14/14 lignes · différence symétrique 0 indices
+    noyau 3 (softmax sur k + Σ w·V) : GPU 0.07 ms · CPU 0.71 ms · écart max 5.960e-8 sur 1.244e-1 (relatif 4.79e-7)
+=== A/B ctx 2048 limit 256 ===
+cpu : perplexité 17.4315 sur 255 tokens
+gpu : perplexité 17.4310 sur 255 tokens
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -F - <<'EOF' && git log --oneline -1\nTop-k déporté : une synchro en trop, un budget de scores, un échec dit une seule fois\n\nTrois suites de la relecture, toutes dans le sens du plan (« supprimer deux\na … [1006 caractères tronqués]`
