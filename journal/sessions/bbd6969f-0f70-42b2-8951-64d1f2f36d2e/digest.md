@@ -35017,3 +35017,354 @@ REPRISE.md:16:`drave-core` est un moteur d'inférence Rust (~13 168 lignes, `std
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rn \"12 947\\|12 995\\|12 870\" --include=\"*.md\" . | grep -v journal/ | head -5; git add -A && git commit -q -m \"Compteur de lignes Rust unifié : 13 168 (un seul chiffre, mesuré, dans README ×2 et REPRISE)\" && git log --one … [57 caractères tronqués]`
+
+  ```
+1f53667 Compteur de lignes Rust unifié : 13 168 (un seul chiffre, mesuré, dans README ×2 et REPRISE)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat /tmp/portes_finales.log 2>/dev/null; date +%H:%M:%S", "description": "Check final gates"}`
+
+  ```
+=== portes finales (binaire de 19h10) ===
+Qwen2.5-0.5B Q8_0 ctx 256 (attendu 19,3885) : 18:23:36
+  ```
+
+### 🤖 Assistant
+
+⏵ Mesure du chemin moteur (sans relecture des scores) pour l'étape 5 du plan
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/gpu.rs'; s=open(p).read()\nancre = \"\"\"    /// **Histogramme d'un octet des scores** (noyau 2a, `docs/plan-gpu-topk.md`).\"\"\"\nmethode = '''    /// **Scores seuls, SANS relecture** : le chemin  … [4118 caractères tronqués]`
+
+  ```
+méthode ajoutée
+build
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/main.rs'; s=open(p).read()\nancre = \"\"\"    // Second passage avec un k PLUS GRAND, dans le MÊME processus : c'est le\"\"\"\nneuf = \"\"\"    // ------------------- étape 5 : ce que coûtera le ch … [4523 caractères tronqués]`
+
+  ```
+étape 5 posée
+build
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat /tmp/portes_finales.log; echo; DRAVE_GPU=1 timeout 900 ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q4_0.gguf --banc-topk 262144 2>&1 | tail -6", "description": "Check gates and run step 5 measurement", "timeoutMs": 1000 … [4 caractères tronqués]`
+
+  ```
+=== portes finales (binaire de 19h10) ===
+Qwen2.5-0.5B Q8_0 ctx 256 (attendu 19,3885) : perplexité 25.0052 sur 2040 tokens
+gpt-oss-120b MXFP4 ctx 256 dense (attendu 15,1757) : 
+    → conforme au critère du plan pour la sortie (1e-6)
+    étape 5 — 14 lignes × 262144 clés :
+      chaîne top-k GPU sans relecture des scores :     1.54 ms
+      attention COMPLÈTE sur CPU (14 fils)   :   167.87 ms  (×109.2)
+      coût de la relecture des scores (banc seul) :   107.72 ms
+    second passage k = 512, mêmes tampons : 14/14 lignes · 0.30 ms (0.43 ms de seuil) · cases non écrites 0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && (./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf --ppl /tmp/wt2_ids.txt --ctx 256 --abits 16 --threads 16 --limit 512 2>&1 | grep -E \"510 tokens|perplexité [0-9]\" ; echo \"--- gpt-oss ---\"; ./drave-core/target/rele … [295 caractères tronqués]`
+
+  ```
+510 tokens notés — perplexité cumulée 19.388  (20.5 tok/s)  [fenêtre 2 : 255 notés, PPL 21.565]
+=== perplexité 19.3885 sur 510 tokens (0 événements, 24.9 s) ===
+--- gpt-oss ---
+     510 tokens notés — perplexité cumulée 15.176  (5.2 tok/s)  [fenêtre 2 : 255 notés, PPL 16.792]
+=== perplexité 15.1757 sur 510 tokens (0 événements, 98.3 s) ===
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && DRAVE_GPU=1 timeout 900 ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q4_0.gguf --banc-topk 262144 2>&1 | tail -8", "description": "Clean step 5 measurement at 262k", "timeoutMs": 1000000}`
+
+  ```
+→ l'ensemble retenu est le MÊME que celui du CPU, et l'ordre est celui qui est écrit dans le noyau
+    noyau 3 (softmax sur k + Σ w·V) : GPU 0.07 ms · CPU 1.32 ms · écart max 3.725e-8 sur 1.382e-1 (relatif 2.70e-7)
+    → conforme au critère du plan pour la sortie (1e-6)
+    étape 5 — 14 lignes × 262144 clés :
+      chaîne top-k GPU sans relecture des scores :     1.25 ms
+      attention COMPLÈTE sur CPU (14 fils)   :   126.72 ms  (×101.6)
+      coût de la relecture des scores (banc seul) :     5.41 ms
+    second passage k = 512, mêmes tampons : 14/14 lignes · 0.30 ms (0.47 ms de seuil) · cases non écrites 0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && nohup bash -c 'cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && DRAVE_GPU=1 ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q4_0.gguf --banc-topk 1000000 > /tmp/banc_topk_1M.log 2>&1; echo FINI >> /tmp/banc_topk_1M.log' >  … [104 caractères tronqués]`
+
+  ```
+1M lancé
+               total        used        free      shared  buff/cache   available
+Mem:             125          11          60           1          56         114
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 90; tail -12 /tmp/banc_topk_1M.log", "description": "Check 1M bench progress", "timeoutMs": 120000}`
+
+  ```
+collecte GPU     0.95 ms · CPU tri complet  1653.52 ms (1744.4× plus rapide)
+    ensembles identiques au CPU : 14/14 lignes · différence symétrique 0 indices
+    ordre documenté (au-dessus puis égaux, croissants) : 14/14 lignes · doublons 0 · hors bornes 0 · cases non écrites 0
+    → l'ensemble retenu est le MÊME que celui du CPU, et l'ordre est celui qui est écrit dans le noyau
+    noyau 3 (softmax sur k + Σ w·V) : GPU 0.07 ms · CPU 0.96 ms · écart max 7.451e-8 sur 1.249e-1 (relatif 5.97e-7)
+    → conforme au critère du plan pour la sortie (1e-6)
+    étape 5 — 14 lignes × 1000000 clés :
+      chaîne top-k GPU sans relecture des scores :     3.90 ms
+      attention COMPLÈTE sur CPU (14 fils)   :   539.89 ms  (×138.3)
+      coût de la relecture des scores (banc seul) :    15.59 ms
+    second passage k = 512, mêmes tampons : 14/14 lignes · 0.78 ms (0.95 ms de seuil) · cases non écrites 0
+FINI
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -E \"4 passes|k-ième|collecte GPU|CPU  tri|écart max\" /tmp/banc_topk_1M.log | head -8; echo \"=== modèle : la condition du miroir ===\"; sed -n '3140,3175p' drave-core/src/model.rs", "description": "Read 1M results and model.rs … [12 caractères tronqués]`
+
+  ```
+écart max 1.788e-7 sur une dynamique de 9.346e-1 (relatif 1.91e-7)
+    CPU  tri + comptage :   401.05 ms
+    GPU  4 passes d'histogramme :     0.98 ms  (409.0× plus rapide)
+    k-ième score identique au bit près : 14/14 lignes (écart entier max 0)
+    k-ième score qui change entre scores CPU et GPU : 4/14 lignes (attendu : noyau 1 à 2e-7)
+    collecte GPU     0.95 ms · CPU tri complet  1653.52 ms (1744.4× plus rapide)
+    noyau 3 (softmax sur k + Σ w·V) : GPU 0.07 ms · CPU 0.96 ms · écart max 7.451e-8 sur 1.249e-1 (relatif 5.97e-7)
+=== modèle : la condition du miroir ===
+            // ---- chemin GROUPÉ par tête KV (attention complète sans top-k) ----
+            // Mesuré : « attention » croît exactement linéairement avec le
+            // contexte (0,88 / 1,91 / 3,20 ms à 64 / 128 / 256) — c'est la
+            // relecture du cache KV, pas le calcul. Or `rep` têtes de requête
+            // partagent une même tête KV : la boucle par tête relisait donc les
+            // mêmes clés `rep` fois (7 ici). En parcourant les clés une fois par
+            // groupe et en tenant `nh` scores, on divise ce trafic par `rep`.
+            // L'arithmétique par tête est inchangée et dans le mê
+… [1571 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '3175,3260p' drave-core/src/model.rs", "description": "Read CPU top-k attention path"}`
+
+  ```
+kvc.cle(kvh, t, &mut kd);
+                        for hh in h0..h1 {
+                            let qh = &q[hh * hd..(hh + 1) * hd];
+                            sc2[hh * ctx + t] = point(qh, &kd) * scale;
+                        }
+                    }
+                }
+                self.prof[4] += t_scores.elapsed().as_secs_f64();
+                let t_soft = Instant::now();
+                for kvh in 0..nkv {
+                    let h0 = kvh * rep;
+                    let h1 = (h0 + rep).min(nh);
+                    for hh in h0..h1 {
+                        let row = &mut sc2[hh * ctx..hh * ctx + n];
+                        let mut mx = f32::NEG_INFINITY;
+                        for &v in row.iter() { if v > mx { mx = v; } }
+                        let puits = lay.sinks.as_ref().map(|s| s[hh]);
+                        if let Some(s) = puits { if s > mx { mx = s; } }
+                        let mut sum = 0f32;
+                        for v in row.iter_mut() { let e = (*v - mx).exp(); *v = e; sum += e; }
+                        if let Some(s) = puits { sum += (s - mx).exp(); }
+                        let inv = 1.0 / sum;
+                        for v in row.iter_mut() { *v *= 
+… [3551 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '3225,3232p' drave-core/src/model.rs && grep -n \"for hh in 0..(if groupe\" drave-core/src/model.rs && grep -n \"let fen\\|let nkv\\|let nh\\b\" drave-core/src/model.rs | sed -n '1,12p'", "description": "Locate insertion point … [16 caractères tronqués]`
+
+  ```
+// fenêtre glissante : seules les clés de la fenêtre sont notées,
+                // plus quelques puits au début (leur attention sert de drain).
+                let nw = pos + 1;
+                let lo = if fen > 0 && nw > fen {
+                    nw - fen
+                } else { 0 };
+                let ns = if lo > 0 { self.attn_sinks.min(lo) } else { 0 };
+                // les puits sont NOTÉS comme les autres : leur donner un score
+3219:            for hh in 0..(if groupe || fait_en_gpu { 0 } else { nh }) {
+1554:        let fenetre = g.cfg("attention.sliding_window").and_then(|m| m.as_u64()).unwrap_or(0) as usize;
+1692:                let nh = cfg.n_head;
+2350:        let nh = self.cfg.n_head;
+2351:        let nkv = self.cfg.n_kv_head;
+2515:                let fen = if self.attn_window == 0 { 0 }
+2998:        let nh = cfg.n_head;
+2999:        let nkv = cfg.n_kv_head;
+3050:            let fen = if self.attn_window == 0 { 0 }
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '3040,3060p' drave-core/src/model.rs && echo \"=== 3205-3222 ===\" && sed -n '3205,3222p' drave-core/src/model.rs", "description": "Read variables in the forward path"}`
+
+  ```
+// `0..n_layer` : un nœud qui reçoit un flux reprend à SA première couche.
+        // La boucle partait de zéro — le pilote calculait donc les 24 couches,
+        // envoyait l'état final, et le pair les recalculait toutes par-dessus :
+        // perplexité répartie 798,3 au lieu de 18,2. `forward_lot` et
+        // `forward_mla` respectaient déjà la plage ; `forward` était l'exception.
+        for l in self.couche_debut..self.couche_fin {
+            let lay = &layers[l];
+            // Fenêtre EFFECTIVE de cette couche : le motif déclaré (gpt-oss :
+            // une couche sur deux en attention complète) prime sur le réglage
+            // global. Lue en champs directs : `self` est déjà déstructuré.
+            let fen = if self.attn_window == 0 { 0 }
+                      else if self.swa_pattern <= 1 { self.attn_window }
+                      else if l % self.swa_pattern < self.swa_pattern - 1 { self.attn_window }
+                      else { 0 };
+            let tm = Instant::now();
+            Self::rmsnorm(&x, &lay.attn_norm, cfg.eps, &mut hn);
+            if self.flux_force.is_some() {
+                // Diagnostic : comparer ce que la trace impose à ce que le
+            
+… [1109 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/model.rs'; s=open(p).read()\nvieux = \"\"\"            for hh in 0..(if groupe || fait_en_gpu { 0 } else { nh }) {\n                let kvh = hh / rep;\n                let qh = &q[hh * hd..(hh + 1 … [3571 caractères tronqués]`
+
+  ```
+branchement posé
+build
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== A : CPU (attn-topk 256) ===\" && /usr/bin/time -f \"%e s\" ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf --ppl /tmp/ids_qwen_long.txt --ctx 2048 --limit 1024 --dense --threads 16 --attn-topk 256 2>&1 | gr … [108 caractères tronqués]`
+
+  ```
+=== A : CPU (attn-topk 256) ===
+[modele] 24 couches chargées en 2.619313615s — listes 0.00 Go , 16 threads
+=== perplexité 9.4167 sur 1023 tokens (0 événements, 38.7 s) ===
+41.59 s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== B : GPU (top-k déporté) ===\" && DRAVE_GPU=1 DRAVE_GPU_KV=1 DRAVE_GPU_TOPK=1 /usr/bin/time -f \"%e s\" ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf --ppl /tmp/ids_qwen_long.txt --ctx 2048 --limit 1024 -- … [153 caractères tronqués]`
+
+  ```
+=== B : GPU (top-k déporté) ===
+[gpu] KV déporté : 12 couches sur GPU 1, 0.03 Go ici (16.17 Go libres)
+[gpu] KV déporté : 12 couches sur GPU 0, 0.03 Go ici (15.12 Go libres)
+[gpu] KV déporté : 0.05 Go au total pour 24 couches
+=== perplexité 9.4162 sur 1023 tokens (0 événements, 39.6 s) ===
+41.45 s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date +%H:%M:%S && nohup bash -c '\ncd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\nD=./drave-core/target/release/drave\nM=models/Qwen2.5-0.5B-Q8_0.gguf\nI=/tmp/ids_qwen_long.txt\nJ=/tmp/topk_crossover.log\n: > $J\nfor ctx in 2048 … [616 caractères tronqués]`
+
+  ```
+lancé
+18:34:15
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rn \"DRAVE_GPU_KV\" --include=\"*.md\" . | grep -v journal/ | grep -v sprints/ | head -8", "description": "Find env var documentation"}`
+
+  ```
+./reports/rapport-drapeaux-ignores.md:113:| `DRAVE_GPU_TETE` · `DRAVE_GPU_KV` · `DRAVE_GPU_EXPERTS` · `DRAVE_GPU_EXPERTS_GO` | `Model::load` : 1391, 1413, 1505, 1508 | Inutiles sans `DRAVE_GPU` ; sans objet en BK/GB (bancs dédiés) | — |
+./reports/rapport-coherence-docs.md:148:| 77 | `REPRISE.md:229-238` (table `DRAVE_*`) | `DRAVE_GPU_TETE`, `DRAVE_GPU_KV`, `DRAVE_KV_*`, `DRAVE_YARN*` | toutes présentes dans le code, et le piège « sans `DRAVE_GPU` rien ne s'exécute » est réel | OK |
+./reports/rapport-placement-bits-kv.md:137:| contexte long **avec** `DRAVE_GPU_KV=1` | **int8/int8** (28 %, +3,04 %) ou f32/f32 | le miroir exige une disposition homogène ; il divise le temps de l'attention par 40 (43 ms contre 1,7 s par jeton à 262 k clés) |
+./docs/contexte-long.md:104:| E4 | **KV déporté sur les 2 GPU** (pagination, préchargement) | **fait** : noyau `attn_kv_*` (tuiles de 32 clés en mémoire partagée, une passe par (tête KV, tranche), recombinaison + puits), miroir VRAM du cache (`DRAVE_GPU_KV=1`) — mesuré **×12 à ×73** sur l'attention selon le format, PPL identique ; voir §4.ter | décodage à 1 M borné par la VRAM et non par la RAM | moyen |
+./docs/contexte-long.md:272:### Dans le moteu
+… [315 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '265,300p' docs/contexte-long.md", "description": "Read GPU env var section"}`
+
+  ```
+coïncident — et écart de 4e-1 sinon. Elle passe maintenant par la mémoire
+   partagée ;
+2. les partiels n'étaient **pas indexés par tête KV** : les blocs d'une même
+   tranche s'écrivaient au même endroit, et 7 têtes sur 14 restaient à zéro ;
+3. les **échelles** du KV quantifié étaient indexées en éléments au lieu d'être
+   indexées par vecteur (`vec * nb + i/32`) : écart de 7e7 en int8.
+
+### Dans le moteur (`DRAVE_GPU=1 DRAVE_GPU_KV=1`)
+
+Les DEUX variables sont nécessaires : c'est `DRAVE_GPU` qui ouvre le pilote (`gpu::instance`),
+`DRAVE_GPU_KV` qui demande le miroir. Avec la seule seconde, il ne se passe rien — et
+rien ne le dit, d'où la note.
+
+Le cache est recopié en VRAM par **tranches contiguës** (une copie par couche et
+par tête KV et par lot, pas une par vecteur), et l'attention par jeton emprunte
+le noyau dès que la couche est en attention complète (ni fenêtre ni top-k). Le
+chemin par lots garde le CPU.
+
+| contexte | mode | perplexité | attention (ms/jeton) | durée du balayage |
+|---|---|---|---|---|
+| 512 | CPU | 13,1368 | 2,91 | 18,4 s |
+| 512 | **KV déporté** | **13,1369** | 3,22 | 17,9 s |
+| 4 096 | CPU | 12,2177 | **22,16** | 219,4 s |
+| 4 096 | **KV déporté** | **12,2
+… [632 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat /tmp/topk_crossover.log 2>/dev/null; date +%H:%M:%S", "description": "Check crossover measurement"}`
+
+  ```
+########## ctx=2048 cpu
+18:34:33
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\ndef patch(p, paires):\n    s=open(p).read()\n    for v,n,nom in paires:\n        assert s.count(v)==1, f\"{p}::{nom}::{s.count(v)}\"\n        s=s.replace(v,n,1)\n    open(p,'w').write(s); print(f\"{p} ok\")\n\npatch … [3824 caractères tronqués]`
+
+  ```
+reports/rapport-gpu-topk-selection.md ok
+docs/plan-gpu-topk.md ok
+docs/plan-gpu-topk.md:92:| 4 | branchement dans `model.rs` (autoriser le GPU quand `attn_topk > 0` **et** que le noyau rend `true`, garder le repli CPU sinon) | ✅ **fait**, en opt-in (`DRAVE_GPU_TOPK=1`) : PPL à ctx 2 048 = **9,4162** contre **9,4167** au CPU (le critère chiffré était faux d'avance : 234,88 ne correspond à aucun réglage reproductible — c'est la comparaison A/B qui fait foi) · ⚠️ le gain de TEMPS n'est pas là à 2 048 clés : six lancements et cinq recopies par couche et par jeton — la fusion des quatre passes est la prochaine étape |
+reports/rapport-gpu-topk-selection.md:162:`DRAVE_GPU_TOPK=1` (opt-in) qui enchaîne les quatre noyaux sur le miroir et ne
+reports/rapport-gpu-topk-selection.md:172:| **GPU** (`DRAVE_GPU=1 DRAVE_GPU_KV=1 DRAVE_GPU_TOPK=1`) | **9,4162** | 41,45 s |
+reports/rapport-gpu-topk-selection.md:214:| 4 | branchement dans `model.rs` (`attn_topk > 0` + miroir VRAM) | ✅ **fait** (opt-in `DRAVE_GPU_TOPK=1`) : PPL 9,4162 contre 9,4167 au CPU à ctx 2 048 ; le gain de temps reste à gagner (coût des lancements) |
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat /tmp/topk_crossover.log; date +%H:%M:%S", "description": "Check crossover progress"}`
+
+  ```
+########## ctx=2048 cpu
+=== perplexité 13.1358 sur 511 tokens (0 événements, 18.1 s) ===
+    postes (ms/token) : projets-attn 2.62 | rope 0.44 | attention 4.21 | proj+mlp 21.20 | somme 28.47 | reste (tête + échantillonnage) 7.05
+    dont attention : scores 0.00 | softmax 0.00 | somme pondérée + écriture KV 4.21
+########## ctx=2048 gpu
+18:34:46
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"DRAVE_GPU\\b\\|DRAVE_KV_BITS\" README.md | head -8", "description": "Find README env var mentions"}`
+
+  ```
+(no output)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"DRAVE_\" README.md | head -10", "description": "Find env vars in README"}`
+
+  ```
+13:`drave`, les variables `DRAVE_*` (table de conversion dans `docs/histoire.md`) ;
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"DRAVE_GPU_KV\\|DRAVE_KV_BITS\" REPRISE.md | head -5 && sed -n '225,245p' REPRISE.md", "description": "Read REPRISE env table"}`
+
+  ```
+163:| 8 | suite du plan 1 M | **fait pour E4/E5** | **E4 KV déporté en VRAM** : noyaux `attn_kv_*` (tuiles de 32 clés, softmax en ligne, recombinaison + puits), miroir du cache **paginé** (capacité doublée à la demande : 0,05 Go de VRAM à ctx 1 M après 512 jetons) et `DRAVE_GPU_KV=1` — à 1 M de clés l'attention passe de 968 ms à **13,2 ms** par couche (int4, ×73) et, dans le moteur à 4 096 de contexte, de **22,2 à 3,3 ms/jeton** (−38 % de bout en bout) à perplexité identique (12,2177 → 12,2175). **E5 attention creuse** : mesurée (`--attn-topk 256` : 234,9 contre 298,6). MLA et vision restent non testables (aucun modèle MLA ici ; le projecteur `mmproj` est là mais rien ne lit les patchs) |
+185:| KV déporté dans le moteur (`DRAVE_GPU_KV=1`, ctx 4 096) | attention **22,16 → 3,29 ms/jeton** (÷6,7) · balayage 219,4 → **136,2 s** · perplexité 12,2177 → 12,2175 |
+242:| `DRAVE_GPU_KV=1` | tient le cache KV en VRAM et y calcule l'attention | inutile sans `DRAVE_GPU` ; au-dessous de ~4 000 clés le CPU gagne (lancements + recopies) |
+244:| `DRAVE_KV_BITS=8` ou `4` | quantifie le cache KV (défaut f32) | le 4 bits coûte +364 % de perplexité à 8 192 |
+314:suite : `DRAVE_KV_BITS=8 DRAVE_KV_K_F32=
+… [1751 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='REPRISE.md'; s=open(p).read()\nvieux = \"\"\"| `DRAVE_GPU_EXPERTS=1` | cache LRU des experts MXFP4 en VRAM | inutile sans `DRAVE_GPU` ; budget par `DRAVE_GPU_EXPERTS_GO` (défaut 8) |\"\"\"\nneuf = \"\"\"| `DRAVE_ … [848 caractères tronqués]`
+
+  ```
+REPRISE ok
+########## ctx=2048 cpu
+=== perplexité 13.1358 sur 511 tokens (0 événements, 18.1 s) ===
+    postes (ms/token) : projets-attn 2.62 | rope 0.44 | attention 4.21 | proj+mlp 21.20 | somme 28.47 | reste (tête + échantillonnage) 7.05
+    dont attention : scores 0.00 | softmax 0.00 | somme pondérée + écriture KV 4.21
+########## ctx=2048 gpu
+=== perplexité 13.1355 sur 511 tokens (0 événements, 20.4 s) ===
+    postes (ms/token) : projets-attn 2.65 | rope 0.68 | attention 7.68 | proj+mlp 21.83 | somme 32.84 | reste (tête + échantillonnage) 7.14
+    dont attention : scores 0.00 | softmax 0.00 | somme pondérée + écriture KV 7.68
+########## ctx=8192 cpu
+18:35:03
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 30; cat /tmp/topk_crossover.log | grep -E \"^####|perplexité|postes\"", "description": "Get crossover results", "timeoutMs": 120000}`
+
+  ```
+########## ctx=2048 cpu
+=== perplexité 13.1358 sur 511 tokens (0 événements, 18.1 s) ===
+    postes (ms/token) : projets-attn 2.62 | rope 0.44 | attention 4.21 | proj+mlp 21.20 | somme 28.47 | reste (tête + échantillonnage) 7.05
+########## ctx=2048 gpu
+=== perplexité 13.1355 sur 511 tokens (0 événements, 20.4 s) ===
+    postes (ms/token) : projets-attn 2.65 | rope 0.68 | attention 7.68 | proj+mlp 21.83 | somme 32.84 | reste (tête + échantillonnage) 7.14
+########## ctx=8192 cpu
+=== perplexité 13.1358 sur 511 tokens (0 événements, 19.2 s) ===
+    postes (ms/token) : projets-attn 2.57 | rope 0.43 | attention 6.35 | proj+mlp 21.13 | somme 30.48 | reste (tête + échantillonnage) 7.10
+########## ctx=8192 gpu
+=== perplexité 13.1355 sur 511 tokens (0 événements, 19.7 s) ===
+    postes (ms/token) : projets-attn 2.58 | rope 0.65 | attention 7.36 | proj+mlp 20.97 | somme 31.56 | reste (tête + échantillonnage) 7.04
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\ndef patch(p, paires):\n    s=open(p).read()\n    for v,n,nom in paires:\n        assert s.count(v)==1, f\"{p}::{nom}::{s.count(v)}\"\n        s=s.replace(v,n,1)\n    open(p,'w').write(s); print(f\"{p} ok\")\n\npatch … [3913 caractères tronqués]`

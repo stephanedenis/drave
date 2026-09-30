@@ -154,6 +154,48 @@ fois corrigé (`tid == 0`), 4,79e-7. La relecture ne l'aurait pas vu : le code a
 l'air juste, et c'est le banc — qui compare à une référence CPU écrite
 indépendamment — qui a parlé.
 
+## Étape 4 : le branchement dans le moteur
+
+Le miroir VRAM était **interdit dès que `attn_topk > 0`**
+(`groupe = fen == 0 && self.attn_topk == 0 && rep > 1`, `model.rs:3150`) : le mode
+creux retombait donc sur le CPU. La condition est complétée par une branche
+`DRAVE_GPU_TOPK=1` (opt-in) qui enchaîne les quatre noyaux sur le miroir et ne
+publie son résultat que si **tous** rendent `true` — sinon le chemin CPU reprend,
+sans résultat partiel.
+
+Vérification A/B, même binaire, même modèle (Qwen2.5-0.5B Q8_0), `--ctx 2048
+--limit 1024 --attn-topk 256 --dense` :
+
+| chemin | perplexité | durée |
+|---|---|---|
+| CPU (`--attn-topk 256`) | 9,4167 | 41,59 s |
+| **GPU** (`DRAVE_GPU=1 DRAVE_GPU_KV=1 DRAVE_GPU_TOPK=1`) | **9,4162** | 41,45 s |
+
+L'écart de perplexité (5e-4 en relatif) est du même ordre que l'exactitude des
+noyaux (1e-7 sur les scores) propagée par un top-k dont le **rang** bascule entre
+deux scores quasi égaux — le banc le montre déjà (5 à 7 lignes sur 14). Le
+résultat est identique à la précision près, pas bit à bit, et c'est écrit ici
+plutôt que passé sous silence.
+
+**Le gain n'est pas encore là** : le poste « attention » (ms/jeton, 24 couches,
+511 jetons, même modèle, `--attn-topk 256`) le dit —
+
+| contexte | attention CPU | attention GPU top-k | perplexité CPU / GPU |
+|---|---|---|---|
+| 2 048 | **4,21** | 7,68 | 13,1358 / 13,1355 |
+| 8 192 | **6,35** | 7,36 | 13,1358 / 13,1355 |
+
+Le GPU est **plat** (7,4 ms/jeton, indépendant du contexte : c'est le but), le CPU
+croît de **3,5e-4 ms par clé** — mais il part de plus bas. Le croisement est donc
+au-delà de 8 192 clés, alors que celui de l'attention complète est vers 4 000. La
+raison est la même que celle déjà payée sur le miroir KV (« les tampons alloués à
+chaque appel : 24,5 ms/jeton au lieu de 2,9 », `docs/contexte-long.md` §4.ter) :
+la chaîne fait **six lancements et cinq recopies par couche et par jeton**, soit
+~74 000 lancements pour ces 511 jetons, à comparer aux ~0,1 ms de calcul utile par
+couche. Ce n'est pas un noyau de plus qu'il faut, c'est **la fusion des quatre
+passes** dans un seul noyau (descente radix sur le périphérique) et la
+réutilisation des tampons hôtes.
+
 ## Limites connues du contrat
 
 Le radix select s'appuie sur la transformation monotone du f32. Elle est
@@ -177,7 +219,7 @@ côtés est le correctif si le cas se présente un jour.
 | 1 | `attn_scores` | ✅ 1,6–2,3e-7 · 26,7–40× |
 | 2 | sélection (radix 2 passes → 4 passes, 3 noyaux) | ✅ ensemble identique, 0 écart |
 | 3 | `attn_topk_somme` : softmax sur les k retenus + puits, puis Σ pondérée des V | ✅ 1,0–4,8e-7 · temps GPU constant (0,07 ms) |
-| 4 | branchement dans `model.rs` (`attn_topk > 0` + miroir VRAM) | à faire |
+| 4 | branchement dans `model.rs` (`attn_topk > 0` + miroir VRAM) | ✅ **fait** (opt-in `DRAVE_GPU_TOPK=1`) : PPL 9,4162 contre 9,4167 au CPU à ctx 2 048 ; le gain de temps reste à gagner (coût des lancements) |
 | 5 | mesure 1 M de clés : ms/couche avec et sans top-k | à faire |
 | 6 | portes de non-régression : 19,3885 et 15,1757 | ✅ inchangées, mesurées le 30/09 au soir (voir le journal de la session) |
 

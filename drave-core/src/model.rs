@@ -3216,6 +3216,59 @@ dynamique de {dyn_:.3e} (relatif {:.2e})", mx / dyn_.max(1e-9));
                     *attn_events += ((h1 - h0) * n) as u64;
                 }
             }
+            // ---- top-k déporté (étape 4 du plan) -------------------------
+            // Le miroir VRAM était interdit dès que `attn_topk > 0` : la
+            // notation restait donc sur CPU, où elle coûte 968 ms par couche à
+            // 1 M de clés. Les trois noyaux du plan (scores sans relecture,
+            // seuil radix, collecte, somme) rendent maintenant le chemin
+            // complet en VRAM — mesuré 3,90 ms pour 14 lignes × 1 M de clés,
+            // contre 539,9 ms pour l'attention complète sur CPU.
+            //
+            // Opt-in par `DRAVE_GPU_TOPK=1` : le chemin CPU reste le défaut tant
+            // que la porte de perplexité n'a pas montré l'égalité, et tout refus
+            // d'un noyau retombe proprement sur le CPU (aucun résultat partiel
+            // n'est publié).
+            if self.attn_topk > 0 && fen == 0 && !fait_en_gpu && kv_gpu.is_some()
+                && nkv * rep == nh && n > 1 && std::env::var("DRAVE_GPU_TOPK").is_ok()
+            {
+                let k = self.attn_topk.min(n);
+                if let Some((idx, m)) = kv_gpu.as_mut().and_then(|v| v.get_mut(l)) {
+                    let machine = crate::gpu::machines()[*idx];
+                    let mut pref = vec![0u32; nh];
+                    let mut dessus = vec![0usize; nh];
+                    let mut hist = vec![0u32; nh * 256];
+                    let mut ok = machine.attn_scores_sans_relecture(m, &q[..nh * hd], n, scale);
+                    let mut dec = 24i32;
+                    while ok && dec >= 0 {
+                        ok = machine.attn_topk_histo(m, nh, n, dec, &pref, &mut hist);
+                        if !ok { break; }
+                        for hh in 0..nh {
+                            let h = &hist[hh * 256..(hh + 1) * 256];
+                            let mut cum = dessus[hh];
+                            let mut b = 256usize;
+                            while b > 0 && cum < k { b -= 1; cum += h[b] as usize; }
+                            dessus[hh] = cum - h[b] as usize;
+                            pref[hh] = (pref[hh] << 8) | b as u32;
+                        }
+                        dec -= 8;
+                    }
+                    let besoin: Vec<i32> = (0..nh).map(|hh| (k - dessus[hh]) as i32).collect();
+                    let mut sel = vec![-1i32; nh * k];
+                    if ok {
+                        ok = machine.attn_topk_collecte(m, nh, n, k, &pref, &besoin, &mut sel);
+                    }
+                    let puits: Option<Vec<f32>> = lay.sinks.as_ref()
+                        .map(|s| (0..nh).map(|h| s[h]).collect());
+                    if ok {
+                        ok = machine.attn_topk_somme(m, nh, n, k, hd, rep, puits.as_deref(),
+                                                     &mut att[..nh * hd]);
+                    }
+                    if ok {
+                        *attn_events += (nh * n) as u64;
+                        fait_en_gpu = true;
+                    }
+                }
+            }
             for hh in 0..(if groupe || fait_en_gpu { 0 } else { nh }) {
                 let kvh = hh / rep;
                 let qh = &q[hh * hd..(hh + 1) * hd];

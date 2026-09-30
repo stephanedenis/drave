@@ -240,6 +240,7 @@ qui reste est classé par rentabilité mesurée.
 | `DRAVE_GPU=1` | ouvre le pilote CUDA (`gpu::instance`) | **c'est elle qui commande tout** ; sans elle, les autres ne font RIEN et rien ne le dit |
 | `DRAVE_GPU_TETE=1` | déporte la tête (Q8_0 ou Q6_K) | inutile sans `DRAVE_GPU` |
 | `DRAVE_GPU_KV=1` | tient le cache KV en VRAM et y calcule l'attention | inutile sans `DRAVE_GPU` ; au-dessous de ~4 000 clés le CPU gagne (lancements + recopies) |
+| `DRAVE_GPU_TOPK=1` | calcule le top-k de l'attention (`--attn-topk`) en VRAM : scores, seuil radix, collecte des k indices, softmax + Σ w·V | inutile sans `DRAVE_GPU` **et** `DRAVE_GPU_KV` ; exige `nkv × rep = nh` et `k ≤ 1 024` ; tout refus d'un noyau retombe sur le CPU. Perplexité identique à 5e-4 près (9,4162 contre 9,4167 à ctx 2 048), mais **pas encore de gain de temps à 2 048 clés** : six lancements et cinq recopies par couche et par jeton (la fusion des quatre passes est à faire) |
 | `DRAVE_GPU_EXPERTS=1` | cache LRU des experts MXFP4 en VRAM | inutile sans `DRAVE_GPU` ; budget par `DRAVE_GPU_EXPERTS_GO` (défaut 8) |
 | `DRAVE_KV_BITS=8` ou `4` | quantifie le cache KV (défaut f32) | le 4 bits coûte +364 % de perplexité à 8 192 |
 | `DRAVE_KV_K_F32=1` | garde les CLÉS en f32 (valeurs quantifiées) | mesuré : à 8 192, **64 %** de la taille f32 (5,125 octets par élément, échelles comprises) pour +0,023 %, contre +3,04 % pour l'int8 complet (28 % de la taille) — l'écart int8 vient des clés à 99 % (`reports/rapport-attribution-kv.md`) |

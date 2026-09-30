@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 51.6 h |
+| Durée | 51.8 h |
 | Tours | 47 |
-| Messages | 2160 |
-| Appels d'outils | 2040 |
+| Messages | 2187 |
+| Appels d'outils | 2067 |
 | Fichiers touchés | 47 |
-| Commandes | 1694 |
+| Commandes | 1721 |
 | Sous-agents | 13 |
-| Commits | 178 |
+| Commits | 179 |
 | Compactages de contexte | 3 |
 
 ## Objectifs déclarés
@@ -2177,7 +2177,7 @@ Le mode creux ne peut pas utiliser le miroir VRAM (le chemin GPU est conditionn�
 
 ### Tour 47 — pret pour des scrum de 2h (boxing temps réel, avec revue, rétro et planning)
 
-*185 appels d'outils.* Actions notables :
+*212 appels d'outils.* Actions notables :
 
 - bash — Check clock, machine and last sprint state
 - bash — Create the sprint timing tool
@@ -2193,11 +2193,11 @@ Le mode creux ne peut pas utiliser le miroir VRAM (le chemin GPU est conditionn�
 - bash — Read the kernel launch call
 - bash — Write the FFI for the scores kernel
 - bash — Complete KvGpu initializer
-- … et 165 autres
+- … et 192 autres
 
 **Synthèse produite :**
 
-⏵ Corrections de documentation (audit) avant de câbler le noyau 3
+⏵ Mesure du chemin moteur (sans relecture des scores) pour l'étape 5 du plan
 
 ## 3. Travail accompli
 
@@ -2311,7 +2311,7 @@ Le mode creux ne peut pas utiliser le miroir VRAM (le chemin GPU est conditionn�
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 1654 autres
+- … et 1681 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2637,4 +2637,5 @@ Le mode creux ne peut pas utiliser le miroir VRAM (le chemin GPU est conditionn�
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -F - <<'EOF' && git log --oneline -1 Relecture adversariale : 7 défauts corrig
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' def patch(p, paires):     s=open(p).read()     for v,n,nom in paires:         assert s.co
 - Compteur de lignes Rust unifié : 13 168 (un seul chiffre, mesuré, dans README ×2 et REPRISE)" && git log --oneline -1
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' def patch(p, paires):     s=open(p).read()     for v,n,nom in paires:         assert s.co
 

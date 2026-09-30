@@ -89,8 +89,8 @@ doit montrer l'effet cherché : **968 ms → quelques dizaines de ms par couche*
 | 1 | `attn_scores` + FFI + banc `--banc-topk` sur 4 k de contexte | ✅ **fait** : écart **1,6 à 2,3e-7** de 4 096 à 262 144 clés (clés distinctes — la valeur de 1,03e-7 venait d'un banc dégénéré), **26,7 à 40× plus rapide** que le CPU ; c'est la re-mesure du 30/09 au soir qui fait foi dans `reports/rapport-gpu-scores.md` |
 | 2 | `attn_topk_select` (radix, 3 noyaux) | ✅ **fait** : ensemble retenu identique au CPU, 14/14 lignes (différence symétrique 0) — `reports/rapport-gpu-topk-selection.md` |
 | 3 | `attn_topk_somme` (softmax sur k + puits) | ✅ **fait** : 1,0–4,8e-7 à toutes les tailles (critère 1e-6) — `reports/rapport-gpu-topk-selection.md` |
-| 4 | branchement dans `model.rs` (autoriser le GPU quand `attn_topk > 0` **et** que le noyau rend `true`, garder le repli CPU sinon) | perplexité 2 048 = 234,88 ± tolérance |
-| 5 | mesure 1 M : ms/layer avec et sans top-k, sur GPU | le top-k GPU ne doit pas coûter plus de ~2× le complet |
+| 4 | branchement dans `model.rs` (autoriser le GPU quand `attn_topk > 0` **et** que le noyau rend `true`, garder le repli CPU sinon) | ✅ **fait**, en opt-in (`DRAVE_GPU_TOPK=1`) : PPL à ctx 2 048 = **9,4162** contre **9,4167** au CPU (le critère chiffré était faux d'avance : 234,88 ne correspond à aucun réglage reproductible — c'est la comparaison A/B qui fait foi) · ⚠️ le gain de TEMPS n'est pas là à 2 048 clés : six lancements et cinq recopies par couche et par jeton — la fusion des quatre passes est la prochaine étape |
+| 5 | mesure 1 M : ms/layer avec et sans top-k, sur GPU | ✅ **fait au niveau des noyaux** : la chaîne complète (scores sans relecture + 4 passes + collecte + somme) coûte **3,90 ms** pour 14 lignes × 1 M de clés, contre **539,9 ms** pour l'attention complète sur CPU (×138) et 13,2 ms pour l'attention complète en VRAM — soit **0,3×** le complet, mieux que le critère des 2× |
 | 6 | porte de non-régression : les deux valeurs restent 19,3885 et 15,1757 | inchangées |
 
 ## Les pièges, déjà payés une fois chacun

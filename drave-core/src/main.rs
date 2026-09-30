@@ -2665,6 +2665,89 @@ l'entrelace — c'est le seul écart attendu)");
         println!("    → AU-DESSUS du critère de 1e-6 : ne pas brancher dans le moteur");
     }
 
+    // ------------------- étape 5 : ce que coûtera le chemin du MOTEUR à 1 M
+    // Le moteur n'a pas besoin de relire les scores : la sélection se fait en
+    // VRAM. On mesure donc la chaîne complète SANS relecture, et on la compare à
+    // l'attention complète sur CPU (toutes les clés notées, softmax, somme
+    // pondérée) — la référence que le plan cite : 968 ms par couche à 1 M de clés.
+    if n >= 65536 {
+        let mut pref5 = vec![0u32; lignes];
+        let mut dessus5 = vec![0usize; lignes];
+        let mut hist5 = vec![0u32; lignes * 256];
+        let t10 = Instant::now();
+        let mut ok5 = machine.attn_scores_sans_relecture(&mut miroir, &q, n, scale);
+        for decalage in [24i32, 16, 8, 0] {
+            if !ok5 { break; }
+            ok5 = machine.attn_topk_histo(&mut miroir, lignes, n, decalage, &pref5, &mut hist5);
+            if !ok5 { break; }
+            for l in 0..lignes {
+                let h = &hist5[l * 256..(l + 1) * 256];
+                let mut cum = dessus5[l];
+                let mut b = 256usize;
+                while b > 0 && cum < k { b -= 1; cum += h[b] as usize; }
+                dessus5[l] = cum - h[b] as usize;
+                pref5[l] = (pref5[l] << 8) | b as u32;
+            }
+        }
+        let besoin5: Vec<i32> = (0..lignes).map(|l| (k - dessus5[l]) as i32).collect();
+        let mut sel5 = vec![-1i32; lignes * k];
+        let mut att5 = vec![0f32; lignes * hd];
+        if ok5 {
+            ok5 = machine.attn_topk_collecte(&mut miroir, lignes, n, k, &pref5, &besoin5,
+                                             &mut sel5);
+        }
+        if ok5 {
+            ok5 = machine.attn_topk_somme(&mut miroir, lignes, n, k, hd, rep, Some(&sinks),
+                                          &mut att5);
+        }
+        let t_chaine = t10.elapsed().as_secs_f64();
+        if !ok5 {
+            println!("    étape 5 : chaîne complète refusée");
+        } else {
+            // Référence : l'attention COMPLÈTE sur CPU, une ligne par fil.
+            let t11 = Instant::now();
+            let mut att_full = vec![0f32; lignes * hd];
+            std::thread::scope(|sp| {
+                for (l, dst) in att_full.chunks_mut(hd).enumerate() {
+                    let cache = &cache;
+                    let q = &q;
+                    let sinks = &sinks;
+                    sp.spawn(move || {
+                        let kvh = l / rep;
+                        let r = l % rep;
+                        let qh = &q[(kvh * rep + r) * hd..(kvh * rep + r + 1) * hd];
+                        let (mut kd, mut vd) = (vec![0f32; hd], vec![0f32; hd]);
+                        let mut sc = vec![0f32; n];
+                        let mut m = sinks[l];
+                        for t in 0..n {
+                            cache.cle(kvh, t, &mut kd);
+                            let mut s = 0f32;
+                            for i in 0..hd { s += qh[i] * kd[i]; }
+                            s *= scale;
+                            sc[t] = s;
+                            m = m.max(s);
+                        }
+                        let mut den = (sinks[l] - m).exp();
+                        for t in 0..n { den += (sc[t] - m).exp(); }
+                        for t in 0..n {
+                            let w = (sc[t] - m).exp();
+                            cache.valeur(kvh, t, &mut vd);
+                            for i in 0..hd { dst[i] += w * vd[i]; }
+                        }
+                        for i in 0..hd { dst[i] /= den; }
+                    });
+                }
+            });
+            let t_full = t11.elapsed().as_secs_f64();
+            println!("    étape 5 — {lignes} lignes × {n} clés :");
+            println!("      chaîne top-k GPU sans relecture des scores : {:8.2} ms", t_chaine * 1e3);
+            println!("      attention COMPLÈTE sur CPU ({lignes} fils)   : {:8.2} ms  (×{:.1})",
+                     t_full * 1e3, t_full / t_chaine.max(1e-9));
+            println!("      coût de la relecture des scores (banc seul) : {:8.2} ms",
+                     t_gpu * 1e3 - t_chaine * 1e3);
+        }
+    }
+
     // Second passage avec un k PLUS GRAND, dans le MÊME processus : c'est le
     // seul chemin qui réutilise les tampons de la collecte avec une taille de
     // sortie différente. Défaut trouvé à la relecture (pas par ce banc) : le

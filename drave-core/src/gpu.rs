@@ -622,6 +622,81 @@ impl Gpu {
         true
     }
 
+    /// **Scores seuls, SANS relecture** : le chemin que le moteur utilisera.
+    ///
+    /// Le banc relit les scores pour les comparer au CPU ; le moteur, lui, n'en a
+    /// pas besoin — la sélection se fait en VRAM. À 262 144 clés la relecture
+    /// pèse 14,7 Mo sur le bus PCIe, et 56 Mo à 1 M : la mesurer séparément est
+    /// la seule façon de savoir ce que coûtera le chemin réel.
+    pub fn attn_scores_sans_relecture(&self, m: &mut KvGpu, q: &[f32], n: usize,
+                                      scale: f32) -> bool {
+        cu_ctx(self.ctx);
+        let rep = if m.n_kv == 0 || m.hd == 0 { 0 } else { q.len() / (m.n_kv * m.hd) };
+        let hd = m.hd;
+        if rep == 0 || rep > 32 || hd % 32 != 0 { return false; }
+        if q.len() % (m.n_kv * m.hd) != 0 { return false; }
+        if n == 0 || n > m.capacite { return false; }
+        let besoin = m.n_kv * rep * n;
+        unsafe {
+            if m.scores_cap < besoin {
+                if m.scores_dev != 0 { cuMemFree_v2(m.scores_dev); }
+                m.scores_dev = 0;
+                m.scores_cap = 0;
+                if cuMemAlloc_v2(&mut m.scores_dev, besoin * 4) != 0 { return false; }
+                m.scores_cap = besoin;
+            }
+            let mut p_k = m.k;
+            let mut p_sk = m.sk;
+            let mut p_q = m.q_dev;
+            if m.q_cap < q.len() {
+                if m.q_dev != 0 { cuMemFree_v2(m.q_dev); }
+                m.q_dev = 0;
+                m.q_cap = 0;
+                if cuMemAlloc_v2(&mut m.q_dev, q.len() * 4) != 0 { return false; }
+                m.q_cap = q.len();
+                p_q = m.q_dev;
+            }
+            if cuMemcpyHtoD_v2(p_q, q.as_ptr() as *const c_void, q.len() * 4) != 0 {
+                return false;
+            }
+            let mut p_sc = m.scores_dev;
+            let nsplit = (n / 256).clamp(1, 128);
+            let (n_i, nsplit_i, ctx_i, hd_i, nb_i, rep_i, bits_i) =
+                (n as c_int, nsplit as c_int, m.capacite as c_int, hd as c_int,
+                 m.nb as c_int, rep as c_int, m.bits as c_int);
+            let (mut rep_c, mut bits_c, mut scale_c) = (rep_i, bits_i, scale);
+            let mut params: [*mut c_void; 12] = [
+                &mut p_k as *mut u64 as *mut c_void,
+                &mut p_sk as *mut u64 as *mut c_void,
+                &mut p_q as *mut u64 as *mut c_void,
+                &mut p_sc as *mut u64 as *mut c_void,
+                &n_i as *const c_int as *mut c_void,
+                &nsplit_i as *const c_int as *mut c_void,
+                &ctx_i as *const c_int as *mut c_void,
+                &hd_i as *const c_int as *mut c_void,
+                &nb_i as *const c_int as *mut c_void,
+                &mut rep_c as *mut c_int as *mut c_void,
+                &mut bits_c as *mut c_int as *mut c_void,
+                &mut scale_c as *mut f32 as *mut c_void,
+            ];
+            let rc = cuLaunchKernel(self.f_attn_scores, m.n_kv as c_uint, nsplit as c_uint, 1,
+                                    (rep * 32) as c_uint, 1, 1,
+                                    ((rep * hd + 32 * (hd + 1)) * 4) as c_uint,
+                                    std::ptr::null_mut(), params.as_mut_ptr(),
+                                    std::ptr::null_mut());
+            if rc != 0 {
+                eprintln!("{}", erreur(rc, "lancement attn_scores (sans relecture)"));
+                return false;
+            }
+            // Pas de synchronisation explicite : la copie DtoH de l'appel
+            // suivant (ou la lecture de l'histogramme) la force. En revanche on
+            // ne peut PAS mesurer le noyau seul sans elle — c'est pourquoi la
+            // mesure du chemin moteur inclut la première lecture qui suit.
+            cuCtxSynchronize();
+        }
+        true
+    }
+
     /// **Histogramme d'un octet des scores** (noyau 2a, `docs/plan-gpu-topk.md`).
     ///
     /// Le score f32 est transformé en entier **monotone** (positif : les bits
