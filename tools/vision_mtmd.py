@@ -73,7 +73,7 @@ def charger():
     return (llama, mtmd, m, ctx)
 
 
-def image_deterministe(cote=84):
+def image_deterministe(cote=336):
     """Exactement l'image du banc Rust : dégradé + carré central."""
     buf = (ctypes.c_ubyte * (cote * cote * 3))()
     for y in range(cote):

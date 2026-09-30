@@ -21010,3 +21010,19 @@ os_w_row[idx] = tx * merge + dx;
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat >> docs/plan-mla-vision.md <<'EOF'\n\n### La rotation est CONFIRMÉE par la source (et une variante de fenêtre découverte)\n\n`clip.cpp` donne le remplissage exact des quatre sections pour Qwen2.5-VL :\n\n```\n// Pack into ggml_ro … [2530 caractères tronqués]`
+
+  ```
+c1c100e vision : la rotation est confirmée par la source, et une variante de fenêtre découverte
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git status --short | head -3 && cd qtrinet-core && cargo test --release 2>&1 | tail -2 && cd .. && timeout 300 ./qtrinet-core/target/release/qtrinet-core models/Qwen2.5-0.5B-Q8_0.gguf --ppl /tmp/ids_qwen.txt --ctx 256 --abits 16 --th … [160 caractères tronqués]`
+
+  ```
+M journal/README.md
+ M tools/vision_mtmd.py
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.09s
+
+perplexité 19.3885 sur 510 tokens
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='REPRISE.md'; s=open(p).read()\nold = \"\"\"4. ~~**MLA et vision.**~~ **MLA FAIT ET VALIDÉ** (modèle synthétique + référence\n   numpy : écart 5,2e-7). **Vision** : première tranche faite et validée\n   (embedding … [1750 caractères tronqués]`
