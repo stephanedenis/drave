@@ -53,7 +53,7 @@ défini avant.
 | # | chantier | état | critère de succès |
 |---|---|---|---|
 | 3.1 | **Contrat d'échange v1** : tranche de liste = en-tête (couche, source, échelle, bits) + paires (destination, valeur) | ✅ | format écrit, relu, rejoué sans perte (phase 0.3/0.3bis) ; **transport TCP en place et FIDÈLE** (`--flux-serveur`, `--ppl-reparti`) — écart local/réparti **0,00e0** sur 40 et 199 flux, après correction de deux défauts (plage de couches ignorée par `forward`, norme finale appliquée deux fois) |
-| 3.2 | **Granularité** : par couche, par bloc de canaux, par expert | 🔬 | livrés et mesurés : listes i16, et **échelles par bloc de 32 canaux avec valeurs i8** (`--flux-blocs`) — ÷2,0 sur le fil pour 0,2 % de perplexité à seuil 0,02 ; reste le cas MoE |
+| 3.2 | **Granularité** : par couche, par bloc de canaux, par expert | 🔬 | livrés et mesurés : listes i16, et **échelles par bloc de 32 canaux avec valeurs i8** (`--flux-blocs`) — seuil 0,01 recommandé : ÷1,6 sur le fil pour 2,7 % d'écart (256 jetons de vrai texte) ; reste le cas MoE |
 | 3.3 | **Seuil de rentabilité** : à partir de quel débit réseau le découpage gagne | 🔬 | mesuré sur localhost : le seuil est une affaire de LATENCE, pas de débit — < 1 Mbit/s par flux de jetons à 20 jetons/s, et 16,1 ms d'attente contre 15,9 ms de calcul local après `TCP_NODELAY` (97,6 ms avant : Nagle) |
 | 3.4 | **Démonstration Colab** : préremplissage réparti (le décodage reste séquentiel — c'est écrit dans la vision) | ⏳ | les mêmes logits qu'en local, à 1e-5 près |
 | 3.5 | **Sûreté** : version du format, refus des flux incompatibles, pas de silence | ✅ | version dans chaque en-tête ; un pair en version 99 est refusé avec un message qui nomme les deux versions — vérifié avec un faux client |
@@ -239,10 +239,14 @@ vecteur dense f32. Mesuré à 40 jetons, par flux (aller) :
 | listes, seuil 0,05 | 897 | 8,1e-1 |
 
 Avec `--flux-blocs` (échelle par bloc de 32 canaux, valeurs i8), le régime creux
-devient franchement bon : à seuil 0,02, **1 778 octets par flux pour 0,2 % de
-perplexité**, contre 2 203 octets et 4,9 % pour la liste i16 à échelle unique —
+s'améliore : à sparsité égale (seuil 0,02, 59 % d'activité) les blocs font
+**1 745 octets contre 2 159** pour la liste i16, et 14 % d'écart contre 16 % —
 l'échelle par bloc borne l'erreur *relative*, l'échelle unique borne l'erreur
-*absolue*.
+*absolue*. Sur 256 jetons de vrai texte, le réglage recommandé est le seuil
+**0,01** : ÷1,6 sur le fil pour 2,7 % d'écart. Et l'écart CROÎT avec la longueur
+(0,2 % à 40 jetons synthétiques, 2,7 % à 256 jetons de WikiText-2) : une erreur
+de flux se compose sur douze couches et sur toute la séquence. C'est écrit comme
+tel dans le rapport, à la place d'un « ÷2 pour 0,2 % » trop optimiste.
 
 Et le coût réel du découpage, mesuré à 200 jetons sur localhost : le calcul local
 de 12 couches prend 15,9 ms par jeton, l'attente du pair 16,1 ms — soit **1,01×**.

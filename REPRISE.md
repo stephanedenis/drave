@@ -3,6 +3,11 @@
 > Rédigé à la fin d'une session longue. Tout ce qui suit est **mesuré**, pas
 > déduit. Les valeurs de perplexité sont des **références de non-régression** :
 > si une modification les change, c'est qu'elle a changé le calcul.
+>
+> **Nom** : le projet s'appelle **Drave** (binaire `drave`, paquet `drave-core`,
+> variables `DRAVE_*`, histoire du renommage dans `docs/histoire.md`). Le dossier
+> de travail, lui, s'appelle encore `Qtrinet` — les chemins ci-dessous sont ceux
+> qui existent.
 
 ---
 
@@ -15,7 +20,7 @@ MoE, tient une conversation, et déporte au GPU ce qui y gagne. Il fait tourner 
 0,5 B au 120 B sur le CPU de cette machine.
 
 ```bash
-cd /home/stephane/Data13TB/stephane/GitHub/Drave/drave-core && cargo build --release
+cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && cargo build --release
 ./target/release/drave ../models/Qwen2.5-0.5B-Q8_0.gguf \
     --infer --chat --flux --prompt "Explique le ciel bleu en une phrase." \
     --n 64 --ctx 512 --threads 16 --temp 0
@@ -29,7 +34,7 @@ Corpus : `/tmp/wt2_txt.txt` = 20 000 premiers octets de `data/wikitext2_test.txt
 **Régénérable** (à refaire si `/tmp` a été vidé) :
 
 ```bash
-cd /home/stephane/Data13TB/stephane/GitHub/Drave
+cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet
 head -c 20000 data/wikitext2_test.txt > /tmp/wt2_txt.txt
 # les identifiants DOIVENT venir du tokenizer du modèle — jamais croisés
 drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf \

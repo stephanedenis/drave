@@ -7,7 +7,7 @@ Sert de référence pour valider les logits de `drave-core`.
 ## Compilation (commande exacte qui marche)
 
 ```bash
-cd /home/stephane/Data13TB/stephane/GitHub/Drave
+cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet
 LC=/home/stephane/Data13TB/stephane/GitHub/llama.cpp
 g++ -O2 -std=c++17 tools/ref_logits.cpp -o tools/ref_logits \
     -I $LC/include -I $LC/ggml/include \

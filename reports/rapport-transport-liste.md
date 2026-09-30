@@ -99,8 +99,30 @@ octet.
 octets contre 3 623, et les deux modes sont de toute façon « taille du dense ».
 **Le régime qui compte est le régime creux, et c'est là que les blocs gagnent.**
 
-Configuration utilisable aujourd'hui : `--flux-blocs --act-thresh 0.02`, soit
-**÷2,0 sur le fil pour 0,2 % de perplexité**.
+Configuration utilisable aujourd'hui : `--flux-blocs --act-thresh 0.01`.
+
+### Sur du vrai texte, les chiffres sont plus sobres
+
+Le banc ci-dessus utilise des identifiants synthétiques (`1, 2, 3, …`) dont la
+perplexité se compte en centaines : toute erreur de logit y est amplifiée. Mesuré
+sur **256 jetons de WikiText-2**, où la référence locale vaut 18,02 :
+
+| mode | seuil | activité | octets/flux | écart |
+|---|---|---|---|---|
+| dense f32 | — | 100 % | 3 623 | **0,00e0** |
+| blocs | 0,01 | 78,6 % | 2 268 | 2,7e-2 |
+| blocs | 0,02 | 59,2 % | 1 745 | 1,4e-1 |
+| listes i16 | 0,02 | 59,2 % | 2 159 | 1,6e-1 |
+
+Trois choses y sont nettes : le mode dense reste **exact** ; les blocs battent
+toujours les listes à sparsité égale (1 745 contre 2 159 octets, et 14 % contre
+16 % d'écart) ; mais **l'écart croît avec la longueur** — 0,2 % à 40 jetons
+synthétiques, 2,7 % à 256 jetons de vrai texte à seuil 0,01, 14 % à 0,02. Une
+erreur de flux se compose sur douze couches ET sur toute la séquence.
+
+Donc la revendication honnête est : **÷1,6 sur le fil pour 2,7 %** à seuil 0,01,
+et non « ÷2 pour 0,2 % ». Le vrai remède n'est pas le seuil, c'est le signal
+transmis (voir les deux suites ci-dessus).
 
 ## Ajout — le coût réel du découpage, et Nagle
 

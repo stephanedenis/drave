@@ -24231,3 +24231,230 @@ IP locale : 192.168.1.101
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > docs/colab-reparti.md <<'EOF'\n# Répétition Colab — la phase 3.4, pas à pas\n\nObjectif : deux machines qui se passent des **listes d'activation**, l'une sur le\nruntime Colab, l'autre en local, et **les mêmes logits** qu'en lo … [5895 caractères tronqués]`
+
+  ```
+27f46c1 Répétition Colab : nœud moteur écoutable au-delà de localhost + recette
+11:08:08
+  ```
+
+### 🤖 Assistant
+
+⏵ Vérification finale (tests + porte de non-régression) pendant que je rafraîchis REPRISE.md.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/verif_finale.sh <<'EOF'\n#!/bin/bash\ncd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\necho \"=== cargo test --release ===\"\n(cd drave-core && cargo test --release 2>&1 | grep -E \"^test result|running\" | tail -3)\nec … [670 caractères tronqués]`
+
+  ```
+started background job bash-51
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n 1,40p REPRISE.md", "description": "Read REPRISE header to refresh"}`
+
+  ```
+# Reprise — état du projet et mode d'emploi pour une nouvelle session
+
+> Rédigé à la fin d'une session longue. Tout ce qui suit est **mesuré**, pas
+> déduit. Les valeurs de perplexité sont des **références de non-régression** :
+> si une modification les change, c'est qu'elle a changé le calcul.
+
+---
+
+## 1. En une phrase
+
+`drave-core` est un moteur d'inférence Rust (~5 000 lignes, `std` seul) qui
+charge les GGUF **en place** (aucune copie, aucune requantification), exécute les
+projections soit en listes d'événements, soit en produit scalaire dense, gère les
+MoE, tient une conversation, et déporte au GPU ce qui y gagne. Il fait tourner du
+0,5 B au 120 B sur le CPU de cette machine.
+
+```bash
+cd /home/stephane/Data13TB/stephane/GitHub/Drave/drave-core && cargo build --release
+./target/release/drave ../models/Qwen2.5-0.5B-Q8_0.gguf \
+    --infer --chat --flux --prompt "Explique le ciel bleu en une phrase." \
+    --n 64 --ctx 512 --threads 16 --temp 0
+```
+
+---
+
+## 2. Références de non-régression
+
+Corpus : `/tmp/wt2_txt.txt` = 20 000 premiers octets de `data/wikitext2_test.txt`.
+**Régénérable** (à refaire si `/tmp` a été vidé) :
+
+```bash
+cd /home/stephane/Data13TB/stephane/GitHub/Drave
+he
+… [421 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub && ls -la | head; echo \"=== titres REPRISE ===\"; grep -n \"^#\\{1,3\\} \" Qtrinet/REPRISE.md", "description": "Check Drave directory and REPRISE structure"}`
+
+  ```
+total 20
+drwxr-xr-x. 1 stephane stephane  2350 25 sep 11:55 .
+drwxr-xr-x. 1 stephane stephane  2278 24 sep 09:15 ..
+drwxr-xr-x. 1 stephane stephane    80 31 jui 13:15 915-SPO (1).com
+drwxr-xr-x. 1 stephane stephane   228 22 fév  2026 915-SPO.com
+drwxr-xr-x. 1 stephane stephane   260  7 jun  2024 915-SPO.com-2
+drwxr-xr-x. 1 stephane stephane    62  6 jun  2024 Ai_Docs
+drwxr-xr-x. 1 stephane stephane    80  6 jun  2024 arduino-i2c-scanner
+drwxr-xr-x. 1 stephane stephane   994  6 jun  2024 Arduino-IRremote
+drwxr-xr-x. 1 stephane stephane    74  6 jun  2024 ArduinoNunchuk
+=== titres REPRISE ===
+1:# Reprise — état du projet et mode d'emploi pour une nouvelle session
+9:## 1. En une phrase
+26:## 2. Références de non-régression
+34:# les identifiants DOIVENT venir du tokenizer du modèle — jamais croisés
+74:## 3. Ce qui est implémenté et vérifié
+102:## 4. Pièges de l'environnement (tous rencontrés)
+117:## 5. Règles de méthode (chacune a coûté une erreur)
+136:## 6. Les huit chantiers : où ils en sont
+149:### Mesures du tour « huit chantiers » (toutes commitées)
+179:### Ce qu'il faut faire ensuite, dans l'ordre
+220:### Les variables d'environnement, et leurs pièges
+239:## 7. Carte du dépôt
+267
+… [803 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rln \"GitHub/Drave\" --include=\"*.md\" . | grep -v journal/ | head; echo \"--- occurrences ---\"; grep -rn \"GitHub/Drave\" --include=\"*.md\" . | grep -v journal/ | wc -l", "description": "Find stale Drave paths in docs"}`
+
+  ```
+./tools/ref_logits.md
+./REPRISE.md
+--- occurrences ---
+3
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rn \"GitHub/Drave\" --include=\"*.md\" . | grep -v journal/; python3 - <<'PY'\nimport re\nfor p in ['REPRISE.md','tools/ref_logits.md']:\n    s=open(p).read()\n    s=s.replace('GitHub/Drave','GitHub/Qtrinet')\n    open(p,'w').w … [1097 caractères tronqués]`
+
+  ```
+./tools/ref_logits.md:10:cd /home/stephane/Data13TB/stephane/GitHub/Drave
+./REPRISE.md:18:cd /home/stephane/Data13TB/stephane/GitHub/Drave/drave-core && cargo build --release
+./REPRISE.md:32:cd /home/stephane/Data13TB/stephane/GitHub/Drave
+chemins corrigés (le dossier réel est Qtrinet ; le projet s'appelle Drave)
+note de nommage ajoutée
+6. **Ne pas laisser un dépôt cassé** pour finir une refactorisation : revenir au
+   dernier état valide est une option honorable.
+
+---
+
+## 6. Les huit chantiers : où ils en sont
+
+| # | chantier | état | mesure |
+|---|---|---|---|
+| 1 | protocole de perplexité longue | **fait** | `--depuis N` note les mêmes jetons à contexte variable ; `--depuis 256 --ctx 256` redonne exactement la fenêtre 2 historique (21,565) |
+| 2 | seuil de rotation YaRN | **fait, seuil à 4 × la longueur déclarée** | comparaison appariée (mêmes 512 jetons) : contexte 128→1536, RoPE simple 39,52/49,79/49,93/298,56 contre interpolation 42,13/82,02/82,15/578,86 → le simple gagne partout. **Au-delà du seuil** (5 120 jetons, corpus de 17 k maintenant disponible) : simple **9,6986** contre interpolation seule **1 269,1777** → le seuil de 4 096 était **trop bas** ; le moteur ne bascule 
+… [2841 caractères tronqués]
+  ```
+
+- **job_output** `{"job_id": "bash-51", "timeout_ms": 240000, "wait": true}`
+
+  ```
+=== cargo test --release ===
+running 6 tests
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.10s
+=== porte Qwen ctx 256 (attendu 19,3885) ===
+=== perplexité 19.3885 sur 510 tokens (0 événements, 16.6 s) ===
+=== blocs 0,02 (100 jetons) ===
+  référence locale  : perplexité 1186.7223  (4.2 s)
+  deux nœuds        : perplexité 1282.1476  (4.1 s)
+  écart             : 8.04e-2
+  transport         : listes à échelle par bloc (3 octets/actif) · 1950 octets par flux (aller) · 2843 au retour · 66.8 % d'activité (598 neurones par flux) · 100 flux
+  temps             : 15.9 ms par jeton en local · 15.8 ms à attendre le pair (son calcul + l'aller-retour) · soit 1.00× le calcul local seul
+=== dense (100 jetons) ===
+  deux nœuds        : perplexité 1339.4231  (4.0 s)
+  écart             : 0.00e0
+  transport         : dense f32 · 3623 octets par flux (aller) · 3623 au retour · 100.0 % d'activité (896 neurones par flux) · 100 flux
+  temps             : 15.3 ms par jeton en local · 15.6 ms à attendre le pair (son calcul + l'aller-retour) · soit 1.02× le calcul local seul
+11:09:05
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+Vérification verte : tests 6/6, porte Qwen **19,3885** inchangée. Mais l'écart des blocs grimpe avec la longueur sur le corpus synthétique — je re-mesure sur du **vrai texte**.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && head -c 200 /tmp/ids_qwen_512.txt; echo; wc -w /tmp/ids_qwen_512.txt", "description": "Inspect ids file format"}`
+
+  ```
+198
+284
+8397
+425
+10965
+465
+284
+14731
+8397
+425
+10965
+465
+374
+458
+6364
+4531
+1154
+12425
+323
+33496
+12089
+659
+1260
+1030
+264
+8640
+569
+12
+31
+39400
+3476
+389
+279
+12425
+4013
+576
+8596
+304
+220
+17
+15
+15
+15
+659
+109
+512 /tmp/ids_qwen_512.txt
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/banc_texte.sh <<'EOF'\n#!/bin/bash\n# Banc réparti sur du VRAI texte (WikiText-2) au lieu d'identifiants synthétiques :\n# la perplexité synthétique (des milliers) amplifie toute erreur de logit.\ncd /home/stephane/Data13T … [949 caractères tronqués]`
+
+  ```
+started background job bash-52
+  ```
+
+- **job_output** `{"job_id": "bash-52", "timeout_ms": 300000, "wait": true}`
+
+  ```
+['timeout 1800 $BIN $MOD --ppl-reparti 127.0.0.1:$PORT --couches-locales $COUCHES --limit $LIM --ctx 256 ${IDS:+--ids $IDS} ${EXTRA:-} 2>&1 | tail -8']
+=== dense (256 jetons de WikiText-2) ===
+  référence locale  : perplexité 18.0206  (10.8 s)
+  deux nœuds        : perplexité 18.0206  (10.6 s)
+  écart             : 0.00e0
+  transport         : dense f32 · 3623 octets par flux (aller) · 3623 au retour · 100.0 % d'activité (896 neurones par flux) · 256 flux
+  temps             : 15.9 ms par jeton en local · 16.0 ms à attendre le pair (son calcul + l'aller-retour) · soit 1.01× le calcul local seul
+=== blocs001 (256 jetons de WikiText-2) ===
+  référence locale  : perplexité 21.3033  (10.8 s)
+  deux nœuds        : perplexité 21.8873  (10.8 s)
+  écart             : 2.74e-2
+  transport         : listes à échelle par bloc (3 octets/actif) · 2268 octets par flux (aller) · 2971 au retour · 78.6 % d'activité (704 neurones par flux) · 256 flux
+  temps             : 16.1 ms par jeton en local · 16.4 ms à attendre le pair (son calcul + l'aller-retour) · soit 1.02× le calcul local seul
+=== blocs002 (256 jetons de WikiText-2) ===
+  référence locale  : perplexité 27.8316  (10.7 s)
+  deux nœuds     
+… [879 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+Les chiffres sur **vrai texte** sont plus sobres que sur identifiants synthétiques — je corrige les affirmations du rapport (÷1,6 pour 2,7 %, pas « ÷2 pour 0,2 % »).
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/rapport-transport-liste.md'; s=open(p).read()\nv = \"\"\"Configuration utilisable aujourd'hui : `--flux-blocs --act-thresh 0.02`, soit\n**÷2,0 sur le fil pour 0,2 % de perplexité**.\"\"\"\nn = \"\"\"Confi … [4462 caractères tronqués]`
