@@ -2311,6 +2311,11 @@ fn run_ppl(opt: Options) {
                      hb.log.len() / cfg_dims(&mdl), cfg_dims(&mdl), perte.len());
         }
     }
+    if let Some(t) = mdl.trace.as_mut() {
+        t.terminer();
+        println!("[trace] {} listes · {} neurones actifs · {:.0} Mo",
+                 t.enregistrements, t.actifs, t.octets as f64 / 1e6);
+    }
     stats_experts(&mdl);
     println!("\n=== perplexité {:.4} sur {} tokens ({} événements, {:.1} s) ===",
              ppl, n, mdl.events_total(), t0.elapsed().as_secs_f64());

@@ -13,3 +13,4 @@ journal/sessions/archive.log
 # Outil de référence : la source est versionnée, le binaire se recompile
 # (commande exacte dans tools/ref_logits.md).
 tools/ref_logits
+target/

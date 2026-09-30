@@ -7,12 +7,12 @@
 | Début | 2026-09-28 14:46 |
 | Durée | 43.2 h |
 | Tours | 42 |
-| Messages | 1380 |
-| Appels d'outils | 1303 |
+| Messages | 1384 |
+| Appels d'outils | 1307 |
 | Fichiers touchés | 42 |
-| Commandes | 1029 |
+| Commandes | 1033 |
 | Sous-agents | 1 |
-| Commits | 78 |
+| Commits | 79 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -1899,16 +1899,20 @@ Un mot d'honnêteté sur 1.1 : le top-k en flux ne se fai
 
 ### Tour 42 — continue, sois autonome pendant 2 heures
 
-*4 appels d'outils.* Actions notables :
+*8 appels d'outils.* Actions notables :
 
 - bash — Write and run the reference codec
 - bash — Add sentinel, rebuild, run codec round-trip
 - bash — Add K/V f32 attribution flags
 - bash — Revert half flags, document 1.4, commit
+- bash — Test --trace-couches selection
+- bash — Final verification of the autonomous stretch
+- bash — Check if target is tracked and .gitignore
+- bash — Untrack target and commit pending changes
 
 **Synthèse produite :**
 
-⏵ Phase 1.4 : deux variantes pour attribuer l'écart int8 (K ou V en f32)
+⏵ Hygiène : `target/` est suivi par git — je corrige ça avant de conclure
 
 ## 3. Travail accompli
 
@@ -2005,7 +2009,7 @@ Un mot d'honnêteté sur 1.1 : le top-k en flux ne se fai
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 989 autres
+- … et 993 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2231,4 +2235,5 @@ Un mot d'honnêteté sur 1.1 : le top-k en flux ne se fai
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p='docs/roadmap.md'; s=open(p).read() s = s.replace("""| 0.1 | **Format de trace du flux*
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p='docs/roadmap.md'; s=open(p).read() s = s.replace("""| 0.4 | **Profilage par neurone gé
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && git checkout src/model.rs && cargo build --release 2>&1 | tail -1 && cd .. && python3 - <<'PY' 
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && printf 'target/\n' >> .gitignore && git rm -r -q --cached drave-core/target 2>/dev/null; git ls-files | gr
 

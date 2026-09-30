@@ -21964,3 +21964,56 @@ grep: warning: stray \ before n
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && git checkout src/model.rs && cargo build --release 2>&1 | tail -1 && cd .. && python3 - <<'PY'\np='docs/roadmap.md'; s=open(p).read()\ns = s.replace(\"\"\"| 1.4 | **Écart int8 résiduel** (+3,0 % contre +0,8 % chez llama.cp … [2742 caractères tronqués]`
+
+  ```
+Finished `release` profile [optimized] target(s) in 19.37s
+roadmap 1.4 documentée
+a2545ac Phase 0.3 et 1.4 : codec de référence du format, et l'expérience int8 écrite
+[stderr]
+Updated 1 path from the index
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 300 ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf --ppl /tmp/ids_qwen.txt --ctx 256 --abits 16 --threads 16 --limit 512 --dense --trace-flux /tmp/flux_c8.bin --trace-couches 0,3 2>&1 | grep -E \"\\[trace\\]| … [166 caractères tronqués]`
+
+  ```
+[trace] 1024 listes · 913899 neurones actifs · 5 Mo
+=== perplexité 19.3885 sur 510 tokens (0 événements, 16.7 s) ===
+/tmp/flux_c8.bin : 1024 listes · 24 couches · 896 cachés
+   couche   densité  top 10 % portent  neurone le + fort    part
+        0     99.2%             38.3%                 56    1.7%
+        3    100.0%             32.3%                570    1.6%
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && cargo test --release 2>&1 | tail -2 && cd .. && git status --short | head -3 && git log --oneline -5 | cat", "description": "Final verification of the autonomous stretch", "timeoutMs": 300000}`
+
+  ```
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.09s
+
+ M drave-core/src/main.rs
+ M drave-core/target/release/.fingerprint/drave-core-9a06049b91b56c63/dep-test-bin-drave
+ M drave-core/target/release/.fingerprint/drave-core-9a06049b91b56c63/output-test-bin-drave
+a2545ac Phase 0.3 et 1.4 : codec de référence du format, et l'expérience int8 écrite
+47aaae9 Phase 0.4 : profilage par neurone depuis une trace
+ac7ccb1 Phase 0 : la trace du flux et le diff par couche sont en place et démontrés
+b97d129 Drave : renommage complet (crate, binaire, variables, documents)
+15c4c8c Drave : document de vision, et le nom dans le README
+  ```
+
+### 🤖 Assistant
+
+⏵ Hygiène : `target/` est suivi par git — je corrige ça avant de conclure
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git ls-files | grep -c \"target/\" ; cat .gitignore 2>/dev/null | head -5; git diff --stat drave-core/src/main.rs | tail -2", "description": "Check if target is tracked and .gitignore"}`
+
+  ```
+44
+__pycache__/
+*.pyc
+reports/*.tmp
+models/
+data/
+ drave-core/src/main.rs | 5 +++++
+ 1 file changed, 5 insertions(+)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && printf 'target/\\n' >> .gitignore && git rm -r -q --cached drave-core/target 2>/dev/null; git ls-files | grep -c \"target/\"; git add -A && git commit -q -F - <<'EOF' && git log --oneline -1 && git status --short | head -3\nHygiène : … [692 caractères tronqués]`
