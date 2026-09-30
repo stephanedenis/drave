@@ -7,12 +7,12 @@
 | Début | 2026-09-28 14:46 |
 | Durée | 52.4 h |
 | Tours | 47 |
-| Messages | 2230 |
-| Appels d'outils | 2108 |
+| Messages | 2236 |
+| Appels d'outils | 2114 |
 | Fichiers touchés | 47 |
-| Commandes | 1761 |
+| Commandes | 1767 |
 | Sous-agents | 14 |
-| Commits | 183 |
+| Commits | 185 |
 | Compactages de contexte | 3 |
 
 ## Objectifs déclarés
@@ -2177,7 +2177,7 @@ Le mode creux ne peut pas utiliser le miroir VRAM (le chemin GPU est conditionn�
 
 ### Tour 47 — pret pour des scrum de 2h (boxing temps réel, avec revue, rétro et planning)
 
-*253 appels d'outils.* Actions notables :
+*259 appels d'outils.* Actions notables :
 
 - bash — Check clock, machine and last sprint state
 - bash — Create the sprint timing tool
@@ -2193,11 +2193,11 @@ Le mode creux ne peut pas utiliser le miroir VRAM (le chemin GPU est conditionn�
 - bash — Read the kernel launch call
 - bash — Write the FFI for the scores kernel
 - bash — Complete KvGpu initializer
-- … et 233 autres
+- … et 239 autres
 
 **Synthèse produite :**
 
-⏵ Mesure du chemin moteur (sans relecture des scores) pour l'étape 5 du plan
+⏵ Box bientôt clos, je prépare la cérémonie (revue, rétro, planning)
 
 ## 3. Travail accompli
 
@@ -2312,7 +2312,7 @@ Le mode creux ne peut pas utiliser le miroir VRAM (le chemin GPU est conditionn�
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 1721 autres
+- … et 1727 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2643,4 +2643,6 @@ Le mode creux ne peut pas utiliser le miroir VRAM (le chemin GPU est conditionn�
 - Plan et REPRISE : l'étape 6 est verte, et la prochaine étape est la FUSION de la chaîne, pas un noyau de plus" && git log --oneline -1 && date +%H:%M:%S
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -F - <<'EOF' && git log --oneline -1 Top-k déporté : une synchro en trop, un b
 - Chiffres du 16 k sur le binaire final : attention 19,58 → 7,59 ms/jeton (−61 %), balayage −24 %" && git log --oneline -1
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo "lot 1 :"; ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf --ppl /tmp/wt2_ids.txt --c
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git commit -q --amend -F - <<'EOF' && git log --oneline -1 --attn-topk en mode lot : le drapeau ne fait ri
 

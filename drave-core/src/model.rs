@@ -1365,6 +1365,9 @@ impl KvCache {
 /// nombre de couches et de jetons (voir la branche `DRAVE_GPU_TOPK`).
 static TOPK_GPU_ECHEC: std::sync::atomic::AtomicBool = std::sync::atomic::AtomicBool::new(false);
 
+/// Un seul message pour `--attn-topk` ignoré en mode lot (voir `forward_lot`).
+static LOT_TOPK_IGNORE: std::sync::atomic::AtomicBool = std::sync::atomic::AtomicBool::new(false);
+
 impl Model {
     pub fn load(path: &str, ctx: usize, n_threads: usize, dense: bool, keep: f32,
                 auto: bool, q4: u8, b6: u8) -> Model {
@@ -2344,6 +2347,17 @@ impl Model {
         // jeton seul.
         let impose = self.emb_imposee_lot.take();
         if t == 0 { return Vec::new(); }
+        // `--attn-topk` n'est PAS implémenté dans le chemin par lots : le lot
+        // calcule une attention DENSE (la sélection à k clés n'y a jamais été
+        // écrite). Jusqu'ici le drapeau était simplement ignoré — le pire cas du
+        // dépôt, une valeur qui ne fait rien et ne le dit pas : `--lot 8
+        // --attn-topk 256` et `--lot 1 --attn-topk 256` ne donnaient pas le même
+        // résultat. Relevé par la relecture du branchement ; on le dit une fois,
+        // et on le dit FORT, en attendant de l'implémenter ou de le refuser.
+        if self.attn_topk > 0 && t > 1 && !LOT_TOPK_IGNORE.swap(true, std::sync::atomic::Ordering::Relaxed) {
+            eprintln!("[attention] --attn-topk {} est IGNORÉ en mode lot (--lot {t}) : \
+l'attention par lots est DENSE. Utiliser --lot 1 pour l'attention creuse.", self.attn_topk);
+        }
         if t == 1 {
             if let Some(v) = impose { self.emb_imposee = Some(v); }
             // Le jeton n'est PAS lu quand un état est imposé : `forward` prend

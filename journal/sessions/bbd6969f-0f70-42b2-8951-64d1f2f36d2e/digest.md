@@ -35979,3 +35979,75 @@ mesure finale 16k lancée
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\ndef patch(p, paires):\n    s=open(p).read()\n    for v,n,nom in paires:\n        assert s.count(v)==1, f\"{p}::{nom}::{s.count(v)}\"\n        s=s.replace(v,n,1)\n    open(p,'w').write(s); print(f\"{p} ok\")\n\npatch … [2290 caractères tronqués]`
+
+  ```
+reports/rapport-gpu-topk-selection.md ok
+REPRISE.md ok
+docs/plan-gpu-topk.md ok
+aa43de9 Chiffres du 16 k sur le binaire final : attention 19,58 → 7,59 ms/jeton (−61 %), balayage −24 %
+  ```
+
+### 🤖 Assistant
+
+⏵ Box bientôt clos, je prépare la cérémonie (revue, rétro, planning)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/ceremonie.md <<'EOF'\n\n**Objectif du sprint** : « Premier des trois noyaux GPU du top-k : les scores\nd'attention calculés en VRAM, vérifiés contre la référence CPU à 1e-6, avec leur\nbanc ». **Livré : les trois noyaux, l … [7061 caractères tronqués]`
+
+  ```
+cérémonie prête (88 lignes)
+19:09:19
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"pub fn forward_lot\" -A 20 drave-core/src/model.rs | head -30", "description": "Read forward_lot start"}`
+
+  ```
+2337:    pub fn forward_lot(&mut self, toks: &[u32], pos0: usize) -> Vec<Vec<f32>> {
+2338-        let t = toks.len();
+2339-        // Lot IMPOSÉ (préremplissage réparti) : les états arrivent de l'autre
+2340-        // nœud, on ne repasse pas par `token_embd`. Lu avant tout le reste — y
+2341-        // compris avant le retour anticipé sur `t == 0`, sinon une trame vide
+2342-        // laissait l'état imposé en place pour le lot suivant (D7 de la
+2343-        // relecture) — et consommé une seule fois, comme `emb_imposee` pour un
+2344-        // jeton seul.
+2345-        let impose = self.emb_imposee_lot.take();
+2346-        if t == 0 { return Vec::new(); }
+2347-        if t == 1 {
+2348-            if let Some(v) = impose { self.emb_imposee = Some(v); }
+2349-            // Le jeton n'est PAS lu quand un état est imposé : `forward` prend
+2350-            // `emb_imposee` et n'appelle jamais `token_embd`. `toks` peut donc
+2351-            // être vide côté nœud distant, qui ne connaît que des états.
+2352-            //
+2353-            // Le raccourci sort AVANT l'avance du compteur : `forward` avance le
+2354-            // sien. Le faire avancer ici aussi doublait la clé à chaque jeton
+… [218 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/model.rs'; s=open(p).read()\nvieux = \"\"\"        let impose = self.emb_imposee_lot.take();\n        if t == 0 { return Vec::new(); }\"\"\"\nneuf = \"\"\"        let impose = self.emb_imposee_lot. … [1989 caractères tronqués]`
+
+  ```
+D2 : avertissement ajouté
+build
+[attention] --attn-topk 256 est IGNORÉ en mode lot (--lot 8) : l'attention par lots est DENSE. Utiliser --lot 1 pour l'attention creuse.
+      63 tokens notés — perplexité cumulée 27.491  (36.4 tok/s)
+=== perplexité 27.4911 sur 63 tokens (0 événements, 1.7 s) ===
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"lot 1 :\"; ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf --ppl /tmp/wt2_ids.txt --ctx 256 --lot 1 --attn-topk 256 --threads 16 --limit 64 2>&1 | grep -E \"attn-topk|perplexité\" | head -2; cargo test --releas … [828 caractères tronqués]`
+
+  ```
+lot 1 :
+      63 tokens notés — perplexité cumulée 27.496  (26.6 tok/s)
+=== perplexité 27.4964 sur 63 tokens (0 événements, 2.4 s) ===
+test result: ok. 17 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.09s
+
+57e2585 --attn-topk en mode lot : le drapeau ne fait rien, il le dit maintenant
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for lot in 8 1; do echo -n \"lot $lot : \"; ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf --ppl /tmp/ids_qwen_long.txt --ctx 2048 --limit 1024 --lot $lot --attn-topk 256 --dense --threads 16 2>&1 | grep -oE \"perple … [116 caractères tronqués]`
+
+  ```
+lot 8 : perplexité 9.4335 sur 1023 tokens
+lot 1 : perplexité 9.4167 sur 1023 tokens
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git commit -q --amend -F - <<'EOF' && git log --oneline -1\n--attn-topk en mode lot : le drapeau ne fait rien, il le dit maintenant\n\n`forward_lot` n'implémente pas la sélection à k clés : le mode lot calcule une\nattention DENSE. L … [847 caractères tronqués]`
