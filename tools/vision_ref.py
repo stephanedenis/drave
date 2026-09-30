@@ -81,6 +81,50 @@ def main():
             print(f"projecteur : référence {y.size} valeurs, moteur {y_eng.size}")
     except FileNotFoundError:
         pass
+    # --- une couche du ViT (bloc 0), sans la rotation 2-D : la référence refait
+    #     la même plomberie (LayerNorm, q/k/v avec biais, attention globale,
+    #     résidus, MLP avec biais et SiLU).
+    try:
+        with open(sortie + ".bloc", "rb") as f:
+            npatch, e, nff = (int(v) for v in np.frombuffer(f.read(12), dtype=np.int32))
+            buf = np.frombuffer(f.read(), dtype=np.float32)
+        def prendre(n):
+            nonlocal buf
+            v, buf = buf[:n], buf[n:]
+            return v
+        ln1, ln2 = prendre(e), prendre(e)
+        wq, bq = prendre(e*e).reshape(e, e), prendre(e)
+        wk, bk = prendre(e*e).reshape(e, e), prendre(e)
+        wv, bv = prendre(e*e).reshape(e, e), prendre(e)
+        wo, bo = prendre(e*e).reshape(e, e), prendre(e)
+        wg, bg = prendre(nff*e).reshape(nff, e), prendre(nff)
+        wu, bu = prendre(nff*e).reshape(nff, e), prendre(nff)
+        wd, bd = prendre(e*nff).reshape(e, nff), prendre(e)
+        x_eng = prendre(npatch * e).reshape(npatch, e)
+        eps = 1e-6
+        def ln(v, w):
+            m = v.mean(-1, keepdims=True)
+            var = ((v - m) ** 2).mean(-1, keepdims=True)
+            return (v - m) / np.sqrt(var + eps) * w
+        x = eng.copy()
+        xn = ln(x, ln1)
+        qq, kk, vv = xn @ wq.T + bq, xn @ wk.T + bk, xn @ wv.T + bv
+        sc = (qq @ kk.T) / np.sqrt(e)
+        sc -= sc.max(-1, keepdims=True)
+        att = np.exp(sc)
+        att /= att.sum(-1, keepdims=True)
+        x = x + (att @ vv) @ wo.T + bo
+        xn = ln(x, ln2)
+        act = (xn @ wg.T + bg)
+        act = (act / (1.0 + np.exp(-act))) * (xn @ wu.T + bu)
+        x = x + act @ wd.T + bd
+        ecart_b = float(np.abs(x - x_eng).max()) / max(1e-9, float(np.abs(x).max()))
+        print(f"bloc 0 : {x.shape} · |référence| max {float(np.abs(x).max()):.4f} · "
+              f"écart max relatif {ecart_b:.3e}")
+        if ecart_b > 1e-5:
+            print("DÉSACCORD bloc — premiers canaux :", x[0, :3], "contre", x_eng[0, :3])
+    except FileNotFoundError:
+        pass
     if ecart > 1e-5:
         print("DÉSACCORD — premiers canaux :", out[0, :4], "contre", eng[0, :4])
     else:

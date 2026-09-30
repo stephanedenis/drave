@@ -19041,3 +19041,93 @@ d5ee7a0 MLA : le moteur retrouve la référence numpy à 5,2e-7 près
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='docs/plan-mla-vision.md'; s=open(p).read()\nold = \"\"\"Ce qui reste est le MILIEU : la rotation 2-D des patchs (mRoPE), les 32 couches\navec attention locale une sur huit, `v.post_ln`. Puis l'injection des embed … [2491 caractères tronqués]`
+
+  ```
+pas suivant détaillé
+0c7d316 vision : détailler le pas suivant (couche, rotation 2-D, attention locale, injection)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git status --short | head -3; cd qtrinet-core && cargo test --release 2>&1 | tail -2", "description": "Final state verification", "timeoutMs": 300000}`
+
+  ```
+M journal/README.md
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.08s
+  ```
+
+### 🤖 Assistant
+
+⏵ Tour 8 : état vérifié, pas suivant détaillé, objectif laissé actif
+
+## Ce tour-ci
+
+Le contexte disponible ne permettait plus d'écrire le corps de la tour de vision sans risquer de laisser le dépôt cassé — la règle du projet passe avant le chiffre. J'ai donc fait ce qui restait utile et sûr :
+
+**Vérification finale, sur le code tel qu'il est commité :**
+- porte gpt-oss : **15,1757** (exactement le chiffre de contrôle, sans `QT_GPU`) ;
+- porte Qwen : **19,3885** (revérifiée après les changements MLA) ;
+- `cargo test --release` : **6/6** ; arbre propre (hors l'archive du journal).
+
+**Le pas suivant est maintenant détaillé** dans `docs/plan-mla-vision.md`, pour qu'une session suivante n'ait pas à refaire l'enquête :
+1. la composition d'une couche (ln1 → q/k/v **+ biais** → attention → attn_out + biais → résidu → ln2 → MLP + biais → résidu) — les biais sont partout, c'est l'erreur classique de ce dépôt ;
+2. la rotation **2-D** (mRoPE) : le seul point **non vérifiable localement** est sa convention exacte (répartition des fréquences entre les deux axes) — à lever en comparant les deux conventions plausibles à la référence numpy, puis en validant la sortie complète contre `llama-mtmd-cli` ;
+3. l'attention **locale une couche sur huit** (`n_wa_pattern = 8`) ;
+4. l'injection des embeddings, qui demande un chemin partant d'un **vecteur** et non de `token_embd` — le seul ajout d'architecture nécessaire au moteur.
+
+## Bilan des six chantiers
+
+| # | chantier | état | chiffre |
+|---|---|---|---|
+| 1 | aiguille long contexte | ✅ | 12/12 sondes (1,5B 512+2048, 30B 2048, gpt-oss 4096) |
+| 2 | chemin GPU (5 sous-items) | ✅ | vectorisation ×1,8-2,3 · experts +6 % · lots ×2,8 · tête AVX2 · 2 cartes |
+| 3 | mémoire KV | ✅ | 0,03 Go à ctx 1 M · hypothèse f16 **réfutée** |
+| 4 | rotation à 16 k | ✅ | 35,18 contre 1 133,02 → seuil à 4 × |
+| 5 | MLA + vision | ⏳ | MLA **validé** (5,2e-7) · vision : patchs (5,4e-7) + projecteur (1,7e-6) validés, corps de la tour à écrire |
+| 6 | hygiène | ✅ | feuille de route + pièges `QT_GPU*` |
+
+L'objectif reste **actif** : il ne manque que le corps de la tour de vision, et tout ce qu'il faut pour l'écrire — formes, biais, conventions, méthode de validation — est dans le dépôt.
+
+
+## Tour 18
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Réaliser les 6 nouveaux chantiers du projet qtrinet-core, dans l'ordre : (1) relancer le test de l'aiguille sur contexte long (remplissage varié en vrai texte, moins de sondes, réponses plus longues) sur un modèle capable, grâce au préremplissage par lots et au KV déporté ; (2) chemin GPU : dépaquetage vectorisé du noyau d'attention (13,2 ms/couche à 1 M en int4 vers ~3 ms), brancher MXFP4 dans le moteur avec une politique de résidence des experts, attention par lots sur GPU dans forward_lot, noyau de tête Q8_0 accéléré (AVX2 ou déport), et usage du second GPU ; (3) mémoire : pagination du cache KV côté CPU (25,77 Go réservés à ctx 1 M pour 512 jetons écrits) et test de l'hypothèse « clés en f16 avant quantification » pour l'écart int8 avec llama.cpp à 8 192 (+3,0 % contre +0,8 %) ; (4) rotation au-delà de 5 120 jetons (passe à 16 k) ; (5) structurel : MLA (aucun modèle local — construire un modèle MLA synthétique et valider contre une référence indépendante) et vision (poids Qwen2.5-VL et projecteur mmproj présents) ; (6) hygiène : réécrire la section « Ce qu'il faut faire ensuite » de REPRISE.md et y consigner les pièges QT_GPU/QT_GPU_TETE/QT_GPU_KV. Chaque chantier doit être implémenté, mesuré (portes de non-régression Qwen 19,3885 et gpt-oss 15,1757 sans QT_GPU), documenté dans le dépôt et commité."
+Round: 9/30
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Vision : j'attaque une couche du ViT (plomberie validée, rotation laissée de côté)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && python3 - <<'PY'\np='src/main.rs'; s=open(p).read()\nold = \"\"\"    let norme: f32 = out.iter().map(|v| v * v).sum::<f32>().sqrt();\"\"\"\nnew = \"\"\"    // ---- Corps de la tour : UNE couche du ViT (bloc 0), SANS la r … [5305 caractères tronqués]`
+
+  ```
+bloc ViT posé
+    Finished `release` profile [optimized] target(s) in 0.01s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 900 ./qtrinet-core/target/release/qtrinet-core /home/stephane/FastNVMe/models/mmproj-Qwen2.5-VL-7B-Instruct-f16.gguf --banc-vision /tmp/vision_patch.bin 2>&1 | grep -E \"bloc 0|projecteur :\" | tail -2", "description": "Run V … [37 caractères tronqués]`
+
+  ```
+projecteur : 3584 valeurs, |sortie| = 17.8837, 4 premières [-0.3701, 0.2001, 0.2074, 0.12]
+bloc 0 : 4 patchs × 1280 · |sortie| = 26.2325 · 4 premières [-0.3298, -0.3083, -0.1532, 0.1002]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='tools/vision_ref.py'; s=open(p).read()\nold = \"\"\"    if ecart > 1e-5:\"\"\"\nnew = \"\"\"    # --- une couche du ViT (bloc 0), sans la rotation 2-D : la référence refait\n    #     la même plomberie (LayerNorm … [2252 caractères tronqués]`
+
+  ```
+référence du bloc écrite
+écart max relatif : 5.367e-07
+projecteur : 3584 valeurs · écart max relatif 1.732e-06
+bloc 0 : (4, 1280) · |référence| max 10.3253 · écart max relatif 1.818e-06
+accord (bruit de virgule flottante)
+  ```
+
+### 🤖 Assistant
+
+⏵ Bloc ViT validé : 1,8e-6 contre la référence numpy
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='docs/plan-mla-vision.md'; s=open(p).read()\nold = \"\"\"| tranche | écart max relatif contre numpy |\n|---|---|\n| embedding de patchs (convolution 14 × 14) | **5,37e-07** |\n| projecteur (fusion 2 × 2 → `mm.0` → … [2868 caractères tronqués]`

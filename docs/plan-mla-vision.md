@@ -177,7 +177,15 @@ embeddings d'image divergent sans que rien ne le signale.
 | tranche | écart max relatif contre numpy |
 |---|---|
 | embedding de patchs (convolution 14 × 14) | **5,37e-07** |
+| **une couche du ViT** (bloc 0, sans rotation) | **1,82e-06** |
 | projecteur (fusion 2 × 2 → `mm.0` → GELU → `mm.2`) | **1,73e-06** |
+
+La couche validée fait toute la plomberie : LayerNorm (`ln1`, `ln2`, eps de
+`clip.vision.attention.layer_norm_epsilon`), q/k/v **avec leurs biais**, attention
+globale, `attn_out` + biais, deux résidus, MLP `ffn_gate`/`ffn_up` + biais,
+**SiLU** (`clip.use_silu = 1` — ce n'est PAS un GELU dans le ViT, contrairement au
+projecteur), `ffn_down` + biais. Ce qui n'y est pas encore : la rotation 2-D et la
+fenêtre locale.
 
 Le projecteur consomme les quatre patchs d'un groupe 2 × 2 concaténés en ordre
 raster, applique `mm.0` (5120 → 5120) + biais, un GELU exact, puis `mm.2`

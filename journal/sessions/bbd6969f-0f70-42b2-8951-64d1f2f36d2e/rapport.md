@@ -6,13 +6,13 @@
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
 | Durée | 30.2 h |
-| Tours | 17 |
-| Messages | 1199 |
-| Appels d'outils | 1173 |
+| Tours | 18 |
+| Messages | 1206 |
+| Appels d'outils | 1178 |
 | Fichiers touchés | 38 |
-| Commandes | 906 |
+| Commandes | 911 |
 | Sous-agents | 1 |
-| Commits | 50 |
+| Commits | 51 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -59,6 +59,8 @@
 **Tour 16** — <goal_round> Objective: "Réaliser les 6 nouveaux chantiers du projet qtrinet-core, dans l'ordre : (1) relancer le test de l'aiguille sur contexte long (remplissage varié en vrai texte, moins de sondes, réponses plus longues) sur un modèle capable, grâce au préremplissage par lots et au KV déporté ; (2) chemin GPU : dépaquetage vectorisé du noyau d'attention (13,2 ms/couche à 1 M en int4 vers ~3 ms … [1491 caractères tronqués]
 
 **Tour 17** — <goal_round> Objective: "Réaliser les 6 nouveaux chantiers du projet qtrinet-core, dans l'ordre : (1) relancer le test de l'aiguille sur contexte long (remplissage varié en vrai texte, moins de sondes, réponses plus longues) sur un modèle capable, grâce au préremplissage par lots et au KV déporté ; (2) chemin GPU : dépaquetage vectorisé du noyau d'attention (13,2 ms/couche à 1 M en int4 vers ~3 ms … [1491 caractères tronqués]
+
+**Tour 18** — <goal_round> Objective: "Réaliser les 6 nouveaux chantiers du projet qtrinet-core, dans l'ordre : (1) relancer le test de l'aiguille sur contexte long (remplissage varié en vrai texte, moins de sondes, réponses plus longues) sur un modèle capable, grâce au préremplissage par lots et au KV déporté ; (2) chemin GPU : dépaquetage vectorisé du noyau d'attention (13,2 ms/couche à 1 M en int4 vers ~3 ms … [1491 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -782,10 +784,56 @@ L'objectif reste **actif** : il ne manque que le corps de la tour de vision, cha
 
 ### Tour 17 — <goal_round> Objective: "Réaliser les 6 nouveaux chantiers du projet qtrinet-core, dans l'ordre : (1) relancer le test d … [1771 caractères tronqués]
 
-*2 appels d'outils.* Actions notables :
+*3 appels d'outils.* Actions notables :
 
 - bash — Final gpt-oss gate and repo check
 - bash — Detail next vision step and commit
+- bash — Final state verification
+
+**Synthèse produite :**
+
+⏵ Tour 8 : état vérifié, pas suivant détaillé, objectif laissé actif
+
+\## Ce tour-ci
+
+Le contexte disponible ne permettait plus d'écrire le corps de la tour de vision sans risquer de laisser le dépôt cassé — la règle du projet passe avant le chiffre. J'ai donc fait ce qui restait utile et sûr :
+
+**Vérification finale, sur le code tel qu'il est commité :**
+- porte gpt-oss : **15,1757** (exactement le chiffre de contrôle, sans `QT_GPU`) ;
+- porte Qwen : **19,3885** (revérifiée après les changements MLA) ;
+- `cargo test --release` : **6/6** ; arbre propre (hors l'archive du journal).
+
+**Le pas suivant est maintenant détaillé** dans `docs/plan-mla-vision.md`, pour qu'une session suivante n'ait pas à refaire l'enquête :
+1. la composition d'une couche (ln1 → q/k/v **+ biais** → attention → attn_out + biais → résidu → ln2 → MLP + biais → résidu) — les biais sont partout, c'est l'erreur classique de ce dépôt ;
+2. la rotation **2-D** (mRoPE) : le seul point **non vérifiable localement** est sa convention exacte (répartition des fréquences entre les deux axes) — à lever en comparant les deux conventions plausibles à la référence numpy, puis en validant la sortie complète contre `llama-mtmd-cli` ;
+3. l'attention **locale une couche sur huit** (`n_wa_pattern = 8`) ;
+4. l'injection des embeddings, qui demande un chemin partant d'un **vecteur** et non de `token_embd` — le seul ajout d'architecture nécessaire au moteur.
+
+\## Bilan des six chantiers
+
+| # | chantier | état | chiffre |
+|---|---|---|---|
+| 1 | aiguille long contexte | ✅ | 12/12 sondes (1,5B 512+2048, 30B 2048, gpt-oss 4096) |
+| 2 | chemin GPU (5 sous-items) | ✅ | vectorisation ×1,8-2,3 · experts +6 % · lots ×2,8 · tête AVX2 · 2 cartes |
+| 3 | mémoire KV | ✅ | 0,03 Go à ctx 1 M · hypothèse f16 **réfutée** |
+| 4 | rotation à 16 k | ✅ | 35,18 contre 1 133,02 → seuil à 4 × |
+| 5 | MLA + vision | ⏳ | MLA **validé** (5,2e-7) · vision : patchs (5,4e-7) + projecteur (1,7e-6) validés, corps de la tour à écrire |
+| 6 | hygiène | ✅ | feuille de route + pièges `QT_GPU*` |
+
+L'objectif reste **actif** : il ne manque que le corps de la tour de vision, et tout ce qu'il faut pour l'écrire — formes, biais, conventions, méthode de validation — est dans le dépôt.
+
+### Tour 18 — <goal_round> Objective: "Réaliser les 6 nouveaux chantiers du projet qtrinet-core, dans l'ordre : (1) relancer le test d … [1771 caractères tronqués]
+
+*4 appels d'outils.* Actions notables :
+
+- bash — Implement one ViT block slice
+- bash — Run ViT block bench
+- bash — Validate ViT block against numpy
+- bash — Document and commit ViT block validation
+
+**Synthèse produite :**
+
+⏵ Bloc ViT validé : 1,8e-6 contre la référence numpy
 
 ## 3. Travail accompli
 
@@ -878,7 +926,7 @@ L'objectif reste **actif** : il ne manque que le corps de la tour de vision, cha
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 866 autres
+- … et 871 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1076,4 +1124,5 @@ L'objectif reste **actif** : il ne manque que le corps de la tour de vision, cha
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p='docs/plan-mla-vision.md'; s=open(p).read() old = """### Ce qu'il faut écrire, dans l'o
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p='docs/plan-mla-vision.md'; s=open(p).read() old = """### ÉTAT : première tranche FAITE 
 - vision : détailler le pas suivant (couche, rotation 2-D, attention locale, injection)  Le plan dit maintenant, étape par étape, ce qui reste à écrire pour le co
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p='docs/plan-mla-vision.md'; s=open(p).read() old = """| tranche | écart max relatif cont
 
