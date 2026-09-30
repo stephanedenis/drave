@@ -22551,3 +22551,70 @@ liaison cfg utilisée
   ```
 
 - **bash** `{"command": "date +\"%H:%M:%S\"; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='docs/roadmap.md'; s=open(p).read()\ns = s.replace(\"\"\"| 3.1 | **Contrat d'échange v1** : tranche de liste = en-tête (couche, source, échelle, bits) + paires (destination, valeur) | ⏳ | encod … [2859 caractères tronqués]`
+
+  ```
+10:26:07
+roadmap phase 3 : état réel
+5d13128 Phase 3 : le transport de flux entre deux nœuds (défaut ouvert, chiffré)
+  ```
+
+### 🤖 Assistant
+
+⏵ 10:26 — point d'étape : 20 min de plage écoulées, je continue
+
+**Heure système : 10:26. Fin de plage : 12:06. Il reste ~1 h 40.** Je continue.
+
+## Fait depuis le début de la plage (10:07)
+
+**Phase 0.3bis — le rejeu** (`--flux-forcer`) : une trace relue et imposée au moteur redonne **exactement** le même résultat — `perplexité 19.3885` avec et sans rejeu, sur une trace de 132 Mo et deux fenêtres de contexte. C'est la démonstration locale du contrat de la phase 3 : *une liste suffit à continuer le calcul*. Diagnostic de fidélité : 1,5e-5 d'écart relatif, soit la quantification 16 bits.
+
+Défaut trouvé **par le rejeu** (qu'un diff n'aurait jamais vu) : la clé d'une liste était `(couche, position dans la fenêtre)`, donc une exécution multi-fenêtres réécrivait les mêmes clés — perplexité 356 694 au lieu de 17,43. Clé corrigée en `(couche, compteur de jeton global)`.
+
+**Phase 0.3ter — trace et rejeu sur le chemin par lots** : les hooks n'existaient que dans le chemin par jeton. Sur le chemin par lots, le rejeu est **exact** (on remplace les entiers et l'échelle, sans requantification) : 17,4294 tracé et rejoué, identiques.
+
+**Phase 1.4 — l'expérience d'attribution** : les deux variantes (`DRAVE_KV_K_F32`, `DRAVE_KV_V_F32`) sont implémentées ; contrôle à ctx 256 (clés int8 + valeurs f32 : 17,5889 contre 17,4315 en f32). Les deux passes à ctx 8192 tournent encore (`/tmp/kv_attribution.log`) — je relèverai le résultat avant la fin de la plage.
+
+**Phase 3 — le transport** : `--flux-serveur` et `--ppl-reparti` font tourner deux nœuds (pilote + moteur) qui se passent des flux ; **88 flux servis**. **Défaut ouvert et chiffré** : la perplexité répartie (798,3) ne correspond pas à la locale (18,2178) — j'ai préféré l'écrire comme défaut ouvert que de le présenter comme fini.
+
+## Ce que je fais dans l'heure restante
+
+1. relever l'attribution int8 (elle arrive dans ~15 min) et la documenter ;
+2. chercher le défaut du calcul réparti — les candidats sont identifiés (position, norme d'entrée du nœud distant, état des caches KV) ; le suspect n° 1 est le **cache KV du nœud distant**, qui doit se remplir au fil des jetons reçus alors que le pilote, lui, ne lui envoie qu'un flux par jeton ;
+3. si le temps le permet, la mesure de débit du transport (octets par flux, latence aller-retour) — c'est le chiffre qui donnera le **seuil de rentabilité** de la phase 3, et il se mesure sur localhost avant Colab.
+
+Je vérifie l'heure à chaque itération et j'arrête à 12:06, en laissant un point d'étape commité quoi qu'il arrive.
+
+
+## Tour 44
+
+### 👤 Utilisateur
+
+pendant que les charges locales s'executent, peux-tu avancer des chantiers légers sur les ressources loçcale ou d'analyse pure?
+
+### 🤖 Assistant
+
+⏵ 10:28 — analyse pure : profil de sparsité et de persistance par couche, depuis les traces
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > tools/analyse_flux.py <<'EOF'\n#!/usr/bin/env python3\n\"\"\"Analyse PURE d'une trace de flux : ce que la vision appelle « voir le modèle\nneurone par neurone », mais chiffré par couche et sans exécuter le moteur.\n\nCe que l'o … [3906 caractères tronqués]`
+
+  ```
+=== flux_sparse.bin : 24576 listes · 896 cachés ===
+   couche  densité  persistants   top1%  top10%  recouvrement
+        0    25.9%        1.45%   14.6%   56.4%              
+        1    56.3%        0.89%    5.3%   26.1%   14/50 (28%)
+        2    36.3%        0.89%   10.8%   38.1%   33/50 (66%)
+        3    28.8%        1.00%   12.4%   48.0%   26/50 (52%)
+        4    26.7%        1.12%   16.3%   46.4%   24/50 (48%)
+        5    45.6%        1.23%    8.4%   32.6%   42/50 (84%)
+        6    40.5%        1.67%   10.4%   35.8%   42/50 (84%)
+        7    30.1%        1.12%   13.4%   44.1%   34/50 (68%)
+        8    29.2%        1.34%   14.8%   47.2%   43/50 (86%)
+        9    20.1%        1.90%   15.1%   67.2%   37/50 (74%)
+       10    31.3%        1.00%   11.9%   40.2%   24/50 (48%)
+  ```
+
+### 🤖 Assistant
+
+⏵ 10:30 — les résultats d'analyse : densité, persistance et recouvrement par couche
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-analyse-flux.md <<'EOF'\n# Analyse du flux, couche par couche\n\nPremière analyse **pure** : aucune exécution du moteur, seulement une trace relue\n(`tools/analyse_flux.py`). Ce qu'elle apporte, et pourquoi ces  … [4064 caractères tronqués]`
