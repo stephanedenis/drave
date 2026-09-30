@@ -32103,3 +32103,783 @@ noyaux exportés : 10
 **Noyau 1 terminé : écart 1,03e-7, 40,6× plus rapide que le CPU à 262 144 clés.** Je commit avec son rapport, puis j'attaque la sélection.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-gpu-scores.md <<'EOF'\n# Noyau GPU de scores d'attention — le premier des trois du top-k\n\n**En une ligne** : les scores d'attention se calculent maintenant **en VRAM**, avec\nun écart de **1,03e-7** sur la réf … [4459 caractères tronqués]`
+
+  ```
+plan : étape 1 ✅
+5e8bf48 Sprint 1 : noyau GPU de scores d'attention — exact à 1,03e-7, 40× plus rapide
+── Sprint 1 ─────────────────────────────────────────────
+- **Début** : 17:41 · **Fin prévue** : 19:41 (boxing de 120 min)
+   temps : 17:46 · reste 1 h 54
+   commits depuis le début : 1
+  ```
+
+### 🤖 Assistant
+
+Noyau 1 livré. J'attaque la **sélection** (noyau 2) : l'histogramme par ligne sur les scores transformés en entiers monotones, puis le seuil du k-ième.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat >> drave-core/gpu/drave_gpu.cu <<'EOF'\n\n// ---------------------------------------------------------------------------\n// SÉLECTION top-k, première moitié : l'HISTOGRAMME (noyau 2a). Chaque ligne\n// (tête KV × tête de requête … [2063 caractères tronqués]`
+
+  ```
+|                    ^~~~~~~~~
+4 errors generated when compiling for sm_75.
+[stderr]
+grep: drave-core/gpu/drave_gpu.ptx: No such file or directory
+[exit code: 2]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ./drave-core/gpu/compiler.sh 2>&1 | grep -E \"error\" | head -6; echo \"=== ce que le stub fournit ===\"; grep -oE \"__device__ [a-z ]*[a-zA-Z_]+\\(\" drave-core/gpu/cuda_stub.h | head -12; grep -c \"atomicAdd\\|float_as_uint\" drave … [78 caractères tronqués]`
+
+  ```
+drave_gpu.cu:704:28: error: use of undeclared identifier '__float_as_uint'
+drave_gpu.cu:709:12: error: use of undeclared identifier '__uint_as_float'; did you mean '__int_as_float'?
+drave_gpu.cu:727:9: error: use of undeclared identifier 'atomicAdd'
+drave_gpu.cu:731:20: error: use of undeclared identifier 'atomicAdd'
+4 errors generated when compiling for sm_75.
+=== ce que le stub fournit ===
+__device__ __attribute__(
+0
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && wc -l drave-core/gpu/cuda_stub.h; sed -n 1,30p drave-core/gpu/cuda_stub.h", "description": "Read the CUDA stub header"}`
+
+  ```
+40 drave-core/gpu/cuda_stub.h
+// Sans en-têtes CUDA : les qualificatifs sont des attributs clang, et
+// `__syncthreads` est un builtin du mode CUDA.
+#define __device__ __attribute__((device))
+#define __host__ __attribute__((host))
+#define __global__ __attribute__((global))
+#define __shared__ __attribute__((shared))
+#define __constant__ __attribute__((constant))
+#define __forceinline__ inline __attribute__((always_inline))
+#define __restrict__ __restrict__
+// Les identifiants de bloc et de fil viennent de
+// `__clang_cuda_builtin_vars.h` (voir compiler.sh) : les redéclarer ici, même
+// avec `device_builtin`, entre en conflit. Sans cet en-tête, clang émet
+// `ld.global.b32 %r, [threadIdx]` au lieu des registres `%tid.x` — la lecture
+// vaut 0, `pas = blockDim.x * gridDim.x` vaut 0, et le noyau boucle à l'infini
+// sans le moindre message d'erreur.
+static __attribute__((device)) __attribute__((always_inline)) float __int_as_float(int x) {
+    return __builtin_bit_cast(float, x);
+}
+typedef __SIZE_TYPE__ size_t;
+typedef unsigned long long uint64_t;
+
+// Aucune bibliothèque CUDA n'est incluse : les fonctions mathématiques des
+// noyaux d'attention sont écrites ici. `ex2.approx.f32` est l'
+… [407 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat >> drave-core/gpu/cuda_stub.h <<'EOF'\n\n// `atomicAdd` sur un entier non signé : le noyau d'histogramme du top-k en a\n// besoin, et la boîte à outils CUDA n'est pas là. `atom.add.u32` est\n// l'instruction du matériel ; la vale … [1642 caractères tronqués]`
+
+  ```
+casts corrigés
+drave_gpu.ptx régénéré (6937 lignes)
+noyaux exportés : 11
+1
+  ```
+
+
+  ```
+,1380,566,572,21009,553,2205,42588,439,323,12357,39260,5139,72,7767,659,15687,27420,3118,5561,304,328,713,10386,369,1429,315,279,1790,4236,1635,659,3216,279,41674,315,429,1042,566,572,304,5896,12264,1154,323,3208,44219,59106,1492,311,5257,53527,3020,659,1260,572,50412,553,24213,36130,1154,264,4238,323,4741,36344,879,572,20822,19044,4586,518,56707,1054,659,17715,806,5896,5322,1154,419,572,825,315,279,98852,323,1429,25650,18346,315,806,2272,659,8999,315,15687,364,82,44219,504,419,4168,525,25650,2170,21439,315,806,2272,518,330,429,2397,75879,330,659,758,220,22,21,17,1154,566,2115,279,3283,311,12449,264,52748,1154,714,566,5927,304,7324,220,22,21,19,979,566,572,20822,458,36613,311,24213,1154,879,572,6398,304,20686,2348,279,71974,20448,659,14731,284,284,284,7996,1635,284,284,284,14731,18360,2253,524,1154,279,5537,315,806,7194,2007,1154,572,25335,553,3033,8437,304,279,12406,315,220,22,21,17,1154,323,304,279,10464,315,220,22,21,20,15687,29253,323,806,2997,75744,1495,279,24474,83,2986,1154,13812,448,279,14602,315,3259,862,1616,1052,659,2379,30696,13970,1154,5644,705,553,806,5862,569,12,31,2820,320,553,419,882,566,572,15691,504,7852,6414,491,1154,46742,2090,323,4586,2310,4231,304,5256,311,80
+… [3959 caractères tronqués]
+  ```
+
+
+  ```
+## 2. En-tête, champs, modes
+
+| # | document | affirmation | ce que dit le code / la mesure | verdict |
+|---|---|---|---|---|
+| 14 | `docs/format-flux.md:66` | en-tête « **26 octets** » | `TAILLE_TETE = 79` : 26 (v1) + 13 (niveaux/seuil/top-k/renorm) + 40 (7 top-k de projection + attn + q·k + moe) | PÉRIMÉ |
+| 15 | `reports/rapport-transport-liste.md:9,14,15,196` | en-tête « **39 octets** » | 79 (offsets vérifiés : topk_proj 39..66, attn 67, qk 71, moe 75) | PÉRIMÉ |
+| 16 | `docs/plan-prefill-reparti.md:20,28,78,105,140` | en-tête « **39 octets** », tous les offsets ≤ 38 | 79, avec quatre champs de plus après l'offset 38 | PÉRIMÉ |
+| 17 | `docs/format-flux.md:74` | « `n` : dimension (mode 0) ou **actifs (mode 1)** » | `n` = actifs aussi en mode 2, et **états** en mode 3 (`MODE_LOT`, main.rs:1307-1312) | MANQUANT |
+| 18 | `docs/format-flux.md:86` | mode 2 = `n_blocs u32 · n_blocs × f32 · longueur u32 · paires` | conforme à l'émetteur (main.rs:1446-1466) et au récepteur (1591-1628) | OK |
+| 19 | `docs/format-flux.md:87` | mode 3 = `n × dimension × f32`, `n` = états | conforme (`envoyer_lot`, main.rs:1512-1544) | OK |
+| 20 | `docs/format-flux.md:30` | échappement 255 → « l'indice ABSO
+… [3956 caractères tronqués]
+  ```
+
+
+> **Compactage de contexte** — résumé conservé :
+
+```
+## Primary Request and Intent
+- Sequence of user directives (verbatim where decisive):
+  - "continue avec REPRISE.md" → resume the project from its handoff doc.
+  - "fais les 8 dans l'ordre" then "fais tous ces 6 nouveaux chantiers" (both complete).
+  - "vision d'abord, puis roadmap" → delivered (`docs/vision.md`, `docs/roadmap.md`).
+  - "fais un roadmap ambitieux et commence les travaux qui ne nécessitent pas d'infra supplémentaire. on pourra terter avec colab pour le volet distribué".
+  - "continue, sois autonome pendant 2 heures" then "ne te fie pas à tes estimés pour le temps… (time-boxing)" → 10:06:59→12:06:59 done.
+  - "as-tu ce qu'il te faut pour te rendre à 15h en travaillant avec un maximum d'autonomie et de parallélisme d'activités?" → done 11:46→~14:10.
+  - "continue jusqu'à 18h HAE" → done 15:07→~17:35.
+  - "pret pour des scrum de 2h (boxing temps réel, avec revue, rétro et planning)".
+- Scrum calibration answers (via ask_user_question): **ceremony AFTER the box** (2 h of work, then review/retro/planning); **agent sets the sprint objective alone, without validation**; **start now on the GPU top-k first kernel**.
+
+## Key Technical Concepts
+- Rust engine (std only), GGUF read in place; project renamed **Qtrinet → Drave** (binary `drave`, crate `drave-core`, env `DRAVE_*`); working dir still `.../GitHub/Qtrinet`.
+- Push/AER architecture: `SparseVec`, `PushMat`, `SignedDelta`, "listes valuées par source"; measured push/pull crossover ≈ **22 %** density (not 10 %).
+- Flux protocol **v5**: 79-byte header (magic `0x44525631`, version, mode, debut, fin, pos, n, échelle, levels, thresh, topk, renorm, 7×topk_proj, attn/qk/moe topk); modes 0 dense f32, 1 listes i16, 2 blocs i8+échelle/bloc+indices par écarts, 3 lot dense f32, 4 lot en listes; unknown mode refused before any body byte.
+- Trace format DRVF: **v2** default (delta indices, lossless) / **v3** (`DRAVE_TRACE_BLOCS=1`, i8 + f16 block scales, lossy).
+- KV cache: paginated `cap`; scales per 32-block; attribution flags `DRAVE_KV_K_F32`, `DRAVE_KV_V_F32`, `DRAVE_KV_K_F16`; VRAM mirror requires homogeneous layout (any attribution variant disables it).
+- GPU: PTX via clang `gpu/compiler.sh` (sm_75, `cuda_stub.h`, no CUDA headers), PTX embedded via `include_str!("../gpu/drave_gpu.ptx")`; two Quadro RTX 5000; kernels must be `extern "C"` or clang mangles names.
+- Machine: 2× Xeon E5-2687W v3 (40 threads), 125 GB RAM, NVMe.
+
+## Files and Code
+- `drave-core/src/main.rs` (~3 500 lines): `tete_flux()` (single header builder), `envoyer_flux`, `envoyer_lot`, `envoyer_lot_listes`, `encoder_etat_blocs`, `encoder_paires_blocs`/`decoder_paires_blocs`, `verifier_taille` (`PLAFOND_FLUX = 256<<20`), `recevoir_flux(s, hidden)` (immediate mode check, `n==0` refused only for modes 0/3/4, cumulative `lus` cap, `a ≤ hidden`), `run_serveur_flux` (guards on debut/fin/pos/n, refusals `continue` not `break`), `run_ppl_reparti` (lot loop, reply mode/n validation, Σt accounting), `options_actives()` + `--options-actives`/`--options-strict`, `run_banc_topk` (new `--banc-topk N` bench), `nll_logits()`, tests `tests_flux`/`tests_plafond` (17 tests).
+- `drave-core/src/model.rs`: `emb_imposee_lot`, `forward_lot` (j0 = jeton_trace+1 advanced once per lot; t==1 shortcut before advance), `flux_lot(j0, …)` with `else { manquantes += 1 }`, `flux_en_liste`, `flux_en_liste_blocs` (asserts `x.len() <= u16::MAX`), `f16_depuis_f32`/`f32_depuis_f16`, `TraceFlux` (v2/v3), `FluxRelecteur` (`listes` + `listes_blocs`), `KvCache` (`k_f16`, `kp: Vec<u16>`, `pub kv`).
+- `drave-core/src/gpu.rs`: `f_attn_scores`, `KvGpu { scores_dev, scores_cap }`, `Machine::attn_scores(m, q, n, scale, sc)` with `nsplit = (n/256).clamp(1,128)`, grid `(n_kv, nsplit)`.
+- `drave-core/gpu/drave_gpu.cu`: new `extern "C" __global__ void attn_scores(...)` (exact 1.03e-7) and new `attn_topk_histo(...)` + `monotone()`/`depuis_monotone()` using `__float_as_uint`/`__uint_as_float`/`atomicAdd` — **these three identifiers are NOT in `cuda_stub.h` and t
+… [5662 caractères tronqués]
+```
+
+### 👤 Utilisateur
+
+This is an automatically generated checkpoint condensing an earlier span of the conversation to free up context. Treat the captured context as established background and build on it without restating it. Continue the task directly from the messages that follow, without acknowledging this checkpoint.
+
+<compacted-summary>
+## Primary Request and Intent
+- Sequence of user directives (verbatim where decisive):
+  - "continue avec REPRISE.md" → resume the project from its handoff doc.
+  - "fais les 8 dans l'ordre" then "fais tous ces 6 nouveaux chantiers" (both complete).
+  - "vision d'abord, puis roadmap" → delivered (`docs/vision.md`, `docs/roadmap.md`).
+  - "fais un roadmap ambitieux et commence les travaux qui ne nécessitent pas d'infra supplémentaire. on pourra terter avec colab pour le volet distribué".
+  - "continue, sois autonome pendant 2 heures" then "ne te fie pas à tes estimés pour le temps… (time-boxing)" → 10:06:59→12:06:59 done.
+  - "as-tu ce qu'il te faut pour te rendre à 15h en travaillant avec un maximum d'autonomie et de parallélisme d'activités?" → done 11:46→~14:10.
+  - "continue jusqu'à 18h HAE" → done 15:07→~17:35.
+  - "pret pour des scrum de 2h (boxing temps réel, avec revue, rétro et planning)".
+- Scrum calibration answers (via ask_user_question): **ceremony AFTER the box** (2 h of work, then review/retro/planning); **agent sets the sprint objective alone, without validation**; **start now on the GPU top-k first kernel**.
+
+## Key Technical Concepts
+- Rust engine (std only), GGUF read in place; project renamed **Qtrinet → Drave** (binary `drave`, crate `drave-core`, env `DRAVE_*`); working dir still `.../GitHub/Qtrinet`.
+- Push/AER architecture: `SparseVec`, `PushMat`, `SignedDelta`, "listes valuées par source"; measured push/pull crossover ≈ **22 %** density (not 10 %).
+- Flux protocol **v5**: 79-byte header (magic `0x44525631`, version, mode, debut, fin, pos, n, échelle, levels, thresh, topk, renorm, 7×topk_proj, attn/qk/moe topk); modes 0 dense f32, 1 listes i16, 2 blocs i8+échelle/bloc+indices par écarts, 3 lot dense f32, 4 lot en listes; unknown mode refused before any body byte.
+- Trace format DRVF: **v2** default (delta indices, lossless) / **v3** (`DRAVE_TRACE_BLOCS=1`, i8 + f16 block scales, lossy).
+- KV cache: paginated `cap`; scales per 32-block; attribution flags `DRAVE_KV_K_F32`, `DRAVE_KV_V_F32`, `DRAVE_KV_K_F16`; VRAM mirror requires homogeneous layout (any attribution variant disables it).
+- GPU: PTX via clang `gpu/compiler.sh` (sm_75, `cuda_stub.h`, no CUDA headers), PTX embedded via `include_str!("../gpu/drave_gpu.ptx")`; two Quadro RTX 5000; kernels must be `extern "C"` or clang mangles names.
+- Machine: 2× Xeon E5-2687W v3 (40 threads), 125 GB RAM, NVMe.
+
+## Files and Code
+- `drave-core/src/main.rs` (~3 500 lines): `tete_flux()` (single header builder), `envoyer_flux`, `envoyer_lot`, `envoyer_lot_listes`, `encoder_etat_blocs`, `encoder_paires_blocs`/`decoder_paires_blocs`, `verifier_taille` (`PLAFOND_FLUX = 256<<20`), `recevoir_flux(s, hidden)` (immediate mode check, `n==0` refused only for modes 0/3/4, cumulative `lus` cap, `a ≤ hidden`), `run_serveur_flux` (guards on debut/fin/pos/n, refusals `continue` not `break`), `run_ppl_reparti` (lot loop, reply mode/n validation, Σt accounting), `options_actives()` + `--options-actives`/`--options-strict`, `run_banc_topk` (new `--banc-topk N` bench), `nll_logits()`, tests `tests_flux`/`tests_plafond` (17 tests).
+- `drave-core/src/model.rs`: `emb_imposee_lot`, `forward_lot` (j0 = jeton_trace+1 advanced once per lot; t==1 shortcut before advance), `flux_lot(j0, …)` with `else { manquantes += 1 }`, `flux_en_liste`, `flux_en_liste_blocs` (asserts `x.len() <= u16::MAX`), `f16_depuis_f32`/`f32_depuis_f16`, `TraceFlux` (v2/v3), `FluxRelecteur` (`listes` + `listes_blocs`), `KvCache` (`k_f16`, `kp: Vec<u16>`, `pub kv`).
+- `drave-core/src/gpu.rs`: `f_attn_scores`, `KvGpu { scores_dev, scores_cap }`, `Machine::attn_scores(m, q, n, scale, sc)` with `nsplit = (n/256).clamp(1,128)`, grid `(n_kv, nsplit)`.
+- `drave-core/gpu/drave_gpu.cu`: new `extern "C" __global__ void attn_scores(...)` (exact 1.03e-7) and new `attn_topk_histo(...)` + `monotone()`/`depuis_monotone()` using `__float_as_uint`/`__uint_as_float`/`atomicAdd` — **these three identifiers are NOT in `cuda_stub.h` and the compile currently FAILS**, leaving `drave_gpu.ptx` deleted.
+- `drave-core/gpu/cuda_stub.h` (40 lines): defines `__device__`/`__global__`/`__shared__`/`__forceinline__`, `__int_as_float` via `__builtin_bit_cast`, `expf` via `ex2.approx.f32`. Needs `atomicAdd(unsigned int*, unsigned int)` (PTX `atom.global.add.u32`) added.
+- `tools/sprint.sh`: `start "<objectif>"` / `status` / `close` / `list`; state in `sprints/COURANT`, one file per sprint, `SCRUM_DUREE` (default 7200 s).
+- `docs/sprints.md`: charter — ceremony after the box, DoD (tests + gates + all committed + machine returned + every figure sourced), agent-chosen objective, three rhythms.
+- `docs/plan-gpu-topk.md`: 3 kernels, 6 steps; step 1 marked ✅ with measured numbers.
+- `reports/rapport-gpu-scores.md`: kernel 1 results (3.8× → 40.6×, écart 1.03e-7, the two bugs found).
+- Other key docs/reports: `docs/format-flux.md` (v5, five modes), `reports/rapport-mode4-lot-listes.md`, `reports/rapport-placement-bits-kv.md`, `reports/rapport-coherence-docs.md` + `-2.md`, `reports/rapport-drapeaux-ignores.md`, `reports/rapport-session-2026-09-30.md`, `docs/plan-mode4-lot-listes.md`, `docs/plan-prefill-reparti.md`, `REPRISE.md` (§6bis + créneau 15h-18h), `README.md` (day table, next steps), `colab/` (notebook 15 cells, README) + `tools/colab_cote_local.sh`, `tools/pair_factice.py` (all 5 modes), `tools/preparer_colab.sh`, `tools/trace_compacite.py`.
+
+## Errors and Fixes
+- `Model::forward` looped `0..n_layer` instead of `couche_debut..couche_fin` (+ double final norm) → split PPL 798.3 vs 18.2; fixed → écart **0,00e0**.
+- Nagle/ACK delayed: peer wait 97.6 ms → **16.1 ms** after `set_nodelay(true)`.
+- `envoyer_lot` wrote 40-byte header for `TAILLE_TETE=39` → byte shift, revealed only on next flux; fixed + `assert_eq!`, later unified in `tete_flux`.
+- Wire blocks-mode index escape written on 4 bytes, read on 2 → fixed to `[..2]`.
+- `VERSION_FLUX` stale at 3 with 79-byte header → bumped (4, then 5).
+- `forward_lot` advanced `jeton_trace` twice for t==1 → keys 2,4,6…; fixed.
+- `flux_lot` lost the plain `else { manquantes += 1 }` → blind guard with `--lot > 1`; fixed.
+- `n == 0` refused for ALL modes (my own fix) → killed legitimate empty lists (`--flux-blocs --act-thresh 1.0 --lot 1`) and `tools/pair_factice.py`; restricted to modes 0/3/4.
+- Missing cumulative R4 cap (`lus`) → 268 MB/state × 74 898 states; fixed, verified refusal at state 72 393 (`268436952 octets au-delà du plafond`).
+- Client SIGABRT / silent wrong PPL on incoherent replies (only lot path validated) → mode+dimension checks everywhere; server forged-header crashes → guards + `continue`.
+- Kernel `attn_scores` mangled (`_Z11attn_scoresPKvPKfS2_Pfiiiiiif`) → `CUDA_ERROR_NOT_FOUND`; fixed with `extern "C"`.
+- Kernel wrote scores without KV-head offset → relative error 1.24; fixed → 1.03e-7.
+- Docs errors corrected: "75 %/50 %" → **64 %/28 %**; crossover "10 %" → **~22 %**; 6-bit reference 19.3045 → **19.5633**; line counts → 12 171; headers 39 → 79 bytes; versions v2/v3/v4 → v5.
+
+## Pending Jobs
+- **Sprint 1 (17:41→19:41)**: finish kernel 2a (histogram compile fix) + threshold + bench; optional kernel 2b collection.
+- Byte-exact cumulative/homogeneity doc leftovers noted by review #4 (bench `--banc-kv` ignores homogeneity rule; reproducibility commands for KV time/mirror section).
+- Background campaign `/tmp/campagne_kv16k.sh` (f32 reference + clés f16 at ctx 16 384) running, log `/tmp/kv_16k.log`.
+- Sprint ceremony (`tools/sprint.sh close`) to be written after 19:41 with revue/rétro/planning.
+
+## Current Work
+- `attn_topk_histo` written into `drave-core/gpu/drave_gpu.cu`; `compiler.sh` fails with 4 errors: `use of undeclared identifier '__float_as_uint'`, `'__uint_as_float'`, and two `'atomicAdd'`; consequently `drave-core/gpu/drave_gpu.ptx` no longer exists (last good PTX is committed at `5e8bf48`).
+- Sprint status at 17:46: sprint 1, 1 commit, ~1 h 54 remaining in the box.
+
+## Next Step
+- Fix `cuda_stub.h` (add `atomicAdd` via PTX inline asm and bit-cast helpers), replace `__float_as_uint`/`__uint_as_float` with `*reinterpret_cast<const unsigned int*>(&f)` / `__builtin_bit_cast`, recompile PTX (`./drave-core/gpu/compiler.sh` must print "noyaux exportés : 11"), rebuild, then wire kernel 2a into `gpu.rs` + `run_banc_topk` and verify the host-side threshold against the CPU k-th score.
+
+## Critical Context
+- Regression gates (must stay green): Qwen ctx 256 = **19,3885**; gpt-oss ctx 256 = **15,1757** without `DRAVE_GPU` (with it: **15,1667**); `cargo test --release` = **17 passed**; split bench dense and lot = **0,00e0**.
+- Measured results to reuse: mode 4 lot-en-listes 1 500 B/token vs 3 663 dense (écart 3.03e-2 at 256 tokens, criterion ≤1.5× mode 2's 2.74e-2); lot mode 18× faster over a 20 ms link, 7× per-token locally; DRVF v2 66 370 408 B (lossless) / v3 45 079 930 B (+0.074 % PPL); KV frontier at 8 192/4 096: f16 keys+int8 values **+0.018 %/+0.011 %** (39 % of f32), int8/int8 +3.04 %/+2.25 %; f16 keys cost 2.3× CPU time (162 vs 70 ms/pass at 262 144 keys); needle 9/9 in all three KV variants; kernel 1 scores écart 1.03e-7, 29–40.6× CPU.
+- 98 commits on 2026-09-30; 4 delegated adversarial reviews found 32+ real defects, nearly all by reading not by benches.
+- Hygiene rules: measure before concluding; every figure needs a source; never leave the repo broken; machine must be returned idle; heavy jobs serialized (background scripts guard on `pgrep -x drave`).
+- Time-box: box ends **19:41**; ceremony (revue → rétro garder/changer/doute → planning) after, written into `sprints/01-premier-des-trois-noyaux-gpu-du-top-k-le.md` via `tools/sprint.sh close`.
+</compacted-summary>
+
+### 🤖 Assistant
+
+⏵ PTX régénéré (11 noyaux), je câble l'histogramme côté hôte
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"attn_scores\\|pub fn \\|struct \\|fn charger\\|noyau\\|histo\" drave-core/src/gpu.rs | head -60 && echo ---- && grep -n \"banc_topk\" -A 60 drave-core/src/main.rs | head -100", "description": "Inspect gpu.rs and bench topk" … [1 caractères tronqués]`
+
+  ```
+1://! Chemin GPU : noyaux PTX chargés par l'API **pilote** de CUDA.
+3://! Rien n'est lié à l'édition : le noyau est du PTX, compilé à la volée par le
+58:pub struct MatriceGpu {
+68:/// `(tête KV, position)` puis la dimension de tête — les noyaux lisent donc les
+70:pub struct KvGpu {
+81:    /// par doublement, sans toucher au noyau (il reçoit la capacité courante
+88:    /// Tampon de SCORES du noyau `attn_scores` (réutilisé, comme les autres).
+94:    // d'attention à 512 jetons, contre 2,9 ms sur CPU — le noyau n'était pas en
+106:pub struct Gpu {
+118:    /// Scores seuls (premier noyau du top-k, `docs/plan-gpu-topk.md`).
+119:    f_attn_scores: *mut c_void,
+127:    /// Ouvre le périphérique 0 et charge les noyaux. `None` si CUDA est absent
+131:    pub fn ouvrir_auto() -> Option<Gpu> {
+139:    pub fn ouvrir(ordinal: c_int) -> Option<Gpu> {
+231:            let nom_s = std::ffi::CString::new("attn_scores").unwrap();
+232:            let mut f_attn_scores: *mut c_void = std::ptr::null_mut();
+233:            let rc = cuModuleGetFunction(&mut f_attn_scores, module, nom_s.as_ptr());
+235:                eprintln!("{}", erreur(rc, "fonction attn_scores"));
+252:                       f_mxfp4_war
+… [8246 caractères tronqués]
+  ```
+
+### 👤 Utilisateur
+
+Current runtime context. This snapshot supersedes earlier runtime-context snapshots.
+
+Current DSH file policy: danger-full-access. The DSH file sandbox does not restrict file modifications by available operations.
+
+Approval prompts are disabled in this session: actions that require approval are rejected automatically — do not request sandbox escalation (do not set `sandbox_permissions`).
+
+### 👤 Utilisateur
+
+<system-reminder>
+The available skill catalog changed. This complete catalog replaces every earlier available-skills list in this session:
+
+<available_skills>
+- `microsoft-foundry`: Deploy, evaluate, fine-tune, and manage Foundry agents end-to-end with azd: hosted agent scaffold/run/deploy, prompt agent create, batch eval, continuous eval, prompt optimizer, Agent Optimizer scaffold, agent.yaml, dataset curation from traces, model fine-tuning (SFT/DPO/RFT). USE FOR: azd ai agent, azd provision/deploy, deploy agent, hosted agent, create agent, add tool to agent, invoke agent, evaluate agent, continuous eval, continuous monitoring, agent CI/CD, optimize prompt, improve prom...
+</available_skills>
+
+Use only names in this replacement catalog. If the user names a listed skill, or the task clearly matches its description, call the `skill` tool with the exact name before acting.
+A user may also invoke a skill directly; its <skill_content> block then appears in this conversation. Follow it, and do not call the `skill` tool again for that skill.
+</system-reminder>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date \"+%H:%M:%S\" && ./tools/sprint.sh status 2>&1 | head -20 && echo \"=== kernel cu ===\" && sed -n '/attn_topk_histo/,/^}/p' drave-core/gpu/drave_gpu.cu", "description": "Check time, sprint status, histo kernel"}`
+
+  ```
+17:48:02
+── Sprint 1 ─────────────────────────────────────────────
+- **Début** : 17:41 · **Fin prévue** : 19:41 (boxing de 120 min)
+   temps : 17:48 · reste 1 h 53
+   commits depuis le début : 1
+     5e8bf48 Sprint 1 : noyau GPU de scores d'attention — exact à 1,03e-7, 40× plus rapide
+=== kernel cu ===
+extern "C" __global__ void attn_topk_histo(const float* __restrict__ sc,
+                                           unsigned int* __restrict__ histo, // [lignes][256]
+                                           int n, int nsplit) {
+    // Grille : (ligne, tranche) ; histogramme PARTAGÉ par bloc (256 u32 = 1 ko),
+    // puis un atomicAdd par seau et par bloc — 256 atomiques au lieu de n.
+    __shared__ unsigned int sh[256];
+    const int ligne = blockIdx.x;
+    const int sp = blockIdx.y;
+    for (int i = threadIdx.x; i < 256; i += blockDim.x) sh[i] = 0u;
+    __syncthreads();
+    const int par = (n + nsplit - 1) / nsplit;
+    const int debut = sp * par;
+    const int fin = min(n, debut + par);
+    const float* row = sc + (size_t)ligne * n;
+    for (int i = debut + threadIdx.x; i < fin; i += blockDim.x) {
+        atomicAdd(&sh[monotone(row[i]) >> 24], 1u);
+    }
+    __syncthreads();
+    
+… [131 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/gpu.rs", "offset": 56, "limit": 130}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/gpu.rs</path>
+<type>file</type>
+<content>
+56: 
+57: /// Une matrice résidente sur le GPU, avec ses tampons d'entrée et de sortie.
+58: pub struct MatriceGpu {
+59:     poids: u64,
+60:     x_dev: u64,
+61:     out_dev: u64,
+62:     pub n_out: usize,
+63:     pub nb: usize,
+64:     pub octets_poids: usize,
+65: }
+66: 
+67: /// Cache KV d'UNE couche, résident en VRAM. Même disposition que `KvCache` :
+68: /// `(tête KV, position)` puis la dimension de tête — les noyaux lisent donc les
+69: /// octets du cache CPU tels quels, sans conversion.
+70: pub struct KvGpu {
+71:     pub k: u64,
+72:     pub v: u64,
+73:     pub sk: u64,
+74:     pub sv: u64,
+75:     pub n_kv: usize,
+76:     /// Capacité LOGIQUE (positions adressables par le moteur).
+77:     pub ctx: usize,
+78:     /// Capacité ALLOUÉE (positions réellement en VRAM), doublée à la demande :
+79:     /// un contexte de 1 M ne réserve plus 24 Go d'un coup alors qu'on n'en a
+80:     /// écrit que quelques milliers — c'est la « pagination » du plan E4, faite
+81:     /// par doublement, sans toucher au noyau (il reçoit la capacité courante
+82:     /// comme pas).
+83:     pub capac
+… [5004 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/gpu.rs", "limit": 130, "offset": 186}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/gpu.rs</path>
+<type>file</type>
+<content>
+186:                 eprintln!("{}", erreur(rc, "fonction proj_q8"));
+187:                 return None;
+188:             }
+189:             let nom_tw = std::ffi::CString::new("tete_q8_warp").unwrap();
+190:             let mut f_tete_warp: *mut c_void = std::ptr::null_mut();
+191:             let rc = cuModuleGetFunction(&mut f_tete_warp, module, nom_tw.as_ptr());
+192:             if rc != 0 {
+193:                 eprintln!("{}", erreur(rc, "fonction tete_q8_warp"));
+194:                 return None;
+195:             }
+196:             let nom_pw = std::ffi::CString::new("proj_q8_warp").unwrap();
+197:             let mut f_proj_warp: *mut c_void = std::ptr::null_mut();
+198:             let rc = cuModuleGetFunction(&mut f_proj_warp, module, nom_pw.as_ptr());
+199:             if rc != 0 {
+200:                 eprintln!("{}", erreur(rc, "fonction proj_q8_warp"));
+201:                 return None;
+202:             }
+203:             let nom_mx = std::ffi::CString::new("proj_mxfp4_warp").unwrap();
+204:             let mut f_mxfp4_warp: *mut c_void = std::ptr::null_mut();
+205:   
+… [6122 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/gpu.rs", "limit": 80, "offset": 436}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/gpu.rs</path>
+<type>file</type>
+<content>
+436:     #[allow(clippy::too_many_arguments)]
+437:     /// **Scores d'attention seuls** (`attn_scores`) : pour chaque tête KV, les
+438:     /// `rep × n` scores `q·k × échelle`, sans softmax ni valeurs. C'est l'entrée
+439:     /// de la sélection top-k (noyau 2 du plan), et ce que le banc compare au CPU.
+440:     ///
+441:     /// `sc` est `[n_kv][rep][n]`, aplati.
+442:     pub fn attn_scores(&self, m: &mut KvGpu, q: &[f32], n: usize, scale: f32,
+443:                        sc: &mut [f32]) -> bool {
+444:         cu_ctx(self.ctx);
+445:         let rep = if m.n_kv == 0 { 0 } else { q.len() / (m.n_kv * m.hd) };
+446:         let hd = m.hd;
+447:         if rep == 0 || rep > 32 || hd % 32 != 0 { return false; }
+448:         if n == 0 || n > m.capacite || sc.len() < m.n_kv * rep * n { return false; }
+449:         let fils = (rep * 32) as c_uint;
+450:         let partage = ((rep * hd + 32 * (hd + 1)) * 4) as c_uint;
+451:         unsafe {
+452:             let mut p_k = m.k;
+453:             let mut p_sk = m.sk;
+454:             let mut p_q = m.q_dev;
+455:             if m.q_cap < q.
+… [3362 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat docs/plan-gpu-topk.md && echo \"=== bench ===\" && sed -n '/fn run_banc_topk/,/^}/p' drave-core/src/main.rs", "description": "Read GPU topk plan and bench"}`
+
+  ```
+# Plan — le top-k de l'attention dans le noyau GPU (phase 1.1)
+
+**En une ligne** : l'attention creuse (`--attn-topk`) ne peut pas se servir du KV
+déporté en VRAM — le code l'interdit explicitement — donc à long contexte elle
+retombe sur le CPU et coûte **~25 à 70 fois** le chemin GPU complet. Ce plan
+chiffre l'écart et décrit les trois noyaux qui le comblent.
+
+## Pourquoi (mesuré, pas supposé)
+
+Le chemin GPU de l'attention est conditionné à `groupe = fen == 0 &&
+self.attn_topk == 0 && rep > 1` (`model.rs:3150`) : **dès que le top-k est
+demandé, le miroir VRAM est ignoré**. Les deux mesures qui existent déjà disent ce
+que ça coûte :
+
+| mesure (dépôt) | valeur |
+|---|---|
+| attention 1 M de clés, **CPU** (int4, host) | **968 ms** par couche |
+| la même, **KV en VRAM** (`DRAVE_GPU_KV=1`, noyaux `attn_kv_*`) | **13,2 ms** (×73) |
+| « masquer sans réécrire les boucles » en top-k CPU | 12,4 → 12,5 ms : **aucun gain** |
+
+La troisième ligne est la clé : en top-k, le coût n'est pas le softmax mais la
+**notation de toutes les clés** (O(N) lectures). Le gain ne peut donc venir que de
+la VRAM, où les clés sont déjà. Aujourd'hui la phase 1.1 n'est pas « optimiser un
+peu » : c'est rendre le mode
+… [8579 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '331,435p' drave-core/src/gpu.rs && echo \"=== libération ===\" && grep -n \"scores_dev\\|cuMemFree_v2\" drave-core/src/gpu.rs | sed -n '1,60p'", "description": "Read kv_allouer and frees"}`
+
+  ```
+pub fn kv_allouer(&self, n_kv: usize, ctx: usize, hd: usize, bits: u32) -> Option<KvGpu> {
+        cu_ctx(self.ctx);
+        let nb = hd.div_ceil(32).max(1);
+        // Première tranche : de quoi couvrir un préremplissage courant. Le
+        // reste s'ajoute par doublement, à la demande.
+        let mut m = KvGpu { k: 0, v: 0, sk: 0, sv: 0, n_kv, ctx, capacite: 0, hd, nb, bits,
+                            scores_dev: 0, scores_cap: 0,
+                            octets: 0, q_dev: 0, part_dev: 0, out_dev: 0, sinks_dev: 0,
+                            q_cap: 0, part_cap: 0, out_cap: 0, sinks_cap: 0 };
+        if !self.kv_assurer(&mut m, ctx.min(2048)) { return None; }
+        Some(m)
+    }
+
+    /// Garantit `besoin` positions allouées. Double la capacité (et COPIE ce qui
+    /// était écrit : le cache est déjà rempli) jusqu'à couvrir la demande.
+    pub fn kv_assurer(&self, m: &mut KvGpu, besoin: usize) -> bool {
+        cu_ctx(self.ctx);
+        if besoin <= m.capacite { return true; }
+        let mut cap = m.capacite.max(1);
+        while cap < besoin { cap = (cap * 2).min(m.ctx); }
+        let pas = match m.bits { 32 => m.hd * 4, 8 => m.hd, 4 => m.hd / 2, _ => return false };
+    
+… [5456 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/gpu/drave_gpu.cu'; s=open(p).read()\nvieux = \"\"\"extern \"C\" __global__ void attn_topk_histo(const float* __restrict__ sc,\n                                           unsigned int* __restrict__ hist … [1339 caractères tronqués]`
+
+  ```
+noyau généralisé
+drave_gpu.ptx régénéré (6949 lignes)
+noyaux exportés : 11
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/gpu.rs'; s=open(p).read()\n\n# 1. champ dans KvGpu\ns = s.replace(\"\"\"    /// Tampon de SCORES du noyau `attn_scores` (réutilisé, comme les autres).\n    pub scores_dev: u64,\n    pub scores_cap: … [5369 caractères tronqués]`
+
+  ```
+gpu.rs câblé
+549:            if cuMemsetD32_v2(m.histo_dev, 0, lignes * 256) != 0 { return false; }
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/gpu.rs", "limit": 40, "offset": 12}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/gpu.rs</path>
+<type>file</type>
+<content>
+12: 
+13: use std::ffi::c_void;
+14: use std::os::raw::{c_char, c_int, c_uint};
+15: 
+16: #[link(name = "cuda")]
+17: extern "C" {
+18:     fn cuInit(flags: c_uint) -> c_int;
+19:     fn cuDeviceGet(dev: *mut c_int, ordinal: c_int) -> c_int;
+20:     fn cuDevicePrimaryCtxRetain(ctx: *mut *mut c_void, dev: c_int) -> c_int;
+21:     fn cuCtxCreate_v2(ctx: *mut *mut c_void, flags: c_uint, dev: c_int) -> c_int;
+22:     fn cuCtxSetCurrent(ctx: *mut c_void) -> c_int;
+23:     fn cuModuleLoadData(module: *mut *mut c_void, image: *const c_void) -> c_int;
+24:     fn cuModuleGetFunction(f: *mut *mut c_void, module: *mut c_void, name: *const c_char) -> c_int;
+25:     fn cuMemAlloc_v2(dptr: *mut u64, octets: usize) -> c_int;
+26:     fn cuMemcpyHtoD_v2(dst: u64, src: *const c_void, octets: usize) -> c_int;
+27:     fn cuMemcpyDtoH_v2(dst: *mut c_void, src: u64, octets: usize) -> c_int;
+28:     fn cuMemcpyDtoD_v2(dst: u64, src: u64, octets: usize) -> c_int;
+29:     fn cuLaunchKernel(f: *mut c_void, gx: c_uint, gy: c_uint, gz: c_uint,
+30:                       bx: c_uint, by: c_uint, bz: c_uint, p
+… [844 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/gpu.rs", "old_string": "    fn cuMemFree_v2(dptr: u64) -> c_int;", "new_string": "    fn cuMemFree_v2(dptr: u64) -> c_int;\n    fn cuMemsetD32_v2(dst: u64, valeur: c_uint, n: usize) -> c_int;"}`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/gpu.rs has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/gpu/drave_gpu.cu'; s=open(p).read()\nvieux = \"\"\"extern \"C\" __global__ void attn_topk_histo(const float* __restrict__ sc,\n                                           unsigned int* __restrict__ hist … [1475 caractères tronqués]`
+
+  ```
+préfixes par ligne
+drave_gpu.ptx régénéré (6953 lignes)
+noyaux exportés : 11
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/gpu.rs'; s=open(p).read()\n\ns = s.replace(\"\"\"    pub histo_dev: u64,\n    pub histo_cap: usize,\"\"\",\n\"\"\"    pub histo_dev: u64,\n    pub histo_cap: usize,\n    /// Préfixes du radix selec … [5462 caractères tronqués]`
+
+  ```
+ok
+warning: unused attribute
+    --> src/model.rs:1788:5
+     |
+1788 |     #[inline]
+     |     ^^^^^^^^^ help: remove this attribute
+--
+warning: unused variable: `arch`
+    --> src/model.rs:1393:21
+     |
+1393 |                 let arch = g.meta.get("general.architecture").and_then(|m| m.as_str());
+     |                     ^^^^ help: if this is intentional, prefix it with an underscore: `_arch`
+--
+warning: unused variable: `tk5`
+    --> src/model.rs:1926:37
+     |
+1926 |                         tk4: usize, tk5: usize, tk6: usize, renorm: bool,
+     |                                     ^^^ help: if this is intentional, prefix it with an underscore: `_tk5`
+--
+warning: unused variable: `attn_all`
+    --> src/model.rs:2405:13
+     |
+2405 |         let attn_all: Vec<u32> = (0..ctx as u32).collect();
+     |             ^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_attn_all`
+--
+warning: unused variable: `attn_idx`
+    --> src/model.rs:2406:13
+     |
+2406 |         let mut attn_idx: Vec<u32> = Vec::with_capacity(ctx);
+     |             ^^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_attn_idx`
+--
+build rc=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/main.rs'; s=open(p).read()\nancre = \"\"\"    if mx / dyn_.max(1e-9) < 1e-6 {\n        println!(\"  → conforme au critère du plan (1e-6) : la sélection peut s'appuyer dessus\");\n    } else {\n     … [5253 caractères tronqués]`
+
+  ```
+banc enrichi
+fin
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"attn_topk\" drave-core/src/main.rs | head -8 && grep -n \"fn modele_chemin\" -A 12 drave-core/src/main.rs | head -20", "description": "Check attn_topk option field"}`
+
+  ```
+359:             mdl.attn_topk, mdl.qk_topk, mdl.moe_topk, mdl.act_topk_proj);
+455:    attn_sinks: usize, attn_topk: usize, qk_topk: usize,
+552:            "--attn-topk" => { o.attn_topk = suivant(i).parse().unwrap(); 2 }
+647:        keep, attn_window, swa_pattern, sans_fenetre, attn_sinks, attn_topk, qk_topk,
+700:    mdl.attn_topk = attn_topk;
+1367:    mdl.attn_topk = opt.attn_topk;
+1424:// top-k · renorm · attn_topk · qk_topk · moe_topk · topk_proj[7]
+1439:    attn_topk: u32,
+340:fn modele_chemin() -> String { MODELE.get().cloned().unwrap_or_default() }
+341-
+342-/// **Tableau de bord des réglages en vigueur** (`--options-actives`), lus sur le
+343-/// MODÈLE après toutes les affectations.
+344-///
+345-/// Pourquoi il existe : le défaut le plus coûteux de ce dépôt n'est pas un calcul
+346-/// faux, c'est un drapeau qui ne fait rien. Huit ont été corrigés en une session
+347-/// (`--keep` en perplexité, `--ffn-gain` en inférence, les top-k dans les modes
+348-/// flux, `--trace-flux` en inférence, `--threads` figé…), et chacun était
+349-/// INVISIBLE : la sortie ne disait nulle part quelle valeur agissait. Ici, elle
+350-/// le dit — et une valeur qu'on ne voit pas bouger est une valeur 
+… [126 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && nproc && ls -la models/ 2>/dev/null | head && echo \"DRAVE_MODELE=$DRAVE_MODELE\" && grep -rn \"MODELE\" drave-core/src/main.rs | head -5", "description": "Find model path and cores"}`
+
+  ```
+40
+total 863324
+drwxr-xr-x. 1 stephane stephane        88 25 sep 17:13 .
+drwxr-xr-x. 1 stephane stephane       612 30 sep 17:39 ..
+-rw-r--r--. 1 stephane stephane 352972352 25 sep 17:13 Qwen2.5-0.5B-Q4_0.gguf
+-rw-r--r--. 1 stephane stephane 531068480 25 sep 16:52 Qwen2.5-0.5B-Q8_0.gguf
+DRAVE_MODELE=
+46:    let _ = MODELE.set(args[1].clone());
+339:static MODELE: std::sync::OnceLock<String> = std::sync::OnceLock::new();
+340:fn modele_chemin() -> String { MODELE.get().cloned().unwrap_or_default() }
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 600 ./target/release/drave models/Qwen2.5-0.5B-Q4_0.gguf --banc-topk 4096 2>&1 | tail -20", "description": "Run topk bench at 4096 keys", "timeoutMs": 620000}`
+
+  ```
+timeout: failed to run command ‘./target/release/drave’: No such file or directory
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls target/release/ 2>/dev/null | head -5; find . -maxdepth 3 -name \"drave\" -type f 2>/dev/null | head", "description": "Locate drave binary"}`
+
+  ```
+(no output)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat drave-core/Cargo.toml && ls drave-core/ && ls drave-core/target/release/ 2>/dev/null | head", "description": "Check cargo layout"}`
+
+  ```
+[package]
+name = "drave-core"
+version = "0.1.0"
+edition = "2021"
+description = "Drave — moteur d'exécution par listes d'activation (stream of logs) pour modèles quantifiés"
+
+[[bin]]
+name = "drave"
+path = "src/main.rs"
+
+[dependencies]
+# aucune : std seul, pour rester sans dépendance réseau
+
+[profile.release]
+opt-level = 3
+lto = true
+codegen-units = 1
+panic = "abort"
+Cargo.lock
+Cargo.toml
+gpu
+README.md
+src
+target
+build
+deps
+drave
+drave.d
+examples
+incremental
+qtrinet-core
+qtrinet-core.d
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 900 ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q4_0.gguf --banc-topk 4096 2>&1 | tail -22", "description": "Run topk bench at 4096 keys", "timeoutMs": 920000}`
+
+  ```
+[attention] QT_IM_SWITCHER est l'ancien nom d'une variable d'environnement : elles s'appellent maintenant DRAVE_* (voir docs/histoire.md). Rien n'a été appliqué.
+banc top-k : 4096 clés · 2 têtes KV × 64 dim · 7 têtes de requête par tête KV · KV 8 bits
+GPU absent : banc terminé
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '/pub fn second()/,/^}/p;/pub fn machines()/,/^}/p;/fn instance()/,/^}/p' drave-core/src/gpu.rs && grep -rn \"DRAVE_GPU\" drave-core/src/*.rs | head -10", "description": "Inspect GPU init policy"}`
+
+  ```
+pub fn second() -> Option<&'static Gpu> {
+    SECOND.get_or_init(|| {
+        if std::env::var("DRAVE_GPU").is_err() { return None; }
+        let premier = instance().map(|g| g.ordinal).unwrap_or(0);
+        for ord in 0..4 {
+            if ord == premier { continue; }
+            if let Some(g) = Gpu::ouvrir(ord) { return Some(g); }
+        }
+        None
+    }).as_ref()
+}
+pub fn machines() -> &'static [&'static Gpu] {
+    MACHINES.get_or_init(|| {
+        let mut v: Vec<&'static Gpu> = Vec::new();
+        if let Some(a) = instance() { v.push(a); }
+        if let Some(b) = second() { v.push(b); }
+        v
+    })
+}
+pub fn instance() -> Option<&'static Gpu> {
+    INSTANCE.get_or_init(|| {
+        if std::env::var("DRAVE_GPU").is_err() { return None; }
+        Gpu::ouvrir_auto()
+    }).as_ref()
+}
+drave-core/src/gpu.rs:947:/// Instance unique du processus. `DRAVE_GPU` active le déport ; sans lui, aucune
+drave-core/src/gpu.rs:957:        if std::env::var("DRAVE_GPU").is_err() { return None; }
+drave-core/src/gpu.rs:982:        if std::env::var("DRAVE_GPU").is_err() { return None; }
+drave-core/src/model.rs:900:    /// Miroir VRAM du cache KV, une entrée par couche (`DRAVE_GPU_KV=1`).
+dr
+… [557 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && DRAVE_GPU=1 timeout 900 ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q4_0.gguf --banc-topk 4096 2>&1 | tail -22", "description": "Run bench with GPU enabled", "timeoutMs": 920000}`
+
+  ```
+[attention] QT_IM_SWITCHER est l'ancien nom d'une variable d'environnement : elles s'appellent maintenant DRAVE_* (voir docs/histoire.md). Rien n'a été appliqué.
+banc top-k : 4096 clés · 2 têtes KV × 64 dim · 7 têtes de requête par tête KV · KV 8 bits
+  CPU  20 fils :     4.03 ms
+  GPU  scores  :     0.22 ms  (18.2× plus rapide)
+  écart max 2.235e-8 sur une dynamique de 2.172e-1 (relatif 1.03e-7)
+  → conforme au critère du plan (1e-6) : la sélection peut s'appuyer dessus
+  le noyau d'histogramme a refusé la configuration
+  ```
+
+- **bash** `{"command": "nm -D --defined-only /usr/lib64/libcuda.so.1 2>/dev/null | grep -i \"memsetd32\\|memsetd8\" ; echo \"---\"; ls /usr/lib64/libcuda.so* 2>/dev/null", "description": "Check cuMemsetD32 symbol"}`
+
+  ```
+0000000000379a90 T cuMemsetD32
+000000000039ed40 T cuMemsetD32Async
+000000000032e2e0 T cuMemsetD32Async_ptsz
+000000000039e010 T cuMemsetD32_v2
+000000000032de20 T cuMemsetD32_v2_ptds
+00000000003798f0 T cuMemsetD8
+000000000039eba0 T cuMemsetD8Async
+000000000032e140 T cuMemsetD8Async_ptsz
+000000000039de70 T cuMemsetD8_v2
+000000000032dc80 T cuMemsetD8_v2_ptds
+---
+/usr/lib64/libcuda.so
+/usr/lib64/libcuda.so.1
+/usr/lib64/libcuda.so.580.178.04
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/gpu.rs'; s=open(p).read()\nvieux = \"\"\"        if lignes == 0 || n == 0 || hist.len() < lignes * 256 || prefixes.len() < lignes {\n            return false;\n        }\n        if !(0..=24).conta … [3436 caractères tronqués]`
+
+  ```
+diagnostics ajoutés
+  CPU  20 fils :     4.01 ms
+  GPU  scores  :     0.16 ms  (25.6× plus rapide)
+  écart max 2.235e-8 sur une dynamique de 2.172e-1 (relatif 1.03e-7)
+  → conforme au critère du plan (1e-6) : la sélection peut s'appuyer dessus
+CUDA relecture des histogrammes : CUDA_ERROR_INVALID_ADDRESS_SPACE (717)
+  le noyau d'histogramme a refusé la configuration
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"atomicAdd\" drave-core/gpu/drave_gpu.cu", "description": "Find atomicAdd uses"}`
+
+  ```
+724:    // puis un atomicAdd par seau et par bloc — 256 atomiques au lieu de n.
+740:        if (((cle >> decalage) >> 8) == prefixe) atomicAdd(&sh[(cle >> decalage) & 0xFFu], 1u);
+744:        if (sh[i]) atomicAdd(&histo[(size_t)ligne * 256 + i], sh[i]);
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/gpu/cuda_stub.h'; s=open(p).read()\nvieux = \"\"\"// `atomicAdd` sur un entier non signé : le noyau d'histogramme du top-k en a\n// besoin, et la boîte à outils CUDA n'est pas là. `atom.add.u32` est\n/ … [2687 caractères tronqués]`
+
+  ```
+atomique partagé
+drave_gpu.ptx régénéré (6957 lignes)
+noyaux exportés : 11
+1
+  écart max 2.235e-8 sur une dynamique de 2.172e-1 (relatif 1.03e-7)
+  → conforme au critère du plan (1e-6) : la sélection peut s'appuyer dessus
+  top-k k = 256 :
+    CPU  tri + comptage :     0.17 ms
+    GPU  4 passes d'histogramme :     0.14 ms  (1.2× plus rapide)
+    k-ième score identique au bit près : 14/14 lignes (écart entier max 0)
+    comptes « strictement au-dessus » et « égaux » : 14/14 lignes
+    encadrement au_dessus < k ≤ au_dessus+égaux : 14/14 lignes
+    k-ième score qui change entre scores CPU et GPU : 10/14 lignes (attendu : noyau 1 à 2e-8)
+    → la descente trouve le seuil EXACT : la collecte peut être écrite
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && (DRAVE_GPU=1 ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q4_0.gguf --banc-topk 262144 > /tmp/banc_topk_262k.log 2>&1; DRAVE_GPU=1 ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q4_0.gguf --banc-topk 65536 > /tmp/banc … [170 caractères tronqués]`
+
+  ```
+lancé
+ M drave-core/gpu/cuda_stub.h
+ M drave-core/gpu/drave_gpu.cu
+ M drave-core/gpu/drave_gpu.ptx
+ M drave-core/src/gpu.rs
+ M drave-core/src/main.rs
+ M journal/README.md
+?? sprints/
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git diff --stat journal/README.md && git diff journal/README.md | head -30 && ls sprints/", "description": "Inspect journal diff and sprints dir"}`
+
+  ```
+journal/README.md | 12 +++++++++++-
+ 1 file changed, 11 insertions(+), 1 deletion(-)
+diff --git a/journal/README.md b/journal/README.md
+index 34252f6..5194d78 100644
+--- a/journal/README.md
++++ b/journal/README.md
+@@ -6,7 +6,17 @@ de la session ; le `digest.md` voisin en donne le verbatim complet.
+ 
+ | Session | Titre | Début | Durée | Tours | Outils | Fichiers | Commits | Rapport |
+ |---|---|---|---|---|---|---|---|---|
++| `15fd322f` | Tu travailles dans le dépôt | 2026-09-30 11:47 | 0.2 h | 1 | 67 | 2 | 0 | [rapport](sessions/15fd322f-7e9e-48c0-a970-f36335eb622a/rapport.md) |
+ | `22bcae27` | Étude de Qtrinet-bootstrap.md | 2026-09-25 11:56 | 74.8 h | 54 | 1227 | 69 | 60 | [rapport](sessions/22bcae27-254b-47b2-acda-87467dab060c/rapport.md) |
+ | `27c99b10` | Tu écris un tokenizer BPE | 2026-09-25 19:40 | 0.2 h | 1 | 54 | 1 | 0 | [rapport](sessions/27c99b10-c57e-4599-a23a-f7b1a54c17a1/rapport.md) |
+-| `bbd6969f` | Continue avec REPRISE.md | 2026-09-28 14:46 | 44.4 h | 44 | 1442 | 44 | 89 | [rapport](sessions/bbd6969f-0f70-42b2-8951-64d1f2f36d2e/rapport.md) |
++| `42059fde` | Tu es vérificateur de documentation | 2026-09-30 12:20 | 0.2 h | 1 | 157 | 1 | 0 | [rapport](sessions/42059fde
+… [1733 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -F - <<'EOF' && git log --oneline -1\nNoyau 2a du top-k GPU : histogramme d'octet, seuil exact sur 14/14 lignes\n\nLe radix select du plan a sa première brique : `attn_topk_histo` histogramme\nl'octet `dec … [1084 caractères tronqués]`

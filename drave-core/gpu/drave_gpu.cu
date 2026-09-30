@@ -690,3 +690,58 @@ extern "C" __global__ void attn_scores(const void* __restrict__ kdata,
         __syncthreads();   // la tuile partagée va être réécrite au tour suivant
     }
 }
+
+// ---------------------------------------------------------------------------
+// SÉLECTION top-k, première moitié : l'HISTOGRAMME (noyau 2a). Chaque ligne
+// (tête KV × tête de requête) a ses `n` scores ; on veut le k-ième plus grand
+// sans trier n éléments. On transforme d'abord chaque score en entier MONOTONE
+// (l'astuce classique : pour un f32 positif les bits sont déjà ordonnés, pour un
+// négatif on inverse tout), puis on compte les 256 seaux des 8 bits de poids
+// fort. L'hôte descend les seaux jusqu'à dépasser k : c'est le seuil, et il est
+// exact — c'est le tri radix à deux passes du plan, dont la seconde (la collecte)
+// vient après.
+__device__ __forceinline__ unsigned int monotone(float f) {
+    // Pas de `__float_as_uint` sans en-têtes CUDA : le reinterpret_cast fait le
+    // même travail, et `__builtin_bit_cast` est disponible (voir cuda_stub.h).
+    const unsigned int b = *reinterpret_cast<const unsigned int*>(&f);
+    return (b & 0x80000000u) ? ~b : (b | 0x80000000u);
+}
+__device__ __forceinline__ float depuis_monotone(unsigned int u) {
+    const unsigned int b = (u & 0x80000000u) ? (u & 0x7FFFFFFFu) : ~u;
+    return *reinterpret_cast<const float*>(&b);
+}
+
+// Histogramme d'un OCTET du score transformé en entier monotone. Un seul noyau
+// sert les quatre passes du radix select : `decalage` dit quel octet (24, 16, 8,
+// 0) et `prefixe` les octets DÉJÀ fixés au-dessus. Le filtre s'écrit
+// `(cle >> decalage) >> 8 == prefixe` — deux décalages toujours < 32, donc pas de
+// décalage par 32 (indéfini en C) quand `decalage == 24`.
+extern "C" __global__ void attn_topk_histo(const float* __restrict__ sc,
+                                           unsigned int* __restrict__ histo, // [lignes][256]
+                                           const unsigned int* __restrict__ prefixes,
+                                           int n, int nsplit, int decalage) {
+    // Grille : (ligne, tranche) ; histogramme PARTAGÉ par bloc (256 u32 = 1 ko),
+    // puis un atomicAdd par seau et par bloc — 256 atomiques au lieu de n.
+    __shared__ unsigned int sh[256];
+    const int ligne = blockIdx.x;
+    const int sp = blockIdx.y;
+    // Un préfixe PAR LIGNE : chaque tête de requête a son propre k-ième score,
+    // donc sa propre descente. Un scalaire obligerait à relancer le noyau une
+    // fois par tête.
+    const unsigned int prefixe = prefixes[ligne];
+    for (int i = threadIdx.x; i < 256; i += blockDim.x) sh[i] = 0u;
+    __syncthreads();
+    const int par = (n + nsplit - 1) / nsplit;
+    const int debut = sp * par;
+    const int fin = min(n, debut + par);
+    const float* row = sc + (size_t)ligne * n;
+    for (int i = debut + threadIdx.x; i < fin; i += blockDim.x) {
+        const unsigned int cle = monotone(row[i]);
+        if (((cle >> decalage) >> 8) == prefixe)
+            atomicAddPartage(&sh[(cle >> decalage) & 0xFFu], 1u);
+    }
+    __syncthreads();
+    for (int i = threadIdx.x; i < 256; i += blockDim.x) {
+        if (sh[i]) atomicAdd(&histo[(size_t)ligne * 256 + i], sh[i]);
+    }
+}

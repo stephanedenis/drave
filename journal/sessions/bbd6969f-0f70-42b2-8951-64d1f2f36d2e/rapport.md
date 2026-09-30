@@ -5,15 +5,15 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 51.0 h |
+| Durée | 51.1 h |
 | Tours | 47 |
-| Messages | 1993 |
-| Appels d'outils | 1880 |
-| Fichiers touchés | 44 |
-| Commandes | 1548 |
+| Messages | 2029 |
+| Appels d'outils | 1913 |
+| Fichiers touchés | 45 |
+| Commandes | 1576 |
 | Sous-agents | 11 |
-| Commits | 171 |
-| Compactages de contexte | 2 |
+| Commits | 172 |
+| Compactages de contexte | 3 |
 
 ## Objectifs déclarés
 
@@ -2177,7 +2177,7 @@ Le mode creux ne peut pas utiliser le miroir VRAM (le chemin GPU est conditionn�
 
 ### Tour 47 — pret pour des scrum de 2h (boxing temps réel, avec revue, rétro et planning)
 
-*25 appels d'outils.* Actions notables :
+*58 appels d'outils.* Actions notables :
 
 - bash — Check clock, machine and last sprint state
 - bash — Create the sprint timing tool
@@ -2193,11 +2193,11 @@ Le mode creux ne peut pas utiliser le miroir VRAM (le chemin GPU est conditionn�
 - bash — Read the kernel launch call
 - bash — Write the FFI for the scores kernel
 - bash — Complete KvGpu initializer
-- … et 11 autres
+- … et 40 autres
 
 **Synthèse produite :**
 
-**Noyau 1 terminé : écart 1,03e-7, 40,6× plus rapide que le CPU à 262 144 clés.** Je commit avec son rapport, puis j'attaque la sélection.
+⏵ PTX régénéré (11 noyaux), je câble l'histogramme côté hôte
 
 ## 3. Travail accompli
 
@@ -2249,6 +2249,7 @@ Le mode creux ne peut pas utiliser le miroir VRAM (le chemin GPU est conditionn�
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/roadmap.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs` | 0 | 5 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/main.rs` | 0 | 1 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/gpu.rs` | 0 | 1 |
 
 ### Sous-agents lancés
 
@@ -2306,7 +2307,7 @@ Le mode creux ne peut pas utiliser le miroir VRAM (le chemin GPU est conditionn�
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 1508 autres
+- … et 1536 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2434,7 +2435,7 @@ Le mode creux ne peut pas utiliser le miroir VRAM (le chemin GPU est conditionn�
 
 ## 5. Erreurs rencontrées
 
-100 sorties en erreur ou divergentes. Les premières :
+102 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : a8f2635f8 docs: record which models this box is good at, and why src/llama-hparams.cpp:8:void llama_hparams::set_swa_pattern(uint32_t n_pattern, bool dense_first) { src/llama-hparams.h:308:    void se
 - **T1** : 511 tokens notés — perplexité cumulée 247.031  (4.9 tok/s) === perplexité 247.0308 sur 511 tokens (0 événements, 104.5 s) ===  ### B3 harmony assistant 511 --- ref --- 0.0 0.0 0:00 ls: cannot access '
@@ -2625,4 +2626,5 @@ Le mode creux ne peut pas utiliser le miroir VRAM (le chemin GPU est conditionn�
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && (cd drave-core && timeout 300 cargo test --release 2>&1 | grep -E "^test result"); TAG=z1 PORT=47810 CTX=2
 - Cadence de sprints de 2 h : charte et outil de boxing temps réel  \`tools/sprint.sh\` chronomètre un sprint sur l'heure du SYSTÈME (start/status/close) et écrit
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-gpu-scores.md <<'EOF' # Noyau GPU de scores d'attention — le premier des trois du to
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -F - <<'EOF' && git log --oneline -1 Noyau 2a du top-k GPU : histogramme d'oct
 

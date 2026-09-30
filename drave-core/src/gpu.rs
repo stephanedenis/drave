@@ -32,6 +32,7 @@ extern "C" {
                       extra: *mut c_void) -> c_int;
     fn cuCtxSynchronize() -> c_int;
     fn cuMemFree_v2(dptr: u64) -> c_int;
+    fn cuMemsetD32_v2(dst: u64, valeur: c_uint, n: usize) -> c_int;
     fn cuGetErrorName(code: c_int, nom: *mut *const c_char) -> c_int;
 }
 
@@ -88,6 +89,13 @@ pub struct KvGpu {
     /// Tampon de SCORES du noyau `attn_scores` (réutilisé, comme les autres).
     pub scores_dev: u64,
     pub scores_cap: usize,
+    /// Histogrammes du radix select du top-k : `[lignes][256]` u32. 14 têtes ×
+    /// 1 ko = 14 ko, alloué une fois et réutilisé à chaque passe des quatre.
+    pub histo_dev: u64,
+    pub histo_cap: usize,
+    /// Préfixes du radix select, un u32 par ligne (téléversés à chaque passe).
+    pub prefixes_dev: u64,
+    pub prefixes_cap: usize,
     pub octets: usize,
     // Tampons de travail RÉUTILISÉS d'un jeton à l'autre. Les allouer à chaque
     // appel coûtait 24 couches × 6 appels CUDA par jeton : mesuré 24,5 ms/jeton
@@ -117,6 +125,8 @@ pub struct Gpu {
     f_attn_recombine: *mut c_void,
     /// Scores seuls (premier noyau du top-k, `docs/plan-gpu-topk.md`).
     f_attn_scores: *mut c_void,
+    /// Histogramme d'octet du radix select (noyau 2a du plan).
+    f_attn_topk_histo: *mut c_void,
     pub nom: String,
     /// Numéro du périphérique, pour savoir qui est qui quand il y en a deux.
     pub ordinal: c_int,
@@ -235,6 +245,13 @@ impl Gpu {
                 eprintln!("{}", erreur(rc, "fonction attn_scores"));
                 return None;
             }
+            let nom_h = std::ffi::CString::new("attn_topk_histo").unwrap();
+            let mut f_attn_topk_histo: *mut c_void = std::ptr::null_mut();
+            let rc = cuModuleGetFunction(&mut f_attn_topk_histo, module, nom_h.as_ptr());
+            if rc != 0 {
+                eprintln!("{}", erreur(rc, "fonction attn_topk_histo"));
+                return None;
+            }
             let nom_r = std::ffi::CString::new("attn_kv_recombine").unwrap();
             let mut f_attn_recombine: *mut c_void = std::ptr::null_mut();
             let rc = cuModuleGetFunction(&mut f_attn_recombine, module, nom_r.as_ptr());
@@ -250,6 +267,7 @@ impl Gpu {
             cuMemGetInfo_v2(&mut libre, &mut total);
             Some(Gpu { ctx, module, f_tete, f_proj, f_tete_warp, f_proj_warp,
                        f_mxfp4_warp, f_q4k_warp, f_q6k_warp, f_attn_scores,
+                       f_attn_topk_histo,
                        f_attn_part, f_attn_recombine, ordinal,
                        nom: format!("GPU {ordinal}"), memoire_libre: libre })
         }
@@ -334,7 +352,8 @@ impl Gpu {
         // Première tranche : de quoi couvrir un préremplissage courant. Le
         // reste s'ajoute par doublement, à la demande.
         let mut m = KvGpu { k: 0, v: 0, sk: 0, sv: 0, n_kv, ctx, capacite: 0, hd, nb, bits,
-                            scores_dev: 0, scores_cap: 0,
+                            scores_dev: 0, scores_cap: 0, histo_dev: 0, histo_cap: 0,
+                            prefixes_dev: 0, prefixes_cap: 0,
                             octets: 0, q_dev: 0, part_dev: 0, out_dev: 0, sinks_dev: 0,
                             q_cap: 0, part_cap: 0, out_cap: 0, sinks_cap: 0 };
         if !self.kv_assurer(&mut m, ctx.min(2048)) { return None; }
@@ -501,6 +520,84 @@ impl Gpu {
             if cuMemcpyDtoH_v2(sc.as_mut_ptr() as *mut c_void, p_sc, sc.len() * 4) != 0 {
                 return false;
             }
+        }
+        true
+    }
+
+    /// **Histogramme d'un octet des scores** (noyau 2a, `docs/plan-gpu-topk.md`).
+    ///
+    /// Le score f32 est transformé en entier **monotone** (positif : les bits
+    /// sont déjà ordonnés ; négatif : on inverse tout), si bien que l'ordre des
+    /// entiers est l'ordre des scores. On histogramme alors l'octet `decalage`,
+    /// en ne gardant que les scores dont les octets au-dessus valent le préfixe
+    /// de leur ligne. C'est la brique des quatre passes du radix select.
+    ///
+    /// **Contrat** : `m.scores_dev` doit déjà contenir `lignes × n` scores
+    /// écrits par [`Gpu::attn_scores`] (même disposition `[ligne][n]`).
+    /// `prefixes` porte un u32 par ligne, `hist` reçoit `lignes × 256` compteurs.
+    pub fn attn_topk_histo(&self, m: &mut KvGpu, lignes: usize, n: usize,
+                           decalage: i32, prefixes: &[u32], hist: &mut [u32]) -> bool {
+        cu_ctx(self.ctx);
+        if lignes == 0 || n == 0 || hist.len() < lignes * 256 || prefixes.len() < lignes {
+            eprintln!("[topk] tampons hôtes trop courts : {lignes} lignes, {n} clés, \
+hist {}, préfixes {}", hist.len(), prefixes.len());
+            return false;
+        }
+        if !(0..=24).contains(&decalage) || decalage % 8 != 0 {
+            eprintln!("[topk] décalage {decalage} invalide (0, 8, 16 ou 24)");
+            return false;
+        }
+        let besoin = lignes * 256 * 4;
+        if m.scores_cap < lignes * n {
+            eprintln!("[topk] scores en VRAM : {} < {} — appeler attn_scores d'abord",
+                      m.scores_cap, lignes * n);
+            return false;
+        }
+        unsafe {
+            if m.histo_cap < besoin {
+                if m.histo_dev != 0 { cuMemFree_v2(m.histo_dev); }
+                m.histo_dev = 0;
+                let rc = cuMemAlloc_v2(&mut m.histo_dev, besoin);
+                if rc != 0 { eprintln!("{}", erreur(rc, "histogrammes en VRAM")); return false; }
+                m.histo_cap = besoin;
+            }
+            // Compteurs à zéro : le noyau ADDITIONNE (il ne peut pas zéroter une
+            // case que personne ne visite).
+            let rc = cuMemsetD32_v2(m.histo_dev, 0, lignes * 256);
+            if rc != 0 { eprintln!("{}", erreur(rc, "remise à zéro des histogrammes")); return false; }
+            let besoin_p = lignes * 4;
+            if m.prefixes_cap < besoin_p {
+                if m.prefixes_dev != 0 { cuMemFree_v2(m.prefixes_dev); }
+                m.prefixes_dev = 0;
+                let rc = cuMemAlloc_v2(&mut m.prefixes_dev, besoin_p);
+                if rc != 0 { eprintln!("{}", erreur(rc, "préfixes en VRAM")); return false; }
+                m.prefixes_cap = besoin_p;
+            }
+            let rc = cuMemcpyHtoD_v2(m.prefixes_dev, prefixes.as_ptr() as *const c_void,
+                                     besoin_p);
+            if rc != 0 { eprintln!("{}", erreur(rc, "copie des préfixes")); return false; }
+            let (n_i, ns_i, dec_i) =
+                (n as c_int, ((n / 256).clamp(1, 128)) as c_int, decalage as c_int);
+            let mut p_sc = m.scores_dev;
+            let mut p_histo = m.histo_dev;
+            let mut p_pref = m.prefixes_dev;
+            let mut params: [*mut c_void; 6] = [
+                &mut p_sc as *mut u64 as *mut c_void,
+                &mut p_histo as *mut u64 as *mut c_void,
+                &mut p_pref as *mut u64 as *mut c_void,
+                &n_i as *const c_int as *mut c_void,
+                &ns_i as *const c_int as *mut c_void,
+                &dec_i as *const c_int as *mut c_void,
+            ];
+            let rc = cuLaunchKernel(self.f_attn_topk_histo, lignes as c_uint, ns_i as c_uint, 1,
+                                    256, 1, 1, 256 * 4, std::ptr::null_mut(),
+                                    params.as_mut_ptr(), std::ptr::null_mut());
+            if rc != 0 {
+                eprintln!("{}", erreur(rc, "lancement attn_topk_histo"));
+                return false;
+            }
+            let rc = cuMemcpyDtoH_v2(hist.as_mut_ptr() as *mut c_void, m.histo_dev, besoin);
+            if rc != 0 { eprintln!("{}", erreur(rc, "relecture des histogrammes")); return false; }
         }
         true
     }

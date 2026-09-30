@@ -38,3 +38,30 @@ static __attribute__((device)) __attribute__((always_inline)) int min(int a, int
 static __attribute__((device)) __attribute__((always_inline)) void __syncwarp() {
     asm volatile("bar.warp.sync 0xffffffff;" ::: "memory");
 }
+
+// `atomicAdd` sur un entier non signé : le noyau d'histogramme du top-k en a
+// besoin, et la boîte à outils CUDA n'est pas là. `atom.add.u32` est
+// l'instruction du matériel ; la valeur rendue (l'ancienne) n'est pas utilisée
+// ici, mais l'asm la demande.
+//
+// DEUX fonctions, et pas une seule « générique » : une adresse GÉNÉRIQUE n'est
+// pas une adresse GLOBALE. `atom.global` sur un pointeur partagé rend
+// CUDA_ERROR_INVALID_ADDRESS_SPACE (717) — mesuré, pas supposé. Pour le
+// partagé, `cvta.to.shared.u64` donne l'adresse d'espace partagé, qui tient sur
+// 32 bits, et `atom.shared.add.u32` fait l'opération.
+static __attribute__((device)) __attribute__((always_inline))
+unsigned int atomicAdd(unsigned int* p, unsigned int v) {
+    unsigned int ancien;
+    asm volatile("atom.global.add.u32 %0, [%1], %2;" : "=r"(ancien) : "l"(p), "r"(v) : "memory");
+    return ancien;
+}
+
+static __attribute__((device)) __attribute__((always_inline))
+unsigned int atomicAddPartage(unsigned int* p, unsigned int v) {
+    unsigned long long adresse;
+    asm volatile("cvta.to.shared.u64 %0, %1;" : "=l"(adresse) : "l"(p));
+    unsigned int ancien;
+    asm volatile("atom.shared.add.u32 %0, [%1], %2;"
+                 : "=r"(ancien) : "r"((unsigned int)adresse), "r"(v) : "memory");
+    return ancien;
+}

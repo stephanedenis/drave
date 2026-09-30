@@ -2420,6 +2420,105 @@ par tête KV · KV {bits} bits");
         println!("  → AU-DESSUS du critère du plan (1e-6) : ne pas écrire la sélection avant \
 d'avoir compris");
     }
+
+    // ------------------------------------------- noyau 2a : le seuil du top-k
+    // La sélection est un radix select : quatre passes de 8 bits sur les scores
+    // transformés en entiers monotones. Ici on ne collecte pas encore les
+    // indices — on vérifie que la descente HÔTE trouve, ligne par ligne, le
+    // k-ième score EXACT et le bon nombre de scores au-dessus. La référence est
+    // un tri des scores rendus PAR LE GPU : le critère porte ainsi sur le noyau
+    // 2a et sur lui seul (l'écart du noyau 1 est mesuré juste au-dessus).
+    let k = if opt.attn_topk > 0 { opt.attn_topk } else { 256 };
+    if k == 0 || k > n {
+        println!("  k = {k} hors de [1, {n}] : pas de top-k");
+        return;
+    }
+    let lignes = n_kv * rep;
+    let t2 = Instant::now();
+    let mut seuils = vec![0f32; lignes];
+    let mut sup_cpu = vec![0usize; lignes];
+    let mut eq_cpu = vec![0usize; lignes];
+    for l in 0..lignes {
+        let ligne = &obtenu[l * n..(l + 1) * n];
+        let mut tri = ligne.to_vec();
+        tri.sort_unstable_by(|a, b| b.partial_cmp(a).unwrap());
+        let sk = tri[k - 1];
+        seuils[l] = sk;
+        for &x in ligne {
+            if x > sk { sup_cpu[l] += 1; } else if x == sk { eq_cpu[l] += 1; }
+        }
+    }
+    let t_cpu_k = t2.elapsed().as_secs_f64();
+
+    let mut hist = vec![0u32; lignes * 256];
+    let mut prefixes = vec![0u32; lignes];
+    let mut au_dessus = vec![0usize; lignes];
+    let mut egaux = vec![0usize; lignes];
+    let t3 = Instant::now();
+    let mut passes = 0;
+    let mut ok = true;
+    for decalage in [24i32, 16, 8, 0] {
+        if !machine.attn_topk_histo(&mut miroir, lignes, n, decalage, &prefixes, &mut hist) {
+            println!("  le noyau d'histogramme a refusé la configuration");
+            ok = false;
+            break;
+        }
+        passes += 1;
+        for l in 0..lignes {
+            let h = &hist[l * 256..(l + 1) * 256];
+            let mut cum = au_dessus[l];
+            let mut b = 256usize;
+            while b > 0 && cum < k {
+                b -= 1;
+                cum += h[b] as usize;
+            }
+            au_dessus[l] = cum - h[b] as usize;
+            if decalage == 0 { egaux[l] = h[b] as usize; }
+            prefixes[l] = (prefixes[l] << 8) | b as u32;
+        }
+    }
+    let t_gpu_k = t3.elapsed().as_secs_f64();
+    if !ok { return; }
+
+    // Le même entier monotone que le noyau, calculé côté hôte.
+    fn monotone(f: f32) -> u32 {
+        let b = f.to_bits();
+        if b & 0x8000_0000 != 0 { !b } else { b | 0x8000_0000 }
+    }
+    let mut exacts = 0usize;
+    let mut comptes = 0usize;
+    let mut encadre = 0usize;
+    let mut pire = 0i64;
+    for l in 0..lignes {
+        let attendu_l = monotone(seuils[l]);
+        if prefixes[l] == attendu_l { exacts += 1; }
+        pire = pire.max((prefixes[l] as i64 - attendu_l as i64).abs());
+        if au_dessus[l] == sup_cpu[l] && egaux[l] == eq_cpu[l] { comptes += 1; }
+        if au_dessus[l] < k && k <= au_dessus[l] + egaux[l] { encadre += 1; }
+    }
+    // Combien de lignes ont un k-ième score qui CHANGE entre les scores CPU et
+    // ceux du GPU : là seulement, l'égalité au bit près n'est pas attendue.
+    let mut bouge = 0usize;
+    for l in 0..lignes {
+        let mut tri: Vec<f32> = attendu[l * n..(l + 1) * n].to_vec();
+        tri.sort_unstable_by(|a, b| b.partial_cmp(a).unwrap());
+        if monotone(tri[k - 1]) != monotone(seuils[l]) { bouge += 1; }
+    }
+    println!("  top-k k = {k} :");
+    println!("    CPU  tri + comptage : {:8.2} ms", t_cpu_k * 1e3);
+    println!("    GPU  {passes} passes d'histogramme : {:8.2} ms  ({:.1}× plus rapide)",
+             t_gpu_k * 1e3, t_cpu_k / t_gpu_k.max(1e-9));
+    println!("    k-ième score identique au bit près : {exacts}/{lignes} lignes (écart entier max \
+{pire})");
+    println!("    comptes « strictement au-dessus » et « égaux » : {comptes}/{lignes} lignes");
+    println!("    encadrement au_dessus < k ≤ au_dessus+égaux : {encadre}/{lignes} lignes");
+    println!("    k-ième score qui change entre scores CPU et GPU : {bouge}/{lignes} lignes \
+(attendu : noyau 1 à {:.0e})", mx);
+    if exacts == lignes && comptes == lignes && encadre == lignes {
+        println!("    → la descente trouve le seuil EXACT : la collecte peut être écrite");
+    } else {
+        println!("    → ÉCART : ne pas écrire la collecte avant d'avoir compris");
+    }
 }
 
 /// Banc **MLA** : passe avant du modèle synthétique, logits écrits en binaire
