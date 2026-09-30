@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 44.5 h |
+| Durée | 44.7 h |
 | Tours | 44 |
-| Messages | 1549 |
-| Appels d'outils | 1464 |
+| Messages | 1557 |
+| Appels d'outils | 1472 |
 | Fichiers touchés | 44 |
-| Commandes | 1164 |
+| Commandes | 1171 |
 | Sous-agents | 1 |
-| Commits | 93 |
+| Commits | 94 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -1995,7 +1995,7 @@ Je vérifie l'heure à chaque itération et j'arrête à 12:06, en laissant un p
 
 ### Tour 44 — pendant que les charges locales s'executent, peux-tu avancer des chantiers légers sur les ressources loçcale ou d'analys … [7 caractères tronqués]
 
-*118 appels d'outils.* Actions notables :
+*126 appels d'outils.* Actions notables :
 
 - bash — Write and run the pure flux analysis tool
 - bash — Document the flux analysis and commit
@@ -2011,11 +2011,11 @@ Je vérifie l'heure à chaque itération et j'arrête à 12:06, en laissant un p
 - bash — Inspect state after timeout
 - bash — Rerun pre-fix distributed test in background
 - bash — Inspect all final-norm condition sites
-- … et 87 autres
+- … et 94 autres
 
 **Synthèse produite :**
 
-La courbe dit l'inverse de ce que j'avais écrit : l'écart **décroît** avec la longueur (13,7 % → 2,7 %) — la différence venait du corpus, pas de la longueur. Je corrige les deux documents.
+**÷2,3 sur le fil** (3 623 → 1 568 octets) à écart identique (2,74e-2) : l'encodage par écarts est sans perte. Je documente et je commit.
 
 ## 3. Travail accompli
 
@@ -2114,7 +2114,7 @@ La courbe dit l'inverse de ce que j'avais écrit : l'écart **décroît** avec l
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 1124 autres
+- … et 1131 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2355,4 +2355,5 @@ La courbe dit l'inverse de ce que j'avais écrit : l'écart **décroît** avec l
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p='reports/rapport-transport-liste.md'; s=open(p).read() v = """D'où les deux suites poss
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p='REPRISE.md'; s=open(p).read() ancre = "## 7. Carte du dépôt" assert s.count(ancre) == 
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p='reports/rapport-transport-liste.md'; s=open(p).read() v = """Trois choses y sont nette
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p='reports/rapport-transport-liste.md'; s=open(p).read() v = """Donc la revendication hon
 

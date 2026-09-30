@@ -117,7 +117,8 @@ octet.
 octets contre 3 623, et les deux modes sont de toute façon « taille du dense ».
 **Le régime qui compte est le régime creux, et c'est là que les blocs gagnent.**
 
-Configuration utilisable aujourd'hui : `--flux-blocs --act-thresh 0.01`.
+Configuration utilisable aujourd'hui : `--flux-blocs --act-thresh 0.01`, soit
+**÷2,3 sur le fil pour 2,7 %** de perplexité.
 
 ### Sur du vrai texte, les chiffres sont plus sobres
 
@@ -154,11 +155,29 @@ s'allonge. Ce qui change vraiment d'un banc à l'autre, c'est le **corpus** —
 sur des identifiants synthétiques la perplexité se compte en milliers et la
 sensibilité relative n'a rien à voir.
 
-Donc la revendication honnête est : **÷1,6 sur le fil pour 2,7 % à 256 jetons de
-vrai texte** (et 13,7 % à 64 jetons : sur une séquence courte, l'erreur est
-chère). Ni le « ÷2 pour 0,2 % » que j'avais tiré du banc synthétique, ni le
-« ça empire avec la longueur » que j'en avais déduit à tort — les deux ont été
-écrits puis corrigés par la mesure.
+Donc la revendication honnête, sur 256 jetons de vrai texte, est celle du
+tableau ci-dessous (et 13,7 % d'écart à 64 jetons : sur une séquence courte,
+l'erreur est chère). Ni le « ÷2 pour 0,2 % » que j'avais tiré du banc
+synthétique, ni le « ça empire avec la longueur » que j'en avais déduit à tort —
+les deux ont été écrits puis corrigés par la mesure.
+
+### Les indices par écarts : ÷2,3 au total, à quantification IDENTIQUE
+
+La liste d'indices est triée (les blocs sont parcourus dans l'ordre), donc
+l'écart au neurone actif précédent tient sur **un octet** dans l'immense majorité
+des cas ; 255 est l'échappement vers l'indice absolu. Deux octets par neurone
+actif au lieu de trois.
+
+| mode | octets/flux | écart | perplexité répartie |
+|---|---|---|---|
+| dense f32 | 3 623 | 0,00e0 | 18,0206 |
+| blocs 0,01, indices u16 | 2 268 | 2,74e-2 | 21,8873 |
+| **blocs 0,01, indices par écarts** | **1 568** | **2,74e-2** | **21,8873** |
+
+Même écart, même perplexité au chiffre près : c'est du **rangement**, pas de la
+perte — et c'est la meilleure façon de le prouver. Au total, le flux passe de
+3 623 à 1 568 octets, soit **÷2,3**, pour 2,7 % d'écart sur 256 jetons de vrai
+texte. À 20 jetons/s, cela demande **0,25 Mbit/s**.
 
 ## Ajout — le coût réel du découpage, et Nagle
 

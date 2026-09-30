@@ -24631,3 +24631,113 @@ started background job bash-54
 La courbe dit l'inverse de ce que j'avais écrit : l'écart **décroît** avec la longueur (13,7 % → 2,7 %) — la différence venait du corpus, pas de la longueur. Je corrige les deux documents.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/rapport-transport-liste.md'; s=open(p).read()\nv = \"\"\"Trois choses y sont nettes : le mode dense reste **exact** ; les blocs battent\ntoujours les listes à sparsité égale (1 745 contre 2 159 octets, et … [4180 caractères tronqués]`
+
+  ```
+rapport : courbe de dérive corrigée
+roadmap : idem
+976cb81 Transport : l'écart DÉCROÎT avec la longueur (la courbe le dit, pas moi)
+11:16:36
+  ```
+
+### 🤖 Assistant
+
+⏵ Porte gpt-oss en fond ; pendant ce temps, je compresse les indices par écarts (deux octets → un octet par neurone actif).
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/porte_oss.sh <<'EOF'\n#!/bin/bash\ncd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\necho \"=== porte gpt-oss ctx 256 (attendu 15,1757, SANS DRAVE_GPU) ===\"\n./drave-core/target/release/drave /home/stephane/FastNVMe/mod … [292 caractères tronqués]`
+
+  ```
+started background job bash-55
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"MODE_BLOCS => {\" -A 20 drave-core/src/main.rs | head -30", "description": "Locate block mode encoder/decoder"}`
+
+  ```
+1413:        MODE_BLOCS => {
+1414-            // corps : nombre de blocs u32 · blocs × f32 · n × (u16 · i8)
+1415-            let mut nb = [0u8; 4];
+1416-            s.read_exact(&mut nb)?;
+1417-            let n_blocs = u32::from_le_bytes(nb) as usize;
+1418-            let mut eb = vec![0u8; n_blocs * 4];
+1419-            s.read_exact(&mut eb)?;
+1420-            let echelles = (0..n_blocs).map(|k| f32::from_le_bytes(
+1421-                [eb[k*4], eb[k*4+1], eb[k*4+2], eb[k*4+3]])).collect();
+1422-            let mut corps = vec![0u8; n * 3];
+1423-            s.read_exact(&mut corps)?;
+1424-            let mut idx = Vec::with_capacity(n);
+1425-            let mut val = Vec::with_capacity(n);
+1426-            for k in 0..n {
+1427-                idx.push(u16::from_le_bytes([corps[k*3], corps[k*3+1]]));
+1428-                val.push(corps[k*3+2] as i8);
+1429-            }
+1430-            return Ok(Flux { debut, fin, pos, mode, act, charge:
+1431-                             ChargeFlux::Blocs { idx, val, echelles } });
+1432-        }
+1433-        _ => {}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/main.rs'; s=open(p).read()\n\n# 1. envoi : indices par écarts (1 octet + échappement)\nv = \"\"\"        let mut c = Vec::with_capacity(4 + echelles.len() * 4 + idx.len() * 3);\n        c.extend_fr … [5050 caractères tronqués]`
+
+  ```
+indices par écarts + comptabilité exacte
+    Finished `release` profile [optimized] target(s) in 0.01s
+  ```
+
+### 🤖 Assistant
+
+Le décodeur lirait hors du tampon en cas d'échappement — je préfixe la longueur des paires.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/main.rs'; s=open(p).read()\n# envoi : longsueur explicite des paires (les échappements la font varier)\nv = \"\"\"        let mut prev = 0u32;\n        for (&i, &v) in idx.iter().zip(val.iter()) {\ … [2893 caractères tronqués]`
+
+  ```
+longueur explicite + garde
+    Finished `release` profile [optimized] target(s) in 0.01s
+  deux nœuds        : perplexité 21.3033  (149.8 s)
+  écart             : 0.00e0
+  transport         : dense f32 · 3623 octets par flux (aller) · 3623 au retour · 100.0 % d'activité (896 neurones par flux) · 256 flux
+  temps             : 303.0 ms par jeton en local · 270.1 ms à attendre le pair (son calcul + l'aller-retour) · soit 0.89× le calcul local seul
+[timed out after 600000ms]
+[killed by signal: SIGTERM]
+  ```
+
+- **bash** `{"command": "date +\"%H:%M:%S\"; pgrep -a -f \"gpt-oss\" | head -3", "description": "Check clock and gpt-oss gate status"}`
+
+  ```
+11:27:36
+90891 ./drave-core/target/release/drave /home/stephane/FastNVMe/models/gpt-oss-120b-MXFP4.gguf --ppl /tmp/ids_oss.txt --ctx 256 --dense --threads 16 --limit 512
+119349 bash -c date +"%H:%M:%S"; pgrep -a -f "gpt-oss" | head -3
+  ```
+
+- **job_output** `{"job_id": "bash-55", "timeout_ms": 300000, "wait": true}`
+
+  ```
+=== porte gpt-oss ctx 256 (attendu 15,1757, SANS DRAVE_GPU) ===
+=== perplexité 15.1757 sur 510 tokens (0 événements, 614.3 s) ===
+11:28:02
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+Porte gpt-oss : **15,1757** ✓ (inchangée). Machine libre — je vérifie l'encodage par écarts.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && IDS=$(head -256 /tmp/ids_qwen_512.txt | tr '\\n' ',' | sed 's/,$//'); echo \"=== blocs 0,01 AVANT écarts : 2268 octets, écart 2,74e-2 (mesuré à 11:10) ===\"; TAG=ec1 PORT=45870 CTX=256 IDS=\"$IDS\" EXTRA=\"--flux-blocs --act-thresh 0 … [243 caractères tronqués]`
+
+  ```
+=== blocs 0,01 AVANT écarts : 2268 octets, écart 2,74e-2 (mesuré à 11:10) ===
+  deux nœuds        : perplexité 21.8873  (11.1 s)
+  écart             : 2.74e-2
+  transport         : listes à échelle par bloc (2 octets/actif, écarts) · 1568 octets par flux (aller) · 1625 au retour · 78.6 % d'activité (704 neurones par flux) · 256 flux
+  temps             : 16.4 ms par jeton en local · 16.6 ms à attendre le pair (son calcul + l'aller-retour) · soit 1.01× le calcul local seul
+=== dense (contrôle) ===
+  deux nœuds        : perplexité 18.0206  (10.8 s)
+  écart             : 0.00e0
+  transport         : dense f32 · 3623 octets par flux (aller) · 3623 au retour · 100.0 % d'activité (896 neurones par flux) · 256 flux
+  temps             : 16.4 ms par jeton en local · 16.6 ms à attendre le pair (son calcul + l'aller-retour) · soit 1.01× le calcul local seul
+11:28:54
+  ```
+
+### 🤖 Assistant
+
+**÷2,3 sur le fil** (3 623 → 1 568 octets) à écart identique (2,74e-2) : l'encodage par écarts est sans perte. Je documente et je commit.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/rapport-transport-liste.md'; s=open(p).read()\nv = \"\"\"Donc la revendication honnête est : **÷1,6 sur le fil pour 2,7 % à 256 jetons de\nvrai texte** (et 13,7 % à 64 jetons : sur une séquence courte, l' … [4344 caractères tronqués]`
