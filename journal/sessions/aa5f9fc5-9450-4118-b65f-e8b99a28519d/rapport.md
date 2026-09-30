@@ -5,12 +5,12 @@
 | Identifiant | `aa5f9fc5-9450-4118-b65f-e8b99a28519d` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-30 15:07 |
-| Durée | 0.0 h |
+| Durée | 0.1 h |
 | Tours | 1 |
-| Messages | 18 |
-| Appels d'outils | 27 |
+| Messages | 32 |
+| Appels d'outils | 46 |
 | Fichiers touchés | 0 |
-| Commandes | 17 |
+| Commandes | 27 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -23,7 +23,7 @@
 
 ### Tour 1 — Tu es vérificateur de documentation dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (projet « Drave » : mo … [3379 caractères tronqués]
 
-*27 appels d'outils.* Actions notables :
+*46 appels d'outils.* Actions notables :
 
 - bash — List repo, docs and reports directories
 - bash — Check for running drave and list sources
@@ -39,11 +39,11 @@
 - bash — Grep CLI flags in main.rs
 - bash — Grep R4 cap constant
 - bash — Read receiving code around validation
-- … et 5 autres
+- … et 15 autres
 
 **Synthèse produite :**
 
-⏵ Je poursuis REPRISE (variables, transports, trace, KV).
+⏵ Je vérifie le codec Python et les chiffres KV dans les autres documents.
 
 ## 3. Travail accompli
 
@@ -71,6 +71,16 @@
 - **T1** Read trace writer and reader in model.rs
 - **T1** Count lines of key documents
 - **T1** Grep key facts across reference docs
+- **T1** Diff DRAVE_ vars code vs docs
+- **T1** Find doc DRAVE_ vars possibly nonexistent
+- **T1** Diff env vars docs vs code excluding journal
+- **T1** Check all markdown links for dead paths
+- **T1** Count test functions in Rust code
+- **T1** Read plan diagnostic section and its git history
+- **T1** Read run_ppl_reparti lot sending logic
+- **T1** Grep lot chunking in main.rs
+- **T1** Read ppl_reparti lot loop
+- **T1** Check codec versions and KV percentages
 
 ## 4. Mesures et résultats marquants
 
@@ -128,4 +138,52 @@
 - **T1** `docs/roadmap.md:58:| 3.4 | **Démonstration Colab** : préremplissage réparti (le décodage reste séquentiel — c'est écrit dans la vision) | 🔬 | **le préremplissage par lots sur le fil est FAIT et fidèle`
 - **T1** `docs/roadmap.md:108:| 2026-09-30 | trace du flux, Qwen2.5-0.5B, 512 jetons, 24 couches, 2 points par couche | 24 576 listes · **132 Mo** en v1 · 6 octets par neurone actif · **+8 % de temps** (aujourd`
 - **T1** `docs/roadmap.md:112:| 2026-09-30 | protocole de flux, deux processus, localhost | en-tête de **39 octets** à l'époque (79 aujourd'hui : les top-k voyagent) · dense f32 **3 623 octets/flux** · listes i`
+- **T1** `/// n'est plus bornée par la RAM (20 Go/s) mais par la VRAM (≈ 450 Go/s).`
+- **T1** `REPRISE.md:158:| 3 | KV int8 puis int4 | **fait, jusqu'à 8 192** | **échelles par bloc de 32** : int8 +**1,5 %** à 512 (était +7,1 %), **+3,0 % à 8 192** (llama.cpp +0,8 %) ; int4 **+364 % à 8 192** c`
+- **T1** `REPRISE.md:180:| KV int4, échelles par bloc | +219 % (512) et +287 % (4 591) — était +384 % et +450 % |`
+- **T1** `REPRISE.md:181:| KV à 8 192 jetons (longueur de la référence llama.cpp) | f32 **14,2339** · int8 **14,6667 (+3,0 %)** contre +0,8 % chez llama.cpp · int4 **66,0369 (+364 %)** contre +494 % chez llama.`
+- **T1** `REPRISE.md:244:| `DRAVE_KV_BITS=8` ou `4` | quantifie le cache KV (défaut f32) | le 4 bits coûte +364 % de perplexité à 8 192 |`
+- **T1** `REPRISE.md:245:| `DRAVE_KV_K_F32=1` | garde les CLÉS en f32 (valeurs quantifiées) | **le bon compromis mesuré** : à 8 192, 75 % de la taille f32 pour +0,02 % de perplexité, contre +3,0 % pour l'int8 c`
+- **T1** `REPRISE.md:313:donne +0,023 %, clés int8 + valeurs f32 donne +3,01 %. Réglage utilisable tout de`
+- **T1** `REPRISE.md:314:suite : `DRAVE_KV_BITS=8 DRAVE_KV_K_F32=1` (75 % de la taille f32 pour +0,02 %).`
+- **T1** `REPRISE.md:364:| clés f16 · valeurs int8 | 3,125 | **39 %** | **+0,018 %** ← le meilleur point |`
+- **T1** `REPRISE.md:365:| clés f32 · valeurs int8 | 5,125 | 64 % | +0,023 % |`
+- **T1** `REPRISE.md:368:| int8 · int8 | 2,25 | 28 % | +3,04 % |`
+- **T1** `REPRISE.md:369:| int4 · int4 | 1,25 | 16 % | +364 % |`
+- **T1** `REPRISE.md:424:   élément contre 2,25 en int8/int8 et 8 en f32) donne **+0,057 %** à contexte 256`
+- **T1** `docs/contexte-long.md:103:| E3 | **KV int4** | **fait** (nibbles empaquetés) | 1 M tient en RAM (9,7 Go) et en VRAM | mesuré : **+384 %** à 512 jetons, **+364 % à 8 192** — llama.cpp q4_0 : +411 % pui`
+- **T1** `docs/contexte-long.md:125:| **int4** | **63,61** (+384 %) | 72,80 (+411 %) | **71,05** (+450 %) | 98,53 (+494 %) |`
+- **T1** `docs/contexte-long.md:144:| int4 | 63,6107 (+384 %) | **41,9442 (+219 %)** | **49,9438 (+287 %)** |`
+- **T1** `docs/contexte-long.md:160:| **int4** | **66,0369** | **+364 %** | 98,53 | +494 % | 1 461 s |`
+- **T1** `docs/contexte-long.md:169:2. **Le 4 bits est ici MEILLEUR que llama.cpp** (+364 % contre +494 %) tout en`
+- **T1** `docs/roadmap.md:111:| 2026-09-30 | attribution du cache KV int8, 8 191 jetons, ctx 8 192 | f32 **14,2339** · int8 **14,6667** (+3,0 %) · **clés f32** + valeurs int8 **14,2372** (+0,023 %) · clés int8 `
+- **T1** `docs/roadmap.md:116:| 2026-09-30 | où mettre les bits du cache KV, 8 191 jetons, ctx 8 192 | à taille ÉGALE : clés f32 + valeurs int8 **+0,023 %** contre clés int8 + valeurs f32 **+3,01 %** (facteur 1`
+- **T1** `docs/roadmap.md:164:| **clés f32** · valeurs int8 | **14,2372** | **+0,023 %** | **99,2 % expliqué** |`
+- **T1** `docs/roadmap.md:173:cache à **75 % de la taille f32** pour +0,02 % de perplexité, là où l'int8 complet`
+- **T1** `docs/roadmap.md:179:coûte +0,023 % là où clés int8 + valeurs f32 coûte +3,01 % (facteur 130), et le`
+- **T1** `docs/roadmap.md:180:4 bits des clés coûte +385 % contre +0,46 % pour celui des valeurs (facteur 840).`
+- **T1** `docs/roadmap.md:181:Les **clés en f16** sont mesurées : clés f16 + valeurs int8 = **+0,018 %** à`
+- **T1** `docs/roadmap.md:182:8 192 jetons pour **39 % de la taille f32** — le meilleur réglage de la courbe`
+- **T1** `docs/roadmap.md:183:(les clés f32, à 64 % de la taille, font +0,023 % ; l'int8 complet, à 28 %, +3,04 %).`
+- **T1** `docs/vision.md:189:  **+3,0 %** à 8 192, là où l'int4 coûte +364 % — le débat n'est pas « combien de`
+- **T1** `reports/rapport-analyse-flux.md:46:**28 % à 86 %**. Les couches 5 à 8 se partagent 84-86 % de leurs neurones`
+- **T1** `reports/rapport-analyse-flux.md:48:partage que 28 %.`
+- **T1** `reports/rapport-attention-creuse.md:26:| 64 | 23,4621 (−0,64 %) | 26,1959 (−0,23 %) | 24,6867 | **19,3700 (−0,78 %)** |`
+- **T1** `reports/rapport-attribution-kv.md:15:| **clés f32** · valeurs int8 | **14,2372** | **+0,023 %** | **99,2 % expliqué** |`
+- **T1** `reports/rapport-attribution-kv.md:33:DRAVE_KV_K_F32=1` donne un cache à **75 % de la taille f32** pour +0,02 % de`
+- **T1** `reports/rapport-campagne-parcimonie.md:19:| activations du FFN (k-WTA 90 %) | +0,15 à +0,28 % | ✅ acceptable |`
+- **T1** `reports/rapport-campagne-parcimonie.md:21:| entrée des projections d'attention (90 %) | +0,06 % | ✅ quasi gratuit |`
+- **T1** `reports/rapport-parcimonie-imposee.md:50:| 90 % | 319,1 M (−9,9 %) | 23,6790 (+0,28 %) | 26,2950 (+0,15 %) |`
+- **T1** `reports/rapport-parcimonie-imposee.md:68:| attention seule à 90 % | 350,0 M (−1,2 %) | +0,06 % | — |`
+- **T1** `reports/rapport-placement-bits-kv.md:5:donnent 39 % de la taille f32 pour +0,06 %.`
+- **T1** `reports/rapport-placement-bits-kv.md:16:| **f32** | **int8** | 5,125 | 64 % | **14,2372** | **+0,023 %** |`
+- **T1** `reports/rapport-placement-bits-kv.md:17:| **int8** | **f32** | 5,125 | 64 % | 14,6622 | **+3,01 %** |`
+- **T1** `reports/rapport-placement-bits-kv.md:19:| int4 | f32 | 4,625 | 58 % | 69,0464 | **+385 %** |`
+- **T1** `reports/rapport-placement-bits-kv.md:20:| int8 | int8 | 2,25 | 28 % | 14,6667 | +3,04 % |`
+- **T1** `reports/rapport-placement-bits-kv.md:21:| **f16** | **int8** | **3,125** | **39 %** | **14,2365** | **+0,018 %** |`
+- **T1** `reports/rapport-placement-bits-kv.md:22:| int4 | int4 | 1,25 | 16 % | 66,0369 | **+364 %** |`
+- **T1** `reports/rapport-placement-bits-kv.md:30:16 %  int4/int4 ................ +364 %`
+- **T1** `reports/rapport-placement-bits-kv.md:31:28 %  int8/int8 ................ +3,04 %`
+- **T1** `reports/rapport-placement-bits-kv.md:33:39 %  clés f16 · valeurs int8 .. +0,018 %   ← le meilleur point`
+- **T1** `reports/rapport-placement-bits-kv.md:35:64 %  clés f32 · valeurs int8 .. +0,023 %`
 

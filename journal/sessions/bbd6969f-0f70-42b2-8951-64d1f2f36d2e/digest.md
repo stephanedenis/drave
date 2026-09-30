@@ -29806,3 +29806,131 @@ notebook : 14 cellules
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json\np='colab/Drave-reparti.ipynb'\nnb = json.load(open(p))\nnouvelles = []\nfor c in nb['cells']:\n    src = ''.join(c['source'])\n    if 'HOTE, PORT =' in src:\n        nouvelles.append({\"cell_type\":\"ma … [3452 caractères tronqués]`
+
+  ```
+notebook : 15 cellules
+valide · 15 cellules · ['ma', 'ma', 'co', 'ma', 'co', 'ma', 'co', 'ma', 'co', 'ma', 'co', 'ma', 'ma', 'co', 'ma']
+90a74a6 Colab clé en main : le nœud local, les trois tunnels, et un texte réel dans le notebook
+15:09:48
+f32_f32 (reference)        :
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat /tmp/aiguille_campagne.sh 2>/dev/null | head -25; echo \"=== options de l'aiguille ===\"; grep -n '\"--aiguille\"\\|\"--sonde\"\\|aiguille' drave-core/src/main.rs | head -6", "description": "Inspect needle test tooling"}`
+
+  ```
+#!/bin/bash
+# Campagne d'aiguille v2 : modèle capable (Qwen3-30B-A3B) puis modèle fort à
+# contexte long (gpt-oss, avec le KV déporté pour rendre l'attention plate).
+set -u
+cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet
+J=/tmp/aiguille_campagne.log
+: > "$J"
+while pgrep -x qtrinet-core > /dev/null; do sleep 20; done
+
+echo "### Qwen3-30B-A3B, contexte 2048, 3 profondeurs" | tee -a "$J"
+python3 tools/aiguille.py /home/stephane/FastNVMe/models/Qwen3-30B-A3B-Instruct-2507-Q4_K_M.gguf \
+    2048 0.1,0.5,0.9 --lot 256 --n 40 --threads 16 \
+    --journal reports/aiguille-30b.md >> "$J" 2>&1
+
+echo "" | tee -a "$J"
+echo "### gpt-oss-120b, contexte 4096, KV déporté" | tee -a "$J"
+python3 tools/aiguille.py /home/stephane/FastNVMe/models/gpt-oss-120b-MXFP4.gguf \
+    4096 0.1,0.5,0.9 --lot 512 --n 40 --threads 16 --gpu-kv \
+    --journal reports/aiguille-gpt-oss.md >> "$J" 2>&1
+
+echo "=== fin ===" | tee -a "$J"
+=== options de l'aiguille ===
+  ```
+
+- **bash** `{"command": "ls -la /home/stephane/FastNVMe/models/*.gguf 2>/dev/null | awk '{printf \"%.1f Go  %s\\n\", $5/1073741824, $9}' | sort -n | head -12; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && head -30 tools/aiguille.py | grep -E \"^#|usage|Usage\" | head -10", "description": "List models an … [21 caractères tronqués]`
+
+  ```
+0.5 Go  /home/stephane/FastNVMe/models/qwen2.5-0.5b-instruct-q4_k_m.gguf
+0.5 Go  /home/stephane/FastNVMe/models/qwen2.5-coder-0.5b-instruct-q4_k_m.gguf
+0.8 Go  /home/stephane/FastNVMe/models/eagle3-gpt-oss-120b-Q8_0.gguf
+1.0 Go  /home/stephane/FastNVMe/models/deepseek-r1-distill-qwen-1.5b-q4_k_m.gguf
+1.0 Go  /home/stephane/FastNVMe/models/qwen2.5-1.5b-instruct-q4_k_m.gguf
+1.1 Go  /home/stephane/FastNVMe/models/bge-m3-FP16.gguf
+1.3 Go  /home/stephane/FastNVMe/models/mmproj-Qwen2.5-VL-7B-Instruct-f16.gguf
+4.4 Go  /home/stephane/FastNVMe/models/Qwen2.5-VL-7B-Instruct-Q4_K_M.gguf
+8.4 Go  /home/stephane/FastNVMe/models/deepseek-r1-distill-qwen-14b-q4_k_m.gguf
+12.4 Go  /home/stephane/FastNVMe/models/codestral-22b-v0.1-q4_k_m.gguf
+17.3 Go  /home/stephane/FastNVMe/models/Qwen3-30B-A3B-Instruct-2507-Q4_K_M.gguf
+17.8 Go  /home/stephane/FastNVMe/models/Muse-Glimmer-30B-AD-Q4_K_M.gguf
+#!/usr/bin/env python3
+Usage :
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n 1,40p tools/aiguille.py | tail -25; echo \"=== campagne aiguille KV (à lancer après le couloir B) ===\"; cat > /tmp/aiguille_kv.sh <<'EOF'\n#!/bin/bash\n# L'aiguille valide-t-elle la politique de cache KV mesurée en perplexité … [971 caractères tronqués]`
+
+  ```
+sondes que le modèle savait résoudre ;
+3. **le préremplissage par lots** (`--lot`) rend chaque sonde abordable : le
+   moteur ne l'utilisait que pour la perplexité ;
+4. le contexte réellement atteint est **lu dans la sortie du moteur** (le
+   tokenizer ne fait pas 4 caractères par jeton pour tout le monde), et une
+   sonde n'est comptée que si le contexte demandé a bien été construit.
+
+Usage :
+    aiguille.py <modele.gguf> <longueurs> <profondeurs> [options]
+
+Exemples :
+    aiguille.py models/Qwen2.5-1.5B-Q4_K_M.gguf 1024,2048 0.1,0.5,0.9 --lot 256
+    aiguille.py /chemin/gpt-oss-120b-MXFP4.gguf 4096 0.1,0.5,0.9 --lot 512 --gpu
+"""
+import argparse
+import os
+import re
+import subprocess
+import sys
+import time
+
+Q = "./drave-core/target/release/drave"
+CORPUS = "data/wikitext2_test.txt"
+CODE = "AZUR-7391"
+AIGUILLE = f" Pour memoire, le code de verification de la reunion est {CODE}. "
+=== campagne aiguille KV (à lancer après le couloir B) ===
+campagne aiguille prête (6 configurations)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && (/tmp/aiguille_kv.sh > /tmp/aiguille_runner.log 2>&1 &) ; echo \"campagne aiguille en file (elle attendra la fin du couloir B)\"; date +\"%H:%M:%S\"; cat /tmp/kv_4096.log", "description": "Queue needle campaign"}`
+
+  ```
+campagne aiguille en file (elle attendra la fin du couloir B)
+15:10:21
+f32_f32 (reference)        :
+  ```
+
+- **list_agents** `{}`
+
+  ```
+e7dfe34f-d596-4f98-93c2-cad5a92d3b1e [ready] — Harness logits llama.cpp
+c25f97d1-9a4d-41da-b983-004f793afe43 [ready] — Audit ignored CLI flags
+7d0d2578-0048-4998-8494-7d2daef56769 [ready] — Spec batched prefill protocol
+15fd322f-7e9e-48c0-a970-f36335eb622a [ready] — Trace format compaction study
+bcfe0b97-1795-4610-8e8b-b598ca1ba6cb [ready] — Adversarial review of recent commits
+42059fde-f06f-4e2c-9a23-8292d887fb6e [ready] — Docs vs measurements consistency audit
+7c876089-605c-4836-930e-925a66028509 [ready] — Review the afternoon fixes
+da69b1fa-91b0-4c69-bb2b-58bf00e92e28 [running] — Spec for lot-in-lists mode 4
+aa5f9fc5-9450-4118-b65f-e8b99a28519d [running] — Docs audit after today's changes
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/texte.txt <<'EOF'\nLa riviere descendait de la montagne en trois cascades, et le moulin, au pied de la derniere, tournait depuis deux siecles. Quand l'eau baissait, on entendait les meules grincer sur la pierre ; quand ell … [1325 caractères tronqués]`
+
+  ```
+101 tokens écrits dans /tmp/ids_colab.txt (vocabulaire du modèle : 151936)
+réversibilité : texte reconstruit identique ✅ (359 octets)
+101 identifiants · premiers : [8747, 43129, 18849, 54568, 1315, 409, 1187, 20007]
+=== le banc avec ces identifiants (perplexité qui veut dire quelque chose) ===
+  référence locale  : perplexité 19.8967  (7.4 s)
+  deux nœuds        : perplexité 19.8967  (6.4 s)
+  écart             : 0.00e0
+  transport         : LOTS de 32 jetons · 90575 octets par lot (aller) · 2.8 ko par jeton · 4 lots (au lieu de 100 flux)
+15:11:33
+  ```
+
+### 🤖 Assistant
+
+Le texte du notebook donne **19,8967** au lieu de 17 869 ✓ (et toujours 0,00e0). Je le note, puis j'écris le plan du noyau GPU de top-k — avec son chiffrage.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json\np='colab/Drave-reparti.ipynb'; nb=json.load(open(p))\nfor c in nb['cells']:\n    src = ''.join(c['source'])\n    if 'référence locale  : perplexité 18.0851' in src:\n        c['source'] = src.replace(\n … [8168 caractères tronqués]`

@@ -7,12 +7,12 @@
 | Début | 2026-09-28 14:46 |
 | Durée | 48.4 h |
 | Tours | 46 |
-| Messages | 1855 |
-| Appels d'outils | 1752 |
+| Messages | 1862 |
+| Appels d'outils | 1759 |
 | Fichiers touchés | 44 |
-| Commandes | 1426 |
+| Commandes | 1432 |
 | Sous-agents | 9 |
-| Commits | 143 |
+| Commits | 144 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -2117,7 +2117,7 @@ L'**audit des drapeaux** a trouvé que **46 options sur 110** étaient ignorées
 
 ### Tour 46 — continue jusqu'à 18h HAE
 
-*14 appels d'outils.* Actions notables :
+*21 appels d'outils.* Actions notables :
 
 - bash — Check time, timezone and remaining budget
 - create_goal
@@ -2133,10 +2133,11 @@ L'**audit des drapeaux** a trouvé que **46 options sur 110** étaient ignorées
 - bash — Improve notebook with real text cell
 - bash — Kill test node safely and check notebook
 - bash — Add notebook real-text cell and commit
+- … et 7 autres
 
 **Synthèse produite :**
 
-Le GPU top-k demanderait 3-4 h pour être validé (sélection radix en CUDA) : je le documente au lieu de le bâcler, et je fais aboutir deux choses certaines — Colab clé en main, puis le mode 4.
+Le texte du notebook donne **19,8967** au lieu de 17 869 ✓ (et toujours 0,00e0). Je le note, puis j'écris le plan du noyau GPU de top-k — avec son chiffrage.
 
 ## 3. Travail accompli
 
@@ -2243,7 +2244,7 @@ Le GPU top-k demanderait 3-4 h pour être validé (sélection radix en CUDA) : j
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 1386 autres
+- … et 1392 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2534,4 +2535,5 @@ Le GPU top-k demanderait 3-4 h pour être validé (sélection radix en CUDA) : j
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p='reports/rapport-placement-bits-kv.md'; s=open(p).read() v = """| f16 | int4 | 2,625 | 
 - REPRISE : la frontière du cache KV et les deux gains du mode lot  Le handoff porte maintenant les deux résultats qui décident : le meilleur réglage du cache KV 
 - Colab clé en main : le nœud local, les trois tunnels, et un texte réel dans le notebook  \`tools/colab_cote_local.sh\` vérifie le binaire et le modèle, affiche 
+- Plan du noyau GPU de top-k (phase 1.1), chiffré, et la perplexité attendue du notebook  \`docs/plan-gpu-topk.md\` : pourquoi le top-k retombe sur le CPU (le che
 

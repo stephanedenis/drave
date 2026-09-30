@@ -589,3 +589,118 @@ grep: warning: stray \ before -
 grep: warning: stray \ before -
   ```
 
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n '\"--ids\"\\|ids:' drave-core/src/main.rs | head -10 && echo ==== && sed -n '/\"--ids\"/,+8p' drave-core/src/main.rs && echo ==== && grep -rn \"ppl-reparti\" docs/*.md reports/rapport-transport-liste.md | head -20", "descript … [53 caractères tronqués]`
+
+  ```
+434:    ids: Vec<u32>, ids_file: Option<String>, texte_file: Option<String>,
+513:            "--ids" => { o.ids = suivant(i).split(',')
+630:        ids: mut ids, ids_file, prompt, n: n_new, temp, top_p, topk, rep_pen, hist,
+1332:        let poids: u64 = t.dims.iter().product();
+1930:    let ids: Vec<u32> = if opt.ids.is_empty() {
+2133:    let ids: Vec<u32> = if opt.ids.is_empty() {
+2836:fn fenetres_harmony(tk: &tokenizer::Tokenizer, ids: &[u32], ctx: usize, mode: &str,
+2978:    let mut ids: Vec<u32> = if idfile.is_empty() {
+====
+            "--ids" => { o.ids = suivant(i).split(',')
+                            .filter_map(|s| s.trim().parse().ok()).collect(); 2 }
+            "--ids-file" => { o.ids_file = Some(suivant(i).clone()); 2 }
+            "--prompt" => { o.prompt = Some(suivant(i).clone()); 2 }
+            "--texte" => { o.texte = Some(suivant(i).clone()); 2 }
+            "--fichier" => { o.fichier = Some(suivant(i).clone()); 2 }
+            "--sortie" => { o.sortie = Some(suivant(i).clone()); 2 }
+            "--matrix" => { o.matrix = suivant(i).clone(); 2 }
+            "--logits-bin" => { o.logits_bin = Some(suivant(i).clone()); 2 }
+====
+docs/colab-reparti.md:74:   --ppl-
+… [1212 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"ids_file\" drave-core/src/main.rs | head -20 && echo ==== && sed -n '2970,3000p' drave-core/src/main.rs && echo ==== && ls tools | head -30 && ls data 2>/dev/null | head", "description": "Vérifie le support de --ids-file"}`
+
+  ```
+434:    ids: Vec<u32>, ids_file: Option<String>, texte_file: Option<String>,
+495:            "--ppl" => { o.ppl = true; o.ids_file = Some(suivant(i).clone()); 2 }
+515:            "--ids-file" => { o.ids_file = Some(suivant(i).clone()); 2 }
+630:        ids: mut ids, ids_file, prompt, n: n_new, temp, top_p, topk, rep_pen, hist,
+759:    if let Some(f) = &ids_file {
+2959:        ids_file: idfile, texte_file, ppl_texte: _, limit, depuis,
+====
+    let path = &modele_chemin();
+    // Défauts du mode PERPLEXITÉ : 256 jetons, trois quarts des cœurs, 16 bits
+    // d'activation (la référence de non-régression en dépend).
+    let cpu = std::thread::available_parallelism().map(|n| n.get()).unwrap_or(8);
+    let ctx = if ctx_impose { ctx_opt } else { 256 };
+    let n_threads = if threads_impose { threads_opt } else { (cpu * 3 / 4).max(1) };
+    let abits = if abits_impose { abits_opt } else { 16 };
+    let idfile = idfile.unwrap_or_default();
+    let mut ids: Vec<u32> = if idfile.is_empty() {
+        Vec::new()
+    } else {
+        let raw = std::fs::read_to_string(&idfile).expect("fichier d'identifiants illisible");
+        raw.split(|c: char| c == ',' || c.is_whitespace())
+            .filter
+… [1249 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rn \"ppl-reparti\" reports/*.md | head -20 && echo ==== && grep -rn \"ids-file\\|--ids \" reports/rapport-transport-liste.md reports/rapport-prefill-reparti.md docs/colab-reparti.md | head -20", "description": "Cherche les invo … [33 caractères tronqués]`
+
+  ```
+reports/rapport-coherence-docs.md:33:   pas de `--flux-serveur` ni de `--ppl-reparti` (interdits). Les tailles d'en-tête
+reports/rapport-drapeaux-ignores.md:27:T = `--tokenize` · FS = `--flux-serveur` · PR = `--ppl-reparti` · BK = `--banc-kv` ·
+reports/rapport-drapeaux-ignores.md:43:| `--infer` `--ppl` `--ppl-texte` `--plan` `--tokenize` `--gpu-banc` `--banc-kv` `--banc-mla` `--tensors` `--banc-vision` `--flux-serveur` `--ppl-reparti` | Aiguillage main.rs:47-57 | Si plusieurs sont donnés, **le premier de l'ordre d'aiguillage gagne en silence** (`--ppl f --tensors` fait `--tensors`) | 🟡 |
+reports/rapport-drapeaux-ignores.md:58:| `--q4` `--q4-ffn` `--q4-attn` `--q4-tout` `--bits-attn` `--bits-ffn` | I (550) · P (2707) · BM : `--dense` seul (1835) | **FS (1575) et PR (1675)** passent `dense=true, auto=false, q4=0, b6=0` en dur : `--q4 --ppl-reparti` mesure un modèle non quantifié en 4 bits | 🔴 |
+reports/rapport-drapeaux-ignores.md:238:     ni appliqués ni transportés en `--flux-serveur`/`--ppl-reparti` : deux nœuds peuvent
+reports/rapport-phase3-reparti.md:16:./drave models/Qwen2.5-0.5B-Q8_0.gguf --ppl-reparti 127.0.0.1:45733 \
+====
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '1,40p' reports/rapport-phase3-reparti.md && echo ==== && ls models 2>/dev/null | head", "description": "Lit l'invocation de référence du banc réparti"}`
+
+  ```
+# Phase 3 — le calcul réparti redevient fidèle
+
+**En une ligne** : deux processus qui se passent des flux calculent maintenant
+**exactement** la même perplexité qu'un seul — écart **0,00e0** — après deux
+corrections qui n'étaient pas celle que je croyais.
+
+## Le banc
+
+Deux processus, localhost, modèle Qwen2.5-0.5B-Q8_0, 12 couches chacun, contexte
+256. Le pilote garde les couches 0..12, le nœud moteur applique 12..24 et renvoie
+le flux ; le pilote norme, applique la tête et note la perplexité. La référence
+est le même modèle calculé entièrement en local. Reproductible :
+
+```bash
+./drave models/Qwen2.5-0.5B-Q8_0.gguf --flux-serveur 45733 &
+./drave models/Qwen2.5-0.5B-Q8_0.gguf --ppl-reparti 127.0.0.1:45733 \
+        --couches-locales 12 --limit 40 --ctx 256
+```
+
+40 jetons suffisent à trancher : la locale vaut 144,8289, et un découpage fidèle
+doit redonner ce chiffre, pas un chiffre « proche ».
+
+## Le défaut que je croyais, et le défaut réel
+
+Je suis parti d'une hypothèse lue dans le code : le nœud moteur reçoit
+`fin = n_layer`, donc `forward` applique la norme finale (`couche_fin >= n_layer`)
+et le pilote la réapplique ensuite. Double norme. La correction (un drapeau
+`flux_brut`) a 
+… [788 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Rédaction de la spécification du mode 4 dans `docs/plan-mode4-lot-listes.md`.
+
+J'ai tout ce qu'il faut : protocole v4, plan du mode 3, mesures, code de `main.rs`/`model.rs`. J'écris la spécification.
+
+- **write** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/plan-mode4-lot-listes.md", "content": "# Spécification — mode 4 : le **lot en listes** (protocole v5)\n\n> **État : non écrit.** Ce document est la spécification à implémenter ; aucun\n> fichier de code n'a été touché pour l'écrire. … [28416 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/plan-mode4-lot-listes.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+

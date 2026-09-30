@@ -767,3 +767,544 @@ REPRISE.md:324:**écart 0,00e0** (18,0851 = 18,0
 … [7994 caractères tronqués]
   ```
 
+### 🤖 Assistant
+
+⏵ Je poursuis REPRISE (variables, transports, trace, KV).
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/REPRISE.md", "limit": 180, "offset": 225}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/REPRISE.md</path>
+<type>file</type>
+<content>
+225:    (234,88 contre 298,56 à 2 048) mais repasse aujourd'hui par le CPU : le noyau
+226:    GPU ne le gère pas.
+227: 6. ~~Experts MXFP4 dans le préremplissage par lots~~ **MESURÉ, À NE PAS FAIRE
+228:    TEL QUEL** : le cache LRU donne +6 % en décodage (5,12 → 5,43 jetons/s,
+229:    53,5 % de succès, 10,64 Go montés) — le chemin CPU des experts est déjà AVX2
+230:    et le coût par expert est faible. Il faudrait supprimer les trois lancements
+231:    et copies par expert, ou grouper les projections.
+232: 7. **Mesure de qualité à contexte long** (`reports/rapport-aiguille.md`) :
+233:    étendre la grille à 8 192 et 16 384, plusieurs codes par sonde, et croiser avec
+234:    `--attn-topk`.
+235: 
+236: ### Les variables d'environnement, et leurs pièges
+237: 
+238: | variable | ce qu'elle fait | le piège |
+239: |---|---|---|
+240: | `DRAVE_GPU=1` | ouvre le pilote CUDA (`gpu::instance`) | **c'est elle qui commande tout** ; sans elle, les autres ne font RIEN et rien ne le dit |
+241: | `DRAVE_GPU_TETE=1` | déporte la tête (Q8_0 ou Q6_K) | inutile sans `DRAVE_GPU` |
+242: | `DRAVE_GPU_KV=1` | ti
+… [11788 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Je compare systématiquement les variables DRAVE_* du code et des documents.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rhoE 'DRAVE_[A-Z0-9_]+' --include='*.md' --include='*.rs' --include='*.py' . 2>/dev/null | sort -u > /tmp/all_vars.txt && echo \"=== CODE RS ===\" && grep -rhoE 'DRAVE_[A-Z0-9_]+' drave-core/src/*.rs | sort -u > /tmp/code_vars. … [175 caractères tronqués]`
+
+  ```
+=== CODE RS ===
+DRAVE_BANC_KV_DEBUG
+DRAVE_BANC_KV_GPU_SEUL
+DRAVE_BANC_KV_GRAD
+DRAVE_BANC_KV_K0
+DRAVE_BANC_KV_KUNIT
+DRAVE_BANC_KV_UNIT
+DRAVE_BANC_KV_V1
+DRAVE_DEBUG_FLUX
+DRAVE_FLUX_VERIF
+DRAVE_GPU
+DRAVE_GPU_EXPERTS
+DRAVE_GPU_EXPERTS_GO
+DRAVE_GPU_KV
+DRAVE_GPU_TETE
+DRAVE_HARMONY_TRACE
+DRAVE_KV_BITS
+DRAVE_KV_F16
+DRAVE_KV_K_F16
+DRAVE_KV_K_F32
+DRAVE_KV_V_F32
+DRAVE_Q8_BLOCS
+DRAVE_SANS_EMPRUNT
+DRAVE_TRACE_BLOCS
+DRAVE_VISION_TEXTE
+DRAVE_YARN
+DRAVE_YARN_MSCALE
+DRAVE_YARN_NON
+DRAVE_YARN_RAMPE
+=== DOCS ONLY (absent du code) ===
+DRAVE_BANC_KV_
+DRAVE_BANC_KV_BITS
+DRAVE_FLUX_POS
+DRAVE_FLUX_VER
+DRAVE_KV
+DRAVE_KV_
+DRAVE_VISIO
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rn 'DRAVE_' --include='*.md' . | grep -vE 'DRAVE_(GPU|GPU_TETE|GPU_KV|GPU_EXPERTS|GPU_EXPERTS_GO|KV_BITS|KV_K_F32|KV_V_F32|KV_K_F16|KV_F16|TRACE_BLOCS|FLUX_VERIF|HARMONY_TRACE|VISION_TEXTE|Q8_BLOCS|SANS_EMPRUNT|YARN|YARN_NON|YA … [114 caractères tronqués]`
+
+  ```
+./reports/rapport-drapeaux-ignores.md:22:`DRAVE_*` (27 chaînes, dont le préfixe cité dans un message). Pour chacun : recherche du **site
+./reports/rapport-drapeaux-ignores.md:98:## 5. Variables d'environnement `DRAVE_*` (26)
+./reports/rapport-drapeaux-ignores.md:230:- **110 options auditées** : 84 drapeaux de ligne de commande + 26 variables `DRAVE_*`.
+./reports/rapport-coherence-docs.md:139:| 68 | `docs/plan-prefill-reparti.md:256` | `DRAVE_FLUX_POS=1` imprime `[flux] lot pos …` | variable absente du code | PÉRIMÉ |
+./README.md:13:`drave`, les variables `DRAVE_*` (table de conversion dans `docs/histoire.md`) ;
+./journal/sessions/bbd6969f-0f70-42b2-8951-64d1f2f36d2e/digest.md:21413:2. **commit de renommage dédié** : crate `drave-core`, binaire `drave`, variables `DRAVE_*` **avec alias `QT_*` conservés** — le journal archivé n'est pas réécrit ;
+./journal/sessions/bbd6969f-0f70-42b2-8951-64d1f2f36d2e/digest.md:21486:- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date +%Y-%m-%d && grep -rhoE '\"(DRAVE_[A-Z0-9_]+)\"' drave-core/src/*.rs | sort -u | tr '\\n' ' '", "description": "Get date and env var list"}`
+./journal/sessions/bbd6969f-0f70-42b2-8951-64d1
+… [7592 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Je refais le diff des variables hors journal et vérifie les renvois de fichiers.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rhoE 'DRAVE_[A-Z0-9_]+' README.md REPRISE.md docs/*.md reports/*.md colab/*.md tools/*.py 2>/dev/null | sort -u > /tmp/docs_vars.txt && echo \"=== dans les docs, absentes du code ===\" && comm -23 /tmp/docs_vars.txt /tmp/code_v … [310 caractères tronqués]`
+
+  ```
+=== dans les docs, absentes du code ===
+DRAVE_BANC_KV_
+DRAVE_FLUX_POS
+DRAVE_KV_
+=== dans le code, absentes des docs ===
+DRAVE_BANC_KV_DEBUG
+DRAVE_BANC_KV_GRAD
+DRAVE_BANC_KV_KUNIT
+DRAVE_BANC_KV_V1
+=== DRAVE_FLUX_POS ? ===
+REPRISE.md:249:| `DRAVE_FLUX_VERIF=1` | vérifie l'écart entre l'activation calculée et celle que la trace impose | 1,5e-5 en v2 ; **muet dès que `--lot > 1`** (le rejeu par lots passe par `flux_lot`) |
+docs/format-flux.md:165:| la fidélité de l'encodage est chiffrée | `DRAVE_FLUX_VERIF=1` : écart relatif **1,5e-5**, soit la quantification 16 bits |
+docs/plan-prefill-reparti.md:266:3. *En diagnostic* : `DRAVE_FLUX_POS=1` fait imprimer `[flux] lot pos .. pos+t-1`
+docs/roadmap.md:208:Identique. Et le diagnostic (`DRAVE_FLUX_VERIF=1`) chiffre la fidélité de
+reports/rapport-coherence-docs.md:139:| 68 | `docs/plan-prefill-reparti.md:256` | `DRAVE_FLUX_POS=1` imprime `[flux] lot pos …` | variable absente du code | PÉRIMÉ |
+reports/rapport-coherence-docs.md:149:| 78 | `docs/format-flux.md:139` | `DRAVE_FLUX_VERIF=1` chiffre la fidélité | présente (model.rs), mais muette dès `--lot > 1` (`rapport-drapeaux-ignores.md:109`) — le document ne le dit pas | MANQUANT |
+reports/rap
+… [791 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport re, os, glob\nfiles = ['README.md','REPRISE.md'] + glob.glob('docs/*.md') + glob.glob('reports/*.md') + glob.glob('colab/*.md')\nmissing = []\ntodo = []\nfor f in files:\n    txt = open(f, encoding='utf-8',  … [699 caractères tronqués]`
+
+  ```
+=== LIENS MORTS ===
+  ```
+
+### 🤖 Assistant
+
+⏵ Je lis le README en entier (première moitié).
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/README.md", "limit": 260}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/README.md</path>
+<type>file</type>
+<content>
+1: # Drave
+2: 
+3: *Anciennement `Qtrinet`.* **La drave**, c'est le flux qu'on conduit : ici, celui
+4: des **listes d'activation** (*stream of logs*) — le moteur ne lit pas des
+5: matrices, il pousse des faits valués vers leurs destinations. La vision complète
+6: est dans [`docs/vision.md`](docs/vision.md).
+7: 
+8: Origine du projet : inférence de LLM en **ternaire / multi-bits** sur un cluster
+9: de cartes **Stratix V** (Microsoft Storey Peak) — 100 % logique, sans DSP.
+10: Le cahier des charges d'origine est dans [`Qtrinet-bootstrap.md`](Qtrinet-bootstrap.md)
+11: ⚠️ **il a été audité et corrigé** : voir la section « Écarts avec le CDC » ci-dessous.
+12: Le renommage est FAIT : le crate et le binaire s'appellent `drave-core` et
+13: `drave`, les variables `DRAVE_*` (table de conversion dans `docs/histoire.md`) ;
+14: le journal de sessions, archivé, n'est pas réécrit.
+15: 
+16: ---
+17: 
+18: ## État du projet
+19: 
+20: | Étape | État |
+21: |-------|------|
+22: | Audit du cahier des charges | ✅ (corrections ci-dessous) |
+23: | **Test de principe : quantification d'un modèle minimal** | ✅ **fa
+… [13492 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Je lis la seconde moitié du README (moteur, chiffres, renvois).
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/README.md", "offset": 261}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/README.md</path>
+<type>file</type>
+<content>
+261: 
+262: 1. **Exploiter l'ordre naturel** (par source, listes de deltas) : 7,79 G év/s, le meilleur
+263:    résultat mesuré. Pas de tri.
+264: 2. **Multi-plans : décaler l'activation**, pas fusionner les listes. La contribution du
+265:    plan *b* vaut `x[src] << b` : l'accumulation les somme naturellement, sans aucun
+266:    dédoublonnage. Un seul accumulateur suffit.
+267: 3. **Le dédoublonnage ne se justifie que pour la sémantique** : fusion de sommes
+268:    partielles venant de plusieurs cartes (ring), ou déterminisme du résultat. Dans ce cas,
+269:    utiliser un **réseau de combinaison à compartiments par destination** (ce que font les
+270:    routeurs AER), jamais un tri global.
+271: 
+272: > ⚠️ Le tri mesuré est un radix naïf mono-thread ; un tri parallèle irait ~10× plus vite,
+273: > mais resterait 5× plus cher que l'accumulation qu'il optimise.
+274: 
+275: ---
+276: 
+277: ## Moteur d'événements Rust (`drave-core`)
+278: 
+279: Le moteur d'exécution par listes est maintenant écrit en Rust — **std seul, zéro
+280: dépendance** (crates.io est inaccessible depuis cette machine, et c'e
+… [12656 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Je lis la fin de REPRISE et vérifie le nombre de tests dans le code.
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/REPRISE.md", "offset": 405}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/REPRISE.md</path>
+<type>file</type>
+<content>
+405:   allouait sur le `n` du fil (12 Gio avant de dire « tronqué »), une trame forgée
+406:   hors dimension TUAIT le nœud (SIGABRT), l'envoi paniquait encore sur un pair
+407:   fermé, `-keep` (un seul tiret) était avalé, `--flux-forcer` ignoré en inférence,
+408:   `--banc-mla` muet sur la trace.
+409: - **Treize tests** : les sept du protocole et du plafond, dont deux qui envoient
+410:   une VRAIE trame forgée dans une socket (indice hors dimension, 100 millions de
+411:   blocs).
+412: 
+413: ### Les prochains chantiers, dans l'ordre
+414: 
+415: 0. **Noyau GPU de top-k** (phase 1.1) : le seul poste de la feuille de route qui
+416:    demande du travail GPU *neuf* ; les deux Quadro sont libres et le cadre existe
+417:    (`gpu/compiler.sh`, `drave_gpu.cu`, sm_75). Vient ensuite le **second GPU**
+418:    (16 Go dormants : cache d'experts MXFP4 et KV à 1 M paginé).
+419: 1. ~~Préremplissage par LOTS sur le fil~~ **FAIT** (mode 3 : 256 jetons en 4 lots,
+420:    écart 0,00e0 ; `reports/rapport-prefill-reparti.md`). Le suivant dans cette
+421:    veine : le **lot en listes** (mode 4), chaque état
+… [4782 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src && grep -c '#\\[test\\]' main.rs model.rs engine.rs list.rs gpu.rs gguf.rs tokenizer.rs | cat; echo \"total:\"; grep -h '#\\[test\\]' *.rs | wc -l", "description": "Count test functions in Rust code"}`
+
+  ```
+main.rs:7
+model.rs:1
+engine.rs:2
+list.rs:3
+gpu.rs:0
+gguf.rs:0
+tokenizer.rs:0
+total:
+13
+  ```
+
+### 🤖 Assistant
+
+⏵ Je lis la feuille de route (statuts, journal des mesures, reste à faire).
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/roadmap.md", "limit": 130}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/roadmap.md</path>
+<type>file</type>
+<content>
+1: # Roadmap
+2: 
+3: > Suite de [`docs/vision.md`](vision.md). Cinq phases, de ce qui se fait **tout de
+4: > suite sur cette machine** à ce qui demande une infra (Colab, FPGA). Chaque
+5: > phase a un critère de succès **mesurable**, et l'état de chaque chantier est
+6: > marqué : ✅ fait · 🔬 en cours · ⏳ à faire · 🧱 bloqué par une infra absente.
+7: 
+8: ## Phase 0 — La drave observable (aucune infra)
+9: 
+10: **Objectif** : faire du flux de listes un objet de première classe, qu'on
+11: enregistre et qu'on compare. Sans cela, tout le reste se débugue à l'aveugle.
+12: 
+13: | # | chantier | état | critère de succès |
+14: |---|---|---|---|
+15: | 0.1 | **Format de trace du flux** : par (couche, position), la liste des neurones actifs (indice + valeur), l'échelle, le nombre | ✅ | écrit et relu sans perte ; **132 Mo pour 512 jetons** (258 ko/jeton), **+8 % de temps** — mesuré |
+16: | 0.2 | **Diff par couche** (`tools/diff_flux.py`) : où deux exécutions divergent, à quel jeton, quels neurones | ✅ | démontré : KV f32 contre int8 → première divergence **couche 1, jeton 0**, 896 neurones, 2,9e-
+… [11110 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Je lis la fin de la roadmap (prochaines étapes, conclusion).
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/roadmap.md", "offset": 240}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/roadmap.md</path>
+<type>file</type>
+<content>
+240:    d'échec « analysé mais jamais appliqué » du dépôt produit.
+241: 2. **La norme finale était appliquée deux fois.** Le nœud moteur recevait
+242:    `fin = n_layer`, donc son `forward` normait (`couche_fin >= n_layer`), et le
+243:    pilote normait ensuite avec `norme_finale()`. La règle est maintenant portée
+244:    par un drapeau explicite, `flux_brut` : un nœud intermédiaire rend TOUJOURS un
+245:    flux résiduel brut, et la norme appartient au nœud qui possède la tête de
+246:    sortie — une seule fois.
+247: 
+248: Le protocole, lui, n'a pas changé d'un octet : c'est le moteur qui était faux.
+249: 
+250: **Puis le transport lui-même** : `--flux-liste` fait voyager la LISTE (indice
+251: u16, valeur i16, une échelle), c'est-à-dire le format du disque, au lieu du
+252: vecteur dense f32. Mesuré à 40 jetons, par flux (aller) :
+253: 
+254: | mode | octets | écart de perplexité |
+255: |---|---|---|
+256: | dense f32 | 3 623 | **0,00e0** |
+257: | listes, seuil 0,00 | 3 622 | 2,6e-2 |
+258: | listes, seuil 0,02 | 2 203 | 4,9e-2 |
+259: | listes, seuil 0,05 | 897 | 8,1e-1 |
+260: 
+261: 
+… [3360 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Je lis la recette Colab et le rapport de la phase 3.1.
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/colab-reparti.md"}`
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-phase3-reparti.md"}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/colab-reparti.md</path>
+<type>file</type>
+<content>
+1: # Répétition Colab — la phase 3.4, pas à pas
+2: 
+3: Objectif : deux machines qui se passent des **listes d'activation**, l'une sur le
+4: runtime Colab, l'autre en local, et **les mêmes logits** qu'en local.
+5: 
+6: Ce document est la recette ; l'état du protocole et les chiffres qui la
+7: dimensionnent sont dans `docs/format-flux.md` et
+8: `reports/rapport-transport-liste.md`.
+9: 
+10: ## Mise en place, concrètement
+11: 
+12: `tools/preparer_colab.sh` produit le dépôt en **un fichier** (`drave.bundle`, 4,5 Mo
+13: avec tout l'historique) et affiche l'empreinte SHA-256 du modèle — les deux nœuds
+14: doivent charger le même GGUF, la dimension ne voyage pas. `colab/README.md` donne
+15: la marche à suivre (tunnel, téléversements) et `colab/Drave-reparti.ipynb` est le
+16: notebook prêt à ouvrir, avec la vérification d'empreinte et la lecture du résultat.
+17: 
+18: ## Ce qui est déjà vérifié, et ce qui ne l'est pas
+19: 
+20: | point | état |
+21: |---|---|
+22: | fidélité du découpage | ✅ écart **0,00e0** entre local et deux nœuds (40 et 200 jetons) |
+23: | version du protocole | ✅ d
+… [5876 caractères tronqués]
+  ```
+
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-phase3-reparti.md</path>
+<type>file</type>
+<content>
+1: # Phase 3 — le calcul réparti redevient fidèle
+2: 
+3: **En une ligne** : deux processus qui se passent des flux calculent maintenant
+4: **exactement** la même perplexité qu'un seul — écart **0,00e0** — après deux
+5: corrections qui n'étaient pas celle que je croyais.
+6: 
+7: ## Le banc
+8: 
+9: Deux processus, localhost, modèle Qwen2.5-0.5B-Q8_0, 12 couches chacun, contexte
+10: 256. Le pilote garde les couches 0..12, le nœud moteur applique 12..24 et renvoie
+11: le flux ; le pilote norme, applique la tête et note la perplexité. La référence
+12: est le même modèle calculé entièrement en local. Reproductible :
+13: 
+14: ```bash
+15: ./drave models/Qwen2.5-0.5B-Q8_0.gguf --flux-serveur 45733 &
+16: ./drave models/Qwen2.5-0.5B-Q8_0.gguf --ppl-reparti 127.0.0.1:45733 \
+17:         --couches-locales 12 --limit 40 --ctx 256
+18: ```
+19: 
+20: 40 jetons suffisent à trancher : la locale vaut 144,8289, et un découpage fidèle
+21: doit redonner ce chiffre, pas un chiffre « proche ».
+22: 
+23: ## Le défaut que je croyais, et le défaut réel
+24: 
+25: Je suis parti d'une hypothèse l
+… [2502 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Je lis l'en-tête du plan de préremplissage réparti et ses renvois.
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/plan-prefill-reparti.md", "limit": 110}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/plan-prefill-reparti.md</path>
+<type>file</type>
+<content>
+1: # Plan — le préremplissage par lots sur le fil (phase 3.4)
+2: 
+3: > **État (30/09, après mise en œuvre).** Ce plan a été suivi : le mode 3 existe,
+4: > le préremplissage par lots est fidèle (écart **0,00e0** en 4 lots de 64 comme en
+5: > un seul lot) et `reports/rapport-prefill-reparti.md` consigne les mesures. Trois
+6: > écarts au plan, tous volontaires : la version du protocole est passée à **4** (et
+7: > non 3) parce que le contrat d'activation transporte désormais aussi les top-k ;
+8: > l'échappement d'indice du mode blocs s'écrit sur **deux** octets (le plan le
+9: > disait, le code en écrivait quatre) ; et la règle R4 (plafond de 256 Mo) est
+10: > maintenant DANS le code, avec son test. Les sections ci-dessous restent le plan
+11: > d'origine — elles ne sont pas réécrites, pour qu'on puisse comparer.
+12: 
+13: **En une ligne** : aujourd'hui un flux = un jeton, donc un préremplissage de N
+14: jetons paie N allers-retours ; on ajoute un **mode 3** qui transporte N états
+15: dans **un seul** message, et le banc réparti doit rendre **0,00e0**.
+16: 
+17: Ce document
+… [5553 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Je vérifie la règle R1 dans le code et l'historique du plan.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '249,285p' docs/plan-prefill-reparti.md; echo \"=== git log plan ===\"; git log --oneline -5 -- docs/plan-prefill-reparti.md", "description": "Read plan diagnostic section and its git history"}`
+
+  ```
+**Ce qui est vérifié.**
+
+1. *Avant le calcul, côté serveur* : `pos + n ≤ mdl.ctx`, sinon arrêt nommé (§2.4).
+   Sans ce test, `KvCache::assurer` (model.rs:907) **boucle indéfiniment** : il
+   plafonne `cap` à `self.ctx` dans un `while cap < besoin`, donc `besoin > ctx`
+   ne termine jamais. Ajouter en défense `assert!(besoin <= self.ctx, …)` dans
+   `assurer` — une panique nommée vaut mieux qu'une attente active (le dépôt a
+   déjà payé 27 minutes de blocage muet, cf. `reports/rapport-prefill-par-lots.md`
+   §4.ter).
+2. *Après réception, côté pilote* — l'**écho** : `rep.mode == MODE_LOT`,
+   `rep.pos == pos0`, `rep.n == chunk.len()`, `rep.debut == couches_locales`,
+   `rep.fin == n_layer`. Sans ces cinq égalités, un lot décalé corrompt le cache
+   des deux nœuds **en silence** : les positions ne servent qu'à la lecture
+   suivante, donc l'erreur n'apparaîtrait qu'à la génération, loin de sa cause.
+   C'est la même classe que la clé `(couche, position)` de la phase 0, qui avait
+   donné 356 694 de perplexité.
+3. *En diagnostic* : `DRAVE_FLUX_POS=1` fait imprimer `[flux] lot pos .. pos+t-1`
+   des deux côtés ; deux lignes qui divergent désignent le découpage fautif.
+
+**Dépassement de
+… [915 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src && sed -n '2090,2160p' main.rs", "description": "Read run_ppl_reparti lot sending logic"}`
+
+  ```
+println!("  transport         : LOTS de {lot} jetons · {:.0} octets par lot (aller) · \
+                  {:.1} ko par jeton · {} lots (au lieu de {} flux)",
+                 octets_envoyes as f64 / nflux as f64,
+                 octets_envoyes as f64 / nflux as f64 / 1024.0 / lot as f64,
+                 nflux, ids.len() - 1);
+        println!("  temps             : {:.1} ms par LOT en local · {:.1} ms à attendre le pair · \
+                  soit {:.2}× le calcul local seul",
+                 1000.0 * t_local / nflux as f64, 1000.0 * t_pair / nflux as f64,
+                 t_pair / t_local.max(1e-9));
+    } else {
+    println!("  transport         : {} · {:.0} octets par flux (aller) · {:.0} au retour · \
+              {:.1} % d'activité ({:.0} neurones par flux) · {} flux",
+             match mode { MODE_BLOCS => "listes à échelle par bloc (2 octets/actif, écarts)",
+                          MODE_LISTE => "listes quantifiées",
+                          _ => "dense f32" },
+             octets_envoyes as f64 / nflux as f64, octets_recus as f64 / nflux as f64,
+             100.0 * actifs_envoyes as f64 / (nflux as f64 * mdl.cfg.hidden as f64),
+             actifs_envoyes as f64 / n
+… [2696 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Je cherche la logique de découpage en lots côté pilote.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src && grep -n \"envoyer_lot\\|chunk\\|lot\\b\" main.rs | sed -n '1,60p'", "description": "Grep lot chunking in main.rs"}`
+
+  ```
+195:                for c in b[lo..hi].chunks_exact(8) {
+361:    println!("[options] fenêtre {} · motif {} · seuil push {} · lot {} · ffn_gain {:?} · hebb {}",
+362:             mdl.attn_window, mdl.swa_pattern, mdl.seuil_push, mdl.lot,
+456:    /// Taille du lot de préremplissage : 1 = jeton par jeton (défaut).
+457:    lot: usize,
+537:            "--lot" => { o.lot = suivant(i).parse().unwrap(); 2 }
+635:        hebb_layer, hebb_q, hebb_out, sans_yarn, lot, ffn_gain,
+650:    mdl.lot = lot.max(1);
+1390:/// C'est le mode du préremplissage réparti : sans lui, un lot de 256 jetons
+1447:    /// Nombre du mode : canaux (dense, listes), actifs (blocs) ou ÉTATS (lot).
+1463:/// contrôle : jusqu'à ~15 To demandés au noyau. 256 Mo couvrent largement un lot
+1464:/// de 8 192 jetons × 8 192 canaux (268 Mo... soit un lot par fenêtre maximale).
+1493:            // Un lot n'a pas UN vecteur dense : c'est `plat()` qui le sert, et
+1494:            // `forward_lot` qui le consomme. L'appeler ici serait une erreur de
+1496:            ChargeFlux::Lot(_) => panic!("un lot d'états n'est pas un vecteur dense"),
+1537:    /// Le lot aplati, pour le nœud qui doit le rendre à `forward_lot`.
+1668:/// Le lot voya
+… [2926 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src && sed -n '1980,2050p' main.rs", "description": "Read ppl_reparti lot loop"}`
+
+  ```
+let t1 = Instant::now();
+    let mut nll = 0f64;
+    if lot > 1 {
+        // PRÉREMPLISSAGE RÉPARTI : un lot par aller-retour au lieu d'un flux par
+        // jeton. C'est ce que la phase 3.4 doit démontrer — le découpage doit
+        // coûter la latence d'UN message par lot, pas par jeton.
+        if mode != MODE_DENSE {
+            eprintln!("[flux] --flux-liste / --flux-blocs ne s'appliquent PAS aux lots \
+(mode 4 non écrit) : le lot part en f32 dense. À --lot 1, le mode choisi s'applique.");
+        }
+        let mut pos = 0usize;
+        while pos + 1 < ids.len() {
+            let t = lot.min(ids.len() - pos);
+            let horloge = Instant::now();
+            let hs = mdl.forward_lot(&ids[pos..pos + t], pos);
+            let plat: Vec<f32> = hs.concat();
+            t_local += horloge.elapsed().as_secs_f64();
+            let horloge = Instant::now();
+            let o = match envoyer_lot(&mut sock, couches_locales as u32, n_layer as u32,
+                                      pos as u32, &plat, t, &mdl) {
+                            Ok(o) => o,
+                            Err(e) => {
+                                eprintln!("[flux] le nœud moteur a fermé la connexion \
+pe
+… [2351 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Je lis le rapport de compacité de trace et le rapport d'attribution KV.
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-compacite-trace.md"}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-compacite-trace.md</path>
+<type>file</type>
+<content>
+1: # Compacité de la trace — le disque paie trois fois le câble
+2: 
+3: > **Fait depuis (même jour).** La variante « écarts » est **implémentée et
+4: > mesurée** dans le moteur (DRVF v2, lecteur rétrocompatible v1) : trace dense de
+5: > 512 jetons **132 396 736 → 66 370 408 octets (−49,87 %)**, rejeu `--flux-forcer`
+6: > **identique** (perplexité 19,3885 dans les deux cas), et la relecture par
+7: > `tools/flux_codec.py` — l'implémentation indépendante — donne exactement les
+8: > mêmes 24 576 listes et 22 008 776 neurones actifs. Le rejeu annonce maintenant
+9: > ses compteurs (`N listes servies, M manquantes`), ce qui a mis au jour une
+10: > trace ancienne dont les clés étaient décalées d'un jeton : elle se rejouait en
+11: > silence avec une perplexité fausse (1958,72 au lieu de 19,3885).
+12: >
+13: > **Et la v3 est faite** (`DRAVE_TRACE_BLOCS=1`) : valeurs i8 + échelle f16 par
+14: > bloc de 32 canaux. Mesuré sur la même trace dense : **45 079 930 octets**
+15: > (−65,9 % par rapport à la v1, −32,1 % par rapport à la v2), au prix de
+16: > **+0,074 % de perplexité 
+… [15264 caractères tronqués]
+  ```
+

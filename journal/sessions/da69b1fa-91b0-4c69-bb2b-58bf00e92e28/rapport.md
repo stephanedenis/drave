@@ -5,12 +5,12 @@
 | Identifiant | `da69b1fa-91b0-4c69-bb2b-58bf00e92e28` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-30 15:07 |
-| Durée | 0.0 h |
+| Durée | 0.1 h |
 | Tours | 1 |
-| Messages | 15 |
-| Appels d'outils | 20 |
-| Fichiers touchés | 0 |
-| Commandes | 12 |
+| Messages | 20 |
+| Appels d'outils | 25 |
+| Fichiers touchés | 1 |
+| Commandes | 16 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -23,7 +23,7 @@
 
 ### Tour 1 — Tu travailles dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (projet « Drave » : moteur d'inférence LLM e … [4154 caractères tronqués]
 
-*20 appels d'outils.* Actions notables :
+*25 appels d'outils.* Actions notables :
 
 - read
 - bash — Liste les points d'ancrage dans main.rs
@@ -38,12 +38,14 @@
 - bash — Vérifie flags de vérif, actifs(), options et flux_lot
 - bash — Cherche l'aide CLI et la règle Colab
 - bash — Cherche comment les ids sont fournis au banc
+- bash — Vérifie le support de --ids-file
+- … et 4 autres
 
 **Synthèse produite :**
 
-⏵ Lecture des documents de référence du dépôt avant d'écrire la spécification.
+⏵ Rédaction de la spécification du mode 4 dans `docs/plan-mode4-lot-listes.md`.
 
-Je commence par lire les fichiers demandés.
+J'ai tout ce qu'il faut : protocole v4, plan du mode 3, mesures, code de `main.rs`/`model.rs`. J'écris la spécification.
 
 ## 3. Travail accompli
 
@@ -51,6 +53,7 @@ Je commence par lire les fichiers demandés.
 
 | Fichier | Écritures | Éditions |
 |---|---|---|
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/plan-mode4-lot-listes.md` | 1 | 0 |
 
 ### Commandes exécutées (échantillon)
 
@@ -66,6 +69,10 @@ Je commence par lire les fichiers demandés.
 - **T1** Vérifie flags de vérif, actifs(), options et flux_lot
 - **T1** Cherche l'aide CLI et la règle Colab
 - **T1** Cherche comment les ids sont fournis au banc
+- **T1** Vérifie le support de --ids-file
+- **T1** Cherche les invocations réelles du banc réparti
+- **T1** Lit l'invocation de référence du banc réparti
+- **T1** Vérifie les noms exacts des options et la ligne du cache KV
 
 ## 4. Mesures et résultats marquants
 
@@ -108,4 +115,6 @@ Je commence par lire les fichiers demandés.
 - **T1** `13,7 % à 64) (et 13,7 % d'écart à 64 jetons : sur une séquence courte,`
 - **T1** `l'erreur est chère). Ni le « ÷2 pour 0,2 % » que j'avais tiré du banc`
 - **T1** `// `n_blocs × 4` octets + un Vec<f32> (mesuré : 16 Gio sur une trame de`
+- **T1** `// Défauts du mode PERPLEXITÉ : 256 jetons, trois quarts des cœurs, 16 bits`
+- **T1** `/// rejouait la mauvaise — mesuré : perplexité 356 694 au lieu de 17,43.`
 
