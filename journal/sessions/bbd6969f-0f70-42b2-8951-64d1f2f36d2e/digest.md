@@ -29343,3 +29343,11 @@ test result: ok. 13 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; fin
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add drave-core/src/main.rs && git commit -q -m \"Deux tests de plus : trame forgée hors dimension, et n_blocs démesuré\n\nLes deux défauts graves de la seconde relecture sont maintenant verrouillés par des\ntests qui envoient une … [363 caractères tronqués]`
+
+  ```
+25cfe12 Deux tests de plus : trame forgée hors dimension, et n_blocs démesuré
+13:37:16
+cles_f16_valeurs_int8      :       31:15 ./drave-core/target/release/drave models/Qwen2.5
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='REPRISE.md'; s=open(p).read()\nv = \"\"\"- **Six défauts de la relecture adversariale corrigés** : compteur de listes\n  manquantes aveugle en rejeu par lots, clés de trace incohérentes selon `--lot`,\n  pair fac … [3768 caractères tronqués]`

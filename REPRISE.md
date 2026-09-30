@@ -367,16 +367,27 @@ réellement en vigueur.
 - **Un drapeau inconnu est signalé** : `--keeep 0.05` était avalé en silence.
 - **Règle R4 dans le code** : les trois modes qui allouent sur une taille lue dans
   l'en-tête refusent au-delà de 256 Mo — un pair pouvait demander ~15 To.
-- **Onze tests** au lieu de six : taille d'en-tête et version verrouillées,
+- **Les tests du protocole** : taille d'en-tête et version verrouillées,
   aller-retour des paires à échappement (écart de 255 compris), refus des corps
   tronqués, aller-retour dense par la vraie mise en trame, refus d'un lot géant.
   Le test de troncature a immédiatement trouvé une garde manquante dans le
   décodeur.
-- **Six défauts de la relecture adversariale corrigés** : compteur de listes
-  manquantes aveugle en rejeu par lots, clés de trace incohérentes selon `--lot`,
-  pair factice qui ne lisait pas le mode lot, modes sparse ignorés en silence avec
-  `--lot > 1`, panique du client sur un refus du pair, `--limit 1` qui affichait
-  NaN.
+- **Six défauts de la première relecture adversariale corrigés** : compteur de
+  listes manquantes aveugle en rejeu par lots, clés de trace incohérentes selon
+  `--lot`, pair factice qui ne lisait pas le mode lot, modes sparse ignorés en
+  silence avec `--lot > 1`, panique du client sur un refus du pair, `--limit 1` qui
+  affichait NaN.
+- **Huit de la seconde**, qui attaquait les correctifs eux-mêmes : le tableau de
+  bord `--options-actives` s'exécutait AVANT les affectations en perplexité (il
+  montrait donc l'état d'avant — pire que rien), la règle R4 ne couvrait pas
+  `n_blocs` (16 Gio alloués sur une trame de 83 octets), le décodeur de paires
+  allouait sur le `n` du fil (12 Gio avant de dire « tronqué »), une trame forgée
+  hors dimension TUAIT le nœud (SIGABRT), l'envoi paniquait encore sur un pair
+  fermé, `-keep` (un seul tiret) était avalé, `--flux-forcer` ignoré en inférence,
+  `--banc-mla` muet sur la trace.
+- **Treize tests** : les sept du protocole et du plafond, dont deux qui envoient
+  une VRAIE trame forgée dans une socket (indice hors dimension, 100 millions de
+  blocs).
 
 ### Les prochains chantiers, dans l'ordre
 

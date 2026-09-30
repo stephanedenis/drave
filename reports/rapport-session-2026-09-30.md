@@ -19,8 +19,9 @@ relectures déléguées. Chaque chiffre a son rapport ; ceci est l'index.
 
 ## Les défauts trouvés, et par qui
 
-Sur les quatorze défauts corrigés, **neuf n'ont pas été trouvés par un banc** mais
-par une relecture :
+Sur les **vingt-deux défauts corrigés** (deux relectures adversariales comprises,
+la seconde attaquant les correctifs de la première), **dix-sept n'ont pas été
+trouvés par un banc** mais par une relecture :
 
 - `forward` ignorait la plage de couches (le pilote calculait tout, le pair
   recalculait tout par-dessus) — trouvé en lisant, mesuré ensuite : ×11,2 ;
@@ -35,7 +36,11 @@ par une relecture :
 - les clés de trace incohérentes selon `--lot` (une trace écrite dans un mode était
   illisible dans l'autre) ;
 - `--keep` ignoré en perplexité, `--ffn-gain` en inférence, les top-k dans les modes
-  flux — la classe « analysé mais jamais appliqué », huit fois.
+  flux — la classe « analysé mais jamais appliqué », huit fois ;
+- et, dans mes propres correctifs : un tableau de bord qui montrait l'état d'AVANT
+  les affectations, un plafond qui ne couvrait qu'une des quatre allocations
+  pilotées par le réseau (16 Gio sur une trame de 83 octets), une trame forgée qui
+  tuait le nœud, un envoi qui paniquait encore sur un pair fermé.
 
 Leçon de méthode, écrite parce qu'elle a coûté deux fois : **un banc qui passe ne
 prouve pas qu'il mesure ce qu'on croit**. Mon premier « rejeu v3 = 19,3885 » était
@@ -57,5 +62,6 @@ non-régression ne s'est pas reproduit : il vaut 19,5633.
 
 ## Portes, à l'heure d'écrire
 
-Qwen ctx 256 = **19,3885** · gpt-oss ctx 256 = **15,1757** · `cargo test`
-**11/11** · dépôt propre, 35 commits, machine rendue.
+Qwen ctx 256 = **19,3885** · gpt-oss ctx 256 = **15,1757** · gpt-oss avec
+`DRAVE_GPU=1` = **15,1667** · `cargo test` **13/13** · dépôt propre, quarante
+commits, machine rendue.
