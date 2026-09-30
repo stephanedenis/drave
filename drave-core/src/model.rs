@@ -846,6 +846,12 @@ pub struct KvCache {
     pub ctx: usize,
     /// `DRAVE_KV_F16=1` : arrondir clés et valeurs en f16 avant quantification.
     pub f16_avant: bool,
+    /// Attribution de l'écart int8 : `DRAVE_KV_K_F32=1` garde les CLÉS en f32
+    /// (l'erreur qui passe par les scores disparaît), `DRAVE_KV_V_F32=1` garde
+    /// les VALEURS (celle de la somme pondérée). Le miroir GPU n'est pas
+    /// utilisable dans ces variantes : il suppose une disposition homogène.
+    pub k_f32: bool,
+    pub v_f32: bool,
     /// Positions réellement allouées, doublées à la demande. Réserver `ctx`
     /// positions d'un coup coûtait 25,77 Go à contexte 1 M pour 512 jetons
     /// écrits (mesuré) ; c'est la même pagination que le miroir VRAM, côté hôte.
@@ -872,8 +878,10 @@ impl KvCache {
             assert!(hd % 2 == 0, "4 bits empaquetés : dimension de tête paire requise");
         }
         let nb = hd.div_ceil(32).max(1);
+        let (k_f32, v_f32) = (std::env::var("DRAVE_KV_K_F32").is_ok(),
+                              std::env::var("DRAVE_KV_V_F32").is_ok());
         let mut c = KvCache { bits, n_kv, ctx, cap: 0, hd,
-                              f16_avant: std::env::var("DRAVE_KV_F16").is_ok(),
+                              f16_avant: std::env::var("DRAVE_KV_F16").is_ok(), k_f32, v_f32,
                               kf: Vec::new(), vf: Vec::new(),
                               kq: Vec::new(), vq: Vec::new(), sk: Vec::new(), sv: Vec::new(),
                               nb };
@@ -892,18 +900,25 @@ impl KvCache {
         let nb = self.nb;
         let pas = self.pas();
         let (n_kv, bits) = (self.n_kv, self.bits);
-        if bits >= 32 {
-            let mut kf = vec![0f32; n_kv * cap * hd];
-            let mut vf = vec![0f32; n_kv * cap * hd];
+        let f32_k = bits >= 32 || self.k_f32;
+        let f32_v = bits >= 32 || self.v_f32;
+        if f32_k || f32_v {
+            let mut kf = if f32_k { vec![0f32; n_kv * cap * hd] } else { Vec::new() };
+            let mut vf = if f32_v { vec![0f32; n_kv * cap * hd] } else { Vec::new() };
             for h in 0..n_kv {
                 let (a, b) = (h * self.cap * hd, h * cap * hd);
                 let n = self.cap * hd;
-                kf[b..b + n].copy_from_slice(&self.kf[a..a + n]);
-                vf[b..b + n].copy_from_slice(&self.vf[a..a + n]);
+                if f32_k && !self.kf.is_empty() {
+                    kf[b..b + n].copy_from_slice(&self.kf[a..a + n]);
+                }
+                if f32_v && !self.vf.is_empty() {
+                    vf[b..b + n].copy_from_slice(&self.vf[a..a + n]);
+                }
             }
-            self.kf = kf;
-            self.vf = vf;
-        } else {
+            if f32_k { self.kf = kf; }
+            if f32_v { self.vf = vf; }
+        }
+        if bits < 32 {
             let mut kq = vec![0u8; n_kv * cap * pas];
             let mut vq = vec![0u8; n_kv * cap * pas];
             let mut sk = vec![0f32; n_kv * cap * nb];
@@ -982,10 +997,20 @@ impl KvCache {
             let sv = if mv > 0.0 { mv / niv } else { 1.0 };
             self.sk[sb + b] = sk;
             self.sv[sb + b] = sv;
+            if self.k_f32 {
+                self.kf[d + lo..d + hi].copy_from_slice(&k[lo..hi]);
+            }
+            if self.v_f32 {
+                self.vf[d + lo..d + hi].copy_from_slice(&v[lo..hi]);
+            }
             if self.bits == 8 {
                 for i in lo..hi {
-                    self.kq[base + i] = (arr(k[i]) / sk).round().clamp(-niv, niv) as i8 as u8;
-                    self.vq[base + i] = (arr(v[i]) / sv).round().clamp(-niv, niv) as i8 as u8;
+                    if !self.k_f32 {
+                        self.kq[base + i] = (arr(k[i]) / sk).round().clamp(-niv, niv) as i8 as u8;
+                    }
+                    if !self.v_f32 {
+                        self.vq[base + i] = (arr(v[i]) / sv).round().clamp(-niv, niv) as i8 as u8;
+                    }
                 }
             } else {
                 // Nibble bas = indice pair, haut = impair, écrits ENSEMBLE : un
@@ -1048,6 +1073,11 @@ impl KvCache {
     pub fn cle(&self, kvh: usize, t: usize, dst: &mut [f32]) {
         let d = (kvh * self.cap + t) * self.hd;
         if self.bits >= 32 { dst[..self.hd].copy_from_slice(&self.kf[d..d + self.hd]); return; }
+        if self.k_f32 {
+            let d = (kvh * self.cap + t) * self.hd;
+            dst[..self.hd].copy_from_slice(&self.kf[d..d + self.hd]);
+            return;
+        }
         let base = (kvh * self.cap + t) * self.pas();
         let sb = (kvh * self.cap + t) * self.nb;
         if self.bits == 8 {
@@ -1069,7 +1099,10 @@ impl KvCache {
     #[inline]
     pub fn valeur(&self, kvh: usize, t: usize, dst: &mut [f32]) {
         let d = (kvh * self.cap + t) * self.hd;
-        if self.bits >= 32 { dst[..self.hd].copy_from_slice(&self.vf[d..d + self.hd]); return; }
+        if self.bits >= 32 || self.v_f32 {
+            dst[..self.hd].copy_from_slice(&self.vf[d..d + self.hd]);
+            return;
+        }
         let base = (kvh * self.cap + t) * self.pas();
         let sb = (kvh * self.cap + t) * self.nb;
         if self.bits == 8 {
@@ -1371,7 +1404,12 @@ impl Model {
                         None => { complet = false; break; }
                     }
                 }
-                if complet {
+                let mixte = caches_kv.iter().any(|c| c.k_f32 || c.v_f32);
+                if mixte {
+                    println!("[gpu] KV déporté désactivé : les variantes d'attribution \
+(clés ou valeurs en f32) supposent une disposition homogène");
+                }
+                if complet && !mixte {
                     let total: usize = v.iter().map(|(_, m)| m.octets).sum();
                     for (i, machine) in machines.iter().enumerate() {
                         let part: usize = v.iter().filter(|(k, _)| *k == i)

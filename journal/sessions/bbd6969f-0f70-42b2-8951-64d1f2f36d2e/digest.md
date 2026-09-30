@@ -22210,3 +22210,71 @@ perplexité 19.3885 sur 510 tokens (0 événements, 16.4 s)
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='docs/roadmap.md'; s=open(p).read()\ns = s.replace(\"\"\"| 0.3 | **Le format EST le contrat d'échange** (phase 3) : versionné, en-tête + paires | ⏳ | spécifié dans ce document ; un encodeur/décodeur de référence | … [2817 caractères tronqués]`
+
+  ```
+roadmap 0.3bis
+6d0bb1d Phase 0.3bis : le rejeu d'un flux redonne exactement le même résultat
+  ```
+
+### 🤖 Assistant
+
+⏵ 10:15 — phase 1.4 : les deux variantes d'attribution (clés ou valeurs en f32)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && python3 - <<'PY'\np='src/model.rs'; s=open(p).read()\n\n# 1) champs\ns = s.replace(\"\"\"    /// `DRAVE_KV_F16=1` : arrondir clés et valeurs en f16 avant quantification.\n    pub f16_avant: bool,\"\"\",\n\"\"\"    /// `DRA … [3416 caractères tronqués]`
+
+  ```
+allocation mixte posée
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && cargo build --release 2>&1 | grep -cE \"^error\"; python3 - <<'PY'\np='src/model.rs'; s=open(p).read()\n# ecrire : le côté gardé en f32 va dans kf/vf\ns = s.replace(\"\"\"            self.sk[sb + b] = sk;\n            self … [3138 caractères tronqués]`
+
+  ```
+0
+ecrire/cle/valeur posés
+error[E0069]: `return;` in a function whose return type is not `()`
+    --> src/model.rs:1410:21
+     |
+1125 |                 auto: bool, q4: u8, b6: u8) -> Model {
+     |                                                ----- expected `Model` because of this return type
+...
+1410 |                     return; // ✗ hors sujet ici
+--
+error: could not compile `drave-core` (bin "drave") due to 1 previous error; 8 warnings emitted
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && python3 - <<'PY'\np='src/model.rs'; s=open(p).read()\ns = s.replace(\"\"\"                if caches_kv.iter().any(|c| c.k_f32 || c.v_f32) {\n                    println!(\"[gpu] KV déporté désactivé : les variantes d'attri … [648 caractères tronqués]`
+
+  ```
+garde-fou reformulé
+error[E0308]: `if` and `else` have incompatible types
+    --> src/model.rs:1411:17
+     |
+1407 |                   if caches_kv.iter().any(|c| c.k_f32 || c.v_f32) {
+     |                   ----------------------------------------------- `if` and `else` have incompatible types
+1408 | /                     println!("[gpu] KV déporté désactivé : les variantes d'attribution \
+1409 | | (clés ou valeurs en f32) supposent une disposition homogène");
+     | |_____________________________________________________________- expected because of this
+1410 |                   } else
+--
+error: could not compile `drave-core` (bin "drave") due to 1 previous error; 8 warnings emitted
+error: could not compile `drave-core` (bin "drave") due to 1 previous error; 8 warnings emitted
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && python3 - <<'PY'\np='src/model.rs'; s=open(p).read()\ns = s.replace(\"\"\"                if caches_kv.iter().any(|c| c.k_f32 || c.v_f32) {\n                    println!(\"[gpu] KV déporté désactivé : les variantes d'attri … [1479 caractères tronqués]`
+
+  ```
+garde-fou corrigé
+    Finished `release` profile [optimized] target(s) in 0.01s
+== contrôle : sans variante (référence) ==
+perplexité 17.4315 sur 255 tokens
+== variante V en f32 ==
+perplexité 17.5889 sur 255 tokens
+  ```
+
+- **bash** `{"command": "date +\"%H:%M:%S\"; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/kv_attribution.sh <<'EOF'\n#!/bin/bash\n# Attribution de l'écart int8 : quelle moitié coûte quoi ?\n# Références déjà mesurées à ctx 8192 : f32 14,2339 · int8 14,6667 (+3,0 %).\nset -u\ncd /home/stephan … [784 caractères tronqués]`
+
+  ```
+started background job bash-40
+  ```
+
+- **bash** `{"command": "date +\"%H:%M:%S\"; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A drave-core/src && git commit -q -F - <<'EOF' && git log --oneline -1\nPhase 1.4 : les deux variantes d'attribution de l'écart int8\n\n`DRAVE_KV_K_F32=1` garde les CLÉS en f32 (l'erreur qui passe par les … [763 caractères tronqués]`
