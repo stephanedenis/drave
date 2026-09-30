@@ -7,12 +7,12 @@
 | Début | 2026-09-28 14:46 |
 | Durée | 48.8 h |
 | Tours | 46 |
-| Messages | 1900 |
-| Appels d'outils | 1793 |
+| Messages | 1901 |
+| Appels d'outils | 1794 |
 | Fichiers touchés | 44 |
-| Commandes | 1465 |
+| Commandes | 1466 |
 | Sous-agents | 10 |
-| Commits | 152 |
+| Commits | 153 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -2117,7 +2117,7 @@ L'**audit des drapeaux** a trouvé que **46 options sur 110** étaient ignorées
 
 ### Tour 46 — continue jusqu'à 18h HAE
 
-*55 appels d'outils.* Actions notables :
+*56 appels d'outils.* Actions notables :
 
 - bash — Check time, timezone and remaining budget
 - create_goal
@@ -2133,11 +2133,11 @@ L'**audit des drapeaux** a trouvé que **46 options sur 110** étaient ignorées
 - bash — Improve notebook with real text cell
 - bash — Kill test node safely and check notebook
 - bash — Add notebook real-text cell and commit
-- … et 41 autres
+- … et 42 autres
 
 **Synthèse produite :**
 
-La campagne KV à 4 096 est complète : **clés f16 (+0,011 %) font mieux que clés f32 (+0,039 %)** pour moitié moins d'octets, et int8/int8 reste à +2,25 %. Je complète le rapport.
+⏵ Pendant que l'aiguille tourne, je rafraîchis le handoff avec le mode 4 et la frontière KV.
 
 ## 3. Travail accompli
 
@@ -2245,7 +2245,7 @@ La campagne KV à 4 096 est complète : **clés f16 (+0,011 %) font mieux que cl
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 1425 autres
+- … et 1426 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2545,4 +2545,5 @@ La campagne KV à 4 096 est complète : **clés f16 (+0,011 %) font mieux que cl
 - Documents : la frontière du cache KV dans contexte-long, et l'addendum du rapport de drapeaux  contexte-long §4.bis.3 porte la frontière complète (clés f16 + va
 - Quatre tests pour le mode 4 : état forgé, deux états, préfixe incohérent  Le mode 4 est du code de protocole neuf : un état forgé à la main doit se décoder comm
 - Cache KV à 4 096 : les quatre points, et les clés f16 devant les clés f32  clés f32 + valeurs int8 = 12,2223 (+0,039 %), soit un peu moins bien que le f16 (+0,0
+- REPRISE : le créneau 15h-18h (mode 4, frontière KV confirmée, plan GPU écrit)" && git log --oneline -1 | cat; sleep 240; cat /tmp/aiguille_kv.log | tail -12; da
 

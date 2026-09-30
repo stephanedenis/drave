@@ -357,6 +357,35 @@ le pas de 2 du mode par défaut (`--dense --threads 4` annonçait 30 fils),
 recommandation de fond — un `--options-actives` qui imprime les réglages
 réellement en vigueur.
 
+### Créneau 15h07 → 18h00 : le mode 4, et la frontière KV confirmée
+
+**Le protocole est en version 5** avec un cinquième mode : le **mode 4 « lot en
+listes »**. Chaque état d'un lot est encodé comme le mode 2 et auto-délimité par
+ses trois tailles (`a_j · n_blocs_j · longueur_j`). Mesuré, 256 jetons, lots de 16,
+seuil 0,01 : **1,5 ko par jeton au lieu de 3,5** (÷2,3) pour un écart de 3,03e-2 —
+sous le critère (1,5 × les 2,74e-2 du mode 2 par jeton). Plan :
+`docs/plan-mode4-lot-listes.md`.
+
+Trois choses apprises en le faisant : la construction de l'en-tête est maintenant
+UNE fonction (`tete_flux`) pour les trois émetteurs (sa duplication avait produit
+l'en-tête d'un octet trop long) ; le serveur ne traitait que le mode 3 dans sa
+branche lot, donc un flux de listes paniquait ; et le refus d'un mode inconnu est
+devenu IMMÉDIAT, avant tout octet de corps. **17 tests**, dont quatre sur le mode 4
+(état forgé, deux états, préfixe incohérent, flux à zéro élément).
+
+**La frontière du cache KV tient à 4 096 comme à 8 192** : clés f16 + valeurs int8
+= +0,011 % et +0,018 %, int8/int8 = +2,25 % et +3,04 %. Les clés f16 font aussi
+bien que les clés f32 pour moitié moins d'octets. ⚠️ Interaction : le miroir VRAM
+suppose une disposition homogène, donc les variantes d'attribution le DÉSACTIVENT —
+à très long contexte avec `DRAVE_GPU_KV=1`, garder les clés en f32.
+
+**Le noyau GPU de top-k** (phase 1.1) est spécifié et chiffré dans
+`docs/plan-gpu-topk.md` : le chemin GPU est conditionné à `attn_topk == 0`
+(`model.rs:3150`), donc le mode creux retombe sur le CPU où il coûte 968 ms par
+couche à 1 M de clés contre 13,2 ms avec le miroir. Trois noyaux, six étapes, leur
+critère d'exactitude — c'est le prochain chantier, et il n'a pas été bâclé faute de
+temps : il est écrit.
+
 ### La frontière du cache KV, mesurée en entier
 
 | réglage | octets/élément | % du f32 | écart |
@@ -416,10 +445,8 @@ sur un lien à 20 ms par message (2,6 s contre 47,6 s). `reports/rapport-prefill
    demande du travail GPU *neuf* ; les deux Quadro sont libres et le cadre existe
    (`gpu/compiler.sh`, `drave_gpu.cu`, sm_75). Vient ensuite le **second GPU**
    (16 Go dormants : cache d'experts MXFP4 et KV à 1 M paginé).
-1. ~~Préremplissage par LOTS sur le fil~~ **FAIT** (mode 3 : 256 jetons en 4 lots,
-   écart 0,00e0 ; `reports/rapport-prefill-reparti.md`). Le suivant dans cette
-   veine : le **lot en listes** (mode 4), chaque état en liste creuse au lieu de
-   f32 dense — ÷2,3 sur le fil.
+1. ~~Préremplissage par LOTS sur le fil~~ **FAIT** (mode 3), et ~~lot en listes~~
+   **FAIT AUSSI** (mode 4 : 1,5 ko par jeton au lieu de 3,5).
 2. **Clés du cache KV** : `DRAVE_KV_K_F16=1` (clés en f16, 3,125 octets par
    élément contre 2,25 en int8/int8 et 8 en f32) donne **+0,057 %** à contexte 256
    là où l'int8/int8 coûte +2,15 % — la campagne à 8 192 jetons est en cours ;

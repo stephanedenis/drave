@@ -677,3 +677,422 @@ started background job bash-73
 
 background job bash-73 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && RAYON_NUM_THREADS=2 cargo test --release -- --test-threads=2 2>&1 | tail -40) finished [status: completed, exit code: 0]. Read its output with job_output.
 
+### 🤖 Assistant
+
+⏵ Lecture du résultat des tests et de la fin de `forward_lot`.
+
+- **job_output** `{"job_id": "bash-73"}`
+
+  ```
+|
+121 | impl Gpu {
+    | -------- method in this implementation
+...
+416 |     pub fn kv_ecrire(&self, m: &mut KvGpu, kvh: usize, pos: usize,
+    |            ^^^^^^^^^
+
+warning: the `ids:` in this pattern is redundant
+   --> src/main.rs:630:9
+    |
+630 |         ids: mut ids, ids_file, prompt, n: n_new, temp, top_p, topk, rep_pen, hist,
+    |         ^^^^^^^^^^^^ help: use shorthand field pattern: `mut ids`
+    |
+    = note: `#[warn(non_shorthand_field_patterns)]` on by default
+
+warning: `drave-core` (bin "drave" test) generated 18 warnings (run `cargo fix --bin "drave" -p drave-core --tests` to apply 9 suggestions)
+    Finished `release` profile [optimized] target(s) in 0.01s
+     Running unittests src/main.rs (target/release/deps/drave-9a06049b91b56c63)
+
+running 17 tests
+test engine::tests_gemm_q4::gemm_q4_egale_matvec ... ok
+test list::tests_mxfp4::import_exact ... ok
+test list::tests_q4::avx2_egale_scalaire ... ok
+test list::tests_q6k::quarts_successifs ... ok
+test model::tests_kv::aller_retour_kv ... ok
+test tests_flux::entete_et_version_sont_ce_que_les_numeros_disent ... ok
+test tests_flux::flux_dense_aller_retour_par_la_vraie_mise_en_trame ... ok
+test tests_flux::paires_bloc
+… [751 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '2430,2520p' drave-core/src/model.rs | grep -n \"return\\|hidden\\|vec!\\[\" | head -20; echo \"=== fin forward_lot ===\"; awk 'NR>=2320 && NR<=2600' drave-core/src/model.rs | grep -n \"^\\s*}\\|hs\\b\" | head -30", "descripti … [40 caractères tronqués]`
+
+  ```
+27:                        let mut out = vec![0f32; taille];
+=== fin forward_lot ===
+22:        }
+44:            }
+49:                }
+50:            }
+51:        }
+104:                }
+105:            }
+106:        };
+113:            }
+132:                        }
+133:                    }
+134:                } else {
+142:                    }
+143:                }
+144:            }
+162:                        }
+163:                    }
+169:                        }
+170:                    }
+171:                }
+176:                    }
+180:                    }
+181:                }
+188:                    }
+189:                }
+229:                        }
+230:                    }
+231:                }
+241:                            }
+242:                        }
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && awk 'NR>=2540 && NR<=2680' drave-core/src/model.rs | grep -n \"fn \\|return\\|Ok(\\|hs\" | head -20; echo \"---- recherche bornes ----\"; awk 'NR>=2320 && NR<=2720 && /^    }/{print NR\": \"$0}' drave-core/src/model.rs | head", "desc … [33 caractères tronqués]`
+
+  ```
+76:            let t_ffn = Instant::now();
+---- recherche bornes ----
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"^    pub fn \\|^    fn \" drave-core/src/model.rs | awk -F: '$1>2300 && $1<3200' | head -10", "description": "List methods after forward_lot"}`
+
+  ```
+2320:    pub fn forward_lot(&mut self, toks: &[u32], pos0: usize) -> Vec<Vec<f32>> {
+2826:    fn flux_lot(trace: &mut Option<TraceFlux>, force: &mut Option<FluxRelecteur>,
+2873:    pub fn forward_mla(&mut self, tok: u32, pos: usize) -> Vec<f32> {
+2970:    pub fn logits_f32(&self, hn: &[f32]) -> Vec<f32> {
+2984:    pub fn forward(&mut self, tok: u32, pos: usize) -> Vec<f32> {
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && awk 'NR>=2760 && NR<=2830 {print NR\": \"$0}' drave-core/src/model.rs", "description": "Read end of forward_lot"}`
+
+  ```
+2760:                         for oo in 0..h {
+2761:                             // Le biais de descente est indexé par la LARGEUR DE
+2762:                             // SORTIE (h), pas par la largeur d'expert.
+2763:                             let b = moe.biais_down.as_ref().map_or(0.0, |b| b[e * h + oo]);
+2764:                             down[i * h + oo] += w * (yd[oo * g + j] + b);
+2765:                         }
+2766:                     }
+2767:                 }
+2768:                 for i in 0..t {
+2769:                     for oo in 0..h { x[i * h + oo] = o[i * h + oo] + down[i * h + oo]; }
+2770:                 }
+2771:             } else {
+2772:                 // ---- FFN DENSE PAR LOTS
+2773:                 for (pj, dst, taille) in [(&lay.wgate, &mut gate, self.cfg.ffn),
+2774:                                           (&lay.wup, &mut up, self.cfg.ffn)] {
+2775:                     if let Some(d8) = pj.d.as_ref() {
+2776:                         self.pool.gemm_dense_i8(d8, &xi, t, &sx, &mut yl[..d8.n_out * t]);
+2777:                         for i in 0..t {
+2778:                             for oo in 0..taille { dst[i * taille + oo] = yl[oo * t + i]; }
+2779:                
+… [3098 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Lecture du plan mode 4 : garde-fous promis et écarts annoncés.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"R4\\|plafond\\|écart\\|Écart\\|non écrit\\|pas écrit\\|limite\\|borne\" docs/plan-mode4-lot-listes.md | head -50", "description": "Scan plan doc for guards"}`
+
+  ```
+3:> **État : non écrit.** Ce document est la spécification à implémenter ; aucun
+14:(2,7e-2 d'écart à 256 jetons, 1,3e-2 à 1 024). Le mode 4 ne touche ni au calcul,
+24:| l'encodage des paires ? | **`encoder_paires_blocs` / `decoder_paires_blocs`, appelés tels quels** | ce couple a déjà été désaccordé une fois (quatre octets écrits, deux lus, invisible tant qu'aucun écart n'atteint 255) : on ne l'ouvre pas, on l'appelle |
+61:                                       écart u8 · valeur i8, et 255 = échappement :
+62:                                       écart u8=255 puis indice ABSOLU u16 LE puis valeur i8
+75:a été écrite avant que la règle R4 ne descende dans le code.
+84:  **vérifié** à chaque état, et un écart est refusé en nommant la cause probable
+86:  `n_blocs` n'est qu'une borne ; c'est voulu, parce qu'un lot n'a pas de
+88:* **R4** — toute taille annoncée passe par `verifier_taille` avant l'allocation
+139:Alternatives écartées : table d'échelles partagée par le lot (perte
+176:## 4. Le garde-fou de taille (R4) : champs et ordre exact
+179:**l'en-tête ne borne plus le corps** : `t` états peuvent annoncer chacun une
+189:   (main.rs:1743). C'est **la** borne de la mémoire vivante : le l
+… [2361 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/plan-mode4-lot-listes.md", "offset": 40, "limit": 110}`
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/plan-mode4-lot-listes.md", "offset": 170, "limit": 80}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/plan-mode4-lot-listes.md</path>
+<type>file</type>
+<content>
+40: | 10 | 4 | couche_fin | inchangée (exclue) |
+41: | 14 | 4 | position | **premier jeton du lot** (positions contiguës) |
+42: | 18 | 4 | `n` | **nombre d'ÉTATS `t`** — pas le nombre d'actifs |
+43: | 22 | 4 | échelle | **0** : sans objet (chaque état porte les siennes) |
+44: | 26…38 | 13 | levels · thresh · topk · renorm | le contrat d'activation, appliqué par le récepteur |
+45: | 39…78 | 40 | 7 top-k de projection · attn · q·k · moe | idem |
+46: 
+47: `TAILLE_TETE` ne bouge pas : les deux émetteurs gardent leur
+48: `assert_eq!(tete.len(), TAILLE_TETE)`.
+49: 
+50: ### 1.2 Corps : `t` états **auto-délimités** par un préfixe de 12 octets
+51: 
+52: ```
+53: corps = état 0 ‖ état 1 ‖ … ‖ état t−1        (dans l'ordre des positions)
+54: 
+55: état j, à partir de l'offset courant :
+56:   +0              a_j         u32 LE   nombre de paires (canaux actifs) de l'état j
+57:   +4              n_blocs_j   u32 LE   nombre d'échelles ; DOIT valoir ⌈hidden/32⌉
+58:   +8              longueur_j  u32 LE   octets de paires (les échelles ne comptent pas)
+59:   +12             n_blocs_j 
+… [5799 caractères tronqués]
+  ```
+
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/plan-mode4-lot-listes.md</path>
+<type>file</type>
+<content>
+170: **Durcissement à faire dans le même passage** (indépendant du mode 4, mais c'est
+171: le même défaut) : dans `recevoir_flux`, refuser un mode inconnu **juste après
+172: l'en-tête**, avant la lecture du corps, au lieu d'attendre le `autre => Err`
+173: actuel. Après ce correctif, un mode 7 forgé en v5 est refusé sans qu'un seul
+174: octet de corps soit lu, et le prochain mode ajouté héritera de la même sûreté.
+175: 
+176: ## 4. Le garde-fou de taille (R4) : champs et ordre exact
+177: 
+178: `PLAFOND_FLUX` vaut 256 Mo et `verifier_taille` est la seule porte. En mode 4,
+179: **l'en-tête ne borne plus le corps** : `t` états peuvent annoncer chacun une
+180: taille licite et faire, ensemble, n'importe quoi. Il faut donc deux niveaux.
+181: 
+182: Ordre de réception, **aucune allocation avant la vérification qui la couvre** :
+183: 
+184: 1. Lire les 79 octets d'en-tête ; magie ; **version == 5** (refus immédiat,
+185:    nommé) ; **mode == 4** (refus immédiat si inconnu, cf. §3).
+186: 2. `t = n` (offset 18). Refuser `t == 0` (« lot de listes vide »).
+187: 3. `verifier_taill
+… [4033 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Repérage des options CLI et de la commande de mesure du plan.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '300,330p' docs/plan-mode4-lot-listes.md; echo \"=== options CLI ===\"; grep -n '\"--flux-serveur\"\\|\"--ppl-reparti\"\\|\"--lot\"\\|\"--n\"\\|\"--ids\"\\|\"--couches-locales\"\\|\"--modele\"\\|\"--ctx\"' drave-core/src/main. … [77 caractères tronqués]`
+
+  ```
+# terminal 2b — le mode 4 : mêmes ids, même seuil, par lots
+./drave models/Qwen2.5-0.5B-Q8_0.gguf --ppl-reparti 127.0.0.1:45733 \
+        --couches-locales 12 --limit 256 --ctx 256 --lot 16 --flux-blocs --act-thresh 0.01
+```
+
+Résultat attendu (le chiffre exact dépend du corpus ; les identifiants par défaut
+`1..256` donnent une perplexité bien plus haute que WikiText-2, l'écart seul
+compte) :
+
+```
+  référence locale  : perplexité X          <- identique au run mode 3 à mêmes ids et --lot
+  deux nœuds        : perplexité Y          <- Y ≠ X : c'est le prix des listes, pas un bug
+  écart             : 2,7e-2                <- du même ordre que 2a (critère : ≤ 1,5×)
+  transport         : mode 4 · listes à échelle par bloc · 16 états ·
+                      ≈ 24 500 octets par lot (≈ 1 530 par jeton) · 16 lots (au lieu de 255 flux)
+```
+
+### 6.2 Ce qui est acceptable, et par rapport à quoi
+
+* Le mode 4 est **avec perte** : `0,00e0` est impossible et le chercher est une
+  erreur de critère. Le mode 2 coûte déjà **2,7e-2 à 256 jetons** (1,3e-2 à
+  1 024, 1,4e-1 à 64) au seuil 0,01. Le mode 4 quantifie **chaque état
+  exactement comme le mode 2 quantifie un jeton**, avec la même fonction et
+… [1119 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rn \"ppl-reparti\" README.md REPRISE.md docs/*.md 2>/dev/null | head -12; echo \"=== free mem ===\"; free -g | head -3; echo \"=== drave procs ===\"; pgrep -af drave | head", "description": "Find documented command and system s … [6 caractères tronqués]`
+
+  ```
+REPRISE.md:491:    --ppl-reparti 127.0.0.1:45999 --couches-locales 12 --limit 40 --ctx 256
+REPRISE.md:500:    --ppl-reparti 127.0.0.1:45760 --couches-locales 12 --limit 4 --ctx 256
+docs/colab-reparti.md:74:   --ppl-reparti <hôte-public>:PORT  ─────────▶ --flux-serveur 0.0.0.0:PORT
+docs/colab-reparti.md:96:    --ppl-reparti <hôte-public>:5599 --couches-locales 12 --limit 200 --ctx 256
+docs/format-flux.md:9:3. le **transport** (phase 3, `--flux-serveur` / `--ppl-reparti`) : ce qu'un nœud
+docs/plan-mode4-lot-listes.md:298:./drave models/Qwen2.5-0.5B-Q8_0.gguf --ppl-reparti 127.0.0.1:45733 \
+docs/plan-mode4-lot-listes.md:302:./drave models/Qwen2.5-0.5B-Q8_0.gguf --ppl-reparti 127.0.0.1:45733 \
+docs/plan-prefill-reparti.md:278:`--ppl-reparti` honore `--lot N` (aujourd'hui il l'ignore : `run_ppl_reparti`,
+docs/plan-prefill-reparti.md:303:./drave models/Qwen2.5-0.5B-Q8_0.gguf --ppl-reparti 127.0.0.1:45733 \
+docs/plan-prefill-reparti.md:333:./drave … --ppl-reparti 127.0.0.1:45733 --couches-locales 12 --limit 200 --ctx 256 --lot 16
+docs/roadmap.md:55:| 3.1 | **Contrat d'échange v1** : tranche de liste = en-tête (couche, source, échelle, bits) + paires (destination, valeur) | ✅ | format écri
+… [10285 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '480,510p' REPRISE.md", "description": "Read REPRISE server command"}`
+
+  ```
+# 4. puis §6.b : la rotation ne bascule plus qu'au-delà de 1,25 × la longueur
+#    d'origine déclarée (5 120 pour gpt-oss) — mesuré, voir docs/contexte-long.md §5.ter
+
+# 5. le calcul réparti (§6bis) : deux nœuds, 12 couches chacun, et le même chiffre
+#    des deux côtés. Le nœud moteur doit être lancé AVANT le pilote.
+cd ..   # racine du dépôt
+(./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf \
+     --flux-serveur 45999 --ctx 256 > /tmp/serveur.log 2>&1 &)
+sleep 3
+./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf \
+    --ppl-reparti 127.0.0.1:45999 --couches-locales 12 --limit 40 --ctx 256
+# attendu : « écart : 0.00e0 » en mode dense (le transport f32 est exact)
+
+# 6. le contrôle qui attrape les fautes de banc : `tools/pair_factice.py` parle le
+#    protocole sans charger de modèle et DIT ce qu'il reçoit (tailles, modes,
+#    réglages). C'est lui qui a montré un flux de 919 canaux là où le modèle en a
+#    896 — mon compteur divisait par le nombre de jetons notés, pas de flux envoyés.
+python3 tools/pair_factice.py 45760 896 &
+./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf \
+    --ppl-reparti 127.0.0.1:45760 --couches-locales 12 --limit 
+… [15 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"flux_serveur\\|fn modele_chemin\" -A 8 drave-core/src/main.rs | sed -n '1,60p'", "description": "Check server option handling"}`
+
+  ```
+51:        (opt.flux_serveur.is_some(), "--flux-serveur"),
+52-        (opt.ppl_reparti.is_some(), "--ppl-reparti"),
+53-        (opt.tensors, "--tensors"), (opt.banc_mla.is_some(), "--banc-mla"),
+54-        (opt.banc_kv > 0, "--banc-kv"), (opt.gpu_banc, "--gpu-banc"),
+55-        (opt.plan, "--plan"), (opt.tokenize, "--tokenize"),
+56-        (opt.ppl, "--ppl"), (opt.infer, "--infer"),
+57-    ].iter().filter(|(v, _)| *v).map(|(_, n)| *n).collect();
+58-    if modes.len() > 1 {
+59-        eprintln!("[modes] {} modes demandés ({}) : c'est {} qui s'exécute — les autres \
+--
+63:    if let Some(adresse) = opt.flux_serveur.clone() { run_serveur_flux(opt, &adresse); return; }
+64-    if let Some(pair) = opt.ppl_reparti.clone() { run_ppl_reparti(opt, &pair); return; }
+65-    if opt.tensors { run_tensors(); return; }
+66-    if let Some(f) = opt.banc_mla.clone() { run_banc_mla(opt, &f); return; }
+67-    if opt.banc_kv > 0 { run_banc_kv(opt); return; }
+68-    if opt.gpu_banc { run_gpu_banc(opt); return; }
+69-    if opt.plan { run_plan(opt); return; }
+70-    if opt.tokenize { run_tokenize(opt); return; }
+71-    if opt.ppl { run_ppl(opt); return; }
+--
+338:fn modele_chemin() -> String { MODELE.get().
+… [1706 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Lecture de l'outil Python existant `pair_factice.py`.
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pair_factice.py"}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pair_factice.py</path>
+<type>file</type>
+<content>
+1: #!/usr/bin/env python3
+2: """Pair factice du protocole de flux (v2) : il ÉCOUTE et DIT ce qu'il reçoit.
+3: 
+4: Pourquoi cet outil : un banc à deux nœuds qui « marche » peut cacher un
+5: protocole faux — c'est exactement ce qui est arrivé avec un flux de 919 canaux
+6: là où le modèle en a 896. Un pair qui parle le protocole sans calculer le modèle
+7: rend visible ce que l'autre bout envoie vraiment : tailles, positions, modes,
+8: réglages. Il répond un flux de la dimension demandée pour que le pilote continue.
+9: 
+10:     python3 tools/pair_factice.py <port> [dimension]
+11: """
+12: import socket, struct, sys
+13: 
+14: MAGIE = 0x44525631
+15: TETE = 79   # en-tête v4 : magie, version, mode, plage, position, n, échelle,
+16:             # niveaux, seuil, top-k, renorm, 7 top-k par projection, 3 top-k globaux
+17: MODES = {0: "dense f32", 1: "listes quantifiées", 2: "blocs (i8 + écarts)",
+18:          3: "lot (t états × dimension)"}
+19: 
+20: 
+21: def lire_tout(sock, n):
+22:     buf = b""
+23:     while len(buf) < n:
+24:         morceau = sock.recv(n - len(buf))
+25:         if no
+… [4548 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Écriture d'un pair Python v5 (mode 4) pour tester l'encodeur réel.
+
+- **write** `{"file_path": "/tmp/m4_peer.py", "content": "#!/usr/bin/env python3\n\"\"\"Pair factice v5, conscient du mode 4 (lot en listes).\n\nIl ECoute ce qu'un vrai `drave --ppl-reparti --flux-blocs --lot N` envoie et\nverifie l'auto-delimitation : a_j / n_blocs_j / longueur_j, echelles, paires\n(ecart u8, 2 … [4755 caractères tronqués]`
+
+  ```
+<path>/tmp/m4_peer.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && (python3 /tmp/m4_peer.py 45801 896 > /tmp/m4_peer.log 2>&1 &) && sleep 1 && timeout 170 ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf --ppl-reparti 127.0.0.1:45801 --couches-locales 12 --limit 20 --ctx 256 --lot 16  … [311 caractères tronqués]`
+
+  ```
+started background job bash-74
+  ```
+
+### 🤖 Assistant
+
+⏵ Écriture du client d'attaque (trames forgées v5).
+
+- **write** `{"content": "#!/usr/bin/env python3\n\"\"\"Client hostile v5 : envoie UNE trame forgee a `drave --flux-serveur` et dit\nce que le serveur en fait (refus nomme, reponse, ou blocage = pas de garde).\n\n    python3 /tmp/m4_attack.py <cas> <port> [hidden]\n\"\"\"\nimport socket, struct, sys, time\n\nMAG … [6126 caractères tronqués]`
+
+  ```
+<path>/tmp/m4_attack.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+### 👤 Utilisateur
+
+background job bash-74 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && (python3 /tmp/m4_peer.py 45801 896 > /tmp/m4_peer.log 2>&1 &) && sleep 1 && timeout 170 ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf --ppl-reparti 127.0.0.1:45801 --couches-locales 12 --limit 20 --ctx 256 --lot 16 --flux-blocs --act-thresh 0.01 --threads 2 > /tmp/m4_client.log 2>&1; echo "exit=$?"; echo "=== PEER ==="; cat /tmp/m4_peer.log; echo "=== CLIENT ==="; tail -20 /tmp/m4_client.log; pkill -f m4_peer.py) finished [status: completed, exit code: 1]. Read its output with job_output.
+
+- **job_output** `{"job_id": "bash-74"}`
+
+  ```
+exit=0
+=== PEER ===
+[pair] ecoute 127.0.0.1:45801 · hidden=896 · 79 octets d'en-tete
+[pair] client ('127.0.0.1', 33468)
+[pair] flux 1 : couches 12..24 pos 0 · version 5 · mode LOT EN LISTES · t=16 · corps=23248 octets · 1453 par etat
+[pair]    etat 0 : a=23 lg=46 echappements=0 echelles=28 hors_dim=0 indice_max=844
+[pair]    etat 1 : a=722 lg=1444 echappements=0 echelles=28 hors_dim=0 indice_max=894
+[pair]    etat 2 : a=720 lg=1440 echappements=0 echelles=28 hors_dim=0 indice_max=894
+[pair]    etat 3 : a=753 lg=1506 echappements=0 echelles=28 hors_dim=0 indice_max=895
+[pair]    etat 4 : a=773 lg=1546 echappements=0 echelles=28 hors_dim=0 indice_max=894
+[pair]    etat 5 : a=691 lg=1382 echappements=0 echelles=28 hors_dim=0 indice_max=895
+[pair]    ... 10 autres etats
+[pair] flux 2 : couches 12..24 pos 16 · version 5 · mode LOT EN LISTES · t=4 · corps=6328 octets · 1582 par etat
+[pair]    etat 0 : a=672 lg=1344 echappements=0 echelles=28 hors_dim=0 indice_max=894
+[pair]    etat 1 : a=735 lg=1470 echappements=0 echelles=28 hors_dim=0 indice_max=895
+[pair]    etat 2 : a=736 lg=1472 echappements=0 echelles=28 hors_dim=0 indice_max=895
+[pair]    etat 3 : a=773 lg=1546 echappements=0 eche
+… [1077 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Test de bout en bout réel : serveur + client mode 4, lots partiel et surdimensionné.
+
+- **write** `{"content": "#!/bin/bash\n# Deux runs reel->reel du mode 4 : lot partiel (20 = 16+4) et lot plus grand\n# que le nombre de jetons (8 < 16). Chaque serveur est tue a la fin.\ncd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\nD=./drave-core/target/release/drave\nM=models/Qwen2.5-0.5B-Q8_0.gguf\n\nru … [928 caractères tronqués]`
+
+  ```
+<path>/tmp/run_e2e.sh</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "bash /tmp/run_e2e.sh 2>&1 | tail -40", "description": "Run end-to-end mode 4 tests", "run_in_background": true, "timeoutMs": 240000}`
+
+  ```
+started background job bash-75
+  ```
+

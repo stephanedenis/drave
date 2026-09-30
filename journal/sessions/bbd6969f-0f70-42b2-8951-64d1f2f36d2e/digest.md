@@ -30556,3 +30556,16 @@ cles_f32_valeurs_int8      : perplexité 12.2223 sur 4095 tokens (0 événements
 La campagne KV à 4 096 est complète : **clés f16 (+0,011 %) font mieux que clés f32 (+0,039 %)** pour moitié moins d'octets, et int8/int8 reste à +2,25 %. Je complète le rapport.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/rapport-placement-bits-kv.md'; s=open(p).read()\nv = \"\"\"| clés f32 · valeurs int8 | *(en cours)* | | 14,2372 | +0,023 % |\"\"\"\nn = \"\"\"| clés f32 · valeurs int8 | 12,2223 | +0,039 % | 14,2372 | +0, … [2009 caractères tronqués]`
+
+  ```
+rapport KV : 4 096 complet
+b9a3425 Cache KV à 4 096 : les quatre points, et les clés f16 devant les clés f32
+### f32 · contexte 2048 · profondeurs 0,1 / 0,5 / 0,9
+15:36:26
+  ```
+
+### 🤖 Assistant
+
+⏵ Pendant que l'aiguille tourne, je rafraîchis le handoff avec le mode 4 et la frontière KV.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='REPRISE.md'; s=open(p).read()\nv = \"\"\"### La frontière du cache KV, mesurée en entier\"\"\"\nn = \"\"\"### Créneau 15h07 → 18h00 : le mode 4, et la frontière KV confirmée\n\n**Le protocole est en version 5** a … [2681 caractères tronqués]`

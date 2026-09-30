@@ -5,12 +5,12 @@
 | Identifiant | `5ce3f080-2d3d-467a-8ee1-df697f3f3e68` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-30 15:32 |
-| Durée | 0.0 h |
+| Durée | 0.1 h |
 | Tours | 1 |
-| Messages | 19 |
-| Appels d'outils | 24 |
-| Fichiers touchés | 0 |
-| Commandes | 14 |
+| Messages | 34 |
+| Appels d'outils | 41 |
+| Fichiers touchés | 3 |
+| Commandes | 24 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -23,7 +23,7 @@
 
 ### Tour 1 — Tu es relecteur ADVERSARIAL dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (projet « Drave » : moteur d'i … [3929 caractères tronqués]
 
-*24 appels d'outils.* Actions notables :
+*41 appels d'outils.* Actions notables :
 
 - bash — Show recent log and commit stat
 - bash — Count lines of relevant docs
@@ -39,11 +39,11 @@
 - bash — Run release test suite with 2 threads
 - bash — Read forward_lot
 - bash — Read quant_scratch
-- … et 2 autres
+- … et 15 autres
 
 **Synthèse produite :**
 
-⏵ Lecture du résultat des tests et de la fin de `forward_lot`.
+⏵ Test de bout en bout réel : serveur + client mode 4, lots partiel et surdimensionné.
 
 ## 3. Travail accompli
 
@@ -51,6 +51,9 @@
 
 | Fichier | Écritures | Éditions |
 |---|---|---|
+| `/tmp/m4_peer.py` | 1 | 0 |
+| `/tmp/m4_attack.py` | 1 | 0 |
+| `/tmp/run_e2e.sh` | 1 | 0 |
 
 ### Commandes exécutées (échantillon)
 
@@ -68,6 +71,16 @@
 - **T1** Read forward_lot
 - **T1** Read quant_scratch
 - **T1** Inspect forward_lot return shape
+- **T1** Find forward_lot end
+- **T1** List methods after forward_lot
+- **T1** Read end of forward_lot
+- **T1** Scan plan doc for guards
+- **T1** Read plan measurement command and CLI flags
+- **T1** Find documented command and system state
+- **T1** Read REPRISE server command
+- **T1** Check server option handling
+- **T1** Run real client against v5 fake peer
+- **T1** Run end-to-end mode 4 tests
 
 ## 4. Mesures et résultats marquants
 
