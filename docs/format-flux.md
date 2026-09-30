@@ -75,10 +75,10 @@ format sur le disque n'a pas changé ; c'est la sémantique du champ qui est
 maintenant explicite — et c'est exactement le genre de précision qu'une
 spécification doit porter.
 
-## Transport (phase 3, TCP) — protocole v3
+## Transport (phase 3, TCP) — protocole v4
 
 ```
-en-tête (26 octets, identique à l'aller et au retour)
+en-tête (79 octets, identique à l'aller et au retour)
           magie        u32          0x44525631 (« DRV1 »)
           version      u8           4   (refusée si différente, en le disant)
           mode         u8           0 = f32 dense · 1 = liste quantifiée
@@ -106,7 +106,7 @@ Le **mode 3 est le préremplissage réparti** : `n` états d'un coup, la positio
 étant celle du premier jeton du lot. La dimension ne voyage pas — chaque nœud la
 connaît par son modèle, et les deux doivent charger le **même GGUF**. Mesuré :
 256 jetons en **4 lots** de 64 (écart **0,00e0** avec la référence locale découpée
-de la même façon), ou en **1 seul lot de 917 543 octets** — un aller-retour pour
+de la même façon), ou en **1 seul lot de 917 583 octets** — un aller-retour pour
 tout un préremplissage, au lieu d'un par jeton. Réserve honnête : le lot voyage en
 f32 dense (3,5 ko par jeton) ; le lot en listes est le mode 4, pas encore écrit.
 
@@ -131,10 +131,15 @@ muet sur la cause.
 
 C'est le critère de la phase 3.5 : pas de silence, pas de devinette.
 
-Le mode dense coûte **3 620 octets par flux** (26 d'en-tête + 896 × 4) pour
-Qwen2.5-0.5B ; le mode liste coûte 26 + 4 × (nombre d'actifs), donc il gagne dès
-que l'activité descend sous 100 %. Les deux sont mesurés côte à côte dans
-`reports/rapport-transport-liste.md`.
+Le mode dense coûte **3 663 octets par flux** (79 d'en-tête + 896 × 4) pour
+Qwen2.5-0.5B ; le mode liste coûte 79 + 4 × (nombre d'actifs) et le mode blocs
+79 + 4 + 112 + 4 + 2 × actifs, donc ils gagnent dès que l'activité descend — le
+mode blocs gagne même à pleine activité depuis que ses indices sont des écarts.
+
+Les chiffres mesurés de `reports/rapport-transport-liste.md` datent d'un en-tête
+de **39 octets** (protocole v3, avant les top-k) : ajouter 40 octets par flux pour
+avoir les valeurs d'aujourd'hui — négligeable devant 3 663, mais écrit ici pour
+que personne ne compare deux tableaux de deux époques.
 
 ### Qui applique la norme finale (règle, pas détail)
 

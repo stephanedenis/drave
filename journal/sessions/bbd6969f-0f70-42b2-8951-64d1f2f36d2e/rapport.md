@@ -7,12 +7,12 @@
 | Début | 2026-09-28 14:46 |
 | Durée | 45.8 h |
 | Tours | 45 |
-| Messages | 1704 |
-| Appels d'outils | 1609 |
+| Messages | 1708 |
+| Appels d'outils | 1613 |
 | Fichiers touchés | 44 |
-| Commandes | 1291 |
+| Commandes | 1295 |
 | Sous-agents | 6 |
-| Commits | 111 |
+| Commits | 112 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -2055,7 +2055,7 @@ Je vérifie l'heure à chaque itération et j'arrête à 12:06, en laissant un p
 
 ### Tour 45 — as-tu ce qu'il te faut pour te rendre à 15h en travaillaint avec un maximum d'autonomie et de parallélisme d'activités?
 
-*110 appels d'outils.* Actions notables :
+*114 appels d'outils.* Actions notables :
 
 - bash — Probe machine, GPU, disk, network state
 - bash — Identify GPU users and stray processes
@@ -2071,11 +2071,11 @@ Je vérifie l'heure à chaque itération et j'arrête à 12:06, en laissant un p
 - bash — Understand batched PPL reference path
 - bash — Add batched imposed states to forward_lot
 - list_agents
-- … et 88 autres
+- … et 92 autres
 
 **Synthèse produite :**
 
-Mon test n'exerçait pas l'échappement (0 sur 487 paires). Je le force avec un seuil élevé et je compte les échappements.
+Le relecteur a raison sur toute la ligne. Je traite sa liste : d'abord le **rapport manquant de la phase 3.4** (le seul chantier livré sans rapport), puis les chiffres.
 
 ## 3. Travail accompli
 
@@ -2179,7 +2179,7 @@ Mon test n'exerçait pas l'échappement (0 sur 487 paires). Je le force avec un 
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 1251 autres
+- … et 1255 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2438,4 +2438,5 @@ Mon test n'exerçait pas l'échappement (0 sur 487 paires). Je le force avec un 
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p='docs/format-flux.md'; s=open(p).read() v = """| | version 1 | version 2 | |---|---|---
 - REPRISE : la session 12h-15h (lots sur le fil, DRVF v2/v3, protocole v4, audit)  Ce qui a changé depuis §6bis, en un bloc : le préremplissage par lots est fait 
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && IDS=$(head -1 /tmp/ids_qwen_long.txt | tr ',' '\n' | head -3 | tr '\n' ',' | sed 's/,$//'); p=46203; (./dr
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p='docs/format-flux.md'; s=open(p).read() s = s.replace("ou en **1 seul lot de 917 543 oc
 

@@ -25,17 +25,20 @@ notebook prêt à ouvrir, avec la vérification d'empreinte et la lecture du ré
 | latence | ✅ `TCP_NODELAY` : 16,1 ms d'attente contre 15,9 ms de calcul local (97,6 ms avant) |
 | au-delà de localhost | ✅ testé sur l'IP du réseau local (`--flux-serveur 0.0.0.0:PORT`) |
 | **deux machines avec le même fichier GGUF** | ❌ les deux nœuds chargent le modèle ENTIER (`Model::load` lit tout le fichier) — le découpage porte sur le CALCUL |
-| **préremplissage par lots sur le fil** | ❌ un flux par jeton aujourd'hui, donc séquentiel |
+| **préremplissage par lots sur le fil** | ✅ mode 3, `--lot T` : 256 jetons en 4 lots, écart **0,00e0** (`reports/rapport-prefill-reparti.md`) |
 
-Les deux ❌ sont des limites assumées, pas des oublis : elles disent ce que la
-démonstration peut prétendre. Un petit modèle tient sur les deux machines ; le
-préremplissage par lots est le chantier suivant.
+La limite qui reste est assumée, pas oubliée : **les deux nœuds chargent le
+modèle entier**. Un petit modèle tient sur les deux machines ; c'est le
+préremplissage par lots (fait depuis) qui manquait pour que la démonstration ne
+paie pas la latence 256 fois.
 
 ## Dimensionnement (mesuré)
 
-* **Débit** : 3 623 octets par flux en dense, 1 989 en listes à échelle par bloc
-  (68 % d'activité). À 20 jetons/s : **moins de 1 Mbit/s**. Le débit n'est pas le
-  problème, même sur un lien domestique.
+* **Débit** : 3 663 octets par flux en dense (en-tête v4 compris), ≈ 1 419 en
+  listes à échelle par bloc à 68 % d'activité. En **lots** (`--lot 64`), c'est
+  229 455 octets par lot de 64 jetons, soit **3,5 ko par jeton** — et surtout UN
+  aller-retour par lot. À 20 jetons/s : **moins de 1 Mbit/s**. Le débit n'est pas
+  le problème, même sur un lien domestique.
 * **Latence** : chaque jeton paie un aller-retour, et c'est le seul poste qui
   compte. Mesuré avec un relais retardateur (`tools/proxy_latence.py`, 256 jetons,
   12 couches par nœud) : `attente ≈ calcul distant + 3,2 × (latence par message)`.
@@ -100,7 +103,7 @@ cd drave-core && cargo build --release
 Le critère de succès de la phase 3.4 est **l'écart**, pas la vitesse : les mêmes
 logits qu'en local, à 1e-5 près. En mode dense il doit être **exactement** nul
 (le transport est du f32, donc sans perte) ; en mode listes, il dépend du seuil —
-utiliser `--flux-blocs --act-thresh 0.02` (÷2 sur le fil pour 0,2 %).
+utiliser `--flux-blocs --act-thresh 0.01` (÷2,3 sur le fil pour 1,3 % à 1 024 jetons).
 
 ## Les pièges déjà payés, pour ne pas les repayer
 

@@ -27400,3 +27400,61 @@ AssertionError
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && IDS=$(head -1 /tmp/ids_qwen_long.txt | tr ',' '\\n' | head -3 | tr '\\n' ',' | sed 's/,$//'); p=46203; (./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf --flux-serveur $p --ctx 32 > /tmp/s_ech.log 2>&1 &); for i in $(s … [1727 caractères tronqués]`
+
+  ```
+=== moteur ↔ moteur, seuil 0,6 (échappements des deux côtés) ===
+  écart             : 7.06e-1
+  transport         : listes à échelle par bloc (2 octets/actif, écarts) · 203 octets par flux (aller) · 203 au retour · 0.1 % d'activité (1 neurones par flux) · 2 flux
+[flux] arrêt : failed to fill whole buffer
+[flux] 2 flux servis
+a9fff24 Deux bugs de protocole trouvés par la relecture, pas par un banc
+  ```
+
+### 🤖 Assistant
+
+Bugs corrigés et vérifiés dans les deux sens. Maintenant la liste de corrections documentaires du relecteur — je travaille à partir de son rapport.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"corrections\" -A 40 reports/rapport-coherence-docs.md | sed -n 1,60p", "description": "Read ordered corrections list"}`
+
+  ```
+155:## Les 10 corrections à faire, dans l'ordre
+156-
+157-1. **Incrémenter `VERSION_FLUX` à 4** (`main.rs:1295`), ou supprimer le commentaire
+158-   « Version 4 » : aujourd'hui deux binaires parlant « 3 » peuvent transporter des
+159-   contrats d'activation **différents** (l'un sans les top-k, l'autre avec) et se
+160-   croient compatibles — le silence exact que la phase 3.5 et le
+161-   `rapport-drapeaux-ignores.md` §8.2 voulaient empêcher.
+162-2. **Corriger l'échappement d'indice du mode blocs réseau** (`main.rs:1457` :
+163-   écrire `&i.to_le_bytes()[..2]` comme le fait le disque en `model.rs:605`) : le
+164-   récepteur en lit deux octets, l'émetteur en écrit quatre ; toute trame avec un
+165-   écart ≥ 255 se désynchronise, et c'est un cas que la doc dit possible.
+166-3. **Réécrire la section transport de `docs/format-flux.md`** avec les valeurs du
+167-   code : version unique (3, ou 4 après la correction 1), en-tête **79 octets**,
+168-   dense **3 663**, lot de 256 **917 583**, réglages transportés au complet
+169-   (14 champs), et retirer la mention du mode 4.
+170-4. **Mettre `REPRISE.md` §6bis à jour** (il a vingt minutes de retard sur quatre
+171-   points) : protocole v3/79 o
+… [2398 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+Le relecteur a raison sur toute la ligne. Je traite sa liste : d'abord le **rapport manquant de la phase 3.4** (le seul chantier livré sans rapport), puis les chiffres.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-prefill-reparti.md <<'EOF'\n# Phase 3.4 — le préremplissage par LOTS sur le fil\n\n**En une ligne** : un préremplissage de 256 jetons traverse désormais le réseau en\n**4 lots** (ou un seul) au lieu de 255 flux, … [4627 caractères tronqués]`
+
+  ```
+format-flux : en-tête 79, version 4
+81:en-tête (79 octets, identique à l'aller et au retour)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"3 62\\|3 60\\|1 98\\|1 56\\|1 58\\|mode 4\\|917\\|229\" docs/format-flux.md docs/colab-reparti.md | head -20", "description": "Find stale transport numbers"}`
+
+  ```
+docs/format-flux.md:109:de la même façon), ou en **1 seul lot de 917 543 octets** — un aller-retour pour
+docs/format-flux.md:111:f32 dense (3,5 ko par jeton) ; le lot en listes est le mode 4, pas encore écrit.
+docs/format-flux.md:134:Le mode dense coûte **3 620 octets par flux** (26 d'en-tête + 896 × 4) pour
+docs/colab-reparti.md:36:* **Débit** : 3 623 octets par flux en dense, 1 989 en listes à échelle par bloc
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='docs/format-flux.md'; s=open(p).read()\ns = s.replace(\"ou en **1 seul lot de 917 543 octets**\", \"ou en **1 seul lot de 917 583 octets**\")\nv = \"\"\"Le mode dense coûte **3 620 octets par flux** (26 d'en-tête … [4407 caractères tronqués]`

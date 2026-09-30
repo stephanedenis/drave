@@ -2280,3 +2280,146 @@ background job bash-68 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet
 ⏵ Test croisé : ancien binaire v3 (39 o) contre nouveau (79 o)
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/audit_head/croise.sh <<'EOF'\n#!/bin/bash\nOLD=/tmp/audit_cda/drave-core/target/release/drave\nNEW=/tmp/audit_head/drave-core/target/release/drave\nM=models/Qwen2.5-0.5B-Q8_0.gguf; R=/tmp/audit_head\necho \"########## 1. S … [1257 caractères tronqués]`
+
+  ```
+########## 1. SERVEUR ANCIEN (cda3162, en-tête 39 o) + CLIENT NOUVEAU (HEAD, 79 o)
+  client nouveau exit=134
+  --- serveur ancien :
+[flux] arrêt : magie de flux absente
+[flux] 1 flux servis
+  --- client nouveau :
+thread 'main' (487435) panicked at src/main.rs:1879:60:
+
+########## 2. SERVEUR NOUVEAU + CLIENT ANCIEN
+  client ancien exit=124
+  --- serveur nouveau :
+[flux] arrêt : failed to fill whole buffer
+[flux] 0 flux servis
+  --- client ancien :
+[stderr]
+/tmp/audit_head/croise.sh: line 8: 487434 Aborted                    timeout 45 $NEW $M --ppl-reparti 127.0.0.1:45801 --couches-locales 12 --ctx 256 --threads 4 --limit 6 > $R/x1_cli.log 2>&1
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== panic client nouveau (x1) ===\"; grep -A2 \"panicked\" /tmp/audit_head/x1_cli.log; echo \"=== lignes finales client ancien (x2) ===\"; tail -4 /tmp/audit_head/x2_cli.log; echo \"=== serveur nouveau (x2) ===\"; tail -3 /tmp … [73 caractères tronqués]`
+
+  ```
+=== panic client nouveau (x1) ===
+thread 'main' (487435) panicked at src/main.rs:1879:60:
+réception du flux: Os { code: 104, kind: ConnectionReset, message: "Connection reset by peer" }
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+=== lignes finales client ancien (x2) ===
+[config] rotation : RoPE simple (le modèle ne déclare pas YaRN)
+[flux] quantification : 127 niveaux, seuil 0, top-k 0, renorm false
+[flux] pilote : 12 couches en local, 12 chez le pair, 6 jetons
+  référence locale  : perplexité 102.6664  (4.5 s)
+=== serveur nouveau (x2) ===
+[flux] client connecté : 127.0.0.1:40448
+[flux] arrêt : failed to fill whole buffer
+[flux] 0 flux servis
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/audit_head/tests4.sh <<'EOF'\n#!/bin/bash\nB=/tmp/audit_head/drave-core/target/release/drave\nM=models/Qwen2.5-0.5B-Q8_0.gguf\necho \"########## K. rejeu de l'ancienne trace v1 DENSE (/tmp/flux_f32.bin), lot 1 (attendu 195 … [911 caractères tronqués]`
+
+  ```
+started background job bash-69
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"if t == 0 { return Vec::new(); }\\|let impose = self.emb_imposee_lot.take();\\|\" drave-core/src/model.rs | grep -n \"\" | head -0; grep -n \"if t == 0 { return Vec::new(); }\\|emb_imposee_lot.take()\\|assert_eq!(v.len(), t … [523 caractères tronqués]`
+
+  ```
+2319:        if t == 0 { return Vec::new(); }
+2323:        let impose = self.emb_imposee_lot.take();
+2344:                assert_eq!(v.len(), t * h,
+3471:        if t == 0 { return Vec::new(); }
+--- flux_lot ---
+2804:    fn flux_lot(trace: &mut Option<TraceFlux>, force: &mut Option<FluxRelecteur>,
+2808:        let mut j0 = *jeton;
+2817:                    r.servies += 1;
+2818:                } else if r.listes_blocs.contains_key(&((base + l) as u16, j0 as u32)) {
+2826:                    r.manquantes += 1;
+--- main.rs ---
+1295:const VERSION_FLUX: u8 = 4;
+1323:const TAILLE_TETE: usize = 4 + 1 + 1 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 1
+1517:fn envoyer_lot(s: &mut std::net::TcpStream, debut: u32, fin: u32, pos0: u32,
+1589:            let mut corps = vec![0u8; n * hidden * 4];
+1709:                    if f.pos as usize + t > mdl.ctx {
+1775:    let mode = if opt.flux_blocs { MODE_BLOCS }
+1843:            let rep = recevoir_flux(&mut sock, mdl.cfg.hidden).expect("réception du lot");
+  ```
+
+### 🤖 Assistant
+
+⏵ Le dépôt bouge encore : je vérifie si la constante de version vient d'être corrigée
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date && git log --oneline -3 && git status --short && echo \"=== VERSION_FLUX dans HEAD vs working tree ===\" && git show HEAD:drave-core/src/main.rs | grep -n \"const VERSION_FLUX\" && grep -n \"const VERSION_FLUX\" drave-core/src/m … [177 caractères tronqués]`
+
+  ```
+mer 30 sep 2026 12:37:17 EDT
+a9fff24 Deux bugs de protocole trouvés par la relecture, pas par un banc
+bd4eac8 REPRISE : la session 12h-15h (lots sur le fil, DRVF v2/v3, protocole v4, audit)
+ae85043 DRVF v3 : −66 % de trace au total, pour +0,074 % de perplexité
+ M docs/format-flux.md
+ M drave-core/src/model.rs
+ M journal/README.md
+?? reports/rapport-coherence-docs.md
+?? reports/rapport-prefill-reparti.md
+=== VERSION_FLUX dans HEAD vs working tree ===
+1295:const VERSION_FLUX: u8 = 4;
+1295:const VERSION_FLUX: u8 = 4;
+=== diff (main.rs) autour de la version ===
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git show a9fff24 --stat && git show a9fff24 -- drave-core/src/main.rs tools/pair_factice.py drave-core/src/model.rs | head -120", "description": "Inspect the new fix commit"}`
+
+  ```
+commit a9fff24e8cb1681005b96d2e1c16c434cc441b6b
+Author: Stéphane <stephane@localhost>
+Date:   Wed Sep 30 12:36:39 2026 -0400
+
+    Deux bugs de protocole trouvés par la relecture, pas par un banc
+    
+    1. **`VERSION_FLUX` valait encore 3** alors que l'en-tête était passé à 79 octets
+       et transportait les top-k : deux binaires « v3 » aux contrats différents se
+       seraient crus compatibles et auraient divergé en silence — exactement le défaut
+       que la version dans chaque en-tête existe pour empêcher. Elle vaut 4.
+    2. **L'échappement d'indice, côté réseau, s'écrivait sur QUATRE octets** quand le
+       décodeur en lisait DEUX (`c.extend_from_slice(&i.to_le_bytes())` au lieu de
+       `[..2]`). Toute trame portant un écart ≥ 255 se désynchronisait. Vérifié
+       maintenant dans les deux sens, avec un seuil de 0,6 qui ne laisse qu'un neurone
+       actif par liste — donc des écarts énormes et des échappements à chaque flux.
+    
+    Les deux ont été trouvés par la relecture croisée des documents
+    (`reports/rapport-coherence-docs.md`), pas par les bancs : les échappements sont
+    rares (22 sur 8,79 M) et la version ne se voyait que dans le code.
+
+ drave-core/src/m
+… [3262 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== flux_lot (working tree) ===\"; sed -n \"$(grep -n 'fn flux_lot' drave-core/src/model.rs | cut -d: -f1),+35p\" drave-core/src/model.rs; echo \"=== forward_lot t==0 ===\"; grep -n \"if t == 0 { return Vec::new(); }\\|emb_imp … [246 caractères tronqués]`
+
+  ```
+=== flux_lot (working tree) ===
+    fn flux_lot(trace: &mut Option<TraceFlux>, force: &mut Option<FluxRelecteur>,
+                jeton: &mut u64, base: usize, l: usize, t: usize,
+                xi: &mut [i32], sx: &mut [f32], h: usize) {
+        if trace.is_none() && force.is_none() { return; }
+        let mut j0 = *jeton;
+        for i in 0..t {
+            if let Some(r) = force.as_mut() {
+                if let Some((ech, paires)) = r.listes.get(&((base + l) as u16, j0 as u32)).cloned() {
+                    for v in xi[i * h..(i + 1) * h].iter_mut() { *v = 0; }
+                    for (idx, q) in paires {
+                        if (idx as usize) < h { xi[i * h + idx as usize] = q as i32; }
+                    }
+                    sx[i] = ech;
+                    r.servies += 1;
+                } else if r.listes_blocs.contains_key(&((base + l) as u16, j0 as u32)) {
+                    // Une trace v3 n'a plus d'entiers d'origine : le rejeu par
+                    // lots, qui les réinjecte, ne peut pas s'en servir. On le dit
+                    // UNE fois, plutôt que de compter des manquantes muettes.
+                    if r.servies == 0 && r.manquantes == 0 {
+           
+… [1192 caractères tronqués]
+  ```
+
