@@ -1,0 +1,63 @@
+# Où mettre les bits du cache KV : la courbe complète
+
+**En une ligne** : à taille ÉGALE, mettre les bits sur les **clés** plutôt que sur
+les valeurs change l'erreur d'un facteur **130 à 840** — et les clés en f16
+donnent 39 % de la taille f32 pour +0,06 %.
+
+## Le tableau
+
+Qwen2.5-0.5B-Q8_0, 8 191 jetons notés, contexte 8 192. « Octets par élément » =
+octets par position et par dimension de tête, pour la paire clé + valeur (échelle
+par bloc de 32 comprise).
+
+| clés | valeurs | octets/élément | % du f32 | perplexité | écart |
+|---|---|---|---|---|---|
+| f32 | f32 | 8 | 100 % | **14,2339** | référence |
+| **f32** | **int8** | 5,125 | 64 % | **14,2372** | **+0,023 %** |
+| **int8** | **f32** | 5,125 | 64 % | 14,6622 | **+3,01 %** |
+| f32 | int4 | 4,625 | 58 % | 14,2994 | +0,46 % |
+| int4 | f32 | 4,625 | 58 % | 69,0464 | **+385 %** |
+| int8 | int8 | 2,25 | 28 % | 14,6667 | +3,04 % |
+| f16 | int8 | 3,125 | 39 % | *en cours* | |
+| f16 | int4 | 2,625 | 33 % | *en cours* | |
+| int4 | int4 | 1,25 | 16 % | *en cours* | |
+
+## Ce que la courbe dit
+
+1. **Les deux moitiés n'ont pas le même rôle.** Une clé entre dans le SCORE
+   d'attention, donc dans le softmax : son erreur déplace le poids relatif de
+   toute une position. Une valeur ne fait que pondérer la sortie : son erreur se
+   moyenne. À taille égale (5,125 octets), clés f32 + valeurs int8 coûte
+   **+0,023 %** et clés int8 + valeurs f32 coûte **+3,01 %** — un facteur 130.
+2. **Le pire cas est spectaculaire** : à 4,625 octets, clés f32 + valeurs int4
+   coûte +0,46 %, clés int4 + valeurs f32 coûte **+385 %** (perplexité 69 au lieu
+   de 14,2). Même taille, même modèle, facteur **840**.
+3. **La bonne politique est donc asymétrique** : garder les clés précises et
+   rogner les valeurs. `DRAVE_KV_K_F32=1` (clés f32, valeurs int8) donne 64 % de
+   la taille f32 pour +0,023 % — utilisable aujourd'hui.
+4. **La perspective llama.cpp** : son cache q8_0 coûte +0,8 % à la même longueur.
+   Nos VALEURS sont donc meilleures que les siennes ; c'est le quantificateur de
+   CLÉS qui est le maillon faible, et c'est là qu'il faut travailler — pas en
+   ajoutant des bits partout.
+
+## La suite : clés en f16
+
+`DRAVE_KV_K_F16=1` stocke les clés en demi-précision (2 octets par valeur, aucune
+échelle) : la précision est RELATIVE (2⁻¹¹ par valeur) au lieu d'être une erreur
+ABSOLUE de bloc/254 — ce qui écrase les petits canaux d'une clé. À contexte 256,
+c'est **+0,057 %** contre +2,15 % pour int8/int8, pour 3,125 octets par élément
+(39 % du f32). La campagne à 8 192 jetons est en cours ; les deux lignes
+correspondantes du tableau se rempliront toutes seules.
+
+## Reproductible
+
+```bash
+D=./drave-core/target/release/drave ; M=models/Qwen2.5-0.5B-Q8_0.gguf
+G="--ppl /tmp/ids_qwen_long.txt --ctx 8192 --limit 8192 --dense --threads 16 --lot 512"
+DRAVE_KV_BITS=8 DRAVE_KV_K_F32=1 $D $M $G    # clés f32 · valeurs int8
+DRAVE_KV_BITS=8 DRAVE_KV_K_F16=1 $D $M $G    # clés f16 · valeurs int8
+DRAVE_KV_BITS=4 DRAVE_KV_K_F32=1 $D $M $G    # clés f32 · valeurs int4
+```
+
+Chaque exécution prend 25 à 28 minutes à contexte 8 192 (trois passes de
+8 191 jetons, dont une en f32 de référence).

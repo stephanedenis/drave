@@ -28156,3 +28156,15 @@ test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; fin
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== porte Qwen ===\" && ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf --ppl /tmp/ids_qwen.txt --ctx 256 --abits 16 --threads 16 --limit 512 --dense 2>&1 | grep -oE \"perplexité [0-9.]+ sur [0-9]+ tokens\"; gi … [2620 caractères tronqués]`
+
+  ```
+=== porte Qwen ===
+perplexité 19.3885 sur 510 tokens
+901f28d Relecture adversariale : six défauts corrigés, et des tests qui les auraient attrapés
+  ```
+
+### 🤖 Assistant
+
+⏵ Rédaction du rapport de campagne KV (6 points mesurés, 3 en cours) pendant que la machine tourne.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-placement-bits-kv.md <<'EOF'\n# Où mettre les bits du cache KV : la courbe complète\n\n**En une ligne** : à taille ÉGALE, mettre les bits sur les **clés** plutôt que sur\nles valeurs change l'erreur d'un facteur … [3762 caractères tronqués]`
