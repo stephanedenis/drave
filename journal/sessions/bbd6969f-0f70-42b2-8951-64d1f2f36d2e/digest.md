@@ -29390,3 +29390,12 @@ cles_f16_valeurs_int4      : 13:40:58
 **Clés f16 + valeurs int8 = 14,2365 (+0,018 %)** — pour 3,125 octets par élément, soit 39 % du f32. C'est le meilleur réglage mesuré. Je l'inscris honnêtement.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/rapport-placement-bits-kv.md'; s=open(p).read()\nv = \"\"\"| int8 | int8 | 2,25 | 28 % | 14,6667 | +3,04 % |\n| int4 | int4 | 1,25 | 16 % | 66,0369 | **+364 %** |\n| f16 | int8 | 3,125 | 39 % | *en cours* … [2968 caractères tronqués]`
+
+  ```
+rapport KV : f16/int8 = +0,018 % pour 39 % de la taille
+REPRISE : réglage KV recommandé mis à jour
+528639c Cache KV : les clés en f16 sont le meilleur réglage mesuré (+0,018 % pour 39 % de la taille)
+13:41:19
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='docs/roadmap.md'; s=open(p).read()\nv = \"\"\"Les clés en f16 (39 % de la taille f32) sont en cours de mesure.\"\"\"\nn = \"\"\"Les **clés en f16** sont mesurées : clés f16 + valeurs int8 = **+0,018 %** à\n8 192  … [898 caractères tronqués]`

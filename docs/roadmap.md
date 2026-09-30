@@ -27,7 +27,7 @@ plus aucun repli silencieux.
 | 1.1 | **Top-k dans le noyau d'attention GPU** — `--attn-topk 256` améliore la perplexité (234,88 contre 298,56 à 2 048) mais retombe sur le CPU | ⏳ | plus aucun repli CPU dans le chemin long contexte |
 | 1.2 | **Quantification choisie par la mesure** : par couche, par tenseur, plutôt qu'un réglage global | 🔬 | la densité par couche varie de **20 % à 56 %** (`reports/rapport-analyse-flux.md`) : la décision push/pull est une propriété de la COUCHE, pas du modèle |
 | 1.3 | **Purge des seuils codés en dur** : le placement (KV, experts, tête) décidé par une règle explicite, pas par un `if` | ⏳ | une table de décision documentée, réglée par des mesures |
-| 1.4 | **Écart int8 résiduel** (+3,0 % contre +0,8 % chez llama.cpp à 8 192) | ✅ | **attribué** : tout l'écart est dans les CLÉS (clés f32 + valeurs int8 = +0,023 % ; l'inverse = +3,01 %) ; **courbe du placement des bits faite** (`reports/rapport-placement-bits-kv.md`) — à taille égale, mettre les bits sur les clés change l'erreur d'un facteur 130 à 840. Suite : clés en f16 (`DRAVE_KV_K_F16=1`), mesure à 8 192 en cours |
+| 1.4 | **Écart int8 résiduel** (+3,0 % contre +0,8 % chez llama.cpp à 8 192) | ✅ | **attribué** : tout l'écart est dans les CLÉS (clés f32 + valeurs int8 = +0,023 % ; l'inverse = +3,01 %) ; **courbe du placement des bits faite** (`reports/rapport-placement-bits-kv.md`) — à taille égale, mettre les bits sur les clés change l'erreur d'un facteur 130 à 840. Suite FAITE : **clés f16 = +0,018 % pour 39 % de la taille f32** — le meilleur réglage mesuré (`DRAVE_KV_BITS=8 DRAVE_KV_K_F16=1`) |
 
 ## Phase 2 — La drave répartie localement (aucune infra)
 
@@ -178,7 +178,10 @@ La **courbe complète du placement des bits** est faite depuis
 (`reports/rapport-placement-bits-kv.md`) : à taille ÉGALE, clés f32 + valeurs int8
 coûte +0,023 % là où clés int8 + valeurs f32 coûte +3,01 % (facteur 130), et le
 4 bits des clés coûte +385 % contre +0,46 % pour celui des valeurs (facteur 840).
-Les clés en f16 (39 % de la taille f32) sont en cours de mesure.
+Les **clés en f16** sont mesurées : clés f16 + valeurs int8 = **+0,018 %** à
+8 192 jetons pour **39 % de la taille f32** — le meilleur réglage de la courbe
+(les clés f32, à 64 % de la taille, font +0,023 % ; l'int8 complet, à 28 %, +3,04 %).
+La mesure clés f16 + valeurs int4 est en cours.
 
 Deux suites, écrites avec leur critère de succès : **clés f32 · valeurs int4**
 (62,5 % de la taille f32 — si les valeurs tolèrent 4 bits, ce réglage bat l'int8
