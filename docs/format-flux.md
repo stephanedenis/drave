@@ -71,6 +71,10 @@ rejouait en silence avec une perplexité fausse.
 ## Le point qui a coûté un bug
 
 `jeton` est un **compteur global**, pas la position dans la fenêtre de contexte.
+Corollaire à connaître : avec `--depuis` (fenêtres qui se recouvrent), un même
+jeton traité dans deux fenêtres consomme DEUX clés — une trace ne se rejoue donc
+qu'avec la même configuration de fenêtres. C'est dit ici parce que c'est le seul
+cas où la clé n'est pas une simple fonction du jeton.
 Avec la position, deux fenêtres réécrivaient les mêmes clés `(couche, position)`
 et le rejeu rejouait la mauvaise : perplexité **356 694** au lieu de 17,43. Le
 format sur le disque n'a pas changé ; c'est la sémantique du champ qui est

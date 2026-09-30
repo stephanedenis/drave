@@ -3435,6 +3435,10 @@ mod tests_plafond {
             sock.write_all(&corps).unwrap();
         });
         let mut client = TcpStream::connect(adresse).unwrap();
+        // Délai de lecture : si un garde-fou disparaissait, le test doit ÉCHOUER,
+        // pas pendre — sans lui il attendrait les 358 Go du corps annoncé
+        // (relevé par la relecture : le test ne pouvait pas rater proprement).
+        client.set_read_timeout(Some(std::time::Duration::from_secs(5))).unwrap();
         let r = recevoir_flux(&mut client, hidden);
         serveur.join().unwrap();
         r
@@ -3494,6 +3498,7 @@ mod tests_plafond {
             // pour toujours sur cette lecture (et le test ne finissait jamais).
         });
         let mut client = TcpStream::connect(adresse).unwrap();
+        client.set_read_timeout(Some(std::time::Duration::from_secs(5))).unwrap();
         let r = recevoir_flux(&mut client, 896);
         assert!(r.is_err(), "un lot de 100 millions d'états doit être refusé");
         let msg = format!("{}", r.err().unwrap());

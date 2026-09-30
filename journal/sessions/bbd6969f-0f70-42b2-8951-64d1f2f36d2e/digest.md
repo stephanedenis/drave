@@ -29399,3 +29399,12 @@ REPRISE : réglage KV recommandé mis à jour
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='docs/roadmap.md'; s=open(p).read()\nv = \"\"\"Les clés en f16 (39 % de la taille f32) sont en cours de mesure.\"\"\"\nn = \"\"\"Les **clés en f16** sont mesurées : clés f16 + valeurs int8 = **+0,018 %** à\n8 192  … [898 caractères tronqués]`
+
+  ```
+roadmap 1.4 : clés f16 mesurées
+dc8a193 Feuille de route : les clés f16 mesurées (+0,018 % pour 39 % de la taille du f32)
+cles_f16_valeurs_int8      : perplexité 14.2365 sur 8191 tokens (0 événements, 1934.5 s)
+cles_f16_valeurs_int4      : 13:42:34
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/main.rs'; s=open(p).read()\n# les tests qui forgent une trame ne doivent pas PENDRE si un garde-fou disparaît\nv = \"\"\"        let mut client = TcpStream::connect(adresse).unwrap();\n        let  … [2533 caractères tronqués]`

@@ -7,12 +7,12 @@
 | Début | 2026-09-28 14:46 |
 | Durée | 46.9 h |
 | Tours | 45 |
-| Messages | 1827 |
-| Appels d'outils | 1726 |
+| Messages | 1828 |
+| Appels d'outils | 1727 |
 | Fichiers touchés | 44 |
-| Commandes | 1405 |
+| Commandes | 1406 |
 | Sous-agents | 7 |
-| Commits | 139 |
+| Commits | 140 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -2055,7 +2055,7 @@ Je vérifie l'heure à chaque itération et j'arrête à 12:06, en laissant un p
 
 ### Tour 45 — as-tu ce qu'il te faut pour te rendre à 15h en travaillaint avec un maximum d'autonomie et de parallélisme d'activités?
 
-*227 appels d'outils.* Actions notables :
+*228 appels d'outils.* Actions notables :
 
 - bash — Probe machine, GPU, disk, network state
 - bash — Identify GPU users and stray processes
@@ -2071,7 +2071,7 @@ Je vérifie l'heure à chaque itération et j'arrête à 12:06, en laissant un p
 - bash — Understand batched PPL reference path
 - bash — Add batched imposed states to forward_lot
 - list_agents
-- … et 204 autres
+- … et 205 autres
 
 **Synthèse produite :**
 
@@ -2180,7 +2180,7 @@ Je vérifie l'heure à chaque itération et j'arrête à 12:06, en laissant un p
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 1365 autres
+- … et 1366 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2467,4 +2467,5 @@ Je vérifie l'heure à chaque itération et j'arrête à 12:06, en laissant un p
 - Handoff et index : la seconde relecture, et treize tests  REPRISE §6bis et l'index de session disent maintenant les deux tours de relecture adversariale (22 déf
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p='reports/rapport-placement-bits-kv.md'; s=open(p).read() v = """| int8 | int8 | 2,25 | 
 - Feuille de route : les clés f16 mesurées (+0,018 % pour 39 % de la taille du f32)" && git log --oneline -1 | cat; sleep 60; cat /tmp/kv_cles_f16.log; date +"%H:
+- Tests de trame forgée : un délai de lecture, pour qu'ils échouent au lieu de pendre  Sans délai, si le plafond disparaissait, le test attendrait les 358 Go du c
 
