@@ -33892,3 +33892,220 @@ corrections écrites
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cargo test --release --manifest-path drave-core/Cargo.toml 2>&1 | tail -3 && git add -A && git commit -q -F - <<'EOF' && git log --oneline -2\nNoyaux 2b : collecte des k indices — même ensemble que le CPU, 896× le tri à 262 k clés\n\ … [1664 caractères tronqués]`
+
+  ```
+test result: ok. 17 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.09s
+
+e950075 Noyaux 2b : collecte des k indices — même ensemble que le CPU, 896× le tri à 262 k clés
+d00c01c Noyau 2a du top-k GPU : histogramme d'octet, seuil exact sur 14/14 lignes
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '561,616p' drave-core/gpu/drave_gpu.cu", "description": "Read recombine kernel for sink semantics"}`
+
+  ```
+__global__ void attn_kv_recombine(const float* __restrict__ part,
+                                  const float* __restrict__ sinks,
+                                  float* __restrict__ out,
+                                  int nsplit, int hd, int rep) {
+    const int tid = threadIdx.x;
+    const int lane = tid & 31;
+    const int warp = tid >> 5;
+    const int kvh = blockIdx.x;
+    float M = -1e30f, S = 0.0f;
+    const int nq = hd / 32;
+    float acc[4];
+    #pragma unroll
+    for (int o = 0; o < 4; ++o) acc[o] = 0.0f;
+    for (int sp = 0; sp < nsplit; ++sp) {
+        const float* p = part + (((size_t)sp * gridDim.x + kvh) * rep + warp) * (hd + 2);
+        M = fmaxf(M, p[0]);
+    }
+    if (sinks != nullptr) M = fmaxf(M, sinks[warp]);
+    for (int sp = 0; sp < nsplit; ++sp) {
+        const float* p = part + (((size_t)sp * gridDim.x + kvh) * rep + warp) * (hd + 2);
+        const float w = expf(p[0] - M);
+        S += p[1] * w;
+        #pragma unroll
+        for (int o = 0; o < 4; ++o) {
+            if (o < nq) acc[o] += p[2 + o * 32 + lane] * w;
+        }
+    }
+    if (sinks != nullptr) S += expf(sinks[warp] - M);
+    const float inv = (S > 0.0f) ? 1.0f / S : 0.0f;
+    #pragma unr
+… [1371 caractères tronqués]
+  ```
+
+- **subagent** `{"description": "Adversarial review GPU topk", "prompt": "Tu es relecteur ADVERSARIAL de code dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (moteur d'inférence Rust « Drave », std seul, sans dépendance). Ton but est de TROUVER DES DÉFAUTS RÉELS, pas de commenter le style. Le dépôt a  … [3655 caractères tronqués]`
+
+  ```
+started subagent 564fbe3a-a859-4b3b-bd17-4da73a2f4e22
+  ```
+
+- **subagent** `{"description": "Vérifier chiffres et cohérence docs", "prompt": "Tu es VÉRIFICATEUR de documentation dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (moteur d'inférence « Drave »). Règle du dépôt : « chaque chiffre publié doit avoir une source, et une valeur affichée est une valeur qu … [3206 caractères tronqués]`
+
+  ```
+started subagent 8e04c99a-8ba1-4675-9f80-fa3338449b17
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"if t.lignes < lignes || t.ntr < ntr\" -A 12 drave-core/src/gpu.rs", "description": "Inspect TamponsTopk reuse condition"}`
+
+  ```
+689:            if t.lignes < lignes || t.ntr < ntr {
+690-                if !vram_assurer(&mut t.comptes, &mut t.cap_comptes, 2 * lignes * ntr * 4)
+691-                    || !vram_assurer(&mut t.bases, &mut t.cap_bases, 2 * lignes * ntr * 4)
+692-                    || !vram_assurer(&mut t.meta, &mut t.cap_meta, 3 * lignes * 4)
+693-                    || !vram_assurer(&mut t.sortie, &mut t.cap_sortie, lignes * k * 4)
+694-                {
+695-                    eprintln!("[topk] allocation VRAM de la collecte impossible");
+696-                    return false;
+697-                }
+698-                t.lignes = lignes; t.ntr = ntr; t.k = k; t.chunk = CHUNK;
+699-            }
+700-            let (p_comptes, p_bases, p_meta, mut p_sortie) =
+701-                (t.comptes, t.bases, t.meta, t.sortie);
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/gpu.rs", "old_string": "            if t.lignes < lignes || t.ntr < ntr {\n                if !vram_assurer(&mut t.comptes, &mut t.cap_comptes, 2 * lignes * ntr * 4)\n                    || !vram_assurer(&mut t.bases, &mut … [1540 caractères tronqués]`
+
+  ```
+Error: cannot edit "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/gpu.rs": file changed since it was read — re-read the file, then retry
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/gpu.rs", "offset": 676, "limit": 30}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/gpu.rs</path>
+<type>file</type>
+<content>
+676:             eprintln!("[topk] tampons hôtes trop courts pour la collecte");
+677:             return false;
+678:         }
+679:         if m.scores_cap < lignes * n { return false; }
+680:         let ntr = n.div_ceil(CHUNK);
+681:         unsafe {
+682:             // (Ré)allocation : les tampons ne grandissent que si un banc plus
+683:             // long arrive — ils ne sont jamais libérés entre deux jetons.
+684:             let t = m.topk.get_or_insert_with(|| TamponsTopk {
+685:                 lignes: 0, ntr: 0, k: 0, chunk: CHUNK,
+686:                 comptes: 0, cap_comptes: 0, bases: 0, cap_bases: 0,
+687:                 meta: 0, cap_meta: 0, sortie: 0, cap_sortie: 0,
+688:             });
+689:             if t.lignes < lignes || t.ntr < ntr {
+690:                 if !vram_assurer(&mut t.comptes, &mut t.cap_comptes, 2 * lignes * ntr * 4)
+691:                     || !vram_assurer(&mut t.bases, &mut t.cap_bases, 2 * lignes * ntr * 4)
+692:                     || !vram_assurer(&mut t.meta, &mut t.cap_meta, 3 * lignes * 4)
+693:                     || !vram_assurer(&mut t
+… [741 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/gpu.rs", "new_string": "            // `t.k < k` est dans la condition, et pas seulement (lignes, ntr) :\n            // un même contexte avec un k plus grand (256 puis 4 096 à n = 4 096)\n            // gardait un tampon  … [330 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/gpu.rs has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/main.rs'; s=open(p).read()\nancre = \"\"\"    } else {\n        println!(\"    → ÉCART sur la sélection\");\n    }\n}\"\"\"\nneuf = \"\"\"    } else {\n        println!(\"    → ÉCART sur la sélecti … [3505 caractères tronqués]`
+
+  ```
+second passage ajouté
+build fini
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for n in 4096 262144; do echo \"### n=$n\"; DRAVE_GPU=1 timeout 600 ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q4_0.gguf --banc-topk $n 2>&1 | tail -4; done", "description": "Run bench with k-growth regression test", "time … [15 caractères tronqués]`
+
+  ```
+### n=4096
+    ensembles identiques au CPU : 14/14 lignes · différence symétrique 0 indices
+    ordre documenté (au-dessus puis égaux, croissants) : 14/14 lignes · doublons 0 · hors bornes 0 · cases non écrites 0
+    → l'ensemble retenu est le MÊME que celui du CPU, et l'ordre est celui qui est écrit dans le noyau
+    second passage k = 512, mêmes tampons : 14/14 lignes · 0.00 ms · cases non écrites 0
+### n=262144
+    ensembles identiques au CPU : 14/14 lignes · différence symétrique 0 indices
+    ordre documenté (au-dessus puis égaux, croissants) : 14/14 lignes · doublons 0 · hors bornes 0 · cases non écrites 0
+    → l'ensemble retenu est le MÊME que celui du CPU, et l'ordre est celui qui est écrit dans le noyau
+    second passage k = 512, mêmes tampons : 14/14 lignes · 0.00 ms · cases non écrites 0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/main.rs'; s=open(p).read()\ns = s.replace(\"\"\"            println!(\"    second passage k = {k2}, mêmes tampons : {ok_lignes}/{lignes} lignes · \\\\\n{t_k2:.2} ms · cases non écrites {vides}\");\ … [994 caractères tronqués]`
+
+  ```
+mesure affinée
+    → l'ensemble retenu est le MÊME que celui du CPU, et l'ordre est celui qui est écrit dans le noyau
+    second passage k = 512, mêmes tampons : 14/14 lignes · 0.0005 ms (0.0003 ms de seuil) · cases non écrites 0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"second passage\" -B 60 drave-core/src/main.rs | sed -n '1,80p'", "description": "Read the second-pass code block"}`
+
+  ```
+2612-        println!("    → ÉCART sur la sélection");
+2613-    }
+2614-
+2615-    // Second passage avec un k PLUS GRAND, dans le MÊME processus : c'est le
+2616-    // seul chemin qui réutilise les tampons de la collecte avec une taille de
+2617-    // sortie différente. Défaut trouvé à la relecture (pas par ce banc) : le
+2618-    // tampon de sortie n'était réalloué que si (lignes, tranches) grandissait,
+2619-    // donc un k plus grand écrivait AU-DELÀ du tampon — un débordement VRAM
+2620-    // silencieux. Ce passage le rend visible.
+2621-    if 2 * k <= n {
+2622-        let k2 = 2 * k;
+2623-        let mut prefixes2 = vec![0u32; lignes];
+2624-        let mut dessus2 = vec![0usize; lignes];
+2625-        let mut egaux2 = vec![0usize; lignes];
+2626-        let mut seuils2 = vec![0f32; lignes];
+2627-        let mut ok2 = true;
+2628-        let t7 = Instant::now();
+2629-        for decalage in [24i32, 16, 8, 0] {
+2630-            if !machine.attn_topk_histo(&mut miroir, lignes, n, decalage, &prefixes2, &mut hist) {
+2631-                ok2 = false;
+2632-                break;
+2633-            }
+2634-            for l in 0..lignes {
+2635-                let h = &hist[l * 256..(l + 1) *
+… [2353 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && DRAVE_GPU=1 timeout 600 ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q4_0.gguf --banc-topk 262144 2>&1 | tail -8", "description": "Run bench with full stderr visible", "timeoutMs": 700000}`
+
+  ```
+encadrement au_dessus < k ≤ au_dessus+égaux : 14/14 lignes
+    k-ième score qui change entre scores CPU et GPU : 5/14 lignes (attendu : noyau 1 à 2e-7)
+    → la descente trouve le seuil EXACT : la collecte peut être écrite
+    collecte GPU     0.48 ms · CPU tri complet   394.64 ms (829.0× plus rapide)
+    ensembles identiques au CPU : 14/14 lignes · différence symétrique 0 indices
+    ordre documenté (au-dessus puis égaux, croissants) : 14/14 lignes · doublons 0 · hors bornes 0 · cases non écrites 0
+    → l'ensemble retenu est le MÊME que celui du CPU, et l'ordre est celui qui est écrit dans le noyau
+    second passage k = 512, mêmes tampons : 14/14 lignes · 0.0004 ms (0.0003 ms de seuil) · cases non écrites 0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/main.rs'; s=open(p).read()\ns = s.replace(\"\"\"        let mut ok2 = true;\n        let t7 = Instant::now();\n        for decalage in [24i32, 16, 8, 0] {\"\"\",\n\"\"\"        let mut ok2 = true;\ … [944 caractères tronqués]`
+
+  ```
+sonde posée
+    → l'ensemble retenu est le MÊME que celui du CPU, et l'ordre est celui qui est écrit dans le noyau
+    [sondes] 1 passe = 0.0834 ms, ok = true
+    second passage k = 512, mêmes tampons : 14/14 lignes · 0.0004 ms (0.0003 ms de seuil) · cases non écrites 0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/main.rs'; s=open(p).read()\ns = s.replace(\"\"\"        let t7 = Instant::now();\n        for decalage in [24i32, 16, 8, 0] {\n            if !machine.attn_topk_histo(&mut miroir, lignes, n, decala … [909 caractères tronqués]`
+
+  ```
+sonde par itération
+    → l'ensemble retenu est le MÊME que celui du CPU, et l'ordre est celui qui est écrit dans le noyau
+    [sondes] 1 passe = 0.0725 ms, ok = true
+    [boucle] decalage 24 : 0.0646 ms, ok = true
+    [boucle] decalage 16 : 0.0612 ms, ok = true
+    [boucle] decalage 8 : 0.0696 ms, ok = true
+    [boucle] decalage 0 : 0.0606 ms, ok = true
+    second passage k = 512, mêmes tampons : 14/14 lignes · 0.0004 ms (0.0003 ms de seuil) · cases non écrites 0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/main.rs'; s=open(p).read()\n# retirer les sondes\ns = s.replace(\"\"\"        // Sonde : une seule passe chronométrée, juste avant la boucle. Si elle\n        // dit 0,0003 ms pour 14,7 Mo lus, c'e … [1967 caractères tronqués]`
+
+  ```
+unité corrigée, sondes retirées
+    → l'ensemble retenu est le MÊME que celui du CPU, et l'ordre est celui qui est écrit dans le noyau
+    second passage k = 512, mêmes tampons : 14/14 lignes · 0.45 ms (0.27 ms de seuil) · cases non écrites 0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cargo test --release --manifest-path drave-core/Cargo.toml 2>&1 | tail -2 && git add -A && git commit -q -F - <<'EOF' && git log --oneline -1\nCollecte top-k : réallouer quand k GRANDIT, et un banc qui le prouve\n\nDéfaut trouvé à la … [965 caractères tronqués]`

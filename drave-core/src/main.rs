@@ -2611,6 +2611,78 @@ l'entrelace — c'est le seul écart attendu)");
     } else {
         println!("    → ÉCART sur la sélection");
     }
+
+    // Second passage avec un k PLUS GRAND, dans le MÊME processus : c'est le
+    // seul chemin qui réutilise les tampons de la collecte avec une taille de
+    // sortie différente. Défaut trouvé à la relecture (pas par ce banc) : le
+    // tampon de sortie n'était réalloué que si (lignes, tranches) grandissait,
+    // donc un k plus grand écrivait AU-DELÀ du tampon — un débordement VRAM
+    // silencieux. Ce passage le rend visible.
+    if 2 * k <= n {
+        let k2 = 2 * k;
+        let mut prefixes2 = vec![0u32; lignes];
+        let mut dessus2 = vec![0usize; lignes];
+        let mut egaux2 = vec![0usize; lignes];
+        let mut seuils2 = vec![0f32; lignes];
+        let mut ok2 = true;
+        let t7 = Instant::now();
+        for decalage in [24i32, 16, 8, 0] {
+            if !machine.attn_topk_histo(&mut miroir, lignes, n, decalage, &prefixes2, &mut hist) {
+                ok2 = false;
+                break;
+            }
+            for l in 0..lignes {
+                let h = &hist[l * 256..(l + 1) * 256];
+                let mut cum = dessus2[l];
+                let mut b = 256usize;
+                while b > 0 && cum < k2 { b -= 1; cum += h[b] as usize; }
+                dessus2[l] = cum - h[b] as usize;
+                prefixes2[l] = (prefixes2[l] << 8) | b as u32;
+            }
+        }
+        let t2_k2 = t7.elapsed().as_secs_f64();
+        // Le seuil FLOTTANT du nouveau k, pour la référence CPU.
+        for l in 0..lignes {
+            let mut tri: Vec<f32> = obtenu[l * n..(l + 1) * n].to_vec();
+            tri.sort_unstable_by(|a, b| b.partial_cmp(a).unwrap());
+            seuils2[l] = tri[k2 - 1];
+            let _ = egaux2[l];
+        }
+        let besoin2: Vec<i32> = (0..lignes).map(|l| (k2 - dessus2[l]) as i32).collect();
+        let mut sortie2 = vec![-1i32; lignes * k2];
+        let t6 = Instant::now();
+        let fait = ok2
+            && machine.attn_topk_collecte(&mut miroir, lignes, n, k2, &prefixes2, &besoin2,
+                                          &mut sortie2);
+        let t_k2 = t6.elapsed().as_secs_f64();
+        if fait {
+            let mut ok_lignes = 0usize;
+            let mut vides = 0usize;
+            for l in 0..lignes {
+                let mut att: Vec<u32> = (0..n as u32)
+                    .filter(|&j| obtenu[l * n + j as usize] >= seuils2[l])
+                    .collect();
+                att.sort_unstable();
+                let mut set: Vec<u32> = sortie2[l * k2..(l + 1) * k2]
+                    .iter().map(|&v| v as u32).collect();
+                vides += set.iter().filter(|&&v| v == u32::MAX).count();
+                set.sort_unstable();
+                if set == att { ok_lignes += 1; }
+            }
+            // ⚠️ `t_k2` et `t2_k2` sont en SECONDES : les afficher avec l'unité « ms »
+            // sans convertir a fait croire à un noyau 1 500× trop rapide — un
+            // affichage mal étiqueté est un affichage qui ment.
+            println!("    second passage k = {k2}, mêmes tampons : {ok_lignes}/{lignes} lignes · \
+{:.2} ms ({:.2} ms de seuil) · cases non écrites {vides}", t_k2 * 1e3, t2_k2 * 1e3);
+            if ok_lignes != lignes || vides != 0 {
+                println!("    → ÉCART : la réutilisation des tampons avec un k plus grand est \
+suspecte");
+            }
+        } else {
+            println!("    second passage k = {k2} : REFUSÉ (la réutilisation des tampons est \
+cassée)");
+        }
+    }
 }
 
 /// Banc **MLA** : passe avant du modèle synthétique, logits écrits en binaire

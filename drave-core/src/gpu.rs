@@ -686,7 +686,12 @@ hist {}, préfixes {}", hist.len(), prefixes.len());
                 comptes: 0, cap_comptes: 0, bases: 0, cap_bases: 0,
                 meta: 0, cap_meta: 0, sortie: 0, cap_sortie: 0,
             });
-            if t.lignes < lignes || t.ntr < ntr {
+            // `t.k < k` est dans la condition, et pas seulement (lignes, ntr) :
+            // un même contexte avec un k plus grand (256 puis 4 096 à n = 4 096)
+            // gardait un tampon de sortie trop petit, et le noyau aurait écrit
+            // AU-DELÀ — un débordement en VRAM, pas une erreur propre. Les
+            // tampons de comptes, eux, ne dépendent que de (lignes, ntr).
+            if t.lignes < lignes || t.ntr < ntr || t.k < k {
                 if !vram_assurer(&mut t.comptes, &mut t.cap_comptes, 2 * lignes * ntr * 4)
                     || !vram_assurer(&mut t.bases, &mut t.cap_bases, 2 * lignes * ntr * 4)
                     || !vram_assurer(&mut t.meta, &mut t.cap_meta, 3 * lignes * 4)

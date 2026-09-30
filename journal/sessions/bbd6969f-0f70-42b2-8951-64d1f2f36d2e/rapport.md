@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 51.3 h |
+| Durée | 51.4 h |
 | Tours | 47 |
-| Messages | 2098 |
-| Appels d'outils | 1982 |
+| Messages | 2114 |
+| Appels d'outils | 1998 |
 | Fichiers touchés | 47 |
-| Commandes | 1642 |
-| Sous-agents | 11 |
-| Commits | 173 |
+| Commandes | 1653 |
+| Sous-agents | 13 |
+| Commits | 174 |
 | Compactages de contexte | 3 |
 
 ## Objectifs déclarés
@@ -2177,7 +2177,7 @@ Le mode creux ne peut pas utiliser le miroir VRAM (le chemin GPU est conditionn�
 
 ### Tour 47 — pret pour des scrum de 2h (boxing temps réel, avec revue, rétro et planning)
 
-*127 appels d'outils.* Actions notables :
+*143 appels d'outils.* Actions notables :
 
 - bash — Check clock, machine and last sprint state
 - bash — Create the sprint timing tool
@@ -2193,7 +2193,7 @@ Le mode creux ne peut pas utiliser le miroir VRAM (le chemin GPU est conditionn�
 - bash — Read the kernel launch call
 - bash — Write the FFI for the scores kernel
 - bash — Complete KvGpu initializer
-- … et 108 autres
+- … et 123 autres
 
 **Synthèse produite :**
 
@@ -2249,7 +2249,7 @@ Maintenant la méthode de collecte côté hôte :
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/roadmap.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs` | 0 | 5 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/main.rs` | 0 | 1 |
-| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/gpu.rs` | 0 | 1 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/gpu.rs` | 0 | 3 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-gpu-topk-selection.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/README.md` | 0 | 1 |
 
@@ -2266,6 +2266,8 @@ Maintenant la méthode de collecte côté hôte :
 - tour 46 — Docs audit after today's changes
 - tour 46 — Adversarial review of mode 4
 - tour 46 — Review the last-hour fixes
+- tour 47 — Adversarial review GPU topk
+- tour 47 — Vérifier chiffres et cohérence docs
 
 ### Commandes exécutées (échantillon)
 
@@ -2309,7 +2311,7 @@ Maintenant la méthode de collecte côté hôte :
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 1602 autres
+- … et 1613 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2630,4 +2632,5 @@ Maintenant la méthode de collecte côté hôte :
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-gpu-scores.md <<'EOF' # Noyau GPU de scores d'attention — le premier des trois du to
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -F - <<'EOF' && git log --oneline -1 Noyau 2a du top-k GPU : histogramme d'oct
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cargo test --release --manifest-path drave-core/Cargo.toml 2>&1 | tail -3 && git add -A && git commit -q -
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cargo test --release --manifest-path drave-core/Cargo.toml 2>&1 | tail -2 && git add -A && git commit -q -
 
