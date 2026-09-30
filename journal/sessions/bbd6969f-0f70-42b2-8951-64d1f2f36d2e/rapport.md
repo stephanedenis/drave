@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 49.8 h |
+| Durée | 50.2 h |
 | Tours | 46 |
-| Messages | 1939 |
-| Appels d'outils | 1830 |
+| Messages | 1944 |
+| Appels d'outils | 1835 |
 | Fichiers touchés | 44 |
-| Commandes | 1502 |
+| Commandes | 1507 |
 | Sous-agents | 10 |
-| Commits | 163 |
+| Commits | 164 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -2117,7 +2117,7 @@ L'**audit des drapeaux** a trouvé que **46 options sur 110** étaient ignorées
 
 ### Tour 46 — continue jusqu'à 18h HAE
 
-*92 appels d'outils.* Actions notables :
+*97 appels d'outils.* Actions notables :
 
 - bash — Check time, timezone and remaining budget
 - create_goal
@@ -2133,11 +2133,11 @@ L'**audit des drapeaux** a trouvé que **46 options sur 110** étaient ignorées
 - bash — Improve notebook with real text cell
 - bash — Kill test node safely and check notebook
 - bash — Add notebook real-text cell and commit
-- … et 78 autres
+- … et 83 autres
 
 **Synthèse produite :**
 
-**Mode 3 dense vérifié aussi à 1 024 jetons : 0,00e0** (9,5939 des deux côtés, 16 lots). J'inscris et j'attends l'aiguille.
+Point crucial : **toute variante d'attribution désactive le miroir VRAM** (il exige une disposition homogène), et les clés f16 coûtent 2,3× le temps CPU. La politique complète s'écrit avec ces nuances.
 
 ## 3. Travail accompli
 
@@ -2245,7 +2245,7 @@ L'**audit des drapeaux** a trouvé que **46 options sur 110** étaient ignorées
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 1462 autres
+- … et 1467 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2556,4 +2556,5 @@ L'**audit des drapeaux** a trouvé que **46 options sur 110** étaient ignorées
 - Mode 4 : le plafond cumulatif vérifié à l'octet près  Le relecteur avait prouvé qu'il manquait ; voici la preuve qu'il marche : avec des états bien formés au ma
 - Préremplissage par lots : fidélité vérifiée à 1 024 jetons (0,00e0, 16 lots)  La fidélité du mode 3 était établie à 40, 200 et 256 jetons ; elle l'est maintenan
 - REPRISE : dix-sept tests, et ce qu'ils verrouillent" && git log --oneline -1 | cat; sleep 420; tail -6 /tmp/aiguille_kv2048.log; date +"%H:%M:%S"
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p='reports/rapport-placement-bits-kv.md'; s=open(p).read() v = """## Reproductible""" n =
 

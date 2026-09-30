@@ -196,10 +196,18 @@ facteur 840. **Le réglage recommandé est `DRAVE_KV_BITS=8 DRAVE_KV_K_F16=1`** 
 le même à 4 096 (+0,011 % contre +2,25 % pour l'int8 complet), donc ce n'est pas un
 artefact de longueur.
 
-⚠️ **Une interaction à connaître** : le miroir VRAM suppose une disposition
-HOMOGÈNE ; les variantes d'attribution (clés f32, clés f16) le désactivent donc
-(`[gpu] KV déporté désactivé`). À contexte très long avec `DRAVE_GPU_KV=1`, garder
-les clés en **f32** et rogner les valeurs — c'est l'inverse du conseil CPU.
+⚠️ **Deux interactions à connaître**, mesurées au banc (`--banc-kv`, 262 144 clés) :
+
+* le miroir VRAM suppose une disposition **HOMOGÈNE** : les variantes d'attribution
+  (clés f32, clés f16) le désactivent (`[gpu] KV déporté désactivé`), alors qu'il
+  divise le temps de l'attention par 40 (1,7 ms contre 70 à 174 ms par passe) ;
+* les **clés f16 coûtent 2,3× le temps CPU** des clés f32 (162 contre 70 ms par
+  passe) : la conversion f16 → f32 se paie par élément. Le réglage le plus économe
+  en octets est le plus cher en temps.
+
+D'où, par régime : **clés f16 + valeurs int8** (39 % du f32, +0,018 %) à contexte
+court ou moyen sur CPU ; **int8/int8 homogène** dès qu'on veut le miroir VRAM ou
+qu'on est à très long contexte, parce que c'est le miroir qui décide du temps.
 
 ## 4.ter KV déporté en VRAM (E4) : le noyau, et ce qu'il donne
 

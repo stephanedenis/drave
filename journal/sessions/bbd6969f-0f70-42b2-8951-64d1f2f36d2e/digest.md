@@ -31231,3 +31231,95 @@ REPRISE.md : 1 occurrence(s) de 13/13
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='REPRISE.md'; s=open(p).read()\ndef rem(nom, v, n):\n    global s\n    c = s.count(v)\n    if c != 1:\n        print(f\"  ✗ {nom} : {c}\"); return False\n    s = s.replace(v, n); print(f\"  ✓ {nom}\"); return True … [1032 caractères tronqués]`
+
+  ```
+✓ compte des tests (ligne 35)
+  ✓ compte des tests (bloc)
+98402c6 REPRISE : dix-sept tests, et ce qu'ils verrouillent
+  lot 256 · 40 jetons de réponse · GPU non
+ contexte  profondeur  trouvé  secondes  détail
+     2048        0.10     oui     368.6  prompt 2147 jetons
+     2048        0.50     oui     243.1  prompt 2147 jetons
+     2048        0.90     oui     242.9  prompt 2147 jetons
+### cles_f16 · contexte 2048
+16:43:33
+  ```
+
+- **bash** `{"command": "sleep 480; tail -8 /tmp/aiguille_kv2048.log; date +\"%H:%M:%S\"", "description": "Wait for f16 needle results", "timeoutMs": 600000}`
+
+  ```
+2048        0.90     oui     242.9  prompt 2147 jetons
+### cles_f16 · contexte 2048
+  lot 256 · 40 jetons de réponse · GPU non
+ contexte  profondeur  trouvé  secondes  détail
+     2048        0.10     oui     294.4  prompt 2147 jetons
+     2048        0.50     oui     297.0  prompt 2147 jetons
+     2048        0.90     oui     292.1  prompt 2147 jetons
+### int8_int8 · contexte 2048
+16:51:39
+  ```
+
+- **bash** `{"command": "sleep 540; tail -8 /tmp/aiguille_kv2048.log; echo \"--- banc KV ---\"; tail -4 /tmp/banc_kv_cles.log 2>/dev/null; date +\"%H:%M:%S\"", "description": "Wait for int8 needle results", "timeoutMs": 700000}`
+
+  ```
+### int8_int8 · contexte 2048
+  lot 256 · 40 jetons de réponse · GPU non
+ contexte  profondeur  trouvé  secondes  détail
+     2048        0.10     oui     284.9  prompt 2147 jetons
+     2048        0.50     oui     283.0  prompt 2147 jetons
+     2048        0.90     oui     283.5  prompt 2147 jetons
+=== fin ===
+16:58:54
+--- banc KV ---
+  CPU 16 fils :    143.1 ms par passe  (1.1 Go/s de KV, 143.1 ms × 24 couches = 3433 ms/jeton)
+  GPU 256 tranches :      1.7 ms par passe  (89.2 Go/s de KV, 1.7 ms × 24 couches = 41 ms/jeton)  écart max +3.42e-5
+=== fin ===
+15:34:20
+17:00:45
+  ```
+
+### 🤖 Assistant
+
+**Aiguille : 9/9 sondes trouvées avec les trois variantes de cache KV** — même l'int8/int8, malgré ses +2,25 % de perplexité. Je lis le banc KV et je documente.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat /tmp/banc_kv_cles.log | head -40", "description": "Read the KV key-format benchmark"}`
+
+  ```
+### cles_f32 · sans_GPU · 262144 clés
+[attention] QT_IM_SWITCHER est l'ancien nom d'une variable d'environnement : elles s'appellent maintenant DRAVE_* (voir docs/histoire.md). Rien n'a été appliqué.
+banc KV : 262144 clés · 24 couches · 2 têtes KV × 64 dim, 7 têtes de requête par tête KV · KV f32 bits
+  CPU 16 fils :     70.5 ms par passe  (7.6 Go/s de KV, 70.5 ms × 24 couches = 1692 ms/jeton)
+### cles_f32 · avec_miroir · 262144 clés
+[attention] QT_IM_SWITCHER est l'ancien nom d'une variable d'environnement : elles s'appellent maintenant DRAVE_* (voir docs/histoire.md). Rien n'a été appliqué.
+banc KV : 262144 clés · 24 couches · 2 têtes KV × 64 dim, 7 têtes de requête par tête KV · KV f32 bits
+  CPU 16 fils :     64.4 ms par passe  (8.3 Go/s de KV, 64.4 ms × 24 couches = 1546 ms/jeton)
+  GPU 256 tranches :      1.8 ms par passe  (298.1 Go/s de KV, 1.8 ms × 24 couches = 43 ms/jeton)  écart max +3.23e-5
+### cles_f16 · sans_GPU · 262144 clés
+[attention] QT_IM_SWITCHER est l'ancien nom d'une variable d'environnement : elles s'appellent maintenant DRAVE_* (voir docs/histoire.md). Rien n'a été appliqué.
+banc KV : 262144 clés · 24 couches · 2 têtes KV × 64 dim, 7 têtes de requête par tête
+… [1561 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+Le banc KV révèle un point important : **les clés f16 coûtent 2,3× le temps CPU** (162 ms contre 70 ms). Je vérifie l'interaction avec le miroir VRAM et je documente.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && D=./drave-core/target/release/drave; M=models/Qwen2.5-0.5B-Q8_0.gguf; echo \"=== le miroir VRAM est-il refusé avec les clés f16 ? ===\"; DRAVE_GPU=1 DRAVE_GPU_KV=1 DRAVE_KV_BITS=8 DRAVE_KV_K_F16=1 $D $M --ppl /tmp/ids_qwen.txt --ctx  … [413 caractères tronqués]`
+
+  ```
+=== le miroir VRAM est-il refusé avec les clés f16 ? ===
+[gpu] KV déporté désactivé : les variantes d'attribution (clés ou valeurs en f32) supposent une disposition homogène
+[gpu] KV déporté impossible sur 2 périphérique(s) : contexte 256 trop long pour la VRAM — cache KV gardé en RAM
+       7 tokens notés — perplexité cumulée 821.198  (21.8 tok/s)
+=== et avec les clés f32 (int8) ? ===
+[gpu] KV déporté : 12 couches sur GPU 1, 0.00 Go ici (16.17 Go libres)
+[gpu] KV déporté : 12 couches sur GPU 0, 0.00 Go ici (15.11 Go libres)
+[gpu] KV déporté : 0.00 Go au total pour 24 couches
+17:01:10
+  ```
+
+### 🤖 Assistant
+
+Point crucial : **toute variante d'attribution désactive le miroir VRAM** (il exige une disposition homogène), et les clés f16 coûtent 2,3× le temps CPU. La politique complète s'écrit avec ces nuances.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/rapport-placement-bits-kv.md'; s=open(p).read()\nv = \"\"\"## Reproductible\"\"\"\nn = \"\"\"## La politique complète, selon le régime (mesuré le 30/09)\n\nLes deux sections précédentes disent quelle préc … [4574 caractères tronqués]`

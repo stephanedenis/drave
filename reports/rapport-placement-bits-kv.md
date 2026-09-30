@@ -106,6 +106,41 @@ Détail rassurant au passage : la référence à 4 096 (**12,2175**) est exactem
 celle que le dépôt avait mesurée pour le banc du KV déporté — les deux chemins
 redisent le même chiffre à un an d'intervalle.
 
+## La politique complète, selon le régime (mesuré le 30/09)
+
+Les deux sections précédentes disent quelle précision donne quelle qualité. Trois
+mesures de plus disent **ce que chaque réglage coûte en TEMPS**, et elles changent
+le conseil selon le régime. Banc `--banc-kv`, 262 144 clés, 24 couches, 16 fils :
+
+| clés | CPU, ms par passe | miroir VRAM | écart du noyau GPU |
+|---|---|---|---|
+| f32 | **70,5** | ✅ déporté (1,8 ms) | +3,2e-5 |
+| **f16** | **162,1** (2,3×) | ❌ désactivé | — |
+| int8 | 174,0 | ✅ déporté (1,7 ms) | +3,4e-5 |
+
+Deux faits qui n'étaient pas prévus :
+
+1. **les clés f16 coûtent 2,3× le temps CPU des clés f32** (162 contre 70 ms par
+   passe à 262 144 clés) : la conversion f16 → f32 se paie par élément, là où le
+   f32 est une copie. Le réglage le plus ÉCONOME en octets est donc le plus CHER en
+   temps sur le chemin CPU ;
+2. **le miroir VRAM exige une disposition homogène** : toute variante d'attribution
+   (`DRAVE_KV_K_F16`, `DRAVE_KV_K_F32`, `DRAVE_KV_V_F32`) le **désactive**
+   — vérifié : `[gpu] KV déporté désactivé : les variantes d'attribution supposent
+   une disposition homogène`.
+
+D'où la politique, par régime :
+
+| régime | réglage recommandé | pourquoi |
+|---|---|---|
+| contexte court ou moyen, CPU | **clés f16 + valeurs int8** (39 % du f32, +0,018 %) | le meilleur compromis taille/qualité, et le temps CPU n'y est pas le facteur limitant |
+| contexte long **avec** `DRAVE_GPU_KV=1` | **int8/int8** (28 %, +3,04 %) ou f32/f32 | le miroir exige une disposition homogène ; il divise le temps de l'attention par 40 (43 ms contre 1,7 s par jeton à 262 k clés) |
+| contexte long **sans** GPU | int8/int8 ; éviter les clés f16 | elles coûtent 2,3× le temps CPU, et l'écart de qualité qu'elles économisent est de deux centièmes de pour cent |
+
+Autrement dit : **le meilleur réglage en qualité par octet n'est pas le meilleur en
+temps**, et le miroir VRAM tranche à lui seul le débat au-delà de quelques dizaines
+de milliers de clés.
+
 ## Reproductible
 
 ```bash
