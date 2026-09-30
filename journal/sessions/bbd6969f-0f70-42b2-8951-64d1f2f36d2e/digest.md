@@ -20526,3 +20526,136 @@ ValueError: operands could not be broadcast together with shapes (4,1280) (256,1
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='tools/vision_ref.py'; s=open(p).read()\ns = s.replace(\"\"\"    ecart = float(np.abs(out - eng).max()) / ech\"\"\",\n\"\"\"    if out.shape != eng.shape:\n        print(f\"patchs : le banc est sur une image de {i … [2816 caractères tronqués]`
+
+  ```
+référence tolérante à la taille
+1961ea4 vision : le chemin image est complet (224 × 224 → 64 jetons de 3584 dimensions)
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.09s
+  ```
+
+### 🤖 Assistant
+
+⏵ Tour 21 : le chemin image va de l'image aux jetons de 3584 dimensions
+
+## Fait dans ce tour
+
+**Le chemin image est complet**, sur une image de **224 × 224** (16 × 16 patchs, 8 × 8 après fusion) :
+
+convolution de patchs → **32 couches de ViT** avec **rotation 2-D** et **fenêtre locale** (couches complètes aux indices 7, 15, 23, 31 ; fenêtre de 4 × 4 jetons fusionnés ailleurs, lue dans `clip.cpp`) → `v.post_ln` → **projecteur par groupes de fusion : 64 groupes × 3 584 valeurs**.
+
+C'est exactement ce qu'il faut injecter à la place des jetons d'image — et le moteur sait le faire depuis `Model::emb_imposee`, branché il y a quelques tours. J'ai aussi corrigé le projecteur, qui ne traitait qu'**un** groupe de fusion (valable pour l'image 28 × 28 du banc initial, faux dès qu'il y en a 64) : c'était le genre d'erreur qui aurait produit 3 584 valeurs plausibles et fausses.
+
+Ce qui reste **non vérifié** est écrit noir sur blanc dans le document :
+
+| point | état |
+|---|---|
+| embedding de patchs, projecteur | **validés** contre numpy (5,37e-7 et 1,73e-6, à 28 × 28) |
+| échelle interne de la rotation | hypothèse — la source montre `positions`, pas l'opération GGML qui le consomme |
+| fenêtre locale | implémentée d'après la source, **non testable** sans référence à cette taille |
+| bout en bout image → texte | impossible : le chemin d'inférence multimodal n'existe pas ici |
+
+La référence numpy annonce désormais ces limites au lieu de planter quand la taille change.
+
+## État des six chantiers
+
+| # | chantier | état |
+|---|---|---|
+| 1 | aiguille long contexte | ✅ 12/12 |
+| 2 | chemin GPU (5 sous-items) | ✅ |
+| 3 | mémoire KV | ✅ |
+| 4 | rotation à 16 k | ✅ |
+| 5 | MLA ✅ (5,2e-7) · vision : **chaîne complète** (patchs → 32 couches → rotation → fenêtre → projecteur → injection branchée), deux points explicitement non vérifiés | en cours |
+| 6 | hygiène | ✅ |
+
+`cargo test` 6/6, arbre propre, portes Qwen **19,3885** / gpt-oss **15,1757** intactes.
+
+L'objectif reste **actif** — mais le chantier vision est maintenant *structurellement* complet : ce qui manque n'est plus du code, c'est une référence pour vérifier deux constantes de convention, et cette référence est bloquée par un appel de bibliothèque que cinq hypothèses n'ont pas débloqué.
+
+
+## Tour 31
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Réaliser les 6 nouveaux chantiers du projet qtrinet-core, dans l'ordre : (1) relancer le test de l'aiguille sur contexte long (remplissage varié en vrai texte, moins de sondes, réponses plus longues) sur un modèle capable, grâce au préremplissage par lots et au KV déporté ; (2) chemin GPU : dépaquetage vectorisé du noyau d'attention (13,2 ms/couche à 1 M en int4 vers ~3 ms), brancher MXFP4 dans le moteur avec une politique de résidence des experts, attention par lots sur GPU dans forward_lot, noyau de tête Q8_0 accéléré (AVX2 ou déport), et usage du second GPU ; (3) mémoire : pagination du cache KV côté CPU (25,77 Go réservés à ctx 1 M pour 512 jetons écrits) et test de l'hypothèse « clés en f16 avant quantification » pour l'écart int8 avec llama.cpp à 8 192 (+3,0 % contre +0,8 %) ; (4) rotation au-delà de 5 120 jetons (passe à 16 k) ; (5) structurel : MLA (aucun modèle local — construire un modèle MLA synthétique et valider contre une référence indépendante) et vision (poids Qwen2.5-VL et projecteur mmproj présents) ; (6) hygiène : réécrire la section « Ce qu'il faut faire ensuite » de REPRISE.md et y consigner les pièges QT_GPU/QT_GPU_TETE/QT_GPU_KV. Chaque chantier doit être implémenté, mesuré (portes de non-régression Qwen 19,3885 et gpt-oss 15,1757 sans QT_GPU), documenté dans le dépôt et commité."
+Round: 22/30
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "nm -D --defined-only /usr/lib/ollama/libmtmd.so | grep -E \"from_parts|input_part\" | awk '{print $3}'; ls -l /tmp/mtmd.h 2>/dev/null | head -1; grep -n -A 12 \"struct mtmd_input_part\" /tmp/mtmd.h 2>/dev/null | head -16", "description": "Check tokenize_from_parts availability"}`
+
+  ```
+-rw-r--r--. 1 stephane stephane 22390 29 sep 21:10 /tmp/mtmd.h
+76:struct mtmd_input_part {
+77-    // only text or bitmap can be set, not both
+78-    const struct mtmd_input_text * text;
+79-    const struct mtmd_bitmap * bitmap;
+80-};
+81-
+82-//
+83-// C API
+84-//
+85-
+86-typedef struct mtmd_context      mtmd_context;
+87-typedef struct mtmd_bitmap       mtmd_bitmap;
+88-typedef struct mtmd_image_tokens mtmd_image_tokens;
+--
+92:typedef struct mtmd_input_part   mtmd_input_part;
+93-typedef struct mtmd_batch        mtmd_batch;
+  ```
+
+- **bash** `{"command": "cd /tmp && timeout 180 python3 - <<'PY'\nimport urllib.request, re\nurl = \"https://raw.githubusercontent.com/ggml-org/llama.cpp/master/ggml/src/ggml-cpu/ops.cpp\"\ntry:\n    t = urllib.request.urlopen(url, timeout=120).read().decode()\nexcept Exception as e:\n    print(\"échec:\", e);  … [460 caractères tronqués]`
+
+  ```
+ops.cpp : 418635 octets
+rope_f32 à l'offset -1
+  ```
+
+- **bash** `{"command": "cd /tmp && grep -n \"rope\" ops.cpp | head -12", "description": "Locate rope code in ops.cpp"}`
+
+  ```
+5953:// ggml_compute_forward_rope
+5955:static float rope_yarn_ramp(const float low, const float high, const int i0) {
+5962:static void rope_yarn(
+5969:        float ramp_mix = rope_yarn_ramp(corr_dims[0], corr_dims[1], i0) * ext_factor;
+5979:static void ggml_rope_cache_init(
+5982:    // ref: https://github.com/jquesnelle/yarn/blob/master/scaled_rope/LlamaYaRNScaledRotaryEmbedding.py
+5986:        rope_yarn(
+5995:static void ggml_mrope_cache_init(
+5996:     float theta_base_t, float theta_base_h, float theta_base_w, float theta_base_e, int sections[4], bool is_imrope, bool indep_sects,
+5999:    // ref: https://github.com/jquesnelle/yarn/blob/master/scaled_rope/LlamaYaRNScaledRotaryEmbedding.py
+6031:        if (is_imrope) { // qwen3vl apply interleaved mrope
+6053:        rope_yarn(
+  ```
+
+- **bash** `{"command": "cd /tmp && sed -n '5995,6060p' ops.cpp", "description": "Read mRoPE cache init"}`
+
+  ```
+static void ggml_mrope_cache_init(
+     float theta_base_t, float theta_base_h, float theta_base_w, float theta_base_e, int sections[4], bool is_imrope, bool indep_sects,
+     float freq_scale, const float * freq_factors, float corr_dims[2], int64_t ne0, float ext_factor, float mscale,
+     float * cache, float sin_sign, float theta_scale) {
+    // ref: https://github.com/jquesnelle/yarn/blob/master/scaled_rope/LlamaYaRNScaledRotaryEmbedding.py
+    float theta_t = theta_base_t;
+    float theta_h = theta_base_h;
+    float theta_w = theta_base_w;
+    float theta_e = theta_base_e;  // extra position id for vision encoder
+    int sect_dims = sections[0] + sections[1] + sections[2] + sections[3];
+    int sec_w = sections[1] + sections[0];
+    int sec_e = sections[2] + sec_w;
+    GGML_ASSERT(sect_dims <= ne0);
+
+    for (int64_t i0 = 0; i0 < ne0; i0 += 2) {
+        const float ff = freq_factors ? freq_factors[i0/2] : 1.0f;
+
+        int sector = (i0 / 2) % sect_dims;
+        if (indep_sects) {
+            // compute theta independently for each dim sections
+            // (i.e. reset corresponding theta when `i0` go from one section to another)
+            if (sector == 0) {
+              
+… [1416 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat >> docs/plan-mla-vision.md <<'EOF'\n\n### Le détail de la rotation, lu dans ggml (et mon implémentation est à corriger)\n\n`ggml/src/ggml-cpu/ops.cpp`, `ggml_mrope_cache_init` — c'est ici que la\nconvention est écrite, noir sur b … [2743 caractères tronqués]`

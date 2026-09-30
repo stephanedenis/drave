@@ -569,3 +569,37 @@ Ce qui reste non vérifié, et pourquoi :
 | échelle interne de la rotation | hypothèse (la source montre `positions`, pas l'opération GGML) |
 | fenêtre locale | implémentée d'après la source, **non testable** sur les images du banc avant 224 px — et sans référence à cette taille |
 | bout en bout (image → texte) | impossible sans le chemin d'inférence multimodal, qui n'existe pas ici |
+
+### Le détail de la rotation, lu dans ggml (et mon implémentation est à corriger)
+
+`ggml/src/ggml-cpu/ops.cpp`, `ggml_mrope_cache_init` — c'est ici que la
+convention est écrite, noir sur blanc :
+
+```cpp
+int sect_dims = sections[0] + sections[1] + sections[2] + sections[3];
+for (int64_t i0 = 0; i0 < ne0; i0 += 2) {
+    int sector = (i0 / 2) % sect_dims;
+    ...  // le secteur choisit la POSITION : t, h, w ou e
+    rope_yarn(theta/ff, ...);
+    theta_t *= theta_scale;  theta_w *= theta_scale;  theta_h *= theta_scale;
+}
+```
+
+Trois choses que la source impose, et que mon implémentation ne fait PAS :
+
+1. la rotation apparie des dimensions **consécutives** `(i0, i0+1)`, pas
+   `(i, i + quart/2)` : c'est le contraire de la convention « moitié tournée »
+   que j'ai écrite ;
+2. `sect_dims` est la SOMME des quatre sections et le secteur vaut
+   `(i0/2) % sect_dims` : avec `positions` = (ligne, colonne, ligne, colonne)
+   et quatre sections, cela donne des blocs de secteurs `(t, h, w, e)` —
+   soit, pour la vision, **(ligne, colonne, ligne, colonne)** dans cet ordre ;
+3. l'échelle de fréquences **continue** d'un bloc au suivant (`theta *= theta_scale`
+   à chaque pas, sans remise à zéro hors mode `indep_sects`) : ce n'est donc PAS
+   une échelle RoPE recalculée par bloc comme je l'ai fait.
+
+Autrement dit : la structure (quatre blocs, deux positions alternées) est la
+bonne, mais **l'appariement et l'échelle sont faux**. C'est exactement ce qu'une
+référence aurait attrapé, et c'est pourquoi le chantier reste ouvert : la
+prochaine session corrige ces deux points à partir du code ci-dessus, puis
+cherche une validation (les trois pistes de la section précédente).

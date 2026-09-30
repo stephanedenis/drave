@@ -6,13 +6,13 @@
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
 | Durée | 30.6 h |
-| Tours | 30 |
-| Messages | 1291 |
-| Appels d'outils | 1239 |
+| Tours | 31 |
+| Messages | 1298 |
+| Appels d'outils | 1244 |
 | Fichiers touchés | 39 |
-| Commandes | 970 |
+| Commandes | 975 |
 | Sous-agents | 1 |
-| Commits | 63 |
+| Commits | 64 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -85,6 +85,8 @@
 **Tour 29** — <goal_round> Objective: "Réaliser les 6 nouveaux chantiers du projet qtrinet-core, dans l'ordre : (1) relancer le test de l'aiguille sur contexte long (remplissage varié en vrai texte, moins de sondes, réponses plus longues) sur un modèle capable, grâce au préremplissage par lots et au KV déporté ; (2) chemin GPU : dépaquetage vectorisé du noyau d'attention (13,2 ms/couche à 1 M en int4 vers ~3 ms … [1492 caractères tronqués]
 
 **Tour 30** — <goal_round> Objective: "Réaliser les 6 nouveaux chantiers du projet qtrinet-core, dans l'ordre : (1) relancer le test de l'aiguille sur contexte long (remplissage varié en vrai texte, moins de sondes, réponses plus longues) sur un modèle capable, grâce au préremplissage par lots et au KV déporté ; (2) chemin GPU : dépaquetage vectorisé du noyau d'attention (13,2 ms/couche à 1 M en int4 vers ~3 ms … [1492 caractères tronqués]
+
+**Tour 31** — <goal_round> Objective: "Réaliser les 6 nouveaux chantiers du projet qtrinet-core, dans l'ordre : (1) relancer le test de l'aiguille sur contexte long (remplissage varié en vrai texte, moins de sondes, réponses plus longues) sur un modèle capable, grâce au préremplissage par lots et au KV déporté ; (2) chemin GPU : dépaquetage vectorisé du noyau d'attention (13,2 ms/couche à 1 M en int4 vers ~3 ms … [1492 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -1375,6 +1377,54 @@ L'objectif reste **actif**. Le chantier vision est désormais complet dans sa st
 - bash — Build and run complete vision path
 - bash — Document complete vision path and commit
 
+**Synthèse produite :**
+
+⏵ Tour 21 : le chemin image va de l'image aux jetons de 3584 dimensions
+
+\## Fait dans ce tour
+
+**Le chemin image est complet**, sur une image de **224 × 224** (16 × 16 patchs, 8 × 8 après fusion) :
+
+convolution de patchs → **32 couches de ViT** avec **rotation 2-D** et **fenêtre locale** (couches complètes aux indices 7, 15, 23, 31 ; fenêtre de 4 × 4 jetons fusionnés ailleurs, lue dans `clip.cpp`) → `v.post_ln` → **projecteur par groupes de fusion : 64 groupes × 3 584 valeurs**.
+
+C'est exactement ce qu'il faut injecter à la place des jetons d'image — et le moteur sait le faire depuis `Model::emb_imposee`, branché il y a quelques tours. J'ai aussi corrigé le projecteur, qui ne traitait qu'**un** groupe de fusion (valable pour l'image 28 × 28 du banc initial, faux dès qu'il y en a 64) : c'était le genre d'erreur qui aurait produit 3 584 valeurs plausibles et fausses.
+
+Ce qui reste **non vérifié** est écrit noir sur blanc dans le document :
+
+| point | état |
+|---|---|
+| embedding de patchs, projecteur | **validés** contre numpy (5,37e-7 et 1,73e-6, à 28 × 28) |
+| échelle interne de la rotation | hypothèse — la source montre `positions`, pas l'opération GGML qui le consomme |
+| fenêtre locale | implémentée d'après la source, **non testable** sans référence à cette taille |
+| bout en bout image → texte | impossible : le chemin d'inférence multimodal n'existe pas ici |
+
+La référence numpy annonce désormais ces limites au lieu de planter quand la taille change.
+
+\## État des six chantiers
+
+| # | chantier | état |
+|---|---|---|
+| 1 | aiguille long contexte | ✅ 12/12 |
+| 2 | chemin GPU (5 sous-items) | ✅ |
+| 3 | mémoire KV | ✅ |
+| 4 | rotation à 16 k | ✅ |
+| 5 | MLA ✅ (5,2e-7) · vision : **chaîne complète** (patchs → 32 couches → rotation → fenêtre → projecteur → injection branchée), deux points explicitement non vérifiés | en cours |
+| 6 | hygiène | ✅ |
+
+`cargo test` 6/6, arbre propre, portes Qwen **19,3885** / gpt-oss **15,1757** intactes.
+
+L'objectif reste **actif** — mais le chantier vision est maintenant *structurellement* complet : ce qui manque n'est plus du code, c'est une référence pour vérifier deux constantes de convention, et cette référence est bloquée par un appel de bibliothèque que cinq hypothèses n'ont pas débloqué.
+
+### Tour 31 — <goal_round> Objective: "Réaliser les 6 nouveaux chantiers du projet qtrinet-core, dans l'ordre : (1) relancer le test d … [1772 caractères tronqués]
+
+*5 appels d'outils.* Actions notables :
+
+- bash — Check tokenize_from_parts availability
+- bash — Fetch ggml rope implementation
+- bash — Locate rope code in ops.cpp
+- bash — Read mRoPE cache init
+- bash — Document rotation correction needed
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -1467,7 +1517,7 @@ L'objectif reste **actif**. Le chantier vision est désormais complet dans sa st
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 930 autres
+- … et 935 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1678,4 +1728,5 @@ L'objectif reste **actif**. Le chantier vision est désormais complet dans sa st
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat >> docs/plan-mla-vision.md <<'EOF'  ### La convention de rotation 2-D, lue dans la source  `clip.cpp`,
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p='tools/vision_ref.py'; s=open(p).read() # le fichier .bloc ne contient plus les poids (
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p='tools/vision_ref.py'; s=open(p).read() s = s.replace("""    ecart = float(np.abs(out -
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat >> docs/plan-mla-vision.md <<'EOF'  ### Le détail de la rotation, lu dans ggml (et mon implémentation 
 
