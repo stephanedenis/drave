@@ -7,12 +7,12 @@
 | Début | 2026-09-28 14:46 |
 | Durée | 45.5 h |
 | Tours | 45 |
-| Messages | 1662 |
-| Appels d'outils | 1569 |
+| Messages | 1666 |
+| Appels d'outils | 1573 |
 | Fichiers touchés | 44 |
-| Commandes | 1254 |
+| Commandes | 1258 |
 | Sous-agents | 4 |
-| Commits | 106 |
+| Commits | 107 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -2055,7 +2055,7 @@ Je vérifie l'heure à chaque itération et j'arrête à 12:06, en laissant un p
 
 ### Tour 45 — as-tu ce qu'il te faut pour te rendre à 15h en travaillaint avec un maximum d'autonomie et de parallélisme d'activités?
 
-*70 appels d'outils.* Actions notables :
+*74 appels d'outils.* Actions notables :
 
 - bash — Probe machine, GPU, disk, network state
 - bash — Identify GPU users and stray processes
@@ -2071,11 +2071,11 @@ Je vérifie l'heure à chaque itération et j'arrête à 12:06, en laissant un p
 - bash — Understand batched PPL reference path
 - bash — Add batched imposed states to forward_lot
 - list_agents
-- … et 49 autres
+- … et 53 autres
 
 **Synthèse produite :**
 
-**Couloir A, 1er résultat : clés f32 + valeurs int4 = 14,2994 (+0,46 %)**. Pendant que la 2e variante tourne, je synchronise le décodeur Python sur DRVF v2.
+Lane A tourne (2e variante). Je traite deux restes de l'audit : la trace muette en inférence, et les modes multiples qui se recouvrent en silence.
 
 ## 3. Travail accompli
 
@@ -2177,7 +2177,7 @@ Je vérifie l'heure à chaque itération et j'arrête à 12:06, en laissant un p
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 1214 autres
+- … et 1218 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2431,4 +2431,5 @@ Je vérifie l'heure à chaque itération et j'arrête à 12:06, en laissant un p
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo "=== porte Qwen (attendu 19,3885) ===" && ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p='docs/format-flux.md'; s=open(p).read() v = """          version      u8           3   
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p='docs/format-flux.md'; s=open(p).read() v = """liste     couche       u16          < 10
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A drave-core/src/main.rs && git commit -q -F - <<'EOF' && git log --oneline -1 | cat Deux silence
 

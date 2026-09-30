@@ -26699,3 +26699,75 @@ désaccord Rust↔Python : AUCUN (24 576 listes, 22 008 776 actifs des deux côt
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='docs/format-flux.md'; s=open(p).read()\nv = \"\"\"liste     couche       u16          < 1000 : entrée d'attention\n                                    >= 1000 : entrée de FFN (couche - 1000)\n          jeton      … [5453 caractères tronqués]`
+
+  ```
+format-flux : disque v2
+addendum sur le rapport de compacité
+6b3b53f DRVF v2 sur le disque : −49,87 % de trace, rejeu identique
+  ```
+
+### 🤖 Assistant
+
+Lane A tourne (2e variante). Je traite deux restes de l'audit : la trace muette en inférence, et les modes multiples qui se recouvrent en silence.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"trace_flux\\|trace_couches\" drave-core/src/main.rs | head -14; echo \"=== setup ppl ===\"; grep -n \"mdl.trace = Some\" -B 6 -A 6 drave-core/src/main.rs | head -24", "description": "Find trace setup code"}`
+
+  ```
+354:    trace_flux: Option<String>,
+367:    trace_couches: Vec<usize>,
+446:            "--trace-flux" => { o.trace_flux = Some(suivant(i).clone()); 2 }
+451:            "--trace-couches" => { o.trace_couches = suivant(i).split(',')
+2739:        ppl_profil, lot, profil_neurones, neurones_sortie, trace_flux, trace_couches, flux_forcer,
+2787:    if let Some(chemin) = trace_flux.as_deref() {
+2788:        match model::TraceFlux::nouveau(chemin, trace_couches.clone(), mdl.cfg.hidden,
+=== setup ppl ===
+2784-            Err(e) => eprintln!("[flux] lecture impossible de {chemin} : {e}"),
+2785-        }
+2786-    }
+2787-    if let Some(chemin) = trace_flux.as_deref() {
+2788-        match model::TraceFlux::nouveau(chemin, trace_couches.clone(), mdl.cfg.hidden,
+2789-                                        mdl.cfg.n_layer) {
+2790:            Ok(t) => { println!("[trace] flux enregistré dans {chemin}"); mdl.trace = Some(t); }
+2791-            Err(e) => eprintln!("[trace] impossible d'écrire {chemin} : {e}"),
+2792-        }
+2793-    }
+2794-    // Texte brut : les identifiants viennent du tokenizer du modèle, donc du
+2795-    // même découpage que celui qui a servi à l'entraîner. `--limit` compte le
+… [70 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n 566,575p drave-core/src/main.rs; python3 - <<'PY'\np='drave-core/src/main.rs'; s=open(p).read()\n\n# 1. --trace-flux en inférence : on le CÂBLE au lieu de l'ignorer en silence\nv = \"\"\"        hebb_layer, hebb_q, hebb_out, s … [2678 caractères tronqués]`
+
+  ```
+let mut mdl = model::Model::load(path, ctx, n_threads, dense, keep, auto, q4, b6);
+    mdl.act_levels = ((1u32 << (abits - 1)) - 1) as f32;
+    mdl.moe_topk = moe_topk;
+    mdl.act_thresh = act_thresh;
+    mdl.act_topk = act_topk;
+    mdl.lot = lot.max(1);
+    mdl.act_renorm = act_renorm;
+    mdl.act_topk_proj = topk_proj;
+    if sans_fenetre { mdl.attn_window = 0; }
+    if attn_window > 0 { mdl.attn_window = attn_window; }
+trace en inférence + avertissement de modes multiples
+    Finished `release` profile [optimized] target(s) in 0.01s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && D=./drave-core/target/release/drave; M=models/Qwen2.5-0.5B-Q8_0.gguf; rm -f /tmp/t_infer.bin; echo \"=== 1. trace en inférence ===\"; $D $M --infer --ids 1,2,3,4,5 --n 2 --ctx 64 --threads 4 --trace-flux /tmp/t_infer.bin 2>&1 | grep  … [542 caractères tronqués]`
+
+  ```
+=== 1. trace en inférence ===
+[config] cache KV : 32 bits, 0.00 Go pour 64 jetons
+[trace] flux enregistré dans /tmp/t_infer.bin
+fichier : 775850 octets
+=== 2. deux modes demandés ===
+[attention] QT_IM_SWITCHER est l'ancien nom d'une variable d'environnement : elles s'appellent maintenant DRAVE_* (voir docs/histoire.md). Rien n'a été appliqué.
+[modes] 2 modes demandés (--tensors, --ppl) : c'est --tensors qui s'exécute — les autres sont ignorés
+=== 3. porte Qwen (le tout doit rester vert) ===
+perplexité 19.3885 sur 510 tokens
+12:19:05
+cles_f32_valeurs_int4      : perplexité 14.2994 sur 8191 tokens (0 événements, 1665.6 s)
+cles_int4_valeurs_f32      :
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A drave-core/src/main.rs && git commit -q -F - <<'EOF' && git log --oneline -1 | cat\nDeux silences de plus, relevés par l'audit : trace en inférence, modes concurrents\n\n1. **`--trace-flux` en `--infer`** ne produisait rie … [524 caractères tronqués]`

@@ -44,6 +44,21 @@ elles s'appellent maintenant DRAVE_* (voir docs/histoire.md). Rien n'a été app
     }
     let opt = analyser(&args);
     let _ = MODELE.set(args[1].clone());
+    // Plusieurs modes demandés : l'aiguillage en retient UN, dans un ordre
+    // arbitraire, et le disait pas. On le dit.
+    let modes: Vec<&str> = [
+        (opt.banc_vision.is_some(), "--banc-vision"),
+        (opt.flux_serveur.is_some(), "--flux-serveur"),
+        (opt.ppl_reparti.is_some(), "--ppl-reparti"),
+        (opt.tensors, "--tensors"), (opt.banc_mla.is_some(), "--banc-mla"),
+        (opt.banc_kv > 0, "--banc-kv"), (opt.gpu_banc, "--gpu-banc"),
+        (opt.plan, "--plan"), (opt.tokenize, "--tokenize"),
+        (opt.ppl, "--ppl"), (opt.infer, "--infer"),
+    ].iter().filter(|(v, _)| *v).map(|(_, n)| *n).collect();
+    if modes.len() > 1 {
+        eprintln!("[modes] {} modes demandés ({}) : c'est {} qui s'exécute — les autres \
+sont ignorés", modes.len(), modes.join(", "), modes[0]);
+    }
     if let Some(f) = opt.banc_vision.clone() { run_banc_vision(&f); return; }
     if let Some(adresse) = opt.flux_serveur.clone() { run_serveur_flux(opt, &adresse); return; }
     if let Some(pair) = opt.ppl_reparti.clone() { run_ppl_reparti(opt, &pair); return; }
@@ -554,7 +569,8 @@ fn run_infer(opt: Options) {
         ctx_impose, threads_impose, abits_impose, dense, auto, q4, b6,
         keep, attn_window, swa_pattern, sans_fenetre, attn_sinks, attn_topk, qk_topk,
         act_thresh, act_topk, act_renorm, topk_proj, moe_topk, patch: patch_file,
-        hebb_layer, hebb_q, hebb_out, sans_yarn, lot, ffn_gain, ..
+        hebb_layer, hebb_q, hebb_out, sans_yarn, lot, ffn_gain,
+        trace_flux, trace_couches, ..
     } = opt;
     let path = &modele_chemin();
     // Défauts du mode INFÉRENCE : 512 jetons, la moitié des cœurs (l'attente
@@ -575,6 +591,16 @@ fn run_infer(opt: Options) {
     if attn_window > 0 { mdl.attn_window = attn_window; }
     if let Some(p) = swa_pattern { mdl.swa_pattern = p; }
     if attn_sinks > 0 { mdl.attn_sinks = attn_sinks; }
+    // `--trace-flux` était ignoré en inférence : on le branche, comme en
+    // perplexité — une trace est un enregistrement du flux, elle n'a rien de
+    // spécifique à la mesure de perplexité.
+    if let Some(chemin) = trace_flux.as_deref() {
+        match model::TraceFlux::nouveau(chemin, trace_couches.clone(), mdl.cfg.hidden,
+                                        mdl.cfg.n_layer) {
+            Ok(t) => { println!("[trace] flux enregistré dans {chemin}"); mdl.trace = Some(t); }
+            Err(e) => eprintln!("[trace] impossible d'écrire {chemin} : {e}"),
+        }
+    }
     // `--ffn-gain` était appliqué en perplexité et JAMAIS déstructuré ici : la
     // sortie était rigoureusement identique avec et sans le drapeau.
     if let Some((l, g)) = ffn_gain {
