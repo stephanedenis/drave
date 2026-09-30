@@ -487,3 +487,40 @@ dans le fichier (aux environs de l'offset 264 000), et c'est le pas suivant.
 
 `n_wa_pattern` est lu depuis la clé `clip.vision.win_attn_pattern` et vaut 8 pour
 ce modèle ; `use_window_attn` est actif dès que `n_wa_pattern > 0`.
+
+### La convention de rotation 2-D, lue dans la source
+
+`clip.cpp`, cas `PROJECTOR_TYPE_QWEN25VL` — le tenseur `positions` a **quatre
+sections** de `num_patches` entiers, remplies (ligne, colonne, ligne, colonne) :
+
+```cpp
+std::vector<int32_t> positions(n_pos * 4);
+int ptr = 0;
+for (int y = 0; y < ph; y += merge_ratio)
+  for (int x = 0; x < pw; x += merge_ratio)
+    for (int dy = 0; dy < 2; dy++)
+      for (int dx = 0; dx < 2; dx++) {
+        positions[                  ptr] = y + dy;   // section 0 : LIGNE
+        positions[    num_patches + ptr] = x + dx;   // section 1 : COLONNE
+        positions[2 * num_patches + ptr] = y + dy;   // section 2 : LIGNE
+        positions[3 * num_patches + ptr] = x + dx;   // section 3 : COLONNE
+        ptr++;
+      }
+set_input_i32("positions", positions);
+```
+
+Deux choses en découlent :
+
+1. la **grille est parcourue par groupes de fusion** (y += 2, x += 2), et les
+   quatre jetons d'un groupe 2 × 2 sont numérotés `(y+dy, x+dx)` — c'est la même
+   convention raster que le banc utilise déjà pour la fusion, confirmée ici ;
+2. la rotation se fait en **quatre blocs** de la dimension de tête : les blocs 0
+   et 2 tournent selon la LIGNE, les blocs 1 et 3 selon la COLONNE. C'est ce que
+   `ggml_rope_multi` attend, et c'est la convention à implémenter — au lieu de la
+   rotation scalaire que le moteur applique à ses jetons de texte.
+
+Reste une ambiguïté que la source ne lève pas seule : l'échelle de fréquences à
+l'intérieur de chaque bloc (la même échelle que RoPE sur `hd/4` dimensions, ou
+l'échelle sur `hd/2` avec paires entrelacées). C'est exactement ce que la
+comparaison à `libmtmd` aurait tranché — et c'est pourquoi la référence reste
+utile même si l'implémentation peut être écrite sans elle.

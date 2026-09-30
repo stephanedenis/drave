@@ -20254,3 +20254,109 @@ oat> mask(pow(ipw * iph, 2), std::numeric_limits<float>::lowest());
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat >> docs/plan-mla-vision.md <<'EOF'\n\n### Les deux conventions, lues dans la SOURCE de llama.cpp (clip.cpp)\n\n`tools/mtmd/clip.cpp` (320 ko) a été récupéré et dépouillé. Ce qui s'y lit, pour\n`PROJECTOR_TYPE_QWEN25VL` :\n\n**Fen … [2589 caractères tronqués]`
+
+  ```
+1e9a350 vision : la fenêtre locale lue dans la source de llama.cpp (et la rotation localisée)
+  ```
+
+### 🤖 Assistant
+
+⏵ Tour 18 : la fenêtre locale est lue dans la source de llama.cpp
+
+## Fait dans ce tour
+
+Deux résultats, dont un qui corrige une de mes suppositions.
+
+**L'hypothèse « image trop petite » est réfutée** : 336 × 336 échoue exactement comme 84 × 84 (`rc=2`, erreur de prétraitement du média). Le blocage `mtmd_tokenize` n'est donc pas une question de taille — c'était ma dernière hypothèse simple, et elle est tombée par la mesure.
+
+**La fenêtre locale est maintenant lue dans la source** (`tools/mtmd/clip.cpp`, récupéré et dépouillé) : ce n'est **pas** une fenêtre par ligne comme je l'avais supposé, mais une **permutation + un masque** — sur les couches fenêtrées, les jetons d'une même fenêtre sont rendus contigus (`window_idx` / `inv_window_idx`) et un masque ne laisse voir que la fenêtre, laquelle est un **bloc carré** de la grille *après* fusion 2 × 2 :
+
+```cpp
+for (int y = 0; y < ph; y += grid_window)
+  for (int x = 0; x < pw; x += grid_window) { ... }
+```
+
+**La rotation 2-D est localisée** : elle n'est pas dans `clip.cpp`, qui calcule un tenseur `positions` et le passe au graphe où les opérations GGML appliquent le mRoPE. C'est donc le calcul de `positions` qu'il faut lire — la zone est identifiée (offset ~264 000 du fichier) et c'est le pas suivant, désormais précis.
+
+## État
+
+| # | chantier | état |
+|---|---|---|
+| 1-4, 6 | aiguille · GPU (5 sous-items) · mémoire KV · rotation 16 k · hygiène | ✅ mesurés |
+| 5 | MLA ✅ (5,2e-7) · vision : 4 tranches validées, tour complète, injection branchée ; fenêtre locale **convention connue** (source), rotation 2-D **localisée** | en cours |
+
+`cargo test` 6/6, portes Qwen **19,3885** / gpt-oss **15,1757** intactes, arbre propre.
+
+L'objectif reste **actif**. La lecture de la source est la voie qui avance — contrairement à la rétro-ingénierie de `mtmd_tokenize`, qui a consommé cinq tours pour rien. Le prochain tour lit le calcul de `positions` (une trentaine de lignes au même endroit) et implémente enfin la rotation mRoPE et la fenêtre locale.
+
+
+## Tour 28
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Réaliser les 6 nouveaux chantiers du projet qtrinet-core, dans l'ordre : (1) relancer le test de l'aiguille sur contexte long (remplissage varié en vrai texte, moins de sondes, réponses plus longues) sur un modèle capable, grâce au préremplissage par lots et au KV déporté ; (2) chemin GPU : dépaquetage vectorisé du noyau d'attention (13,2 ms/couche à 1 M en int4 vers ~3 ms), brancher MXFP4 dans le moteur avec une politique de résidence des experts, attention par lots sur GPU dans forward_lot, noyau de tête Q8_0 accéléré (AVX2 ou déport), et usage du second GPU ; (3) mémoire : pagination du cache KV côté CPU (25,77 Go réservés à ctx 1 M pour 512 jetons écrits) et test de l'hypothèse « clés en f16 avant quantification » pour l'écart int8 avec llama.cpp à 8 192 (+3,0 % contre +0,8 %) ; (4) rotation au-delà de 5 120 jetons (passe à 16 k) ; (5) structurel : MLA (aucun modèle local — construire un modèle MLA synthétique et valider contre une référence indépendante) et vision (poids Qwen2.5-VL et projecteur mmproj présents) ; (6) hygiène : réécrire la section « Ce qu'il faut faire ensuite » de REPRISE.md et y consigner les pièges QT_GPU/QT_GPU_TETE/QT_GPU_KV. Chaque chantier doit être implémenté, mesuré (portes de non-régression Qwen 19,3885 et gpt-oss 15,1757 sans QT_GPU), documenté dans le dépôt et commité."
+Round: 19/30
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "ls -l /tmp/clip.cpp 2>/dev/null | head -1; cd /tmp && python3 - <<'PY'\nt = open('/tmp/clip.cpp').read()\nimport re\n# le calcul du tenseur `positions` pour QWEN25VL\nidx = [m.start() for m in re.finditer(r\"positions\\[\", t)]\nprint(\"occurrences de positions[ :\", len(idx), idx[:6])\ … [151 caractères tronqués]`
+
+  ```
+-rw-r--r--. 1 stephane stephane 320923 29 sep 21:11 /tmp/clip.cpp
+occurrences de positions[ : 30 [245243, 252900, 254988, 259730, 259805, 259880]
+
+        ggml_backend_tensor_set(cur, values.data(), 0, ggml_nbytes(cur));
+    };
+
+    auto set_input_i32 = [&get_inp_tensor](const char * name, std::vector<int32_t> & values) {
+        ggml_tensor * cur = get_inp_tensor(name);
+        GGML_ASSERT(cur->type == GGML_TYPE_I32);
+        GGML_ASSERT(ggml_nelements(cur) == (int64_t)values.size());
+        ggml_backend_tensor_set(cur, values.data(), 0, ggml_nbytes(cur));
+    };
+
+    // upload the decoder state from the previous call, or zero-fill on a cold start
+    auto set_gen_state_in = [&]() {
+        size_t offset = 0;
+        for (const auto & slot : list_gen_state_slots(hparams, model)) {
+            ggml_tensor * t = get_inp_tensor(("state_in_" + slot.name).c_str());
+            const size_t nb = ggml_nbytes(t);
+            if (params->state_in && params->state_in->size() >= offset + nb) {
+                ggml_backend_tensor_set(t, params->state_in->data() + offset, 0, nb);
+            } else {
+                std::vector<uint8_t> zeros(nb, 0);
+                ggml_backend_tensor_set(t,
+… [1418 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /tmp && python3 -c \"\nt=open('/tmp/clip.cpp').read()\nprint(t[259400:260400])\"", "description": "Read Qwen2.5-VL positions block"}`
+
+  ```
+int> positions(n_pos * 4);
+                int ptr = 0;
+                for (int y = 0; y < ph; y += merge_ratio) {
+                    for (int x = 0; x < pw; x += merge_ratio) {
+                        for (int dy = 0; dy < 2; dy++) {
+                            for (int dx = 0; dx < 2; dx++) {
+                                positions[                  ptr] = y + dy;
+                                positions[    num_patches + ptr] = x + dx;
+                                positions[2 * num_patches + ptr] = y + dy;
+                                positions[3 * num_patches + ptr] = x + dx;
+                                ptr++;
+                            }
+                        }
+                    }
+                }
+
+                set_input_i32("positions", positions);
+            } break;
+        case PROJECTOR_TYPE_STEP3VL:
+            {
+                std::vector<int32_t> pos_data(n_pos);
+                for (int i = 0; i < n_pos; i++) {
+                    pos_data[i] = i
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat >> docs/plan-mla-vision.md <<'EOF'\n\n### La convention de rotation 2-D, lue dans la source\n\n`clip.cpp`, cas `PROJECTOR_TYPE_QWEN25VL` — le tenseur `positions` a **quatre\nsections** de `num_patches` entiers, remplies (ligne, c … [2575 caractères tronqués]`

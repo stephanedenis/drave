@@ -6,13 +6,13 @@
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
 | Durée | 30.4 h |
-| Tours | 27 |
-| Messages | 1275 |
-| Appels d'outils | 1229 |
+| Tours | 28 |
+| Messages | 1280 |
+| Appels d'outils | 1232 |
 | Fichiers touchés | 39 |
-| Commandes | 960 |
+| Commandes | 963 |
 | Sous-agents | 1 |
-| Commits | 60 |
+| Commits | 61 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -79,6 +79,8 @@
 **Tour 26** — <goal_round> Objective: "Réaliser les 6 nouveaux chantiers du projet qtrinet-core, dans l'ordre : (1) relancer le test de l'aiguille sur contexte long (remplissage varié en vrai texte, moins de sondes, réponses plus longues) sur un modèle capable, grâce au préremplissage par lots et au KV déporté ; (2) chemin GPU : dépaquetage vectorisé du noyau d'attention (13,2 ms/couche à 1 M en int4 vers ~3 ms … [1492 caractères tronqués]
 
 **Tour 27** — <goal_round> Objective: "Réaliser les 6 nouveaux chantiers du projet qtrinet-core, dans l'ordre : (1) relancer le test de l'aiguille sur contexte long (remplissage varié en vrai texte, moins de sondes, réponses plus longues) sur un modèle capable, grâce au préremplissage par lots et au KV déporté ; (2) chemin GPU : dépaquetage vectorisé du noyau d'attention (13,2 ms/couche à 1 M en int4 vers ~3 ms … [1492 caractères tronqués]
+
+**Tour 28** — <goal_round> Objective: "Réaliser les 6 nouveaux chantiers du projet qtrinet-core, dans l'ordre : (1) relancer le test de l'aiguille sur contexte long (remplissage varié en vrai texte, moins de sondes, réponses plus longues) sur un modèle capable, grâce au préremplissage par lots et au KV déporté ; (2) chemin GPU : dépaquetage vectorisé du noyau d'attention (13,2 ms/couche à 1 M en int4 vers ~3 ms … [1492 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -1247,6 +1249,44 @@ L'objectif reste **actif** : la vision demande encore les deux conventions d'att
 - bash — Read Qwen2.5-VL position/window setup
 - bash — Document source findings and commit
 
+**Synthèse produite :**
+
+⏵ Tour 18 : la fenêtre locale est lue dans la source de llama.cpp
+
+\## Fait dans ce tour
+
+Deux résultats, dont un qui corrige une de mes suppositions.
+
+**L'hypothèse « image trop petite » est réfutée** : 336 × 336 échoue exactement comme 84 × 84 (`rc=2`, erreur de prétraitement du média). Le blocage `mtmd_tokenize` n'est donc pas une question de taille — c'était ma dernière hypothèse simple, et elle est tombée par la mesure.
+
+**La fenêtre locale est maintenant lue dans la source** (`tools/mtmd/clip.cpp`, récupéré et dépouillé) : ce n'est **pas** une fenêtre par ligne comme je l'avais supposé, mais une **permutation + un masque** — sur les couches fenêtrées, les jetons d'une même fenêtre sont rendus contigus (`window_idx` / `inv_window_idx`) et un masque ne laisse voir que la fenêtre, laquelle est un **bloc carré** de la grille *après* fusion 2 × 2 :
+
+```cpp
+for (int y = 0; y < ph; y += grid_window)
+  for (int x = 0; x < pw; x += grid_window) { ... }
+```
+
+**La rotation 2-D est localisée** : elle n'est pas dans `clip.cpp`, qui calcule un tenseur `positions` et le passe au graphe où les opérations GGML appliquent le mRoPE. C'est donc le calcul de `positions` qu'il faut lire — la zone est identifiée (offset ~264 000 du fichier) et c'est le pas suivant, désormais précis.
+
+\## État
+
+| # | chantier | état |
+|---|---|---|
+| 1-4, 6 | aiguille · GPU (5 sous-items) · mémoire KV · rotation 16 k · hygiène | ✅ mesurés |
+| 5 | MLA ✅ (5,2e-7) · vision : 4 tranches validées, tour complète, injection branchée ; fenêtre locale **convention connue** (source), rotation 2-D **localisée** | en cours |
+
+`cargo test` 6/6, portes Qwen **19,3885** / gpt-oss **15,1757** intactes, arbre propre.
+
+L'objectif reste **actif**. La lecture de la source est la voie qui avance — contrairement à la rétro-ingénierie de `mtmd_tokenize`, qui a consommé cinq tours pour rien. Le prochain tour lit le calcul de `positions` (une trentaine de lignes au même endroit) et implémente enfin la rotation mRoPE et la fenêtre locale.
+
+### Tour 28 — <goal_round> Objective: "Réaliser les 6 nouveaux chantiers du projet qtrinet-core, dans l'ordre : (1) relancer le test d … [1772 caractères tronqués]
+
+*3 appels d'outils.* Actions notables :
+
+- bash — Read positions computation for mRoPE
+- bash — Read Qwen2.5-VL positions block
+- bash — Document mRoPE convention and commit
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -1339,7 +1379,7 @@ L'objectif reste **actif** : la vision demande encore les deux conventions d'att
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 920 autres
+- … et 923 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1547,4 +1587,5 @@ L'objectif reste **actif** : la vision demande encore les deux conventions d'att
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat >> docs/plan-mla-vision.md <<'EOF'  ### tokenize : deux hypothèses testées, aucune ne suffit  Après le
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat >> docs/plan-mla-vision.md <<'EOF'  ### L'API de mtmd est maintenant CONNUE (en-tête récupéré)  `mtmd.
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat >> docs/plan-mla-vision.md <<'EOF'  ### Les deux conventions, lues dans la SOURCE de llama.cpp (clip.c
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat >> docs/plan-mla-vision.md <<'EOF'  ### La convention de rotation 2-D, lue dans la source  `clip.cpp`,
 
