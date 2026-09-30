@@ -1770,6 +1770,13 @@ fn recevoir_flux(s: &mut std::net::TcpStream, hidden: usize) -> std::io::Result<
     // Le mode est vérifié AVANT de lire le moindre octet de corps : un mode
     // inconnu se refusait après avoir lu `n × 4` octets et s'être désynchronisé,
     // en disant « mode inconnu » — exact, tardif, et muet sur la cause.
+    // Règle R4, première moitié : un flux à ZÉRO élément est un bug du pair, pas
+    // une donnée — le plan l'annonçait, le code ne le vérifiait pas (relevé par le
+    // second audit de cohérence).
+    if n == 0 {
+        return Err(std::io::Error::new(std::io::ErrorKind::InvalidData,
+            "flux à zéro élément : refusé (règle R4 de docs/plan-prefill-reparti.md)"));
+    }
     match mode {
         MODE_DENSE | MODE_LISTE | MODE_BLOCS | MODE_LOT | MODE_LOT_LISTES => {}
         autre => return Err(std::io::Error::new(std::io::ErrorKind::InvalidData,
@@ -3578,6 +3585,18 @@ mod tests_plafond {
         let x = f.charge.en_dense(896);          // ne doit pas paniquer
         assert_eq!(x.len(), 896);
         assert!(x.iter().all(|v| *v == 0.0), "un indice hors dimension est ignoré");
+    }
+
+    #[test]
+    fn un_flux_a_zero_element_est_refuse() {
+        // Règle R4 : « n == 0 » est un bug du pair, pas une donnée. Le plan
+        // l'annonçait ; le code ne le faisait pas (second audit de cohérence).
+        let r = decoder_une_trame(MODE_DENSE, 0, Vec::new(), 896);
+        assert!(r.is_err(), "un flux de zéro canal doit être refusé");
+        let msg = format!("{}", r.err().unwrap());
+        assert!(msg.contains("zéro"), "le refus doit dire pourquoi : {msg}");
+        let r = decoder_une_trame(MODE_LOT, 0, Vec::new(), 896);
+        assert!(r.is_err(), "un lot de zéro état doit être refusé");
     }
 
     #[test]

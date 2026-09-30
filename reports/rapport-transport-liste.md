@@ -7,7 +7,7 @@ dire où.
 
 ## Le protocole, mesuré
 
-Deux modes dans le même en-tête de 39 octets — magie, version, mode, plage,
+Deux modes dans le même en-tête (39 octets à l'époque de ces mesures, **79** depuis que les top-k voyagent) — magie, version, mode, plage,
 position, dimension, échelle, **et les réglages d'activation** :
 
 | mode | contenu | octets par flux (Qwen2.5-0.5B, 896 canaux) |
@@ -85,7 +85,7 @@ hypothèse réfutée vaut mieux qu'un mode « presque juste » qu'on aurait gard
 
 * `--flux-liste` : le pilote envoie des listes ; le nœud moteur suit le mode reçu.
 * **Version dans chaque en-tête** (3.5) : un pair en version 99 est refusé avec
-  `flux en version 99, cette build parle la 4 (pair incompatible : rien n'a été
+  `flux en version 99, cette build parle la 5 (pair incompatible : rien n'a été
   interprété)` — vérifié avec un client Python qui envoie un faux en-tête.
 * **Les réglages d'activation voyagent** : niveaux, seuil, top-k, renorm. Deux
   nœuds lancés avec des seuils différents calculaient deux choses différentes en

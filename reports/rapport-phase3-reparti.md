@@ -60,7 +60,7 @@ processus**, pas seulement en rejeu local ; la séparation en nœuds ne coûte
 aucune fidélité ; la norme finale a une règle écrite (`flux_brut`).
 
 Pas établi : le coût. Aujourd'hui le flux voyage en **f32 dense, 3 663 octets par
-flux** (20 d'en-tête + 896 × 4) — soit 3,2 ko par couche d'état, alors que le
+flux** (79 d'en-tête + 896 × 4) — soit 3,6 ko par couche d'état, alors que le
 disque sait déjà écrire la même information en **6 octets par neurone actif**.
 C'est le prochain chantier (3.2) : faire voyager la LISTE, pas le vecteur dense,
 et mesurer octets par jeton × latence.

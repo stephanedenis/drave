@@ -171,8 +171,9 @@ d'une position entière ; une valeur ne fait que pondérer la sortie, son erreur
 moyenne.
 
 Conséquence utilisable tout de suite : `DRAVE_KV_BITS=8 DRAVE_KV_K_F32=1` donne un
-cache à **75 % de la taille f32** pour +0,02 % de perplexité, là où l'int8 complet
-(50 %) coûte +3,0 %. Notre quantificateur de VALEURS est donc bon ; c'est celui
+cache à **64 % de la taille f32** pour +0,023 % de perplexité, là où l'int8 complet
+(28 %) coûte +3,04 %. Puis les clés en f16 ont pris sa place : **39 % pour
++0,018 %**. Notre quantificateur de VALEURS est donc bon ; c'est celui
 des CLÉS qui est le maillon faible.
 
 La **courbe complète du placement des bits** est faite depuis

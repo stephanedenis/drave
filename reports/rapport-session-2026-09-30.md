@@ -1,8 +1,9 @@
 # Session du 30/09 — index des chantiers
 
-Deux créneaux : 10h06–11h42 (time-box de 2 h) puis 11h46–15h00 (autonomie et
-parallélisme). Trente-cinq commits, deux campagnes de mesure lourdes, cinq
-relectures déléguées. Chaque chiffre a son rapport ; ceci est l'index.
+Trois créneaux : 10h06–11h42 (time-box de 2 h), 11h46–15h00 puis 15h07–18h00
+(autonomie et parallélisme). Les commits, les campagnes de mesure lourdes et les
+relectures déléguées sont comptés dans le journal ; ce document est l'index des
+chantiers, pas le décompte. Chaque chiffre a son rapport ; ceci est l'index.
 
 ## Ce qui est livré
 

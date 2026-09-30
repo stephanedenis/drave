@@ -7,12 +7,12 @@
 | Début | 2026-09-28 14:46 |
 | Durée | 48.7 h |
 | Tours | 46 |
-| Messages | 1883 |
-| Appels d'outils | 1776 |
+| Messages | 1887 |
+| Appels d'outils | 1780 |
 | Fichiers touchés | 44 |
-| Commandes | 1449 |
+| Commandes | 1453 |
 | Sous-agents | 9 |
-| Commits | 147 |
+| Commits | 148 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -2117,7 +2117,7 @@ L'**audit des drapeaux** a trouvé que **46 options sur 110** étaient ignorées
 
 ### Tour 46 — continue jusqu'à 18h HAE
 
-*38 appels d'outils.* Actions notables :
+*42 appels d'outils.* Actions notables :
 
 - bash — Check time, timezone and remaining budget
 - create_goal
@@ -2133,11 +2133,11 @@ L'**audit des drapeaux** a trouvé que **46 options sur 110** étaient ignorées
 - bash — Improve notebook with real text cell
 - bash — Kill test node safely and check notebook
 - bash — Add notebook real-text cell and commit
-- … et 24 autres
+- … et 28 autres
 
 **Synthèse produite :**
 
-**Mode 4 vérifié : écart 3,03e-2 (≤ 1,5 × le mode 2) et 1,5 ko par jeton au lieu de 3,5 — ÷2,3 exactement.** Je verrouille : portes, docs, commit.
+⏵ Je traite les 15 corrections du second audit : d'abord les chiffres faux (dont mon « 75 % » qui vaut 64 %), puis les époques d'en-tête.
 
 ## 3. Travail accompli
 
@@ -2244,7 +2244,7 @@ L'**audit des drapeaux** a trouvé que **46 options sur 110** étaient ignorées
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 1409 autres
+- … et 1413 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2539,4 +2539,5 @@ L'**audit des drapeaux** a trouvé que **46 options sur 110** étaient ignorées
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && (cd drave-core && cargo test --release 2>&1 | grep -E "^test .*FAILED|assertion" | head -3); python3 - <<'
 - Documents : protocole v5 et mode 4 (lot en listes)  format-flux décrit le mode 4 (chaque état auto-délimité par ses trois tailles) et son coût mesuré ; la feuil
 - Cache KV : la frontière tient à 4 096 comme à 8 192  Refait à contexte 4 096 : référence 12,2175 · clés f16 + valeurs int8 **+0,011 %** · int8/int8 **+2,25 %**.
+- Corrections du second audit (1/2) : chiffres, époques, comptes, et la journée au README  - Les pourcentages du cache KV : « 75 % / 50 % » était une ERREUR de ma
 

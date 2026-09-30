@@ -30,8 +30,9 @@ relatif de toute une position. Une valeur ne fait que pondérer la sortie — so
 erreur se moyenne. Le résultat est net : **les bits doivent aller aux clés**.
 
 Conséquence immédiate, utilisable aujourd'hui : `DRAVE_KV_BITS=8
-DRAVE_KV_K_F32=1` donne un cache à **75 % de la taille f32** pour +0,02 % de
-perplexité — alors que l'int8 complet (50 % de la taille) coûte +3,0 %. C'est le
+DRAVE_KV_K_F32=1` donne un cache à **64 % de la taille f32** (5,125 octets par
+élément contre 8, échelles comprises) pour +0,02 % de perplexité — alors que
+l'int8 complet (28 %, soit 2,25 octets) coûte +3,0 %. C'est le
 premier réglage KV qui soit à la fois plus petit ET gratuit en qualité.
 
 Perspective : llama.cpp paie +0,8 % pour son cache int8 à la même longueur. Notre
@@ -41,7 +42,7 @@ partout.
 
 ## Les deux expériences que ça ouvre
 
-1. **clés f32 · valeurs int4** : 62,5 % de la taille f32 (1 + 0,25 sur 2). Si les
+1. **clés f32 · valeurs int4** : 58 % de la taille f32 (4 + 0,625 sur 8). Si les
    valeurs tolèrent 4 bits aussi bien que 8, ce réglage bat l'int8 complet en
    taille *et* en qualité.
 2. **un meilleur quantificateur de clés** : échelle par tête plutôt que par bloc

@@ -17,7 +17,7 @@ réseau.
 
 ```
 en-tête   "DRVF"                    4 octets
-          version      u16          = 1
+          version      u16          = 2 (défaut) ou 3 (`DRAVE_TRACE_BLOCS=1`)
           n_couches    u32
           cachés       u32
 liste     couche       u16          < 1000 : entrée d'attention

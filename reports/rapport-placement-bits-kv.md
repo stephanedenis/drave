@@ -2,7 +2,7 @@
 
 **En une ligne** : à taille ÉGALE, mettre les bits sur les **clés** plutôt que sur
 les valeurs change l'erreur d'un facteur **130 à 840** — et les clés en f16
-donnent 39 % de la taille f32 pour +0,06 %.
+donnent 39 % de la taille f32 pour **+0,018 %**.
 
 ## Le tableau
 
@@ -73,10 +73,9 @@ VALEURS, qui n'est pas le maillon faible, ou qu'on rogne les clés sous le f16.
 
 `DRAVE_KV_K_F16=1` stocke les clés en demi-précision (2 octets par valeur, aucune
 échelle) : la précision est RELATIVE (2⁻¹¹ par valeur) au lieu d'être une erreur
-ABSOLUE de bloc/254 — ce qui écrase les petits canaux d'une clé. À contexte 256,
-c'est **+0,057 %** contre +2,15 % pour int8/int8, pour 3,125 octets par élément
-(39 % du f32). La campagne à 8 192 jetons est en cours ; les deux lignes
-correspondantes du tableau se rempliront toutes seules.
+ABSOLUE de bloc/254 — ce qui écrase les petits canaux d'une clé. Mesuré à
+8 192 jetons : **+0,018 %** pour 3,125 octets par élément (**39 %** du f32), et à
+4 096 : +0,011 % — dans les deux cas le meilleur point de la courbe.
 
 ## La frontière tient-elle à un AUTRE contexte ?
 

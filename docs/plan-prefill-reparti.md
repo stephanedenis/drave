@@ -3,7 +3,7 @@
 > **État (30/09, après mise en œuvre).** Ce plan a été suivi : le mode 3 existe,
 > le préremplissage par lots est fidèle (écart **0,00e0** en 4 lots de 64 comme en
 > un seul lot) et `reports/rapport-prefill-reparti.md` consigne les mesures. Trois
-> écarts au plan, tous volontaires : la version du protocole est passée à **4** (et
+> écarts au plan, tous volontaires : la version du protocole est passée à **5** (et
 > non 3) parce que le contrat d'activation transporte désormais aussi les top-k ;
 > l'échappement d'indice du mode blocs s'écrit sur **deux** octets (le plan le
 > disait, le code en écrivait quatre) ; et la règle R4 (plafond de 256 Mo) est
@@ -263,7 +263,7 @@ par contrat (R2).
    suivante, donc l'erreur n'apparaîtrait qu'à la génération, loin de sa cause.
    C'est la même classe que la clé `(couche, position)` de la phase 0, qui avait
    donné 356 694 de perplexité.
-3. *En diagnostic* : `DRAVE_FLUX_POS=1` fait imprimer `[flux] lot pos .. pos+t-1`
+3. *En diagnostic* : `DRAVE_DEBUG_FLUX=1` fait imprimer `[flux] lot pos .. pos+t-1`
    des deux côtés ; deux lignes qui divergent désignent le découpage fautif.
 
 **Dépassement de contexte.** Il n'y a pas de « continuation » implicite : si

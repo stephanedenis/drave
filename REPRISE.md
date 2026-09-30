@@ -13,7 +13,7 @@
 
 ## 1. En une phrase
 
-`drave-core` est un moteur d'inférence Rust (~11 440 lignes, `std` seul) qui
+`drave-core` est un moteur d'inférence Rust (~11 901 lignes, `std` seul) qui
 charge les GGUF **en place** (aucune copie, aucune requantification), exécute les
 projections soit en listes d'événements, soit en produit scalaire dense, gère les
 MoE, tient une conversation, et déporte au GPU ce qui y gagne. Il fait tourner du
@@ -32,7 +32,7 @@ cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && cargo build --r
 
 > **Revérifiées le 30/09 après tous les changements de la journée** (mode lot,
 > protocole v4, DRVF v2/v3, plafond R4, tableau de bord) : Qwen ctx 256 =
-> **19,3885** et gpt-oss ctx 256 = **15,1757**, `cargo test` **11/11**. La porte
+> **19,3885** et gpt-oss ctx 256 = **15,1757**, `cargo test` **13/13**. La porte
 > gpt-oss était la seule que la relecture adversariale n'avait pas pu faire
 > tourner (bornes de temps) ; elle est verte.
 >
@@ -242,7 +242,7 @@ qui reste est classé par rentabilité mesurée.
 | `DRAVE_GPU_KV=1` | tient le cache KV en VRAM et y calcule l'attention | inutile sans `DRAVE_GPU` ; au-dessous de ~4 000 clés le CPU gagne (lancements + recopies) |
 | `DRAVE_GPU_EXPERTS=1` | cache LRU des experts MXFP4 en VRAM | inutile sans `DRAVE_GPU` ; budget par `DRAVE_GPU_EXPERTS_GO` (défaut 8) |
 | `DRAVE_KV_BITS=8` ou `4` | quantifie le cache KV (défaut f32) | le 4 bits coûte +364 % de perplexité à 8 192 |
-| `DRAVE_KV_K_F32=1` | garde les CLÉS en f32 (valeurs quantifiées) | **le bon compromis mesuré** : à 8 192, 75 % de la taille f32 pour +0,02 % de perplexité, contre +3,0 % pour l'int8 complet — l'écart int8 vient des clés à 99 % (`reports/rapport-attribution-kv.md`) |
+| `DRAVE_KV_K_F32=1` | garde les CLÉS en f32 (valeurs quantifiées) | mesuré : à 8 192, **64 %** de la taille f32 (5,125 octets par élément, échelles comprises) pour +0,023 %, contre +3,04 % pour l'int8 complet (28 % de la taille) — l'écart int8 vient des clés à 99 % (`reports/rapport-attribution-kv.md`) |
 | `DRAVE_KV_V_F32=1` | garde les VALEURS en f32 | +3,01 % : ne sert à rien, l'erreur ne passe pas par là |
 | `DRAVE_KV_K_F16=1` | clés en **f16** (2 octets/valeur, précision relative) | **le meilleur réglage mesuré** : à 8 192 jetons, clés f16 + valeurs int8 = **+0,018 %** pour **39 % de la taille f32** — contre +0,023 % pour les clés f32 (64 % de la taille) et +3,04 % pour l'int8 complet (28 %) |
 | `DRAVE_TRACE_BLOCS=1` | trace DRVF **v3** : valeurs i8, échelle f16 par bloc de 32 | 45 079 930 o contre 66 370 408 en v2 (−32 %), rejeu 19,4029 contre 19,3885 (+0,074 %) |
@@ -294,8 +294,8 @@ dense, listes, blocs et **lot** ; `--flux-serveur` accepte `hôte:port`, et
 
 | | octets par flux | écart local/réparti |
 |---|---|---|
-| dense f32 | 3 623 | **0,00e0** |
-| listes i16, seuil 0,01 | ~2 300 | 2,7e-2 |
+| dense f32 | 3 663 | **0,00e0** |
+| listes à échelle par bloc, seuil 0,01 | 1 608 | 2,7e-2 |
 | échelles par bloc, seuil 0,01 | 2 268 | 2,7e-2 |
 
 `TCP_NODELAY` a divisé l'attente du pair par six (**97,6 → 16,1 ms** par jeton,
@@ -321,7 +321,7 @@ besoin du résidu lui-même. Drapeau retiré, réfutation écrite.
 
 **Le préremplissage par lots sur le fil est FAIT** (mode 3 du protocole) : N états
 d'un coup au lieu d'un flux par jeton. Vérifié : 256 jetons en 4 lots de 64 →
-**écart 0,00e0** (18,0851 = 18,0851) ; en UN lot de 917 543 octets → **0,00e0**
+**écart 0,00e0** (18,0851 = 18,0851) ; en UN lot de 917 583 octets → **0,00e0**
 aussi. C'était le bloqueur de la phase 3.4 ; `colab/` contient maintenant le
 notebook prêt à ouvrir, `tools/preparer_colab.sh` fait le dépôt en un fichier
 (`git bundle`, 4,5 Mo — il n'y a pas de dépôt distant) et vérifie l'empreinte du

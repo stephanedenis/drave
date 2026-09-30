@@ -30292,3 +30292,53 @@ roadmap : 3.2 et journal à jour
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/rapport-placement-bits-kv.md'; s=open(p).read()\nv = \"\"\"## Reproductible\"\"\"\nn = \"\"\"## La frontière tient-elle à un AUTRE contexte ?\n\nLes mesures de référence sont à 8 192. Refaites à **4 096** … [1693 caractères tronqués]`
+
+  ```
+rapport KV : section 4 096
+ac7f593 Cache KV : la frontière tient à 4 096 comme à 8 192
+15:30:11
+  ```
+
+### 🤖 Assistant
+
+⏵ Je traite les 15 corrections du second audit : d'abord les chiffres faux (dont mon « 75 % » qui vaut 64 %), puis les époques d'en-tête.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\ndef rem(p, paires):\n    s = open(p).read(); ok = 0\n    for v, n in paires:\n        if s.count(v) >= 1:\n            s = s.replace(v, n); ok += 1\n        else:\n            print(f\"  ⚠ absent de {p} : {v[:65]}…\ … [5114 caractères tronqués]`
+
+  ```
+reports/rapport-attribution-kv.md : 2/2
+REPRISE.md : 1/1
+docs/roadmap.md : 1/1
+reports/rapport-placement-bits-kv.md : 2/2
+reports/rapport-transport-liste.md : 2/2
+docs/plan-prefill-reparti.md : 1/1
+docs/format-flux.md : 1/1
+README.md : 2/2
+REPRISE.md : 2/2
+  ⚠ absent de reports/rapport-session-2026-09-30.md : **Qwen ctx 256 = **19,3885**…
+reports/rapport-session-2026-09-30.md : 1/2
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/main.rs'; s=open(p).read()\ndef rem(nom, v, n):\n    global s\n    c = s.count(v)\n    if c != 1:\n        print(f\"  ✗ {nom} : {c}\"); return False\n    s = s.replace(v, n); print(f\"  ✓ {nom}\"); … [1942 caractères tronqués]`
+
+  ```
+✓ refus de n == 0
+  ✓ test n == 0
+R4 complète
+    Finished `release` profile [optimized] target(s) in 0.01s
+test result: ok. 14 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.13s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"3 623\\|~2 300\\|917 543\\|20 d'en-tête\\|11/11\" REPRISE.md reports/rapport-phase3-reparti.md | head -8; grep -n \"FPGA-Stratix\\|rapport-pe-evenementiel\" docs/vision.md | head -3; grep -n \"protocole v4\\|version 4\" doc … [118 caractères tronqués]`
+
+  ```
+REPRISE.md:297:| dense f32 | 3 623 | **0,00e0** |
+REPRISE.md:298:| listes i16, seuil 0,01 | ~2 300 | 2,7e-2 |
+REPRISE.md:324:**écart 0,00e0** (18,0851 = 18,0851) ; en UN lot de 917 543 octets → **0,00e0**
+reports/rapport-phase3-reparti.md:63:flux** (20 d'en-tête + 896 × 4) — soit 3,2 ko par couche d'état, alors que le
+109:(`reports/rapport-pe-evenementiel.md`), et le bilan multi-matériel
+int8_int8                  : perplexité 12.4921 sur 4095 tokens (0 événements, 619.2 s)
+cles_f32_valeurs_int8      :
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\ndef rem(p, paires):\n    s = open(p).read(); ok = 0\n    for v, n in paires:\n        if s.count(v) >= 1: s = s.replace(v, n); ok += 1\n        else: print(f\"  ⚠ absent de {p} : {v[:60]}…\")\n    open(p,'w').write( … [3565 caractères tronqués]`
