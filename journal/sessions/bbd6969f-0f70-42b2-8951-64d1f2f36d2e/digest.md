@@ -24741,3 +24741,34 @@ Porte gpt-oss : **15,1757** ✓ (inchangée). Machine libre — je vérifie l'en
 **÷2,3 sur le fil** (3 623 → 1 568 octets) à écart identique (2,74e-2) : l'encodage par écarts est sans perte. Je documente et je commit.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/rapport-transport-liste.md'; s=open(p).read()\nv = \"\"\"Donc la revendication honnête est : **÷1,6 sur le fil pour 2,7 % à 256 jetons de\nvrai texte** (et 13,7 % à 64 jetons : sur une séquence courte, l' … [4344 caractères tronqués]`
+
+  ```
+rapport : écarts documentés
+roadmap 3.2 : ÷2,3
+cb37c83 Transport : indices par écarts — 3 623 → 1 568 octets par flux, à quantification identique
+11:29:10
+  ```
+
+### 🤖 Assistant
+
+⏵ Dernière ligne droite : j'inscris les mesures de la session au journal de la feuille de route.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n 100,112p docs/roadmap.md", "description": "Read measurement log table"}`
+
+  ```
+calcul : c'est la raison pour laquelle la phase 0 sert la phase 3.
+
+
+## Journal des mesures de la phase 0
+
+| date | mesure | valeur |
+|---|---|---|
+| 2026-09-30 | trace du flux, Qwen2.5-0.5B, 512 jetons, 24 couches, 2 points par couche | 12 288 listes · **132 Mo** · 6 octets par neurone actif · **+8 % de temps** |
+| 2026-09-30 | calcul réparti sur deux processus (12 couches chacun), 40 jetons | écart local/réparti **0,00e0** (144,8289 = 144,8289) après correction de deux défauts ; avant : ×11,2 |
+| 2026-09-30 | diff KV f32 contre KV int8 (perplexité 19,3885 contre 19,8059) | première divergence couche 1 jeton 0 · couche la plus touchée FFN 2 (3,9 × la dynamique) · 229 000 neurones changés sur 24 couches |
+
+Le second point est exactement ce que la vision promettait : **la divergence est
+localisée**, pas seulement constatée. La première version de l'outil comparait les
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='docs/roadmap.md'; s=open(p).read()\nv = \"| 2026-09-30 | diff KV f32 contre KV int8 (perplexité 19,3885 contre 19,8059) | première divergence couche 1 jeton 0 · couche la plus touchée FFN 2 (3,9 × la dynamique) · … [1851 caractères tronqués]`
