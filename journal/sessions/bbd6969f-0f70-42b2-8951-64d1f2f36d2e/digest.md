@@ -30275,3 +30275,20 @@ test result: ok. 13 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; fin
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat /tmp/kv_4096.log; date +\"%H:%M:%S\"; python3 - <<'PY'\np='docs/format-flux.md'; s=open(p).read()\ndef rem(nom, v, n):\n    global s\n    c = s.count(v)\n    if c != 1:\n        print(f\"  ✗ {nom} : {c}\"); return False\n    s =  … [3639 caractères tronqués]`
+
+  ```
+f32_f32 (reference)        : perplexité 12.2175 sur 4095 tokens (0 événements, 283.6 s)
+cles_f16_valeurs_int8      : perplexité 12.2188 sur 4095 tokens (0 événements, 344.5 s)
+int8_int8                  : perplexité 12.4921 sur 4095 tokens (0 événements, 619.2 s)
+cles_f32_valeurs_int8      : 15:29:47
+  ✓ titre protocole
+  ✓ version
+  ✓ modes
+  ✓ corps
+  ✗ message v5 : 0
+  ✓ mode 4 note
+roadmap : 3.2 et journal à jour
+6b6ac17 Documents : protocole v5 et mode 4 (lot en listes)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/rapport-placement-bits-kv.md'; s=open(p).read()\nv = \"\"\"## Reproductible\"\"\"\nn = \"\"\"## La frontière tient-elle à un AUTRE contexte ?\n\nLes mesures de référence sont à 8 192. Refaites à **4 096** … [1693 caractères tronqués]`

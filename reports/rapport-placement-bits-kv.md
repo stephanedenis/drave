@@ -78,6 +78,28 @@ c'est **+0,057 %** contre +2,15 % pour int8/int8, pour 3,125 octets par élémen
 (39 % du f32). La campagne à 8 192 jetons est en cours ; les deux lignes
 correspondantes du tableau se rempliront toutes seules.
 
+## La frontière tient-elle à un AUTRE contexte ?
+
+Les mesures de référence sont à 8 192. Refaites à **4 096** (mêmes 4 095 jetons
+notés, mêmes commandes avec `--ctx 4096`) :
+
+| réglage | 4 096 (PPL) | écart | 8 192 (rappel) | écart |
+|---|---|---|---|---|
+| f32 · f32 (référence) | **12,2175** | — | 14,2339 | — |
+| clés f16 · valeurs int8 | **12,2188** | **+0,011 %** | 14,2365 | +0,018 % |
+| int8 · int8 | 12,4921 | **+2,25 %** | 14,6667 | +3,04 % |
+| clés f32 · valeurs int8 | *(en cours)* | | 14,2372 | +0,023 % |
+
+**Le classement tient** : à 4 096 comme à 8 192, les clés en f16 avec des valeurs
+int8 restent collées à la référence (deux centièmes de pour cent) pendant que
+l'int8 des deux côtés coûte plus de deux pour cent. La conclusion « les bits
+doivent aller aux clés, et le f16 est le bon compromis » n'est donc pas un
+artefact d'une longueur de contexte.
+
+Détail rassurant au passage : la référence à 4 096 (**12,2175**) est exactement
+celle que le dépôt avait mesurée pour le banc du KV déporté — les deux chemins
+redisent le même chiffre à un an d'intervalle.
+
 ## Reproductible
 
 ```bash
