@@ -5,12 +5,12 @@
 | Identifiant | `bcfe0b97-1795-4610-8e8b-b598ca1ba6cb` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-30 12:20 |
-| Durée | 0.2 h |
+| Durée | 0.3 h |
 | Tours | 1 |
-| Messages | 69 |
-| Appels d'outils | 78 |
+| Messages | 86 |
+| Appels d'outils | 95 |
 | Fichiers touchés | 0 |
-| Commandes | 59 |
+| Commandes | 73 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -23,7 +23,7 @@
 
 ### Tour 1 — Tu es relecteur ADVERSARIAL dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (projet « Drave » : moteur d'i … [4103 caractères tronqués]
 
-*78 appels d'outils.* Actions notables :
+*95 appels d'outils.* Actions notables :
 
 - bash — List recent commits and status
 - bash — List repo structure and source sizes
@@ -39,11 +39,11 @@
 - bash — Inspect concurrent uncommitted edits
 - bash — Extract HEAD and cda3162 sources to /tmp
 - bash — Check models, data and existing binary/traces
-- … et 48 autres
+- … et 62 autres
 
 **Synthèse produite :**
 
-⏵ Le parent vient de committer DRVF v3 : je recale l'audit sur ce nouvel état
+⏵ Test croisé : ancien binaire v3 (39 o) contre nouveau (79 o)
 
 ## 3. Travail accompli
 
@@ -94,7 +94,7 @@
 - **T1** Read single-token trace key scheme
 - **T1** Check claims in prefill report
 - **T1** Run fake peer with dense client
-- … et 19 autres
+- … et 33 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -166,11 +166,25 @@
 - **T1** `DRVF v3 : −66 % de trace au total, pour +0,074 % de perplexité`
 - **T1** `| erreur par valeur | — | nulle | RMS 0,085 % du max |`
 - **T1** `Soit −65,9 % depuis la v1 pour +0,074 % de perplexité. La v3 est AVEC PERTE, donc`
+- **T1** `| trace dense, 512 jetons | 66 370 408 o | **45 079 930 o (−32,1 %)** |`
+- **T1** `| rejeu `--flux-forcer` | 19,3885 | **19,4029 (+0,074 %)** |`
+- **T1** `| neurones actifs | 22 008 776 | 21 630 645 (−1,7 % : les valeurs qui s'arrondissent à zéro ne sont pas écrites) |`
+- **T1** `| erreur par valeur | nulle | RMS **0,085 %** du max de la liste (max 0,394 %) |`
+- **T1** `26521:perplexité 1958.7210 sur 510 tokens`
+- **T1** `26600:=== perplexité 1958.7210 sur 510 tokens (0 événements, 23.2 s) ===`
+- **T1** `trace] 24576 listes · 22008776 neurones actifs · 66 Mo`
+- **T1** `perplexité 19.3885 sur 510 tokens`
+- **T1** `perplexité 1958.7210 sur 510 tokens`
+- **T1** `Le rejeu v2 est bon (19,3885, −49,87 % de taille) mais l'ancienne trace v1 ne se relit plus : je vérifie l'hypothèse d'un en-tête historique de 16 octets.`
+- **T1** `=== perplexité 19.3885 sur 510 tokens (0 événements, 21.9 s) ===`
+- **T1** `=== perplexité 1958.7210 sur 510 tokens (0 événements, 23.2 s) ===`
 
 ## 5. Erreurs rencontrées
 
-2 sorties en erreur ou divergentes. Les premières :
+4 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : [attention] QT_IM_SWITCHER est l'ancien nom d'une variable d'environnement : elles s'appellent maintenant DRAVE_* (voir docs/histoire.md). Rien n'a été appliqué.  thread 'main' (391048) panicked at sr
 - **T1** : (no output) [exit code: 1]
+- **T1** : |         ^^^^^^^^^^^^ help: use shorthand field pattern: `mut ids`     |     = note: `#[warn(non_shorthand_field_patterns)]` on by default  [exit code: 2]
+- **T1** : ########## 1. SERVEUR ANCIEN (cda3162, en-tête 39 o) + CLIENT NOUVEAU (HEAD, 79 o)   client nouveau exit=134   --- serveur ancien : [flux] arrêt : magie de flux absente [flux] 1 flux servis   --- clie
 

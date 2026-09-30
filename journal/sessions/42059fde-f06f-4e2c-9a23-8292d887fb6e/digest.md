@@ -2761,3 +2761,237 @@ ae85043 12:30
 … [81 caractères tronqués]
   ```
 
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-coherence-docs.md", "limit": 30, "offset": 52}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-coherence-docs.md</path>
+<type>file</type>
+<content>
+52: | 10 | `docs/format-flux.md:49` | « Le lecteur lit **les deux versions** [1 et 2] » | le lecteur lit **1, 2 et 3** (model.rs:691-693, version non commitée) — la v3 n'est documentée nulle part | MANQUANT |
+53: | 11 | `docs/format-flux.md:137` (invariant « deux implémentations ») | Rust et Python lisent le même fichier | `tools/flux_codec.py:62` refuse encore la v3 (`version in (1, 2)`) : l'invariant ne tient plus pour la trace que le code commence à écrire | MANQUANT |
+54: | 12 | `docs/format-flux.md:141` et `docs/roadmap.md:55` | « 40 puis **199 flux** » à 40 et 200 jetons | depuis `2184fc5`, les flux envoyés valent N−1 (le dernier jeton est sauté) : **39** à 40 jetons, 199 à 200 | PÉRIMÉ |
+55: | 13 | `REPRISE.md:251`, `docs/roadmap.md:116`, `reports/rapport-phase3-reparti.md:51` | « 1 024 jetons (**1 024 flux**) » | le même correctif `2184fc5` (11:41, **après** ces trois textes) donne **1 023 flux** ; le message du commit dit lui-même « 255 flux au lieu de 256 » à 256 jetons | PÉRIMÉ |
+56: 
+57: ## 2. En-tête, champs, modes
+58: 
+59: | # | document | affirma
+… [3787 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '100,112p' reports/rapport-coherence-docs.md", "description": "Voir les lignes 100-112 du rapport"}`
+
+  ```
+| # | document | affirmation | ce que dit le code / la mesure | verdict |
+|---|---|---|---|---|
+| 45 | `README.md:34` | « Croisement push/pull à **10 %** de densité ✅ mesuré » | `reports/rapport-croisement-push-pull.md:43` : « **~22 %** … pas à 10 » ; le README lui-même le dit ligne 389 | CONTRADICTOIRE |
+| 46 | `docs/vision.md:46,133,198` et `docs/histoire.md:12` | croisement « mesuré » à **10 %** | 22 % (rapport de référence + REPRISE §5.1 + `docs/convertisseur.md:225`) | CONTRADICTOIRE |
+| 47 | `README.md:280` | « le moteur tient en **386 lignes** » | 11 440 lignes aujourd'hui (main.rs 3 112, model.rs 3 872) ; 386 était l'état initial (`rapport-optimisations.md:3`) | PÉRIMÉ |
+| 48 | `README.md:354` | « **2 319 lignes** de Rust » | idem : chiffre de `rapport-inference.md:3`, dépassé (11 440) | PÉRIMÉ |
+| 49 | `REPRISE.md:16` | « ~**5 000** lignes » | 11 440 lignes de `.rs` (dont 6 984 pour main+model) | PÉRIMÉ |
+| 50 | `docs/contexte-long.md:103` | E5 attention creuse « **à faire** » | le même document donne les résultats §6 (234,88 contre 298,56) et `REPRISE.md:152` la classe « fait pour E4/E5 » | CONTRADICTOIRE |
+| 51 | `docs/contexte-long.md:103` | KV int4 « mesuré : **+384 %*
+… [798 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '95,100p' reports/rapport-coherence-docs.md && echo \"===\" && sed -n '130,140p' reports/rapport-coherence-docs.md", "description": "Voir les lignes 44 et 69"}`
+
+  ```
+| 43 | `docs/format-flux.md:143` | « `--topk-q 900` contre `--topk-q 4` → 0,00e0 (vérifié) » | la vérification date d'**avant** `d59d061` : à l'époque les top-k n'étaient ni appliqués ni transportés dans les modes flux (`rapport-drapeaux-ignores.md:72`), donc l'égalité était tautologique. Jamais re-mesurée depuis | MANQUANT |
+| 44 | `reports/rapport-compacite-trace.md:13-14` | « restent à faire : valeurs i8 (−60,9 %), échelles f16 (−63,5 %), zstd (−79 %) » | la v3 non commitée implémente déjà i8 + échelles f16 par bloc (`model.rs:570-610`) | PÉRIMÉ |
+
+## 4. Autres chiffres (perplexités, densité, tailles)
+
+| # | document | affirmation | ce que dit le code / la mesure | verdict |
+===
+## 6. Drapeaux, variables, renvois et phrases cassées
+
+| # | document | affirmation | ce que dit le code / la mesure | verdict |
+|---|---|---|---|---|
+| 67 | `docs/vision.md:69` | `--profil-experts` « quels experts sont choisis (MoE) » | ce drapeau **n'existe pas** ; seuls `--profil-neurones` et `--neurones-sortie` existent | PÉRIMÉ |
+| 68 | `docs/plan-prefill-reparti.md:256` | `DRAVE_FLUX_POS=1` imprime `[flux] lot pos …` | variable absente du code | PÉRIMÉ |
+| 69 | `model.rs:526,549`, `main.rs` | `DRAV
+… [1084 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && wc -l drave-core/src/*.rs | tail -3 && wc -l drave-core/src/main.rs drave-core/src/model.rs && git status --short", "description": "Mesurer les fichiers après le commit v3"}`
+
+  ```
+3872 drave-core/src/model.rs
+   507 drave-core/src/tokenizer.rs
+ 11449 total
+  3112 drave-core/src/main.rs
+  3872 drave-core/src/model.rs
+  6984 total
+ M journal/README.md
+?? reports/rapport-coherence-docs.md
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-coherence-docs.md", "new_string": "| | |\n|---|---|\n| Commit de référence | `ae85043` (2026-09-30 12:30) |\n| `drave-core/src/main.rs` | sha256 `d5e90136…` · 3 112 lignes |\n| `drave-core/src/model.rs` | sha256 `3e5dde2d … [2560 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-coherence-docs.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-coherence-docs.md", "new_string": "| 10 | `docs/format-flux.md:64` | « Le lecteur lit **les deux versions** » | le lecteur lit **1, 2 et 3** (model.rs:691-693) — et le même document l'écrit correctement ligne 156 (« v1/v2 … [803 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-coherence-docs.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-coherence-docs.md", "new_string": "| 44 | `reports/rapport-compacite-trace.md:13-14` | « restent à faire : valeurs i8 (−60,9 %), échelles f16 (−63,5 %), zstd (−79 %) » | i8 + échelles f16 par bloc sont **faits et commités … [390 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-coherence-docs.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-coherence-docs.md", "new_string": "| 69 | `model.rs:526,549` | `DRAVE_TRACE_BLOCS` (trace v3) | documentée depuis `ae85043` dans `docs/format-flux.md:49` (tableau v2/v3 et invariant ligne 156) — encore absente de `REPRISE … [284 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-coherence-docs.md has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && awk -F'|' '/^\\| [0-9]+ \\|/ {v=$(NF-1); gsub(/^ +| +$/,\"\",v); print v}' reports/rapport-coherence-docs.md | sort | uniq -c | sort -rn", "description": "Recompter les verdicts"}`
+
+  ```
+38 PÉRIMÉ
+     15 OK
+     15 CONTRADICTOIRE
+      9 MANQUANT
+      1 OK (source)
+      1 OK (2 o)
+      1 MANQUANT (précision)
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-coherence-docs.md", "new_string": "**En une ligne** : **80 affirmations** vérifiées une par une contre le code (et\ncontre les traces réelles du disque) ; **38 sont fausses (PÉRIMÉ)**, **15 se\ncontredisent entre document … [1032 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-coherence-docs.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-coherence-docs.md", "new_string": "| verdict | nombre | principaux foyers |\n|---|---:|---|\n| PÉRIMÉ | **38** | version du format de flux et du disque (7) · nombre de flux à 40 et 1 024 jetons (2) · en-têtes 26 et 39 oct … [2877 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-coherence-docs.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-coherence-docs.md", "new_string": "| PÉRIMÉ | **38** | version du format de flux et du disque (7) · nombre de flux à 40 et 1 024 jetons (2) · en-têtes 26 et 39 octets (3) · octets par flux, par lot et par neurone actif (8 … [648 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-coherence-docs.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-coherence-docs.md", "new_string": "10. **Documenter les variables qui restent dans l'ombre** : `DRAVE_BANC_KV_UNIT`,\n    `_V1`, `_GRAD`, `_KUNIT`, `_DEBUG` ne sont décrites nulle part,\n    `DRAVE_FLUX_VERIF` est muet en … [890 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-coherence-docs.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-coherence-docs.md", "new_string": "* Les performances et les perplexités « en vol » : aucune exécution du moteur n'a été\n  autorisée ici, donc les chiffres **recalculables** (3 663, 917 583, 1 419, 1 023)\n  sont des **c … [728 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-coherence-docs.md has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && awk -F'|' '/^\\| [0-9]+ \\|/ {v=$(NF-1); gsub(/^ +| +$/,\"\",v); print v}' reports/rapport-coherence-docs.md | sort | uniq -c | sort -rn && echo \"--- total lignes numérotées ---\" && grep -cE '^\\| [0-9]+ \\|' reports/rapport-cohere … [130 caractères tronqués]`
+
+  ```
+38 PÉRIMÉ
+     15 OK
+     15 CONTRADICTOIRE
+      9 MANQUANT
+      1 OK (source)
+      1 OK (2 o)
+      1 MANQUANT (précision)
+--- total lignes numérotées ---
+80
+226 reports/rapport-coherence-docs.md
+ M drave-core/src/model.rs
+ M journal/README.md
+?? reports/rapport-coherence-docs.md
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git diff --stat && git diff -- drave-core/src/model.rs | head -40", "description": "Vérifier le nouveau diff de model.rs"}`
+
+  ```
+drave-core/src/model.rs | 31 ++++++++++++++++++++++++++++++-
+ journal/README.md       |  7 ++++++-
+ 2 files changed, 36 insertions(+), 2 deletions(-)
+diff --git a/drave-core/src/model.rs b/drave-core/src/model.rs
+index acdca9e..268a75f 100644
+--- a/drave-core/src/model.rs
++++ b/drave-core/src/model.rs
+@@ -1068,6 +1068,14 @@ pub struct KvCache {
+     pub hd: usize,
+     kf: Vec<f32>,
+     vf: Vec<f32>,
++    /// `DRAVE_KV_K_F16=1` : les CLÉS sont stockées en f16, sans quantification
++    /// par bloc. Deux octets par valeur — plus que l'int8 (1,125 avec son échelle)
++    /// mais bien moins que le f32 (4) — et une précision RELATIVE de 2⁻¹¹ par
++    /// valeur, là où l'int8 à échelle par bloc a une erreur ABSOLUE de bloc/254
++    /// qui écrase les petits canaux. C'est le « meilleur quantificateur de clés »
++    /// que la feuille de route appelle, sans rotation ni échelle par tête.
++    kp: Vec<u16>,
++    pub k_f16: bool,
+     /// Quantifié : un octet par valeur en 8 bits, **deux nibbles par octet en
+     /// 4 bits** (même disposition que Q4_0/MXFP4 : nibble bas = indice pair).
+     kq: Vec<u8>,
+@@ -1089,8 +1097,10 @@ impl KvCache {
+         let nb = hd.div_ceil(32).max(1);
+       
+… [1111 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-coherence-docs.md", "new_string": "1. **L'arbre de travail a bougé pendant l'audit.** Quand il a commencé, HEAD était\n   `a0687b9` avec 165 lignes de `model.rs` non commitées (trace v3) ; le commit\n   `ae85043` (12:30)  … [1009 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-coherence-docs.md has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n '^#' reports/rapport-coherence-docs.md && echo \"---\" && awk -F'|' '/^\\| [0-9]+ \\|/ {v=$(NF-1); gsub(/^ +| +$/,\"\",v); print v}' reports/rapport-coherence-docs.md | sort | uniq -c | sort -rn && wc -l reports/rapport-coher … [54 caractères tronqués]`
+
+  ```
+1:# Cohérence des documents avec le code — audit
+12:## Révision auditée, méthode, réserves
+43:## 1. Version du protocole et du format
+61:## 2. En-tête, champs, modes
+79:## 3. Chiffres de transport et de trace
+102:## 4. Autres chiffres (perplexités, densité, tailles)
+119:## 5. Statuts et affirmations « vérifié »
+134:## 6. Drapeaux, variables, renvois et phrases cassées
+155:## Les 10 corrections à faire, dans l'ordre
+203:## Ce que cet audit n'a pas vérifié
+219:## Récapitulatif
+---
+     38 PÉRIMÉ
+     15 OK
+     15 CONTRADICTOIRE
+      9 MANQUANT
+      1 OK (source)
+      1 OK (2 o)
+      1 MANQUANT (précision)
+229 reports/rapport-coherence-docs.md
+  ```
+
+- **send_message** `{"agent_id": "bbd6969f-0f70-42b2-8951-64d1f2f36d2e", "message": "Livrable : reports/rapport-coherence-docs.md (229 lignes). Seul fichier créé/modifié par moi. Révision auditée : HEAD ae85043 (12:30), main.rs sha d5e90136, model.rs sha 3e5dde2d ; l'arbre a bougé pendant l'audit (v3 disque commitée à  … [2074 caractères tronqués]`
+
+  ```
+message delivered to agent bbd6969f-0f70-42b2-8951-64d1f2f36d2e
+  ```
+
+### 🤖 Assistant
+
+⏵ Audit terminé, livrable écrit et transmis au parent
+
+Livrable : `reports/rapport-coherence-docs.md` (229 lignes, seul fichier que j'ai créé ; aucun autre fichier modifié, pas de `cargo build`, aucune exécution de serveur).
+
+1. Révision auditée : HEAD `ae85043` (12:30) + 31 lignes non commitées de `model.rs` en fin d'audit ; 80 affirmations vérifiées contre le code et les traces réelles.
+2. Verdicts : **38 PÉRIMÉ**, **15 CONTRADICTOIRE**, **10 MANQUANT**, **17 OK**.
+3. Correction la plus urgente : `VERSION_FLUX = 3` (main.rs:1295) alors que le code, le commit « Protocole v4 » et le rapport d'audit annoncent une v4 qui transporte les top-k — deux binaires « v3 » aux contrats différents se croient compatibles et divergent en silence.
+4. Deuxième urgence : en mode blocs, l'échappement d'indice est écrit sur **4 octets** (main.rs:1457) et lu sur **2** (main.rs:1618) ; toute trame avec un écart ≥ 255 se désynchronise, et la spec dit « deux octets ».
+5. Troisième urgence : `REPRISE.md` §6bis est déjà périmé sur quatre points (protocole v2/39 octets, 1 024 flux, lots « prochain chantier », écart qui croît) — comme `docs/colab-reparti.md`, qui dit encore « lots ❌ » et cite 3 623/1 989 octets.
+6. Les chiffres de transport publiés sont tous faux avec l'en-tête actuel de **79 octets** : 3 623 → 3 663, 1 989 → ≈ 1 419, 917 543 → 917 583, 1 589 → 1 629.
+7. `docs/format-flux.md` se contredit seul : titre v3, « version u8 = 4 », message « parle la 4 », en-tête « 26 octets ».
+8. Contradictions documentaires fortes : 10 % contre 22 % de densité (README, vision, histoire), README « Anciennement Drave » et « le nom changera dans un commit dédié », E5 « à faire » contre mesuré, « ÷2 pour 0,2 % » déjà réfuté par le rapport cité.
+9. Renvois cassés : `reports/rapport-prefill-reparti.md` (jamais écrit — la phase 3.4 n'a pas de rapport), `rapport-pe-evenementiel.md` et `rapport-lecteur-ddr3.md` (existent dans `../FPGA-Stratix-V/docs/`), `gpu/drave_gpu.cu` (réel : `drave-core/gpu/`).
+10. Manques côté doc : ~10 champs d'activation transportés en plus des 4 documentés, plafond R4 du lot absent du code, mode 4 fantôme, `--profil-experts` et `DRAVE_FLUX_POS` inexistants, `DRAVE_TRACE_BLOCS` documentée seulement depuis `ae85043` — les 10 corrections ordonnées sont dans le rapport, non appliquées.
+

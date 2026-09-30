@@ -1292,7 +1292,7 @@ const MAGIE_FLUX: u32 = 0x4452_5631;   // "DRV1"
 /// en version 2 lirait `n × 4` octets d'un corps qui en fait `n × hidden × 4`,
 /// se désynchroniserait, puis dirait « mode inconnu » : un refus exact mais tardif
 /// et muet sur la cause. Ici il est immédiat et nommé.
-const VERSION_FLUX: u8 = 3;
+const VERSION_FLUX: u8 = 4;
 /// Vecteur dense en f32 : 4 octets par canal, toute la dimension.
 const MODE_DENSE: u8 = 0;
 /// LISTE creuse quantifiée : indice u16 + valeur i16, plus une échelle. C'est le
@@ -1453,8 +1453,13 @@ fn envoyer_flux(s: &mut std::net::TcpStream, debut: u32, fin: u32, pos: u32,
             if ecart < 255 {
                 paires.push(ecart as u8);
             } else {
+                // DEUX octets, comme le disque (`model.rs`) et comme la
+                // spécification. Ce chemin en écrivait QUATRE et le décodeur en
+                // lisait deux : toute trame portant un écart ≥ 255 se
+                // désynchronisait. Trouvé par la relecture croisée des documents,
+                // pas par un banc — l'échappement est rare (22 sur 8,79 M).
                 paires.push(255);
-                paires.extend_from_slice(&i.to_le_bytes());
+                paires.extend_from_slice(&i.to_le_bytes()[..2]);
             }
             prev = i as u32;
             paires.push(v as u8);

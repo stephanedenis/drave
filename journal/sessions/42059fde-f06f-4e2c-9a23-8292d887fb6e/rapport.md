@@ -7,10 +7,10 @@
 | Début | 2026-09-30 12:20 |
 | Durée | 0.2 h |
 | Tours | 1 |
-| Messages | 94 |
-| Appels d'outils | 140 |
+| Messages | 112 |
+| Appels d'outils | 157 |
 | Fichiers touchés | 1 |
-| Commandes | 102 |
+| Commandes | 108 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -23,7 +23,7 @@
 
 ### Tour 1 — Tu es vérificateur de documentation dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (projet « Drave » : mo … [3423 caractères tronqués]
 
-*140 appels d'outils.* Actions notables :
+*157 appels d'outils.* Actions notables :
 
 - bash — Lister la racine du dépôt
 - bash — Voir l'historique git récent
@@ -39,13 +39,24 @@
 - bash — Chercher autres drapeaux obsolètes
 - bash — Relever les mentions de version par document
 - bash — Comparer les octets par flux cités
-- … et 95 autres
+- … et 112 autres
 
 **Synthèse produite :**
 
-⏵ Rédaction du rapport de cohérence documentaire
+⏵ Audit terminé, livrable écrit et transmis au parent
 
-J'ai terminé les vérifications. J'écris maintenant le livrable.
+Livrable : `reports/rapport-coherence-docs.md` (229 lignes, seul fichier que j'ai créé ; aucun autre fichier modifié, pas de `cargo build`, aucune exécution de serveur).
+
+1. Révision auditée : HEAD `ae85043` (12:30) + 31 lignes non commitées de `model.rs` en fin d'audit ; 80 affirmations vérifiées contre le code et les traces réelles.
+2. Verdicts : **38 PÉRIMÉ**, **15 CONTRADICTOIRE**, **10 MANQUANT**, **17 OK**.
+3. Correction la plus urgente : `VERSION_FLUX = 3` (main.rs:1295) alors que le code, le commit « Protocole v4 » et le rapport d'audit annoncent une v4 qui transporte les top-k — deux binaires « v3 » aux contrats différents se croient compatibles et divergent en silence.
+4. Deuxième urgence : en mode blocs, l'échappement d'indice est écrit sur **4 octets** (main.rs:1457) et lu sur **2** (main.rs:1618) ; toute trame avec un écart ≥ 255 se désynchronise, et la spec dit « deux octets ».
+5. Troisième urgence : `REPRISE.md` §6bis est déjà périmé sur quatre points (protocole v2/39 octets, 1 024 flux, lots « prochain chantier », écart qui croît) — comme `docs/colab-reparti.md`, qui dit encore « lots ❌ » et cite 3 623/1 989 octets.
+6. Les chiffres de transport publiés sont tous faux avec l'en-tête actuel de **79 octets** : 3 623 → 3 663, 1 989 → ≈ 1 419, 917 543 → 917 583, 1 589 → 1 629.
+7. `docs/format-flux.md` se contredit seul : titre v3, « version u8 = 4 », message « parle la 4 », en-tête « 26 octets ».
+8. Contradictions documentaires fortes : 10 % contre 22 % de densité (README, vision, histoire), README « Anciennement Drave » et « le nom changera dans un commit dédié », E5 « à faire » contre mesuré, « ÷2 pour 0,2 % » déjà réfuté par le rapport cité.
+9. Renvois cassés : `reports/rapport-prefill-reparti.md` (jamais écrit — la phase 3.4 n'a pas de rapport), `rapport-pe-evenementiel.md` et `rapport-lecteur-ddr3.md` (existent dans `../FPGA-Stratix-V/docs/`), `gpu/drave_gpu.cu` (réel : `drave-core/gpu/`).
+10. Manques côté doc : ~10 champs d'activation transportés en plus des 4 documentés, plafond R4 du lot absent du code, mode 4 fantôme, `--profil-experts` et `DRAVE_FLUX_POS` inexistants, `DRAVE_TRACE_BLOCS` documentée seulement depuis `ae85043` — les 10 corrections ordonnées sont dans le rapport, non appliquées.
 
 ## 3. Travail accompli
 
@@ -53,7 +64,7 @@ J'ai terminé les vérifications. J'écris maintenant le livrable.
 
 | Fichier | Écritures | Éditions |
 |---|---|---|
-| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-coherence-docs.md` | 1 | 4 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-coherence-docs.md` | 1 | 14 |
 
 ### Commandes exécutées (échantillon)
 
@@ -97,7 +108,7 @@ J'ai terminé les vérifications. J'écris maintenant le livrable.
 - **T1** Relever les statuts de contexte-long
 - **T1** Comparer le statut de E5
 - **T1** Comparer les variables DRAVE_*
-- … et 62 autres
+- … et 68 autres
 
 ## 4. Mesures et résultats marquants
 

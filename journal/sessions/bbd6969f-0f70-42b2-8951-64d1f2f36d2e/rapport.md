@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 45.7 h |
+| Durée | 45.8 h |
 | Tours | 45 |
-| Messages | 1693 |
-| Appels d'outils | 1600 |
+| Messages | 1704 |
+| Appels d'outils | 1609 |
 | Fichiers touchés | 44 |
-| Commandes | 1282 |
+| Commandes | 1291 |
 | Sous-agents | 6 |
-| Commits | 110 |
+| Commits | 111 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -2055,7 +2055,7 @@ Je vérifie l'heure à chaque itération et j'arrête à 12:06, en laissant un p
 
 ### Tour 45 — as-tu ce qu'il te faut pour te rendre à 15h en travaillaint avec un maximum d'autonomie et de parallélisme d'activités?
 
-*101 appels d'outils.* Actions notables :
+*110 appels d'outils.* Actions notables :
 
 - bash — Probe machine, GPU, disk, network state
 - bash — Identify GPU users and stray processes
@@ -2071,11 +2071,11 @@ Je vérifie l'heure à chaque itération et j'arrête à 12:06, en laissant un p
 - bash — Understand batched PPL reference path
 - bash — Add batched imposed states to forward_lot
 - list_agents
-- … et 79 autres
+- … et 88 autres
 
 **Synthèse produite :**
 
-v3 est correct cette fois : **45 079 930 octets (−32 % vs v2, −66 % vs v1)** pour **+0,074 % de perplexité** (19,4029 contre 19,3885), avec 24 576 listes réellement servies. Je synchronise Python et je commit.
+Mon test n'exerçait pas l'échappement (0 sur 487 paires). Je le force avec un seuil élevé et je compte les échappements.
 
 ## 3. Travail accompli
 
@@ -2179,7 +2179,7 @@ v3 est correct cette fois : **45 079 930 octets (−32 % vs v2, −66 % vs v1)**
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 1242 autres
+- … et 1251 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2307,7 +2307,7 @@ v3 est correct cette fois : **45 079 930 octets (−32 % vs v2, −66 % vs v1)**
 
 ## 5. Erreurs rencontrées
 
-89 sorties en erreur ou divergentes. Les premières :
+90 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : a8f2635f8 docs: record which models this box is good at, and why src/llama-hparams.cpp:8:void llama_hparams::set_swa_pattern(uint32_t n_pattern, bool dense_first) { src/llama-hparams.h:308:    void se
 - **T1** : 511 tokens notés — perplexité cumulée 247.031  (4.9 tok/s) === perplexité 247.0308 sur 511 tokens (0 événements, 104.5 s) ===  ### B3 harmony assistant 511 --- ref --- 0.0 0.0 0:00 ls: cannot access '
@@ -2437,4 +2437,5 @@ v3 est correct cette fois : **45 079 930 octets (−32 % vs v2, −66 % vs v1)**
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p='tools/preparer_colab.sh'; s=open(p).read() s = s.replace("    temps : ~16 ms de calcul
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p='docs/format-flux.md'; s=open(p).read() v = """| | version 1 | version 2 | |---|---|---
 - REPRISE : la session 12h-15h (lots sur le fil, DRVF v2/v3, protocole v4, audit)  Ce qui a changé depuis §6bis, en un bloc : le préremplissage par lots est fait 
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && IDS=$(head -1 /tmp/ids_qwen_long.txt | tr ',' '\n' | head -3 | tr '\n' ',' | sed 's/,$//'); p=46203; (./dr
 

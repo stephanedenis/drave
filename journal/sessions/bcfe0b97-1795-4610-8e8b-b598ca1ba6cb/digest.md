@@ -1990,3 +1990,293 @@ Date:   Wed Sep 30 12:30:38 2026 -0400
 … [407 caractères tronqués]
   ```
 
+- **bash** `{"command": "grep -n -B5 -A15 \"^error\" /tmp/audit_head/build_head.log | head -60; echo \"=== fichiers src ===\"; ls -R /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src | head -20", "description": "Inspect build error"}`
+
+  ```
+1-   Compiling drave-core v0.1.0 (/tmp/audit_head/drave-core)
+2:error: couldn't read `src/../gpu/drave_gpu.ptx`: No such file or directory (os error 2)
+3-  --> src/gpu.rs:39:19
+4-   |
+5-39 | const PTX: &str = include_str!("../gpu/drave_gpu.ptx");
+6-   |                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+7-
+8-warning: variant `Q4_K` should have an upper camel case name
+9-   --> src/list.rs:572:40
+10-    |
+11-572 | pub enum Source { Propre, Q4_0, Mxfp4, Q4_K, Q6_K }
+12-    |                                        ^^^^ help: convert the identifier to upper camel case: `Q4K`
+13-    |
+14-    = note: `#[warn(non_camel_case_types)]` (part of `#[warn(nonstandard_style)]`) on by default
+15-
+16-warning: variant `Q6_K` should have an upper camel case name
+17-   --> src/list.rs:572:46
+--
+101-     |                     ^^^^^^^^^^^^^^^^^
+102-     |
+103-     = help: maybe it is overwritten before being read?
+104-
+105-warning: `drave-core` (bin "drave") generated 12 warnings
+106:error: could not compile `drave-core` (bin "drave") due to 1 previous error; 12 warnings emitted
+107-BUILD EXIT=101
+=== fichiers src ===
+/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src:
+engine.rs
+gguf.rs
+… [45 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && mkdir -p /tmp/audit_head/drave-core/gpu && git show ae85043:drave-core/gpu/drave_gpu.ptx > /tmp/audit_head/drave-core/gpu/drave_gpu.ptx 2>/dev/null || cp drave-core/gpu/drave_gpu.ptx /tmp/audit_head/drave-core/gpu/ ; ls -la /tmp/audi … [270 caractères tronqués]`
+
+  ```
+started background job bash-65
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git diff a0687b9 ae85043 -- drave-core/src/main.rs", "description": "Show main.rs change in new commit"}`
+
+  ```
+diff --git a/drave-core/src/main.rs b/drave-core/src/main.rs
+index 2adf53b..f9d6fab 100644
+--- a/drave-core/src/main.rs
++++ b/drave-core/src/main.rs
+@@ -2804,7 +2804,8 @@ fn run_ppl(opt: Options) {
+     if let Some(chemin) = flux_forcer.as_deref() {
+         match model::FluxRelecteur::lire(chemin) {
+             Ok(r) => {
+-                println!("[flux] rejeu depuis {chemin} : {} listes enregistrées", r.listes.len());
++                println!("[flux] rejeu depuis {chemin} : {} listes enregistrées",
++                         r.listes.len() + r.listes_blocs.len());
+                 mdl.flux_force = Some(r);
+             }
+             Err(e) => eprintln!("[flux] lecture impossible de {chemin} : {e}"),
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== émetteurs MAGIE_FLUX ===\"; grep -n \"MAGIE_FLUX\" drave-core/src/main.rs tools/*.py; echo \"=== doc format-flux: en-tête annoncé ===\"; sed -n '55,80p' docs/format-flux.md", "description": "Check all header emitters and d … [16 caractères tronqués]`
+
+  ```
+=== émetteurs MAGIE_FLUX ===
+drave-core/src/main.rs:1282:const MAGIE_FLUX: u32 = 0x4452_5631;   // "DRV1"
+drave-core/src/main.rs:1483:    tete.extend_from_slice(&MAGIE_FLUX.to_le_bytes());
+drave-core/src/main.rs:1517:    tete.extend_from_slice(&MAGIE_FLUX.to_le_bytes());
+drave-core/src/main.rs:1553:    if u(0) != MAGIE_FLUX {
+=== doc format-flux: en-tête annoncé ===
+|---|---|---|
+| trace dense, 512 jetons | 66 370 408 o | **45 079 930 o (−32,1 %)** |
+| rejeu `--flux-forcer` | 19,3885 | **19,4029 (+0,074 %)** |
+| neurones actifs | 22 008 776 | 21 630 645 (−1,7 % : les valeurs qui s'arrondissent à zéro ne sont pas écrites) |
+| erreur par valeur | nulle | RMS **0,085 %** du max de la liste (max 0,394 %) |
+
+Le rejeu par LOTS n'accepte pas la v3 (il réinjecte les entiers d'origine, que la
+v3 n'a plus) : il le dit au lieu de compter des listes manquantes en silence.
+
+Le lecteur lit **les deux versions** ; une version inconnue est refusée en la
+nommant. Le rejeu annonce désormais ce qu'il a servi — `24 576 listes servies,
+0 manquantes` — parce qu'une trace dont les clés ne correspondent plus se
+rejouait en silence avec une perplexité fausse.
+
+## Le point qui a coûté un bug
+
+`jeton` est un
+… [449 caractères tronqués]
+  ```
+
+- **job_output** `{"job_id": "bash-65", "wait": true, "timeout_ms": 120000}`
+
+  ```
+total 224
+drwxr-xr-x. 2 stephane stephane     60 30 sep 12:31 .
+drwxr-xr-x. 5 stephane stephane    140 30 sep 12:31 ..
+-rw-r--r--. 1 stephane stephane 225765 30 sep 12:31 drave_gpu.ptx
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "tail -3 /tmp/audit_head/build_head2.log; ls -la /tmp/audit_head/drave-core/target/release/drave 2>/dev/null; free -g | head -2", "description": "Check pristine build result and memory"}`
+
+  ```
+warning: `drave-core` (bin "drave") generated 19 warnings (run `cargo fix --bin "drave" -p drave-core` to apply 8 suggestions)
+    Finished `release` profile [optimized] target(s) in 23.08s
+BUILD EXIT=0
+-rwxr-xr-x. 2 stephane stephane 1589632 30 sep 12:31 /tmp/audit_head/drave-core/target/release/drave
+               total        used        free      shared  buff/cache   available
+Mem:             125          12          56           1          59         113
+  ```
+
+### 🤖 Assistant
+
+⏵ Revalidation des preuves avec le binaire HEAD reconstruit proprement
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && B=/tmp/audit_head/drave-core/target/release/drave; M=models/Qwen2.5-0.5B-Q8_0.gguf\necho \"=== 1. compteurs de rejeu, trace v2 témoin (clés absentes) ===\"\nfor L in 1 4; do printf \"  --lot %s : \" $L; timeout 60 $B $M --ppl /tmp/id … [695 caractères tronqués]`
+
+  ```
+=== 1. compteurs de rejeu, trace v2 témoin (clés absentes) ===
+  --lot 1 :   rejeu             : 0 listes servies, 384 manquantes  ← AUCUNE liste utilisée : la trace ne correspond pas à ce calcul
+  --lot 4 :   rejeu             : 0 listes servies, 0 manquantes
+=== 2. clés de trace écrites, lot 1 vs lot 4 ===
+/tmp/audit_head/h_lot1.bin : version 2, n_layer 24, hidden 896
+  couche     0 pos    1 n   887 echelle 4.538e-05  (3 premiers idx [0, 1, 2])
+  couche  1000 pos    1 n   896 echelle 0.0003109  (3 premiers idx [0, 1, 2])
+  couche     1 pos    1 n   896 echelle 0.0002511  (3 premiers idx [0, 1, 2])
+  couche  1001 pos    1 n   896 echelle 0.0002787  (3 premiers idx [0, 1, 2])
+  couche     2 pos    1 n   896 echelle 0.0004981  (3 premiers idx [0, 1, 2])
+  couche  1002 pos    1 n   894 echelle 0.0008736  (3 premiers idx [0, 1, 2])
+  couche     3 pos    1 n   891 echelle 0.0008903  (3 premiers idx [0, 1, 2])
+  couche  1003 pos    1 n   868 echelle 0.01026  (3 premiers idx [0, 1, 2])
+/tmp/audit_head/h_lot4.bin : version 2, n_layer 24, hidden 896
+  couche     0 pos    0 n   887 echelle 4.538e-05  (3 premiers idx [0, 1, 2])
+  couche     0 pos    1 n   892 echelle 3.664e-05  (3 premiers i
+… [480 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/audit_head/final_tests.sh <<'EOF'\n#!/bin/bash\nB=/tmp/audit_head/drave-core/target/release/drave\nM=models/Qwen2.5-0.5B-Q8_0.gguf\nR=/tmp/audit_head\n\necho \"########## A. porte Qwen ctx 256 (attendu 19,3885)\"\ntimeout  … [2248 caractères tronqués]`
+
+  ```
+started background job bash-66
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls -la colab/ && grep -rn \"39\\|79\\|version\\|TETE\" colab/*.ipynb 2>/dev/null | head -20", "description": "Inspect Colab notebook for protocol constants"}`
+
+  ```
+total 12
+drwxr-xr-x. 1 stephane stephane   56 30 sep 12:20 .
+drwxr-xr-x. 1 stephane stephane  598 30 sep 12:19 ..
+-rw-r--r--. 1 stephane stephane 7629 30 sep 12:19 Drave-reparti.ipynb
+-rw-r--r--. 1 stephane stephane 3204 30 sep 12:20 README.md
+68:    "print(subprocess.run(['cargo','--version'], capture_output=True, text=True).stdout.strip())"
+188:    "  la même des deux côtés, puis la version du protocole (un pair incompatible est\n",
+  ```
+
+- **job_output** `{"job_id": "bash-66", "wait": true, "timeout_ms": 180000}`
+
+  ```
+########## A. porte Qwen ctx 256 (attendu 19,3885)
+=== perplexité 19.3885 sur 510 tokens (0 événements, 75.0 s) ===
+########## B. pair_factice : version annoncée par le client
+[factice] flux 1 : couches 12..24 pos 0 · version 3 · mode dense f32 · n=896 · échelle 0 · niveaux 127 seuil 0 topk 0 renorm 0 · corps 3584 octets
+########## C. pair_factice : mode lot (le client se bloque)
+  client exit=124 (124 = bloqué puis tué)
+[factice] flux 1 : couches 12..24 pos 0 · version 3 · mode lot (t états × dimension) · n=4 · échelle 0 · niveaux 127 seuil 0 topk 0 renorm 0 · corps 16 octets
+########## D. deux vrais nœuds, --lot 8
+  client exit=0
+  écart             : 0.00e0
+  transport         : LOTS de 8 jetons · 28751 octets par lot (aller) · 3.5 ko par jeton · 5 lots (au lieu de 39 flux)
+########## E. --flux-blocs ignoré quand --lot > 1
+  client exit=0
+  écart             : 0.00e0
+  transport         : LOTS de 8 jetons · 28751 octets par lot (aller) · 3.5 ko par jeton · 5 lots (au lieu de 39 flux)
+########## F. serveur trop court en contexte : --ctx 16, client --lot 8
+  client exit=134 (134 = panique)
+thread 'main' (475692) panicked at src/main.rs:1838:64:
+réception du lot: Error { kind: Unex
+… [407 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Rétrocompatibilité v1 et vérification des drapeaux « plomberie »
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/audit_head/tests3.sh <<'EOF'\n#!/bin/bash\nB=/tmp/audit_head/drave-core/target/release/drave\nM=models/Qwen2.5-0.5B-Q8_0.gguf\necho \"########## G. rejeu d'une trace v1 (/tmp/flux_sparse.bin), lot 1\"\ntimeout 200 $B $M -- … [789 caractères tronqués]`
+
+  ```
+started background job bash-67
+  ```
+
+### 🤖 Assistant
+
+⏵ Construction du binaire « ancien v3 » (cda3162) pour prouver l'incompatibilité silencieuse
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && R=/tmp/audit_cda/drave-core && mkdir -p $R/src $R/gpu && git show cda3162:drave-core/Cargo.toml > $R/Cargo.toml && for f in main.rs model.rs engine.rs gguf.rs gpu.rs list.rs tokenizer.rs; do git show cda3162:drave-core/src/$f > $R/sr … [441 caractères tronqués]`
+
+  ```
+started background job bash-68
+  ```
+
+- **job_output** `{"job_id": "bash-67", "timeout_ms": 200000, "wait": true}`
+
+  ```
+########## G. rejeu d'une trace v1 (/tmp/flux_sparse.bin), lot 1
+[flux] rejeu depuis /tmp/flux_sparse.bin : 12288 listes enregistrées
+  rejeu             : 12240 listes servies, 12336 manquantes  ← la moitié au moins n'a pas servi : vérifier la trace
+=== perplexité 763.7948 sur 510 tokens (0 événements, 27.1 s) ===
+########## H. la MÊME trace v1, rejeu par LOTS (--lot 4), limit 8
+[flux] rejeu depuis /tmp/flux_sparse.bin : 12288 listes enregistrées
+  rejeu             : 256 listes servies, 0 manquantes
+########## I. --plan sans --ctx (plomberie) 
+=== contexte : 32768 jetons ===
+########## J. --plan --ctx 256
+=== contexte : 256 jetons ===
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rn \"1958\" journal/sessions/bbd6969f-0f70-42b2-8951-64d1f2f36d2e/digest.md 2>/dev/null | head -5; grep -rn -B3 -A3 \"1958,72\\|1958.72\" reports/*.md docs/*.md 2>/dev/null | head -30; ls -la --time-style=long-iso /tmp/flux_spa … [64 caractères tronqués]`
+
+  ```
+14850:- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && grep -n \"fn point\" -A 8 src/model.rs | head -14 && sed -n '1958,1972p' src/model.rs && grep -n \"let Model {\" src/model.rs", "description": "Check point() and destructuring"}`
+25195:- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/main.rs'; s=open(p).read()\nv = \"\"\"        // Le DERNIER jeton n'a rien à prédire : lui demander un aller-retour\n        // distant, c'est payer un calcul complet pour un état que personne ne\n … [1958 caractères tronqués]`
+26521:perplexité 1958.7210 sur 510 tokens
+26600:=== perplexité 1958.7210 sur 510 tokens (0 événements, 23.2 s) ===
+reports/rapport-compacite-trace.md-8-> mêmes 24 576 listes et 22 008 776 neurones actifs. Le rejeu annonce maintenant
+reports/rapport-compacite-trace.md-9-> ses compteurs (`N listes servies, M manquantes`), ce qui a mis au jour une
+reports/rapport-compacite-trace.md-10-> trace ancienne dont les clés étaient décalées d'un jeton : elle se rejouait en
+reports/rapport-compacite-trace.md:11:> silence avec une perplexité fausse (1958,72 au lieu de 19,3885).
+rep
+… [347 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '26500,26530p' journal/sessions/bbd6969f-0f70-42b2-8951-64d1f2f36d2e/digest.md && echo \"=== 26590-26605 ===\" && sed -n '26590,26605p' journal/sessions/bbd6969f-0f70-42b2-8951-64d1f2f36d2e/digest.md", "description": "Read dig … [30 caractères tronqués]`
+
+  ```
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rn \"trace-flux\" --include=\"*.md\" . | grep -v journal/ | head -8; ls -la /tmp/flux_f32.bin /tmp/flux_sparse.bin 2>/dev/null | awk '{print $5, $9}'", "description": "Find trace command and existing traces"}`
+
+  ```
+./reports/rapport-drapeaux-ignores.md:86:| `--trace-flux` `--trace-couches` `--flux-forcer` | P : 2709-2720 | **I** (et partout ailleurs) : jamais lu → `--infer --trace-flux f` ne produit aucun fichier, sans message | 🟠 |
+./reports/rapport-drapeaux-ignores.md:128:4. `--ppl-texte`, `--depuis`, `--trace-flux` + `--lot` (rejeu et trace passent par `flux_lot`,
+./docs/format-flux.md:5:1. la **trace** d'exécution (`--trace-flux`) : ce qui s'est passé, couche par
+./docs/format-flux.md:118:| deux implémentations indépendantes lisent le même fichier | Rust (`--trace-flux`) et Python (`tools/flux_codec.py`) : aller-retour **identique** sur 132 396 736 octets |
+132396736 /tmp/flux_f32.bin
+53092562 /tmp/flux_sparse.bin
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && D=./drave-core/target/release/drave; M=models/Qwen2.5-0.5B-Q8_0.gguf; G=\"--ppl /tmp/ids_qwen.t
+… [2020 caractères tronqués]
+  ```
+
+- **bash** `{"command": "tail -4 /tmp/audit_head/build_cda.log; ls -la /tmp/audit_cda/drave-core/target/release/drave 2>/dev/null && /tmp/audit_cda/drave-core/target/release/drave --tensors 2>&1 | head -2", "description": "Check cda3162 build result"}`
+
+  ```
+|         ^^^^^^^^^^^^ help: use shorthand field pattern: `mut ids`
+    |
+    = note: `#[warn(non_shorthand_field_patterns)]` on by default
+
+[exit code: 2]
+  ```
+
+- **bash** `{"command": "tail -6 /tmp/audit_head/build_cda.log; echo \"---\"; ls -la /tmp/audit_cda/drave-core/target/release/ 2>/dev/null | head", "description": "Inspect cda build tail"}`
+
+  ```
+= note: `#[warn(non_shorthand_field_patterns)]` on by default
+
+warning: `drave-core` (bin "drave") generated 19 warnings (run `cargo fix --bin "drave" -p drave-core` to apply 8 suggestions)
+    Finished `release` profile [optimized] target(s) in 26.35s
+BUILD EXIT=0
+-rwxr-xr-x. 2 stephane stephane 1576328 30 sep 12:35 target/release/drave
+---
+total 1544
+drwxr-xr-x. 7 stephane stephane     240 30 sep 12:35 .
+drwxr-xr-x. 3 stephane stephane     100 30 sep 12:35 ..
+drwxr-xr-x. 2 stephane stephane      40 30 sep 12:35 build
+-rw-r--r--. 1 stephane stephane       0 30 sep 12:35 .cargo-artifact-lock
+-rw-r--r--. 1 stephane stephane       0 30 sep 12:35 .cargo-build-lock
+-rw-r--r--. 1 stephane stephane       0 30 sep 12:35 .cargo-lock
+drwxr-xr-x. 2 stephane stephane      80 30 sep 12:35 deps
+-rwxr-xr-x. 2 stephane stephane 1576328 30 sep 12:35 drave
+-rw-r--r--. 1 stephane stephane     365 30 sep 12:35 drave.d
+  ```
+
+### 👤 Utilisateur
+
+background job bash-68 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && R=/tmp/audit_cda/drave-core && mkdir -p $R/src $R/gpu && git show cda3162:drave-core/Cargo.toml > $R/Cargo.toml && for f in main.rs model.rs engine.rs gguf.rs gpu.rs list.rs tokenizer.rs; do git show cda3162:drave-core/src/$f > $R/src/$f; done && git show cda3162:drave-core/gpu/drave_gpu.ptx > $R/gpu/drave_gpu.ptx && grep -n "VERSION_FLUX: u8\|TAILLE_TETE: usize =" $R/src/main.rs && cd $R && (nice -n 10 cargo build --release -j 8 > /tmp/audit_head/build_cda.log 2>&1; echo "BUILD EXIT=$?" >> /tmp/audit_head/build_cda.log; ls -la target/release/drave >> /tmp/audit_head/build_cda.log 2>&1)) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+### 🤖 Assistant
+
+⏵ Test croisé : ancien binaire v3 (39 o) contre nouveau (79 o)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/audit_head/croise.sh <<'EOF'\n#!/bin/bash\nOLD=/tmp/audit_cda/drave-core/target/release/drave\nNEW=/tmp/audit_head/drave-core/target/release/drave\nM=models/Qwen2.5-0.5B-Q8_0.gguf; R=/tmp/audit_head\necho \"########## 1. S … [1257 caractères tronqués]`

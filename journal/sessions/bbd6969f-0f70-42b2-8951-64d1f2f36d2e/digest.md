@@ -27173,3 +27173,230 @@ cles_int4_valeurs_f32      :
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add REPRISE.md && git commit -q -m \"REPRISE : la session 12h-15h (lots sur le fil, DRVF v2/v3, protocole v4, audit)\n\nCe qui a changé depuis §6bis, en un bloc : le préremplissage par lots est fait et\nfidèle, le protocole est e … [519 caractères tronqués]`
+
+  ```
+bd4eac8 REPRISE : la session 12h-15h (lots sur le fil, DRVF v2/v3, protocole v4, audit)
+=== k_f32 dans KvCache ===
+1062:    pub k_f32: bool,
+1090:        let (k_f32, v_f32) = (std::env::var("DRAVE_KV_K_F32").is_ok(),
+1093:                              f16_avant: std::env::var("DRAVE_KV_F16").is_ok(), k_f32, v_f32,
+1112:        let f32_k = bits >= 32 || self.k_f32;
+1209:            if self.k_f32 {
+1217:                    if !self.k_f32 {
+1285:        if self.k_f32 {
+1618:                let mixte = caches_kv.iter().any(|c| c.k_f32 || c.v_f32);
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n 1100,1130p drave-core/src/model.rs; echo \"=== ecrire (extrait) ===\"; sed -n 1200,1240p drave-core/src/model.rs; echo \"=== cle ===\"; sed -n 1275,1300p drave-core/src/model.rs", "description": "Read KvCache f32 paths to mirr … [4 caractères tronqués]`
+
+  ```
+/// Garantit `besoin` positions allouées (doublement, avec recopie : les
+    /// positions déjà écrites le restent). Chaque tête KV a son bloc contigu,
+    /// donc la recopie se fait tête par tête.
+    pub fn assurer(&mut self, besoin: usize) {
+        if besoin <= self.cap { return; }
+        let mut cap = self.cap.max(1);
+        while cap < besoin { cap = (cap * 2).min(self.ctx); }
+        let hd = self.hd;
+        let nb = self.nb;
+        let pas = self.pas();
+        let (n_kv, bits) = (self.n_kv, self.bits);
+        let f32_k = bits >= 32 || self.k_f32;
+        let f32_v = bits >= 32 || self.v_f32;
+        if f32_k || f32_v {
+            let mut kf = if f32_k { vec![0f32; n_kv * cap * hd] } else { Vec::new() };
+            let mut vf = if f32_v { vec![0f32; n_kv * cap * hd] } else { Vec::new() };
+            for h in 0..n_kv {
+                let (a, b) = (h * self.cap * hd, h * cap * hd);
+                let n = self.cap * hd;
+                if f32_k && !self.kf.is_empty() {
+                    kf[b..b + n].copy_from_slice(&self.kf[a..a + n]);
+                }
+                if f32_v && !self.vf.is_empty() {
+                    vf[b..b + n].copy_from_slice(&self.vf[a..a
+… [3241 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+Couloir A continue ; j'implémente en parallèle une variante **clés en f16** (le « meilleur quantificateur de clés » que la feuille de route appelle).
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n 1075,1100p drave-core/src/model.rs; echo \"=== mixte GPU ===\"; sed -n 1614,1625p drave-core/src/model.rs", "description": "Read KvCache constructor and GPU guard"}`
+
+  ```
+/// Échelles **par bloc de 32**, comme Q8_0 — et non une par vecteur : c'est
+    /// ce qui explique l'écart mesuré avec llama.cpp (+5,2 % de perplexité
+    /// contre +0,8 % pour son cache q8_0).
+    sk: Vec<f32>,
+    sv: Vec<f32>,
+    nb: usize,
+}
+
+impl KvCache {
+    pub fn new(bits: u32, n_kv: usize, ctx: usize, hd: usize) -> Self {
+        let bits = if bits >= 32 { 32 } else if bits > 4 { 8 } else { 4 };
+        if bits < 32 {
+            assert!(hd % 2 == 0, "4 bits empaquetés : dimension de tête paire requise");
+        }
+        let nb = hd.div_ceil(32).max(1);
+        let (k_f32, v_f32) = (std::env::var("DRAVE_KV_K_F32").is_ok(),
+                              std::env::var("DRAVE_KV_V_F32").is_ok());
+        let mut c = KvCache { bits, n_kv, ctx, cap: 0, hd,
+                              f16_avant: std::env::var("DRAVE_KV_F16").is_ok(), k_f32, v_f32,
+                              kf: Vec::new(), vf: Vec::new(),
+                              kq: Vec::new(), vq: Vec::new(), sk: Vec::new(), sv: Vec::new(),
+                              nb };
+        c.assurer(ctx.min(1024));
+        c
+    }
+
+=== mixte GPU ===
+                        Some(m) => v.push((idx, m)),
+              
+… [543 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/model.rs'; s=open(p).read()\n\n# 1. le champ\nv = \"\"\"    kf: Vec<f32>,\n    vf: Vec<f32>,\"\"\"\nn = \"\"\"    kf: Vec<f32>,\n    vf: Vec<f32>,\n    /// `DRAVE_KV_K_F16=1` : les CLÉS sont stocké … [3827 caractères tronqués]`
+
+  ```
+clés en f16 : champ, allocation, écriture, lecture, garde GPU
+    Finished `release` profile [optimized] target(s) in 0.01s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && D=./drave-core/target/release/drave; M=models/Qwen2.5-0.5B-Q8_0.gguf; G=\"--ppl /tmp/ids_qwen.txt --ctx 256 --abits 16 --threads 16 --limit 512 --dense\"; echo \"références ctx 256 : f32 = 19,3885 · int8/int8 = 19,8059\"; for cas in  … [428 caractères tronqués]`
+
+  ```
+références ctx 256 : f32 = 19,3885 · int8/int8 = 19,8059
+cles_f16_valeurs_int8    : perplexité 19.3995 sur 510 tokens
+cles_f32_valeurs_int8    : perplexité 19.4122 sur 510 tokens
+int8_int8                : perplexité 19.8059 sur 510 tokens
+12:34:55
+cles_f32_valeurs_int4      : perplexité 14.2994 sur 8191 tokens (0 événements, 1665.6 s)
+cles_int4_valeurs_f32      :
+  ```
+
+### 👤 Utilisateur
+
+Agent 42059fde-f06f-4e2c-9a23-8292d887fb6e sent a message:
+Livrable : reports/rapport-coherence-docs.md (229 lignes). Seul fichier créé/modifié par moi. Révision auditée : HEAD ae85043 (12:30), main.rs sha d5e90136, model.rs sha 3e5dde2d ; l'arbre a bougé pendant l'audit (v3 disque commitée à 12:30, puis 31 lignes non commitées DRAVE_KV_K_F16).
+
+80 affirmations vérifiées : 38 PÉRIMÉ, 15 CONTRADICTOIRE, 10 MANQUANT, 17 OK.
+
+Les 3 corrections les plus urgentes (aucune appliquée) :
+1. VERSION_FLUX vaut 3 (main.rs:1295) alors que le commentaire du code, le commit « Protocole v4 » (d59d061) et le rapport-drapeaux annoncent une v4 qui transporte les top-k : deux binaires « v3 » aux contrats d'activation différents se croient compatibles et divergent en silence. Incrémenter à 4 (recommandation §8.2 du rapport d'audit jamais appliquée jusqu'au bout).
+2. Bug latent de protocole : en mode blocs réseau, l'échappement d'indice (écart ≥ 255) est ÉCRIT sur 4 octets (main.rs:1457, i.to_le_bytes()) mais LU sur 2 (main.rs:1618), alors que la spec format-flux dit « deux octets » et que le disque fait bien 2 (model.rs:605,628). Toute trame avec échappement se désynchronise.
+3. REPRISE.md §6bis (commit 1cf4714, 11:39) est périmé par les commits suivants : protocole « v2 / 39 octets » (réel : 3 / 79), « 1 024 flux » (réel : 1 023 après 2184fc5), « préremplissage par LOTS = prochain chantier » (fait à 12:02), « l'écart croît avec la longueur » (il décroît, commit 976cb81). Idem docs/colab-reparti.md (12:20) qui dit encore « lots ❌ » et cite 3 623/1 989 octets.
+
+Autres points saillants : docs/format-flux.md se contredit (titre v3, version u8=4, message « parle la 4 », en-tête 26 octets) et tous les chiffres de transport publiés (3 623, 1 604, 1 989, 917 543) sont faux avec l'en-tête actuel de 79 octets (→ 3 663, ≈1 419, 917 583) ; README/vision/histoire disent 10 % de densité contre 22 % mesuré ; README « Anciennement Drave » et « le nom changera dans un commit dédié » (renommage fait) ; 3 renvois cassés (reports/rapport-prefill-reparti.md inexistant, 2 rapports FPGA à pointer vers ../FPGA-Stratix-V/docs/) ; ~10 champs d'activation transportés en plus des 4 documentés ; règle R4 du plan (plafond 256 Mo) absente du code ; --profil-experts et DRAVE_FLUX_POS documentés mais inexistants ; DRAVE_TRACE_BLOCS documentée seulement depuis ae85043.
+
+### 👤 Utilisateur
+
+Background subagent 42059fde-f06f-4e2c-9a23-8292d887fb6e finished and will do no further work unless you send it more.
+Its closing message:
+⏵ Audit terminé, livrable écrit et transmis au parent
+
+Livrable : `reports/rapport-coherence-docs.md` (229 lignes, seul fichier que j'ai créé ; aucun autre fichier modifié, pas de `cargo build`, aucune exécution de serveur).
+
+1. Révision auditée : HEAD `ae85043` (12:30) + 31 lignes non commitées de `model.rs` en fin d'audit ; 80 affirmations vérifiées contre le code et les traces réelles.
+2. Verdicts : **38 PÉRIMÉ**, **15 CONTRADICTOIRE**, **10 MANQUANT**, **17 OK**.
+3. Correction la plus urgente : `VERSION_FLUX = 3` (main.rs:1295) alors que le code, le commit « Protocole v4 » et le rapport d'audit annoncent une v4 qui transporte les top-k — deux binaires « v3 » aux contrats différents se croient compatibles et divergent en silence.
+4. Deuxième urgence : en mode blocs, l'échappement d'indice est écrit sur **4 octets** (main.rs:1457) et lu sur **2** (main.rs:1618) ; toute trame avec un écart ≥ 255 se désynchronise, et la spec dit « deux octets ».
+5. Troisième urgence : `REPRISE.md` §6bis est déjà périmé sur quatre points (protocole v2/39 octets, 1 024 flux, lots « prochain chantier », écart qui croît) — comme `docs/colab-reparti.md`, qui dit encore « lots ❌ » et cite 3 623/1 989 octets.
+6. Les chiffres de transport publiés sont tous faux avec l'en-tête actuel de **79 octets** : 3 623 → 3 663, 1 989 → ≈ 1 419, 917 543 → 917 583, 1 589 → 1 629.
+7. `docs/format-flux.md` se contredit seul : titre v3, « version u8 = 4 », message « parle la 4 », en-tête « 26 octets ».
+8. Contradictions documentaires fortes : 10 % contre 22 % de densité (README, vision, histoire), README « Anciennement Drave » et « le nom changera dans un commit dédié », E5 « à faire » contre mesuré, « ÷2 pour 0,2 % » déjà réfuté par le rapport cité.
+9. Renvois cassés : `reports/rapport-prefill-reparti.md` (jamais écrit — la phase 3.4 n'a pas de rapport), `rapport-pe-evenementiel.md` et `rapport-lecteur-ddr3.md` (existent dans `../FPGA-Stratix-V/docs/`), `gpu/drave_gpu.cu` (réel : `drave-core/gpu/`).
+10. Manques côté doc : ~10 champs d'activation transportés en plus des 4 documentés, plafond R4 du lot absent du code, mode 4 fantôme, `--profil-experts` et `DRAVE_FLUX_POS` inexistants, `DRAVE_TRACE_BLOCS` documentée seulement depuis `ae85043` — les 10 corrections ordonnées sont dans le rapport, non appliquées.
+
+### 🤖 Assistant
+
+Le relecteur a trouvé **deux vrais bugs** : la constante `VERSION_FLUX` est restée à 3 alors que l'en-tête a changé (divergence silencieuse garantie), et l'échappement d'indice est écrit sur 4 octets mais lu sur 2 côté réseau. Je corrige tout de suite.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"const VERSION_FLUX\" drave-core/src/main.rs; grep -n \"extend_from_slice(&i.to_le_bytes())\" drave-core/src/main.rs | head; python3 - <<'PY'\np='drave-core/src/main.rs'; s=open(p).read()\nv = \"const VERSION_FLUX: u8 = 3;\" … [1498 caractères tronqués]`
+
+  ```
+1295:const VERSION_FLUX: u8 = 3;
+1457:                paires.extend_from_slice(&i.to_le_bytes());
+1473:            c.extend_from_slice(&i.to_le_bytes());
+    Finished `release` profile [optimized] target(s) in 0.01s
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 27, in <module>
+AssertionError
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n 1450,1480p drave-core/src/main.rs", "description": "Read the wire blocs encoder"}`
+
+  ```
+let mut prev = 0u32;
+        for (&i, &v) in idx.iter().zip(val.iter()) {
+            let ecart = i as u32 - prev;
+            if ecart < 255 {
+                paires.push(ecart as u8);
+            } else {
+                paires.push(255);
+                paires.extend_from_slice(&i.to_le_bytes());
+            }
+            prev = i as u32;
+            paires.push(v as u8);
+        }
+        // La longueur est écrite : avec les échappements, elle n'est pas
+        // déductible du nombre de paires, et un décodeur qui la suppose lit
+        // hors du tampon.
+        c.extend_from_slice(&(paires.len() as u32).to_le_bytes());
+        c.extend_from_slice(&paires);
+        (idx.len(), 0f32, c)
+    } else if mode == MODE_LISTE {
+        let (idx, val, ech) = mdl.expect("modèle requis pour quantifier un flux")
+                                 .flux_en_liste(actifs);
+        let mut c = Vec::with_capacity(idx.len() * 4);
+        for (&i, &v) in idx.iter().zip(val.iter()) {
+            c.extend_from_slice(&i.to_le_bytes());
+            c.extend_from_slice(&v.to_le_bytes());
+        }
+        (idx.len(), ech, c)
+    } else {
+        let mut c = Vec::with_capacity(actifs.len() * 4);
+       
+… [91 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/main.rs'; s=open(p).read()\nv = \"const VERSION_FLUX: u8 = 3;\"\nassert s.count(v) == 1\ns = s.replace(v, \"const VERSION_FLUX: u8 = 4;\")\nv = \"\"\"            if ecart < 255 {\n                p … [2588 caractères tronqués]`
+
+  ```
+VERSION_FLUX = 4 + échappement réseau sur 2 octets
+1295:const VERSION_FLUX: u8 = 4;
+    Finished `release` profile [optimized] target(s) in 0.01s
+  écart             : 2.26e-1
+  transport         : listes à échelle par bloc (2 octets/actif, écarts) · 1173 octets par flux (aller) · 1329 au retour · 54.3 % d'activité (487 neurones par flux) · 7 flux
+ÉCHEC : écart non nul ou trame perdue
+  deux nœuds        : perplexité 1181.1441  (6.1 s)
+  écart             : 2.26e-1
+  transport         : listes à échelle par bloc (2 octets/actif, écarts) · 1173 octets par flux (aller) · 1329 au retour · 54.3 % d'activité (487 neurones par flux) · 7 flux
+  temps             : 433.0 ms par jeton en local · 427.2 ms à attendre le pair (son calcul + l'aller-retour) · soit 0.99× le calcul local seul
+[attention] QT_IM_SWITCHER est l'ancien nom d'une variable d'environnement : elles s'appellent maintenant DRAVE_* (voir docs/histoire.md). Rien n'a été appliqué.
+[modele] 24 couches chargées en 1.21568969s — listes 0.00 Go , 20 threads
+  ```
+
+### 🤖 Assistant
+
+Mon test n'exerçait pas l'échappement (0 sur 487 paires). Je le force avec un seuil élevé et je compte les échappements.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='tools/pair_factice.py'; s=open(p).read()\nv = \"\"\"        elif mode == 2:\n            nb = struct.unpack(\"<I\", lire_tout(sock, 4))[0]\n            echelles = lire_tout(sock, nb * 4)\n            longueur = s … [1445 caractères tronqués]`
+
+  ```
+écart             : 7.02e-1
+  transport         : listes à échelle par bloc (2 octets/actif, écarts) · 203 octets par flux (aller) · 199 au retour · 0.1 % d'activité (1 neurones par flux) · 2 flux
+  temps             : 252.6 ms par jeton en local · 0.3 ms à attendre le pair (son calcul + l'aller-retour) · soit 0.00× le calcul local seul
+--- vu par le pair ---
+[factice] écoute sur 127.0.0.1:46202 · je réponds 896 canaux
+[factice] client ('127.0.0.1', 30672)
+[factice] flux 1 : couches 12..24 pos 0 · version 4 · mode blocs (i8 + écarts) · n=1 · échelle 0 · niveaux 127 seuil 0.6 topk 0 renorm 0 · corps 116 octets
+[factice] flux 2 : couches 12..24 pos 1 · version 4 · mode blocs (i8 + écarts) · n=1 · échelle 0 · niveaux 127 seuil 0.6 topk 0 renorm 0 · corps 116 octets
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 17, in <module>
+AssertionError
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && IDS=$(head -1 /tmp/ids_qwen_long.txt | tr ',' '\\n' | head -3 | tr '\\n' ',' | sed 's/,$//'); p=46203; (./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf --flux-serveur $p --ctx 32 > /tmp/s_ech.log 2>&1 &); for i in $(s … [1727 caractères tronqués]`
