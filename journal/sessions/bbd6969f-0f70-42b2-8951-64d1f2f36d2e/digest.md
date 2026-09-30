@@ -24945,3 +24945,56 @@ jetons : 1024
 **Écart 0,00e0 sur 1 024 jetons** (perplexité 9,5146 des deux côtés, 1 024 flux). J'inscris ce chiffre et je clôture.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/rapport-phase3-reparti.md'; s=open(p).read()\nv = \"\"\"Égalité exacte, et pas seulement petite : le transport est du f32, donc rien\nn'est arrondi en chemin — le découpage ne devrait pas changer un bit,  … [1976 caractères tronqués]`
+
+  ```
+rapport phase 3 : 1024 jetons
+REPRISE : 1024 jetons
+3ae3f45 Découpage fidèle à 1 024 jetons : 0,00e0 sur 1 024 flux
+ M drave-core/src/main.rs
+ M journal/README.md
+--- dernier commit ---
+3ae3f45 Découpage fidèle à 1 024 jetons : 0,00e0 sur 1 024 flux
+11:34:21
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git diff drave-core/src/main.rs | head -40", "description": "Inspect uncommitted change"}`
+
+  ```
+diff --git a/drave-core/src/main.rs b/drave-core/src/main.rs
+index 1751558..67f876f 100644
+--- a/drave-core/src/main.rs
++++ b/drave-core/src/main.rs
+@@ -1281,6 +1281,9 @@ struct Flux {
+     mode: u8,
+     act: Act,
+     charge: ChargeFlux,
++    /// Octets du corps effectivement lus sur le câble (en-tête exclu) : la
++    /// comptabilité du banc doit être la taille RÉELLE, pas une formule par mode.
++    octets_corps: usize,
+ }
+ 
+ /// Charge utile d'un flux : dense (f32), ou **liste creuse quantifiée**. Le
+@@ -1320,14 +1323,6 @@ impl ChargeFlux {
+             ChargeFlux::Liste { idx, .. } | ChargeFlux::Blocs { idx, .. } => idx.len(),
+         }
+     }
+-    /// Octets du corps, en-tête exclu : c'est ce qui doit être lu sur le câble.
+-    fn octets_corps(&self) -> usize {
+-        match self {
+-            ChargeFlux::Dense(v) => v.len() * 4,
+-            ChargeFlux::Liste { idx, .. } => idx.len() * 4,
+-            ChargeFlux::Blocs { idx, echelles, .. } => 4 + echelles.len() * 4 + idx.len() * 3,
+-        }
+-    }
+ }
+ 
+ /// Envoie un flux et rend le nombre d'octets écrits (en-tête compris) — c'est ce
+@@ -1341,13 +1336,32 @@ fn envoyer_flux(s: &mut std::net::TcpStream, debut: u32, fin: 
+… [797 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+Alerte hygiène : le **code** de l'encodage par écarts n'était pas dans le commit (j'avais ajouté les deux documents seulement). Je répare.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git show --stat cb37c83 | tail -5; echo \"=== ce que le code committé contient ===\"; git show HEAD:drave-core/src/main.rs | grep -c \"paires.push(ecart\" ; echo \"(0 = l'encodage par écarts manquait bien)\"; git add drave-core/src/m … [813 caractères tronqués]`

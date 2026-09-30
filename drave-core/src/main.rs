@@ -1281,6 +1281,9 @@ struct Flux {
     mode: u8,
     act: Act,
     charge: ChargeFlux,
+    /// Octets du corps effectivement lus sur le câble (en-tête exclu) : la
+    /// comptabilité du banc doit être la taille RÉELLE, pas une formule par mode.
+    octets_corps: usize,
 }
 
 /// Charge utile d'un flux : dense (f32), ou **liste creuse quantifiée**. Le
@@ -1320,14 +1323,6 @@ impl ChargeFlux {
             ChargeFlux::Liste { idx, .. } | ChargeFlux::Blocs { idx, .. } => idx.len(),
         }
     }
-    /// Octets du corps, en-tête exclu : c'est ce qui doit être lu sur le câble.
-    fn octets_corps(&self) -> usize {
-        match self {
-            ChargeFlux::Dense(v) => v.len() * 4,
-            ChargeFlux::Liste { idx, .. } => idx.len() * 4,
-            ChargeFlux::Blocs { idx, echelles, .. } => 4 + echelles.len() * 4 + idx.len() * 3,
-        }
-    }
 }
 
 /// Envoie un flux et rend le nombre d'octets écrits (en-tête compris) — c'est ce
@@ -1341,13 +1336,32 @@ fn envoyer_flux(s: &mut std::net::TcpStream, debut: u32, fin: u32, pos: u32,
     let (n, echelle, corps): (usize, f32, Vec<u8>) = if mode == MODE_BLOCS {
         let (idx, val, echelles) = mdl.expect("modèle requis pour quantifier un flux")
                                       .flux_en_liste_blocs(actifs);
-        let mut c = Vec::with_capacity(4 + echelles.len() * 4 + idx.len() * 3);
+        // Indices par ÉCARTS : la liste est triée (les blocs sont parcourus dans
+        // l'ordre), donc l'écart au neurone précédent tient sur un octet dans
+        // l'immense majorité des cas — 255 est l'échappement vers l'indice absolu.
+        // Deux octets par neurone actif au lieu de trois, à quantification
+        // IDENTIQUE : c'est du rangement, pas de la perte.
+        let mut c = Vec::with_capacity(4 + echelles.len() * 4 + idx.len() * 2);
         c.extend_from_slice(&(echelles.len() as u32).to_le_bytes());
         for e in &echelles { c.extend_from_slice(&e.to_le_bytes()); }
+        let mut paires: Vec<u8> = Vec::with_capacity(idx.len() * 2);
+        let mut prev = 0u32;
         for (&i, &v) in idx.iter().zip(val.iter()) {
-            c.extend_from_slice(&i.to_le_bytes());
-            c.push(v as u8);
+            let ecart = i as u32 - prev;
+            if ecart < 255 {
+                paires.push(ecart as u8);
+            } else {
+                paires.push(255);
+                paires.extend_from_slice(&i.to_le_bytes());
+            }
+            prev = i as u32;
+            paires.push(v as u8);
         }
+        // La longueur est écrite : avec les échappements, elle n'est pas
+        // déductible du nombre de paires, et un décodeur qui la suppose lit
+        // hors du tampon.
+        c.extend_from_slice(&(paires.len() as u32).to_le_bytes());
+        c.extend_from_slice(&paires);
         (idx.len(), 0f32, c)
     } else if mode == MODE_LISTE {
         let (idx, val, ech) = mdl.expect("modèle requis pour quantifier un flux")
@@ -1419,15 +1433,34 @@ fn recevoir_flux(s: &mut std::net::TcpStream) -> std::io::Result<Flux> {
             s.read_exact(&mut eb)?;
             let echelles = (0..n_blocs).map(|k| f32::from_le_bytes(
                 [eb[k*4], eb[k*4+1], eb[k*4+2], eb[k*4+3]])).collect();
-            let mut corps = vec![0u8; n * 3];
+            let mut lg = [0u8; 4];
+            s.read_exact(&mut lg)?;
+            let longueur = u32::from_le_bytes(lg) as usize;
+            let mut corps = vec![0u8; longueur];
             s.read_exact(&mut corps)?;
             let mut idx = Vec::with_capacity(n);
             let mut val = Vec::with_capacity(n);
-            for k in 0..n {
-                idx.push(u16::from_le_bytes([corps[k*3], corps[k*3+1]]));
-                val.push(corps[k*3+2] as i8);
+            let mut prev = 0u32;
+            let mut lus = 0usize;
+            let mut echappements = 0usize;
+            while idx.len() < n {
+                if lus + 1 >= corps.len() && idx.len() + 1 < n {
+                    return Err(std::io::Error::new(std::io::ErrorKind::InvalidData,
+                        "corps de flux tronqué"));
+                }
+                let d = corps[lus]; lus += 1;
+                let absolu = if d == 255 {
+                    echappements += 1;
+                    let a = u16::from_le_bytes([corps[lus], corps[lus+1]]) as u32;
+                    lus += 2;
+                    a
+                } else { prev + d as u32 };
+                prev = absolu;
+                idx.push(absolu as u16);
+                val.push(corps[lus] as i8); lus += 1;
             }
-            return Ok(Flux { debut, fin, pos, mode, act, charge:
+            let octets_corps = 4 + n_blocs * 4 + 4 + longueur;
+            return Ok(Flux { debut, fin, pos, mode, act, octets_corps, charge:
                              ChargeFlux::Blocs { idx, val, echelles } });
         }
         _ => {}
@@ -1449,7 +1482,7 @@ fn recevoir_flux(s: &mut std::net::TcpStream) -> std::io::Result<Flux> {
         autre => return Err(std::io::Error::new(std::io::ErrorKind::InvalidData,
             format!("mode de flux inconnu : {autre}"))),
     };
-    Ok(Flux { debut, fin, pos, mode, act, charge })
+    Ok(Flux { debut, fin, pos, mode, act, octets_corps: octets.len(), charge })
 }
 
 /// Le NŒUD MOTEUR : charge le modèle, écoute, applique SA plage de couches au
@@ -1586,7 +1619,7 @@ fn run_ppl_reparti(opt: Options, pair: &str) {
         // Ce que coûte le découpage : le calcul local, et l'attente du pair
         // (son calcul + l'aller-retour réseau) — la latence, pas le débit.
         t_pair += horloge.elapsed().as_secs_f64();
-        octets_recus += TAILLE_TETE as u64 + rep.charge.actifs() as u64 * 4;
+        octets_recus += TAILLE_TETE as u64 + rep.octets_corps as u64;
         let final_ = rep.charge.en_dense(mdl.cfg.hidden);
         if pos + 1 < ids.len() {
             let hn = mdl.norme_finale(&final_);
@@ -1607,7 +1640,7 @@ fn run_ppl_reparti(opt: Options, pair: &str) {
     let nflux = flux_envoyes.max(1);
     println!("  transport         : {} · {:.0} octets par flux (aller) · {:.0} au retour · \
               {:.1} % d'activité ({:.0} neurones par flux) · {} flux",
-             match mode { MODE_BLOCS => "listes à échelle par bloc (3 octets/actif)",
+             match mode { MODE_BLOCS => "listes à échelle par bloc (2 octets/actif, écarts)",
                           MODE_LISTE => "listes quantifiées",
                           _ => "dense f32" },
              octets_envoyes as f64 / nflux as f64, octets_recus as f64 / nflux as f64,

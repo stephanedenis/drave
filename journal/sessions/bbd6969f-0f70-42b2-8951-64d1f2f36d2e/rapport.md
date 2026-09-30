@@ -7,12 +7,12 @@
 | Début | 2026-09-28 14:46 |
 | Durée | 44.8 h |
 | Tours | 44 |
-| Messages | 1569 |
-| Appels d'outils | 1484 |
+| Messages | 1571 |
+| Appels d'outils | 1486 |
 | Fichiers touchés | 44 |
-| Commandes | 1183 |
+| Commandes | 1185 |
 | Sous-agents | 1 |
-| Commits | 97 |
+| Commits | 98 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -1995,7 +1995,7 @@ Je vérifie l'heure à chaque itération et j'arrête à 12:06, en laissant un p
 
 ### Tour 44 — pendant que les charges locales s'executent, peux-tu avancer des chantiers légers sur les ressources loçcale ou d'analys … [7 caractères tronqués]
 
-*138 appels d'outils.* Actions notables :
+*140 appels d'outils.* Actions notables :
 
 - bash — Write and run the pure flux analysis tool
 - bash — Document the flux analysis and commit
@@ -2011,11 +2011,11 @@ Je vérifie l'heure à chaque itération et j'arrête à 12:06, en laissant un p
 - bash — Inspect state after timeout
 - bash — Rerun pre-fix distributed test in background
 - bash — Inspect all final-norm condition sites
-- … et 106 autres
+- … et 108 autres
 
 **Synthèse produite :**
 
-**Écart 0,00e0 sur 1 024 jetons** (perplexité 9,5146 des deux côtés, 1 024 flux). J'inscris ce chiffre et je clôture.
+Alerte hygiène : le **code** de l'encodage par écarts n'était pas dans le commit (j'avais ajouté les deux documents seulement). Je répare.
 
 ## 3. Travail accompli
 
@@ -2114,7 +2114,7 @@ Je vérifie l'heure à chaque itération et j'arrête à 12:06, en laissant un p
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 1143 autres
+- … et 1145 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2359,4 +2359,5 @@ Je vérifie l'heure à chaque itération et j'arrête à 12:06, en laissant un p
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p='docs/roadmap.md'; s=open(p).read() v = "| 2026-09-30 | diff KV f32 contre KV int8 (per
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add tools/pair_factice.py && git commit -q -F - <<'EOF' && echo "--- validation à 1024 jetons ---" && 
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p='reports/rapport-phase3-reparti.md'; s=open(p).read() v = """Égalité exacte, et pas seu
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git show --stat cb37c83 | tail -5; echo "=== ce que le code committé contient ==="; git show HEAD:drave-co
 
