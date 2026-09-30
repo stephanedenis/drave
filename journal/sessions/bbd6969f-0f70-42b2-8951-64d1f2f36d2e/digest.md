@@ -24458,3 +24458,101 @@ started background job bash-52
 Les chiffres sur **vrai texte** sont plus sobres que sur identifiants synthétiques — je corrige les affirmations du rapport (÷1,6 pour 2,7 %, pas « ÷2 pour 0,2 % »).
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/rapport-transport-liste.md'; s=open(p).read()\nv = \"\"\"Configuration utilisable aujourd'hui : `--flux-blocs --act-thresh 0.02`, soit\n**÷2,0 sur le fil pour 0,2 % de perplexité**.\"\"\"\nn = \"\"\"Confi … [4462 caractères tronqués]`
+
+  ```
+rapport corrigé avec le vrai texte
+roadmap corrigée
+2c7271b Transport : les chiffres du VRAI texte, plus sobres que ceux des identifiants synthétiques
+11:11:10
+  ```
+
+### 🤖 Assistant
+
+⏵ Dernier chantier technique : transporter l'entrée **normée** (bien conditionnée) au lieu du résidu brut — ce que la trace avait déjà prouvé.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n 2782,2800p drave-core/src/model.rs", "description": "Read forward loop head for norm skip"}`
+
+  ```
+let verif = std::env::var("DRAVE_FLUX_VERIF").is_ok();
+                let avant = if verif { hn.clone() } else { Vec::new() };
+                let j = self.jeton_trace;
+                let r = self.flux_force.as_mut().unwrap();
+                r.appliquer(l, j as usize, &mut hn);
+                if verif && r.servies < 4 {
+                    let mut mx = 0f32;
+                    let mut dyn_ = 0f32;
+                    for (a, b) in avant.iter().zip(hn.iter()) {
+                        mx = mx.max((a - b).abs());
+                        dyn_ = dyn_.max(a.abs());
+                    }
+                    println!("[verif] couche {l} pos {pos} : écart max {mx:.3e} sur une \
+dynamique de {dyn_:.3e} (relatif {:.2e})", mx / dyn_.max(1e-9));
+                }
+            } else if self.trace.is_some() {
+                let mut tmp = Vec::with_capacity(h);
+                if let Some((sv, sx)) = Self::quant_scratch(&hn, self.act_levels, self.act_thresh,
+                                                            tk(0), self.act_renorm, &mut tmp) {
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/model.rs'; s=open(p).read()\n# 1. le champ\nv = \"\"\"    pub flux_brut: bool,\"\"\"\nassert s.count(v) == 1\ns = s.replace(v, \"\"\"    pub flux_brut: bool,\n    /// Le flux REÇU est l'entrée **dé … [4509 caractères tronqués]`
+
+  ```
+model.rs : flux_norme + norme_entree
+main.rs : drapeau de forme dans l'en-tête
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/main.rs'; s=open(p).read()\n# serveur : appliquer la forme reçue\nv = \"\"\"                f.act.appliquer(&mut mdl);\n                mdl.couche_debut = f.debut as usize;\n                mdl.cou … [4005 caractères tronqués]`
+
+  ```
+pilote : --flux-norme branché
+    Finished `release` profile [optimized] target(s) in 0.01s
+11:11:57
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/banc_norme.sh <<'EOF'\n#!/bin/bash\ncd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\nIDS=$(head -256 /tmp/ids_qwen_512.txt | tr '\\n' ',' | sed 's/,$//')\np=45820\nfor cas in \"dense+norme:--flux-norme\" \"blocs001+norm … [546 caractères tronqués]`
+
+  ```
+started background job bash-53
+  ```
+
+- **job_output** `{"job_id": "bash-53", "timeout_ms": 300000, "wait": true}`
+
+  ```
+=== dense+norme (256 jetons de WikiText-2) ===
+  référence locale  : perplexité 18.0206  (11.0 s)
+  deux nœuds        : perplexité 119.1580  (10.9 s)
+  écart             : 5.61e0
+  transport         : dense f32 en entrée normée · 3624 octets par flux (aller) · 3624 au retour · 100.0 % d'activité (896 neurones par flux) · 256 flux
+  temps             : 16.0 ms par jeton en local · 16.1 ms à attendre le pair (son calcul + l'aller-retour) · soit 1.01× le calcul local seul
+=== blocs001+norme (256 jetons de WikiText-2) ===
+  référence locale  : perplexité 21.3033  (10.6 s)
+  deux nœuds        : perplexité 234.1495  (10.8 s)
+  écart             : 9.99e0
+  transport         : listes à échelle par bloc (3 octets/actif) en entrée normée · 2356 octets par flux (aller) · 2931 au retour · 81.8 % d'activité (733 neurones par flux) · 256 flux
+  temps             : 16.1 ms par jeton en local · 16.6 ms à attendre le pair (son calcul + l'aller-retour) · soit 1.03× le calcul local seul
+=== blocs002+norme (256 jetons de WikiText-2) ===
+  référence locale  : perplexité 27.8316  (10.7 s)
+  deux nœuds        : perplexité 435.0466  (10.8 s)
+  écart             : 1.46e1
+  transport         : listes à éche
+… [820 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+Le mode « entrée normée » est **faux** (dense : 5,61e0 au lieu de 0,00e0) : le résidu sert aussi à la connexion résiduelle. Je reviens en arrière et je documente la réfutation.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git checkout -- drave-core/src/model.rs drave-core/src/main.rs && cd drave-core && timeout 900 cargo build --release 2>&1 | tail -1 && cd .. && git status --short | head; echo \"=== contrôle : dense après retour arrière ===\"; TAG=re … [169 caractères tronqués]`
+
+  ```
+Finished `release` profile [optimized] target(s) in 20.66s
+ M journal/README.md
+=== contrôle : dense après retour arrière ===
+  deux nœuds        : perplexité 144.8289  (1.6 s)
+  écart             : 0.00e0
+  transport         : dense f32 · 3623 octets par flux (aller) · 3623 au retour · 100.0 % d'activité (896 neurones par flux) · 40 flux
+  temps             : 15.2 ms par jeton en local · 15.5 ms à attendre le pair (son calcul + l'aller-retour) · soit 1.02× le calcul local seul
+11:14:12
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/rapport-transport-liste.md'; s=open(p).read()\nv = \"\"\"D'où les deux suites possibles, par ordre de propreté :\n\n* **transmettre l'entrée normée** de la première couche distante (le nœud\n  distant sau … [4497 caractères tronqués]`

@@ -51,16 +51,34 @@ transport encode le résidu brut, dont la dynamique est bien plus large — une
 *relative* énorme sur les petits canaux, et l'erreur se compose sur douze
 couches.
 
-D'où les deux suites possibles, par ordre de propreté :
+D'où les deux suites possibles :
 
-* **transmettre l'entrée normée** de la première couche distante (le nœud
-  distant saute sa propre norme d'entrée) : c'est ce que la trace fait déjà, et
-  c'est bien conditionné ;
 * **une échelle par bloc de 32 canaux** (comme le cache KV) au lieu d'une échelle
-  par vecteur : même coût par valeur, erreur relative bornée par bloc, une
-  centaine d'octets de plus par flux.
+  par vecteur : faite, c'est `--flux-blocs` ci-dessus — erreur relative bornée
+  par bloc, et deux octets de moins par neurone actif ;
+* **transmettre l'entrée normée** de la première couche distante : essayée,
+  **RÉFUTÉE**, voir ci-dessous.
 
-Aucune des deux n'est faite ici : ce rapport s'arrête à la mesure, et l'écrit.
+### L'entrée normée : réfutation, et pourquoi
+
+L'idée semblait bonne — la trace encode l'entrée normée d'une couche et son rejeu
+sur 16 bits redonne la perplexité exacte. Un drapeau `--flux-norme` a donc été
+écrit : le pilote envoie `rmsnorm(résidu, attn_norm[12])`, le nœud distant saute
+sa propre norme d'entrée. Le banc de contrôle est sans pitié : **en mode dense,
+où le transport est exact, l'écart passe de 0,00e0 à 5,61e0** (perplexité 119
+contre 18,02). Ce n'est pas une perte de précision, c'est un calcul faux.
+
+La raison est simple une fois écrite : la norme d'entrée n'est pas seulement
+l'entrée de l'attention, c'est aussi **ce qui reste à côté** — la connexion
+résiduelle a besoin du résidu, pas de sa version normée. En remplaçant le résidu
+par l'entrée normée, on casse `x = x + attention(norme(x))` dès la première
+couche distante. Pour que l'idée marche, il faudrait transmettre **les deux**
+(deux fois plus d'octets, aucun gain) ou reconstruire le résidu par
+`x = hn · rms(x) / w` — exact sur le papier, fragile là où `w` s'approche de
+zéro.
+
+Le drapeau a été retiré, et c'est la mesure du mode dense qui l'a dit. Une
+hypothèse réfutée vaut mieux qu'un mode « presque juste » qu'on aurait gardé.
 
 ## Ajouts de la session
 

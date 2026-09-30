@@ -259,9 +259,14 @@ La leçon est écrite noir sur blanc : **le gain ne vient que de la sparsité**
 **jeter des canaux coûte cher** — l'écart est déjà de 2,6 % à 16 bits pleins,
 alors que le rejeu d'une trace quantifiée 16 bits redonnait la perplexité exacte.
 Ce n'est pas la précision qui diffère, c'est ce qu'on quantifie : le résidu brut
-a une dynamique bien plus large que l'entrée normée qu'encode la trace. Les deux
-suites (transmettre l'entrée normée, ou une échelle par bloc de 32 canaux) sont
-dans `reports/rapport-transport-liste.md`.
+a une dynamique bien plus large que l'entrée normée qu'encode la trace.
+
+La suite logique — transmettre l'entrée NORMÉE au lieu du résidu — a été essayée
+et **réfutée** : en mode dense, où le transport est exact, l'écart passait de
+0,00e0 à **5,61e0**. La norme d'entrée n'est pas seulement l'entrée de
+l'attention : la connexion résiduelle a besoin du résidu lui-même. Le drapeau a
+été retiré. Ce qui marche, c'est l'**échelle par bloc** (faite, `--flux-blocs`).
+Détail et chiffres : `reports/rapport-transport-liste.md`.
 Chiffres des trois états, mesurés sur le même banc de 40 jetons :
 
 | état | perplexité locale | perplexité répartie | écart |
