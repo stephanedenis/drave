@@ -25082,3 +25082,114 @@ e80ceb1 Phase 3.3 : le coût du découpage en fonction de la latence, mesuré
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date +\"%H:%M:%S\" && python3 - <<'PY'\np='REPRISE.md'; s=open(p).read()\nv = \"\"\"`TCP_NODELAY` a divisé l'attente du pair par six (**97,6 → 16,1 ms** par jeton,\nsoit 1,01× le calcul local) : le banc réparti prend maintenant le te … [2195 caractères tronqués]`
+
+  ```
+11:39:21
+REPRISE + journal : latence et 1024 jetons
+1cf4714 REPRISE et journal : la formule de latence et la validation à 1 024 jetons
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== processus restants de mes bancs ===\"; pgrep -a -f \"flux-serveur|pair_factice|proxy_latence|ppl-reparti\" | grep -v pgrep | head; for pid in $(pgrep -f \"flux-serveur\" ); do kill $pid 2>/dev/null; done; for pid in $(pgre … [482 caractères tronqués]`
+
+  ```
+=== processus restants de mes bancs ===
+141726 python3 tools/pair_factice.py 45763 896
+[killed by signal: SIGTERM]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && MOI=$$; for pid in $(pgrep -f \"tools/pair_factice.py\" | grep -v \"^$MOI\\$\"); do kill $pid 2>/dev/null; done; for pid in $(pgrep -f \"tools/proxy_latence.py\" | grep -v \"^$MOI\\$\"); do kill $pid 2>/dev/null; done; for pid in $(p … [434 caractères tronqués]`
+
+  ```
+--- processus drave restants ---
+(vide = machine rendue)
+=== état du dépôt ===
+ M journal/README.md
+1cf4714 REPRISE et journal : la formule de latence et la validation à 1 024 jetons
+e80ceb1 Phase 3.3 : le coût du découpage en fonction de la latence, mesuré
+af18f29 Transport en listes à 1 024 jetons : ÷2,3 pour 1,3 % d'écart
+86ddf12 Le CODE de l'encodage par écarts, oublié dans le commit précédent
+3ae3f45 Découpage fidèle à 1 024 jetons : 0,00e0 sur 1 024 flux
+f4bce59 tools/pair_factice.py : les trois modes, et plusieurs clients
+9fe0c80 Feuille de route : les cinq mesures de la session au journal
+cb37c83 Transport : indices par écarts — 3 623 → 1 568 octets par flux, à quantification identique
+976cb81 Transport : l'écart DÉCROÎT avec la longueur (la courbe le dit, pas moi)
+4396f25 REPRISE : le calcul réparti tient debout (§6bis) et les commandes pour le rejouer
+fb8183a L'entrée normée sur le fil : hypothèse RÉFUTÉE par la mesure
+2c7271b Transport : les chiffres du VRAI texte, plus sobres que ceux des identifiants synthétiques
+27f46c1 Répétition Colab : nœud moteur écoutable au-delà de localhost + recette
+5ea06f9 Phase 3 : échelles par bloc, TCP_NODELAY, et l'écart KV attribué aux c
+… [222 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+Machine rendue, dépôt propre, 16 commits. Il reste ~25 min : je supprime le flux inutile du **dernier jeton** (un aller-retour distant pour rien, 1/40 du travail du banc).
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n 1490,1512p drave-core/src/main.rs", "description": "Read pilot split loop"}`
+
+  ```
+/// banc d'essai, pas un service.
+fn run_serveur_flux(opt: Options, adresse: &str) {
+    // `port` reste localhost ; `hôte:port` écoute sur l'interface nommée
+    // (« 0.0.0.0:5599 » pour un pair distant). Le pair distant est le cas de la
+    // phase 3.4 : un nœud Colab, ou une autre machine du réseau.
+    let (hote, port) = match adresse.rsplit_once(':') {
+        Some((h, p)) => (h.to_string(), p.parse().expect("port invalide")),
+        None => ("127.0.0.1".to_string(), adresse.parse().expect("port invalide")),
+    };
+    let chemin = modele_chemin();
+    // Le contexte du nœud moteur suit `--ctx` : figé à 4096, il faisait payer au
+    // pair des tampons d'attention seize fois plus grands que le banc (mesuré :
+    // 4,8 s contre 1,7 s pour le même calcul, à contexte 256).
+    let ctx = if opt.ctx_impose { opt.ctx } else { 4096 };
+    let mut mdl = model::Model::load(&chemin, ctx, 16, true, 1.0, false, 0, 0);
+    appliquer_quantification(&mut mdl, &opt);
+    let hidden = mdl.cfg.hidden;
+    let ecoute = std::net::TcpListener::bind((hote.as_str(), port)).expect("écoute");
+    println!("[flux] nœud moteur sur {hote}:{port} · {hidden} cachés · {} couches · contexte {ctx}",
+     
+… [252 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"let horloge = Instant::now();\" -B 4 -A 22 drave-core/src/main.rs | sed -n 1,40p", "description": "Locate pilot send/receive block"}`
+
+  ```
+1604-    let mut t_pair = 0f64;
+1605-    let t1 = Instant::now();
+1606-    let mut nll = 0f64;
+1607-    for (pos, &t) in ids.iter().enumerate() {
+1608:        let horloge = Instant::now();
+1609-        let etat = mdl.forward(t, pos);
+1610-        t_local += horloge.elapsed().as_secs_f64();
+1611:        let horloge = Instant::now();
+1612-        let (o, a) = envoyer_flux(&mut sock, couches_locales as u32, n_layer as u32,
+1613-                                  pos as u32, &etat, mode, Some(&mdl))
+1614-                        .expect("envoi du flux");
+1615-        octets_envoyes += o as u64;
+1616-        actifs_envoyes += a as u64;
+1617-        flux_envoyes += 1;
+1618-        let rep = recevoir_flux(&mut sock).expect("réception du flux");
+1619-        // Ce que coûte le découpage : le calcul local, et l'attente du pair
+1620-        // (son calcul + l'aller-retour réseau) — la latence, pas le débit.
+1621-        t_pair += horloge.elapsed().as_secs_f64();
+1622-        octets_recus += TAILLE_TETE as u64 + rep.octets_corps as u64;
+1623-        let final_ = rep.charge.en_dense(mdl.cfg.hidden);
+1624-        if pos + 1 < ids.len() {
+1625-            let hn = mdl.norme_finale(&final_);
+1626- 
+… [361 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/main.rs'; s=open(p).read()\nv = \"\"\"        let horloge = Instant::now();\n        let etat = mdl.forward(t, pos);\n        t_local += horloge.elapsed().as_secs_f64();\n        let horloge = Inst … [2868 caractères tronqués]`
+
+  ```
+dernier jeton : plus de flux (mais calcul local conservé)
+    Finished `release` profile [optimized] target(s) in 0.01s
+  deux nœuds        : perplexité 18.0206  (10.8 s)
+  écart             : 0.00e0
+  transport         : dense f32 · 3623 octets par flux (aller) · 3623 au retour · 100.0 % d'activité (896 neurones par flux) · 255 flux
+  temps             : 16.3 ms par jeton en local · 16.4 ms à attendre le pair (son calcul + l'aller-retour) · soit 1.01× le calcul local seul
+11:40:38
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/main.rs'; s=open(p).read()\nv = \"\"\"        // Le DERNIER jeton n'a rien à prédire : lui demander un aller-retour\n        // distant, c'est payer un calcul complet pour un état que personne ne\n … [1958 caractères tronqués]`

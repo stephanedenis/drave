@@ -1605,6 +1605,14 @@ fn run_ppl_reparti(opt: Options, pair: &str) {
     let t1 = Instant::now();
     let mut nll = 0f64;
     for (pos, &t) in ids.iter().enumerate() {
+        let dernier = pos + 1 == ids.len();
+        // Le DERNIER jeton n'a rien à prédire : lui demander un aller-retour
+        // distant, c'est payer un calcul complet — des deux côtés — pour un état
+        // que personne ne lit. On sort donc ici, AVANT le calcul local aussi.
+        // La référence locale, elle, calcule encore ce dernier jeton pour rien
+        // (1 sur N : négligeable, mais écrit ici pour que personne ne s'étonne
+        // d'un écart de temps entre les deux chemins).
+        if dernier { break; }
         let horloge = Instant::now();
         let etat = mdl.forward(t, pos);
         t_local += horloge.elapsed().as_secs_f64();

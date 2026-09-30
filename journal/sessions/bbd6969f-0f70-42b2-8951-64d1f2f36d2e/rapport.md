@@ -7,12 +7,12 @@
 | Début | 2026-09-28 14:46 |
 | Durée | 44.9 h |
 | Tours | 44 |
-| Messages | 1577 |
-| Appels d'outils | 1492 |
+| Messages | 1583 |
+| Appels d'outils | 1498 |
 | Fichiers touchés | 44 |
-| Commandes | 1191 |
+| Commandes | 1197 |
 | Sous-agents | 1 |
-| Commits | 101 |
+| Commits | 102 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -1995,7 +1995,7 @@ Je vérifie l'heure à chaque itération et j'arrête à 12:06, en laissant un p
 
 ### Tour 44 — pendant que les charges locales s'executent, peux-tu avancer des chantiers légers sur les ressources loçcale ou d'analys … [7 caractères tronqués]
 
-*146 appels d'outils.* Actions notables :
+*152 appels d'outils.* Actions notables :
 
 - bash — Write and run the pure flux analysis tool
 - bash — Document the flux analysis and commit
@@ -2011,11 +2011,11 @@ Je vérifie l'heure à chaque itération et j'arrête à 12:06, en laissant un p
 - bash — Inspect state after timeout
 - bash — Rerun pre-fix distributed test in background
 - bash — Inspect all final-norm condition sites
-- … et 114 autres
+- … et 120 autres
 
 **Synthèse produite :**
 
-Mesure nette : **attente ≈ 16 ms + 3,2 × latence** (1,01× → 1,99× → 4,89×), fidélité intacte (0,00e0). Je chiffre l'attente Colab et je clos.
+Machine rendue, dépôt propre, 16 commits. Il reste ~25 min : je supprime le flux inutile du **dernier jeton** (un aller-retour distant pour rien, 1/40 du travail du banc).
 
 ## 3. Travail accompli
 
@@ -2114,7 +2114,7 @@ Mesure nette : **attente ≈ 16 ms + 3,2 × latence** (1,01× → 1,99× → 4,8
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 1151 autres
+- … et 1157 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2363,4 +2363,5 @@ Mesure nette : **attente ≈ 16 ms + 3,2 × latence** (1,01× → 1,99× → 4,8
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p='reports/rapport-transport-liste.md'; s=open(p).read() v = """| jetons | écart | octets
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p='reports/rapport-transport-liste.md'; s=open(p).read() v = """C'est aussi la réponse à 
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date +"%H:%M:%S" && python3 - <<'PY' p='REPRISE.md'; s=open(p).read() v = """`TCP_NODELAY` a divisé l'atte
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p='drave-core/src/main.rs'; s=open(p).read() v = """        // Le DERNIER jeton n'a rien 
 
