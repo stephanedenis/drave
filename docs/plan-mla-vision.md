@@ -422,3 +422,36 @@ plausible) ; (2) retrouver la signature exacte de `mtmd_tokenize` dans une
 version de llama.cpp (le dépôt n'a pas de copie locale, mais la documentation en
 ligne la donne) ; (3) se passer de mtmd et prendre le modèle de vision comme
 référence en Python (coûteux, mais sans ABI).
+
+### L'API de mtmd est maintenant CONNUE (en-tête récupéré)
+
+`mtmd.h` de llama.cpp a été récupéré (22 ko) et dépouillé — les trois tours de
+rétro-ingénierie à l'aveugle sont remplacés par des signatures exactes :
+
+```c
+struct mtmd_input_text { const char * text; size_t text_len;
+                         bool add_special; bool parse_special; };   // text_len !
+struct mtmd_context_params { bool use_gpu; ggml_backend_dev_t device; bool print_timings;
+                             int n_threads; const char * image_marker; const char * media_marker;
+                             enum llama_flash_attn_type flash_attn_type; bool warmup;
+                             int image_min_tokens; int image_max_tokens; /* + callback */ };
+
+int32_t mtmd_tokenize(const mtmd_context * ctx, mtmd_input_chunks * output,
+                      const mtmd_input_text * text, const mtmd_bitmap * const * bitmaps,
+                      size_t n_bitmaps);
+mtmd_input_chunks * mtmd_input_chunks_init(void);
+int32_t mtmd_encode_chunk(mtmd_context * ctx, const mtmd_input_chunk * chunk);
+float * mtmd_get_output_embd(mtmd_context * ctx);
+```
+
+Les codes de retour de `tokenize` sont documentés dans l'en-tête : **1** = nombre
+de bitmaps ≠ nombre de marqueurs, **2** = **erreur de prétraitement du média**.
+C'est donc le code 2 qui tombe : mon image est acceptée par le bitmap, mais
+refusée par le prétraitement du modèle. Format vérifié conforme (`nx * ny * 3`,
+RGB entrelacé), taille conforme (`84 × 84 = 7 056 ≥ image_min_pixels = 6 272`).
+
+Pistes restantes, dans l'ordre : (1) `image_min_tokens` — passer une image plus
+grande (par exemple 336 × 336, comme le fait llama.cpp dans ses exemples) ;
+(2) compiler le programme en C contre les mêmes bibliothèques (le mélange de
+runtimes C++ reste plausible) ; (3) comparer à la référence Python du modèle de
+vision, sans ABI du tout.

@@ -6,13 +6,13 @@
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
 | Durée | 30.4 h |
-| Tours | 25 |
-| Messages | 1260 |
-| Appels d'outils | 1218 |
+| Tours | 26 |
+| Messages | 1268 |
+| Appels d'outils | 1224 |
 | Fichiers touchés | 39 |
-| Commandes | 949 |
+| Commandes | 955 |
 | Sous-agents | 1 |
-| Commits | 58 |
+| Commits | 59 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -75,6 +75,8 @@
 **Tour 24** — <goal_round> Objective: "Réaliser les 6 nouveaux chantiers du projet qtrinet-core, dans l'ordre : (1) relancer le test de l'aiguille sur contexte long (remplissage varié en vrai texte, moins de sondes, réponses plus longues) sur un modèle capable, grâce au préremplissage par lots et au KV déporté ; (2) chemin GPU : dépaquetage vectorisé du noyau d'attention (13,2 ms/couche à 1 M en int4 vers ~3 ms … [1492 caractères tronqués]
 
 **Tour 25** — <goal_round> Objective: "Réaliser les 6 nouveaux chantiers du projet qtrinet-core, dans l'ordre : (1) relancer le test de l'aiguille sur contexte long (remplissage varié en vrai texte, moins de sondes, réponses plus longues) sur un modèle capable, grâce au préremplissage par lots et au KV déporté ; (2) chemin GPU : dépaquetage vectorisé du noyau d'attention (13,2 ms/couche à 1 M en int4 vers ~3 ms … [1492 caractères tronqués]
+
+**Tour 26** — <goal_round> Objective: "Réaliser les 6 nouveaux chantiers du projet qtrinet-core, dans l'ordre : (1) relancer le test de l'aiguille sur contexte long (remplissage varié en vrai texte, moins de sondes, réponses plus longues) sur un modèle capable, grâce au préremplissage par lots et au KV déporté ; (2) chemin GPU : dépaquetage vectorisé du noyau d'attention (13,2 ms/couche à 1 M en int4 vers ~3 ms … [1492 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -1163,7 +1165,50 @@ L'objectif reste **actif**. Le prochain tour peut tenter le programme en C (hypo
 
 **Synthèse produite :**
 
-⏵ Piste sérieuse : `mtmd_tokenize` attend une STRUCT, pas une chaîne
+⏵ Tour 16 : deux hypothèses de plus testées sur `mtmd_tokenize`
+
+\## Fait dans ce tour
+
+Le programme de référence avance mais bute toujours sur le même appel. Les deux hypothèses les plus sérieuses ont été testées et **écartées par la mesure** :
+
+1. le marqueur **du contexte** (`mtmd_get_marker`) plutôt que celui par défaut — les deux valent `<__media__>`, aucun changement ;
+2. une **structure d'entrée** `(text, add_special, parse_special)` au lieu d'un `char *` — toujours `basic_string::_M_replace`, rc = 2.
+
+Tout le reste du chemin fonctionne : backend ggml chargé explicitement, modèle de texte chargé, projecteur chargé (519 tenseurs), contexte multimodal instancié, bitmap accepté (84 × 84, conforme à `image_min_pixels = 6272`), conteneur de morceaux alloué.
+
+**Un en-tête `mtmd.h` trancherait en dix secondes ce que trois tours de rétro-ingénierie n'ont pas tranché.** C'est le constat honnête, et il est écrit dans le plan avec trois pistes ordonnées : programme en **C** contre les mêmes bibliothèques (le mélange de runtimes C++ reste l'hypothèse la plus plausible), signature exacte retrouvée dans une version de llama.cpp, ou référence Python du modèle de vision (coûteuse, mais sans ABI).
+
+Point important : **ce blocage ne concerne que la vérification**, pas le travail livré. Les tranches du chemin image sont validées contre numpy (patchs 5,4e-7, couche 1,8e-6, projecteur 1,7e-6), la tour entière tourne, et le point d'injection des embeddings est en place.
+
+\## État des six chantiers
+
+| # | chantier | état |
+|---|---|---|
+| 1 | aiguille long contexte | ✅ 12/12 |
+| 2 | chemin GPU (5 sous-items) | ✅ |
+| 3 | mémoire KV | ✅ |
+| 4 | rotation à 16 k | ✅ |
+| 5 | MLA ✅ (5,2e-7) · vision : 4 tranches validées, tour complète, injection branchée, conventions d'attention non tranchées | en cours |
+| 6 | hygiène | ✅ |
+
+`cargo test` 6/6, arbre propre, portes Qwen **19,3885** / gpt-oss **15,1757** intactes.
+
+L'objectif reste **actif**. Je note honnêtement que les trois derniers tours ont été consommés par l'API d'une bibliothèque sans en-têtes, sans résultat : si le prochain tour ne débloque pas `mtmd_tokenize` rapidement (essai en C, ou signature retrouvée), la bonne décision sera de **clore le chantier vision à son état actuel** — mesuré, documenté, avec la lacune explicitement nommée — plutôt que d'y consumer d'autres tours.
+
+### Tour 26 — <goal_round> Objective: "Réaliser les 6 nouveaux chantiers du projet qtrinet-core, dans l'ordre : (1) relancer le test d … [1772 caractères tronqués]
+
+*6 appels d'outils.* Actions notables :
+
+- bash — Fetch mtmd.h and extract signatures
+- bash — Extract exact signatures from mtmd.h
+- bash — Add text_len and run reference
+- bash — Get exact tokenize declaration
+- bash — Read bitmap format docs
+- bash — Document exact mtmd API and commit
+
+**Synthèse produite :**
+
+⏵ Trouvé : il manquait `text_len` dans la structure d'entrée
 
 ## 3. Travail accompli
 
@@ -1257,7 +1302,7 @@ L'objectif reste **actif**. Le prochain tour peut tenter le programme en C (hypo
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 909 autres
+- … et 915 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1463,4 +1508,5 @@ L'objectif reste **actif**. Le prochain tour peut tenter le programme en C (hypo
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/vision_etat.txt <<'EOF' ### libmtmd : où en est le programme de référence  Le programme `tools/
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/mtmd_etat2.txt <<'EOF'  ### libmtmd : état exact après ce tour  Tout ce qui précède `mtmd_token
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat >> docs/plan-mla-vision.md <<'EOF'  ### tokenize : deux hypothèses testées, aucune ne suffit  Après le
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat >> docs/plan-mla-vision.md <<'EOF'  ### L'API de mtmd est maintenant CONNUE (en-tête récupéré)  `mtmd.
 

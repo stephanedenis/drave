@@ -19950,3 +19950,182 @@ tokenize rc=2 · 0 morceaux
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat >> docs/plan-mla-vision.md <<'EOF'\n\n### tokenize : deux hypothèses testées, aucune ne suffit\n\nAprès le sondage et les corrections (conteneur de morceaux rendu par\n`mtmd_input_chunks_init`, image 84 × 84 conforme à `image_min … [2297 caractères tronqués]`
+
+  ```
+301f65b vision : deux hypothèses de plus testées sur mtmd_tokenize, aucune ne suffit
+  ```
+
+### 🤖 Assistant
+
+⏵ Tour 16 : deux hypothèses de plus testées sur `mtmd_tokenize`
+
+## Fait dans ce tour
+
+Le programme de référence avance mais bute toujours sur le même appel. Les deux hypothèses les plus sérieuses ont été testées et **écartées par la mesure** :
+
+1. le marqueur **du contexte** (`mtmd_get_marker`) plutôt que celui par défaut — les deux valent `<__media__>`, aucun changement ;
+2. une **structure d'entrée** `(text, add_special, parse_special)` au lieu d'un `char *` — toujours `basic_string::_M_replace`, rc = 2.
+
+Tout le reste du chemin fonctionne : backend ggml chargé explicitement, modèle de texte chargé, projecteur chargé (519 tenseurs), contexte multimodal instancié, bitmap accepté (84 × 84, conforme à `image_min_pixels = 6272`), conteneur de morceaux alloué.
+
+**Un en-tête `mtmd.h` trancherait en dix secondes ce que trois tours de rétro-ingénierie n'ont pas tranché.** C'est le constat honnête, et il est écrit dans le plan avec trois pistes ordonnées : programme en **C** contre les mêmes bibliothèques (le mélange de runtimes C++ reste l'hypothèse la plus plausible), signature exacte retrouvée dans une version de llama.cpp, ou référence Python du modèle de vision (coûteuse, mais sans ABI).
+
+Point important : **ce blocage ne concerne que la vérification**, pas le travail livré. Les tranches du chemin image sont validées contre numpy (patchs 5,4e-7, couche 1,8e-6, projecteur 1,7e-6), la tour entière tourne, et le point d'injection des embeddings est en place.
+
+## État des six chantiers
+
+| # | chantier | état |
+|---|---|---|
+| 1 | aiguille long contexte | ✅ 12/12 |
+| 2 | chemin GPU (5 sous-items) | ✅ |
+| 3 | mémoire KV | ✅ |
+| 4 | rotation à 16 k | ✅ |
+| 5 | MLA ✅ (5,2e-7) · vision : 4 tranches validées, tour complète, injection branchée, conventions d'attention non tranchées | en cours |
+| 6 | hygiène | ✅ |
+
+`cargo test` 6/6, arbre propre, portes Qwen **19,3885** / gpt-oss **15,1757** intactes.
+
+L'objectif reste **actif**. Je note honnêtement que les trois derniers tours ont été consommés par l'API d'une bibliothèque sans en-têtes, sans résultat : si le prochain tour ne débloque pas `mtmd_tokenize` rapidement (essai en C, ou signature retrouvée), la bonne décision sera de **clore le chantier vision à son état actuel** — mesuré, documenté, avec la lacune explicitement nommée — plutôt que d'y consumer d'autres tours.
+
+
+## Tour 26
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Réaliser les 6 nouveaux chantiers du projet qtrinet-core, dans l'ordre : (1) relancer le test de l'aiguille sur contexte long (remplissage varié en vrai texte, moins de sondes, réponses plus longues) sur un modèle capable, grâce au préremplissage par lots et au KV déporté ; (2) chemin GPU : dépaquetage vectorisé du noyau d'attention (13,2 ms/couche à 1 M en int4 vers ~3 ms), brancher MXFP4 dans le moteur avec une politique de résidence des experts, attention par lots sur GPU dans forward_lot, noyau de tête Q8_0 accéléré (AVX2 ou déport), et usage du second GPU ; (3) mémoire : pagination du cache KV côté CPU (25,77 Go réservés à ctx 1 M pour 512 jetons écrits) et test de l'hypothèse « clés en f16 avant quantification » pour l'écart int8 avec llama.cpp à 8 192 (+3,0 % contre +0,8 %) ; (4) rotation au-delà de 5 120 jetons (passe à 16 k) ; (5) structurel : MLA (aucun modèle local — construire un modèle MLA synthétique et valider contre une référence indépendante) et vision (poids Qwen2.5-VL et projecteur mmproj présents) ; (6) hygiène : réécrire la section « Ce qu'il faut faire ensuite » de REPRISE.md et y consigner les pièges QT_GPU/QT_GPU_TETE/QT_GPU_KV. Chaque chantier doit être implémenté, mesuré (portes de non-régression Qwen 19,3885 et gpt-oss 15,1757 sans QT_GPU), documenté dans le dépôt et commité."
+Round: 17/30
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /tmp && timeout 120 python3 - <<'PY'\nimport urllib.request, re\nurl = \"https://raw.githubusercontent.com/ggml-org/llama.cpp/master/tools/mtmd/mtmd.h\"\ntry:\n    t = urllib.request.urlopen(url, timeout=60).read().decode()\nexcept Exception as e:\n    print(\"échec:\", e); raise Sys … [649 caractères tronqués]`
+
+  ```
+taille 22390
+--- typedef struct mtmd_input_text   mtmd_input_text;
+--- struct mtmd_input_text {
+    const char * text;
+--- "use mtmd_encode_chunk() instead");
+--- MTMD_API float * mtmd_get_output_embd(mtmd_context * ctx);
+--- MTMD_API mtmd_context * mtmd_init_from_file(const char * mmproj_fname,
+                                            const struct llama_model * text_model,
+                                            const struct mtmd_context_params ctx_params);
+--- struct mtmd_context_params {
+    bool use_gpu;
+  ```
+
+- **bash** `{"command": "grep -n -A 6 \"mtmd_tokenize\" /tmp/mtmd.h | head -14; echo \"=== input_text ===\"; grep -n -A 6 \"struct mtmd_input_text {\" /tmp/mtmd.h | head -8; echo \"=== params ===\"; grep -n -A 14 \"struct mtmd_context_params {\" /tmp/mtmd.h | head -16", "description": "Extract exact signatures  … [13 caractères tronqués]`
+
+  ```
+165://           into one chunk; mtmd_tokenize() handles this, but remember to set
+166-//           mtmd_bitmap_set_mergeable(true) for every frame
+167-// if bitmap is audio:
+168-//     length of data must be n_samples * sizeof(float)
+169-//     the data is in float format (PCM F32)
+170-//
+171-// if data == nullptr:
+--
+173://     you can pass the bitmap via mtmd_tokenize(), then call mtmd_*_get_n_tokens() to count the tokens
+174-//     note: passing a placeholder bitmap to mtmd_encode() will return an error
+175-MTMD_API mtmd_bitmap *         mtmd_bitmap_init           (uint32_t nx, uint32_t ny, const unsigned char * data);
+176-MTMD_API mtmd_bitmap *         mtmd_bitmap_init_from_audio(size_t n_samples,         const float         * data);
+177-MTMD_API uint32_t              mtmd_bitmap_get_nx     (const mtmd_bitmap * bitmap);
+178-MTMD_API uint32_t              mtmd_bitmap_get_ny     (const mtmd_bitmap * bitmap);
+=== input_text ===
+69:struct mtmd_input_text {
+70-    const char * text;
+71-    size_t text_len;
+72-    bool add_special;
+73-    bool parse_special;
+74-};
+75-
+=== params ===
+97:struct mtmd_context_params {
+98-    bool use_gpu;
+99-    ggml_backend_dev_t device;
+100-    bool p
+… [641 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Trouvé : il manquait `text_len` dans la structure d'entrée
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='tools/vision_mtmd.py'; s=open(p).read()\ns = s.replace(\"\"\"    class Entree(ctypes.Structure):\n        _fields_ = [(\"text\", ctypes.c_char_p),\n                    (\"add_special\", ctypes.c_bool),\n          … [1264 caractères tronqués]`
+
+  ```
+text_len ajouté
+
+
+--- vision hparams ---
+
+contexte mtmd : ok
+bitmap : ok
+marqueur du contexte : b'<__media__>' · par défaut : b'<__media__>'
+conteneur de morceaux : ok
+mtmd_tokenize: error: basic_string::_M_replace
+tokenize rc=2 · 0 morceaux
+  ```
+
+- **bash** `{"command": "grep -n -B2 -A 8 \"MTMD_API int32_t mtmd_tokenize\" /tmp/mtmd.h; grep -n \"mtmd_input_chunks_init\\|mtmd_encode_chunk\\|mtmd_output_embd\" /tmp/mtmd.h | head -6", "description": "Get exact tokenize declaration"}`
+
+  ```
+300-//   1 on number of bitmaps not matching the number of markers
+301-//   2 on media preprocessing error
+302:MTMD_API int32_t mtmd_tokenize(const mtmd_context * ctx,
+303-                               mtmd_input_chunks * output,
+304-                               const mtmd_input_text * text,
+305-                               const mtmd_bitmap * const * bitmaps,
+306-                               size_t n_bitmaps);
+307-
+308-// same as mtmd_tokenize(), but takes an array of mtmd_input_part
+309-// use cases:
+310-// - when you don't want to use media markers (they will be tokenized as normal text)
+--
+312-// note: per-part add_special will be ignored
+313-// return 1 if a part has both text and bitmap set (or neither)
+314:MTMD_API int32_t mtmd_tokenize_from_parts(const mtmd_context * ctx,
+315-                                          mtmd_input_chunks * output,
+316-                                          const mtmd_input_part * const * parts,
+317-                                          size_t n_parts,
+318-                                          bool add_special);
+319-
+320-DEPRECATED(MTMD_API int32_t mtmd_encode(mtmd_context * ctx, const mtmd_image_tokens * image_tokens),
+321-  
+… [227 caractères tronqués]
+  ```
+
+- **bash** `{"command": "sed -n '150,176p' /tmp/mtmd.h", "description": "Read bitmap format docs"}`
+
+  ```
+MTMD_API bool mtmd_support_audio(const mtmd_context * ctx);
+
+// get audio sample rate in Hz, for example 16000 for Whisper
+// return -1 if audio is not supported
+MTMD_API int mtmd_get_audio_sample_rate(const mtmd_context * ctx);
+
+// get the current marker string
+MTMD_API const char * mtmd_get_marker(const mtmd_context * ctx);
+
+// mtmd_bitmap
+//
+// if bitmap is image:
+//     length of data must be nx * ny * 3
+//     the data is in RGBRGBRGB... format
+//     note: some video-capable models (i.e. qwen-vl) can merge consecutive bitmaps
+//           into one chunk; mtmd_tokenize() handles this, but remember to set
+//           mtmd_bitmap_set_mergeable(true) for every frame
+// if bitmap is audio:
+//     length of data must be n_samples * sizeof(float)
+//     the data is in float format (PCM F32)
+//
+// if data == nullptr:
+//     the bitmap is considered "empty", and will be treated as a placeholder for counting tokens
+//     you can pass the bitmap via mtmd_tokenize(), then call mtmd_*_get_n_tokens() to count the tokens
+//     note: passing a placeholder bitmap to mtmd_encode() will return an error
+MTMD_API mtmd_bitmap *         mtmd_bitmap_init           (uint32_t nx, uint32_t ny, const
+… [137 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat >> docs/plan-mla-vision.md <<'EOF'\n\n### L'API de mtmd est maintenant CONNUE (en-tête récupéré)\n\n`mtmd.h` de llama.cpp a été récupéré (22 ko) et dépouillé — les trois tours de\nrétro-ingénierie à l'aveugle sont remplacés par d … [2773 caractères tronqués]`
