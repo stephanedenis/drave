@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 29.0 h |
+| Durée | 29.1 h |
 | Tours | 10 |
-| Messages | 1117 |
-| Appels d'outils | 1106 |
+| Messages | 1121 |
+| Appels d'outils | 1110 |
 | Fichiers touchés | 37 |
-| Commandes | 842 |
+| Commandes | 846 |
 | Sous-agents | 1 |
-| Commits | 41 |
+| Commits | 42 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -452,7 +452,7 @@ L'objectif reste actif : la suite (2d, 2e, résultat du 16 k, puis MLA/vision) e
 
 ### Tour 10 — <goal_round> Objective: "Réaliser les 6 nouveaux chantiers du projet qtrinet-core, dans l'ordre : (1) relancer le test d … [1771 caractères tronqués]
 
-*14 appels d'outils.* Actions notables :
+*18 appels d'outils.* Actions notables :
 
 - bash — Check 16k rotation job and repo state
 - bash — Read Q8_0 branch of q8_dot_at
@@ -468,6 +468,7 @@ L'objectif reste actif : la suite (2d, 2e, résultat du 16 k, puis MLA/vision) e
 - bash — Wait for 16k rotation result
 - bash — Commit plan and wait for rotation
 - bash — Fix commit message quoting
+- … et 4 autres
 
 **Synthèse produite :**
 
@@ -563,7 +564,7 @@ L'objectif reste actif : la suite (2d, 2e, résultat du 16 k, puis MLA/vision) e
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 802 autres
+- … et 806 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -752,4 +753,5 @@ L'objectif reste actif : la suite (2d, 2e, résultat du 16 k, puis MLA/vision) e
 - cat /tmp/rotation_16k.log; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p='docs/contexte-long.md'; s=open(p).read() old = """Il reste,
 - docs : plan détaillé pour MLA et la vision (chantier 5)  MLA n'est pas testable en l'état (aucun modèle MLA en GGUF ici — le deepseek-r1-distill local est un Qw
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log -1 --format=%B | tail -4 && cat > /tmp/msg_plan.txt <<'EOF' docs : plan détaillé pour MLA et la vi
+- journal : archive automatique" 2>/dev/null; git log --oneline -3 | cat
 

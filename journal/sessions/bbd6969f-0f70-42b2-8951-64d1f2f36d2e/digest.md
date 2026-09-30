@@ -17959,3 +17959,50 @@ bash: line 1: forward: command not found
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log -1 --format=%B | tail -4 && cat > /tmp/msg_plan.txt <<'EOF'\ndocs : plan détaillé pour MLA et la vision (chantier 5)\n\nMLA n'est pas testable en l'état (aucun modèle MLA en GGUF ici — le\ndeepseek-r1-distill local est un Qwe … [878 caractères tronqués]`
+
+  ```
+Rien n'y est mesuré — c'est une feuille de route, et elle est marquée comme
+telle.
+
+Rien n'y est mesuré — c'est une feuille de route, et elle est marquée comme
+telle.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log -1 --format=%B | head -6 && echo \"...\" && git log -1 --format=%B | wc -l && sleep 480 && cat /tmp/rotation_16k.log", "description": "Verify amended message and check rotation", "timeoutMs": 600000}`
+
+  ```
+docs : plan détaillé pour MLA et la vision (chantier 5)
+
+MLA n'est pas testable en l'état (aucun modèle MLA en GGUF ici — le
+deepseek-r1-distill local est un Qwen dense). Le document donne la voie : un
+modèle MLA SYNTHÉTIQUE écrit en GGUF, une référence numpy indépendante, et un
+contrôle négatif astucieux — en posant W_kv_b = I et kv_lora_rank = n_head x 192,
+...
+18
+ctx 16384 simple  :
+  ```
+
+- **bash** `{"command": "ps -o pid,etime,time,rss,args -p $(pgrep -x qtrinet-core | head -1) 2>/dev/null | cut -c1-140; nvidia-smi --query-gpu=index,utilization.gpu,memory.used --format=csv,noheader 2>/dev/null", "description": "Check rotation process progress and GPU use"}`
+
+  ```
+PID     ELAPSED     TIME   RSS COMMAND
+3768087       27:41 08:04:31 64587380 ./qtrinet-core/target/release/qtrinet-core /home/stephane/FastNVMe/models/gpt-oss-120b-MXFP4.gguf --pp
+0, 21 %, 1286 MiB
+1, 3 %, 3694 MiB
+  ```
+
+- **bash** `{"command": "pgrep -af \"rotation_16k\" | head -3; echo \"---\"; pgrep -af \"qtrinet-core\" | head -2 | cut -c1-200; echo \"---\"; wc -l /tmp/rotation_16k.log; cat /tmp/rotation_16k.log", "description": "Inspect rotation script and engine args"}`
+
+  ```
+3768081 /bin/bash /tmp/rotation_16k.sh
+3768089 tee -a /tmp/rotation_16k.log
+3788290 bash -c pgrep -af "rotation_16k" | head -3; echo "---"; pgrep -af "qtrinet-core" | head -2 | cut -c1-200; echo "---"; wc -l /tmp/rotation_16k.log; cat /tmp/rotation_16k.log
+---
+3768087 ./qtrinet-core/target/release/qtrinet-core /home/stephane/FastNVMe/models/gpt-oss-120b-MXFP4.gguf --ppl /tmp/ids_oss_long.txt --ctx 16384 --limit 512 --depuis 15872 --dense --threads 16 --lot 
+3788290 bash -c pgrep -af "rotation_16k" | head -3; echo "---"; pgrep -af "qtrinet-core" | head -2 | cut -c1-200; echo "---"; wc -l /tmp/rotation_16k.log; cat /tmp/rotation_16k.log
+---
+0 /tmp/rotation_16k.log
+ctx 16384 simple  :
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 900 ./qtrinet-core/target/release/qtrinet-core /home/stephane/FastNVMe/models/gpt-oss-120b-MXFP4.gguf --ppl /tmp/ids_oss.txt --ctx 256 --dense --threads 16 --limit 512 2>&1 | grep -oE \"perplexité [0-9.]+ sur [0-9]+ tokens \\ … [226 caractères tronqués]`
