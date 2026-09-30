@@ -7,12 +7,12 @@
 | Début | 2026-09-28 14:46 |
 | Durée | 49.5 h |
 | Tours | 46 |
-| Messages | 1927 |
-| Appels d'outils | 1818 |
+| Messages | 1932 |
+| Appels d'outils | 1823 |
 | Fichiers touchés | 44 |
-| Commandes | 1490 |
+| Commandes | 1495 |
 | Sous-agents | 10 |
-| Commits | 160 |
+| Commits | 161 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -2117,7 +2117,7 @@ L'**audit des drapeaux** a trouvé que **46 options sur 110** étaient ignorées
 
 ### Tour 46 — continue jusqu'à 18h HAE
 
-*80 appels d'outils.* Actions notables :
+*85 appels d'outils.* Actions notables :
 
 - bash — Check time, timezone and remaining budget
 - create_goal
@@ -2133,11 +2133,11 @@ L'**audit des drapeaux** a trouvé que **46 options sur 110** étaient ignorées
 - bash — Improve notebook with real text cell
 - bash — Kill test node safely and check notebook
 - bash — Add notebook real-text cell and commit
-- … et 66 autres
+- … et 71 autres
 
 **Synthèse produite :**
 
-⏵ Pendant l'aiguille, je mets l'index de session à jour avec le créneau 15h-18h.
+**Le garde cumulatif est vérifié** : refus exactement à l'état 72 393 (le point de croisement), 258 Mo envoyés en 1,4 s. D1 est fermé avec ma propre preuve.
 
 ## 3. Travail accompli
 
@@ -2245,7 +2245,7 @@ L'**audit des drapeaux** a trouvé que **46 options sur 110** étaient ignorées
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 1450 autres
+- … et 1455 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2553,4 +2553,5 @@ L'**audit des drapeaux** a trouvé que **46 options sur 110** étaient ignorées
 - Colab : les quatorze champs du contrat d'activation, pas quatre  Et portes finales après la version 5 : 17 tests, Qwen 19,3885, réparti dense 0,00e0, lot dense 
 - Index de session : le créneau 15h-18h (mode 4, plan GPU, 32 défauts relevés)" && git log --oneline -1 | cat; tail -3 /tmp/aiguille_kv2048.log 2>/dev/null; date 
 - Index : le mode 4, le protocole v5, le plan GPU et le décompte des relectures" && git log --oneline -1 | cat; tail -4 /tmp/aiguille_kv2048.log; date +"%H:%M:%S"
+- Mode 4 : le plafond cumulatif vérifié à l'octet près  Le relecteur avait prouvé qu'il manquait ; voici la preuve qu'il marche : avec des états bien formés au ma
 

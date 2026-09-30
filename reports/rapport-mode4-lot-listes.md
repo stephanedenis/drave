@@ -67,7 +67,13 @@ choses que le banc ne voyait pas :
 
 1. **le plafond R4 n'était pas cumulatif** : chaque état pouvait être légal et le
    total ne pas l'être — un pair annonçait 268 Mo par état sur 74 898 états
-   (~19 Po). La mémoire restait bornée (on décode état par état), le temps non ;
+   (~19 Po). La mémoire restait bornée (on décode état par état), le temps non.
+   **Vérifié après correction**, avec des états bien formés au maximum légal
+   (896 actifs, 3 708 octets chacun, 74 898 états annoncés — la borne nominale
+   passe) : le serveur refuse à l'état **72 393**, exactement le point où le cumul
+   franchit les 256 Mo, en le disant :
+   `corps du lot en listes (cumul après l'état 72393) : 268436952 octets au-delà du
+   plafond de 256 Mo` — 258 Mo envoyés en 1,4 s, aucun octet de trop décodé ;
 2. **le refus de `n == 0` était trop large** — et c'est un correctif de la même
    journée qui l'avait introduit : en modes 1 et 2, `n` est un nombre de PAIRES, et
    une liste VIDE est légitime (seuil au-dessus du maximum, état nul). La session

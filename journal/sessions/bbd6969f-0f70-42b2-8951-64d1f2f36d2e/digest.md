@@ -31092,3 +31092,69 @@ index : section du créneau
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/rapport-session-2026-09-30.md'; s=open(p).read()\ndef rem(nom, v, n):\n    global s\n    c = s.count(v)\n    if c != 1:\n        print(f\"  ✗ {nom} : {c}\"); return False\n    s = s.replace(v, n); print(f … [1679 caractères tronqués]`
+
+  ```
+✓ ligne mode 4
+  ✓ décompte des relectures
+1dd3952 Index : le mode 4, le protocole v5, le plan GPU et le décompte des relectures
+### f32 (référence) · contexte 2048
+16:16:23
+  ```
+
+- **bash** `{"command": "ls -la /tmp/m4_attack.py /tmp/m4_peer.py 2>/dev/null | awk '{print $5, $9}'; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && D=./drave-core/target/release/drave; M=models/Qwen2.5-0.5B-Q8_0.gguf; p=47500; ($D $M --flux-serveur $p --ctx 256 > /tmp/s_cumul.log 2>&1 &); for i in $(seq … [1475 caractères tronqués]`
+
+  ```
+6133 /tmp/m4_attack.py
+4812 /tmp/m4_peer.py
+--- ce que le serveur a dit ---
+[flux] arrêt : état 0 : 268435564 octets au-delà du plafond de 256 Mo — flux refusé                      (règle R4 de docs/plan-prefill-reparti.md)
+[flux] 0 flux servis
+16:16:34
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 14, in <module>
+ConnectionResetError: [Errno 104] Connection reset by peer
+  ```
+
+### 🤖 Assistant
+
+Mon test tombait sur le plafond *par état* (déjà correct). Je vise le **cumul** : des états légaux au maximum, répétés jusqu'à dépasser 256 Mo.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && D=./drave-core/target/release/drave; M=models/Qwen2.5-0.5B-Q8_0.gguf; p=47501; ($D $M --flux-serveur $p --ctx 256 > /tmp/s_cumul2.log 2>&1 &); for i in $(seq 1 40); do ss -ltn 2>/dev/null | grep -q \":$p \" && break; sleep 0.5; done; … [1448 caractères tronqués]`
+
+  ```
+le serveur a fermé après 4 états : ConnectionResetError
+4 états légaux de 1916 octets = 0.0 Mio envoyés en 0.0 s · le cumul dépasse le plafond vers l'état 140102
+--- ce que le serveur a dit ---
+[flux] arrêt : lot en listes de 140105 états × 896 canaux : 502136320 octets au-delà du plafond de 256 Mo — flux refusé                      (règle R4 de docs/plan-prefill-reparti.md)
+[flux] 0 flux servis
+16:16:50
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && D=./drave-core/target/release/drave; M=models/Qwen2.5-0.5B-Q8_0.gguf; p=47502; ($D $M --flux-serveur $p --ctx 256 > /tmp/s_cumul3.log 2>&1 &); for i in $(seq 1 40); do ss -ltn 2>/dev/null | grep -q \":$p \" && break; sleep 0.5; done; … [1516 caractères tronqués]`
+
+  ```
+74898 états annoncés (borne nominale 256 Mio ≤ 256) · chaque état réel pèse 1916 o · le cumul dépasse vers l'état 140102
+le serveur a fermé après 417 états (1 Mio) en 0.0 s : ConnectionResetError
+--- ce que le serveur a dit ---
+[flux] arrêt : état 1 : 83952897 blocs : 335811588 octets au-delà du plafond de 256 Mo — flux refusé                      (règle R4 de docs/plan-prefill-reparti.md)
+[flux] 0 flux servis
+16:17:02
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && D=./drave-core/target/release/drave; M=models/Qwen2.5-0.5B-Q8_0.gguf; p=47503; ($D $M --flux-serveur $p --ctx 256 > /tmp/s_cumul4.log 2>&1 &); for i in $(seq 1 40); do ss -ltn 2>/dev/null | grep -q \":$p \" && break; sleep 0.5; done; … [1589 caractères tronqués]`
+
+  ```
+74898 états annoncés · chaque état pèse 3708 o · cumul > plafond vers l'état 72393 (256 Mio)
+le serveur a fermé après 73021 états (258 Mio) en 1.4 s : ConnectionResetError
+--- ce que le serveur a dit ---
+[flux] arrêt : corps du lot en listes (cumul après l'état 72393) : 268436952 octets au-delà du plafond de 256 Mo — flux refusé                      (règle R4 de docs/plan-prefill-reparti.md)
+[flux] 0 flux servis
+16:17:16
+  ```
+
+### 🤖 Assistant
+
+**Le garde cumulatif est vérifié** : refus exactement à l'état 72 393 (le point de croisement), 258 Mo envoyés en 1,4 s. D1 est fermé avec ma propre preuve.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/rapport-mode4-lot-listes.md'; s=open(p).read()\nv = \"\"\"1. **le plafond R4 n'était pas cumulatif** : chaque état pouvait être légal et le\n   total ne pas l'être — un pair annonçait 268 Mo par état sur  … [1507 caractères tronqués]`
