@@ -25,7 +25,7 @@ peu » : c'est rendre le mode creux **utilisable** au-delà de ~32 k de contexte
 
 ## Ce qui existe
 
-* `drave-core/gpu/drave_gpu.cu` (853 lignes, 13 noyaux) : `attn_kv_partiels` (scores
+* `drave-core/gpu/drave_gpu.cu` (956 lignes, 14 noyaux) : `attn_kv_partiels` (scores
   et partiels par tranche, softmax en ligne), `attn_kv_recombine` (fusion des
   tranches + puits), puis `attn_scores` + les trois noyaux de la sélection ;
 * `drave-core/src/gpu.rs` : `Machine::attn_kv(...)` (FFI, allocations, partiels) ;

@@ -12,14 +12,14 @@ Noyau 1 (les scores) : [`reports/rapport-gpu-scores.md`](rapport-gpu-scores.md).
 
 ## Ce qui a été écrit
 
-Trois noyaux dans `drave-core/gpu/drave_gpu.cu` (10 → 13 noyaux : les scores
-avaient porté le fichier à 10, la sélection le porte à 13) :
+Trois noyaux dans `drave-core/gpu/drave_gpu.cu` (le fichier passe de 10 à 13
+noyaux avec la sélection, puis à **14** avec le noyau 3 — 956 lignes) :
 
 | noyau | rôle |
 |---|---|
 | `attn_topk_histo` | histogramme d'un OCTET des scores, pour les seuls scores dont les octets au-dessus valent le préfixe de leur ligne |
 | `attn_topk_compte` | par (ligne, tranche) : combien de scores au-dessus du seuil, combien égaux |
-| `attn_topk_ecrit` | écrit les indices retenus, **dans l'ordre croissant des indices** |
+| `attn_topk_ecrit` | écrit les indices retenus : d'abord ceux au-dessus du seuil, puis les égaux, chacun par indices croissants |
 
 Le plan prévoyait **un** noyau de sélection. Il en faut trois, et ce n'est pas un
 choix de style : un bloc ne peut pas connaître son rang global avant que les blocs

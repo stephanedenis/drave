@@ -36171,3 +36171,55 @@ Date:   Wed Sep 30 19:10:27 2026 -0400
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -m \"Journal : index des sessions régénéré\" && git status --short | wc -l && date +%H:%M:%S", "description": "Commit journal index"}`
+
+  ```
+1
+19:20:33
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git status --short; git log --oneline -1", "description": "Check remaining uncommitted file"}`
+
+  ```
+M journal/README.md
+dada69a Journal : index des sessions régénéré
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-gpu-topk-selection.md", "limit": 70}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-gpu-topk-selection.md</path>
+<type>file</type>
+<content>
+1: # Rapport — la sélection top-k et la somme sur GPU (noyaux 2 et 3 du plan)
+2: 
+3: **En une ligne** : la sélection du top-k de l'attention tourne maintenant sur GPU en
+4: **quatre passes d'histogramme + deux noyaux de collecte**, elle rend le **même
+5: ensemble d'indices que le CPU** (14/14 lignes, différence symétrique 0 à toutes les
+6: tailles testées) et coûte **0,89 ms** là où le tri CPU en coûte **497 ms** à
+7: 262 144 clés. Le **noyau 3** (softmax sur les k retenus + puits, puis Σ w·V) est
+8: écrit et vérifié à **2,7–4,8e-7** — sous le critère de 1e-6 du plan.
+9: 
+10: Plan suivi : [`docs/plan-gpu-topk.md`](../docs/plan-gpu-topk.md), étape 2.
+11: Noyau 1 (les scores) : [`reports/rapport-gpu-scores.md`](rapport-gpu-scores.md).
+12: 
+13: ## Ce qui a été écrit
+14: 
+15: Trois noyaux dans `drave-core/gpu/drave_gpu.cu` (10 → 13 noyaux : les scores
+16: avaient porté le fichier à 10, la sélection le porte à 13) :
+17: 
+18: | noyau | rôle |
+19: |---|---|
+20: | `attn_topk_histo` | histogramme d'un OCTET des scores, pour les seuls scores dont les octets au-dessus
+… [3299 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && wc -l drave-core/gpu/drave_gpu.cu && grep -c \"__global__ void\" drave-core/gpu/drave_gpu.cu && grep -rn \"853 lignes\\|13 noyaux\" docs/*.md reports/*.md | head -5", "description": "Check kernel and line counts"}`
+
+  ```
+956 drave-core/gpu/drave_gpu.cu
+14
+docs/plan-gpu-topk.md:28:* `drave-core/gpu/drave_gpu.cu` (853 lignes, 13 noyaux) : `attn_kv_partiels` (scores
+reports/rapport-gpu-topk-selection.md:15:Trois noyaux dans `drave-core/gpu/drave_gpu.cu` (10 → 13 noyaux : les scores
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\ndef patch(p, paires):\n    s=open(p).read()\n    for v,n,nom in paires:\n        assert s.count(v)==1, f\"{p}::{nom}::{s.count(v)}\"\n        s=s.replace(v,n,1)\n    open(p,'w').write(s); print(f\"{p} ok\")\n\npatch … [1236 caractères tronqués]`
