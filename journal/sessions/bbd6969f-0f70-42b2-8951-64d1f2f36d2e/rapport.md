@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 46.8 h |
+| Durée | 46.9 h |
 | Tours | 45 |
-| Messages | 1823 |
-| Appels d'outils | 1722 |
+| Messages | 1826 |
+| Appels d'outils | 1725 |
 | Fichiers touchés | 44 |
-| Commandes | 1401 |
+| Commandes | 1404 |
 | Sous-agents | 7 |
-| Commits | 137 |
+| Commits | 138 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -2055,7 +2055,7 @@ Je vérifie l'heure à chaque itération et j'arrête à 12:06, en laissant un p
 
 ### Tour 45 — as-tu ce qu'il te faut pour te rendre à 15h en travaillaint avec un maximum d'autonomie et de parallélisme d'activités?
 
-*223 appels d'outils.* Actions notables :
+*226 appels d'outils.* Actions notables :
 
 - bash — Probe machine, GPU, disk, network state
 - bash — Identify GPU users and stray processes
@@ -2071,11 +2071,11 @@ Je vérifie l'heure à chaque itération et j'arrête à 12:06, en laissant un p
 - bash — Understand batched PPL reference path
 - bash — Add batched imposed states to forward_lot
 - list_agents
-- … et 200 autres
+- … et 203 autres
 
 **Synthèse produite :**
 
-La seconde relecture a trouvé **huit défauts de plus**, dont deux graves dans mes propres correctifs. Je corrige dans l'ordre : le tableau de bord qui ment, puis la famille R4 (allocations non bornées).
+**Clés f16 + valeurs int8 = 14,2365 (+0,018 %)** — pour 3,125 octets par élément, soit 39 % du f32. C'est le meilleur réglage mesuré. Je l'inscris honnêtement.
 
 ## 3. Travail accompli
 
@@ -2180,7 +2180,7 @@ La seconde relecture a trouvé **huit défauts de plus**, dont deux graves dans 
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 1361 autres
+- … et 1364 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2465,4 +2465,5 @@ La seconde relecture a trouvé **huit défauts de plus**, dont deux graves dans 
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A drave-core/src/main.rs && git commit -q -F - <<'EOF' && git log --oneline -1 | cat Seconde rele
 - Deux tests de plus : trame forgée hors dimension, et n_blocs démesuré  Les deux défauts graves de la seconde relecture sont maintenant verrouillés par des tests
 - Handoff et index : la seconde relecture, et treize tests  REPRISE §6bis et l'index de session disent maintenant les deux tours de relecture adversariale (22 déf
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p='reports/rapport-placement-bits-kv.md'; s=open(p).read() v = """| int8 | int8 | 2,25 | 
 

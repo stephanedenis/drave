@@ -18,8 +18,8 @@ par bloc de 32 comprise).
 | f32 | int4 | 4,625 | 58 % | 14,2994 | +0,46 % |
 | int4 | f32 | 4,625 | 58 % | 69,0464 | **+385 %** |
 | int8 | int8 | 2,25 | 28 % | 14,6667 | +3,04 % |
+| **f16** | **int8** | **3,125** | **39 %** | **14,2365** | **+0,018 %** |
 | int4 | int4 | 1,25 | 16 % | 66,0369 | **+364 %** |
-| f16 | int8 | 3,125 | 39 % | *en cours* | |
 | f16 | int4 | 2,625 | 33 % | *en cours* | |
 
 ## Ce que la courbe dit
@@ -38,7 +38,16 @@ par bloc de 32 comprise).
 3. **La bonne politique est donc asymétrique** : garder les clés précises et
    rogner les valeurs. `DRAVE_KV_K_F32=1` (clés f32, valeurs int8) donne 64 % de
    la taille f32 pour +0,023 % — utilisable aujourd'hui.
-4. **La perspective llama.cpp** : son cache q8_0 coûte +0,8 % à la même longueur.
+4. **Les clés en f16 sont le meilleur réglage mesuré** : 3,125 octets par élément
+   (39 % du f32) pour **+0,018 %** — contre 5,125 octets (64 %) pour les clés f32
+   avec les mêmes valeurs int8 (+0,023 %). Les deux sont à +0,02 %, et l'écart
+   entre eux n'est PAS significatif (8 191 jetons) : ce qui compte, c'est que la
+   même qualité s'obtient avec **40 % d'octets en moins**, parce que le f16 est une
+   précision RELATIVE là où l'int8 à échelle par bloc est une erreur ABSOLUE.
+   Autrement dit : `DRAVE_KV_BITS=8 DRAVE_KV_K_F16=1` donne un cache à **39 % de la
+   taille f32** pour +0,018 %, là où l'int8 complet (28 %) coûte +3,04 %.
+
+5. **La perspective llama.cpp** : son cache q8_0 coûte +0,8 % à la même longueur.
    Nos VALEURS sont donc meilleures que les siennes ; c'est le quantificateur de
    CLÉS qui est le maillon faible, et c'est là qu'il faut travailler — pas en
    ajoutant des bits partout.

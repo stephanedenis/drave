@@ -244,7 +244,7 @@ qui reste est classé par rentabilité mesurée.
 | `DRAVE_KV_BITS=8` ou `4` | quantifie le cache KV (défaut f32) | le 4 bits coûte +364 % de perplexité à 8 192 |
 | `DRAVE_KV_K_F32=1` | garde les CLÉS en f32 (valeurs quantifiées) | **le bon compromis mesuré** : à 8 192, 75 % de la taille f32 pour +0,02 % de perplexité, contre +3,0 % pour l'int8 complet — l'écart int8 vient des clés à 99 % (`reports/rapport-attribution-kv.md`) |
 | `DRAVE_KV_V_F32=1` | garde les VALEURS en f32 | +3,01 % : ne sert à rien, l'erreur ne passe pas par là |
-| `DRAVE_KV_K_F16=1` | clés en **f16** (2 octets/valeur, précision relative) | à contexte 256 : **+0,057 %** contre +2,15 % pour int8/int8 — 3,125 octets par élément au lieu de 8 en f32 ; campagne à 8 192 en cours |
+| `DRAVE_KV_K_F16=1` | clés en **f16** (2 octets/valeur, précision relative) | **le meilleur réglage mesuré** : à 8 192 jetons, clés f16 + valeurs int8 = **+0,018 %** pour **39 % de la taille f32** — contre +0,023 % pour les clés f32 (64 % de la taille) et +3,04 % pour l'int8 complet (28 %) |
 | `DRAVE_TRACE_BLOCS=1` | trace DRVF **v3** : valeurs i8, échelle f16 par bloc de 32 | 45 079 930 o contre 66 370 408 en v2 (−32 %), rejeu 19,4029 contre 19,3885 (+0,074 %) |
 | `DRAVE_FLUX_VERIF=1` | vérifie l'écart entre l'activation calculée et celle que la trace impose | 1,5e-5 en v2 ; **muet dès que `--lot > 1`** (le rejeu par lots passe par `flux_lot`) |
 | `DRAVE_HARMONY_TRACE=1` | trace les fenêtres du découpage « harmony » (gpt-oss) | diagnostic |

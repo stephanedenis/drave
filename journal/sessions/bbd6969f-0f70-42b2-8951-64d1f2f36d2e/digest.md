@@ -29351,3 +29351,42 @@ cles_f16_valeurs_int8      :       31:15 ./drave-core/target/release/drave model
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='REPRISE.md'; s=open(p).read()\nv = \"\"\"- **Six défauts de la relecture adversariale corrigés** : compteur de listes\n  manquantes aveugle en rejeu par lots, clés de trace incohérentes selon `--lot`,\n  pair fac … [3768 caractères tronqués]`
+
+  ```
+REPRISE : seconde relecture + 13 tests
+index de session : 22 défauts, portes à jour
+e092c0e Handoff et index : la seconde relecture, et treize tests
+13:37:36
+cles_f16_valeurs_int8      :
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== porte Qwen après les correctifs du 2e tour ===\"; ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf --ppl /tmp/ids_qwen.txt --ctx 256 --abits 16 --threads 16 --limit 512 --dense 2>&1 | grep -oE \"perplexité [ … [411 caractères tronqués]`
+
+  ```
+=== porte Qwen après les correctifs du 2e tour ===
+perplexité 19.3885 sur 510 tokens
+=== banc réparti dense (attendu 0,00e0) ===
+  écart             : 0.00e0
+  transport         : dense f32 · 3663 octets par flux (aller) · 3663 au retour · 100.0 % d'activité (896 neurones par flux) · 39 flux
+  temps             : 378.8 ms par jeton en local · 347.4 ms à attendre le pair (son calcul + l'aller-retour) · soit 0.92× le calcul local seul
+=== banc réparti par lots de 8 (attendu 0,00e0) ===
+  deux nœuds        : perplexité 148.1267  (4.4 s)
+  écart             : 0.00e0
+  transport         : LOTS de 8 jetons · 28751 octets par lot (aller) · 3.5 ko par jeton · 5 lots (au lieu de 39 flux)
+  temps             : 415.1 ms par LOT en local · 384.3 ms à attendre le pair · soit 0.93× le calcul local seul
+13:39:20
+  ```
+
+- **bash** `{"command": "sleep 90; cat /tmp/kv_cles_f16.log; date +\"%H:%M:%S\"; ps -o etime,args -C drave 2>/dev/null | tail -1 | cut -c1-55", "description": "Wait and check f16 result", "timeoutMs": 180000}`
+
+  ```
+cles_f16_valeurs_int8      : perplexité 14.2365 sur 8191 tokens (0 événements, 1934.5 s)
+cles_f16_valeurs_int4      : 13:40:58
+      02:41 ./drave-core/target/release/drave models/Qw
+  ```
+
+### 🤖 Assistant
+
+**Clés f16 + valeurs int8 = 14,2365 (+0,018 %)** — pour 3,125 octets par élément, soit 39 % du f32. C'est le meilleur réglage mesuré. Je l'inscris honnêtement.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/rapport-placement-bits-kv.md'; s=open(p).read()\nv = \"\"\"| int8 | int8 | 2,25 | 28 % | 14,6667 | +3,04 % |\n| int4 | int4 | 1,25 | 16 % | 66,0369 | **+364 %** |\n| f16 | int8 | 3,125 | 39 % | *en cours* … [2968 caractères tronqués]`
