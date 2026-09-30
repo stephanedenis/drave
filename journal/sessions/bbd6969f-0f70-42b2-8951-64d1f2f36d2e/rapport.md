@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 30.3 h |
-| Tours | 22 |
-| Messages | 1239 |
-| Appels d'outils | 1203 |
-| Fichiers touchés | 38 |
-| Commandes | 935 |
+| Durée | 30.4 h |
+| Tours | 23 |
+| Messages | 1249 |
+| Appels d'outils | 1211 |
+| Fichiers touchés | 39 |
+| Commandes | 942 |
 | Sous-agents | 1 |
-| Commits | 55 |
+| Commits | 56 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -69,6 +69,8 @@
 **Tour 21** — <goal_round> Objective: "Réaliser les 6 nouveaux chantiers du projet qtrinet-core, dans l'ordre : (1) relancer le test de l'aiguille sur contexte long (remplissage varié en vrai texte, moins de sondes, réponses plus longues) sur un modèle capable, grâce au préremplissage par lots et au KV déporté ; (2) chemin GPU : dépaquetage vectorisé du noyau d'attention (13,2 ms/couche à 1 M en int4 vers ~3 ms … [1492 caractères tronqués]
 
 **Tour 22** — <goal_round> Objective: "Réaliser les 6 nouveaux chantiers du projet qtrinet-core, dans l'ordre : (1) relancer le test de l'aiguille sur contexte long (remplissage varié en vrai texte, moins de sondes, réponses plus longues) sur un modèle capable, grâce au préremplissage par lots et au KV déporté ; (2) chemin GPU : dépaquetage vectorisé du noyau d'attention (13,2 ms/couche à 1 M en int4 vers ~3 ms … [1492 caractères tronqués]
+
+**Tour 23** — <goal_round> Objective: "Réaliser les 6 nouveaux chantiers du projet qtrinet-core, dans l'ordre : (1) relancer le test de l'aiguille sur contexte long (remplissage varié en vrai texte, moins de sondes, réponses plus longues) sur un modèle capable, grâce au préremplissage par lots et au KV déporté ; (2) chemin GPU : dépaquetage vectorisé du noyau d'attention (13,2 ms/couche à 1 M en int4 vers ~3 ms … [1492 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -1023,6 +1025,56 @@ L'objectif reste **actif** : le prochain tour peut soit écrire le petit program
 - bash — Probe mtmd params struct layout
 - bash — Document ABI probe and commit
 
+**Synthèse produite :**
+
+⏵ Tour 13 : l'ABI de `libmtmd` est sondée — l'obstacle technique tombe
+
+\## Fait dans ce tour
+
+Le dernier obstacle pour trancher les deux conventions du ViT (rotation 2-D et fenêtre locale) était technique : appeler `libmtmd` sans en-têtes, avec une structure passée **par valeur** dont je ne connaissais pas la taille.
+
+C'est résolu, et proprement :
+
+1. **`mtmd_context_params_default` existe** dans la bibliothèque — plus besoin de deviner les valeurs par défaut ;
+2. elle rend la structure par **pointeur caché**, donc on peut la **sonder** en l'appelant avec un tampon large. Le sondage (ctypes, 256 octets) donne le contenu réel :
+
+| offset | lecture |
+|---|---|
+| 0-1 | deux booléens à vrai (`use_gpu`, `print_timings`) |
+| 4 | `n_threads = 4` |
+| 16 | un pointeur (marqueur d'image) |
+| 24-31 | deux entiers, dont un `-1` |
+| 32-39 | un entier 64 bits à `-1` |
+| 57 | un octet |
+
+Soit une **soixantaine d'octets** — et comme au-delà de 16 octets SysV passe la structure sur la pile, une structure opaque déclarée à 64 octets et remise à zéro est un **appel ABI-correct** : l'appelé ne lit que ce dont il a besoin. Tout-à-zéro correspond aux valeurs par défaut (`use_gpu` faux, `n_threads` automatique).
+
+Il ne reste donc qu'à écrire le programme — charger le modèle, `mtmd_init_from_file`, `mtmd_bitmap_init` sur l'image déterministe du banc, `mtmd_tokenize`, `mtmd_encode`, **`mtmd_get_output_embd`** — et comparer ses 3 584 valeurs au projecteur du moteur. Ce seul test trancherait la rotation 2-D, la fenêtre locale et la fusion 2 × 2 ensemble, puisque c'est la sortie complète de l'implémentation de référence.
+
+\## État
+
+| # | chantier | état |
+|---|---|---|
+| 1-4, 6 | aiguille · GPU (5 sous-items) · mémoire KV · rotation 16 k · hygiène | ✅ tous mesurés |
+| 5 | MLA ✅ (5,2e-7) · vision : tour complète qui tourne, 4 tranches validées, **déblocage ABI fait** | en cours |
+
+`cargo test` 6/6, arbre propre, portes Qwen **19,3885** / gpt-oss **15,1757** intactes.
+
+L'objectif reste **actif** : le prochain tour écrit le programme de comparaison, désormais sans inconnue technique, puis ajoute la rotation 2-D et la fenêtre locale au banc vision.
+
+### Tour 23 — <goal_round> Objective: "Réaliser les 6 nouveaux chantiers du projet qtrinet-core, dans l'ordre : (1) relancer le test d … [1772 caractères tronqués]
+
+*8 appels d'outils.* Actions notables :
+
+- bash — Check required mtmd/llama symbols
+- write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/vision_mtmd.py`
+- bash — Run mtmd vision reference
+- bash — Load ggml backends and retry
+- bash — Find library exporting ggml_backend_load_all
+- bash — Use libggml.so and retry
+- bash — Load CPU backend explicitly and retry
+- bash — Document mtmd program state and commit
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -1067,6 +1119,7 @@ L'objectif reste **actif** : le prochain tour peut soit écrire le petit program
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-aiguille.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/plan-mla-vision.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/mla_synthetique.py` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/vision_mtmd.py` | 1 | 0 |
 
 ### Sous-agents lancés
 
@@ -1114,7 +1167,7 @@ L'objectif reste **actif** : le prochain tour peut soit écrire le petit program
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 895 autres
+- … et 902 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1242,7 +1295,7 @@ L'objectif reste **actif** : le prochain tour peut soit écrire le petit program
 
 ## 5. Erreurs rencontrées
 
-57 sorties en erreur ou divergentes. Les premières :
+58 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : a8f2635f8 docs: record which models this box is good at, and why src/llama-hparams.cpp:8:void llama_hparams::set_swa_pattern(uint32_t n_pattern, bool dense_first) { src/llama-hparams.h:308:    void se
 - **T1** : 511 tokens notés — perplexité cumulée 247.031  (4.9 tok/s) === perplexité 247.0308 sur 511 tokens (0 événements, 104.5 s) ===  ### B3 harmony assistant 511 --- ref --- 0.0 0.0 0:00 ls: cannot access '
@@ -1317,4 +1370,5 @@ L'objectif reste **actif** : le prochain tour peut soit écrire le petit program
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p='docs/plan-mla-vision.md'; s=open(p).read() old = """Ce qui n'y est pas encore : la rot
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p='docs/plan-mla-vision.md'; s=open(p).read() add = """ ### Le point d'injection est en p
 - vision : la structure de paramètres de libmtmd est sondée (l'ABI n'est plus un obstacle)  mtmd_context_params_default rend la structure par pointeur caché : on 
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/vision_etat.txt <<'EOF' ### libmtmd : où en est le programme de référence  Le programme `tools/
 

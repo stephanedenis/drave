@@ -19614,3 +19614,161 @@ comme u64 : [17179869441, 0, 140664321613873, 8589934591, 18446744073709551615]
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='docs/plan-mla-vision.md'; s=open(p).read()\nadd = \"\"\"\n### libmtmd : la structure de paramètres est SONDÉE (l'ABI n'est plus un obstacle)\n\n`mtmd_context_params_default` existe et rend la structure par pointe … [2871 caractères tronqués]`
+
+  ```
+sondage documenté
+6c5ed86 vision : la structure de paramètres de libmtmd est sondée (l'ABI n'est plus un obstacle)
+  ```
+
+### 🤖 Assistant
+
+⏵ Tour 13 : l'ABI de `libmtmd` est sondée — l'obstacle technique tombe
+
+## Fait dans ce tour
+
+Le dernier obstacle pour trancher les deux conventions du ViT (rotation 2-D et fenêtre locale) était technique : appeler `libmtmd` sans en-têtes, avec une structure passée **par valeur** dont je ne connaissais pas la taille.
+
+C'est résolu, et proprement :
+
+1. **`mtmd_context_params_default` existe** dans la bibliothèque — plus besoin de deviner les valeurs par défaut ;
+2. elle rend la structure par **pointeur caché**, donc on peut la **sonder** en l'appelant avec un tampon large. Le sondage (ctypes, 256 octets) donne le contenu réel :
+
+| offset | lecture |
+|---|---|
+| 0-1 | deux booléens à vrai (`use_gpu`, `print_timings`) |
+| 4 | `n_threads = 4` |
+| 16 | un pointeur (marqueur d'image) |
+| 24-31 | deux entiers, dont un `-1` |
+| 32-39 | un entier 64 bits à `-1` |
+| 57 | un octet |
+
+Soit une **soixantaine d'octets** — et comme au-delà de 16 octets SysV passe la structure sur la pile, une structure opaque déclarée à 64 octets et remise à zéro est un **appel ABI-correct** : l'appelé ne lit que ce dont il a besoin. Tout-à-zéro correspond aux valeurs par défaut (`use_gpu` faux, `n_threads` automatique).
+
+Il ne reste donc qu'à écrire le programme — charger le modèle, `mtmd_init_from_file`, `mtmd_bitmap_init` sur l'image déterministe du banc, `mtmd_tokenize`, `mtmd_encode`, **`mtmd_get_output_embd`** — et comparer ses 3 584 valeurs au projecteur du moteur. Ce seul test trancherait la rotation 2-D, la fenêtre locale et la fusion 2 × 2 ensemble, puisque c'est la sortie complète de l'implémentation de référence.
+
+## État
+
+| # | chantier | état |
+|---|---|---|
+| 1-4, 6 | aiguille · GPU (5 sous-items) · mémoire KV · rotation 16 k · hygiène | ✅ tous mesurés |
+| 5 | MLA ✅ (5,2e-7) · vision : tour complète qui tourne, 4 tranches validées, **déblocage ABI fait** | en cours |
+
+`cargo test` 6/6, arbre propre, portes Qwen **19,3885** / gpt-oss **15,1757** intactes.
+
+L'objectif reste **actif** : le prochain tour écrit le programme de comparaison, désormais sans inconnue technique, puis ajoute la rotation 2-D et la fenêtre locale au banc vision.
+
+
+## Tour 23
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Réaliser les 6 nouveaux chantiers du projet qtrinet-core, dans l'ordre : (1) relancer le test de l'aiguille sur contexte long (remplissage varié en vrai texte, moins de sondes, réponses plus longues) sur un modèle capable, grâce au préremplissage par lots et au KV déporté ; (2) chemin GPU : dépaquetage vectorisé du noyau d'attention (13,2 ms/couche à 1 M en int4 vers ~3 ms), brancher MXFP4 dans le moteur avec une politique de résidence des experts, attention par lots sur GPU dans forward_lot, noyau de tête Q8_0 accéléré (AVX2 ou déport), et usage du second GPU ; (3) mémoire : pagination du cache KV côté CPU (25,77 Go réservés à ctx 1 M pour 512 jetons écrits) et test de l'hypothèse « clés en f16 avant quantification » pour l'écart int8 avec llama.cpp à 8 192 (+3,0 % contre +0,8 %) ; (4) rotation au-delà de 5 120 jetons (passe à 16 k) ; (5) structurel : MLA (aucun modèle local — construire un modèle MLA synthétique et valider contre une référence indépendante) et vision (poids Qwen2.5-VL et projecteur mmproj présents) ; (6) hygiène : réécrire la section « Ce qu'il faut faire ensuite » de REPRISE.md et y consigner les pièges QT_GPU/QT_GPU_TETE/QT_GPU_KV. Chaque chantier doit être implémenté, mesuré (portes de non-régression Qwen 19,3885 et gpt-oss 15,1757 sans QT_GPU), documenté dans le dépôt et commité."
+Round: 14/30
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "nm -D --defined-only /usr/lib/ollama/libmtmd.so | grep -E \" T mtmd_(input|init_from|encode|get_output|default_marker|tokenize|free)\" | awk '{print $3}'; echo \"--- libllama ---\"; nm -D --defined-only /usr/lib/ollama/libllama.so | grep -E \" T llama_(model_default_params|model_load_fr … [108 caractères tronqués]`
+
+  ```
+mtmd_default_marker
+mtmd_encode
+mtmd_encode_chunk
+mtmd_free
+mtmd_get_output_embd
+mtmd_init_from_file
+mtmd_input_chunk_copy
+mtmd_input_chunk_free
+mtmd_input_chunk_get_id
+mtmd_input_chunk_get_n_pos
+mtmd_input_chunk_get_n_tokens
+mtmd_input_chunk_get_tokens_image
+mtmd_input_chunk_get_tokens_text
+mtmd_input_chunk_get_type
+mtmd_input_chunk_load
+mtmd_input_chunk_save
+mtmd_input_chunks_free
+mtmd_input_chunks_get
+mtmd_input_chunks_init
+mtmd_input_chunks_size
+mtmd_tokenize
+--- libllama ---
+llama_backend_init
+llama_model_default_params
+llama_model_free
+llama_model_load_from_file
+  ```
+
+- **write** `{"content": "#!/usr/bin/env python3\n\"\"\"Référence de vision : interroger libmtmd d'ollama, sans en-têtes.\n\nC'est la SEULE vérification qui tranche d'un coup la rotation 2-D, la fenêtre\nlocale et la fusion 2 × 2 du ViT de Qwen2.5-VL : elle compare la sortie complète\nde l'implémentation de réfé … [5968 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/vision_mtmd.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && LD_LIBRARY_PATH=/usr/lib/ollama timeout 900 python3 tools/vision_mtmd.py 2>&1 | tail -14", "description": "Run mtmd vision reference", "timeoutMs": 900000}`
+
+  ```
+llama_model_load_from_file_impl: no backends are loaded. hint: use ggml_backend_load() or ggml_backend_load_all() to load a backend before calling this function
+chargement du modèle de texte : /home/stephane/FastNVMe/models/Qwen2.5-VL-7B-Instruct-Q4_K_M.gguf
+échec du chargement du modèle
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='tools/vision_mtmd.py'; s=open(p).read()\ns = s.replace(\"\"\"def charger():\n    llama = ctypes.CDLL(f\"{OLLAMA}/libllama.so\", mode=ctypes.RTLD_GLOBAL)\n    mtmd = ctypes.CDLL(f\"{OLLAMA}/libmtmd.so\")\"\"\",\n\ … [867 caractères tronqués]`
+
+  ```
+chargement des backends ajouté
+llama_model_load_from_file_impl: no backends are loaded. hint: use ggml_backend_load() or ggml_backend_load_all() to load a backend before calling this function
+chargement des backends ggml impossible : /usr/lib/ollama/libggml-base.so.0: undefined symbol: ggml_backend_load_all
+chargement du modèle de texte : /home/stephane/FastNVMe/models/Qwen2.5-VL-7B-Instruct-Q4_K_M.gguf
+échec du chargement du modèle
+  ```
+
+- **bash** `{"command": "ls /usr/lib/ollama/ | grep -E \"^libggml\" | head -8; for l in /usr/lib/ollama/libggml.so /usr/lib/ollama/libggml-base.so.0; do [ -e \"$l\" ] && printf \"%s : \" \"$l\" && (nm -D --defined-only \"$l\" 2>/dev/null | grep -c \"ggml_backend_load_all\"); done", "description": "Find library  … [33 caractères tronqués]`
+
+  ```
+libggml-base.so
+libggml-base.so.0
+libggml-base.so.0.19.0
+libggml-cpu-alderlake.so
+libggml-cpu-cannonlake.so
+libggml-cpu-cascadelake.so
+libggml-cpu-cooperlake.so
+libggml-cpu-haswell.so
+/usr/lib/ollama/libggml.so : 2
+/usr/lib/ollama/libggml-base.so.0 : 0
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -i 's|ggml = ctypes.CDLL(f\"{OLLAMA}/libggml-base.so\", mode=ctypes.RTLD_GLOBAL)|ggml = ctypes.CDLL(f\"{OLLAMA}/libggml.so\", mode=ctypes.RTLD_GLOBAL)|' tools/vision_mtmd.py && LD_LIBRARY_PATH=/usr/lib/ollama timeout 900 python3  … [102 caractères tronqués]`
+
+  ```
+llama_model_load_from_file_impl: no backends are loaded. hint: use ggml_backend_load() or ggml_backend_load_all() to load a backend before calling this function
+backends ggml chargés
+chargement du modèle de texte : /home/stephane/FastNVMe/models/Qwen2.5-VL-7B-Instruct-Q4_K_M.gguf
+échec du chargement du modèle
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='tools/vision_mtmd.py'; s=open(p).read()\ns = s.replace(\"\"\"        ggml.ggml_backend_load_all.restype = None\n        ggml.ggml_backend_load_all()\n        print(\"backends ggml chargés\")\"\"\",\n\"\"\"        … [920 caractères tronqués]`
+
+  ```
+chargement explicite du backend CPU
+load_hparams: image_min_pixels:   6272
+load_hparams: image_max_pixels:   3211264
+
+load_hparams: model size:         1291.40 MiB
+load_hparams: metadata size:      0.18 MiB
+load_tensors: loaded 519 tensors from /home/stephane/FastNVMe/models/mmproj-Qwen2.5-VL-7B-Instruct-f16.gguf
+get_dummy_batch: warmup with image size = 1288 x 1288
+get_dummy_batch: warmup with image size = 1288 x 1288
+reserve_compute_meta:        CPU compute buffer size =   704.79 MiB
+reserve_compute_meta: graph splits = 1, nodes = 1119
+warmup: flash attention is enabled
+timeout: the monitored command dumped core
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/vision_etat.txt <<'EOF'\n### libmtmd : où en est le programme de référence\n\nLe programme `tools/vision_mtmd.py` (ctypes, sans en-têtes) va jusqu'au bout du\nchargement :\n\n* il faut charger un backend ggml EXPLICITEMENT … [2640 caractères tronqués]`

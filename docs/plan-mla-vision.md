@@ -338,3 +338,28 @@ structure de paramètres généreuse et remise à zéro, `mtmd_init_from_file`,
 `mtmd_encode`, puis `mtmd_get_output_embd` — les 3 584 valeurs à comparer au
 projecteur du moteur. C'est ce qui trancherait la rotation 2-D et la fenêtre
 locale d'un seul coup.
+### libmtmd : où en est le programme de référence
+
+Le programme `tools/vision_mtmd.py` (ctypes, sans en-têtes) va jusqu'au bout du
+chargement :
+
+* il faut charger un backend ggml EXPLICITEMENT : `ggml_backend_load_all` cherche
+  les greffons à côté de l'exécutable (ici `python3`) et n'en trouve aucun ;
+  `ggml_backend_load("/usr/lib/ollama/libggml-cpu-haswell.so")` fonctionne (Xeon
+  E5 v3 = haswell) ;
+* le modèle de texte se charge, le projecteur aussi (« 519 tenseurs »), et le
+  warmup du ViT se fait sur 1288 × 1288.
+
+Deux points identifiés pour la suite, tous deux dans MON code d'appel :
+
+1. `mtmd_input_chunks_init()` **rend** un pointeur (elle ne prend pas de
+   paramètre de sortie) — ma déclaration passait un pointeur de sortie, donc
+   `chunks` restait nul et le plantage vient de là ;
+2. `image_min_pixels = 6272` : l'image 28 × 28 du banc (784 pixels) est refusée
+   par le modèle. Il faut au moins 84 × 84 (7 056 pixels, 6 × 6 patchs), et le
+   banc Rust devra prendre la même taille pour que la comparaison porte sur la
+   même entrée.
+
+Une fois ces deux points corrigés, `mtmd_get_output_embd` donnera les embeddings
+d'image de la référence, à comparer aux valeurs du projecteur du moteur — la
+comparaison qui tranche la rotation 2-D et la fenêtre locale.
