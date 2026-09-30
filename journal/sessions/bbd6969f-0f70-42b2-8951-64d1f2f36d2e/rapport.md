@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 29.1 h |
-| Tours | 10 |
-| Messages | 1121 |
-| Appels d'outils | 1110 |
-| Fichiers touchés | 37 |
-| Commandes | 846 |
+| Durée | 29.3 h |
+| Tours | 11 |
+| Messages | 1133 |
+| Appels d'outils | 1120 |
+| Fichiers touchés | 38 |
+| Commandes | 854 |
 | Sous-agents | 1 |
-| Commits | 42 |
+| Commits | 43 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -45,6 +45,8 @@
 **Tour 9** — fais tous ces 6 nouveaux chantiers
 
 **Tour 10** — <goal_round> Objective: "Réaliser les 6 nouveaux chantiers du projet qtrinet-core, dans l'ordre : (1) relancer le test de l'aiguille sur contexte long (remplissage varié en vrai texte, moins de sondes, réponses plus longues) sur un modèle capable, grâce au préremplissage par lots et au KV déporté ; (2) chemin GPU : dépaquetage vectorisé du noyau d'attention (13,2 ms/couche à 1 M en int4 vers ~3 ms … [1491 caractères tronqués]
+
+**Tour 11** — <goal_round> Objective: "Réaliser les 6 nouveaux chantiers du projet qtrinet-core, dans l'ordre : (1) relancer le test de l'aiguille sur contexte long (remplissage varié en vrai texte, moins de sondes, réponses plus longues) sur un modèle capable, grâce au préremplissage par lots et au KV déporté ; (2) chemin GPU : dépaquetage vectorisé du noyau d'attention (13,2 ms/couche à 1 M en int4 vers ~3 ms … [1491 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -452,7 +454,7 @@ L'objectif reste actif : la suite (2d, 2e, résultat du 16 k, puis MLA/vision) e
 
 ### Tour 10 — <goal_round> Objective: "Réaliser les 6 nouveaux chantiers du projet qtrinet-core, dans l'ordre : (1) relancer le test d … [1771 caractères tronqués]
 
-*18 appels d'outils.* Actions notables :
+*19 appels d'outils.* Actions notables :
 
 - bash — Check 16k rotation job and repo state
 - bash — Read Q8_0 branch of q8_dot_at
@@ -468,11 +470,45 @@ L'objectif reste actif : la suite (2d, 2e, résultat du 16 k, puis MLA/vision) e
 - bash — Wait for 16k rotation result
 - bash — Commit plan and wait for rotation
 - bash — Fix commit message quoting
-- … et 4 autres
+- … et 5 autres
 
 **Synthèse produite :**
 
-⏵ Chantier 2d : j'inspecte le noyau de tête Q8_0 actuel
+⏵ Tour 1 : quatre chantiers sur six livrés, la rotation 16 k tourne encore
+
+\## Livré dans ce tour
+
+| chantier | mesure | commit |
+|---|---|---|
+| **2d. Noyau de tête Q8_0 en AVX2** | `vpmaddwd` sur 32 niveaux, **somme entière donc exacte** : porte Qwen **19,3885** et gpt-oss **15,1757** inchangées au chiffre près — le noyau est bit-identique au scalaire | `38d4d8b` |
+| **2e. KV réparti sur les deux Quadro** | couches allouées en tournant : **12 sur GPU 1, 12 sur GPU 0**, perplexité 13,1369 inchangée. La pagination rend la 2ᵉ carte inutile aux longueurs courantes ; sa valeur est la marge des très longs contextes (KV f32 à 1 M = 24 Go, soit 12 Go par carte) | `38d4d8b` |
+| **5. Plan MLA + vision** | document `docs/plan-mla-vision.md` : tenseurs et clés GGUF, ordre du calcul MLA, et le **contrôle négatif** qui relie l'implémentation nouvelle à une déjà validée (avec `W_kv_b = I`, l'attention latente doit redonner exactement une MQA) | `c866186` |
+
+Les deux portes de non-régression ont été revérifiées après le changement de noyau : **Qwen ctx 256 = 19,3885** et **gpt-oss ctx 256 = 15,1757**, toutes deux sans `QT_GPU` (piège documenté : `QT_GPU` déporte à lui seul les projections Q8_0 de plus de 8 Mo et décale le chiffre de 0,06 %).
+
+\## En cours
+
+**Chantier 4 — rotation à 16 k** : la première passe (RoPE simple, mêmes 512 jetons notés, positions 15 872-16 383) tourne depuis ~28 minutes ; la seconde (interpolation seule) suivra, ~30 minutes de plus. Le préremplissage par lots et le KV déporté la rendent possible, mais elle reste l'opération la plus chère du dépôt. Résultat à collecter dans `/tmp/rotation_16k.log` — je n'ai pas voulu l'interrompre pour tenir un délai.
+
+\## Reste
+
+**Chantier 5 — MLA et vision**, le seul non commencé. Le plan est écrit et chiffré : un modèle MLA **synthétique** en GGUF (aucun modèle MLA local), une référence numpy indépendante, et la validation par équivalence MQA ; pour la vision, la tour ViT, la fusion 2 × 2 des patchs et surtout le chemin d'injection d'embeddings qui manque au moteur (`forward` part toujours de `token_embd`).
+
+L'objectif reste **actif** : le prochain tour commence par relever le résultat du 16 k, puis attaque MLA selon `docs/plan-mla-vision.md`. Rien n'est laissé cassé — `cargo test` 6/6, arbre propre, et tout ce qui est annoncé ici est dans un rapport, un document ou `REPRISE.md`.
+
+### Tour 11 — <goal_round> Objective: "Réaliser les 6 nouveaux chantiers du projet qtrinet-core, dans l'ordre : (1) relancer le test d … [1771 caractères tronqués]
+
+*9 appels d'outils.* Actions notables :
+
+- bash — Collect 16k rotation result
+- bash — Check engine elapsed time
+- write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/mla_synthetique.py`
+- bash — Generate synthetic MLA model and reference
+- bash — Fix writer and verify GGUF header
+- bash — Fix reference einsums and rerun
+- bash — Debug MLA reference shapes
+- bash — Fix einsum indices and regenerate
+- bash — Document harness state and commit
 
 ## 3. Travail accompli
 
@@ -517,6 +553,7 @@ L'objectif reste actif : la suite (2d, 2e, résultat du 16 k, puis MLA/vision) e
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/gpu/qtrinet_gpu.cu` | 0 | 1 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-aiguille.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/plan-mla-vision.md` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/mla_synthetique.py` | 1 | 0 |
 
 ### Sous-agents lancés
 
@@ -564,7 +601,7 @@ L'objectif reste actif : la suite (2d, 2e, résultat du 16 k, puis MLA/vision) e
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 806 autres
+- … et 814 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -754,4 +791,5 @@ L'objectif reste actif : la suite (2d, 2e, résultat du 16 k, puis MLA/vision) e
 - docs : plan détaillé pour MLA et la vision (chantier 5)  MLA n'est pas testable en l'état (aucun modèle MLA en GGUF ici — le deepseek-r1-distill local est un Qw
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log -1 --format=%B | tail -4 && cat > /tmp/msg_plan.txt <<'EOF' docs : plan détaillé pour MLA et la vi
 - journal : archive automatique" 2>/dev/null; git log --oneline -3 | cat
+- cat /tmp/rotation_16k.log; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p='docs/plan-mla-vision.md'; s=open(p).read() old = "### Valid
 

@@ -18006,3 +18006,129 @@ ctx 16384 simple  :
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 900 ./qtrinet-core/target/release/qtrinet-core /home/stephane/FastNVMe/models/gpt-oss-120b-MXFP4.gguf --ppl /tmp/ids_oss.txt --ctx 256 --dense --threads 16 --limit 512 2>&1 | grep -oE \"perplexité [0-9.]+ sur [0-9]+ tokens \\ … [226 caractères tronqués]`
+
+  ```
+perplexité 15.1757 sur 510 tokens (0 événements, 189.4 s)
+86ffc00 journal : archive automatique
+c866186 docs : plan détaillé pour MLA et la vision (chantier 5)
+38d4d8b Chantiers 2d et 2e : noyau de tête AVX2, KV réparti sur les deux GPU
+  ```
+
+- **todo_write** `{"todos": [{"content": "Chantier 1 : aiguille long contexte (12/12 sondes)", "status": "completed"}, {"content": "Chantier 2 : GPU (2a 2b 2c 2d 2e) — vectorisation, experts, lots, tête AVX2, 2 cartes", "status": "completed"}, {"content": "Chantier 3 : pagination CPU + hypothèse f16 réfutée", "status … [336 caractères tronqués]`
+
+  ```
+Updated todo list: 1 pending, 1 in progress, 4 completed.
+  ```
+
+### 🤖 Assistant
+
+⏵ Tour 1 : quatre chantiers sur six livrés, la rotation 16 k tourne encore
+
+## Livré dans ce tour
+
+| chantier | mesure | commit |
+|---|---|---|
+| **2d. Noyau de tête Q8_0 en AVX2** | `vpmaddwd` sur 32 niveaux, **somme entière donc exacte** : porte Qwen **19,3885** et gpt-oss **15,1757** inchangées au chiffre près — le noyau est bit-identique au scalaire | `38d4d8b` |
+| **2e. KV réparti sur les deux Quadro** | couches allouées en tournant : **12 sur GPU 1, 12 sur GPU 0**, perplexité 13,1369 inchangée. La pagination rend la 2ᵉ carte inutile aux longueurs courantes ; sa valeur est la marge des très longs contextes (KV f32 à 1 M = 24 Go, soit 12 Go par carte) | `38d4d8b` |
+| **5. Plan MLA + vision** | document `docs/plan-mla-vision.md` : tenseurs et clés GGUF, ordre du calcul MLA, et le **contrôle négatif** qui relie l'implémentation nouvelle à une déjà validée (avec `W_kv_b = I`, l'attention latente doit redonner exactement une MQA) | `c866186` |
+
+Les deux portes de non-régression ont été revérifiées après le changement de noyau : **Qwen ctx 256 = 19,3885** et **gpt-oss ctx 256 = 15,1757**, toutes deux sans `QT_GPU` (piège documenté : `QT_GPU` déporte à lui seul les projections Q8_0 de plus de 8 Mo et décale le chiffre de 0,06 %).
+
+## En cours
+
+**Chantier 4 — rotation à 16 k** : la première passe (RoPE simple, mêmes 512 jetons notés, positions 15 872-16 383) tourne depuis ~28 minutes ; la seconde (interpolation seule) suivra, ~30 minutes de plus. Le préremplissage par lots et le KV déporté la rendent possible, mais elle reste l'opération la plus chère du dépôt. Résultat à collecter dans `/tmp/rotation_16k.log` — je n'ai pas voulu l'interrompre pour tenir un délai.
+
+## Reste
+
+**Chantier 5 — MLA et vision**, le seul non commencé. Le plan est écrit et chiffré : un modèle MLA **synthétique** en GGUF (aucun modèle MLA local), une référence numpy indépendante, et la validation par équivalence MQA ; pour la vision, la tour ViT, la fusion 2 × 2 des patchs et surtout le chemin d'injection d'embeddings qui manque au moteur (`forward` part toujours de `token_embd`).
+
+L'objectif reste **actif** : le prochain tour commence par relever le résultat du 16 k, puis attaque MLA selon `docs/plan-mla-vision.md`. Rien n'est laissé cassé — `cargo test` 6/6, arbre propre, et tout ce qui est annoncé ici est dans un rapport, un document ou `REPRISE.md`.
+
+
+## Tour 11
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Réaliser les 6 nouveaux chantiers du projet qtrinet-core, dans l'ordre : (1) relancer le test de l'aiguille sur contexte long (remplissage varié en vrai texte, moins de sondes, réponses plus longues) sur un modèle capable, grâce au préremplissage par lots et au KV déporté ; (2) chemin GPU : dépaquetage vectorisé du noyau d'attention (13,2 ms/couche à 1 M en int4 vers ~3 ms), brancher MXFP4 dans le moteur avec une politique de résidence des experts, attention par lots sur GPU dans forward_lot, noyau de tête Q8_0 accéléré (AVX2 ou déport), et usage du second GPU ; (3) mémoire : pagination du cache KV côté CPU (25,77 Go réservés à ctx 1 M pour 512 jetons écrits) et test de l'hypothèse « clés en f16 avant quantification » pour l'écart int8 avec llama.cpp à 8 192 (+3,0 % contre +0,8 %) ; (4) rotation au-delà de 5 120 jetons (passe à 16 k) ; (5) structurel : MLA (aucun modèle local — construire un modèle MLA synthétique et valider contre une référence indépendante) et vision (poids Qwen2.5-VL et projecteur mmproj présents) ; (6) hygiène : réécrire la section « Ce qu'il faut faire ensuite » de REPRISE.md et y consigner les pièges QT_GPU/QT_GPU_TETE/QT_GPU_KV. Chaque chantier doit être implémenté, mesuré (portes de non-régression Qwen 19,3885 et gpt-oss 15,1757 sans QT_GPU), documenté dans le dépôt et commité."
+Round: 2/30
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cat /tmp/rotation_16k.log; echo \"---\"; pgrep -x qtrinet-core >/dev/null && echo \"[en cours]\" || echo \"[libre]\"", "description": "Collect 16k rotation result"}`
+
+  ```
+ctx 16384 simple  : ---
+[en cours]
+  ```
+
+- **bash** `{"command": "ps -o pid,etime,time,args -p $(pgrep -x qtrinet-core | head -1) 2>/dev/null | cut -c1-120", "description": "Check engine elapsed time"}`
+
+  ```
+PID     ELAPSED     TIME COMMAND
+3768087       35:32 10:00:42 ./qtrinet-core/target/release/qtrinet-core /home/stephane/FastNVMe/models/gpt-oss-120b-MXFP
+  ```
+
+- **write** `{"content": "#!/usr/bin/env python3\n\"\"\"Modèle MLA synthétique + référence numpy — le harnais du chantier 5.\n\nMLA (attention latente, DeepSeek-V2/V3) n'est pas testable en l'état : aucun\nmodèle MLA en GGUF sur cette machine (le « deepseek-r1-distill » local est un\nQwen dense). Ce script fabri … [9662 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/mla_synthetique.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/mla_synthetique.py 2>&1 | tail -5 && ls -l /tmp/mla_minuscule.gguf", "description": "Generate synthetic MLA model and reference", "timeoutMs": 300000}`
+
+  ```
+~~~~~~~~~~~~~^^^^^^
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/mla_synthetique.py", line 202, in ecrire_chaine
+    b = s.encode("utf-8")
+        ^^^^^^^^
+AttributeError: 'int' object has no attribute 'encode'
+-rw-r--r--. 1 stephane stephane 1413 29 sep 20:03 /tmp/mla_minuscule.gguf
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='tools/mla_synthetique.py'; s=open(p).read()\ns = s.replace(\"\"\"        (\"tokenizer.ggml.tokens\", 9, [f\"t{i}\" for i in range(VOCAB)]),\n        (\"tokenizer.ggml.token_type\", 9, [1] * VOCAB),\"\"\",\n\"\"\" … [506 caractères tronqués]`
+
+  ```
+clé tableau d'entiers retirée
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/mla_synthetique.py", line 120, in avant
+    sc = sc + q_rope @ k_rope_t.transpose(0, 2, 1)[:, :1].transpose(0, 2, 1).repeat(NH, 1)
+                       ~~~~~~~~~~~~~~~~~~^^^^^^^^^
+ValueError: axes don't match array
+-rw-r--r--. 1 stephane stephane 381792 29 sep 20:03 /tmp/mla_minuscule.gguf
+version 3 tenseurs 26 métadonnées 15
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='tools/mla_synthetique.py'; s=open(p).read()\nold = \"\"\"        # --- scores : partie non tournée + partie tournée (broadcast sur les têtes)\n        sc = q_nope @ k_nope.transpose(0, 2, 1)\n        sc = sc + q_ … [1097 caractères tronqués]`
+
+  ```
+référence corrigée
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/mla_synthetique.py", line 121, in avant
+    sc = sc + np.einsum('nhe,ke->nhk', q_rope, k_rope_t)
+         ~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ValueError: operands could not be broadcast together with shapes (8,4,4) (8,4,8)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport numpy as np, importlib.util\nspec = importlib.util.spec_from_file_location(\"mla\", \"tools/mla_synthetique.py\")\nm = importlib.util.module_from_spec(spec); spec.loader.exec_module(m)\np = m.construire(1234) … [642 caractères tronqués]`
+
+  ```
+qb (8, 128) attendu (8, 128)
+kva (8, 64) attendu (8, 64)
+kvb (8, 128) attendu (8, 128)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='tools/mla_synthetique.py'; s=open(p).read()\nold = \"\"\"        sc = np.einsum('nhe,nke->nhk', q_nope, k_nope)\n        sc = sc + np.einsum('nhe,ke->nhk', q_rope, k_rope_t)\"\"\"\nnew = \"\"\"        #     (n =  … [575 caractères tronqués]`
+
+  ```
+indices corrigés (requête/clé/tête)
+modèle   : /tmp/mla_minuscule.gguf
+référence: /tmp/mla_ref/logits.npy  (forme (8, 64))
+logits[0, :4] = [ 0.46666391  1.35360381  0.60666662 -0.08645432]
+logits[-1, :4] = [-0.58902812  0.99612308  0.17355105 -0.39631457]
+  ```
+
+- **bash** `{"command": "cat /tmp/rotation_16k.log; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='docs/plan-mla-vision.md'; s=open(p).read()\nold = \"### Validation proposée\"\nnew = \"\"\"### État du harnais : FAIT\n\n`tools/mla_synthetique.py` fabrique le modèle et la référence nu … [2033 caractères tronqués]`

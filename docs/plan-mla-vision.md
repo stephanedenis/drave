@@ -52,6 +52,22 @@ partie « rope », le reste de Q/K est **non tourné**, c'est le « decoupled Ro
    (matrice `[512, n_head × 192]`, soit ~1 Mo en Q8 : le coût est réel mais petit
    devant le cache économisé).
 
+### État du harnais : FAIT
+
+`tools/mla_synthetique.py` fabrique le modèle et la référence numpy :
+
+* GGUF de 381 ko, 26 tenseurs, 15 clés de métadonnées, architecture
+  `deepseek2` avec `q_lora_rank` 32, `kv_lora_rank` 48, `qk_rope` 16,
+  `qk_nope` 16, `v_dim` 16, 4 têtes, 2 couches, hidden 64 ;
+* référence numpy du même calcul (logits pour 8 jetons, forme `(8, 64)`),
+  rangée dans `/tmp/mla_ref/` avec `ids.npy` et la description des formes ;
+* l'écriture du GGUF a été vérifiée en relisant son en-tête (version 3, 26
+  tenseurs, 15 métadonnées).
+
+Ce qui reste : **le chemin MLA dans le moteur** — lire ces tenseurs, tenir le
+cache latent (`c_kv` + `k_rope` par position), n'appliquer la rotation qu'à la
+partie « rope », et comparer les logits à `logits.npy`.
+
 ### Validation proposée
 
 1. script Python qui écrit un GGUF MLA minuscule (2 couches, hidden 256, 4 têtes,
