@@ -7,12 +7,12 @@
 | Début | 2026-09-28 14:46 |
 | Durée | 48.8 h |
 | Tours | 46 |
-| Messages | 1895 |
-| Appels d'outils | 1788 |
+| Messages | 1899 |
+| Appels d'outils | 1792 |
 | Fichiers touchés | 44 |
-| Commandes | 1460 |
+| Commandes | 1464 |
 | Sous-agents | 10 |
-| Commits | 150 |
+| Commits | 151 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -2117,7 +2117,7 @@ L'**audit des drapeaux** a trouvé que **46 options sur 110** étaient ignorées
 
 ### Tour 46 — continue jusqu'à 18h HAE
 
-*50 appels d'outils.* Actions notables :
+*54 appels d'outils.* Actions notables :
 
 - bash — Check time, timezone and remaining budget
 - create_goal
@@ -2133,11 +2133,11 @@ L'**audit des drapeaux** a trouvé que **46 options sur 110** étaient ignorées
 - bash — Improve notebook with real text cell
 - bash — Kill test node safely and check notebook
 - bash — Add notebook real-text cell and commit
-- … et 36 autres
+- … et 40 autres
 
 **Synthèse produite :**
 
-⏵ Je traite les 15 corrections du second audit : d'abord les chiffres faux (dont mon « 75 % » qui vaut 64 %), puis les époques d'en-tête.
+⏵ Le mode 4 est du code neuf et complexe : je le verrouille par des tests (état forgé, préfixe incohérent, deux états).
 
 ## 3. Travail accompli
 
@@ -2245,7 +2245,7 @@ L'**audit des drapeaux** a trouvé que **46 options sur 110** étaient ignorées
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 1420 autres
+- … et 1424 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2373,7 +2373,7 @@ L'**audit des drapeaux** a trouvé que **46 options sur 110** étaient ignorées
 
 ## 5. Erreurs rencontrées
 
-96 sorties en erreur ou divergentes. Les premières :
+98 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : a8f2635f8 docs: record which models this box is good at, and why src/llama-hparams.cpp:8:void llama_hparams::set_swa_pattern(uint32_t n_pattern, bool dense_first) { src/llama-hparams.h:308:    void se
 - **T1** : 511 tokens notés — perplexité cumulée 247.031  (4.9 tok/s) === perplexité 247.0308 sur 511 tokens (0 événements, 104.5 s) ===  ### B3 harmony assistant 511 --- ref --- 0.0 0.0 0:00 ls: cannot access '
@@ -2543,4 +2543,5 @@ L'**audit des drapeaux** a trouvé que **46 options sur 110** étaient ignorées
 - Corrections du second audit (1/2) : chiffres, époques, comptes, et la journée au README  - Les pourcentages du cache KV : « 75 % / 50 % » était une ERREUR de ma
 - Corrections du second audit (2/2) : la journée au README, le mode 4 dans la recette Colab, le renvoi FPGA de la vision" && git log --oneline -1 | cat; date +"%H
 - Documents : la frontière du cache KV dans contexte-long, et l'addendum du rapport de drapeaux  contexte-long §4.bis.3 porte la frontière complète (clés f16 + va
+- Quatre tests pour le mode 4 : état forgé, deux états, préfixe incohérent  Le mode 4 est du code de protocole neuf : un état forgé à la main doit se décoder comm
 

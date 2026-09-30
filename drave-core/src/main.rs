@@ -3587,6 +3587,69 @@ mod tests_plafond {
         assert!(x.iter().all(|v| *v == 0.0), "un indice hors dimension est ignoré");
     }
 
+    /// Un état du mode 4, forgé à la main : `a · n_blocs · longueur`, les échelles,
+    /// puis les paires (écart u8, valeur i8).
+    fn etat_forge(paires: &[(u16, i8)], n_blocs: u32, echelles: &[f32]) -> Vec<u8> {
+        let mut p: Vec<u8> = Vec::new();
+        let mut prev = 0u32;
+        for &(i, v) in paires {
+            let e = i as u32 - prev;
+            if e < 255 { p.push(e as u8); } else { p.push(255); p.extend_from_slice(&i.to_le_bytes()[..2]); }
+            prev = i as u32;
+            p.push(v as u8);
+        }
+        let mut c: Vec<u8> = Vec::new();
+        c.extend_from_slice(&(paires.len() as u32).to_le_bytes());
+        c.extend_from_slice(&n_blocs.to_le_bytes());
+        c.extend_from_slice(&(p.len() as u32).to_le_bytes());
+        for e in echelles { c.extend_from_slice(&e.to_le_bytes()); }
+        c.extend_from_slice(&p);
+        c
+    }
+
+    #[test]
+    fn mode4_un_etat_se_decode_comme_le_mode2() {
+        // 28 blocs (896 canaux / 32), une seule paire non nulle : canal 40, +3,
+        // échelle du bloc 1 (canaux 32..63) = 0,5 → la valeur attendue est 1,5.
+        let mut echelles = vec![0f32; 28];
+        echelles[1] = 0.5;
+        let corps = etat_forge(&[(40, 3)], 28, &echelles);
+        let f = decoder_une_trame(MODE_LOT_LISTES, 1, corps, 896).unwrap();
+        let x = f.charge.plat().to_vec();
+        assert_eq!(x.len(), 896, "un état = une ligne de `hidden` canaux");
+        assert!((x[40] - 1.5).abs() < 1e-6, "canal 40 = 3 × 0,5 = 1,5, vu {}", x[40]);
+        assert!(x.iter().enumerate().all(|(i, v)| i == 40 || *v == 0.0));
+    }
+
+    #[test]
+    fn mode4_deux_etats_dans_un_flux() {
+        let mut e1 = vec![0f32; 28];
+        e1[0] = 1.0;
+        let mut e2 = vec![0f32; 28];
+        e2[0] = 2.0;
+        let mut corps = etat_forge(&[(5, 7)], 28, &e1);
+        corps.extend_from_slice(&etat_forge(&[(6, -7)], 28, &e2));
+        let f = decoder_une_trame(MODE_LOT_LISTES, 2, corps, 896).unwrap();
+        let x = f.charge.plat().to_vec();
+        assert_eq!(x.len(), 2 * 896);
+        assert!((x[5] - 7.0).abs() < 1e-6, "premier état : {}", x[5]);
+        assert!((x[896 + 6] + 14.0).abs() < 1e-6, "second état : {}", x[896 + 6]);
+    }
+
+    #[test]
+    fn mode4_prefixe_incoherent_est_refuse() {
+        // Le nombre de blocs doit être ⌈hidden/32⌉ : 27 au lieu de 28 signale deux
+        // nœuds qui n'ont pas le même GGUF, et c'est mieux que de lire au hasard.
+        let corps = etat_forge(&[(5, 7)], 27, &vec![1.0f32; 27]);
+        let r = decoder_une_trame(MODE_LOT_LISTES, 1, corps, 896);
+        assert!(r.is_err(), "27 blocs pour 896 canaux doivent être refusés");
+        // Une longueur de paires incohérente avec le nombre d'actifs aussi.
+        let mut corps = etat_forge(&[(5, 7)], 28, &vec![1.0f32; 28]);
+        corps[8..12].copy_from_slice(&100u32.to_le_bytes());   // longueur = 100 pour 1 actif
+        let r = decoder_une_trame(MODE_LOT_LISTES, 1, corps, 896);
+        assert!(r.is_err(), "100 octets de paires pour 1 actif doivent être refusés");
+    }
+
     #[test]
     fn un_flux_a_zero_element_est_refuse() {
         // Règle R4 : « n == 0 » est un bug du pair, pas une donnée. Le plan

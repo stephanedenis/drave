@@ -30465,3 +30465,79 @@ cles_f32_valeurs_int8      :
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n 151,175p docs/contexte-long.md | head -12; python3 - <<'PY'\np='docs/contexte-long.md'; s=open(p).read()\nv = \"\"\"## 4.ter KV déporté en VRAM (E4) : le noyau, et ce qu'il donne\"\"\"\nn = \"\"\"### 4.bis.3 OÙ mettre les bits … [3708 caractères tronqués]`
+
+  ```
+### 4.bis.2 À 8 192 jetons, la longueur exacte de la comparaison llama.cpp
+
+Le corpus de 16 455 jetons (tokenisé avec le tokenizer du modèle, réversibilité
+vérifiée) permet enfin de mesurer à la longueur de la référence :
+
+| KV | nous, 8 191 jetons notés | Δ | llama.cpp (8 192) | Δ | durée de la passe |
+|---|---|---|---|---|---|
+| f32 | 14,2339 | — | 16,59 | — | 864 s |
+| **int8** | **14,6667** | **+3,0 %** | 16,73 | +0,8 % | 1 144 s |
+| **int4** | **66,0369** | **+364 %** | 98,53 | +494 % | 1 461 s |
+
+Deux choses que la mesure ajoute :
+contexte-long : section 4.bis.3 ajoutée
+rapport drapeaux : addendum 2
+64bf745 Documents : la frontière du cache KV dans contexte-long, et l'addendum du rapport de drapeaux
+int8_int8                  : perplexité 12.4921 sur 4095 tokens (0 événements, 619.2 s)
+cles_f32_valeurs_int8      : 15:33:07
+  ```
+
+### 🤖 Assistant
+
+⏵ Le mode 4 est du code neuf et complexe : je le verrouille par des tests (état forgé, préfixe incohérent, deux états).
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/main.rs'; s=open(p).read()\nancre = \"\"\"    #[test]\n    fn un_flux_a_zero_element_est_refuse() {\"\"\"\nneuf = '''    /// Un état du mode 4, forgé à la main : `a · n_blocs · longueur`, les échel … [3388 caractères tronqués]`
+
+  ```
+quatre tests du mode 4 ajoutés
+error[E0308]: mismatched types
+error[E0308]: mismatched types
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && timeout 600 cargo test --release 2>&1 | grep -E \"^error\" -A 8 | head -22", "description": "See test compile errors", "timeoutMs": 600000}`
+
+  ```
+error[E0308]: mismatched types
+    --> src/main.rs:3595:14
+     |
+3595 |         for (&i, &v) in paires {
+     |              ^^         ------ this is an iterator with items of type `&(u16, i8)`
+     |              |
+     |              expected `u16`, found `&_`
+     |
+     = note:   expected type `u16`
+--
+error[E0308]: mismatched types
+    --> src/main.rs:3595:18
+     |
+3595 |         for (&i, &v) in paires {
+     |                  ^^     ------ this is an iterator with items of type `&(u16, i8)`
+     |                  |
+     |                  expected `i8`, found `&_`
+     |
+     = note:   expected type `i8`
+--
+error: could not compile `drave-core` (bin "drave" test) due to 2 previous errors; 11 warnings emitted
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/main.rs'; s=open(p).read()\nv = \"\"\"        for (&i, &v) in paires {\"\"\"\nassert s.count(v) == 1\ns = s.replace(v, \"\"\"        for &(i, v) in paires {\"\"\")\nopen(p,'w').write(s); print(\"it … [202 caractères tronqués]`
+
+  ```
+itération corrigée
+test tests_plafond::mode4_deux_etats_dans_un_flux ... ok
+test tests_plafond::mode4_un_etat_se_decode_comme_le_mode2 ... ok
+test tests_plafond::un_lot_dement_grand_est_refuse_avant_allocation ... ok
+test tests_plafond::un_nombre_de_blocs_dement_grand_est_refuse ... ok
+test tests_plafond::une_trame_liste_hors_dimension_ne_tue_pas_le_noeud ... ok
+test tests_plafond::mode4_prefixe_incoherent_est_refuse ... ok
+test tests_plafond::un_flux_a_zero_element_est_refuse ... ok
+test engine::tests_gemm_q4::gemm_q4_egale_matvec ... ok
+test engine::tests_gemm::gemm_bat_le_matvec ... ok
+test result: ok. 17 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.08s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A drave-core/src/main.rs && git commit -q -m \"Quatre tests pour le mode 4 : état forgé, deux états, préfixe incohérent\n\nLe mode 4 est du code de protocole neuf : un état forgé à la main doit se décoder\ncomme le mode 2 (c … [440 caractères tronqués]`

@@ -361,3 +361,285 @@ Date:   Wed Sep 30 15:29:29 2026 -0400
 … [7647 caractères tronqués]
   ```
 
+### 🤖 Assistant
+
+⏵ Inspection de `flux_en_liste_blocs`, `plat()` et des tests existants.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"fn flux_en_liste_blocs\\|fn flux_en_liste\\b\\|fn flux_en_liste(\" -A 60 drave-core/src/model.rs | head -140", "description": "Read flux_en_liste_blocs implementation"}`
+
+  ```
+3607:    pub fn flux_en_liste(&self, x: &[f32]) -> (Vec<u16>, Vec<i16>, f32) {
+3608-        assert!(x.len() <= u16::MAX as usize,
+3609-                "flux de {} canaux : l'indice u16 ne suffit pas", x.len());
+3610-        let mut scratch = Vec::with_capacity(x.len());
+3611-        // Le champ de valeur du fil fait 16 bits : on quantifie donc sur 32 767
+3612-        // niveaux, PAS sur `act_levels`. C'est gratuit — deux octets par valeur
+3613-        // dans les deux cas — et mesuré : à 127 niveaux, l'écart de perplexité du
+3614-        // découpage passait de quelques pour mille à ×2. Le seuil, lui, reste
+3615-        // celui du modèle : c'est lui qui décide de la sparsité, donc de la taille.
+3616-        match Self::quant_scratch(x, 32767.0, self.act_thresh, self.act_topk,
+3617-                                  self.act_renorm, &mut scratch) {
+3618-            Some((sv, sx)) => (sv.idx.iter().map(|&i| i as u16).collect(),
+3619-                               sv.val.iter().map(|&v| v.clamp(i16::MIN as i32,
+3620-                                                              i16::MAX as i32) as i16).collect(),
+3621-                               sx),
+3622-            None => (Vec::n
+… [4152 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"fn plat\\|fn forward_lot\" -A 30 drave-core/src/main.rs | head -80; echo \"=== models ===\"; ls -la models/ 2>/dev/null | head -20; ls -la data/ 2>/dev/null | head", "description": "Read plat/forward_lot and list models"}`
+
+  ```
+1545:    fn plat(&self) -> &[f32] {
+1546-        match self { ChargeFlux::Lot(v) => v, _ => &[] }
+1547-    }
+1548-}
+1549-
+1550-/// Construit l'en-tête d'un flux (79 octets) : magie, version, mode, plage,
+1551-/// position, `n`, échelle, et le contrat d'activation.
+1552-///
+1553-/// **Une seule fonction pour les trois émetteurs**, et c'est délibéré : la
+1554-/// duplication de cette construction est exactement ce qui a produit l'en-tête
+1555-/// d'un octet trop long (40 écrits pour 39 lus), invisible pendant des flux
+1556-/// entiers parce qu'il ne décalait le corps que d'un octet.
+1557-fn tete_flux(mode: u8, debut: u32, fin: u32, pos: u32, n: usize, echelle: f32,
+1558-             mdl: Option<&model::Model>) -> Vec<u8> {
+1559-    let act = mdl.map(Act::du_modele).unwrap_or(Act {
+1560-        levels: 127.0, thresh: 0.0, topk: 0, renorm: false,
+1561-        topk_proj: [0; 7], attn_topk: 0, qk_topk: 0, moe_topk: 0 });
+1562-    let mut t = Vec::with_capacity(TAILLE_TETE);
+1563-    t.extend_from_slice(&MAGIE_FLUX.to_le_bytes());
+1564-    t.push(VERSION_FLUX);
+1565-    t.push(mode);
+1566-    t.extend_from_slice(&debut.to_le_bytes());
+1567-    t.extend_from_slice(&fin.to_le_bytes());
+1568
+… [985 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git status --porcelain | head -20 && echo \"=== log main.rs ===\" && git log --oneline -6 -- drave-core/src/main.rs && echo \"=== origine refus n==0 ===\" && git log --oneline -S \"flux à zéro élément\" -- drave-core/src/main.rs", "d … [48 caractères tronqués]`
+
+  ```
+M drave-core/src/main.rs
+ M journal/README.md
+=== log main.rs ===
+64a86ca Corrections du second audit (1/2) : chiffres, époques, comptes, et la journée au README
+8e132aa Mode 4 : le lot en LISTES sur le fil — ÷2,3 sur les octets, écart tenu
+fcda4ff Tests de trame forgée : un délai de lecture, pour qu'ils échouent au lieu de pendre
+25cfe12 Deux tests de plus : trame forgée hors dimension, et n_blocs démesuré
+320b612 Seconde relecture adversariale : huit défauts, dont deux graves dans mes propres correctifs
+01b7274 Un drapeau inconnu n'est plus avalé en silence
+=== origine refus n==0 ===
+64a86ca Corrections du second audit (1/2) : chiffres, époques, comptes, et la journée au README
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/main.rs", "limit": 40, "offset": 1519}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/main.rs</path>
+<type>file</type>
+<content>
+1519:             }
+1520:             ChargeFlux::Blocs { idx, val, echelles } => {
+1521:                 let mut x = vec![0f32; hidden];
+1522:                 let mut hors = 0usize;
+1523:                 for (&i, &v) in idx.iter().zip(val.iter()) {
+1524:                     let b = i as usize / 32;
+1525:                     if (i as usize) < hidden && b < echelles.len() {
+1526:                         x[i as usize] = v as f32 * echelles[b];
+1527:                     } else { hors += 1; }
+1528:                 }
+1529:                 if hors > 0 {
+1530:                     eprintln!("[flux] {hors} indice(s) hors dimension ignorés (flux reçu \
+1531: de {hidden} canaux, {} blocs d'échelles)", echelles.len());
+1532:                 }
+1533:                 x
+1534:             }
+1535:         }
+1536:     }
+1537:     fn actifs(&self) -> usize {
+1538:         match self {
+1539:             ChargeFlux::Dense(v) => v.len(),
+1540:             ChargeFlux::Liste { idx, .. } | ChargeFlux::Blocs { idx, .. } => idx.len(),
+1541:             ChargeFlux::Lot(v) => v.len(),
+1542:         }
+
+… [910 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Le fichier est modifié hors commit — examen du diff non commité.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git diff -- drave-core/src/main.rs", "description": "Show uncommitted changes to main.rs"}`
+
+  ```
+diff --git a/drave-core/src/main.rs b/drave-core/src/main.rs
+index 6ed37b2..09e6bf1 100644
+--- a/drave-core/src/main.rs
++++ b/drave-core/src/main.rs
+@@ -3587,6 +3587,69 @@ mod tests_plafond {
+         assert!(x.iter().all(|v| *v == 0.0), "un indice hors dimension est ignoré");
+     }
+ 
++    /// Un état du mode 4, forgé à la main : `a · n_blocs · longueur`, les échelles,
++    /// puis les paires (écart u8, valeur i8).
++    fn etat_forge(paires: &[(u16, i8)], n_blocs: u32, echelles: &[f32]) -> Vec<u8> {
++        let mut p: Vec<u8> = Vec::new();
++        let mut prev = 0u32;
++        for (&i, &v) in paires {
++            let e = i as u32 - prev;
++            if e < 255 { p.push(e as u8); } else { p.push(255); p.extend_from_slice(&i.to_le_bytes()[..2]); }
++            prev = i as u32;
++            p.push(v as u8);
++        }
++        let mut c: Vec<u8> = Vec::new();
++        c.extend_from_slice(&(paires.len() as u32).to_le_bytes());
++        c.extend_from_slice(&n_blocs.to_le_bytes());
++        c.extend_from_slice(&(p.len() as u32).to_le_bytes());
++        for e in echelles { c.extend_from_slice(&e.to_le_bytes()); }
++        c.extend_from_slice(&p);
++        c
++    }
++
++    #[test]
++  
+… [2326 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/main.rs", "limit": 180, "offset": 3440}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/main.rs</path>
+<type>file</type>
+<content>
+3440:         // serait un artefact de division par zéro, pas une mesure.
+3441:         println!("    part de l'attention dans le flux d'événements : — (aucun événement)");
+3442:     }
+3443:     // Où passe VRAIMENT le temps du token : sans ce découpage, on optimise à
+3444:     // l'aveugle. Le poste non compté contient la tête de sortie (151 936 × 896
+3445:     // poids, la plus grosse matrice du modèle) et l'échantillonnage.
+3446:     let sec = t0.elapsed().as_secs_f64();
+3447:     let p = mdl.prof;
+3448:     let tot = p[0] + p[1] + p[2] + p[3];
+3449:     println!("    postes (ms/token) : projets-attn {:.2} | rope {:.2} | attention {:.2} | proj+mlp {:.2} | somme {:.2} | reste (tête + échantillonnage) {:.2}",
+3450:              p[0] / n as f64 * 1e3, p[1] / n as f64 * 1e3, p[2] / n as f64 * 1e3,
+3451:              p[3] / n as f64 * 1e3, tot / n as f64 * 1e3,
+3452:              (sec - tot) / n as f64 * 1e3);
+3453:     println!("    dont tête de sortie {:.2} | notation log-sum-exp {:.2} (le reste du « reste » n'est pas chronométré)",
+3454:              t_tete / n as f64 * 
+… [8693 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/main.rs", "limit": 95, "offset": 3620}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/main.rs</path>
+<type>file</type>
+<content>
+3620:         assert!((x[40] - 1.5).abs() < 1e-6, "canal 40 = 3 × 0,5 = 1,5, vu {}", x[40]);
+3621:         assert!(x.iter().enumerate().all(|(i, v)| i == 40 || *v == 0.0));
+3622:     }
+3623: 
+3624:     #[test]
+3625:     fn mode4_deux_etats_dans_un_flux() {
+3626:         let mut e1 = vec![0f32; 28];
+3627:         e1[0] = 1.0;
+3628:         let mut e2 = vec![0f32; 28];
+3629:         e2[0] = 2.0;
+3630:         let mut corps = etat_forge(&[(5, 7)], 28, &e1);
+3631:         corps.extend_from_slice(&etat_forge(&[(6, -7)], 28, &e2));
+3632:         let f = decoder_une_trame(MODE_LOT_LISTES, 2, corps, 896).unwrap();
+3633:         let x = f.charge.plat().to_vec();
+3634:         assert_eq!(x.len(), 2 * 896);
+3635:         assert!((x[5] - 7.0).abs() < 1e-6, "premier état : {}", x[5]);
+3636:         assert!((x[896 + 6] + 14.0).abs() < 1e-6, "second état : {}", x[896 + 6]);
+3637:     }
+3638: 
+3639:     #[test]
+3640:     fn mode4_prefixe_incoherent_est_refuse() {
+3641:         // Le nombre de blocs doit être ⌈hidden/32⌉ : 27 au lieu de 28 signale deux
+3642:         // nœuds qui n'ont pas
+… [4340 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rn \"flux-en-listes\\|flux_blocs\\|flux-blocs\\|lot_listes\\|lot-listes\" --include=*.rs drave-core/src/ | head -30; echo \"=== options ===\"; grep -n \"lot\\b\" drave-core/src/main.rs | grep -n \"opt\\.\\|Options\" | head -30" … [45 caractères tronqués]`
+
+  ```
+drave-core/src/main.rs:438:    flux: bool, session: bool, chat: bool, flux_liste: bool, flux_blocs: bool,
+drave-core/src/main.rs:566:            "--flux-blocs" => { o.flux_blocs = true; 1 }
+drave-core/src/main.rs:1399:/// de perplexité. Plan : `docs/plan-mode4-lot-listes.md`.
+drave-core/src/main.rs:1721:fn envoyer_lot_listes(s: &mut std::net::TcpStream, debut: u32, fin: u32, pos0: u32,
+drave-core/src/main.rs:1985:                        envoyer_lot_listes(&mut sock, f.debut, f.fin, f.pos, &plat, t, &mdl)
+drave-core/src/main.rs:2041:    let mode = if opt.flux_blocs { MODE_BLOCS }
+drave-core/src/main.rs:2044:    // Le mode des LOTS est distinct : `--flux-blocs` donne le mode 4 (lot en
+drave-core/src/main.rs:2108:            eprintln!("[flux] --flux-liste ne s'applique pas aux lots (seul --flux-blocs a un \
+drave-core/src/main.rs:2120:                envoyer_lot_listes(&mut sock, couches_locales as u32, n_layer as u32,
+=== options ===
+29:2037:    let lot = opt.lot.max(1);
+  ```
+
+### 🤖 Assistant
+
+⏵ Lancement des tests en fond et reconnaissance de l'environnement.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && nproc && pgrep -a -x drave | head && echo \"=== cargo ===\" && cat drave-core/Cargo.toml && ls drave-core/target/release/drave 2>/dev/null || ls target/release/drave 2>/dev/null", "description": "Check CPUs, running drave, cargo conf … [4 caractères tronqués]`
+
+  ```
+40
+=== cargo ===
+[package]
+name = "drave-core"
+version = "0.1.0"
+edition = "2021"
+description = "Drave — moteur d'exécution par listes d'activation (stream of logs) pour modèles quantifiés"
+
+[[bin]]
+name = "drave"
+path = "src/main.rs"
+
+[dependencies]
+# aucune : std seul, pour rester sans dépendance réseau
+
+[profile.release]
+opt-level = 3
+lto = true
+codegen-units = 1
+panic = "abort"
+drave-core/target/release/drave
+  ```
+
+### 🤖 Assistant
+
+⏵ Tests release en arrière-plan ; lecture du plan et de `forward_lot`.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && RAYON_NUM_THREADS=2 cargo test --release -- --test-threads=2 2>&1 | tail -40", "description": "Run release test suite with 2 threads", "run_in_background": true, "timeoutMs": 600000}`
+
+  ```
+started background job bash-73
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"fn forward_lot\" -A 45 drave-core/src/model.rs", "description": "Read forward_lot"}`
+
+  ```
+2320:    pub fn forward_lot(&mut self, toks: &[u32], pos0: usize) -> Vec<Vec<f32>> {
+2321-        let t = toks.len();
+2322-        // Lot IMPOSÉ (préremplissage réparti) : les états arrivent de l'autre
+2323-        // nœud, on ne repasse pas par `token_embd`. Lu avant tout le reste — y
+2324-        // compris avant le retour anticipé sur `t == 0`, sinon une trame vide
+2325-        // laissait l'état imposé en place pour le lot suivant (D7 de la
+2326-        // relecture) — et consommé une seule fois, comme `emb_imposee` pour un
+2327-        // jeton seul.
+2328-        let impose = self.emb_imposee_lot.take();
+2329-        if t == 0 { return Vec::new(); }
+2330-        if t == 1 {
+2331-            if let Some(v) = impose { self.emb_imposee = Some(v); }
+2332-            // Le jeton n'est PAS lu quand un état est imposé : `forward` prend
+2333-            // `emb_imposee` et n'appelle jamais `token_embd`. `toks` peut donc
+2334-            // être vide côté nœud distant, qui ne connaît que des états.
+2335-            //
+2336-            // Le raccourci sort AVANT l'avance du compteur : `forward` avance le
+2337-            // sien. Le faire avancer ici aussi doublait la clé à chaque jeton
+… [1475 caractères tronqués]
+  ```
+
