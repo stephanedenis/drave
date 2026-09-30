@@ -7,10 +7,10 @@
 | Début | 2026-09-30 15:07 |
 | Durée | 0.1 h |
 | Tours | 1 |
-| Messages | 20 |
-| Appels d'outils | 25 |
+| Messages | 37 |
+| Appels d'outils | 45 |
 | Fichiers touchés | 1 |
-| Commandes | 16 |
+| Commandes | 20 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -23,7 +23,7 @@
 
 ### Tour 1 — Tu travailles dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (projet « Drave » : moteur d'inférence LLM e … [4154 caractères tronqués]
 
-*25 appels d'outils.* Actions notables :
+*45 appels d'outils.* Actions notables :
 
 - read
 - bash — Liste les points d'ancrage dans main.rs
@@ -39,13 +39,26 @@
 - bash — Cherche l'aide CLI et la règle Colab
 - bash — Cherche comment les ids sont fournis au banc
 - bash — Vérifie le support de --ids-file
-- … et 4 autres
+- … et 19 autres
 
 **Synthèse produite :**
 
-⏵ Rédaction de la spécification du mode 4 dans `docs/plan-mode4-lot-listes.md`.
+⏵ Spécification écrite et transmise ; vérification finale de l'état du dépôt.
 
-J'ai tout ce qu'il faut : protocole v4, plan du mode 3, mesures, code de `main.rs`/`model.rs`. J'écris la spécification.
+La spécification est dans `docs/plan-mode4-lot-listes.md` (445 lignes) — seul fichier que j'ai touché. Aucune compilation, aucune exécution : le `drave` de la campagne (PID 656529) tourne toujours, je ne l'ai pas approché (`journal/README.md` était déjà modifié avant mon écriture, sa mtime le prouve).
+
+**Résumé — décisions d'architecture et points ouverts**
+
+1. Le mode 4 est le mode 2 répété par état dans un seul flux : `n` = nombre d'ÉTATS, en-tête 79 octets inchangé, échelle d'en-tête sans objet.
+2. Chaque état est auto-délimité par un préfixe de 12 octets (`a_j · n_blocs_j · longueur_j`), puis les échelles f32 par bloc de 32, puis les paires d'`encoder_paires_blocs` — aucun encodage réinventé.
+3. L'échelle vit dans l'état, pas dans une table du lot : indépendance des états, dynamique par jeton, 112 octets sur ~1 530 ne justifient pas un second codec.
+4. Le protocole passe en version 5, sinon un pair v4 consommerait `4·t` octets avant de dire « mode inconnu » ; le refus des modes inconnus devient immédiat, après l'en-tête.
+5. Le corps n'étant plus borné par l'en-tête, `a_j·2`, `n_blocs_j·4`, `longueur_j` et leur cumul passent par `verifier_taille` avant chaque allocation, après `t·hidden·4` validé en tête.
+6. Le mode 4 s'arrête au transport : `ChargeFlux::Lot`, `emb_imposee_lot`, `forward_lot`, le cache KV et la norme finale ne changent pas d'une ligne.
+7. La réponse est encodée comme la demande ; le pilote norme chaque état une fois, puis `logits_lot`.
+8. Critère de vérification : `écart(mode 4) ≤ 1,5 × écart(mode 2 par jeton)` (≈ 2,7e-2 à 256 jetons, seuil 0,01), jamais 0,00e0 — le mode est avec perte par décision, et ÷2,3 attendu sur le fil.
+9. Laissé à l'implémenteur : la forme exacte des helpers `encoder_etat_blocs` / `lire_etat_blocs` et le portage de `Flux.actifs`.
+10. Laissé à l'implémenteur : le seuil de bascule mode 3 ↔ mode 4 et la borne structurelle facultative du corps ; le plan en 7 étapes (§8) donne fichier et critère de succès pour chacune.
 
 ## 3. Travail accompli
 
@@ -53,7 +66,7 @@ J'ai tout ce qu'il faut : protocole v4, plan du mode 3, mesures, code de `main.r
 
 | Fichier | Écritures | Éditions |
 |---|---|---|
-| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/plan-mode4-lot-listes.md` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/plan-mode4-lot-listes.md` | 1 | 10 |
 
 ### Commandes exécutées (échantillon)
 
@@ -73,6 +86,10 @@ J'ai tout ce qu'il faut : protocole v4, plan du mode 3, mesures, code de `main.r
 - **T1** Cherche les invocations réelles du banc réparti
 - **T1** Lit l'invocation de référence du banc réparti
 - **T1** Vérifie les noms exacts des options et la ligne du cache KV
+- **T1** Vérifie la ligne de KvCache::assurer
+- **T1** Localise les passages à corriger
+- **T1** Vérifie l'état git et les processus drave
+- **T1** Vérifie l'ancienneté de la modif de journal/README.md
 
 ## 4. Mesures et résultats marquants
 
@@ -117,4 +134,6 @@ J'ai tout ce qu'il faut : protocole v4, plan du mode 3, mesures, code de `main.r
 - **T1** `// `n_blocs × 4` octets + un Vec<f32> (mesuré : 16 Gio sur une trame de`
 - **T1** `// Défauts du mode PERPLEXITÉ : 256 jetons, trois quarts des cœurs, 16 bits`
 - **T1** `/// rejouait la mauvaise — mesuré : perplexité 356 694 au lieu de 17,43.`
+- **T1** `22:| quel encodage dans le lot ? | **listes à échelle par bloc de 32, valeurs i8 — le mode 2, tel quel** | c'est le mode qui gagne en régime creux (mesuré : ÷2,3 et 20× plus fidèle que l'i16 à 60 % d'`
+- **T1** `308:  référence locale  : perplexité 18,0xxx          <- identique au run mode 3 à mêmes ids et --lot`
 

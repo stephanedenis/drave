@@ -704,3 +704,288 @@ Created file
 </content>
   ```
 
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n '\"--act-thresh\"\\|\"--act-levels\"\\|\"--couches-locales\"\\|\"--flux-serveur\"\\|\"--ppl-reparti\"' drave-core/src/main.rs | head && echo ==== && sed -n '900,915p' drave-core/src/model.rs", "description": "Vérifie les noms … [45 caractères tronqués]`
+
+  ```
+51:        (opt.flux_serveur.is_some(), "--flux-serveur"),
+52:        (opt.ppl_reparti.is_some(), "--ppl-reparti"),
+506:            "--flux-serveur" => { o.flux_serveur = Some(suivant(i).clone()); 2 }
+508:            "--ppl-reparti" => { o.ppl_reparti = Some(suivant(i).clone()); 2 }
+509:            "--couches-locales" => { o.couches_locales = suivant(i).parse().unwrap(); 2 }
+548:            "--act-thresh" => { o.act_thresh = suivant(i).parse().unwrap(); 2 }
+====
+    /// Miroir VRAM du cache KV, une entrée par couche (`DRAVE_GPU_KV=1`).
+    /// Un miroir VRAM par couche, avec l'index du périphérique qui le porte :
+    /// deux cartes se partagent les couches (16 Go chacune).
+    pub kv_gpu: Option<Vec<(usize, crate::gpu::KvGpu)>>,
+    /// Tranches de clés du noyau d'attention, réutilisées d'un jeton à l'autre.
+    pub attn_gpu_part: Vec<f32>,
+    /// Compteur de jetons tracés : `position` dans la trace est ce compteur, et
+    /// non la position DANS la fenêtre. Sans cela, une exécution à plusieurs
+    /// fenêtres réécrivait les mêmes clés (couche, position) et le rejeu
+    /// rejouait la mauvaise — mesuré : perplexité 356 694 au lieu de 17,43.
+    pub jeton_trace: u64,
+    /// Tr
+… [317 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"fn assurer\" drave-core/src/model.rs", "description": "Vérifie la ligne de KvCache::assurer"}`
+
+  ```
+1117:    pub fn assurer(&mut self, besoin: usize) {
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"1 533\\|1 562\\|13,7e-2\\|20× plus fidèle\\|model.rs:907\\|tests_flux tests_plafond\\|perpétuité\\|18,0xxx\" docs/plan-mode4-lot-listes.md", "description": "Localise les passages à corriger"}`
+
+  ```
+22:| quel encodage dans le lot ? | **listes à échelle par bloc de 32, valeurs i8 — le mode 2, tel quel** | c'est le mode qui gagne en régime creux (mesuré : ÷2,3 et 20× plus fidèle que l'i16 à 60 % d'activité) ; un lot i16 serait un second encodage à maintenir pour rien |
+107:| **lot de `t`, mode 4** | `79 + t·(12 + 112) + 2·Σa_j` | ≈ `79 + 1 532t` | **≈ 1 533 à `t = 16`** |
+112:mesure du mode 2 donne 1 589 octets par flux, le mode 4 donne ≈ 1 562 par état.
+218:   indéfiniment (model.rs:907).
+308:  référence locale  : perplexité 18,0xxx          <- identique au run mode 3 à mêmes ids et --lot
+319:  1 024, 13,7e-2 à 64) au seuil 0,01. Le mode 4 quantifie **chaque état
+341:cargo test -p drave-core tests_flux tests_plafond
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/plan-mode4-lot-listes.md", "old_string": "c'est le mode qui gagne en régime creux (mesuré : ÷2,3 et 20× plus fidèle que l'i16 à 60 % d'activité) ; un lot i16 serait un second encodage à maintenir pour rien", "new_string": "c'est le  … [184 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/plan-mode4-lot-listes.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/plan-mode4-lot-listes.md", "old_string": "| **lot de `t`, mode 4** | `79 + t·(12 + 112) + 2·Σa_j` | ≈ `79 + 1 532t` | **≈ 1 533 à `t = 16`** |", "new_string": "| **lot de `t`, mode 4** | `79 + t·(12 + 112) + 2·Σa_j` | ≈ `79 + 1 532t … [30 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/plan-mode4-lot-listes.md has been updated successfully.
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/plan-mode4-lot-listes.md", "offset": 104, "limit": 14}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/plan-mode4-lot-listes.md</path>
+<type>file</type>
+<content>
+104: | un jeton, mode 0 | `79 + 4·hidden` | 3 663 | 3 663 |
+105: | un jeton, mode 2 (seuil 0,01, 78,6 % d'actifs) | `79 + 8 + 112 + 2a` | 1 607 | 1 607 |
+106: | lot de `t`, mode 3 | `79 + 4·t·hidden` | `79 + 3 584t` | 3 589 à `t = 16` |
+107: | **lot de `t`, mode 4** | `79 + t·(12 + 112) + 2·Σa_j` | ≈ `79 + 1 532t` | **≈ 1 537 à `t = 16`** |
+108: 
+109: **÷2,34** sur le fil à seuil 0,01, et le lot est même un peu moins cher que le
+110: mode 2 par jeton : l'en-tête de 79 octets est amorti et le corps du mode 2
+111: (8 octets de préfixe) est remplacé par 12 octets par état. À 1 024 jetons, où la
+112: mesure du mode 2 donne 1 589 octets par flux, le mode 4 donne ≈ 1 562 par état.
+113: Les échelles coûtent 112 octets par état (4 × 28), soit ~7 % du message : elles
+114: sont conservées telles quelles (§2).
+115: 
+116: ## 2. Où vit l'échelle d'état — et pourquoi là
+117: 
+
+(Showing lines 104-117 of 440. Use offset=118 to continue.)
+</content>
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/plan-mode4-lot-listes.md", "new_string": "mesure du mode 2 donne 1 589 octets par flux, le mode 4 donne ≈ 1 554 par état\n(≈ 1 560 par jeton à `t = 16`).", "old_string": "mesure du mode 2 donne 1 589 octets par flux, le mode 4 donne … [20 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/plan-mode4-lot-listes.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/plan-mode4-lot-listes.md", "new_string": "   indéfiniment (`KvCache::assurer`, model.rs:1117 — noté 907 dans le plan du\n   mode 3, l'arbre a bougé depuis).", "old_string": "   indéfiniment (model.rs:907)."}`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/plan-mode4-lot-listes.md has been updated successfully.
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/plan-mode4-lot-listes.md", "limit": 50, "offset": 296}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/plan-mode4-lot-listes.md</path>
+<type>file</type>
+<content>
+296: # terminal 2a — la référence PERDANTE : le mode 2, un flux par jeton (mêmes ids)
+297: ./drave models/Qwen2.5-0.5B-Q8_0.gguf --ppl-reparti 127.0.0.1:45733 \
+298:         --couches-locales 12 --limit 256 --ctx 256 --flux-blocs --act-thresh 0.01
+299: 
+300: # terminal 2b — le mode 4 : mêmes ids, même seuil, par lots
+301: ./drave models/Qwen2.5-0.5B-Q8_0.gguf --ppl-reparti 127.0.0.1:45733 \
+302:         --couches-locales 12 --limit 256 --ctx 256 --lot 16 --flux-blocs --act-thresh 0.01
+303: ```
+304: 
+305: Résultat attendu (le chiffre exact dépend du corpus ; les identifiants par défaut
+306: `1..256` donnent une perplexité bien plus haute que WikiText-2, l'écart seul
+307: compte) :
+308: 
+309: ```
+310:   référence locale  : perplexité 18,0xxx          <- identique au run mode 3 à mêmes ids et --lot
+311:   deux nœuds        : perplexité 18,4xxx
+312:   écart             : 2,7e-2                      <- du même ordre que 2a
+313:   transport         : mode 4 · listes à échelle par bloc · 16 états ·
+314:                       ≈ 24 500 octets par lot (≈ 1 530 par jeton) · 1
+… [1830 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/plan-mode4-lot-listes.md", "new_string": "```\n  référence locale  : perplexité X          <- identique au run mode 3 à mêmes ids et --lot\n  deux nœuds        : perplexité Y          <- Y ≠ X : c'est le prix des listes, pas un bug\ … [676 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/plan-mode4-lot-listes.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/plan-mode4-lot-listes.md", "new_string": "  1 024, 1,4e-1 à 64) au seuil 0,01. Le mode 4 quantifie **chaque état", "old_string": "  1 024, 13,7e-2 à 64) au seuil 0,01. Le mode 4 quantifie **chaque état"}`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/plan-mode4-lot-listes.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/plan-mode4-lot-listes.md", "new_string": "```bash\ncargo test -p drave-core tests_flux      # protocole et codec\ncargo test -p drave-core tests_plafond   # règle R4 : refus avant allocation\n```", "old_string": "```bash\ncargo test … [46 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/plan-mode4-lot-listes.md has been updated successfully.
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/plan-mode4-lot-listes.md", "limit": 120}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/plan-mode4-lot-listes.md</path>
+<type>file</type>
+<content>
+1: # Spécification — mode 4 : le **lot en listes** (protocole v5)
+2: 
+3: > **État : non écrit.** Ce document est la spécification à implémenter ; aucun
+4: > fichier de code n'a été touché pour l'écrire. Il suppose connus
+5: > `docs/format-flux.md` (protocole v4, modes 0–3) et `docs/plan-prefill-reparti.md`
+6: > (le mode 3, mis en œuvre, et ses leçons). Les numéros de ligne sont ceux de
+7: > l'arbre au moment de la rédaction (`VERSION_FLUX = 4`, `TAILLE_TETE = 79`,
+8: > `MODE_LOT = 3`).
+9: 
+10: **En une ligne** : le mode 3 transporte `t` états en f32 dense — 3 589 octets par
+11: jeton à `t = 16` pour Qwen2.5-0.5B ; le mode 4 transporte **les mêmes `t` états
+12: encodés en listes à échelle par bloc de 32 canaux**, soit ≈ 1 530 octets par état
+13: au seuil 0,01, **÷2,3 sur le fil**, au prix exact que le mode 2 paie déjà
+14: (2,7e-2 d'écart à 256 jetons, 1,3e-2 à 1 024). Le mode 4 ne touche ni au calcul,
+15: ni au cache KV, ni à la norme finale : il s'arrête au transport.
+16: 
+17: ## 0. Décisions d'architecture (à ne pas rediscuter)
+18: 
+19: | question | décision | pou
+… [7296 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/plan-mode4-lot-listes.md", "limit": 170, "offset": 121}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/plan-mode4-lot-listes.md</path>
+<type>file</type>
+<content>
+121: 
+122: 1. **Un seul codec, donc une seule classe de bug.** Le contenu de l'état j est le
+123:    corps du mode 2 à l'octet près ; `flux_en_liste_blocs` (model.rs:3638) produit
+124:    les échelles, `encoder_paires_blocs` produit les paires, `decoder_paires_blocs`
+125:    les relit. Aucun nouvel encodage n'est introduit.
+126: 2. **La dynamique est par jeton.** `flux_en_liste_blocs` calcule une échelle par
+127:    bloc à partir du maximum DU VECTEUR ; partager une table entre états
+128:    reviendrait à quantifier des colonnes, pas des états, et ferait dépendre la
+129:    précision d'un jeton de ses voisins du lot.
+130: 3. **L'état reste autonome.** Le lecteur valide, alloue, décode et déquantifie un
+131:    état sans connaître les autres ; un état forgé ou corrompu ne peut pas
+132:    contaminer les suivants, et le cumul (§4) est vérifiable état par état.
+133: 4. **Le coût est déjà payé et il est petit.** 112 octets sur ~1 530 (~7 %) ; les
+134:    supprimer (une échelle globale par état) ferait retomber sur l'erreur absolue
+135:    constante du mode 1, mesurée 2
+… [9298 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/plan-mode4-lot-listes.md", "new_string": "   constante du mode 1, mesurée 22× moins fidèle en régime creux. Les passer en", "old_string": "   constante du mode 1, mesurée 20× moins fidèle en régime creux. Les passer en"}`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/plan-mode4-lot-listes.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/plan-mode4-lot-listes.md", "new_string": "7. Le contrôle de contexte (`pos + t ≤ mdl.ctx`) reste dans la boucle serveur,\n   sur la branche commune aux modes 3 et 4 : sans lui, `KvCache::assurer`\n   (model.rs:1117 — noté 907 dans l … [891 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/plan-mode4-lot-listes.md has been updated successfully.
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/plan-mode4-lot-listes.md", "limit": 160, "offset": 286}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/plan-mode4-lot-listes.md</path>
+<type>file</type>
+<content>
+286: `norme_finale` **une fois par état** puis `logits_lot`. Le coût du retour est du
+287: même ordre que l'aller (÷2,3) ; c'est la ligne `octets_recus` qui le prouvera.
+288: 
+289: ## 6. La vérification
+290: 
+291: ### 6.1 Commande exacte (localhost, Qwen2.5-0.5B, 12 couches par nœud)
+292: 
+293: ```bash
+294: # terminal 1 — le nœud moteur : inchangé
+295: ./drave models/Qwen2.5-0.5B-Q8_0.gguf --flux-serveur 45733 --ctx 256
+296: 
+297: # terminal 2a — la référence PERDANTE : le mode 2, un flux par jeton (mêmes ids)
+298: ./drave models/Qwen2.5-0.5B-Q8_0.gguf --ppl-reparti 127.0.0.1:45733 \
+299:         --couches-locales 12 --limit 256 --ctx 256 --flux-blocs --act-thresh 0.01
+300: 
+301: # terminal 2b — le mode 4 : mêmes ids, même seuil, par lots
+302: ./drave models/Qwen2.5-0.5B-Q8_0.gguf --ppl-reparti 127.0.0.1:45733 \
+303:         --couches-locales 12 --limit 256 --ctx 256 --lot 16 --flux-blocs --act-thresh 0.01
+304: ```
+305: 
+306: Résultat attendu (le chiffre exact dépend du corpus ; les identifiants par défaut
+307: `1..256` donnent une perplexité bien plus haute que Wi
+… [11178 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/plan-mode4-lot-listes.md", "new_string": "1. **Un octet d'en-tête en trop** décale tout le corps, ne lève aucune erreur, et\n   ne se voit qu'au flux suivant (« magie de flux absente »). Déjà payé (40 pour\n   39). Les trois émetteu … [360 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/plan-mode4-lot-listes.md has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git status --porcelain && echo \"---- pgrep drave ----\" && (pgrep -x drave || echo \"aucun processus drave\") && echo \"---- wc ----\" && wc -l docs/plan-mode4-lot-listes.md", "description": "Vérifie l'état git et les processus drav … [3 caractères tronqués]`
+
+  ```
+M journal/README.md
+?? docs/plan-mode4-lot-listes.md
+---- pgrep drave ----
+656529
+---- wc ----
+445 docs/plan-mode4-lot-listes.md
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git diff --stat journal/README.md && stat -c '%y %n' journal/README.md docs/plan-mode4-lot-listes.md && date", "description": "Vérifie l'ancienneté de la modif de journal/README.md"}`
+
+  ```
+journal/README.md | 10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
+2026-09-30 15:12:07.356146841 -0400 journal/README.md
+2026-09-30 15:13:08.637235084 -0400 docs/plan-mode4-lot-listes.md
+mer 30 sep 2026 15:13:17 EDT
+  ```
+
+- **send_message** `{"agent_id": "bbd6969f-0f70-42b2-8951-64d1f2f36d2e", "message": "Mode 4 spécifié. Fichier écrit : `docs/plan-mode4-lot-listes.md` (445 lignes). **Seul fichier touché** — `journal/README.md` apparaît modifié dans `git status` mais sa mtime (15:12:07) précède la mienne (15:13:08) et je ne l'ai jamais  … [2994 caractères tronqués]`
+
+  ```
+message delivered to agent bbd6969f-0f70-42b2-8951-64d1f2f36d2e
+  ```
+
+### 🤖 Assistant
+
+⏵ Spécification écrite et transmise ; vérification finale de l'état du dépôt.
+
+La spécification est dans `docs/plan-mode4-lot-listes.md` (445 lignes) — seul fichier que j'ai touché. Aucune compilation, aucune exécution : le `drave` de la campagne (PID 656529) tourne toujours, je ne l'ai pas approché (`journal/README.md` était déjà modifié avant mon écriture, sa mtime le prouve).
+
+**Résumé — décisions d'architecture et points ouverts**
+
+1. Le mode 4 est le mode 2 répété par état dans un seul flux : `n` = nombre d'ÉTATS, en-tête 79 octets inchangé, échelle d'en-tête sans objet.
+2. Chaque état est auto-délimité par un préfixe de 12 octets (`a_j · n_blocs_j · longueur_j`), puis les échelles f32 par bloc de 32, puis les paires d'`encoder_paires_blocs` — aucun encodage réinventé.
+3. L'échelle vit dans l'état, pas dans une table du lot : indépendance des états, dynamique par jeton, 112 octets sur ~1 530 ne justifient pas un second codec.
+4. Le protocole passe en version 5, sinon un pair v4 consommerait `4·t` octets avant de dire « mode inconnu » ; le refus des modes inconnus devient immédiat, après l'en-tête.
+5. Le corps n'étant plus borné par l'en-tête, `a_j·2`, `n_blocs_j·4`, `longueur_j` et leur cumul passent par `verifier_taille` avant chaque allocation, après `t·hidden·4` validé en tête.
+6. Le mode 4 s'arrête au transport : `ChargeFlux::Lot`, `emb_imposee_lot`, `forward_lot`, le cache KV et la norme finale ne changent pas d'une ligne.
+7. La réponse est encodée comme la demande ; le pilote norme chaque état une fois, puis `logits_lot`.
+8. Critère de vérification : `écart(mode 4) ≤ 1,5 × écart(mode 2 par jeton)` (≈ 2,7e-2 à 256 jetons, seuil 0,01), jamais 0,00e0 — le mode est avec perte par décision, et ÷2,3 attendu sur le fil.
+9. Laissé à l'implémenteur : la forme exacte des helpers `encoder_etat_blocs` / `lire_etat_blocs` et le portage de `Flux.actifs`.
+10. Laissé à l'implémenteur : le seuil de bascule mode 3 ↔ mode 4 et la borne structurelle facultative du corps ; le plan en 7 étapes (§8) donne fichier et critère de succès pour chacune.
+

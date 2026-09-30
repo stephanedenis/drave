@@ -29934,3 +29934,333 @@ réversibilité : texte reconstruit identique ✅ (359 octets)
 Le texte du notebook donne **19,8967** au lieu de 17 869 ✓ (et toujours 0,00e0). Je le note, puis j'écris le plan du noyau GPU de top-k — avec son chiffrage.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json\np='colab/Drave-reparti.ipynb'; nb=json.load(open(p))\nfor c in nb['cells']:\n    src = ''.join(c['source'])\n    if 'référence locale  : perplexité 18.0851' in src:\n        c['source'] = src.replace(\n … [8168 caractères tronqués]`
+
+  ```
+notebook : la perplexité attendue est documentée
+a383cd7 Plan du noyau GPU de top-k (phase 1.1), chiffré, et la perplexité attendue du notebook
+15:12:07
+f32_f32 (reference)        :
+  ```
+
+- **bash** `{"command": "sleep 300; cat /tmp/kv_4096.log; echo \"--- aiguille (en file) ---\"; head -3 /tmp/aiguille_kv.log 2>/dev/null; date +\"%H:%M:%S\"", "description": "Wait for KV campaign at 4096", "timeoutMs": 600000}`
+
+  ```
+f32_f32 (reference)        : perplexité 12.2175 sur 4095 tokens (0 événements, 283.6 s)
+cles_f16_valeurs_int8      : --- aiguille (en file) ---
+15:17:17
+  ```
+
+### 👤 Utilisateur
+
+Agent da69b1fa-91b0-4c69-bb2b-58bf00e92e28 sent a message:
+Mode 4 spécifié. Fichier écrit : `docs/plan-mode4-lot-listes.md` (445 lignes). **Seul fichier touché** — `journal/README.md` apparaît modifié dans `git status` mais sa mtime (15:12:07) précède la mienne (15:13:08) et je ne l'ai jamais ouvert en écriture. Aucune compilation, aucune exécution : rien n'a été lancé (le `drave` de la campagne, PID 656529, tourne toujours).
+
+Décisions d'architecture (à ne pas rediscuter) :
+1. **Mode 4 = mode 2 répété par état**, dans un seul flux. `n` (offset 18) = nombre d'ÉTATS `t`, comme en mode 3 ; en-tête `TAILLE_TETE` inchangé (79 o), échelle d'en-tête = 0.
+2. **Corps auto-délimité, préfixe de 12 octets par état** : `a_j u32 · n_blocs_j u32 · longueur_j u32`, puis `n_blocs_j × f32` (échelles par bloc de 32, COPIÉES du mode 2), puis `longueur_j` octets de paires produites par `encoder_paires_blocs` (écart u8, 255 = échappement + u16 absolu, valeur i8). Taille d'un état = `12 + 4·n_blocs_j + longueur_j`. Écart délibéré par rapport à l'esquisse du §7 de `plan-prefill-reparti.md` (qui mettait `longueur_j` après les échelles) : les trois tailles sont lisibles d'un `read_exact` de 12 o AVANT toute allocation, et un état est sautable. Aucun encodage réinventé.
+3. **L'échelle vit dans l'état** (et non dans une table du lot) : indépendance des états, dynamique par jeton, 112 o sur ~1 530 (~7 %), et un passage en f16 refusé (nouveau codec = nouvelle classe de bug).
+4. **Version 5 obligatoire** : dans `recevoir_flux` un mode inconnu n'est refusé qu'APRÈS lecture de `n×4` octets (repli `_ => {}`, puis `autre => Err`) ; un pair v4 lirait `4t` octets d'un corps de ~1 500/état et dirait « mode inconnu », exact mais tardif et muet sur la cause. Critère 3.5. Durcissement ajouté au plan : refuser les modes inconnus juste après l'en-tête, avant tout octet de corps.
+5. **Garde-fou R4** : `t·hidden·4` validé en tête (borne de la mémoire vivante, comme le mode 3), puis par état et dans cet ordre `a_j·2`, `n_blocs_j·4`, `longueur_j`, puis le cumul `12 + 4·n_blocs_j + longueur_j` (l'en-tête ne borne plus le corps). Contrôles de cohérence avant lecture : `n_blocs_j == ⌈hidden/32⌉` (GGUF différents refusés au 1er état) et `2·a_j ≤ longueur_j ≤ 4·a_j`.
+6. **Le mode 4 s'arrête au transport** : décodé en `ChargeFlux::Lot(Vec<f32>)`, donc `emb_imposee_lot`, `forward_lot`, le cache KV, `flux_brut` et `norme_finale` ne changent pas d'une ligne. `model.rs` n'est pas touché. Réponse encodée comme la demande (mode 4), le pilote norme chaque état une fois.
+7. **Vérification** : `--lot 16 --flux-blocs --act-thresh 0.01` contre la référence perdante `--lot 1 --flux-blocs` à mêmes ids ; critère `écart(mode 4) ≤ 1,5 × écart(mode 2)` (≈ 2,7e-2 à 256 jetons), jamais 0,00e0. Contrôle gratuit : la ligne « référence locale » doit être identique au run mode 3 à mêmes lots. Attendu ≈ 1 530 o/jeton contre 3 589 (÷2,3).
+
+Points laissés à l'implémenteur : (a) forme exacte des deux helpers `encoder_etat_blocs` / `lire_etat_blocs<R: Read>` et portage du champ `Flux.actifs` ; (b) défaut de bascule mode 3 ↔ mode 4 (aujourd'hui `--flux-blocs` décide) ; (c) borne structurelle facultative du corps. Plan d'implémentation en 7 étapes ordonnées avec fichier + critère, §8 du document.
+
+### 👤 Utilisateur
+
+Background subagent da69b1fa-91b0-4c69-bb2b-58bf00e92e28 finished and will do no further work unless you send it more.
+Its closing message:
+⏵ Spécification écrite et transmise ; vérification finale de l'état du dépôt.
+
+La spécification est dans `docs/plan-mode4-lot-listes.md` (445 lignes) — seul fichier que j'ai touché. Aucune compilation, aucune exécution : le `drave` de la campagne (PID 656529) tourne toujours, je ne l'ai pas approché (`journal/README.md` était déjà modifié avant mon écriture, sa mtime le prouve).
+
+**Résumé — décisions d'architecture et points ouverts**
+
+1. Le mode 4 est le mode 2 répété par état dans un seul flux : `n` = nombre d'ÉTATS, en-tête 79 octets inchangé, échelle d'en-tête sans objet.
+2. Chaque état est auto-délimité par un préfixe de 12 octets (`a_j · n_blocs_j · longueur_j`), puis les échelles f32 par bloc de 32, puis les paires d'`encoder_paires_blocs` — aucun encodage réinventé.
+3. L'échelle vit dans l'état, pas dans une table du lot : indépendance des états, dynamique par jeton, 112 octets sur ~1 530 ne justifient pas un second codec.
+4. Le protocole passe en version 5, sinon un pair v4 consommerait `4·t` octets avant de dire « mode inconnu » ; le refus des modes inconnus devient immédiat, après l'en-tête.
+5. Le corps n'étant plus borné par l'en-tête, `a_j·2`, `n_blocs_j·4`, `longueur_j` et leur cumul passent par `verifier_taille` avant chaque allocation, après `t·hidden·4` validé en tête.
+6. Le mode 4 s'arrête au transport : `ChargeFlux::Lot`, `emb_imposee_lot`, `forward_lot`, le cache KV et la norme finale ne changent pas d'une ligne.
+7. La réponse est encodée comme la demande ; le pilote norme chaque état une fois, puis `logits_lot`.
+8. Critère de vérification : `écart(mode 4) ≤ 1,5 × écart(mode 2 par jeton)` (≈ 2,7e-2 à 256 jetons, seuil 0,01), jamais 0,00e0 — le mode est avec perte par décision, et ÷2,3 attendu sur le fil.
+9. Laissé à l'implémenteur : la forme exacte des helpers `encoder_etat_blocs` / `lire_etat_blocs` et le portage de `Flux.actifs`.
+10. Laissé à l'implémenteur : le seuil de bascule mode 3 ↔ mode 4 et la borne structurelle facultative du corps ; le plan en 7 étapes (§8) donne fichier et critère de succès pour chacune.
+
+### 🤖 Assistant
+
+La spec du mode 4 est là (précise, avec la version 5 et le durcissement du refus immédiat). J'implémente.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"fn encoder_paires_blocs\\|fn decoder_paires_blocs\\|fn envoyer_lot\\|fn actifs\\|MODE_LOT\\|PLAFOND_FLUX\\|fn verifier_taille\" drave-core/src/main.rs | head -14; echo \"=== dispatch de recevoir_flux ===\"; sed -n \"$(grep  … [159 caractères tronqués]`
+
+  ```
+1393:const MODE_LOT: u8 = 3;
+1465:const PLAFOND_FLUX: usize = 256 << 20;
+1468:fn verifier_taille(octets: usize, quoi: &str) -> std::io::Result<()> {
+1469:    if octets > PLAFOND_FLUX {
+1471:            format!("{quoi} : {octets} octets au-delà du plafond de {} Mo — flux refusé                      (règle R4 de docs/plan-prefill-reparti.md)", PLAFOND_FLUX >> 20)));
+1530:    fn actifs(&self) -> usize {
+1548:fn encoder_paires_blocs(idx: &[u16], val: &[i8]) -> Vec<u8> {
+1566:fn decoder_paires_blocs(corps: &[u8], n: usize) -> Result<(Vec<u16>, Vec<i8>), String> {
+1570:    if n.saturating_mul(2) > PLAFOND_FLUX {
+1572:                           PLAFOND_FLUX >> 20));
+1671:fn envoyer_lot(s: &mut std::net::TcpStream, debut: u32, fin: u32, pos0: u32,
+1678:    tete.push(MODE_LOT);
+1740:        MODE_LOT => {
+1849:                if f.mode == MODE_LOT {
+=== dispatch de recevoir_flux ===
+    let charge = match mode {
+        MODE_LOT => {
+            // `n` est le nombre d'ÉTATS, pas de canaux : la dimension vient du
+            // modèle du nœud qui reçoit, elle n'a pas à voyager.
+            let taille = n.checked_mul(hidden).and_then(|x| x.checked_mul(4))
+                         .unwrap_or(us
+… [182 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n 1665,1700p drave-core/src/main.rs; echo \"=== fin du dispatch (mode inconnu) ===\"; sed -n 1780,1805p drave-core/src/main.rs", "description": "Read envoyer_lot and mode fallback"}`
+
+  ```
+/// Envoie un LOT d'états (`t × hidden`, aplati) dans un seul flux.
+///
+/// Le lot voyage en f32 dense : c'est le mode de la phase 3.4 (préremplissage
+/// réparti), où la latence domine tout — le quantifier est la suite, et il faudra
+/// alors une liste PAR ÉTAT, ce que ce cadriciel ne sait pas encore décrire.
+fn envoyer_lot(s: &mut std::net::TcpStream, debut: u32, fin: u32, pos0: u32,
+               etats: &[f32], t: usize, mdl: &model::Model) -> std::io::Result<usize> {
+    use std::io::Write;
+    let act = Act::du_modele(mdl);
+    let mut tete = Vec::with_capacity(TAILLE_TETE);
+    tete.extend_from_slice(&MAGIE_FLUX.to_le_bytes());
+    tete.push(VERSION_FLUX);
+    tete.push(MODE_LOT);
+    tete.extend_from_slice(&debut.to_le_bytes());
+    tete.extend_from_slice(&fin.to_le_bytes());
+    tete.extend_from_slice(&pos0.to_le_bytes());
+    tete.extend_from_slice(&(t as u32).to_le_bytes());
+    tete.extend_from_slice(&0f32.to_le_bytes());          // échelle : sans objet
+    tete.extend_from_slice(&act.levels.to_le_bytes());
+    tete.extend_from_slice(&act.thresh.to_le_bytes());
+    tete.extend_from_slice(&act.topk.to_le_bytes());
+    tete.push(act.renorm as u8);
+    for k in act.topk_p
+… [1984 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/main.rs'; s=open(p).read()\ndef rem(nom, v, n):\n    global s\n    c = s.count(v)\n    if c != 1:\n        print(f\"  ✗ {nom} : {c} occurrence(s)\"); return False\n    s = s.replace(v, n); print(f\ … [2873 caractères tronqués]`
+
+  ```
+✓ version 5
+  ✓ mode 4
+constantes posées
+encodeur d'état + envoi lot en listes posés (tete_flux à extraire)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n \"$(grep -n 'fn envoyer_flux' drave-core/src/main.rs | cut -d: -f1),+8p\" drave-core/src/main.rs; echo \"...\"; sed -n \"$(grep -n 'let mut tete = Vec::with_capacity(TAILLE_TETE);' drave-core/src/main.rs | head -1 | cut -d: -f … [83 caractères tronqués]`
+
+  ```
+fn envoyer_flux(s: &mut std::net::TcpStream, debut: u32, fin: u32, pos: u32,
+                actifs: &[f32], mode: u8, mdl: Option<&model::Model>)
+                -> std::io::Result<(usize, usize)> {
+    let act = mdl.map(Act::du_modele).unwrap_or(Act {
+        levels: 127.0, thresh: 0.0, topk: 0, renorm: false,
+        topk_proj: [0; 7], attn_topk: 0, qk_topk: 0, moe_topk: 0 });
+    use std::io::Write;
+    let (n, echelle, corps): (usize, f32, Vec<u8>) = if mode == MODE_BLOCS {
+        let (idx, val, echelles) = mdl.expect("modèle requis pour quantifier un flux")
+...
+    let mut tete = Vec::with_capacity(TAILLE_TETE);
+    tete.extend_from_slice(&MAGIE_FLUX.to_le_bytes());
+    tete.push(VERSION_FLUX);
+    tete.push(mode);
+    tete.extend_from_slice(&debut.to_le_bytes());
+    tete.extend_from_slice(&fin.to_le_bytes());
+    tete.extend_from_slice(&pos.to_le_bytes());
+    tete.extend_from_slice(&(n as u32).to_le_bytes());
+    tete.extend_from_slice(&echelle.to_le_bytes());
+    tete.extend_from_slice(&act.levels.to_le_bytes());
+    tete.extend_from_slice(&act.thresh.to_le_bytes());
+    tete.extend_from_slice(&act.topk.to_le_bytes());
+    tete.push(act.renorm as u8);
+    for k in act.to
+… [449 caractères tronqués]
+  ```
+
+### 👤 Utilisateur
+
+Agent aa5f9fc5-9450-4118-b65f-e8b99a28519d sent a message:
+Second passage de cohérence documentaire TERMINÉ. Livrable : reports/rapport-coherence-docs-2.md (241 lignes, 66 affirmations, tableaux à 4 colonnes + verdicts, 15 corrections ordonnées, résumé 10 lignes). Aucun autre fichier modifié (git status : seul mon rapport s'ajoute).
+
+Révision auditée : HEAD a383cd7 (30/09 15:11), main.rs sha256 bc53a66a… (3 508 l.), model.rs 61582adb… (3 928 l.), total .rs 11 901. Vérifications faites sans build ; 2 exécutions courtes autorisées (--limit 4) : trace par défaut = DRVF v2 (517 366 o, 192 listes, 171 554 actifs), DRAVE_TRACE_BLOCS=1 = v3 (346 636 o, 166 206 actifs) ; --options-actives imprime bien après affectations.
+
+DÉCOMPTE : 27 OK, 17 PÉRIMÉ, 14 CONTRADICTOIRE, 8 MANQUANT.
+
+Défauts les plus graves (à corriger en priorité) :
+1. CACHE KV : « clés f32 + valeurs int8 = 75 % du f32 ; int8 complet = 50 % » (REPRISE:245,314 ; roadmap:173-174 ; rapport-attribution-kv:33-34) contredit le rapport de la campagne complète (64 % et 28 %, placement-bits-kv:16,20) ET le tableau de REPRISE:365,368 lui-même. Le bandeau du rapport de placement dit aussi +0,06 % (ligne 5) alors que son tableau donne +0,018 % (ligne 21) ; sa section « campagne en cours » (72-79), roadmap:184 et REPRISE:423-426 sont périmés (mesures faites).
+2. RÈGLE R4 : docs/plan-prefill-reparti.md:76-78 et son bandeau exigent le refus de « n == 0 » ET du plafond 256 Mo ; le code ne refuse QUE le plafond (verifier_taille, 4 appels + 1 contrôle décodeur), aucun test n==0. Le bandeau dit « la règle R4 est maintenant DANS le code, avec son test » : faux à moitié.
+3. ÉPOQUES DE L'EN-TÊTE MÉLANGÉES : depuis d59d061 (12:11), version 4 = en-tête 79 octets dans le même commit. Or rapport-transport-liste.md:10 dit « en-tête de 39 octets » et :87-89 cite le message « cette build parle la 4 » — impossible. Même contamination : REPRISE:297 (3 623, ~2 300, 917 543 au lieu de 3 663, 917 583), roadmap:56 (1 589 → 1 629), phase3:62-63 (3 663 = « 20 d'en-tête + 896×4 », incohérent), phase3:64-65 (« 6 o/actif » v1 et « prochain chantier 3.2 » fait depuis).
+4. PLAN PRÉREMPLISSAGE : DRAVE_FLUX_POS (plan:266) n'existe pas (le diagnostic livré est DRAVE_DEBUG_FLUX, main.rs:1866) ; le bandeau dit v4 mais pas que l'en-tête est passé à 79 o.
+5. FORMAT-FLUX : version u16 = 1 (ligne 20) alors que le défaut écrit 2 ; la disposition d'octets et la formule de taille de la v3 sont absentes ; `n` n'est documenté que pour les modes 0/1 (mode 2 = actifs, mode 3 = états).
+6. COMPTEURS/VISION : README:281,355 et REPRISE:16 « 11 440 » vs 11 901 ; REPRISE:35 « cargo test 11/11 » vs :409 « Treize tests » (le code en a 13) ; rapport-session:4 « 35 commits » vs :66 « quarante » (73 aujourd'hui) ; vision.md:222 axe 3 « rien » et :147/:210 « mesures à faire » alors que le transport est livré ; vision.md:109 renvoi FPGA mort (README corrigé, pas vision).
+7. MANQUES : README ignore tout le chantier du jour (v4, DRVF v2/v3, transport, lot, --options-actives, KV f16, Colab) ; README:345 ligne gpt-oss décalée d'une colonne ; colab-reparti:24 ne cite que 4 des 14 champs transportés ; contexte-long ignore la campagne KV et DRAVE_KV_K_F16 ; tools/colab_cote_local.sh (15:09) cité nulle part ; rapport-drapeaux-ignores:196 recommande encore --options-actives (fait) et --options-strict (absent).
+
+Aucun lien [texte](chemin) mort sur l'ensemble des documents de référence. Deux documents sont apparus pendant l'audit (plan-mode4-lot-listes 15:12 non commité, plan-gpu-topk 15:11) : ancrages au code vérifiés, OK. Détail complet, preuves et liste des 15 corrections dans le rapport.
+
+### 👤 Utilisateur
+
+Background subagent aa5f9fc5-9450-4118-b65f-e8b99a28519d finished and will do no further work unless you send it more.
+Its closing message:
+⏵ Rapport livré et transmis au parent.
+
+## Mission terminée
+
+**Livrable** : `reports/rapport-coherence-docs-2.md` (241 lignes) — second passage de vérification de la documentation **après** les changements du 30/09. Aucun autre fichier touché (`git status` ne montre que mon rapport en plus des modifications préexistantes).
+
+### Ce qui a été vérifié
+- **66 affirmations** contre le code (`VERSION_FLUX = 4`, `TAILLE_TETE = 79`, modes 0–3, sémantique de `n`, `PLAFOND_FLUX` 256 Mo, 28 variables `DRAVE_*`, drapeaux), contre les rapports et entre documents (octets par flux, tailles de trace, perplexités, pourcentages KV, accélérations, comptes de tests/lignes/commits).
+- Tous les liens `[texte](chemin)` par script : **aucun lien mort**.
+- Deux exécutions courtes autorisées (`--limit 4`) : trace par défaut = **DRVF v2**, `DRAVE_TRACE_BLOCS=1` = **v3** (avec perte), `--options-actives` opérationnel.
+- Réserve de méthode : l'arbre a bougé pendant l'audit (deux plans apparus, un commit en cours), une campagne de mesure tournait — rien de lourd n'a été lancé.
+
+### Verdicts
+**27 OK · 17 PÉRIMÉ · 14 CONTRADICTOIRE · 8 MANQUANT**
+
+### Les trois défauts majeurs
+1. **Cache KV** : « 75 % / 50 % » (REPRISE, roadmap, rapport d'attribution) contre « **64 % / 28 %** » dans le rapport de la campagne complète et dans le tableau de REPRISE lui-même ; le bandeau du rapport de placement dit même `+0,06 %` contre `+0,018 %` dans son propre tableau.
+2. **Règle R4** : le refus de `n == 0` est annoncé comme « dans le code, avec son test » — il n'y est pas ; seul le plafond de 256 Mo existe.
+3. **Époques de l'en-tête mélangées** : « 39 octets + version 4 » est impossible depuis `d59d061`, et contamine six passages (REPRISE §6bis, roadmap:56, rapport transport, phase 3).
+
+Le rapport se termine par les **15 corrections ordonnées** (sans les appliquer) et un **résumé de 10 lignes**.
+
+### 🤖 Assistant
+
+Le second audit a trouvé 15 corrections (dont une erreur de calcul à moi : 75 % au lieu de 64 %). Je finis d'abord le mode 4, puis je corrige les documents.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/main.rs'; s=open(p).read()\ndef rem(nom, v, n):\n    global s\n    c = s.count(v)\n    if c != 1:\n        print(f\"  ✗ {nom} : {c} occurrence(s)\"); return False\n    s = s.replace(v, n); print(f\ … [5572 caractères tronqués]`
+
+  ```
+✓ tete_flux
+  ✓ envoyer_flux en-tête
+  ✓ envoyer_flux écriture
+  ✓ envoyer_lot en-tête
+construction d'en-tête unifiée
+error[E0308]: mismatched types
+    --> src/main.rs:1730:69
+     |
+1730 |     let tete = tete_flux(MODE_LOT_LISTES, debut, fin, pos0, t, 0.0, mdl);
+     |                --------- arguments to this function are incorrect   ^^^ expected `Option<&Model>`, found `&Model`
+     |
+     = note:   expected enum `Option<&Model>`
+--
+error: could not compile `drave-core` (bin "drave") due to 1 previous error; 10 warnings emitted
+error: could not compile `drave-core` (bin "drave") due to 1 previous error; 10 warnings emitted
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/main.rs'; s=open(p).read()\nv = \"    let tete = tete_flux(MODE_LOT_LISTES, debut, fin, pos0, t, 0.0, mdl);\"\nassert s.count(v) == 1\ns = s.replace(v, \"    let tete = tete_flux(MODE_LOT_LISTES, d … [302 caractères tronqués]`
+
+  ```
+signature corrigée
+    Finished `release` profile [optimized] target(s) in 0.01s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/main.rs'; s=open(p).read()\ndef rem(nom, v, n):\n    global s\n    c = s.count(v)\n    if c != 1:\n        print(f\"  ✗ {nom} : {c}\"); return False\n    s = s.replace(v, n); print(f\"  ✓ {nom}\"); … [4756 caractères tronqués]`
+
+  ```
+✓ refus immédiat + mode 4
+récepteur du mode 4 posé
+    Finished `release` profile [optimized] target(s) in 0.01s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/main.rs'; s=open(p).read()\ndef rem(nom, v, n):\n    global s\n    c = s.count(v)\n    if c != 1:\n        print(f\"  ✗ {nom} : {c}\"); return False\n    s = s.replace(v, n); print(f\"  ✓ {nom}\"); … [3930 caractères tronqués]`
+
+  ```
+✓ compteur de fil
+  ✓ cumul
+  ✓ pilote mode 4
+  ✓ pilote envoi
+  ✓ libellé du transport
+  ✓ réponse du serveur
+mode 4 branché des deux côtés
+error[E0425]: cannot find value `mode_lot` in this scope
+    --> src/main.rs:2207:21
+     |
+1393 | const MODE_LOT: u8 = 3;
+     | ----------------------- similarly named constant `MODE_LOT` defined here
+...
+2207 |                  if mode_lot == MODE_LOT_LISTES { "lot en LISTES" } else { "lot dense f32" },
+     |                     ^^^^^^^^
+     |
+--
+error: could not compile `drave-core` (bin "drave") due to 1 previous error; 11 warnings emitted
+error: could not compile `drave-core` (bin "drave") due to 1 previous error; 11 warnings emitted
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/main.rs'; s=open(p).read()\nv = \"\"\"    let mode = if opt.flux_blocs { MODE_BLOCS }\n               else if opt.flux_liste { MODE_LISTE }\n               else { MODE_DENSE };\"\"\"\nassert s.coun … [1407 caractères tronqués]`
+
+  ```
+mode_lot hoisté
+    Finished `release` profile [optimized] target(s) in 0.01s
+  ```
+
+### 🤖 Assistant
+
+Le mode 4 est câblé. Vérification : il doit coûter ce que coûte le mode 2 (avec perte) et diviser les octets par ~2,3.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && D=./drave-core/target/release/drave; M=models/Qwen2.5-0.5B-Q8_0.gguf; IDS=$(head -1 /tmp/ids_qwen_long.txt | tr ',' '\\n' | head -256 | tr '\\n' ',' | sed 's/,$//'); echo \"=== référence : mode 2, un flux par jeton (--lot 1 --flux-bl … [1042 caractères tronqués]`
+
+  ```
+=== référence : mode 2, un flux par jeton (--lot 1 --flux-blocs) ===
+  écart             : 2.74e-2
+  transport         : listes à échelle par bloc (2 octets/actif, écarts) · 1608 octets par flux (aller) · 1665 au retour · 78.6 % d'activité (704 neurones par flux) · 255 flux
+=== mode 4 : lot en listes, 16 jetons par lot ===
+15:26:32
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && D=./drave-core/target/release/drave; M=models/Qwen2.5-0.5B-Q8_0.gguf; IDS=$(head -1 /tmp/ids_qwen_long.txt | tr ',' '\\n' | head -64 | tr '\\n' ',' | sed 's/,$//'); p=47002; ($D $M --flux-serveur $p --ctx 256 > /tmp/s_m4.log 2>&1 &); … [505 caractères tronqués]`
+
+  ```
+[config] 24 couches, hidden 896 · 
+[config] puits appris sur 0/24 couches · n_rot 64 · ffn 4864 · experts 0
+[config] rotation : RoPE simple (le modèle ne déclare pas YaRN)
+[flux] quantification : 127 niveaux, seuil 0.01, top-k 0, renorm false
+[flux] pilote : 12 couches en local, 12 chez le pair, 64 jetons
+  référence locale  : perplexité 36.0178  (4.8 s)
+[flux] le nœud moteur a fermé la connexion (failed to fill whole buffer).
+       Cause la plus probable : il a REFUSÉ le lot (son contexte est plus petit que --ctx ici : 256). Il l'a dit de son côté.
+--- serveur ---
+
+thread 'main' (671779) panicked at src/main.rs:1503:35:
+un lot d'états n'est pas un vecteur dense
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/main.rs'; s=open(p).read()\nv = \"\"\"                if f.mode == MODE_LOT {\"\"\"\nassert s.count(v) == 1, s.count(v)\ns = s.replace(v, \"\"\"                // Les DEUX modes de lot : 3 (dense f … [1267 caractères tronqués]`
+
+  ```
+serveur : les deux modes de lot
+    Finished `release` profile [optimized] target(s) in 0.01s
+=== mode 4 : lot en listes de 16 ===
+  écart             : 3.03e-2
+  transport         : lot en LISTES · LOTS de 16 jetons · 24595 octets par lot (aller) · 1.5 ko par jeton · 16 lots (au lieu de 255 flux)
+  temps             : 552.6 ms par LOT en local · 542.7 ms à attendre le pair · soit 0.98× le calcul local seul
+15:28:06
+  ```
+
+### 🤖 Assistant
+
+**Mode 4 vérifié : écart 3,03e-2 (≤ 1,5 × le mode 2) et 1,5 ko par jeton au lieu de 3,5 — ÷2,3 exactement.** Je verrouille : portes, docs, commit.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== tests ===\" && (cd drave-core && timeout 300 cargo test --release 2>&1 | grep -E \"^test result\"); echo \"=== porte Qwen (le protocole a changé : version 5, en-tête unifié) ===\" && ./drave-core/target/release/drave model … [424 caractères tronqués]`
+
+  ```
+=== tests ===
+test result: FAILED. 12 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.33s
+=== porte Qwen (le protocole a changé : version 5, en-tête unifié) ===
+perplexité 19.3885 sur 510 tokens
+=== banc lot DENSE (mode 3) toujours bon ? ===
+  écart             : 0.00e0
+  transport         : lot dense f32 · LOTS de 16 jetons · 57423 octets par lot (aller) · 3.5 ko par jeton · 4 lots (au lieu de 63 flux)
+15:29:05
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && (cd drave-core && cargo test --release 2>&1 | grep -E \"^test .*FAILED|assertion\" | head -3); python3 - <<'PY'\np='drave-core/src/main.rs'; s=open(p).read()\nv = \"\"\"        assert_eq!(VERSION_FLUX, 4, \"le contrat d'activation im … [2395 caractères tronqués]`

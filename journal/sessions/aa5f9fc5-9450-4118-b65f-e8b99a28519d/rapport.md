@@ -5,12 +5,12 @@
 | Identifiant | `aa5f9fc5-9450-4118-b65f-e8b99a28519d` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-30 15:07 |
-| Durée | 0.1 h |
+| Durée | 0.2 h |
 | Tours | 1 |
-| Messages | 32 |
-| Appels d'outils | 46 |
-| Fichiers touchés | 0 |
-| Commandes | 27 |
+| Messages | 78 |
+| Appels d'outils | 100 |
+| Fichiers touchés | 1 |
+| Commandes | 66 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -23,7 +23,7 @@
 
 ### Tour 1 — Tu es vérificateur de documentation dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (projet « Drave » : mo … [3379 caractères tronqués]
 
-*46 appels d'outils.* Actions notables :
+*100 appels d'outils.* Actions notables :
 
 - bash — List repo, docs and reports directories
 - bash — Check for running drave and list sources
@@ -39,11 +39,31 @@
 - bash — Grep CLI flags in main.rs
 - bash — Grep R4 cap constant
 - bash — Read receiving code around validation
-- … et 15 autres
+- … et 63 autres
 
 **Synthèse produite :**
 
-⏵ Je vérifie le codec Python et les chiffres KV dans les autres documents.
+⏵ Rapport livré et transmis au parent.
+
+\## Mission terminée
+
+**Livrable** : `reports/rapport-coherence-docs-2.md` (241 lignes) — second passage de vérification de la documentation **après** les changements du 30/09. Aucun autre fichier touché (`git status` ne montre que mon rapport en plus des modifications préexistantes).
+
+\### Ce qui a été vérifié
+- **66 affirmations** contre le code (`VERSION_FLUX = 4`, `TAILLE_TETE = 79`, modes 0–3, sémantique de `n`, `PLAFOND_FLUX` 256 Mo, 28 variables `DRAVE_*`, drapeaux), contre les rapports et entre documents (octets par flux, tailles de trace, perplexités, pourcentages KV, accélérations, comptes de tests/lignes/commits).
+- Tous les liens `[texte](chemin)` par script : **aucun lien mort**.
+- Deux exécutions courtes autorisées (`--limit 4`) : trace par défaut = **DRVF v2**, `DRAVE_TRACE_BLOCS=1` = **v3** (avec perte), `--options-actives` opérationnel.
+- Réserve de méthode : l'arbre a bougé pendant l'audit (deux plans apparus, un commit en cours), une campagne de mesure tournait — rien de lourd n'a été lancé.
+
+\### Verdicts
+**27 OK · 17 PÉRIMÉ · 14 CONTRADICTOIRE · 8 MANQUANT**
+
+\### Les trois défauts majeurs
+1. **Cache KV** : « 75 % / 50 % » (REPRISE, roadmap, rapport d'attribution) contre « **64 % / 28 %** » dans le rapport de la campagne complète et dans le tableau de REPRISE lui-même ; le bandeau du rapport de placement dit même `+0,06 %` contre `+0,018 %` dans son propre tableau.
+2. **Règle R4** : le refus de `n == 0` est annoncé comme « dans le code, avec son test » — il n'y est pas ; seul le plafond de 256 Mo existe.
+3. **Époques de l'en-tête mélangées** : « 39 octets + version 4 » est impossible depuis `d59d061`, et contamine six passages (REPRISE §6bis, roadmap:56, rapport transport, phase 3).
+
+Le rapport se termine par les **15 corrections ordonnées** (sans les appliquer) et un **résumé de 10 lignes**.
 
 ## 3. Travail accompli
 
@@ -51,6 +71,7 @@
 
 | Fichier | Écritures | Éditions |
 |---|---|---|
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-coherence-docs-2.md` | 1 | 7 |
 
 ### Commandes exécutées (échantillon)
 
@@ -81,6 +102,20 @@
 - **T1** Grep lot chunking in main.rs
 - **T1** Read ppl_reparti lot loop
 - **T1** Check codec versions and KV percentages
+- **T1** Read roadmap KV attribution section
+- **T1** Read contexte-long E-series table
+- **T1** Grep stale statuses in vision/histoire/contexte-long
+- **T1** Read vision sections on distribution status
+- **T1** Check reference docs coverage of new features
+- **T1** Re-list docs and reports for new files
+- **T1** Read headers of the two new plan docs
+- **T1** Check backticked file paths existence
+- **T1** Check cited reports existence
+- **T1** Check FPGA refs and mode4 report ref
+- **T1** Check options-actives implementation sites
+- **T1** Read KV K f16 code
+- **T1** Grep stale header/size figures everywhere
+- … et 26 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -186,4 +221,23 @@
 - **T1** `reports/rapport-placement-bits-kv.md:31:28 %  int8/int8 ................ +3,04 %`
 - **T1** `reports/rapport-placement-bits-kv.md:33:39 %  clés f16 · valeurs int8 .. +0,018 %   ← le meilleur point`
 - **T1** `reports/rapport-placement-bits-kv.md:35:64 %  clés f32 · valeurs int8 .. +0,023 %`
+- **T1** `L'écart avec llama.cpp à 8 192 (+3,0 % contre +0,8 %) est attribué. Les deux`
+- **T1** `| cache int8 complet | 14,6667 | +3,04 % | 100 % |`
+- **T1** `| **clés f32** · valeurs int8 | **14,2372** | **+0,023 %** | **99,2 % expliqué** |`
+- **T1** `| clés int8 · **valeurs f32** | 14,6622 | +3,01 % | 1,0 % seulement |`
+- **T1** `cache à **75 % de la taille f32** pour +0,02 % de perplexité, là où l'int8 complet`
+- **T1** `(50 %) coûte +3,0 %. Notre quantificateur de VALEURS est donc bon ; c'est celui`
+- **T1** `coûte +0,023 % là où clés int8 + valeurs f32 coûte +3,01 % (facteur 130), et le`
+- **T1** `4 bits des clés coûte +385 % contre +0,46 % pour celui des valeurs (facteur 840).`
+- **T1** `Les **clés en f16** sont mesurées : clés f16 + valeurs int8 = **+0,018 %** à`
+- **T1** `8 192 jetons pour **39 % de la taille f32** — le meilleur réglage de la courbe`
+- **T1** `(les clés f32, à 64 % de la taille, font +0,023 % ; l'int8 complet, à 28 %, +3,04 %).`
+- **T1** `(62,5 % de la taille f32 — si les valeurs tolèrent 4 bits, ce réglage bat l'int8`
+- **T1** `l'écart des clés sous les +0,8 % de llama.cpp. Détail :`
+- **T1** `| E2 | **KV int8** | **fait** (échelle par vecteur, dequantification à la lecture) | ÷4 sur le KV ; 128 k confortable | mesuré : +7,1 % de perplexité (llama.cpp q8_0 : +3,1 %) |`
+- **T1** `| E3 | **KV int4** | **fait** (nibbles empaquetés) | 1 M tient en RAM (9,7 Go) et en VRAM | mesuré : **+384 %** à 512 jetons, **+364 % à 8 192** — llama.cpp q4_0 : +411 % puis +494 % ; à réserver aux `
+- **T1** `| E4 | **KV déporté sur les 2 GPU** (pagination, préchargement) | **fait** : noyau `attn_kv_*` (tuiles de 32 clés en mémoire partagée, une passe par (tête KV, tranche), recombinaison + puits), miroir `
+- **T1** `| **int8** | **14,07** (+7,1 %) | 14,68 (+3,1 %) | **13,58** (+5,2 %) | 16,73 (+0,8 %) |`
+- **T1** `| **int4** | **63,61** (+384 %) | 72,80 (+411 %) | **71,05** (+450 %) | 98,53 (+494 %) |`
+- … (tronqué)
 

@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 48.4 h |
+| Durée | 48.7 h |
 | Tours | 46 |
-| Messages | 1862 |
-| Appels d'outils | 1759 |
+| Messages | 1881 |
+| Appels d'outils | 1774 |
 | Fichiers touchés | 44 |
-| Commandes | 1432 |
+| Commandes | 1447 |
 | Sous-agents | 9 |
-| Commits | 144 |
+| Commits | 145 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -2117,7 +2117,7 @@ L'**audit des drapeaux** a trouvé que **46 options sur 110** étaient ignorées
 
 ### Tour 46 — continue jusqu'à 18h HAE
 
-*21 appels d'outils.* Actions notables :
+*36 appels d'outils.* Actions notables :
 
 - bash — Check time, timezone and remaining budget
 - create_goal
@@ -2133,11 +2133,11 @@ L'**audit des drapeaux** a trouvé que **46 options sur 110** étaient ignorées
 - bash — Improve notebook with real text cell
 - bash — Kill test node safely and check notebook
 - bash — Add notebook real-text cell and commit
-- … et 7 autres
+- … et 22 autres
 
 **Synthèse produite :**
 
-Le texte du notebook donne **19,8967** au lieu de 17 869 ✓ (et toujours 0,00e0). Je le note, puis j'écris le plan du noyau GPU de top-k — avec son chiffrage.
+**Mode 4 vérifié : écart 3,03e-2 (≤ 1,5 × le mode 2) et 1,5 ko par jeton au lieu de 3,5 — ÷2,3 exactement.** Je verrouille : portes, docs, commit.
 
 ## 3. Travail accompli
 
@@ -2244,7 +2244,7 @@ Le texte du notebook donne **19,8967** au lieu de 17 869 ✓ (et toujours 0,00e0
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 1392 autres
+- … et 1407 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2372,7 +2372,7 @@ Le texte du notebook donne **19,8967** au lieu de 17 869 ✓ (et toujours 0,00e0
 
 ## 5. Erreurs rencontrées
 
-93 sorties en erreur ou divergentes. Les premières :
+96 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : a8f2635f8 docs: record which models this box is good at, and why src/llama-hparams.cpp:8:void llama_hparams::set_swa_pattern(uint32_t n_pattern, bool dense_first) { src/llama-hparams.h:308:    void se
 - **T1** : 511 tokens notés — perplexité cumulée 247.031  (4.9 tok/s) === perplexité 247.0308 sur 511 tokens (0 événements, 104.5 s) ===  ### B3 harmony assistant 511 --- ref --- 0.0 0.0 0:00 ls: cannot access '
@@ -2536,4 +2536,5 @@ Le texte du notebook donne **19,8967** au lieu de 17 869 ✓ (et toujours 0,00e0
 - REPRISE : la frontière du cache KV et les deux gains du mode lot  Le handoff porte maintenant les deux résultats qui décident : le meilleur réglage du cache KV 
 - Colab clé en main : le nœud local, les trois tunnels, et un texte réel dans le notebook  \`tools/colab_cote_local.sh\` vérifie le binaire et le modèle, affiche 
 - Plan du noyau GPU de top-k (phase 1.1), chiffré, et la perplexité attendue du notebook  \`docs/plan-gpu-topk.md\` : pourquoi le top-k retombe sur le CPU (le che
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && (cd drave-core && cargo test --release 2>&1 | grep -E "^test .*FAILED|assertion" | head -3); python3 - <<'
 
