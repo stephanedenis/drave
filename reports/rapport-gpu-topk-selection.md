@@ -180,14 +180,19 @@ plutôt que passé sous silence.
 **Le gain n'est pas encore là** : le poste « attention » (ms/jeton, 24 couches,
 511 jetons, même modèle, `--attn-topk 256`) le dit —
 
-| contexte | attention CPU | attention GPU top-k | perplexité CPU / GPU |
-|---|---|---|---|
-| 2 048 | **4,21** | 7,68 | 13,1358 / 13,1355 |
-| 8 192 | **6,35** | 7,36 | 13,1358 / 13,1355 |
+| contexte | jetons | attention CPU | attention GPU top-k | perplexité CPU / GPU | balayage CPU / GPU |
+|---|---|---|---|---|---|
+| 2 048 | 511 | **4,21** | 7,68 | 13,1358 / 13,1355 | 18,1 / 20,4 s |
+| 8 192 | 511 | **6,35** | 7,36 | 13,1358 / 13,1355 | 19,2 / 19,7 s |
+| **16 384** | 4 095 | 20,69 | **7,72** | 12,2267 / **12,2265** | **207,8 / 160,7 s (−23 %)** |
 
-Le GPU est **plat** (7,4 ms/jeton, indépendant du contexte : c'est le but), le CPU
-croît de **3,5e-4 ms par clé** — mais il part de plus bas. Le croisement est donc
-au-delà de 8 192 clés, alors que celui de l'attention complète est vers 4 000. La
+Le GPU est **plat** (7,4–7,7 ms/jeton, indépendant du contexte : c'est le but), le
+CPU croît — de 4,21 à 20,69 ms/jeton entre 2 k et 16 k. **Le croisement est donc
+entre 8 192 et 16 384 clés**, et à 16 k le déport gagne franchement : attention
+**20,69 → 7,72 ms/jeton (−63 %)**, balayage **207,8 → 160,7 s (−23 %)**, perplexité
+identique à 2e-5 près. C'est plus loin que le croisement de l'attention complète
+(~4 000 clés), et pour la raison déjà identifiée : le coût fixe des lancements et
+des recopies. La
 raison est la même que celle déjà payée sur le miroir KV (« les tampons alloués à
 chaque appel : 24,5 ms/jeton au lieu de 2,9 », `docs/contexte-long.md` §4.ter) :
 la chaîne fait **six lancements et cinq recopies par couche et par jeton**, soit
@@ -195,6 +200,31 @@ la chaîne fait **six lancements et cinq recopies par couche et par jeton**, soi
 couche. Ce n'est pas un noyau de plus qu'il faut, c'est **la fusion des quatre
 passes** dans un seul noyau (descente radix sur le périphérique) et la
 réutilisation des tampons hôtes.
+
+## Un faux résultat silencieux trouvé AILLEURS, par la relecture du branchement
+
+La seconde relecture adversariale (celle du branchement dans le moteur) a trouvé un
+défaut dans un noyau **plus ancien**, `attn_kv_recombine` : il lisait `sinks[warp]`
+— la tête de requête DANS le groupe KV — alors que sa sortie est écrite par tête
+GLOBALE (`out[(kvh*rep + warp)*hd …]`). Sur gpt-oss (64 têtes de requête, 8 têtes
+KV, puits allant de −1,95 à +3,38), la tête `kvh×rep + w` recevait donc le puits de
+la tête `w`, avec jusqu'à **4,65 logit** d'écart — un facteur 105 sur le terme de
+drainage du dénominateur. Le chemin CPU, le noyau 3 du top-k et la référence HF
+indexent tous par tête globale : seul ce noyau était faux.
+
+**Mesuré, avant et après** (gpt-oss-120b MXFP4, ctx 256, 510 jetons,
+`--dense`, `DRAVE_GPU=1 DRAVE_GPU_KV=1`) :
+
+| | perplexité |
+|---|---|
+| avant correction | **17,6531** |
+| après correction | **15,1786** |
+| référence CPU (sans miroir VRAM) | 15,1757 |
+
+Qwen2.5 n'a pas de puits : la porte de 19,3885 ne pouvait pas voir ce défaut, et
+aucun banc ne le couvrait (les bancs KV n'ont pas de puits non plus). C'est la
+démonstration la plus nette de la journée qu'une relecture **par un autre** trouve
+ce que les mesures ne cherchent pas.
 
 ## Limites connues du contrat
 
@@ -219,7 +249,7 @@ côtés est le correctif si le cas se présente un jour.
 | 1 | `attn_scores` | ✅ 1,6–2,3e-7 · 26,7–40× |
 | 2 | sélection (radix 2 passes → 4 passes, 3 noyaux) | ✅ ensemble identique, 0 écart |
 | 3 | `attn_topk_somme` : softmax sur les k retenus + puits, puis Σ pondérée des V | ✅ 1,0–4,8e-7 · temps GPU constant (0,07 ms) |
-| 4 | branchement dans `model.rs` (`attn_topk > 0` + miroir VRAM) | ✅ **fait** (opt-in `DRAVE_GPU_TOPK=1`) : PPL 9,4162 contre 9,4167 au CPU à ctx 2 048 ; le gain de temps reste à gagner (coût des lancements) |
+| 4 | branchement dans `model.rs` (`attn_topk > 0` + miroir VRAM) | ✅ **fait** (opt-in `DRAVE_GPU_TOPK=1`) : PPL identique (9,4162 contre 9,4167 à 2 k ; 12,2265 contre 12,2267 à 16 k) et **gain à 16 k** : attention 20,69 → 7,72 ms/jeton, balayage −23 % |
 | 5 | mesure 1 M de clés : ms/couche avec et sans top-k | à faire |
 | 6 | portes de non-régression : 19,3885 et 15,1757 | ✅ inchangées, mesurées le 30/09 au soir (voir le journal de la session) |
 

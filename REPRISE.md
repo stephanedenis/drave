@@ -387,6 +387,75 @@ couche à 1 M de clés contre 13,2 ms avec le miroir. Trois noyaux, six étapes,
 critère d'exactitude — c'est le prochain chantier, et il n'a pas été bâclé faute de
 temps : il est écrit.
 
+### Créneau 17h41 → 19h41 (sprint 1) : le top-k GPU, du banc au moteur
+
+**Les trois noyaux du plan sont écrits, mesurés et relus.** Le top-k de l'attention
+ne retombait plus sur le CPU par nécessité : `model.rs:3150` interdisait le miroir
+VRAM dès que `attn_topk > 0`.
+
+| étape | ce qui est fait | mesure |
+|---|---|---|
+| 1 · scores | `attn_scores` (déjà là au début du sprint) | écart **1,6–2,3e-7**, **26,7–40×** le CPU (re-mesure sur clés distinctes : l'ancien 1,03e-7 venait d'un banc dégénéré) |
+| 2 · sélection | `attn_topk_histo` (4 passes d'octets) + `attn_topk_compte` + `attn_topk_ecrit` | **même ensemble que le CPU** 14/14 lignes, différence symétrique 0 à 4 k / 65 k / 262 k / **1 M** clés ; collecte **0,95 ms** contre 1 653 ms de tri CPU à 1 M (×1 744) |
+| 3 · somme | `attn_topk_somme` (softmax sur les k + puits, Σ w·V, indices lus en VRAM) | écart **1,0–4,8e-7** (critère 1e-6) · temps GPU **constant : 0,07 ms** de 4 k à 262 k clés |
+| 4 · moteur | branche `DRAVE_GPU_TOPK=1` dans `forward`, repli CPU sur tout refus | PPL **9,4162** contre **9,4167** (CPU) à ctx 2 048 · 13,1355 contre 13,1358 à ctx 8 192 |
+| 5 · 1 M | chaîne complète sans relecture des scores | **3,90 ms** pour 14 lignes × 1 M clés, contre 539,9 ms d'attention complète CPU (×138) et 13,2 ms en VRAM — **0,3×** le complet (critère : ≤ 2×) |
+
+⚠️ **Le gain de TEMPS dans le moteur n'est pas encore là**, et c'est mesuré :
+
+| contexte | jetons | attention CPU | attention GPU top-k | balayage |
+|---|---|---|---|---|
+| 2 048 | 511 | **4,21 ms/jeton** | 7,68 | 18,1 / 20,4 s |
+| 8 192 | 511 | **6,35 ms/jeton** | 7,36 | 19,2 / 19,7 s |
+| **16 384** | 4 095 | 20,69 ms/jeton | **7,72 ms/jeton** | **207,8 / 160,7 s (−23 %)** |
+
+Le GPU est plat (c'est le but), le CPU croît fortement : **le croisement est entre
+8 192 et 16 384 clés**, et à 16 k le déport gagne (attention −63 %, balayage −23 %,
+perplexité identique à 2e-5). C'est plus loin que le croisement de l'attention
+complète (~4 000), et pour la raison déjà identifiée : la chaîne coûte **8
+lancements et 17 transferts par couche et par jeton** (dont 8 copies DtoH
+bloquantes). Le prochain sprint doit donc **fusionner** — descente radix, collecte
+et somme dans un seul noyau, tampons hôtes réutilisés — pas ajouter un noyau.
+
+**Quatre défauts attrapés, chacun par un moyen différent** — c'est la leçon du
+créneau :
+1. le **banc était dégénéré** (même clé à toutes les positions : tous les scores
+   d'une ligne égaux, donc la descente radix ne choisissait jamais entre deux
+   seaux) — trouvé en RELISANT le banc, pas en le faisant échouer ;
+2. le **puits était ajouté par chaque fil** dans le noyau 3 alors que chaque fil
+   ne tient qu'une somme partielle : dénominateur ×45,7, sortie 55× trop petite à
+   k = 1 — trouvé par le BANC en une ligne ;
+3. une **relecture adversariale** (sous-agent) a trouvé 7 défauts de plus, dont un
+   bloquant : le garde de réallocation de la collecte était piloté par les
+   dimensions au lieu des capacités, donc un échec d'allocation au milieu du `||`
+   laissait un pointeur 0 pour l'appel suivant. Corrigés, avec en plus une fuite
+   VRAM (`kv_assurer`), trois capacités périmées, quatre copies DtoD non
+   vérifiées, une boucle infinie latente et un `rep` tronqué ;
+4. une SECONDE relecture adversariale, sur le branchement dans le moteur, a
+   trouvé **un faux résultat silencieux dans un noyau plus ancien** :
+   `attn_kv_recombine` lisait `sinks[warp]` (tête DANS le groupe KV) alors que la
+   sortie est écrite par tête GLOBALE — sur gpt-oss, `DRAVE_GPU_KV=1` donnait donc
+   à la tête `kvh×rep + w` le puits de la tête `w`, jusqu'à 4,65 logit d'écart
+   (facteur 105 sur le drainage). **Mesuré avant/après** : perplexité gpt-oss ctx
+   256 `DRAVE_GPU=1 DRAVE_GPU_KV=1` = **17,6531 AVANT** contre **15,1786 APRÈS**
+   (référence CPU 15,1757 ; Qwen n'a pas de puits, donc la porte de 19,3885 ne
+   pouvait pas le voir). Deux lignes de correction. La relecture a aussi listé 12
+   autres points, dont cinq corrigés dans la foulée : garde du noyau 3 testé
+   APRÈS sept lancements, couverture de la collecte non vérifiée alors que la
+   copie qui le permet est déjà payée, unités de capacité mélangées
+   (`sinks_cap`/`out_cap` en éléments d'un côté, en octets de l'autre), compteur
+   d'événements incohérent entre les deux chemins, `DRAVE_GPU_TOPK=0` qui
+   ACTIVE.
+
+**Un audit de documentation** (second sous-agent) a corrigé quatre chiffres périmés
+ou mal sourcés, dont la ligne « 65 536 » du rapport des scores (7,4 ms / 8,9×,
+mesurée AVANT le découpage en tranches → 2,36 ms / 26,7×) et le compteur de lignes
+Rust (12 171 → **13 168**, un seul chiffre dans tout le dépôt).
+
+Portes du sprint, mesurées sur le binaire final : **Qwen2.5-0.5B Q8_0 ctx 256 =
+19,3885** · **gpt-oss-120b MXFP4 ctx 256 = 15,1757** · `cargo test --release` =
+**17/17** · `--banc-topk` toujours vert de n = 1 à n = 1 000 000.
+
 ### La frontière du cache KV, mesurée en entier
 
 | réglage | octets/élément | % du f32 | écart |

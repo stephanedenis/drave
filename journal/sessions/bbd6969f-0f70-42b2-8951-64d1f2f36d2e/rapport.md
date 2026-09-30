@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 51.8 h |
+| Durée | 52.2 h |
 | Tours | 47 |
-| Messages | 2187 |
-| Appels d'outils | 2067 |
+| Messages | 2218 |
+| Appels d'outils | 2096 |
 | Fichiers touchés | 47 |
-| Commandes | 1721 |
-| Sous-agents | 13 |
-| Commits | 179 |
+| Commandes | 1749 |
+| Sous-agents | 14 |
+| Commits | 180 |
 | Compactages de contexte | 3 |
 
 ## Objectifs déclarés
@@ -2177,7 +2177,7 @@ Le mode creux ne peut pas utiliser le miroir VRAM (le chemin GPU est conditionn�
 
 ### Tour 47 — pret pour des scrum de 2h (boxing temps réel, avec revue, rétro et planning)
 
-*212 appels d'outils.* Actions notables :
+*241 appels d'outils.* Actions notables :
 
 - bash — Check clock, machine and last sprint state
 - bash — Create the sprint timing tool
@@ -2193,7 +2193,7 @@ Le mode creux ne peut pas utiliser le miroir VRAM (le chemin GPU est conditionn�
 - bash — Read the kernel launch call
 - bash — Write the FFI for the scores kernel
 - bash — Complete KvGpu initializer
-- … et 192 autres
+- … et 221 autres
 
 **Synthèse produite :**
 
@@ -2268,6 +2268,7 @@ Le mode creux ne peut pas utiliser le miroir VRAM (le chemin GPU est conditionn�
 - tour 46 — Review the last-hour fixes
 - tour 47 — Adversarial review GPU topk
 - tour 47 — Vérifier chiffres et cohérence docs
+- tour 47 — Revue adversariale du branchement top-k
 
 ### Commandes exécutées (échantillon)
 
@@ -2311,7 +2312,7 @@ Le mode creux ne peut pas utiliser le miroir VRAM (le chemin GPU est conditionn�
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 1681 autres
+- … et 1709 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2638,4 +2639,5 @@ Le mode creux ne peut pas utiliser le miroir VRAM (le chemin GPU est conditionn�
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' def patch(p, paires):     s=open(p).read()     for v,n,nom in paires:         assert s.co
 - Compteur de lignes Rust unifié : 13 168 (un seul chiffre, mesuré, dans README ×2 et REPRISE)" && git log --oneline -1
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' def patch(p, paires):     s=open(p).read()     for v,n,nom in paires:         assert s.co
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && DRAVE_GPU=1 timeout 300 ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q4_0.gguf --banc-topk 4096 2
 

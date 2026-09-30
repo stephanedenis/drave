@@ -575,7 +575,15 @@ __global__ void attn_kv_recombine(const float* __restrict__ part,
         const float* p = part + (((size_t)sp * gridDim.x + kvh) * rep + warp) * (hd + 2);
         M = fmaxf(M, p[0]);
     }
-    if (sinks != nullptr) M = fmaxf(M, sinks[warp]);
+    // ⚠️ `warp` est la tête de requête DANS le groupe KV, alors que la sortie
+    // est écrite par tête GLOBALE (`out[(kvh * rep + warp) * hd + …]` juste en
+    // dessous). Lire `sinks[warp]` donnait à la tête `kvh*rep + w` le puits de la
+    // tête `w` : sur gpt-oss (64 têtes de requête, 8 têtes KV, puits allant de
+    // -1,95 à +3,38) l'écart atteint 4,65 logit DANS un groupe, soit un facteur
+    // 105 sur le terme de drainage du dénominateur. Trouvé par un relecteur
+    // adversarial ; le chemin CPU, le noyau 3 du top-k et HF indexent tous par
+    // tête globale — seul ce noyau était faux.
+    if (sinks != nullptr) M = fmaxf(M, sinks[kvh * rep + warp]);
     for (int sp = 0; sp < nsplit; ++sp) {
         const float* p = part + (((size_t)sp * gridDim.x + kvh) * rep + warp) * (hd + 2);
         const float w = expf(p[0] - M);
@@ -585,7 +593,7 @@ __global__ void attn_kv_recombine(const float* __restrict__ part,
             if (o < nq) acc[o] += p[2 + o * 32 + lane] * w;
         }
     }
-    if (sinks != nullptr) S += expf(sinks[warp] - M);
+    if (sinks != nullptr) S += expf(sinks[kvh * rep + warp] - M);
     const float inv = (S > 0.0f) ? 1.0f / S : 0.0f;
     #pragma unroll
     for (int o = 0; o < 4; ++o) {

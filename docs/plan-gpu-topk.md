@@ -55,8 +55,10 @@ peu » : c'est rendre le mode creux **utilisable** au-delà de ~32 k de contexte
    * la collecte des indices est **deux noyaux** (`attn_topk_compte` puis
      `attn_topk_ecrit`, séparés par une somme préfixée sur l'hôte) : un bloc ne
      peut pas connaître son rang global avant que les précédents aient compté ;
-   * les indices sortent **par ordre croissant** — c'est ce qui rend la somme
-     pondérée déterministe, et c'est le départage des ex æquo du CPU.
+   * les indices sortent **dans un ordre fixe** (au-dessus du seuil, puis les
+     égaux, chacun par indices croissants) — c'est ce qui rend la somme pondérée
+     déterministe, et le départage des ex æquo est celui du CPU (premiers égaux
+     par ordre d'indice).
    ✅ **fait** : ensemble identique au CPU sur 14/14 lignes (différence symétrique
    0) à 4 096, 65 536 et 262 144 clés — `reports/rapport-gpu-topk-selection.md`
 3. **`attn_topk_somme`** — softmax sur les k scores retenus (le max et le

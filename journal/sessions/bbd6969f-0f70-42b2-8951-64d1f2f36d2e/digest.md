@@ -35368,3 +35368,479 @@ REPRISE ok
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\ndef patch(p, paires):\n    s=open(p).read()\n    for v,n,nom in paires:\n        assert s.count(v)==1, f\"{p}::{nom}::{s.count(v)}\"\n        s=s.replace(v,n,1)\n    open(p,'w').write(s); print(f\"{p} ok\")\n\npatch … [3913 caractères tronqués]`
+
+  ```
+reports/rapport-gpu-topk-selection.md ok
+test result: ok. 17 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.09s
+
+d221ead Étape 4 : le top-k déporté tourne dans le moteur (opt-in), et l'étape 5 est chiffrée
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date +%H:%M:%S && ./tools/sprint.sh status | head -4", "description": "Check time before fusion work"}`
+
+  ```
+18:36:16
+── Sprint 1 ─────────────────────────────────────────────
+- **Début** : 17:41 · **Fin prévue** : 19:41 (boxing de 120 min)
+   temps : 18:36 · reste 1 h 05
+   commits depuis le début : 9
+  ```
+
+- **subagent** `{"description": "Revue adversariale du branchement top-k", "prompt": "Tu es relecteur ADVERSARIAL de code dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (moteur d'inférence Rust « Drave », std seul). Ton but est de TROUVER DES DÉFAUTS RÉELS en LISANT le code — les bancs de ce dépôt ne … [4241 caractères tronqués]`
+
+  ```
+started subagent c776b71f-525a-4bad-b83c-eff1c2d204ff
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '3268,3345p' drave-core/src/model.rs", "description": "Read CPU per-head top-k path"}`
+
+  ```
+fait_en_gpu = true;
+                    }
+                }
+            }
+            for hh in 0..(if groupe || fait_en_gpu { 0 } else { nh }) {
+                let kvh = hh / rep;
+                let qh = &q[hh * hd..(hh + 1) * hd];
+                // produit scalaire écrit en itérateurs : la forme indexée
+                // (`for d in 0..hd { s += qh[d]*kt[d] }`) ne se vectorise pas —
+                // mesuré à 1,9 GFLOP/s sur un cœur, soit 0,6 opération par cycle.
+                // fenêtre glissante : seules les clés de la fenêtre sont notées,
+                // plus quelques puits au début (leur attention sert de drain).
+                let nw = pos + 1;
+                let lo = if fen > 0 && nw > fen {
+                    nw - fen
+                } else { 0 };
+                let ns = if lo > 0 { self.attn_sinks.min(lo) } else { 0 };
+                // les puits sont NOTÉS comme les autres : leur donner un score
+                // arbitraire (0) fausse la distribution au lieu de la drainer.
+                for t in (0..ns).chain(lo..nw) {
+                    kvc.cle(kvh, t, &mut kd);
+                    sc[t] = point(qh, &kd) * scale;
+                }
+                for t
+… [3371 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '3345,3390p' drave-core/src/model.rs", "description": "Read the rest of the CPU top-k path"}`
+
+  ```
+let puits = lay.sinks.as_ref().map(|s| s[hh]);
+                let mut mx = f32::NEG_INFINITY;
+                for &t in iter { let v = sc[t as usize]; if v > mx { mx = v; } }
+                if let Some(s) = puits { if s > mx { mx = s; } }
+                let mut sum = 0f32;
+                for &t in iter { let e = (sc[t as usize] - mx).exp(); sc[t as usize] = e; sum += e; }
+                if let Some(s) = puits { sum += (s - mx).exp(); }
+                let inv = 1.0 / sum;
+                for &t in iter { sc[t as usize] *= inv; }
+                // somme pondérée : on accumule par clé dans le vecteur de sortie,
+                // ce qui lit vc séquentiellement au lieu de le parcourir à stride.
+                let out = &mut att[hh * hd..(hh + 1) * hd];
+                for v in out.iter_mut() { *v = 0.0; }
+                for &t in iter {
+                    let w = sc[t as usize];
+                    kvc.valeur(kvh, t as usize, &mut vd);
+                    for (o, x) in out.iter_mut().zip(vd.iter()) { *o += w * x; }
+                }
+            }
+            self.prof[2] += ta.elapsed().as_secs_f64();
+            let tf = Instant::now();
+            Self::matvec(pool, &lay.wo
+… [1575 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls -la --time-style=+%H:%M:%S drave-core/target/release/drave && (echo \"=== portes finales (binaire post-intégration) ===\"; echo -n \"Qwen Q8_0 ctx 256 : \"; ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf --ppl /tm … [502 caractères tronqués]`
+
+  ```
+-rwxr-xr-x. 2 stephane stephane 1744528 18:32:30 drave-core/target/release/drave
+=== portes finales (binaire post-intégration) ===
+Qwen Q8_0 ctx 256 : perplexité 19.3885 sur 510 tokens
+gpt-oss MXFP4 ctx 256 dense : perplexité 15.1757 sur 510 tokens
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"^## \\|^### \" REPRISE.md | tail -12 && sed -n '/^## 6/,$p' REPRISE.md | head -40", "description": "Read REPRISE structure"}`
+
+  ```
+165:### Mesures du tour « huit chantiers » (toutes commitées)
+195:### Ce qu'il faut faire ensuite, dans l'ordre
+236:### Les variables d'environnement, et leurs pièges
+266:## 6bis. Session « Drave » — le calcul réparti tient debout
+321:### Session « autonomie jusqu'à 15h » — ce qui s'ajoute (12h → 15h)
+361:### Créneau 15h07 → 18h00 : le mode 4, et la frontière KV confirmée
+390:### La frontière du cache KV, mesurée en entier
+414:### Le mode lot gagne sur les deux tableaux
+420:### Hygiène et garde-fous ajoutés depuis (13h)
+454:### Les prochains chantiers, dans l'ordre
+474:## 7. Carte du dépôt
+502:## 8. Premier pas suggéré pour la nouvelle session
+## 6. Les huit chantiers : où ils en sont
+
+| # | chantier | état | mesure |
+|---|---|---|---|
+| 1 | protocole de perplexité longue | **fait** | `--depuis N` note les mêmes jetons à contexte variable ; `--depuis 256 --ctx 256` redonne exactement la fenêtre 2 historique (21,565) |
+| 2 | seuil de rotation YaRN | **fait, seuil à 4 × la longueur déclarée** | comparaison appariée (mêmes 512 jetons) : contexte 128→1536, RoPE simple 39,52/49,79/49,93/298,56 contre interpolation 42,13/82,02/82,15/578,86 → le simple gagne partout. **Au-delà du seuil** 
+… [6153 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date +%H:%M:%S && git log --oneline --since=\"2026-09-30 17:41\" | cat", "description": "Check time and sprint commits"}`
+
+  ```
+18:39:59
+d221ead Étape 4 : le top-k déporté tourne dans le moteur (opt-in), et l'étape 5 est chiffrée
+1f53667 Compteur de lignes Rust unifié : 13 168 (un seul chiffre, mesuré, dans README ×2 et REPRISE)
+674a334 Noyau 3 : softmax sur les k retenus + Σ w·V, écart 1,0 à 4,8e-7
+47ce9b7 Relecture adversariale : 7 défauts corrigés, dont un bloquant sur les chemins d'échec
+a891c31 Rapport de sélection : le second passage k doublé, et la durée mal étiquetée
+fa6a4f3 Collecte top-k : réallouer quand k GRANDIT, et un banc qui le prouve
+e950075 Noyaux 2b : collecte des k indices — même ensemble que le CPU, 896× le tri à 262 k clés
+d00c01c Noyau 2a du top-k GPU : histogramme d'octet, seuil exact sur 14/14 lignes
+5e8bf48 Sprint 1 : noyau GPU de scores d'attention — exact à 1,03e-7, 40× plus rapide
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && nohup bash -c '\ncd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\nD=./drave-core/target/release/drave\nM=models/Qwen2.5-0.5B-Q8_0.gguf\nJ=/tmp/topk_16k.log\n: > $J\nfor mode in cpu gpu; do\n  echo \"########## ctx=16384 limit=4096 … [537 caractères tronqués]`
+
+  ```
+16k lancé
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 120; cat /tmp/topk_16k.log; date +%H:%M:%S", "description": "Check 16k test progress", "timeoutMs": 180000}`
+
+  ```
+########## ctx=16384 limit=4096 cpu
+18:42:23
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='REPRISE.md'; s=open(p).read()\nancre = \"\"\"### La frontière du cache KV, mesurée en entier\"\"\"\nneuf = \"\"\"### Créneau 17h41 → 19h41 (sprint 1) : le top-k GPU, du banc au moteur\n\n**Les trois noyaux du pla … [3693 caractères tronqués]`
+
+  ```
+REPRISE : section du sprint écrite
+########## ctx=16384 limit=4096 cpu
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 180; cat /tmp/topk_16k.log; date +%H:%M:%S", "description": "Wait for 16k CPU result", "timeoutMs": 240000}`
+
+  ```
+########## ctx=16384 limit=4096 cpu
+=== perplexité 12.2267 sur 4095 tokens (0 événements, 207.8 s) ===
+    postes (ms/token) : projets-attn 2.47 | rope 0.42 | attention 20.69 | proj+mlp 20.14 | somme 43.72 | reste (tête + échantillonnage) 7.03
+########## ctx=16384 limit=4096 gpu
+18:45:36
+  ```
+
+### 👤 Utilisateur
+
+Agent c776b71f-525a-4bad-b83c-eff1c2d204ff sent a message:
+RELECTURE ADVERSARIALE — commit d221ead (top-k déporté). Aucun fichier modifié. Périmètre lu : `model.rs:3219-3272` + chemin CPU `3272-3363`, `gpu.rs:631-1039` (+ `attn_kv` 1041-1149, `KvGpu`), `drave_gpu.cu:616-948`, `main.rs:2668-2815`, docs. J'ai aussi vérifié l'en-tête du GGUF gpt-oss (lecture seule).
+
+## A. Ce qui est CONFORME (vérifié, ne pas re-vérifier)
+1. **Aucun résultat partiel dans `att`** : le noyau 3 est le seul à écrire `att` ; le chemin CPU reprend TOUJOURS les `nh` têtes (`model.rs:3272` `for hh in 0..(if groupe || fait_en_gpu { 0 } else { nh })`, `groupe` faux car `attn_topk > 0`) et **zéroïse** `att[hh*hd..]` avant d'accumuler (`model.rs:3356-3357`, et `3319` en fenêtré). Même si la copie DtoH de `attn_topk_somme` échoue à mi-chemin (`gpu.rs:1035`), tout est réécrit. Le contrat « tout refus ⇒ repli CPU sans publication » tient.
+2. **4 passes exactes** (`dec = 24,16,8,0`), `ok` correctement propagé (le `if !ok { break; }` est redondant, pas faux) ; descente des seaux et préfixe par ligne corrects (carry de `dessus` d'une passe à l'autre = « strictement au-dessus ») ; `pref[hh] << 8` identique au filtre `(cle >> dec) >> 8 == prefixe`.
+3. **Disposition** : `sc[(kvh*rep + warp)*n + t]` ⇒ `ligne = kvh*rep + r = hh` ; `attn_topk_somme` écrit `out[ligne*hd..]` et le CPU `att[hh*hd..]` : même layout.
+4. **Puits au dénominateur seulement** dans les deux chemins ; `sinks[ligne]` du noyau 3 est bien indexé par `hh` (`drave_gpu.cu:914,933`), comme le CPU (`model.rs:3260-3261`, `3345`).
+5. **`sc2`/`ctx` vs `sc`/`n` : pas un bug.** Deux tampons distincts, chacun avec son pas : `sc2[nh*ctx]` pas `ctx` (capacité logique CPU), `scores_dev[nh*n]` pas `n` (compact, alloué `m.n_kv*rep*n` par `attn_scores_sans_relecture`, `gpu.rs:639-647`) ; le paramètre `ctx` du noyau est le pas du cache KV miroir (`m.capacite`), correctement utilisé des deux côtés.
+6. **Déterminisme : oui** (même machine). `atomicAddPartage`/`atomicAdd` sont de vrais `atom.shared/global.add.u32` (`cuda_stub.h:52-67`, addition entière ⇒ ordre indifférent), réductions en arbre à taille fixe, accumulation séquentielle `j = 0..k` par fil, écritures du noyau 3 indexées par le rang calculé (pas de course).
+7. **Pas d'usage-après-libre des tampons partagés** : chaque usage de `m.out_dev`/`m.sinks_dev`/`scores_dev`/`q_dev` se termine par une copie DtoH bloquante (et `attn_kv` fait `cuCtxSynchronize()`, `gpu.rs:1141`), donc aucune réallocation ne peut courir après un noyau en vol. Pas d'alternance possible sur une même couche : `groupe` exige `attn_topk == 0`, la branche top-k exige `attn_topk > 0`, et `attn_topk` est fixé au chargement.
+8. `besoin[hh] == 0` **impossible** : `dessus` = nombre de scores strictement supérieurs au k-ième ⇒ ≤ k-1 ⇒ `besoin ≥ 1` ; et `b ≥ besoin` est garanti par la descente (le seau retenu contient ≥ besoin égaux). Le garde `gpu.rs:892` refuse en plus si les comptes ne tombent pas juste.
+
+## B. DÉFAUTS
+
+**D1 — [faux résultat silencieux, PRÉ-EXISTANT mais dans le périmètre demandé] Le noyau de recombinaison lit le mauvais puits : `sinks[warp]` au lieu de `sinks[kvh*rep + warp]`.**
+`drave_gpu.cu:578` `if (sinks != nullptr) M = fmaxf(M, sinks[warp]);` et `:588` `if (sinks != nullptr) S += expf(sinks[warp] - M);` — alors que la sortie est écrite par tête GLOBALE : `:592` `out[(kvh * rep + warp) * hd + o * 32 + lane] = acc[o] * inv;`. `warp` = tête de requête DANS le groupe (0..rep-1) ; pour tout `kvh ≥ 1` la tête `kvh*rep+warp` reçoit le puits de la tête `warp`.
+Scénario : gpt-oss-120b, `n_head=64`, `n_kv_head=8` (URL GGUF vérifiée : `blk.N.attn_sinks.weight` = **[64]** = n_head, type F32), `DRAVE_GPU_KV=1`, demi-finales couches `fen==0` → `attn_kv`. Les puits valent de -1,95 à +3,38 et varient de 4,65 logit À L'INTÉRIEUR d'un groupe (kvh=6) : la tête 48+w applique le puits de la tête w, jusqu'à ~4,7 logit d'erreur sur un logit de drainage ⇒ `e^4,7 ≈ 110×` sur le terme de puits du dénominateur. Le chemin CPU (`s[hh]`), le noyau 3 top-k (`sinks[ligne]`) et HF (`num_heads`) sont d'accord : seul `attn_kv_recombine` est faux. Invisible dans l'A/B du commit (Qwen2.5 n'a pas de puits) et dans la porte gpt-oss (15,1757/15,1667 mesurées sans `DRAVE_GPU_KV`).
+Correctif minimal (2 lignes) : `sinks[kvh * rep + warp]` en 578 et 588 (`rep` est déjà un paramètre). Confirmation possible sans coder : `DRAVE_GPU=1 DRAVE_GPU_KV=1 <bin> <gpt-oss> --ppl --ctx 256` doit s'écarter de 15,1757 (au CPU) — à vérifier, je n'ai rien lancé (chargement 120b).
+
+**D2 — [faux résultat silencieux, pré-existant, « ailleurs »] `forward_lot` ignore complètement `--attn-topk`.**
+`model.rs:2526` `let groupe = fen == 0 && self.attn_topk == 0 && rep > 1;` puis repli CPU `:2591` `for tt in lo..n { kvc.cle(kvh, tt, &mut kd); sc[tt] = Self::dot8(&qh, &kd) * scale; }` — aucune occurrence de `attn_topk`, `attn_idx` ni `k` dans `forward_lot` (2320-2820). Scénario : `--lot 8 --attn-topk 256 --ctx 32768` (ou tout mode passant par `forward_lot` : flux réparti `main.rs:2126,2171`) calcule une attention DENSE ; `--lot 1` calcule l'attention creuse. Aucun message, aucun refus. La branche GPU top-k ne rattrape rien (`groupe` est faux dès que `attn_topk > 0`). Correctif minimal : refuser la combinaison (`attn_topk > 0 && lot > 1` ⇒ message + repli explicite) ou implémenter le top-k dans `forward_lot`. Bonus même zone : `model.rs:2612` `self.attn_events += (nh * (n - lo)) as u64;` est HORS de la boucle `for i in 0..t` et s'ajoute aussi après le chemin GPU ⇒ compteur faux en mode lot.
+
+**D3 — [perf, significatif] Les gardes du noyau 3 (`k ≤ 1024`, `bits ∈ {8,32}`) sont testés APRÈS 7 lancements de noyaux.**
+`model.rs:3231-3234` (garde d'entrée : `attn_topk > 0 && fen == 0 && …`) puis `gpu.rs:946` `if (… || k > 1024 || …)` et `gpu.rs:951` `if (m.bits != 8 && m.bits != 32)`. Scénario : `--attn-topk 2048` (ou `DRAVE_KV_BITS=4`) + `DRAVE_GPU_TOPK=1`, n > 1024 ⇒ par couche et par jeton : scores complets en VRAM + 4 passes d'histogramme + 2 noyaux de collecte, PUIS refus, puis tout le travail refait au CPU, avec une ligne d'erreur `[topk] noyau 3 : dimensions refusées…` × 24 couches × jeton. Le run est plus lent qu'en CPU pur. `REPRISE.md:243` annonce pourtant « exige … `k ≤ 1 024` ». Correctif minimal : tester `k <= 1024 && (bits == 8 || bits == 32)` dans la condition de `model.rs:3231` (ou au début de `attn_scores_sans_relecture`).
+
+**D4 — [perf/robustesse] Le tampon de scores complet `nh × n × 4` par couche contredit le budget mémoire du plan, n'est pas budgété, et son échec est muet.**
+`docs/plan-gpu-topk.md:44-46` : « *Budget mémoire* : 14 têtes × N × 4 octets — 56 Mo à 1 M ✗ trop. **Le tampon ne doit donc PAS contenir tous les scores** ». Or `gpu.rs:639-647` alloue exactement ça : `let besoin = m.n_kv * rep * n; … cuMemAlloc_v2(&mut m.scores_dev, besoin * 4)`. À 1 M de clés : 56 Mo/couche (14 têtes) = 1,34 Go pour 24 couches ; gpt-oss (64 têtes × 36 couches) = 256 Mo/couche = **9,2 Go**. `memoire_libre` n'est jamais décrémenté et le contrôle de budget de `kv_assurer` (`gpu.rs:443`) ne le voit pas. Scénario : ctx 1 M sur une carte qui tient tout juste le miroir KV ⇒ une des 24-36 allocations échoue (`return false` **sans message**, `gpu.rs:645`) ⇒ le top-k retombe silencieusement sur le CPU (~100× plus lent à 1 M) en cours de run. Correctif minimal : soustraire/comparer au budget et imprimer UNE fois « [gpu] top-k déporté refusé : X Mo de scores par couche » ; correctif de fond = le noyau fusionné du plan (ne garder que k candidats), qui supprime le tampon.
+
+**D5 — [faux résultat silencieux possible] Le chemin moteur ne vérifie jamais la couverture de la collecte, alors qu'il paie déjà la copie qui le permettrait.**
+`model.rs:3256` `let mut sel = vec![-1i32; nh * k];` — `sel` n'est JAMAIS lu par le moteur ; il est pourtant rempli par `gpu.rs:924` `cuMemcpyDtoH_v2(sortie.as_mut_ptr(), p_sortie, lignes * k * 4)`. Le noyau 3 lit la sélection **en VRAM** (`gpu.rs:999` `let mut p_idx = p_sortie;`) et ce tampon (`t.sortie`) n'est jamais remis à zéro entre deux jetons (`gpu.rs:804-834`). Si la collecte sous-écrit une case (le seul garde est le contrôle de COMPTES `gpu.rs:892`, pas des écritures), le noyau 3 lit des indices PÉRIMÉS du jeton précédent, `fait_en_gpu = true` les publie, et `sc_l[-1]`/`valeur_v(base,-1,…)` donnent une sortie plausible et fausse. Les bancs, eux, vérifient : `main.rs:2569` `cases_vides += b.iter().filter(|&&v| v < 0).count();` et `:2809`. Correctif minimal (gratuit) : après la collecte, `if ok { ok = sel.iter().all(|&v| v >= 0); }` — la donnée est déjà sur l'hôte.
+
+**D6 — [métrique fausse] `attn_events` ne compte pas la même chose dans les deux chemins.**
+`model.rs:3267` `*attn_events += (nh * n) as u64;` (GPU top-k : toutes les clés notées) contre `model.rs:3338` `*attn_events += iter.len() as u64;` (CPU top-k : `k` clés retenues par tête — alors que le CPU NOTE lui aussi les n clés, `3287-3290`). Le même run publie donc `main.rs:4020` « attention : X M paires (requête, clé) par token » multiplié par n/k (×8 à ctx 2 048 / k 256) selon `DRAVE_GPU_TOPK` — et la « part de l'attention dans le flux d'événements » change avec le drapeau. Correctif minimal : compter `nh * n` des deux côtés (c'est le sens du libellé), et le signaler dans le rapport (les chiffres historiques changent).
+
+**D7 — [piège de mesure] `DRAVE_GPU_TOPK` ignore sa valeur.**
+`model.rs:3232` `std::env::var("DRAVE_GPU_TOPK").is_ok()` : `DRAVE_GPU_TOPK=0` (et `DRAVE_GPU_TOPK=`) ACTIVE le chemin GPU, silencieusement, alors que la doc dit `=1` (`REPRISE.md:243`) et que le protocole A/B du dépôt est « même binaire, bascule par variable ». Correctif : accepter seulement `1`/`true` (idéalement de façon cohérente pour les autres `DRAVE_GPU*`, même si `is_ok` est la convention actuelle).
+
+**D8 — [diagnostic] Le drapeau ne dit jamais rien.**
+`DRAVE_GPU_TOPK=1` sans `DRAVE_GPU_KV` (⇒ `kv_gpu == None`) ou sans `DRAVE_GPU` (⇒ `machines()` vide) : la condition `model.rs:3231` est fausse, rien n'est imprimé — on croit avoir mesuré le GPU. Idem `attn_scores_sans_relecture` qui rend `false` en silence pour `rep > 32`, `hd % 32 != 0`, `n > m.capacite` (`gpu.rs:636-638`) : le drapeau peut être inerte pendant tout le run. `REPRISE.md:243` ne cite que `nkv×rep = nh` et `k ≤ 1024`, alors que le code exige en plus `rep ≤ 32`, `hd % 32 == 0`, `bits ≠ 4`, `n > 1`. Correctif : une ligne au chargement (« top-k déporté actif/refusé : raison »), comme le fait déjà `[gpu] KV déporté`.
+
+**D9 — [doc, chiffres faux et décisionnels] « six lancements et cinq recopies par couche et par jeton ».**
+Recompté dans le code : **8 lancements** (`gpu.rs:682` scores, `:767` ×4 histogrammes, `:866` compte, `:917` écrit, `:1028` somme) et **17-18 transferts** (HtoD : q `:659`, préfixes ×4 `:751`, meta ×3 `:842/845/849`, bases `:898`, puits `:984` ; DtoH : histogrammes ×4 `:774`, comptes ×2 `:877/878`, sélection `:924`, sortie `:1035`), dont **8 copies DtoH bloquantes** + `cuCtxSynchronize()` (`:695`). C'est répété en `REPRISE.md:243` et `docs/plan-gpu-topk.md:92`. La direction (« fusionner les quatre passes ») est bonne, mais l'arithmétique qui la dimensionne est fausse d'un facteur ~3 : il y a plus à gagner (3 lancements et 8 transferts par la fusion, 1 transfert par D6/D10, 1 synchro).
+
+**D10 — [perf] Deux des ~9 allers-retours bloquants sont inutiles.**
+(a) `gpu.rs:924` : la sélection est recopiée sur l'hôte alors que le moteur n'utilise que la copie VRAM ; comme `attn_topk_ecrit` et `attn_topk_somme` sont sur le même flux, l'ordre est déjà garanti sans cette copie bloquante (~14 ko + un vidage de pipeline par couche et par jeton). Correctif : paramètre `relecture: bool` (le banc garde `true`).
+(b) `gpu.rs:691-695` : le commentaire dit « Pas de synchronisation explicite… » et la ligne suivante appelle `cuCtxSynchronize()`. Commentaire périmé + un aller-retour ; l'ordre du flux suffit pour que le premier `attn_topk_histo` lise des scores complets. Correctif : supprimer la synchro (la garder côté banc si la mesure du noyau seul en dépend) ou corriger le commentaire.
+
+**D11 — [latent, faux résultat silencieux si atteint] `m.sinks_cap` et `m.out_cap` sont écrits dans DEUX unités différentes.**
+`attn_kv` compte en ÉLÉMENTS : `gpu.rs:1109-1113` `if m.sinks_cap < s.len() { … cuMemAlloc_v2(&mut m.sinks_dev, s.len() * 4) … m.sinks_cap = s.len(); }` et `:1120-1124` `if m.out_cap < out.len() { … m.out_cap = out.len(); }`. `attn_topk_somme` compte en OCTETS : `gpu.rs:975-983` `let besoin = lignes * 4; … m.sinks_cap = besoin;` et `:1001-1008` `let octets_out = lignes * hd * 4; … m.out_cap = octets_out;`. Chemin d'échec : `attn_kv` libère `sinks_dev` puis l'allocation échoue (`:1112` `return false`) **sans remettre `sinks_cap` à zéro** ; à l'appel suivant, si la demande est ≤ l'ancienne capacité, le garde est faux, `p_sinks = m.sinks_dev == 0` ⇒ le noyau reçoit `nullptr` ⇒ **le puits est silencieusement ignoré et `attn_kv` rend `true`**. Aujourd'hui je n'ai PAS de déclencheur : les deux fonctions ne partagent jamais une couche (`attn_topk` fixe) et les deux quantités valent exactement nh (éléments) et 4·nh (octets), donc la comparaison croisée tombe juste par coïncidence. Correctif minimal : un seul helper `vram_assurer(&mut m.sinks_dev, &mut m.sinks_cap, octets)` (il remet la capacité à 0 avant d'allouer, `gpu.rs:53-60`) utilisé par les deux, unité = octets partout. `attn_topk_somme` fait déjà ce qu'il faut (`:980` `m.sinks_cap = 0;`), pas `attn_kv`.
+
+**D12 — [cosmétique/doc] « par ordre croissant » est faux.**
+`gpu.rs:785` (et `docs/plan-gpu-topk.md:58`) : « les `k` indices **par ordre croissant** » ; `main.rs:2558-2560` dit explicitement le contraire (« ce n'est PAS l'ordre croissant global, qui entrelace les deux groupes »). Contre-exemple : scores `[5,1,1,9]`, k=2 ⇒ sortie `[3,0]`. Sans effet sur le résultat (le noyau 3 est indifférent à l'ordre) mais le commentaire doit dire « au-dessus du seuil, puis les égaux par ordre d'index ».
+
+**D13 — [cosmétique] Code mort** : `!fait_en_gpu` dans la garde `model.rs:3231` est toujours vrai (`fait_en_gpu` exige `groupe`, qui exige `attn_topk == 0`) ; `model.rs:3244` `if !ok { break; }` redondant avec la condition de boucle ; `model.rs:3297` `let n = pos + 1;` masque le `n` de `3139`.
+
+## C. Réponse chiffrée à « les allocations expliquent-elles les 7,4 ms/jeton ? » — NON
+Par couche et par jeton, la branche alloue 4 vecteurs hôtes (`model.rs:3237-3239,3256` : 56 o + 112 o + 14 336 o + 14 336 o ≈ **28,8 ko**) + 4 dans `attn_topk_collecte` (`gpu.rs:836,874,875,880` : 168 o + 56 o + 56 o + 112 o à ctx 2 048, `ntr=1`) ≈ 8 malloc/free et ~29 ko de remplissage par couche ⇒ ~192 allocations et ~700 ko par jeton (24 couches). Même à 1 Go/s (pessimiste pour des tampons L2-chauds) : **~0,1 ms/jeton, soit 1-2 % des 7,4 ms**. Ce qui explique le coût, c'est le nombre d'allers-retours bloquants : ~17 transferts + 8 lancements + 1 `cuCtxSynchronize` par couche ⇒ ~26 opérations hôte↔GPU × 24 couches ≈ 620 par jeton ; 7,4 ms / 620 ≈ **12 µs par opération**, l'ordre de grandeur connu d'une copie DtoH bloquante + lancement sur cette machine. Conclusion : inutile d'optimiser les `vec![]` (les hisser comme `attn_gpu_part` est propre mais rapporte ≤2 %) ; D9/D10 (fusion + suppression des 2 allers-retours inutiles) est le bon levier, et la mesure du commit le dit déjà.
+
+## D. Classement par gravité
+1. **D1** gpt-oss `sinks[warp]` — faux résultat silencieux, en production sous `DRAVE_GPU_KV=1` (correctif 2 lignes).
+2. **D2** `forward_lot` ignore `--attn-topk` — faux résultat silencieux dès `--lot > 1` (pré-existant).
+3. **D5** couverture de la collecte non vérifiée alors que la donnée est sur l'hôte — faux résultat silencieux possible (correctif gratuit).
+4. **D3** gardes `k`/`bits` testés après 7 noyaux — perf franchement négative + bruit (contredit la doc).
+5. **D4** tampon de scores `nh×n` par couche, non budgété, échec muet — perf/robustesse (contredit le plan).
+6. **D11** unités mélangées `sinks_cap`/`out_cap` — latent, faux résultat silencieux si atteint.
+7. **D6** `attn_events` (nh·n vs nh·k) — métrique fausse, non comparable A/B.
+8. **D7** `DRAVE_GPU_TOPK=0` active le GPU — piège de mesure.
+9. **D9** « six lancements et cinq recopies » — doc fausse, dimensionne la prochaine étape.
+10. **D10** 2 allers-retours inutiles — perf (~10-20 % de la chaîne).
+11. **D8** silence des drapeaux/refus — diagnostic.
+12. **D12/D13** ordre croissant, code mort — cosmétique.
+
+Non mesuré (à vérifier si tu veux la preuve empirique) : D1 par `DRAVE_GPU=1 DRAVE_GPU_KV=1 <bin> gpt-oss-120b-MXFP4.gguf --ppl --ctx 256` contre 15,1757 (je n'ai rien lancé : chargement 120b, et ça perturberait tes mesures en cours) ; D4 par un run à ctx 1 M avec `nvidia-smi` pendant l'exécution (scores = 4·nh·n octets/couche).
+
+### 👤 Utilisateur
+
+Background subagent c776b71f-525a-4bad-b83c-eff1c2d204ff finished and will do no further work unless you send it more.
+Its closing message:
+⏵ Report sent to the parent agent; summarizing the findings
+
+Rapport livré au parent (`send_message` → `bbd6969f-...`). Aucun fichier modifié.
+
+## Vérifié conforme (ne pas re-vérifier)
+- **Aucun résultat partiel dans `att`** : le noyau 3 est le seul à écrire `att` ; le repli CPU reprend les `nh` têtes (`model.rs:3272`) et **zéroïse** `att[hh*hd..]` (`3356-3357`, `3319`). Même une DtoH interrompue (`gpu.rs:1035`) est réécrite.
+- **4 passes exactes** (24,16,8,0), `ok` propagé, descente/préfixes corrects, `besoin ≥ 1` par construction, garde `gpu.rs:892` en filet.
+- **Layout** `ligne = kvh*rep + r = hh` ; `att[hh*hd..]` ↔ `out[ligne*hd..]`.
+- **Puits au dénominateur seulement**, et le noyau 3 les indexe bien par `hh` (`sinks[ligne]`).
+- **`sc2`/`ctx` vs `sc`/`n` : pas un bug** (deux tampons, chacun son pas ; `ctx` du noyau = pas du cache KV).
+- **Déterminisme : oui** (`atom.shared/global.add.u32` réels, réductions fixes, accumulation séquentielle).
+- **Pas d'usage-après-libre** des tampons partagés (chaque usage finit par une DtoH bloquante / `cuCtxSynchronize`), et pas d'alternance possible sur une même couche.
+
+## Défauts, classés
+1. **D1 (faux résultat silencieux, pré-existant)** `drave_gpu.cu:578,588` : `sinks[warp]` alors que la sortie est `out[(kvh*rep + warp)*hd …]` (`:592`). gpt-oss : `attn_sinks.weight` = 64 = `n_head` (GGUF vérifié), `n_kv_head` = 8, écarts intra-groupe jusqu'à 4,65 logit ⇒ tête 48+w drainée par le puits de la tête w. Le CPU et le nouveau noyau 3 sont corrects. Correctif : `sinks[kvh*rep + warp]`.
+2. **D2 (faux résultat silencieux)** `forward_lot` ignore `--attn-topk` (`model.rs:2526,2591`) : `--lot > 1` calcule une attention dense, sans message.
+3. **D5** `sel` (`model.rs:3256`) n'est jamais contrôlé alors que la collecte le recopie (`gpu.rs:924`) et que `t.sortie` n'est jamais remis à zéro : une sous-écriture publierait des indices périmés (`fait_en_gpu = true`). Le banc, lui, teste `cases_vides`.
+4. **D3 (perf)** `k ≤ 1024` / `bits ∈ {8,32}` ne sont testés qu'à `gpu.rs:946,951`, après 7 noyaux : `--attn-topk 2048` ou `DRAVE_KV_BITS=4` refait 7 passes GPU par couche et par jeton avant de rendre la main au CPU.
+5. **D4 (perf/robustesse)** `gpu.rs:639-647` matérialise `nh×n×4` par couche — exactement le tampon que `docs/plan-gpu-topk.md:44-46` déclare « ✗ trop » (56 Mo/couche à 1 M × 14 têtes ; 9,2 Go pour gpt-oss), non budgété, échec muet ⇒ repli CPU silencieux.
+6. **D11 (latent)** `sinks_cap`/`out_cap` en éléments dans `attn_kv` (`gpu.rs:1109-1124`) et en octets dans `attn_topk_somme` (`:975-1008`) ; après un échec d'allocation, `sinks_dev = 0` avec `sinks_cap` périmé ⇒ puits ignoré silencieusement. Non déclenchable aujourd'hui (couches disjointes, quantités exactement 4×).
+7. **D6 (métrique)** `attn_events` : `nh*n` (GPU, `model.rs:3267`) vs `nh*k` (CPU, `:3338`) ⇒ la ligne « M paires (requête, clé) par token » change d'un facteur n/k avec le drapeau.
+8. **D7/D8** `DRAVE_GPU_TOPK=0` active le GPU (`is_ok()`, `model.rs:3232`) ; drapeau inerte sans `DRAVE_GPU_KV`/`DRAVE_GPU`, et refus silencieux de `attn_scores_sans_relecture` (rep>32, hd%32≠0).
+9. **D9/D10** « six lancements et cinq recopies » (`REPRISE.md:243`, plan:92) : le code fait **8 lancements et 17-18 transferts**, dont 8 DtoH bloquantes ; 2 de ces allers-retours sont inutiles (copie de `sortie`, `cuCtxSynchronize` sous un commentaire qui dit le contraire).
+10. **D12/D13** « par ordre croissant » faux (`gpu.rs:785`, contredit par `main.rs:2558-2560`) ; code mort (`!fait_en_gpu`, `if !ok break`).
+
+**Allocations (réponse chiffrée)** : ~8 malloc/free et ~29 ko par couche et par jeton ⇒ ~0,1 ms/jeton (**1-2 %** des 7,4 ms). Le coût est dans les ~26 opérations hôte↔GPU par couche (≈12 µs chacune).
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat /tmp/topk_16k.log | tail -3; nohup bash -c 'cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo -n \"AVANT correction (sinks[warp]) : \" > /tmp/sinks_avant.log && DRAVE_GPU=1 DRAVE_GPU_KV=1 ./drave-core/target/release/drav … [349 caractères tronqués]`
+
+  ```
+=== perplexité 12.2267 sur 4095 tokens (0 événements, 207.8 s) ===
+    postes (ms/token) : projets-attn 2.47 | rope 0.42 | attention 20.69 | proj+mlp 20.14 | somme 43.72 | reste (tête + échantillonnage) 7.03
+########## ctx=16384 limit=4096 gpu
+mesure AVANT lancée
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/gpu/drave_gpu.cu'; s=open(p).read()\ndef rep(v,n,nom):\n    global s\n    assert s.count(v)==1, f\"{nom}::{s.count(v)}\"\n    s=s.replace(v,n,1)\n\nrep(\"\"\"    if (sinks != nullptr) M = fmaxf(M, sink … [1059 caractères tronqués]`
+
+  ```
+D1 corrigé
+noyaux exportés : 14
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/model.rs'; s=open(p).read()\ndef rep(v,n,nom):\n    global s\n    assert s.count(v)==1, f\"{nom}::{s.count(v)}\"\n    s=s.replace(v,n,1)\n\n# --- D7 : la valeur du drapeau compte ; D3 : gardes tôt  … [3392 caractères tronqués]`
+
+  ```
+D3 D5 D6 D7 corrigés
+build
+AVANT correction (sinks[warp]) :
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '1648,1672p' drave-core/src/model.rs", "description": "Read GPU mirror setup messages"}`
+
+  ```
+}
+                }
+                let mixte = caches_kv.iter().any(|c| c.k_f32 || c.v_f32 || c.k_f16);
+                if mixte {
+                    println!("[gpu] KV déporté désactivé : les variantes d'attribution \
+(clés ou valeurs en f32) supposent une disposition homogène");
+                }
+                if complet && !mixte {
+                    let total: usize = v.iter().map(|(_, m)| m.octets).sum();
+                    for (i, machine) in machines.iter().enumerate() {
+                        let part: usize = v.iter().filter(|(k, _)| *k == i)
+                            .map(|(_, m)| m.octets).sum();
+                        println!("[gpu] KV déporté : {} couches sur {}, {:.2} Go ici ({:.2} Go libres)",
+                                 v.iter().filter(|(k, _)| *k == i).count(), machine.nom,
+                                 part as f64 / 1e9, machine.memoire_libre as f64 / 1e9);
+                    }
+                    println!("[gpu] KV déporté : {:.2} Go au total pour {} couches", 
+                             total as f64 / 1e9, v.len());
+                    Some(v)
+                } else {
+                    println!("[gpu] KV déporté impossible sur {} périphér
+… [238 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/model.rs'; s=open(p).read()\ndef rep(v,n,nom):\n    global s\n    assert s.count(v)==1, f\"{nom}::{s.count(v)}\"\n    s=s.replace(v,n,1)\n\n# --- D8 : dire si le top-k déporté peut tourner, et pour … [3438 caractères tronqués]`
+
+  ```
+D8 posé
+build
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 8, in <module>
+  File "<stdin>", line 4, in rep
+AssertionError: sinks::0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"sinks_cap\\|out_cap\" drave-core/src/gpu.rs | head -14 && sed -n '/if let Some(s) = sinks {/,+12p' drave-core/src/gpu.rs | sed -n '20,60p'", "description": "Find attn_kv sink allocation code"}`
+
+  ```
+127:    pub out_cap: usize,
+128:    pub sinks_cap: usize,
+423:                            q_cap: 0, part_cap: 0, out_cap: 0, sinks_cap: 0 };
+977:                if m.sinks_cap < besoin {
+980:                    m.sinks_cap = 0;
+982:                    m.sinks_cap = besoin;
+1002:            if m.out_cap < octets_out {
+1005:                m.out_cap = 0;
+1007:                m.out_cap = octets_out;
+1109:                if m.sinks_cap < s.len() {
+1113:                    m.sinks_cap = s.len();
+1120:            if m.out_cap < out.len() {
+1124:                m.out_cap = out.len();
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '1104,1130p' drave-core/src/gpu.rs", "description": "Read exact attn_kv allocation block"}`
+
+  ```
+eprintln!("{}", erreur(rc, "lancement attn_kv_partiels"));
+                return false;
+            }
+            let mut p_sinks = m.sinks_dev;
+            if let Some(s) = sinks {
+                if m.sinks_cap < s.len() {
+                    if m.sinks_dev != 0 { cuMemFree_v2(m.sinks_dev); }
+                    m.sinks_dev = 0;
+                    if cuMemAlloc_v2(&mut m.sinks_dev, s.len() * 4) != 0 { return false; }
+                    m.sinks_cap = s.len();
+                }
+                p_sinks = m.sinks_dev;
+                if cuMemcpyHtoD_v2(p_sinks, s.as_ptr() as *const c_void, s.len() * 4) != 0 {
+                    return false;
+                }
+            }
+            if m.out_cap < out.len() {
+                if m.out_dev != 0 { cuMemFree_v2(m.out_dev); }
+                m.out_dev = 0;
+                if cuMemAlloc_v2(&mut m.out_dev, out.len() * 4) != 0 { return false; }
+                m.out_cap = out.len();
+            }
+            let mut p_out = m.out_dev;
+            // six paramètres : le noyau de recombinaison a besoin de `rep`
+            // (l'oublier faisait lire une valeur au hasard et écrivait hors du
+            // tampon de sortie — plantage imméd
+… [55 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/gpu.rs'; s=open(p).read()\ndef rep(v,n,nom):\n    global s\n    assert s.count(v)==1, f\"{nom}::{s.count(v)}\"\n    s=s.replace(v,n,1)\n\nrep(\"\"\"            let mut p_sinks = m.sinks_dev;\n      … [1762 caractères tronqués]`
+
+  ```
+D11 corrigé
+build
+AVANT correction (sinks[warp]) :     postes (ms/token) : projets-attn 2.61 | rope 0.69 | attention 7.72 | proj+mlp 21.03 | somme 32.06 | reste (tête + échantillonnage) 7.18
+=== 16k FINI ===
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== 16k log ===\"; cat /tmp/topk_16k.log; echo \"=== sinks avant ===\"; cat /tmp/sinks_avant.log; pgrep -c -x drave; date +%H:%M:%S", "description": "Read both logs fully"}`
+
+  ```
+=== 16k log ===
+########## ctx=16384 limit=4096 cpu
+=== perplexité 12.2267 sur 4095 tokens (0 événements, 207.8 s) ===
+    postes (ms/token) : projets-attn 2.47 | rope 0.42 | attention 20.69 | proj+mlp 20.14 | somme 43.72 | reste (tête + échantillonnage) 7.03
+########## ctx=16384 limit=4096 gpu
+=== perplexité 12.2265 sur 4095 tokens (0 événements, 160.7 s) ===
+    postes (ms/token) : projets-attn 2.61 | rope 0.69 | attention 7.72 | proj+mlp 21.03 | somme 32.06 | reste (tête + échantillonnage) 7.18
+=== 16k FINI ===
+=== sinks avant ===
+AVANT correction (sinks[warp]) : 1
+18:48:16
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\ndef patch(p, paires):\n    s=open(p).read()\n    for v,n,nom in paires:\n        assert s.count(v)==1, f\"{p}::{nom}::{s.count(v)}\"\n        s=s.replace(v,n,1)\n    open(p,'w').write(s); print(f\"{p} ok\")\n\npatch … [5482 caractères tronqués]`
+
+  ```
+reports/rapport-gpu-topk-selection.md ok
+REPRISE.md ok
+AVANT correction (sinks[warp]) : perplexité 17.6531 sur 510 tokens
+FINI
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && (echo -n \"APRES correction (sinks[kvh*rep+warp]) : \"; DRAVE_GPU=1 DRAVE_GPU_KV=1 ./drave-core/target/release/drave /home/stephane/FastNVMe/models/gpt-oss-120b-MXFP4.gguf --ppl /tmp/ids_oss_512.txt --ctx 256 --dense --threads 16 --l … [169 caractères tronqués]`
+
+  ```
+APRES correction (sinks[kvh*rep+warp]) : perplexité 15.1786 sur 510 tokens
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && nohup bash -c '\ncd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\nD=./drave-core/target/release/drave\nO=/home/stephane/FastNVMe/models/gpt-oss-120b-MXFP4.gguf\n{\necho -n \"gpt-oss DRAVE_GPU=1 (sans KV, attendu 15,1667) : \"\nDRA … [1102 caractères tronqués]`
+
+  ```
+portes lancées
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\ndef patch(p, paires):\n    s=open(p).read()\n    for v,n,nom in paires:\n        assert s.count(v)==1, f\"{p}::{nom}::{s.count(v)}\"\n        s=s.replace(v,n,1)\n    open(p,'w').write(s); print(f\"{p} ok\")\n\npatch … [2088 caractères tronqués]`
+
+  ```
+REPRISE.md ok
+gpt-oss DRAVE_GPU=1 (sans KV, attendu 15,1667) :
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 200; cat /tmp/portes_finales3.log; date +%H:%M:%S", "description": "Wait for gates to finish", "timeoutMs": 300000}`
+
+  ```
+gpt-oss DRAVE_GPU=1 (sans KV, attendu 15,1667) : perplexité 15.1667 sur 510 tokens
+gpt-oss CPU (attendu 15,1757) : 18:57:07
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\ndef patch(p, paires):\n    s=open(p).read()\n    for v,n,nom in paires:\n        assert s.count(v)==1, f\"{p}::{nom}::{s.count(v)}\"\n        s=s.replace(v,n,1)\n    open(p,'w').write(s); print(f\"{p} ok\")\n\n# D12 … [2341 caractères tronqués]`
+
+  ```
+drave-core/src/gpu.rs ok
+docs/plan-gpu-topk.md ok
+drave-core/src/model.rs ok
+build
+gpt-oss DRAVE_GPU=1 (sans KV, attendu 15,1667) : perplexité 15.1667 sur 510 tokens
+gpt-oss CPU (attendu 15,1757) : perplexité 15.1757 sur 510 tokens
+Qwen Q8_0 CPU (attendu 19,3885) :
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/rapport-gpu-topk-selection.md'; s=open(p).read()\nvieux = \"\"\"## Limites connues du contrat\"\"\"\nneuf = \"\"\"## Un faux résultat silencieux trouvé AILLEURS, par la relecture du branchement\n\nLa seco … [1434 caractères tronqués]`
+
+  ```
+rapport : section sinks ajoutée
+gpt-oss DRAVE_GPU=1 (sans KV, attendu 15,1667) : perplexité 15.1667 sur 510 tokens
+gpt-oss CPU (attendu 15,1757) : perplexité 15.1757 sur 510 tokens
+Qwen Q8_0 CPU (attendu 19,3885) : perplexité 19.3885 sur 510 tokens
+Qwen Q8_0 DRAVE_GPU=1 DRAVE_GPU_KV=1 (attendu ~19,3885) :
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 60; cat /tmp/portes_finales3.log; date +%H:%M:%S", "description": "Wait for last gate", "timeoutMs": 120000}`
+
+  ```
+gpt-oss DRAVE_GPU=1 (sans KV, attendu 15,1667) : perplexité 15.1667 sur 510 tokens
+gpt-oss CPU (attendu 15,1757) : perplexité 15.1757 sur 510 tokens
+Qwen Q8_0 CPU (attendu 19,3885) : perplexité 19.3885 sur 510 tokens
+Qwen Q8_0 DRAVE_GPU=1 DRAVE_GPU_KV=1 (attendu ~19,3885) : perplexité 19.3885 sur 510 tokens
+cargo test : test result: ok. 17 passed
+=== PORTES FINALES 2 FINIES ===
+18:58:59
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && DRAVE_GPU=1 timeout 300 ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q4_0.gguf --banc-topk 4096 2>&1 | tail -5 && git add -A && git commit -q -F - <<'EOF' && git log --oneline -1\nRelecture du branchement : un faux résultat  … [2720 caractères tronqués]`

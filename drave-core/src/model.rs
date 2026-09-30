@@ -1663,6 +1663,19 @@ impl Model {
                     }
                     println!("[gpu] KV déporté : {:.2} Go au total pour {} couches", 
                              total as f64 / 1e9, v.len());
+                    // Le drapeau du top-k ne dit rien par lui-même : sans cette
+                    // ligne, `DRAVE_GPU_TOPK=1` posé sans `DRAVE_GPU_KV` (ou avec
+                    // un `--attn-topk` hors limites) laissait croire qu'on
+                    // mesurait le GPU alors que tout restait au CPU.
+                    if std::env::var("DRAVE_GPU_TOPK").map(|v| v != "0" && !v.is_empty())
+                        .unwrap_or(false) {
+                        let bits = caches_kv.first().map(|c| c.bits).unwrap_or(32);
+                        if !(bits == 8 || bits == 32) {
+                            println!("[gpu] top-k déporté REFUSÉ : valeurs KV {bits} bits (le noyau 3 n'en gère que 8 ou 32)");
+                        } else {
+                            println!("[gpu] top-k déporté demandé (DRAVE_GPU_TOPK) : actif si --attn-topk vaut 1 à 1024, sans fenêtre, et si nkv × rep = nh");
+                        }
+                    }
                     Some(v)
                 } else {
                     println!("[gpu] KV déporté impossible sur {} périphérique(s) : contexte {} \
@@ -3228,8 +3241,20 @@ dynamique de {dyn_:.3e} (relatif {:.2e})", mx / dyn_.max(1e-9));
             // que la porte de perplexité n'a pas montré l'égalité, et tout refus
             // d'un noyau retombe proprement sur le CPU (aucun résultat partiel
             // n'est publié).
-            if self.attn_topk > 0 && fen == 0 && !fait_en_gpu && kv_gpu.is_some()
-                && nkv * rep == nh && n > 1 && std::env::var("DRAVE_GPU_TOPK").is_ok()
+            // `=0` veut dire NON : la convention `is_ok()` du dépôt fait qu'une
+            // variable mise à 0 par un script active le chemin — un piège de
+            // mesure pour un A/B qui ne bascule que par la variable.
+            let topk_gpu_demande = std::env::var("DRAVE_GPU_TOPK")
+                .map(|v| v != "0" && !v.is_empty()).unwrap_or(false);
+            // Les limites du noyau 3 sont testées ICI, pas après sept
+            // lancements : `--attn-topk 2048` ou `DRAVE_KV_BITS=4` refaisaient
+            // toute la chaîne GPU par couche et par jeton avant de rendre la
+            // main au CPU — plus lent que le CPU seul, et une ligne d'erreur par
+            // couche et par jeton.
+            let topk_gpu_possible = self.attn_topk > 0 && self.attn_topk.min(n) <= 1024
+                && (kvc.bits == 8 || kvc.bits == 32);
+            if topk_gpu_possible && fen == 0 && kv_gpu.is_some()
+                && nkv * rep == nh && n > 1 && topk_gpu_demande
             {
                 let k = self.attn_topk.min(n);
                 if let Some((idx, m)) = kv_gpu.as_mut().and_then(|v| v.get_mut(l)) {
@@ -3241,7 +3266,6 @@ dynamique de {dyn_:.3e} (relatif {:.2e})", mx / dyn_.max(1e-9));
                     let mut dec = 24i32;
                     while ok && dec >= 0 {
                         ok = machine.attn_topk_histo(m, nh, n, dec, &pref, &mut hist);
-                        if !ok { break; }
                         for hh in 0..nh {
                             let h = &hist[hh * 256..(hh + 1) * 256];
                             let mut cum = dessus[hh];
@@ -3257,6 +3281,14 @@ dynamique de {dyn_:.3e} (relatif {:.2e})", mx / dyn_.max(1e-9));
                     if ok {
                         ok = machine.attn_topk_collecte(m, nh, n, k, &pref, &besoin, &mut sel);
                     }
+                    // Une case non écrite laisserait le noyau 3 lire un indice
+                    // PÉRIMÉ du jeton précédent (le tampon VRAM n'est pas remis à
+                    // zéro) : sortie plausible et fausse, publiée sans un mot. Le
+                    // contrôle est gratuit — `sel` vient d'être recopié.
+                    if ok && sel.iter().any(|&v| v < 0) {
+                        eprintln!("[topk] collecte incomplète (case non écrite) : repli CPU");
+                        ok = false;
+                    }
                     let puits: Option<Vec<f32>> = lay.sinks.as_ref()
                         .map(|s| (0..nh).map(|h| s[h]).collect());
                     if ok {
@@ -3264,7 +3296,11 @@ dynamique de {dyn_:.3e} (relatif {:.2e})", mx / dyn_.max(1e-9));
                                                      &mut att[..nh * hd]);
                     }
                     if ok {
-                        *attn_events += (nh * n) as u64;
+                        // Même unité que le chemin CPU (`iter.len()` = k paires
+                        // retenues par tête) : compter `nh * n` ici faisait
+                        // varier la ligne « paires (requête, clé) par token »
+                        // d'un facteur n/k selon le drapeau, à calcul identique.
+                        *attn_events += (nh * k) as u64;
                         fait_en_gpu = true;
                     }
                 }

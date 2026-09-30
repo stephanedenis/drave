@@ -782,10 +782,11 @@ hist {}, préfixes {}", hist.len(), prefixes.len());
     /// `prefixes[l]` est le score k-ième EXACT de la ligne (entier monotone),
     /// rendu par les quatre passes de [`Gpu::attn_topk_histo`], et
     /// `besoin[l] = k − (nombre de scores strictement au-dessus)`. La sortie
-    /// contient, pour chaque ligne, les `k` indices **par ordre croissant** :
-    /// les scores strictement au-dessus du seuil, puis les premiers égaux au
-    /// seuil par ordre d'index — le même départage que le CPU, donc le même
-    /// ensemble, reproductible.
+    /// contient, pour chaque ligne, les `k` indices **dans l'ordre du noyau** :
+    /// d'abord ceux strictement au-dessus du seuil (indices croissants), puis les
+    /// premiers égaux au seuil (indices croissants). Ce n'est PAS l'ordre
+    /// croissant global, qui entrelace les deux groupes — mais c'est un ordre
+    /// fixe et reproductible, et le même départage des ex æquo que le CPU.
     pub fn attn_topk_collecte(&self, m: &mut KvGpu, lignes: usize, n: usize, k: usize,
                               prefixes: &[u32], besoin: &[i32],
                               sortie: &mut [i32]) -> bool {
@@ -1106,23 +1107,21 @@ k = {k} (plafonné à 1024 : le partagé du noyau tient 2k + 256 flottants), hd 
             }
             let mut p_sinks = m.sinks_dev;
             if let Some(s) = sinks {
-                if m.sinks_cap < s.len() {
-                    if m.sinks_dev != 0 { cuMemFree_v2(m.sinks_dev); }
-                    m.sinks_dev = 0;
-                    if cuMemAlloc_v2(&mut m.sinks_dev, s.len() * 4) != 0 { return false; }
-                    m.sinks_cap = s.len();
+                // `sinks_cap` compte des OCTETS, ici comme dans `attn_topk_somme`.
+                // Le compter en ÉLÉMENTS dans cette fonction et en OCTETS dans
+                // l'autre marchait par coïncidence (facteur 4 exactement) : après
+                // un échec d'allocation, un pointeur 0 passait pour valide et le
+                // puits était silencieusement ignoré. Relevé par un relecteur.
+                if !vram_assurer(&mut m.sinks_dev, &mut m.sinks_cap, s.len() * 4) {
+                    return false;
                 }
                 p_sinks = m.sinks_dev;
                 if cuMemcpyHtoD_v2(p_sinks, s.as_ptr() as *const c_void, s.len() * 4) != 0 {
                     return false;
                 }
             }
-            if m.out_cap < out.len() {
-                if m.out_dev != 0 { cuMemFree_v2(m.out_dev); }
-                m.out_dev = 0;
-                if cuMemAlloc_v2(&mut m.out_dev, out.len() * 4) != 0 { return false; }
-                m.out_cap = out.len();
-            }
+            // Même unité que partout : des octets.
+            if !vram_assurer(&mut m.out_dev, &mut m.out_cap, out.len() * 4) { return false; }
             let mut p_out = m.out_dev;
             // six paramètres : le noyau de recombinaison a besoin de `rep`
             // (l'oublier faisait lire une valeur au hasard et écrivait hors du
