@@ -81,14 +81,15 @@ format sur le disque n'a pas changé ; c'est la sémantique du champ qui est
 maintenant explicite — et c'est exactement le genre de précision qu'une
 spécification doit porter.
 
-## Transport (phase 3, TCP) — protocole v4
+## Transport (phase 3, TCP) — protocole v5
 
 ```
 en-tête (79 octets, identique à l'aller et au retour)
           magie        u32          0x44525631 (« DRV1 »)
-          version      u8           4   (refusée si différente, en le disant)
+          version      u8           5   (refusée si différente, en le disant)
           mode         u8           0 = f32 dense · 1 = liste quantifiée
-                                    2 = listes à échelle par bloc · 3 = LOT
+                                    2 = listes à échelle par bloc · 3 = LOT dense
+                                    4 = LOT en listes (mode 2 répété par état)
           couche_debut u32
           couche_fin   u32
           position     u32
@@ -106,7 +107,17 @@ corps     mode 0 : n × f32
           mode 1 : n × ( indice u16 · valeur i16 )
           mode 2 : n_blocs u32 · n_blocs × f32 · longueur u32 · paires
           mode 3 : n × dimension × f32   (n = nombre d'ÉTATS, pas de canaux)
+          mode 4 : n × [ a_j u32 · n_blocs_j u32 · longueur_j u32 ·
+                         n_blocs_j × f32 (échelles) · longueur_j octets de paires ]
 ```
+
+Le **mode 4 est le même lot, en listes** : chaque état est encodé comme le mode 2
+(indices par écarts, valeurs i8, une échelle f32 par bloc de 32 canaux) et
+auto-délimité par ses trois tailles, lues avant toute allocation. Mesuré à 256
+jetons, 16 par lot, seuil 0,01 : **1,5 ko par jeton au lieu de 3,5** (÷2,3) pour
+un écart de **3,03e-2** — le mode est avec perte, comme le mode 2, et le critère
+est qu'il ne coûte pas plus de 1,5 fois celui-ci. Un mode inconnu est refusé
+**avant** toute lecture de corps (il l'était après, donc désynchronisé).
 
 Le **mode 3 est le préremplissage réparti** : `n` états d'un coup, la position
 étant celle du premier jeton du lot. La dimension ne voyage pas — chaque nœud la

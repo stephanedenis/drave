@@ -30264,3 +30264,14 @@ perplexité 19.3885 sur 510 tokens
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && (cd drave-core && cargo test --release 2>&1 | grep -E \"^test .*FAILED|assertion\" | head -3); python3 - <<'PY'\np='drave-core/src/main.rs'; s=open(p).read()\nv = \"\"\"        assert_eq!(VERSION_FLUX, 4, \"le contrat d'activation im … [2395 caractères tronqués]`
+
+  ```
+test tests_flux::entete_et_version_sont_ce_que_les_numeros_disent ... FAILED
+assertion `left == right` failed: le contrat d'activation impose la version 4
+test result: FAILED. 12 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.12s
+test de version mis à jour
+test result: ok. 13 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.12s
+8e132aa Mode 4 : le lot en LISTES sur le fil — ÷2,3 sur les octets, écart tenu
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat /tmp/kv_4096.log; date +\"%H:%M:%S\"; python3 - <<'PY'\np='docs/format-flux.md'; s=open(p).read()\ndef rem(nom, v, n):\n    global s\n    c = s.count(v)\n    if c != 1:\n        print(f\"  ✗ {nom} : {c}\"); return False\n    s =  … [3639 caractères tronqués]`

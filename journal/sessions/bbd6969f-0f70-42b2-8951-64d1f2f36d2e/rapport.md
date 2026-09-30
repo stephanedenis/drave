@@ -7,12 +7,12 @@
 | Début | 2026-09-28 14:46 |
 | Durée | 48.7 h |
 | Tours | 46 |
-| Messages | 1881 |
-| Appels d'outils | 1774 |
+| Messages | 1882 |
+| Appels d'outils | 1775 |
 | Fichiers touchés | 44 |
-| Commandes | 1447 |
+| Commandes | 1448 |
 | Sous-agents | 9 |
-| Commits | 145 |
+| Commits | 146 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -2117,7 +2117,7 @@ L'**audit des drapeaux** a trouvé que **46 options sur 110** étaient ignorées
 
 ### Tour 46 — continue jusqu'à 18h HAE
 
-*36 appels d'outils.* Actions notables :
+*37 appels d'outils.* Actions notables :
 
 - bash — Check time, timezone and remaining budget
 - create_goal
@@ -2133,7 +2133,7 @@ L'**audit des drapeaux** a trouvé que **46 options sur 110** étaient ignorées
 - bash — Improve notebook with real text cell
 - bash — Kill test node safely and check notebook
 - bash — Add notebook real-text cell and commit
-- … et 22 autres
+- … et 23 autres
 
 **Synthèse produite :**
 
@@ -2244,7 +2244,7 @@ L'**audit des drapeaux** a trouvé que **46 options sur 110** étaient ignorées
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 1407 autres
+- … et 1408 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2537,4 +2537,5 @@ L'**audit des drapeaux** a trouvé que **46 options sur 110** étaient ignorées
 - Colab clé en main : le nœud local, les trois tunnels, et un texte réel dans le notebook  \`tools/colab_cote_local.sh\` vérifie le binaire et le modèle, affiche 
 - Plan du noyau GPU de top-k (phase 1.1), chiffré, et la perplexité attendue du notebook  \`docs/plan-gpu-topk.md\` : pourquoi le top-k retombe sur le CPU (le che
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && (cd drave-core && cargo test --release 2>&1 | grep -E "^test .*FAILED|assertion" | head -3); python3 - <<'
+- Documents : protocole v5 et mode 4 (lot en listes)  format-flux décrit le mode 4 (chaque état auto-délimité par ses trois tailles) et son coût mesuré ; la feuil
 
