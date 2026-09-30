@@ -7,12 +7,12 @@
 | Début | 2026-09-28 14:46 |
 | Durée | 29.4 h |
 | Tours | 12 |
-| Messages | 1152 |
-| Appels d'outils | 1137 |
+| Messages | 1156 |
+| Appels d'outils | 1141 |
 | Fichiers touchés | 38 |
-| Commandes | 871 |
+| Commandes | 875 |
 | Sous-agents | 1 |
-| Commits | 44 |
+| Commits | 45 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -543,7 +543,7 @@ Bilan des six chantiers : **1, 2 (cinq sous-items), 3, 6 terminés** ; **4** en 
 
 ### Tour 12 — <goal_round> Objective: "Réaliser les 6 nouveaux chantiers du projet qtrinet-core, dans l'ordre : (1) relancer le test d … [1771 caractères tronqués]
 
-*15 appels d'outils.* Actions notables :
+*19 appels d'outils.* Actions notables :
 
 - bash — Check rotation and helper APIs
 - bash — Read Meta enum accessors
@@ -559,7 +559,7 @@ Bilan des six chantiers : **1, 2 (cinq sous-items), 3, 6 terminés** ; **4** en 
 - bash — Verify loader edits applied
 - bash — Re-run MLA bench after rebuild
 - bash — Fix dims order and compare again
-- … et 1 autres
+- … et 5 autres
 
 **Synthèse produite :**
 
@@ -656,7 +656,7 @@ Bilan des six chantiers : **1, 2 (cinq sous-items), 3, 6 terminés** ; **4** en 
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 831 autres
+- … et 835 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -784,7 +784,7 @@ Bilan des six chantiers : **1, 2 (cinq sous-items), 3, 6 terminés** ; **4** en 
 
 ## 5. Erreurs rencontrées
 
-53 sorties en erreur ou divergentes. Les premières :
+54 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : a8f2635f8 docs: record which models this box is good at, and why src/llama-hparams.cpp:8:void llama_hparams::set_swa_pattern(uint32_t n_pattern, bool dense_first) { src/llama-hparams.h:308:    void se
 - **T1** : 511 tokens notés — perplexité cumulée 247.031  (4.9 tok/s) === perplexité 247.0308 sur 511 tokens (0 événements, 104.5 s) ===  ### B3 harmony assistant 511 --- ref --- 0.0 0.0 0:00 ls: cannot access '
@@ -848,4 +848,5 @@ Bilan des six chantiers : **1, 2 (cinq sous-items), 3, 6 terminés** ; **4** en 
 - journal : archive automatique" 2>/dev/null; git log --oneline -3 | cat
 - cat /tmp/rotation_16k.log; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p='docs/plan-mla-vision.md'; s=open(p).read() old = "### Valid
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p='docs/plan-mla-vision.md'; s=open(p).read() old = """### État du harnais : FAIT""" new 
+- vision : relevé du projecteur mmproj (paramètres et nommage réels)  Le fichier est en architecture \`clip\` et contient la tour COMPLÈTE (519 tenseurs, \`v.blk.
 

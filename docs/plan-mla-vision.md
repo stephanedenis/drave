@@ -121,6 +121,32 @@ implémentation déjà validée par les portes de non-régression.
 projecteur) et `Qwen2.5-VL-7B-Instruct-Q4_K_M.gguf` (le modèle). Rien ne lit les
 patchs.
 
+### Ce que dit le fichier (relevé, plus deviné)
+
+Le projecteur `mmproj-Qwen2.5-VL-7B-Instruct-f16.gguf` est en architecture
+`clip` et déclare, relevé dans son en-tête :
+
+| clé | valeur | sens |
+|---|---|---|
+| `clip.vision.image_size` | 560 | taille d'entrée du ViT |
+| `clip.vision.patch_size` | 14 | 40 × 40 patchs |
+| `clip.vision.embedding_length` | 1 280 | largeur du ViT |
+| `clip.vision.block_count` | 32 | profondeur |
+| `clip.vision.attention.head_count` | 16 | 80 par tête |
+| `clip.vision.feed_forward_length` | 3 420 | MLP |
+| `clip.vision.n_wa_pattern` | 8 | **une couche sur 8 en attention locale** |
+| `clip.projector_type` | `qwen2.5vl_merger` | fusion 2 × 2 des patchs + MLP |
+| `clip.vision.projection_dim` | 3 584 | dimension de sortie (celle du modèle) |
+| `clip.vision.image_mean` / `image_std` | 0,4815/0,4579/0,4084 · 0,2686/0,2613/0,2758 | normalisation |
+
+Les tenseurs sont nommés `v.blk.N.*` (`v.blk.0.attn_out.bias` est le premier
+relevé), et le fichier en contient 519. C'est donc bien la tour complète, pas
+seulement le projecteur : le chemin image peut se construire sur ce fichier seul.
+
+`n_wa_pattern = 8` confirme le point délicat annoncé : **toutes les 8 couches,
+l'attention est locale** — il faut la même fenêtre que llama.cpp, sinon les
+embeddings d'image divergent sans que rien ne le signale.
+
 ### Ce qu'il faut écrire, dans l'ordre
 
 1. **pré-traitement** : redimensionnement (le ViT de Qwen2.5-VL accepte des

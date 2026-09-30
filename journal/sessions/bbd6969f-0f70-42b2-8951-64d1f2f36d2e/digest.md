@@ -18399,3 +18399,58 @@ eng[0,:4] : [0.1797251  1.1594771  0.7848169  0.09325276]
 ⏵ MLA validé : le moteur retrouve la référence numpy à 5,2e-7 près
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='docs/plan-mla-vision.md'; s=open(p).read()\nold = \"\"\"### État du harnais : FAIT\"\"\"\nnew = \"\"\"### ÉTAT : MLA EST FAIT ET VALIDÉ\n\nLe moteur charge un modèle MLA (`attn_kv_a_mqa` reconnu à ses tenseurs, s … [3213 caractères tronqués]`
+
+  ```
+docs MLA à jour
+d5ee7a0 MLA : le moteur retrouve la référence numpy à 5,2e-7 près
+  ```
+
+- **bash** `{"command": "cat /tmp/rotation_16k.log; ps -o etime,time -p $(pgrep -x qtrinet-core | head -1) 2>/dev/null | tail -1", "description": "Check 16k rotation status"}`
+
+  ```
+ctx 16384 simple  : perplexité 35.1837 sur 512 tokens (0 événements, 2366.6 s)
+ctx 16384 interp  :       00:22 00:00:21
+  ```
+
+- **bash** `{"command": "cd /tmp && timeout 300 python3 gguf_tensors.py /home/stephane/FastNVMe/models/mmproj-Qwen2.5-VL-7B-Instruct-f16.gguf 2>&1 | head -25", "description": "Inspect mmproj tensors for vision plan", "timeoutMs": 300000}`
+
+  ```
+arch = clip
+Traceback (most recent call last):
+  File "/tmp/gguf_tensors.py", line 22, in <module>
+    name=rstr(); nd,=r('<I'); dims=r('<Q'*nd); tt,=r('<I'); off,=r('<Q')
+                                   ~^^^^^^^^^
+  File "/tmp/gguf_tensors.py", line 4, in r
+    n=struct.calcsize(fmt); return struct.unpack(fmt, f.read(n))
+struct.error: bad char in struct format
+  ```
+
+- **bash** `{"command": "cd /tmp && timeout 300 python3 - <<'PY'\nimport struct\ndef dump(chemin, filtre=None, maxi=30):\n    f=open(chemin,'rb')\n    def r(fmt):\n        n=struct.calcsize(fmt); return struct.unpack(fmt, f.read(n))\n    assert f.read(4)==b'GGUF'\n    ver,=r('<I'); nt,=r('<Q'); nkv,=r('<Q')\n   … [1207 caractères tronqués]`
+
+  ```
+clip.vision.projection_dim = b'\x00\x0e\x00\x00'
+  clip.has_vision_encoder = b'\x01'
+  clip.vision.image_size = b'0\x02\x00\x00'
+  clip.vision.patch_size = b'\x0e\x00\x00\x00'
+  clip.vision.embedding_length = b'\x00\x05\x00\x00'
+  clip.vision.feed_forward_length = b'\\\r\x00\x00'
+  clip.vision.block_count = b' \x00\x00\x00'
+  clip.vision.attention.head_count = b'\x10\x00\x00\x00'
+  clip.vision.image_mean = [b':\x81\xf6>', b'^h\xea>', b'\xff\x00\xd1>']
+  clip.vision.image_std = [b'\xd0\x89\x89>', b't\xc9\x85>', b'\xa82\x8d>']
+  clip.projector_type = qwen2.5vl_merger
+  clip.use_silu = b'\x01'
+  clip.vision.n_wa_pattern = b'\x08\x00\x00\x00'
+  clip.vision.attention.layer_norm_epsilon = b'\xbd7\x865'
+=== mmproj-Qwen2.5-VL-7B-Instruct-f16.gguf : arch=clip tenseurs=519
+  F32   v.blk.0.attn_out.bias                  (1280,)
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 32, in <module>
+  File "<stdin>", line 26, in dump
+  File "<stdin>", line 5, in r
+struct.error: bad char in struct format
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='docs/plan-mla-vision.md'; s=open(p).read()\nold = \"\"\"### Ce qu'il faut écrire, dans l'ordre\"\"\"\nnew = \"\"\"### Ce que dit le fichier (relevé, plus deviné)\n\nLe projecteur `mmproj-Qwen2.5-VL-7B-Instruct-f1 … [2156 caractères tronqués]`
