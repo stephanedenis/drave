@@ -21,7 +21,7 @@ notebook prêt à ouvrir, avec la vérification d'empreinte et la lecture du ré
 |---|---|
 | fidélité du découpage | ✅ écart **0,00e0** entre local et deux nœuds (40 et 200 jetons) |
 | version du protocole | ✅ dans chaque en-tête ; un pair incompatible est refusé en le disant |
-| réglages qui changent les chiffres | ✅ niveaux, seuil, top-k, renorm voyagent dans l'en-tête |
+| réglages qui changent les chiffres | ✅ niveaux, seuil, top-k, renorm, les sept top-k par projection, attn/qk/moe top-k (14 champs) voyagent dans l'en-tête |
 | latence | ✅ `TCP_NODELAY` : 16,1 ms d'attente contre 15,9 ms de calcul local (97,6 ms avant) |
 | au-delà de localhost | ✅ testé sur l'IP du réseau local (`--flux-serveur 0.0.0.0:PORT`) |
 | **deux machines avec le même fichier GGUF** | ❌ les deux nœuds chargent le modèle ENTIER (`Model::load` lit tout le fichier) — le découpage porte sur le CALCUL |

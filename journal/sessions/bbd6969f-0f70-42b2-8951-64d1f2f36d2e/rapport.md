@@ -7,12 +7,12 @@
 | Début | 2026-09-28 14:46 |
 | Durée | 49.3 h |
 | Tours | 46 |
-| Messages | 1921 |
-| Appels d'outils | 1812 |
+| Messages | 1923 |
+| Appels d'outils | 1814 |
 | Fichiers touchés | 44 |
-| Commandes | 1484 |
+| Commandes | 1486 |
 | Sous-agents | 10 |
-| Commits | 157 |
+| Commits | 158 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -2117,7 +2117,7 @@ L'**audit des drapeaux** a trouvé que **46 options sur 110** étaient ignorées
 
 ### Tour 46 — continue jusqu'à 18h HAE
 
-*74 appels d'outils.* Actions notables :
+*76 appels d'outils.* Actions notables :
 
 - bash — Check time, timezone and remaining budget
 - create_goal
@@ -2133,7 +2133,7 @@ L'**audit des drapeaux** a trouvé que **46 options sur 110** étaient ignorées
 - bash — Improve notebook with real text cell
 - bash — Kill test node safely and check notebook
 - bash — Add notebook real-text cell and commit
-- … et 60 autres
+- … et 62 autres
 
 **Synthèse produite :**
 
@@ -2245,7 +2245,7 @@ La session qui mourait revit (liste vide acceptée) et le mode 4 est intact. Je 
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 1444 autres
+- … et 1446 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2550,4 +2550,5 @@ La session qui mourait revit (liste vide acceptée) et le mode 4 est intact. Je 
 - --options-strict : un drapeau inconnu devient une erreur, pour les scripts  La dernière recommandation de l'audit des drapeaux : un avertissement suffit quand o
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-mode4-lot-listes.md <<'EOF' # Mode 4 — le lot en listes : ÷2,3 sur les octets, et ce
 - Documents : dernières mentions de la version 4 remplacées par la 5 (mode lot en listes)" && git log --oneline -1 | cat; date +"%H:%M:%S"
+- Colab : les quatorze champs du contrat d'activation, pas quatre  Et portes finales après la version 5 : 17 tests, Qwen 19,3885, réparti dense 0,00e0, lot dense 
 

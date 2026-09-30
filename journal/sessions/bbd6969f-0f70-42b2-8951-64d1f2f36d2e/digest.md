@@ -31009,3 +31009,28 @@ docs/roadmap.md:96:d'échange réseau est en **version 4** (79 octets d'en-tête
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\ndef rem(p, paires):\n    s = open(p).read(); ok = 0\n    for v, n in paires:\n        if s.count(v) >= 1: s = s.replace(v, n); ok += 1\n        else: print(f\"  ⚠ absent de {p} : {v[:60]}…\")\n    open(p,'w').write( … [1092 caractères tronqués]`
+
+  ```
+docs/roadmap.md : 1/1
+REPRISE.md : 1/1
+reports/rapport-drapeaux-ignores.md : 1/1
+d36f93e Documents : dernières mentions de la version 4 remplacées par la 5 (mode lot en listes)
+16:04:18
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== portes finales (après version 5 et tous les correctifs) ===\" && (cd drave-core && timeout 300 cargo test --release 2>&1 | grep -E \"^test result\") && ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf --ppl  … [1268 caractères tronqués]`
+
+  ```
+=== portes finales (après version 5 et tous les correctifs) ===
+test result: ok. 17 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.13s
+perplexité 19.3885 sur 510 tokens
+=== réparti dense et lots (0,00e0 attendu) ===
+  écart             : 0.00e0
+  écart             : 0.00e0
+  écart             : 1.11e-1
+  transport         : lot en LISTES · lots de 8 jetons au plus · 12347 octets par lot (aller) · 1.5 ko par jeton · 5 lots pour 40 jetons
+  colab-reparti : champs complétés (niveaux, seuil, top-k, renorm)
+16:06:16
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A docs && git commit -q -m \"Colab : les quatorze champs du contrat d'activation, pas quatre\n\nEt portes finales après la version 5 : 17 tests, Qwen 19,3885, réparti dense\n0,00e0, lot dense 0,00e0, lot en listes 1,11e-1 à  … [265 caractères tronqués]`
