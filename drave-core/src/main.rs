@@ -62,14 +62,19 @@ elles s'appellent maintenant DRAVE_* (voir docs/histoire.md). Rien n'a été app
     // threads sur 40 CPU).
     let cpu = std::thread::available_parallelism().map(|n| n.get()).unwrap_or(8);
     let mut n_threads = (cpu * 3 / 4).max(1);
+    // Pas de 2 SEULEMENT devant un drapeau qui prend une valeur : un pas de 2
+    // aveugle sautait `--threads 4` dès qu'un drapeau booléen le précédait
+    // (`--dense --threads 4` annonçait 30 fils). C'est exactement le bug corrigé
+    // dans `analyser` — il en restait une copie ici.
     let mut i = 2;
     while i < args.len() {
         match args[i].as_str() {
-            "--matrix" => matrix = args[i + 1].clone(),
-            "--threads" => n_threads = args[i + 1].parse().unwrap(),
-            _ => {}
+            "--matrix" if i + 1 < args.len() => { matrix = args[i + 1].clone(); i += 2; }
+            "--threads" if i + 1 < args.len() => {
+                n_threads = args[i + 1].parse().unwrap_or(n_threads); i += 2;
+            }
+            _ => i += 1,
         }
-        i += 2;
     }
 
     let t0 = Instant::now();
@@ -317,6 +322,17 @@ elles s'appellent maintenant DRAVE_* (voir docs/histoire.md). Rien n'a été app
 static MODELE: std::sync::OnceLock<String> = std::sync::OnceLock::new();
 fn modele_chemin() -> String { MODELE.get().cloned().unwrap_or_default() }
 
+/// Fils de calcul d'un mode SECONDAIRE : `--threads` s'il est donné, sinon la
+/// moitié des cœurs. Ces modes étaient figés à 16 fils, ce qui ignorait
+/// `--threads` en silence (relevé par `reports/rapport-drapeaux-ignores.md`).
+fn fils(opt: &Options) -> usize {
+    if opt.threads_impose { opt.threads.max(1) }
+    else {
+        let cpu = std::thread::available_parallelism().map(|n| n.get()).unwrap_or(8);
+        (cpu / 2).max(1)
+    }
+}
+
 /// **Toutes** les options de la ligne de commande, dans une seule structure.
 ///
 /// Les modes (inférence, perplexité, plan, tokenize) la remplissent par la MÊME
@@ -538,7 +554,7 @@ fn run_infer(opt: Options) {
         ctx_impose, threads_impose, abits_impose, dense, auto, q4, b6,
         keep, attn_window, swa_pattern, sans_fenetre, attn_sinks, attn_topk, qk_topk,
         act_thresh, act_topk, act_renorm, topk_proj, moe_topk, patch: patch_file,
-        hebb_layer, hebb_q, hebb_out, sans_yarn, lot, ..
+        hebb_layer, hebb_q, hebb_out, sans_yarn, lot, ffn_gain, ..
     } = opt;
     let path = &modele_chemin();
     // Défauts du mode INFÉRENCE : 512 jetons, la moitié des cœurs (l'attente
@@ -559,6 +575,12 @@ fn run_infer(opt: Options) {
     if attn_window > 0 { mdl.attn_window = attn_window; }
     if let Some(p) = swa_pattern { mdl.swa_pattern = p; }
     if attn_sinks > 0 { mdl.attn_sinks = attn_sinks; }
+    // `--ffn-gain` était appliqué en perplexité et JAMAIS déstructuré ici : la
+    // sortie était rigoureusement identique avec et sans le drapeau.
+    if let Some((l, g)) = ffn_gain {
+        mdl.ffn_gain = Some((l, g));
+        println!("gain FFN : couche {l} × {g}");
+    }
     // Appliqués en perplexité depuis toujours, oubliés ici : la déstructuration
     // unique les rend visibles (le compilateur signale tout champ non lu).
     mdl.attn_topk = attn_topk;
@@ -1572,7 +1594,7 @@ fn run_serveur_flux(opt: Options, adresse: &str) {
     // pair des tampons d'attention seize fois plus grands que le banc (mesuré :
     // 4,8 s contre 1,7 s pour le même calcul, à contexte 256).
     let ctx = if opt.ctx_impose { opt.ctx } else { 4096 };
-    let mut mdl = model::Model::load(&chemin, ctx, 16, true, 1.0, false, 0, 0);
+    let mut mdl = model::Model::load(&chemin, ctx, fils(&opt), true, opt.keep, false, 0, 0);
     appliquer_quantification(&mut mdl, &opt);
     let hidden = mdl.cfg.hidden;
     let ecoute = std::net::TcpListener::bind((hote.as_str(), port)).expect("écoute");
@@ -1672,7 +1694,7 @@ fn run_ppl_reparti(opt: Options, pair: &str) {
     // alors calculée avec le MÊME découpage — sinon l'écart mesurerait la
     // différence entre deux ordres de sommation, pas celle du découpage.
     let lot = opt.lot.max(1);
-    let mut mdl = model::Model::load(&chemin, ctx, 16, true, 1.0, false, 0, 0);
+    let mut mdl = model::Model::load(&chemin, ctx, fils(&opt), true, opt.keep, false, 0, 0);
     appliquer_quantification(&mut mdl, &opt);
     let mode = if opt.flux_blocs { MODE_BLOCS }
                else if opt.flux_liste { MODE_LISTE }
@@ -1832,7 +1854,7 @@ fn run_ppl_reparti(opt: Options, pair: &str) {
 fn run_banc_mla(opt: Options, sortie: &str) {
     use std::io::Write;
     let path = &modele_chemin();
-    let mut mdl = model::Model::load(path, 4096, 16, opt.dense, 1.0, false, 0, 0);
+    let mut mdl = model::Model::load(path, 4096, fils(&opt), opt.dense, opt.keep, false, 0, 0);
     if mdl.mla.is_none() {
         println!("pas un modèle MLA (attn_kv_a_mqa absent)");
         return;
@@ -2441,9 +2463,11 @@ fn run_plan(opt: Options) {
     // 1 M, c'est ce trafic qui décide de tout — d'où ce chiffrage, séparé en
     // f32 / int8 / int4 et tenant compte des couches à fenêtre glissante, qui
     // n'ont jamais besoin de plus de `fenetre` entrées.
-    let ctx_demande = if opt.ctx > 0 {
+    let ctx_demande = if opt.ctx_impose && opt.ctx > 0 {
         opt.ctx
     } else {
+        // Sans `--ctx`, on chiffre le contexte DÉCLARÉ par le modèle : le défaut
+        // 512 du mode masquait les 32 768 de Qwen (relevé par l'audit).
         g.cfg("context_length").and_then(|m| m.as_u64()).unwrap_or(4096) as usize
     };
     let n_kv = g.cfg("attention.head_count_kv").and_then(|m| m.as_u64()).unwrap_or(0) as usize;
@@ -2665,7 +2689,8 @@ fn run_ppl(opt: Options) {
         ctx_impose, threads_impose, abits_impose,
         dense, auto, q4, b6, attn_window, swa_pattern,
         sans_fenetre, attn_sinks, attn_topk, qk_topk, act_thresh, act_topk, act_renorm,
-        topk_proj, moe_topk, patch: patch_file, hebb_layer, ffn_gain, logits_bin,
+        topk_proj, moe_topk, patch: patch_file, hebb_layer, hebb_q, hebb_out,
+        ffn_gain, logits_bin, keep,
         ppl_profil, lot, profil_neurones, neurones_sortie, trace_flux, trace_couches, flux_forcer,
         harmony, harmony_contexte, sans_yarn, ..
     } = opt;
@@ -2704,7 +2729,7 @@ fn run_ppl(opt: Options) {
         println!("{idfile} : {} tokens, fenêtres de {ctx}", ids.len());
     }
 
-    let mut mdl = model::Model::load(path, ctx, n_threads, dense, 1.0, auto, q4, b6);
+    let mut mdl = model::Model::load(path, ctx, n_threads, dense, keep, auto, q4, b6);
     if let Some(chemin) = flux_forcer.as_deref() {
         match model::FluxRelecteur::lire(chemin) {
             Ok(r) => {
@@ -2756,8 +2781,10 @@ fn run_ppl(opt: Options) {
     mdl.attn_topk = attn_topk;
     mdl.qk_topk = qk_topk;
     if sans_yarn { mdl.cfg_yarn_off(); }
-    if attn_window > 0 { mdl.attn_window = attn_window; }
+    // MÊME précédence qu'en inférence (sans-fenetre d'abord, puis la fenêtre
+    // explicite) : l'ordre était inversé entre les deux modes.
     if sans_fenetre { mdl.attn_window = 0; }
+    if attn_window > 0 { mdl.attn_window = attn_window; }
     if let Some(p) = swa_pattern { mdl.swa_pattern = p; }
     if sans_fenetre || swa_pattern.is_some() {
         println!("fenêtre : {} · motif {} (imposé par la ligne de commande)",
@@ -2771,7 +2798,7 @@ fn run_ppl(opt: Options) {
                  if act_topk > 0 { format!(", k-WTA k={act_topk}") } else { String::new() });
     }
     if let Some(l) = hebb_layer {
-        let mut hb = model::Hebb::new(l, mdl.cfg.ffn, mdl.cfg.hidden, 0.1);
+        let mut hb = model::Hebb::new(l, mdl.cfg.ffn, mdl.cfg.hidden, hebb_q);
         hb.log_on = true;
         mdl.hebb = Some(hb);
         println!("journalisation : couche {l}, entrée FFN ({} dim)", mdl.cfg.hidden);
@@ -2952,9 +2979,9 @@ fn run_ppl(opt: Options) {
     if let Some(hb) = mdl.hebb.as_ref() {
         if hb.log_on {
             use std::io::Write;
-            let mut fa = std::fs::File::create("/tmp/act_log.bin").unwrap();
+            let mut fa = std::fs::File::create(&hebb_out).unwrap();
             for v in &hb.log { fa.write_all(&v.to_le_bytes()).unwrap(); }
-            let mut fl = std::fs::File::create("/tmp/loss_log.bin").unwrap();
+            let mut fl = std::fs::File::create(format!("{hebb_out}.perte")).unwrap();
             for v in &perte { fl.write_all(&v.to_le_bytes()).unwrap(); }
             println!("journal : {} vecteurs de {} dim, {} pertes (act_log.bin, loss_log.bin)",
                      hb.log.len() / cfg_dims(&mdl), cfg_dims(&mdl), perte.len());

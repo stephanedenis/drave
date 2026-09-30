@@ -26087,3 +26087,190 @@ cles_f32_valeurs_int4      : 12:02:25
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='docs/format-flux.md'; s=open(p).read()\n\nv = \"\"\"## Transport (phase 3, TCP) — protocole v2\"\"\"\nn = \"\"\"## Transport (phase 3, TCP) — protocole v3\"\"\"\nassert s.count(v) == 1\ns = s.replace(v, n)\n\nv = … [5923 caractères tronqués]`
+
+  ```
+format-flux : v3 + mode lot
+roadmap 3.4
+cda3162 Phase 3.4 : préremplissage par LOTS sur le fil — écart 0,00e0
+  ```
+
+### 🤖 Assistant
+
+Audit en main : je corrige les no-ops silencieux les moins chers d'abord (ceux qui ne changent rien sans le dire).
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"keep\\|ffn-gain\\|threads\\|hebb-q\\|hebb-out\\|i += 2\\|plan\" reports/rapport-drapeaux-ignores.md | head -40", "description": "Extract cheap fixes from audit report"}`
+
+  ```
+8:`--infer`, `--ppl`, `--plan`, boucle d'analyse.
+15:**Convention de lecture.** I = `--infer` · P = `--ppl`/`--ppl-texte` · PL = `--plan` ·
+32:| `--infer` `--ppl` `--ppl-texte` `--plan` `--tokenize` `--gpu-banc` `--banc-kv` `--banc-mla` `--tensors` `--banc-vision` `--flux-serveur` `--ppl-reparti` | Aiguillage main.rs:47-57 | Si plusieurs sont donnés, **le premier de l'ordre d'aiguillage gagne en silence** (`--ppl f --tensors` fait `--tensors`) | 🟡 |
+33:| `--banc-vision` (le mode) | main.rs:47 appelle `run_banc_vision(&f)` dont la signature est `fn run_banc_vision(sortie: &str)` (main.rs:857) | **Aucune `Options` n'entre dans ce mode** : `--threads`, `--ctx`, `--dense`, `--limit`, `--abits`, `--patch`… y sont tous ignorés. Seuls le chemin du modèle et `DRAVE_VISION_TEXTE` (main.rs:1170) agissent | 🟠 |
+46:| `--keep` | I seulement : `Model::load(…, keep, …)` (550) | **P : `Model::load(…, 1.0, …)` en dur (2707)** · FS (1575) · PR (1675) · BM (1835) · BV (1172). Vérifié empiriquement (§7.1) | 🔴 |
+50:| `--threads` | I (548) · P (2678) · BK (1937) · GB (2047) | **FS (1575), PR (1675), BM (1835), BV (1172) : `16` en dur** · **D : avalé par la boucle `i += 2`** (main.rs:65-73, §7.4) | 🟠 |
+8
+… [2533 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/main.rs", "limit": 45, "offset": 42}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/main.rs</path>
+<type>file</type>
+<content>
+42:         eprintln!("[attention] {vieux} est l'ancien nom d'une variable d'environnement : \
+43: elles s'appellent maintenant DRAVE_* (voir docs/histoire.md). Rien n'a été appliqué.");
+44:     }
+45:     let opt = analyser(&args);
+46:     let _ = MODELE.set(args[1].clone());
+47:     if let Some(f) = opt.banc_vision.clone() { run_banc_vision(&f); return; }
+48:     if let Some(adresse) = opt.flux_serveur.clone() { run_serveur_flux(opt, &adresse); return; }
+49:     if let Some(pair) = opt.ppl_reparti.clone() { run_ppl_reparti(opt, &pair); return; }
+50:     if opt.tensors { run_tensors(); return; }
+51:     if let Some(f) = opt.banc_mla.clone() { run_banc_mla(opt, &f); return; }
+52:     if opt.banc_kv > 0 { run_banc_kv(opt); return; }
+53:     if opt.gpu_banc { run_gpu_banc(opt); return; }
+54:     if opt.plan { run_plan(opt); return; }
+55:     if opt.tokenize { run_tokenize(opt); return; }
+56:     if opt.ppl { run_ppl(opt); return; }
+57:     if opt.infer { run_infer(opt); return; }
+58:     let path = &args[1];
+59:     let mut matrix = "blk.0.ffn_gate.weight".to_string();
+60:  
+… [1561 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for l in 550 558 2707 2759 2774 2955; do echo \"=== $l ===\"; sed -n \"$((l-4)),$((l+4))p\" drave-core/src/main.rs; done; echo \"=== keep dans les autres modes ===\"; grep -n \"Model::load(\" drave-core/src/main.rs", "description": " … [24 caractères tronqués]`
+
+  ```
+=== 550 ===
+    let cpu = std::thread::available_parallelism().map(|n| n.get()).unwrap_or(8);
+    let ctx = if ctx_impose { ctx_opt } else { 512 };
+    let n_threads = if threads_impose { threads_opt } else { (cpu / 2).max(1) };
+    let abits = if abits_impose { abits_opt } else { 8 };
+    let mut mdl = model::Model::load(path, ctx, n_threads, dense, keep, auto, q4, b6);
+    mdl.act_levels = ((1u32 << (abits - 1)) - 1) as f32;
+    mdl.moe_topk = moe_topk;
+    mdl.act_thresh = act_thresh;
+    mdl.act_topk = act_topk;
+=== 558 ===
+    mdl.act_topk = act_topk;
+    mdl.lot = lot.max(1);
+    mdl.act_renorm = act_renorm;
+    mdl.act_topk_proj = topk_proj;
+    if sans_fenetre { mdl.attn_window = 0; }
+    if attn_window > 0 { mdl.attn_window = attn_window; }
+    if let Some(p) = swa_pattern { mdl.swa_pattern = p; }
+    if attn_sinks > 0 { mdl.attn_sinks = attn_sinks; }
+    // Appliqués en perplexité depuis toujours, oubliés ici : la déstructuration
+=== 2707 ===
+    if !idfile.is_empty() {
+        println!("{idfile} : {} tokens, fenêtres de {ctx}", ids.len());
+    }
+
+    let mut mdl = model::Model::load(path, ctx, n_threads, dense, 1.0, auto, q4, b6);
+    if let Some(chemin) = flux_forcer.as
+… [2136 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== plan ctx ===\"; sed -n 2440,2452p drave-core/src/main.rs; echo \"=== ffn_gain en ppl ===\"; grep -n \"ffn_gain\" drave-core/src/main.rs | head; echo \"=== destructuring infer ===\"; sed -n 528,545p drave-core/src/main.rs;  … [211 caractères tronqués]`
+
+  ```
+=== plan ctx ===
+    // LINÉAIREMENT avec la longueur et se relit EN ENTIER à chaque jeton. À
+    // 1 M, c'est ce trafic qui décide de tout — d'où ce chiffrage, séparé en
+    // f32 / int8 / int4 et tenant compte des couches à fenêtre glissante, qui
+    // n'ont jamais besoin de plus de `fenetre` entrées.
+    let ctx_demande = if opt.ctx > 0 {
+        opt.ctx
+    } else {
+        g.cfg("context_length").and_then(|m| m.as_u64()).unwrap_or(4096) as usize
+    };
+    let n_kv = g.cfg("attention.head_count_kv").and_then(|m| m.as_u64()).unwrap_or(0) as usize;
+    let head_dim = {
+        let d = g.cfg("attention.key_length").and_then(|m| m.as_u64()).unwrap_or(0) as usize;
+        if d > 0 { d } else {
+=== ffn_gain en ppl ===
+389:    hebb_out: String, ffn_gain: Option<(usize, f32)>, matrix: String,
+484:                o.ffn_gain = Some((v[0].parse().unwrap(), v[1].parse().unwrap())); 2
+2668:        topk_proj, moe_topk, patch: patch_file, hebb_layer, ffn_gain, logits_bin,
+2748:    if let Some((l, g)) = ffn_gain {
+2750:        mdl.ffn_gain = Some((l, g));
+=== destructuring infer ===
+                 c.octets_envoyes as f64 / 1e9, c.octets as f64 / 1e9);
+    }
+}
+
+fn run_infer(opt: Options) 
+… [2810 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n 2650,2680p drave-core/src/main.rs", "description": "Read run_ppl destructuring"}`
+
+  ```
+// d'ordre ne se voit nulle part ailleurs).
+    if std::env::var("DRAVE_HARMONY_TRACE").is_ok() {
+        for (i, (w, m)) in fenetres.iter().enumerate() {
+            let apercu: String = tk.decode(w).chars().take(110).collect();
+            eprintln!("[harmony] fenêtre {} : {} jetons, {} notés · |{}|",
+                      i + 1, w.len(), m.iter().filter(|&&b| b).count(), apercu);
+        }
+    }
+    fenetres
+}
+
+fn run_ppl(opt: Options) {
+    let Options {
+        ids_file: idfile, texte_file, ppl_texte: _, limit, depuis,
+        ctx: ctx_opt, threads: threads_opt, abits: abits_opt,
+        ctx_impose, threads_impose, abits_impose,
+        dense, auto, q4, b6, attn_window, swa_pattern,
+        sans_fenetre, attn_sinks, attn_topk, qk_topk, act_thresh, act_topk, act_renorm,
+        topk_proj, moe_topk, patch: patch_file, hebb_layer, ffn_gain, logits_bin,
+        ppl_profil, lot, profil_neurones, neurones_sortie, trace_flux, trace_couches, flux_forcer,
+        harmony, harmony_contexte, sans_yarn, ..
+    } = opt;
+    let lot = lot.max(1);
+    let path = &modele_chemin();
+    // Défauts du mode PERPLEXITÉ : 256 jetons, trois quarts des cœurs, 16 bits
+    // d'activation (la référence
+… [355 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/main.rs'; s=open(p).read()\nn_mod = 0\n\n# 1. boucle d'arguments du mode par défaut : pas de 2 aveugle (le bug d'analyser, recopié)\nv = \"\"\"    let mut i = 2;\n    while i < args.len() {\n       … [7642 caractères tronqués]`
+
+  ```
+13 corrections de plomberie appliquées
+    Finished `release` profile [optimized] target(s) in 0.01s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && D=./drave-core/target/release/drave; M=models/Qwen2.5-0.5B-Q8_0.gguf; echo \"=== 1. --keep 0,05 en --ppl (doit CHANGER) ===\"; $D $M --ppl-texte data/wikitext2_test.txt --limit 4 --ctx 64 --threads 4 2>&1 | grep -oE \"perplexité [0-9 … [785 caractères tronqués]`
+
+  ```
+=== 1. --keep 0,05 en --ppl (doit CHANGER) ===
+perplexité 1929.3230
+perplexité 6980830.0388
+=== 2. --ffn-gain 0:4 en --infer (doit CHANGER) ===
+[config] cache KV : 32 bits, 0.00 Go pour 64 jetons
+[config] cache KV : 32 bits, 0.00 Go pour 64 jetons
+gain FFN : couche 0 × 4
+=== 3. mode par défaut : --dense --threads 4 (doit dire 4) ===
+threads : 4
+=== 4. --plan sans --ctx (doit dire 32 768) ===
+12:04:30
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && D=./drave-core/target/release/drave; M=models/Qwen2.5-0.5B-Q8_0.gguf; echo \"=== plan : contexte chiffré ===\"; $D $M --plan 2>&1 | grep -iE \"contexte|ctx\" | head -3; echo \"=== infer : jetons avec/sans ffn-gain ===\"; $D $M --infe … [291 caractères tronqués]`
+
+  ```
+=== plan : contexte chiffré ===
+=== contexte : 32768 jetons ===
+=== infer : jetons avec/sans ffn-gain ===
+événements : 13908687 au total, 1545409.7 par token
+postes (ms/token) : matvec-attn 5.2 | rope 0.7 | attention 0.1 | matvec+mlp 57.0 | total mesuré 63.0
+événements : 35547399 au total, 3949711.0 par token
+postes (ms/token) : matvec-attn 5.9 | rope 0.7 | attention 0.1 | matvec+mlp 67.8 | total mesuré 74.5
+=== couloir A ===
+cles_f32_valeurs_int4      : 12:04:50
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== porte Qwen (attendu 19,3885) ===\" && ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf --ppl /tmp/ids_qwen.txt --ctx 256 --abits 16 --threads 16 --limit 512 --dense 2>&1 | grep -E \"perplexité [0-9.]+ sur\"  … [1996 caractères tronqués]`

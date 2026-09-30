@@ -7,12 +7,12 @@
 | Début | 2026-09-28 14:46 |
 | Durée | 45.3 h |
 | Tours | 45 |
-| Messages | 1631 |
-| Appels d'outils | 1538 |
+| Messages | 1640 |
+| Appels d'outils | 1547 |
 | Fichiers touchés | 44 |
-| Commandes | 1224 |
+| Commandes | 1232 |
 | Sous-agents | 4 |
-| Commits | 103 |
+| Commits | 104 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -2055,7 +2055,7 @@ Je vérifie l'heure à chaque itération et j'arrête à 12:06, en laissant un p
 
 ### Tour 45 — as-tu ce qu'il te faut pour te rendre à 15h en travaillaint avec un maximum d'autonomie et de parallélisme d'activités?
 
-*39 appels d'outils.* Actions notables :
+*48 appels d'outils.* Actions notables :
 
 - bash — Probe machine, GPU, disk, network state
 - bash — Identify GPU users and stray processes
@@ -2071,11 +2071,11 @@ Je vérifie l'heure à chaque itération et j'arrête à 12:06, en laissant un p
 - bash — Understand batched PPL reference path
 - bash — Add batched imposed states to forward_lot
 - list_agents
-- … et 19 autres
+- … et 27 autres
 
 **Synthèse produite :**
 
-Les trois sous-agents ont livré (et l'un a trouvé mon bug d'en-tête). Le lot extrême — **un seul flux de 917 ko pour 256 jetons — donne aussi 0,00e0**. Je verrouille : portes, docs, commit.
+Audit en main : je corrige les no-ops silencieux les moins chers d'abord (ceux qui ne changent rien sans le dire).
 
 ## 3. Travail accompli
 
@@ -2177,7 +2177,7 @@ Les trois sous-agents ont livré (et l'un a trouvé mon bug d'en-tête). Le lot 
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 1184 autres
+- … et 1192 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2428,4 +2428,5 @@ Les trois sous-agents ont livré (et l'un a trouvé mon bug d'en-tête). Le lot 
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date +"%H:%M:%S" && python3 - <<'PY' p='REPRISE.md'; s=open(p).read() v = """`TCP_NODELAY` a divisé l'atte
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p='drave-core/src/main.rs'; s=open(p).read() v = """        // Le DERNIER jeton n'a rien 
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p='docs/format-flux.md'; s=open(p).read()  v = """## Transport (phase 3, TCP) — protocole
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo "=== porte Qwen (attendu 19,3885) ===" && ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.
 
