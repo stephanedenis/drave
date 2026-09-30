@@ -726,6 +726,13 @@ pub struct Model {
     /// ajout d'architecture que la vision demande au moteur — `forward` partait
     /// toujours de `token_embd`.
     pub emb_imposee: Option<Vec<f32>>,
+    /// États imposés pour un LOT entier (`forward_lot`) : `t × hidden`, aplati.
+    ///
+    /// C'est le pendant de `emb_imposee` pour le préremplissage réparti : un nœud
+    /// qui reçoit N états d'un coup — au lieu des N identifiants de jetons —
+    /// reprend le calcul à sa première couche sans repasser par les embeddings.
+    /// Sans ce champ, le transport devait payer un aller-retour PAR JETON.
+    pub emb_imposee_lot: Option<Vec<f32>>,
     /// Première et dernière couche PORTÉES par ce modèle (exclue). Un nœud
     /// distant ne charge que sa plage : c'est le découpage de la phase 3.
     pub couche_debut: usize,
@@ -1543,7 +1550,7 @@ impl Model {
             tete_gpu, tete_gpu_q6k, head4, sinks_vus, kv_gpu, attn_gpu_part: Vec::new(),
             couche_debut: 0, couche_fin: n_layer_total, flux_brut: false,
             cache_experts, mla, mla_cache, jeton_trace: 0, trace: None, flux_force: None,
-            emb_imposee: None, lot: 1,
+            emb_imposee: None, emb_imposee_lot: None, lot: 1,
             patch: None, ffn_gain: None, hebb: None,
         }
     }
@@ -2091,8 +2098,16 @@ impl Model {
     pub fn forward_lot(&mut self, toks: &[u32], pos0: usize) -> Vec<Vec<f32>> {
         let t = toks.len();
         if t == 0 { return Vec::new(); }
+        // Lot IMPOSÉ (préremplissage réparti) : les états arrivent de l'autre
+        // nœud, on ne repasse pas par `token_embd`. Lu avant tout le reste, et
+        // consommé une seule fois — comme `emb_imposee` pour un jeton seul.
+        let impose = self.emb_imposee_lot.take();
         if t == 1 {
-            return vec![self.forward(toks[0], pos0)];
+            if let Some(v) = impose { self.emb_imposee = Some(v); }
+            // Le jeton n'est PAS lu quand un état est imposé : `forward` prend
+            // `emb_imposee` et n'appelle jamais `token_embd`. `toks` peut donc
+            // être vide côté nœud distant, qui ne connaît que des états.
+            return vec![self.forward(toks.first().copied().unwrap_or(0), pos0)];
         }
         // Les modèles à experts suivent le même chemin par lots, avec en plus le
         // regroupement des jetons par expert (voir la section MoE plus bas).
@@ -2105,9 +2120,19 @@ impl Model {
         // --- activations du lot, en i32 quantifié (une seule quantification de
         //     l'entrée normative sert à q, k, v ET au FFN)
         let mut x = vec![0f32; t * h];
-        for (i, &tok) in toks.iter().enumerate() {
-            let r = self.g.row_f32("token_embd.weight", tok as usize, h);
-            x[i * h..(i + 1) * h].copy_from_slice(&r);
+        match impose {
+            Some(v) => {
+                assert_eq!(v.len(), t * h,
+                           "lot imposé de {} valeurs pour {t} jetons de {h} canaux",
+                           v.len());
+                x.copy_from_slice(&v);
+            }
+            None => {
+                for (i, &tok) in toks.iter().enumerate() {
+                    let r = self.g.row_f32("token_embd.weight", tok as usize, h);
+                    x[i * h..(i + 1) * h].copy_from_slice(&r);
+                }
+            }
         }
         let mut hn = vec![0f32; t * h];
         let mut xi = vec![0i32; t * h];

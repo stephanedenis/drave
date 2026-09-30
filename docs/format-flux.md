@@ -41,13 +41,14 @@ format sur le disque n'a pas changé ; c'est la sémantique du champ qui est
 maintenant explicite — et c'est exactement le genre de précision qu'une
 spécification doit porter.
 
-## Transport (phase 3, TCP) — protocole v2
+## Transport (phase 3, TCP) — protocole v3
 
 ```
 en-tête (26 octets, identique à l'aller et au retour)
           magie        u32          0x44525631 (« DRV1 »)
-          version      u8           2   (refusée si différente, en le disant)
+          version      u8           3   (refusée si différente, en le disant)
           mode         u8           0 = f32 dense · 1 = liste quantifiée
+                                    2 = listes à échelle par bloc · 3 = LOT
           couche_debut u32
           couche_fin   u32
           position     u32
@@ -55,7 +56,17 @@ en-tête (26 octets, identique à l'aller et au retour)
           échelle      f32          mode 1 uniquement
 corps     mode 0 : n × f32
           mode 1 : n × ( indice u16 · valeur i16 )
+          mode 2 : n_blocs u32 · n_blocs × f32 · longueur u32 · paires
+          mode 3 : n × dimension × f32   (n = nombre d'ÉTATS, pas de canaux)
 ```
+
+Le **mode 3 est le préremplissage réparti** : `n` états d'un coup, la position
+étant celle du premier jeton du lot. La dimension ne voyage pas — chaque nœud la
+connaît par son modèle, et les deux doivent charger le **même GGUF**. Mesuré :
+256 jetons en **4 lots** de 64 (écart **0,00e0** avec la référence locale découpée
+de la même façon), ou en **1 seul lot de 917 543 octets** — un aller-retour pour
+tout un préremplissage, au lieu d'un par jeton. Réserve honnête : le lot voyage en
+f32 dense (3,5 ko par jeton) ; le lot en listes est le mode 4, pas encore écrit.
 
 Le **mode 1 est le format du disque**, à l'octet près : deux octets d'indice,
 deux octets de valeur, une échelle par liste. Transporter la liste plutôt que le
@@ -68,8 +79,13 @@ La version est dans **chaque** en-tête, et un pair d'une autre version est refu
 avec un message qui nomme les deux versions :
 
 ```
-[flux] arrêt : flux en version 99, cette build parle la 2 (pair incompatible : rien n'a été interprété)
+[flux] arrêt : flux en version 99, cette build parle la 3 (pair incompatible : rien n'a été interprété)
 ```
+
+Le passage de la version 2 à la 3 n'est pas cosmétique : un pair en version 2 qui
+recevrait un lot lirait `n × 4` octets d'un corps qui en fait `n × dimension × 4`,
+se désynchroniserait, puis dirait « mode inconnu » — un refus exact mais tardif et
+muet sur la cause.
 
 C'est le critère de la phase 3.5 : pas de silence, pas de devinette.
 
@@ -96,3 +112,5 @@ découpage (798,3 au lieu de 18,2).
 | la fidélité de l'encodage est chiffrée | `DRAVE_FLUX_VERIF=1` : écart relatif **1,5e-5**, soit la quantification 16 bits |
 | la taille suit l'activité | densité ÷2,3 → trace ÷2,5 (132 Mo → 53 Mo) |
 | le découpage ne change pas le résultat | deux processus, 12 couches chacun : écart local/réparti **0,00e0** (144,8289 = 144,8289), 40 puis 199 flux |
+| un lot ne change pas le résultat non plus | 256 jetons en 4 lots de 64 : écart **0,00e0** (18,0851 = 18,0851) ; en 1 lot de 256 : **0,00e0** (918 ko sur le fil) |
+| l'en-tête fait exactement `TAILLE_TETE` octets | `assert_eq!` dans les deux émetteurs — un octet de trop décale tout le corps en silence et ne se voit qu'au flux suivant |

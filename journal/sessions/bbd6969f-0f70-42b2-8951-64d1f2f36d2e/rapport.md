@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 44.9 h |
-| Tours | 44 |
-| Messages | 1583 |
-| Appels d'outils | 1498 |
+| Durée | 45.3 h |
+| Tours | 45 |
+| Messages | 1631 |
+| Appels d'outils | 1538 |
 | Fichiers touchés | 44 |
-| Commandes | 1197 |
-| Sous-agents | 1 |
-| Commits | 102 |
+| Commandes | 1224 |
+| Sous-agents | 4 |
+| Commits | 103 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -25,6 +25,8 @@
 … [1023 caractères tronqués]
 - **complete** — Réaliser les 6 nouveaux chantiers du projet qtrinet-core, dans l'ordre : (1) relancer le test de l'aiguille sur contexte long (remplissage varié en vrai texte, moins de sondes, réponses plus longues) sur un modèle capable, grâce au préremplissage par lots et au KV déporté ; (2) chemin GPU : dépaquet
 … [1023 caractères tronqués]
+- **create** — Travailler en autonomie maximale et en couloirs parallèles jusqu'à 15h00 sur Drave : (A) campagne de mesure des clés du cache KV et de leur quantificateur, (B) préremplissage par lots sur le fil (phase 3.4, bloqueur Colab), (C) analyses déléguées et audit des drapeaux ignorés, (D) noyau GPU si la ma
+… [182 caractères tronqués]
 
 ## 1. Ce qui a été demandé
 
@@ -115,6 +117,8 @@
 **Tour 43** — ne te fie pas à tes estimés pour le temps. fais un 2h de travail autonome en vérifiant l'heure du système à chaque itération afin de continuer à travailler sur une période te temps absolue (time-boxing)
 
 **Tour 44** — pendant que les charges locales s'executent, peux-tu avancer des chantiers légers sur les ressources loçcale ou d'analyse pure?
+
+**Tour 45** — as-tu ce qu'il te faut pour te rendre à 15h en travaillaint avec un maximum d'autonomie et de parallélisme d'activités?
 
 ## 2. Déroulé, étape par étape
 
@@ -1995,7 +1999,7 @@ Je vérifie l'heure à chaque itération et j'arrête à 12:06, en laissant un p
 
 ### Tour 44 — pendant que les charges locales s'executent, peux-tu avancer des chantiers légers sur les ressources loçcale ou d'analys … [7 caractères tronqués]
 
-*152 appels d'outils.* Actions notables :
+*153 appels d'outils.* Actions notables :
 
 - bash — Write and run the pure flux analysis tool
 - bash — Document the flux analysis and commit
@@ -2011,11 +2015,67 @@ Je vérifie l'heure à chaque itération et j'arrête à 12:06, en laissant un p
 - bash — Inspect state after timeout
 - bash — Rerun pre-fix distributed test in background
 - bash — Inspect all final-norm condition sites
-- … et 120 autres
+- … et 121 autres
 
 **Synthèse produite :**
 
-Machine rendue, dépôt propre, 16 commits. Il reste ~25 min : je supprime le flux inutile du **dernier jeton** (un aller-retour distant pour rien, 1/40 du travail du banc).
+⏵ Clôture du créneau : tout est commité, portes vertes, machine rendue.
+
+\## Session autonome (10:06 → 11:42) — bilan
+
+**Le fil rouge** : la phase 3 (calcul réparti sur deux machines) est passée de « ça tourne mais faux » à « fidèle au bit près, et ÷2,3 plus économe sur le fil ». 18 commits, toutes les portes vertes.
+
+\### Ce qui a été corrigé (et qui n'était pas ce que je croyais)
+
+| défaut | mesure |
+|---|---|
+| `Model::forward` bouclait sur `0..n_layer` au lieu de `couche_debut..couche_fin` : le pilote calculait les 24 couches, envoyait l'état **final**, le pair recalculait tout par-dessus | ×11,2 → cause principale |
+| La norme finale appliquée **deux fois** (nœud moteur + pilote) | ×4,8 après ce seul correctif — une hypothèse juste mais incomplète |
+| Les réglages d'activation (`--act-thresh`) **ignorés** dans les chemins flux : deux nœuds réglés différemment calculaient deux choses différentes **en silence** | 0,69 d'écart |
+| Nagle + ACK différé sur chaque jeton | attente **97,6 → 16,1 ms** (1,01× le calcul local) |
+| Mon propre compteur divisait par les jetons *notés* au lieu des flux *envoyés* | un flux « de 919 canaux » pour un modèle qui en a 896 |
+
+\### Les chiffres qui restent
+
+- **Découpage fidèle : écart 0,00e0** — 144,8289 des deux côtés à 40 jetons, **9,5146 des deux côtés à 1 024 jetons** (1 024 flux, texte réel).
+- **Transport** : dense 3 623 octets/flux → listes à échelles par bloc + indices par écarts **1 589 octets (÷2,3)** pour 1,3 % d'écart à 1 024 jetons. L'encodage par écarts est prouvé sans perte : mêmes écart et perplexité qu'avant, mot pour mot.
+- **Latence** : `attente ≈ calcul distant + 3,2 × latence` (1,01× à 0 ms, 4,89× à 20 ms) → Colab à 60 ms d'aller-retour : ~8 jetons/s au lieu de ~60, fidélité intacte.
+- **Cache KV int8** : l'écart (+3,0 % à 8 192) est **entièrement dans les clés** — clés f32 + valeurs int8 = **+0,023 %** pour 75 % de la taille f32.
+
+\### Ce que j'ai écrit puis dû corriger moi-même
+
+1. « ÷2 pour 0,2 % » (banc synthétique) → sur **vrai texte**, c'est ÷2,3 pour 1,3–2,7 %.
+2. « l'écart croît avec la longueur » → la courbe dit l'**inverse** (13,7 % à 64, 1,3 % à 1 024) ; ce qui changeait, c'était le corpus.
+3. « transmettre l'entrée normée » → **réfuté** par le banc de contrôle : 5,61e0 au lieu de 0,00e0, la connexion résiduelle a besoin du résidu. Drapeau retiré, réfutation écrite.
+
+\### Livrables
+
+`docs/format-flux.md` (spécification v2), `docs/colab-reparti.md` (recette phase 3.4 avec ses deux limites assumée
+… [573 caractères tronqués]
+
+### Tour 45 — as-tu ce qu'il te faut pour te rendre à 15h en travaillaint avec un maximum d'autonomie et de parallélisme d'activités?
+
+*39 appels d'outils.* Actions notables :
+
+- bash — Probe machine, GPU, disk, network state
+- bash — Identify GPU users and stray processes
+- create_goal
+- bash — Launch KV bit-placement campaign
+- sous-agent — Audit ignored CLI flags
+- sous-agent — Spec batched prefill protocol
+- sous-agent — Trace format compaction study
+- todo_write
+- bash — Locate KV cache structure
+- read
+- bash — Check lane A and read KV write path
+- bash — Understand batched PPL reference path
+- bash — Add batched imposed states to forward_lot
+- list_agents
+- … et 19 autres
+
+**Synthèse produite :**
+
+Les trois sous-agents ont livré (et l'un a trouvé mon bug d'en-tête). Le lot extrême — **un seul flux de 917 ko pour 256 jetons — donne aussi 0,00e0**. Je verrouille : portes, docs, commit.
 
 ## 3. Travail accompli
 
@@ -2071,6 +2131,9 @@ Machine rendue, dépôt propre, 16 commits. Il reste ~25 min : je supprime le fl
 ### Sous-agents lancés
 
 - tour 1 — Harness logits llama.cpp
+- tour 45 — Audit ignored CLI flags
+- tour 45 — Spec batched prefill protocol
+- tour 45 — Trace format compaction study
 
 ### Commandes exécutées (échantillon)
 
@@ -2114,7 +2177,7 @@ Machine rendue, dépôt propre, 16 commits. Il reste ~25 min : je supprime le fl
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 1157 autres
+- … et 1184 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2242,7 +2305,7 @@ Machine rendue, dépôt propre, 16 commits. Il reste ~25 min : je supprime le fl
 
 ## 5. Erreurs rencontrées
 
-78 sorties en erreur ou divergentes. Les premières :
+82 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : a8f2635f8 docs: record which models this box is good at, and why src/llama-hparams.cpp:8:void llama_hparams::set_swa_pattern(uint32_t n_pattern, bool dense_first) { src/llama-hparams.h:308:    void se
 - **T1** : 511 tokens notés — perplexité cumulée 247.031  (4.9 tok/s) === perplexité 247.0308 sur 511 tokens (0 événements, 104.5 s) ===  ### B3 harmony assistant 511 --- ref --- 0.0 0.0 0:00 ls: cannot access '
@@ -2364,4 +2427,5 @@ Machine rendue, dépôt propre, 16 commits. Il reste ~25 min : je supprime le fl
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p='reports/rapport-transport-liste.md'; s=open(p).read() v = """C'est aussi la réponse à 
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date +"%H:%M:%S" && python3 - <<'PY' p='REPRISE.md'; s=open(p).read() v = """`TCP_NODELAY` a divisé l'atte
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p='drave-core/src/main.rs'; s=open(p).read() v = """        // Le DERNIER jeton n'a rien 
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p='docs/format-flux.md'; s=open(p).read()  v = """## Transport (phase 3, TCP) — protocole
 

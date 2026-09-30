@@ -1228,7 +1228,11 @@ const MAGIE_FLUX: u32 = 0x4452_5631;   // "DRV1"
 /// Version du protocole de flux. Elle est dans CHAQUE en-tête : un pair d'une
 /// autre version est refusé avec un message qui dit laquelle il parle, plutôt
 /// que de laisser lire des octets qui ne veulent pas dire la même chose.
-const VERSION_FLUX: u8 = 2;
+/// Version 3 : ajoute le mode LOT. Le passage à 3 n'est pas cosmétique — un pair
+/// en version 2 lirait `n × 4` octets d'un corps qui en fait `n × hidden × 4`,
+/// se désynchroniserait, puis dirait « mode inconnu » : un refus exact mais tardif
+/// et muet sur la cause. Ici il est immédiat et nommé.
+const VERSION_FLUX: u8 = 3;
 /// Vecteur dense en f32 : 4 octets par canal, toute la dimension.
 const MODE_DENSE: u8 = 0;
 /// LISTE creuse quantifiée : indice u16 + valeur i16, plus une échelle. C'est le
@@ -1240,6 +1244,12 @@ const MODE_LISTE: u8 = 1;
 /// erreur relative bornée DANS le bloc (le résidu brut a une dynamique trop
 /// large pour une échelle unique).
 const MODE_BLOCS: u8 = 2;
+/// **LOT** : `n` états de `hidden` canaux chacun, en f32 dense, dans UN SEUL flux.
+///
+/// C'est le mode du préremplissage réparti : sans lui, un lot de 256 jetons
+/// payait 256 allers-retours. Le corps fait `n × hidden × 4` octets ; la
+/// dimension n'est pas dans l'en-tête, chaque nœud la connaît par son modèle.
+const MODE_LOT: u8 = 3;
 
 /// En-tête commun : magie · version · mode · plage · position · n · échelle ·
 /// **réglages d'activation** (niveaux, seuil, top-k, renorm).
@@ -1275,6 +1285,8 @@ impl Act {
 /// Tout ce qu'un flux transporte : sa plage, sa position, son mode, ses
 /// réglages d'activation et sa charge utile.
 struct Flux {
+    /// Nombre du mode : canaux (dense, listes), actifs (blocs) ou ÉTATS (lot).
+    n: usize,
     debut: u32,
     fin: u32,
     pos: u32,
@@ -1293,6 +1305,8 @@ enum ChargeFlux {
     Dense(Vec<f32>),
     Liste { idx: Vec<u16>, val: Vec<i16>, echelle: f32 },
     Blocs { idx: Vec<u16>, val: Vec<i8>, echelles: Vec<f32> },
+    /// Lot d'états, aplati (`t × hidden`).
+    Lot(Vec<f32>),
 }
 
 impl ChargeFlux {
@@ -1301,6 +1315,10 @@ impl ChargeFlux {
     fn en_dense(&self, hidden: usize) -> Vec<f32> {
         match self {
             ChargeFlux::Dense(v) => v.clone(),
+            // Un lot n'a pas UN vecteur dense : c'est `plat()` qui le sert, et
+            // `forward_lot` qui le consomme. L'appeler ici serait une erreur de
+            // programme, pas une donnée invalide — on le dit.
+            ChargeFlux::Lot(_) => panic!("un lot d'états n'est pas un vecteur dense"),
             ChargeFlux::Liste { idx, val, echelle } => {
                 let mut x = vec![0f32; hidden];
                 for (&i, &v) in idx.iter().zip(val.iter()) {
@@ -1321,7 +1339,12 @@ impl ChargeFlux {
         match self {
             ChargeFlux::Dense(v) => v.len(),
             ChargeFlux::Liste { idx, .. } | ChargeFlux::Blocs { idx, .. } => idx.len(),
+            ChargeFlux::Lot(v) => v.len(),
         }
+    }
+    /// Le lot aplati, pour le nœud qui doit le rendre à `forward_lot`.
+    fn plat(&self) -> &[f32] {
+        match self { ChargeFlux::Lot(v) => v, _ => &[] }
     }
 }
 
@@ -1390,14 +1413,52 @@ fn envoyer_flux(s: &mut std::net::TcpStream, debut: u32, fin: u32, pos: u32,
     tete.extend_from_slice(&act.thresh.to_le_bytes());
     tete.extend_from_slice(&act.topk.to_le_bytes());
     tete.push(act.renorm as u8);
+    assert_eq!(tete.len(), TAILLE_TETE,
+               "en-tête de flux de {} octets pour {TAILLE_TETE}", tete.len());
     s.write_all(&tete)?;
     s.write_all(&corps)?;
     s.flush()?;
     Ok((TAILLE_TETE + corps.len(), n))
 }
 
+/// Envoie un LOT d'états (`t × hidden`, aplati) dans un seul flux.
+///
+/// Le lot voyage en f32 dense : c'est le mode de la phase 3.4 (préremplissage
+/// réparti), où la latence domine tout — le quantifier est la suite, et il faudra
+/// alors une liste PAR ÉTAT, ce que ce cadriciel ne sait pas encore décrire.
+fn envoyer_lot(s: &mut std::net::TcpStream, debut: u32, fin: u32, pos0: u32,
+               etats: &[f32], t: usize, mdl: &model::Model) -> std::io::Result<usize> {
+    use std::io::Write;
+    let act = Act::du_modele(mdl);
+    let mut tete = Vec::with_capacity(TAILLE_TETE);
+    tete.extend_from_slice(&MAGIE_FLUX.to_le_bytes());
+    tete.push(VERSION_FLUX);
+    tete.push(MODE_LOT);
+    tete.extend_from_slice(&debut.to_le_bytes());
+    tete.extend_from_slice(&fin.to_le_bytes());
+    tete.extend_from_slice(&pos0.to_le_bytes());
+    tete.extend_from_slice(&(t as u32).to_le_bytes());
+    tete.extend_from_slice(&0f32.to_le_bytes());          // échelle : sans objet
+    tete.extend_from_slice(&act.levels.to_le_bytes());
+    tete.extend_from_slice(&act.thresh.to_le_bytes());
+    tete.extend_from_slice(&act.topk.to_le_bytes());
+    tete.push(act.renorm as u8);
+    // Garde-fou, parce que ce bug-là est INVISIBLE : un octet d'en-tête en trop et
+    // tout le corps se décale d'un octet — des f32 valides, faux, sans erreur, et
+    // la désynchronisation n'apparaît qu'au flux SUIVANT (« magie absente »). Il
+    // est arrivé exactement comme ça (40 octets écrits pour 39 lus).
+    assert_eq!(tete.len(), TAILLE_TETE,
+               "en-tête de lot de {} octets pour {TAILLE_TETE}", tete.len());
+    s.write_all(&tete)?;
+    let mut corps = Vec::with_capacity(etats.len() * 4);
+    for v in etats { corps.extend_from_slice(&v.to_le_bytes()); }
+    s.write_all(&corps)?;
+    s.flush()?;
+    Ok(TAILLE_TETE + corps.len())
+}
+
 /// Reçoit un flux : `(debut, fin, pos, mode, charge utile)`.
-fn recevoir_flux(s: &mut std::net::TcpStream) -> std::io::Result<Flux> {
+fn recevoir_flux(s: &mut std::net::TcpStream, hidden: usize) -> std::io::Result<Flux> {
     use std::io::Read;
     let mut tete = [0u8; TAILLE_TETE];
     s.read_exact(&mut tete)?;
@@ -1424,6 +1485,16 @@ fn recevoir_flux(s: &mut std::net::TcpStream) -> std::io::Result<Flux> {
         renorm: tete[38] != 0,
     };
     let charge = match mode {
+        MODE_LOT => {
+            // `n` est le nombre d'ÉTATS, pas de canaux : la dimension vient du
+            // modèle du nœud qui reçoit, elle n'a pas à voyager.
+            let mut corps = vec![0u8; n * hidden * 4];
+            s.read_exact(&mut corps)?;
+            let etats = (0..n * hidden).map(|k| f32::from_le_bytes(
+                [corps[k*4], corps[k*4+1], corps[k*4+2], corps[k*4+3]])).collect();
+            return Ok(Flux { n, debut, fin, pos, mode, act, octets_corps: corps.len(),
+                             charge: ChargeFlux::Lot(etats) });
+        }
         MODE_BLOCS => {
             // corps : nombre de blocs u32 · blocs × f32 · n × (u16 · i8)
             let mut nb = [0u8; 4];
@@ -1460,7 +1531,7 @@ fn recevoir_flux(s: &mut std::net::TcpStream) -> std::io::Result<Flux> {
                 val.push(corps[lus] as i8); lus += 1;
             }
             let octets_corps = 4 + n_blocs * 4 + 4 + longueur;
-            return Ok(Flux { debut, fin, pos, mode, act, octets_corps, charge:
+            return Ok(Flux { n, debut, fin, pos, mode, act, octets_corps, charge:
                              ChargeFlux::Blocs { idx, val, echelles } });
         }
         _ => {}
@@ -1482,7 +1553,7 @@ fn recevoir_flux(s: &mut std::net::TcpStream) -> std::io::Result<Flux> {
         autre => return Err(std::io::Error::new(std::io::ErrorKind::InvalidData,
             format!("mode de flux inconnu : {autre}"))),
     };
-    Ok(Flux { debut, fin, pos, mode, act, octets_corps: octets.len(), charge })
+    Ok(Flux { n, debut, fin, pos, mode, act, octets_corps: octets.len(), charge })
 }
 
 /// Le NŒUD MOTEUR : charge le modèle, écoute, applique SA plage de couches au
@@ -1517,7 +1588,7 @@ fn run_serveur_flux(opt: Options, adresse: &str) {
     println!("[flux] client connecté : {pair}");
     let mut servis = 0u64;
     loop {
-        match recevoir_flux(&mut sock) {
+        match recevoir_flux(&mut sock, hidden) {
             Ok(f) => {
                 // Les réglages du client s'appliquent ICI : les deux nœuds
                 // doivent quantifier les activations pareil, sinon ils ne
@@ -1529,6 +1600,33 @@ fn run_serveur_flux(opt: Options, adresse: &str) {
                 // finale appartient au nœud qui a la tête de sortie, et à lui
                 // seul. C'est ce qui manquait — 798,3 au lieu de 18,2.
                 mdl.flux_brut = true;
+                if f.mode == MODE_LOT {
+                    // Préremplissage réparti : N états d'un coup. Le nœud n'a pas
+                    // les identifiants de jetons — il n'en a pas besoin, les
+                    // états entrent directement dans SA première couche.
+                    let t = f.n;
+                    // Refus EXPLICITE plutôt qu'une boucle sans fin : au-delà de
+                    // son contexte, `KvCache::assurer` ne peut pas agrandir et
+                    // tournerait indéfiniment (relevé dans `docs/plan-prefill-reparti.md`).
+                    if f.pos as usize + t > mdl.ctx {
+                        println!("[flux] lot refusé : {t} états à partir de la position {} \
+                                  dépassent le contexte {} de ce nœud",
+                                 f.pos, mdl.ctx);
+                        break;
+                    }
+                    mdl.emb_imposee_lot = Some(f.charge.plat().to_vec());
+                    let hs = mdl.forward_lot(&vec![0u32; t], f.pos as usize);
+                    let plat: Vec<f32> = hs.concat();
+                    if std::env::var("DRAVE_DEBUG_FLUX").is_ok() {
+                        eprintln!("[debug] lot reçu : n={t} pos={} états={} plat={} corps={}",
+                                  f.pos, hs.len(), plat.len(), f.octets_corps);
+                    }
+                    if envoyer_lot(&mut sock, f.debut, f.fin, f.pos, &plat, t, &mdl).is_err() {
+                        break;
+                    }
+                    servis += 1;
+                    continue;
+                }
                 mdl.emb_imposee = Some(f.charge.en_dense(hidden));
                 let sortie = mdl.forward(0, f.pos as usize);
                 // La RÉPONSE est encodée comme la demande : un pair qui parle en
@@ -1554,12 +1652,26 @@ fn run_serveur_flux(opt: Options, adresse: &str) {
 /// Le PILOTE : garde les premières couches, envoie le flux au nœud moteur,
 /// reçoit l'état final, et note la perplexité — qu'on compare à celle du même
 /// modèle calculé ENTIÈREMENT en local.
+/// NLL d'un jeton : log-sum-exp des logits, moins le logit de la cible. Une
+/// seule définition — elle était recopiée cinq fois dans ce fichier.
+fn nll_logits(lg: &[f32], cible: u32) -> f64 {
+    let mut mx = f32::NEG_INFINITY;
+    for &v in lg { if v > mx { mx = v; } }
+    let mut somme = 0f64;
+    for &v in lg { somme += ((v - mx) as f64).exp(); }
+    (mx as f64 + somme.ln()) - lg[cible as usize] as f64
+}
+
 fn run_ppl_reparti(opt: Options, pair: &str) {
     use std::time::Instant;
     let chemin = modele_chemin();
     let ctx = if opt.ctx_impose { opt.ctx } else { 256 };
     let limite = opt.limit.max(1).min(ctx);
     let couches_locales = if opt.couches_locales > 0 { opt.couches_locales } else { 12 };
+    // `--lot T` : préremplissage par LOTS sur le fil. La référence locale est
+    // alors calculée avec le MÊME découpage — sinon l'écart mesurerait la
+    // différence entre deux ordres de sommation, pas celle du découpage.
+    let lot = opt.lot.max(1);
     let mut mdl = model::Model::load(&chemin, ctx, 16, true, 1.0, false, 0, 0);
     appliquer_quantification(&mut mdl, &opt);
     let mode = if opt.flux_blocs { MODE_BLOCS }
@@ -1574,19 +1686,28 @@ fn run_ppl_reparti(opt: Options, pair: &str) {
     println!("[flux] pilote : {couches_locales} couches en local, {} chez le pair, {} jetons",
              n_layer - couches_locales, ids.len());
 
-    // 1. référence locale, tout le modèle
+    // 1. référence locale, tout le modèle (même découpage que le chemin réparti)
     let t0 = Instant::now();
     let mut nll_ref = 0f64;
-    let mut last = Vec::new();
-    for (pos, &t) in ids.iter().enumerate() {
-        last = mdl.forward(t, pos);
-        if pos + 1 < ids.len() {
-            let lg = mdl.logits(&last);
-            let mut mx = f32::NEG_INFINITY;
-            for &v in &lg { if v > mx { mx = v; } }
-            let mut somme = 0f64;
-            for &v in &lg { somme += ((v - mx) as f64).exp(); }
-            nll_ref += (mx as f64 + somme.ln()) - lg[ids[pos + 1] as usize] as f64;
+    if lot > 1 {
+        let mut pos = 0usize;
+        while pos < ids.len() {
+            let t = lot.min(ids.len() - pos);
+            let hs = mdl.forward_lot(&ids[pos..pos + t], pos);
+            let lgs = mdl.logits_lot(&hs);
+            for i in 0..t {
+                if pos + i + 1 < ids.len() {
+                    nll_ref += nll_logits(&lgs[i], ids[pos + i + 1]);
+                }
+            }
+            pos += t;
+        }
+    } else {
+        for (pos, &t) in ids.iter().enumerate() {
+            let last = mdl.forward(t, pos);
+            if pos + 1 < ids.len() {
+                nll_ref += nll_logits(&mdl.logits(&last), ids[pos + 1]);
+            }
         }
     }
     let ppl_ref = (nll_ref / (ids.len() - 1) as f64).exp();
@@ -1604,6 +1725,45 @@ fn run_ppl_reparti(opt: Options, pair: &str) {
     let mut t_pair = 0f64;
     let t1 = Instant::now();
     let mut nll = 0f64;
+    if lot > 1 {
+        // PRÉREMPLISSAGE RÉPARTI : un lot par aller-retour au lieu d'un flux par
+        // jeton. C'est ce que la phase 3.4 doit démontrer — le découpage doit
+        // coûter la latence d'UN message par lot, pas par jeton.
+        let mut pos = 0usize;
+        while pos + 1 < ids.len() {
+            let t = lot.min(ids.len() - pos);
+            let horloge = Instant::now();
+            let hs = mdl.forward_lot(&ids[pos..pos + t], pos);
+            let plat: Vec<f32> = hs.concat();
+            t_local += horloge.elapsed().as_secs_f64();
+            let horloge = Instant::now();
+            let o = envoyer_lot(&mut sock, couches_locales as u32, n_layer as u32,
+                                pos as u32, &plat, t, &mdl).expect("envoi du lot");
+            octets_envoyes += o as u64;
+            actifs_envoyes += (t * mdl.cfg.hidden) as u64;
+            flux_envoyes += 1;
+            let rep = recevoir_flux(&mut sock, mdl.cfg.hidden).expect("réception du lot");
+            t_pair += horloge.elapsed().as_secs_f64();
+            octets_recus += TAILLE_TETE as u64 + rep.octets_corps as u64;
+            let etats = rep.charge.plat().to_vec();
+            assert_eq!(etats.len(), t * mdl.cfg.hidden,
+                       "lot reçu de {} valeurs pour {t} jetons de {} canaux",
+                       etats.len(), mdl.cfg.hidden);
+            // La norme finale reste au nœud qui a la tête, et la tête se fait par
+            // lots : le lot reçu ne redescend pas jeton par jeton.
+            let mut hn: Vec<Vec<f32>> = Vec::with_capacity(t);
+            for i in 0..t {
+                hn.push(mdl.norme_finale(&etats[i * mdl.cfg.hidden..(i + 1) * mdl.cfg.hidden]));
+            }
+            let lgs = mdl.logits_lot(&hn);
+            for i in 0..t {
+                if pos + i + 1 < ids.len() {
+                    nll += nll_logits(&lgs[i], ids[pos + i + 1]);
+                }
+            }
+            pos += t;
+        }
+    } else {
     for (pos, &t) in ids.iter().enumerate() {
         let dernier = pos + 1 == ids.len();
         // Le DERNIER jeton n'a rien à prédire : lui demander un aller-retour
@@ -1623,21 +1783,16 @@ fn run_ppl_reparti(opt: Options, pair: &str) {
         octets_envoyes += o as u64;
         actifs_envoyes += a as u64;
         flux_envoyes += 1;
-        let rep = recevoir_flux(&mut sock).expect("réception du flux");
+        let rep = recevoir_flux(&mut sock, mdl.cfg.hidden).expect("réception du flux");
         // Ce que coûte le découpage : le calcul local, et l'attente du pair
         // (son calcul + l'aller-retour réseau) — la latence, pas le débit.
         t_pair += horloge.elapsed().as_secs_f64();
         octets_recus += TAILLE_TETE as u64 + rep.octets_corps as u64;
         let final_ = rep.charge.en_dense(mdl.cfg.hidden);
         if pos + 1 < ids.len() {
-            let hn = mdl.norme_finale(&final_);
-            let lg = mdl.logits(&hn);
-            let mut mx = f32::NEG_INFINITY;
-            for &v in &lg { if v > mx { mx = v; } }
-            let mut somme = 0f64;
-            for &v in &lg { somme += ((v - mx) as f64).exp(); }
-            nll += (mx as f64 + somme.ln()) - lg[ids[pos + 1] as usize] as f64;
+            nll += nll_logits(&mdl.logits(&mdl.norme_finale(&final_)), ids[pos + 1]);
         }
+    }
     }
     let ppl = (nll / (ids.len() - 1) as f64).exp();
     println!("  deux nœuds        : perplexité {ppl:.4}  ({:.1} s)", t1.elapsed().as_secs_f64());
@@ -1646,6 +1801,17 @@ fn run_ppl_reparti(opt: Options, pair: &str) {
     // compris) et non le nombre de jetons NOTÉS — l'erreur d'un facteur 40/39
     // faisait apparaître un flux de « 919 canaux » pour un modèle qui en a 896.
     let nflux = flux_envoyes.max(1);
+    if lot > 1 {
+        println!("  transport         : LOTS de {lot} jetons · {:.0} octets par lot (aller) · \
+                  {:.1} ko par jeton · {} lots (au lieu de {} flux)",
+                 octets_envoyes as f64 / nflux as f64,
+                 octets_envoyes as f64 / nflux as f64 / 1024.0 / lot as f64,
+                 nflux, ids.len() - 1);
+        println!("  temps             : {:.1} ms par LOT en local · {:.1} ms à attendre le pair · \
+                  soit {:.2}× le calcul local seul",
+                 1000.0 * t_local / nflux as f64, 1000.0 * t_pair / nflux as f64,
+                 t_pair / t_local.max(1e-9));
+    } else {
     println!("  transport         : {} · {:.0} octets par flux (aller) · {:.0} au retour · \
               {:.1} % d'activité ({:.0} neurones par flux) · {} flux",
              match mode { MODE_BLOCS => "listes à échelle par bloc (2 octets/actif, écarts)",
@@ -1658,6 +1824,7 @@ fn run_ppl_reparti(opt: Options, pair: &str) {
               (son calcul + l'aller-retour) · soit {:.2}× le calcul local seul",
              1000.0 * t_local / nflux as f64, 1000.0 * t_pair / nflux as f64,
              t_pair / t_local.max(1e-9));
+    }
 }
 
 /// Banc **MLA** : passe avant du modèle synthétique, logits écrits en binaire
