@@ -29321,3 +29321,25 @@ test result: ok. 11 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; fin
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A drave-core/src/main.rs && git commit -q -F - <<'EOF' && git log --oneline -1 | cat\nSeconde relecture adversariale : huit défauts, dont deux graves dans mes propres correctifs\n\nElle a attaqué les CORRECTIFS du début d'ap … [2164 caractères tronqués]`
+
+  ```
+320b612 Seconde relecture adversariale : huit défauts, dont deux graves dans mes propres correctifs
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/main.rs'; s=open(p).read()\nancre = \"\"\"    #[test]\n    fn un_lot_dement_grand_est_refuse_avant_allocation() {\"\"\"\nneuf = \"\"\"    /// En-tête v4 complet, prêt à compléter par un corps.\n    … [3221 caractères tronqués]`
+
+  ```
+deux tests de trame forgée ajoutés à tests_plafond
+test tests_flux::entete_et_version_sont_ce_que_les_numeros_disent ... ok
+test tests_flux::paires_blocs_aller_retour_avec_echappement ... ok
+test tests_flux::paires_blocs_tronquees_sont_refusees ... ok
+test tests_flux::flux_dense_aller_retour_par_la_vraie_mise_en_trame ... ok
+test tests_plafond::un_nombre_de_blocs_dement_grand_est_refuse ... ok
+test tests_plafond::un_lot_dement_grand_est_refuse_avant_allocation ... ok
+test tests_plafond::une_trame_liste_hors_dimension_ne_tue_pas_le_noeud ... ok
+test engine::tests_gemm_q4::gemm_q4_egale_matvec ... ok
+test engine::tests_gemm::gemm_bat_le_matvec ... ok
+test result: ok. 13 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.14s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add drave-core/src/main.rs && git commit -q -m \"Deux tests de plus : trame forgée hors dimension, et n_blocs démesuré\n\nLes deux défauts graves de la seconde relecture sont maintenant verrouillés par des\ntests qui envoient une … [363 caractères tronqués]`

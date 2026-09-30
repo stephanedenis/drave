@@ -3404,6 +3404,68 @@ mod tests_plafond {
     use std::io::Write;
     use std::net::{TcpListener, TcpStream};
 
+    /// En-tête v4 complet, prêt à compléter par un corps.
+    fn entete(mode: u8, n: u32) -> Vec<u8> {
+        let mut t: Vec<u8> = Vec::new();
+        t.extend_from_slice(&MAGIE_FLUX.to_le_bytes());
+        t.push(VERSION_FLUX);
+        t.push(mode);
+        t.extend_from_slice(&12u32.to_le_bytes());
+        t.extend_from_slice(&24u32.to_le_bytes());
+        t.extend_from_slice(&0u32.to_le_bytes());
+        t.extend_from_slice(&n.to_le_bytes());
+        t.extend_from_slice(&0f32.to_le_bytes());
+        t.extend_from_slice(&127f32.to_le_bytes());
+        t.extend_from_slice(&0f32.to_le_bytes());
+        t.extend_from_slice(&0u32.to_le_bytes());
+        t.push(0);
+        for _ in 0..10 { t.extend_from_slice(&0u32.to_le_bytes()); }
+        assert_eq!(t.len(), TAILLE_TETE);
+        t
+    }
+
+    /// Le corps est envoyé puis la connexion fermée : le décodeur ne doit ni
+    /// paniquer ni bloquer.
+    fn decoder_une_trame(mode: u8, n: u32, corps: Vec<u8>, hidden: usize) -> std::io::Result<Flux> {
+        let ecoute = TcpListener::bind("127.0.0.1:0").unwrap();
+        let adresse = ecoute.local_addr().unwrap();
+        let serveur = std::thread::spawn(move || {
+            let (mut sock, _) = ecoute.accept().unwrap();
+            sock.write_all(&entete(mode, n)).unwrap();
+            sock.write_all(&corps).unwrap();
+        });
+        let mut client = TcpStream::connect(adresse).unwrap();
+        let r = recevoir_flux(&mut client, hidden);
+        serveur.join().unwrap();
+        r
+    }
+
+    #[test]
+    fn une_trame_liste_hors_dimension_ne_tue_pas_le_noeud() {
+        // n = 1 paire, indice 5000 pour 896 canaux : c'était un `index out of
+        // bounds` → SIGABRT (relecture adversariale, trame forgée).
+        let mut corps = Vec::new();
+        corps.extend_from_slice(&5000u16.to_le_bytes());
+        corps.extend_from_slice(&7i16.to_le_bytes());
+        let f = decoder_une_trame(MODE_LISTE, 1, corps, 896).unwrap();
+        let x = f.charge.en_dense(896);          // ne doit pas paniquer
+        assert_eq!(x.len(), 896);
+        assert!(x.iter().all(|v| *v == 0.0), "un indice hors dimension est ignoré");
+    }
+
+    #[test]
+    fn un_nombre_de_blocs_dement_grand_est_refuse() {
+        // mode blocs : `n_blocs` vient de l'en-tête et servait à allouer
+        // `n_blocs × 4` octets + un Vec<f32> (mesuré : 16 Gio sur une trame de
+        // 83 octets). Le plafond doit refuser AVANT d'allouer.
+        let mut corps = Vec::new();
+        corps.extend_from_slice(&100_000_000u32.to_le_bytes());
+        let r = decoder_une_trame(MODE_BLOCS, 1, corps, 896);
+        assert!(r.is_err(), "100 millions de blocs doivent être refusés");
+        let msg = format!("{}", r.err().unwrap());
+        assert!(msg.contains("plafond"), "le refus doit nommer le plafond : {msg}");
+    }
+
     #[test]
     fn un_lot_dement_grand_est_refuse_avant_allocation() {
         let ecoute = TcpListener::bind("127.0.0.1:0").unwrap();

@@ -7,12 +7,12 @@
 | Début | 2026-09-28 14:46 |
 | Durée | 46.8 h |
 | Tours | 45 |
-| Messages | 1820 |
-| Appels d'outils | 1719 |
+| Messages | 1822 |
+| Appels d'outils | 1721 |
 | Fichiers touchés | 44 |
-| Commandes | 1398 |
+| Commandes | 1400 |
 | Sous-agents | 7 |
-| Commits | 135 |
+| Commits | 136 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -2055,7 +2055,7 @@ Je vérifie l'heure à chaque itération et j'arrête à 12:06, en laissant un p
 
 ### Tour 45 — as-tu ce qu'il te faut pour te rendre à 15h en travaillaint avec un maximum d'autonomie et de parallélisme d'activités?
 
-*220 appels d'outils.* Actions notables :
+*222 appels d'outils.* Actions notables :
 
 - bash — Probe machine, GPU, disk, network state
 - bash — Identify GPU users and stray processes
@@ -2071,7 +2071,7 @@ Je vérifie l'heure à chaque itération et j'arrête à 12:06, en laissant un p
 - bash — Understand batched PPL reference path
 - bash — Add batched imposed states to forward_lot
 - list_agents
-- … et 197 autres
+- … et 199 autres
 
 **Synthèse produite :**
 
@@ -2180,7 +2180,7 @@ La seconde relecture a trouvé **huit défauts de plus**, dont deux graves dans 
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 1358 autres
+- … et 1360 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2463,4 +2463,5 @@ La seconde relecture a trouvé **huit défauts de plus**, dont deux graves dans 
 - Index de la session : les huit chantiers, les défauts et par qui ils ont été trouvés  Un rapport court pour un humain qui reprend : ce qui est livré (avec le re
 - Chemin GPU revérifié : 15,1667 avec le pilote, noyau exact à 1,99e-7  Les portes de la journée se mesurent SANS DRAVE_GPU (c'est la règle du dépôt), donc person
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A drave-core/src/main.rs && git commit -q -F - <<'EOF' && git log --oneline -1 | cat Seconde rele
+- Deux tests de plus : trame forgée hors dimension, et n_blocs démesuré  Les deux défauts graves de la seconde relecture sont maintenant verrouillés par des tests
 
