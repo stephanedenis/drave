@@ -37,6 +37,7 @@ fn main() {
     // d'options, donc les mêmes drapeaux.
     let opt = analyser(&args);
     let _ = MODELE.set(args[1].clone());
+    if let Some(f) = opt.banc_mla.clone() { run_banc_mla(opt, &f); return; }
     if opt.banc_kv > 0 { run_banc_kv(opt); return; }
     if opt.gpu_banc { run_gpu_banc(opt); return; }
     if opt.plan { run_plan(opt); return; }
@@ -319,6 +320,9 @@ struct Options {
     infer: bool, ppl: bool, plan: bool, tokenize: bool, gpu_banc: bool,
     /// Banc du KV déporté : nombre de clés à faire tenir en VRAM.
     banc_kv: usize,
+    /// Banc MLA : écrit les logits `(n_pos × vocab)` en f32 pour les comparer à
+    /// la référence numpy du modèle synthétique.
+    banc_mla: Option<String>,
     // --- source des jetons
     ids: Vec<u32>, ids_file: Option<String>, texte_file: Option<String>,
     ppl_texte: bool, prompt: Option<String>, limit: usize, depuis: usize,
@@ -388,6 +392,7 @@ fn analyser(args: &[String]) -> Options {
             "--tokenize" => { o.tokenize = true; 1 }
             "--gpu-banc" => { o.gpu_banc = true; 1 }
             "--banc-kv" => { o.banc_kv = suivant(i).parse().unwrap(); 2 }
+            "--banc-mla" => { o.banc_mla = Some(suivant(i).clone()); 2 }
             "--ids" => { o.ids = suivant(i).split(',')
                             .filter_map(|s| s.trim().parse().ok()).collect(); 2 }
             "--ids-file" => { o.ids_file = Some(suivant(i).clone()); 2 }
@@ -787,6 +792,35 @@ fn mdl_cfg_vocab(path: &str) -> Option<usize> {
 /// mesure (23 → 159 ms) : sans un banc isolé, on ne sait pas si un changement
 /// de noyau aide, la mesure par jeton mélangeant tête, attention et
 /// échantillonnage.
+/// Banc **MLA** : passe avant du modèle synthétique, logits écrits en binaire
+/// pour être comparés à `logits.npy` (référence numpy indépendante).
+fn run_banc_mla(opt: Options, sortie: &str) {
+    use std::io::Write;
+    let path = &modele_chemin();
+    let mut mdl = model::Model::load(path, 4096, 16, opt.dense, 1.0, false, 0, 0);
+    if mdl.mla.is_none() {
+        println!("pas un modèle MLA (attn_kv_a_mqa absent)");
+        return;
+    }
+    let ids: Vec<u32> = if opt.ids.is_empty() {
+        (1..=8u32).collect()
+    } else { opt.ids.clone() };
+    let vocab = mdl.cfg.vocab;
+    let mut f = std::io::BufWriter::new(std::fs::File::create(sortie).expect("création"));
+    let t0 = std::time::Instant::now();
+    for (pos, &t) in ids.iter().enumerate() {
+        let hn = mdl.forward_mla(t, pos);
+        let lg = mdl.logits_f32(&hn);
+        let mut tampon = Vec::with_capacity(vocab * 4);
+        for v in lg.iter() { tampon.extend_from_slice(&v.to_le_bytes()); }
+        f.write_all(&tampon).unwrap();
+        println!("  position {pos} : logits[0..4] = {:?}",
+                 &lg[..4.min(lg.len())].iter().map(|v| (v * 1e4).round() / 1e4).collect::<Vec<_>>());
+    }
+    println!("{} positions × {vocab} logits écrits dans {sortie} ({:.2} s)",
+             ids.len(), t0.elapsed().as_secs_f64());
+}
+
 /// Banc du **KV déporté** (étape E4) : le cache d'une couche tient en VRAM, une
 /// passe d'attention est calculée par le noyau, et le résultat est comparé au
 /// chemin du moteur (mêmes `cle`/`valeur`, même `dot8`, même softmax).

@@ -52,6 +52,37 @@ partie « rope », le reste de Q/K est **non tourné**, c'est le « decoupled Ro
    (matrice `[512, n_head × 192]`, soit ~1 Mo en Q8 : le coût est réel mais petit
    devant le cache économisé).
 
+### ÉTAT : MLA EST FAIT ET VALIDÉ
+
+Le moteur charge un modèle MLA (`attn_kv_a_mqa` reconnu à ses tenseurs, sans
+aucune clé de configuration nouvelle — les rangs se lisent dans les FORMES) et
+tient le **cache latent** : `c_kv` et `k_rope` par position, `k_nope` et `v`
+reconstruits à la lecture par `W_kv_b`. La rotation ne porte que sur la partie
+« rope », et le chemin est séparé de `forward` (le modèle du harnais n'a ni
+teneurs Q8_0 ni fenêtre glissante).
+
+Mesure : `--banc-mla` écrit les logits des 8 positions, comparés à la référence
+numpy indépendante — **écart max relatif 5,2e-7**, soit le bruit de virgule
+flottante du moteur. Le témoin imprimé le dit aussi : `MLA : 2 couches · q_lora
+32 · kv_lora 48 · qk_nope 16 + qk_rope 16 · v 16 · cache latente 64 valeurs par
+jeton (au lieu de 32)`.
+
+Deux erreurs réelles ont été trouvées PAR la référence, et c'est tout l'intérêt
+d'un témoin indépendant :
+
+1. dans la référence elle-même, des indices d'`einsum` qui confondaient
+   dimension de tête et dimension de clé ;
+2. **la convention GGUF des tenseurs linéaires** : un poids est stocké
+   (sortie, entrée) et déclaré (entrée, sortie) — s'y tromper multiplie par la
+   transposée. L'écart est passé de 0,82 (relatif) à 5,2e-7 après correction.
+
+Reste à faire pour MLA : le contrôle négatif (avec `W_kv_b = I` et
+`kv_lora_rank = n_head × (qk_nope + v_dim)`, l'attention latente doit redonner
+une MQA ordinaire) — la comparaison numpy le rend moins indispensable, mais il
+relierait l'implémentation à une autre DÉJÀ validée par les portes de
+non-régression. Et le branchement du cache latent dans le plan 1 M (mesurer le
+cache ÷50 sur un vrai modèle MLA, ce qu'on n'a pas ici).
+
 ### État du harnais : FAIT
 
 `tools/mla_synthetique.py` fabrique le modèle et la référence numpy :

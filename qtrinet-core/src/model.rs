@@ -454,6 +454,38 @@ impl CacheExperts {
     }
 }
 
+/// MLA (attention latente) : les poids d'une couche, lus en f32. Le cache n'est
+/// PAS `(n_kv, ctx, head_dim)` mais **une seule tête latente** par couche —
+/// `kv_lora` valeurs, plus les `qk_rope` composantes tournées. C'est tout
+/// l'intérêt de MLA : le cache ne dépend plus du nombre de têtes.
+pub struct Mla {
+    pub q_a: Vec<f32>,      // [h, q_lora]
+    pub q_a_norm: Vec<f32>, // [q_lora]
+    pub q_b: Vec<f32>,      // [q_lora, nh*(qkn+qkr)]
+    pub kv_a: Vec<f32>,     // [h, kv_lora+qkr]
+    pub kv_a_norm: Vec<f32>,// [kv_lora]
+    pub kv_b: Vec<f32>,     // [kv_lora, nh*(qkn+vd)]
+    pub wo: Vec<f32>,       // [nh*vd, h]
+    pub ffn_norm: Vec<f32>, // [h]
+    pub gate: Vec<f32>,     // [h, ffn]
+    pub up: Vec<f32>,       // [h, ffn]
+    pub down: Vec<f32>,     // [ffn, h]
+    pub attn_norm: Vec<f32>,// [h]
+    pub q_lora: usize, pub kv_lora: usize, pub qkr: usize, pub qkn: usize,
+    pub vd: usize, pub nh: usize, pub ffn: usize,
+}
+
+/// Produit matrice-vecteur en f32 : `y[o] = Σ_i w[o*n_in + i] * x[i]`.
+/// Les poids MLA sont rangés ligne par ligne, comme les tenseurs GGUF F32.
+fn matvec_f32(w: &[f32], x: &[f32], n_in: usize, n_out: usize, y: &mut [f32]) {
+    for o in 0..n_out {
+        let ligne = &w[o * n_in..(o + 1) * n_in];
+        let mut acc = 0f32;
+        for i in 0..n_in { acc += ligne[i] * x[i]; }
+        y[o] = acc;
+    }
+}
+
 pub struct Model {
     pub g: Gguf,
     pub cfg: Cfg,
@@ -560,6 +592,10 @@ pub struct Model {
     pub kv_gpu: Option<Vec<(usize, crate::gpu::KvGpu)>>,
     /// Tranches de clés du noyau d'attention, réutilisées d'un jeton à l'autre.
     pub attn_gpu_part: Vec<f32>,
+    /// Couches MLA, si le modèle en est un (`attn_kv_a_mqa` présent).
+    pub mla: Option<Vec<Mla>>,
+    /// Cache LATENT par couche : `c_kv` (kv_lora) et `k_rope` (qkr) par position.
+    pub mla_cache: Vec<(Vec<f32>, Vec<f32>)>,
     /// Cache VRAM des experts MoE (`QT_GPU_EXPERTS=1`).
     pub cache_experts: Option<CacheExperts>,
     /// Taille du lot de PRÉREMPLISSAGE en inférence (1 = jeton par jeton).
@@ -1221,6 +1257,56 @@ impl Model {
                 }
             }
         } else { None };
+        // ---- MLA : reconnu à ses tenseurs, sans aucune clé de configuration
+        // (les rangs se lisent dans les FORMES, ce qui évite d'ajouter cinq
+        // champs à `Cfg` et de les tenir à jour).
+        let mla = if g.tensor("blk.0.attn_kv_a_mqa.weight").is_some() {
+            let mut v = Vec::with_capacity(cfg.n_layer);
+            for l in 0..cfg.n_layer {
+                let p = |s: &str| format!("blk.{l}.{s}");
+                let t = |n: &str| g.tensor(&p(n)).unwrap_or_else(|| panic!("tenseur MLA {n} absent"));
+                // Le fichier déclare (entrée, sortie) ; le moteur renverse à la
+                // lecture, donc `dims[0]` est ici la SORTIE (= le rang).
+                let q_lora = t("attn_q_a.weight").dims[0] as usize;
+                let q_b = g.dequant(&p("attn_q_b.weight"));
+                let qkr = g.cfg("rope.dimension_count").and_then(|m| m.as_u64())
+                    .unwrap_or(0) as usize;
+                let cle = t("attn_kv_a_mqa.weight").dims[0] as usize;
+                let kv_lora = cle - qkr;
+                let kv_b = g.dequant(&p("attn_kv_b.weight"));
+                let nh = cfg.n_head;
+                let total = q_b.len() / q_lora;              // nh*(qkn+qkr)
+                let qkn = total / nh - qkr;
+                let per = kv_b.len() / kv_lora;              // nh*(qkn+vd)
+                let vd = per / nh - qkn;
+                v.push(Mla {
+                    q_a: g.dequant(&p("attn_q_a.weight")),
+                    q_a_norm: g.dequant(&p("attn_q_a_norm.weight")),
+                    q_b,
+                    kv_a: g.dequant(&p("attn_kv_a_mqa.weight")),
+                    kv_a_norm: g.dequant(&p("attn_kv_a_norm.weight")),
+                    kv_b,
+                    wo: g.dequant(&p("attn_output.weight")),
+                    ffn_norm: g.dequant(&p("ffn_norm.weight")),
+                    gate: g.dequant(&p("ffn_gate.weight")),
+                    up: g.dequant(&p("ffn_up.weight")),
+                    down: g.dequant(&p("ffn_down.weight")),
+                    attn_norm: g.dequant(&p("attn_norm.weight")),
+                    q_lora, kv_lora, qkr, qkn, vd, nh, ffn: cfg.ffn,
+                });
+            }
+            let m0 = &v[0];
+            println!("[config] MLA : {} couches · q_lora {} · kv_lora {} · qk_nope {} + qk_rope {} · v {} · \
+                      cache latente {} valeurs par jeton (au lieu de {})",
+                     v.len(), m0.q_lora, m0.kv_lora, m0.qkn, m0.qkr, m0.vd,
+                     m0.kv_lora + m0.qkr, cfg.n_kv_head * (m0.qkn + m0.vd));
+            Some(v)
+        } else { None };
+        let mla_cache = match mla.as_ref() {
+            Some(v) => v.iter().map(|m| (vec![0f32; ctx * m.kv_lora], vec![0f32; ctx * m.qkr])).collect(),
+            None => Vec::new(),
+        };
+
         // Cache VRAM des experts : opt-in, et seulement sur un modèle à experts
         // au format MXFP4 (les autres formats ont leurs propres noyaux).
         let cache_experts = if std::env::var("QT_GPU_EXPERTS").is_ok()
@@ -1269,7 +1355,7 @@ impl Model {
             stop_id: None, stop_id2: None, prof: [0.0; 6],
             tete,
             tete_gpu, tete_gpu_q6k, head4, sinks_vus, kv_gpu, attn_gpu_part: Vec::new(),
-            cache_experts, lot: 1,
+            cache_experts, mla, mla_cache, lot: 1,
             patch: None, ffn_gain: None, hebb: None,
         }
     }
@@ -2268,6 +2354,120 @@ impl Model {
             Self::rmsnorm(&r, &self.out_norm, self.cfg.eps, &mut hn[i * h..(i + 1) * h]);
         }
         (0..t).map(|i| hn[i * h..(i + 1) * h].to_vec()).collect()
+    }
+
+    /// Passe avant d'un modèle **MLA**, un jeton à la fois, avec le cache
+    /// LATENT : `c_kv` (la seule tête latente) et `k_rope` (les composantes
+    /// tournées) sont écrites une fois par position, et `k_nope`/`v` sont
+    /// reconstruits à la lecture par `W_kv_b` — c'est le contrat de MLA.
+    ///
+    /// Chemin séparé de `forward` à dessein : le modèle jouet du harnais
+    /// (`tools/mla_synthetique.py`) n'a ni tenseurs Q8_0 ni fenêtre glissante, et
+    /// mélanger les deux chemins rendrait la validation illisible.
+    pub fn forward_mla(&mut self, tok: u32, pos: usize) -> Vec<f32> {
+        assert!(pos < self.ctx, "contexte dépassé");
+        let h = self.cfg.hidden;
+        let eps = self.cfg.eps;
+        let scale = 1.0 / ((self.mla.as_ref().unwrap()[0].qkn
+                            + self.mla.as_ref().unwrap()[0].qkr) as f32).sqrt();
+        let mut x = self.g.row_f32("token_embd.weight", tok as usize, h);
+        let mut hn = vec![0f32; h];
+        for l in 0..self.cfg.n_layer {
+            let m = &self.mla.as_ref().unwrap()[l];
+            let (nh, qkn, qkr, vd, kvl) = (m.nh, m.qkn, m.qkr, m.vd, m.kv_lora);
+            // --- norme d'entrée
+            Self::rmsnorm(&x, &m.attn_norm, eps, &mut hn);
+            // --- requête : descente, norme, remontée, découpage nope / rope
+            let mut qa = vec![0f32; m.q_lora];
+            matvec_f32(&m.q_a, &hn, h, m.q_lora, &mut qa);
+            let mut qan = vec![0f32; m.q_lora];
+            Self::rmsnorm(&qa, &m.q_a_norm, eps, &mut qan);
+            let nq = nh * (qkn + qkr);
+            let mut qb = vec![0f32; nq];
+            matvec_f32(&m.q_b, &qan, m.q_lora, nq, &mut qb);
+            // --- KV : descente MQA, norme sur la partie latente, remontée
+            let mut kva = vec![0f32; kvl + qkr];
+            matvec_f32(&m.kv_a, &hn, h, kvl + qkr, &mut kva);
+            let mut c_n = vec![0f32; kvl];
+            Self::rmsnorm(&kva[..kvl], &m.kv_a_norm, eps, &mut c_n);
+            let mut k_rope = kva[kvl..].to_vec();
+            Self::rope(&mut k_rope, 1, qkr, pos, self.cfg.rope_base, qkr);
+            // --- rotation des seules composantes « rope » de Q
+            let mut q_rope = vec![0f32; nh * qkr];
+            for hh in 0..nh {
+                q_rope[hh * qkr..(hh + 1) * qkr]
+                    .copy_from_slice(&qb[hh * (qkn + qkr) + qkn..(hh + 1) * (qkn + qkr)]);
+            }
+            Self::rope(&mut q_rope, nh, qkr, pos, self.cfg.rope_base, qkr);
+            // --- écriture du cache LATENT
+            {
+                let (ckv, krop) = &mut self.mla_cache[l];
+                ckv[pos * kvl..(pos + 1) * kvl].copy_from_slice(&c_n);
+                krop[pos * qkr..(pos + 1) * qkr].copy_from_slice(&k_rope);
+            }
+            // --- attention : k_nope et v reconstruits à la lecture
+            let n = pos + 1;
+            let (ckv, krop) = &self.mla_cache[l];
+            let mut sortie = vec![0f32; nh * vd];
+            let mut kvt = vec![0f32; nh * (qkn + vd)];
+            let mut sc = vec![0f32; n];
+            for hh in 0..nh {
+                let q_nope = &qb[hh * (qkn + qkr)..hh * (qkn + qkr) + qkn];
+                let qr = &q_rope[hh * qkr..(hh + 1) * qkr];
+                for t in 0..n {
+                    matvec_f32(&m.kv_b, &ckv[t * kvl..(t + 1) * kvl], kvl, nh * (qkn + vd), &mut kvt);
+                    let kt = &kvt[hh * (qkn + vd)..hh * (qkn + vd) + qkn];
+                    let mut s = 0f32;
+                    for i in 0..qkn { s += q_nope[i] * kt[i]; }
+                    for i in 0..qkr { s += qr[i] * krop[t * qkr + i]; }
+                    sc[t] = s * scale;
+                }
+                let mut mx = f32::NEG_INFINITY;
+                for &v in sc.iter() { if v > mx { mx = v; } }
+                let mut somme = 0f32;
+                for v in sc.iter_mut() { let e = (*v - mx).exp(); *v = e; somme += e; }
+                let inv = 1.0 / somme;
+                for t in 0..n {
+                    matvec_f32(&m.kv_b, &ckv[t * kvl..(t + 1) * kvl], kvl, nh * (qkn + vd), &mut kvt);
+                    let vt = &kvt[hh * (qkn + vd) + qkn..(hh + 1) * (qkn + vd)];
+                    let w = sc[t] * inv;
+                    for i in 0..vd { sortie[hh * vd + i] += w * vt[i]; }
+                }
+            }
+            // --- projection de sortie et résidu
+            let mut o = vec![0f32; h];
+            matvec_f32(&m.wo, &sortie, nh * vd, h, &mut o);
+            for i in 0..h { x[i] += o[i]; }
+            // --- FFN (les poids du harnais sont en f32, donc lus ici)
+            Self::rmsnorm(&x, &m.ffn_norm, eps, &mut hn);
+            let mut g_t = vec![0f32; m.ffn];
+            let mut u_t = vec![0f32; m.ffn];
+            matvec_f32(&m.gate, &hn, h, m.ffn, &mut g_t);
+            matvec_f32(&m.up, &hn, h, m.ffn, &mut u_t);
+            let mut act = vec![0f32; m.ffn];
+            Self::activation(&mut g_t, &u_t, m.ffn, false);
+            for i in 0..m.ffn { act[i] = g_t[i]; }
+            let mut d = vec![0f32; h];
+            matvec_f32(&m.down, &act, m.ffn, h, &mut d);
+            for i in 0..h { x[i] += d[i]; }
+        }
+        Self::rmsnorm(&x, &self.out_norm, eps, &mut hn);
+        hn
+    }
+
+    /// Logits d'un état caché avec une tête **liée en f32** (le harnais MLA n'a
+    /// pas de blocs Q8_0 : `logits` ne s'applique pas).
+    pub fn logits_f32(&self, hn: &[f32]) -> Vec<f32> {
+        let h = self.cfg.hidden;
+        let v = self.cfg.vocab;
+        let mut out = vec![0f32; v];
+        for o in 0..v {
+            let ligne = self.g.row_f32("token_embd.weight", o, h);
+            let mut acc = 0f32;
+            for i in 0..h { acc += ligne[i] * hn[i]; }
+            out[o] = acc;
+        }
+        out
     }
 
     /// Un token, une position. Retourne l'état caché après la dernière norme.

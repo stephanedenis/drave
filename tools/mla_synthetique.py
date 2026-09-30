@@ -51,17 +51,24 @@ def construire(graine=1234):
          "output_norm.weight": np.ones(H, np.float32)}
     for l in range(NL):
         p[f"blk.{l}.attn_norm.weight"] = np.ones(H, np.float32)
-        p[f"blk.{l}.attn_q_a.weight"] = poids(rng, H, QL)
+        p[f"blk.{l}.attn_q_a.weight"] = poids(rng, QL, H)
         p[f"blk.{l}.attn_q_a_norm.weight"] = np.ones(QL, np.float32)
-        p[f"blk.{l}.attn_q_b.weight"] = poids(rng, QL, NH * (QKN + QKR))
-        p[f"blk.{l}.attn_kv_a_mqa.weight"] = poids(rng, H, KVL + QKR)
+        p[f"blk.{l}.attn_q_b.weight"] = poids(rng, NH * (QKN + QKR), QL)
+        p[f"blk.{l}.attn_kv_a_mqa.weight"] = poids(rng, KVL + QKR, H)
         p[f"blk.{l}.attn_kv_a_norm.weight"] = np.ones(KVL, np.float32)
-        p[f"blk.{l}.attn_kv_b.weight"] = poids(rng, KVL, NH * (QKN + VD))
-        p[f"blk.{l}.attn_output.weight"] = poids(rng, NH * VD, H)
+        p[f"blk.{l}.attn_kv_b.weight"] = poids(rng, NH * (QKN + VD), KVL)
+        p[f"blk.{l}.attn_output.weight"] = poids(rng, H, NH * VD)
+        # Tenseurs « ordinaires » factices : le moteur exige un modèle chargeable
+        # (q/k/v/o, FFN) même quand c'est le chemin MLA qui sera emprunté. Ils ne
+        # servent à rien ici, mais sans eux le chargement s'arrête avant d'avoir
+        # lu les tenseurs MLA.
+        p[f"blk.{l}.attn_q.weight"] = poids(rng, NH * (QKN + QKR), H)
+        p[f"blk.{l}.attn_k.weight"] = poids(rng, QKN + QKR, H)
+        p[f"blk.{l}.attn_v.weight"] = poids(rng, QKN + QKR, H)
         p[f"blk.{l}.ffn_norm.weight"] = np.ones(H, np.float32)
-        p[f"blk.{l}.ffn_gate.weight"] = poids(rng, H, FFN)
-        p[f"blk.{l}.ffn_up.weight"] = poids(rng, H, FFN)
-        p[f"blk.{l}.ffn_down.weight"] = poids(rng, FFN, H)
+        p[f"blk.{l}.ffn_gate.weight"] = poids(rng, FFN, H)
+        p[f"blk.{l}.ffn_up.weight"] = poids(rng, FFN, H)
+        p[f"blk.{l}.ffn_down.weight"] = poids(rng, H, FFN)
     return p
 
 
@@ -100,16 +107,16 @@ def avant(p, ids):
     for l in range(NL):
         h = rmsnorm(x, p[f"blk.{l}.attn_norm.weight"])
         # --- requête : descente, norme, remontée, puis découpage
-        qa = h @ p[f"blk.{l}.attn_q_a.weight"]
+        qa = h @ p[f"blk.{l}.attn_q_a.weight"].T
         qa = rmsnorm(qa, p[f"blk.{l}.attn_q_a_norm.weight"])
-        qb = qa @ p[f"blk.{l}.attn_q_b.weight"]
+        qb = qa @ p[f"blk.{l}.attn_q_b.weight"].T
         q = qb.reshape(n, NH, QKN + QKR)
         q_nope, q_rope = q[..., :QKN], q[..., QKN:]
         # --- KV : descente MQA, norme sur la partie latente, remontée
-        kva = h @ p[f"blk.{l}.attn_kv_a_mqa.weight"]
+        kva = h @ p[f"blk.{l}.attn_kv_a_mqa.weight"].T
         c_kv, k_rope = kva[:, :KVL], kva[:, KVL:]
         c_n = rmsnorm(c_kv, p[f"blk.{l}.attn_kv_a_norm.weight"])
-        kv = c_n @ p[f"blk.{l}.attn_kv_b.weight"]
+        kv = c_n @ p[f"blk.{l}.attn_kv_b.weight"].T
         kv = kv.reshape(n, NH, QKN + VD)
         k_nope, v = kv[..., :QKN], kv[..., QKN:]
         # --- rotation : SEULEMENT les parties « rope », à chaque position
@@ -126,13 +133,13 @@ def avant(p, ids):
         att = softmax(sc + masque[:, None, :])
         o = np.einsum('nhm,mhv->nhv', att, v)
         o = o.reshape(n, NH * VD)
-        x = x + o @ p[f"blk.{l}.attn_output.weight"]
+        x = x + o @ p[f"blk.{l}.attn_output.weight"].T
         # --- FFN
         hn = rmsnorm(x, p[f"blk.{l}.ffn_norm.weight"])
-        g = hn @ p[f"blk.{l}.ffn_gate.weight"]
-        u = hn @ p[f"blk.{l}.ffn_up.weight"]
+        g = hn @ p[f"blk.{l}.ffn_gate.weight"].T
+        u = hn @ p[f"blk.{l}.ffn_up.weight"].T
         act = (g / (1.0 + np.exp(-g))) * u          # SiLU(g) * u
-        x = x + act @ p[f"blk.{l}.ffn_down.weight"]
+        x = x + act @ p[f"blk.{l}.ffn_down.weight"].T
     hn = rmsnorm(x, p["output_norm.weight"])
     return hn @ p["token_embd.weight"].T            # tête liée
 
@@ -163,7 +170,7 @@ def gguf_ecrire(chemin, p, ids_entree):
     infos = []
     for nom in noms:
         t = p[nom]
-        dims = list(t.shape)
+        dims = dims_gguf(t.shape)
         infos.append((nom, dims, 0, decalage))       # type 0 = F32
         decalage += t.nbytes
     with open(chemin, "wb") as f:
@@ -197,6 +204,15 @@ def gguf_ecrire(chemin, p, ids_entree):
         for nom in noms:
             f.write(p[nom].tobytes())
     return chemin
+
+
+def dims_gguf(forme):
+    """Un tenseur de couche linéaire est stocké (sortie, entrée) et DÉCLARÉ
+    (entrée, sortie) : c'est la convention GGUF, et s'y tromper revient à
+    multiplier par la transposée — l'erreur a été trouvée en comparant le moteur
+    à cette référence (écart 0,82 relatif). Les tenseurs 1-D et la table
+    d'embedding (lue ligne à ligne) ne sont pas renversés."""
+    return list(forme) if len(forme) < 2 or forme[0] == VOCAB else list(reversed(forme))
 
 
 def ecrire_chaine(f, s):

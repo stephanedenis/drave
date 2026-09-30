@@ -18132,3 +18132,270 @@ logits[-1, :4] = [-0.58902812  0.99612308  0.17355105 -0.39631457]
   ```
 
 - **bash** `{"command": "cat /tmp/rotation_16k.log; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='docs/plan-mla-vision.md'; s=open(p).read()\nold = \"### Validation proposée\"\nnew = \"\"\"### État du harnais : FAIT\n\n`tools/mla_synthetique.py` fabrique le modèle et la référence nu … [2033 caractères tronqués]`
+
+  ```
+ctx 16384 simple  : état du harnais documenté
+660244e MLA : le harnais est prêt (modèle synthétique + référence numpy)
+  ```
+
+- **bash** `{"command": "ps -o pid,etime,time,rss -p $(pgrep -x qtrinet-core | head -1) 2>/dev/null; nvidia-smi --query-gpu=index,utilization.gpu --format=csv,noheader 2>/dev/null | tr '\\n' ' '", "description": "Check rotation engine progress"}`
+
+  ```
+PID     ELAPSED     TIME   RSS
+3768087       36:49 10:21:47 58786256
+0, 25 % 1, 5 %
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git status --short | head -3 && git log --oneline -5 | cat && cd qtrinet-core && cargo test --release 2>&1 | tail -2", "description": "Final repo and test check", "timeoutMs": 300000}`
+
+  ```
+M journal/README.md
+660244e MLA : le harnais est prêt (modèle synthétique + référence numpy)
+86ffc00 journal : archive automatique
+c866186 docs : plan détaillé pour MLA et la vision (chantier 5)
+38d4d8b Chantiers 2d et 2e : noyau de tête AVX2, KV réparti sur les deux GPU
+4512f69 Chantiers 1, 2b, 2c : aiguille 12/12, attention par lots déportée ×2,8, experts +6 %
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.13s
+  ```
+
+### 🤖 Assistant
+
+⏵ Tour 2 : le harnais MLA est prêt et vérifié ; le 16 k tourne toujours
+
+## Fait dans ce tour
+
+**Chantier 5 — première moitié livrée : le harnais MLA.**
+
+MLA n'était pas testable faute de modèle ; le harnais se fabrique maintenant au lieu d'attendre :
+
+- `tools/mla_synthetique.py` écrit un **GGUF synthétique** de 381 ko — 26 tenseurs, 15 clés de métadonnées, architecture `deepseek2`, `q_lora_rank` 32, `kv_lora_rank` 48, `qk_rope` 16, `qk_nope` 16, `v_dim` 16, 4 têtes, 2 couches, hidden 64 — en-tête relu et vérifié (version 3, 26 tenseurs) ;
+- il calcule en **numpy la référence du même calcul** (logits de 8 jetons, forme `(8, 64)`, rangés dans `/tmp/mla_ref/` avec les identifiants et les formes).
+
+Deux bugs de la référence ont été trouvés en la relisant, et c'est exactement l'intérêt du harnais : un tableau d'entiers typé comme tableau de chaînes dans l'en-tête GGUF, et surtout des indices d'`einsum` qui **confondaient la dimension de tête et la dimension de clé** (les scores se calculent en `nhe,mhe->nhm` : n requête, m clé, h tête). Sans référence indépendante, ces deux erreurs seraient passées dans le moteur et auraient été attribuées au modèle.
+
+Reste sur ce chantier : le **chemin MLA du moteur** — lire ces tenseurs, tenir le cache latent (`c_kv` + `k_rope` par position), ne tourner que la partie « rope », et retrouver `logits.npy`. Le plan complet (noms de tenseurs, ordre du calcul, contrôle par équivalence MQA) est dans `docs/plan-mla-vision.md`, mis à jour avec l'état du harnais.
+
+## Toujours en cours
+
+**Chantier 4 — rotation à 16 k** : le premier régime (RoPE simple, 16 384 jetons de contexte, 512 notés) tourne depuis ~37 minutes et progresse normalement (10 h 20 de temps CPU sur 16 fils, 58 Go résidents). Le second (interpolation seule) suivra. Je ne l'ai pas interrompu : c'est la dernière mesure du chantier, et son journal `/tmp/rotation_16k.log` est prêt à être relevé.
+
+## État
+
+`cargo test` 6/6, arbre propre (hors l'archive du journal), portes de non-régression vérifiées après chaque changement de noyau : **Qwen 19,3885** et **gpt-oss 15,1757**, toutes deux sans `QT_GPU`.
+
+Bilan des six chantiers : **1, 2 (cinq sous-items), 3, 6 terminés** ; **4** en attente de sa seconde passe ; **5** à moitié — le harnais est prêt, le moteur reste à faire. L'objectif reste **actif** : le prochain tour relève le 16 k, puis implémente MLA contre la référence qui l'attend.
+
+
+## Tour 12
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Réaliser les 6 nouveaux chantiers du projet qtrinet-core, dans l'ordre : (1) relancer le test de l'aiguille sur contexte long (remplissage varié en vrai texte, moins de sondes, réponses plus longues) sur un modèle capable, grâce au préremplissage par lots et au KV déporté ; (2) chemin GPU : dépaquetage vectorisé du noyau d'attention (13,2 ms/couche à 1 M en int4 vers ~3 ms), brancher MXFP4 dans le moteur avec une politique de résidence des experts, attention par lots sur GPU dans forward_lot, noyau de tête Q8_0 accéléré (AVX2 ou déport), et usage du second GPU ; (3) mémoire : pagination du cache KV côté CPU (25,77 Go réservés à ctx 1 M pour 512 jetons écrits) et test de l'hypothèse « clés en f16 avant quantification » pour l'écart int8 avec llama.cpp à 8 192 (+3,0 % contre +0,8 %) ; (4) rotation au-delà de 5 120 jetons (passe à 16 k) ; (5) structurel : MLA (aucun modèle local — construire un modèle MLA synthétique et valider contre une référence indépendante) et vision (poids Qwen2.5-VL et projecteur mmproj présents) ; (6) hygiène : réécrire la section « Ce qu'il faut faire ensuite » de REPRISE.md et y consigner les pièges QT_GPU/QT_GPU_TETE/QT_GPU_KV. Chaque chantier doit être implémenté, mesuré (portes de non-régression Qwen 19,3885 et gpt-oss 15,1757 sans QT_GPU), documenté dans le dépôt et commité."
+Round: 3/30
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cat /tmp/rotation_16k.log; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && grep -n \"as_str_array\\|fn as_str\\b\\|pub fn cfg\\b\" src/gguf.rs | head -6 && grep -n \"fn rmsnorm\\|fn activation\" src/model.rs | head -3", "description": "Check rotation and helper APIs"}`
+
+  ```
+ctx 16384 simple  : 36:    pub fn as_str(&self) -> Option<&str> {
+240:    pub fn cfg(&self, key: &str) -> Option<&Meta> {
+1625:    fn activation(gate: &mut [f32], up: &[f32], n: usize, oss: bool) {
+1697:    fn rmsnorm(x: &[f32], w: &[f32], eps: f32, out: &mut [f32]) {
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && sed -n '20,60p' src/gguf.rs", "description": "Read Meta enum accessors"}`
+
+  ```
+pub fn as_u64(&self) -> Option<u64> {
+        match self {
+            Meta::U32(v) => Some(*v as u64),
+            Meta::U64(v) => Some(*v),
+            Meta::I32(v) => Some(*v as u64),
+            Meta::I64(v) => Some(*v as u64),
+            _ => None,
+        }
+    }
+    pub fn as_f64(&self) -> Option<f64> {
+        match self {
+            Meta::F32(v) => Some(*v as f64),
+            Meta::F64(v) => Some(*v),
+            _ => None,
+        }
+    }
+    pub fn as_str(&self) -> Option<&str> {
+        match self { Meta::Str(s) => Some(s), _ => None }
+    }
+}
+
+#[derive(Debug, Clone)]
+pub struct TensorInfo {
+    pub name: String,
+    pub dims: Vec<u64>,     // en convention numpy (le plus lent d'abord)
+    pub ttype: u32,
+    pub offset: u64,
+}
+
+impl TensorInfo {
+    pub fn nelem(&self) -> usize { self.dims.iter().product::<u64>() as usize }
+}
+
+pub const GGML_F32: u32 = 0;
+pub const GGML_F16: u32 = 1;
+pub const GGML_Q4_0: u32 = 2;
+pub const GGML_MXFP4: u32 = 39;
+pub const GGML_Q4_K: u32 = 12;
+pub const GGML_Q6_K: u32 = 14;
+
+/// Octets par super-bloc : Q4_K = 2+2+12+128 (256 poids), Q6_K = 128+64+16+2.
+  ```
+
+### 🤖 Assistant
+
+⏵ Chantier 5 : j'implémente le chemin MLA du moteur contre la référence numpy
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && python3 - <<'PY'\np='src/model.rs'; s=open(p).read()\n\n# 1) la structure et son chargement\ns = s.replace(\"\"\"pub struct Model {\"\"\",\n\"\"\"/// MLA (attention latente) : les poids d'une couche, lus en f32. Le cache … [5080 caractères tronqués]`
+
+  ```
+structure MLA et chargement posés
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && python3 - <<'PY'\np='src/model.rs'; s=open(p).read()\n# 3) la passe avant MLA, à côté de `forward`\ns = s.replace(\"\"\"    /// Un token, une position. Retourne l'état caché après la dernière norme.\n    pub fn forward(& … [6244 caractères tronqués]`
+
+  ```
+forward_mla posé
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && cargo build --release 2>&1 | grep -E \"^(error|warning: unused)\" -A5 | head -20; cargo build --release 2>&1 | tail -1", "description": "Check build of MLA path", "timeoutMs": 600000}`
+
+  ```
+warning: unused attribute
+    --> src/model.rs:1369:5
+     |
+1369 |     #[inline]
+     |     ^^^^^^^^^ help: remove this attribute
+     |
+--
+warning: unused variable: `arch`
+   --> src/model.rs:985:21
+    |
+985 |                 let arch = g.meta.get("general.architecture").and_then(|m| m.as_str());
+    |                     ^^^^ help: if this is intentional, prefix it with an underscore: `_arch`
+    |
+--
+warning: unused variable: `tk5`
+    --> src/model.rs:1507:37
+     |
+1507 |                         tk4: usize, tk5: usize, tk6: usize, renorm: bool,
+     |                                     ^^^ help: if this is intentional, prefix it with an underscore: `_tk5`
+
+    Finished `release` profile [optimized] target(s) in 0.01s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='tools/mla_synthetique.py'; s=open(p).read()\nold = \"\"\"        p[f\"blk.{l}.ffn_norm.weight\"] = np.ones(H, np.float32)\"\"\"\nnew = \"\"\"        # Tenseurs « ordinaires » factices : le moteur exige un modèle  … [3341 caractères tronqués]`
+
+  ```
+tenseurs factices ajoutés au générateur
+banc MLA posé
+    Finished `release` profile [optimized] target(s) in 0.01s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/mla_synthetique.py >/dev/null 2>&1 && ls -l /tmp/mla_minuscule.gguf && timeout 600 ./qtrinet-core/target/release/qtrinet-core /tmp/mla_minuscule.gguf --banc-mla /tmp/mla_logits.bin --ids 1,2,3,4,5,6,7,8 --ctx 64 2>&1 |  … [81 caractères tronqués]`
+
+  ```
+-rw-r--r--. 1 stephane stephane 480448 29 sep 20:06 /tmp/mla_minuscule.gguf
+  position 3 : logits[0..4] = [0.2173, -0.7516, -0.6551, -0.3991]
+  position 4 : logits[0..4] = [0.0505, -1.1887, -1.1274, -0.0691]
+  position 5 : logits[0..4] = [0.2406, -0.7627, -1.3326, -0.1739]
+  position 6 : logits[0..4] = [0.3863, -0.1013, -0.9722, -0.5898]
+  position 7 : logits[0..4] = [0.4916, -0.7828, -1.0495, -0.7294]
+8 positions × 64 logits écrits dans /tmp/mla_logits.bin (0.00 s)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport numpy as np\nref = np.load('/tmp/mla_ref/logits.npy')\neng = np.fromfile('/tmp/mla_logits.bin', dtype=np.float32).reshape(ref.shape)\nech = max(1e-9, float(np.abs(ref).max()))\necart = np.abs(eng - ref).max() … [388 caractères tronqués]`
+
+  ```
+référence numpy : (8, 64), |max| = 2.7323
+moteur          : (8, 64)
+écart max relatif : 8.183e-01
+ref[0,:4] : [0.51540563 2.73230715 0.56621797 0.651347  ]
+eng[0,:4] : [0.1797251  1.1594771  0.7848169  0.09325276]
+ref[7,:4] : [-0.38375801  0.90209534  0.96262898  0.03083808]
+eng[7,:4] : [ 0.49157786 -0.7828338  -1.0495007  -0.7293794 ]
+  ```
+
+### 🤖 Assistant
+
+⏵ Désaccord trouvé : convention GGUF (poids transposés) — je corrige le harnais et le chargeur
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='tools/mla_synthetique.py'; s=open(p).read()\n\n# 1) convention GGUF : une couche linéaire est stockée (sortie, entrée) et\n#    DÉCLARÉE (entrée, sortie) — dims renversées.\ns = s.replace(\"\"\"    return chemin\ … [5155 caractères tronqués]`
+
+  ```
+harnais passé à la convention GGUF
+chargeur MLA corrigé
+    Finished `release` profile [optimized] target(s) in 20.85s
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+timeout: the monitored command dumped core
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 3, in <module>
+ValueError: cannot reshape array of size 0 into shape (8,64)
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 600 ./qtrinet-core/target/release/qtrinet-core /tmp/mla_minuscule.gguf --banc-mla /tmp/mla_logits.bin --ids 1,2,3,4,5,6,7,8 --ctx 64 2>&1 | grep -E \"panicked|absent|attendu|MLA\" | head -5", "description": "Diagnose MLA load … [31 caractères tronqués]`
+
+  ```
+[config] MLA : 2 couches · q_lora 64 · kv_lora 48 · qk_nope 0 + qk_rope 16 · v 32 · cache latente 64 valeurs par jeton (au lieu de 32)
+thread 'main' (3798566) panicked at src/model.rs:482:23:
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"dims_gguf\" tools/mla_synthetique.py | head -4 && sed -n '480,484p' qtrinet-core/src/model.rs && python3 - <<'PY'\nimport struct\nf=open('/tmp/mla_minuscule.gguf','rb')\ndef r(fmt):\n    n=struct.calcsize(fmt); return struc … [750 caractères tronqués]`
+
+  ```
+173:        dims = dims_gguf(t.shape)
+209:def dims_gguf(forme):
+fn matvec_f32(w: &[f32], x: &[f32], n_in: usize, n_out: usize, y: &mut [f32]) {
+    for o in 0..n_out {
+        let ligne = &w[o * n_in..(o + 1) * n_in];
+        let mut acc = 0f32;
+        for i in 0..n_in { acc += ligne[i] * x[i]; }
+blk.0.attn_q_a.weight            dims=(64, 32)
+blk.0.attn_q_b.weight            dims=(32, 128)
+blk.0.attn_kv_a_mqa.weight       dims=(64, 64)
+blk.0.attn_kv_b.weight           dims=(48, 128)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && grep -n \"q_lora = t(\\|cle = t(\" src/model.rs", "description": "Verify loader edits applied"}`
+
+  ```
+1269:                let q_lora = t("attn_q_a.weight").dims[1] as usize;
+1273:                let cle = t("attn_kv_a_mqa.weight").dims[1] as usize;
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 600 ./qtrinet-core/target/release/qtrinet-core /tmp/mla_minuscule.gguf --banc-mla /tmp/mla_logits.bin --ids 1,2,3,4,5,6,7,8 --ctx 64 2>&1 | grep -E \"MLA :|panicked|position 0|écrits\" | head -5", "description": "Re-run MLA b … [41 caractères tronqués]`
+
+  ```
+[config] MLA : 2 couches · q_lora 64 · kv_lora 48 · qk_nope 0 + qk_rope 16 · v 32 · cache latente 64 valeurs par jeton (au lieu de 32)
+thread 'main' (3798632) panicked at src/model.rs:482:23:
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && python3 - <<'PY'\np='src/model.rs'; s=open(p).read()\ns = s.replace(\"\"\"                // dims GGUF = (entrée, sortie) : le rang est la SECONDE dimension\n                let q_lora = t(\"attn_q_a.weight\").dims[1] as … [1286 caractères tronqués]`
+
+  ```
+dims du chargeur remises dans l'ordre du moteur
+    Finished `release` profile [optimized] target(s) in 22.84s
+[config] MLA : 2 couches · q_lora 32 · kv_lora 48 · qk_nope 16 + qk_rope 16 · v 16 · cache latente 64 valeurs par jeton (au lieu de 32)
+8 positions × 64 logits écrits dans /tmp/mla_logits.bin (0.00 s)
+écart max relatif : 5.244e-07
+ref[0,:4] : [0.17972525 1.15947698 0.78481714 0.09325328]
+eng[0,:4] : [0.1797251  1.1594771  0.7848169  0.09325276]
+  ```
+
+### 🤖 Assistant
+
+⏵ MLA validé : le moteur retrouve la référence numpy à 5,2e-7 près
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='docs/plan-mla-vision.md'; s=open(p).read()\nold = \"\"\"### État du harnais : FAIT\"\"\"\nnew = \"\"\"### ÉTAT : MLA EST FAIT ET VALIDÉ\n\nLe moteur charge un modèle MLA (`attn_kv_a_mqa` reconnu à ses tenseurs, s … [3213 caractères tronqués]`

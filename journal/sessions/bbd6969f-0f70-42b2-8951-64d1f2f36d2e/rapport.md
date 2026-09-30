@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 29.3 h |
-| Tours | 11 |
-| Messages | 1133 |
-| Appels d'outils | 1120 |
+| Durée | 29.4 h |
+| Tours | 12 |
+| Messages | 1152 |
+| Appels d'outils | 1137 |
 | Fichiers touchés | 38 |
-| Commandes | 854 |
+| Commandes | 871 |
 | Sous-agents | 1 |
-| Commits | 43 |
+| Commits | 44 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -47,6 +47,8 @@
 **Tour 10** — <goal_round> Objective: "Réaliser les 6 nouveaux chantiers du projet qtrinet-core, dans l'ordre : (1) relancer le test de l'aiguille sur contexte long (remplissage varié en vrai texte, moins de sondes, réponses plus longues) sur un modèle capable, grâce au préremplissage par lots et au KV déporté ; (2) chemin GPU : dépaquetage vectorisé du noyau d'attention (13,2 ms/couche à 1 M en int4 vers ~3 ms … [1491 caractères tronqués]
 
 **Tour 11** — <goal_round> Objective: "Réaliser les 6 nouveaux chantiers du projet qtrinet-core, dans l'ordre : (1) relancer le test de l'aiguille sur contexte long (remplissage varié en vrai texte, moins de sondes, réponses plus longues) sur un modèle capable, grâce au préremplissage par lots et au KV déporté ; (2) chemin GPU : dépaquetage vectorisé du noyau d'attention (13,2 ms/couche à 1 M en int4 vers ~3 ms … [1491 caractères tronqués]
+
+**Tour 12** — <goal_round> Objective: "Réaliser les 6 nouveaux chantiers du projet qtrinet-core, dans l'ordre : (1) relancer le test de l'aiguille sur contexte long (remplissage varié en vrai texte, moins de sondes, réponses plus longues) sur un modèle capable, grâce au préremplissage par lots et au KV déporté ; (2) chemin GPU : dépaquetage vectorisé du noyau d'attention (13,2 ms/couche à 1 M en int4 vers ~3 ms … [1491 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -498,7 +500,7 @@ L'objectif reste **actif** : le prochain tour commence par relever le résultat 
 
 ### Tour 11 — <goal_round> Objective: "Réaliser les 6 nouveaux chantiers du projet qtrinet-core, dans l'ordre : (1) relancer le test d … [1771 caractères tronqués]
 
-*9 appels d'outils.* Actions notables :
+*11 appels d'outils.* Actions notables :
 
 - bash — Collect 16k rotation result
 - bash — Check engine elapsed time
@@ -509,6 +511,59 @@ L'objectif reste **actif** : le prochain tour commence par relever le résultat 
 - bash — Debug MLA reference shapes
 - bash — Fix einsum indices and regenerate
 - bash — Document harness state and commit
+- bash — Check rotation engine progress
+- bash — Final repo and test check
+
+**Synthèse produite :**
+
+⏵ Tour 2 : le harnais MLA est prêt et vérifié ; le 16 k tourne toujours
+
+\## Fait dans ce tour
+
+**Chantier 5 — première moitié livrée : le harnais MLA.**
+
+MLA n'était pas testable faute de modèle ; le harnais se fabrique maintenant au lieu d'attendre :
+
+- `tools/mla_synthetique.py` écrit un **GGUF synthétique** de 381 ko — 26 tenseurs, 15 clés de métadonnées, architecture `deepseek2`, `q_lora_rank` 32, `kv_lora_rank` 48, `qk_rope` 16, `qk_nope` 16, `v_dim` 16, 4 têtes, 2 couches, hidden 64 — en-tête relu et vérifié (version 3, 26 tenseurs) ;
+- il calcule en **numpy la référence du même calcul** (logits de 8 jetons, forme `(8, 64)`, rangés dans `/tmp/mla_ref/` avec les identifiants et les formes).
+
+Deux bugs de la référence ont été trouvés en la relisant, et c'est exactement l'intérêt du harnais : un tableau d'entiers typé comme tableau de chaînes dans l'en-tête GGUF, et surtout des indices d'`einsum` qui **confondaient la dimension de tête et la dimension de clé** (les scores se calculent en `nhe,mhe->nhm` : n requête, m clé, h tête). Sans référence indépendante, ces deux erreurs seraient passées dans le moteur et auraient été attribuées au modèle.
+
+Reste sur ce chantier : le **chemin MLA du moteur** — lire ces tenseurs, tenir le cache latent (`c_kv` + `k_rope` par position), ne tourner que la partie « rope », et retrouver `logits.npy`. Le plan complet (noms de tenseurs, ordre du calcul, contrôle par équivalence MQA) est dans `docs/plan-mla-vision.md`, mis à jour avec l'état du harnais.
+
+\## Toujours en cours
+
+**Chantier 4 — rotation à 16 k** : le premier régime (RoPE simple, 16 384 jetons de contexte, 512 notés) tourne depuis ~37 minutes et progresse normalement (10 h 20 de temps CPU sur 16 fils, 58 Go résidents). Le second (interpolation seule) suivra. Je ne l'ai pas interrompu : c'est la dernière mesure du chantier, et son journal `/tmp/rotation_16k.log` est prêt à être relevé.
+
+\## État
+
+`cargo test` 6/6, arbre propre (hors l'archive du journal), portes de non-régression vérifiées après chaque changement de noyau : **Qwen 19,3885** et **gpt-oss 15,1757**, toutes deux sans `QT_GPU`.
+
+Bilan des six chantiers : **1, 2 (cinq sous-items), 3, 6 terminés** ; **4** en attente de sa seconde passe ; **5** à moitié — le harnais est prêt, le moteur reste à faire. L'objectif reste **actif** : le prochain tour relève le 16 k, puis implémente MLA contre la référence qui l'attend.
+
+### Tour 12 — <goal_round> Objective: "Réaliser les 6 nouveaux chantiers du projet qtrinet-core, dans l'ordre : (1) relancer le test d … [1771 caractères tronqués]
+
+*15 appels d'outils.* Actions notables :
+
+- bash — Check rotation and helper APIs
+- bash — Read Meta enum accessors
+- bash — Add MLA struct and loader
+- bash — Implement MLA forward path
+- bash — Check build of MLA path
+- bash — Add MLA bench and dummy tensors
+- bash — Run MLA bench on synthetic model
+- bash — Compare engine MLA logits with numpy reference
+- bash — Fix GGUF convention and recompare
+- bash — Diagnose MLA load failure
+- bash — Check declared dims in the file
+- bash — Verify loader edits applied
+- bash — Re-run MLA bench after rebuild
+- bash — Fix dims order and compare again
+- … et 1 autres
+
+**Synthèse produite :**
+
+⏵ MLA validé : le moteur retrouve la référence numpy à 5,2e-7 près
 
 ## 3. Travail accompli
 
@@ -601,7 +656,7 @@ L'objectif reste **actif** : le prochain tour commence par relever le résultat 
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 814 autres
+- … et 831 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -729,7 +784,7 @@ L'objectif reste **actif** : le prochain tour commence par relever le résultat 
 
 ## 5. Erreurs rencontrées
 
-50 sorties en erreur ou divergentes. Les premières :
+53 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : a8f2635f8 docs: record which models this box is good at, and why src/llama-hparams.cpp:8:void llama_hparams::set_swa_pattern(uint32_t n_pattern, bool dense_first) { src/llama-hparams.h:308:    void se
 - **T1** : 511 tokens notés — perplexité cumulée 247.031  (4.9 tok/s) === perplexité 247.0308 sur 511 tokens (0 événements, 104.5 s) ===  ### B3 harmony assistant 511 --- ref --- 0.0 0.0 0:00 ls: cannot access '
@@ -792,4 +847,5 @@ L'objectif reste **actif** : le prochain tour commence par relever le résultat 
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log -1 --format=%B | tail -4 && cat > /tmp/msg_plan.txt <<'EOF' docs : plan détaillé pour MLA et la vi
 - journal : archive automatique" 2>/dev/null; git log --oneline -3 | cat
 - cat /tmp/rotation_16k.log; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p='docs/plan-mla-vision.md'; s=open(p).read() old = "### Valid
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p='docs/plan-mla-vision.md'; s=open(p).read() old = """### État du harnais : FAIT""" new 
 
