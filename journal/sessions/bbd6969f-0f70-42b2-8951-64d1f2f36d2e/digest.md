@@ -31555,3 +31555,115 @@ les refus ne tuent plus le nœud
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && (cd drave-core && timeout 300 cargo test --release 2>&1 | grep -E \"^test result\"); TAG=z1 PORT=47810 CTX=256 LIM=40 EXTRA=\"\" timeout 300 /tmp/test_reparti.sh 2>&1 | grep -E \"écart\"; TAG=z2 PORT=47811 CTX=256 LIM=40 EXTRA=\"--lo … [3174 caractères tronqués]`
+
+  ```
+test result: ok. 17 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.09s
+  écart             : 0.00e0
+  écart             : 0.00e0
+reports/rapport-mode4-lot-listes.md : 2/2
+reports/rapport-placement-bits-kv.md : 1/1
+docs/plan-mode4-lot-listes.md : 1/1
+645c3ee Quatrième relecture : deux défauts graves (client et nœud tués par 83 octets) — corrigés
+17:34:27
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && MOI=$$; for pid in $(pgrep -f \"flux-serveur|pair_factice|aiguille\" | grep -v \"^$MOI\\$\"); do kill $pid 2>/dev/null; done; sleep 1; echo \"processus restants : $(pgrep -c -f 'release/drave' 2>/dev/null || echo 0)\"; git status --s … [260 caractères tronqués]`
+
+  ```
+processus restants : 2
+ M journal/README.md
+commits du créneau : 27 · du jour : 98
+17:34:33
+37, 8,25, 7,32
+  ```
+
+- **get_goal** `{}`
+
+  ```
+{"goal":{"id":"goal-c04be19f-289d-41cb-beb1-479e60cfbe8c","revision":1,"objective":"Travailler en autonomie jusqu'à 18h00 HAE sur Drave, en couloirs parallèles : (A) noyau GPU de top-k pour l'attention creuse (phase 1.1, le seul poste GPU neuf de la feuille de route), (B) campagne de mesure en fond (frontière du cache KV à un autre contexte, vérifications long contexte), (C) analyses et relectures déléguées (spec du mode 4 « lot en listes », audit de cohérence des documents après les changements du jour), (D) préparation de la démonstration Colab côté utilisateur. Chaque affirmation mesurée, chaque chantier commité, dépôt vert et portes de non-régression (Qwen 19,3885 · gpt-oss 15,1757) intactes.","phase":"active","roundsStarted":0,"maxGoalRounds":12},"activation":"armed"}
+  ```
+
+- **update_goal** `{"action": "complete", "goal_id": "goal-c04be19f-289d-41cb-beb1-479e60cfbe8c", "revision": 1}`
+
+> **Objectif** (complete) : Travailler en autonomie jusqu'à 18h00 HAE sur Drave, en couloirs parallèles : (A) noyau GPU de top-k pour l'attention creuse (phase 1.1, le seul poste GPU neuf de la feuille de route), (B) campagne de mesure en fond (frontière du cache KV à un autre contexte, vérifications long contexte), (C) analyses et relectures déléguées (spec du mode 4 « lot en listes », audit de cohérence des documents après les changements du jour), (D) préparation de la démonstration Colab côté utilisateur. Chaque affirmation mesurée, chaque chantier commité, dépôt vert et portes de non-régression (Qwen 19,3885 · gpt-oss 15,1757) intactes.
+
+
+  ```
+{"goal":{"id":"goal-c04be19f-289d-41cb-beb1-479e60cfbe8c","revision":2,"objective":"Travailler en autonomie jusqu'à 18h00 HAE sur Drave, en couloirs parallèles : (A) noyau GPU de top-k pour l'attention creuse (phase 1.1, le seul poste GPU neuf de la feuille de route), (B) campagne de mesure en fond (frontière du cache KV à un autre contexte, vérifications long contexte), (C) analyses et relectures déléguées (spec du mode 4 « lot en listes », audit de cohérence des documents après les changements du jour), (D) préparation de la démonstration Colab côté utilisateur. Chaque affirmation mesurée, chaque chantier commité, dépôt vert et portes de non-régression (Qwen 19,3885 · gpt-oss 15,1757) intactes.","phase":"complete","roundsStarted":0,"maxGoalRounds":12},"activation":"disarmed"}
+  ```
+
+### 🤖 Assistant
+
+⏵ Créneau 15h07 → 18h00 terminé : machine rendue, dépôt vert, objectif clos.
+
+## Créneau 15h07 → 17h35 — ce qui a été fait
+
+### 1. Le mode 4 « lot en listes » : écrit, mesuré, relu, corrigé
+
+Le prochain chantier identifié après le mode 3. Chaque état d'un lot est encodé comme le mode 2 et auto-délimité par ses trois tailles (`a_j · n_blocs_j · longueur_j`), lues avant toute allocation. Protocole passé en **version 5** (un pair v4 refuserait le mode *avant* de lire un octet).
+
+| | octets par jeton | écart |
+|---|---|---|
+| lot dense (mode 3) | 3 663 | 0,00e0 |
+| **lot en listes (mode 4)** | **1 500** | 3,03e-2 à 256 jetons |
+
+La relecture adversariale du mode 4 (fraîchement écrit) a trouvé **10 défauts, dont 2 graves** — et le plus embarrassant était **un de mes correctifs de l'après-midi** : le refus de `n == 0` que j'avais ajouté tuait une session légitime (une liste d'activation **vide**, ça existe : seuil au-dessus du maximum). Le contrôle indépendant du dépôt mourait dessus. Corrigé, testé, et le plafond R4 est devenu **cumulatif** — vérifié à l'octet près : refus à l'état 72 393, exactement le franchissement des 256 Mo.
+
+### 2. La politique du cache KV, complète — et elle dépend du régime
+
+| régime | réglage | pourquoi |
+|---|---|---|
+| court/moyen, CPU | **clés f16 + valeurs int8** (39 % du f32, +0,018 %) | le meilleur compromis taille/qualité |
+| long, **avec** miroir VRAM | **int8/int8** homogène | toute variante d'attribution **désactive** le miroir, qui divise l'attention par 40 (1,7 ms contre 70-174 ms par passe) |
+| long, sans GPU | int8/int8 | les clés f16 coûtent **2,3× le temps CPU** (162 contre 70 ms à 262 144 clés) |
+
+Et **l'aiguille v2 retrouve 9/9 sondes dans les trois variantes**, int8/int8 compris — la tâche est plus robuste que la perplexité ne le suggère.
+
+### 3. Le chantier GPU : plan chiffré plutôt que bâclé
+
+Le mode creux ne peut pas utiliser le miroir VRAM (le chemin GPU est conditionné à `attn_topk == 0`) : à 1 M de clés il coûte **968 ms par couche** contre 13,2 ms. Trois noyaux, une sélection radix, six étapes, contrat d'exactitude — `docs/plan-gpu-topk.md`. Je ne l'ai pas commencé faute de 2 h devant moi : il est **écrit**, pas à moitié fait.
+
+### 4. Colab clé en main, et deux audits de cohérence
+
+`tools/colab_cote_local.sh` (nœud + les trois voies de tunnel + l'empreinte du modèle) et un notebook qui tokenise un **vrai texte** : la perplexité du banc passe de 17 869 à **19,8967**, l'écart reste 0,00e0. Les deux audits documentaires ont corrigé 15 puis 15 points — dont **mon erreur** : « 75 % de la taille du f32 » valait 64 % (j'avais oublié les échelles de bloc).
+
+### Les trois relectures du créneau, et ce qu'elles disent du travail
+
+**9 + 10 + 9 = 28 défauts** relevés par les relectures adversariales sur ce créneau, **presque tous par lecture et non par un banc**. Les deux plus graves de la dernière heure — un client qui affichait une perplexité de 2,76e8 comme un résultat, un nœud qui mourait sur 83 octets forgés — sont corrigés, et le nœud refuse maintenant **sans mourir** (un pair hostile ne doit pas pouvoir arrêter un service).
+
+**État final** : `cargo test` **17/17** · Qwen ctx 256 **19,3885** · gpt-oss **15,1757** · GPU **15,1667** · réparti dense, lot dense et lot en listes verts · **98 commits aujourd'hui** dont 27 sur ce créneau · 42 rapports, zéro lien mort · machine rendue.
+
+
+## Tour 47
+
+### 👤 Utilisateur
+
+pret pour des scrum de 2h (boxing temps réel, avec revue, rétro et planning)
+
+### 🤖 Assistant
+
+⏵ Oui — je monte la cadence : charte de sprint, outil de boxing temps réel, puis deux questions pour caler le rythme.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date +\"%H:%M:%S %Z\"; echo \"--- dernier créneau ---\"; git log --oneline --since=\"2026-09-30 15:05\" | wc -l; echo \"--- machine ---\"; uptime | cut -d, -f4-; pgrep -c -f \"release/drave\" 2>/dev/null || echo \"0 drave\"; free -g  … [258 caractères tronqués]`
+
+  ```
+17:39:46 EDT
+--- dernier créneau ---
+27
+--- machine ---
+40, 3,14, 5,34
+1
+115 Go dispo
+--- portes actuelles ---
+17 passed
+645c3ee Quatrième relecture : deux défauts graves (client et nœud tués par 83 octets) — corrigés
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && MOI=$$; for pid in $(pgrep -f \"release/drave\" | grep -v \"^$MOI\\$\"); do kill $pid 2>/dev/null && echo \"processus résiduel arrêté ($pid)\"; done; mkdir -p sprints && cat > tools/sprint.sh <<'EOF'\n#!/bin/bash\n# Boxing temps réel … [3818 caractères tronqués]`
+
+  ```
+syntaxe ok
+(aucun sprint encore)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > docs/sprints.md <<'EOF'\n# Les sprints de 2 h — charte\n\nCe document dit **comment on travaille**, pas ce qu'on fait (ça, c'est\n`docs/roadmap.md` et les sprints eux-mêmes, dans `sprints/`).\n\n## Le boxing\n\nUn sprint dure * … [3699 caractères tronqués]`

@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 50.8 h |
-| Tours | 46 |
-| Messages | 1963 |
-| Appels d'outils | 1852 |
+| Durée | 50.9 h |
+| Tours | 47 |
+| Messages | 1971 |
+| Appels d'outils | 1858 |
 | Fichiers touchés | 44 |
-| Commandes | 1523 |
+| Commandes | 1527 |
 | Sous-agents | 11 |
-| Commits | 169 |
+| Commits | 170 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -30,6 +30,8 @@
 - **complete** — Travailler en autonomie maximale et en couloirs parallèles jusqu'à 15h00 sur Drave : (A) campagne de mesure des clés du cache KV et de leur quantificateur, (B) préremplissage par lots sur le fil (phase 3.4, bloqueur Colab), (C) analyses déléguées et audit des drapeaux ignorés, (D) noyau GPU si la ma
 … [182 caractères tronqués]
 - **create** — Travailler en autonomie jusqu'à 18h00 HAE sur Drave, en couloirs parallèles : (A) noyau GPU de top-k pour l'attention creuse (phase 1.1, le seul poste GPU neuf de la feuille de route), (B) campagne de mesure en fond (frontière du cache KV à un autre contexte, vérifications long contexte), (C) analys
+… [321 caractères tronqués]
+- **complete** — Travailler en autonomie jusqu'à 18h00 HAE sur Drave, en couloirs parallèles : (A) noyau GPU de top-k pour l'attention creuse (phase 1.1, le seul poste GPU neuf de la feuille de route), (B) campagne de mesure en fond (frontière du cache KV à un autre contexte, vérifications long contexte), (C) analys
 … [321 caractères tronqués]
 
 ## 1. Ce qui a été demandé
@@ -125,6 +127,8 @@
 **Tour 45** — as-tu ce qu'il te faut pour te rendre à 15h en travaillaint avec un maximum d'autonomie et de parallélisme d'activités?
 
 **Tour 46** — continue jusqu'à 18h HAE
+
+**Tour 47** — pret pour des scrum de 2h (boxing temps réel, avec revue, rétro et planning)
 
 ## 2. Déroulé, étape par étape
 
@@ -2117,7 +2121,7 @@ L'**audit des drapeaux** a trouvé que **46 options sur 110** étaient ignorées
 
 ### Tour 46 — continue jusqu'à 18h HAE
 
-*114 appels d'outils.* Actions notables :
+*117 appels d'outils.* Actions notables :
 
 - bash — Check time, timezone and remaining budget
 - create_goal
@@ -2133,11 +2137,55 @@ L'**audit des drapeaux** a trouvé que **46 options sur 110** étaient ignorées
 - bash — Improve notebook with real text cell
 - bash — Kill test node safely and check notebook
 - bash — Add notebook real-text cell and commit
-- … et 100 autres
+- … et 103 autres
 
 **Synthèse produite :**
 
-La quatrième relecture a trouvé **2 défauts graves** (le client ne valide la réponse du pair que dans le chemin lot, et le nœud meurt sur un en-tête forgé). Je corrige ces deux-là d'abord — 28 minutes.
+⏵ Créneau 15h07 → 18h00 terminé : machine rendue, dépôt vert, objectif clos.
+
+\## Créneau 15h07 → 17h35 — ce qui a été fait
+
+\### 1. Le mode 4 « lot en listes » : écrit, mesuré, relu, corrigé
+
+Le prochain chantier identifié après le mode 3. Chaque état d'un lot est encodé comme le mode 2 et auto-délimité par ses trois tailles (`a_j · n_blocs_j · longueur_j`), lues avant toute allocation. Protocole passé en **version 5** (un pair v4 refuserait le mode *avant* de lire un octet).
+
+| | octets par jeton | écart |
+|---|---|---|
+| lot dense (mode 3) | 3 663 | 0,00e0 |
+| **lot en listes (mode 4)** | **1 500** | 3,03e-2 à 256 jetons |
+
+La relecture adversariale du mode 4 (fraîchement écrit) a trouvé **10 défauts, dont 2 graves** — et le plus embarrassant était **un de mes correctifs de l'après-midi** : le refus de `n == 0` que j'avais ajouté tuait une session légitime (une liste d'activation **vide**, ça existe : seuil au-dessus du maximum). Le contrôle indépendant du dépôt mourait dessus. Corrigé, testé, et le plafond R4 est devenu **cumulatif** — vérifié à l'octet près : refus à l'état 72 393, exactement le franchissement des 256 Mo.
+
+\### 2. La politique du cache KV, complète — et elle dépend du régime
+
+| régime | réglage | pourquoi |
+|---|---|---|
+| court/moyen, CPU | **clés f16 + valeurs int8** (39 % du f32, +0,018 %) | le meilleur compromis taille/qualité |
+| long, **avec** miroir VRAM | **int8/int8** homogène | toute variante d'attribution **désactive** le miroir, qui divise l'attention par 40 (1,7 ms contre 70-174 ms par passe) |
+| long, sans GPU | int8/int8 | les clés f16 coûtent **2,3× le temps CPU** (162 contre 70 ms à 262 144 clés) |
+
+Et **l'aiguille v2 retrouve 9/9 sondes dans les trois variantes**, int8/int8 compris — la tâche est plus robuste que la perplexité ne le suggère.
+
+\### 3. Le chantier GPU : plan chiffré plutôt que bâclé
+
+Le mode creux ne peut pas utiliser le miroir VRAM (le chemin GPU est conditionné à `attn_topk == 0`) : à 1 M de clés il coûte **968 ms par couche** contre 13,2 ms. Trois noyaux, une sélection radix, six étapes, contrat d'exactitude — `docs/plan-gpu-topk.md`. Je ne l'ai pas commencé faute de 2 h devant moi : il est **écrit**, pas à moitié fait.
+
+\### 4. Colab clé en main, et deux audits de cohérence
+
+`tools/colab_cote_local.sh` (nœud + les trois voies de tunnel + l'empreinte du modèle) et un notebook qui tokenise un **vrai texte** : la perplexité du banc passe de 17 869 à **19,8967**, l'écart reste 0,00e0. Les deux audits docume
+… [878 caractères tronqués]
+
+### Tour 47 — pret pour des scrum de 2h (boxing temps réel, avec revue, rétro et planning)
+
+*3 appels d'outils.* Actions notables :
+
+- bash — Check clock, machine and last sprint state
+- bash — Create the sprint timing tool
+- bash — Write the sprint charter and commit
+
+**Synthèse produite :**
+
+⏵ Oui — je monte la cadence : charte de sprint, outil de boxing temps réel, puis deux questions pour caler le rythme.
 
 ## 3. Travail accompli
 
@@ -2246,7 +2294,7 @@ La quatrième relecture a trouvé **2 défauts graves** (le client ne valide la 
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 1483 autres
+- … et 1487 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2563,4 +2611,5 @@ La quatrième relecture a trouvé **2 défauts graves** (le client ne valide la 
 - Compteurs de lignes : 12 171 au 30/09 (le mode 4 et ses correctifs ont ajouté 270 lignes)" && git log --oneline -1 | cat; date +"%H:%M:%S"
 - README : les prochaines étapes étaient restées à l'époque du FPGA  Elles listaient l'entraînement ternaire et le RTL comme priorités, alors que la feuille de ro
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && (cd drave-core && timeout 300 cargo test --release 2>&1 | grep -E "^test result"); TAG=z1 PORT=47810 CTX=2
+- Cadence de sprints de 2 h : charte et outil de boxing temps réel  \`tools/sprint.sh\` chronomètre un sprint sur l'heure du SYSTÈME (start/status/close) et écrit
 
