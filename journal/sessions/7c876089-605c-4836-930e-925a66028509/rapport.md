@@ -7,10 +7,10 @@
 | Début | 2026-09-30 13:10 |
 | Durée | 0.0 h |
 | Tours | 1 |
-| Messages | 4 |
-| Appels d'outils | 2 |
+| Messages | 8 |
+| Appels d'outils | 10 |
 | Fichiers touchés | 0 |
-| Commandes | 2 |
+| Commandes | 8 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -23,16 +23,21 @@
 
 ### Tour 1 — Tu es relecteur ADVERSARIAL dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (projet « Drave » : moteur d'i … [3709 caractères tronqués]
 
-*2 appels d'outils.* Actions notables :
+*10 appels d'outils.* Actions notables :
 
 - bash — List recent commits and repo root
 - bash — Show stats for target commits
+- bash — Show main.rs diff of 901f28d part 1
+- bash — Dump diffs a9fff24 and 86ddf12
+- bash — Show rest of 901f28d main.rs diff
+- bash — Show R4 cap diff
+- bash — Grep flux modes and caps
+- bash — Grep trace key logic
+- read
 
 **Synthèse produite :**
 
-⏵ Démarrage de la relecture adversariale des correctifs récents
-
-Je commence par inspecter le dépôt et les commits ciblés.
+⏵ Lecture des chemins d'écriture de trace (forward_lot, forward, forward_mla, flux_lot)
 
 ## 3. Travail accompli
 
@@ -45,6 +50,12 @@ Je commence par inspecter le dépôt et les commits ciblés.
 
 - **T1** List recent commits and repo root
 - **T1** Show stats for target commits
+- **T1** Show main.rs diff of 901f28d part 1
+- **T1** Dump diffs a9fff24 and 86ddf12
+- **T1** Show rest of 901f28d main.rs diff
+- **T1** Show R4 cap diff
+- **T1** Grep flux modes and caps
+- **T1** Grep trace key logic
 
 ## 4. Mesures et résultats marquants
 
@@ -55,4 +66,7 @@ Je commence par inspecter le dépôt et les commits ciblés.
 - **T1** `par `verifier_taille`, qui refuse au-delà de 256 Mo en NOMMANT la règle.`
 - **T1** `- **D4** : `tools/pair_factice.py` ne lisait pas le mode lot (`n × 4` au lieu de`
 - **T1** ``n × dimension × 4`) — il bloquait le client et mourait. C'est pour cela que le`
+- **T1** `+/// annonce `n = 4 milliards` fait allouer `n × dimension × 4` octets AVANT tout`
+- **T1** `+/// contrôle : jusqu'à ~15 To demandés au noyau. 256 Mo couvrent largement un lot`
+- **T1** `+/// de 8 192 jetons × 8 192 canaux (268 Mo... soit un lot par fenêtre maximale).`
 

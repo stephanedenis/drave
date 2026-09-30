@@ -27,7 +27,7 @@ plus aucun repli silencieux.
 | 1.1 | **Top-k dans le noyau d'attention GPU** — `--attn-topk 256` améliore la perplexité (234,88 contre 298,56 à 2 048) mais retombe sur le CPU | ⏳ | plus aucun repli CPU dans le chemin long contexte |
 | 1.2 | **Quantification choisie par la mesure** : par couche, par tenseur, plutôt qu'un réglage global | 🔬 | la densité par couche varie de **20 % à 56 %** (`reports/rapport-analyse-flux.md`) : la décision push/pull est une propriété de la COUCHE, pas du modèle |
 | 1.3 | **Purge des seuils codés en dur** : le placement (KV, experts, tête) décidé par une règle explicite, pas par un `if` | ⏳ | une table de décision documentée, réglée par des mesures |
-| 1.4 | **Écart int8 résiduel** (+3,0 % contre +0,8 % chez llama.cpp à 8 192) | ⏳ | **expérience conçue** : garder les CLÉS en f32 et quantifier les VALEURS, puis l'inverse — c'est la seule façon d'attribuer l'écart entre les scores et la somme pondérée |
+| 1.4 | **Écart int8 résiduel** (+3,0 % contre +0,8 % chez llama.cpp à 8 192) | ✅ | **attribué** : tout l'écart est dans les CLÉS (clés f32 + valeurs int8 = +0,023 % ; l'inverse = +3,01 %) ; **courbe du placement des bits faite** (`reports/rapport-placement-bits-kv.md`) — à taille égale, mettre les bits sur les clés change l'erreur d'un facteur 130 à 840. Suite : clés en f16 (`DRAVE_KV_K_F16=1`), mesure à 8 192 en cours |
 
 ## Phase 2 — La drave répartie localement (aucune infra)
 
@@ -86,18 +86,19 @@ Phase 0, chantier 0.1 et 0.2 : **la trace du flux et le diff par couche**. Aucun
 infra, et c'est le préalable à tout le reste — y compris à la phase 3, dont le
 format d'échange n'est autre que le format de trace.
 
-### Le format de trace (et donc d'échange), v1
+### Le format de trace (et donc d'échange)
 
-```
-en-tête de fichier :  magie "DRVF" · u16 version · u32 n_couches · u32 hidden
-enregistrement      :  u16 couche · u32 position · u32 n_actifs · f32 echelle
-                       puis n_actifs × ( u32 indice · i16 valeur )
-fin                 :  u16 0xFFFF (sentinelle)
-```
+Le format est spécifié dans **`docs/format-flux.md`** (source unique, avec ses
+invariants vérifiés) : fichier DRVF en **version 2** par défaut — indices par
+écarts, **sans perte**, 3,01 octets par neurone actif — et **version 3** sur
+`DRAVE_TRACE_BLOCS=1` (valeurs i8, échelle f16 par bloc de 32 : 45 079 930 octets
+contre 66 370 408, au prix de +0,074 % de perplexité au rejeu). Le protocole
+d'échange réseau est en **version 4** (79 octets d'en-tête, quatre modes : dense,
+listes, blocs, lot).
 
-Compact (2 + 4 + 4 + 4 + 6 octets par neurone actif), sans ambiguïté, et
-**exactement** ce qu'un nœud distant aurait besoin de recevoir pour continuer le
-calcul : c'est la raison pour laquelle la phase 0 sert la phase 3.
+C'est **exactement** ce qu'un nœud distant reçoit pour continuer le calcul : la
+raison pour laquelle la phase 0 sert la phase 3, et la phase 3 le vérifie (écart
+**0,00e0** sur 40, 200 et 1 024 jetons, en flux simple comme en lots).
 
 
 ## Journal des mesures de la phase 0

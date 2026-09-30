@@ -28851,3 +28851,62 @@ started subagent 7c876089-605c-4836-930e-925a66028509
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='REPRISE.md'; s=open(p).read()\nv = \"\"\"### Les prochains chantiers, dans l'ordre\n\n1. ~~Préremplissage par LOTS sur le fil~~ **FAIT**\"\"\"\nn = \"\"\"### Les prochains chantiers, dans l'ordre\n\n0. **Noyau GP … [1002 caractères tronqués]`
+
+  ```
+REPRISE : prochains chantiers réordonnés (GPU en tête)
+63a0e12 REPRISE : le noyau GPU de top-k en tête des prochains chantiers
+13:10:44
+cles_f16_valeurs_int8      :
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n 60,100p docs/roadmap.md", "description": "Read roadmap phases 1-2 tables"}`
+
+  ```
+## Phase 4 — La drave apprenante (recherche)
+
+**Objectif** : le flux n'est pas qu'une exécution, c'est une donnée.
+
+| # | chantier | état | critère de succès |
+|---|---|---|---|
+| 4.1 | **Capteur hebbien généralisé** : apprendre des journaux d'activation, déjà amorcé | ⏳ | une couche améliorée par apprentissage sur ses propres logs |
+| 4.2 | **Routage appris** (MoE) : les experts choisis par les logs plutôt que par un routeur dense | ⏳ | qualité égale, coût de routage ÷10 |
+| 4.3 | **Élagage guidé par les logs** : retirer les neurones qui ne s'allument jamais | ⏳ | modèle plus petit, perplexité égale |
+
+## Phase 5 — La drave sur matériel (FPGA)
+
+**Objectif** : le flux est natif sur du matériel événementiel — le premier âge du
+projet avait raison, au mauvais moment.
+
+| # | chantier | état | critère de succès |
+|---|---|---|---|
+| 5.1 | **PE événementiel** (Stratix V) : existe et synthétisé | ✅ | — |
+| 5.2 | **Lecteur DDR3** : vérifié de bout en bout | ✅ | — |
+| 5.3 | **Un opérateur complet sur FPGA** : une couche, alimentée par le même format de flux | 🧱 | dépend d'un accès matériel |
+| 5.4 | **Comparaison énergie/jeton** CPU / GPU / FPGA | 🧱 | dépend d'un accès matériel |
+
+## Ce qu
+… [785 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n 20,45p docs/roadmap.md", "description": "Read roadmap phases 0-2 tables"}`
+
+  ```
+## Phase 1 — La drave mesurée (aucune infra)
+
+**Objectif** : que chaque décision d'exécution soit *choisie par la mesure*, et
+plus aucun repli silencieux.
+
+| # | chantier | état | critère de succès |
+|---|---|---|---|
+| 1.1 | **Top-k dans le noyau d'attention GPU** — `--attn-topk 256` améliore la perplexité (234,88 contre 298,56 à 2 048) mais retombe sur le CPU | ⏳ | plus aucun repli CPU dans le chemin long contexte |
+| 1.2 | **Quantification choisie par la mesure** : par couche, par tenseur, plutôt qu'un réglage global | 🔬 | la densité par couche varie de **20 % à 56 %** (`reports/rapport-analyse-flux.md`) : la décision push/pull est une propriété de la COUCHE, pas du modèle |
+| 1.3 | **Purge des seuils codés en dur** : le placement (KV, experts, tête) décidé par une règle explicite, pas par un `if` | ⏳ | une table de décision documentée, réglée par des mesures |
+| 1.4 | **Écart int8 résiduel** (+3,0 % contre +0,8 % chez llama.cpp à 8 192) | ⏳ | **expérience conçue** : garder les CLÉS en f32 et quantifier les VALEURS, puis l'inverse — c'est la seule façon d'attribuer l'écart entre les scores et la somme pondérée |
+
+## Phase 2 — La drave répartie localement (aucune infra)
+
+**Object
+… [933 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='docs/roadmap.md'; s=open(p).read()\nv = \"\"\"| 1.4 | **Écart int8 résiduel** (+3,0 % contre +0,8 % chez llama.cpp à 8 192) | ⏳ | **expérience conçue** : garder les CLÉS en f32 et quantifier les VALEURS, puis l'i … [2686 caractères tronqués]`
