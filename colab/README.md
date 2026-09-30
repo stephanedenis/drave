@@ -48,6 +48,12 @@ ss -ltn | grep 5599          # le port écoute-t-il ?
 depuis le bundle, vérification du modèle, compilation, banc réparti, lecture du
 résultat. Remplacez `HOTE, PORT` par ce que le tunnel vous a donné.
 
+**Vérifié de bout en bout** (le 30/09) : le bundle clone, compile en 23 s, et le
+binaire ainsi obtenu pilote le banc contre le nœud moteur du dépôt — `écart :
+0.00e0`, 4 lots pour 256 jetons. Sans fichier d'identifiants, le pilote retombe
+sur des identifiants synthétiques : la perplexité est alors élevée (des milliers),
+**sans importance** — le critère de la démonstration est l'ÉCART, pas la valeur.
+
 ## 5. Ce qu'on attend, et ce que ça veut dire
 
 ```

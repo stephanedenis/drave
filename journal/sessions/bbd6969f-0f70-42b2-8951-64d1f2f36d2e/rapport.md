@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 46.2 h |
+| Durée | 46.3 h |
 | Tours | 45 |
-| Messages | 1752 |
-| Appels d'outils | 1655 |
+| Messages | 1755 |
+| Appels d'outils | 1658 |
 | Fichiers touchés | 44 |
-| Commandes | 1337 |
+| Commandes | 1340 |
 | Sous-agents | 6 |
-| Commits | 119 |
+| Commits | 120 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -2055,7 +2055,7 @@ Je vérifie l'heure à chaque itération et j'arrête à 12:06, en laissant un p
 
 ### Tour 45 — as-tu ce qu'il te faut pour te rendre à 15h en travaillaint avec un maximum d'autonomie et de parallélisme d'activités?
 
-*156 appels d'outils.* Actions notables :
+*159 appels d'outils.* Actions notables :
 
 - bash — Probe machine, GPU, disk, network state
 - bash — Identify GPU users and stray processes
@@ -2071,11 +2071,11 @@ Je vérifie l'heure à chaque itération et j'arrête à 12:06, en laissant un p
 - bash — Understand batched PPL reference path
 - bash — Add batched imposed states to forward_lot
 - list_agents
-- … et 134 autres
+- … et 137 autres
 
 **Synthèse produite :**
 
-Gain mesuré sur un lien à 20 ms par message : **2,6 s en un lot contre 47,6 s flux par flux** (18×). Je l'écris dans le rapport et la recette Colab.
+Le kit Colab passe le test de bout en bout (clonage, compilation 23 s, **0,00e0** avec le binaire cloné). Je note, puis j'implémente le tableau de bord `--options-actives` que les deux audits réclament.
 
 ## 3. Travail accompli
 
@@ -2179,7 +2179,7 @@ Gain mesuré sur un lien à 20 ms par message : **2,6 s en un lot contre 47,6 s 
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 1297 autres
+- … et 1300 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2446,4 +2446,5 @@ Gain mesuré sur un lien à 20 ms par message : **2,6 s en un lot contre 47,6 s 
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A drave-core/src/main.rs && git commit -q -F - <<'EOF' && git log --oneline -1 | cat Règle R4 : p
 - Mode lot sur un lien latent : 18× (2,6 s contre 47,6 s)  Mesuré avec le relais retardateur (20 ms par message, 64 jetons, 12 couches par nœud) : un seul lot de 
 - Colab : le mode lot chiffré dans la recette (2,6 s contre 47,6 s à 20 ms par message)" && git log --oneline -1 | cat; date +"%H:%M:%S"
+- Kit Colab vérifié de bout en bout (clonage, compilation 23 s, écart 0,00e0)" && git log --oneline -1 | cat
 

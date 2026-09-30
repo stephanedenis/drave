@@ -28261,3 +28261,48 @@ bash: line 46: --lot: command not found
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='docs/colab-reparti.md'; s=open(p).read()\nv = \"\"\"  **Le découpage sert à faire tenir un modèle qui ne tient pas sur une machine,\n  pas à accélérer** ; c'est ce que la démonstration devra montrer, et le tablea … [1037 caractères tronqués]`
+
+  ```
+colab-reparti : chiffres du mode lot ajoutés
+da6415b Colab : le mode lot chiffré dans la recette (2,6 s contre 47,6 s à 20 ms par message)
+13:00:26
+  ```
+
+### 🤖 Assistant
+
+⏵ Test du kit Colab de bout en bout : cloner le bundle dans un dossier propre, compiler, et faire tourner le banc avec ce binaire-là.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ./tools/preparer_colab.sh > /tmp/prep_colab.log 2>&1; tail -3 /tmp/prep_colab.log; rm -rf /tmp/colab_test && mkdir -p /tmp/colab_test && cd /tmp/colab_test && echo \"=== clonage depuis le bundle (comme Colab) ===\" && git clone -q /t … [258 caractères tronqués]`
+
+  ```
+transport : LOTS de 64 jetons · ~229 000 octets par lot · 4 lots pour 256 jetons
+    temps : ~1,6 s de calcul local par LOT de 64 (12 couches) · l'attente du pair = son calcul + l'aller-retour
+    ordre de grandeur à 60 ms d'aller-retour : ~8 jetons/s (le découpage ne sert pas à accélérer)
+=== clonage depuis le bundle (comme Colab) ===
+da6415b Colab : le mode lot chiffré dans la recette (2,6 s contre 47,6 s à 20 ms par message)
+=== compilation (comme Colab) ===
+warning: `drave-core` (bin "drave") generated 17 warnings (run `cargo fix --bin "drave" -p drave-core` to apply 8 suggestions)
+    Finished `release` profile [optimized] target(s) in 22.80s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && p=46550; (./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf --flux-serveur $p --ctx 256 > /tmp/s_colab.log 2>&1 &); for i in $(seq 1 60); do ss -ltn 2>/dev/null | grep -q \":$p \" && break; sleep 0.5; done; echo \"=== l … [554 caractères tronqués]`
+
+  ```
+=== le binaire CLONÉ (comme Colab) pilote le banc, sans fichier d'identifiants ===
+[flux] pilote : 12 couches en local, 12 chez le pair, 256 jetons
+  référence locale  : perplexité 17869.5162  (16.6 s)
+  deux nœuds        : perplexité 17869.5162  (15.9 s)
+  écart             : 0.00e0
+  transport         : LOTS de 64 jetons · 229455 octets par lot (aller) · 3.5 ko par jeton · 4 lots (au lieu de 255 flux)
+  temps             : 1564.1 ms par LOT en local · 1540.0 ms à attendre le pair · soit 0.98× le calcul local seul
+=== le serveur a-t-il vu la bonne version ? ===
+[flux] nœud moteur sur 127.0.0.1:46550 · 896 cachés · 24 couches · contexte 256
+[flux] 4 flux servis
+13:01:46
+  ```
+
+### 🤖 Assistant
+
+Le kit Colab passe le test de bout en bout (clonage, compilation 23 s, **0,00e0** avec le binaire cloné). Je note, puis j'implémente le tableau de bord `--options-actives` que les deux audits réclament.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"pub keep\\|pub attn_window\\|pub swa_pattern\\|pub ffn_gain\\|pub lot\\b\\|pub seuil_push\" drave-core/src/model.rs | head; grep -n \"fn kv_bits\\|DRAVE_KV_BITS\" drave-core/src/model.rs | head -3; python3 - <<'PY'\np='cola … [911 caractères tronqués]`
