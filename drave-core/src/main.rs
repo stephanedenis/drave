@@ -45,6 +45,8 @@ elles s'appellent maintenant DRAVE_* (voir docs/histoire.md). Rien n'a été app
     let opt = analyser(&args);
     let _ = MODELE.set(args[1].clone());
     if let Some(f) = opt.banc_vision.clone() { run_banc_vision(&f); return; }
+    if let Some(port) = opt.flux_serveur { run_serveur_flux(port); return; }
+    if let Some(pair) = opt.ppl_reparti.clone() { run_ppl_reparti(opt, &pair); return; }
     if opt.tensors { run_tensors(); return; }
     if let Some(f) = opt.banc_mla.clone() { run_banc_mla(opt, &f); return; }
     if opt.banc_kv > 0 { run_banc_kv(opt); return; }
@@ -337,6 +339,12 @@ struct Options {
     /// Relecture d'une trace : les activations enregistrées remplacent celles
     /// calculées (rejeu).
     flux_forcer: Option<String>,
+    /// Phase 3 : nœud MOTEUR qui écoute et applique sa plage de couches.
+    flux_serveur: Option<u16>,
+    /// Phase 3 : pilote qui répartit le calcul sur un nœud distant (hôte:port).
+    ppl_reparti: Option<String>,
+    /// Nombre de couches gardées en local par le pilote.
+    couches_locales: usize,
     /// Couches à tracer (vide = toutes).
     trace_couches: Vec<usize>,
     /// Banc vision : embedding de patchs, écrit en binaire pour comparaison
@@ -419,6 +427,9 @@ fn analyser(args: &[String]) -> Options {
             "--tensors" => { o.tensors = true; 1 }
             "--trace-flux" => { o.trace_flux = Some(suivant(i).clone()); 2 }
             "--flux-forcer" => { o.flux_forcer = Some(suivant(i).clone()); 2 }
+            "--flux-serveur" => { o.flux_serveur = suivant(i).parse().ok(); 2 }
+            "--ppl-reparti" => { o.ppl_reparti = Some(suivant(i).clone()); 2 }
+            "--couches-locales" => { o.couches_locales = suivant(i).parse().unwrap(); 2 }
             "--trace-couches" => { o.trace_couches = suivant(i).split(',')
                                      .filter_map(|x| x.trim().parse().ok()).collect(); 2 }
             "--banc-vision" => { o.banc_vision = Some(suivant(i).clone()); 2 }
@@ -1189,6 +1200,134 @@ fn run_tensors() {
         println!("  {:5} {:38} {:?} · {:.1} M poids", nom_type(t.ttype), t.name, t.dims,
                  poids as f64 / 1e6);
     }
+}
+
+/// ---- Phase 3 : le flux passe d'un nœud à l'autre ----------------------------
+///
+/// Cadriciel : `u32` magie, `u32` plage (debut, fin), `u32` position, `u32`
+/// dimension, puis les activations en f32. C'est le même contenu que le format
+/// de trace, réduit à ce qu'un nœud a besoin de recevoir pour continuer.
+const MAGIE_FLUX: u32 = 0x4452_5631;   // "DRV1"
+
+fn envoyer_flux(s: &mut std::net::TcpStream, debut: u32, fin: u32, pos: u32,
+                actifs: &[f32]) -> std::io::Result<()> {
+    use std::io::Write;
+    let mut tete = Vec::with_capacity(20);
+    tete.extend_from_slice(&MAGIE_FLUX.to_le_bytes());
+    tete.extend_from_slice(&debut.to_le_bytes());
+    tete.extend_from_slice(&fin.to_le_bytes());
+    tete.extend_from_slice(&pos.to_le_bytes());
+    tete.extend_from_slice(&(actifs.len() as u32).to_le_bytes());
+    s.write_all(&tete)?;
+    let mut corps = Vec::with_capacity(actifs.len() * 4);
+    for v in actifs { corps.extend_from_slice(&v.to_le_bytes()); }
+    s.write_all(&corps)?;
+    s.flush()
+}
+
+fn recevoir_flux(s: &mut std::net::TcpStream) -> std::io::Result<(u32, u32, u32, Vec<f32>)> {
+    use std::io::Read;
+    let mut tete = [0u8; 20];
+    s.read_exact(&mut tete)?;
+    let u = |o: usize| u32::from_le_bytes([tete[o], tete[o+1], tete[o+2], tete[o+3]]);
+    if u(0) != MAGIE_FLUX { return Err(std::io::Error::new(std::io::ErrorKind::InvalidData,
+                                                          "magie de flux absente")); }
+    let (debut, fin, pos) = (u(4), u(8), u(12));
+    let n = u(16) as usize;
+    let mut octets = vec![0u8; n * 4];
+    s.read_exact(&mut octets)?;
+    let actifs = (0..n).map(|k| f32::from_le_bytes(
+        [octets[k*4], octets[k*4+1], octets[k*4+2], octets[k*4+3]])).collect();
+    Ok((debut, fin, pos, actifs))
+}
+
+/// Le NŒUD MOTEUR : charge le modèle, écoute, applique SA plage de couches au
+/// flux reçu et renvoie le flux résultant. Un seul client à la fois — c'est un
+/// banc d'essai, pas un service.
+fn run_serveur_flux(port: u16) {
+    let chemin = modele_chemin();
+    let mut mdl = model::Model::load(&chemin, 4096, 16, true, 1.0, false, 0, 0);
+    let hidden = mdl.cfg.hidden;
+    let ecoute = std::net::TcpListener::bind(("127.0.0.1", port)).expect("écoute");
+    println!("[flux] nœud moteur sur 127.0.0.1:{port} · {hidden} cachés · {} couches",
+             mdl.cfg.n_layer);
+    let (mut sock, pair) = ecoute.accept().expect("connexion");
+    println!("[flux] client connecté : {pair}");
+    let mut servis = 0u64;
+    loop {
+        match recevoir_flux(&mut sock) {
+            Ok((debut, fin, pos, actifs)) => {
+                mdl.couche_debut = debut as usize;
+                mdl.couche_fin = fin as usize;
+                mdl.emb_imposee = Some(actifs);
+                let sortie = mdl.forward(0, pos as usize);
+                if envoyer_flux(&mut sock, debut, fin, pos, &sortie).is_err() { break; }
+                servis += 1;
+            }
+            Err(_) => break,
+        }
+    }
+    println!("[flux] {servis} flux servis");
+}
+
+/// Le PILOTE : garde les premières couches, envoie le flux au nœud moteur,
+/// reçoit l'état final, et note la perplexité — qu'on compare à celle du même
+/// modèle calculé ENTIÈREMENT en local.
+fn run_ppl_reparti(opt: Options, pair: &str) {
+    use std::time::Instant;
+    let chemin = modele_chemin();
+    let ctx = if opt.ctx_impose { opt.ctx } else { 256 };
+    let limite = opt.limit.max(1).min(ctx);
+    let couches_locales = if opt.couches_locales > 0 { opt.couches_locales } else { 12 };
+    let mut mdl = model::Model::load(&chemin, ctx, 16, true, 1.0, false, 0, 0);
+    let n_layer = mdl.cfg.n_layer;
+    let ids: Vec<u32> = if opt.ids.is_empty() {
+        (1..=limite as u32).collect()
+    } else { opt.ids.clone() };
+    println!("[flux] pilote : {couches_locales} couches en local, {} chez le pair, {} jetons",
+             n_layer - couches_locales, ids.len());
+
+    // 1. référence locale, tout le modèle
+    let t0 = Instant::now();
+    let mut nll_ref = 0f64;
+    let mut last = Vec::new();
+    for (pos, &t) in ids.iter().enumerate() {
+        last = mdl.forward(t, pos);
+        if pos + 1 < ids.len() {
+            let lg = mdl.logits(&last);
+            let mut mx = f32::NEG_INFINITY;
+            for &v in &lg { if v > mx { mx = v; } }
+            let mut somme = 0f64;
+            for &v in &lg { somme += ((v - mx) as f64).exp(); }
+            nll_ref += (mx as f64 + somme.ln()) - lg[ids[pos + 1] as usize] as f64;
+        }
+    }
+    let ppl_ref = (nll_ref / (ids.len() - 1) as f64).exp();
+    println!("  référence locale  : perplexité {ppl_ref:.4}  ({:.1} s)", t0.elapsed().as_secs_f64());
+
+    // 2. la même chose, coupée en deux nœuds
+    let mut sock = std::net::TcpStream::connect(pair).expect("connexion au nœud moteur");
+    mdl.couche_fin = couches_locales;
+    let t1 = Instant::now();
+    let mut nll = 0f64;
+    for (pos, &t) in ids.iter().enumerate() {
+        let etat = mdl.forward(t, pos);
+        envoyer_flux(&mut sock, couches_locales as u32, n_layer as u32, pos as u32, &etat)
+            .expect("envoi du flux");
+        let (_, _, _, final_) = recevoir_flux(&mut sock).expect("réception du flux");
+        if pos + 1 < ids.len() {
+            let hn = mdl.norme_finale(&final_);
+            let lg = mdl.logits(&hn);
+            let mut mx = f32::NEG_INFINITY;
+            for &v in &lg { if v > mx { mx = v; } }
+            let mut somme = 0f64;
+            for &v in &lg { somme += ((v - mx) as f64).exp(); }
+            nll += (mx as f64 + somme.ln()) - lg[ids[pos + 1] as usize] as f64;
+        }
+    }
+    let ppl = (nll / (ids.len() - 1) as f64).exp();
+    println!("  deux nœuds        : perplexité {ppl:.4}  ({:.1} s)", t1.elapsed().as_secs_f64());
+    println!("  écart             : {:.2e}", (ppl - ppl_ref).abs() / ppl_ref);
 }
 
 /// Banc **MLA** : passe avant du modèle synthétique, logits écrits en binaire

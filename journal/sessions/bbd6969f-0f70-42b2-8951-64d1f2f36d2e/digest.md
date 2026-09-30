@@ -22359,3 +22359,195 @@ cles_f32     :
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A drave-core/src && git commit -q -F - <<'EOF' && git log --oneline -1 && date +\"%H:%M:%S\"\nPhase 0.3ter : trace et rejeu sur le chemin par LOTS\n\nLes hooks n'existaient que dans le chemin par jeton, donc toute trace exig … [697 caractères tronqués]`
+
+  ```
+98ed93e Phase 0.3ter : trace et rejeu sur le chemin par LOTS
+10:16:28
+  ```
+
+### 🤖 Assistant
+
+⏵ 10:17 — phase 3 : chargement par plage de couches (le « nœud moteur »)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && grep -n \"for l in 0..cfg.n_layer\\|for l in 0..self.cfg.n_layer\\|let mut layers\" src/model.rs | head -8 && grep -n \"pub fn charger(\" src/model.rs | head -3", "description": "Find layer loading and execution loops"}`
+
+  ```
+1231:        let mut layers = Vec::with_capacity(cfg.n_layer);
+1233:        for l in 0..cfg.n_layer {
+1437:            for l in 0..cfg.n_layer {
+1812:        for l in 0..self.cfg.n_layer {
+1845:                for l in 0..self.cfg.n_layer {
+2152:        for l in 0..self.cfg.n_layer {
+2584:        for l in 0..self.cfg.n_layer {
+2738:        for l in 0..cfg.n_layer {
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && python3 - <<'PY'\np='src/model.rs'; s=open(p).read()\n# 1) le modèle sait quelle PLAGE de couches il porte (nœud moteur distribué)\ns = s.replace(\"\"\"    /// Couches MLA, si le modèle en est un (`attn_kv_a_mqa` présent). … [1393 caractères tronqués]`
+
+  ```
+plage de couches posée dans les boucles d'exécution
+4
+error[E0382]: use of moved value: `cfg`
+    --> src/model.rs:1534:42
+     |
+1227 |         let cfg = {
+     |             --- move occurs because `cfg` has type `Cfg`, which does not implement the `Copy` trait
+--
+error: could not compile `drave-core` (bin "drave") due to 1 previous error; 9 warnings emitted
+error: could not compile `drave-core` (bin "drave") due to 1 previous error; 9 warnings emitted
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && python3 - <<'PY'\np='src/model.rs'; s=open(p).read()\ns = s.replace(\"\"\"        let mut layers = Vec::with_capacity(cfg.n_layer);\"\"\",\n\"\"\"        // Capturé avant que `cfg` ne soit déplacé dans la structure.\n      … [736 caractères tronqués]`
+
+  ```
+plage initialisée depuis une capture
+    Finished `release` profile [optimized] target(s) in 0.01s
+perplexité 17.4315 sur 255 tokens
+  ```
+
+- **bash** `{"command": "date +\"%H:%M:%S\"; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && python3 - <<'PY'\np='src/model.rs'; s=open(p).read()\n# la norme finale n'a de sens que si ce modèle porte la DERNIÈRE couche : un nœud\n# intermédiaire rend le flux résiduel tel quel\ns = s.replace(\"\ … [727 caractères tronqués]`
+
+  ```
+10:17:44
+norme finale conditionnée à la dernière couche
+2671:            Self::rmsnorm(&x, &self.out_norm, eps, &mut hn);
+  ```
+
+### 🤖 Assistant
+
+⏵ 10:18 — transport de flux : deux nœuds qui se passent des listes (localhost)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && python3 - <<'PY'\np='src/main.rs'; s=open(p).read()\n# options\ns = s.replace(\"\"\"    /// Relecture d'une trace : les activations enregistrées remplacent celles\n    /// calculées (rejeu).\n    flux_forcer: Option<String … [8432 caractères tronqués]`
+
+  ```
+serveur, pilote et cadriciel posés
+norme_finale exposée
+    Finished `release` profile [optimized] target(s) in 0.01s
+  ```
+
+- **bash** `{"command": "date +\"%H:%M:%S\"; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat /tmp/kv_attribution.log 2>/dev/null | tail -3; (./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf --flux-serveur 45711 > /tmp/serveur_flux.log 2>&1 &) ; sleep 25; timeout 300 ./drave-core/target/ … [306 caractères tronqués]`
+
+  ```
+10:18:27
+cles_f32     : [config] rotation : RoPE simple (le modèle ne déclare pas YaRN)
+[flux] pilote : 12 couches en local, 12 chez le pair, 88 jetons
+  référence locale  : perplexité 18.2178  (50.3 s)
+  deux nœuds        : perplexité 229.0592  (93.6 s)
+  écart             : 1.16e1
+--- serveur ---
+[flux] client connecté : 127.0.0.1:27230
+[flux] 88 flux servis
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && grep -n \"out_norm\" src/model.rs | head -6", "description": "Locate the forward tail norm"}`
+
+  ```
+611:    pub out_norm: Vec<f32>,
+1278:        let out_norm = g.dequant("output_norm.weight");
+1521:            g, cfg, layers, out_norm, pool,
+2538:            Self::rmsnorm(&r, &self.out_norm, self.cfg.eps, &mut hn[i * h..(i + 1) * h]);
+2671:            Self::rmsnorm(&x, &self.out_norm, eps, &mut hn);
+2704:        let Model { g, cfg, layers, out_norm, pool, kv, events, attn_events, kv_gpu,
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && sed -n '2530,2545p' src/model.rs", "description": "Inspect the forward_lot tail"}`
+
+  ```
+x[i * h + oo] = o[i * h + oo] + down[i * h + oo];
+                    }
+                }
+            }
+            self.prof[3] += t_ffn.elapsed().as_secs_f64();
+        }
+        for i in 0..t {
+            let r = x[i * h..(i + 1) * h].to_vec();
+            Self::rmsnorm(&r, &self.out_norm, self.cfg.eps, &mut hn[i * h..(i + 1) * h]);
+        }
+        (0..t).map(|i| hn[i * h..(i + 1) * h].to_vec()).collect()
+    }
+
+    /// Trace OU impose le flux d'un LOT : `xi` porte les entiers quantifiés du
+    /// lot (t × h) et `sx` une échelle par jeton. Sur ce chemin, le rejeu est
+    /// EXACT — on remplace les entiers et l'échelle, sans repasser par une
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && python3 - <<'PY'\np='src/model.rs'; s=open(p).read()\nn = 0\n# chemin par LOTS : ne normer que si ce modèle porte la dernière couche\nold_lot = \"\"\"        for i in 0..t {\n            let r = x[i * h..(i + 1) * h].to_ve … [1572 caractères tronqués]`
+
+  ```
+normes finales conditionnées : 1
+    Finished `release` profile [optimized] target(s) in 0.01s
+cles_f32     :
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && grep -n \"^    pub fn forward\\|^    pub fn logits\\|^    pub fn generate\" src/model.rs | head -6 && awk 'NR>=2680 && NR<=2700 {printf \"%4d|%s\\n\", NR, $0}' src/model.rs | grep -n \"rmsnorm\\|return\\|^.*hn\" | head -6" … [53 caractères tronqués]`
+
+  ```
+2083:    pub fn forward_lot(&mut self, toks: &[u32], pos0: usize) -> Vec<Vec<f32>> {
+2587:    pub fn forward_mla(&mut self, tok: u32, pos: usize) -> Vec<f32> {
+2684:    pub fn logits_f32(&self, hn: &[f32]) -> Vec<f32> {
+2698:    pub fn forward(&mut self, tok: u32, pos: usize) -> Vec<f32> {
+3200:    pub fn logits_lot(&mut self, hs: &[Vec<f32>]) -> Vec<Vec<f32>> {
+3317:    pub fn logits(&mut self, h: &[f32]) -> Vec<f32> {
+5:2684|    pub fn logits_f32(&self, hn: &[f32]) -> Vec<f32> {
+12:2691|            for i in 0..h { acc += ligne[i] * hn[i]; }
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && awk 'NR>=3160 && NR<=3195 {printf \"%4d|%s\\n\", NR, $0}' src/model.rs | grep -E \"rmsnorm|return x|hn$|^\\s*[0-9]+\\|\\s*\\}\" | head -8", "description": "Find the tail of forward (line 2698+)"}`
+
+  ```
+3167|                }
+3168|            }
+3182|                }
+3183|            }
+3186|            }
+3189|        }
+3190|        Self::rmsnorm(&x, out_norm, cfg.eps, &mut hn);
+3191|        hn
+  ```
+
+- **bash** `{"command": "date +\"%H:%M:%S\"; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && python3 - <<'PY'\np='src/model.rs'; s=open(p).read()\nvieux = \"\"\"        Self::rmsnorm(&x, out_norm, cfg.eps, &mut hn);\n        hn\n\"\"\"\nassert vieux in s\ns = s.replace(vieux, \"\"\"        if s … [448 caractères tronqués]`
+
+  ```
+10:22:18
+queue de forward patchée
+1236:        let n_layer_total = cfg.n_layer;
+1536:            couche_debut: 0, couche_fin: n_layer_total,
+3190:        if self.couche_fin < n_layer_tot {
+error[E0425]: cannot find value `n_layer_tot` in this scope
+    --> src/model.rs:3190:30
+     |
+3190 |         if self.couche_fin < n_layer_tot {
+     |                              ^^^^^^^^^^^ not found in this scope
+
+--
+error: could not compile `drave-core` (bin "drave") due to 1 previous error; 10 warnings emitted
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && python3 - <<'PY'\np='src/model.rs'; s=open(p).read()\ns = s.replace(\"\"\"        if self.couche_fin < n_layer_tot {\n            return x;                       // nœud intermédiaire : flux brut\n        }\"\"\",\n\"\"\"  … [777 caractères tronqués]`
+
+  ```
+variable corrigée
+error[E0503]: cannot use `self.cfg.n_layer` because it was mutably borrowed
+    --> src/model.rs:3190:30
+     |
+2708 |         let Model { g, cfg, layers, out_norm, pool, kv, events, attn_events, kv_gpu,
+     |                        --- `self.cfg` is borrowed here
+...
+--
+error: could not compile `drave-core` (bin "drave") due to 1 previous error; 10 warnings emitted
+error: could not compile `drave-core` (bin "drave") due to 1 previous error; 10 warnings emitted
+[killed by signal: SIGTERM]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && sed -i 's/if self.couche_fin < self.cfg.n_layer {\\n            return x;                       \\/\\/ nœud intermédiaire : flux brut/XX/' src/model.rs && python3 - <<'PY'\np='src/model.rs'; s=open(p).read()\ns = s.replace … [882 caractères tronqués]`
+
+  ```
+liaison cfg utilisée
+    Finished `release` profile [optimized] target(s) in 0.01s
+[flux] pilote : 12 couches en local, 12 chez le pair, 88 jetons
+  référence locale  : perplexité 18.2178  (53.2 s)
+  deux nœuds        : perplexité 798.2991  (97.7 s)
+  écart             : 4.28e1
+  ```
+
+- **bash** `{"command": "date +\"%H:%M:%S\"; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='docs/roadmap.md'; s=open(p).read()\ns = s.replace(\"\"\"| 3.1 | **Contrat d'échange v1** : tranche de liste = en-tête (couche, source, échelle, bits) + paires (destination, valeur) | ⏳ | encod … [2859 caractères tronqués]`

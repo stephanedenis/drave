@@ -52,7 +52,7 @@ défini avant.
 
 | # | chantier | état | critère de succès |
 |---|---|---|---|
-| 3.1 | **Contrat d'échange v1** : tranche de liste = en-tête (couche, source, échelle, bits) + paires (destination, valeur) | ⏳ | encodeur/décodeur de référence, aller-retour sans perte |
+| 3.1 | **Contrat d'échange v1** : tranche de liste = en-tête (couche, source, échelle, bits) + paires (destination, valeur) | 🔬 | format écrit, relu, rejoué sans perte (phase 0.3/0.3bis) ; **transport TCP en place** (`--flux-serveur`, `--ppl-reparti`) — 88 flux servis entre deux processus, mais la perplexité répartie n'est PAS encore fidèle (798 contre 18,2) : le défaut est identifié comme prochain chantier, pas maquillé |
 | 3.2 | **Granularité** : par couche, par bloc de canaux, par expert | ⏳ | courbe : octets par jeton × latence pour chaque granularité |
 | 3.3 | **Seuil de rentabilité** : à partir de quel débit réseau le découpage gagne | ⏳ | formule validée par une mesure locale (socket `localhost`) avant Colab |
 | 3.4 | **Démonstration Colab** : préremplissage réparti (le décodage reste séquentiel — c'est écrit dans la vision) | ⏳ | les mêmes logits qu'en local, à 1e-5 près |
@@ -186,3 +186,23 @@ réécrivait donc les mêmes clés, et le rejeu rejouait la mauvaise : perplexit
 **356 694** au lieu de 17,43. La clé est maintenant `(couche, compteur de jeton
 global)` — même format sur le disque, sémantique non ambiguë. C'est le genre de
 défaut qu'un rejeu attrape et qu'un diff ne voit pas.
+
+
+### Phase 3 — ce qui tourne déjà, et ce qui ne tourne pas encore
+
+Le transport existe : `--flux-serveur <port>` fait tourner un **nœud moteur** qui
+charge le modèle, écoute, applique SA plage de couches au flux reçu et renvoie le
+flux résultant ; `--ppl-reparti <hôte:port> --couches-locales N` fait tourner le
+**pilote** qui garde les N premières couches, envoie le flux, reçoit l'état final
+et note la perplexité.
+
+Mesuré, deux processus, localhost, 88 jetons de 896 cachés : **88 flux servis**,
+aucune erreur de transport — et la perplexité répartie **ne correspond pas**
+encore (798,3 contre 18,2178 en local).
+
+Ce qui est donc ACQUIS : le cadriciel d'échange, la séparation en deux nœuds, la
+plage de couches par nœud, la norme finale appliquée par le dernier nœud
+seulement. Ce qui reste à trouver : pourquoi le calcul coupé diverge — les
+candidats sont la position transmise (elle l'est), la norme d'entrée du nœud
+distant (elle s'applique à la couche 12, correctement) et l'état du cache KV de
+chaque nœud. C'est écrit ici comme un défaut OUVERT, avec ses chiffres.

@@ -726,6 +726,10 @@ pub struct Model {
     /// ajout d'architecture que la vision demande au moteur — `forward` partait
     /// toujours de `token_embd`.
     pub emb_imposee: Option<Vec<f32>>,
+    /// Première et dernière couche PORTÉES par ce modèle (exclue). Un nœud
+    /// distant ne charge que sa plage : c'est le découpage de la phase 3.
+    pub couche_debut: usize,
+    pub couche_fin: usize,
     /// Couches MLA, si le modèle en est un (`attn_kv_a_mqa` présent).
     pub mla: Option<Vec<Mla>>,
     /// Cache LATENT par couche : `c_kv` (kv_lora) et `k_rope` (qkr) par position.
@@ -1228,6 +1232,8 @@ impl Model {
         assert!(cfg.head_dim > 0, "dimension de tête indéterminée");
         assert!(cfg.head_dim * cfg.n_head >= cfg.hidden,
                 "n_head × head_dim doit couvrir hidden");
+        // Capturé avant que `cfg` ne soit déplacé dans la structure.
+        let n_layer_total = cfg.n_layer;
         let mut layers = Vec::with_capacity(cfg.n_layer);
         let mut bytes = 0u64;
         for l in 0..cfg.n_layer {
@@ -1527,6 +1533,7 @@ impl Model {
             stop_id: None, stop_id2: None, prof: [0.0; 6],
             tete,
             tete_gpu, tete_gpu_q6k, head4, sinks_vus, kv_gpu, attn_gpu_part: Vec::new(),
+            couche_debut: 0, couche_fin: n_layer_total,
             cache_experts, mla, mla_cache, jeton_trace: 0, trace: None, flux_force: None,
             emb_imposee: None, lot: 1,
             patch: None, ffn_gain: None, hebb: None,
@@ -1809,7 +1816,7 @@ impl Model {
         // Dispersion entre couches : une localité qui ne tient que sur quelques
         // couches ne se place pas de la même façon.
         let mut par_couche: Vec<(f64, f64)> = Vec::new();
-        for l in 0..self.cfg.n_layer {
+        for l in self.couche_debut..self.couche_fin {
             let t = &tirs[l * largeur..(l + 1) * largeur];
             let p = &poids[l * largeur..(l + 1) * largeur];
             let mut ip: Vec<usize> = (0..largeur).collect();
@@ -1842,7 +1849,7 @@ impl Model {
             for part in [0.05f64, 0.10, 0.25, 0.50] {
                 let k = ((ne as f64 * part) as usize).max(1);
                 let mut couverts = 0f64;
-                for l in 0..self.cfg.n_layer {
+                for l in self.couche_debut..self.couche_fin {
                     let mut t: Vec<u64> = exp[l * ne..(l + 1) * ne].to_vec();
                     t.sort_unstable_by(|a, b| b.cmp(a));
                     let tot: u64 = t.iter().sum();
@@ -2149,7 +2156,7 @@ impl Model {
                 }
             }
         };
-        for l in 0..self.cfg.n_layer {
+        for l in self.couche_debut..self.couche_fin {
             let lay = &self.layers[l];
             // 1. norme d'entrée du lot
             for i in 0..t {
@@ -2526,6 +2533,10 @@ impl Model {
             }
             self.prof[3] += t_ffn.elapsed().as_secs_f64();
         }
+        if self.couche_fin < self.cfg.n_layer {
+            // Nœud intermédiaire : on rend le flux résiduel brut, sans norme.
+            return (0..t).map(|i| x[i * h..(i + 1) * h].to_vec()).collect();
+        }
         for i in 0..t {
             let r = x[i * h..(i + 1) * h].to_vec();
             Self::rmsnorm(&r, &self.out_norm, self.cfg.eps, &mut hn[i * h..(i + 1) * h]);
@@ -2581,7 +2592,7 @@ impl Model {
                             + self.mla.as_ref().unwrap()[0].qkr) as f32).sqrt();
         let mut x = self.g.row_f32("token_embd.weight", tok as usize, h);
         let mut hn = vec![0f32; h];
-        for l in 0..self.cfg.n_layer {
+        for l in self.couche_debut..self.couche_fin {
             let m = &self.mla.as_ref().unwrap()[l];
             let (nh, qkn, qkr, vd, kvl) = (m.nh, m.qkn, m.qkr, m.vd, m.kv_lora);
             // --- norme d'entrée
@@ -2660,8 +2671,12 @@ impl Model {
             matvec_f32(&m.down, &act, m.ffn, h, &mut d);
             for i in 0..h { x[i] += d[i]; }
         }
-        Self::rmsnorm(&x, &self.out_norm, eps, &mut hn);
-        hn
+        if self.couche_fin >= self.cfg.n_layer {
+            Self::rmsnorm(&x, &self.out_norm, eps, &mut hn);
+            hn
+        } else {
+            x
+        }
     }
 
     /// Logits d'un état caché avec une tête **liée en f32** (le harnais MLA n'a
@@ -3172,6 +3187,9 @@ dynamique de {dyn_:.3e} (relatif {:.2e})", mx / dyn_.max(1e-9));
             for i in 0..h { x[i] = o[i] + down[i]; }
             self.prof[3] += tf.elapsed().as_secs_f64();
         }
+        if self.couche_fin < cfg.n_layer {
+            return x;                       // nœud intermédiaire : flux brut
+        }
         Self::rmsnorm(&x, out_norm, cfg.eps, &mut hn);
         hn
     }
@@ -3287,6 +3305,14 @@ dynamique de {dyn_:.3e} (relatif {:.2e})", mx / dyn_.max(1e-9));
         } else {
             machine.tete_warp(m, xd).map(|y| y.iter().map(|v| v * sx).collect())
         }
+    }
+
+    /// Norme finale, pour un état venu d'un AUTRE nœud : le nœud distant rend le
+    /// flux résiduel brut, c'est le dernier qui norme.
+    pub fn norme_finale(&self, x: &[f32]) -> Vec<f32> {
+        let mut hn = vec![0f32; self.cfg.hidden];
+        Self::rmsnorm(x, &self.out_norm, self.cfg.eps, &mut hn);
+        hn
     }
 
     /// Tête de sortie : produits scalaires entiers sur les lignes Q8_0 du
