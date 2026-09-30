@@ -7,12 +7,12 @@
 | Début | 2026-09-28 14:46 |
 | Durée | 52.6 h |
 | Tours | 47 |
-| Messages | 2253 |
-| Appels d'outils | 2131 |
+| Messages | 2256 |
+| Appels d'outils | 2134 |
 | Fichiers touchés | 47 |
-| Commandes | 1783 |
+| Commandes | 1785 |
 | Sous-agents | 14 |
-| Commits | 188 |
+| Commits | 189 |
 | Compactages de contexte | 3 |
 
 ## Objectifs déclarés
@@ -2177,7 +2177,7 @@ Le mode creux ne peut pas utiliser le miroir VRAM (le chemin GPU est conditionn�
 
 ### Tour 47 — pret pour des scrum de 2h (boxing temps réel, avec revue, rétro et planning)
 
-*276 appels d'outils.* Actions notables :
+*279 appels d'outils.* Actions notables :
 
 - bash — Check clock, machine and last sprint state
 - bash — Create the sprint timing tool
@@ -2193,7 +2193,7 @@ Le mode creux ne peut pas utiliser le miroir VRAM (le chemin GPU est conditionn�
 - bash — Read the kernel launch call
 - bash — Write the FFI for the scores kernel
 - bash — Complete KvGpu initializer
-- … et 255 autres
+- … et 257 autres
 
 **Synthèse produite :**
 
@@ -2312,7 +2312,7 @@ Le mode creux ne peut pas utiliser le miroir VRAM (le chemin GPU est conditionn�
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 1743 autres
+- … et 1745 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2648,4 +2648,5 @@ Le mode creux ne peut pas utiliser le miroir VRAM (le chemin GPU est conditionn�
 - Correction d'interprétation : les clés notées dépendent du nombre de JETONS, pas du contexte — le croisement est entre 255 et 2 047 clés, pas « entre 8 k et 16 
 - Journal : index des sessions régénéré" && git status --short | wc -l && date +%H:%M:%S
 - Rapport et plan : 14 noyaux et 956 lignes (le noyau 3 est arrivé après le comptage), ordre réel de la collecte" && git log --oneline -1; date +%H:%M:%S
+- Rapport : l'étape 5 est faite, et la ligne de l'étape 4 dit la bonne variable (clés vues, pas contexte)" && git log --oneline -1; date +%H:%M:%S
 

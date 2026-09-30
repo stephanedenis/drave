@@ -48,6 +48,13 @@ distincte par position**. La référence CPU est calculée sur **les scores rend
 le GPU** : le critère porte ainsi sur les noyaux 2a/2b seuls, pas sur l'écart du
 noyau 1.
 
+> ⚠️ Les TEMPS de ce rapport varient de ±50 % selon la charge de la machine (les
+> mêmes passages ont donné 0,45 ms puis 0,30 ms de collecte à 262 144 clés, selon
+> qu'une campagne tournait ou non). Les verdicts d'égalité, eux, ne varient pas :
+> 14/14 et différence symétrique 0 à chaque exécution. Un chiffre de temps sans
+> mention de la charge vaut donc à ±50 % près — c'est écrit ici une fois pour
+> toutes.
+
 | N clés | k-ième score identique | comptes identiques | ensembles identiques | diff. sym. | 4 passes GPU | tri CPU | collecte GPU | tri complet CPU |
 |---|---|---|---|---|---|---|---|---|
 | 4 096 | 14/14 | 14/14 | 14/14 | **0** | 0,14 ms (9×) | 1,31 ms | 0,13 ms (35×) | 4,33 ms |
@@ -254,8 +261,8 @@ côtés est le correctif si le cas se présente un jour.
 | 1 | `attn_scores` | ✅ 1,6–2,3e-7 · 26,7–40× |
 | 2 | sélection (radix 2 passes → 4 passes, 3 noyaux) | ✅ ensemble identique, 0 écart |
 | 3 | `attn_topk_somme` : softmax sur les k retenus + puits, puis Σ pondérée des V | ✅ 1,0–4,8e-7 · temps GPU constant (0,07 ms) |
-| 4 | branchement dans `model.rs` (`attn_topk > 0` + miroir VRAM) | ✅ **fait** (opt-in `DRAVE_GPU_TOPK=1`) : PPL identique (9,4162 contre 9,4167 à 2 k ; 12,2265 contre 12,2267 à 16 k) et **gain à 16 k** : attention 20,69 → 7,72 ms/jeton, balayage −23 % |
-| 5 | mesure 1 M de clés : ms/couche avec et sans top-k | à faire |
+| 4 | branchement dans `model.rs` (`attn_topk > 0` + miroir VRAM) | ✅ **fait** (opt-in `DRAVE_GPU_TOPK=1`) : PPL identique (9,4162 contre 9,4167 à 2 k ; 12,2265 contre 12,2267 à 4 095 jetons) et **le déport gagne à 2 047 clés vues** : attention 19,58 → 7,59 ms/jeton (−61 %), balayage −24 %. À 255 clés il perd encore (7,68 contre 4,21) |
+| 5 | mesure 1 M de clés : ms/couche avec et sans top-k | ✅ **fait au niveau des noyaux** : chaîne complète **3,90 ms** pour 14 lignes × 1 M clés contre 539,9 ms d'attention complète CPU (×138) et 13,2 ms en VRAM (0,3× le complet, critère 2×) |
 | 6 | portes de non-régression : 19,3885 et 15,1757 | ✅ inchangées, mesurées le 30/09 au soir (voir le journal de la session) |
 
 Le top-k GPU n'est donc **pas encore branché dans le moteur** : il est mesuré,

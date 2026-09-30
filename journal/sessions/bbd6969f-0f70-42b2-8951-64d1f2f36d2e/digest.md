@@ -36223,3 +36223,66 @@ reports/rapport-gpu-topk-selection.md:15:Trois noyaux dans `drave-core/gpu/drave
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\ndef patch(p, paires):\n    s=open(p).read()\n    for v,n,nom in paires:\n        assert s.count(v)==1, f\"{p}::{nom}::{s.count(v)}\"\n        s=s.replace(v,n,1)\n    open(p,'w').write(s); print(f\"{p} ok\")\n\npatch … [1236 caractères tronqués]`
+
+  ```
+reports/rapport-gpu-topk-selection.md ok
+docs/plan-gpu-topk.md ok
+docs/plan-gpu-topk.md:28:* `drave-core/gpu/drave_gpu.cu` (956 lignes, 14 noyaux) : `attn_kv_partiels` (scores
+reports/rapport-gpu-topk-selection.md:16:noyaux avec la sélection, puis à **14** avec le noyau 3 — 956 lignes) :
+c1fdfd4 Rapport et plan : 14 noyaux et 956 lignes (le noyau 3 est arrivé après le comptage), ordre réel de la collecte
+19:21:01
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-gpu-topk-selection.md", "offset": 71, "limit": 90}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-gpu-topk-selection.md</path>
+<type>file</type>
+<content>
+71: défaut ne se voyait pas : les 14/14 lignes passaient. Corrigé (une clé par
+72: position), les chiffres ci-dessus sont ceux d'un vrai test.
+73: 
+74: Effet secondaire de la correction : l'écart du **noyau 1** n'est plus 1,03e-7 mais
+75: **1,60 à 2,25e-7** selon la taille — c'est la même mesure faite sur des données non
+76: dégénérées, et elle reste 4× sous le critère de 1e-6 du plan. Le rapport du noyau 1
+77: est corrigé dans le même commit.
+78: 
+79: **Ce que le banc refuse de cacher** : le k-ième score **change** entre les scores
+80: calculés par le CPU et ceux calculés par le GPU sur 5 à 7 des 14 lignes aux trois
+81: tailles principales — et jusqu'à 14/14 sur les petites (n = 8 191 avec k = 4 096,
+82: où le k-ième est au milieu d'une distribution dense). Ce n'est
+83: pas un défaut de la sélection : l'écart entre le 256e et le 257e score est du même
+84: ordre que l'exactitude du noyau 1, donc le *rang* bascule sur des valeurs
+85: quasiment égales. La comparaison qui compte — le k-ième score des scores GPU
+86: retrouvé par la descente — est exacte au bit 
+… [4593 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/rapport-gpu-topk-selection.md'; s=open(p).read()\nvieux = \"\"\"`--banc-topk N` avec `DRAVE_GPU=1`, Qwen2.5-0.5B Q4_0, k = 256, 2 têtes KV ×\n64 dim, 7 têtes de requête par tête KV (**14 lignes**), cache  … [1266 caractères tronqués]`
+
+  ```
+note de variance ajoutée
+4:## Étape 4 : le branchement dans le moteur
+16:| chemin | perplexité | durée |
+18:| CPU (`--attn-topk 256`) | 9,4167 | 41,59 s |
+19:| **GPU** (`DRAVE_GPU=1 DRAVE_GPU_KV=1 DRAVE_GPU_TOPK=1`) | **9,4162** | 41,45 s |
+27:**Le gain n'est pas encore là** : le poste « attention » (ms/jeton, 24 couches,
+30:| contexte alloué | jetons | clés vues (moyenne) | attention CPU | attention GPU top-k | perplexité CPU / GPU | balayage CPU / GPU |
+32:| 2 048 | 511 | 255 | **4,21** | 7,68 | 13,1358 / 13,1355 | 18,1 / 20,4 s |
+33:| 8 192 | 511 | 255 | **6,35** | 7,36 | 13,1358 / 13,1355 | 19,2 / 19,7 s |
+34:| **16 384** | 4 095 | **2 047** | 19,58 | **7,59** | 12,2267 / **12,2265** | **203,7 / 155,5 s (−24 %)** |
+56:## Un faux résultat silencieux trouvé AILLEURS, par la relecture du branchement
+67:**Mesuré, avant et après** (gpt-oss-120b MXFP4, ctx 256, 510 jetons,
+70:| | perplexité |
+72:| avant correction | **17,6531** |
+73:| après correction | **15,1786** |
+74:| référence CPU (sans miroir VRAM) | 15,1757 |
+81:## Limites connues du contrat
+84:**strictement croissante pour deux valeurs distinctes**, mais :
+97:## Ce qui reste
+99:| # | étape du plan | état |
+101:| 1 | `attn_sco
+… [740 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/rapport-gpu-topk-selection.md'; s=open(p).read()\ndef rep(v,n,nom):\n    global s\n    assert s.count(v)==1, f\"{nom}::{s.count(v)}\"\n    s=s.replace(v,n,1)\nrep(\"\"\"| 4 | branchement dans `model.rs` ( … [1227 caractères tronqués]`
