@@ -148,6 +148,7 @@ J'avais écrit que l'écart croissait avec la longueur. La courbe dit le contrai
 | 64 | 1,37e-1 | 2 249 | 77,9 % |
 | 128 | 6,37e-2 | 2 257 | 78,2 % |
 | 256 | 2,74e-2 | 2 268 | 78,6 % |
+| **1 024** | **1,32e-2** | **1 589** | 79,8 % |
 
 Il décroît, et c'est logique : la perturbation est à peu près stationnaire par
 jeton, donc son effet sur une perplexité *moyennée* se dilue quand la séquence
@@ -155,8 +156,9 @@ s'allonge. Ce qui change vraiment d'un banc à l'autre, c'est le **corpus** —
 sur des identifiants synthétiques la perplexité se compte en milliers et la
 sensibilité relative n'a rien à voir.
 
-Donc la revendication honnête, sur 256 jetons de vrai texte, est celle du
-tableau ci-dessous (et 13,7 % d'écart à 64 jetons : sur une séquence courte,
+Donc la revendication honnête, sur du vrai texte, est celle du tableau
+ci-dessous — **÷2,3 sur le fil pour 1,3 % d'écart à 1 024 jetons** (2,7 % à 256,
+13,7 % à 64) (et 13,7 % d'écart à 64 jetons : sur une séquence courte,
 l'erreur est chère). Ni le « ÷2 pour 0,2 % » que j'avais tiré du banc
 synthétique, ni le « ça empire avec la longueur » que j'en avais déduit à tort —
 les deux ont été écrits puis corrigés par la mesure.

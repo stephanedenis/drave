@@ -24998,3 +24998,41 @@ index 1751558..67f876f 100644
 Alerte hygiène : le **code** de l'encodage par écarts n'était pas dans le commit (j'avais ajouté les deux documents seulement). Je répare.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git show --stat cb37c83 | tail -5; echo \"=== ce que le code committé contient ===\"; git show HEAD:drave-core/src/main.rs | grep -c \"paires.push(ecart\" ; echo \"(0 = l'encodage par écarts manquait bien)\"; git add drave-core/src/m … [813 caractères tronqués]`
+
+  ```
+journal/sessions/MANIFEST.md                       |   4 +-
+ .../bbd6969f-0f70-42b2-8951-64d1f2f36d2e/digest.md | 110 +++++++++++++++++++++
+ .../rapport.md                                     |  19 ++--
+ reports/rapport-transport-liste.md                 |  31 ++++--
+ 5 files changed, 152 insertions(+), 20 deletions(-)
+=== ce que le code committé contient ===
+0
+(0 = l'encodage par écarts manquait bien)
+86ddf12 Le CODE de l'encodage par écarts, oublié dans le commit précédent
+ M journal/README.md
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && timeout 900 cargo build --release 2>&1 | tail -1 && timeout 900 cargo test --release 2>&1 | grep -E \"^test result\"; cd .. && echo \"=== contrôle final avec le binaire définitif ===\" && ./drave-core/target/release/drave  … [292 caractères tronqués]`
+
+  ```
+Finished `release` profile [optimized] target(s) in 0.01s
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.08s
+=== contrôle final avec le binaire définitif ===
+=== perplexité 19.3885 sur 510 tokens (0 événements, 16.1 s) ===
+86ddf12 Le CODE de l'encodage par écarts, oublié dans le commit précédent
+ M journal/README.md
+11:35:15
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && IDS=$(head -1 /tmp/ids_qwen_long.txt | tr ',' '\\n' | head -1024 | tr '\\n' ',' | sed 's/,$//'); TAG=b1024 PORT=45883 CTX=1024 IDS=\"$IDS\" EXTRA=\"--flux-blocs --act-thresh 0.01\" timeout 900 /tmp/test_reparti.sh 2>&1 | tail -5; dat … [95 caractères tronqués]`
+
+  ```
+référence locale  : perplexité 10.7639  (49.4 s)
+  deux nœuds        : perplexité 10.9062  (49.6 s)
+  écart             : 1.32e-2
+  transport         : listes à échelle par bloc (2 octets/actif, écarts) · 1589 octets par flux (aller) · 1621 au retour · 79.8 % d'activité (715 neurones par flux) · 1024 flux
+  temps             : 19.3 ms par jeton en local · 19.6 ms à attendre le pair (son calcul + l'aller-retour) · soit 1.01× le calcul local seul
+11:37:01
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/rapport-transport-liste.md'; s=open(p).read()\nv = \"\"\"| jetons | écart | octets/flux | activité |\n|---|---|---|---|\n| 64 | 1,37e-1 | 2 249 | 77,9 % |\n| 128 | 6,37e-2 | 2 257 | 78,2 % |\n| 256 | 2,74 … [2532 caractères tronqués]`

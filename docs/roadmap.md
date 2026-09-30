@@ -53,7 +53,7 @@ défini avant.
 | # | chantier | état | critère de succès |
 |---|---|---|---|
 | 3.1 | **Contrat d'échange v1** : tranche de liste = en-tête (couche, source, échelle, bits) + paires (destination, valeur) | ✅ | format écrit, relu, rejoué sans perte (phase 0.3/0.3bis) ; **transport TCP en place et FIDÈLE** (`--flux-serveur`, `--ppl-reparti`) — écart local/réparti **0,00e0** sur 40 et 199 flux, après correction de deux défauts (plage de couches ignorée par `forward`, norme finale appliquée deux fois) |
-| 3.2 | **Granularité** : par couche, par bloc de canaux, par expert | 🔬 | livrés et mesurés : listes i16, **échelles par bloc de 32 canaux (valeurs i8)** et **indices par écarts** — `--flux-blocs --act-thresh 0.01` : **3 623 → 1 568 octets par flux (÷2,3) pour 2,7 % d'écart** sur 256 jetons de vrai texte ; reste le cas MoE |
+| 3.2 | **Granularité** : par couche, par bloc de canaux, par expert | 🔬 | livrés et mesurés : listes i16, **échelles par bloc de 32 canaux (valeurs i8)** et **indices par écarts** — `--flux-blocs --act-thresh 0.01` : **3 623 → 1 589 octets par flux (÷2,3) pour 1,3 % d'écart à 1 024 jetons** (2,7 % à 256, 13,7 % à 64) ; reste le cas MoE |
 | 3.3 | **Seuil de rentabilité** : à partir de quel débit réseau le découpage gagne | 🔬 | mesuré sur localhost : le seuil est une affaire de LATENCE, pas de débit — < 1 Mbit/s par flux de jetons à 20 jetons/s, et 16,1 ms d'attente contre 15,9 ms de calcul local après `TCP_NODELAY` (97,6 ms avant : Nagle) |
 | 3.4 | **Démonstration Colab** : préremplissage réparti (le décodage reste séquentiel — c'est écrit dans la vision) | ⏳ | les mêmes logits qu'en local, à 1e-5 près |
 | 3.5 | **Sûreté** : version du format, refus des flux incompatibles, pas de silence | ✅ | version dans chaque en-tête ; un pair en version 99 est refusé avec un message qui nomme les deux versions — vérifié avec un faux client |
@@ -251,7 +251,7 @@ l'échelle par bloc borne l'erreur *relative*, l'échelle unique borne l'erreur
 échappement) : 2 268 → **1 568 octets** à écart et perplexité IDENTIQUES — du
 rangement, pas de la perte. Sur 256 jetons de vrai texte, le réglage recommandé
 est donc le seuil **0,01** : **÷2,3 sur le fil pour 2,7 %** d'écart — et l'écart DÉCROÎT avec la
-longueur (13,7 % à 64 jetons, 6,4 % à 128, 2,7 % à 256) : la perturbation est
+longueur (13,7 % à 64 jetons, 6,4 % à 128, 2,7 % à 256, **1,3 % à 1 024**) : la perturbation est
 stationnaire par jeton, donc elle se dilue dans une perplexité moyennée. Ce qui
 change d'un banc à l'autre, c'est le corpus, pas la longueur. Le rapport porte la
 courbe et les deux formulations que la mesure a corrigées (« ÷2 pour 0,2 % »,
