@@ -20360,3 +20360,77 @@ int> positions(n_pos * 4);
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat >> docs/plan-mla-vision.md <<'EOF'\n\n### La convention de rotation 2-D, lue dans la source\n\n`clip.cpp`, cas `PROJECTOR_TYPE_QWEN25VL` — le tenseur `positions` a **quatre\nsections** de `num_patches` entiers, remplies (ligne, c … [2575 caractères tronqués]`
+
+  ```
+b032a36 vision : la convention de rotation 2-D lue dans la source de llama.cpp
+  ```
+
+### 🤖 Assistant
+
+⏵ Tour 19 : la convention de rotation 2-D est lue dans la source
+
+## Fait dans ce tour
+
+La convention mRoPE de Qwen2.5-VL est maintenant **connue par la source**, pas devinée. Dans `clip.cpp`, cas `QWEN25VL`, le tenseur `positions` porte **quatre sections** de `num_patches` entiers, remplies (ligne, colonne, ligne, colonne) :
+
+```cpp
+for (int y = 0; y < ph; y += merge_ratio)
+  for (int x = 0; x < pw; x += merge_ratio)
+    for (int dy = 0; dy < 2; dy++)
+      for (int dx = 0; dx < 2; dx++) {
+        positions[                  ptr] = y + dy;   // section 0 : LIGNE
+        positions[    num_patches + ptr] = x + dx;   // section 1 : COLONNE
+        positions[2 * num_patches + ptr] = y + dy;   // section 2 : LIGNE
+        positions[3 * num_patches + ptr] = x + dx;   // section 3 : COLONNE
+```
+
+Deux conséquences :
+
+1. la **numérotation raster des groupes de fusion** est confirmée (celle que le banc utilise déjà pour la fusion 2 × 2) ;
+2. la rotation se fait en **quatre blocs** de la dimension de tête : blocs 0 et 2 selon la **ligne**, blocs 1 et 3 selon la **colonne** — exactement ce que `ggml_rope_multi` attend, et très différent de la rotation scalaire que le moteur applique à ses jetons de texte.
+
+Reste **une** ambiguïté que la source ne lève pas seule : l'échelle de fréquences *à l'intérieur* de chaque bloc (RoPE sur `hd/4`, ou sur `hd/2` avec paires entrelacées). C'est précisément ce que la comparaison à `libmtmd` aurait tranché — je le note sans détour.
+
+## État
+
+| # | chantier | état |
+|---|---|---|
+| 1-4, 6 | aiguille · GPU (5 sous-items) · mémoire KV · rotation 16 k · hygiène | ✅ |
+| 5 | MLA ✅ (5,2e-7) · vision : fenêtre locale **connue**, rotation 2-D **connue à une ambiguïté près**, 4 tranches validées, tour complète, injection branchée | en cours |
+
+`cargo test` 6/6, portes Qwen **19,3885** / gpt-oss **15,1757** intactes, arbre propre.
+
+L'objectif reste **actif**. La voie est maintenant tracée : implémenter la fenêtre locale (permutation + masque par bloc carré, lue dans la source) et la rotation en quatre blocs, puis vérifier que la tour produit des embeddings de norme plausible — et si le temps le permet, rouvrir `mtmd` avec la signature désormais exacte.
+
+
+## Tour 29
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Réaliser les 6 nouveaux chantiers du projet qtrinet-core, dans l'ordre : (1) relancer le test de l'aiguille sur contexte long (remplissage varié en vrai texte, moins de sondes, réponses plus longues) sur un modèle capable, grâce au préremplissage par lots et au KV déporté ; (2) chemin GPU : dépaquetage vectorisé du noyau d'attention (13,2 ms/couche à 1 M en int4 vers ~3 ms), brancher MXFP4 dans le moteur avec une politique de résidence des experts, attention par lots sur GPU dans forward_lot, noyau de tête Q8_0 accéléré (AVX2 ou déport), et usage du second GPU ; (3) mémoire : pagination du cache KV côté CPU (25,77 Go réservés à ctx 1 M pour 512 jetons écrits) et test de l'hypothèse « clés en f16 avant quantification » pour l'écart int8 avec llama.cpp à 8 192 (+3,0 % contre +0,8 %) ; (4) rotation au-delà de 5 120 jetons (passe à 16 k) ; (5) structurel : MLA (aucun modèle local — construire un modèle MLA synthétique et valider contre une référence indépendante) et vision (poids Qwen2.5-VL et projecteur mmproj présents) ; (6) hygiène : réécrire la section « Ce qu'il faut faire ensuite » de REPRISE.md et y consigner les pièges QT_GPU/QT_GPU_TETE/QT_GPU_KV. Chaque chantier doit être implémenté, mesuré (portes de non-régression Qwen 19,3885 et gpt-oss 15,1757 sans QT_GPU), documenté dans le dépôt et commité."
+Round: 20/30
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && python3 - <<'PY'\np='src/main.rs'; s=open(p).read()\nold = \"\"\"            let scale = 1.0 / (e as f32).sqrt();\n            let mut att = vec![0f32; n_patch * e];\"\"\"\nnew = \"\"\"            // Rotation 2-D (mRoPE) … [2396 caractères tronqués]`
+
+  ```
+rotation 2-D ajoutée au banc vision
+    Finished `release` profile [optimized] target(s) in 0.01s
+projecteur : 3584 valeurs, |sortie| = 17.8837, 4 premières [-0.3701, 0.2001, 0.2074, 0.12]
+tour : 32 couches × 4 patchs × 1280 · |sortie| = 42.6154 · 4 premières [-0.1847, -0.1478, 0.8067, -0.1928]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='tools/vision_ref.py'; s=open(p).read()\nold = \"\"\"        x = eng.copy()\n        xn = ln(x, ln1)\n        qq, kk, vv = xn @ wq.T + bq, xn @ wk.T + bk, xn @ wv.T + bv\n        sc = (qq @ kk.T) / np.sqrt(e)\"\"\ … [1492 caractères tronqués]`
+
+  ```
+rotation ajoutée à la référence
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/vision_ref.py", line 96, in main
+    wq, bq = prendre(e*e).reshape(e, e), prendre(e)
+             ~~~~~~~~~~~~~~~~~~~~^^^^^^
+ValueError: cannot reshape array of size 2560 into shape (1280,1280)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='tools/vision_ref.py'; s=open(p).read()\n# le fichier .bloc ne contient plus les poids (la tour écrit sa sortie seule) :\n# on l'annonce au lieu de planter, et on garde les deux tranches qui restent\n# comparables … [3278 caractères tronqués]`

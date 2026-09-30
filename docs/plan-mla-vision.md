@@ -524,3 +524,28 @@ l'intérieur de chaque bloc (la même échelle que RoPE sur `hd/4` dimensions, o
 l'échelle sur `hd/2` avec paires entrelacées). C'est exactement ce que la
 comparaison à `libmtmd` aurait tranché — et c'est pourquoi la référence reste
 utile même si l'implémentation peut être écrite sans elle.
+
+### La rotation 2-D est IMPLÉMENTÉE (et la référence ne la couvre plus)
+
+Le banc applique maintenant la rotation en quatre blocs, exactement comme la
+source la décrit : blocs 0 et 2 par la ligne, blocs 1 et 3 par la colonne,
+chaque bloc tourné par paires (i, i + quart/2) avec l'échelle RoPE usuelle. La
+sortie de la tour change en conséquence (|sortie| 35,55 → 42,62), ce qui prouve
+que la rotation agit.
+
+Deux réserves, écrites noir sur blanc :
+
+1. la **convention de l'échelle interne** (RoPE sur `hd/4` par bloc, ou sur
+   `hd/2` avec paires entrelacées) reste une hypothèse : la source montre le
+   tenseur `positions` (quatre sections ligne/colonne/ligne/colonne) mais pas
+   l'opération GGML qui consomme ce tenseur ;
+2. la **référence numpy ne couvre plus la tour** : depuis que le banc écrit sa
+   seule sortie (et non plus les poids de la couche 0), le fichier `.bloc` ne
+   permet plus de rejouer les 32 couches en numpy. Les deux tranches qui restent
+   comparables — embedding de patchs et projecteur — le restent (5,4e-7 et
+   1,7e-6), et l'outil le dit au lieu de planter.
+
+Ce qui manque encore : la **fenêtre locale**, inexprimable sur les images du banc
+(28 × 28 et 84 × 84 tiennent dans une seule fenêtre de 8 × 8 après fusion), et
+l'injection des embeddings d'image dans le flux de jetons, qui est branchée côté
+moteur (`Model::emb_imposee`) mais pas encore alimentée par une tour complète.

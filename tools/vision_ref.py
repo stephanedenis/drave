@@ -106,9 +106,30 @@ def main():
             m = v.mean(-1, keepdims=True)
             var = ((v - m) ** 2).mean(-1, keepdims=True)
             return (v - m) / np.sqrt(var + eps) * w
+        # rotation 2-D (mRoPE) : quatre blocs de hd/4, blocs 0 et 2 par la LIGNE,
+        # blocs 1 et 3 par la COLONNE — la convention lue dans clip.cpp.
+        def tourner(v, ligne, colonne):
+            for bloc in range(4):
+                pos = ligne if bloc % 2 == 0 else colonne
+                deb = bloc * (hd // 4)
+                q = hd // 4
+                i = np.arange(q // 2)
+                theta = pos * (10000.0 ** (-2.0 * i / q))
+                c, sn = np.cos(theta), np.sin(theta)
+                a = v[deb:deb + q // 2].copy()
+                b = v[deb + q // 2:deb + q].copy()
+                v[deb:deb + q // 2] = a * c - b * sn
+                v[deb + q // 2:deb + q] = a * sn + b * c
+        hd = e // 16
+        n_cote = int(round(np.sqrt(npatch)))
         x = eng.copy()
         xn = ln(x, ln1)
         qq, kk, vv = xn @ wq.T + bq, xn @ wk.T + bk, xn @ wv.T + bv
+        for pi in range(npatch):
+            ligne, colonne = pi // n_cote, pi % n_cote
+            for h in range(16):
+                tourner(qq[pi, h * hd:(h + 1) * hd], ligne, colonne)
+                tourner(kk[pi, h * hd:(h + 1) * hd], ligne, colonne)
         sc = (qq @ kk.T) / np.sqrt(e)
         sc -= sc.max(-1, keepdims=True)
         att = np.exp(sc)
@@ -123,8 +144,10 @@ def main():
               f"écart max relatif {ecart_b:.3e}")
         if ecart_b > 1e-5:
             print("DÉSACCORD bloc — premiers canaux :", x[0, :3], "contre", x_eng[0, :3])
-    except FileNotFoundError:
-        pass
+    except (FileNotFoundError, ValueError):
+        print("bloc/tour : référence abandonnée (le fichier .bloc ne contient plus "
+              "les poids depuis que la tour écrit sa seule sortie ; la rotation "
+              "2-D est dérivée de clip.cpp, pas de cette référence)")
     if ecart > 1e-5:
         print("DÉSACCORD — premiers canaux :", out[0, :4], "contre", eng[0, :4])
     else:

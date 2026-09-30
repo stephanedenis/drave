@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 30.4 h |
-| Tours | 28 |
-| Messages | 1280 |
-| Appels d'outils | 1232 |
+| Durée | 30.5 h |
+| Tours | 29 |
+| Messages | 1285 |
+| Appels d'outils | 1235 |
 | Fichiers touchés | 39 |
-| Commandes | 963 |
+| Commandes | 966 |
 | Sous-agents | 1 |
-| Commits | 61 |
+| Commits | 62 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -81,6 +81,8 @@
 **Tour 27** — <goal_round> Objective: "Réaliser les 6 nouveaux chantiers du projet qtrinet-core, dans l'ordre : (1) relancer le test de l'aiguille sur contexte long (remplissage varié en vrai texte, moins de sondes, réponses plus longues) sur un modèle capable, grâce au préremplissage par lots et au KV déporté ; (2) chemin GPU : dépaquetage vectorisé du noyau d'attention (13,2 ms/couche à 1 M en int4 vers ~3 ms … [1492 caractères tronqués]
 
 **Tour 28** — <goal_round> Objective: "Réaliser les 6 nouveaux chantiers du projet qtrinet-core, dans l'ordre : (1) relancer le test de l'aiguille sur contexte long (remplissage varié en vrai texte, moins de sondes, réponses plus longues) sur un modèle capable, grâce au préremplissage par lots et au KV déporté ; (2) chemin GPU : dépaquetage vectorisé du noyau d'attention (13,2 ms/couche à 1 M en int4 vers ~3 ms … [1492 caractères tronqués]
+
+**Tour 29** — <goal_round> Objective: "Réaliser les 6 nouveaux chantiers du projet qtrinet-core, dans l'ordre : (1) relancer le test de l'aiguille sur contexte long (remplissage varié en vrai texte, moins de sondes, réponses plus longues) sur un modèle capable, grâce au préremplissage par lots et au KV déporté ; (2) chemin GPU : dépaquetage vectorisé du noyau d'attention (13,2 ms/couche à 1 M en int4 vers ~3 ms … [1492 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -1287,6 +1289,51 @@ L'objectif reste **actif**. La lecture de la source est la voie qui avance — c
 - bash — Read Qwen2.5-VL positions block
 - bash — Document mRoPE convention and commit
 
+**Synthèse produite :**
+
+⏵ Tour 19 : la convention de rotation 2-D est lue dans la source
+
+\## Fait dans ce tour
+
+La convention mRoPE de Qwen2.5-VL est maintenant **connue par la source**, pas devinée. Dans `clip.cpp`, cas `QWEN25VL`, le tenseur `positions` porte **quatre sections** de `num_patches` entiers, remplies (ligne, colonne, ligne, colonne) :
+
+```cpp
+for (int y = 0; y < ph; y += merge_ratio)
+  for (int x = 0; x < pw; x += merge_ratio)
+    for (int dy = 0; dy < 2; dy++)
+      for (int dx = 0; dx < 2; dx++) {
+        positions[                  ptr] = y + dy;   // section 0 : LIGNE
+        positions[    num_patches + ptr] = x + dx;   // section 1 : COLONNE
+        positions[2 * num_patches + ptr] = y + dy;   // section 2 : LIGNE
+        positions[3 * num_patches + ptr] = x + dx;   // section 3 : COLONNE
+```
+
+Deux conséquences :
+
+1. la **numérotation raster des groupes de fusion** est confirmée (celle que le banc utilise déjà pour la fusion 2 × 2) ;
+2. la rotation se fait en **quatre blocs** de la dimension de tête : blocs 0 et 2 selon la **ligne**, blocs 1 et 3 selon la **colonne** — exactement ce que `ggml_rope_multi` attend, et très différent de la rotation scalaire que le moteur applique à ses jetons de texte.
+
+Reste **une** ambiguïté que la source ne lève pas seule : l'échelle de fréquences *à l'intérieur* de chaque bloc (RoPE sur `hd/4`, ou sur `hd/2` avec paires entrelacées). C'est précisément ce que la comparaison à `libmtmd` aurait tranché — je le note sans détour.
+
+\## État
+
+| # | chantier | état |
+|---|---|---|
+| 1-4, 6 | aiguille · GPU (5 sous-items) · mémoire KV · rotation 16 k · hygiène | ✅ |
+| 5 | MLA ✅ (5,2e-7) · vision : fenêtre locale **connue**, rotation 2-D **connue à une ambiguïté près**, 4 tranches validées, tour complète, injection branchée | en cours |
+
+`cargo test` 6/6, portes Qwen **19,3885** / gpt-oss **15,1757** intactes, arbre propre.
+
+L'objectif reste **actif**. La voie est maintenant tracée : implémenter la fenêtre locale (permutation + masque par bloc carré, lue dans la source) et la rotation en quatre blocs, puis vérifier que la tour produit des embeddings de norme plausible — et si le temps le permet, rouvrir `mtmd` avec la signature désormais exacte.
+
+### Tour 29 — <goal_round> Objective: "Réaliser les 6 nouveaux chantiers du projet qtrinet-core, dans l'ordre : (1) relancer le test d … [1772 caractères tronqués]
+
+*3 appels d'outils.* Actions notables :
+
+- bash — Implement 2-D rotation in vision bench
+- bash — Add rotation to reference and compare
+- bash — Make reference tolerant and commit rotation
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -1379,7 +1426,7 @@ L'objectif reste **actif**. La lecture de la source est la voie qui avance — c
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 923 autres
+- … et 926 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1588,4 +1635,5 @@ L'objectif reste **actif**. La lecture de la source est la voie qui avance — c
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat >> docs/plan-mla-vision.md <<'EOF'  ### L'API de mtmd est maintenant CONNUE (en-tête récupéré)  `mtmd.
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat >> docs/plan-mla-vision.md <<'EOF'  ### Les deux conventions, lues dans la SOURCE de llama.cpp (clip.c
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat >> docs/plan-mla-vision.md <<'EOF'  ### La convention de rotation 2-D, lue dans la source  `clip.cpp`,
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p='tools/vision_ref.py'; s=open(p).read() # le fichier .bloc ne contient plus les poids (
 

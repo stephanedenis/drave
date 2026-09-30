@@ -987,6 +987,40 @@ fn run_banc_vision(sortie: &str) {
                 kk.extend(proj_l(&xn, &wk, &bk, e, e));
                 vv.extend(proj_l(&xn, &wv, &bv, e, e));
             }
+            // Rotation 2-D (mRoPE) : quatre blocs de la dimension de tête, lus
+            // dans clip.cpp — le tenseur `positions` y est rempli (ligne,
+            // colonne, ligne, colonne), donc les blocs 0 et 2 tournent selon la
+            // LIGNE et les blocs 1 et 3 selon la COLONNE. Chaque couple d'un
+            // bloc est (i, i + quart/2), la convention « moitié tournée ».
+            let nh_t = 16usize;                       // vision.head_count du mmproj
+            let hd_t = e / nh_t;
+            let quart = hd_t / 4;
+            let n_cote = (cote - kx) / kx + 1;
+            let base_rot = 10000.0f32;
+            let tourner = |v: &mut [f32], ligne: f32, colonne: f32| {
+                for bloc in 0..4 {
+                    let pos = if bloc % 2 == 0 { ligne } else { colonne };
+                    let deb = bloc * quart;
+                    for i in 0..quart / 2 {
+                        let theta = pos * base_rot.powf(-2.0 * i as f32 / quart as f32);
+                        let (c, sn) = (theta.cos(), theta.sin());
+                        let a = v[deb + i];
+                        let b = v[deb + i + quart / 2];
+                        v[deb + i] = a * c - b * sn;
+                        v[deb + i + quart / 2] = a * sn + b * c;
+                    }
+                }
+            };
+            for pi in 0..n_patch {
+                let (ligne, colonne) = ((pi / n_cote) as f32, (pi % n_cote) as f32);
+                for hh in 0..nh_t {
+                    let deb = pi * e + hh * hd_t;
+                    let v = &mut qq[deb..deb + hd_t];
+                    tourner(v, ligne, colonne);
+                    let vk = &mut kk[deb..deb + hd_t];
+                    tourner(vk, ligne, colonne);
+                }
+            }
             let scale = 1.0 / (e as f32).sqrt();
             let mut att = vec![0f32; n_patch * e];
             let mut sc = vec![0f32; n_patch];
