@@ -25072,3 +25072,13 @@ af18f29 Transport en listes à 1 024 jetons : ÷2,3 pour 1,3 % d'écart
 Mesure nette : **attente ≈ 16 ms + 3,2 × latence** (1,01× → 1,99× → 4,89×), fidélité intacte (0,00e0). Je chiffre l'attente Colab et je clos.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/rapport-transport-liste.md'; s=open(p).read()\nv = \"\"\"C'est aussi la réponse à la phase 3.3 : **le seuil de rentabilité est une\naffaire de latence, pas de débit**.\"\"\"\nn = \"\"\"### Et si le lien e … [4904 caractères tronqués]`
+
+  ```
+rapport : courbe de latence
+recette Colab : attente chiffrée
+roadmap 3.3 : formule mesurée
+e80ceb1 Phase 3.3 : le coût du découpage en fonction de la latence, mesuré
+ M journal/README.md
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date +\"%H:%M:%S\" && python3 - <<'PY'\np='REPRISE.md'; s=open(p).read()\nv = \"\"\"`TCP_NODELAY` a divisé l'attente du pair par six (**97,6 → 16,1 ms** par jeton,\nsoit 1,01× le calcul local) : le banc réparti prend maintenant le te … [2195 caractères tronqués]`

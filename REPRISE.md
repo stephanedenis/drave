@@ -276,8 +276,13 @@ la phase 3.4.
 
 `TCP_NODELAY` a divisé l'attente du pair par six (**97,6 → 16,1 ms** par jeton,
 soit 1,01× le calcul local) : le banc réparti prend maintenant le temps du calcul
-local, à logits identiques. Le seuil de rentabilité (phase 3.3) est donc une
-affaire de latence, pas de débit — moins de 1 Mbit/s par flux de jetons.
+local, à logits identiques. Et avec un relais retardateur
+(`tools/proxy_latence.py`), la formule du coût est mesurée :
+**attente ≈ calcul distant + 3,2 × latence par message** — 1,01× le calcul local à
+0 ms, 1,99× à 5 ms, 4,89× à 20 ms, fidélité intacte (0,00e0) dans les trois cas.
+Le seuil de rentabilité (phase 3.3) est donc une affaire de latence, pas de débit :
+0,25 Mbit/s suffisent. Un aller-retour Colab de 60 ms donnerait ~8 jetons/s
+contre ~60 en local.
 
 **Phase 1.4 attribuée** (`reports/rapport-attribution-kv.md`) : l'écart du cache
 KV int8 (+3,0 % à 8 192) vient **entièrement des clés** — clés f32 + valeurs int8

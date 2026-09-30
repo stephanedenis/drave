@@ -112,6 +112,8 @@ calcul : c'est la raison pour laquelle la phase 0 sert la phase 3.
 | 2026-09-30 | `TCP_NODELAY` sur le banc réparti, 200 jetons | attente du pair **97,6 → 16,1 ms** par jeton (calcul local : 15,9 ms) · banc complet 24,5 → **8,3 s**, soit le temps du calcul local (8,2 s), à logits identiques |
 | 2026-09-30 | écart du transport selon la longueur, blocs à seuil 0,01 | **1,37e-1** à 64 jetons · 6,37e-2 à 128 · **2,74e-2** à 256 — il DÉCROÎT (l'erreur est stationnaire par jeton, la perplexité se moyenne) |
 | 2026-09-30 | hypothèse « transmettre l'entrée normée », mode dense | écart **5,61e0** au lieu de 0,00e0 : RÉFUTÉE — la connexion résiduelle a besoin du résidu, pas de sa version normée |
+| 2026-09-30 | coût du découpage selon la latence (relais retardateur, 256 jetons) | attente **16,8 ms** à 0 ms · **33,0** à 5 ms · **81,8** à 20 ms → `attente ≈ calcul distant + 3,2 × latence`, écart 0,00e0 partout |
+| 2026-09-30 | découpage fidèle à **1 024 jetons** (1 024 flux, texte réel) | perplexité **9,5146** des deux côtés, écart **0,00e0** · 19,4 ms en local contre 19,7 ms à attendre le pair |
 
 Le second point est exactement ce que la vision promettait : **la divergence est
 localisée**, pas seulement constatée. La première version de l'outil comparait les
