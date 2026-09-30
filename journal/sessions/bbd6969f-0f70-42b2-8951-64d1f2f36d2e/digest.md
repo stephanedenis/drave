@@ -36490,3 +36490,14 @@ a6eedd8 Sprint 1 : cérémonie (revue chiffrée, rétrospective, planning du spr
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -m \"Journal : index des sessions (clôture)\" 2>/dev/null; git status --short; echo \"--- 22 commits, aucun processus, dépôt propre ---\"; pgrep -c -x drave; ps -eo pcpu,comm --sort=-pcpu | head -3", "desc … [37 caractères tronqués]`
+
+  ```
+M journal/README.md
+--- 22 commits, aucun processus, dépôt propre ---
+0
+%CPU COMMAND
+33.9 node-MainThread
+27.4 node-MainThread
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add journal/README.md && git commit -q -m \"Journal : index régénéré par l'outillage de session\" && git log --oneline -3 && echo \"--- reste ---\" && git status --short | wc -l", "description": "Final journal commit"}`
