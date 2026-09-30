@@ -25,7 +25,7 @@ notebook prêt à ouvrir, avec la vérification d'empreinte et la lecture du ré
 | latence | ✅ `TCP_NODELAY` : 16,1 ms d'attente contre 15,9 ms de calcul local (97,6 ms avant) |
 | au-delà de localhost | ✅ testé sur l'IP du réseau local (`--flux-serveur 0.0.0.0:PORT`) |
 | **deux machines avec le même fichier GGUF** | ❌ les deux nœuds chargent le modèle ENTIER (`Model::load` lit tout le fichier) — le découpage porte sur le CALCUL |
-| **préremplissage par lots sur le fil** | ✅ mode 3, `--lot T` : 256 jetons en 4 lots, écart **0,00e0** (`reports/rapport-prefill-reparti.md`) |
+| **préremplissage par lots sur le fil** | ✅ mode 3, `--lot T` : 256 jetons en 4 lots, écart **0,00e0** (`reports/rapport-prefill-reparti.md`) ; mode 4 (lot en listes) : 1,5 ko par jeton au lieu de 3,5 |
 
 La limite qui reste est assumée, pas oubliée : **les deux nœuds chargent le
 modèle entier**. Un petit modèle tient sur les deux machines ; c'est le

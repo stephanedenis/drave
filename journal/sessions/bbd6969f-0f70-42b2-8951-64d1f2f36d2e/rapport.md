@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 48.7 h |
+| Durée | 48.8 h |
 | Tours | 46 |
-| Messages | 1887 |
-| Appels d'outils | 1780 |
+| Messages | 1889 |
+| Appels d'outils | 1782 |
 | Fichiers touchés | 44 |
-| Commandes | 1453 |
+| Commandes | 1455 |
 | Sous-agents | 9 |
-| Commits | 148 |
+| Commits | 149 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -2117,7 +2117,7 @@ L'**audit des drapeaux** a trouvé que **46 options sur 110** étaient ignorées
 
 ### Tour 46 — continue jusqu'à 18h HAE
 
-*42 appels d'outils.* Actions notables :
+*44 appels d'outils.* Actions notables :
 
 - bash — Check time, timezone and remaining budget
 - create_goal
@@ -2133,7 +2133,7 @@ L'**audit des drapeaux** a trouvé que **46 options sur 110** étaient ignorées
 - bash — Improve notebook with real text cell
 - bash — Kill test node safely and check notebook
 - bash — Add notebook real-text cell and commit
-- … et 28 autres
+- … et 30 autres
 
 **Synthèse produite :**
 
@@ -2244,7 +2244,7 @@ L'**audit des drapeaux** a trouvé que **46 options sur 110** étaient ignorées
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 1413 autres
+- … et 1415 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2540,4 +2540,5 @@ L'**audit des drapeaux** a trouvé que **46 options sur 110** étaient ignorées
 - Documents : protocole v5 et mode 4 (lot en listes)  format-flux décrit le mode 4 (chaque état auto-délimité par ses trois tailles) et son coût mesuré ; la feuil
 - Cache KV : la frontière tient à 4 096 comme à 8 192  Refait à contexte 4 096 : référence 12,2175 · clés f16 + valeurs int8 **+0,011 %** · int8/int8 **+2,25 %**.
 - Corrections du second audit (1/2) : chiffres, époques, comptes, et la journée au README  - Les pourcentages du cache KV : « 75 % / 50 % » était une ERREUR de ma
+- Corrections du second audit (2/2) : la journée au README, le mode 4 dans la recette Colab, le renvoi FPGA de la vision" && git log --oneline -1 | cat; date +"%H
 

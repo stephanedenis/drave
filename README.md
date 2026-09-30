@@ -15,6 +15,24 @@ le journal de sessions, archivé, n'est pas réécrit.
 
 ---
 
+## La journée du 30/09 — huit chantiers, mesurés
+
+Le détail est dans [`reports/rapport-session-2026-09-30.md`](reports/rapport-session-2026-09-30.md).
+
+| chantier | résultat |
+|---|---|
+| **calcul réparti fidèle** | écart local/réparti **0,00e0** à 40, 200 et 1 024 jetons |
+| **préremplissage par lots** (mode 3) | 256 jetons en 4 lots, **0,00e0** ; **18×** plus rapide qu'un flux par jeton sur un lien à 20 ms |
+| **lot en listes** (mode 4) | **1,5 ko par jeton** au lieu de 3,5 (÷2,3), écart 3,03e-2 |
+| **transport en listes** | 3 663 → 1 608 octets par flux pour 2,7e-2 d'écart |
+| **cache KV : où mettre les bits** | clés f16 + valeurs int8 = **+0,018 %** pour **39 %** de la taille du f32 → [`reports/rapport-placement-bits-kv.md`](reports/rapport-placement-bits-kv.md) |
+| **format de trace v2 / v3** | 132 396 736 → **66 370 408** (sans perte) → **45 079 930** octets (+0,074 % de perplexité) |
+| **protocole de flux v5** | version, cinq modes, contrat d'activation complet, refus immédiat d'un pair incompatible |
+| **Colab prêt** | [`colab/`](colab/README.md) : notebook, bundle de 4,5 Mo, trois voies de tunnel, vérifié de bout en bout |
+
+Deux relectures adversariales déléguées ont trouvé **22 défauts** — dont 17 par
+lecture et non par un banc, y compris dans les correctifs de la première.
+
 ## État du projet
 
 | Étape | État |

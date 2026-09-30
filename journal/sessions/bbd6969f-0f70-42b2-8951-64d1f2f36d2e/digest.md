@@ -30342,3 +30342,32 @@ cles_f32_valeurs_int8      :
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\ndef rem(p, paires):\n    s = open(p).read(); ok = 0\n    for v, n in paires:\n        if s.count(v) >= 1: s = s.replace(v, n); ok += 1\n        else: print(f\"  ⚠ absent de {p} : {v[:60]}…\")\n    open(p,'w').write( … [3565 caractères tronqués]`
+
+  ```
+REPRISE.md : 3/3
+reports/rapport-phase3-reparti.md : 1/1
+docs/plan-prefill-reparti.md : 1/1
+  ⚠ ancre README absente : 0
+64a86ca Corrections du second audit (1/2) : chiffres, époques, comptes, et la journée au README
+15:31:34
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"^## \" README.md | head -14", "description": "Find README structure"}`
+
+  ```
+18:## État du projet
+54:## Test de principe (`run_quantify.py`)
+104:## Élagage et approche par événement (`run_sparsity.py`)
+152:## Encodage de structure : éliminer complètement la valeur (`run_encoding.py`)
+195:## Architecture « push » (AER) et exécution CPU (`run_cpu.py`, `bench/cpu_aer.c`)
+242:## Tri et dédoublonnage des contributions (`bench/cpu_merge.c`)
+277:## Moteur d'événements Rust (`drave-core`)
+332:## Formats et modèles réellement lisibles
+352:## Inférence complète en Rust (`--infer`)
+434:## Écarts avec le CDC d'origine
+447:## Structure
+465:## Lancer
+478:## Prochaines étapes
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\ns = open('README.md').read()\nancre = \"## État du projet\"\nassert s.count(ancre) == 1\nsection = \"\"\"## La journée du 30/09 — huit chantiers, mesurés\n\nLe détail est dans [`reports/rapport-session-2026-09-30.md … [2627 caractères tronqués]`

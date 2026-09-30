@@ -106,7 +106,7 @@ C'est l'axe le plus avancé, et il est **mesuré** :
 La leçon de cet axe est une règle de placement : **on place un opérateur là où
 son flux coûte le moins cher**, et on le vérifie. Le même raisonnement mène au
 FPGA : le projecteur événementiel sur Stratix V existe et a été synthétisé
-(`reports/rapport-pe-evenementiel.md`), et le bilan multi-matériel
+(../FPGA-Stratix-V/docs/rapport-pe-evenementiel.md), et le bilan multi-matériel
 (`reports/bilan-multi-materiel.md`) donne le cadre CPU / FPGA / GPU.
 
 Ce qui reste ouvert : la **politique** de placement (aujourd'hui : des seuils
