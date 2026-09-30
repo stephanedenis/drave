@@ -470,3 +470,128 @@ index fe513b6..7325169 100644
 … [9455 caractères tronqués]
   ```
 
+### 🤖 Assistant
+
+⏵ Lecture du découpage en fenêtres et de la boucle de notation
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/main.rs", "limit": 150, "offset": 3009}`
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/main.rs", "limit": 130, "offset": 1690}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/main.rs</path>
+<type>file</type>
+<content>
+3009:     if let Some(l) = hebb_layer {
+3010:         let mut hb = model::Hebb::new(l, mdl.cfg.ffn, mdl.cfg.hidden, hebb_q);
+3011:         hb.log_on = true;
+3012:         mdl.hebb = Some(hb);
+3013:         println!("journalisation : couche {l}, entrée FFN ({} dim)", mdl.cfg.hidden);
+3014:     }
+3015:     if profil_neurones {
+3016:         mdl.activer_profil_neurones();
+3017:         println!("profilage des neurones actif : un neurone compte comme actif si sa valeur \
+3018:                   quantifiée n'est pas nulle (même critère que le chemin par événements)");
+3019:     }
+3020:     mdl.reset_events();
+3021:     // Fenêtres d'évaluation : soit des tranches brutes de `ctx` jetons (mode
+3022:     // historique, toutes notées), soit des tours harmony dont seuls les jetons
+3023:     // de contenu sont notés.
+3024:     let fenetres: Vec<(Vec<u32>, Vec<bool>)> = match &harmony {
+3025:         None => {
+3026:             // `--depuis N` : les fenêtres sont ancrées pour que le premier jeton
+3027:             // NOTÉ ait un contexte complet (on recule de ctx-1 jetons, qui ne
+302
+… [7450 caractères tronqués]
+  ```
+
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/main.rs</path>
+<type>file</type>
+<content>
+1690:         topk: u(34),
+1691:         renorm: tete[38] != 0,
+1692:         topk_proj,
+1693:         attn_topk: u(67),
+1694:         qk_topk: u(71),
+1695:         moe_topk: u(75),
+1696:     };
+1697:     let charge = match mode {
+1698:         MODE_LOT => {
+1699:             // `n` est le nombre d'ÉTATS, pas de canaux : la dimension vient du
+1700:             // modèle du nœud qui reçoit, elle n'a pas à voyager.
+1701:             let taille = n.checked_mul(hidden).and_then(|x| x.checked_mul(4))
+1702:                          .unwrap_or(usize::MAX);
+1703:             verifier_taille(taille, &format!("lot de {n} états × {hidden} canaux"))?;
+1704:             let mut corps = vec![0u8; taille];
+1705:             s.read_exact(&mut corps)?;
+1706:             let etats = (0..n * hidden).map(|k| f32::from_le_bytes(
+1707:                 [corps[k*4], corps[k*4+1], corps[k*4+2], corps[k*4+3]])).collect();
+1708:             return Ok(Flux { n, debut, fin, pos, mode, act, octets_corps: corps.len(),
+1709:                              charge: ChargeFlux::Lot(etats) });
+1710:         }
+… [6814 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Inspection des écritures de trace dans `forward`, du rejeu et du banc MLA
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs", "limit": 70, "offset": 3040}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs</path>
+<type>file</type>
+<content>
+3040:         // `0..n_layer` : un nœud qui reçoit un flux reprend à SA première couche.
+3041:         // La boucle partait de zéro — le pilote calculait donc les 24 couches,
+3042:         // envoyait l'état final, et le pair les recalculait toutes par-dessus :
+3043:         // perplexité répartie 798,3 au lieu de 18,2. `forward_lot` et
+3044:         // `forward_mla` respectaient déjà la plage ; `forward` était l'exception.
+3045:         for l in self.couche_debut..self.couche_fin {
+3046:             let lay = &layers[l];
+3047:             // Fenêtre EFFECTIVE de cette couche : le motif déclaré (gpt-oss :
+3048:             // une couche sur deux en attention complète) prime sur le réglage
+3049:             // global. Lue en champs directs : `self` est déjà déstructuré.
+3050:             let fen = if self.attn_window == 0 { 0 }
+3051:                       else if self.swa_pattern <= 1 { self.attn_window }
+3052:                       else if l % self.swa_pattern < self.swa_pattern - 1 { self.attn_window }
+3053:                       else { 0 };
+3054:             let tm = I
+… [3588 caractères tronqués]
+  ```
+
+- **bash** `{"command": "sed -n '2058,2095p' drave-core/src/main.rs; echo \"=== rejeu diag ===\"; sed -n '3159,3225p' drave-core/src/main.rs", "description": "Read banc MLA and replay diagnostics", "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+fn run_banc_mla(opt: Options, sortie: &str) {
+    use std::io::Write;
+    let path = &modele_chemin();
+    let mut mdl = model::Model::load(path, 4096, fils(&opt), opt.dense, opt.keep, false, 0, 0);
+    if mdl.mla.is_none() {
+        println!("pas un modèle MLA (attn_kv_a_mqa absent)");
+        return;
+    }
+    let ids: Vec<u32> = if opt.ids.is_empty() {
+        (1..=8u32).collect()
+    } else { opt.ids.clone() };
+    let vocab = mdl.cfg.vocab;
+    let mut f = std::io::BufWriter::new(std::fs::File::create(sortie).expect("création"));
+    let t0 = std::time::Instant::now();
+    for (pos, &t) in ids.iter().enumerate() {
+        let hn = mdl.forward_mla(t, pos);
+        let lg = mdl.logits_f32(&hn);
+        let mut tampon = Vec::with_capacity(vocab * 4);
+        for v in lg.iter() { tampon.extend_from_slice(&v.to_le_bytes()); }
+        f.write_all(&tampon).unwrap();
+        println!("  position {pos} : logits[0..4] = {:?}",
+                 &lg[..4.min(lg.len())].iter().map(|v| (v * 1e4).round() / 1e4).collect::<Vec<_>>());
+    }
+    println!("{} positions × {vocab} logits écrits dans {sortie} ({:.2} s)",
+             ids.len(), t0.elapsed().as_secs_f64());
+}
+
+/// Banc du **KV déport
+… [3949 caractères tronqués]
+  ```
+

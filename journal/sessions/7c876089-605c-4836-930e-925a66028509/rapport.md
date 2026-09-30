@@ -7,10 +7,10 @@
 | Début | 2026-09-30 13:10 |
 | Durée | 0.0 h |
 | Tours | 1 |
-| Messages | 11 |
-| Appels d'outils | 16 |
+| Messages | 13 |
+| Appels d'outils | 20 |
 | Fichiers touchés | 0 |
-| Commandes | 11 |
+| Commandes | 14 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -23,7 +23,7 @@
 
 ### Tour 1 — Tu es relecteur ADVERSARIAL dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (projet « Drave » : moteur d'i … [3709 caractères tronqués]
 
-*16 appels d'outils.* Actions notables :
+*20 appels d'outils.* Actions notables :
 
 - bash — List recent commits and repo root
 - bash — Show stats for target commits
@@ -37,10 +37,13 @@
 - bash — Grep call sites in main.rs
 - bash — Show options-actives diff
 - bash — Show unknown flag diff and parser
+- bash — Read banc MLA and replay diagnostics
+- bash — Check build artifacts and models
+- … et 1 autres
 
 **Synthèse produite :**
 
-⏵ Lecture du découpage en fenêtres et de la boucle de notation
+⏵ Vérification du binaire existant et des diffs a9fff24/86ddf12
 
 ## 3. Travail accompli
 
@@ -62,6 +65,9 @@
 - **T1** Grep call sites in main.rs
 - **T1** Show options-actives diff
 - **T1** Show unknown flag diff and parser
+- **T1** Read banc MLA and replay diagnostics
+- **T1** Check build artifacts and models
+- **T1** Read a9fff24 diff head
 
 ## 4. Mesures et résultats marquants
 
@@ -75,4 +81,10 @@
 - **T1** `+/// annonce `n = 4 milliards` fait allouer `n × dimension × 4` octets AVANT tout`
 - **T1** `+/// contrôle : jusqu'à ~15 To demandés au noyau. 256 Mo couvrent largement un lot`
 - **T1** `+/// de 8 192 jetons × 8 192 canaux (268 Mo... soit un lot par fenêtre maximale).`
+- **T1** `/// n'est plus bornée par la RAM (20 Go/s) mais par la VRAM (≈ 450 Go/s).`
+- **T1** `/// en version 2 lirait `n × 4` octets d'un corps qui en fait `n × hidden × 4`,`
+- **T1** `+| 45 | `README.md:34` | « Croisement push/pull à **10 %** de densité ✅ mesuré » | `reports/rapport-croisement-push-pull.md:43` : « **~22 %** … pas à 10 » ; le README lui-même le dit ligne 389 | CONTR`
+- **T1** `+| 46 | `docs/vision.md:46,133,198` et `docs/histoire.md:12` | croisement « mesuré » à **10 %** | 22 % (rapport de référence + REPRISE §5.1 + `docs/convertisseur.md:225`) | CONTRADICTOIRE |`
+- **T1** `+| 51 | `docs/contexte-long.md:103` | KV int4 « mesuré : **+384 %*`
+- **T1** `+| 44 | `reports/rapport-compacite-trace.md:13-14` | « restent à faire : valeurs i8 (−60,9 %), échelles f16 (−63,5 %), zstd (−79 %) » | la v3 non commitée implémente déjà i8 + échelles f16 par bloc (``
 

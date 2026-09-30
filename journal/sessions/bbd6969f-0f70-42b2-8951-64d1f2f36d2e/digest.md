@@ -28926,3 +28926,34 @@ chronos en file d'attente (après la campagne f16)
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n 53p REPRISE.md; grep -rn \"19,3045\\|19.3045\\|19,30\\b\" --include=\"*.md\" reports/ docs/ | head -4; python3 - <<'PY'\np='docs/format-flux.md'; s=open(p).read()\nv = \"\"\"Taille : `14 + 6 × n_actifs` en v1, `14 + 3 × n_acti … [1046 caractères tronqués]`
+
+  ```
+identique à la source) — les deux tokenizers la passent sur ce corpus.
+reports/rapport-coherence-docs.md:113:| 52 | `REPRISE.md:53` | Qwen 6 bits : « **19,3045** ← bat l'int8 » | aucune source dans `reports/` : ni 19,3045 ni `--bits-attn 6` n'y figurent ; REPRISE §5.2 ne cite que « 19,30 » | MANQUANT |
+reports/rapport-coherence-docs.md:225:| MANQUANT | **10** | 10 champs de réglages en plus des 4 documentés · plafond R4 du lot · mode 4 · précision 6,02/6,04 · « vérifié » des top-k jamais re-mesuré · 19,3045 sans source · gpt-oss « — » · `DRAVE_BANC_KV_*`, `DRAVE_FLUX_VERIF` muet en lot |
+format-flux : nuance dense/creux
+7c6bd5d Format de flux : la taille par neurone actif, dense et creuse
+13:11:49
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"19,3045\" REPRISE.md; grep -n '\"--bits' drave-core/src/main.rs | head -4; sed -n 50,56p REPRISE.md", "description": "Locate the 6-bit claim and its flag"}`
+
+  ```
+59:| Qwen2.5-0.5B Q8_0, 6 bits | `--dense --bits-attn 6 --bits-ffn 6 --limit 512` | **19,3045** ← bat l'int8 |
+534:            "--bits" => { o.bits = suivant(i).parse().unwrap(); 2 }
+561:            "--bits-attn" => { if suivant(i).parse::<u32>().unwrap() == 6 { o.b6 |= 2; } 2 }
+562:            "--bits-ffn" => { if suivant(i).parse::<u32>().unwrap() == 6 { o.b6 |= 1; } 2 }
+```
+
+Le mode `--tokenize --fichier` **vérifie la réversibilité** (texte reconstruit
+identique à la source) — les deux tokenizers la passent sur ce corpus.
+
+| modèle | commande (abrégée) | perplexité attendue |
+|---|---|---|
+  ```
+
+### 🤖 Assistant
+
+La commande existe (`--bits-attn 6 --bits-ffn 6`) : plutôt que de la retirer, je la re-mesure — une référence de non-régression doit être reproductible.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 600 ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf --ppl /tmp/ids_qwen.txt --ctx 256 --dense --bits-attn 6 --bits-ffn 6 --threads 16 --limit 512 2>&1 | grep -oE \"perplexité [0-9.]+ sur [0-9]+ tokens\"; pytho … [1113 caractères tronqués]`
