@@ -56,6 +56,12 @@ paie pas la latence 256 fois.
   pas à accélérer** ; c'est ce que la démonstration devra montrer, et le tableau
   ci-dessus dit d'avance ce qu'elle mesurera.
 
+  **Le mode lot change l'ordre de grandeur du préremplissage** : mesuré avec un
+  relais qui ajoute 20 ms par message (64 jetons, 12 couches par nœud), un seul
+  lot prend **2,6 s** là où un flux par jeton en prend **47,6 s** — 18×, à
+  fidélité identique. C'est pourquoi le notebook lance le banc avec `--lot 64` :
+  sans lui, la démonstration paierait 63 fois la latence du lien.
+
 ## Topologie recommandée : le nœud moteur EN LOCAL, le pilote sur Colab
 
 Colab n'accepte aucune connexion entrante. Un tunnel est donc nécessaire dans un

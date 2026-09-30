@@ -28235,3 +28235,29 @@ test result: ok. 11 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; fin
 Gain mesuré sur un lien à 20 ms par message : **2,6 s en un lot contre 47,6 s flux par flux** (18×). Je l'écris dans le rapport et la recette Colab.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/rapport-prefill-reparti.md'; s=open(p).read()\nv = \"\"\"## Ce que ça coûte, et ce que ça n'économise pas\"\"\"\nn = \"\"\"## Sur un lien latent : 18× (c'est là que le mode lot paie)\n\n`tools/proxy_laten … [2645 caractères tronqués]`
+
+  ```
+rapport 3.4 : section latence
+c2ff9a8 Mode lot sur un lien latent : 18× (2,6 s contre 47,6 s)
+cles_f32_valeurs_int4      : perplexité 14.2994 sur 8191 tokens (0 événements, 1665.6 s)
+cles_int4_valeurs_f32      : perplexité 69.0464 sur 8191 tokens (0 événements, 1482.6 s)
+int4_int4                  : 13:00:02
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 41, in <module>
+AssertionError
+bash: line 46: --lot: command not found
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"8 jetons/s\" -A 3 -B 2 docs/colab-reparti.md | head -12", "description": "Find colab doc anchor"}`
+
+  ```
+51-  | 20 ms | 81,8 ms | 4,89× |
+52-
+53:  Un aller-retour Colab de 60 ms donne donc ≈ 112 ms par jeton, soit ~8 jetons/s
+54-  au lieu de ~60 en local — et la fidélité, elle, ne bouge pas (0,00e0 partout).
+55-  **Le découpage sert à faire tenir un modèle qui ne tient pas sur une machine,
+56-  pas à accélérer** ; c'est ce que la démonstration devra montrer, et le tableau
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='docs/colab-reparti.md'; s=open(p).read()\nv = \"\"\"  **Le découpage sert à faire tenir un modèle qui ne tient pas sur une machine,\n  pas à accélérer** ; c'est ce que la démonstration devra montrer, et le tablea … [1037 caractères tronqués]`

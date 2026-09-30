@@ -7,12 +7,12 @@
 | Début | 2026-09-28 14:46 |
 | Durée | 46.2 h |
 | Tours | 45 |
-| Messages | 1750 |
-| Appels d'outils | 1653 |
+| Messages | 1752 |
+| Appels d'outils | 1655 |
 | Fichiers touchés | 44 |
-| Commandes | 1335 |
+| Commandes | 1337 |
 | Sous-agents | 6 |
-| Commits | 118 |
+| Commits | 119 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -2055,7 +2055,7 @@ Je vérifie l'heure à chaque itération et j'arrête à 12:06, en laissant un p
 
 ### Tour 45 — as-tu ce qu'il te faut pour te rendre à 15h en travaillaint avec un maximum d'autonomie et de parallélisme d'activités?
 
-*154 appels d'outils.* Actions notables :
+*156 appels d'outils.* Actions notables :
 
 - bash — Probe machine, GPU, disk, network state
 - bash — Identify GPU users and stray processes
@@ -2071,7 +2071,7 @@ Je vérifie l'heure à chaque itération et j'arrête à 12:06, en laissant un p
 - bash — Understand batched PPL reference path
 - bash — Add batched imposed states to forward_lot
 - list_agents
-- … et 132 autres
+- … et 134 autres
 
 **Synthèse produite :**
 
@@ -2179,7 +2179,7 @@ Gain mesuré sur un lien à 20 ms par message : **2,6 s en un lot contre 47,6 s 
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 1295 autres
+- … et 1297 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2445,4 +2445,5 @@ Gain mesuré sur un lien à 20 ms par message : **2,6 s en un lot contre 47,6 s 
 - Rapport : où mettre les bits du cache KV (facteur 130 à 840 à taille égale)  Six points mesurés à 8 191 jetons, trois en cours. La courbe est sans ambiguïté : à
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A drave-core/src/main.rs && git commit -q -F - <<'EOF' && git log --oneline -1 | cat Règle R4 : p
 - Mode lot sur un lien latent : 18× (2,6 s contre 47,6 s)  Mesuré avec le relais retardateur (20 ms par message, 64 jetons, 12 couches par nœud) : un seul lot de 
+- Colab : le mode lot chiffré dans la recette (2,6 s contre 47,6 s à 20 ms par message)" && git log --oneline -1 | cat; date +"%H:%M:%S"
 
