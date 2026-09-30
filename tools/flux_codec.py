@@ -28,7 +28,7 @@ import sys
 import time
 
 MAGIE = b"DRVF"
-VERSION = 2        # ce que ce fichier ÉCRIT ; il LIT la 1 et la 2
+VERSION = 2        # ce que ce fichier ÉCRIT ; il LIT la 1, la 2 et la 3
 ENTETE = struct.Struct("<4sHII")
 LISTE = struct.Struct("<HIIf")
 PAIRE_V1 = struct.Struct("<Ih")
@@ -59,7 +59,7 @@ def encoder(n_layer, hidden, listes, version=VERSION):
 def decoder(blob):
     magie, version, n_layer, hidden = ENTETE.unpack_from(blob, 0)
     assert magie == MAGIE, "magie absente"
-    assert version in (1, 2), f"version {version} inconnue (ce lecteur lit la 1 et la 2)"
+    assert version in (1, 2, 3), f"version {version} inconnue (ce lecteur lit la 1, la 2 et la 3)"
     off = ENTETE.size
     listes = []
     while True:
@@ -72,7 +72,26 @@ def decoder(blob):
         off += LISTE.size
         actifs = []
         prev = 0
+        echelles = None
+        if version == 3:
+            # v3 : nombre de blocs u32 · échelles f16 · paires (écart u8, valeur i8)
+            n_blocs, = struct.unpack_from("<I", blob, off)
+            off += 4
+            echelles = []
+            for _ in range(n_blocs):
+                echelles.append(struct.unpack_from("<e", blob, off)[0])   # f16 natif
+                off += 2
         for _ in range(n):
+            if version == 3:
+                d = blob[off]; off += 1
+                if d == 255:
+                    i = struct.unpack_from("<H", blob, off)[0]; off += 2
+                else:
+                    i = prev + d
+                prev = i
+                q = struct.unpack_from("<b", blob, off)[0]; off += 1
+                actifs.append((i, q * echelles[i // 32]))
+                continue
             if version == 1:
                 i, v = PAIRE_V1.unpack_from(blob, off)
                 off += PAIRE_V1.size

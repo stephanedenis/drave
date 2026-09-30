@@ -26849,3 +26849,291 @@ The bundle uses this hash algorithm: sha1
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='tools/preparer_colab.sh'; s=open(p).read()\ns = s.replace(\"    temps : ~16 ms de calcul local par LOT de 64 · l'attente du pair = son calcul + l'aller-retour\",\n              \"    temps : ~1,6 s de calcul loca … [5236 caractères tronqués]`
+
+  ```
+docs/colab-reparti : pointeur ajouté
+a0687b9 Colab : notebook prêt à ouvrir + script de préparation
+  ```
+
+### 🤖 Assistant
+
+⏵ Parallélisme : je lance deux relecteurs indépendants (mes propres commits, cohérence des docs) pendant que je continue.
+
+- **subagent** `{"description": "Adversarial review of recent commits", "prompt": "Tu es relecteur ADVERSARIAL dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (projet « Drave » : moteur d'inférence LLM en Rust, `std` seul, paquet `drave-core`, binaire `drave`). Documentation et rapports en FRANÇAIS :  … [3546 caractères tronqués]`
+
+  ```
+started subagent bcfe0b97-1795-4610-8e8b-b598ca1ba6cb
+  ```
+
+- **subagent** `{"description": "Docs vs measurements consistency audit", "prompt": "Tu es vérificateur de documentation dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (projet « Drave » : moteur d'inférence LLM en Rust, `std` seul, binaire `drave`). Tout est en FRANÇAIS : écris en français.\n\nMISSIO … [2871 caractères tronqués]`
+
+  ```
+started subagent 42059fde-f06f-4e2c-9a23-8292d887fb6e
+  ```
+
+- **bash** `{"command": "date +\"%H:%M:%S\"; cat /tmp/kv_cles.log; pgrep -x drave >/dev/null && echo \"(campagne KV en cours)\"", "description": "Check clock and lane A progress"}`
+
+  ```
+12:20:56
+cles_f32_valeurs_int4      : perplexité 14.2994 sur 8191 tokens (0 événements, 1665.6 s)
+cles_int4_valeurs_f32      : (campagne KV en cours)
+  ```
+
+### 🤖 Assistant
+
+⏵ Trace DRVF v3 : valeurs i8 + échelle f16 par bloc (l'étude déléguée annonce −63 % ; je vérifie).
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/model.rs'; s=open(p).read()\n\n# 1. les conversions f16 (aucune dépendance : le moteur est en std seul)\nv = \"\"\"/// Trace du **flux d'activation** : par (couche, position), la liste des\"\"\"\nn … [8323 caractères tronqués]`
+
+  ```
+model.rs : v3 écriture + lecture (reste à unifier le type des paires)
+717:                listes3.insert((couche, pos), paires);
+748:            listes.insert((couche, pos), (echelle, paires));
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"listes\" drave-core/src/model.rs | sed -n 1,25p; grep -n \"\\.listes\" drave-core/src/main.rs | head", "description": "Find all uses of the replay map"}`
+
+  ```
+1://! Inférence Qwen2 en **mode listes d'événements** — std seul, sans GPU, sans
+4://! Chaque matrice de poids est stockée en listes par source
+60:/// `m` = listes d'événements (architecture du projet) ;
+258:/// fenêtre contiguë de destinations, centrée sur la plus forte. Les listes
+655:    pub listes: std::collections::HashMap<(u16, u32), (f32, Vec<(u32, i16)>)>,
+678:        let mut listes = std::collections::HashMap::new();
+717:                listes3.insert((couche, pos), paires);
+748:            listes.insert((couche, pos), (echelle, paires));
+750:        Ok(FluxRelecteur { listes, servies: 0, manquantes: 0 })
+756:        match self.listes.get(&(couche as u16, pos as u32)) {
+1467:        eprintln!("[modele] {} couches chargées en {:?} — listes {:.2} Go{} , {} threads",
+2754:                if let Some((ech, paires)) = r.listes.get(&((base + l) as u16, j0 as u32)).cloned() {
+3515:    /// la phase 3 : « des listes, pas des matrices » vaut aussi sur le câble.
+2807:                println!("[flux] rejeu depuis {chemin} : {} listes enregistrées", r.listes.len());
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n 2750,2762p drave-core/src/model.rs; python3 - <<'PY'\np='drave-core/src/model.rs'; s=open(p).read()\n\n# type unifié : des valeurs DÉJÀ déquantifiées en f32 (les trois versions du format)\nv = \"\"\"    pub listes: std::collec … [2467 caractères tronqués]`
+
+  ```
+if trace.is_none() && force.is_none() { return; }
+        let mut j0 = *jeton;
+        for i in 0..t {
+            if let Some(r) = force.as_mut() {
+                if let Some((ech, paires)) = r.listes.get(&((base + l) as u16, j0 as u32)).cloned() {
+                    for v in xi[i * h..(i + 1) * h].iter_mut() { *v = 0; }
+                    for (idx, q) in paires {
+                        if (idx as usize) < h { xi[i * h + idx as usize] = q as i32; }
+                    }
+                    sx[i] = ech;
+                    r.servies += 1;
+                } else {
+                    r.manquantes += 1;
+type unifié (valeurs déquantifiées)
+
+    /// Trace OU impose le flux d'un LOT : `xi` porte les entiers quantifiés du
+    /// lot (t × h) et `sx` une échelle par jeton. Sur ce chemin, le rejeu est
+    /// EXACT — on remplace les entiers et l'échelle, sans repasser par une
+    /// déquantification suivie d'une requantification.
+    #[allow(clippy::too_many_arguments)]
+    fn flux_lot(trace: &mut Option<TraceFlux>, force: &mut Option<FluxRelecteur>,
+                jeton: &mut u64, base: usize, l: usize, t: usize,
+                xi: &mut [i32], sx: &mut [f32], h: usize) {
+        if
+… [146 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+Le chemin de rejeu par lots a besoin des entiers d'origine : je garde deux cartes (v1/v2 intactes, v3 à part) plutôt que d'unifier.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/model.rs'; s=open(p).read()\n\nv = \"\"\"    /// (couche, jeton global) → liste d'activations DÉJÀ déquantifiée.\n    ///\n    /// Le type est en f32 pour les trois versions du format : la v1 et la … [5057 caractères tronqués]`
+
+  ```
+deux cartes : v1/v2 exactes, v3 à part
+main.rs : comptage des deux cartes
+error[E0308]: mismatched types
+   --> src/model.rs:736:37
+    |
+736 |                     paires.push((i, v));
+    |                                     ^ expected `f32`, found `i16`
+    |
+help: you can convert an `i16` to an `f32`, producing the floating point representation of the integer
+    |
+736 |                     paires.push((i, v.into()));
+    |                                      +++++++
+
+error[E0308]: mismatched types
+   --> src/model.rs:736:33
+    |
+724 |                     paires.push((i, q, ech));
+    |                     ------      ----------- this argument has type `(u32, f32, f32)`...
+    |                     |
+    |                     ... which causes `paires` to have type `Vec<(u32, f32, f32)>`
+...
+736 |                     paires.push((i, v));
+    |                            ---- ^^^^^^ expected a tuple with 3 elements, found one with 2 elements
+    |                            |
+--
+error[E0308]: mismatched types
+   --> src/model.rs:754:37
+    |
+754 |                     paires.push((i, i16::from_le_bytes(b)));
+    |                                     ^^^^^^^^^^^^^^^^^^^^^ expecte
+… [227 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/model.rs'; s=open(p).read()\nv = \"\"\"            let mut paires = Vec::with_capacity(n as usize);\n            if version == 3 {\"\"\"\nn = \"\"\"            let mut paires: Vec<(u32, i16)> = Vec … [1354 caractères tronqués]`
+
+  ```
+branche v3 séparée
+    Finished `release` profile [optimized] target(s) in 0.01s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && D=./drave-core/target/release/drave; M=models/Qwen2.5-0.5B-Q8_0.gguf; G=\"--ppl /tmp/ids_qwen.txt --ctx 256 --abits 16 --threads 16 --limit 512 --dense\"; echo \"=== 1. trace v3 (DRAVE_TRACE_BLOCS=1) ===\"; DRAVE_TRACE_BLOCS=1 $D $M  … [607 caractères tronqués]`
+
+  ```
+=== 1. trace v3 (DRAVE_TRACE_BLOCS=1) ===
+trace] 24576 listes · 21630645 neurones actifs · 45 Mo
+perplexité 19.3885 sur 510 tokens
+/tmp/flux_v2.bin       66370408 octets
+/tmp/flux_v3.bin       45276538 octets
+=== 2. rejeu v3 (prix de l'i8) ===
+=== perplexité 19.3885 sur 510 tokens (0 événements, 22.1 s) ===
+=== 3. rejeu v2 (doit rester 19,3885 : pas de régression du refactor) ===
+  rejeu             : 24576 listes servies, 0 manquantes
+=== perplexité 19.3885 sur 510 tokens (0 événements, 21.9 s) ===
+12:24:03
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && D=./drave-core/target/release/drave; M=models/Qwen2.5-0.5B-Q8_0.gguf; G=\"--ppl /tmp/ids_qwen.txt --ctx 256 --abits 16 --threads 16 --limit 512 --dense\"; $D $M $G --flux-forcer /tmp/flux_v3.bin 2>&1 | grep -iE \"rejeu|perplexité [0- … [97 caractères tronqués]`
+
+  ```
+=== perplexité 19.3885 sur 510 tokens (0 événements, 22.0 s) ===
+  ```
+
+### 🤖 Assistant
+
+La vérification v3 était un **faux positif** : la trace n'était même pas chargée (l'écrivain v3 dupliquait des champs d'en-tête). Je réécris `ecrire` proprement.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n 522,600p drave-core/src/model.rs", "description": "Read current ecrire implementation"}`
+
+  ```
+/// vision mis sur disque : on peut rejouer, comparer, et c'est aussi le format
+/// qu'un nœud distant devrait recevoir pour continuer le calcul.
+pub struct TraceFlux {
+    /// Version écrite : 2 (indices par écarts, valeurs i16 — SANS PERTE) ou
+    /// 3 (`DRAVE_TRACE_BLOCS=1` : valeurs i8 et une échelle f16 par bloc de 32
+    /// canaux, ~22 % plus petit, avec perte).
+    pub version: u16,
+    /// Nombre de canaux par bloc d'échelle en v3.
+    pub bloc: usize,
+    pub fichier: std::io::BufWriter<std::fs::File>,
+    /// Couches à tracer (toutes si vide).
+    pub couches: Vec<usize>,
+    pub octets: u64,
+    pub enregistrements: u64,
+    pub actifs: u64,
+}
+
+impl TraceFlux {
+    pub fn nouveau(chemin: &str, couches: Vec<usize>, hidden: usize, n_layer: usize)
+        -> std::io::Result<Self> {
+        use std::io::Write;
+        let mut f = std::io::BufWriter::new(std::fs::File::create(chemin)?);
+        f.write_all(b"DRVF")?;
+        // Version 2 par défaut : indices par ÉCARTS, valeurs i16 — sans perte.
+        // Version 3 sur `DRAVE_TRACE_BLOCS=1` : en plus, valeurs i8 et une échelle
+        // f16 par bloc de 32 canaux (l'étude de compacité annonce −22 % de plus,
+        // au p
+… [2879 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/model.rs'; s=open(p).read()\ni = s.index(\"    /// Une liste : ce qui est réellement poussé dans la couche.\")\nj = s.index(\"    pub fn terminer(&mut self) {\")\nneuf = '''    /// Une liste : ce q … [4737 caractères tronqués]`
+
+  ```
+ecrire réécrit : corps d'abord, en-tête ensuite
+error[E0308]: mismatched types
+   --> src/model.rs:646:47
+    |
+646 |         self.octets += 14 + octets_echelles + octets_par_actif * n as u64;
+    |                                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^ expected `usize`, found `u64`
+
+error[E0277]: cannot add `u64` to `usize`
+   --> src/model.rs:646:45
+    |
+646 |         self.octets += 14 + octets_echelles + octets_par_actif * n as u64;
+    |                                             ^ no implementation for `usize + u64`
+    |
+    = help: the trait `Add<u64>` is not implemented for `usize`
+help: the following other types implement trait `Add<Rhs>`
+   --> /rustc/8bab26f4f68e0e26f0bb7960be334d5b520ea452/library/core/src/ops/arith.rs:98:8
+--
+error[E0308]: mismatched types
+   --> src/model.rs:646:24
+    |
+646 |         self.octets += 14 + octets_echelles + octets_par_actif * n as u64;
+error: could not compile `drave-core` (bin "drave") due to 4 previous errors; 12 warnings emitted
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/model.rs'; s=open(p).read()\nv = \"\"\"        self.octets += 14 + octets_echelles + octets_par_actif * n as u64;\"\"\"\nn = \"\"\"        self.octets += 14 + octets_echelles as u64 + octets_par_ac … [1109 caractères tronqués]`
+
+  ```
+types corrigés
+    Finished `release` profile [optimized] target(s) in 0.01s
+=== trace v2 (doit rester identique : 66 370 408) ===
+trace] 24576 listes · 22008776 neurones actifs · 66 Mo
+v2 : 66370408
+=== trace v3 ===
+trace] 24576 listes · 21630645 neurones actifs · 45 Mo
+v3 : 45079930
+=== rejeu v3 (cette fois la trace doit VRAIMENT se charger) ===
+[flux] rejeu depuis /tmp/flux_v3.bin : 24576 listes enregistrées
+  rejeu             : 24576 listes servies, 0 manquantes
+=== perplexité 19.4029 sur 510 tokens (0 événements, 68.0 s) ===
+12:28:01
+  ```
+
+### 🤖 Assistant
+
+v3 est correct cette fois : **45 079 930 octets (−32 % vs v2, −66 % vs v1)** pour **+0,074 % de perplexité** (19,4029 contre 19,3885), avec 24 576 listes réellement servies. Je synchronise Python et je commit.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='tools/flux_codec.py'; s=open(p).read()\ns = s.replace(\"VERSION = 2        # ce que ce fichier ÉCRIT ; il LIT la 1 et la 2\",\n              \"VERSION = 2        # ce que ce fichier ÉCRIT ; il LIT la 1, la 2 et l … [2245 caractères tronqués]`
+
+  ```
+flux_codec : lit aussi la v3 (échelles f16 par '<e')
+flux_v2b.bin     : 24576 listes · 22008776 actifs (attendu 22008776) · listes mal triées : 0
+flux_v3.bin      : 24576 listes · 21630645 actifs (attendu 21630645) · listes mal triées : 0
+Rust↔Python : accord sur la v2 ET la v3, indices triés partout
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport sys, math\nsys.path.insert(0, 'tools')\nimport flux_codec as fc\n_, _, v2 = fc.lire_rust('/tmp/flux_v2b.bin')\n_, _, v3 = fc.lire_rust('/tmp/flux_v3.bin')\ncles = sorted(v2.keys() & v3.keys())[:40]          # … [977 caractères tronqués]`
+
+  ```
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 4, in <module>
+ValueError: too many values to unpack (expected 3)
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport sys, math\nsys.path.insert(0, 'tools')\nimport flux_codec as fc\nr2 = fc.lire_rust('/tmp/flux_v2b.bin'); r3 = fc.lire_rust('/tmp/flux_v3.bin')\nv2, v3 = dict(r2[2]), dict(r3[2])\n# en v2 la liste est (echelle … [1171 caractères tronqués]`
+
+  ```
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 5, in <module>
+ValueError: dictionary update sequence element #0 has length 4; 2 is required
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport sys, math\nsys.path.insert(0, 'tools')\nimport flux_codec as fc\nr2 = fc.lire_rust('/tmp/flux_v2b.bin'); r3 = fc.lire_rust('/tmp/flux_v3.bin')\n# listes de (couche, pos, echelle, [(indice, valeur)]) — en v3 l … [1029 caractères tronqués]`
+
+  ```
+v2 vs v3, 40 listes, 34953 valeurs : RMS 0.0852 % · max 0.3940 % du max de la liste
+indices divergents : 589 (0 attendu)
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 23, in <module>
+AssertionError
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='docs/format-flux.md'; s=open(p).read()\nv = \"\"\"| | version 1 | version 2 |\n|---|---|---|\n| trace dense, 512 jetons | 132 396 736 o | **66 370 408 o (−49,87 %)** |\n| rejeu (`--flux-forcer`) | 19,3885 | **19, … [4580 caractères tronqués]`

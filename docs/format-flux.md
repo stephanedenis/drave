@@ -46,6 +46,21 @@ neurone actif au lieu de six, et c'est du RANGEMENT, pas de la perte :
 | rejeu (`--flux-forcer`) | 19,3885 | **19,3885 — identique** |
 | listes · neurones actifs | 24 576 · 22 008 776 | identiques (relus par Python) |
 
+### Version 3 : valeurs i8 et échelle f16 par bloc (`DRAVE_TRACE_BLOCS=1`)
+
+Encore une échelle par **bloc de 32 canaux**, mais en f16, et des valeurs sur un
+octet. C'est **avec perte**, donc la v3 n'est pas le défaut :
+
+| | version 2 | version 3 |
+|---|---|---|
+| trace dense, 512 jetons | 66 370 408 o | **45 079 930 o (−32,1 %)** |
+| rejeu `--flux-forcer` | 19,3885 | **19,4029 (+0,074 %)** |
+| neurones actifs | 22 008 776 | 21 630 645 (−1,7 % : les valeurs qui s'arrondissent à zéro ne sont pas écrites) |
+| erreur par valeur | nulle | RMS **0,085 %** du max de la liste (max 0,394 %) |
+
+Le rejeu par LOTS n'accepte pas la v3 (il réinjecte les entiers d'origine, que la
+v3 n'a plus) : il le dit au lieu de compter des listes manquantes en silence.
+
 Le lecteur lit **les deux versions** ; une version inconnue est refusée en la
 nommant. Le rejeu annonce désormais ce qu'il a servi — `24 576 listes servies,
 0 manquantes` — parce qu'une trace dont les clés ne correspondent plus se
@@ -138,6 +153,7 @@ découpage (798,3 au lieu de 18,2).
 | un rejeu redonne le même résultat | `--flux-forcer` : perplexité **19,3885** avec et sans rejeu (chemin par jeton), **17,4294** (chemin par lots) |
 | la fidélité de l'encodage est chiffrée | `DRAVE_FLUX_VERIF=1` : écart relatif **1,5e-5**, soit la quantification 16 bits |
 | la taille suit l'activité | densité ÷2,3 → trace ÷2,5 (132 Mo → 53 Mo) |
+| une version inconnue est refusée | v1/v2/v3 lues, toute autre refusée en la nommant ; le rejeu ANNONCE ses comptes (`N servies, M manquantes`) |
 | le découpage ne change pas le résultat | deux processus, 12 couches chacun : écart local/réparti **0,00e0** (144,8289 = 144,8289), 40 puis 199 flux |
 | un lot ne change pas le résultat non plus | 256 jetons en 4 lots de 64 : écart **0,00e0** (18,0851 = 18,0851) ; en 1 lot de 256 : **0,00e0** (918 ko sur le fil) |
 | les deux nœuds quantifient PAREIL | un serveur lancé avec `--topk-q 900` et un client avec `--topk-q 4` donnent quand même **0,00e0** : les réglages du client gagnent (vérifié) |

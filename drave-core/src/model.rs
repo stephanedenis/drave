@@ -486,11 +486,48 @@ fn matvec_f32(w: &[f32], x: &[f32], n_in: usize, n_out: usize, y: &mut [f32]) {
     }
 }
 
+/// f32 → f16 (IEEE 754 binary16), pour les échelles par bloc de la trace v3.
+/// Arrondi au plus proche ; les dénormalisés deviennent 0 (des échelles nulles le
+/// sont déjà). Aucune dépendance : le moteur est en `std` seul.
+pub fn f16_depuis_f32(x: f32) -> u16 {
+    let b = x.to_bits();
+    let s = ((b >> 16) & 0x8000) as u16;
+    let mut e = ((b >> 23) & 0xff) as i32 - 127 + 15;
+    let mut m = b & 0x007f_ffff;
+    if e <= 0 { return s; }
+    if e >= 31 { return s | 0x7c00; }
+    m += 0x1000;                                   // arrondi au bit 13
+    if m & 0x0080_0000 != 0 { m = 0; e += 1; if e >= 31 { return s | 0x7c00; } }
+    s | ((e as u16) << 10) | ((m >> 13) as u16)
+}
+
+/// f16 → f32, l'inverse exact de la fonction ci-dessus (dénormalisés compris).
+pub fn f32_depuis_f16(h: u16) -> f32 {
+    let s = ((h >> 15) & 1) as u32;
+    let e = ((h >> 10) & 0x1f) as u32;
+    let m = (h & 0x3ff) as u32;
+    let bits = if e == 0 {
+        if m == 0 { s << 31 } else {
+            let (mut e2, mut m2) = (127 - 15 + 1i32, m);
+            while m2 & 0x400 == 0 { m2 <<= 1; e2 -= 1; }
+            (s << 31) | ((e2 as u32) << 23) | ((m2 & 0x3ff) << 13)
+        }
+    } else if e == 31 { (s << 31) | 0x7f80_0000 | (m << 13) }
+    else { (s << 31) | ((e + 127 - 15) << 23) | (m << 13) };
+    f32::from_bits(bits)
+}
+
 /// Trace du **flux d'activation** : par (couche, position), la liste des
 /// neurones actifs — indice, valeur — avec son échelle. C'est le cœur de la
 /// vision mis sur disque : on peut rejouer, comparer, et c'est aussi le format
 /// qu'un nœud distant devrait recevoir pour continuer le calcul.
 pub struct TraceFlux {
+    /// Version écrite : 2 (indices par écarts, valeurs i16 — SANS PERTE) ou
+    /// 3 (`DRAVE_TRACE_BLOCS=1` : valeurs i8 et une échelle f16 par bloc de 32
+    /// canaux, ~22 % plus petit, avec perte).
+    pub version: u16,
+    /// Nombre de canaux par bloc d'échelle en v3.
+    pub bloc: usize,
     pub fichier: std::io::BufWriter<std::fs::File>,
     /// Couches à tracer (toutes si vide).
     pub couches: Vec<usize>,
@@ -505,47 +542,110 @@ impl TraceFlux {
         use std::io::Write;
         let mut f = std::io::BufWriter::new(std::fs::File::create(chemin)?);
         f.write_all(b"DRVF")?;
-        // Version 2 : les indices sont écrits par ÉCARTS (voir `ecrire`).
-        f.write_all(&2u16.to_le_bytes())?;
+        // Version 2 par défaut : indices par ÉCARTS, valeurs i16 — sans perte.
+        // Version 3 sur `DRAVE_TRACE_BLOCS=1` : en plus, valeurs i8 et une échelle
+        // f16 par bloc de 32 canaux (l'étude de compacité annonce −22 % de plus,
+        // au prix de la fidélité du rejeu).
+        let version: u16 = if std::env::var("DRAVE_TRACE_BLOCS").is_ok() { 3 } else { 2 };
+        f.write_all(&version.to_le_bytes())?;
         f.write_all(&(n_layer as u32).to_le_bytes())?;
         f.write_all(&(hidden as u32).to_le_bytes())?;
         // 14 octets d'en-tête, pas 16 : la comptabilité disait 16 depuis le
         // début et personne ne s'en apercevait (2 octets sur 132 Mo).
-        Ok(TraceFlux { fichier: f, couches, octets: 14, enregistrements: 0, actifs: 0 })
+        Ok(TraceFlux { version, bloc: 32, fichier: f, couches, octets: 14,
+                       enregistrements: 0, actifs: 0 })
     }
 
     /// Une liste : ce qui est réellement poussé dans la couche.
+    ///
+    /// Le corps est construit AVANT l'en-tête, parce que chaque version a son
+    /// compte : `n` est le nombre d'entiers i16 (v1/v2) ou de valeurs i8 (v3), et
+    /// la v3 ajoute ses échelles de bloc. Écrire l'en-tête d'abord obligeait à
+    /// connaître les deux comptes — et la première version de ce code les
+    /// écrivait tous les deux, décalant tout le fichier de huit octets.
     pub fn ecrire(&mut self, couche: usize, pos: usize, actifs: &[i32], echelle: f32) {
         use std::io::Write;
         if !self.couches.is_empty() && !self.couches.contains(&couche) { return; }
-        let liste: Vec<(u32, i16)> = actifs.iter().enumerate()
-            .filter(|(_, &v)| v != 0)
-            .map(|(i, &v)| (i as u32, v.clamp(-32767, 32767) as i16))
-            .collect();
+
+        let (n, ech_liste, corps): (u32, f32, Vec<u8>) = if self.version == 3 {
+            // v3 : une échelle f16 par bloc de 32 canaux, valeurs i8. L'échelle
+            // par bloc borne l'erreur RELATIVE (celle par vecteur borne l'absolue,
+            // catastrophique sur les canaux faibles) et permet un octet par valeur.
+            let n_blocs = actifs.len().div_ceil(self.bloc);
+            let mut echelles = vec![0f32; n_blocs];
+            let mut idx: Vec<u32> = Vec::new();
+            let mut val: Vec<i8> = Vec::new();
+            for b in 0..n_blocs {
+                let lo = b * self.bloc;
+                let hi = (lo + self.bloc).min(actifs.len());
+                let mut mb = 0f32;
+                for &q in &actifs[lo..hi] {
+                    let a = (q as f32 * echelle).abs();
+                    if a > mb { mb = a; }
+                }
+                if mb == 0.0 { continue; }
+                let ech = mb / 127.0;
+                echelles[b] = ech;
+                for (k, &q) in actifs[lo..hi].iter().enumerate() {
+                    if q == 0 { continue; }
+                    let v = (q as f32 * echelle / ech).round().clamp(-127.0, 127.0);
+                    if v != 0.0 { idx.push((lo + k) as u32); val.push(v as i8); }
+                }
+            }
+            let mut c = Vec::with_capacity(4 + n_blocs * 2 + idx.len() * 3);
+            c.extend_from_slice(&(n_blocs as u32).to_le_bytes());
+            for e in &echelles { c.extend_from_slice(&f16_depuis_f32(*e).to_le_bytes()); }
+            let mut prev = 0u32;
+            for (i, v) in idx.iter().zip(val.iter()) {
+                let ecart = *i - prev;
+                if ecart < 255 {
+                    c.push(ecart as u8);
+                } else {
+                    c.push(255);
+                    c.extend_from_slice(&i.to_le_bytes()[..2]);
+                }
+                c.push(*v as u8);
+                prev = *i;
+            }
+            (idx.len() as u32, 0f32, c)
+        } else {
+            // v1 et v2 : les entiers i16 du moteur, tels quels.
+            let liste: Vec<(u32, i16)> = actifs.iter().enumerate()
+                .filter(|(_, &v)| v != 0)
+                .map(|(i, &v)| (i as u32, v.clamp(-32767, 32767) as i16))
+                .collect();
+            let mut c = Vec::with_capacity(6 * liste.len());
+            let mut prev = 0u32;
+            for (i, v) in &liste {
+                if self.version == 1 {
+                    c.extend_from_slice(&i.to_le_bytes());
+                } else {
+                    let ecart = *i - prev;
+                    if ecart < 255 {
+                        c.push(ecart as u8);
+                    } else {
+                        c.push(255);
+                        c.extend_from_slice(&i.to_le_bytes()[..2]);
+                    }
+                    prev = *i;
+                }
+                c.extend_from_slice(&v.to_le_bytes());
+            }
+            (liste.len() as u32, echelle, c)
+        };
+
         let _ = self.fichier.write_all(&(couche as u16).to_le_bytes());
         let _ = self.fichier.write_all(&(pos as u32).to_le_bytes());
-        let _ = self.fichier.write_all(&(liste.len() as u32).to_le_bytes());
-        let _ = self.fichier.write_all(&echelle.to_le_bytes());
-        // **Indices par écarts** (DRVF v2) : la liste est triée, donc l'écart au
-        // neurone précédent tient sur UN octet dans 99,9997 % des cas mesurés
-        // (22 échappements sur 8,79 M) ; 255 est l'échappement vers l'indice
-        // absolu. Trois octets par neurone actif au lieu de six, et c'est du
-        // RANGEMENT : le rejeu redonne exactement la même perplexité.
-        let mut prev = 0u32;
-        for (i, v) in &liste {
-            let ecart = *i - prev;
-            if ecart < 255 {
-                let _ = self.fichier.write_all(&[ecart as u8]);
-            } else {
-                let _ = self.fichier.write_all(&[255u8]);
-                let _ = self.fichier.write_all(&i.to_le_bytes()[..2]);
-            }
-            let _ = self.fichier.write_all(&v.to_le_bytes());
-            prev = *i;
-        }
-        self.octets += 14 + 3 * liste.len() as u64;
+        let _ = self.fichier.write_all(&n.to_le_bytes());
+        let _ = self.fichier.write_all(&ech_liste.to_le_bytes());
+        let _ = self.fichier.write_all(&corps);
+        let octets_par_actif = if self.version == 3 { 2 } else if self.version == 1 { 6 } else { 3 };
+        let octets_echelles = if self.version == 3 {
+            4 + actifs.len().div_ceil(self.bloc) * 2
+        } else { 0 };
+        self.octets += 14 + octets_echelles as u64 + octets_par_actif as u64 * n as u64;
         self.enregistrements += 1;
-        self.actifs += liste.len() as u64;
+        self.actifs += n as u64;
     }
 
     pub fn terminer(&mut self) {
@@ -561,7 +661,15 @@ impl TraceFlux {
 /// le RELIRE et à repartir de là.
 pub struct FluxRelecteur {
     /// (couche, position) -> (échelle, indices/valeurs)
+    /// (couche, jeton global) → (échelle, paires) pour les versions 1 et 2 : les
+    /// ENTIERS d'origine sont conservés, parce que le rejeu par LOTS les réinjecte
+    /// tels quels (chemin exact, sans déquantifier-requantifier).
     pub listes: std::collections::HashMap<(u16, u32), (f32, Vec<(u32, i16)>)>,
+    /// Version 3 : les valeurs sont des f32 (i8 × échelle f16 de bloc), il n'y a
+    /// plus d'entiers d'origine. Le rejeu JETON PAR JETON les accepte ; le rejeu
+    /// par lots, non — et il le dira au lieu de compter des listes manquantes
+    /// sans explication.
+    pub listes_blocs: std::collections::HashMap<(u16, u32), Vec<(u32, f32)>>,
     pub servies: u64,
     pub manquantes: u64,
 }
@@ -580,11 +688,12 @@ impl FluxRelecteur {
                                            "ce n'est pas une trace DRVF"));
         }
         let version = u16::from_le_bytes([entete[4], entete[5]]);
-        if version != 1 && version != 2 {
+        if version != 1 && version != 2 && version != 3 {
             return Err(std::io::Error::new(std::io::ErrorKind::InvalidData,
-                format!("trace DRVF en version {version} : ce lecteur lit la 1 et la 2")));
+                format!("trace DRVF en version {version} : ce lecteur lit la 1, la 2 et la 3")));
         }
         let mut listes = std::collections::HashMap::new();
+        let mut listes_blocs = std::collections::HashMap::new();
         loop {
             let mut tete = [0u8; 2];
             if f.read_exact(&mut tete).is_err() { break; }          // fin de fichier
@@ -595,7 +704,38 @@ impl FluxRelecteur {
             let pos = u32::from_le_bytes([corps[0], corps[1], corps[2], corps[3]]);
             let n = u32::from_le_bytes([corps[4], corps[5], corps[6], corps[7]]);
             let echelle = f32::from_le_bytes([corps[8], corps[9], corps[10], corps[11]]);
-            let mut paires = Vec::with_capacity(n as usize);
+            let mut paires: Vec<(u32, i16)> = Vec::with_capacity(n as usize);
+            if version == 3 {
+                let mut paires3: Vec<(u32, f32)> = Vec::with_capacity(n as usize);
+                // v3 : nombre de blocs u32 · échelles f16 · paires (écart u8, i8)
+                let mut nb = [0u8; 4];
+                f.read_exact(&mut nb)?;
+                let n_blocs = u32::from_le_bytes(nb) as usize;
+                let mut eb = vec![0u8; n_blocs * 2];
+                f.read_exact(&mut eb)?;
+                let echelles: Vec<f32> = (0..n_blocs).map(|k|
+                    f32_depuis_f16(u16::from_le_bytes([eb[k*2], eb[k*2+1]]))).collect();
+                let mut prev = 0u32;
+                for _ in 0..n as usize {
+                    let mut d = [0u8; 1];
+                    f.read_exact(&mut d)?;
+                    let i = if d[0] == 255 {
+                        let mut a = [0u8; 2];
+                        f.read_exact(&mut a)?;
+                        u16::from_le_bytes(a) as u32
+                    } else { prev + d[0] as u32 };
+                    prev = i;
+                    let mut b = [0u8; 1];
+                    f.read_exact(&mut b)?;
+                    let q = b[0] as i8 as f32;
+                    let ech = echelles.get(i as usize / 32).copied().unwrap_or(0.0);
+                    // La valeur rejouée est un f32 : le format v3 ne stocke plus
+                    // d'entiers d'origine, il stocke des activations déquantifiées.
+                    paires3.push((i, q * ech));
+                }
+                listes_blocs.insert((couche, pos), paires3);
+                continue;
+            }
             if version == 1 {
                 let mut octets = vec![0u8; n as usize * 6];
                 f.read_exact(&mut octets)?;
@@ -626,13 +766,22 @@ impl FluxRelecteur {
             }
             listes.insert((couche, pos), (echelle, paires));
         }
-        Ok(FluxRelecteur { listes, servies: 0, manquantes: 0 })
+        Ok(FluxRelecteur { listes, listes_blocs, servies: 0, manquantes: 0 })
     }
 
     /// Écrit dans `dst` l'activation DÉQUANTIFIÉE de la liste enregistrée.
     /// C'est exactement ce qu'un nœud recevant le flux ferait avant de continuer.
     pub fn appliquer(&mut self, couche: usize, pos: usize, dst: &mut [f32]) {
-        match self.listes.get(&(couche as u16, pos as u32)) {
+        let cle = (couche as u16, pos as u32);
+        if let Some(paires) = self.listes_blocs.get(&cle) {
+            for v in dst.iter_mut() { *v = 0.0; }
+            for &(i, v) in paires {
+                if (i as usize) < dst.len() { dst[i as usize] = v; }
+            }
+            self.servies += 1;
+            return;
+        }
+        match self.listes.get(&cle) {
             Some((echelle, paires)) => {
                 for v in dst.iter_mut() { *v = 0.0; }
                 for &(i, q) in paires {
@@ -2637,7 +2786,14 @@ impl Model {
                     }
                     sx[i] = ech;
                     r.servies += 1;
-                } else {
+                } else if r.listes_blocs.contains_key(&((base + l) as u16, j0 as u32)) {
+                    // Une trace v3 n'a plus d'entiers d'origine : le rejeu par
+                    // lots, qui les réinjecte, ne peut pas s'en servir. On le dit
+                    // UNE fois, plutôt que de compter des manquantes muettes.
+                    if r.servies == 0 && r.manquantes == 0 {
+                        eprintln!("[flux] trace v3 (valeurs i8) : le rejeu par LOTS ne \
+s'applique pas — utilisez --lot 1, ou réenregistrez sans DRAVE_TRACE_BLOCS");
+                    }
                     r.manquantes += 1;
                 }
             } else if let Some(tr) = trace.as_mut() {

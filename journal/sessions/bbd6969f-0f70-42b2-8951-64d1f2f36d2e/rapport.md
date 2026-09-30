@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 45.6 h |
+| Durée | 45.7 h |
 | Tours | 45 |
-| Messages | 1671 |
-| Appels d'outils | 1578 |
+| Messages | 1689 |
+| Appels d'outils | 1596 |
 | Fichiers touchés | 44 |
-| Commandes | 1263 |
-| Sous-agents | 4 |
-| Commits | 108 |
+| Commandes | 1279 |
+| Sous-agents | 6 |
+| Commits | 109 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -2055,7 +2055,7 @@ Je vérifie l'heure à chaque itération et j'arrête à 12:06, en laissant un p
 
 ### Tour 45 — as-tu ce qu'il te faut pour te rendre à 15h en travaillaint avec un maximum d'autonomie et de parallélisme d'activités?
 
-*79 appels d'outils.* Actions notables :
+*97 appels d'outils.* Actions notables :
 
 - bash — Probe machine, GPU, disk, network state
 - bash — Identify GPU users and stray processes
@@ -2071,11 +2071,11 @@ Je vérifie l'heure à chaque itération et j'arrête à 12:06, en laissant un p
 - bash — Understand batched PPL reference path
 - bash — Add batched imposed states to forward_lot
 - list_agents
-- … et 58 autres
+- … et 76 autres
 
 **Synthèse produite :**
 
-Colab : je prépare un notebook prêt à l'emploi + la mise en place. D'abord, comment le code peut-il arriver sur Colab ?
+v3 est correct cette fois : **45 079 930 octets (−32 % vs v2, −66 % vs v1)** pour **+0,074 % de perplexité** (19,4029 contre 19,3885), avec 24 576 listes réellement servies. Je synchronise Python et je commit.
 
 ## 3. Travail accompli
 
@@ -2134,6 +2134,8 @@ Colab : je prépare un notebook prêt à l'emploi + la mise en place. D'abord, c
 - tour 45 — Audit ignored CLI flags
 - tour 45 — Spec batched prefill protocol
 - tour 45 — Trace format compaction study
+- tour 45 — Adversarial review of recent commits
+- tour 45 — Docs vs measurements consistency audit
 
 ### Commandes exécutées (échantillon)
 
@@ -2177,7 +2179,7 @@ Colab : je prépare un notebook prêt à l'emploi + la mise en place. D'abord, c
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 1223 autres
+- … et 1239 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2305,7 +2307,7 @@ Colab : je prépare un notebook prêt à l'emploi + la mise en place. D'abord, c
 
 ## 5. Erreurs rencontrées
 
-84 sorties en erreur ou divergentes. Les premières :
+89 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : a8f2635f8 docs: record which models this box is good at, and why src/llama-hparams.cpp:8:void llama_hparams::set_swa_pattern(uint32_t n_pattern, bool dense_first) { src/llama-hparams.h:308:    void se
 - **T1** : 511 tokens notés — perplexité cumulée 247.031  (4.9 tok/s) === perplexité 247.0308 sur 511 tokens (0 événements, 104.5 s) ===  ### B3 harmony assistant 511 --- ref --- 0.0 0.0 0:00 ls: cannot access '
@@ -2433,4 +2435,5 @@ Colab : je prépare un notebook prêt à l'emploi + la mise en place. D'abord, c
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p='docs/format-flux.md'; s=open(p).read() v = """liste     couche       u16          < 10
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A drave-core/src/main.rs && git commit -q -F - <<'EOF' && git log --oneline -1 | cat Deux silence
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p='tools/preparer_colab.sh'; s=open(p).read() s = s.replace("    temps : ~16 ms de calcul
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p='docs/format-flux.md'; s=open(p).read() v = """| | version 1 | version 2 | |---|---|---
 

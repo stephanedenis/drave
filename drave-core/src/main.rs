@@ -2804,7 +2804,8 @@ fn run_ppl(opt: Options) {
     if let Some(chemin) = flux_forcer.as_deref() {
         match model::FluxRelecteur::lire(chemin) {
             Ok(r) => {
-                println!("[flux] rejeu depuis {chemin} : {} listes enregistrées", r.listes.len());
+                println!("[flux] rejeu depuis {chemin} : {} listes enregistrées",
+                         r.listes.len() + r.listes_blocs.len());
                 mdl.flux_force = Some(r);
             }
             Err(e) => eprintln!("[flux] lecture impossible de {chemin} : {e}"),

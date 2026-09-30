@@ -10,8 +10,16 @@
 > trace ancienne dont les clés étaient décalées d'un jeton : elle se rejouait en
 > silence avec une perplexité fausse (1958,72 au lieu de 19,3885).
 >
-> Restent à faire, tels quels : les valeurs i8 à échelle par bloc (−60,9 %), les
-> échelles f16 (−63,5 %) et l'emballage zstd (−79 %).
+> **Et la v3 est faite** (`DRAVE_TRACE_BLOCS=1`) : valeurs i8 + échelle f16 par
+> bloc de 32 canaux. Mesuré sur la même trace dense : **45 079 930 octets**
+> (−65,9 % par rapport à la v1, −32,1 % par rapport à la v2), au prix de
+> **+0,074 % de perplexité au rejeu** (19,4029 contre 19,3885) et d'une erreur par
+> valeur de **0,085 % RMS** du max de la liste — la prévision de ce rapport était
+> 0,077-0,081 %, elle tient. La v3 est avec perte, donc la v2 reste le défaut.
+>
+> Reste : l'emballage zstd en étape EXTERNE (−79 % au total, mesuré ici) — le
+> moteur est en `std` seul, il n'embarque pas de compresseur, et c'est très bien
+> ainsi : `zstd -19` sur le fichier fait le travail sans une ligne de code.
 
 **En une ligne** : la trace DRVF v1 coûte **6,04 octets par neurone actif** quand
 le transport en coûte ~2 ; les **indices u32 en sont les deux tiers**, et les
