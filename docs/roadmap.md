@@ -27,7 +27,7 @@ plus aucun repli silencieux.
 | 1.1 | **Top-k dans le noyau d'attention GPU** — `--attn-topk 256` améliore la perplexité (234,88 contre 298,56 à 2 048) mais retombe sur le CPU | ⏳ | plus aucun repli CPU dans le chemin long contexte |
 | 1.2 | **Quantification choisie par la mesure** : par couche, par tenseur, plutôt qu'un réglage global | ⏳ | +0 % de perplexité à budget d'octets égal |
 | 1.3 | **Purge des seuils codés en dur** : le placement (KV, experts, tête) décidé par une règle explicite, pas par un `if` | ⏳ | une table de décision documentée, réglée par des mesures |
-| 1.4 | **Écart int8 résiduel** (+3,0 % contre +0,8 % chez llama.cpp à 8 192) | ⏳ | hypothèses testées : quantification des valeurs, précision du softmax |
+| 1.4 | **Écart int8 résiduel** (+3,0 % contre +0,8 % chez llama.cpp à 8 192) | ⏳ | **expérience conçue** : garder les CLÉS en f32 et quantifier les VALEURS, puis l'inverse — c'est la seule façon d'attribuer l'écart entre les scores et la somme pondérée |
 
 ## Phase 2 — La drave répartie localement (aucune infra)
 
@@ -138,3 +138,24 @@ Deux choses en sortent, et la seconde est le cœur de la vision :
 
 Réserve écrite : la ligne « seuil 0,05 » a une perplexité de 2 445 — c'est un
 relevé de COÛT, pas de qualité ; le seuil est volontairement brutal.
+
+
+### Phase 1.4 — l'expérience à faire, écrite pour ne pas la reperdre
+
+L'écart avec llama.cpp à 8 192 (+3,0 % contre +0,8 %) n'est pas attribué. Deux
+sources possibles, et une seule expérience les sépare :
+
+| variante | ce qu'elle isole | réglage proposé |
+|---|---|---|
+| clés quantifiées, **valeurs en f32** | l'erreur qui passe par les SCORES | `DRAVE_KV_V_F32=1` |
+| **clés en f32**, valeurs quantifiées | l'erreur qui passe par la SOMME PONDÉRÉE | `DRAVE_KV_K_F32=1` |
+
+Le code à toucher est localisé : `KvCache::ecrire` (écrire dans `kf`/`vf` au lieu
+de `kq`/`vq` selon le drapeau), `cle`/`valeur` (lire le bon tableau), `assurer`
+(agrandir les tableaux f32 quand ils servent) et `new` (les allouer). Les appels
+GPU doivent être désactivés dans ces variantes — le miroir suppose une
+disposition homogène.
+
+Ces deux drapeaux ont été commencés puis RETIRÉS : le temps restant ne permettait
+pas de les finir et de les mesurer, et un demi-drapeau vaut moins qu'une
+expérience écrite. C'est ici, avec les points de code exacts.

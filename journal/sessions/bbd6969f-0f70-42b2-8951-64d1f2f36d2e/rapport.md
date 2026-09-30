@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 42.2 h |
-| Tours | 41 |
-| Messages | 1374 |
-| Appels d'outils | 1299 |
+| Durée | 43.2 h |
+| Tours | 42 |
+| Messages | 1380 |
+| Appels d'outils | 1303 |
 | Fichiers touchés | 42 |
-| Commandes | 1025 |
+| Commandes | 1029 |
 | Sous-agents | 1 |
-| Commits | 77 |
+| Commits | 78 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -109,6 +109,8 @@
 **Tour 40** — fais un roadmap ambitieux et commence les travaux qui ne nécessitent pas d'infra supplémentaire. on pourra terter avec colab pour le volet distribué
 
 **Tour 41** — continue
+
+**Tour 42** — continue, sois autonome pendant 2 heures
 
 ## 2. Déroulé, étape par étape
 
@@ -1855,7 +1857,58 @@ Commit `ac7ccb1`, `cargo test` 6/6, portes Qwen 19,3885 / gpt-oss 15,1757 intact
 
 **Synthèse produite :**
 
-⏵ Phase 0.4 : je transforme la trace en profilage par neurone
+⏵ Phase 0 terminée : trace, diff, et profilage par neurone
+
+\## Ce qui vient d'être livré
+
+**Phase 0.4 — `tools/profil_flux.py`** : lit une trace et rend, **par couche**, la densité d'activation, la part de magnitude portée par les 10 % de neurones les plus forts, les neurones dominants, avec export CSV.
+
+Deux exécutions du même modèle (Qwen2.5-0.5B, 512 jetons, 896 cachés) :
+
+| réglage | densité par couche | taille de trace | top 10 % portent |
+|---|---|---|---|
+| `--abits 16` (défaut) | 99-100 % (rien n'est seuillé) | 132 Mo | 25 à 42 % |
+| `--abits 8 --act-thresh 0.05` | **26 à 56 %** | **53 Mo** | 26 à 56 % |
+
+Deux enseignements, dont le second est le cœur de la vision **rendu mesurable sur un fichier** :
+
+1. la part des 10 % les plus forts reproduit **par couche** le chiffre global du projet (33,1 %) — le même phénomène, localisé ;
+2. **la taille de la trace suit l'activité** : densité ÷2,3, trace ÷2,5. *Le coût est proportionnel à ce qui parle* — et ce sera vrai du format d'échange de la phase 3 comme il l'est ici.
+
+Réserve écrite dans la roadmap plutôt que cachée : la ligne à seuil 0,05 a une perplexité de 2 445 — c'est un relevé de **coût**, pas de qualité, le seuil étant volontairement brutal.
+
+\## État de la roadmap
+
+| phase | état |
+|---|---|
+| **0. La drave observable** | ✅ **terminée** — 0.1 trace (132 Mo/512 jetons, +8 %), 0.2 diff par couche (démo KV f32/int8 → couche 1, jeton 0, FFN 2 la plus touchée), 0.4 profilage par neurone |
+| **1. La drave mesurée** | ⏳ prochain — top-k dans le noyau GPU, quantification choisie par la mesure, écart int8 |
+| **2. La drave répartie localement** | ⏳ ordonnanceur, streaming NVMe, cache d'experts, politique de pages |
+| **3. La drave distribuée** | 🧱 Colab — le format d'échange est déjà spécifié **et implémenté** (c'est le format de trace) |
+| **4. La drave apprenante** | recherche |
+| **5. La drave sur matériel** | PE et lecteur DDR3 ✅, opérateur complet 🧱 FPGA |
+
+Trois commits ce tour : `ac7ccb1` (phase 0.1/0.2), `47aaae9` (0.4), et la roadmap dans le premier. `cargo test` 6/6.
+
+\## Suite
+
+Je continue sur la **phase 1**, dans cet ordre : **1.1 le top-k dans le noyau d'attention GPU** (dernier repli CPU du chemin long contexte, et `--attn-topk 256` améliore déjà la perplexité de 21 %), puis **0.3** (l'encodeur/décodeur de référence du format — petit, et c'est ce qui rendra Colab immédiat), puis **1.4** (l'écart int8 résiduel, deux hypothèses à tester).
+
+Un mot d'honnêteté sur 1.1 : le top-k en flux ne se fai
+… [368 caractères tronqués]
+
+### Tour 42 — continue, sois autonome pendant 2 heures
+
+*4 appels d'outils.* Actions notables :
+
+- bash — Write and run the reference codec
+- bash — Add sentinel, rebuild, run codec round-trip
+- bash — Add K/V f32 attribution flags
+- bash — Revert half flags, document 1.4, commit
+
+**Synthèse produite :**
+
+⏵ Phase 1.4 : deux variantes pour attribuer l'écart int8 (K ou V en f32)
 
 ## 3. Travail accompli
 
@@ -1952,7 +2005,7 @@ Commit `ac7ccb1`, `cargo test` 6/6, portes Qwen 19,3885 / gpt-oss 15,1757 intact
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 985 autres
+- … et 989 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2080,7 +2133,7 @@ Commit `ac7ccb1`, `cargo test` 6/6, portes Qwen 19,3885 / gpt-oss 15,1757 intact
 
 ## 5. Erreurs rencontrées
 
-64 sorties en erreur ou divergentes. Les premières :
+65 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : a8f2635f8 docs: record which models this box is good at, and why src/llama-hparams.cpp:8:void llama_hparams::set_swa_pattern(uint32_t n_pattern, bool dense_first) { src/llama-hparams.h:308:    void se
 - **T1** : 511 tokens notés — perplexité cumulée 247.031  (4.9 tok/s) === perplexité 247.0308 sur 511 tokens (0 événements, 104.5 s) ===  ### B3 harmony assistant 511 --- ref --- 0.0 0.0 0:00 ls: cannot access '
@@ -2177,4 +2230,5 @@ Commit `ac7ccb1`, `cargo test` 6/6, portes Qwen 19,3885 / gpt-oss 15,1757 intact
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -F - <<'EOF' && git log --oneline -1 && git status --short | head -3 Drave : r
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p='docs/roadmap.md'; s=open(p).read() s = s.replace("""| 0.1 | **Format de trace du flux*
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p='docs/roadmap.md'; s=open(p).read() s = s.replace("""| 0.4 | **Profilage par neurone gé
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && git checkout src/model.rs && cargo build --release 2>&1 | tail -1 && cd .. && python3 - <<'PY' 
 

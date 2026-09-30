@@ -21844,3 +21844,123 @@ trace sparse : 53092562 octets
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='docs/roadmap.md'; s=open(p).read()\ns = s.replace(\"\"\"| 0.4 | **Profilage par neurone généralisé** : trace exploitable par couche et par expert, pas seulement des compteurs | ⏳ | top-k des neurones par couche,  … [2708 caractères tronqués]`
+
+  ```
+roadmap 0.4 à jour
+47aaae9 Phase 0.4 : profilage par neurone depuis une trace
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.10s
+  ```
+
+### 🤖 Assistant
+
+⏵ Phase 0 terminée : trace, diff, et profilage par neurone
+
+## Ce qui vient d'être livré
+
+**Phase 0.4 — `tools/profil_flux.py`** : lit une trace et rend, **par couche**, la densité d'activation, la part de magnitude portée par les 10 % de neurones les plus forts, les neurones dominants, avec export CSV.
+
+Deux exécutions du même modèle (Qwen2.5-0.5B, 512 jetons, 896 cachés) :
+
+| réglage | densité par couche | taille de trace | top 10 % portent |
+|---|---|---|---|
+| `--abits 16` (défaut) | 99-100 % (rien n'est seuillé) | 132 Mo | 25 à 42 % |
+| `--abits 8 --act-thresh 0.05` | **26 à 56 %** | **53 Mo** | 26 à 56 % |
+
+Deux enseignements, dont le second est le cœur de la vision **rendu mesurable sur un fichier** :
+
+1. la part des 10 % les plus forts reproduit **par couche** le chiffre global du projet (33,1 %) — le même phénomène, localisé ;
+2. **la taille de la trace suit l'activité** : densité ÷2,3, trace ÷2,5. *Le coût est proportionnel à ce qui parle* — et ce sera vrai du format d'échange de la phase 3 comme il l'est ici.
+
+Réserve écrite dans la roadmap plutôt que cachée : la ligne à seuil 0,05 a une perplexité de 2 445 — c'est un relevé de **coût**, pas de qualité, le seuil étant volontairement brutal.
+
+## État de la roadmap
+
+| phase | état |
+|---|---|
+| **0. La drave observable** | ✅ **terminée** — 0.1 trace (132 Mo/512 jetons, +8 %), 0.2 diff par couche (démo KV f32/int8 → couche 1, jeton 0, FFN 2 la plus touchée), 0.4 profilage par neurone |
+| **1. La drave mesurée** | ⏳ prochain — top-k dans le noyau GPU, quantification choisie par la mesure, écart int8 |
+| **2. La drave répartie localement** | ⏳ ordonnanceur, streaming NVMe, cache d'experts, politique de pages |
+| **3. La drave distribuée** | 🧱 Colab — le format d'échange est déjà spécifié **et implémenté** (c'est le format de trace) |
+| **4. La drave apprenante** | recherche |
+| **5. La drave sur matériel** | PE et lecteur DDR3 ✅, opérateur complet 🧱 FPGA |
+
+Trois commits ce tour : `ac7ccb1` (phase 0.1/0.2), `47aaae9` (0.4), et la roadmap dans le premier. `cargo test` 6/6.
+
+## Suite
+
+Je continue sur la **phase 1**, dans cet ordre : **1.1 le top-k dans le noyau d'attention GPU** (dernier repli CPU du chemin long contexte, et `--attn-topk 256` améliore déjà la perplexité de 21 %), puis **0.3** (l'encodeur/décodeur de référence du format — petit, et c'est ce qui rendra Colab immédiat), puis **1.4** (l'écart int8 résiduel, deux hypothèses à tester).
+
+Un mot d'honnêteté sur 1.1 : le top-k en flux ne se fait pas en une passe — il faut calculer les scores, puis sélectionner. Sur GPU cela veut dire **deux ou trois noyaux** et un tampon de scores en VRAM (acceptable jusqu'à ~32 k de contexte, à éviter à 1 M). Si la conception ne tient pas dans le temps dont je dispose pour ce tour, je le dirai et je ferai 0.3 et 1.4 d'abord, plutôt que de laisser un noyau à moitié écrit.
+
+
+## Tour 42
+
+### 👤 Utilisateur
+
+continue, sois autonome pendant 2 heures
+
+### 🤖 Assistant
+
+⏵ Phase 0.3 : l'encodeur/décodeur de référence du format d'échange
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > tools/flux_codec.py <<'EOF'\n#!/usr/bin/env python3\n\"\"\"Encodeur/décodeur de RÉFÉRENCE du flux d'activation (format DRVF v1).\n\nLe format de trace et le contrat d'échange de la phase 3 sont le MÊME format :\nune liste d'act … [4105 caractères tronqués]`
+
+  ```
+[stderr]
+Traceback (most recent call last):
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/flux_codec.py", line 108, in <module>
+    sys.exit(main())
+             ~~~~^^
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/flux_codec.py", line 74, in main
+    n_layer, hidden, listes, blob = lire_rust(chemin)
+                                    ~~~~~~~~~^^^^^^^^
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/flux_codec.py", line 68, in lire_rust
+    n_layer, hidden, listes = decoder(blob)
+                              ~~~~~~~^^^^^^
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/flux_codec.py", line 50, in decoder
+    couche, = FIN.unpack_from(blob, off)
+              ~~~~~~~~~~~~~~~^^^^^^^^^^^
+struct.error: unpack_from requires a buffer of at least 132396736 bytes for unpacking 2 bytes at offset 132396734 (actual buffer size is 132396734)
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\n# 1) le lecteur tolère l'absence de sentinelle (fin de fichier = fin de trace)\np='tools/flux_codec.py'; s=open(p).read()\ns = s.replace(\"\"\"    off = ENTETE.size\n    listes = []\n    while True:\n        couche, … [1614 caractères tronqués]`
+
+  ```
+sentinelle et rapport de trace
+    Finished `release` profile [optimized] target(s) in 0.01s
+[trace] 24576 listes · 22008776 neurones actifs · 132 Mo
+=== perplexité 19.3885 sur 510 tokens (0 événements, 16.7 s) ===
+/tmp/flux_f32.bin
+  24576 listes · 256 jetons · 24 couches · 896 cachés
+  132396736 octets · 505.1 ko par jeton · 6.02 octet par neurone actif
+  aller-retour : IDENTIQUE (132396736 octets réencodés)
+  débit : encodage 40 Mo/s · décodage 15 Mo/s
+  projection : 512 jetons -> 0.26 Go (265 Mo), soit 265 Mo à faire passer sur le réseau
+    à 100 Mo/s : 2.65 s par passe complète
+    à 1000 Mo/s : 0.26 s par passe complète
+    à 10000 Mo/s : 0.03 s par passe complète
+  ```
+
+### 🤖 Assistant
+
+⏵ Phase 1.4 : deux variantes pour attribuer l'écart int8 (K ou V en f32)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && python3 - <<'PY'\np='src/model.rs'; s=open(p).read()\n# 1) champs : garder K ou V en f32 pendant que l'autre est quantifié\ns = s.replace(\"\"\"    /// `DRAVE_KV_F16=1` : arrondir clés et valeurs en f16 avant quantificatio … [1567 caractères tronqués]`
+
+  ```
+champs posés
+809:        let mut c = KvCache { bits, n_kv, ctx, cap: 0, hd,
+3352:            let mut c = KvCache::new(bits, nkv, ctx, hd);
+821:    pub fn assurer(&mut self, besoin: usize) {
+822-        if besoin <= self.cap { return; }
+823-        let mut cap = self.cap.max(1);
+824-        while cap < besoin { cap = (cap * 2).min(self.ctx); }
+825-        let hd = self.hd;
+826-        let nb = self.nb;
+827-        let pas = self.pas();
+[stderr]
+grep: warning: stray \ before n
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && git checkout src/model.rs && cargo build --release 2>&1 | tail -1 && cd .. && python3 - <<'PY'\np='docs/roadmap.md'; s=open(p).read()\ns = s.replace(\"\"\"| 1.4 | **Écart int8 résiduel** (+3,0 % contre +0,8 % chez llama.cp … [2742 caractères tronqués]`
