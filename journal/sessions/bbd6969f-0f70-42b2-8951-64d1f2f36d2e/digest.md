@@ -36385,3 +36385,89 @@ REPRISE.md:464:Rust (12 171 → **13 168**, un seul chiffre dans tout le dépôt
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\ndef patch(p, paires):\n    s=open(p).read()\n    for v,n,nom in paires:\n        assert s.count(v)==1, f\"{p}::{nom}::{s.count(v)}\"\n        s=s.replace(v,n,1)\n    open(p,'w').write(s); print(f\"{p} ok\")\npatch(' … [1191 caractères tronqués]`
+
+  ```
+README.md ok
+REPRISE.md ok
+cérémonie : compteur aligné
+03243f7 Compteur de lignes Rust re-mesuré en fin de sprint : 13 480 (le chiffre avait bougé de 312 lignes pendant le sprint)
+19:24:44
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 420; date +%H:%M:%S; pgrep -c -x drave; git status --short", "description": "Wait for the box to end", "timeoutMs": 480000}`
+
+  ```
+19:31:47
+0
+ M journal/README.md
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 460; date +%H:%M:%S; ./tools/sprint.sh status | head -4", "description": "Wait until box end", "timeoutMs": 520000}`
+
+  ```
+19:39:33
+── Sprint 1 ─────────────────────────────────────────────
+- **Début** : 17:41 · **Fin prévue** : 19:41 (boxing de 120 min)
+   temps : 19:39 · reste 0 h 01
+   commits depuis le début : 20
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 120; date +%H:%M:%S; ./tools/sprint.sh close | tail -3", "description": "Close the sprint box at 19:41", "timeoutMs": 200000}`
+
+  ```
+19:41:37
+=== clôture du sprint 1 (17:41 → 19:41, prévu 19:41) ===
+trame écrite dans sprints/01-premier-des-trois-noyaux-gpu-du-top-k-le.md — à compléter (revue chiffrée, rétro, planning)
+  ```
+
+### 🤖 Assistant
+
+⏵ Box clos à 19:41 pile, je remplis la cérémonie (revue, rétro, planning)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='sprints/01-premier-des-trois-noyaux-gpu-du-top-k-le.md'\ns=open(p).read()\n# On garde l'en-tête et la trame (durée + liste des commits), et on remplace les\n# sections vides par la cérémonie rédigée.\ni = s.index … [512 caractères tronqués]`
+
+  ```
+cérémonie écrite
+# Sprint 1 — Premier des trois noyaux GPU du top-k : les scores d'attention calculés en VRAM, vérifiés contre la référence CPU à 1e-6, avec leur banc
+
+- **Début** : 17:41 · **Fin prévue** : 19:41 (boxing de 120 min)
+- **Objectif** : Premier des trois noyaux GPU du top-k : les scores d'attention calculés en VRAM, vérifiés contre la référence CPU à 1e-6, avec leur banc
+- **Engagement de fin** : dépôt vert (tests + portes), machine rendue, tout commité.
+
+
+## Revue — ce qui est livré, mesuré
+
+Durée : 120 min (boxing 120 min). Commits : 20.
+
+  - `03243f7` Compteur de lignes Rust re-mesuré en fin de sprint : 13 480 (le chiffre avait bougé de 312 lignes pendant le sprint)
+  - `22d3004` --options-actives dit si le top-k déporté s'applique, et pourquoi sinon
+  - `e49f3bb` Rapport : l'étape 5 est faite, et la ligne de l'étape 4 dit la bonne variable (clés vues, pas contexte)
+  - `c1fdfd4` Rapport et plan : 14 noyaux et 956 lignes (le noyau 3 est arrivé après le comptage), ordre réel de la collecte
+  - `dada69a` Journal : index des sessions régénéré
+  - `b8d4fa5` Correction d'interprétation : les clés notées dépendent du nombre de JETONS, pas du contexte — le croisement est e
+… [468 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '30,45p' sprints/01-premier-des-trois-noyaux-gpu-du-top-k-le.md && echo \"=== fin ===\" && tail -12 sprints/01-premier-des-trois-noyaux-gpu-du-top-k-le.md", "description": "Review ceremony content"}`
+
+  ```
+- `d00c01c` Noyau 2a du top-k GPU : histogramme d'octet, seuil exact sur 14/14 lignes
+  - `5e8bf48` Sprint 1 : noyau GPU de scores d'attention — exact à 1,03e-7, 40× plus rapide
+
+**Objectif du sprint** : « Premier des trois noyaux GPU du top-k : les scores
+d'attention calculés en VRAM, vérifiés contre la référence CPU à 1e-6, avec leur
+banc ». **Livré : les trois noyaux, le banc, le branchement dans le moteur, les
+portes, et deux relectures adversariales.**
+
+### Ce qui est livré, chiffre par chiffre
+
+| # | livrable | mesure |
+|---|---|---|
+| 1 | `attn_scores` + banc `--banc-topk` (objectif du sprint) | écart **1,6–2,3e-7** (critère 1e-6) · **26,7–40×** le CPU de 4 k à 262 k clés |
+| 2 | `attn_topk_histo` : seuil radix 4 passes | k-ième score **exact au bit près 14/14 lignes** à 4 k / 65 k / 262 k / **1 M** clés ; **224×** le tri+comptage CPU à 262 k |
+| 3 | `attn_topk_compte` + `attn_topk_ecrit` : collecte | **même ensemble que le CPU, 14/14 lignes, différence symétrique 0** ; 0 doublon, 0 hors borne, 0 case vide ; **0,95 ms** contre 1 653 ms de tri CPU à 1 M (×1 744) |
+| 4 | `attn_topk_somme` : softmax sur k + puits, Σ w·V | écart **1,0–4,8e-7** · temps GPU **constant (0,07 ms) de
+… [1190 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -F - <<'EOF' && git log --oneline -1 && ./tools/sprint.sh list && git status --short\nSprint 1 : cérémonie (revue chiffrée, rétrospective, planning du sprint 2)\n\nBox de 17:41 à 19:41, 120 min pleines, 20 … [1545 caractères tronqués]`
