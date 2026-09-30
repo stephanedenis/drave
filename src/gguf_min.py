@@ -1,5 +1,5 @@
 """
-Qtrinet — lecteur GGUF minimal (numpy pur, aucune dépendance).
+Drave — lecteur GGUF minimal (numpy pur, aucune dépendance).
 
 Ne lit que ce dont on a besoin pour l'analyse de structure :
   - l'en-tête et les métadonnées (architecture, dimensions, nombre de têtes),

@@ -1,6 +1,6 @@
 # Contexte long : ce que 1 M veut dire, et par où ça casse
 
-> Tous les chiffres de budget viennent de `qtrinet-core <modele> --plan --ctx N`,
+> Tous les chiffres de budget viennent de `drave-core <modele> --plan --ctx N`,
 > qui les calcule depuis les métadonnées du GGUF. Les bandes passantes sont
 > celles mesurées sur cette machine (deux Quadro RTX 5000 16 Go, 125 Go de RAM,
 > NVMe à ~3,5 Go/s, 20 cœurs Haswell AVX2).
@@ -86,7 +86,7 @@ Deux résultats mesurés (§5) changent la façon de poser le problème :
   vu, et c'est elle qu'il faut garder ;
 - **la mise à l'échelle de température est nuisible sur du texte brut** (÷8,9 de
   perplexité à 512 jetons quand on la retire). Le moteur l'éteint donc par
-  défaut dans le mode retardé ; `QT_YARN=1` la rétablit pour reproduire les
+  défaut dans le mode retardé ; `DRAVE_YARN=1` la rétablit pour reproduire les
   implémentations de référence.
 
 Au-delà du facteur déclaré, la seule réponse honnête reste « extrapolation,
@@ -101,7 +101,7 @@ plus tôt : c'est le préremplissage (§3.a).
 | E1 | **Préremplissage par lots** | **fait** : `gemm_dense_i8` et `gemm_dense_q4` (produits matrice-matrice par tranches), `forward_lot` juste sur dense **et** sur MoE avec regroupement des jetons par expert ; débit bout en bout à chiffrer | 32 k utilisable ; TTFT | le noyau est là ; reste à mesurer et à élargir les tranches |
 | E2 | **KV int8** | **fait** (échelle par vecteur, dequantification à la lecture) | ÷4 sur le KV ; 128 k confortable | mesuré : +7,1 % de perplexité (llama.cpp q8_0 : +3,1 %) |
 | E3 | **KV int4** | **fait** (nibbles empaquetés) | 1 M tient en RAM (9,7 Go) et en VRAM | mesuré : **+384 %** — llama.cpp q4_0 : +411 % ; à réserver aux cas où la mémoire manque |
-| E4 | **KV déporté sur les 2 GPU** (pagination, préchargement) | **fait** : noyau `attn_kv_*` (tuiles de 32 clés en mémoire partagée, une passe par (tête KV, tranche), recombinaison + puits), miroir VRAM du cache (`QT_GPU_KV=1`) — mesuré **×12 à ×73** sur l'attention selon le format, PPL identique ; voir §4.ter | décodage à 1 M borné par la VRAM et non par la RAM | moyen |
+| E4 | **KV déporté sur les 2 GPU** (pagination, préchargement) | **fait** : noyau `attn_kv_*` (tuiles de 32 clés en mémoire partagée, une passe par (tête KV, tranche), recombinaison + puits), miroir VRAM du cache (`DRAVE_GPU_KV=1`) — mesuré **×12 à ×73** sur l'attention selon le format, PPL identique ; voir §4.ter | décodage à 1 M borné par la VRAM et non par la RAM | moyen |
 | E5 | **Attention creuse** | à faire — `--attn-topk` et `--attn-window` existent et se mesurent au protocole `--depuis` | casse le O(N) du décodage | moyen |
 | E6 | **MLA** (DeepSeek) | **non testable ici** : aucun modèle MLA en GGUF sur cette machine (le « deepseek-r1-distill » local est un Qwen dense) | compression structurelle du KV | gros |
 | E7 | **Vision** | **non testable ici sans le chemin image** : le projecteur `mmproj` est présent, mais rien ne lit les patchs | images | gros |
@@ -114,7 +114,7 @@ long).
 ## 4.bis KV quantifié : mesuré, et le 4 bits est cher
 
 Cache KV en 8 puis 4 bits, échelle par vecteur (tête, position), nibbles
-empaquetés en 4 bits — `QT_KV_BITS=8` ou `4`, `[config] cache KV` dit ce qui est
+empaquetés en 4 bits — `DRAVE_KV_BITS=8` ou `4`, `[config] cache KV` dit ce qui est
 alloué. Banc d'essai : Qwen2.5-0.5B Q8_0, 511 jetons, contexte 512, comparé à
 llama.cpp sur le même texte.
 
@@ -233,10 +233,10 @@ pas :
 3. les **échelles** du KV quantifié étaient indexées en éléments au lieu d'être
    indexées par vecteur (`vec * nb + i/32`) : écart de 7e7 en int8.
 
-### Dans le moteur (`QT_GPU=1 QT_GPU_KV=1`)
+### Dans le moteur (`DRAVE_GPU=1 DRAVE_GPU_KV=1`)
 
-Les DEUX variables sont nécessaires : c'est `QT_GPU` qui ouvre le pilote (`gpu::instance`),
-`QT_GPU_KV` qui demande le miroir. Avec la seule seconde, il ne se passe rien — et
+Les DEUX variables sont nécessaires : c'est `DRAVE_GPU` qui ouvre le pilote (`gpu::instance`),
+`DRAVE_GPU_KV` qui demande le miroir. Avec la seule seconde, il ne se passe rien — et
 rien ne le dit, d'où la note.
 
 Le cache est recopié en VRAM par **tranches contiguës** (une copie par couche et
@@ -296,7 +296,7 @@ croît avec la longueur.
 
 ### Experts MXFP4 en VRAM : mesuré, et décevant
 
-Le cache LRU d'experts a été écrit et mesuré (`QT_GPU_EXPERTS=1`, budget 12 Go,
+Le cache LRU d'experts a été écrit et mesuré (`DRAVE_GPU_EXPERTS=1`, budget 12 Go,
 gpt-oss, 32 jetons de décodage) : **5,12 → 5,43 jetons/s, soit +6 %**, avec
 6 192 demandes, 2 880 manques (53,5 % de succès) et 10,64 Go montés sur le bus.
 
@@ -336,7 +336,7 @@ demande**, chaque tête KV recopiant son bloc. Mesuré à **contexte 1 048 576**
 
 Un mot sur ce qui n'était PAS la cause de l'écart avec llama.cpp : l'hypothèse
 « llama.cpp calcule ses clés en f16 avant de les quantifier » a été testée
-(`QT_KV_F16=1`, arrondi à 10 bits de mantisse dans les boucles de
+(`DRAVE_KV_F16=1`, arrondi à 10 bits de mantisse dans les boucles de
 quantification) — **perplexité identique au chiffre près** (10,6231 avec et sans,
 à 2 048 jetons). L'écart de +3,0 % contre +0,8 % à 8 192 vient donc d'ailleurs :
 probablement la quantification des VALEURS et la précision du softmax, pas
@@ -348,8 +348,8 @@ l'arrondi des clés.
 Politique implémentée (`[config] rotation` le dit à chaque chargement) : **RoPE
 simple tant que le contexte demandé tient dans la longueur initiale déclarée
 (4 096 pour gpt-oss), interpolation YaRN au-delà — sans la mise à l'échelle de
-température** ; `QT_YARN=1` force le YaRN complet des implémentations de
-référence, `QT_YARN_NON=1` jamais, `QT_YARN_MSCALE=0/1` tranche sur la
+température** ; `DRAVE_YARN=1` force le YaRN complet des implémentations de
+référence, `DRAVE_YARN_NON=1` jamais, `DRAVE_YARN_MSCALE=0/1` tranche sur la
 température seule. Décision **par séquence**, pas par position : la structure de
 position relative ne survit que si toutes les clés partagent le même jeu de
 fréquences.
@@ -406,8 +406,8 @@ contexte 5 120, protocole apparié `--depuis` :
 
 | régime | perplexité |
 |---|---|
-| **RoPE simple** (`QT_YARN_NON=1`) | **9,6986** |
-| interpolation seule (`QT_YARN=1 QT_YARN_MSCALE=0`) | 1 269,1777 |
+| **RoPE simple** (`DRAVE_YARN_NON=1`) | **9,6986** |
+| interpolation seule (`DRAVE_YARN=1 DRAVE_YARN_MSCALE=0`) | 1 269,1777 |
 
 **L'interpolation dégrade encore au-delà de 4 096** — d'un facteur 131 — alors
 que c'est exactement la zone où le moteur basculait. Le seuil « longueur

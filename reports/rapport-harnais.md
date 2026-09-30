@@ -1,4 +1,4 @@
-# Qtrinet — harnais de test : qualité et débit variable
+# Drave — harnais de test : qualité et débit variable
 
 Modèle : **qwen2 Q8_0** · corpus : WikiText-2 test (4080 tokens évalués).
 
@@ -69,4 +69,4 @@ cette valeur valide l'implémentation numpy (aucune bibliothèque ML).
 
 
 ---
-*Généré par `run_harness.py` — Qtrinet.*
+*Généré par `run_harness.py` — Drave.*

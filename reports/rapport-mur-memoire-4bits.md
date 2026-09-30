@@ -209,22 +209,22 @@ plus « dans l'ordre », c'est le prix assumé.
 ## 7. Reproductible
 
 ```bash
-cd qtrinet-core && cargo build --release
+cd drave-core && cargo build --release
 cargo test --release            # noyau AVX2 vs scalaire
 B=../models/Qwen2.5-0.5B-Q8_0.gguf
 
 # bande passante + croisement push/pull sur une matrice
-./target/release/qtrinet-core $B --matrix blk.0.ffn_gate.weight --threads 16
+./target/release/drave $B --matrix blk.0.ffn_gate.weight --threads 16
 
 # équivalence bit à bit des trois modes
 for f in "" --dense --auto; do
-  ./target/release/qtrinet-core $B --ppl /tmp/wt2_ids.txt --ctx 256 --abits 16 \
+  ./target/release/drave $B --ppl /tmp/wt2_ids.txt --ctx 256 --abits 16 \
      --threads 16 --limit 512 $f | grep "perplexité"
 done
 
 # balayage de précision
 for f in --dense --q4-attn --q4-ffn --q4; do
-  ./target/release/qtrinet-core $B --ppl /tmp/wt2_ids.txt --ctx 256 --abits 16 \
+  ./target/release/drave $B --ppl /tmp/wt2_ids.txt --ctx 256 --abits 16 \
      --threads 16 --limit 256 $f | grep "perplexité"
 done
 ```
@@ -233,6 +233,6 @@ Et sur le modèle 4 bits lui-même :
 
 ```bash
 Q=../models/Qwen2.5-0.5B-Q4_0.gguf
-./target/release/qtrinet-core $Q --ppl /tmp/wt2_ids.txt --ctx 256 --abits 16 --threads 16 --limit 512 --dense
-./target/release/qtrinet-core $Q --ppl /tmp/wt2_ids.txt --ctx 256 --abits 16 --threads 16 --limit 512 --q4
+./target/release/drave $Q --ppl /tmp/wt2_ids.txt --ctx 256 --abits 16 --threads 16 --limit 512 --dense
+./target/release/drave $Q --ppl /tmp/wt2_ids.txt --ctx 256 --abits 16 --threads 16 --limit 512 --q4
 ```

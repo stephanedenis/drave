@@ -1,6 +1,6 @@
 # Drave
 
-*Anciennement `Qtrinet`.* **La drave**, c'est le flux qu'on conduit : ici, celui
+*Anciennement `Drave`.* **La drave**, c'est le flux qu'on conduit : ici, celui
 des **listes d'activation** (*stream of logs*) — le moteur ne lit pas des
 matrices, il pousse des faits valués vers leurs destinations. La vision complète
 est dans [`docs/vision.md`](docs/vision.md).
@@ -9,7 +9,7 @@ Origine du projet : inférence de LLM en **ternaire / multi-bits** sur un cluste
 de cartes **Stratix V** (Microsoft Storey Peak) — 100 % logique, sans DSP.
 Le cahier des charges d'origine est dans [`Qtrinet-bootstrap.md`](Qtrinet-bootstrap.md)
 ⚠️ **il a été audité et corrigé** : voir la section « Écarts avec le CDC » ci-dessous.
-Le nom du crate et du binaire (`qtrinet-core`, variables `QT_*`) changera dans un
+Le nom du crate et du binaire (`drave-core`, variables `DRAVE_*`) changera dans un
 commit dédié ; le journal de sessions, archivé, n'est pas réécrit.
 
 ---
@@ -273,7 +273,7 @@ n'étaient pas le goulot. Et il coûte 838 ms là où l'accumulation en coûte 1
 
 ---
 
-## Moteur d'événements Rust (`qtrinet-core`)
+## Moteur d'événements Rust (`drave-core`)
 
 Le moteur d'exécution par listes est maintenant écrit en Rust — **std seul, zéro
 dépendance** (crates.io est inaccessible depuis cette machine, et c'est très bien :
@@ -281,8 +281,8 @@ le moteur tient en 386 lignes). Détail complet :
 [`reports/rapport-optimisations.md`](reports/rapport-optimisations.md).
 
 ```bash
-cd qtrinet-core && cargo build --release
-./target/release/qtrinet-core ../models/Qwen2.5-0.5B-Q8_0.gguf --threads 16
+cd drave-core && cargo build --release
+./target/release/drave ../models/Qwen2.5-0.5B-Q8_0.gguf --threads 16
 ```
 
 **Les 4 optimisations :**
@@ -355,8 +355,8 @@ BLAS, sans aucune dépendance : **2 319 lignes de Rust, `std` seul**. Détail :
 [`reports/rapport-inference.md`](reports/rapport-inference.md).
 
 ```bash
-cd qtrinet-core && cargo build --release
-./target/release/qtrinet-core ../models/Qwen2.5-0.5B-Q8_0.gguf \
+cd drave-core && cargo build --release
+./target/release/drave ../models/Qwen2.5-0.5B-Q8_0.gguf \
     --infer --chat --prompt "Explain in one sentence why the sky is blue."
 ```
 
@@ -451,7 +451,7 @@ src/ternary.py          quantification ternaire/multi-bits, plans, encodages, MA
 src/tiny_model.py       MLP minimal + entraînement numpy (aucune dépendance ML)
 src/roofline.py         projection matérielle (constantes mesurées de la carte)
 run_quantify.py         orchestrateur : entraîne, quantifie, mesure, écrit le rapport
-qtrinet-core/           moteur d'événements en Rust (std seul, 0 dépendance)
+drave-core/           moteur d'événements en Rust (std seul, 0 dépendance)
   src/gguf.rs             lecture GGUF + déquantification Q4_0/Q8_0/F16/F32
   src/list.rs             encodages : deltas signés, bitmap+signe, creux k, fusion, push
   src/engine.rs           pool de threads, décodage SWAR, accumulation creuse
@@ -465,8 +465,8 @@ reports/                rapports générés
 
 ```bash
 python3 run_quantify.py --epochs 400      # ~10 s, numpy seul
-cd qtrinet-core && cargo build --release  # moteur d'événements
-./target/release/qtrinet-core ../models/Qwen2.5-0.5B-Q8_0.gguf --threads 16
+cd drave-core && cargo build --release  # moteur d'événements
+./target/release/drave ../models/Qwen2.5-0.5B-Q8_0.gguf --threads 16
 ```
 
 Aucune dépendance hors `numpy`. (`torch`/`gguf`/`transformers` seront nécessaires

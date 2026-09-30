@@ -1,6 +1,6 @@
 # Moteur d'événements Rust — les 4 optimisations, et les 3 pièges
 
-Moteur `qtrinet-core` (Rust, **std seul**, zéro dépendance, 386 lignes de moteur).
+Moteur `drave-core` (Rust, **std seul**, zéro dépendance, 386 lignes de moteur).
 Matrice réelle `blk.0.ffn_gate.weight` de Qwen2.5-0.5B-Q8_0 : 4864 entrées × 896
 sorties, **4 303 745 événements** (ternaire issu des signes réels, densité 100 %).
 Machine : 2 × Xeon E5-2687W v3 (20 cœurs / 40 CPU logiques), NUMA 2 nœuds.

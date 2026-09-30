@@ -66,8 +66,8 @@ Trois chemins, par ordre de coût croissant :
 ## 4. Reproductible
 
 ```bash
-cd qtrinet-core && cargo build --release
+cd drave-core && cargo build --release
 cd .. && python3 tools/make_patch.py croise 12 /tmp/p.bin --i 0 --j 7 --scale 1.0
-cd qtrinet-core && ./target/release/qtrinet-core ../models/Qwen2.5-0.5B-Q8_0.gguf \
+cd drave-core && ./target/release/drave ../models/Qwen2.5-0.5B-Q8_0.gguf \
     --ppl /tmp/wt2_ids.txt --ctx 256 --abits 16 --threads 16 --limit 1024 --patch /tmp/p.bin
 ```

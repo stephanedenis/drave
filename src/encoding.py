@@ -1,5 +1,5 @@
 """
-Qtrinet — encodages de *structure* : éliminer complètement la valeur.
+Drave — encodages de *structure* : éliminer complètement la valeur.
 
 Idée : si tous les poids valent ±1, la valeur n'a plus besoin d'être stockée.
 On remplace la matrice par **deux listes de destinations** par source (les « + »

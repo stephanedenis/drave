@@ -35,8 +35,8 @@ extern "C" {
     fn cuGetErrorName(code: c_int, nom: *mut *const c_char) -> c_int;
 }
 
-/// PTX compilé depuis `gpu/qtrinet_gpu.cu` par clang.
-const PTX: &str = include_str!("../gpu/qtrinet_gpu.ptx");
+/// PTX compilé depuis `gpu/drave_gpu.cu` par clang.
+const PTX: &str = include_str!("../gpu/drave_gpu.ptx");
 
 #[inline]
 fn cu_ctx(ctx: *mut c_void) {
@@ -775,7 +775,7 @@ impl Gpu {
     }
 }
 
-/// Instance unique du processus. `QT_GPU` active le déport ; sans lui, aucune
+/// Instance unique du processus. `DRAVE_GPU` active le déport ; sans lui, aucune
 /// ressource vidéo n'est touchée et le moteur reste strictement sur CPU.
 static INSTANCE: std::sync::OnceLock<Option<Gpu>> = std::sync::OnceLock::new();
 
@@ -785,7 +785,7 @@ static SECOND: std::sync::OnceLock<Option<Gpu>> = std::sync::OnceLock::new();
 
 pub fn second() -> Option<&'static Gpu> {
     SECOND.get_or_init(|| {
-        if std::env::var("QT_GPU").is_err() { return None; }
+        if std::env::var("DRAVE_GPU").is_err() { return None; }
         let premier = instance().map(|g| g.ordinal).unwrap_or(0);
         for ord in 0..4 {
             if ord == premier { continue; }
@@ -810,7 +810,7 @@ pub fn machines() -> &'static [&'static Gpu] {
 
 pub fn instance() -> Option<&'static Gpu> {
     INSTANCE.get_or_init(|| {
-        if std::env::var("QT_GPU").is_err() { return None; }
+        if std::env::var("DRAVE_GPU").is_err() { return None; }
         Gpu::ouvrir_auto()
     }).as_ref()
 }

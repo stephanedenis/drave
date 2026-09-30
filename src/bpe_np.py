@@ -1,5 +1,5 @@
 """
-Qtrinet — tokenizer BPE byte-level minimal, reconstruit depuis les métadonnées GGUF.
+Drave — tokenizer BPE byte-level minimal, reconstruit depuis les métadonnées GGUF.
 
 Aucune dépendance. Suffisant pour mesurer une perplexité sur WikiText-2.
 """

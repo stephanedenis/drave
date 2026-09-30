@@ -1,4 +1,4 @@
-# Qtrinet — le modèle réel expose-t-il ses grappes ?
+# Drave — le modèle réel expose-t-il ses grappes ?
 
 Modèle analysé : **qwen2**, 24 couches, hidden 896, intermédiaire 4864, 14 têtes / 2 KV (GQA).
 
@@ -80,4 +80,4 @@ Seule structure réellement préexistante et exploitable : **les têtes GQA**, d
 groupées 7:1 par construction.
 
 ---
-*Généré par `run_real_clusters.py` — Qtrinet.*
+*Généré par `run_real_clusters.py` — Drave.*

@@ -1,4 +1,4 @@
-# Qtrinet — 8 bits : la perfection est-elle atteignable ?
+# Drave — 8 bits : la perfection est-elle atteignable ?
 
 Modèle : **qwen2** en Q8_0, 494.0 M poids analysés.
 
@@ -57,4 +57,4 @@ Modèle : **qwen2** en Q8_0, 494.0 M poids analysés.
 
 
 ---
-*Généré par `run_8bit_perfection.py` — Qtrinet.*
+*Généré par `run_8bit_perfection.py` — Drave.*

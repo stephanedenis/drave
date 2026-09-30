@@ -1,4 +1,4 @@
-# Qtrinet — la sparsité peut-elle acheter de la précision ?
+# Drave — la sparsité peut-elle acheter de la précision ?
 
 Modèle minimal (MLP 32→64→10, 2688 poids), référence float **76.07 %**.
 
@@ -77,4 +77,4 @@ de les dépenser en zéros. C'est la forme utile de l'intuition « plus de nœud
 
 
 ---
-*Généré par `run_precision.py` — Qtrinet.*
+*Généré par `run_precision.py` — Drave.*

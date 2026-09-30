@@ -1,5 +1,5 @@
 """
-Qtrinet — projection matérielle sur la carte Storey Peak (Stratix V GS D5).
+Drave — projection matérielle sur la carte Storey Peak (Stratix V GS D5).
 
 Toutes les constantes viennent de mesures réelles, consignées dans
 FPGA-Stratix-V/docs/carte-storey-peak.md et docs/journal-bringup.md :

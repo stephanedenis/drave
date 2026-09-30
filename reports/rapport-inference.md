@@ -5,7 +5,7 @@ quantifié Q8_0 (507 Mo, 494 M de poids) tourne en **mode listes d'événements*
 CPU de cette machine (2 × Xeon E5-2687W v3), et génère du texte correct :
 
 ```
-$ qtrinet-core qwen2.5-0.5b-q8_0.gguf --infer --chat \
+$ drave-core qwen2.5-0.5b-q8_0.gguf --infer --chat \
       --prompt "Explain in one sentence why the sky is blue."
 
 <|im_start|>user
@@ -310,27 +310,27 @@ destinations à la fois) plutôt qu'un accumulateur large par PE.
 ## 9. Reproductible
 
 ```bash
-cd qtrinet-core && cargo build --release     # 0 avertissement
+cd drave-core && cargo build --release     # 0 avertissement
 
 # génération de texte (gabarit de chat Qwen2.5)
-./target/release/qtrinet-core ../models/Qwen2.5-0.5B-Q8_0.gguf \
+./target/release/drave ../models/Qwen2.5-0.5B-Q8_0.gguf \
     --infer --chat --prompt "Explain in one sentence why the sky is blue." \
     --n 60 --threads 16 --abits 16
 
 # perplexité sur une suite d'identifiants
-./target/release/qtrinet-core ../models/Qwen2.5-0.5B-Q8_0.gguf \
+./target/release/drave ../models/Qwen2.5-0.5B-Q8_0.gguf \
     --ppl /tmp/wt2_ids.txt --ctx 256 --abits 16 --threads 16
 
 # comparaison avec un noyau dense int8 (mêmes poids, mêmes activations)
-./target/release/qtrinet-core ../models/Qwen2.5-0.5B-Q8_0.gguf \
+./target/release/drave ../models/Qwen2.5-0.5B-Q8_0.gguf \
     --infer --ids 9707,0 --n 16 --threads 16 --abits 16 --dense
 
 # modèle 4 bits (le fichier est mixte Q4_0/Q4_1) et élagage
-./target/release/qtrinet-core ../models/Qwen2.5-0.5B-Q4_0.gguf \
+./target/release/drave ../models/Qwen2.5-0.5B-Q4_0.gguf \
     --infer --ids 9707,0 --n 16 --threads 16 --abits 16
-./target/release/qtrinet-core ../models/Qwen2.5-0.5B-Q8_0.gguf \
+./target/release/drave ../models/Qwen2.5-0.5B-Q8_0.gguf \
     --infer --ids 9707,0 --n 16 --threads 16 --keep 0.25    # dispersé
-./target/release/qtrinet-core ../models/Qwen2.5-0.5B-Q8_0.gguf \
+./target/release/drave ../models/Qwen2.5-0.5B-Q8_0.gguf \
     --infer --ids 9707,0 --n 16 --threads 16 --keep -0.25   # contigu
 ```
 

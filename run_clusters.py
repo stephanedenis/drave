@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Qtrinet — grappes afférentes/efférentes : imposer la structure à la conversion.
+Drave — grappes afférentes/efférentes : imposer la structure à la conversion.
 
 Question : peut-on optimiser le modèle *à la conversion* pour créer des grappes
 naturelles (afférentes = ce qui entre, efférentes = ce qui sort) et le découper en
@@ -162,7 +162,7 @@ def main():
     print("  (à comparer aux ~45 ms/token de calcul : le ring n'est JAMAIS le goulot)")
 
     # --------------------------------- rapport ---------------------------- #
-    L = ["# Qtrinet — grappes afférentes/efférentes et découpage en sous-modèles\n",
+    L = ["# Drave — grappes afférentes/efférentes et découpage en sous-modèles\n",
          f"Modèle : MLP {D_IN}→{D_HID}→{N_CLASS}, structure **imposée à l'entraînement**",
          f"(masque à {G} grappes + une fraction d'arêtes inter-grappes).\n",
          "## Coût de la structure imposée\n",
@@ -208,7 +208,7 @@ def main():
           "\n> ⚠️ Mesures sur un MLP de 2 688 poids : les valeurs absolues ne se transposent",
           "> pas. Ce qui se transpose, c'est le **sens des compromis** et l'existence de la",
           "> double dividende.\n",
-          "\n---\n*Généré par `run_clusters.py` — Qtrinet.*\n"]
+          "\n---\n*Généré par `run_clusters.py` — Drave.*\n"]
 
     args.out.parent.mkdir(parents=True, exist_ok=True)
     args.out.write_text("\n".join(L), encoding="utf-8")

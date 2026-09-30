@@ -1,4 +1,4 @@
-# Qtrinet — test de principe : modèle minimal en ternaire / multi-bits
+# Drave — test de principe : modèle minimal en ternaire / multi-bits
 
 Modèle : MLP 32→64→10, entraîné sur 4096 exemples synthétiques, évalué sur 1024.
 
@@ -86,4 +86,4 @@ Débits **mesurés** : DDR3 9,66 Go/s · PCIe x8 6,5 Go/s · fmax actuel 124 MHz
 
 
 ---
-*Généré par `run_quantify.py` — Qtrinet.*
+*Généré par `run_quantify.py` — Drave.*

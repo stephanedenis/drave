@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Qtrinet — peut-on éliminer la valeur en répétant l'adresse d'activation ?
+Drave — peut-on éliminer la valeur en répétant l'adresse d'activation ?
 
 Idée testée : plutôt que de stocker la valeur quantifiée v d'un poids, on
 **répète l'adresse v fois** — l'accumulateur ajoute v fois l'activation. En
@@ -137,7 +137,7 @@ def main():
     print("  ternaire      : deux listes signées (+, −) → même résultat, 0 bit de valeur.")
 
     # ------------------------------------------------------------------ rapport
-    L = ["# Qtrinet — éliminer la valeur par répétition d'adresse ?\n",
+    L = ["# Drave — éliminer la valeur par répétition d'adresse ?\n",
          f"Modèle mesuré : **{g.arch()}** quantifié **Q4_0** ({len(mats)} matrices 2-D).",
          "Les niveaux sont lus *tels que stockés* (−8..+7), avant mise à l'échelle.\n",
          "## 1. Distribution réelle des niveaux\n",
@@ -195,7 +195,7 @@ def main():
           "> dépend de la recette de quantification : Q4_K_M, avec ses échelles de blocs",
           "> plus fines, donnerait une distribution différente — à mesurer avant de figer",
           "> le format.\n",
-          "\n---\n*Généré par `run_value_encoding.py` — Qtrinet.*\n"]
+          "\n---\n*Généré par `run_value_encoding.py` — Drave.*\n"]
 
     args.out.parent.mkdir(parents=True, exist_ok=True)
     args.out.write_text("\n".join(L), encoding="utf-8")

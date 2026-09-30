@@ -1,5 +1,5 @@
 """
-Qtrinet — forward pass Qwen2 en numpy pur (aucune dépendance ML).
+Drave — forward pass Qwen2 en numpy pur (aucune dépendance ML).
 
 Sert de **modèle d'or** pour l'architecture événementielle : il donne les
 activations réelles, donc le nombre d'événements par couche et par token — et

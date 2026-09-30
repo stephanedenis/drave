@@ -210,11 +210,11 @@ struct.unpack("<I",f.read(4)); nt,=struct.unpack("<Q",f.read(8)); nkv,=struct.un
 PY
 
 # modèle 4 bits natif, noyau 4 bits
-cd qtrinet-core
-./target/release/qtrinet-core ../models/Qwen2.5-0.5B-Q4_0.gguf --ppl /tmp/wt2_ids.txt \
+cd drave-core
+./target/release/drave ../models/Qwen2.5-0.5B-Q4_0.gguf --ppl /tmp/wt2_ids.txt \
     --ctx 256 --abits 16 --threads 16 --limit 512 --q4
 
 # repère de bande passante (lu dans le même banc, mêmes conditions)
-./target/release/qtrinet-core ../models/Qwen2.5-0.5B-Q8_0.gguf \
+./target/release/drave ../models/Qwen2.5-0.5B-Q8_0.gguf \
     --matrix blk.0.ffn_gate.weight --threads 16
 ```

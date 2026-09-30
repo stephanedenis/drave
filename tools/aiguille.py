@@ -34,7 +34,7 @@ import subprocess
 import sys
 import time
 
-Q = "./qtrinet-core/target/release/qtrinet-core"
+Q = "./drave-core/target/release/drave"
 CORPUS = "data/wikitext2_test.txt"
 CODE = "AZUR-7391"
 AIGUILLE = f" Pour memoire, le code de verification de la reunion est {CODE}. "
@@ -68,10 +68,10 @@ def sonde(modele, corpus, ctx, profondeur, offset, args):
 
     env = dict(os.environ)
     if args.gpu:
-        env["QT_GPU"] = "1"
+        env["DRAVE_GPU"] = "1"
     if args.gpu_kv:
-        env["QT_GPU"] = "1"
-        env["QT_GPU_KV"] = "1"
+        env["DRAVE_GPU"] = "1"
+        env["DRAVE_GPU_KV"] = "1"
     cmd = [Q, modele, "--infer", "--chat", "--flux", "--prompt", invite,
            "--n", str(args.n), "--ctx", str(ctx + 512), "--threads", str(args.threads),
            "--temp", "0", "--lot", str(args.lot)]
@@ -108,8 +108,8 @@ def main():
     ap.add_argument("--threads", type=int, default=16)
     ap.add_argument("--lot", type=int, default=256, help="lot de préremplissage")
     ap.add_argument("--timeout", type=int, default=7200)
-    ap.add_argument("--gpu", action="store_true", help="QT_GPU=1 (déport des projections)")
-    ap.add_argument("--gpu-kv", action="store_true", help="QT_GPU=1 QT_GPU_KV=1 (KV en VRAM)")
+    ap.add_argument("--gpu", action="store_true", help="DRAVE_GPU=1 (déport des projections)")
+    ap.add_argument("--gpu-kv", action="store_true", help="DRAVE_GPU=1 DRAVE_GPU_KV=1 (KV en VRAM)")
     ap.add_argument("--journal", default="")
     args = ap.parse_args()
 

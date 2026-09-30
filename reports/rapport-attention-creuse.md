@@ -159,7 +159,7 @@ parcimonie mais de l'écriture des boucles.
 ## 5. Reproductible
 
 ```bash
-cd qtrinet-core && cargo build --release
-./target/release/qtrinet-core ../models/Qwen2.5-0.5B-Q8_0.gguf --ppl /tmp/wt2_a.txt \
+cd drave-core && cargo build --release
+./target/release/drave ../models/Qwen2.5-0.5B-Q8_0.gguf --ppl /tmp/wt2_a.txt \
     --ctx 256 --abits 16 --threads 16 --attn-topk 32
 ```

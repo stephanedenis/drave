@@ -18,7 +18,7 @@ d'événements** (0,7 Go de listes lues).
 
 | Cible | Livrable | Taille | Vérification |
 |---|---|---|---|
-| **CPU** | `qtrinet-core` — moteur d'événements, tokenizer BPE, forward Qwen2, génération, perplexité | **2 547 lignes de Rust, `std` seul, 0 dépendance** | tokens identiques à la référence numpy ; perplexité identique ; 14/14 au banc des décodeurs |
+| **CPU** | `drave-core` — moteur d'événements, tokenizer BPE, forward Qwen2, génération, perplexité | **2 547 lignes de Rust, `std` seul, 0 dépendance** | tokens identiques à la référence numpy ; perplexité identique ; 14/14 au banc des décodeurs |
 | **FPGA** | `event_pe.sv`, `event_engine.sv`, `event_reader.sv` + bancs + modèle DDR3 + empaqueteur | **1 924 lignes** | 309 020 événements réels, aucune divergence (PE, lecteur, réduction) ; synthétisé sur la vraie puce |
 | **GPU** | micro-bancs des deux primitives (bande passante, dispersion) | ~80 lignes Numba | mesuré sur les cartes |
 
@@ -138,10 +138,10 @@ mode listes, sans GPU.
 
 ```bash
 # CPU
-cd qtrinet-core && cargo build --release
-./target/release/qtrinet-core ../models/Qwen2.5-0.5B-Q8_0.gguf \
+cd drave-core && cargo build --release
+./target/release/drave ../models/Qwen2.5-0.5B-Q8_0.gguf \
     --infer --ids 9707,0 --n 16 --threads 16 --abits 16
-./target/release/qtrinet-core ../models/Qwen2.5-0.5B-Q8_0.gguf --threads 16   # banc des décodeurs
+./target/release/drave ../models/Qwen2.5-0.5B-Q8_0.gguf --threads 16   # banc des décodeurs
 
 # FPGA (aucune licence)
 export PATH=$HOME/iverilog/bin:$PATH

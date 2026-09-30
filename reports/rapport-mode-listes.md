@@ -1,4 +1,4 @@
-# Qtrinet — « mode listes » : exécuter sans GPU
+# Drave — « mode listes » : exécuter sans GPU
 
 Objectif : **pas** de compresser le modèle, mais l'exécuter avec des opérations
 purement structurelles (compter, décaler, additionner) — donc **sans multiplieur,
@@ -58,4 +58,4 @@ même résultat exact.
 
 
 ---
-*Généré par `run_list_mode.py` — Qtrinet.*
+*Généré par `run_list_mode.py` — Drave.*

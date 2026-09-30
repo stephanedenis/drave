@@ -1,4 +1,4 @@
-# Qtrinet — éliminer la valeur par répétition d'adresse ?
+# Drave — éliminer la valeur par répétition d'adresse ?
 
 Modèle mesuré : **qwen2** quantifié **Q4_0** (166 matrices 2-D).
 Les niveaux sont lus *tels que stockés* (−8..+7), avant mise à l'échelle.
@@ -101,4 +101,4 @@ par construction. Voir `reports/rapport-8bits.md`.
 
 
 ---
-*Généré par `run_value_encoding.py` — Qtrinet.*
+*Généré par `run_value_encoding.py` — Drave.*

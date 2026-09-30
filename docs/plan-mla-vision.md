@@ -644,7 +644,7 @@ l'échelle interne de la rotation, la fenêtre locale, et le bout en bout.
 
 ### La chaîne complète est DÉMONTRÉE, de l'image aux logits
 
-`QT_VISION_TEXTE=<modele.gguf>` fait faire au banc le dernier pas : il charge le
+`DRAVE_VISION_TEXTE=<modele.gguf>` fait faire au banc le dernier pas : il charge le
 modèle de texte, lui impose le **premier jeton d'image** par
 `Model::emb_imposee`, et lit les logits. Mesuré sur Qwen2.5-VL-7B (poids Q4_K_M,
 projecteur f16 du `mmproj`) :

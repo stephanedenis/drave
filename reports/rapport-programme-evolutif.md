@@ -132,7 +132,7 @@ supplémentaires) depuis un fichier, ce que le moteur ne sait pas encore faire.
 
 ```bash
 # journal d'activations + pertes par token
-./target/release/qtrinet-core ../models/Qwen2.5-0.5B-Q8_0.gguf --ppl /tmp/wt2_ids.txt \
+./target/release/drave ../models/Qwen2.5-0.5B-Q8_0.gguf --ppl /tmp/wt2_ids.txt \
     --ctx 256 --abits 16 --threads 16 --hebbian 12
 # -> /tmp/act_log.bin (2048 x 896 f32), /tmp/loss_log.bin (pertes par token)
 ```

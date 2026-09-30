@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Qtrinet — la sparsité peut-elle acheter de la précision ?
+Drave — la sparsité peut-elle acheter de la précision ?
 
 Hypothèse à tester : « en fonctionnant par événement, on peut multiplier les
 nœuds pour émuler plus de précision ».
@@ -135,7 +135,7 @@ def main():
     print("\n(* = frontière de Pareto : aucun encodage ne fait mieux à coût égal)")
 
     # ---------------------------------------------------------------- rapport
-    L = ["# Qtrinet — la sparsité peut-elle acheter de la précision ?\n",
+    L = ["# Drave — la sparsité peut-elle acheter de la précision ?\n",
          f"Modèle minimal (MLP 32→64→10, {n_tot} poids), référence float "
          f"**{acc_float*100:.2f} %**.\n",
          "Protocole : **prune → retrain (masque fixe) → quantize → refit d'échelle**.\n",
@@ -177,7 +177,7 @@ def main():
           "4. **Réserve** : ces mesures sont faites sur un MLP de 2 688 poids, avec un",
           "   réentraînement court. Les valeurs absolues ne se transposent pas à un LLM ;",
           "   c'est la **forme de la frontière** qui est transposable.\n",
-          "\n---\n*Généré par `run_precision.py` — Qtrinet.*\n"]
+          "\n---\n*Généré par `run_precision.py` — Drave.*\n"]
 
     args.out.parent.mkdir(parents=True, exist_ok=True)
     args.out.write_text("\n".join(L), encoding="utf-8")

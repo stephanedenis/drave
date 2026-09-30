@@ -134,7 +134,7 @@ Trois enseignements, tous mesurés :
    calcul**, pas à la mémoire (151 936 lignes × 896 produits par jeton, en
    scalaire). Le tuilage supprime bien les relectures, mais elles n'étaient pas
    le coût dominant. Ce qu'il faut pour la tête, c'est un noyau vectorisé AVX2 ou
-   le déport GPU (`QT_GPU_TETE=1`, déjà mesuré à 6,2 ms/jeton contre 15,6 pour
+   le déport GPU (`DRAVE_GPU_TETE=1`, déjà mesuré à 6,2 ms/jeton contre 15,6 pour
    tête + échantillonnage sur gpt-oss), pas un lot plus gros.
 2. **L'attention par lots reste 1,7 fois plus lente** que le chemin par jeton
    (5,59 contre 2,78 + 0,46 ms). Le groupement des KV a divisé le coût, mais il

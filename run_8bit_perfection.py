@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Qtrinet — 8 bits : peut-on atteindre la perfection (compression sans perte) ?
+Drave — 8 bits : peut-on atteindre la perfection (compression sans perte) ?
 
 À 8 bits, la qualité est déjà quasi parfaite. La seule question qui reste est
 celle du **stockage sans perte** : peut-on descendre sous 8 bits/poids en
@@ -131,7 +131,7 @@ def main():
     print(f"  borne entropique            : {n_tot*H/8/1e6:8.1f} Mo (×{gain_h:.3f})")
 
     # ------------------------------------------------------------------ rapport
-    L = ["# Qtrinet — 8 bits : la perfection est-elle atteignable ?\n",
+    L = ["# Drave — 8 bits : la perfection est-elle atteignable ?\n",
          f"Modèle : **{g.arch()}** en Q8_0, {n_tot/1e6:.1f} M poids analysés.\n",
          "## 1. Distribution des niveaux\n",
          f"- densité : **{dens*100:.1f} %**",
@@ -175,7 +175,7 @@ def main():
          "   à 8 bits l'entropie est déjà presque atteinte. Le vrai levier reste la",
          "   **quantification à 4 bits et moins**, où la structure a de la place pour",
          "   s'exprimer — c'est là que les gains mesurés (×2,17) se trouvent.\n",
-         "\n---\n*Généré par `run_8bit_perfection.py` — Qtrinet.*\n"]
+         "\n---\n*Généré par `run_8bit_perfection.py` — Drave.*\n"]
 
     args.out.parent.mkdir(parents=True, exist_ok=True)
     args.out.write_text("\n".join(L), encoding="utf-8")

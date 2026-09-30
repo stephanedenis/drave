@@ -1,4 +1,4 @@
-# Qtrinet — encodage de structure : éliminer la valeur
+# Drave — encodage de structure : éliminer la valeur
 
 Idée testée : remplacer `(position, valeur)` par **deux listes triées de
 destinations** (les « + » et les « − »). Le signe est porté par l'appartenance
@@ -85,4 +85,4 @@ et l'écart se creuse vite (×4,2 à 5 %, ×13 face au dense 2 bits à 1 %).
 
 
 ---
-*Généré par `run_encoding.py` — Qtrinet.*
+*Généré par `run_encoding.py` — Drave.*

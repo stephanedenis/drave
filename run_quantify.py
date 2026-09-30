@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Qtrinet — test de principe : quantifier un modèle minimal en ternaire / multi-bits.
+Drave — test de principe : quantifier un modèle minimal en ternaire / multi-bits.
 
 Ce script répond à trois questions, chiffres en main :
 
@@ -206,7 +206,7 @@ def throughput_table(model: MLP):
 
 def write_report(path: Path, acc_float, fmt_rows, intchk, enc_rows, dens_rows, thr_rows):
     L = []
-    L.append("# Qtrinet — test de principe : modèle minimal en ternaire / multi-bits\n")
+    L.append("# Drave — test de principe : modèle minimal en ternaire / multi-bits\n")
     L.append(f"Modèle : MLP {D_IN}→{D_HID}→{N_CLASS}, entraîné sur {N_TRAIN} exemples "
              f"synthétiques, évalué sur {N_TEST}.\n")
 
@@ -281,7 +281,7 @@ def write_report(path: Path, acc_float, fmt_rows, intchk, enc_rows, dens_rows, t
         "(BitNet b1.58) — ce sera l'étape suivante.\n",
     ]
 
-    L.append("\n---\n*Généré par `run_quantify.py` — Qtrinet.*\n")
+    L.append("\n---\n*Généré par `run_quantify.py` — Drave.*\n")
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text("\n".join(L), encoding="utf-8")
 

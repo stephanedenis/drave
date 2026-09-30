@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Qtrinet — harnais de test : qualité (perplexité) et débit variable (événements).
+Drave — harnais de test : qualité (perplexité) et débit variable (événements).
 
 Deux mesures, sur un vrai modèle :
 
@@ -147,7 +147,7 @@ def main():
     print(f"  rapport max/min = {tot.max()/max(tot.min(),1):.2f}")
 
     # ------------------------------------------------------------------ rapport
-    L_ = ["# Qtrinet — harnais de test : qualité et débit variable\n",
+    L_ = ["# Drave — harnais de test : qualité et débit variable\n",
           f"Modèle : **{g.arch()} Q8_0** · corpus : WikiText-2 test "
           f"({ntok} tokens évalués).\n",
           "## 1. Qualité — perplexité\n",
@@ -183,7 +183,7 @@ def main():
            "   que les modèles « impensables » en architecture dense deviennent intéressants.",
            "\n> ⚠️ Mesure faite sur une seule fenêtre de tokens pour les statistiques",
            "> d'événements (coût numpy), et sur l'ensemble du corpus pour la perplexité.\n",
-           "\n---\n*Généré par `run_harness.py` — Qtrinet.*\n"]
+           "\n---\n*Généré par `run_harness.py` — Drave.*\n"]
 
     args.out.parent.mkdir(parents=True, exist_ok=True)
     args.out.write_text("\n".join(L_), encoding="utf-8")

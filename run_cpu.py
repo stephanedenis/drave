@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Qtrinet — l'architecture « push » (AER) tient-elle sur un CPU ?
+Drave — l'architecture « push » (AER) tient-elle sur un CPU ?
 
 Architecture testée
 -------------------
@@ -210,7 +210,7 @@ def main():
           f"→ {1/t_cpu/(1/t_fpga):.2f}x")
 
     # ----------------------------- rapport --------------------------------- #
-    L = ["# Qtrinet — l'architecture « push » (AER) sur CPU\n",
+    L = ["# Drave — l'architecture « push » (AER) sur CPU\n",
          "## L'architecture\n",
          "Au lieu de **tirer** les activations à des indices arbitraires (gather), on",
          "**pousse** : chaque source active émet un événement, sa liste de destinations se",
@@ -261,7 +261,7 @@ def main():
          "> d'un noyau optimisé (SIMD, multi-thread, accumulateurs par banc) peut aller",
          "> plus vite que `np.bincount` ; à confirmer avec un noyau C/OpenMP avant de",
          "> conclure définitivement.\n",
-         "\n---\n*Généré par `run_cpu.py` — Qtrinet.*\n"]
+         "\n---\n*Généré par `run_cpu.py` — Drave.*\n"]
 
     out = Path("reports/rapport-cpu-aer.md")
     out.parent.mkdir(parents=True, exist_ok=True)

@@ -11,7 +11,7 @@ ouvre sur chaque axe. Il ne remplace pas les rapports — chaque affirmation
 mesurée renvoie à celui qui la porte — et il distingue partout ce qui est
 **mesuré**, ce qui est **raisonné**, et ce qui est **à faire**.
 
-Le projet s'appelait `Qtrinet`, du nom de son origine : un cahier des charges
+Le projet s'appelait `Drave`, du nom de son origine : un cahier des charges
 d'inférence ternaire sur un cluster de cartes Stratix V
 (`Qtrinet-bootstrap.md`). Ce cahier des charges reste l'acte de naissance ; le
 nom, lui, ne dit plus ce que le projet est devenu. **Drave** le dit.
@@ -223,17 +223,19 @@ Pour que le document serve à quelque chose, il doit aussi refuser des choses :
 
 **Drave** : le flux qu'on conduit, du bassin de flottage jusqu'à la scierie. Le
 mot porte les trois propriétés que ce document essaie de décrire — il **coule**
-(les listes avancent), il se **répartit** (les billots se séparent aux
-fourches), et il se **surveille** (on compte, on trie, on redirige).
+(les listes avancent), il se **répartit** (les billots se séparent aux fourches),
+et il **se surveille** (on compte, on trie, on redirige).
 
-Ce que le changement de nom implique, concrètement : ~3 000 occurrences dans
-86 fichiers, dont le journal de sessions — qui est **archivé et ne doit pas être
-réécrit**. La proposition est donc :
+**Le renommage est fait** (2026-09-30), et partout : crate `drave-core`, binaire
+`drave`, variables `DRAVE_*`, noyaux `drave_gpu.*`, et « Drave » dans les rapports
+comme dans les documents.
 
-1. l'**identité** change tout de suite : ce document, le `README`, les documents
-   de `docs/` ;
-2. le **code** (crate `qtrinet-core`, binaire, variables d'environnement
-   `QT_*`) sera renommé dans un commit dédié, **en excluant `journal/`** — avec
-   les alias d'environnement gardés le temps d'une transition ;
-3. les rapports passés gardent leur texte : on n'efface pas un historique daté,
-   on écrit le nouveau nom dans ce qui vient.
+Trois choses ont été **préservées**, délibérément : le **journal de sessions**
+(un journal réécrit n'est plus un journal), le **cahier des charges d'origine**
+`Qtrinet-bootstrap.md` (une pièce datée), et l'**historique Git**.
+
+La table de conversion des anciens noms — variables `QT_*`, chemins — est dans
+[`docs/histoire.md`](histoire.md), avec l'histoire des trois âges du projet : le
+Qtrinet ternaire des cartes Stratix V, le virage événementiel, et Drave. Les
+anciennes variables ne font plus rien, mais le moteur **le dit** au lieu de
+laisser croire qu'une option est active.

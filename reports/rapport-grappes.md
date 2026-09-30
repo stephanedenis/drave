@@ -1,4 +1,4 @@
-# Qtrinet — grappes afférentes/efférentes et découpage en sous-modèles
+# Drave — grappes afférentes/efférentes et découpage en sous-modèles
 
 Modèle : MLP 32→64→10, structure **imposée à l'entraînement**
 (masque à 4 grappes + une fraction d'arêtes inter-grappes).
@@ -59,4 +59,4 @@ grappes est ailleurs (coût d'encodage et partitionnabilité).
 
 
 ---
-*Généré par `run_clusters.py` — Qtrinet.*
+*Généré par `run_clusters.py` — Drave.*

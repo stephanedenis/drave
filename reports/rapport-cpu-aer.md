@@ -1,4 +1,4 @@
-# Qtrinet — l'architecture « push » (AER) sur CPU
+# Drave — l'architecture « push » (AER) sur CPU
 
 ## L'architecture
 
@@ -66,4 +66,4 @@ quasi gratuit (le noyau complet est plus rapide que la dispersion pure).
 
 
 ---
-*Généré par `run_cpu.py` — Qtrinet.*
+*Généré par `run_cpu.py` — Drave.*

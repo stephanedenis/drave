@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Qtrinet — l'élagage permet-il une approche par événement ?
+Drave — l'élagage permet-il une approche par événement ?
 
 Réponse en trois temps :
   1. quelle est la densité naturelle d'un modèle ternaire ? (mesuré)
@@ -113,7 +113,7 @@ def main():
     # ------------------------------------------------------------------ #
     # Rapport
     # ------------------------------------------------------------------ #
-    L = ["# Qtrinet — élagage et approche par événement\n",
+    L = ["# Drave — élagage et approche par événement\n",
          f"Modèle minimal (MLP 32→64→10), accuracy float **{acc_float*100:.2f} %**, "
          f"ternaire (non élagué) **{acc_tern*100:.2f} %**.\n",
          "## 1. Densité naturelle du ternaire\n",
@@ -189,7 +189,7 @@ def main():
           "à 50-60 % sans réentraînement, et le 2:4 structuré (50 %) est la forme matériellement "
           "supportée. **Au-delà de ~90 % de zéros, un LLM généraliste s'effondre** — le régime "
           "où le CSR deviendrait rentable est donc hors d'atteinte.\n",
-          "\n---\n*Généré par `run_sparsity.py` — Qtrinet.*\n"]
+          "\n---\n*Généré par `run_sparsity.py` — Drave.*\n"]
 
     args.out.parent.mkdir(parents=True, exist_ok=True)
     args.out.write_text("\n".join(L), encoding="utf-8")

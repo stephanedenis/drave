@@ -14,7 +14,7 @@ puisse être recalculée depuis les logits exportés.
 """
 import subprocess, sys, os
 
-Q = "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/target/release/qtrinet-core"
+Q = "/home/stephane/Data13TB/stephane/GitHub/Drave/drave-core/target/release/drave"
 M = "/home/stephane/FastNVMe/models/gpt-oss-120b-MXFP4.gguf"
 
 DEB, FIN, MSG, CANAL = 200006, 200007, 200008, 200005

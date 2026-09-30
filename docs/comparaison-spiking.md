@@ -40,7 +40,7 @@ d'énergie** sur ImageNet.
 
 ## 2. Comparaison avec notre architecture
 
-| | Spikformer / SpikeGPT / Spikingformer | Qtrinet |
+| | Spikformer / SpikeGPT / Spikingformer | Drave |
 |---|---|---|
 | Origine de la parcimonie | **dynamique** : le seuil du LIF force des activations 0/1 | **structurelle** : les poids nuls ne coûtent rien |
 | Taux d'activation mesuré | **R̂ ≈ 0,15** (SpikeGPT) | **0,00 % de zéros** sur un LLM dense entraîné |

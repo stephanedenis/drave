@@ -1,4 +1,4 @@
-// Noyaux GPU de Qtrinet.
+// Noyaux GPU de Drave.
 //
 // Principe : les POIDS RESTENT SUR LE GPU. La bande passante est locale
 // (380 Go/s mesurés, contre 6,5 Go/s de PCIe x8) ; ne traversent le bus que les

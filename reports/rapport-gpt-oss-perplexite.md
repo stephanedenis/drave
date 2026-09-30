@@ -67,7 +67,7 @@ d'identifiants** avec llama.cpp (mêmes positions, aucun BOS ajouté, une seule
 séquence, un seul batch) et écrit les logits bruts, que
 `tools/compare_logits.py` compare position par position.
 
-| protocole (mêmes 63/511 prédictions) | llama.cpp | qtrinet-core |
+| protocole (mêmes 63/511 prédictions) | llama.cpp | drave-core |
 |---|---|---|
 | 63 jetons, YaRN (la configuration déclarée par le modèle) | **38,37** | **41,11** |
 | 511 jetons, YaRN, une seule fenêtre de 512 | **169,67** | **174,34** |
@@ -184,7 +184,7 @@ qu'au-delà du contexte initial. En le mesurant, deux choses sont apparues.
 YaRN a deux composantes : l'**interpolation des basses fréquences** (qui étend
 la portée) et la **mise à l'échelle de température** `mscale = 1 + 0,1·ln f` (qui
 compense l'entropie du softmax quand les clés se multiplient). Le moteur sait
-maintenant les activer séparément (`QT_YARN_MSCALE`).
+maintenant les activer séparément (`DRAVE_YARN_MSCALE`).
 
 | longueur | RoPE simple | YaRN **sans** mscale | YaRN complet (référence) |
 |---|---|---|---|
@@ -206,7 +206,7 @@ fenêtre d'entraînement, le RoPE simple extrapole) ; la mesure qui la tranchera
 — le RoPE simple à 8 192 — est en cours (`/tmp/audela_4096.log`).
 
 Le défaut du moteur devient donc : **RoPE simple sous la longueur initiale,
-interpolation seule au-delà** ; `QT_YARN=1` rétablit le comportement de
+interpolation seule au-delà** ; `DRAVE_YARN=1` rétablit le comportement de
 référence pour qui veut comparer.
 
 ### b. La dégradation avec la longueur n'est PAS un bug du moteur

@@ -117,13 +117,13 @@ préférence d'architecture, c'est une **mesure**.
 ## 5. Reproductible
 
 ```bash
-cd qtrinet-core && cargo build --release
+cd drave-core && cargo build --release
 # les deux modes, résultats identiques
-./target/release/qtrinet-core ../models/Qwen2.5-0.5B-Q8_0.gguf --infer --ids 9707,0 --n 32 --threads 16 --abits 8
-./target/release/qtrinet-core ../models/Qwen2.5-0.5B-Q8_0.gguf --infer --ids 9707,0 --n 32 --threads 16 --abits 8 --dense
+./target/release/drave ../models/Qwen2.5-0.5B-Q8_0.gguf --infer --ids 9707,0 --n 32 --threads 16 --abits 8
+./target/release/drave ../models/Qwen2.5-0.5B-Q8_0.gguf --infer --ids 9707,0 --n 32 --threads 16 --abits 8 --dense
 # le croisement
 for k in 1000 500 250 100 50; do
-  ./target/release/qtrinet-core ../models/Qwen2.5-0.5B-Q8_0.gguf --infer --ids 9707,0 --n 24 --threads 16 --abits 8 --act-topk $k
-  ./target/release/qtrinet-core ../models/Qwen2.5-0.5B-Q8_0.gguf --infer --ids 9707,0 --n 24 --threads 16 --abits 8 --act-topk $k --dense
+  ./target/release/drave ../models/Qwen2.5-0.5B-Q8_0.gguf --infer --ids 9707,0 --n 24 --threads 16 --abits 8 --act-topk $k
+  ./target/release/drave ../models/Qwen2.5-0.5B-Q8_0.gguf --infer --ids 9707,0 --n 24 --threads 16 --abits 8 --act-topk $k --dense
 done
 ```

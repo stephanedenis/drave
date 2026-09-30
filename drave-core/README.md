@@ -1,4 +1,4 @@
-# qtrinet-core
+# drave-core
 
 Moteur d'exécution par **listes d'événements** pour modèles quantifiés.
 Rust, **std seul** (aucune dépendance externe, aucun accès réseau au build).
@@ -7,7 +7,7 @@ Rust, **std seul** (aucune dépendance externe, aucun accès réseau au build).
 
 ```
 cargo build --release
-./target/release/qtrinet-core <modele.gguf> [--matrix blk.0.ffn_gate.weight] [--threads 16]
+./target/release/drave <modele.gguf> [--matrix blk.0.ffn_gate.weight] [--threads 16]
 ```
 
 1. **Lecteur GGUF** complet (métadonnées, tenseurs, Q4_0/Q8_0/F16/F32 → f32 ou niveaux bruts).

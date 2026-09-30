@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Fabrique un greffon (neurone ajouté) pour qtrinet-core.
+"""Fabrique un greffon (neurone ajouté) pour drave-core.
 
 Trois modes :
   zero     u = v = d = 0            -> doit donner EXACTEMENT la perplexité de base

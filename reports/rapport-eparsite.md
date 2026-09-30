@@ -1,4 +1,4 @@
-# Qtrinet — élagage et approche par événement
+# Drave — élagage et approche par événement
 
 Modèle minimal (MLP 32→64→10), accuracy float **76.07 %**, ternaire (non élagué) **49.71 %**.
 
@@ -72,4 +72,4 @@ Modèle minimal (MLP 32→64→10), accuracy float **76.07 %**, ternaire (non é
 
 
 ---
-*Généré par `run_sparsity.py` — Qtrinet.*
+*Généré par `run_sparsity.py` — Drave.*

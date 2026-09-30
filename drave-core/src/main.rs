@@ -1,7 +1,7 @@
-//! qtrinet-core — moteur d'exécution par listes d'événements.
+//! drave-core — moteur d'exécution par listes d'événements.
 //!
 //! Usage :
-//!   qtrinet-core <modele.gguf> [--matrix blk.0.ffn_gate.weight] [--threads 8]
+//!   drave-core <modele.gguf> [--matrix blk.0.ffn_gate.weight] [--threads 8]
 //!
 //! Mesure sur le VRAI modèle :
 //!   1. taille exacte de chaque encodage de liste (bits/poids),
@@ -27,14 +27,21 @@ fn fmt_bits(b: u64, n: usize) -> String {
 fn main() {
     let args: Vec<String> = std::env::args().collect();
     if args.len() < 2 {
-        eprintln!("usage: qtrinet-core <modele.gguf> [--matrix NOM] [--threads N]");
-        eprintln!("       qtrinet-core <modele.gguf> --infer (--ids 1,2,3 | --prompt TEXTE)");
+        eprintln!("usage: drave-core <modele.gguf> [--matrix NOM] [--threads N]");
+        eprintln!("       drave-core <modele.gguf> --infer (--ids 1,2,3 | --prompt TEXTE)");
         eprintln!("                    [--n 32] [--temp 0] [--ctx 512] [--threads N]");
         std::process::exit(1);
     }
     // Une seule analyse, puis un aiguillage : `--plan`, `--tokenize`,
     // `--ppl`/`--ppl-texte` et `--infer` partagent désormais la même structure
     // d'options, donc les mêmes drapeaux.
+    // Les variables d'environnement ont été renommées QT_* -> DRAVE_* : un
+    // ancien nom encore présent dans un script ne ferait RIEN, en silence. On le
+    // dit, plutôt que de laisser croire que l'option est active.
+    if let Some((vieux, _)) = std::env::vars().find(|(k, _)| k.starts_with("QT_")) {
+        eprintln!("[attention] {vieux} est l'ancien nom d'une variable d'environnement : \
+elles s'appellent maintenant DRAVE_* (voir docs/histoire.md). Rien n'a été appliqué.");
+    }
     let opt = analyser(&args);
     let _ = MODELE.set(args[1].clone());
     if let Some(f) = opt.banc_vision.clone() { run_banc_vision(&f); return; }
@@ -1125,7 +1132,7 @@ fn run_banc_vision(sortie: &str) {
     }
 
     // ---- Injection : le moteur consomme-t-il un embedding d'image ?
-    // `QT_VISION_TEXTE=<modele.gguf>` charge le modèle de texte et lui impose le
+    // `DRAVE_VISION_TEXTE=<modele.gguf>` charge le modèle de texte et lui impose le
     // PREMIER jeton d'image via `Model::emb_imposee` — le chemin qui manquait
     // (« forward partait toujours de token_embd »). C'est un contrôle de
     // PLOMBERIE : le moteur ne panique pas, il rend des logits d'échelle
@@ -1134,7 +1141,7 @@ fn run_banc_vision(sortie: &str) {
         let n_emb = 3584usize;
         let n_tok = y.len() / n_emb;
         println!("injection : {n_tok} jetons × {n_emb} disponibles");
-        let chemin = std::env::var("QT_VISION_TEXTE").unwrap_or_default();
+        let chemin = std::env::var("DRAVE_VISION_TEXTE").unwrap_or_default();
         if !chemin.is_empty() {
             let mut mdl = model::Model::load(&chemin, 512, 16, true, 1.0, false, 0, 0);
             mdl.emb_imposee = Some(y[..n_emb].to_vec());
@@ -1221,7 +1228,7 @@ fn run_banc_kv(opt: Options) {
         _ => hidden / n_head.max(1),
     };
     let n_layer = g.cfg("block_count").and_then(|m| m.as_u64()).unwrap_or(0) as usize;
-    let bits = std::env::var("QT_KV_BITS").ok().and_then(|v| v.parse().ok()).unwrap_or(32u32);
+    let bits = std::env::var("DRAVE_KV_BITS").ok().and_then(|v| v.parse().ok()).unwrap_or(32u32);
     let n = opt.banc_kv;
     let rep = (n_head / n_kv.max(1)).max(1);
     let scale = 1.0 / (hd as f32).sqrt();
@@ -1238,20 +1245,20 @@ fn run_banc_kv(opt: Options) {
     // Deux cas dégénérés pour isoler une erreur du noyau : clés nulles (poids
     // uniformes) et valeurs constantes (la sortie vaut 1 quelle que soit la
     // softmax). Les deux doivent être reproduits EXACTEMENT.
-    let k_nul = std::env::var("QT_BANC_KV_K0").is_ok();
-    let v_un = std::env::var("QT_BANC_KV_V1").is_ok();
+    let k_nul = std::env::var("DRAVE_BANC_KV_K0").is_ok();
+    let v_un = std::env::var("DRAVE_BANC_KV_V1").is_ok();
     // Troisième cas : valeurs « une chaude » par position — la sortie devient
     // alors le poids de chaque clé, ce qui montre si les poids sont appariés à
     // la BONNE ligne de valeurs.
-    let v_unitaire = std::env::var("QT_BANC_KV_UNIT").is_ok();
+    let v_unitaire = std::env::var("DRAVE_BANC_KV_UNIT").is_ok();
     // Cas « pente » : une seule composante de requête non nulle et des clés
     // croissantes sur cette composante. La softmax se concentre alors sur la
     // DERNIÈRE clé, et la sortie doit valoir sa ligne de valeurs : le test le
     // plus lisible de l'appariement poids ↔ valeurs.
-    let pente = std::env::var("QT_BANC_KV_GRAD").is_ok();
+    let pente = std::env::var("DRAVE_BANC_KV_GRAD").is_ok();
     // Clés « une chaude » : la clé k ne parle qu'à la composante k. Avec une
     // requête e_0, seule la clé 0 a un score non nul — signature nette.
-    let k_unitaire = std::env::var("QT_BANC_KV_KUNIT").is_ok();
+    let k_unitaire = std::env::var("DRAVE_BANC_KV_KUNIT").is_ok();
     let (mut k, mut v) = (vec![0f32; hd], vec![0f32; hd]);
     for pos in 0..n {
         for kvh in 0..n_kv {
@@ -1277,9 +1284,9 @@ fn run_banc_kv(opt: Options) {
     }
 
     // 2. Référence CPU : le chemin exact du moteur, une tête par fil.
-    //    `QT_BANC_KV_GPU_SEUL=1` la saute : à 1 M de clés elle coûte 3 à 16
+    //    `DRAVE_BANC_KV_GPU_SEUL=1` la saute : à 1 M de clés elle coûte 3 à 16
     //    minutes pour un chiffre (la vitesse du noyau) qui n'en a pas besoin.
-    let gpu_seul = std::env::var("QT_BANC_KV_GPU_SEUL").is_ok();
+    let gpu_seul = std::env::var("DRAVE_BANC_KV_GPU_SEUL").is_ok();
     let threads = if opt.threads_impose { opt.threads } else {
         (std::thread::available_parallelism().map(|x| x.get()).unwrap_or(8) * 3 / 4).max(1)
     };
@@ -1319,7 +1326,7 @@ fn run_banc_kv(opt: Options) {
     let octets = cache.octets();
     let _ = threads;
     if gpu_seul {
-        println!("  CPU non mesuré (QT_BANC_KV_GPU_SEUL) · {:.2} Go de KV, une couche", octets as f64 / 1e9);
+        println!("  CPU non mesuré (DRAVE_BANC_KV_GPU_SEUL) · {:.2} Go de KV, une couche", octets as f64 / 1e9);
     } else {
         println!("  CPU {threads} fils : {:>8.1} ms par passe  ({:.1} Go/s de KV, {:.1} ms × {n_layer} couches = {:.0} ms/jeton)",
                  tc * 1e3, 2.0 * octets as f64 / tc / 1e9, tc * 1e3,
@@ -1368,14 +1375,14 @@ fn run_banc_kv(opt: Options) {
              ms * 1e3, 2.0 * octets as f64 / ms / 1e9, ms * 1e3,
              ms * 1e3 * n_layer as f64, ecart);
     println!("  gain par passe : ×{:.1}", tc / ms);
-    if std::env::var("QT_BANC_KV_UNIT").is_ok() && hd >= 32 {
+    if std::env::var("DRAVE_BANC_KV_UNIT").is_ok() && hd >= 32 {
         let c = &cpu[..8];
         let o = &out[..8];
         println!("  poids CPU 0..8 : {}", c.iter().map(|v| format!("{v:.4}")).collect::<Vec<_>>().join(" "));
         println!("  poids GPU 0..8 : {}", o.iter().map(|v| format!("{v:.4}")).collect::<Vec<_>>().join(" "));
         println!("  somme CPU {:.4} · somme GPU {:.4}", c.iter().sum::<f32>(), o.iter().sum::<f32>());
     }
-    if std::env::var("QT_BANC_KV_DEBUG").is_ok() {
+    if std::env::var("DRAVE_BANC_KV_DEBUG").is_ok() {
         let ech = |v: &[f32]| v.iter().fold(1e-9f32, |a, &b| a.max(b.abs()));
         for hh in 0..n_head {
             let c = &cpu[hh * hd..(hh + 1) * hd];
@@ -1949,7 +1956,7 @@ fn fenetres_harmony(tk: &tokenizer::Tokenizer, ids: &[u32], ctx: usize, mode: &s
             fenetres.push((w, m));
             i += n;
         }
-        if std::env::var("QT_HARMONY_TRACE").is_ok() {
+        if std::env::var("DRAVE_HARMONY_TRACE").is_ok() {
             for (i, (w, m)) in fenetres.iter().enumerate() {
                 let apercu: String = tk.decode(w).chars().take(110).collect();
                 eprintln!("[harmony] fenêtre {} : {} jetons, {} notés · |{}|",
@@ -1994,7 +2001,7 @@ fn fenetres_harmony(tk: &tokenizer::Tokenizer, ids: &[u32], ctx: usize, mode: &s
     // Trace : sans elle, on ne sait pas ce qui a RÉELLEMENT été présenté au
     // modèle (les identifiants spéciaux sont insérés à la main, une erreur
     // d'ordre ne se voit nulle part ailleurs).
-    if std::env::var("QT_HARMONY_TRACE").is_ok() {
+    if std::env::var("DRAVE_HARMONY_TRACE").is_ok() {
         for (i, (w, m)) in fenetres.iter().enumerate() {
             let apercu: String = tk.decode(w).chars().take(110).collect();
             eprintln!("[harmony] fenêtre {} : {} jetons, {} notés · |{}|",

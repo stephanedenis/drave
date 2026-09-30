@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Qtrinet — « mode listes » : exécuter un modèle quantifié sans GPU.
+Drave — « mode listes » : exécuter un modèle quantifié sans GPU.
 
 Le but n'est PAS de compresser le modèle 8 bits, mais de l'exécuter avec des
 opérations purement structurelles : compter, décaler, additionner. Aucun
@@ -106,7 +106,7 @@ def main():
     print(f"  que le décalage-addition, pour exactement le même résultat.")
 
     # ------------------------------------------------------------------ rapport
-    L = ["# Qtrinet — « mode listes » : exécuter sans GPU\n",
+    L = ["# Drave — « mode listes » : exécuter sans GPU\n",
          "Objectif : **pas** de compresser le modèle, mais l'exécuter avec des opérations",
          "purement structurelles (compter, décaler, additionner) — donc **sans multiplieur,",
          "sans cœur tensoriel, sans GPU**.\n",
@@ -153,7 +153,7 @@ def main():
           "\n> ⚠️ Projections sur la partie GEMM seule, à débit mémoire mesuré. Les 3,13",
           "> additions par poids supposent un accumulateur par destination et un séquenceur",
           "> de décalages — à valider en RTL.\n",
-          "\n---\n*Généré par `run_list_mode.py` — Qtrinet.*\n"]
+          "\n---\n*Généré par `run_list_mode.py` — Drave.*\n"]
 
     args.out.parent.mkdir(parents=True, exist_ok=True)
     args.out.write_text("\n".join(L), encoding="utf-8")

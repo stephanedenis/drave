@@ -1,5 +1,5 @@
 """
-Qtrinet — quantification ternaire et multi-bits, encodages matériels.
+Drave — quantification ternaire et multi-bits, encodages matériels.
 
 Aucune dépendance hors numpy.
 

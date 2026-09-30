@@ -8,15 +8,15 @@
 
 ## 1. En une phrase
 
-`qtrinet-core` est un moteur d'inférence Rust (~5 000 lignes, `std` seul) qui
+`drave-core` est un moteur d'inférence Rust (~5 000 lignes, `std` seul) qui
 charge les GGUF **en place** (aucune copie, aucune requantification), exécute les
 projections soit en listes d'événements, soit en produit scalaire dense, gère les
 MoE, tient une conversation, et déporte au GPU ce qui y gagne. Il fait tourner du
 0,5 B au 120 B sur le CPU de cette machine.
 
 ```bash
-cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && cargo build --release
-./target/release/qtrinet-core ../models/Qwen2.5-0.5B-Q8_0.gguf \
+cd /home/stephane/Data13TB/stephane/GitHub/Drave/drave-core && cargo build --release
+./target/release/drave ../models/Qwen2.5-0.5B-Q8_0.gguf \
     --infer --chat --flux --prompt "Explique le ciel bleu en une phrase." \
     --n 64 --ctx 512 --threads 16 --temp 0
 ```
@@ -29,12 +29,12 @@ Corpus : `/tmp/wt2_txt.txt` = 20 000 premiers octets de `data/wikitext2_test.txt
 **Régénérable** (à refaire si `/tmp` a été vidé) :
 
 ```bash
-cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet
+cd /home/stephane/Data13TB/stephane/GitHub/Drave
 head -c 20000 data/wikitext2_test.txt > /tmp/wt2_txt.txt
 # les identifiants DOIVENT venir du tokenizer du modèle — jamais croisés
-qtrinet-core/target/release/qtrinet-core models/Qwen2.5-0.5B-Q8_0.gguf \
+drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf \
     --tokenize --fichier /tmp/wt2_txt.txt --sortie /tmp/ids_qwen.txt
-qtrinet-core/target/release/qtrinet-core /home/stephane/FastNVMe/models/gpt-oss-120b-MXFP4.gguf \
+drave-core/target/release/drave /home/stephane/FastNVMe/models/gpt-oss-120b-MXFP4.gguf \
     --tokenize --fichier /tmp/wt2_txt.txt --sortie /tmp/ids_oss.txt
 ```
 
@@ -54,7 +54,7 @@ identique à la source) — les deux tokenizers la passent sur ce corpus.
 | gpt-oss-120b MXFP4 | `--dense --limit 512`, ids_oss | **15,1757** (510 jetons, deux fenêtres) |
 | gpt-oss-120b MXFP4 | `--ppl-texte`, `--limit 512` (mêmes jetons) | **15,0757** (509 jetons) |
 | gpt-oss-120b MXFP4 | `--dense --ctx 512 --limit 512`, ids_oss | **18,5803** (511 jetons, une fenêtre) |
-| gpt-oss-120b MXFP4, YaRN | `QT_YARN=1`, `--ctx 512 --limit 512` | **174,3375** ← le YaRN statique du modèle |
+| gpt-oss-120b MXFP4, YaRN | `DRAVE_YARN=1`, `--ctx 512 --limit 512` | **174,3375** ← le YaRN statique du modèle |
 
 > **gpt-oss : les anciens chiffres (39,8 puis 129,9) sont périmés.** Ils ont été
 > mesurés avec deux bugs depuis corrigés : le biais `attn_output` ignoré et la
@@ -83,10 +83,10 @@ Un garde-fou le détecte maintenant (identifiant ≥ vocabulaire = erreur franch
 | Échantillonnage | température, top-k 40, top-p, **pénalité de répétition** (`--rep-penalty`, fenêtre `--hist`) |
 | Génération | **sortie en flux** (`--flux`), **session multi-tours** (`--session`), arrêt sur fin de tour |
 | Encodages | listes d'événements (push), dense int8 par ligne, dense 4 bits par bloc, **6 bits empaqueté par bloc** |
-| GPU | noyaux PTX + API pilote, tête et projections opt-in (`QT_GPU=1`) |
+| GPU | noyaux PTX + API pilote, tête et projections opt-in (`DRAVE_GPU=1`) |
 | Outils | `--ppl`, `--plan` (placement), `--tokenize`, `--bits N` (simulation de précision) |
 | Mesure | `--ppl-texte F` (identifiants du tokenizer du modèle), `--depuis N` (ne noter qu'à partir du jeton N, contexte ancré — les mêmes jetons deviennent comparables à 512, 1 024, 4 096… de contexte), `--ppl-profil` (perte par tranche de 256 positions), `--logits-bin F` (logits bruts), `--harmony*` (habillage harmony), `--swa-pattern N`, `--sans-fenetre` |
-| Rotation | **YaRN à retardement** : RoPE simple tant que `--ctx` tient dans `rope.scaling.original_context_length` (4 096), **interpolation YaRN seule au-delà** (la température `mscale` est la moitié nuisible : divise la perplexité par 8,9 à 512 jetons). `QT_YARN=1` = YaRN complet des références, `QT_YARN_NON=1` (ou `--sans-yarn`) = jamais, `QT_YARN_MSCALE=0/1` = température seule. La trace `[config] rotation` dit lequel est actif |
+| Rotation | **YaRN à retardement** : RoPE simple tant que `--ctx` tient dans `rope.scaling.original_context_length` (4 096), **interpolation YaRN seule au-delà** (la température `mscale` est la moitié nuisible : divise la perplexité par 8,9 à 512 jetons). `DRAVE_YARN=1` = YaRN complet des références, `DRAVE_YARN_NON=1` (ou `--sans-yarn`) = jamais, `DRAVE_YARN_MSCALE=0/1` = température seule. La trace `[config] rotation` dit lequel est actif |
 | Budget de contexte | `--plan --ctx N` : KV f32/int8/int4, relecture par jeton, décodage selon les bandes passantes, coût du préremplissage séquentiel, portée du YaRN |
 | Référence externe | `tools/ref_logits` (llama.cpp, mêmes identifiants, sans BOS) + `tools/compare_logits.py` |
 
@@ -143,8 +143,8 @@ comparé à `llama-tokenize` sur 4 424 jetons (0 écart).
 | 4 | préremplissage par lots | **fait, −20 % et attribué** | tuilage, **attention groupée dans le lot** et **tête en lot** (`logits_lot`) : Qwen ctx 512, **17,1 s → 13,6 s (−20 %)** à perplexité égale (13,1368 → 13,1359) ; gpt-oss ctx 256, ≈ 50 s → **34,4 s** (13,7205 partout). Postes : projections ÷2,6, FFN/wo ÷1,43, attention par lots encore **×1,7** (5,59 contre 3,24 ms/jeton), tête inchangée (5,47 contre 5,63 — noyau lié au calcul, pas à la mémoire). Au passage : pointeur gras sur les sommes par bloc (lot > 90 → blocage muet) corrigé et verrouillé par un test — voir `reports/rapport-prefill-par-lots.md` |
 | 5 | échelles par bloc pour `DenseQ8` | **fait, hypothèse réfutée** | 23,696 contre 23,612 : les échelles par bloc n'apportent rien ; l'avantage du 6 bits est son coût (25 % d'octets en moins à qualité égale) |
 | 6 | boucles CLI unifiées | **fait** | `struct Options` + `analyser` ; trois drapeaux de plus trouvés ignorés (`--attn-topk`, `--qk-topk`, `--sans-yarn` en inférence) et un bug de pas de lecture corrigé |
-| 7 | noyaux GPU | **fait, quatre formats** | warp par ligne : tête **Q8_0** (1,6 ms contre 7,3 CPU, écart 2e-7), **MXFP4** (0,1 ms, écart **0,00e0** — bit à bit), **Q4_K** (0,5 contre 1,2 ms, 4e-7), **Q6_K** (3,6 contre 8,3 ms sur la tête liée de 191 Mo, 3,3e-7 ; ×5 sur un tenseur de 11 Mo). **Tête Q6_K branchée** dans le moteur : `QT_GPU=1 QT_GPU_TETE=1` → 7,58 → **3,60 ms/jeton**, perplexité identique (13,6877). Reste le cache d'experts chauds en VRAM : la mesure d'activation (`rapport-localite-activation.md`) dit qu'un préchargement statique ne paie pas sur SiLU |
-| 8 | suite du plan 1 M | **fait pour E4/E5** | **E4 KV déporté en VRAM** : noyaux `attn_kv_*` (tuiles de 32 clés, softmax en ligne, recombinaison + puits), miroir du cache **paginé** (capacité doublée à la demande : 0,05 Go de VRAM à ctx 1 M après 512 jetons) et `QT_GPU_KV=1` — à 1 M de clés l'attention passe de 968 ms à **13,2 ms** par couche (int4, ×73) et, dans le moteur à 4 096 de contexte, de **22,2 à 3,3 ms/jeton** (−38 % de bout en bout) à perplexité identique (12,2177 → 12,2175). **E5 attention creuse** : mesurée (`--attn-topk 256` : 234,9 contre 298,6). MLA et vision restent non testables (aucun modèle MLA ici ; le projecteur `mmproj` est là mais rien ne lit les patchs) |
+| 7 | noyaux GPU | **fait, quatre formats** | warp par ligne : tête **Q8_0** (1,6 ms contre 7,3 CPU, écart 2e-7), **MXFP4** (0,1 ms, écart **0,00e0** — bit à bit), **Q4_K** (0,5 contre 1,2 ms, 4e-7), **Q6_K** (3,6 contre 8,3 ms sur la tête liée de 191 Mo, 3,3e-7 ; ×5 sur un tenseur de 11 Mo). **Tête Q6_K branchée** dans le moteur : `DRAVE_GPU=1 DRAVE_GPU_TETE=1` → 7,58 → **3,60 ms/jeton**, perplexité identique (13,6877). Reste le cache d'experts chauds en VRAM : la mesure d'activation (`rapport-localite-activation.md`) dit qu'un préchargement statique ne paie pas sur SiLU |
+| 8 | suite du plan 1 M | **fait pour E4/E5** | **E4 KV déporté en VRAM** : noyaux `attn_kv_*` (tuiles de 32 clés, softmax en ligne, recombinaison + puits), miroir du cache **paginé** (capacité doublée à la demande : 0,05 Go de VRAM à ctx 1 M après 512 jetons) et `DRAVE_GPU_KV=1` — à 1 M de clés l'attention passe de 968 ms à **13,2 ms** par couche (int4, ×73) et, dans le moteur à 4 096 de contexte, de **22,2 à 3,3 ms/jeton** (−38 % de bout en bout) à perplexité identique (12,2177 → 12,2175). **E5 attention creuse** : mesurée (`--attn-topk 256` : 234,9 contre 298,6). MLA et vision restent non testables (aucun modèle MLA ici ; le projecteur `mmproj` est là mais rien ne lit les patchs) |
 
 ### Mesures du tour « huit chantiers » (toutes commitées)
 
@@ -163,10 +163,10 @@ comparé à `llama-tokenize` sur 4 424 jetons (0 écart).
 | KV int8, échelles par bloc | +1,5 % (512 jetons) et +3,4 % (4 591) — était +7,1 % et +5,2 % |
 | KV int4, échelles par bloc | +219 % (512) et +287 % (4 591) — était +384 % et +450 % |
 | KV à 8 192 jetons (longueur de la référence llama.cpp) | f32 **14,2339** · int8 **14,6667 (+3,0 %)** contre +0,8 % chez llama.cpp · int4 **66,0369 (+364 %)** contre +494 % chez llama.cpp |
-| porte gpt-oss selon l'ouverture du pilote | sans `QT_GPU` : **15,1757** · avec `QT_GPU=1` : **15,1667** — l'écart vient du déport automatique des projections Q8_0 (> 8 Mo), pas d'une régression |
+| porte gpt-oss selon l'ouverture du pilote | sans `DRAVE_GPU` : **15,1757** · avec `DRAVE_GPU=1` : **15,1667** — l'écart vient du déport automatique des projections Q8_0 (> 8 Mo), pas d'une régression |
 | attention creuse (gpt-oss, ctx 2 048) | sans restriction 298,56 · **top-256 : 234,88** · fenêtre 512 : 3 269,34 |
 | KV déporté en VRAM, 1 M de clés (une couche, `--banc-kv`) | f32 165,8 → **13,6 ms** (×12) · int8 510,6 → 15,0 (×34) · int4 968,5 → **13,2 ms (×73)**, écarts 1e-5 à 1e-4 |
-| KV déporté dans le moteur (`QT_GPU_KV=1`, ctx 4 096) | attention **22,16 → 3,29 ms/jeton** (÷6,7) · balayage 219,4 → **136,2 s** · perplexité 12,2177 → 12,2175 |
+| KV déporté dans le moteur (`DRAVE_GPU_KV=1`, ctx 4 096) | attention **22,16 → 3,29 ms/jeton** (÷6,7) · balayage 219,4 → **136,2 s** · perplexité 12,2177 → 12,2175 |
 | attention déportée dans le PRÉREMPLISSAGE par lots (ctx 4 096, lot 512) | **261,6 → 93,7 s (×2,8)**, perplexité **identique** (12,2175) |
 | dépaquetage vectorisé du noyau (1 M de clés) | f32 13,6 → **7,0 ms** (308 Go/s) · int8 15,0 → **6,5** · int4 13,2 → **7,4 ms** |
 | cache d'experts MXFP4 en VRAM (gpt-oss, 32 jetons) | 5,12 → **5,43 jetons/s (+6 %)**, 53,5 % de succès — verdict : ne pas activer par défaut |
@@ -221,23 +221,23 @@ qui reste est classé par rentabilité mesurée.
 
 | variable | ce qu'elle fait | le piège |
 |---|---|---|
-| `QT_GPU=1` | ouvre le pilote CUDA (`gpu::instance`) | **c'est elle qui commande tout** ; sans elle, les autres ne font RIEN et rien ne le dit |
-| `QT_GPU_TETE=1` | déporte la tête (Q8_0 ou Q6_K) | inutile sans `QT_GPU` |
-| `QT_GPU_KV=1` | tient le cache KV en VRAM et y calcule l'attention | inutile sans `QT_GPU` ; au-dessous de ~4 000 clés le CPU gagne (lancements + recopies) |
-| `QT_GPU_EXPERTS=1` | cache LRU des experts MXFP4 en VRAM | inutile sans `QT_GPU` ; budget par `QT_GPU_EXPERTS_GO` (défaut 8) |
-| `QT_KV_BITS=8` ou `4` | quantifie le cache KV (défaut f32) | le 4 bits coûte +364 % de perplexité à 8 192 |
-| `QT_KV_F16=1` | arrondit clés/valeurs en f16 avant quantification | mesuré : aucun effet (hypothèse réfutée) |
-| `QT_YARN=1` / `QT_YARN_NON=1` / `QT_YARN_MSCALE=0` | force / interdit / règle la rotation | le défaut ne bascule qu'à 1,25 × la longueur déclarée |
-| `QT_BANC_KV_GPU_SEUL=1` | saute la référence CPU du banc de KV | à 1 M elle coûte 3 à 16 minutes |
+| `DRAVE_GPU=1` | ouvre le pilote CUDA (`gpu::instance`) | **c'est elle qui commande tout** ; sans elle, les autres ne font RIEN et rien ne le dit |
+| `DRAVE_GPU_TETE=1` | déporte la tête (Q8_0 ou Q6_K) | inutile sans `DRAVE_GPU` |
+| `DRAVE_GPU_KV=1` | tient le cache KV en VRAM et y calcule l'attention | inutile sans `DRAVE_GPU` ; au-dessous de ~4 000 clés le CPU gagne (lancements + recopies) |
+| `DRAVE_GPU_EXPERTS=1` | cache LRU des experts MXFP4 en VRAM | inutile sans `DRAVE_GPU` ; budget par `DRAVE_GPU_EXPERTS_GO` (défaut 8) |
+| `DRAVE_KV_BITS=8` ou `4` | quantifie le cache KV (défaut f32) | le 4 bits coûte +364 % de perplexité à 8 192 |
+| `DRAVE_KV_F16=1` | arrondit clés/valeurs en f16 avant quantification | mesuré : aucun effet (hypothèse réfutée) |
+| `DRAVE_YARN=1` / `DRAVE_YARN_NON=1` / `DRAVE_YARN_MSCALE=0` | force / interdit / règle la rotation | le défaut ne bascule qu'à 1,25 × la longueur déclarée |
+| `DRAVE_BANC_KV_GPU_SEUL=1` | saute la référence CPU du banc de KV | à 1 M elle coûte 3 à 16 minutes |
 
-Une porte de non-régression se mesure **sans** `QT_GPU` : la variable déporte à
+Une porte de non-régression se mesure **sans** `DRAVE_GPU` : la variable déporte à
 elle seule les projections Q8_0 de plus de 8 Mo, ce qui change le chiffre de
 0,06 % (15,1757 → 15,1667 sur gpt-oss).
 
 ## 7. Carte du dépôt
 
 ```
-qtrinet-core/src/
+drave-core/src/
   engine.rs     pool de fils, barrière, accumulateurs, noyau dense int8
   model.rs      chargement, forward, attention, MoE, génération, YaRN, sinks
   list.rs       encodages (PushMat, DenseQ4/6/8), noyaux AVX2, sources empruntées
@@ -245,7 +245,7 @@ qtrinet-core/src/
   tokenizer.rs  BPE byte-level, motifs qwen2 et gpt-4o
   gpu.rs        API pilote CUDA (sans crate), noyaux PTX
   main.rs       modes : inférence, perplexité, plan, tokenize
-gpu/qtrinet_gpu.cu + .ptx    noyaux, compilés par clang
+gpu/drave_gpu.cu + .ptx    noyaux, compilés par clang
 tools/ref_logits.cpp         référence llama.cpp : mêmes identifiants, sans BOS
 tools/compare_logits.py      comparaison position par position (NLL, top-1, corrélation)
 tools/harmony_canonique.py   montage harmony canonique (analysis puis final)
@@ -267,17 +267,17 @@ Le journal s'archive à chaque commit (`tools/archive_sessions.py` +
 ```bash
 # 1. l'état est-il vert ? (Qwen ne doit pas bouger : les corrections de cette
 #    session ne touchent que les modèles à biais de sortie et à fenêtre par couche)
-cd qtrinet-core && cargo build --release && cargo test --release
-./target/release/qtrinet-core ../models/Qwen2.5-0.5B-Q8_0.gguf --ppl /tmp/ids_qwen.txt \
+cd drave-core && cargo build --release && cargo test --release
+./target/release/drave ../models/Qwen2.5-0.5B-Q8_0.gguf --ppl /tmp/ids_qwen.txt \
     --ctx 256 --abits 16 --threads 16 --limit 512 --dense   # attendu 19,3885
 
 # 2. si /tmp a été vidé, régénérer le corpus et les identifiants (§2)
 
 # 3. gpt-oss : le chiffre de contrôle de cette session (≈ 45 s de chargement,
-#    ~100 s pour 510 jetons). SANS `QT_GPU` : la variable ouvre le pilote, et le
+#    ~100 s pour 510 jetons). SANS `DRAVE_GPU` : la variable ouvre le pilote, et le
 #    moteur déporte alors tout seul les projections Q8_0 de plus de 8 Mo — le
 #    chiffre devient 15,1667 (même calcul, ordre de sommation du noyau GPU).
-./target/release/qtrinet-core /home/stephane/FastNVMe/models/gpt-oss-120b-MXFP4.gguf \
+./target/release/drave /home/stephane/FastNVMe/models/gpt-oss-120b-MXFP4.gguf \
     --ppl /tmp/ids_oss.txt --ctx 256 --dense --threads 16 --limit 512   # attendu 15,1757
 
 # 4. puis §6.b : la rotation ne bascule plus qu'au-delà de 1,25 × la longueur

@@ -1,5 +1,5 @@
 """
-Qtrinet — élagage, densité et coût des encodages « par événement ».
+Drave — élagage, densité et coût des encodages « par événement ».
 
 Question posée : un modèle quantifié peut-il être élagué assez pour qu'une
 approche par événement (on ne traite que les non-nuls) soit rentable ?

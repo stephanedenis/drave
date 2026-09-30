@@ -1,8 +1,12 @@
 [package]
-name = "qtrinet-core"
+name = "drave-core"
 version = "0.1.0"
 edition = "2021"
-description = "Moteur d'exécution par listes d'événements pour modèles quantifiés (Qtrinet)"
+description = "Drave — moteur d'exécution par listes d'activation (stream of logs) pour modèles quantifiés"
+
+[[bin]]
+name = "drave"
+path = "src/main.rs"
 
 [dependencies]
 # aucune : std seul, pour rester sans dépendance réseau

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Qtrinet — encodage de structure : « deux listes de destinations » élimine la valeur.
+Drave — encodage de structure : « deux listes de destinations » élimine la valeur.
 
 Test de l'idée : au lieu de stocker (position, valeur), on stocke **deux listes
 triées de destinations** (les « + » et les « − »). L'appartenance à une liste
@@ -176,7 +176,7 @@ def main():
         print(f"  {b:6.2f} b/poids  {acc*100:6.2f}%  {toks:6.1f} tok/s (7B)   {lab}")
 
     # ------------------------------- rapport ------------------------------ #
-    L = ["# Qtrinet — encodage de structure : éliminer la valeur\n",
+    L = ["# Drave — encodage de structure : éliminer la valeur\n",
          "Idée testée : remplacer `(position, valeur)` par **deux listes triées de",
          "destinations** (les « + » et les « − »). Le signe est porté par l'appartenance",
          "à la liste : **plus aucun bit de valeur n'est stocké**, il ne reste que de la",
@@ -229,7 +229,7 @@ def main():
           "\n> ⚠️ Les coûts ci-dessus sont mesurés exactement (positions aléatoires). Les",
           "> *densités atteignables* viennent du MLP jouet : sur un LLM réel, 5-12 % de",
           "> densité demande un réentraînement lourd, à valider sur un vrai modèle.\n",
-          "\n---\n*Généré par `run_encoding.py` — Qtrinet.*\n"]
+          "\n---\n*Généré par `run_encoding.py` — Drave.*\n"]
 
     args.out.parent.mkdir(parents=True, exist_ok=True)
     args.out.write_text("\n".join(L), encoding="utf-8")

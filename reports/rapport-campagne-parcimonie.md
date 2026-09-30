@@ -84,8 +84,8 @@ surabondante** (les poids d'attention) se coupe gratuitement.
 ## 6. Reproductible
 
 ```bash
-cd qtrinet-core && cargo build --release
+cd drave-core && cargo build --release
 # configuration gagnante
-./target/release/qtrinet-core ../models/Qwen2.5-0.5B-Q8_0.gguf --ppl /tmp/wt2_b.txt \
+./target/release/drave ../models/Qwen2.5-0.5B-Q8_0.gguf --ppl /tmp/wt2_b.txt \
     --ctx 256 --abits 16 --threads 16 --attn-topk 32 --topk-gate 850
 ```

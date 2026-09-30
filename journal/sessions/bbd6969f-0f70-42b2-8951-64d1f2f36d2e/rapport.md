@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 41.8 h |
-| Tours | 38 |
-| Messages | 1345 |
-| Appels d'outils | 1276 |
-| Fichiers touchés | 40 |
-| Commandes | 1004 |
+| Durée | 42.0 h |
+| Tours | 39 |
+| Messages | 1355 |
+| Appels d'outils | 1284 |
+| Fichiers touchés | 41 |
+| Commandes | 1011 |
 | Sous-agents | 1 |
-| Commits | 74 |
+| Commits | 75 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -103,6 +103,8 @@
 **Tour 37** — vision d'abord, puis roadmap
 
 **Tour 38** — Au delà des défis techniques, il nou faut un vrai document de vision de ce projet. Je serais porté à renommer le projet "Drave" dans le sens Stream of logs, et ça sonne aussi bien en français car la drave fait partie du patrimoine québecois. Ces flux de listes d'activation sont le coeur de la vision et on doit en explorer toutes les implications et bénéfices sur tous les axes. Cette approche perme … [164 caractères tronqués]
+
+**Tour 39** — 3 tout tout de suite, préserve l'historique dans un document et là ou ça permet d'être cohérent, mais tout le reste prend la teinte de la vision.
 
 ## 2. Déroulé, étape par étape
 
@@ -1720,7 +1722,44 @@ Je passe maintenant à la feuille de route : corriger les items périmés de `RE
 
 **Synthèse produite :**
 
-⏵ J'écris le document de vision : *Drave*, le flux des listes d'activation
+⏵ Vision écrite ; je passe à la feuille de route comme demandé
+
+\## 1. Vision — `docs/vision.md`
+
+Le document existe et il est **adossé aux mesures du dépôt** (j'ai vérifié que chaque chiffre cité est bien dans un rapport : 17,9 %, 33,1 %, 0,08 %, 10 % de densité, 7,79 G événements/s, 6,2 ms). Il est structuré pour servir, pas pour décorer :
+
+- **§1 Le cœur** : des listes valuées groupées **par source**, poussées vers leurs destinations (AER) — le coût devient proportionnel à l'**activité**, pas à la taille du modèle. Avec la nuance qui rend le document crédible : le croisement push/pull est **mesuré à ~10 % de densité**, donc le moteur garde les deux chemins et choisit par la mesure ;
+- **§2 Axe 1 — voir et régler neurone par neurone** : les outils existent (`--profil-neurones`, `--profil-experts`, `[config]`, `--ppl-profil`, journal) et ont servi ; ce que la vision ajoute est un **format de trace stable** et le **diff par couche** — passer de « la perplexité a bougé de 0,01 » à « la couche 23 a changé de régime au jeton 4 096 » ;
+- **§3 Axe 2 — répartir sur les composants** : le plus avancé, tout mesuré (KV en VRAM sur deux cartes, attention ÷6,7, préremplissage ×2,8, tête Q6_K ×2,1, experts +6 % → verdict honnête) ; la règle qui en sort : *on place un opérateur là où son flux coûte le moins cher* ;
+- **§4 Axe 3 — répartir sur plusieurs machines** : **rien n'existe**, et je l'écris comme une hypothèse de travail, avec les cinq choses à définir (contrat d'échange, granularité, placement, ce qui ne se parallélise pas — le décodage est séquentiel, c'est le préremplissage qu'il faut distribuer d'abord) et les mesures à faire ;
+- **§5 Axe 4 — rejouer/comparer** : les portes de non-régression et les références indépendantes (MLA 5,2e-7, vision 5,4e-7/1,7e-6) sont déjà cette idée en petit ;
+- **§6 Axe 5 — formats, matériels, énergie** : trois matériels (SIMD, PTX, FPGA), et l'argument énergétique — *on ne lit que ce qui parle* ;
+- **§7 Ce que la vision n'est pas** : pas « le sparse gagne toujours », pas « distribuer est gratuit », pas une réécriture ;
+- **§9 Le nom** : ce que « Drave » dit (ça coule, ça se répartit, ça se surveille) et ce que le renommage implique.
+
+Le **README** porte maintenant le nom, avec la mention de l'ancien et le renvoi à la vision. Commit `15c4c8c`.
+
+\## 2. Feuille de route — maintenant
+
+Je fais le rafraîchissement de `REPRISE.md` §6 dans la foulée : ses items 1 (noyau de tête) et 2 (second GPU) sont annoncés « à faire » alors qu'ils son
+… [747 caractères tronqués]
+
+### Tour 39 — 3 tout tout de suite, préserve l'historique dans un document et là ou ça permet d'être cohérent, mais tout le reste pren … [25 caractères tronqués]
+
+*8 appels d'outils.* Actions notables :
+
+- bash — Recon for the rename
+- bash — Perform the full rename
+- bash — Set binary name, fix paths, add legacy warning
+- bash — Get date and env var list
+- write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/histoire.md`
+- bash — Update vision, test, verify gate and legacy warning
+- bash — Fix vision section and run gpt-oss gate
+- bash — Commit the full rename
+
+**Synthèse produite :**
+
+⏵ Renommage complet : je recense d'abord tout ce qui porte l'ancien nom
 
 ## 3. Travail accompli
 
@@ -1768,6 +1807,7 @@ Je passe maintenant à la feuille de route : corriger les items périmés de `RE
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/mla_synthetique.py` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/vision_mtmd.py` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/vision.md` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/histoire.md` | 1 | 0 |
 
 ### Sous-agents lancés
 
@@ -1815,7 +1855,7 @@ Je passe maintenant à la feuille de route : corriger les items périmés de `RE
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 964 autres
+- … et 971 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2037,4 +2077,5 @@ Je passe maintenant à la feuille de route : corriger les items périmés de `RE
 - REPRISE : l'item 3 (rotation) reflète la mesure à 16 k et le seuil porté à 4 ×" && git log --oneline -1
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p='docs/plan-mla-vision.md'; s=open(p).read() add = """ ### La permutation colonne-majeur
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p='README.md'; s=open(p).read() old = """# Qtrinet  Inférence de LLM en **ternaire / mult
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -F - <<'EOF' && git log --oneline -1 && git status --short | head -3 Drave : r
 

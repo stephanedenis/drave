@@ -12,7 +12,7 @@ raison mathématique vérifiée sur les données.**
 
 ## 1. Le capteur, et ce qu'il coûte
 
-`qtrinet-core --hebbian L --hebb-q Q --hebb-out F` branche un accumulateur sur
+`drave-core --hebbian L --hebb-q Q --hebb-out F` branche un accumulateur sur
 une projection : `H[o][i] += y[o] · x[i]`, **uniquement pour les sorties qui
 « déchargent »** (|y| au-dessus du quantile Q). C'est le principe neuromorphique :
 seuls les neurones qui tirent apprennent. Il ne modifie jamais le calcul.
@@ -117,9 +117,9 @@ contourne pas par l'architecture.
 ## 6. Reproductible
 
 ```bash
-cd qtrinet-core && cargo build --release
+cd drave-core && cargo build --release
 # trace hebbienne de la couche 12, 10 % des sorties, sur 1025 tokens réels
-./target/release/qtrinet-core ../models/Qwen2.5-0.5B-Q8_0.gguf --infer \
+./target/release/drave ../models/Qwen2.5-0.5B-Q8_0.gguf --infer \
     --ids-file /tmp/wt2_1024.txt --n 1 --ctx 2048 --threads 16 --abits 16 \
     --hebbian 12 --hebb-q 0.1 --hebb-out /tmp/hebb12.bin
 ```

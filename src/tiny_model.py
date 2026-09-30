@@ -1,5 +1,5 @@
 """
-Qtrinet — modèle minimal entraînable en numpy pur (aucune dépendance ML).
+Drave — modèle minimal entraînable en numpy pur (aucune dépendance ML).
 
 But : disposer d'un modèle *réellement appris* (pas aléatoire) pour tester si la
 quantification ternaire / multi-bits préserve sa fonction.

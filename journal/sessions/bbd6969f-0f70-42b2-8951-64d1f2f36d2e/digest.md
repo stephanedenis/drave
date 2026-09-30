@@ -21376,3 +21376,149 @@ reports/rapport-localite-activation.md
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='README.md'; s=open(p).read()\nold = \"\"\"# Qtrinet\n\nInférence de LLM en **ternaire / multi-bits** sur un cluster de cartes **Stratix V**\n(Microsoft Storey Peak) — 100 % logique, sans DSP.\n\nLe cahier des cha … [2227 caractères tronqués]`
+
+  ```
+README : identité Drave
+15c4c8c Drave : document de vision, et le nom dans le README
+  ```
+
+### 🤖 Assistant
+
+⏵ Vision écrite ; je passe à la feuille de route comme demandé
+
+## 1. Vision — `docs/vision.md`
+
+Le document existe et il est **adossé aux mesures du dépôt** (j'ai vérifié que chaque chiffre cité est bien dans un rapport : 17,9 %, 33,1 %, 0,08 %, 10 % de densité, 7,79 G événements/s, 6,2 ms). Il est structuré pour servir, pas pour décorer :
+
+- **§1 Le cœur** : des listes valuées groupées **par source**, poussées vers leurs destinations (AER) — le coût devient proportionnel à l'**activité**, pas à la taille du modèle. Avec la nuance qui rend le document crédible : le croisement push/pull est **mesuré à ~10 % de densité**, donc le moteur garde les deux chemins et choisit par la mesure ;
+- **§2 Axe 1 — voir et régler neurone par neurone** : les outils existent (`--profil-neurones`, `--profil-experts`, `[config]`, `--ppl-profil`, journal) et ont servi ; ce que la vision ajoute est un **format de trace stable** et le **diff par couche** — passer de « la perplexité a bougé de 0,01 » à « la couche 23 a changé de régime au jeton 4 096 » ;
+- **§3 Axe 2 — répartir sur les composants** : le plus avancé, tout mesuré (KV en VRAM sur deux cartes, attention ÷6,7, préremplissage ×2,8, tête Q6_K ×2,1, experts +6 % → verdict honnête) ; la règle qui en sort : *on place un opérateur là où son flux coûte le moins cher* ;
+- **§4 Axe 3 — répartir sur plusieurs machines** : **rien n'existe**, et je l'écris comme une hypothèse de travail, avec les cinq choses à définir (contrat d'échange, granularité, placement, ce qui ne se parallélise pas — le décodage est séquentiel, c'est le préremplissage qu'il faut distribuer d'abord) et les mesures à faire ;
+- **§5 Axe 4 — rejouer/comparer** : les portes de non-régression et les références indépendantes (MLA 5,2e-7, vision 5,4e-7/1,7e-6) sont déjà cette idée en petit ;
+- **§6 Axe 5 — formats, matériels, énergie** : trois matériels (SIMD, PTX, FPGA), et l'argument énergétique — *on ne lit que ce qui parle* ;
+- **§7 Ce que la vision n'est pas** : pas « le sparse gagne toujours », pas « distribuer est gratuit », pas une réécriture ;
+- **§9 Le nom** : ce que « Drave » dit (ça coule, ça se répartit, ça se surveille) et ce que le renommage implique.
+
+Le **README** porte maintenant le nom, avec la mention de l'ancien et le renvoi à la vision. Commit `15c4c8c`.
+
+## 2. Feuille de route — maintenant
+
+Je fais le rafraîchissement de `REPRISE.md` §6 dans la foulée : ses items 1 (noyau de tête) et 2 (second GPU) sont annoncés « à faire » alors qu'ils sont livrés, et l'axe multi-machines de la vision mérite d'y figurer comme chantier à part entière.
+
+## 3. Une décision qui vous revient
+
+Le renommage **mécanique** (~3 000 occurrences, 86 fichiers) touche le crate, le binaire et les variables `QT_*`. Trois options :
+
+1. **identité seulement** (ce qui est fait) : docs et README disent Drave, le code reste `qtrinet-core` ;
+2. **commit de renommage dédié** : crate `drave-core`, binaire `drave`, variables `DRAVE_*` **avec alias `QT_*` conservés** — le journal archivé n'est pas réécrit ;
+3. **tout, tout de suite**, y compris les rapports passés (je le déconseille : on efface un historique daté).
+
+Dites-moi laquelle — je pars sur la 2 par défaut, après le rafraîchissement de la feuille de route.
+
+
+## Tour 39
+
+### 👤 Utilisateur
+
+3 tout tout de suite, préserve l'historique dans un document et là ou ça permet d'être cohérent, mais tout le reste prend la teinte de la vision.
+
+### 🤖 Assistant
+
+⏵ Renommage complet : je recense d'abord tout ce qui porte l'ancien nom
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat qtrinet-core/Cargo.toml && ls .git/hooks/ | grep -v sample | head -5; grep -rl \"qtrinet\" --include=\"*.rs\" --include=\"*.toml\" --include=\"*.sh\" --include=\"*.py\" --include=\"*.md\" --include=\"*.cu\" --include=\"*.h\" . 2> … [277 caractères tronqués]`
+
+  ```
+[package]
+name = "qtrinet-core"
+version = "0.1.0"
+edition = "2021"
+description = "Moteur d'exécution par listes d'événements pour modèles quantifiés (Qtrinet)"
+
+[dependencies]
+# aucune : std seul, pour rester sans dépendance réseau
+
+[profile.release]
+opt-level = 3
+lto = true
+codegen-units = 1
+panic = "abort"
+pre-commit
+26
+     13 ./reports
+      6 ./qtrinet-core/target/release/deps
+      5 ./tools
+      3 ./qtrinet-core
+      3 .
+      2 ./qtrinet-core/target/release/.fingerprint/qtrinet-core-a3e8e1872708e2f6
+      2 ./qtrinet-core/target/release/.fingerprint/qtrinet-core-87504f33cf9039c3
+      2 ./qtrinet-core/target/release
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat .git/hooks/pre-commit | head -12 && python3 - <<'PY'\nimport os, subprocess\nsubprocess.run(['mv', 'qtrinet-core', 'drave-core'], check=True)\nfor ext in ('cu', 'ptx'):\n    a = f'drave-core/gpu/qtrinet_gpu.{ext}'\n    if os.path … [1214 caractères tronqués]`
+
+  ```
+#!/bin/sh
+# Archive les traces de session DSH avant chaque commit : le journal doit
+# accompagner le code, pas le suivre.
+cd "$(git rev-parse --show-toplevel)" || exit 0
+python3 tools/archive_sessions.py --quiet >/dev/null 2>&1 || true
+git add journal/sessions 2>/dev/null || true
+exit 0
+renommé drave-core/gpu/qtrinet_gpu.cu
+renommé drave-core/gpu/qtrinet_gpu.ptx
+fichiers modifiés : 61
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport os, re\n# 1) le binaire s'appelle « drave »\np = 'drave-core/Cargo.toml'; s = open(p).read()\ns = s.replace('description = \"Moteur d\\'exécution par listes d\\'événements pour modèles quantifiés (Drave)\"',\ … [1991 caractères tronqués]`
+
+  ```
+chemins corrigés dans 16 fichiers
+avertissement QT_* posé
+compiler.sh
+cuda_stub.h
+drave_gpu.cu
+drave_gpu.ptx
+warning: `drave-core` (bin "drave") generated 15 warnings (run `cargo fix --bin "drave" -p drave-core` to apply 7 suggestions)
+    Finished `release` profile [optimized] target(s) in 19.92s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date +%Y-%m-%d && grep -rhoE '\"(DRAVE_[A-Z0-9_]+)\"' drave-core/src/*.rs | sort -u | tr '\\n' ' '", "description": "Get date and env var list"}`
+
+  ```
+2026-09-30
+"DRAVE_BANC_KV_DEBUG" "DRAVE_BANC_KV_GPU_SEUL" "DRAVE_BANC_KV_GRAD" "DRAVE_BANC_KV_K0" "DRAVE_BANC_KV_KUNIT" "DRAVE_BANC_KV_UNIT" "DRAVE_BANC_KV_V1" "DRAVE_GPU" "DRAVE_GPU_EXPERTS" "DRAVE_GPU_EXPERTS_GO" "DRAVE_GPU_KV" "DRAVE_GPU_TETE" "DRAVE_HARMONY_TRACE" "DRAVE_KV_BITS" "DRAVE_KV_F16" "DRAVE_Q8_BLOCS" "DRAVE_SANS_EMPRUNT" "DRAVE_VISION_TEXTE" "DRAVE_YARN" "DRAVE_YARN_MSCALE" "DRAVE_YARN_NON" "DRAVE_YARN_RAMPE"
+  ```
+
+- **write** `{"content": "# Histoire du projet, et le renommage\n\nCe document est là pour une raison précise : **le 30 septembre 2026, le projet a\nchangé de nom, partout, d'un coup.** Renommer efface des traces ; ce fichier est\nla trace qu'on ne voulait pas perdre.\n\n## 1. Le projet a eu trois âges\n\n| âge  … [4125 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/histoire.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='docs/vision.md'; s=open(p).read()\nold = \"\"\"Ce que le changement de nom implique, concrètement : ~3 000 occurrences dans\n86 fichiers, dont le journal de sessions — qui est **archivé et ne doit pas être\nréécr … [1876 caractères tronqués]`
+
+  ```
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.09s
+
+perplexité 19.3885 sur 510 tokens
+[attention] QT_GPU est l'ancien nom d'une variable d'environnement : elles s'appellent maintenant DRAVE_* (voir docs/histoire.md). Rien n'a été appliqué.
+290 tenseurs dans models/Qwen2.5-0.5B-Q8_0.gguf
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 26, in <module>
+AssertionError
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='docs/vision.md'; s=open(p).read()\ni = s.index(\"## 9. Le nom\")\ns = s[:i] + \"\"\"## 9. Le nom\n\n**Drave** : le flux qu'on conduit, du bassin de flottage jusqu'à la scierie. Le\nmot porte les trois propriétés  … [1348 caractères tronqués]`
+
+  ```
+vision §9 remplacé
+perplexité 15.1757 sur 510 tokens
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -F - <<'EOF' && git log --oneline -1 && git status --short | head -3\nDrave : renommage complet (crate, binaire, variables, documents)\n\nLe projet s'appelait Qtrinet du nom de son origine — inférence tern … [1202 caractères tronqués]`

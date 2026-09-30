@@ -128,11 +128,11 @@ une part du gain — c'est ce qui explique qu'on ne récupère pas les 15 %.
 ## 9. Reproductible
 
 ```bash
-cd qtrinet-core && cargo build --release
+cd drave-core && cargo build --release
 # frontière
-./target/release/qtrinet-core ../models/Qwen2.5-0.5B-Q8_0.gguf --ppl /tmp/wt2_a.txt \
+./target/release/drave ../models/Qwen2.5-0.5B-Q8_0.gguf --ppl /tmp/wt2_a.txt \
     --ctx 256 --abits 16 --threads 16 --act-topk 850
 # point de fonctionnement retenu
-./target/release/qtrinet-core ../models/Qwen2.5-0.5B-Q8_0.gguf --ppl /tmp/wt2_a.txt \
+./target/release/drave ../models/Qwen2.5-0.5B-Q8_0.gguf --ppl /tmp/wt2_a.txt \
     --ctx 256 --abits 16 --threads 16 --topk-gate 850 --topk-up 850 --topk-down 850
 ```

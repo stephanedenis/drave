@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Qtrinet — un vrai modèle expose-t-il déjà ses grappes ?
+Drave — un vrai modèle expose-t-il déjà ses grappes ?
 
 Test : on partitionne la dimension cachée en G grappes, puis on mesure la
 **spécialisation afférente** de chaque neurone :
@@ -205,7 +205,7 @@ def main():
               f"(max {off.max():.3f}, min {off.min():.3f})")
 
     # ------------------------------------------------------------- rapport
-    L = [f"# Qtrinet — le modèle réel expose-t-il ses grappes ?\n",
+    L = [f"# Drave — le modèle réel expose-t-il ses grappes ?\n",
          f"Modèle analysé : **{arch}**, {n_layer} couches, hidden {hidden}, "
          f"intermédiaire {inter}, {n_head} têtes / {n_kv} KV (GQA).\n",
          "## 1. Parcimonie intrinsèque\n",
@@ -233,7 +233,7 @@ def main():
           f"- énergie par tête : {en.min()/en.sum()*100:.1f} % à {en.max()/en.sum()*100:.1f} % "
           f"(uniforme = {100/n_head:.1f} %)" if hd else "",
           f"- similarité entre têtes : {off.mean():.3f} en moyenne\n" if hd else "",
-          "\n---\n*Généré par `run_real_clusters.py` — Qtrinet.*\n"]
+          "\n---\n*Généré par `run_real_clusters.py` — Drave.*\n"]
 
     args.out.parent.mkdir(parents=True, exist_ok=True)
     args.out.write_text("\n".join(x for x in L if x != ""), encoding="utf-8")

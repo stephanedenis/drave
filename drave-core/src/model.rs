@@ -276,13 +276,13 @@ fn prune_structured(w: &mut [f32], n_out: usize, n_in: usize, keep: f32) {
     }
 }
 
-/// Construit une matrice int8 : **une échelle par bloc de 32** (`QT_Q8_BLOCS=1`,
+/// Construit une matrice int8 : **une échelle par bloc de 32** (`DRAVE_Q8_BLOCS=1`,
 /// la disposition de Q8_0) ou une par ligne (défaut historique).
 ///
 /// L'hypothèse testée : si le 6 bits bat notre int8, c'est peut-être grâce à ses
 /// échelles par bloc de 32 et non grâce à ses deux bits supplémentaires.
 fn construire_q8(w: &[f32], n_out: usize, n_in: usize) -> DenseQ8 {
-    if std::env::var("QT_Q8_BLOCS").is_ok() && n_in % 32 == 0 {
+    if std::env::var("DRAVE_Q8_BLOCS").is_ok() && n_in % 32 == 0 {
         DenseQ8::build_blocs(w, n_out, n_in)
     } else {
         DenseQ8::build(w, n_out, n_in)
@@ -340,16 +340,16 @@ impl Proj {
             // Source déjà en Q8_0 et aucun élagage : on EMPRUNTE les blocs au
             // lieu de les reconstruire depuis les f32 (copie == taille du
             // modèle, plus un transitoire f32 de quatre fois cette taille).
-            // `QT_SANS_EMPRUNT=1` force la reconstruction : c'est ce qui permet
+            // `DRAVE_SANS_EMPRUNT=1` force la reconstruction : c'est ce qui permet
             // de comparer nos deux schémas d'échelle à la référence empruntée.
-            let emprunt = keep >= 1.0 && std::env::var("QT_SANS_EMPRUNT").is_err();
+            let emprunt = keep >= 1.0 && std::env::var("DRAVE_SANS_EMPRUNT").is_err();
             match (emprunt, g.q8_blocks(name)) {
                 (true, Some((buf, nb))) =>
                     (None, Some(unsafe { DenseQ8::emprunter_q8(buf.as_ptr(), n_out, n_in, nb) }), None),
                 _ => (None, Some(construire_q8(&w, n_out, n_in)), None),
             }
         } else if auto {
-            let emprunt = keep >= 1.0 && std::env::var("QT_SANS_EMPRUNT").is_err();
+            let emprunt = keep >= 1.0 && std::env::var("DRAVE_SANS_EMPRUNT").is_err();
             let dense8 = match (emprunt, g.q8_blocks(name)) {
                 (true, Some((buf, nb))) =>
                     unsafe { DenseQ8::emprunter_q8(buf.as_ptr(), n_out, n_in, nb) },
@@ -586,7 +586,7 @@ pub struct Model {
     /// celui de Q8_0 ne multiplie PAS par l'échelle d'activation, celui de Q6_K
     /// l'applique.
     pub tete_gpu_q6k: bool,
-    /// Miroir VRAM du cache KV, une entrée par couche (`QT_GPU_KV=1`).
+    /// Miroir VRAM du cache KV, une entrée par couche (`DRAVE_GPU_KV=1`).
     /// Un miroir VRAM par couche, avec l'index du périphérique qui le porte :
     /// deux cartes se partagent les couches (16 Go chacune).
     pub kv_gpu: Option<Vec<(usize, crate::gpu::KvGpu)>>,
@@ -601,7 +601,7 @@ pub struct Model {
     pub mla: Option<Vec<Mla>>,
     /// Cache LATENT par couche : `c_kv` (kv_lora) et `k_rope` (qkr) par position.
     pub mla_cache: Vec<(Vec<f32>, Vec<f32>)>,
-    /// Cache VRAM des experts MoE (`QT_GPU_EXPERTS=1`).
+    /// Cache VRAM des experts MoE (`DRAVE_GPU_EXPERTS=1`).
     pub cache_experts: Option<CacheExperts>,
     /// Taille du lot de PRÉREMPLISSAGE en inférence (1 = jeton par jeton).
     /// Le préremplissage par lots n'était branché que sur la perplexité : une
@@ -715,7 +715,7 @@ pub struct KvCache {
     pub n_kv: usize,
     /// Longueur LOGIQUE (positions adressables par le moteur).
     pub ctx: usize,
-    /// `QT_KV_F16=1` : arrondir clés et valeurs en f16 avant quantification.
+    /// `DRAVE_KV_F16=1` : arrondir clés et valeurs en f16 avant quantification.
     pub f16_avant: bool,
     /// Positions réellement allouées, doublées à la demande. Réserver `ctx`
     /// positions d'un coup coûtait 25,77 Go à contexte 1 M pour 512 jetons
@@ -744,7 +744,7 @@ impl KvCache {
         }
         let nb = hd.div_ceil(32).max(1);
         let mut c = KvCache { bits, n_kv, ctx, cap: 0, hd,
-                              f16_avant: std::env::var("QT_KV_F16").is_ok(),
+                              f16_avant: std::env::var("DRAVE_KV_F16").is_ok(),
                               kf: Vec::new(), vf: Vec::new(),
                               kq: Vec::new(), vq: Vec::new(), sk: Vec::new(), sv: Vec::new(),
                               nb };
@@ -831,7 +831,7 @@ impl KvCache {
             return;
         }
         let niv = if self.bits == 4 { 7.0 } else { 127.0 };
-        // `QT_KV_F16=1` : clés et valeurs arrondies en demi-précision avant
+        // `DRAVE_KV_F16=1` : clés et valeurs arrondies en demi-précision avant
         // quantification (ce que fait llama.cpp pour son cache q8_0). L'arrondi
         // s'applique DANS les boucles : allouer des tampons ici fuirait à chaque
         // écriture (une par couche et par jeton).
@@ -998,9 +998,9 @@ impl Model {
             // ------------------------------------------------ rotation (RoPE)
             // Trois régimes, choisis **par mesure** :
             //
-            //   `QT_YARN=1`      YaRN à toutes les positions, comme HF, llama.cpp
+            //   `DRAVE_YARN=1`      YaRN à toutes les positions, comme HF, llama.cpp
             //                    et l'implémentation officielle d'OpenAI ;
-            //   `QT_YARN_NON=1`  jamais de YaRN (ce que fait `--sans-yarn`) ;
+            //   `DRAVE_YARN_NON=1`  jamais de YaRN (ce que fait `--sans-yarn`) ;
             //   défaut           **YaRN à retardement** : RoPE simple tant que le
             //                    contexte demandé tient dans la longueur initiale
             //                    du modèle (4 096 pour gpt-oss), YaRN au-delà.
@@ -1029,18 +1029,18 @@ impl Model {
                         // moitié NUISIBLE de YaRN : mesuré sur gpt-oss, la
                         // retirer fait passer la perplexité de 174,34 à 19,65 à
                         // 512 jetons, de 417,65 à 71,35 à 1 024, de 722,56 à
-                        // 192,63 à 2 048. Le mode FORCÉ (`QT_YARN=1`) garde donc
+                        // 192,63 à 2 048. Le mode FORCÉ (`DRAVE_YARN=1`) garde donc
                         // le comportement des implémentations de référence, et
                         // le mode retardé — celui du moteur — s'en passe.
-                        // `QT_YARN_MSCALE=0/1` tranche explicitement dans les
+                        // `DRAVE_YARN_MSCALE=0/1` tranche explicitement dans les
                         // deux cas.
-                        std::env::var("QT_YARN_MSCALE").map(|v| v != "0")
-                            .unwrap_or_else(|_| std::env::var("QT_YARN").is_ok()),
+                        std::env::var("DRAVE_YARN_MSCALE").map(|v| v != "0")
+                            .unwrap_or_else(|_| std::env::var("DRAVE_YARN").is_ok()),
                     )),
                     _ => None,
                 };
-                let toujours = std::env::var("QT_YARN").is_ok();
-                let jamais = std::env::var("QT_YARN_NON").is_ok();
+                let toujours = std::env::var("DRAVE_YARN").is_ok();
+                let jamais = std::env::var("DRAVE_YARN_NON").is_ok();
                 // Seuil de bascule : mesuré au protocole apparié (`--depuis`,
                 // mêmes 512 jetons notés) à 5 120 jetons — RoPE simple **9,6986**
                 // contre **1 269,1777** en interpolation seule — puis à 16 384 :
@@ -1110,7 +1110,7 @@ impl Model {
         let out_norm = g.dequant("output_norm.weight");
         // Précision du cache KV : 32 (f32, défaut), 8 ou 4. Le trafic de
         // relecture est LE mur du contexte long ; la trace le dit au chargement.
-        let kv_bits: u32 = std::env::var("QT_KV_BITS").ok()
+        let kv_bits: u32 = std::env::var("DRAVE_KV_BITS").ok()
             .and_then(|v| v.parse().ok()).unwrap_or(32);
         let caches_kv: Vec<KvCache> = (0..cfg.n_layer)
             .map(|_| KvCache::new(kv_bits, cfg.n_kv_head, ctx, cfg.head_dim)).collect();
@@ -1199,13 +1199,13 @@ impl Model {
         // — à écrire avant de réactiver.
         // Le noyau « une warp par ligne » rend le déport de la tête enfin
         // rentable : l'ancien lisait une ligne par fil (23 → 159 ms mesurés).
-        // Opt-in : `QT_GPU_TETE=1`.
+        // Opt-in : `DRAVE_GPU_TETE=1`.
         // Têtes liées de la famille Qwen en Q4_K_M : elles sont en **Q6_K**, pas
-        // en Q8_0 — sans cette reconnaissance, `QT_GPU_TETE=1` ne faisait rien
+        // en Q8_0 — sans cette reconnaissance, `DRAVE_GPU_TETE=1` ne faisait rien
         // sur ces modèles (le noyau existait mais aucune tête ne lui était
         // présentée).
         let mut tete_gpu_q6k = false;
-        let tete_gpu = if std::env::var("QT_GPU_TETE").is_ok()
+        let tete_gpu = if std::env::var("DRAVE_GPU_TETE").is_ok()
                           && crate::gpu::instance().is_some() {
             let machine = crate::gpu::instance();
             let charge = if let (Some(machine), Some((blocs, nb))) =
@@ -1227,7 +1227,7 @@ impl Model {
         } else { None };
         // Miroir VRAM du cache KV (étape E4) : opt-in, et seulement si TOUTES
         // les couches tiennent — sinon on le dit et on garde le CPU.
-        let kv_gpu = if std::env::var("QT_GPU_KV").is_ok() {
+        let kv_gpu = if std::env::var("DRAVE_GPU_KV").is_ok() {
             let machines = crate::gpu::machines();
             if machines.is_empty() { None } else {
                 // Les couches sont réparties EN TOURNANT sur les périphériques :
@@ -1314,10 +1314,10 @@ impl Model {
 
         // Cache VRAM des experts : opt-in, et seulement sur un modèle à experts
         // au format MXFP4 (les autres formats ont leurs propres noyaux).
-        let cache_experts = if std::env::var("QT_GPU_EXPERTS").is_ok()
+        let cache_experts = if std::env::var("DRAVE_GPU_EXPERTS").is_ok()
                                && crate::gpu::instance().is_some()
                                && cfg.n_expert > 0 {
-            let go: f64 = std::env::var("QT_GPU_EXPERTS_GO").ok()
+            let go: f64 = std::env::var("DRAVE_GPU_EXPERTS_GO").ok()
                 .and_then(|v| v.parse().ok()).unwrap_or(8.0);
             let budget = (go * 1e9) as usize;
             println!("[gpu] cache d'experts : budget {:.1} Go de VRAM (LRU), éviction par (couche, expert)",
@@ -1855,8 +1855,8 @@ impl Model {
                 // (basses dimensions) et interpolation (hautes). Selon les
                 // implémentations, le facteur d'extrapolation vaut 1 (rampe
                 // active) ou 0 (interpolation PURE) — les deux se rencontrent.
-                // QT_YARN_RAMPE=0 force l'interpolation pure.
-                let rampe = if std::env::var("QT_YARN_RAMPE").map_or(false, |v| v == "0") {
+                // DRAVE_YARN_RAMPE=0 force l'interpolation pure.
+                let rampe = if std::env::var("DRAVE_YARN_RAMPE").map_or(false, |v| v == "0") {
                     0.0
                 } else {
                     let y = (i as f32 - corr0) / (corr1 - corr0).max(0.001);
