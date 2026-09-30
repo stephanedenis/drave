@@ -29515,3 +29515,294 @@ perplexité 19.3885 sur 510 tokens
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='REPRISE.md'; s=open(p).read()\nv = \"\"\"### Hygiène et garde-fous ajoutés depuis (13h)\"\"\"\nn = \"\"\"### La frontière du cache KV, mesurée en entier\n\n| réglage | octets/élément | % du f32 | écart |\n|---|-- … [1484 caractères tronqués]`
+
+  ```
+REPRISE : frontière KV + chronos du lot
+6c1aecf REPRISE : la frontière du cache KV et les deux gains du mode lot
+ M journal/README.md
+14:09:55
+  ```
+
+- **get_goal** `{}`
+
+  ```
+{"goal":{"id":"goal-5fbc381c-7713-4142-82a7-982863ecc87a","revision":1,"objective":"Travailler en autonomie maximale et en couloirs parallèles jusqu'à 15h00 sur Drave : (A) campagne de mesure des clés du cache KV et de leur quantificateur, (B) préremplissage par lots sur le fil (phase 3.4, bloqueur Colab), (C) analyses déléguées et audit des drapeaux ignorés, (D) noyau GPU si la machine se libère pour les chronos. Chaque affirmation mesurée, chaque chantier commité, dépôt vert et portes de non-régression (Qwen 19,3885 · gpt-oss 15,1757) intactes à tout moment.","phase":"active","roundsStarted":0,"maxGoalRounds":14},"activation":"armed"}
+  ```
+
+- **update_goal** `{"goal_id": "goal-5fbc381c-7713-4142-82a7-982863ecc87a", "revision": 1, "action": "complete"}`
+
+> **Objectif** (complete) : Travailler en autonomie maximale et en couloirs parallèles jusqu'à 15h00 sur Drave : (A) campagne de mesure des clés du cache KV et de leur quantificateur, (B) préremplissage par lots sur le fil (phase 3.4, bloqueur Colab), (C) analyses déléguées et audit des drapeaux ignorés, (D) noyau GPU si la machine se libère pour les chronos. Chaque affirmation mesurée, chaque chantier commité, dépôt vert et portes de non-régression (Qwen 19,3885 · gpt-oss 15,1757) intactes à tout moment.
+
+
+  ```
+{"goal":{"id":"goal-5fbc381c-7713-4142-82a7-982863ecc87a","revision":2,"objective":"Travailler en autonomie maximale et en couloirs parallèles jusqu'à 15h00 sur Drave : (A) campagne de mesure des clés du cache KV et de leur quantificateur, (B) préremplissage par lots sur le fil (phase 3.4, bloqueur Colab), (C) analyses déléguées et audit des drapeaux ignorés, (D) noyau GPU si la machine se libère pour les chronos. Chaque affirmation mesurée, chaque chantier commité, dépôt vert et portes de non-régression (Qwen 19,3885 · gpt-oss 15,1757) intactes à tout moment.","phase":"complete","roundsStarted":0,"maxGoalRounds":14},"activation":"disarmed"}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== processus restants ===\"; pgrep -a -f \"release/drave|pair_factice|proxy_latence|campagne|banc_chrono\" | grep -v pgrep | head -3; echo \"(vide = machine rendue)\"; echo \"=== état ===\"; git log --oneline -1 | cat; git lo … [149 caractères tronqués]`
+
+  ```
+=== processus restants ===
+488074 python3 tools/pair_factice.py 46202 896
+496904 python3 tools/pair_factice.py 46302 896
+511453 python3 tools/proxy_latence.py 46401 127.0.0.1:46501 20
+(vide = machine rendue)
+=== état ===
+6c1aecf REPRISE : la frontière du cache KV et les deux gains du mode lot
+41
+ M journal/README.md
+14:10:12
+  load average: 15,55, 18,11, 23,08
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && MOI=$$; for pid in $(pgrep -f \"pair_factice.py\" | grep -v \"^$MOI\\$\"); do kill $pid 2>/dev/null; done; for pid in $(pgrep -f \"proxy_latence.py\" | grep -v \"^$MOI\\$\"); do kill $pid 2>/dev/null; done; sleep 1; echo \"=== restan … [209 caractères tronqués]`
+
+  ```
+=== restants ===
+(vide = machine rendue)
+               total        used        free      shared  buff/cache   available
+Mem:             125          10          60           1          57         115
+14:10:21
+  ```
+
+### 🤖 Assistant
+
+⏵ Créneau terminé : machine rendue, tout est commité, les portes sont vertes.
+
+## Session 11h46 → 14h10 — quatre couloirs en parallèle
+
+### Couloir A — où mettre les bits du cache KV (2 campagnes, ~2 h de machine)
+
+| réglage | octets/élément | % du f32 | écart à 8 192 jetons |
+|---|---|---|---|
+| **clés f16 · valeurs int8** | 3,125 | **39 %** | **+0,018 %** ← le meilleur point |
+| clés f32 · valeurs int8 | 5,125 | 64 % | +0,023 % |
+| clés f32 · valeurs int4 | 4,625 | 58 % | +0,46 % |
+| clés f16 · valeurs int4 | 2,625 | 33 % | +0,61 % |
+| int8 · int8 | 2,25 | 28 % | +3,04 % |
+| int4 · int4 | 1,25 | 16 % | +364 % |
+
+À taille **égale**, mettre les bits sur les clés plutôt que sur les valeurs change l'erreur d'un facteur **130** (5,125 o) à **840** (4,625 o). Réglage recommandé : `DRAVE_KV_BITS=8 DRAVE_KV_K_F16=1` — 2,5× plus petit que le f32 pour deux centièmes de pour cent. Nouveau code : clés en f16 ; rapport `reports/rapport-placement-bits-kv.md`.
+
+### Couloir B — le préremplissage par LOTS sur le fil (le bloqueur Colab : levé)
+
+Mode 3 du protocole : N états d'un coup au lieu d'un flux par jeton. **Écart 0,00e0** en 4 lots de 64 comme en un seul lot de 917 583 octets. Et il gagne sur les deux tableaux : **7× le débit local** (16,6 ms/jeton contre 116,7 en un seul lot) et **18×** sur un lien à 20 ms par message (2,6 s contre 47,6 s).
+
+### Couloir C — trois analyses déléguées, puis deux relectures adversariales
+
+L'**audit des drapeaux** a trouvé que **46 options sur 110** étaient ignorées dans au moins un mode ; la **spécification du lot** a trouvé mon bug d'en-tête d'un octet ; l'**étude de compacité** a chiffré le format (−49,9 % sans perte, −65,9 % avec perte, toutes deux implémentées : DRVF v2 et v3). Puis deux relectures adversariales ont trouvé **22 défauts** — dont **17 par lecture, pas par un banc** — et la seconde a attaqué mes propres correctifs : un tableau de bord qui affichait l'état d'*avant* les affectations, un plafond réseau qui laissait passer 16 Gio sur une trame de 83 octets, une trame forgée qui tuait le nœud.
+
+### Couloir D — le GPU : vérifié, pas étendu
+
+`DRAVE_GPU=1` sur gpt-oss redonne **15,1667**, et le noyau de tête **1,6 ms** (88 Go/s) pour un écart de **1,99e-7**. Le noyau de top-k (phase 1.1) était le chantier suivant : je ne l'ai pas commencé plutôt que de le laisser à moitié fait — il est en tête des prochains chantiers de `REPRISE.md`.
+
+### Ce que j'ai dû corriger dans mes propres affirmations
+
+- le croisement push/pull : j'avais écarté la correction du relecteur, **à tort** — la source dit ~22 %, pas 10 % ;
+- la référence 6 bits de `REPRISE.md` (19,3045) **ne se reproduit pas** : elle vaut 19,5633 ;
+- mon « rejeu v3 = 19,3885 » était un **faux positif** (la trace n'était pas chargée) — démasqué par les compteurs de rejeu que je venais d'ajouter ;
+- « ÷2 pour 0,2 % » puis « l'écart croît avec la longueur » : les deux faux, la courbe dit l'inverse.
+
+### État final
+
+`cargo test` **13/13** · Qwen ctx 256 **19,3885** · gpt-oss ctx 256 **15,1757** · GPU **15,1667** · rejeu de trace **19,3885** · banc réparti **0,00e0** (dense et lots) · 41 commits sur le créneau, dépôt propre, machine rendue. Le kit Colab est prêt et **testé de bout en bout** (bundle de 4,5 Mo, compilation 23 s, 0,00e0 avec le binaire cloné) : il ne manque que votre compte pour la démonstration distante.
+
+
+## Tour 46
+
+### 👤 Utilisateur
+
+continue jusqu'à 18h HAE
+
+- **bash** `{"command": "date +\"%H:%M:%S %Z %z\"; timedatectl 2>/dev/null | head -3; echo \"---\"; date -u +\"%H:%M UTC\"; TZ=America/New_York date +\"%H:%M HAE\"; echo \"--- jusqu'à 18h HAE ---\"; python3 -c \"\nfrom datetime import datetime, timezone, timedelta\nimport subprocess\nhae = subprocess.run(['date … [352 caractères tronqués]`
+
+  ```
+15:07:25 EDT -0400
+               Local time: mer 2026-09-30 15:07:25 EDT
+           Universal time: mer 2026-09-30 19:07:25 UTC
+                 RTC time: mer 2026-09-30 19:07:25
+---
+19:07 UTC
+15:07 HAE
+--- jusqu'à 18h HAE ---
+temps restant : 2:52:34
+  ```
+
+### 🤖 Assistant
+
+15h07 HAE — il reste **2h52**. Je relance un créneau : objectif, couloirs parallèles, puis le chantier GPU que j'avais laissé de côté.
+
+- **create_goal** `{"max_goal_rounds": 12, "objective": "Travailler en autonomie jusqu'à 18h00 HAE sur Drave, en couloirs parallèles : (A) noyau GPU de top-k pour l'attention creuse (phase 1.1, le seul poste GPU neuf de la feuille de route), (B) campagne de mesure en fond (frontière du cache KV à un autre contexte, vé … [361 caractères tronqués]`
+
+> **Objectif** (create) : Travailler en autonomie jusqu'à 18h00 HAE sur Drave, en couloirs parallèles : (A) noyau GPU de top-k pour l'attention creuse (phase 1.1, le seul poste GPU neuf de la feuille de route), (B) campagne de mesure en fond (frontière du cache KV à un autre contexte, vérifications long contexte), (C) analyses et relectures déléguées (spec du mode 4 « lot en listes », audit de cohérence des documents après les changements du jour), (D) préparation de la démonstration Colab côté utilisateur. Chaque affirmation mesurée, chaque chantier commité, dépôt vert et portes de non-régression (Qwen 19,3885 · gpt-oss 15,1757) intactes.
+
+
+  ```
+{"goal":{"id":"goal-c04be19f-289d-41cb-beb1-479e60cfbe8c","revision":1,"objective":"Travailler en autonomie jusqu'à 18h00 HAE sur Drave, en couloirs parallèles : (A) noyau GPU de top-k pour l'attention creuse (phase 1.1, le seul poste GPU neuf de la feuille de route), (B) campagne de mesure en fond (frontière du cache KV à un autre contexte, vérifications long contexte), (C) analyses et relectures déléguées (spec du mode 4 « lot en listes », audit de cohérence des documents après les changements du jour), (D) préparation de la démonstration Colab côté utilisateur. Chaque affirmation mesurée, chaque chantier commité, dépôt vert et portes de non-régression (Qwen 19,3885 · gpt-oss 15,1757) intactes.","phase":"active","roundsStarted":0,"maxGoalRounds":12},"activation":"armed"}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/campagne_kv4096.sh <<'EOF'\n#!/bin/bash\n# La frontière du cache KV tient-elle à un AUTRE contexte ? Les mesures de\n# référence sont à 8 192 ; on refait les trois meilleurs points à 4 096.\nset -u\ncd /home/stephane/Data1 … [989 caractères tronqués]`
+
+  ```
+couloir B lancé (4 mesures à ctx 4 096)
+15:07:40
+  ```
+
+- **subagent** `{"description": "Spec for lot-in-lists mode 4", "prompt": "Tu travailles dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (projet « Drave » : moteur d'inférence LLM en Rust, `std` seul, binaire `drave`). Tout est en FRANÇAIS : écris en français.\n\nCONTEXTE : le moteur sait faire tourne … [3592 caractères tronqués]`
+
+  ```
+started subagent da69b1fa-91b0-4c69-bb2b-58bf00e92e28
+  ```
+
+- **subagent** `{"description": "Docs audit after today's changes", "prompt": "Tu es vérificateur de documentation dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (projet « Drave » : moteur d'inférence LLM en Rust, `std` seul, binaire `drave`). Tout est en FRANÇAIS : écris en français.\n\nCONTEXTE : l … [2817 caractères tronqués]`
+
+  ```
+started subagent aa5f9fc5-9450-4118-b65f-e8b99a28519d
+  ```
+
+### 🤖 Assistant
+
+⏵ Couloirs B et C lancés. J'attaque le chantier GPU : d'abord comprendre où le top-k retombe sur le CPU.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"attn_topk\" drave-core/src/model.rs | head -20; echo \"=== repli GPU ===\"; grep -n \"attn_topk\\|top-k\" drave-core/src/gpu.rs | head -12", "description": "Find attention top-k and GPU fallback"}`
+
+  ```
+833:    pub attn_topk: usize,
+1761:            act_topk_proj: [0; 7], attn_topk: 0, attn_events: 0, qk_topk: 0,
+2526:                let groupe = fen == 0 && self.attn_topk == 0 && rep > 1;
+3149:            let groupe = fen == 0 && self.attn_topk == 0 && rep > 1;
+3245:                let k = if self.attn_topk > 0 { self.attn_topk.min(n) } else { n };
+=== repli GPU ===
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n 3230,3270p drave-core/src/model.rs; echo \"=== où le GPU est-il appelé pour l'attention ? ===\"; grep -n \"attn_kv\\|machine\\.\" drave-core/src/model.rs | sed -n 1,20p", "description": "Read the CPU top-k path and GPU attenti … [10 caractères tronqués]`
+
+  ```
+} else { 0 };
+                let ns = if lo > 0 { self.attn_sinks.min(lo) } else { 0 };
+                // les puits sont NOTÉS comme les autres : leur donner un score
+                // arbitraire (0) fausse la distribution au lieu de la drainer.
+                for t in (0..ns).chain(lo..nw) {
+                    kvc.cle(kvh, t, &mut kd);
+                    sc[t] = point(qh, &kd) * scale;
+                }
+                for t in ns..lo { sc[t] = f32::NEG_INFINITY; }
+                // Attention à k clés. Le CALCUL DES SCORES reste sur toutes les
+                // clés — il faut les noter pour savoir lesquelles garder. En
+                // revanche le softmax ET la somme pondérée n'itèrent plus que sur
+                // les k retenues : c'est là qu'est le O(N·k). Masquer sans
+                // réécrire les boucles ne gagnait rien (mesuré : 12,4 → 12,5 ms).
+                let n = pos + 1;
+                let k = if self.attn_topk > 0 { self.attn_topk.min(n) } else { n };
+                if fen > 0 {
+                    // pas de top-k : on note exactement les clés de la fenêtre
+                    attn_idx.clear();
+                    let ns = if lo > 0 { self.attn_sinks.m
+… [3001 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"pub fn attn\" drave-core/src/gpu.rs | head; echo \"=== appels côté moteur ===\"; grep -n \"attn_gpu\\|\\.attn(\" drave-core/src/model.rs | head -12; echo \"=== repli explicite ===\"; grep -rn \"topk\" drave-core/src/gpu.rs  … [89 caractères tronqués]`
+
+  ```
+424:    pub fn attn_kv(&self, m: &mut KvGpu, q: &[f32], n: usize, scale: f32,
+=== appels côté moteur ===
+905:    pub attn_gpu_part: Vec<f32>,
+1772:            tete_gpu, tete_gpu_q6k, head4, sinks_vus, kv_gpu, attn_gpu_part: Vec::new(),
+2532:                    if self.attn_gpu_part.len() < besoin { self.attn_gpu_part.resize(besoin, 0.0); }
+2535:                    let part = &mut self.attn_gpu_part;
+2995:                    attn_gpu_part, emb_imposee, .. } = self;
+3157:                if attn_gpu_part.len() < besoin { attn_gpu_part.resize(besoin, 0.0); }
+3163:                                       nsplit, attn_gpu_part, &mut att[..]) {
+=== repli explicite ===
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n 3140,3170p drave-core/src/model.rs; echo \"=== signature du noyau ===\"; sed -n 424,440p drave-core/src/gpu.rs", "description": "Read GPU attention call site and signature"}`
+
+  ```
+// ---- chemin GROUPÉ par tête KV (attention complète sans top-k) ----
+            // Mesuré : « attention » croît exactement linéairement avec le
+            // contexte (0,88 / 1,91 / 3,20 ms à 64 / 128 / 256) — c'est la
+            // relecture du cache KV, pas le calcul. Or `rep` têtes de requête
+            // partagent une même tête KV : la boucle par tête relisait donc les
+            // mêmes clés `rep` fois (7 ici). En parcourant les clés une fois par
+            // groupe et en tenant `nh` scores, on divise ce trafic par `rep`.
+            // L'arithmétique par tête est inchangée et dans le même ordre : les
+            // sorties restent bit à bit identiques.
+            let groupe = fen == 0 && self.attn_topk == 0 && rep > 1;
+            // ---- KV déporté (étape E4) : la MÊME attention, calculée en VRAM.
+            // Le noyau a besoin d'un nombre entier de têtes de requête par tête
+            // KV ; la fenêtre et le top-k gardent le chemin CPU.
+            let mut fait_en_gpu = false;
+            if groupe && kv_gpu.is_some() && nkv * rep == nh && n > 1 {
+                let nsplit = (n / 256).clamp(1, 128);
+                let besoin = nsplit * nkv * rep * (hd + 2)
+… [1682 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && wc -l drave-core/gpu/*.cu drave-core/gpu/*.sh drave-core/src/gpu.rs 2>/dev/null; echo \"=== noyaux existants ===\"; grep -n \"__global__\" drave-core/gpu/drave_gpu.cu | head -20; echo \"=== entrée attn ===\"; grep -n \"attn_kv\" drav … [82 caractères tronqués]`
+
+  ```
+596 drave-core/gpu/drave_gpu.cu
+   15 drave-core/gpu/compiler.sh
+  821 drave-core/src/gpu.rs
+ 1432 total
+=== noyaux existants ===
+37:__global__ void tete_q8(const unsigned char* __restrict__ w,
+64:__global__ void proj_q8(const unsigned char* __restrict__ w,
+124:__global__ void tete_q8_warp(const unsigned char* __restrict__ w,
+155:__global__ void proj_q8_warp(const unsigned char* __restrict__ w,
+203:__global__ void proj_mxfp4_warp(const unsigned char* __restrict__ w,
+255:__global__ void proj_q4k_warp(const unsigned char* __restrict__ w,
+315:__global__ void proj_q6k_warp(const unsigned char* __restrict__ w,
+415:__global__ void attn_kv_partiels(const void* __restrict__ kdata,
+561:__global__ void attn_kv_recombine(const float* __restrict__ part,
+=== entrée attn ===
+415:__global__ void attn_kv_partiels(const void* __restrict__ kdata,
+561:__global__ void attn_kv_recombine(const float* __restrict__ part,
+  ```
+
+### 🤖 Assistant
+
+Le GPU top-k demanderait 3-4 h pour être validé (sélection radix en CUDA) : je le documente au lieu de le bâcler, et je fais aboutir deux choses certaines — Colab clé en main, puis le mode 4.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > tools/colab_cote_local.sh <<'EOF'\n#!/bin/bash\n# Le côté LOCAL de la démonstration Colab : un nœud moteur qui écoute, et les\n# trois façons de le rendre joignable depuis un runtime distant.\n#\n#   tools/colab_cote_local.sh [ … [3204 caractères tronqués]`
+
+  ```
+syntaxe ok
+=== 1. vérifications ===
+  binaire : drave
+  modèle  : models/Qwen2.5-0.5B-Q8_0.gguf (506 Mo)
+  sha256 (24 premiers, à coller dans la cellule 4 du notebook) :
+            25130a98aa782284a7dabea0
+  ⚠ un autre « drave » tourne déjà (campagne de mesure ?) : le nœud s'y ajoutera
+
+=== 2. le nœud moteur écoute ===
+  sur 0.0.0.0:5599 — donc au-delà de localhost, ce qu'il faut pour un pair distant
+  ✓ il écoute (journal : /tmp/noeud_colab.log)
+
+=== 3. rendez-le joignable depuis Colab (au choix) ===
+  a) ngrok (compte gratuit, un authtoken) :
+       ngrok tcp 5599
+     → notez l'adresse « tcp://X.tcp.ngrok.io:YYYY » : dans le notebook, HOTE=X.tcp.ngrok.io, PORT=YYYY
+  b) Tailscale (les deux côtés sur le même tailnet) :
+       tailscale up && tailscale ip -4
+     → dans le notebook, HOTE=<ip 100.x.y.z>, PORT=5599
+  c) SSH inverse (si vous avez une machine publique) :
+       ssh -R 5599:localhost:5599 votre-vps
+     → dans le notebook, HOTE=<votre-vps>, PORT=5599
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && pkill -f \"flux-serveur 0.0.0.0:5599\" 2>/dev/null; python3 - <<'PY'\nimport json\np='colab/Drave-reparti.ipynb'\nnb = json.load(open(p))\n# insérer une cellule de texte AVANT la cellule du banc, et réécrire celle du banc\nnouvelles  … [3008 caractères tronqués]`
+
+  ```
+(no output)
+[killed by signal: SIGTERM]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && MOI=$$; for pid in $(pgrep -f \"flux-serveur 0.0.0.0:5599\" | grep -v \"^$MOI\\$\"); do kill $pid 2>/dev/null && echo \"nœud de test arrêté ($pid)\"; done; sleep 1; pgrep -a -f \"flux-serveur\" | grep -v pgrep | head -2; echo \"(vide … [215 caractères tronqués]`
+
+  ```
+(vide = plus de nœud de test)
+notebook : 14 cellules
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json\np='colab/Drave-reparti.ipynb'\nnb = json.load(open(p))\nnouvelles = []\nfor c in nb['cells']:\n    src = ''.join(c['source'])\n    if 'HOTE, PORT =' in src:\n        nouvelles.append({\"cell_type\":\"ma … [3452 caractères tronqués]`

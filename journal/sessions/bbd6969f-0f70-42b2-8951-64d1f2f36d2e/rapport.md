@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 47.4 h |
-| Tours | 45 |
-| Messages | 1835 |
-| Appels d'outils | 1734 |
+| Durée | 48.4 h |
+| Tours | 46 |
+| Messages | 1855 |
+| Appels d'outils | 1752 |
 | Fichiers touchés | 44 |
-| Commandes | 1413 |
-| Sous-agents | 7 |
-| Commits | 142 |
+| Commandes | 1426 |
+| Sous-agents | 9 |
+| Commits | 143 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -27,6 +27,10 @@
 … [1023 caractères tronqués]
 - **create** — Travailler en autonomie maximale et en couloirs parallèles jusqu'à 15h00 sur Drave : (A) campagne de mesure des clés du cache KV et de leur quantificateur, (B) préremplissage par lots sur le fil (phase 3.4, bloqueur Colab), (C) analyses déléguées et audit des drapeaux ignorés, (D) noyau GPU si la ma
 … [182 caractères tronqués]
+- **complete** — Travailler en autonomie maximale et en couloirs parallèles jusqu'à 15h00 sur Drave : (A) campagne de mesure des clés du cache KV et de leur quantificateur, (B) préremplissage par lots sur le fil (phase 3.4, bloqueur Colab), (C) analyses déléguées et audit des drapeaux ignorés, (D) noyau GPU si la ma
+… [182 caractères tronqués]
+- **create** — Travailler en autonomie jusqu'à 18h00 HAE sur Drave, en couloirs parallèles : (A) noyau GPU de top-k pour l'attention creuse (phase 1.1, le seul poste GPU neuf de la feuille de route), (B) campagne de mesure en fond (frontière du cache KV à un autre contexte, vérifications long contexte), (C) analys
+… [321 caractères tronqués]
 
 ## 1. Ce qui a été demandé
 
@@ -119,6 +123,8 @@
 **Tour 44** — pendant que les charges locales s'executent, peux-tu avancer des chantiers légers sur les ressources loçcale ou d'analyse pure?
 
 **Tour 45** — as-tu ce qu'il te faut pour te rendre à 15h en travaillaint avec un maximum d'autonomie et de parallélisme d'activités?
+
+**Tour 46** — continue jusqu'à 18h HAE
 
 ## 2. Déroulé, étape par étape
 
@@ -2055,7 +2061,7 @@ Je vérifie l'heure à chaque itération et j'arrête à 12:06, en laissant un p
 
 ### Tour 45 — as-tu ce qu'il te faut pour te rendre à 15h en travaillaint avec un maximum d'autonomie et de parallélisme d'activités?
 
-*235 appels d'outils.* Actions notables :
+*239 appels d'outils.* Actions notables :
 
 - bash — Probe machine, GPU, disk, network state
 - bash — Identify GPU users and stray processes
@@ -2071,11 +2077,66 @@ Je vérifie l'heure à chaque itération et j'arrête à 12:06, en laissant un p
 - bash — Understand batched PPL reference path
 - bash — Add batched imposed states to forward_lot
 - list_agents
-- … et 212 autres
+- … et 216 autres
 
 **Synthèse produite :**
 
-Deux derniers résultats : **clés f16 + valeurs int4 = 14,3209 (+0,61 %, 33 % de la taille)** et les chronos machine au repos — le mode lot est **7× plus rapide par jeton** (116,7 → 16,6 ms). Je documente et je clôture.
+⏵ Créneau terminé : machine rendue, tout est commité, les portes sont vertes.
+
+\## Session 11h46 → 14h10 — quatre couloirs en parallèle
+
+\### Couloir A — où mettre les bits du cache KV (2 campagnes, ~2 h de machine)
+
+| réglage | octets/élément | % du f32 | écart à 8 192 jetons |
+|---|---|---|---|
+| **clés f16 · valeurs int8** | 3,125 | **39 %** | **+0,018 %** ← le meilleur point |
+| clés f32 · valeurs int8 | 5,125 | 64 % | +0,023 % |
+| clés f32 · valeurs int4 | 4,625 | 58 % | +0,46 % |
+| clés f16 · valeurs int4 | 2,625 | 33 % | +0,61 % |
+| int8 · int8 | 2,25 | 28 % | +3,04 % |
+| int4 · int4 | 1,25 | 16 % | +364 % |
+
+À taille **égale**, mettre les bits sur les clés plutôt que sur les valeurs change l'erreur d'un facteur **130** (5,125 o) à **840** (4,625 o). Réglage recommandé : `DRAVE_KV_BITS=8 DRAVE_KV_K_F16=1` — 2,5× plus petit que le f32 pour deux centièmes de pour cent. Nouveau code : clés en f16 ; rapport `reports/rapport-placement-bits-kv.md`.
+
+\### Couloir B — le préremplissage par LOTS sur le fil (le bloqueur Colab : levé)
+
+Mode 3 du protocole : N états d'un coup au lieu d'un flux par jeton. **Écart 0,00e0** en 4 lots de 64 comme en un seul lot de 917 583 octets. Et il gagne sur les deux tableaux : **7× le débit local** (16,6 ms/jeton contre 116,7 en un seul lot) et **18×** sur un lien à 20 ms par message (2,6 s contre 47,6 s).
+
+\### Couloir C — trois analyses déléguées, puis deux relectures adversariales
+
+L'**audit des drapeaux** a trouvé que **46 options sur 110** étaient ignorées dans au moins un mode ; la **spécification du lot** a trouvé mon bug d'en-tête d'un octet ; l'**étude de compacité** a chiffré le format (−49,9 % sans perte, −65,9 % avec perte, toutes deux implémentées : DRVF v2 et v3). Puis deux relectures adversariales ont trouvé **22 défauts** — dont **17 par lecture, pas par un banc** — et la seconde a attaqué mes propres correctifs : un tableau de bord qui affichait l'état d'*avant* les affectations, un plafond réseau qui laissait passer 16 Gio sur une trame de 83 octets, une trame forgée qui tuait le nœud.
+
+\### Couloir D — le GPU : vérifié, pas étendu
+
+`DRAVE_GPU=1` sur gpt-oss redonne **15,1667**, et le noyau de tête **1,6 ms** (88 Go/s) pour un écart de **1,99e-7**. Le noyau de top-k (phase 1.1) était le chantier suivant : je ne l'ai pas commencé plutôt que de le laisser à moitié fait — il est en tête des prochains chantiers de `REPRISE.md`.
+
+\### Ce que j'ai dû corriger dans mes propres affirmations
+
+- le croisement push/pull : j'a
+… [857 caractères tronqués]
+
+### Tour 46 — continue jusqu'à 18h HAE
+
+*14 appels d'outils.* Actions notables :
+
+- bash — Check time, timezone and remaining budget
+- create_goal
+- bash — Launch KV frontier campaign at ctx 4096
+- sous-agent — Spec for lot-in-lists mode 4
+- sous-agent — Docs audit after today's changes
+- bash — Find attention top-k and GPU fallback
+- bash — Read the CPU top-k path and GPU attention calls
+- bash — Find GPU attention entry points
+- bash — Read GPU attention call site and signature
+- bash — Size the CUDA infrastructure
+- bash — Write and test the local Colab helper
+- bash — Improve notebook with real text cell
+- bash — Kill test node safely and check notebook
+- bash — Add notebook real-text cell and commit
+
+**Synthèse produite :**
+
+Le GPU top-k demanderait 3-4 h pour être validé (sélection radix en CUDA) : je le documente au lieu de le bâcler, et je fais aboutir deux choses certaines — Colab clé en main, puis le mode 4.
 
 ## 3. Travail accompli
 
@@ -2137,6 +2198,8 @@ Deux derniers résultats : **clés f16 + valeurs int4 = 14,3209 (+0,61 %, 33 % d
 - tour 45 — Adversarial review of recent commits
 - tour 45 — Docs vs measurements consistency audit
 - tour 45 — Review the afternoon fixes
+- tour 46 — Spec for lot-in-lists mode 4
+- tour 46 — Docs audit after today's changes
 
 ### Commandes exécutées (échantillon)
 
@@ -2180,7 +2243,7 @@ Deux derniers résultats : **clés f16 + valeurs int4 = 14,3209 (+0,61 %, 33 % d
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 1373 autres
+- … et 1386 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2470,4 +2533,5 @@ Deux derniers résultats : **clés f16 + valeurs int4 = 14,3209 (+0,61 %, 33 % d
 - Tests de trame forgée : un délai de lecture, pour qu'ils échouent au lieu de pendre  Sans délai, si le plafond disparaissait, le test attendrait les 358 Go du c
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p='reports/rapport-placement-bits-kv.md'; s=open(p).read() v = """| f16 | int4 | 2,625 | 
 - REPRISE : la frontière du cache KV et les deux gains du mode lot  Le handoff porte maintenant les deux résultats qui décident : le meilleur réglage du cache KV 
+- Colab clé en main : le nœud local, les trois tunnels, et un texte réel dans le notebook  \`tools/colab_cote_local.sh\` vérifie le binaire et le modèle, affiche 
 
