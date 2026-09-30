@@ -4,7 +4,8 @@
 > en `--infer`) et la moitié basse du tableau (`--threads` en FS/PR/BM, `--hebb-q`,
 > `--hebb-out`, `--plan` sans `--ctx`, précédence de fenêtre, pas de 2 du mode par
 > défaut) ont été **corrigés** dans les commits `7522289` et le suivant. Le
-> protocole de flux passe en **version 4** : le contrat d'activation transporte
+> protocole de flux est passé en **version 4** (puis 5, avec le mode « lot en
+> listes ») : le contrat d'activation transporte
 > désormais aussi les sept top-k par projection, `--attn-topk`, `--qk-topk` et
 > `--moe-topk`. Les sections ci-dessous décrivent l'état AVANT correction — elles
 > restent la référence de ce qui a été trouvé, et la liste de ce qui reste

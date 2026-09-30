@@ -93,8 +93,8 @@ invariants vérifiés) : fichier DRVF en **version 2** par défaut — indices p
 écarts, **sans perte**, 3,01 octets par neurone actif — et **version 3** sur
 `DRAVE_TRACE_BLOCS=1` (valeurs i8, échelle f16 par bloc de 32 : 45 079 930 octets
 contre 66 370 408, au prix de +0,074 % de perplexité au rejeu). Le protocole
-d'échange réseau est en **version 4** (79 octets d'en-tête, quatre modes : dense,
-listes, blocs, lot).
+d'échange réseau est en **version 5** (79 octets d'en-tête, cinq modes : dense,
+listes, blocs, lot dense, lot en listes).
 
 C'est **exactement** ce qu'un nœud distant reçoit pour continuer le calcul : la
 raison pour laquelle la phase 0 sert la phase 3, et la phase 3 le vérifie (écart

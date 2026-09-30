@@ -30985,3 +30985,27 @@ réponse : n états pour les modes 3 ET 4
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-mode4-lot-listes.md <<'EOF'\n# Mode 4 — le lot en listes : ÷2,3 sur les octets, et ce qu'il coûte\n\n**En une ligne** : un préremplissage de N états peut voyager en **listes creuses**\nau lieu de f32 dense — 1,5 … [7928 caractères tronqués]`
+
+  ```
+docs/format-flux.md : 2/2
+docs/plan-mode4-lot-listes.md : 2/2
+  ⚠ absent de docs/roadmap.md : version 4 (79 octets d'en-tête, quatre modes…
+docs/roadmap.md : 0/1
+REPRISE.md : 1/1
+998d409 Relecture du mode 4 : dix défauts, dont deux graves — corrigés, et le rapport écrit
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date +\"%H:%M:%S\"; grep -n \"version 4\\|quatre modes\" docs/roadmap.md REPRISE.md reports/*.md docs/*.md 2>/dev/null | grep -v \"rapport-coherence\" | head -6; tail -3 /tmp/aiguille_kv.log", "description": "Find remaining v4 mentio … [4 caractères tronqués]`
+
+  ```
+16:04:04
+docs/roadmap.md:96:d'échange réseau est en **version 4** (79 octets d'en-tête, quatre modes : dense,
+REPRISE.md:330:**Le protocole est en version 4** et le contrat d'activation transporte
+reports/rapport-drapeaux-ignores.md:7:> protocole de flux passe en **version 4** : le contrat d'activation transporte
+docs/roadmap.md:96:d'échange réseau est en **version 4** (79 octets d'en-tête, quatre modes : dense,
+     2048        0.50     oui     266.9  prompt 2147 jetons
+     2048        0.90     oui     295.3  prompt 2147 jetons
+### f32 · contexte 4096 · profondeurs 0,1 / 0,5 / 0,9
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\ndef rem(p, paires):\n    s = open(p).read(); ok = 0\n    for v, n in paires:\n        if s.count(v) >= 1: s = s.replace(v, n); ok += 1\n        else: print(f\"  ⚠ absent de {p} : {v[:60]}…\")\n    open(p,'w').write( … [1092 caractères tronqués]`

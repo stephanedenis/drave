@@ -281,7 +281,7 @@ fallu deux corrections dans `Model::forward`, et la première ne suffisait pas :
    plage allait jusqu'à la dernière couche, puis le pilote normait). La règle est
    maintenant portée par un drapeau explicite, `flux_brut`.
 
-**Le protocole de flux est en v4** (`docs/format-flux.md`) : en-tête de **79
+**Le protocole de flux est en v5** (`docs/format-flux.md`) : en-tête de **79
 octets** avec version, mode et le **contrat d'activation complet** (niveaux, seuil,
 top-k, renorm, les sept top-k par projection, attn/qk/moe top-k) — deux nœuds
 réglés différemment calculaient deux choses différentes en silence (0,69 d'écart
@@ -327,7 +327,7 @@ notebook prêt à ouvrir, `tools/preparer_colab.sh` fait le dépôt en un fichie
 (`git bundle`, 4,5 Mo — il n'y a pas de dépôt distant) et vérifie l'empreinte du
 modèle.
 
-**Le protocole est en version 4** et le contrat d'activation transporte
+**Le protocole est en version 5** et le contrat d'activation transporte
 niveaux, seuil, top-k, renorm, les sept top-k par projection, attn/qk/moe top-k :
 un serveur lancé avec `--topk-q 900` et un client avec `--topk-q 4` donnent quand
 même 0,00e0 — les réglages du client gagnent. En version 3 ils divergeaient en
