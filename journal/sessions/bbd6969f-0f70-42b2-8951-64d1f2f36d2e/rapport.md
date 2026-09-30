@@ -7,12 +7,12 @@
 | Début | 2026-09-28 14:46 |
 | Durée | 46.4 h |
 | Tours | 45 |
-| Messages | 1782 |
-| Appels d'outils | 1684 |
+| Messages | 1786 |
+| Appels d'outils | 1687 |
 | Fichiers touchés | 44 |
-| Commandes | 1366 |
+| Commandes | 1368 |
 | Sous-agents | 6 |
-| Commits | 126 |
+| Commits | 127 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -2055,7 +2055,7 @@ Je vérifie l'heure à chaque itération et j'arrête à 12:06, en laissant un p
 
 ### Tour 45 — as-tu ce qu'il te faut pour te rendre à 15h en travaillaint avec un maximum d'autonomie et de parallélisme d'activités?
 
-*185 appels d'outils.* Actions notables :
+*188 appels d'outils.* Actions notables :
 
 - bash — Probe machine, GPU, disk, network state
 - bash — Identify GPU users and stray processes
@@ -2071,11 +2071,11 @@ Je vérifie l'heure à chaque itération et j'arrête à 12:06, en laissant un p
 - bash — Understand batched PPL reference path
 - bash — Add batched imposed states to forward_lot
 - list_agents
-- … et 163 autres
+- … et 166 autres
 
 **Synthèse produite :**
 
-Le relecteur a raison sur un point où je l'avais contredit : la source dit ~22 %, pas 10 %. Je vérifie, puis je corrige — y compris mon propre commit.
+Porte gpt-oss : **15,1757** ✓ — le trou du relecteur est comblé, les deux portes sont vertes après tous les changements. Je l'inscris et je finis les points de cohérence restants.
 
 ## 3. Travail accompli
 
@@ -2179,7 +2179,7 @@ Le relecteur a raison sur un point où je l'avais contredit : la source dit ~22 
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 1326 autres
+- … et 1328 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2453,4 +2453,5 @@ Le relecteur a raison sur un point où je l'avais contredit : la source dit ~22 
 - Cohérence : versions et comptes de flux remis d'aplomb partout  D'après le reste de \`reports/rapport-coherence-docs.md\` : le message de refus cité par le rapp
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' def rem(p, paires):     s = open(p).read(); ok = 0     for v, n in paires:         if s.c
 - Rapport transport : l'en-tête dit maintenant ce que son tableau mesure  « 871 octets » ne correspondait à aucune ligne du tableau (897 en listes i16 à seuil 5 %
+- Portes revérifiées après la journée : 19,3885 · 15,1757 · 11 tests  La porte gpt-oss était la seule que la relecture adversariale n'avait pas pu exécuter (borne
 

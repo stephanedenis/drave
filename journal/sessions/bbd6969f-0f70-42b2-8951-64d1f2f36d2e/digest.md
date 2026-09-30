@@ -28771,3 +28771,49 @@ cles_f16_valeurs_int8      : === porte gpt-oss (job) ===
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/rapport-transport-liste.md'; s=open(p).read()\nv = \"\"\"**En une ligne** : le flux peut voyager en liste creuse (871 octets au lieu de\n3 623), mais à seuil 5 % le découpage coûte **×1,8 de perplexité**  … [1244 caractères tronqués]`
+
+  ```
+ligne 3 622 → 3 623 corrigée
+rapport transport : en-tête cohérent avec son tableau
+4:3 623** à seuil 5 %, et **1 568** avec des indices par écarts — mais jeter des
+15:| 0 · dense f32 | `896 × f32` | **3 623** (39 + 3 584) |
+25:| dense f32 | 100 % | 3 623 | 3 623 | 144,8289 | **144,8289** | **0,00e0** |
+26:| listes 0,00 | 100,0 % (896) | 3 623 | 3 623 | 144,8289 | 141,0539 | 2,6e-2 |
+105:| 0,00 | 98,1 % | 2 793 | 7,1e-2 | 3 622 octets · 2,6e-2 |
+118:octets contre 3 623, et les deux modes sont de toute façon « taille du dense ».
+5b2ec03 Rapport transport : l'en-tête dit maintenant ce que son tableau mesure
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/porte_finale.sh <<'EOF'\n#!/bin/bash\n# Porte finale de la session : tout ce qui doit rester vert, d'un coup.\ncd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\nD=./drave-core/target/release/drave\nM=models/Qwen2.5-0.5B- … [1119 caractères tronqués]`
+
+  ```
+porte finale prête (elle attendra la fin des campagnes)
+13:09:50
+  ```
+
+- **job_output** `{"job_id": "bash-70", "timeout_ms": 420000, "wait": true}`
+
+  ```
+=== porte gpt-oss ctx 256 (attendu 15,1757, SANS DRAVE_GPU) ===
+=== perplexité 15.1757 sur 510 tokens (0 événements, 126.3 s) ===
+13:09:51
+[status: completed, exit code: 0]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-70 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/porte_oss_finale.sh <<'EOF'
+#!/bin/bash
+cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet
+echo "=== porte gpt-oss ctx 256 (attendu 15,1757, SANS DRAVE_GPU) ==="
+timeout 3600 ./drave-core/target/release/drave /home/stephane/FastNVMe/models/gpt-oss-120b-MXFP4.gguf \
+    --ppl /tmp/ids_oss.txt --ctx 256 --dense --threads 16 --limit 512 2>&1 | grep -E "perplexité [0-9.]+ sur"
+date +"%H:%M:%S"
+EOF
+chmod +x /tmp/porte_oss_finale.sh && /tmp/porte_oss_finale.sh) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+### 🤖 Assistant
+
+Porte gpt-oss : **15,1757** ✓ — le trou du relecteur est comblé, les deux portes sont vertes après tous les changements. Je l'inscris et je finis les points de cohérence restants.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n 26,40p REPRISE.md; python3 - <<'PY'\np='REPRISE.md'; s=open(p).read()\nv = \"\"\"## 2. Références de non-régression\"\"\"\nn = \"\"\"## 2. Références de non-régression\n\n> **Revérifiées le 30/09 après tous les changements de  … [1798 caractères tronqués]`

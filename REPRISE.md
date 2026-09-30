@@ -30,6 +30,12 @@ cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && cargo build --r
 
 ## 2. Références de non-régression
 
+> **Revérifiées le 30/09 après tous les changements de la journée** (mode lot,
+> protocole v4, DRVF v2/v3, plafond R4, tableau de bord) : Qwen ctx 256 =
+> **19,3885** et gpt-oss ctx 256 = **15,1757**, `cargo test` **11/11**. La porte
+> gpt-oss était la seule que la relecture adversariale n'avait pas pu faire
+> tourner (bornes de temps) ; elle est verte.
+
 Corpus : `/tmp/wt2_txt.txt` = 20 000 premiers octets de `data/wikitext2_test.txt`.
 **Régénérable** (à refaire si `/tmp` a été vidé) :
 

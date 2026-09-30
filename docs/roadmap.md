@@ -173,6 +173,12 @@ cache à **75 % de la taille f32** pour +0,02 % de perplexité, là où l'int8 c
 (50 %) coûte +3,0 %. Notre quantificateur de VALEURS est donc bon ; c'est celui
 des CLÉS qui est le maillon faible.
 
+La **courbe complète du placement des bits** est faite depuis
+(`reports/rapport-placement-bits-kv.md`) : à taille ÉGALE, clés f32 + valeurs int8
+coûte +0,023 % là où clés int8 + valeurs f32 coûte +3,01 % (facteur 130), et le
+4 bits des clés coûte +385 % contre +0,46 % pour celui des valeurs (facteur 840).
+Les clés en f16 (39 % de la taille f32) sont en cours de mesure.
+
 Deux suites, écrites avec leur critère de succès : **clés f32 · valeurs int4**
 (62,5 % de la taille f32 — si les valeurs tolèrent 4 bits, ce réglage bat l'int8
 complet en taille ET en qualité), et **un meilleur quantificateur de clés**
