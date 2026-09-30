@@ -26771,3 +26771,81 @@ cles_int4_valeurs_f32      :
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A drave-core/src/main.rs && git commit -q -F - <<'EOF' && git log --oneline -1 | cat\nDeux silences de plus, relevés par l'audit : trace en inférence, modes concurrents\n\n1. **`--trace-flux` en `--infer`** ne produisait rie … [524 caractères tronqués]`
+
+  ```
+25c42c3 Deux silences de plus, relevés par l'audit : trace en inférence, modes concurrents
+  ```
+
+### 🤖 Assistant
+
+Colab : je prépare un notebook prêt à l'emploi + la mise en place. D'abord, comment le code peut-il arriver sur Colab ?
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git remote -v | head -3; echo \"(vide = pas de dépôt distant)\"; ls models/ | head; echo \"=== modèles hors dépôt ===\"; ls -la /home/stephane/FastNVMe/models/ 2>/dev/null | awk '{print $5, $9}' | head -8; du -sh models/*.gguf 2>/dev … [220 caractères tronqués]`
+
+  ```
+(vide = pas de dépôt distant)
+Qwen2.5-0.5B-Q4_0.gguf
+Qwen2.5-0.5B-Q8_0.gguf
+=== modèles hors dépôt ===
+ 
+928 .
+96 ..
+1157671200 bge-m3-FP16.gguf
+13341237600 codestral-22b-v0.1-q4_k_m.gguf
+8988109984 deepseek-r1-distill-qwen-14b-q4_k_m.gguf
+1117320800 deepseek-r1-distill-qwen-1.5b-q4_k_m.gguf
+849103296 eagle3-gpt-oss-120b-Q8_0.gguf
+337M	models/Qwen2.5-0.5B-Q4_0.gguf
+507M	models/Qwen2.5-0.5B-Q8_0.gguf
+taille du dépôt (sans target) :
+880M	.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && du -sh .git | tail -1; git bundle create /tmp/drave.bundle --all 2>&1 | tail -2; ls -la /tmp/drave.bundle | awk '{print \"bundle :\", $5, \"octets\"}'; sha256sum models/Qwen2.5-0.5B-Q8_0.gguf | cut -c1-24; git bundle verify /tmp/drav … [105 caractères tronqués]`
+
+  ```
+20M	.git
+bundle : 4654197 octets
+25130a98aa782284a7dabea0
+The bundle records a complete history.
+The bundle uses this hash algorithm: sha1
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && mkdir -p colab && python3 - <<'PY'\nimport json, os\n\ndef md(t): return {\"cell_type\":\"markdown\",\"metadata\":{},\"source\":t.splitlines(keepends=True)}\ndef code(t): return {\"cell_type\":\"code\",\"execution_count\":None,\"meta … [6191 caractères tronqués]`
+
+  ```
+notebook écrit : 7629 octets
+notebook valide : 14 cellules
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > tools/preparer_colab.sh <<'EOF'\n#!/bin/bash\n# Prépare la répétition Colab : le dépôt en UN fichier, l'empreinte du modèle,\n# et les commandes des deux côtés. Rien n'est envoyé nulle part — c'est vous qui\n# téléversez, et le … [2279 caractères tronqués]`
+
+  ```
+=== 1. le dépôt, en un fichier ===
+The bundle uses this hash algorithm: sha1
+    /tmp/drave.bundle : 4654150 octets (4,5M)
+    commit : 25c42c3 Deux silences de plus, relevés par l'audit : trace en inférence, modes concurrents
+
+=== 2. le modèle (le MÊME des deux côtés) ===
+    models/Qwen2.5-0.5B-Q8_0.gguf : 506 Mo
+    sha256 (24 premiers) : 25130a98aa782284a7dabea0
+    → à coller dans la cellule 4 du notebook (constante ATTENDU)
+
+=== 3. côté MACHINE LOCALE (le nœud moteur) ===
+    cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && cargo build --release
+    ./target/release/drave ../models/Qwen2.5-0.5B-Q8_0.gguf --flux-serveur 0.0.0.0:5599 --ctx 256
+    # puis rendez 5599 joignable depuis Colab, au choix :
+    #   ngrok tcp 5599                    (compte gratuit, donne hote:port)
+    #   tailscale up                       (les deux côtés sur le même tailnet)
+    #   ssh -R 5599:localhost:5599 votre-vps   (si vous avez une machine publique)
+    # vérification locale : ss -ltn | grep 5599
+
+=== 4. côté COLAB ===
+    téléverser : /tmp/drave.bundle  et  models/Qwen2.5-0.5B-Q8_0.gguf
+    puis ouvrir colab/Drave-reparti.ipynb et suivre les cellules
+
+=== 5. ce qu'on attend =
+… [357 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='tools/preparer_colab.sh'; s=open(p).read()\ns = s.replace(\"    temps : ~16 ms de calcul local par LOT de 64 · l'attente du pair = son calcul + l'aller-retour\",\n              \"    temps : ~1,6 s de calcul loca … [5236 caractères tronqués]`

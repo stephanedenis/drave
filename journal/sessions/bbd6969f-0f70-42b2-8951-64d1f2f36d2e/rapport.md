@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 45.5 h |
+| Durée | 45.6 h |
 | Tours | 45 |
-| Messages | 1666 |
-| Appels d'outils | 1573 |
+| Messages | 1671 |
+| Appels d'outils | 1578 |
 | Fichiers touchés | 44 |
-| Commandes | 1258 |
+| Commandes | 1263 |
 | Sous-agents | 4 |
-| Commits | 107 |
+| Commits | 108 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -2055,7 +2055,7 @@ Je vérifie l'heure à chaque itération et j'arrête à 12:06, en laissant un p
 
 ### Tour 45 — as-tu ce qu'il te faut pour te rendre à 15h en travaillaint avec un maximum d'autonomie et de parallélisme d'activités?
 
-*74 appels d'outils.* Actions notables :
+*79 appels d'outils.* Actions notables :
 
 - bash — Probe machine, GPU, disk, network state
 - bash — Identify GPU users and stray processes
@@ -2071,11 +2071,11 @@ Je vérifie l'heure à chaque itération et j'arrête à 12:06, en laissant un p
 - bash — Understand batched PPL reference path
 - bash — Add batched imposed states to forward_lot
 - list_agents
-- … et 53 autres
+- … et 58 autres
 
 **Synthèse produite :**
 
-Lane A tourne (2e variante). Je traite deux restes de l'audit : la trace muette en inférence, et les modes multiples qui se recouvrent en silence.
+Colab : je prépare un notebook prêt à l'emploi + la mise en place. D'abord, comment le code peut-il arriver sur Colab ?
 
 ## 3. Travail accompli
 
@@ -2177,7 +2177,7 @@ Lane A tourne (2e variante). Je traite deux restes de l'audit : la trace muette 
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 1218 autres
+- … et 1223 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2432,4 +2432,5 @@ Lane A tourne (2e variante). Je traite deux restes de l'audit : la trace muette 
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p='docs/format-flux.md'; s=open(p).read() v = """          version      u8           3   
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p='docs/format-flux.md'; s=open(p).read() v = """liste     couche       u16          < 10
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A drave-core/src/main.rs && git commit -q -F - <<'EOF' && git log --oneline -1 | cat Deux silence
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p='tools/preparer_colab.sh'; s=open(p).read() s = s.replace("    temps : ~16 ms de calcul
 

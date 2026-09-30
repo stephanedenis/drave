@@ -7,6 +7,14 @@ Ce document est la recette ; l'état du protocole et les chiffres qui la
 dimensionnent sont dans `docs/format-flux.md` et
 `reports/rapport-transport-liste.md`.
 
+## Mise en place, concrètement
+
+`tools/preparer_colab.sh` produit le dépôt en **un fichier** (`drave.bundle`, 4,5 Mo
+avec tout l'historique) et affiche l'empreinte SHA-256 du modèle — les deux nœuds
+doivent charger le même GGUF, la dimension ne voyage pas. `colab/README.md` donne
+la marche à suivre (tunnel, téléversements) et `colab/Drave-reparti.ipynb` est le
+notebook prêt à ouvrir, avec la vérification d'empreinte et la lecture du résultat.
+
 ## Ce qui est déjà vérifié, et ce qui ne l'est pas
 
 | point | état |
