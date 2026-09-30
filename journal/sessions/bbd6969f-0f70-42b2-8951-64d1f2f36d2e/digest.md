@@ -22017,3 +22017,196 @@ data/
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && printf 'target/\\n' >> .gitignore && git rm -r -q --cached drave-core/target 2>/dev/null; git ls-files | grep -c \"target/\"; git add -A && git commit -q -F - <<'EOF' && git log --oneline -1 && git status --short | head -3\nHygiène : … [692 caractères tronqués]`
+
+  ```
+0
+a44414d Hygiène : sortir les artefacts de compilation du dépôt, et committer la sentinelle
+ M journal/README.md
+  ```
+
+### 🤖 Assistant
+
+⏵ Bilan de la session autonome : phase 0 terminée, dépôt assaini
+
+## Ce qui a été fait pendant cette plage autonome
+
+**Phase 0 de la roadmap — « la drave observable » — est terminée**, avec des chiffres :
+
+| chantier | livrable | mesure |
+|---|---|---|
+| **0.1 trace du flux** | `--trace-flux` + `--trace-couches` : par (couche, position), la liste des neurones actifs poussée dans la couche | 12 288 listes, **132 Mo** pour 512 jetons, **6,02 octets par neurone actif**, **+8 % de temps** ; trace sélective (2 couches) : **5 Mo au lieu de 132** |
+| **0.2 diff par couche** | `tools/diff_flux.py` | KV f32 contre int8 (19,3885 contre 19,8059) → première divergence **couche 1, jeton 0**, 896 neurones ; couche la plus touchée **FFN 2** |
+| **0.3 codec de référence** | `tools/flux_codec.py` — la **seconde implémentation** du format DRVF | aller-retour **IDENTIQUE** sur 132 396 736 octets ; encodage 40 Mo/s, décodage 15 Mo/s en Python ; projection phase 3 : 512 jetons = **265 Mo** sur le fil |
+| **0.4 profilage par neurone** | `tools/profil_flux.py` : densité, part des 10 % les plus forts, dominants, CSV | par couche : **25-42 %** de la magnitude portée par 10 % des neurones ; en creux : densité **26-56 %** et trace **÷2,5** |
+
+Le résultat qui répond le mieux à votre vision : **la taille de la trace suit l'activité** (densité ÷2,3 → trace ÷2,5). « Le coût est proportionnel à ce qui parle » n'est plus un principe, c'est un chiffre — et ce sera vrai du format d'échange de la phase 3, puisque c'est le même format.
+
+**Phase 1.4** : l'expérience qui attribue l'écart int8 avec llama.cpp (+3,0 % contre +0,8 %) est **écrite avec ses points de code exacts** (clés en f32 / valeurs en f32 pour séparer l'erreur des scores de celle de la somme pondérée). J'avais commencé les drapeaux, je les ai **retirés** : le temps restant ne permettait pas de les finir *et* de les mesurer, et un demi-drapeau vaut moins qu'une expérience écrite.
+
+**Hygiène trouvée en chemin** : mon `git add -A` du renommage avait embarqué **44 fichiers de `target/`** dans le dépôt. Retirés du suivi, `target/` ajouté au `.gitignore` — le dépôt ne grossira plus à chaque compilation.
+
+## État
+
+- Commits : `ac7ccb1` (0.1/0.2), `47aaae9` (0.4), `a2545ac` (0.3 + 1.4), `a44414d` (hygiène) ;
+- `cargo test --release` **6/6**, portes Qwen **19,3885** et gpt-oss **15,1757** intactes ;
+- le seul fichier modifié est l'archive du journal, comme d'habitude.
+
+## Ce que je ferais ensuite, dans l'ordre
+
+1. **1.4** — les deux variantes K/V en f32 : le code est localisé (`ecrire`, `cle`/`valeur`, `assurer`, `new`), et la mesure tranche une question ouverte depuis plusieurs sessions ;
+2. **1.1** — le top-k dans le noyau GPU : je le rappelle honnêtement, cela demande **deux ou trois noyaux** et un tampon de scores en VRAM (tenable jusqu'à ~32 k de contexte, à éviter à 1 M) — c'est un chantier, pas un après-midi ;
+3. **0.3bis** — un `--flux-rejouer` qui relit une trace et renvoie les listes dans le moteur, ce qui ferme la boucle « enregistrer → rejouer » et **prépare directement Colab** : le nœud distant n'aura qu'à recevoir ce que ce mode sait déjà lire.
+
+
+## Tour 43
+
+### 👤 Utilisateur
+
+ne te fie pas à tes estimés pour le temps. fais un 2h de travail autonome en vérifiant l'heure du système à chaque itération afin de continuer à travailler sur une période te temps absolue (time-boxing)
+
+### 🤖 Assistant
+
+⏵ Je note l'heure de départ et je time-boxe 2 heures de travail
+
+- **bash** `{"command": "date +\"%H:%M:%S\" && date -d \"+2 hours\" +\"%H:%M:%S\" && echo \"(fin de plage)\" && cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"pub fn quant_scratch\" -A 4 drave-core/src/model.rs | head -8", "description": "Set the 2-hour deadline and recon"}`
+
+  ```
+10:06:59
+12:06:59
+(fin de plage)
+  ```
+
+### 🤖 Assistant
+
+⏵ 10:07 — chantier 0.3bis : rejouer un flux enregistré dans le moteur
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && python3 - <<'PY'\np='src/model.rs'; s=open(p).read()\n\n# 1) le relecteur de flux\ns = s.replace(\"\"\"pub struct Model {\"\"\",\n\"\"\"/// Relit une trace de flux et rend, pour (couche, position), la liste\n/// enregistré … [6382 caractères tronqués]`
+
+  ```
+relecteur de flux posé
+    Finished `release` profile [optimized] target(s) in 0.01s
+  ```
+
+- **bash** `{"command": "date +\"%H:%M:%S\"; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && python3 - <<'PY'\np='src/main.rs'; s=open(p).read()\ns = s.replace(\"\"\"    /// Trace du flux d'activation : fichier de sortie.\n    trace_flux: Option<String>,\"\"\",\n\"\"\"    /// Trace du flux d'ac … [1486 caractères tronqués]`
+
+  ```
+10:07:41
+option --flux-forcer posée
+error[E0616]: field `listes` of struct `FluxRelecteur` is private
+    --> src/main.rs:2075:85
+     |
+2075 |                 println!("[flux] rejeu depuis {chemin} : {} listes enregistrées", r.listes.len());
+     |                                                                                     ^^^^^^ private field
+
+warning: unused variable: `arch`
+--
+error: could not compile `drave-core` (bin "drave") due to 1 previous error; 9 warnings emitted
+error: could not compile `drave-core` (bin "drave") due to 1 previous error; 9 warnings emitted
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && python3 - <<'PY'\np='src/model.rs'; s=open(p).read()\ns = s.replace(\"\"\"    /// (couche, position) -> (échelle, indices/valeurs)\n    listes: std::collections::HashMap<(u16, u32), (f32, Vec<(u32, i16)>)>,\"\"\",\n\"\"\"  … [931 caractères tronqués]`
+
+  ```
+champ public
+    Finished `release` profile [optimized] target(s) in 0.01s
+== référence (sans rejeu) ==
+perplexité 19.3885 sur 510 tokens
+== rejeu du flux enregistré ==
+[flux] lecture impossible de /tmp/flux_f32.bin : failed to fill whole buffer
+perplexité 19.3885 sur 510 tokens
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && python3 - <<'PY'\np='src/model.rs'; s=open(p).read()\ns = s.replace(\"\"\"        let mut entete = [0u8; 16];\n        f.read_exact(&mut entete)?;\"\"\",\n\"\"\"        // En-tête : magie (4) + version (2) + n_layer (4) +  … [736 caractères tronqués]`
+
+  ```
+en-tête corrigé (14 octets)
+    Finished `release` profile [optimized] target(s) in 20.44s
+10:09:13
+[flux] rejeu depuis /tmp/flux_f32.bin : 12288 listes enregistrées
+perplexité 2773.4771 sur 510 tokens
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"== référence, une seule fenêtre ==\" && timeout 300 ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf --ppl /tmp/ids_qwen.txt --ctx 256 --abits 16 --threads 16 --limit 256 --dense 2>&1 | grep -oE \"perplexité [0- … [469 caractères tronqués]`
+
+  ```
+== référence, une seule fenêtre ==
+perplexité 17.4315 sur 255 tokens (0 événements, 7.9 s)
+== même chose, flux REJOUÉ ==
+[flux] rejeu depuis /tmp/flux_f32.bin : 12288 listes enregistrées
+perplexité 356694.7669 sur 255 tokens (0 événements, 7.9 s)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && grep -n \"fn quant_scratch\" src/model.rs && sed -n \"$(grep -n 'fn quant_scratch' src/model.rs | head -1 | cut -d: -f1),+26p\" src/model.rs", "description": "Read quant_scratch convention"}`
+
+  ```
+1506:    fn quant_scratch(x: &[f32], levels: f32, thresh: f32, topk: usize, renorm: bool,
+    fn quant_scratch(x: &[f32], levels: f32, thresh: f32, topk: usize, renorm: bool,
+                     scratch: &mut Vec<f32>) -> Option<(SparseVec, f32)> {
+        let mut mx = 0f32;
+        for &v in x { let a = v.abs(); if a > mx { mx = a; } }
+        if mx == 0.0 { return None; }
+        let s = mx / levels;
+        let inv = 1.0 / s;
+        // seuil absolu correspondant à la fraction demandée du maximum
+        let seuil = (thresh * levels) as i32;
+        let mut sv = SparseVec { idx: Vec::with_capacity(x.len()), val: Vec::with_capacity(x.len()) };
+        if topk > 0 {
+            // k-WTA : ne garder que les k plus grandes magnitudes (inhibition
+            // latérale). `topk` est une FRACTION de la dimension : sans cela la
+            // même valeur de k ne veut pas dire la même chose pour un vecteur de
+            // 896 et un de 4 864.
+            scratch.clear();
+            scratch.extend(x.iter().map(|v| v.abs()));
+            let mag = &mut *scratch;
+            let k = (((topk as f32) / 1000.0) * x.len() as f32).round() as usize;
+            let k = k.clamp(1, x.len());
+  
+… [492 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && python3 - <<'PY'\np='src/model.rs'; s=open(p).read()\nold = \"\"\"            if let Some(r) = self.flux_force.as_mut() {\n                r.appliquer(l, pos, &mut hn);\n            } else if self.trace.is_some() {\"\"\"\n … [1659 caractères tronqués]`
+
+  ```
+diagnostic de rejeu posé
+    Finished `release` profile [optimized] target(s) in 0.01s
+[verif] couche 0 pos 0 : écart max 1.142e0 sur une dynamique de 1.487e0 (relatif 7.68e-1)
+[verif] couche 1 pos 0 : écart max 9.285e-1 sur une dynamique de 7.860e0 (relatif 1.18e-1)
+     255 tokens notés — perplexité cumulée 356694.767  (30.7 tok/s)
+=== perplexité 356694.7669 sur 255 tokens (0 événements, 8.3 s) ===
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 300 ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf --ppl /tmp/ids_qwen.txt --ctx 256 --abits 16 --threads 16 --limit 256 --dense --trace-flux /tmp/flux_256.bin 2>&1 | grep -E \"\\[trace\\]\" && DRAVE_FLUX_VER … [324 caractères tronqués]`
+
+  ```
+[trace] flux enregistré dans /tmp/flux_256.bin
+[trace] 12288 listes · 11004270 neurones actifs · 66 Mo
+[verif] couche 0 pos 0 : écart max 2.268e-5 sur une dynamique de 1.487e0 (relatif 1.53e-5)
+[verif] couche 1 pos 0 : écart max 1.254e-4 sur une dynamique de 8.229e0 (relatif 1.52e-5)
+     255 tokens notés — perplexité cumulée 17.431  (29.9 tok/s)
+=== perplexité 17.4315 sur 255 tokens (0 événements, 8.5 s) ===
+  ```
+
+### 🤖 Assistant
+
+⏵ 10:17 — le rejeu marche ; je corrige l'ambiguïté de clé (compteur de jeton global)
+
+- **bash** `{"command": "date +\"%H:%M:%S\"; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && python3 - <<'PY'\np='src/model.rs'; s=open(p).read()\n# un compteur de jeton monotone : la clé (couche, jeton) devient non ambiguë\n# même quand le moteur repasse par plusieurs fenêtres de contexte\ns = … [2573 caractères tronqués]`
+
+  ```
+10:11:23
+compteur de jeton global posé
+    Finished `release` profile [optimized] target(s) in 0.01s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 300 ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf --ppl /tmp/ids_qwen.txt --ctx 256 --abits 16 --threads 16 --limit 512 --dense --trace-flux /tmp/flux_g.bin 2>&1 | grep -E \"\\[trace\\] [0-9]\" && echo \"==  … [709 caractères tronqués]`
+
+  ```
+[trace] 24576 listes · 22008776 neurones actifs · 132 Mo
+== rejeu, même configuration (deux fenêtres) ==
+perplexité 19.3885 sur 510 tokens (0 événements, 16.3 s)
+== référence sans rejeu ==
+perplexité 19.3885 sur 510 tokens (0 événements, 16.4 s)
+10:12:42
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='docs/roadmap.md'; s=open(p).read()\ns = s.replace(\"\"\"| 0.3 | **Le format EST le contrat d'échange** (phase 3) : versionné, en-tête + paires | ⏳ | spécifié dans ce document ; un encodeur/décodeur de référence | … [2817 caractères tronqués]`

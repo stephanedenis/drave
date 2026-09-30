@@ -539,6 +539,71 @@ impl TraceFlux {
     }
 }
 
+/// Relit une trace de flux et rend, pour (couche, position), la liste
+/// enregistrée. C'est le pendant du `TraceFlux` : ce qu'un nœud distant devrait
+/// recevoir pour continuer le calcul, on sait déjà l'écrire — ici, on apprend à
+/// le RELIRE et à repartir de là.
+pub struct FluxRelecteur {
+    /// (couche, position) -> (échelle, indices/valeurs)
+    pub listes: std::collections::HashMap<(u16, u32), (f32, Vec<(u32, i16)>)>,
+    pub servies: u64,
+    pub manquantes: u64,
+}
+
+impl FluxRelecteur {
+    pub fn lire(chemin: &str) -> std::io::Result<Self> {
+        use std::io::Read;
+        let mut f = std::fs::File::open(chemin)?;
+        // En-tête : magie (4) + version (2) + n_layer (4) + hidden (4) = 14 octets.
+        // Lire 16 décalait tout de deux octets et faisait échouer la dernière
+        // lecture — un « failed to fill whole buffer » qui ne dit pas pourquoi.
+        let mut entete = [0u8; 14];
+        f.read_exact(&mut entete)?;
+        if &entete[0..4] != b"DRVF" {
+            return Err(std::io::Error::new(std::io::ErrorKind::InvalidData,
+                                           "ce n'est pas une trace DRVF"));
+        }
+        let mut listes = std::collections::HashMap::new();
+        loop {
+            let mut tete = [0u8; 2];
+            if f.read_exact(&mut tete).is_err() { break; }          // fin de fichier
+            let couche = u16::from_le_bytes(tete);
+            if couche == 0xFFFF { break; }
+            let mut corps = [0u8; 12];
+            f.read_exact(&mut corps)?;
+            let pos = u32::from_le_bytes([corps[0], corps[1], corps[2], corps[3]]);
+            let n = u32::from_le_bytes([corps[4], corps[5], corps[6], corps[7]]);
+            let echelle = f32::from_le_bytes([corps[8], corps[9], corps[10], corps[11]]);
+            let mut octets = vec![0u8; n as usize * 6];
+            f.read_exact(&mut octets)?;
+            let mut paires = Vec::with_capacity(n as usize);
+            for k in 0..n as usize {
+                let o = k * 6;
+                let i = u32::from_le_bytes([octets[o], octets[o+1], octets[o+2], octets[o+3]]);
+                let v = i16::from_le_bytes([octets[o+4], octets[o+5]]);
+                paires.push((i, v));
+            }
+            listes.insert((couche, pos), (echelle, paires));
+        }
+        Ok(FluxRelecteur { listes, servies: 0, manquantes: 0 })
+    }
+
+    /// Écrit dans `dst` l'activation DÉQUANTIFIÉE de la liste enregistrée.
+    /// C'est exactement ce qu'un nœud recevant le flux ferait avant de continuer.
+    pub fn appliquer(&mut self, couche: usize, pos: usize, dst: &mut [f32]) {
+        match self.listes.get(&(couche as u16, pos as u32)) {
+            Some((echelle, paires)) => {
+                for v in dst.iter_mut() { *v = 0.0; }
+                for &(i, q) in paires {
+                    if (i as usize) < dst.len() { dst[i as usize] = q as f32 * *echelle; }
+                }
+                self.servies += 1;
+            }
+            None => self.manquantes += 1,
+        }
+    }
+}
+
 pub struct Model {
     pub g: Gguf,
     pub cfg: Cfg,
@@ -645,8 +710,17 @@ pub struct Model {
     pub kv_gpu: Option<Vec<(usize, crate::gpu::KvGpu)>>,
     /// Tranches de clés du noyau d'attention, réutilisées d'un jeton à l'autre.
     pub attn_gpu_part: Vec<f32>,
+    /// Compteur de jetons tracés : `position` dans la trace est ce compteur, et
+    /// non la position DANS la fenêtre. Sans cela, une exécution à plusieurs
+    /// fenêtres réécrivait les mêmes clés (couche, position) et le rejeu
+    /// rejouait la mauvaise — mesuré : perplexité 356 694 au lieu de 17,43.
+    pub jeton_trace: u64,
     /// Trace du flux d'activation (`--trace-flux`).
     pub trace: Option<TraceFlux>,
+    /// Relecture d'une trace : les activations enregistrées REMPLACENT celles
+    /// calculées (`--flux-forcer`). Si le rejeu redonne les mêmes logits, alors
+    /// une liste suffit à continuer le calcul — c'est le contrat de la phase 3.
+    pub flux_force: Option<FluxRelecteur>,
     /// Embedding imposé pour le prochain appel à `forward` : c'est le point
     /// d'injection des vecteurs d'image (ou de tout autre vecteur), le seul
     /// ajout d'architecture que la vision demande au moteur — `forward` partait
@@ -1415,7 +1489,8 @@ impl Model {
             stop_id: None, stop_id2: None, prof: [0.0; 6],
             tete,
             tete_gpu, tete_gpu_q6k, head4, sinks_vus, kv_gpu, attn_gpu_part: Vec::new(),
-            cache_experts, mla, mla_cache, trace: None, emb_imposee: None, lot: 1,
+            cache_experts, mla, mla_cache, jeton_trace: 0, trace: None, flux_force: None,
+            emb_imposee: None, lot: 1,
             patch: None, ffn_gain: None, hebb: None,
         }
     }
@@ -2533,6 +2608,7 @@ impl Model {
     /// Un token, une position. Retourne l'état caché après la dernière norme.
     pub fn forward(&mut self, tok: u32, pos: usize) -> Vec<f32> {
         assert!(pos < self.ctx, "contexte dépassé ({pos} ≥ {})", self.ctx);
+        self.jeton_trace += 1;
         // lus AVANT l'emprunt destructuré : la parcimonie par projection
         let tkp = self.act_topk_proj;
         let tkg = self.act_topk;
@@ -2596,13 +2672,33 @@ impl Model {
                       else { 0 };
             let tm = Instant::now();
             Self::rmsnorm(&x, &lay.attn_norm, cfg.eps, &mut hn);
-            if self.trace.is_some() {
+            if self.flux_force.is_some() {
+                // Diagnostic : comparer ce que la trace impose à ce que le
+                // calcul vient de produire. Un écart minuscule = la liste est
+                // fidèle ; un écart énorme = le codage de la liste est faux.
+                let verif = std::env::var("DRAVE_FLUX_VERIF").is_ok();
+                let avant = if verif { hn.clone() } else { Vec::new() };
+                let j = self.jeton_trace;
+                let r = self.flux_force.as_mut().unwrap();
+                r.appliquer(l, j as usize, &mut hn);
+                if verif && r.servies < 4 {
+                    let mut mx = 0f32;
+                    let mut dyn_ = 0f32;
+                    for (a, b) in avant.iter().zip(hn.iter()) {
+                        mx = mx.max((a - b).abs());
+                        dyn_ = dyn_.max(a.abs());
+                    }
+                    println!("[verif] couche {l} pos {pos} : écart max {mx:.3e} sur une \
+dynamique de {dyn_:.3e} (relatif {:.2e})", mx / dyn_.max(1e-9));
+                }
+            } else if self.trace.is_some() {
                 let mut tmp = Vec::with_capacity(h);
                 if let Some((sv, sx)) = Self::quant_scratch(&hn, self.act_levels, self.act_thresh,
                                                             tk(0), self.act_renorm, &mut tmp) {
                     let mut actifs = vec![0i32; h];
                     for (&i, &v) in sv.idx.iter().zip(sv.val.iter()) { actifs[i as usize] = v; }
-                    self.trace.as_mut().unwrap().ecrire(l, pos, &actifs, sx);
+                    let j = self.jeton_trace;
+                    self.trace.as_mut().unwrap().ecrire(l, j as usize, &actifs, sx);
                 }
             }
             Self::matvec(pool, &lay.wq, &hn, &mut q, events, self.act_levels, self.act_thresh, tk(0), self.act_renorm, &mut scratch, self.seuil_push);
@@ -2836,13 +2932,17 @@ impl Model {
             Self::matvec(pool, &lay.wo, &att, &mut o, events, self.act_levels, self.act_thresh, tk(3), self.act_renorm, &mut scratch, self.seuil_push);
             for i in 0..h { o[i] += x[i]; }
             Self::rmsnorm(&o, &lay.ffn_norm, cfg.eps, &mut hn);
-            if self.trace.is_some() {
+            if let Some(r) = self.flux_force.as_mut() {
+                let j = self.jeton_trace;
+                r.appliquer(l + 1000, j as usize, &mut hn);
+            } else if self.trace.is_some() {
                 let mut tmp = Vec::with_capacity(h);
                 if let Some((sv, sx)) = Self::quant_scratch(&hn, self.act_levels, self.act_thresh,
                                                             tk(3), self.act_renorm, &mut tmp) {
                     let mut actifs = vec![0i32; h];
                     for (&i, &v) in sv.idx.iter().zip(sv.val.iter()) { actifs[i as usize] = v; }
-                    self.trace.as_mut().unwrap().ecrire(l + 1000, pos, &actifs, sx);
+                    let j = self.jeton_trace;
+                    self.trace.as_mut().unwrap().ecrire(l + 1000, j as usize, &actifs, sx);
                 }
             }
             // ------------------------------------------------------ MoE

@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 43.2 h |
-| Tours | 42 |
-| Messages | 1384 |
-| Appels d'outils | 1307 |
+| Durée | 43.4 h |
+| Tours | 43 |
+| Messages | 1398 |
+| Appels d'outils | 1319 |
 | Fichiers touchés | 42 |
-| Commandes | 1033 |
+| Commandes | 1045 |
 | Sous-agents | 1 |
-| Commits | 79 |
+| Commits | 80 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -111,6 +111,8 @@
 **Tour 41** — continue
 
 **Tour 42** — continue, sois autonome pendant 2 heures
+
+**Tour 43** — ne te fie pas à tes estimés pour le temps. fais un 2h de travail autonome en vérifiant l'heure du système à chaque itération afin de continuer à travailler sur une période te temps absolue (time-boxing)
 
 ## 2. Déroulé, étape par étape
 
@@ -1912,7 +1914,56 @@ Un mot d'honnêteté sur 1.1 : le top-k en flux ne se fai
 
 **Synthèse produite :**
 
-⏵ Hygiène : `target/` est suivi par git — je corrige ça avant de conclure
+⏵ Bilan de la session autonome : phase 0 terminée, dépôt assaini
+
+\## Ce qui a été fait pendant cette plage autonome
+
+**Phase 0 de la roadmap — « la drave observable » — est terminée**, avec des chiffres :
+
+| chantier | livrable | mesure |
+|---|---|---|
+| **0.1 trace du flux** | `--trace-flux` + `--trace-couches` : par (couche, position), la liste des neurones actifs poussée dans la couche | 12 288 listes, **132 Mo** pour 512 jetons, **6,02 octets par neurone actif**, **+8 % de temps** ; trace sélective (2 couches) : **5 Mo au lieu de 132** |
+| **0.2 diff par couche** | `tools/diff_flux.py` | KV f32 contre int8 (19,3885 contre 19,8059) → première divergence **couche 1, jeton 0**, 896 neurones ; couche la plus touchée **FFN 2** |
+| **0.3 codec de référence** | `tools/flux_codec.py` — la **seconde implémentation** du format DRVF | aller-retour **IDENTIQUE** sur 132 396 736 octets ; encodage 40 Mo/s, décodage 15 Mo/s en Python ; projection phase 3 : 512 jetons = **265 Mo** sur le fil |
+| **0.4 profilage par neurone** | `tools/profil_flux.py` : densité, part des 10 % les plus forts, dominants, CSV | par couche : **25-42 %** de la magnitude portée par 10 % des neurones ; en creux : densité **26-56 %** et trace **÷2,5** |
+
+Le résultat qui répond le mieux à votre vision : **la taille de la trace suit l'activité** (densité ÷2,3 → trace ÷2,5). « Le coût est proportionnel à ce qui parle » n'est plus un principe, c'est un chiffre — et ce sera vrai du format d'échange de la phase 3, puisque c'est le même format.
+
+**Phase 1.4** : l'expérience qui attribue l'écart int8 avec llama.cpp (+3,0 % contre +0,8 %) est **écrite avec ses points de code exacts** (clés en f32 / valeurs en f32 pour séparer l'erreur des scores de celle de la somme pondérée). J'avais commencé les drapeaux, je les ai **retirés** : le temps restant ne permettait pas de les finir *et* de les mesurer, et un demi-drapeau vaut moins qu'une expérience écrite.
+
+**Hygiène trouvée en chemin** : mon `git add -A` du renommage avait embarqué **44 fichiers de `target/`** dans le dépôt. Retirés du suivi, `target/` ajouté au `.gitignore` — le dépôt ne grossira plus à chaque compilation.
+
+\## État
+
+- Commits : `ac7ccb1` (0.1/0.2), `47aaae9` (0.4), `a2545ac` (0.3 + 1.4), `a44414d` (hygiène) ;
+- `cargo test --release` **6/6**, portes Qwen **19,3885** et gpt-oss **15,1757** intactes ;
+- le seul fichier modifié est l'archive du journal, comme d'habitude.
+
+\## Ce que je ferais ensuite, dans l'ordre
+
+1. **1.4** — les deux vari
+… [633 caractères tronqués]
+
+### Tour 43 — ne te fie pas à tes estimés pour le temps. fais un 2h de travail autonome en vérifiant l'heure du système à chaque itéra … [82 caractères tronqués]
+
+*12 appels d'outils.* Actions notables :
+
+- bash — Set the 2-hour deadline and recon
+- bash — Implement flux replay reader
+- bash — Wire --flux-forcer CLI
+- bash — Build and test flux replay
+- bash — Fix header size and test replay
+- bash — Verify replay on a single window
+- bash — Read quant_scratch convention
+- bash — Add replay diagnostic and measure fidelity
+- bash — Trace and replay with identical settings
+- bash — Use a global token counter as trace key
+- bash — Verify replay across two windows
+- bash — Commit replay work
+
+**Synthèse produite :**
+
+⏵ 10:17 — le rejeu marche ; je corrige l'ambiguïté de clé (compteur de jeton global)
 
 ## 3. Travail accompli
 
@@ -2009,7 +2060,7 @@ Un mot d'honnêteté sur 1.1 : le top-k en flux ne se fai
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 993 autres
+- … et 1005 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2137,7 +2188,7 @@ Un mot d'honnêteté sur 1.1 : le top-k en flux ne se fai
 
 ## 5. Erreurs rencontrées
 
-65 sorties en erreur ou divergentes. Les premières :
+66 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : a8f2635f8 docs: record which models this box is good at, and why src/llama-hparams.cpp:8:void llama_hparams::set_swa_pattern(uint32_t n_pattern, bool dense_first) { src/llama-hparams.h:308:    void se
 - **T1** : 511 tokens notés — perplexité cumulée 247.031  (4.9 tok/s) === perplexité 247.0308 sur 511 tokens (0 événements, 104.5 s) ===  ### B3 harmony assistant 511 --- ref --- 0.0 0.0 0:00 ls: cannot access '
@@ -2236,4 +2287,5 @@ Un mot d'honnêteté sur 1.1 : le top-k en flux ne se fai
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p='docs/roadmap.md'; s=open(p).read() s = s.replace("""| 0.4 | **Profilage par neurone gé
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && git checkout src/model.rs && cargo build --release 2>&1 | tail -1 && cd .. && python3 - <<'PY' 
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && printf 'target/\n' >> .gitignore && git rm -r -q --cached drave-core/target 2>/dev/null; git ls-files | gr
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p='docs/roadmap.md'; s=open(p).read() s = s.replace("""| 0.3 | **Le format EST le contrat
 

@@ -14,7 +14,7 @@ enregistre et qu'on compare. Sans cela, tout le reste se débugue à l'aveugle.
 |---|---|---|---|
 | 0.1 | **Format de trace du flux** : par (couche, position), la liste des neurones actifs (indice + valeur), l'échelle, le nombre | ✅ | écrit et relu sans perte ; **132 Mo pour 512 jetons** (258 ko/jeton), **+8 % de temps** — mesuré |
 | 0.2 | **Diff par couche** (`tools/diff_flux.py`) : où deux exécutions divergent, à quel jeton, quels neurones | ✅ | démontré : KV f32 contre int8 → première divergence **couche 1, jeton 0**, 896 neurones, 2,9e-3 de la dynamique ; couche la plus touchée : **FFN 2** |
-| 0.3 | **Le format EST le contrat d'échange** (phase 3) : versionné, en-tête + paires | ⏳ | spécifié dans ce document ; un encodeur/décodeur de référence |
+| 0.3 | **Le format EST le contrat d'échange** (phase 3) : versionné, en-tête + paires | ✅ | codec de référence (`tools/flux_codec.py`) : aller-retour **identique** sur 132 Mo ; **et le rejeu dans le moteur redonne les mêmes logits** (`--flux-forcer`) |
 | 0.4 | **Profilage par neurone généralisé** : trace exploitable par couche et par expert, pas seulement des compteurs | ✅ | `tools/profil_flux.py` : densité par couche, part des 10 % les plus forts, neurones dominants, export CSV |
 
 ## Phase 1 — La drave mesurée (aucune infra)
@@ -159,3 +159,30 @@ disposition homogène.
 Ces deux drapeaux ont été commencés puis RETIRÉS : le temps restant ne permettait
 pas de les finir et de les mesurer, et un demi-drapeau vaut moins qu'une
 expérience écrite. C'est ici, avec les points de code exacts.
+
+
+### Phase 0.3bis — le REJEU, et ce qu'il démontre pour la phase 3
+
+`--flux-forcer <trace>` relit une trace et **remplace les activations calculées
+par celles qui sont enregistrées** (déquantifiées). Si le rejeu redonne les mêmes
+logits, alors **une liste suffit à continuer le calcul** — c'est exactement le
+contrat qu'un nœud distant devra honorer, et il est donc déjà démontré
+localement.
+
+Mesuré, Qwen2.5-0.5B, 512 jetons, deux fenêtres de contexte, trace de 132 Mo :
+
+```
+sans rejeu  : perplexité 19.3885 sur 510 tokens
+avec rejeu  : perplexité 19.3885 sur 510 tokens
+```
+
+Identique. Et le diagnostic (`DRAVE_FLUX_VERIF=1`) chiffre la fidélité de
+l'encodage : écart relatif **1,5e-5** entre l'activation calculée et celle que la
+trace impose — soit la quantification 16 bits, rien de plus.
+
+**Le défaut trouvé en chemin, et corrigé** : la clé d'une liste était
+`(couche, position DANS la fenêtre)`. Une exécution à plusieurs fenêtres
+réécrivait donc les mêmes clés, et le rejeu rejouait la mauvaise : perplexité
+**356 694** au lieu de 17,43. La clé est maintenant `(couche, compteur de jeton
+global)` — même format sur le disque, sémantique non ambiguë. C'est le genre de
+défaut qu'un rejeu attrape et qu'un diff ne voit pas.

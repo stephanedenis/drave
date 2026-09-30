@@ -334,6 +334,9 @@ struct Options {
     banc_mla: Option<String>,
     /// Trace du flux d'activation : fichier de sortie.
     trace_flux: Option<String>,
+    /// Relecture d'une trace : les activations enregistrées remplacent celles
+    /// calculées (rejeu).
+    flux_forcer: Option<String>,
     /// Couches à tracer (vide = toutes).
     trace_couches: Vec<usize>,
     /// Banc vision : embedding de patchs, écrit en binaire pour comparaison
@@ -415,6 +418,7 @@ fn analyser(args: &[String]) -> Options {
             "--banc-mla" => { o.banc_mla = Some(suivant(i).clone()); 2 }
             "--tensors" => { o.tensors = true; 1 }
             "--trace-flux" => { o.trace_flux = Some(suivant(i).clone()); 2 }
+            "--flux-forcer" => { o.flux_forcer = Some(suivant(i).clone()); 2 }
             "--trace-couches" => { o.trace_couches = suivant(i).split(',')
                                      .filter_map(|x| x.trim().parse().ok()).collect(); 2 }
             "--banc-vision" => { o.banc_vision = Some(suivant(i).clone()); 2 }
@@ -2026,7 +2030,7 @@ fn run_ppl(opt: Options) {
         dense, auto, q4, b6, attn_window, swa_pattern,
         sans_fenetre, attn_sinks, attn_topk, qk_topk, act_thresh, act_topk, act_renorm,
         topk_proj, moe_topk, patch: patch_file, hebb_layer, ffn_gain, logits_bin,
-        ppl_profil, lot, profil_neurones, neurones_sortie, trace_flux, trace_couches,
+        ppl_profil, lot, profil_neurones, neurones_sortie, trace_flux, trace_couches, flux_forcer,
         harmony, harmony_contexte, sans_yarn, ..
     } = opt;
     let lot = lot.max(1);
@@ -2065,6 +2069,15 @@ fn run_ppl(opt: Options) {
     }
 
     let mut mdl = model::Model::load(path, ctx, n_threads, dense, 1.0, auto, q4, b6);
+    if let Some(chemin) = flux_forcer.as_deref() {
+        match model::FluxRelecteur::lire(chemin) {
+            Ok(r) => {
+                println!("[flux] rejeu depuis {chemin} : {} listes enregistrées", r.listes.len());
+                mdl.flux_force = Some(r);
+            }
+            Err(e) => eprintln!("[flux] lecture impossible de {chemin} : {e}"),
+        }
+    }
     if let Some(chemin) = trace_flux.as_deref() {
         match model::TraceFlux::nouveau(chemin, trace_couches.clone(), mdl.cfg.hidden,
                                         mdl.cfg.n_layer) {
