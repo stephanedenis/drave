@@ -191,8 +191,9 @@ qui reste est classé par rentabilité mesurée.
 2. **Second GPU.** 16 Go dorment. Le cache d'experts MXFP4 (13,2 Mo par expert,
    4 608 experts chez gpt-oss) et le KV à 1 M le rempliraient utilement ; il faut
    un second contexte CUDA et une règle de répartition.
-3. **Rotation au-delà de 5 120 jetons.** Le seuil mesuré (1,25 × la longueur
-   déclarée) n'est qu'une borne basse : une passe à 16 k coûte ~1 h par régime.
+3. ~~**Rotation au-delà de 5 120 jetons.**~~ **MESURÉ À 16 k** : RoPE simple
+   **35,18** contre **1 133,02** en interpolation seule, et le seuil est passé à
+   **4 ×** la longueur déclarée (16 384, la plus grande longueur mesurée).
 4. ~~**MLA et vision.**~~ **TOUS DEUX FAITS.** MLA : modèle synthétique + référence
    numpy, écart **5,2e-7**. Vision : chaîne COMPLÈTE et démontrée de bout en bout
    — image → patchs → 32 couches (rotation 2-D **conforme à la source** ggml,

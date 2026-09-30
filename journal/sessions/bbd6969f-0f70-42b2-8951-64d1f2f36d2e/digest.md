@@ -21051,3 +21051,24 @@ paragraphe remplacé ; longueur 285
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '193,205p' REPRISE.md && git add -A journal && git commit -q -m \"journal : archive automatique\" 2>/dev/null; git log --oneline -3 | cat", "description": "Verify REPRISE item and finalize"}`
+
+  ```
+un second contexte CUDA et une règle de répartition.
+3. **Rotation au-delà de 5 120 jetons.** Le seuil mesuré (1,25 × la longueur
+   déclarée) n'est qu'une borne basse : une passe à 16 k coûte ~1 h par régime.
+4. ~~**MLA et vision.**~~ **TOUS DEUX FAITS.** MLA : modèle synthétique + référence
+   numpy, écart **5,2e-7**. Vision : chaîne COMPLÈTE et démontrée de bout en bout
+   — image → patchs → 32 couches (rotation 2-D **conforme à la source** ggml,
+   fenêtre locale d'après clip.cpp) → `v.post_ln` → projecteur (64 groupes ×
+   3 584) → injection dans le modèle de texte → **152 064 logits**. Tranches
+   validées contre numpy : patchs 5,4e-7, projecteur 1,7e-6, une couche 1,8e-6.
+   Réserves NOMMÉES : la permutation colonne-majeur des couches fenêtrées
+   (constatée dans la source, pas implémentée), et l'absence de référence locale
+   pour la qualité (libmtmd d'ollama bloqué sur `tokenize`, cinq hypothèses
+   testées). Tout est dans `docs/plan-mla-vision.md`.
+c6695f4 journal : archive automatique
+095e093 REPRISE : l'item 5 reflète l'état final (chaîne vision démontrée, réserves nommées)
+a42ebb3 REPRISE : MLA et vision tous deux faits, avec leurs réserves nommées
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\ns = open('REPRISE.md').read()\nold = \"\"\"3. **Rotation au-delà de 5 120 jetons.** Le seuil mesuré (1,25 × la longueur\n   déclarée) n'est qu'une borne basse : une passe à 16 k coûte ~1 h par régime.\"\"\"\nnew = \ … [552 caractères tronqués]`
