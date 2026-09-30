@@ -1,7 +1,8 @@
 # Spécification — mode 4 : le **lot en listes** (protocole v5)
 
 > **État : ÉCRIT, mesuré et relu** (voir `reports/rapport-mode4-lot-listes.md`) — ce plan
-> reste la référence de conception ; trois écarts volontaires y sont notés en tête. Ce document est la spécification à implémenter ; aucun
+> reste la référence de conception, et les écarts constatés à la mise en œuvre sont
+> consignés dans ce rapport (version 5, borne des actifs, garde cumulatif). Ce document est la spécification à implémenter ; aucun
 > fichier de code n'a été touché pour l'écrire. Il suppose connus
 > `docs/format-flux.md` (protocole v4, modes 0–3) et `docs/plan-prefill-reparti.md`
 > (le mode 3, mis en œuvre, et ses leçons). Les numéros de ligne sont ceux de

@@ -31429,3 +31429,129 @@ liens .md cassés : 0
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='README.md'; s=open(p).read()\nvieux = \"\"\"## Prochaines étapes\n\n1. **Modèle ternaire entraîné** : implémenter un entraînement avec poids ternaires\n   (straight-through estimator) ou récupérer un petit modèle … [3113 caractères tronqués]`
+
+  ```
+README : prochaines étapes remises à jour
+f1c265e README : les prochaines étapes étaient restées à l'époque du FPGA
+17:08:57
+  ```
+
+- **bash** `{"command": "sleep 420; date +\"%H:%M:%S\"; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log --oneline -1 | cat; pgrep -c -x drave 2>/dev/null || echo \"(aucun drave)\"", "description": "Wait for the fourth review", "timeoutMs": 600000}`
+
+  ```
+17:16:01
+f1c265e README : les prochaines étapes étaient restées à l'époque du FPGA
+0
+(aucun drave)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"commits du créneau 15h-18h : $(git log --oneline --since='2026-09-30 15:05' | wc -l)\"; echo \"commits du jour : $(git log --oneline --since='2026-09-30 00:00' | wc -l)\"; echo \"rapports : $(ls reports/*.md | wc -l) · documen … [491 caractères tronqués]`
+
+  ```
+commits du créneau 15h-18h : 26
+commits du jour : 97
+rapports : 42 · documents : 13 · outils : 18
+tests : 17 passed
+--- portes ---
+perplexité 19.3885 sur 510 tokens
+17:16:24
+  ```
+
+- **bash** `{"command": "sleep 420; date +\"%H:%M:%S\"; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; git status --short | head -3", "description": "Wait more for the review", "timeoutMs": 600000}`
+
+  ```
+17:23:30
+ M journal/README.md
+ M journal/sessions/5185ccb1-be24-4716-89df-62621e790444/digest.md
+ M journal/sessions/5185ccb1-be24-4716-89df-62621e790444/rapport.md
+  ```
+
+- **bash** `{"command": "sleep 480; date +\"%H:%M:%S\"", "description": "Wait for review completion", "timeoutMs": 600000}`
+
+  ```
+17:31:35
+  ```
+
+### 👤 Utilisateur
+
+Agent 5185ccb1-be24-4716-89df-62621e790444 sent a message:
+RELECTURE ADVERSARIALE des correctifs 998d409→0c56c35 : 9 défauts réels prouvés (6 code, 3 doc/mesure), 2 graves. Aucun fichier du dépôt modifié. cargo test 17/17 ; porte Qwen ctx 256 = 19,3885 reproduite.
+
+GRAVE 1 — le client ne valide la réponse du pair QUE dans le chemin lot (`main.rs:2176-2196`, à l'intérieur de `if lot > 1`). Faux serveur + client réel `--ppl-reparti --limit 6 --ctx 64` :
+• réponse mode 3 (ou 4) à une demande mode 0 → SIGABRT signal 6 (`main.rs:1512` « un lot d'états n'est pas un vecteur dense ») ;
+• réponse mode 0 n=897 > hidden → SIGABRT (`model.rs:2204`, index out of bounds) ;
+• réponse mode 0 n=895 < hidden → acceptée en SILENCE, perplexité 2,76e8 affichée comme résultat, code 0 ;
+• réponse mode 1 n=0 → silencieuse, perplexité = 151936 = vocabulaire.
+Le chemin lot est correct : demande 4 → réponse 3 ⇒ code 1 + message clair ; inverse idem. Le commentaire du correctif (« le client vérifie le mode et la taille de la réponse au lieu d'abandonner en SIGABRT sur 83 octets hostiles ») est donc faux hors lot.
+
+GRAVE 2 — le nœud moteur meurt sur des trames forgées de 83 octets : aucun contrôle de `debut`/`fin`/`pos`/`n` vs hidden. Prouvé : mode 1 n=1 pos=100000 → SIGABRT `model.rs:2985` assert(pos<ctx) ; mode 1 n=1 fin=200 → SIGABRT `model.rs:3046` (&layers[l]) ; mode 0 n=897 (et n=895) → SIGABRT `model.rs:2204`/`3314`. Le mode 0 ne refuse que n==0 (le refus devrait être n==hidden). Le mode 4 est, lui, bien gardé (a>hidden, nb, lg, n=0 → refus nommés, sortie propre).
+
+AUTRES : (3) plafond R4 = par message, pas par session : 8 flux de 35,4 Mo (282,9 Mo cumulés > 256) tous acceptés — mais la RAM ne s'accumule PAS (RSS 593 Mo stable, HWM 698 Mo) ; la vérif du cumul est faite après lecture de l'état, contre le §4 du plan (« refuser sans lire l'état fautif »). Le refus intra-message est exact à l'octet : état 72393, 268436952 o, 258,0 Mo poussés = le rapport, reproduit. (4) « 256 Mo = borne de la mémoire vivante » faux ×2 : trame mode 1 de 256 Mio pile → VmHWM 1,04 Gio. (5) `--banc-kv` n'applique pas la règle d'homogénéité : avec DRAVE_KV_BITS=8 DRAVE_KV_K_F16=1 il INSTALLE le miroir et sort « écart +4,17e-5 », alors que le moteur le désactive ; la cellule « ❌ désactivé/— » du rapport ne sort pas du banc. Sans DRAVE_GPU=1 le banc dit « GPU absent ». (6) Reproductibilité : aucune commande pour la section temps/miroir du rapport KV ; 3 commandes sur 9 lignes ; /tmp/ids_qwen_long.txt non régénérable depuis le rapport (REPRISE §2 donne head -c 20000 → 4592 ids, insuffisant pour --limit 8192) ; aiguille 9/9 invérifiable (modèle 1.5B absent, seuls 0.5B Q4_0/Q8_0 dans models/) ; `--ppl-reparti` ignore `--ids-file` (donc le « corpus WikiText-2 » du rapport mode 4 n'est alimentable que par une liste --ids littérale). (7) « ÷2,3 sur les octets » contredit par le tableau lui-même (1608 o/flux vs 1,5 ko = 1,05×) ; ma mesure : mode 2 = 1671 o/flux, mode 4 = 1,6 ko/jeton → 1,02× (le ÷2,3 n'est vrai que contre le mode 3 dense, 3,5 ko). (8) docs/plan-mode4-lot-listes.md : « trois écarts volontaires y sont notés en tête » (liste inexistante) et « aucun fichier de code n'a été touché pour l'écrire » (faux). Mineurs : int8 145,5 ms contre 174,0 annoncés (−16 %, la mesure dépend de la charge : sous charge j'ai eu f32 94,7 ms et ratio 1,64× au lieu de 2,3×) ; « 1 lots pour 20 jetons » ; bannière --threads du banc fausse (toujours n_head threads).
+
+VÉRIFIÉ CORRECT : refus n==0 restreint (modes 1/2 : liste vide acceptée, en_dense → zéros, quant_scratch None → zéros/biais sans division par zéro ; session réelle `--flux-blocs --act-thresh 1.0 --lot 1` → 0,00e0) ; gardes mode 4 ; « hors dimension » une seule ligne par flux (4 480 000 indices) ; comptabilité Σt (2 lots/20 jetons, 1 lot/1000, 16 lots/1024, arithmétique cohérente) ; mode 3 à 1024 jetons = 0,00e0 ; modes 0/1/2/3/4 de bout en bout (0,00e0 ; mode 1 3,29e-3 ; mode 2 5,64e-2 ; mode 4 6,46e-2) ; miroir désactivé par K_F32, V_F32, K_F16 et NON par DRAVE_KV_F16 (correct : arrondi avant quantification, le miroir copie les octets stockés) ; temps f32 71,5 ms / f16 163,6 ms (2,29×) / miroir 1,8 et 1,7 ms / écarts +3,23e-5 et +3,42e-5 conformes au rapport.
+
+NON VÉRIFIÉ : aiguille 9/9 (modèle 1.5B absent), 6 lignes du tableau KV (25-28 min chacune), portes gpt-oss (modèle absent), octets WikiText exacts du rapport mode 4.
+
+### 👤 Utilisateur
+
+Background subagent 5185ccb1-be24-4716-89df-62621e790444 finished and will do no further work unless you send it more.
+Its closing message:
+⏵ Clôture : rapport envoyé, aucun processus résiduel
+
+Le rapport complet figure ci-dessus et le résumé auto-portant a été transmis au parent (`bbd6969f-…`) via `send_message` (livré). Aucun fichier du dépôt n'a été modifié (les `journal/…` modifiés dans `git status` sont les écritures d'autres agents) ; tous mes serveurs, clients factices et bancs sont arrêtés, aucun job de fond ne tourne.
+
+### 🤖 Assistant
+
+La quatrième relecture a trouvé **2 défauts graves** (le client ne valide la réponse du pair que dans le chemin lot, et le nœud meurt sur un en-tête forgé). Je corrige ces deux-là d'abord — 28 minutes.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/main.rs'; s=open(p).read()\ndef rem(nom, v, n):\n    global s\n    c = s.count(v)\n    if c != 1:\n        print(f\"  ✗ {nom} : {c}\"); return False\n    s = s.replace(v, n); print(f\"  ✓ {nom}\"); … [3167 caractères tronqués]`
+
+  ```
+✓ GRAVE1 : réponse validée partout
+  ✓ GRAVE2 : garde du nœud
+les deux défauts graves traités
+    Finished `release` profile [optimized] target(s) in 0.01s
+test result: ok. 17 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.09s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && D=./drave-core/target/release/drave; M=models/Qwen2.5-0.5B-Q8_0.gguf; echo \"=== 1. chemins normaux (dense puis lot) ===\"; TAG=v1 PORT=47800 CTX=256 LIM=40 EXTRA=\"\" timeout 300 /tmp/test_reparti.sh 2>&1 | grep -E \"écart\"; TAG=v2 … [1583 caractères tronqués]`
+
+  ```
+=== 1. chemins normaux (dense puis lot) ===
+  écart             : 0.00e0
+  écart             : 0.00e0
+=== 2. en-tête forgé contre le nœud (pos=100000, plage invalide, n faux) ===
+  pos hors contexte    → connexion fermée
+--- le serveur a-t-il survécu ? ---
+1
+[flux] flux refusé : position 100000 au-delà du contexte 256
+[flux] 0 flux servis
+17:32:58
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 12, in <module>
+  File "/usr/lib64/python3.13/socket.py", line 868, in create_connection
+    raise exceptions[0]
+  File "/usr/lib64/python3.13/socket.py", line 853, in create_connection
+    sock.connect(sa)
+    ~~~~~~~~~~~~^^^^
+ConnectionRefusedError: [Errno 111] Connection refused
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/main.rs'; s=open(p).read()\ndef rem(nom, v, n):\n    global s\n    c = s.count(v)\n    if c != 1:\n        print(f\"  ✗ {nom} : {c}\"); return False\n    s = s.replace(v, n); print(f\"  ✓ {nom}\"); … [2702 caractères tronqués]`
+
+  ```
+✓ refus 1
+  ✓ refus 2
+  ✓ refus 3
+les refus ne tuent plus le nœud
+    Finished `release` profile [optimized] target(s) in 0.01s
+  pos hors contexte    → TimeoutError
+  plage inversée       → ConnectionResetError
+  couche inexistante   → ConnectionRefusedError
+  dimension fausse     → ConnectionRefusedError
+1
+17:33:35
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && (cd drave-core && timeout 300 cargo test --release 2>&1 | grep -E \"^test result\"); TAG=z1 PORT=47810 CTX=256 LIM=40 EXTRA=\"\" timeout 300 /tmp/test_reparti.sh 2>&1 | grep -E \"écart\"; TAG=z2 PORT=47811 CTX=256 LIM=40 EXTRA=\"--lo … [3174 caractères tronqués]`

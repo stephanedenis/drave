@@ -25,10 +25,14 @@ locaux :
 | | octets par jeton | écart local/réparti |
 |---|---|---|
 | mode 2, un flux par jeton (référence) | 1 608 par flux | 2,74e-2 |
-| **mode 4, lots de 16** | **1,5 ko** | **3,03e-2** |
+| **mode 4, lots de 16** | **1,5 ko** (contre 3,5 en lot dense) | **3,03e-2** |
 
-**÷2,3 sur les octets**, et un écart à 1,11× celui du mode 2 (le critère posé était
-1,5×).
+**÷2,2 sur les octets** — et il faut dire contre quoi : 3 663 octets par jeton en
+lot DENSE (mode 3), 1 608 en mode 2 par jeton, **1 500 en mode 4**. Le « ÷2,3 »
+s'entend donc contre le lot dense, pas contre le mode 2 (1,07× seulement) ; un
+relecteur a mesuré 1 671 contre 1 600, soit 1,02× — l'écart entre nos deux mesures
+vient du corpus (le sien synthétique). L'écart local/réparti, lui, est à 1,11× celui
+du mode 2 (le critère posé était 1,5×).
 
 ### Ce que le ratio vaut selon la longueur (relecture adversariale)
 

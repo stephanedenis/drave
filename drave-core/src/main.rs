@@ -1976,6 +1976,27 @@ fn run_serveur_flux(opt: Options, adresse: &str) {
     loop {
         match recevoir_flux(&mut sock, hidden) {
             Ok(f) => {
+                // Un en-tête FORGÉ ne doit pas tuer le nœud : `debut`, `fin` et
+                // `pos` venaient du réseau sans contrôle, et une trame de 83
+                // octets suffisait à faire tomber le moteur (assert sur `pos`,
+                // index hors `layers`, dimension fausse — relecture adversariale).
+                let (n_layer_local, ctx_local) = (mdl.cfg.n_layer, mdl.ctx);
+                if f.fin as usize > n_layer_local || f.debut >= f.fin {
+                    println!("[flux] flux refusé : plage de couches {}..{} invalide pour {} \
+couches — le nœud continue", f.debut, f.fin, n_layer_local);
+                    continue;
+                }
+                if f.mode == MODE_DENSE && f.n != hidden {
+                    println!("[flux] flux refusé : {} canaux annoncés, {hidden} attendus — \
+le nœud continue", f.n);
+                    continue;
+                }
+                if f.pos as usize >= ctx_local
+                   && !(f.mode == MODE_LOT || f.mode == MODE_LOT_LISTES) {
+                    println!("[flux] flux refusé : position {} au-delà du contexte {} — le \
+nœud continue", f.pos, ctx_local);
+                    continue;
+                }
                 // Les réglages du client s'appliquent ICI : les deux nœuds
                 // doivent quantifier les activations pareil, sinon ils ne
                 // calculent pas la même chose.
@@ -2245,7 +2266,21 @@ protocole, réglages, ou contexte : il a dit pourquoi de son côté.");
         // (son calcul + l'aller-retour réseau) — la latence, pas le débit.
         t_pair += horloge.elapsed().as_secs_f64();
         octets_recus += TAILLE_TETE as u64 + rep.octets_corps as u64;
+        // Une réponse de pair hostile ne doit ni tuer le client ni être prise
+        // pour un résultat : hors lot, elle n'était pas vérifiée du tout — un
+        // vecteur de 895 canaux passait en silence et affichait une perplexité de
+        // 2,76e8 comme si c'en était une (relecture adversariale).
+        if rep.mode != mode {
+            eprintln!("[flux] le nœud moteur a répondu en mode {} alors que la demande \
+était en mode {mode} — pair incompatible ? Rien n'a été calculé.", rep.mode);
+            std::process::exit(1);
+        }
         let final_ = rep.charge.en_dense(mdl.cfg.hidden);
+        if final_.len() != mdl.cfg.hidden {
+            eprintln!("[flux] le nœud moteur a renvoyé {} canaux pour {} attendus — \
+pair incohérent. Rien n'a été calculé.", final_.len(), mdl.cfg.hidden);
+            std::process::exit(1);
+        }
         if pos + 1 < ids.len() {
             nll += nll_logits(&mdl.logits(&mdl.norme_finale(&final_)), ids[pos + 1]);
         }

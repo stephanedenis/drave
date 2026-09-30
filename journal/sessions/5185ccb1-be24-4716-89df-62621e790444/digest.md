@@ -1637,3 +1637,1359 @@ Created file
 ⏵ Exécution du test D (8 flux mode 4, cap cumulatif)
 
 - **bash** `{"command": "cd /tmp/adv && timeout 600 python3 testD_plafond.py 2>&1 | tail -30", "description": "Run cumulative cap test"}`
+
+  ```
+corps d'un flux : 37080000 octets (35.4 Mo) ; 8 flux = 282.9 Mo
+Traceback (most recent call last):
+  File "/tmp/adv/testD_plafond.py", line 50, in <module>
+    b = s.recv(min(1 << 20, a_lire - lu))
+TimeoutError: timed out
+  ```
+
+### 🤖 Assistant
+
+⏵ Nettoyage et inspection des bornes de boucle de `forward_lot`
+
+- **bash** `{"command": "pgrep -af \"drave.*flux-serveur\" | head; echo \"---\"; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"couche_debut\\|couche_fin\" drave-core/src/model.rs | head -20", "description": "Check leftover servers and loop bounds"}`
+
+  ```
+761832 bash -c pgrep -af "drave.*flux-serveur" | head; echo "---"; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n "couche_debut\|couche_fin" drave-core/src/model.rs | head -20
+---
+931:    pub couche_debut: usize,
+932:    pub couche_fin: usize,
+937:    /// flux (`couche_fin >= n_layer`) et le pilote le normait une SECONDE fois :
+1773:            couche_debut: 0, couche_fin: n_layer_total, flux_brut: false,
+2056:        for l in self.couche_debut..self.couche_fin {
+2089:                for l in self.couche_debut..self.couche_fin {
+2426:        for l in self.couche_debut..self.couche_fin {
+2803:        if self.flux_brut || self.couche_fin < self.cfg.n_layer {
+2881:        for l in self.couche_debut..self.couche_fin {
+2960:        if self.couche_fin >= self.cfg.n_layer && !self.flux_brut {
+3039:        // La plage PORTÉE par ce nœud (`couche_debut..couche_fin`), et non
+3045:        for l in self.couche_debut..self.couche_fin {
+3482:        if self.flux_brut || self.couche_fin < cfg.n_layer {
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '2780,2830p' drave-core/src/model.rs && echo \"=== fin de forward_lot ===\" && sed -n '2860,2900p' drave-core/src/model.rs", "description": "Read end of forward_lot"}`
+
+  ```
+}
+                }
+                for i in 0..t {
+                    let g0 = gate[i * self.cfg.ffn..(i + 1) * self.cfg.ffn].to_vec();
+                    let u0 = up[i * self.cfg.ffn..(i + 1) * self.cfg.ffn].to_vec();
+                    let mut gg = g0;
+                    Self::activation(&mut gg, &u0, self.cfg.ffn, self.cfg.ffn_act_oss);
+                    gate[i * self.cfg.ffn..(i + 1) * self.cfg.ffn].copy_from_slice(&gg);
+                }
+                quantifier(&gate, &mut gi, &mut sg, self.act_levels, self.act_thresh);
+                {
+                    let d8 = self.layers[l].wdown.d.as_ref().expect("projection dense requise");
+                    self.pool.gemm_dense_i8(d8, &gi, t, &sg, &mut yl[..d8.n_out * t]);
+                }
+                for i in 0..t {
+                    for oo in 0..h {
+                        down[i * h + oo] = yl[oo * t + i];
+                        x[i * h + oo] = o[i * h + oo] + down[i * h + oo];
+                    }
+                }
+            }
+            self.prof[3] += t_ffn.elapsed().as_secs_f64();
+        }
+        if self.flux_brut || self.couche_fin < self.cfg.n_layer {
+            // Nœud intermédiaire : on rend le f
+… [3752 caractères tronqués]
+  ```
+
+- **bash** `{"command": "pgrep -af \"target/release/drave\" ; echo \"(fin pgrep)\"", "description": "Check for leftover drave processes"}`
+
+  ```
+761852 bash -c pgrep -af "target/release/drave" ; echo "(fin pgrep)"
+(fin pgrep)
+  ```
+
+### 🤖 Assistant
+
+⏵ Diagnostic du test D (réponse plus courte que prévu ?)
+
+- **bash** `{"command": "cd /tmp/adv && python3 - <<'EOF' 2>&1 | tail -30\nimport socket, struct, subprocess, sys, time\nsys.path.insert(0,\"/tmp/adv\")\nfrom flux import *\nPORT=5905; T=2000; CTX=65536\npaires=(b\"\\xff\\x00\\x00\\x01\"+b\"\\xff\\xff\\xff\\x01\")*(896//2)\netat=struct.pack(\"<III\",896,28,3584 … [969 caractères tronqués]`
+
+  ```
+corps 7416000
+ecoute: ['[flux] nœud moteur sur 127.0.0.1:5905 · 896 cachés · 24 couches · contexte 65536']
+entete recue: 79 mode 4 n 2000
+EXC TimeoutError('timed out')
+serveur vivant ? None
+[flux] client connecté : 127.0.0.1:58640
+[flux] 896000 indice(s) hors dimension ignorés sur l'ensemble du lot (flux reçu de 896 canaux)
+  ```
+
+### 🤖 Assistant
+
+⏵ Lecture de `flux_en_liste_blocs` (boucle pathologique sur vecteur nul ?)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '3630,3700p' drave-core/src/model.rs", "description": "Read flux_en_liste_blocs"}`
+
+  ```
+/// échelle UNIQUE par vecteur donne une erreur *absolue* constante — énorme
+    /// en relatif sur les petits canaux (2,6 % de perplexité à 16 bits pleins,
+    /// mesuré). Une échelle par bloc borne l'erreur relative à l'intérieur du
+    /// bloc, ce qui permet de descendre la valeur à UN octet : moins d'octets
+    /// par neurone actif ET une précision localement meilleure.
+    ///
+    /// Le seuil, lui, reste GLOBAL (fraction du maximum du vecteur) : c'est lui
+    /// qui décide de la sparsité, donc de la taille sur le fil.
+    pub fn flux_en_liste_blocs(&self, x: &[f32]) -> (Vec<u16>, Vec<i8>, Vec<f32>) {
+        const BLOC: usize = 32;
+        // La même garde que `flux_en_liste` : au-delà de 65 535 canaux, l'indice
+        // u16 tronque EN SILENCE (les modes 2 et 4 en dépendent).
+        assert!(x.len() <= u16::MAX as usize,
+                "flux de {} canaux : l'indice u16 ne suffit pas", x.len());
+        let n_blocs = x.len().div_ceil(BLOC);
+        let mut echelles = vec![0f32; n_blocs];
+        let mut mx = 0f32;
+        for &v in x { let a = v.abs(); if a > mx { mx = a; } }
+        let seuil = self.act_thresh * mx;
+        let mut idx: Vec<u16> = Vec::new();
+        l
+… [2495 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Diagnostic live : état du serveur et de la socket pendant l'attente
+
+- **bash** `{"command": "cd /tmp/adv && timeout 200 python3 - <<'EOF' 2>&1 | tail -40\nimport socket, struct, subprocess, sys, time, threading\nsys.path.insert(0,\"/tmp/adv\")\nfrom flux import *\nPORT=5907; T=2000; CTX=65536\npaires=(b\"\\xff\\x00\\x00\\x01\"+b\"\\xff\\xff\\xff\\x01\")*(896//2)\netat=struct.pa … [1117 caractères tronqués]`
+
+  ```
+recu 79 octets ; cpu u=0.8s s=0.2s ['VmHWM:\t  602300 kB\n', 'VmRSS:\t  583348 kB\n', 'Threads:\t5\n']
+recu 128079 octets ; cpu u=0.8s s=0.2s ['VmHWM:\t  602300 kB\n', 'VmRSS:\t  575948 kB\n', 'Threads:\t5\n']
+recu 196687 octets ; cpu u=0.8s s=0.2s ['VmHWM:\t  602300 kB\n', 'VmRSS:\t  575948 kB\n', 'Threads:\t5\n']
+recu 252079 octets ; cpu u=0.8s s=0.2s ['VmHWM:\t  602300 kB\n', 'VmRSS:\t  575948 kB\n', 'Threads:\t5\n']
+timeout apres 252079 octets
+--- ss ---
+92.168.1.101:22122   142.250.69.37:443   users:(("chrome",pid=3552690,fd=44))
+ESTAB      0      0          127.0.0.1:5907        127.0.0.1:60680 users:(("drave",pid=762124,fd=4))
+ESTAB      0      0      192.168.1.101:57160   172.67.74.152:443   users:(("chrome",pid=3552690,fd=58))
+ESTAB      0      0      192.168.1.101:33260   173.194.71.94:443   users:(("chrome",pid=3552690,fd=96))
+ESTAB      0      0      192.168.1.101:50396 136.243.173.177:443   users:(("node-MainThread",pid=11117,fd=25))
+ESTAB      0      0      192.168.1.101:56680   107.170.69.11:443   users:(("chrome",pid=3552690,fd=59))
+ESTAB      0      0      192.168.1.101:24678      31.13.80.6:443   users:(("chrome",pid=3552690,fd=24))
+ESTAB      0      0      192.16
+… [915 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Correction du lecteur de réponse mode 4 et relance du test D
+
+- **write** `{"content": "#!/usr/bin/env python3\n\"\"\"Test D (v2) : le plafond R4 'cumulatif' du mode 4 face a PLUSIEURS flux.\n\nChaque flux reste sous 256 Mo ; le total depasse 256 Mo.\nLa reponse du serveur est un corps MODE 4 (etats auto-delimites), pas du dense.\n\"\"\"\nimport os, socket, struct, subproc … [2212 caractères tronqués]`
+
+  ```
+<path>/tmp/adv/testD_plafond.py</path>
+<type>file</type>
+<content>
+Updated file
+</content>
+  ```
+
+### 🤖 Assistant
+
+⏵ Exécution du test D v2 (8 flux × 35,4 Mo)
+
+- **bash** `{"command": "cd /tmp/adv && timeout 600 python3 testD_plafond.py 2>&1 | tail -20", "description": "Run cumulative cap test v2"}`
+
+  ```
+corps d'un flux : 37080000 octets (35.4 Mo) ; 8 flux = 282.9 Mo
+  flux 1/8 accepte (reponse mode 4 n=10000, 1260079 o) · total envoye 35.4 Mo > plafond 256 Mo : False · RSS 571220 kB pic 675816 kB
+  flux 2/8 accepte (reponse mode 4 n=10000, 1260079 o) · total envoye 70.7 Mo > plafond 256 Mo : False · RSS 593140 kB pic 697828 kB
+  flux 3/8 accepte (reponse mode 4 n=10000, 1260079 o) · total envoye 106.1 Mo > plafond 256 Mo : False · RSS 593140 kB pic 697828 kB
+  flux 4/8 accepte (reponse mode 4 n=10000, 1260079 o) · total envoye 141.4 Mo > plafond 256 Mo : False · RSS 593140 kB pic 697828 kB
+  flux 5/8 accepte (reponse mode 4 n=10000, 1260079 o) · total envoye 176.8 Mo > plafond 256 Mo : False · RSS 593140 kB pic 697828 kB
+  flux 6/8 accepte (reponse mode 4 n=10000, 1260079 o) · total envoye 212.2 Mo > plafond 256 Mo : False · RSS 593140 kB pic 697828 kB
+  flux 7/8 accepte (reponse mode 4 n=10000, 1260079 o) · total envoye 247.5 Mo > plafond 256 Mo : False · RSS 593140 kB pic 697828 kB
+  flux 8/8 accepte (reponse mode 4 n=10000, 1260079 o) · total envoye 282.9 Mo > plafond 256 Mo : True · RSS 593140 kB pic 697828 kB
+--- sortie du serveur ---
+  | [flux] 4480000 indice(s) hors dimensi
+… [230 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Test E : reproduction du refus cumulatif annoncé (état 72393)
+
+- **write** `{"content": "#!/usr/bin/env python3\n\"\"\"Test E : reproduction a l'octet pres du refus cumulatif du rapport\n(reports/rapport-mode4-lot-listes.md : refus a l'etat 72 393, 258 Mo envoyes).\n\nt = 74 898 etats annonces (borne nominale 74 898 x 896 x 4 = 268 433 664 <= 256 MiB),\nchaque etat = 12 + 2 … [1753 caractères tronqués]`
+
+  ```
+<path>/tmp/adv/testE_refus.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /tmp/adv && timeout 300 python3 testE_refus.py 2>&1 | tail -20", "description": "Run cumulative refusal reproduction"}`
+
+  ```
+corps annonce : 277721784 octets (264.9 Mo) ; t*hidden*4 = 268434432 <= 268435456 : True
+connexion coupee apres 523856 octets : ConnectionResetError
+octets pousses : 523856 (0.5 Mo) en 0.10 s (5 Mo/s)
+etat correspondant au dernier octet : environ 141
+cumul apres l'etat 72393 = 268436952 (plafond 268435456)
+reponse du serveur : 0 octets
+--- sortie du serveur ---
+  | [flux] client connecté : 127.0.0.1:51808
+  | [flux] arrêt : magie de flux absente
+  | [flux] 0 flux servis
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rn \"19,3885\\|19.3885\" --include=*.md . | head -10; echo \"=== ids files ===\"; grep -rn \"ids_qwen_long\\|ids_qwen\" --include=*.md --include=*.py --include=*.sh . | head -10", "description": "Find Qwen gate and ids corpus r … [11 caractères tronqués]`
+
+  ```
+./reports/rapport-gpt-oss-perplexite.md:175:complète. Le contrôle de non-régression Qwen ne bouge pas (19,3885).
+./reports/rapport-prefill-par-lots.md:197:et la porte de non-régression Qwen contexte 256 reste à **19,3885**.
+./reports/rapport-transport-liste.md:48:(19,3885), mais ici 16 bits coûtent 2,6 % : la différence n'est pas la précision,
+./reports/rapport-compacite-trace.md:6:> **identique** (perplexité 19,3885 dans les deux cas), et la relecture par
+./reports/rapport-compacite-trace.md:11:> silence avec une perplexité fausse (1958,72 au lieu de 19,3885).
+./reports/rapport-compacite-trace.md:16:> **+0,074 % de perplexité au rejeu** (19,4029 contre 19,3885) et d'une erreur par
+./reports/rapport-compacite-trace.md:234:   réinjecte, et le contrat est « mêmes logits » (perplexité **19,3885** avec et
+./reports/rapport-session-2026-09-30.md:50:prouve pas qu'il mesure ce qu'on croit**. Mon premier « rejeu v3 = 19,3885 » était
+./reports/rapport-session-2026-09-30.md:92:Qwen ctx 256 = **19,3885** · gpt-oss ctx 256 = **15,1757** · gpt-oss avec
+./journal/sessions/22bcae27-254b-47b2-acda-87467dab060c/digest.md:23746:=== perplexité 19.3885 sur 510 tokens (0 événements, 16.4 s) ===
+=== ids
+… [2684 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Test E corrigé : l'en-tête manquait dans mon envoi
+
+- **bash** `{"command": "cd /tmp/adv && python3 - <<'EOF'\nimport re\np=\"/tmp/adv/testE_refus.py\"\ns=open(p).read()\ns=s.replace('CTX = 65536','CTX = 131072')\ns=s.replace(\"\"\"    morceau = corps[: 1 << 20]\n    reste = corps\"\"\",\"\"\"    reste = tete(MODE_LOT_LISTES, debut=0, fin=0, pos=0, n=T) + corps\ … [144 caractères tronqués]`
+
+  ```
+corps annonce : 277721784 octets (264.9 Mo) ; t*hidden*4 = 268434432 <= 268435456 : True
+connexion coupee apres 270532608 octets : ConnectionResetError
+octets pousses : 270532608 (258.0 Mo) en 10.43 s (26 Mo/s)
+etat correspondant au dernier octet : environ 72959
+cumul apres l'etat 72393 = 268436952 (plafond 268435456)
+reponse du serveur : 0 octets
+--- sortie du serveur ---
+  | [flux] client connecté : 127.0.0.1:61414
+  | [flux] arrêt : corps du lot en listes (cumul après l'état 72393) : 268436952 octets au-delà du plafond de 256 Mo — flux refusé                      (règle R4 de docs/plan-prefill-reparti.md)
+  | [flux] 0 flux servis
+  ```
+
+### 🤖 Assistant
+
+⏵ Recherche de la commande exacte de la porte Qwen ctx 256
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rn \"porte\" REPRISE.md | head -20 && echo \"=== rapport-session 80-100 ===\" && sed -n '80,100p' reports/rapport-session-2026-09-30.md", "description": "Find gate command"}`
+
+  ```
+19:MoE, tient une conversation, et déporte au GPU ce qui y gagne. Il fait tourner du
+35:> **19,3885** et gpt-oss ctx 256 = **15,1757**, `cargo test` **17/17**. La porte
+160:| 5 | échelles par bloc pour `DenseQ8` | **fait, hypothèse réfutée** | 23,696 contre 23,612 : les échelles par bloc n'apportent rien ; l'avantage du 6 bits est son coût (25 % d'octets en moins à qualité égale) |
+182:| porte gpt-oss selon l'ouverture du pilote | sans `DRAVE_GPU` : **15,1757** · avec `DRAVE_GPU=1` : **15,1667** — l'écart vient du déport automatique des projections Q8_0 (> 8 Mo), pas d'une régression |
+241:| `DRAVE_GPU_TETE=1` | déporte la tête (Q8_0 ou Q6_K) | inutile sans `DRAVE_GPU` |
+261:Une porte de non-régression se mesure **sans** `DRAVE_GPU` : la variable déporte à
+291:`colab/` (notebook + `tools/preparer_colab.sh`) porte la recette de la phase 3.4.
+330:**Le protocole est en version 5** et le contrat d'activation transporte
+514:#    moteur déporte alors tout seul les projections Q8_0 de plus de 8 Mo — le
+=== rapport-session 80-100 ===
+- **Noyau GPU de top-k** (phase 1.1) : les trois heures sont allées au transport,
+  aux formats et aux garde-fous. Les deux Quadro sont libres, le cadre exist
+… [731 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rn \"19,3885\\|19.3885\\|ctx 256\" reports/rapport-prefill-par-lots.md | head; echo \"===\"; sed -n '185,200p' reports/rapport-prefill-par-lots.md", "description": "Find gate reproduction line"}`
+
+  ```
+197:et la porte de non-régression Qwen contexte 256 reste à **19,3885**.
+===
+Un lot de `t` jetons ne le coûte plus qu'une fois par groupe de 16 (et une fois
+par expert et par groupe pour un MoE) : le facteur à gagner est donc de l'ordre
+de 16 sur la partie « projections », qui domine le préremplissage.
+
+Mesuré, avec les deux suites de la §4 et le correctif de la §4.ter en place :
+
+| machine / modèle | contexte | lot 1 | lot 512 | gain |
+|---|---|---|---|---|
+| Qwen2.5-0.5B Q8_0, `--dense`, 16 fils | 512 | 17,1 s | **13,6 s** | **−20 %** |
+| gpt-oss-120b MXFP4, MoE groupé, 16 fils | 256 | ≈ 50 s | 34,4 s (lot 256) | **−31 %** |
+
+Perplexité inchangée dans les deux cas (13,1368 → 13,1359 ; 13,7149 → 13,7205),
+et la porte de non-régression Qwen contexte 256 reste à **19,3885**.
+
+Ce qui reste sur la table, dans l'ordre de rentabilité : **le noyau de la tête**
+(vectorisation AVX2 ou déport GPU — le lot n'y change rien, §4.bis), **l'attention
+  ```
+
+### 🤖 Assistant
+
+⏵ Recherche de la commande de la porte dans le journal
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"19.3885\" -B 40 journal/sessions/22bcae27-254b-47b2-acda-87467dab060c/digest.md | grep -E \"command|ppl|ids|limit|ctx\" | tail -20", "description": "Find gate command in journal"}`
+
+  ```
+25237-La simulation est déjà dans le moteur (`--bits N`) : la courbe est reproductible en une commande, et le noyau 6 bits n'aura plus qu'à confirmer ce que la simulation annonce.
+25275-- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\npython3 - <<'PY'\np='src/list.rs'; s=open(p,encoding='utf-8').read()\ns=s.replace('''q, sc, scale, plan6: None,\n                  plan6: None, src: Source::Propre''','''q, sc, scale, plan6: None,\n                  src: S … [1737 caractères tronqués]`
+25282-- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\npython3 - <<'PY'\np='src/main.rs'; s=open(p,encoding='utf-8').read(); o=s\ns=s.replace('''            \"--bits\" => {''','''            \"--bits-attn\" => {\n                let b: u32 = args[i + 1].parse().unwrap();\n     … [1447 caractères tronqués]`
+25304-- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core\ngrep -n \"let mut b6\" src/main.rs\npython3 - <<'PY'\np='src/main.rs'; s=open(p,encoding='utf-8').read()\n# run_ppl : après la déclaration de moe_topk de run_ppl (contexte du fichier d'identifiants)\nold='''    let mut abi … [
+… [3924 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && head -5 data/wikitext2_test.txt | cut -c1-200; echo \"---\"; wc -c data/wikitext2_test.txt; echo \"--- ppt-texte ---\"; sed -n '3135,3180p' drave-core/src/main.rs", "description": "Inspect corpus and ppl-texte path"}`
+
+  ```
+= Robert Boulter = 
+
+
+ Robert Boulter is an English film , television and theatre actor . He had a guest @-@ starring role on the television series The Bill in 2000 . This was followed by a starring role in the play Herons
+---
+359041 data/wikitext2_test.txt
+--- ppt-texte ---
+        ids_file: idfile, texte_file, ppl_texte: _, limit, depuis,
+        ctx: ctx_opt, threads: threads_opt, abits: abits_opt,
+        ctx_impose, threads_impose, abits_impose,
+        dense, auto, q4, b6, attn_window, swa_pattern,
+        sans_fenetre, attn_sinks, attn_topk, qk_topk, act_thresh, act_topk, act_renorm,
+        topk_proj, moe_topk, patch: patch_file, hebb_layer, hebb_q, hebb_out,
+        ffn_gain, logits_bin, keep,
+        ppl_profil, lot, profil_neurones, neurones_sortie, trace_flux, trace_couches, flux_forcer,
+        harmony, harmony_contexte, sans_yarn, ..
+    } = opt;
+    let lot = lot.max(1);
+    let path = &modele_chemin();
+    // Défauts du mode PERPLEXITÉ : 256 jetons, trois quarts des cœurs, 16 bits
+    // d'activation (la référence de non-régression en dépend).
+    let cpu = std::thread::available_parallelism().map(|n| n.get()).unwrap_or(8);
+    let ctx = if ctx_impose { ctx_opt } el
+… [1488 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Recherche du générateur d'ids (tokenisation) et de la porte
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rn \"ids_qwen\" --include=\"*\" . 2>/dev/null | grep -v \"^./journal\" | head -20; echo \"=== tokenize ===\"; grep -n \"fn run_tokenize\" -A 30 drave-core/src/main.rs | head -40", "description": "Find ids generator and tokenize … [7 caractères tronqués]`
+
+  ```
+./reports/rapport-attribution-kv.md:22:    --ppl /tmp/ids_qwen_long.txt --ctx 8192 --limit 8192 --dense --threads 16 --lot 512
+./reports/rapport-placement-bits-kv.md:171:G="--ppl /tmp/ids_qwen_long.txt --ctx 8192 --limit 8192 --dense --threads 16 --lot 512"
+./tools/ref_logits.md:37:  ./tools/ref_logits models/Qwen2.5-0.5B-Q8_0.gguf /tmp/ids_qwen.txt \
+./tools/ref_logits.md:41:## Nombres obtenus (Qwen2.5-0.5B-Q8_0, 64 premiers ids de /tmp/ids_qwen.txt)
+./REPRISE.md:52:    --tokenize --fichier /tmp/wt2_txt.txt --sortie /tmp/ids_qwen.txt
+./REPRISE.md:507:./target/release/drave ../models/Qwen2.5-0.5B-Q8_0.gguf --ppl /tmp/ids_qwen.txt \
+=== tokenize ===
+2787:fn run_tokenize(opt: Options) {
+2788-    let path = &modele_chemin();
+2789-    let texte = opt.texte.clone().unwrap_or_default();
+2790-    let fichier = opt.fichier.clone().unwrap_or_default();
+2791-    let sortie = opt.sortie.clone().unwrap_or_default();
+2792-    // En-tête seul : le décodage du vocabulaire n'a pas besoin des poids, et
+2793-    // `open` lisait le fichier entier (62 Go pour gpt-oss) à chaque appel.
+2794-    let g = Gguf::open_meta(path).expect("ouverture du GGUF");
+2795-    let tk = build_tokenizer(&g);
+2796-    if
+… [1512 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '40,60p' REPRISE.md && echo \"=== 500-515 ===\" && sed -n '500,515p' REPRISE.md", "description": "Read REPRISE gate commands"}`
+
+  ```
+> changements) : gpt-oss avec `DRAVE_GPU=1` donne **15,1667**, la valeur attendue
+> du pilote, et `--gpu-banc` retrouve l'exactitude des noyaux — 1,6 ms par ligne
+> en warp-par-ligne contre 7,2 ms sur 30 fils CPU, **écart max 1,99e-7**.
+
+Corpus : `/tmp/wt2_txt.txt` = 20 000 premiers octets de `data/wikitext2_test.txt`.
+**Régénérable** (à refaire si `/tmp` a été vidé) :
+
+```bash
+cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet
+head -c 20000 data/wikitext2_test.txt > /tmp/wt2_txt.txt
+# les identifiants DOIVENT venir du tokenizer du modèle — jamais croisés
+drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf \
+    --tokenize --fichier /tmp/wt2_txt.txt --sortie /tmp/ids_qwen.txt
+drave-core/target/release/drave /home/stephane/FastNVMe/models/gpt-oss-120b-MXFP4.gguf \
+    --tokenize --fichier /tmp/wt2_txt.txt --sortie /tmp/ids_oss.txt
+```
+
+Le mode `--tokenize --fichier` **vérifie la réversibilité** (texte reconstruit
+identique à la source) — les deux tokenizers la passent sur ce corpus.
+
+| modèle | commande (abrégée) | perplexité attendue |
+=== 500-515 ===
+
+## 8. Premier pas suggéré pour la nouvelle session
+
+```bash
+# 1. l'état est-il vert ? (Qwen ne doit pas bouger : les corr
+… [712 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Régénération du corpus et porte Qwen ctx 256
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && head -c 20000 data/wikitext2_test.txt > /tmp/wt2_txt.txt && timeout 300 ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf --tokenize --fichier /tmp/wt2_txt.txt --sortie /tmp/ids_qwen.txt 2>&1 | tail -3", "description":  … [24 caractères tronqués]`
+
+  ```
+[attention] QT_IM_SWITCHER est l'ancien nom d'une variable d'environnement : elles s'appellent maintenant DRAVE_* (voir docs/histoire.md). Rien n'a été appliqué.
+4592 tokens écrits dans /tmp/ids_qwen.txt (vocabulaire du modèle : 151936)
+réversibilité : texte reconstruit identique ✅ (20000 octets)
+  ```
+
+### 🤖 Assistant
+
+⏵ Exécution de la porte (threads 8) puis 16
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && time timeout 600 ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf --ppl /tmp/ids_qwen.txt --ctx 256 --abits 16 --threads 8 --limit 512 --dense 2>&1 | grep -E \"perplexité|tokens|options\" | head -5", "description": "Ru … [24 caractères tronqués]`
+
+  ```
+/tmp/ids_qwen.txt : 512 tokens, fenêtres de 256
+     255 tokens notés — perplexité cumulée 17.431  (26.7 tok/s)  [fenêtre 1 : 255 notés, PPL 17.431]
+     510 tokens notés — perplexité cumulée 19.388  (26.8 tok/s)  [fenêtre 2 : 255 notés, PPL 21.565]
+=== perplexité 19.3885 sur 510 tokens (0 événements, 19.0 s) ===
+[stderr]
+
+real	0m19,882s
+user	3m8,383s
+sys	0m0,664s
+  ```
+
+### 🤖 Assistant
+
+⏵ Test F : fidélité mode 3 à 1 024 jetons (claim 0259bf1)
+
+- **bash** `{"command": "cd /tmp/adv && python3 - <<'EOF' 2>&1 | tail -12\nimport sys, subprocess, time\nsys.path.insert(0,\"/tmp/adv\")\nfrom flux import *\nPORT=5950\nsrv=lancer_serveur(PORT, ctx=1024)\nattendre_ecoute(srv)\ncmd=[BIN,MODEL,\"--ppl-reparti\",f\"127.0.0.1:{PORT}\",\"--ctx\",\"1024\",\"--limit\" … [423 caractères tronqués]`
+
+  ```
+(no output)
+[timed out after 60000ms]
+[killed by signal: SIGTERM]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && head -c 40000 data/wikitext2_test.txt > /tmp/wt2_long.txt && ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf --tokenize --fichier /tmp/wt2_long.txt --sortie /tmp/ids_qwen_long.txt 2>&1 | tail -2", "description": "Rege … [24 caractères tronqués]`
+
+  ```
+9261 tokens écrits dans /tmp/ids_qwen_long.txt (vocabulaire du modèle : 151936)
+réversibilité : texte reconstruit identique ✅ (40000 octets)
+  ```
+
+### 🤖 Assistant
+
+⏵ Relance du test 1 024 jetons en tâche de fond
+
+- **bash** `{"command": "cd /tmp/adv && nohup python3 - > /tmp/adv/f1024.log 2>&1 <<'EOF' &\nimport sys, subprocess, time\nsys.path.insert(0,\"/tmp/adv\")\nfrom flux import *\nPORT=5951\nsrv=lancer_serveur(PORT, ctx=1024)\nattendre_ecoute(srv)\ncmd=[BIN,MODEL,\"--ppl-reparti\",f\"127.0.0.1:{PORT}\",\"--ctx\",\" … [504 caractères tronqués]`
+
+  ```
+lance
+767133 bash -c cd /tmp/adv && nohup python3 - > /tmp/adv/f1024.log 2>&1 <<'EOF' & import sys, subprocess, time sys.path.insert(0,"/tmp/adv") from flux import * PORT=5951 srv=lancer_serveur(PORT, ctx=1024) attendre_ecoute(srv) cmd=[BIN,MODEL,"--ppl-reparti",f"127.0.0.1:{PORT}","--ctx","1024","--limit","1024","--threads","4","--lot","64"] t0=time.time(); r=subprocess.run(cmd,capture_output=True,text=True,timeout=1200); dt=time.time()-t0 srv.kill() print("code",r.returncode,"duree %.1f s"%dt) for l in (r.stdout+r.stderr).splitlines():     if any(k in l for k in ("perplexité","écart","transport","temps","pilote")): print(" |",l) EOF echo "lance"; sleep 1; pgrep -af "ppl-reparti" | head -2
+767134 bash -c cd /tmp/adv && nohup python3 - > /tmp/adv/f1024.log 2>&1 <<'EOF' & import sys, subprocess, time sys.path.insert(0,"/tmp/adv") from flux import * PORT=5951 srv=lancer_serveur(PORT, ctx=1024) attendre_ecoute(srv) cmd=[BIN,MODEL,"--ppl-reparti",f"127.0.0.1:{PORT}","--ctx","1024","--limit","1024","--threads","4","--lot","64"] t0=time.time(); r=subprocess.run(cmd,capture_output=True,text=True,timeout=1200); dt=time.time()-t0 srv.kill() print("code",r.returncode,"duree %.1f s"%dt) for l
+… [193 caractères tronqués]
+  ```
+
+- **bash** `{"command": "sleep 20; cat /tmp/adv/f1024.log 2>/dev/null; echo \"--- procs ---\"; pgrep -af \"python3 -\" | head -3; pgrep -af \"release/drave\" | head -3", "description": "Check background 1024 test progress"}`
+
+  ```
+--- procs ---
+2241 /usr/local/bin/python3 -m uvicorn open_webui.main:app --host 0.0.0.0 --port 8080 --forwarded-allow-ips * --workers 1
+767134 bash -c cd /tmp/adv && nohup python3 - > /tmp/adv/f1024.log 2>&1 <<'EOF' & import sys, subprocess, time sys.path.insert(0,"/tmp/adv") from flux import * PORT=5951 srv=lancer_serveur(PORT, ctx=1024) attendre_ecoute(srv) cmd=[BIN,MODEL,"--ppl-reparti",f"127.0.0.1:{PORT}","--ctx","1024","--limit","1024","--threads","4","--lot","64"] t0=time.time(); r=subprocess.run(cmd,capture_output=True,text=True,timeout=1200); dt=time.time()-t0 srv.kill() print("code",r.returncode,"duree %.1f s"%dt) for l in (r.stdout+r.stderr).splitlines():     if any(k in l for k in ("perplexité","écart","transport","temps","pilote")): print(" |",l) EOF echo "lance"; sleep 1; pgrep -af "ppl-reparti" | head -2
+767136 python3 -
+767138 /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/target/release/drave /home/stephane/Data13TB/stephane/GitHub/Qtrinet/models/Qwen2.5-0.5B-Q8_0.gguf --flux-serveur 127.0.0.1:5951 --ctx 1024 --threads 4
+767144 /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/target/release/drave /home/stephane/Data13TB/stephane/GitHub/Qtrinet/
+… [255 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Test G : le miroir VRAM et les quatre variables d'attribution
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for cfg in \"aucune\" \"DRAVE_KV_K_F32=1\" \"DRAVE_KV_V_F32=1\" \"DRAVE_KV_BITS=8 DRAVE_KV_K_F16=1\" \"DRAVE_KV_BITS=8 DRAVE_KV_F16=1\" \"DRAVE_KV_BITS=8\"; do echo \"### $cfg\"; env DRAVE_GPU_KV=1 $cfg timeout 200 ./drave-core/targe … [210 caractères tronqués]`
+
+  ```
+### aucune
+### DRAVE_KV_K_F32=1
+[config] cache KV : 32 bits, 0.00 Go pour 32 jetons
+### DRAVE_KV_V_F32=1
+[config] cache KV : 32 bits, 0.00 Go pour 32 jetons
+### DRAVE_KV_BITS=8 DRAVE_KV_K_F16=1
+[config] cache KV : 8 bits, 0.00 Go pour 32 jetons
+### DRAVE_KV_BITS=8 DRAVE_KV_F16=1
+[config] cache KV : 8 bits, 0.00 Go pour 32 jetons
+### DRAVE_KV_BITS=8
+[config] cache KV : 8 bits, 0.00 Go pour 32 jetons
+  ```
+
+### 🤖 Assistant
+
+⏵ Le miroir n'apparaît pas : vérification de l'activation GPU
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"pub fn machines\\|pub fn instance\\|DRAVE_GPU\" drave-core/src/gpu.rs | head -20 && sed -n \"$(grep -n 'pub fn machines' drave-core/src/gpu.rs | head -1 | cut -d: -f1),+18p\" drave-core/src/gpu.rs", "description": "Check GP … [15 caractères tronqués]`
+
+  ```
+778:/// Instance unique du processus. `DRAVE_GPU` active le déport ; sans lui, aucune
+788:        if std::env::var("DRAVE_GPU").is_err() { return None; }
+802:pub fn machines() -> &'static [&'static Gpu] {
+811:pub fn instance() -> Option<&'static Gpu> {
+813:        if std::env::var("DRAVE_GPU").is_err() { return None; }
+pub fn machines() -> &'static [&'static Gpu] {
+    MACHINES.get_or_init(|| {
+        let mut v: Vec<&'static Gpu> = Vec::new();
+        if let Some(a) = instance() { v.push(a); }
+        if let Some(b) = second() { v.push(b); }
+        v
+    })
+}
+
+pub fn instance() -> Option<&'static Gpu> {
+    INSTANCE.get_or_init(|| {
+        if std::env::var("DRAVE_GPU").is_err() { return None; }
+        Gpu::ouvrir_auto()
+    }).as_ref()
+}
+
+unsafe impl Send for Gpu {}
+unsafe impl Sync for Gpu {}
+unsafe impl Send for MatriceGpu {}
+  ```
+
+### 🤖 Assistant
+
+⏵ Test G relancé avec `DRAVE_GPU=1`
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for cfg in \"aucune\" \"DRAVE_KV_K_F32=1\" \"DRAVE_KV_V_F32=1\" \"DRAVE_KV_BITS=8 DRAVE_KV_K_F16=1\" \"DRAVE_KV_BITS=8 DRAVE_KV_F16=1\" \"DRAVE_KV_BITS=8\"; do echo \"### $cfg\"; env DRAVE_GPU=1 DRAVE_GPU_KV=1 $cfg timeout 200 ./drav … [222 caractères tronqués]`
+
+  ```
+### aucune
+### DRAVE_KV_K_F32=1
+[config] cache KV : 32 bits, 0.00 Go pour 32 jetons
+[gpu] KV déporté désactivé : les variantes d'attribution (clés ou valeurs en f32) supposent une disposition homogène
+[gpu] KV déporté impossible sur 2 périphérique(s) : contexte 32 trop long pour la VRAM — cache KV gardé en RAM
+### DRAVE_KV_V_F32=1
+[config] cache KV : 32 bits, 0.00 Go pour 32 jetons
+[gpu] KV déporté désactivé : les variantes d'attribution (clés ou valeurs en f32) supposent une disposition homogène
+[gpu] KV déporté impossible sur 2 périphérique(s) : contexte 32 trop long pour la VRAM — cache KV gardé en RAM
+### DRAVE_KV_BITS=8 DRAVE_KV_K_F16=1
+[config] cache KV : 8 bits, 0.00 Go pour 32 jetons
+[gpu] KV déporté désactivé : les variantes d'attribution (clés ou valeurs en f32) supposent une disposition homogène
+[gpu] KV déporté impossible sur 2 périphérique(s) : contexte 32 trop long pour la VRAM — cache KV gardé en RAM
+### DRAVE_KV_BITS=8 DRAVE_KV_F16=1
+[config] cache KV : 8 bits, 0.00 Go pour 32 jetons
+[gpu] KV déporté : 12 couches sur GPU 1, 0.00 Go ici (16.17 Go libres)
+[gpu] KV déporté : 12 couches sur GPU 0, 0.00 Go ici (15.12 Go libres)
+### DRAVE_KV_BITS=8
+[config] cache KV : 8 b
+… [169 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Attente du test 1 024 jetons avant les mesures de temps
+
+- **bash** `{"command": "sleep 45; cat /tmp/adv/f1024.log; echo \"--- encore en cours ? ---\"; pgrep -af \"ppl-reparti|flux-serveur\" | grep -c drave", "description": "Check 1024 test progress"}`
+
+  ```
+code 0 duree 132.9 s
+ | [flux] pilote : 12 couches en local, 12 chez le pair, 1024 jetons
+ |   référence locale  : perplexité 12883.6157  (65.8 s)
+ |   deux nœuds        : perplexité 12883.6157  (66.3 s)
+ |   écart             : 0.00e0
+ |   transport         : lot dense f32 · lots de 64 jetons au plus · 229455 octets par lot (aller) · 3.5 ko par jeton · 16 lots pour 1024 jetons
+ |   temps             : 1761.5 ms par LOT en local · 1748.8 ms à attendre le pair · soit 0.99× le calcul local seul
+--- encore en cours ? ---
+1
+  ```
+
+### 🤖 Assistant
+
+⏵ Vérification des processus restants puis banc KV
+
+- **bash** `{"command": "pgrep -af \"release/drave\" ; echo \"---\"; uptime", "description": "Check leftover drave processes"}`
+
+  ```
+768155 bash -c cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo "commits du créneau 15h-18h : $(git log --oneline --since='2026-09-30 15:05' | wc -l)"; echo "commits du jour : $(git log --oneline --since='2026-09-30 00:00' | wc -l)"; echo "rapports : $(ls reports/*.md | wc -l) · documents : $(ls docs/*.md | wc -l) · outils : $(ls tools/*.py tools/*.sh | wc -l)"; echo "tests : $(cd drave-core && cargo test --release 2>&1 | grep -oE '[0-9]+ passed' | head -1)"; echo "--- portes ---"; ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf --ppl /tmp/ids_qwen.txt --ctx 256 --abits 16 --threads 16 --limit 512 --dense 2>&1 | grep -oE "perplexité [0-9.]+ sur [0-9]+ tokens"; date +"%H:%M:%S"
+768227 ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf --ppl /tmp/ids_qwen.txt --ctx 256 --abits 16 --threads 16 --limit 512 --dense
+770836 bash -c pgrep -af "release/drave" ; echo "---"; uptime
+---
+ 17:16:14  up 9 days  6:28,  2 users,  load average: 7,85, 6,82, 9,77
+  ```
+
+### 🤖 Assistant
+
+⏵ Pendant ce temps : lecture de `tools/pair_factice.py` et des docs modifiés
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git show 998d409 -- tools/pair_factice.py docs/format-flux.md docs/plan-mode4-lot-listes.md", "description": "Show pair_factice and docs diff"}`
+
+  ```
+commit 998d4095ee84bc9e785e10e8e44f48b99a215751
+Author: Stéphane <stephane@localhost>
+Date:   Wed Sep 30 16:03:52 2026 -0400
+
+    Relecture du mode 4 : dix défauts, dont deux graves — corrigés, et le rapport écrit
+    
+    La relecture adversariale du mode 4 a trouvé ce que les bancs ne voyaient pas :
+    
+    1. **le plafond R4 n'était pas cumulatif** (le plan l'exigeait trois fois) : chaque
+       état pouvait être légal sans que le total le soit — 268 Mo par état sur 74 898
+       états. La mémoire restait bornée, le temps non.
+    2. **le refus de `n == 0` était trop large**, et c'est un correctif de la journée
+       qui l'avait introduit : en modes 1 et 2, `n` compte des PAIRES, et une liste
+       vide est légitime (seuil au-dessus du maximum). `--flux-blocs --act-thresh 1.0
+       --lot 1` mourait, et `tools/pair_factice.py` avec elle. Le refus ne vise plus que
+       les modes où `n` est une dimension ou un nombre d'états — vérifié : la session
+       qui mourait donne 0,00e0.
+    3. `a_j` borné par `hidden` ; « hors dimension » dit UNE fois par message ;
+       le client vérifie le mode et la taille de la réponse au lieu d'abandonner en
+       SIGABRT sur 83 octets hostil
+… [6787 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Vérification des « trois écarts volontaires » et de l'usage de pair_factice
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '1,40p' docs/plan-mode4-lot-listes.md", "description": "Read plan head"}`
+
+  ```
+# Spécification — mode 4 : le **lot en listes** (protocole v5)
+
+> **État : ÉCRIT, mesuré et relu** (voir `reports/rapport-mode4-lot-listes.md`) — ce plan
+> reste la référence de conception ; trois écarts volontaires y sont notés en tête. Ce document est la spécification à implémenter ; aucun
+> fichier de code n'a été touché pour l'écrire. Il suppose connus
+> `docs/format-flux.md` (protocole v4, modes 0–3) et `docs/plan-prefill-reparti.md`
+> (le mode 3, mis en œuvre, et ses leçons). Les numéros de ligne sont ceux de
+> l'arbre au moment de la rédaction (`VERSION_FLUX = 4`, `TAILLE_TETE = 79`,
+> `MODE_LOT = 3`).
+
+**En une ligne** : le mode 3 transporte `t` états en f32 dense — 3 589 octets par
+jeton à `t = 16` pour Qwen2.5-0.5B ; le mode 4 transporte **les mêmes `t` états
+encodés en listes à échelle par bloc de 32 canaux**, soit ≈ 1 530 octets par état
+au seuil 0,01, **÷2,3 sur le fil**, au prix exact que le mode 2 paie déjà
+(2,7e-2 d'écart à 256 jetons, 1,3e-2 à 1 024). Le mode 4 ne touche ni au calcul,
+ni au cache KV, ni à la norme finale : il s'arrête au transport.
+
+## 0. Décisions d'architecture (à ne pas rediscuter)
+
+| question | décision | pourquoi |
+|---|---|---|
+| nouveau mode
+… [2191 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '1,70p' tools/pair_factice.py && echo \"...\" && tail -40 tools/pair_factice.py", "description": "Read pair_factice usage"}`
+
+  ```
+#!/usr/bin/env python3
+"""Pair factice du protocole de flux (v2) : il ÉCOUTE et DIT ce qu'il reçoit.
+
+Pourquoi cet outil : un banc à deux nœuds qui « marche » peut cacher un
+protocole faux — c'est exactement ce qui est arrivé avec un flux de 919 canaux
+là où le modèle en a 896. Un pair qui parle le protocole sans calculer le modèle
+rend visible ce que l'autre bout envoie vraiment : tailles, positions, modes,
+réglages. Il répond un flux de la dimension demandée pour que le pilote continue.
+
+    python3 tools/pair_factice.py <port> [dimension]
+"""
+import socket, struct, sys
+
+MAGIE = 0x44525631
+TETE = 79   # en-tête v4 : magie, version, mode, plage, position, n, échelle,
+            # niveaux, seuil, top-k, renorm, 7 top-k par projection, 3 top-k globaux
+MODES = {0: "dense f32", 1: "listes quantifiées", 2: "blocs (i8 + écarts)",
+         3: "lot dense (t états × dimension)", 4: "lot en listes (mode 2 par état)"}
+
+
+def lire_tout(sock, n):
+    buf = b""
+    while len(buf) < n:
+        morceau = sock.recv(n - len(buf))
+        if not morceau:
+            raise EOFError("pair fermé")
+        buf += morceau
+    return buf
+
+
+def main():
+    port = int(sys.argv[1]) if len(sys.argv) > 1 else 
+… [4021 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Test H : réponse de mode incohérent dans le chemin LOT (3↔4)
+
+- **write** `{"content": "#!/usr/bin/env python3\n\"\"\"Test H : chemin LOT — le client verifie-t-il le mode de la reponse ?\n\nLe client demande en mode 4 (--flux-blocs --lot 4) ; le faux serveur repond en\nmode 3, et reciproquement (demande mode 3, reponse mode 4).\n\"\"\"\nimport socket, struct, subprocess, s … [2936 caractères tronqués]`
+
+  ```
+<path>/tmp/adv/testH_lot_modes.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /tmp/adv && timeout 400 python3 testH_lot_modes.py 2>&1 | tail -30", "description": "Run lot-path mode mismatch test"}`
+
+  ```
+(no output)
+[timed out after 60000ms]
+[killed by signal: SIGTERM]
+  ```
+
+### 🤖 Assistant
+
+⏵ Diagnostic du test H (blocage) en tâche de fond
+
+- **bash** `{"command": "cd /tmp/adv && nohup python3 -u testH_lot_modes.py > /tmp/adv/testH.log 2>&1 &\necho lance; sleep 50; cat /tmp/adv/testH.log; echo \"--- procs ---\"; pgrep -af \"release/drave\" | head -4", "description": "Run test H in background and inspect"}`
+
+  ```
+lance
+Exception in thread Thread-1 (servir):
+Traceback (most recent call last):
+  File "/usr/lib64/python3.13/threading.py", line 1044, in _bootstrap_inner
+    self.run()
+    ~~~~~~~~^^
+  File "/usr/lib64/python3.13/threading.py", line 995, in run
+    self._target(*self._args, **self._kwargs)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/adv/testH_lot_modes.py", line 48, in servir
+    srv.bind(("127.0.0.1", port)); srv.listen(1)
+    ~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+OSError: [Errno 98] Address already in use
+--- procs ---
+776565 /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/target/release/drave /home/stephane/Data13TB/stephane/GitHub/Qtrinet/models/Qwen2.5-0.5B-Q8_0.gguf --ppl-reparti 127.0.0.1:5961 --ctx 64 --limit 8 --threads 4 --flux-blocs --lot 4
+776891 bash -c cd /tmp/adv && nohup python3 -u testH_lot_modes.py > /tmp/adv/testH.log 2>&1 & echo lance; sleep 50; cat /tmp/adv/testH.log; echo "--- procs ---"; pgrep -af "release/drave" | head -4
+776892 bash -c cd /tmp/adv && nohup python3 -u testH_lot_modes.py > /tmp/adv/testH.log 2>&1 & echo lance; sleep 50; cat /tmp/adv/testH.log; echo "--- procs ---"; pgrep -af "release/drave" | head -4
+776898 /home/stephane
+… [224 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Nettoyage de mes processus bloqués puis correction du test H
+
+- **bash** `{"command": "kill 776565 776898 2>/dev/null; sleep 1; pkill -f \"testH_lot_modes.py\" 2>/dev/null; sleep 1; pgrep -af \"release/drave\" | grep -v pgrep | head -5; echo \"(nettoyage fini)\"", "description": "Kill my leftover test processes"}`
+
+  ```
+(no output)
+[killed by signal: SIGTERM]
+  ```
+
+- **bash** `{"command": "ps -eo pid,etimes,cmd | grep -E \"release/drave|testH\" | grep -v grep | head -10; echo \"(fin)\"", "description": "List leftover processes safely"}`
+
+  ```
+(fin)
+  ```
+
+### 🤖 Assistant
+
+⏵ Réécriture robuste du test H
+
+- **write** `{"content": "#!/usr/bin/env python3\n\"\"\"Test H (v2) : chemin LOT — le client verifie-t-il le mode de la reponse ?\"\"\"\nimport socket, struct, subprocess, sys, threading, time\nsys.path.insert(0, \"/tmp/adv\")\nfrom flux import *\n\nBASE = 5970\n\n\ndef lire_flux(s):\n    h = b\"\"\n    while le … [2845 caractères tronqués]`
+
+  ```
+<path>/tmp/adv/testH_lot_modes.py</path>
+<type>file</type>
+<content>
+Updated file
+</content>
+  ```
+
+- **bash** `{"command": "cd /tmp/adv && timeout 200 python3 -u testH_lot_modes.py 2>&1 | tail -30", "description": "Run fixed lot mode test", "timeoutMs": 220000}`
+
+  ```
+=== demande mode 4 · reponse mode 3 ===
+  requetes vues : [(4, 4)]
+  client : code=TIMEOUT signal=None
+    | [flux] pilote : 12 couches en local, 12 chez le pair, 8 jetons
+    |   référence locale  : perplexité 433.1166  (0.4 s)
+    | [attention] QT_IM_SWITCHER est l'ancien nom d'une variable d'environnement : elles s'appellent maintenant DRAVE_* (voir docs/histoire.md). Rien n'a été appliqué.
+    | [modele] 24 couches chargées en 756.672825ms — listes 0.00 Go , 4 threads
+
+=== demande mode 3 · reponse mode 4 ===
+  requetes vues : [(3, 4)]
+  client : code=1 signal=None
+    |   référence locale  : perplexité 433.1166  (0.5 s)
+    | [attention] QT_IM_SWITCHER est l'ancien nom d'une variable d'environnement : elles s'appellent maintenant DRAVE_* (voir docs/histoire.md). Rien n'a été appliqué.
+    | [modele] 24 couches chargées en 741.277699ms — listes 0.00 Go , 4 threads
+    | [flux] le nœud moteur a répondu en mode 4 alors que la demande était en mode 3 — pair incompatible ? Rien n'a été calculé.
+
+=== demande mode 4 · reponse mode 4 (controle) ===
+  requetes vues : [(4, 4)]
+  client : code=TIMEOUT signal=None
+    | [flux] pilote : 12 couches en local, 12 chez le pair, 8 jetons
+    |  
+… [297 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Instrumentation du blocage du chemin lot (ss + journal serveur)
+
+- **bash** `{"command": "cd /tmp/adv && cat > /tmp/adv/h2.py <<'EOF'\nimport socket, struct, subprocess, sys, threading, time\nsys.path.insert(0,\"/tmp/adv\")\nfrom flux import *\nPORT=5985\ndef lire_flux(s):\n    h=b\"\"\n    while len(h)<TAILLE_TETE:\n        b=s.recv(TAILLE_TETE-len(h))\n        if not b: re … [1820 caractères tronqués]`
+
+  ```
+[srv] entete recue mode 4 n 4
+  [srv] etat 823 28 1646
+  [srv] etat 1041934978 1093186142 1031658153
+  [srv] etat 1024380564 1035016681 1049434079
+  [srv] etat 1051932607 1026498797 1056403665
+client vivant ? None
+2690,fd=24))
+ESTAB      0      0      192.168.1.101:28366      31.13.80.6:443   users:(("chrome",pid=3552690,fd=75))
+ESTAB      0      0      192.168.1.101:41038      31.13.80.6:443   users:(("chrome",pid=3552690,fd=38))
+ESTAB      0      0      192.168.1.101:42798      31.13.80.6:443   users:(("chrome",pid=3552690,fd=41))
+CLOSE-WAIT 25     0      192.168.1.101:20108    18.239.6.122:443  
+ESTAB      0      0      192.168.1.101:34528      31.13.80.8:443   users:(("chrome",pid=3552690,fd=25))
+ESTAB      0      0      192.168.1.101:37158      31.13.80.8:443   users:(("chrome",pid=3552690,fd=35))
+
+  [srv] corps lu 7390 / 15756304183
+  [srv] envoi reponse mode 3 de m d'une variable d'environnement : elles s'appellent maintenant DRAVE_* (voir docs/histoire.md). Rien n'a été appliqué.
+[config] cache KV : 32 bits, 0.00 Go pour 64 jetons
+[modele] 24 couches chargées en 773.216142ms — listes 0.00 Go , 4 threads
+[config] 24 couches, hidden 896 · 
+[config] puits appris sur 0/24 couch
+… [295 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Correction du lecteur de trames mode 4 et relance du test H
+
+- **bash** `{"command": "cd /tmp/adv && python3 - <<'PY'\np=\"/tmp/adv/testH_lot_modes.py\"\ns=open(p).read()\nold = \"\"\"    else:\n        a = 0\n        for _ in range(n):\n            p = b\"\"\n            while len(p) < 12:\n                p += s.recv(12 - len(p))\n            aa, nb, lg = struct.unpack … [1011 caractères tronqués]`
+
+  ```
+ok
+
+=== demande mode 4 · reponse mode 3 ===
+  requetes vues : [(4, 4)]
+  client : code=1 signal=None
+    |   référence locale  : perplexité 433.1166  (0.4 s)
+    | [attention] QT_IM_SWITCHER est l'ancien nom d'une variable d'environnement : elles s'appellent maintenant DRAVE_* (voir docs/histoire.md). Rien n'a été appliqué.
+    | [modele] 24 couches chargées en 756.490521ms — listes 0.00 Go , 4 threads
+    | [flux] le nœud moteur a répondu en mode 3 alors que la demande était en mode 4 — pair incompatible ? Rien n'a été calculé.
+
+=== demande mode 3 · reponse mode 4 ===
+  requetes vues : [(3, 4)]
+  client : code=1 signal=None
+    |   référence locale  : perplexité 433.1166  (0.4 s)
+    | [attention] QT_IM_SWITCHER est l'ancien nom d'une variable d'environnement : elles s'appellent maintenant DRAVE_* (voir docs/histoire.md). Rien n'a été appliqué.
+    | [modele] 24 couches chargées en 735.325385ms — listes 0.00 Go , 4 threads
+    | [flux] le nœud moteur a répondu en mode 4 alors que la demande était en mode 3 — pair incompatible ? Rien n'a été calculé.
+
+=== demande mode 4 · reponse mode 4 (controle) ===
+  requetes vues : [(4, 4), (4, 4)]
+  client : code=0 signal=None
+    |   transpor
+… [487 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Lancement des trois bancs KV en tâche de fond
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && nohup bash -c 'for cfg in \"32\" \"8\" \"8 K_F16\"; do echo \"### DRAVE_KV_BITS=$cfg\"; if [ \"$cfg\" = \"8 K_F16\" ]; then env DRAVE_KV_BITS=8 DRAVE_KV_K_F16=1 timeout 240 ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.g … [328 caractères tronqués]`
+
+  ```
+lance
+### DRAVE_KV_BITS=32
+[attention] QT_IM_SWITCHER est l'ancien nom d'une variable d'environnement : elles s'appellent maintenant DRAVE_* (voir docs/histoire.md). Rien n'a été appliqué.
+banc KV : 262144 clés · 24 couches · 2 têtes KV × 64 dim, 7 têtes de requête par tête KV · KV f32 bits
+  CPU 8 fils :     94.7 ms par passe  (5.7 Go/s de KV, 94.7 ms × 24 couches = 2273 ms/jeton)
+  GPU absent
+### DRAVE_KV_BITS=8
+[attention] QT_IM_SWITCHER est l'ancien nom d'une variable d'environnement : elles s'appellent maintenant DRAVE_* (voir docs/histoire.md). Rien n'a été appliqué.
+banc KV : 262144 clés · 24 couches · 2 têtes KV × 64 dim, 7 têtes de requête par tête KV · KV 8 bits
+  CPU 8 fils :    164.9 ms par passe  (0.9 Go/s de KV, 164.9 ms × 24 couches = 3957 ms/jeton)
+  GPU absent
+### DRAVE_KV_BITS=8 K_F16
+[attention] QT_IM_SWITCHER est l'ancien nom d'une variable d'environnement : elles s'appellent maintenant DRAVE_* (voir docs/histoire.md). Rien n'a été appliqué.
+banc KV : 262144 clés · 24 couches · 2 têtes KV × 64 dim, 7 têtes de requête par tête KV · KV 8 bits
+  CPU 8 fils :    155.0 ms par passe  (1.0 Go/s de KV, 155.0 ms × 24 couches = 3719 ms/jeton)
+  GPU absent
+  ```
+
+### 🤖 Assistant
+
+⏵ Vérification de la charge puis répétition des temps f32/f16 au repos
+
+- **bash** `{"command": "uptime; ps -eo pid,etimes,pcpu,cmd --sort=-pcpu | head -6", "description": "Check machine load"}`
+
+  ```
+17:21:39  up 9 days  6:33,  2 users,  load average: 2,32, 5,00, 8,20
+    PID ELAPSED %CPU CMD
+ 778243       0 50.0 bash -c uptime; ps -eo pid,etimes,pcpu,cmd --sort=-pcpu | head -6
+  11117  786051 33.9 node26 /home/stephane/Data13TB/stephane/GitHub/gods-eye-view/node_modules/.bin/vite
+ 710008  451521 26.3 node26 /home/stephane/.local/share/../bin/dsh --profile dsh-tui
+   3770  786790 19.6 /usr/bin/plasmashell --no-respawn
+ 372484  597865  3.4 node /home/stephane/.local/share/../bin/dsh --profile dsh-tui
+  ```
+
+### 🤖 Assistant
+
+⏵ Banc KV avec `DRAVE_GPU=1` (colonnes miroir et noyau)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && nohup bash -c 'for cfg in \"32\" \"8\" \"8F16\"; do echo \"### cfg=$cfg\"; case $cfg in 32) env DRAVE_GPU=1 DRAVE_KV_BITS=32 timeout 240 ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf --banc-kv 262144 --threads 8 2>& … [495 caractères tronqués]`
+
+  ```
+lance
+### cfg=32
+[attention] QT_IM_SWITCHER est l'ancien nom d'une variable d'environnement : elles s'appellent maintenant DRAVE_* (voir docs/histoire.md). Rien n'a été appliqué.
+banc KV : 262144 clés · 24 couches · 2 têtes KV × 64 dim, 7 têtes de requête par tête KV · KV f32 bits
+  CPU 8 fils :     71.5 ms par passe  (7.5 Go/s de KV, 71.5 ms × 24 couches = 1715 ms/jeton)
+  GPU 1 · KV d'une couche : 0.00 Go résidents, 16.17 Go libres
+  recopie CPU → VRAM : 4.0 s (0.1 Go/s sur le bus)
+  GPU 256 tranches :      1.8 ms par passe  (298.0 Go/s de KV, 1.8 ms × 24 couches = 43 ms/jeton)  écart max +3.23e-5
+  gain par passe : ×39.7
+### cfg=8
+[attention] QT_IM_SWITCHER est l'ancien nom d'une variable d'environnement : elles s'appellent maintenant DRAVE_* (voir docs/histoire.md). Rien n'a été appliqué.
+banc KV : 262144 clés · 24 couches · 2 têtes KV × 64 dim, 7 têtes de requête par tête KV · KV 8 bits
+  CPU 8 fils :    145.5 ms par passe  (1.0 Go/s de KV, 145.5 ms × 24 couches = 3493 ms/jeton)
+  GPU 1 · KV d'une couche : 0.00 Go résidents, 16.17 Go libres
+  recopie CPU → VRAM : 8.0 s (0.0 Go/s sur le bus)
+  GPU 256 tranches :      1.7 ms par passe  (89.4 Go/s de KV, 1.7 ms × 24 couches = 41 
+… [680 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Lecture de la fin du banc KV et recherche des « trois écarts »
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '2470,2530p' drave-core/src/main.rs", "description": "Read banc KV tail"}`
+
+  ```
+2.0 * octets as f64 / t1.elapsed().as_secs_f64() / 1e9);
+    let nsplit = (n / 512).clamp(1, 256);
+    let mut part = vec![0f32; nsplit * n_kv * rep * (hd + 2)];
+    let mut out = vec![0f32; n_head * hd];
+    let mut ms = f64::MAX;
+    for passe in 0..3 {
+        let t2 = Instant::now();
+        if !machine.attn_kv(&mut m, &qs, n, scale, None, nsplit, &mut part, &mut out) {
+            println!("  noyau d'attention en échec"); return;
+        }
+        let dt = t2.elapsed().as_secs_f64();
+        if passe > 0 && dt < ms { ms = dt; }
+    }
+    let mut ecart = f32::NAN;
+    if !gpu_seul {
+        let mut echelle = 1e-9f32;
+        for o in 0..n_head * hd { echelle = echelle.max(cpu[o].abs()); }
+        ecart = 0f32;
+        for o in 0..n_head * hd { ecart = ecart.max((out[o] - cpu[o]).abs() / echelle); }
+    }
+    println!("  GPU {nsplit} tranches : {:>8.1} ms par passe  ({:.1} Go/s de KV, {:.1} ms × {n_layer} couches = {:.0} ms/jeton)  écart max {:+.2e}",
+             ms * 1e3, 2.0 * octets as f64 / ms / 1e9, ms * 1e3,
+             ms * 1e3 * n_layer as f64, ecart);
+    println!("  gain par passe : ×{:.1}", tc / ms);
+    if std::env::var("DRAVE_BANC_KV_UNIT").is_ok() && hd >= 32 {
+ 
+… [1798 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"écart\" docs/plan-mode4-lot-listes.md | head -20", "description": "Find deviations noted in plan"}`
+
+  ```
+4:> reste la référence de conception ; trois écarts volontaires y sont notés en tête. Ce document est la spécification à implémenter ; aucun
+15:(2,7e-2 d'écart à 256 jetons, 1,3e-2 à 1 024). Le mode 4 ne touche ni au calcul,
+25:| l'encodage des paires ? | **`encoder_paires_blocs` / `decoder_paires_blocs`, appelés tels quels** | ce couple a déjà été désaccordé une fois (quatre octets écrits, deux lus, invisible tant qu'aucun écart n'atteint 255) : on ne l'ouvre pas, on l'appelle |
+62:                                       écart u8 · valeur i8, et 255 = échappement :
+63:                                       écart u8=255 puis indice ABSOLU u16 LE puis valeur i8
+85:  **vérifié** à chaque état, et un écart est refusé en nommant la cause probable
+140:Alternatives écartées : table d'échelles partagée par le lot (perte
+308:`1..256` donnent une perplexité bien plus haute que WikiText-2, l'écart seul
+314:  écart             : 2,7e-2                <- du même ordre que 2a (critère : ≤ 1,5×)
+326:* **Critère** : `écart(mode 4) ≤ 1,5 × écart(mode 2 par jeton)` à mêmes ids,
+328:  s'écarte de 10×, c'est le placement des échelles ou l'ordre des états qui est
+336:  la formule du §1.4 est vérifiée e
+… [770 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"volontaire\\|assum\\|noté\\|écrit\" docs/plan-mode4-lot-listes.md | head -20; echo \"=== tete 30 lignes apres modif ===\"; sed -n '340,360p' docs/plan-mode4-lot-listes.md", "description": "Search deliberate deviations in pl … [4 caractères tronqués]`
+
+  ```
+4:> reste la référence de conception ; trois écarts volontaires y sont notés en tête. Ce document est la spécification à implémenter ; aucun
+25:| l'encodage des paires ? | **`encoder_paires_blocs` / `decoder_paires_blocs`, appelés tels quels** | ce couple a déjà été désaccordé une fois (quatre octets écrits, deux lus, invisible tant qu'aucun écart n'atteint 255) : on ne l'ouvre pas, on l'appelle |
+61:  +12+4·n_blocs_j longueur_j × u8      paires, telles que les écrit `encoder_paires_blocs` :
+76:a été écrite avant que la règle R4 ne descende dans le code.
+97:  seule autorité pour le décodage. L'émetteur écrit `longueur_j = paires.len()`
+220:   (model.rs:1117 — noté 907 dans le plan du mode 3, l'arbre a bougé depuis)
+237:   repli silencieux. Le message actuel « mode 4 non écrit » (main.rs:1987) doit
+370:   (écrit sur quatre octets, lu sur deux) ; ici l'erreur ne casserait rien tant
+400:11. **`TCP_NODELAY` et le nombre d'écritures** : l'en-tête puis le corps en deux
+401:    `write_all`, jamais une écriture par état (Nagle retient les petites
+402:    écritures ; mesuré 97,6 ms contre 15,6 ms de calcul).
+417:| 7 | `reports/rapport-mode4-lot-listes.md`, `docs/format-flux.md`, `docs/plan-
+… [1468 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Test I : mode 1 avec n = 67 M (256 Mio pile) et mesure de la mémoire vive
+
+- **write** `{"content": "#!/usr/bin/env python3\n\"\"\"Test I : mode 1 (LISTE) avec n = 67 108 864 paires = 256 Mio pile.\n\nLe plafond R4 autorise n*4 == PLAFOND_FLUX (le refus est strictement >).\nOn mesure le pic memoire (VmHWM) du serveur : le corps brut + les deux Vec\n(idx u16, val i16) valent 2x la taill … [1813 caractères tronqués]`
+
+  ```
+<path>/tmp/adv/testI_mode1_256m.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /tmp/adv && timeout 300 python3 -u testI_mode1_256m.py 2>&1 | tail -20", "description": "Run 256MiB mode-1 memory test", "timeoutMs": 320000}`
+
+  ```
+n = 67108864 paires · corps = 268435456 octets = 256 Mio (plafond 256 Mio)
+corps envoye en 0.1 s (3469 Mo/s)
+VmRSS 567164 kB · VmHWM 1090852 kB · VmPeak 1455048 kB
+reponse : 79 octets ; mode 1 ; n 896
+--- serveur ---
+  | [flux] client connecté : 127.0.0.1:24336
+  | [flux] arrêt : Connection reset by peer (os error 104)
+  | [flux] 1 flux servis
+  ```
+
+### 🤖 Assistant
+
+⏵ Lecture des branches `None` de `quant_scratch` (vecteur nul)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '1845,1865p' drave-core/src/model.rs && echo \"---- 1950,1975 ----\" && sed -n '1950,1975p' drave-core/src/model.rs && echo \"---- 3500,3515 ----\" && sed -n '3500,3515p' drave-core/src/model.rs", "description": "Read quant_sc … [20 caractères tronqués]`
+
+  ```
+/// Produit matrice-vecteur **par événements** : les activations actives
+    /// poussent leur contribution dans les sorties de leur liste.
+    fn matvec(pool: &mut Pool, p: &Proj, x: &[f32], out: &mut [f32], events: &mut u64,
+              levels: f32, thresh: f32, topk: usize, renorm: bool, scratch: &mut Vec<f32>,
+              thresh_auto: f32) {
+        let Some((sv, sx)) = Self::quant_scratch(x, levels, thresh, topk, renorm, scratch) else {
+            for (o, v) in out.iter_mut().enumerate() {
+                *v = p.bias.as_ref().map_or(0.0, |b| b[o]);
+            }
+            return;
+        };
+        // ---- choix de direction par mesure : sous le seuil, disperser (push) ;
+        // au-dessus, le produit scalaire dense (pull) est plus rapide.
+        // Forme 4 bits : pas d'événements du tout, un seul chemin.
+        if let Some(q) = &p.q4 {
+            let mut xd = vec![0i32; x.len()];
+            for (&i, &v) in sv.idx.iter().zip(sv.val.iter()) { xd[i as usize] = v; }
+            let y = pool.matvec_dense_q4(q, &xd, sx);
+            for o in 0..q.n_out {
+                out[o] = y[o] + p.bias.as_ref().map_or(0.0, |b| b[o]);
+            }
+---- 1950,1975 ----
+        for
+… [1969 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Test J : les gardes du mode 4 (a > hidden, nb, lg) et n=0 refusé
+
+- **bash** `{"command": "cd /tmp/adv && timeout 250 python3 -u - <<'EOF' 2>&1 | tail -40\nimport socket, struct, sys, time\nsys.path.insert(0,\"/tmp/adv\")\nfrom flux import *\nPORT=6000\ndef etat4(a,nb,lg,paires=b\"\"):\n    return struct.pack(\"<III\",a,nb,lg)+struct.pack(\"<%df\"%nb,*([1.0]*nb))+paires\ndef  … [1543 caractères tronqués]`
+
+  ```
+=== mode 4 · a=897 > 896 ===
+  client: reset · serveur code=0 signal=None
+   | [flux] arrêt : état 0 : 897 actifs pour 896 canaux — un encodeur légitime ne peut pas en produire autant
+
+=== mode 4 · nb=27 ===
+  client: reset · serveur code=0 signal=None
+   | [flux] arrêt : état 0 : 27 blocs d'échelles pour 896 canaux (28 attendus) — les deux nœuds n'ont pas le même GGUF ?
+
+=== mode 4 · lg=3588 > 4a ===
+  client: reset · serveur code=0 signal=None
+   | [flux] arrêt : état 0 : 3588 octets de paires pour 896 actifs — incohérent (attendu entre 1792 et 3584)
+
+=== mode 4 · n=0 ===
+  client: 0 octets · serveur code=0 signal=None
+   | [flux] arrêt : flux de zéro état : refusé (R4 de docs/plan-prefill-reparti.md)
+
+=== mode 3 · n=0 ===
+  client: 0 octets · serveur code=0 signal=None
+   | [flux] arrêt : flux de zéro état : refusé (R4 de docs/plan-prefill-reparti.md)
+
+=== mode 4 · a=896 tous hors dimension ===
+  client: 32 octets · serveur code=0 signal=None
+   | [flux] arrêt : Connection reset by peer (os error 104)
+  ```
+
+### 🤖 Assistant
+
+⏵ Tests de régression : modes 0/1/2 réels et ratio d'octets mode 4 vs mode 2
+
+- **write** `{"content": "#!/usr/bin/env python3\n\"\"\"Test K : modes 0, 1, 2 reels (WikiText-2, 256 jetons) + ratio d'octets mode 4/2.\"\"\"\nimport re, subprocess, sys, time\nsys.path.insert(0, \"/tmp/adv\")\nfrom flux import *\n\nPORT = 6100\n\n\ndef run(nom, extra, limite=256, ctx=256):\n    global PORT\n   … [1731 caractères tronqués]`
+
+  ```
+<path>/tmp/adv/testK_modes.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /tmp/adv && nohup python3 -u testK_modes.py > /tmp/adv/testK.log 2>&1 & echo lance; sleep 45; cat /tmp/adv/testK.log", "description": "Launch real-mode regression runs"}`
+
+  ```
+lance
+
+=== mode 0 (dense) · un flux par jeton (38 s, code 0) ===
+   |   référence locale  : perplexité 17095.3708  (19.4 s)
+   |   deux nœuds        : perplexité 17095.3708  (17.8 s)
+   |   écart             : 0.00e0
+   |   transport         : dense f32 · 3663 octets par flux (aller) · 3663 au retour · 100.0 % d'activité (896 neurones par flux) · 255 flux
+  ```
+
+### 🤖 Assistant
+
+⏵ Recherche de la commande de campagne du plan (ids du client réparti)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"ppl-reparti\" docs/plan-mode4-lot-listes.md | head -10 && echo \"===\" && sed -n '280,320p' docs/plan-mode4-lot-listes.md", "description": "Read campaign command in plan"}`
+
+  ```
+299:./drave models/Qwen2.5-0.5B-Q8_0.gguf --ppl-reparti 127.0.0.1:45733 \
+303:./drave models/Qwen2.5-0.5B-Q8_0.gguf --ppl-reparti 127.0.0.1:45733 \
+===
+
+### 5.3 La réponse
+
+Encodée **comme la demande** (R5) : `envoyer_lot_listes` sur les `t` états
+rendus par `forward_lot` (résidu brut, jamais normé), mêmes `t`, `position`,
+plage et réglages. Le pilote la décode par le même `recevoir_flux`, retrouve un
+`ChargeFlux::Lot` plat, garde son `assert_eq!(etats.len(), t*hidden)`, applique
+`norme_finale` **une fois par état** puis `logits_lot`. Le coût du retour est du
+même ordre que l'aller (÷2,3) ; c'est la ligne `octets_recus` qui le prouvera.
+
+## 6. La vérification
+
+### 6.1 Commande exacte (localhost, Qwen2.5-0.5B, 12 couches par nœud)
+
+```bash
+# terminal 1 — le nœud moteur : inchangé
+./drave models/Qwen2.5-0.5B-Q8_0.gguf --flux-serveur 45733 --ctx 256
+
+# terminal 2a — la référence PERDANTE : le mode 2, un flux par jeton (mêmes ids)
+./drave models/Qwen2.5-0.5B-Q8_0.gguf --ppl-reparti 127.0.0.1:45733 \
+        --couches-locales 12 --limit 256 --ctx 256 --flux-blocs --act-thresh 0.01
+
+# terminal 2b — le mode 4 : mêmes ids, même seuil, par lots
+./drave models/Qwen2.5-0.5B-Q8_0.gguf --ppl-re
+… [790 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Recherche de la commande réellement utilisée pour le rapport mode 4
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rn \"ppl-reparti\" journal/sessions/*/digest.md 2>/dev/null | grep -i \"ids\\|wiki\" | head -8; echo \"=== toutes les commandes ppl-reparti du journal (extraits) ===\"; grep -rho \"ppl-reparti[^\\\\\\\\\\\"]*\" journal/sessions … [98 caractères tronqués]`
+
+  ```
+journal/sessions/42059fde-f06f-4e2c-9a23-8292d887fb6e/digest.md:504:"--abits" "--act-renorm" "--act-thresh" "--act-topk" "--attn-sinks" "--attn-topk" "--attn-window" "--auto" "--banc-kv" "--banc-mla" "--banc-vision" "--bits" "--bits-attn" "--bits-ffn" "--chat" "--couches-locales" "--ctx" "--dense" "--depuis" "--ffn-gain" "--fichier" "--flux" "--flux-blocs" "--flux-forcer" "--flux-liste" "--flux-serveur" "--gpu-banc" "--harmony" "--harmony-assistant" "--harmony-contexte" "--harmony-suite" "--harmony-user" "--hebbian" "--hebb-out" "--hebb-q" "--hist" "--ids" "--ids-file" "--infer" "--keep" "--limit" "--logits-bin" "--lot" "--matrix" "--moe-topk" "--n" "--neurones-sortie" "--patch" "--pin" "--plan" "--ppl" "--ppl-profil" "--ppl-reparti" "--ppl-texte" "--profil-neurones" "--prompt" "--push" "--q4" "--q4-attn" "--q4-ffn" "--q4-tout" "--qk-topk" "--rep-penalty" "--sans-fenetre" "--sans-yarn" "--session" "--sortie" "--swa-pattern" "--temp" "--tensors" "--texte" "--threads" "--tokenize" "--topk" "--topk-down" "--topk-gate" "--topk-k" "--topk-o" "--topk-q" "--topk-up" "--topk-v" "--top-p" "--trace-couches" "--trace-flux"
+journal/sessions/5ce3f080-2d3d-467a-8ee1-df697f3f3e68/digest.md:881:- 
+… [4987 caractères tronqués]
+  ```
+
+- **bash** `{"command": "sleep 30; cat /tmp/adv/testK.log", "description": "Check K progress"}`
+
+  ```
+=== mode 0 (dense) · un flux par jeton (38 s, code 0) ===
+   |   référence locale  : perplexité 17095.3708  (19.4 s)
+   |   deux nœuds        : perplexité 17095.3708  (17.8 s)
+   |   écart             : 0.00e0
+   |   transport         : dense f32 · 3663 octets par flux (aller) · 3663 au retour · 100.0 % d'activité (896 neurones par flux) · 255 flux
+
+=== mode 1 (listes i16) · seuil 0,01 (38 s, code 0) ===
+   |   référence locale  : perplexité 17446.1253  (19.4 s)
+   |   deux nœuds        : perplexité 17503.6039  (18.0 s)
+   |   écart             : 3.29e-3
+   |   transport         : listes quantifiées · 3024 octets par flux (aller) · 2921 au retour · 82.2 % d'activité (736 neurones par flux) · 255 flux
+  ```
+
+### 🤖 Assistant
+
+⏵ Attente des modes 2 et 4 du test K
+
+- **bash** `{"command": "sleep 90; cat /tmp/adv/testK.log; echo \"=== git status ===\"; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git status --porcelain && git diff --stat journal/README.md | tail -2", "description": "Check K results and git status"}`
+
+  ```
+(no output)
+[timed out after 60000ms]
+[killed by signal: SIGTERM]
+  ```
+
+- **bash** `{"command": "cat /tmp/adv/testK.log; echo \"=== procs ===\"; ps -eo pid,etimes,cmd | grep -E \"ppl-reparti|flux-serveur|testK\" | grep -v grep | head -5", "description": "Check K log and processes"}`
+
+  ```
+=== mode 0 (dense) · un flux par jeton (38 s, code 0) ===
+   |   référence locale  : perplexité 17095.3708  (19.4 s)
+   |   deux nœuds        : perplexité 17095.3708  (17.8 s)
+   |   écart             : 0.00e0
+   |   transport         : dense f32 · 3663 octets par flux (aller) · 3663 au retour · 100.0 % d'activité (896 neurones par flux) · 255 flux
+
+=== mode 1 (listes i16) · seuil 0,01 (38 s, code 0) ===
+   |   référence locale  : perplexité 17446.1253  (19.4 s)
+   |   deux nœuds        : perplexité 17503.6039  (18.0 s)
+   |   écart             : 3.29e-3
+   |   transport         : listes quantifiées · 3024 octets par flux (aller) · 2921 au retour · 82.2 % d'activité (736 neurones par flux) · 255 flux
+
+=== mode 2 (blocs) · seuil 0,01 · lot 1 (38 s, code 0) ===
+   |   référence locale  : perplexité 17446.1253  (19.6 s)
+   |   deux nœuds        : perplexité 18430.7753  (18.0 s)
+   |   écart             : 5.64e-2
+   |   transport         : listes à échelle par bloc (2 octets/actif, écarts) · 1671 octets par flux (aller) · 1621 au retour · 82.2 % d'activité (736 neurones par flux) · 255 flux
+
+=== mode 4 (lot en listes) · seuil 0,01 · lot 16 (36 s, code 0) ===
+   |   référence locale  : 
+… [410 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Dernières vérifications (git status, ids-file ignoré) puis rédaction
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git status --porcelain; echo \"--- diff journal/README.md ---\"; git diff --stat; echo \"--- ids_file dans run_ppl_reparti ? ---\"; sed -n '2057,2096p' drave-core/src/main.rs | grep -n \"ids\" ", "description": "Check git status and  … [14 caractères tronqués]`
+
+  ```
+M journal/README.md
+ M journal/sessions/5185ccb1-be24-4716-89df-62621e790444/digest.md
+ M journal/sessions/5185ccb1-be24-4716-89df-62621e790444/rapport.md
+ M journal/sessions/MANIFEST.md
+ M journal/sessions/bbd6969f-0f70-42b2-8951-64d1f2f36d2e/digest.md
+ M journal/sessions/bbd6969f-0f70-42b2-8951-64d1f2f36d2e/rapport.md
+--- diff journal/README.md ---
+ journal/README.md                                  |  12 +-
+ .../5185ccb1-be24-4716-89df-62621e790444/digest.md | 693 +++++++++++++++++++++
+ .../rapport.md                                     |  52 +-
+ journal/sessions/MANIFEST.md                       |   6 +-
+ .../bbd6969f-0f70-42b2-8951-64d1f2f36d2e/digest.md |  29 +
+ .../rapport.md                                     |  14 +-
+ 6 files changed, 785 insertions(+), 21 deletions(-)
+--- ids_file dans run_ppl_reparti ? ---
+24:    let ids: Vec<u32> = if opt.ids.is_empty() {
+26:    } else { opt.ids.clone() };
+27:    if ids.len() < 2 {
+31:(le premier ne prédit rien) — reçu {}. Rien n'a été calculé.", ids.len());
+35:             n_layer - couches_locales, ids.len());
+  ```
+
+### 🤖 Assistant
+
+⏵ Nettoyage final de mes processus et vérification
+
+- **bash** `{"command": "ps -eo pid,etimes,cmd | grep -E \"release/drave|adv/\" | grep -v grep | head; echo \"(fin liste)\"; uptime", "description": "Verify no leftover processes"}`
+
+  ```
+(fin liste)
+ 17:26:45  up 9 days  6:38,  2 users,  load average: 4,91, 5,40, 7,41
+  ```
+
+### 🤖 Assistant
+
+⏵ Rédaction du rapport adversarial final
+
+J'ai fini les vérifications. Voici le rapport.
+
+---
+
+# Relecture adversariale des correctifs du 30/09 (998d409 → 0c56c35)
+
+**Verdict court : les dix correctifs de 998d409 sont réels et fonctionnent là où ils ont été posés — mais le durcissement s'arrête net à la frontière du chemin « lot ».** Le client reste tuable par un pair hostile en mode 1/2, le nœud moteur reste tuable par une trame de 83 octets, et trois affirmations des rapports ne sont pas reproductibles telles quelles. 17/17 tests, porte Qwen = **19,3885** exacte.
+
+## 1. GRAVE — le contrôle de la réponse du pair n'existe QUE dans le chemin lot
+
+`main.rs:2176-2196` : `if rep.mode != mode_lot` et `if rep.n != t` sont **à l'intérieur du `if lot > 1`**. Le chemin non-lot (modes 0/1/2, un flux par jeton) ne vérifie **rien** — ni le mode, ni la taille. Le commentaire du correctif (« le client vérifie le mode et la taille de la réponse au lieu d'abandonner en SIGABRT sur 83 octets hostiles ») est donc faux pour ce chemin.
+
+Preuves (faux serveur sur `127.0.0.1`, client réel `--ppl-reparti --limit 6 --ctx 64`) :
+
+| réponse forgée | résultat client |
+|---|---|
+| mode 4 (lot) alors que la demande est mode 0 | **SIGABRT** (signal 6) — `main.rs:1512` « un lot d'états n'est pas un vecteur dense » |
+| mode 3 (lot dense) idem | **SIGABRT** — même site |
+| mode 0, `n = 897 > hidden` | **SIGABRT** — `model.rs:2204` « index out of bounds: the len is 896 but the index is 896 » |
+| mode 0, `n = 895 < hidden` | **silencieux**, code 0, perplexité 2,76e8 affichée comme un résultat |
+| mode 1 `n=0` | **silencieux**, code 0, perplexité = 151936,0 = vocabulaire (logits nuls) |
+
+Le chemin lot, lui, est correct : demande mode 4 → réponse mode 3 ⇒ `code 1` + « le nœud moteur a répondu en mode 3 alors que la demande était en mode 4 » ; inverse idem.
+
+## 2. GRAVE — le nœud moteur est tué par des trames forgées de 83 octets
+
+Aucun champ d'en-tête n'est validé côté récepteur : `debut`, `fin`, `pos` sont recopiés tels quels (`main.rs:2020-2023`). Trois trames bien formées, testées une par une :
+
+| trame | panique serveur |
+|---|---|
+| mode 1, `n=1`, `pos=100000` (83 octets) | `model.rs:2985` `assert!(pos < self.ctx)` → **SIGABRT** |
+| mode 1, `n=1`, `fin=200` pour 24 couches (83 octets) | `model.rs:3046` `&layers[l]` → **SIGABRT** |
+| mode 0, `n=897` (et aussi `n=895`) | `model.rs:2204` / `model.rs:3314` → **SIGABRT** |
+
+Le plan n'exige le contrôle de contexte que sur la branche lot (« le contrôle de contexte reste dans la boucle serveur, sur la branche commune aux modes 3 et 4 ») : c'est précisément le trou. Le mode 4 est, lui, bien gardé (voir §5). Le commentaire du code — « une trame FORGÉE ne doit pas tuer le nœud » — est violé sur le chemin jeton par jeton.
+
+## 3. Le refus de `n == 0` est correct… mais incomplet en mode 0
+
+- **Modes 1/2** : le correctif est bon et complet. Liste vide acceptée, `en_dense` rend `vec![0.0; hidden]`, `quant_scratch` rend `None` et **tous** ses appelants écrivent des zéros ou les biais (aucune division par zéro) : la session réelle `--flux-blocs --act-thresh 1.0 --lot 1` donne **0,00e0** (19 flux, « 0 neurones par flux »).
+- **Mode 0** : zéro canal est bien illégitime, mais la seule règle appliquée est `n != 0`. Or `n` **doit** valoir `hidden` (c'est une dimension, R3). `n=895` et `n=897` tuent le serveur et/ou corrompent le client en silence. Le refus de `n==0` est donc *trop étroit*, pas trop large.
+
+## 4. Le plafond cumulatif : exact au bit, mais par message — et la mémoire ne s'accumule pas
+
+- **Reproduction exacte du rapport** (test E) : 74 898 états annoncés de 3 708 octets, `t·hidden·4 = 268 434 432 ≤ 256 Mio` (borne nominale qui passe). Le serveur refuse à l'état **72 393** :
+  `corps du lot en listes (cumul après l'état 72393) : 268436952 octets au-delà du plafond de 256 Mo` — **258,0 Mo poussés** avant la coupure. Le chiffre du rapport est juste à l'octet.
+- **Multi-flux** : le cumul repart de zéro à chaque `recevoir_flux` (`let mut lus = 0usize`), et le serveur boucle. **8 flux de 35,4 Mo = 282,9 Mo (total > 256 Mo) sont tous acceptés** et servis. La mémoire vive, elle, **ne s'accumule pas** : RSS stable à 593 Mo, pic 698 Mo du 2ᵉ au 8ᵉ flux (pas de fuite de `plat`). Le plafond R4 est donc une borne de message, pas de session ; c'est conforme au §4 du plan (qui ne parle que du cumul intra-message), mais la phrase du commit « le temps, non » reste vraie entre les messages.
+- **Écart avec le plan** : le §4 exige la vérification du cumul **avant** de lire l'état fautif (« refuser sans lire l'état fautif ») ; le code lit et décode l'état, puis vérifie (`main.rs:1860-1866`). Conséquence bornée ici (≤ 1 état = 3 708 octets), mais c'est un écart textuel.
+- **La borne « 256 Mo = mémoire vivante » est fausse d'un facteur 2** (test I) : une trame mode 1 de **256 Mio pile** (`n = 67 108 864`, `n·4 == PLAFOND_FLUX`, acceptée puisque le refus est strictement `>`) fait monter le serveur à **VmHWM 1,04 Gio** (delta ≈ +512 Mo : corps brut 256 Mo + `Vec<u16>` 128 Mo + `Vec<i16>` 128 Mo). Idem en mode 0 et 3 (double copie). Le décodeur ne peut pas être tué, mais il alloue 2× ce que le plafond annonce.
+
+## 5. Ce qui est solide (vérifié, pas seulement lu)
+
+- Gardes du mode 4 : `a=897 > hidden` → « état 0 : 897 actifs pour 896 canaux » ; `nb=27` → « 27 blocs … les deux nœuds n'ont pas le même GGUF ? » ; `lg=3588 > 4a` → refus nommé ; `n=0` en modes 3/4 → refus nommé. Sortie propre (code 0, pas de panique) dans les quatre cas.
+- « Hors dimension dit une fois » : 4 480 000 indices ignorés → **une seule ligne par flux** (8 lignes pour 8 flux).
+- Comptabilité : `--lot 16 --limit 20` → « 2 lots pour 20 jetons », 35 919 o/lot, et 35 919×2/20/1024 = 3,5077 → « 3.5 ko par jeton » (cohérent) ; `--lot 1000` → « 1 lots pour 20 jetons » ; à 1 024 jetons/64 → **16 lots pour 1 024 jetons, écart 0,00e0** (claim de 0259bf1 reproduit).
+- Non-régression : `cargo test --release` **17/17** ; porte Qwen ctx 256 (`head -c 20000` + `--tokenize`, puis `--ppl /tmp/ids_qwen.txt --ctx 256 --abits 16 --limit 512 --dense`) = **19,3885** ; modes 0/1/2/3/4 de bout en bout : mode 0 **0,00e0**, mode 1 3,29e-3, mode 2 5,64e-2 (act-thresh 0,01), mode 3 **0,00e0** (1 024 jetons), mode 4 6,46e-2.
+- **Miroir VRAM et les quatre variables** : `K_F32`, `V_F32`, `K_F16` (avec `BITS=8`) désactivent bien le miroir (`[gpu] KV déporté désactivé`) ; `DRAVE_KV_F16` **ne le désactive pas** — et c'est correct, puisque l'arrondi f16 s'applique *avant* quantification et que le miroir copie les octets déjà quantifiés. La formulation du rapport (« toute variante d'attribution ») est exacte mais n'énumère que 3 variables.
+- Temps KV au repos, avec `DRAVE_GPU=1` : f32 **71,5 ms** (rapport 70,5) · f16 **163,6 ms** (162,1), soit **2,29×** (le 2,3× est reproduit) · int8 **145,5 ms** (rapport **174,0**, −16 %) ; miroir 1,8 ms / 1,7 ms, écarts noyau +3,23e-5 et +3,42e-5 (rapport +3,2/+3,4e-5). ⚠ Première passe faite sous charge (un autre job tournait) : 94,7 / 155,0 / 164,9 ms, ratio 1,64× — la mesure est sensible à la charge, non documentée.
+
+## 6. Reproductibilité des rapports (défauts prouvés)
+
+1. **`--banc-kv` n'applique pas la règle d'homogénéité** que la politique invoque : `run_banc_kv` appelle `machine.kv_allouer(...)` sans le test `mixte` de `model.rs:1650`. Avec `DRAVE_KV_BITS=8 DRAVE_KV_K_F16=1`, le banc **installe le miroir** et affiche « GPU 1 · 1,7 ms … écart max +4,17e-5 » — alors que le moteur, lui, refuse ce miroir. La cellule « ❌ désactivé / — » du tableau ne sort **pas** de la commande du banc ; elle vient du chemin modèle. De plus, sans `DRAVE_GPU=1` (jamais écrit dans le rapport), le banc affiche « GPU absent » et **aucune** colonne miroir/noyau.
+2. **Aucune commande pour la nouvelle section** (les trois lignes de temps, le miroir, les écarts noyau) ; la section « Reproductible » ne couvre que **3 des 9 lignes** du tableau ; `/tmp/ids_qwen_long.txt` n'est pas régénérable depuis le rapport (la recette est dans `REPRISE.md` §2 avec `head -c 20000` → 4 592 ids, insuffisant pour `--limit 8192` ; il m'a fallu inventer `head -c 40000` → 9 261 ids).
+3. **Aiguille 9/9 invérifiable** : `models/` ne contient que Qwen2.5‑0.5B (Q4_0, Q8_0) ; le modèle 1.5B‑Instruct Q4_K_M du tableau est absent, aucune commande de téléchargement.
+4. **`--ppl-reparti` ignore `--ids-file` (et `--ppl <fichier>`)** : `run_ppl_reparti` ne lit que `opt.ids` (ligne 2080). Le « corpus WikiText-2 » du rapport mode 4 n'est donc alimentable que par une liste `--ids` littérale (le journal montre `--ids $IDS`), et la commande du plan §6.1 mesure en réalité les ids 1..256.
+5. **« ÷2,3 sur les octets » est trompeur** : le tableau « Mesuré » aligne mode 2 = 1 608 o/flux et mode 4 = 1,5 ko → **1,05×**, pas 2,3×. Le ÷2,3 n'est vrai que contre le mode 3 **dense** (3,5 ko/jeton), qui n'est pas dans le tableau. Ma mesure : mode 2 = 1 671 o/flux, mode 4 = 1,6 ko/jeton → **1,02×**.
+6. **Docs** : `docs/plan-mode4-lot-listes.md` annonce « trois écarts volontaires y sont notés en tête » — **aucune liste de trois écarts n'existe dans le fichier** — et conserve « aucun fichier de code n'a été touché pour l'écrire », faux depuis l'implémentation et les dix correctifs.
+
+## 7. Mineurs
+
+- « 1 lots pour 20 jetons » (accord) ; `--banc-kv --threads N` affiche « N fils » alors que la passe CPU lance toujours `n_head` threads (`let _ = threads`).
+- `tools/pair_factice.py` : le mode 2 renvoie `n_paires = 0` mais `mode in (3,4)` seulement pour le mode lot — cohérent ; à noter que son `elif mode == 2` vient APRÈS `mode == 4`, l'ordre est bon.
+- L'arbre de travail n'est pas propre (`journal/README.md`, `journal/sessions/…/digest.md` et `rapport.md` modifiés) — écritures d'autres agents, pas de moi ; je n'ai touché **aucun** fichier du dépôt.
+
+## 8. Non vérifié
+
+Aiguille 9/9 (modèle 1.5B absent) ; les 6 lignes du tableau KV sans commande (25–28 min chacune) ; les portes gpt-oss (modèle absent de `models/`) ; les octets WikiText exacts du rapport mode 4 (mes runs utilisent les ids synthétiques, seuls reproductibles sans liste littérale).
+
+---
+
+**Résumé (10 lignes)**
+
+1. **9 défauts réels prouvés** (6 de code, 3 de documentation/mesure), dont 2 graves.
+2. **Grave n°1 — le client ne valide la réponse du pair que dans le chemin lot** : mode 3/4 en réponse à une demande mode 0 → SIGABRT (`main.rs:1512`) ; mode 0 `n=897` → SIGABRT (`model.rs:2204`) ; `n=895` ou mode 1 `n=0` → perplexité fausse acceptée en silence. Le lot, lui, est correct (3↔4 refusés proprement).
+3. **Grave n°2 — le nœud moteur meurt sur 83 octets forgés** : `pos ≥ ctx` (assert `model.rs:2985`), `fin > n_layer` (`model.rs:3046`), et `n ≠ hidden` en mode 0 (`model.rs:2204`/`3314`) → SIGABRT. Le mode 0 ne contrôle que `n != 0`.
+4. **Vérifié correct** : refus `n==0` en modes 0/3/4 et listes vides en 1/2 (session réelle `--act-thresh 1.0` → 0,00e0, `quant_scratch → None` sans division par zéro) ; gardes mode 4 (`a≤hidden`, `nb`, `lg`, une seule ligne « hors dimension ») ; comptabilité Σt (2 lots/20 jetons, 16 lots/1 024 jetons) ; mode 3 à 1 024 jetons 0,00e0 ; `cargo test` 17/17 ; porte Qwen **19,3885** ; modes 0–4 sans régression.
+5. **Plafond cumulatif** : reproduit à l'octet (refus à l'état 72 393, 258,0 Mo poussés) mais **par message** : 8 flux de 35,4 Mo (282,9 Mo cumulés) passent ; la RAM ne s'accumule pas (RSS 593 Mo stable) ; la vérification est faite **après** lecture, contre le §4 du plan.
+6. **La borne « 256 Mo de mémoire vivante » est fausse d'un facteur 2** : trame mode 1 de 256 Mio pile → VmHWM **1,04 Gio** (corps + `Vec<u16>` + `Vec<i16>`).
+7. **Le banc KV n'applique pas l'homogénéité qu'il sert à justifier** : avec `K_F16` il installe le miroir et sort « écart +4,17e-5 », là où le rapport écrit « ❌ désactivé / — » ; sans `DRAVE_GPU=1`, « GPU absent ».
+8. **Mesures KV** : f32 71,5 ms et f16 163,6 ms (2,29×) reproduits, miroir 1,8/1,7 ms et écarts +3,2/+3,4e-5 reproduits ; **int8 145,5 ms contre 174,0 annoncés** (−16 %).
+9. **Reproductibilité** : pas de commande pour la section temps/miroir, 6 lignes du tableau KV sans commande, `/tmp/ids_qwen_long.txt` non régénérable depuis le rapport, aiguille 9/9 invérifiable (modèle 1.5B absent), `--ppl-reparti` ignore `--ids-file` ; « ÷2,3 sur les octets » contredit par le tableau lui-même (1,05×) et par ma mesure (1,02×).
+10. **Non vérifié** : aiguille 9/9, 6 lignes KV, portes gpt-oss, octets WikiText exacts du mode 4. Aucun fichier du dépôt modifié ; tous mes processus arrêtés.
+
+- **send_message** `{"agent_id": "bbd6969f-0f70-42b2-8951-64d1f2f36d2e", "message": "RELECTURE ADVERSARIALE des correctifs 998d409→0c56c35 : 9 défauts réels prouvés (6 code, 3 doc/mesure), 2 graves. Aucun fichier du dépôt modifié. cargo test 17/17 ; porte Qwen ctx 256 = 19,3885 reproduite.\n\nGRAVE 1 — le client ne val … [4122 caractères tronqués]`
+
+  ```
+message delivered to agent bbd6969f-0f70-42b2-8951-64d1f2f36d2e
+  ```
+
+### 🤖 Assistant
+
+⏵ Clôture : rapport envoyé, aucun processus résiduel
+
+Le rapport complet figure ci-dessus et le résumé auto-portant a été transmis au parent (`bbd6969f-…`) via `send_message` (livré). Aucun fichier du dépôt n'a été modifié (les `journal/…` modifiés dans `git status` sont les écritures d'autres agents) ; tous mes serveurs, clients factices et bancs sont arrêtés, aucun job de fond ne tourne.
+

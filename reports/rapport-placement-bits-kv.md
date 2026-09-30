@@ -115,7 +115,7 @@ le conseil selon le régime. Banc `--banc-kv`, 262 144 clés, 24 couches, 16 fil
 | clés | CPU, ms par passe | miroir VRAM | écart du noyau GPU |
 |---|---|---|---|
 | f32 | **70,5** | ✅ déporté (1,8 ms) | +3,2e-5 |
-| **f16** | **162,1** (2,3×) | ❌ désactivé | — |
+| **f16** | **162,1** (2,3×) | ❌ désactivé | — (la ligne GPU du banc ne vaut PAS pour le moteur : `--banc-kv` installe le miroir sans appliquer la règle d'homogénéité — relevé par un relecteur) |
 | int8 | 174,0 | ✅ déporté (1,7 ms) | +3,4e-5 |
 
 Deux faits qui n'étaient pas prévus :

@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 50.4 h |
+| Durée | 50.8 h |
 | Tours | 46 |
-| Messages | 1953 |
-| Appels d'outils | 1844 |
+| Messages | 1963 |
+| Appels d'outils | 1852 |
 | Fichiers touchés | 44 |
-| Commandes | 1515 |
+| Commandes | 1523 |
 | Sous-agents | 11 |
-| Commits | 168 |
+| Commits | 169 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -2117,7 +2117,7 @@ L'**audit des drapeaux** a trouvé que **46 options sur 110** étaient ignorées
 
 ### Tour 46 — continue jusqu'à 18h HAE
 
-*106 appels d'outils.* Actions notables :
+*114 appels d'outils.* Actions notables :
 
 - bash — Check time, timezone and remaining budget
 - create_goal
@@ -2133,11 +2133,11 @@ L'**audit des drapeaux** a trouvé que **46 options sur 110** étaient ignorées
 - bash — Improve notebook with real text cell
 - bash — Kill test node safely and check notebook
 - bash — Add notebook real-text cell and commit
-- … et 92 autres
+- … et 100 autres
 
 **Synthèse produite :**
 
-⏵ Dernière heure : je lance une quatrième relecture sur les correctifs de la dernière heure, et je prépare la clôture.
+La quatrième relecture a trouvé **2 défauts graves** (le client ne valide la réponse du pair que dans le chemin lot, et le nœud meurt sur un en-tête forgé). Je corrige ces deux-là d'abord — 28 minutes.
 
 ## 3. Travail accompli
 
@@ -2246,7 +2246,7 @@ L'**audit des drapeaux** a trouvé que **46 options sur 110** étaient ignorées
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 1475 autres
+- … et 1483 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2562,4 +2562,5 @@ L'**audit des drapeaux** a trouvé que **46 options sur 110** étaient ignorées
 - REPRISE : la politique du cache KV complète (taille ET temps), et l'aiguille 9/9" && git log --oneline -1 | cat
 - Compteurs de lignes : 12 171 au 30/09 (le mode 4 et ses correctifs ont ajouté 270 lignes)" && git log --oneline -1 | cat; date +"%H:%M:%S"
 - README : les prochaines étapes étaient restées à l'époque du FPGA  Elles listaient l'entraînement ternaire et le RTL comme priorités, alors que la feuille de ro
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && (cd drave-core && timeout 300 cargo test --release 2>&1 | grep -E "^test result"); TAG=z1 PORT=47810 CTX=2
 

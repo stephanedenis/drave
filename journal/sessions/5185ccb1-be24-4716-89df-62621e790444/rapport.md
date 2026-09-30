@@ -5,12 +5,12 @@
 | Identifiant | `5185ccb1-be24-4716-89df-62621e790444` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-30 17:03 |
-| Durée | 0.1 h |
+| Durée | 0.4 h |
 | Tours | 1 |
-| Messages | 47 |
-| Appels d'outils | 62 |
-| Fichiers touchés | 5 |
-| Commandes | 52 |
+| Messages | 102 |
+| Appels d'outils | 123 |
+| Fichiers touchés | 9 |
+| Commandes | 106 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -23,7 +23,7 @@
 
 ### Tour 1 — Tu es relecteur ADVERSARIAL dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (projet « Drave » : moteur d'i … [4131 caractères tronqués]
 
-*62 appels d'outils.* Actions notables :
+*123 appels d'outils.* Actions notables :
 
 - bash — List commits and repo contents
 - bash — Check git status and HEAD
@@ -39,11 +39,13 @@
 - bash — Read quant_scratch and norme_finale
 - bash — Read emb_imposee and rmsnorm
 - bash — List models, reports, tools
-- … et 46 autres
+- … et 107 autres
 
 **Synthèse produite :**
 
-⏵ Exécution du test D (8 flux mode 4, cap cumulatif)
+⏵ Clôture : rapport envoyé, aucun processus résiduel
+
+Le rapport complet figure ci-dessus et le résumé auto-portant a été transmis au parent (`bbd6969f-…`) via `send_message` (livré). Aucun fichier du dépôt n'a été modifié (les `journal/…` modifiés dans `git status` sont les écritures d'autres agents) ; tous mes serveurs, clients factices et bancs sont arrêtés, aucun job de fond ne tourne.
 
 ## 3. Travail accompli
 
@@ -55,7 +57,11 @@
 | `/tmp/adv/testA_serveur.py` | 1 | 0 |
 | `/tmp/adv/testB_client.py` | 1 | 0 |
 | `/tmp/adv/testC_reel.py` | 1 | 0 |
-| `/tmp/adv/testD_plafond.py` | 1 | 0 |
+| `/tmp/adv/testD_plafond.py` | 2 | 0 |
+| `/tmp/adv/testE_refus.py` | 1 | 0 |
+| `/tmp/adv/testH_lot_modes.py` | 2 | 0 |
+| `/tmp/adv/testI_mode1_256m.py` | 1 | 0 |
+| `/tmp/adv/testK_modes.py` | 1 | 0 |
 
 ### Commandes exécutées (échantillon)
 
@@ -99,7 +105,7 @@
 - **T1** Read protocol constants and envoyer_flux
 - **T1** Check binary and create workdir
 - **T1** Read decoder_paires_blocs
-- … et 12 autres
+- … et 66 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -194,6 +200,36 @@
 - **T1** `| **un seul lot de 256** | 4 255,6 ms | **16,6 ms** |`
 - **T1** `|   référence locale  : perplexité 144.3267  (1.0 s)`
 - **T1** `|   deux nœuds        : perplexité 144.3267  (1.1 s)`
+- **T1** `corps d'un flux : 37080000 octets (35.4 Mo) ; 8 flux = 282.9 Mo`
+- **T1** `/// en relatif sur les petits canaux (2,6 % de perplexité à 16 bits pleins,`
+- **T1** `// int8 — et non par le pool. Le pool coûtait 4 ms de plus par jeton pour`
+- **T1** `// 72 Mo lus au lieu de 136 : ses seize tampons de sortie (9,7 Mo) sont`
+- **T1** `flux 1/8 accepte (reponse mode 4 n=10000, 1260079 o) · total envoye 35.4 Mo > plafond 256 Mo : False · RSS 571220 kB pic 675816 kB`
+- **T1** `flux 2/8 accepte (reponse mode 4 n=10000, 1260079 o) · total envoye 70.7 Mo > plafond 256 Mo : False · RSS 593140 kB pic 697828 kB`
+- **T1** `flux 3/8 accepte (reponse mode 4 n=10000, 1260079 o) · total envoye 106.1 Mo > plafond 256 Mo : False · RSS 593140 kB pic 697828 kB`
+- **T1** `flux 4/8 accepte (reponse mode 4 n=10000, 1260079 o) · total envoye 141.4 Mo > plafond 256 Mo : False · RSS 593140 kB pic 697828 kB`
+- **T1** `flux 5/8 accepte (reponse mode 4 n=10000, 1260079 o) · total envoye 176.8 Mo > plafond 256 Mo : False · RSS 593140 kB pic 697828 kB`
+- **T1** `flux 6/8 accepte (reponse mode 4 n=10000, 1260079 o) · total envoye 212.2 Mo > plafond 256 Mo : False · RSS 593140 kB pic 697828 kB`
+- **T1** `flux 7/8 accepte (reponse mode 4 n=10000, 1260079 o) · total envoye 247.5 Mo > plafond 256 Mo : False · RSS 593140 kB pic 697828 kB`
+- **T1** `flux 8/8 accepte (reponse mode 4 n=10000, 1260079 o) · total envoye 282.9 Mo > plafond 256 Mo : True · RSS 593140 kB pic 697828 kB`
+- **T1** `corps annonce : 277721784 octets (264.9 Mo) ; t*hidden*4 = 268434432 <= 268435456 : True`
+- **T1** `octets pousses : 523856 (0.5 Mo) en 0.10 s (5 Mo/s)`
+- **T1** `./reports/rapport-transport-liste.md:48:(19,3885), mais ici 16 bits coûtent 2,6 % : la différence n'est pas la précision,`
+- **T1** `./reports/rapport-compacite-trace.md:6:> **identique** (perplexité 19,3885 dans les deux cas), et la relecture par`
+- **T1** `./reports/rapport-compacite-trace.md:16:> **+0,074 % de perplexité au rejeu** (19,4029 contre 19,3885) et d'une erreur par`
+- **T1** `./journal/sessions/22bcae27-254b-47b2-acda-87467dab060c/digest.md:23746:=== perplexité 19.3885 sur 510 tokens (0 événements, 16.4 s) ===`
+- **T1** `octets pousses : 270532608 (258.0 Mo) en 10.43 s (26 Mo/s)`
+- **T1** `| [flux] arrêt : corps du lot en listes (cumul après l'état 72393) : 268436952 octets au-delà du plafond de 256 Mo — flux refusé                      (règle R4 de docs/plan-prefill-reparti.md)`
+- **T1** `160:| 5 | échelles par bloc pour `DenseQ8` | **fait, hypothèse réfutée** | 23,696 contre 23,612 : les échelles par bloc n'apportent rien ; l'avantage du 6 bits est son coût (25 % d'octets en moins à q`
+- **T1** `182:| porte gpt-oss selon l'ouverture du pilote | sans `DRAVE_GPU` : **15,1757** · avec `DRAVE_GPU=1` : **15,1667** — l'écart vient du déport automatique des projections Q8_0 (> 8 Mo), pas d'une régre`
+- **T1** `514:#    moteur déporte alors tout seul les projections Q8_0 de plus de 8 Mo — le`
+- **T1** `| Qwen2.5-0.5B Q8_0, `--dense`, 16 fils | 512 | 17,1 s | **13,6 s** | **−20 %** |`
+- **T1** `| gpt-oss-120b MXFP4, MoE groupé, 16 fils | 256 | ≈ 50 s | 34,4 s (lot 256) | **−31 %** |`
+- **T1** `25315-⏵ **Le 6 bits empaqueté bat notre int8** : PPL 19,30 contre 19,39, avec 25 % d'octets en moins. Test de la répartition recommandée`
+- **T1** `25413-Ce qui manquait était l'extraction des deux plans, encore scalaire par poids. Elle se fait maintenant **par octet** (huit tours que le compilateur vectorise), puis recombinaison et produit entie`
+- **T1** `// Défauts du mode PERPLEXITÉ : 256 jetons, trois quarts des cœurs, 16 bits`
+- **T1** `> du pilote, et `--gpu-banc` retrouve l'exactitude des noyaux — 1,6 ms par ligne`
+- … (tronqué)
 
 ## 5. Erreurs rencontrées
 
