@@ -7,10 +7,10 @@
 | Début | 2026-09-30 12:20 |
 | Durée | 0.2 h |
 | Tours | 1 |
-| Messages | 63 |
-| Appels d'outils | 72 |
+| Messages | 69 |
+| Appels d'outils | 78 |
 | Fichiers touchés | 0 |
-| Commandes | 53 |
+| Commandes | 59 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -23,7 +23,7 @@
 
 ### Tour 1 — Tu es relecteur ADVERSARIAL dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (projet « Drave » : moteur d'i … [4103 caractères tronqués]
 
-*72 appels d'outils.* Actions notables :
+*78 appels d'outils.* Actions notables :
 
 - bash — List recent commits and status
 - bash — List repo structure and source sizes
@@ -39,11 +39,11 @@
 - bash — Inspect concurrent uncommitted edits
 - bash — Extract HEAD and cda3162 sources to /tmp
 - bash — Check models, data and existing binary/traces
-- … et 42 autres
+- … et 48 autres
 
 **Synthèse produite :**
 
-⏵ Alerte : le binaire a été reconstruit pendant l'audit — je vérifie la provenance
+⏵ Le parent vient de committer DRVF v3 : je recale l'audit sur ce nouvel état
 
 ## 3. Travail accompli
 
@@ -94,7 +94,7 @@
 - **T1** Read single-token trace key scheme
 - **T1** Check claims in prefill report
 - **T1** Run fake peer with dense client
-- … et 13 autres
+- … et 19 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -162,6 +162,10 @@
 - **T1** `7 tokens notés — perplexité cumulée 795.210  (11.3 tok/s)`
 - **T1** `7 tokens notés — perplexité cumulée 795.210  (11.2 tok/s)`
 - **T1** `7 tokens notés — perplexité cumulée 795.210  (11.4 tok/s)`
+- **T1** `ae85043 DRVF v3 : −66 % de trace au total, pour +0,074 % de perplexité`
+- **T1** `DRVF v3 : −66 % de trace au total, pour +0,074 % de perplexité`
+- **T1** `| erreur par valeur | — | nulle | RMS 0,085 % du max |`
+- **T1** `Soit −65,9 % depuis la v1 pour +0,074 % de perplexité. La v3 est AVEC PERTE, donc`
 
 ## 5. Erreurs rencontrées
 

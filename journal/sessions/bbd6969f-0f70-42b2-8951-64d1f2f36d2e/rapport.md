@@ -7,12 +7,12 @@
 | Début | 2026-09-28 14:46 |
 | Durée | 45.7 h |
 | Tours | 45 |
-| Messages | 1689 |
-| Appels d'outils | 1596 |
+| Messages | 1693 |
+| Appels d'outils | 1600 |
 | Fichiers touchés | 44 |
-| Commandes | 1279 |
+| Commandes | 1282 |
 | Sous-agents | 6 |
-| Commits | 109 |
+| Commits | 110 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -2055,7 +2055,7 @@ Je vérifie l'heure à chaque itération et j'arrête à 12:06, en laissant un p
 
 ### Tour 45 — as-tu ce qu'il te faut pour te rendre à 15h en travaillaint avec un maximum d'autonomie et de parallélisme d'activités?
 
-*97 appels d'outils.* Actions notables :
+*101 appels d'outils.* Actions notables :
 
 - bash — Probe machine, GPU, disk, network state
 - bash — Identify GPU users and stray processes
@@ -2071,7 +2071,7 @@ Je vérifie l'heure à chaque itération et j'arrête à 12:06, en laissant un p
 - bash — Understand batched PPL reference path
 - bash — Add batched imposed states to forward_lot
 - list_agents
-- … et 76 autres
+- … et 79 autres
 
 **Synthèse produite :**
 
@@ -2179,7 +2179,7 @@ v3 est correct cette fois : **45 079 930 octets (−32 % vs v2, −66 % vs v1)**
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 1239 autres
+- … et 1242 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2436,4 +2436,5 @@ v3 est correct cette fois : **45 079 930 octets (−32 % vs v2, −66 % vs v1)**
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A drave-core/src/main.rs && git commit -q -F - <<'EOF' && git log --oneline -1 | cat Deux silence
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p='tools/preparer_colab.sh'; s=open(p).read() s = s.replace("    temps : ~16 ms de calcul
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p='docs/format-flux.md'; s=open(p).read() v = """| | version 1 | version 2 | |---|---|---
+- REPRISE : la session 12h-15h (lots sur le fil, DRVF v2/v3, protocole v4, audit)  Ce qui a changé depuis §6bis, en un bloc : le préremplissage par lots est fait 
 

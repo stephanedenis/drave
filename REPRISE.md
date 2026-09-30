@@ -293,6 +293,46 @@ suite : `DRAVE_KV_BITS=8 DRAVE_KV_K_F32=1` (75 % de la taille f32 pour +0,02 %).
 passait l'écart de 0,00e0 à **5,61e0** en mode dense — la connexion résiduelle a
 besoin du résidu lui-même. Drapeau retiré, réfutation écrite.
 
+### Session « autonomie jusqu'à 15h » — ce qui s'ajoute (12h → 15h)
+
+**Le préremplissage par lots sur le fil est FAIT** (mode 3 du protocole) : N états
+d'un coup au lieu d'un flux par jeton. Vérifié : 256 jetons en 4 lots de 64 →
+**écart 0,00e0** (18,0851 = 18,0851) ; en UN lot de 917 543 octets → **0,00e0**
+aussi. C'était le bloqueur de la phase 3.4 ; `colab/` contient maintenant le
+notebook prêt à ouvrir, `tools/preparer_colab.sh` fait le dépôt en un fichier
+(`git bundle`, 4,5 Mo — il n'y a pas de dépôt distant) et vérifie l'empreinte du
+modèle.
+
+**Le protocole est en version 4** et le contrat d'activation transporte
+niveaux, seuil, top-k, renorm, les sept top-k par projection, attn/qk/moe top-k :
+un serveur lancé avec `--topk-q 900` et un client avec `--topk-q 4` donnent quand
+même 0,00e0 — les réglages du client gagnent. En version 3 ils divergeaient en
+silence.
+
+**Le format de trace est en version 2 par défaut et 3 en option** :
+
+| | v1 | v2 (défaut) | v3 (`DRAVE_TRACE_BLOCS=1`) |
+|---|---|---|---|
+| trace dense 512 jetons | 132 396 736 o | 66 370 408 o | **45 079 930 o** |
+| rejeu `--flux-forcer` | 19,3885 | 19,3885 | 19,4029 (+0,074 %) |
+
+La v2 (indices par écarts) est SANS PERTE ; la v3 (valeurs i8, échelle f16 par
+bloc de 32) est avec perte. Le rejeu annonce ses comptes — `24 576 listes
+servies, 0 manquantes` — et c'est ce qui a démasqué un FAUX POSITIF : mon premier
+« rejeu v3 = 19,3885 » lisait en fait la perplexité du calcul normal, la trace
+n'étant pas chargée du tout (l'écrivain décalait le fichier de huit octets).
+
+**L'audit des drapeaux** (`reports/rapport-drapeaux-ignores.md`, délégué) : 110
+options passées au crible, **46 ignorées dans au moins un mode**. Corrigés :
+les top-k (ci-dessus), `--keep` en `--ppl` (prouvé : 1929,3230 identique avant),
+`--ffn-gain` en `--infer`, `--threads` en FS/PR/BM, `--hebb-q`/`--hebb-out`,
+`--plan` sans `--ctx` (annonçait 512 au lieu de 32 768), la précédence de fenêtre,
+le pas de 2 du mode par défaut (`--dense --threads 4` annonçait 30 fils),
+`--trace-flux` en inférence (muet), les modes multiples (silencieux). Restent :
+`--banc-vision` (ne reçoit aucune `Options`), `--bits` du noyau GPU, et la
+recommandation de fond — un `--options-actives` qui imprime les réglages
+réellement en vigueur.
+
 ### Les prochains chantiers, dans l'ordre
 
 1. **Préremplissage par LOTS sur le fil** : le transport est séquentiel (un flux

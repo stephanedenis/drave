@@ -2641,3 +2641,123 @@ The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-coheren
 80 OK
   ```
 
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-coherence-docs.md", "new_string": "## Récapitulatif\n\n| verdict | nombre | principaux foyers |\n|---|---:|---|\n| PÉRIMÉ | **37** | version du format de flux et du disque (6) · nombre de flux à 40 et 1 024 jetons (2) · e … [2153 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-coherence-docs.md has been updated successfully.
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-coherence-docs.md", "limit": 50}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-coherence-docs.md</path>
+<type>file</type>
+<content>
+1: # Cohérence des documents avec le code — audit
+2: 
+3: **En une ligne** : **80 affirmations** vérifiées une par une contre le code (et
+4: contre les traces réelles du disque) ; **37 sont fausses (PÉRIMÉ)**, **15 se
+5: contredisent entre documents (CONTRADICTOIRE)**, **13 existent dans le code et
+6: manquent aux documents (MANQUANT)**, **15 tiennent (OK)** — les trois plus graves
+7: touchent la **version du protocole de flux** (deux binaires « v3 » aux contrats
+8: différents se croient compatibles), un **échappement d'indice écrit sur 4 octets et
+9: lu sur 2** en mode blocs, et `REPRISE.md` §6bis (pourtant écrit il y a une heure)
+10: déjà faux sur quatre points.
+11: 
+12: ## Révision auditée, méthode, réserves
+13: 
+14: | | |
+15: |---|---|
+16: | Commit de référence | `a0687b9` (2026-09-30 12:20) |
+17: | `drave-core/src/main.rs` | sha256 `d5e90136…` · 3 112 lignes · **3 lignes modifiées non commitées** |
+18: | `drave-core/src/model.rs` | sha256 `0a0856cc…` · 3 872 lignes · **165 lignes ajoutées non commitées** (trace v3) |
+19: | Traces relues | `/tmp/flux_v2.bin`
+… [2981 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git status --short && echo \"---\" && wc -l reports/rapport-coherence-docs.md", "description": "Vérifier l'état git et le fichier livré"}`
+
+  ```
+M journal/README.md
+?? reports/rapport-coherence-docs.md
+---
+223 reports/rapport-coherence-docs.md
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log --oneline -3 && git show --stat --format='%h %s' HEAD | head -12 && echo \"--- valeurs clés ---\" && grep -n 'const VERSION_FLUX' drave-core/src/main.rs && grep -n 'let version: u16' drave-core/src/model.rs && grep -n 'paires … [126 caractères tronqués]`
+
+  ```
+ae85043 DRVF v3 : −66 % de trace au total, pour +0,074 % de perplexité
+a0687b9 Colab : notebook prêt à ouvrir + script de préparation
+25c42c3 Deux silences de plus, relevés par l'audit : trace en inférence, modes concurrents
+ae85043 DRVF v3 : −66 % de trace au total, pour +0,074 % de perplexité
+
+ docs/format-flux.md                                |   16 +
+ drave-core/src/main.rs                             |    3 +-
+ drave-core/src/model.rs                            |  224 +-
+ .../42059fde-f06f-4e2c-9a23-8292d887fb6e/digest.md | 2643 ++++++++++++++++++++
+ .../rapport.md                                     |  232 ++
+ journal/sessions/MANIFEST.md                       |    6 +-
+ .../bbd6969f-0f70-42b2-8951-64d1f2f36d2e/digest.md |  288 +++
+ .../rapport.md                                     |   25 +-
+ .../bcfe0b97-1795-4610-8e8b-b598ca1ba6cb/digest.md | 1865 ++++++++++++++
+ .../rapport.md                                     |  172 ++
+--- valeurs clés ---
+1295:const VERSION_FLUX: u8 = 3;
+549:        let version: u16 = if std::env::var("DRAVE_TRACE_BLOCS").is_ok() { 3 } else { 2 };
+1457:                paires.extend_from_slice(&i.to_le_bytes());
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git show ae85043 -- docs/format-flux.md", "description": "Voir la mise à jour de format-flux par le commit v3"}`
+
+  ```
+commit ae850435f8640f60446f17c46205e52582343db6
+Author: Stéphane <stephane@localhost>
+Date:   Wed Sep 30 12:30:38 2026 -0400
+
+    DRVF v3 : −66 % de trace au total, pour +0,074 % de perplexité
+    
+    `DRAVE_TRACE_BLOCS=1` écrit des valeurs i8 avec une échelle **f16 par bloc de 32
+    canaux** — l'échelle par bloc borne l'erreur relative, ce qui autorise un octet
+    par valeur. Mesuré sur la même trace dense de 512 jetons :
+    
+    | | v1 | v2 | v3 |
+    |---|---|---|---|
+    | octets | 132 396 736 | 66 370 408 | **45 079 930** |
+    | rejeu `--flux-forcer` | 19,3885 | 19,3885 | **19,4029** |
+    | erreur par valeur | — | nulle | RMS 0,085 % du max |
+    
+    Soit −65,9 % depuis la v1 pour +0,074 % de perplexité. La v3 est AVEC PERTE, donc
+    la v2 reste le défaut ; la v3 est pour les traces qu'on garde longtemps.
+    
+    Deux choses apprises en la faisant, et écrites dans le code :
+    - l'écrivain construisait le corps APRÈS l'en-tête, et écrivait donc deux fois le
+      compte (`liste.len()` puis `idx.len()`) : tout le fichier se décalait de huit
+      octets et le lecteur refusait la trace. Pire : mon premier « rejeu v3 = 19,3885 »
+      était un FAUX POSITIF — la trace n'
+… [3086 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n 'version in' tools/flux_codec.py && sha256sum drave-core/src/main.rs drave-core/src/model.rs && git log -1 --format='%h %ad' --date=format:'%H:%M' && grep -n 'Le lecteur lit' docs/format-flux.md && grep -n 'version' docs/form … [76 caractères tronqués]`
+
+  ```
+62:    assert version in (1, 2, 3), f"version {version} inconnue (ce lecteur lit la 1, la 2 et la 3)"
+d5e901368718f14fd34a8664631a08f090150ff12df4b7592cf3dcdc919f87cb  drave-core/src/main.rs
+3e5dde2d10a4e83dfd710b6c98e7f411a05769a9cec22fbeeb67d583809a72ec  drave-core/src/model.rs
+ae85043 12:30
+64:Le lecteur lit **les deux versions** ; une version inconnue est refusée en la
+20:          version      u16          = 1
+28:          puis n_actifs × ( indice u32 · valeur i16 )           [version 1]
+29:          puis n_actifs × ( écart u8 · valeur i16 )             [version 2]
+43:| | version 1 | version 2 |
+54:| | version 2 | version 3 |
+64:Le lecteur lit **les deux versions** ; une version inconnue est refusée en la
+83:          version      u8           4   (refusée si différente, en le disant)
+120:La version est dans **chaque** en-tête, et un pair d'une autre version est refusé
+121:avec un message qui nomme les deux versions :
+124:[flux] arrêt : flux en version 99, cette build parle la 4 (pair incompatible : rien n'a été interprété)
+127:Le passage de la version 2 à la 3 n'est pas cosmétique : un pair en version 2 qui
+156:| une version inconnue est refusée | v1/v2/v3 lues, toute autre r
+… [81 caractères tronqués]
+  ```
+

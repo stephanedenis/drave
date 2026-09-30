@@ -7,10 +7,10 @@
 | Début | 2026-09-30 12:20 |
 | Durée | 0.2 h |
 | Tours | 1 |
-| Messages | 88 |
-| Appels d'outils | 132 |
+| Messages | 94 |
+| Appels d'outils | 140 |
 | Fichiers touchés | 1 |
-| Commandes | 97 |
+| Commandes | 102 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -23,7 +23,7 @@
 
 ### Tour 1 — Tu es vérificateur de documentation dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (projet « Drave » : mo … [3423 caractères tronqués]
 
-*132 appels d'outils.* Actions notables :
+*140 appels d'outils.* Actions notables :
 
 - bash — Lister la racine du dépôt
 - bash — Voir l'historique git récent
@@ -39,7 +39,7 @@
 - bash — Chercher autres drapeaux obsolètes
 - bash — Relever les mentions de version par document
 - bash — Comparer les octets par flux cités
-- … et 89 autres
+- … et 95 autres
 
 **Synthèse produite :**
 
@@ -53,7 +53,7 @@ J'ai terminé les vérifications. J'écris maintenant le livrable.
 
 | Fichier | Écritures | Éditions |
 |---|---|---|
-| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-coherence-docs.md` | 1 | 3 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-coherence-docs.md` | 1 | 4 |
 
 ### Commandes exécutées (échantillon)
 
@@ -97,7 +97,7 @@ J'ai terminé les vérifications. J'écris maintenant le livrable.
 - **T1** Relever les statuts de contexte-long
 - **T1** Comparer le statut de E5
 - **T1** Comparer les variables DRAVE_*
-- … et 57 autres
+- … et 62 autres
 
 ## 4. Mesures et résultats marquants
 

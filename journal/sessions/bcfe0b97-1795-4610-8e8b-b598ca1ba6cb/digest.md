@@ -1863,3 +1863,130 @@ a0687b9 2026-09-30 12:20:09 -0400 Colab : notebook prêt à ouvrir + script de p
 6b3b53f 2026-09-30 12:17:39 -0400 DRVF v2 sur le disque : −49,87 % de trace, rejeu identique
   ```
 
+### 🤖 Assistant
+
+⏵ Alerte : le binaire a été reconstruit pendant l'audit — je vérifie la provenance
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && strings drave-core/target/release/drave | grep -c \"DRAVE_TRACE_BLOCS\" ; strings drave-core/target/release/drave | grep -E \"trace DRVF en version|lot imposé|n'est pas un vecteur dense\" | head; echo \"=== état du working tree ===\" … [196 caractères tronqués]`
+
+  ```
+2
+trace DRVF en version 
+tats n'est pas un vecteur densesortie du lot trop petiteun worker du pool est mort pendant le calcul (panique ci-dessus) : r
+=== état du working tree ===
+M  docs/format-flux.md
+M  drave-core/src/main.rs
+M  drave-core/src/model.rs
+ M journal/README.md
+ M journal/sessions/MANIFEST.md
+ M journal/sessions/bbd6969f-0f70-42b2-8951-64d1f2f36d2e/digest.md
+M  reports/rapport-compacite-trace.md
+M  tools/flux_codec.py
+?? journal/sessions/42059fde-f06f-4e2c-9a23-8292d887fb6e/
+?? journal/sessions/bcfe0b97-1795-4610-8e8b-b598ca1ba6cb/
+?? reports/rapport-coherence-docs.md
+mer 30 sep 2026 12:30:42 EDT
+=== flux_lot courant (working tree) ===
+792:            None => self.manquantes += 1,
+2797:                    r.manquantes += 1;
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '2760,2810p' drave-core/src/model.rs && echo \"=== appliquer working tree ===\" && sed -n '770,800p' drave-core/src/model.rs", "description": "Read working-tree flux_lot and appliquer"}`
+
+  ```
+// Nœud intermédiaire : on rend le flux résiduel brut, sans norme.
+            return (0..t).map(|i| x[i * h..(i + 1) * h].to_vec()).collect();
+        }
+        for i in 0..t {
+            let r = x[i * h..(i + 1) * h].to_vec();
+            Self::rmsnorm(&r, &self.out_norm, self.cfg.eps, &mut hn[i * h..(i + 1) * h]);
+        }
+        (0..t).map(|i| hn[i * h..(i + 1) * h].to_vec()).collect()
+    }
+
+    /// Trace OU impose le flux d'un LOT : `xi` porte les entiers quantifiés du
+    /// lot (t × h) et `sx` une échelle par jeton. Sur ce chemin, le rejeu est
+    /// EXACT — on remplace les entiers et l'échelle, sans repasser par une
+    /// déquantification suivie d'une requantification.
+    #[allow(clippy::too_many_arguments)]
+    fn flux_lot(trace: &mut Option<TraceFlux>, force: &mut Option<FluxRelecteur>,
+                jeton: &mut u64, base: usize, l: usize, t: usize,
+                xi: &mut [i32], sx: &mut [f32], h: usize) {
+        if trace.is_none() && force.is_none() { return; }
+        let mut j0 = *jeton;
+        for i in 0..t {
+            if let Some(r) = force.as_mut() {
+                if let Some((ech, paires)) = r.listes.get(&((base + l) as u16, j0 as u32)).cloned() 
+… [2467 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Le binaire venait du working tree modifié : je construis un binaire HEAD propre dans /tmp
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && mkdir -p /tmp/audit_head/drave-core && git show HEAD:drave-core/Cargo.toml > /tmp/audit_head/drave-core/Cargo.toml && mkdir -p /tmp/audit_head/drave-core/src && for f in main.rs model.rs engine.rs gguf.rs gpu.rs list.rs tokenizer.rs; … [374 caractères tronqués]`
+
+  ```
+started background job bash-64
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git diff HEAD --stat -- drave-core/src/main.rs && git diff HEAD -- drave-core/src/main.rs | grep -E \"^[-+].*(VERSION_FLUX|TAILLE_TETE|envoyer_lot|MODE_LOT|lot\\b)\" | head -30", "description": "Check working-tree main.rs changes to  … [10 caractères tronqués]`
+
+  ```
+(no output)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date && git log --oneline -5 && git status --short | head", "description": "Re-check git state after concurrent commit"}`
+
+  ```
+mer 30 sep 2026 12:31:03 EDT
+ae85043 DRVF v3 : −66 % de trace au total, pour +0,074 % de perplexité
+a0687b9 Colab : notebook prêt à ouvrir + script de préparation
+25c42c3 Deux silences de plus, relevés par l'audit : trace en inférence, modes concurrents
+6b3b53f DRVF v2 sur le disque : −49,87 % de trace, rejeu identique
+d59d061 Protocole v4 : les top-k voyagent aussi (défaut n°1 de l'audit)
+ M journal/README.md
+?? reports/rapport-coherence-docs.md
+  ```
+
+### 👤 Utilisateur
+
+background job bash-64 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && mkdir -p /tmp/audit_head/drave-core && git show HEAD:drave-core/Cargo.toml > /tmp/audit_head/drave-core/Cargo.toml && mkdir -p /tmp/audit_head/drave-core/src && for f in main.rs model.rs engine.rs gguf.rs gpu.rs list.rs tokenizer.rs; do git show HEAD:drave-core/src/$f > /tmp/audit_head/drave-core/src/$f; done && ls -la /tmp/audit_head/drave-core/src/ && cd /tmp/audit_head/drave-core && (nice -n 10 cargo build --release -j 8 > /tmp/audit_head/build_head.log 2>&1; echo "BUILD EXIT=$?" >> /tmp/audit_head/build_head.log) ) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+### 🤖 Assistant
+
+⏵ Le parent vient de committer DRVF v3 : je recale l'audit sur ce nouvel état
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git show ae85043 --stat | head -20; echo \"=== diff a0687b9..ae85043 main.rs (résumé) ===\"; git diff a0687b9 ae85043 --stat -- drave-core/src/main.rs tools/pair_factice.py; echo \"=== VERSION_FLUX à HEAD ===\"; git show HEAD:drave-c … [478 caractères tronqués]`
+
+  ```
+commit ae850435f8640f60446f17c46205e52582343db6
+Author: Stéphane <stephane@localhost>
+Date:   Wed Sep 30 12:30:38 2026 -0400
+
+    DRVF v3 : −66 % de trace au total, pour +0,074 % de perplexité
+    
+    `DRAVE_TRACE_BLOCS=1` écrit des valeurs i8 avec une échelle **f16 par bloc de 32
+    canaux** — l'échelle par bloc borne l'erreur relative, ce qui autorise un octet
+    par valeur. Mesuré sur la même trace dense de 512 jetons :
+    
+    | | v1 | v2 | v3 |
+    |---|---|---|---|
+    | octets | 132 396 736 | 66 370 408 | **45 079 930** |
+    | rejeu `--flux-forcer` | 19,3885 | 19,3885 | **19,4029** |
+    | erreur par valeur | — | nulle | RMS 0,085 % du max |
+    
+    Soit −65,9 % depuis la v1 pour +0,074 % de perplexité. La v3 est AVEC PERTE, donc
+    la v2 reste le défaut ; la v3 est pour les traces qu'on garde longtemps.
+    
+    Deux choses apprises en la faisant, et écrites dans le code :
+=== diff a0687b9..ae85043 main.rs (résumé) ===
+ drave-core/src/main.rs | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+=== VERSION_FLUX à HEAD ===
+1295:const VERSION_FLUX: u8 = 3;
+1323:const TAILLE_TETE: usize = 4 + 1 + 1 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 1
+=== qui a introduit le else-if ==
+… [407 caractères tronqués]
+  ```
+

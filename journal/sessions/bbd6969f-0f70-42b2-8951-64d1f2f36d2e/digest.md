@@ -27137,3 +27137,39 @@ AssertionError
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='docs/format-flux.md'; s=open(p).read()\nv = \"\"\"| | version 1 | version 2 |\n|---|---|---|\n| trace dense, 512 jetons | 132 396 736 o | **66 370 408 o (−49,87 %)** |\n| rejeu (`--flux-forcer`) | 19,3885 | **19, … [4580 caractères tronqués]`
+
+  ```
+format-flux : v3 disque
+rapport compacité : v3
+ae85043 DRVF v3 : −66 % de trace au total, pour +0,074 % de perplexité
+  ```
+
+- **bash** `{"command": "date +\"%H:%M:%S\"; cat /tmp/kv_cles.log; pgrep -x drave >/dev/null && echo \"(campagne KV encore en cours)\" || echo \"(couloir A libre)\"", "description": "Check lane A status"}`
+
+  ```
+12:30:51
+cles_f32_valeurs_int4      : perplexité 14.2994 sur 8191 tokens (0 événements, 1665.6 s)
+cles_int4_valeurs_f32      : (campagne KV encore en cours)
+  ```
+
+- **list_agents** `{}`
+
+  ```
+e7dfe34f-d596-4f98-93c2-cad5a92d3b1e [ready] — Harness logits llama.cpp
+c25f97d1-9a4d-41da-b983-004f793afe43 [ready] — Audit ignored CLI flags
+7d0d2578-0048-4998-8494-7d2daef56769 [ready] — Spec batched prefill protocol
+15fd322f-7e9e-48c0-a970-f36335eb622a [ready] — Trace format compaction study
+bcfe0b97-1795-4610-8e8b-b598ca1ba6cb [running] — Adversarial review of recent commits
+42059fde-f06f-4e2c-9a23-8292d887fb6e [running] — Docs vs measurements consistency audit
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='REPRISE.md'; s=open(p).read()\nv = \"\"\"### Les prochains chantiers, dans l'ordre\"\"\"\nn = \"\"\"### Session « autonomie jusqu'à 15h » — ce qui s'ajoute (12h → 15h)\n\n**Le préremplissage par lots sur le fil e … [2470 caractères tronqués]`
+
+  ```
+REPRISE : session 12h-15h ajoutée
+12:31:08
+cles_f32_valeurs_int4      : perplexité 14.2994 sur 8191 tokens (0 événements, 1665.6 s)
+cles_int4_valeurs_f32      :
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add REPRISE.md && git commit -q -m \"REPRISE : la session 12h-15h (lots sur le fil, DRVF v2/v3, protocole v4, audit)\n\nCe qui a changé depuis §6bis, en un bloc : le préremplissage par lots est fait et\nfidèle, le protocole est e … [519 caractères tronqués]`
