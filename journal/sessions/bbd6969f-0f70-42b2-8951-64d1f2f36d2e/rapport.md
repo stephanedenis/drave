@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 49.5 h |
+| Durée | 49.6 h |
 | Tours | 46 |
-| Messages | 1932 |
-| Appels d'outils | 1823 |
+| Messages | 1936 |
+| Appels d'outils | 1827 |
 | Fichiers touchés | 44 |
-| Commandes | 1495 |
+| Commandes | 1499 |
 | Sous-agents | 10 |
-| Commits | 161 |
+| Commits | 162 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -2117,7 +2117,7 @@ L'**audit des drapeaux** a trouvé que **46 options sur 110** étaient ignorées
 
 ### Tour 46 — continue jusqu'à 18h HAE
 
-*85 appels d'outils.* Actions notables :
+*89 appels d'outils.* Actions notables :
 
 - bash — Check time, timezone and remaining budget
 - create_goal
@@ -2133,11 +2133,11 @@ L'**audit des drapeaux** a trouvé que **46 options sur 110** étaient ignorées
 - bash — Improve notebook with real text cell
 - bash — Kill test node safely and check notebook
 - bash — Add notebook real-text cell and commit
-- … et 71 autres
+- … et 75 autres
 
 **Synthèse produite :**
 
-**Le garde cumulatif est vérifié** : refus exactement à l'état 72 393 (le point de croisement), 258 Mo envoyés en 1,4 s. D1 est fermé avec ma propre preuve.
+**Mode 3 dense vérifié aussi à 1 024 jetons : 0,00e0** (9,5939 des deux côtés, 16 lots). J'inscris et j'attends l'aiguille.
 
 ## 3. Travail accompli
 
@@ -2245,7 +2245,7 @@ L'**audit des drapeaux** a trouvé que **46 options sur 110** étaient ignorées
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 1455 autres
+- … et 1459 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2554,4 +2554,5 @@ L'**audit des drapeaux** a trouvé que **46 options sur 110** étaient ignorées
 - Index de session : le créneau 15h-18h (mode 4, plan GPU, 32 défauts relevés)" && git log --oneline -1 | cat; tail -3 /tmp/aiguille_kv2048.log 2>/dev/null; date 
 - Index : le mode 4, le protocole v5, le plan GPU et le décompte des relectures" && git log --oneline -1 | cat; tail -4 /tmp/aiguille_kv2048.log; date +"%H:%M:%S"
 - Mode 4 : le plafond cumulatif vérifié à l'octet près  Le relecteur avait prouvé qu'il manquait ; voici la preuve qu'il marche : avec des états bien formés au ma
+- Préremplissage par lots : fidélité vérifiée à 1 024 jetons (0,00e0, 16 lots)  La fidélité du mode 3 était établie à 40, 200 et 256 jetons ; elle l'est maintenan
 

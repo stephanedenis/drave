@@ -31158,3 +31158,43 @@ le serveur a fermé après 73021 états (258 Mio) en 1.4 s : ConnectionResetErro
 **Le garde cumulatif est vérifié** : refus exactement à l'état 72 393 (le point de croisement), 258 Mo envoyés en 1,4 s. D1 est fermé avec ma propre preuve.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/rapport-mode4-lot-listes.md'; s=open(p).read()\nv = \"\"\"1. **le plafond R4 n'était pas cumulatif** : chaque état pouvait être légal et le\n   total ne pas l'être — un pair annonçait 268 Mo par état sur  … [1507 caractères tronqués]`
+
+  ```
+rapport mode 4 : vérification du cumul
+f28c60a Mode 4 : le plafond cumulatif vérifié à l'octet près
+### f32 (référence) · contexte 2048
+16:17:32
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport os, re\ncasses = []\nfor racine, _, fichiers in os.walk('.'):\n    if '/.git' in racine or '/journal' in racine or '/target' in racine: continue\n    for f in fichiers:\n        if not f.endswith('.md'): cont … [616 caractères tronqués]`
+
+  ```
+liens .md vérifiés : 0 cassé(s)
+ M journal/README.md
+19
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json\nnb = json.load(open('colab/Drave-reparti.ipynb'))\nok = 0\nfor i, c in enumerate(nb['cells']):\n    if c['cell_type'] != 'code': continue\n    src = ''.join(c['source'])\n    if src.lstrip().startswith( … [375 caractères tronqués]`
+
+  ```
+cellules de code syntaxiquement valides : 5
+### f32 (référence) · contexte 2048
+16:17:45
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && IDS=$(head -1 /tmp/ids_qwen_long.txt | tr ',' '\\n' | head -1024 | tr '\\n' ',' | sed 's/,$//'); TAG=lot1024 PORT=47600 CTX=1024 IDS=\"$IDS\" EXTRA=\"--lot 64\" timeout 1500 /tmp/test_reparti.sh 2>&1 | grep -E \"référence|deux nœuds| … [125 caractères tronqués]`
+
+  ```
+référence locale  : perplexité 9.5939  (88.3 s)
+  deux nœuds        : perplexité 9.5939  (83.2 s)
+  écart             : 0.00e0
+  transport         : lot dense f32 · lots de 64 jetons au plus · 229455 octets par lot (aller) · 3.5 ko par jeton · 16 lots pour 1024 jetons
+  temps             : 2180.7 ms par LOT en local · 2253.3 ms à attendre le pair · soit 1.03× le calcul local seul
+16:20:48
+  ```
+
+### 🤖 Assistant
+
+**Mode 3 dense vérifié aussi à 1 024 jetons : 0,00e0** (9,5939 des deux côtés, 16 lots). J'inscris et j'attends l'aiguille.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/rapport-prefill-reparti.md'; s=open(p).read()\nv = \"\"\"| contrôle `--lot 1` (un flux par jeton) | 255 | **0,00e0** (18,0206 = 18,0206) |\"\"\"\nn = \"\"\"| contrôle `--lot 1` (un flux par jeton) | 255 | … [825 caractères tronqués]`

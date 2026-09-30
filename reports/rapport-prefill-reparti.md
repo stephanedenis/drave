@@ -41,6 +41,7 @@ Qwen2.5-0.5B-Q8_0, 256 jetons de WikiText-2, 12 couches par nœud, deux processu
 | 256 jetons en lots de 64 | 4 | **0,00e0** (18,0851 = 18,0851) |
 | 256 jetons en UN lot de 917 583 octets | 1 | **0,00e0** |
 | contrôle `--lot 1` (un flux par jeton) | 255 | **0,00e0** (18,0206 = 18,0206) |
+| **1 024 jetons en lots de 64** | 16 | **0,00e0** (9,5939 = 9,5939), 16 lots pour 1 024 jetons |
 
 Le critère est l'égalité **à lot égal** : la référence locale est découpée de la
 même façon que le chemin réparti, sinon l'écart mesurerait la différence entre
