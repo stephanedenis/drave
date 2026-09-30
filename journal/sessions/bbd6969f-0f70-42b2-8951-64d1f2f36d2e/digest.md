@@ -36121,3 +36121,53 @@ GPU     postes (ms/token) : projets-attn 3.96 | rope 0.78 | attention 9.89 | pro
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\ndef patch(p, paires):\n    s=open(p).read()\n    for v,n,nom in paires:\n        assert s.count(v)==1, f\"{p}::{nom}::{s.count(v)}\"\n        s=s.replace(v,n,1)\n    open(p,'w').write(s); print(f\"{p} ok\")\n\n# ⚠️  … [4990 caractères tronqués]`
+
+  ```
+reports/rapport-gpu-topk-selection.md ok
+REPRISE.md ok
+b8d4fa5 Correction d'interprétation : les clés notées dépendent du nombre de JETONS, pas du contexte — le croisement est entre 255 et 2 047 clés, pas « entre 8 k et 16 k »
+19:19:59
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='/tmp/ceremonie.md'\ns=open(p).read()\n\ns = s.replace(\"\"\"| 7 | **le gain dans le moteur, à 16 384 clés** | attention **19,58 → 7,59 ms/jeton (−61 %)**, balayage **203,7 → 155,5 s (−24 %)**, perplexité identiqu … [3209 caractères tronqués]`
+
+  ```
+cérémonie mise à jour
+102 /tmp/ceremonie.md
+19:20:09
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rn \"21,1444\\|21.1444\" --include=\"*.md\" --include=\"*.rs\" . 2>/dev/null | grep -v journal/ | head -3; git log --format=\"%s\" --since=\"2026-09-30 17:41\" | grep -c . ; echo \"--- vérif : le message amendé ne contient plus … [116 caractères tronqués]`
+
+  ```
+15
+--- vérif : le message amendé ne contient plus le chiffre inventé ---
+Correction d'interprétation : les clés notées dépendent du nombre de JETONS, pas du contexte — le croisement est entre 255 et 2 047 clés, pas « entre 8 k et 16 k »
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log --format=\"%h %s\" --since=\"2026-09-30 17:41\" | grep \"attn-topk en mode lot\" && git show f9f2f99 --stat | head -5 && git log f9f2f99 --format=%B -1 | grep -c \"21,1444\"", "description": "Confirm amended commit content"}`
+
+  ```
+f9f2f99 --attn-topk en mode lot : le drapeau ne fait rien, il le dit maintenant
+commit f9f2f996f815cedb244109905a40bcd8233838b2
+Author: Stéphane <stephane@localhost>
+Date:   Wed Sep 30 19:10:27 2026 -0400
+
+    --attn-topk en mode lot : le drapeau ne fait rien, il le dit maintenant
+0
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== restes de debug ===\"; grep -rn \"\\[diag\\]\\|\\[sondes\\]\\|\\[boucle\\]\\|dbg!\\|TODO\\|FIXME\\|XXX\" drave-core/src/*.rs drave-core/gpu/*.cu drave-core/gpu/*.h 2>/dev/null | head -5; echo \"=== état git ===\"; git stat … [156 caractères tronqués]`
+
+  ```
+=== restes de debug ===
+=== état git ===
+ M journal/README.md
+=== diff des fichiers modifiés aujourd'hui (stat) ===
+ .../01-premier-des-trois-noyaux-gpu-du-top-k-le.md |    6 +
+ sprints/COURANT                                    |    1 +
+ 25 files changed, 13041 insertions(+), 136 deletions(-)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -m \"Journal : index des sessions régénéré\" && git status --short | wc -l && date +%H:%M:%S", "description": "Commit journal index"}`
