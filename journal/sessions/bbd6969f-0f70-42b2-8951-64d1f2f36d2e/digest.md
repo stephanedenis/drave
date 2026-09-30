@@ -35844,3 +35844,65 @@ cargo test : test result: ok. 17 passed
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && DRAVE_GPU=1 timeout 300 ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q4_0.gguf --banc-topk 4096 2>&1 | tail -5 && git add -A && git commit -q -F - <<'EOF' && git log --oneline -1\nRelecture du branchement : un faux résultat  … [2720 caractères tronqués]`
+
+  ```
+ordre documenté (au-dessus puis égaux, croissants) : 14/14 lignes · doublons 0 · hors bornes 0 · cases non écrites 0
+    → l'ensemble retenu est le MÊME que celui du CPU, et l'ordre est celui qui est écrit dans le noyau
+    noyau 3 (softmax sur k + Σ w·V) : GPU 0.07 ms · CPU 0.63 ms · écart max 5.960e-8 sur 1.244e-1 (relatif 4.79e-7)
+    → conforme au critère du plan pour la sortie (1e-6)
+    second passage k = 512, mêmes tampons : 14/14 lignes · 0.07 ms (0.12 ms de seuil) · cases non écrites 0
+abcfab7 Relecture du branchement : un faux résultat silencieux dans attn_kv_recombine, et le top-k gagne à 16 k
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && DRAVE_GPU=1 timeout 600 ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q4_0.gguf --banc-kv 32768 2>&1 | tail -6", "description": "Sanity check banc-kv after fixes", "timeoutMs": 700000}`
+
+  ```
+banc KV : 32768 clés · 24 couches · 2 têtes KV × 64 dim, 7 têtes de requête par tête KV · KV f32 bits
+  CPU 30 fils :      9.7 ms par passe  (6.9 Go/s de KV, 9.7 ms × 24 couches = 233 ms/jeton)
+  GPU 1 · KV d'une couche : 0.00 Go résidents, 16.17 Go libres
+  recopie CPU → VRAM : 0.5 s (0.1 Go/s sur le bus)
+  GPU 64 tranches :      0.3 ms par passe  (246.0 Go/s de KV, 0.3 ms × 24 couches = 7 ms/jeton)  écart max +9.82e-6
+  gain par passe : ×35.6
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '195,215p' REPRISE.md", "description": "Read REPRISE next steps list"}`
+
+  ```
+### Ce qu'il faut faire ensuite, dans l'ordre
+
+État au moment d'écrire : les huit chantiers de la campagne précédente sont clos
+(voir le tableau du §6), et la campagne « six nouveaux chantiers » a livré
+l'aiguille v2, le dépaquetage vectorisé du noyau d'attention, les experts MXFP4
+en VRAM, l'attention par lots déportée et la pagination des deux caches KV. Ce
+qui reste est classé par rentabilité mesurée.
+
+1. **Noyau de la tête Q8_0.** Le chemin CPU de la tête par lots est **lié au
+   calcul** (5,5 ms/jeton pour Qwen 0.5B, le lot n'y change rien). Deux voies :
+   un noyau AVX2 (le déport GPU Q8_0 existe déjà : 15,6 → 6,2 ms/jeton sur
+   gpt-oss). C'est le premier consommateur après le FFN.
+2. **Second GPU.** 16 Go dorment. Le cache d'experts MXFP4 (13,2 Mo par expert,
+   4 608 experts chez gpt-oss) et le KV à 1 M le rempliraient utilement ; il faut
+   un second contexte CUDA et une règle de répartition.
+3. ~~**Rotation au-delà de 5 120 jetons.**~~ **MESURÉ À 16 k** : RoPE simple
+   **35,18** contre **1 133,02** en interpolation seule, et le seuil est passé à
+   **4 ×** la longueur déclarée (16 384, la plus grande longueur mesurée).
+4. ~~**MLA et vision.**~~ **TOUS DEUX FAITS.** MLA 
+… [192 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\ndef patch(p, paires):\n    s=open(p).read()\n    for v,n,nom in paires:\n        assert s.count(v)==1, f\"{p}::{nom}::{s.count(v)}\"\n        s=s.replace(v,n,1)\n    open(p,'w').write(s); print(f\"{p} ok\")\n\npatch … [3101 caractères tronqués]`
+
+  ```
+docs/plan-gpu-topk.md ok
+REPRISE.md ok
+135:1. **Mesurer avant de conclure.** Le croisement push/pull était annoncé à 10 %,
+138:2. **La double quantification est le piège le plus cher** : +12 % de perplexité
+141:3. **Une hypothèse se teste, elle ne se défend pas.** Trois ont été réfutées cette
+144:4. **Vérifier quel chemin est actif** avant de déboguer un chiffre : la trace
+203:1. **Fusionner la chaîne du top-k déporté.** Elle gagne déjà à 16 k (attention
+210:2. **Noyau de la tête Q8_0.** Le chemin CPU de la tête par lots est **lié au
+214:3. **Second GPU.** 16 Go dorment. Le cache d'experts MXFP4 (13,2 Mo par expert,
+217:4. ~~**Rotation au-delà de 5 120 jetons.**~~ **MESURÉ À 16 k** : RoPE simple
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cargo test --release --manifest-path drave-core/Cargo.toml 2>&1 | tail -2 && git add -A && git commit -q -m \"Plan et REPRISE : l'étape 6 est verte, et la prochaine étape est la FUSION de la chaîne, pas un noyau de plus\" && git log  … [90 caractères tronqués]`

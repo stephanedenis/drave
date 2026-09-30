@@ -93,7 +93,7 @@ doit montrer l'effet cherché : **968 ms → quelques dizaines de ms par couche*
 | 3 | `attn_topk_somme` (softmax sur k + puits) | ✅ **fait** : 1,0–4,8e-7 à toutes les tailles (critère 1e-6) — `reports/rapport-gpu-topk-selection.md` |
 | 4 | branchement dans `model.rs` (autoriser le GPU quand `attn_topk > 0` **et** que le noyau rend `true`, garder le repli CPU sinon) | ✅ **fait**, en opt-in (`DRAVE_GPU_TOPK=1`) : PPL à ctx 2 048 = **9,4162** contre **9,4167** au CPU (le critère chiffré était faux d'avance : 234,88 ne correspond à aucun réglage reproductible — c'est la comparaison A/B qui fait foi) · ⚠️ le gain de TEMPS n'est pas là à 2 048 clés : six lancements et cinq recopies par couche et par jeton — la fusion des quatre passes est la prochaine étape |
 | 5 | mesure 1 M : ms/layer avec et sans top-k, sur GPU | ✅ **fait au niveau des noyaux** : la chaîne complète (scores sans relecture + 4 passes + collecte + somme) coûte **3,90 ms** pour 14 lignes × 1 M de clés, contre **539,9 ms** pour l'attention complète sur CPU (×138) et 13,2 ms pour l'attention complète en VRAM — soit **0,3×** le complet, mieux que le critère des 2× |
-| 6 | porte de non-régression : les deux valeurs restent 19,3885 et 15,1757 | inchangées |
+| 6 | porte de non-régression : les deux valeurs restent 19,3885 et 15,1757 | ✅ **inchangées**, mesurées sur le binaire final : Qwen 19,3885 (CPU **et** avec `DRAVE_GPU_KV`) · gpt-oss 15,1757 (CPU) et 15,1667 (`DRAVE_GPU`) · `cargo test` 17/17 |
 
 ## Les pièges, déjà payés une fois chacun
 
@@ -109,6 +109,22 @@ doit montrer l'effet cherché : **968 ms → quelques dizaines de ms par couche*
 * **l'ordre des sommes** : la somme pondérée GPU ne sommera pas dans le même ordre
   que le CPU (partiels par tranche) — c'est déjà le cas pour l'attention complète
   (écart 2e-7 documenté), et c'est acceptable **à condition de le dire**.
+
+## La prochaine étape n'est pas un noyau de plus, c'est une fusion
+
+Mesuré à 16 384 clés : la chaîne déportée gagne (attention 20,69 → 7,72 ms/jeton,
+balayage −23 %), mais elle coûte **8 lancements et 17 transferts par couche et par
+jeton**, dont 8 copies DtoH bloquantes — d'où un croisement entre 8 k et 16 k au
+lieu des ~4 000 clés de l'attention complète. Le levier est donc :
+
+1. **fusionner** la descente radix, la collecte et la somme dans **un seul noyau**
+   par ligne (les k scores tiennent en partagé) : 8 lancements → 2 ;
+2. **supprimer deux allers-retours inutiles** : la recopie de la sélection (le
+   moteur ne lit que la copie VRAM — mais elle sert de contrôle de couverture, à
+   déplacer dans le noyau) et le `cuCtxSynchronize()` de `attn_scores_sans_relecture` ;
+3. **budgéter le tampon de scores** `nh × n × 4` par couche (56 Mo à 1 M pour
+   14 têtes, 9,2 Go pour gpt-oss) : c'est exactement ce que ce plan déclarait
+   « trop », et la fusion le supprime aussi.
 
 ## Ce que ce plan ne fait pas
 

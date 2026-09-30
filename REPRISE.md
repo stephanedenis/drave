@@ -200,14 +200,21 @@ l'aiguille v2, le dépaquetage vectorisé du noyau d'attention, les experts MXFP
 en VRAM, l'attention par lots déportée et la pagination des deux caches KV. Ce
 qui reste est classé par rentabilité mesurée.
 
-1. **Noyau de la tête Q8_0.** Le chemin CPU de la tête par lots est **lié au
+1. **Fusionner la chaîne du top-k déporté.** Elle gagne déjà à 16 k (attention
+   20,69 → **7,72 ms/jeton**, balayage −23 %), mais coûte 8 lancements et 17
+   transferts par couche et par jeton : un seul noyau par ligne (descente radix +
+   collecte + somme, les k scores en partagé) doit ramener les 8 lancements à 2 et
+   supprimer le tampon `nh × n × 4` que le plan déclarait « trop ». Critère :
+   dépasser le CPU dès 4 000 clés. Détail : `docs/plan-gpu-topk.md`, § « La
+   prochaine étape n'est pas un noyau de plus ».
+2. **Noyau de la tête Q8_0.** Le chemin CPU de la tête par lots est **lié au
    calcul** (5,5 ms/jeton pour Qwen 0.5B, le lot n'y change rien). Deux voies :
    un noyau AVX2 (le déport GPU Q8_0 existe déjà : 15,6 → 6,2 ms/jeton sur
    gpt-oss). C'est le premier consommateur après le FFN.
-2. **Second GPU.** 16 Go dorment. Le cache d'experts MXFP4 (13,2 Mo par expert,
+3. **Second GPU.** 16 Go dorment. Le cache d'experts MXFP4 (13,2 Mo par expert,
    4 608 experts chez gpt-oss) et le KV à 1 M le rempliraient utilement ; il faut
    un second contexte CUDA et une règle de répartition.
-3. ~~**Rotation au-delà de 5 120 jetons.**~~ **MESURÉ À 16 k** : RoPE simple
+4. ~~**Rotation au-delà de 5 120 jetons.**~~ **MESURÉ À 16 k** : RoPE simple
    **35,18** contre **1 133,02** en interpolation seule, et le seuil est passé à
    **4 ×** la longueur déclarée (16 384, la plus grande longueur mesurée).
 4. ~~**MLA et vision.**~~ **TOUS DEUX FAITS.** MLA : modèle synthétique + référence
