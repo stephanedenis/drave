@@ -20,9 +20,26 @@ par bloc de 32 comprise).
 | int8 | int8 | 2,25 | 28 % | 14,6667 | +3,04 % |
 | **f16** | **int8** | **3,125** | **39 %** | **14,2365** | **+0,018 %** |
 | int4 | int4 | 1,25 | 16 % | 66,0369 | **+364 %** |
-| f16 | int4 | 2,625 | 33 % | *en cours* | |
+| f16 | int4 | 2,625 | 33 % | 14,3209 | +0,61 % |
 
 ## Ce que la courbe dit
+
+**La frontière, du plus petit au plus gros** (8 191 jetons, ctx 8 192) :
+
+```
+16 %  int4/int4 ................ +364 %
+28 %  int8/int8 ................ +3,04 %
+33 %  clés f16 · valeurs int4 .. +0,61 %
+39 %  clés f16 · valeurs int8 .. +0,018 %   ← le meilleur point
+58 %  clés f32 · valeurs int4 .. +0,46 %
+64 %  clés f32 · valeurs int8 .. +0,023 %
+100 %  f32/f32 ................. référence
+```
+
+Le point utile est à **39 %** : on divise la taille du cache par 2,5 pour deux
+centièmes de pour cent. Descendre plus bas coûte cher d'un coup — 33 % pour
++0,61 %, puis 28 % pour +3,04 % — parce qu'on attaque alors la précision des
+VALEURS, qui n'est pas le maillon faible, ou qu'on rogne les clés sous le f16.
 
 1. **Les deux moitiés n'ont pas le même rôle.** Une clé entre dans le SCORE
    d'attention, donc dans le softmax : son erreur déplace le poids relatif de

@@ -62,6 +62,24 @@ coûte ~4 × 20 ms de latence pure, et le mode lot en supprime 62 sur 63. C'est
 l'argument de la phase 3.4, et ce que la démonstration Colab doit montrer : sur un
 lien rapide le mode lot ne change presque rien, sur un lien distant il change tout.
 
+## Le lot est aussi plus RAPIDE, machine au repos
+
+Chronométré sur 256 jetons, deux processus locaux, machine au repos (12 couches
+par nœud) :
+
+| découpage | temps par lot | temps par jeton |
+|---|---|---|
+| un flux par jeton | 116,7 ms | **116,7 ms** |
+| lots de 16 | 358,0 ms | 22,4 ms |
+| lots de 64 | 1 185,3 ms | 18,5 ms |
+| **un seul lot de 256** | 4 255,6 ms | **16,6 ms** |
+
+**7× plus rapide par jeton** — et ce n'est pas la latence (localhost), c'est le
+produit matrice-matrice : le chemin par lots lit chaque ligne de poids une fois
+pour tout le lot, celui par jeton la relit 256 fois. Le mode lot gagne donc sur
+les deux tableaux : moins d'allers-retours sur un lien distant (18× à 20 ms), et
+moins de lectures de poids en local.
+
 ## Ce que ça coûte, et ce que ça n'économise pas
 
 Le lot voyage en **f32 dense, 3 663 octets par jeton en mode dense** — le mode

@@ -29408,3 +29408,76 @@ cles_f16_valeurs_int4      : 13:42:34
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/main.rs'; s=open(p).read()\n# les tests qui forgent une trame ne doivent pas PENDRE si un garde-fou disparaît\nv = \"\"\"        let mut client = TcpStream::connect(adresse).unwrap();\n        let  … [2533 caractères tronqués]`
+
+  ```
+délais de lecture posés dans les deux tests de trame forgée
+format-flux : le corollaire de --depuis
+test result: ok. 13 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.12s
+fcda4ff Tests de trame forgée : un délai de lecture, pour qu'ils échouent au lieu de pendre
+13:43:07
+cles_f16_valeurs_int8      : perplexité 14.2365 sur 8191 tokens (0 événements, 1934.5 s)
+cles_f16_valeurs_int4      :
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git status --short; echo \"=== commits de la session (depuis 11h46) ===\"; git log --oneline --since=\"2026-09-30 11:44\" | cat | wc -l; git log --oneline --since=\"2026-09-30 11:44\" | cat | head -40", "description": "Check repo sta … [24 caractères tronqués]`
+
+  ```
+M journal/README.md
+=== commits de la session (depuis 11h46) ===
+39
+fcda4ff Tests de trame forgée : un délai de lecture, pour qu'ils échouent au lieu de pendre
+dc8a193 Feuille de route : les clés f16 mesurées (+0,018 % pour 39 % de la taille du f32)
+528639c Cache KV : les clés en f16 sont le meilleur réglage mesuré (+0,018 % pour 39 % de la taille)
+e092c0e Handoff et index : la seconde relecture, et treize tests
+25cfe12 Deux tests de plus : trame forgée hors dimension, et n_blocs démesuré
+320b612 Seconde relecture adversariale : huit défauts, dont deux graves dans mes propres correctifs
+ace24b5 Chemin GPU revérifié : 15,1667 avec le pilote, noyau exact à 1,99e-7
+b160864 Index de la session : les huit chantiers, les défauts et par qui ils ont été trouvés
+181764a Référence 6 bits : 19,5633 et non 19,3045 — la commande ne redonne pas l'ancien chiffre
+818028e Référence 6 bits re-mesurée (19,3045) plutôt que retirée
+7c6bd5d Format de flux : la taille par neurone actif, dense et creuse
+b2767fe Feuille de route : 1.4 attribuée et la section format renvoyée à sa spécification
+63a0e12 REPRISE : le noyau GPU de top-k en tête des prochains chantiers
+fc715e9 Portes revérifiées après la journée
+… [2006 caractères tronqués]
+  ```
+
+- **bash** `{"command": "sleep 420; cat /tmp/kv_cles_f16.log; echo \"---\"; cat /tmp/chrono_lot.log 2>/dev/null | tail -6; date +\"%H:%M:%S\"", "description": "Wait for f16 run 2 and chronos", "timeoutMs": 600000}`
+
+  ```
+cles_f16_valeurs_int8      : perplexité 14.2365 sur 8191 tokens (0 événements, 1934.5 s)
+cles_f16_valeurs_int4      : ---
+13:50:25
+  ```
+
+- **bash** `{"command": "sleep 540; cat /tmp/kv_cles_f16.log; echo \"--- chronos ---\"; cat /tmp/chrono_lot.log 2>/dev/null | tail -8; date +\"%H:%M:%S\"; ps -o etime,args -C drave 2>/dev/null | tail -1 | cut -c1-50", "description": "Wait for last measurement", "timeoutMs": 600000}`
+
+  ```
+cles_f16_valeurs_int8      : perplexité 14.2365 sur 8191 tokens (0 événements, 1934.5 s)
+cles_f16_valeurs_int4      : --- chronos ---
+13:59:34
+      21:17 ./drave-core/target/release/drave mode
+  ```
+
+- **bash** `{"command": "sleep 480; cat /tmp/kv_cles_f16.log; echo \"--- chronos ---\"; cat /tmp/chrono_lot.log 2>/dev/null; date +\"%H:%M:%S\"", "description": "Wait for final measurement and chronos", "timeoutMs": 600000}`
+
+  ```
+cles_f16_valeurs_int8      : perplexité 14.2365 sur 8191 tokens (0 événements, 1934.5 s)
+cles_f16_valeurs_int4      : perplexité 14.3209 sur 8191 tokens (0 événements, 1389.7 s)
+=== couloir A (suite) terminé ===
+14:01:27
+--- chronos ---
+jeton par jeton    : temps             : 116.7 ms par jeton en local · 135.3 ms à attendre le pair (son calcul + l'aller-retour) · soit 1.16× le calcul local seul
+lots de 16         : temps             : 358.0 ms par LOT en local · 401.7 ms à attendre le pair · soit 1.12× le calcul local seul
+lots de 64         : temps             : 1185.3 ms par LOT en local · 1210.7 ms à attendre le pair · soit 1.02× le calcul local seul
+un seul lot        : temps             : 4255.6 ms par LOT en local · 4367.2 ms à attendre le pair · soit 1.03× le calcul local seul
+=== fin des chronos ===
+14:04:46
+14:07:44
+  ```
+
+### 🤖 Assistant
+
+Deux derniers résultats : **clés f16 + valeurs int4 = 14,3209 (+0,61 %, 33 % de la taille)** et les chronos machine au repos — le mode lot est **7× plus rapide par jeton** (116,7 → 16,6 ms). Je documente et je clôture.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/rapport-placement-bits-kv.md'; s=open(p).read()\nv = \"\"\"| f16 | int4 | 2,625 | 33 % | *en cours* | |\"\"\"\nn = \"\"\"| f16 | int4 | 2,625 | 33 % | 14,3209 | +0,61 % |\"\"\"\nassert s.count(v) == 1\ns  … [3458 caractères tronqués]`
