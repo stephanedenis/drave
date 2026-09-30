@@ -28306,3 +28306,125 @@ warning: `drave-core` (bin "drave") generated 17 warnings (run `cargo fix --bin 
 Le kit Colab passe le test de bout en bout (clonage, compilation 23 s, **0,00e0** avec le binaire cloné). Je note, puis j'implémente le tableau de bord `--options-actives` que les deux audits réclament.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"pub keep\\|pub attn_window\\|pub swa_pattern\\|pub ffn_gain\\|pub lot\\b\\|pub seuil_push\" drave-core/src/model.rs | head; grep -n \"fn kv_bits\\|DRAVE_KV_BITS\" drave-core/src/model.rs | head -3; python3 - <<'PY'\np='cola … [911 caractères tronqués]`
+
+  ```
+856:    pub attn_window: usize,
+863:    pub swa_pattern: usize,
+868:    pub seuil_push: f32,
+947:    pub lot: usize,
+952:    pub ffn_gain: Option<(usize, f32)>,
+1515:        let kv_bits: u32 = std::env::var("DRAVE_KV_BITS").ok()
+colab/README : vérification consignée
+809763d Kit Colab vérifié de bout en bout (clonage, compilation 23 s, écart 0,00e0)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/main.rs'; s=open(p).read()\n\n# 1. le drapeau\nv = \"\"\"    /// Adresse d'écoute du nœud moteur : `port`, ou `hôte:port` pour écouter\"\"\"\nn = \"\"\"    /// `--options-actives` : imprime, APRÈS  … [3249 caractères tronqués]`
+
+  ```
+--options-actives : drapeau et tableau de bord
+1057:    pub f16_avant: bool,
+1078:    pub k_f16: bool,
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"^    pub kv\\|    pub kv:\" drave-core/src/model.rs | head -3; grep -n \"kv: Vec<KvCache>\\|kv: \" drave-core/src/model.rs | head -5", "description": "Find the kv field declaration"}`
+
+  ```
+465:    pub kv_a: Vec<f32>,     // [h, kv_lora+qkr]
+466:    pub kv_a_norm: Vec<f32>,// [kv_lora]
+467:    pub kv_b: Vec<f32>,     // [kv_lora, nh*(qkn+vd)]
+804:    kv: Vec<KvCache>,
+1053:    pub n_kv: usize,
+1092:    pub fn new(bits: u32, n_kv: usize, ctx: usize, hd: usize) -> Self {
+1517:        let caches_kv: Vec<KvCache> = (0..cfg.n_layer)
+1756:            kv: caches_kv,
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/model.rs'; s=open(p).read()\nv = \"\"\"    kv: Vec<KvCache>,\"\"\"\nassert s.count(v) == 1\ns = s.replace(v, \"\"\"    /// Caches KV, un par couche (pub : le tableau de bord `--options-actives`\n   … [1891 caractères tronqués]`
+
+  ```
+kv rendu public
+1 appel(s) posé(s) — reste à plomber opt/opt_ref dans run_infer
+603:fn run_infer(opt: Options) {
+604-    // Une seule analyse de la ligne de commande (voir `analyser`) : chaque mode
+605-    // ne fait plus que déstructurer ce dont il a besoin.
+606-    let Options {
+607-        ids: mut ids, ids_file, prompt, n: n_new, temp, top_p, topk, rep_pen, hist,
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/main.rs'; s=open(p).read()\n\n# signature simplifiée : les modes déstructures `opt`, on ne peut pas l'emprunter après\nv = \"\"\"fn options_actives(mdl: &model::Model, opt: &Options, mode: &str) {\ … [3882 caractères tronqués]`
+
+  ```
+tableau de bord branché dans 4 modes
+    Finished `release` profile [optimized] target(s) in 0.01s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && D=./drave-core/target/release/drave; M=models/Qwen2.5-0.5B-Q8_0.gguf; echo \"=== perplexité : --keep 0,05 doit APPARAÎTRE ===\"; $D $M --ppl /tmp/ids_qwen.txt --ctx 64 --limit 4 --dense --threads 4 --keep 0.05 --options-actives 2>&1  … [574 caractères tronqués]`
+
+  ```
+=== perplexité : --keep 0,05 doit APPARAÎTRE ===
+[options] mode perplexité · contexte 64 (imposé) · dense true · keep 0.050
+[options] activation : niveaux 127 · seuil 0 · k-WTA 0 · renorm false
+[options] top-k : attn 0 · q·k 0 · MoE 0 · par projection [0, 0, 0, 0, 0, 0, 0]
+[options] couches 0..24 · flux brut false · trace false · rejeu false
+[options] fenêtre 0 · motif 0 · seuil push 0.22 · lot 1 · ffn_gain None · hebb false
+[options] cache KV : 32 bits · f16 avant false
+=== inférence : --ffn-gain doit apparaître (il était ignoré avant aujourd'hui) ===
+[options] mode inférence · contexte 64 (imposé) · dense false · keep 1.000
+[options] activation : niveaux 127 · seuil 0 · k-WTA 0 · renorm false
+[options] top-k : attn 0 · q·k 0 · MoE 0 · par projection [0, 0, 0, 0, 0, 0, 0]
+[options] couches 0..24 · flux brut false · trace false · rejeu false
+[options] fenêtre 0 · motif 0 · seuil push 0.22 · lot 1 · ffn_gain None · hebb false
+[options] cache KV : 32 bits · f16 avant false
+=== cache KV en f16 : le tableau doit le dire ===
+[config] cache KV : 8 bits, 0.00 Go pour 32 jetons
+[options] cache KV : 8 bits · clés en f16 · f16 avant false
+13:03:28
+cles_f32_valeurs_int4      : perplexité 14.2
+… [162 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+Le tableau de bord doit montrer l'état **final** : en inférence il s'affichait avant l'application de `--ffn-gain`. Je le déplace après.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"if montre_options\" drave-core/src/main.rs | head -3; sed -n 640,665p drave-core/src/main.rs", "description": "Find dashboard call in run_infer"}`
+
+  ```
+639:    if montre_options {
+2930:    if montre_options {
+        options_actives(&mdl, "inférence", ctx_impose, dense, keep);
+    }
+    if let Some(chemin) = trace_flux.as_deref() {
+        match model::TraceFlux::nouveau(chemin, trace_couches.clone(), mdl.cfg.hidden,
+                                        mdl.cfg.n_layer) {
+            Ok(t) => { println!("[trace] flux enregistré dans {chemin}"); mdl.trace = Some(t); }
+            Err(e) => eprintln!("[trace] impossible d'écrire {chemin} : {e}"),
+        }
+    }
+    // `--ffn-gain` était appliqué en perplexité et JAMAIS déstructuré ici : la
+    // sortie était rigoureusement identique avec et sans le drapeau.
+    if let Some((l, g)) = ffn_gain {
+        mdl.ffn_gain = Some((l, g));
+        println!("gain FFN : couche {l} × {g}");
+    }
+    // Appliqués en perplexité depuis toujours, oubliés ici : la déstructuration
+    // unique les rend visibles (le compilateur signale tout champ non lu).
+    mdl.attn_topk = attn_topk;
+    mdl.qk_topk = qk_topk;
+    if sans_yarn { mdl.cfg_yarn_off(); }
+    if act_topk > 0 || act_thresh > 0.0 {
+        println!("parcimonie imposée : k-WTA garde {:.1} %{}",
+                 act_topk as f32 / 10.0,
+… [133 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/main.rs'; s=open(p).read()\nv = \"\"\"    if montre_options {\n        options_actives(&mdl, \"inférence\", ctx_impose, dense, keep);\n    }\n    if let Some(chemin) = trace_flux.as_deref() {\"\"\" … [1168 caractères tronqués]`
+
+  ```
+tableau déplacé en fin de préparation (inférence)
+    Finished `release` profile [optimized] target(s) in 0.01s
+gain FFN : couche 0 × 4
+[options] fenêtre 0 · motif 0 · seuil push 0.22 · lot 1 · ffn_gain Some((0, 4.0)) · hebb false
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A drave-core/src/main.rs drave-core/src/model.rs && git commit -q -F - <<'EOF' && git log --oneline -1 | cat; (cd drave-core && cargo test --release 2>&1 | grep -E \"^test result\"); date +\"%H:%M:%S\"; cat /tmp/kv_cles.log\ … [1457 caractères tronqués]`

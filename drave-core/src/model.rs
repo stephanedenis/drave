@@ -801,7 +801,10 @@ pub struct Model {
     pub out_norm: Vec<f32>,
     pub pool: Pool,
     /// cache KV, par couche : `[n_kv_head × ctx × head_dim]`, en f32 ou quantifié
-    kv: Vec<KvCache>,
+    /// Caches KV, un par couche (pub : le tableau de bord `--options-actives`
+    /// montre ce que le moteur utilise vraiment — et c'est là qu'on voit si
+    /// `DRAVE_KV_K_F32` ou `DRAVE_KV_K_F16` a réellement pris).
+    pub kv: Vec<KvCache>,
     pub ctx: usize,
     pub events: u64,
     /// Nombre de niveaux de quantification des **activations** (127 pour int8,

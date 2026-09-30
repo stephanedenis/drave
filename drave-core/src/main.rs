@@ -337,6 +337,40 @@ sont ignorés", modes.len(), modes.join(", "), modes[0]);
 static MODELE: std::sync::OnceLock<String> = std::sync::OnceLock::new();
 fn modele_chemin() -> String { MODELE.get().cloned().unwrap_or_default() }
 
+/// **Tableau de bord des réglages en vigueur** (`--options-actives`), lus sur le
+/// MODÈLE après toutes les affectations.
+///
+/// Pourquoi il existe : le défaut le plus coûteux de ce dépôt n'est pas un calcul
+/// faux, c'est un drapeau qui ne fait rien. Huit ont été corrigés en une session
+/// (`--keep` en perplexité, `--ffn-gain` en inférence, les top-k dans les modes
+/// flux, `--trace-flux` en inférence, `--threads` figé…), et chacun était
+/// INVISIBLE : la sortie ne disait nulle part quelle valeur agissait. Ici, elle
+/// le dit — et une valeur qu'on ne voit pas bouger est une valeur qui ne sert à
+/// rien.
+fn options_actives(mdl: &model::Model, mode: &str, ctx_impose: bool, dense: bool, keep: f32) {
+    let oui = |b: bool| if b { "imposé" } else { "défaut" };
+    println!("[options] mode {mode} · contexte {} ({}) · dense {} · keep {:.3}",
+             mdl.ctx, oui(ctx_impose), dense, keep);
+    println!("[options] activation : niveaux {:.0} · seuil {} · k-WTA {} · renorm {}",
+             mdl.act_levels, mdl.act_thresh, mdl.act_topk, mdl.act_renorm);
+    println!("[options] top-k : attn {} · q·k {} · MoE {} · par projection {:?}",
+             mdl.attn_topk, mdl.qk_topk, mdl.moe_topk, mdl.act_topk_proj);
+    println!("[options] couches {}..{} · flux brut {} · trace {} · rejeu {}",
+             mdl.couche_debut, mdl.couche_fin, mdl.flux_brut,
+             mdl.trace.is_some(), mdl.flux_force.is_some());
+    println!("[options] fenêtre {} · motif {} · seuil push {} · lot {} · ffn_gain {:?} · hebb {}",
+             mdl.attn_window, mdl.swa_pattern, mdl.seuil_push, mdl.lot,
+             mdl.ffn_gain, mdl.hebb.is_some());
+    if let Some(kv) = mdl.kv.first() {
+        println!("[options] cache KV : {} bits{} · f16 avant {}",
+                 kv.bits,
+                 if kv.k_f32 { " · CLÉS en f32" }
+                 else if kv.k_f16 { " · clés en f16" }
+                 else if kv.v_f32 { " · VALEURS en f32" } else { "" },
+                 kv.f16_avant);
+    }
+}
+
 /// Fils de calcul d'un mode SECONDAIRE : `--threads` s'il est donné, sinon la
 /// moitié des cœurs. Ces modes étaient figés à 16 fils, ce qui ignorait
 /// `--threads` en silence (relevé par `reports/rapport-drapeaux-ignores.md`).
@@ -371,6 +405,11 @@ struct Options {
     /// calculées (rejeu).
     flux_forcer: Option<String>,
     /// Phase 3 : nœud MOTEUR qui écoute et applique sa plage de couches.
+    /// `--options-actives` : imprime, APRÈS toutes les affectations, les réglages
+    /// que le moteur utilise réellement. C'est la réponse au mode d'échec le plus
+    /// coûteux du dépôt — huit drapeaux « analysés mais jamais appliqués » en une
+    /// seule session : une valeur affichée ici est une valeur qui agit.
+    options_actives: bool,
     /// Adresse d'écoute du nœud moteur : `port`, ou `hôte:port` pour écouter
     /// au-delà de localhost (un pair distant, un tunnel, une autre machine).
     flux_serveur: Option<String>,
@@ -461,6 +500,7 @@ fn analyser(args: &[String]) -> Options {
             "--trace-flux" => { o.trace_flux = Some(suivant(i).clone()); 2 }
             "--flux-forcer" => { o.flux_forcer = Some(suivant(i).clone()); 2 }
             "--flux-serveur" => { o.flux_serveur = Some(suivant(i).clone()); 2 }
+            "--options-actives" => { o.options_actives = true; 1 }
             "--ppl-reparti" => { o.ppl_reparti = Some(suivant(i).clone()); 2 }
             "--couches-locales" => { o.couches_locales = suivant(i).parse().unwrap(); 2 }
             "--trace-couches" => { o.trace_couches = suivant(i).split(',')
@@ -561,6 +601,8 @@ fn stats_experts(mdl: &model::Model) {
 }
 
 fn run_infer(opt: Options) {
+    // Lu AVANT la déstructuration, qui consomme `opt`.
+    let montre_options = opt.options_actives;
     // Une seule analyse de la ligne de commande (voir `analyser`) : chaque mode
     // ne fait plus que déstructurer ce dont il a besoin.
     let Options {
@@ -616,6 +658,13 @@ fn run_infer(opt: Options) {
         println!("parcimonie imposée : k-WTA garde {:.1} %{}",
                  act_topk as f32 / 10.0,
                  if act_thresh > 0.0 { format!(", seuil {:.1} %", act_thresh * 100.0) } else { String::new() });
+    }
+    // Le tableau de bord vient EN DERNIER : il doit montrer l'état FINAL. Placé
+    // plus haut, il affichait `ffn_gain None` alors que `--ffn-gain` venait
+    // d'être appliqué trois lignes plus bas — un tableau de bord qui ment sur
+    // l'ordre des affectations ne vaut pas mieux que pas de tableau du tout.
+    if montre_options {
+        options_actives(&mdl, "inférence", ctx_impose, dense, keep);
     }
     if chat {
         mdl.stop_id = build_tokenizer(&mdl.g).special_id("<|im_end|>");
@@ -1709,6 +1758,7 @@ fn run_serveur_flux(opt: Options, adresse: &str) {
     let ctx = if opt.ctx_impose { opt.ctx } else { 4096 };
     let mut mdl = model::Model::load(&chemin, ctx, fils(&opt), true, opt.keep, false, 0, 0);
     appliquer_quantification(&mut mdl, &opt);
+    if opt.options_actives { options_actives(&mdl, "nœud moteur du flux", opt.ctx_impose, true, opt.keep); }
     let hidden = mdl.cfg.hidden;
     let ecoute = std::net::TcpListener::bind((hote.as_str(), port)).expect("écoute");
     println!("[flux] nœud moteur sur {hote}:{port} · {hidden} cachés · {} couches · contexte {ctx}",
@@ -1809,6 +1859,7 @@ fn run_ppl_reparti(opt: Options, pair: &str) {
     let lot = opt.lot.max(1);
     let mut mdl = model::Model::load(&chemin, ctx, fils(&opt), true, opt.keep, false, 0, 0);
     appliquer_quantification(&mut mdl, &opt);
+    if opt.options_actives { options_actives(&mdl, "pilote du flux", opt.ctx_impose, true, opt.keep); }
     let mode = if opt.flux_blocs { MODE_BLOCS }
                else if opt.flux_liste { MODE_LISTE }
                else { MODE_DENSE };
@@ -2822,6 +2873,7 @@ fn fenetres_harmony(tk: &tokenizer::Tokenizer, ids: &[u32], ctx: usize, mode: &s
 }
 
 fn run_ppl(opt: Options) {
+    let montre_options = opt.options_actives;
     let Options {
         ids_file: idfile, texte_file, ppl_texte: _, limit, depuis,
         ctx: ctx_opt, threads: threads_opt, abits: abits_opt,
@@ -2878,6 +2930,9 @@ fn run_ppl(opt: Options) {
             }
             Err(e) => eprintln!("[flux] lecture impossible de {chemin} : {e}"),
         }
+    }
+    if montre_options {
+        options_actives(&mdl, "perplexité", ctx_impose, dense, keep);
     }
     if let Some(chemin) = trace_flux.as_deref() {
         match model::TraceFlux::nouveau(chemin, trace_couches.clone(), mdl.cfg.hidden,

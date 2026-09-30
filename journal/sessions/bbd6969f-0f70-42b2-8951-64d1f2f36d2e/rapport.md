@@ -7,12 +7,12 @@
 | Début | 2026-09-28 14:46 |
 | Durée | 46.3 h |
 | Tours | 45 |
-| Messages | 1755 |
-| Appels d'outils | 1658 |
+| Messages | 1763 |
+| Appels d'outils | 1666 |
 | Fichiers touchés | 44 |
-| Commandes | 1340 |
+| Commandes | 1348 |
 | Sous-agents | 6 |
-| Commits | 120 |
+| Commits | 121 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -2055,7 +2055,7 @@ Je vérifie l'heure à chaque itération et j'arrête à 12:06, en laissant un p
 
 ### Tour 45 — as-tu ce qu'il te faut pour te rendre à 15h en travaillaint avec un maximum d'autonomie et de parallélisme d'activités?
 
-*159 appels d'outils.* Actions notables :
+*167 appels d'outils.* Actions notables :
 
 - bash — Probe machine, GPU, disk, network state
 - bash — Identify GPU users and stray processes
@@ -2071,11 +2071,11 @@ Je vérifie l'heure à chaque itération et j'arrête à 12:06, en laissant un p
 - bash — Understand batched PPL reference path
 - bash — Add batched imposed states to forward_lot
 - list_agents
-- … et 137 autres
+- … et 145 autres
 
 **Synthèse produite :**
 
-Le kit Colab passe le test de bout en bout (clonage, compilation 23 s, **0,00e0** avec le binaire cloné). Je note, puis j'implémente le tableau de bord `--options-actives` que les deux audits réclament.
+Le tableau de bord doit montrer l'état **final** : en inférence il s'affichait avant l'application de `--ffn-gain`. Je le déplace après.
 
 ## 3. Travail accompli
 
@@ -2179,7 +2179,7 @@ Le kit Colab passe le test de bout en bout (clonage, compilation 23 s, **0,00e0*
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 1300 autres
+- … et 1308 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2447,4 +2447,5 @@ Le kit Colab passe le test de bout en bout (clonage, compilation 23 s, **0,00e0*
 - Mode lot sur un lien latent : 18× (2,6 s contre 47,6 s)  Mesuré avec le relais retardateur (20 ms par message, 64 jetons, 12 couches par nœud) : un seul lot de 
 - Colab : le mode lot chiffré dans la recette (2,6 s contre 47,6 s à 20 ms par message)" && git log --oneline -1 | cat; date +"%H:%M:%S"
 - Kit Colab vérifié de bout en bout (clonage, compilation 23 s, écart 0,00e0)" && git log --oneline -1 | cat
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A drave-core/src/main.rs drave-core/src/model.rs && git commit -q -F - <<'EOF' && git log --oneli
 
