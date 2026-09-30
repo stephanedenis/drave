@@ -1068,6 +1068,14 @@ pub struct KvCache {
     pub hd: usize,
     kf: Vec<f32>,
     vf: Vec<f32>,
+    /// `DRAVE_KV_K_F16=1` : les CLÉS sont stockées en f16, sans quantification
+    /// par bloc. Deux octets par valeur — plus que l'int8 (1,125 avec son échelle)
+    /// mais bien moins que le f32 (4) — et une précision RELATIVE de 2⁻¹¹ par
+    /// valeur, là où l'int8 à échelle par bloc a une erreur ABSOLUE de bloc/254
+    /// qui écrase les petits canaux. C'est le « meilleur quantificateur de clés »
+    /// que la feuille de route appelle, sans rotation ni échelle par tête.
+    kp: Vec<u16>,
+    pub k_f16: bool,
     /// Quantifié : un octet par valeur en 8 bits, **deux nibbles par octet en
     /// 4 bits** (même disposition que Q4_0/MXFP4 : nibble bas = indice pair).
     kq: Vec<u8>,
@@ -1089,8 +1097,10 @@ impl KvCache {
         let nb = hd.div_ceil(32).max(1);
         let (k_f32, v_f32) = (std::env::var("DRAVE_KV_K_F32").is_ok(),
                               std::env::var("DRAVE_KV_V_F32").is_ok());
+        let k_f16 = bits < 32 && std::env::var("DRAVE_KV_K_F16").is_ok();
         let mut c = KvCache { bits, n_kv, ctx, cap: 0, hd,
                               f16_avant: std::env::var("DRAVE_KV_F16").is_ok(), k_f32, v_f32,
+                              k_f16, kp: Vec::new(),
                               kf: Vec::new(), vf: Vec::new(),
                               kq: Vec::new(), vq: Vec::new(), sk: Vec::new(), sv: Vec::new(),
                               nb };
@@ -1111,6 +1121,15 @@ impl KvCache {
         let (n_kv, bits) = (self.n_kv, self.bits);
         let f32_k = bits >= 32 || self.k_f32;
         let f32_v = bits >= 32 || self.v_f32;
+        if self.k_f16 {
+            let mut kp = vec![0u16; n_kv * cap * hd];
+            for h in 0..n_kv {
+                let (a, b) = (h * self.cap * hd, h * cap * hd);
+                let n = self.cap * hd;
+                if !self.kp.is_empty() { kp[b..b + n].copy_from_slice(&self.kp[a..a + n]); }
+            }
+            self.kp = kp;
+        }
         if f32_k || f32_v {
             let mut kf = if f32_k { vec![0f32; n_kv * cap * hd] } else { Vec::new() };
             let mut vf = if f32_v { vec![0f32; n_kv * cap * hd] } else { Vec::new() };
@@ -1209,6 +1228,11 @@ impl KvCache {
             if self.k_f32 {
                 self.kf[d + lo..d + hi].copy_from_slice(&k[lo..hi]);
             }
+            if self.k_f16 {
+                // f16 direct, sans échelle : aucune division par un maximum de
+                // bloc, donc aucune erreur absolue imposée aux petits canaux.
+                for i in lo..hi { self.kp[d + i] = f16_depuis_f32(arr(k[i])); }
+            }
             if self.v_f32 {
                 self.vf[d + lo..d + hi].copy_from_slice(&v[lo..hi]);
             }
@@ -1285,6 +1309,11 @@ impl KvCache {
         if self.k_f32 {
             let d = (kvh * self.cap + t) * self.hd;
             dst[..self.hd].copy_from_slice(&self.kf[d..d + self.hd]);
+            return;
+        }
+        if self.k_f16 {
+            let d = (kvh * self.cap + t) * self.hd;
+            for i in 0..self.hd { dst[i] = f32_depuis_f16(self.kp[d + i]); }
             return;
         }
         let base = (kvh * self.cap + t) * self.pas();
@@ -1615,7 +1644,7 @@ impl Model {
                         None => { complet = false; break; }
                     }
                 }
-                let mixte = caches_kv.iter().any(|c| c.k_f32 || c.v_f32);
+                let mixte = caches_kv.iter().any(|c| c.k_f32 || c.v_f32 || c.k_f16);
                 if mixte {
                     println!("[gpu] KV déporté désactivé : les variantes d'attribution \
 (clés ou valeurs en f32) supposent une disposition homogène");
@@ -2287,18 +2316,30 @@ impl Model {
     /// leur regroupement par expert est l'étape suivante.
     pub fn forward_lot(&mut self, toks: &[u32], pos0: usize) -> Vec<Vec<f32>> {
         let t = toks.len();
-        if t == 0 { return Vec::new(); }
         // Lot IMPOSÉ (préremplissage réparti) : les états arrivent de l'autre
-        // nœud, on ne repasse pas par `token_embd`. Lu avant tout le reste, et
-        // consommé une seule fois — comme `emb_imposee` pour un jeton seul.
+        // nœud, on ne repasse pas par `token_embd`. Lu avant tout le reste — y
+        // compris avant le retour anticipé sur `t == 0`, sinon une trame vide
+        // laissait l'état imposé en place pour le lot suivant (D7 de la
+        // relecture) — et consommé une seule fois, comme `emb_imposee` pour un
+        // jeton seul.
         let impose = self.emb_imposee_lot.take();
+        if t == 0 { return Vec::new(); }
         if t == 1 {
             if let Some(v) = impose { self.emb_imposee = Some(v); }
             // Le jeton n'est PAS lu quand un état est imposé : `forward` prend
             // `emb_imposee` et n'appelle jamais `token_embd`. `toks` peut donc
             // être vide côté nœud distant, qui ne connaît que des états.
+            //
+            // Le raccourci sort AVANT l'avance du compteur : `forward` avance le
+            // sien. Le faire avancer ici aussi doublait la clé à chaque jeton
+            // (2, 4, 6…) — et une trace écrite en `--lot 1` n'était alors
+            // relisible par AUCUN autre mode.
             return vec![self.forward(toks.first().copied().unwrap_or(0), pos0)];
         }
+        // Clé de trace du lot : compteur global, 1-based, avancé une fois pour
+        // tout le lot. Le chemin jeton par jeton écrit la même famille de clés.
+        let j0 = self.jeton_trace + 1;
+        self.jeton_trace += t as u64;
         // Les modèles à experts suivent le même chemin par lots, avec en plus le
         // regroupement des jetons par expert (voir la section MoE plus bas).
         let h = self.cfg.hidden;
@@ -2387,7 +2428,7 @@ impl Model {
                 Self::rmsnorm(r, &lay.attn_norm, self.cfg.eps, &mut hn[i * h..(i + 1) * h]);
             }
             quantifier(&hn, &mut xi, &mut sx, self.act_levels, self.act_thresh);
-            Self::flux_lot(&mut self.trace, &mut self.flux_force, &mut self.jeton_trace,
+            Self::flux_lot(&mut self.trace, &mut self.flux_force, j0,
                            0, l, t, &mut xi, &mut sx, h);
             let t_proj = Instant::now();
             // 2. q, k, v : un produit matrice-matrice chacun. Trois tampons
@@ -2597,7 +2638,7 @@ impl Model {
                 Self::rmsnorm(r, &lay.ffn_norm, self.cfg.eps, &mut hn[i * h..(i + 1) * h]);
             }
             quantifier(&hn, &mut xi, &mut sx, self.act_levels, self.act_thresh);
-            Self::flux_lot(&mut self.trace, &mut self.flux_force, &mut self.jeton_trace,
+            Self::flux_lot(&mut self.trace, &mut self.flux_force, j0,
                            1000, l, t, &mut xi, &mut sx, h);
             if let Some(moe) = lay.moe.as_ref() {
                 // ---- MoE PAR LOTS : les jetons qui ont choisi le même expert
@@ -2772,11 +2813,18 @@ impl Model {
     /// EXACT — on remplace les entiers et l'échelle, sans repasser par une
     /// déquantification suivie d'une requantification.
     #[allow(clippy::too_many_arguments)]
+    /// `j0` est la clé du PREMIER jeton du lot (compteur global, 1-based comme
+    /// sur le chemin jeton par jeton) : elle est calculée UNE fois par lot par
+    /// `forward_lot`, et non à chaque appel — `flux_lot` est appelé deux fois par
+    /// couche (famille attention, base 0, et famille FFN, base 1000) et les deux
+    /// doivent écrire les MÊMES clés. Avant, le compteur avançait de `t` à chaque
+    /// appel : une trace écrite avec `--lot N` n'était rejouable qu'avec le même N
+    /// (relecture adversariale, D3).
     fn flux_lot(trace: &mut Option<TraceFlux>, force: &mut Option<FluxRelecteur>,
-                jeton: &mut u64, base: usize, l: usize, t: usize,
+                j0: u64, base: usize, l: usize, t: usize,
                 xi: &mut [i32], sx: &mut [f32], h: usize) {
         if trace.is_none() && force.is_none() { return; }
-        let mut j0 = *jeton;
+        let mut j0 = j0;                 // clé du jeton i du lot : j0 + i
         for i in 0..t {
             if let Some(r) = force.as_mut() {
                 if let Some((ech, paires)) = r.listes.get(&((base + l) as u16, j0 as u32)).cloned() {
@@ -2795,6 +2843,12 @@ impl Model {
 s'applique pas — utilisez --lot 1, ou réenregistrez sans DRAVE_TRACE_BLOCS");
                     }
                     r.manquantes += 1;
+                } else {
+                    // D2 de la relecture adversariale : sans ce `else`, une clé
+                    // absente des DEUX cartes n'était comptée nulle part — le
+                    // garde-fou devenait aveugle dès `--lot > 1`, et une trace
+                    // entièrement étrangère s'affichait « 0 manquante ».
+                    r.manquantes += 1;
                 }
             } else if let Some(tr) = trace.as_mut() {
                 let actifs: Vec<i32> = xi[i * h..(i + 1) * h].to_vec();
@@ -2803,7 +2857,6 @@ s'applique pas — utilisez --lot 1, ou réenregistrez sans DRAVE_TRACE_BLOCS");
             }
             j0 += 1;
         }
-        *jeton = j0;
     }
 
     /// Passe avant d'un modèle **MLA**, un jeton à la fois, avec le cache

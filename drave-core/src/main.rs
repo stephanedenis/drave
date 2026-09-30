@@ -1426,6 +1426,56 @@ impl ChargeFlux {
     }
 }
 
+/// Encode les paires d'une liste à échelle par bloc : **écart sur un octet**
+/// (255 = échappement, les DEUX octets suivants portent l'indice absolu), puis la
+/// valeur i8. Le décodeur est juste en dessous, et les deux sont testés ensemble
+/// parce que ce couple a déjà été désaccordé une fois (quatre octets écrits, deux
+/// lus) — un désaccord qui ne casse rien tant qu'aucun écart n'atteint 255.
+fn encoder_paires_blocs(idx: &[u16], val: &[i8]) -> Vec<u8> {
+    let mut paires = Vec::with_capacity(idx.len() * 2);
+    let mut prev = 0u32;
+    for (&i, &v) in idx.iter().zip(val.iter()) {
+        let ecart = i as u32 - prev;
+        if ecart < 255 {
+            paires.push(ecart as u8);
+        } else {
+            paires.push(255);
+            paires.extend_from_slice(&i.to_le_bytes()[..2]);
+        }
+        prev = i as u32;
+        paires.push(v as u8);
+    }
+    paires
+}
+
+/// Décode `n` paires écrites par `encoder_paires_blocs`.
+fn decoder_paires_blocs(corps: &[u8], n: usize) -> Result<(Vec<u16>, Vec<i8>), String> {
+    let mut idx = Vec::with_capacity(n);
+    let mut val = Vec::with_capacity(n);
+    let mut prev = 0u32;
+    let mut lus = 0usize;
+    while idx.len() < n {
+        if lus + 1 >= corps.len() {
+            return Err(format!("corps de flux tronqué : {} paires lues sur {n}", idx.len()));
+        }
+        let d = corps[lus]; lus += 1;
+        let absolu = if d == 255 {
+            if lus + 1 >= corps.len() { return Err("échappement tronqué".into()); }
+            let a = u16::from_le_bytes([corps[lus], corps[lus + 1]]) as u32;
+            lus += 2;
+            a
+        } else { prev + d as u32 };
+        prev = absolu;
+        idx.push(absolu as u16);
+        // La garde doit porter sur CHAQUE lecture, y compris celle de la valeur
+        // juste après un échappement : sans elle, un corps coupé au mauvais octet
+        // paniquait au lieu d'être refusé (attrapé par le test de troncature).
+        if lus >= corps.len() { return Err("valeur manquante en fin de corps".into()); }
+        val.push(corps[lus] as i8); lus += 1;
+    }
+    Ok((idx, val))
+}
+
 /// Envoie un flux et rend le nombre d'octets écrits (en-tête compris) — c'est ce
 /// que la phase 3 doit chiffrer : octets par jeton × latence.
 fn envoyer_flux(s: &mut std::net::TcpStream, debut: u32, fin: u32, pos: u32,
@@ -1446,24 +1496,7 @@ fn envoyer_flux(s: &mut std::net::TcpStream, debut: u32, fin: u32, pos: u32,
         let mut c = Vec::with_capacity(4 + echelles.len() * 4 + idx.len() * 2);
         c.extend_from_slice(&(echelles.len() as u32).to_le_bytes());
         for e in &echelles { c.extend_from_slice(&e.to_le_bytes()); }
-        let mut paires: Vec<u8> = Vec::with_capacity(idx.len() * 2);
-        let mut prev = 0u32;
-        for (&i, &v) in idx.iter().zip(val.iter()) {
-            let ecart = i as u32 - prev;
-            if ecart < 255 {
-                paires.push(ecart as u8);
-            } else {
-                // DEUX octets, comme le disque (`model.rs`) et comme la
-                // spécification. Ce chemin en écrivait QUATRE et le décodeur en
-                // lisait deux : toute trame portant un écart ≥ 255 se
-                // désynchronisait. Trouvé par la relecture croisée des documents,
-                // pas par un banc — l'échappement est rare (22 sur 8,79 M).
-                paires.push(255);
-                paires.extend_from_slice(&i.to_le_bytes()[..2]);
-            }
-            prev = i as u32;
-            paires.push(v as u8);
-        }
+        let paires = encoder_paires_blocs(&idx, &val);
         // La longueur est écrite : avec les échappements, elle n'est pas
         // déductible du nombre de paires, et un décodeur qui la suppose lit
         // hors du tampon.
@@ -1607,27 +1640,10 @@ fn recevoir_flux(s: &mut std::net::TcpStream, hidden: usize) -> std::io::Result<
             let longueur = u32::from_le_bytes(lg) as usize;
             let mut corps = vec![0u8; longueur];
             s.read_exact(&mut corps)?;
-            let mut idx = Vec::with_capacity(n);
-            let mut val = Vec::with_capacity(n);
-            let mut prev = 0u32;
-            let mut lus = 0usize;
-            let mut echappements = 0usize;
-            while idx.len() < n {
-                if lus + 1 >= corps.len() && idx.len() + 1 < n {
-                    return Err(std::io::Error::new(std::io::ErrorKind::InvalidData,
-                        "corps de flux tronqué"));
-                }
-                let d = corps[lus]; lus += 1;
-                let absolu = if d == 255 {
-                    echappements += 1;
-                    let a = u16::from_le_bytes([corps[lus], corps[lus+1]]) as u32;
-                    lus += 2;
-                    a
-                } else { prev + d as u32 };
-                prev = absolu;
-                idx.push(absolu as u16);
-                val.push(corps[lus] as i8); lus += 1;
-            }
+            let (idx, val) = match decoder_paires_blocs(&corps, n) {
+                Ok(v) => v,
+                Err(e) => return Err(std::io::Error::new(std::io::ErrorKind::InvalidData, e)),
+            };
             let octets_corps = 4 + n_blocs * 4 + 4 + longueur;
             return Ok(Flux { n, debut, fin, pos, mode, act, octets_corps, charge:
                              ChargeFlux::Blocs { idx, val, echelles } });
@@ -1781,6 +1797,13 @@ fn run_ppl_reparti(opt: Options, pair: &str) {
     let ids: Vec<u32> = if opt.ids.is_empty() {
         (1..=limite as u32).collect()
     } else { opt.ids.clone() };
+    if ids.len() < 2 {
+        // La perplexité est une moyenne sur `len - 1` jetons notés : avec un seul
+        // jeton elle vaut NaN, et un NaN affiché comme un résultat ne dit rien.
+        println!("[flux] il faut au moins DEUX jetons pour noter une perplexité \
+(le premier ne prédit rien) — reçu {}. Rien n'a été calculé.", ids.len());
+        return;
+    }
     println!("[flux] pilote : {couches_locales} couches en local, {} chez le pair, {} jetons",
              n_layer - couches_locales, ids.len());
 
@@ -1827,6 +1850,10 @@ fn run_ppl_reparti(opt: Options, pair: &str) {
         // PRÉREMPLISSAGE RÉPARTI : un lot par aller-retour au lieu d'un flux par
         // jeton. C'est ce que la phase 3.4 doit démontrer — le découpage doit
         // coûter la latence d'UN message par lot, pas par jeton.
+        if mode != MODE_DENSE {
+            eprintln!("[flux] --flux-liste / --flux-blocs ne s'appliquent PAS aux lots \
+(mode 4 non écrit) : le lot part en f32 dense. À --lot 1, le mode choisi s'applique.");
+        }
         let mut pos = 0usize;
         while pos + 1 < ids.len() {
             let t = lot.min(ids.len() - pos);
@@ -1840,7 +1867,15 @@ fn run_ppl_reparti(opt: Options, pair: &str) {
             octets_envoyes += o as u64;
             actifs_envoyes += (t * mdl.cfg.hidden) as u64;
             flux_envoyes += 1;
-            let rep = recevoir_flux(&mut sock, mdl.cfg.hidden).expect("réception du lot");
+            let rep = match recevoir_flux(&mut sock, mdl.cfg.hidden) {
+                Ok(r) => r,
+                Err(e) => {
+                    eprintln!("[flux] le nœud moteur a fermé la connexion ({e}).\
+\n       Cause la plus probable : il a REFUSÉ le lot (son contexte est plus petit \
+que --ctx ici : {ctx}). Il l'a dit de son côté.");
+                    std::process::exit(1);
+                }
+            };
             t_pair += horloge.elapsed().as_secs_f64();
             octets_recus += TAILLE_TETE as u64 + rep.octets_corps as u64;
             let etats = rep.charge.plat().to_vec();
@@ -1881,7 +1916,14 @@ fn run_ppl_reparti(opt: Options, pair: &str) {
         octets_envoyes += o as u64;
         actifs_envoyes += a as u64;
         flux_envoyes += 1;
-        let rep = recevoir_flux(&mut sock, mdl.cfg.hidden).expect("réception du flux");
+        let rep = match recevoir_flux(&mut sock, mdl.cfg.hidden) {
+            Ok(r) => r,
+            Err(e) => {
+                eprintln!("[flux] le nœud moteur a fermé la connexion ({e}) — version du \
+protocole, réglages, ou contexte : il a dit pourquoi de son côté.");
+                std::process::exit(1);
+            }
+        };
         // Ce que coûte le découpage : le calcul local, et l'attente du pair
         // (son calcul + l'aller-retour réseau) — la latence, pas le débit.
         t_pair += horloge.elapsed().as_secs_f64();
@@ -3067,6 +3109,10 @@ fn run_ppl(opt: Options) {
                      "  ← la moitié au moins n'a pas servi : vérifier la trace"
                  } else { "" });
     }
+    if n == 0 {
+        println!("aucun jeton noté (il en faut au moins deux : le premier ne prédit rien)");
+        return;
+    }
     if let Some(hb) = mdl.hebb.as_ref() {
         if hb.log_on {
             use std::io::Write;
@@ -3114,4 +3160,67 @@ fn run_ppl(opt: Options) {
     println!("    dont attention : scores {:.2} | softmax {:.2} | somme pondérée + écriture KV {:.2}",
              p[4] / n as f64 * 1e3, p[5] / n as f64 * 1e3,
              (p[2] - p[4] - p[5]) / n as f64 * 1e3);
+}
+
+#[cfg(test)]
+mod tests_flux {
+    //! Les tests du PROTOCOLE et du CODEC. Ils manquaient : les deux bugs les
+    //! plus coûteux de la session (un en-tête d'un octet trop long, un
+    //! échappement d'indice écrit sur quatre octets et lu sur deux) étaient
+    //! invisibles pour les six tests existants, qui ne couvraient que le cache KV.
+    use super::*;
+    use std::net::{TcpListener, TcpStream};
+
+    #[test]
+    fn entete_et_version_sont_ce_que_les_numeros_disent() {
+        assert_eq!(TAILLE_TETE, 79, "l'en-tête de flux doit faire 79 octets");
+        assert_eq!(VERSION_FLUX, 4, "le contrat d'activation impose la version 4");
+    }
+
+    #[test]
+    fn paires_blocs_aller_retour_avec_echappement() {
+        // Écarts successifs : 3 (direct), 297 (échappement), 1 (direct),
+        // 255 (échappement — c'est le cas LIMITE, 255 est réservé).
+        let idx: Vec<u16> = vec![3, 300, 301, 556];
+        let val: Vec<i8> = vec![7, -3, 0, 127];
+        let octets = encoder_paires_blocs(&idx, &val);
+        assert_eq!(octets.len(), 2 * 2 + 2 * 4, "2 paires directes et 2 échappements");
+        let (i2, v2) = decoder_paires_blocs(&octets, idx.len()).unwrap();
+        assert_eq!(i2, idx);
+        assert_eq!(v2, val);
+    }
+
+    #[test]
+    fn paires_blocs_tronquees_sont_refusees() {
+        let idx: Vec<u16> = vec![3, 300];
+        let val: Vec<i8> = vec![1, 2];
+        let octets = encoder_paires_blocs(&idx, &val);
+        assert!(decoder_paires_blocs(&octets[..octets.len() - 1], 2).is_err(),
+                "une paire coupée doit être refusée, pas lue au hasard");
+        assert!(decoder_paires_blocs(&[255], 1).is_err(),
+                "un échappement sans ses deux octets doit être refusé");
+    }
+
+    #[test]
+    fn flux_dense_aller_retour_par_la_vraie_mise_en_trame() {
+        let ecoute = TcpListener::bind("127.0.0.1:0").unwrap();
+        let adresse = ecoute.local_addr().unwrap();
+        let valeurs: Vec<f32> = (0..8).map(|i| i as f32 * 0.5 - 1.0).collect();
+        let attendu = valeurs.clone();
+        let serveur = std::thread::spawn(move || {
+            let (mut sock, _) = ecoute.accept().unwrap();
+            let f = recevoir_flux(&mut sock, 8).unwrap();
+            assert_eq!(f.mode, MODE_DENSE);
+            assert_eq!(f.n, 8);
+            assert_eq!(f.octets_corps, 32);
+            assert_eq!(f.charge.en_dense(8), attendu);
+        });
+        let mut client = TcpStream::connect(adresse).unwrap();
+        let (octets, n) = envoyer_flux(&mut client, 12, 24, 0, &valeurs,
+                                       MODE_DENSE, None).unwrap();
+        assert_eq!(n, 8);
+        assert_eq!(octets, TAILLE_TETE + 32,
+                   "l'octet d'en-tête en trop faisait exactement cette différence");
+        serveur.join().unwrap();
+    }
 }

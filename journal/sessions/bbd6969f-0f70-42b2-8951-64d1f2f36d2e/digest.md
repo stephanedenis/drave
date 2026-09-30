@@ -27668,3 +27668,491 @@ DRAVE_VISIO
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"^| \\`DRAVE_\" REPRISE.md | tail -6; python3 - <<'PY'\np='REPRISE.md'; s=open(p).read()\nv = \"\"\"| `DRAVE_KV_V_F32=1` | garde les VALEURS en f32 | +3,01 % : ne sert à rien, l'erreur ne passe pas par là |\"\"\"\nn = \"\"\" … [2436 caractères tronqués]`
+
+  ```
+233:| `DRAVE_KV_BITS=8` ou `4` | quantifie le cache KV (défaut f32) | le 4 bits coûte +364 % de perplexité à 8 192 |
+234:| `DRAVE_KV_K_F32=1` | garde les CLÉS en f32 (valeurs quantifiées) | **le bon compromis mesuré** : à 8 192, 75 % de la taille f32 pour +0,02 % de perplexité, contre +3,0 % pour l'int8 complet — l'écart int8 vient des clés à 99 % (`reports/rapport-attribution-kv.md`) |
+235:| `DRAVE_KV_V_F32=1` | garde les VALEURS en f32 | +3,01 % : ne sert à rien, l'erreur ne passe pas par là |
+236:| `DRAVE_KV_F16=1` | arrondit clés/valeurs en f16 avant quantification | mesuré : aucun effet (hypothèse réfutée) |
+237:| `DRAVE_YARN=1` / `DRAVE_YARN_NON=1` / `DRAVE_YARN_MSCALE=0` | force / interdit / règle la rotation | le défaut ne bascule qu'à 1,25 × la longueur déclarée |
+238:| `DRAVE_BANC_KV_GPU_SEUL=1` | saute la référence CPU du banc de KV | à 1 M elle coûte 3 à 16 minutes |
+REPRISE : variables d'environnement complétées
+10895b5 REPRISE : les variables d'environnement qui restaient dans l'ombre
+  ```
+
+### 👤 Utilisateur
+
+Agent bcfe0b97-1795-4610-8e8b-b598ca1ba6cb sent a message:
+RAPPORT DE RELECTURE ADVERSARIALE (Drave — session lots / DRVF v2 / protocole v4). Aucun fichier du dépôt touché ; tout s'est fait dans /tmp. ATTENTION : le dépôt a bougé pendant l'audit (HEAD a0687b9 → ae85043 12:30 → a9fff24 12:36 ; model.rs re-modifié non commité à 12:40) et le binaire du dépôt a été reconstruit à 12:25. J'ai donc reconstruit trois binaires épinglés dans /tmp (cda3162, ae85043, a9fff24) ; chaque preuve cite le sien.
+
+DÉFAUTS RÉELS PROUVÉS
+D1 (CORRIGÉ entre-temps par a9fff24) `main.rs:1295` : VERSION_FLUX valait 3 avec un en-tête passé de 39 à 79 octets (cda3162 = 3+39). Preuve par binaires reconstruits : serveur cda3162 + client ae85043 → panique `main.rs:1879 réception du flux: ConnectionReset` et « magie de flux absente » côté serveur, AUCUN message de version ; sens inverse → client bloqué, serveur « 0 flux servis ». Après correctif (binaire a9fff24 reconstruit) : « flux en version 3, cette build parle la 4 (pair incompatible) », 0 flux servi. Le correctif marche, mais rien n'empêche la prochaine modification de TAILLE_TETE sans bump.
+
+D2 (OUVERT, le plus grave) `model.rs:2789` (HEAD a9fff24) : dans `flux_lot`, `if listes.get {servies+=1} else if listes_blocs.contains_key {manquantes+=1}` — plus de `else` simple. Le garde-fou ajouté par 6b3b53f est AVEUGLE en rejeu par lots. Preuve avec la vraie vieille trace : `--ppl /tmp/ids_qwen.txt --ctx 256 --abits 16 --threads 8 --limit 512 --dense --flux-forcer /tmp/flux_f32.bin` → « 12240 servies, 12336 manquantes ← la moitié au moins n'a pas servi », PPL 1958,7210 (chiffre du commit reproduit) ; la MÊME commande avec `--lot 4 --limit 8` → « 256 servies, 0 manquante », aucune alerte. Trace témoin de 384 clés toutes absentes : lot 1 → 0/384 + « AUCUNE liste utilisée » ; lot 4 → 0/0.
+
+D3 (OUVERT) `model.rs:2290-2294` + `flux_lot` : en mode lot, `jeton_trace` avance de t à CHAQUE appel de flux_lot (2 par couche, bases 0 et 1000), et démarre à 0, alors que `forward` (lot 1) fait +1 par jeton et démarre à 1. Dump de traces : lot 1 → couche 0 pos 1, couche 1000 pos 1… ; lot 4 → couche 0 pos 0,1,2,3 puis couche 1000 pos 4,5,6,7. Une trace écrite avec --lot N n'est rejouable qu'avec le même N (`--flux-forcer t_lot1.bin --lot 4` → 8 servies/376 manquantes, PPL 6215 au lieu de 795).
+
+D4 (OUVERT) `tools/pair_factice.py:70` lit `n*4` octets en mode lot au lieu de `n*dimension*4` et répond `dimension*4` octets en annonçant n=t états : le client se bloque (exit 124 après 20 s), le pair meurt en EOFError. L'outil que REPRISE §6 présente comme contrôle du protocole ne couvre pas le mode lot.
+
+D5 (OUVERT) `main.rs:1775` calcule `mode` mais la branche lot (`main.rs:1826+`) appelle `envoyer_lot` (f32 dense) sans le consulter : `--flux-blocs --lot 8 --limit 40` donne exactement le même transport que sans le drapeau (28751 octets/lot), alors qu'à `--lot 1` le mode blocs donne 1958 octets/flux. Drapeau ignoré en silence — la classe de défaut que 7522289 prétendait corriger.
+
+D6 (OUVERT, mineur) serveur `--ctx 16` + client `--lot 8` : refus côté serveur (`main.rs:1710`) puis panique du client `main.rs:1843 réception du lot: UnexpectedEof`, exit 134.
+D7 (OUVERT, latent) `model.rs:2290` `if t == 0 {return}` précède `model.rs:2294` `emb_imposee_lot.take()` : une trame lot n=0 laisse Some(vec![]) ; non observable via la CLI actuelle (le serveur réécrit toujours le champ).
+D8 (mineur) `--limit 1` → « perplexité NaN / écart NaN » (division par ids.len()-1 = 0).
+
+SOUPÇONS NON PROUVÉS : allocation non bornée `main.rs:1589 vec![0u8; n*hidden*4]` sur un n hostile (jusqu'à ~15 To ; non testé, risque machine) ; `fils(&opt)` fait passer FS/PR/BM de 16 fils figés à cpu/2 = 20 sur cette machine (changement de défaut non annoncé) ; troncature 16 bits de l'échappement DRVF v2 au-delà de l'indice 65535 (inatteignable avec hidden 896) ; aucun test unitaire pour le lot, le protocole ou le codec (seul test = KV).
+
+VÉRIFIÉ CORRECT : porte Qwen ctx 256 = 19,3885 (rejouée à ae85043, 8 fils, 75 s) ; lot bout en bout écart 0,00e0 (40/8 et lot partiel 44/8) ; offsets 39→79 cohérents entre les 3 fonctions, TAILLE_TETE=79, assert dans les deux émetteurs, pas de 3e émetteur ; le raccourci t==1 consomme bien l'état imposé ; rétrocompat v1 réelle (flux_f32.bin relu, PPL 1958,7210 identique) ; écart == 255 → échappement symétrique au disque ; sentinelle 0xFFFF non ambiguë ; --plan sans --ctx → 32768, avec --ctx 256 → 256 ; keep par défaut = 1.0.
+
+NON VÉRIFIÉ : porte gpt-oss ctx 256 = 15,1757 (120B : 45 s de chargement + ~100 s à 16 fils ; avec ≤ 8 fils et ≤ 5 min/commande la passe complète ne tient pas — non lancée). Mesures Colab/notebook et tout DRAVE_GPU non contrôlés.
+
+### 🤖 Assistant
+
+Le relecteur adversarial a trouvé du lourd — dont **D2**, qui rend aveugle le garde-fou que je venais d'ajouter, et **D3**, des clés de rejeu incohérentes entre modes. Je corrige dans l'ordre.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n 2745,2800p drave-core/src/model.rs; echo \"=== appels de flux_lot ===\"; grep -n \"flux_lot(\" drave-core/src/model.rs | head", "description": "Read flux_lot and its call sites"}`
+
+  ```
+for oo in 0..h {
+                            // Le biais de descente est indexé par la LARGEUR DE
+                            // SORTIE (h), pas par la largeur d'expert.
+                            let b = moe.biais_down.as_ref().map_or(0.0, |b| b[e * h + oo]);
+                            down[i * h + oo] += w * (yd[oo * g + j] + b);
+                        }
+                    }
+                }
+                for i in 0..t {
+                    for oo in 0..h { x[i * h + oo] = o[i * h + oo] + down[i * h + oo]; }
+                }
+            } else {
+                // ---- FFN DENSE PAR LOTS
+                for (pj, dst, taille) in [(&lay.wgate, &mut gate, self.cfg.ffn),
+                                          (&lay.wup, &mut up, self.cfg.ffn)] {
+                    if let Some(d8) = pj.d.as_ref() {
+                        self.pool.gemm_dense_i8(d8, &xi, t, &sx, &mut yl[..d8.n_out * t]);
+                        for i in 0..t {
+                            for oo in 0..taille { dst[i * taille + oo] = yl[oo * t + i]; }
+                        }
+                    }
+                }
+                for i in 0..t {
+                    let g0 = gate[i * self.cfg.ffn..(i + 1) *
+… [1914 caractères tronqués]
+  ```
+
+### 👤 Utilisateur
+
+Background subagent bcfe0b97-1795-4610-8e8b-b598ca1ba6cb finished and will do no further work unless you send it more.
+Its closing message:
+⏵ Rapport final
+
+# Rapport de relecture adversariale — Drave (lots sur le fil, DRVF v2, protocole v4)
+
+**Le dépôt a bougé pendant l'audit** : HEAD est passé de `a0687b9` (12:20) à `ae85043` (12:30, DRVF v3) puis `a9fff24` (12:36, « deux bugs de protocole »), et `model.rs` porte à 12:40 des modifications non commitées. Le binaire du dépôt a été **reconstruit à 12:25:26** en pleine session : mes premières exécutions n'étaient pas reproductibles. J'ai donc reconstruit trois binaires épinglés dans `/tmp` (`cda3162` = l'ancien « v3 » à en-tête 39 o, `ae85043`, `a9fff24`) et **chaque preuve ci-dessous cite le binaire utilisé**. Aucun fichier du dépôt n'a été touché.
+
+---
+
+## (a) Défauts réels, prouvés
+
+### D1 — `VERSION_FLUX` n'a pas suivi l'en-tête (39 → 79 octets) — trouvé, **corrigé entre-temps** par `a9fff24`
+- `drave-core/src/main.rs:1295` : `const VERSION_FLUX: u8 = 3;` alors que `main.rs:1323` donne `TAILLE_TETE = 79` et que le commentaire comme `docs/format-flux.md:68` annoncent la version 4. `cda3162` portait bien `3` **avec 39 octets**.
+- Scénario : deux binaires issus de deux commits de la même session se croient compatibles.
+- Preuve (binaires reconstruits, un par commit) :
+  - serveur `cda3162` + client `ae85043` → client : `panicked at src/main.rs:1879: réception du flux: ConnectionReset` ; serveur : `[flux] arrêt : magie de flux absente` après 1 flux ; **aucun message de version**.
+  - serveur `ae85043` + client `cda3162` → client **bloqué** (tué à 45 s) ; serveur : `0 flux servis`, `failed to fill whole buffer`.
+- Après correctif (binaire `a9fff24` reconstruit) : `[flux] arrêt : flux en version 3, cette build parle la 4 (pair incompatible : rien n'a été interprété)`, 0 flux servi. **Le correctif fonctionne**, mais rien n'empêche la prochaine modification de `TAILLE_TETE` sans bump : l'`assert_eq!(tete.len(), TAILLE_TETE)` ne compare pas la version. Un `const _: () = assert!(...)` liant version et taille, ou un test avec une trame dorée, fermerait la porte.
+
+### D2 — Le rejeu par LOTS ne compte plus les listes manquantes : le garde-fou de `6b3b53f` est aveugle — **OUVERT, le plus grave**
+- `drave-core/src/model.rs:2789` (HEAD `a9fff24`) : `if listes.get(..) { servies += 1 } else if listes_blocs.contains_key(..) { manquantes += 1 }` — **il n'y a plus de `else` simple**. Avant `ae85043` c'était `else { manquantes += 1 }` : c'est une régression du commit DRVF v3.
+- Scénario exact que `6b3b53f` voulait rendre visible, avec la vraie vieille trace :
+  ```bash
+  # chemin jeton par jeton : alerte correcte, chiffre du commit reproduit
+  drave Qwen2.5-0.5B-Q8_0.gguf --ppl /tmp/ids_qwen.txt --ctx 256 --abits 16 \
+        --threads 8 --limit 512 --dense --flux-forcer /tmp/flux_f32.bin
+  #  → 12240 listes servies, 12336 manquantes ← la moitié au moins n'a pas servi
+  #  → perplexité 1958.7210 (identique au chiffre annoncé)
+
+  # même trace, rejeu par lots : plus rien
+  … --limit 8 --flux-forcer /tmp/flux_f32.bin --lot 4
+  #  → 256 listes servies, 0 manquante     (aucune alerte, PPL fausse affichée normalement)
+  ```
+- Trace témoin de 384 clés toutes absentes : lot 1 → `0 servies, 384 manquantes ← AUCUNE liste utilisée` ; lot 4 → `0 servies, 0 manquantes`.
+
+### D3 — Les clés de trace ne veulent pas dire la même chose selon `--lot` — **OUVERT**
+- `model.rs:2290-2294` (`forward_lot`) + `model.rs:2804-2830` (`flux_lot`) : en mode lot, `jeton_trace` **avance de `t` à chaque appel** de `flux_lot`, appelé deux fois par couche (base 0 puis base 1000), et démarre à 0 ; en mode jeton, `forward` fait `jeton_trace += 1` une fois par jeton (première clé = 1) et les deux familles partagent la clé.
+- Preuve (dump de deux traces écrites par le binaire `ae85043`) :
+  - lot 1 : `couche 0 pos 1`, `couche 1000 pos 1`, `couche 1 pos 1`… (clé = jeton global, 1-based) ;
+  - lot 4 : `couche 0 pos 0,1,2,3` puis `couche 1000 pos 4,5,6,7` (décalage de `t` entre les deux familles, et `2t` par couche).
+- Conséquence : une trace écrite avec `--lot N` n'est rejouable qu'avec **le même N** ; `--flux-forcer t_lot1.bin --lot 4` → `8 servies / 376 manquantes`, PPL 6215 au lieu de 795. L'invariant « `jeton` = compteur global » de `docs/format-flux.md` ne tient que pour `--lot 1`.
+
+### D4 — `tools/pair_factice.py` ne sait pas lire le mode LOT — **OUVERT**
+- `tools/pair_factice.py:70` : `corps = lire_tout(sock, n * 4)` alors que le corps lot fait `n × dimension × 4` ; et la réponse (`:87`) annonce `n` = t états mais n'envoie que `dimension * 4` octets (`:94`).
+- Preuve : `python3 tools/pair_factice.py 45792 896 &` puis client `--ppl-reparti … --lot 4` → client **bloqué** dans `read_exact` (exit 124 après 20 s), pair mort sur `EOFError`. L'outil que `REPRISE.md` §6 présente comme le contrôle qui « DIT ce qu'il reçoit » ne vérifie rien en mode lot et pend le client — c'est aussi la raison pour laquelle le mode lot n'a jamais été confronté à un pair indépendant.
+
+### D5 — `--flux-liste` / `--flux-blocs` ignorés en silence dès que `--lot > 1` — **OUVERT**
+- `main.rs:1775` calcule `mode`, mais la branche lot (`main.rs:1826+`) appelle `envoyer_lot` (f32 dense) sans le consulter ni le dire.
+- Preuve : à `--limit 40 --lot 8`, la ligne transport est **identique** avec et sans `--flux-blocs` (`28751 octets par lot` = 79 + 8×896×4) ; à `--lot 1`, `--flux-blocs` donne bien `1958 octets par flux`. C'est exactement la classe « drapeau analysé, jamais appliqué, sans un mot » que `7522289` prétendait traquer.
+
+### D6 — Serveur trop court en contexte → panique du client — **OUVERT** (mineur)
+- `main.rs:1710` (refus + `break`) et `main.rs:1843` (`.expect("réception du lot")`).
+- Preuve : serveur `--ctx 16`, client `--limit 40 --lot 8` → serveur `lot refusé : 8 états à partir de la position 16 dépassent le contexte 16`, client `panicked at src/main.rs:1843 … UnexpectedEof`, exit 134.
+
+### D7 — `forward_lot(&[], pos)` ne consomme pas `emb_imposee_lot` — **OUVERT** (latent)
+- `model.rs:2290` (`if t == 0 { return Vec::new(); }`) **précède** `model.rs:2294` (`let impose = self.emb_imposee_lot.take();`). Une trame MODE_LOT de `n = 0` laisse `Some(vec![])` ; l'assertion `model.rs:2344` paniquerait au prochain `forward_lot(t ≥ 2)` qui ne réécrit pas le champ. Non observable via la CLI actuelle (le serveur réécrit toujours le champ avant l'appel) — je le classe réel mais latent.
+
+### D8 — `--limit 1` affiche `NaN` sans rien dire — **OUVERT** (mineur, pré-existant)
+- Division `nll / (ids.len() - 1)` avec un seul jeton. Preuve : `référence locale : perplexité NaN`, `deux nœuds : perplexité NaN`, `écart : NaN`.
+
+---
+
+## (b) Soupçons non prouvés
+- **Allocation non bornée venue du réseau** — `main.rs:1589` : `vec![0u8; n * hidden * 4]` avec `n` (u32) lu dans l'en-tête, **avant** le contrôle de contexte. Un pair peut demander jusqu'à ~1,5×10¹³ octets ; selon `vm.overcommit_memory`, `alloc_zeroed` échoue (→ `abort`, `panic = "abort"`) ou réserve 15 To. Non testé : le risque machine dépasse le gain de preuve.
+- **`fils(&opt)` change un défaut** — les modes FS/PR/BM passent de 16 fils figés à `cpu/2` = **20** sur cette machine à 40 CPU, alors que les autres modes gardent « trois quarts des cœurs, un quart pour le système ». Non mesuré ; c'est un changement de défaut que le tableau du commit ne signale pas.
+- **Troncature à 16 bits de l'échappement DRVF v2** — l'écriture fait `i.to_le_bytes()[..2]`, la lecture un `u16` : au-delà de l'indice 65535, troncature silencieuse. Inatteignable avec `hidden = 896`, mais le format ne le dit pas.
+- **Aucune couverture de test** — le seul `#[test]` du crate est sur le KV (`model.rs:3674`). Lot, protocole et codec DRVF ne sont verrouillés par aucun test : toutes les « vérifications » sont des exécutions manuelles.
+
+---
+
+## (c) Vérifié et trouvé correct
+- **Porte Qwen ctx 256 = 19,3885** : reproduite sur le binaire `ae85043` reconstruit, 8 fils, 75 s. Inchangée.
+- **Lot bout en bout** : `--limit 40 --lot 8` → écart **0,00e0**, 5 lots ; **dernier lot partiel** `--limit 44 --lot 8` → 6 lots (5×8 + 4), écart **0,00e0**. Le morceau de taille 1 de la référence locale passe bien par le raccourci `t == 1` et consomme l'état imposé (déplacé dans `emb_imposee`, pris par `forward`).
+- **Offsets de l'en-tête 39 → 79** cohérents entre `envoyer_flux`, `envoyer_lot` et `recevoir_flux` (`u(39+4i)`, `u(67)`, `u(71)`, `u(75)`) ; `TAILLE_TETE` = 79 ; les deux émetteurs portent l'`assert_eq!` ; pas de troisième émetteur Rust (`MAGIE_FLUX` n'apparaît qu'aux lignes 1483 et 1517).
+- **Sens de `n`** conforme au commentaire selon le mode (canaux / paires / actifs / états).
+- **Rétrocompatibilité v1 réelle** : `/tmp/flux_f32.bin` (12 288 listes, 132 Mo) relu, compteurs `12240/12336`, **PPL 1958,7210** — le chiffre du commit, reproduit exactement.
+- **Échappement 255 (DRVF v2)** : `ecart == 255` part bien dans l'échappement (pas de collision), écriture/lecture symétriques ; la sentinelle `0xFFFF` n'est indistinguable d'une couche qu'à partir de 64 536 couches — non atteignable. (L'échappement **réseau** du mode blocs, lui, écrivait 4 octets pour 2 lus — bug réel corrigé par `a9fff24`, lu mais non testé par moi.)
+- **Plomberie** : `--plan` sans `--ctx` → `contexte : 32768 jetons`, avec `--ctx 256` → 256 ; `keep` par défaut = 1.0 (pas de changement de défaut FS/PR/BM sur ce point) ; la porte Qwen ne bouge pas.
+
+---
+
+## Non vérifié
+- **Porte gpt-oss ctx 256 = 15,1757** : 120B (≈45 s de chargement + ≈100 s à 16 fils). Avec les bornes imposées (≤ 8 fils, ≤ 5 min par commande) la passe complète ne tient pas ; **je ne l'ai pas lancée** — c'est la seule des deux portes que je n'ai pas pu contrôler.
+- Les mesures Colab / notebook (`a0687b9`) et tout ce qui touche `DRAVE_GPU`.
+
+---
+
+## Résumé (10 lignes)
+1. **6 défauts réels prouvés** encore ouverts (D2–D8 hors D1) + 1 déjà corrigé en cours d'audit (D1).
+2. **Le plus grave — D2** : en rejeu par lots, les listes manquantes ne sont plus comptées (`model.rs:2789`, plus de `else` simple).
+3. Preuve D2 : `/tmp/flux_f32.bin` → lot 1 : `12240 servies / 12336 manquantes` + alerte ; lot 4 : `256 servies / 0 manquante`, **aucune alerte**, PPL fausse affichée comme un résultat.
+4. **D1 (corrigé)** : deux binaires « v3 » (39 o et 79 o) ne se parlaient plus — panique/blocage croisés, sans message ; vérifié corrigé par le bump à 4.
+5. **D3** : en mode lot le compteur de jeton avance de `t` par appel (2 par couche) et démarre à 0 → trace illisible par un autre `--lot`.
+6. **D4** : `pair_factice.py:70` ignore la taille du corps lot → client bloqué (exit 124), donc le mode lot n'a jamais eu de contrôle indépendant.
+7. **D5** : `--flux-blocs`/`--flux-liste` silencieusement ignorés dès `--lot > 1` (transport identique, 28751 o/lot).
+8. **Vérifié correct** : porte Qwen = 19,3885 ; lot exact (0,00e0) y compris lot partiel ; offsets, `n`, raccourci `t == 1`, rétrocompat v1 (1958,7210), `--plan` 32768.
+9. **Non vérifié** : porte gpt-oss 15,1757 (bornes 8 fils / 5 min), Colab, GPU.
+10. Méthode : 3 binaires reconstruits dans `/tmp` (dépôt inchangé), toutes les preuves citent leur révision — le dépôt ayant été modifié et recompilé pendant l'audit.
+
+### 🤖 Assistant
+
+Le relecteur a raison sur les six points. Je corrige : d'abord D2 (compteur aveugle), D3 (clés de rejeu), D7.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n 2804,2830p drave-core/src/model.rs; echo \"=== appels ===\"; sed -n 2417,2422p drave-core/src/model.rs; sed -n 2627,2632p drave-core/src/model.rs; echo \"=== increment du compteur dans forward_lot ===\"; grep -n \"jeton_trace\ … [87 caractères tronqués]`
+
+  ```
+fn flux_lot(trace: &mut Option<TraceFlux>, force: &mut Option<FluxRelecteur>,
+                jeton: &mut u64, base: usize, l: usize, t: usize,
+                xi: &mut [i32], sx: &mut [f32], h: usize) {
+        if trace.is_none() && force.is_none() { return; }
+        let mut j0 = *jeton;
+        for i in 0..t {
+            if let Some(r) = force.as_mut() {
+                if let Some((ech, paires)) = r.listes.get(&((base + l) as u16, j0 as u32)).cloned() {
+                    for v in xi[i * h..(i + 1) * h].iter_mut() { *v = 0; }
+                    for (idx, q) in paires {
+                        if (idx as usize) < h { xi[i * h + idx as usize] = q as i32; }
+                    }
+                    sx[i] = ech;
+                    r.servies += 1;
+                } else if r.listes_blocs.contains_key(&((base + l) as u16, j0 as u32)) {
+                    // Une trace v3 n'a plus d'entiers d'origine : le rejeu par
+                    // lots, qui les réinjecte, ne peut pas s'en servir. On le dit
+                    // UNE fois, plutôt que de compter des manquantes muettes.
+                    if r.servies == 0 && r.manquantes == 0 {
+                        eprintln!("[flux] trace
+… [1697 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/model.rs'; s=open(p).read()\n\n# --- D2 : le compteur doit compter les manquantes, quelle que soit la cause ---\nv = \"\"\"                    r.manquantes += 1;\n                }\n            } e … [4633 caractères tronqués]`
+
+  ```
+D2, D3, D7 corrigés
+error[E0425]: cannot find value `jeton` in this scope
+    --> src/model.rs:2856:10
+     |
+2856 |         *jeton = j0;
+     |          ^^^^^ not found in this scope
+
+warning: variant `Q4_K` should have an upper camel case name
+   --> src/list.rs:572:40
+    |
+--
+error: could not compile `drave-core` (bin "drave") due to 1 previous error; 12 warnings emitted
+error: could not compile `drave-core` (bin "drave") due to 1 previous error; 12 warnings emitted
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n 2848,2862p drave-core/src/model.rs; python3 - <<'PY'\np='drave-core/src/model.rs'; s=open(p).read()\nv = \"\"\"        *jeton = j0;\n\"\"\"\nif v in s:\n    s = s.replace(v, \"\")\n    open(p,'w').write(s); print(\"ligne deven … [330 caractères tronqués]`
+
+  ```
+}
+            } else if let Some(tr) = trace.as_mut() {
+                let actifs: Vec<i32> = xi[i * h..(i + 1) * h].to_vec();
+                let e = sx[i];
+                tr.ecrire(base + l, j0 as usize, &actifs, e);
+            }
+            j0 += 1;
+        }
+        *jeton = j0;
+    }
+
+    /// Passe avant d'un modèle **MLA**, un jeton à la fois, avec le cache
+    /// LATENT : `c_kv` (la seule tête latente) et `k_rope` (les composantes
+    /// tournées) sont écrites une fois par position, et `k_nope`/`v` sont
+    /// reconstruits à la lecture par `W_kv_b` — c'est le contrat de MLA.
+ligne devenue inutile retirée
+                    // garde-fou devenait aveugle dès `--lot > 1`, et une trace
+                    // entièrement étrangère s'affichait « 0 manquante ».
+                    r.manquantes += 1;
+                }
+            } else if let Some(tr) = trace.as_mut() {
+                let actifs: Vec<i32> = xi[i * h..(i + 1) * h].to_vec();
+                let e = sx[i];
+                tr.ecrire(base + l, j0 as usize, &actifs, e);
+            }
+            j0 += 1;
+        }
+    }
+
+    /// Passe avant d'un modèle **MLA**, un jeton à la fois, avec le cache
+    /// LATENT : `
+… [562 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/model.rs'; s=open(p).read()\nv = \"\"\"        if trace.is_none() && force.is_none() { return; }\n        for i in 0..t {\"\"\"\nn = \"\"\"        if trace.is_none() && force.is_none() { return; }\ … [433 caractères tronqués]`
+
+  ```
+j0 rendu mutable dans flux_lot
+    Finished `release` profile [optimized] target(s) in 0.01s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && D=./drave-core/target/release/drave; M=models/Qwen2.5-0.5B-Q8_0.gguf; G=\"--ppl /tmp/ids_qwen.txt --ctx 256 --abits 16 --threads 8 --dense\"; echo \"=== D2 : ancienne trace, rejeu par LOTS (doit alerter) ===\"; $D $M $G --limit 8 --f … [509 caractères tronqués]`
+
+  ```
+=== D2 : ancienne trace, rejeu par LOTS (doit alerter) ===
+  rejeu             : 384 listes servies, 0 manquantes
+=== perplexité 802100.0153 sur 7 tokens (0 événements, 0.8 s) ===
+=== D3a : trace écrite avec --lot 1, rejouée avec --lot 8 ===
+perplexité 27.4964 sur 63 tokens
+  rejeu             : 1536 listes servies, 1536 manquantes
+=== perplexité 3897.8954 sur 63 tokens (0 événements, 3.2 s) ===
+12:41:05
+  ```
+
+### 🤖 Assistant
+
+Mi-parcours : D2 est corrigé (la trace réelle se sert entièrement), mais la relecture croisée entre `--lot 1` et `--lot 8` rate encore la moitié des clés. J'inspecte les deux chemins d'écriture.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n 3028,3048p drave-core/src/model.rs; echo \"=== famille FFN (chemin jeton) ===\"; sed -n 3050,3062p drave-core/src/model.rs; echo \"=== famille FFN (chemin lot) ===\"; grep -n \"flux_lot\" -A 2 drave-core/src/model.rs | grep -A … [64 caractères tronqués]`
+
+  ```
+Self::dot8(a, b)
+        };
+        let mut attn_idx: Vec<u32> = Vec::with_capacity(ctx);
+        let attn_all: Vec<u32> = (0..ctx as u32).collect();
+
+        // La plage PORTÉE par ce nœud (`couche_debut..couche_fin`), et non
+        // `0..n_layer` : un nœud qui reçoit un flux reprend à SA première couche.
+        // La boucle partait de zéro — le pilote calculait donc les 24 couches,
+        // envoyait l'état final, et le pair les recalculait toutes par-dessus :
+        // perplexité répartie 798,3 au lieu de 18,2. `forward_lot` et
+        // `forward_mla` respectaient déjà la plage ; `forward` était l'exception.
+        for l in self.couche_debut..self.couche_fin {
+            let lay = &layers[l];
+            // Fenêtre EFFECTIVE de cette couche : le motif déclaré (gpt-oss :
+            // une couche sur deux en attention complète) prime sur le réglage
+            // global. Lue en champs directs : `self` est déjà déstructuré.
+            let fen = if self.attn_window == 0 { 0 }
+                      else if self.swa_pattern <= 1 { self.attn_window }
+                      else if l % self.swa_pattern < self.swa_pattern - 1 { self.attn_window }
+                      else { 0 }
+… [1173 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"1000\" drave-core/src/model.rs | head -12", "description": "Find the FFN family trace writes"}`
+
+  ```
+499:    m += 0x1000;                                   // arrondi au bit 13
+1192:        f32::from_bits(b.wrapping_add(0x1000) & !0x1FFF)
+1373:            rope_base: g.cfg("rope.freq_base").and_then(|m| m.as_f64()).unwrap_or(10000.0) as f32,
+1808:            let k = (((topk as f32) / 1000.0) * x.len() as f32).round() as usize;
+2208:        let k = ((milliemes as f32 / 1000.0) * head_dim as f32).round() as usize;
+2639:                           1000, l, t, &mut xi, &mut sx, h);
+2816:    /// couche (famille attention, base 0, et famille FFN, base 1000) et les deux
+3312:                r.appliquer(l + 1000, j as usize, &mut hn);
+3320:                    self.trace.as_mut().unwrap().ecrire(l + 1000, j as usize, &actifs, sx);
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && D=./drave-core/target/release/drave; M=models/Qwen2.5-0.5B-Q8_0.gguf; $D $M --ppl /tmp/ids_qwen.txt --ctx 256 --abits 16 --threads 8 --dense --limit 8 --lot 1 --trace-flux /tmp/t8_l1.bin 2>&1 | grep -oE \"perplexité [0-9.]+ sur [0-9] … [664 caractères tronqués]`
+
+  ```
+perplexité 795.0325 sur 7 tokens
+listes : 384 · famille attention : 192 clés [2, 2, 2, 2, 2, 2] … [16, 16, 16]
+         famille FFN      : 192 clés [2, 2, 2, 2, 2, 2] … [16, 16, 16]
+couches présentes : [0, 1, 2, 3, 4] … [1019, 1020, 1021, 1022, 1023]
+  ```
+
+### 🤖 Assistant
+
+**Trouvé** : avec `--lot 1`, le compteur avançait **deux fois** (une fois par `forward_lot`, une fois par `forward` délégué) — d'où des clés 2,4,6… Je corrige et je re-vérifie dans les deux sens.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/model.rs'; s=open(p).read()\nv = \"\"\"        let j0 = self.jeton_trace + 1;\n        self.jeton_trace += t as u64;\n        if t == 1 {\n            if let Some(v) = impose { self.emb_imposee = S … [2675 caractères tronqués]`
+
+  ```
+avance du compteur dédoublée
+    Finished `release` profile [optimized] target(s) in 0.01s
+=== trace --lot 1 : les clés doivent être 1..8 ===
+perplexité 795.0325 sur 7 tokens
+clés distinctes de la trace : [1, 2, 3, 4, 5, 6, 7, 8]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && D=./drave-core/target/release/drave; M=models/Qwen2.5-0.5B-Q8_0.gguf; G=\"--ppl /tmp/ids_qwen.txt --ctx 256 --abits 16 --threads 8 --dense\"; echo \"=== A. trace écrite --lot 1, rejouée --lot 4 (attendu : 384 servies, 0 manquante, 79 … [816 caractères tronqués]`
+
+  ```
+=== A. trace écrite --lot 1, rejouée --lot 4 (attendu : 384 servies, 0 manquante, 795,0325) ===
+  rejeu             : 384 listes servies, 0 manquantes
+=== perplexité 795.0602 sur 7 tokens (0 événements, 0.3 s) ===
+=== B. trace écrite --lot 4, rejouée --lot 1 (attendu : idem) ===
+perplexité 795.2102 sur 7 tokens
+  rejeu             : 384 listes servies, 0 manquantes
+=== perplexité 795.2137 sur 7 tokens (0 événements, 0.4 s) ===
+=== C. D2 : trace étrangère (couche 0 seulement), rejeu par lots ===
+  rejeu             : 8 listes servies, 376 manquantes  ← la moitié au moins n'a pas servi : vérifier la trace
+12:42:19
+  ```
+
+### 🤖 Assistant
+
+D2 et D3 sont corrigés et vérifiés dans les deux sens. Je traite D5, D6, D8 (messages explicites au lieu de silences et de paniques).
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/main.rs'; s=open(p).read()\n\n# --- D5 : les modes listes/blocs ne s'appliquent pas aux lots : le DIRE ---\nv = \"\"\"    if lot > 1 {\n        // PRÉREMPLISSAGE RÉPARTI : un lot par aller-retour a … [3697 caractères tronqués]`
+
+  ```
+D5, D6, D8 : messages explicites
+    Finished `release` profile [optimized] target(s) in 0.01s
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 9, in <module>
+AssertionError
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"let ppl = (nll\" drave-core/src/main.rs; python3 - <<'PY'\np='drave-core/src/main.rs'; s=open(p).read()\nv = \"\"\"    if let Some(hb) = mdl.hebb.as_ref() {\n        if hb.log_on {\"\"\"\nn = \"\"\"    if n == 0 {\n         … [1862 caractères tronqués]`
+
+  ```
+1921:    let ppl = (nll / (ids.len() - 1) as f64).exp();
+3045:        let ppl = (nll / n as f64).exp();
+3081:    let ppl = (nll / n as f64).exp();
+garde placée juste après le calcul de la perplexité
+    Finished `release` profile [optimized] target(s) in 0.01s
+=== D8 : --limit 1 ===
+       0 tokens notés — perplexité cumulée NaN  (0.0 tok/s)
+aucun jeton noté (il en faut au moins deux : le premier ne prédit rien)
+=== D5 : --flux-blocs --lot 4 (doit prévenir) ===
+[flux] --flux-liste / --flux-blocs ne s'appliquent PAS aux lots (mode 4 non écrit) : le lot part en f32 dense. À --lot 1, le mode choisi s'applique.
+  écart             : 0.00e0
+  transport         : LOTS de 4 jetons · 14415 octets par lot (aller) · 3.5 ko par jeton · 2 lots (au lieu de 7 flux)
+=== D6 : serveur --ctx 8, client --lot 8 (refus) ===
+  référence locale  : perplexité 45.2832  (4.1 s)
+[flux] le nœud moteur a fermé la connexion (failed to fill whole buffer).
+       Cause la plus probable : il a REFUSÉ le lot (son contexte est plus petit que --ctx ici : 32). Il l'a dit de son côté.
+12:43:40
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat /tmp/kv_cles.log; sed -n 60,100p tools/pair_factice.py", "description": "Check lane A and fake peer code"}`
+
+  ```
+cles_f32_valeurs_int4      : perplexité 14.2994 sur 8191 tokens (0 événements, 1665.6 s)
+cles_int4_valeurs_f32      : perplexité 69.0464 sur 8191 tokens (0 événements, 1482.6 s)
+int4_int4                  :         # Le corps dépend du MODE : dense et listes i16 font 4 octets par
+        # élément, les blocs font 2 octets par actif plus les échelles et les
+        # échappements. Un pair factice qui suppose une seule disposition mentirait
+        # exactement là où on l'interroge.
+        if mode == 2:
+            nb = struct.unpack("<I", lire_tout(sock, 4))[0]
+            echelles = lire_tout(sock, nb * 4)
+            longueur = struct.unpack("<I", lire_tout(sock, 4))[0]
+            corps = echelles + lire_tout(sock, longueur)
+        else:
+            corps = lire_tout(sock, n * 4)
+        if magie != MAGIE:
+            print(f"[factice] MAGIE INCONNUE {magie:#x}", flush=True)
+            break
+        vus.append(n)
+        if len(vus) <= 3 or len(vus) % 20 == 0:
+            print(f"[factice] flux {len(vus)} : couches {debut}..{fin} pos {pos} · "
+                  f"version {version} · mode {MODES.get(mode, mode)} · n={n} · "
+                  f"échelle {echelle:g} · niveaux {lev
+… [1197 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+Lane A : **clés int4 + valeurs f32 = 69,0464 (+385 %)** contre clés f32 + valeurs int4 = +0,46 % — même taille, ×840 d'écart. Je finis les correctifs (outil factice, puis tests unitaires du codec).
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='tools/pair_factice.py'; s=open(p).read()\nv = \"\"\"        if mode == 2:\n            nb = struct.unpack(\"<I\", lire_tout(sock, 4))[0]\n            echelles = lire_tout(sock, nb * 4)\n            longueur = str … [2592 caractères tronqués]`
+
+  ```
+D4 : pair factice — mode lot lu et répondu correctement
+  transport         : LOTS de 4 jetons · 14415 octets par lot (aller) · 3.5 ko par jeton · 2 lots (au lieu de 7 flux)
+  temps             : 42.3 ms par LOT en local · 0.4 ms à attendre le pair · soit 0.01× le calcul local seul
+--- vu par le pair ---
+[factice] écoute sur 127.0.0.1:46302 · je réponds 896 canaux
+[factice] client ('127.0.0.1', 15532)
+[factice] flux 1 : couches 12..24 pos 0 · version 4 · mode lot (t états × dimension) · n=4 · échelle 0 · niveaux 127 seuil 0 topk 0 renorm 0 · corps 14336 octets
+[factice] flux 2 : couches 12..24 pos 4 · version 4 · mode lot (t états × dimension) · n=4 · échelle 0 · niveaux 127 seuil 0 topk 0 renorm 0 · corps 14336 octets
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/main.rs'; s=open(p).read()\n\n# 1. extraire l'encodage des paires (fonction pure, testable)\nv = \"\"\"        let mut paires: Vec<u8> = Vec::with_capacity(idx.len() * 2);\n        let mut prev = 0 … [4717 caractères tronqués]`
+
+  ```
+codec des paires extrait (encodeur + décodeur purs)
+    Finished `release` profile [optimized] target(s) in 0.01s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"^fn envoyer_flux\" -A 3 drave-core/src/main.rs | head -6; grep -n \"^fn recevoir_flux\" drave-core/src/main.rs", "description": "Check current function signatures"}`
+
+  ```
+1477:fn envoyer_flux(s: &mut std::net::TcpStream, debut: u32, fin: u32, pos: u32,
+1478-                actifs: &[f32], mode: u8, mdl: Option<&model::Model>)
+1479-                -> std::io::Result<(usize, usize)> {
+1480-    let act = mdl.map(Act::du_modele).unwrap_or(Act {
+1582:fn recevoir_flux(s: &mut std::net::TcpStream, hidden: usize) -> std::io::Result<Flux> {
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat >> drave-core/src/main.rs <<'EOF'\n\n#[cfg(test)]\nmod tests_flux {\n    //! Les tests du PROTOCOLE et du CODEC. Ils manquaient : les deux bugs les\n    //! plus coûteux de la session (un en-tête d'un octet trop long, un\n    //! … [2847 caractères tronqués]`
+
+  ```
+test list::tests_mxfp4::import_exact ... ok
+test list::tests_q4::avx2_egale_scalaire ... ok
+test list::tests_q6k::quarts_successifs ... ok
+test model::tests_kv::aller_retour_kv ... ok
+test tests_flux::entete_et_version_sont_ce_que_les_numeros_disent ... ok
+test tests_flux::paires_blocs_aller_retour_avec_echappement ... ok
+test tests_flux::paires_blocs_tronquees_sont_refusees ... FAILED
+test tests_flux::flux_dense_aller_retour_par_la_vraie_mise_en_trame ... ok
+test engine::tests_gemm_q4::gemm_q4_egale_matvec ... ok
+test engine::tests_gemm::gemm_bat_le_matvec ... ok
+test result: FAILED. 9 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.14s
+  ```
+
+### 🤖 Assistant
+
+Le test de troncature a attrapé une vraie faiblesse du décodeur (lecture de l'octet de valeur après un échappement sans garde). Je corrige.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/main.rs'; s=open(p).read()\nv = \"\"\"        let absolu = if d == 255 {\n            if lus + 1 >= corps.len() { return Err(\"échappement tronqué\".into()); }\n            let a = u16::from_le_byt … [1294 caractères tronqués]`
+
+  ```
+garde ajoutée
+test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.13s
+    Finished `release` profile [optimized] target(s) in 24.04s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== porte Qwen ===\" && ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf --ppl /tmp/ids_qwen.txt --ctx 256 --abits 16 --threads 16 --limit 512 --dense 2>&1 | grep -oE \"perplexité [0-9.]+ sur [0-9]+ tokens\"; gi … [2620 caractères tronqués]`

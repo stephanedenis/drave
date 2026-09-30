@@ -7,7 +7,7 @@
 | Début | 2026-09-30 12:20 |
 | Durée | 0.3 h |
 | Tours | 1 |
-| Messages | 101 |
+| Messages | 102 |
 | Appels d'outils | 110 |
 | Fichiers touchés | 0 |
 | Commandes | 86 |
@@ -43,7 +43,29 @@
 
 **Synthèse produite :**
 
-⏵ Rédaction du rapport final et envoi au parent
+⏵ Rapport final
+
+\# Rapport de relecture adversariale — Drave (lots sur le fil, DRVF v2, protocole v4)
+
+**Le dépôt a bougé pendant l'audit** : HEAD est passé de `a0687b9` (12:20) à `ae85043` (12:30, DRVF v3) puis `a9fff24` (12:36, « deux bugs de protocole »), et `model.rs` porte à 12:40 des modifications non commitées. Le binaire du dépôt a été **reconstruit à 12:25:26** en pleine session : mes premières exécutions n'étaient pas reproductibles. J'ai donc reconstruit trois binaires épinglés dans `/tmp` (`cda3162` = l'ancien « v3 » à en-tête 39 o, `ae85043`, `a9fff24`) et **chaque preuve ci-dessous cite le binaire utilisé**. Aucun fichier du dépôt n'a été touché.
+
+---
+
+\## (a) Défauts réels, prouvés
+
+\### D1 — `VERSION_FLUX` n'a pas suivi l'en-tête (39 → 79 octets) — trouvé, **corrigé entre-temps** par `a9fff24`
+- `drave-core/src/main.rs:1295` : `const VERSION_FLUX: u8 = 3;` alors que `main.rs:1323` donne `TAILLE_TETE = 79` et que le commentaire comme `docs/format-flux.md:68` annoncent la version 4. `cda3162` portait bien `3` **avec 39 octets**.
+- Scénario : deux binaires issus de deux commits de la même session se croient compatibles.
+- Preuve (binaires reconstruits, un par commit) :
+  - serveur `cda3162` + client `ae85043` → client : `panicked at src/main.rs:1879: réception du flux: ConnectionReset` ; serveur : `[flux] arrêt : magie de flux absente` après 1 flux ; **aucun message de version**.
+  - serveur `ae85043` + client `cda3162` → client **bloqué** (tué à 45 s) ; serveur : `0 flux servis`, `failed to fill whole buffer`.
+- Après correctif (binaire `a9fff24` reconstruit) : `[flux] arrêt : flux en version 3, cette build parle la 4 (pair incompatible : rien n'a été interprété)`, 0 flux servi. **Le correctif fonctionne**, mais rien n'empêche la prochaine modification de `TAILLE_TETE` sans bump : l'`assert_eq!(tete.len(), TAILLE_TETE)` ne compare pas la version. Un `const _: () = assert!(...)` liant version et taille, ou un test avec une trame dorée, fermerait la porte.
+
+\### D2 — Le rejeu par LOTS ne compte plus les listes manquantes : le garde-fou de `6b3b53f` est aveugle — **OUVERT, le plus grave**
+- `drave-core/src/model.rs:2789` (HEAD `a9fff24`) : `if listes.get(..) { servies += 1 } else if listes_blocs.contains_key(..) { manquantes += 1 }` — **il n'y a plus de `else` simple**. Avant `ae85043` c'était `else { manquantes += 1 }` : c'est une régression du commit DRVF v3.
+- Scénario exact que `6b3b53f` voulait rendre visible, avec la vraie vieille trace :
+  `
+… [8606 caractères tronqués]
 
 ## 3. Travail accompli
 

@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 45.9 h |
+| Durée | 46.0 h |
 | Tours | 45 |
-| Messages | 1722 |
-| Appels d'outils | 1627 |
+| Messages | 1744 |
+| Appels d'outils | 1647 |
 | Fichiers touchés | 44 |
-| Commandes | 1309 |
+| Commandes | 1329 |
 | Sous-agents | 6 |
-| Commits | 114 |
+| Commits | 115 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -2055,7 +2055,7 @@ Je vérifie l'heure à chaque itération et j'arrête à 12:06, en laissant un p
 
 ### Tour 45 — as-tu ce qu'il te faut pour te rendre à 15h en travaillaint avec un maximum d'autonomie et de parallélisme d'activités?
 
-*128 appels d'outils.* Actions notables :
+*148 appels d'outils.* Actions notables :
 
 - bash — Probe machine, GPU, disk, network state
 - bash — Identify GPU users and stray processes
@@ -2071,11 +2071,11 @@ Je vérifie l'heure à chaque itération et j'arrête à 12:06, en laissant un p
 - bash — Understand batched PPL reference path
 - bash — Add batched imposed states to forward_lot
 - list_agents
-- … et 106 autres
+- … et 126 autres
 
 **Synthèse produite :**
 
-Le relecteur a raison sur toute la ligne. Je traite sa liste : d'abord le **rapport manquant de la phase 3.4** (le seul chantier livré sans rapport), puis les chiffres.
+Le test de troncature a attrapé une vraie faiblesse du décodeur (lecture de l'octet de valeur après un échappement sans garde). Je corrige.
 
 ## 3. Travail accompli
 
@@ -2179,7 +2179,7 @@ Le relecteur a raison sur toute la ligne. Je traite sa liste : d'abord le **rapp
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 1269 autres
+- … et 1289 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2307,7 +2307,7 @@ Le relecteur a raison sur toute la ligne. Je traite sa liste : d'abord le **rapp
 
 ## 5. Erreurs rencontrées
 
-90 sorties en erreur ou divergentes. Les premières :
+92 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : a8f2635f8 docs: record which models this box is good at, and why src/llama-hparams.cpp:8:void llama_hparams::set_swa_pattern(uint32_t n_pattern, bool dense_first) { src/llama-hparams.h:308:    void se
 - **T1** : 511 tokens notés — perplexité cumulée 247.031  (4.9 tok/s) === perplexité 247.0308 sur 511 tokens (0 événements, 104.5 s) ===  ### B3 harmony assistant 511 --- ref --- 0.0 0.0 0:00 ls: cannot access '
@@ -2441,4 +2441,5 @@ Le relecteur a raison sur toute la ligne. Je traite sa liste : d'abord le **rapp
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p='docs/format-flux.md'; s=open(p).read() s = s.replace("ou en **1 seul lot de 917 543 oc
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls ../FPGA-Stratix-V/docs/ | grep -iE "pe-even|ddr3|evenement" | head -4; python3 - <<'PY' p='README.md'; 
 - REPRISE : les variables d'environnement qui restaient dans l'ombre  Treize variables présentes dans le code n'étaient documentées nulle part (DRAVE_BANC_KV_*, D
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo "=== porte Qwen ===" && ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf --ppl /tmp/id
 

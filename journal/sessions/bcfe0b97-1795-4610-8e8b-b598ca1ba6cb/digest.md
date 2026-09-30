@@ -2561,3 +2561,113 @@ warning: `drave-core` (bin "drave") generated 19 warnings (run `cargo fix --bin 
 bash: line 5: 493538 Aborted                    timeout 30 $OLD $M --ppl-reparti 127.0.0.1:45831 --couches-locales 12 --ctx 256 --threads 4 --limit 6 > /tmp/audit_head/y_cli.log 2>&1
   ```
 
+### 🤖 Assistant
+
+⏵ Rédaction du rapport final et envoi au parent
+
+- **send_message** `{"agent_id": "bbd6969f-0f70-42b2-8951-64d1f2f36d2e", "message": "RAPPORT DE RELECTURE ADVERSARIALE (Drave — session lots / DRVF v2 / protocole v4). Aucun fichier du dépôt touché ; tout s'est fait dans /tmp. ATTENTION : le dépôt a bougé pendant l'audit (HEAD a0687b9 → ae85043 12:30 → a9fff24 12:36 ;  … [4455 caractères tronqués]`
+
+  ```
+message delivered to agent bbd6969f-0f70-42b2-8951-64d1f2f36d2e
+  ```
+
+### 🤖 Assistant
+
+⏵ Rapport final
+
+# Rapport de relecture adversariale — Drave (lots sur le fil, DRVF v2, protocole v4)
+
+**Le dépôt a bougé pendant l'audit** : HEAD est passé de `a0687b9` (12:20) à `ae85043` (12:30, DRVF v3) puis `a9fff24` (12:36, « deux bugs de protocole »), et `model.rs` porte à 12:40 des modifications non commitées. Le binaire du dépôt a été **reconstruit à 12:25:26** en pleine session : mes premières exécutions n'étaient pas reproductibles. J'ai donc reconstruit trois binaires épinglés dans `/tmp` (`cda3162` = l'ancien « v3 » à en-tête 39 o, `ae85043`, `a9fff24`) et **chaque preuve ci-dessous cite le binaire utilisé**. Aucun fichier du dépôt n'a été touché.
+
+---
+
+## (a) Défauts réels, prouvés
+
+### D1 — `VERSION_FLUX` n'a pas suivi l'en-tête (39 → 79 octets) — trouvé, **corrigé entre-temps** par `a9fff24`
+- `drave-core/src/main.rs:1295` : `const VERSION_FLUX: u8 = 3;` alors que `main.rs:1323` donne `TAILLE_TETE = 79` et que le commentaire comme `docs/format-flux.md:68` annoncent la version 4. `cda3162` portait bien `3` **avec 39 octets**.
+- Scénario : deux binaires issus de deux commits de la même session se croient compatibles.
+- Preuve (binaires reconstruits, un par commit) :
+  - serveur `cda3162` + client `ae85043` → client : `panicked at src/main.rs:1879: réception du flux: ConnectionReset` ; serveur : `[flux] arrêt : magie de flux absente` après 1 flux ; **aucun message de version**.
+  - serveur `ae85043` + client `cda3162` → client **bloqué** (tué à 45 s) ; serveur : `0 flux servis`, `failed to fill whole buffer`.
+- Après correctif (binaire `a9fff24` reconstruit) : `[flux] arrêt : flux en version 3, cette build parle la 4 (pair incompatible : rien n'a été interprété)`, 0 flux servi. **Le correctif fonctionne**, mais rien n'empêche la prochaine modification de `TAILLE_TETE` sans bump : l'`assert_eq!(tete.len(), TAILLE_TETE)` ne compare pas la version. Un `const _: () = assert!(...)` liant version et taille, ou un test avec une trame dorée, fermerait la porte.
+
+### D2 — Le rejeu par LOTS ne compte plus les listes manquantes : le garde-fou de `6b3b53f` est aveugle — **OUVERT, le plus grave**
+- `drave-core/src/model.rs:2789` (HEAD `a9fff24`) : `if listes.get(..) { servies += 1 } else if listes_blocs.contains_key(..) { manquantes += 1 }` — **il n'y a plus de `else` simple**. Avant `ae85043` c'était `else { manquantes += 1 }` : c'est une régression du commit DRVF v3.
+- Scénario exact que `6b3b53f` voulait rendre visible, avec la vraie vieille trace :
+  ```bash
+  # chemin jeton par jeton : alerte correcte, chiffre du commit reproduit
+  drave Qwen2.5-0.5B-Q8_0.gguf --ppl /tmp/ids_qwen.txt --ctx 256 --abits 16 \
+        --threads 8 --limit 512 --dense --flux-forcer /tmp/flux_f32.bin
+  #  → 12240 listes servies, 12336 manquantes ← la moitié au moins n'a pas servi
+  #  → perplexité 1958.7210 (identique au chiffre annoncé)
+
+  # même trace, rejeu par lots : plus rien
+  … --limit 8 --flux-forcer /tmp/flux_f32.bin --lot 4
+  #  → 256 listes servies, 0 manquante     (aucune alerte, PPL fausse affichée normalement)
+  ```
+- Trace témoin de 384 clés toutes absentes : lot 1 → `0 servies, 384 manquantes ← AUCUNE liste utilisée` ; lot 4 → `0 servies, 0 manquantes`.
+
+### D3 — Les clés de trace ne veulent pas dire la même chose selon `--lot` — **OUVERT**
+- `model.rs:2290-2294` (`forward_lot`) + `model.rs:2804-2830` (`flux_lot`) : en mode lot, `jeton_trace` **avance de `t` à chaque appel** de `flux_lot`, appelé deux fois par couche (base 0 puis base 1000), et démarre à 0 ; en mode jeton, `forward` fait `jeton_trace += 1` une fois par jeton (première clé = 1) et les deux familles partagent la clé.
+- Preuve (dump de deux traces écrites par le binaire `ae85043`) :
+  - lot 1 : `couche 0 pos 1`, `couche 1000 pos 1`, `couche 1 pos 1`… (clé = jeton global, 1-based) ;
+  - lot 4 : `couche 0 pos 0,1,2,3` puis `couche 1000 pos 4,5,6,7` (décalage de `t` entre les deux familles, et `2t` par couche).
+- Conséquence : une trace écrite avec `--lot N` n'est rejouable qu'avec **le même N** ; `--flux-forcer t_lot1.bin --lot 4` → `8 servies / 376 manquantes`, PPL 6215 au lieu de 795. L'invariant « `jeton` = compteur global » de `docs/format-flux.md` ne tient que pour `--lot 1`.
+
+### D4 — `tools/pair_factice.py` ne sait pas lire le mode LOT — **OUVERT**
+- `tools/pair_factice.py:70` : `corps = lire_tout(sock, n * 4)` alors que le corps lot fait `n × dimension × 4` ; et la réponse (`:87`) annonce `n` = t états mais n'envoie que `dimension * 4` octets (`:94`).
+- Preuve : `python3 tools/pair_factice.py 45792 896 &` puis client `--ppl-reparti … --lot 4` → client **bloqué** dans `read_exact` (exit 124 après 20 s), pair mort sur `EOFError`. L'outil que `REPRISE.md` §6 présente comme le contrôle qui « DIT ce qu'il reçoit » ne vérifie rien en mode lot et pend le client — c'est aussi la raison pour laquelle le mode lot n'a jamais été confronté à un pair indépendant.
+
+### D5 — `--flux-liste` / `--flux-blocs` ignorés en silence dès que `--lot > 1` — **OUVERT**
+- `main.rs:1775` calcule `mode`, mais la branche lot (`main.rs:1826+`) appelle `envoyer_lot` (f32 dense) sans le consulter ni le dire.
+- Preuve : à `--limit 40 --lot 8`, la ligne transport est **identique** avec et sans `--flux-blocs` (`28751 octets par lot` = 79 + 8×896×4) ; à `--lot 1`, `--flux-blocs` donne bien `1958 octets par flux`. C'est exactement la classe « drapeau analysé, jamais appliqué, sans un mot » que `7522289` prétendait traquer.
+
+### D6 — Serveur trop court en contexte → panique du client — **OUVERT** (mineur)
+- `main.rs:1710` (refus + `break`) et `main.rs:1843` (`.expect("réception du lot")`).
+- Preuve : serveur `--ctx 16`, client `--limit 40 --lot 8` → serveur `lot refusé : 8 états à partir de la position 16 dépassent le contexte 16`, client `panicked at src/main.rs:1843 … UnexpectedEof`, exit 134.
+
+### D7 — `forward_lot(&[], pos)` ne consomme pas `emb_imposee_lot` — **OUVERT** (latent)
+- `model.rs:2290` (`if t == 0 { return Vec::new(); }`) **précède** `model.rs:2294` (`let impose = self.emb_imposee_lot.take();`). Une trame MODE_LOT de `n = 0` laisse `Some(vec![])` ; l'assertion `model.rs:2344` paniquerait au prochain `forward_lot(t ≥ 2)` qui ne réécrit pas le champ. Non observable via la CLI actuelle (le serveur réécrit toujours le champ avant l'appel) — je le classe réel mais latent.
+
+### D8 — `--limit 1` affiche `NaN` sans rien dire — **OUVERT** (mineur, pré-existant)
+- Division `nll / (ids.len() - 1)` avec un seul jeton. Preuve : `référence locale : perplexité NaN`, `deux nœuds : perplexité NaN`, `écart : NaN`.
+
+---
+
+## (b) Soupçons non prouvés
+- **Allocation non bornée venue du réseau** — `main.rs:1589` : `vec![0u8; n * hidden * 4]` avec `n` (u32) lu dans l'en-tête, **avant** le contrôle de contexte. Un pair peut demander jusqu'à ~1,5×10¹³ octets ; selon `vm.overcommit_memory`, `alloc_zeroed` échoue (→ `abort`, `panic = "abort"`) ou réserve 15 To. Non testé : le risque machine dépasse le gain de preuve.
+- **`fils(&opt)` change un défaut** — les modes FS/PR/BM passent de 16 fils figés à `cpu/2` = **20** sur cette machine à 40 CPU, alors que les autres modes gardent « trois quarts des cœurs, un quart pour le système ». Non mesuré ; c'est un changement de défaut que le tableau du commit ne signale pas.
+- **Troncature à 16 bits de l'échappement DRVF v2** — l'écriture fait `i.to_le_bytes()[..2]`, la lecture un `u16` : au-delà de l'indice 65535, troncature silencieuse. Inatteignable avec `hidden = 896`, mais le format ne le dit pas.
+- **Aucune couverture de test** — le seul `#[test]` du crate est sur le KV (`model.rs:3674`). Lot, protocole et codec DRVF ne sont verrouillés par aucun test : toutes les « vérifications » sont des exécutions manuelles.
+
+---
+
+## (c) Vérifié et trouvé correct
+- **Porte Qwen ctx 256 = 19,3885** : reproduite sur le binaire `ae85043` reconstruit, 8 fils, 75 s. Inchangée.
+- **Lot bout en bout** : `--limit 40 --lot 8` → écart **0,00e0**, 5 lots ; **dernier lot partiel** `--limit 44 --lot 8` → 6 lots (5×8 + 4), écart **0,00e0**. Le morceau de taille 1 de la référence locale passe bien par le raccourci `t == 1` et consomme l'état imposé (déplacé dans `emb_imposee`, pris par `forward`).
+- **Offsets de l'en-tête 39 → 79** cohérents entre `envoyer_flux`, `envoyer_lot` et `recevoir_flux` (`u(39+4i)`, `u(67)`, `u(71)`, `u(75)`) ; `TAILLE_TETE` = 79 ; les deux émetteurs portent l'`assert_eq!` ; pas de troisième émetteur Rust (`MAGIE_FLUX` n'apparaît qu'aux lignes 1483 et 1517).
+- **Sens de `n`** conforme au commentaire selon le mode (canaux / paires / actifs / états).
+- **Rétrocompatibilité v1 réelle** : `/tmp/flux_f32.bin` (12 288 listes, 132 Mo) relu, compteurs `12240/12336`, **PPL 1958,7210** — le chiffre du commit, reproduit exactement.
+- **Échappement 255 (DRVF v2)** : `ecart == 255` part bien dans l'échappement (pas de collision), écriture/lecture symétriques ; la sentinelle `0xFFFF` n'est indistinguable d'une couche qu'à partir de 64 536 couches — non atteignable. (L'échappement **réseau** du mode blocs, lui, écrivait 4 octets pour 2 lus — bug réel corrigé par `a9fff24`, lu mais non testé par moi.)
+- **Plomberie** : `--plan` sans `--ctx` → `contexte : 32768 jetons`, avec `--ctx 256` → 256 ; `keep` par défaut = 1.0 (pas de changement de défaut FS/PR/BM sur ce point) ; la porte Qwen ne bouge pas.
+
+---
+
+## Non vérifié
+- **Porte gpt-oss ctx 256 = 15,1757** : 120B (≈45 s de chargement + ≈100 s à 16 fils). Avec les bornes imposées (≤ 8 fils, ≤ 5 min par commande) la passe complète ne tient pas ; **je ne l'ai pas lancée** — c'est la seule des deux portes que je n'ai pas pu contrôler.
+- Les mesures Colab / notebook (`a0687b9`) et tout ce qui touche `DRAVE_GPU`.
+
+---
+
+## Résumé (10 lignes)
+1. **6 défauts réels prouvés** encore ouverts (D2–D8 hors D1) + 1 déjà corrigé en cours d'audit (D1).
+2. **Le plus grave — D2** : en rejeu par lots, les listes manquantes ne sont plus comptées (`model.rs:2789`, plus de `else` simple).
+3. Preuve D2 : `/tmp/flux_f32.bin` → lot 1 : `12240 servies / 12336 manquantes` + alerte ; lot 4 : `256 servies / 0 manquante`, **aucune alerte**, PPL fausse affichée comme un résultat.
+4. **D1 (corrigé)** : deux binaires « v3 » (39 o et 79 o) ne se parlaient plus — panique/blocage croisés, sans message ; vérifié corrigé par le bump à 4.
+5. **D3** : en mode lot le compteur de jeton avance de `t` par appel (2 par couche) et démarre à 0 → trace illisible par un autre `--lot`.
+6. **D4** : `pair_factice.py:70` ignore la taille du corps lot → client bloqué (exit 124), donc le mode lot n'a jamais eu de contrôle indépendant.
+7. **D5** : `--flux-blocs`/`--flux-liste` silencieusement ignorés dès `--lot > 1` (transport identique, 28751 o/lot).
+8. **Vérifié correct** : porte Qwen = 19,3885 ; lot exact (0,00e0) y compris lot partiel ; offsets, `n`, raccourci `t == 1`, rétrocompat v1 (1958,7210), `--plan` 32768.
+9. **Non vérifié** : porte gpt-oss 15,1757 (bornes 8 fils / 5 min), Colab, GPU.
+10. Méthode : 3 binaires reconstruits dans `/tmp` (dépôt inchangé), toutes les preuves citent leur révision — le dépôt ayant été modifié et recompilé pendant l'audit.
+

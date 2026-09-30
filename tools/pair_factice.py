@@ -61,7 +61,13 @@ def servir(sock, dimension):
         # élément, les blocs font 2 octets par actif plus les échelles et les
         # échappements. Un pair factice qui suppose une seule disposition mentirait
         # exactement là où on l'interroge.
-        if mode == 2:
+        if mode == 3:
+            # LOT : `n` est le nombre d'ÉTATS, le corps fait n × dimension × 4.
+            # Lire n × 4 (comme avant) laissait le client BLOQUÉ dans read_exact
+            # et tuait le pair — c'est pour cela que le mode lot n'avait jamais
+            # été confronté à un pair indépendant (relecture adversariale, D4).
+            corps = lire_tout(sock, n * dimension * 4)
+        elif mode == 2:
             nb = struct.unpack("<I", lire_tout(sock, 4))[0]
             echelles = lire_tout(sock, nb * 4)
             longueur = struct.unpack("<I", lire_tout(sock, 4))[0]
@@ -86,7 +92,12 @@ def servir(sock, dimension):
         reponse = struct.pack("<IBBIIIIfffIBIIIIIIIIII", MAGIE, version, mode, debut, fin, pos,
                               n if mode == 3 else n_paires, 0.0, levels, thresh, topk, renorm,
                               0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
-        if mode == 2:
+        if mode == 3:
+            # réponse : le MÊME nombre d'états, valeurs nulles (le pair factice
+            # ne calcule rien) — annoncer n états et n'envoyer qu'un vecteur
+            # faisait lire au client un corps tronqué.
+            reponse += b"\0" * (n * dimension * 4)
+        elif mode == 2:
             # réponse : aucune valeur active (n=0), une échelle par bloc
             nb = (dimension + 31) // 32
             reponse += struct.pack("<I", nb) + struct.pack("<f", 0.0) * nb + struct.pack("<I", 0)
