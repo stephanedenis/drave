@@ -13,7 +13,7 @@
 
 ## 1. En une phrase
 
-`drave-core` est un moteur d'inférence Rust (~12 171 lignes, `std` seul) qui
+`drave-core` est un moteur d'inférence Rust (~13 168 lignes, `std` seul) qui
 charge les GGUF **en place** (aucune copie, aucune requantification), exécute les
 projections soit en listes d'événements, soit en produit scalaire dense, gère les
 MoE, tient une conversation, et déporte au GPU ce qui y gagne. Il fait tourner du

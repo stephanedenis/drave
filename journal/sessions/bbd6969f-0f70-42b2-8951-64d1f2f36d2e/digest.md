@@ -34989,3 +34989,31 @@ le noyau 3 a refusé la configuration
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\ndef patch(p, paires):\n    s=open(p).read()\n    for v,n,nom in paires:\n        assert s.count(v)==1, f\"{p}::{nom}::{s.count(v)}\"\n        s=s.replace(v,n,1)\n    open(p,'w').write(s); print(f\"{p} ok\")\n\npatch … [7191 caractères tronqués]`
+
+  ```
+reports/rapport-gpu-topk-selection.md ok
+docs/plan-gpu-topk.md ok
+README.md ok
+674a334 Noyau 3 : softmax sur les k retenus + Σ w·V, écart 1,0 à 4,8e-7
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && nohup bash -c '\ncd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\n{\necho \"=== portes finales (binaire de 19h10) ===\"\necho -n \"Qwen2.5-0.5B Q8_0 ctx 256 (attendu 19,3885) : \"\n./drave-core/target/release/drave models/Qwen2.5- … [795 caractères tronqués]`
+
+  ```
+portes relancées
+  3932 drave-core/src/model.rs
+   507 drave-core/src/tokenizer.rs
+ 13168 total
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\ndef patch(p, paires):\n    s=open(p).read()\n    for v,n,nom in paires:\n        assert s.count(v)==1, f\"{p}::{nom}::{s.count(v)}\"\n        s=s.replace(v,n,1)\n    open(p,'w').write(s); print(f\"{p} ok\")\n\npatch … [834 caractères tronqués]`
+
+  ```
+README.md ok
+REPRISE.md ok
+README.md:299:le moteur tenait en 386 lignes à ses débuts ; il en fait 13 168 aujourd'hui). Détail complet :
+README.md:373:BLAS, sans aucune dépendance : **13 168 lignes de Rust, `std` seul** au 30/09 au soir (2 319 au premier prototype). Détail :
+REPRISE.md:16:`drave-core` est un moteur d'inférence Rust (~13 168 lignes, `std` seul) qui
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rn \"12 947\\|12 995\\|12 870\" --include=\"*.md\" . | grep -v journal/ | head -5; git add -A && git commit -q -m \"Compteur de lignes Rust unifié : 13 168 (un seul chiffre, mesuré, dans README ×2 et REPRISE)\" && git log --one … [57 caractères tronqués]`
