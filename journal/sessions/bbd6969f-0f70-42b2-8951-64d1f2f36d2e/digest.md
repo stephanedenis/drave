@@ -20784,3 +20784,55 @@ test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; fini
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat >> docs/plan-mla-vision.md <<'EOF'\n\n### Après correction : la rotation suit la source, mais l'ORDRE est encore faux\n\nLa rotation est corrigée d'après `ggml_mrope_cache_init` (paires consécutives\n`(2i, 2i+1)`, moitié « ligne  … [2136 caractères tronqués]`
+
+  ```
+081c669 vision : rotation corrigée d'après ggml — et un défaut d'ordre mis au jour
+  ```
+
+### 🤖 Assistant
+
+⏵ Tour 23 : rotation corrigée d'après ggml — et un défaut d'ordre mis au jour
+
+## Fait dans ce tour
+
+**La rotation est corrigée d'après la source** (`ggml_mrope_cache_init`) : paires **consécutives** `(2i, 2i+1)`, moitié « ligne » puis moitié « colonne » de la tête, exposant suivant l'indice de paire **global** (l'échelle continue d'un bloc à l'autre). La sortie de la tour change : 187,45 → **234,53**, donc la correction agit.
+
+**Et le témoin a mis au jour un défaut d'ordre** que les chiffres seuls auraient laissé passer : le projecteur affiche toujours `|sortie| = 131,54`, **identique** à ce qu'il donnait avant la correction. Conclusion : il consomme encore les **embeddings de patchs** et non la **sortie de la tour**. Le pipeline réel est `patchs → tour → v.post_ln → projecteur`.
+
+C'est un chiffre *qui ne bouge pas* alors que tout ce qui l'alimente a changé — exactement le genre de signal que ce projet traite comme une alerte, et pas comme une bonne nouvelle. Le point est localisé à la ligne près dans `run_banc_vision` (`let source = tour.clone().unwrap_or_else(|| out.clone());` lu alors que `tour` est encore `None`) : déplacer le bloc projecteur après la tour est mécanique.
+
+Je n'ai pas voulu enchaîner ce déplacement avec le peu de contexte restant : la modification est simple mais touche l'ordre d'un pipeline, et la faire à moitié laisserait le banc dans un état pire que celui-ci.
+
+## État
+
+| # | chantier | état |
+|---|---|---|
+| 1-4, 6 | aiguille · GPU (5 sous-items) · mémoire KV · rotation 16 k · hygiène | ✅ mesurés |
+| 5 | MLA ✅ (5,2e-7) · vision : chaîne complète, rotation **conforme à la source**, fenêtre locale d'après la source ; reste à ordonner projecteur après tour, et à vérifier les conventions | en cours |
+
+`cargo test` 6/6, arbre propre, portes Qwen **19,3885** / gpt-oss **15,1757** intactes.
+
+L'objectif reste **actif** : le prochain tour commence par un déplacement de bloc (mécanique, décrit dans le document), puis cherche à valider — ou à défaut documente — les deux conventions qui restent non vérifiées.
+
+
+## Tour 33
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Réaliser les 6 nouveaux chantiers du projet qtrinet-core, dans l'ordre : (1) relancer le test de l'aiguille sur contexte long (remplissage varié en vrai texte, moins de sondes, réponses plus longues) sur un modèle capable, grâce au préremplissage par lots et au KV déporté ; (2) chemin GPU : dépaquetage vectorisé du noyau d'attention (13,2 ms/couche à 1 M en int4 vers ~3 ms), brancher MXFP4 dans le moteur avec une politique de résidence des experts, attention par lots sur GPU dans forward_lot, noyau de tête Q8_0 accéléré (AVX2 ou déport), et usage du second GPU ; (3) mémoire : pagination du cache KV côté CPU (25,77 Go réservés à ctx 1 M pour 512 jetons écrits) et test de l'hypothèse « clés en f16 avant quantification » pour l'écart int8 avec llama.cpp à 8 192 (+3,0 % contre +0,8 %) ; (4) rotation au-delà de 5 120 jetons (passe à 16 k) ; (5) structurel : MLA (aucun modèle local — construire un modèle MLA synthétique et valider contre une référence indépendante) et vision (poids Qwen2.5-VL et projecteur mmproj présents) ; (6) hygiène : réécrire la section « Ce qu'il faut faire ensuite » de REPRISE.md et y consigner les pièges QT_GPU/QT_GPU_TETE/QT_GPU_KV. Chaque chantier doit être implémenté, mesuré (portes de non-régression Qwen 19,3885 et gpt-oss 15,1757 sans QT_GPU), documenté dans le dépôt et commité."
+Round: 24/30
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && python3 - <<'PY'\np='src/main.rs'; s=open(p).read()\ndeb = s.index(\"    // ---- Projecteur : fusion 2 × 2 des patchs\")\nfin_marqueur = \"        proj = Some((Vec::new(), y));\\n    }\\n\"\nfin = s.index(fin_marqueur) + … [843 caractères tronqués]`
+
+  ```
+bloc projecteur déplacé après la tour ; occurrences de '// ---- Projecteur' : 1
+    Finished `release` profile [optimized] target(s) in 0.01s
+projecteur : mm.0 5120→5120 · mm.2 5120→3584
+projecteur : 64 groupes × 3584 valeurs, |sortie| = 515.8354, 4 premières [-2.2082, 1.5388, 0.0004, 3.1743]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/vision_ref.py /tmp/vision_patch.bin 2>&1 | tail -3 && cat >> docs/plan-mla-vision.md <<'EOF'\n\n### L'ordre est corrigé, et la vérification est le CHANGEMENT du chiffre\n\nLe bloc projecteur a été déplacé après la tour  … [2151 caractères tronqués]`

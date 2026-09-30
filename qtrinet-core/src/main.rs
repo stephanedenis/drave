@@ -872,66 +872,6 @@ fn run_banc_vision(sortie: &str) {
             }
         }
     }
-    // ---- Projecteur : fusion 2 × 2 des patchs puis mm.0 → GELU → mm.2.
-    // La fusion est en ordre RASTER (les quatre patchs d'un groupe de 2 × 2
-    // concaténés ligne par ligne) : c'est la convention de llama.cpp, et c'est
-    // la seule hypothèse non vérifiable ici — elle ne se confirmerait qu'en
-    // comparant la SORTIE complète à une implémentation de référence.
-    if let (Some(t0), Some(t2)) = (g.tensor("mm.0.weight"), g.tensor("mm.2.weight")) {
-        let (n0, n1) = (t0.dims[0] as usize, t0.dims[1] as usize);
-        let (n2, n3) = (t2.dims[0] as usize, t2.dims[1] as usize);
-        let w0 = g.dequant("mm.0.weight");
-        let b0 = g.dequant("mm.0.bias");
-        let w2 = g.dequant("mm.2.weight");
-        let b2 = g.dequant("mm.2.bias");
-        println!("projecteur : mm.0 {n1}→{n0} · mm.2 {n3}→{n2}");
-        // GELU exact (erf), comme dans la tour de vision.
-        let gelu = |x: f32| 0.5 * x * (1.0 + erf(x / std::f32::consts::SQRT_2));
-        // Un groupe de fusion 2 × 2 = quatre patchs concaténés (4 × 1280 = 5120),
-        // puis mm.0 → GELU → mm.2 → 3584 valeurs PAR GROUPE. Sur une image de
-        // 224 px il y a 64 groupes : la version qui ne traitait qu'un groupe
-        // (celle du banc 28 × 28) ne veut plus rien dire.
-        let n_cote_p = (n_patch as f64).sqrt().round() as usize;
-        let n_groupe = (n_cote_p / 2) * (n_cote_p / 2);
-        let mut y = vec![0f32; n_groupe * n2];
-        let source = tour.clone().unwrap_or_else(|| out.clone());
-        let mut fusion = vec![0f32; n1];
-        for g in 0..n_groupe {
-            let (gy, gx) = (2 * (g / (n_cote_p / 2)), 2 * (g % (n_cote_p / 2)));
-            for dy in 0..2 {
-                for dx in 0..2 {
-                    let p = (gy + dy) * n_cote_p + (gx + dx);
-                    fusion[(dy * 2 + dx) * cout..(dy * 2 + dx + 1) * cout]
-                        .copy_from_slice(&source[p * cout..(p + 1) * cout]);
-                }
-            }
-            let mut h = vec![0f32; n0];
-            for o in 0..n0 {
-                let mut acc = b0[o];
-                for i in 0..n1 { acc += w0[o * n1 + i] * fusion[i]; }
-                h[o] = gelu(acc);
-            }
-            for o in 0..n2 {
-                let mut acc = b2[o];
-                for i in 0..n3 { acc += w2[o * n3 + i] * h[i]; }
-                y[g * n2 + o] = acc;
-            }
-        }
-        {
-            let mut f2 = std::io::BufWriter::new(
-                std::fs::File::create(format!("{sortie}.projecteur")).expect("création"));
-            for v in [(n0 as i32), (n1 as i32), (n2 as i32), (n3 as i32)] {
-                f2.write_all(&v.to_le_bytes()).unwrap();
-            }
-            for v in w0.iter().chain(b0.iter()).chain(w2.iter()).chain(b2.iter()) {
-                f2.write_all(&v.to_le_bytes()).unwrap();
-            }
-        }
-        println!("projecteur : {n_groupe} groupes × {n2} valeurs, |sortie| = {:.4}, 4 premières {:?}",
-                 y.iter().map(|v| v * v).sum::<f32>().sqrt(),
-                 &y[..4].iter().map(|v| (v * 1e4).round() / 1e4).collect::<Vec<_>>());
-        proj = Some((Vec::new(), y));
-    }
 
     let mut f = std::io::BufWriter::new(std::fs::File::create(sortie).expect("création"));
     f.write_all(&(n_patch as i32).to_le_bytes()).unwrap();
@@ -1111,6 +1051,67 @@ fn run_banc_vision(sortie: &str) {
                  x.iter().map(|v| v * v).sum::<f32>().sqrt(),
                  &x[..4].iter().map(|v| (v * 1e4).round() / 1e4).collect::<Vec<_>>());
         let _ = poids_bloc;
+    }
+
+    // ---- Projecteur : fusion 2 × 2 des patchs puis mm.0 → GELU → mm.2.
+    // La fusion est en ordre RASTER (les quatre patchs d'un groupe de 2 × 2
+    // concaténés ligne par ligne) : c'est la convention de llama.cpp, et c'est
+    // la seule hypothèse non vérifiable ici — elle ne se confirmerait qu'en
+    // comparant la SORTIE complète à une implémentation de référence.
+    if let (Some(t0), Some(t2)) = (g.tensor("mm.0.weight"), g.tensor("mm.2.weight")) {
+        let (n0, n1) = (t0.dims[0] as usize, t0.dims[1] as usize);
+        let (n2, n3) = (t2.dims[0] as usize, t2.dims[1] as usize);
+        let w0 = g.dequant("mm.0.weight");
+        let b0 = g.dequant("mm.0.bias");
+        let w2 = g.dequant("mm.2.weight");
+        let b2 = g.dequant("mm.2.bias");
+        println!("projecteur : mm.0 {n1}→{n0} · mm.2 {n3}→{n2}");
+        // GELU exact (erf), comme dans la tour de vision.
+        let gelu = |x: f32| 0.5 * x * (1.0 + erf(x / std::f32::consts::SQRT_2));
+        // Un groupe de fusion 2 × 2 = quatre patchs concaténés (4 × 1280 = 5120),
+        // puis mm.0 → GELU → mm.2 → 3584 valeurs PAR GROUPE. Sur une image de
+        // 224 px il y a 64 groupes : la version qui ne traitait qu'un groupe
+        // (celle du banc 28 × 28) ne veut plus rien dire.
+        let n_cote_p = (n_patch as f64).sqrt().round() as usize;
+        let n_groupe = (n_cote_p / 2) * (n_cote_p / 2);
+        let mut y = vec![0f32; n_groupe * n2];
+        let source = tour.clone().unwrap_or_else(|| out.clone());
+        let mut fusion = vec![0f32; n1];
+        for g in 0..n_groupe {
+            let (gy, gx) = (2 * (g / (n_cote_p / 2)), 2 * (g % (n_cote_p / 2)));
+            for dy in 0..2 {
+                for dx in 0..2 {
+                    let p = (gy + dy) * n_cote_p + (gx + dx);
+                    fusion[(dy * 2 + dx) * cout..(dy * 2 + dx + 1) * cout]
+                        .copy_from_slice(&source[p * cout..(p + 1) * cout]);
+                }
+            }
+            let mut h = vec![0f32; n0];
+            for o in 0..n0 {
+                let mut acc = b0[o];
+                for i in 0..n1 { acc += w0[o * n1 + i] * fusion[i]; }
+                h[o] = gelu(acc);
+            }
+            for o in 0..n2 {
+                let mut acc = b2[o];
+                for i in 0..n3 { acc += w2[o * n3 + i] * h[i]; }
+                y[g * n2 + o] = acc;
+            }
+        }
+        {
+            let mut f2 = std::io::BufWriter::new(
+                std::fs::File::create(format!("{sortie}.projecteur")).expect("création"));
+            for v in [(n0 as i32), (n1 as i32), (n2 as i32), (n3 as i32)] {
+                f2.write_all(&v.to_le_bytes()).unwrap();
+            }
+            for v in w0.iter().chain(b0.iter()).chain(w2.iter()).chain(b2.iter()) {
+                f2.write_all(&v.to_le_bytes()).unwrap();
+            }
+        }
+        println!("projecteur : {n_groupe} groupes × {n2} valeurs, |sortie| = {:.4}, 4 premières {:?}",
+                 y.iter().map(|v| v * v).sum::<f32>().sqrt(),
+                 &y[..4].iter().map(|v| (v * 1e4).round() / 1e4).collect::<Vec<_>>());
+        proj = Some((Vec::new(), y));
     }
 
     let norme: f32 = out.iter().map(|v| v * v).sum::<f32>().sqrt();

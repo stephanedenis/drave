@@ -623,3 +623,21 @@ Le point est localisé : dans `run_banc_vision`, le bloc projecteur lit
 `tour` est encore `None` à cet endroit — l'affectation `tour = Some(x.clone())`
 est plus bas, à la fin du bloc de la tour. Déplacer le bloc projecteur APRÈS la
 tour est le seul changement à faire, et il est mécanique.
+
+### L'ordre est corrigé, et la vérification est le CHANGEMENT du chiffre
+
+Le bloc projecteur a été déplacé après la tour : il consomme maintenant la sortie
+du ViT, et non les embeddings de patchs. La vérification n'est pas un nouveau
+chiffre « plausible » mais le fait que **le chiffre ait changé** :
+`|sortie| = 131,54` (embeddings de patchs) → **`515,84`** (sortie de la tour),
+pour 64 jetons × 3 584 dimensions.
+
+Contrôle de plausibilité, puisqu'il n'y a pas de référence : la moyenne
+quadratique par élément vaut `515,84 / √(64 × 3584) = 1,08`, du même ordre que
+les lignes de `token_embd` du modèle de texte — un pipeline qui produirait des
+embeddings d'échelle absurde (1e-3 ou 1e3) se verrait ici.
+
+État du chemin image : **patchs → 32 couches (rotation 2-D conforme à ggml,
+fenêtre locale d'après clip.cpp) → v.post_ln → projecteur (64 groupes × 3584) →
+`Model::emb_imposee`**. Ce qui reste non vérifié est inchangé et nommé :
+l'échelle interne de la rotation, la fenêtre locale, et le bout en bout.

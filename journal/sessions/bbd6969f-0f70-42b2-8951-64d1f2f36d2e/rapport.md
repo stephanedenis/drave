@@ -6,13 +6,13 @@
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
 | Durée | 30.9 h |
-| Tours | 32 |
-| Messages | 1307 |
-| Appels d'outils | 1251 |
+| Tours | 33 |
+| Messages | 1311 |
+| Appels d'outils | 1253 |
 | Fichiers touchés | 39 |
-| Commandes | 982 |
+| Commandes | 984 |
 | Sous-agents | 1 |
-| Commits | 65 |
+| Commits | 66 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -89,6 +89,8 @@
 **Tour 31** — <goal_round> Objective: "Réaliser les 6 nouveaux chantiers du projet qtrinet-core, dans l'ordre : (1) relancer le test de l'aiguille sur contexte long (remplissage varié en vrai texte, moins de sondes, réponses plus longues) sur un modèle capable, grâce au préremplissage par lots et au KV déporté ; (2) chemin GPU : dépaquetage vectorisé du noyau d'attention (13,2 ms/couche à 1 M en int4 vers ~3 ms … [1492 caractères tronqués]
 
 **Tour 32** — <goal_round> Objective: "Réaliser les 6 nouveaux chantiers du projet qtrinet-core, dans l'ordre : (1) relancer le test de l'aiguille sur contexte long (remplissage varié en vrai texte, moins de sondes, réponses plus longues) sur un modèle capable, grâce au préremplissage par lots et au KV déporté ; (2) chemin GPU : dépaquetage vectorisé du noyau d'attention (13,2 ms/couche à 1 M en int4 vers ~3 ms … [1492 caractères tronqués]
+
+**Tour 33** — <goal_round> Objective: "Réaliser les 6 nouveaux chantiers du projet qtrinet-core, dans l'ordre : (1) relancer le test de l'aiguille sur contexte long (remplissage varié en vrai texte, moins de sondes, réponses plus longues) sur un modèle capable, grâce au préremplissage par lots et au KV déporté ; (2) chemin GPU : dépaquetage vectorisé du noyau d'attention (13,2 ms/couche à 1 M en int4 vers ~3 ms … [1492 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -1475,7 +1477,35 @@ L'objectif reste **actif**, et il se réduit maintenant à quelque chose de pré
 
 **Synthèse produite :**
 
-⏵ Tour 23 : je corrige la rotation (paires consécutives, échelle continue)
+⏵ Tour 23 : rotation corrigée d'après ggml — et un défaut d'ordre mis au jour
+
+\## Fait dans ce tour
+
+**La rotation est corrigée d'après la source** (`ggml_mrope_cache_init`) : paires **consécutives** `(2i, 2i+1)`, moitié « ligne » puis moitié « colonne » de la tête, exposant suivant l'indice de paire **global** (l'échelle continue d'un bloc à l'autre). La sortie de la tour change : 187,45 → **234,53**, donc la correction agit.
+
+**Et le témoin a mis au jour un défaut d'ordre** que les chiffres seuls auraient laissé passer : le projecteur affiche toujours `|sortie| = 131,54`, **identique** à ce qu'il donnait avant la correction. Conclusion : il consomme encore les **embeddings de patchs** et non la **sortie de la tour**. Le pipeline réel est `patchs → tour → v.post_ln → projecteur`.
+
+C'est un chiffre *qui ne bouge pas* alors que tout ce qui l'alimente a changé — exactement le genre de signal que ce projet traite comme une alerte, et pas comme une bonne nouvelle. Le point est localisé à la ligne près dans `run_banc_vision` (`let source = tour.clone().unwrap_or_else(|| out.clone());` lu alors que `tour` est encore `None`) : déplacer le bloc projecteur après la tour est mécanique.
+
+Je n'ai pas voulu enchaîner ce déplacement avec le peu de contexte restant : la modification est simple mais touche l'ordre d'un pipeline, et la faire à moitié laisserait le banc dans un état pire que celui-ci.
+
+\## État
+
+| # | chantier | état |
+|---|---|---|
+| 1-4, 6 | aiguille · GPU (5 sous-items) · mémoire KV · rotation 16 k · hygiène | ✅ mesurés |
+| 5 | MLA ✅ (5,2e-7) · vision : chaîne complète, rotation **conforme à la source**, fenêtre locale d'après la source ; reste à ordonner projecteur après tour, et à vérifier les conventions | en cours |
+
+`cargo test` 6/6, arbre propre, portes Qwen **19,3885** / gpt-oss **15,1757** intactes.
+
+L'objectif reste **actif** : le prochain tour commence par un déplacement de bloc (mécanique, décrit dans le document), puis cherche à valider — ou à défaut documente — les deux conventions qui restent non vérifiées.
+
+### Tour 33 — <goal_round> Objective: "Réaliser les 6 nouveaux chantiers du projet qtrinet-core, dans l'ordre : (1) relancer le test d … [1772 caractères tronqués]
+
+*2 appels d'outils.* Actions notables :
+
+- bash — Move projector after tower and verify
+- bash — Verify reference tolerance and commit fix
 
 ## 3. Travail accompli
 
@@ -1569,7 +1599,7 @@ L'objectif reste **actif**, et il se réduit maintenant à quelque chose de pré
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 942 autres
+- … et 944 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1782,4 +1812,5 @@ L'objectif reste **actif**, et il se réduit maintenant à quelque chose de pré
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p='tools/vision_ref.py'; s=open(p).read() s = s.replace("""    ecart = float(np.abs(out -
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat >> docs/plan-mla-vision.md <<'EOF'  ### Le détail de la rotation, lu dans ggml (et mon implémentation 
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat >> docs/plan-mla-vision.md <<'EOF'  ### Après correction : la rotation suit la source, mais l'ORDRE es
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/vision_ref.py /tmp/vision_patch.bin 2>&1 | tail -3 && cat >> docs/plan-mla-vision.md <<'EOF'
 
