@@ -247,7 +247,9 @@ Tout est mesuré, tout est commité. Détail complet dans `docs/roadmap.md` (pha
 0 à 3) et les rapports cités.
 
 **Le découpage en deux nœuds est fidèle** (`reports/rapport-phase3-reparti.md`) :
-écart local/réparti **0,00e0** — 144,8289 des deux côtés, 40 puis 199 flux. Il a
+écart local/réparti **0,00e0** — 144,8289 des deux côtés à 40 jetons, et
+**9,5146 des deux côtés à 1 024 jetons** (1 024 flux, texte réel), le banc
+réparti prenant le temps du calcul local (19,7 contre 19,4 ms par jeton). Il a
 fallu deux corrections dans `Model::forward`, et la première ne suffisait pas :
 
 1. la boucle partait de `0` au lieu de `couche_debut..couche_fin` : le pilote

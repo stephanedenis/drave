@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 44.7 h |
+| Durée | 44.8 h |
 | Tours | 44 |
-| Messages | 1565 |
-| Appels d'outils | 1480 |
+| Messages | 1569 |
+| Appels d'outils | 1484 |
 | Fichiers touchés | 44 |
-| Commandes | 1179 |
+| Commandes | 1183 |
 | Sous-agents | 1 |
-| Commits | 96 |
+| Commits | 97 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -1995,7 +1995,7 @@ Je vérifie l'heure à chaque itération et j'arrête à 12:06, en laissant un p
 
 ### Tour 44 — pendant que les charges locales s'executent, peux-tu avancer des chantiers légers sur les ressources loçcale ou d'analys … [7 caractères tronqués]
 
-*134 appels d'outils.* Actions notables :
+*138 appels d'outils.* Actions notables :
 
 - bash — Write and run the pure flux analysis tool
 - bash — Document the flux analysis and commit
@@ -2011,11 +2011,11 @@ Je vérifie l'heure à chaque itération et j'arrête à 12:06, en laissant un p
 - bash — Inspect state after timeout
 - bash — Rerun pre-fix distributed test in background
 - bash — Inspect all final-norm condition sites
-- … et 102 autres
+- … et 106 autres
 
 **Synthèse produite :**
 
-Le pair factice est cohérent dans les trois modes (et le moteur n'a pas de bug). Dernière validation : le découpage reste-t-il **exact** sur 1 024 jetons ?
+**Écart 0,00e0 sur 1 024 jetons** (perplexité 9,5146 des deux côtés, 1 024 flux). J'inscris ce chiffre et je clôture.
 
 ## 3. Travail accompli
 
@@ -2114,7 +2114,7 @@ Le pair factice est cohérent dans les trois modes (et le moteur n'a pas de bug)
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 1139 autres
+- … et 1143 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2242,7 +2242,7 @@ Le pair factice est cohérent dans les trois modes (et le moteur n'a pas de bug)
 
 ## 5. Erreurs rencontrées
 
-76 sorties en erreur ou divergentes. Les premières :
+78 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : a8f2635f8 docs: record which models this box is good at, and why src/llama-hparams.cpp:8:void llama_hparams::set_swa_pattern(uint32_t n_pattern, bool dense_first) { src/llama-hparams.h:308:    void se
 - **T1** : 511 tokens notés — perplexité cumulée 247.031  (4.9 tok/s) === perplexité 247.0308 sur 511 tokens (0 événements, 104.5 s) ===  ### B3 harmony assistant 511 --- ref --- 0.0 0.0 0:00 ls: cannot access '
@@ -2358,4 +2358,5 @@ Le pair factice est cohérent dans les trois modes (et le moteur n'a pas de bug)
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p='reports/rapport-transport-liste.md'; s=open(p).read() v = """Donc la revendication hon
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p='docs/roadmap.md'; s=open(p).read() v = "| 2026-09-30 | diff KV f32 contre KV int8 (per
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add tools/pair_factice.py && git commit -q -F - <<'EOF' && echo "--- validation à 1024 jetons ---" && 
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p='reports/rapport-phase3-reparti.md'; s=open(p).read() v = """Égalité exacte, et pas seu
 

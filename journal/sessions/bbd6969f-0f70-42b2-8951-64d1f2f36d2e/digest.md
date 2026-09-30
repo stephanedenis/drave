@@ -24892,3 +24892,56 @@ pair factice : plusieurs clients
 Le pair factice est cohérent dans les trois modes (et le moteur n'a pas de bug). Dernière validation : le découpage reste-t-il **exact** sur 1 024 jetons ?
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add tools/pair_factice.py && git commit -q -F - <<'EOF' && echo \"--- validation à 1024 jetons ---\" && IDS=$(head -1024 /tmp/ids_qwen_long.txt | tr '\\n' ',' | sed 's/,$//'); TAG=long1024 PORT=45880 CTX=1024 IDS=\"$IDS\" EXTRA=\ … [690 caractères tronqués]`
+
+  ```
+--- validation à 1024 jetons ---
+
+thread 'main' (141982) panicked at src/model.rs:2707:9:
+contexte dépassé (256 ≥ 256)
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+timeout: the monitored command dumped core
+11:31:18
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='/tmp/test_reparti.sh'; s=open(p).read()\ns = s.replace('--limit $LIM --ctx 256 ${IDS:+--ids $IDS}', '--limit $LIM --ctx ${CTX:-256} ${IDS:+--ids $IDS}')\nopen(p,'w').write(s); print([l for l in s.splitlines() if  … [328 caractères tronqués]`
+
+  ```
+['timeout 1800 $BIN $MOD --ppl-reparti 127.0.0.1:$PORT --couches-locales $COUCHES --limit $LIM --ctx ${CTX:-256} ${IDS:+--ids $IDS} ${EXTRA:-} 2>&1 | tail -8']
+f4bce59 tools/pair_factice.py : les trois modes, et plusieurs clients
+
+thread 'main' (146344) panicked at src/model.rs:2707:9:
+contexte dépassé (1024 ≥ 1024)
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+timeout: the monitored command dumped core
+11:32:15
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && head -3 /tmp/ids_qwen_long.txt | cat -A | head -3; echo \"---\"; head -1024 /tmp/ids_qwen_long.txt | wc -w; head -1024 /tmp/ids_qwen_long.txt | tr '\\n' ',' | awk -F, '{print NF}'", "description": "Inspect long ids file"}`
+
+  ```
+,1380,566,572,21009,553,2205,42588,439,323,12357,39260,5139,72,7767,659,15687,27420,3118,5561,304,328,713,10386,369,1429,315,279,1790,4236,1635,659,3216,279,41674,315,429,1042,566,572,304,5896,12264,1154,323,3208,44219,59106,1492,311,5257,53527,3020,659,1260,572,50412,553,24213,36130,1154,264,4238,323,4741,36344,879,572,20822,19044,4586,518,56707,1054,659,17715,806,5896,5322,1154,419,572,825,315,279,98852,323,1429,25650,18346,315,806,2272,659,8999,315,15687,364,82,44219,504,419,4168,525,25650,2170,21439,315,806,2272,518,330,429,2397,75879,330,659,758,220,22,21,17,1154,566,2115,279,3283,311,12449,264,52748,1154,714,566,5927,304,7324,220,22,21,19,979,566,572,20822,458,36613,311,24213,1154,879,572,6398,304,20686,2348,279,71974,20448,659,14731,284,284,284,7996,1635,284,284,284,14731,18360,2253,524,1154,279,5537,315,806,7194,2007,1154,572,25335,553,3033,8437,304,279,12406,315,220,22,21,17,1154,323,304,279,10464,315,220,22,21,20,15687,29253,323,806,2997,75744,1495,279,24474,83,2986,1154,13812,448,279,14602,315,3259,862,1616,1052,659,2379,30696,13970,1154,5644,705,553,806,5862,569,12,31,2820,320,553,419,882,566,572,15691,504,7852,6414,491,1154,46742,2090,323,4586,2310,4231,304,5256,311,80
+… [48800 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+La longue liste est sur **une seule ligne** — d'où mes 17 434 jetons. Je refais la découpe correctement.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date +\"%H:%M:%S\"; IDS=$(head -1 /tmp/ids_qwen_long.txt | tr ',' '\\n' | head -1024 | tr '\\n' ',' | sed 's/,$//'); echo \"jetons : $(echo $IDS | tr ',' '\\n' | wc -l)\"; TAG=long1024 PORT=45882 CTX=1024 IDS=\"$IDS\" EXTRA=\"\" time … [143 caractères tronqués]`
+
+  ```
+11:32:28
+jetons : 1024
+  référence locale  : perplexité 9.5146  (48.6 s)
+  deux nœuds        : perplexité 9.5146  (50.1 s)
+  écart             : 0.00e0
+  transport         : dense f32 · 3623 octets par flux (aller) · 3623 au retour · 100.0 % d'activité (896 neurones par flux) · 1024 flux
+  temps             : 19.4 ms par jeton en local · 19.7 ms à attendre le pair (son calcul + l'aller-retour) · soit 1.01× le calcul local seul
+11:34:09
+  ```
+
+### 🤖 Assistant
+
+**Écart 0,00e0 sur 1 024 jetons** (perplexité 9,5146 des deux côtés, 1 024 flux). J'inscris ce chiffre et je clôture.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/rapport-phase3-reparti.md'; s=open(p).read()\nv = \"\"\"Égalité exacte, et pas seulement petite : le transport est du f32, donc rien\nn'est arrondi en chemin — le découpage ne devrait pas changer un bit,  … [1976 caractères tronqués]`
