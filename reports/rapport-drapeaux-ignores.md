@@ -1,4 +1,15 @@
 # Drapeaux et variables « analysés mais jamais appliqués » — audit systématique
+> **Addendum (mêmes jour, après l'audit).** Les défauts n°1 (top-k non transportés
+> ni appliqués dans les modes flux), n°2 (`--keep` en `--ppl`), n°3 (`--ffn-gain`
+> en `--infer`) et la moitié basse du tableau (`--threads` en FS/PR/BM, `--hebb-q`,
+> `--hebb-out`, `--plan` sans `--ctx`, précédence de fenêtre, pas de 2 du mode par
+> défaut) ont été **corrigés** dans les commits `7522289` et le suivant. Le
+> protocole de flux passe en **version 4** : le contrat d'activation transporte
+> désormais aussi les sept top-k par projection, `--attn-topk`, `--qk-topk` et
+> `--moe-topk`. Les sections ci-dessous décrivent l'état AVANT correction — elles
+> restent la référence de ce qui a été trouvé, et la liste de ce qui reste
+> (`--banc-vision` sans `Options`, `--bits` du noyau GPU, etc.).
+
 
 **Révision auditée** : `drave-core/src/main.rs` sha256 `1726f9ac3665c3ce…` (2 999 lignes),
 `drave-core/src/model.rs` sha256 `1d7eacc506db6cab…` (3 675 lignes), 30/09 11:54.

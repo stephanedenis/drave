@@ -1239,6 +1239,13 @@ fn appliquer_quantification(mdl: &mut model::Model, opt: &Options) {
     mdl.act_thresh = opt.act_thresh;
     mdl.act_topk = opt.act_topk;
     mdl.act_renorm = opt.act_renorm;
+    // Les top-k étaient PUREMENT ignorés dans les modes flux (audit
+    // `reports/rapport-drapeaux-ignores.md`, défaut n°1) : ils s'appliquent ici,
+    // et ils voyagent dans l'en-tête pour que les deux nœuds fassent pareil.
+    mdl.act_topk_proj = opt.topk_proj;
+    mdl.attn_topk = opt.attn_topk;
+    mdl.qk_topk = opt.qk_topk;
+    mdl.moe_topk = opt.moe_topk;
 }
 
 /// ---- Phase 3 : le flux passe d'un nœud à l'autre ----------------------------
@@ -1250,6 +1257,11 @@ const MAGIE_FLUX: u32 = 0x4452_5631;   // "DRV1"
 /// Version du protocole de flux. Elle est dans CHAQUE en-tête : un pair d'une
 /// autre version est refusé avec un message qui dit laquelle il parle, plutôt
 /// que de laisser lire des octets qui ne veulent pas dire la même chose.
+/// Version 4 : le bloc de réglages transporte AUSSI les top-k (par projection,
+/// attention, q·k, MoE). En version 3, deux nœuds lancés avec des `--topk-*`
+/// différents calculaient deux choses différentes en silence — le même défaut que
+/// les niveaux et le seuil, dont le correctif était resté incomplet.
+///
 /// Version 3 : ajoute le mode LOT. Le passage à 3 n'est pas cosmétique — un pair
 /// en version 2 lirait `n × 4` octets d'un corps qui en fait `n × hidden × 4`,
 /// se désynchroniserait, puis dirait « mode inconnu » : un refus exact mais tardif
@@ -1280,7 +1292,10 @@ const MODE_LOT: u8 = 3;
 /// avec des `--act-thresh` différents ne calculent pas la même chose, et la
 /// divergence serait silencieuse. Mesuré : 0,69 d'écart de perplexité avec un
 /// seuil 0,05 d'un côté et 0,00 de l'autre, sur le même modèle.
-const TAILLE_TETE: usize = 4 + 1 + 1 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 1;
+// magie · version · mode · plage · position · n · échelle · niveaux · seuil ·
+// top-k · renorm · attn_topk · qk_topk · moe_topk · topk_proj[7]
+const TAILLE_TETE: usize = 4 + 1 + 1 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 1
+                            + 4 + 4 + 4 + 7 * 4;
 
 /// Réglages d'activation d'un nœud : ils font partie du contrat d'échange.
 #[derive(Clone, Copy)]
@@ -1289,18 +1304,33 @@ struct Act {
     thresh: f32,
     topk: u32,
     renorm: bool,
+    /// Top-k par projection (q, k, v, o, gate, up, down) : « topk est une FRACTION
+    /// de la dimension » (voir `quant_scratch`), donc ces valeurs décident de ce
+    /// qui est calculé. Elles voyagent pour la même raison que le seuil.
+    topk_proj: [u32; 7],
+    attn_topk: u32,
+    qk_topk: u32,
+    moe_topk: u32,
 }
 
 impl Act {
     fn du_modele(m: &model::Model) -> Self {
-        Act { levels: m.act_levels, thresh: m.act_thresh,
-              topk: m.act_topk as u32, renorm: m.act_renorm }
+        let mut topk_proj = [0u32; 7];
+        for (i, v) in m.act_topk_proj.iter().enumerate() { topk_proj[i] = *v as u32; }
+        Act { levels: m.act_levels, thresh: m.act_thresh, topk: m.act_topk as u32,
+              renorm: m.act_renorm, topk_proj,
+              attn_topk: m.attn_topk as u32, qk_topk: m.qk_topk as u32,
+              moe_topk: m.moe_topk as u32 }
     }
     fn appliquer(&self, m: &mut model::Model) {
         m.act_levels = self.levels;
         m.act_thresh = self.thresh;
         m.act_topk = self.topk as usize;
         m.act_renorm = self.renorm;
+        for (i, v) in self.topk_proj.iter().enumerate() { m.act_topk_proj[i] = *v as usize; }
+        m.attn_topk = self.attn_topk as usize;
+        m.qk_topk = self.qk_topk as usize;
+        m.moe_topk = self.moe_topk as usize;
     }
 }
 
@@ -1375,8 +1405,9 @@ impl ChargeFlux {
 fn envoyer_flux(s: &mut std::net::TcpStream, debut: u32, fin: u32, pos: u32,
                 actifs: &[f32], mode: u8, mdl: Option<&model::Model>)
                 -> std::io::Result<(usize, usize)> {
-    let act = mdl.map(Act::du_modele).unwrap_or(Act { levels: 127.0, thresh: 0.0,
-                                                       topk: 0, renorm: false });
+    let act = mdl.map(Act::du_modele).unwrap_or(Act {
+        levels: 127.0, thresh: 0.0, topk: 0, renorm: false,
+        topk_proj: [0; 7], attn_topk: 0, qk_topk: 0, moe_topk: 0 });
     use std::io::Write;
     let (n, echelle, corps): (usize, f32, Vec<u8>) = if mode == MODE_BLOCS {
         let (idx, val, echelles) = mdl.expect("modèle requis pour quantifier un flux")
@@ -1435,6 +1466,10 @@ fn envoyer_flux(s: &mut std::net::TcpStream, debut: u32, fin: u32, pos: u32,
     tete.extend_from_slice(&act.thresh.to_le_bytes());
     tete.extend_from_slice(&act.topk.to_le_bytes());
     tete.push(act.renorm as u8);
+    for k in act.topk_proj { tete.extend_from_slice(&k.to_le_bytes()); }
+    tete.extend_from_slice(&act.attn_topk.to_le_bytes());
+    tete.extend_from_slice(&act.qk_topk.to_le_bytes());
+    tete.extend_from_slice(&act.moe_topk.to_le_bytes());
     assert_eq!(tete.len(), TAILLE_TETE,
                "en-tête de flux de {} octets pour {TAILLE_TETE}", tete.len());
     s.write_all(&tete)?;
@@ -1465,6 +1500,10 @@ fn envoyer_lot(s: &mut std::net::TcpStream, debut: u32, fin: u32, pos0: u32,
     tete.extend_from_slice(&act.thresh.to_le_bytes());
     tete.extend_from_slice(&act.topk.to_le_bytes());
     tete.push(act.renorm as u8);
+    for k in act.topk_proj { tete.extend_from_slice(&k.to_le_bytes()); }
+    tete.extend_from_slice(&act.attn_topk.to_le_bytes());
+    tete.extend_from_slice(&act.qk_topk.to_le_bytes());
+    tete.extend_from_slice(&act.moe_topk.to_le_bytes());
     // Garde-fou, parce que ce bug-là est INVISIBLE : un octet d'en-tête en trop et
     // tout le corps se décale d'un octet — des f32 valides, faux, sans erreur, et
     // la désynchronisation n'apparaît qu'au flux SUIVANT (« magie absente »). Il
@@ -1500,11 +1539,17 @@ fn recevoir_flux(s: &mut std::net::TcpStream, hidden: usize) -> std::io::Result<
     let (debut, fin, pos) = (u(6), u(10), u(14));
     let n = u(18) as usize;
     let echelle = f32::from_le_bytes([tete[22], tete[23], tete[24], tete[25]]);
+    let mut topk_proj = [0u32; 7];
+    for (i, v) in topk_proj.iter_mut().enumerate() { *v = u(39 + i * 4); }
     let act = Act {
         levels: f32::from_le_bytes([tete[26], tete[27], tete[28], tete[29]]),
         thresh: f32::from_le_bytes([tete[30], tete[31], tete[32], tete[33]]),
         topk: u(34),
         renorm: tete[38] != 0,
+        topk_proj,
+        attn_topk: u(67),
+        qk_topk: u(71),
+        moe_topk: u(75),
     };
     let charge = match mode {
         MODE_LOT => {

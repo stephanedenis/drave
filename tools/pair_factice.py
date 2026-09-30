@@ -12,8 +12,10 @@ réglages. Il répond un flux de la dimension demandée pour que le pilote conti
 import socket, struct, sys
 
 MAGIE = 0x44525631
-TETE = 39
-MODES = {0: "dense f32", 1: "listes quantifiées", 2: "blocs (i8 + écarts)"}
+TETE = 79   # en-tête v4 : magie, version, mode, plage, position, n, échelle,
+            # niveaux, seuil, top-k, renorm, 7 top-k par projection, 3 top-k globaux
+MODES = {0: "dense f32", 1: "listes quantifiées", 2: "blocs (i8 + écarts)",
+         3: "lot (t états × dimension)"}
 
 
 def lire_tout(sock, n):
@@ -81,8 +83,9 @@ def servir(sock, dimension):
         # dans un mode liste ferait lire au pilote un corps tronqué — c'est
         # exactement l'erreur que ce fichier a commise, et le moteur l'a dite.
         n_paires = dimension if mode == 0 else 0
-        reponse = struct.pack("<IBBIIIIfffIB", MAGIE, version, mode, debut, fin, pos,
-                              n_paires, 0.0, levels, thresh, topk, renorm)
+        reponse = struct.pack("<IBBIIIIfffIBIIIIIIIIII", MAGIE, version, mode, debut, fin, pos,
+                              n if mode == 3 else n_paires, 0.0, levels, thresh, topk, renorm,
+                              0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
         if mode == 2:
             # réponse : aucune valeur active (n=0), une échelle par bloc
             nb = (dimension + 31) // 32

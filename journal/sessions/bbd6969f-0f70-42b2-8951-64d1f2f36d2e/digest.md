@@ -26274,3 +26274,128 @@ cles_f32_valeurs_int4      : 12:04:50
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== porte Qwen (attendu 19,3885) ===\" && ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf --ppl /tmp/ids_qwen.txt --ctx 256 --abits 16 --threads 16 --limit 512 --dense 2>&1 | grep -E \"perplexité [0-9.]+ sur\"  … [1996 caractères tronqués]`
+
+  ```
+=== porte Qwen (attendu 19,3885) ===
+=== perplexité 19.3885 sur 510 tokens (0 événements, 21.3 s) ===
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.12s
+7522289 Plomberie : huit drapeaux qui ne faisaient rien, d'après l'audit délégué
+  ```
+
+### 🤖 Assistant
+
+⏵ Chantier suivant : le défaut n°1 de l'audit — les réglages de top-k ne voyagent pas (divergence silencieuse entre nœuds).
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"appliquer_quantification\" -A 12 drave-core/src/main.rs | head -20; echo \"=== champs du modèle ===\"; grep -n \"pub attn_topk\\|pub qk_topk\\|pub moe_topk\\|pub act_topk_proj\" drave-core/src/model.rs", "description": "Ins … [44 caractères tronqués]`
+
+  ```
+1236:fn appliquer_quantification(mdl: &mut model::Model, opt: &Options) {
+1237-    let abits = if opt.abits_impose { opt.abits } else { 8 };
+1238-    mdl.act_levels = ((1u32 << (abits - 1)) - 1) as f32;
+1239-    mdl.act_thresh = opt.act_thresh;
+1240-    mdl.act_topk = opt.act_topk;
+1241-    mdl.act_renorm = opt.act_renorm;
+1242-}
+1243-
+1244-/// ---- Phase 3 : le flux passe d'un nœud à l'autre ----------------------------
+1245-///
+1246-/// Cadriciel : `u32` magie, `u32` plage (debut, fin), `u32` position, `u32`
+1247-/// dimension, puis les activations en f32. C'est le même contenu que le format
+1248-/// de trace, réduit à ce qu'un nœud a besoin de recevoir pour continuer.
+--
+1598:    appliquer_quantification(&mut mdl, &opt);
+1599-    let hidden = mdl.cfg.hidden;
+1600-    let ecoute = std::net::TcpListener::bind((hote.as_str(), port)).expect("écoute");
+1601-    println!("[flux] nœud moteur sur {hote}:{port} · {hidden} cachés · {} couches · contexte {ctx}",
+1602-             mdl.cfg.n_layer);
+1603-    let (mut sock, pair) = ecoute.accept().expect("connexion");
+=== champs du modèle ===
+635:    pub act_topk_proj: [usize; 7],
+640:    pub attn_topk: usize,
+648:    pub qk_topk: usize,
+654:
+… [24 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/main.rs'; s=open(p).read()\n\n# 1. version 4 : le bloc de réglages s'élargit\nv = \"\"\"/// Version 3 : ajoute le mode LOT.\"\"\"\nassert s.count(v) == 1\ns = s.replace(v, \"\"\"/// Version 4 : le  … [6126 caractères tronqués]`
+
+  ```
+réglages top-k : appliqués et transportés
+error[E0063]: missing fields `attn_topk`, `moe_topk`, `qk_topk` and 1 other field in initializer of `Act`
+    --> src/main.rs:1408:49
+     |
+1408 |     let act = mdl.map(Act::du_modele).unwrap_or(Act { levels: 127.0, thresh: 0.0,
+     |                                                 ^^^ missing `attn_topk`, `moe_topk`, `qk_topk` and 1 other field
+
+warning: unused variable: `arch`
+    --> src/model.rs:1171:21
+     |
+1171 |                 let arch = g.meta.get("general.architecture").and_then(|m| m.as_str());
+     |                     ^^^^ help: if this is intentional, prefix it with an underscore: `_arch`
+--
+error: could not compile `drave-core` (bin "drave") due to 1 previous error; 12 warnings emitted
+error: could not compile `drave-core` (bin "drave") due to 1 previous error; 12 warnings emitted
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/main.rs'; s=open(p).read()\nv = \"\"\"    let act = mdl.map(Act::du_modele).unwrap_or(Act { levels: 127.0, thresh: 0.0,\n                                                       topk: 0, renorm: fals … [543 caractères tronqués]`
+
+  ```
+initialisation complétée
+    Finished `release` profile [optimized] target(s) in 0.01s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n '\"--topk-q\"\\|\"--attn-topk\"\\|\"--moe-topk\"' drave-core/src/main.rs | head -4; python3 - <<'PY'\np='tools/pair_factice.py'; s=open(p).read()\nv = \"TETE = 40\"\nassert s.count(v) == 1\ns = s.replace(v, \"TETE = 79   # en … [936 caractères tronqués]`
+
+  ```
+480:            "--moe-topk" => { o.moe_topk = suivant(i).parse().unwrap(); 2 }
+484:            "--attn-topk" => { o.attn_topk = suivant(i).parse().unwrap(); 2 }
+491:            "--topk-q" => { o.topk_proj[0] = suivant(i).parse().unwrap(); 2 }
+taille en-tête factice : 79
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 3, in <module>
+AssertionError
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"TETE\\|MODES =\\|reponse = struct\\|n_paires\\|mode == 3\" tools/pair_factice.py | head -20", "description": "Inspect current state of fake peer"}`
+
+  ```
+15:TETE = 39
+16:MODES = {0: "dense f32", 1: "listes quantifiées", 2: "blocs (i8 + écarts)"}
+51:            tete = lire_tout(sock, TETE)
+83:        n_paires = dimension if mode == 0 else 0
+84:        reponse = struct.pack("<IBBIIIIfffIB", MAGIE, version, mode, debut, fin, pos,
+85:                              n_paires, 0.0, levels, thresh, topk, renorm)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='tools/pair_factice.py'; s=open(p).read()\ns = s.replace(\"TETE = 39\", \"TETE = 79   # en-tête v4 : magie, version, mode, plage, position, n, échelle,\\n            # niveaux, seuil, top-k, renorm, 7 top-k par pr … [1724 caractères tronqués]`
+
+  ```
+TETE = TETE = 79   # en-tête v4 : magie, version, mode, plage, position, n, échelle,
+87:                              n if mode == 3 else n_paires, 0.0, levels, thresh, topk, renorm,
+=== vérification du correctif top-k ===
+--- sans topk ---
+  référence locale  : perplexité 28.3545  (45.7 s)
+  écart             : 0.00e0
+12:08:18
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && IDS=$(head -1 /tmp/ids_qwen_long.txt | tr ',' '\\n' | head -64 | tr '\\n' ',' | sed 's/,$//'); echo \"=== A. pilote --topk-q 4, serveur aux défauts (les réglages doivent VOYAGER) ===\"; p=46011; (./drave-core/target/release/drave mod … [1179 caractères tronqués]`
+
+  ```
+=== A. pilote --topk-q 4, serveur aux défauts (les réglages doivent VOYAGER) ===
+  référence locale  : perplexité 148.3767  (51.8 s)
+  deux nœuds        : perplexité 148.3767  (45.5 s)
+  écart             : 0.00e0
+=== B. serveur réglé DIFFÉREMMENT (--topk-q 900) : le client doit imposer les siens ===
+  référence locale  : perplexité 148.3767  (40.9 s)
+  deux nœuds        : perplexité 148.3767  (42.4 s)
+  écart             : 0.00e0
+12:11:29
+  ```
+
+### 🤖 Assistant
+
+Réglages top-k : **appliqués et transportés** — le test B est décisif : serveur réglé différemment, le client impose les siens, écart 0,00e0. Je documente et commit.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='docs/format-flux.md'; s=open(p).read()\nv = \"\"\"          version      u8           3   (refusée si différente, en le disant)\"\"\"\nn = \"\"\"          version      u8           4   (refusée si différente, en  … [3929 caractères tronqués]`

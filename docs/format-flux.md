@@ -46,7 +46,7 @@ spécification doit porter.
 ```
 en-tête (26 octets, identique à l'aller et au retour)
           magie        u32          0x44525631 (« DRV1 »)
-          version      u8           3   (refusée si différente, en le disant)
+          version      u8           4   (refusée si différente, en le disant)
           mode         u8           0 = f32 dense · 1 = liste quantifiée
                                     2 = listes à échelle par bloc · 3 = LOT
           couche_debut u32
@@ -54,6 +54,14 @@ en-tête (26 octets, identique à l'aller et au retour)
           position     u32
           n            u32          dimension (mode 0) ou actifs (mode 1)
           échelle      f32          mode 1 uniquement
+          niveaux      f32          ┐
+          seuil        f32          │ le CONTRAT D'ACTIVATION : ces réglages
+          top-k        u32          │ changent les chiffres, donc ils voyagent —
+          renorm       u8           │ et le client impose les siens au serveur
+          7 × top-k    u32          │ (q, k, v, o, gate, up, down)
+          attn_top-k   u32          │
+          q·k top-k    u32          │
+          moe top-k    u32          ┘
 corps     mode 0 : n × f32
           mode 1 : n × ( indice u16 · valeur i16 )
           mode 2 : n_blocs u32 · n_blocs × f32 · longueur u32 · paires
@@ -79,7 +87,7 @@ La version est dans **chaque** en-tête, et un pair d'une autre version est refu
 avec un message qui nomme les deux versions :
 
 ```
-[flux] arrêt : flux en version 99, cette build parle la 3 (pair incompatible : rien n'a été interprété)
+[flux] arrêt : flux en version 99, cette build parle la 4 (pair incompatible : rien n'a été interprété)
 ```
 
 Le passage de la version 2 à la 3 n'est pas cosmétique : un pair en version 2 qui
@@ -113,4 +121,5 @@ découpage (798,3 au lieu de 18,2).
 | la taille suit l'activité | densité ÷2,3 → trace ÷2,5 (132 Mo → 53 Mo) |
 | le découpage ne change pas le résultat | deux processus, 12 couches chacun : écart local/réparti **0,00e0** (144,8289 = 144,8289), 40 puis 199 flux |
 | un lot ne change pas le résultat non plus | 256 jetons en 4 lots de 64 : écart **0,00e0** (18,0851 = 18,0851) ; en 1 lot de 256 : **0,00e0** (918 ko sur le fil) |
+| les deux nœuds quantifient PAREIL | un serveur lancé avec `--topk-q 900` et un client avec `--topk-q 4` donnent quand même **0,00e0** : les réglages du client gagnent (vérifié) |
 | l'en-tête fait exactement `TAILLE_TETE` octets | `assert_eq!` dans les deux émetteurs — un octet de trop décale tout le corps en silence et ne se voit qu'au flux suivant |
