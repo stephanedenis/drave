@@ -6,13 +6,13 @@
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
 | Durée | 30.2 h |
-| Tours | 19 |
-| Messages | 1211 |
-| Appels d'outils | 1181 |
+| Tours | 20 |
+| Messages | 1218 |
+| Appels d'outils | 1186 |
 | Fichiers touchés | 38 |
-| Commandes | 914 |
+| Commandes | 919 |
 | Sous-agents | 1 |
-| Commits | 52 |
+| Commits | 53 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -63,6 +63,8 @@
 **Tour 18** — <goal_round> Objective: "Réaliser les 6 nouveaux chantiers du projet qtrinet-core, dans l'ordre : (1) relancer le test de l'aiguille sur contexte long (remplissage varié en vrai texte, moins de sondes, réponses plus longues) sur un modèle capable, grâce au préremplissage par lots et au KV déporté ; (2) chemin GPU : dépaquetage vectorisé du noyau d'attention (13,2 ms/couche à 1 M en int4 vers ~3 ms … [1491 caractères tronqués]
 
 **Tour 19** — <goal_round> Objective: "Réaliser les 6 nouveaux chantiers du projet qtrinet-core, dans l'ordre : (1) relancer le test de l'aiguille sur contexte long (remplissage varié en vrai texte, moins de sondes, réponses plus longues) sur un modèle capable, grâce au préremplissage par lots et au KV déporté ; (2) chemin GPU : dépaquetage vectorisé du noyau d'attention (13,2 ms/couche à 1 M en int4 vers ~3 ms … [1492 caractères tronqués]
+
+**Tour 20** — <goal_round> Objective: "Réaliser les 6 nouveaux chantiers du projet qtrinet-core, dans l'ordre : (1) relancer le test de l'aiguille sur contexte long (remplissage varié en vrai texte, moins de sondes, réponses plus longues) sur un modèle capable, grâce au préremplissage par lots et au KV déporté ; (2) chemin GPU : dépaquetage vectorisé du noyau d'attention (13,2 ms/couche à 1 M en int4 vers ~3 ms … [1492 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -886,7 +888,53 @@ L'objectif reste **actif** : la tour de vision est à mi-chemin, chaque étape r
 
 **Synthèse produite :**
 
-⏵ Découverte : une référence de vision existe sur la machine (libmtmd d'ollama)
+⏵ Tour 10 : la référence qui manquait pour finir la vision est sur la machine
+
+\## Fait dans ce tour
+
+Le seul morceau restant — le corps de la tour de vision — butait sur un point : la **convention de rotation 2-D** (mRoPE) n'est pas vérifiable localement, et le plan pariait sur `llama-mtmd-cli`, absent. J'ai cherché, et la référence existe :
+
+**`/usr/lib/ollama/libmtmd.so`** embarque la bibliothèque multimodale de llama.cpp, avec exactement les symboles qu'il faut :
+
+| symbole | usage |
+|---|---|
+| `mtmd_init_from_file` | charger le projecteur + le modèle |
+| `mtmd_helper_bitmap_init_from_buf` / `_from_file` | fournir l'image |
+| `mtmd_tokenize`, `mtmd_encode_chunk` | encoder les patchs |
+| **`mtmd_get_output_embd`** | **récupérer les embeddings d'image** |
+
+`/usr/lib/ollama/libllama.so` expose de son côté 3 989 symboles `llama_*`. Il n'y a pas d'en-têtes dans `/usr/include`, mais ce dépôt a l'habitude de déclarer à la main ce dont il a besoin — c'est ainsi que les noyaux CUDA sont liés.
+
+La recette complète est écrite dans `docs/plan-mla-vision.md` : charger le modèle de texte, initialiser mtmd avec des paramètres remis à zéro, encoder **la même image déterministe** que le banc, et comparer `mtmd_get_output_embd` aux 3 584 valeurs du projecteur du moteur. C'est la seule vérification qui trancherait **d'un coup** la rotation 2-D, la fenêtre locale et la fusion 2 × 2, puisqu'elle compare la sortie complète.
+
+\## État
+
+| # | chantier | état |
+|---|---|---|
+| 1 | aiguille | ✅ 12/12 |
+| 2 | chemin GPU (5 sous-items) | ✅ |
+| 3 | mémoire KV | ✅ |
+| 4 | rotation à 16 k | ✅ |
+| 5 | MLA ✅ (5,2e-7) · vision : trois tranches validées (patchs 5,4e-7, couche 1,8e-6, projecteur 1,7e-6) + référence trouvée | en cours |
+| 6 | hygiène | ✅ |
+
+`cargo test` 6/6, arbre propre, portes de non-régression Qwen **19,3885** et gpt-oss **15,1757** vérifiées sur le code final.
+
+L'objectif reste **actif** : la prochaine session peut écrire le petit programme C qui interroge `libmtmd` — le seul chaînon manquant pour valider la tour entière — puis empiler les 32 couches et brancher l'injection des embeddings.
+
+### Tour 20 — <goal_round> Objective: "Réaliser les 6 nouveaux chantiers du projet qtrinet-core, dans l'ordre : (1) relancer le test d … [1772 caractères tronqués]
+
+*5 appels d'outils.* Actions notables :
+
+- bash — Search for llama/mtmd headers
+- bash — Stack 32 vision layers
+- bash — Run stacked tower
+- bash — Fix config keys and run full tower
+- bash — Document tower and commit
+
+**Synthèse produite :**
+
+⏵ Vision : j'empile les 32 couches (le corps de la tour)
 
 ## 3. Travail accompli
 
@@ -979,7 +1027,7 @@ L'objectif reste **actif** : la tour de vision est à mi-chemin, chaque étape r
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 874 autres
+- … et 879 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1179,4 +1227,5 @@ L'objectif reste **actif** : la tour de vision est à mi-chemin, chaque étape r
 - vision : détailler le pas suivant (couche, rotation 2-D, attention locale, injection)  Le plan dit maintenant, étape par étape, ce qui reste à écrire pour le co
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p='docs/plan-mla-vision.md'; s=open(p).read() old = """| tranche | écart max relatif cont
 - vision : une RÉFÉRENCE existe sur la machine (libmtmd d'ollama)  Le plan pariait sur llama-mtmd-cli ; il n'y est pas, mais ollama embarque la bibliothèque multi
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p='docs/plan-mla-vision.md'; s=open(p).read() old = """Ce qui n'y est pas encore : la rot
 

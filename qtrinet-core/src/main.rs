@@ -934,32 +934,15 @@ fn run_banc_vision(sortie: &str) {
         }
         for v in w.iter() { fp.write_all(&v.to_le_bytes()).unwrap(); }
     }
-    // ---- Corps de la tour : UNE couche du ViT (bloc 0), SANS la rotation 2-D.
-    // La rotation est le seul morceau dont la convention n'est pas vérifiable
-    // localement ; ce bloc la laisse de côté et la référence fait de même. Ce qui
-    // est mesuré ici est la PLOMBERIE : LayerNorm, q/k/v avec biais, attention
-    // globale, résidus, MLP avec biais et SiLU (`clip.use_silu = 1`).
+    // ---- Corps de la tour : LES 32 COUCHES, sans rotation 2-D ni fenêtre
+    // locale (les deux points dont la convention n'est pas encore tranchée).
+    // Ce qui est mesuré ici : la PLOMBERIE répétée 32 fois, plus v.post_ln.
     if g.tensor("v.blk.0.attn_q.weight").is_some() {
-        let e = cout;                                  // largeur 1280
-        let eps = g.cfg("clip.vision.attention.layer_norm_epsilon")
+        let e = cout;
+        let eps = g.cfg("vision.attention.layer_norm_epsilon")
             .and_then(|m| m.as_f64()).unwrap_or(1e-6) as f32;
-        let ln1 = g.dequant("v.blk.0.ln1.weight");
-        let ln2 = g.dequant("v.blk.0.ln2.weight");
-        let wq = g.dequant("v.blk.0.attn_q.weight");
-        let bq = g.dequant("v.blk.0.attn_q.bias");
-        let wk = g.dequant("v.blk.0.attn_k.weight");
-        let bk = g.dequant("v.blk.0.attn_k.bias");
-        let wv = g.dequant("v.blk.0.attn_v.weight");
-        let bv = g.dequant("v.blk.0.attn_v.bias");
-        let wo = g.dequant("v.blk.0.attn_out.weight");
-        let bo = g.dequant("v.blk.0.attn_out.bias");
-        let wg = g.dequant("v.blk.0.ffn_gate.weight");
-        let bg = g.dequant("v.blk.0.ffn_gate.bias");
-        let wu = g.dequant("v.blk.0.ffn_up.weight");
-        let bu = g.dequant("v.blk.0.ffn_up.bias");
-        let wd = g.dequant("v.blk.0.ffn_down.weight");
-        let bd = g.dequant("v.blk.0.ffn_down.bias");
-        let nff = wg.len() / e;
+        let n_layer = g.cfg("vision.block_count")
+            .and_then(|m| m.as_u64()).unwrap_or(0) as usize;
         let norme_ln = |v: &[f32], w: &[f32], dst: &mut [f32]| {
             let moy: f32 = v.iter().sum::<f32>() / v.len() as f32;
             let var: f32 = v.iter().map(|a| (a - moy) * (a - moy)).sum::<f32>() / v.len() as f32;
@@ -975,62 +958,87 @@ fn run_banc_vision(sortie: &str) {
             }
             y
         };
-        let mut x = out.clone();                       // 4 patchs × 1280
+        let mut x = out.clone();
         let mut xn = vec![0f32; e];
-        let (mut qq, mut kk, mut vv) = (Vec::new(), Vec::new(), Vec::new());
-        for p in 0..n_patch {
-            norme_ln(&x[p * e..(p + 1) * e], &ln1, &mut xn);
-            qq.extend(proj_l(&xn, &wq, &bq, e, e));
-            kk.extend(proj_l(&xn, &wk, &bk, e, e));
-            vv.extend(proj_l(&xn, &wv, &bv, e, e));
+        let mut poids_bloc: Vec<Vec<f32>> = Vec::new();
+        for l in 0..n_layer {
+            let p = |n: &str| format!("v.blk.{l}.{n}");
+            let ln1 = g.dequant(&p("ln1.weight"));
+            let ln2 = g.dequant(&p("ln2.weight"));
+            let wq = g.dequant(&p("attn_q.weight"));
+            let bq = g.dequant(&p("attn_q.bias"));
+            let wk = g.dequant(&p("attn_k.weight"));
+            let bk = g.dequant(&p("attn_k.bias"));
+            let wv = g.dequant(&p("attn_v.weight"));
+            let bv = g.dequant(&p("attn_v.bias"));
+            let wo = g.dequant(&p("attn_out.weight"));
+            let bo = g.dequant(&p("attn_out.bias"));
+            let wg = g.dequant(&p("ffn_gate.weight"));
+            let bg = g.dequant(&p("ffn_gate.bias"));
+            let wu = g.dequant(&p("ffn_up.weight"));
+            let bu = g.dequant(&p("ffn_up.bias"));
+            let wd = g.dequant(&p("ffn_down.weight"));
+            let bd = g.dequant(&p("ffn_down.bias"));
+            let nff = wg.len() / e;
+            let (mut qq, mut kk, mut vv) = (Vec::new(), Vec::new(), Vec::new());
+            for pi in 0..n_patch {
+                norme_ln(&x[pi * e..(pi + 1) * e], &ln1, &mut xn);
+                qq.extend(proj_l(&xn, &wq, &bq, e, e));
+                kk.extend(proj_l(&xn, &wk, &bk, e, e));
+                vv.extend(proj_l(&xn, &wv, &bv, e, e));
+            }
+            let scale = 1.0 / (e as f32).sqrt();
+            let mut att = vec![0f32; n_patch * e];
+            let mut sc = vec![0f32; n_patch];
+            for pi in 0..n_patch {
+                let q = &qq[pi * e..(pi + 1) * e];
+                for t in 0..n_patch {
+                    let mut acc = 0f32;
+                    for i in 0..e { acc += q[i] * kk[t * e + i]; }
+                    sc[t] = acc * scale;
+                }
+                let mx = sc.iter().cloned().fold(f32::NEG_INFINITY, f32::max);
+                let mut somme = 0f32;
+                for v in sc.iter_mut() { let z = (*v - mx).exp(); *v = z; somme += z; }
+                for t in 0..n_patch {
+                    let w = sc[t] / somme;
+                    for i in 0..e { att[pi * e + i] += w * vv[t * e + i]; }
+                }
+            }
+            for pi in 0..n_patch {
+                let o = proj_l(&att[pi * e..(pi + 1) * e], &wo, &bo, e, e);
+                for i in 0..e { x[pi * e + i] += o[i]; }
+                norme_ln(&x[pi * e..(pi + 1) * e], &ln2, &mut xn);
+                let g_t = proj_l(&xn, &wg, &bg, e, nff);
+                let u_t = proj_l(&xn, &wu, &bu, e, nff);
+                let mut act = vec![0f32; nff];
+                for i in 0..nff {
+                    let z = g_t[i];
+                    act[i] = (z / (1.0 + (-z).exp())) * u_t[i];
+                }
+                let d_t = proj_l(&act, &wd, &bd, nff, e);
+                for i in 0..e { x[pi * e + i] += d_t[i]; }
+            }
+            if l == 0 { poids_bloc = vec![ln1, ln2, wq, bq, wk, bk, wv, bv, wo, bo,
+                                         wg, bg, wu, bu, wd, bd]; }
         }
-        let scale = 1.0 / (e as f32).sqrt();
-        let mut att = vec![0f32; n_patch * e];
-        let mut sc = vec![0f32; n_patch];
-        for p in 0..n_patch {
-            let q = &qq[p * e..(p + 1) * e];
-            for t in 0..n_patch {
-                let mut acc = 0f32;
-                for i in 0..e { acc += q[i] * kk[t * e + i]; }
-                sc[t] = acc * scale;
-            }
-            let mx = sc.iter().cloned().fold(f32::NEG_INFINITY, f32::max);
-            let mut somme = 0f32;
-            for v in sc.iter_mut() { let z = (*v - mx).exp(); *v = z; somme += z; }
-            for t in 0..n_patch {
-                let w = sc[t] / somme;
-                for i in 0..e { att[p * e + i] += w * vv[t * e + i]; }
-            }
-        }
-        for p in 0..n_patch {
-            let o = proj_l(&att[p * e..(p + 1) * e], &wo, &bo, e, e);
-            for i in 0..e { x[p * e + i] += o[i]; }
-            norme_ln(&x[p * e..(p + 1) * e], &ln2, &mut xn);
-            let g_t = proj_l(&xn, &wg, &bg, e, nff);
-            let u_t = proj_l(&xn, &wu, &bu, e, nff);
-            let mut act = vec![0f32; nff];
-            for i in 0..nff {
-                let z = g_t[i];
-                act[i] = (z / (1.0 + (-z).exp())) * u_t[i];   // SiLU (clip.use_silu)
-            }
-            let d_t = proj_l(&act, &wd, &bd, nff, e);
-            for i in 0..e { x[p * e + i] += d_t[i]; }
+        let post_ln = g.dequant("v.post_ln.weight");
+        for pi in 0..n_patch {
+            norme_ln(&x[pi * e..(pi + 1) * e], &post_ln, &mut xn);
+            x[pi * e..(pi + 1) * e].copy_from_slice(&xn);
         }
         {
             let mut fb = std::io::BufWriter::new(
                 std::fs::File::create(format!("{sortie}.bloc")).expect("création"));
-            for v in [(n_patch as i32), (e as i32), (nff as i32)] {
+            for v in [(n_patch as i32), (e as i32), (n_layer as i32)] {
                 fb.write_all(&v.to_le_bytes()).unwrap();
-            }
-            for t in [&ln1, &ln2, &wq, &bq, &wk, &bk, &wv, &bv, &wo, &bo,
-                      &wg, &bg, &wu, &bu, &wd, &bd] {
-                for v in t.iter() { fb.write_all(&v.to_le_bytes()).unwrap(); }
             }
             for v in x.iter() { fb.write_all(&v.to_le_bytes()).unwrap(); }
         }
-        println!("bloc 0 : {n_patch} patchs × {e} · |sortie| = {:.4} · 4 premières {:?}",
+        println!("tour : {n_layer} couches × {n_patch} patchs × {e} · |sortie| = {:.4} · 4 premières {:?}",
                  x.iter().map(|v| v * v).sum::<f32>().sqrt(),
                  &x[..4].iter().map(|v| (v * 1e4).round() / 1e4).collect::<Vec<_>>());
+        let _ = poids_bloc;
     }
 
     let norme: f32 = out.iter().map(|v| v * v).sum::<f32>().sqrt();

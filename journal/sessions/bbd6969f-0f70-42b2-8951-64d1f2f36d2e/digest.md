@@ -19242,3 +19242,101 @@ vision_ref.py
 ⏵ Découverte : une référence de vision existe sur la machine (libmtmd d'ollama)
 
 - **bash** `{"command": "nm -D --defined-only /usr/lib/ollama/libmtmd.so 2>/dev/null | grep -E \"mtmd_(init_from_file|get_output_embd|free|encode_chunk|helper)\" | head -6; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='docs/plan-mla-vision.md'; s=open(p).read()\nold = \"\"\"### Ce q … [2596 caractères tronqués]`
+
+  ```
+0000000000052940 T mtmd_encode_chunk
+000000000004fe10 T mtmd_free
+0000000000050090 T mtmd_get_output_embd
+00000000000d4dd0 T mtmd_helper_bitmap_init_from_buf
+00000000000d5450 T mtmd_helper_bitmap_init_from_file
+00000000000d2520 T mtmd_helper_decode_image_chunk
+référence mtmd documentée
+8c51fe4 vision : une RÉFÉRENCE existe sur la machine (libmtmd d'ollama)
+  ```
+
+### 🤖 Assistant
+
+⏵ Tour 10 : la référence qui manquait pour finir la vision est sur la machine
+
+## Fait dans ce tour
+
+Le seul morceau restant — le corps de la tour de vision — butait sur un point : la **convention de rotation 2-D** (mRoPE) n'est pas vérifiable localement, et le plan pariait sur `llama-mtmd-cli`, absent. J'ai cherché, et la référence existe :
+
+**`/usr/lib/ollama/libmtmd.so`** embarque la bibliothèque multimodale de llama.cpp, avec exactement les symboles qu'il faut :
+
+| symbole | usage |
+|---|---|
+| `mtmd_init_from_file` | charger le projecteur + le modèle |
+| `mtmd_helper_bitmap_init_from_buf` / `_from_file` | fournir l'image |
+| `mtmd_tokenize`, `mtmd_encode_chunk` | encoder les patchs |
+| **`mtmd_get_output_embd`** | **récupérer les embeddings d'image** |
+
+`/usr/lib/ollama/libllama.so` expose de son côté 3 989 symboles `llama_*`. Il n'y a pas d'en-têtes dans `/usr/include`, mais ce dépôt a l'habitude de déclarer à la main ce dont il a besoin — c'est ainsi que les noyaux CUDA sont liés.
+
+La recette complète est écrite dans `docs/plan-mla-vision.md` : charger le modèle de texte, initialiser mtmd avec des paramètres remis à zéro, encoder **la même image déterministe** que le banc, et comparer `mtmd_get_output_embd` aux 3 584 valeurs du projecteur du moteur. C'est la seule vérification qui trancherait **d'un coup** la rotation 2-D, la fenêtre locale et la fusion 2 × 2, puisqu'elle compare la sortie complète.
+
+## État
+
+| # | chantier | état |
+|---|---|---|
+| 1 | aiguille | ✅ 12/12 |
+| 2 | chemin GPU (5 sous-items) | ✅ |
+| 3 | mémoire KV | ✅ |
+| 4 | rotation à 16 k | ✅ |
+| 5 | MLA ✅ (5,2e-7) · vision : trois tranches validées (patchs 5,4e-7, couche 1,8e-6, projecteur 1,7e-6) + référence trouvée | en cours |
+| 6 | hygiène | ✅ |
+
+`cargo test` 6/6, arbre propre, portes de non-régression Qwen **19,3885** et gpt-oss **15,1757** vérifiées sur le code final.
+
+L'objectif reste **actif** : la prochaine session peut écrire le petit programme C qui interroge `libmtmd` — le seul chaînon manquant pour valider la tour entière — puis empiler les 32 couches et brancher l'injection des embeddings.
+
+
+## Tour 20
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Réaliser les 6 nouveaux chantiers du projet qtrinet-core, dans l'ordre : (1) relancer le test de l'aiguille sur contexte long (remplissage varié en vrai texte, moins de sondes, réponses plus longues) sur un modèle capable, grâce au préremplissage par lots et au KV déporté ; (2) chemin GPU : dépaquetage vectorisé du noyau d'attention (13,2 ms/couche à 1 M en int4 vers ~3 ms), brancher MXFP4 dans le moteur avec une politique de résidence des experts, attention par lots sur GPU dans forward_lot, noyau de tête Q8_0 accéléré (AVX2 ou déport), et usage du second GPU ; (3) mémoire : pagination du cache KV côté CPU (25,77 Go réservés à ctx 1 M pour 512 jetons écrits) et test de l'hypothèse « clés en f16 avant quantification » pour l'écart int8 avec llama.cpp à 8 192 (+3,0 % contre +0,8 %) ; (4) rotation au-delà de 5 120 jetons (passe à 16 k) ; (5) structurel : MLA (aucun modèle local — construire un modèle MLA synthétique et valider contre une référence indépendante) et vision (poids Qwen2.5-VL et projecteur mmproj présents) ; (6) hygiène : réécrire la section « Ce qu'il faut faire ensuite » de REPRISE.md et y consigner les pièges QT_GPU/QT_GPU_TETE/QT_GPU_KV. Chaque chantier doit être implémenté, mesuré (portes de non-régression Qwen 19,3885 et gpt-oss 15,1757 sans QT_GPU), documenté dans le dépôt et commité."
+Round: 11/30
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "find / -name \"mtmd.h\" -o -name \"llama.h\" -o -name \"clip.h\" 2>/dev/null | head -5; ls /usr/lib/ollama/ 2>/dev/null | head -12; python3 -c \"print('---')\"; strings /usr/lib/ollama/libmtmd.so 2>/dev/null | grep -iE \"^mtmd:|image_marker|use_gpu\" | head -6", "description": "Search f … [23 caractères tronqués]`
+
+  ```
+(no output)
+[timed out after 60000ms]
+[killed by signal: SIGTERM]
+  ```
+
+### 🤖 Assistant
+
+⏵ Vision : j'empile les 32 couches (le corps de la tour)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && python3 - <<'PY'\nimport re\np='src/main.rs'; s=open(p).read()\ndeb = s.index(\"    // ---- Corps de la tour : UNE couche du ViT (bloc 0), SANS la rotation 2-D.\")\nfin = s.index(\"    let norme: f32 = out.iter().map(|v| … [5706 caractères tronqués]`
+
+  ```
+tour empilée
+    Finished `release` profile [optimized] target(s) in 0.01s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 900 ./qtrinet-core/target/release/qtrinet-core /home/stephane/FastNVMe/models/mmproj-Qwen2.5-VL-7B-Instruct-f16.gguf --banc-vision /tmp/vision_patch.bin 2>&1 | grep -E \"^tour|bloc\" | tail -2 && python3 - <<'PY'\nimport nump … [661 caractères tronqués]`
+
+  ```
+tour : 0 couches × 4 patchs × 1280 · |sortie| = 92.0016 · 4 premières [-0.459, -0.7166, 0.8753, -1.5456]
+moteur : (4, 1280) |max| 19.437496185302734
+(la référence numpy de la tour complète reste à écrire : elle doit relire les 32 couches du GGUF)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && python3 - <<'PY'\np='src/main.rs'; s=open(p).read()\ns = s.replace(\"\"\"        let eps = g.cfg(\"clip.vision.attention.layer_norm_epsilon\")\"\"\",\n              \"\"\"        let eps = g.cfg(\"vision.attention.layer_ … [636 caractères tronqués]`
+
+  ```
+clés de configuration corrigées (cfg ajoute déjà l'architecture)
+    Finished `release` profile [optimized] target(s) in 19.17s
+projecteur : mm.0 5120→5120 · mm.2 5120→3584
+projecteur : 3584 valeurs, |sortie| = 17.8837, 4 premières [-0.3701, 0.2001, 0.2074, 0.12]
+tour : 32 couches × 4 patchs × 1280 · |sortie| = 35.5471 · 4 premières [-0.4278, -0.8725, 1.3919, 0.1346]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='docs/plan-mla-vision.md'; s=open(p).read()\nold = \"\"\"Ce qui n'y est pas encore : la rotation 2-D et la fenêtre locale.\"\"\"\nnew = \"\"\"Ce qui n'y est pas encore : la rotation 2-D et la fenêtre locale.\n\n## … [1994 caractères tronqués]`
