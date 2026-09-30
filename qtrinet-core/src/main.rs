@@ -1114,6 +1114,30 @@ fn run_banc_vision(sortie: &str) {
         proj = Some((Vec::new(), y));
     }
 
+    // ---- Injection : le moteur consomme-t-il un embedding d'image ?
+    // `QT_VISION_TEXTE=<modele.gguf>` charge le modèle de texte et lui impose le
+    // PREMIER jeton d'image via `Model::emb_imposee` — le chemin qui manquait
+    // (« forward partait toujours de token_embd »). C'est un contrôle de
+    // PLOMBERIE : le moteur ne panique pas, il rend des logits d'échelle
+    // normale. La qualité, elle, demanderait la comparaison complète.
+    if let Some((_, y)) = proj.as_ref() {
+        let n_emb = 3584usize;
+        let n_tok = y.len() / n_emb;
+        println!("injection : {n_tok} jetons × {n_emb} disponibles");
+        let chemin = std::env::var("QT_VISION_TEXTE").unwrap_or_default();
+        if !chemin.is_empty() {
+            let mut mdl = model::Model::load(&chemin, 512, 16, true, 1.0, false, 0, 0);
+            mdl.emb_imposee = Some(y[..n_emb].to_vec());
+            let hn = mdl.forward(0, 0);
+            let lg = mdl.logits(&hn);
+            let mut best = 0usize;
+            for (i, &v) in lg.iter().enumerate() { if v > lg[best] { best = i; } }
+            let moy: f32 = lg.iter().sum::<f32>() / lg.len() as f32;
+            let var: f32 = lg.iter().map(|v| (v - moy) * (v - moy)).sum::<f32>() / lg.len() as f32;
+            println!("  moteur : {} logits · argmax {best} · moyenne {moy:.3} · écart-type {:.3}",
+                     lg.len(), var.sqrt());
+        }
+    }
     let norme: f32 = out.iter().map(|v| v * v).sum::<f32>().sqrt();
     println!("{n_patch} patchs × {cout} canaux écrits dans {sortie} (|sortie| = {norme:.4})");
     println!("premier patch, 4 premiers canaux : {:?}",

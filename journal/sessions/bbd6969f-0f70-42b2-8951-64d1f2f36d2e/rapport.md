@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 30.9 h |
-| Tours | 33 |
-| Messages | 1311 |
-| Appels d'outils | 1253 |
+| Durée | 31.0 h |
+| Tours | 34 |
+| Messages | 1315 |
+| Appels d'outils | 1255 |
 | Fichiers touchés | 39 |
-| Commandes | 984 |
+| Commandes | 986 |
 | Sous-agents | 1 |
-| Commits | 66 |
+| Commits | 67 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -91,6 +91,8 @@
 **Tour 32** — <goal_round> Objective: "Réaliser les 6 nouveaux chantiers du projet qtrinet-core, dans l'ordre : (1) relancer le test de l'aiguille sur contexte long (remplissage varié en vrai texte, moins de sondes, réponses plus longues) sur un modèle capable, grâce au préremplissage par lots et au KV déporté ; (2) chemin GPU : dépaquetage vectorisé du noyau d'attention (13,2 ms/couche à 1 M en int4 vers ~3 ms … [1492 caractères tronqués]
 
 **Tour 33** — <goal_round> Objective: "Réaliser les 6 nouveaux chantiers du projet qtrinet-core, dans l'ordre : (1) relancer le test de l'aiguille sur contexte long (remplissage varié en vrai texte, moins de sondes, réponses plus longues) sur un modèle capable, grâce au préremplissage par lots et au KV déporté ; (2) chemin GPU : dépaquetage vectorisé du noyau d'attention (13,2 ms/couche à 1 M en int4 vers ~3 ms … [1492 caractères tronqués]
+
+**Tour 34** — <goal_round> Objective: "Réaliser les 6 nouveaux chantiers du projet qtrinet-core, dans l'ordre : (1) relancer le test de l'aiguille sur contexte long (remplissage varié en vrai texte, moins de sondes, réponses plus longues) sur un modèle capable, grâce au préremplissage par lots et au KV déporté ; (2) chemin GPU : dépaquetage vectorisé du noyau d'attention (13,2 ms/couche à 1 M en int4 vers ~3 ms … [1492 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -1507,6 +1509,59 @@ L'objectif reste **actif** : le prochain tour commence par un déplacement de bl
 - bash — Move projector after tower and verify
 - bash — Verify reference tolerance and commit fix
 
+**Synthèse produite :**
+
+⏵ Tour 24 : l'ordre du pipeline est corrigé, et la preuve est que le chiffre change
+
+\## Fait dans ce tour
+
+Le déplacement mécanique annoncé hier est fait : **le projecteur consomme maintenant la sortie de la tour**, et non les embeddings de patchs.
+
+La vérification n'est pas un nouveau chiffre « plausible » — c'est le fait que **le chiffre ait changé** :
+
+| alimentation | \|sortie\| du projecteur |
+|---|---|
+| embeddings de patchs (l'ancien ordre, faux) | 131,54 |
+| **sortie de la tour (l'ordre correct)** | **515,84** |
+
+Le tour précédent, ce même chiffre restait identique alors que tout ce qui l'alimente avait changé : c'était la trace du mauvais ordre, et c'est maintenant le contrôle qui la détecte.
+
+Faute de référence, j'ai ajouté un contrôle de plausibilité : la moyenne quadratique par élément vaut `515,84 / √(64 × 3584) = 1,08`, du même ordre que les lignes de `token_embd` du modèle de texte. Un pipeline qui produirait des embeddings d'échelle absurde (1e-3 ou 1e3) se verrait immédiatement ici.
+
+La référence numpy, elle, annonce proprement qu'elle ne peut plus comparer à cette taille et rappelle les valeurs validées (5,4e-7 à 28 × 28).
+
+\## État du chantier vision
+
+**Complet et dans le bon ordre** : patchs → 32 couches (rotation 2-D conforme à `ggml_mrope_cache_init`, fenêtre locale d'après `clip.cpp`) → `v.post_ln` → projecteur (64 groupes × 3 584) → `Model::emb_imposee`.
+
+Non vérifié, et nommé : l'échelle interne de la rotation (dérivée de la source, pas confirmée par une référence), la fenêtre locale (idem), et le bout en bout image → texte (impossible sans chemin d'inférence multimodal).
+
+\## Les six chantiers
+
+| # | chantier | état |
+|---|---|---|
+| 1 | aiguille long contexte | ✅ 12/12 |
+| 2 | chemin GPU (5 sous-items) | ✅ |
+| 3 | mémoire KV | ✅ |
+| 4 | rotation à 16 k | ✅ |
+| 5 | MLA ✅ (5,2e-7) · vision : chaîne complète et ordonnée, trois points non vérifiés nommés | en cours |
+| 6 | hygiène | ✅ |
+
+`cargo test` 6/6, arbre propre, portes Qwen **19,3885** / gpt-oss **15,1757** intactes.
+
+L'objectif reste **actif**. Il ne reste, côté vision, aucune ligne de code identifiée comme fausse — seulement des conventions que rien de local ne peut confirmer, et c'est une distinction que je préfère laisser explicite plutôt que de la maquiller en « terminé ».
+
+### Tour 34 — <goal_round> Objective: "Réaliser les 6 nouveaux chantiers du projet qtrinet-core, dans l'ordre : (1) relancer le test d … [1772 caractères tronqués]
+
+*2 appels d'outils.* Actions notables :
+
+- bash — Inject vision embedding into engine
+- bash — Document end-to-end injection and commit
+
+**Synthèse produite :**
+
+⏵ Tour 25 : l'injection d'un jeton d'image va jusqu'aux logits du modèle de texte
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -1599,7 +1654,7 @@ L'objectif reste **actif** : le prochain tour commence par un déplacement de bl
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 944 autres
+- … et 946 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1813,4 +1868,5 @@ L'objectif reste **actif** : le prochain tour commence par un déplacement de bl
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat >> docs/plan-mla-vision.md <<'EOF'  ### Le détail de la rotation, lu dans ggml (et mon implémentation 
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat >> docs/plan-mla-vision.md <<'EOF'  ### Après correction : la rotation suit la source, mais l'ORDRE es
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/vision_ref.py /tmp/vision_patch.bin 2>&1 | tail -3 && cat >> docs/plan-mla-vision.md <<'EOF'
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat >> docs/plan-mla-vision.md <<'EOF'  ### La chaîne complète est DÉMONTRÉE, de l'image aux logits  `QT_V
 

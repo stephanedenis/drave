@@ -20836,3 +20836,79 @@ projecteur : 64 groupes × 3584 valeurs, |sortie| = 515.8354, 4 premières [-2.2
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/vision_ref.py /tmp/vision_patch.bin 2>&1 | tail -3 && cat >> docs/plan-mla-vision.md <<'EOF'\n\n### L'ordre est corrigé, et la vérification est le CHANGEMENT du chiffre\n\nLe bloc projecteur a été déplacé après la tour  … [2151 caractères tronqués]`
+
+  ```
+patchs : le banc est sur une image de 16 × 16 patchs et la référence suppose 28 × 28 — comparaison sautée (elle a été validée à 28 × 28 : 5,4e-7)
+c13232d vision : l'ordre du pipeline est corrigé — et la preuve est que le chiffre CHANGE
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.09s
+  ```
+
+### 🤖 Assistant
+
+⏵ Tour 24 : l'ordre du pipeline est corrigé, et la preuve est que le chiffre change
+
+## Fait dans ce tour
+
+Le déplacement mécanique annoncé hier est fait : **le projecteur consomme maintenant la sortie de la tour**, et non les embeddings de patchs.
+
+La vérification n'est pas un nouveau chiffre « plausible » — c'est le fait que **le chiffre ait changé** :
+
+| alimentation | \|sortie\| du projecteur |
+|---|---|
+| embeddings de patchs (l'ancien ordre, faux) | 131,54 |
+| **sortie de la tour (l'ordre correct)** | **515,84** |
+
+Le tour précédent, ce même chiffre restait identique alors que tout ce qui l'alimente avait changé : c'était la trace du mauvais ordre, et c'est maintenant le contrôle qui la détecte.
+
+Faute de référence, j'ai ajouté un contrôle de plausibilité : la moyenne quadratique par élément vaut `515,84 / √(64 × 3584) = 1,08`, du même ordre que les lignes de `token_embd` du modèle de texte. Un pipeline qui produirait des embeddings d'échelle absurde (1e-3 ou 1e3) se verrait immédiatement ici.
+
+La référence numpy, elle, annonce proprement qu'elle ne peut plus comparer à cette taille et rappelle les valeurs validées (5,4e-7 à 28 × 28).
+
+## État du chantier vision
+
+**Complet et dans le bon ordre** : patchs → 32 couches (rotation 2-D conforme à `ggml_mrope_cache_init`, fenêtre locale d'après `clip.cpp`) → `v.post_ln` → projecteur (64 groupes × 3 584) → `Model::emb_imposee`.
+
+Non vérifié, et nommé : l'échelle interne de la rotation (dérivée de la source, pas confirmée par une référence), la fenêtre locale (idem), et le bout en bout image → texte (impossible sans chemin d'inférence multimodal).
+
+## Les six chantiers
+
+| # | chantier | état |
+|---|---|---|
+| 1 | aiguille long contexte | ✅ 12/12 |
+| 2 | chemin GPU (5 sous-items) | ✅ |
+| 3 | mémoire KV | ✅ |
+| 4 | rotation à 16 k | ✅ |
+| 5 | MLA ✅ (5,2e-7) · vision : chaîne complète et ordonnée, trois points non vérifiés nommés | en cours |
+| 6 | hygiène | ✅ |
+
+`cargo test` 6/6, arbre propre, portes Qwen **19,3885** / gpt-oss **15,1757** intactes.
+
+L'objectif reste **actif**. Il ne reste, côté vision, aucune ligne de code identifiée comme fausse — seulement des conventions que rien de local ne peut confirmer, et c'est une distinction que je préfère laisser explicite plutôt que de la maquiller en « terminé ».
+
+
+## Tour 34
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Réaliser les 6 nouveaux chantiers du projet qtrinet-core, dans l'ordre : (1) relancer le test de l'aiguille sur contexte long (remplissage varié en vrai texte, moins de sondes, réponses plus longues) sur un modèle capable, grâce au préremplissage par lots et au KV déporté ; (2) chemin GPU : dépaquetage vectorisé du noyau d'attention (13,2 ms/couche à 1 M en int4 vers ~3 ms), brancher MXFP4 dans le moteur avec une politique de résidence des experts, attention par lots sur GPU dans forward_lot, noyau de tête Q8_0 accéléré (AVX2 ou déport), et usage du second GPU ; (3) mémoire : pagination du cache KV côté CPU (25,77 Go réservés à ctx 1 M pour 512 jetons écrits) et test de l'hypothèse « clés en f16 avant quantification » pour l'écart int8 avec llama.cpp à 8 192 (+3,0 % contre +0,8 %) ; (4) rotation au-delà de 5 120 jetons (passe à 16 k) ; (5) structurel : MLA (aucun modèle local — construire un modèle MLA synthétique et valider contre une référence indépendante) et vision (poids Qwen2.5-VL et projecteur mmproj présents) ; (6) hygiène : réécrire la section « Ce qu'il faut faire ensuite » de REPRISE.md et y consigner les pièges QT_GPU/QT_GPU_TETE/QT_GPU_KV. Chaque chantier doit être implémenté, mesuré (portes de non-régression Qwen 19,3885 et gpt-oss 15,1757 sans QT_GPU), documenté dans le dépôt et commité."
+Round: 25/30
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && python3 - <<'PY'\np='src/main.rs'; s=open(p).read()\nancre = \"\"\"    let norme: f32 = out.iter().map(|v| v * v).sum::<f32>().sqrt();\"\"\"\nassert ancre in s\najout = \"\"\"    // ---- Injection : le moteur consomme-t- … [2003 caractères tronqués]`
+
+  ```
+injection ajoutée au banc vision
+    Finished `release` profile [optimized] target(s) in 0.01s
+projecteur : 64 groupes × 3584 valeurs, |sortie| = 515.8354, 4 premières [-2.2082, 1.5388, 0.0004, 3.1743]
+injection : 64 jetons × 3584 disponibles
+  moteur : 152064 logits · argmax 15 · moyenne -1.788 · écart-type 2.026
+  ```
+
+### 🤖 Assistant
+
+⏵ Tour 25 : l'injection d'un jeton d'image va jusqu'aux logits du modèle de texte
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat >> docs/plan-mla-vision.md <<'EOF'\n\n### La chaîne complète est DÉMONTRÉE, de l'image aux logits\n\n`QT_VISION_TEXTE=<modele.gguf>` fait faire au banc le dernier pas : il charge le\nmodèle de texte, lui impose le **premier jeton … [2523 caractères tronqués]`

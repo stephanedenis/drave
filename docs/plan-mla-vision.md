@@ -641,3 +641,31 @@ embeddings d'échelle absurde (1e-3 ou 1e3) se verrait ici.
 fenêtre locale d'après clip.cpp) → v.post_ln → projecteur (64 groupes × 3584) →
 `Model::emb_imposee`**. Ce qui reste non vérifié est inchangé et nommé :
 l'échelle interne de la rotation, la fenêtre locale, et le bout en bout.
+
+### La chaîne complète est DÉMONTRÉE, de l'image aux logits
+
+`QT_VISION_TEXTE=<modele.gguf>` fait faire au banc le dernier pas : il charge le
+modèle de texte, lui impose le **premier jeton d'image** par
+`Model::emb_imposee`, et lit les logits. Mesuré sur Qwen2.5-VL-7B (poids Q4_K_M,
+projecteur f16 du `mmproj`) :
+
+```
+projecteur : 64 groupes × 3584 valeurs, |sortie| = 515.8354
+injection  : 64 jetons × 3584 disponibles
+  moteur   : 152064 logits · argmax 15 · moyenne -1.788 · écart-type 2.026
+```
+
+Autrement dit : **image → convolution de patchs → 32 couches (rotation 2-D,
+fenêtre locale) → v.post_ln → projecteur → 64 jetons de 3 584 dimensions →
+injection dans le modèle de texte → 152 064 logits**. Le trou d'architecture
+identifié au premier tour (« `forward` part toujours de `token_embd` ») est
+comblé, et la démonstration passe par le chemin réel, pas par un banc isolé.
+
+Ce que cela prouve, et ce que cela ne prouve pas :
+
+* **prouvé** : la plomberie complète tient, le moteur accepte un vecteur d'image
+  et rend des logits d'échelle normale (moyenne −1,79, écart-type 2,03) ;
+* **non prouvé** : la QUALITÉ. Les deux conventions non confirmées (échelle
+  interne de la rotation, fenêtre locale) et l'absence de modèle d'inférence
+  multimodal local font qu'aucun chiffre de qualité ne peut être avancé ici —
+  et il ne le sera pas.
