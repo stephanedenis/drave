@@ -22618,3 +22618,11 @@ pendant que les charges locales s'executent, peux-tu avancer des chantiers lége
 ⏵ 10:30 — les résultats d'analyse : densité, persistance et recouvrement par couche
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-analyse-flux.md <<'EOF'\n# Analyse du flux, couche par couche\n\nPremière analyse **pure** : aucune exécution du moteur, seulement une trace relue\n(`tools/analyse_flux.py`). Ce qu'elle apporte, et pourquoi ces  … [4064 caractères tronqués]`
+
+  ```
+roadmap 1.2 mis à jour
+7e028da Analyse pure du flux : densité, persistance et recouvrement par couche
+10:36:06
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > docs/format-flux.md <<'EOF'\n# Le format de flux (DRVF v1) — spécification\n\nCe format sert **trois choses à la fois**, et c'est délibéré :\n\n1. la **trace** d'exécution (`--trace-flux`) : ce qui s'est passé, couche par\n   c … [5036 caractères tronqués]`

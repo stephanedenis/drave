@@ -49,3 +49,20 @@ partage que 28 %.
 
 C'est le genre de fait qu'aucune perplexité ne montre, et qui décide de ce qu'on
 précharge, de ce qu'on élague et de ce qu'on place sur quel composant.
+
+
+## Modèle de coût par couche (dérivé, pas mesuré)
+
+Le croisement push/pull mesuré du projet est à ~10 % de densité. Avec les densités
+ci-dessus, la conséquence par couche est directe :
+
+| couche (densité) | régime attendu | raison |
+|---|---|---|
+| 9 (20,1 %), 0 (25,9 %), 4 (26,7 %), 3 (28,8 %), 8 (29,2 %) | au-dessus du croisement | les listes coûtent moins que la matrice |
+| 6 (40,5 %), 5 (45,6 %), 1 (56,3 %) | en dessous | la matrice dense est plus économique |
+
+Ce tableau est une **projection**, pas une mesure : il dit où regarder pour la
+phase 1.2 (« quantification et chemin choisis par la mesure »), et il donne le
+critère du banc à écrire — comparer, pour chaque couche, le temps du chemin par
+listes et celui du chemin dense. La trace fournit la densité ; le moteur fournit
+les deux chemins ; il ne manque que la comparaison systématique.

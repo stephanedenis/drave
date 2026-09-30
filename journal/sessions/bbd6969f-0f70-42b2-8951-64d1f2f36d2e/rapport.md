@@ -7,12 +7,12 @@
 | Début | 2026-09-28 14:46 |
 | Durée | 43.8 h |
 | Tours | 44 |
-| Messages | 1429 |
-| Appels d'outils | 1348 |
+| Messages | 1430 |
+| Appels d'outils | 1349 |
 | Fichiers touchés | 42 |
-| Commandes | 1074 |
+| Commandes | 1075 |
 | Sous-agents | 1 |
-| Commits | 84 |
+| Commits | 85 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -1995,10 +1995,11 @@ Je vérifie l'heure à chaque itération et j'arrête à 12:06, en laissant un p
 
 ### Tour 44 — pendant que les charges locales s'executent, peux-tu avancer des chantiers légers sur les ressources loçcale ou d'analys … [7 caractères tronqués]
 
-*2 appels d'outils.* Actions notables :
+*3 appels d'outils.* Actions notables :
 
 - bash — Write and run the pure flux analysis tool
 - bash — Document the flux analysis and commit
+- bash — Write the format spec and cost model, commit
 
 **Synthèse produite :**
 
@@ -2099,7 +2100,7 @@ Je vérifie l'heure à chaque itération et j'arrête à 12:06, en laissant un p
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 1034 autres
+- … et 1035 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2331,4 +2332,5 @@ Je vérifie l'heure à chaque itération et j'arrête à 12:06, en laissant un p
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A drave-core/src && git commit -q -F - <<'EOF' && git log --oneline -1 && date +"%H:%M:%S" Phase 
 - date +"%H:%M:%S"; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p='docs/roadmap.md'; s=open(p).read() s = s.replace("""| 3.1 | **Contra
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-analyse-flux.md <<'EOF' # Analyse du flux, couche par couche  Première analyse **pur
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > docs/format-flux.md <<'EOF' # Le format de flux (DRVF v1) — spécification  Ce format sert **trois ch
 
