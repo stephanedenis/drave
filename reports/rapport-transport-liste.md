@@ -198,6 +198,33 @@ et l'ACK différé**. Le pilote écrit un en-tête de 39 octets puis un corps ; 
 pair retarde — deux fois par jeton, une fois par sens. Une ligne de code
 (`set_nodelay(true)`, des deux côtés) divise l'attente par six.
 
+### Et si le lien est lent ? Mesuré avec un relais retardateur
+
+Localhost est un plancher optimiste : `tools/proxy_latence.py` ajoute un délai
+par message et on refait le banc (256 jetons de vrai texte, 12 couches par nœud).
+
+| latence ajoutée | attente du pair | rapport au calcul local | durée du banc | écart |
+|---|---|---|---|---|
+| 0 ms | 16,8 ms/jeton | 1,01× | 11,0 s | 0,00e0 |
+| 5 ms | 33,0 ms/jeton | 1,99× | 15,1 s | 0,00e0 |
+| 20 ms | 81,8 ms/jeton | 4,89× | 27,6 s | 0,00e0 |
+
+La fidélité ne bouge pas d'un bit (0,00e0 partout : la latence ne change pas le
+calcul, elle change le temps). Et l'attente suit une droite simple :
+
+```
+attente ≈ calcul distant + 3,2 × (latence par message)
+```
+
+Le facteur 3,2 est le nombre de messages retardés par jeton dans ce banc (le flux
+et sa réponse, dans les deux sens). **C'est la formule de la phase 3.3** :
+le débit ne compte pas (0,25 Mbit/s suffisent), la latence compte quatre fois.
+
+Application à Colab : un aller-retour de 60 ms donne 16 + 3,2 × 30 ≈ **112 ms par
+jeton**, soit ~8 jetons/s au lieu de ~60 en local. Le découpage ne sert donc pas à
+accélérer — il sert à faire tenir un modèle qui ne tient pas sur une machine, et
+c'est ce que la démonstration devra montrer.
+
 C'est aussi la réponse à la phase 3.3 : **le seuil de rentabilité est une
 affaire de latence, pas de débit**. Par jeton, le flux pèse 3 623 octets (dense)
 ou 1 989 (blocs à 68 % d'activité), et le calcul distant coûte 16 ms : le réseau

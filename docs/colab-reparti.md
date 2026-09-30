@@ -28,12 +28,22 @@ préremplissage par lots est le chantier suivant.
 * **Débit** : 3 623 octets par flux en dense, 1 989 en listes à échelle par bloc
   (68 % d'activité). À 20 jetons/s : **moins de 1 Mbit/s**. Le débit n'est pas le
   problème, même sur un lien domestique.
-* **Latence** : chaque jeton paie un aller-retour. Un aller-retour Colab ↔
-  connexion domestique se compte en dizaines de millisecondes ; le calcul distant
-  de 12 couches de Qwen2.5-0.5B coûte ~15 ms sur ce serveur. À 40 ms d'aller-
-  retour, le banc réparti sera ~2,5× plus lent que le local — et c'est normal :
-  **le découpage sert à faire tenir un modèle qui ne tient pas sur une machine,
-  pas à accélérer.**
+* **Latence** : chaque jeton paie un aller-retour, et c'est le seul poste qui
+  compte. Mesuré avec un relais retardateur (`tools/proxy_latence.py`, 256 jetons,
+  12 couches par nœud) : `attente ≈ calcul distant + 3,2 × (latence par message)`.
+  Concrètement,
+
+  | latence ajoutée | attente par jeton | rapport au calcul local |
+  |---|---|---|
+  | 0 ms (localhost) | 16,8 ms | 1,01× |
+  | 5 ms | 33,0 ms | 1,99× |
+  | 20 ms | 81,8 ms | 4,89× |
+
+  Un aller-retour Colab de 60 ms donne donc ≈ 112 ms par jeton, soit ~8 jetons/s
+  au lieu de ~60 en local — et la fidélité, elle, ne bouge pas (0,00e0 partout).
+  **Le découpage sert à faire tenir un modèle qui ne tient pas sur une machine,
+  pas à accélérer** ; c'est ce que la démonstration devra montrer, et le tableau
+  ci-dessus dit d'avance ce qu'elle mesurera.
 
 ## Topologie recommandée : le nœud moteur EN LOCAL, le pilote sur Colab
 

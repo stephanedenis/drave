@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 44.8 h |
+| Durée | 44.9 h |
 | Tours | 44 |
-| Messages | 1574 |
-| Appels d'outils | 1489 |
+| Messages | 1576 |
+| Appels d'outils | 1491 |
 | Fichiers touchés | 44 |
-| Commandes | 1188 |
+| Commandes | 1190 |
 | Sous-agents | 1 |
-| Commits | 99 |
+| Commits | 100 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -1995,7 +1995,7 @@ Je vérifie l'heure à chaque itération et j'arrête à 12:06, en laissant un p
 
 ### Tour 44 — pendant que les charges locales s'executent, peux-tu avancer des chantiers légers sur les ressources loçcale ou d'analys … [7 caractères tronqués]
 
-*143 appels d'outils.* Actions notables :
+*145 appels d'outils.* Actions notables :
 
 - bash — Write and run the pure flux analysis tool
 - bash — Document the flux analysis and commit
@@ -2011,11 +2011,11 @@ Je vérifie l'heure à chaque itération et j'arrête à 12:06, en laissant un p
 - bash — Inspect state after timeout
 - bash — Rerun pre-fix distributed test in background
 - bash — Inspect all final-norm condition sites
-- … et 111 autres
+- … et 113 autres
 
 **Synthèse produite :**
 
-Alerte hygiène : le **code** de l'encodage par écarts n'était pas dans le commit (j'avais ajouté les deux documents seulement). Je répare.
+Mesure nette : **attente ≈ 16 ms + 3,2 × latence** (1,01× → 1,99× → 4,89×), fidélité intacte (0,00e0). Je chiffre l'attente Colab et je clos.
 
 ## 3. Travail accompli
 
@@ -2114,7 +2114,7 @@ Alerte hygiène : le **code** de l'encodage par écarts n'était pas dans le com
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 1148 autres
+- … et 1150 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2361,4 +2361,5 @@ Alerte hygiène : le **code** de l'encodage par écarts n'était pas dans le com
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p='reports/rapport-phase3-reparti.md'; s=open(p).read() v = """Égalité exacte, et pas seu
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git show --stat cb37c83 | tail -5; echo "=== ce que le code committé contient ==="; git show HEAD:drave-co
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p='reports/rapport-transport-liste.md'; s=open(p).read() v = """| jetons | écart | octets
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p='reports/rapport-transport-liste.md'; s=open(p).read() v = """C'est aussi la réponse à 
 

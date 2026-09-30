@@ -25036,3 +25036,39 @@ référence locale  : perplexité 10.7639  (49.4 s)
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/rapport-transport-liste.md'; s=open(p).read()\nv = \"\"\"| jetons | écart | octets/flux | activité |\n|---|---|---|---|\n| 64 | 1,37e-1 | 2 249 | 77,9 % |\n| 128 | 6,37e-2 | 2 257 | 78,2 % |\n| 256 | 2,74 … [2532 caractères tronqués]`
+
+  ```
+rapport : point à 1024 jetons
+roadmap : point à 1024 jetons
+af18f29 Transport en listes à 1 024 jetons : ÷2,3 pour 1,3 % d'écart
+ M journal/README.md
+11:37:13
+  ```
+
+### 🤖 Assistant
+
+⏵ Dernière mesure : simuler la latence d'un lien distant (proxy retardateur) pour chiffrer ce qu'attendra Colab.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > tools/proxy_latence.py <<'EOF'\n#!/usr/bin/env python3\n\"\"\"Relais TCP qui ajoute une latence par message, pour mesurer ce qu'un lien\ndistant coûte à un découpage de modèle.\n\nPourquoi : sur localhost, l'attente du pair vau … [2915 caractères tronqués]`
+
+  ```
+=== latence ajoutée : 0 ms par message ===
+  deux nœuds        : perplexité 18.0206  (11.0 s)
+  écart             : 0.00e0
+  temps             : 16.6 ms par jeton en local · 16.8 ms à attendre le pair (son calcul + l'aller-retour) · soit 1.01× le calcul local seul
+=== latence ajoutée : 5 ms par message ===
+  deux nœuds        : perplexité 18.0206  (15.1 s)
+  écart             : 0.00e0
+  temps             : 16.6 ms par jeton en local · 33.0 ms à attendre le pair (son calcul + l'aller-retour) · soit 1.99× le calcul local seul
+=== latence ajoutée : 20 ms par message ===
+  deux nœuds        : perplexité 18.0206  (27.6 s)
+  écart             : 0.00e0
+  temps             : 16.7 ms par jeton en local · 81.8 ms à attendre le pair (son calcul + l'aller-retour) · soit 4.89× le calcul local seul
+11:38:58
+  ```
+
+### 🤖 Assistant
+
+Mesure nette : **attente ≈ 16 ms + 3,2 × latence** (1,01× → 1,99× → 4,89×), fidélité intacte (0,00e0). Je chiffre l'attente Colab et je clos.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/rapport-transport-liste.md'; s=open(p).read()\nv = \"\"\"C'est aussi la réponse à la phase 3.3 : **le seuil de rentabilité est une\naffaire de latence, pas de débit**.\"\"\"\nn = \"\"\"### Et si le lien e … [4904 caractères tronqués]`
