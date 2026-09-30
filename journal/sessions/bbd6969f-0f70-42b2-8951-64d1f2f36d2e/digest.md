@@ -26399,3 +26399,303 @@ TETE = TETE = 79   # en-tête v4 : magie, version, mode, plage, position, n, éc
 Réglages top-k : **appliqués et transportés** — le test B est décisif : serveur réglé différemment, le client impose les siens, écart 0,00e0. Je documente et commit.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='docs/format-flux.md'; s=open(p).read()\nv = \"\"\"          version      u8           3   (refusée si différente, en le disant)\"\"\"\nn = \"\"\"          version      u8           4   (refusée si différente, en  … [3929 caractères tronqués]`
+
+  ```
+format-flux : v4
+addendum posé sur l'audit
+# Drapeaux et variables « analysés mais jamais appliqués » — audit systématique
+> **Addendum (mêmes jour, après l'audit).** Les défauts n°1 (top-k non transportés
+> ni appliqués dans les modes flux), n°2 (`--keep` en `--ppl`), n°3 (`--ffn-gain`
+> en `--infer`) et la moitié basse du tableau (`--threads` en FS/PR/BM, `--hebb-q`,
+> `--hebb-out`, `--plan` sans `--ctx`, précédence de fenêtre, pas de 2 du mode par
+> défaut) ont été **corrigés** dans les commits `7522289` et le suivant. Le
+> protocole de flux passe en **version 4** : le contrat d'activation transporte
+> désormais aussi les sept top-k par projection, `--attn-topk`, `--qk-topk` et
+> `--moe-topk`. Les sections ci-dessous décrivent l'état AVANT correction — elles
+> restent la référence de ce qui a été trouvé, et la liste de ce qui reste
+> (`--banc-vision` sans `Options`, `--bits` du noyau GPU, etc.).
+
+
+**Révision auditée** : `drave-core/src/main.rs` sha256 `1726f9ac3665c3ce…` (2 999 lignes),
+d59d061 Protocole v4 : les top-k voyagent aussi (défaut n°1 de l'audit)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat /tmp/kv_cles.log; sed -n 480,534p drave-core/src/model.rs", "description": "Check lane A and read trace writer"}`
+
+  ```
+cles_f32_valeurs_int4      : fn matvec_f32(w: &[f32], x: &[f32], n_in: usize, n_out: usize, y: &mut [f32]) {
+    for o in 0..n_out {
+        let ligne = &w[o * n_in..(o + 1) * n_in];
+        let mut acc = 0f32;
+        for i in 0..n_in { acc += ligne[i] * x[i]; }
+        y[o] = acc;
+    }
+}
+
+/// Trace du **flux d'activation** : par (couche, position), la liste des
+/// neurones actifs — indice, valeur — avec son échelle. C'est le cœur de la
+/// vision mis sur disque : on peut rejouer, comparer, et c'est aussi le format
+/// qu'un nœud distant devrait recevoir pour continuer le calcul.
+pub struct TraceFlux {
+    pub fichier: std::io::BufWriter<std::fs::File>,
+    /// Couches à tracer (toutes si vide).
+    pub couches: Vec<usize>,
+    pub octets: u64,
+    pub enregistrements: u64,
+    pub actifs: u64,
+}
+
+impl TraceFlux {
+    pub fn nouveau(chemin: &str, couches: Vec<usize>, hidden: usize, n_layer: usize)
+        -> std::io::Result<Self> {
+        use std::io::Write;
+        let mut f = std::io::BufWriter::new(std::fs::File::create(chemin)?);
+        f.write_all(b"DRVF")?;
+        f.write_all(&1u16.to_le_bytes())?;
+        f.write_all(&(n_layer as u32).to_le_bytes())?;
+        f.write_a
+… [1174 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Format DRVF v2 : indices par écarts sur le disque (−50 % annoncés par l'étude déléguée), avec rejeu identique comme critère.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n 553,600p drave-core/src/model.rs", "description": "Read trace reader"}`
+
+  ```
+impl FluxRelecteur {
+    pub fn lire(chemin: &str) -> std::io::Result<Self> {
+        use std::io::Read;
+        let mut f = std::fs::File::open(chemin)?;
+        // En-tête : magie (4) + version (2) + n_layer (4) + hidden (4) = 14 octets.
+        // Lire 16 décalait tout de deux octets et faisait échouer la dernière
+        // lecture — un « failed to fill whole buffer » qui ne dit pas pourquoi.
+        let mut entete = [0u8; 14];
+        f.read_exact(&mut entete)?;
+        if &entete[0..4] != b"DRVF" {
+            return Err(std::io::Error::new(std::io::ErrorKind::InvalidData,
+                                           "ce n'est pas une trace DRVF"));
+        }
+        let mut listes = std::collections::HashMap::new();
+        loop {
+            let mut tete = [0u8; 2];
+            if f.read_exact(&mut tete).is_err() { break; }          // fin de fichier
+            let couche = u16::from_le_bytes(tete);
+            if couche == 0xFFFF { break; }
+            let mut corps = [0u8; 12];
+            f.read_exact(&mut corps)?;
+            let pos = u32::from_le_bytes([corps[0], corps[1], corps[2], corps[3]]);
+            let n = u32::from_le_bytes([corps[4], corps[5], corps[6], corps
+… [1260 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/model.rs'; s=open(p).read()\n\n# --- ÉCRITURE : version 2, indices par écarts ---\nv = \"\"\"        f.write_all(b\"DRVF\")?;\n        f.write_all(&1u16.to_le_bytes())?;\n        f.write_all(&(n_la … [5159 caractères tronqués]`
+
+  ```
+DRVF v2 : écriture et lecture
+    Finished `release` profile [optimized] target(s) in 0.01s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rn \"trace-flux\" --include=\"*.md\" . | grep -v journal/ | head -8; ls -la /tmp/flux_f32.bin /tmp/flux_sparse.bin 2>/dev/null | awk '{print $5, $9}'", "description": "Find trace command and existing traces"}`
+
+  ```
+./reports/rapport-drapeaux-ignores.md:86:| `--trace-flux` `--trace-couches` `--flux-forcer` | P : 2709-2720 | **I** (et partout ailleurs) : jamais lu → `--infer --trace-flux f` ne produit aucun fichier, sans message | 🟠 |
+./reports/rapport-drapeaux-ignores.md:128:4. `--ppl-texte`, `--depuis`, `--trace-flux` + `--lot` (rejeu et trace passent par `flux_lot`,
+./docs/format-flux.md:5:1. la **trace** d'exécution (`--trace-flux`) : ce qui s'est passé, couche par
+./docs/format-flux.md:118:| deux implémentations indépendantes lisent le même fichier | Rust (`--trace-flux`) et Python (`tools/flux_codec.py`) : aller-retour **identique** sur 132 396 736 octets |
+132396736 /tmp/flux_f32.bin
+53092562 /tmp/flux_sparse.bin
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && D=./drave-core/target/release/drave; M=models/Qwen2.5-0.5B-Q8_0.gguf; G=\"--ppl /tmp/ids_qwen.txt --ctx 256 --abits 16 --threads 16 --limit 512 --dense\"; echo \"=== 1. trace v2 (mêmes réglages que la porte) ===\"; $D $M $G --trace-f … [683 caractères tronqués]`
+
+  ```
+=== 1. trace v2 (mêmes réglages que la porte) ===
+trace] 24576 listes · 22008776 neurones actifs · 66 Mo
+perplexité 19.3885 sur 510 tokens
+taille v2 : 66370408 octets
+=== 2. rejeu de la trace v2 (attendu 19,3885) ===
+perplexité 19.3885 sur 510 tokens
+=== 3. rejeu de l'ancienne trace v1 (rétrocompatibilité) ===
+perplexité 1958.7210 sur 510 tokens
+taille v1 : 132396736 octets
+12:14:21
+  ```
+
+### 🤖 Assistant
+
+Le rejeu v2 est bon (19,3885, −49,87 % de taille) mais l'ancienne trace v1 ne se relit plus : je vérifie l'hypothèse d'un en-tête historique de 16 octets.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport struct\nfor nom in ('/tmp/flux_f32.bin','/tmp/flux_v2.bin','/tmp/flux_sparse.bin'):\n    f=open(nom,'rb'); d=f.read(40)\n    magie=d[:4]; ver=struct.unpack('<H',d[4:6])[0]; nl=struct.unpack('<I',d[6:10])[0];  … [654 caractères tronqués]`
+
+  ```
+flux_f32.bin     b'DRVF' v1 n_layer=24 hidden=896
+   en-tête 14 → couche=0 jeton=0 n=887   PLAUSIBLE
+   en-tête 16 → couche=0 jeton=58130432 n=1366687744   absurde
+flux_v2.bin      b'DRVF' v2 n_layer=24 hidden=896
+   en-tête 14 → couche=0 jeton=1 n=887   PLAUSIBLE
+   en-tête 16 → couche=1 jeton=58130432 n=1366687744   absurde
+flux_sparse.bin  b'DRVF' v1 n_layer=24 hidden=896
+   en-tête 14 → couche=0 jeton=0 n=182   PLAUSIBLE
+   en-tête 16 → couche=0 jeton=11927552 n=3482845184   absurde
+  ```
+
+### 🤖 Assistant
+
+Mon hypothèse était fausse : les anciennes traces ont bien 14 octets d'en-tête, mais leur **compteur de jeton commence à 0** (avant le correctif) — d'où le décalage. Détail à rendre visible plutôt que silencieux.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"manquantes\\|servies\" drave-core/src/model.rs drave-core/src/main.rs | head -12", "description": "Check replay counters usage"}`
+
+  ```
+drave-core/src/model.rs:565:    pub servies: u64,
+drave-core/src/model.rs:566:    pub manquantes: u64,
+drave-core/src/model.rs:629:        Ok(FluxRelecteur { listes, servies: 0, manquantes: 0 })
+drave-core/src/model.rs:641:                self.servies += 1;
+drave-core/src/model.rs:643:            None => self.manquantes += 1,
+drave-core/src/model.rs:2639:                    r.servies += 1;
+drave-core/src/model.rs:2641:                    r.manquantes += 1;
+drave-core/src/model.rs:2853:                if verif && r.servies < 4 {
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"flux_forcer\" drave-core/src/main.rs | head; echo \"=== fin du run_ppl (compteurs) ===\"; grep -n \"journal : \\|println!(\\\"  perplexité\\|manquantes\" drave-core/src/main.rs | head -6; sed -n 3010,3025p drave-core/src/ma … [62 caractères tronqués]`
+
+  ```
+357:    flux_forcer: Option<String>,
+447:            "--flux-forcer" => { o.flux_forcer = Some(suivant(i).clone()); 2 }
+2739:        ppl_profil, lot, profil_neurones, neurones_sortie, trace_flux, trace_couches, flux_forcer,
+2778:    if let Some(chemin) = flux_forcer.as_deref() {
+=== fin du run_ppl (compteurs) ===
+3031:            println!("journal : {} vecteurs de {} dim, {} pertes (act_log.bin, loss_log.bin)",
+            println!("    {:>6}-{:<6} : {:>9.3}  ({} jetons notés)",
+                     i * 256, i * 256 + 255, (s / *c as f64).exp(), c);
+        }
+    }
+    if let Some(rapport) = mdl.rapport_neurones() {
+        println!("\n{rapport}");
+        if let Some(f) = &neurones_sortie {
+            match mdl.ecrire_neurones(f) {
+                Ok(n) => println!("classement de {n} neurones écrit dans {f}"),
+                Err(e) => println!("écriture du classement impossible : {e}"),
+            }
+        }
+    }
+    let ppl = (nll / n as f64).exp();
+    if let Some(hb) = mdl.hebb.as_ref() {
+        if hb.log_on {
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/main.rs'; s=open(p).read()\nv = \"\"\"    let ppl = (nll / n as f64).exp();\n    if let Some(hb) = mdl.hebb.as_ref() {\"\"\"\nn = \"\"\"    let ppl = (nll / n as f64).exp();\n    // Un rejeu doit D … [1707 caractères tronqués]`
+
+  ```
+compteurs de rejeu affichés
+    Finished `release` profile [optimized] target(s) in 0.01s
+=== rejeu v2 (doit dire les compteurs) ===
+[flux] rejeu depuis /tmp/flux_v2.bin : 24576 listes enregistrées
+  rejeu             : 24576 listes servies, 0 manquantes
+=== perplexité 19.3885 sur 510 tokens (0 événements, 21.9 s) ===
+=== rejeu de l'ancienne trace (doit alerter) ===
+[flux] rejeu depuis /tmp/flux_f32.bin : 12288 listes enregistrées
+  rejeu             : 12240 listes servies, 12336 manquantes  ← la moitié au moins n'a pas servi : vérifier la trace
+=== perplexité 1958.7210 sur 510 tokens (0 événements, 23.2 s) ===
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"^def \\|^class \\|version\\|struct.pack\\|struct.unpack\" tools/flux_codec.py | head -30; wc -l tools/flux_codec.py; cat /tmp/kv_cles.log", "description": "Inspect Python codec structure"}`
+
+  ```
+11:    en-tête   "DRVF" · u16 version · u32 n_layer · u32 hidden
+32:def encoder(n_layer, hidden, listes):
+43:def decoder(blob):
+44:    magie, version, n_layer, hidden = ENTETE.unpack_from(blob, 0)
+46:    assert version == VERSION, f"version {version} inconnue"
+66:def lire_rust(chemin):
+74:def main():
+110 tools/flux_codec.py
+cles_f32_valeurs_int4      : perplexité 14.2994 sur 8191 tokens (0 événements, 1665.6 s)
+cles_int4_valeurs_f32      :
+  ```
+
+### 🤖 Assistant
+
+**Couloir A, 1er résultat : clés f32 + valeurs int4 = 14,2994 (+0,46 %)**. Pendant que la 2e variante tourne, je synchronise le décodeur Python sur DRVF v2.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n 1,70p tools/flux_codec.py", "description": "Read Python codec"}`
+
+  ```
+#!/usr/bin/env python3
+"""Encodeur/décodeur de RÉFÉRENCE du flux d'activation (format DRVF v1).
+
+Le format de trace et le contrat d'échange de la phase 3 sont le MÊME format :
+une liste d'activation est ce qu'un nœud distant doit recevoir pour continuer le
+calcul. Ce fichier est la deuxième implémentation de ce format — la première est
+en Rust (`--trace-flux`) — et c'est ce qui permet de dire qu'il est sans
+ambiguïté : deux implémentations indépendantes, un aller-retour identique.
+
+Structure :
+    en-tête   "DRVF" · u16 version · u32 n_layer · u32 hidden
+    liste     u16 couche · u32 position · u32 n_actifs · f32 echelle
+              puis n_actifs × ( u32 indice · i16 valeur )
+    fin       u16 0xFFFF
+
+Usage :
+    flux_codec.py <trace>            # vérifie l'aller-retour et mesure le débit
+    flux_codec.py <trace> --jetons N # projette le coût pour N jetons
+"""
+import struct
+import sys
+import time
+
+MAGIE = b"DRVF"
+VERSION = 1
+ENTETE = struct.Struct("<4sHII")
+LISTE = struct.Struct("<HIIf")
+PAIRE = struct.Struct("<Ih")
+FIN = struct.Struct("<H")
+
+
+def encoder(n_layer, hidden, listes):
+    """listes : itérable de (couche, position, echelle, [(indice, valeur)])."""
+    out = bytearra
+… [1264 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='tools/flux_codec.py'; s=open(p).read()\ns = s.replace('\"\"\"Encodeur/décodeur de RÉFÉRENCE du flux d\\'activation (format DRVF v1).',\n              '\"\"\"Encodeur/décodeur de RÉFÉRENCE du flux d\\'activation ( … [4608 caractères tronqués]`
+
+  ```
+flux_codec : lit v1 et v2, écrit v2
+aller-retour Python v2 : identique · 949 octets pour 301 actifs
+aller-retour Python v1 : identique · 1850 octets (v2 = 48.7% de moins )
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 16, in <module>
+ValueError: too many values to unpack (expected 3)
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n 78,95p tools/flux_codec.py; python3 - <<'PY'\nimport sys\nsys.path.insert(0, 'tools')\nimport flux_codec as fc\nres = fc.lire_rust('/tmp/flux_v2.bin')\nprint(\"lire_rust rend\", len(res), \"valeurs :\", [type(x).__name__ for x … [434 caractères tronqués]`
+
+  ```
+off += PAIRE_V1.size
+            else:
+                d = blob[off]
+                off += 1
+                if d == 255:
+                    i = struct.unpack_from("<H", blob, off)[0]
+                    off += 2
+                else:
+                    i = prev + d
+                prev = i
+                v = struct.unpack_from("<h", blob, off)[0]
+                off += 2
+            actifs.append((i, v))
+        listes.append((couche, pos, echelle, actifs))
+    return n_layer, hidden, listes
+
+
+def lire_rust(chemin):
+lire_rust rend 4 valeurs : ['int', 'int', 'list', 'bytes']
+trace Rust v2 lue par Python : 24576 listes · 22008776 neurones actifs · n_layer=24 hidden=896
+désaccord Rust↔Python : AUCUN (24 576 listes, 22 008 776 actifs des deux côtés)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='docs/format-flux.md'; s=open(p).read()\nv = \"\"\"liste     couche       u16          < 1000 : entrée d'attention\n                                    >= 1000 : entrée de FFN (couche - 1000)\n          jeton      … [5453 caractères tronqués]`

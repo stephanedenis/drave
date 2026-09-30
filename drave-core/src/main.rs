@@ -3021,6 +3021,20 @@ fn run_ppl(opt: Options) {
         }
     }
     let ppl = (nll / n as f64).exp();
+    // Un rejeu doit DIRE ce qu'il a servi. Sans ces deux compteurs, une trace
+    // dont les clés ne correspondent plus (par exemple écrite avant le passage
+    // au compteur de jeton GLOBAL : la première clé valait 0, elle vaut 1
+    // maintenant) se rejouait en silence en donnant une perplexité fausse —
+    // 1958,72 au lieu de 19,3885 sur l'ancienne trace de /tmp, constaté ici.
+    if let Some(r) = mdl.flux_force.as_ref() {
+        println!("  rejeu             : {} listes servies, {} manquantes{}",
+                 r.servies, r.manquantes,
+                 if r.manquantes > 0 && r.servies == 0 {
+                     "  ← AUCUNE liste utilisée : la trace ne correspond pas à ce calcul"
+                 } else if r.manquantes > r.servies {
+                     "  ← la moitié au moins n'a pas servi : vérifier la trace"
+                 } else { "" });
+    }
     if let Some(hb) = mdl.hebb.as_ref() {
         if hb.log_on {
             use std::io::Write;

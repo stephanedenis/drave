@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 45.4 h |
+| Durée | 45.5 h |
 | Tours | 45 |
-| Messages | 1648 |
-| Appels d'outils | 1555 |
+| Messages | 1662 |
+| Appels d'outils | 1569 |
 | Fichiers touchés | 44 |
-| Commandes | 1240 |
+| Commandes | 1254 |
 | Sous-agents | 4 |
-| Commits | 105 |
+| Commits | 106 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -2055,7 +2055,7 @@ Je vérifie l'heure à chaque itération et j'arrête à 12:06, en laissant un p
 
 ### Tour 45 — as-tu ce qu'il te faut pour te rendre à 15h en travaillaint avec un maximum d'autonomie et de parallélisme d'activités?
 
-*56 appels d'outils.* Actions notables :
+*70 appels d'outils.* Actions notables :
 
 - bash — Probe machine, GPU, disk, network state
 - bash — Identify GPU users and stray processes
@@ -2071,11 +2071,11 @@ Je vérifie l'heure à chaque itération et j'arrête à 12:06, en laissant un p
 - bash — Understand batched PPL reference path
 - bash — Add batched imposed states to forward_lot
 - list_agents
-- … et 35 autres
+- … et 49 autres
 
 **Synthèse produite :**
 
-Réglages top-k : **appliqués et transportés** — le test B est décisif : serveur réglé différemment, le client impose les siens, écart 0,00e0. Je documente et commit.
+**Couloir A, 1er résultat : clés f32 + valeurs int4 = 14,2994 (+0,46 %)**. Pendant que la 2e variante tourne, je synchronise le décodeur Python sur DRVF v2.
 
 ## 3. Travail accompli
 
@@ -2177,7 +2177,7 @@ Réglages top-k : **appliqués et transportés** — le test B est décisif : se
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 1200 autres
+- … et 1214 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2305,7 +2305,7 @@ Réglages top-k : **appliqués et transportés** — le test B est décisif : se
 
 ## 5. Erreurs rencontrées
 
-83 sorties en erreur ou divergentes. Les premières :
+84 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : a8f2635f8 docs: record which models this box is good at, and why src/llama-hparams.cpp:8:void llama_hparams::set_swa_pattern(uint32_t n_pattern, bool dense_first) { src/llama-hparams.h:308:    void se
 - **T1** : 511 tokens notés — perplexité cumulée 247.031  (4.9 tok/s) === perplexité 247.0308 sur 511 tokens (0 événements, 104.5 s) ===  ### B3 harmony assistant 511 --- ref --- 0.0 0.0 0:00 ls: cannot access '
@@ -2430,4 +2430,5 @@ Réglages top-k : **appliqués et transportés** — le test B est décisif : se
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p='docs/format-flux.md'; s=open(p).read()  v = """## Transport (phase 3, TCP) — protocole
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo "=== porte Qwen (attendu 19,3885) ===" && ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p='docs/format-flux.md'; s=open(p).read() v = """          version      u8           3   
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p='docs/format-flux.md'; s=open(p).read() v = """liste     couche       u16          < 10
 

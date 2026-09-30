@@ -1,5 +1,18 @@
 # Compacité de la trace — le disque paie trois fois le câble
 
+> **Fait depuis (même jour).** La variante « écarts » est **implémentée et
+> mesurée** dans le moteur (DRVF v2, lecteur rétrocompatible v1) : trace dense de
+> 512 jetons **132 396 736 → 66 370 408 octets (−49,87 %)**, rejeu `--flux-forcer`
+> **identique** (perplexité 19,3885 dans les deux cas), et la relecture par
+> `tools/flux_codec.py` — l'implémentation indépendante — donne exactement les
+> mêmes 24 576 listes et 22 008 776 neurones actifs. Le rejeu annonce maintenant
+> ses compteurs (`N listes servies, M manquantes`), ce qui a mis au jour une
+> trace ancienne dont les clés étaient décalées d'un jeton : elle se rejouait en
+> silence avec une perplexité fausse (1958,72 au lieu de 19,3885).
+>
+> Restent à faire, tels quels : les valeurs i8 à échelle par bloc (−60,9 %), les
+> échelles f16 (−63,5 %) et l'emballage zstd (−79 %).
+
 **En une ligne** : la trace DRVF v1 coûte **6,04 octets par neurone actif** quand
 le transport en coûte ~2 ; les **indices u32 en sont les deux tiers**, et les
 ramener à un octet par écarts divise la trace par deux **sans perdre un seul

@@ -25,12 +25,31 @@ liste     couche       u16          < 1000 : entrée d'attention
           jeton        u32          COMPTEUR GLOBAL de jeton, pas la position
           n_actifs     u32
           échelle      f32
-          puis n_actifs × ( indice u32 · valeur i16 )
+          puis n_actifs × ( indice u32 · valeur i16 )           [version 1]
+          puis n_actifs × ( écart u8 · valeur i16 )             [version 2]
+                l'écart de 255 annonce l'indice ABSOLU sur les deux octets suivants
 fin       sentinelle   u16          0xFFFF (optionnelle : la fin de fichier suffit)
 ```
 
-Taille : `14 + 6 × n_actifs` octets par liste. Mesuré : **6,02 octets par neurone
-actif**, et 505 ko par jeton sur une exécution dense (deux listes par couche).
+Taille : `14 + 6 × n_actifs` en v1, `14 + 3 × n_actifs` en v2. Mesuré : **6,02
+octets par neurone actif** en v1, et **3,01** en v2.
+
+### Version 2 : les indices par écarts
+
+La liste est triée, donc l'écart au neurone précédent tient sur **un octet** dans
+99,9997 % des cas (22 échappements sur 8 790 000 mesurés). Trois octets par
+neurone actif au lieu de six, et c'est du RANGEMENT, pas de la perte :
+
+| | version 1 | version 2 |
+|---|---|---|
+| trace dense, 512 jetons | 132 396 736 o | **66 370 408 o (−49,87 %)** |
+| rejeu (`--flux-forcer`) | 19,3885 | **19,3885 — identique** |
+| listes · neurones actifs | 24 576 · 22 008 776 | identiques (relus par Python) |
+
+Le lecteur lit **les deux versions** ; une version inconnue est refusée en la
+nommant. Le rejeu annonce désormais ce qu'il a servi — `24 576 listes servies,
+0 manquantes` — parce qu'une trace dont les clés ne correspondent plus se
+rejouait en silence avec une perplexité fausse.
 
 ## Le point qui a coûté un bug
 
@@ -115,7 +134,7 @@ découpage (798,3 au lieu de 18,2).
 
 | invariant | comment il est vérifié |
 |---|---|
-| deux implémentations indépendantes lisent le même fichier | Rust (`--trace-flux`) et Python (`tools/flux_codec.py`) : aller-retour **identique** sur 132 396 736 octets |
+| deux implémentations indépendantes lisent le même fichier | Rust (`--trace-flux`) et Python (`tools/flux_codec.py`) : aller-retour **identique** en v1 (132 396 736 octets) et en v2 (24 576 listes, 22 008 776 actifs des deux côtés) |
 | un rejeu redonne le même résultat | `--flux-forcer` : perplexité **19,3885** avec et sans rejeu (chemin par jeton), **17,4294** (chemin par lots) |
 | la fidélité de l'encodage est chiffrée | `DRAVE_FLUX_VERIF=1` : écart relatif **1,5e-5**, soit la quantification 16 bits |
 | la taille suit l'activité | densité ÷2,3 → trace ÷2,5 (132 Mo → 53 Mo) |
