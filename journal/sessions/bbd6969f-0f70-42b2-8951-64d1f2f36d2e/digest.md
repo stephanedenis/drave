@@ -28992,3 +28992,52 @@ cles_f16_valeurs_int8      :       07:42 ./drave-core/target/release/drave model
 ⏵ Pendant que la dernière campagne tourne, j'écris l'index de la journée (un rapport court qui renvoie à chaque chantier).
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-session-2026-09-30.md <<'EOF'\n# Session du 30/09 — index des chantiers\n\nDeux créneaux : 10h06–11h42 (time-box de 2 h) puis 11h46–15h00 (autonomie et\nparallélisme). Trente-cinq commits, deux campagnes de mesu … [4396 caractères tronqués]`
+
+  ```
+b160864 Index de la session : les huit chantiers, les défauts et par qui ils ont été trouvés
+13:14:07
+cles_f16_valeurs_int8      :
+  ```
+
+### 🤖 Assistant
+
+⏵ Autre trou de vérification : le chemin GPU n'a pas été exercé aujourd'hui. Je lance la porte gpt-oss **avec** `DRAVE_GPU` (valeur documentée 15,1667).
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/porte_gpu.sh <<'EOF'\n#!/bin/bash\ncd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\necho \"=== 1. gpt-oss avec DRAVE_GPU (documenté : 15,1667, le pilote déporte les Q8_0 > 8 Mo) ===\"\nDRAVE_GPU=1 timeout 3600 ./drave-c … [503 caractères tronqués]`
+
+  ```
+started background job bash-71
+  ```
+
+- **job_output** `{"job_id": "bash-71", "timeout_ms": 600000, "wait": true}`
+
+  ```
+=== 1. gpt-oss avec DRAVE_GPU (documenté : 15,1667, le pilote déporte les Q8_0 > 8 Mo) ===
+=== perplexité 15.1667 sur 510 tokens (0 événements, 129.5 s) ===
+=== 2. banc GPU (exactitude des noyaux) ===
+[attention] QT_IM_SWITCHER est l'ancien nom d'une variable d'environnement : elles s'appellent maintenant DRAVE_* (voir docs/histoire.md). Rien n'a été appliqué.
+tête token_embd.weight : 151936 × 896 · 144.6 Mo · 28 blocs de 32
+  CPU  30 fils :    11.3 ms  (  12.8 Go/s)
+  GPU absent : banc terminé
+13:18:35
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && DRAVE_GPU=1 timeout 900 ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf --gpu-banc 2>&1 | grep -vE \"^\\[attention\\]|QT_IM\" | tail -14; date +\"%H:%M:%S\"", "description": "Run GPU bench with driver enabled", "timeo … [14 caractères tronqués]`
+
+  ```
+tête token_embd.weight : 151936 × 896 · 144.6 Mo · 28 blocs de 32
+  CPU  30 fils :     7.2 ms  (  20.0 Go/s)
+  GPU 1
+[banc] allocation de 144.6 Mo sur le GPU
+[banc] poids montés, premier lancement
+  GPU  ligne par fil  :     3.5 ms  (  41.6 Go/s)  écart max +1.99e-7 (relatif au plus grand logit)
+  GPU  warp par ligne :     1.6 ms  (  88.0 Go/s)  écart max +1.99e-7 (relatif au plus grand logit)
+13:18:46
+  ```
+
+### 🤖 Assistant
+
+Chemin GPU vérifié aujourd'hui aussi : offline 15,1667 ✓ et noyau warp **1,6 ms** avec écart **1,99e-7** ✓. Je l'inscris.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='REPRISE.md'; s=open(p).read()\nv = \"\"\"> gpt-oss était la seule que la relecture adversariale n'avait pas pu faire\n> tourner (bornes de temps) ; elle est verte.\"\"\"\nn = \"\"\"> gpt-oss était la seule que la … [1226 caractères tronqués]`

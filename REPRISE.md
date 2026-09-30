@@ -35,6 +35,11 @@ cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && cargo build --r
 > **19,3885** et gpt-oss ctx 256 = **15,1757**, `cargo test` **11/11**. La porte
 > gpt-oss était la seule que la relecture adversariale n'avait pas pu faire
 > tourner (bornes de temps) ; elle est verte.
+>
+> **Chemin GPU revérifié le même jour** (personne ne l'avait exercé depuis les
+> changements) : gpt-oss avec `DRAVE_GPU=1` donne **15,1667**, la valeur attendue
+> du pilote, et `--gpu-banc` retrouve l'exactitude des noyaux — 1,6 ms par ligne
+> en warp-par-ligne contre 7,2 ms sur 30 fils CPU, **écart max 1,99e-7**.
 
 Corpus : `/tmp/wt2_txt.txt` = 20 000 premiers octets de `data/wikitext2_test.txt`.
 **Régénérable** (à refaire si `/tmp` a été vidé) :

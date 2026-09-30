@@ -7,10 +7,10 @@
 | Début | 2026-09-30 13:10 |
 | Durée | 0.1 h |
 | Tours | 1 |
-| Messages | 17 |
-| Appels d'outils | 28 |
-| Fichiers touchés | 0 |
-| Commandes | 22 |
+| Messages | 28 |
+| Appels d'outils | 44 |
+| Fichiers touchés | 2 |
+| Commandes | 34 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -23,7 +23,7 @@
 
 ### Tour 1 — Tu es relecteur ADVERSARIAL dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (projet « Drave » : moteur d'i … [3709 caractères tronqués]
 
-*28 appels d'outils.* Actions notables :
+*44 appels d'outils.* Actions notables :
 
 - bash — List recent commits and repo root
 - bash — Show stats for target commits
@@ -39,11 +39,11 @@
 - bash — Show unknown flag diff and parser
 - bash — Read banc MLA and replay diagnostics
 - bash — Check build artifacts and models
-- … et 9 autres
+- … et 23 autres
 
 **Synthèse produite :**
 
-⏵ Correction des chemins et relance des deux modes
+⏵ Lancement des 11 tests annoncés en arrière-plan, puis expérience de clés de trace
 
 ## 3. Travail accompli
 
@@ -51,6 +51,8 @@
 
 | Fichier | Écritures | Éditions |
 |---|---|---|
+| `/tmp/r4_probe.py` | 1 | 0 |
+| `/tmp/r4_probe2.py` | 1 | 0 |
 
 ### Commandes exécutées (échantillon)
 
@@ -76,6 +78,18 @@
 - **T1** Run inference with dashboard
 - **T1** Run ppl with dashboard, absolute paths
 - **T1** Run inference with dashboard, absolute paths
+- **T1** Test limit 1 NaN output
+- **T1** Test act-topk honored in lot mode
+- **T1** List trace write/read sites in model.rs
+- **T1** Read FluxRelecteur
+- **T1** Check memory and overcommit
+- **T1** Look at tools and pair_factice
+- **T1** Prove n_blocs allocation bypass on real server
+- **T1** Run three R4 bypass scenarios with real PID
+- **T1** Prove with_capacity(n) allocation hole
+- **T1** Re-run probe with correct units
+- **T1** Run the 11 tests in release
+- **T1** Read flux_codec.py
 
 ## 4. Mesures et résultats marquants
 
@@ -111,6 +125,14 @@
 - **T1** `gain FFN : couche 0 × 2`
 - **T1** `parcimonie imposée : k-WTA garde 0.0 %, seuil 10.0 %`
 - **T1** `prompt  : 3 tokens en 0.156 s  (19.3 tok/s, TTFT 51.8 ms)`
+- **T1** `0 tokens notés — perplexité cumulée NaN  (0.0 tok/s)`
+- **T1** `=== perplexité 410.7398 sur 5 tokens (0 événements, 0.5 s) ===`
+- **T1** `=== perplexité 54171.2701 sur 5 tokens (0 événements, 0.5 s) ===`
+- **T1** `=== perplexité 41524.7214 sur 5 tokens (0 événements, 0.5 s) ===`
+- **T1** `=== perplexité 410.9033 sur 5 tokens (0 événements, 0.4 s) ===`
+- **T1** `[sonde] après envoi (400 Mo d'échelles) : {'VmPeak': '5844 kB', 'VmSize': '5844 kB', 'VmRSS': '2440 kB'}`
+- **T1** `[sonde] après envoi (400 Mo d'échelles) : {'VmPeak': '1576796 kB', 'VmSize': '1576796 kB', 'VmRSS': '1011704 kB'}`
+- **T1** `réelle de 512 jetons : 132 396 736 octets en v1, **66 370 408** en v2 (−49,87 %),`
 
 ## 5. Erreurs rencontrées
 

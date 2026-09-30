@@ -7,12 +7,12 @@
 | Début | 2026-09-28 14:46 |
 | Durée | 46.5 h |
 | Tours | 45 |
-| Messages | 1798 |
-| Appels d'outils | 1699 |
+| Messages | 1802 |
+| Appels d'outils | 1703 |
 | Fichiers touchés | 44 |
-| Commandes | 1379 |
+| Commandes | 1382 |
 | Sous-agents | 7 |
-| Commits | 133 |
+| Commits | 134 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -2055,7 +2055,7 @@ Je vérifie l'heure à chaque itération et j'arrête à 12:06, en laissant un p
 
 ### Tour 45 — as-tu ce qu'il te faut pour te rendre à 15h en travaillaint avec un maximum d'autonomie et de parallélisme d'activités?
 
-*200 appels d'outils.* Actions notables :
+*204 appels d'outils.* Actions notables :
 
 - bash — Probe machine, GPU, disk, network state
 - bash — Identify GPU users and stray processes
@@ -2071,11 +2071,11 @@ Je vérifie l'heure à chaque itération et j'arrête à 12:06, en laissant un p
 - bash — Understand batched PPL reference path
 - bash — Add batched imposed states to forward_lot
 - list_agents
-- … et 178 autres
+- … et 181 autres
 
 **Synthèse produite :**
 
-⏵ Pendant que la dernière campagne tourne, j'écris l'index de la journée (un rapport court qui renvoie à chaque chantier).
+Chemin GPU vérifié aujourd'hui aussi : offline 15,1667 ✓ et noyau warp **1,6 ms** avec écart **1,99e-7** ✓. Je l'inscris.
 
 ## 3. Travail accompli
 
@@ -2180,7 +2180,7 @@ Je vérifie l'heure à chaque itération et j'arrête à 12:06, en laissant un p
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 1339 autres
+- … et 1342 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2461,4 +2461,5 @@ Je vérifie l'heure à chaque itération et j'arrête à 12:06, en laissant un p
 - Référence 6 bits re-mesurée (19,3045) plutôt que retirée  Le relecteur avait raison : ce chiffre de la table de non-régression n'était cité dans aucun rapport. 
 - Référence 6 bits : 19,5633 et non 19,3045 — la commande ne redonne pas l'ancien chiffre  J'ai rejoué la commande de la table de non-régression au lieu de retire
 - Index de la session : les huit chantiers, les défauts et par qui ils ont été trouvés  Un rapport court pour un humain qui reprend : ce qui est livré (avec le re
+- Chemin GPU revérifié : 15,1667 avec le pilote, noyau exact à 1,99e-7  Les portes de la journée se mesurent SANS DRAVE_GPU (c'est la règle du dépôt), donc person
 

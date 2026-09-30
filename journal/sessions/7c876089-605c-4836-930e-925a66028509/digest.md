@@ -802,3 +802,397 @@ parcimonie imposée : seuil 10.0 % du max, k-WTA k=5
   ```
 
 - **bash** `{"command": "M=/home/stephane/Data13TB/stephane/GitHub/Qtrinet; timeout 170 $M/drave-core/target/release/drave $M/models/Qwen2.5-0.5B-Q8_0.gguf --infer --ids 1,2,3 --threads 4 --options-actives --attn-topk 3 --ffn-gain 0:2.0 --trace-flux /tmp/trace_inf.drvf --act-thresh 0.1 2>&1 | head -20", "descri … [117 caractères tronqués]`
+
+  ```
+[attention] QT_IM_SWITCHER est l'ancien nom d'une variable d'environnement : elles s'appellent maintenant DRAVE_* (voir docs/histoire.md). Rien n'a été appliqué.
+[config] cache KV : 32 bits, 0.01 Go pour 512 jetons
+[modele] 24 couches chargées en 7.310773588s — listes 0.71 Go , 4 threads
+[config] 24 couches, hidden 896 · 
+[config] puits appris sur 0/24 couches · n_rot 64 · ffn 4864 · experts 0
+[config] rotation : RoPE simple (le modèle ne déclare pas YaRN)
+[trace] flux enregistré dans /tmp/trace_inf.drvf
+gain FFN : couche 0 × 2
+parcimonie imposée : k-WTA garde 0.0 %, seuil 10.0 %
+[options] mode inférence · contexte 512 (défaut) · dense false · keep 1.000
+[options] activation : niveaux 127 · seuil 0.1 · k-WTA 0 · renorm false
+[options] top-k : attn 3 · q·k 0 · MoE 0 · par projection [0, 0, 0, 0, 0, 0, 0]
+[options] couches 0..24 · flux brut false · trace true · rejeu false
+[options] fenêtre 0 · motif 0 · seuil push 0.22 · lot 1 · ffn_gain Some((0, 2.0)) · hebb false
+[options] cache KV : 32 bits · f16 avant false
+Qwen2 · 24 couches · hidden 896 · 14 têtes / 2 KV · FFN 4864 · vocab 151936
+tokens générés : [220, 220, 220, 264, 264, 220, 220, 220, 220, 264, 220, 220, 264, 220, 220, 220, 
+… [151 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Preuve n°1 obtenue (tableau de bord périmé en perplexité) ; test du NaN et du k-WTA en lot
+
+- **bash** `{"command": "M=/home/stephane/Data13TB/stephane/GitHub/Qtrinet; D=$M/drave-core/target/release/drave; MOD=$M/models/Qwen2.5-0.5B-Q8_0.gguf\necho \"=== E2: --limit 1 ===\"; timeout 170 $D $MOD --ppl-texte /tmp/txt4.txt --limit 1 --threads 4 2>&1 | grep -v \"^\\[attention\\]\" | tail -12", "descriptio … [92 caractères tronqués]`
+
+  ```
+=== E2: --limit 1 ===
+[config] cache KV : 32 bits, 0.01 Go pour 256 jetons
+[modele] 24 couches chargées en 6.870416944s — listes 0.71 Go , 4 threads
+[config] 24 couches, hidden 896 · 
+[config] puits appris sur 0/24 couches · n_rot 64 · ffn 4864 · experts 0
+[config] rotation : RoPE simple (le modèle ne déclare pas YaRN)
+/tmp/txt4.txt : 1 jetons (tokenizer du modèle), fenêtres de 256
+       0 tokens notés — perplexité cumulée NaN  (0.0 tok/s)
+aucun jeton noté (il en faut au moins deux : le premier ne prédit rien)
+  ```
+
+- **bash** `{"command": "M=/home/stephane/Data13TB/stephane/GitHub/Qtrinet; D=$M/drave-core/target/release/drave; MOD=$M/models/Qwen2.5-0.5B-Q8_0.gguf\nfor arg in \"--lot 1\" \"--lot 1 --act-topk 5\" \"--lot 4 --act-topk 5\" \"--lot 4\"; do\n  echo \"=== dense, $arg ===\"\n  timeout 170 $D $MOD --ppl-texte /tmp … [212 caractères tronqués]`
+
+  ```
+=== dense, --lot 1 ===
+=== perplexité 410.7398 sur 5 tokens (0 événements, 0.5 s) ===
+=== dense, --lot 1 --act-topk 5 ===
+=== perplexité 54171.2701 sur 5 tokens (0 événements, 0.5 s) ===
+=== dense, --lot 4 --act-topk 5 ===
+=== perplexité 41524.7214 sur 5 tokens (0 événements, 0.5 s) ===
+=== dense, --lot 4 ===
+=== perplexité 410.9033 sur 5 tokens (0 événements, 0.4 s) ===
+  ```
+
+### 🤖 Assistant
+
+⏵ Recensement de tous les sites d'écriture/lecture de trace
+
+- **bash** `{"command": "grep -n \"\\.ecrire(\\|fn ecrire\\|fn lire\\|flux_lot(\\|jeton_trace\\|1000\" drave-core/src/model.rs", "description": "List trace write/read sites in model.rs", "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+499:    m += 0x1000;                                   // arrondi au bit 13
+566:    pub fn ecrire(&mut self, couche: usize, pos: usize, actifs: &[i32], echelle: f32) {
+678:    pub fn lire(chemin: &str) -> std::io::Result<Self> {
+910:    pub jeton_trace: u64,
+1195:        f32::from_bits(b.wrapping_add(0x1000) & !0x1FFF)
+1200:    pub fn ecrire(&mut self, kvh: usize, pos: usize, k: &[f32], v: &[f32]) {
+1376:            rope_base: g.cfg("rope.freq_base").and_then(|m| m.as_f64()).unwrap_or(10000.0) as f32,
+1774:            cache_experts, mla, mla_cache, jeton_trace: 0, trace: None, flux_force: None,
+1811:            let k = (((topk as f32) / 1000.0) * x.len() as f32).round() as usize;
+2108:    pub fn ecrire_neurones(&self, chemin: &str) -> std::io::Result<usize> {
+2211:        let k = ((milliemes as f32 / 1000.0) * head_dim as f32).round() as usize;
+2344:        let j0 = self.jeton_trace + 1;
+2345:        self.jeton_trace += t as u64;
+2434:            Self::flux_lot(&mut self.trace, &mut self.flux_force, j0,
+2505:                        kvc.ecrire(hh, pos, &ki[hh * hd..(hh + 1) * hd],
+2644:            Self::flux_lot(&mut self.trace, &mut self.flux_force, j0,
+2645:                       
+… [947 caractères tronqués]
+  ```
+
+- **bash** `{"command": "sed -n '655,780p' drave-core/src/model.rs", "description": "Read FluxRelecteur", "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+}
+}
+
+/// Relit une trace de flux et rend, pour (couche, position), la liste
+/// enregistrée. C'est le pendant du `TraceFlux` : ce qu'un nœud distant devrait
+/// recevoir pour continuer le calcul, on sait déjà l'écrire — ici, on apprend à
+/// le RELIRE et à repartir de là.
+pub struct FluxRelecteur {
+    /// (couche, position) -> (échelle, indices/valeurs)
+    /// (couche, jeton global) → (échelle, paires) pour les versions 1 et 2 : les
+    /// ENTIERS d'origine sont conservés, parce que le rejeu par LOTS les réinjecte
+    /// tels quels (chemin exact, sans déquantifier-requantifier).
+    pub listes: std::collections::HashMap<(u16, u32), (f32, Vec<(u32, i16)>)>,
+    /// Version 3 : les valeurs sont des f32 (i8 × échelle f16 de bloc), il n'y a
+    /// plus d'entiers d'origine. Le rejeu JETON PAR JETON les accepte ; le rejeu
+    /// par lots, non — et il le dira au lieu de compter des listes manquantes
+    /// sans explication.
+    pub listes_blocs: std::collections::HashMap<(u16, u32), Vec<(u32, f32)>>,
+    pub servies: u64,
+    pub manquantes: u64,
+}
+
+impl FluxRelecteur {
+    pub fn lire(chemin: &str) -> std::io::Result<Self> {
+        use std::io::Read;
+        let mut f = std::fs::
+… [5177 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Lecture d'`envoyer_flux` (en-tête) et de la boucle du nœud moteur
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/main.rs", "limit": 130, "offset": 1550}`
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/main.rs", "limit": 45, "offset": 1820}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/main.rs</path>
+<type>file</type>
+<content>
+1550:         // juste après un échappement : sans elle, un corps coupé au mauvais octet
+1551:         // paniquait au lieu d'être refusé (attrapé par le test de troncature).
+1552:         if lus >= corps.len() { return Err("valeur manquante en fin de corps".into()); }
+1553:         val.push(corps[lus] as i8); lus += 1;
+1554:     }
+1555:     Ok((idx, val))
+1556: }
+1557: 
+1558: /// Envoie un flux et rend le nombre d'octets écrits (en-tête compris) — c'est ce
+1559: /// que la phase 3 doit chiffrer : octets par jeton × latence.
+1560: fn envoyer_flux(s: &mut std::net::TcpStream, debut: u32, fin: u32, pos: u32,
+1561:                 actifs: &[f32], mode: u8, mdl: Option<&model::Model>)
+1562:                 -> std::io::Result<(usize, usize)> {
+1563:     let act = mdl.map(Act::du_modele).unwrap_or(Act {
+1564:         levels: 127.0, thresh: 0.0, topk: 0, renorm: false,
+1565:         topk_proj: [0; 7], attn_topk: 0, qk_topk: 0, moe_topk: 0 });
+1566:     use std::io::Write;
+1567:     let (n, echelle, corps): (usize, f32, Vec<u8>) = if mode == MODE_BLOCS {
+1568:         let (idx, v
+… [6428 caractères tronqués]
+  ```
+
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/main.rs</path>
+<type>file</type>
+<content>
+1820:                         eprintln!("[debug] lot reçu : n={t} pos={} états={} plat={} corps={}",
+1821:                                   f.pos, hs.len(), plat.len(), f.octets_corps);
+1822:                     }
+1823:                     if envoyer_lot(&mut sock, f.debut, f.fin, f.pos, &plat, t, &mdl).is_err() {
+1824:                         break;
+1825:                     }
+1826:                     servis += 1;
+1827:                     continue;
+1828:                 }
+1829:                 mdl.emb_imposee = Some(f.charge.en_dense(hidden));
+1830:                 let sortie = mdl.forward(0, f.pos as usize);
+1831:                 // La RÉPONSE est encodée comme la demande : un pair qui parle en
+1832:                 // listes reçoit des listes, sans second réglage à faire tenir
+1833:                 // cohérent entre les deux machines.
+1834:                 if envoyer_flux(&mut sock, f.debut, f.fin, f.pos, &sortie, f.mode,
+1835:                                 Some(&mdl)).is_err() {
+1836:                     break;
+1837:                 }
+1838:                 servis
+… [1244 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Préparation de la preuve R4 : pair factice contre le nœud moteur
+
+- **bash** `{"command": "free -g; cat /proc/sys/vm/overcommit_memory; nproc; python3 -c \"print('ok')\"", "description": "Check memory and overcommit", "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+total        used        free      shared  buff/cache   available
+Mem:             125          64           0           1          62          60
+Swap:             62          17          45
+1
+40
+ok
+  ```
+
+- **bash** `{"command": "ls tools/ | head -30; echo ===; sed -n '1,60p' tools/pair_factice.py 2>/dev/null", "description": "Look at tools and pair_factice", "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+aiguille.py
+analyse_flux.py
+archive_sessions.py
+compare_logits.py
+diff_flux.py
+flux_codec.py
+harmony_canonique.py
+make_patch.py
+mla_synthetique.py
+pair_factice.py
+preparer_colab.sh
+profil_flux.py
+proxy_latence.py
+__pycache__
+ref_logits
+ref_logits.cpp
+ref_logits.md
+session_report.py
+trace_compacite.py
+vision_mtmd.py
+vision_ref.py
+===
+#!/usr/bin/env python3
+"""Pair factice du protocole de flux (v2) : il ÉCOUTE et DIT ce qu'il reçoit.
+
+Pourquoi cet outil : un banc à deux nœuds qui « marche » peut cacher un
+protocole faux — c'est exactement ce qui est arrivé avec un flux de 919 canaux
+là où le modèle en a 896. Un pair qui parle le protocole sans calculer le modèle
+rend visible ce que l'autre bout envoie vraiment : tailles, positions, modes,
+réglages. Il répond un flux de la dimension demandée pour que le pilote continue.
+
+    python3 tools/pair_factice.py <port> [dimension]
+"""
+import socket, struct, sys
+
+MAGIE = 0x44525631
+TETE = 79   # en-tête v4 : magie, version, mode, plage, position, n, échelle,
+            # niveaux, seuil, top-k, renorm, 7 top-k par projection, 3 top-k globaux
+MODES = {0: "dense f32", 1: "listes quantifiées", 2: "blocs (i8 + écarts)",
+         3: "lot (t états ×
+… [1477 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Écriture du pair factice pour prouver les trous du plafond R4
+
+- **write** `{"file_path": "/tmp/r4_probe.py", "content": "#!/usr/bin/env python3\n\"\"\"Sonde R4 : un pair annonce des tailles énormes SANS dépasser son en-tête.\n\nObjectif : montrer que `verifier_taille` n'est pas appliqué à toutes les\nallocations pilotées par le réseau dans `recevoir_flux` (mode BLOCS).\n\" … [3221 caractères tronqués]`
+
+  ```
+<path>/tmp/r4_probe.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+### 🤖 Assistant
+
+⏵ Lancement du nœud moteur et injection du corps « échelles » (400 Mo)
+
+- **bash** `{"command": "M=/home/stephane/Data13TB/stephane/GitHub/Qtrinet; D=$M/drave-core/target/release/drave; MOD=$M/models/Qwen2.5-0.5B-Q8_0.gguf\nrm -f /tmp/srv1.log\ntimeout 90 $D $MOD --flux-serveur 5611 --ctx 64 --threads 2 > /tmp/srv1.log 2>&1 &\nSRV=$!\nfor i in $(seq 1 60); do grep -q \"nœud moteur  … [516 caractères tronqués]`
+
+  ```
+serveur prêt (pid 546325)
+[sonde] connecté ; avant : {'VmPeak': '5844 kB', 'VmSize': '5844 kB', 'VmRSS': '2440 kB'}
+[sonde] après envoi (400 Mo d'échelles) : {'VmPeak': '5844 kB', 'VmSize': '5844 kB', 'VmRSS': '2440 kB'}
+[sonde] réponse du nœud : mode=2 n=892 n_blocs=28 longueur=1784
+[sonde] connexion fermée
+--- log serveur ---
+[config] rotation : RoPE simple (le modèle ne déclare pas YaRN)
+[flux] nœud moteur sur 127.0.0.1:5611 · 896 cachés · 24 couches · contexte 64
+[flux] client connecté : 127.0.0.1:28898
+[flux] arrêt : failed to fill whole buffer
+[flux] 1 flux servis
+serveur tué
+  ```
+
+### 🤖 Assistant
+
+⏵ Mesure correcte du PID réel : les trois scénarios R4
+
+- **bash** `{"command": "M=/home/stephane/Data13TB/stephane/GitHub/Qtrinet; D=$M/drave-core/target/release/drave; MOD=$M/models/Qwen2.5-0.5B-Q8_0.gguf\nrun() {\n  port=$1; scen=$2\n  rm -f /tmp/srv_$port.log\n  $D $MOD --flux-serveur $port --ctx 64 --threads 2 > /tmp/srv_$port.log 2>&1 &\n  SRV=$!\n  for i in $ … [616 caractères tronqués]`
+
+  ```
+=== scénario echelles (pid 547503) ===
+[sonde] connecté ; avant : {'VmPeak': '861052 kB', 'VmSize': '795540 kB', 'VmRSS': '566860 kB'}
+[sonde] après envoi (400 Mo d'échelles) : {'VmPeak': '1576796 kB', 'VmSize': '1576796 kB', 'VmRSS': '1011704 kB'}
+[sonde] réponse du nœud : mode=2 n=892 n_blocs=28 longueur=1784
+[sonde] connexion fermée
+--- log ---
+[flux] client connecté : 127.0.0.1:14676
+[flux] arrêt : failed to fill whole buffer
+[flux] 1 flux servis
+=== scénario paires (pid 550563) ===
+[sonde] connecté ; avant : {'VmPeak': '926588 kB', 'VmSize': '795540 kB', 'VmRSS': '566680 kB'}
+--- log ---
+[flux] client connecté : 127.0.0.1:29868
+[flux] arrêt : corps de flux tronqué : 0 paires lues sur 100000000
+[flux] 0 flux servis
+=== scénario geant (pid 550931) ===
+[sonde] connecté ; avant : {'VmPeak': '861052 kB', 'VmSize': '795540 kB', 'VmRSS': '566804 kB'}
+[sonde] après envoi (n_blocs=2^32-1) : {'VmPeak': '17572760 kB', 'VmSize': '17572760 kB', 'VmRSS': '566808 kB'}
+[sonde] connexion fermée
+--- log ---
+[flux] client connecté : 127.0.0.1:53634
+[flux] arrêt : failed to fill whole buffer
+[flux] 0 flux servis
+=== fin ===
+547501 bash -c M=/home/stephane/Data13TB/stephane/GitHub/Qtrinet; D=$M/dr
+… [1168 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Preuve n°2 du trou R4 : allocation `with_capacity(n)` suivie d'un long décodage
+
+- **write** `{"content": "#!/usr/bin/env python3\n\"\"\"Sonde R4 n°2 : `decoder_paires_blocs` alloue Vec::with_capacity(n) DEUX fois\navant de lire la moindre paire, et `n` vient de l'en-tête réseau (non plafonné).\n\nOn garde le serveur vivant assez longtemps pour lire son VmPeak : on lui donne\nune longueur de … [2880 caractères tronqués]`
+
+  ```
+<path>/tmp/r4_probe2.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "M=/home/stephane/Data13TB/stephane/GitHub/Qtrinet; timeout 150 python3 /tmp/r4_probe2.py $M/drave-core/target/release/drave $M/models/Qwen2.5-0.5B-Q8_0.gguf 5620; pgrep -af \"flux-serveur 5620\" || echo \"aucun serveur restant\"", "description": "Prove with_capacity(n) allocation hole", … [83 caractères tronqués]`
+
+  ```
+[sonde2] n = 4 000 000 000 paires annoncées ; longueur = 268435456 octets (au plafond)
+[sonde2] VmPeak observé : VmSize max 12 Mio · VmRSS max 1 Mio
+[sonde2] log serveur :
+ , 2 threads
+[config] 24 couches, hidden 896 · 
+[config] puits appris sur 0/24 couches · n_rot 64 · ffn 4864 · experts 0
+[config] rotation : RoPE simple (le modèle ne déclare pas YaRN)
+[flux] nœud moteur sur 127.0.0.1:5620 · 896 cachés · 24 couches · contexte 64
+[flux] client connecté : 127.0.0.1:42924
+[flux] arrêt : corps de flux tronqué : 134217728 paires lues sur 4000000000
+[flux] 0 flux servis
+554374 bash -c M=/home/stephane/Data13TB/stephane/GitHub/Qtrinet; timeout 150 python3 /tmp/r4_probe2.py $M/drave-core/target/release/drave $M/models/Qwen2.5-0.5B-Q8_0.gguf 5620; pgrep -af "flux-serveur 5620" || echo "aucun serveur restant"
+  ```
+
+### 🤖 Assistant
+
+⏵ Correction des unités et nouvelle mesure propre du pic mémoire
+
+- **bash** `{"command": "cd /tmp && python3 - <<'EOF'\nimport re\ns = open('/tmp/r4_probe2.py').read()\ns = s.replace('{maxi[\\'VmSize\\']/1048576:.0f} Mio · ', '{maxi[\\'VmSize\\']/1024:.0f} Mio · ')\ns = s.replace('{maxi[\\'VmRSS\\']/1048576:.0f} Mio', '{maxi[\\'VmRSS\\']/1024:.0f} Mio')\nopen('/tmp/r4_probe2 … [388 caractères tronqués]`
+
+  ```
+[sonde2] n = 4 000 000 000 paires annoncées ; longueur = 268435456 octets (au plafond)
+[sonde2] VmPeak observé : VmSize max 12477 Mio · VmRSS max 1193 Mio
+[sonde2] log serveur :
+ , 2 threads
+[config] 24 couches, hidden 896 · 
+[config] puits appris sur 0/24 couches · n_rot 64 · ffn 4864 · experts 0
+[config] rotation : RoPE simple (le modèle ne déclare pas YaRN)
+[flux] nœud moteur sur 127.0.0.1:5621 · 896 cachés · 24 couches · contexte 64
+[flux] client connecté : 127.0.0.1:18780
+[flux] arrêt : corps de flux tronqué : 134217728 paires lues sur 4000000000
+[flux] 0 flux servis
+555634 bash -c cd /tmp && python3 - <<'EOF' import re s = open('/tmp/r4_probe2.py').read() s = s.replace('{maxi[\'VmSize\']/1048576:.0f} Mio · ', '{maxi[\'VmSize\']/1024:.0f} Mio · ') s = s.replace('{maxi[\'VmRSS\']/1048576:.0f} Mio', '{maxi[\'VmRSS\']/1024:.0f} Mio') open('/tmp/r4_probe2.py','w').write(s) EOF M=/home/stephane/Data13TB/stephane/GitHub/Qtrinet; timeout 150 python3 /tmp/r4_probe2.py $M/drave-core/target/release/drave $M/models/Qwen2.5-0.5B-Q8_0.gguf 5621; pgrep -af "flux-serveur 5621" || echo "aucun serveur restant"
+  ```
+
+### 🤖 Assistant
+
+⏵ Lancement des 11 tests annoncés en arrière-plan, puis expérience de clés de trace
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && cargo test --release -- --test-threads 2 2>&1 | tail -40", "description": "Run the 11 tests in release", "run_in_background": true, "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+started background job bash-72
+  ```
+
+- **bash** `{"command": "sed -n '1,80p' tools/flux_codec.py", "description": "Read flux_codec.py", "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+#!/usr/bin/env python3
+"""Encodeur/décodeur de RÉFÉRENCE du flux d'activation (format DRVF v1 et v2).
+
+Le format de trace et le contrat d'échange de la phase 3 sont le MÊME format :
+une liste d'activation est ce qu'un nœud distant doit recevoir pour continuer le
+calcul. Ce fichier est la deuxième implémentation de ce format — la première est
+en Rust (`--trace-flux`) — et c'est ce qui permet de dire qu'il est sans
+ambiguïté : deux implémentations indépendantes, un aller-retour identique.
+
+Structure :
+    en-tête   "DRVF" · u16 version · u32 n_layer · u32 hidden
+    liste     u16 couche · u32 position · u32 n_actifs · f32 echelle
+              puis n_actifs × ( u32 indice · i16 valeur )          [v1]
+              puis n_actifs × ( u8 écart · i16 valeur )            [v2]
+                   l'écart de 255 annonce l'indice ABSOLU sur u16
+    fin       u16 0xFFFF
+
+v2 : les indices sont écrits par ÉCARTS (la liste est triée). Mesuré sur une trace
+réelle de 512 jetons : 132 396 736 octets en v1, **66 370 408** en v2 (−49,87 %),
+à contenu identique — le rejeu redonne la même perplexité au chiffre près.
+
+Usage :
+    flux_codec.py <trace>            # vérifie l'aller-retour et mesure le débi
+… [1970 caractères tronqués]
+  ```
+
