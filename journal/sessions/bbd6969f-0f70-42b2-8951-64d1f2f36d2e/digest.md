@@ -31065,3 +31065,30 @@ campagne aiguille 2 048 lancée (3 variantes × 3 profondeurs)
 ⏵ Pendant l'aiguille, je mets l'index de session à jour avec le créneau 15h-18h.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/rapport-session-2026-09-30.md'; s=open(p).read()\nv = \"\"\"| **protocole de flux v5** | version, 5 modes, contrat d'activation complet, refus immédiat d'un pair incompatible |\"\"\"\nn = \"\"\"| **mode 4 … [2619 caractères tronqués]`
+
+  ```
+⚠ ancre du tableau absente : 0
+  ⚠ phrase des relectures absente
+index : section du créneau
+5999469 Index de session : le créneau 15h-18h (mode 4, plan GPU, 32 défauts relevés)
+### f32 (référence) · contexte 2048
+16:16:02
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n 9,30p reports/rapport-session-2026-09-30.md", "description": "Read session index table"}`
+
+  ```
+| chantier | résultat | rapport |
+|---|---|---|
+| **Calcul réparti fidèle** | écart local/réparti **0,00e0** — 144,8289 des deux côtés à 40 jetons, 9,5146 à 1 024 | `rapport-phase3-reparti.md` |
+| **Préremplissage par LOTS** (mode 3) | 256 jetons en **4 lots** (ou 1 seul) → 0,00e0 ; **18× plus rapide** qu'un flux par jeton sur un lien à 20 ms | `rapport-prefill-reparti.md` |
+| **Transport en listes** | dense 3 663 octets → **1 629** par flux (÷2,3) pour 1,3 % d'écart à 1 024 jetons | `rapport-transport-liste.md` |
+| **où mettre les bits du cache KV** | à taille ÉGALE : clés f32 + valeurs int8 **+0,023 %** contre **+3,01 %** pour l'inverse (facteur **130**) ; 4 bits : +0,46 % contre **+385 %** (facteur **840**) | `rapport-placement-bits-kv.md` |
+| **Format de trace v2/v3** | 132 396 736 → **66 370 408** (sans perte) → **45 079 930** octets (+0,074 % de perplexité) | `rapport-compacite-trace.md` |
+| **Colab prêt** | dépôt en un fichier (4,5 Mo), notebook, recette, tunnel — vérifié de bout en bout | `colab/README.md` |
+| **Drapeaux ignorés** | **46 sur 110** l'étaient dans au moins un mode ; neuf corrigés, tableau de bord `--options-actives` ajouté | `rapport-drapeaux-ignores.md` |
+| 
+… [702 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/rapport-session-2026-09-30.md'; s=open(p).read()\ndef rem(nom, v, n):\n    global s\n    c = s.count(v)\n    if c != 1:\n        print(f\"  ✗ {nom} : {c}\"); return False\n    s = s.replace(v, n); print(f … [1679 caractères tronqués]`

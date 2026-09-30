@@ -14,15 +14,18 @@ chantiers, pas le décompte. Chaque chiffre a son rapport ; ceci est l'index.
 | **Transport en listes** | dense 3 663 octets → **1 629** par flux (÷2,3) pour 1,3 % d'écart à 1 024 jetons | `rapport-transport-liste.md` |
 | **où mettre les bits du cache KV** | à taille ÉGALE : clés f32 + valeurs int8 **+0,023 %** contre **+3,01 %** pour l'inverse (facteur **130**) ; 4 bits : +0,46 % contre **+385 %** (facteur **840**) | `rapport-placement-bits-kv.md` |
 | **Format de trace v2/v3** | 132 396 736 → **66 370 408** (sans perte) → **45 079 930** octets (+0,074 % de perplexité) | `rapport-compacite-trace.md` |
-| **Colab prêt** | dépôt en un fichier (4,5 Mo), notebook, recette, tunnel — vérifié de bout en bout | `colab/README.md` |
+| **Mode 4 — lot en listes** | **1,5 ko par jeton** au lieu de 3,5 (÷2,3) ; écart 3,03e-2 à 256 jetons (critère : ≤ 1,5 × le mode 2) | `rapport-mode4-lot-listes.md` |
+| **Protocole v5** | cinq modes, contrat d'activation complet (14 champs), refus immédiat d'un pair incompatible | `format-flux.md` |
+| **Plan du noyau GPU de top-k** | chiffré : le mode creux retombe sur le CPU (968 ms par couche à 1 M contre 13,2 ms avec le miroir VRAM) — le prochain chantier, écrit et non bâclé | `plan-gpu-topk.md` |
+| **Colab prêt** | dépôt en un fichier (4,5 Mo), notebook (texte réel : perplexité ~20 au lieu de 17 869), trois voies de tunnel — vérifié de bout en bout | `colab/README.md` |
 | **Drapeaux ignorés** | **46 sur 110** l'étaient dans au moins un mode ; neuf corrigés, tableau de bord `--options-actives` ajouté | `rapport-drapeaux-ignores.md` |
 | **Cohérence des documents** | 80 affirmations vérifiées, 38 périmées, 15 contradictoires — corrigées, plus deux bugs de protocole trouvés par la lecture | `rapport-coherence-docs.md` |
 
 ## Les défauts trouvés, et par qui
 
-Sur les **vingt-deux défauts corrigés** (deux relectures adversariales comprises,
-la seconde attaquant les correctifs de la première), **dix-sept n'ont pas été
-trouvés par un banc** mais par une relecture :
+Sur les **trente-deux défauts corrigés** par **trois relectures adversariales**
+déléguées (chacune attaquant les correctifs de la précédente), **vingt-sept n'ont
+pas été trouvés par un banc** mais par une relecture :
 
 - `forward` ignorait la plage de couches (le pilote calculait tout, le pair
   recalculait tout par-dessus) — trouvé en lisant, mesuré ensuite : ×11,2 ;

@@ -7,12 +7,12 @@
 | Début | 2026-09-28 14:46 |
 | Durée | 49.5 h |
 | Tours | 46 |
-| Messages | 1925 |
-| Appels d'outils | 1816 |
+| Messages | 1927 |
+| Appels d'outils | 1818 |
 | Fichiers touchés | 44 |
-| Commandes | 1488 |
+| Commandes | 1490 |
 | Sous-agents | 10 |
-| Commits | 159 |
+| Commits | 160 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -2117,7 +2117,7 @@ L'**audit des drapeaux** a trouvé que **46 options sur 110** étaient ignorées
 
 ### Tour 46 — continue jusqu'à 18h HAE
 
-*78 appels d'outils.* Actions notables :
+*80 appels d'outils.* Actions notables :
 
 - bash — Check time, timezone and remaining budget
 - create_goal
@@ -2133,7 +2133,7 @@ L'**audit des drapeaux** a trouvé que **46 options sur 110** étaient ignorées
 - bash — Improve notebook with real text cell
 - bash — Kill test node safely and check notebook
 - bash — Add notebook real-text cell and commit
-- … et 64 autres
+- … et 66 autres
 
 **Synthèse produite :**
 
@@ -2245,7 +2245,7 @@ L'**audit des drapeaux** a trouvé que **46 options sur 110** étaient ignorées
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 1448 autres
+- … et 1450 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2552,4 +2552,5 @@ L'**audit des drapeaux** a trouvé que **46 options sur 110** étaient ignorées
 - Documents : dernières mentions de la version 4 remplacées par la 5 (mode lot en listes)" && git log --oneline -1 | cat; date +"%H:%M:%S"
 - Colab : les quatorze champs du contrat d'activation, pas quatre  Et portes finales après la version 5 : 17 tests, Qwen 19,3885, réparti dense 0,00e0, lot dense 
 - Index de session : le créneau 15h-18h (mode 4, plan GPU, 32 défauts relevés)" && git log --oneline -1 | cat; tail -3 /tmp/aiguille_kv2048.log 2>/dev/null; date 
+- Index : le mode 4, le protocole v5, le plan GPU et le décompte des relectures" && git log --oneline -1 | cat; tail -4 /tmp/aiguille_kv2048.log; date +"%H:%M:%S"
 
