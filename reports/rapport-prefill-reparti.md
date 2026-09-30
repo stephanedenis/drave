@@ -47,6 +47,21 @@ même façon que le chemin réparti, sinon l'écart mesurerait la différence en
 deux ordres de sommation (le par-lots contre le jeton par jeton donne ~1e-4 sur
 Qwen, ce qui n'est pas un défaut du découpage).
 
+## Sur un lien latent : 18× (c'est là que le mode lot paie)
+
+`tools/proxy_latence.py` ajoute 20 ms par message, comme le ferait un lien
+distant. 64 jetons de préremplissage, 12 couches par nœud :
+
+| | échanges | temps local | attente du pair | total |
+|---|---|---|---|---|
+| **en UN lot de 64** | 1 | 1 145 ms | 1 488 ms | **2,6 s** |
+| un flux par jeton | 63 | 350 ms/jeton | 394 ms/jeton | **47,6 s** |
+
+Même calcul, même fidélité (0,00e0 des deux côtés) : **18×**. Chaque aller-retour
+coûte ~4 × 20 ms de latence pure, et le mode lot en supprime 62 sur 63. C'est
+l'argument de la phase 3.4, et ce que la démonstration Colab doit montrer : sur un
+lien rapide le mode lot ne change presque rien, sur un lien distant il change tout.
+
 ## Ce que ça coûte, et ce que ça n'économise pas
 
 Le lot voyage en **f32 dense, 3 663 octets par jeton en mode dense** — le mode

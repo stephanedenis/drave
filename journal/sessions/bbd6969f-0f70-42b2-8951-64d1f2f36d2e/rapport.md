@@ -7,12 +7,12 @@
 | Début | 2026-09-28 14:46 |
 | Durée | 46.2 h |
 | Tours | 45 |
-| Messages | 1748 |
-| Appels d'outils | 1651 |
+| Messages | 1750 |
+| Appels d'outils | 1653 |
 | Fichiers touchés | 44 |
-| Commandes | 1333 |
+| Commandes | 1335 |
 | Sous-agents | 6 |
-| Commits | 117 |
+| Commits | 118 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -2055,7 +2055,7 @@ Je vérifie l'heure à chaque itération et j'arrête à 12:06, en laissant un p
 
 ### Tour 45 — as-tu ce qu'il te faut pour te rendre à 15h en travaillaint avec un maximum d'autonomie et de parallélisme d'activités?
 
-*152 appels d'outils.* Actions notables :
+*154 appels d'outils.* Actions notables :
 
 - bash — Probe machine, GPU, disk, network state
 - bash — Identify GPU users and stray processes
@@ -2071,11 +2071,11 @@ Je vérifie l'heure à chaque itération et j'arrête à 12:06, en laissant un p
 - bash — Understand batched PPL reference path
 - bash — Add batched imposed states to forward_lot
 - list_agents
-- … et 130 autres
+- … et 132 autres
 
 **Synthèse produite :**
 
-11/11 tests ✓ (dont le refus d'allocation géante). Je commit, puis je chiffre le gain du mode lot **sur un lien latent** — l'argument direct pour Colab.
+Gain mesuré sur un lien à 20 ms par message : **2,6 s en un lot contre 47,6 s flux par flux** (18×). Je l'écris dans le rapport et la recette Colab.
 
 ## 3. Travail accompli
 
@@ -2179,7 +2179,7 @@ Je vérifie l'heure à chaque itération et j'arrête à 12:06, en laissant un p
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 1293 autres
+- … et 1295 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2444,4 +2444,5 @@ Je vérifie l'heure à chaque itération et j'arrête à 12:06, en laissant un p
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo "=== porte Qwen ===" && ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf --ppl /tmp/id
 - Rapport : où mettre les bits du cache KV (facteur 130 à 840 à taille égale)  Six points mesurés à 8 191 jetons, trois en cours. La courbe est sans ambiguïté : à
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A drave-core/src/main.rs && git commit -q -F - <<'EOF' && git log --oneline -1 | cat Règle R4 : p
+- Mode lot sur un lien latent : 18× (2,6 s contre 47,6 s)  Mesuré avec le relais retardateur (20 ms par message, 64 jetons, 12 couches par nœud) : un seul lot de 
 

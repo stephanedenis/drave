@@ -28209,3 +28209,29 @@ test result: ok. 11 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; fin
 11/11 tests ✓ (dont le refus d'allocation géante). Je commit, puis je chiffre le gain du mode lot **sur un lien latent** — l'argument direct pour Colab.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A drave-core/src/main.rs && git commit -q -F - <<'EOF' && git log --oneline -1 | cat\nRègle R4 : plafond des allocations pilotées par le réseau (256 Mo)\n\nLa relecture adversariale avait relevé un soupçon qu'elle n'a pas vo … [2204 caractères tronqués]`
+
+  ```
+1bc0470 Règle R4 : plafond des allocations pilotées par le réseau (256 Mo)
+=== 20 ms par message · lots de 64 ===
+  écart             : 0.00e0
+  transport         : LOTS de 64 jetons · 229455 octets par lot (aller) · 3.5 ko par jeton · 1 lots (au lieu de 63 flux)
+  temps             : 1145.1 ms par LOT en local · 1488.3 ms à attendre le pair · soit 1.30× le calcul local seul
+=== 20 ms par message · un flux par jeton ===
+12:57:57
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && BIN=./drave-core/target/release/drave; MOD=models/Qwen2.5-0.5B-Q8_0.gguf; IDS=$(head -1 /tmp/ids_qwen_long.txt | tr ',' '\\n' | head -64 | tr '\\n' ',' | sed 's/,$//'); p=46401; ($BIN $MOD --flux-serveur $((p+100)) --ctx 64 > /tmp/s_ … [729 caractères tronqués]`
+
+  ```
+=== 20 ms par message · un flux par jeton (63 allers-retours) ===
+  écart             : 0.00e0
+  transport         : dense f32 · 3663 octets par flux (aller) · 3663 au retour · 100.0 % d'activité (896 neurones par flux) · 63 flux
+  temps             : 350.3 ms par jeton en local · 393.9 ms à attendre le pair (son calcul + l'aller-retour) · soit 1.12× le calcul local seul
+[killed by signal: SIGTERM]
+  ```
+
+### 🤖 Assistant
+
+Gain mesuré sur un lien à 20 ms par message : **2,6 s en un lot contre 47,6 s flux par flux** (18×). Je l'écris dans le rapport et la recette Colab.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/rapport-prefill-reparti.md'; s=open(p).read()\nv = \"\"\"## Ce que ça coûte, et ce que ça n'économise pas\"\"\"\nn = \"\"\"## Sur un lien latent : 18× (c'est là que le mode lot paie)\n\n`tools/proxy_laten … [2645 caractères tronqués]`
