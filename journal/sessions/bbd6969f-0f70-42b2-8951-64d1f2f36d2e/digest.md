@@ -30371,3 +30371,97 @@ docs/plan-prefill-reparti.md : 1/1
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\ns = open('README.md').read()\nancre = \"## État du projet\"\nassert s.count(ancre) == 1\nsection = \"\"\"## La journée du 30/09 — huit chantiers, mesurés\n\nLe détail est dans [`reports/rapport-session-2026-09-30.md … [2627 caractères tronqués]`
+
+  ```
+README : section de la journée insérée après le titre
+docs/colab-reparti.md : 1/1
+docs/vision.md : 1/1
+109:(../FPGA-Stratix-V/docs/rapport-pe-evenementiel.md), et le bilan multi-matériel
+57f0fc6 Corrections du second audit (2/2) : la journée au README, le mode 4 dans la recette Colab, le renvoi FPGA de la vision
+15:31:55
+int8_int8                  : perplexité 12.4921 sur 4095 tokens (0 événements, 619.2 s)
+cles_f32_valeurs_int8      :
+  ```
+
+- **subagent** `{"description": "Adversarial review of mode 4", "prompt": "Tu es relecteur ADVERSARIAL dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (projet « Drave » : moteur d'inférence LLM en Rust, `std` seul, binaire `drave`). Tout est en FRANÇAIS : écris en français. Ton rôle est de TROUVER DES … [3365 caractères tronqués]`
+
+  ```
+started subagent 5ce3f080-2d3d-467a-8ee1-df697f3f3e68
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && tail -2 /tmp/kv_4096.log; echo \"=== usage du banc KV ===\"; ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf --banc-kv 0 2>&1 | head -6; grep -n '\"--banc-kv\"' drave-core/src/main.rs", "description": "Check KV run 4  … [40 caractères tronqués]`
+
+  ```
+int8_int8                  : perplexité 12.4921 sur 4095 tokens (0 événements, 619.2 s)
+cles_f32_valeurs_int8      : === usage du banc KV ===
+[attention] QT_IM_SWITCHER est l'ancien nom d'une variable d'environnement : elles s'appellent maintenant DRAVE_* (voir docs/histoire.md). Rien n'a été appliqué.
+GGUF ouvert en 192.975044ms — 290 tenseurs
+architecture : qwen2 · 24 couches · hidden 896 · intermédiaire 4864
+threads : 30
+
+=== 1. Taille exacte des encodages (mesurée sur les niveaux réels) ===
+54:        (opt.banc_kv > 0, "--banc-kv"), (opt.gpu_banc, "--gpu-banc"),
+501:            "--banc-kv" => { o.banc_kv = suivant(i).parse().unwrap(); 2 }
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n \"$(grep -n 'fn run_banc_kv' drave-core/src/main.rs | cut -d: -f1),+30p\" drave-core/src/main.rs | grep -E \"println|let |kv|clés|jetons\" | head -18", "description": "Inspect banc-kv behaviour"}`
+
+  ```
+fn run_banc_kv(opt: Options) {
+    let path = &modele_chemin();
+    let g = Gguf::open(path).expect("ouverture du GGUF");
+    let n_kv = g.cfg("attention.head_count_kv").and_then(|m| m.as_u64()).unwrap_or(1) as usize;
+    let n_head = g.cfg("attention.head_count").and_then(|m| m.as_u64()).unwrap_or(1) as usize;
+    let hidden = g.cfg("embedding_length").and_then(|m| m.as_u64()).unwrap_or(0) as usize;
+    let hd = match g.cfg("attention.key_length").and_then(|m| m.as_u64()) {
+    let n_layer = g.cfg("block_count").and_then(|m| m.as_u64()).unwrap_or(0) as usize;
+    let bits = std::env::var("DRAVE_KV_BITS").ok().and_then(|v| v.parse().ok()).unwrap_or(32u32);
+    let n = opt.banc_kv;
+    let rep = (n_head / n_kv.max(1)).max(1);
+    let scale = 1.0 / (hd as f32).sqrt();
+    println!("banc KV : {n} clés · {n_layer} couches · {n_kv} têtes KV × {hd} dim, {rep} têtes de requête par tête KV · KV {} bits",
+    let mut cache = KvCache::new(bits, n_kv, n, hd);
+    let mut etat = 12345u64;
+    let mut suivant = move || {
+    // Deux cas dégénérés pour isoler une erreur du noyau : clés nulles (poids
+    let k_nul = std::env::var("DRAVE_BANC_KV_K0").is_ok();
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/banc_kv_clés.sh <<'EOF'\n#!/bin/bash\n# Ce que les clés en f16 coûtent (ou rapportent) à LONG contexte, avec et sans le\n# miroir VRAM : le miroir suppose une disposition homogène, donc le f16 le désactive.\nset -u\ncd /ho … [1154 caractères tronqués]`
+
+  ```
+-rwxr-xr-x. /tmp/banc_kv_clés.sh
+banc KV en file (après l'aiguille)
+15:32:37
+int8_int8                  : perplexité 12.4921 sur 4095 tokens (0 événements, 619.2 s)
+cles_f32_valeurs_int8      :
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"^## \\|^### \" docs/contexte-long.md | sed -n 1,20p; grep -n \"DRAVE_KV\" docs/contexte-long.md | head -5", "description": "Find contexte-long structure"}`
+
+  ```
+8:## 1. Ce que les modèles déclarent
+21:## 2. Le budget, mesuré
+39:## 3. Les trois murs, dans l'ordre où ils frappent
+41:### a. Le préremplissage — le mur n° 1, et de très loin
+61:### b. La bande passante du KV — le mur du décodage
+75:### c. La portée de la rotation — le mur discret, et la température qui n'aide pas
+97:## 4. Plan par étapes
+114:## 4.bis KV quantifié : mesuré, et le 4 bits est cher
+151:### 4.bis.2 À 8 192 jetons, la longueur exacte de la comparaison llama.cpp
+176:## 4.ter KV déporté en VRAM (E4) : le noyau, et ce qu'il donne
+190:### Courbe mesurée (Qwen2.5-0.5B, une couche, 16 fils CPU, `--banc-kv`)
+216:### Comment le noyau a été validé (et les trois bugs qu'il a fallu sortir)
+236:### Dans le moteur (`DRAVE_GPU=1 DRAVE_GPU_KV=1`)
+263:### Pagination du miroir : la VRAM suit l'usage, pas le contexte
+278:### Le préremplissage par lots emprunte le même noyau
+297:### Experts MXFP4 en VRAM : mesuré, et décevant
+310:### Deux cartes, et un noyau de tête AVX2
+329:### Le cache CPU est paginé lui aussi
+346:## 5. YaRN à retardement : ce que la mesure a dit
+377:### 5.bis Comparaison appariée (mêmes jetons, contexte variable)
+117:empaquetés en 4 bits — `DRAVE_KV_BITS=8` ou `4`, `
+… [106 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n 151,175p docs/contexte-long.md | head -12; python3 - <<'PY'\np='docs/contexte-long.md'; s=open(p).read()\nv = \"\"\"## 4.ter KV déporté en VRAM (E4) : le noyau, et ce qu'il donne\"\"\"\nn = \"\"\"### 4.bis.3 OÙ mettre les bits … [3708 caractères tronqués]`

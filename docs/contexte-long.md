@@ -173,6 +173,34 @@ Deux choses que la mesure ajoute :
    int8, 1 461 s en int4 pour la même passe. La déquantification se paie par
    élément ; c'est exactement ce que le noyau GPU du §4.ter supprime.
 
+### 4.bis.3 OÙ mettre les bits : les clés, pas les valeurs (30/09)
+
+La section précédente attribuait l'écart de l'int8 : **tout est dans les CLÉS**.
+La campagne complète a été faite depuis, à 8 192 et à 4 096 jetons, et elle donne
+la frontière entière — le détail est dans
+[`reports/rapport-placement-bits-kv.md`](../reports/rapport-placement-bits-kv.md) :
+
+| réglage | octets/élément | % du f32 | écart à 8 192 |
+|---|---|---|---|
+| **clés f16 · valeurs int8** | 3,125 | **39 %** | **+0,018 %** |
+| clés f32 · valeurs int8 | 5,125 | 64 % | +0,023 % |
+| clés f32 · valeurs int4 | 4,625 | 58 % | +0,46 % |
+| clés f16 · valeurs int4 | 2,625 | 33 % | +0,61 % |
+| int8 · int8 | 2,25 | 28 % | +3,04 % |
+| int4 · int4 | 1,25 | 16 % | +364 % |
+
+À taille ÉGALE (5,125 octets), mettre les bits sur les clés donne **+0,023 %** et
+sur les valeurs **+3,01 %** : facteur 130. À 4,625 octets, +0,46 % contre +385 % :
+facteur 840. **Le réglage recommandé est `DRAVE_KV_BITS=8 DRAVE_KV_K_F16=1`** :
+2,5× plus petit que le f32 pour deux centièmes de pour cent — et le classement est
+le même à 4 096 (+0,011 % contre +2,25 % pour l'int8 complet), donc ce n'est pas un
+artefact de longueur.
+
+⚠️ **Une interaction à connaître** : le miroir VRAM suppose une disposition
+HOMOGÈNE ; les variantes d'attribution (clés f32, clés f16) le désactivent donc
+(`[gpu] KV déporté désactivé`). À contexte très long avec `DRAVE_GPU_KV=1`, garder
+les clés en **f32** et rogner les valeurs — c'est l'inverse du conseil CPU.
+
 ## 4.ter KV déporté en VRAM (E4) : le noyau, et ce qu'il donne
 
 Le cache KV d'une couche tient en VRAM ; une passe d'attention le parcourt sur

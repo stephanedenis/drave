@@ -9,6 +9,15 @@
 > `--moe-topk`. Les sections ci-dessous décrivent l'état AVANT correction — elles
 > restent la référence de ce qui a été trouvé, et la liste de ce qui reste
 > (`--banc-vision` sans `Options`, `--bits` du noyau GPU, etc.).
+>
+> **Addendum 2 (même jour, 15h).** La recommandation principale de ce rapport est
+> FAITE : `--options-actives` existe et imprime, APRÈS toutes les affectations, les
+> réglages que le moteur utilise vraiment (niveaux, seuil, top-k par projection,
+> fenêtre, lot, cache KV avec sa variante). Sa première version s'exécutait trop tôt
+> en perplexité — elle montrait l'état d'avant les affectations, exactement ce
+> qu'elle est censée démasquer — et c'est la relecture adversariale qui l'a pris.
+> La variante `--options-strict` n'existe pas ; en revanche un drapeau INCONNU est
+> désormais signalé (`--keeep`, `-keep`), ce qui couvre le cas le plus fréquent.
 
 
 **Révision auditée** : `drave-core/src/main.rs` sha256 `1726f9ac3665c3ce…` (2 999 lignes),
