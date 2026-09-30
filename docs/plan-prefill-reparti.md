@@ -1,5 +1,15 @@
 # Plan — le préremplissage par lots sur le fil (phase 3.4)
 
+> **État (30/09, après mise en œuvre).** Ce plan a été suivi : le mode 3 existe,
+> le préremplissage par lots est fidèle (écart **0,00e0** en 4 lots de 64 comme en
+> un seul lot) et `reports/rapport-prefill-reparti.md` consigne les mesures. Trois
+> écarts au plan, tous volontaires : la version du protocole est passée à **4** (et
+> non 3) parce que le contrat d'activation transporte désormais aussi les top-k ;
+> l'échappement d'indice du mode blocs s'écrit sur **deux** octets (le plan le
+> disait, le code en écrivait quatre) ; et la règle R4 (plafond de 256 Mo) est
+> maintenant DANS le code, avec son test. Les sections ci-dessous restent le plan
+> d'origine — elles ne sont pas réécrites, pour qu'on puisse comparer.
+
 **En une ligne** : aujourd'hui un flux = un jeton, donc un préremplissage de N
 jetons paie N allers-retours ; on ajoute un **mode 3** qui transporte N états
 dans **un seul** message, et le banc réparti doit rendre **0,00e0**.

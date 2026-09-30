@@ -52,7 +52,7 @@ défini avant.
 
 | # | chantier | état | critère de succès |
 |---|---|---|---|
-| 3.1 | **Contrat d'échange v1** : tranche de liste = en-tête (couche, source, échelle, bits) + paires (destination, valeur) | ✅ | format écrit, relu, rejoué sans perte (phase 0.3/0.3bis) ; **transport TCP en place et FIDÈLE** (`--flux-serveur`, `--ppl-reparti`) — écart local/réparti **0,00e0** sur 40 et 199 flux, après correction de deux défauts (plage de couches ignorée par `forward`, norme finale appliquée deux fois) |
+| 3.1 | **Contrat d'échange v1** : tranche de liste = en-tête (couche, source, échelle, bits) + paires (destination, valeur) | ✅ | format écrit, relu, rejoué sans perte (phase 0.3/0.3bis) ; **transport TCP en place et FIDÈLE** (`--flux-serveur`, `--ppl-reparti`) — écart local/réparti **0,00e0** sur 40 et 200 jetons (39 et 199 flux : le dernier n'a rien à prédire), après correction de deux défauts (plage de couches ignorée par `forward`, norme finale appliquée deux fois) |
 | 3.2 | **Granularité** : par couche, par bloc de canaux, par expert | 🔬 | livrés et mesurés : listes i16, **échelles par bloc de 32 canaux (valeurs i8)** et **indices par écarts** — `--flux-blocs --act-thresh 0.01` : **3 623 → 1 589 octets par flux (÷2,3) pour 1,3 % d'écart à 1 024 jetons** (2,7 % à 256, 13,7 % à 64) ; reste le cas MoE |
 | 3.3 | **Seuil de rentabilité** : à partir de quel débit réseau le découpage gagne | 🔬 | mesuré jusqu'à 20 ms de latence par message (`tools/proxy_latence.py`) : **attente ≈ calcul distant + 3,2 × latence**, soit 1,01× le calcul local à 0 ms, 1,99× à 5 ms, 4,89× à 20 ms — le débit ne compte pas (0,25 Mbit/s), la latence compte quatre fois |
 | 3.4 | **Démonstration Colab** : préremplissage réparti (le décodage reste séquentiel — c'est écrit dans la vision) | 🔬 | **le préremplissage par lots sur le fil est FAIT et fidèle** (mode 3 : 256 jetons en 4 lots, écart **0,00e0** ; en 1 lot de 917 ko, **0,00e0**) — reste à le faire tourner sur le runtime Colab, recette dans `docs/colab-reparti.md` |
@@ -115,7 +115,7 @@ calcul : c'est la raison pour laquelle la phase 0 sert la phase 3.
 | 2026-09-30 | où mettre les bits du cache KV, 8 191 jetons, ctx 8 192 | à taille ÉGALE : clés f32 + valeurs int8 **+0,023 %** contre clés int8 + valeurs f32 **+3,01 %** (facteur 130) ; à 4,625 octets : **+0,46 %** contre **+385 %** (facteur 840) · int4/int4 **+364 %** — `reports/rapport-placement-bits-kv.md` |
 | 2026-09-30 | préremplissage par lots sur un lien à 20 ms par message | **2,6 s** en un lot de 64 contre **47,6 s** en un flux par jeton — 18×, écart 0,00e0 des deux côtés |
 | 2026-09-30 | coût du découpage selon la latence (relais retardateur, 256 jetons) | attente **16,8 ms** à 0 ms · **33,0** à 5 ms · **81,8** à 20 ms → `attente ≈ calcul distant + 3,2 × latence`, écart 0,00e0 partout |
-| 2026-09-30 | découpage fidèle à **1 024 jetons** (1 024 flux, texte réel) | perplexité **9,5146** des deux côtés, écart **0,00e0** · 19,4 ms en local contre 19,7 ms à attendre le pair |
+| 2026-09-30 | découpage fidèle à **1 024 jetons** (1 023 flux, texte réel) | perplexité **9,5146** des deux côtés, écart **0,00e0** · 19,4 ms en local contre 19,7 ms à attendre le pair |
 
 Le second point est exactement ce que la vision promettait : **la divergence est
 localisée**, pas seulement constatée. La première version de l'outil comparait les
@@ -217,7 +217,8 @@ et note la perplexité.
 
 Mesuré, deux processus, localhost, 12 couches de chaque côté : le calcul coupé
 redonne **exactement** le calcul local — écart **0,00e0**, perplexité 144,8289 des
-deux côtés, sur 40 jetons puis sur 200 (199 flux servis).
+deux côtés, sur 40 jetons puis sur 200 (199 flux servis : le dernier jeton n'est
+pas envoyé).
 
 Il a fallu **deux corrections** pour y arriver, et la première ne suffisait pas :
 

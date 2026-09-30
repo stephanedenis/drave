@@ -84,7 +84,7 @@ hypothèse réfutée vaut mieux qu'un mode « presque juste » qu'on aurait gard
 
 * `--flux-liste` : le pilote envoie des listes ; le nœud moteur suit le mode reçu.
 * **Version dans chaque en-tête** (3.5) : un pair en version 99 est refusé avec
-  `flux en version 99, cette build parle la 2 (pair incompatible : rien n'a été
+  `flux en version 99, cette build parle la 4 (pair incompatible : rien n'a été
   interprété)` — vérifié avec un client Python qui envoie un faux en-tête.
 * **Les réglages d'activation voyagent** : niveaux, seuil, top-k, renorm. Deux
   nœuds lancés avec des seuils différents calculaient deux choses différentes en

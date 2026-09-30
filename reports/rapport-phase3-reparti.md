@@ -47,7 +47,8 @@ appliqué » que ce dépôt a déjà rencontré cinq fois (`--pin`, `--moe-topk`
 
 Égalité exacte, et pas seulement petite : le transport est du f32, donc rien
 n'est arrondi en chemin — le découpage ne devrait pas changer un bit, il ne le
-change pas. Vérifié à 40, 200 et **1 024 jetons** (1 024 flux servis, texte réel,
+change pas. Vérifié à 40, 200 et **1 024 jetons** (1 023 flux servis — le dernier jeton n'a
+rien à prédire, il n'est plus envoyé ; texte réel,
 perplexité **9,5146 des deux côtés**, écart 0,00e0), et à chaque fois le banc
 réparti prend le temps du calcul local : 19,4 ms par jeton en local, 19,7 ms à
 attendre le pair.

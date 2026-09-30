@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 46.3 h |
+| Durée | 46.4 h |
 | Tours | 45 |
-| Messages | 1773 |
-| Appels d'outils | 1675 |
+| Messages | 1776 |
+| Appels d'outils | 1678 |
 | Fichiers touchés | 44 |
-| Commandes | 1357 |
+| Commandes | 1360 |
 | Sous-agents | 6 |
-| Commits | 123 |
+| Commits | 124 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -2055,7 +2055,7 @@ Je vérifie l'heure à chaque itération et j'arrête à 12:06, en laissant un p
 
 ### Tour 45 — as-tu ce qu'il te faut pour te rendre à 15h en travaillaint avec un maximum d'autonomie et de parallélisme d'activités?
 
-*176 appels d'outils.* Actions notables :
+*179 appels d'outils.* Actions notables :
 
 - bash — Probe machine, GPU, disk, network state
 - bash — Identify GPU users and stray processes
@@ -2071,7 +2071,7 @@ Je vérifie l'heure à chaque itération et j'arrête à 12:06, en laissant un p
 - bash — Understand batched PPL reference path
 - bash — Add batched imposed states to forward_lot
 - list_agents
-- … et 154 autres
+- … et 157 autres
 
 **Synthèse produite :**
 
@@ -2179,7 +2179,7 @@ Je vérifie l'heure à chaque itération et j'arrête à 12:06, en laissant un p
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 1317 autres
+- … et 1320 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2450,4 +2450,5 @@ Je vérifie l'heure à chaque itération et j'arrête à 12:06, en laissant un p
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A drave-core/src/main.rs drave-core/src/model.rs && git commit -q -F - <<'EOF' && git log --oneli
 - Un drapeau inconnu n'est plus avalé en silence  \`--keeep 0.05\` (une faute de frappe) faisait tourner le modèle entier sans élagage et sans un mot. L'analyse r
 - Handoff : les garde-fous de l'après-midi et deux lignes de mesures  REPRISE §6bis gagne ce qui a été ajouté depuis 13h (tableau de bord --options-actives, drape
+- Cohérence : versions et comptes de flux remis d'aplomb partout  D'après le reste de \`reports/rapport-coherence-docs.md\` : le message de refus cité par le rapp
 

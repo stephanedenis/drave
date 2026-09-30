@@ -28626,3 +28626,56 @@ started background job bash-70
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='REPRISE.md'; s=open(p).read()\nv = \"\"\"### Les prochains chantiers, dans l'ordre\"\"\"\nn = \"\"\"### Hygiène et garde-fous ajoutés depuis (13h)\n\n- **`--options-actives`** : un tableau de bord qui imprime, AP … [2759 caractères tronqués]`
+
+  ```
+REPRISE : hygiène et garde-fous
+roadmap : deux lignes de mesures
+a2952f7 Handoff : les garde-fous de l'après-midi et deux lignes de mesures
+13:07:11
+cles_f16_valeurs_int8      :
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n 1,60p reports/rapport-coherence-docs.md", "description": "Read coherence report details"}`
+
+  ```
+# Cohérence des documents avec le code — audit
+
+**En une ligne** : **80 affirmations** vérifiées une par une contre le code (et
+contre les traces réelles du disque) ; **38 sont fausses (PÉRIMÉ)**, **15 se
+contredisent entre documents (CONTRADICTOIRE)**, **10 existent dans le code et
+manquent aux documents (MANQUANT)**, **17 tiennent (OK)** — les trois plus graves
+touchent la **version du protocole de flux** (deux binaires « v3 » aux contrats
+différents se croient compatibles), un **échappement d'indice écrit sur 4 octets et
+lu sur 2** en mode blocs, et `REPRISE.md` §6bis (pourtant écrit il y a une heure)
+déjà faux sur quatre points.
+
+## Révision auditée, méthode, réserves
+
+| | |
+|---|---|
+| Commit de référence | `ae85043` (2026-09-30 12:30) |
+| `drave-core/src/main.rs` | sha256 `d5e90136…` · 3 112 lignes |
+| `drave-core/src/model.rs` | sha256 `3e5dde2d…` · 3 872 lignes |
+| Traces relues | `/tmp/flux_v2.bin` (66 370 408 o, en-tête `DRVF` version **2**), `/tmp/flux_v3.bin` (version **3**) |
+
+Deux réserves de méthode, parce qu'elles changent la portée des constats :
+
+1. **L'arbre de travail a bougé pendant l'audit.** Quand il a commencé, HEAD était
+   `a0687b9` avec 165 lignes de `mod
+… [3989 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rn \"parle la 2\\|parle la 3\\|DRVF v1\\|les deux versions\\|199 flux\\|1 024 flux\\|vaut encore 2\\|version change\" --include=\"*.md\" . | grep -v journal/ | grep -v rapport-coherence | head -14", "description": "Find remaini … [25 caractères tronqués]`
+
+  ```
+./reports/rapport-phase3-reparti.md:50:change pas. Vérifié à 40, 200 et **1 024 jetons** (1 024 flux servis, texte réel,
+./reports/rapport-transport-liste.md:87:  `flux en version 99, cette build parle la 2 (pair incompatible : rien n'a été
+./reports/rapport-compacite-trace.md:24:**En une ligne** : la trace DRVF v1 coûte **6,04 octets par neurone actif** quand
+./reports/rapport-compacite-trace.md:43:| **disque, DRVF v1** | u32, 4 octets | i16, 2 octets | f32, 1 par liste | **6,04** (mesuré) |
+./reports/rapport-compacite-trace.md:54:Deux traces **réelles** du projet, toutes deux en DRVF v1, relues telles quelles :
+./docs/roadmap.md:55:| 3.1 | **Contrat d'échange v1** : tranche de liste = en-tête (couche, source, échelle, bits) + paires (destination, valeur) | ✅ | format écrit, relu, rejoué sans perte (phase 0.3/0.3bis) ; **transport TCP en place et FIDÈLE** (`--flux-serveur`, `--ppl-reparti`) — écart local/réparti **0,00e0** sur 40 et 199 flux, après correction de deux défauts (plage de couches ignorée par `forward`, norme finale appliquée deux fois) |
+./docs/roadmap.md:59:| 3.5 | **Sûreté** : version du format, refus des flux incompatibles, pas de silence | ✅ | version dans chaque 
+… [1137 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport re\ndef rem(p, paires):\n    s = open(p).read(); ok = 0\n    for v, n in paires:\n        if s.count(v) >= 1:\n            s = s.replace(v, n); ok += 1\n        else:\n            print(f\"  ⚠ absent de {p} : … [3703 caractères tronqués]`

@@ -1,4 +1,4 @@
-# Le format de flux (DRVF v1) — spécification
+# Le format de flux (DRVF) — spécification
 
 Ce format sert **trois choses à la fois**, et c'est délibéré :
 
@@ -61,7 +61,7 @@ octet. C'est **avec perte**, donc la v3 n'est pas le défaut :
 Le rejeu par LOTS n'accepte pas la v3 (il réinjecte les entiers d'origine, que la
 v3 n'a plus) : il le dit au lieu de compter des listes manquantes en silence.
 
-Le lecteur lit **les deux versions** ; une version inconnue est refusée en la
+Le lecteur lit **les trois versions** (1, 2 et 3) ; une version inconnue est refusée en la
 nommant. Le rejeu annonce désormais ce qu'il a servi — `24 576 listes servies,
 0 manquantes` — parce qu'une trace dont les clés ne correspondent plus se
 rejouait en silence avec une perplexité fausse.
@@ -118,7 +118,7 @@ un pair qui parle en listes reçoit des listes, il n'y a pas deux réglages à
 garder cohérents entre deux machines.
 
 La version est dans **chaque** en-tête, et un pair d'une autre version est refusé
-avec un message qui nomme les deux versions :
+avec un message qui nomme les deux versions en présence :
 
 ```
 [flux] arrêt : flux en version 99, cette build parle la 4 (pair incompatible : rien n'a été interprété)
@@ -159,7 +159,7 @@ découpage (798,3 au lieu de 18,2).
 | la fidélité de l'encodage est chiffrée | `DRAVE_FLUX_VERIF=1` : écart relatif **1,5e-5**, soit la quantification 16 bits |
 | la taille suit l'activité | densité ÷2,3 → trace ÷2,5 (132 Mo → 53 Mo) |
 | une version inconnue est refusée | v1/v2/v3 lues, toute autre refusée en la nommant ; le rejeu ANNONCE ses comptes (`N servies, M manquantes`) |
-| le découpage ne change pas le résultat | deux processus, 12 couches chacun : écart local/réparti **0,00e0** (144,8289 = 144,8289), 40 puis 199 flux |
+| le découpage ne change pas le résultat | deux processus, 12 couches chacun : écart local/réparti **0,00e0** (144,8289 = 144,8289), 39 puis 199 flux (le dernier jeton n'est pas envoyé) |
 | un lot ne change pas le résultat non plus | 256 jetons en 4 lots de 64 : écart **0,00e0** (18,0851 = 18,0851) ; en 1 lot de 256 : **0,00e0** (918 ko sur le fil) |
 | les deux nœuds quantifient PAREIL | un serveur lancé avec `--topk-q 900` et un client avec `--topk-q 4` donnent quand même **0,00e0** : les réglages du client gagnent (vérifié) |
 | l'en-tête fait exactement `TAILLE_TETE` octets | `assert_eq!` dans les deux émetteurs — un octet de trop décale tout le corps en silence et ne se voit qu'au flux suivant |
