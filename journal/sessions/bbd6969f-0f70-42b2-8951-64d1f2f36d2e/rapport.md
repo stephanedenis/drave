@@ -7,12 +7,12 @@
 | Début | 2026-09-28 14:46 |
 | Durée | 52.9 h |
 | Tours | 47 |
-| Messages | 2272 |
-| Appels d'outils | 2150 |
+| Messages | 2273 |
+| Appels d'outils | 2151 |
 | Fichiers touchés | 47 |
-| Commandes | 1801 |
+| Commandes | 1802 |
 | Sous-agents | 14 |
-| Commits | 193 |
+| Commits | 194 |
 | Compactages de contexte | 3 |
 
 ## Objectifs déclarés
@@ -2177,7 +2177,7 @@ Le mode creux ne peut pas utiliser le miroir VRAM (le chemin GPU est conditionn�
 
 ### Tour 47 — pret pour des scrum de 2h (boxing temps réel, avec revue, rétro et planning)
 
-*295 appels d'outils.* Actions notables :
+*296 appels d'outils.* Actions notables :
 
 - bash — Check clock, machine and last sprint state
 - bash — Create the sprint timing tool
@@ -2193,7 +2193,7 @@ Le mode creux ne peut pas utiliser le miroir VRAM (le chemin GPU est conditionn�
 - bash — Read the kernel launch call
 - bash — Write the FFI for the scores kernel
 - bash — Complete KvGpu initializer
-- … et 273 autres
+- … et 274 autres
 
 **Synthèse produite :**
 
@@ -2312,7 +2312,7 @@ Le mode creux ne peut pas utiliser le miroir VRAM (le chemin GPU est conditionn�
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 1761 autres
+- … et 1762 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2653,4 +2653,5 @@ Le mode creux ne peut pas utiliser le miroir VRAM (le chemin GPU est conditionn�
 - Compteur de lignes Rust re-mesuré en fin de sprint : 13 480 (le chiffre avait bougé de 312 lignes pendant le sprint)" && git log --oneline -1; date +%H:%M:%S
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -F - <<'EOF' && git log --oneline -1 && ./tools/sprint.sh list && git status -
 - Journal : index des sessions (fin de sprint 1)" && git log --oneline --since="2026-09-30 17:41" | wc -l && git status --short | wc -l && pgrep -c -x drave; echo
+- Journal : index des sessions (clôture)" 2>/dev/null; git status --short; echo "--- 22 commits, aucun processus, dépôt propre ---"; pgrep -c -x drave; ps -eo pcp
 

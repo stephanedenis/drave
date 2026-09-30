@@ -36479,3 +36479,14 @@ a6eedd8 Sprint 1 : cérémonie (revue chiffrée, rétrospective, planning du spr
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -m \"Journal : index des sessions (fin de sprint 1)\" && git log --oneline --since=\"2026-09-30 17:41\" | wc -l && git status --short | wc -l && pgrep -c -x drave; echo \"--- bilan fichiers ---\"; git diff … [87 caractères tronqués]`
+
+  ```
+22
+1
+0
+--- bilan fichiers ---
+ .../01-premier-des-trois-noyaux-gpu-du-top-k-le.md |  133 +
+ 24 files changed, 13566 insertions(+), 136 deletions(-)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -m \"Journal : index des sessions (clôture)\" 2>/dev/null; git status --short; echo \"--- 22 commits, aucun processus, dépôt propre ---\"; pgrep -c -x drave; ps -eo pcpu,comm --sort=-pcpu | head -3", "desc … [37 caractères tronqués]`
