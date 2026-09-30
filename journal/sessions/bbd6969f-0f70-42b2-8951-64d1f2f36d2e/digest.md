@@ -31391,3 +31391,41 @@ README mentionne 11 901 : 2
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\ndef rem(p, paires):\n    s = open(p).read(); ok = 0\n    for v, n in paires:\n        if s.count(v) >= 1: s = s.replace(v, n); ok += 1\n        else: print(f\"  ⚠ absent de {p} : {v[:50]}…\")\n    open(p,'w').write( … [597 caractères tronqués]`
+
+  ```
+README.md : 2/2
+REPRISE.md : 1/1
+a4735aa Compteurs de lignes : 12 171 au 30/09 (le mode 4 et ses correctifs ont ajouté 270 lignes)
+17:03:24
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport os, re\ncasses = []\nfor racine, _, fichiers in os.walk('.'):\n    if '/.git' in racine or '/journal' in racine or '/target' in racine: continue\n    for f in fichiers:\n        if not f.endswith('.md'): cont … [548 caractères tronqués]`
+
+  ```
+liens .md cassés : 0
+17:08:36
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n \"$(grep -n '^## Prochaines étapes' README.md | cut -d: -f1),+22p\" README.md", "description": "Check README next steps section"}`
+
+  ```
+## Prochaines étapes
+
+1. **Modèle ternaire entraîné** : implémenter un entraînement avec poids ternaires
+   (straight-through estimator) ou récupérer un petit modèle BitNet b1.58 pour
+   trancher la question « le ternaire suffit-il ? ».
+2. **Extracteur** : GGUF/safetensors → plans → format binaire packé, avec un
+   **schéma unique** générant à la fois le packer Python et le paquet SystemVerilog
+   (contrainte de cohérence des largeurs de bus du CDC).
+3. **RTL** : PE ternaire (mux + add/sub + accumulateur 24 bits) et décodeur, puis
+   mesure réelle du débit sur la carte.
+4. **Moteur** : traitement par blocs de destination (AVX2 n'a ni gather ni scatter
+   entier — il faut transposer le parcours, pas la boucle) et fusion par
+   compartiments de destination pour le multi-cartes.
+5. **Sparsité imposée** : c'est le point qui décide de l'avenir du mode
+   événementiel. Mesurer la perplexité de Qwen2.5-0.5B avec un seuil / top-k sur
+   les activations (10 %, 25 %, 50 % de densité) — sans sparsité, le débit reste
+   constant quel que soit le matériel.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='README.md'; s=open(p).read()\nvieux = \"\"\"## Prochaines étapes\n\n1. **Modèle ternaire entraîné** : implémenter un entraînement avec poids ternaires\n   (straight-through estimator) ou récupérer un petit modèle … [3113 caractères tronqués]`

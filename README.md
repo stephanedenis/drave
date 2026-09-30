@@ -495,18 +495,24 @@ plus tard, pour les modèles réels — pas pour le test de principe.)
 
 ## Prochaines étapes
 
-1. **Modèle ternaire entraîné** : implémenter un entraînement avec poids ternaires
-   (straight-through estimator) ou récupérer un petit modèle BitNet b1.58 pour
-   trancher la question « le ternaire suffit-il ? ».
-2. **Extracteur** : GGUF/safetensors → plans → format binaire packé, avec un
-   **schéma unique** générant à la fois le packer Python et le paquet SystemVerilog
-   (contrainte de cohérence des largeurs de bus du CDC).
-3. **RTL** : PE ternaire (mux + add/sub + accumulateur 24 bits) et décodeur, puis
-   mesure réelle du débit sur la carte.
-4. **Moteur** : traitement par blocs de destination (AVX2 n'a ni gather ni scatter
-   entier — il faut transposer le parcours, pas la boucle) et fusion par
-   compartiments de destination pour le multi-cartes.
-5. **Sparsité imposée** : c'est le point qui décide de l'avenir du mode
-   événementiel. Mesurer la perplexité de Qwen2.5-0.5B avec un seuil / top-k sur
-   les activations (10 %, 25 %, 50 % de densité) — sans sparsité, le débit reste
-   constant quel que soit le matériel.
+La feuille de route complète est dans [`docs/roadmap.md`](docs/roadmap.md). Ce qui
+est ouvert aujourd'hui, par ordre de valeur mesurée :
+
+1. **Noyau GPU de top-k** (phase 1.1) : c'est le seul poste GPU neuf. Le chemin GPU
+   de l'attention est conditionné à `attn_topk == 0`, donc le mode creux retombe
+   sur le CPU où il coûte 968 ms par couche à 1 M de clés, contre 13,2 ms avec le
+   miroir VRAM. Trois noyaux, six étapes, contrat d'exactitude — le plan est écrit
+   et chiffré : [`docs/plan-gpu-topk.md`](docs/plan-gpu-topk.md).
+2. **Second GPU** : 16 Go dorment. Le cache d'experts MXFP4 et le KV paginé à 1 M
+   les rempliraient utilement ; il faut un second contexte CUDA et une règle de
+   répartition.
+3. **Démonstration Colab** : tout est prêt côté code
+   ([`colab/`](colab/README.md)), la manipulation demande un compte et un tunnel.
+4. **Phase 2 locale** : ordonnanceur de flux (2 GPU, CPU, VRAM, RAM, NVMe),
+   streaming des poids depuis le NVMe (3,5 Go/s) pour ce qui ne tient pas en RAM,
+   cache d'experts rentable (+6 % aujourd'hui, l'objectif est ≥ +30 %).
+5. **Phase 5, sur matériel** : le PE événementiel et le lecteur DDR3 existent et
+   sont vérifiés ; il manque un accès à la carte pour la comparaison
+   énergie/jeton. Le prototype C mesure 7,79 G événements/s et le croisement
+   push/pull (~22 % de densité) — de quoi décider si le mode événementiel vaut le
+   détour matériel.

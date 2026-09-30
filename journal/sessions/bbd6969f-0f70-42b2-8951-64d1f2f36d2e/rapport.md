@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 50.3 h |
+| Durée | 50.4 h |
 | Tours | 46 |
-| Messages | 1950 |
-| Appels d'outils | 1841 |
+| Messages | 1953 |
+| Appels d'outils | 1844 |
 | Fichiers touchés | 44 |
-| Commandes | 1512 |
+| Commandes | 1515 |
 | Sous-agents | 11 |
-| Commits | 167 |
+| Commits | 168 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -2117,7 +2117,7 @@ L'**audit des drapeaux** a trouvé que **46 options sur 110** étaient ignorées
 
 ### Tour 46 — continue jusqu'à 18h HAE
 
-*103 appels d'outils.* Actions notables :
+*106 appels d'outils.* Actions notables :
 
 - bash — Check time, timezone and remaining budget
 - create_goal
@@ -2133,7 +2133,7 @@ L'**audit des drapeaux** a trouvé que **46 options sur 110** étaient ignorées
 - bash — Improve notebook with real text cell
 - bash — Kill test node safely and check notebook
 - bash — Add notebook real-text cell and commit
-- … et 89 autres
+- … et 92 autres
 
 **Synthèse produite :**
 
@@ -2246,7 +2246,7 @@ L'**audit des drapeaux** a trouvé que **46 options sur 110** étaient ignorées
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 1472 autres
+- … et 1475 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2561,4 +2561,5 @@ L'**audit des drapeaux** a trouvé que **46 options sur 110** étaient ignorées
 - Aiguille 9/9 dans les trois variantes de cache KV, et les vérifications de fin de journée  L'aiguille v2 (Qwen2.5-1.5B, contexte 2 048, trois profondeurs) retro
 - REPRISE : la politique du cache KV complète (taille ET temps), et l'aiguille 9/9" && git log --oneline -1 | cat
 - Compteurs de lignes : 12 171 au 30/09 (le mode 4 et ses correctifs ont ajouté 270 lignes)" && git log --oneline -1 | cat; date +"%H:%M:%S"
+- README : les prochaines étapes étaient restées à l'époque du FPGA  Elles listaient l'entraînement ternaire et le RTL comme priorités, alors que la feuille de ro
 
