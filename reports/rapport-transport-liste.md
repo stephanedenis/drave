@@ -1,8 +1,9 @@
 # Phase 3.2 — transporter la LISTE au lieu du vecteur
 
-**En une ligne** : le flux peut voyager en liste creuse (871 octets au lieu de
-3 623), mais à seuil 5 % le découpage coûte **×1,8 de perplexité** — la courbe
-est là, avec le seuil où ça casse.
+**En une ligne** : le flux peut voyager en liste creuse — **897 octets au lieu de
+3 623** à seuil 5 %, et **1 568** avec des indices par écarts — mais jeter des
+canaux coûte cher (**×1,8 de perplexité** à ce seuil), et la courbe est là pour
+dire où.
 
 ## Le protocole, mesuré
 
@@ -22,7 +23,7 @@ la demande : un pair qui parle en listes reçoit des listes.
 | seuil | activité | octets/flux (aller) | octets/flux (retour) | perplexité locale | perplexité répartie | écart |
 |---|---|---|---|---|---|---|
 | dense f32 | 100 % | 3 623 | 3 623 | 144,8289 | **144,8289** | **0,00e0** |
-| listes 0,00 | 100,0 % (896) | 3 622 | 3 622 | 144,8289 | 141,0539 | 2,6e-2 |
+| listes 0,00 | 100,0 % (896) | 3 623 | 3 623 | 144,8289 | 141,0539 | 2,6e-2 |
 | listes 0,02 | 60,4 % (541) | 2 203 | 2 677 | 203,8033 | 213,7739 | 4,9e-2 |
 | listes 0,05 | 24,0 % (215) | 897 | 993 | 493,0344 | 893,1350 | 8,1e-1 |
 | listes 0,10 | 36,5 % (327) | 1 347 | 216 | 35 483,0643 | 66 813,6606 | 8,8e-1 |

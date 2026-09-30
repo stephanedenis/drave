@@ -28745,3 +28745,29 @@ reports/rapport-phase3-reparti.md:62:Pas établi : le coût. Aujourd'hui le flux
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\ndef rem(p, paires):\n    s = open(p).read(); ok = 0\n    for v, n in paires:\n        if s.count(v) >= 1:\n            s = s.replace(v, n); ok += 1\n        else:\n            print(f\"  ⚠ absent de {p} : {v[:60]}…\ … [5166 caractères tronqués]`
+
+  ```
+README.md : 4/4
+docs/vision.md : 3/3
+docs/histoire.md : 1/1
+REPRISE.md : 1/1
+docs/contexte-long.md : 2/2
+reports/rapport-phase3-reparti.md : 1/1
+  ⚠ absent de reports/rapport-compacite-trace.md : > Restent à faire, tels quels : les valeurs i8 à échelle par…
+reports/rapport-compacite-trace.md : 0/1
+format-flux : datation de la vérification des top-k
+00dcebc Cohérence (suite) : le croisement push/pull, les comptes de lignes, et une erreur que j'avais écartée à tort
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date +\"%H:%M:%S\"; echo \"=== f16 ===\"; cat /tmp/kv_cles_f16.log; echo \"=== porte gpt-oss (job) ===\"; ps -o etime,args -C drave 2>/dev/null | cut -c1-80 | head -3", "description": "Check running jobs"}`
+
+  ```
+13:09:10
+=== f16 ===
+cles_f16_valeurs_int8      : === porte gpt-oss (job) ===
+    ELAPSED COMMAND
+      03:09 ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf --pp
+      02:18 ./drave-core/target/release/drave /home/stephane/FastNVMe/models/gpt
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/rapport-transport-liste.md'; s=open(p).read()\nv = \"\"\"**En une ligne** : le flux peut voyager en liste creuse (871 octets au lieu de\n3 623), mais à seuil 5 % le découpage coûte **×1,8 de perplexité**  … [1244 caractères tronqués]`

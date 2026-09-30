@@ -7,12 +7,12 @@
 | Début | 2026-09-28 14:46 |
 | Durée | 46.4 h |
 | Tours | 45 |
-| Messages | 1780 |
-| Appels d'outils | 1682 |
+| Messages | 1782 |
+| Appels d'outils | 1684 |
 | Fichiers touchés | 44 |
-| Commandes | 1364 |
+| Commandes | 1366 |
 | Sous-agents | 6 |
-| Commits | 125 |
+| Commits | 126 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -2055,7 +2055,7 @@ Je vérifie l'heure à chaque itération et j'arrête à 12:06, en laissant un p
 
 ### Tour 45 — as-tu ce qu'il te faut pour te rendre à 15h en travaillaint avec un maximum d'autonomie et de parallélisme d'activités?
 
-*183 appels d'outils.* Actions notables :
+*185 appels d'outils.* Actions notables :
 
 - bash — Probe machine, GPU, disk, network state
 - bash — Identify GPU users and stray processes
@@ -2071,7 +2071,7 @@ Je vérifie l'heure à chaque itération et j'arrête à 12:06, en laissant un p
 - bash — Understand batched PPL reference path
 - bash — Add batched imposed states to forward_lot
 - list_agents
-- … et 161 autres
+- … et 163 autres
 
 **Synthèse produite :**
 
@@ -2179,7 +2179,7 @@ Le relecteur a raison sur un point où je l'avais contredit : la source dit ~22 
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 1324 autres
+- … et 1326 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2452,4 +2452,5 @@ Le relecteur a raison sur un point où je l'avais contredit : la source dit ~22 
 - Handoff : les garde-fous de l'après-midi et deux lignes de mesures  REPRISE §6bis gagne ce qui a été ajouté depuis 13h (tableau de bord --options-actives, drape
 - Cohérence : versions et comptes de flux remis d'aplomb partout  D'après le reste de \`reports/rapport-coherence-docs.md\` : le message de refus cité par le rapp
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' def rem(p, paires):     s = open(p).read(); ok = 0     for v, n in paires:         if s.c
+- Rapport transport : l'en-tête dit maintenant ce que son tableau mesure  « 871 octets » ne correspondait à aucune ligne du tableau (897 en listes i16 à seuil 5 %
 
