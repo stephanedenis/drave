@@ -201,7 +201,7 @@ en VRAM, l'attention par lots déportée et la pagination des deux caches KV. Ce
 qui reste est classé par rentabilité mesurée.
 
 1. **Fusionner la chaîne du top-k déporté.** Elle gagne déjà à 16 k (attention
-   20,69 → **7,72 ms/jeton**, balayage −23 %), mais coûte 8 lancements et 17
+   19,58 → **7,59 ms/jeton**, balayage −24 %), mais coûte 8 lancements et 17
    transferts par couche et par jeton : un seul noyau par ligne (descente radix +
    collecte + somme, les k scores en partagé) doit ramener les 8 lancements à 2 et
    supprimer le tampon `nh × n × 4` que le plan déclarait « trop ». Critère :
@@ -414,10 +414,10 @@ VRAM dès que `attn_topk > 0`.
 |---|---|---|---|---|
 | 2 048 | 511 | **4,21 ms/jeton** | 7,68 | 18,1 / 20,4 s |
 | 8 192 | 511 | **6,35 ms/jeton** | 7,36 | 19,2 / 19,7 s |
-| **16 384** | 4 095 | 20,69 ms/jeton | **7,72 ms/jeton** | **207,8 / 160,7 s (−23 %)** |
+| **16 384** | 4 095 | 19,58 ms/jeton | **7,59 ms/jeton** | **203,7 / 155,5 s (−24 %)** |
 
 Le GPU est plat (c'est le but), le CPU croît fortement : **le croisement est entre
-8 192 et 16 384 clés**, et à 16 k le déport gagne (attention −63 %, balayage −23 %,
+8 192 et 16 384 clés**, et à 16 k le déport gagne (attention −61 %, balayage −24 %,
 perplexité identique à 2e-5). C'est plus loin que le croisement de l'attention
 complète (~4 000), et pour la raison déjà identifiée : la chaîne coûte **8
 lancements et 17 transferts par couche et par jeton** (dont 8 copies DtoH

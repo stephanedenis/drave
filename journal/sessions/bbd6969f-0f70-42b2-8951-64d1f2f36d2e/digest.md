@@ -35933,3 +35933,49 @@ gpu : perplexité 17.4310 sur 255 tokens
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -F - <<'EOF' && git log --oneline -1\nTop-k déporté : une synchro en trop, un budget de scores, un échec dit une seule fois\n\nTrois suites de la relecture, toutes dans le sens du plan (« supprimer deux\na … [1006 caractères tronqués]`
+
+  ```
+64c9d26 Top-k déporté : une synchro en trop, un budget de scores, un échec dit une seule fois
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && nohup bash -c '\ncd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\nD=./drave-core/target/release/drave\nM=models/Qwen2.5-0.5B-Q8_0.gguf\nJ=/tmp/topk_16k_final.log\n: > $J\nfor mode in gpu cpu; do\n  echo \"########## ctx=16384 limi … [585 caractères tronqués]`
+
+  ```
+mesure finale 16k lancée
+19:01:09
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat sprints/01-premier-des-trois-noyaux-gpu-du-top-k-le.md | head -8 && git log --oneline --since=\"2026-09-30 17:41\" | wc -l", "description": "Check sprint file and commit count"}`
+
+  ```
+# Sprint 1 — Premier des trois noyaux GPU du top-k : les scores d'attention calculés en VRAM, vérifiés contre la référence CPU à 1e-6, avec leur banc
+
+- **Début** : 17:41 · **Fin prévue** : 19:41 (boxing de 120 min)
+- **Objectif** : Premier des trois noyaux GPU du top-k : les scores d'attention calculés en VRAM, vérifiés contre la référence CPU à 1e-6, avec leur banc
+- **Engagement de fin** : dépôt vert (tests + portes), machine rendue, tout commité.
+
+12
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 240; cat /tmp/topk_16k_final.log; date +%H:%M:%S", "description": "Check final 16k measurement", "timeoutMs": 300000}`
+
+  ```
+########## ctx=16384 limit=4096 gpu
+[gpu] top-k déporté demandé (DRAVE_GPU_TOPK) : actif si --attn-topk vaut 1 à 1024, sans fenêtre, et si nkv × rep = nh
+=== perplexité 12.2265 sur 4095 tokens (0 événements, 155.5 s) ===
+    postes (ms/token) : projets-attn 2.51 | rope 0.68 | attention 7.59 | proj+mlp 20.26 | somme 31.03 | reste (tête + échantillonnage) 6.95
+########## ctx=16384 limit=4096 cpu
+19:05:20
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 200; cat /tmp/topk_16k_final.log | tail -4; date +%H:%M:%S", "description": "Get final CPU 16k number", "timeoutMs": 300000}`
+
+  ```
+########## ctx=16384 limit=4096 cpu
+=== perplexité 12.2267 sur 4095 tokens (0 événements, 203.7 s) ===
+    postes (ms/token) : projets-attn 2.48 | rope 0.42 | attention 19.58 | proj+mlp 20.21 | somme 42.70 | reste (tête + échantillonnage) 7.05
+=== FINAL FINI ===
+19:08:50
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\ndef patch(p, paires):\n    s=open(p).read()\n    for v,n,nom in paires:\n        assert s.count(v)==1, f\"{p}::{nom}::{s.count(v)}\"\n        s=s.replace(v,n,1)\n    open(p,'w').write(s); print(f\"{p} ok\")\n\npatch … [2290 caractères tronqués]`

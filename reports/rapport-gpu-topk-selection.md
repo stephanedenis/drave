@@ -184,12 +184,12 @@ plutôt que passé sous silence.
 |---|---|---|---|---|---|
 | 2 048 | 511 | **4,21** | 7,68 | 13,1358 / 13,1355 | 18,1 / 20,4 s |
 | 8 192 | 511 | **6,35** | 7,36 | 13,1358 / 13,1355 | 19,2 / 19,7 s |
-| **16 384** | 4 095 | 20,69 | **7,72** | 12,2267 / **12,2265** | **207,8 / 160,7 s (−23 %)** |
+| **16 384** | 4 095 | 19,58 | **7,59** | 12,2267 / **12,2265** | **203,7 / 155,5 s (−24 %)** |
 
 Le GPU est **plat** (7,4–7,7 ms/jeton, indépendant du contexte : c'est le but), le
 CPU croît — de 4,21 à 20,69 ms/jeton entre 2 k et 16 k. **Le croisement est donc
 entre 8 192 et 16 384 clés**, et à 16 k le déport gagne franchement : attention
-**20,69 → 7,72 ms/jeton (−63 %)**, balayage **207,8 → 160,7 s (−23 %)**, perplexité
+**19,58 → 7,59 ms/jeton (−61 %)**, balayage **203,7 → 155,5 s (−24 %)**, perplexité
 identique à 2e-5 près. C'est plus loin que le croisement de l'attention complète
 (~4 000 clés), et pour la raison déjà identifiée : le coût fixe des lancements et
 des recopies. La

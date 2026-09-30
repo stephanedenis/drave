@@ -112,8 +112,8 @@ doit montrer l'effet cherché : **968 ms → quelques dizaines de ms par couche*
 
 ## La prochaine étape n'est pas un noyau de plus, c'est une fusion
 
-Mesuré à 16 384 clés : la chaîne déportée gagne (attention 20,69 → 7,72 ms/jeton,
-balayage −23 %), mais elle coûte **8 lancements et 17 transferts par couche et par
+Mesuré à 16 384 clés : la chaîne déportée gagne (attention 19,58 → 7,59 ms/jeton,
+balayage −24 %), mais elle coûte **8 lancements et 17 transferts par couche et par
 jeton**, dont 8 copies DtoH bloquantes — d'où un croisement entre 8 k et 16 k au
 lieu des ~4 000 clés de l'attention complète. Le levier est donc :
 
