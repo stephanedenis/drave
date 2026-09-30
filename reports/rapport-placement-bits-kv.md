@@ -141,6 +141,29 @@ Autrement dit : **le meilleur réglage en qualité par octet n'est pas le meille
 temps**, et le miroir VRAM tranche à lui seul le débat au-delà de quelques dizaines
 de milliers de clés.
 
+## Et l'aiguille ? 9/9 dans les trois cas
+
+La perplexité n'est pas tout : un modèle qui retrouve une information enfouie dans
+son contexte le fait-il encore après quantification du cache ? Aiguille v2
+(`tools/aiguille.py`), Qwen2.5-1.5B-Instruct Q4_K_M, contexte 2 048, trois
+profondeurs (0,1 / 0,5 / 0,9), trois variantes de cache :
+
+| cache | sondes trouvées |
+|---|---|
+| f32 (référence) | **3/3** |
+| clés f16 + valeurs int8 | **3/3** |
+| int8 · int8 | **3/3** |
+
+**La tâche est robuste là où la perplexité ne l'est pas** : l'int8 complet coûte
++2,25 % de perplexité à ce contexte, et retrouve pourtant ses trois aiguilles, y
+compris au fond du contexte. C'est cohérent avec ce qu'on sait de la perplexité :
+elle moyenne une petite erreur sur chaque jeton, alors qu'une aiguille ne demande
+qu'un pic d'attention au bon endroit.
+
+Ce que ça ne dit pas : à 2 048 jetons et trois profondeurs, l'échantillon est
+petit ; et rien ici ne teste la dégradation à 32 k ou 128 k, où le cache quantifié
+pèse beaucoup plus.
+
 ## Reproductible
 
 ```bash

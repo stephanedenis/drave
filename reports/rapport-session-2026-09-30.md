@@ -62,6 +62,19 @@ classement tient) ; **quatre tests** de plus sur le protocole (17 au total) ;
 (`tools/colab_cote_local.sh`, notebook enrichi d'un texte réel : la perplexité du
 banc passe de 17 869 à ~20, et l'écart reste 0,00e0).
 
+## Les vérifications de fin de journée
+
+* **Aiguille v2, trois variantes de cache KV** (Qwen2.5-1.5B, contexte 2 048, trois
+  profondeurs) : **9/9 sondes trouvées** — même avec l'int8/int8, qui coûte pourtant
+  +2,25 % de perplexité. La tâche est robuste là où la perplexité ne l'est pas.
+* **Banc KV à 262 144 clés** : l'attention coûte 70 ms par passe avec des clés f32,
+  **162 ms avec des clés f16** (la conversion se paie par élément) et 174 ms en
+  int8 ; le miroir VRAM la ramène à 1,7 ms (43 ms par jeton sur 24 couches) et
+  exige une disposition **homogène** — toute variante d'attribution le désactive.
+* **Mode 3 (lot dense) à 1 024 jetons** : écart **0,00e0**, seize lots de 64.
+* **Plafond cumulatif R4** : vérifié à l'octet près sur 258 Mo d'états légaux
+  (refus à l'état 72 393, le point de franchissement des 256 Mo).
+
 ## Ce qui n'a pas été fait
 
 - **Noyau GPU de top-k** (phase 1.1) : les trois heures sont allées au transport,
