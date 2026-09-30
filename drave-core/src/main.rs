@@ -1376,6 +1376,22 @@ struct Flux {
     octets_corps: usize,
 }
 
+/// Plafond d'une allocation pilotée par le RÉSEAU (règle R4 de
+/// `docs/plan-prefill-reparti.md`). Sans lui, un pair — hostile ou bogué — qui
+/// annonce `n = 4 milliards` fait allouer `n × dimension × 4` octets AVANT tout
+/// contrôle : jusqu'à ~15 To demandés au noyau. 256 Mo couvrent largement un lot
+/// de 8 192 jetons × 8 192 canaux (268 Mo... soit un lot par fenêtre maximale).
+const PLAFOND_FLUX: usize = 256 << 20;
+
+/// Refuse une taille de corps au-delà du plafond, en le DISANT.
+fn verifier_taille(octets: usize, quoi: &str) -> std::io::Result<()> {
+    if octets > PLAFOND_FLUX {
+        return Err(std::io::Error::new(std::io::ErrorKind::InvalidData,
+            format!("{quoi} : {octets} octets au-delà du plafond de {} Mo — flux refusé                      (règle R4 de docs/plan-prefill-reparti.md)", PLAFOND_FLUX >> 20)));
+    }
+    Ok(())
+}
+
 /// Charge utile d'un flux : dense (f32), ou **liste creuse quantifiée**. Le
 /// réseau transporte alors exactement ce que le disque écrit déjà — deux octets
 /// d'indice, deux octets de valeur, une échelle par liste.
@@ -1619,7 +1635,10 @@ fn recevoir_flux(s: &mut std::net::TcpStream, hidden: usize) -> std::io::Result<
         MODE_LOT => {
             // `n` est le nombre d'ÉTATS, pas de canaux : la dimension vient du
             // modèle du nœud qui reçoit, elle n'a pas à voyager.
-            let mut corps = vec![0u8; n * hidden * 4];
+            let taille = n.checked_mul(hidden).and_then(|x| x.checked_mul(4))
+                         .unwrap_or(usize::MAX);
+            verifier_taille(taille, &format!("lot de {n} états × {hidden} canaux"))?;
+            let mut corps = vec![0u8; taille];
             s.read_exact(&mut corps)?;
             let etats = (0..n * hidden).map(|k| f32::from_le_bytes(
                 [corps[k*4], corps[k*4+1], corps[k*4+2], corps[k*4+3]])).collect();
@@ -1638,6 +1657,7 @@ fn recevoir_flux(s: &mut std::net::TcpStream, hidden: usize) -> std::io::Result<
             let mut lg = [0u8; 4];
             s.read_exact(&mut lg)?;
             let longueur = u32::from_le_bytes(lg) as usize;
+            verifier_taille(longueur, &format!("corps de {n} paires"))?;
             let mut corps = vec![0u8; longueur];
             s.read_exact(&mut corps)?;
             let (idx, val) = match decoder_paires_blocs(&corps, n) {
@@ -1650,6 +1670,7 @@ fn recevoir_flux(s: &mut std::net::TcpStream, hidden: usize) -> std::io::Result<
         }
         _ => {}
     };
+    verifier_taille(n.saturating_mul(4), &format!("flux de {n} valeurs"))?;
     let mut octets = vec![0u8; n * 4];
     s.read_exact(&mut octets)?;
     let charge = match mode {
@@ -3221,6 +3242,53 @@ mod tests_flux {
         assert_eq!(n, 8);
         assert_eq!(octets, TAILLE_TETE + 32,
                    "l'octet d'en-tête en trop faisait exactement cette différence");
+        serveur.join().unwrap();
+    }
+}
+
+#[cfg(test)]
+mod tests_plafond {
+    //! Le plafond des allocations pilotées par le réseau (règle R4). Sans lui, un
+    //! pair qui annonce `n = 4 milliards` fait demander ~15 To au noyau AVANT tout
+    //! contrôle — la relecture adversariale l'avait relevé comme soupçon, faute de
+    //! pouvoir le tester sans risquer la machine. Le test ne risque rien : le
+    //! refus a lieu avant l'allocation.
+    use super::*;
+    use std::io::Write;
+    use std::net::{TcpListener, TcpStream};
+
+    #[test]
+    fn un_lot_dement_grand_est_refuse_avant_allocation() {
+        let ecoute = TcpListener::bind("127.0.0.1:0").unwrap();
+        let adresse = ecoute.local_addr().unwrap();
+        let serveur = std::thread::spawn(move || {
+            let (mut sock, _) = ecoute.accept().unwrap();
+            // en-tête v4 complet, mode lot, n = 100 millions d'états
+            let mut tete: Vec<u8> = Vec::new();
+            tete.extend_from_slice(&MAGIE_FLUX.to_le_bytes());
+            tete.push(VERSION_FLUX);
+            tete.push(MODE_LOT);
+            tete.extend_from_slice(&12u32.to_le_bytes());
+            tete.extend_from_slice(&24u32.to_le_bytes());
+            tete.extend_from_slice(&0u32.to_le_bytes());
+            tete.extend_from_slice(&100_000_000u32.to_le_bytes());
+            tete.extend_from_slice(&0f32.to_le_bytes());
+            tete.extend_from_slice(&127f32.to_le_bytes());
+            tete.extend_from_slice(&0f32.to_le_bytes());
+            tete.extend_from_slice(&0u32.to_le_bytes());
+            tete.push(0);
+            for _ in 0..10 { tete.extend_from_slice(&0u32.to_le_bytes()); }
+            assert_eq!(tete.len(), TAILLE_TETE);
+            sock.write_all(&tete).unwrap();
+            // Pas de lecture ici : le client refuse AVANT de lire le corps, donc
+            // il ne renverra rien — l'ancienne version de ce test se bloquait
+            // pour toujours sur cette lecture (et le test ne finissait jamais).
+        });
+        let mut client = TcpStream::connect(adresse).unwrap();
+        let r = recevoir_flux(&mut client, 896);
+        assert!(r.is_err(), "un lot de 100 millions d'états doit être refusé");
+        let msg = format!("{}", r.err().unwrap());
+        assert!(msg.contains("plafond"), "le refus doit nommer le plafond : {msg}");
         serveur.join().unwrap();
     }
 }

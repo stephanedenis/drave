@@ -28168,3 +28168,44 @@ perplexité 19.3885 sur 510 tokens
 ⏵ Rédaction du rapport de campagne KV (6 points mesurés, 3 en cours) pendant que la machine tourne.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-placement-bits-kv.md <<'EOF'\n# Où mettre les bits du cache KV : la courbe complète\n\n**En une ligne** : à taille ÉGALE, mettre les bits sur les **clés** plutôt que sur\nles valeurs change l'erreur d'un facteur … [3762 caractères tronqués]`
+
+  ```
+f145f05 Rapport : où mettre les bits du cache KV (facteur 130 à 840 à taille égale)
+cles_f32_valeurs_int4      : perplexité 14.2994 sur 8191 tokens (0 événements, 1665.6 s)
+cles_int4_valeurs_f32      : perplexité 69.0464 sur 8191 tokens (0 événements, 1482.6 s)
+int4_int4                  : 12:46:48
+  ```
+
+### 🤖 Assistant
+
+⏵ Pendant que la campagne tourne : je borne les allocations pilotées par le réseau (un pair peut aujourd'hui demander 15 To) et je le teste.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/main.rs'; s=open(p).read()\n\n# le plafond, à côté de TAILLE_TETE\nv = \"\"\"/// Charge utile d'un flux : dense (f32), ou **liste creuse quantifiée**.\"\"\"\nn = \"\"\"/// Plafond d'une allocation  … [5359 caractères tronqués]`
+
+  ```
+plafond R4 posé sur les trois modes
+import Write ajouté
+[timed out after 600000ms]
+[killed by signal: SIGTERM]
+  ```
+
+- **bash** `{"command": "date +\"%H:%M:%S\"; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/main.rs'; s=open(p).read()\nv = \"\"\"            assert_eq!(tete.len(), TAILLE_TETE);\n            sock.write_all(&tete).unwrap();\n            // le pair attend la réponse : e … [793 caractères tronqués]`
+
+  ```
+12:57:10
+test débloqué
+test tests_flux::entete_et_version_sont_ce_que_les_numeros_disent ... ok
+test tests_flux::paires_blocs_aller_retour_avec_echappement ... ok
+test tests_flux::paires_blocs_tronquees_sont_refusees ... ok
+test tests_plafond::un_lot_dement_grand_est_refuse_avant_allocation ... ok
+test tests_flux::flux_dense_aller_retour_par_la_vraie_mise_en_trame ... ok
+test engine::tests_gemm_q4::gemm_q4_egale_matvec ... ok
+test engine::tests_gemm::gemm_bat_le_matvec ... ok
+test result: ok. 11 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.13s
+  ```
+
+### 🤖 Assistant
+
+11/11 tests ✓ (dont le refus d'allocation géante). Je commit, puis je chiffre le gain du mode lot **sur un lien latent** — l'argument direct pour Colab.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A drave-core/src/main.rs && git commit -q -F - <<'EOF' && git log --oneline -1 | cat\nRègle R4 : plafond des allocations pilotées par le réseau (256 Mo)\n\nLa relecture adversariale avait relevé un soupçon qu'elle n'a pas vo … [2204 caractères tronqués]`
