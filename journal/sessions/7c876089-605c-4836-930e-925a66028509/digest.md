@@ -1196,3 +1196,582 @@ Usage :
 … [1970 caractères tronqués]
   ```
 
+### 🤖 Assistant
+
+⏵ Lecture de pair_factice.py (mode lot) et du bloc D5 dans run_ppl_reparti
+
+- **bash** `{"command": "sed -n '60,140p' tools/pair_factice.py", "description": "Read pair_factice lot handling", "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+# Le corps dépend du MODE : dense et listes i16 font 4 octets par
+        # élément, les blocs font 2 octets par actif plus les échelles et les
+        # échappements. Un pair factice qui suppose une seule disposition mentirait
+        # exactement là où on l'interroge.
+        if mode == 3:
+            # LOT : `n` est le nombre d'ÉTATS, le corps fait n × dimension × 4.
+            # Lire n × 4 (comme avant) laissait le client BLOQUÉ dans read_exact
+            # et tuait le pair — c'est pour cela que le mode lot n'avait jamais
+            # été confronté à un pair indépendant (relecture adversariale, D4).
+            corps = lire_tout(sock, n * dimension * 4)
+        elif mode == 2:
+            nb = struct.unpack("<I", lire_tout(sock, 4))[0]
+            echelles = lire_tout(sock, nb * 4)
+            longueur = struct.unpack("<I", lire_tout(sock, 4))[0]
+            corps = echelles + lire_tout(sock, longueur)
+        else:
+            corps = lire_tout(sock, n * 4)
+        if magie != MAGIE:
+            print(f"[factice] MAGIE INCONNUE {magie:#x}", flush=True)
+            break
+        vus.append(n)
+        if len(vus) <= 3 or len(vus) % 20 == 0:
+            print(f"[factice] flux 
+… [1669 caractères tronqués]
+  ```
+
+- **bash** `{"command": "sed -n '1908,1960p' drave-core/src/main.rs", "description": "Read D5 message placement", "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+}
+            }
+            pos += t;
+        }
+    } else {
+        for (pos, &t) in ids.iter().enumerate() {
+            let last = mdl.forward(t, pos);
+            if pos + 1 < ids.len() {
+                nll_ref += nll_logits(&mdl.logits(&last), ids[pos + 1]);
+            }
+        }
+    }
+    let ppl_ref = (nll_ref / (ids.len() - 1) as f64).exp();
+    println!("  référence locale  : perplexité {ppl_ref:.4}  ({:.1} s)", t0.elapsed().as_secs_f64());
+
+    // 2. la même chose, coupée en deux nœuds
+    let mut sock = std::net::TcpStream::connect(pair).expect("connexion au nœud moteur");
+    sock.set_nodelay(true).expect("TCP_NODELAY");   // cf. le nœud moteur : Nagle coûte 6×
+    mdl.couche_fin = couches_locales;
+    let mut octets_envoyes = 0u64;
+    let mut octets_recus = 0u64;
+    let mut actifs_envoyes = 0u64;
+    let mut flux_envoyes = 0u64;
+    let mut t_local = 0f64;
+    let mut t_pair = 0f64;
+    let t1 = Instant::now();
+    let mut nll = 0f64;
+    if lot > 1 {
+        // PRÉREMPLISSAGE RÉPARTI : un lot par aller-retour au lieu d'un flux par
+        // jeton. C'est ce que la phase 3.4 doit démontrer — le découpage doit
+        // coûter la latence d'UN message par lot, pas 
+… [1180 caractères tronqués]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-72 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && cargo test --release -- --test-threads 2 2>&1 | tail -40) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+### 🤖 Assistant
+
+⏵ Résultats des tests annoncés (« 11 tests »)
+
+- **job_output** `{"job_id": "bash-72"}`
+
+  ```
+...
+109 |     f_proj_warp: *mut c_void,
+    |     ^^^^^^^^^^^
+
+warning: method `kv_ecrire` is never used
+   --> src/gpu.rs:416:12
+    |
+121 | impl Gpu {
+    | -------- method in this implementation
+...
+416 |     pub fn kv_ecrire(&self, m: &mut KvGpu, kvh: usize, pos: usize,
+    |            ^^^^^^^^^
+
+warning: the `ids:` in this pattern is redundant
+   --> src/main.rs:623:9
+    |
+623 |         ids: mut ids, ids_file, prompt, n: n_new, temp, top_p, topk, rep_pen, hist,
+    |         ^^^^^^^^^^^^ help: use shorthand field pattern: `mut ids`
+    |
+    = note: `#[warn(non_shorthand_field_patterns)]` on by default
+
+warning: `drave-core` (bin "drave" test) generated 17 warnings (run `cargo fix --bin "drave" -p drave-core --tests` to apply 8 suggestions)
+    Finished `release` profile [optimized] target(s) in 12.10s
+     Running unittests src/main.rs (target/release/deps/drave-9a06049b91b56c63)
+
+running 11 tests
+test engine::tests_gemm_q4::gemm_q4_egale_matvec ... ok
+test list::tests_mxfp4::import_exact ... ok
+test list::tests_q4::avx2_egale_scalaire ... ok
+test list::tests_q6k::quarts_successifs ... ok
+test model::tests_kv::aller_retour_kv ... ok
+test tests_flux::entete_et_version_sont_c
+… [491 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Lecture de `run_infer` : ordre du tableau de bord et flags appliqués
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/main.rs", "limit": 110, "offset": 617}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/main.rs</path>
+<type>file</type>
+<content>
+617: fn run_infer(opt: Options) {
+618:     // Lu AVANT la déstructuration, qui consomme `opt`.
+619:     let montre_options = opt.options_actives;
+620:     // Une seule analyse de la ligne de commande (voir `analyser`) : chaque mode
+621:     // ne fait plus que déstructurer ce dont il a besoin.
+622:     let Options {
+623:         ids: mut ids, ids_file, prompt, n: n_new, temp, top_p, topk, rep_pen, hist,
+624:         flux, session, chat, ctx: ctx_opt, threads: threads_opt, abits: abits_opt,
+625:         ctx_impose, threads_impose, abits_impose, dense, auto, q4, b6,
+626:         keep, attn_window, swa_pattern, sans_fenetre, attn_sinks, attn_topk, qk_topk,
+627:         act_thresh, act_topk, act_renorm, topk_proj, moe_topk, patch: patch_file,
+628:         hebb_layer, hebb_q, hebb_out, sans_yarn, lot, ffn_gain,
+629:         trace_flux, trace_couches, ..
+630:     } = opt;
+631:     let path = &modele_chemin();
+632:     // Défauts du mode INFÉRENCE : 512 jetons, la moitié des cœurs (l'attente
+633:     // active de la barrière ne tolère pas la sursouscription), 8 bits.
+634:     le
+… [5257 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Vérification du décodeur de référence puis expérience clés/fenêtres
+
+- **bash** `{"command": "sed -n '80,150p' tools/flux_codec.py; echo \"=== TraceFlux version ===\"; sed -n '530,600p' drave-core/src/model.rs", "description": "Read codec decoder and TraceFlux", "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+echelles = []
+            for _ in range(n_blocs):
+                echelles.append(struct.unpack_from("<e", blob, off)[0])   # f16 natif
+                off += 2
+        for _ in range(n):
+            if version == 3:
+                d = blob[off]; off += 1
+                if d == 255:
+                    i = struct.unpack_from("<H", blob, off)[0]; off += 2
+                else:
+                    i = prev + d
+                prev = i
+                q = struct.unpack_from("<b", blob, off)[0]; off += 1
+                actifs.append((i, q * echelles[i // 32]))
+                continue
+            if version == 1:
+                i, v = PAIRE_V1.unpack_from(blob, off)
+                off += PAIRE_V1.size
+            else:
+                d = blob[off]
+                off += 1
+                if d == 255:
+                    i = struct.unpack_from("<H", blob, off)[0]
+                    off += 2
+                else:
+                    i = prev + d
+                prev = i
+                v = struct.unpack_from("<h", blob, off)[0]
+                off += 2
+            actifs.append((i, v))
+        listes.append((couche, pos, echelle, actifs))
+    return n_layer, hidden, listes
+
+
+def 
+… [5092 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Expérience : trace écrite à contexte 64 puis à 512, mêmes jetons
+
+- **bash** `{"command": "M=/home/stephane/Data13TB/stephane/GitHub/Qtrinet; D=$M/drave-core/target/release/drave; MOD=$M/models/Qwen2.5-0.5B-Q8_0.gguf\npython3 -c \"\nimport random\nrandom.seed(7)\nmots='le chat dort sur le tapis rouge et reve encore dans la maison calme du village ancien pres de la riviere fro … [500 caractères tronqués]`
+
+  ```
+=== ctx 64 ===
+[trace] flux enregistré dans /tmp/W64.drvf
+/tmp/long.txt : 130 jetons (tokenizer du modèle), fenêtres de 64
+[trace] 6240 listes · 5587213 neurones actifs · 17 Mo
+=== perplexité 345.5146 sur 127 tokens (0 événements, 61.0 s) ===
+=== ctx 512 ===
+[trace] flux enregistré dans /tmp/W512.drvf
+/tmp/long.txt : 130 jetons (tokenizer du modèle), fenêtres de 512
+[trace] 6240 listes · 5588199 neurones actifs · 17 Mo
+=== perplexité 168.6228 sur 129 tokens (0 événements, 56.6 s) ===
+  ```
+
+### 🤖 Assistant
+
+⏵ Comparaison des clés des deux traces (ctx 64 vs 512)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport sys\nsys.path.insert(0, 'tools')\nimport flux_codec as fc\n\ndef charge(p):\n    n_layer, hidden, listes = fc.lire_rust(p)[:3]\n    return {(c, pos) for c, pos, _, _ in listes}, {pos for _, pos, _, _ in list … [798 caractères tronqués]`
+
+  ```
+W64  : listes 6240 clés (couche,pos) 6240 pos distincts 130 min 1 max 130
+W512 : listes 6240 clés (couche,pos) 6240 pos distincts 130 min 1 max 130
+clés identiques : True | diff 0
+listes au contenu IDENTIQUE aux mêmes clés : 3138 / 6240
+  ```
+
+### 🤖 Assistant
+
+⏵ Inspection du générateur de modèle MLA synthétique
+
+- **bash** `{"command": "wc -l tools/mla_synthetique.py; sed -n '1,50p' tools/mla_synthetique.py; echo ...; grep -n \"def main\\|argparse\\|sys.argv\\|sortie\\|\\.gguf\" tools/mla_synthetique.py | head -20", "description": "Inspect MLA synthetic tool", "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet … [2 caractères tronqués]`
+
+  ```
+250 tools/mla_synthetique.py
+#!/usr/bin/env python3
+"""Modèle MLA synthétique + référence numpy — le harnais du chantier 5.
+
+MLA (attention latente, DeepSeek-V2/V3) n'est pas testable en l'état : aucun
+modèle MLA en GGUF sur cette machine (le « deepseek-r1-distill » local est un
+Qwen dense). Ce script fabrique donc un modèle minuscule dont les poids sont
+aléatoires mais les FORMES correctes, l'écrit en GGUF, et calcule une référence
+indépendante en numpy — c'est elle que le moteur devra retrouver.
+
+Pourquoi c'est un vrai test : la référence est écrite à partir des formules, pas
+du code Rust ; si les deux tombent d'accord sur un modèle dont le cache KV est
+LATENT (une seule tête de 128 + 32 valeurs par jeton au lieu de n_head × 192),
+alors l'implémentation est validée sur ce qu'elle a de spécifique.
+
+Usage :
+    mla_synthetique.py --sortie /tmp/mla_minuscule.gguf --dossier /tmp/mla_ref
+"""
+import argparse
+import json
+import os
+import struct
+
+import numpy as np
+
+# ---------------------------------------------------------------------------
+# Hyperparamètres du modèle jouet : assez petits pour être lisibles, assez
+# généraux pour que le découpage qk_nope / qk_rope soit celui de DeepSee
+… [1138 caractères tronqués]
+  ```
+
+- **bash** `{"command": "ls -la /tmp/*.gguf /tmp/mla* 2>/dev/null; find / -maxdepth 4 -name \"*mla*\" -newer /home/stephane/Data13TB/stephane/GitHub/Qtrinet/Cargo.toml 2>/dev/null | head; ls journal/ 2>/dev/null | head", "description": "Look for existing MLA model artifacts", "workdir": "/home/stephane/Data13TB … [26 caractères tronqués]`
+
+  ```
+-rw-r--r--. 1 stephane stephane       2048 29 sep 20:08 /tmp/mla_logits.bin
+-rw-r--r--. 1 stephane stephane     480448 29 sep 20:07 /tmp/mla_minuscule.gguf
+-rw-r--r--. 1 stephane stephane     480448 29 sep 20:07 /tmp/mla_minuscule.gguf
+-rw-r--r--. 1 stephane stephane 3560416288 28 sep 07:35 /tmp/ref-f16.gguf
+
+/tmp/mla_ref:
+total 16
+drwxr-xr-x.  2 stephane stephane   100 29 sep 20:03 .
+drwxrwxrwt. 73 root     root     17040 30 sep 13:23 ..
+-rw-r--r--.  1 stephane stephane   178 29 sep 20:07 forme.json
+-rw-r--r--.  1 stephane stephane   192 29 sep 20:07 ids.npy
+-rw-r--r--.  1 stephane stephane  4224 29 sep 20:07 logits.npy
+README.md
+sessions
+  ```
+
+### 🤖 Assistant
+
+⏵ Preuve du silence MLA et des cas limites du parseur
+
+- **bash** `{"command": "M=/home/stephane/Data13TB/stephane/GitHub/Qtrinet; D=$M/drave-core/target/release/drave\nrm -f /tmp/mla_trace.drvf /tmp/mla_out2.bin\necho \"=== --banc-mla avec --trace-flux et --flux-forcer ===\"\ntimeout 100 $D /tmp/mla_minuscule.gguf --banc-mla /tmp/mla_out2.bin --trace-flux /tmp/mla … [329 caractères tronqués]`
+
+  ```
+=== --banc-mla avec --trace-flux et --flux-forcer ===
+[attention] QT_IM_SWITCHER est l'ancien nom d'une variable d'environnement : elles s'appellent maintenant DRAVE_* (voir docs/histoire.md). Rien n'a été appliqué.
+[config] cache KV : 32 bits, 0.00 Go pour 4096 jetons
+[modele] 2 couches chargées en 8.820276ms — listes 0.00 Go , 20 threads
+[config] 2 couches, hidden 64 · 
+[config] puits appris sur 0/2 couches · n_rot 16 · ffn 128 · experts 0
+[config] rotation : RoPE simple (le modèle ne déclare pas YaRN)
+[config] MLA : 2 couches · q_lora 32 · kv_lora 48 · qk_nope 16 + qk_rope 16 · v 16 · cache latente 64 valeurs par jeton (au lieu de 32)
+  position 0 : logits[0..4] = [0.1797, 1.1595, 0.7848, 0.0933]
+  position 1 : logits[0..4] = [-0.1069, 0.7312, 0.3862, -0.6178]
+  position 2 : logits[0..4] = [0.7365, -0.4164, -0.8823, 0.1396]
+  position 3 : logits[0..4] = [0.2173, -0.7516, -0.6551, -0.3991]
+  position 4 : logits[0..4] = [0.0505, -1.1887, -1.1274, -0.0691]
+  position 5 : logits[0..4] = [0.2406, -0.7627, -1.3326, -0.1739]
+  position 6 : logits[0..4] = [0.3863, -0.1013, -0.9722, -0.5898]
+  position 7 : logits[0..4] = [0.4916, -0.7828, -1.0495, -0.7294]
+fichier de trace créé ? NON
+-rw
+… [61 caractères tronqués]
+  ```
+
+- **bash** `{"command": "M=/home/stephane/Data13TB/stephane/GitHub/Qtrinet; D=$M/drave-core/target/release/drave; MOD=$M/models/Qwen2.5-0.5B-Q8_0.gguf\necho \"=== 1. valeur qui commence par -- (--prompt \\\"--bonjour\\\") ===\"\ntimeout 100 $D $MOD --plan --prompt \"--bonjour\" 2>&1 | grep -iE \"inconnu|prompt\ … [558 caractères tronqués]`
+
+  ```
+=== 1. valeur qui commence par -- (--prompt "--bonjour") ===
+(rien = pas de faux positif)
+=== 2. booléen suivi d'un drapeau à valeur ===
+[options] mode inférence · contexte 512 (défaut) · dense true · keep 0.500
+=== 3. positionnel sans tirets (keep 0.05) ===
+(rien = toujours avalé en silence)
+  ```
+
+### 🤖 Assistant
+
+⏵ Vérification d'`en_dense` (mode blocs) : indices non bornés ?
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/main.rs", "limit": 60, "offset": 1455}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/main.rs</path>
+<type>file</type>
+<content>
+1455:     Ok(())
+1456: }
+1457: 
+1458: /// Charge utile d'un flux : dense (f32), ou **liste creuse quantifiée**. Le
+1459: /// réseau transporte alors exactement ce que le disque écrit déjà — deux octets
+1460: /// d'indice, deux octets de valeur, une échelle par liste.
+1461: enum ChargeFlux {
+1462:     Dense(Vec<f32>),
+1463:     Liste { idx: Vec<u16>, val: Vec<i16>, echelle: f32 },
+1464:     Blocs { idx: Vec<u16>, val: Vec<i8>, echelles: Vec<f32> },
+1465:     /// Lot d'états, aplati (`t × hidden`).
+1466:     Lot(Vec<f32>),
+1467: }
+1468: 
+1469: impl ChargeFlux {
+1470:     /// Rend le vecteur dense : la déquantification a besoin de la dimension, que
+1471:     /// seul le modèle connaît.
+1472:     fn en_dense(&self, hidden: usize) -> Vec<f32> {
+1473:         match self {
+1474:             ChargeFlux::Dense(v) => v.clone(),
+1475:             // Un lot n'a pas UN vecteur dense : c'est `plat()` qui le sert, et
+1476:             // `forward_lot` qui le consomme. L'appeler ici serait une erreur de
+1477:             // programme, pas une donnée invalide — on le dit.
+1478:           
+… [1882 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Test : une trame LISTE avec un indice hors dimension fait-elle tomber le nœud ?
+
+- **bash** `{"command": "cat > /tmp/dos_probe.py <<'EOF'\nimport os, socket, struct, subprocess, sys, time\nMAGIE = 0x44525631\ndef tete(mode, debut, fin, pos, n):\n    b = struct.pack(\"<IBBIIII\", MAGIE, 4, mode, debut, fin, pos, n)\n    b += struct.pack(\"<fff\", 0.0, 127.0, 0.0) + struct.pack(\"<IB\", 0, 0) … [1507 caractères tronqués]`
+
+  ```
+[dos] réponse reçue : 0 octets (pas de panique)
+[dos] code de sortie : -6
+0 Go , 2 threads
+[config] 24 couches, hidden 896 · 
+[config] puits appris sur 0/24 couches · n_rot 64 · ffn 4864 · experts 0
+[config] rotation : RoPE simple (le modèle ne déclare pas YaRN)
+[flux] nœud moteur sur 127.0.0.1:5631 · 896 cachés · 24 couches · contexte 64
+[flux] client connecté : 127.0.0.1:62730
+
+thread 'main' (567482) panicked at src/main.rs:1482:22:
+index out of bounds: the len is 896 but the index is 5000
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+567477 bash -c cat > /tmp/dos_probe.py <<'EOF' import os, socket, struct, subprocess, sys, time MAGIE = 0x44525631 def tete(mode, debut, fin, pos, n):     b = struct.pack("<IBBIIII", MAGIE, 4, mode, debut, fin, pos, n)     b += struct.pack("<fff", 0.0, 127.0, 0.0) + struct.pack("<IB", 0, 0)     b += struct.pack("<7I", *([0]*7)) + struct.pack("<III", 0, 0, 0)     assert len(b) == 79     return b drave, modele, port = sys.argv[1], sys.argv[2], int(sys.argv[3]) logp = f"/tmp/dos_{port}.log" log = open(logp, "w") p = subprocess.Popen([drave, modele, "--flux-serveur", str(port), "--ctx", "64", "--threads", "2"],           
+… [965 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Vérification positive D4/D5 (mode lot avec pair factice) et D6 (pair qui ferme)
+
+- **bash** `{"command": "M=/home/stephane/Data13TB/stephane/GitHub/Qtrinet; D=$M/drave-core/target/release/drave; MOD=$M/models/Qwen2.5-0.5B-Q8_0.gguf\nrm -f /tmp/fact.log\ntimeout 60 python3 $M/tools/pair_factice.py 5640 896 > /tmp/fact.log 2>&1 &\nF=$!\nsleep 1\ntimeout 150 $D $MOD --ppl-reparti 127.0.0.1:564 … [366 caractères tronqués]`
+
+  ```
+référence locale  : perplexité 261.1724  (1.3 s)
+[flux] --flux-liste / --flux-blocs ne s'appliquent PAS aux lots (mode 4 non écrit) : le lot part en f32 dense. À --lot 1, le mode choisi s'applique.
+  deux nœuds        : perplexité 151936.0000  (0.5 s)
+--- pair factice ---
+[factice] écoute sur 127.0.0.1:5640 · je réponds 896 canaux
+[factice] client ('127.0.0.1', 38840)
+[factice] flux 1 : couches 12..24 pos 0 · version 4 · mode lot (t états × dimension) · n=4 · échelle 0 · niveaux 127 seuil 0 topk 0 renorm 0 · corps 14336 octets
+  ```
+
+### 🤖 Assistant
+
+⏵ Vérification positive D6 : pair qui ferme la connexion
+
+- **bash** `{"command": "M=/home/stephane/Data13TB/stephane/GitHub/Qtrinet; D=$M/drave-core/target/release/drave; MOD=$M/models/Qwen2.5-0.5B-Q8_0.gguf\npython3 - <<'EOF' > /tmp/peer_close.log 2>&1 &\nimport socket\ns = socket.socket(); s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)\ns.bind((\"127.0.0.1 … [406 caractères tronqués]`
+
+  ```
+référence locale  : perplexité 994.2334  (2.1 s)
+
+thread 'main' (569094) panicked at src/main.rs:2001:26:
+envoi du flux: Os { code: 32, kind: BrokenPipe, message: "Broken pipe" }
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+timeout: the monitored command dumped core
+code=0
+pair fermé
+  ```
+
+### 🤖 Assistant
+
+⏵ Vérifications finales : lignes exactes, attribution, absence de délai de test
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; grep -n \"expect(\\\"envoi du\\|expect(\\\"réception\" drave-core/src/main.rs; echo \"=== .expect envoi ===\"; ls -a drave-core/.cargo .cargo 2>/dev/null; grep -rn \"timeout\" tools/*.sh 2>/dev/null | head -5; echo \"=== attribution en … [287 caractères tronqués]`
+
+  ```
+1952:                                pos as u32, &plat, t, &mdl).expect("envoi du lot");
+2001:                        .expect("envoi du flux");
+=== .expect envoi ===
+=== attribution en_dense ===
+5ea06f9 Phase 3 : échelles par bloc, TCP_NODELAY, et l'écart KV attribué aux clés
+=== attribution quantifier topk ===
+b97d129 Drave : renommage complet (crate, binaire, variables, documents)
+  ```
+
+### 🤖 Assistant
+
+⏵ Nettoyage et vérification de l'état du dépôt
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; git status --short; echo \"--- mes processus drave restants ? ---\"; pgrep -af \"target/release/drave\" | grep -v \"campagne\" || echo \"aucun\"; echo \"--- fichiers du dépôt modifiés par moi ? ---\"; git diff --stat | tail -3", "descr … [58 caractères tronqués]`
+
+  ```
+M journal/README.md
+--- mes processus drave restants ? ---
+517405 timeout 5400 ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf --ppl /tmp/ids_qwen_long.txt --ctx 8192 --limit 8192 --dense --threads 16 --lot 512
+517408 ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf --ppl /tmp/ids_qwen_long.txt --ctx 8192 --limit 8192 --dense --threads 16 --lot 512
+555974 ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf --flux-serveur 46750 --ctx 1024
+556007 timeout 1800 ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf --ppl-reparti 127.0.0.1:46750 --couches-locales 12 --limit 40 --ctx 1024 --ids 198,284,8397,425,10965,465,284,14731,8397,425,10965,465,374,458,6364,4531,1154,12425,323,33496,12089,659,1260,1030,264,8640,569,12,31,39400,3476,389,279,12425,4013,576,8596,304,220,17,15,15,15,659,1096,572,8110,553,264,39400,3476,304,279,1486,6252,2382,5326,553,21315,75923,1154,892,572,10660,304,220,17,15,15,16,518,279,16194,7154,26221,659,1260,1030,264,8640,3476,304,279,12425,4013,20207,3757,1581,291,304,220,17,15,15,17,659,758,220,17,15,15,19,425,10965,465,26120,264,3476,438,330,28417,330,304,279,9234,330,70066,364,82,15106,330,315,279,12425,40
+… [9180 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Rédaction du rapport adversarial final
+
+Relecture terminée. Aucun fichier du dépôt n'a été modifié (`git status` : seul `journal/README.md`, déjà modifié avant mon arrivée) ; tous mes serveurs sont tués ; la campagne en cours (pids 517408, 555974, 556009) n'a pas été touchée.
+
+# Rapport adversarial — correctifs du 30/09 12h36–13h06
+
+## Défaut 1 — GRAVE : `--options-actives` affiche des valeurs d'AVANT application en perplexité (le défaut exact qu'il devait traquer)
+
+`run_ppl` (main.rs:2948-2950) appelle `options_actives` **avant** `--trace-flux` (2951), `--moe-topk` (2973), `--abits` (2974), `--ffn-gain` (2982), `--act-*` (2986-2991), `--attn-window`/`--sans-fenetre`/`--swa-pattern` (2995-2997), `--topk-*`. Le commit dit avoir appris la leçon (« en inférence, le tableau est placé EN DERNIER ») mais ne l'a pas appliquée au mode perplexité.
+
+```
+$ drave models/Qwen2.5-0.5B-Q8_0.gguf --ppl-texte /tmp/txt4.txt --limit 6 --options-actives \
+    --attn-topk 3 --qk-topk 4 --moe-topk 2 --ffn-gain 0:2.0 --act-thresh 0.1 --act-topk 5 \
+    --abits 4 --act-renorm --attn-window 32 --topk-q 6 --trace-flux /tmp/trace_test.drvf
+[options] activation : niveaux 127 · seuil 0 · k-WTA 0 · renorm false      ← 7, 0.1, 5, true
+[options] top-k : attn 0 · q·k 0 · MoE 0 · par projection [0,0,0,0,0,0,0] ← 3, 4, 2, [6,…]
+[options] … trace false · rejeu false                                    ← trace ACTIVE
+[options] fenêtre 0 … · ffn_gain None …                                  ← 32, Some((0,2.0))
+[trace] flux enregistré dans /tmp/trace_test.drvf
+gain FFN : couche 0 x 2
+parcimonie imposée : seuil 10.0 % du max, k-WTA k=5
+```
+Neuf champs faux. La même commande en `--infer` (tableau en dernier) affiche au contraire `attn 3`, `trace true`, `ffn_gain Some((0, 2.0))`, `seuil 0.1` — c'est bien un défaut d'ORDRE propre au mode perplexité. Correctif : déplacer l'appel après la ligne 3008, comme en inférence.
+
+## Défaut 2 — GRAVE : la règle R4 ne couvre pas les échelles du mode blocs (`n_blocs`)
+
+`recevoir_flux` (main.rs:1715-1719) lit `n_blocs` **dans le corps réseau** puis alloue `vec![0u8; n_blocs * 4]` **puis** un `Vec<f32>` de `n_blocs` échelles (800 Mo au total) sans jamais appeler `verifier_taille`. Contrairement à ce qu'annonce le message du commit (« les trois modes … passent par `verifier_taille` »).
+
+Preuve (pair factice `/tmp/r4_probe.py` contre le vrai `--flux-serveur`, model Qwen, `--ctx 64`) :
+```
+[sonde] avant  : VmSize 795 540 ko · VmRSS 566 860 ko
+[sonde] après envoi (400 Mo d'échelles) : VmSize 1 576 796 ko (+763 Mio) · VmRSS 1 011 704 ko
+[sonde] réponse du nœud : mode=2 n=892 n_blocs=28 longueur=1784
+--- log --- [flux] 1 flux servis          ← trame ACCEPTÉE, aucun refus
+```
+Et avec `n_blocs = 0xFFFFFFFF` (une seule trame de 83 octets) :
+```
+[sonde] après envoi : VmSize 17 572 760 ko (16,8 Gio) · VmRSS inchangé
+```
+C'est exactement la classe « un `n` hostile fait demander des To au noyau » que le commit prétend fermer : elle est encore ouverte par un champ voisin.
+
+## Défaut 3 — GRAVE : `decoder_paires_blocs` alloue `n` avant toute lecture (mode blocs)
+
+Le plafond porte sur `longueur`, mais le décodeur fait `Vec::with_capacity(n)` **deux fois** avec le `n` de l'en-tête (non borné en mode blocs) : `n = 4e9` ⇒ 8 Gio (u16) + 4 Gio (i8). Mesure (sonde n°2, corps à la longueur maximale autorisée 256 Mio) :
+```
+[sonde2] n = 4 000 000 000 paires ; longueur = 268 435 456 octets (au plafond)
+[sonde2] VmPeak observé : VmSize max 12 477 Mio · VmRSS max 1 193 Mio
+[flux] arrêt : corps de flux tronqué : 134217728 paires lues sur 4000000000
+```
+12,2 Gio de mémoire virtuelle pilotés par l'en-tête, sans un mot de la règle R4. Correctif : `verifier_taille(n * 2, …)` (et `n * 4` en mode liste) avant les `with_capacity`.
+
+## Défaut 4 — GRAVE : une trame forgée fait tomber le nœud moteur (SIGABRT)
+
+`ChargeFlux::en_dense` (main.rs:1482 et 1489) indexe `x[i as usize]` et `echelles[i/32]` sans borne. Une trame LISTE bien formée avec un indice ≥ `hidden` tue le processus (`panic = "abort"`) :
+```
+thread 'main' panicked at src/main.rs:1482:22:
+index out of bounds: the len is 896 but the index is 5000
+[dos] code de sortie : -6
+```
+Le mode blocs a le même défaut en double (indice et bloc). R4 protège la taille, pas les valeurs : le pair hostile reste un déni de service à une trame. (Code d'origine antérieure — `5ea06f9` — mais laissé ouvert par le correctif R4 qui visait ce modèle de menace.)
+
+## Défaut 5 — MOYEN : D6 n'a corrigé que la RÉCEPTION ; le client panique encore à l'envoi
+
+D6 a remplacé `expect("réception …")` par un message propre, mais `envoyer_flux(...).expect("envoi du flux")` (ligne 2001) et `envoi du lot` (1952) restent. Un pair qui ferme (précisément le cas « le nœud a refusé et il sort ») donne :
+```
+thread 'main' panicked at src/main.rs:2001:26:
+envoi du flux: Os { code: 32, kind: BrokenPipe }  → core dumped
+```
+Le correctif est donc à moitié fait.
+
+## Défaut 6 — MOYEN : D8 incomplet, `--limit 1` affiche toujours `NaN`
+
+```
+$ drave … --ppl-texte /tmp/txt4.txt --limit 1
+       0 tokens notés — perplexité cumulée NaN  (0.0 tok/s)
+aucun jeton noté (il en faut au moins deux : le premier ne prédit rien)
+```
+Le garde-fou `if n == 0` (main.rs:3193) est placé APRÈS le calcul et l'impression de `ppl` (3151) : la ligne « NaN » que D8 devait supprimer est toujours là.
+
+## Défaut 7 — MOYEN : la détection de drapeau inconnu ne couvre que `--xxx`
+
+Vérifié : pas de faux positif sur `--prompt "--bonjour"` (aucun message), et `--dense --keep 0.5` applique bien `keep 0.500` (le booléen ne mange pas le drapeau suivant). Mais `keep 0.05` et `-keep 0.05` (tirets oubliés — la faute de frappe type) restent **avalés en silence**, et `args[1]` (le chemin du modèle) n'est jamais analysé. `--flux-forcer` est de même ignoré sans mot en `--infer` et `--ppl-reparti`. Le correctif réduit la classe de bugs, il ne la ferme pas.
+
+## Défaut 8 — FAIBLE : `forward_mla` et les modes MLA restent hors du contrat de trace
+
+`forward_mla` (model.rs:2873) n'incrémente jamais `jeton_trace` et n'appelle jamais `flux_lot` ; `run_banc_mla` ne lit ni `trace_flux` ni `flux_forcer`. Preuve sur le modèle MLA synthétique :
+```
+$ drave /tmp/mla_minuscule.gguf --banc-mla /tmp/mla_out2.bin \
+    --trace-flux /tmp/mla_trace.drvf --flux-forcer /tmp/W64.drvf --options-actives
+… 8 positions calculées …
+fichier de trace créé ? NON          (et aucun message sur les drapeaux ignorés)
+```
+La revendication D3 (« une seule clé par lot … tous les chemins ») ne couvre donc pas MLA ; la seule famille de clés y serait `0`, contraire à la convention 1-based.
+
+## Ce que j'ai vérifié et qui tient
+
+- **Clés de trace et fenêtres (question 1)** : trace écrite à `--ctx 64` (3 fenêtres) et à `--ctx 512` (1 fenêtre), mêmes 130 jetons → **clés identiques** : 6240 listes, positions 1..130, `diff 0` (décodage par `tools/flux_codec.py`). La clé est bien l'ordinal d'appel `forward`, 1-based, indépendant du découpage ; `forward_lot` (j0 = compteur+1, avancé une fois par lot, deux bases 0/1000) et le raccourci `t == 1` qui délègue à `forward` sont cohérents.
+- **Tests** : `cargo test --release` → **11 passés, 0 échec** (4 protocole, 1 plafond, 6 antérieurs), en 0,12 s. Le test de troncature échoue par le bon chemin (garde « valeur manquante en fin de corps » après un échappement, pas par chance). Réserve : le test du plafond ne peut pas *échouer* proprement si le garde-fou disparaît — il se bloquerait dans `read_exact` sur ~358 Go ; il n'existe aucun délai configuré (pas de `.cargo/config.toml`, pas de harnais), contrairement à ce que dit le message du commit.
+- **D4/D5/D6 (côté réception)** : avec `tools/pair_factice.py 5640 896` et `--ppl-reparti --lot 4 --flux-liste`, le pair lit bien `4 × 896 × 4 = 14336` octets, le pilote avertit que le mode creux ne s'applique pas aux lots, et D6 explique le refus.
+- **Plafond et flux légitimes** : 8192 × 8192 × 4 = 268 435 456 = exactement `PLAFOND_FLUX`, donc accepté (`>` strict). En revanche le pic réel du receveur est ~2× le plafond (corps + `etats`), et un modèle de `hidden > 8192` avec 8192 jetons serait refusé — non mesuré faute de modèle.
+
+## Non vérifié / limites
+
+Pas de test de `--depuis` (clé = ordinal d'appel : le recouvrement d'un jeton entre fenêtres lui fait consommer DEUX clés, donc une trace `--depuis` n'est rejouable qu'à configuration identique — raisonnement sur le code, non exécuté) ; pas de test du mode LISTE côté plafond (couvert par `n × 4`) ; contenus de trace entre `--lot 1` et `--lot 4` non équivalents en valeur (54171 contre 41524 avec `--act-topk 5`) mais je n'ai pas pu attribuer l'écart (réordonnancement numérique ou chemin de code différent) — non retenu comme défaut ; `--banc-kv`, `--gpu-banc`, `--tensors`, `--tokenize`, `--plan` n'ont pas de tableau de bord (constat statique).
+
+---
+
+### Résumé (10 lignes)
+
+1. **8 défauts réels prouvés** par exécution, tous dans le périmètre des correctifs relus.
+2. Le plus grave — **`--options-actives` ment en perplexité** : appelé avant les affectations, il affiche 9 champs d'avant (`niveaux 127` au lieu de 7, `k-WTA 0` au lieu de 5, `trace false`, `ffn_gain None`, `attn 0` …) — le défaut exact qu'il devait dénoncer.
+3. Second plus grave — **la règle R4 est contournable par deux champs voisins** : `n_blocs` (échelles) → 763 Mio alloués et trame servie, 16,8 Gio de VmSize avec `n_blocs = 0xFFFFFFFF` ; `n` des paires en mode blocs → **12 477 Mio de VmPeak** avec `n = 4e9`, avant toute lecture.
+4. Troisième — une trame LISTE forgée **fait tomber le nœud** : `index out of bounds: the len is 896 but the index is 5000`, code de sortie −6.
+5. Corrections partielles : D6 (le client panique encore à l'**envoi**, `BrokenPipe`, core dump), D8 (`--limit 1` imprime toujours `perplexité cumulée NaN`), drapeaux inconnus (`keep 0.05` et `-keep` toujours silencieux).
+6. `forward_mla` n'écrit ni ne lit aucune trace et n'avance pas `jeton_trace` : `--trace-flux`/`--flux-forcer` sont ignorés en silence en `--banc-mla` (fichier non créé, vérifié).
+7. Vérifié et solide : les clés de trace sont **identiques** entre contexte 64 (3 fenêtres) et 512 (1 fenêtre) — 6240 listes, positions 1..130, écart nul ; la question 1 du mandat a une réponse positive.
+8. Vérifié et solide : les 11 tests passent (0,12 s) ; le test de troncature refuse par le bon chemin ; le plafond laisse passer 8192 × 8192 (limite exacte).
+9. Le test du plafond ne peut pas échouer proprement si le garde-fou disparaît (blocage sur `read_exact` de ~358 Go) : `cargo test` n'a aucun délai, contrairement à ce qu'affirme le message du commit.
+10. Non vérifié : `--depuis` en exécution, un lot légitime > 256 Mo sur `hidden > 8192`, l'attribution de l'écart de valeurs de trace entre `--lot 1` et `--lot 4`, et les modes sans tableau de bord (constat statique seulement).
+
+- **send_message** `{"agent_id": "bbd6969f-0f70-42b2-8951-64d1f2f36d2e", "message": "RAPPORT ADVERSARIAL — correctifs 12h36–13h06 (dépôt Qtrinet, binaire release déjà compilé, aucun fichier du dépôt modifié, tous mes serveurs tués, campagne en cours intacte).\n\n8 DÉFAUTS RÉELS PROUVÉS :\n\n1. GRAVE — `--options-active … [4387 caractères tronqués]`
+
+  ```
+message delivered to agent bbd6969f-0f70-42b2-8951-64d1f2f36d2e
+  ```
+
+### 🤖 Assistant
+
+⏵ Rapport transmis à l'agent parent
+
+Le rapport complet (8 défauts prouvés, vérifications positives, limites) a été rendu ci-dessus et transmis à l'agent parent `bbd6969f`. Aucun fichier du dépôt n'a été touché, aucun processus de la campagne n'a été arrêté, et tous mes serveurs de test ont été tués.
+

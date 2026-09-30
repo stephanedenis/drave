@@ -586,7 +586,14 @@ fn analyser(args: &[String]) -> Options {
             // Inconnu : on avance d'UN cran, jamais de deux — et on le RETIENT,
             // pour le dire à la fin plutôt que de l'avaler.
             _ => {
-                if args[i].starts_with("--") { o.inconnus.push(args[i].clone()); }
+                // `--xxx` bien sûr, mais aussi `-keep` (un seul tiret) : c'est une
+                // faute de frappe, pas un nombre négatif — un `-5` n'a pas de
+                // lettre après le tiret.
+                let a = &args[i];
+                let lettre = a.len() > 1 && a.as_bytes()[1].is_ascii_alphabetic();
+                if a.starts_with("--") || (a.starts_with('-') && lettre) {
+                    o.inconnus.push(a.clone());
+                }
                 1
             }
         };
@@ -626,7 +633,7 @@ fn run_infer(opt: Options) {
         keep, attn_window, swa_pattern, sans_fenetre, attn_sinks, attn_topk, qk_topk,
         act_thresh, act_topk, act_renorm, topk_proj, moe_topk, patch: patch_file,
         hebb_layer, hebb_q, hebb_out, sans_yarn, lot, ffn_gain,
-        trace_flux, trace_couches, ..
+        trace_flux, trace_couches, flux_forcer, ..
     } = opt;
     let path = &modele_chemin();
     // Défauts du mode INFÉRENCE : 512 jetons, la moitié des cœurs (l'attente
@@ -655,6 +662,17 @@ fn run_infer(opt: Options) {
                                         mdl.cfg.n_layer) {
             Ok(t) => { println!("[trace] flux enregistré dans {chemin}"); mdl.trace = Some(t); }
             Err(e) => eprintln!("[trace] impossible d'écrire {chemin} : {e}"),
+        }
+    }
+    // Le REJEU aussi : `--flux-forcer` était ignoré en inférence, sans un mot.
+    if let Some(chemin) = flux_forcer.as_deref() {
+        match model::FluxRelecteur::lire(chemin) {
+            Ok(r) => {
+                println!("[flux] rejeu depuis {chemin} : {} listes enregistrées",
+                         r.listes.len() + r.listes_blocs.len());
+                mdl.flux_force = Some(r);
+            }
+            Err(e) => eprintln!("[flux] lecture impossible de {chemin} : {e}"),
         }
     }
     // `--ffn-gain` était appliqué en perplexité et JAMAIS déstructuré ici : la
@@ -1478,15 +1496,32 @@ impl ChargeFlux {
             ChargeFlux::Lot(_) => panic!("un lot d'états n'est pas un vecteur dense"),
             ChargeFlux::Liste { idx, val, echelle } => {
                 let mut x = vec![0f32; hidden];
+                let mut hors = 0usize;
                 for (&i, &v) in idx.iter().zip(val.iter()) {
-                    x[i as usize] = v as f32 * echelle;
+                    // Une trame FORGÉE ne doit pas tuer le nœud : un indice hors
+                    // dimension était un `index out of bounds` → SIGABRT (mesuré
+                    // par la relecture adversariale, trame LISTE n=1 indice 5000).
+                    if (i as usize) < hidden { x[i as usize] = v as f32 * echelle; }
+                    else { hors += 1; }
+                }
+                if hors > 0 {
+                    eprintln!("[flux] {hors} indice(s) hors dimension ignorés (flux reçu \
+de {hidden} canaux) — pair bogué ou hostile ?");
                 }
                 x
             }
             ChargeFlux::Blocs { idx, val, echelles } => {
                 let mut x = vec![0f32; hidden];
+                let mut hors = 0usize;
                 for (&i, &v) in idx.iter().zip(val.iter()) {
-                    x[i as usize] = v as f32 * echelles[i as usize / 32];
+                    let b = i as usize / 32;
+                    if (i as usize) < hidden && b < echelles.len() {
+                        x[i as usize] = v as f32 * echelles[b];
+                    } else { hors += 1; }
+                }
+                if hors > 0 {
+                    eprintln!("[flux] {hors} indice(s) hors dimension ignorés (flux reçu \
+de {hidden} canaux, {} blocs d'échelles)", echelles.len());
                 }
                 x
             }
@@ -1529,8 +1564,15 @@ fn encoder_paires_blocs(idx: &[u16], val: &[i8]) -> Vec<u8> {
 
 /// Décode `n` paires écrites par `encoder_paires_blocs`.
 fn decoder_paires_blocs(corps: &[u8], n: usize) -> Result<(Vec<u16>, Vec<i8>), String> {
-    let mut idx = Vec::with_capacity(n);
-    let mut val = Vec::with_capacity(n);
+    // `n` vient de l'en-tête : deux `with_capacity(n)` sur 4 milliards de paires
+    // demandaient 12 Gio AVANT de découvrir que le corps était tronqué (mesuré :
+    // VmPeak 12 477 Mio). Le plafond s'applique donc ici aussi.
+    if n.saturating_mul(2) > PLAFOND_FLUX {
+        return Err(format!("{n} paires annoncées : au-delà du plafond de {} Mo",
+                           PLAFOND_FLUX >> 20));
+    }
+    let mut idx = Vec::with_capacity(n.min(1 << 20));
+    let mut val = Vec::with_capacity(n.min(1 << 20));
     let mut prev = 0u32;
     let mut lus = 0usize;
     while idx.len() < n {
@@ -1713,6 +1755,11 @@ fn recevoir_flux(s: &mut std::net::TcpStream, hidden: usize) -> std::io::Result<
             let mut nb = [0u8; 4];
             s.read_exact(&mut nb)?;
             let n_blocs = u32::from_le_bytes(nb) as usize;
+            // Le plafond vaut pour TOUTE taille lue dans l'en-tête : `n_blocs`
+            // autant que `longueur`. Sans cette ligne, une trame de 83 octets
+            // annonçant 4 milliards de blocs faisait allouer 16 Gio (mesuré par la
+            // relecture adversariale : VmSize 17 572 760 ko sur une seule trame).
+            verifier_taille(n_blocs.saturating_mul(4), &format!("{n_blocs} blocs d'échelles"))?;
             let mut eb = vec![0u8; n_blocs * 4];
             s.read_exact(&mut eb)?;
             let echelles = (0..n_blocs).map(|k| f32::from_le_bytes(
@@ -1948,8 +1995,16 @@ fn run_ppl_reparti(opt: Options, pair: &str) {
             let plat: Vec<f32> = hs.concat();
             t_local += horloge.elapsed().as_secs_f64();
             let horloge = Instant::now();
-            let o = envoyer_lot(&mut sock, couches_locales as u32, n_layer as u32,
-                                pos as u32, &plat, t, &mdl).expect("envoi du lot");
+            let o = match envoyer_lot(&mut sock, couches_locales as u32, n_layer as u32,
+                                      pos as u32, &plat, t, &mdl) {
+                            Ok(o) => o,
+                            Err(e) => {
+                                eprintln!("[flux] le nœud moteur a fermé la connexion \
+pendant l'envoi du lot ({e}) — version, réglages ou contexte : il a dit pourquoi \
+de son côté.");
+                                std::process::exit(1);
+                            }
+                        };
             octets_envoyes += o as u64;
             actifs_envoyes += (t * mdl.cfg.hidden) as u64;
             flux_envoyes += 1;
@@ -1998,7 +2053,11 @@ que --ctx ici : {ctx}). Il l'a dit de son côté.");
         let horloge = Instant::now();
         let (o, a) = envoyer_flux(&mut sock, couches_locales as u32, n_layer as u32,
                                   pos as u32, &etat, mode, Some(&mdl))
-                        .expect("envoi du flux");
+                        .unwrap_or_else(|e| {
+                            eprintln!("[flux] le nœud moteur a fermé la connexion pendant \
+l'envoi du flux ({e}) — il a dit pourquoi de son côté.");
+                            std::process::exit(1);
+                        });
         octets_envoyes += o as u64;
         actifs_envoyes += a as u64;
         flux_envoyes += 1;
@@ -2057,6 +2116,14 @@ protocole, réglages, ou contexte : il a dit pourquoi de son côté.");
 /// pour être comparés à `logits.npy` (référence numpy indépendante).
 fn run_banc_mla(opt: Options, sortie: &str) {
     use std::io::Write;
+    // Le chemin MLA est un banc de comparaison avec numpy (`forward_mla` part des
+    // embeddings et n'appelle ni `flux_lot` ni le compteur de jeton global) : la
+    // trace et le rejeu n'y sont pas branchés, et le dire vaut mieux que de laisser
+    // croire qu'ils le sont (relevé par la relecture adversariale).
+    if opt.trace_flux.is_some() || opt.flux_forcer.is_some() {
+        eprintln!("[banc-mla] ni --trace-flux ni --flux-forcer ne s'appliquent à ce \
+banc : il écrit des logits pour la comparaison numpy, sans passer par le flux.");
+    }
     let path = &modele_chemin();
     let mut mdl = model::Model::load(path, 4096, fils(&opt), opt.dense, opt.keep, false, 0, 0);
     if mdl.mla.is_none() {
@@ -2945,9 +3012,6 @@ fn run_ppl(opt: Options) {
             Err(e) => eprintln!("[flux] lecture impossible de {chemin} : {e}"),
         }
     }
-    if montre_options {
-        options_actives(&mdl, "perplexité", ctx_impose, dense, keep);
-    }
     if let Some(chemin) = trace_flux.as_deref() {
         match model::TraceFlux::nouveau(chemin, trace_couches.clone(), mdl.cfg.hidden,
                                         mdl.cfg.n_layer) {
@@ -3005,6 +3069,15 @@ fn run_ppl(opt: Options) {
         println!("parcimonie imposée : seuil {:.1} % du max{}",
                  act_thresh * 100.0,
                  if act_topk > 0 { format!(", k-WTA k={act_topk}") } else { String::new() });
+    }
+    // Le tableau de bord vient EN DERNIER, après la trace, les top-k, les seuils,
+    // la fenêtre et le gain FFN : sa première version, placée plus haut, affichait
+    // « niveaux 127 · seuil 0 · trace false · ffn_gain None » alors que la ligne de
+    // commande demandait 4 bits, un seuil de 0,1, une trace et un gain FFN — un
+    // tableau de bord qui montre l'état d'avant les affectations est pire que pas
+    // de tableau du tout, puisque c'est exactement ce qu'il est censé démasquer.
+    if montre_options {
+        options_actives(&mdl, "perplexité", ctx_impose, dense, keep);
     }
     if let Some(l) = hebb_layer {
         let mut hb = model::Hebb::new(l, mdl.cfg.ffn, mdl.cfg.hidden, hebb_q);
@@ -3152,12 +3225,17 @@ fn run_ppl(opt: Options) {
         // La perplexité PROPRE à la fenêtre dit où le modèle décroche : une
         // première fenêtre à 900 et les suivantes à 15 ne racontent pas du tout
         // la même histoire qu'une dégradation régulière.
+        if n == 0 {
+            println!("  aucun jeton noté (il en faut au moins deux : le premier ne \
+prédit rien) — la perplexité cumulée n'a pas de sens ici");
+        } else {
         println!("  {:6} tokens notés — perplexité cumulée {:.3}  ({:.1} tok/s){}",
                  n, ppl, n as f64 / t0.elapsed().as_secs_f64(),
                  if fenetres.len() > 1 {
                      format!("  [fenêtre {} : {} notés, PPL {:.3}]",
                              i_f + 1, n_f, (nll_f / n_f.max(1) as f64).exp())
                  } else { String::new() });
+        }
     }
     if let (Some(w), Some(f)) = (journal, &logits_bin) {
         use std::io::{Seek, SeekFrom, Write};

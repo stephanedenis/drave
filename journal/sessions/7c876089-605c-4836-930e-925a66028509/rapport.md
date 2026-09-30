@@ -5,12 +5,12 @@
 | Identifiant | `7c876089-605c-4836-930e-925a66028509` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-30 13:10 |
-| Durée | 0.1 h |
+| Durée | 0.3 h |
 | Tours | 1 |
-| Messages | 28 |
-| Appels d'outils | 44 |
+| Messages | 45 |
+| Appels d'outils | 62 |
 | Fichiers touchés | 2 |
-| Commandes | 34 |
+| Commandes | 48 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -23,7 +23,7 @@
 
 ### Tour 1 — Tu es relecteur ADVERSARIAL dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (projet « Drave » : moteur d'i … [3709 caractères tronqués]
 
-*44 appels d'outils.* Actions notables :
+*62 appels d'outils.* Actions notables :
 
 - bash — List recent commits and repo root
 - bash — Show stats for target commits
@@ -39,11 +39,13 @@
 - bash — Show unknown flag diff and parser
 - bash — Read banc MLA and replay diagnostics
 - bash — Check build artifacts and models
-- … et 23 autres
+- … et 39 autres
 
 **Synthèse produite :**
 
-⏵ Lancement des 11 tests annoncés en arrière-plan, puis expérience de clés de trace
+⏵ Rapport transmis à l'agent parent
+
+Le rapport complet (8 défauts prouvés, vérifications positives, limites) a été rendu ci-dessus et transmis à l'agent parent `bbd6969f`. Aucun fichier du dépôt n'a été touché, aucun processus de la campagne n'a été arrêté, et tous mes serveurs de test ont été tués.
 
 ## 3. Travail accompli
 
@@ -90,6 +92,13 @@
 - **T1** Re-run probe with correct units
 - **T1** Run the 11 tests in release
 - **T1** Read flux_codec.py
+- **T1** Read pair_factice lot handling
+- **T1** Read D5 message placement
+- **T1** Read codec decoder and TraceFlux
+- **T1** Write traces at ctx 64 and 512
+- **T1** Compare trace keys across window layouts
+- **T1** Inspect MLA synthetic tool
+- … et 8 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -133,12 +142,27 @@
 - **T1** `[sonde] après envoi (400 Mo d'échelles) : {'VmPeak': '5844 kB', 'VmSize': '5844 kB', 'VmRSS': '2440 kB'}`
 - **T1** `[sonde] après envoi (400 Mo d'échelles) : {'VmPeak': '1576796 kB', 'VmSize': '1576796 kB', 'VmRSS': '1011704 kB'}`
 - **T1** `réelle de 512 jetons : 132 396 736 octets en v1, **66 370 408** en v2 (−49,87 %),`
+- **T1** `# LOT : `n` est le nombre d'ÉTATS, le corps fait n × dimension × 4.`
+- **T1** `# Lire n × 4 (comme avant) laissait le client BLOQUÉ dans read_exact`
+- **T1** `// f16 par bloc de 32 canaux (l'étude de compacité annonce −22 % de plus,`
+- **T1** `// début et personne ne s'en apercevait (2 octets sur 132 Mo).`
+- **T1** `[trace] 6240 listes · 5587213 neurones actifs · 17 Mo`
+- **T1** `=== perplexité 345.5146 sur 127 tokens (0 événements, 61.0 s) ===`
+- **T1** `[trace] 6240 listes · 5588199 neurones actifs · 17 Mo`
+- **T1** `=== perplexité 168.6228 sur 129 tokens (0 événements, 56.6 s) ===`
+- **T1** `LATENT (une seule tête de 128 + 32 valeurs par jeton au lieu de n_head × 192),`
+- **T1** `[modele] 2 couches chargées en 8.820276ms — listes 0.00 Go , 20 threads`
+- **T1** `référence locale  : perplexité 261.1724  (1.3 s)`
+- **T1** `deux nœuds        : perplexité 151936.0000  (0.5 s)`
+- **T1** `référence locale  : perplexité 994.2334  (2.1 s)`
 
 ## 5. Erreurs rencontrées
 
-3 sorties en erreur ou divergentes. Les premières :
+5 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : [attention] QT_IM_SWITCHER est l'ancien nom d'une variable d'environnement : elles s'appellent maintenant DRAVE_* (voir docs/histoire.md). Rien n'a été appliqué. [options] 1 drapeau(x) INCONNU(S), don
 - **T1** : [attention] QT_IM_SWITCHER est l'ancien nom d'une variable d'environnement : elles s'appellent maintenant DRAVE_* (voir docs/histoire.md). Rien n'a été appliqué.  thread 'main' (545252) panicked at sr
 - **T1** : [attention] QT_IM_SWITCHER est l'ancien nom d'une variable d'environnement : elles s'appellent maintenant DRAVE_* (voir docs/histoire.md). Rien n'a été appliqué.  thread 'main' (545293) panicked at sr
+- **T1** : [dos] réponse reçue : 0 octets (pas de panique) [dos] code de sortie : -6 0 Go , 2 threads [config] 24 couches, hidden 896 ·  [config] puits appris sur 0/24 couches · n_rot 64 · ffn 4864 · experts 0 [
+- **T1** : référence locale  : perplexité 994.2334  (2.1 s)  thread 'main' (569094) panicked at src/main.rs:2001:26: envoi du flux: Os { code: 32, kind: BrokenPipe, message: "Broken pipe" } note: run with `RUST_
 

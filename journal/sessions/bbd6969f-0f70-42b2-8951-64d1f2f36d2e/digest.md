@@ -29041,3 +29041,283 @@ tête token_embd.weight : 151936 × 896 · 144.6 Mo · 28 blocs de 32
 Chemin GPU vérifié aujourd'hui aussi : offline 15,1667 ✓ et noyau warp **1,6 ms** avec écart **1,99e-7** ✓. Je l'inscris.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='REPRISE.md'; s=open(p).read()\nv = \"\"\"> gpt-oss était la seule que la relecture adversariale n'avait pas pu faire\n> tourner (bornes de temps) ; elle est verte.\"\"\"\nn = \"\"\"> gpt-oss était la seule que la … [1226 caractères tronqués]`
+
+  ```
+REPRISE : chemin GPU revérifié
+ace24b5 Chemin GPU revérifié : 15,1667 avec le pilote, noyau exact à 1,99e-7
+13:19:04
+cles_f16_valeurs_int8      :       13:03 ./drave-core/target/release/drave models/Qwen2.5
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && IDS=$(head -1 /tmp/ids_qwen_long.txt | tr ',' '\\n' | head -1024 | tr '\\n' ',' | sed 's/,$//'); TAG=v1024 PORT=46750 CTX=1024 IDS=\"$IDS\" EXTRA=\"--flux-blocs --act-thresh 0.01\" timeout 900 /tmp/test_reparti.sh 2>&1 | tail -4; dat … [113 caractères tronqués]`
+
+  ```
+(no output)
+[timed out after 600000ms]
+[killed by signal: SIGTERM]
+  ```
+
+### 👤 Utilisateur
+
+Agent 7c876089-605c-4836-930e-925a66028509 sent a message:
+RAPPORT ADVERSARIAL — correctifs 12h36–13h06 (dépôt Qtrinet, binaire release déjà compilé, aucun fichier du dépôt modifié, tous mes serveurs tués, campagne en cours intacte).
+
+8 DÉFAUTS RÉELS PROUVÉS :
+
+1. GRAVE — `--options-actives` affiche des valeurs d'AVANT application en PERPLEXITÉ. main.rs:2948 appelle options_actives avant `--trace-flux` (2951), `--moe-topk` (2973), `--abits` (2974), `--ffn-gain` (2982), `--act-*` (2986-91), `--attn-window` (2995-97), `--topk-*`. Preuve : `drave MOD --ppl-texte f --limit 6 --options-actives --attn-topk 3 --qk-topk 4 --moe-topk 2 --ffn-gain 0:2.0 --act-thresh 0.1 --act-topk 5 --abits 4 --act-renorm --attn-window 32 --topk-q 6 --trace-flux /tmp/t.drvf` imprime `niveaux 127 · seuil 0 · k-WTA 0 · renorm false / top-k attn 0 q·k 0 MoE 0 par projection [0,…] / trace false / fenêtre 0 / ffn_gain None`, puis `[trace] flux enregistré`, `gain FFN : couche 0 x 2`, `k-WTA k=5`. En `--infer` le même tableau est correct (mis en dernier). Correctif : déplacer l'appel après la ligne 3008.
+
+2. GRAVE — R4 ne couvre pas `n_blocs` (échelles du mode blocs) : main.rs:1715-1719 alloue `vec![0u8; n_blocs*4]` + `Vec<f32>` d'échelles sans `verifier_taille`. Preuve (pair factice contre `--flux-serveur` réel) : n_blocs=100 000 000 → VmSize 795 540 → 1 576 796 ko (+763 Mio), trame ACCEPTÉE (`[flux] 1 flux servis`, réponse mode=2 n=892 n_blocs=28) ; n_blocs=0xFFFFFFFF → VmSize 17 572 760 ko (16,8 Gio) sur une seule trame de 83 octets. C'est la classe « n hostile » que le commit prétend fermer.
+
+3. GRAVE — `decoder_paires_blocs` fait `Vec::with_capacity(n)` DEUX fois avec le `n` de l'en-tête, non borné en mode blocs (le plafond ne porte que sur `longueur`). Preuve : n=4e9, longueur=256 Mio (au plafond) → **VmPeak 12 477 Mio**, log `corps de flux tronqué : 134217728 paires lues sur 4000000000`. Correctif : verifier_taille(n*2) (blocs) et n*4 (listes) avant les with_capacity.
+
+4. GRAVE — trame forgée = nœud tué : `ChargeFlux::en_dense` (main.rs:1482, 1489) indexe `x[i]` et `echelles[i/32]` sans borne. Une trame LISTE n=1 avec indice 5000 → `panicked at src/main.rs:1482:22: index out of bounds: the len is 896 but the index is 5000`, sortie −6 (SIGABRT, panic=abort). Mode blocs : double défaut. Code antérieur (5ea06f9) mais laissé ouvert par R4.
+
+5. MOYEN — D6 n'a corrigé que la RÉCEPTION : `envoyer_flux(...).expect("envoi du flux")` (ligne 2001) et `envoi du lot` (1952) restent. Un pair qui ferme → `panicked at src/main.rs:2001:26: envoi du flux: BrokenPipe`, core dump.
+
+6. MOYEN — D8 incomplet : `--limit 1` imprime toujours `0 tokens notés — perplexité cumulée NaN` (calcul/impression ligne 3151) AVANT le garde-fou `if n == 0` (3193).
+
+7. MOYEN — détection de drapeau inconnu partielle : vérifié OK pour `--prompt "--bonjour"` (pas de faux positif) et `--dense --keep 0.5` (keep 0.500 appliqué) ; mais `keep 0.05` et `-keep 0.05` restent avalés en silence, args[1] (chemin du modèle) n'est jamais analysé, et `--flux-forcer` est ignoré sans mot en `--infer`/`--ppl-reparti`.
+
+8. FAIBLE — `forward_mla` (model.rs:2873) n'avance jamais `jeton_trace` et n'appelle jamais flux_lot ; run_banc_mla ignore trace_flux/flux_forcer. Preuve : `drave /tmp/mla_minuscule.gguf --banc-mla out.bin --trace-flux /tmp/mla_trace.drvf --flux-forcer /tmp/W64.drvf --options-actives` → 8 positions calculées, fichier de trace NON créé, aucun message.
+
+VÉRIFIÉ SOLIDE (question 1 du mandat) : trace écrite à `--ctx 64` (3 fenêtres) et à `--ctx 512` (1 fenêtre), mêmes 130 jetons → clés STRICTEMENT identiques (6240 listes, positions 1..130, diff 0, décodage tools/flux_codec.py). forward (1-based, bases 0/1000), forward_lot (j0=compteur+1, avancé une fois par lot) et le raccourci t==1 qui délègue à forward sont cohérents. `cargo test --release` : 11 passés, 0 échec, 0,12 s ; le test de troncature refuse par le bon chemin ; 8192×8192×4 = exactement le plafond → accepté.
+RÉSERVE tests : le test du plafond ne peut pas échouer proprement si le garde-fou disparaît (blocage read_exact sur ~358 Go) ; aucun délai n'est configuré (pas de .cargo/config.toml).
+NON VÉRIFIÉ : `--depuis` en exécution (raisonnement : clé = ordinal d'appel, le recouvrement d'un jeton entre fenêtres consomme 2 clés → rejeu seulement à config identique) ; lot légitime > 256 Mo sur hidden > 8192 (pas de modèle) ; écart de valeurs de trace `--lot 1` vs `--lot 4` avec --act-topk 5 (54171 vs 41524) non attribué, non retenu comme défaut.
+
+Les deux plus graves : n°1 (le tableau de bord lui-même ment, en perplexité) et la famille R4 n°2+n°3 (12 à 17 Go pilotés par l'en-tête réseau).
+
+### 👤 Utilisateur
+
+Background subagent 7c876089-605c-4836-930e-925a66028509 finished and will do no further work unless you send it more.
+Its closing message:
+⏵ Rapport transmis à l'agent parent
+
+Le rapport complet (8 défauts prouvés, vérifications positives, limites) a été rendu ci-dessus et transmis à l'agent parent `bbd6969f`. Aucun fichier du dépôt n'a été touché, aucun processus de la campagne n'a été arrêté, et tous mes serveurs de test ont été tués.
+
+### 🤖 Assistant
+
+La seconde relecture a trouvé **huit défauts de plus**, dont deux graves dans mes propres correctifs. Je corrige dans l'ordre : le tableau de bord qui ment, puis la famille R4 (allocations non bornées).
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n 2944,2952p drave-core/src/main.rs; echo \"...\"; sed -n 3004,3012p drave-core/src/main.rs", "description": "Locate dashboard call in run_ppl"}`
+
+  ```
+}
+            Err(e) => eprintln!("[flux] lecture impossible de {chemin} : {e}"),
+        }
+    }
+    if montre_options {
+        options_actives(&mdl, "perplexité", ctx_impose, dense, keep);
+    }
+    if let Some(chemin) = trace_flux.as_deref() {
+        match model::TraceFlux::nouveau(chemin, trace_couches.clone(), mdl.cfg.hidden,
+...
+    if act_thresh > 0.0 || act_topk > 0 {
+        println!("parcimonie imposée : seuil {:.1} % du max{}",
+                 act_thresh * 100.0,
+                 if act_topk > 0 { format!(", k-WTA k={act_topk}") } else { String::new() });
+    }
+    if let Some(l) = hebb_layer {
+        let mut hb = model::Hebb::new(l, mdl.cfg.ffn, mdl.cfg.hidden, hebb_q);
+        hb.log_on = true;
+        mdl.hebb = Some(hb);
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/main.rs'; s=open(p).read()\n# A. le tableau de bord doit venir APRÈS toutes les affectations, ici comme en inférence\nv = \"\"\"    if montre_options {\n        options_actives(&mdl, \"perplexité\" … [6036 caractères tronqués]`
+
+  ```
+A (tableau de bord), B (n_blocs), C (paires) corrigés
+D : les trames forgées sont ignorées, pas fatales
+    Finished `release` profile [optimized] target(s) in 0.03s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"perplexité cumulée\" drave-core/src/main.rs | head -3; grep -n 'expect(\"envoi du flux\")\\|expect(\"envoi du lot\")' drave-core/src/main.rs; grep -n \"fn run_banc_mla\" -A 6 drave-core/src/main.rs | head -8; grep -n \"fn r … [83 caractères tronqués]`
+
+  ```
+3190:        println!("  {:6} tokens notés — perplexité cumulée {:.3}  ({:.1} tok/s){}",
+1981:                                pos as u32, &plat, t, &mdl).expect("envoi du lot");
+2030:                        .expect("envoi du flux");
+2087:fn run_banc_mla(opt: Options, sortie: &str) {
+2088-    use std::io::Write;
+2089-    let path = &modele_chemin();
+2090-    let mut mdl = model::Model::load(path, 4096, fils(&opt), opt.dense, opt.keep, false, 0, 0);
+2091-    if mdl.mla.is_none() {
+2092-        println!("pas un modèle MLA (attn_kv_a_mqa absent)");
+2093-        return;
+2087:fn run_banc_mla(opt: Options, sortie: &str) {
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/main.rs'; s=open(p).read()\n\n# E. D8 : le garde-fou doit précéder l'affichage, pas le suivre\nv = \"\"\"        println!(\"  {:6} tokens notés — perplexité cumulée {:.3}  ({:.1} tok/s){}\",\"\"\"\ … [507 caractères tronqués]`
+
+  ```
+E : la ligne est conditionnée à n > 0
+        let ppl = (nll / n as f64).exp();
+        // La perplexité PROPRE à la fenêtre dit où le modèle décroche : une
+        // première fenêtre à 900 et les suivantes à 15 ne racontent pas du tout
+        // la même histoire qu'une dégradation régulière.
+        if n == 0 {
+            println!("  aucun jeton noté (il en faut au moins deux : le premier ne \
+prédit rien) — la perplexité cumulée n'a pas de sens ici");
+        } else {
+        println!("  {:6} tokens notés — perplexité cumulée {:.3}  ({:.1} tok/s){}",
+                 n, ppl, n as f64 / t0.elapsed().as_secs_f64(),
+                 if fenetres.len() > 1 {
+                     format!("  [fenêtre {} : {} notés, PPL {:.3}]",
+                             i_f + 1, n_f, (nll_f / n_f.max(1) as f64).exp())
+                 } else { String::new() });
+    }
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/main.rs'; s=open(p).read()\nv = \"\"\"                 } else { String::new() });\n    }\"\"\"\nn = \"\"\"                 } else { String::new() });\n        }\n    }\"\"\"\nassert s.count(v) >= 1 … [1517 caractères tronqués]`
+
+  ```
+accolade fermante ajoutée
+F : envoi protégé des deux côtés
+            let hs = mdl.forward_lot(&ids[pos..pos + t], pos);
+            let plat: Vec<f32> = hs.concat();
+            t_local += horloge.elapsed().as_secs_f64();
+            let horloge = Instant::now();
+            let o = envoyer_lot(&mut sock, couches_locales as u32, n_layer as u32,
+                                pos as u32, &plat, t, &mdl) {
+                            Ok(o) => o,
+                            Err(e) => {
+                                eprintln!("[flux] le nœud moteur a fermé la connexion \
+pendant l'envoi du lot ({e}) — version, réglages ou contexte : il a dit pourquoi \
+de son côté.");
+                                std::process::exit(1);
+                            }
+                        };
+            octets_envoyes += o as u64;
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/main.rs'; s=open(p).read()\nv = \"\"\"            let o = envoyer_lot(&mut sock, couches_locales as u32, n_layer as u32,\n                                pos as u32, &plat, t, &mdl) {\"\"\"\nn = \" … [475 caractères tronqués]`
+
+  ```
+match rétabli
+    Finished `release` profile [optimized] target(s) in 0.03s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/main.rs'; s=open(p).read()\n\n# G. un drapeau à UN tiret est aussi une faute de frappe probable (`-keep`)\nv = \"\"\"            _ => {\n                if args[i].starts_with(\"--\") { o.inconnus. … [4050 caractères tronqués]`
+
+  ```
+Finished `release` profile [optimized] target(s) in 0.02s
+=== vérifications rapides ===
+13:33:04
+cles_f16_valeurs_int8      : 
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 56, in <module>
+AssertionError
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"fn run_banc_mla\" drave-core/src/main.rs; sed -n \"$(grep -n 'fn run_banc_mla' drave-core/src/main.rs | cut -d: -f1),+6p\" drave-core/src/main.rs", "description": "Check banc MLA signature"}`
+
+  ```
+2099:fn run_banc_mla(opt: Options, sortie: &str) {
+fn run_banc_mla(opt: Options, sortie: &str) {
+    use std::io::Write;
+    let path = &modele_chemin();
+    let mut mdl = model::Model::load(path, 4096, fils(&opt), opt.dense, opt.keep, false, 0, 0);
+    if mdl.mla.is_none() {
+        println!("pas un modèle MLA (attn_kv_a_mqa absent)");
+        return;
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/main.rs'; s=open(p).read()\ndef rem(nom, v, n):\n    global s\n    c = s.count(v)\n    if c != 1:\n        print(f\"  ✗ {nom} : {c} occurrence(s)\"); return False\n    s = s.replace(v, n); print(f\ … [2751 caractères tronqués]`
+
+  ```
+✓ G tiret simple
+  ✓ G bis flux_forcer dans run_infer
+  ✗ G ter rejeu branché en inférence : 2 occurrence(s)
+    Finished `release` profile [optimized] target(s) in 0.03s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/main.rs'; s=open(p).read()\n# l'occurrence d'INFÉRENCE est celle suivie du commentaire sur --ffn-gain\nv = \"\"\"            Err(e) => eprintln!(\"[trace] impossible d'écrire {chemin} : {e}\"),\n   … [2750 caractères tronqués]`
+
+  ```
+G ter (inférence) et H (banc MLA) appliqués
+error[E0425]: cannot find value `flux_forcer` in this scope
+   --> src/main.rs:661:27
+    |
+622 |       let Options {
+    |  _________-
+623 | |         ids: mut ids, ids_file, prompt, n: n_new, temp, top_p, topk, rep_pen, hist,
+624 | |         flux, session, chat, ctx: ctx_opt, threads: threads_opt, abits: abits_opt,
+--
+error: could not compile `drave-core` (bin "drave") due to 1 previous error; 10 warnings emitted
+error: could not compile `drave-core` (bin "drave") due to 1 previous error; 10 warnings emitted
+--- -keep (tiret simple) ---
+--- banc MLA + trace ---
+--- perplexité : le tableau doit montrer les valeurs APRÈS application ---
+[options] activation : niveaux 7 · seuil 0.1 · k-WTA 0 · renorm false
+[options] top-k : attn 3 · q·k 0 · MoE 0 · par projection [0, 0, 0, 0, 0, 0, 0]
+[options] fenêtre 0 · motif 0 · seuil push 0.22 · lot 1 · ffn_gain None · hebb false
+13:34:19
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n 626,636p drave-core/src/main.rs; python3 - <<'PY'\np='drave-core/src/main.rs'; s=open(p).read()\nv = \"\"\"        act_thresh, act_topk, act_renorm, topk_proj, moe_topk, patch: patch_file,\n        hebb_layer, hebb_q, hebb_out … [1178 caractères tronqués]`
+
+  ```
+keep, attn_window, swa_pattern, sans_fenetre, attn_sinks, attn_topk, qk_topk,
+        act_thresh, act_topk, act_renorm, topk_proj, moe_topk, patch: patch_file,
+        hebb_layer, hebb_q, hebb_out, sans_yarn, lot, ffn_gain,
+        trace_flux, trace_couches, ..
+    } = opt;
+    let path = &modele_chemin();
+    // Défauts du mode INFÉRENCE : 512 jetons, la moitié des cœurs (l'attente
+    // active de la barrière ne tolère pas la sursouscription), 8 bits.
+    let cpu = std::thread::available_parallelism().map(|n| n.get()).unwrap_or(8);
+    let ctx = if ctx_impose { ctx_opt } else { 512 };
+    let n_threads = if threads_impose { threads_opt } else { (cpu / 2).max(1) };
+flux_forcer déstructuré dans run_infer
+    Finished `release` profile [optimized] target(s) in 0.01s
+--- -keep ---
+--- banc MLA + trace ---
+[banc-mla] ni --trace-flux ni --flux-forcer ne s'appliquent à ce banc : il écrit des logits pour la comparaison numpy, sans passer par le flux.
+--- rejeu en inférence ---
+[flux] rejeu depuis /tmp/t8_l1.bin : 384 listes enregistrées
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf --ppl /tmp/ids_qwen.txt --ctx 32 --limit 4 --dense --threads 4 -keep 0.05 2>&1 | head -4; echo \"--- avec --keeep ---\"; ./drave-core/target/release/drave models/Qwen2.5 … [206 caractères tronqués]`
+
+  ```
+[attention] QT_IM_SWITCHER est l'ancien nom d'une variable d'environnement : elles s'appellent maintenant DRAVE_* (voir docs/histoire.md). Rien n'a été appliqué.
+/tmp/ids_qwen.txt : 4 tokens, fenêtres de 32
+[config] cache KV : 32 bits, 0.00 Go pour 32 jetons
+[modele] 24 couches chargées en 811.6362ms — listes 0.00 Go , 4 threads
+--- avec --keeep ---
+[attention] QT_IM_SWITCHER est l'ancien nom d'une variable d'environnement : elles s'appellent maintenant DRAVE_* (voir docs/histoire.md). Rien n'a été appliqué.
+[options] 1 drapeau(x) INCONNU(S), donc sans effet : --keeep
+[options] (une faute de frappe suffit — `--options-actives` montre ce que le moteur applique vraiment)
+13:35:22
+cles_f16_valeurs_int8      :
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"lettre\" drave-core/src/main.rs | head -3; sed -n \"$(grep -n 'Inconnu : on avance' drave-core/src/main.rs | cut -d: -f1),+12p\" drave-core/src/main.rs", "description": "Verify the single-dash edit is present"}`
+
+  ```
+// Inconnu : on avance d'UN cran, jamais de deux — et on le RETIENT,
+            // pour le dire à la fin plutôt que de l'avaler.
+            _ => {
+                if args[i].starts_with("--") { o.inconnus.push(args[i].clone()); }
+                1
+            }
+        };
+        i += pas;
+    }
+    if !o.inconnus.is_empty() {
+        eprintln!("[options] {} drapeau(x) INCONNU(S), donc sans effet : {}",
+                  o.inconnus.len(), o.inconnus.join(" "));
+        eprintln!("[options] (une faute de frappe suffit — `--options-actives` montre \
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/main.rs'; s=open(p).read()\nv = \"\"\"            _ => {\n                if args[i].starts_with(\"--\") { o.inconnus.push(args[i].clone()); }\n                1\n            }\"\"\"\nn = \"\"\"    … [1126 caractères tronqués]`
+
+  ```
+tiret simple : appliqué
+    Finished `release` profile [optimized] target(s) in 0.01s
+test result: ok. 11 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.13s
+[options] 1 drapeau(x) INCONNU(S), donc sans effet : -keep
+13:36:19
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A drave-core/src/main.rs && git commit -q -F - <<'EOF' && git log --oneline -1 | cat\nSeconde relecture adversariale : huit défauts, dont deux graves dans mes propres correctifs\n\nElle a attaqué les CORRECTIFS du début d'ap … [2164 caractères tronqués]`

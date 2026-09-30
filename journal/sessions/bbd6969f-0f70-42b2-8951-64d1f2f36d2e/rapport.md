@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 46.5 h |
+| Durée | 46.8 h |
 | Tours | 45 |
-| Messages | 1802 |
-| Appels d'outils | 1703 |
+| Messages | 1820 |
+| Appels d'outils | 1719 |
 | Fichiers touchés | 44 |
-| Commandes | 1382 |
+| Commandes | 1398 |
 | Sous-agents | 7 |
-| Commits | 134 |
+| Commits | 135 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -2055,7 +2055,7 @@ Je vérifie l'heure à chaque itération et j'arrête à 12:06, en laissant un p
 
 ### Tour 45 — as-tu ce qu'il te faut pour te rendre à 15h en travaillaint avec un maximum d'autonomie et de parallélisme d'activités?
 
-*204 appels d'outils.* Actions notables :
+*220 appels d'outils.* Actions notables :
 
 - bash — Probe machine, GPU, disk, network state
 - bash — Identify GPU users and stray processes
@@ -2071,11 +2071,11 @@ Je vérifie l'heure à chaque itération et j'arrête à 12:06, en laissant un p
 - bash — Understand batched PPL reference path
 - bash — Add batched imposed states to forward_lot
 - list_agents
-- … et 181 autres
+- … et 197 autres
 
 **Synthèse produite :**
 
-Chemin GPU vérifié aujourd'hui aussi : offline 15,1667 ✓ et noyau warp **1,6 ms** avec écart **1,99e-7** ✓. Je l'inscris.
+La seconde relecture a trouvé **huit défauts de plus**, dont deux graves dans mes propres correctifs. Je corrige dans l'ordre : le tableau de bord qui ment, puis la famille R4 (allocations non bornées).
 
 ## 3. Travail accompli
 
@@ -2180,7 +2180,7 @@ Chemin GPU vérifié aujourd'hui aussi : offline 15,1667 ✓ et noyau warp **1,6
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 1342 autres
+- … et 1358 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2308,7 +2308,7 @@ Chemin GPU vérifié aujourd'hui aussi : offline 15,1667 ✓ et noyau warp **1,6
 
 ## 5. Erreurs rencontrées
 
-92 sorties en erreur ou divergentes. Les premières :
+93 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : a8f2635f8 docs: record which models this box is good at, and why src/llama-hparams.cpp:8:void llama_hparams::set_swa_pattern(uint32_t n_pattern, bool dense_first) { src/llama-hparams.h:308:    void se
 - **T1** : 511 tokens notés — perplexité cumulée 247.031  (4.9 tok/s) === perplexité 247.0308 sur 511 tokens (0 événements, 104.5 s) ===  ### B3 harmony assistant 511 --- ref --- 0.0 0.0 0:00 ls: cannot access '
@@ -2462,4 +2462,5 @@ Chemin GPU vérifié aujourd'hui aussi : offline 15,1667 ✓ et noyau warp **1,6
 - Référence 6 bits : 19,5633 et non 19,3045 — la commande ne redonne pas l'ancien chiffre  J'ai rejoué la commande de la table de non-régression au lieu de retire
 - Index de la session : les huit chantiers, les défauts et par qui ils ont été trouvés  Un rapport court pour un humain qui reprend : ce qui est livré (avec le re
 - Chemin GPU revérifié : 15,1667 avec le pilote, noyau exact à 1,99e-7  Les portes de la journée se mesurent SANS DRAVE_GPU (c'est la règle du dépôt), donc person
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A drave-core/src/main.rs && git commit -q -F - <<'EOF' && git log --oneline -1 | cat Seconde rele
 
