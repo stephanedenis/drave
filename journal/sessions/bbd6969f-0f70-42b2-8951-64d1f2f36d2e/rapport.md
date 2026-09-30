@@ -7,12 +7,12 @@
 | Début | 2026-09-28 14:46 |
 | Durée | 46.5 h |
 | Tours | 45 |
-| Messages | 1797 |
-| Appels d'outils | 1698 |
+| Messages | 1798 |
+| Appels d'outils | 1699 |
 | Fichiers touchés | 44 |
-| Commandes | 1378 |
+| Commandes | 1379 |
 | Sous-agents | 7 |
-| Commits | 132 |
+| Commits | 133 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -2055,7 +2055,7 @@ Je vérifie l'heure à chaque itération et j'arrête à 12:06, en laissant un p
 
 ### Tour 45 — as-tu ce qu'il te faut pour te rendre à 15h en travaillaint avec un maximum d'autonomie et de parallélisme d'activités?
 
-*199 appels d'outils.* Actions notables :
+*200 appels d'outils.* Actions notables :
 
 - bash — Probe machine, GPU, disk, network state
 - bash — Identify GPU users and stray processes
@@ -2071,11 +2071,11 @@ Je vérifie l'heure à chaque itération et j'arrête à 12:06, en laissant un p
 - bash — Understand batched PPL reference path
 - bash — Add batched imposed states to forward_lot
 - list_agents
-- … et 177 autres
+- … et 178 autres
 
 **Synthèse produite :**
 
-La re-mesure donne **19,5633**, pas 19,3045 : la table de REPRISE était fausse. Je vérifie une variante avant de corriger honnêtement.
+⏵ Pendant que la dernière campagne tourne, j'écris l'index de la journée (un rapport court qui renvoie à chaque chantier).
 
 ## 3. Travail accompli
 
@@ -2180,7 +2180,7 @@ La re-mesure donne **19,5633**, pas 19,3045 : la table de REPRISE était fausse.
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 1338 autres
+- … et 1339 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2460,4 +2460,5 @@ La re-mesure donne **19,5633**, pas 19,3045 : la table de REPRISE était fausse.
 - Format de flux : la taille par neurone actif, dense et creuse  6,02 et 3,01 sont les valeurs d'une trace DENSE ; une trace creuse coûte 6,04 et 3,04, parce que 
 - Référence 6 bits re-mesurée (19,3045) plutôt que retirée  Le relecteur avait raison : ce chiffre de la table de non-régression n'était cité dans aucun rapport. 
 - Référence 6 bits : 19,5633 et non 19,3045 — la commande ne redonne pas l'ancien chiffre  J'ai rejoué la commande de la table de non-régression au lieu de retire
+- Index de la session : les huit chantiers, les défauts et par qui ils ont été trouvés  Un rapport court pour un humain qui reprend : ce qui est livré (avec le re
 

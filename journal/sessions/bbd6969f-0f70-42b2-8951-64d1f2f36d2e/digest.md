@@ -28979,3 +28979,16 @@ ctx 512 : perplexité 13.2692 sur 511 tokens
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='REPRISE.md'; s=open(p).read()\nv = \"| Qwen2.5-0.5B Q8_0, 6 bits | `--dense --bits-attn 6 --bits-ffn 6 --limit 512` | **19,3045** ← bat l'int8 (re-mesuré le 30/09 : c'est la valeur, et la commande suffit à la rep … [1507 caractères tronqués]`
+
+  ```
+REPRISE : valeur 6 bits corrigée (19,5633, non reproductible à 19,3045)
+181764a Référence 6 bits : 19,5633 et non 19,3045 — la commande ne redonne pas l'ancien chiffre
+13:13:43
+cles_f16_valeurs_int8      :       07:42 ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0
+  ```
+
+### 🤖 Assistant
+
+⏵ Pendant que la dernière campagne tourne, j'écris l'index de la journée (un rapport court qui renvoie à chaque chantier).
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-session-2026-09-30.md <<'EOF'\n# Session du 30/09 — index des chantiers\n\nDeux créneaux : 10h06–11h42 (time-box de 2 h) puis 11h46–15h00 (autonomie et\nparallélisme). Trente-cinq commits, deux campagnes de mesu … [4396 caractères tronqués]`

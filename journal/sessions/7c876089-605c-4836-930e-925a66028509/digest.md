@@ -745,3 +745,60 @@ ae85043 DRVF v3 : −66 % de trace au total, pour +0,074 % de perplexité
 ---
   ```
 
+### 🤖 Assistant
+
+⏵ Test du tableau de bord en mode perplexité (valeurs avant application ?)
+
+- **bash** `{"command": "printf 'Le chat dort sur le tapis rouge. Il reve encore.\\n' > /tmp/txt4.txt; cd drave-core && timeout 170 ./target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf --ppl-texte /tmp/txt4.txt --limit 6 --threads 4 --options-actives --attn-topk 3 --qk-topk 4 --moe-topk 2 --ffn-gain 0:2.0 --act … [245 caractères tronqués]`
+
+  ```
+[attention] QT_IM_SWITCHER est l'ancien nom d'une variable d'environnement : elles s'appellent maintenant DRAVE_* (voir docs/histoire.md). Rien n'a été appliqué.
+
+thread 'main' (545252) panicked at src/model.rs:1368:34:
+ouverture du GGUF: Os { code: 2, kind: NotFound, message: "No such file or directory" }
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+timeout: the monitored command dumped core
+  ```
+
+- **bash** `{"command": "cd drave-core && timeout 170 ./target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf --infer --ids 1,2,3 --limit 2 --threads 4 --options-actives --attn-topk 3 --ffn-gain 0:2.0 --trace-flux /tmp/trace_inf.drvf --act-thresh 0.1 2>&1 | head -20", "description": "Run inference with dashboard", … [62 caractères tronqués]`
+
+  ```
+[attention] QT_IM_SWITCHER est l'ancien nom d'une variable d'environnement : elles s'appellent maintenant DRAVE_* (voir docs/histoire.md). Rien n'a été appliqué.
+
+thread 'main' (545293) panicked at src/model.rs:1368:34:
+ouverture du GGUF: Os { code: 2, kind: NotFound, message: "No such file or directory" }
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+timeout: the monitored command dumped core
+  ```
+
+### 🤖 Assistant
+
+⏵ Correction des chemins et relance des deux modes
+
+- **bash** `{"command": "M=/home/stephane/Data13TB/stephane/GitHub/Qtrinet; timeout 170 $M/drave-core/target/release/drave $M/models/Qwen2.5-0.5B-Q8_0.gguf --ppl-texte /tmp/txt4.txt --limit 6 --threads 4 --options-actives --attn-topk 3 --qk-topk 4 --moe-topk 2 --ffn-gain 0:2.0 --act-thresh 0.1 --act-topk 5 --ab … [217 caractères tronqués]`
+
+  ```
+[attention] QT_IM_SWITCHER est l'ancien nom d'une variable d'environnement : elles s'appellent maintenant DRAVE_* (voir docs/histoire.md). Rien n'a été appliqué.
+[config] cache KV : 32 bits, 0.01 Go pour 256 jetons
+[modele] 24 couches chargées en 6.883829865s — listes 0.71 Go , 4 threads
+[config] 24 couches, hidden 896 · 
+[config] puits appris sur 0/24 couches · n_rot 64 · ffn 4864 · experts 0
+[config] rotation : RoPE simple (le modèle ne déclare pas YaRN)
+[options] mode perplexité · contexte 256 (défaut) · dense false · keep 1.000
+[options] activation : niveaux 127 · seuil 0 · k-WTA 0 · renorm false
+[options] top-k : attn 0 · q·k 0 · MoE 0 · par projection [0, 0, 0, 0, 0, 0, 0]
+[options] couches 0..24 · flux brut false · trace false · rejeu false
+[options] fenêtre 0 · motif 0 · seuil push 0.22 · lot 1 · ffn_gain None · hebb false
+[options] cache KV : 32 bits · f16 avant false
+[trace] flux enregistré dans /tmp/trace_test.drvf
+/tmp/txt4.txt : 6 jetons (tokenizer du modèle), fenêtres de 256
+gain FFN : couche 0 x 2
+parcimonie imposée : seuil 10.0 % du max, k-WTA k=5
+       5 tokens notés — perplexité cumulée 328866.777  (48.0 tok/s)
+[trace] 288 listes · 1296 neurones actifs · 0 Mo
+
+==
+… [595 caractères tronqués]
+  ```
+
+- **bash** `{"command": "M=/home/stephane/Data13TB/stephane/GitHub/Qtrinet; timeout 170 $M/drave-core/target/release/drave $M/models/Qwen2.5-0.5B-Q8_0.gguf --infer --ids 1,2,3 --threads 4 --options-actives --attn-topk 3 --ffn-gain 0:2.0 --trace-flux /tmp/trace_inf.drvf --act-thresh 0.1 2>&1 | head -20", "descri … [117 caractères tronqués]`

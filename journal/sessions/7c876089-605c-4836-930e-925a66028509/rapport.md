@@ -7,10 +7,10 @@
 | Début | 2026-09-30 13:10 |
 | Durée | 0.1 h |
 | Tours | 1 |
-| Messages | 16 |
-| Appels d'outils | 26 |
+| Messages | 17 |
+| Appels d'outils | 28 |
 | Fichiers touchés | 0 |
-| Commandes | 20 |
+| Commandes | 22 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -23,7 +23,7 @@
 
 ### Tour 1 — Tu es relecteur ADVERSARIAL dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (projet « Drave » : moteur d'i … [3709 caractères tronqués]
 
-*26 appels d'outils.* Actions notables :
+*28 appels d'outils.* Actions notables :
 
 - bash — List recent commits and repo root
 - bash — Show stats for target commits
@@ -39,11 +39,11 @@
 - bash — Show unknown flag diff and parser
 - bash — Read banc MLA and replay diagnostics
 - bash — Check build artifacts and models
-- … et 7 autres
+- … et 9 autres
 
 **Synthèse produite :**
 
-⏵ Test du tableau de bord en mode perplexité (valeurs avant application ?)
+⏵ Correction des chemins et relance des deux modes
 
 ## 3. Travail accompli
 
@@ -74,6 +74,8 @@
 - **T1** Check which commits touched src
 - **T1** Run ppl with dashboard and many flags
 - **T1** Run inference with dashboard
+- **T1** Run ppl with dashboard, absolute paths
+- **T1** Run inference with dashboard, absolute paths
 
 ## 4. Mesures et résultats marquants
 
@@ -100,6 +102,15 @@
 - **T1** `6b3b53f 2026-09-30 12:17:39 -0400 DRVF v2 sur le disque : −49,87 % de trace, rejeu identique`
 - **T1** `// barrière ne tolère aucune sursouscription (mesuré : ×1,3 de perte à 40+1`
 - **T1** `ae85043 DRVF v3 : −66 % de trace au total, pour +0,074 % de perplexité`
+- **T1** `parcimonie imposée : seuil 10.0 % du max, k-WTA k=5`
+- **T1** `5 tokens notés — perplexité cumulée 328866.777  (48.0 tok/s)`
+- **T1** `[trace] 288 listes · 1296 neurones actifs · 0 Mo`
+- **T1** `=== perplexité 328866.7766 sur 5 tokens (10136822 événements, 0.1 s) ===`
+- **T1** `48.0 tok/s effectifs (avant + tête)`
+- **T1** `part de l'attention dans le flux d'événements : 0.1 %`
+- **T1** `gain FFN : couche 0 × 2`
+- **T1** `parcimonie imposée : k-WTA garde 0.0 %, seuil 10.0 %`
+- **T1** `prompt  : 3 tokens en 0.156 s  (19.3 tok/s, TTFT 51.8 ms)`
 
 ## 5. Erreurs rencontrées
 
