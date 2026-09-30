@@ -31344,3 +31344,50 @@ index : vérifications de fin de journée
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='REPRISE.md'; s=open(p).read()\nv = \"\"\"Réglage recommandé : **`DRAVE_KV_BITS=8 DRAVE_KV_K_F16=1`** — 2,5× plus petit que le\nf32 pour deux centièmes de pour cent. Détail et reproduction :\n`reports/rapport-plac … [1730 caractères tronqués]`
+
+  ```
+REPRISE : la politique KV complète
+=== porte finale du créneau ===
+17:01:54
+test result: ok. 17 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.09s
+perplexité 19.3885 sur 510 tokens
+  écart             : 0.00e0
+  écart             : 0.00e0
+0c56c35 REPRISE : la politique du cache KV complète (taille ET temps), et l'aiguille 9/9
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && MOI=$$; for pid in $(pgrep -f \"pair_factice|proxy_latence|aiguille\" | grep -v \"^$MOI\\$\"); do kill $pid 2>/dev/null; done; sleep 1; echo \"=== processus restants ===\"; pgrep -a -f \"drave|pair_factice|aiguille|banc\" | grep -v p … [419 caractères tronqués]`
+
+  ```
+=== processus restants ===
+(vide = machine rendue)
+=== dépôt ===
+ M journal/README.md
+0c56c35 REPRISE : la politique du cache KV complète (taille ET temps), et l'aiguille 9/9
+commits du jour : 95
+tests : 17 passed
+17:02:53
+85, 13,38, 16,37
+  ```
+
+### 🤖 Assistant
+
+⏵ Dernière heure : je lance une quatrième relecture sur les correctifs de la dernière heure, et je prépare la clôture.
+
+- **subagent** `{"description": "Review the last-hour fixes", "prompt": "Tu es relecteur ADVERSARIAL dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (projet « Drave » : moteur d'inférence LLM en Rust, `std` seul, binaire `drave`). Tout est en FRANÇAIS : écris en français. Ton rôle est de TROUVER DES D … [3570 caractères tronqués]`
+
+  ```
+started subagent 5185ccb1-be24-4716-89df-62621e790444
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\n# dernier passage : la carte du dépôt et les compteurs du README/REPRISE\nimport subprocess, os\nrs = subprocess.run(['bash','-c','find drave-core/src -name \"*.rs\" | xargs wc -l | tail -1'],\n                    c … [405 caractères tronqués]`
+
+  ```
+lignes Rust : 12171 total
+REPRISE mentionne 11 901 : 1
+README mentionne 11 901 : 2
+42
+13
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\ndef rem(p, paires):\n    s = open(p).read(); ok = 0\n    for v, n in paires:\n        if s.count(v) >= 1: s = s.replace(v, n); ok += 1\n        else: print(f\"  ⚠ absent de {p} : {v[:50]}…\")\n    open(p,'w').write( … [597 caractères tronqués]`

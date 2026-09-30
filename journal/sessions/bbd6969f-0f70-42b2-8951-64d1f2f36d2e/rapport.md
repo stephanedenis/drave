@@ -7,12 +7,12 @@
 | Début | 2026-09-28 14:46 |
 | Durée | 50.3 h |
 | Tours | 46 |
-| Messages | 1946 |
-| Appels d'outils | 1837 |
+| Messages | 1950 |
+| Appels d'outils | 1841 |
 | Fichiers touchés | 44 |
-| Commandes | 1509 |
-| Sous-agents | 10 |
-| Commits | 166 |
+| Commandes | 1512 |
+| Sous-agents | 11 |
+| Commits | 167 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -2117,7 +2117,7 @@ L'**audit des drapeaux** a trouvé que **46 options sur 110** étaient ignorées
 
 ### Tour 46 — continue jusqu'à 18h HAE
 
-*99 appels d'outils.* Actions notables :
+*103 appels d'outils.* Actions notables :
 
 - bash — Check time, timezone and remaining budget
 - create_goal
@@ -2133,11 +2133,11 @@ L'**audit des drapeaux** a trouvé que **46 options sur 110** étaient ignorées
 - bash — Improve notebook with real text cell
 - bash — Kill test node safely and check notebook
 - bash — Add notebook real-text cell and commit
-- … et 85 autres
+- … et 89 autres
 
 **Synthèse produite :**
 
-Point crucial : **toute variante d'attribution désactive le miroir VRAM** (il exige une disposition homogène), et les clés f16 coûtent 2,3× le temps CPU. La politique complète s'écrit avec ces nuances.
+⏵ Dernière heure : je lance une quatrième relecture sur les correctifs de la dernière heure, et je prépare la clôture.
 
 ## 3. Travail accompli
 
@@ -2202,6 +2202,7 @@ Point crucial : **toute variante d'attribution désactive le miroir VRAM** (il e
 - tour 46 — Spec for lot-in-lists mode 4
 - tour 46 — Docs audit after today's changes
 - tour 46 — Adversarial review of mode 4
+- tour 46 — Review the last-hour fixes
 
 ### Commandes exécutées (échantillon)
 
@@ -2245,7 +2246,7 @@ Point crucial : **toute variante d'attribution désactive le miroir VRAM** (il e
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 1469 autres
+- … et 1472 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2559,4 +2560,5 @@ Point crucial : **toute variante d'attribution désactive le miroir VRAM** (il e
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p='reports/rapport-placement-bits-kv.md'; s=open(p).read() v = """## Reproductible""" n =
 - Aiguille 9/9 dans les trois variantes de cache KV, et les vérifications de fin de journée  L'aiguille v2 (Qwen2.5-1.5B, contexte 2 048, trois profondeurs) retro
 - REPRISE : la politique du cache KV complète (taille ET temps), et l'aiguille 9/9" && git log --oneline -1 | cat
+- Compteurs de lignes : 12 171 au 30/09 (le mode 4 et ses correctifs ont ajouté 270 lignes)" && git log --oneline -1 | cat; date +"%H:%M:%S"
 
