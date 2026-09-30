@@ -858,3 +858,91 @@ extern "C" __global__ void attn_topk_ecrit(const float* __restrict__ sc,
         }
     }
 }
+
+// ---------------------------------------------------------------------------
+// Noyau 3 : le softmax sur les k clés RETENUES, puis la somme pondérée des V.
+// C'est le dernier des trois noyaux du top-k (docs/plan-gpu-topk.md).
+//
+// Un bloc par LIGNE (tête KV × tête de requête). Les k scores sont rassemblés
+// en partagé, les k poids aussi : le max et le dénominateur se calculent donc
+// UNE fois par ligne et non une fois par composante. Les puits comptent dans le
+// dénominateur (comme partout ailleurs dans le moteur) et pas dans le numérateur.
+//
+// bits = 8 : valeurs int8 avec une échelle f32 par bloc de 32 canaux ;
+// bits = 32 : valeurs f32 telles quelles. `ctx` est la capacité ALLOUÉE — c'est
+// le pas entre deux positions du cache, comme dans `attn_kv_partiels`.
+// ---------------------------------------------------------------------------
+
+__device__ __forceinline__ float valeur_v(const void* __restrict__ vdata,
+                                          const float* __restrict__ vscale,
+                                          size_t base, int pos, int d,
+                                          int hd, int nb, int bits) {
+    const size_t vec = base + (size_t)pos;
+    if (bits >= 32) {
+        return reinterpret_cast<const float*>(vdata)[vec * (size_t)hd + d];
+    }
+    const float e = vscale[vec * (size_t)nb + (d >> 5)];
+    const signed char* p = reinterpret_cast<const signed char*>(vdata);
+    return (float)p[vec * (size_t)hd + d] * e;
+}
+
+extern "C" __global__ void attn_topk_somme(const float* __restrict__ sc,
+                                           const void* __restrict__ vdata,
+                                           const float* __restrict__ vscale,
+                                           const int* __restrict__ idx,     // [lignes][k]
+                                           const float* __restrict__ sinks, // [lignes] ou nullptr
+                                           float* __restrict__ out,         // [lignes][hd]
+                                           int n, int ctx, int hd, int nb,
+                                           int k, int rep, int bits) {
+    extern __shared__ float sh[];
+    float* shS = sh;            // les k scores retenus
+    float* shW = shS + k;       // leurs k poids exp(s − m)
+    float* red = shW + k;       // réductions (blockDim.x cases)
+    const int ligne = blockIdx.x;
+    const int tid = threadIdx.x;
+    const int kvh = ligne / rep;
+    const float* sc_l = sc + (size_t)ligne * n;
+    const int* ix = idx + (size_t)ligne * k;
+    const size_t base = (size_t)kvh * ctx;
+
+    float m = -1e30f;
+    for (int j = tid; j < k; j += blockDim.x) {
+        const float s = sc_l[ix[j]];
+        shS[j] = s;
+        m = fmaxf(m, s);
+    }
+    if (sinks != nullptr) m = fmaxf(m, sinks[ligne]);
+    red[tid] = m;
+    __syncthreads();
+    for (int pas = blockDim.x >> 1; pas > 0; pas >>= 1) {
+        if (tid < pas) red[tid] = fmaxf(red[tid], red[tid + pas]);
+        __syncthreads();
+    }
+    m = red[0];
+    float somme = 0.0f;
+    for (int j = tid; j < k; j += blockDim.x) {
+        const float w = expf(shS[j] - m);
+        shW[j] = w;
+        somme += w;
+    }
+    // ⚠️ Le puits s'ajoute UNE fois, pas une par fil : chaque fil tient une
+    // somme PARTIELLE, et la réduction les additionne. L'ajouter dans la boucle
+    // de tous les fils le comptait 256 fois — mesuré : dénominateur ×45,7 et
+    // sortie 55× trop petite à k = 1. Le banc l'a dit en une ligne, la
+    // relecture ne l'aurait pas vu.
+    if (sinks != nullptr && tid == 0) somme += expf(sinks[ligne] - m);
+    red[tid] = somme;
+    __syncthreads();
+    for (int pas = blockDim.x >> 1; pas > 0; pas >>= 1) {
+        if (tid < pas) red[tid] += red[tid + pas];
+        __syncthreads();
+    }
+    const float inv = (red[0] > 0.0f) ? 1.0f / red[0] : 0.0f;
+    for (int d = tid; d < hd; d += blockDim.x) {
+        float acc = 0.0f;
+        for (int j = 0; j < k; j++) {
+            acc += shW[j] * valeur_v(vdata, vscale, base, ix[j], d, hd, nb, bits);
+        }
+        out[(size_t)ligne * hd + d] = acc * inv;
+    }
+}

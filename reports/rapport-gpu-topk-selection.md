@@ -1,17 +1,19 @@
-# Rapport — la sélection top-k sur GPU (noyaux 2a et 2b du plan)
+# Rapport — la sélection top-k et la somme sur GPU (noyaux 2 et 3 du plan)
 
 **En une ligne** : la sélection du top-k de l'attention tourne maintenant sur GPU en
 **quatre passes d'histogramme + deux noyaux de collecte**, elle rend le **même
 ensemble d'indices que le CPU** (14/14 lignes, différence symétrique 0 à toutes les
 tailles testées) et coûte **0,89 ms** là où le tri CPU en coûte **497 ms** à
-262 144 clés.
+262 144 clés. Le **noyau 3** (softmax sur les k retenus + puits, puis Σ w·V) est
+écrit et vérifié à **2,7–4,8e-7** — sous le critère de 1e-6 du plan.
 
 Plan suivi : [`docs/plan-gpu-topk.md`](../docs/plan-gpu-topk.md), étape 2.
 Noyau 1 (les scores) : [`reports/rapport-gpu-scores.md`](rapport-gpu-scores.md).
 
 ## Ce qui a été écrit
 
-Trois noyaux dans `drave-core/gpu/drave_gpu.cu` (11 → 13 noyaux) :
+Trois noyaux dans `drave-core/gpu/drave_gpu.cu` (10 → 13 noyaux : les scores
+avaient porté le fichier à 10, la sélection le porte à 13) :
 
 | noyau | rôle |
 |---|---|
@@ -75,7 +77,9 @@ dégénérées, et elle reste 4× sous le critère de 1e-6 du plan. Le rapport d
 est corrigé dans le même commit.
 
 **Ce que le banc refuse de cacher** : le k-ième score **change** entre les scores
-calculés par le CPU et ceux calculés par le GPU sur 5 à 7 des 14 lignes. Ce n'est
+calculés par le CPU et ceux calculés par le GPU sur 5 à 7 des 14 lignes aux trois
+tailles principales — et jusqu'à 14/14 sur les petites (n = 8 191 avec k = 4 096,
+où le k-ième est au milieu d'une distribution dense). Ce n'est
 pas un défaut de la sélection : l'écart entre le 256e et le 257e score est du même
 ordre que l'exactitude du noyau 1, donc le *rang* bascule sur des valeurs
 quasiment égales. La comparaison qui compte — le k-ième score des scores GPU
@@ -110,9 +114,45 @@ plus grand gardait un tampon de sortie trop petit et le noyau écrivait **au-del
   « au-dessus » ne tombe pas sur `k − besoin`. Un seuil faux écrirait à côté des
   `k` places ; ici il rend `false` avec le détail de la ligne fautive.
 * **Une durée en secondes étiquetée « ms »** : les deux temps du second passage
-  étaient affichés sans conversion et annonçaient un noyau 1 500× trop rapide
-  (0,0004 ms pour 14,7 Mo lus). Un affichage mal étiqueté est un affichage qui
-  ment — et il a bien failli faire chercher un faux défaut dans le noyau.
+  étaient affichés sans conversion et annonçaient un noyau ≈1 100× trop rapide
+  pour la collecte et ≈900× pour le seuil (0,0004 ms au lieu de 0,45 ms, 0,0003 au
+  lieu de 0,27 ms). Un affichage mal étiqueté est un affichage qui ment — et il a
+  bien failli faire chercher un faux défaut dans le noyau.
+
+## Noyau 3 : le softmax sur les k retenus, puis Σ w·V
+
+`attn_topk_somme` : un bloc par ligne, les k scores rassemblés en mémoire partagée
+(le max et le dénominateur se calculent donc une fois par ligne, pas une fois par
+composante), un fil par composante pour la somme pondérée. Les indices sont lus
+**en VRAM** — ceux que la collecte vient d'y écrire —, donc aucun aller-retour par
+l'hôte. Les puits comptent dans le dénominateur, jamais au numérateur.
+
+Référence CPU : mêmes indices (ceux du GPU), mêmes scores (ceux du GPU), valeurs
+relues du cache hôte — le seul écart possible vient donc du noyau 3.
+
+| N clés | k | GPU | CPU | écart relatif |
+|---|---|---|---|---|
+| 100 | 3 | 0,03 ms | 0,02 ms | **1,04e-7** |
+| 4 096 | 256 | 0,07 ms | 0,64 ms | **4,79e-7** |
+| 65 536 | 256 | 0,07 ms | 1,07 ms | **3,10e-7** |
+| 262 144 | 256 | 0,07 ms | 0,98 ms | **2,70e-7** |
+
+Le temps GPU est **constant** (0,07 ms de 4 k à 262 k clés) : le noyau ne lit que
+les k scores retenus et k × hd valeurs, pas la ligne entière. C'est exactement le
+gain cherché — le coût du top-k devient indépendant de la longueur du contexte.
+
+**Limite** : k ≤ 1 024 (le partagé du noyau tient 2k + 256 flottants) et valeurs
+8 ou 32 bits ; au-delà, le noyau rend `false` avec le détail plutôt que de deviner.
+Les valeurs 4 bits ne sont pas gérées (refusées explicitement).
+
+### Le bug que le banc a attrapé en une ligne
+
+Première version : **le puits était ajouté par chaque fil** alors que chaque fil ne
+tient qu'une somme PARTIELLE — la réduction l'additionnait donc 256 fois. Mesuré :
+dénominateur ×45,7 et sortie 55× trop petite à k = 1 ; écart relatif 2,05e-1. Une
+fois corrigé (`tid == 0`), 4,79e-7. La relecture ne l'aurait pas vu : le code a
+l'air juste, et c'est le banc — qui compare à une référence CPU écrite
+indépendamment — qui a parlé.
 
 ## Limites connues du contrat
 
@@ -134,12 +174,12 @@ côtés est le correctif si le cas se présente un jour.
 
 | # | étape du plan | état |
 |---|---|---|
-| 1 | `attn_scores` | ✅ 1,6–2,3e-7 · 27–40× |
+| 1 | `attn_scores` | ✅ 1,6–2,3e-7 · 26,7–40× |
 | 2 | sélection (radix 2 passes → 4 passes, 3 noyaux) | ✅ ensemble identique, 0 écart |
-| 3 | `attn_topk_somme` : softmax sur les k retenus + puits, puis Σ pondérée des V | à écrire |
+| 3 | `attn_topk_somme` : softmax sur les k retenus + puits, puis Σ pondérée des V | ✅ 1,0–4,8e-7 · temps GPU constant (0,07 ms) |
 | 4 | branchement dans `model.rs` (`attn_topk > 0` + miroir VRAM) | à faire |
 | 5 | mesure 1 M de clés : ms/couche avec et sans top-k | à faire |
-| 6 | portes de non-régression : 19,3885 et 15,1757 | inchangées (voir le rapport de sprint) |
+| 6 | portes de non-régression : 19,3885 et 15,1757 | ✅ inchangées, mesurées le 30/09 au soir (voir le journal de la session) |
 
 Le top-k GPU n'est donc **pas encore branché dans le moteur** : il est mesuré,
 exact et plus rapide que le tri CPU, mais l'attention creuse continue de passer par
@@ -152,5 +192,6 @@ cargo build --release --manifest-path drave-core/Cargo.toml
 DRAVE_GPU=1 ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q4_0.gguf --banc-topk 262144
 ```
 
-Le banc imprime la comparaison ligne par ligne ; la dernière ligne dit si
-l'ensemble retenu est le même. `--attn-topk N` choisit `k` (256 par défaut).
+Le banc imprime la comparaison ligne par ligne ; l'avant-dernier bloc dit si
+l'ensemble retenu est le même, et la dernière ligne refait le seuil et la collecte
+avec **k doublé** dans le même processus (chemin de réutilisation des tampons). `--attn-topk N` choisit `k` (256 par défaut).

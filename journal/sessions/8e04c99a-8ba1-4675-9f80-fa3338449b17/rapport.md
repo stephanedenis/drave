@@ -7,10 +7,10 @@
 | Début | 2026-09-30 18:07 |
 | Durée | 0.2 h |
 | Tours | 1 |
-| Messages | 55 |
-| Appels d'outils | 82 |
+| Messages | 59 |
+| Appels d'outils | 85 |
 | Fichiers touchés | 0 |
-| Commandes | 72 |
+| Commandes | 74 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -23,7 +23,7 @@
 
 ### Tour 1 — Tu es VÉRIFICATEUR de documentation dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (moteur d'inférence «  … [3755 caractères tronqués]
 
-*82 appels d'outils.* Actions notables :
+*85 appels d'outils.* Actions notables :
 
 - bash — List repo root and measurement traces
 - bash — Show today's git log
@@ -39,11 +39,26 @@
 - bash — Show recent commits touching sources
 - bash — Diff docs in last commit
 - bash — Find line-count methodology references
-- … et 59 autres
+- … et 62 autres
 
 **Synthèse produite :**
 
-⏵ Vérification de la transformation monotone dans le noyau et des dernières lignes
+⏵ Verdict rendu : écarts identifiés, envoi au parent effectué
+
+\## Cadre de l'audit
+
+Révision auditée : **HEAD `a891c31` (18:13)** + arbre de travail figé à **18:17** ; le rapport a été relu dans sa version du 18:15:54 (md5 `24a1ffdc…`, avec la section « Limites connues »). ⚠️ Le dépôt a bougé pendant l'audit (`fa6a4f3` 18:12, `a891c31` 18:13, éditions non commitées 18:15-18:17) : les numéros de ligne ci-dessous valent pour cette version. **Aucun fichier n'a été modifié** ; les seules commandes lancées sont des lectures et le banc de reproduction (1,2 s et 10,7 s).
+
+\## Tableau des écarts
+
+| # | fichier:ligne | chiffre écrit | ce que dit la source | verdict |
+|---|---|---|---|---|
+| 1 | `README.md:299` · `README.md:373` · `REPRISE.md:16` | « 12 171 » (×2) et « 12 840 » | `wc -l drave-core/src/*.rs` = **12 947** à HEAD (12 995 arbre de travail) | **FAUX/périmé + contradiction interne** : 669 lignes d'écart entre deux sections du même README. 12 171 était vrai à 17:03 (commit `a4735aa`) ; 12 840 mesuré à 17:57 mais commité à 18:07 alors que le compte était déjà 12 870 |
+| 2 | `reports/rapport-gpu-scores.md:32` (note) et `:37` (ligne 65 536) | « Le temps du noyau, lui, ne change pas » ; « 65 536 \| 65,3 ms \| 7,4 ms \| **8,9×** » | Re-mesure sur banc corrigé (journal `bbd6969f`, ~33840) : **63,06 ms / 2,36 ms / 26,7×** ; les 7,36 ms/8,9× datent d'AVANT le découpage en tranches (journal ~32071) | **FAUX** : la ligne 65 536 est la seule non re-mesurée après le découpage ; le temps est divisé par ~3, et cette ligne contredit le « 27–40× » utilisé partout ailleurs |
+| 3 | `reports/rapport-gpu-topk-selection.md:113` | « un noyau **1 500×** trop rapide (0,0004 ms pour 14,7 Mo lus) » | Même run : affiché 0,0004 ms (0,0003 ms de seuil), réel 0,45 ms (0,27 ms) après correction d'unité (journal ~34108) → **÷1 125** (collecte) et **÷900** (seuil) | **CALCUL FAUX** : 1 500 = 0,45/0,0003, un mélange des deux paires |
+| 4 | `reports/rapport-gpu-topk-selection.md:14` | « Trois noyaux … (**11 → 13** noyaux) » | Comptage par commit : 9 → 10 (`5e8bf48`, scores) → 11 (`d00c01c`, histo) → 13 (`e950075`, compte+écrit) | **IMPRÉCIS** : le trio de sélection fait passer 10 → 13 ; 11→13 ne décrit que le dernier commit |
+| 5 | `reports/rapport-gpu-topk-selection.md:78` | « sur **5 à 7** des 14 lignes » | `final.log` : 7/14, 6/14, 5/14 aux trois tailles — mais 12/14 (n=1), 10/14 (n=100), 7/14 (4097, 5000), **14/14** (8191) | Vrai seulement pour les trois tailles principales ; faux pour l
+… [4654 caractères tronqués]
 
 ## 3. Travail accompli
 
@@ -94,7 +109,7 @@
 - **T1** Find Q4_0 expected gate value
 - **T1** Find Q4_0 gate value history
 - **T1** Read digest around the 18:00 Q4_0 gate
-- … et 32 autres
+- … et 34 autres
 
 ## 4. Mesures et résultats marquants
 

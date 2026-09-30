@@ -168,6 +168,8 @@ pub struct Gpu {
     /// Collecte des k indices : comptage par tranche puis écriture ordonnée.
     f_attn_topk_compte: *mut c_void,
     f_attn_topk_ecrit: *mut c_void,
+    /// Softmax sur les k retenus + somme pondérée des V (noyau 3 du plan).
+    f_attn_topk_somme: *mut c_void,
     pub nom: String,
     /// Numéro du périphérique, pour savoir qui est qui quand il y en a deux.
     pub ordinal: c_int,
@@ -307,6 +309,13 @@ impl Gpu {
                 eprintln!("{}", erreur(rc, "fonction attn_topk_ecrit"));
                 return None;
             }
+            let nom_ts = std::ffi::CString::new("attn_topk_somme").unwrap();
+            let mut f_attn_topk_somme: *mut c_void = std::ptr::null_mut();
+            let rc = cuModuleGetFunction(&mut f_attn_topk_somme, module, nom_ts.as_ptr());
+            if rc != 0 {
+                eprintln!("{}", erreur(rc, "fonction attn_topk_somme"));
+                return None;
+            }
             let nom_r = std::ffi::CString::new("attn_kv_recombine").unwrap();
             let mut f_attn_recombine: *mut c_void = std::ptr::null_mut();
             let rc = cuModuleGetFunction(&mut f_attn_recombine, module, nom_r.as_ptr());
@@ -323,6 +332,7 @@ impl Gpu {
             Some(Gpu { ctx, module, f_tete, f_proj, f_tete_warp, f_proj_warp,
                        f_mxfp4_warp, f_q4k_warp, f_q6k_warp, f_attn_scores,
                        f_attn_topk_histo, f_attn_topk_compte, f_attn_topk_ecrit,
+                       f_attn_topk_somme,
                        f_attn_part, f_attn_recombine, ordinal,
                        nom: format!("GPU {ordinal}"), memoire_libre: libre })
         }
@@ -839,6 +849,116 @@ hist {}, préfixes {}", hist.len(), prefixes.len());
             let rc = cuMemcpyDtoH_v2(sortie.as_mut_ptr() as *mut c_void, p_sortie,
                                      lignes * k * 4);
             if rc != 0 { eprintln!("{}", erreur(rc, "relecture de la sélection")); return false; }
+        }
+        true
+    }
+
+    /// **Noyau 3 : le softmax sur les k clés retenues, puis la somme pondérée
+    /// des valeurs** (`attn_topk_somme`, `docs/plan-gpu-topk.md`).
+    ///
+    /// Un bloc par ligne (tête KV × tête de requête). Les k indices sont lus
+    /// **en VRAM** — ceux qu'`attn_topk_collecte` vient d'y écrire —, donc
+    /// aucun aller-retour par l'hôte. Les puits comptent dans le dénominateur,
+    /// jamais dans le numérateur.
+    ///
+    /// `sinks` est indexé par ligne, comme le moteur. `bits` doit valoir 8
+    /// (valeurs int8 + échelle par bloc de 32) ou 32 (valeurs f32) ; les
+    /// valeurs 4 bits sont refusées plutôt que devinées.
+    pub fn attn_topk_somme(&self, m: &mut KvGpu, lignes: usize, n: usize, k: usize,
+                           hd: usize, rep: usize, sinks: Option<&[f32]>,
+                           out: &mut [f32]) -> bool {
+        cu_ctx(self.ctx);
+        if lignes == 0 || n == 0 || k == 0 || k > 1024 || hd == 0 || hd > 1024 || rep == 0 {
+            eprintln!("[topk] noyau 3 : dimensions refusées — {lignes} lignes, {n} clés, \
+k = {k} (plafonné à 1024 : le partagé du noyau tient 2k + 256 flottants), hd = {hd}");
+            return false;
+        }
+        if m.bits != 8 && m.bits != 32 {
+            eprintln!("[topk] noyau 3 : valeurs {} bits non gérées (8 ou 32)", m.bits);
+            return false;
+        }
+        if m.scores_cap < lignes * n || out.len() < lignes * hd {
+            eprintln!("[topk] noyau 3 : scores ou sortie trop courts");
+            return false;
+        }
+        // Les indices doivent déjà être en VRAM, à la bonne taille : le noyau 3
+        // ne collecte pas, il consomme.
+        let Some(t) = m.topk.as_ref() else {
+            eprintln!("[topk] noyau 3 : aucune sélection en VRAM (appeler attn_topk_collecte)");
+            return false;
+        };
+        if t.cap_sortie < lignes * k * 4 || t.lignes < lignes || t.k < k {
+            eprintln!("[topk] noyau 3 : la sélection en VRAM est trop petite \
+({} lignes × k = {} demandés)", lignes, k);
+            return false;
+        }
+        let p_sortie = t.sortie;
+        // Puits : recopiés dans le tampon déjà prévu par le cache KV.
+        let mut p_sinks: u64 = 0;
+        if let Some(si) = sinks {
+            if si.len() < lignes { return false; }
+            let besoin = lignes * 4;
+            unsafe {
+                if m.sinks_cap < besoin {
+                    if m.sinks_dev != 0 { cuMemFree_v2(m.sinks_dev); }
+                    m.sinks_dev = 0;
+                    m.sinks_cap = 0;
+                    if cuMemAlloc_v2(&mut m.sinks_dev, besoin) != 0 { return false; }
+                    m.sinks_cap = besoin;
+                }
+                if cuMemcpyHtoD_v2(m.sinks_dev, si.as_ptr() as *const c_void, besoin) != 0 {
+                    return false;
+                }
+            }
+            p_sinks = m.sinks_dev;
+        }
+        let partage = ((2 * k + 256) * 4) as c_uint;
+        if partage as usize > 48 * 1024 {
+            eprintln!("[topk] noyau 3 : {partage} octets de partagé demandés (48 ko au plus)");
+            return false;
+        }
+        unsafe {
+            let mut p_sc = m.scores_dev;
+            let mut p_v = m.v;
+            let mut p_vs = m.sv;
+            let mut p_idx = p_sortie;
+            let mut p_out = 0u64;
+            let octets_out = lignes * hd * 4;
+            if m.out_cap < octets_out {
+                if m.out_dev != 0 { cuMemFree_v2(m.out_dev); }
+                m.out_dev = 0;
+                m.out_cap = 0;
+                if cuMemAlloc_v2(&mut m.out_dev, octets_out) != 0 { return false; }
+                m.out_cap = octets_out;
+            }
+            p_out = m.out_dev;
+            let (n_i, ctx_i, hd_i, nb_i, k_i, rep_i, bits_i) =
+                (n as c_int, m.capacite as c_int, hd as c_int, m.nb as c_int,
+                 k as c_int, rep as c_int, m.bits as c_int);
+            let mut params: [*mut c_void; 13] = [
+                &mut p_sc as *mut u64 as *mut c_void,
+                &mut p_v as *mut u64 as *mut c_void,
+                &mut p_vs as *mut u64 as *mut c_void,
+                &mut p_idx as *mut u64 as *mut c_void,
+                &mut p_sinks as *mut u64 as *mut c_void,
+                &mut p_out as *mut u64 as *mut c_void,
+                &n_i as *const c_int as *mut c_void,
+                &ctx_i as *const c_int as *mut c_void,
+                &hd_i as *const c_int as *mut c_void,
+                &nb_i as *const c_int as *mut c_void,
+                &k_i as *const c_int as *mut c_void,
+                &rep_i as *const c_int as *mut c_void,
+                &bits_i as *const c_int as *mut c_void,
+            ];
+            let rc = cuLaunchKernel(self.f_attn_topk_somme, lignes as c_uint, 1, 1,
+                                    256, 1, 1, partage, std::ptr::null_mut(),
+                                    params.as_mut_ptr(), std::ptr::null_mut());
+            if rc != 0 {
+                eprintln!("{}", erreur(rc, "lancement attn_topk_somme"));
+                return false;
+            }
+            let rc = cuMemcpyDtoH_v2(out.as_mut_ptr() as *mut c_void, p_out, octets_out);
+            if rc != 0 { eprintln!("{}", erreur(rc, "relecture de l'attention")); return false; }
         }
         true
     }

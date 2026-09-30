@@ -2,7 +2,7 @@
 
 **En une ligne** : l'attention creuse (`--attn-topk`) ne peut pas se servir du KV
 déporté en VRAM — le code l'interdit explicitement — donc à long contexte elle
-retombe sur le CPU et coûte **~25 à 70 fois** le chemin GPU complet. Ce plan
+retombe sur le CPU et coûte **~70 fois** le chemin GPU complet. Ce plan
 chiffre l'écart et décrit les trois noyaux qui le comblent.
 
 ## Pourquoi (mesuré, pas supposé)
@@ -64,6 +64,9 @@ peu » : c'est rendre le mode creux **utilisable** au-delà de ~32 k de contexte
    dans le dénominateur comme aujourd'hui), puis somme pondérée des V lus en VRAM
    par les k indices. Sortie : le vecteur d'attention, même disposition que
    `attn_kv`.
+   ✅ **fait** : écart **1,0 à 4,8e-7** (critère 1e-6), temps GPU **constant**
+   (0,07 ms de 4 k à 262 k clés) — `reports/rapport-gpu-topk-selection.md`.
+   Limites : k ≤ 1 024, valeurs 8 ou 32 bits (refus explicite sinon).
 
 ## Le contrat d'exactitude
 
@@ -83,9 +86,9 @@ doit montrer l'effet cherché : **968 ms → quelques dizaines de ms par couche*
 
 | # | étape | critère de succès |
 |---|---|---|
-| 1 | `attn_scores` + FFI + banc `--banc-topk` sur 4 k de contexte | ✅ **fait** : écart **1,6 à 2,3e-7** à toutes les longueurs (256 à 262 144 clés, clés distinctes — la valeur de 1,03e-7 venait d'un banc dégénéré), **27 à 40× plus rapide** que le CPU — `reports/rapport-gpu-scores.md` |
+| 1 | `attn_scores` + FFI + banc `--banc-topk` sur 4 k de contexte | ✅ **fait** : écart **1,6 à 2,3e-7** de 4 096 à 262 144 clés (clés distinctes — la valeur de 1,03e-7 venait d'un banc dégénéré), **26,7 à 40× plus rapide** que le CPU ; c'est la re-mesure du 30/09 au soir qui fait foi dans `reports/rapport-gpu-scores.md` |
 | 2 | `attn_topk_select` (radix, 3 noyaux) | ✅ **fait** : ensemble retenu identique au CPU, 14/14 lignes (différence symétrique 0) — `reports/rapport-gpu-topk-selection.md` |
-| 3 | `attn_topk_somme` (softmax sur k + puits) | sortie identique au CPU à 1e-6 |
+| 3 | `attn_topk_somme` (softmax sur k + puits) | ✅ **fait** : 1,0–4,8e-7 à toutes les tailles (critère 1e-6) — `reports/rapport-gpu-topk-selection.md` |
 | 4 | branchement dans `model.rs` (autoriser le GPU quand `attn_topk > 0` **et** que le noyau rend `true`, garder le repli CPU sinon) | perplexité 2 048 = 234,88 ± tolérance |
 | 5 | mesure 1 M : ms/layer avec et sans top-k, sur GPU | le top-k GPU ne doit pas coûter plus de ~2× le complet |
 | 6 | porte de non-régression : les deux valeurs restent 19,3885 et 15,1757 | inchangées |

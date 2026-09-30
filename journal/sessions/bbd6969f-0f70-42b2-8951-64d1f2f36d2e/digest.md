@@ -34585,3 +34585,407 @@ n=4096 k=256 :     ensembles identiques au CPU : 14/14 lignes · différence sym
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -F - <<'EOF' && git log --oneline -1\nRelecture adversariale : 7 défauts corrigés, dont un bloquant sur les chemins d'échec\n\nUn relecteur adversarial a relu les quatre noyaux et leur FFI. Presque tout a  … [2159 caractères tronqués]`
+
+  ```
+47ce9b7 Relecture adversariale : 7 défauts corrigés, dont un bloquant sur les chemins d'échec
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date +%H:%M:%S && ./tools/sprint.sh status", "description": "Check sprint time and status"}`
+
+  ```
+18:17:00
+── Sprint 1 ─────────────────────────────────────────────
+- **Début** : 17:41 · **Fin prévue** : 19:41 (boxing de 120 min)
+   temps : 18:17 · reste 1 h 24
+   commits depuis le début : 6
+     47ce9b7 Relecture adversariale : 7 défauts corrigés, dont un bloquant sur les chemins d'échec
+     a891c31 Rapport de sélection : le second passage k doublé, et la durée mal étiquetée
+     fa6a4f3 Collecte top-k : réallouer quand k GRANDIT, et un banc qui le prouve
+     e950075 Noyaux 2b : collecte des k indices — même ensemble que le CPU, 896× le tri à 262 k clés
+     d00c01c Noyau 2a du top-k GPU : histogramme d'octet, seuil exact sur 14/14 lignes
+     5e8bf48 Sprint 1 : noyau GPU de scores d'attention — exact à 1,03e-7, 40× plus rapide
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '415,470p' drave-core/gpu/drave_gpu.cu", "description": "Read attn_kv_partiels signature"}`
+
+  ```
+__global__ void attn_kv_partiels(const void* __restrict__ kdata,
+                                 const float* __restrict__ kscale,
+                                 const void* __restrict__ vdata,
+                                 const float* __restrict__ vscale,
+                                 const float* __restrict__ q,     // [rep][hd]
+                                 float* __restrict__ part,        // [nsplit][rep][hd+2]
+                                 int n, int nsplit, int ctx, int hd, int nb,
+                                 int rep, int bits, float scale) {
+    extern __shared__ float sh[];
+    float* shQ = sh;                 // rep * hd : la requête ENTIÈRE, partagée
+    float* shK = shQ + rep * hd;     // 32 * (hd + 1), tuile de clés rembourrée
+    float* shV = shK + 32 * (hd + 1); // 32 * hd
+    float* shP = shV + 32 * hd;      // rep * 32
+    const int tid = threadIdx.x;
+    const int lane = tid & 31;
+    const int warp = tid >> 5;
+    const int kvh = blockIdx.x;
+    const int sp = blockIdx.y;
+    const int par_tranche = (n + nsplit - 1) / nsplit;
+    const int debut = sp * par_tranche;
+    const int fin = min(n, debut + par_tranche);
+    const int nq = hd / 32;
+  
+… [1960 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"pub fn cle\\|pub fn valeur\\|pub fn valeur_v\" -A 3 drave-core/src/model.rs | head -20", "description": "Find KvCache readers"}`
+
+  ```
+1309:    pub fn cle(&self, kvh: usize, t: usize, dst: &mut [f32]) {
+1310-        let d = (kvh * self.cap + t) * self.hd;
+1311-        if self.bits >= 32 { dst[..self.hd].copy_from_slice(&self.kf[d..d + self.hd]); return; }
+1312-        if self.k_f32 {
+--
+1341:    pub fn valeur(&self, kvh: usize, t: usize, dst: &mut [f32]) {
+1342-        let d = (kvh * self.cap + t) * self.hd;
+1343-        if self.bits >= 32 || self.v_f32 {
+1344-            dst[..self.hd].copy_from_slice(&self.vf[d..d + self.hd]);
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat >> drave-core/gpu/drave_gpu.cu <<'EOF'\n\n// ---------------------------------------------------------------------------\n// Noyau 3 : le softmax sur les k clés RETENUES, puis la somme pondérée des V.\n// C'est le dernier des tro … [3747 caractères tronqués]`
+
+  ```
+drave_gpu.ptx régénéré (7633 lignes)
+noyaux exportés : 14
+  ```
+
+### 👤 Utilisateur
+
+Agent 8e04c99a-8ba1-4675-9f80-fa3338449b17 sent a message:
+VÉRIFICATION DOCS TOP-K — terminée, AUCUN fichier modifié.
+
+Révision auditée : HEAD a891c31 (18:13) + arbre de travail à 18:17 (rapport md5 24a1ffdc…, version avec « Limites connues »). Le dépôt a bougé pendant l'audit (fa6a4f3 18:12, a891c31 18:13, éditions non commitées à 18:15-18:17) : les numéros de ligne ci-dessous valent pour cette version.
+
+ÉCARTS (fichier:ligne · écrit · source · verdict)
+1. README.md:299 « 12 171 » / README.md:373 « 12 840 » / REPRISE.md:16 « ~12 171 » · wc -l drave-core/src/*.rs = 12 947 à HEAD (12 995 arbre de travail) · FAUX + contradiction interne (669 lignes entre les deux sections du même README). 12 171 était vrai à 17:03 ; 12 840 mesuré à 17:57 mais commité à 18:07 alors que le compte était 12 870.
+2. reports/rapport-gpu-scores.md:32 « Le temps du noyau, lui, ne change pas » + ligne 37 « 65 536 | 7,4 ms | 8,9× » · re-mesure post-correctif (journal bbd6969f ~33840) : 63,06 ms CPU / 2,36 ms GPU / 26,7× ; les 7,36 ms datent d'AVANT le découpage en tranches (journal ~32071) · FAUX : ÷3 sur le temps, contredit le « 27–40× » utilisé partout.
+3. reports/rapport-gpu-topk-selection.md:113 « un noyau 1 500× trop rapide (0,0004 ms) » · affiché 0,0004/0,0003 vs réel 0,45/0,27 ms (journal ~34108) → ÷1 125 (collecte) et ÷900 (seuil) · CALCUL FAUX : 1 500 = 0,45/0,0003, mélange des deux paires.
+4. rapport-sélection:14 « Trois noyaux … (11 → 13 noyaux) » · comptage par commit : 9→10 (5e8bf48) →11 (d00c01c) →13 (e950075) · IMPRÉCIS : le trio complet fait 10→13.
+5. rapport-sélection:78 « sur 5 à 7 des 14 lignes » · final.log : 7/14, 6/14, 5/14 aux 3 tailles, mais 12/14 (n=1), 10/14 (n=100), 14/14 (n=8191) · vrai seulement aux 3 tailles principales.
+6. rapport-sélection:155 « la dernière ligne dit si l'ensemble retenu est le même » · code actuel : la dernière ligne est « second passage k = 512 … » · PÉRIMÉ.
+7. plan:86 + README:505 + rapport:137 « 27 à 40× … à toutes les longueurs (256 à 262 144) » · le 27–40 vient d'un run post-correctif du journal (~33840 : 31,6/26,7/40,0×), PAS du fichier cité rapport-gpu-scores.md (8,9× à 65 k, 3,8× à 256) · SOURCE MAL CITÉE + contradiction avec le fichier cité.
+8. rapport-sélection:142 « voir le rapport de sprint » · sprints/01-… ne contient aucun chiffre de porte · référence morte (mineure).
+9. plan:5 « ~25 à 70 fois » vs plan:18 « ×73 » (968/13,2 = 73,3) · incohérence pré-existante, non touchée aujourd'hui.
+
+CONFORME (sourcé, arithmétique juste) : tout le tableau du rapport (0,14/1,31/0,13/4,33 ; 0,32/22,17/0,34/86,53 ; 0,44/97,88/0,45/399,21 avec 9×/69×/224×/35×/258×/896× arrondis des 9,1/68,5/224,0/34,6/258,0/895,8 de /tmp/banc_topk_final.log) ; 0,44+0,45 = 0,89 ✓ ; 97,88+399,21 = 497,09 → « 497 ms » ✓ ; 14/14 et diff. sym. 0 aux 8 tailles ✓ ; écarts 1,60/2,13/2,25e-7 = final.log:2,17,32 ✓ et cohérents partout (README 1,6–2,3e-7, plan, rapport, note du rapport scores) ; bornes n=1/100/4097/5000/8191 ✓ ; pas de tranche 4 096 = gpu.rs CHUNK:4096 ✓ ; second passage 14/14 · 0,45 ms · 0,27 ms ✓ (journal 34108) ; portes 19,3885 (portes_qwen.log 19.388 à 510 j ; journal 19.3885) et 15,1757 (porte_oss.log) ✓, REPRISE:517 commande + attendu ✓ ; 13 noyaux ✓ et 853 lignes du .cu ✓ à HEAD ; étapes 1-2 faites = exactement le périmètre du rapport, numérotation 1..6 identique ✓ ; ±0,0/NaN (monotone(-0)=0x7FFFFFFF, monotone(+0)=0x80000000, NaN signé hors ±inf) vérifiés ✓ ; commande de repro exécutée (4096 en 1,2 s ; 262144 en 10,7 s, mêmes verdicts, seuls les temps varient).
+
+FAUX ALARME à ne pas corriger : /tmp/portes_qwen.log Q4_0 « attendu 21,01 » affiche 21.198 — la référence 21,0110 exige `--q4` (REPRISE:63) ; je l'ai reproduite exactement (21.0110) avec le drapeau. Le run du log avait oublié `--q4`, pas de dérive.
+
+CORRECTIONS MINIMALES : (a) un seul compteur de lignes, re-mesuré, dans README:299, README:373 et REPRISE:16 ; (b) rapport-gpu-scores.md : marquer/remplacer la ligne 65 536 (7,4 ms/8,9× → 2,36 ms/26,7×, mesure post-découpage) et nuancer la note ligne 32 ; (c) rapport-sélection:113 → « ≈1 100× (collecte) / ≈900× (seuil) » ; (d) :14 → « 10 → 13 noyaux » ; (e) :78 → « aux trois tailles principales (5 à 7/14) » ; (f) :155 → « l'avant-dernière ligne » ou mentionner le second passage ; (g) plan:86/README:505 : citer la mesure post-correctif du banc comme source du 27–40×, ou aligner rapport-gpu-scores.md ; (h) :142 : pointer le fichier réel.
+
+### 🤖 Assistant
+
+⏵ Corrections de documentation (audit) avant de câbler le noyau 3
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '20,45p' reports/rapport-gpu-scores.md", "description": "Read scores report table"}`
+
+  ```
+## Mesuré
+
+Qwen2.5-0.5B (2 têtes KV × 64, 7 têtes de requête par tête KV), KV int8, un
+Quadro RTX 5000 :
+
+| clés | CPU (20 fils) | GPU | accélération | écart relatif |
+|---|---|---|---|---|
+> ⚠️ **Correction du 30/09 (même journée)** : les écarts de 1,03e-7 ci-dessous ont
+> été mesurés avec, pour toutes les positions, **la même clé** — un banc dégénéré
+> (voir `reports/rapport-gpu-topk-selection.md`, § « Le banc mentait »). Sur des clés
+> distinctes, l'écart relatif est de **1,60e-7 (4 096 clés)**, **2,13e-7 (65 536)** et
+> **2,25e-7 (262 144)** : le critère de 1e-6 tient toujours, avec 4× de marge au
+> lieu de 10×. Le temps du noyau, lui, ne change pas (les valeurs ci-dessous sont
+> conservées telles quelles pour la traçabilité).
+
+| 256 | 0,25 ms | 0,07 ms | 3,8× | 1,03e-7 |
+| 4 096 | 3,98 ms | **0,14 ms** | **29×** | 1,03e-7 |
+| 65 536 | 65,3 ms | 7,4 ms | 8,9× | 1,03e-7 |
+| **262 144** | 257,9 ms | **6,36 ms** | **40,6×** | 1,03e-7 |
+
+L'écart est **constant** (mêmes données, même ordre de sommation) : il ne dépend ni
+de la longueur ni du découpage, ce qui est exactement ce qu'on demande à un banc
+d'exactitude. Le critère du plan (`docs/plan-gpu-topk.md`, étape 1) était 1e-6 : il
+… [116 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '45,70p' reports/rapport-gpu-scores.md", "description": "Read rest of scores report"}`
+
+  ```
+Le découpage en tranches a été ajouté **après** la première mesure (3,8× seulement) :
+avec une grille de `n_kv` blocs, le GPU tournait à 1,2 Go/s, presque au repos. Une
+grille `n_kv × nsplit` (une tranche ≈ 256 clés, plafonnée à 128 tranches) donne le
+facteur 40 — la même leçon que le noyau d'attention complet, deux ans plus tôt.
+
+## Ce que le banc a attrapé, et que la relecture n'aurait pas vu
+
+Deux bugs, tous les deux au premier essai :
+
+1. **le noyau sortait MANGLÉ** (`_Z11attn_scoresPKvPKfS2_Pfiiiiiif`) : ajouté après
+   le bloc `extern "C"` du fichier, il n'était pas trouvé par
+   `cuModuleGetFunction` — `CUDA_ERROR_NOT_FOUND` sur les deux cartes, et le banc
+   disait « GPU absent » ;
+2. **les scores étaient écrits sans l'offset de la tête KV** : chaque bloc écrasait
+   la tranche du précédent, écart relatif **1,24**. Le banc l'a dit en une ligne.
+
+## La suite (étapes 2 à 6 du plan)
+
+La **sélection** (noyau 2) : un histogramme par ligne sur les 8 bits de poids fort
+des scores transformés en entiers monotones, puis une collecte au-dessus du seuil.
+Le présent noyau lui laisse les scores en VRAM ; il reste à écrire la collecte
+déterministe (départage par indice) et le banc qui co
+… [108 caractères tronqués]
+  ```
+
+### 👤 Utilisateur
+
+Background subagent 8e04c99a-8ba1-4675-9f80-fa3338449b17 finished and will do no further work unless you send it more.
+Its closing message:
+⏵ Verdict rendu : écarts identifiés, envoi au parent effectué
+
+## Cadre de l'audit
+
+Révision auditée : **HEAD `a891c31` (18:13)** + arbre de travail figé à **18:17** ; le rapport a été relu dans sa version du 18:15:54 (md5 `24a1ffdc…`, avec la section « Limites connues »). ⚠️ Le dépôt a bougé pendant l'audit (`fa6a4f3` 18:12, `a891c31` 18:13, éditions non commitées 18:15-18:17) : les numéros de ligne ci-dessous valent pour cette version. **Aucun fichier n'a été modifié** ; les seules commandes lancées sont des lectures et le banc de reproduction (1,2 s et 10,7 s).
+
+## Tableau des écarts
+
+| # | fichier:ligne | chiffre écrit | ce que dit la source | verdict |
+|---|---|---|---|---|
+| 1 | `README.md:299` · `README.md:373` · `REPRISE.md:16` | « 12 171 » (×2) et « 12 840 » | `wc -l drave-core/src/*.rs` = **12 947** à HEAD (12 995 arbre de travail) | **FAUX/périmé + contradiction interne** : 669 lignes d'écart entre deux sections du même README. 12 171 était vrai à 17:03 (commit `a4735aa`) ; 12 840 mesuré à 17:57 mais commité à 18:07 alors que le compte était déjà 12 870 |
+| 2 | `reports/rapport-gpu-scores.md:32` (note) et `:37` (ligne 65 536) | « Le temps du noyau, lui, ne change pas » ; « 65 536 \| 65,3 ms \| 7,4 ms \| **8,9×** » | Re-mesure sur banc corrigé (journal `bbd6969f`, ~33840) : **63,06 ms / 2,36 ms / 26,7×** ; les 7,36 ms/8,9× datent d'AVANT le découpage en tranches (journal ~32071) | **FAUX** : la ligne 65 536 est la seule non re-mesurée après le découpage ; le temps est divisé par ~3, et cette ligne contredit le « 27–40× » utilisé partout ailleurs |
+| 3 | `reports/rapport-gpu-topk-selection.md:113` | « un noyau **1 500×** trop rapide (0,0004 ms pour 14,7 Mo lus) » | Même run : affiché 0,0004 ms (0,0003 ms de seuil), réel 0,45 ms (0,27 ms) après correction d'unité (journal ~34108) → **÷1 125** (collecte) et **÷900** (seuil) | **CALCUL FAUX** : 1 500 = 0,45/0,0003, un mélange des deux paires |
+| 4 | `reports/rapport-gpu-topk-selection.md:14` | « Trois noyaux … (**11 → 13** noyaux) » | Comptage par commit : 9 → 10 (`5e8bf48`, scores) → 11 (`d00c01c`, histo) → 13 (`e950075`, compte+écrit) | **IMPRÉCIS** : le trio de sélection fait passer 10 → 13 ; 11→13 ne décrit que le dernier commit |
+| 5 | `reports/rapport-gpu-topk-selection.md:78` | « sur **5 à 7** des 14 lignes » | `final.log` : 7/14, 6/14, 5/14 aux trois tailles — mais 12/14 (n=1), 10/14 (n=100), 7/14 (4097, 5000), **14/14** (8191) | Vrai seulement pour les trois tailles principales ; faux pour les bornes |
+| 6 | `reports/rapport-gpu-topk-selection.md:155` | « la **dernière ligne** dit si l'ensemble retenu est le même » | Code actuel (`fa6a4f3`) : la dernière ligne imprimée est « second passage k = 512, … » | **PÉRIMÉ** (section Reproduire) |
+| 7 | `docs/plan-gpu-topk.md:86` (+ `README.md:505`, rapport:137) | « **27 à 40×** … à toutes les longueurs (256 à 262 144 clés) » | Le 27–40 vient d'un run post-correctif du **journal** (~33840 : 31,6 / 26,7 / 40,0×), pas du fichier cité `rapport-gpu-scores.md` (8,9× à 65 k, **3,8× à 256**) | **Source non citée + contradiction** avec le fichier cité ; le 3,8× à 256 clés est hors fourchette |
+| 8 | `reports/rapport-gpu-topk-selection.md:142` | « voir le rapport de sprint » | `sprints/01-…` ne contient aucun chiffre de porte (seulement le boxing 17:41→19:41) | **Référence morte** (mineure) |
+| 9 | `docs/plan-gpu-topk.md:5` vs `:18` | « ~25 à 70 fois » vs « ×73 » (968/13,2 = 73,3) | Même fichier | Incohérence pré-existante, non touchée aujourd'hui — pour mémoire |
+
+## Ce qui est conforme (sourcé et arithmétiquement juste)
+
+- **Tout le tableau du rapport** (l. 49-53) : `final.log` l. 5-6/12-13 (4 k), 20-21/27-28 (65 k), 35-36/42-43 (262 k) ; 14/14 et diff. sym. 0 aux **8** tailles (l. 13, 28, 43, 51, 59, 67, 75, 83). Les ratios du rapport recopient ceux de la trace (9,1→9×, 68,5→69×, 224,0→224×, 34,6→35×, 258,0→258×, 895,8→896×) ; recalculés sur les temps arrondis on trouve 9,4/33,3/69,3/254,5/222,5/887,1 — l'écart vient des temps non arrondis, pas d'une erreur.
+- **0,44 + 0,45 = 0,89 ms** ✓ et **97,88 + 399,21 = 497,09 → « 497 ms »** ✓ (somme des deux étages CPU, chacun homologue d'un étage GPU).
+- **1,60 / 2,13 / 2,25e-7** = `final.log` l. 2, 17, 32 ✓, et la fourchette est la même partout : README:505 et plan:86 « 1,6–2,3e-7 », rapport:73 « 1,60 à 2,25e-7 », rapport scores:4 et note l. 30-31.
+- **Bornes** n=1/k=1, n=100/k=3, n=4097 et 5000/k=256, n=8191/k=4096 ✓ (`final.log` l. 46, 54, 62, 70, 78) ; « pas de tranche 4 096 » = `gpu.rs` `CHUNK: 4096` ✓.
+- **Second passage** : 14/14, 0,45 ms de collecte, 0,27 ms de seuil à 262 144 ✓ (journal ~34108) ; l'anecdote ±0,0/NaN est exacte (`monotone(-0,0)=0x7FFFFFFF`, `monotone(+0,0)=0x80000000`, NaN signé hors ±inf) ✓.
+- **Portes** : 19,3885 (`portes_qwen.log` 19.388 à 510 jetons, journal `=== perplexité 19.3885 ===`) et 15,1757 (`porte_oss.log`) ✓ ; `REPRISE.md:517` : commande et attendu exacts ✓.
+- **13 noyaux** = `grep -c "__global__ void"` ✓ ; **853 lignes** du `.cu` ✓ à HEAD (860 dans l'arbre de travail, commentaires ajoutés à 18:16) ; **étapes 1 et 2 faites** = exactement le périmètre du rapport, numérotation 1..6 identique entre plan et rapport ✓ ; `model.rs:3149` confirme que le top-k n'est pas branché ✓.
+- **Reproduction exécutée** : `DRAVE_GPU=1 … --banc-topk 4096` (1,2 s) et `… --banc-topk 262144` (10,7 s) → mêmes verdicts (14/14, différence symétrique 0) ; seuls les temps varient (0,44/0,44 ms, 96,42 ms, 389,41 ms) : les chiffres du rapport sont **un** échantillon, pas une constante.
+
+## Fausse alerte à ne pas corriger
+
+`/tmp/portes_qwen.log` affiche Q4_0 = **21.198** là où l'en-tête dit « attendu 21,01 » : la référence **21,0110 exige `--q4`** (`REPRISE.md:63`). J'ai reproduit **21.0110 exactement** avec le drapeau (`--q4 --limit 512`) ; le run du log l'avait oublié. Aucune dérive, aucune correction de doc.
+
+## Corrections minimales
+
+1. **Compteur de lignes** : un seul chiffre, re-mesuré, dans `README.md:299`, `README.md:373` et `REPRISE.md:16` (actuellement 12 947 à HEAD).
+2. **`rapport-gpu-scores.md`** : remplacer ou marquer la ligne 65 536 (7,4 ms/8,9× → **2,36 ms/26,7×**, mesure post-découpage) et nuancer « le temps ne change pas » (l. 32).
+3. **`rapport-gpu-topk-selection.md:113`** : « 1 500× » → « ≈1 100× (collecte) / ≈900× (seuil) ».
+4. **`:14`** : « 11 → 13 noyaux » → « 10 → 13 noyaux » (ou « +3, 13 au total »).
+5. **`:78`** : préciser « aux trois tailles principales (5 à 7/14) ».
+6. **`:155`** : « la dernière ligne » → « l'avant-dernière » ou mentionner le second passage k=512.
+7. **`plan:86` / `README:505`** : citer la mesure post-correctif du banc comme source du 27–40×, ou aligner le tableau de `rapport-gpu-scores.md`.
+8. **`:142`** : remplacer « voir le rapport de sprint » par le fichier réel (le journal).
+
+Le cœur des chiffres du rapport de sélection est **solide** : chaque temps, chaque ratio et chaque 14/14 vient de `/tmp/banc_topk_final.log`, et 0,89/497 ms sont justes. Les écarts sont des chiffres **périmés ailleurs** (compteurs de lignes, ligne 65 536 du rapport scores), une fourchette **mal sourcée** (27–40×), et trois formulations/calculs mineurs.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\ndef patch(p, paires):\n    s = open(p).read()\n    for vieux, neuf, nom in paires:\n        assert s.count(vieux) == 1, f\"{p} :: {nom} :: {s.count(vieux)} occurrences\"\n        s = s.replace(vieux, neuf, 1)\n    o … [7028 caractères tronqués]`
+
+  ```
+reports/rapport-gpu-scores.md : 2 corrections
+reports/rapport-gpu-topk-selection.md : 5 corrections
+docs/plan-gpu-topk.md : 2 corrections
+reports/rapport-gpu-scores.md:34:> 26,7×**. Les deux tableaux sont conservés pour la traçabilité.
+reports/rapport-gpu-scores.md:51:| 65 536 | 63,06 ms | **2,36 ms** | **26,7×** | 2,13e-7 |
+docs/plan-gpu-topk.md:86:| 1 | `attn_scores` + FFI + banc `--banc-topk` sur 4 k de contexte | ✅ **fait** : écart **1,6 à 2,3e-7** de 4 096 à 262 144 clés (clés distinctes — la valeur de 1,03e-7 venait d'un banc dégénéré), **26,7 à 40× plus rapide** que le CPU ; c'est la re-mesure du 30/09 au soir qui fait foi dans `reports/rapport-gpu-scores.md` |
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rn \"27 à 40×\\|27–40\" README.md reports/*.md docs/*.md | head -5; grep -n \"12 171\\|12 840\" README.md REPRISE.md | head -5", "description": "Check remaining 27-40x and line counts"}`
+
+  ```
+README.md:505:   (`reports/rapport-gpu-scores.md`, écart 1,6–2,3e-7, 27–40× le CPU) et la sélection
+reports/rapport-gpu-topk-selection.md:141:| 1 | `attn_scores` | ✅ 1,6–2,3e-7 · 27–40× |
+README.md:299:le moteur tenait en 386 lignes à ses débuts ; il en fait 12 171 aujourd'hui). Détail complet :
+README.md:373:BLAS, sans aucune dépendance : **12 840 lignes de Rust, `std` seul** au 30/09 (2 319 au premier prototype). Détail :
+REPRISE.md:16:`drave-core` est un moteur d'inférence Rust (~12 171 lignes, `std` seul) qui
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\ndef patch(p, paires):\n    s=open(p).read()\n    for v,n,nom in paires:\n        assert s.count(v)==1, f\"{p}::{nom}::{s.count(v)}\"\n        s=s.replace(v,n,1)\n    open(p,'w').write(s); print(f\"{p} ok\")\n\npatch … [482 caractères tronqués]`
+
+  ```
+README.md ok
+reports/rapport-gpu-topk-selection.md ok
+## Moteur d'événements Rust (`drave-core`)
+
+Le moteur d'exécution par listes est maintenant écrit en Rust — **std seul, zéro
+dépendance** (crates.io est inaccessible depuis cette machine, et c'est très bien :
+le moteur tenait en 386 lignes à ses débuts ; il en fait 12 171 aujourd'hui). Détail complet :
+[`reports/rapport-optimisations.md`](reports/rapport-optimisations.md).
+
+```bash
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/gpu.rs'; s=open(p).read()\ndef rep(v,n,nom):\n    global s\n    assert s.count(v)==1, f\"{nom}::{s.count(v)}\"\n    s=s.replace(v,n,1)\n\nrep(\"\"\"    /// Collecte des k indices : comptage par tra … [6966 caractères tronqués]`
+
+  ```
+FFI noyau 3 posé
+build
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/main.rs'; s=open(p).read()\nancre = \"\"\"    // Second passage avec un k PLUS GRAND, dans le MÊME processus : c'est le\"\"\"\nneuf = \"\"\"    // ------------------------------- noyau 3 : softmax  … [2830 caractères tronqués]`
+
+  ```
+banc noyau 3 posé
+    → la descente trouve le seuil EXACT : la collecte peut être écrite
+    collecte GPU     0.09 ms · CPU tri complet     4.09 ms (44.5× plus rapide)
+    ensembles identiques au CPU : 14/14 lignes · différence symétrique 0 indices
+    ordre documenté (au-dessus puis égaux, croissants) : 14/14 lignes · doublons 0 · hors bornes 0 · cases non écrites 0
+    → l'ensemble retenu est le MÊME que celui du CPU, et l'ordre est celui qui est écrit dans le noyau
+    noyau 3 (softmax sur k + Σ w·V) : GPU 0.08 ms · CPU 0.64 ms · écart max 2.546e-2 sur 1.244e-1 (relatif 2.05e-1)
+    → AU-DESSUS du critère de 1e-6 : ne pas brancher dans le moteur
+    second passage k = 512, mêmes tampons : 14/14 lignes · 0.07 ms (0.09 ms de seuil) · cases non écrites 0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '1341,1370p' drave-core/src/model.rs && grep -n \"fn expf\" -A 6 drave-core/gpu/cuda_stub.h", "description": "Read valeur() and expf stub"}`
+
+  ```
+pub fn valeur(&self, kvh: usize, t: usize, dst: &mut [f32]) {
+        let d = (kvh * self.cap + t) * self.hd;
+        if self.bits >= 32 || self.v_f32 {
+            dst[..self.hd].copy_from_slice(&self.vf[d..d + self.hd]);
+            return;
+        }
+        let base = (kvh * self.cap + t) * self.pas();
+        let sb = (kvh * self.cap + t) * self.nb;
+        if self.bits == 8 {
+            for i in 0..self.hd {
+                dst[i] = self.vq[base + i] as i8 as f32 * self.sv[sb + i / 32];
+            }
+        } else {
+            for i in 0..self.hd {
+                let o = self.vq[base + i / 2];
+                let q = if i % 2 == 0 { (o & 0x0F) as i32 } else { (o >> 4) as i32 };
+                let q = if q >= 8 { q - 16 } else { q };
+                dst[i] = q as f32 * self.sv[sb + i / 32];
+            }
+        }
+    }
+}
+
+impl Model {
+    pub fn load(path: &str, ctx: usize, n_threads: usize, dense: bool, keep: f32,
+                auto: bool, q4: u8, b6: u8) -> Model {
+        let t0 = Instant::now();
+        let g = Gguf::open(path).expect("ouverture du GGUF");
+        let cfg = Cfg {
+            n_layer: g.cfg("block_count").and_then(|m| m.as_u64()).unwrap_or(0) as usiz
+… [17 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && head -20 drave-core/gpu/drave_gpu.cu && echo \"=== stub ===\" && cat drave-core/gpu/cuda_stub.h | head -45", "description": "Check expf definition"}`
+
+  ```
+// Noyaux GPU de Drave.
+//
+// Principe : les POIDS RESTENT SUR LE GPU. La bande passante est locale
+// (380 Go/s mesurés, contre 6,5 Go/s de PCIe x8) ; ne traversent le bus que les
+// activations — quelques kilo-octets par jeton. Déplacer les poids à chaque
+// jeton serait plus lent que de les lire sur CPU (20 Go/s).
+// Aucun en-tête : le noyau se compile en PTX avec clang, puis le pilote le
+// compile à la volée. Cela évite le conflit entre les en-têtes glibc récents et
+// ceux de CUDA, et rend le noyau indépendant de la boîte à outils.
+
+// Demi-précision → simple, écrit à la main (pas de cuda_fp16.h).
+__device__ __forceinline__ float f16_en_f32(unsigned short h) {
+    const unsigned int s = (h >> 15) & 1u;
+    const unsigned int e = (h >> 10) & 0x1Fu;
+    const unsigned int m = h & 0x3FFu;
+    unsigned int bits;
+    if (e == 0) {
+        if (m == 0) { bits = s << 31; }
+        else {
+            unsigned int mm = m; int ex = -1;
+=== stub ===
+// Sans en-têtes CUDA : les qualificatifs sont des attributs clang, et
+// `__syncthreads` est un builtin du mode CUDA.
+#define __device__ __attribute__((device))
+#define __host__ __attribute__((host))
+#define __global__ __attribute__((global)
+… [1977 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/main.rs'; s=open(p).read()\nvieux = \"\"\"    println!(\"    noyau 3 (softmax sur k + Σ w·V) : GPU {:.2} ms · CPU {:.2} ms · écart max \\\\\n{mx3:.3e} sur {dyn3:.3e} (relatif {:.2e})\",\"\"\"\nneuf … [1118 caractères tronqués]`
+
+  ```
+diag posé
+    [diag] ligne 0 : sel[0] = 1 · v[0..3] = [0.38088495, -0.6063066, -0.49748236] · m = 0.5497
+    [diag] cpu[0..4] = [0.011662061, 0.026857441, -0.046406813, 0.03814494]
+    [diag] gpu[0..4] = [0.009229531, 0.021255355, -0.03672702, 0.030188447]
+    noyau 3 (softmax sur k + Σ w·V) : GPU 0.08 ms · CPU 0.69 ms · écart max 2.546e-2 sur 1.244e-1 (relatif 2.05e-1)
+    → AU-DESSUS du critère de 1e-6 : ne pas brancher dans le moteur
+    second passage k = 512, mêmes tampons : 14/14 lignes · 0.08 ms (0.11 ms de seuil) · cases non écrites 0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for k in 1 2 100; do echo \"### k=$k\"; DRAVE_GPU=1 timeout 300 ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q4_0.gguf --banc-topk 4096 --attn-topk $k 2>&1 | grep -E \"diag|noyau 3\"; done", "description": "Test kernel 3 wit … [32 caractères tronqués]`
+
+  ```
+### k=1
+    [diag] ligne 0 : sel[0] = 3204 · v[0..3] = [-0.20839137, -0.44765553, 0.33188257] · m = 0.5497
+    [diag] cpu[0..4] = [-0.17189437, -0.36925456, 0.27375773, -0.52841604]
+    [diag] gpu[0..4] = [-0.0037646696, -0.008087068, 0.005995585, -0.011572873]
+    noyau 3 (softmax sur k + Σ w·V) : GPU 0.04 ms · CPU 0.03 ms · écart max 8.191e-1 sur 8.407e-1 (relatif 9.74e-1)
+### k=2
+    [diag] ligne 0 : sel[0] = 3204 · v[0..3] = [-0.20839137, -0.44765553, 0.33188257] · m = 0.5497
+    [diag] cpu[0..4] = [-0.3642347, -0.055735998, 0.2536011, -0.12695341]
+    [diag] gpu[0..4] = [-0.014076563, -0.0021540264, 0.00980091, -0.004906363]
+    noyau 3 (softmax sur k + Σ w·V) : GPU 0.04 ms · CPU 0.03 ms · écart max 8.604e-1 sur 8.959e-1 (relatif 9.60e-1)
+### k=100
+    [diag] ligne 0 : sel[0] = 1 · v[0..3] = [0.38088495, -0.6063066, -0.49748236] · m = 0.5497
+    [diag] cpu[0..4] = [0.0057643508, -0.003671702, -0.033340175, 0.0050206725]
+    [diag] gpu[0..4] = [0.0035401846, -0.0022549813, -0.020475917, 0.0030834482]
+    noyau 3 (softmax sur k + Σ w·V) : GPU 0.05 ms · CPU 0.32 ms · écart max 8.122e-2 sur 2.138e-1 (relatif 3.80e-1)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/gpu/drave_gpu.cu'; s=open(p).read()\nvieux = \"\"\"    if (sinks != nullptr) somme += expf(sinks[ligne] - m);\n    red[tid] = somme;\"\"\"\nneuf = \"\"\"    // ⚠️ Le puits s'ajoute UNE fois, pas une pa … [866 caractères tronqués]`
+
+  ```
+puits compté une fois
+noyaux exportés : 14
+0
+    [diag] ligne 0 : sel[0] = 1 · v[0..3] = [0.38088495, -0.6063066, -0.49748236] · m = 0.5497
+    [diag] cpu[0..4] = [0.011662061, 0.026857441, -0.046406813, 0.03814494]
+    [diag] gpu[0..4] = [0.011662078, 0.026857445, -0.046406843, 0.038144954]
+    noyau 3 (softmax sur k + Σ w·V) : GPU 0.08 ms · CPU 0.72 ms · écart max 5.960e-8 sur 1.244e-1 (relatif 4.79e-7)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/main.rs'; s=open(p).read()\nvieux = \"\"\"    // Diagnostic temporaire : les premières composantes de la ligne 0.\n    {\n        let sel = &sortie[0..k];\n        let mut vd = vec![0f32; hd];\n    … [1009 caractères tronqués]`
+
+  ```
+diag retiré
+0
+n=4096 k=256 :  ensembles identiques au CPU : 14/14 lignes · différence symétrique 0 indices| noyau 3 (softmax sur k + Σ w·V) : GPU 0.07 ms · CPU 0.64 ms · écart max 5.960e-8 sur 1.244e-1 (relatif 4.79e-7)|
+n=65536 k=256 :  ensembles identiques au CPU : 14/14 lignes · différence symétrique 0 indices| noyau 3 (softmax sur k + Σ w·V) : GPU 0.07 ms · CPU 1.07 ms · écart max 4.470e-8 sur 1.443e-1 (relatif 3.10e-7)|
+n=262144 k=256 :  ensembles identiques au CPU : 14/14 lignes · différence symétrique 0 indices| noyau 3 (softmax sur k + Σ w·V) : GPU 0.07 ms · CPU 0.98 ms · écart max 3.725e-8 sur 1.382e-1 (relatif 2.70e-7)|
+n=100 k=3 :  ensembles identiques au CPU : 14/14 lignes · différence symétrique 0 indices| noyau 3 (softmax sur k + Σ w·V) : GPU 0.03 ms · CPU 0.02 ms · écart max 8.941e-8 sur 8.573e-1 (relatif 1.04e-7)|
+n=8191 k=4096 :  ensembles identiques au CPU : 14/14 lignes · différence symétrique 0 indices| le noyau 3 a refusé la configuration|
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/gpu.rs'; s=open(p).read()\nvieux = \"\"\"            eprintln!(\"[topk] dimensions refusées : {lignes} lignes, {n} clés, k = {k}, hd = {hd}\");\"\"\"\nneuf = \"\"\"            eprintln!(\"[topk] no … [528 caractères tronqués]`
+
+  ```
+message précisé
+test result: ok. 17 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.11s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && DRAVE_GPU=1 timeout 300 ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q4_0.gguf --banc-topk 8191 --attn-topk 4096 2>&1 | grep -E \"noyau 3 a refusé\" -A 1; DRAVE_GPU=1 timeout 300 ./drave-core/target/release/drave models/Qwen … [142 caractères tronqués]`
+
+  ```
+le noyau 3 a refusé la configuration
+[topk] noyau 3 : dimensions refusées — 14 lignes, 8191 clés, k = 4096 (plafonné à 1024 : le partagé du noyau tient 2k + 256 flottants), hd = 64
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\ndef patch(p, paires):\n    s=open(p).read()\n    for v,n,nom in paires:\n        assert s.count(v)==1, f\"{p}::{nom}::{s.count(v)}\"\n        s=s.replace(v,n,1)\n    open(p,'w').write(s); print(f\"{p} ok\")\n\npatch … [7191 caractères tronqués]`

@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 51.5 h |
+| Durée | 51.6 h |
 | Tours | 47 |
-| Messages | 2135 |
-| Appels d'outils | 2017 |
+| Messages | 2157 |
+| Appels d'outils | 2037 |
 | Fichiers touchés | 47 |
-| Commandes | 1671 |
+| Commandes | 1691 |
 | Sous-agents | 13 |
-| Commits | 176 |
+| Commits | 177 |
 | Compactages de contexte | 3 |
 
 ## Objectifs déclarés
@@ -2177,7 +2177,7 @@ Le mode creux ne peut pas utiliser le miroir VRAM (le chemin GPU est conditionn�
 
 ### Tour 47 — pret pour des scrum de 2h (boxing temps réel, avec revue, rétro et planning)
 
-*162 appels d'outils.* Actions notables :
+*182 appels d'outils.* Actions notables :
 
 - bash — Check clock, machine and last sprint state
 - bash — Create the sprint timing tool
@@ -2193,11 +2193,11 @@ Le mode creux ne peut pas utiliser le miroir VRAM (le chemin GPU est conditionn�
 - bash — Read the kernel launch call
 - bash — Write the FFI for the scores kernel
 - bash — Complete KvGpu initializer
-- … et 142 autres
+- … et 162 autres
 
 **Synthèse produite :**
 
-⏵ Relecture adversariale reçue : 8 défauts, j'en corrige 7 maintenant
+⏵ Corrections de documentation (audit) avant de câbler le noyau 3
 
 ## 3. Travail accompli
 
@@ -2311,7 +2311,7 @@ Le mode creux ne peut pas utiliser le miroir VRAM (le chemin GPU est conditionn�
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 1631 autres
+- … et 1651 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2439,7 +2439,7 @@ Le mode creux ne peut pas utiliser le miroir VRAM (le chemin GPU est conditionn�
 
 ## 5. Erreurs rencontrées
 
-104 sorties en erreur ou divergentes. Les premières :
+105 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : a8f2635f8 docs: record which models this box is good at, and why src/llama-hparams.cpp:8:void llama_hparams::set_swa_pattern(uint32_t n_pattern, bool dense_first) { src/llama-hparams.h:308:    void se
 - **T1** : 511 tokens notés — perplexité cumulée 247.031  (4.9 tok/s) === perplexité 247.0308 sur 511 tokens (0 événements, 104.5 s) ===  ### B3 harmony assistant 511 --- ref --- 0.0 0.0 0:00 ls: cannot access '
@@ -2635,4 +2635,5 @@ Le mode creux ne peut pas utiliser le miroir VRAM (le chemin GPU est conditionn�
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cargo test --release --manifest-path drave-core/Cargo.toml 2>&1 | tail -2 && git add -A && git commit -q -
 - Rapport de sélection : le second passage k doublé, et la durée mal étiquetée" && git log --oneline -1
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -F - <<'EOF' && git log --oneline -1 Relecture adversariale : 7 défauts corrig
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' def patch(p, paires):     s=open(p).read()     for v,n,nom in paires:         assert s.co
 

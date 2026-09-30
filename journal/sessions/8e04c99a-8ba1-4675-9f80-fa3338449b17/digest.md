@@ -1892,3 +1892,110 @@ nan  -> 0xffc00000
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"1 500×\\|5 à 7 des 14\\|11 → 13\\|27–40×\\|dernière ligne dit\" reports/rapport-gpu-topk-selection.md; echo \"=== scores note line ===\"; grep -n \"Le temps du noyau\" reports/rapport-gpu-scores.md", "description": "Get cur … [31 caractères tronqués]`
+
+  ```
+14:Trois noyaux dans `drave-core/gpu/drave_gpu.cu` (11 → 13 noyaux) :
+78:calculés par le CPU et ceux calculés par le GPU sur 5 à 7 des 14 lignes. Ce n'est
+113:  étaient affichés sans conversion et annonçaient un noyau 1 500× trop rapide
+137:| 1 | `attn_scores` | ✅ 1,6–2,3e-7 · 27–40× |
+155:Le banc imprime la comparaison ligne par ligne ; la dernière ligne dit si
+=== scores note line ===
+32:> lieu de 10×. Le temps du noyau, lui, ne change pas (les valeurs ci-dessous sont
+  ```
+
+### 🤖 Assistant
+
+⏵ Dernières vérifications (compteur à jour, lancement des deux noyaux)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"wc actuel: $(wc -l drave-core/src/*.rs | tail -1)\"; echo \"cu actuel: $(wc -l < drave-core/gpu/drave_gpu.cu) lignes, $(grep -c '__global__ void' drave-core/gpu/drave_gpu.cu) noyaux\"; grep -n \"f_attn_topk_ecrit\\|f_attn_topk … [91 caractères tronqués]`
+
+  ```
+wc actuel:  12995 total
+cu actuel: 860 lignes, 13 noyaux
+169:    f_attn_topk_compte: *mut c_void,
+170:    f_attn_topk_ecrit: *mut c_void,
+297:            let mut f_attn_topk_compte: *mut c_void = std::ptr::null_mut();
+298:            let rc = cuModuleGetFunction(&mut f_attn_topk_compte, module, nom_tc.as_ptr());
+304:            let mut f_attn_topk_ecrit: *mut c_void = std::ptr::null_mut();
+305:            let rc = cuModuleGetFunction(&mut f_attn_topk_ecrit, module, nom_te.as_ptr());
+325:                       f_attn_topk_histo, f_attn_topk_compte, f_attn_topk_ecrit,
+781:            let rc = cuLaunchKernel(self.f_attn_topk_compte, lignes as c_uint, ntr as c_uint, 1,
+832:            let rc = cuLaunchKernel(self.f_attn_topk_ecrit, lignes as c_uint, ntr as c_uint, 1,
+  ```
+
+### 🤖 Assistant
+
+⏵ Numéros de ligne finaux des constats dans le rapport courant
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"rapport de sprint\\|Ce qui reste\\|attn_scores\\` | ✅\\|portes de non-régression\\|Le banc imprime\" reports/rapport-gpu-topk-selection.md; echo \"=== md5 now ===\"; md5sum reports/rapport-gpu-topk-selection.md; date +%H:%M … [51 caractères tronqués]`
+
+  ```
+133:## Ce qui reste
+137:| 1 | `attn_scores` | ✅ 1,6–2,3e-7 · 27–40× |
+142:| 6 | portes de non-régression : 19,3885 et 15,1757 | inchangées (voir le rapport de sprint) |
+155:Le banc imprime la comparaison ligne par ligne ; la dernière ligne dit si
+=== md5 now ===
+24a1ffdc979514db3b7ceb87168d322f  reports/rapport-gpu-topk-selection.md
+18:17:10
+  ```
+
+### 🤖 Assistant
+
+⏵ Envoi du verdict à l'agent parent
+
+- **send_message** `{"agent_id": "bbd6969f-0f70-42b2-8951-64d1f2f36d2e", "message": "VÉRIFICATION DOCS TOP-K — terminée, AUCUN fichier modifié.\n\nRévision auditée : HEAD a891c31 (18:13) + arbre de travail à 18:17 (rapport md5 24a1ffdc…, version avec « Limites connues »). Le dépôt a bougé pendant l'audit (fa6a4f3 18:12 … [4159 caractères tronqués]`
+
+  ```
+message delivered to agent bbd6969f-0f70-42b2-8951-64d1f2f36d2e
+  ```
+
+### 🤖 Assistant
+
+⏵ Verdict rendu : écarts identifiés, envoi au parent effectué
+
+## Cadre de l'audit
+
+Révision auditée : **HEAD `a891c31` (18:13)** + arbre de travail figé à **18:17** ; le rapport a été relu dans sa version du 18:15:54 (md5 `24a1ffdc…`, avec la section « Limites connues »). ⚠️ Le dépôt a bougé pendant l'audit (`fa6a4f3` 18:12, `a891c31` 18:13, éditions non commitées 18:15-18:17) : les numéros de ligne ci-dessous valent pour cette version. **Aucun fichier n'a été modifié** ; les seules commandes lancées sont des lectures et le banc de reproduction (1,2 s et 10,7 s).
+
+## Tableau des écarts
+
+| # | fichier:ligne | chiffre écrit | ce que dit la source | verdict |
+|---|---|---|---|---|
+| 1 | `README.md:299` · `README.md:373` · `REPRISE.md:16` | « 12 171 » (×2) et « 12 840 » | `wc -l drave-core/src/*.rs` = **12 947** à HEAD (12 995 arbre de travail) | **FAUX/périmé + contradiction interne** : 669 lignes d'écart entre deux sections du même README. 12 171 était vrai à 17:03 (commit `a4735aa`) ; 12 840 mesuré à 17:57 mais commité à 18:07 alors que le compte était déjà 12 870 |
+| 2 | `reports/rapport-gpu-scores.md:32` (note) et `:37` (ligne 65 536) | « Le temps du noyau, lui, ne change pas » ; « 65 536 \| 65,3 ms \| 7,4 ms \| **8,9×** » | Re-mesure sur banc corrigé (journal `bbd6969f`, ~33840) : **63,06 ms / 2,36 ms / 26,7×** ; les 7,36 ms/8,9× datent d'AVANT le découpage en tranches (journal ~32071) | **FAUX** : la ligne 65 536 est la seule non re-mesurée après le découpage ; le temps est divisé par ~3, et cette ligne contredit le « 27–40× » utilisé partout ailleurs |
+| 3 | `reports/rapport-gpu-topk-selection.md:113` | « un noyau **1 500×** trop rapide (0,0004 ms pour 14,7 Mo lus) » | Même run : affiché 0,0004 ms (0,0003 ms de seuil), réel 0,45 ms (0,27 ms) après correction d'unité (journal ~34108) → **÷1 125** (collecte) et **÷900** (seuil) | **CALCUL FAUX** : 1 500 = 0,45/0,0003, un mélange des deux paires |
+| 4 | `reports/rapport-gpu-topk-selection.md:14` | « Trois noyaux … (**11 → 13** noyaux) » | Comptage par commit : 9 → 10 (`5e8bf48`, scores) → 11 (`d00c01c`, histo) → 13 (`e950075`, compte+écrit) | **IMPRÉCIS** : le trio de sélection fait passer 10 → 13 ; 11→13 ne décrit que le dernier commit |
+| 5 | `reports/rapport-gpu-topk-selection.md:78` | « sur **5 à 7** des 14 lignes » | `final.log` : 7/14, 6/14, 5/14 aux trois tailles — mais 12/14 (n=1), 10/14 (n=100), 7/14 (4097, 5000), **14/14** (8191) | Vrai seulement pour les trois tailles principales ; faux pour les bornes |
+| 6 | `reports/rapport-gpu-topk-selection.md:155` | « la **dernière ligne** dit si l'ensemble retenu est le même » | Code actuel (`fa6a4f3`) : la dernière ligne imprimée est « second passage k = 512, … » | **PÉRIMÉ** (section Reproduire) |
+| 7 | `docs/plan-gpu-topk.md:86` (+ `README.md:505`, rapport:137) | « **27 à 40×** … à toutes les longueurs (256 à 262 144 clés) » | Le 27–40 vient d'un run post-correctif du **journal** (~33840 : 31,6 / 26,7 / 40,0×), pas du fichier cité `rapport-gpu-scores.md` (8,9× à 65 k, **3,8× à 256**) | **Source non citée + contradiction** avec le fichier cité ; le 3,8× à 256 clés est hors fourchette |
+| 8 | `reports/rapport-gpu-topk-selection.md:142` | « voir le rapport de sprint » | `sprints/01-…` ne contient aucun chiffre de porte (seulement le boxing 17:41→19:41) | **Référence morte** (mineure) |
+| 9 | `docs/plan-gpu-topk.md:5` vs `:18` | « ~25 à 70 fois » vs « ×73 » (968/13,2 = 73,3) | Même fichier | Incohérence pré-existante, non touchée aujourd'hui — pour mémoire |
+
+## Ce qui est conforme (sourcé et arithmétiquement juste)
+
+- **Tout le tableau du rapport** (l. 49-53) : `final.log` l. 5-6/12-13 (4 k), 20-21/27-28 (65 k), 35-36/42-43 (262 k) ; 14/14 et diff. sym. 0 aux **8** tailles (l. 13, 28, 43, 51, 59, 67, 75, 83). Les ratios du rapport recopient ceux de la trace (9,1→9×, 68,5→69×, 224,0→224×, 34,6→35×, 258,0→258×, 895,8→896×) ; recalculés sur les temps arrondis on trouve 9,4/33,3/69,3/254,5/222,5/887,1 — l'écart vient des temps non arrondis, pas d'une erreur.
+- **0,44 + 0,45 = 0,89 ms** ✓ et **97,88 + 399,21 = 497,09 → « 497 ms »** ✓ (somme des deux étages CPU, chacun homologue d'un étage GPU).
+- **1,60 / 2,13 / 2,25e-7** = `final.log` l. 2, 17, 32 ✓, et la fourchette est la même partout : README:505 et plan:86 « 1,6–2,3e-7 », rapport:73 « 1,60 à 2,25e-7 », rapport scores:4 et note l. 30-31.
+- **Bornes** n=1/k=1, n=100/k=3, n=4097 et 5000/k=256, n=8191/k=4096 ✓ (`final.log` l. 46, 54, 62, 70, 78) ; « pas de tranche 4 096 » = `gpu.rs` `CHUNK: 4096` ✓.
+- **Second passage** : 14/14, 0,45 ms de collecte, 0,27 ms de seuil à 262 144 ✓ (journal ~34108) ; l'anecdote ±0,0/NaN est exacte (`monotone(-0,0)=0x7FFFFFFF`, `monotone(+0,0)=0x80000000`, NaN signé hors ±inf) ✓.
+- **Portes** : 19,3885 (`portes_qwen.log` 19.388 à 510 jetons, journal `=== perplexité 19.3885 ===`) et 15,1757 (`porte_oss.log`) ✓ ; `REPRISE.md:517` : commande et attendu exacts ✓.
+- **13 noyaux** = `grep -c "__global__ void"` ✓ ; **853 lignes** du `.cu` ✓ à HEAD (860 dans l'arbre de travail, commentaires ajoutés à 18:16) ; **étapes 1 et 2 faites** = exactement le périmètre du rapport, numérotation 1..6 identique entre plan et rapport ✓ ; `model.rs:3149` confirme que le top-k n'est pas branché ✓.
+- **Reproduction exécutée** : `DRAVE_GPU=1 … --banc-topk 4096` (1,2 s) et `… --banc-topk 262144` (10,7 s) → mêmes verdicts (14/14, différence symétrique 0) ; seuls les temps varient (0,44/0,44 ms, 96,42 ms, 389,41 ms) : les chiffres du rapport sont **un** échantillon, pas une constante.
+
+## Fausse alerte à ne pas corriger
+
+`/tmp/portes_qwen.log` affiche Q4_0 = **21.198** là où l'en-tête dit « attendu 21,01 » : la référence **21,0110 exige `--q4`** (`REPRISE.md:63`). J'ai reproduit **21.0110 exactement** avec le drapeau (`--q4 --limit 512`) ; le run du log l'avait oublié. Aucune dérive, aucune correction de doc.
+
+## Corrections minimales
+
+1. **Compteur de lignes** : un seul chiffre, re-mesuré, dans `README.md:299`, `README.md:373` et `REPRISE.md:16` (actuellement 12 947 à HEAD).
+2. **`rapport-gpu-scores.md`** : remplacer ou marquer la ligne 65 536 (7,4 ms/8,9× → **2,36 ms/26,7×**, mesure post-découpage) et nuancer « le temps ne change pas » (l. 32).
+3. **`rapport-gpu-topk-selection.md:113`** : « 1 500× » → « ≈1 100× (collecte) / ≈900× (seuil) ».
+4. **`:14`** : « 11 → 13 noyaux » → « 10 → 13 noyaux » (ou « +3, 13 au total »).
+5. **`:78`** : préciser « aux trois tailles principales (5 à 7/14) ».
+6. **`:155`** : « la dernière ligne » → « l'avant-dernière » ou mentionner le second passage k=512.
+7. **`plan:86` / `README:505`** : citer la mesure post-correctif du banc comme source du 27–40×, ou aligner le tableau de `rapport-gpu-scores.md`.
+8. **`:142`** : remplacer « voir le rapport de sprint » par le fichier réel (le journal).
+
+Le cœur des chiffres du rapport de sélection est **solide** : chaque temps, chaque ratio et chaque 14/14 vient de `/tmp/banc_topk_final.log`, et 0,89/497 ms sont justes. Les écarts sont des chiffres **périmés ailleurs** (compteurs de lignes, ligne 65 536 du rapport scores), une fourchette **mal sourcée** (27–40×), et trois formulations/calculs mineurs.
+

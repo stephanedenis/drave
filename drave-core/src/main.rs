@@ -2612,6 +2612,59 @@ l'entrelace — c'est le seul écart attendu)");
         println!("    → ÉCART sur la sélection");
     }
 
+    // ------------------------------- noyau 3 : softmax sur les k, puis Σ w·V
+    // La référence CPU consomme les MÊMES indices (ceux rendus par le GPU) et
+    // les MÊMES scores (ceux du GPU) : le seul écart possible vient donc du
+    // noyau 3. Les puits comptent dans le dénominateur, jamais au numérateur —
+    // c'est le piège que le plan signale, et il est testé ici avec des puits
+    // différents par ligne.
+    let sinks: Vec<f32> = (0..lignes).map(|l| -1.0 + 0.001 * l as f32).collect();
+    let mut att_gpu = vec![0f32; lignes * hd];
+    let t8 = Instant::now();
+    if !machine.attn_topk_somme(&mut miroir, lignes, n, k, hd, rep, Some(&sinks), &mut att_gpu) {
+        println!("    le noyau 3 a refusé la configuration");
+        return;
+    }
+    let t_somme = t8.elapsed().as_secs_f64();
+    let t9 = Instant::now();
+    let mut att_cpu = vec![0f32; lignes * hd];
+    {
+        let mut vd = vec![0f32; hd];
+        for l in 0..lignes {
+            let sel = &sortie[l * k..(l + 1) * k];
+            let kvh = l / rep;
+            let mut m = sinks[l];
+            for &j in sel { m = m.max(obtenu[l * n + j as usize]); }
+            let mut den = (sinks[l] - m).exp();
+            let mut w = vec![0f32; k];
+            for (i, &j) in sel.iter().enumerate() {
+                let e = (obtenu[l * n + j as usize] - m).exp();
+                w[i] = e;
+                den += e;
+            }
+            for i in 0..k {
+                cache.valeur(kvh, sel[i] as usize, &mut vd);
+                for d in 0..hd { att_cpu[l * hd + d] += w[i] * vd[d]; }
+            }
+            for d in 0..hd { att_cpu[l * hd + d] /= den; }
+        }
+    }
+    let t_cpu_somme = t9.elapsed().as_secs_f64();
+    let mut mx3 = 0f32;
+    let mut dyn3 = 0f32;
+    for (a, b) in att_cpu.iter().zip(att_gpu.iter()) {
+        mx3 = mx3.max((a - b).abs());
+        dyn3 = dyn3.max(a.abs());
+    }
+    println!("    noyau 3 (softmax sur k + Σ w·V) : GPU {:.2} ms · CPU {:.2} ms · écart max \
+{mx3:.3e} sur {dyn3:.3e} (relatif {:.2e})",
+             t_somme * 1e3, t_cpu_somme * 1e3, mx3 / dyn3.max(1e-9));
+    if mx3 / dyn3.max(1e-9) < 1e-6 {
+        println!("    → conforme au critère du plan pour la sortie (1e-6)");
+    } else {
+        println!("    → AU-DESSUS du critère de 1e-6 : ne pas brancher dans le moteur");
+    }
+
     // Second passage avec un k PLUS GRAND, dans le MÊME processus : c'est le
     // seul chemin qui réutilise les tampons de la collecte avec une taille de
     // sortie différente. Défaut trouvé à la relecture (pas par ce banc) : le
