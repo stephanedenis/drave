@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 30.2 h |
-| Tours | 20 |
-| Messages | 1218 |
-| Appels d'outils | 1186 |
+| Durée | 30.3 h |
+| Tours | 21 |
+| Messages | 1231 |
+| Appels d'outils | 1197 |
 | Fichiers touchés | 38 |
-| Commandes | 919 |
+| Commandes | 929 |
 | Sous-agents | 1 |
-| Commits | 53 |
+| Commits | 54 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -65,6 +65,8 @@
 **Tour 19** — <goal_round> Objective: "Réaliser les 6 nouveaux chantiers du projet qtrinet-core, dans l'ordre : (1) relancer le test de l'aiguille sur contexte long (remplissage varié en vrai texte, moins de sondes, réponses plus longues) sur un modèle capable, grâce au préremplissage par lots et au KV déporté ; (2) chemin GPU : dépaquetage vectorisé du noyau d'attention (13,2 ms/couche à 1 M en int4 vers ~3 ms … [1492 caractères tronqués]
 
 **Tour 20** — <goal_round> Objective: "Réaliser les 6 nouveaux chantiers du projet qtrinet-core, dans l'ordre : (1) relancer le test de l'aiguille sur contexte long (remplissage varié en vrai texte, moins de sondes, réponses plus longues) sur un modèle capable, grâce au préremplissage par lots et au KV déporté ; (2) chemin GPU : dépaquetage vectorisé du noyau d'attention (13,2 ms/couche à 1 M en int4 vers ~3 ms … [1492 caractères tronqués]
+
+**Tour 21** — <goal_round> Objective: "Réaliser les 6 nouveaux chantiers du projet qtrinet-core, dans l'ordre : (1) relancer le test de l'aiguille sur contexte long (remplissage varié en vrai texte, moins de sondes, réponses plus longues) sur un modèle capable, grâce au préremplissage par lots et au KV déporté ; (2) chemin GPU : dépaquetage vectorisé du noyau d'attention (13,2 ms/couche à 1 M en int4 vers ~3 ms … [1492 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -924,17 +926,59 @@ L'objectif reste **actif** : la prochaine session peut écrire le petit programm
 
 ### Tour 20 — <goal_round> Objective: "Réaliser les 6 nouveaux chantiers du projet qtrinet-core, dans l'ordre : (1) relancer le test d … [1772 caractères tronqués]
 
-*5 appels d'outils.* Actions notables :
+*6 appels d'outils.* Actions notables :
 
 - bash — Search for llama/mtmd headers
 - bash — Stack 32 vision layers
 - bash — Run stacked tower
 - bash — Fix config keys and run full tower
 - bash — Document tower and commit
+- bash — Final state check
 
 **Synthèse produite :**
 
-⏵ Vision : j'empile les 32 couches (le corps de la tour)
+⏵ Tour 11 : la tour entière tourne (32 couches) ; il ne manque que la rotation et la fenêtre locale
+
+\## Fait dans ce tour
+
+**Le corps de la tour de vision est en place : les 32 couches s'empilent** et `v.post_ln` s'applique — `tour : 32 couches × 4 patchs × 1280`, |sortie| = 35,55.
+
+Les tranches déjà validées contre numpy couvrent toute la plomberie que la tour répète : embedding de patchs (**5,4e-7**), une couche complète (**1,8e-6**), projecteur (**1,7e-6**). Ce qui manque n'est donc plus « la tour » mais **deux points précis, tous deux dans l'attention** :
+
+1. la **rotation 2-D** (mRoPE) — dont la convention est le seul point non vérifiable par ma référence (elle la partage) et se tranchera contre `libmtmd` d'ollama, dont la recette est écrite dans le plan ;
+2. la **fenêtre locale** une couche sur huit (`n_wa_pattern = 8`).
+
+Piège relevé et corrigé au passage : `Gguf::cfg` ajoute **déjà** le préfixe d'architecture — `cfg("vision.block_count")`, pas `cfg("clip.vision.block_count")`. La seconde forme cherche `clip.clip.vision.block_count` et rend la valeur par défaut, ici **0 couche** : la « tour » ne faisait strictement rien, et c'est le témoin imprimé qui l'a dit. Sans lui, j'aurais conclu que 32 couches ne changeaient presque rien.
+
+\## État
+
+| # | chantier | état |
+|---|---|---|
+| 1 | aiguille | ✅ 12/12 |
+| 2 | chemin GPU (5 sous-items) | ✅ |
+| 3 | mémoire KV | ✅ |
+| 4 | rotation à 16 k | ✅ |
+| 5 | MLA ✅ (5,2e-7) · vision : tour complète qui tourne, rotation 2-D + fenêtre locale à ajouter | en cours |
+| 6 | hygiène | ✅ |
+
+`cargo test` 6/6, arbre propre (hors archive du journal), portes de non-régression Qwen **19,3885** et gpt-oss **15,1757** vérifiées sur le code final.
+
+L'objectif reste **actif** : il se réduit maintenant à deux conventions d'attention dans le ViT, plus l'injection des embeddings dans le flux de jetons — le seul ajout d'architecture nécessaire au moteur, décrit dans `docs/plan-mla-vision.md`.
+
+### Tour 21 — <goal_round> Objective: "Réaliser les 6 nouveaux chantiers du projet qtrinet-core, dans l'ordre : (1) relancer le test d … [1772 caractères tronqués]
+
+*10 appels d'outils.* Actions notables :
+
+- bash — Check for transformers reference source
+- bash — Look for Qwen2.5-VL reference source locally
+- web_search
+- bash — Find embedding lookup in forward
+- bash — Add embedding injection point
+- bash — Verify injection and gate
+- bash — Inspect forward embedding site
+- bash — Wire injection into forward
+- bash — Verify tests and gate after injection
+- bash — Document injection point and commit
 
 ## 3. Travail accompli
 
@@ -1027,7 +1071,7 @@ L'objectif reste **actif** : la prochaine session peut écrire le petit programm
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 879 autres
+- … et 889 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1228,4 +1272,5 @@ L'objectif reste **actif** : la prochaine session peut écrire le petit programm
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p='docs/plan-mla-vision.md'; s=open(p).read() old = """| tranche | écart max relatif cont
 - vision : une RÉFÉRENCE existe sur la machine (libmtmd d'ollama)  Le plan pariait sur llama-mtmd-cli ; il n'y est pas, mais ollama embarque la bibliothèque multi
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p='docs/plan-mla-vision.md'; s=open(p).read() old = """Ce qui n'y est pas encore : la rot
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p='docs/plan-mla-vision.md'; s=open(p).read() add = """ ### Le point d'injection est en p
 

@@ -285,3 +285,24 @@ C'est le plus gros morceau du dépôt : une tour ViT complète, un chemin
 d'injection d'embeddings, et une chaîne de pré-traitement d'image. À mener APRÈS
 MLA, dont le chemin d'injection (`c_kv`) est plus simple et dont le gain
 (cache ÷50) est mesurable sur le plan 1 M.
+
+### Le point d'injection est en place (le seul ajout d'architecture)
+
+`Model::emb_imposee` : un vecteur imposé remplace, pour UN appel, la ligne
+`token_embd.weight` que `forward` lisait toujours. C'est ce qui permettra
+d'injecter les embeddings d'image à la place des jetons `<|image_pad|>`, et
+c'était le seul ajout d'architecture que la vision demandait au moteur — le
+reste (MLA, tour ViT) vit dans des chemins séparés.
+
+Vérifié : `cargo test` 6/6 et la porte Qwen reste à **19,3885** (le vecteur
+imposé est consommé une fois puis oublié, donc le chemin standard est intact).
+
+### Ce qui reste, et ce qui le débloque
+
+Deux conventions d'attention dans le ViT — la **rotation 2-D** (mRoPE) et la
+**fenêtre locale une couche sur huit** — ne sont PAS vérifiables par ma
+référence numpy, qui les partage. Ce qui les trancherait : `libmtmd` d'ollama
+(recette au § précédent), qui donne les embeddings d'image de l'implémentation de
+référence. Une recherche du source de `transformers` sur cette machine n'a rien
+donné (ni torch ni transformers installés), et la recherche web n'a pas rendu le
+fragment de code dans le budget disponible.

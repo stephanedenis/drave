@@ -592,6 +592,11 @@ pub struct Model {
     pub kv_gpu: Option<Vec<(usize, crate::gpu::KvGpu)>>,
     /// Tranches de clés du noyau d'attention, réutilisées d'un jeton à l'autre.
     pub attn_gpu_part: Vec<f32>,
+    /// Embedding imposé pour le prochain appel à `forward` : c'est le point
+    /// d'injection des vecteurs d'image (ou de tout autre vecteur), le seul
+    /// ajout d'architecture que la vision demande au moteur — `forward` partait
+    /// toujours de `token_embd`.
+    pub emb_imposee: Option<Vec<f32>>,
     /// Couches MLA, si le modèle en est un (`attn_kv_a_mqa` présent).
     pub mla: Option<Vec<Mla>>,
     /// Cache LATENT par couche : `c_kv` (kv_lora) et `k_rope` (qkr) par position.
@@ -1355,7 +1360,7 @@ impl Model {
             stop_id: None, stop_id2: None, prof: [0.0; 6],
             tete,
             tete_gpu, tete_gpu_q6k, head4, sinks_vus, kv_gpu, attn_gpu_part: Vec::new(),
-            cache_experts, mla, mla_cache, lot: 1,
+            cache_experts, mla, mla_cache, emb_imposee: None, lot: 1,
             patch: None, ffn_gain: None, hebb: None,
         }
     }
@@ -2481,7 +2486,7 @@ impl Model {
         let largeur_profil = self.cfg.ffn.max(self.cfg.ffn_exp);
         self.profil_jetons += 1;
         let Model { g, cfg, layers, out_norm, pool, kv, events, attn_events, kv_gpu,
-                    attn_gpu_part, .. } = self;
+                    attn_gpu_part, emb_imposee, .. } = self;
         let h = cfg.hidden;
         let hd = cfg.head_dim;
         let nh = cfg.n_head;
@@ -2489,7 +2494,13 @@ impl Model {
         let rep = nh / nkv;
         let ctx = self.ctx;
 
-        let mut x = g.row_f32("token_embd.weight", tok as usize, h);
+        // Injection : un vecteur imposé (embedding d'image) remplace la ligne
+        // `token_embd` pour cet appel, et seulement pour lui — c'est le seul
+        // ajout d'architecture que la vision demande au moteur.
+        let mut x = match emb_imposee.take() {
+            Some(v) => v,
+            None => g.row_f32("token_embd.weight", tok as usize, h),
+        };
         let mut hn = vec![0f32; h];
         let mut q = vec![0f32; nh * hd];
         let mut k = vec![0f32; nkv * hd];
