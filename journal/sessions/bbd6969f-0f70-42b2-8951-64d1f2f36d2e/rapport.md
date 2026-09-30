@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 49.6 h |
+| Durée | 49.8 h |
 | Tours | 46 |
-| Messages | 1936 |
-| Appels d'outils | 1827 |
+| Messages | 1939 |
+| Appels d'outils | 1830 |
 | Fichiers touchés | 44 |
-| Commandes | 1499 |
+| Commandes | 1502 |
 | Sous-agents | 10 |
-| Commits | 162 |
+| Commits | 163 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -2117,7 +2117,7 @@ L'**audit des drapeaux** a trouvé que **46 options sur 110** étaient ignorées
 
 ### Tour 46 — continue jusqu'à 18h HAE
 
-*89 appels d'outils.* Actions notables :
+*92 appels d'outils.* Actions notables :
 
 - bash — Check time, timezone and remaining budget
 - create_goal
@@ -2133,7 +2133,7 @@ L'**audit des drapeaux** a trouvé que **46 options sur 110** étaient ignorées
 - bash — Improve notebook with real text cell
 - bash — Kill test node safely and check notebook
 - bash — Add notebook real-text cell and commit
-- … et 75 autres
+- … et 78 autres
 
 **Synthèse produite :**
 
@@ -2245,7 +2245,7 @@ L'**audit des drapeaux** a trouvé que **46 options sur 110** étaient ignorées
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 1459 autres
+- … et 1462 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2555,4 +2555,5 @@ L'**audit des drapeaux** a trouvé que **46 options sur 110** étaient ignorées
 - Index : le mode 4, le protocole v5, le plan GPU et le décompte des relectures" && git log --oneline -1 | cat; tail -4 /tmp/aiguille_kv2048.log; date +"%H:%M:%S"
 - Mode 4 : le plafond cumulatif vérifié à l'octet près  Le relecteur avait prouvé qu'il manquait ; voici la preuve qu'il marche : avec des états bien formés au ma
 - Préremplissage par lots : fidélité vérifiée à 1 024 jetons (0,00e0, 16 lots)  La fidélité du mode 3 était établie à 40, 200 et 256 jetons ; elle l'est maintenan
+- REPRISE : dix-sept tests, et ce qu'ils verrouillent" && git log --oneline -1 | cat; sleep 420; tail -6 /tmp/aiguille_kv2048.log; date +"%H:%M:%S"
 

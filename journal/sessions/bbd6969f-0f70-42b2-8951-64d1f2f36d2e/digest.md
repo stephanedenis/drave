@@ -31198,3 +31198,36 @@ référence locale  : perplexité 9.5939  (88.3 s)
 **Mode 3 dense vérifié aussi à 1 024 jetons : 0,00e0** (9,5939 des deux côtés, 16 lots). J'inscris et j'attends l'aiguille.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/rapport-prefill-reparti.md'; s=open(p).read()\nv = \"\"\"| contrôle `--lot 1` (un flux par jeton) | 255 | **0,00e0** (18,0206 = 18,0206) |\"\"\"\nn = \"\"\"| contrôle `--lot 1` (un flux par jeton) | 255 | … [825 caractères tronqués]`
+
+  ```
+rapport 3.4 : la vérification à 1 024 jetons
+0259bf1 Préremplissage par lots : fidélité vérifiée à 1 024 jetons (0,00e0, 16 lots)
+### f32 (référence) · contexte 2048
+16:28:03
+  ```
+
+- **bash** `{"command": "sleep 480; tail -10 /tmp/aiguille_kv2048.log; date +\"%H:%M:%S\"", "description": "Wait for needle reference results", "timeoutMs": 600000}`
+
+  ```
+### f32 (référence) · contexte 2048
+  lot 256 · 40 jetons de réponse · GPU non
+ contexte  profondeur  trouvé  secondes  détail
+     2048        0.10     oui     368.6  prompt 2147 jetons
+     2048        0.50     oui     243.1  prompt 2147 jetons
+     2048        0.90     oui     242.9  prompt 2147 jetons
+### cles_f16 · contexte 2048
+16:36:11
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"13/13\\|Treize tests\\|11 tests\" REPRISE.md reports/*.md 2>/dev/null | head -5; python3 - <<'PY'\nimport re\nfor p in ['REPRISE.md']:\n    s = open(p).read()\n    n = s.count('13/13')\n    print(f\"{p} : {n} occurrence(s)  … [63 caractères tronqués]`
+
+  ```
+REPRISE.md:35:> **19,3885** et gpt-oss ctx 256 = **15,1757**, `cargo test` **13/13**. La porte
+REPRISE.md:438:- **Treize tests** : les sept du protocole et du plafond, dont deux qui envoient
+reports/rapport-coherence-docs-2.md:127:| 58 | `REPRISE.md:35` vs `:409`, `reports/rapport-session-2026-09-30.md:66` | « `cargo test` **11/11** » ; ailleurs « **Treize tests** » et « 13/13 » | le code contient **13** `#[test]` (main.rs 7, list.rs 3, engine.rs 2, model.rs 1) | CONTRADICTOIRE |
+reports/rapport-coherence-docs-2.md:133:| 64 | `REPRISE.md:409-411` | « Treize tests : les sept du protocole et du plafond, dont deux qui envoient une VRAIE trame forgée dans une socket » | conforme : 7 tests dans `main.rs`, dont `une_trame_liste_hors_dimension_ne_tue_pas_le_noeud` et `un_nombre_de_blocs_dement_grand_est_refuse` | OK |
+reports/rapport-coherence-docs-2.md:184:    lignes ; REPRISE:35 → **13/13** ; rapport-session:4 vs :66 (trancher le nombre
+REPRISE.md : 1 occurrence(s) de 13/13
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='REPRISE.md'; s=open(p).read()\ndef rem(nom, v, n):\n    global s\n    c = s.count(v)\n    if c != 1:\n        print(f\"  ✗ {nom} : {c}\"); return False\n    s = s.replace(v, n); print(f\"  ✓ {nom}\"); return True … [1032 caractères tronqués]`

@@ -32,7 +32,7 @@ cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && cargo build --r
 
 > **Revérifiées le 30/09 après tous les changements de la journée** (mode lot,
 > protocole v4, DRVF v2/v3, plafond R4, tableau de bord) : Qwen ctx 256 =
-> **19,3885** et gpt-oss ctx 256 = **15,1757**, `cargo test` **13/13**. La porte
+> **19,3885** et gpt-oss ctx 256 = **15,1757**, `cargo test` **17/17**. La porte
 > gpt-oss était la seule que la relecture adversariale n'avait pas pu faire
 > tourner (bornes de temps) ; elle est verte.
 >
@@ -435,9 +435,11 @@ sur un lien à 20 ms par message (2,6 s contre 47,6 s). `reports/rapport-prefill
   hors dimension TUAIT le nœud (SIGABRT), l'envoi paniquait encore sur un pair
   fermé, `-keep` (un seul tiret) était avalé, `--flux-forcer` ignoré en inférence,
   `--banc-mla` muet sur la trace.
-- **Treize tests** : les sept du protocole et du plafond, dont deux qui envoient
-  une VRAIE trame forgée dans une socket (indice hors dimension, 100 millions de
-  blocs).
+- **Dix-sept tests** : onze sur le protocole et le plafond — taille d'en-tête et
+  version verrouillées, aller-retour des paires à échappement, refus des corps
+  tronqués, deux trames FORGÉES envoyées dans une vraie socket (indice hors
+  dimension, 100 millions de blocs, cumul au-delà des 256 Mo), quatre sur le mode 4
+  (état forgé, deux états, préfixe incohérent, liste vide acceptée en modes 1/2).
 
 ### Les prochains chantiers, dans l'ordre
 
