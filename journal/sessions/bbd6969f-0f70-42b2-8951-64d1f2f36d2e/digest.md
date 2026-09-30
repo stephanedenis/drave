@@ -36471,3 +36471,11 @@ portes, et deux relectures adversariales.**
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -F - <<'EOF' && git log --oneline -1 && ./tools/sprint.sh list && git status --short\nSprint 1 : cérémonie (revue chiffrée, rétrospective, planning du sprint 2)\n\nBox de 17:41 à 19:41, 120 min pleines, 20 … [1545 caractères tronqués]`
+
+  ```
+a6eedd8 Sprint 1 : cérémonie (revue chiffrée, rétrospective, planning du sprint 2)
+# Sprint 1 — Premier des trois noyaux GPU du top-k : les scores d'attention calculés en VRAM, vérifiés contre la référence CPU à 1e-6, avec leur banc
+ M journal/README.md
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -m \"Journal : index des sessions (fin de sprint 1)\" && git log --oneline --since=\"2026-09-30 17:41\" | wc -l && git status --short | wc -l && pgrep -c -x drave; echo \"--- bilan fichiers ---\"; git diff … [87 caractères tronqués]`
