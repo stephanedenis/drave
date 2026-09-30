@@ -41,23 +41,42 @@ format sur le disque n'a pas changé ; c'est la sémantique du champ qui est
 maintenant explicite — et c'est exactement le genre de précision qu'une
 spécification doit porter.
 
-## Transport (phase 3, TCP)
+## Transport (phase 3, TCP) — protocole v2
 
 ```
-requête   magie        u32          0x44525631 (« DRV1 »)
+en-tête (26 octets, identique à l'aller et au retour)
+          magie        u32          0x44525631 (« DRV1 »)
+          version      u8           2   (refusée si différente, en le disant)
+          mode         u8           0 = f32 dense · 1 = liste quantifiée
           couche_debut u32
           couche_fin   u32
           position     u32
-          dimension    u32
-          puis dimension × f32
-réponse   même en-tête, puis dimension × f32
+          n            u32          dimension (mode 0) ou actifs (mode 1)
+          échelle      f32          mode 1 uniquement
+corps     mode 0 : n × f32
+          mode 1 : n × ( indice u16 · valeur i16 )
 ```
 
-Le flux voyage en **f32 dense** sur le réseau alors qu'il est quantifié sur le
-disque : c'est un choix de simplicité pour le banc d'essai, pas une obligation —
-soit **3 604 octets par flux** (20 d'en-tête + 896 × 4) pour Qwen2.5-0.5B. La
-version quantifiée du transport est ce que la phase 3 devra mesurer (octets par
-jeton × latence) ; le disque, lui, est déjà à 6 octets par neurone actif.
+Le **mode 1 est le format du disque**, à l'octet près : deux octets d'indice,
+deux octets de valeur, une échelle par liste. Transporter la liste plutôt que le
+vecteur dense, c'est le sujet même de la phase 3 — « des listes, pas des
+matrices » vaut aussi sur le câble. La réponse est encodée **comme la demande** :
+un pair qui parle en listes reçoit des listes, il n'y a pas deux réglages à
+garder cohérents entre deux machines.
+
+La version est dans **chaque** en-tête, et un pair d'une autre version est refusé
+avec un message qui nomme les deux versions :
+
+```
+[flux] arrêt : flux en version 99, cette build parle la 2 (pair incompatible : rien n'a été interprété)
+```
+
+C'est le critère de la phase 3.5 : pas de silence, pas de devinette.
+
+Le mode dense coûte **3 620 octets par flux** (26 d'en-tête + 896 × 4) pour
+Qwen2.5-0.5B ; le mode liste coûte 26 + 4 × (nombre d'actifs), donc il gagne dès
+que l'activité descend sous 100 %. Les deux sont mesurés côte à côte dans
+`reports/rapport-transport-liste.md`.
 
 ### Qui applique la norme finale (règle, pas détail)
 

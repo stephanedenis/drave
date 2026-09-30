@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 44.0 h |
+| Durée | 44.3 h |
 | Tours | 44 |
-| Messages | 1472 |
-| Appels d'outils | 1388 |
+| Messages | 1510 |
+| Appels d'outils | 1426 |
 | Fichiers touchés | 44 |
-| Commandes | 1101 |
+| Commandes | 1133 |
 | Sous-agents | 1 |
-| Commits | 86 |
+| Commits | 87 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -1995,7 +1995,7 @@ Je vérifie l'heure à chaque itération et j'arrête à 12:06, en laissant un p
 
 ### Tour 44 — pendant que les charges locales s'executent, peux-tu avancer des chantiers légers sur les ressources loçcale ou d'analys … [7 caractères tronqués]
 
-*42 appels d'outils.* Actions notables :
+*80 appels d'outils.* Actions notables :
 
 - bash — Write and run the pure flux analysis tool
 - bash — Document the flux analysis and commit
@@ -2011,11 +2011,11 @@ Je vérifie l'heure à chaque itération et j'arrête à 12:06, en laissant un p
 - bash — Inspect state after timeout
 - bash — Rerun pre-fix distributed test in background
 - bash — Inspect all final-norm condition sites
-- … et 23 autres
+- … et 56 autres
 
 **Synthèse produite :**
 
-Écart **0,00e0** : le découpage est désormais fidèle au bit près. Je verrouille avec un banc plus long + les portes de non-régression.
+Courbe obtenue. Je documente — les chiffres racontent une histoire nette (le seuil de 5 % coûte ×1,8 de perplexité pour ÷4 de taille).
 
 ## 3. Travail accompli
 
@@ -2114,7 +2114,7 @@ Je vérifie l'heure à chaque itération et j'arrête à 12:06, en laissant un p
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 1061 autres
+- … et 1093 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2242,7 +2242,7 @@ Je vérifie l'heure à chaque itération et j'arrête à 12:06, en laissant un p
 
 ## 5. Erreurs rencontrées
 
-73 sorties en erreur ou divergentes. Les premières :
+76 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : a8f2635f8 docs: record which models this box is good at, and why src/llama-hparams.cpp:8:void llama_hparams::set_swa_pattern(uint32_t n_pattern, bool dense_first) { src/llama-hparams.h:308:    void se
 - **T1** : 511 tokens notés — perplexité cumulée 247.031  (4.9 tok/s) === perplexité 247.0308 sur 511 tokens (0 événements, 104.5 s) ===  ### B3 harmony assistant 511 --- ref --- 0.0 0.0 0:00 ls: cannot access '
@@ -2348,4 +2348,5 @@ Je vérifie l'heure à chaque itération et j'arrête à 12:06, en laissant un p
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-analyse-flux.md <<'EOF' # Analyse du flux, couche par couche  Première analyse **pur
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > docs/format-flux.md <<'EOF' # Le format de flux (DRVF v1) — spécification  Ce format sert **trois ch
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p='docs/format-flux.md'; s=open(p).read() vieux = """Le flux voyage en **f32** sur le rés
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date +"%H:%M:%S" && cat > reports/rapport-transport-liste.md <<'EOF' # Phase 3.2 — transporter la LISTE au
 

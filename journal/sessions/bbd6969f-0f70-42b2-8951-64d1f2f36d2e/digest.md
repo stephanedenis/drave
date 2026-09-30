@@ -23436,3 +23436,582 @@ roadmap mise à jour
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='docs/format-flux.md'; s=open(p).read()\nvieux = \"\"\"Le flux voyage en **f32** sur le réseau alors qu'il est quantifié sur le disque :\nc'est un choix de simplicité pour le banc d'essai, pas une obligation — la  … [6072 caractères tronqués]`
+
+  ```
+format-flux mis à jour
+8037ba8 Phase 3 : le calcul réparti redevient fidèle — écart 0,00e0
+10:44:17
+  ```
+
+### 🤖 Assistant
+
+⏵ Chantier 3.2 : faire voyager la **liste** sur le réseau au lieu du vecteur dense f32.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date +\"%H:%M:%S\"; grep -n \"fn quant_scratch\" -A 30 drave-core/src/model.rs | head -50; echo \"=== SparseVec ===\"; grep -n \"pub struct SparseVec\" -A 12 drave-core/src/model.rs", "description": "Inspect sparse quantizer API"}`
+
+  ```
+10:44:32
+1564:    fn quant_scratch(x: &[f32], levels: f32, thresh: f32, topk: usize, renorm: bool,
+1565-                     scratch: &mut Vec<f32>) -> Option<(SparseVec, f32)> {
+1566-        let mut mx = 0f32;
+1567-        for &v in x { let a = v.abs(); if a > mx { mx = a; } }
+1568-        if mx == 0.0 { return None; }
+1569-        let s = mx / levels;
+1570-        let inv = 1.0 / s;
+1571-        // seuil absolu correspondant à la fraction demandée du maximum
+1572-        let seuil = (thresh * levels) as i32;
+1573-        let mut sv = SparseVec { idx: Vec::with_capacity(x.len()), val: Vec::with_capacity(x.len()) };
+1574-        if topk > 0 {
+1575-            // k-WTA : ne garder que les k plus grandes magnitudes (inhibition
+1576-            // latérale). `topk` est une FRACTION de la dimension : sans cela la
+1577-            // même valeur de k ne veut pas dire la même chose pour un vecteur de
+1578-            // 896 et un de 4 864.
+1579-            scratch.clear();
+1580-            scratch.extend(x.iter().map(|v| v.abs()));
+1581-            let mag = &mut *scratch;
+1582-            let k = (((topk as f32) / 1000.0) * x.len() as f32).round() as usize;
+1583-            let k = k.cl
+… [780 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n 1594,1625p drave-core/src/model.rs; echo \"=== SparseVec def ===\"; grep -rn \"struct SparseVec\" -A 10 drave-core/src/*.rs | head -20", "description": "Finish reading quantizer and SparseVec"}`
+
+  ```
+if renorm && !sv.val.is_empty() {
+                let l1_tot: f64 = x.iter().map(|v| v.abs() as f64).sum();
+                let l1_kept: f64 = sv.val.iter().map(|q| q.abs() as f64).sum::<f64>() * s as f64;
+                if l1_kept > 0.0 {
+                    let f = (l1_tot / l1_kept) as f32;
+                    let lim = levels - 1.0;
+                    for q in sv.val.iter_mut() {
+                        let v = (*q as f32 * f).round().clamp(-lim, lim);
+                        *q = v as i32;
+                    }
+                    sv.idx.retain(|_| true);
+                }
+            }
+        } else {
+            for (i, &v) in x.iter().enumerate() {
+                let q = (v * inv).round();
+                if q != 0.0 && (q as i32).abs() > seuil { sv.idx.push(i as u32); sv.val.push(q as i32); }
+            }
+        }
+        Some((sv, s))
+    }
+
+    /// Produit matrice-vecteur **par événements** : les activations actives
+    /// poussent leur contribution dans les sorties de leur liste.
+    fn matvec(pool: &mut Pool, p: &Proj, x: &[f32], out: &mut [f32], events: &mut u64,
+              levels: f32, thresh: f32, topk: usize, renorm: bool, scratch: &mut Vec<f32>,
+        
+… [907 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n '\"--dense\"' -B 3 -A 3 drave-core/src/main.rs | head -20; echo \"=== Options: champs booléens ===\"; sed -n 330,400p drave-core/src/main.rs | grep -n \"bool\" | head -20", "description": "Inspect option parsing pattern for f … [6 caractères tronqués]`
+
+  ```
+487-            "--flux" => { o.flux = true; 1 }
+488-            "--session" => { o.session = true; o.flux = true; 1 }
+489-            "--chat" => { o.chat = true; 1 }
+490:            "--dense" => { o.dense = true; 1 }
+491-            "--auto" => { o.auto = true; 1 }
+492-            "--push" => { o.auto = false; o.dense = false; 1 }
+493-            "--pin" => { o.pin = true; 1 }
+=== Options: champs booléens ===
+2:    infer: bool, ppl: bool, plan: bool, tokenize: bool, gpu_banc: bool,
+27:    tensors: bool,
+30:    ppl_texte: bool, prompt: Option<String>, limit: usize, depuis: usize,
+33:    flux: bool, session: bool, chat: bool,
+35:    ctx: usize, threads: usize, abits: u32, dense: bool, auto: bool,
+39:    ctx_impose: bool, threads_impose: bool, abits_impose: bool,
+40:    q4: u8, b6: u8, keep: f32, bits: u32, moe_topk: usize, pin: bool,
+42:    attn_window: usize, swa_pattern: Option<usize>, sans_fenetre: bool,
+45:    act_thresh: f32, act_topk: usize, act_renorm: bool, topk_proj: [usize; 7],
+47:    logits_bin: Option<String>, ppl_profil: bool,
+50:    profil_neurones: bool, neurones_sortie: Option<String>,
+55:    sans_yarn: bool,
+64:/// l'argument suivant (`i += 2`) ; les drapeaux boolé
+… [19 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+Je code le protocole v2 : en-tête versionné, mode dense/liste, et refus explicite d'une version inconnue.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/main.rs'; s=open(p).read()\n\n# 1. Options : le drapeau\nv = \"            \\\"--flux\\\" => { o.flux = true; 1 }\"\nassert s.count(v) == 1\ns = s.replace(v, \"            \\\"--flux\\\" => { o.flu … [6698 caractères tronqués]`
+
+  ```
+en-tête v2 écrit (le décodage liste reste à finir)
+  ```
+
+### 🤖 Assistant
+
+Le décodage que je viens d'écrire est bancal (pas de modèle dans la fonction). Je le remplace par une charge utile typée, plus propre.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/main.rs'; s=open(p).read()\ni = s.index(\"/// Envoie un flux et rend le nombre d'octets écrits\")\nj = s.index(\"/// Le NŒUD MOTEUR : charge le modèle\")\nneuf = '''/// Charge utile d'un flux : den … [4659 caractères tronqués]`
+
+  ```
+charge utile typée écrite
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/Code 2>/dev/null; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"fn run_serveur_flux\" -A 45 drave-core/src/main.rs | sed -n 1,60p", "description": "Read current server function"}`
+
+  ```
+1334:fn run_serveur_flux(port: u16) {
+1335-    let chemin = modele_chemin();
+1336-    let mut mdl = model::Model::load(&chemin, 4096, 16, true, 1.0, false, 0, 0);
+1337-    let hidden = mdl.cfg.hidden;
+1338-    let ecoute = std::net::TcpListener::bind(("127.0.0.1", port)).expect("écoute");
+1339-    println!("[flux] nœud moteur sur 127.0.0.1:{port} · {hidden} cachés · {} couches",
+1340-             mdl.cfg.n_layer);
+1341-    let (mut sock, pair) = ecoute.accept().expect("connexion");
+1342-    println!("[flux] client connecté : {pair}");
+1343-    let mut servis = 0u64;
+1344-    loop {
+1345-        match recevoir_flux(&mut sock) {
+1346-            Ok((debut, fin, pos, actifs)) => {
+1347-                mdl.couche_debut = debut as usize;
+1348-                mdl.couche_fin = fin as usize;
+1349-                // Le nœud moteur rend TOUJOURS un flux résiduel brut : la norme
+1350-                // finale appartient au nœud qui a la tête de sortie, et à lui
+1351-                // seul. C'est ce qui manquait — 798,3 au lieu de 18,2.
+1352-                mdl.flux_brut = true;
+1353-                mdl.emb_imposee = Some(actifs);
+1354-                let sortie = mdl.forward(0, pos as usize)
+… [1228 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/main.rs'; s=open(p).read()\n\n# --- serveur ---\nvieux = \"\"\"            Ok((debut, fin, pos, actifs)) => {\n                mdl.couche_debut = debut as usize;\n                mdl.couche_fin = f … [4862 caractères tronqués]`
+
+  ```
+appelants mis à jour
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/main.rs'; s=open(p).read()\nv = \"\"\"fn envoyer_flux(s: &mut std::net::TcpStream, debut: u32, fin: u32, pos: u32,\n                actifs: &[f32], mode: u8, mdl: Option<&model::Model>)\n           … [4759 caractères tronqués]`
+
+  ```
+encodeur de flux ajouté
+--- fin build ---
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && timeout 900 cargo build --release 2>&1 | tail -3; date +\"%H:%M:%S\"; cd .. && job() { :; }; echo \"--- état des jobs ---\"", "description": "Confirm build succeeds", "timeoutMs": 900000}`
+
+  ```
+warning: `drave-core` (bin "drave") generated 16 warnings (run `cargo fix --bin "drave" -p drave-core` to apply 7 suggestions)
+    Finished `release` profile [optimized] target(s) in 0.04s
+10:46:11
+--- état des jobs ---
+  ```
+
+- **job_output** `{"job_id": "bash-44"}`
+
+  ```
+=== porte Qwen ctx 256 (attendu 19,3885) ===
+    dont tête de sortie 8.07 | notation log-sum-exp 1.92 (le reste du « reste » n'est pas chronométré)
+    dont attention : scores 0.78 | softmax 0.38 | somme pondérée + écriture KV 0.94
+=== cargo test ===
+running 6 tests
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.13s
+=== réparti 200 jetons ===
+[status: running]
+  ```
+
+- **job_output** `{"job_id": "bash-44", "timeout_ms": 240000, "wait": true}`
+
+  ```
+[modele] 24 couches chargées en 1.414506591s — listes 0.00 Go , 16 threads
+[config] 24 couches, hidden 896 · 
+[config] puits appris sur 0/24 couches · n_rot 64 · ffn 4864 · experts 0
+[config] rotation : RoPE simple (le modèle ne déclare pas YaRN)
+[flux] pilote : 12 couches en local, 12 chez le pair, 200 jetons
+  référence locale  : perplexité 35847.0441  (127.8 s)
+  deux nœuds        : perplexité 35847.0441  (116.4 s)
+  écart             : 0.00e0
+=== fin ===
+10:48:31
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='/tmp/test_reparti.sh'; s=open(p).read()\ns = s.replace('timeout 900 $BIN $MOD --ppl-reparti 127.0.0.1:$PORT --couches-locales $COUCHES --limit $LIM --ctx 256 2>&1 | tail -8',\n              'timeout 1800 $BIN $MO … [1017 caractères tronqués]`
+
+  ```
+started background job bash-45
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"act_levels = \\|act_thresh = \\|act_renorm = \\|act_topk = \" drave-core/src/*.rs | head -12; echo \"=== abits par défaut ===\"; grep -n \"abits\" drave-core/src/main.rs | head -12", "description": "Check quantization defau … [5 caractères tronqués]`
+
+  ```
+drave-core/src/main.rs:471:            "--act-thresh" => { o.act_thresh = suivant(i).parse().unwrap(); 2 }
+drave-core/src/main.rs:472:            "--act-topk" => { o.act_topk = suivant(i).parse().unwrap(); 2 }
+drave-core/src/main.rs:497:            "--act-renorm" => { o.act_renorm = true; 1 }
+drave-core/src/main.rs:548:    mdl.act_levels = ((1u32 << (abits - 1)) - 1) as f32;
+drave-core/src/main.rs:550:    mdl.act_thresh = act_thresh;
+drave-core/src/main.rs:551:    mdl.act_topk = act_topk;
+drave-core/src/main.rs:553:    mdl.act_renorm = act_renorm;
+drave-core/src/main.rs:2360:    mdl.act_levels = ((1u32 << (abits - 1)) - 1) as f32;
+drave-core/src/main.rs:2372:    mdl.act_thresh = act_thresh;
+drave-core/src/main.rs:2373:    mdl.act_topk = act_topk;
+drave-core/src/main.rs:2374:    mdl.act_renorm = act_renorm;
+=== abits par défaut ===
+364:    ctx: usize, threads: usize, abits: u32, dense: bool, auto: bool,
+365:    /// Vrai si `--ctx`, `--threads` ou `--abits` ont été donnés : leurs défauts
+368:    ctx_impose: bool, threads_impose: bool, abits_impose: bool,
+397:        hebb_out: String::from("hebb.bin"), keep: 1.0, abits: 8,
+456:            "--abits" => { o.abits = suivant(i).parse().un
+… [505 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"act_levels\\|act_thresh\" drave-core/src/model.rs | sed -n 1,20p; echo \"=== run_ppl_reparti applique-t-il les options ? ===\"; sed -n 1367,1382p drave-core/src/main.rs", "description": "Check whether split path honors quan … [18 caractères tronqués]`
+
+  ```
+620:    pub act_levels: f32,
+622:    /// `act_thresh` écarte les activations sous cette fraction du maximum du
+627:    pub act_thresh: f32,
+1531:            ctx, events: 0, act_levels: 127.0, act_thresh: 0.0, act_topk: 0, act_renorm: false,
+2174:            quantifier(&hn, &mut xi, &mut sx, self.act_levels, self.act_thresh);
+2199:                                     &mut self.events, self.act_levels, self.act_thresh, 0,
+2366:                quantifier(&att, &mut ai[..t * n_in_wo], &mut sa, self.act_levels, self.act_thresh);
+2384:            quantifier(&hn, &mut xi, &mut sx, self.act_levels, self.act_thresh);
+2489:                        let ech = if mx > 0.0 { mx / self.act_levels } else { 1.0 };
+2530:                quantifier(&gate, &mut gi, &mut sg, self.act_levels, self.act_thresh);
+2799:                if let Some((sv, sx)) = Self::quant_scratch(&hn, self.act_levels, self.act_thresh,
+2807:            Self::matvec(pool, &lay.wq, &hn, &mut q, events, self.act_levels, self.act_thresh, tk(0), self.act_renorm, &mut scratch, self.seuil_push);
+2808:            Self::matvec(pool, &lay.wk, &hn, &mut k, events, self.act_levels, self.act_thresh, tk(1), self.act_renorm, &mut scratch, self
+… [1440 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+Le drapeau `--abits/--act-thresh` est **ignoré** dans les deux modes flux (le mode d'échec récurrent du dépôt). J'arrête la mesure, je branche les options, je relance.
+
+- **job_kill** `{"job_id": "bash-45", "reason": "Options de quantification ignorées dans le chemin flux : mesure invalide"}`
+
+  ```
+requested cancellation of job bash-45
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && pkill -f \"flux-serveur 4574\" ; pkill -f \"ppl-reparti\" ; sleep 0.5; python3 - <<'PY'\np='drave-core/src/main.rs'; s=open(p).read()\nv = \"    if let Some(port) = opt.flux_serveur { run_serveur_flux(port); return; }\"\nassert s.cou … [2996 caractères tronqués]`
+
+  ```
+(no output)
+[killed by signal: SIGTERM]
+  ```
+
+### 🤖 Assistant
+
+`pkill` a tué mon propre shell (le motif matchait sa ligne de commande). Je reprends proprement.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && pgrep -a -f \"release/drave\" | head; echo \"--- patch déjà appliqué ? ---\"; grep -c \"appliquer_quantification\" drave-core/src/main.rs", "description": "Check leftovers and patch state"}`
+
+  ```
+4100209 timeout 3600 ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf --ppl /tmp/ids_qwen_long.txt --ctx 8192 --limit 8192 --dense --threads 16 --lot 512
+4100212 ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf --ppl /tmp/ids_qwen_long.txt --ctx 8192 --limit 8192 --dense --threads 16 --lot 512
+4126511 bash -c cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && pgrep -a -f "release/drave" | head; echo "--- patch déjà appliqué ? ---"; grep -c "appliquer_quantification" drave-core/src/main.rs
+--- patch déjà appliqué ? ---
+0
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/main.rs'; s=open(p).read()\nv = \"    if let Some(port) = opt.flux_serveur { run_serveur_flux(port); return; }\"\nassert s.count(v) == 1\ns = s.replace(v, \"    if let Some(port) = opt.flux_serveur … [2789 caractères tronqués]`
+
+  ```
+options de quantification branchées
+warning: `drave-core` (bin "drave") generated 16 warnings (run `cargo fix --bin "drave" -p drave-core` to apply 7 suggestions)
+    Finished `release` profile [optimized] target(s) in 0.01s
+10:49:32
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && /tmp/test_transport.sh", "description": "Measure dense vs list transport", "run_in_background": true}`
+
+  ```
+started background job bash-46
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && (./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf --flux-serveur 45799 > /tmp/serveur_version.log 2>&1 &) ; for i in $(seq 1 60); do ss -ltn 2>/dev/null | grep -q \":45799 \" && break; sleep 0.5; done; python3 - <<'PY' … [532 caractères tronqués]`
+
+  ```
+--- log serveur ---
+[attention] QT_IM_SWITCHER est l'ancien nom d'une variable d'environnement : elles s'appellent maintenant DRAVE_* (voir docs/histoire.md). Rien n'a été appliqué.
+[flux] nœud moteur sur 127.0.0.1:45799 · 896 cachés · 24 couches
+[flux] client connecté : 127.0.0.1:16580
+[flux] arrêt : flux en version 99, cette build parle la 2 (pair incompatible : rien n'a été interprété)
+[flux] 0 flux servis
+[killed by signal: SIGTERM]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && pgrep -a -f \"release/drave .*flux-serveur\" | head; echo \"(vide = aucun serveur restant)\"; python3 - <<'PY'\np='docs/format-flux.md'; s=open(p).read()\nvieux = \"\"\"## Transport (phase 3, TCP)\n\n```\nrequête   magie        u32   … [2574 caractères tronqués]`
+
+  ```
+4131857 bash -c cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && pgrep -a -f "release/drave .*flux-serveur" | head; echo "(vide = aucun serveur restant)"; python3 - <<'PY' p='docs/format-flux.md'; s=open(p).read() vieux = """## Transport (phase 3, TCP)  ``` requête   magie        u32          0x44525631 (« DRV1 »)           couche_debut u32           couche_fin   u32           position     u32           dimension    u32           puis dimension × f32 réponse   même en-tête, puis dimension × f32 ```""" neuf = """## Transport (phase 3, TCP) — protocole v2  ``` en-tête (26 octets, identique à l'aller et au retour)           magie        u32          0x44525631 (« DRV1 »)           version      u8           2   (refusée si différente, en le disant)           mode         u8           0 = f32 dense · 1 = liste quantifiée           couche_debut u32           couche_fin   u32           position     u32           n            u32          dimension (mode 0) ou actifs (mode 1)           échelle      f32          mode 1 uniquement corps     mode 0 : n × f32           mode 1 : n × ( indice u16 · valeur i16 ) ```  Le **mode 1 est le format du disque**, à l'octet près : deux octets d'indic
+… [1607 caractères tronqués]
+  ```
+
+- **job_output** `{"job_id": "bash-46", "timeout_ms": 300000, "wait": true}`
+
+  ```
+=== porte Qwen ctx 256 (attendu 19,3885) ===
+     255 tokens notés — perplexité cumulée 17.431  (22.8 tok/s)  [fenêtre 1 : 255 notés, PPL 17.431]
+     510 tokens notés — perplexité cumulée 19.388  (22.9 tok/s)  [fenêtre 2 : 255 notés, PPL 21.565]
+=== perplexité 19.3885 sur 510 tokens (0 événements, 22.3 s) ===
+=== transport DENSE f32 (abits 8, seuil 0,05) ===
+[flux] quantification : 127 niveaux, seuil 0.05, top-k 0, renorm false
+[flux] pilote : 12 couches en local, 12 chez le pair, 80 jetons
+  référence locale  : perplexité 556.9951  (47.4 s)
+  deux nœuds        : perplexité 942.4584  (45.2 s)
+  écart             : 6.92e-1
+  transport         : dense f32 · 3656 octets par flux (aller) · 3656 au retour · 101.3 % d'activité (907 neurones par flux)
+=== transport LISTES quantifiées (mêmes réglages) ===
+[flux] quantification : 127 niveaux, seuil 0.05, top-k 0, renorm false
+[flux] pilote : 12 couches en local, 12 chez le pair, 80 jetons
+  référence locale  : perplexité 556.9951  (49.2 s)
+  deux nœuds        : perplexité 988.3158  (44.9 s)
+  écart             : 7.74e-1
+  transport         : listes quantifiées · 1051 octets par flux (aller) · 3405 au retour · 28.6 % d'activité (256 neurone
+… [54 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+Le banc était faussé : le serveur ne recevait pas `--act-thresh` (nœuds réglés différemment → écart 0,69). C'est un vrai trou du protocole : **les réglages d'activation changent les chiffres et ne voyagent pas**. Je les mets dans l'en-tête.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/main.rs'; s=open(p).read()\n\n# --- constante d'en-tête ---\nv = \"\"\"/// En-tête commun : magie · version · mode · plage · position · n · échelle.\nconst TAILLE_TETE: usize = 4 + 1 + 1 + 4 + 4 +  … [5981 caractères tronqués]`
+
+  ```
+réglages d'activation dans l'en-tête
+warning: `drave-core` (bin "drave") generated 16 warnings (run `cargo fix --bin "drave" -p drave-core` to apply 7 suggestions)
+    Finished `release` profile [optimized] target(s) in 0.01s
+10:54:00
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/verif_flux.sh <<'EOF'\n#!/bin/bash\ncd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\nBIN=./drave-core/target/release/drave\necho \"=== 1. dense f32, réglages par défaut (40 jetons) ===\"\nTAG=def PORT=45750 LIM=40 EXTRA … [1084 caractères tronqués]`
+
+  ```
+started background job bash-47
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date +\"%H:%M:%S\"; cat /tmp/kv_attribution.log; echo \"--- processus de la campagne ---\"; pgrep -a -f \"ids_qwen_long\" | grep -v pgrep | head -3", "description": "Check KV attribution campaign"}`
+
+  ```
+10:54:11
+cles_f32     : perplexité 14.2372 sur 8191 tokens (0 événements, 1208.0 s)
+valeurs_f32  : --- processus de la campagne ---
+4100209 timeout 3600 ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf --ppl /tmp/ids_qwen_long.txt --ctx 8192 --limit 8192 --dense --threads 16 --lot 512
+4100212 ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf --ppl /tmp/ids_qwen_long.txt --ctx 8192 --limit 8192 --dense --threads 16 --lot 512
+  ```
+
+- **bash** `{"command": "ls -la /tmp/*.sh 2>/dev/null | head -20; echo \"=== script de campagne KV ===\"; for f in /tmp/kv*.sh /tmp/campagne*.sh; do [ -f \"$f\" ] && echo \"--- $f ---\" && cat \"$f\"; done 2>/dev/null | head -40; echo \"=== flags KV dans le CLI ===\"; cd /home/stephane/Data13TB/stephane/GitHub/ … [159 caractères tronqués]`
+
+  ```
+-rwx--x--x. 1 stephane stephane 1647 24 sep 14:56 /tmp/ab-after.sh
+-rwxr-xr-x. 1 stephane stephane  377 29 sep 17:44 /tmp/aiguille_1p5b.sh
+-rwxr-xr-x. 1 stephane stephane  513 29 sep 12:15 /tmp/aiguille30b.sh
+-rwxr-xr-x. 1 stephane stephane  923 29 sep 18:06 /tmp/aiguille_campagne.sh
+-rwxr-xr-x. 1 stephane stephane  468 29 sep 11:26 /tmp/aiguille_lance.sh
+-rwxr-xr-x. 1 stephane stephane  356 27 sep 14:37 /tmp/attn512.sh
+-rwx--x--x. 1 stephane stephane 1152 28 sep 20:17 /tmp/audela_4096.sh
+-rwxr-xr-x. 1 stephane stephane 1167 27 sep 11:42 /tmp/balayage.sh
+-rwxr-xr-x. 1 stephane stephane  679 29 sep 14:19 /tmp/banc_kv2.sh
+-rwxr-xr-x. 1 stephane stephane  718 29 sep 14:18 /tmp/banc_kv.sh
+-rwx--x--x. 1 stephane stephane 1311 28 sep 17:34 /tmp/bascule_yarn.sh
+-rwxr-xr-x. 1 stephane stephane  617 23 sep 19:23 /tmp/bench2.sh
+-rwxr-xr-x. 1 stephane stephane 1198 23 sep 19:19 /tmp/bench-llama.sh
+-rwxr-xr-x. 1 stephane stephane  523 24 sep 08:43 /tmp/bench-nccl.sh
+-rwxr-xr-x. 1 stephane stephane  609 26 sep 07:34 /tmp/build_sim.sh
+-rwxr-xr-x. 1 stephane stephane 3498 24 sep 21:25 /tmp/check-offline-inner.sh
+-rwxr-xr-x. 1 stephane stephane 1289 24 sep 08:10 /tmp/cmp2.sh
+-rwxr-xr-x. 1 stephane
+… [1945 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rn \"DRAVE_KV\" --include=\"*.md\" . | grep -v journal/ | head -12", "description": "Check KV env var documentation"}`
+
+  ```
+./docs/contexte-long.md:117:empaquetés en 4 bits — `DRAVE_KV_BITS=8` ou `4`, `[config] cache KV` dit ce qui est
+./docs/contexte-long.md:339:(`DRAVE_KV_F16=1`, arrondi à 10 bits de mantisse dans les boucles de
+./docs/histoire.md:57:| `QT_KV_BITS`, `QT_KV_F16` | `DRAVE_KV_BITS`, `DRAVE_KV_F16` |
+./docs/roadmap.md:151:| clés quantifiées, **valeurs en f32** | l'erreur qui passe par les SCORES | `DRAVE_KV_V_F32=1` |
+./docs/roadmap.md:152:| **clés en f32**, valeurs quantifiées | l'erreur qui passe par la SOMME PONDÉRÉE | `DRAVE_KV_K_F32=1` |
+./REPRISE.md:228:| `DRAVE_KV_BITS=8` ou `4` | quantifie le cache KV (défaut f32) | le 4 bits coûte +364 % de perplexité à 8 192 |
+./REPRISE.md:229:| `DRAVE_KV_F16=1` | arrondit clés/valeurs en f16 avant quantification | mesuré : aucun effet (hypothèse réfutée) |
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n 135,165p docs/roadmap.md; echo \"=== log KV du rapport ===\"; ls reports/ | head -30", "description": "Read roadmap KV attribution section"}`
+
+  ```
+2. **la taille de la trace suit l'activité** : densité ÷2,3, trace ÷2,5. C'est
+   l'argument de la vision, rendu mesurable sur un fichier : *le coût est
+   proportionnel à ce qui parle*, et ce sera vrai du format d'échange de la
+   phase 3 comme il l'est ici.
+
+Réserve écrite : la ligne « seuil 0,05 » a une perplexité de 2 445 — c'est un
+relevé de COÛT, pas de qualité ; le seuil est volontairement brutal.
+
+
+### Phase 1.4 — l'expérience à faire, écrite pour ne pas la reperdre
+
+L'écart avec llama.cpp à 8 192 (+3,0 % contre +0,8 %) n'est pas attribué. Deux
+sources possibles, et une seule expérience les sépare :
+
+| variante | ce qu'elle isole | réglage proposé |
+|---|---|---|
+| clés quantifiées, **valeurs en f32** | l'erreur qui passe par les SCORES | `DRAVE_KV_V_F32=1` |
+| **clés en f32**, valeurs quantifiées | l'erreur qui passe par la SOMME PONDÉRÉE | `DRAVE_KV_K_F32=1` |
+
+Le code à toucher est localisé : `KvCache::ecrire` (écrire dans `kf`/`vf` au lieu
+de `kq`/`vq` selon le drapeau), `cle`/`valeur` (lire le bon tableau), `assurer`
+(agrandir les tableaux f32 quand ils servent) et `new` (les allouer). Les appels
+GPU doivent être désactivés dans ces variantes — le miroir suppose une
+di
+… [1053 caractères tronqués]
+  ```
+
+- **job_output** `{"job_id": "bash-47", "timeout_ms": 300000, "wait": true}`
+
+  ```
+=== 1. dense f32, réglages par défaut (40 jetons) ===
+[flux] pilote : 12 couches en local, 12 chez le pair, 40 jetons
+  référence locale  : perplexité 144.8289  (25.3 s)
+  deux nœuds        : perplexité 144.8289  (24.7 s)
+  écart             : 0.00e0
+  transport         : dense f32 · 3716 octets par flux (aller) · 3716 au retour · 102.6 % d'activité (919 neurones par flux)
+=== 2. dense f32, seuil 0,05 des DEUX côtés ===
+[flux] pilote : 12 couches en local, 12 chez le pair, 40 jetons
+  référence locale  : perplexité 493.0344  (26.3 s)
+  deux nœuds        : perplexité 493.0344  (24.7 s)
+  écart             : 0.00e0
+  transport         : dense f32 · 3716 octets par flux (aller) · 3716 au retour · 102.6 % d'activité (919 neurones par flux)
+=== 3. listes quantifiées, mêmes réglages ===
+[flux] quantification : 127 niveaux, seuil 0.05, top-k 0, renorm false
+[flux] pilote : 12 couches en local, 12 chez le pair, 40 jetons
+  référence locale  : perplexité 493.0344  (24.9 s)
+  deux nœuds        : perplexité 1010.4646  (22.4 s)
+  écart             : 1.05e0
+  transport         : listes quantifiées · 893 octets par flux (aller) · 923 au retour · 23.8 % d'activité (213 neurones par flux)
+=== 4. r
+… [178 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+Résultats : dense fidèle (0,00e0) avec l'en-tête v2 ✓, listes à 893 octets/flux ✓. Mais le flux dense fait **919 canaux** en moyenne, pas 896 — j'élucide avant d'écrire le rapport.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && awk 'NR>=2705 && NR<=3210' drave-core/src/model.rs | grep -n \"x\\.extend\\|x\\.resize\\|x\\.push\\|x\\.truncate\\|return x\\|return hn\\|concat\" ; echo \"=== hidden dans le cfg ===\"; grep -n \"hidden:\" drave-core/src/model.rs | h … [184 caractères tronqués]`
+
+  ```
+268:                    attn_idx.extend((0..ns as u32).chain(lo as u32..n as u32));
+294:                    attn_idx.extend(0..n as u32);
+298:                    attn_idx.truncate(k);
+306:                // un logit de plus (HF concatène la colonne du puits avant le
+370:                        idx.truncate(k);
+388:                        idx.truncate(k);
+501:            return x;                       // nœud intermédiaire : flux brut
+=== hidden dans le cfg ===
+27:    pub hidden: usize,
+503:    pub fn nouveau(chemin: &str, couches: Vec<usize>, hidden: usize, n_layer: usize)
+1142:            hidden: g.cfg("embedding_length").and_then(|m| m.as_u64()).unwrap_or(0) as usize,
+=== row_f32 ===
+drave-core/src/gguf.rs:303:    pub fn row_f32(&self, name: &str, row: usize, n_cols: usize) -> Vec<f32> {
+drave-core/src/gguf.rs-304-        let t = self.tensor(name).unwrap_or_else(|| panic!("tenseur {name} absent"));
+drave-core/src/gguf.rs-305-        let base = self.data_start + t.offset as usize;
+drave-core/src/gguf.rs-306-        let mut out = Vec::with_capacity(n_cols);
+drave-core/src/gguf.rs-307-        match t.ttype {
+drave-core/src/gguf.rs-308-            GGML_F32 => {
+drave-core/src/gguf.r
+… [948 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+Le flux dense fait 919 canaux en moyenne au lieu de 896. Je fabrique un **pair factice** en Python pour lire ce que le pilote envoie réellement (et ça restera comme outil de test du protocole).
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > tools/pair_factice.py <<'EOF'\n#!/usr/bin/env python3\n\"\"\"Pair factice du protocole de flux (v2) : il ÉCOUTE et DIT ce qu'il reçoit.\n\nPourquoi cet outil : un banc à deux nœuds qui « marche » peut cacher un\nprotocole faux  … [3152 caractères tronqués]`
+
+  ```
+thread 'main' (4144855) panicked at src/main.rs:1497:44:
+réception du flux: Custom { kind: InvalidData, error: "magie de flux absente" }
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+timeout: the monitored command dumped core
+--- ce que le pair a vu ---
+[factice] écoute sur 127.0.0.1:45760 · je réponds 896 canaux
+[factice] client ('127.0.0.1', 26024)
+[factice] flux 1 : couches 12..24 pos 0 · version 2 · mode dense f32 · n=896 · échelle 0 · niveaux 127 seuil 0 topk 0 renorm 0 · corps 3584 octets
+[factice] flux 2 : couches 12..24 pos 1 · version 2 · mode dense f32 · n=896 · échelle 0 · niveaux 127 seuil 0 topk 0 renorm 0 · corps 3584 octets
+  ```
+
+### 🤖 Assistant
+
+Le flux fait bien 896 canaux : c'est **mon compteur** qui divisait par 39 au lieu de 40. Et je vois pourquoi les listes perdent : le champ de valeur fait 16 bits sur le fil, mais je le quantifiais en 8 bits (127 niveaux). Je corrige les deux.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\n# 1. l'encodeur de flux : utiliser TOUTE l'échelle i16 (le champ fait 16 bits)\np='drave-core/src/model.rs'; s=open(p).read()\nv = \"\"\"        let mut scratch = Vec::with_capacity(x.len());\n        match Self::qu … [3244 caractères tronqués]`
+
+  ```
+Finished `release` profile [optimized] target(s) in 0.01s
+10:57:49
+[stderr]
+  File "<stdin>", line 7
+    s = s.replace(v, """        let mut scratch = Vec::with_capacity(x.len());
+                 ^
+SyntaxError: '(' was never closed
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/model.rs'; s=open(p).read()\nvieux = \"\"\"        let mut scratch = Vec::with_capacity(x.len());\n        match Self::quant_scratch(x, self.act_levels, self.act_thresh, self.act_topk,\n            … [2858 caractères tronqués]`
+
+  ```
+encodeur : 16 bits
+compteur corrigé
+    Finished `release` profile [optimized] target(s) in 0.01s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/courbe_flux.sh <<'EOF'\n#!/bin/bash\ncd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\np=45770\necho \"=== dense f32 (référence) ===\"\nTAG=dense REF PORT=$p LIM=40 EXTRA=\"\" /tmp/test_reparti.sh | tail -5\np=$((p+1))\n … [374 caractères tronqués]`
+
+  ```
+started background job bash-48
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date +\"%H:%M:%S\"; cat /tmp/kv_attribution.log; pgrep -c -f \"ids_qwen_long\" 2>/dev/null || echo \"(campagne KV terminée)\"", "description": "Check KV campaign completion"}`
+
+  ```
+10:58:27
+cles_f32     : perplexité 14.2372 sur 8191 tokens (0 événements, 1208.0 s)
+valeurs_f32  : 3
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='tools/pair_factice.py'; s=open(p).read()\nvieux = \"\"\"        reponse = struct.pack(\"<IBBIIIIffffIB\", MAGIE, version, mode, debut, fin, pos,\n                              dimension, 0.0, levels, thresh, 0.0, … [583 caractères tronqués]`
+
+  ```
+pair_factice : en-tête de réponse corrigé (39 octets)
+taille en-tête : 39 octets (attendu 39)
+  ```
+
+- **job_output** `{"job_id": "bash-48", "timeout_ms": 300000, "wait": true}`
+
+  ```
+=== dense f32 (référence) ===
+=== listes, seuil 0.0 ===
+[flux] quantification : 127 niveaux, seuil 0, top-k 0, renorm false
+[flux] pilote : 12 couches en local, 12 chez le pair, 40 jetons
+  référence locale  : perplexité 144.8289  (24.0 s)
+  deux nœuds        : perplexité 141.0539  (24.2 s)
+  écart             : 2.61e-2
+  transport         : listes quantifiées · 3622 octets par flux (aller) · 3622 au retour · 100.0 % d'activité (896 neurones par flux) · 40 flux
+=== listes, seuil 0.02 ===
+[flux] quantification : 127 niveaux, seuil 0.02, top-k 0, renorm false
+[flux] pilote : 12 couches en local, 12 chez le pair, 40 jetons
+  référence locale  : perplexité 203.8033  (24.5 s)
+  deux nœuds        : perplexité 213.7739  (21.9 s)
+  écart             : 4.89e-2
+  transport         : listes quantifiées · 2203 octets par flux (aller) · 2677 au retour · 60.4 % d'activité (541 neurones par flux) · 40 flux
+=== listes, seuil 0.05 ===
+[flux] quantification : 127 niveaux, seuil 0.05, top-k 0, renorm false
+[flux] pilote : 12 couches en local, 12 chez le pair, 40 jetons
+  référence locale  : perplexité 493.0344  (27.9 s)
+  deux nœuds        : perplexité 893.1350  (23.9 s)
+  écart             : 8.12e-1
+… [686 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+Courbe obtenue. Je documente — les chiffres racontent une histoire nette (le seuil de 5 % coûte ×1,8 de perplexité pour ÷4 de taille).
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date +\"%H:%M:%S\" && cat > reports/rapport-transport-liste.md <<'EOF'\n# Phase 3.2 — transporter la LISTE au lieu du vecteur\n\n**En une ligne** : le flux peut voyager en liste creuse (871 octets au lieu de\n3 623), mais à seuil 5 % … [5909 caractères tronqués]`

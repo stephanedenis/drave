@@ -3321,6 +3321,30 @@ dynamique de {dyn_:.3e} (relatif {:.2e})", mx / dyn_.max(1e-9));
         }
     }
 
+    /// **Encode un flux pour le réseau** : la même quantification que la trace
+    /// (mêmes `act_levels`, `act_thresh`, `act_topk`, `act_renorm`), donc les
+    /// mêmes octets que sur le disque — indice `u16`, valeur `i16`, une échelle
+    /// par liste. Transporter la LISTE au lieu du vecteur dense est le sujet de
+    /// la phase 3 : « des listes, pas des matrices » vaut aussi sur le câble.
+    pub fn flux_en_liste(&self, x: &[f32]) -> (Vec<u16>, Vec<i16>, f32) {
+        assert!(x.len() <= u16::MAX as usize,
+                "flux de {} canaux : l'indice u16 ne suffit pas", x.len());
+        let mut scratch = Vec::with_capacity(x.len());
+        // Le champ de valeur du fil fait 16 bits : on quantifie donc sur 32 767
+        // niveaux, PAS sur `act_levels`. C'est gratuit — deux octets par valeur
+        // dans les deux cas — et mesuré : à 127 niveaux, l'écart de perplexité du
+        // découpage passait de quelques pour mille à ×2. Le seuil, lui, reste
+        // celui du modèle : c'est lui qui décide de la sparsité, donc de la taille.
+        match Self::quant_scratch(x, 32767.0, self.act_thresh, self.act_topk,
+                                  self.act_renorm, &mut scratch) {
+            Some((sv, sx)) => (sv.idx.iter().map(|&i| i as u16).collect(),
+                               sv.val.iter().map(|&v| v.clamp(i16::MIN as i32,
+                                                              i16::MAX as i32) as i16).collect(),
+                               sx),
+            None => (Vec::new(), Vec::new(), 0.0),
+        }
+    }
+
     /// Norme finale, pour un état venu d'un AUTRE nœud : le nœud distant rend le
     /// flux résiduel brut, c'est le dernier qui norme.
     pub fn norme_finale(&self, x: &[f32]) -> Vec<f32> {

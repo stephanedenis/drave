@@ -45,7 +45,7 @@ elles s'appellent maintenant DRAVE_* (voir docs/histoire.md). Rien n'a été app
     let opt = analyser(&args);
     let _ = MODELE.set(args[1].clone());
     if let Some(f) = opt.banc_vision.clone() { run_banc_vision(&f); return; }
-    if let Some(port) = opt.flux_serveur { run_serveur_flux(port); return; }
+    if let Some(port) = opt.flux_serveur { run_serveur_flux(opt, port); return; }
     if let Some(pair) = opt.ppl_reparti.clone() { run_ppl_reparti(opt, &pair); return; }
     if opt.tensors { run_tensors(); return; }
     if let Some(f) = opt.banc_mla.clone() { run_banc_mla(opt, &f); return; }
@@ -359,7 +359,7 @@ struct Options {
     ppl_texte: bool, prompt: Option<String>, limit: usize, depuis: usize,
     // --- génération
     n: usize, temp: f32, top_p: f32, topk: usize, rep_pen: f32, hist: usize,
-    flux: bool, session: bool, chat: bool,
+    flux: bool, session: bool, chat: bool, flux_liste: bool,
     // --- moteur
     ctx: usize, threads: usize, abits: u32, dense: bool, auto: bool,
     /// Vrai si `--ctx`, `--threads` ou `--abits` ont été donnés : leurs défauts
@@ -485,6 +485,7 @@ fn analyser(args: &[String]) -> Options {
             "--bits-ffn" => { if suivant(i).parse::<u32>().unwrap() == 6 { o.b6 |= 1; } 2 }
             // --- drapeaux booléens : UN argument
             "--flux" => { o.flux = true; 1 }
+            "--flux-liste" => { o.flux_liste = true; 1 }
             "--session" => { o.session = true; o.flux = true; 1 }
             "--chat" => { o.chat = true; 1 }
             "--dense" => { o.dense = true; 1 }
@@ -1202,51 +1203,201 @@ fn run_tensors() {
     }
 }
 
+/// Applique les réglages de quantification de la ligne de commande à un modèle
+/// des chemins FLUX. Ils étaient ignorés dans `--flux-serveur` et
+/// `--ppl-reparti` : un `--act-thresh 0,05` n'y changeait rien, et le mode
+/// « listes » transportait donc une liste PLEINE au lieu d'une liste creuse —
+/// le défaut « le drapeau est analysé mais jamais appliqué », déjà vu cinq fois.
+fn appliquer_quantification(mdl: &mut model::Model, opt: &Options) {
+    let abits = if opt.abits_impose { opt.abits } else { 8 };
+    mdl.act_levels = ((1u32 << (abits - 1)) - 1) as f32;
+    mdl.act_thresh = opt.act_thresh;
+    mdl.act_topk = opt.act_topk;
+    mdl.act_renorm = opt.act_renorm;
+}
+
 /// ---- Phase 3 : le flux passe d'un nœud à l'autre ----------------------------
 ///
 /// Cadriciel : `u32` magie, `u32` plage (debut, fin), `u32` position, `u32`
 /// dimension, puis les activations en f32. C'est le même contenu que le format
 /// de trace, réduit à ce qu'un nœud a besoin de recevoir pour continuer.
 const MAGIE_FLUX: u32 = 0x4452_5631;   // "DRV1"
+/// Version du protocole de flux. Elle est dans CHAQUE en-tête : un pair d'une
+/// autre version est refusé avec un message qui dit laquelle il parle, plutôt
+/// que de laisser lire des octets qui ne veulent pas dire la même chose.
+const VERSION_FLUX: u8 = 2;
+/// Vecteur dense en f32 : 4 octets par canal, toute la dimension.
+const MODE_DENSE: u8 = 0;
+/// LISTE creuse quantifiée : indice u16 + valeur i16, plus une échelle. C'est le
+/// même encodage que la trace sur le disque — la mise en réseau ne réinvente
+/// rien, elle réutilise le format de la phase 0.
+const MODE_LISTE: u8 = 1;
 
+/// En-tête commun : magie · version · mode · plage · position · n · échelle ·
+/// **réglages d'activation** (niveaux, seuil, top-k, renorm).
+///
+/// Les réglages voyagent parce qu'ils CHANGENT LES CHIFFRES : deux nœuds lancés
+/// avec des `--act-thresh` différents ne calculent pas la même chose, et la
+/// divergence serait silencieuse. Mesuré : 0,69 d'écart de perplexité avec un
+/// seuil 0,05 d'un côté et 0,00 de l'autre, sur le même modèle.
+const TAILLE_TETE: usize = 4 + 1 + 1 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 1;
+
+/// Réglages d'activation d'un nœud : ils font partie du contrat d'échange.
+#[derive(Clone, Copy)]
+struct Act {
+    levels: f32,
+    thresh: f32,
+    topk: u32,
+    renorm: bool,
+}
+
+impl Act {
+    fn du_modele(m: &model::Model) -> Self {
+        Act { levels: m.act_levels, thresh: m.act_thresh,
+              topk: m.act_topk as u32, renorm: m.act_renorm }
+    }
+    fn appliquer(&self, m: &mut model::Model) {
+        m.act_levels = self.levels;
+        m.act_thresh = self.thresh;
+        m.act_topk = self.topk as usize;
+        m.act_renorm = self.renorm;
+    }
+}
+
+/// Tout ce qu'un flux transporte : sa plage, sa position, son mode, ses
+/// réglages d'activation et sa charge utile.
+struct Flux {
+    debut: u32,
+    fin: u32,
+    pos: u32,
+    mode: u8,
+    act: Act,
+    charge: ChargeFlux,
+}
+
+/// Charge utile d'un flux : dense (f32), ou **liste creuse quantifiée**. Le
+/// réseau transporte alors exactement ce que le disque écrit déjà — deux octets
+/// d'indice, deux octets de valeur, une échelle par liste.
+enum ChargeFlux {
+    Dense(Vec<f32>),
+    Liste { idx: Vec<u16>, val: Vec<i16>, echelle: f32 },
+}
+
+impl ChargeFlux {
+    /// Rend le vecteur dense : la déquantification a besoin de la dimension, que
+    /// seul le modèle connaît.
+    fn en_dense(&self, hidden: usize) -> Vec<f32> {
+        match self {
+            ChargeFlux::Dense(v) => v.clone(),
+            ChargeFlux::Liste { idx, val, echelle } => {
+                let mut x = vec![0f32; hidden];
+                for (&i, &v) in idx.iter().zip(val.iter()) {
+                    x[i as usize] = v as f32 * echelle;
+                }
+                x
+            }
+        }
+    }
+    fn actifs(&self) -> usize {
+        match self { ChargeFlux::Dense(v) => v.len(), ChargeFlux::Liste { idx, .. } => idx.len() }
+    }
+}
+
+/// Envoie un flux et rend le nombre d'octets écrits (en-tête compris) — c'est ce
+/// que la phase 3 doit chiffrer : octets par jeton × latence.
 fn envoyer_flux(s: &mut std::net::TcpStream, debut: u32, fin: u32, pos: u32,
-                actifs: &[f32]) -> std::io::Result<()> {
+                actifs: &[f32], mode: u8, mdl: Option<&model::Model>)
+                -> std::io::Result<(usize, usize)> {
+    let act = mdl.map(Act::du_modele).unwrap_or(Act { levels: 127.0, thresh: 0.0,
+                                                       topk: 0, renorm: false });
     use std::io::Write;
-    let mut tete = Vec::with_capacity(20);
+    let (n, echelle, corps): (usize, f32, Vec<u8>) = if mode == MODE_LISTE {
+        let (idx, val, ech) = mdl.expect("modèle requis pour quantifier un flux")
+                                 .flux_en_liste(actifs);
+        let mut c = Vec::with_capacity(idx.len() * 4);
+        for (&i, &v) in idx.iter().zip(val.iter()) {
+            c.extend_from_slice(&i.to_le_bytes());
+            c.extend_from_slice(&v.to_le_bytes());
+        }
+        (idx.len(), ech, c)
+    } else {
+        let mut c = Vec::with_capacity(actifs.len() * 4);
+        for v in actifs { c.extend_from_slice(&v.to_le_bytes()); }
+        (actifs.len(), 0f32, c)
+    };
+    let mut tete = Vec::with_capacity(TAILLE_TETE);
     tete.extend_from_slice(&MAGIE_FLUX.to_le_bytes());
+    tete.push(VERSION_FLUX);
+    tete.push(mode);
     tete.extend_from_slice(&debut.to_le_bytes());
     tete.extend_from_slice(&fin.to_le_bytes());
     tete.extend_from_slice(&pos.to_le_bytes());
-    tete.extend_from_slice(&(actifs.len() as u32).to_le_bytes());
+    tete.extend_from_slice(&(n as u32).to_le_bytes());
+    tete.extend_from_slice(&echelle.to_le_bytes());
+    tete.extend_from_slice(&act.levels.to_le_bytes());
+    tete.extend_from_slice(&act.thresh.to_le_bytes());
+    tete.extend_from_slice(&act.topk.to_le_bytes());
+    tete.push(act.renorm as u8);
     s.write_all(&tete)?;
-    let mut corps = Vec::with_capacity(actifs.len() * 4);
-    for v in actifs { corps.extend_from_slice(&v.to_le_bytes()); }
     s.write_all(&corps)?;
-    s.flush()
+    s.flush()?;
+    Ok((TAILLE_TETE + corps.len(), n))
 }
 
-fn recevoir_flux(s: &mut std::net::TcpStream) -> std::io::Result<(u32, u32, u32, Vec<f32>)> {
+/// Reçoit un flux : `(debut, fin, pos, mode, charge utile)`.
+fn recevoir_flux(s: &mut std::net::TcpStream) -> std::io::Result<Flux> {
     use std::io::Read;
-    let mut tete = [0u8; 20];
+    let mut tete = [0u8; TAILLE_TETE];
     s.read_exact(&mut tete)?;
     let u = |o: usize| u32::from_le_bytes([tete[o], tete[o+1], tete[o+2], tete[o+3]]);
-    if u(0) != MAGIE_FLUX { return Err(std::io::Error::new(std::io::ErrorKind::InvalidData,
-                                                          "magie de flux absente")); }
-    let (debut, fin, pos) = (u(4), u(8), u(12));
-    let n = u(16) as usize;
+    if u(0) != MAGIE_FLUX {
+        return Err(std::io::Error::new(std::io::ErrorKind::InvalidData,
+                                       "magie de flux absente"));
+    }
+    let version = tete[4];
+    let mode = tete[5];
+    if version != VERSION_FLUX {
+        // Refus EXPLICITE : on ne devine pas la version du pair, on la nomme.
+        return Err(std::io::Error::new(std::io::ErrorKind::InvalidData,
+            format!("flux en version {version}, cette build parle la {VERSION_FLUX} \
+                     (pair incompatible : rien n'a été interprété)")));
+    }
+    let (debut, fin, pos) = (u(6), u(10), u(14));
+    let n = u(18) as usize;
+    let echelle = f32::from_le_bytes([tete[22], tete[23], tete[24], tete[25]]);
+    let act = Act {
+        levels: f32::from_le_bytes([tete[26], tete[27], tete[28], tete[29]]),
+        thresh: f32::from_le_bytes([tete[30], tete[31], tete[32], tete[33]]),
+        topk: u(34),
+        renorm: tete[38] != 0,
+    };
     let mut octets = vec![0u8; n * 4];
     s.read_exact(&mut octets)?;
-    let actifs = (0..n).map(|k| f32::from_le_bytes(
-        [octets[k*4], octets[k*4+1], octets[k*4+2], octets[k*4+3]])).collect();
-    Ok((debut, fin, pos, actifs))
+    let charge = match mode {
+        MODE_DENSE => ChargeFlux::Dense((0..n).map(|k| f32::from_le_bytes(
+            [octets[k*4], octets[k*4+1], octets[k*4+2], octets[k*4+3]])).collect()),
+        MODE_LISTE => {
+            let mut idx = Vec::with_capacity(n);
+            let mut val = Vec::with_capacity(n);
+            for k in 0..n {
+                idx.push(u16::from_le_bytes([octets[k*4], octets[k*4+1]]));
+                val.push(i16::from_le_bytes([octets[k*4+2], octets[k*4+3]]));
+            }
+            ChargeFlux::Liste { idx, val, echelle }
+        }
+        autre => return Err(std::io::Error::new(std::io::ErrorKind::InvalidData,
+            format!("mode de flux inconnu : {autre}"))),
+    };
+    Ok(Flux { debut, fin, pos, mode, act, charge })
 }
 
 /// Le NŒUD MOTEUR : charge le modèle, écoute, applique SA plage de couches au
 /// flux reçu et renvoie le flux résultant. Un seul client à la fois — c'est un
 /// banc d'essai, pas un service.
-fn run_serveur_flux(port: u16) {
+fn run_serveur_flux(opt: Options, port: u16) {
     let chemin = modele_chemin();
     let mut mdl = model::Model::load(&chemin, 4096, 16, true, 1.0, false, 0, 0);
+    appliquer_quantification(&mut mdl, &opt);
     let hidden = mdl.cfg.hidden;
     let ecoute = std::net::TcpListener::bind(("127.0.0.1", port)).expect("écoute");
     println!("[flux] nœud moteur sur 127.0.0.1:{port} · {hidden} cachés · {} couches",
@@ -1256,19 +1407,34 @@ fn run_serveur_flux(port: u16) {
     let mut servis = 0u64;
     loop {
         match recevoir_flux(&mut sock) {
-            Ok((debut, fin, pos, actifs)) => {
-                mdl.couche_debut = debut as usize;
-                mdl.couche_fin = fin as usize;
+            Ok(f) => {
+                // Les réglages du client s'appliquent ICI : les deux nœuds
+                // doivent quantifier les activations pareil, sinon ils ne
+                // calculent pas la même chose.
+                f.act.appliquer(&mut mdl);
+                mdl.couche_debut = f.debut as usize;
+                mdl.couche_fin = f.fin as usize;
                 // Le nœud moteur rend TOUJOURS un flux résiduel brut : la norme
                 // finale appartient au nœud qui a la tête de sortie, et à lui
                 // seul. C'est ce qui manquait — 798,3 au lieu de 18,2.
                 mdl.flux_brut = true;
-                mdl.emb_imposee = Some(actifs);
-                let sortie = mdl.forward(0, pos as usize);
-                if envoyer_flux(&mut sock, debut, fin, pos, &sortie).is_err() { break; }
+                mdl.emb_imposee = Some(f.charge.en_dense(hidden));
+                let sortie = mdl.forward(0, f.pos as usize);
+                // La RÉPONSE est encodée comme la demande : un pair qui parle en
+                // listes reçoit des listes, sans second réglage à faire tenir
+                // cohérent entre les deux machines.
+                if envoyer_flux(&mut sock, f.debut, f.fin, f.pos, &sortie, f.mode,
+                                Some(&mdl)).is_err() {
+                    break;
+                }
                 servis += 1;
             }
-            Err(_) => break,
+            Err(e) => {
+                // Un pair incompatible doit s'entendre dire POURQUOI : sans cela,
+                // la session se termine sur « 0 flux servi » et rien d'autre.
+                println!("[flux] arrêt : {e}");
+                break;
+            }
         }
     }
     println!("[flux] {servis} flux servis");
@@ -1284,6 +1450,10 @@ fn run_ppl_reparti(opt: Options, pair: &str) {
     let limite = opt.limit.max(1).min(ctx);
     let couches_locales = if opt.couches_locales > 0 { opt.couches_locales } else { 12 };
     let mut mdl = model::Model::load(&chemin, ctx, 16, true, 1.0, false, 0, 0);
+    appliquer_quantification(&mut mdl, &opt);
+    let mode = if opt.flux_liste { MODE_LISTE } else { MODE_DENSE };
+    println!("[flux] quantification : {} niveaux, seuil {}, top-k {}, renorm {}",
+             mdl.act_levels, mdl.act_thresh, mdl.act_topk, mdl.act_renorm);
     let n_layer = mdl.cfg.n_layer;
     let ids: Vec<u32> = if opt.ids.is_empty() {
         (1..=limite as u32).collect()
@@ -1312,13 +1482,23 @@ fn run_ppl_reparti(opt: Options, pair: &str) {
     // 2. la même chose, coupée en deux nœuds
     let mut sock = std::net::TcpStream::connect(pair).expect("connexion au nœud moteur");
     mdl.couche_fin = couches_locales;
+    let mut octets_envoyes = 0u64;
+    let mut octets_recus = 0u64;
+    let mut actifs_envoyes = 0u64;
+    let mut flux_envoyes = 0u64;
     let t1 = Instant::now();
     let mut nll = 0f64;
     for (pos, &t) in ids.iter().enumerate() {
         let etat = mdl.forward(t, pos);
-        envoyer_flux(&mut sock, couches_locales as u32, n_layer as u32, pos as u32, &etat)
-            .expect("envoi du flux");
-        let (_, _, _, final_) = recevoir_flux(&mut sock).expect("réception du flux");
+        let (o, a) = envoyer_flux(&mut sock, couches_locales as u32, n_layer as u32,
+                                  pos as u32, &etat, mode, Some(&mdl))
+                        .expect("envoi du flux");
+        octets_envoyes += o as u64;
+        actifs_envoyes += a as u64;
+        flux_envoyes += 1;
+        let rep = recevoir_flux(&mut sock).expect("réception du flux");
+        octets_recus += TAILLE_TETE as u64 + rep.charge.actifs() as u64 * 4;
+        let final_ = rep.charge.en_dense(mdl.cfg.hidden);
         if pos + 1 < ids.len() {
             let hn = mdl.norme_finale(&final_);
             let lg = mdl.logits(&hn);
@@ -1332,6 +1512,16 @@ fn run_ppl_reparti(opt: Options, pair: &str) {
     let ppl = (nll / (ids.len() - 1) as f64).exp();
     println!("  deux nœuds        : perplexité {ppl:.4}  ({:.1} s)", t1.elapsed().as_secs_f64());
     println!("  écart             : {:.2e}", (ppl - ppl_ref).abs() / ppl_ref);
+    // Divisor : le nombre de flux RÉELLEMENT envoyés (un par jeton, le dernier
+    // compris) et non le nombre de jetons NOTÉS — l'erreur d'un facteur 40/39
+    // faisait apparaître un flux de « 919 canaux » pour un modèle qui en a 896.
+    let nflux = flux_envoyes.max(1);
+    println!("  transport         : {} · {:.0} octets par flux (aller) · {:.0} au retour · \
+              {:.1} % d'activité ({:.0} neurones par flux) · {} flux",
+             if mode == MODE_LISTE { "listes quantifiées" } else { "dense f32" },
+             octets_envoyes as f64 / nflux as f64, octets_recus as f64 / nflux as f64,
+             100.0 * actifs_envoyes as f64 / (nflux as f64 * mdl.cfg.hidden as f64),
+             actifs_envoyes as f64 / nflux as f64, nflux);
 }
 
 /// Banc **MLA** : passe avant du modèle synthétique, logits écrits en binaire
