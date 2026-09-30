@@ -30569,3 +30569,48 @@ b9a3425 Cache KV à 4 096 : les quatre points, et les clés f16 devant les clés
 ⏵ Pendant que l'aiguille tourne, je rafraîchis le handoff avec le mode 4 et la frontière KV.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='REPRISE.md'; s=open(p).read()\nv = \"\"\"### La frontière du cache KV, mesurée en entier\"\"\"\nn = \"\"\"### Créneau 15h07 → 18h00 : le mode 4, et la frontière KV confirmée\n\n**Le protocole est en version 5** a … [2681 caractères tronqués]`
+
+  ```
+REPRISE : créneau 15h-18h ajouté
+6929642 REPRISE : le créneau 15h-18h (mode 4, frontière KV confirmée, plan GPU écrit)
+### f32 · contexte 2048 · profondeurs 0,1 / 0,5 / 0,9
+aiguille v2 : /home/stephane/FastNVMe/models/qwen2.5-1.5b-instruct-q4_k_m.gguf
+  remplissage : data/wikitext2_test.txt (353778 caractères), fenêtres décalées
+  lot 256 · 40 jetons de réponse · GPU non
+ contexte  profondeur  trouvé  secondes  détail
+     2048        0.10     oui     264.4  prompt 2147 jetons
+15:40:47
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"gpt-oss-120b\" README.md | head -4; sed -n 370,380p README.md | head -8", "description": "Check README table alignment"}`
+
+  ```
+363:| **gpt-oss-120b** (MoE, MXFP4) | MXFP4 | blocs lus | 15,1757 (ctx 256) | 60 Go |
+## Inférence complète en Rust (`--infer`)
+
+Qwen2.5-0.5B-Instruct Q8_0 tourne **en mode listes d'événements**, sans GPU, sans
+BLAS, sans aucune dépendance : **11 901 lignes de Rust, `std` seul** (2 319 au premier prototype). Détail :
+[`reports/rapport-inference.md`](reports/rapport-inference.md).
+
+```bash
+cd drave-core && cargo build --release
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n 355,366p README.md", "description": "Read the models table header and rows"}`
+
+  ```
+contiguës adressées par un pointeur et un pas.
+
+| modèle | format | perplexité | débit | mémoire |
+|---|---|---|---|---|
+| Qwen2.5-0.5B | Q4_0 | 21,01 | 39 tok/s | 0,41 Go |
+| Qwen2.5-1.5B | Q4_K_M | 12,92 | 17 tok/s | 1,1 Go |
+| Qwen2.5-VL-7B | Q4_K_M | 10,99 | 2,8 tok/s | 4,5 Go |
+| **Qwen3-30B-A3B** (MoE 128 experts, top-8) | Q4_K_M | **7,61** | 5,4 tok/s | **17,7 Go** |
+| **gpt-oss-120b** (MoE, MXFP4) | MXFP4 | blocs lus | 15,1757 (ctx 256) | 60 Go |
+
+Les lecteurs Q4_K et Q6_K sont vérifiés **tenseur par tenseur** contre une
+référence F16 des mêmes poids produite par `llama-quantize`, et le routage MoE
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='README.md'; s=open(p).read()\nv = \"| **gpt-oss-120b** (MoE, MXFP4) | MXFP4 | blocs lus | 15,1757 (ctx 256) | 60 Go |\"\nn = \"| **gpt-oss-120b** (MoE, MXFP4) | MXFP4 | **15,1757** (ctx 256) | blocs lus | 60 Go | … [393 caractères tronqués]`

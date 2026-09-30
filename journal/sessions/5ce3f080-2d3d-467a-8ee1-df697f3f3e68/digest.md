@@ -1096,3 +1096,400 @@ Created file
 started background job bash-75
   ```
 
+### 🤖 Assistant
+
+⏵ Vérification du commit voisin (refus n==0) et des docs périmées.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git show --stat 64a86ca | head -20 && echo \"=== diff main.rs 64a86ca ===\" && git show 64a86ca -- drave-core/src/main.rs | head -80", "description": "Inspect the n==0 commit"}`
+
+  ```
+commit 64a86cae7014100b11afa36c67802fc0033120e5
+Author: Stéphane <stephane@localhost>
+Date:   Wed Sep 30 15:31:26 2026 -0400
+
+    Corrections du second audit (1/2) : chiffres, époques, comptes, et la journée au README
+    
+    - Les pourcentages du cache KV : « 75 % / 50 % » était une ERREUR de ma part (j'avais
+      compté 1,5/2 sans les échelles de bloc). Les valeurs justes sont **64 %** (clés f32
+      + valeurs int8) et **28 %** (int8/int8) ; le rapport de placement est à jour dans
+      ses trois documents, bandeau compris (+0,018 % et non +0,06 %).
+    - Règle R4 **complète** : le refus d'un flux à zéro élément est maintenant dans le
+      code (il n'était que dans le plan) et testé — 14 tests.
+    - Époques d'en-tête : le rapport de transport disait 39 octets et citait la version
+      4 ; c'est 79 octets et la version 5 depuis le mode 4.
+    - Comptes : 11 440 → 11 901 lignes, 11/11 → 13/13 tests (14 maintenant).
+    - Le README gagne le résumé de la journée en huit lignes chiffrées, avec les renvois.
+
+ README.md                                          |   4 +-
+ REPRISE.md                                         |  12 +-
+ docs/format-flux.md                                
+… [3038 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rn \"pas encore écrit\\|non écrit\\|mode 4 non écrit\\|parle la 4\\|version 4\\b\" docs/*.md REPRISE.md README.md 2>/dev/null | head -20", "description": "Find stale doc claims"}`
+
+  ```
+docs/format-flux.md:128:f32 dense (3,5 ko par jeton) ; le lot en listes est le mode 4, pas encore écrit.
+docs/format-flux.md:141:[flux] arrêt : flux en version 99, cette build parle la 4 (pair incompatible : rien n'a été interprété)
+docs/plan-mode4-lot-listes.md:3:> **État : non écrit.** Ce document est la spécification à implémenter ; aucun
+docs/plan-mode4-lot-listes.md:159:[flux] arrêt : flux en version 5, cette build parle la 4 (pair incompatible : rien n'a été interprété)
+docs/plan-mode4-lot-listes.md:236:   repli silencieux. Le message actuel « mode 4 non écrit » (main.rs:1987) doit
+docs/plan-mode4-lot-listes.md:416:| 7 | `reports/rapport-mode4-lot-listes.md`, `docs/format-flux.md`, `docs/plan-prefill-reparti.md` §7, `docs/roadmap.md` 3.4/3.5 | consigner les chiffres **mesurés**, le tableau du mode 4 et la version 5 ; retirer « mode 4 non écrit » partout où c'est écrit | chaque nombre du rapport est recopié de la sortie de l'étape 6, commande incluse ; aucune mention de mode 4 « à écrire » ne subsiste |
+docs/roadmap.md:96:d'échange réseau est en **version 4** (79 octets d'en-tête, quatre modes : dense,
+REPRISE.md:330:**Le protocole est en version 4** et le contrat d'activation
+… [11 caractères tronqués]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-75 (bash: bash /tmp/run_e2e.sh 2>&1 | tail -40) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **job_output** `{"job_id": "bash-75"}`
+
+  ```
+### partiel : serveur pret (port 45811), client --limit 20 --lot 16 --flux-blocs
+### partiel : client exit=0
+--- serveur partiel ---
+[config] puits appris sur 0/24 couches · n_rot 64 · ffn 4864 · experts 0
+[config] rotation : RoPE simple (le modèle ne déclare pas YaRN)
+[flux] nœud moteur sur 127.0.0.1:45811 · 896 cachés · 24 couches · contexte 256
+[flux] client connecté : 127.0.0.1:45400
+[flux] arrêt : failed to fill whole buffer
+[flux] 2 flux servis
+--- client partiel ---
+  référence locale  : perplexité 204.3350  (3.0 s)
+  deux nœuds        : perplexité 157.3415  (2.6 s)
+  écart             : 2.30e-1
+  transport         : lot en LISTES · LOTS de 16 jetons · 14867 octets par lot (aller) · 0.9 ko par jeton · 2 lots (au lieu de 19 flux)
+  temps             : 602.6 ms par LOT en local · 463.7 ms à attendre le pair · soit 0.77× le calcul local seul
+### lotplusgrand : serveur pret (port 45812), client --limit 8 --lot 16 --flux-blocs
+### lotplusgrand : client exit=0
+--- serveur lotplusgrand ---
+[config] puits appris sur 0/24 couches · n_rot 64 · ffn 4864 · experts 0
+[config] rotation : RoPE simple (le modèle ne déclare pas YaRN)
+[flux] nœud moteur sur 127.0.0.1:45812 · 896 cachés · 24 c
+… [567 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+Le lot partiel donne un écart 10× supérieur — je mesure la matrice pour isoler.
+
+- **write** `{"content": "#!/bin/bash\n# Matrice : ou nait l'ecart du mode 4 ? Chaque ligne = un serveur neuf + un client.\ncd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\nD=./drave-core/target/release/drave\nM=models/Qwen2.5-0.5B-Q8_0.gguf\nport=45900\nrun() {  # $1=limite $2=lot $3=flags client $4=etiquett … [986 caractères tronqués]`
+
+  ```
+<path>/tmp/run_matrix.sh</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "bash /tmp/run_matrix.sh 2>&1", "description": "Run error matrix for mode 4", "run_in_background": true, "timeoutMs": 400000}`
+
+  ```
+started background job bash-76
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '250,300p' docs/plan-mode4-lot-listes.md", "description": "Read plan section 5"}`
+
+  ```
+corps.extend_from_slice(&(paires.len() as u32).to_le_bytes());
+       for e in &ech { corps.extend_from_slice(&e.to_le_bytes()); }
+       corps.extend_from_slice(&paires);
+   }
+   ```
+
+4. Garde-fous d'émetteur, les deux, avant d'écrire :
+   `assert_eq!(tete.len(), TAILLE_TETE, …)` (le bug d'un octet de trop, déjà
+   payé) et `debug_assert_eq!(corps.len(), 12*t + 4*Σn_blocs + Σlongueur, …)`.
+5. **Deux `write_all`** (en-tête, corps), jamais t+1 ; `TCP_NODELAY` reste.
+   Rend `(octets, Σa_j)` : la comptabilité doit être mesurée, pas déduite.
+6. Ligne de transport : `mode 4 · listes à échelle par bloc · t états · X octets
+   par lot · Y par jeton · N lots (au lieu de M flux)`.
+
+### 5.2 Le nœud moteur (`run_serveur_flux`) — décoder N états
+
+* La branche existante `if f.mode == MODE_LOT` devient
+  `if f.mode == MODE_LOT || f.mode == MODE_LOT_LISTES`. Rien d'autre ne bouge :
+  `f.act.appliquer(&mut mdl)`, `couche_debut/fin`, `mdl.flux_brut = true`, le
+  contrôle `pos + t ≤ ctx`, puis
+  `mdl.emb_imposee_lot = Some(f.charge.plat().to_vec())` et
+  `mdl.forward_lot(&vec![0u32; t], f.pos as usize)` — `ChargeFlux::Lot` est
+  produit par le décodeur du mode 4 exactement comme par celui du mode 3
+… [1270 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"volontaire\\|Écart\\|ecart assumé\\|assumé\" docs/plan-mode4-lot-listes.md | head -20; echo ===; sed -n '355,445p' docs/plan-mode4-lot-listes.md", "description": "Read plan sections 7-8"}`
+
+  ```
+===
+
+## 7. Les pièges (ceux déjà payés, et ceux que le mode 4 ajoute)
+
+1. **Un octet d'en-tête en trop** décale tout le corps, ne lève aucune erreur, et
+   ne se voit qu'au flux suivant (« magie de flux absente »). Déjà payé (40 pour
+   39). Les trois émetteurs (`envoyer_flux`, `envoyer_lot`, `envoyer_lot_listes`)
+   gardent leur `assert_eq!(tete.len(), TAILLE_TETE)`.
+2. **Le décalage propre au mode 4** : une erreur d'un octet dans un préfixe
+   d'état décale les états SUIVANTS dans le même message, et peut produire des
+   préfixes plausibles — donc des états faux sans erreur. C'est le même bug, une
+   couche plus bas. Réponse : R6 (frontières exactes), le `debug_assert` de
+   longueur de corps à l'émission, et le test d'aller-retour multi-états.
+3. **Ne pas dériver `longueur_j` de `a_j`** : les échappements (255 + 2 octets)
+   font que `longueur_j` n'est pas `2·a_j`. Le mode 2 a déjà payé ce couple
+   (écrit sur quatre octets, lu sur deux) ; ici l'erreur ne casserait rien tant
+   qu'aucun écart n'atteint 255 — donc resterait invisible jusqu'au jour où.
+4. **Chaque état a son propre `prev`** : `encoder_paires_blocs` repart de 0 à
+   chaque appel, donc le premier écart d'un état est
+… [6622 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"\\.actifs()\\|fn actifs\" drave-core/src/main.rs; echo \"=== debug_assert ===\"; grep -n \"debug_assert\" drave-core/src/main.rs | head", "description": "Check actifs() usage and debug_assert"}`
+
+  ```
+1537:    fn actifs(&self) -> usize {
+=== debug_assert ===
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git show 8e132aa^:drave-core/src/main.rs | grep -n \"\\.actifs()\\|fn actifs\" ; echo \"--- (vide = jamais utilise avant non plus ?) ---\"; git show 8e132aa^:drave-core/src/main.rs | grep -n \"actifs_envoyes\" | head", "description": … [35 caractères tronqués]`
+
+  ```
+1530:    fn actifs(&self) -> usize {
+--- (vide = jamais utilise avant non plus ?) ---
+1976:    let mut actifs_envoyes = 0u64;
+2009:            actifs_envoyes += (t * mdl.cfg.hidden) as u64;
+2062:        actifs_envoyes += a as u64;
+2106:             100.0 * actifs_envoyes as f64 / (nflux as f64 * mdl.cfg.hidden as f64),
+2107:             actifs_envoyes as f64 / nflux as f64, nflux);
+  ```
+
+- **job_output** `{"job_id": "bash-76", "wait": true, "timeout_ms": 200000}`
+
+  ```
+== m4_l16_lim20 (limit=20 lot=16 --flux-blocs) exit=0
+     référence locale  : perplexité 204.3350  (2.9 s)
+     deux nœuds        : perplexité 157.3415  (2.8 s)
+     écart             : 2.30e-1
+     transport         : lot en LISTES · LOTS de 16 jetons · 14867 octets par lot (aller) · 0.9 ko par jeton · 2 lots (au lieu de 19 flux)
+   srv: [flux] arrêt : failed to fill whole buffer
+   srv: [flux] 2 flux servis
+== m4_l20_lim20 (limit=20 lot=20 --flux-blocs) exit=0
+     référence locale  : perplexité 204.3350  (2.4 s)
+     deux nœuds        : perplexité 157.3415  (2.5 s)
+     écart             : 2.30e-1
+     transport         : lot en LISTES · LOTS de 20 jetons · 29655 octets par lot (aller) · 1.4 ko par jeton · 1 lots (au lieu de 19 flux)
+   srv: [flux] arrêt : failed to fill whole buffer
+   srv: [flux] 1 flux servis
+== m3_l16_lim20 (limit=20 lot=16 ) exit=0
+     référence locale  : perplexité 204.3350  (2.7 s)
+     deux nœuds        : perplexité 204.3350  (2.8 s)
+     écart             : 0.00e0
+     transport         : lot dense f32 · LOTS de 16 jetons · 35919 octets par lot (aller) · 2.2 ko par jeton · 2 lots (au lieu de 19 flux)
+   srv: [flux] arrêt : failed to fill whole buffer
+
+… [1342 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Campagne de trames forgées contre le serveur réel.
+
+- **write** `{"content": "#!/bin/bash\n# Une trame forgee par serveur neuf (le serveur meurt a chaque refus).\ncd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\nD=./drave-core/target/release/drave\nM=models/Qwen2.5-0.5B-Q8_0.gguf\nP=46100\nfor cas in A_etat_vide B_a_ enorme C_nb_ enorme D_lg_ enorme E_nb_faux  … [868 caractères tronqués]`
+
+  ```
+<path>/tmp/run_attack.sh</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "bash /tmp/run_attack.sh 2>&1", "description": "Run forged-frame attack campaign", "run_in_background": true, "timeoutMs": 600000}`
+
+  ```
+started background job bash-77
+  ```
+
+- **job_output** `{"job_id": "bash-77", "timeout_ms": 240000, "wait": true}`
+
+  ```
+===== A_etat_vide
+  cli:   reponse : magie=0x44525631 version=5 mode=4 couches 12..24 pos 0 n=1
+  cli:     etat 0 : a=824 nb=28 (attendu 28) lg=1648 paires=824 echappements=0 hors_dim=0 max=895 conso=1648
+  srv exit=0
+  srv: [flux] nœud moteur sur 127.0.0.1:46101 · 896 cachés · 24 couches · contexte 256
+  srv: [flux] client connecté : 127.0.0.1:21392
+  srv: [flux] arrêt : failed to fill whole buffer
+  srv: [flux] 1 flux servis
+  srv: 0 ligne(s) 'hors dimension'
+===== B_a_
+  cli: cas inconnu
+  srv exit=0
+  srv: [flux] nœud moteur sur 127.0.0.1:46102 · 896 cachés · 24 couches · contexte 256
+  srv: [flux] client connecté : 127.0.0.1:64664
+  srv: [flux] arrêt : failed to fill whole buffer
+  srv: [flux] 0 flux servis
+  srv: 0 ligne(s) 'hors dimension'
+===== enorme
+  cli: cas inconnu
+  srv exit=0
+  srv: [flux] nœud moteur sur 127.0.0.1:46103 · 896 cachés · 24 couches · contexte 256
+  srv: [flux] client connecté : 127.0.0.1:27366
+  srv: [flux] arrêt : failed to fill whole buffer
+  srv: [flux] 0 flux servis
+  srv: 0 ligne(s) 'hors dimension'
+===== C_nb_
+  cli: cas inconnu
+  srv exit=0
+  srv: [flux] nœud moteur sur 127.0.0.1:46104 · 896 cachés · 24 couches · contexte 256
+  srv: [flux] clien
+… [3831 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Reprise des cas B/C/D (noms cassés) + régression `--act-thresh 1` + pair factice v4.
+
+- **bash** `{"command": "cd /tmp && python3 - <<'EOF'\nimport re\np='/tmp/m4_attack.py'\ns=open(p).read()\ns=s.replace('\"B_a_ enorme\"','\"B_a_enorme\"').replace('\"C_nb_ enorme\"','\"C_nb_enorme\"').replace('\"D_lg_ enorme\"','\"D_lg_enorme\"')\nopen(p,'w').write(s)\nprint([l for l in s.splitlines() if 'enorm … [84 caractères tronqués]`
+
+  ```
+['    elif cas == "B_a_enorme":', '    elif cas == "C_nb_enorme":', '    elif cas == "D_lg_enorme":']
+  ```
+
+- **write** `{"content": "#!/bin/bash\n# 1) les trois refus \"taille enorme\" (noms sans espace) ;\n# 2) A/B --act-thresh 1 : mode 2 par jeton (n=0 legitime) contre mode 4 (a_j=0) ;\n# 3) le pair factice du depot (v4) face a un client mode 4.\ncd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\nD=./drave-core/ta … [2404 caractères tronqués]`
+
+  ```
+<path>/tmp/run_suite2.sh</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "bash /tmp/run_suite2.sh 2>&1", "description": "Run second test suite", "run_in_background": true, "timeoutMs": 600000}`
+
+  ```
+started background job bash-78
+  ```
+
+### 🤖 Assistant
+
+⏵ Préparation du test cumulatif (268 Mo) et du test « réponse d'un autre mode ».
+
+- **write** `{"content": "#!/usr/bin/env python3\n\"\"\"Pair qui repond un AUTRE mode que la demande (mode 2 la ou on lui parle en\nmode 4) : le client doit refuser, pas mourir.\"\"\"\nimport socket, struct, sys\n\nMAGIE = 0x44525631\n\n\ndef lire_tout(sock, n):\n    buf = b\"\"\n    while len(buf) < n:\n        … [1388 caractères tronqués]`
+
+  ```
+<path>/tmp/m4_badreply.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **job_output** `{"job_id": "bash-78", "timeout_ms": 400000, "wait": true}`
+
+  ```
+===== B_a_enorme
+  cli:   recu 0 octets en 0.00 s : b''
+  srv exit=0
+  srv: [flux] arrêt : état 0 : 4294967295 actifs : 8589934590 octets au-delà du plafond de 256 Mo — flux refusé                      (règle R4 de docs/plan-prefill-reparti.md)
+===== C_nb_enorme
+  cli:   recu 0 octets en 0.00 s : b''
+  srv exit=0
+  srv: [flux] arrêt : état 0 : 4294967295 blocs : 17179869180 octets au-delà du plafond de 256 Mo — flux refusé                      (règle R4 de docs/plan-prefill-reparti.md)
+===== D_lg_enorme
+  cli:   recu 0 octets en 0.00 s : b''
+  srv exit=0
+  srv: [flux] arrêt : état 0 : 4294967295 octets de paires : 4294967295 octets au-delà du plafond de 256 Mo — flux refusé                      (règle R4 de docs/plan-prefill-reparti.md)
+===== act_thresh1 mode 2 (lot 1)
+  cli exit=1
+  cli: [flux] pilote : 12 couches en local, 12 chez le pair, 8 jetons
+  cli:   référence locale  : perplexité 151936.0000  (0.9 s)
+  cli: [flux] le nœud moteur a fermé la connexion (Connection reset by peer (os error 104)) — version du protocole, réglages, ou contexte : il a dit pourquoi de son côté.
+  srv exit=0
+  srv: [flux] arrêt : flux à zéro élément : refusé (règle R4 de docs/plan-prefill-reparti.md
+… [1223 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /tmp && python3 - <<'EOF'\np='/tmp/m4_attack.py'\ns=open(p).read()\nold = \"\"\"        bloc = b\"\\\\x00\" * (1 << 20)\n        s.sendall(trame)\n        reste = lg\n        while reste > 0:\n            m = min(reste, len(bloc)); s.sendall(bloc[:m]); reste -= m\n        s.sendall(s … [588 caractères tronqués]`
+
+  ```
+ok
+  ```
+
+- **write** `{"content": "#!/bin/bash\n# K : le garde CUMULATIF promis par le plan (268 Mo d'etat 0 + prefixe de\n# l'etat 1) ; puis la reponse d'un autre mode que la demande.\ncd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\nD=./drave-core/target/release/drave\nM=models/Qwen2.5-0.5B-Q8_0.gguf\n\necho \"===== … [1246 caractères tronqués]`
+
+  ```
+<path>/tmp/run_suite3.sh</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "bash /tmp/run_suite3.sh 2>&1", "description": "Run cumulative-guard and bad-reply tests", "run_in_background": true, "timeoutMs": 400000}`
+
+  ```
+started background job bash-79
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '94,100p' docs/roadmap.md; echo \"=== REPRISE 326-334 ===\"; sed -n '326,334p' REPRISE.md; echo \"=== rapports mode4 ===\"; ls reports/ | grep -i mode4; ls -la reports/ | head -20", "description": "Read stale doc lines and rep … [6 caractères tronqués]`
+
+  ```
+`DRAVE_TRACE_BLOCS=1` (valeurs i8, échelle f16 par bloc de 32 : 45 079 930 octets
+contre 66 370 408, au prix de +0,074 % de perplexité au rejeu). Le protocole
+d'échange réseau est en **version 4** (79 octets d'en-tête, quatre modes : dense,
+listes, blocs, lot).
+
+C'est **exactement** ce qu'un nœud distant reçoit pour continuer le calcul : la
+raison pour laquelle la phase 0 sert la phase 3, et la phase 3 le vérifie (écart
+=== REPRISE 326-334 ===
+notebook prêt à ouvrir, `tools/preparer_colab.sh` fait le dépôt en un fichier
+(`git bundle`, 4,5 Mo — il n'y a pas de dépôt distant) et vérifie l'empreinte du
+modèle.
+
+**Le protocole est en version 4** et le contrat d'activation transporte
+niveaux, seuil, top-k, renorm, les sept top-k par projection, attn/qk/moe top-k :
+un serveur lancé avec `--topk-q 900` et un client avec `--topk-q 4` donnent quand
+même 0,00e0 — les réglages du client gagnent. En version 3 ils divergeaient en
+silence.
+=== rapports mode4 ===
+total 384
+drwxr-xr-x. 1 stephane stephane  1956 30 sep 15:17 .
+drwxr-xr-x. 1 stephane stephane   598 30 sep 12:19 ..
+-rw-r--r--. 1 stephane stephane   371 29 sep 18:39 aiguille-30b.md
+-rw-r--r--. 1 stephane stephane   355 29 sep 19:09 ai
+… [1159 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls reports/ | grep -iE \"mode|lot\" ; echo \"=== glob rapport-mode4 ===\"; find . -name \"*mode4*\" -o -name \"*mode-4*\" | grep -v \"^./drave-core/target\" | head; echo \"=== 'non écrit' restants ===\"; grep -rn \"mode 4\" --include … [149 caractères tronqués]`
+
+  ```
+rapport-modele-reel.md
+rapport-mode-listes.md
+rapport-prefill-par-lots.md
+=== glob rapport-mode4 ===
+./docs/plan-mode4-lot-listes.md
+=== 'non écrit' restants ===
+./reports/rapport-coherence-docs.md:75:| 24 | `docs/format-flux.md:96`, `docs/plan-prefill-reparti.md:21` | « le lot en listes est le **mode 4**, pas encore écrit » | les modes du code sont 0, 1, 2, 3 ; aucun mode 4 n'existe ni n'est réservé dans `recevoir_flux` | MANQUANT |
+./reports/rapport-prefill-reparti.md:86:liste par état n'existe pas encore (c'est le mode 4 décrit, non écrit). Ce qui est
+./reports/rapport-coherence-docs-2.md:64:| 15 | `docs/format-flux.md:117` | « le lot en listes est le mode 4, pas encore écrit » | exact (aucun `MODE_LOT_LISTES` dans le code) ; mais `docs/plan-mode4-lot-listes.md`, écrit le 30/09 à 15:12, spécifie ce mode 4 sans que `format-flux.md` y renvoie | MANQUANT |
+./reports/rapport-coherence-docs-2.md:134:| 65 | `docs/plan-mode4-lot-listes.md` (apparu pendant l'audit) | mode 4 = protocole **v5**, en-tête inchangé de 79 octets, `n` = états | cohérent avec l'état du code (`VERSION_FLUX = 4`, `TAILLE_TETE = 79`, `MODE_LOT = 3`, pas de mode 4) ; le document dit lui-même « non écrit » | OK |
+./
+… [1114 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git show 64a86ca -- REPRISE.md docs/roadmap.md docs/format-flux.md | grep -E \"^[-+].*(version|mode|octets)\" | head -20; echo \"=== qui a touche roadmap 96 ? ===\"; git log --oneline -2 -S \"version 4** (79 octets\" -- docs/roadmap. … [59 caractères tronqués]`
+
+  ```
++| `DRAVE_KV_K_F32=1` | garde les CLÉS en f32 (valeurs quantifiées) | mesuré : à 8 192, **64 %** de la taille f32 (5,125 octets par élément, échelles comprises) pour +0,023 %, contre +3,04 % pour l'int8 complet (28 % de la taille) — l'écart int8 vient des clés à 99 % (`reports/rapport-attribution-kv.md`) |
+-**écart 0,00e0** (18,0851 = 18,0851) ; en UN lot de 917 543 octets → **0,00e0**
++**écart 0,00e0** (18,0851 = 18,0851) ; en UN lot de 917 583 octets → **0,00e0**
+-          version      u16          = 1
++          version      u16          = 2 (défaut) ou 3 (`DRAVE_TRACE_BLOCS=1`)
+=== qui a touche roadmap 96 ? ===
+b2767fe Feuille de route : 1.4 attribuée et la section format renvoyée à sa spécification
+  ```
+
+- **job_output** `{"job_id": "bash-79", "timeout_ms": 300000, "wait": true}`

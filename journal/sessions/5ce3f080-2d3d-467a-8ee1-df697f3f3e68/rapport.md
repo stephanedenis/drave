@@ -7,10 +7,10 @@
 | Début | 2026-09-30 15:32 |
 | Durée | 0.1 h |
 | Tours | 1 |
-| Messages | 34 |
-| Appels d'outils | 41 |
-| Fichiers touchés | 3 |
-| Commandes | 24 |
+| Messages | 58 |
+| Appels d'outils | 66 |
+| Fichiers touchés | 8 |
+| Commandes | 39 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -23,7 +23,7 @@
 
 ### Tour 1 — Tu es relecteur ADVERSARIAL dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (projet « Drave » : moteur d'i … [3929 caractères tronqués]
 
-*41 appels d'outils.* Actions notables :
+*66 appels d'outils.* Actions notables :
 
 - bash — Show recent log and commit stat
 - bash — Count lines of relevant docs
@@ -39,11 +39,11 @@
 - bash — Run release test suite with 2 threads
 - bash — Read forward_lot
 - bash — Read quant_scratch
-- … et 15 autres
+- … et 35 autres
 
 **Synthèse produite :**
 
-⏵ Test de bout en bout réel : serveur + client mode 4, lots partiel et surdimensionné.
+⏵ Préparation du test cumulatif (268 Mo) et du test « réponse d'un autre mode ».
 
 ## 3. Travail accompli
 
@@ -54,6 +54,11 @@
 | `/tmp/m4_peer.py` | 1 | 0 |
 | `/tmp/m4_attack.py` | 1 | 0 |
 | `/tmp/run_e2e.sh` | 1 | 0 |
+| `/tmp/run_matrix.sh` | 1 | 0 |
+| `/tmp/run_attack.sh` | 1 | 0 |
+| `/tmp/run_suite2.sh` | 1 | 0 |
+| `/tmp/m4_badreply.py` | 1 | 0 |
+| `/tmp/run_suite3.sh` | 1 | 0 |
 
 ### Commandes exécutées (échantillon)
 
@@ -81,6 +86,21 @@
 - **T1** Check server option handling
 - **T1** Run real client against v5 fake peer
 - **T1** Run end-to-end mode 4 tests
+- **T1** Inspect the n==0 commit
+- **T1** Find stale doc claims
+- **T1** Run error matrix for mode 4
+- **T1** Read plan section 5
+- **T1** Read plan sections 7-8
+- **T1** Check actifs() usage and debug_assert
+- **T1** Check if actifs() was ever used
+- **T1** Run forged-frame attack campaign
+- **T1** Fix case names in attack script
+- **T1** Run second test suite
+- **T1** Fix case K byte accounting
+- **T1** Run cumulative-guard and bad-reply tests
+- **T1** Read stale doc lines and reports
+- **T1** Check missing mode-4 report and stale mentions
+- **T1** Check which stale lines were touched
 
 ## 4. Mesures et résultats marquants
 
@@ -94,4 +114,17 @@
 - **T1** `3689-        // int8 — et non par le pool. Le pool coûtait 4 ms de plus par jeton pour`
 - **T1** `3690-        // 72 Mo lus au lieu de 136 : ses seize tampons de sortie (9,7 Mo) sont`
 - **T1** `+        assert!((x[40] - 1.5).abs() < 1e-6, "canal 40 = 3 × 0,5 = 1,5, vu {}", x[40]);`
+- **T1** `- Les pourcentages du cache KV : « 75 % / 50 % » était une ERREUR de ma part (j'avais`
+- **T1** `compté 1,5/2 sans les échelles de bloc). Les valeurs justes sont **64 %** (clés f32`
+- **T1** `+ valeurs int8) et **28 %** (int8/int8) ; le rapport de placement est à jour dans`
+- **T1** `ses trois documents, bandeau compris (+0,018 % et non +0,06 %).`
+- **T1** `// inconnu se refusait après avoir lu `n × 4` octets et s'être désynchronisé,`
+- **T1** `docs/format-flux.md:128:f32 dense (3,5 ko par jeton) ; le lot en listes est le mode 4, pas encore écrit.`
+- **T1** `écritures ; mesuré 97,6 ms contre 15,6 ms de calcul).`
+- **T1** `contre 66 370 408, au prix de +0,074 % de perplexité au rejeu). Le protocole`
+- **T1** `(`git bundle`, 4,5 Mo — il n'y a pas de dépôt distant) et vérifie l'empreinte du`
+- **T1** `./journal/sessions/bbd6969f-0f70-42b2-8951-64d1f2f36d2e/digest.md:27455:docs/format-flux.md:111:f32 dense (3,5 ko par jeton) ; le lot en listes est le mode 4, pas encore écrit.`
+- **T1** `./journal/sessions/42059fde-f06f-4e2c-9a23-8292d887fb6e/rapport.md:202:- **T1** `+f32 dense (3,5 ko par jeton) ; le lot en listes est le mode 4, pas encore écrit.``
+- **T1** `./journal/sessions/aa5f9fc5-9450-4118-b65f-e8b99a28519d/digest.md:2256:docs/format-flux.md:117:f32 dense (3,5 ko par jeton) ; le lot en listes est le mode 4, pas encore écrit.`
+- **T1** `+| `DRAVE_KV_K_F32=1` | garde les CLÉS en f32 (valeurs quantifiées) | mesuré : à 8 192, **64 %** de la taille f32 (5,125 octets par élément, échelles comprises) pour +0,023 %, contre +3,04 % pour l'in`
 

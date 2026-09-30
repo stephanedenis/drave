@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 48.8 h |
+| Durée | 48.9 h |
 | Tours | 46 |
-| Messages | 1901 |
-| Appels d'outils | 1794 |
+| Messages | 1904 |
+| Appels d'outils | 1797 |
 | Fichiers touchés | 44 |
-| Commandes | 1466 |
+| Commandes | 1469 |
 | Sous-agents | 10 |
-| Commits | 153 |
+| Commits | 154 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -2117,7 +2117,7 @@ L'**audit des drapeaux** a trouvé que **46 options sur 110** étaient ignorées
 
 ### Tour 46 — continue jusqu'à 18h HAE
 
-*56 appels d'outils.* Actions notables :
+*59 appels d'outils.* Actions notables :
 
 - bash — Check time, timezone and remaining budget
 - create_goal
@@ -2133,7 +2133,7 @@ L'**audit des drapeaux** a trouvé que **46 options sur 110** étaient ignorées
 - bash — Improve notebook with real text cell
 - bash — Kill test node safely and check notebook
 - bash — Add notebook real-text cell and commit
-- … et 42 autres
+- … et 45 autres
 
 **Synthèse produite :**
 
@@ -2245,7 +2245,7 @@ L'**audit des drapeaux** a trouvé que **46 options sur 110** étaient ignorées
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 1426 autres
+- … et 1429 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2546,4 +2546,5 @@ L'**audit des drapeaux** a trouvé que **46 options sur 110** étaient ignorées
 - Quatre tests pour le mode 4 : état forgé, deux états, préfixe incohérent  Le mode 4 est du code de protocole neuf : un état forgé à la main doit se décoder comm
 - Cache KV à 4 096 : les quatre points, et les clés f16 devant les clés f32  clés f32 + valeurs int8 = 12,2223 (+0,039 %), soit un peu moins bien que le f16 (+0,0
 - REPRISE : le créneau 15h-18h (mode 4, frontière KV confirmée, plan GPU écrit)" && git log --oneline -1 | cat; sleep 240; cat /tmp/aiguille_kv.log | tail -12; da
+- README : la perplexité de gpt-oss était dans la colonne du débit" && git log --oneline -1 | cat; echo "=== aiguille ==="; tail -6 /tmp/aiguille_kv.log; date +"%
 
