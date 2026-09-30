@@ -15,7 +15,7 @@ MAGIE = 0x44525631
 TETE = 79   # en-tête v4 : magie, version, mode, plage, position, n, échelle,
             # niveaux, seuil, top-k, renorm, 7 top-k par projection, 3 top-k globaux
 MODES = {0: "dense f32", 1: "listes quantifiées", 2: "blocs (i8 + écarts)",
-         3: "lot (t états × dimension)"}
+         3: "lot dense (t états × dimension)", 4: "lot en listes (mode 2 par état)"}
 
 
 def lire_tout(sock, n):
@@ -67,6 +67,29 @@ def servir(sock, dimension):
             # et tuait le pair — c'est pour cela que le mode lot n'avait jamais
             # été confronté à un pair indépendant (relecture adversariale, D4).
             corps = lire_tout(sock, n * dimension * 4)
+        elif mode == 4:
+            # LOT EN LISTES : chaque état est auto-délimité par `a · n_blocs ·
+            # longueur`, puis ses échelles f32, puis ses paires (écart u8, i8).
+            # On les relit UN PAR UN et on vérifie les invariants : c'est le
+            # contrôle indépendant que le dépôt revendique, et il manquait pour ce
+            # mode (relecture adversariale, D7).
+            morceaux = []
+            for j in range(n):
+                tete_etat = lire_tout(sock, 12)
+                a, nb, lg = struct.unpack("<III", tete_etat)
+                attendu = (dimension + 31) // 32
+                if nb != attendu:
+                    print(f"[factice]   ⚠ état {j} : {nb} blocs pour {dimension} canaux "
+                          f"({attendu} attendus)", flush=True)
+                if not (2 * a <= lg <= 4 * a) and not (a == 0 and lg == 0):
+                    print(f"[factice]   ⚠ état {j} : {lg} octets de paires pour {a} actifs",
+                          flush=True)
+                echelles = lire_tout(sock, nb * 4)
+                paires = lire_tout(sock, lg)
+                morceaux.append(tete_etat + echelles + paires)
+            corps = b"".join(morceaux)
+            print(f"[factice]   → {n} états, {len(corps)} octets de corps "
+                  f"(somme des préfixes, échelles et paires)", flush=True)
         elif mode == 2:
             nb = struct.unpack("<I", lire_tout(sock, 4))[0]
             echelles = lire_tout(sock, nb * 4)
@@ -90,13 +113,19 @@ def servir(sock, dimension):
         # exactement l'erreur que ce fichier a commise, et le moteur l'a dite.
         n_paires = dimension if mode == 0 else 0
         reponse = struct.pack("<IBBIIIIfffIBIIIIIIIIII", MAGIE, version, mode, debut, fin, pos,
-                              n if mode == 3 else n_paires, 0.0, levels, thresh, topk, renorm,
+                              n if mode in (3, 4) else n_paires, 0.0, levels, thresh, topk, renorm,
                               0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
         if mode == 3:
             # réponse : le MÊME nombre d'états, valeurs nulles (le pair factice
             # ne calcule rien) — annoncer n états et n'envoyer qu'un vecteur
             # faisait lire au client un corps tronqué.
             reponse += b"\0" * (n * dimension * 4)
+        elif mode == 4:
+            # réponse en mode 4 : des états à liste VIDE (a = 0, longueur 0), une
+            # échelle nulle par bloc — c'est licite, et le moteur doit l'accepter.
+            nb = (dimension + 31) // 32
+            for _ in range(n):
+                reponse += struct.pack("<III", 0, nb, 0) + b"\0" * (nb * 4)
         elif mode == 2:
             # réponse : aucune valeur active (n=0), une échelle par bloc
             nb = (dimension + 31) // 32

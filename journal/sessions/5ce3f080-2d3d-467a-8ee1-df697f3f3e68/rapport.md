@@ -5,12 +5,12 @@
 | Identifiant | `5ce3f080-2d3d-467a-8ee1-df697f3f3e68` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-30 15:32 |
-| Durée | 0.2 h |
+| Durée | 0.3 h |
 | Tours | 1 |
-| Messages | 60 |
-| Appels d'outils | 68 |
-| Fichiers touchés | 8 |
-| Commandes | 41 |
+| Messages | 70 |
+| Appels d'outils | 77 |
+| Fichiers touchés | 9 |
+| Commandes | 47 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -23,7 +23,7 @@
 
 ### Tour 1 — Tu es relecteur ADVERSARIAL dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (projet « Drave » : moteur d'i … [3929 caractères tronqués]
 
-*68 appels d'outils.* Actions notables :
+*77 appels d'outils.* Actions notables :
 
 - bash — Show recent log and commit stat
 - bash — Count lines of relevant docs
@@ -39,11 +39,51 @@
 - bash — Run release test suite with 2 threads
 - bash — Read forward_lot
 - bash — Read quant_scratch
-- … et 37 autres
+- … et 45 autres
 
 **Synthèse produite :**
 
-⏵ Préparation du test cumulatif (268 Mo) et du test « réponse d'un autre mode ».
+⏵ Rapport final.
+
+\# Relecture adversariale — mode 4 « lot en listes », protocole v5
+
+**Méthode.** `git show 8e132aa`, lecture du code en place (l'arbre de travail contient 3 tests non commités en plus de HEAD), `cargo test --release` (17/17 ✓), un **pair Python v5 indépendant** (`/tmp/m4_peer.py`) qui décode ce qu'émet le vrai client, un **client Python hostile** (`/tmp/m4_attack.py`) qui forge des trames contre le vrai serveur, et des mesures réelles. Aucun fichier du dépôt modifié ; les scripts sont dans `/tmp`. Serveurs : un par trame, `timeout ≤ 110 s`, `--threads 2`, tous tués ; le processus de campagne (691410) est intact.
+
+---
+
+\## 1. Défauts prouvés
+
+\### D1 — GRAVE : le garde **cumulatif** de R4 promis par le plan n'existe pas
+
+Le plan l'exige trois fois : §1.3 R4 (« le cumul du corps aussi »), §4.5 (« `cumul += 12 + 4·n_blocs_j + longueur_j` puis `verifier_taille(cumul, "corps du lot en listes (cumul)")`. Sans lui, un pair peut annoncer `t × 256 Mo` de corps licites un par un : la mémoire resterait bornée (on décode état par état) mais le temps, non ») et §8 étape 2 (`lire_etat_blocs(s, j, hidden, dst, cumul)`).
+
+Le code accumule exactement ce cumul… et ne le vérifie jamais :
+
+```rust
+// main.rs:1808  -> seul le cumul d'UN état est contrôlé
+verifier_taille(12usize.saturating_add(nb.saturating_mul(4)).saturating_add(lg), ...)?;
+...
+// main.rs:1840  -> la variable EST le cumul ; aucun verifier_taille(lus, ...) nulle part
+lus += 12 + nb * 4 + lg;
+```
+
+**Preuve exécutable** (trame K) : état 0 légal au bord du plafond (`a=67 108 833`, `nb=28`, `lg=268 435 330` → `12+4·28+lg = 268 435 454 ≤ 268 435 456`), 268 Mo réellement envoyés, puis le préfixe de l'état 1 annonçant autant — cumul annoncé **536 870 908 > 268 435 456** :
+
+```
+etat 0 (268 Mo) envoye + prefixe de l'etat 1 (268 Mo de plus)
+cumul annonce = 536 870 908 octets > plafond 268 435 456
+AUCUN refus : le serveur lit encore l'etat 1 (pas de garde cumulatif)
+srv: [flux] arrêt : failed to fill whole buffer     <- seulement quand MOI je ferme
+```
+
+Avec `n = 74 898` (maximum accepté pour hidden = 896), le corps annoncé atteint ≈ 19 Po.
+
+\### D2 — GRAVE : le refus `n == 0` (commit voisin `64a86ca`) est **faux** pour les modes 1/2 et tue une session légitime
+
+`main.rs:1776-1779` refuse tout flux `n == 0`, **tous modes, avant le dispatch** — donc « oui, il couvre tous les modes », et c'est précisément le défaut. Or `n = 0` est **représentable** :
+
+* `flux_en_liste_blocs` (`model.rs:3638-3662`) : `seuil = a
+… [12034 caractères tronqués]
 
 ## 3. Travail accompli
 
@@ -59,6 +99,7 @@
 | `/tmp/run_suite2.sh` | 1 | 0 |
 | `/tmp/m4_badreply.py` | 1 | 0 |
 | `/tmp/run_suite3.sh` | 1 | 0 |
+| `/tmp/run_suite4.sh` | 1 | 0 |
 
 ### Commandes exécutées (échantillon)
 
@@ -102,7 +143,7 @@
 - **T1** Check missing mode-4 report and stale mentions
 - **T1** Check which stale lines were touched
 - **T1** Make bad peer wait after replying
-- … et 1 autres
+- … et 7 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -129,4 +170,19 @@
 - **T1** `./journal/sessions/42059fde-f06f-4e2c-9a23-8292d887fb6e/rapport.md:202:- **T1** `+f32 dense (3,5 ko par jeton) ; le lot en listes est le mode 4, pas encore écrit.``
 - **T1** `./journal/sessions/aa5f9fc5-9450-4118-b65f-e8b99a28519d/digest.md:2256:docs/format-flux.md:117:f32 dense (3,5 ko par jeton) ; le lot en listes est le mode 4, pas encore écrit.`
 - **T1** `+| `DRAVE_KV_K_F32=1` | garde les CLÉS en f32 (valeurs quantifiées) | mesuré : à 8 192, **64 %** de la taille f32 (5,125 octets par élément, échelles comprises) pour +0,023 %, contre +3,04 % pour l'in`
+- **T1** `référence locale  : perplexité 841.7671  (2.4 s)`
+- **T1** `cli:   référence locale  : perplexité 841.7671  (2.7 s)`
+- **T1** `[modele] 24 couches chargées en 853.626969ms — listes 0.00 Go , 2 threads`
+- **T1** `référence locale  : perplexité 841.7671  (2.7 s)`
+- **T1** `cli:   référence locale  : perplexité 520.0365  (0.9 s)`
+- **T1** `référence locale  : perplexité 239.5010  (6.9 s)`
+- **T1** `deux nœuds        : perplexité 230.6490  (7.9 s)`
+- **T1** `transport         : listes à échelle par bloc (2 octets/actif, écarts) · 1655 octets par flux (aller) · 1783 au retour · 81.3 % d'activité (728 neurones par flux) · 63 flux`
+
+## 5. Erreurs rencontrées
+
+2 sorties en erreur ou divergentes. Les premières :
+
+- **T1** : cli exit=1 (134 = SIGABRT) [flux] pilote : 12 couches en local, 12 chez le pair, 16 jetons   référence locale  : perplexité 841.7671  (2.4 s) [flux] le nœud moteur a fermé la connexion (failed to fill
+- **T1** : cli exit=0 [pair] ecoute 127.0.0.1:46601 · hidden=896 · 79 octets d'en-tete [pair] client ('127.0.0.1', 63674) [pair] flux 1 : couches 12..24 pos 0 · version 5 · mode LOT EN LISTES · t=16 · corps=2042
 

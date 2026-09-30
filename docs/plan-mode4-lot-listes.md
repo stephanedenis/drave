@@ -1,6 +1,7 @@
 # Spécification — mode 4 : le **lot en listes** (protocole v5)
 
-> **État : non écrit.** Ce document est la spécification à implémenter ; aucun
+> **État : ÉCRIT, mesuré et relu** (voir `reports/rapport-mode4-lot-listes.md`) — ce plan
+> reste la référence de conception ; trois écarts volontaires y sont notés en tête. Ce document est la spécification à implémenter ; aucun
 > fichier de code n'a été touché pour l'écrire. Il suppose connus
 > `docs/format-flux.md` (protocole v4, modes 0–3) et `docs/plan-prefill-reparti.md`
 > (le mode 3, mis en œuvre, et ses leçons). Les numéros de ligne sont ceux de
@@ -156,7 +157,7 @@ devinette ») qui l'impose. Ce qui se passerait sans elle :
   en place :
 
 ```
-[flux] arrêt : flux en version 5, cette build parle la 4 (pair incompatible : rien n'a été interprété)
+[flux] arrêt : flux en version 5, cette build parle la 5 (pair incompatible : rien n'a été interprété)
 ```
 
 et un pair v5 recevant un flux v4 dit la réciproque. Les deux nœuds doivent être

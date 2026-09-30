@@ -30646,3 +30646,342 @@ code de sortie : 0
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf --ppl /tmp/ids_qwen.txt --ctx 32 --limit 4 --dense --threads 4 --keeep 0.05 --options-strict > /dev/null 2>&1; echo \"code de sortie avec faute : $?\"; ./drave-core/targ … [701 caractères tronqués]`
+
+  ```
+code de sortie avec faute : 2
+code de sortie sans faute : 0
+621670b --options-strict : un drapeau inconnu devient une erreur, pour les scripts
+  remplissage : data/wikitext2_test.txt (353778 caractères), fenêtres décalées
+  lot 256 · 40 jetons de réponse · GPU non
+ contexte  profondeur  trouvé  secondes  détail
+     2048        0.10     oui     264.4  prompt 2147 jetons
+15:42:11
+  ```
+
+- **bash** `{"command": "sleep 420; tail -8 /tmp/aiguille_kv.log; date +\"%H:%M:%S\"; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log --oneline -1 | cat", "description": "Wait for needle progress and review agent", "timeoutMs": 600000}`
+
+  ```
+aiguille v2 : /home/stephane/FastNVMe/models/qwen2.5-1.5b-instruct-q4_k_m.gguf
+  remplissage : data/wikitext2_test.txt (353778 caractères), fenêtres décalées
+  lot 256 · 40 jetons de réponse · GPU non
+ contexte  profondeur  trouvé  secondes  détail
+     2048        0.10     oui     264.4  prompt 2147 jetons
+     2048        0.50     oui     266.9  prompt 2147 jetons
+     2048        0.90     oui     295.3  prompt 2147 jetons
+### f32 · contexte 4096 · profondeurs 0,1 / 0,5 / 0,9
+15:49:18
+621670b --options-strict : un drapeau inconnu devient une erreur, pour les scripts
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && D=./drave-core/target/release/drave; M=models/Qwen2.5-0.5B-Q8_0.gguf; IDS=$(head -1 /tmp/ids_qwen_long.txt | tr ',' '\\n' | head -1024 | tr '\\n' ',' | sed 's/,$//'); echo \"=== mode 2 à 1 024 jetons (référence) ===\"; p=47100; ($D $ … [1007 caractères tronqués]`
+
+  ```
+=== mode 2 à 1 024 jetons (référence) ===
+[timed out after 600000ms]
+[killed by signal: SIGTERM]
+  ```
+
+### 👤 Utilisateur
+
+Agent 5ce3f080-2d3d-467a-8ee1-df697f3f3e68 sent a message:
+RAPPORT ADVERSARIAL — mode 4 « lot en listes » / protocole v5 (dépôt Qtrinet, commit 8e132aa + voisins). Aucun fichier du dépôt modifié ; scripts dans /tmp ; 17/17 `cargo test --release` OK.
+
+DÉFAUTS PROUVÉS (10, dont 2 graves)
+
+D1 (GRAVE) — le garde CUMULATIF de R4 promis par le plan n'existe pas.
+Plan §1.3 R4, §4.5 et §8 étape 2 exigent `cumul += 12+4·nb+lg` puis `verifier_taille(cumul, "corps du lot en listes (cumul)")`. Code : main.rs:1840 `lus += 12 + nb*4 + lg;` — la variable est le cumul, elle n'est JAMAIS vérifiée (seul le cumul d'UN état l'est, l.1808).
+Preuve exécutable (/tmp/m4_attack.py K_a_et_lg_max_legaux) : état 0 légal (a=67 108 833, nb=28, lg=268 435 330 ; 12+4·28+lg = 268 435 454 ≤ plafond 268 435 456), 268 Mo envoyés, puis préfixe de l'état 1 → cumul annoncé 536 870 908 > plafond. Sortie : « AUCUN refus : le serveur lit encore l'etat 1 (pas de garde cumulatif) » ; le serveur ne rend la main qu'à ma fermeture (« arrêt : failed to fill whole buffer », 0 flux servi). Avec n=74 898 (max accepté pour hidden=896) le corps annoncé atteint ~19 Po. C'est le scénario que le plan décrit lui-même (« la mémoire resterait bornée, le temps non »).
+
+D2 (GRAVE) — le refus `n == 0` (commit voisin 64a86ca, main.rs:1776-1779, tous modes, avant le dispatch) est FAUX pour les modes 1/2 et tue une session légitime.
+n=0 est représentable : `flux_en_liste_blocs` (model.rs:3638-3662) et `quant_scratch` (model.rs:1797) rendent 0 actif dès que le seuil vaut ≥ le max (act_thresh ≥ 1) ou que l'état est exactement nul ; le décodeur mode 4, lui, accepte a_j=0 (main.rs:1815).
+Preuves : (a) A/B réel `--flux-blocs --act-thresh 1.0` : `--lot 1` → cli exit=1, serveur « arrêt : flux à zéro élément » ; mêmes flags `--lot 8` (mode 4, tous a_j=0) → exit=0, écart 0.00e0. (b) `tools/pair_factice.py` (le contrôle indépendant documenté, REPRISE.md §6) répond « aucune valeur active » n=0 en modes 1/2 → le client meurt : « le nœud moteur a fermé la connexion (flux à zéro élément …) ». Le test unitaire `un_flux_a_zero_element_est_refuse` verrouille le mauvais comportement.
+
+D3 (MOYEN) — `a_j` n'est jamais borné par `hidden` : seuls 2a ≤ plafond (l.1805) et 2a ≤ lg ≤ 4a (l.1815). Preuve : trame a=1 000 000 pour 896 canaux ACCEPTÉE (le serveur répond et imprime « état 0 : 1000000 indice(s) hors dimension ignorés »), 4 Mo lus/décodés. La « borne structurelle gratuite » du plan §4 (l.222-225) n'est pas implémentée.
+
+D4 (MOYEN) — « hors dimension » imprimé PAR ÉTAT et non une fois par message (main.rs:1841-1843) alors que le plan §4.6 l'exige explicitement. Preuve : trame de 200 états forgés → 200 lignes stderr.
+
+D5 (MOYEN) — le client meurt en SIGABRT (panic=abort) sur une réponse de mode ou de t différents : main.rs:2149 `assert_eq!(etats.len(), t*hidden)`, `plat()` rend `&[]` hors `Lot`, aucun contrôle du mode de la réponse. Preuves : réponse mode 4 t=15 au lieu de 16 → exit 134, « assertion left == right failed: lot reçu de 0 valeurs pour 16 jetons de 896 canaux » (src/main.rs:2158) ; réponse mode 1 → exit 134. 83 octets d'un pair hostile suffisent. Le message d'erreur devine en plus une fausse cause (« il a REFUSÉ le lot (son contexte est plus petit…) »).
+
+D6 (MINEUR) — « ko par jeton » (main.rs:2216-2221) divise par `lot` au lieu de Σt : à limit 20 / lot 16, la ligne dit « 14867 octets par lot · 0,9 ko par jeton » alors que 29 734 octets ont été envoyés pour 20 jetons = 1,45 ko/jeton ; elle annonce aussi « LOTS de 16 jetons » pour un dernier lot de 4.
+
+D7 (MOYEN) — le contrôle indépendant du dépôt ne connaît pas le mode 4 : tools/pair_factice.py:17-18 (pas de mode 4) et :76 (`n*4` octets). Preuve : « mode 4 · n=16 · corps 64 octets » au lieu de 23 248 → désynchronisation, puis mort du client. Le mode 4 n'a donc AUCUNE vérification par une seconde implémentation.
+
+D8 (MOYEN) — spec/docs périmés après le bump v5 : docs/format-flux.md:128 « le lot en listes est le mode 4, pas encore écrit » (contredit les l.110-120 du même fichier) ; :141 exemple « cette build parle la 4 » ; docs/plan-mode4-lot-listes.md:3 « État : non écrit » et :159 même exemple v4, alors que son étape 7 exige qu'aucune mention « mode 4 à écrire » ne subsiste ; docs/roadmap.md:96 « version 4 … quatre modes » ; REPRISE.md:330 « Le protocole est en version 4 » ; le livrable `reports/rapport-mode4-lot-listes.md` n'existe pas.
+
+D9/D10 (LATENTS/MINEURS) — `flux_en_liste_blocs` (model.rs:3658) tronque `as u16` sans l'assert que `flux_en_liste` a (model.rs:3608) → modes 2 et 4 corrompus en silence si hidden > 65 535 ; pas de `debug_assert_eq!` de longueur de corps dans `envoyer_lot_listes` (plan §8 étape 4) ; `ChargeFlux::actifs()` (l.1537) est du code mort et Σa_j n'est pas affiché (plan §7.7).
+
+MESURES (ids 1..N, seuil 0,01, --threads 2) : écart mode 4 = 2,83e-2 (8 jetons), 2,30e-1 (20), 1,11e-1 (40), 1,86e-2 (64), 6,46e-2 (256) ; mode 2 = 4,09e-2 (20), 3,70e-2 (64), 5,64e-2 (256) ; mode 3 dense = 0,00e0 partout. Donc critère du plan (≤1,5× mode 2) TENU à 64 (0,50×) et 256 (1,15×), VIOLÉ à 20 jetons (5,6×). Le lot partiel est innocent : limit 20 lot 20 et limit 20 lot 16 (16+4) donnent la même perplexité (157,3415) et le même écart. Les chiffres publiés (3,03e-2 / 2,74e-2) ne se reproduisent pas avec la commande du plan §6.1 (je mesure 6,46e-2 / 5,64e-2) — corpus non donné ; le ratio, lui, se reproduit (1,15 vs 1,11).
+
+VÉRIFIÉ CORRECT : en-tête 79 octets symétrique entre `tete_flux` et `recevoir_flux` (offsets vérifiés un à un) ; préfixe de 12 octets lu avant toute allocation ; champs/ordre/largeurs du corps conformes au plan §1.2 (mon pair Python v5 a consommé exactement Σ(12+112+lg) sur 23 248 et 6 328 octets sans décalage, et a relu la réponse du serveur : a=824, lg=1648=2a) ; échappement 255+u16+i8 écrit sur 4 octets et lu sur 4, prouvé en vrai à `--act-thresh 0,9` (états « a=1 lg=4 échappements=1 » décodés par mon implémentation indépendante, `prev` remis à 0 par état) ; n_blocs == ⌈hidden/32⌉ refusé nommément (27 au lieu de 28) ; 2a ≤ lg ≤ 4a correct pour état vide, pleine activité et échappements ; a/nb/lg énormes refusés en 0,00 s avant lecture ; n énorme refusé avant la boucle ; mode inconnu refusé sans lire un octet de corps (donc un pair v4 refuse un mode 4 avant lecture, via le contrôle de version) ; réponse encodée comme la demande (mode 4, même t/pos/plage, t=1 accepté) ; lots partiels et `--lot` > nombre de jetons OK (limit 8 lot 16 → un lot de 8, écart 2,83e-2) ; modes 0-3 intacts (mode 3 à 0,00e0, référence locale identique entre run mode 4 et mode 3).
+
+NON VÉRIFIÉ : binaire v4 réel (seule la position du contrôle a été lue) ; échappement sur le chemin serveur ; cause exacte du 5,6× à 20 jetons (états calculés en lot avec une échelle unique par gemm vs corpus) ; reproduction des chiffres publiés sur WikiText-2 (--ids-file) ; l'ampleur mémoire réelle du cas D1 (prouvé sur 536 Mo annoncés, pas sur 19 Po).
+
+Hygiène : ~20 serveurs d'une trame, timeout ≤ 110 s, --threads 2, tous tués ; le processus de campagne (691410) est intact ; aucun fichier du dépôt touché.
+
+### 👤 Utilisateur
+
+Background subagent 5ce3f080-2d3d-467a-8ee1-df697f3f3e68 finished and will do no further work unless you send it more.
+Its closing message:
+⏵ Rapport final.
+
+# Relecture adversariale — mode 4 « lot en listes », protocole v5
+
+**Méthode.** `git show 8e132aa`, lecture du code en place (l'arbre de travail contient 3 tests non commités en plus de HEAD), `cargo test --release` (17/17 ✓), un **pair Python v5 indépendant** (`/tmp/m4_peer.py`) qui décode ce qu'émet le vrai client, un **client Python hostile** (`/tmp/m4_attack.py`) qui forge des trames contre le vrai serveur, et des mesures réelles. Aucun fichier du dépôt modifié ; les scripts sont dans `/tmp`. Serveurs : un par trame, `timeout ≤ 110 s`, `--threads 2`, tous tués ; le processus de campagne (691410) est intact.
+
+---
+
+## 1. Défauts prouvés
+
+### D1 — GRAVE : le garde **cumulatif** de R4 promis par le plan n'existe pas
+
+Le plan l'exige trois fois : §1.3 R4 (« le cumul du corps aussi »), §4.5 (« `cumul += 12 + 4·n_blocs_j + longueur_j` puis `verifier_taille(cumul, "corps du lot en listes (cumul)")`. Sans lui, un pair peut annoncer `t × 256 Mo` de corps licites un par un : la mémoire resterait bornée (on décode état par état) mais le temps, non ») et §8 étape 2 (`lire_etat_blocs(s, j, hidden, dst, cumul)`).
+
+Le code accumule exactement ce cumul… et ne le vérifie jamais :
+
+```rust
+// main.rs:1808  -> seul le cumul d'UN état est contrôlé
+verifier_taille(12usize.saturating_add(nb.saturating_mul(4)).saturating_add(lg), ...)?;
+...
+// main.rs:1840  -> la variable EST le cumul ; aucun verifier_taille(lus, ...) nulle part
+lus += 12 + nb * 4 + lg;
+```
+
+**Preuve exécutable** (trame K) : état 0 légal au bord du plafond (`a=67 108 833`, `nb=28`, `lg=268 435 330` → `12+4·28+lg = 268 435 454 ≤ 268 435 456`), 268 Mo réellement envoyés, puis le préfixe de l'état 1 annonçant autant — cumul annoncé **536 870 908 > 268 435 456** :
+
+```
+etat 0 (268 Mo) envoye + prefixe de l'etat 1 (268 Mo de plus)
+cumul annonce = 536 870 908 octets > plafond 268 435 456
+AUCUN refus : le serveur lit encore l'etat 1 (pas de garde cumulatif)
+srv: [flux] arrêt : failed to fill whole buffer     <- seulement quand MOI je ferme
+```
+
+Avec `n = 74 898` (maximum accepté pour hidden = 896), le corps annoncé atteint ≈ 19 Po.
+
+### D2 — GRAVE : le refus `n == 0` (commit voisin `64a86ca`) est **faux** pour les modes 1/2 et tue une session légitime
+
+`main.rs:1776-1779` refuse tout flux `n == 0`, **tous modes, avant le dispatch** — donc « oui, il couvre tous les modes », et c'est précisément le défaut. Or `n = 0` est **représentable** :
+
+* `flux_en_liste_blocs` (`model.rs:3638-3662`) : `seuil = act_thresh·mx` et `if v.abs() <= seuil { continue; }` → **0 actif dès que `act_thresh ≥ 1`**, ou dès que l'état est exactement nul (cas où `quant_scratch` rend `None`, `model.rs:1797`) ;
+* le propre décodeur du mode 4 **accepte** `a_j = 0` (`main.rs:1815` tolère `lg = 0` pour `a = 0`) — la contradiction est interne au même commit.
+
+**Preuve A/B réelle**, mêmes flags, même modèle, seul `--lot` change :
+
+| commande | résultat |
+|---|---|
+| `--flux-blocs --act-thresh 1.0 --lot 1` (mode 2 par jeton) | **cli exit=1** ; serveur : `arrêt : flux à zéro élément : refusé (règle R4 …)` |
+| `--flux-blocs --act-thresh 1.0 --lot 8` (mode 4, tous `a_j=0`) | **exit=0**, écart 0.00e0, run complet |
+
+**Preuve d'interop** : `tools/pair_factice.py`, le contrôle indépendant documenté (`REPRISE.md` §6), répond « aucune valeur active » (`n=0`) en modes 1/2 → le client meurt : `le nœud moteur a fermé la connexion (flux à zéro élément : refusé …)`. Le test unitaire `un_flux_a_zero_element_est_refuse` verrouille ce comportement.
+
+### D3 — MOYEN : `a_j` n'est jamais borné par `hidden`
+
+Seuls `2a ≤ plafond` (l.1805) et `2a ≤ lg ≤ 4a` (l.1815) sont vérifiés. Un encodeur légitime ne peut pas produire `a > hidden`, et le plan §4 (l.222-225) demande la borne structurelle gratuite `t·(4·hidden + 4·⌈hidden/32⌉ + 12)`.
+**Preuve** (trame I) : `a = 1 000 000` pour 896 canaux → **ACCEPTÉE** ; le serveur répond et imprime `état 0 : 1000000 indice(s) hors dimension ignorés` après avoir lu/décodé 4 Mo. Même racine que D1 : ×74 898 états, 19 Po.
+
+### D4 — MOYEN : « hors dimension » imprimé **par état**, pas une fois par message
+
+`main.rs:1841-1843` : l'`eprintln!` est **dans** la boucle. Le plan §4.6 dit l'inverse : « le total est imprimé **une fois** en fin de message (une ligne par état ferait `t` lignes de bruit sur une trame forgée) ».
+**Preuve** (trame J) : 200 états forgés → **200 lignes** stderr.
+
+### D5 — MOYEN : le client meurt (SIGABRT) sur une réponse de mode ou de `t` différents
+
+`main.rs:2149` `assert_eq!(etats.len(), t * hidden)`, `plat()` rend `&[]` pour tout ce qui n'est pas `Lot`, le mode de la réponse n'est jamais comparé à la demande, et le profil release est `panic = "abort"`.
+**Preuves** : réponse mode 4 avec `t=15` au lieu de 16 → `cli exit=134`, `panicked at src/main.rs:2158: assertion left == right failed: lot reçu de 0 valeurs pour 16 jetons de 896 canaux` ; réponse mode 1 → exit 134 également. Un pair hostile tue le client avec **83 octets**. Le message d'erreur devine en outre une fausse cause (« Cause la plus probable : il a REFUSÉ le lot (son contexte est plus petit que --ctx ici : 256) »).
+
+### D6 — MINEUR : la comptabilité « par jeton » est fausse si le dernier lot est partiel
+
+`main.rs:2216-2221` divise par `lot` au lieu de `Σt`. **Preuve** : `--limit 20 --lot 16` affiche `14867 octets par lot · 0,9 ko par jeton` alors que 29 734 octets ont été envoyés pour 20 jetons = **1,45 ko/jeton** (le 2e lot fait 4 états) ; la ligne annonce aussi « LOTS de 16 jetons » pour un lot de 4.
+
+### D7 — MOYEN : le contrôle indépendant du dépôt ne connaît pas le mode 4
+
+`tools/pair_factice.py:17-18` (MODES sans mode 4) et `:76` (`corps = lire_tout(sock, n*4)`).
+**Preuve** : face à un flux mode 4 de `t=16`, il annonce `corps 64 octets` (au lieu de 23 248) puis se désynchronise ; le client meurt ensuite sur sa réponse `n=0` (D2). **Le mode 4 n'a donc aucune vérification par une seconde implémentation** — l'invariant même que la spec revendique.
+
+### D8 — MOYEN : spec et docs périmées après le bump v5
+
+* `docs/format-flux.md:128` : « le lot en listes est le mode 4, **pas encore écrit** » — contredit les lignes 110-120 du même fichier ;
+* `docs/format-flux.md:141` : exemple de refus « cette build parle la **4** » (le code dit 5) ;
+* `docs/plan-mode4-lot-listes.md:3` : « **État : non écrit.** » et `:159` même exemple en v4, alors que l'étape 7 du même plan exige qu'« aucune mention de mode 4 “à écrire” ne subsiste » ;
+* `docs/roadmap.md:96` : « version 4 … quatre modes » ; `REPRISE.md:330` : « Le protocole est en version 4 » ;
+* le livrable `reports/rapport-mode4-lot-listes.md` (étape 7) **n'existe pas**.
+
+### D9/D10 — LATENTS / MINEURS
+
+`flux_en_liste_blocs` (`model.rs:3658`) fait `idx.push((lo + k) as u16)` **sans** l'assert `x.len() <= u16::MAX` que `flux_en_liste` possède (`model.rs:3608`) : pour hidden > 65 535, les modes 2 **et 4** corrompent les indices en silence. Pas de `debug_assert_eq!` de longueur de corps dans `envoyer_lot_listes` (plan §8 étape 4). `ChargeFlux::actifs()` (`main.rs:1537`) est du code mort, et Σa_j n'est jamais affiché (plan §7.7) — `actifs_envoyes += t*hidden` (l.2135) compte du dense.
+
+---
+
+## 2. Mesures (ids 1..N, seuil 0,01, `--threads 2`)
+
+| limit | lot | mode | écart |
+|---|---|---|---|
+| 8 | 16 | **4** | 2,83e-2 |
+| 20 | 16 | **4** | **2,30e-1** |
+| 20 | 20 | **4** | **2,30e-1** (identique) |
+| 20 | 16 | 3 | 0,00e0 |
+| 20 | 1 | 2 | 4,09e-2 |
+| 40 | 16 | **4** | 1,11e-1 |
+| 64 | 16 | **4** | 1,86e-2 |
+| 64 | 1 | 2 | 3,70e-2 |
+| 256 | 16 | **4** | 6,46e-2 |
+| 256 | 1 | 2 | 5,64e-2 |
+| 256 | 16 | 3 | 0,00e0 |
+
+* Le **critère du plan** (écart mode 4 ≤ 1,5 × mode 2 à mêmes ids/limit/seuil) est **tenu** à 64 (0,50×) et 256 (1,15×), mais **violé à 20 jetons (5,6×)** — et le commit ne l'a mesuré qu'au point 256. Je n'ai pas isolé de cause protocolaire (états calculés en lot avec une échelle unique par gemm `gemm_dense_i8` contre chemin séquentiel ; corpus court à 19 jetons notés).
+* **Le lot partiel est innocent** : `--limit 20 --lot 20` et `--limit 20 --lot 16` (16+4) donnent la **même** perplexité (157,3415) et le même écart — l'ordre et le découpage des états sont corrects.
+* Les chiffres publiés (3,03e-2 et 2,74e-2, « 1,5 ko par jeton ») **ne se reproduisent pas** avec la commande du plan §6.1 (je mesure 6,46e-2 et 5,64e-2, perplexités 17 015 et 17 446) : le corpus n'est pas donné dans le commit ni dans la doc (le plan mentionne WikiText-2, donc `--ids-file`). Le **ratio**, lui, se reproduit (1,15 contre 1,11 annoncé).
+
+---
+
+## 3. Vérifié et trouvé CORRECT
+
+1. **En-tête** : `tete_flux` écrit 79 octets aux offsets exactement lus par `recevoir_flux` (magie 0, version 4, mode 5, début 6, fin 10, pos 14, n 18, échelle 22, levels 26, thresh 30, topk 34, renorm 38, 7 topk_proj 39..66, attn 67, qk 71, moe 75) — vérifié octet par octet et par mon pair Python (79 octets, valeurs relues justes). L'unification n'a rien changé pour les trois émetteurs.
+2. **Préfixe 12 octets lu avant toute allocation** : tableau sur la pile, `read_exact(12)`, puis les trois `verifier_taille`, les contrôles de cohérence, et seulement ensuite `vec![0u8; nb*4]` et `vec![0u8; lg]`. Ordre et largeurs conformes au plan §1.2.
+3. **Échappement d'indice** : écrit sur **4** octets (`255 + u16 absolu LE + i8`) et lu sur **4**, des deux côtés. Prouvé **en vrai** avec `--act-thresh 0.9` : mon décodeur Python indépendant a lu des états `a=1 lg=4 échappements=1` et conservé l'alignement jusqu'au flux suivant (`prev` remis à 0 à chaque état, le premier écart est bien l'indice absolu). Le test unitaire d'aller-retour avec échappements passe.
+4. **Contrôles de cohérence** : `n_blocs_j == ⌈hidden/32⌉` refusé nommément (`état 0 : 27 blocs d'échelles pour 896 canaux (28 attendus)`) ; `2·a ≤ lg ≤ 4·a` correct pour **l'état vide** (a=0, lg=0 accepté — trame A), la pleine activité et les échappements (lg=4a exactement admis). Cosmétique : le message affiche « attendu entre 0 et 0 » quand a=0 alors que le code tolère lg ≤ 4.
+5. **Indices hors dimension** : ignorés, comptés, dits, sans panique, comme en modes 1/2 ; `plat[base + i]` ne peut pas sortir (`i < hidden` et `plat` redimensionné à `base+hidden` avant la boucle).
+6. **R4 par champ** : `a=0xFFFFFFFF`, `nb=0xFFFFFFFF`, `lg=0xFFFFFFFF` refusés en **0,00 s**, avant tout octet de corps, en nommant l'état et le plafond ; `n` énorme refusé avant la boucle.
+7. **Mode inconnu refusé avant lecture** : trame mode 7, en-tête seul, aucune attente → `arrêt : mode de flux inconnu : 7 (cette build parle les modes 0 à 4, protocole v5)` en 0,00 s. Un pair v4 refuse donc un mode 4 **avant** lecture (contrôle de version placé avant le corps).
+8. **Réponse encodée comme la demande** : serveur mode 4 → réponse mode 4, mêmes `t`/`pos`/plage (trame A : réponse `a=824, nb=28, lg=1648=2a, 0 échappement, max=895`, relue par mon pair). `t=1` accepté en réception (R1).
+9. **Lots partiels et `--lot` > jetons** : `--limit 20 --lot 16` envoie 16 puis 4 états (pos 0 puis 16) ; `--limit 8 --lot 16` envoie un lot de 8 (écart 2,83e-2) — les deux runs complets, exit 0.
+10. **Modes 0–3 intacts** : 17/17 tests release (dont l'aller-retour dense par vraie socket), mode 3 dense à 0,00e0 à 20 et 256 jetons, référence locale identique entre un run mode 4 et un run mode 3 à mêmes ids/lot (204,3350 et 17 015,2135).
+11. **Troncature** : une trame mode 4 tronquée (2 états annoncés, 1 envoyé) rend une erreur propre (`failed to fill whole buffer`), pas de panique.
+
+---
+
+## 4. Non vérifié
+
+* Binaire **v4 réel** : je n'ai lu que la position du contrôle de version ; je n'ai pas construit de build v4 pour observer le refus d'un mode 4.
+* **Échappement sur le chemin serveur** : les réponses observées étaient denses ; l'échappement a été prouvé sur l'émetteur client avec un seuil 0,9.
+* **Cause exacte du 5,6× à 20 jetons** (chemin par lots vs séquentiel, corpus court) ; il faudrait des runs WikiText-2 via `--ids-file`.
+* **Reproduction des chiffres publiés** : corpus absent du commit et de la doc.
+* **Ampleur mémoire réelle de D1** : prouvé sur 536 Mo annoncés, pas sur les 19 Po théoriques.
+
+---
+
+## Résumé (10 lignes)
+
+1. **10 défauts réels** (2 graves, 5 moyens, 3 mineurs/latents) ; `cargo test --release` 17/17 ✓ ; aucun fichier du dépôt touché.
+2. **Grave 1 —** le garde **cumulatif** R4 du plan est absent : `lus` (`main.rs:1840`) n'est jamais passé à `verifier_taille` ; preuve : 268 Mo d'état légal + préfixe d'un 2ᵉ état (cumul 536 870 908 > plafond 268 435 456) → « AUCUN refus : le serveur lit encore », ~19 Po annonçables.
+3. **Grave 2 —** le refus `n == 0` (`main.rs:1776`) tue une session légitime en modes 1/2 alors que le mode 4 accepte `a_j = 0` : `--act-thresh 1.0` `--lot 1` meurt, `--lot 8` passe, et le contrôle documenté `tools/pair_factice.py` meurt dessus.
+4. **Moyens —** `a_j` jamais borné par hidden (1 000 000 actifs acceptés pour 896 canaux) ; « hors dimension » une ligne **par état** (200 lignes) ; client tué en SIGABRT 134 par une réponse de `t` ou de mode différents ; pair factice v4 incapable de lire le mode 4 ; spec/docs périmées (`format-flux.md:128` et `:141`, plan `:3` et `:159`, `roadmap:96`, `REPRISE:330`, rapport mode 4 absent).
+5. **Mineur —** « ko par jeton » divise par `lot` au lieu de Σt : 0,9 ko/jeton annoncé contre 1,45 réel à 20 jetons en lots de 16.
+6. **Vérifié correct —** en-tête 79 octets symétrique (`tete_flux` ↔ `recevoir_flux`), préfixe 12 octets lu avant allocation, échappement `255+u16+i8` écrit et lu sur 4 octets (prouvé en vrai à seuil 0,9 par un décodeur Python indépendant), `n_blocs == ⌈hidden/32⌉` et `2a ≤ lg ≤ 4a` corrects (état vide accepté), indices hors dimension ignorés sans panique.
+7. **Vérifié correct —** `a`/`nb`/`lg` énormes refusés en 0,00 s avant lecture, mode inconnu refusé sans lire le corps, réponse encodée comme la demande, `t=1` accepté, lots partiels et `--lot` > jetons OK, modes 0–3 intacts (mode 3 à 0,00e0).
+8. **Mesures —** écart mode 4 / mode 2 : 5,6× à 20 jetons (critère du plan 1,5× **violé**), 0,50× à 64, 1,15× à 256 ; le lot partiel est innocent (lot 16 et lot 20 donnent la même perplexité).
+9. **Reproductibilité —** les chiffres publiés (3,03e-2 / 2,74e-2) ne se reproduisent pas avec la commande du plan §6.1 (je mesure 6,46e-2 / 5,64e-2, ids 1..256) ; le ratio se reproduit ; corpus non donné.
+10. **Non vérifié —** binaire v4 réel, échappement côté serveur, cause exacte du 5,6×, reproduction sur WikiText-2 ; ~20 serveurs d'une trame (≤ 110 s, `--threads 2`), tous tués, campagne intacte.
+
+### 🤖 Assistant
+
+La relecture du mode 4 a trouvé **10 défauts, dont 2 graves — et le second est un correctif à moi qui casse une session légitime** (`n == 0` est valide pour une liste vide). Je corrige tout de suite.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/main.rs'; s=open(p).read()\ndef rem(nom, v, n):\n    global s\n    c = s.count(v)\n    if c != 1:\n        print(f\"  ✗ {nom} : {c}\"); return False\n    s = s.replace(v, n); print(f\"  ✓ {nom}\"); … [4525 caractères tronqués]`
+
+  ```
+✓ D2 n==0 seulement pour dimension/états
+  ✓ D1 cumul R4
+  ✓ D3 borne des actifs
+  ✓ D4 message unique
+  ✓ D4 cumul hors dimension
+  ✓ D4 affichage
+D1-D4 traités
+D9 : garde de largeur d'indice
+    Finished `release` profile [optimized] target(s) in 0.01s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/main.rs'; s=open(p).read()\ndef rem(nom, v, n):\n    global s\n    c = s.count(v)\n    if c != 1:\n        print(f\"  ✗ {nom} : {c}\"); return False\n    s = s.replace(v, n); print(f\"  ✓ {nom}\"); … [3437 caractères tronqués]`
+
+  ```
+✓ D5 contrôle de la réponse
+  ✓ D6 compteur de jetons
+  ✓ D6 cumul
+  ✗ D6 affichage : 0
+D5 et D6 traités
+    Finished `release` profile [optimized] target(s) in 0.01s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"LOTS de {lot} jetons\" -A 6 drave-core/src/main.rs | head -10", "description": "Read the transport print exactly"}`
+
+  ```
+2262:        println!("  transport         : {} · LOTS de {lot} jetons · {:.0} octets par lot \
+2263-                  (aller) · {:.1} ko par jeton · {} lots (au lieu de {} flux)",
+2264-                 if mode_lot == MODE_LOT_LISTES { "lot en LISTES" } else { "lot dense f32" },
+2265-                 octets_envoyes as f64 / nflux as f64,
+2266-                 octets_envoyes as f64 / nflux as f64 / 1024.0 / lot as f64,
+2267-                 nflux, ids.len() - 1);
+2268-        println!("  temps             : {:.1} ms par LOT en local · {:.1} ms à attendre le pair · \
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/main.rs'; s=open(p).read()\nv = \"\"\"        println!(\"  transport         : {} · LOTS de {lot} jetons · {:.0} octets par lot \\\\\n                  (aller) · {:.1} ko par jeton · {} lots (au li … [3660 caractères tronqués]`
+
+  ```
+D6 : affichage corrigé
+test du zéro corrigé
+test result: ok. 17 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.13s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date +\"%H:%M:%S\"; D=./drave-core/target/release/drave; M=models/Qwen2.5-0.5B-Q8_0.gguf; IDS=$(head -1 /tmp/ids_qwen_long.txt | tr ',' '\\n' | head -64 | tr '\\n' ',' | sed 's/,$//'); echo \"=== la session qui MOURAIT : mode 2, seui … [1144 caractères tronqués]`
+
+  ```
+16:01:36
+=== la session qui MOURAIT : mode 2, seuil 1,0 (toutes les listes vides) ===
+  écart             : 0.00e0
+  transport         : listes à échelle par bloc (2 octets/actif, écarts) · 199 octets par flux (aller) · 199 au retour · 0.0 % d'activité (0 neurones par flux) · 63 flux
+0
+=== mode 4, 64 jetons (après les correctifs) ===
+  écart             : 1.16e-3
+  transport         : lot en LISTES · lots de 16 jetons au plus · 24278 octets par lot (aller) · 1.5 ko par jeton · 4 lots pour 64 jetons
+     2048        0.10     oui     264.4  prompt 2147 jetons
+     2048        0.50     oui     266.9  prompt 2147 jetons
+     2048        0.90     oui     295.3  prompt 2147 jetons
+### f32 · contexte 4096 · profondeurs 0,1 / 0,5 / 0,9
+  ```
+
+### 🤖 Assistant
+
+La session qui mourait revit (liste vide acceptée) et le mode 4 est intact. Je complète l'outil de contrôle indépendant (il ignorait le mode 4) puis les documents.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='tools/pair_factice.py'; s=open(p).read()\ndef rem(nom, v, n):\n    global s\n    c = s.count(v)\n    if c != 1:\n        print(f\"  ✗ {nom} : {c}\"); return False\n    s = s.replace(v, n); print(f\"  ✓ {nom}\");  … [4333 caractères tronqués]`
+
+  ```
+✓ modes
+  ✓ lecture du corps
+  ✓ réponse
+pair factice : mode 4
+syntaxe ok
+--- vu par le pair ---
+[factice] écoute sur 127.0.0.1:47300 · je réponds 896 canaux
+[factice] client ('127.0.0.1', 35622)
+[factice]   → 8 états, 11010 octets de corps (somme des préfixes, échelles et paires)
+[factice] flux 1 : couches 12..24 pos 0 · version 5 · mode lot en listes (mode 2 par état) · n=8 · échelle 0 · niveaux 127 seuil 0.01 topk 0 renorm 0 · corps 11010 octets
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && (python3 tools/pair_factice.py 47301 896 > /tmp/factice_m4b.log 2>&1 &); sleep 1; IDS=$(head -1 /tmp/ids_qwen_long.txt | tr ',' '\\n' | head -16 | tr '\\n' ',' | sed 's/,$//'); timeout 200 ./drave-core/target/release/drave models/Qwe … [294 caractères tronqués]`
+
+  ```
+[flux] pilote : 12 couches en local, 12 chez le pair, 16 jetons
+  référence locale  : perplexité 124.8760  (0.5 s)
+[flux] le nœud moteur a fermé la connexion (flux de zéro état : refusé (R4 de docs/plan-prefill-reparti.md)).
+       Cause la plus probable : il a REFUSÉ le lot (son contexte est plus petit que --ctx ici : 64). Il l'a dit de son côté.
+--- pair ---
+[factice] client ('127.0.0.1', 51928)
+[factice]   → 8 états, 11010 octets de corps (somme des préfixes, échelles et paires)
+[factice] flux 1 : couches 12..24 pos 0 · version 5 · mode lot en listes (mode 2 par état) · n=8 · échelle 0 · niveaux 127 seuil 0.01 topk 0 renorm 0 · corps 11010 octets
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"n if mode == 3 else n_paires\" tools/pair_factice.py; python3 - <<'PY'\np='tools/pair_factice.py'; s=open(p).read()\nv = \"n if mode == 3 else n_paires\"\nassert s.count(v) == 1\ns = s.replace(v, \"n if mode in (3, 4) else  … [651 caractères tronqués]`
+
+  ```
+116:                              n if mode == 3 else n_paires, 0.0, levels, thresh, topk, renorm,
+réponse : n états pour les modes 3 ET 4
+  écart             : 1.22e3
+  transport         : lot en LISTES · lots de 8 jetons au plus · 11733 octets par lot (aller) · 1.4 ko par jeton · 2 lots pour 16 jetons
+  temps             : 89.9 ms par LOT en local · 0.6 ms à attendre le pair · soit 0.01× le calcul local seul
+--- pair ---
+[factice] flux 1 : couches 12..24 pos 0 · version 5 · mode lot en listes (mode 2 par état) · n=8 · échelle 0 · niveaux 127 seuil 0.01 topk 0 renorm 0 · corps 11010 octets
+[factice]   → 8 états, 12298 octets de corps (somme des préfixes, échelles et paires)
+[factice] flux 2 : couches 12..24 pos 8 · version 5 · mode lot en listes (mode 2 par état) · n=8 · échelle 0 · niveaux 127 seuil 0.01 topk 0 renorm 0 · corps 12298 octets
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-mode4-lot-listes.md <<'EOF'\n# Mode 4 — le lot en listes : ÷2,3 sur les octets, et ce qu'il coûte\n\n**En une ligne** : un préremplissage de N états peut voyager en **listes creuses**\nau lieu de f32 dense — 1,5 … [7928 caractères tronqués]`

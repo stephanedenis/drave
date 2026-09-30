@@ -3637,6 +3637,10 @@ dynamique de {dyn_:.3e} (relatif {:.2e})", mx / dyn_.max(1e-9));
     /// qui décide de la sparsité, donc de la taille sur le fil.
     pub fn flux_en_liste_blocs(&self, x: &[f32]) -> (Vec<u16>, Vec<i8>, Vec<f32>) {
         const BLOC: usize = 32;
+        // La même garde que `flux_en_liste` : au-delà de 65 535 canaux, l'indice
+        // u16 tronque EN SILENCE (les modes 2 et 4 en dépendent).
+        assert!(x.len() <= u16::MAX as usize,
+                "flux de {} canaux : l'indice u16 ne suffit pas", x.len());
         let n_blocs = x.len().div_ceil(BLOC);
         let mut echelles = vec![0f32; n_blocs];
         let mut mx = 0f32;

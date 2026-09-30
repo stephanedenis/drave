@@ -125,7 +125,8 @@ connaît par son modèle, et les deux doivent charger le **même GGUF**. Mesuré
 256 jetons en **4 lots** de 64 (écart **0,00e0** avec la référence locale découpée
 de la même façon), ou en **1 seul lot de 917 583 octets** — un aller-retour pour
 tout un préremplissage, au lieu d'un par jeton. Réserve honnête : le lot voyage en
-f32 dense (3,5 ko par jeton) ; le lot en listes est le mode 4, pas encore écrit.
+f32 dense (3,5 ko par jeton) ; le lot en LISTES est le mode 4 (1,5 ko par jeton,
+voir `reports/rapport-mode4-lot-listes.md`).
 
 Le **mode 1 est le format du disque**, à l'octet près : deux octets d'indice,
 deux octets de valeur, une échelle par liste. Transporter la liste plutôt que le
@@ -138,7 +139,7 @@ La version est dans **chaque** en-tête, et un pair d'une autre version est refu
 avec un message qui nomme les deux versions en présence :
 
 ```
-[flux] arrêt : flux en version 99, cette build parle la 4 (pair incompatible : rien n'a été interprété)
+[flux] arrêt : flux en version 99, cette build parle la 5 (pair incompatible : rien n'a été interprété)
 ```
 
 Le passage de la version 2 à la 3 n'est pas cosmétique : un pair en version 2 qui

@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 48.9 h |
+| Durée | 49.3 h |
 | Tours | 46 |
-| Messages | 1906 |
-| Appels d'outils | 1799 |
+| Messages | 1919 |
+| Appels d'outils | 1810 |
 | Fichiers touchés | 44 |
-| Commandes | 1471 |
+| Commandes | 1482 |
 | Sous-agents | 10 |
-| Commits | 155 |
+| Commits | 156 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -2117,7 +2117,7 @@ L'**audit des drapeaux** a trouvé que **46 options sur 110** étaient ignorées
 
 ### Tour 46 — continue jusqu'à 18h HAE
 
-*61 appels d'outils.* Actions notables :
+*72 appels d'outils.* Actions notables :
 
 - bash — Check time, timezone and remaining budget
 - create_goal
@@ -2133,11 +2133,11 @@ L'**audit des drapeaux** a trouvé que **46 options sur 110** étaient ignorées
 - bash — Improve notebook with real text cell
 - bash — Kill test node safely and check notebook
 - bash — Add notebook real-text cell and commit
-- … et 47 autres
+- … et 58 autres
 
 **Synthèse produite :**
 
-⏵ Pendant que l'aiguille tourne, je rafraîchis le handoff avec le mode 4 et la frontière KV.
+La session qui mourait revit (liste vide acceptée) et le mode 4 est intact. Je complète l'outil de contrôle indépendant (il ignorait le mode 4) puis les documents.
 
 ## 3. Travail accompli
 
@@ -2245,7 +2245,7 @@ L'**audit des drapeaux** a trouvé que **46 options sur 110** étaient ignorées
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 1431 autres
+- … et 1442 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2548,4 +2548,5 @@ L'**audit des drapeaux** a trouvé que **46 options sur 110** étaient ignorées
 - REPRISE : le créneau 15h-18h (mode 4, frontière KV confirmée, plan GPU écrit)" && git log --oneline -1 | cat; sleep 240; cat /tmp/aiguille_kv.log | tail -12; da
 - README : la perplexité de gpt-oss était dans la colonne du débit" && git log --oneline -1 | cat; echo "=== aiguille ==="; tail -6 /tmp/aiguille_kv.log; date +"%
 - --options-strict : un drapeau inconnu devient une erreur, pour les scripts  La dernière recommandation de l'audit des drapeaux : un avertissement suffit quand o
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-mode4-lot-listes.md <<'EOF' # Mode 4 — le lot en listes : ÷2,3 sur les octets, et ce
 

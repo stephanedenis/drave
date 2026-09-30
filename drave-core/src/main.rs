@@ -1779,12 +1779,16 @@ fn recevoir_flux(s: &mut std::net::TcpStream, hidden: usize) -> std::io::Result<
     // Le mode est vérifié AVANT de lire le moindre octet de corps : un mode
     // inconnu se refusait après avoir lu `n × 4` octets et s'être désynchronisé,
     // en disant « mode inconnu » — exact, tardif, et muet sur la cause.
-    // Règle R4, première moitié : un flux à ZÉRO élément est un bug du pair, pas
-    // une donnée — le plan l'annonçait, le code ne le vérifiait pas (relevé par le
-    // second audit de cohérence).
-    if n == 0 {
+    // Un flux à zéro élément n'est illégitime que là où `n` est une DIMENSION
+    // (mode 0) ou un nombre d'ÉTATS (modes 3 et 4). En modes 1 et 2, `n` est un
+    // nombre de PAIRES : une liste VIDE est légitime — un vecteur d'activation
+    // peut n'avoir aucun actif (seuil au-dessus du maximum, état exactement nul),
+    // et c'est même ce que répond le pair factice du dépôt. Refuser n == 0 partout
+    // tuait ces sessions (relevé par la relecture adversariale du mode 4).
+    if n == 0 && matches!(mode, MODE_DENSE | MODE_LOT | MODE_LOT_LISTES) {
         return Err(std::io::Error::new(std::io::ErrorKind::InvalidData,
-            "flux à zéro élément : refusé (règle R4 de docs/plan-prefill-reparti.md)"));
+            format!("flux de zéro {} : refusé (R4 de docs/plan-prefill-reparti.md)",
+                    if mode == MODE_DENSE { "canal" } else { "état" })));
     }
     match mode {
         MODE_DENSE | MODE_LISTE | MODE_BLOCS | MODE_LOT | MODE_LOT_LISTES => {}
@@ -1805,6 +1809,7 @@ fn recevoir_flux(s: &mut std::net::TcpStream, hidden: usize) -> std::io::Result<
             let attendu = hidden.div_ceil(32);
             let mut plat: Vec<f32> = Vec::with_capacity(n * hidden);
             let mut lus = 0usize;
+            let mut hors_total = 0usize;
             for j in 0..n {
                 let mut p = [0u8; 12];
                 s.read_exact(&mut p)?;
@@ -1816,6 +1821,11 @@ fn recevoir_flux(s: &mut std::net::TcpStream, hidden: usize) -> std::io::Result<
                 verifier_taille(lg, &format!("état {j} : {lg} octets de paires"))?;
                 verifier_taille(12usize.saturating_add(nb.saturating_mul(4)).saturating_add(lg),
                                 &format!("état {j}"))?;
+                if a > hidden {
+                    return Err(std::io::Error::new(std::io::ErrorKind::InvalidData,
+                        format!("état {j} : {a} actifs pour {hidden} canaux — un \
+encodeur légitime ne peut pas en produire autant")));
+                }
                 if nb != attendu {
                     return Err(std::io::Error::new(std::io::ErrorKind::InvalidData,
                         format!("état {j} : {nb} blocs d'échelles pour {hidden} canaux \
@@ -1846,10 +1856,20 @@ incohérent (attendu entre {} et {})", a * 2, a * 4)));
                         plat[base + i as usize] = v as f32 * echelles[b];
                     } else { hors += 1; }
                 }
+                hors_total += hors;
                 lus += 12 + nb * 4 + lg;
-                if hors > 0 {
-                    eprintln!("[flux] état {j} : {hors} indice(s) hors dimension ignorés");
-                }
+                // Le plan l'exige et le code ne le faisait pas : chaque état peut
+                // être légal et le TOTAL ne pas l'être — un pair annonçait
+                // 268 Mo par état sur 74 898 états. La mémoire reste bornée (on
+                // décode état par état), le TEMPS non.
+                verifier_taille(lus, &format!("corps du lot en listes (cumul après \
+l'état {j})"))?;
+            }
+            if hors_total > 0 {
+                // UNE ligne par message : une trame forgée de 200 états en
+                // produisait 200 (le plan demandait déjà l'inverse).
+                eprintln!("[flux] {hors_total} indice(s) hors dimension ignorés sur \
+l'ensemble du lot (flux reçu de {hidden} canaux)");
             }
             // Octets réellement lus SUR LE FIL : c'est ce que le banc doit
             // afficher, pas la taille du vecteur dense reconstruit en mémoire.
@@ -2105,6 +2125,7 @@ fn run_ppl_reparti(opt: Options, pair: &str) {
     let mut octets_recus = 0u64;
     let mut actifs_envoyes = 0u64;
     let mut flux_envoyes = 0u64;
+    let mut jetons_envoyes = 0u64;   // Σt, pas `lot` : le dernier lot est partiel
     let mut t_local = 0f64;
     let mut t_pair = 0f64;
     let t1 = Instant::now();
@@ -2142,6 +2163,7 @@ de son côté.");
                         };
             octets_envoyes += o as u64;
             actifs_envoyes += (t * mdl.cfg.hidden) as u64;
+            jetons_envoyes += t as u64;
             flux_envoyes += 1;
             let rep = match recevoir_flux(&mut sock, mdl.cfg.hidden) {
                 Ok(r) => r,
@@ -2154,6 +2176,21 @@ que --ctx ici : {ctx}). Il l'a dit de son côté.");
             };
             t_pair += horloge.elapsed().as_secs_f64();
             octets_recus += TAILLE_TETE as u64 + rep.octets_corps as u64;
+            // Un pair hostile tue le client avec 83 octets si l'on ne vérifie pas
+            // ce qu'il répond : mode différent, ou nombre d'états différent. Le
+            // profil release est en `panic = "abort"`, donc une assertion est un
+            // SIGABRT — on préfère un message et une sortie propre.
+            if rep.mode != mode_lot {
+                eprintln!("[flux] le nœud moteur a répondu en mode {} alors que la \
+demande était en mode {mode_lot} — pair incompatible ? Rien n'a été calculé.",
+                          rep.mode);
+                std::process::exit(1);
+            }
+            if rep.n != t {
+                eprintln!("[flux] le nœud moteur a répondu {} états pour un lot de {t} \
+— pair incohérent. Rien n'a été calculé.", rep.n);
+                std::process::exit(1);
+            }
             let etats = rep.charge.plat().to_vec();
             assert_eq!(etats.len(), t * mdl.cfg.hidden,
                        "lot reçu de {} valeurs pour {t} jetons de {} canaux",
@@ -2222,12 +2259,15 @@ protocole, réglages, ou contexte : il a dit pourquoi de son côté.");
     // faisait apparaître un flux de « 919 canaux » pour un modèle qui en a 896.
     let nflux = flux_envoyes.max(1);
     if lot > 1 {
-        println!("  transport         : {} · LOTS de {lot} jetons · {:.0} octets par lot \
-                  (aller) · {:.1} ko par jeton · {} lots (au lieu de {} flux)",
+        // « par jeton » divise par les jetons RÉELLEMENT envoyés (Σt) : le dernier
+        // lot est presque toujours partiel, et diviser par `lot` sous-estimait le
+        // coût (0,9 ko annoncés contre 1,45 réels à 20 jetons en lots de 16).
+        println!("  transport         : {} · lots de {lot} jetons au plus · {:.0} octets \
+                  par lot (aller) · {:.1} ko par jeton · {} lots pour {} jetons",
                  if mode_lot == MODE_LOT_LISTES { "lot en LISTES" } else { "lot dense f32" },
                  octets_envoyes as f64 / nflux as f64,
-                 octets_envoyes as f64 / nflux as f64 / 1024.0 / lot as f64,
-                 nflux, ids.len() - 1);
+                 octets_envoyes as f64 / jetons_envoyes.max(1) as f64 / 1024.0,
+                 nflux, jetons_envoyes);
         println!("  temps             : {:.1} ms par LOT en local · {:.1} ms à attendre le pair · \
                   soit {:.2}× le calcul local seul",
                  1000.0 * t_local / nflux as f64, 1000.0 * t_pair / nflux as f64,
@@ -3660,15 +3700,27 @@ mod tests_plafond {
     }
 
     #[test]
-    fn un_flux_a_zero_element_est_refuse() {
-        // Règle R4 : « n == 0 » est un bug du pair, pas une donnée. Le plan
-        // l'annonçait ; le code ne le faisait pas (second audit de cohérence).
-        let r = decoder_une_trame(MODE_DENSE, 0, Vec::new(), 896);
-        assert!(r.is_err(), "un flux de zéro canal doit être refusé");
-        let msg = format!("{}", r.err().unwrap());
-        assert!(msg.contains("zéro"), "le refus doit dire pourquoi : {msg}");
-        let r = decoder_une_trame(MODE_LOT, 0, Vec::new(), 896);
-        assert!(r.is_err(), "un lot de zéro état doit être refusé");
+    fn zero_element_est_refuse_seulement_ou_c_est_une_dimension() {
+        // Mode 0 : zéro CANAL n'a pas de sens. Modes 3 et 4 : zéro ÉTAT non plus.
+        for mode in [MODE_DENSE, MODE_LOT] {
+            let r = decoder_une_trame(mode, 0, Vec::new(), 896);
+            assert!(r.is_err(), "mode {mode} : un flux de zéro élément doit être refusé");
+            let msg = format!("{}", r.err().unwrap());
+            assert!(msg.contains("zéro"), "le refus doit dire pourquoi : {msg}");
+        }
+        // Modes 1 et 2 : `n` est un nombre de PAIRES, et une liste VIDE est
+        // légitime — un vecteur d'activation peut n'avoir aucun actif (seuil
+        // au-dessus du maximum), et c'est ce que répond le pair factice du dépôt.
+        // Refuser n == 0 partout tuait ces sessions (relecture adversariale du
+        // mode 4 : `--flux-blocs --act-thresh 1.0 --lot 1` mourait).
+        for mode in [MODE_LISTE, MODE_BLOCS] {
+            let corps = if mode == MODE_LISTE { Vec::new() } else {
+                etat_forge(&[], 28, &vec![0f32; 28])
+            };
+            let r = decoder_une_trame(mode, 0, corps, 896);
+            assert!(r.is_ok(), "mode {mode} : une liste vide doit être ACCEPTÉE");
+            assert!(r.unwrap().charge.en_dense(896).iter().all(|v| *v == 0.0));
+        }
     }
 
     #[test]
