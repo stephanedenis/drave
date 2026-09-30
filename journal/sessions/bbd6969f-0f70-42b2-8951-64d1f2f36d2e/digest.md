@@ -36051,3 +36051,73 @@ lot 1 : perplexité 9.4167 sur 1023 tokens
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git commit -q --amend -F - <<'EOF' && git log --oneline -1\n--attn-topk en mode lot : le drapeau ne fait rien, il le dit maintenant\n\n`forward_lot` n'implémente pas la sélection à k clés : le mode lot calcule une\nattention DENSE. L … [847 caractères tronqués]`
+
+  ```
+f9f2f99 --attn-topk en mode lot : le drapeau ne fait rien, il le dit maintenant
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date +%H:%M:%S && ./tools/sprint.sh status | head -5 && pgrep -c -x drave; git status --short | head -5", "description": "Check time and repo state"}`
+
+  ```
+19:12:08
+── Sprint 1 ─────────────────────────────────────────────
+- **Début** : 17:41 · **Fin prévue** : 19:41 (boxing de 120 min)
+   temps : 19:12 · reste 0 h 29
+   commits depuis le début : 14
+     f9f2f99 --attn-topk en mode lot : le drapeau ne fait rien, il le dit maintenant
+0
+ M journal/README.md
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && (echo \"=== portes finales sur le BINAIRE FINAL ===\"; echo -n \"Qwen Q8_0 ctx 256 : \"; ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf --ppl /tmp/wt2_ids.txt --ctx 256 --abits 16 --threads 16 --limit 512 2>&1 | grep … [549 caractères tronqués]`
+
+  ```
+=== portes finales sur le BINAIRE FINAL ===
+Qwen Q8_0 ctx 256 : perplexité 19.3885 sur 510 tokens
+gpt-oss MXFP4 ctx 256 : perplexité 15.1757 sur 510 tokens
+cargo test : test result: ok. 17 passed
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date +%H:%M:%S && ps -eo pcpu,comm --sort=-pcpu | head -3 && free -g | head -2 && git log --oneline --since=\"2026-09-30 17:41\" | wc -l", "description": "Check machine idle and commit count"}`
+
+  ```
+19:15:11
+%CPU COMMAND
+33.9 node-MainThread
+27.3 node-MainThread
+               total        used        free      shared  buff/cache   available
+Mem:             125           9          60           0          57         115
+14
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && nohup bash -c '\ncd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\nD=./drave-core/target/release/drave\nM=models/Qwen2.5-0.5B-Q8_0.gguf\nJ=/tmp/topk_32k.log\n: > $J\nDRAVE_GPU=1 DRAVE_GPU_KV=1 DRAVE_GPU_TOPK=1 $D $M --ppl /tmp/ids_ … [702 caractères tronqués]`
+
+  ```
+32k lancé (GPU et CPU en parallèle)
+19:15:18
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 240; cat /tmp/topk_32k.log; date +%H:%M:%S", "description": "Check 32k measurement", "timeoutMs": 300000}`
+
+  ```
+GPU === perplexité 12.2265 sur 4095 tokens (0 événements, 232.9 s) ===
+GPU     postes (ms/token) : projets-attn 3.96 | rope 0.78 | attention 9.89 | proj+mlp 30.97 | somme 45.61 | reste (tête + échantillonnage) 11.25
+=== GPU 32k fini ===
+19:19:27
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && pkill -f \"ctx 32768\" ; sleep 1; pgrep -c -x drave; echo \"--- mesure 16k : clés réellement vues ---\"; python3 -c \"print('511 jetons -> n moyen', 511//2, 'clés ; 4095 jetons -> n moyen', 4095//2, 'clés')\"", "description": "Stop 3 … [33 caractères tronqués]`
+
+  ```
+(no output)
+[killed by signal: SIGTERM]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && pgrep -c -x drave; python3 -c \"print('511 jetons -> n moyen', 511//2, 'cles ; 4095 jetons -> n moyen', 4095//2, 'cles')\"", "description": "Verify processes stopped"}`
+
+  ```
+0
+511 jetons -> n moyen 255 cles ; 4095 jetons -> n moyen 2047 cles
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\ndef patch(p, paires):\n    s=open(p).read()\n    for v,n,nom in paires:\n        assert s.count(v)==1, f\"{p}::{nom}::{s.count(v)}\"\n        s=s.replace(v,n,1)\n    open(p,'w').write(s); print(f\"{p} ok\")\n\n# ⚠️  … [4990 caractères tronqués]`

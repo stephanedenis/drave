@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 52.4 h |
+| Durée | 52.6 h |
 | Tours | 47 |
-| Messages | 2236 |
-| Appels d'outils | 2114 |
+| Messages | 2244 |
+| Appels d'outils | 2122 |
 | Fichiers touchés | 47 |
-| Commandes | 1767 |
+| Commandes | 1775 |
 | Sous-agents | 14 |
-| Commits | 185 |
+| Commits | 186 |
 | Compactages de contexte | 3 |
 
 ## Objectifs déclarés
@@ -2177,7 +2177,7 @@ Le mode creux ne peut pas utiliser le miroir VRAM (le chemin GPU est conditionn�
 
 ### Tour 47 — pret pour des scrum de 2h (boxing temps réel, avec revue, rétro et planning)
 
-*259 appels d'outils.* Actions notables :
+*267 appels d'outils.* Actions notables :
 
 - bash — Check clock, machine and last sprint state
 - bash — Create the sprint timing tool
@@ -2193,7 +2193,7 @@ Le mode creux ne peut pas utiliser le miroir VRAM (le chemin GPU est conditionn�
 - bash — Read the kernel launch call
 - bash — Write the FFI for the scores kernel
 - bash — Complete KvGpu initializer
-- … et 239 autres
+- … et 247 autres
 
 **Synthèse produite :**
 
@@ -2312,7 +2312,7 @@ Le mode creux ne peut pas utiliser le miroir VRAM (le chemin GPU est conditionn�
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 1727 autres
+- … et 1735 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2645,4 +2645,5 @@ Le mode creux ne peut pas utiliser le miroir VRAM (le chemin GPU est conditionn�
 - Chiffres du 16 k sur le binaire final : attention 19,58 → 7,59 ms/jeton (−61 %), balayage −24 %" && git log --oneline -1
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo "lot 1 :"; ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf --ppl /tmp/wt2_ids.txt --c
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git commit -q --amend -F - <<'EOF' && git log --oneline -1 --attn-topk en mode lot : le drapeau ne fait ri
+- Correction d'interprétation : les clés notées dépendent du nombre de JETONS, pas du contexte — le croisement est entre 255 et 2 047 clés, pas « entre 8 k et 16 
 

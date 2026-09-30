@@ -180,19 +180,24 @@ plutôt que passé sous silence.
 **Le gain n'est pas encore là** : le poste « attention » (ms/jeton, 24 couches,
 511 jetons, même modèle, `--attn-topk 256`) le dit —
 
-| contexte | jetons | attention CPU | attention GPU top-k | perplexité CPU / GPU | balayage CPU / GPU |
-|---|---|---|---|---|---|
-| 2 048 | 511 | **4,21** | 7,68 | 13,1358 / 13,1355 | 18,1 / 20,4 s |
-| 8 192 | 511 | **6,35** | 7,36 | 13,1358 / 13,1355 | 19,2 / 19,7 s |
-| **16 384** | 4 095 | 19,58 | **7,59** | 12,2267 / **12,2265** | **203,7 / 155,5 s (−24 %)** |
+| contexte alloué | jetons | clés vues (moyenne) | attention CPU | attention GPU top-k | perplexité CPU / GPU | balayage CPU / GPU |
+|---|---|---|---|---|---|---|
+| 2 048 | 511 | 255 | **4,21** | 7,68 | 13,1358 / 13,1355 | 18,1 / 20,4 s |
+| 8 192 | 511 | 255 | **6,35** | 7,36 | 13,1358 / 13,1355 | 19,2 / 19,7 s |
+| **16 384** | 4 095 | **2 047** | 19,58 | **7,59** | 12,2267 / **12,2265** | **203,7 / 155,5 s (−24 %)** |
 
-Le GPU est **plat** (7,4–7,7 ms/jeton, indépendant du contexte : c'est le but), le
-CPU croît — de 4,21 à 20,69 ms/jeton entre 2 k et 16 k. **Le croisement est donc
-entre 8 192 et 16 384 clés**, et à 16 k le déport gagne franchement : attention
-**19,58 → 7,59 ms/jeton (−61 %)**, balayage **203,7 → 155,5 s (−24 %)**, perplexité
-identique à 2e-5 près. C'est plus loin que le croisement de l'attention complète
-(~4 000 clés), et pour la raison déjà identifiée : le coût fixe des lancements et
-des recopies. La
+⚠️ **Ce que ce tableau ne dit pas, et qu'il faut lire correctement** : le nombre de
+clés RÉELLEMENT notées dépend du nombre de jetons traités (`n = pos + 1`), pas du
+contexte alloué. Les deux premières lignes traitent 511 jetons (255 clés en
+moyenne), la troisième 4 095 jetons (2 047 clés) — les lignes diffèrent donc par
+DEUX variables à la fois. Ce qui est établi : à ~255 clés le CPU gagne nettement
+(4,21 contre 7,68 ms/jeton), à ~2 047 clés le déport gagne nettement (7,59 contre
+19,58). **Le croisement en clés est donc entre 255 et 2 047 clés**, et il est plus
+haut que celui de l'attention complète (~4 000 clés d'après `docs/contexte-long.md`,
+mesuré à nombre de jetons égal) — à cause du coût fixe : 8 lancements et 17
+transferts par couche et par jeton. Une grille propre demanderait de faire varier le
+nombre de jetons à contexte fixé (17 434 jetons sont disponibles dans
+`/tmp/ids_qwen_long.txt` ; une passe à 16 384 jetons coûte ~20 min par chemin). La
 raison est la même que celle déjà payée sur le miroir KV (« les tampons alloués à
 chaque appel : 24,5 ms/jeton au lieu de 2,9 », `docs/contexte-long.md` §4.ter) :
 la chaîne fait **six lancements et cinq recopies par couche et par jeton**, soit

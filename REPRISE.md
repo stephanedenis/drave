@@ -410,19 +410,23 @@ VRAM dès que `attn_topk > 0`.
 
 ⚠️ **Le gain de TEMPS dans le moteur n'est pas encore là**, et c'est mesuré :
 
-| contexte | jetons | attention CPU | attention GPU top-k | balayage |
-|---|---|---|---|---|
-| 2 048 | 511 | **4,21 ms/jeton** | 7,68 | 18,1 / 20,4 s |
-| 8 192 | 511 | **6,35 ms/jeton** | 7,36 | 19,2 / 19,7 s |
-| **16 384** | 4 095 | 19,58 ms/jeton | **7,59 ms/jeton** | **203,7 / 155,5 s (−24 %)** |
+| contexte alloué | jetons | clés vues (moy.) | attention CPU | attention GPU top-k | balayage |
+|---|---|---|---|---|---|
+| 2 048 | 511 | 255 | **4,21 ms/jeton** | 7,68 | 18,1 / 20,4 s |
+| 8 192 | 511 | 255 | **6,35 ms/jeton** | 7,36 | 19,2 / 19,7 s |
+| **16 384** | 4 095 | **2 047** | 19,58 ms/jeton | **7,59 ms/jeton** | **203,7 / 155,5 s (−24 %)** |
 
-Le GPU est plat (c'est le but), le CPU croît fortement : **le croisement est entre
-8 192 et 16 384 clés**, et à 16 k le déport gagne (attention −61 %, balayage −24 %,
-perplexité identique à 2e-5). C'est plus loin que le croisement de l'attention
-complète (~4 000), et pour la raison déjà identifiée : la chaîne coûte **8
-lancements et 17 transferts par couche et par jeton** (dont 8 copies DtoH
-bloquantes). Le prochain sprint doit donc **fusionner** — descente radix, collecte
-et somme dans un seul noyau, tampons hôtes réutilisés — pas ajouter un noyau.
+⚠️ Le nombre de clés notées dépend du nombre de JETONS (`n = pos + 1`), pas du
+contexte alloué : les deux premières lignes valent pour ~255 clés, la troisième
+pour ~2 047. Ce qui est établi : à 255 clés le CPU gagne, à 2 047 le déport gagne
+(attention −61 %, balayage −24 %, perplexité identique à 2e-5) — **le croisement
+en clés est donc entre 255 et 2 047**, plus haut que celui de l'attention complète
+(~4 000), à cause du coût fixe : **8 lancements et 17 transferts par couche et par
+jeton** (dont 8 copies DtoH bloquantes). Une grille propre demande de faire varier
+le nombre de jetons à contexte fixé (17 434 disponibles ; ~20 min par passe à
+16 384 jetons). Le prochain sprint doit donc **fusionner** — descente radix,
+collecte et somme dans un seul noyau, tampons hôtes réutilisés — pas ajouter un
+noyau.
 
 **Quatre défauts attrapés, chacun par un moyen différent** — c'est la leçon du
 créneau :
