@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 29.4 h |
-| Tours | 12 |
-| Messages | 1156 |
-| Appels d'outils | 1141 |
+| Durée | 30.0 h |
+| Tours | 13 |
+| Messages | 1168 |
+| Appels d'outils | 1150 |
 | Fichiers touchés | 38 |
-| Commandes | 875 |
+| Commandes | 884 |
 | Sous-agents | 1 |
-| Commits | 45 |
+| Commits | 46 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -49,6 +49,8 @@
 **Tour 11** — <goal_round> Objective: "Réaliser les 6 nouveaux chantiers du projet qtrinet-core, dans l'ordre : (1) relancer le test de l'aiguille sur contexte long (remplissage varié en vrai texte, moins de sondes, réponses plus longues) sur un modèle capable, grâce au préremplissage par lots et au KV déporté ; (2) chemin GPU : dépaquetage vectorisé du noyau d'attention (13,2 ms/couche à 1 M en int4 vers ~3 ms … [1491 caractères tronqués]
 
 **Tour 12** — <goal_round> Objective: "Réaliser les 6 nouveaux chantiers du projet qtrinet-core, dans l'ordre : (1) relancer le test de l'aiguille sur contexte long (remplissage varié en vrai texte, moins de sondes, réponses plus longues) sur un modèle capable, grâce au préremplissage par lots et au KV déporté ; (2) chemin GPU : dépaquetage vectorisé du noyau d'attention (13,2 ms/couche à 1 M en int4 vers ~3 ms … [1491 caractères tronqués]
+
+**Tour 13** — <goal_round> Objective: "Réaliser les 6 nouveaux chantiers du projet qtrinet-core, dans l'ordre : (1) relancer le test de l'aiguille sur contexte long (remplissage varié en vrai texte, moins de sondes, réponses plus longues) sur un modèle capable, grâce au préremplissage par lots et au KV déporté ; (2) chemin GPU : dépaquetage vectorisé du noyau d'attention (13,2 ms/couche à 1 M en int4 vers ~3 ms … [1491 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -543,7 +545,7 @@ Bilan des six chantiers : **1, 2 (cinq sous-items), 3, 6 terminés** ; **4** en 
 
 ### Tour 12 — <goal_round> Objective: "Réaliser les 6 nouveaux chantiers du projet qtrinet-core, dans l'ordre : (1) relancer le test d … [1771 caractères tronqués]
 
-*19 appels d'outils.* Actions notables :
+*20 appels d'outils.* Actions notables :
 
 - bash — Check rotation and helper APIs
 - bash — Read Meta enum accessors
@@ -559,11 +561,51 @@ Bilan des six chantiers : **1, 2 (cinq sous-items), 3, 6 terminés** ; **4** en 
 - bash — Verify loader edits applied
 - bash — Re-run MLA bench after rebuild
 - bash — Fix dims order and compare again
-- … et 5 autres
+- … et 6 autres
 
 **Synthèse produite :**
 
-⏵ MLA validé : le moteur retrouve la référence numpy à 5,2e-7 près
+⏵ Tour 3 : MLA est validé (5,2e-7 contre la référence numpy)
+
+\## Fait dans ce tour
+
+**Chantier 5, moitié MLA : implémenté et validé.**
+
+Le moteur charge maintenant un modèle MLA — reconnu à ses tenseurs (`attn_kv_a_mqa`), **sans aucune clé de configuration nouvelle** : les rangs se lisent dans les formes — et tient le **cache latent** (`c_kv` + `k_rope` par position, `k_nope` et `v` reconstruits à la lecture par `W_kv_b`). La rotation ne porte que sur la partie « rope ». Le chemin est volontairement séparé de `forward` : le modèle du harnais n'a ni tenseurs Q8_0 ni fenêtre glissante.
+
+Mesure : `--banc-mla` écrit les logits des 8 positions, comparés à la référence numpy indépendante → **écart max relatif 5,2e-7**, soit le bruit de virgule flottante du moteur. Le témoin imprimé : `MLA : q_lora 32 · kv_lora 48 · qk_nope 16 + qk_rope 16 · v 16 · cache latente 64 valeurs par jeton (au lieu de 32)`.
+
+Deux erreurs réelles ont été trouvées **par** la référence — c'est exactement son rôle : des indices d'`einsum` qui confondaient dimension de tête et dimension de clé dans la référence elle-même, et surtout la **convention GGUF des tenseurs linéaires** (stockés (sortie, entrée), déclarés (entrée, sortie)). L'écart est passé de 0,82 à 5,2e-7 après correction.
+
+**Chantier 5, moitié vision : reconnaissance faite, plan corrigé par les faits.** Le `mmproj` est en architecture `clip` et contient la tour **complète** (519 tenseurs, `v.blk.N.*`) : image 560, patchs 14, largeur 1280, 32 couches, 16 têtes, MLP 3420, projecteur `qwen2.5vl_merger`, projection 3584, normalisation CLIP. Le point délicat est confirmé par le fichier : **`n_wa_pattern = 8`**, une couche sur huit en attention **locale** — se tromper de fenêtre ferait diverger les embeddings sans aucun signal.
+
+\## En cours
+
+**Chantier 4** : la première passe à 16 k est tombée — **RoPE simple : perplexité 35,1837** (512 jetons notés, 16 384 de contexte, 39 minutes). La seconde (interpolation seule) tourne depuis une vingtaine de minutes ; c'est elle qui dira si le seuil doit encore monter.
+
+\## État
+
+`cargo test` 6/6, porte Qwen **19,3885** revérifiée après les changements MLA (chemin séparé, portes intactes), arbre propre.
+
+Bilan des six chantiers : **1, 2 (cinq sous-items), 3, 4 (première passe), 6 terminés** ; **5** : MLA **fait et validé**, vision **planifiée et reconnue**, l'implémentation ViT reste à écrire. L'objectif reste **actif** : prochain tour, relever la seconde passe du 16 k et l'écrire dans le rapport, p
+… [57 caractères tronqués]
+
+### Tour 13 — <goal_round> Objective: "Réaliser les 6 nouveaux chantiers du projet qtrinet-core, dans l'ordre : (1) relancer le test d … [1771 caractères tronqués]
+
+*8 appels d'outils.* Actions notables :
+
+- bash — Collect 16k interp result
+- bash — List distinct ViT tensor patterns
+- bash — Wait for 16k interp result
+- bash — Poll interp run again
+- bash — Poll interp run
+- bash — Poll interp run once more
+- bash — Document 16k verdict and raise threshold
+- bash — Commit 16k verdict and threshold change
+
+**Synthèse produite :**
+
+⏵ 16 k tranché : RoPE simple 35,18 contre 1 133 en interpolation
 
 ## 3. Travail accompli
 
@@ -656,7 +698,7 @@ Bilan des six chantiers : **1, 2 (cinq sous-items), 3, 6 terminés** ; **4** en 
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 835 autres
+- … et 844 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -849,4 +891,5 @@ Bilan des six chantiers : **1, 2 (cinq sous-items), 3, 6 terminés** ; **4** en 
 - cat /tmp/rotation_16k.log; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p='docs/plan-mla-vision.md'; s=open(p).read() old = "### Valid
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p='docs/plan-mla-vision.md'; s=open(p).read() old = """### État du harnais : FAIT""" new 
 - vision : relevé du projecteur mmproj (paramètres et nommage réels)  Le fichier est en architecture \`clip\` et contient la tour COMPLÈTE (519 tenseurs, \`v.blk.
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p='REPRISE.md'; s=open(p).read() old = "| 2 | seuil de rotation YaRN | **fait, seuil corr
 

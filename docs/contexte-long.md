@@ -417,6 +417,26 @@ ait été mesuré gagnant. Plus haut (16 k, 131 k), c'est une extrapolation non
 mesurée : une passe à 16 384 jetons de contexte coûte environ une heure par
 régime sur cette machine, et le corpus s'arrête à 17 k jetons.
 
+### 5.quater À 16 384 jetons : le simple gagne encore
+
+Mêmes 512 jetons notés (**positions 15 872 à 16 383**), contexte 16 384, KV
+déporté (sans lui l'attention coûte ~180 ms/jeton et la passe dépasse l'heure par
+régime) :
+
+| régime | perplexité | durée |
+|---|---|---|
+| **RoPE simple** | **35,18** | 2 367 s |
+| interpolation seule | **1 133,02** | 2 251 s |
+
+**×32 en faveur du simple.** Sur toute l'étendue mesurée — 128, 512, 1 024,
+1 536, 5 120, 16 384 jetons — l'interpolation n'a JAMAIS gagné, et l'écart se
+creuse avec la longueur (×1,1 à 512, ×131 à 5 120, ×32 à 16 384).
+
+Conséquence pour le moteur : le seuil de bascule passe de 1,25 × à **4 ×** la
+longueur déclarée (16 384 pour gpt-oss, soit exactement la plus grande longueur
+mesurée). L'interpolation ne s'active donc plus dans la plage où on sait qu'elle
+nuit ; au-delà, c'est une extrapolation non mesurée, et c'est écrit ici.
+
 Ce que ça dit du plan 1 M : la rotation n'est pas ce qui limite d'abord (c'est le
 préremplissage), et **le YaRN déclaré n'est pas la bonne réponse sur du texte
 brut** — la portée gagnée par l'interpolation se paie d'une perplexité détruite

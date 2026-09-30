@@ -18454,3 +18454,141 @@ struct.error: bad char in struct format
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='docs/plan-mla-vision.md'; s=open(p).read()\nold = \"\"\"### Ce qu'il faut écrire, dans l'ordre\"\"\"\nnew = \"\"\"### Ce que dit le fichier (relevé, plus deviné)\n\nLe projecteur `mmproj-Qwen2.5-VL-7B-Instruct-f1 … [2156 caractères tronqués]`
+
+  ```
+reconnaissance vision documentée
+2d173f1 vision : relevé du projecteur mmproj (paramètres et nommage réels)
+ctx 16384 simple  : perplexité 35.1837 sur 512 tokens (0 événements, 2366.6 s)
+ctx 16384 interp  :
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 300 ./qtrinet-core/target/release/qtrinet-core models/Qwen2.5-0.5B-Q8_0.gguf --ppl /tmp/ids_qwen.txt --ctx 256 --abits 16 --threads 16 --limit 512 --dense 2>&1 | grep -oE \"perplexité [0-9.]+ sur [0-9]+ tokens\" && cd qtrinet … [116 caractères tronqués]`
+
+  ```
+perplexité 19.3885 sur 510 tokens
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.14s
+  ```
+
+### 🤖 Assistant
+
+⏵ Tour 3 : MLA est validé (5,2e-7 contre la référence numpy)
+
+## Fait dans ce tour
+
+**Chantier 5, moitié MLA : implémenté et validé.**
+
+Le moteur charge maintenant un modèle MLA — reconnu à ses tenseurs (`attn_kv_a_mqa`), **sans aucune clé de configuration nouvelle** : les rangs se lisent dans les formes — et tient le **cache latent** (`c_kv` + `k_rope` par position, `k_nope` et `v` reconstruits à la lecture par `W_kv_b`). La rotation ne porte que sur la partie « rope ». Le chemin est volontairement séparé de `forward` : le modèle du harnais n'a ni tenseurs Q8_0 ni fenêtre glissante.
+
+Mesure : `--banc-mla` écrit les logits des 8 positions, comparés à la référence numpy indépendante → **écart max relatif 5,2e-7**, soit le bruit de virgule flottante du moteur. Le témoin imprimé : `MLA : q_lora 32 · kv_lora 48 · qk_nope 16 + qk_rope 16 · v 16 · cache latente 64 valeurs par jeton (au lieu de 32)`.
+
+Deux erreurs réelles ont été trouvées **par** la référence — c'est exactement son rôle : des indices d'`einsum` qui confondaient dimension de tête et dimension de clé dans la référence elle-même, et surtout la **convention GGUF des tenseurs linéaires** (stockés (sortie, entrée), déclarés (entrée, sortie)). L'écart est passé de 0,82 à 5,2e-7 après correction.
+
+**Chantier 5, moitié vision : reconnaissance faite, plan corrigé par les faits.** Le `mmproj` est en architecture `clip` et contient la tour **complète** (519 tenseurs, `v.blk.N.*`) : image 560, patchs 14, largeur 1280, 32 couches, 16 têtes, MLP 3420, projecteur `qwen2.5vl_merger`, projection 3584, normalisation CLIP. Le point délicat est confirmé par le fichier : **`n_wa_pattern = 8`**, une couche sur huit en attention **locale** — se tromper de fenêtre ferait diverger les embeddings sans aucun signal.
+
+## En cours
+
+**Chantier 4** : la première passe à 16 k est tombée — **RoPE simple : perplexité 35,1837** (512 jetons notés, 16 384 de contexte, 39 minutes). La seconde (interpolation seule) tourne depuis une vingtaine de minutes ; c'est elle qui dira si le seuil doit encore monter.
+
+## État
+
+`cargo test` 6/6, porte Qwen **19,3885** revérifiée après les changements MLA (chemin séparé, portes intactes), arbre propre.
+
+Bilan des six chantiers : **1, 2 (cinq sous-items), 3, 4 (première passe), 6 terminés** ; **5** : MLA **fait et validé**, vision **planifiée et reconnue**, l'implémentation ViT reste à écrire. L'objectif reste **actif** : prochain tour, relever la seconde passe du 16 k et l'écrire dans le rapport, puis attaquer la tour de vision avec les chiffres relevés.
+
+
+## Tour 13
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Réaliser les 6 nouveaux chantiers du projet qtrinet-core, dans l'ordre : (1) relancer le test de l'aiguille sur contexte long (remplissage varié en vrai texte, moins de sondes, réponses plus longues) sur un modèle capable, grâce au préremplissage par lots et au KV déporté ; (2) chemin GPU : dépaquetage vectorisé du noyau d'attention (13,2 ms/couche à 1 M en int4 vers ~3 ms), brancher MXFP4 dans le moteur avec une politique de résidence des experts, attention par lots sur GPU dans forward_lot, noyau de tête Q8_0 accéléré (AVX2 ou déport), et usage du second GPU ; (3) mémoire : pagination du cache KV côté CPU (25,77 Go réservés à ctx 1 M pour 512 jetons écrits) et test de l'hypothèse « clés en f16 avant quantification » pour l'écart int8 avec llama.cpp à 8 192 (+3,0 % contre +0,8 %) ; (4) rotation au-delà de 5 120 jetons (passe à 16 k) ; (5) structurel : MLA (aucun modèle local — construire un modèle MLA synthétique et valider contre une référence indépendante) et vision (poids Qwen2.5-VL et projecteur mmproj présents) ; (6) hygiène : réécrire la section « Ce qu'il faut faire ensuite » de REPRISE.md et y consigner les pièges QT_GPU/QT_GPU_TETE/QT_GPU_KV. Chaque chantier doit être implémenté, mesuré (portes de non-régression Qwen 19,3885 et gpt-oss 15,1757 sans QT_GPU), documenté dans le dépôt et commité."
+Round: 4/30
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cat /tmp/rotation_16k.log; pgrep -x qtrinet-core >/dev/null && echo \"[en cours]\" || echo \"[libre]\"", "description": "Collect 16k interp result"}`
+
+  ```
+ctx 16384 simple  : perplexité 35.1837 sur 512 tokens (0 événements, 2366.6 s)
+ctx 16384 interp  : [en cours]
+  ```
+
+- **bash** `{"command": "cd /tmp && timeout 300 python3 - <<'PY' 2>&1 | head -30\nimport struct\nf=open('/home/stephane/FastNVMe/models/mmproj-Qwen2.5-VL-7B-Instruct-f16.gguf','rb')\ndef r(fmt):\n    n=struct.calcsize(fmt)\n    if n==0: return ()\n    return struct.unpack(fmt, f.read(n))\nassert f.read(4)==b'GG … [1139 caractères tronqués]`
+
+  ```
+Traceback (most recent call last):
+  File "<stdin>", line 27, in <module>
+  File "<stdin>", line 4, in r
+struct.error: bad char in struct format
+  ```
+
+- **bash** `{"command": "sleep 540; cat /tmp/rotation_16k.log; pgrep -x qtrinet-core >/dev/null && echo \"[en cours]\" || echo \"[libre]\"", "description": "Wait for 16k interp result", "timeoutMs": 600000}`
+
+  ```
+ctx 16384 simple  : perplexité 35.1837 sur 512 tokens (0 événements, 2366.6 s)
+ctx 16384 interp  : [en cours]
+  ```
+
+- **bash** `{"command": "sleep 570; cat /tmp/rotation_16k.log; ps -o etime -p $(pgrep -x qtrinet-core | head -1) 2>/dev/null | tail -1", "description": "Poll interp run again", "timeoutMs": 600000}`
+
+  ```
+ctx 16384 simple  : perplexité 35.1837 sur 512 tokens (0 événements, 2366.6 s)
+ctx 16384 interp  :       20:31
+  ```
+
+- **bash** `{"command": "sleep 570; tail -2 /tmp/rotation_16k.log; ps -o etime -p $(pgrep -x qtrinet-core | head -1) 2>/dev/null | tail -1", "description": "Poll interp run", "timeoutMs": 600000}`
+
+  ```
+ctx 16384 simple  : perplexité 35.1837 sur 512 tokens (0 événements, 2366.6 s)
+ctx 16384 interp  :       30:06
+  ```
+
+- **bash** `{"command": "sleep 570; tail -3 /tmp/rotation_16k.log; pgrep -x qtrinet-core >/dev/null && echo \"[en cours]\" || echo \"[libre]\"", "description": "Poll interp run once more", "timeoutMs": 600000}`
+
+  ```
+ctx 16384 simple  : perplexité 35.1837 sur 512 tokens (0 événements, 2366.6 s)
+ctx 16384 interp  : perplexité 1133.0175 sur 512 tokens (0 événements, 2250.8 s)
+=== fin ===
+[libre]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-39 (bash: cat > /tmp/rotation_16k.sh <<'EOF'
+#!/bin/bash
+# Chantier 4 : la rotation à 16 k. Deux régimes, mêmes 512 jetons notés
+# (positions 15 872 à 16 383). Le KV déporté est indispensable ici : sans lui
+# l'attention coûte ~180 ms/jeton et la passe dépasse l'heure par régime.
+set -u
+cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet
+Q=./qtrinet-core/target/release/qtrinet-core
+M=/home/stephane/FastNVMe/models/gpt-oss-120b-MXFP4.gguf
+IDS=/tmp/ids_oss_long.txt
+J=/tmp/rotation_16k.log
+: > "$J"
+while pgrep -x qtrinet-core > /dev/null; do sleep 20; done
+for regime in "simple:QT_YARN_NON=1" "interp:QT_YARN=1 QT_YARN_MSCALE=0"; do
+    nom=${regime%%:*}; envs=${regime#*:}
+    printf "ctx 16384 %-7s : " "$nom" | tee -a "$J"
+    env QT_GPU=1 QT_GPU_KV=1 $envs $Q $M --ppl $IDS --ctx 16384 --limit 512 \
+        --depuis 15872 --dense --threads 16 --lot 512 2>&1 \
+        | grep -oE "perplexité [0-9.]+ sur [0-9]+ tokens \([0-9]+ événements, [0-9.]+ s\)" | tee -a "$J"
+done
+echo "=== fin ===" | tee -a "$J"
+EOF
+chmod +x /tmp/rotation_16k.sh && /tmp/rotation_16k.sh) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+### 🤖 Assistant
+
+⏵ 16 k tranché : RoPE simple 35,18 contre 1 133 en interpolation
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='docs/contexte-long.md'; s=open(p).read()\nold = \"\"\"Ce que ça dit du plan 1 M : la rotation n'est pas ce qui limite d'abord (c'est le\npréremplissage), et **le YaRN déclaré n'est pas la bonne réponse sur du tex … [3466 caractères tronqués]`
+
+  ```
+seuil porté à 4 × la longueur déclarée
+    Finished `release` profile [optimized] target(s) in 19.01s
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.09s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='REPRISE.md'; s=open(p).read()\nold = \"| 2 | seuil de rotation YaRN | **fait, seuil corrigé**\"\nnew = \"| 2 | seuil de rotation YaRN | **fait, seuil à 4 × la longueur déclarée**\"\nassert old in s; s = s.replace … [1535 caractères tronqués]`
