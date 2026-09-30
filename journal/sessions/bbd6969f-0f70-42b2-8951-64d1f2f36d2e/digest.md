@@ -21752,3 +21752,95 @@ première divergence : couche 1 · jeton 0 · 896 neurones · écart max 2.864e-
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='docs/roadmap.md'; s=open(p).read()\ns = s.replace(\"\"\"| 0.1 | **Format de trace du flux** : par (couche, position), la liste des neurones actifs (indice + valeur), l'échelle, le nombre | 🔬 | écrit et relu sans  … [3215 caractères tronqués]`
+
+  ```
+roadmap à jour
+ac7ccb1 Phase 0 : la trace du flux et le diff par couche sont en place et démontrés
+  ```
+
+### 🤖 Assistant
+
+⏵ Roadmap écrite, phase 0 déjà livrée et démontrée
+
+## 1. Roadmap — `docs/roadmap.md`
+
+Cinq phases, du **faisable ici tout de suite** à ce qui demande une infra, chaque chantier avec un critère de succès mesurable et un état (✅ 🔬 ⏳ 🧱) :
+
+| phase | objet | infra |
+|---|---|---|
+| **0. La drave observable** | trace du flux, diff par couche, format d'échange v1, profilage par neurone | **aucune** |
+| **1. La drave mesurée** | top-k dans le noyau GPU, quantification choisie par la mesure, purge des seuils en dur, écart int8 | **aucune** |
+| **2. La drave répartie localement** | ordonnanceur de placement (2 GPU, CPU, RAM, NVMe), streaming des poids depuis le NVMe (3,5 Go/s), cache d'experts rentable, politique de pages du KV | **aucune** |
+| **3. La drave distribuée** | contrat d'échange, granularité, seuil de rentabilité, **démonstration Colab** (préremplissage réparti), sûreté du format | **Colab** |
+| **4. La drave apprenante** | capteur hebbien généralisé, routage appris, élagage guidé par les logs | recherche |
+| **5. La drave sur matériel** | PE événementiel et lecteur DDR3 ✅, un opérateur complet sur FPGA, énergie/jeton | **FPGA** |
+
+Le format de trace de la phase 0 **est** le contrat d'échange de la phase 3 — c'est délibéré : c'est ce qui rendra le test Colab possible sans redéfinir quoi que ce soit.
+
+## 2. Travaux commencés — phase 0, chantiers 0.1 et 0.2 : **faits et démontrés**
+
+- **`--trace-flux <fichier>`** (+ `--trace-couches`) écrit, par (couche, position), la liste des neurones actifs poussée dans la couche — indice, valeur, échelle, nombre, à deux points par couche (entrée d'attention, entrée de FFN) ;
+- **`tools/diff_flux.py`** compare deux traces et dit **où** le flux diverge.
+
+**Mesuré** (Qwen2.5-0.5B, 512 jetons, 24 couches) : **12 288 listes, 132 Mo, 6 octets par neurone actif, +8 % de temps**.
+
+**Démonstration** : KV f32 contre KV int8 (perplexité 19,3885 contre 19,8059) → première divergence **couche 1, jeton 0**, 896 neurones, 2,9e-3 de la dynamique, et **FFN 2** comme couche la plus touchée. C'est exactement ce que la vision promettait : la divergence est **localisée**, pas seulement constatée.
+
+Piège corrigé en route, et noté dans la roadmap : la première version de l'outil comparait les **entiers bruts** de deux exécutions dont les échelles diffèrent — écarts de 1e8. Un flux se compare **déquantifié**, jamais brut.
+
+Commit `ac7ccb1`, `cargo test` 6/6, portes Qwen 19,3885 / gpt-oss 15,1757 intactes.
+
+## 3. Prochaine étape que je propose
+
+**Phase 1.1 — le top-k dans le noyau d'attention GPU** : c'est le dernier repli CPU du chemin long contexte, et `--attn-topk 256` *améliore* déjà la perplexité (234,88 contre 298,56). Aucune infra.
+
+Puis **phase 0.3/0.4** (encodeur/décodeur de référence du format, profilage par neurone exportable) et **phase 2.2** (streaming des poids depuis le NVMe), qui sont les trois chantiers sans infra qui débloquent le plus — et qui préparent Colab : quand vous voudrez tester le distribué, le format, la granularité et le seuil de rentabilité seront déjà chiffrés localement.
+
+
+## Tour 41
+
+### 👤 Utilisateur
+
+continue
+
+### 🤖 Assistant
+
+⏵ Phase 0.4 : je transforme la trace en profilage par neurone
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > tools/profil_flux.py <<'EOF'\n#!/usr/bin/env python3\n\"\"\"Profilage par neurone à partir d'une trace de flux (format DRVF).\n\nCe que la vision demande, rendu calculable : « quels neurones s'allument, à\nquelle fréquence, ave … [3119 caractères tronqués]`
+
+  ```
+/tmp/flux_f32.bin : 24576 listes · 24 couches · 896 cachés
+   couche   densité  top 10 % portent  neurone le + fort    part
+        0     99.2%             38.3%                 56    1.7%
+        1    100.0%             24.7%                757    1.1%
+        2    100.0%             27.7%                208    1.3%
+        3    100.0%             32.3%                570    1.6%
+        4    100.0%             29.3%                570    2.0%
+        5    100.0%             27.4%                570    1.4%
+        6    100.0%             28.1%                570    1.6%
+        7    100.0%             31.9%                570    2.5%
+        8    100.0%             32.0%                570    2.4%
+        9    100.0%             41.9%                570    1.9%
+       10    100.0%             29.3%                646    1.8%
+       11    100.0%             39.9%                646    1.8%
+       12    100.0%             27.8%                646    1.7%
+       13    100.0%             32.6%                646    2.0%
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 900 ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf --ppl /tmp/ids_qwen.txt --ctx 256 --abits 8 --threads 16 --limit 512 --dense --act-thresh 0.05 --trace-flux /tmp/flux_sparse.bin 2>&1 | grep -oE \"perplexité … [258 caractères tronqués]`
+
+  ```
+perplexité 2445.0050 sur 510 tokens
+/tmp/flux_sparse.bin : 24576 listes · 24 couches · 896 cachés
+   couche   densité  top 10 % portent  neurone le + fort    part
+        0     25.9%             56.4%                 56    2.6%
+        1     56.3%             26.1%                757    1.2%
+        2     36.3%             38.1%                208    2.3%
+        3     28.8%             48.0%                570    2.9%
+        4     26.7%             46.4%                570    3.3%
+        5     45.6%             32.6%                646    1.5%
+trace sparse : 53092562 octets
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='docs/roadmap.md'; s=open(p).read()\ns = s.replace(\"\"\"| 0.4 | **Profilage par neurone généralisé** : trace exploitable par couche et par expert, pas seulement des compteurs | ⏳ | top-k des neurones par couche,  … [2708 caractères tronqués]`

@@ -15,7 +15,7 @@ enregistre et qu'on compare. Sans cela, tout le reste se débugue à l'aveugle.
 | 0.1 | **Format de trace du flux** : par (couche, position), la liste des neurones actifs (indice + valeur), l'échelle, le nombre | ✅ | écrit et relu sans perte ; **132 Mo pour 512 jetons** (258 ko/jeton), **+8 % de temps** — mesuré |
 | 0.2 | **Diff par couche** (`tools/diff_flux.py`) : où deux exécutions divergent, à quel jeton, quels neurones | ✅ | démontré : KV f32 contre int8 → première divergence **couche 1, jeton 0**, 896 neurones, 2,9e-3 de la dynamique ; couche la plus touchée : **FFN 2** |
 | 0.3 | **Le format EST le contrat d'échange** (phase 3) : versionné, en-tête + paires | ⏳ | spécifié dans ce document ; un encodeur/décodeur de référence |
-| 0.4 | **Profilage par neurone généralisé** : trace exploitable par couche et par expert, pas seulement des compteurs | ⏳ | top-k des neurones par couche, exportable |
+| 0.4 | **Profilage par neurone généralisé** : trace exploitable par couche et par expert, pas seulement des compteurs | ✅ | `tools/profil_flux.py` : densité par couche, part des 10 % les plus forts, neurones dominants, export CSV |
 
 ## Phase 1 — La drave mesurée (aucune infra)
 
@@ -112,3 +112,29 @@ localisée**, pas seulement constatée. La première version de l'outil comparai
 entiers bruts de deux exécutions dont les échelles diffèrent et affichait des
 écarts de 1e8 : c'est en le lisant qu'on l'a vu — le flux se compare
 **déquantifié**, jamais brut.
+
+
+### Phase 0.4 — le profilage par neurone, mesuré
+
+`tools/profil_flux.py` lit une trace et rend, **par couche** : la densité
+d'activation, la part de magnitude portée par les 10 % de neurones les plus
+forts, les neurones dominants, et un export CSV.
+
+Deux exécutions du même modèle, 512 jetons, 896 cachés par couche :
+
+| réglage | densité par couche | taille de trace | top 10 % portent |
+|---|---|---|---|
+| `--abits 16` (défaut) | 99-100 % (rien n'est seuillé) | 132 Mo | 25 à 42 % |
+| `--abits 8 --act-thresh 0.05` | **26 à 56 %** | **53 Mo** | 26 à 56 % |
+
+Deux choses en sortent, et la seconde est le cœur de la vision :
+
+1. la **part des 10 % les plus forts** (25-42 % selon les couches) reproduit, par
+   couche, le chiffre global du projet (33,1 %) — le même phénomène, localisé ;
+2. **la taille de la trace suit l'activité** : densité ÷2,3, trace ÷2,5. C'est
+   l'argument de la vision, rendu mesurable sur un fichier : *le coût est
+   proportionnel à ce qui parle*, et ce sera vrai du format d'échange de la
+   phase 3 comme il l'est ici.
+
+Réserve écrite : la ligne « seuil 0,05 » a une perplexité de 2 445 — c'est un
+relevé de COÛT, pas de qualité ; le seuil est volontairement brutal.

@@ -6,13 +6,13 @@
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
 | Durée | 42.2 h |
-| Tours | 40 |
-| Messages | 1369 |
-| Appels d'outils | 1296 |
+| Tours | 41 |
+| Messages | 1374 |
+| Appels d'outils | 1299 |
 | Fichiers touchés | 42 |
-| Commandes | 1022 |
+| Commandes | 1025 |
 | Sous-agents | 1 |
-| Commits | 76 |
+| Commits | 77 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -107,6 +107,8 @@
 **Tour 39** — 3 tout tout de suite, préserve l'historique dans un document et là ou ça permet d'être cohérent, mais tout le reste prend la teinte de la vision.
 
 **Tour 40** — fais un roadmap ambitieux et commence les travaux qui ne nécessitent pas d'infra supplémentaire. on pourra terter avec colab pour le volet distribué
+
+**Tour 41** — continue
 
 ## 2. Déroulé, étape par étape
 
@@ -1810,7 +1812,50 @@ Plus une section « ce que la vision n'est pas » : le croisement push/pull à 1
 
 **Synthèse produite :**
 
-⏵ Roadmap ambitieuse, puis j'attaque la phase qui ne demande aucune infra
+⏵ Roadmap écrite, phase 0 déjà livrée et démontrée
+
+\## 1. Roadmap — `docs/roadmap.md`
+
+Cinq phases, du **faisable ici tout de suite** à ce qui demande une infra, chaque chantier avec un critère de succès mesurable et un état (✅ 🔬 ⏳ 🧱) :
+
+| phase | objet | infra |
+|---|---|---|
+| **0. La drave observable** | trace du flux, diff par couche, format d'échange v1, profilage par neurone | **aucune** |
+| **1. La drave mesurée** | top-k dans le noyau GPU, quantification choisie par la mesure, purge des seuils en dur, écart int8 | **aucune** |
+| **2. La drave répartie localement** | ordonnanceur de placement (2 GPU, CPU, RAM, NVMe), streaming des poids depuis le NVMe (3,5 Go/s), cache d'experts rentable, politique de pages du KV | **aucune** |
+| **3. La drave distribuée** | contrat d'échange, granularité, seuil de rentabilité, **démonstration Colab** (préremplissage réparti), sûreté du format | **Colab** |
+| **4. La drave apprenante** | capteur hebbien généralisé, routage appris, élagage guidé par les logs | recherche |
+| **5. La drave sur matériel** | PE événementiel et lecteur DDR3 ✅, un opérateur complet sur FPGA, énergie/jeton | **FPGA** |
+
+Le format de trace de la phase 0 **est** le contrat d'échange de la phase 3 — c'est délibéré : c'est ce qui rendra le test Colab possible sans redéfinir quoi que ce soit.
+
+\## 2. Travaux commencés — phase 0, chantiers 0.1 et 0.2 : **faits et démontrés**
+
+- **`--trace-flux <fichier>`** (+ `--trace-couches`) écrit, par (couche, position), la liste des neurones actifs poussée dans la couche — indice, valeur, échelle, nombre, à deux points par couche (entrée d'attention, entrée de FFN) ;
+- **`tools/diff_flux.py`** compare deux traces et dit **où** le flux diverge.
+
+**Mesuré** (Qwen2.5-0.5B, 512 jetons, 24 couches) : **12 288 listes, 132 Mo, 6 octets par neurone actif, +8 % de temps**.
+
+**Démonstration** : KV f32 contre KV int8 (perplexité 19,3885 contre 19,8059) → première divergence **couche 1, jeton 0**, 896 neurones, 2,9e-3 de la dynamique, et **FFN 2** comme couche la plus touchée. C'est exactement ce que la vision promettait : la divergence est **localisée**, pas seulement constatée.
+
+Piège corrigé en route, et noté dans la roadmap : la première version de l'outil comparait les **entiers bruts** de deux exécutions dont les échelles diffèrent — écarts de 1e8. Un flux se compare **déquantifié**, jamais brut.
+
+Commit `ac7ccb1`, `cargo test` 6/6, portes Qwen 19,3885 / gpt-oss 15,1757 intactes.
+
+\## 3. Prochaine étape que je propo
+… [573 caractères tronqués]
+
+### Tour 41 — continue
+
+*3 appels d'outils.* Actions notables :
+
+- bash — Write and run the per-neuron flux profiler
+- bash — Trace with a sparsity threshold
+- bash — Commit phase 0.4 profiler
+
+**Synthèse produite :**
+
+⏵ Phase 0.4 : je transforme la trace en profilage par neurone
 
 ## 3. Travail accompli
 
@@ -1907,7 +1952,7 @@ Plus une section « ce que la vision n'est pas » : le croisement push/pull à 1
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 982 autres
+- … et 985 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2131,4 +2176,5 @@ Plus une section « ce que la vision n'est pas » : le croisement push/pull à 1
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p='README.md'; s=open(p).read() old = """# Qtrinet  Inférence de LLM en **ternaire / mult
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -F - <<'EOF' && git log --oneline -1 && git status --short | head -3 Drave : r
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p='docs/roadmap.md'; s=open(p).read() s = s.replace("""| 0.1 | **Format de trace du flux*
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p='docs/roadmap.md'; s=open(p).read() s = s.replace("""| 0.4 | **Profilage par neurone gé
 
