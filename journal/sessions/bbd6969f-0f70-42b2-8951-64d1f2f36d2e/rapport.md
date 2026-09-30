@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 44.3 h |
+| Durée | 44.4 h |
 | Tours | 44 |
-| Messages | 1523 |
-| Appels d'outils | 1438 |
+| Messages | 1527 |
+| Appels d'outils | 1442 |
 | Fichiers touchés | 44 |
-| Commandes | 1142 |
+| Commandes | 1146 |
 | Sous-agents | 1 |
-| Commits | 88 |
+| Commits | 89 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -1995,7 +1995,7 @@ Je vérifie l'heure à chaque itération et j'arrête à 12:06, en laissant un p
 
 ### Tour 44 — pendant que les charges locales s'executent, peux-tu avancer des chantiers légers sur les ressources loçcale ou d'analys … [7 caractères tronqués]
 
-*92 appels d'outils.* Actions notables :
+*96 appels d'outils.* Actions notables :
 
 - bash — Write and run the pure flux analysis tool
 - bash — Document the flux analysis and commit
@@ -2011,11 +2011,11 @@ Je vérifie l'heure à chaque itération et j'arrête à 12:06, en laissant un p
 - bash — Inspect state after timeout
 - bash — Rerun pre-fix distributed test in background
 - bash — Inspect all final-norm condition sites
-- … et 65 autres
+- … et 69 autres
 
 **Synthèse produite :**
 
-**Nagle confirmé** : 97,6 ms → **16,1 ms** (1,01× le calcul local), et le banc réparti passe de 24,5 s à **8,3 s**, soit le temps du calcul local (8,2 s) — à logits identiques. Je documente.
+⏵ Vers Colab : je rends le nœud moteur écoutable hors de localhost et j'écris la recette de mise en place.
 
 ## 3. Travail accompli
 
@@ -2114,7 +2114,7 @@ Je vérifie l'heure à chaque itération et j'arrête à 12:06, en laissant un p
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 1102 autres
+- … et 1106 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2350,4 +2350,5 @@ Je vérifie l'heure à chaque itération et j'arrête à 12:06, en laissant un p
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p='docs/format-flux.md'; s=open(p).read() vieux = """Le flux voyage en **f32** sur le rés
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date +"%H:%M:%S" && cat > reports/rapport-transport-liste.md <<'EOF' # Phase 3.2 — transporter la LISTE au
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p='reports/rapport-transport-liste.md'; s=open(p).read() s += """  ## Ajout — l'échelle p
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > docs/colab-reparti.md <<'EOF' # Répétition Colab — la phase 3.4, pas à pas  Objectif : deux machines
 

@@ -24186,3 +24186,48 @@ TCP_NODELAY posé des deux côtés
 **Nagle confirmé** : 97,6 ms → **16,1 ms** (1,01× le calcul local), et le banc réparti passe de 24,5 s à **8,3 s**, soit le temps du calcul local (8,2 s) — à logits identiques. Je documente.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/rapport-transport-liste.md'; s=open(p).read()\ns += \"\"\"\n\n## Ajout — l'échelle par bloc de 32 canaux (`--flux-blocs`)\n\nTrois octets par neurone actif (indice u16, valeur **i8**) plus une échelle f32 … [6745 caractères tronqués]`
+
+  ```
+rapport transport complété
+roadmap 3.2/3.3 à jour
+5ea06f9 Phase 3 : échelles par bloc, TCP_NODELAY, et l'écart KV attribué aux clés
+11:07:01
+  ```
+
+### 🤖 Assistant
+
+⏵ Vers Colab : je rends le nœud moteur écoutable hors de localhost et j'écris la recette de mise en place.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"flux_serveur\" drave-core/src/main.rs | head; echo \"=== parse ===\"; grep -n '\"--flux-serveur\"' -A 2 drave-core/src/main.rs", "description": "Inspect flux-serveur option"}`
+
+  ```
+48:    if let Some(port) = opt.flux_serveur { run_serveur_flux(opt, port); return; }
+343:    flux_serveur: Option<u16>,
+430:            "--flux-serveur" => { o.flux_serveur = suivant(i).parse().ok(); 2 }
+=== parse ===
+430:            "--flux-serveur" => { o.flux_serveur = suivant(i).parse().ok(); 2 }
+431-            "--ppl-reparti" => { o.ppl_reparti = Some(suivant(i).clone()); 2 }
+432-            "--couches-locales" => { o.couches_locales = suivant(i).parse().unwrap(); 2 }
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/main.rs'; s=open(p).read()\nv = \"    flux_serveur: Option<u16>,\"\nassert s.count(v) == 1\ns = s.replace(v, \"    /// Adresse d'écoute du nœud moteur : `port`, ou `hôte:port` pour écouter\\n    // … [2050 caractères tronqués]`
+
+  ```
+--flux-serveur accepte hôte:port
+    Finished `release` profile [optimized] target(s) in 0.01s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && IP=$(hostname -I | awk '{print $1}'); echo \"IP locale : $IP\"; (./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf --flux-serveur 0.0.0.0:45797 --ctx 256 > /tmp/serveur_lan.log 2>&1 &) ; for i in $(seq 1 60); do ss -ltn … [408 caractères tronqués]`
+
+  ```
+IP locale : 192.168.1.101
+[flux] nœud moteur sur 0.0.0.0:45797 · 896 cachés · 24 couches · contexte 256
+  référence locale  : perplexité 144.8289  (1.6 s)
+  deux nœuds        : perplexité 144.8289  (1.6 s)
+  écart             : 0.00e0
+  transport         : dense f32 · 3623 octets par flux (aller) · 3623 au retour · 100.0 % d'activité (896 neurones par flux) · 40 flux
+  temps             : 15.1 ms par jeton en local · 15.7 ms à attendre le pair (son calcul + l'aller-retour) · soit 1.04× le calcul local seul
+[killed by signal: SIGTERM]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > docs/colab-reparti.md <<'EOF'\n# Répétition Colab — la phase 3.4, pas à pas\n\nObjectif : deux machines qui se passent des **listes d'activation**, l'une sur le\nruntime Colab, l'autre en local, et **les mêmes logits** qu'en lo … [5895 caractères tronqués]`

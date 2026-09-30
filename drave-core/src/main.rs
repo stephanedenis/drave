@@ -45,7 +45,7 @@ elles s'appellent maintenant DRAVE_* (voir docs/histoire.md). Rien n'a été app
     let opt = analyser(&args);
     let _ = MODELE.set(args[1].clone());
     if let Some(f) = opt.banc_vision.clone() { run_banc_vision(&f); return; }
-    if let Some(port) = opt.flux_serveur { run_serveur_flux(opt, port); return; }
+    if let Some(adresse) = opt.flux_serveur.clone() { run_serveur_flux(opt, &adresse); return; }
     if let Some(pair) = opt.ppl_reparti.clone() { run_ppl_reparti(opt, &pair); return; }
     if opt.tensors { run_tensors(); return; }
     if let Some(f) = opt.banc_mla.clone() { run_banc_mla(opt, &f); return; }
@@ -340,7 +340,9 @@ struct Options {
     /// calculées (rejeu).
     flux_forcer: Option<String>,
     /// Phase 3 : nœud MOTEUR qui écoute et applique sa plage de couches.
-    flux_serveur: Option<u16>,
+    /// Adresse d'écoute du nœud moteur : `port`, ou `hôte:port` pour écouter
+    /// au-delà de localhost (un pair distant, un tunnel, une autre machine).
+    flux_serveur: Option<String>,
     /// Phase 3 : pilote qui répartit le calcul sur un nœud distant (hôte:port).
     ppl_reparti: Option<String>,
     /// Nombre de couches gardées en local par le pilote.
@@ -427,7 +429,7 @@ fn analyser(args: &[String]) -> Options {
             "--tensors" => { o.tensors = true; 1 }
             "--trace-flux" => { o.trace_flux = Some(suivant(i).clone()); 2 }
             "--flux-forcer" => { o.flux_forcer = Some(suivant(i).clone()); 2 }
-            "--flux-serveur" => { o.flux_serveur = suivant(i).parse().ok(); 2 }
+            "--flux-serveur" => { o.flux_serveur = Some(suivant(i).clone()); 2 }
             "--ppl-reparti" => { o.ppl_reparti = Some(suivant(i).clone()); 2 }
             "--couches-locales" => { o.couches_locales = suivant(i).parse().unwrap(); 2 }
             "--trace-couches" => { o.trace_couches = suivant(i).split(',')
@@ -1453,7 +1455,14 @@ fn recevoir_flux(s: &mut std::net::TcpStream) -> std::io::Result<Flux> {
 /// Le NŒUD MOTEUR : charge le modèle, écoute, applique SA plage de couches au
 /// flux reçu et renvoie le flux résultant. Un seul client à la fois — c'est un
 /// banc d'essai, pas un service.
-fn run_serveur_flux(opt: Options, port: u16) {
+fn run_serveur_flux(opt: Options, adresse: &str) {
+    // `port` reste localhost ; `hôte:port` écoute sur l'interface nommée
+    // (« 0.0.0.0:5599 » pour un pair distant). Le pair distant est le cas de la
+    // phase 3.4 : un nœud Colab, ou une autre machine du réseau.
+    let (hote, port) = match adresse.rsplit_once(':') {
+        Some((h, p)) => (h.to_string(), p.parse().expect("port invalide")),
+        None => ("127.0.0.1".to_string(), adresse.parse().expect("port invalide")),
+    };
     let chemin = modele_chemin();
     // Le contexte du nœud moteur suit `--ctx` : figé à 4096, il faisait payer au
     // pair des tampons d'attention seize fois plus grands que le banc (mesuré :
@@ -1462,8 +1471,8 @@ fn run_serveur_flux(opt: Options, port: u16) {
     let mut mdl = model::Model::load(&chemin, ctx, 16, true, 1.0, false, 0, 0);
     appliquer_quantification(&mut mdl, &opt);
     let hidden = mdl.cfg.hidden;
-    let ecoute = std::net::TcpListener::bind(("127.0.0.1", port)).expect("écoute");
-    println!("[flux] nœud moteur sur 127.0.0.1:{port} · {hidden} cachés · {} couches · contexte {ctx}",
+    let ecoute = std::net::TcpListener::bind((hote.as_str(), port)).expect("écoute");
+    println!("[flux] nœud moteur sur {hote}:{port} · {hidden} cachés · {} couches · contexte {ctx}",
              mdl.cfg.n_layer);
     let (mut sock, pair) = ecoute.accept().expect("connexion");
     // TCP_NODELAY, et ce n'est pas un détail de confort : sans lui, Nagle garde
