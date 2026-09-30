@@ -346,6 +346,27 @@ le pas de 2 du mode par défaut (`--dense --threads 4` annonçait 30 fils),
 recommandation de fond — un `--options-actives` qui imprime les réglages
 réellement en vigueur.
 
+### Hygiène et garde-fous ajoutés depuis (13h)
+
+- **`--options-actives`** : un tableau de bord qui imprime, APRÈS toutes les
+  affectations, les réglages que le moteur utilise vraiment (niveaux, seuil,
+  top-k, fenêtre, lot, cache KV avec sa variante…). C'est la réponse au défaut le
+  plus coûteux du dépôt — un drapeau qui ne fait rien. Branché dans les quatre
+  modes principaux.
+- **Un drapeau inconnu est signalé** : `--keeep 0.05` était avalé en silence.
+- **Règle R4 dans le code** : les trois modes qui allouent sur une taille lue dans
+  l'en-tête refusent au-delà de 256 Mo — un pair pouvait demander ~15 To.
+- **Onze tests** au lieu de six : taille d'en-tête et version verrouillées,
+  aller-retour des paires à échappement (écart de 255 compris), refus des corps
+  tronqués, aller-retour dense par la vraie mise en trame, refus d'un lot géant.
+  Le test de troncature a immédiatement trouvé une garde manquante dans le
+  décodeur.
+- **Six défauts de la relecture adversariale corrigés** : compteur de listes
+  manquantes aveugle en rejeu par lots, clés de trace incohérentes selon `--lot`,
+  pair factice qui ne lisait pas le mode lot, modes sparse ignorés en silence avec
+  `--lot > 1`, panique du client sur un refus du pair, `--limit 1` qui affichait
+  NaN.
+
 ### Les prochains chantiers, dans l'ordre
 
 1. ~~Préremplissage par LOTS sur le fil~~ **FAIT** (mode 3 : 256 jetons en 4 lots,

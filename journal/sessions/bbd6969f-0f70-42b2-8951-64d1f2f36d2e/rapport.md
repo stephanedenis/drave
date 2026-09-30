@@ -7,12 +7,12 @@
 | Début | 2026-09-28 14:46 |
 | Durée | 46.3 h |
 | Tours | 45 |
-| Messages | 1771 |
-| Appels d'outils | 1673 |
+| Messages | 1773 |
+| Appels d'outils | 1675 |
 | Fichiers touchés | 44 |
-| Commandes | 1355 |
+| Commandes | 1357 |
 | Sous-agents | 6 |
-| Commits | 122 |
+| Commits | 123 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -2055,7 +2055,7 @@ Je vérifie l'heure à chaque itération et j'arrête à 12:06, en laissant un p
 
 ### Tour 45 — as-tu ce qu'il te faut pour te rendre à 15h en travaillaint avec un maximum d'autonomie et de parallélisme d'activités?
 
-*174 appels d'outils.* Actions notables :
+*176 appels d'outils.* Actions notables :
 
 - bash — Probe machine, GPU, disk, network state
 - bash — Identify GPU users and stray processes
@@ -2071,11 +2071,11 @@ Je vérifie l'heure à chaque itération et j'arrête à 12:06, en laissant un p
 - bash — Understand batched PPL reference path
 - bash — Add batched imposed states to forward_lot
 - list_agents
-- … et 152 autres
+- … et 154 autres
 
 **Synthèse produite :**
 
-La campagne principale est finie : **int4/int4 = 66,0369 (+364 %)** — cohérent avec la mesure d'une session antérieure. La suite f16 démarre. Je commit et je mets le rapport à jour.
+⏵ Je comble le trou du relecteur : la porte gpt-oss n'a jamais été repassée après mes changements. Je la lance en fond et je rafraîchis le handoff.
 
 ## 3. Travail accompli
 
@@ -2179,7 +2179,7 @@ La campagne principale est finie : **int4/int4 = 66,0369 (+364 %)** — cohéren
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 1315 autres
+- … et 1317 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2449,4 +2449,5 @@ La campagne principale est finie : **int4/int4 = 66,0369 (+364 %)** — cohéren
 - Kit Colab vérifié de bout en bout (clonage, compilation 23 s, écart 0,00e0)" && git log --oneline -1 | cat
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A drave-core/src/main.rs drave-core/src/model.rs && git commit -q -F - <<'EOF' && git log --oneli
 - Un drapeau inconnu n'est plus avalé en silence  \`--keeep 0.05\` (une faute de frappe) faisait tourner le modèle entier sans élagage et sans un mot. L'analyse r
+- Handoff : les garde-fous de l'après-midi et deux lignes de mesures  REPRISE §6bis gagne ce qui a été ajouté depuis 13h (tableau de bord --options-actives, drape
 

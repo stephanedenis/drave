@@ -28607,3 +28607,22 @@ chmod +x /tmp/campagne_cles.sh && /tmp/campagne_cles.sh) finished [status: compl
 La campagne principale est finie : **int4/int4 = 66,0369 (+364 %)** — cohérent avec la mesure d'une session antérieure. La suite f16 démarre. Je commit et je mets le rapport à jour.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A drave-core/src/main.rs && git commit -q -m \"Un drapeau inconnu n'est plus avalé en silence\n\n\\`--keeep 0.05\\` (une faute de frappe) faisait tourner le modèle entier sans\nélagage et sans un mot. L'analyse retient maint … [1919 caractères tronqués]`
+
+  ```
+01b7274 Un drapeau inconnu n'est plus avalé en silence
+rapport KV : int4/int4 ajouté
+d89e340 Cache KV : int4/int4 mesuré (+364 %), la courbe a ses six premiers points
+cles_f16_valeurs_int8      : 517408 ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf --ppl /tmp/ids_qwen_long.txt --ctx 8192 --limit 8192 --dense --threads 16 --lot 512
+  ```
+
+### 🤖 Assistant
+
+⏵ Je comble le trou du relecteur : la porte gpt-oss n'a jamais été repassée après mes changements. Je la lance en fond et je rafraîchis le handoff.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/porte_oss_finale.sh <<'EOF'\n#!/bin/bash\ncd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\necho \"=== porte gpt-oss ctx 256 (attendu 15,1757, SANS DRAVE_GPU) ===\"\ntimeout 3600 ./drave-core/target/release/drave /home/s … [333 caractères tronqués]`
+
+  ```
+started background job bash-70
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='REPRISE.md'; s=open(p).read()\nv = \"\"\"### Les prochains chantiers, dans l'ordre\"\"\"\nn = \"\"\"### Hygiène et garde-fous ajoutés depuis (13h)\n\n- **`--options-actives`** : un tableau de bord qui imprime, AP … [2759 caractères tronqués]`
