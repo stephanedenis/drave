@@ -85,6 +85,9 @@ pub struct KvGpu {
     pub nb: usize,
     /// 32 = f32, 8 = un octet par valeur, 4 = deux nibbles par octet.
     pub bits: u32,
+    /// Tampon de SCORES du noyau `attn_scores` (réutilisé, comme les autres).
+    pub scores_dev: u64,
+    pub scores_cap: usize,
     pub octets: usize,
     // Tampons de travail RÉUTILISÉS d'un jeton à l'autre. Les allouer à chaque
     // appel coûtait 24 couches × 6 appels CUDA par jeton : mesuré 24,5 ms/jeton
@@ -112,6 +115,8 @@ pub struct Gpu {
     f_q6k_warp: *mut c_void,
     f_attn_part: *mut c_void,
     f_attn_recombine: *mut c_void,
+    /// Scores seuls (premier noyau du top-k, `docs/plan-gpu-topk.md`).
+    f_attn_scores: *mut c_void,
     pub nom: String,
     /// Numéro du périphérique, pour savoir qui est qui quand il y en a deux.
     pub ordinal: c_int,
@@ -223,6 +228,13 @@ impl Gpu {
                 eprintln!("{}", erreur(rc, "fonction attn_kv_partiels"));
                 return None;
             }
+            let nom_s = std::ffi::CString::new("attn_scores").unwrap();
+            let mut f_attn_scores: *mut c_void = std::ptr::null_mut();
+            let rc = cuModuleGetFunction(&mut f_attn_scores, module, nom_s.as_ptr());
+            if rc != 0 {
+                eprintln!("{}", erreur(rc, "fonction attn_scores"));
+                return None;
+            }
             let nom_r = std::ffi::CString::new("attn_kv_recombine").unwrap();
             let mut f_attn_recombine: *mut c_void = std::ptr::null_mut();
             let rc = cuModuleGetFunction(&mut f_attn_recombine, module, nom_r.as_ptr());
@@ -237,7 +249,7 @@ impl Gpu {
             }
             cuMemGetInfo_v2(&mut libre, &mut total);
             Some(Gpu { ctx, module, f_tete, f_proj, f_tete_warp, f_proj_warp,
-                       f_mxfp4_warp, f_q4k_warp, f_q6k_warp,
+                       f_mxfp4_warp, f_q4k_warp, f_q6k_warp, f_attn_scores,
                        f_attn_part, f_attn_recombine, ordinal,
                        nom: format!("GPU {ordinal}"), memoire_libre: libre })
         }
@@ -322,6 +334,7 @@ impl Gpu {
         // Première tranche : de quoi couvrir un préremplissage courant. Le
         // reste s'ajoute par doublement, à la demande.
         let mut m = KvGpu { k: 0, v: 0, sk: 0, sv: 0, n_kv, ctx, capacite: 0, hd, nb, bits,
+                            scores_dev: 0, scores_cap: 0,
                             octets: 0, q_dev: 0, part_dev: 0, out_dev: 0, sinks_dev: 0,
                             q_cap: 0, part_cap: 0, out_cap: 0, sinks_cap: 0 };
         if !self.kv_assurer(&mut m, ctx.min(2048)) { return None; }
@@ -421,6 +434,77 @@ impl Gpu {
     /// Une passe d'attention sur le KV déporté : `rep` têtes de requête
     /// partageant une tête KV, `n` clés notées. `q` est `n_kv × rep × hd`.
     #[allow(clippy::too_many_arguments)]
+    /// **Scores d'attention seuls** (`attn_scores`) : pour chaque tête KV, les
+    /// `rep × n` scores `q·k × échelle`, sans softmax ni valeurs. C'est l'entrée
+    /// de la sélection top-k (noyau 2 du plan), et ce que le banc compare au CPU.
+    ///
+    /// `sc` est `[n_kv][rep][n]`, aplati.
+    pub fn attn_scores(&self, m: &mut KvGpu, q: &[f32], n: usize, scale: f32,
+                       sc: &mut [f32]) -> bool {
+        cu_ctx(self.ctx);
+        let rep = if m.n_kv == 0 { 0 } else { q.len() / (m.n_kv * m.hd) };
+        let hd = m.hd;
+        if rep == 0 || rep > 32 || hd % 32 != 0 { return false; }
+        if n == 0 || n > m.capacite || sc.len() < m.n_kv * rep * n { return false; }
+        let fils = (rep * 32) as c_uint;
+        let partage = ((rep * hd + 32 * (hd + 1)) * 4) as c_uint;
+        unsafe {
+            let mut p_k = m.k;
+            let mut p_sk = m.sk;
+            let mut p_q = m.q_dev;
+            if m.q_cap < q.len() {
+                if m.q_dev != 0 { cuMemFree_v2(m.q_dev); }
+                m.q_dev = 0;
+                if cuMemAlloc_v2(&mut m.q_dev, q.len() * 4) != 0 { return false; }
+                m.q_cap = q.len();
+                p_q = m.q_dev;
+            }
+            if cuMemcpyHtoD_v2(p_q, q.as_ptr() as *const c_void, q.len() * 4) != 0 {
+                return false;
+            }
+            let p_sc = m.scores_dev;
+            if m.scores_cap < sc.len() {
+                if m.scores_dev != 0 { cuMemFree_v2(m.scores_dev); }
+                m.scores_dev = 0;
+                if cuMemAlloc_v2(&mut m.scores_dev, sc.len() * 4) != 0 { return false; }
+                m.scores_cap = sc.len();
+            }
+            let mut p_sc = if m.scores_cap >= sc.len() { m.scores_dev } else { p_sc };
+            // Le même découpage que le noyau complet : ~256 clés par tranche,
+            // plafonné à 128 tranches.
+            let nsplit = (n / 256).clamp(1, 128);
+            let (n_i, nsplit_i, ctx_i, hd_i, nb_i, rep_i, bits_i) =
+                (n as c_int, nsplit as c_int, m.capacite as c_int, hd as c_int,
+                 m.nb as c_int, rep as c_int, m.bits as c_int);
+            let (mut rep_c, mut bits_c, mut scale_c) = (rep_i, bits_i, scale);
+            let mut params: [*mut c_void; 12] = [
+                &mut p_k as *mut u64 as *mut c_void,
+                &mut p_sk as *mut u64 as *mut c_void,
+                &mut p_q as *mut u64 as *mut c_void,
+                &mut p_sc as *mut u64 as *mut c_void,
+                &n_i as *const c_int as *mut c_void,
+                &nsplit_i as *const c_int as *mut c_void,
+                &ctx_i as *const c_int as *mut c_void,
+                &hd_i as *const c_int as *mut c_void,
+                &nb_i as *const c_int as *mut c_void,
+                &mut rep_c as *mut c_int as *mut c_void,
+                &mut bits_c as *mut c_int as *mut c_void,
+                &mut scale_c as *mut f32 as *mut c_void,
+            ];
+            let rc = cuLaunchKernel(self.f_attn_scores, m.n_kv as c_uint, nsplit as c_uint, 1,
+                                    fils, 1, 1, partage, std::ptr::null_mut(),
+                                    params.as_mut_ptr(), std::ptr::null_mut());
+            if rc != 0 {
+                eprintln!("{}", erreur(rc, "lancement attn_scores"));
+                return false;
+            }
+            if cuMemcpyDtoH_v2(sc.as_mut_ptr() as *mut c_void, p_sc, sc.len() * 4) != 0 {
+                return false;
+            }
+        }
+        true
+    }
+
     pub fn attn_kv(&self, m: &mut KvGpu, q: &[f32], n: usize, scale: f32,
                    sinks: Option<&[f32]>, nsplit: usize,
                    part: &mut [f32], out: &mut [f32]) -> bool {

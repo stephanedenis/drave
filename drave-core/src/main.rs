@@ -51,7 +51,8 @@ elles s'appellent maintenant DRAVE_* (voir docs/histoire.md). Rien n'a été app
         (opt.flux_serveur.is_some(), "--flux-serveur"),
         (opt.ppl_reparti.is_some(), "--ppl-reparti"),
         (opt.tensors, "--tensors"), (opt.banc_mla.is_some(), "--banc-mla"),
-        (opt.banc_kv > 0, "--banc-kv"), (opt.gpu_banc, "--gpu-banc"),
+        (opt.banc_kv > 0, "--banc-kv"), (opt.banc_topk > 0, "--banc-topk"),
+        (opt.gpu_banc, "--gpu-banc"),
         (opt.plan, "--plan"), (opt.tokenize, "--tokenize"),
         (opt.ppl, "--ppl"), (opt.infer, "--infer"),
     ].iter().filter(|(v, _)| *v).map(|(_, n)| *n).collect();
@@ -65,6 +66,7 @@ sont ignorés", modes.len(), modes.join(", "), modes[0]);
     if opt.tensors { run_tensors(); return; }
     if let Some(f) = opt.banc_mla.clone() { run_banc_mla(opt, &f); return; }
     if opt.banc_kv > 0 { run_banc_kv(opt); return; }
+    if opt.banc_topk > 0 { run_banc_topk(opt); return; }
     if opt.gpu_banc { run_gpu_banc(opt); return; }
     if opt.plan { run_plan(opt); return; }
     if opt.tokenize { run_tokenize(opt); return; }
@@ -396,6 +398,8 @@ struct Options {
     infer: bool, ppl: bool, plan: bool, tokenize: bool, gpu_banc: bool,
     /// Banc du KV déporté : nombre de clés à faire tenir en VRAM.
     banc_kv: usize,
+    /// Banc des SCORES d'attention : nombre de clés à noter (noyau 1 du top-k).
+    banc_topk: usize,
     /// Banc MLA : écrit les logits `(n_pos × vocab)` en f32 pour les comparer à
     /// la référence numpy du modèle synthétique.
     banc_mla: Option<String>,
@@ -502,6 +506,7 @@ fn analyser(args: &[String]) -> Options {
             "--tokenize" => { o.tokenize = true; 1 }
             "--gpu-banc" => { o.gpu_banc = true; 1 }
             "--banc-kv" => { o.banc_kv = suivant(i).parse().unwrap(); 2 }
+            "--banc-topk" => { o.banc_topk = suivant(i).parse().unwrap(); 2 }
             "--banc-mla" => { o.banc_mla = Some(suivant(i).clone()); 2 }
             "--tensors" => { o.tensors = true; 1 }
             "--trace-flux" => { o.trace_flux = Some(suivant(i).clone()); 2 }
@@ -2320,6 +2325,100 @@ pair incohérent. Rien n'a été calculé.", final_.len(), mdl.cfg.hidden);
               (son calcul + l'aller-retour) · soit {:.2}× le calcul local seul",
              1000.0 * t_local / nflux as f64, 1000.0 * t_pair / nflux as f64,
              t_pair / t_local.max(1e-9));
+    }
+}
+
+/// Banc **des scores d'attention** (`--banc-topk N`) : le premier des trois noyaux
+/// du plan `docs/plan-gpu-topk.md`. Il compare les scores calculés en VRAM à la
+/// référence CPU — même clé, même requête, même échelle — et chronomètre les deux.
+///
+/// C'est le banc qui doit dire **1e-6** avant qu'on écrive la sélection : sans lui,
+/// le noyau 2 s'appuierait sur des scores qu'on n'a jamais relus.
+fn run_banc_topk(opt: Options) {
+    use std::time::Instant;
+    let path = &modele_chemin();
+    let g = Gguf::open(path).expect("ouverture du GGUF");
+    let n_kv = g.cfg("attention.head_count_kv").and_then(|m| m.as_u64()).unwrap_or(1) as usize;
+    let n_head = g.cfg("attention.head_count").and_then(|m| m.as_u64()).unwrap_or(1) as usize;
+    let hd = g.cfg("attention.key_length").and_then(|m| m.as_u64()).unwrap_or(64) as usize;
+    let bits = std::env::var("DRAVE_KV_BITS").ok().and_then(|v| v.parse().ok()).unwrap_or(8u32);
+    let n = opt.banc_topk;
+    let rep = (n_head / n_kv.max(1)).max(1);
+    let scale = 1.0 / (hd as f32).sqrt();
+    println!("banc top-k : {n} clés · {n_kv} têtes KV × {hd} dim · {rep} têtes de requête \
+par tête KV · KV {bits} bits");
+
+    // Un cache KV rempli de valeurs déterministes, puis son miroir VRAM.
+    let mut cache = model::KvCache::new(bits, n_kv, n, hd);
+    let mut etat = 987654321u64;
+    let mut suivant = move || {
+        etat ^= etat << 13; etat ^= etat >> 7; etat ^= etat << 17;
+        ((etat >> 11) as f64 / (1u64 << 53) as f64) as f32 * 2.0 - 1.0
+    };
+    let k: Vec<f32> = (0..n_kv * hd).map(|_| suivant()).collect();
+    let v: Vec<f32> = (0..n_kv * hd).map(|_| suivant()).collect();
+    for pos in 0..n {
+        for kvh in 0..n_kv {
+            cache.ecrire(kvh, pos, &k, &v);
+        }
+    }
+    let machine = match crate::gpu::machines().first() {
+        Some(m) => m,
+        None => { println!("GPU absent : banc terminé"); return; }
+    };
+    let mut miroir = match machine.kv_allouer(n_kv, n, hd, bits) {
+        Some(m) => m,
+        None => { println!("allocation VRAM impossible : banc terminé"); return; }
+    };
+    for kvh in 0..n_kv {
+        for pos in 0..n {
+            cache.vers_gpu(machine, &mut miroir, kvh, pos);
+        }
+    }
+    // La requête : `rep` têtes, déterministes elles aussi.
+    let q: Vec<f32> = (0..n_kv * rep * hd).map(|_| suivant() * 0.5).collect();
+
+    // Référence CPU : un produit scalaire par (tête KV, tête de requête, clé).
+    let mut attendu = vec![0f32; n_kv * rep * n];
+    let t0 = Instant::now();
+    let mut kd = vec![0f32; hd];
+    for kvh in 0..n_kv {
+        for t in 0..n {
+            cache.cle(kvh, t, &mut kd);
+            for r in 0..rep {
+                let qh = &q[(kvh * rep + r) * hd..(kvh * rep + r + 1) * hd];
+                let mut s = 0f32;
+                for i in 0..hd { s += qh[i] * kd[i]; }
+                attendu[(kvh * rep + r) * n + t] = s * scale;
+            }
+        }
+    }
+    let t_cpu = t0.elapsed().as_secs_f64();
+
+    let mut obtenu = vec![0f32; n_kv * rep * n];
+    let t1 = Instant::now();
+    if !machine.attn_scores(&mut miroir, &q, n, scale, &mut obtenu) {
+        println!("le noyau a refusé la configuration");
+        return;
+    }
+    let t_gpu = t1.elapsed().as_secs_f64();
+
+    let mut mx = 0f32;
+    let mut dyn_ = 0f32;
+    for (a, b) in attendu.iter().zip(obtenu.iter()) {
+        mx = mx.max((a - b).abs());
+        dyn_ = dyn_.max(a.abs());
+    }
+    println!("  CPU  {} fils : {:8.2} ms", fils(&opt), t_cpu * 1e3);
+    println!("  GPU  scores  : {:8.2} ms  ({:.1}× plus rapide)", t_gpu * 1e3,
+             t_cpu / t_gpu.max(1e-9));
+    println!("  écart max {mx:.3e} sur une dynamique de {dyn_:.3e} (relatif {:.2e})",
+             mx / dyn_.max(1e-9));
+    if mx / dyn_.max(1e-9) < 1e-6 {
+        println!("  → conforme au critère du plan (1e-6) : la sélection peut s'appuyer dessus");
+    } else {
+        println!("  → AU-DESSUS du critère du plan (1e-6) : ne pas écrire la sélection avant \
+d'avoir compris");
     }
 }
 

@@ -16,7 +16,7 @@ tools/sprint.sh status     # à chaque itération : temps restant, commits du sp
 tools/sprint.sh close      # écrit la trame de cérémonie dans sprints/NN-*.md
 ```
 
-## La cérémonie, à la fin de chaque boîte
+## La cérémonie, APRÈS la boîte
 
 Trois parties, dans cet ordre, écrites dans le fichier du sprint :
 
@@ -43,6 +43,14 @@ Un sprint se ferme **vert**, et c'est non négociable :
 - la machine est **rendue** (pas de processus de banc qui traîne) ;
 - tout chiffre annoncé a sa **source** : un rapport, un journal de mesure, ou une
   commande reproductible.
+
+## L'autonomie de l'objectif
+
+Choix du 30/09 : l'objectif de chaque sprint est fixé **par l'agent, sans
+validation** — le planning s'appuie sur `docs/roadmap.md`, sur la rétro du sprint
+précédent et sur ce que la mesure a laissé ouvert. Vous gardez évidemment le droit
+d'interrompre ou de changer en cours de boîte ; c'est simplement le point de départ
+qui ne demande pas d'aller-retour.
 
 ## Les trois rythmes, et pourquoi ils diffèrent
 

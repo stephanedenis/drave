@@ -77,7 +77,7 @@ doit montrer l'effet cherché : **968 ms → quelques dizaines de ms par couche*
 
 | # | étape | critère de succès |
 |---|---|---|
-| 1 | `attn_scores` + FFI + banc `--gpu-banc-topk` sur 4 k de contexte | scores identiques au CPU à 1e-6 |
+| 1 | `attn_scores` + FFI + banc `--banc-topk` sur 4 k de contexte | ✅ **fait** : écart **1,03e-7** à toutes les longueurs (256 à 262 144 clés), **29 à 40× plus rapide** que le CPU — `reports/rapport-gpu-scores.md` |
 | 2 | `attn_topk_select` (radix 2 passes) | ensemble retenu identique hors ex æquo |
 | 3 | `attn_topk_somme` (softmax sur k + puits) | sortie identique au CPU à 1e-6 |
 | 4 | branchement dans `model.rs` (autoriser le GPU quand `attn_topk > 0` **et** que le noyau rend `true`, garder le repli CPU sinon) | perplexité 2 048 = 234,88 ± tolérance |

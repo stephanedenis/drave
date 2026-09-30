@@ -31667,3 +31667,439 @@ syntaxe ok
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > docs/sprints.md <<'EOF'\n# Les sprints de 2 h — charte\n\nCe document dit **comment on travaille**, pas ce qu'on fait (ça, c'est\n`docs/roadmap.md` et les sprints eux-mêmes, dans `sprints/`).\n\n## Le boxing\n\nUn sprint dure * … [3699 caractères tronqués]`
+
+  ```
+e7cb848 Cadence de sprints de 2 h : charte et outil de boxing temps réel
+17:40:14
+  ```
+
+- **ask_user_question** `{"questions": [{"id": "ceremonie", "header": "Cérémonie", "question": "Les 15 min de cérémonie (revue + rétro + planning) sont-elles DANS la boîte de 2 h, ou après ?", "multi_select": false, "options": [{"label": "Dans la boîte : 1 h 45 de travail + 15 min de cérémonie (Recommandé)", "description":  … [1776 caractères tronqués]`
+
+  ```
+{"answers":[{"id":"ceremonie","selected":["Après la boîte : 2 h de travail, puis la cérémonie"]},{"id":"objectif","selected":["Je fixe seul, sans validation"]},{"id":"premier","selected":["Oui — noyau GPU de top-k, premier noyau (Recommandé)"]}]}
+  ```
+
+### 🤖 Assistant
+
+Réglages reçus : **2 h de travail puis la cérémonie**, objectif à ma main, et on démarre sur le **premier noyau GPU**. J'ajuste la charte, je lance le sprint et une campagne en fond.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='docs/sprints.md'; s=open(p).read()\nv = \"\"\"## La cérémonie, à la fin de chaque boîte\"\"\"\nn = \"\"\"## La cérémonie, APRÈS la boîte\n\nChoix du 30/09 : la boîte fait **2 h de travail**, et la cérémonie vient … [2736 caractères tronqués]`
+
+  ```
+charte ajustée : cérémonie après la boîte, objectif autonome
+Sprint 1 démarré à 17:41 → 19:41  ·  sprints/01-premier-des-trois-noyaux-gpu-du-top-k-le.md
+── Sprint 1 ─────────────────────────────────────────────
+- **Début** : 17:41 · **Fin prévue** : 19:41 (boxing de 120 min)
+   temps : 17:41 · reste 2 h 00
+   commits depuis le début : 0
+--- campagne 16 k lancée en fond ---
+17:41:23
+  ```
+
+### 🤖 Assistant
+
+Sprint 1 démarré (17:41 → 19:41), campagne 16 k en fond. J'attaque : d'abord comprendre le noyau d'attention existant.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n 415,470p drave-core/gpu/drave_gpu.cu", "description": "Read the attention partials kernel"}`
+
+  ```
+__global__ void attn_kv_partiels(const void* __restrict__ kdata,
+                                 const float* __restrict__ kscale,
+                                 const void* __restrict__ vdata,
+                                 const float* __restrict__ vscale,
+                                 const float* __restrict__ q,     // [rep][hd]
+                                 float* __restrict__ part,        // [nsplit][rep][hd+2]
+                                 int n, int nsplit, int ctx, int hd, int nb,
+                                 int rep, int bits, float scale) {
+    extern __shared__ float sh[];
+    float* shQ = sh;                 // rep * hd : la requête ENTIÈRE, partagée
+    float* shK = shQ + rep * hd;     // 32 * (hd + 1), tuile de clés rembourrée
+    float* shV = shK + 32 * (hd + 1); // 32 * hd
+    float* shP = shV + 32 * hd;      // rep * 32
+    const int tid = threadIdx.x;
+    const int lane = tid & 31;
+    const int warp = tid >> 5;
+    const int kvh = blockIdx.x;
+    const int sp = blockIdx.y;
+    const int par_tranche = (n + nsplit - 1) / nsplit;
+    const int debut = sp * par_tranche;
+    const int fin = min(n, debut + par_tranche);
+    const int nq = hd / 32;
+  
+… [1960 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n 470,545p drave-core/gpu/drave_gpu.cu", "description": "Read the score computation and accumulation"}`
+
+  ```
+const float sk = kscale[vec * nb + (i >> 5)];
+                const float sv = vscale[vec * nb + (i >> 5)];
+                #pragma unroll
+                for (int j = 0; j < 4; ++j) {
+                    kv[j] = (float)(signed char)((q4 >> (8 * j)) & 0xFFu) * sk;
+                    vv[j] = (float)(signed char)((w4 >> (8 * j)) & 0xFFu) * sv;
+                }
+            } else if (bits == 4) {
+                const unsigned char* pk =
+                    reinterpret_cast<const unsigned char*>(kdata) + vec * (size_t)(hd / 2) + (i >> 1);
+                const unsigned char* pv =
+                    reinterpret_cast<const unsigned char*>(vdata) + vec * (size_t)(hd / 2) + (i >> 1);
+                const float sk = kscale[vec * nb + (i >> 5)];
+                const float sv = vscale[vec * nb + (i >> 5)];
+                #pragma unroll
+                for (int j = 0; j < 4; ++j) {
+                    int qk = (pk[j >> 1] >> (4 * (j & 1))) & 0x0F;
+                    int qv = (pv[j >> 1] >> (4 * (j & 1))) & 0x0F;
+                    if (qk >= 8) qk -= 16;
+                    if (qv >= 8) qv -= 16;
+                    kv[j] = (float)qk * sk;
+                    vv[j] = (float)qv * sv;
+  
+… [1994 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n 440,470p drave-core/src/gpu.rs; echo \"=== déclaration des symboles ===\"; grep -n \"attn_kv_partiels\\|attn_kv_recombine\\|fn charger_fonction\\|let f_\" drave-core/src/gpu.rs | head -12", "description": "Read the FFI launch  … [9 caractères tronqués]`
+
+  ```
+let mut p_sk = m.sk;
+            let mut p_sv = m.sv;
+            if m.q_cap < q.len() {
+                if m.q_dev != 0 { cuMemFree_v2(m.q_dev); }
+                m.q_dev = 0;
+                if cuMemAlloc_v2(&mut m.q_dev, q.len() * 4) != 0 { return false; }
+                m.q_cap = q.len();
+            }
+            let mut p_q = m.q_dev;
+            if cuMemcpyHtoD_v2(p_q, q.as_ptr() as *const c_void, q.len() * 4) != 0 {
+                return false;
+            }
+            if m.part_cap < part.len() {
+                if m.part_dev != 0 { cuMemFree_v2(m.part_dev); }
+                m.part_dev = 0;
+                if cuMemAlloc_v2(&mut m.part_dev, part.len() * 4) != 0 { return false; }
+                m.part_cap = part.len();
+            }
+            let mut p_part = m.part_dev;
+            // `ctx` passé au noyau = la capacité ALLOUÉE : c'est le pas entre
+            // deux têtes KV dans la VRAM, pas la longueur logique.
+            let (n_i, nsplit_i, ctx_i, hd_i, nb_i, rep_i, bits_i) =
+                (n as c_int, nsplit as c_int, m.capacite as c_int, hd as c_int,
+                 m.nb as c_int, rep as c_int, m.bits as c_int);
+            let (mut rep_c, mut bits_c, mut s
+… [914 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n 205,240p drave-core/src/gpu.rs; echo \"=== champs de KvGpu ===\"; grep -n \"pub struct KvGpu\" -A 22 drave-core/src/gpu.rs | head -26", "description": "Read kernel loading and KvGpu fields"}`
+
+  ```
+let nom_q4k = std::ffi::CString::new("proj_q4k_warp").unwrap();
+            let mut f_q4k_warp: *mut c_void = std::ptr::null_mut();
+            let rc = cuModuleGetFunction(&mut f_q4k_warp, module, nom_q4k.as_ptr());
+            if rc != 0 {
+                eprintln!("{}", erreur(rc, "fonction proj_q4k_warp"));
+                return None;
+            }
+            let nom_q6k = std::ffi::CString::new("proj_q6k_warp").unwrap();
+            let mut f_q6k_warp: *mut c_void = std::ptr::null_mut();
+            let rc = cuModuleGetFunction(&mut f_q6k_warp, module, nom_q6k.as_ptr());
+            if rc != 0 {
+                eprintln!("{}", erreur(rc, "fonction proj_q6k_warp"));
+                return None;
+            }
+            let nom_p = std::ffi::CString::new("attn_kv_partiels").unwrap();
+            let mut f_attn_part: *mut c_void = std::ptr::null_mut();
+            let rc = cuModuleGetFunction(&mut f_attn_part, module, nom_p.as_ptr());
+            if rc != 0 {
+                eprintln!("{}", erreur(rc, "fonction attn_kv_partiels"));
+                return None;
+            }
+            let nom_r = std::ffi::CString::new("attn_kv_recombine").unwrap();
+            let mut f_attn
+… [1747 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat drave-core/gpu/compiler.sh; grep -n \"include_str\\|\\.ptx\" drave-core/src/gpu.rs | head -5", "description": "Check PTX embedding and build"}`
+
+  ```
+#!/bin/bash
+# Compile les noyaux en PTX — la chaîne qui marche sur cette machine.
+#
+# nvcc refuse gcc 15/16 (conflit d'en-têtes glibc) ; on passe donc par le
+# backend NVPTX de clang, et le pilote compile le PTX à la volée. Comme aucun
+# en-tête CUDA n'est disponible sans la boîte à outils, les qualificatifs
+# (`__global__`, `__shared__`, …) viennent de `cuda_stub.h` — c'est la seule
+# pièce à maintenir si les noyaux grossissent.
+set -e
+cd "$(dirname "$0")"
+BUILTINS="$(clang -print-resource-dir)/include/__clang_cuda_builtin_vars.h"
+clang++ -x cuda --cuda-device-only --cuda-gpu-arch=sm_75 -nocudalib -nocudainc \
+    -O3 -S -include "$BUILTINS" -include cuda_stub.h -o drave_gpu.ptx drave_gpu.cu
+echo "drave_gpu.ptx régénéré ($(grep -c '' drave_gpu.ptx) lignes)"
+grep -c 'visible .entry' drave_gpu.ptx | xargs echo "noyaux exportés :"
+39:const PTX: &str = include_str!("../gpu/drave_gpu.ptx");
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat >> drave-core/gpu/drave_gpu.cu <<'EOF'\n\n// ---------------------------------------------------------------------------\n// SCORES d'attention, SANS softmax ni valeurs — le premier des trois noyaux du\n// top-k (docs/plan-gpu-to … [3803 caractères tronqués]`
+
+  ```
+drave_gpu.ptx régénéré (6820 lignes)
+noyaux exportés : 10
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n 470,500p drave-core/src/gpu.rs; echo \"=== struct Gpu (champs ff) ===\"; grep -n \"f_attn_part\\|f_attn_recombine\" drave-core/src/gpu.rs | head -6", "description": "Read the kernel launch call"}`
+
+  ```
+&mut p_v as *mut u64 as *mut c_void,
+                &mut p_sv as *mut u64 as *mut c_void,
+                &mut p_q as *mut u64 as *mut c_void,
+                &mut p_part as *mut u64 as *mut c_void,
+                &n_i as *const c_int as *mut c_void,
+                &nsplit_i as *const c_int as *mut c_void,
+                &ctx_i as *const c_int as *mut c_void,
+                &hd_i as *const c_int as *mut c_void,
+                &nb_i as *const c_int as *mut c_void,
+                &mut rep_c as *mut c_int as *mut c_void,
+                &mut bits_c as *mut c_int as *mut c_void,
+                &mut scale_c as *mut f32 as *mut c_void,
+            ];
+            let rc = cuLaunchKernel(self.f_attn_part, m.n_kv as c_uint, nsplit as c_uint, 1,
+                                    fils, 1, 1, partage, std::ptr::null_mut(),
+                                    params2.as_mut_ptr(), std::ptr::null_mut());
+            if rc != 0 {
+                eprintln!("{}", erreur(rc, "lancement attn_kv_partiels"));
+                return false;
+            }
+            let mut p_sinks = m.sinks_dev;
+            if let Some(s) = sinks {
+                if m.sinks_cap < s.len() {
+                   
+… [842 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/gpu.rs'; s=open(p).read()\ndef rem(nom, v, n):\n    global s\n    c = s.count(v)\n    if c != 1:\n        print(f\"  ✗ {nom} : {c}\"); return False\n    s = s.replace(v, n); print(f\"  ✓ {nom}\");  … [5239 caractères tronqués]`
+
+  ```
+✓ champ
+  ✓ chargement
+  ✓ init
+  ✓ méthode
+  ✓ champs de tampon
+FFI écrit
+error[E0063]: missing fields `scores_cap` and `scores_dev` in initializer of `KvGpu`
+   --> src/gpu.rs:336:21
+    |
+336 |         let mut m = KvGpu { k: 0, v: 0, sk: 0, sv: 0, n_kv, ctx, capacite: 0, hd, nb, bits,
+    |                     ^^^^^ missing `scores_cap` and `scores_dev`
+
+warning: unused variable: `arch`
+    --> src/model.rs:1393:21
+     |
+--
+error: could not compile `drave-core` (bin "drave") due to 1 previous error; 11 warnings emitted
+error: could not compile `drave-core` (bin "drave") due to 1 previous error; 11 warnings emitted
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n 334,340p drave-core/src/gpu.rs; python3 - <<'PY'\np='drave-core/src/gpu.rs'; s=open(p).read()\nv = \"\"\"        let mut m = KvGpu { k: 0, v: 0, sk: 0, sv: 0, n_kv, ctx, capacite: 0, hd, nb, bits,\"\"\"\nassert s.count(v) == 1 … [454 caractères tronqués]`
+
+  ```
+// Première tranche : de quoi couvrir un préremplissage courant. Le
+        // reste s'ajoute par doublement, à la demande.
+        let mut m = KvGpu { k: 0, v: 0, sk: 0, sv: 0, n_kv, ctx, capacite: 0, hd, nb, bits,
+                            octets: 0, q_dev: 0, part_dev: 0, out_dev: 0, sinks_dev: 0,
+                            q_cap: 0, part_cap: 0, out_cap: 0, sinks_cap: 0 };
+        if !self.kv_assurer(&mut m, ctx.min(2048)) { return None; }
+        Some(m)
+initialiseur complété
+    Finished `release` profile [optimized] target(s) in 0.01s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n \"$(grep -n 'fn run_banc_kv' drave-core/src/main.rs | cut -d: -f1),+70p\" drave-core/src/main.rs | grep -n \"kv_creer\\|kv_ecrire\\|KvGpu\\|machine\\|machines()\\|cache\\.\" | head -14", "description": "Find mirror setup in ba … [7 caractères tronqués]`
+
+  ```
+59:            cache.ecrire(kvh, pos, &k, &v);
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"fn kv_creer\\|fn kv_ecrire_tranche\\|fn kv_vers_gpu\\|KvGpu\" drave-core/src/gpu.rs | head -8; echo \"=== usage dans model.rs ===\"; sed -n 1285,1300p drave-core/src/model.rs", "description": "Find the mirror creation API"}`
+
+  ```
+70:pub struct KvGpu {
+331:    pub fn kv_allouer(&self, n_kv: usize, ctx: usize, hd: usize, bits: u32) -> Option<KvGpu> {
+336:        let mut m = KvGpu { k: 0, v: 0, sk: 0, sv: 0, n_kv, ctx, capacite: 0, hd, nb, bits,
+346:    pub fn kv_assurer(&self, m: &mut KvGpu, besoin: usize) -> bool {
+400:    pub fn kv_ecrire_tranche(&self, m: &mut KvGpu, kvh: usize, pos0: usize, t: usize,
+429:    pub fn kv_ecrire(&self, m: &mut KvGpu, kvh: usize, pos: usize,
+442:    pub fn attn_scores(&self, m: &mut KvGpu, q: &[f32], n: usize, scale: f32,
+504:    pub fn attn_kv(&self, m: &mut KvGpu, q: &[f32], n: usize, scale: f32,
+=== usage dans model.rs ===
+                                      &self.sv[sb..sb + t * self.nb])
+        }
+    }
+
+    /// Un seul vecteur.
+    pub fn vers_gpu(&self, machine: &crate::gpu::Gpu, m: &mut crate::gpu::KvGpu,
+                    kvh: usize, pos: usize) -> bool {
+        self.vers_gpu_tranche(machine, m, kvh, pos, 1)
+    }
+
+    /// Recopie vers la VRAM les `t` positions nouvellement écrites de la couche
+    /// `l`. Silencieux quand aucun miroir n'est installé.
+    pub fn miroir_gpu(miroirs: Option<&mut [(usize, crate::gpu::KvGpu)]>, l: usize,
+                      kvc: &
+… [161 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/main.rs'; s=open(p).read()\ndef rem(nom, v, n):\n    global s\n    c = s.count(v)\n    if c != 1:\n        print(f\"  ✗ {nom} : {c}\"); return False\n    s = s.replace(v, n); print(f\"  ✓ {nom}\"); … [5527 caractères tronqués]`
+
+  ```
+✓ option
+  ✓ champ
+  ✓ aiguillage
+  ✓ mode listé
+  ✓ fonction
+banc --banc-topk écrit
+    Finished `release` profile [optimized] target(s) in 0.01s
+  ```
+
+### 🤖 Assistant
+
+Le noyau et son banc compilent. Moment de vérité : les scores GPU contre la référence CPU.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && DRAVE_GPU=1 timeout 300 ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf --banc-topk 256 2>&1 | grep -vE \"^\\[attention\\]\" | tail -8; date +\"%H:%M:%S\"", "description": "Run the scores bench", "timeoutMs": 400000}`
+
+  ```
+CUDA fonction attn_scores : CUDA_ERROR_NOT_FOUND (500)
+[gpu] périphérique 1 indisponible, essai du suivant
+CUDA fonction attn_scores : CUDA_ERROR_NOT_FOUND (500)
+[gpu] périphérique 0 indisponible, essai du suivant
+CUDA fonction attn_scores : CUDA_ERROR_NOT_FOUND (500)
+CUDA cuDeviceGet : CUDA_ERROR_INVALID_DEVICE (101)
+CUDA cuDeviceGet : CUDA_ERROR_INVALID_DEVICE (101)
+GPU absent : banc terminé
+17:43:50
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -c \"attn_scores\" drave-core/gpu/drave_gpu.ptx; echo \"--- dans le binaire ? ---\"; grep -c \"attn_scores\" drave-core/target/release/drave 2>/dev/null || echo \"absent du binaire\"; ls -la --time-style=+%H:%M:%S drave-core/gpu … [143 caractères tronqués]`
+
+  ```
+25
+--- dans le binaire ? ---
+28
+17:42:09 drave-core/gpu/drave_gpu.ptx
+17:43:42 drave-core/target/release/drave
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"visible .entry\" drave-core/gpu/drave_gpu.ptx | head -12; echo \"--- ce que dit le PTX pour attn_scores ---\"; grep -n \"attn_scores\" drave-core/gpu/drave_gpu.ptx | head -6", "description": "Inspect PTX entry names"}`
+
+  ```
+14:.visible .entry tete_q8(
+191:.visible .entry proj_q8(
+371:.visible .entry tete_q8_warp(
+586:.visible .entry proj_q8_warp(
+804:.visible .entry proj_mxfp4_warp(
+1164:.visible .entry proj_q4k_warp(
+2017:.visible .entry proj_q6k_warp(
+4605:.visible .entry attn_kv_partiels(
+6272:.visible .entry attn_kv_recombine(
+6509:.visible .entry _Z11attn_scoresPKvPKfS2_Pfiiiiiif(
+--- ce que dit le PTX pour attn_scores ---
+6508:	// .globl	_Z11attn_scoresPKvPKfS2_Pfiiiiiif // -- Begin function _Z11attn_scoresPKvPKfS2_Pfiiiiiif
+6509:.visible .entry _Z11attn_scoresPKvPKfS2_Pfiiiiiif(
+6510:	.param .u64 .ptr .align 1 _Z11attn_scoresPKvPKfS2_Pfiiiiiif_param_0,
+6511:	.param .u64 .ptr .align 1 _Z11attn_scoresPKvPKfS2_Pfiiiiiif_param_1,
+6512:	.param .u64 .ptr .align 1 _Z11attn_scoresPKvPKfS2_Pfiiiiiif_param_2,
+6513:	.param .u64 .ptr .align 1 _Z11attn_scoresPKvPKfS2_Pfiiiiiif_param_3,
+  ```
+
+### 🤖 Assistant
+
+Le noyau est sorti **manglé** (`_Z11attn_scores…`) : je l'ai ajouté après le bloc `extern "C"` du fichier. Correction d'une ligne.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && head -12 drave-core/gpu/drave_gpu.cu | grep -n \"extern\" ; python3 - <<'PY'\np='drave-core/gpu/drave_gpu.cu'; s=open(p).read()\nv = \"\"\"__global__ void attn_scores(const void* __restrict__ kdata,\"\"\"\nassert s.count(v) == 1\ns = … [895 caractères tronqués]`
+
+  ```
+extern "C" ajouté
+drave_gpu.ptx régénéré (6820 lignes)
+noyaux exportés : 10
+1
+    Finished `release` profile [optimized] target(s) in 23.23s
+banc top-k : 256 clés · 2 têtes KV × 64 dim · 7 têtes de requête par tête KV · KV 8 bits
+  CPU  20 fils :     0.25 ms
+  GPU  scores  :     0.07 ms  (3.8× plus rapide)
+  écart max 2.700e-1 sur une dynamique de 2.172e-1 (relatif 1.24e0)
+  → AU-DESSUS du critère du plan (1e-6) : ne pas écrire la sélection avant d'avoir compris
+17:44:39
+  ```
+
+### 🤖 Assistant
+
+Le banc a fait son travail : les scores sont faux (1,24 relatif) — mon noyau écrit les scores **sans l'offset de la tête KV**. Correction.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/gpu/drave_gpu.cu'; s=open(p).read()\nv = \"\"\"            sc[(size_t)warp * n + t0 + lane] = s * scale;\"\"\"\nassert s.count(v) == 1\ns = s.replace(v, \"\"\"            // L'offset de la TÊTE KV est  … [710 caractères tronqués]`
+
+  ```
+offset de tête KV ajouté
+noyaux exportés : 10
+    Finished `release` profile [optimized] target(s) in 23.86s
+banc top-k : 256 clés · 2 têtes KV × 64 dim · 7 têtes de requête par tête KV · KV 8 bits
+  CPU  20 fils :     0.25 ms
+  GPU  scores  :     0.07 ms  (3.8× plus rapide)
+  écart max 2.235e-8 sur une dynamique de 2.172e-1 (relatif 1.03e-7)
+  → conforme au critère du plan (1e-6) : la sélection peut s'appuyer dessus
+17:45:16
+  ```
+
+### 🤖 Assistant
+
+**Scores exacts : écart relatif 1,03e-7** (critère 1e-6 ✓) et 3,8× plus rapide. Je mesure à l'échelle, puis je commit le noyau 1.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for n in 4096 65536 262144; do DRAVE_GPU=1 timeout 900 ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf --banc-topk $n 2>&1 | grep -vE \"^\\[attention\\]|^\\[gpu\\]\" | tail -4 | sed \"s/^/[$n] /\"; done; date +\"%H:%M … [81 caractères tronqués]`
+
+  ```
+[4096]   CPU  20 fils :     3.98 ms
+[4096]   GPU  scores  :     0.46 ms  (8.6× plus rapide)
+[4096]   écart max 2.235e-8 sur une dynamique de 2.172e-1 (relatif 1.03e-7)
+[4096]   → conforme au critère du plan (1e-6) : la sélection peut s'appuyer dessus
+[65536]   CPU  20 fils :    65.29 ms
+[65536]   GPU  scores  :     7.36 ms  (8.9× plus rapide)
+[65536]   écart max 2.235e-8 sur une dynamique de 2.172e-1 (relatif 1.03e-7)
+[65536]   → conforme au critère du plan (1e-6) : la sélection peut s'appuyer dessus
+[262144]   CPU  20 fils :   259.05 ms
+[262144]   GPU  scores  :    27.58 ms  (9.4× plus rapide)
+[262144]   écart max 2.235e-8 sur une dynamique de 2.172e-1 (relatif 1.03e-7)
+[262144]   → conforme au critère du plan (1e-6) : la sélection peut s'appuyer dessus
+17:45:37
+  ```
+
+### 🤖 Assistant
+
+Le noyau n'utilise que **2 blocs** (une grille par tête KV) : le GPU est presque au repos. J'ajoute le découpage en tranches, comme le noyau d'attention complet.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/gpu/drave_gpu.cu'; s=open(p).read()\ndef rem(nom, v, n):\n    global s\n    c = s.count(v)\n    if c != 1:\n        print(f\"  ✗ {nom} : {c}\"); return False\n    s = s.replace(v, n); print(f\"  ✓ {nom … [3632 caractères tronqués]`
+
+  ```
+✓ signature
+  ✓ tranche
+  ✓ boucle
+découpage en tranches écrit
+  ✓ nsplit dans la méthode
+  ✓ params
+  ✓ lancement
+FFI : nsplit passé au noyau
+noyaux exportés : 10
+    Finished `release` profile [optimized] target(s) in 0.01s
+[4096]   CPU  20 fils :     3.98 ms
+[4096]   GPU  scores  :     0.14 ms  (29.3× plus rapide)
+[4096]   écart max 2.235e-8 sur une dynamique de 2.172e-1 (relatif 1.03e-7)
+[4096]   → conforme au critère du plan (1e-6) : la sélection peut s'appuyer dessus
+[262144]   CPU  20 fils :   257.88 ms
+[262144]   GPU  scores  :     6.36 ms  (40.6× plus rapide)
+[262144]   écart max 2.235e-8 sur une dynamique de 2.172e-1 (relatif 1.03e-7)
+[262144]   → conforme au critère du plan (1e-6) : la sélection peut s'appuyer dessus
+17:46:24
+  ```
+
+### 🤖 Assistant
+
+**Noyau 1 terminé : écart 1,03e-7, 40,6× plus rapide que le CPU à 262 144 clés.** Je commit avec son rapport, puis j'attaque la sélection.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-gpu-scores.md <<'EOF'\n# Noyau GPU de scores d'attention — le premier des trois du top-k\n\n**En une ligne** : les scores d'attention se calculent maintenant **en VRAM**, avec\nun écart de **1,03e-7** sur la réf … [4459 caractères tronqués]`

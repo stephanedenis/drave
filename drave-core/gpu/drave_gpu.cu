@@ -594,3 +594,99 @@ __global__ void attn_kv_recombine(const float* __restrict__ part,
 }
 
 }  // extern "C"
+
+// ---------------------------------------------------------------------------
+// SCORES d'attention, SANS softmax ni valeurs — le premier des trois noyaux du
+// top-k (docs/plan-gpu-topk.md). Il reprend la tuile de clés du noyau complet
+// (`attn_kv_partiels`) et écrit les scores `rep × n` au lieu de les consommer :
+// c'est ce que la sélection (noyau 2) doit lire, et ce que le banc compare à la
+// référence CPU.
+//
+// Pourquoi un noyau séparé plutôt qu'un drapeau dans l'autre : le noyau complet
+// calcule les scores PUIS les utilise dans la même boucle, et son état en ligne
+// (max, somme) n'a pas de sens sans les valeurs. Séparer coûte une relecture des
+// clés (la VRAM est rapide) et rend la sélection testable seule.
+//
+// q    : [rep][hd] pour UNE tête KV (le décalage est celui de l'appelant)
+// sc   : [rep][n] — un score par tête de requête et par clé
+// `extern "C"` : sans lui, clang++ MANGELLE le nom (`_Z11attn_scoresPKv…`) et
+// `cuModuleGetFunction("attn_scores")` rend CUDA_ERROR_NOT_FOUND — les autres
+// noyaux du fichier sont dans le bloc `extern "C"` du haut, celui-ci a été ajouté
+// après. Une ligne, et le noyau se trouve.
+extern "C" __global__ void attn_scores(const void* __restrict__ kdata,
+                            const float* __restrict__ kscale,
+                            const float* __restrict__ q,      // [rep][hd]
+                            float* __restrict__ sc,           // [n_kv][rep][n]
+                            int n, int nsplit, int ctx, int hd, int nb,
+                            int rep, int bits, float scale) {
+    extern __shared__ float sh[];
+    float* shQ = sh;                  // rep * hd
+    float* shK = shQ + rep * hd;      // 32 * (hd + 1), tuile rembourrée
+    const int tid = threadIdx.x;
+    const int lane = tid & 31;
+    const int warp = tid >> 5;
+    const int kvh = blockIdx.x;
+    // Tranches : une grille de `n_kv` blocs laissait le GPU au repos (deux blocs
+    // de 224 fils pour 262 144 clés, 1,2 Go/s à peine). Le découpage est celui du
+    // noyau d'attention complet.
+    const int sp = blockIdx.y;
+    const int par_tranche = (n + nsplit - 1) / nsplit;
+    const int debut = sp * par_tranche;
+    const int fin = min(n, debut + par_tranche);
+    for (int i = tid; i < rep * hd; i += blockDim.x) {
+        shQ[i] = q[kvh * rep * hd + i];
+    }
+    __syncthreads();
+    const size_t basekv = (size_t)kvh * ctx;
+    for (int t0 = debut; t0 < fin; t0 += 32) {
+        const int reste = min(32, fin - t0);
+        const int par4 = hd >> 2;
+        for (int idx = tid; idx < reste * par4; idx += blockDim.x) {
+            const int k = idx / par4, ib = idx % par4;
+            const int i = ib << 2;
+            const size_t vec = basekv + t0 + k;
+            float kv[4];
+            if (bits == 8) {
+                const unsigned int q4 = *reinterpret_cast<const unsigned int*>(
+                    reinterpret_cast<const unsigned char*>(kdata) + vec * (size_t)hd + i);
+                const float sk = kscale[vec * nb + (i >> 5)];
+                #pragma unroll
+                for (int j = 0; j < 4; ++j) {
+                    kv[j] = (float)(signed char)((q4 >> (8 * j)) & 0xFFu) * sk;
+                }
+            } else if (bits == 4) {
+                const unsigned char* pk =
+                    reinterpret_cast<const unsigned char*>(kdata) + vec * (size_t)(hd / 2) + (i >> 1);
+                const float sk = kscale[vec * nb + (i >> 5)];
+                #pragma unroll
+                for (int j = 0; j < 4; ++j) {
+                    int qk = (pk[j >> 1] >> (4 * (j & 1))) & 0x0F;
+                    if (qk >= 8) qk -= 16;
+                    kv[j] = (float)qk * sk;
+                }
+            } else {
+                #pragma unroll
+                for (int j = 0; j < 4; ++j) {
+                    kv[j] = reinterpret_cast<const float*>(kdata)[vec * hd + i + j];
+                }
+            }
+            #pragma unroll
+            for (int j = 0; j < 4; ++j) {
+                shK[k * (hd + 1) + i + j] = kv[j];
+            }
+        }
+        __syncthreads();
+        if (lane < reste) {
+            float s = 0.0f;
+            const float* qw = shQ + warp * hd;
+            const float* kl = shK + lane * (hd + 1);
+            #pragma unroll 8
+            for (int i = 0; i < hd; ++i) s += qw[i] * kl[i];
+            // L'offset de la TÊTE KV est indispensable : chaque bloc écrit SA
+            // tranche de `sc`, et sans lui tous les blocs écrasaient la même
+            // (écart relatif 1,24 — c'est le banc qui l'a dit, pas une relecture).
+            sc[((size_t)kvh * rep + warp) * n + t0 + lane] = s * scale;
+        }
+        __syncthreads();   // la tuile partagée va être réécrite au tour suivant
+    }
+}
