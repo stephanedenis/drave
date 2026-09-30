@@ -195,9 +195,11 @@ qui reste est classé par rentabilité mesurée.
    déclarée) n'est qu'une borne basse : une passe à 16 k coûte ~1 h par régime.
 4. ~~**MLA et vision.**~~ **MLA FAIT ET VALIDÉ** (modèle synthétique + référence
    numpy : écart 5,2e-7). **Vision** : première tranche faite et validée
-   (embedding de patchs, écart 5,4e-7) ; restent la rotation 2-D, les 32 couches
-   avec attention locale une sur huit, le projecteur et l'injection des
-   embeddings — inventaire exact des tenseurs dans `docs/plan-mla-vision.md`.
+   : embedding de patchs (5,4e-7 contre numpy) et **projecteur** (fusion 2 × 2 →
+   `mm.0` → GELU → `mm.2`, 1,7e-6) ; restent le MILIEU — rotation 2-D, 32 couches
+   avec attention locale une sur huit, `v.post_ln` — et l'injection des
+   embeddings dans le flux de jetons. Inventaire exact des tenseurs dans
+   `docs/plan-mla-vision.md`.
 5. **Top-k dans le noyau d'attention.** `--attn-topk 256` AMÉLIORE la perplexité
    (234,88 contre 298,56 à 2 048) mais repasse aujourd'hui par le CPU : le noyau
    GPU ne le gère pas.

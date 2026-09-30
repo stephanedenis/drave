@@ -18800,3 +18800,179 @@ accord (bruit de virgule flottante)
 ⏵ Embedding de patchs validé : 5,4e-7 contre la référence numpy
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='docs/plan-mla-vision.md'; s=open(p).read()\nold = \"\"\"### Ce qu'il faut écrire, dans l'ordre\"\"\"\nnew = \"\"\"### ÉTAT : première tranche FAITE et validée (embedding de patchs)\n\n`--banc-vision` fait tourner … [3021 caractères tronqués]`
+
+  ```
+docs et REPRISE
+2ca9e0d Vision : l'embedding de patchs est fait et validé (5,4e-7 contre numpy)
+  ```
+
+### 🤖 Assistant
+
+⏵ Tour 6 : le chemin image a sa première tranche validée
+
+## Fait dans ce tour
+
+**Vision — première tranche implémentée et validée.** `--banc-vision` fait tourner la convolution 14 × 14 du ViT sur une image 28 × 28 déterministe (dégradé + carré central) et écrit les 4 patchs × 1 280 canaux ; `tools/vision_ref.py` refait le **calcul** en numpy à partir des mêmes poids — l'extraction des tenseurs étant vérifiée séparément par `--tensors`. Même partage des rôles que pour MLA, et même résultat :
+
+**écart max relatif 5,4e-7**, le bruit de virgule flottante du moteur.
+
+La tranche est isolée à dessein : si l'embedding de patchs est faux, tout ce qui suit l'est aussi, et le comparer seul évite d'attribuer au modèle une erreur de découpage.
+
+Reste, dans l'ordre et avec l'inventaire exact des tenseurs déjà relevé : la rotation 2-D (mRoPE) des patchs, les 32 couches avec **attention locale une sur huit** (`n_wa_pattern = 8`), `v.post_ln`, le projecteur `mm.0`/`mm.2` (fusion 2 × 2, 5120 = 1280 × 4), et enfin **l'injection des embeddings dans le flux de jetons** — le point d'architecture qui manque au moteur, puisque `forward` part toujours de `token_embd`.
+
+## État général
+
+| # | chantier | état |
+|---|---|---|
+| 1 | aiguille long contexte | ✅ 12/12 sondes |
+| 2 | chemin GPU (vectorisation, experts, lots, tête AVX2, 2 cartes) | ✅ |
+| 3 | mémoire KV (pagination 0,03 Go à 1 M, hypothèse f16 réfutée) | ✅ |
+| 4 | rotation à 16 k (35,18 contre 1 133,02, seuil à 4 ×) | ✅ |
+| 5 | MLA ✅ validé (5,2e-7) · vision ⏳ embedding de patchs validé (5,4e-7), tour à finir | en cours |
+| 6 | hygiène (feuille de route + pièges `QT_GPU*`) | ✅ |
+
+`cargo test` 6/6, portes de non-régression Qwen **19,3885** et gpt-oss **15,1757** intactes (les ajouts MLA/vision sont des chemins séparés), arbre propre.
+
+L'objectif reste **actif** : il ne manque que la suite de la tour de vision, dont chaque étape est décrite dans `docs/plan-mla-vision.md` avec les formes et les biais relevés dans le fichier.
+
+
+## Tour 16
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Réaliser les 6 nouveaux chantiers du projet qtrinet-core, dans l'ordre : (1) relancer le test de l'aiguille sur contexte long (remplissage varié en vrai texte, moins de sondes, réponses plus longues) sur un modèle capable, grâce au préremplissage par lots et au KV déporté ; (2) chemin GPU : dépaquetage vectorisé du noyau d'attention (13,2 ms/couche à 1 M en int4 vers ~3 ms), brancher MXFP4 dans le moteur avec une politique de résidence des experts, attention par lots sur GPU dans forward_lot, noyau de tête Q8_0 accéléré (AVX2 ou déport), et usage du second GPU ; (3) mémoire : pagination du cache KV côté CPU (25,77 Go réservés à ctx 1 M pour 512 jetons écrits) et test de l'hypothèse « clés en f16 avant quantification » pour l'écart int8 avec llama.cpp à 8 192 (+3,0 % contre +0,8 %) ; (4) rotation au-delà de 5 120 jetons (passe à 16 k) ; (5) structurel : MLA (aucun modèle local — construire un modèle MLA synthétique et valider contre une référence indépendante) et vision (poids Qwen2.5-VL et projecteur mmproj présents) ; (6) hygiène : réécrire la section « Ce qu'il faut faire ensuite » de REPRISE.md et y consigner les pièges QT_GPU/QT_GPU_TETE/QT_GPU_KV. Chaque chantier doit être implémenté, mesuré (portes de non-régression Qwen 19,3885 et gpt-oss 15,1757 sans QT_GPU), documenté dans le dépôt et commité."
+Round: 7/30
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Vision : deuxième tranche — le projecteur (fusion 2×2 + mm.0/mm.2)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='qtrinet-core/src/main.rs'; s=open(p).read()\nold = \"\"\"    let norme: f32 = out.iter().map(|v| v * v).sum::<f32>().sqrt();\"\"\"\nnew = \"\"\"    // ---- Projecteur : fusion 2 × 2 des patchs puis mm.0 → GELU →  … [5009 caractères tronqués]`
+
+  ```
+banc et référence étendus au projecteur
+error[E0382]: borrow of moved value: `h`
+   --> src/main.rs:931:23
+    |
+905 |         let mut h = vec![0f32; n0];
+    |             ----- move occurs because `h` has type `Vec<f32>`, which does not implement the `Copy` trait
+...
+930 |         proj = Some((h, y));
+--
+error: could not compile `qtrinet-core` (bin "qtrinet-core") due to 1 previous error; 10 warnings emitted
+error: could not compile `qtrinet-core` (bin "qtrinet-core") due to 1 previous error; 10 warnings emitted
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && python3 - <<'PY'\np='src/main.rs'; s=open(p).read()\ns = s.replace(\"\"\"        proj = Some((h, y));\n        let _ = (&mut h.clone(), &proj);\"\"\",\n\"\"\"        proj = Some((h, y));\"\"\", 1)\ns = s.replace(\"\"\"   … [371 caractères tronqués]`
+
+  ```
+emprunt corrigé
+    Finished `release` profile [optimized] target(s) in 0.01s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 900 ./qtrinet-core/target/release/qtrinet-core /home/stephane/FastNVMe/models/mmproj-Qwen2.5-VL-7B-Instruct-f16.gguf --banc-vision /tmp/vision_patch.bin 2>&1 | tail -3 && python3 tools/vision_ref.py /tmp/vision_patch.bin 2>&1 … [84 caractères tronqués]`
+
+  ```
+projecteur : 3584 valeurs, |sortie| = 17.8837, 4 premières [-0.3701, 0.2001, 0.2074, 0.12]
+4 patchs × 1280 canaux écrits dans /tmp/vision_patch.bin (|sortie| = 6.7559)
+premier patch, 4 premiers canaux : [-0.02613, -0.04087, 0.04828, -0.08782]
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/vision_ref.py", line 57, in main
+    h = 0.5 * h * (1.0 + erf(h / np.sqrt(2.0)))   # GELU exact
+                         ~~~^^^^^^^^^^^^^^^^^^
+TypeError: only 0-dimensional arrays can be converted to Python scalars
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='qtrinet-core/src/main.rs'; s=open(p).read()\n# écrire la sortie du projecteur À LA SUITE des patchs, dans le même fichier\ns = s.replace(\"\"\"    for v in out.iter() { f.write_all(&v.to_le_bytes()).unwrap(); }\" … [1453 caractères tronqués]`
+
+  ```
+écriture et erf corrigés
+error: could not compile `qtrinet-core` (bin "qtrinet-core") due to 1 previous error; 9 warnings emitted
+projecteur : mm.0 5120→5120 · mm.2 5120→3584
+projecteur : 3584 valeurs, |sortie| = 17.8837, 4 premières [-0.3701, 0.2001, 0.2074, 0.12]
+écart max relatif : 5.367e-07
+projecteur : référence 3584 valeurs, moteur 0
+accord (bruit de virgule flottante)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && cargo build --release 2>&1 | grep -E \"^error\" -A8 | head -14", "description": "Show build error", "timeoutMs": 300000}`
+
+  ```
+error[E0425]: cannot find value `proj` in this scope
+   --> src/main.rs:877:27
+    |
+877 |     if let Some((_, y)) = proj.as_ref() {
+    |                           ^^^^ not found in this scope
+
+warning: variant `Q4_K` should have an upper camel case name
+   --> src/list.rs:572:40
+    |
+--
+error: could not compile `qtrinet-core` (bin "qtrinet-core") due to 1 previous error; 9 warnings emitted
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && python3 - <<'PY'\np='src/main.rs'; s=open(p).read()\ns = s.replace(\"\"\"    let mut proj: Option<(Vec<f32>, Vec<f32>)> = None;\n    let _ = &proj;\"\"\", \"\"\"    let _ = &proj;\"\"\", 1)\ns = s.replace(\"\"\"    let m … [789 caractères tronqués]`
+
+  ```
+déclaration déplacée avant l'écriture
+    Finished `release` profile [optimized] target(s) in 0.01s
+2
+projecteur : référence 3584 valeurs, moteur 0
+accord (bruit de virgule flottante)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && python3 - <<'PY'\np='src/main.rs'; s=open(p).read()\ndeb = s.index(\"    // ---- Projecteur : fusion 2 × 2 des patchs\")\nfin = s.index(\"    let norme: f32 = out.iter().map(|v| v * v).sum::<f32>().sqrt();\")\nbloc = s[d … [702 caractères tronqués]`
+
+  ```
+bloc projecteur déplacé AVANT l'écriture
+error[E0425]: cannot find value `proj` in this scope
+   --> src/main.rs:880:14
+    |
+880 |     let _ = &proj;
+    |              ^^^^ not found in this scope
+
+error[E0425]: cannot find value `proj` in this scope
+   --> src/main.rs:916:9
+    |
+916 |         proj = Some((h, y));
+error: could not compile `qtrinet-core` (bin "qtrinet-core") due to 2 previous errors; 9 warnings emitted
+projecteur : 3584 valeurs, |sortie| = 17.8837, 4 premières [-0.3701, 0.2001, 0.2074, 0.12]
+écart max relatif : 5.367e-07
+projecteur : référence 3584 valeurs, moteur 0
+accord (bruit de virgule flottante)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && python3 - <<'PY'\np='src/main.rs'; s=open(p).read()\ns = s.replace(\"    let _ = &proj;\\n\", \"\", 1)\n# une seule déclaration, au début de la fonction\ns = s.replace(\"\"\"    let (cout, cin, ky, kx) = (t.dims[0] as us … [908 caractères tronqués]`
+
+  ```
+déclarations de proj : 1
+    Finished `release` profile [optimized] target(s) in 0.01s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 900 ./qtrinet-core/target/release/qtrinet-core /home/stephane/FastNVMe/models/mmproj-Qwen2.5-VL-7B-Instruct-f16.gguf --banc-vision /tmp/vision_patch.bin 2>&1 | grep \"projecteur :\" | tail -1 && python3 tools/vision_ref.py /t … [111 caractères tronqués]`
+
+  ```
+projecteur : 3584 valeurs, |sortie| = 17.8837, 4 premières [-0.3701, 0.2001, 0.2074, 0.12]
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/vision_ref.py", line 32, in main
+    eng = np.frombuffer(f.read(), dtype=np.float32).reshape(int(n_patch), int(cout))
+ValueError: cannot reshape array of size 8705 into shape (4,1280)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='tools/vision_ref.py'; s=open(p).read()\ns = s.replace(\"\"\"        eng = np.frombuffer(f.read(), dtype=np.float32).reshape(int(n_patch), int(cout))\"\"\",\n\"\"\"        npatch, ncan = int(n_patch), int(cout)\n  … [706 caractères tronqués]`
+
+  ```
+lecture bornée
+patchs (4, 1280) · |référence| max 1.7769
+écart max relatif : 5.367e-07
+projecteur : 3584 valeurs · écart max relatif 1.732e-06
+accord (bruit de virgule flottante)
+  ```
+
+### 🤖 Assistant
+
+⏵ Les deux extrémités du chemin image sont validées (patchs et projecteur)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='docs/plan-mla-vision.md'; s=open(p).read()\nold = \"\"\"### ÉTAT : première tranche FAITE et validée (embedding de patchs)\"\"\"\nnew = \"\"\"### ÉTAT : les DEUX EXTRÉMITÉS du chemin image sont faites et validées … [2918 caractères tronqués]`

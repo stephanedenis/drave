@@ -803,6 +803,17 @@ fn mdl_cfg_vocab(path: &str) -> Option<usize> {
 /// mesure (23 → 159 ms) : sans un banc isolé, on ne sait pas si un changement
 /// de noyau aide, la mesure par jeton mélangeant tête, attention et
 /// échantillonnage.
+/// Erreur de Gauss, approximation d'Abramowitz-Stegun 7.1.26 (|erreur| < 1,5e-7,
+/// ce qui suffit pour un GELU comparé à 1e-5 près).
+fn erf(x: f32) -> f32 {
+    let signe = if x < 0.0 { -1.0 } else { 1.0 };
+    let x = x.abs();
+    let t = 1.0 / (1.0 + 0.3275911 * x);
+    let y = 1.0 - (((((1.061405429 * t - 1.453152027) * t) + 1.421413741) * t
+                    - 0.284496736) * t + 0.254829592) * t * (-x * x).exp();
+    signe * y
+}
+
 /// **Première tranche du chemin image** : l'embedding de patchs.
 ///
 /// Le ViT de Qwen2.5-VL commence par une convolution 14 × 14 sur une image
@@ -821,6 +832,7 @@ fn run_banc_vision(sortie: &str) {
     // dims du moteur : (sortie, entrée, ky, kx)
     let (cout, cin, ky, kx) = (t.dims[0] as usize, t.dims[1] as usize,
                                t.dims[2] as usize, t.dims[3] as usize);
+    let mut proj: Option<(Vec<f32>, Vec<f32>)> = None;
     println!("v.patch_embd.weight : sortie {cout} · entrée {cin} · noyau {ky}×{kx}");
     let w = g.dequant("v.patch_embd.weight");
     assert_eq!(w.len(), cout * cin * ky * kx, "poids de patch inattendus");
@@ -859,10 +871,59 @@ fn run_banc_vision(sortie: &str) {
             }
         }
     }
+    // ---- Projecteur : fusion 2 × 2 des patchs puis mm.0 → GELU → mm.2.
+    // La fusion est en ordre RASTER (les quatre patchs d'un groupe de 2 × 2
+    // concaténés ligne par ligne) : c'est la convention de llama.cpp, et c'est
+    // la seule hypothèse non vérifiable ici — elle ne se confirmerait qu'en
+    // comparant la SORTIE complète à une implémentation de référence.
+    let mut fusion = vec![0f32; n_patch * cout];
+    fusion.copy_from_slice(&out);
+    if let (Some(t0), Some(t2)) = (g.tensor("mm.0.weight"), g.tensor("mm.2.weight")) {
+        let (n0, n1) = (t0.dims[0] as usize, t0.dims[1] as usize);
+        let (n2, n3) = (t2.dims[0] as usize, t2.dims[1] as usize);
+        let w0 = g.dequant("mm.0.weight");
+        let b0 = g.dequant("mm.0.bias");
+        let w2 = g.dequant("mm.2.weight");
+        let b2 = g.dequant("mm.2.bias");
+        println!("projecteur : mm.0 {n1}→{n0} · mm.2 {n3}→{n2}");
+        // GELU exact (erf), comme dans la tour de vision.
+        let gelu = |x: f32| 0.5 * x * (1.0 + erf(x / std::f32::consts::SQRT_2));
+        let mut h = vec![0f32; n0];
+        for o in 0..n0 {
+            let mut acc = b0[o];
+            for i in 0..n1 { acc += w0[o * n1 + i] * fusion[i]; }
+            h[o] = gelu(acc);
+        }
+        let mut y = vec![0f32; n2];
+        for o in 0..n2 {
+            let mut acc = b2[o];
+            for i in 0..n3 { acc += w2[o * n3 + i] * h[i]; }
+            y[o] = acc;
+        }
+        {
+            let mut f2 = std::io::BufWriter::new(
+                std::fs::File::create(format!("{sortie}.projecteur")).expect("création"));
+            for v in [(n0 as i32), (n1 as i32), (n2 as i32), (n3 as i32)] {
+                f2.write_all(&v.to_le_bytes()).unwrap();
+            }
+            for v in w0.iter().chain(b0.iter()).chain(w2.iter()).chain(b2.iter()) {
+                f2.write_all(&v.to_le_bytes()).unwrap();
+            }
+        }
+        println!("projecteur : {n2} valeurs, |sortie| = {:.4}, 4 premières {:?}",
+                 y.iter().map(|v| v * v).sum::<f32>().sqrt(),
+                 &y[..4].iter().map(|v| (v * 1e4).round() / 1e4).collect::<Vec<_>>());
+        proj = Some((h, y));
+    }
+
     let mut f = std::io::BufWriter::new(std::fs::File::create(sortie).expect("création"));
     f.write_all(&(n_patch as i32).to_le_bytes()).unwrap();
     f.write_all(&(cout as i32).to_le_bytes()).unwrap();
     for v in out.iter() { f.write_all(&v.to_le_bytes()).unwrap(); }
+    if let Some((_, y)) = proj.as_ref() {
+        f.write_all(&(y.len() as i32).to_le_bytes()).unwrap();
+        for v in y.iter() { f.write_all(&v.to_le_bytes()).unwrap(); }
+    }
     // Les poids partent à côté : la référence numpy refait le CALCUL, pas
     // l'extraction du GGUF (la lecture des tenseurs est vérifiée par --tensors).
     {

@@ -172,7 +172,25 @@ image peut se construire sur ce fichier seul, sans le modèle de langage.
 l'attention est locale** — il faut la même fenêtre que llama.cpp, sinon les
 embeddings d'image divergent sans que rien ne le signale.
 
-### ÉTAT : première tranche FAITE et validée (embedding de patchs)
+### ÉTAT : les DEUX EXTRÉMITÉS du chemin image sont faites et validées
+
+| tranche | écart max relatif contre numpy |
+|---|---|
+| embedding de patchs (convolution 14 × 14) | **5,37e-07** |
+| projecteur (fusion 2 × 2 → `mm.0` → GELU → `mm.2`) | **1,73e-06** |
+
+Le projecteur consomme les quatre patchs d'un groupe 2 × 2 concaténés en ordre
+raster, applique `mm.0` (5120 → 5120) + biais, un GELU exact, puis `mm.2`
+(5120 → 3584) + biais : 3 584 valeurs, |sortie| = 17,88. La référence numpy
+utilise la MÊME approximation d'erf que le moteur (Abramowitz-Stegun 7.1.26) :
+comparer deux formules différentes mesurerait l'approximation, pas
+l'implémentation.
+
+Ce qui reste est le MILIEU : la rotation 2-D des patchs (mRoPE), les 32 couches
+avec attention locale une sur huit, `v.post_ln`. Puis l'injection des embeddings
+dans le flux de jetons, qui manque au moteur.
+
+### Détail de la première tranche (embedding de patchs)
 
 `--banc-vision` fait tourner la convolution 14 × 14 du ViT sur une image 28 × 28
 déterministe (dégradé + carré central) et écrit les 4 patchs × 1 280 canaux ;

@@ -6,13 +6,13 @@
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
 | Durée | 30.1 h |
-| Tours | 15 |
-| Messages | 1182 |
-| Appels d'outils | 1160 |
+| Tours | 16 |
+| Messages | 1195 |
+| Appels d'outils | 1171 |
 | Fichiers touchés | 38 |
-| Commandes | 893 |
+| Commandes | 904 |
 | Sous-agents | 1 |
-| Commits | 48 |
+| Commits | 49 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -55,6 +55,8 @@
 **Tour 14** — <goal_round> Objective: "Réaliser les 6 nouveaux chantiers du projet qtrinet-core, dans l'ordre : (1) relancer le test de l'aiguille sur contexte long (remplissage varié en vrai texte, moins de sondes, réponses plus longues) sur un modèle capable, grâce au préremplissage par lots et au KV déporté ; (2) chemin GPU : dépaquetage vectorisé du noyau d'attention (13,2 ms/couche à 1 M en int4 vers ~3 ms … [1491 caractères tronqués]
 
 **Tour 15** — <goal_round> Objective: "Réaliser les 6 nouveaux chantiers du projet qtrinet-core, dans l'ordre : (1) relancer le test de l'aiguille sur contexte long (remplissage varié en vrai texte, moins de sondes, réponses plus longues) sur un modèle capable, grâce au préremplissage par lots et au KV déporté ; (2) chemin GPU : dépaquetage vectorisé du noyau d'attention (13,2 ms/couche à 1 M en int4 vers ~3 ms … [1491 caractères tronqués]
+
+**Tour 16** — <goal_round> Objective: "Réaliser les 6 nouveaux chantiers du projet qtrinet-core, dans l'ordre : (1) relancer le test de l'aiguille sur contexte long (remplissage varié en vrai texte, moins de sondes, réponses plus longues) sur un modèle capable, grâce au préremplissage par lots et au KV déporté ; (2) chemin GPU : dépaquetage vectorisé du noyau d'attention (13,2 ms/couche à 1 M en int4 vers ~3 ms … [1491 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -701,7 +703,52 @@ L'objectif reste **actif** pour ce dernier morceau : le prochain tour peut attaq
 
 **Synthèse produite :**
 
-⏵ Embedding de patchs validé : 5,4e-7 contre la référence numpy
+⏵ Tour 6 : le chemin image a sa première tranche validée
+
+\## Fait dans ce tour
+
+**Vision — première tranche implémentée et validée.** `--banc-vision` fait tourner la convolution 14 × 14 du ViT sur une image 28 × 28 déterministe (dégradé + carré central) et écrit les 4 patchs × 1 280 canaux ; `tools/vision_ref.py` refait le **calcul** en numpy à partir des mêmes poids — l'extraction des tenseurs étant vérifiée séparément par `--tensors`. Même partage des rôles que pour MLA, et même résultat :
+
+**écart max relatif 5,4e-7**, le bruit de virgule flottante du moteur.
+
+La tranche est isolée à dessein : si l'embedding de patchs est faux, tout ce qui suit l'est aussi, et le comparer seul évite d'attribuer au modèle une erreur de découpage.
+
+Reste, dans l'ordre et avec l'inventaire exact des tenseurs déjà relevé : la rotation 2-D (mRoPE) des patchs, les 32 couches avec **attention locale une sur huit** (`n_wa_pattern = 8`), `v.post_ln`, le projecteur `mm.0`/`mm.2` (fusion 2 × 2, 5120 = 1280 × 4), et enfin **l'injection des embeddings dans le flux de jetons** — le point d'architecture qui manque au moteur, puisque `forward` part toujours de `token_embd`.
+
+\## État général
+
+| # | chantier | état |
+|---|---|---|
+| 1 | aiguille long contexte | ✅ 12/12 sondes |
+| 2 | chemin GPU (vectorisation, experts, lots, tête AVX2, 2 cartes) | ✅ |
+| 3 | mémoire KV (pagination 0,03 Go à 1 M, hypothèse f16 réfutée) | ✅ |
+| 4 | rotation à 16 k (35,18 contre 1 133,02, seuil à 4 ×) | ✅ |
+| 5 | MLA ✅ validé (5,2e-7) · vision ⏳ embedding de patchs validé (5,4e-7), tour à finir | en cours |
+| 6 | hygiène (feuille de route + pièges `QT_GPU*`) | ✅ |
+
+`cargo test` 6/6, portes de non-régression Qwen **19,3885** et gpt-oss **15,1757** intactes (les ajouts MLA/vision sont des chemins séparés), arbre propre.
+
+L'objectif reste **actif** : il ne manque que la suite de la tour de vision, dont chaque étape est décrite dans `docs/plan-mla-vision.md` avec les formes et les biais relevés dans le fichier.
+
+### Tour 16 — <goal_round> Objective: "Réaliser les 6 nouveaux chantiers du projet qtrinet-core, dans l'ordre : (1) relancer le test d … [1771 caractères tronqués]
+
+*11 appels d'outils.* Actions notables :
+
+- bash — Add projector slice and reference
+- bash — Fix borrow and rebuild
+- bash — Run and validate projector slice
+- bash — Fix output write and erf, revalidate
+- bash — Show build error
+- bash — Fix order, rebuild and validate projector
+- bash — Move projector before write and validate
+- bash — Single declaration at function start
+- bash — Validate projector slice end to end
+- bash — Fix reference reading and validate
+- bash — Document and commit projector validation
+
+**Synthèse produite :**
+
+⏵ Les deux extrémités du chemin image sont validées (patchs et projecteur)
 
 ## 3. Travail accompli
 
@@ -794,7 +841,7 @@ L'objectif reste **actif** pour ce dernier morceau : le prochain tour peut attaq
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 853 autres
+- … et 864 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -922,7 +969,7 @@ L'objectif reste **actif** pour ce dernier morceau : le prochain tour peut attaq
 
 ## 5. Erreurs rencontrées
 
-54 sorties en erreur ou divergentes. Les premières :
+57 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : a8f2635f8 docs: record which models this box is good at, and why src/llama-hparams.cpp:8:void llama_hparams::set_swa_pattern(uint32_t n_pattern, bool dense_first) { src/llama-hparams.h:308:    void se
 - **T1** : 511 tokens notés — perplexité cumulée 247.031  (4.9 tok/s) === perplexité 247.0308 sur 511 tokens (0 événements, 104.5 s) ===  ### B3 harmony assistant 511 --- ref --- 0.0 0.0 0:00 ls: cannot access '
@@ -990,4 +1037,5 @@ L'objectif reste **actif** pour ce dernier morceau : le prochain tour peut attaq
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p='REPRISE.md'; s=open(p).read() old = "| 2 | seuil de rotation YaRN | **fait, seuil corr
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p='docs/plan-mla-vision.md'; s=open(p).read() old = """Les tenseurs sont nommés `v.blk.N.
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p='docs/plan-mla-vision.md'; s=open(p).read() old = """### Ce qu'il faut écrire, dans l'o
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p='docs/plan-mla-vision.md'; s=open(p).read() old = """### ÉTAT : première tranche FAITE 
 
