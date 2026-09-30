@@ -81,6 +81,16 @@ ordre que l'exactitude du noyau 1, donc le *rang* bascule sur des valeurs
 quasiment égales. La comparaison qui compte — le k-ième score des scores GPU
 retrouvé par la descente — est exacte au bit près (écart entier max 0) partout.
 
+### Le second passage, avec un k plus grand
+
+Le banc refait un seuil et une collecte avec **k doublé (512)**, dans le MÊME
+processus, et vérifie l'ensemble contre le CPU : **14/14 lignes identiques**,
+0,45 ms de collecte et 0,27 ms de seuil à 262 144 clés. Ce passage existe pour un
+défaut précis, trouvé à la relecture et pas par un banc : les tampons de la
+collecte n'étaient réalloués que si `(lignes, tranches)` grandissait, donc un `k`
+plus grand gardait un tampon de sortie trop petit et le noyau écrivait **au-delà**
+— un débordement en VRAM silencieux (`t.k < k` est entré dans la condition).
+
 ## Les pièges, payés une fois chacun
 
 * **`atom.shared.add.u32` n'est pas `atom.global.add.u32`** : un atomique global
@@ -99,6 +109,10 @@ retrouvé par la descente — est exacte au bit près (écart entier max 0) part
 * **L'invariant vérifié avant d'écrire** : l'hôte refuse la collecte si le compte
   « au-dessus » ne tombe pas sur `k − besoin`. Un seuil faux écrirait à côté des
   `k` places ; ici il rend `false` avec le détail de la ligne fautive.
+* **Une durée en secondes étiquetée « ms »** : les deux temps du second passage
+  étaient affichés sans conversion et annonçaient un noyau 1 500× trop rapide
+  (0,0004 ms pour 14,7 Mo lus). Un affichage mal étiqueté est un affichage qui
+  ment — et il a bien failli faire chercher un faux défaut dans le noyau.
 
 ## Ce qui reste
 

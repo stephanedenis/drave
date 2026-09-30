@@ -7,10 +7,10 @@
 | Début | 2026-09-30 18:07 |
 | Durée | 0.1 h |
 | Tours | 1 |
-| Messages | 34 |
-| Appels d'outils | 54 |
+| Messages | 36 |
+| Appels d'outils | 57 |
 | Fichiers touchés | 0 |
-| Commandes | 45 |
+| Commandes | 48 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -23,7 +23,7 @@
 
 ### Tour 1 — Tu es VÉRIFICATEUR de documentation dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (moteur d'inférence «  … [3755 caractères tronqués]
 
-*54 appels d'outils.* Actions notables :
+*57 appels d'outils.* Actions notables :
 
 - bash — List repo root and measurement traces
 - bash — Show today's git log
@@ -39,11 +39,11 @@
 - bash — Show recent commits touching sources
 - bash — Diff docs in last commit
 - bash — Find line-count methodology references
-- … et 32 autres
+- … et 35 autres
 
 **Synthèse produite :**
 
-⏵ Recherche de la commande de lancement des portes Qwen
+⏵ Recherche de la commande Q4_0 avec --ppl
 
 ## 3. Travail accompli
 
@@ -94,7 +94,7 @@
 - **T1** Find Q4_0 expected gate value
 - **T1** Find Q4_0 gate value history
 - **T1** Read digest around the 18:00 Q4_0 gate
-- … et 5 autres
+- … et 8 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -198,4 +198,5 @@
 - **T1** `CPU  tri + comptage :    27.12 ms`
 - **T1** `GPU  4 passes d'histogramme :     0.74 ms  (36.5× plus rapide)`
 - **T1** `collecte GPU     0.36 ms · CPU tri complet    16.55 ms (46.1× plus rapide)`
+- **T1** `31489:AUTRES : (3) plafond R4 = par message, pas par session : 8 flux de 35,4 Mo (282,9 Mo cumulés > 256) tous acceptés — mais la RAM ne s'accumule PAS (RSS 593 Mo stable, HWM 698 Mo) ; la vérif du cu`
 

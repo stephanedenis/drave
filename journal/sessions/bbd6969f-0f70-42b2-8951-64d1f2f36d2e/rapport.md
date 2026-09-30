@@ -7,12 +7,12 @@
 | Début | 2026-09-28 14:46 |
 | Durée | 51.4 h |
 | Tours | 47 |
-| Messages | 2114 |
-| Appels d'outils | 1998 |
+| Messages | 2116 |
+| Appels d'outils | 2000 |
 | Fichiers touchés | 47 |
-| Commandes | 1653 |
+| Commandes | 1654 |
 | Sous-agents | 13 |
-| Commits | 174 |
+| Commits | 175 |
 | Compactages de contexte | 3 |
 
 ## Objectifs déclarés
@@ -2177,7 +2177,7 @@ Le mode creux ne peut pas utiliser le miroir VRAM (le chemin GPU est conditionn�
 
 ### Tour 47 — pret pour des scrum de 2h (boxing temps réel, avec revue, rétro et planning)
 
-*143 appels d'outils.* Actions notables :
+*145 appels d'outils.* Actions notables :
 
 - bash — Check clock, machine and last sprint state
 - bash — Create the sprint timing tool
@@ -2193,7 +2193,7 @@ Le mode creux ne peut pas utiliser le miroir VRAM (le chemin GPU est conditionn�
 - bash — Read the kernel launch call
 - bash — Write the FFI for the scores kernel
 - bash — Complete KvGpu initializer
-- … et 123 autres
+- … et 125 autres
 
 **Synthèse produite :**
 
@@ -2311,7 +2311,7 @@ Maintenant la méthode de collecte côté hôte :
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 1613 autres
+- … et 1614 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2633,4 +2633,5 @@ Maintenant la méthode de collecte côté hôte :
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -F - <<'EOF' && git log --oneline -1 Noyau 2a du top-k GPU : histogramme d'oct
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cargo test --release --manifest-path drave-core/Cargo.toml 2>&1 | tail -3 && git add -A && git commit -q -
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cargo test --release --manifest-path drave-core/Cargo.toml 2>&1 | tail -2 && git add -A && git commit -q -
+- Rapport de sélection : le second passage k doublé, et la durée mal étiquetée" && git log --oneline -1
 

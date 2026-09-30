@@ -34109,3 +34109,29 @@ unité corrigée, sondes retirées
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cargo test --release --manifest-path drave-core/Cargo.toml 2>&1 | tail -2 && git add -A && git commit -q -F - <<'EOF' && git log --oneline -1\nCollecte top-k : réallouer quand k GRANDIT, et un banc qui le prouve\n\nDéfaut trouvé à la … [965 caractères tronqués]`
+
+  ```
+test result: ok. 17 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.13s
+
+fa6a4f3 Collecte top-k : réallouer quand k GRANDIT, et un banc qui le prouve
+  ```
+
+- **list_agents** `{}`
+
+  ```
+e7dfe34f-d596-4f98-93c2-cad5a92d3b1e [ready] — Harness logits llama.cpp
+c25f97d1-9a4d-41da-b983-004f793afe43 [ready] — Audit ignored CLI flags
+7d0d2578-0048-4998-8494-7d2daef56769 [ready] — Spec batched prefill protocol
+15fd322f-7e9e-48c0-a970-f36335eb622a [ready] — Trace format compaction study
+bcfe0b97-1795-4610-8e8b-b598ca1ba6cb [ready] — Adversarial review of recent commits
+42059fde-f06f-4e2c-9a23-8292d887fb6e [ready] — Docs vs measurements consistency audit
+7c876089-605c-4836-930e-925a66028509 [ready] — Review the afternoon fixes
+da69b1fa-91b0-4c69-bb2b-58bf00e92e28 [ready] — Spec for lot-in-lists mode 4
+aa5f9fc5-9450-4118-b65f-e8b99a28519d [ready] — Docs audit after today's changes
+5ce3f080-2d3d-467a-8ee1-df697f3f3e68 [ready] — Adversarial review of mode 4
+5185ccb1-be24-4716-89df-62621e790444 [ready] — Review the last-hour fixes
+564fbe3a-a859-4b3b-bd17-4da73a2f4e22 [running] — Adversarial review GPU topk
+8e04c99a-8ba1-4675-9f80-fa3338449b17 [running] — Vérifier chiffres et cohérence docs
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/rapport-gpu-topk-selection.md'; s=open(p).read()\nvieux = \"\"\"## Les pièges, payés une fois chacun\"\"\"\nneuf = \"\"\"### Le second passage, avec un k plus grand\n\nLe banc refait un seuil et une colle … [1763 caractères tronqués]`

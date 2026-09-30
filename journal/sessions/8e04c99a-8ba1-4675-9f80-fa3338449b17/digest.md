@@ -1289,3 +1289,97 @@ restant() { # secondes → « 1 h 07 »
 … [724 caractères tronqués]
   ```
 
+### 🤖 Assistant
+
+⏵ Recherche de la commande de lancement des portes Qwen
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '33220,33265p' journal/sessions/bbd6969f-0f70-42b2-8951-64d1f2f36d2e/digest.md", "description": "Read digest before first portes_qwen check"}`
+
+  ```
+```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '/porte Qwen/,/porte gpt-oss/p' /tmp/portes.log | grep -iE \"perplex|tokens\" | head -5", "description": "Extract Qwen gate perplexity"}`
+
+  ```
+(no output)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '/porte Qwen/,/porte gpt-oss/p' /tmp/portes.log | head -40", "description": "Show Qwen gate output"}`
+
+  ```
+=== porte Qwen2.5-0.5B Q8_0 ctx 256 (attendu 19,3885) ===
+    part de l'attention dans le flux d'événements : 100.0 %
+    postes (ms/token) : projets-attn 3.50 | rope 0.75 | attention 2.19 | proj+mlp 26.94 | somme 33.39 | reste (tête + échantillonnage) 10.40
+    dont tête de sortie 8.41 | notation log-sum-exp 1.94 (le reste du « reste » n'est pas chronométré)
+    dont attention : scores 0.80 | softmax 0.38 | somme pondérée + écriture KV 1.02
+=== porte gpt-oss-120b MXFP4 ctx 256 (attendu 15,1757) ===
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && nohup bash -c '\ncd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\necho \"=== Qwen2.5-0.5B Q8_0 ctx 256 (attendu 19,3885) ===\"\n./drave-core/target/release/
+… [1652 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Lecture de la zone de lancement des portes (digest 33400-33470)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '33435,33480p' journal/sessions/bbd6969f-0f70-42b2-8951-64d1f2f36d2e/digest.md", "description": "Read digest 33435-33480"}`
+
+  ```
+`docs/plan-mode4-lot-listes.md`.
+
+Trois choses apprises en le faisant : la construction de l'en-tête est maintenant
+UNE fonction (`tete_flux`) pour les trois émetteurs (sa duplication avait produit
+l'en-tête d'un octet trop long) ; le serveur ne traitait que le mode 3 dans sa
+branche lot, donc un flux de listes paniquait ; et le refus d'un mode inconnu est
+devenu 
+… [1476 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat /tmp/portes_qwen.log; echo \"=== gpt-oss ===\"; sed -n '/porte gpt-oss/,$p' /tmp/portes.log; uptime; pgrep -c -x drave", "description": "Check gates after load drop"}`
+
+  ```
+=== Qwen2.5-0.5B Q8_0 ctx 256 (attendu 19,3885) ===
+=== gpt-oss ===
+=== porte gpt-oss-120b MXFP4 ctx 256 (attendu 15,1757) ===
+ 17:59:11  up 9 days  7:11,  2 users,  load average: 45,38, 34,42, 21,55
+2
+  ```
+
+- **bash** `{"command": "ps -eo pcpu,etime,comm --sort=-pcpu | head -8", "description": "Top CPU consumers"}`
+
+  ```
+%CPU     ELAPSED COMMAND
+1419       03:24 drave
+1229       04:11 drave
+ 300       00:00 ps
+66.6       00:00 bash
+33.9  9-02:58:31 node-MainThread
+26.6  5-06:03:01 node-MainThread
+19.6  9-03:10:50 plasmashell
+  ```
+… [830 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Recherche de la commande Q4_0 avec --ppl
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 60 grep -n \"ppl.*Q4_0\\|Q4_0.*ppl\\|--q4 \" journal/sessions/bbd6969f-0f70-42b2-8951-64d1f2f36d2e/digest.md | head -12", "description": "Grep for Q4_0 ppl commands"}`
+
+  ```
+4521:- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/REPRISE.md", "new_string": "| modèle | commande (abrégée) | perplexité attendue |\n|---|---|---|\n| Qwen2.5-0.5B Q8_0 | `--dense --limit 512` | **19,3885** |\n| Qwen2.5-0.5B Q4_0 | `--q4 --limit 512` | **21,0110** |\n| Qwen2.5-0.5B Q8_0, … [1937 caractères tronqués]`
+12457:- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 600 ./qtrinet-core/target/release/qtrinet-core /home/stephane/FastNVMe/models/qwen2.5-0.5b-instruct-q4_k_m.gguf --ppl /tmp/ids_qwen.txt --ctx 512 --limit 512 --q4 --threads 16 --lot 1 2>&1 | tail -6", "description": "Run Q4_K … [52 caractères tronqués]`
+25998:Ce qui est correct : --abits/--act-thresh/--act-topk/--act-renorm partout (correctif récent OK) ; --pin et --bits globaux dans analyser (516-517) ; les réglages d'activation voyagent dans le flux (principe bon, liste incomplète) ; --ppl-texte/--depuis/--trace-flux+--lot/--patch/--q4 en I et P.
+31489:AUTRES : (3) plafond R4 = par message, pas par session : 8 flux de 35,4 Mo (282,9 Mo cumulés > 256) tous acceptés — mais la RAM ne s'accumule PAS (RSS 593 Mo stable, HWM 698 Mo) ; la vérif du cumul 
+… [1691 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 60 grep -n \"Q4_0 ctx 256\" journal/sessions/bbd6969f-0f70-42b2-8951-64d1f2f36d2e/rapport.md journal/sessions/bbd6969f-0f70-42b2-8951-64d1f2f36d2e/digest.md 2>/dev/null | head", "description": "Find Q4_0 ctx header origin"}`
+
+  ```
+journal/sessions/bbd6969f-0f70-42b2-8951-64d1f2f36d2e/digest.md:33509:=== Qwen2.5-0.5B Q4_0 ctx 256 (attendu 21,01) ===
+journal/sessions/bbd6969f-0f70-42b2-8951-64d1f2f36d2e/digest.md:33528:=== Qwen2.5-0.5B Q4_0 ctx 256 (attendu 21,01) ===
+journal/sessions/bbd6969f-0f70-42b2-8951-64d1f2f36d2e/digest.md:33762:=== Qwen2.5-0.5B Q4_0 ctx 256 (attendu 21,01) ===
+  ```
+
