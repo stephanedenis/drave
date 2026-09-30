@@ -43,7 +43,7 @@ n'est plus lu en entier.
 ### Ce que la mesure impose de dire tout de suite
 
 Le projet ne prétend pas que la sparsité gagne toujours. Le croisement a été
-**mesuré** : en dessous d'environ **10 % de densité**, le push (listes) bat le
+**mesuré** : en dessous d'environ **22 % de densité**, le push (listes) bat le
 pull (matvec dense) ; au-dessus, le dense gagne
 (`reports/rapport-croisement-push-pull.md`). C'est pourquoi le moteur garde **les
 deux chemins** et choisit par la mesure, pas par principe — `--dense` existe, et
@@ -136,7 +136,7 @@ Ce qu'il faut définir, dans l'ordre :
    versionné ;
 2. **la granularité** : par couche ? par bloc de canaux ? par expert ? La mesure
    dira où le coût de sérialisation rattrape le gain de parallélisme — le
-   croisement push/pull à 10 % donne déjà l'ordre de grandeur de ce qu'on
+   croisement push/pull à ~22 % donne déjà l'ordre de grandeur de ce qu'on
    transporte ;
 3. **le placement** : la même règle qu'à l'axe 2, appliquée entre machines — un
    opérateur va là où son entrée est déjà, ou là où elle coûte le moins à
@@ -201,7 +201,7 @@ Les chiffres qui comptent, du point de vue de la vision :
 
 Pour que le document serve à quelque chose, il doit aussi refuser des choses :
 
-* **ce n'est pas « le sparse gagne toujours »** : le croisement à 10 % de densité
+* **ce n'est pas « le sparse gagne toujours »** : le croisement à ~22 % de densité
   est mesuré, et le moteur garde le chemin dense ;
 * **ce n'est pas « un neurone = une décision »** : le profiler montre qu'un petit
   nombre de neurones portent l'essentiel, et qu'un préchargement statique ne paie

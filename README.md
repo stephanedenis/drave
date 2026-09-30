@@ -32,7 +32,7 @@ le journal de sessions, archivé, n'est pas réécrit.
 | **Bilan multi-matériel (CPU / FPGA / GPU)** | ✅ → [`reports/bilan-multi-materiel.md`](reports/bilan-multi-materiel.md) |
 | **Capteur hebbien (apprendre des logs d'activation)** | ✅ mesuré → [`reports/rapport-capteur-hebbien.md`](reports/rapport-capteur-hebbien.md) |
 | **Programme évolutif (journaliser, faire évoluer)** | ✅ évalué → [`reports/rapport-programme-evolutif.md`](reports/rapport-programme-evolutif.md) |
-| **Croisement push/pull à 10 % de densité** | ✅ mesuré → [`reports/rapport-croisement-push-pull.md`](reports/rapport-croisement-push-pull.md) |
+| **Croisement push/pull à ~22 % de densité** | ✅ mesuré → [`reports/rapport-croisement-push-pull.md`](reports/rapport-croisement-push-pull.md) |
 | **Greffon : plomberie d'apprentissage** | ✅ validé → [`reports/rapport-greffon.md`](reports/rapport-greffon.md) |
 | **Journal de sessions automatisé** | ✅ `tools/archive_sessions.py` (hook git + cron) |
 | **Comparaison Spiking (SpikeGPT / Spikformer / Spikingformer)** | ✅ → [`docs/comparaison-spiking.md`](docs/comparaison-spiking.md) |
@@ -278,7 +278,7 @@ n'étaient pas le goulot. Et il coûte 838 ms là où l'accumulation en coûte 1
 
 Le moteur d'exécution par listes est maintenant écrit en Rust — **std seul, zéro
 dépendance** (crates.io est inaccessible depuis cette machine, et c'est très bien :
-le moteur tient en 386 lignes). Détail complet :
+le moteur tenait en 386 lignes à ses débuts ; il en fait 11 440 aujourd'hui). Détail complet :
 [`reports/rapport-optimisations.md`](reports/rapport-optimisations.md).
 
 ```bash
@@ -342,7 +342,7 @@ contiguës adressées par un pointeur et un pas.
 | Qwen2.5-1.5B | Q4_K_M | 12,92 | 17 tok/s | 1,1 Go |
 | Qwen2.5-VL-7B | Q4_K_M | 10,99 | 2,8 tok/s | 4,5 Go |
 | **Qwen3-30B-A3B** (MoE 128 experts, top-8) | Q4_K_M | **7,61** | 5,4 tok/s | **17,7 Go** |
-| **gpt-oss-120b** (MoE, MXFP4) | MXFP4 | blocs lus | — | 60 Go |
+| **gpt-oss-120b** (MoE, MXFP4) | MXFP4 | blocs lus | 15,1757 (ctx 256) | 60 Go |
 
 Les lecteurs Q4_K et Q6_K sont vérifiés **tenseur par tenseur** contre une
 référence F16 des mêmes poids produite par `llama-quantize`, et le routage MoE
@@ -352,7 +352,7 @@ et [`reports/rapport-passage-a-l-echelle.md`](reports/rapport-passage-a-l-echell
 ## Inférence complète en Rust (`--infer`)
 
 Qwen2.5-0.5B-Instruct Q8_0 tourne **en mode listes d'événements**, sans GPU, sans
-BLAS, sans aucune dépendance : **2 319 lignes de Rust, `std` seul**. Détail :
+BLAS, sans aucune dépendance : **11 440 lignes de Rust, `std` seul** (2 319 au premier prototype). Détail :
 [`reports/rapport-inference.md`](reports/rapport-inference.md).
 
 ```bash

@@ -28679,3 +28679,69 @@ Deux réserves de méthode, parce qu'elles changent la portée des constats :
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport re\ndef rem(p, paires):\n    s = open(p).read(); ok = 0\n    for v, n in paires:\n        if s.count(v) >= 1:\n            s = s.replace(v, n); ok += 1\n        else:\n            print(f\"  ⚠ absent de {p} : … [3703 caractères tronqués]`
+
+  ```
+reports/rapport-transport-liste.md : 1/1
+reports/rapport-phase3-reparti.md : 1/1
+docs/format-flux.md : 4/4
+docs/roadmap.md : 3/3
+plan 3.4 : note d'état ajoutée
+d0d0ede Cohérence : versions et comptes de flux remis d'aplomb partout
+13:07:48
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n 60,118p reports/rapport-coherence-docs.md", "description": "Read remaining coherence findings"}`
+
+  ```
+## 2. En-tête, champs, modes
+
+| # | document | affirmation | ce que dit le code / la mesure | verdict |
+|---|---|---|---|---|
+| 14 | `docs/format-flux.md:66` | en-tête « **26 octets** » | `TAILLE_TETE = 79` : 26 (v1) + 13 (niveaux/seuil/top-k/renorm) + 40 (7 top-k de projection + attn + q·k + moe) | PÉRIMÉ |
+| 15 | `reports/rapport-transport-liste.md:9,14,15,196` | en-tête « **39 octets** » | 79 (offsets vérifiés : topk_proj 39..66, attn 67, qk 71, moe 75) | PÉRIMÉ |
+| 16 | `docs/plan-prefill-reparti.md:20,28,78,105,140` | en-tête « **39 octets** », tous les offsets ≤ 38 | 79, avec quatre champs de plus après l'offset 38 | PÉRIMÉ |
+| 17 | `docs/format-flux.md:74` | « `n` : dimension (mode 0) ou **actifs (mode 1)** » | `n` = actifs aussi en mode 2, et **états** en mode 3 (`MODE_LOT`, main.rs:1307-1312) | MANQUANT |
+| 18 | `docs/format-flux.md:86` | mode 2 = `n_blocs u32 · n_blocs × f32 · longueur u32 · paires` | conforme à l'émetteur (main.rs:1446-1466) et au récepteur (1591-1628) | OK |
+| 19 | `docs/format-flux.md:87` | mode 3 = `n × dimension × f32`, `n` = états | conforme (`envoyer_lot`, main.rs:1512-1544) | OK |
+| 20 | `docs/format-flux.md:30` | échappement 255 → « l'indice ABSO
+… [8164 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+Le relecteur a raison sur un point où je l'avais contredit : la source dit ~22 %, pas 10 %. Je vérifie, puis je corrige — y compris mon propre commit.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"22 %\\|10 %\" reports/rapport-croisement-push-pull.md | head -8; echo \"=== README 389 ===\"; sed -n 386,390p README.md", "description": "Verify the push/pull crossover value"}`
+
+  ```
+38:| **10 %** | 0,078 | 0,163 | **0,48** |
+43:➡️ **Les deux architectures se croisent à ~22 % de densité d'activation**, pas à
+44:10 %. Le chiffre se lit dans le rapport à pleine densité : le pull traite 4,7 fois
+46:vers 1/4,7. À 10 % le push est ×2,1 plus rapide, à 1 % ×8,3.
+57:| réseau vraiment creux (ReLU, MoE, top-k) | < 10 % | ✅ push gagne |
+96:| 200 | 22 % | 0 év — 9,6 s | 18,1 G év — 8,7 s (bascule) |
+100:➡️ La bascule tombe exactement au seuil mesuré (22 %), et le gain croît à mesure
+106:1. **Sur CPU, le mode pull est le bon choix** au-dessus de 22 % de densité. Le
+=== README 389 ===
+| Événements par token | 352,8 M à **5,3 G év/s** en push |
+| Mémoire | 1,27 Go (0,71 Go de listes), chargement 6,3 s |
+| Justesse | **16 tokens sur 16 identiques** à la référence numpy float32 |
+| Perplexité WikiText-2 | **24,90** sur 2 040 jetons contre **25,00** pour numpy + OpenBLAS |
+| Croisement push/pull | **~22 %** de densité d'activation, mesuré — pas 10 % (voir [`reports/rapport-croisement-push-pull.md`](reports/rapport-croisement-push-pull.md)) |
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"386 lignes\\|2 319 lignes\\|~5 000 lignes\\|5 000 lignes\" README.md REPRISE.md | head -4; grep -n \"à faire\" docs/contexte-long.md | sed -n 1,4p; grep -n \"+384 %\" docs/contexte-long.md | head -3; grep -n \"3 604\" docs/ … [215 caractères tronqués]`
+
+  ```
+README.md:281:le moteur tient en 386 lignes). Détail complet :
+README.md:355:BLAS, sans aucune dépendance : **2 319 lignes de Rust, `std` seul**. Détail :
+REPRISE.md:16:`drave-core` est un moteur d'inférence Rust (~5 000 lignes, `std` seul) qui
+105:| E5 | **Attention creuse** | à faire — `--attn-topk` et `--attn-window` existent et se mesurent au protocole `--depuis` | casse le O(N) du décodage | moyen |
+103:| E3 | **KV int4** | **fait** (nibbles empaquetés) | 1 M tient en RAM (9,7 Go) et en VRAM | mesuré : **+384 %** — llama.cpp q4_0 : +411 % ; à réserver aux cas où la mémoire manque |
+125:| **int4** | **63,61** (+384 %) | 72,80 (+411 %) | **71,05** (+450 %) | 98,53 (+494 %) |
+144:| int4 | 63,6107 (+384 %) | **41,9442 (+219 %)** | **49,9438 (+287 %)** |
+reports/rapport-phase3-reparti.md:62:Pas établi : le coût. Aujourd'hui le flux voyage en **f32 dense, 3 604 octets par
+345:| **gpt-oss-120b** (MoE, MXFP4) | MXFP4 | blocs lus | — | 60 Go |
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\ndef rem(p, paires):\n    s = open(p).read(); ok = 0\n    for v, n in paires:\n        if s.count(v) >= 1:\n            s = s.replace(v, n); ok += 1\n        else:\n            print(f\"  ⚠ absent de {p} : {v[:60]}…\ … [5166 caractères tronqués]`

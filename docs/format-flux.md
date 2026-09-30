@@ -161,5 +161,5 @@ découpage (798,3 au lieu de 18,2).
 | une version inconnue est refusée | v1/v2/v3 lues, toute autre refusée en la nommant ; le rejeu ANNONCE ses comptes (`N servies, M manquantes`) |
 | le découpage ne change pas le résultat | deux processus, 12 couches chacun : écart local/réparti **0,00e0** (144,8289 = 144,8289), 39 puis 199 flux (le dernier jeton n'est pas envoyé) |
 | un lot ne change pas le résultat non plus | 256 jetons en 4 lots de 64 : écart **0,00e0** (18,0851 = 18,0851) ; en 1 lot de 256 : **0,00e0** (918 ko sur le fil) |
-| les deux nœuds quantifient PAREIL | un serveur lancé avec `--topk-q 900` et un client avec `--topk-q 4` donnent quand même **0,00e0** : les réglages du client gagnent (vérifié) |
+| les deux nœuds quantifient PAREIL | un serveur lancé avec `--topk-q 900` et un client avec `--topk-q 4` donnent quand même **0,00e0** : les réglages du client gagnent — vérifié le 30/09 après `d59d061`, la première vérification (avant le correctif) était tautologique |
 | l'en-tête fait exactement `TAILLE_TETE` octets | `assert_eq!` dans les deux émetteurs — un octet de trop décale tout le corps en silence et ne se voit qu'au flux suivant |

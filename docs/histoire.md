@@ -9,7 +9,7 @@ la trace qu'on ne voulait pas perdre.
 | âge | ce qu'il était | où c'est écrit |
 |---|---|---|
 | **Qtrinet** (origine) | inférence de LLM en ternaire / multi-bits sur un cluster de cartes **Stratix V** (Microsoft Storey Peak), 100 % logique, sans DSP. Le cahier des charges d'origine est **conservé tel quel** : [`Qtrinet-bootstrap.md`](../Qtrinet-bootstrap.md) — c'est un document daté, il n'est pas réécrit | `Qtrinet-bootstrap.md`, `README.md` §« Écarts avec le CDC » |
-| **le virage événementiel** | l'idée qui a tout changé : ne plus multiplier des matrices, mais **pousser des listes d'activation** vers leurs destinations (AER, *Address Event Representation*). Le prototype C mesure **7,79 G événements/s**, le croisement push/pull est mesuré à **10 % de densité** | `reports/rapport-cpu-aer.md`, `reports/rapport-croisement-push-pull.md`, `reports/rapport-encodage.md` |
+| **le virage événementiel** | l'idée qui a tout changé : ne plus multiplier des matrices, mais **pousser des listes d'activation** vers leurs destinations (AER, *Address Event Representation*). Le prototype C mesure **7,79 G événements/s**, le croisement push/pull est mesuré à **~22 % de densité** | `reports/rapport-cpu-aer.md`, `reports/rapport-croisement-push-pull.md`, `reports/rapport-encodage.md` |
 | **Drave** (aujourd'hui) | le moteur Rust qui exploite cette représentation sur CPU, GPU et FPGA, avec le contexte long (KV paginé, MLA, vision) et la distribution en ligne de mire | `docs/vision.md` |
 
 Le nom **Qtrinet** appartenait au premier âge : il évoquait un réseau ternaire, une
