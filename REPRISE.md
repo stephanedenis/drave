@@ -13,7 +13,7 @@
 
 ## 1. En une phrase
 
-`drave-core` est un moteur d'inférence Rust (~13 168 lignes, `std` seul) qui
+`drave-core` est un moteur d'inférence Rust (~13 480 lignes, `std` seul) qui
 charge les GGUF **en place** (aucune copie, aucune requantification), exécute les
 projections soit en listes d'événements, soit en produit scalaire dense, gère les
 MoE, tient une conversation, et déporte au GPU ce qui y gagne. Il fait tourner du
@@ -461,7 +461,7 @@ créneau :
 **Un audit de documentation** (second sous-agent) a corrigé quatre chiffres périmés
 ou mal sourcés, dont la ligne « 65 536 » du rapport des scores (7,4 ms / 8,9×,
 mesurée AVANT le découpage en tranches → 2,36 ms / 26,7×) et le compteur de lignes
-Rust (12 171 → **13 168**, un seul chiffre dans tout le dépôt).
+Rust (12 171 → **13 480** en fin de sprint, un seul chiffre dans tout le dépôt).
 
 Portes du sprint, mesurées sur le binaire final : **Qwen2.5-0.5B Q8_0 ctx 256 =
 19,3885** · **gpt-oss-120b MXFP4 ctx 256 = 15,1757** · `cargo test --release` =

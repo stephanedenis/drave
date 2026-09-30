@@ -36366,3 +36366,22 @@ cas DRAVE_GPU manquant ajouté
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cargo test --release --manifest-path drave-core/Cargo.toml 2>&1 | tail -2 && git add -A && git commit -q -F - <<'EOF' && git log --oneline -1 && date +%H:%M:%S\n--options-actives dit si le top-k déporté s'applique, et pourquoi sinon\ … [667 caractères tronqués]`
+
+  ```
+test result: ok. 17 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.09s
+
+22d3004 --options-actives dit si le top-k déporté s'applique, et pourquoi sinon
+19:24:25
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && wc -l drave-core/src/*.rs | tail -1 && grep -rn \"13 168\" README.md REPRISE.md | head -4", "description": "Re-measure Rust line count"}`
+
+  ```
+13480 total
+README.md:299:le moteur tenait en 386 lignes à ses débuts ; il en fait 13 168 aujourd'hui). Détail complet :
+README.md:373:BLAS, sans aucune dépendance : **13 168 lignes de Rust, `std` seul** au 30/09 au soir (2 319 au premier prototype). Détail :
+REPRISE.md:16:`drave-core` est un moteur d'inférence Rust (~13 168 lignes, `std` seul) qui
+REPRISE.md:464:Rust (12 171 → **13 168**, un seul chiffre dans tout le dépôt).
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\ndef patch(p, paires):\n    s=open(p).read()\n    for v,n,nom in paires:\n        assert s.count(v)==1, f\"{p}::{nom}::{s.count(v)}\"\n        s=s.replace(v,n,1)\n    open(p,'w').write(s); print(f\"{p} ok\")\npatch(' … [1191 caractères tronqués]`
