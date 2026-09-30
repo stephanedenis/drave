@@ -5,15 +5,15 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 43.8 h |
+| Durée | 44.0 h |
 | Tours | 44 |
-| Messages | 1430 |
-| Appels d'outils | 1349 |
-| Fichiers touchés | 42 |
-| Commandes | 1075 |
+| Messages | 1472 |
+| Appels d'outils | 1388 |
+| Fichiers touchés | 44 |
+| Commandes | 1101 |
 | Sous-agents | 1 |
-| Commits | 85 |
-| Compactages de contexte | 1 |
+| Commits | 86 |
+| Compactages de contexte | 2 |
 
 ## Objectifs déclarés
 
@@ -1995,15 +1995,27 @@ Je vérifie l'heure à chaque itération et j'arrête à 12:06, en laissant un p
 
 ### Tour 44 — pendant que les charges locales s'executent, peux-tu avancer des chantiers légers sur les ressources loçcale ou d'analys … [7 caractères tronqués]
 
-*3 appels d'outils.* Actions notables :
+*42 appels d'outils.* Actions notables :
 
 - bash — Write and run the pure flux analysis tool
 - bash — Document the flux analysis and commit
 - bash — Write the format spec and cost model, commit
+- bash — Check KV attribution run progress
+- bash — Locate distributed PPL code paths
+- bash — Read distributed PPL implementation
+- bash — Inspect forward/logits/norm semantics
+- bash — Read forward tail, norme_finale and logits
+- bash — Read forward entry and rope context dependence
+- bash — Find how to launch distributed PPL test
+- bash — Run distributed PPL test before fix
+- bash — Inspect state after timeout
+- bash — Rerun pre-fix distributed test in background
+- bash — Inspect all final-norm condition sites
+- … et 23 autres
 
 **Synthèse produite :**
 
-⏵ 10:30 — les résultats d'analyse : densité, persistance et recouvrement par couche
+Écart **0,00e0** : le découpage est désormais fidèle au bit près. Je verrouille avec un banc plus long + les portes de non-régression.
 
 ## 3. Travail accompli
 
@@ -2053,6 +2065,8 @@ Je vérifie l'heure à chaque itération et j'arrête à 12:06, en laissant un p
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/vision.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/histoire.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/roadmap.md` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs` | 0 | 5 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/main.rs` | 0 | 1 |
 
 ### Sous-agents lancés
 
@@ -2100,7 +2114,7 @@ Je vérifie l'heure à chaque itération et j'arrête à 12:06, en laissant un p
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 1035 autres
+- … et 1061 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2228,7 +2242,7 @@ Je vérifie l'heure à chaque itération et j'arrête à 12:06, en laissant un p
 
 ## 5. Erreurs rencontrées
 
-72 sorties en erreur ou divergentes. Les premières :
+73 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : a8f2635f8 docs: record which models this box is good at, and why src/llama-hparams.cpp:8:void llama_hparams::set_swa_pattern(uint32_t n_pattern, bool dense_first) { src/llama-hparams.h:308:    void se
 - **T1** : 511 tokens notés — perplexité cumulée 247.031  (4.9 tok/s) === perplexité 247.0308 sur 511 tokens (0 événements, 104.5 s) ===  ### B3 harmony assistant 511 --- ref --- 0.0 0.0 0:00 ls: cannot access '
@@ -2333,4 +2347,5 @@ Je vérifie l'heure à chaque itération et j'arrête à 12:06, en laissant un p
 - date +"%H:%M:%S"; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p='docs/roadmap.md'; s=open(p).read() s = s.replace("""| 3.1 | **Contra
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-analyse-flux.md <<'EOF' # Analyse du flux, couche par couche  Première analyse **pur
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > docs/format-flux.md <<'EOF' # Le format de flux (DRVF v1) — spécification  Ce format sert **trois ch
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p='docs/format-flux.md'; s=open(p).read() vieux = """Le flux voyage en **f32** sur le rés
 

@@ -22626,3 +22626,813 @@ roadmap 1.2 mis à jour
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > docs/format-flux.md <<'EOF'\n# Le format de flux (DRVF v1) — spécification\n\nCe format sert **trois choses à la fois**, et c'est délibéré :\n\n1. la **trace** d'exécution (`--trace-flux`) : ce qui s'est passé, couche par\n   c … [5036 caractères tronqués]`
+
+  ```
+modèle de coût ajouté au rapport
+0fdd4c9 Spécification du format de flux, et modèle de coût par couche
+10:36:28
+  ```
+
+
+  ```
+3695122 timeout 900 python3 tools/aiguille.py /home/stephane/FastNVMe/models/qwen2.5-1.5b-instruct-q4_k_m.gguf 1024,2048 0.1,0.5,0.9 --lot 256 --n 40 --journal /tmp/aiguille_1.5b.md
+3695124 python3 tools/aiguille.py /home/stephane/FastNVMe/models/qwen2.5-1.5b-instruct-q4_k_m.gguf 1024,2048 0.1,0.5,0.9 --lot 256 --n 40 --journal /tmp/aiguille_1.5b.md
+3696250 ./qtrinet-core/target/release/qtrinet-core /home/stephane/FastNVMe/models/qwen2.5-1.5b-instruct-q4_k_m.gguf --infer --chat --flux --prompt = Robert Boulter = Robert Boulter is an English film , television and theatre actor . He had a guest - starring role on the television series The Bill in 2000 . This was followed by a starring role in the play Herons written by Simon Stephens , which was performed in 2001 at the Royal Court Theatre . He had a guest role in the television series Judge John Deed in 2002 . In 2004 Boulter landed a role as " Craig " in the episode " Teddy 's Story " of the television series The Long Firm ; he starred alongside actors Mark Strong and Derek Jacobi . He was cast in the 2005 theatre productions of the Philip Ridley play Mercury Fur , which was performed at the Drum Theatre in Plymouth and the Menier 
+… [3959 caractères tronqués]
+  ```
+
+
+> **Compactage de contexte** — résumé conservé :
+
+```
+## Primary Request and Intent
+- Sequence of user directives (verbatim where decisive):
+  - "continue avec REPRISE.md" → resume project from handoff doc.
+  - "fais les 8 dans l'ordre" (8 chantiers) — all completed and committed.
+  - "que reste-t-il à faire" → then "fais tous ces 6 nouveaux chantiers" (6 new chantiers, goal `goal-5fb0695d-...`, now marked **complete**).
+  - "vision d'abord, puis roadmap" → vision + roadmap delivered.
+  - "fais un roadmap ambitieux et commence les travaux qui ne nécessitent pas d'infra supplémentaire. on pourra terter avec colab pour le volet distribué".
+  - "continue, sois autonome pendant 2 heures".
+  - "ne te fie pas à tes estimés pour le temps. fais un 2h de travail autonome en vérifiant l'heure du système à chaque itération… (time-boxing)".
+  - "pendant que les charges locales s'executent, peux-tu avancer des chantiers légers sur les ressources loçcale ou d'analyse pure?"
+- Project renamed **Qtrinet → Drave** on user request: "3 tout tout de suite, préserve l'historique dans un document et là ou ça permet d'être cohérent, mais tout le reste prend la teinte de la vision."
+- Vision: **streams of activation lists** ("stream of logs") as the core; explore all axes: per-neuron/layer debugging & optimization, work distribution across components and across machines.
+
+## Key Technical Concepts
+- Rust engine (std only), GGUF read in place; **push/AER architecture**: `SparseVec`, `PushMat`, `FusedSign`, `SignedDelta`, `accumulate_push`, "listes valuées par source".
+- Two execution paths kept: dense matvec/GEMM vs event-list push; measured **push/pull crossover ≈ 10 % density**.
+- Quantization: Q8_0/Q4_K/Q6_K/MXFP4, KV int8/int4 with per-32-block scales; MLA latent cache; YaRN/RoPE.
+- GPU: PTX via clang (`gpu/compiler.sh`), sm_75, two Quadro RTX 5000; `DRAVE_GPU*` env gates.
+- Machine: 2× Xeon E5-2687W v3 (40 threads), 125 GB RAM, NVMe ~3.5 GB/s.
+- Time-boxing rule: check `date +"%H:%M:%S"` each iteration; start 10:06:59, deadline **12:06:59**.
+- Hygiene: measure before concluding; verify which path is active via `[config]`; a *unchanged* number is a signal; never leave the repo broken.
+
+## Files and Code
+- `drave-core/` (renamed from `qtrinet-core/`), package `drave-core`, **binary `drave`** via `[[bin]] name = "drave"`; `target/` now gitignored and untracked.
+- `drave-core/src/model.rs`: `KvCache` (paginated `cap`, `k_f32`/`v_f32` attribution flags, `f16_avant`), `TraceFlux`, `FluxRelecteur`, `Model::{couche_debut,couche_fin,jeton_trace,trace,flux_force,emb_imposee,mla,mla_cache,cache_experts}`, `flux_lot()` (associated fn), `norme_finale()`, `forward_mla()`, `logits_f32()`; final norms conditioned on `couche_fin >= n_layer`.
+- `drave-core/src/main.rs`: `--trace-flux`, `--trace-couches`, `--flux-forcer`, `--flux-serveur <port>`, `--ppl-reparti <host:port>`, `--couches-locales N`, `--tensors`, `--banc-vision`, `--banc-kv`, `--banc-mla`; `run_serveur_flux()`, `run_ppl_reparti()`, `envoyer_flux()`, `recevoir_flux()`, `MAGIE_FLUX = 0x4452_5631` ("DRV1"), legacy `QT_*` warning.
+- `drave-core/gpu/drave_gpu.cu` / `.ptx` (renamed), vectorized KV dequant (uint4 loads, row-major padded tile `shK[k*(hd+1)+i]`).
+- Tools: `tools/aiguille.py` (v2 needle), `tools/diff_flux.py`, `tools/profil_flux.py`, `tools/analyse_flux.py`, `tools/flux_codec.py`, `tools/mla_synthetique.py`, `tools/vision_ref.py`, `tools/vision_mtmd.py`.
+- Docs: `docs/vision.md` (Drave vision, 5 axes), `docs/roadmap.md` (phases 0–5 + measurement log), `docs/histoire.md` (rename history + `QT_*`→`DRAVE_*` conversion table), `docs/plan-mla-vision.md`, `docs/contexte-long.md`; reports incl. `reports/rapport-analyse-flux.md`, `reports/rapport-aiguille.md`, `reports/rapport-prefill-par-lots.md`; `README.md` (title "Drave").
+- Trace format **DRVF v1**: header `"DRVF" | u16 version | u32 n_layer | u32 hidden` (**14 bytes**), record `u16 couche | u32 jeton(global counter) | u32 n | f32 echelle` + n×(u32 idx, i16 val), sentinel `0xFFFF`.
+
+## Errors and Fix
+… [5016 caractères tronqués]
+```
+
+### 👤 Utilisateur
+
+This is an automatically generated checkpoint condensing an earlier span of the conversation to free up context. Treat the captured context as established background and build on it without restating it. Continue the task directly from the messages that follow, without acknowledging this checkpoint.
+
+<compacted-summary>
+## Primary Request and Intent
+- Sequence of user directives (verbatim where decisive):
+  - "continue avec REPRISE.md" → resume project from handoff doc.
+  - "fais les 8 dans l'ordre" (8 chantiers) — all completed and committed.
+  - "que reste-t-il à faire" → then "fais tous ces 6 nouveaux chantiers" (6 new chantiers, goal `goal-5fb0695d-...`, now marked **complete**).
+  - "vision d'abord, puis roadmap" → vision + roadmap delivered.
+  - "fais un roadmap ambitieux et commence les travaux qui ne nécessitent pas d'infra supplémentaire. on pourra terter avec colab pour le volet distribué".
+  - "continue, sois autonome pendant 2 heures".
+  - "ne te fie pas à tes estimés pour le temps. fais un 2h de travail autonome en vérifiant l'heure du système à chaque itération… (time-boxing)".
+  - "pendant que les charges locales s'executent, peux-tu avancer des chantiers légers sur les ressources loçcale ou d'analyse pure?"
+- Project renamed **Qtrinet → Drave** on user request: "3 tout tout de suite, préserve l'historique dans un document et là ou ça permet d'être cohérent, mais tout le reste prend la teinte de la vision."
+- Vision: **streams of activation lists** ("stream of logs") as the core; explore all axes: per-neuron/layer debugging & optimization, work distribution across components and across machines.
+
+## Key Technical Concepts
+- Rust engine (std only), GGUF read in place; **push/AER architecture**: `SparseVec`, `PushMat`, `FusedSign`, `SignedDelta`, `accumulate_push`, "listes valuées par source".
+- Two execution paths kept: dense matvec/GEMM vs event-list push; measured **push/pull crossover ≈ 10 % density**.
+- Quantization: Q8_0/Q4_K/Q6_K/MXFP4, KV int8/int4 with per-32-block scales; MLA latent cache; YaRN/RoPE.
+- GPU: PTX via clang (`gpu/compiler.sh`), sm_75, two Quadro RTX 5000; `DRAVE_GPU*` env gates.
+- Machine: 2× Xeon E5-2687W v3 (40 threads), 125 GB RAM, NVMe ~3.5 GB/s.
+- Time-boxing rule: check `date +"%H:%M:%S"` each iteration; start 10:06:59, deadline **12:06:59**.
+- Hygiene: measure before concluding; verify which path is active via `[config]`; a *unchanged* number is a signal; never leave the repo broken.
+
+## Files and Code
+- `drave-core/` (renamed from `qtrinet-core/`), package `drave-core`, **binary `drave`** via `[[bin]] name = "drave"`; `target/` now gitignored and untracked.
+- `drave-core/src/model.rs`: `KvCache` (paginated `cap`, `k_f32`/`v_f32` attribution flags, `f16_avant`), `TraceFlux`, `FluxRelecteur`, `Model::{couche_debut,couche_fin,jeton_trace,trace,flux_force,emb_imposee,mla,mla_cache,cache_experts}`, `flux_lot()` (associated fn), `norme_finale()`, `forward_mla()`, `logits_f32()`; final norms conditioned on `couche_fin >= n_layer`.
+- `drave-core/src/main.rs`: `--trace-flux`, `--trace-couches`, `--flux-forcer`, `--flux-serveur <port>`, `--ppl-reparti <host:port>`, `--couches-locales N`, `--tensors`, `--banc-vision`, `--banc-kv`, `--banc-mla`; `run_serveur_flux()`, `run_ppl_reparti()`, `envoyer_flux()`, `recevoir_flux()`, `MAGIE_FLUX = 0x4452_5631` ("DRV1"), legacy `QT_*` warning.
+- `drave-core/gpu/drave_gpu.cu` / `.ptx` (renamed), vectorized KV dequant (uint4 loads, row-major padded tile `shK[k*(hd+1)+i]`).
+- Tools: `tools/aiguille.py` (v2 needle), `tools/diff_flux.py`, `tools/profil_flux.py`, `tools/analyse_flux.py`, `tools/flux_codec.py`, `tools/mla_synthetique.py`, `tools/vision_ref.py`, `tools/vision_mtmd.py`.
+- Docs: `docs/vision.md` (Drave vision, 5 axes), `docs/roadmap.md` (phases 0–5 + measurement log), `docs/histoire.md` (rename history + `QT_*`→`DRAVE_*` conversion table), `docs/plan-mla-vision.md`, `docs/contexte-long.md`; reports incl. `reports/rapport-analyse-flux.md`, `reports/rapport-aiguille.md`, `reports/rapport-prefill-par-lots.md`; `README.md` (title "Drave").
+- Trace format **DRVF v1**: header `"DRVF" | u16 version | u32 n_layer | u32 hidden` (**14 bytes**), record `u16 couche | u32 jeton(global counter) | u32 n | f32 echelle` + n×(u32 idx, i16 val), sentinel `0xFFFF`.
+
+## Errors and Fixes
+- Fat slice pointer read back as `Vec<Vec<i32>>` (worker saw len 90 = blocks) → thin `AtomicPtr<Vec<i32>>` + `from_raw_parts(ptr, t)`; worker panic caused silent livelock → `catch_unwind` + `morts` counter + `Pool::attendre`. Note: release profile has `panic = "abort"`, so the guard matters mainly in test builds.
+- Attention kernel bugs: query read per-lane (fixed via shared `shQ`); partials not indexed per KV head; scales indexed per element instead of per vector (écart 7e7 int8).
+- Vision rotation was wrong (half-split pairs, per-block ladder) → fixed per `ggml_mrope_cache_init`: consecutive pairs `(2i,2i+1)`, first half = LIGNE, second = COLONNE, continuous ladder. Then col-major permutation for windowed layers per `clip.cpp`. Verified by the **change** of the numbers (tour 234,53→244,38; projecteur 515,84→465,84).
+- Projector consumed patch embeddings instead of tower output (number unchanged = signal) → reordered; `|sortie|` 131,54 → 515,84.
+- Replay failure: trace key was `(couche, position in window)` → multi-window collision (PPL 356 694) → key now `(couche, jeton_trace global)`; replay then identical (19,3885).
+- Rust reader header read 16 bytes instead of 14 → "failed to fill whole buffer".
+- `git add -A` had committed 44 `target/` files → untracked + `.gitignore`.
+- `--flux-forcer`/trace plumbing inserted at wrong scope (`mdl` not found) → moved after `Model::load` in run_ppl; `self.cfg.n_layer` vs destructured `cfg` borrow error → use `cfg.n_layer`.
+- Multi-GPU guard for mixed `k_f32`/`v_f32` needed restructuring (if/else type mismatch) → `let mixte = ...; if complet && !mixte`.
+- `mtmd_tokenize` blocked (rc=2 "media preprocessing error"; `basic_string::_M_replace`) after 5 hypotheses; headers fetched (`/tmp/mtmd.h`, `/tmp/clip.cpp`, `/tmp/ops.cpp`).
+
+## Pending Jobs
+- **Phase 1.4**: collect `/tmp/kv_attribution.log` (runs `cles_f32` then `valeurs_f32` at ctx 8192; background job `bash-40`) and document attribution of the int8 gap (+3,0 % vs llama.cpp +0,8 % at 8192; refs 14,2339 f32 / 14,6667 int8).
+- **Phase 3 defect (open)**: two-node split not faithful — PPL 798,3 vs local 18,2178 (88 fluxes served OK). Candidates: transmitted position, remote node's input norm, per-node KV state.
+- Phase 1.1 GPU top-k kernel (needs 2–3 kernels + score buffer; viable ≤ ~32k context).
+- Phase 2: placement scheduler, NVMe weight streaming, rentable expert cache (currently +6 %), KV page policy.
+- Vision quality validation blocked (libmtmd); 3 paths documented in `docs/plan-mla-vision.md`.
+- `REPRISE.md` §6 refresh (old items mostly done; phases now in `docs/roadmap.md`).
+
+## Current Work
+- Time-box at **10:36** (deadline 12:06). Just delivered light/pure-analysis chantier while the ctx-8192 attribution runs: `tools/analyse_flux.py` + `reports/rapport-analyse-flux.md` + roadmap 1.2 update, commit `7e028da`.
+- Analysis findings (trace `--abits 8 --act-thresh 0.05`, Qwen2.5-0.5B, 256 jetons, 896 hidden): density per layer **20,1 %–56,3 %** (creusest 9, densest 1); persistent neurons (≥90 % tokens) **0,89–1,90 %**; top 10 % carry **26–67 %** magnitude; neighbour-layer top-50 overlap **28–86 %** (84–86 % on layers 5–8).
+
+## Next Step
+- Check `date`, then read `/tmp/kv_attribution.log`; if both runs are done, document the K-vs-V attribution in `docs/roadmap.md` and commit — otherwise continue with another light item (e.g. REPRISE §6 refresh or the phase-3 split defect analysis), checking the clock each iteration and stopping at 12:06:59 with a committed checkpoint.
+
+## Critical Context
+- Regression gates (must stay): Qwen ctx 256 = **19,3885**; gpt-oss ctx 256 = **15,1757** — measured **without** `DRAVE_GPU` (that variable alone offloads Q8_0 projections >8 Mo and shifts gpt-oss to 15,1667).
+- Key measured results: batched prefill −20 % Qwen (17,1→13,6 s), gpt-oss ≈50→34,4 s; grouped attention + batched head; GPU KV attention 22,16→3,29 ms/token (÷6,7) and prefill ×2,8 (261,6→93,7 s, PPL identical 12,2175); attention kernel vectorized at 1M: f32 13,6→7,0 ms, int8 15,0→6,5, int4 13,2→7,4; KV CPU pagination 0,03 Go at ctx 1M (was 25,77 Go); rotation at 16k: plain 35,18 vs interp 1 133,02 → threshold raised to 4× declared length; aiguille 12/12 probes; needle v1→v2 (varied WikiText-2 filler, 40-token answers, `--lot`).
+- MLA validated: synthetic GGUF (`tools/mla_synthetique.py`) + numpy reference, engine écart **5,2e-7**; vision validated slices: patches 5,37e-7, one ViT block 1,82e-6, projector 1,73e-6; end-to-end image→152 064 logits demonstrated.
+- Trace measurements: 132 Mo/512 tokens (dense), 6,02 bytes/active neuron, +8 % runtime, selective trace (2 layers) 5 Mo; sparse trace 53 Mo (density ÷2,3 → size ÷2,5).
+- Env vars renamed to `DRAVE_*` (no aliases; engine warns if `QT_*` seen); mapping in `docs/histoire.md` §4; `journal/` and `Qtrinet-bootstrap.md` deliberately preserved.
+- Heavy jobs must run sequentially; machine-idle required for timing measurements; background scripts live in `/tmp/*.sh` with `pgrep -x drave` guards.
+</compacted-summary>
+
+### 🤖 Assistant
+
+⏵ Point d'étape : spécification du format écrite ; je regarde où en est la mesure d'attribution KV.
+
+Committing done (10:36). Now check the attribution campaign.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date +\"%H:%M:%S\" && echo \"--- log ---\" && cat /tmp/kv_attribution.log 2>/dev/null | tail -40 && echo \"--- procs ---\" && pgrep -a -x drave | head; ls -la /tmp/kv_attribution.log 2>/dev/null", "description": "Check KV attribution … [15 caractères tronqués]`
+
+  ```
+10:36:55
+--- log ---
+cles_f32     : perplexité 14.2372 sur 8191 tokens (0 événements, 1208.0 s)
+valeurs_f32  : --- procs ---
+4100212 ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf --ppl /tmp/ids_qwen_long.txt --ctx 8192 --limit 8192 --dense --threads 16 --lot 512
+-rw-r--r--. 1 stephane stephane 93 30 sep 10:34 /tmp/kv_attribution.log
+  ```
+
+### 👤 Utilisateur
+
+Current runtime context. This snapshot supersedes earlier runtime-context snapshots.
+
+Current DSH file policy: danger-full-access. The DSH file sandbox does not restrict file modifications by available operations.
+
+Approval prompts are disabled in this session: actions that require approval are rejected automatically — do not request sandbox escalation (do not set `sandbox_permissions`).
+
+### 👤 Utilisateur
+
+<system-reminder>
+The available skill catalog changed. This complete catalog replaces every earlier available-skills list in this session:
+
+<available_skills>
+- `microsoft-foundry`: Deploy, evaluate, fine-tune, and manage Foundry agents end-to-end with azd: hosted agent scaffold/run/deploy, prompt agent create, batch eval, continuous eval, prompt optimizer, Agent Optimizer scaffold, agent.yaml, dataset curation from traces, model fine-tuning (SFT/DPO/RFT). USE FOR: azd ai agent, azd provision/deploy, deploy agent, hosted agent, create agent, add tool to agent, invoke agent, evaluate agent, continuous eval, continuous monitoring, agent CI/CD, optimize prompt, improve prom...
+</available_skills>
+
+Use only names in this replacement catalog. If the user names a listed skill, or the task clearly matches its description, call the `skill` tool with the exact name before acting.
+A user may also invoke a skill directly; its <skill_content> block then appears in this conversation. Follow it, and do not call the `skill` tool again for that skill.
+</system-reminder>
+
+### 🤖 Assistant
+
+⏵ Pendant que `valeurs_f32` tourne (~20 min), j'analyse le défaut de la phase 3 en lisant le code du calcul réparti.
+
+`cles_f32` = **14,2372** contre la référence f32 **14,2339** (int8 : 14,6667) → l'écart int8 vient quasi entièrement des **clés**. `valeurs_f32` tourne encore ; en attendant, j'attaque le défaut ouvert de la phase 3 (réparti non fidèle) par lecture de code — c'est léger et ça ne perturbe pas la mesure.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"run_ppl_reparti\\|envoyer_flux\\|recevoir_flux\\|flux_serveur\\|run_serveur_flux\\|MAGIE_FLUX\" drave-core/src/main.rs | head -40", "description": "Locate distributed PPL code paths"}`
+
+  ```
+48:    if let Some(port) = opt.flux_serveur { run_serveur_flux(port); return; }
+49:    if let Some(pair) = opt.ppl_reparti.clone() { run_ppl_reparti(opt, &pair); return; }
+343:    flux_serveur: Option<u16>,
+430:            "--flux-serveur" => { o.flux_serveur = suivant(i).parse().ok(); 2 }
+1210:const MAGIE_FLUX: u32 = 0x4452_5631;   // "DRV1"
+1212:fn envoyer_flux(s: &mut std::net::TcpStream, debut: u32, fin: u32, pos: u32,
+1216:    tete.extend_from_slice(&MAGIE_FLUX.to_le_bytes());
+1228:fn recevoir_flux(s: &mut std::net::TcpStream) -> std::io::Result<(u32, u32, u32, Vec<f32>)> {
+1233:    if u(0) != MAGIE_FLUX { return Err(std::io::Error::new(std::io::ErrorKind::InvalidData,
+1247:fn run_serveur_flux(port: u16) {
+1258:        match recevoir_flux(&mut sock) {
+1264:                if envoyer_flux(&mut sock, debut, fin, pos, &sortie).is_err() { break; }
+1276:fn run_ppl_reparti(opt: Options, pair: &str) {
+1315:        envoyer_flux(&mut sock, couches_locales as u32, n_layer as u32, pos as u32, &etat)
+1317:        let (_, _, _, final_) = recevoir_flux(&mut sock).expect("réception du flux");
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n 1205,1345p drave-core/src/main.rs", "description": "Read distributed PPL implementation"}`
+
+  ```
+/// ---- Phase 3 : le flux passe d'un nœud à l'autre ----------------------------
+///
+/// Cadriciel : `u32` magie, `u32` plage (debut, fin), `u32` position, `u32`
+/// dimension, puis les activations en f32. C'est le même contenu que le format
+/// de trace, réduit à ce qu'un nœud a besoin de recevoir pour continuer.
+const MAGIE_FLUX: u32 = 0x4452_5631;   // "DRV1"
+
+fn envoyer_flux(s: &mut std::net::TcpStream, debut: u32, fin: u32, pos: u32,
+                actifs: &[f32]) -> std::io::Result<()> {
+    use std::io::Write;
+    let mut tete = Vec::with_capacity(20);
+    tete.extend_from_slice(&MAGIE_FLUX.to_le_bytes());
+    tete.extend_from_slice(&debut.to_le_bytes());
+    tete.extend_from_slice(&fin.to_le_bytes());
+    tete.extend_from_slice(&pos.to_le_bytes());
+    tete.extend_from_slice(&(actifs.len() as u32).to_le_bytes());
+    s.write_all(&tete)?;
+    let mut corps = Vec::with_capacity(actifs.len() * 4);
+    for v in actifs { corps.extend_from_slice(&v.to_le_bytes()); }
+    s.write_all(&corps)?;
+    s.flush()
+}
+
+fn recevoir_flux(s: &mut std::net::TcpStream) -> std::io::Result<(u32, u32, u32, Vec<f32>)> {
+    use std::io::Read;
+    let mut tete = [0u8; 20];
+    s.read_exact(&mut tet
+… [5177 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"fn forward\\|fn logits\\|fn norme_finale\\|couche_fin\\|couche_debut\\|emb_imposee\" drave-core/src/model.rs | head -60", "description": "Inspect forward/logits/norm semantics"}`
+
+  ```
+728:    pub emb_imposee: Option<Vec<f32>>,
+731:    pub couche_debut: usize,
+732:    pub couche_fin: usize,
+1536:            couche_debut: 0, couche_fin: n_layer_total,
+1538:            emb_imposee: None, lot: 1,
+1819:        for l in self.couche_debut..self.couche_fin {
+1852:                for l in self.couche_debut..self.couche_fin {
+2083:    pub fn forward_lot(&mut self, toks: &[u32], pos0: usize) -> Vec<Vec<f32>> {
+2159:        for l in self.couche_debut..self.couche_fin {
+2536:        if self.couche_fin < self.cfg.n_layer {
+2587:    pub fn forward_mla(&mut self, tok: u32, pos: usize) -> Vec<f32> {
+2595:        for l in self.couche_debut..self.couche_fin {
+2674:        if self.couche_fin >= self.cfg.n_layer {
+2684:    pub fn logits_f32(&self, hn: &[f32]) -> Vec<f32> {
+2698:    pub fn forward(&mut self, tok: u32, pos: usize) -> Vec<f32> {
+2709:                    attn_gpu_part, emb_imposee, .. } = self;
+2720:        let mut x = match emb_imposee.take() {
+3190:        if self.couche_fin < cfg.n_layer {
+3203:    pub fn logits_lot(&mut self, hs: &[Vec<f32>]) -> Vec<Vec<f32>> {
+3300:    fn logits_gpu(&self, xd: &[i32], sx: f32) -> Option<Vec<f32>> {
+3312:    pub fn norme_finale(&sel
+… [86 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n 2660,2700p drave-core/src/model.rs && echo \"=== forward (fin) ===\" && sed -n 3175,3215p drave-core/src/model.rs && echo \"=== norme_finale / logits ===\" && sed -n 3305,3340p drave-core/src/model.rs", "description": "Read fo … [37 caractères tronqués]`
+
+  ```
+for i in 0..h { x[i] += o[i]; }
+            // --- FFN (les poids du harnais sont en f32, donc lus ici)
+            Self::rmsnorm(&x, &m.ffn_norm, eps, &mut hn);
+            let mut g_t = vec![0f32; m.ffn];
+            let mut u_t = vec![0f32; m.ffn];
+            matvec_f32(&m.gate, &hn, h, m.ffn, &mut g_t);
+            matvec_f32(&m.up, &hn, h, m.ffn, &mut u_t);
+            let mut act = vec![0f32; m.ffn];
+            Self::activation(&mut g_t, &u_t, m.ffn, false);
+            for i in 0..m.ffn { act[i] = g_t[i]; }
+            let mut d = vec![0f32; h];
+            matvec_f32(&m.down, &act, m.ffn, h, &mut d);
+            for i in 0..h { x[i] += d[i]; }
+        }
+        if self.couche_fin >= self.cfg.n_layer {
+            Self::rmsnorm(&x, &self.out_norm, eps, &mut hn);
+            hn
+        } else {
+            x
+        }
+    }
+
+    /// Logits d'un état caché avec une tête **liée en f32** (le harnais MLA n'a
+    /// pas de blocs Q8_0 : `logits` ne s'applique pas).
+    pub fn logits_f32(&self, hn: &[f32]) -> Vec<f32> {
+        let h = self.cfg.hidden;
+        let v = self.cfg.vocab;
+        let mut out = vec![0f32; v];
+        for o in 0..v {
+            let ligne = self.g.row_f
+… [4259 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n 2698,2745p drave-core/src/model.rs && echo \"=== rope: dépendance au ctx ? ===\" && grep -n \"fn rope\\|n_ctx_train\\|ctx as f32\\|interp\" drave-core/src/model.rs | head -30", "description": "Read forward entry and rope conte … [15 caractères tronqués]`
+
+  ```
+pub fn forward(&mut self, tok: u32, pos: usize) -> Vec<f32> {
+        assert!(pos < self.ctx, "contexte dépassé ({pos} ≥ {})", self.ctx);
+        self.jeton_trace += 1;
+        // lus AVANT l'emprunt destructuré : la parcimonie par projection
+        let tkp = self.act_topk_proj;
+        let tkg = self.act_topk;
+        let tk = |p: usize| if tkp[p] > 0 { tkp[p] } else { tkg };
+        // Lus AVANT l'emprunt destructuré (comme la parcimonie par projection).
+        let largeur_profil = self.cfg.ffn.max(self.cfg.ffn_exp);
+        self.profil_jetons += 1;
+        let Model { g, cfg, layers, out_norm, pool, kv, events, attn_events, kv_gpu,
+                    attn_gpu_part, emb_imposee, .. } = self;
+        let h = cfg.hidden;
+        let hd = cfg.head_dim;
+        let nh = cfg.n_head;
+        let nkv = cfg.n_kv_head;
+        let rep = nh / nkv;
+        let ctx = self.ctx;
+
+        // Injection : un vecteur imposé (embedding d'image) remplace la ligne
+        // `token_embd` pour cet appel, et seulement pour lui — c'est le seul
+        // ajout d'architecture que la vision demande au moteur.
+        let mut x = match emb_imposee.take() {
+            Some(v) => v,
+            None => g
+… [2303 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rn \"ppl-reparti\\|flux-serveur\" --include=\"*.md\" --include=\"*.sh\" . | head -20; echo \"=== modele_chemin ===\"; grep -n \"fn modele_chemin\" -A 12 drave-core/src/main.rs; echo \"=== ids/limit ===\"; grep -n '\"--ids\"\\|\ … [113 caractères tronqués]`
+
+  ```
+./journal/sessions/bbd6969f-0f70-42b2-8951-64d1f2f36d2e/digest.md:22428:- **bash** `{"command": "date +\"%H:%M:%S\"; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat /tmp/kv_attribution.log 2>/dev/null | tail -3; (./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf --flux-serveur 45711 > /tmp/serveur_flux.log 2>&1 &) ; sleep 25; timeout 300 ./drave-core/target/ … [306 caractères tronqués]`
+./journal/sessions/bbd6969f-0f70-42b2-8951-64d1f2f36d2e/digest.md:22577:**Phase 3 — le transport** : `--flux-serveur` et `--ppl-reparti` font tourner deux nœuds (pilote + moteur) qui se passent des flux ; **88 flux servis**. **Défaut ouvert et chiffré** : la perplexité répartie (798,3) ne correspond pas à la locale (18,2178) — j'ai préféré l'écrire comme défaut ouvert que de le présenter comme fini.
+./journal/sessions/bbd6969f-0f70-42b2-8951-64d1f2f36d2e/rapport.md:1985:**Phase 3 — le transport** : `--flux-serveur` et `--ppl-reparti` font tourner deux nœuds (pilote + moteur) qui se passent des flux ; **88 flux servis**. **Défaut ouvert et chiffré** : la perplexité répartie (798,3) ne correspond pas à la locale (18,2178) — j'ai préféré l'écrire comme défaut ouvert que de le pr
+… [1753 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+Code lu : le serveur reçoit `fin = n_layer`, donc son `forward` applique la **norme finale**, puis le pilote applique `norme_finale()` **une seconde fois**. Hypothèse : double norme. Je la teste avant de corriger.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/test_reparti.sh <<'EOF'\n#!/bin/bash\n# Banc réparti minimal : un nœud moteur + un pilote, comparaison local/réparti.\ncd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\nBIN=./drave-core/target/release/drave\nMOD=models/Q … [638 caractères tronqués]`
+
+  ```
+(no output)
+[timed out after 60000ms]
+[killed by signal: SIGTERM]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date +\"%H:%M:%S\"; echo \"--- serveur ---\"; cat /tmp/serveur_avant.log 2>/dev/null | tail -5; echo \"--- procs ---\"; pgrep -a -f \"flux-serveur|ppl-reparti\" | head; echo \"--- port ---\"; ss -ltn 2>/dev/null | grep 45733", "descr … [39 caractères tronqués]`
+
+  ```
+10:38:40
+--- serveur ---
+[config] 24 couches, hidden 896 · 
+[config] puits appris sur 0/24 couches · n_rot 64 · ffn 4864 · experts 0
+[config] rotation : RoPE simple (le modèle ne déclare pas YaRN)
+[flux] nœud moteur sur 127.0.0.1:45733 · 896 cachés · 24 couches
+[flux] client connecté : 127.0.0.1:52510
+--- procs ---
+4101990 bash -c cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date +"%H:%M:%S"; echo "--- serveur ---"; cat /tmp/serveur_avant.log 2>/dev/null | tail -5; echo "--- procs ---"; pgrep -a -f "flux-serveur|ppl-reparti" | head; echo "--- port ---"; ss -ltn 2>/dev/null | grep 45733
+--- port ---
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && TAG=avant PORT=45733 LIM=40 /tmp/test_reparti.sh; date +\"%H:%M:%S\"", "description": "Rerun pre-fix distributed test in background", "run_in_background": true}`
+
+  ```
+started background job bash-41
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for l in 2530 2670 3186; do echo \"=== autour de $l ===\"; sed -n \"$((l-8)),$((l+12))p\" drave-core/src/model.rs; done", "description": "Inspect all final-norm condition sites"}`
+
+  ```
+=== autour de 2530 ===
+                quantifier(&gate, &mut gi, &mut sg, self.act_levels, self.act_thresh);
+                {
+                    let d8 = self.layers[l].wdown.d.as_ref().expect("projection dense requise");
+                    self.pool.gemm_dense_i8(d8, &gi, t, &sg, &mut yl[..d8.n_out * t]);
+                }
+                for i in 0..t {
+                    for oo in 0..h {
+                        down[i * h + oo] = yl[oo * t + i];
+                        x[i * h + oo] = o[i * h + oo] + down[i * h + oo];
+                    }
+                }
+            }
+            self.prof[3] += t_ffn.elapsed().as_secs_f64();
+        }
+        if self.couche_fin < self.cfg.n_layer {
+            // Nœud intermédiaire : on rend le flux résiduel brut, sans norme.
+            return (0..t).map(|i| x[i * h..(i + 1) * h].to_vec()).collect();
+        }
+        for i in 0..t {
+            let r = x[i * h..(i + 1) * h].to_vec();
+            Self::rmsnorm(&r, &self.out_norm, self.cfg.eps, &mut hn[i * h..(i + 1) * h]);
+=== autour de 2670 ===
+            Self::rmsnorm(&x, &m.ffn_norm, eps, &mut hn);
+            let mut g_t = vec![0f32; m.ffn];
+            let mut u_t = vec![0f32; m.
+… [1519 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n 720,740p drave-core/src/model.rs && echo \"=== init ===\" && sed -n 1528,1545p drave-core/src/model.rs", "description": "Read Model fields and constructor init"}`
+
+  ```
+/// Relecture d'une trace : les activations enregistrées REMPLACENT celles
+    /// calculées (`--flux-forcer`). Si le rejeu redonne les mêmes logits, alors
+    /// une liste suffit à continuer le calcul — c'est le contrat de la phase 3.
+    pub flux_force: Option<FluxRelecteur>,
+    /// Embedding imposé pour le prochain appel à `forward` : c'est le point
+    /// d'injection des vecteurs d'image (ou de tout autre vecteur), le seul
+    /// ajout d'architecture que la vision demande au moteur — `forward` partait
+    /// toujours de `token_embd`.
+    pub emb_imposee: Option<Vec<f32>>,
+    /// Première et dernière couche PORTÉES par ce modèle (exclue). Un nœud
+    /// distant ne charge que sa plage : c'est le découpage de la phase 3.
+    pub couche_debut: usize,
+    pub couche_fin: usize,
+    /// Couches MLA, si le modèle en est un (`attn_kv_a_mqa` présent).
+    pub mla: Option<Vec<Mla>>,
+    /// Cache LATENT par couche : `c_kv` (kv_lora) et `k_rope` (qkr) par position.
+    pub mla_cache: Vec<(Vec<f32>, Vec<f32>)>,
+    /// Cache VRAM des experts MoE (`DRAVE_GPU_EXPERTS=1`).
+    pub cache_experts: Option<CacheExperts>,
+    /// Taille du lot de PRÉREMPLISSAGE en inférence (1 = jeton par j
+… [884 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+Le banc tourne. J'applique la correction : un drapeau explicite « nœud intermédiaire » plutôt qu'une condition implicite sur `couche_fin`.
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs", "old_string": "    pub couche_debut: usize,\n    pub couche_fin: usize,", "new_string": "    pub couche_debut: usize,\n    pub couche_fin: usize,\n    /// Nœud **intermédiaire** du transport : sa plage peut alle … [436 caractères tronqués]`
+
+  ```
+Error: edit requires reading "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs" first — read the file, then retry
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs", "offset": 726, "limit": 14}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs</path>
+<type>file</type>
+<content>
+726:     /// ajout d'architecture que la vision demande au moteur — `forward` partait
+727:     /// toujours de `token_embd`.
+728:     pub emb_imposee: Option<Vec<f32>>,
+729:     /// Première et dernière couche PORTÉES par ce modèle (exclue). Un nœud
+730:     /// distant ne charge que sa plage : c'est le découpage de la phase 3.
+731:     pub couche_debut: usize,
+732:     pub couche_fin: usize,
+733:     /// Couches MLA, si le modèle en est un (`attn_kv_a_mqa` présent).
+734:     pub mla: Option<Vec<Mla>>,
+735:     /// Cache LATENT par couche : `c_kv` (kv_lora) et `k_rope` (qkr) par position.
+736:     pub mla_cache: Vec<(Vec<f32>, Vec<f32>)>,
+737:     /// Cache VRAM des experts MoE (`DRAVE_GPU_EXPERTS=1`).
+738:     pub cache_experts: Option<CacheExperts>,
+739:     /// Taille du lot de PRÉREMPLISSAGE en inférence (1 = jeton par jeton).
+
+(Showing lines 726-739 of 3574. Use offset=740 to continue.)
+</content>
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs", "old_string": "    pub couche_debut: usize,\n    pub couche_fin: usize,\n    /// Couches MLA, si le modèle en est un (`attn_kv_a_mqa` présent).", "new_string": "    pub couche_debut: usize,\n    pub couche_fin:  … [590 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs", "new_string": "            couche_debut: 0, couche_fin: n_layer_total, flux_brut: false,", "old_string": "            couche_debut: 0, couche_fin: n_layer_total,"}`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs has been updated successfully.
+  ```
+
+### 🤖 Assistant
+
+Maintenant les trois sites qui appliquent la norme finale :
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs", "limit": 6, "offset": 2543}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs</path>
+<type>file</type>
+<content>
+2543:         }
+2544:         if self.couche_fin < self.cfg.n_layer {
+2545:             // Nœud intermédiaire : on rend le flux résiduel brut, sans norme.
+2546:             return (0..t).map(|i| x[i * h..(i + 1) * h].to_vec()).collect();
+2547:         }
+2548:         for i in 0..t {
+
+(Showing lines 2543-2548 of 3582. Use offset=2549 to continue.)
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/model.rs'; s=open(p).read()\na = \"\"\"        if self.couche_fin < self.cfg.n_layer {\n            // Nœud intermédiaire : on rend le flux résiduel brut, sans norme.\"\"\"\nb = \"\"\"        if se … [1184 caractères tronqués]`
+
+  ```
+3 sites corrigés
+740:    pub flux_brut: bool,
+1544:            couche_debut: 0, couche_fin: n_layer_total, flux_brut: false,
+2544:        if self.flux_brut || self.couche_fin < self.cfg.n_layer {
+2682:        if self.couche_fin >= self.cfg.n_layer && !self.flux_brut {
+3198:        if self.flux_brut || self.couche_fin < cfg.n_layer {
+  ```
+
+- **job_output** `{"job_id": "bash-41", "wait": true, "timeout_ms": 120000}`
+
+  ```
+[modele] 24 couches chargées en 1.312162187s — listes 0.00 Go , 16 threads
+[config] 24 couches, hidden 896 · 
+[config] puits appris sur 0/24 couches · n_rot 64 · ffn 4864 · experts 0
+[config] rotation : RoPE simple (le modèle ne déclare pas YaRN)
+[flux] pilote : 12 couches en local, 12 chez le pair, 40 jetons
+  référence locale  : perplexité 144.8289  (22.6 s)
+  deux nœuds        : perplexité 1621.7239  (44.3 s)
+  écart             : 1.02e1
+10:39:53
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+Défaut reproduit en miniature : local **144,83** contre réparti **1 621,72** (×11,2). J'applique le drapeau côté nœud moteur et je reconstruis.
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/main.rs", "limit": 16, "offset": 1252}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/main.rs</path>
+<type>file</type>
+<content>
+1252:     println!("[flux] nœud moteur sur 127.0.0.1:{port} · {hidden} cachés · {} couches",
+1253:              mdl.cfg.n_layer);
+1254:     let (mut sock, pair) = ecoute.accept().expect("connexion");
+1255:     println!("[flux] client connecté : {pair}");
+1256:     let mut servis = 0u64;
+1257:     loop {
+1258:         match recevoir_flux(&mut sock) {
+1259:             Ok((debut, fin, pos, actifs)) => {
+1260:                 mdl.couche_debut = debut as usize;
+1261:                 mdl.couche_fin = fin as usize;
+1262:                 mdl.emb_imposee = Some(actifs);
+1263:                 let sortie = mdl.forward(0, pos as usize);
+1264:                 if envoyer_flux(&mut sock, debut, fin, pos, &sortie).is_err() { break; }
+1265:                 servis += 1;
+1266:             }
+1267:             Err(_) => break,
+
+(Showing lines 1252-1267 of 2502. Use offset=1268 to continue.)
+</content>
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/main.rs", "new_string": "            Ok((debut, fin, pos, actifs)) => {\n                mdl.couche_debut = debut as usize;\n                mdl.couche_fin = fin as usize;\n                // Le nœud moteur rend TOUJOURS u … [487 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/main.rs has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && timeout 900 cargo build --release 2>&1 | tail -5; date +\"%H:%M:%S\"", "description": "Rebuild engine with fix", "timeoutMs": 900000}`
+
+  ```
+|
+    = note: `#[warn(non_shorthand_field_patterns)]` on by default
+
+warning: `drave-core` (bin "drave") generated 16 warnings (run `cargo fix --bin "drave" -p drave-core` to apply 7 suggestions)
+    Finished `release` profile [optimized] target(s) in 23.25s
+10:40:24
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && TAG=apres PORT=45734 LIM=40 /tmp/test_reparti.sh; date +\"%H:%M:%S\"", "description": "Rerun distributed test after fix", "run_in_background": true}`
+
+  ```
+started background job bash-42
+  ```
+
+- **job_output** `{"job_id": "bash-42", "timeout_ms": 180000, "wait": true}`
+
+  ```
+[modele] 24 couches chargées en 1.486993178s — listes 0.00 Go , 16 threads
+[config] 24 couches, hidden 896 · 
+[config] puits appris sur 0/24 couches · n_rot 64 · ffn 4864 · experts 0
+[config] rotation : RoPE simple (le modèle ne déclare pas YaRN)
+[flux] pilote : 12 couches en local, 12 chez le pair, 40 jetons
+  référence locale  : perplexité 144.8289  (31.0 s)
+  deux nœuds        : perplexité 693.4492  (45.1 s)
+  écart             : 3.79e0
+10:41:45
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+Le premier correctif aide (×11,2 → ×4,8) mais ne suffit pas : il y a **un second** défaut. Je cherche les autres asymétries entre local et réparti.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && awk 'NR>=2705 && NR<=3205' drave-core/src/model.rs | grep -n \"tok\\b\\|tok as\\|couche_debut\\|emb_imposee\\|out_norm\\|jeton\" | head -30", "description": "Find tok/couche_debut dependence inside forward"}`
+
+  ```
+2:    pub fn forward(&mut self, tok: u32, pos: usize) -> Vec<f32> {
+4:        self.jeton_trace += 1;
+11:        self.profil_jetons += 1;
+12:        let Model { g, cfg, layers, out_norm, pool, kv, events, attn_events, kv_gpu,
+13:                    attn_gpu_part, emb_imposee, .. } = self;
+24:        let mut x = match emb_imposee.take() {
+26:            None => g.row_f32("token_embd.weight", tok as usize, h),
+74:                let j = self.jeton_trace;
+93:                    let j = self.jeton_trace;
+329:                let j = self.jeton_trace;
+337:                    let j = self.jeton_trace;
+400:                    // repasserait 4,4 Mo sur le bus à chaque jeton.
+497:        Self::rmsnorm(&x, out_norm, cfg.eps, &mut hn);
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"for l in\" drave-core/src/model.rs | head; echo \"=== contexte du début de boucle de forward ===\"; grep -n \"for l in.*deb\" drave-core/src/model.rs | head", "description": "Locate layer loops"}`
+
+  ```
+1247:        for l in 0..cfg.n_layer {
+1451:            for l in 0..cfg.n_layer {
+1827:        for l in self.couche_debut..self.couche_fin {
+1860:                for l in self.couche_debut..self.couche_fin {
+2167:        for l in self.couche_debut..self.couche_fin {
+2603:        for l in self.couche_debut..self.couche_fin {
+2761:        for l in 0..cfg.n_layer {
+=== contexte du début de boucle de forward ===
+1827:        for l in self.couche_debut..self.couche_fin {
+1860:                for l in self.couche_debut..self.couche_fin {
+2167:        for l in self.couche_debut..self.couche_fin {
+2603:        for l in self.couche_debut..self.couche_fin {
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs", "limit": 40, "offset": 2755}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs</path>
+<type>file</type>
+<content>
+2755:             if simd { return unsafe { Self::dot8_avx(a, b) }; }
+2756:             Self::dot8(a, b)
+2757:         };
+2758:         let mut attn_idx: Vec<u32> = Vec::with_capacity(ctx);
+2759:         let attn_all: Vec<u32> = (0..ctx as u32).collect();
+2760: 
+2761:         for l in 0..cfg.n_layer {
+2762:             let lay = &layers[l];
+2763:             // Fenêtre EFFECTIVE de cette couche : le motif déclaré (gpt-oss :
+2764:             // une couche sur deux en attention complète) prime sur le réglage
+2765:             // global. Lue en champs directs : `self` est déjà déstructuré.
+2766:             let fen = if self.attn_window == 0 { 0 }
+2767:                       else if self.swa_pattern <= 1 { self.attn_window }
+2768:                       else if l % self.swa_pattern < self.swa_pattern - 1 { self.attn_window }
+2769:                       else { 0 };
+2770:             let tm = Instant::now();
+2771:             Self::rmsnorm(&x, &lay.attn_norm, cfg.eps, &mut hn);
+2772:             if self.flux_force.is_some() {
+2773:                 // Diagnostic : comparer ce 
+… [1466 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+**Trouvé le vrai défaut** : `forward` boucle sur `0..cfg.n_layer` — il ignore `couche_debut`/`couche_fin`. Le pilote calculait donc les 24 couches, envoyait l'état **final**, et le pair recalculait les 24 couches par-dessus.
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs", "new_string": "        // La plage PORTÉE par ce nœud (`couche_debut..couche_fin`), et non\n        // `0..n_layer` : un nœud qui reçoit un flux reprend à SA première couche.\n        // La boucle partait de zér … [390 caractères tronqués]`
+
+  ```
+Error: old_string matched 3 times in "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs"; provide a more specific old_string or set replace_all to true
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs", "new_string": "        let mut attn_idx: Vec<u32> = Vec::with_capacity(ctx);\n        let attn_all: Vec<u32> = (0..ctx as u32).collect();\n\n        // La plage PORTÉE par ce nœud (`couche_debut..couche_fin`), e … [642 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && timeout 900 cargo build --release 2>&1 | grep -E \"^error|^warning: unused|Finished\" | tail -5; date +\"%H:%M:%S\"", "description": "Rebuild with layer-range fix", "timeoutMs": 900000}`
+
+  ```
+warning: unused variable: `arch`
+warning: unused variable: `tk5`
+warning: unused variable: `attn_all`
+warning: unused variable: `attn_idx`
+    Finished `release` profile [optimized] target(s) in 21.68s
+10:42:39
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && TAG=apres2 PORT=45735 LIM=40 /tmp/test_reparti.sh; date +\"%H:%M:%S\"", "description": "Retest distributed fidelity after second fix", "run_in_background": true}`
+
+  ```
+started background job bash-43
+  ```
+
+- **job_output** `{"job_id": "bash-43", "timeout_ms": 180000, "wait": true}`
+
+  ```
+[modele] 24 couches chargées en 1.40396955s — listes 0.00 Go , 16 threads
+[config] 24 couches, hidden 896 · 
+[config] puits appris sur 0/24 couches · n_rot 64 · ffn 4864 · experts 0
+[config] rotation : RoPE simple (le modèle ne déclare pas YaRN)
+[flux] pilote : 12 couches en local, 12 chez le pair, 40 jetons
+  référence locale  : perplexité 144.8289  (23.3 s)
+  deux nœuds        : perplexité 144.8289  (24.2 s)
+  écart             : 0.00e0
+10:43:32
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+Écart **0,00e0** : le découpage est désormais fidèle au bit près. Je verrouille avec un banc plus long + les portes de non-régression.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rn \"19,3885\\|19.3885\" --include=\"*.md\" --include=\"*.sh\" . | grep -v journal/ | head -10; echo \"=== ids ===\"; ls /tmp/ids_*.txt 2>/dev/null; ls models/ | head", "description": "Find regression gate commands"}`
+
+  ```
+./reports/rapport-gpt-oss-perplexite.md:175:complète. Le contrôle de non-régression Qwen ne bouge pas (19,3885).
+./reports/rapport-prefill-par-lots.md:197:et la porte de non-régression Qwen contexte 256 reste à **19,3885**.
+./docs/convertisseur.md:193:| Qwen2.5-0.5B | Q8_0 | 19,3885 | 32 | **0,81 s** | **0,57 Go** |
+./docs/contexte-long.md:322:scalaire **au bit près**, ce que la perplexité confirme (19,3885 et 13,1359
+./docs/contexte-long.md:335:19,3885.
+./docs/plan-mla-vision.md:297:Vérifié : `cargo test` 6/6 et la porte Qwen reste à **19,3885** (le vecteur
+./docs/vision.md:156:* les **portes de non-régression** du dépôt (Qwen ctx 256 = **19,3885**,
+./docs/roadmap.md:108:| 2026-09-30 | diff KV f32 contre KV int8 (perplexité 19,3885 contre 19,8059) | première divergence couche 1 jeton 0 · couche la plus touchée FFN 2 (3,9 × la dynamique) · 229 000 neurones changés sur 24 couches |
+./docs/roadmap.md:175:sans rejeu  : perplexité 19.3885 sur 510 tokens
+./docs/roadmap.md:176:avec rejeu  : perplexité 19.3885 sur 510 tokens
+=== ids ===
+/tmp/ids_llama.txt
+/tmp/ids_oss_2048.txt
+/tmp/ids_oss_240.txt
+/tmp/ids_oss_4096.txt
+/tmp/ids_oss_512.txt
+/tmp/ids_oss_64.txt
+/tmp/ids_oss_debut.txt
+/tmp/i
+… [269 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n 165,195p docs/roadmap.md; echo \"=== scripts ===\"; ls *.sh tools/*.sh 2>/dev/null; grep -rn \"ids_qwen.txt\\|ids_qwen_512\" --include=\"*.md\" . | grep -v journal/ | head -5", "description": "Find exact gate invocation"}`
+
+  ```
+`--flux-forcer <trace>` relit une trace et **remplace les activations calculées
+par celles qui sont enregistrées** (déquantifiées). Si le rejeu redonne les mêmes
+logits, alors **une liste suffit à continuer le calcul** — c'est exactement le
+contrat qu'un nœud distant devra honorer, et il est donc déjà démontré
+localement.
+
+Mesuré, Qwen2.5-0.5B, 512 jetons, deux fenêtres de contexte, trace de 132 Mo :
+
+```
+sans rejeu  : perplexité 19.3885 sur 510 tokens
+avec rejeu  : perplexité 19.3885 sur 510 tokens
+```
+
+Identique. Et le diagnostic (`DRAVE_FLUX_VERIF=1`) chiffre la fidélité de
+l'encodage : écart relatif **1,5e-5** entre l'activation calculée et celle que la
+trace impose — soit la quantification 16 bits, rien de plus.
+
+**Le défaut trouvé en chemin, et corrigé** : la clé d'une liste était
+`(couche, position DANS la fenêtre)`. Une exécution à plusieurs fenêtres
+réécrivait donc les mêmes clés, et le rejeu rejouait la mauvaise : perplexité
+**356 694** au lieu de 17,43. La clé est maintenant `(couche, compteur de jeton
+global)` — même format sur le disque, sémantique non ambiguë. C'est le genre de
+défaut qu'un rejeu attrape et qu'un diff ne voit pas.
+
+
+### Phase 3 — ce qui tourne déjà, e
+… [673 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n 265,280p REPRISE.md", "description": "Read canonical gate command"}`
+
+  ```
+## 8. Premier pas suggéré pour la nouvelle session
+
+```bash
+# 1. l'état est-il vert ? (Qwen ne doit pas bouger : les corrections de cette
+#    session ne touchent que les modèles à biais de sortie et à fenêtre par couche)
+cd drave-core && cargo build --release && cargo test --release
+./target/release/drave ../models/Qwen2.5-0.5B-Q8_0.gguf --ppl /tmp/ids_qwen.txt \
+    --ctx 256 --abits 16 --threads 16 --limit 512 --dense   # attendu 19,3885
+
+# 2. si /tmp a été vidé, régénérer le corpus et les identifiants (§2)
+
+# 3. gpt-oss : le chiffre de contrôle de cette session (≈ 45 s de chargement,
+#    ~100 s pour 510 jetons). SANS `DRAVE_GPU` : la variable ouvre le pilote, et le
+#    moteur déporte alors tout seul les projections Q8_0 de plus de 8 Mo — le
+#    chiffre devient 15,1667 (même calcul, ordre de sommation du noyau GPU).
+./target/release/drave /home/stephane/FastNVMe/models/gpt-oss-120b-MXFP4.gguf \
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/verif_phase3.sh <<'EOF'\n#!/bin/bash\ncd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\nBIN=./drave-core/target/release/drave\necho \"=== porte Qwen ctx 256 (attendu 19,3885) ===\"\n$BIN models/Qwen2.5-0.5B-Q8_0.gguf --p … [508 caractères tronqués]`
+
+  ```
+started background job bash-44
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n 45,60p docs/roadmap.md; echo \"=== 190-230 ===\"; sed -n 190,235p docs/roadmap.md; echo \"=== journal des mesures (début) ===\"; sed -n 100,112p docs/roadmap.md", "description": "Read roadmap phase 3 and measurement log"}`
+
+  ```
+**Objectif** : deux machines qui se passent des listes, pas des matrices.
+
+Le prototype se fera **avec Colab** : un *nœud moteur* (un bloc de couches) sur le
+runtime Colab, un *nœud pilote* (embeddings, tête, échantillonnage) en local, et
+entre les deux **le format de la phase 0** — c'est précisément pour cela qu'il est
+défini avant.
+
+| # | chantier | état | critère de succès |
+|---|---|---|---|
+| 3.1 | **Contrat d'échange v1** : tranche de liste = en-tête (couche, source, échelle, bits) + paires (destination, valeur) | 🔬 | format écrit, relu, rejoué sans perte (phase 0.3/0.3bis) ; **transport TCP en place** (`--flux-serveur`, `--ppl-reparti`) — 88 flux servis entre deux processus, mais la perplexité répartie n'est PAS encore fidèle (798 contre 18,2) : le défaut est identifié comme prochain chantier, pas maquillé |
+| 3.2 | **Granularité** : par couche, par bloc de canaux, par expert | ⏳ | courbe : octets par jeton × latence pour chaque granularité |
+| 3.3 | **Seuil de rentabilité** : à partir de quel débit réseau le découpage gagne | ⏳ | formule validée par une mesure locale (socket `localhost`) avant Colab |
+| 3.4 | **Démonstration Colab** : préremplissage réparti (le décodage res
+… [2147 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='docs/roadmap.md'; s=open(p).read()\n\nvieux_ligne = \"| 3.1 | **Contrat d'échange v1** : tranche de liste = en-tête (couche, source, échelle, bits) + paires (destination, valeur) | 🔬 | format écrit, relu, rejoué  … [4184 caractères tronqués]`
+
+  ```
+roadmap mise à jour
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='docs/format-flux.md'; s=open(p).read()\nvieux = \"\"\"Le flux voyage en **f32** sur le réseau alors qu'il est quantifié sur le disque :\nc'est un choix de simplicité pour le banc d'essai, pas une obligation — la  … [6072 caractères tronqués]`

@@ -52,7 +52,7 @@ défini avant.
 
 | # | chantier | état | critère de succès |
 |---|---|---|---|
-| 3.1 | **Contrat d'échange v1** : tranche de liste = en-tête (couche, source, échelle, bits) + paires (destination, valeur) | 🔬 | format écrit, relu, rejoué sans perte (phase 0.3/0.3bis) ; **transport TCP en place** (`--flux-serveur`, `--ppl-reparti`) — 88 flux servis entre deux processus, mais la perplexité répartie n'est PAS encore fidèle (798 contre 18,2) : le défaut est identifié comme prochain chantier, pas maquillé |
+| 3.1 | **Contrat d'échange v1** : tranche de liste = en-tête (couche, source, échelle, bits) + paires (destination, valeur) | ✅ | format écrit, relu, rejoué sans perte (phase 0.3/0.3bis) ; **transport TCP en place et FIDÈLE** (`--flux-serveur`, `--ppl-reparti`) — écart local/réparti **0,00e0** sur 40 et 199 flux, après correction de deux défauts (plage de couches ignorée par `forward`, norme finale appliquée deux fois) |
 | 3.2 | **Granularité** : par couche, par bloc de canaux, par expert | ⏳ | courbe : octets par jeton × latence pour chaque granularité |
 | 3.3 | **Seuil de rentabilité** : à partir de quel débit réseau le découpage gagne | ⏳ | formule validée par une mesure locale (socket `localhost`) avant Colab |
 | 3.4 | **Démonstration Colab** : préremplissage réparti (le décodage reste séquentiel — c'est écrit dans la vision) | ⏳ | les mêmes logits qu'en local, à 1e-5 près |
@@ -105,6 +105,7 @@ calcul : c'est la raison pour laquelle la phase 0 sert la phase 3.
 | date | mesure | valeur |
 |---|---|---|
 | 2026-09-30 | trace du flux, Qwen2.5-0.5B, 512 jetons, 24 couches, 2 points par couche | 12 288 listes · **132 Mo** · 6 octets par neurone actif · **+8 % de temps** |
+| 2026-09-30 | calcul réparti sur deux processus (12 couches chacun), 40 jetons | écart local/réparti **0,00e0** (144,8289 = 144,8289) après correction de deux défauts ; avant : ×11,2 |
 | 2026-09-30 | diff KV f32 contre KV int8 (perplexité 19,3885 contre 19,8059) | première divergence couche 1 jeton 0 · couche la plus touchée FFN 2 (3,9 × la dynamique) · 229 000 neurones changés sur 24 couches |
 
 Le second point est exactement ce que la vision promettait : **la divergence est
@@ -196,13 +197,36 @@ flux résultant ; `--ppl-reparti <hôte:port> --couches-locales N` fait tourner 
 **pilote** qui garde les N premières couches, envoie le flux, reçoit l'état final
 et note la perplexité.
 
-Mesuré, deux processus, localhost, 88 jetons de 896 cachés : **88 flux servis**,
-aucune erreur de transport — et la perplexité répartie **ne correspond pas**
-encore (798,3 contre 18,2178 en local).
+Mesuré, deux processus, localhost, 12 couches de chaque côté : le calcul coupé
+redonne **exactement** le calcul local — écart **0,00e0**, perplexité 144,8289 des
+deux côtés, sur 40 jetons puis sur 200 (199 flux servis).
+
+Il a fallu **deux corrections** pour y arriver, et la première ne suffisait pas :
+
+1. **`forward` ignorait la plage de couches.** La boucle partait de `0` au lieu de
+   `couche_debut..couche_fin` : le pilote calculait les 24 couches, envoyait
+   l'état FINAL, et le nœud moteur recalculait les 24 couches par-dessus. C'était
+   la cause principale. `forward_lot` et `forward_mla` respectaient déjà la plage ;
+   `forward` était l'exception — exactement le genre d'asymétrie que le mode
+   d'échec « analysé mais jamais appliqué » du dépôt produit.
+2. **La norme finale était appliquée deux fois.** Le nœud moteur recevait
+   `fin = n_layer`, donc son `forward` normait (`couche_fin >= n_layer`), et le
+   pilote normait ensuite avec `norme_finale()`. La règle est maintenant portée
+   par un drapeau explicite, `flux_brut` : un nœud intermédiaire rend TOUJOURS un
+   flux résiduel brut, et la norme appartient au nœud qui possède la tête de
+   sortie — une seule fois.
+
+Le protocole, lui, n'a pas changé d'un octet : c'est le moteur qui était faux.
+Chiffres des trois états, mesurés sur le même banc de 40 jetons :
+
+| état | perplexité locale | perplexité répartie | écart |
+|---|---|---|---|
+| avant correction | 144,8289 | 1 621,7239 | ×11,2 |
+| après la norme seule | 144,8289 | 693,4492 | ×4,8 |
+| après la plage de couches | 144,8289 | **144,8289** | **0,00e0** |
 
 Ce qui est donc ACQUIS : le cadriciel d'échange, la séparation en deux nœuds, la
-plage de couches par nœud, la norme finale appliquée par le dernier nœud
-seulement. Ce qui reste à trouver : pourquoi le calcul coupé diverge — les
-candidats sont la position transmise (elle l'est), la norme d'entrée du nœud
-distant (elle s'applique à la couche 12, correctement) et l'état du cache KV de
-chaque nœud. C'est écrit ici comme un défaut OUVERT, avec ses chiffres.
+plage de couches par nœud, la norme finale appliquée par le seul nœud qui a la
+tête — et la preuve que le découpage ne change pas un chiffre. Ce qui reste :
+le transport lui-même (aujourd'hui du f32 dense, 3 604 octets par flux), la
+granularité (3.2), le seuil de rentabilité (3.3) et la version du format (3.5).

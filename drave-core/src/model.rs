@@ -730,6 +730,14 @@ pub struct Model {
     /// distant ne charge que sa plage : c'est le découpage de la phase 3.
     pub couche_debut: usize,
     pub couche_fin: usize,
+    /// Nœud **intermédiaire** du transport : sa plage peut aller jusqu'à la
+    /// dernière couche, il n'en rend pas moins le flux résiduel BRUT.
+    ///
+    /// Sans ce drapeau, un nœud moteur qui porte les couches `N/2..N` normait le
+    /// flux (`couche_fin >= n_layer`) et le pilote le normait une SECONDE fois :
+    /// perplexité répartie **798,3** au lieu de **18,2**. La norme finale est
+    /// appliquée par le nœud qui possède la tête de sortie — une seule fois.
+    pub flux_brut: bool,
     /// Couches MLA, si le modèle en est un (`attn_kv_a_mqa` présent).
     pub mla: Option<Vec<Mla>>,
     /// Cache LATENT par couche : `c_kv` (kv_lora) et `k_rope` (qkr) par position.
@@ -1533,7 +1541,7 @@ impl Model {
             stop_id: None, stop_id2: None, prof: [0.0; 6],
             tete,
             tete_gpu, tete_gpu_q6k, head4, sinks_vus, kv_gpu, attn_gpu_part: Vec::new(),
-            couche_debut: 0, couche_fin: n_layer_total,
+            couche_debut: 0, couche_fin: n_layer_total, flux_brut: false,
             cache_experts, mla, mla_cache, jeton_trace: 0, trace: None, flux_force: None,
             emb_imposee: None, lot: 1,
             patch: None, ffn_gain: None, hebb: None,
@@ -2533,7 +2541,7 @@ impl Model {
             }
             self.prof[3] += t_ffn.elapsed().as_secs_f64();
         }
-        if self.couche_fin < self.cfg.n_layer {
+        if self.flux_brut || self.couche_fin < self.cfg.n_layer {
             // Nœud intermédiaire : on rend le flux résiduel brut, sans norme.
             return (0..t).map(|i| x[i * h..(i + 1) * h].to_vec()).collect();
         }
@@ -2671,7 +2679,7 @@ impl Model {
             matvec_f32(&m.down, &act, m.ffn, h, &mut d);
             for i in 0..h { x[i] += d[i]; }
         }
-        if self.couche_fin >= self.cfg.n_layer {
+        if self.couche_fin >= self.cfg.n_layer && !self.flux_brut {
             Self::rmsnorm(&x, &self.out_norm, eps, &mut hn);
             hn
         } else {
@@ -2750,7 +2758,13 @@ impl Model {
         let mut attn_idx: Vec<u32> = Vec::with_capacity(ctx);
         let attn_all: Vec<u32> = (0..ctx as u32).collect();
 
-        for l in 0..cfg.n_layer {
+        // La plage PORTÉE par ce nœud (`couche_debut..couche_fin`), et non
+        // `0..n_layer` : un nœud qui reçoit un flux reprend à SA première couche.
+        // La boucle partait de zéro — le pilote calculait donc les 24 couches,
+        // envoyait l'état final, et le pair les recalculait toutes par-dessus :
+        // perplexité répartie 798,3 au lieu de 18,2. `forward_lot` et
+        // `forward_mla` respectaient déjà la plage ; `forward` était l'exception.
+        for l in self.couche_debut..self.couche_fin {
             let lay = &layers[l];
             // Fenêtre EFFECTIVE de cette couche : le motif déclaré (gpt-oss :
             // une couche sur deux en attention complète) prime sur le réglage
@@ -3187,7 +3201,7 @@ dynamique de {dyn_:.3e} (relatif {:.2e})", mx / dyn_.max(1e-9));
             for i in 0..h { x[i] = o[i] + down[i]; }
             self.prof[3] += tf.elapsed().as_secs_f64();
         }
-        if self.couche_fin < cfg.n_layer {
+        if self.flux_brut || self.couche_fin < cfg.n_layer {
             return x;                       // nœud intermédiaire : flux brut
         }
         Self::rmsnorm(&x, out_norm, cfg.eps, &mut hn);

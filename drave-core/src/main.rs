@@ -1259,6 +1259,10 @@ fn run_serveur_flux(port: u16) {
             Ok((debut, fin, pos, actifs)) => {
                 mdl.couche_debut = debut as usize;
                 mdl.couche_fin = fin as usize;
+                // Le nœud moteur rend TOUJOURS un flux résiduel brut : la norme
+                // finale appartient au nœud qui a la tête de sortie, et à lui
+                // seul. C'est ce qui manquait — 798,3 au lieu de 18,2.
+                mdl.flux_brut = true;
                 mdl.emb_imposee = Some(actifs);
                 let sortie = mdl.forward(0, pos as usize);
                 if envoyer_flux(&mut sock, debut, fin, pos, &sortie).is_err() { break; }

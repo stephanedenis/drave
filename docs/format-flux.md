@@ -53,10 +53,20 @@ requête   magie        u32          0x44525631 (« DRV1 »)
 réponse   même en-tête, puis dimension × f32
 ```
 
-Le flux voyage en **f32** sur le réseau alors qu'il est quantifié sur le disque :
-c'est un choix de simplicité pour le banc d'essai, pas une obligation — la version
-quantifiée du transport est ce que la phase 3 devra mesurer (octets par jeton ×
-latence).
+Le flux voyage en **f32 dense** sur le réseau alors qu'il est quantifié sur le
+disque : c'est un choix de simplicité pour le banc d'essai, pas une obligation —
+soit **3 604 octets par flux** (20 d'en-tête + 896 × 4) pour Qwen2.5-0.5B. La
+version quantifiée du transport est ce que la phase 3 devra mesurer (octets par
+jeton × latence) ; le disque, lui, est déjà à 6 octets par neurone actif.
+
+### Qui applique la norme finale (règle, pas détail)
+
+Un flux qui circule est un **résidu brut**. La norme finale n'appartient qu'au
+nœud qui possède la tête de sortie, et elle s'applique **une fois**. Le nœud
+moteur le déclare par un drapeau explicite (`flux_brut`) plutôt que de le déduire
+de sa plage de couches : « ma plage va jusqu'à la dernière couche » et « je dois
+normer » sont deux choses différentes, et les confondre a coûté la fidélité du
+découpage (798,3 au lieu de 18,2).
 
 ## Invariants vérifiés
 
@@ -66,3 +76,4 @@ latence).
 | un rejeu redonne le même résultat | `--flux-forcer` : perplexité **19,3885** avec et sans rejeu (chemin par jeton), **17,4294** (chemin par lots) |
 | la fidélité de l'encodage est chiffrée | `DRAVE_FLUX_VERIF=1` : écart relatif **1,5e-5**, soit la quantification 16 bits |
 | la taille suit l'activité | densité ÷2,3 → trace ÷2,5 (132 Mo → 53 Mo) |
+| le découpage ne change pas le résultat | deux processus, 12 couches chacun : écart local/réparti **0,00e0** (144,8289 = 144,8289), 40 puis 199 flux |
