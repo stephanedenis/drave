@@ -7,10 +7,10 @@
 | Début | 2026-09-30 15:32 |
 | Durée | 0.0 h |
 | Tours | 1 |
-| Messages | 16 |
-| Appels d'outils | 21 |
+| Messages | 19 |
+| Appels d'outils | 24 |
 | Fichiers touchés | 0 |
-| Commandes | 12 |
+| Commandes | 14 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -23,7 +23,7 @@
 
 ### Tour 1 — Tu es relecteur ADVERSARIAL dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (projet « Drave » : moteur d'i … [3929 caractères tronqués]
 
-*21 appels d'outils.* Actions notables :
+*24 appels d'outils.* Actions notables :
 
 - bash — Show recent log and commit stat
 - bash — Count lines of relevant docs
@@ -38,10 +38,12 @@
 - bash — Check CPUs, running drave, cargo config
 - bash — Run release test suite with 2 threads
 - bash — Read forward_lot
+- bash — Read quant_scratch
+- … et 2 autres
 
 **Synthèse produite :**
 
-⏵ Tests release en arrière-plan ; lecture du plan et de `forward_lot`.
+⏵ Lecture du résultat des tests et de la fin de `forward_lot`.
 
 ## 3. Travail accompli
 
@@ -64,6 +66,8 @@
 - **T1** Check CPUs, running drave, cargo config
 - **T1** Run release test suite with 2 threads
 - **T1** Read forward_lot
+- **T1** Read quant_scratch
+- **T1** Inspect forward_lot return shape
 
 ## 4. Mesures et résultats marquants
 

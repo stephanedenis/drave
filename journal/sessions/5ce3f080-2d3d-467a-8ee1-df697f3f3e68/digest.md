@@ -643,3 +643,37 @@ started background job bash-73
 … [1475 caractères tronqués]
   ```
 
+### 🤖 Assistant
+
+⏵ Lecture de `quant_scratch` pour voir si une liste vide est légitime.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"fn quant_scratch\" -A 75 drave-core/src/model.rs", "description": "Read quant_scratch"}`
+
+  ```
+1793:    fn quant_scratch(x: &[f32], levels: f32, thresh: f32, topk: usize, renorm: bool,
+1794-                     scratch: &mut Vec<f32>) -> Option<(SparseVec, f32)> {
+1795-        let mut mx = 0f32;
+1796-        for &v in x { let a = v.abs(); if a > mx { mx = a; } }
+1797-        if mx == 0.0 { return None; }
+1798-        let s = mx / levels;
+1799-        let inv = 1.0 / s;
+1800-        // seuil absolu correspondant à la fraction demandée du maximum
+1801-        let seuil = (thresh * levels) as i32;
+1802-        let mut sv = SparseVec { idx: Vec::with_capacity(x.len()), val: Vec::with_capacity(x.len()) };
+1803-        if topk > 0 {
+1804-            // k-WTA : ne garder que les k plus grandes magnitudes (inhibition
+1805-            // latérale). `topk` est une FRACTION de la dimension : sans cela la
+1806-            // même valeur de k ne veut pas dire la même chose pour un vecteur de
+1807-            // 896 et un de 4 864.
+1808-            scratch.clear();
+1809-            scratch.extend(x.iter().map(|v| v.abs()));
+1810-            let mag = &mut *scratch;
+1811-            let k = (((topk as f32) / 1000.0) * x.len() as f32).round() as usize;
+1812-            let k = k.clamp(1, x.
+… [3066 caractères tronqués]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-73 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && RAYON_NUM_THREADS=2 cargo test --release -- --test-threads=2 2>&1 | tail -40) finished [status: completed, exit code: 0]. Read its output with job_output.
+

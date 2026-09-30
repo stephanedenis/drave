@@ -87,13 +87,20 @@ notés, mêmes commandes avec `--ctx 4096`) :
 | f32 · f32 (référence) | **12,2175** | — | 14,2339 | — |
 | clés f16 · valeurs int8 | **12,2188** | **+0,011 %** | 14,2365 | +0,018 % |
 | int8 · int8 | 12,4921 | **+2,25 %** | 14,6667 | +3,04 % |
-| clés f32 · valeurs int8 | *(en cours)* | | 14,2372 | +0,023 % |
+| clés f32 · valeurs int8 | 12,2223 | +0,039 % | 14,2372 | +0,023 % |
 
 **Le classement tient** : à 4 096 comme à 8 192, les clés en f16 avec des valeurs
-int8 restent collées à la référence (deux centièmes de pour cent) pendant que
+int8 restent collées à la référence (un à deux centièmes de pour cent) pendant que
 l'int8 des deux côtés coûte plus de deux pour cent. La conclusion « les bits
 doivent aller aux clés, et le f16 est le bon compromis » n'est donc pas un
 artefact d'une longueur de contexte.
+
+Un détail qui se répète : **les clés en f16 font aussi bien, et ici mieux, que les
+clés en f32** avec les mêmes valeurs int8 (+0,011 % contre +0,039 % à 4 096 ;
++0,018 % contre +0,023 % à 8 192) — pour **moitié moins d'octets**. On ne prétend
+pas que le f16 soit plus fidèle (l'écart est du même ordre que le bruit d'une
+mesure de perplexité) : on constate qu'il ne coûte rien, et qu'il divise la taille
+du cache par deux.
 
 Détail rassurant au passage : la référence à 4 096 (**12,2175**) est exactement
 celle que le dépôt avait mesurée pour le banc du KV déporté — les deux chemins

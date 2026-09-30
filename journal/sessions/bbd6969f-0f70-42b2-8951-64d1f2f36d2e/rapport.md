@@ -7,12 +7,12 @@
 | Début | 2026-09-28 14:46 |
 | Durée | 48.8 h |
 | Tours | 46 |
-| Messages | 1899 |
-| Appels d'outils | 1792 |
+| Messages | 1900 |
+| Appels d'outils | 1793 |
 | Fichiers touchés | 44 |
-| Commandes | 1464 |
+| Commandes | 1465 |
 | Sous-agents | 10 |
-| Commits | 151 |
+| Commits | 152 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -2117,7 +2117,7 @@ L'**audit des drapeaux** a trouvé que **46 options sur 110** étaient ignorées
 
 ### Tour 46 — continue jusqu'à 18h HAE
 
-*54 appels d'outils.* Actions notables :
+*55 appels d'outils.* Actions notables :
 
 - bash — Check time, timezone and remaining budget
 - create_goal
@@ -2133,11 +2133,11 @@ L'**audit des drapeaux** a trouvé que **46 options sur 110** étaient ignorées
 - bash — Improve notebook with real text cell
 - bash — Kill test node safely and check notebook
 - bash — Add notebook real-text cell and commit
-- … et 40 autres
+- … et 41 autres
 
 **Synthèse produite :**
 
-⏵ Le mode 4 est du code neuf et complexe : je le verrouille par des tests (état forgé, préfixe incohérent, deux états).
+La campagne KV à 4 096 est complète : **clés f16 (+0,011 %) font mieux que clés f32 (+0,039 %)** pour moitié moins d'octets, et int8/int8 reste à +2,25 %. Je complète le rapport.
 
 ## 3. Travail accompli
 
@@ -2245,7 +2245,7 @@ L'**audit des drapeaux** a trouvé que **46 options sur 110** étaient ignorées
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 1424 autres
+- … et 1425 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2544,4 +2544,5 @@ L'**audit des drapeaux** a trouvé que **46 options sur 110** étaient ignorées
 - Corrections du second audit (2/2) : la journée au README, le mode 4 dans la recette Colab, le renvoi FPGA de la vision" && git log --oneline -1 | cat; date +"%H
 - Documents : la frontière du cache KV dans contexte-long, et l'addendum du rapport de drapeaux  contexte-long §4.bis.3 porte la frontière complète (clés f16 + va
 - Quatre tests pour le mode 4 : état forgé, deux états, préfixe incohérent  Le mode 4 est du code de protocole neuf : un état forgé à la main doit se décoder comm
+- Cache KV à 4 096 : les quatre points, et les clés f16 devant les clés f32  clés f32 + valeurs int8 = 12,2223 (+0,039 %), soit un peu moins bien que le f16 (+0,0
 

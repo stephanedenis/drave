@@ -30541,3 +30541,18 @@ test result: ok. 17 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; fin
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A drave-core/src/main.rs && git commit -q -m \"Quatre tests pour le mode 4 : état forgé, deux états, préfixe incohérent\n\nLe mode 4 est du code de protocole neuf : un état forgé à la main doit se décoder\ncomme le mode 2 (c … [440 caractères tronqués]`
+
+  ```
+545c3f7 Quatre tests pour le mode 4 : état forgé, deux états, préfixe incohérent
+=== campagnes ===
+cles_f32_valeurs_int8      : perplexité 12.2223 sur 4095 tokens (0 événements, 315.8 s)
+=== fin ===
+15:33:47
+15:34:09
+  ```
+
+### 🤖 Assistant
+
+La campagne KV à 4 096 est complète : **clés f16 (+0,011 %) font mieux que clés f32 (+0,039 %)** pour moitié moins d'octets, et int8/int8 reste à +2,25 %. Je complète le rapport.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/rapport-placement-bits-kv.md'; s=open(p).read()\nv = \"\"\"| clés f32 · valeurs int8 | *(en cours)* | | 14,2372 | +0,023 % |\"\"\"\nn = \"\"\"| clés f32 · valeurs int8 | 12,2223 | +0,039 % | 14,2372 | +0, … [2009 caractères tronqués]`
