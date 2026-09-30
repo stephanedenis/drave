@@ -49,6 +49,16 @@ un faux positif — la trace n'était pas chargée du tout — et ce sont les co
 de rejeu qui l'ont démasqué. De même, le chiffre 19,3045 de la table de
 non-régression ne s'est pas reproduit : il vaut 19,5633.
 
+## Le créneau 15h07 → 18h00, en plus court
+
+Le **mode 4** (lot en listes) écrit, mesuré et relu ; le **plan du noyau GPU de
+top-k** chiffré, pas bâclé ; la **frontière du cache KV** confirmée à un second
+contexte (4 096 : +0,011 % pour les clés f16, +2,25 % pour l'int8 complet — le
+classement tient) ; **quatre tests** de plus sur le protocole (17 au total) ;
+`--options-strict` pour les scripts ; le **kit Colab** rendu clé en main
+(`tools/colab_cote_local.sh`, notebook enrichi d'un texte réel : la perplexité du
+banc passe de 17 869 à ~20, et l'écart reste 0,00e0).
+
 ## Ce qui n'a pas été fait
 
 - **Noyau GPU de top-k** (phase 1.1) : les trois heures sont allées au transport,

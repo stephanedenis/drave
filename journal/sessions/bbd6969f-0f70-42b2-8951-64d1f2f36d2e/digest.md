@@ -31034,3 +31034,34 @@ perplexité 19.3885 sur 510 tokens
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A docs && git commit -q -m \"Colab : les quatorze champs du contrat d'activation, pas quatre\n\nEt portes finales après la version 5 : 17 tests, Qwen 19,3885, réparti dense\n0,00e0, lot dense 0,00e0, lot en listes 1,11e-1 à  … [265 caractères tronqués]`
+
+  ```
+e6d6ce9 Colab : les quatorze champs du contrat d'activation, pas quatre
+### f32 · contexte 4096 · profondeurs 0,1 / 0,5 / 0,9
+aiguille v2 : /home/stephane/FastNVMe/models/qwen2.5-1.5b-instruct-q4_k_m.gguf
+  remplissage : data/wikitext2_test.txt (353778 caractères), fenêtres décalées
+  lot 256 · 40 jetons de réponse · GPU non
+ contexte  profondeur  trouvé  secondes  détail
+     4096        0.10     oui    1140.3  prompt 4114 jetons
+16:15:31
+  ```
+
+### 🤖 Assistant
+
+L'aiguille à 4 096 prend 19 min par sonde (×9 = hors budget) : je la ramène au contexte 2 048 pour comparer les trois variantes de cache KV.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && MOI=$$; for pid in $(pgrep -f \"aiguille_kv.sh\" | grep -v \"^$MOI\\$\"); do kill $pid 2>/dev/null && echo \"campagne aiguille arrêtée ($pid)\"; done; for pid in $(pgrep -f \"tools/aiguille.py\" | grep -v \"^$MOI\\$\"); do kill $pid  … [1496 caractères tronqués]`
+
+  ```
+campagne aiguille arrêtée (655569)
+aiguille arrêtée (691408)
+aiguille arrêtée (691409)
+campagne aiguille 2 048 lancée (3 variantes × 3 profondeurs)
+16:15:44
+  ```
+
+### 🤖 Assistant
+
+⏵ Pendant l'aiguille, je mets l'index de session à jour avec le créneau 15h-18h.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/rapport-session-2026-09-30.md'; s=open(p).read()\nv = \"\"\"| **protocole de flux v5** | version, 5 modes, contrat d'activation complet, refus immédiat d'un pair incompatible |\"\"\"\nn = \"\"\"| **mode 4 … [2619 caractères tronqués]`

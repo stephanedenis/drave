@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 49.3 h |
+| Durée | 49.5 h |
 | Tours | 46 |
-| Messages | 1923 |
-| Appels d'outils | 1814 |
+| Messages | 1925 |
+| Appels d'outils | 1816 |
 | Fichiers touchés | 44 |
-| Commandes | 1486 |
+| Commandes | 1488 |
 | Sous-agents | 10 |
-| Commits | 158 |
+| Commits | 159 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -2117,7 +2117,7 @@ L'**audit des drapeaux** a trouvé que **46 options sur 110** étaient ignorées
 
 ### Tour 46 — continue jusqu'à 18h HAE
 
-*76 appels d'outils.* Actions notables :
+*78 appels d'outils.* Actions notables :
 
 - bash — Check time, timezone and remaining budget
 - create_goal
@@ -2133,11 +2133,11 @@ L'**audit des drapeaux** a trouvé que **46 options sur 110** étaient ignorées
 - bash — Improve notebook with real text cell
 - bash — Kill test node safely and check notebook
 - bash — Add notebook real-text cell and commit
-- … et 62 autres
+- … et 64 autres
 
 **Synthèse produite :**
 
-La session qui mourait revit (liste vide acceptée) et le mode 4 est intact. Je complète l'outil de contrôle indépendant (il ignorait le mode 4) puis les documents.
+⏵ Pendant l'aiguille, je mets l'index de session à jour avec le créneau 15h-18h.
 
 ## 3. Travail accompli
 
@@ -2245,7 +2245,7 @@ La session qui mourait revit (liste vide acceptée) et le mode 4 est intact. Je 
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 1446 autres
+- … et 1448 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2551,4 +2551,5 @@ La session qui mourait revit (liste vide acceptée) et le mode 4 est intact. Je 
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-mode4-lot-listes.md <<'EOF' # Mode 4 — le lot en listes : ÷2,3 sur les octets, et ce
 - Documents : dernières mentions de la version 4 remplacées par la 5 (mode lot en listes)" && git log --oneline -1 | cat; date +"%H:%M:%S"
 - Colab : les quatorze champs du contrat d'activation, pas quatre  Et portes finales après la version 5 : 17 tests, Qwen 19,3885, réparti dense 0,00e0, lot dense 
+- Index de session : le créneau 15h-18h (mode 4, plan GPU, 32 défauts relevés)" && git log --oneline -1 | cat; tail -3 /tmp/aiguille_kv2048.log 2>/dev/null; date 
 
