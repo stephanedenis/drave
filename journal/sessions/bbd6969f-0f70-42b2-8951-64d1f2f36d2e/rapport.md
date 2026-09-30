@@ -7,12 +7,12 @@
 | Début | 2026-09-28 14:46 |
 | Durée | 52.6 h |
 | Tours | 47 |
-| Messages | 2256 |
-| Appels d'outils | 2134 |
+| Messages | 2263 |
+| Appels d'outils | 2141 |
 | Fichiers touchés | 47 |
-| Commandes | 1785 |
+| Commandes | 1792 |
 | Sous-agents | 14 |
-| Commits | 189 |
+| Commits | 190 |
 | Compactages de contexte | 3 |
 
 ## Objectifs déclarés
@@ -2177,7 +2177,7 @@ Le mode creux ne peut pas utiliser le miroir VRAM (le chemin GPU est conditionn�
 
 ### Tour 47 — pret pour des scrum de 2h (boxing temps réel, avec revue, rétro et planning)
 
-*279 appels d'outils.* Actions notables :
+*286 appels d'outils.* Actions notables :
 
 - bash — Check clock, machine and last sprint state
 - bash — Create the sprint timing tool
@@ -2193,7 +2193,7 @@ Le mode creux ne peut pas utiliser le miroir VRAM (le chemin GPU est conditionn�
 - bash — Read the kernel launch call
 - bash — Write the FFI for the scores kernel
 - bash — Complete KvGpu initializer
-- … et 257 autres
+- … et 264 autres
 
 **Synthèse produite :**
 
@@ -2312,7 +2312,7 @@ Le mode creux ne peut pas utiliser le miroir VRAM (le chemin GPU est conditionn�
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 1745 autres
+- … et 1752 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2649,4 +2649,5 @@ Le mode creux ne peut pas utiliser le miroir VRAM (le chemin GPU est conditionn�
 - Journal : index des sessions régénéré" && git status --short | wc -l && date +%H:%M:%S
 - Rapport et plan : 14 noyaux et 956 lignes (le noyau 3 est arrivé après le comptage), ordre réel de la collecte" && git log --oneline -1; date +%H:%M:%S
 - Rapport : l'étape 5 est faite, et la ligne de l'étape 4 dit la bonne variable (clés vues, pas contexte)" && git log --oneline -1; date +%H:%M:%S
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cargo test --release --manifest-path drave-core/Cargo.toml 2>&1 | tail -2 && git add -A && git commit -q -
 

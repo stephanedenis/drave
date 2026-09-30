@@ -371,6 +371,33 @@ fn options_actives(mdl: &model::Model, mode: &str, ctx_impose: bool, dense: bool
                  else if kv.v_f32 { " · VALEURS en f32" } else { "" },
                  kv.f16_avant);
     }
+    // Le top-k déporté est un mode, pas un détail : c'est ici qu'on voit s'il
+    // s'applique VRAIMENT à cette configuration, et pourquoi sinon. La ligne
+    // existe parce que huit drapeaux « analysés mais jamais appliqués » ont coûté
+    // une session entière — et parce que `DRAVE_GPU_TOPK=1` posé sans
+    // `DRAVE_GPU_KV` ne faisait rien en silence.
+    if std::env::var("DRAVE_GPU_TOPK").map(|v| v != "0" && !v.is_empty()).unwrap_or(false) {
+        let bits = mdl.kv.first().map(|k| k.bits).unwrap_or(32);
+        let k = mdl.attn_topk;
+        let motif = if k == 0 {
+            "inactif : --attn-topk n'est pas donné"
+        } else if k > 1024 {
+            "inactif : k > 1024 (limite du noyau 3)"
+        } else if bits != 8 && bits != 32 {
+            "inactif : valeurs KV 4 bits (le noyau 3 n'en gère que 8 ou 32)"
+        } else if mdl.attn_window > 0 {
+            "inactif : la fenêtre garde le chemin CPU"
+        } else if mdl.lot > 1 {
+            "inactif en mode lot : l'attention par lots est DENSE"
+        } else if std::env::var("DRAVE_GPU").is_err() {
+            "inactif : DRAVE_GPU n'est pas posé (rien ne va au GPU)"
+        } else if std::env::var("DRAVE_GPU_KV").is_err() {
+            "inactif : DRAVE_GPU_KV n'est pas posé (pas de miroir VRAM à interroger)"
+        } else {
+            "ACTIF"
+        };
+        println!("[options] top-k déporté (DRAVE_GPU_TOPK) : {motif}");
+    }
 }
 
 /// Fils de calcul d'un mode SECONDAIRE : `--threads` s'il est donné, sinon la

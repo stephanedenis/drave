@@ -36286,3 +36286,83 @@ note de variance ajoutée
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/rapport-gpu-topk-selection.md'; s=open(p).read()\ndef rep(v,n,nom):\n    global s\n    assert s.count(v)==1, f\"{nom}::{s.count(v)}\"\n    s=s.replace(v,n,1)\nrep(\"\"\"| 4 | branchement dans `model.rs` ( … [1227 caractères tronqués]`
+
+  ```
+table corrigée
+e49f3bb Rapport : l'étape 5 est faite, et la ligne de l'étape 4 dit la bonne variable (clés vues, pas contexte)
+19:21:27
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && DRAVE_GPU=1 DRAVE_GPU_KV=1 DRAVE_GPU_TOPK=1 ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf --ppl /tmp/ids_qwen_long.txt --ctx 2048 --limit 256 --dense --threads 16 --attn-topk 256 2>&1 | grep -E \"top-k déporté|KV dé … [125 caractères tronqués]`
+
+  ```
+[gpu] KV déporté : 12 couches sur GPU 1, 0.03 Go ici (16.17 Go libres)
+[gpu] KV déporté : 12 couches sur GPU 0, 0.03 Go ici (15.12 Go libres)
+[gpu] KV déporté : 0.05 Go au total pour 24 couches
+[gpu] top-k déporté demandé (DRAVE_GPU_TOPK) : actif si --attn-topk vaut 1 à 1024, sans fenêtre, et si nkv × rep = nh
+=== perplexité 17.4310 sur 255 tokens (0 événements, 9.2 s) ===
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"fn options_actives\" -A 40 drave-core/src/main.rs | grep -nE \"println|attn_topk|GPU\" | head -20", "description": "Check options-actives content"}`
+
+  ```
+3:354-    println!("[options] mode {mode} · contexte {} ({}) · dense {} · keep {:.3}",
+5:356-    println!("[options] activation : niveaux {:.0} · seuil {} · k-WTA {} · renorm {}",
+7:358-    println!("[options] top-k : attn {} · q·k {} · MoE {} · par projection {:?}",
+8:359-             mdl.attn_topk, mdl.qk_topk, mdl.moe_topk, mdl.act_topk_proj);
+9:360-    println!("[options] couches {}..{} · flux brut {} · trace {} · rejeu {}",
+12:363-    println!("[options] fenêtre {} · motif {} · seuil push {} · lot {} · ffn_gain {:?} · hebb {}",
+16:367-        println!("[options] cache KV : {} bits{} · f16 avant {}",
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '358,378p' drave-core/src/main.rs", "description": "Read options-actives lines"}`
+
+  ```
+println!("[options] top-k : attn {} · q·k {} · MoE {} · par projection {:?}",
+             mdl.attn_topk, mdl.qk_topk, mdl.moe_topk, mdl.act_topk_proj);
+    println!("[options] couches {}..{} · flux brut {} · trace {} · rejeu {}",
+             mdl.couche_debut, mdl.couche_fin, mdl.flux_brut,
+             mdl.trace.is_some(), mdl.flux_force.is_some());
+    println!("[options] fenêtre {} · motif {} · seuil push {} · lot {} · ffn_gain {:?} · hebb {}",
+             mdl.attn_window, mdl.swa_pattern, mdl.seuil_push, mdl.lot,
+             mdl.ffn_gain, mdl.hebb.is_some());
+    if let Some(kv) = mdl.kv.first() {
+        println!("[options] cache KV : {} bits{} · f16 avant {}",
+                 kv.bits,
+                 if kv.k_f32 { " · CLÉS en f32" }
+                 else if kv.k_f16 { " · clés en f16" }
+                 else if kv.v_f32 { " · VALEURS en f32" } else { "" },
+                 kv.f16_avant);
+    }
+}
+
+/// Fils de calcul d'un mode SECONDAIRE : `--threads` s'il est donné, sinon la
+/// moitié des cœurs. Ces modes étaient figés à 16 fils, ce qui ignorait
+/// `--threads` en silence (relevé par `reports/rapport-drapeaux-ignores.md`).
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/main.rs'; s=open(p).read()\nvieux = \"\"\"    if let Some(kv) = mdl.kv.first() {\n        println!(\"[options] cache KV : {} bits{} · f16 avant {}\",\n                 kv.bits,\n                 if … [2304 caractères tronqués]`
+
+  ```
+options-actives : ligne top-k déporté
+[options] top-k : attn 256 · q·k 0 · MoE 0 · par projection [0, 0, 0, 0, 0, 0, 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/main.rs'; s=open(p).read()\nvieux = \"\"\"        } else if mdl.lot > 1 {\n            \"inactif en mode lot : l'attention par lots est DENSE\"\n        } else {\n            \"ACTIF\"\n        };\ … [1108 caractères tronqués]`
+
+  ```
+cas DRAVE_GPU manquant ajouté
+0
+[] -> [DRAVE_GPU_TOPK=1] -> top-k déporté (DRAVE_GPU_TOPK) : inactif : DRAVE_GPU n'est pas posé (rien ne va au GPU)
+[DRAVE_GPU_TOPK=1 DRAVE_GPU=1] -> top-k déporté (DRAVE_GPU_TOPK) : inactif : DRAVE_GPU_KV n'est pas posé (pas de miroir VRAM à interroger)
+[DRAVE_GPU_TOPK=1 DRAVE_GPU=1 DRAVE_GPU_KV=1] -> top-k déporté demandé (DRAVE_GPU_TOPK) : actif si --attn-topk vaut 1 à 1024, sans fenêtre, et si nkv × rep = nh
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && DRAVE_GPU_TOPK=1 DRAVE_GPU=1 DRAVE_GPU_KV=1 ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q4_0.gguf --ppl /tmp/wt2_ids.txt --ctx 256 --attn-topk 256 --threads 8 --limit 32 --options-actives 2>&1 | grep -E \"\\[options\\] top- … [106 caractères tronqués]`
+
+  ```
+[gpu] top-k déporté demandé (DRAVE_GPU_TOPK) : actif si --attn-topk vaut 1 à 1024, sans fenêtre, et si nkv × rep = nh
+[options] top-k déporté (DRAVE_GPU_TOPK) : ACTIF
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cargo test --release --manifest-path drave-core/Cargo.toml 2>&1 | tail -2 && git add -A && git commit -q -F - <<'EOF' && git log --oneline -1 && date +%H:%M:%S\n--options-actives dit si le top-k déporté s'applique, et pourquoi sinon\ … [667 caractères tronqués]`
