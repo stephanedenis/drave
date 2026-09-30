@@ -455,3 +455,35 @@ grande (par exemple 336 × 336, comme le fait llama.cpp dans ses exemples) ;
 (2) compiler le programme en C contre les mêmes bibliothèques (le mélange de
 runtimes C++ reste plausible) ; (3) comparer à la référence Python du modèle de
 vision, sans ABI du tout.
+
+### Les deux conventions, lues dans la SOURCE de llama.cpp (clip.cpp)
+
+`tools/mtmd/clip.cpp` (320 ko) a été récupéré et dépouillé. Ce qui s'y lit, pour
+`PROJECTOR_TYPE_QWEN25VL` :
+
+**Fenêtre locale** — ce n'est PAS une fenêtre par ligne comme je l'avais supposé :
+sur les couches fenêtrées, llama.cpp **permute** les jetons pour que tous ceux
+d'une même fenêtre soient contigus (`window_idx` / `inv_window_idx`) et applique
+un **masque** qui ne laisse voir que la fenêtre. La fenêtre est un **bloc carré**
+de la grille APRÈS fusion 2 × 2 :
+
+```cpp
+for (int y = 0; y < ph; y += grid_window) {
+    for (int x = 0; x < pw; x += grid_window) {
+        const int win_h = std::min(grid_window, ph - y);
+        const int win_w = std::min(grid_window, pw - x);
+        ...  // les jetons de la fenêtre deviennent contigus (idx / inv_idx)
+        // puis, pour chaque ligne du masque, on remplit de -inf sauf la fenêtre
+        set_input_i32("window_idx", idx);
+        set_input_i32("inv_window_idx", inv_idx);
+        set_input_f32("window_mask", mask);
+```
+
+**Rotation 2-D** — elle n'est pas dans `clip.cpp` : le fichier calcule un tenseur
+`positions` (`set_input_i32("positions", positions)`) et le passe au graphe, où
+la rotation mRoPE est appliquée par les opérations GGML. C'est donc le calcul de
+`positions` qu'il faut lire pour trancher la convention — la zone est identifiée
+dans le fichier (aux environs de l'offset 264 000), et c'est le pas suivant.
+
+`n_wa_pattern` est lu depuis la clé `clip.vision.win_attn_pattern` et vaut 8 pour
+ce modèle ; `use_window_attn` est actif dès que `n_wa_pattern > 0`.

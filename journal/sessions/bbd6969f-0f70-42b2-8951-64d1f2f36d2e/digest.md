@@ -20129,3 +20129,128 @@ MTMD_API mtmd_bitmap *         mtmd_bitmap_init           (uint32_t nx, uint32_t
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat >> docs/plan-mla-vision.md <<'EOF'\n\n### L'API de mtmd est maintenant CONNUE (en-tête récupéré)\n\n`mtmd.h` de llama.cpp a été récupéré (22 ko) et dépouillé — les trois tours de\nrétro-ingénierie à l'aveugle sont remplacés par d … [2773 caractères tronqués]`
+
+  ```
+93b5e6d vision : l'API de mtmd est connue (en-tête récupéré), le blocage est nommé
+  ```
+
+### 🤖 Assistant
+
+⏵ Tour 17 : l'API de `mtmd` est connue — le blocage est nommé, plus deviné
+
+## Fait dans ce tour
+
+J'ai récupéré **`mtmd.h`** de llama.cpp (22 ko) et je l'ai dépouillé : les signatures exactes remplacent trois tours de rétro-ingénierie à l'aveugle.
+
+- **`struct mtmd_input_text { const char* text; size_t text_len; bool add_special; bool parse_special; }`** — c'est `text_len` qui manquait, et son absence faisait lire à la bibliothèque les octets de ma chaîne comme une longueur ;
+- `mtmd_tokenize(ctx, output, const mtmd_input_text*, const mtmd_bitmap* const*, size_t)` — signature confirmée, c'est bien celle que j'appelle désormais ;
+- surtout, les **codes de retour sont documentés dans l'en-tête** : `1` = nombre de bitmaps ≠ nombre de marqueurs, **`2` = erreur de prétraitement du média** — c'est le code 2 qui tombe.
+
+Donc : mon bitmap est accepté (format conforme : `nx*ny*3`, RGB entrelacé), sa taille aussi (84 × 84 = 7 056 ≥ `image_min_pixels` = 6 272), mais le **prétraitement du modèle** le refuse. Les pistes restantes sont écrites, ordonnées : une image plus grande (336 × 336, comme dans les exemples de llama.cpp, à cause de `image_min_tokens`), le programme en C, ou une référence Python du modèle de vision sans ABI du tout.
+
+## État
+
+| # | chantier | état |
+|---|---|---|
+| 1 | aiguille long contexte | ✅ 12/12 |
+| 2 | chemin GPU (5 sous-items) | ✅ |
+| 3 | mémoire KV | ✅ |
+| 4 | rotation à 16 k | ✅ |
+| 5 | MLA ✅ (5,2e-7) · vision : 4 tranches validées, tour complète, injection branchée ; **rotation 2-D et fenêtre locale non implémentées** (leur vérification est bloquée sur le prétraitement mtmd) | en cours |
+| 6 | hygiène | ✅ |
+
+`cargo test` 6/6, arbre propre, portes Qwen **19,3885** / gpt-oss **15,1757** intactes.
+
+L'objectif reste **actif** : la vision demande encore les deux conventions d'attention. Le prochain tour a une action unique et peu coûteuse — **essayer une image de 336 × 336** — qui, si elle passe, débloque la comparaison complète ; sinon, la décision que j'ai annoncée s'applique : clore le chantier à son état mesuré et documenté plutôt que d'y consumer d'autres tours.
+
+
+## Tour 27
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Réaliser les 6 nouveaux chantiers du projet qtrinet-core, dans l'ordre : (1) relancer le test de l'aiguille sur contexte long (remplissage varié en vrai texte, moins de sondes, réponses plus longues) sur un modèle capable, grâce au préremplissage par lots et au KV déporté ; (2) chemin GPU : dépaquetage vectorisé du noyau d'attention (13,2 ms/couche à 1 M en int4 vers ~3 ms), brancher MXFP4 dans le moteur avec une politique de résidence des experts, attention par lots sur GPU dans forward_lot, noyau de tête Q8_0 accéléré (AVX2 ou déport), et usage du second GPU ; (3) mémoire : pagination du cache KV côté CPU (25,77 Go réservés à ctx 1 M pour 512 jetons écrits) et test de l'hypothèse « clés en f16 avant quantification » pour l'écart int8 avec llama.cpp à 8 192 (+3,0 % contre +0,8 %) ; (4) rotation au-delà de 5 120 jetons (passe à 16 k) ; (5) structurel : MLA (aucun modèle local — construire un modèle MLA synthétique et valider contre une référence indépendante) et vision (poids Qwen2.5-VL et projecteur mmproj présents) ; (6) hygiène : réécrire la section « Ce qu'il faut faire ensuite » de REPRISE.md et y consigner les pièges QT_GPU/QT_GPU_TETE/QT_GPU_KV. Chaque chantier doit être implémenté, mesuré (portes de non-régression Qwen 19,3885 et gpt-oss 15,1757 sans QT_GPU), documenté dans le dépôt et commité."
+Round: 18/30
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -i 's/def image_deterministe(cote=84):/def image_deterministe(cote=336):/' tools/vision_mtmd.py && LD_LIBRARY_PATH=/usr/lib/ollama timeout 900 python3 -u tools/vision_mtmd.py /home/stephane/FastNVMe/models/Qwen2.5-VL-7B-Instruct- … [257 caractères tronqués]`
+
+  ```
+--- vision hparams ---
+
+contexte mtmd : ok
+bitmap : ok
+marqueur du contexte : b'<__media__>' · par défaut : b'<__media__>'
+conteneur de morceaux : ok
+mtmd_tokenize: error: basic_string::_M_replace
+tokenize rc=2 · 0 morceaux
+  ```
+
+- **bash** `{"command": "cd /tmp && timeout 180 python3 - <<'PY'\nimport urllib.request\nurl = \"https://raw.githubusercontent.com/ggml-org/llama.cpp/master/tools/mtmd/clip.cpp\"\ntry:\n    t = urllib.request.urlopen(url, timeout=90).read().decode()\nexcept Exception as e:\n    print(\"échec:\", e); raise Syste … [456 caractères tronqués]`
+
+  ```
+clip.cpp : 320833 octets
+rot_pos_emb: 0 occurrences aux offsets []
+get_position_ids: 0 occurrences aux offsets []
+n_wa_pattern: 3 occurrences aux offsets [67707, 85019, 92699]
+window: 3 occurrences aux offsets [57422, 61847, 70772]
+rotary: 0 occurrences aux offsets []
+  ```
+
+- **bash** `{"command": "cd /tmp && python3 - <<'PY'\nt = open('/tmp/clip.cpp').read()\nimport re\nfor m in re.finditer(\"n_wa_pattern\", t):\n    deb = t.rfind(\"\\n\", 0, max(0, m.start()-600))\n    print(\"=\" * 20, \"offset\", m.start())\n    print(t[deb:m.start()+260])\nPY", "description": "Read window pat … [24 caractères tronqués]`
+
+  ```
+==================== offset 67707
+
+                        get_u32(KEY_PROJ_SCALE_FACTOR, hparams.n_merge, false);
+                    } break;
+                case PROJECTOR_TYPE_QWEN2VL:
+                case PROJECTOR_TYPE_QWEN25VL:
+                case PROJECTOR_TYPE_QWEN3VL:
+                case PROJECTOR_TYPE_LING3VL:
+                    {
+                        hparams.n_merge = 2; // default value for Qwen 2 and 2.5
+                        hparams.image_resize_algo = RESIZE_ALGO_BICUBIC;
+                        get_u32(KEY_SPATIAL_MERGE_SIZE, hparams.n_merge, false);
+                        get_u32(KEY_WIN_ATTN_PATTERN, hparams.n_wa_pattern, model.proj_type == PROJECTOR_TYPE_QWEN25VL); // only 2.5 requires it
+                        // ref: https://huggingface.co/Qwen/Qwen2.5-VL-7B-Instruct/blob/main/preprocessor_config.json
+                        hparams.set_limit_image_tokens(8, 4
+==================== offset 85019
+
+                        hparams.audio_chunk_len        = 1; // in seconds
+                        hparams.audio_sample_rate      = 16000;
+                        hparams.audio_n_fft            = 512;
+                        hparams.audio_window_len       = 400
+… [3443 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /tmp && python3 -c \"\nt=open('/tmp/clip.cpp').read()\nprint(t[264085+900:264085+3000])\"", "description": "Read Qwen2.5-VL position/window setup"}`
+
+  ```
+oat> mask(pow(ipw * iph, 2), std::numeric_limits<float>::lowest());
+                    int mask_row = 0;
+
+                    for (int y = 0; y < ph; y += grid_window) {
+                        for (int x = 0; x < pw; x += grid_window) {
+                            const int win_h = std::min(grid_window, ph - y);
+                            const int win_w = std::min(grid_window, pw - x);
+                            const int dst_0 = dst;
+                            // group all tokens belong to the same window togather (to a continue range)
+                            for (int dy = 0; dy < win_h; dy++) {
+                                for (int dx = 0; dx < win_w; dx++) {
+                                    const int src = (y + dy) * pw + (x + dx);
+                                    GGML_ASSERT(src < (int)idx.size());
+                                    GGML_ASSERT(dst < (int)inv_idx.size());
+                                    idx    [src] = dst;
+                                    inv_idx[dst] = src;
+                                    dst++;
+                                }
+                            }
+
+                            for (int r=0; r < win_h * win_w * merge_rat
+… [900 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat >> docs/plan-mla-vision.md <<'EOF'\n\n### Les deux conventions, lues dans la SOURCE de llama.cpp (clip.cpp)\n\n`tools/mtmd/clip.cpp` (320 ko) a été récupéré et dépouillé. Ce qui s'y lit, pour\n`PROJECTOR_TYPE_QWEN25VL` :\n\n**Fen … [2589 caractères tronqués]`
