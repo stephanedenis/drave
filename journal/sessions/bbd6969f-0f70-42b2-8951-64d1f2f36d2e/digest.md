@@ -21279,3 +21279,100 @@ projecteur : 64 groupes × 3584 valeurs, |sortie| = 465.8422, 4 premières [-1.6
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='docs/plan-mla-vision.md'; s=open(p).read()\nadd = \"\"\"\n### La permutation colonne-majeur est IMPLÉMENTÉE (le dernier écart connu)\n\nSur les couches FENÊTRÉES, `clip.cpp` transpose la grille des unités de fusi … [2433 caractères tronqués]`
+
+  ```
+docs à jour
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.09s
+
+d349063 vision : la permutation colonne-majeur des couches fenêtrées est implémentée
+  ```
+
+### 🤖 Assistant
+
+⏵ Vision terminée : le dernier écart connu avec la source est comblé — je passe à la feuille de route
+
+Vision faite. Le dernier écart de code identifié est comblé :
+
+**Sur les couches fenêtrées**, `clip.cpp` transpose la grille des unités de fusion avant d'empaqueter les positions (`idx_col[u_col] = u_row`, soit `pos_col[c·n+r] = pos_row[r·n+c]` pour une grille carrée) : un patch (r, c) reçoit les positions de (c, r). La fenêtre n'était donc pas qu'un masque — **elle change aussi l'ordre des positions**, et c'est maintenant implémenté (`complete_rot` : couches 7, 15, 23, 31 en attention complète, les autres permutées).
+
+Vérification par le **changement** des chiffres — le contrôle qui m'avait manqué une fois :
+
+| | avant | après |
+|---|---|---|
+| sortie de la tour | 234,53 | **244,38** |
+| sortie du projecteur | 515,84 | **465,84** |
+
+Le chemin image suit désormais la source sur ses trois points d'attention : rotation en quatre blocs (`ggml_mrope_cache_init`), échelle continue (idem), permutation colonne-majeur (`clip.cpp`). **Ce qui reste sans référence n'est plus une ligne de code identifiée, mais la qualité globale** — et les trois pistes de validation sont écrites dans `docs/plan-mla-vision.md`.
+
+Commit `d349063`, `cargo test` 6/6.
+
+Je passe maintenant à la feuille de route : corriger les items périmés de `REPRISE.md` §6 (le **noyau de tête** et le **second GPU** y sont encore annoncés comme à faire alors qu'ils sont livrés), remonter ce qui est mûr, et redescendre ce qui a été mesuré comme non rentable (les experts MXFP4 à +6 %).
+
+
+## Tour 38
+
+### 👤 Utilisateur
+
+Au delà des défis techniques, il nou faut un vrai document de vision de ce projet. Je serais porté à renommer le projet "Drave" dans le sens Stream of logs, et ça sonne aussi bien en français car la drave fait partie du patrimoine québecois. Ces flux de listes d'activation sont le coeur de la vision et on doit en explorer toutes les implications et bénéfices sur tous les axes. Cette approche permet de déboguer et optimiser les neuronnes couches par couche en plus de permettre la distribution du travail sur plusieurs composants et même sur plusieurs machines.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls docs/ && head -30 README.md 2>/dev/null && echo \"=== occurrences du nom ===\" && grep -ric \"qtrinet\" --include=\"*.rs\" --include=\"*.md\" --include=\"*.py\" --include=\"*.sh\" . 2>/dev/null | awk -F: '{s+=$2} END {print s\" oc … [92 caractères tronqués]`
+
+  ```
+comparaison-spiking.md
+contexte-long.md
+convertisseur.md
+plan-mla-vision.md
+programme-recherche.md
+# Qtrinet
+
+Inférence de LLM en **ternaire / multi-bits** sur un cluster de cartes **Stratix V**
+(Microsoft Storey Peak) — 100 % logique, sans DSP.
+
+Le cahier des charges d'origine est dans [`Qtrinet-bootstrap.md`](Qtrinet-bootstrap.md).
+⚠️ **Il a été audité et corrigé** : voir la section « Écarts avec le CDC » ci-dessous.
+
+---
+
+## État du projet
+
+| Étape | État |
+|-------|------|
+| Audit du cahier des charges | ✅ (corrections ci-dessous) |
+| **Test de principe : quantification d'un modèle minimal** | ✅ **fait** → [`reports/rapport-minimal.md`](reports/rapport-minimal.md) |
+| **Élagage et approche par événement** | ✅ **fait** → [`reports/rapport-eparsite.md`](reports/rapport-eparsite.md) |
+| **Sparsité → précision** | ✅ **fait** → [`reports/rapport-precision.md`](reports/rapport-precision.md) |
+| **Encodage de structure (listes signées)** | ✅ **fait** → [`reports/rapport-encodage.md`](reports/rapport-encodage.md) |
+| **Architecture push (AER) + faisabilité CPU** | ✅ **fait** → [`reports/rapport-cpu-aer.md`](reports/rapport-cpu-aer.md) |
+| **Moteur d'événements Rust (4 optimisations)** 
+… [1317 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ J'écris le document de vision : *Drave*, le flux des listes d'activation
+
+- **write** `{"content": "# Drave — la vision\n\n> *« Stream of logs »* : le flux des listes. Et, en français d'ici, **la drave** —\n> ces billots qu'on confiait à la rivière au printemps, qu'on guidait de\n> l'estacade jusqu'à la scierie. Le nom dit exactement ce que fait ce moteur :\n> il ne lit pas des matric … [12121 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/vision.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rl \"17,9\\|17.9\" reports/*.md | head -3 && grep -rhoE \"17,9 %|33,1 %|0,08 %|10 % de densité|7,79 G|15,6 à 6,2|6,2 ms\" reports/*.md docs/*.md README.md 2>/dev/null | sort | uniq -c | sort -rn | head -10", "description": "Ver … [37 caractères tronqués]`
+
+  ```
+reports/rapport-encodage.md
+reports/rapport-inference.md
+reports/rapport-localite-activation.md
+      4 17,9 %
+      4 10 % de densité
+      4 0,08 %
+      3 7,79 G
+      2 6,2 ms
+      2 33,1 %
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='README.md'; s=open(p).read()\nold = \"\"\"# Qtrinet\n\nInférence de LLM en **ternaire / multi-bits** sur un cluster de cartes **Stratix V**\n(Microsoft Storey Peak) — 100 % logique, sans DSP.\n\nLe cahier des cha … [2227 caractères tronqués]`

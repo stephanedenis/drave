@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 40.5 h |
-| Tours | 37 |
-| Messages | 1339 |
-| Appels d'outils | 1272 |
-| Fichiers touchés | 39 |
-| Commandes | 1001 |
+| Durée | 41.8 h |
+| Tours | 38 |
+| Messages | 1345 |
+| Appels d'outils | 1276 |
+| Fichiers touchés | 40 |
+| Commandes | 1004 |
 | Sous-agents | 1 |
-| Commits | 73 |
+| Commits | 74 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -101,6 +101,8 @@
 **Tour 36** — prochaine étape?
 
 **Tour 37** — vision d'abord, puis roadmap
+
+**Tour 38** — Au delà des défis techniques, il nou faut un vrai document de vision de ce projet. Je serais porté à renommer le projet "Drave" dans le sens Stream of logs, et ça sonne aussi bien en français car la drave fait partie du patrimoine québecois. Ces flux de listes d'activation sont le coeur de la vision et on doit en explorer toutes les implications et bénéfices sur tous les axes. Cette approche perme … [164 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -1686,6 +1688,40 @@ Puis le **rafraîchissement de `REPRISE.md` §6** dan
 - bash — Repair and run with col-major permutation
 - bash — Document and commit col-major permutation
 
+**Synthèse produite :**
+
+⏵ Vision terminée : le dernier écart connu avec la source est comblé — je passe à la feuille de route
+
+Vision faite. Le dernier écart de code identifié est comblé :
+
+**Sur les couches fenêtrées**, `clip.cpp` transpose la grille des unités de fusion avant d'empaqueter les positions (`idx_col[u_col] = u_row`, soit `pos_col[c·n+r] = pos_row[r·n+c]` pour une grille carrée) : un patch (r, c) reçoit les positions de (c, r). La fenêtre n'était donc pas qu'un masque — **elle change aussi l'ordre des positions**, et c'est maintenant implémenté (`complete_rot` : couches 7, 15, 23, 31 en attention complète, les autres permutées).
+
+Vérification par le **changement** des chiffres — le contrôle qui m'avait manqué une fois :
+
+| | avant | après |
+|---|---|---|
+| sortie de la tour | 234,53 | **244,38** |
+| sortie du projecteur | 515,84 | **465,84** |
+
+Le chemin image suit désormais la source sur ses trois points d'attention : rotation en quatre blocs (`ggml_mrope_cache_init`), échelle continue (idem), permutation colonne-majeur (`clip.cpp`). **Ce qui reste sans référence n'est plus une ligne de code identifiée, mais la qualité globale** — et les trois pistes de validation sont écrites dans `docs/plan-mla-vision.md`.
+
+Commit `d349063`, `cargo test` 6/6.
+
+Je passe maintenant à la feuille de route : corriger les items périmés de `REPRISE.md` §6 (le **noyau de tête** et le **second GPU** y sont encore annoncés comme à faire alors qu'ils sont livrés), remonter ce qui est mûr, et redescendre ce qui a été mesuré comme non rentable (les experts MXFP4 à +6 %).
+
+### Tour 38 — Au delà des défis techniques, il nou faut un vrai document de vision de ce projet. Je serais porté à renommer le projet  … [444 caractères tronqués]
+
+*4 appels d'outils.* Actions notables :
+
+- bash — Recon: docs, README, name occurrences
+- write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/vision.md`
+- bash — Verify cited numbers exist in the repo
+- bash — Update README identity and commit vision doc
+
+**Synthèse produite :**
+
+⏵ J'écris le document de vision : *Drave*, le flux des listes d'activation
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -1731,6 +1767,7 @@ Puis le **rafraîchissement de `REPRISE.md` §6** dan
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/plan-mla-vision.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/mla_synthetique.py` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/vision_mtmd.py` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/vision.md` | 1 | 0 |
 
 ### Sous-agents lancés
 
@@ -1778,7 +1815,7 @@ Puis le **rafraîchissement de `REPRISE.md` §6** dan
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 961 autres
+- … et 964 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1999,4 +2036,5 @@ Puis le **rafraîchissement de `REPRISE.md` §6** dan
 - journal : archive automatique" 2>/dev/null; git log --oneline -3 | cat
 - REPRISE : l'item 3 (rotation) reflète la mesure à 16 k et le seuil porté à 4 ×" && git log --oneline -1
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p='docs/plan-mla-vision.md'; s=open(p).read() add = """ ### La permutation colonne-majeur
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p='README.md'; s=open(p).read() old = """# Qtrinet  Inférence de LLM en **ternaire / mult
 
