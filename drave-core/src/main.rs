@@ -414,6 +414,9 @@ struct Options {
     /// silence : `--keeep 0.05` (une faute de frappe) faisait tourner le modèle
     /// entier sans élagage et sans un mot.
     inconnus: Vec<String>,
+    /// `--options-strict` : un drapeau inconnu n'est plus un avertissement mais une
+    /// ERREUR. Pour les scripts : une faute de frappe ne doit pas passer.
+    options_strict: bool,
     /// Adresse d'écoute du nœud moteur : `port`, ou `hôte:port` pour écouter
     /// au-delà de localhost (un pair distant, un tunnel, une autre machine).
     flux_serveur: Option<String>,
@@ -505,6 +508,7 @@ fn analyser(args: &[String]) -> Options {
             "--flux-forcer" => { o.flux_forcer = Some(suivant(i).clone()); 2 }
             "--flux-serveur" => { o.flux_serveur = Some(suivant(i).clone()); 2 }
             "--options-actives" => { o.options_actives = true; 1 }
+            "--options-strict" => { o.options_strict = true; 1 }
             "--ppl-reparti" => { o.ppl_reparti = Some(suivant(i).clone()); 2 }
             "--couches-locales" => { o.couches_locales = suivant(i).parse().unwrap(); 2 }
             "--trace-couches" => { o.trace_couches = suivant(i).split(',')
@@ -604,6 +608,11 @@ fn analyser(args: &[String]) -> Options {
                   o.inconnus.len(), o.inconnus.join(" "));
         eprintln!("[options] (une faute de frappe suffit — `--options-actives` montre \
 ce que le moteur applique vraiment)");
+        if o.options_strict {
+            eprintln!("[options] --options-strict : arrêt (un script ne doit pas \
+continuer avec un drapeau qui n'existe pas)");
+            std::process::exit(2);
+        }
     }
     if o.pin { engine::EPINGLER.store(true, std::sync::atomic::Ordering::Relaxed); }
     if o.bits > 0 { list::BITS_POIDS.store(o.bits, std::sync::atomic::Ordering::Relaxed); }

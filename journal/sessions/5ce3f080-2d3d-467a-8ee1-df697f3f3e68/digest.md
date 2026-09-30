@@ -1493,3 +1493,32 @@ b2767fe Feuille de route : 1.4 attribuée et la section format renvoyée à sa s
   ```
 
 - **job_output** `{"job_id": "bash-79", "timeout_ms": 300000, "wait": true}`
+
+  ```
+===== K cumul (plan §4.5 : verifier_taille(cumul) apres chaque prefixe)
+    etat 0 (268 Mo) envoye + prefixe de l'etat 1 (268 Mo de plus)
+    cumul annonce = 536 870 908 octets > plafond 268 435 456
+    AUCUN refus : le serveur lit encore l'etat 1 (pas de garde cumulatif)
+    cli: temps 9.14 s, RSS max 15496 ko
+  srv exit=0
+  srv: [flux] arrêt : failed to fill whole buffer
+  srv: [flux] 0 flux servis
+===== reponse d'un AUTRE mode que la demande (client tue ?)
+  cli exit=1 (134 = SIGABRT, panic=abort)
+  cli:   référence locale  : perplexité 841.7671  (2.3 s)
+  cli: [flux] le nœud moteur a fermé la connexion (failed to fill whole buffer).
+  cli:        Cause la plus probable : il a REFUSÉ le lot (son contexte est plus petit que --ctx ici : 256). Il l'a dit de son côté.
+  --- pair:
+  bad: [bad] ecoute 46301
+  bad: [bad] demande : mode=4 t=16 pos=0 version=5
+  bad: [bad] corps consomme ; je reponds un mode 2 (n=1) au lieu du mode 4
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /tmp && python3 - <<'EOF'\np='/tmp/m4_badreply.py'\ns=open(p).read()\ns=s.replace(\"\"\"    s.sendall(rep + struct.pack(\"<hH\", 5, 7))\n    try:\n        s.recv(100)\n    except Exception:\n        pass\"\"\",\"\"\"    s.sendall(rep + struct.pack(\"<hH\", 5, 7))\n    print(\"[bad] r … [379 caractères tronqués]`
+
+  ```
+ok
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && D=./drave-core/target/release/drave; M=models/Qwen2.5-0.5B-Q8_0.gguf; P=46302; (timeout 60 python3 /tmp/m4_badreply.py $P 896 > /tmp/bad2.log 2>&1 &); sleep 1; timeout 90 $D $M --ppl-reparti 127.0.0.1:$P --couches-locales 12 --limit  … [297 caractères tronqués]`

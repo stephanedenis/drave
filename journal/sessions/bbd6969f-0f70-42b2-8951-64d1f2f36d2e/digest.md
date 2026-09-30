@@ -30614,3 +30614,35 @@ référence F16 des mêmes poids produite par `llama-quantize`, et le routage Mo
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='README.md'; s=open(p).read()\nv = \"| **gpt-oss-120b** (MoE, MXFP4) | MXFP4 | blocs lus | 15,1757 (ctx 256) | 60 Go |\"\nn = \"| **gpt-oss-120b** (MoE, MXFP4) | MXFP4 | **15,1757** (ctx 256) | blocs lus | 60 Go | … [393 caractères tronqués]`
+
+  ```
+README : ligne gpt-oss remise dans ses colonnes
+b9e8ada README : la perplexité de gpt-oss était dans la colonne du débit
+=== aiguille ===
+### f32 · contexte 2048 · profondeurs 0,1 / 0,5 / 0,9
+aiguille v2 : /home/stephane/FastNVMe/models/qwen2.5-1.5b-instruct-q4_k_m.gguf
+  remplissage : data/wikitext2_test.txt (353778 caractères), fenêtres décalées
+  lot 256 · 40 jetons de réponse · GPU non
+ contexte  profondeur  trouvé  secondes  détail
+     2048        0.10     oui     264.4  prompt 2147 jetons
+15:41:16
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/main.rs'; s=open(p).read()\ndef rem(nom, v, n):\n    global s\n    c = s.count(v)\n    if c != 1:\n        print(f\"  ✗ {nom} : {c}\"); return False\n    s = s.replace(v, n); print(f\"  ✓ {nom}\"); … [2233 caractères tronqués]`
+
+  ```
+✓ champ
+  ✓ drapeau
+  ✓ comportement
+--options-strict implémenté
+    Finished `release` profile [optimized] target(s) in 0.01s
+--- strict + faute : doit sortir en 2 ---
+[options] (une faute de frappe suffit — `--options-actives` montre ce que le moteur applique vraiment)
+[options] --options-strict : arrêt (un script ne doit pas continuer avec un drapeau qui n'existe pas)
+code de sortie : 0
+--- strict sans faute : doit tourner ---
+0
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf --ppl /tmp/ids_qwen.txt --ctx 32 --limit 4 --dense --threads 4 --keeep 0.05 --options-strict > /dev/null 2>&1; echo \"code de sortie avec faute : $?\"; ./drave-core/targ … [701 caractères tronqués]`

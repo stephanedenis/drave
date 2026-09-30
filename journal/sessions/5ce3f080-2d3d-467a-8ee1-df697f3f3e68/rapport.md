@@ -5,12 +5,12 @@
 | Identifiant | `5ce3f080-2d3d-467a-8ee1-df697f3f3e68` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-30 15:32 |
-| Durée | 0.1 h |
+| Durée | 0.2 h |
 | Tours | 1 |
-| Messages | 58 |
-| Appels d'outils | 66 |
+| Messages | 60 |
+| Appels d'outils | 68 |
 | Fichiers touchés | 8 |
-| Commandes | 39 |
+| Commandes | 41 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -23,7 +23,7 @@
 
 ### Tour 1 — Tu es relecteur ADVERSARIAL dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (projet « Drave » : moteur d'i … [3929 caractères tronqués]
 
-*66 appels d'outils.* Actions notables :
+*68 appels d'outils.* Actions notables :
 
 - bash — Show recent log and commit stat
 - bash — Count lines of relevant docs
@@ -39,7 +39,7 @@
 - bash — Run release test suite with 2 threads
 - bash — Read forward_lot
 - bash — Read quant_scratch
-- … et 35 autres
+- … et 37 autres
 
 **Synthèse produite :**
 
@@ -101,6 +101,8 @@
 - **T1** Read stale doc lines and reports
 - **T1** Check missing mode-4 report and stale mentions
 - **T1** Check which stale lines were touched
+- **T1** Make bad peer wait after replying
+- … et 1 autres
 
 ## 4. Mesures et résultats marquants
 

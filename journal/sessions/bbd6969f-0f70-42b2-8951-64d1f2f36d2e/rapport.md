@@ -7,12 +7,12 @@
 | Début | 2026-09-28 14:46 |
 | Durée | 48.9 h |
 | Tours | 46 |
-| Messages | 1904 |
-| Appels d'outils | 1797 |
+| Messages | 1906 |
+| Appels d'outils | 1799 |
 | Fichiers touchés | 44 |
-| Commandes | 1469 |
+| Commandes | 1471 |
 | Sous-agents | 10 |
-| Commits | 154 |
+| Commits | 155 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -2117,7 +2117,7 @@ L'**audit des drapeaux** a trouvé que **46 options sur 110** étaient ignorées
 
 ### Tour 46 — continue jusqu'à 18h HAE
 
-*59 appels d'outils.* Actions notables :
+*61 appels d'outils.* Actions notables :
 
 - bash — Check time, timezone and remaining budget
 - create_goal
@@ -2133,7 +2133,7 @@ L'**audit des drapeaux** a trouvé que **46 options sur 110** étaient ignorées
 - bash — Improve notebook with real text cell
 - bash — Kill test node safely and check notebook
 - bash — Add notebook real-text cell and commit
-- … et 45 autres
+- … et 47 autres
 
 **Synthèse produite :**
 
@@ -2245,7 +2245,7 @@ L'**audit des drapeaux** a trouvé que **46 options sur 110** étaient ignorées
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 1429 autres
+- … et 1431 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2373,7 +2373,7 @@ L'**audit des drapeaux** a trouvé que **46 options sur 110** étaient ignorées
 
 ## 5. Erreurs rencontrées
 
-98 sorties en erreur ou divergentes. Les premières :
+99 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : a8f2635f8 docs: record which models this box is good at, and why src/llama-hparams.cpp:8:void llama_hparams::set_swa_pattern(uint32_t n_pattern, bool dense_first) { src/llama-hparams.h:308:    void se
 - **T1** : 511 tokens notés — perplexité cumulée 247.031  (4.9 tok/s) === perplexité 247.0308 sur 511 tokens (0 événements, 104.5 s) ===  ### B3 harmony assistant 511 --- ref --- 0.0 0.0 0:00 ls: cannot access '
@@ -2547,4 +2547,5 @@ L'**audit des drapeaux** a trouvé que **46 options sur 110** étaient ignorées
 - Cache KV à 4 096 : les quatre points, et les clés f16 devant les clés f32  clés f32 + valeurs int8 = 12,2223 (+0,039 %), soit un peu moins bien que le f16 (+0,0
 - REPRISE : le créneau 15h-18h (mode 4, frontière KV confirmée, plan GPU écrit)" && git log --oneline -1 | cat; sleep 240; cat /tmp/aiguille_kv.log | tail -12; da
 - README : la perplexité de gpt-oss était dans la colonne du débit" && git log --oneline -1 | cat; echo "=== aiguille ==="; tail -6 /tmp/aiguille_kv.log; date +"%
+- --options-strict : un drapeau inconnu devient une erreur, pour les scripts  La dernière recommandation de l'audit des drapeaux : un avertissement suffit quand o
 
