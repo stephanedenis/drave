@@ -248,7 +248,8 @@ Tout est mesuré, tout est commité. Détail complet dans `docs/roadmap.md` (pha
 
 **Le découpage en deux nœuds est fidèle** (`reports/rapport-phase3-reparti.md`) :
 écart local/réparti **0,00e0** — 144,8289 des deux côtés à 40 jetons, et
-**9,5146 des deux côtés à 1 024 jetons** (1 024 flux, texte réel), le banc
+**9,5146 des deux côtés à 1 024 jetons** (1 023 flux : le dernier jeton n'a rien
+à prédire, il n'est plus envoyé), le banc
 réparti prenant le temps du calcul local (19,7 contre 19,4 ms par jeton). Il a
 fallu deux corrections dans `Model::forward`, et la première ne suffisait pas :
 
@@ -259,12 +260,14 @@ fallu deux corrections dans `Model::forward`, et la première ne suffisait pas :
    plage allait jusqu'à la dernière couche, puis le pilote normait). La règle est
    maintenant portée par un drapeau explicite, `flux_brut`.
 
-**Le protocole de flux est en v2** (`docs/format-flux.md`) : en-tête de 39 octets
-avec version, mode et **réglages d'activation** — deux nœuds réglés différemment
-calculaient deux choses différentes en silence (0,69 d'écart mesuré). Un pair
-d'une autre version est refusé en le disant. `--flux-serveur` accepte
-`hôte:port` (donc un pair distant) et `docs/colab-reparti.md` est la recette de
-la phase 3.4.
+**Le protocole de flux est en v4** (`docs/format-flux.md`) : en-tête de **79
+octets** avec version, mode et le **contrat d'activation complet** (niveaux, seuil,
+top-k, renorm, les sept top-k par projection, attn/qk/moe top-k) — deux nœuds
+réglés différemment calculaient deux choses différentes en silence (0,69 d'écart
+mesuré, et un serveur en `--topk-q 900` contre un client en `--topk-q 4` divergeait
+sans un mot). Un pair d'une autre version est refusé en le disant. Les modes sont
+dense, listes, blocs et **lot** ; `--flux-serveur` accepte `hôte:port`, et
+`colab/` (notebook + `tools/preparer_colab.sh`) porte la recette de la phase 3.4.
 
 **Ce que coûte le transport** (`reports/rapport-transport-liste.md`) :
 
@@ -335,15 +338,17 @@ réellement en vigueur.
 
 ### Les prochains chantiers, dans l'ordre
 
-1. **Préremplissage par LOTS sur le fil** : le transport est séquentiel (un flux
-   par jeton), c'est le vrai bloqueur d'une démonstration Colab utile — la vision
-   dit « préremplissage réparti, décodage séquentiel ».
-2. **Clés du cache KV** : clés f32 + valeurs int4 (62,5 % de la taille f32), ou
-   un meilleur quantificateur de clés (échelle par tête, rotation avant
-   quantification) pour passer sous les +0,8 % de llama.cpp.
-3. **Transport** : rendre le mode « blocs » meilleur que le dense en toutes
-   circonstances (l'écart croît avec la longueur : chercher pourquoi, sans doute
-   la dérive du KV de chaque nœud).
+1. ~~Préremplissage par LOTS sur le fil~~ **FAIT** (mode 3 : 256 jetons en 4 lots,
+   écart 0,00e0 ; `reports/rapport-prefill-reparti.md`). Le suivant dans cette
+   veine : le **lot en listes** (mode 4), chaque état en liste creuse au lieu de
+   f32 dense — ÷2,3 sur le fil.
+2. **Clés du cache KV** : `DRAVE_KV_K_F16=1` (clés en f16, 3,125 octets par
+   élément contre 2,25 en int8/int8 et 8 en f32) donne **+0,057 %** à contexte 256
+   là où l'int8/int8 coûte +2,15 % — la campagne à 8 192 jetons est en cours ;
+   reste à confirmer, puis à choisir la politique par défaut.
+3. **Transport** : le mode « blocs » perd encore un peu de fidélité ; l'écart
+   **décroît** avec la longueur (13,7 % à 64 jetons, 1,3 % à 1 024) — chercher
+   pourquoi il ne descend pas plus vite.
 4. Le reste des phases 1 et 2 de `docs/roadmap.md` (noyau GPU de top-k,
    ordonnanceur de placement, flux de poids depuis le NVMe).
 

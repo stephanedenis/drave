@@ -27458,3 +27458,144 @@ docs/colab-reparti.md:36:* **Débit** : 3 623 octets par flux en dense, 1 989 en
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='docs/format-flux.md'; s=open(p).read()\ns = s.replace(\"ou en **1 seul lot de 917 543 octets**\", \"ou en **1 seul lot de 917 583 octets**\")\nv = \"\"\"Le mode dense coûte **3 620 octets par flux** (26 d'en-tête … [4407 caractères tronqués]`
+
+  ```
+format-flux : chiffres à jour + note d'époque
+colab-reparti : lots ✅, chiffres à jour
+148456f Le rapport manquant de la phase 3.4, et les chiffres remis d'aplomb
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat /tmp/kv_cles.log; date +\"%H:%M:%S\"; echo \"=== README ===\"; sed -n 1,40p README.md | grep -n \"Drave\\|Qtrinet\\|10 %\\|FPGA\\|lignes\\|renom\" ; echo \"=== vision ===\"; grep -n \"10 %\\|22 %\\|rien n'existe\\|s'appelait\\|pr … [192 caractères tronqués]`
+
+  ```
+cles_f32_valeurs_int4      : perplexité 14.2994 sur 8191 tokens (0 événements, 1665.6 s)
+cles_int4_valeurs_f32      : 12:37:41
+=== README ===
+1:# Drave
+3:*Anciennement `Drave`.* **La drave**, c'est le flux qu'on conduit : ici, celui
+10:Le cahier des charges d'origine est dans [`Qtrinet-bootstrap.md`](Qtrinet-bootstrap.md)
+31:| **Bilan multi-matériel (CPU / FPGA / GPU)** | ✅ → [`reports/bilan-multi-materiel.md`](reports/bilan-multi-materiel.md) |
+34:| **Croisement push/pull à 10 % de densité** | ✅ mesuré → [`reports/rapport-croisement-push-pull.md`](reports/rapport-croisement-push-pull.md) |
+=== vision ===
+14:Le projet s'appelait `Drave`, du nom de son origine : un cahier des charges
+46:**mesuré** : en dessous d'environ **10 % de densité**, le push (listes) bat le
+69:| `--profil-experts` | quels experts sont choisis (MoE), et à quel point le routage est concentré |
+76:* **top 10 % des neurones portent 33,1 % de la magnitude** ; seuls **0,08 %** sont
+133:   croisement push/pull à 10 % donne déjà l'ordre de grandeur de ce qu'on
+198:* **ce n'est pas « le sparse gagne toujours »** : le croisement à 10 % de densité
+=== histoire ===
+12:| **le virage événementiel** | l'idée qui a tout chan
+… [436 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat /tmp/kv_cles.log; echo \"---\"; pgrep -a -x drave | head -3; date +\"%H:%M:%S\"; echo \"=== lignes README/vision à corriger ===\"; sed -n 1,14p README.md; grep -n \"lignes\\|FPGA\" README.md | head -5; grep -n \"Rien n'existe\\|r … [117 caractères tronqués]`
+
+  ```
+cles_f32_valeurs_int4      : perplexité 14.2994 sur 8191 tokens (0 événements, 1665.6 s)
+cles_int4_valeurs_f32      : ---
+359514 ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf --ppl /tmp/ids_qwen_long.txt --ctx 8192 --limit 8192 --dense --threads 16 --lot 512
+492995 /tmp/audit_head/drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf --flux-serveur 127.0.0.1:45821 --ctx 256 --threads 4
+493024 /tmp/audit_head/drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf --ppl-reparti 127.0.0.1:45821 --couches-locales 12 --ctx 256 --threads 4 --limit 44 --lot 8
+12:37:50
+=== lignes README/vision à corriger ===
+# Drave
+
+*Anciennement `Drave`.* **La drave**, c'est le flux qu'on conduit : ici, celui
+des **listes d'activation** (*stream of logs*) — le moteur ne lit pas des
+matrices, il pousse des faits valués vers leurs destinations. La vision complète
+est dans [`docs/vision.md`](docs/vision.md).
+
+Origine du projet : inférence de LLM en **ternaire / multi-bits** sur un cluster
+de cartes **Stratix V** (Microsoft Storey Peak) — 100 % logique, sans DSP.
+Le cahier des charges d'origine est dans [`Qtrinet-bootstrap.md`](Qtrinet-bootstrap.md)
+⚠️ **il a été audité et co
+… [788 caractères tronqués]
+  ```
+
+- **bash** `{"command": "ps -o pid,etime,pcpu,args -p 492995,493024 2>/dev/null | cut -c1-110; echo \"---\"; date +\"%H:%M:%S\"", "description": "Check reviewer process ages"}`
+
+  ```
+PID     ELAPSED %CPU COMMAND
+---
+12:37:58
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n 105,113p docs/roadmap.md; echo \"=== 288-296 ===\"; sed -n 288,296p docs/roadmap.md; echo \"=== vision 10-18 / 115-124 ===\"; sed -n 10,18p docs/vision.md; sed -n 115,124p docs/vision.md", "description": "Read exact stale line … [3 caractères tronqués]`
+
+  ```
+| date | mesure | valeur |
+|---|---|---|
+| 2026-09-30 | trace du flux, Qwen2.5-0.5B, 512 jetons, 24 couches, 2 points par couche | 12 288 listes · **132 Mo** · 6 octets par neurone actif · **+8 % de temps** |
+| 2026-09-30 | calcul réparti sur deux processus (12 couches chacun), 40 jetons | écart local/réparti **0,00e0** (144,8289 = 144,8289) après correction de deux défauts ; avant : ×11,2 |
+| 2026-09-30 | diff KV f32 contre KV int8 (perplexité 19,3885 contre 19,8059) | première divergence couche 1 jeton 0 · couche la plus touchée FFN 2 (3,9 × la dynamique) · 229 000 neurones changés sur 24 couches |
+| 2026-09-30 | attribution du cache KV int8, 8 191 jetons, ctx 8 192 | f32 **14,2339** · int8 **14,6667** (+3,0 %) · **clés f32** + valeurs int8 **14,2372** (+0,023 %) · clés int8 + **valeurs f32** 14,6622 (+3,01 %) → **tout l'écart est dans les clés** |
+| 2026-09-30 | protocole de flux v2, deux processus, localhost | en-tête de 39 octets (version, mode, réglages d'activation) · dense f32 **3 623 octets/flux** · listes i16 2 159 · **blocs + indices par écarts 1 568 (÷2,3)** pour 2,7 % d'écart à 256 jetons de vrai texte |
+| 2026-09-30 | `TCP_NODELAY` sur le banc réparti, 200 jetons | at
+… [1745 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport sys\ndef rem(p, paires):\n    s = open(p).read(); ok = 0\n    for v, n in paires:\n        if s.count(v) == 1:\n            s = s.replace(v, n); ok += 1\n        else:\n            print(f\"  ⚠ NON TROUVÉ ({s … [3319 caractères tronqués]`
+
+  ```
+README.md : 2/2 remplacements
+docs/vision.md : 3/3 remplacements
+docs/roadmap.md : 3/3 remplacements
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"v2\\|39 octets\\|1 024 flux\\|LOTS sur le fil\\|écart croît\\|prochain chantier\\|4 591\\|÷2 pour\" REPRISE.md | sed -n 1,20p", "description": "Locate stale REPRISE lines"}`
+
+  ```
+111:| **CUDA 13 : les symboles non versionnés du pilote échouent** (`cuMemAlloc` → erreur 201 alors que le contexte est courant) | utiliser partout les `_v2` |
+168:| KV int8, échelles par bloc | +1,5 % (512 jetons) et +3,4 % (4 591) — était +7,1 % et +5,2 % |
+169:| KV int4, échelles par bloc | +219 % (512) et +287 % (4 591) — était +384 % et +450 % |
+179:| aiguille v2 (12 sondes) | **12/12 trouvées** : 1,5B 512/2048, 30B 2048, gpt-oss 4096, profondeurs 0,1/0,5/0,9 |
+188:l'aiguille v2, le dépaquetage vectorisé du noyau d'attention, les experts MXFP4
+251:**9,5146 des deux côtés à 1 024 jetons** (1 024 flux, texte réel), le banc
+262:**Le protocole de flux est en v2** (`docs/format-flux.md`) : en-tête de 39 octets
+314:| | v1 | v2 (défaut) | v3 (`DRAVE_TRACE_BLOCS=1`) |
+319:La v2 (indices par écarts) est SANS PERTE ; la v3 (valeurs i8, échelle f16 par
+338:1. **Préremplissage par LOTS sur le fil** : le transport est séquentiel (un flux
+345:   circonstances (l'écart croît avec la longueur : chercher pourquoi, sans doute
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n 260,268p REPRISE.md; echo \"...\"; sed -n 336,348p REPRISE.md", "description": "Read REPRISE stale blocks"}`
+
+  ```
+maintenant portée par un drapeau explicite, `flux_brut`.
+
+**Le protocole de flux est en v2** (`docs/format-flux.md`) : en-tête de 39 octets
+avec version, mode et **réglages d'activation** — deux nœuds réglés différemment
+calculaient deux choses différentes en silence (0,69 d'écart mesuré). Un pair
+d'une autre version est refusé en le disant. `--flux-serveur` accepte
+`hôte:port` (donc un pair distant) et `docs/colab-reparti.md` est la recette de
+la phase 3.4.
+
+...
+### Les prochains chantiers, dans l'ordre
+
+1. **Préremplissage par LOTS sur le fil** : le transport est séquentiel (un flux
+   par jeton), c'est le vrai bloqueur d'une démonstration Colab utile — la vision
+   dit « préremplissage réparti, décodage séquentiel ».
+2. **Clés du cache KV** : clés f32 + valeurs int4 (62,5 % de la taille f32), ou
+   un meilleur quantificateur de clés (échelle par tête, rotation avant
+   quantification) pour passer sous les +0,8 % de llama.cpp.
+3. **Transport** : rendre le mode « blocs » meilleur que le dense en toutes
+   circonstances (l'écart croît avec la longueur : chercher pourquoi, sans doute
+   la dérive du KV de chaque nœud).
+4. Le reste des phases 1 et 2 de `docs/roadmap.md` (noyau GPU de
+… [68 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='REPRISE.md'; s=open(p).read()\ndef rem(v, n):\n    global s\n    assert s.count(v) == 1, f\"{s.count(v)}× : {v[:50]}\"\n    s = s.replace(v, n)\n\nrem(\"\"\"**Le protocole de flux est en v2** (`docs/format-flux.m … [3138 caractères tronqués]`
+
+  ```
+REPRISE : 3 blocs corrigés
+lien cassé : reports/rapport-pe-evenementiel.md
+lien cassé : reports/rapport-lecteur-ddr3.md
+../FPGA-Stratix-V/docs/bellman_ford_rtl.md
+../FPGA-Stratix-V/docs/carte-storey-peak.md
+../FPGA-Stratix-V/docs/journal-bringup.md
+../FPGA-Stratix-V/docs/multicartes.md
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls ../FPGA-Stratix-V/docs/ | grep -iE \"pe-even|ddr3|evenement\" | head -4; python3 - <<'PY'\np='README.md'; s=open(p).read()\na = \"reports/rapport-pe-evenementiel.md\"\nb = \"reports/rapport-lecteur-ddr3.md\"\nn = 0\nfor lien, cibl … [2080 caractères tronqués]`

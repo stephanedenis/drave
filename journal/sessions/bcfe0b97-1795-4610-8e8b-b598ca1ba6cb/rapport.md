@@ -7,10 +7,10 @@
 | Début | 2026-09-30 12:20 |
 | Durée | 0.3 h |
 | Tours | 1 |
-| Messages | 93 |
-| Appels d'outils | 102 |
+| Messages | 99 |
+| Appels d'outils | 108 |
 | Fichiers touchés | 0 |
-| Commandes | 80 |
+| Commandes | 85 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -23,7 +23,7 @@
 
 ### Tour 1 — Tu es relecteur ADVERSARIAL dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (projet « Drave » : moteur d'i … [4103 caractères tronqués]
 
-*102 appels d'outils.* Actions notables :
+*108 appels d'outils.* Actions notables :
 
 - bash — List recent commits and status
 - bash — List repo structure and source sizes
@@ -39,11 +39,11 @@
 - bash — Inspect concurrent uncommitted edits
 - bash — Extract HEAD and cda3162 sources to /tmp
 - bash — Check models, data and existing binary/traces
-- … et 69 autres
+- … et 74 autres
 
 **Synthèse produite :**
 
-⏵ Le dépôt bouge encore : je vérifie si la constante de version vient d'être corrigée
+⏵ Vérification du correctif v4 : reconstruction de HEAD et test croisé
 
 ## 3. Travail accompli
 
@@ -94,7 +94,7 @@
 - **T1** Read single-token trace key scheme
 - **T1** Check claims in prefill report
 - **T1** Run fake peer with dense client
-- … et 40 autres
+- … et 45 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -179,14 +179,18 @@
 - **T1** `=== perplexité 19.3885 sur 510 tokens (0 événements, 21.9 s) ===`
 - **T1** `=== perplexité 1958.7210 sur 510 tokens (0 événements, 23.2 s) ===`
 - **T1** `référence locale  : perplexité 102.6664  (4.5 s)`
+- **T1** `référence locale  : perplexité 160.5998  (3.2 s)`
+- **T1** `deux nœuds        : perplexité 160.5998  (3.3 s)`
+- **T1** `transport         : LOTS de 8 jetons · 26362 octets par lot (aller) · 3.2 ko par jeton · 6 lots (au lieu de 43 flux)`
 
 ## 5. Erreurs rencontrées
 
-5 sorties en erreur ou divergentes. Les premières :
+6 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : [attention] QT_IM_SWITCHER est l'ancien nom d'une variable d'environnement : elles s'appellent maintenant DRAVE_* (voir docs/histoire.md). Rien n'a été appliqué.  thread 'main' (391048) panicked at sr
 - **T1** : (no output) [exit code: 1]
 - **T1** : |         ^^^^^^^^^^^^ help: use shorthand field pattern: `mut ids`     |     = note: `#[warn(non_shorthand_field_patterns)]` on by default  [exit code: 2]
 - **T1** : ########## 1. SERVEUR ANCIEN (cda3162, en-tête 39 o) + CLIENT NOUVEAU (HEAD, 79 o)   client nouveau exit=134   --- serveur ancien : [flux] arrêt : magie de flux absente [flux] 1 flux servis   --- clie
 - **T1** : === panic client nouveau (x1) === thread 'main' (487435) panicked at src/main.rs:1879:60: réception du flux: Os { code: 104, kind: ConnectionReset, message: "Connection reset by peer" } note: run with
+- **T1** : [stderr] bash: -c: line 1: syntax error near unexpected token `(' bash: -c: line 1: `cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo "== working tree (état 12:40) =="; grep -n "listes_blocs
 

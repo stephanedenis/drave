@@ -2423,3 +2423,122 @@ Date:   Wed Sep 30 12:36:39 2026 -0400
 … [1192 caractères tronqués]
   ```
 
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '2315,2330p' drave-core/src/model.rs; echo \"=== appels flux_lot ===\"; grep -n \"Self::flux_lot\" drave-core/src/model.rs; echo \"=== les appels sont-ils inchangés vs HEAD ? ===\"; git diff HEAD -- drave-core/src/model.rs | g … [235 caractères tronqués]`
+
+  ```
+/// en lot. Les modèles à experts retombent sur le chemin jeton par jeton :
+    /// leur regroupement par expert est l'étape suivante.
+    pub fn forward_lot(&mut self, toks: &[u32], pos0: usize) -> Vec<Vec<f32>> {
+        let t = toks.len();
+        if t == 0 { return Vec::new(); }
+        // Lot IMPOSÉ (préremplissage réparti) : les états arrivent de l'autre
+        // nœud, on ne repasse pas par `token_embd`. Lu avant tout le reste, et
+        // consommé une seule fois — comme `emb_imposee` pour un jeton seul.
+        let impose = self.emb_imposee_lot.take();
+        if t == 1 {
+            if let Some(v) = impose { self.emb_imposee = Some(v); }
+            // Le jeton n'est PAS lu quand un état est imposé : `forward` prend
+            // `emb_imposee` et n'appelle jamais `token_embd`. `toks` peut donc
+            // être vide côté nœud distant, qui ne connaît que des états.
+            return vec![self.forward(toks.first().copied().unwrap_or(0), pos0)];
+        }
+=== appels flux_lot ===
+2419:            Self::flux_lot(&mut self.trace, &mut self.flux_force, &mut self.jeton_trace,
+2629:            Self::flux_lot(&mut self.trace, &mut self.flux_force, &mut self.jeton_trace,
+=== l
+… [177 caractères tronqués]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-69 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/audit_head/tests4.sh <<'EOF'
+#!/bin/bash
+B=/tmp/audit_head/drave-core/target/release/drave
+M=models/Qwen2.5-0.5B-Q8_0.gguf
+echo "########## K. rejeu de l'ancienne trace v1 DENSE (/tmp/flux_f32.bin), lot 1 (attendu 1958,7210)"
+timeout 200 $B $M --ppl /tmp/ids_qwen.txt --ctx 256 --abits 16 --threads 8 --limit 512 --dense --flux-forcer /tmp/flux_f32.bin 2>&1 | grep -E "rejeu|perplexité .* sur"
+echo "########## L. la même trace, rejeu par LOTS, limit 8 : le silence"
+timeout 120 $B $M --ppl /tmp/ids_qwen.txt --ctx 256 --abits 16 --threads 8 --limit 8 --dense --flux-forcer /tmp/flux_f32.bin --lot 4 2>&1 | grep -E "rejeu"
+echo "########## M. --limit 1 (ids d'un seul jeton) face au pair factice"
+python3 tools/pair_factice.py 45811 896 > /tmp/audit_head/f_m.log 2>&1 &
+P=$!; sleep 1
+timeout 60 $B $M --ppl-reparti 127.0.0.1:45811 --couches-locales 12 --ctx 256 --threads 4 --limit 1 2>&1 | grep -E "perplexité|écart|jetons"
+kill $P 2>/dev/null
+EOF
+chmod +x /tmp/audit_head/tests4.sh && /tmp/audit_head/tests4.sh) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **job_output** `{"job_id": "bash-69"}`
+
+  ```
+########## K. rejeu de l'ancienne trace v1 DENSE (/tmp/flux_f32.bin), lot 1 (attendu 1958,7210)
+[flux] rejeu depuis /tmp/flux_f32.bin : 12288 listes enregistrées
+  rejeu             : 12240 listes servies, 12336 manquantes  ← la moitié au moins n'a pas servi : vérifier la trace
+=== perplexité 1958.7210 sur 510 tokens (0 événements, 27.7 s) ===
+########## L. la même trace, rejeu par LOTS, limit 8 : le silence
+[flux] rejeu depuis /tmp/flux_f32.bin : 12288 listes enregistrées
+  rejeu             : 256 listes servies, 0 manquantes
+########## M. --limit 1 (ids d'un seul jeton) face au pair factice
+[config] cache KV : 32 bits, 0.01 Go pour 256 jetons
+[flux] pilote : 12 couches en local, 12 chez le pair, 1 jetons
+  référence locale  : perplexité NaN  (0.1 s)
+  deux nœuds        : perplexité NaN  (0.0 s)
+  écart             : NaN
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Dernier test : lot partiel en fin de séquence
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && B=/tmp/audit_head/drave-core/target/release/drave; M=models/Qwen2.5-0.5B-Q8_0.gguf\n$B $M --flux-serveur 127.0.0.1:45821 --ctx 256 --threads 4 > /tmp/audit_head/s7.log 2>&1 &\nS=$!; sleep 4\ntimeout 120 $B $M --ppl-reparti 127.0.0.1: … [284 caractères tronqués]`
+
+  ```
+référence locale  : perplexité 160.5998  (3.2 s)
+  deux nœuds        : perplexité 160.5998  (3.3 s)
+  écart             : 0.00e0
+  transport         : LOTS de 8 jetons · 26362 octets par lot (aller) · 3.2 ko par jeton · 6 lots (au lieu de 43 flux)
+[flux] 6 flux servis
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"== working tree (état 12:40) ==\"; grep -n \"listes_blocs.contains_key\\|if t == 0 { return Vec::new(); }\\|let impose = self.emb_imposee_lot.take()\" drave-core/src/model.rs; grep -n \"fn envoyer_lot\\|vec!\\[0u8; n \\* hidde … [605 caractères tronqués]`
+
+  ```
+[stderr]
+bash: -c: line 1: syntax error near unexpected token `('
+bash: -c: line 1: `cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo "== working tree (état 12:40) =="; grep -n "listes_blocs.contains_key\|if t == 0 { return Vec::new(); }\|let impose = self.emb_imposee_lot.take()" drave-core/src/model.rs; grep -n "fn envoyer_lot\|vec!\[0u8; n \* hidden \* 4\]\|expect(\"réception du lot\")\|if f.pos as usize + t > mdl.ctx" drave-core/src/main.rs; grep -n "corps = lire_tout(sock, n \* 4)\|n if mode == 3 else n_paires\|reponse += b\" drave-core/tools/pair_factice.py tools/pair_factice.py 2>/dev/null | head -5; echo "== HEAD a9fff24 =="; git show HEAD:drave-core/src/model.rs | grep -n "listes_blocs.contains_key" ; git show HEAD:drave-core/src/model.rs | grep -n "if t == 0 { return Vec::new(); }"; git show HEAD:drave-core/src/main.rs | grep -n "expect(\"réception du lot\")"'
+[exit code: 2]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"== working tree ==\" && grep -n 'listes_blocs.contains_key' drave-core/src/model.rs && grep -n 'if t == 0 { return Vec::new(); }' drave-core/src/model.rs && grep -n 'emb_imposee_lot.take()' drave-core/src/model.rs && grep -n ' … [355 caractères tronqués]`
+
+  ```
+== working tree ==
+2818:                } else if r.listes_blocs.contains_key(&((base + l) as u16, j0 as u32)) {
+2319:        if t == 0 { return Vec::new(); }
+3471:        if t == 0 { return Vec::new(); }
+2323:        let impose = self.emb_imposee_lot.take();
+1517:fn envoyer_lot(s: &mut std::net::TcpStream, debut: u32, fin: u32, pos0: u32,
+1589:            let mut corps = vec![0u8; n * hidden * 4];
+1843:            let rep = recevoir_flux(&mut sock, mdl.cfg.hidden).expect("réception du lot");
+1710:                        println!("[flux] lot refusé : {t} états à partir de la position {} \
+70:            corps = lire_tout(sock, n * 4)
+87:                              n if mode == 3 else n_paires, 0.0, levels, thresh, topk, renorm,
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git show HEAD:drave-core/src/model.rs > /tmp/audit_head/model_head.rs && grep -n 'listes_blocs.contains_key' /tmp/audit_head/model_head.rs; grep -n 'if t == 0 { return Vec::new(); }' /tmp/audit_head/model_head.rs; grep -n 'emb_impose … [216 caractères tronqués]`
+
+  ```
+2789:                } else if r.listes_blocs.contains_key(&((base + l) as u16, j0 as u32)) {
+2290:        if t == 0 { return Vec::new(); }
+3442:        if t == 0 { return Vec::new(); }
+2294:        let impose = self.emb_imposee_lot.take();
+1295:const VERSION_FLUX: u8 = 4;
+1589:            let mut corps = vec![0u8; n * hidden * 4];
+1843:            let rep = recevoir_flux(&mut sock, mdl.cfg.hidden).expect("réception du lot");
+  ```
+
+### 🤖 Assistant
+
+⏵ Vérification du correctif v4 : reconstruction de HEAD et test croisé
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && R=/tmp/audit_fix/drave-core && mkdir -p $R/src $R/gpu && git show HEAD:drave-core/Cargo.toml > $R/Cargo.toml && for f in main.rs model.rs engine.rs gguf.rs gpu.rs list.rs tokenizer.rs; do git show HEAD:drave-core/src/$f > $R/src/$f;  … [252 caractères tronqués]`

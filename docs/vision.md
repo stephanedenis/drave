@@ -11,7 +11,7 @@ ouvre sur chaque axe. Il ne remplace pas les rapports — chaque affirmation
 mesurée renvoie à celui qui la porte — et il distingue partout ce qui est
 **mesuré**, ce qui est **raisonné**, et ce qui est **à faire**.
 
-Le projet s'appelait `Drave`, du nom de son origine : un cahier des charges
+Le projet s'appelait `Qtrinet`, du nom de son origine : un cahier des charges
 d'inférence ternaire sur un cluster de cartes Stratix V
 (`Qtrinet-bootstrap.md`). Ce cahier des charges reste l'acte de naissance ; le
 nom, lui, ne dit plus ce que le projet est devenu. **Drave** le dit.
@@ -66,7 +66,7 @@ Ce qui existe déjà, et qui a servi :
 | outil | ce qu'il donne |
 |---|---|
 | `--profil-neurones`, `--neurones-sortie` | quels neurones s'allument, à quelle fréquence, avec quelle magnitude |
-| `--profil-experts` | quels experts sont choisis (MoE), et à quel point le routage est concentré |
+| `--profil-neurones` | quels neurones s'activent, couche par couche (le `--profil-experts` d'origine n'existe pas) |
 | `[config]` sur chaque exécution | quel chemin est **réellement** actif (rotation, cache KV, MLA, experts…) |
 | `--ppl-profil` | le temps par poste (projections, rope, attention, FFN, tête) |
 | journal de session | l'historique de tout ce qui a été mesuré, archivé à chaque commit |
@@ -117,7 +117,13 @@ noyau d'attention — le dernier chemin qui retombe sur le CPU.
 
 ## 4. Axe 3 — Répartir sur plusieurs machines
 
-**Rien n'existe ici, et c'est le chantier le plus prometteur du projet.** La
+**Le transport existe, et c'est l'axe où le projet a le plus avancé depuis.**
+Deux processus se passent des flux (protocole v4 : version, modes dense / listes /
+blocs / **lot**, contrat d'activation complet), le découpage est fidèle au bit
+près (`0,00e0`), le préremplissage par lots tient en un aller-retour par lot, et
+`colab/` contient de quoi faire la démonstration sur un runtime distant. Ce qui
+reste : le lot en listes, l'ordonnanceur de placement, le flux de poids depuis le
+NVMe. La
 raison est dans la nature de la représentation : si le calcul est un flux de
 listes adressées, alors **une liste est une unité de travail autonome**, avec ses
 entrées (les activations), sa sortie (les activations produites) et sa

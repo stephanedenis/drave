@@ -104,11 +104,11 @@ calcul : c'est la raison pour laquelle la phase 0 sert la phase 3.
 
 | date | mesure | valeur |
 |---|---|---|
-| 2026-09-30 | trace du flux, Qwen2.5-0.5B, 512 jetons, 24 couches, 2 points par couche | 12 288 listes · **132 Mo** · 6 octets par neurone actif · **+8 % de temps** |
+| 2026-09-30 | trace du flux, Qwen2.5-0.5B, 512 jetons, 24 couches, 2 points par couche | 24 576 listes · **132 Mo** en v1 · 6 octets par neurone actif · **+8 % de temps** (aujourd'hui : 66 Mo en v2 sans perte, 45 Mo en v3) |
 | 2026-09-30 | calcul réparti sur deux processus (12 couches chacun), 40 jetons | écart local/réparti **0,00e0** (144,8289 = 144,8289) après correction de deux défauts ; avant : ×11,2 |
 | 2026-09-30 | diff KV f32 contre KV int8 (perplexité 19,3885 contre 19,8059) | première divergence couche 1 jeton 0 · couche la plus touchée FFN 2 (3,9 × la dynamique) · 229 000 neurones changés sur 24 couches |
 | 2026-09-30 | attribution du cache KV int8, 8 191 jetons, ctx 8 192 | f32 **14,2339** · int8 **14,6667** (+3,0 %) · **clés f32** + valeurs int8 **14,2372** (+0,023 %) · clés int8 + **valeurs f32** 14,6622 (+3,01 %) → **tout l'écart est dans les clés** |
-| 2026-09-30 | protocole de flux v2, deux processus, localhost | en-tête de 39 octets (version, mode, réglages d'activation) · dense f32 **3 623 octets/flux** · listes i16 2 159 · **blocs + indices par écarts 1 568 (÷2,3)** pour 2,7 % d'écart à 256 jetons de vrai texte |
+| 2026-09-30 | protocole de flux, deux processus, localhost | en-tête de **39 octets** à l'époque (79 aujourd'hui : les top-k voyagent) · dense f32 **3 623 octets/flux** · listes i16 2 159 · **blocs + indices par écarts 1 568 (÷2,3)** pour 2,7 % d'écart à 256 jetons de vrai texte · **lots** : 256 jetons en 4 lots, **0,00e0** |
 | 2026-09-30 | `TCP_NODELAY` sur le banc réparti, 200 jetons | attente du pair **97,6 → 16,1 ms** par jeton (calcul local : 15,9 ms) · banc complet 24,5 → **8,3 s**, soit le temps du calcul local (8,2 s), à logits identiques |
 | 2026-09-30 | écart du transport selon la longueur, blocs à seuil 0,01 | **1,37e-1** à 64 jetons · 6,37e-2 à 128 · **2,74e-2** à 256 — il DÉCROÎT (l'erreur est stationnaire par jeton, la perplexité se moyenne) |
 | 2026-09-30 | hypothèse « transmettre l'entrée normée », mode dense | écart **5,61e0** au lieu de 0,00e0 : RÉFUTÉE — la connexion résiduelle a besoin du résidu, pas de sa version normée |
@@ -288,6 +288,7 @@ Chiffres des trois états, mesurés sur le même banc de 40 jetons :
 
 Ce qui est donc ACQUIS : le cadriciel d'échange, la séparation en deux nœuds, la
 plage de couches par nœud, la norme finale appliquée par le seul nœud qui a la
-tête — et la preuve que le découpage ne change pas un chiffre. Ce qui reste :
-le transport lui-même (aujourd'hui du f32 dense, 3 604 octets par flux), la
-granularité (3.2), le seuil de rentabilité (3.3) et la version du format (3.5).
+tête — et la preuve que le découpage ne change pas un chiffre, **y compris par
+lots** (mode 3 : 256 jetons en 4 lots, écart 0,00e0). Ce qui reste : le lot en
+listes (mode 4), l'ordonnanceur de placement, et la démonstration sur Colab, dont
+la recette est prête (`colab/`).

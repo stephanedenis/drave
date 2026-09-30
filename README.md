@@ -1,6 +1,6 @@
 # Drave
 
-*Anciennement `Drave`.* **La drave**, c'est le flux qu'on conduit : ici, celui
+*Anciennement `Qtrinet`.* **La drave**, c'est le flux qu'on conduit : ici, celui
 des **listes d'activation** (*stream of logs*) — le moteur ne lit pas des
 matrices, il pousse des faits valués vers leurs destinations. La vision complète
 est dans [`docs/vision.md`](docs/vision.md).
@@ -9,8 +9,9 @@ Origine du projet : inférence de LLM en **ternaire / multi-bits** sur un cluste
 de cartes **Stratix V** (Microsoft Storey Peak) — 100 % logique, sans DSP.
 Le cahier des charges d'origine est dans [`Qtrinet-bootstrap.md`](Qtrinet-bootstrap.md)
 ⚠️ **il a été audité et corrigé** : voir la section « Écarts avec le CDC » ci-dessous.
-Le nom du crate et du binaire (`drave-core`, variables `DRAVE_*`) changera dans un
-commit dédié ; le journal de sessions, archivé, n'est pas réécrit.
+Le renommage est FAIT : le crate et le binaire s'appellent `drave-core` et
+`drave`, les variables `DRAVE_*` (table de conversion dans `docs/histoire.md`) ;
+le journal de sessions, archivé, n'est pas réécrit.
 
 ---
 
@@ -26,8 +27,8 @@ commit dédié ; le journal de sessions, archivé, n'est pas réécrit.
 | **Architecture push (AER) + faisabilité CPU** | ✅ **fait** → [`reports/rapport-cpu-aer.md`](reports/rapport-cpu-aer.md) |
 | **Moteur d'événements Rust (4 optimisations)** | ✅ **fait** → [`reports/rapport-optimisations.md`](reports/rapport-optimisations.md) |
 | **Inférence complète en Rust, sans GPU** | ✅ **fait** → [`reports/rapport-inference.md`](reports/rapport-inference.md) |
-| **PE événementiel vérifié et synthétisé (Stratix V)** | ✅ **fait** → [`reports/rapport-pe-evenementiel.md`](reports/rapport-pe-evenementiel.md) |
-| **Lecteur DDR3 vérifié de bout en bout** | ✅ **fait** → [`reports/rapport-lecteur-ddr3.md`](reports/rapport-lecteur-ddr3.md) |
+| **PE événementiel vérifié et synthétisé (Stratix V)** | ✅ **fait** → [`../FPGA-Stratix-V/docs/rapport-pe-evenementiel.md`](../FPGA-Stratix-V/docs/rapport-pe-evenementiel.md) |
+| **Lecteur DDR3 vérifié de bout en bout** | ✅ **fait** → [`../FPGA-Stratix-V/docs/rapport-lecteur-ddr3.md`](../FPGA-Stratix-V/docs/rapport-lecteur-ddr3.md) |
 | **Bilan multi-matériel (CPU / FPGA / GPU)** | ✅ → [`reports/bilan-multi-materiel.md`](reports/bilan-multi-materiel.md) |
 | **Capteur hebbien (apprendre des logs d'activation)** | ✅ mesuré → [`reports/rapport-capteur-hebbien.md`](reports/rapport-capteur-hebbien.md) |
 | **Programme évolutif (journaliser, faire évoluer)** | ✅ évalué → [`reports/rapport-programme-evolutif.md`](reports/rapport-programme-evolutif.md) |
