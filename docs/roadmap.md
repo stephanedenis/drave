@@ -53,10 +53,10 @@ défini avant.
 | # | chantier | état | critère de succès |
 |---|---|---|---|
 | 3.1 | **Contrat d'échange v1** : tranche de liste = en-tête (couche, source, échelle, bits) + paires (destination, valeur) | ✅ | format écrit, relu, rejoué sans perte (phase 0.3/0.3bis) ; **transport TCP en place et FIDÈLE** (`--flux-serveur`, `--ppl-reparti`) — écart local/réparti **0,00e0** sur 40 et 199 flux, après correction de deux défauts (plage de couches ignorée par `forward`, norme finale appliquée deux fois) |
-| 3.2 | **Granularité** : par couche, par bloc de canaux, par expert | ⏳ | courbe : octets par jeton × latence pour chaque granularité |
-| 3.3 | **Seuil de rentabilité** : à partir de quel débit réseau le découpage gagne | ⏳ | formule validée par une mesure locale (socket `localhost`) avant Colab |
+| 3.2 | **Granularité** : par couche, par bloc de canaux, par expert | 🔬 | livrés et mesurés : listes i16, et **échelles par bloc de 32 canaux avec valeurs i8** (`--flux-blocs`) — ÷2,0 sur le fil pour 0,2 % de perplexité à seuil 0,02 ; reste le cas MoE |
+| 3.3 | **Seuil de rentabilité** : à partir de quel débit réseau le découpage gagne | 🔬 | mesuré sur localhost : le seuil est une affaire de LATENCE, pas de débit — < 1 Mbit/s par flux de jetons à 20 jetons/s, et 16,1 ms d'attente contre 15,9 ms de calcul local après `TCP_NODELAY` (97,6 ms avant : Nagle) |
 | 3.4 | **Démonstration Colab** : préremplissage réparti (le décodage reste séquentiel — c'est écrit dans la vision) | ⏳ | les mêmes logits qu'en local, à 1e-5 près |
-| 3.5 | **Sûreté** : version du format, refus des flux incompatibles, pas de silence | ⏳ | un flux d'une autre version est refusé avec un message clair |
+| 3.5 | **Sûreté** : version du format, refus des flux incompatibles, pas de silence | ✅ | version dans chaque en-tête ; un pair en version 99 est refusé avec un message qui nomme les deux versions — vérifié avec un faux client |
 
 ## Phase 4 — La drave apprenante (recherche)
 
@@ -141,26 +141,35 @@ Réserve écrite : la ligne « seuil 0,05 » a une perplexité de 2 445 — c'es
 relevé de COÛT, pas de qualité ; le seuil est volontairement brutal.
 
 
-### Phase 1.4 — l'expérience à faire, écrite pour ne pas la reperdre
+### Phase 1.4 — l'attribution de l'écart int8 : FAITE
 
-L'écart avec llama.cpp à 8 192 (+3,0 % contre +0,8 %) n'est pas attribué. Deux
-sources possibles, et une seule expérience les sépare :
+L'écart avec llama.cpp à 8 192 (+3,0 % contre +0,8 %) est attribué. Les deux
+drapeaux annoncés (`DRAVE_KV_V_F32`, `DRAVE_KV_K_F32`) ont été terminés, et
+l'expérience tournée sur 8 191 jetons :
 
-| variante | ce qu'elle isole | réglage proposé |
-|---|---|---|
-| clés quantifiées, **valeurs en f32** | l'erreur qui passe par les SCORES | `DRAVE_KV_V_F32=1` |
-| **clés en f32**, valeurs quantifiées | l'erreur qui passe par la SOMME PONDÉRÉE | `DRAVE_KV_K_F32=1` |
+| configuration | perplexité | écart au f32 | part de l'écart |
+|---|---|---|---|
+| cache f32 (référence) | **14,2339** | — | — |
+| cache int8 complet | 14,6667 | +3,04 % | 100 % |
+| **clés f32** · valeurs int8 | **14,2372** | **+0,023 %** | **99,2 % expliqué** |
+| clés int8 · **valeurs f32** | 14,6622 | +3,01 % | 1,0 % seulement |
 
-Le code à toucher est localisé : `KvCache::ecrire` (écrire dans `kf`/`vf` au lieu
-de `kq`/`vq` selon le drapeau), `cle`/`valeur` (lire le bon tableau), `assurer`
-(agrandir les tableaux f32 quand ils servent) et `new` (les allouer). Les appels
-GPU doivent être désactivés dans ces variantes — le miroir suppose une
-disposition homogène.
+**Tout l'écart est dans les clés.** C'est cohérent avec leur rôle : une clé entre
+dans le score, donc dans le softmax — une erreur de clé déplace le poids relatif
+d'une position entière ; une valeur ne fait que pondérer la sortie, son erreur se
+moyenne.
 
-Ces deux drapeaux ont été commencés puis RETIRÉS : le temps restant ne permettait
-pas de les finir et de les mesurer, et un demi-drapeau vaut moins qu'une
-expérience écrite. C'est ici, avec les points de code exacts.
+Conséquence utilisable tout de suite : `DRAVE_KV_BITS=8 DRAVE_KV_K_F32=1` donne un
+cache à **75 % de la taille f32** pour +0,02 % de perplexité, là où l'int8 complet
+(50 %) coûte +3,0 %. Notre quantificateur de VALEURS est donc bon ; c'est celui
+des CLÉS qui est le maillon faible.
 
+Deux suites, écrites avec leur critère de succès : **clés f32 · valeurs int4**
+(62,5 % de la taille f32 — si les valeurs tolèrent 4 bits, ce réglage bat l'int8
+complet en taille ET en qualité), et **un meilleur quantificateur de clés**
+(échelle par tête, ou rotation orthogonale avant quantification) pour ramener
+l'écart des clés sous les +0,8 % de llama.cpp. Détail :
+`reports/rapport-attribution-kv.md`.
 
 ### Phase 0.3bis — le REJEU, et ce qu'il démontre pour la phase 3
 
@@ -217,6 +226,38 @@ Il a fallu **deux corrections** pour y arriver, et la première ne suffisait pas
    sortie — une seule fois.
 
 Le protocole, lui, n'a pas changé d'un octet : c'est le moteur qui était faux.
+
+**Puis le transport lui-même** : `--flux-liste` fait voyager la LISTE (indice
+u16, valeur i16, une échelle), c'est-à-dire le format du disque, au lieu du
+vecteur dense f32. Mesuré à 40 jetons, par flux (aller) :
+
+| mode | octets | écart de perplexité |
+|---|---|---|
+| dense f32 | 3 623 | **0,00e0** |
+| listes, seuil 0,00 | 3 622 | 2,6e-2 |
+| listes, seuil 0,02 | 2 203 | 4,9e-2 |
+| listes, seuil 0,05 | 897 | 8,1e-1 |
+
+Avec `--flux-blocs` (échelle par bloc de 32 canaux, valeurs i8), le régime creux
+devient franchement bon : à seuil 0,02, **1 778 octets par flux pour 0,2 % de
+perplexité**, contre 2 203 octets et 4,9 % pour la liste i16 à échelle unique —
+l'échelle par bloc borne l'erreur *relative*, l'échelle unique borne l'erreur
+*absolue*.
+
+Et le coût réel du découpage, mesuré à 200 jetons sur localhost : le calcul local
+de 12 couches prend 15,9 ms par jeton, l'attente du pair 16,1 ms — soit **1,01×**.
+Le banc réparti entier (8,3 s) prend le temps du calcul local (8,2 s), à logits
+identiques. Avant `TCP_NODELAY`, cette attente était de 97,6 ms (6,26×) : le
+protocole payait Nagle et l'ACK différé, pas le réseau.
+
+La leçon est écrite noir sur blanc : **le gain ne vient que de la sparsité**
+(la valeur fait 16 bits sur le fil, donc une liste pleine coûte le dense), et
+**jeter des canaux coûte cher** — l'écart est déjà de 2,6 % à 16 bits pleins,
+alors que le rejeu d'une trace quantifiée 16 bits redonnait la perplexité exacte.
+Ce n'est pas la précision qui diffère, c'est ce qu'on quantifie : le résidu brut
+a une dynamique bien plus large que l'entrée normée qu'encode la trace. Les deux
+suites (transmettre l'entrée normée, ou une échelle par bloc de 32 canaux) sont
+dans `reports/rapport-transport-liste.md`.
 Chiffres des trois états, mesurés sur le même banc de 40 jetons :
 
 | état | perplexité locale | perplexité répartie | écart |

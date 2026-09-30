@@ -7,12 +7,12 @@
 | Début | 2026-09-28 14:46 |
 | Durée | 44.3 h |
 | Tours | 44 |
-| Messages | 1510 |
-| Appels d'outils | 1426 |
+| Messages | 1523 |
+| Appels d'outils | 1438 |
 | Fichiers touchés | 44 |
-| Commandes | 1133 |
+| Commandes | 1142 |
 | Sous-agents | 1 |
-| Commits | 87 |
+| Commits | 88 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -1995,7 +1995,7 @@ Je vérifie l'heure à chaque itération et j'arrête à 12:06, en laissant un p
 
 ### Tour 44 — pendant que les charges locales s'executent, peux-tu avancer des chantiers légers sur les ressources loçcale ou d'analys … [7 caractères tronqués]
 
-*80 appels d'outils.* Actions notables :
+*92 appels d'outils.* Actions notables :
 
 - bash — Write and run the pure flux analysis tool
 - bash — Document the flux analysis and commit
@@ -2011,11 +2011,11 @@ Je vérifie l'heure à chaque itération et j'arrête à 12:06, en laissant un p
 - bash — Inspect state after timeout
 - bash — Rerun pre-fix distributed test in background
 - bash — Inspect all final-norm condition sites
-- … et 56 autres
+- … et 65 autres
 
 **Synthèse produite :**
 
-Courbe obtenue. Je documente — les chiffres racontent une histoire nette (le seuil de 5 % coûte ×1,8 de perplexité pour ÷4 de taille).
+**Nagle confirmé** : 97,6 ms → **16,1 ms** (1,01× le calcul local), et le banc réparti passe de 24,5 s à **8,3 s**, soit le temps du calcul local (8,2 s) — à logits identiques. Je documente.
 
 ## 3. Travail accompli
 
@@ -2114,7 +2114,7 @@ Courbe obtenue. Je documente — les chiffres racontent une histoire nette (le s
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 1093 autres
+- … et 1102 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2349,4 +2349,5 @@ Courbe obtenue. Je documente — les chiffres racontent une histoire nette (le s
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > docs/format-flux.md <<'EOF' # Le format de flux (DRVF v1) — spécification  Ce format sert **trois ch
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p='docs/format-flux.md'; s=open(p).read() vieux = """Le flux voyage en **f32** sur le rés
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date +"%H:%M:%S" && cat > reports/rapport-transport-liste.md <<'EOF' # Phase 3.2 — transporter la LISTE au
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p='reports/rapport-transport-liste.md'; s=open(p).read() s += """  ## Ajout — l'échelle p
 

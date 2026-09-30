@@ -3345,6 +3345,44 @@ dynamique de {dyn_:.3e} (relatif {:.2e})", mx / dyn_.max(1e-9));
         }
     }
 
+    /// **Liste à échelle par bloc de 32 canaux** : trois octets par neurone actif
+    /// (indice u16, valeur i8) plus une échelle f32 par bloc.
+    ///
+    /// Pourquoi ce mode existe : le résidu brut a une dynamique large, donc une
+    /// échelle UNIQUE par vecteur donne une erreur *absolue* constante — énorme
+    /// en relatif sur les petits canaux (2,6 % de perplexité à 16 bits pleins,
+    /// mesuré). Une échelle par bloc borne l'erreur relative à l'intérieur du
+    /// bloc, ce qui permet de descendre la valeur à UN octet : moins d'octets
+    /// par neurone actif ET une précision localement meilleure.
+    ///
+    /// Le seuil, lui, reste GLOBAL (fraction du maximum du vecteur) : c'est lui
+    /// qui décide de la sparsité, donc de la taille sur le fil.
+    pub fn flux_en_liste_blocs(&self, x: &[f32]) -> (Vec<u16>, Vec<i8>, Vec<f32>) {
+        const BLOC: usize = 32;
+        let n_blocs = x.len().div_ceil(BLOC);
+        let mut echelles = vec![0f32; n_blocs];
+        let mut mx = 0f32;
+        for &v in x { let a = v.abs(); if a > mx { mx = a; } }
+        let seuil = self.act_thresh * mx;
+        let mut idx: Vec<u16> = Vec::new();
+        let mut val: Vec<i8> = Vec::new();
+        for b in 0..n_blocs {
+            let lo = b * BLOC;
+            let hi = (lo + BLOC).min(x.len());
+            let mut mb = 0f32;
+            for &v in &x[lo..hi] { let a = v.abs(); if a > mb { mb = a; } }
+            if mb == 0.0 { continue; }
+            let ech = mb / 127.0;
+            echelles[b] = ech;
+            for (k, &v) in x[lo..hi].iter().enumerate() {
+                if v.abs() <= seuil { continue; }
+                let q = (v / ech).round().clamp(-127.0, 127.0);
+                if q != 0.0 { idx.push((lo + k) as u16); val.push(q as i8); }
+            }
+        }
+        (idx, val, echelles)
+    }
+
     /// Norme finale, pour un état venu d'un AUTRE nœud : le nœud distant rend le
     /// flux résiduel brut, c'est le dernier qui norme.
     pub fn norme_finale(&self, x: &[f32]) -> Vec<f32> {

@@ -74,3 +74,54 @@ Aucune des deux n'est faite ici : ce rapport s'arrête à la mesure, et l'écrit
 * `tools/pair_factice.py` : un pair qui parle le protocole sans charger de
   modèle et **dit** ce qu'il reçoit. C'est lui qui a montré que le flux fait 896
   canaux quand mon compteur en annonçait 919 (division par 39 au lieu de 40).
+
+
+## Ajout — l'échelle par bloc de 32 canaux (`--flux-blocs`)
+
+Trois octets par neurone actif (indice u16, valeur **i8**) plus une échelle f32
+par bloc de 32. Le seuil reste global — c'est lui qui décide de la sparsité.
+
+| seuil | activité | octets/flux | écart | à comparer aux listes i16 |
+|---|---|---|---|---|
+| 0,00 | 98,1 % | 2 793 | 7,1e-2 | 3 622 octets · 2,6e-2 |
+| 0,02 | 60,4 % | **1 778** | **2,2e-3** | 2 203 octets · 4,9e-2 |
+| 0,05 | 24,0 % | 799 | 1,1e0 | 897 octets · 8,1e-1 |
+
+**En régime creux, l'échelle par bloc gagne sur les deux tableaux** : à seuil
+0,02, ÷1,24 d'octets *et* une fidélité vingt fois meilleure (2,2e-3 contre
+4,9e-2). C'est cohérent : une échelle unique par vecteur donne une erreur
+*absolue* constante, donc catastrophique en relatif sur les canaux faibles ; une
+échelle par bloc borne l'erreur *relative*, ce qui autorise des valeurs à un
+octet.
+
+À pleine densité, en revanche, l'i16 avec une échelle globale est plus fidèle
+(2,6e-2 contre 7,1e-2) — mais à pleine densité il n'y a rien à gagner : 2 793
+octets contre 3 623, et les deux modes sont de toute façon « taille du dense ».
+**Le régime qui compte est le régime creux, et c'est là que les blocs gagnent.**
+
+Configuration utilisable aujourd'hui : `--flux-blocs --act-thresh 0.02`, soit
+**÷2,0 sur le fil pour 0,2 % de perplexité**.
+
+## Ajout — le coût réel du découpage, et Nagle
+
+Mesuré à 200 jetons, machine au repos, 12 couches par nœud, localhost :
+
+| | avant | après |
+|---|---|---|
+| calcul local (12 couches) | 15,6 ms/jeton | 15,9 ms/jeton |
+| attente du pair | **97,6 ms/jeton** | **16,1 ms/jeton** |
+| rapport attente/calcul | **6,26×** | **1,01×** |
+| durée du banc réparti | 24,5 s | **8,3 s** (référence locale : 8,2 s) |
+
+L'attente de 97,6 ms n'était ni le calcul distant ni le débit : c'était **Nagle
+et l'ACK différé**. Le pilote écrit un en-tête de 39 octets puis un corps ; sans
+`TCP_NODELAY`, la seconde écriture attend l'acquittement de la première, que le
+pair retarde — deux fois par jeton, une fois par sens. Une ligne de code
+(`set_nodelay(true)`, des deux côtés) divise l'attente par six.
+
+C'est aussi la réponse à la phase 3.3 : **le seuil de rentabilité est une
+affaire de latence, pas de débit**. Par jeton, le flux pèse 3 623 octets (dense)
+ou 1 989 (blocs à 68 % d'activité), et le calcul distant coûte 16 ms : le réseau
+demande donc **moins de 1 Mbit/s par flux de jetons à 20 jetons/s**, ce qu'un
+lien domestique fournit sans peine. Ce qui coûte, c'est l'aller-retour — et
+seulement lui.

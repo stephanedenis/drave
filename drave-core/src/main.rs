@@ -359,7 +359,7 @@ struct Options {
     ppl_texte: bool, prompt: Option<String>, limit: usize, depuis: usize,
     // --- génération
     n: usize, temp: f32, top_p: f32, topk: usize, rep_pen: f32, hist: usize,
-    flux: bool, session: bool, chat: bool, flux_liste: bool,
+    flux: bool, session: bool, chat: bool, flux_liste: bool, flux_blocs: bool,
     // --- moteur
     ctx: usize, threads: usize, abits: u32, dense: bool, auto: bool,
     /// Vrai si `--ctx`, `--threads` ou `--abits` ont été donnés : leurs défauts
@@ -486,6 +486,7 @@ fn analyser(args: &[String]) -> Options {
             // --- drapeaux booléens : UN argument
             "--flux" => { o.flux = true; 1 }
             "--flux-liste" => { o.flux_liste = true; 1 }
+            "--flux-blocs" => { o.flux_blocs = true; 1 }
             "--session" => { o.session = true; o.flux = true; 1 }
             "--chat" => { o.chat = true; 1 }
             "--dense" => { o.dense = true; 1 }
@@ -1232,6 +1233,11 @@ const MODE_DENSE: u8 = 0;
 /// même encodage que la trace sur le disque — la mise en réseau ne réinvente
 /// rien, elle réutilise le format de la phase 0.
 const MODE_LISTE: u8 = 1;
+/// LISTE à **échelle par bloc de 32 canaux** : indice u16, valeur i8, et une
+/// échelle f32 par bloc — 3 octets par neurone actif au lieu de 4, avec une
+/// erreur relative bornée DANS le bloc (le résidu brut a une dynamique trop
+/// large pour une échelle unique).
+const MODE_BLOCS: u8 = 2;
 
 /// En-tête commun : magie · version · mode · plage · position · n · échelle ·
 /// **réglages d'activation** (niveaux, seuil, top-k, renorm).
@@ -1281,6 +1287,7 @@ struct Flux {
 enum ChargeFlux {
     Dense(Vec<f32>),
     Liste { idx: Vec<u16>, val: Vec<i16>, echelle: f32 },
+    Blocs { idx: Vec<u16>, val: Vec<i8>, echelles: Vec<f32> },
 }
 
 impl ChargeFlux {
@@ -1296,10 +1303,28 @@ impl ChargeFlux {
                 }
                 x
             }
+            ChargeFlux::Blocs { idx, val, echelles } => {
+                let mut x = vec![0f32; hidden];
+                for (&i, &v) in idx.iter().zip(val.iter()) {
+                    x[i as usize] = v as f32 * echelles[i as usize / 32];
+                }
+                x
+            }
         }
     }
     fn actifs(&self) -> usize {
-        match self { ChargeFlux::Dense(v) => v.len(), ChargeFlux::Liste { idx, .. } => idx.len() }
+        match self {
+            ChargeFlux::Dense(v) => v.len(),
+            ChargeFlux::Liste { idx, .. } | ChargeFlux::Blocs { idx, .. } => idx.len(),
+        }
+    }
+    /// Octets du corps, en-tête exclu : c'est ce qui doit être lu sur le câble.
+    fn octets_corps(&self) -> usize {
+        match self {
+            ChargeFlux::Dense(v) => v.len() * 4,
+            ChargeFlux::Liste { idx, .. } => idx.len() * 4,
+            ChargeFlux::Blocs { idx, echelles, .. } => 4 + echelles.len() * 4 + idx.len() * 3,
+        }
     }
 }
 
@@ -1311,7 +1336,18 @@ fn envoyer_flux(s: &mut std::net::TcpStream, debut: u32, fin: u32, pos: u32,
     let act = mdl.map(Act::du_modele).unwrap_or(Act { levels: 127.0, thresh: 0.0,
                                                        topk: 0, renorm: false });
     use std::io::Write;
-    let (n, echelle, corps): (usize, f32, Vec<u8>) = if mode == MODE_LISTE {
+    let (n, echelle, corps): (usize, f32, Vec<u8>) = if mode == MODE_BLOCS {
+        let (idx, val, echelles) = mdl.expect("modèle requis pour quantifier un flux")
+                                      .flux_en_liste_blocs(actifs);
+        let mut c = Vec::with_capacity(4 + echelles.len() * 4 + idx.len() * 3);
+        c.extend_from_slice(&(echelles.len() as u32).to_le_bytes());
+        for e in &echelles { c.extend_from_slice(&e.to_le_bytes()); }
+        for (&i, &v) in idx.iter().zip(val.iter()) {
+            c.extend_from_slice(&i.to_le_bytes());
+            c.push(v as u8);
+        }
+        (idx.len(), 0f32, c)
+    } else if mode == MODE_LISTE {
         let (idx, val, ech) = mdl.expect("modèle requis pour quantifier un flux")
                                  .flux_en_liste(actifs);
         let mut c = Vec::with_capacity(idx.len() * 4);
@@ -1371,6 +1407,29 @@ fn recevoir_flux(s: &mut std::net::TcpStream) -> std::io::Result<Flux> {
         topk: u(34),
         renorm: tete[38] != 0,
     };
+    let charge = match mode {
+        MODE_BLOCS => {
+            // corps : nombre de blocs u32 · blocs × f32 · n × (u16 · i8)
+            let mut nb = [0u8; 4];
+            s.read_exact(&mut nb)?;
+            let n_blocs = u32::from_le_bytes(nb) as usize;
+            let mut eb = vec![0u8; n_blocs * 4];
+            s.read_exact(&mut eb)?;
+            let echelles = (0..n_blocs).map(|k| f32::from_le_bytes(
+                [eb[k*4], eb[k*4+1], eb[k*4+2], eb[k*4+3]])).collect();
+            let mut corps = vec![0u8; n * 3];
+            s.read_exact(&mut corps)?;
+            let mut idx = Vec::with_capacity(n);
+            let mut val = Vec::with_capacity(n);
+            for k in 0..n {
+                idx.push(u16::from_le_bytes([corps[k*3], corps[k*3+1]]));
+                val.push(corps[k*3+2] as i8);
+            }
+            return Ok(Flux { debut, fin, pos, mode, act, charge:
+                             ChargeFlux::Blocs { idx, val, echelles } });
+        }
+        _ => {}
+    };
     let mut octets = vec![0u8; n * 4];
     s.read_exact(&mut octets)?;
     let charge = match mode {
@@ -1396,13 +1455,23 @@ fn recevoir_flux(s: &mut std::net::TcpStream) -> std::io::Result<Flux> {
 /// banc d'essai, pas un service.
 fn run_serveur_flux(opt: Options, port: u16) {
     let chemin = modele_chemin();
-    let mut mdl = model::Model::load(&chemin, 4096, 16, true, 1.0, false, 0, 0);
+    // Le contexte du nœud moteur suit `--ctx` : figé à 4096, il faisait payer au
+    // pair des tampons d'attention seize fois plus grands que le banc (mesuré :
+    // 4,8 s contre 1,7 s pour le même calcul, à contexte 256).
+    let ctx = if opt.ctx_impose { opt.ctx } else { 4096 };
+    let mut mdl = model::Model::load(&chemin, ctx, 16, true, 1.0, false, 0, 0);
     appliquer_quantification(&mut mdl, &opt);
     let hidden = mdl.cfg.hidden;
     let ecoute = std::net::TcpListener::bind(("127.0.0.1", port)).expect("écoute");
-    println!("[flux] nœud moteur sur 127.0.0.1:{port} · {hidden} cachés · {} couches",
+    println!("[flux] nœud moteur sur 127.0.0.1:{port} · {hidden} cachés · {} couches · contexte {ctx}",
              mdl.cfg.n_layer);
     let (mut sock, pair) = ecoute.accept().expect("connexion");
+    // TCP_NODELAY, et ce n'est pas un détail de confort : sans lui, Nagle garde
+    // une petite écriture en attendant l'acquittement de la précédente, et l'ACK
+    // différé du pair la retarde encore. Mesuré sur localhost, 12 couches
+    // distantes : **97,6 ms** d'attente contre 15,6 ms de calcul local — six fois
+    // le calcul, payés par la seule latence du protocole.
+    sock.set_nodelay(true).expect("TCP_NODELAY");
     println!("[flux] client connecté : {pair}");
     let mut servis = 0u64;
     loop {
@@ -1451,7 +1520,9 @@ fn run_ppl_reparti(opt: Options, pair: &str) {
     let couches_locales = if opt.couches_locales > 0 { opt.couches_locales } else { 12 };
     let mut mdl = model::Model::load(&chemin, ctx, 16, true, 1.0, false, 0, 0);
     appliquer_quantification(&mut mdl, &opt);
-    let mode = if opt.flux_liste { MODE_LISTE } else { MODE_DENSE };
+    let mode = if opt.flux_blocs { MODE_BLOCS }
+               else if opt.flux_liste { MODE_LISTE }
+               else { MODE_DENSE };
     println!("[flux] quantification : {} niveaux, seuil {}, top-k {}, renorm {}",
              mdl.act_levels, mdl.act_thresh, mdl.act_topk, mdl.act_renorm);
     let n_layer = mdl.cfg.n_layer;
@@ -1481,15 +1552,21 @@ fn run_ppl_reparti(opt: Options, pair: &str) {
 
     // 2. la même chose, coupée en deux nœuds
     let mut sock = std::net::TcpStream::connect(pair).expect("connexion au nœud moteur");
+    sock.set_nodelay(true).expect("TCP_NODELAY");   // cf. le nœud moteur : Nagle coûte 6×
     mdl.couche_fin = couches_locales;
     let mut octets_envoyes = 0u64;
     let mut octets_recus = 0u64;
     let mut actifs_envoyes = 0u64;
     let mut flux_envoyes = 0u64;
+    let mut t_local = 0f64;
+    let mut t_pair = 0f64;
     let t1 = Instant::now();
     let mut nll = 0f64;
     for (pos, &t) in ids.iter().enumerate() {
+        let horloge = Instant::now();
         let etat = mdl.forward(t, pos);
+        t_local += horloge.elapsed().as_secs_f64();
+        let horloge = Instant::now();
         let (o, a) = envoyer_flux(&mut sock, couches_locales as u32, n_layer as u32,
                                   pos as u32, &etat, mode, Some(&mdl))
                         .expect("envoi du flux");
@@ -1497,6 +1574,9 @@ fn run_ppl_reparti(opt: Options, pair: &str) {
         actifs_envoyes += a as u64;
         flux_envoyes += 1;
         let rep = recevoir_flux(&mut sock).expect("réception du flux");
+        // Ce que coûte le découpage : le calcul local, et l'attente du pair
+        // (son calcul + l'aller-retour réseau) — la latence, pas le débit.
+        t_pair += horloge.elapsed().as_secs_f64();
         octets_recus += TAILLE_TETE as u64 + rep.charge.actifs() as u64 * 4;
         let final_ = rep.charge.en_dense(mdl.cfg.hidden);
         if pos + 1 < ids.len() {
@@ -1518,10 +1598,16 @@ fn run_ppl_reparti(opt: Options, pair: &str) {
     let nflux = flux_envoyes.max(1);
     println!("  transport         : {} · {:.0} octets par flux (aller) · {:.0} au retour · \
               {:.1} % d'activité ({:.0} neurones par flux) · {} flux",
-             if mode == MODE_LISTE { "listes quantifiées" } else { "dense f32" },
+             match mode { MODE_BLOCS => "listes à échelle par bloc (3 octets/actif)",
+                          MODE_LISTE => "listes quantifiées",
+                          _ => "dense f32" },
              octets_envoyes as f64 / nflux as f64, octets_recus as f64 / nflux as f64,
              100.0 * actifs_envoyes as f64 / (nflux as f64 * mdl.cfg.hidden as f64),
              actifs_envoyes as f64 / nflux as f64, nflux);
+    println!("  temps             : {:.1} ms par jeton en local · {:.1} ms à attendre le pair \
+              (son calcul + l'aller-retour) · soit {:.2}× le calcul local seul",
+             1000.0 * t_local / nflux as f64, 1000.0 * t_pair / nflux as f64,
+             t_pair / t_local.max(1e-9));
 }
 
 /// Banc **MLA** : passe avant du modèle synthétique, logits écrits en binaire

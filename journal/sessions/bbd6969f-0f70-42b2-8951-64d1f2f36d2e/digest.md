@@ -24015,3 +24015,174 @@ taille en-tête : 39 octets (attendu 39)
 Courbe obtenue. Je documente — les chiffres racontent une histoire nette (le seuil de 5 % coûte ×1,8 de perplexité pour ÷4 de taille).
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date +\"%H:%M:%S\" && cat > reports/rapport-transport-liste.md <<'EOF'\n# Phase 3.2 — transporter la LISTE au lieu du vecteur\n\n**En une ligne** : le flux peut voyager en liste creuse (871 octets au lieu de\n3 623), mais à seuil 5 % … [5909 caractères tronqués]`
+
+  ```
+11:02:16
+7b88131 Phase 3.2 : le flux voyage en LISTE — courbe taille/fidélité
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='docs/roadmap.md'; s=open(p).read()\nv = \"| 3.2 | **Granularité** : par couche, par bloc de canaux, par expert | ⏳ | courbe : octets par jeton × latence pour chaque granularité |\"\nn = \"| 3.2 | **Granularité**  … [2197 caractères tronqués]`
+
+  ```
+roadmap : 3.2 et 3.5 à jour
+cles_f32     : perplexité 14.2372 sur 8191 tokens (0 événements, 1208.0 s)
+valeurs_f32  : 11:02:28
+  ```
+
+### 🤖 Assistant
+
+⏵ Pendant que la campagne KV finit, j'implémente l'échelle par bloc (3 octets/neurone actif, précision adaptée localement).
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/model.rs'; s=open(p).read()\nancre = \"\"\"    /// Norme finale, pour un état venu d'un AUTRE nœud : le nœud distant rend le\n    /// flux résiduel brut, c'est le dernier qui norme.\"\"\"\nassert s … [2128 caractères tronqués]`
+
+  ```
+encodeur par blocs ajouté
+3360:    pub fn flux_en_liste_blocs(&self, x: &[f32]) -> (Vec<u16>, Vec<i8>, Vec<f32>) {
+  ```
+
+### 👤 Utilisateur
+
+background job bash-40 (bash: date +"%H:%M:%S"; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/kv_attribution.sh <<'EOF'
+#!/bin/bash
+# Attribution de l'écart int8 : quelle moitié coûte quoi ?
+# Références déjà mesurées à ctx 8192 : f32 14,2339 · int8 14,6667 (+3,0 %).
+set -u
+cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet
+D=./drave-core/target/release/drave
+M=models/Qwen2.5-0.5B-Q8_0.gguf
+J=/tmp/kv_attribution.log
+: > "$J"
+for variante in "cles_f32:DRAVE_KV_K_F32=1" "valeurs_f32:DRAVE_KV_V_F32=1"; do
+    nom=${variante%%:*}; envs=${variante#*:}
+    printf "%-12s : " "$nom" | tee -a "$J"
+    env DRAVE_KV_BITS=8 $envs timeout 3600 $D $M --ppl /tmp/ids_qwen_long.txt --ctx 8192 \
+        --limit 8192 --dense --threads 16 --lot 512 2>&1 \
+        | grep -oE "perplexité [0-9.]+ sur [0-9]+ tokens \([0-9]+ événements, [0-9.]+ s\)" | tee -a "$J"
+done
+echo "=== fin ===" | tee -a "$J"
+EOF
+chmod +x /tmp/kv_attribution.sh && /tmp/kv_attribution.sh) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **job_output** `{"job_id": "bash-40"}`
+
+  ```
+10:14:41
+cles_f32     : perplexité 14.2372 sur 8191 tokens (0 événements, 1208.0 s)
+valeurs_f32  : perplexité 14.6622 sur 8191 tokens (0 événements, 1663.2 s)
+=== fin ===
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+La campagne KV est terminée : **clés f32 = 14,2372 (+0,02 %)**, clés int8 + valeurs f32 = **14,6622 (+3,01 %)** → tout l'écart vient des **clés**. Je finis le mode « blocs » puis je documente les deux.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/main.rs'; s=open(p).read()\n\nv = \"const MODE_LISTE: u8 = 1;\"\nassert s.count(v) == 1\ns = s.replace(v, \"\"\"const MODE_LISTE: u8 = 1;\n/// LISTE à **échelle par bloc de 32 canaux** : indice u16 … [6809 caractères tronqués]`
+
+  ```
+mode blocs câblé
+drapeau --flux-blocs ajouté
+    Finished `release` profile [optimized] target(s) in 0.01s
+11:03:23
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/courbe_blocs.sh <<'EOF'\n#!/bin/bash\ncd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\np=45780\nfor seuil in 0.0 0.02 0.05; do\n    echo \"=== blocs (3 octets/actif), seuil $seuil ===\"\n    TAG=bloc$seuil PORT=$p LIM=4 … [260 caractères tronqués]`
+
+  ```
+started background job bash-49
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-attribution-kv.md <<'EOF'\n# Phase 1.4 — l'écart du cache KV int8 est ENTIÈREMENT dû aux clés\n\n**En une ligne** : à 8 192 jetons, les **valeurs** en int8 ne coûtent rien\n(1 % de l'écart) et les **clés** coûte … [4912 caractères tronqués]`
+
+  ```
+roadmap 1.4 : attribué
+REPRISE : réglages KV à jour
+  ```
+
+- **job_output** `{"job_id": "bash-49", "timeout_ms": 300000, "wait": true}`
+
+  ```
+=== blocs (3 octets/actif), seuil 0.0 ===
+[flux] quantification : 127 niveaux, seuil 0, top-k 0, renorm false
+[flux] pilote : 12 couches en local, 12 chez le pair, 40 jetons
+  référence locale  : perplexité 144.8289  (1.7 s)
+  deux nœuds        : perplexité 155.0802  (4.8 s)
+  écart             : 7.08e-2
+  transport         : listes à échelle par bloc (3 octets/actif) · 2793 octets par flux (aller) · 3581 au retour · 98.1 % d'activité (879 neurones par flux) · 40 flux
+=== blocs (3 octets/actif), seuil 0.02 ===
+[flux] quantification : 127 niveaux, seuil 0.02, top-k 0, renorm false
+[flux] pilote : 12 couches en local, 12 chez le pair, 40 jetons
+  référence locale  : perplexité 203.8033  (1.6 s)
+  deux nœuds        : perplexité 203.3646  (4.8 s)
+  écart             : 2.15e-3
+  transport         : listes à échelle par bloc (3 octets/actif) · 1778 octets par flux (aller) · 2661 au retour · 60.4 % d'activité (541 neurones par flux) · 40 flux
+=== blocs (3 octets/actif), seuil 0.05 ===
+[flux] quantification : 127 niveaux, seuil 0.05, top-k 0, renorm false
+[flux] pilote : 12 couches en local, 12 chez le pair, 40 jetons
+  référence locale  : perplexité 493.0344  (1.6 s)
+  deux nœuds        :
+… [268 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+Le mode blocs gagne nettement en régime creux (÷1,24 de taille **et** ×23 de fidélité à seuil 0,02). Et je vois un défaut de banc : le nœud moteur est chargé en ctx 4096 quand le pilote est en 256 → j'instrumente et je corrige.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/main.rs'; s=open(p).read()\n# 1. le nœud moteur respecte --ctx (il était figé à 4096 : le pair payait des\n#    tampons 16 fois plus grands que nécessaire)\nv = \"\"\"    let chemin = modele_chemin … [2851 caractères tronqués]`
+
+  ```
+nœud moteur : --ctx respecté + décomposition du temps
+    Finished `release` profile [optimized] target(s) in 0.01s
+11:04:31
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='/tmp/test_reparti.sh'; s=open(p).read()\ns = s.replace('($BIN $MOD --flux-serveur $PORT > /tmp/serveur_$TAG.log 2>&1 &)',\n              '($BIN $MOD --flux-serveur $PORT --ctx ${CTX:-256} > /tmp/serveur_$TAG.log  … [622 caractères tronqués]`
+
+  ```
+started background job bash-50
+  ```
+
+- **job_output** `{"job_id": "bash-50", "timeout_ms": 300000, "wait": true}`
+
+  ```
+['pkill -f "flux-serveur $PORT" 2>/dev/null; sleep 0.3', '($BIN $MOD --flux-serveur $PORT --ctx ${CTX:-256} > /tmp/serveur_$TAG.log 2>&1 &)', 'pkill -f "flux-serveur $PORT" 2>/dev/null']
+=== machine au repos : dense, 200 jetons ===
+ 11:04:36  up 9 days  0:16,  2 users,  load average: 10,77, 30,61, 35,08
+[flux] quantification : 127 niveaux, seuil 0, top-k 0, renorm false
+[flux] pilote : 12 couches en local, 12 chez le pair, 200 jetons
+  référence locale  : perplexité 35847.0441  (8.2 s)
+  deux nœuds        : perplexité 35847.0441  (24.5 s)
+  écart             : 0.00e0
+  transport         : dense f32 · 3623 octets par flux (aller) · 3623 au retour · 100.0 % d'activité (896 neurones par flux) · 200 flux
+  temps             : 15.6 ms par jeton en local · 97.6 ms à attendre le pair (son calcul + l'aller-retour) · soit 6.26× le calcul local seul
+=== blocs 0,02, 200 jetons ===
+[flux] quantification : 127 niveaux, seuil 0.02, top-k 0, renorm false
+[flux] pilote : 12 couches en local, 12 chez le pair, 200 jetons
+  référence locale  : perplexité 46123.8719  (8.2 s)
+  deux nœuds        : perplexité 44662.6016  (24.7 s)
+  écart             : 3.17e-2
+  transport         : listes à échelle par b
+… [308 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+Trouvaille : **97,6 ms d'attente pour 12 couches distantes** (6,26× le calcul local) — signature de Nagle + ACK différé. Je pose `TCP_NODELAY` et je re-mesure.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/main.rs'; s=open(p).read()\nv = \"\"\"    let (mut sock, pair) = ecoute.accept().expect(\"connexion\");\n    println!(\"[flux] client connecté : {pair}\");\"\"\"\nassert s.count(v) == 1\ns = s.repl … [1395 caractères tronqués]`
+
+  ```
+TCP_NODELAY posé des deux côtés
+    Finished `release` profile [optimized] target(s) in 0.01s
+  deux nœuds        : perplexité 35847.0441  (8.3 s)
+  écart             : 0.00e0
+  transport         : dense f32 · 3623 octets par flux (aller) · 3623 au retour · 100.0 % d'activité (896 neurones par flux) · 200 flux
+  temps             : 15.9 ms par jeton en local · 16.1 ms à attendre le pair (son calcul + l'aller-retour) · soit 1.01× le calcul local seul
+11:06:39
+  ```
+
+### 🤖 Assistant
+
+**Nagle confirmé** : 97,6 ms → **16,1 ms** (1,01× le calcul local), et le banc réparti passe de 24,5 s à **8,3 s**, soit le temps du calcul local (8,2 s) — à logits identiques. Je documente.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/rapport-transport-liste.md'; s=open(p).read()\ns += \"\"\"\n\n## Ajout — l'échelle par bloc de 32 canaux (`--flux-blocs`)\n\nTrois octets par neurone actif (indice u16, valeur **i8**) plus une échelle f32 … [6745 caractères tronqués]`
