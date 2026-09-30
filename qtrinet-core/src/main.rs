@@ -835,6 +835,7 @@ fn run_banc_vision(sortie: &str) {
     let mut proj: Option<(Vec<f32>, Vec<f32>)> = None;
     println!("v.patch_embd.weight : sortie {cout} · entrée {cin} · noyau {ky}×{kx}");
     let w = g.dequant("v.patch_embd.weight");
+    let mut tour: Option<Vec<f32>> = None;
     assert_eq!(w.len(), cout * cin * ky * kx, "poids de patch inattendus");
     // Image 28 × 28 déterministe : dégradé + carré central, pour que la
     // référence numpy puisse la reconstruire sans lire de fichier.
@@ -893,6 +894,7 @@ fn run_banc_vision(sortie: &str) {
         let n_cote_p = (n_patch as f64).sqrt().round() as usize;
         let n_groupe = (n_cote_p / 2) * (n_cote_p / 2);
         let mut y = vec![0f32; n_groupe * n2];
+        let source = tour.clone().unwrap_or_else(|| out.clone());
         let mut fusion = vec![0f32; n1];
         for g in 0..n_groupe {
             let (gy, gx) = (2 * (g / (n_cote_p / 2)), 2 * (g % (n_cote_p / 2)));
@@ -900,7 +902,7 @@ fn run_banc_vision(sortie: &str) {
                 for dx in 0..2 {
                     let p = (gy + dy) * n_cote_p + (gx + dx);
                     fusion[(dy * 2 + dx) * cout..(dy * 2 + dx + 1) * cout]
-                        .copy_from_slice(&out[p * cout..(p + 1) * cout]);
+                        .copy_from_slice(&source[p * cout..(p + 1) * cout]);
                 }
             }
             let mut h = vec![0f32; n0];
@@ -1007,23 +1009,29 @@ fn run_banc_vision(sortie: &str) {
             // colonne, ligne, colonne), donc les blocs 0 et 2 tournent selon la
             // LIGNE et les blocs 1 et 3 selon la COLONNE. Chaque couple d'un
             // bloc est (i, i + quart/2), la convention « moitié tournée ».
+            // Convention exacte, lue dans ggml_mrope_cache_init :
+            //   * les paires sont CONSÉCUTIVES : (i0, i0+1) ;
+            //   * le secteur vaut (i0/2) % sect_dims, avec quatre sections de
+            //     hd/4 dimensions — donc les hd/4 premières paires (la moitié
+            //     « ligne » de la tête) tournent selon la LIGNE, les suivantes
+            //     selon la COLONNE ;
+            //   * l'échelle de fréquences CONTINUE d'un bloc à l'autre
+            //     (theta *= theta_scale), donc l'exposant suit l'indice de paire
+            //     GLOBAL sur toute la tête.
             let nh_t = 16usize;                       // vision.head_count du mmproj
             let hd_t = e / nh_t;
-            let quart = hd_t / 4;
             let n_cote = (cote - kx) / kx + 1;
             let base_rot = 10000.0f32;
             let tourner = |v: &mut [f32], ligne: f32, colonne: f32| {
-                for bloc in 0..4 {
-                    let pos = if bloc % 2 == 0 { ligne } else { colonne };
-                    let deb = bloc * quart;
-                    for i in 0..quart / 2 {
-                        let theta = pos * base_rot.powf(-2.0 * i as f32 / quart as f32);
-                        let (c, sn) = (theta.cos(), theta.sin());
-                        let a = v[deb + i];
-                        let b = v[deb + i + quart / 2];
-                        v[deb + i] = a * c - b * sn;
-                        v[deb + i + quart / 2] = a * sn + b * c;
-                    }
+                let paires = hd_t / 2;
+                for i in 0..paires {
+                    let pos = if i < paires / 2 { ligne } else { colonne };
+                    let theta = pos * base_rot.powf(-2.0 * i as f32 / hd_t as f32);
+                    let (c, sn) = (theta.cos(), theta.sin());
+                    let a = v[2 * i];
+                    let b = v[2 * i + 1];
+                    v[2 * i] = a * c - b * sn;
+                    v[2 * i + 1] = a * sn + b * c;
                 }
             };
             for pi in 0..n_patch {
@@ -1098,6 +1106,7 @@ fn run_banc_vision(sortie: &str) {
             }
             for v in x.iter() { fb.write_all(&v.to_le_bytes()).unwrap(); }
         }
+        tour = Some(x.clone());
         println!("tour : {n_layer} couches × {n_patch} patchs × {e} · |sortie| = {:.4} · 4 premières {:?}",
                  x.iter().map(|v| v * v).sum::<f32>().sqrt(),
                  &x[..4].iter().map(|v| (v * 1e4).round() / 1e4).collect::<Vec<_>>());

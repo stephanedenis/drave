@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 30.6 h |
-| Tours | 31 |
-| Messages | 1298 |
-| Appels d'outils | 1244 |
+| Durée | 30.9 h |
+| Tours | 32 |
+| Messages | 1307 |
+| Appels d'outils | 1251 |
 | Fichiers touchés | 39 |
-| Commandes | 975 |
+| Commandes | 982 |
 | Sous-agents | 1 |
-| Commits | 64 |
+| Commits | 65 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -87,6 +87,8 @@
 **Tour 30** — <goal_round> Objective: "Réaliser les 6 nouveaux chantiers du projet qtrinet-core, dans l'ordre : (1) relancer le test de l'aiguille sur contexte long (remplissage varié en vrai texte, moins de sondes, réponses plus longues) sur un modèle capable, grâce au préremplissage par lots et au KV déporté ; (2) chemin GPU : dépaquetage vectorisé du noyau d'attention (13,2 ms/couche à 1 M en int4 vers ~3 ms … [1492 caractères tronqués]
 
 **Tour 31** — <goal_round> Objective: "Réaliser les 6 nouveaux chantiers du projet qtrinet-core, dans l'ordre : (1) relancer le test de l'aiguille sur contexte long (remplissage varié en vrai texte, moins de sondes, réponses plus longues) sur un modèle capable, grâce au préremplissage par lots et au KV déporté ; (2) chemin GPU : dépaquetage vectorisé du noyau d'attention (13,2 ms/couche à 1 M en int4 vers ~3 ms … [1492 caractères tronqués]
+
+**Tour 32** — <goal_round> Objective: "Réaliser les 6 nouveaux chantiers du projet qtrinet-core, dans l'ordre : (1) relancer le test de l'aiguille sur contexte long (remplissage varié en vrai texte, moins de sondes, réponses plus longues) sur un modèle capable, grâce au préremplissage par lots et au KV déporté ; (2) chemin GPU : dépaquetage vectorisé du noyau d'attention (13,2 ms/couche à 1 M en int4 vers ~3 ms … [1492 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -1425,6 +1427,56 @@ L'objectif reste **actif** — mais le chantier vision est maintenant *structure
 - bash — Read mRoPE cache init
 - bash — Document rotation correction needed
 
+**Synthèse produite :**
+
+⏵ Tour 22 : le détail de la rotation lu dans ggml — et mon implémentation est fausse
+
+\## Fait dans ce tour
+
+J'ai suivi la piste jusqu'au bout : la convention exacte est dans `ggml/src/ggml-cpu/ops.cpp`, fonction `ggml_mrope_cache_init`. La lecture est sans ambiguïté — et elle montre que **mon implémentation est fausse sur deux points** :
+
+```cpp
+int sect_dims = sections[0] + sections[1] + sections[2] + sections[3];
+for (int64_t i0 = 0; i0 < ne0; i0 += 2) {
+    int sector = (i0 / 2) % sect_dims;   // le secteur choisit la position
+    rope_yarn(theta/ff, ...);
+    theta_t *= theta_scale;  theta_w *= theta_scale;  theta_h *= theta_scale;
+}
+```
+
+1. la rotation apparie des dimensions **consécutives** `(i0, i0+1)` — c'est le contraire de la convention « moitié tournée » `(i, i + quart/2)` que j'avais écrite ;
+2. le secteur vaut `(i0/2) % sect_dims`, avec `sect_dims` = **somme** des quatre sections : avec `positions` = (ligne, colonne, ligne, colonne), cela donne des blocs de secteurs (ligne, colonne, ligne, colonne) dans cet ordre ;
+3. l'échelle de fréquences **continue** d'un bloc au suivant (`theta *= theta_scale` à chaque pas, sans remise à zéro hors mode `indep_sects`) — ce n'est donc pas une échelle recalculée par bloc comme je l'ai fait.
+
+Autrement dit : la **structure** (quatre blocs, deux positions alternées) est la bonne, mais **l'appariement et l'échelle sont faux**. C'est précisément ce qu'une référence aurait attrapé en une seconde — et c'est la démonstration, sur pièce, de pourquoi je n'ai pas voulu déclarer cette partie « faite » : le code tournait, les valeurs étaient plausibles, et elles étaient fausses.
+
+\## État
+
+| # | chantier | état |
+|---|---|---|
+| 1-4, 6 | aiguille · GPU (5 sous-items) · mémoire KV · rotation 16 k · hygiène | ✅ mesurés |
+| 5 | MLA ✅ (5,2e-7) · vision : chaîne complète et **erreur identifiée avec sa correction** (appariement consécutif, échelle continue), fenêtre locale d'après la source, référence numpy valable sur 2 tranches | en cours |
+
+`cargo test` 6/6, arbre propre, portes Qwen **19,3885** / gpt-oss **15,1757** intactes.
+
+L'objectif reste **actif**, et il se réduit maintenant à quelque chose de précis et de petit : corriger les deux points de la rotation d'après le code cité, puis chercher une validation. Le prochain tour peut appliquer la correction — c'est une vingtaine de lignes, et le texte de référence est dans le dépôt.
+
+### Tour 32 — <goal_round> Objective: "Réaliser les 6 nouveaux chantiers du projet qtrinet-core, dans l'ordre : (1) relancer le test d … [1772 caractères tronqués]
+
+*7 appels d'outils.* Actions notables :
+
+- bash — Apply corrected rotation
+- bash — Reorder projector after tower
+- bash — Close brace and run corrected pipeline
+- bash — Declare tour and run pipeline
+- bash — Restore projector execution
+- bash — Check reordering state
+- bash — Commit corrected rotation and identified ordering bug
+
+**Synthèse produite :**
+
+⏵ Tour 23 : je corrige la rotation (paires consécutives, échelle continue)
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -1517,7 +1569,7 @@ L'objectif reste **actif** — mais le chantier vision est maintenant *structure
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 935 autres
+- … et 942 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1645,7 +1697,7 @@ L'objectif reste **actif** — mais le chantier vision est maintenant *structure
 
 ## 5. Erreurs rencontrées
 
-59 sorties en erreur ou divergentes. Les premières :
+60 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : a8f2635f8 docs: record which models this box is good at, and why src/llama-hparams.cpp:8:void llama_hparams::set_swa_pattern(uint32_t n_pattern, bool dense_first) { src/llama-hparams.h:308:    void se
 - **T1** : 511 tokens notés — perplexité cumulée 247.031  (4.9 tok/s) === perplexité 247.0308 sur 511 tokens (0 événements, 104.5 s) ===  ### B3 harmony assistant 511 --- ref --- 0.0 0.0 0:00 ls: cannot access '
@@ -1729,4 +1781,5 @@ L'objectif reste **actif** — mais le chantier vision est maintenant *structure
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p='tools/vision_ref.py'; s=open(p).read() # le fichier .bloc ne contient plus les poids (
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p='tools/vision_ref.py'; s=open(p).read() s = s.replace("""    ecart = float(np.abs(out -
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat >> docs/plan-mla-vision.md <<'EOF'  ### Le détail de la rotation, lu dans ggml (et mon implémentation 
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat >> docs/plan-mla-vision.md <<'EOF'  ### Après correction : la rotation suit la source, mais l'ORDRE es
 

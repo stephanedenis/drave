@@ -603,3 +603,23 @@ bonne, mais **l'appariement et l'échelle sont faux**. C'est exactement ce qu'un
 référence aurait attrapé, et c'est pourquoi le chantier reste ouvert : la
 prochaine session corrige ces deux points à partir du code ci-dessus, puis
 cherche une validation (les trois pistes de la section précédente).
+
+### Après correction : la rotation suit la source, mais l'ORDRE est encore faux
+
+La rotation est corrigée d'après `ggml_mrope_cache_init` (paires consécutives
+`(2i, 2i+1)`, moitié « ligne » puis moitié « colonne », exposant suivant l'indice
+de paire GLOBAL) — la sortie de la tour change (187,45 → **234,53**), donc la
+correction agit.
+
+Mais un défaut d'ORDRE subsiste et le témoin le dit : le projecteur affiche
+toujours `|sortie| = 131,54`, **identique** à ce qu'il donnait avant la
+correction. Autrement dit il consomme encore les embeddings de PATCHS et non la
+sortie de la tour. C'est la bonne conclusion à tirer d'un chiffre qui ne bouge
+pas alors que tout ce qui l'alimente a changé — et le pipeline réel est
+`patchs → tour → v.post_ln → projecteur`, pas `patchs → projecteur`.
+
+Le point est localisé : dans `run_banc_vision`, le bloc projecteur lit
+`let source = tour.clone().unwrap_or_else(|| out.clone());` (ligne ~897) alors que
+`tour` est encore `None` à cet endroit — l'affectation `tour = Some(x.clone())`
+est plus bas, à la fin du bloc de la tour. Déplacer le bloc projecteur APRÈS la
+tour est le seul changement à faire, et il est mécanique.

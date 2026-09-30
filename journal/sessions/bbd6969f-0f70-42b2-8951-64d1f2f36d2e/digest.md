@@ -20659,3 +20659,128 @@ static void ggml_mrope_cache_init(
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat >> docs/plan-mla-vision.md <<'EOF'\n\n### Le détail de la rotation, lu dans ggml (et mon implémentation est à corriger)\n\n`ggml/src/ggml-cpu/ops.cpp`, `ggml_mrope_cache_init` — c'est ici que la\nconvention est écrite, noir sur b … [2743 caractères tronqués]`
+
+  ```
+7ec4cf9 vision : le détail de la rotation lu dans ggml — mon implémentation est à corriger
+  ```
+
+### 🤖 Assistant
+
+⏵ Tour 22 : le détail de la rotation lu dans ggml — et mon implémentation est fausse
+
+## Fait dans ce tour
+
+J'ai suivi la piste jusqu'au bout : la convention exacte est dans `ggml/src/ggml-cpu/ops.cpp`, fonction `ggml_mrope_cache_init`. La lecture est sans ambiguïté — et elle montre que **mon implémentation est fausse sur deux points** :
+
+```cpp
+int sect_dims = sections[0] + sections[1] + sections[2] + sections[3];
+for (int64_t i0 = 0; i0 < ne0; i0 += 2) {
+    int sector = (i0 / 2) % sect_dims;   // le secteur choisit la position
+    rope_yarn(theta/ff, ...);
+    theta_t *= theta_scale;  theta_w *= theta_scale;  theta_h *= theta_scale;
+}
+```
+
+1. la rotation apparie des dimensions **consécutives** `(i0, i0+1)` — c'est le contraire de la convention « moitié tournée » `(i, i + quart/2)` que j'avais écrite ;
+2. le secteur vaut `(i0/2) % sect_dims`, avec `sect_dims` = **somme** des quatre sections : avec `positions` = (ligne, colonne, ligne, colonne), cela donne des blocs de secteurs (ligne, colonne, ligne, colonne) dans cet ordre ;
+3. l'échelle de fréquences **continue** d'un bloc au suivant (`theta *= theta_scale` à chaque pas, sans remise à zéro hors mode `indep_sects`) — ce n'est donc pas une échelle recalculée par bloc comme je l'ai fait.
+
+Autrement dit : la **structure** (quatre blocs, deux positions alternées) est la bonne, mais **l'appariement et l'échelle sont faux**. C'est précisément ce qu'une référence aurait attrapé en une seconde — et c'est la démonstration, sur pièce, de pourquoi je n'ai pas voulu déclarer cette partie « faite » : le code tournait, les valeurs étaient plausibles, et elles étaient fausses.
+
+## État
+
+| # | chantier | état |
+|---|---|---|
+| 1-4, 6 | aiguille · GPU (5 sous-items) · mémoire KV · rotation 16 k · hygiène | ✅ mesurés |
+| 5 | MLA ✅ (5,2e-7) · vision : chaîne complète et **erreur identifiée avec sa correction** (appariement consécutif, échelle continue), fenêtre locale d'après la source, référence numpy valable sur 2 tranches | en cours |
+
+`cargo test` 6/6, arbre propre, portes Qwen **19,3885** / gpt-oss **15,1757** intactes.
+
+L'objectif reste **actif**, et il se réduit maintenant à quelque chose de précis et de petit : corriger les deux points de la rotation d'après le code cité, puis chercher une validation. Le prochain tour peut appliquer la correction — c'est une vingtaine de lignes, et le texte de référence est dans le dépôt.
+
+
+## Tour 32
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Réaliser les 6 nouveaux chantiers du projet qtrinet-core, dans l'ordre : (1) relancer le test de l'aiguille sur contexte long (remplissage varié en vrai texte, moins de sondes, réponses plus longues) sur un modèle capable, grâce au préremplissage par lots et au KV déporté ; (2) chemin GPU : dépaquetage vectorisé du noyau d'attention (13,2 ms/couche à 1 M en int4 vers ~3 ms), brancher MXFP4 dans le moteur avec une politique de résidence des experts, attention par lots sur GPU dans forward_lot, noyau de tête Q8_0 accéléré (AVX2 ou déport), et usage du second GPU ; (3) mémoire : pagination du cache KV côté CPU (25,77 Go réservés à ctx 1 M pour 512 jetons écrits) et test de l'hypothèse « clés en f16 avant quantification » pour l'écart int8 avec llama.cpp à 8 192 (+3,0 % contre +0,8 %) ; (4) rotation au-delà de 5 120 jetons (passe à 16 k) ; (5) structurel : MLA (aucun modèle local — construire un modèle MLA synthétique et valider contre une référence indépendante) et vision (poids Qwen2.5-VL et projecteur mmproj présents) ; (6) hygiène : réécrire la section « Ce qu'il faut faire ensuite » de REPRISE.md et y consigner les pièges QT_GPU/QT_GPU_TETE/QT_GPU_KV. Chaque chantier doit être implémenté, mesuré (portes de non-régression Qwen 19,3885 et gpt-oss 15,1757 sans QT_GPU), documenté dans le dépôt et commité."
+Round: 23/30
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Tour 23 : je corrige la rotation (paires consécutives, échelle continue)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && python3 - <<'PY'\np='src/main.rs'; s=open(p).read()\nold = \"\"\"            let nh_t = 16usize;                       // vision.head_count du mmproj\n            let hd_t = e / nh_t;\n            let quart = hd_t / 4;\n … [2761 caractères tronqués]`
+
+  ```
+rotation corrigée (paires consécutives, échelle continue)
+    Finished `release` profile [optimized] target(s) in 0.01s
+projecteur : 64 groupes × 3584 valeurs, |sortie| = 131.5430, 4 premières [-0.0474, 0.2066, 0.1466, -0.0586]
+tour : 32 couches × 256 patchs × 1280 · |sortie| = 234.5318 · 4 premières [0.0944, -0.1649, 0.9411, 0.2942]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && python3 - <<'PY'\np='src/main.rs'; s=open(p).read()\n# Le projecteur doit consommer la SORTIE DE LA TOUR, pas les embeddings de\n# patchs : l'ordre était resté celui du banc « patchs seuls ».\ndeb_proj = s.index(\"    // … [2014 caractères tronqués]`
+
+  ```
+projecteur déplacé APRÈS la tour
+error: this file contains an unclosed delimiter
+    --> src/main.rs:2288:3
+     |
+ 824 | fn run_banc_vision(sortie: &str) {
+     |                                  - unclosed delimiter
+...
+ 880 |       if let (Some(t0), Some(t2)) = (g.tensor("mm.0.weight"), g.tensor("mm.2.weight")) {
+--
+error: could not compile `qtrinet-core` (bin "qtrinet-core") due to 1 previous error
+error: could not compile `qtrinet-core` (bin "qtrinet-core") due to 1 previous error
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && python3 - <<'PY'\np='src/main.rs'; s=open(p).read()\ns = s.replace(\"\"\"        proj = Some((Vec::new(), y));\n    }\n\"\"\", \"\"\"        proj = Some((Vec::new(), y));\n      }\n    }\n\"\"\", 1)\nopen(p,'w').write(s) … [434 caractères tronqués]`
+
+  ```
+accolade fermée
+error[E0425]: cannot find value `tour` in this scope
+   --> src/main.rs:879:8
+    |
+879 |     if tour.is_some() {
+    |        ^^^^ not found in this scope
+
+error[E0425]: cannot find value `tour` in this scope
+   --> src/main.rs:897:22
+    |
+897 |         let source = tour.clone().unwrap_or_else(|| out.clone());
+error: could not compile `qtrinet-core` (bin "qtrinet-core") due to 2 previous errors; 9 warnings emitted
+projecteur : 64 groupes × 3584 valeurs, |sortie| = 131.5430, 4 premières [-0.0474, 0.2066, 0.1466, -0.0586]
+tour : 32 couches × 256 patchs × 1280 · |sortie| = 234.5318 · 4 premières [0.0944, -0.1649, 0.9411, 0.2942]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && python3 - <<'PY'\np='src/main.rs'; s=open(p).read()\na = \"\"\"    let w = g.dequant(\"v.patch_embd.weight\");\"\"\"\nassert a in s\ns = s.replace(a, a + \"\\n    let mut tour: Option<Vec<f32>> = None;\", 1)\nb = \"\"\"  … [639 caractères tronqués]`
+
+  ```
+déclaration et affectation posées
+    Finished `release` profile [optimized] target(s) in 0.01s
+tour : 32 couches × 256 patchs × 1280 · |sortie| = 234.5318 · 4 premières [0.0944, -0.1649, 0.9411, 0.2942]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && python3 - <<'PY'\np='src/main.rs'; s=open(p).read()\ns = s.replace(\"\"\"    if tour.is_some() {\n      if let (Some(t0), Some(t2)) = (g.tensor(\"mm.0.weight\"), g.tensor(\"mm.2.weight\")) {\"\"\",\n\"\"\"    if let (Som … [729 caractères tronqués]`
+
+  ```
+gardes restantes: 0
+    Finished `release` profile [optimized] target(s) in 0.01s
+projecteur : 64 groupes × 3584 valeurs, |sortie| = 131.5430, 4 premières [-0.0474, 0.2066, 0.1466, -0.0586]
+tour : 32 couches × 256 patchs × 1280 · |sortie| = 234.5318 · 4 premières [0.0944, -0.1649, 0.9411, 0.2942]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"let source = tour\" qtrinet-core/src/main.rs | head -2; grep -c \"tour = Some(x.clone())\" qtrinet-core/src/main.rs; cd qtrinet-core && cargo test --release 2>&1 | tail -2", "description": "Check reordering state", "timeout … [12 caractères tronqués]`
+
+  ```
+897:        let source = tour.clone().unwrap_or_else(|| out.clone());
+1
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.09s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat >> docs/plan-mla-vision.md <<'EOF'\n\n### Après correction : la rotation suit la source, mais l'ORDRE est encore faux\n\nLa rotation est corrigée d'après `ggml_mrope_cache_init` (paires consécutives\n`(2i, 2i+1)`, moitié « ligne  … [2136 caractères tronqués]`
