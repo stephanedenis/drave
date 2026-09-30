@@ -595,3 +595,153 @@ fn run_banc_mla(opt: Options, sortie: &str) {
 … [3949 caractères tronqués]
   ```
 
+### 🤖 Assistant
+
+⏵ Vérification du binaire existant et des diffs a9fff24/86ddf12
+
+- **bash** `{"command": "ls -la drave-core/ 2>/dev/null; ls -la drave-core/target/release/drave 2>/dev/null; ls -la target/release/drave 2>/dev/null; cat drave-core/Cargo.toml 2>/dev/null | head -20; ls models/ | head", "description": "Check build artifacts and models", "workdir": "/home/stephane/Data13TB/steph … [20 caractères tronqués]`
+
+  ```
+total 16
+drwxr-xr-x. 1 stephane stephane   82 28 sep 11:58 .
+drwxr-xr-x. 1 stephane stephane  598 30 sep 12:19 ..
+-rw-r--r--. 1 stephane stephane  154 30 sep 08:44 Cargo.lock
+-rw-r--r--. 1 stephane stephane  375 30 sep 08:44 Cargo.toml
+drwxr-xr-x. 1 stephane stephane   94 30 sep 08:44 gpu
+-rw-r--r--. 1 stephane stephane 4351 30 sep 08:44 README.md
+drwxr-xr-x. 1 stephane stephane  112 30 sep 11:13 src
+drwxr-xr-x. 1 stephane stephane   70 25 sep 18:32 target
+-rwxr-xr-x. 2 stephane stephane 1591704 30 sep 13:05 drave-core/target/release/drave
+[package]
+name = "drave-core"
+version = "0.1.0"
+edition = "2021"
+description = "Drave — moteur d'exécution par listes d'activation (stream of logs) pour modèles quantifiés"
+
+[[bin]]
+name = "drave"
+path = "src/main.rs"
+
+[dependencies]
+# aucune : std seul, pour rester sans dépendance réseau
+
+[profile.release]
+opt-level = 3
+lto = true
+codegen-units = 1
+panic = "abort"
+Qwen2.5-0.5B-Q4_0.gguf
+Qwen2.5-0.5B-Q8_0.gguf
+  ```
+
+- **bash** `{"command": "sed -n '1,120p' /tmp/da9.diff", "description": "Read a9fff24 diff head", "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+commit a9fff24e8cb1681005b96d2e1c16c434cc441b6b
+Author: Stéphane <stephane@localhost>
+Date:   Wed Sep 30 12:36:39 2026 -0400
+
+    Deux bugs de protocole trouvés par la relecture, pas par un banc
+    
+    1. **`VERSION_FLUX` valait encore 3** alors que l'en-tête était passé à 79 octets
+       et transportait les top-k : deux binaires « v3 » aux contrats différents se
+       seraient crus compatibles et auraient divergé en silence — exactement le défaut
+       que la version dans chaque en-tête existe pour empêcher. Elle vaut 4.
+    2. **L'échappement d'indice, côté réseau, s'écrivait sur QUATRE octets** quand le
+       décodeur en lisait DEUX (`c.extend_from_slice(&i.to_le_bytes())` au lieu de
+       `[..2]`). Toute trame portant un écart ≥ 255 se désynchronisait. Vérifié
+       maintenant dans les deux sens, avec un seuil de 0,6 qui ne laisse qu'un neurone
+       actif par liste — donc des écarts énormes et des échappements à chaque flux.
+    
+    Les deux ont été trouvés par la relecture croisée des documents
+    (`reports/rapport-coherence-docs.md`), pas par les bancs : les échappements sont
+    rares (22 sur 8,79 M) et la version ne se voyait que dans le code.
+
+diff --git a/drav
+… [6720 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ État de compilation et fraîcheur du binaire
+
+- **bash** `{"command": "git status --short; echo \"---\"; git log -1 --format='%H %ci %s'; echo \"---\"; ls -la --time-style=full-iso drave-core/src/*.rs drave-core/target/release/drave; echo \"---\"; git log --oneline -30 --format='%h %ci %s' | head -30", "description": "Check working tree and build freshness … [64 caractères tronqués]`
+
+  ```
+M journal/README.md
+---
+818028e3c3e8ec36889a05cd354b61849ec7c983 2026-09-30 13:12:35 -0400 Référence 6 bits re-mesurée (19,3045) plutôt que retirée
+---
+-rw-r--r--. 1 stephane stephane   45442 2026-09-29 13:49:27.030953906 -0400 drave-core/src/engine.rs
+-rw-------. 1 stephane stephane   33061 2026-09-29 19:27:58.251471084 -0400 drave-core/src/gguf.rs
+-rw-r--r--. 1 stephane stephane   39060 2026-09-30 08:44:18.353240461 -0400 drave-core/src/gpu.rs
+-rw-------. 1 stephane stephane   67760 2026-09-29 07:30:58.442869846 -0400 drave-core/src/list.rs
+-rw-r--r--. 1 stephane stephane  170857 2026-09-30 13:05:26.069280260 -0400 drave-core/src/main.rs
+-rw-r--r--. 1 stephane stephane  205470 2026-09-30 13:02:34.097536091 -0400 drave-core/src/model.rs
+-rw-------. 1 stephane stephane   20019 2026-09-28 14:34:17.944094400 -0400 drave-core/src/tokenizer.rs
+-rwxr-xr-x. 2 stephane stephane 1591704 2026-09-30 13:05:49.569560823 -0400 drave-core/target/release/drave
+---
+818028e 2026-09-30 13:12:35 -0400 Référence 6 bits re-mesurée (19,3045) plutôt que retirée
+7c6bd5d 2026-09-30 13:11:42 -0400 Format de flux : la taille par neurone actif, dense et creuse
+b2767fe 2026-09-30 13:11:13 -0400 Feuille de rout
+… [2890 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd drave-core && ./target/release/drave --modele models/Qwen2.5-0.5B-Q8_0.gguf --keeep 0.05 --limit 2 --ppl-texte /dev/null 2>&1 | head -20; echo \"exit=$?\"", "description": "Test whether binary reports unknown flag", "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+[attention] QT_IM_SWITCHER est l'ancien nom d'une variable d'environnement : elles s'appellent maintenant DRAVE_* (voir docs/histoire.md). Rien n'a été appliqué.
+[options] 1 drapeau(x) INCONNU(S), donc sans effet : --keeep
+[options] (une faute de frappe suffit — `--options-actives` montre ce que le moteur applique vraiment)
+
+thread 'main' (536779) panicked at src/model.rs:1368:34:
+ouverture du GGUF: Os { code: 2, kind: NotFound, message: "No such file or directory" }
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+exit=0
+  ```
+
+### 🤖 Assistant
+
+⏵ Lecture de `main()` pour comprendre la position du chemin de modèle
+
+- **bash** `{"command": "grep -n \"fn main\\|args\\[1\\]\\|MODELE.set\\|analyser(\" drave-core/src/main.rs | head -30; echo \"===\"; sed -n '/^fn main/,/^}/p' drave-core/src/main.rs | head -80", "description": "Read main function", "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+27:fn main() {
+45:    let opt = analyser(&args);
+46:    let _ = MODELE.set(args[1].clone());
+73:    let path = &args[1];
+470:fn analyser(args: &[String]) -> Options {
+===
+fn main() {
+    let args: Vec<String> = std::env::args().collect();
+    if args.len() < 2 {
+        eprintln!("usage: drave-core <modele.gguf> [--matrix NOM] [--threads N]");
+        eprintln!("       drave-core <modele.gguf> --infer (--ids 1,2,3 | --prompt TEXTE)");
+        eprintln!("                    [--n 32] [--temp 0] [--ctx 512] [--threads N]");
+        std::process::exit(1);
+    }
+    // Une seule analyse, puis un aiguillage : `--plan`, `--tokenize`,
+    // `--ppl`/`--ppl-texte` et `--infer` partagent désormais la même structure
+    // d'options, donc les mêmes drapeaux.
+    // Les variables d'environnement ont été renommées QT_* -> DRAVE_* : un
+    // ancien nom encore présent dans un script ne ferait RIEN, en silence. On le
+    // dit, plutôt que de laisser croire que l'option est active.
+    if let Some((vieux, _)) = std::env::vars().find(|(k, _)| k.starts_with("QT_")) {
+        eprintln!("[attention] {vieux} est l'ancien nom d'une variable d'environnement : \
+elles s'appellent maintenant DRAVE_* (voir
+… [3468 caractères tronqués]
+  ```
+
+- **bash** `{"command": "git log --oneline -6 --format='%h %s' -- drave-core/src/main.rs drave-core/src/model.rs; echo \"---\"; git diff HEAD --stat -- drave-core/", "description": "Check which commits touched src", "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+01b7274 Un drapeau inconnu n'est plus avalé en silence
+1a4beb3 `--options-actives` : le tableau de bord des réglages qui agissent
+1bc0470 Règle R4 : plafond des allocations pilotées par le réseau (256 Mo)
+901f28d Relecture adversariale : six défauts corrigés, et des tests qui les auraient attrapés
+a9fff24 Deux bugs de protocole trouvés par la relecture, pas par un banc
+ae85043 DRVF v3 : −66 % de trace au total, pour +0,074 % de perplexité
+---
+  ```
+

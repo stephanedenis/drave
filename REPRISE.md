@@ -56,7 +56,7 @@ identique à la source) — les deux tokenizers la passent sur ce corpus.
 |---|---|---|
 | Qwen2.5-0.5B Q8_0 | `--dense --limit 512` | **19,3885** |
 | Qwen2.5-0.5B Q4_0 | `--q4 --limit 512` | **21,0110** |
-| Qwen2.5-0.5B Q8_0, 6 bits | `--dense --bits-attn 6 --bits-ffn 6 --limit 512` | **19,3045** ← bat l'int8 (re-mesuré le 30/09 : c'est la valeur, et la commande suffit à la reproduire — la référence n'était citée dans aucun rapport, elle l'est maintenant) |
+| Qwen2.5-0.5B Q8_0, 6 bits | `--dense --bits-attn 6 --bits-ffn 6 --limit 512` (ctx 256) | **19,5633** ← bat l'int8 (19,8059), mais de moins loin qu'annoncé : la valeur **19,3045** qui figurait ici n'est PAS reproductible avec cette commande (re-mesuré le 30/09, deux fois) |
 | Qwen2.5-0.5B Q8_0, 4 bits | `--dense --q4 --limit 512` | **23,1323** |
 | Qwen2.5-1.5B Q4_K_M | `--q4 --limit 256` | **12,9228** |
 | Qwen2.5-VL-7B Q4_K_M | défaut, `--limit 128` | **10,9947** |

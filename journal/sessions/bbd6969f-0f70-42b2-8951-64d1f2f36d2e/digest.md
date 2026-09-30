@@ -28957,3 +28957,25 @@ identique à la source) — les deux tokenizers la passent sur ce corpus.
 La commande existe (`--bits-attn 6 --bits-ffn 6`) : plutôt que de la retirer, je la re-mesure — une référence de non-régression doit être reproductible.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 600 ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf --ppl /tmp/ids_qwen.txt --ctx 256 --dense --bits-attn 6 --bits-ffn 6 --threads 16 --limit 512 2>&1 | grep -oE \"perplexité [0-9.]+ sur [0-9]+ tokens\"; pytho … [1113 caractères tronqués]`
+
+  ```
+perplexité 19.5633 sur 510 tokens
+REPRISE : la référence 6 bits est datée et re-mesurée
+818028e Référence 6 bits re-mesurée (19,3045) plutôt que retirée
+13:12:43
+cles_f16_valeurs_int8      :
+  ```
+
+### 🤖 Assistant
+
+La re-mesure donne **19,5633**, pas 19,3045 : la table de REPRISE était fausse. Je vérifie une variante avant de corriger honnêtement.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for ctx in 512; do printf \"ctx %s : \" $ctx; timeout 600 ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf --ppl /tmp/ids_qwen.txt --ctx $ctx --dense --bits-attn 6 --bits-ffn 6 --threads 16 --limit 512 2>&1 | grep -oE  … [220 caractères tronqués]`
+
+  ```
+ctx 512 : perplexité 13.2692 sur 511 tokens
+--- rappel : 16 bits (porte) = 19,3885 · KV int8 = 19,8059 ---
+13:13:22
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='REPRISE.md'; s=open(p).read()\nv = \"| Qwen2.5-0.5B Q8_0, 6 bits | `--dense --bits-attn 6 --bits-ffn 6 --limit 512` | **19,3045** ← bat l'int8 (re-mesuré le 30/09 : c'est la valeur, et la commande suffit à la rep … [1507 caractères tronqués]`
