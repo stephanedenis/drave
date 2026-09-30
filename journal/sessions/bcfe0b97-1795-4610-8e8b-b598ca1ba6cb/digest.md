@@ -2542,3 +2542,22 @@ bash: -c: line 1: `cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo "=
 ⏵ Vérification du correctif v4 : reconstruction de HEAD et test croisé
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && R=/tmp/audit_fix/drave-core && mkdir -p $R/src $R/gpu && git show HEAD:drave-core/Cargo.toml > $R/Cargo.toml && for f in main.rs model.rs engine.rs gguf.rs gpu.rs list.rs tokenizer.rs; do git show HEAD:drave-core/src/$f > $R/src/$f;  … [252 caractères tronqués]`
+
+  ```
+1295:const VERSION_FLUX: u8 = 4;
+warning: `drave-core` (bin "drave") generated 19 warnings (run `cargo fix --bin "drave" -p drave-core` to apply 8 suggestions)
+    Finished `release` profile [optimized] target(s) in 23.20s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && OLD=/tmp/audit_cda/drave-core/target/release/drave; NEW=/tmp/audit_fix/drave-core/target/release/drave; M=models/Qwen2.5-0.5B-Q8_0.gguf\necho \"### serveur v4 (HEAD a9fff24) + client v3 (cda3162)\"\n$NEW $M --flux-serveur 127.0.0.1:4 … [439 caractères tronqués]`
+
+  ```
+### serveur v4 (HEAD a9fff24) + client v3 (cda3162)
+  client v3 exit=134
+  serveur v4 :
+[flux] arrêt : flux en version 3, cette build parle la 4 (pair incompatible : rien n'a été interprété)
+[flux] 0 flux servis
+[stderr]
+bash: line 5: 493538 Aborted                    timeout 30 $OLD $M --ppl-reparti 127.0.0.1:45831 --couches-locales 12 --ctx 256 --threads 4 --limit 6 > /tmp/audit_head/y_cli.log 2>&1
+  ```
+

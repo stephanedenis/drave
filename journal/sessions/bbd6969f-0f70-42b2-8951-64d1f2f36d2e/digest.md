@@ -27599,3 +27599,72 @@ lien cassé : reports/rapport-lecteur-ddr3.md
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls ../FPGA-Stratix-V/docs/ | grep -iE \"pe-even|ddr3|evenement\" | head -4; python3 - <<'PY'\np='README.md'; s=open(p).read()\na = \"reports/rapport-pe-evenementiel.md\"\nb = \"reports/rapport-lecteur-ddr3.md\"\nn = 0\nfor lien, cibl … [2080 caractères tronqués]`
+
+  ```
+rapport-lecteur-ddr3.md
+rapport-pe-evenementiel.md
+2 liens FPGA repointés
+346:| 7 | `reports/rapport-prefill-reparti.md`, `docs/format-flux.md` | chiffres mesurés, tableau du protocole v3 (mode 3) | les nombres du rapport sont ceux de l'étape 5, commande recopiée telle quelle |
+ea754df Corrections documentaires : le renommage, les chiffres, et une affirmation fausse en moins
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/campagne_cles_f16.sh <<'EOF'\n#!/bin/bash\n# Couloir A, suite : le « meilleur quantificateur de clés » — clés en f16.\n# À contexte 256 : clés f16 + valeurs int8 = 19,3995 (+0,057 %) contre 19,8059\n# (+2,15 %) pour int8/i … [1157 caractères tronqués]`
+
+  ```
+suite de campagne lancée (elle attendra la fin de la campagne en cours)
+cles_f32_valeurs_int4      : perplexité 14.2994 sur 8191 tokens (0 événements, 1665.6 s)
+cles_int4_valeurs_f32      : 12:38:56
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== log brut ===\"; cat -A /tmp/kv_cles.log | tail -4; echo \"=== processus ===\"; ps -o pid,etime,args -C drave 2>/dev/null | cut -c1-100; echo \"=== scripts ===\"; pgrep -a -f \"campagne_cles\" | grep -v pgrep | head -4; dat … [70 caractères tronqués]`
+
+  ```
+=== log brut ===
+cles_f32_valeurs_int4      : perplexitM-CM-) 14.2994 sur 8191 tokens (0 M-CM-)vM-CM-)nements, 1665.6 s)$
+cles_int4_valeurs_f32      : === processus ===
+    PID     ELAPSED COMMAND
+ 359514       24:11 ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf --ppl /tmp/ids_q
+=== scripts ===
+287346 /bin/bash /tmp/campagne_cles.sh
+493529 /bin/bash /tmp/campagne_cles_f16.sh
+12:39:02
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rhoE 'DRAVE_[A-Z0-9_]+' drave-core/src/*.rs | sort -u > /tmp/envs_code.txt; grep -oE 'DRAVE_[A-Z0-9_]+' REPRISE.md | sort -u > /tmp/envs_doc.txt; echo \"=== dans le code, absentes de REPRISE ===\"; comm -23 /tmp/envs_code.txt / … [172 caractères tronqués]`
+
+  ```
+=== dans le code, absentes de REPRISE ===
+DRAVE_BANC_KV_DEBUG
+DRAVE_BANC_KV_GRAD
+DRAVE_BANC_KV_K0
+DRAVE_BANC_KV_KUNIT
+DRAVE_BANC_KV_UNIT
+DRAVE_BANC_KV_V1
+DRAVE_DEBUG_FLUX
+DRAVE_FLUX_VERIF
+DRAVE_HARMONY_TRACE
+DRAVE_Q8_BLOCS
+DRAVE_SANS_EMPRUNT
+DRAVE_VISION_TEXTE
+DRAVE_YARN_RAMPE
+=== documentées mais absentes du code ===
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for v in DRAVE_BANC_KV_DEBUG DRAVE_BANC_KV_GRAD DRAVE_BANC_KV_K0 DRAVE_BANC_KV_KUNIT DRAVE_BANC_KV_UNIT DRAVE_BANC_KV_V1 DRAVE_DEBUG_FLUX DRAVE_HARMONY_TRACE DRAVE_Q8_BLOCS DRAVE_SANS_EMPRUNT DRAVE_VISION_TEXTE DRAVE_YARN_RAMPE DRAVE … [162 caractères tronqués]`
+
+  ```
+DRAVE_BANC_KV_DEBUG      drave-core/src/main.rs:2130:    if std::env::var("DRAVE_BANC_KV_DEBUG").is_ok() {
+DRAVE_BANC_KV_GRAD       drave-core/src/main.rs:2003:    let pente = std::env::var("DRAVE_BANC_KV_GRAD").is_ok();
+DRAVE_BANC_KV_K0         drave-core/src/main.rs:1993:    let k_nul = std::env::var("DRAVE_BANC_KV_K0").is_ok();
+DRAVE_BANC_KV_KUNIT      drave-core/src/main.rs:2006:    let k_unitaire = std::env::var("DRAVE_BANC_KV_KUNIT").is_ok();
+DRAVE_BANC_KV_UNIT       drave-core/src/main.rs:1998:    let v_unitaire = std::env::var("DRAVE_BANC_KV_UNIT").is_ok();
+DRAVE_BANC_KV_V1         drave-core/src/main.rs:1994:    let v_un = std::env::var("DRAVE_BANC_KV_V1").is_ok();
+DRAVE_DEBUG_FLUX         drave-core/src/main.rs:1718:                    if std::env::var("DRAVE_DEBUG_FLUX").is_ok() {
+DRAVE_HARMONY_TRACE      drave-core/src/main.rs:2706:        if std::env::var("DRAVE_HARMONY_TRACE").is_ok() {
+DRAVE_Q8_BLOCS           drave-core/src/model.rs:279:/// Construit une matrice int8 : **une échelle par bloc de 32** (`DRAVE_Q8_BLOCS=1`,
+DRAVE_SANS_EMPRUNT       drave-core/src/model.rs:343:            // `DRAVE_SANS_EMPRUNT=1` force la reconstruction : c'est ce qui permet
+DRAVE_VISIO
+… [371 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"^| \\`DRAVE_\" REPRISE.md | tail -6; python3 - <<'PY'\np='REPRISE.md'; s=open(p).read()\nv = \"\"\"| `DRAVE_KV_V_F32=1` | garde les VALEURS en f32 | +3,01 % : ne sert à rien, l'erreur ne passe pas par là |\"\"\"\nn = \"\"\" … [2436 caractères tronqués]`

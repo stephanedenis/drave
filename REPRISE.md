@@ -233,6 +233,16 @@ qui reste est classé par rentabilité mesurée.
 | `DRAVE_KV_BITS=8` ou `4` | quantifie le cache KV (défaut f32) | le 4 bits coûte +364 % de perplexité à 8 192 |
 | `DRAVE_KV_K_F32=1` | garde les CLÉS en f32 (valeurs quantifiées) | **le bon compromis mesuré** : à 8 192, 75 % de la taille f32 pour +0,02 % de perplexité, contre +3,0 % pour l'int8 complet — l'écart int8 vient des clés à 99 % (`reports/rapport-attribution-kv.md`) |
 | `DRAVE_KV_V_F32=1` | garde les VALEURS en f32 | +3,01 % : ne sert à rien, l'erreur ne passe pas par là |
+| `DRAVE_KV_K_F16=1` | clés en **f16** (2 octets/valeur, précision relative) | à contexte 256 : **+0,057 %** contre +2,15 % pour int8/int8 — 3,125 octets par élément au lieu de 8 en f32 ; campagne à 8 192 en cours |
+| `DRAVE_TRACE_BLOCS=1` | trace DRVF **v3** : valeurs i8, échelle f16 par bloc de 32 | 45 079 930 o contre 66 370 408 en v2 (−32 %), rejeu 19,4029 contre 19,3885 (+0,074 %) |
+| `DRAVE_FLUX_VERIF=1` | vérifie l'écart entre l'activation calculée et celle que la trace impose | 1,5e-5 en v2 ; **muet dès que `--lot > 1`** (le rejeu par lots passe par `flux_lot`) |
+| `DRAVE_HARMONY_TRACE=1` | trace les fenêtres du découpage « harmony » (gpt-oss) | diagnostic |
+| `DRAVE_VISION_TEXTE=<gguf>` | modèle de texte qui reçoit le vecteur d'image | 152 064 logits démontrés de bout en bout |
+| `DRAVE_Q8_BLOCS=1` | échelles par bloc de 32 pour `DenseQ8` | **hypothèse réfutée** : 23,696 contre 23,612 — aucun gain |
+| `DRAVE_SANS_EMPRUNT=1` | reconstruit les matrices au lieu de les emprunter au GGUF | outil de diagnostic (le lecteur « en place » est le défaut) |
+| `DRAVE_YARN_RAMPE=0` | force l'interpolation PURE de YaRN (rampe nulle) | mesure du §6.2 : le RoPE simple gagne partout |
+| `DRAVE_BANC_KV_UNIT`, `_KUNIT`, `_K0`, `_V1`, `_GRAD`, `_DEBUG` | variantes du **banc KV** (`--banc-kv`) : valeurs unitaires, clés nulles, dégradé | outil de mesure, pas des réglages de production |
+| `DRAVE_DEBUG_FLUX=1` | le nœud moteur imprime ce qu'il reçoit (n, positions, octets) | diagnostic du mode lot |
 | `DRAVE_KV_F16=1` | arrondit clés/valeurs en f16 avant quantification | mesuré : aucun effet (hypothèse réfutée) |
 | `DRAVE_YARN=1` / `DRAVE_YARN_NON=1` / `DRAVE_YARN_MSCALE=0` | force / interdit / règle la rotation | le défaut ne bascule qu'à 1,25 × la longueur déclarée |
 | `DRAVE_BANC_KV_GPU_SEUL=1` | saute la référence CPU du banc de KV | à 1 M elle coûte 3 à 16 minutes |
