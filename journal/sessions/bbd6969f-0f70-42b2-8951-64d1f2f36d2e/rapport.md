@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 30.1 h |
-| Tours | 16 |
-| Messages | 1195 |
-| Appels d'outils | 1171 |
+| Durée | 30.2 h |
+| Tours | 17 |
+| Messages | 1199 |
+| Appels d'outils | 1173 |
 | Fichiers touchés | 38 |
-| Commandes | 904 |
+| Commandes | 906 |
 | Sous-agents | 1 |
-| Commits | 49 |
+| Commits | 50 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -57,6 +57,8 @@
 **Tour 15** — <goal_round> Objective: "Réaliser les 6 nouveaux chantiers du projet qtrinet-core, dans l'ordre : (1) relancer le test de l'aiguille sur contexte long (remplissage varié en vrai texte, moins de sondes, réponses plus longues) sur un modèle capable, grâce au préremplissage par lots et au KV déporté ; (2) chemin GPU : dépaquetage vectorisé du noyau d'attention (13,2 ms/couche à 1 M en int4 vers ~3 ms … [1491 caractères tronqués]
 
 **Tour 16** — <goal_round> Objective: "Réaliser les 6 nouveaux chantiers du projet qtrinet-core, dans l'ordre : (1) relancer le test de l'aiguille sur contexte long (remplissage varié en vrai texte, moins de sondes, réponses plus longues) sur un modèle capable, grâce au préremplissage par lots et au KV déporté ; (2) chemin GPU : dépaquetage vectorisé du noyau d'attention (13,2 ms/couche à 1 M en int4 vers ~3 ms … [1491 caractères tronqués]
+
+**Tour 17** — <goal_round> Objective: "Réaliser les 6 nouveaux chantiers du projet qtrinet-core, dans l'ordre : (1) relancer le test de l'aiguille sur contexte long (remplissage varié en vrai texte, moins de sondes, réponses plus longues) sur un modèle capable, grâce au préremplissage par lots et au KV déporté ; (2) chemin GPU : dépaquetage vectorisé du noyau d'attention (13,2 ms/couche à 1 M en int4 vers ~3 ms … [1491 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -748,7 +750,42 @@ L'objectif reste **actif** : il ne manque que la suite de la tour de vision, don
 
 **Synthèse produite :**
 
-⏵ Les deux extrémités du chemin image sont validées (patchs et projecteur)
+⏵ Tour 7 : les deux extrémités du chemin image tiennent
+
+\## Fait dans ce tour
+
+**Vision — le projecteur est implémenté et validé**, après l'embedding de patchs du tour précédent. Les deux extrémités du chemin image sont donc en place et vérifiées contre une implémentation numpy indépendante :
+
+| tranche | écart max relatif |
+|---|---|
+| embedding de patchs (convolution 14 × 14 sur 28 × 28) | **5,37e-07** |
+| projecteur (fusion 2 × 2 → `mm.0` → GELU → `mm.2`) | **1,73e-06** |
+
+Le projecteur concatène en ordre raster les quatre patchs d'un groupe 2 × 2 (5120 = 1280 × 4), applique `mm.0` (5120 → 5120) + biais, un GELU exact, puis `mm.2` (5120 → 3584) + biais — 3 584 valeurs, |sortie| = 17,88. Détail méthodologique qui compte : la référence numpy utilise **la même approximation d'erf** que le moteur (Abramowitz-Stegun 7.1.26, écrite en vectorisé) — comparer deux formules différentes aurait mesuré l'approximation, pas l'implémentation.
+
+Reste le **milieu** : rotation 2-D des patchs (mRoPE), 32 couches avec attention locale une sur huit, `v.post_ln` — puis l'injection des embeddings dans le flux de jetons, le point d'architecture qui manque au moteur.
+
+\## État général
+
+| # | chantier | état |
+|---|---|---|
+| 1 | aiguille long contexte | ✅ 12/12 |
+| 2 | chemin GPU (5 sous-items) | ✅ |
+| 3 | mémoire KV | ✅ |
+| 4 | rotation à 16 k | ✅ (35,18 contre 1 133,02, seuil à 4 ×) |
+| 5 | MLA ✅ (5,2e-7) · vision ⏳ patchs ✅ + projecteur ✅, 32 couches à écrire | en cours |
+| 6 | hygiène | ✅ |
+
+`cargo test` 6/6, arbre propre, portes de non-régression intactes (les chemins MLA et vision sont des ajouts isolés).
+
+L'objectif reste **actif** : il ne manque que le corps de la tour de vision, chaque étape étant décrite dans `docs/plan-mla-vision.md` avec les formes et les biais relevés dans le fichier réel.
+
+### Tour 17 — <goal_round> Objective: "Réaliser les 6 nouveaux chantiers du projet qtrinet-core, dans l'ordre : (1) relancer le test d … [1771 caractères tronqués]
+
+*2 appels d'outils.* Actions notables :
+
+- bash — Final gpt-oss gate and repo check
+- bash — Detail next vision step and commit
 
 ## 3. Travail accompli
 
@@ -841,7 +878,7 @@ L'objectif reste **actif** : il ne manque que la suite de la tour de vision, don
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 864 autres
+- … et 866 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1038,4 +1075,5 @@ L'objectif reste **actif** : il ne manque que la suite de la tour de vision, don
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p='docs/plan-mla-vision.md'; s=open(p).read() old = """Les tenseurs sont nommés `v.blk.N.
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p='docs/plan-mla-vision.md'; s=open(p).read() old = """### Ce qu'il faut écrire, dans l'o
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p='docs/plan-mla-vision.md'; s=open(p).read() old = """### ÉTAT : première tranche FAITE 
+- vision : détailler le pas suivant (couche, rotation 2-D, attention locale, injection)  Le plan dit maintenant, étape par étape, ce qui reste à écrire pour le co
 

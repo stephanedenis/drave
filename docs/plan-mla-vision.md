@@ -190,6 +190,26 @@ Ce qui reste est le MILIEU : la rotation 2-D des patchs (mRoPE), les 32 couches
 avec attention locale une sur huit, `v.post_ln`. Puis l'injection des embeddings
 dans le flux de jetons, qui manque au moteur.
 
+**Le pas suivant, en détail** (pour qu'une session suivante n'ait pas à
+l'enquêter) :
+
+1. une couche = `ln1` → q/k/v (+ biais) → attention → `attn_out` (+ biais) →
+   résidu → `ln2` → `ffn_up`/`ffn_gate` (+ biais, GELU sur la porte) →
+   `ffn_down` (+ biais) → résidu. Les biais sont partout, et les oublier est
+   l'erreur classique de ce dépôt ;
+2. la rotation est **2-D** (mRoPE) : chaque patch a une position (ligne, colonne)
+   et la rotation s'applique par paires d'axes, pas par positions scalaires. La
+   CONVENTION exacte (répartition des fréquences entre les deux axes, moitié
+   tournée) est le seul point non vérifiable localement : la lever en comparant
+   les deux conventions plausibles à la référence numpy, puis en validant la
+   sortie complète contre llama.cpp (`llama-mtmd-cli` si disponible) ;
+3. l'attention est **locale une couche sur huit** (`n_wa_pattern = 8`) : sur les
+   couches locales, la fenêtre est le groupe de patchs de la même ligne ; s'y
+   tromper fait diverger les embeddings sans aucun signal ;
+4. l'injection dans le flux de jetons demande un chemin qui parte d'un VECTEUR et
+   non de `token_embd` — `forward` n'en a pas, et c'est le seul ajout
+   d'architecture nécessaire au moteur.
+
 ### Détail de la première tranche (embedding de patchs)
 
 `--banc-vision` fait tourner la convolution 14 × 14 du ViT sur une image 28 × 28

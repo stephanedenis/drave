@@ -18976,3 +18976,68 @@ accord (bruit de virgule flottante)
 ⏵ Les deux extrémités du chemin image sont validées (patchs et projecteur)
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='docs/plan-mla-vision.md'; s=open(p).read()\nold = \"\"\"### ÉTAT : première tranche FAITE et validée (embedding de patchs)\"\"\"\nnew = \"\"\"### ÉTAT : les DEUX EXTRÉMITÉS du chemin image sont faites et validées … [2918 caractères tronqués]`
+
+  ```
+docs à jour
+c165fcf Vision : le projecteur est validé aussi (1,7e-6) — les deux extrémités du chemin image tiennent
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.09s
+  ```
+
+### 🤖 Assistant
+
+⏵ Tour 7 : les deux extrémités du chemin image tiennent
+
+## Fait dans ce tour
+
+**Vision — le projecteur est implémenté et validé**, après l'embedding de patchs du tour précédent. Les deux extrémités du chemin image sont donc en place et vérifiées contre une implémentation numpy indépendante :
+
+| tranche | écart max relatif |
+|---|---|
+| embedding de patchs (convolution 14 × 14 sur 28 × 28) | **5,37e-07** |
+| projecteur (fusion 2 × 2 → `mm.0` → GELU → `mm.2`) | **1,73e-06** |
+
+Le projecteur concatène en ordre raster les quatre patchs d'un groupe 2 × 2 (5120 = 1280 × 4), applique `mm.0` (5120 → 5120) + biais, un GELU exact, puis `mm.2` (5120 → 3584) + biais — 3 584 valeurs, |sortie| = 17,88. Détail méthodologique qui compte : la référence numpy utilise **la même approximation d'erf** que le moteur (Abramowitz-Stegun 7.1.26, écrite en vectorisé) — comparer deux formules différentes aurait mesuré l'approximation, pas l'implémentation.
+
+Reste le **milieu** : rotation 2-D des patchs (mRoPE), 32 couches avec attention locale une sur huit, `v.post_ln` — puis l'injection des embeddings dans le flux de jetons, le point d'architecture qui manque au moteur.
+
+## État général
+
+| # | chantier | état |
+|---|---|---|
+| 1 | aiguille long contexte | ✅ 12/12 |
+| 2 | chemin GPU (5 sous-items) | ✅ |
+| 3 | mémoire KV | ✅ |
+| 4 | rotation à 16 k | ✅ (35,18 contre 1 133,02, seuil à 4 ×) |
+| 5 | MLA ✅ (5,2e-7) · vision ⏳ patchs ✅ + projecteur ✅, 32 couches à écrire | en cours |
+| 6 | hygiène | ✅ |
+
+`cargo test` 6/6, arbre propre, portes de non-régression intactes (les chemins MLA et vision sont des ajouts isolés).
+
+L'objectif reste **actif** : il ne manque que le corps de la tour de vision, chaque étape étant décrite dans `docs/plan-mla-vision.md` avec les formes et les biais relevés dans le fichier réel.
+
+
+## Tour 17
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Réaliser les 6 nouveaux chantiers du projet qtrinet-core, dans l'ordre : (1) relancer le test de l'aiguille sur contexte long (remplissage varié en vrai texte, moins de sondes, réponses plus longues) sur un modèle capable, grâce au préremplissage par lots et au KV déporté ; (2) chemin GPU : dépaquetage vectorisé du noyau d'attention (13,2 ms/couche à 1 M en int4 vers ~3 ms), brancher MXFP4 dans le moteur avec une politique de résidence des experts, attention par lots sur GPU dans forward_lot, noyau de tête Q8_0 accéléré (AVX2 ou déport), et usage du second GPU ; (3) mémoire : pagination du cache KV côté CPU (25,77 Go réservés à ctx 1 M pour 512 jetons écrits) et test de l'hypothèse « clés en f16 avant quantification » pour l'écart int8 avec llama.cpp à 8 192 (+3,0 % contre +0,8 %) ; (4) rotation au-delà de 5 120 jetons (passe à 16 k) ; (5) structurel : MLA (aucun modèle local — construire un modèle MLA synthétique et valider contre une référence indépendante) et vision (poids Qwen2.5-VL et projecteur mmproj présents) ; (6) hygiène : réécrire la section « Ce qu'il faut faire ensuite » de REPRISE.md et y consigner les pièges QT_GPU/QT_GPU_TETE/QT_GPU_KV. Chaque chantier doit être implémenté, mesuré (portes de non-régression Qwen 19,3885 et gpt-oss 15,1757 sans QT_GPU), documenté dans le dépôt et commité."
+Round: 8/30
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 900 ./qtrinet-core/target/release/qtrinet-core /home/stephane/FastNVMe/models/gpt-oss-120b-MXFP4.gguf --ppl /tmp/ids_oss.txt --ctx 256 --dense --threads 16 --limit 512 2>&1 | grep -oE \"perplexité [0-9.]+ sur [0-9]+ tokens\"  … [136 caractères tronqués]`
+
+  ```
+perplexité 15.1757 sur 510 tokens
+ M journal/README.md
+c165fcf Vision : le projecteur est validé aussi (1,7e-6) — les deux extrémités du chemin image tiennent
+2ca9e0d Vision : l'embedding de patchs est fait et validé (5,4e-7 contre numpy)
+a50a5a5 vision : inventaire exact des tenseurs (et deux corrections du plan)
+1517088 Rotation à 16 384 jetons : le RoPE simple gagne encore (35,18 contre 1 133,02)
+2d173f1 vision : relevé du projecteur mmproj (paramètres et nommage réels)
+d5ee7a0 MLA : le moteur retrouve la référence numpy à 5,2e-7 près
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='docs/plan-mla-vision.md'; s=open(p).read()\nold = \"\"\"Ce qui reste est le MILIEU : la rotation 2-D des patchs (mRoPE), les 32 couches\navec attention locale une sur huit, `v.post_ln`. Puis l'injection des embed … [2491 caractères tronqués]`
