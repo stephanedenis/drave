@@ -375,6 +375,10 @@ réellement en vigueur.
 
 ### Les prochains chantiers, dans l'ordre
 
+0. **Noyau GPU de top-k** (phase 1.1) : le seul poste de la feuille de route qui
+   demande du travail GPU *neuf* ; les deux Quadro sont libres et le cadre existe
+   (`gpu/compiler.sh`, `drave_gpu.cu`, sm_75). Vient ensuite le **second GPU**
+   (16 Go dormants : cache d'experts MXFP4 et KV à 1 M paginé).
 1. ~~Préremplissage par LOTS sur le fil~~ **FAIT** (mode 3 : 256 jetons en 4 lots,
    écart 0,00e0 ; `reports/rapport-prefill-reparti.md`). Le suivant dans cette
    veine : le **lot en listes** (mode 4), chaque état en liste creuse au lieu de

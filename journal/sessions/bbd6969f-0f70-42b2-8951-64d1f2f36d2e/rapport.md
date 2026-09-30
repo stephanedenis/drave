@@ -7,12 +7,12 @@
 | Début | 2026-09-28 14:46 |
 | Durée | 46.4 h |
 | Tours | 45 |
-| Messages | 1786 |
-| Appels d'outils | 1687 |
+| Messages | 1788 |
+| Appels d'outils | 1689 |
 | Fichiers touchés | 44 |
-| Commandes | 1368 |
-| Sous-agents | 6 |
-| Commits | 127 |
+| Commandes | 1369 |
+| Sous-agents | 7 |
+| Commits | 128 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -2055,7 +2055,7 @@ Je vérifie l'heure à chaque itération et j'arrête à 12:06, en laissant un p
 
 ### Tour 45 — as-tu ce qu'il te faut pour te rendre à 15h en travaillaint avec un maximum d'autonomie et de parallélisme d'activités?
 
-*188 appels d'outils.* Actions notables :
+*190 appels d'outils.* Actions notables :
 
 - bash — Probe machine, GPU, disk, network state
 - bash — Identify GPU users and stray processes
@@ -2071,11 +2071,11 @@ Je vérifie l'heure à chaque itération et j'arrête à 12:06, en laissant un p
 - bash — Understand batched PPL reference path
 - bash — Add batched imposed states to forward_lot
 - list_agents
-- … et 166 autres
+- … et 168 autres
 
 **Synthèse produite :**
 
-Porte gpt-oss : **15,1757** ✓ — le trou du relecteur est comblé, les deux portes sont vertes après tous les changements. Je l'inscris et je finis les points de cohérence restants.
+⏵ Je lance une relecture adversariale des correctifs de l'après-midi (mes propres correctifs n'ont été relus par personne).
 
 ## 3. Travail accompli
 
@@ -2136,6 +2136,7 @@ Porte gpt-oss : **15,1757** ✓ — le trou du relecteur est comblé, les deux p
 - tour 45 — Trace format compaction study
 - tour 45 — Adversarial review of recent commits
 - tour 45 — Docs vs measurements consistency audit
+- tour 45 — Review the afternoon fixes
 
 ### Commandes exécutées (échantillon)
 
@@ -2179,7 +2180,7 @@ Porte gpt-oss : **15,1757** ✓ — le trou du relecteur est comblé, les deux p
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 1328 autres
+- … et 1329 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2454,4 +2455,5 @@ Porte gpt-oss : **15,1757** ✓ — le trou du relecteur est comblé, les deux p
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' def rem(p, paires):     s = open(p).read(); ok = 0     for v, n in paires:         if s.c
 - Rapport transport : l'en-tête dit maintenant ce que son tableau mesure  « 871 octets » ne correspondait à aucune ligne du tableau (897 en listes i16 à seuil 5 %
 - Portes revérifiées après la journée : 19,3885 · 15,1757 · 11 tests  La porte gpt-oss était la seule que la relecture adversariale n'avait pas pu exécuter (borne
+- REPRISE : le noyau GPU de top-k en tête des prochains chantiers  Les deux Quadro sont libres, le cadre GPU existe (compiler.sh, drave_gpu.cu, sm_75) et c'est le
 

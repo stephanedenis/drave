@@ -28817,3 +28817,37 @@ chmod +x /tmp/porte_oss_finale.sh && /tmp/porte_oss_finale.sh) finished [status:
 Porte gpt-oss : **15,1757** ✓ — le trou du relecteur est comblé, les deux portes sont vertes après tous les changements. Je l'inscris et je finis les points de cohérence restants.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n 26,40p REPRISE.md; python3 - <<'PY'\np='REPRISE.md'; s=open(p).read()\nv = \"\"\"## 2. Références de non-régression\"\"\"\nn = \"\"\"## 2. Références de non-régression\n\n> **Revérifiées le 30/09 après tous les changements de  … [1798 caractères tronqués]`
+
+  ```
+--n 64 --ctx 512 --threads 16 --temp 0
+```
+
+---
+
+## 2. Références de non-régression
+
+Corpus : `/tmp/wt2_txt.txt` = 20 000 premiers octets de `data/wikitext2_test.txt`.
+**Régénérable** (à refaire si `/tmp` a été vidé) :
+
+```bash
+cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet
+head -c 20000 data/wikitext2_test.txt > /tmp/wt2_txt.txt
+# les identifiants DOIVENT venir du tokenizer du modèle — jamais croisés
+drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf \
+REPRISE : portes revérifiées notées
+roadmap 1.4 : renvoi au rapport de placement
+fc715e9 Portes revérifiées après la journée : 19,3885 · 15,1757 · 11 tests
+13:10:15
+  ```
+
+### 🤖 Assistant
+
+⏵ Je lance une relecture adversariale des correctifs de l'après-midi (mes propres correctifs n'ont été relus par personne).
+
+- **subagent** `{"description": "Review the afternoon fixes", "prompt": "Tu es relecteur ADVERSARIAL dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (projet « Drave » : moteur d'inférence LLM en Rust, `std` seul, binaire `drave`). Tout est en FRANÇAIS : écris en français. Ton rôle est de TROUVER DES D … [3150 caractères tronqués]`
+
+  ```
+started subagent 7c876089-605c-4836-930e-925a66028509
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='REPRISE.md'; s=open(p).read()\nv = \"\"\"### Les prochains chantiers, dans l'ordre\n\n1. ~~Préremplissage par LOTS sur le fil~~ **FAIT**\"\"\"\nn = \"\"\"### Les prochains chantiers, dans l'ordre\n\n0. **Noyau GP … [1002 caractères tronqués]`
