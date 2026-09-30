@@ -21043,3 +21043,11 @@ AssertionError
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nlignes = open('REPRISE.md').read().split('\\n')\n# lignes 196-199 (index 195..) : on remplace le paragraphe par son état final\ndeb = 195\nfin = deb\nwhile fin < len(lignes) and not lignes[fin].strip().startswith('5 … [1211 caractères tronqués]`
+
+  ```
+paragraphe remplacé ; longueur 285
+095e093 REPRISE : l'item 5 reflète l'état final (chaîne vision démontrée, réserves nommées)
+ M journal/README.md
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '193,205p' REPRISE.md && git add -A journal && git commit -q -m \"journal : archive automatique\" 2>/dev/null; git log --oneline -3 | cat", "description": "Verify REPRISE item and finalize"}`
