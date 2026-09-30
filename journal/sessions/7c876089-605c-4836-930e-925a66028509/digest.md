@@ -349,3 +349,124 @@ Date:   Wed Sep 30 12:57:35 2026 -0400
 … [10419 caractères tronqués]
   ```
 
+### 🤖 Assistant
+
+⏵ Cartographie des chemins d'appel et du parseur d'options
+
+- **bash** `{"command": "grep -n \"fn run_\\|fn options_actives\\|options_actives\\|forward_mla\\|forward_lot\\|\\.forward(\\|depuis\\|trace_flux\\|flux_force\\|FluxRelecteur\" drave-core/src/main.rs | head -100", "description": "Grep call sites in main.rs", "workdir": "/home/stephane/Data13TB/stephane/GitHub/Q … [8 caractères tronqués]`
+
+  ```
+350:fn options_actives(mdl: &model::Model, mode: &str, ctx_impose: bool, dense: bool, keep: f32) {
+360:             mdl.trace.is_some(), mdl.flux_force.is_some());
+403:    trace_flux: Option<String>,
+406:    flux_forcer: Option<String>,
+412:    options_actives: bool,
+435:    ppl_texte: bool, prompt: Option<String>, limit: usize, depuis: usize,
+504:            "--trace-flux" => { o.trace_flux = Some(suivant(i).clone()); 2 }
+505:            "--flux-forcer" => { o.flux_forcer = Some(suivant(i).clone()); 2 }
+507:            "--options-actives" => { o.options_actives = true; 1 }
+536:            "--depuis" => { o.depuis = suivant(i).parse().unwrap(); 2 }
+617:fn run_infer(opt: Options) {
+619:    let montre_options = opt.options_actives;
+629:        trace_flux, trace_couches, ..
+653:    if let Some(chemin) = trace_flux.as_deref() {
+666:    // Appliqués en perplexité depuis toujours, oubliés ici : la déstructuration
+681:        options_actives(&mdl, "inférence", ctx_impose, dense, keep);
+747:        println!("ids depuis {f} : {} tokens", ids.len());
+827:        for (pos, &t) in ids.iter().enumerate() { last = mdl.forward(t, pos); }
+838:            last = mdl.forward(next, ids.len() + step);
+… [2603 caractères tronqués]
+  ```
+
+- **bash** `{"command": "git show 1a4beb3 -- drave-core/src/main.rs drave-core/src/model.rs", "description": "Show options-actives diff", "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+commit 1a4beb37cac44cb9938a8aaa619b0947678d28d7
+Author: Stéphane <stephane@localhost>
+Date:   Wed Sep 30 13:04:20 2026 -0400
+
+    `--options-actives` : le tableau de bord des réglages qui agissent
+    
+    Les deux relectures ont trouvé le même mode d'échec, et il n'est pas dans un
+    calcul : **huit drapeaux « analysés mais jamais appliqués »** en une session, tous
+    invisibles — la sortie ne disait nulle part quelle valeur agissait. Le tableau de
+    bord lit le MODÈLE après toutes les affectations et imprime ce qu'il utilise
+    vraiment :
+    
+    ```
+    [options] mode perplexité · contexte 64 (imposé) · dense true · keep 0.050
+    [options] activation : niveaux 127 · seuil 0 · k-WTA 0 · renorm false
+    [options] top-k : attn 0 · q·k 0 · MoE 0 · par projection [0, 0, 0, 0, 0, 0, 0]
+    [options] couches 0..24 · flux brut false · trace false · rejeu false
+    [options] fenêtre 0 · motif 0 · seuil push 0.22 · lot 1 · ffn_gain Some((0, 4.0)) · hebb false
+    [options] cache KV : 8 bits · clés en f16 · f16 avant false
+    ```
+    
+    Un `--keep 0.05` qui n'aurait pas pris afficherait `keep 1.000` : le défaut saute
+    aux yeux au lieu de se cacher dans un calcul. Branché dans
+… [8061 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Vérification du tableau de bord en perplexité et du parseur de drapeaux
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/main.rs", "offset": 2889, "limit": 120}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/main.rs</path>
+<type>file</type>
+<content>
+2889: fn run_ppl(opt: Options) {
+2890:     let montre_options = opt.options_actives;
+2891:     let Options {
+2892:         ids_file: idfile, texte_file, ppl_texte: _, limit, depuis,
+2893:         ctx: ctx_opt, threads: threads_opt, abits: abits_opt,
+2894:         ctx_impose, threads_impose, abits_impose,
+2895:         dense, auto, q4, b6, attn_window, swa_pattern,
+2896:         sans_fenetre, attn_sinks, attn_topk, qk_topk, act_thresh, act_topk, act_renorm,
+2897:         topk_proj, moe_topk, patch: patch_file, hebb_layer, hebb_q, hebb_out,
+2898:         ffn_gain, logits_bin, keep,
+2899:         ppl_profil, lot, profil_neurones, neurones_sortie, trace_flux, trace_couches, flux_forcer,
+2900:         harmony, harmony_contexte, sans_yarn, ..
+2901:     } = opt;
+2902:     let lot = lot.max(1);
+2903:     let path = &modele_chemin();
+2904:     // Défauts du mode PERPLEXITÉ : 256 jetons, trois quarts des cœurs, 16 bits
+2905:     // d'activation (la référence de non-régression en dépend).
+2906:     let cpu = std::thread::available_parallelism().map(|n| n.get()).unwrap_or(8);
+2907:  
+… [5619 caractères tronqués]
+  ```
+
+- **bash** `{"command": "git show 01b7274 -- drave-core/src/main.rs; echo \"=== parser ===\"; sed -n '470,600p' drave-core/src/main.rs", "description": "Show unknown flag diff and parser", "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+commit 01b7274a5e562546ffdecf88a7f9db6a4fae221e
+Author: Stéphane <stephane@localhost>
+Date:   Wed Sep 30 13:06:06 2026 -0400
+
+    Un drapeau inconnu n'est plus avalé en silence
+    
+    `--keeep 0.05` (une faute de frappe) faisait tourner le modèle entier sans
+    élagage et sans un mot. L'analyse retient maintenant les `--xxx` qu'elle ne
+    reconnaît pas et les nomme, en renvoyant au tableau de bord `--options-actives`
+    qui montre, lui, ce qui s'applique vraiment. Vérifié : la faute est signalée, et
+    l'orthographe correcte ne produit aucun message.
+
+diff --git a/drave-core/src/main.rs b/drave-core/src/main.rs
+index fe513b6..7325169 100644
+--- a/drave-core/src/main.rs
++++ b/drave-core/src/main.rs
+@@ -410,6 +410,10 @@ struct Options {
+     /// coûteux du dépôt — huit drapeaux « analysés mais jamais appliqués » en une
+     /// seule session : une valeur affichée ici est une valeur qui agit.
+     options_actives: bool,
++    /// Drapeaux `--xxx` que l'analyse n'a PAS reconnus. Ils étaient ignorés en
++    /// silence : `--keeep 0.05` (une faute de frappe) faisait tourner le modèle
++    /// entier sans élagage et sans un mot.
++    inconnus: Vec<String>,
+     /// Adresse d'écoute d
+… [9455 caractères tronqués]
+  ```
+

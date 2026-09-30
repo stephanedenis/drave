@@ -7,10 +7,10 @@
 | Début | 2026-09-30 13:10 |
 | Durée | 0.0 h |
 | Tours | 1 |
-| Messages | 8 |
-| Appels d'outils | 10 |
+| Messages | 11 |
+| Appels d'outils | 16 |
 | Fichiers touchés | 0 |
-| Commandes | 8 |
+| Commandes | 11 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -23,7 +23,7 @@
 
 ### Tour 1 — Tu es relecteur ADVERSARIAL dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (projet « Drave » : moteur d'i … [3709 caractères tronqués]
 
-*10 appels d'outils.* Actions notables :
+*16 appels d'outils.* Actions notables :
 
 - bash — List recent commits and repo root
 - bash — Show stats for target commits
@@ -34,10 +34,13 @@
 - bash — Grep flux modes and caps
 - bash — Grep trace key logic
 - read
+- bash — Grep call sites in main.rs
+- bash — Show options-actives diff
+- bash — Show unknown flag diff and parser
 
 **Synthèse produite :**
 
-⏵ Lecture des chemins d'écriture de trace (forward_lot, forward, forward_mla, flux_lot)
+⏵ Lecture du découpage en fenêtres et de la boucle de notation
 
 ## 3. Travail accompli
 
@@ -56,6 +59,9 @@
 - **T1** Show R4 cap diff
 - **T1** Grep flux modes and caps
 - **T1** Grep trace key logic
+- **T1** Grep call sites in main.rs
+- **T1** Show options-actives diff
+- **T1** Show unknown flag diff and parser
 
 ## 4. Mesures et résultats marquants
 

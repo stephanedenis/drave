@@ -28910,3 +28910,19 @@ plus aucun repli silencieux.
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='docs/roadmap.md'; s=open(p).read()\nv = \"\"\"| 1.4 | **Écart int8 résiduel** (+3,0 % contre +0,8 % chez llama.cpp à 8 192) | ⏳ | **expérience conçue** : garder les CLÉS en f32 et quantifier les VALEURS, puis l'i … [2686 caractères tronqués]`
+
+  ```
+roadmap : 1.4 ✅ et la section format renvoyée à la spec
+b2767fe Feuille de route : 1.4 attribuée et la section format renvoyée à sa spécification
+13:11:20
+cles_f16_valeurs_int8      :
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/banc_chrono_lot.sh <<'EOF'\n#!/bin/bash\n# Chronos du mode lot, machine au repos (après les campagnes) : le lot doit\n# gagner sur les DEUX tableaux — moins d'allers-retours (latence) et un\n# préremplissage par lots plus  … [1312 caractères tronqués]`
+
+  ```
+chronos en file d'attente (après la campagne f16)
+13:11:33
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n 53p REPRISE.md; grep -rn \"19,3045\\|19.3045\\|19,30\\b\" --include=\"*.md\" reports/ docs/ | head -4; python3 - <<'PY'\np='docs/format-flux.md'; s=open(p).read()\nv = \"\"\"Taille : `14 + 6 × n_actifs` en v1, `14 + 3 × n_acti … [1046 caractères tronqués]`

@@ -7,12 +7,12 @@
 | Début | 2026-09-28 14:46 |
 | Durée | 46.4 h |
 | Tours | 45 |
-| Messages | 1791 |
-| Appels d'outils | 1692 |
+| Messages | 1793 |
+| Appels d'outils | 1694 |
 | Fichiers touchés | 44 |
-| Commandes | 1372 |
+| Commandes | 1374 |
 | Sous-agents | 7 |
-| Commits | 129 |
+| Commits | 130 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -2055,7 +2055,7 @@ Je vérifie l'heure à chaque itération et j'arrête à 12:06, en laissant un p
 
 ### Tour 45 — as-tu ce qu'il te faut pour te rendre à 15h en travaillaint avec un maximum d'autonomie et de parallélisme d'activités?
 
-*193 appels d'outils.* Actions notables :
+*195 appels d'outils.* Actions notables :
 
 - bash — Probe machine, GPU, disk, network state
 - bash — Identify GPU users and stray processes
@@ -2071,7 +2071,7 @@ Je vérifie l'heure à chaque itération et j'arrête à 12:06, en laissant un p
 - bash — Understand batched PPL reference path
 - bash — Add batched imposed states to forward_lot
 - list_agents
-- … et 171 autres
+- … et 173 autres
 
 **Synthèse produite :**
 
@@ -2180,7 +2180,7 @@ Je vérifie l'heure à chaque itération et j'arrête à 12:06, en laissant un p
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 1332 autres
+- … et 1334 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2457,4 +2457,5 @@ Je vérifie l'heure à chaque itération et j'arrête à 12:06, en laissant un p
 - Portes revérifiées après la journée : 19,3885 · 15,1757 · 11 tests  La porte gpt-oss était la seule que la relecture adversariale n'avait pas pu exécuter (borne
 - REPRISE : le noyau GPU de top-k en tête des prochains chantiers  Les deux Quadro sont libres, le cadre GPU existe (compiler.sh, drave_gpu.cu, sm_75) et c'est le
 - Feuille de route : 1.4 attribuée et la section format renvoyée à sa spécification  La 1.4 était encore « expérience conçue » alors qu'elle est faite et que la c
+- Format de flux : la taille par neurone actif, dense et creuse  6,02 et 3,01 sont les valeurs d'une trace DENSE ; une trace creuse coûte 6,04 et 3,04, parce que 
 

@@ -31,8 +31,10 @@ liste     couche       u16          < 1000 : entrée d'attention
 fin       sentinelle   u16          0xFFFF (optionnelle : la fin de fichier suffit)
 ```
 
-Taille : `14 + 6 × n_actifs` en v1, `14 + 3 × n_actifs` en v2. Mesuré : **6,02
-octets par neurone actif** en v1, et **3,01** en v2.
+Taille : `14 + 6 × n_actifs` en v1, `14 + 3 × n_actifs` en v2. Mesuré sur une
+trace **dense** : **6,02 octets par neurone actif** en v1, **3,01** en v2 ; sur une
+trace creuse (39,9 % d'activité) : 6,04 et 3,04 — deux centièmes de plus, parce que
+l'en-tête de liste de 14 octets pèse alors sur trois fois moins de neurones.
 
 ### Version 2 : les indices par écarts
 
