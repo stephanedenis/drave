@@ -241,6 +241,67 @@ Une porte de non-régression se mesure **sans** `DRAVE_GPU` : la variable dépor
 elle seule les projections Q8_0 de plus de 8 Mo, ce qui change le chiffre de
 0,06 % (15,1757 → 15,1667 sur gpt-oss).
 
+## 6bis. Session « Drave » — le calcul réparti tient debout
+
+Tout est mesuré, tout est commité. Détail complet dans `docs/roadmap.md` (phases
+0 à 3) et les rapports cités.
+
+**Le découpage en deux nœuds est fidèle** (`reports/rapport-phase3-reparti.md`) :
+écart local/réparti **0,00e0** — 144,8289 des deux côtés, 40 puis 199 flux. Il a
+fallu deux corrections dans `Model::forward`, et la première ne suffisait pas :
+
+1. la boucle partait de `0` au lieu de `couche_debut..couche_fin` : le pilote
+   calculait les 24 couches, envoyait l'état FINAL, et le pair les recalculait
+   toutes par-dessus (`forward_lot` et `forward_mla`, eux, respectaient la plage) ;
+2. la norme finale était appliquée DEUX fois (le nœud moteur normait parce que sa
+   plage allait jusqu'à la dernière couche, puis le pilote normait). La règle est
+   maintenant portée par un drapeau explicite, `flux_brut`.
+
+**Le protocole de flux est en v2** (`docs/format-flux.md`) : en-tête de 39 octets
+avec version, mode et **réglages d'activation** — deux nœuds réglés différemment
+calculaient deux choses différentes en silence (0,69 d'écart mesuré). Un pair
+d'une autre version est refusé en le disant. `--flux-serveur` accepte
+`hôte:port` (donc un pair distant) et `docs/colab-reparti.md` est la recette de
+la phase 3.4.
+
+**Ce que coûte le transport** (`reports/rapport-transport-liste.md`) :
+
+| | octets par flux | écart local/réparti |
+|---|---|---|
+| dense f32 | 3 623 | **0,00e0** |
+| listes i16, seuil 0,01 | ~2 300 | 2,7e-2 |
+| échelles par bloc, seuil 0,01 | 2 268 | 2,7e-2 |
+
+`TCP_NODELAY` a divisé l'attente du pair par six (**97,6 → 16,1 ms** par jeton,
+soit 1,01× le calcul local) : le banc réparti prend maintenant le temps du calcul
+local, à logits identiques. Le seuil de rentabilité (phase 3.3) est donc une
+affaire de latence, pas de débit — moins de 1 Mbit/s par flux de jetons.
+
+**Phase 1.4 attribuée** (`reports/rapport-attribution-kv.md`) : l'écart du cache
+KV int8 (+3,0 % à 8 192) vient **entièrement des clés** — clés f32 + valeurs int8
+donne +0,023 %, clés int8 + valeurs f32 donne +3,01 %. Réglage utilisable tout de
+suite : `DRAVE_KV_BITS=8 DRAVE_KV_K_F32=1` (75 % de la taille f32 pour +0,02 %).
+
+**Une hypothèse réfutée** : transmettre l'entrée NORMÉE au lieu du résidu brut
+passait l'écart de 0,00e0 à **5,61e0** en mode dense — la connexion résiduelle a
+besoin du résidu lui-même. Drapeau retiré, réfutation écrite.
+
+### Les prochains chantiers, dans l'ordre
+
+1. **Préremplissage par LOTS sur le fil** : le transport est séquentiel (un flux
+   par jeton), c'est le vrai bloqueur d'une démonstration Colab utile — la vision
+   dit « préremplissage réparti, décodage séquentiel ».
+2. **Clés du cache KV** : clés f32 + valeurs int4 (62,5 % de la taille f32), ou
+   un meilleur quantificateur de clés (échelle par tête, rotation avant
+   quantification) pour passer sous les +0,8 % de llama.cpp.
+3. **Transport** : rendre le mode « blocs » meilleur que le dense en toutes
+   circonstances (l'écart croît avec la longueur : chercher pourquoi, sans doute
+   la dérive du KV de chaque nœud).
+4. Le reste des phases 1 et 2 de `docs/roadmap.md` (noyau GPU de top-k,
+   ordonnanceur de placement, flux de poids depuis le NVMe).
+
+---
+
 ## 7. Carte du dépôt
 
 ```
@@ -289,4 +350,22 @@ cd drave-core && cargo build --release && cargo test --release
 
 # 4. puis §6.b : la rotation ne bascule plus qu'au-delà de 1,25 × la longueur
 #    d'origine déclarée (5 120 pour gpt-oss) — mesuré, voir docs/contexte-long.md §5.ter
+
+# 5. le calcul réparti (§6bis) : deux nœuds, 12 couches chacun, et le même chiffre
+#    des deux côtés. Le nœud moteur doit être lancé AVANT le pilote.
+cd ..   # racine du dépôt
+(./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf \
+     --flux-serveur 45999 --ctx 256 > /tmp/serveur.log 2>&1 &)
+sleep 3
+./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf \
+    --ppl-reparti 127.0.0.1:45999 --couches-locales 12 --limit 40 --ctx 256
+# attendu : « écart : 0.00e0 » en mode dense (le transport f32 est exact)
+
+# 6. le contrôle qui attrape les fautes de banc : `tools/pair_factice.py` parle le
+#    protocole sans charger de modèle et DIT ce qu'il reçoit (tailles, modes,
+#    réglages). C'est lui qui a montré un flux de 919 canaux là où le modèle en a
+#    896 — mon compteur divisait par le nombre de jetons notés, pas de flux envoyés.
+python3 tools/pair_factice.py 45760 896 &
+./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf \
+    --ppl-reparti 127.0.0.1:45760 --couches-locales 12 --limit 4 --ctx 256
 ```

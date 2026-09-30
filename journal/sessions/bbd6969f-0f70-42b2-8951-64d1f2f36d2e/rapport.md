@@ -7,12 +7,12 @@
 | Début | 2026-09-28 14:46 |
 | Durée | 44.5 h |
 | Tours | 44 |
-| Messages | 1544 |
-| Appels d'outils | 1459 |
+| Messages | 1546 |
+| Appels d'outils | 1461 |
 | Fichiers touchés | 44 |
-| Commandes | 1160 |
+| Commandes | 1162 |
 | Sous-agents | 1 |
-| Commits | 91 |
+| Commits | 92 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -1995,7 +1995,7 @@ Je vérifie l'heure à chaque itération et j'arrête à 12:06, en laissant un p
 
 ### Tour 44 — pendant que les charges locales s'executent, peux-tu avancer des chantiers légers sur les ressources loçcale ou d'analys … [7 caractères tronqués]
 
-*113 appels d'outils.* Actions notables :
+*115 appels d'outils.* Actions notables :
 
 - bash — Write and run the pure flux analysis tool
 - bash — Document the flux analysis and commit
@@ -2011,7 +2011,7 @@ Je vérifie l'heure à chaque itération et j'arrête à 12:06, en laissant un p
 - bash — Inspect state after timeout
 - bash — Rerun pre-fix distributed test in background
 - bash — Inspect all final-norm condition sites
-- … et 83 autres
+- … et 85 autres
 
 **Synthèse produite :**
 
@@ -2114,7 +2114,7 @@ Le mode « entrée normée » est **faux** (dense : 5,61e0 au lieu de 0,00e0) : 
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 1120 autres
+- … et 1122 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2353,4 +2353,5 @@ Le mode « entrée normée » est **faux** (dense : 5,61e0 au lieu de 0,00e0) : 
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > docs/colab-reparti.md <<'EOF' # Répétition Colab — la phase 3.4, pas à pas  Objectif : deux machines
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p='reports/rapport-transport-liste.md'; s=open(p).read() v = """Configuration utilisable 
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p='reports/rapport-transport-liste.md'; s=open(p).read() v = """D'où les deux suites poss
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p='REPRISE.md'; s=open(p).read() ancre = "## 7. Carte du dépôt" assert s.count(ancre) == 
 

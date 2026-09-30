@@ -24556,3 +24556,35 @@ Finished `release` profile [optimized] target(s) in 20.66s
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/rapport-transport-liste.md'; s=open(p).read()\nv = \"\"\"D'où les deux suites possibles, par ordre de propreté :\n\n* **transmettre l'entrée normée** de la première couche distante (le nœud\n  distant sau … [4497 caractères tronqués]`
+
+  ```
+réfutation documentée
+roadmap : réfutation notée
+ journal/README.md | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+fb8183a L'entrée normée sur le fil : hypothèse RÉFUTÉE par la mesure
+11:14:27
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n 179,200p REPRISE.md; echo \"=== §8 ===\"; sed -n 267,300p REPRISE.md", "description": "Read REPRISE next-steps and §8"}`
+
+  ```
+| aiguille v2 (12 sondes) | **12/12 trouvées** : 1,5B 512/2048, 30B 2048, gpt-oss 4096, profondeurs 0,1/0,5/0,9 |
+| KV déporté, ctx 512 (point de croisement) | attention 2,91 (CPU) contre 3,22 ms (GPU) : le noyau ne paie qu'au-delà de ~4 000 clés |
+| miroir VRAM paginé (capacité doublée à la demande) | à **ctx 1 M** : cache CPU 25,77 Go contre **0,05 Go** de VRAM pour 512 jetons écrits (l'allocation d'un bloc exigeait 25,77 Go et refusait) ; perplexité 13,1369 inchangée |
+| rotation, comparaison appariée | RoPE simple gagne à TOUTES les longueurs mesurées : 128 à 1 536 (39,5 → 298,6), 5 120 (**9,70 contre 1 269,18**), 16 384 (**35,18 contre 1 133,02**) |
+
+### Ce qu'il faut faire ensuite, dans l'ordre
+
+État au moment d'écrire : les huit chantiers de la campagne précédente sont clos
+(voir le tableau du §6), et la campagne « six nouveaux chantiers » a livré
+l'aiguille v2, le dépaquetage vectorisé du noyau d'attention, les experts MXFP4
+en VRAM, l'attention par lots déportée et la pagination des deux caches KV. Ce
+qui reste est classé par rentabilité mesurée.
+
+1. **Noyau de la tête Q8_0.** Le chemin CPU de la tête par lots est **lié au
+   calcul** (5,5 ms/jeton pour Qwen 0.5B, le lot n
+… [1858 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='REPRISE.md'; s=open(p).read()\nancre = \"## 7. Carte du dépôt\"\nassert s.count(ancre) == 1\nneuf = \"\"\"## 6bis. Session « Drave » — le calcul réparti tient debout\n\nTout est mesuré, tout est commité. Détail c … [5677 caractères tronqués]`
