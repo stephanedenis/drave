@@ -19131,3 +19131,114 @@ accord (bruit de virgule flottante)
 ⏵ Bloc ViT validé : 1,8e-6 contre la référence numpy
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='docs/plan-mla-vision.md'; s=open(p).read()\nold = \"\"\"| tranche | écart max relatif contre numpy |\n|---|---|\n| embedding de patchs (convolution 14 × 14) | **5,37e-07** |\n| projecteur (fusion 2 × 2 → `mm.0` → … [2868 caractères tronqués]`
+
+  ```
+docs à jour
+9cdc4ae Vision : une couche du ViT est validée aussi (1,8e-6)
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.09s
+  ```
+
+### 🤖 Assistant
+
+⏵ Tour 9 : la couche du ViT est validée, la tour tient sur trois pattes
+
+## Fait dans ce tour
+
+**Vision — une couche complète du ViT est implémentée et validée.** Le banc calcule maintenant le bloc 0 de bout en bout :
+
+- LayerNorm (`ln1`, `ln2`, eps relevé dans `clip.vision.attention.layer_norm_epsilon`) ;
+- q/k/v **avec leurs biais** — l'erreur classique de ce dépôt, ici évitée ;
+- attention globale, `attn_out` + biais, deux résidus ;
+- MLP `ffn_gate`/`ffn_up` + biais, **SiLU** (`clip.use_silu = 1` : ce n'est *pas* un GELU dans le ViT, contrairement au projecteur), `ffn_down` + biais.
+
+La référence numpy refait la même plomberie : **écart max relatif 1,82e-06**. Les trois tranches validées du chemin image :
+
+| tranche | écart contre numpy |
+|---|---|
+| embedding de patchs (convolution 14 × 14) | **5,37e-07** |
+| une couche du ViT | **1,82e-06** |
+| projecteur (fusion 2 × 2 → `mm.0` → GELU → `mm.2`) | **1,73e-06** |
+
+## Reste, dans l'ordre
+
+1. la **rotation 2-D** (mRoPE) des patchs — dont la convention reste le seul point non vérifiable localement, à lever en comparant les deux conventions plausibles à la référence, puis la sortie complète contre `llama-mtmd-cli` ;
+2. la **fenêtre locale** une couche sur huit (`n_wa_pattern = 8`) ;
+3. les **32 couches empilées** + `v.post_ln` (mécanique, une fois 1 et 2 réglés) ;
+4. l'**injection des embeddings** dans le flux de jetons, qui demande un chemin partant d'un vecteur plutôt que de `token_embd`.
+
+## État général
+
+| # | chantier | état |
+|---|---|---|
+| 1 | aiguille | ✅ 12/12 |
+| 2 | chemin GPU (5 sous-items) | ✅ |
+| 3 | mémoire KV | ✅ |
+| 4 | rotation à 16 k | ✅ (35,18 contre 1 133,02) |
+| 5 | MLA ✅ (5,2e-7) · vision ⏳ trois tranches validées, rotation + fenêtre locale à faire | en cours |
+| 6 | hygiène | ✅ |
+
+`cargo test` 6/6, arbre propre, portes de non-régression intactes (chemins MLA et vision isolés du chemin standard).
+
+L'objectif reste **actif** : la tour de vision est à mi-chemin, chaque étape restante étant décrite avec ses formes et ses conventions dans `docs/plan-mla-vision.md`.
+
+
+## Tour 19
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Réaliser les 6 nouveaux chantiers du projet qtrinet-core, dans l'ordre : (1) relancer le test de l'aiguille sur contexte long (remplissage varié en vrai texte, moins de sondes, réponses plus longues) sur un modèle capable, grâce au préremplissage par lots et au KV déporté ; (2) chemin GPU : dépaquetage vectorisé du noyau d'attention (13,2 ms/couche à 1 M en int4 vers ~3 ms), brancher MXFP4 dans le moteur avec une politique de résidence des experts, attention par lots sur GPU dans forward_lot, noyau de tête Q8_0 accéléré (AVX2 ou déport), et usage du second GPU ; (3) mémoire : pagination du cache KV côté CPU (25,77 Go réservés à ctx 1 M pour 512 jetons écrits) et test de l'hypothèse « clés en f16 avant quantification » pour l'écart int8 avec llama.cpp à 8 192 (+3,0 % contre +0,8 %) ; (4) rotation au-delà de 5 120 jetons (passe à 16 k) ; (5) structurel : MLA (aucun modèle local — construire un modèle MLA synthétique et valider contre une référence indépendante) et vision (poids Qwen2.5-VL et projecteur mmproj présents) ; (6) hygiène : réécrire la section « Ce qu'il faut faire ensuite » de REPRISE.md et y consigner les pièges QT_GPU/QT_GPU_TETE/QT_GPU_KV. Chaque chantier doit être implémenté, mesuré (portes de non-régression Qwen 19,3885 et gpt-oss 15,1757 sans QT_GPU), documenté dans le dépôt et commité."
+Round: 10/30
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "ls /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/ 2>/dev/null | head -20; find / -maxdepth 4 -name \"llama-mtmd*\" -o -maxdepth 4 -name \"libmtmd*\" 2>/dev/null | head -3; ls ~/llama.cpp 2>/dev/null | head -5", "description": "Check for llama.cpp mtmd availability"}`
+
+  ```
+aiguille.py
+archive_sessions.py
+compare_logits.py
+harmony_canonique.py
+make_patch.py
+mla_synthetique.py
+__pycache__
+ref_logits
+ref_logits.cpp
+ref_logits.md
+session_report.py
+vision_ref.py
+/usr/lib/ollama/libmtmd.so
+/usr/lib/ollama/libmtmd.so.0
+/usr/lib/ollama/libmtmd.so.0.0.1
+  ```
+
+- **bash** `{"command": "nm -D --defined-only /usr/lib/ollama/libmtmd.so 2>/dev/null | grep -iE \"mtmd_(init|encode|get_output|helper|tokenize|bitmap)\" | head -12; echo \"---\"; nm -D --defined-only /usr/lib/ollama/libllama.so 2>/dev/null | grep -ciE \"llama_\"; ls /usr/include/llama.h /usr/include/mtmd.h 2>/d … [117 caractères tronqués]`
+
+  ```
+0000000000050600 T mtmd_bitmap_free
+0000000000050290 T mtmd_bitmap_get_data
+00000000000502e0 T mtmd_bitmap_get_id
+00000000000502b0 T mtmd_bitmap_get_n_bytes
+0000000000050270 T mtmd_bitmap_get_nx
+0000000000050280 T mtmd_bitmap_get_ny
+0000000000051ee0 T mtmd_bitmap_init
+0000000000051f80 T mtmd_bitmap_init_from_audio
+0000000000050580 T mtmd_bitmap_init_lazy
+00000000000502d0 T mtmd_bitmap_is_audio
+00000000000502f0 T mtmd_bitmap_set_id
+0000000000052200 T mtmd_encode
+---
+3989
+/usr/lib/ollama/libggml-base.so
+/usr/lib/ollama/libggml-base.so.0
+/usr/lib/ollama/libggml-base.so.0.19.0
+/usr/lib/ollama/libggml-cpu-alderlake.so
+/usr/lib/ollama/libggml-cpu-cannonlake.so
+  ```
+
+### 🤖 Assistant
+
+⏵ Découverte : une référence de vision existe sur la machine (libmtmd d'ollama)
+
+- **bash** `{"command": "nm -D --defined-only /usr/lib/ollama/libmtmd.so 2>/dev/null | grep -E \"mtmd_(init_from_file|get_output_embd|free|encode_chunk|helper)\" | head -6; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='docs/plan-mla-vision.md'; s=open(p).read()\nold = \"\"\"### Ce q … [2596 caractères tronqués]`

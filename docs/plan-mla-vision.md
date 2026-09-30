@@ -236,6 +236,31 @@ l'attention locale une sur huit, la norme finale, le projecteur `mm.0`/`mm.2`
 (fusion 2 × 2), et enfin l'injection des embeddings dans le flux de jetons — le
 point d'architecture qui manque au moteur.
 
+### Une RÉFÉRENCE est disponible sur cette machine (découverte)
+
+Le plan disait « valider contre llama.cpp si `llama-mtmd-cli` est disponible » :
+il ne l'est pas, mais **ollama embarque la bibliothèque multimodale de
+llama.cpp** — `/usr/lib/ollama/libmtmd.so` exporte `mtmd_init_from_file`,
+`mtmd_bitmap_init`, `mtmd_tokenize`, `mtmd_encode`… et `/usr/lib/ollama/libllama.so`
+expose 3 989 symboles `llama_*`. Il n'y a pas d'en-têtes dans `/usr/include`, mais
+ce dépôt a l'habitude de déclarer à la main ce dont il a besoin (c'est ainsi que
+les noyaux CUDA sont liés).
+
+Recette pour la prochaine session :
+
+1. charger le modèle de texte (`llama_model_load_from_file`) — la 4,4 Go
+   Qwen2.5-VL-Q4_K_M est là ;
+2. `mtmd_init_from_file(mmproj, model, params)` avec une structure de paramètres
+   **remise à zéro** (le tout-zéro donne les valeurs par défaut) ;
+3. `mtmd_bitmap_init(28, 28, image_rgb)` avec la MÊME image déterministe que le
+   banc, puis `mtmd_tokenize` sur un texte contenant le marqueur d'image ;
+4. `mtmd_encode` puis `mtmd_get_output_embd` → les embeddings d'image, à
+   comparer aux 3 584 valeurs du projecteur du moteur.
+
+C'est la seule vérification qui trancherait D'UN COUP la convention de rotation
+2-D, la fenêtre locale et la fusion 2 × 2 : elle compare la sortie complète, pas
+une tranche.
+
 ### Ce qu'il faut écrire, dans l'ordre
 
 1. **pré-traitement** : redimensionnement (le ViT de Qwen2.5-VL accepte des

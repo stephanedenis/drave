@@ -6,13 +6,13 @@
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
 | Durée | 30.2 h |
-| Tours | 18 |
-| Messages | 1206 |
-| Appels d'outils | 1178 |
+| Tours | 19 |
+| Messages | 1211 |
+| Appels d'outils | 1181 |
 | Fichiers touchés | 38 |
-| Commandes | 911 |
+| Commandes | 914 |
 | Sous-agents | 1 |
-| Commits | 51 |
+| Commits | 52 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -61,6 +61,8 @@
 **Tour 17** — <goal_round> Objective: "Réaliser les 6 nouveaux chantiers du projet qtrinet-core, dans l'ordre : (1) relancer le test de l'aiguille sur contexte long (remplissage varié en vrai texte, moins de sondes, réponses plus longues) sur un modèle capable, grâce au préremplissage par lots et au KV déporté ; (2) chemin GPU : dépaquetage vectorisé du noyau d'attention (13,2 ms/couche à 1 M en int4 vers ~3 ms … [1491 caractères tronqués]
 
 **Tour 18** — <goal_round> Objective: "Réaliser les 6 nouveaux chantiers du projet qtrinet-core, dans l'ordre : (1) relancer le test de l'aiguille sur contexte long (remplissage varié en vrai texte, moins de sondes, réponses plus longues) sur un modèle capable, grâce au préremplissage par lots et au KV déporté ; (2) chemin GPU : dépaquetage vectorisé du noyau d'attention (13,2 ms/couche à 1 M en int4 vers ~3 ms … [1491 caractères tronqués]
+
+**Tour 19** — <goal_round> Objective: "Réaliser les 6 nouveaux chantiers du projet qtrinet-core, dans l'ordre : (1) relancer le test de l'aiguille sur contexte long (remplissage varié en vrai texte, moins de sondes, réponses plus longues) sur un modèle capable, grâce au préremplissage par lots et au KV déporté ; (2) chemin GPU : dépaquetage vectorisé du noyau d'attention (13,2 ms/couche à 1 M en int4 vers ~3 ms … [1492 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -833,7 +835,58 @@ L'objectif reste **actif** : il ne manque que le corps de la tour de vision, et 
 
 **Synthèse produite :**
 
-⏵ Bloc ViT validé : 1,8e-6 contre la référence numpy
+⏵ Tour 9 : la couche du ViT est validée, la tour tient sur trois pattes
+
+\## Fait dans ce tour
+
+**Vision — une couche complète du ViT est implémentée et validée.** Le banc calcule maintenant le bloc 0 de bout en bout :
+
+- LayerNorm (`ln1`, `ln2`, eps relevé dans `clip.vision.attention.layer_norm_epsilon`) ;
+- q/k/v **avec leurs biais** — l'erreur classique de ce dépôt, ici évitée ;
+- attention globale, `attn_out` + biais, deux résidus ;
+- MLP `ffn_gate`/`ffn_up` + biais, **SiLU** (`clip.use_silu = 1` : ce n'est *pas* un GELU dans le ViT, contrairement au projecteur), `ffn_down` + biais.
+
+La référence numpy refait la même plomberie : **écart max relatif 1,82e-06**. Les trois tranches validées du chemin image :
+
+| tranche | écart contre numpy |
+|---|---|
+| embedding de patchs (convolution 14 × 14) | **5,37e-07** |
+| une couche du ViT | **1,82e-06** |
+| projecteur (fusion 2 × 2 → `mm.0` → GELU → `mm.2`) | **1,73e-06** |
+
+\## Reste, dans l'ordre
+
+1. la **rotation 2-D** (mRoPE) des patchs — dont la convention reste le seul point non vérifiable localement, à lever en comparant les deux conventions plausibles à la référence, puis la sortie complète contre `llama-mtmd-cli` ;
+2. la **fenêtre locale** une couche sur huit (`n_wa_pattern = 8`) ;
+3. les **32 couches empilées** + `v.post_ln` (mécanique, une fois 1 et 2 réglés) ;
+4. l'**injection des embeddings** dans le flux de jetons, qui demande un chemin partant d'un vecteur plutôt que de `token_embd`.
+
+\## État général
+
+| # | chantier | état |
+|---|---|---|
+| 1 | aiguille | ✅ 12/12 |
+| 2 | chemin GPU (5 sous-items) | ✅ |
+| 3 | mémoire KV | ✅ |
+| 4 | rotation à 16 k | ✅ (35,18 contre 1 133,02) |
+| 5 | MLA ✅ (5,2e-7) · vision ⏳ trois tranches validées, rotation + fenêtre locale à faire | en cours |
+| 6 | hygiène | ✅ |
+
+`cargo test` 6/6, arbre propre, portes de non-régression intactes (chemins MLA et vision isolés du chemin standard).
+
+L'objectif reste **actif** : la tour de vision est à mi-chemin, chaque étape restante étant décrite avec ses formes et ses conventions dans `docs/plan-mla-vision.md`.
+
+### Tour 19 — <goal_round> Objective: "Réaliser les 6 nouveaux chantiers du projet qtrinet-core, dans l'ordre : (1) relancer le test d … [1772 caractères tronqués]
+
+*3 appels d'outils.* Actions notables :
+
+- bash — Check for llama.cpp mtmd availability
+- bash — Check mtmd symbols for a vision reference
+- bash — Document the mtmd reference discovery
+
+**Synthèse produite :**
+
+⏵ Découverte : une référence de vision existe sur la machine (libmtmd d'ollama)
 
 ## 3. Travail accompli
 
@@ -926,7 +979,7 @@ L'objectif reste **actif** : il ne manque que le corps de la tour de vision, et 
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 871 autres
+- … et 874 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1125,4 +1178,5 @@ L'objectif reste **actif** : il ne manque que le corps de la tour de vision, et 
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p='docs/plan-mla-vision.md'; s=open(p).read() old = """### ÉTAT : première tranche FAITE 
 - vision : détailler le pas suivant (couche, rotation 2-D, attention locale, injection)  Le plan dit maintenant, étape par étape, ce qui reste à écrire pour le co
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p='docs/plan-mla-vision.md'; s=open(p).read() old = """| tranche | écart max relatif cont
+- vision : une RÉFÉRENCE existe sur la machine (libmtmd d'ollama)  Le plan pariait sur llama-mtmd-cli ; il n'y est pas, mais ollama embarque la bibliothèque multi
 
