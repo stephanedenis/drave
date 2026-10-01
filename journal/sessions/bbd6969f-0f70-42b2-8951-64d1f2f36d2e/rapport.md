@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 69.2 h |
+| Durée | 69.3 h |
 | Tours | 51 |
-| Messages | 2929 |
-| Appels d'outils | 2786 |
+| Messages | 2944 |
+| Appels d'outils | 2801 |
 | Fichiers touchés | 63 |
-| Commandes | 2401 |
+| Commandes | 2416 |
 | Sous-agents | 22 |
-| Commits | 242 |
+| Commits | 243 |
 | Compactages de contexte | 4 |
 
 ## Objectifs déclarés
@@ -2400,7 +2400,7 @@ Les téléchargements avancent en parallèle : **DeepSeek-V4.1-Flash 68 %** (249
 
 ### Tour 51 — continue jusqu'à 13h HAE
 
-*223 appels d'outils.* Actions notables :
+*238 appels d'outils.* Actions notables :
 
 - bash — Check time and running processes
 - job_list
@@ -2416,11 +2416,11 @@ Les téléchargements avancent en parallèle : **DeepSeek-V4.1-Flash 68 %** (249
 - todo_write
 - bash — Count buffer accesses in gguf.rs
 - bash — Map functions and base computations
-- … et 209 autres
+- … et 224 autres
 
 **Synthèse produite :**
 
-⏵ Je complète le sprint avec les résultats mmap et nœud partiel.
+⏵ Je corrige le pointeur de sprint puis je clôture avec la trame.
 
 ## 3. Travail accompli
 
@@ -2559,7 +2559,7 @@ Les téléchargements avancent en parallèle : **DeepSeek-V4.1-Flash 68 %** (249
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 2361 autres
+- … et 2376 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2687,7 +2687,7 @@ Les téléchargements avancent en parallèle : **DeepSeek-V4.1-Flash 68 %** (249
 
 ## 5. Erreurs rencontrées
 
-147 sorties en erreur ou divergentes. Les premières :
+149 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : a8f2635f8 docs: record which models this box is good at, and why src/llama-hparams.cpp:8:void llama_hparams::set_swa_pattern(uint32_t n_pattern, bool dense_first) { src/llama-hparams.h:308:    void se
 - **T1** : 511 tokens notés — perplexité cumulée 247.031  (4.9 tok/s) === perplexité 247.0308 sur 511 tokens (0 événements, 104.5 s) ===  ### B3 harmony assistant 511 --- ref --- 0.0 0.0 0:00 ls: cannot access '
@@ -2949,4 +2949,5 @@ Les téléchargements avancent en parallèle : **DeepSeek-V4.1-Flash 68 %** (249
 - Clusters exécutables : origine 15,2789 = clusters 15,2789, et les défauts trouvés en chemin  L'épreuve appariée (mêmes jetons, même contexte, chemin par jeton) 
 - mmap (3,3x plus rapide, 3x moins de mémoire) et nœud partiel (2,36 Go pour un huitième des experts)  mmap : read_to_end lisait tout le fichier et en gardait une
 - Journal du bloc : mmap, nœud partiel, et le défaut prédit par la revue confirmé en vrai  Sprint 08 complété, rapport de mesure écrit, REPRISE.md à jour avec les
+- Cérémonie du sprint 08 : quatre objectifs, deux nés de la preuve d'exécution  Rétrospective : garder le point d'étranglement unique (tbuf, Moe::ou) et le silenc
 

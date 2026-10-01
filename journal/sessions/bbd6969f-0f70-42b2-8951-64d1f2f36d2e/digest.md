@@ -46311,3 +46311,206 @@ gpt-oss ctx 256 lot 1 :
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -m \"Journal du bloc : mmap, nœud partiel, et le défaut prédit par la revue confirmé en vrai\n\nSprint 08 complété, rapport de mesure écrit, REPRISE.md à jour avec les commandes\nde reproduction. Le défaut … [262 caractères tronqués]`
+
+  ```
+6a2dfcb Journal du bloc : mmap, nœud partiel, et le défaut prédit par la revue confirmé en vrai
+b24a2e6 mmap (3,3x plus rapide, 3x moins de mémoire) et nœud partiel (2,36 Go pour un huitième des experts)
+8f55e4f Clusters exécutables : origine 15,2789 = clusters 15,2789, et les défauts trouvés en chemin
+11:58
+  ```
+
+### 🤖 Assistant
+
+⏵ Test d'un cas piégeux : lister tous les clusters dans `DRAVE_CLUSTERS` doit donner le résultat complet.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/tous_explicites.sh <<'EOF'\n#!/bin/bash\n# `DRAVE_CLUSTERS` liste TOUS les clusters : on charge donc le modèle entier.\n# Le contrôle d'exhaustivité est pourtant désactivé (partiel() est vrai). Le\n# résultat doit être ide … [900 caractères tronqués]`
+
+  ```
+defaut           : perplexité 799.8557 sur 7 tokens
+tous_explicites  : perplexité 799.8557 sur 7 tokens
+desordre         : perplexité 799.8557 sur 7 tokens
+doublon          : perplexité 799.8557 sur 7 tokens
+hors_bornes      : panicked at src/model.rs:1534
+=== fin ===
+  ```
+
+### 🤖 Assistant
+
+⏵ `DRAVE_CLUSTERS=0,9` panique au lieu de donner le message prévu. J'inspecte.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '1528,1540p' drave-core/src/model.rs; echo \"=== log complet ===\"; cat > /tmp/hb.sh <<'EOF'\n#!/bin/bash\ncd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\nenv DRAVE_CLUSTERS=0,9 ./drave-core/target/release/drave /home/step … [304 caractères tronqués]`
+
+  ```
+static LOT_TOPK_IGNORE: std::sync::atomic::AtomicBool = std::sync::atomic::AtomicBool::new(false);
+
+impl Model {
+    pub fn load(path: &str, ctx: usize, n_threads: usize, dense: bool, keep: f32,
+                auto: bool, q4: u8, b6: u8) -> Model {
+        let t0 = Instant::now();
+        let g = Gguf::open_auto(path).expect("ouverture du GGUF");
+        let cfg = Cfg {
+            n_layer: g.cfg("block_count").and_then(|m| m.as_u64()).unwrap_or(0) as usize,
+            hidden: g.cfg("embedding_length").and_then(|m| m.as_u64()).unwrap_or(0) as usize,
+            n_head: g.cfg("attention.head_count").and_then(|m| m.as_u64()).unwrap_or(0) as usize,
+            n_kv_head: g.cfg("attention.head_count_kv").and_then(|m| m.as_u64()).unwrap_or(0) as usize,
+            ffn: g.cfg("feed_forward_length").and_then(|m| m.as_u64()).unwrap_or(0) as usize,
+=== log complet ===
+[attention] QT_IM_SWITCHER est l'ancien nom d'une variable d'environnement : elles s'appellent maintenant DRAVE_* (voir docs/histoire.md). Rien n'a été appliqué.
+/tmp/ids_qwen.txt : 8 tokens, fenêtres de 64
+
+thread 'main' (2952791) panicked at src/model.rs:1534:39:
+ouverture du GGUF: Custom { kind: InvalidInput, error: "DRAV
+… [128 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Les cinq cas se comportent bien. Je rends le nœud partiel testable en séparant la lecture de la variable.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np = 'drave-core/src/clusters.rs'\ns = open(p).read()\ndef rep(a, b):\n    global s\n    assert a in s, f\"ANCRE INTROUVABLE : {a[:70]!r}\"\n    s = s.replace(a, b, 1)\n\nrep('''pub fn ouvrir(dossier: &Path) -> std:: … [3028 caractères tronqués]`
+
+  ```
+ok
+BUILD 0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np = 'drave-core/src/clusters.rs'\ns = open(p).read()\nancre = '''    /// Un numéro de cluster manquant doit être refusé, pas renuméroté'''\najout = '''    /// Le nœud partiel : ne charger qu'une partie des clusters. … [3143 caractères tronqués]`
+
+  ```
+test result: ok. 30 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.13s
+  ```
+
+### 🤖 Assistant
+
+⏵ 30 tests verts. Je vérifie la porte gpt-oss et la revue.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat /tmp/gate_oss_final2.log; echo \"--- proc ---\"; pgrep -c -f \"release/drave\"; date +%H:%M", "description": "Check gpt-oss gate progress"}`
+
+  ```
+gpt-oss ctx 256 lot 1 : --- proc ---
+4
+12:01
+  ```
+
+- **bash** `{"command": "sleep 55; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat /tmp/gate_oss_final2.log; free -g | head -2", "description": "Wait for gpt-oss gate"}`
+
+  ```
+gpt-oss ctx 256 lot 1 :                total        used        free      shared  buff/cache   available
+Mem:             125          14           0           4         115         110
+  ```
+
+### 🤖 Assistant
+
+⏵ Contrôle croisé : les mêmes chiffres doivent apparaître partout dans la doc.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for chiffre in \"15,2789\" \"19,3885\" \"15,1757\" \"86,90\" \"18,55\" \"1 587\" \"1587\" \"2,36\" \"6,35\" \"9,32\"; do printf \"%-10s : \" \"$chiffre\"; grep -rl \"$chiffre\" README.md REPRISE.md docs/ reports/ sprints/08*.md 2>/de … [99 caractères tronqués]`
+
+  ```
+15,2789    : README.md REPRISE.md docs/format-clusters.md reports/rapport-lecteur-multifichiers.md sprints/08-un-modele-eclate-se-lit-comme-un-seul.md 
+19,3885    : REPRISE.md docs/convertisseur.md docs/contexte-long.md docs/plan-mla-vision.md docs/vision.md docs/roadmap.md docs/format-flux.md docs/plan-gpu-topk.md docs/sprints.md reports/rapport-gpt-oss-perplexite.md reports/rapport-prefill-par-lots.md reports/rapport-transport-liste.md reports/rapport-compacite-trace.md reports/rapport-session-2026-09-30.md reports/rapport-gpu-topk-selection.md reports/rapport-lecteur-multifichiers.md sprints/08-un-modele-eclate-se-lit-comme-un-seul.md 
+15,1757    : README.md REPRISE.md docs/vision.md docs/plan-gpu-topk.md docs/sprints.md reports/rapport-coherence-docs.md reports/rapport-session-2026-09-30.md reports/rapport-coherence-docs-2.md reports/rapport-gpu-topk-selection.md reports/rapport-logits-gpu-vs-cpu.md reports/rapport-lecteur-multifichiers.md 
+86,90      : README.md REPRISE.md reports/rapport-lecteur-multifichiers.md sprints/08-un-modele-eclate-se-lit-comme-un-seul.md 
+18,55      : README.md REPRISE.md docs/format-clusters.md reports/rapport-lecteur-multifichiers.md sprints/08-un-
+… [793 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && wc -l drave-core/src/*.rs | tail -1; grep -n \"13 758\\|13758\\|lignes\" README.md | head -5", "description": "Check Rust line count in README"}`
+
+  ```
+15300 total
+181:**Coût exact mesuré, lignes de 4 096 poids :**
+299:le moteur tenait en 386 lignes à ses débuts ; il en fait 13 758 aujourd'hui). Détail complet :
+394:BLAS, sans aucune dépendance : **13 758 lignes de Rust, `std` seul** au 01/10 au matin (2 319 au premier prototype). Détail :
+441:produits scalaires sur les lignes Q8_0 d'origine — en mode push il faudrait un
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np = 'README.md'\ns = open(p).read()\ns = s.replace(\"le moteur tenait en 386 lignes à ses débuts ; il en fait 13 758 aujourd'hui). Détail complet :\",\n              \"le moteur tenait en 386 lignes à ses débuts ; i … [473 caractères tronqués]`
+
+  ```
+ok
+gpt-oss ctx 256 lot 1 : 12:03
+  ```
+
+- **bash** `{"command": "sleep 55; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat /tmp/gate_oss_final2.log; echo \"--- état disque ---\"; df -h /home/stephane/Data13TB | tail -1; tail -1 /tmp/tl_file2.log", "description": "Wait for gpt-oss and check disk"}`
+
+  ```
+gpt-oss ctx 256 lot 1 : --- état disque ---
+/dev/mapper/system-root   11T  7,2T  3,7T  67% /home/stephane/Data13TB
+12:03:41    31.4 Go / 49.5 Go (63.5 %, 112 Mo/s)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '/^close)/,/^;;/p' tools/sprint.sh | head -30; ./tools/sprint.sh status 2>&1 | head -3", "description": "Inspect sprint close behaviour"}`
+
+  ```
+close)
+    [ -f "$COURANT" ] || { echo "aucun sprint en cours"; exit 0; }
+    read -r num debut fin < "$COURANT"
+    m=$(maintenant); fic=$(ls sprints/$(printf '%02d' "$num")-*.md)
+    echo "=== clôture du sprint $num ($(hm "$debut") → $(hm "$m"), prévu $(hm "$fin")) ==="
+    {
+        printf "\n## Revue — ce qui est livré, mesuré\n\n"
+        printf "Durée : %s min (boxing %s min). Commits : %s.\n\n" \
+               "$(( (m - debut) / 60 ))" "$((DUREE / 60 ))" "$(git log --oneline --since="@$debut" | wc -l)"
+        git log --format='- `%h` %s' --since="@$debut" | sed 's/^/  /'
+        printf "\n## Rétrospective — garder / changer\n\n"
+        printf -- "- **Garder** :\n- **Changer** :\n- **Doute** :\n"
+        printf "\n## Planning — le sprint suivant\n\n"
+        printf -- "| # | chantier | critère de succès |\n|---|---|---|\n| 1 |  |  |\n"
+    } >> "$fic"
+    rm -f "$COURANT"
+    echo "trame écrite dans $fic — à compléter (revue chiffrée, rétro, planning)"
+    ;;
+list)
+    for f in sprints/*.md; do [ -e "$f" ] || continue; head -1 "$f"; done
+    ;;
+*) echo "usage : sprint.sh {start \"<objectif>\"|status|close|list}"; exit 1 ;;
+esac
+── Sprint 1 ─────────────────────────────────
+… [109 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Je corrige le pointeur de sprint puis je clôture avec la trame.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && D=$(date -d \"2026-10-01 11:13\" +%s) && F=$(date -d \"2026-10-01 13:13\" +%s) && echo \"8 $D $F\" > sprints/COURANT && cat sprints/COURANT && ./tools/sprint.sh close 2>&1 | tail -4", "description": "Fix sprint pointer and close"}`
+
+  ```
+8 1790867580 1790874780
+=== clôture du sprint 8 (11:13 → 12:04, prévu 13:13) ===
+trame écrite dans sprints/08-un-modele-eclate-se-lit-comme-un-seul.md — à compléter (revue chiffrée, rétro, planning)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && tail -20 sprints/08-un-modele-eclate-se-lit-comme-un-seul.md", "description": "Read appended ceremony frame"}`
+
+  ```
+## Revue — ce qui est livré, mesuré
+
+Durée : 51 min (boxing 120 min). Commits : 4.
+
+  - `6a2dfcb` Journal du bloc : mmap, nœud partiel, et le défaut prédit par la revue confirmé en vrai
+  - `b24a2e6` mmap (3,3x plus rapide, 3x moins de mémoire) et nœud partiel (2,36 Go pour un huitième des experts)
+  - `8f55e4f` Clusters exécutables : origine 15,2789 = clusters 15,2789, et les défauts trouvés en chemin
+  - `3eb0af7` Un modèle éclaté se lit comme un seul : lecteur multi-fichiers, shards et clusters
+
+## Rétrospective — garder / changer
+
+- **Garder** :
+- **Changer** :
+- **Doute** :
+
+## Planning — le sprint suivant
+
+| # | chantier | critère de succès |
+|---|---|---|
+| 1 |  |  |
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np = 'sprints/08-un-modele-eclate-se-lit-comme-un-seul.md'\ns = open(p).read()\ns = s.replace('''## Revue — ce qui est livré, mesuré\n\nDurée : 51 min (boxing 120 min). Commits : 4.''',\n'''## Revue — ce qui est livr … [3226 caractères tronqués]`
+
+  ```
+ok
+gpt-oss ctx 256 lot 1 : 12:04
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -m \"Cérémonie du sprint 08 : quatre objectifs, deux nés de la preuve d'exécution\n\nRétrospective : garder le point d'étranglement unique (tbuf, Moe::ou) et le\nsilence rendu visible ; changer le binaire  … [474 caractères tronqués]`

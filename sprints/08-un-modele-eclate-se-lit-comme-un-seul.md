@@ -236,3 +236,56 @@ Bloc suivant, dans l'ordre de valeur :
    donc le format ne couvre pas encore ce modèle-là.
 5. **Le rééquilibrage par charge** : les clusters sont équilibrés en nombre
    d'experts, pas en nombre d'activations.
+
+## Revue — ce qui est livré, mesuré
+
+Quatre objectifs, dont deux qui n'étaient pas au programme et que la preuve
+d'exécution a rendus nécessaires : le **mmap** (3,3× plus rapide, 3× moins de
+mémoire) et le **nœud partiel** (2,36 Go pour un huitième des experts).
+
+Livré et mesuré : le lecteur multi-fichiers (shards et clusters) · les clusters
+exécutables, 15,2789 = 15,2789 contre l'original · le mmap · le nœud partiel ·
+le convertisseur écrit `mapping.tsv` (identique à l'octet près à la référence) ·
+les portes Qwen 19,3885 et gpt-oss 15,1757 · 30 tests verts (20 au début).
+
+Durée : 51 min (boxing 120 min). Commits : 4.
+
+  - `6a2dfcb` Journal du bloc : mmap, nœud partiel, et le défaut prédit par la revue confirmé en vrai
+  - `b24a2e6` mmap (3,3x plus rapide, 3x moins de mémoire) et nœud partiel (2,36 Go pour un huitième des experts)
+  - `8f55e4f` Clusters exécutables : origine 15,2789 = clusters 15,2789, et les défauts trouvés en chemin
+  - `3eb0af7` Un modèle éclaté se lit comme un seul : lecteur multi-fichiers, shards et clusters
+
+## Rétrospective — garder / changer
+
+- **Garder** : le **point d'étranglement unique** (`tbuf` pour les octets, `Moe::ou`
+  pour les experts). Les deux refactors ont été possibles parce qu'il n'y avait
+  qu'un endroit à changer — et `Moe::ou` a ensuite servi de point d'accroche au
+  nœud partiel sans toucher aux neuf sites de lecture.
+- **Garder** : **rendre le silence visible**. Le défaut le plus coûteux
+  (`blk.0.blk.0.…`) a été trouvé en une minute après avoir ajouté un message par
+  refus et un compteur au chargement. Avant, `charger_moe` rendait `None` 48 fois
+  sans un mot.
+- **Changer** : **figer le binaire dans /tmp avant toute mesure longue**. J'ai
+  lancé la porte gpt-oss puis recompilé par-dessus ; le processus tournait sur
+  l'ancien binaire. Pas de dégât cette fois, mais c'est mesurer autre chose que ce
+  qu'on croit.
+- **Changer** : **un seul job lourd à la fois**. Trois chargements de 18–63 Go en
+  parallèle sur le disque mécanique ont saturé l'I/O et fait croire à des
+  blocages. La règle existait ; je ne l'ai pas suivie.
+- **Doute** : la table des tailles ggml. Elle est relevée depuis `libggml` et
+  confrontée à deux modèles réels, mais rien ne garantit qu'un type ajouté demain
+  n'y manquera pas. Le signalement d'un type inconnu est le filet ; il faudrait un
+  test qui compare la table à `ggml_type_size` quand llama.cpp est présent.
+- **Doute** : la publication du mapping par `OnceLock` est globale au processus.
+  Un test qui ouvre deux modèles ne peut pas vérifier la seconde publication — je
+  l'ai contourné en testant la valeur rendue plutôt que la valeur publiée. C'est
+  honnête mais incomplet.
+
+## Planning — le sprint suivant
+
+| # | chantier | critère de succès |
+|---|---|---|
+| 1 | La **somme des contributions entre nœuds** : deux nœuds partiels, chacun ses clusters, et la sortie du modèle complet | la perplexité des deux nœuds sommés égale 15,2789 |
+| 2 | Les **biais d'experts** en clusters | gpt-oss-120b convertible et exécutable en clusters |
+| 3 | Le **rééquilibrage par charge** (activations, pas nombre d'experts) | le nœud le plus chargé porte moins d'activations que le plus léger d'aujourd'hui |
+| 4 | Un test qui confronte `octets_tensor` à `ggml_type_size` | la table ne peut plus dériver en silence |

@@ -296,7 +296,7 @@ n'étaient pas le goulot. Et il coûte 838 ms là où l'accumulation en coûte 1
 
 Le moteur d'exécution par listes est maintenant écrit en Rust — **std seul, zéro
 dépendance** (crates.io est inaccessible depuis cette machine, et c'est très bien :
-le moteur tenait en 386 lignes à ses débuts ; il en fait 13 758 aujourd'hui). Détail complet :
+le moteur tenait en 386 lignes à ses débuts ; il en fait 15 300 aujourd'hui). Détail complet :
 [`reports/rapport-optimisations.md`](reports/rapport-optimisations.md).
 
 ```bash
@@ -391,7 +391,7 @@ faut cela pour inspecter un fichier de 366 Go. Détail :
 ## Inférence complète en Rust (`--infer`)
 
 Qwen2.5-0.5B-Instruct Q8_0 tourne **en mode listes d'événements**, sans GPU, sans
-BLAS, sans aucune dépendance : **13 758 lignes de Rust, `std` seul** au 01/10 au matin (2 319 au premier prototype). Détail :
+BLAS, sans aucune dépendance : **15 300 lignes de Rust, `std` seul** au 01/10 à midi (2 319 au premier prototype). Détail :
 [`reports/rapport-inference.md`](reports/rapport-inference.md).
 
 ```bash

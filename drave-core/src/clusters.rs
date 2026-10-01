@@ -150,16 +150,42 @@ pub struct Modele {
 /// ce qui permet de réunir les N fichiers dans un seul `Gguf` sans que les noms
 /// se recouvrent.
 pub fn ouvrir(dossier: &Path) -> std::io::Result<Modele> {
-    ouvrir_interne(dossier, false)
+    let gardes = gardes_du_milieu()?;
+    ouvrir_interne(dossier, false, gardes.as_deref())
+}
+
+/// Ouvre un modèle en ne retenant QUE les clusters demandés.
+///
+/// C'est le mode « nœud partiel » : chaque nœud ne sert que ses experts. Le
+/// paramètre est explicite pour que ce chemin soit **testable** — la variable
+/// d'environnement, elle, est globale au processus et ne se prête pas à un test
+/// qui s'exécute en parallèle d'autres.
+pub fn ouvrir_sous_ensemble(dossier: &Path, clusters: Option<&[usize]>)
+    -> std::io::Result<Modele> {
+    ouvrir_interne(dossier, false, clusters)
+}
+
+/// `DRAVE_CLUSTERS=0,3` : les numéros demandés, ou `None` pour tous.
+pub fn gardes_du_milieu() -> std::io::Result<Option<Vec<usize>>> {
+    match std::env::var("DRAVE_CLUSTERS") {
+        Ok(v) if !v.trim().is_empty() => Ok(Some(v.split(',')
+            .map(|x| x.trim().parse::<usize>().map_err(|_| std::io::Error::new(
+                std::io::ErrorKind::InvalidInput,
+                format!("DRAVE_CLUSTERS : « {x} » n'est pas un numéro de cluster"))))
+            .collect::<std::io::Result<Vec<usize>>>()?)),
+        _ => Ok(None),
+    }
 }
 
 /// Inventaire d'un dossier de clusters : mêmes vérifications, mais les poids ne
 /// sont pas lus. Un modèle de 366 Go doit pouvoir être inspecté.
 pub fn ouvrir_meta(dossier: &Path) -> std::io::Result<Modele> {
-    ouvrir_interne(dossier, true)
+    let gardes = gardes_du_milieu()?;
+    ouvrir_interne(dossier, true, gardes.as_deref())
 }
 
-fn ouvrir_interne(dossier: &Path, meta_seule: bool) -> std::io::Result<Modele> {
+fn ouvrir_interne(dossier: &Path, meta_seule: bool, gardes: Option<&[usize]>)
+    -> std::io::Result<Modele> {
     let commun = dossier.join("commun.gguf");
     if !commun.is_file() {
         return Err(std::io::Error::new(std::io::ErrorKind::NotFound,
@@ -198,15 +224,7 @@ continue à partir de 0", p.display(), num)));
     // c'est le mode « nœud partiel », où chaque nœud ne sert que ses experts et
     // où les contributions se somment entre nœuds. Le mapping, lui, reste
     // global : il dit où est chaque expert, pas ce que ce nœud-ci possède.
-    let gardes: Option<Vec<usize>> = match std::env::var("DRAVE_CLUSTERS") {
-        Ok(v) if !v.trim().is_empty() => Some(v.split(',')
-            .map(|x| x.trim().parse::<usize>().map_err(|_| std::io::Error::new(
-                std::io::ErrorKind::InvalidInput,
-                format!("DRAVE_CLUSTERS : « {x} » n'est pas un numéro de cluster"))))
-            .collect::<std::io::Result<Vec<usize>>>()?),
-        _ => None,
-    };
-    let clusters: Vec<(usize, PathBuf)> = match &gardes {
+    let clusters: Vec<(usize, PathBuf)> = match gardes {
         None => clusters,
         Some(g) => {
             for c in g {
@@ -366,6 +384,64 @@ mod tests {
         let v0 = m.gguf.dequant("cl0/blk.0.ffn_gate_exps.weight");
         let v1 = m.gguf.dequant("cl1/blk.0.ffn_gate_exps.weight");
         assert_ne!(v0, v1, "une inversion de cluster doit se voir");
+        let _ = std::fs::remove_dir_all(&d);
+    }
+
+    /// Le nœud partiel : ne charger qu'une partie des clusters. Le préfixe doit
+    /// porter le NUMÉRO du cluster, pas son rang — sinon un nœud qui ne charge
+    /// que le cluster 3 exposerait `cl0/`, et `mapping.tsv` désignerait le
+    /// mauvais fichier.
+    #[test]
+    fn sous_ensemble_garde_les_numeros() {
+        use crate::gguf::tests::{ecrire, gguf_synth};
+        let d = std::env::temp_dir().join("drave_sous_ensemble");
+        let _ = std::fs::remove_dir_all(&d);
+        std::fs::create_dir_all(&d).unwrap();
+        let t: Vec<(&str, Vec<u64>)> =
+            vec![("blk.0.ffn_gate_inp.weight", vec![4, 3])];
+        std::fs::write(d.join("commun.gguf"), gguf_synth(&t, 0, 1.0)).unwrap();
+        for c in 0..3usize {
+            let t: Vec<(&str, Vec<u64>)> =
+                vec![("blk.0.ffn_gate_exps.weight", vec![2, 3, 3])];
+            std::fs::write(d.join(format!("cluster-{c:02}.gguf")),
+                           gguf_synth(&t, c * 10, 1.0)).unwrap();
+        }
+        std::fs::write(d.join("mapping.tsv"), "\
+# n_couches 1 · n_experts 6 · clusters 3 · experts_par_cluster 2
+0\t0\t0\t0
+0\t1\t1\t0
+0\t0\t2\t1
+0\t1\t3\t1
+0\t0\t4\t2
+0\t1\t5\t2
+").unwrap();
+
+        // Les trois clusters : le modèle est complet.
+        let tous = ouvrir_sous_ensemble(&d, None).unwrap();
+        assert_eq!(tous.gguf.nb_fichiers(), 4);
+        assert!(tous.gguf.tensor("cl2/blk.0.ffn_gate_exps.weight").is_some());
+
+        // Un seul cluster, le numéro 2 : c'est `cl2/` qui doit apparaître.
+        let un = ouvrir_sous_ensemble(&d, Some(&[2])).unwrap();
+        assert_eq!(un.gguf.nb_fichiers(), 2, "commun + un cluster");
+        assert!(un.gguf.tensor("cl2/blk.0.ffn_gate_exps.weight").is_some(),
+                "le préfixe porte le NUMÉRO (2), pas le rang (0)");
+        assert!(un.gguf.tensor("cl0/blk.0.ffn_gate_exps.weight").is_none());
+        assert!(un.gguf.tensor("cl1/blk.0.ffn_gate_exps.weight").is_none());
+        assert_eq!(un.gguf.tensor("cl2/blk.0.ffn_gate_exps.weight").unwrap().fichier, 1);
+        // Le mapping reste GLOBAL : l'expert 0 est dans le cluster 0, qui n'est
+        // pas chargé — `ou` doit le dire, pas mentir.
+        assert_eq!(un.mapping.ou(0, 0), Some((0, 0)));
+        assert_eq!(un.mapping.ou(0, 4), Some((2, 0)));
+
+        // Un numéro hors bornes est refusé avec un message qui dit lequel.
+        let e = match ouvrir_sous_ensemble(&d, Some(&[0, 7])) {
+            Ok(_) => panic!("un cluster hors bornes doit être refusé"),
+            Err(e) => e,
+        };
+        assert!(e.to_string().contains("cluster 7"), "{e}");
+        // Un sous-ensemble vide est refusé aussi.
+        assert!(ouvrir_sous_ensemble(&d, Some(&[])).is_err());
         let _ = std::fs::remove_dir_all(&d);
     }
 
