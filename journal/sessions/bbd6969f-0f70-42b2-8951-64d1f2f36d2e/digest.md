@@ -37648,3 +37648,89 @@ ctx 4096 · prof 0.1 · complete   : 22:17:17
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='REPRISE.md'; s=open(p).read()\nvieux = \"\"\"⚠️ **Doute, à moitié levé** : le déport des projections change la perplexité de\ngpt-oss de **−1,22 %** quand l'attention porte sur 511 clés (ctx 512 et ctx 1024\ndonn … [2492 caractères tronqués]`
+
+  ```
+REPRISE : doute instruit
+c752ad4 Le déport des projections est EXACT sur un modèle dense — et déplace la perplexité d'un MoE
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 300; cat /tmp/aiguille_topk2.log; date +%H:%M:%S", "description": "Check needle results", "timeoutMs": 360000}`
+
+  ```
+ctx 4096 · prof 0.1 · complete   :      4096        0.10     oui     256.5  prompt 4114 jetons
+ctx 4096 · prof 0.1 · topk-CPU   : 22:22:38
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -c \" oui$\" /tmp/compare_logits_gptoss.txt; wc -l < /tmp/compare_logits_gptoss.txt; head -3 /tmp/compare_logits_gptoss.txt; date +%H:%M:%S", "description": "Verify the logits comparison claims"}`
+
+  ```
+39
+45
+notre : 511 positions x 201088 · référence : 511 positions x 201088
+  pos   cible  NLL nous   NLL réf    écart rang nous  rang réf top1 nous  top1 réf  accord
+    0     314   10.2696   10.2700  -0.0004      1288      1288       271       271     oui
+22:22:44
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"accord\\|range(\\|\\[::\\|pas\\b\\|saut\" tools/compare_logits.py | head -20", "description": "Check comparison script sampling"}`
+
+  ```
+8:cible dans chacun, et l'accord du top-1. C'est ce qui localise une divergence :
+30:             for i in range(n_pos)]
+40:    return nll, rang, max(range(len(ligne)), key=lambda i: ligne[i])
+57:          f"{'rang nous':>9} {'rang réf':>9} {'top1 nous':>9} {'top1 réf':>9} {'accord':>7}")
+60:    for i in range(n):
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '52,80p' tools/compare_logits.py", "description": "Read comparison loop"}`
+
+  ```
+print(f"notre : {np_a} positions x {nv_a} · référence : {np_b} positions x {nv_b}")
+    if np_a != np_b:
+        print("ATTENTION : nombres de positions différents, comparaison sur le minimum")
+
+    print(f"{'pos':>5} {'cible':>7} {'NLL nous':>9} {'NLL réf':>9} {'écart':>8} "
+          f"{'rang nous':>9} {'rang réf':>9} {'top1 nous':>9} {'top1 réf':>9} {'accord':>7}")
+    tot_a = tot_b = 0.0
+    ecarts = []
+    for i in range(n):
+        cible = ids[i + 1] if ids and i + 1 < len(ids) else None
+        if cible is None:
+            break
+        na, ra, t1a = nll_et_rang(A[i], cible)
+        nb, rb, t1b = nll_et_rang(B[i], cible)
+        tot_a += na; tot_b += nb
+        ecarts.append(abs(na - nb))
+        if i < 24 or i % 32 == 0:
+            print(f"{i:5d} {cible:7d} {na:9.4f} {nb:9.4f} {na-nb:+8.4f} "
+                  f"{ra:9d} {rb:9d} {t1a:9d} {t1b:9d} {'oui' if t1a == t1b else 'NON':>7}")
+    if ecarts and np is not None:
+        e = np.array(ecarts)
+        print(f"\nécart |NLL| : moyenne {e.mean():.4f} · médiane {np.median(e):.4f} · max {e.max():.4f}")
+    print(f"perplexité nous : {math.exp(tot_a/n):.4f}   référence : {math.exp(tot_b/n):.4f}   "
+          f"({n} positions)")
+… [285 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 600 python3 - <<'PY'\nimport numpy as np, struct\ndef charge(chemin):\n    with open(chemin,'rb') as f:\n        nv, npos = struct.unpack('<ii', f.read(8))\n        L = np.frombuffer(f.read(npos*nv*4), dtype='<f4').reshape(np … [1166 caractères tronqués]`
+
+  ```
+positions comparées : 511
+accord top-1 : 497/511
+|ΔNLL| : moyenne 0.0379 · médiane 0.0123 · max 1.3708 · p90 0.0836
+positions où le top-1 diffère : 14
+perplexité CPU 18.5803 · GPU 18.3538
+jeton cible = top-1 CPU dans 242/511 cas, GPU 242/511
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='tools/compare_logits.py'; s=open(p).read()\nvieux = \"\"\"    tot_a = tot_b = 0.0\n    ecarts = []\n    for i in range(n):\"\"\"\nneuf = \"\"\"    tot_a = tot_b = 0.0\n    ecarts = []\n    # ⚠️ Le tableau n'impri … [1534 caractères tronqués]`
+
+  ```
+outil : accord top-1 global
+écart |NLL| : moyenne 0.0379 · médiane 0.0123 · max 1.3708
+accord du top-1 : 497/511  (14 positions divergentes)
+perplexité nous : 18.5803   référence : 18.3538   (511 positions)
+corrélation des logits (position 0) : 1.000000
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\ndef patch(p, paires):\n    s=open(p).read()\n    for v,n,nom in paires:\n        assert s.count(v)==1, f\"{p}::{nom}::{s.count(v)}\"\n        s=s.replace(v,n,1)\n    open(p,'w').write(s); print(f\"{p} ok\")\n\npatch … [2868 caractères tronqués]`

@@ -57,6 +57,11 @@ def main():
           f"{'rang nous':>9} {'rang réf':>9} {'top1 nous':>9} {'top1 réf':>9} {'accord':>7}")
     tot_a = tot_b = 0.0
     ecarts = []
+    # ⚠️ Le tableau n'imprime qu'un ÉCHANTILLON (i < 24 ou i % 32 == 0) : croire que
+    # « aucun NON dans l'échantillon » veut dire « accord partout » est exactement
+    # l'erreur commise au sprint 3 (511/511 annoncé, 497/511 mesuré). L'accord
+    # global est donc compté ici, sur toutes les positions.
+    accord_top1 = 0
     for i in range(n):
         cible = ids[i + 1] if ids and i + 1 < len(ids) else None
         if cible is None:
@@ -65,12 +70,16 @@ def main():
         nb, rb, t1b = nll_et_rang(B[i], cible)
         tot_a += na; tot_b += nb
         ecarts.append(abs(na - nb))
+        if t1a == t1b:
+            accord_top1 += 1
         if i < 24 or i % 32 == 0:
             print(f"{i:5d} {cible:7d} {na:9.4f} {nb:9.4f} {na-nb:+8.4f} "
                   f"{ra:9d} {rb:9d} {t1a:9d} {t1b:9d} {'oui' if t1a == t1b else 'NON':>7}")
     if ecarts and np is not None:
         e = np.array(ecarts)
         print(f"\nécart |NLL| : moyenne {e.mean():.4f} · médiane {np.median(e):.4f} · max {e.max():.4f}")
+    print(f"accord du top-1 : {accord_top1}/{n}"
+          + ("" if accord_top1 == n else f"  ({n - accord_top1} positions divergentes)"))
     print(f"perplexité nous : {math.exp(tot_a/n):.4f}   référence : {math.exp(tot_b/n):.4f}   "
           f"({n} positions)")
     # corrélation ligne à ligne sur la première position

@@ -498,8 +498,9 @@ testé est une décoration.**
 ✅ **Doute instruit** (`reports/rapport-logits-gpu-vs-cpu.md`) : le déport des
 projections donne des logits **IDENTIQUES au CPU sur un modèle dense**
 (Qwen2.5-0.5B : écart moyen |ΔNLL| = 0,0000, perplexité 17,4315 des deux côtés) et
-les décale de **0,038 nat** sur gpt-oss (MxFP4, 128 experts top-8), avec le **même
-top-1 sur les 511 positions**. Les noyaux GPU sont donc exacts ; ce qui diffère,
+les décale de **0,038 nat** sur gpt-oss (MxFP4, 128 experts top-8), avec le même
+jeton sur **497 des 511 positions** (les 14 divergences portent les plus grands
+écarts, jusqu'à 1,37 nat). Les noyaux GPU sont donc exacts ; ce qui diffère,
 c'est le **routage des experts** — un top-8 est une opération discrète, qu'un écart
 de 1e-7 sur un logit de routeur peut faire basculer. Hypothèse fortement étayée par
 le contraste dense/MoE, à démontrer en comparant les routages eux-mêmes. Le miroir

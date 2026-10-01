@@ -38,12 +38,17 @@ sur un expert MXFP4, mesurés un par un). Une erreur de 1e-7 ne devrait pas pese
 | | CPU | GPU (projections) |
 |---|---|---|
 | perplexité | 18,5803 | 18,3538 |
-| écart moyen \|ΔNLL\| | — | **0,0379** (médiane 0,0123, max 1,3708) |
-| accord du top-1 | — | **511/511 positions** |
+| écart moyen \|ΔNLL\| | — | **0,0379** (médiane 0,0123, max 1,3708, p90 0,0836) |
+| accord du top-1 | — | **497/511** (14 positions divergentes) |
 | corrélation des logits (position 0) | — | 1,000000 |
 
-Le top-1 est le même PARTOUT, mais les probabilités diffèrent : la perplexité,
-qui est une moyenne de −log p(jeton cible), intègre ces écarts.
+Le jeton choisi est le même sur 97 % des positions ; les 14 divergences sont
+justement là où l'écart de NLL est le plus grand (jusqu'à 1,37 nat). ⚠️ **Piège de
+lecture payé** : `compare_logits.py` n'imprimait qu'un ÉCHANTILLON de positions
+(`i < 24` ou `i % 32 == 0`), et « aucun NON dans l'échantillon » avait été lu comme
+« accord partout » (511/511 annoncé, **497/511** mesuré). L'outil imprime
+maintenant l'accord GLOBAL — un affichage partiel qui a l'air complet est un
+affichage qui ment.
 
 ## L'hypothèse, et pourquoi elle est la bonne piste
 
@@ -55,8 +60,10 @@ un logit de routeur peut faire basculer le 8e expert, et l'ensemble des experts
 actifs change alors la sortie bien plus que 1e-7.
 
 C'est cohérent avec l'écart de 0,06 % mesuré à `--ctx 256` (deux fenêtres de 255
-jetons, un autre calcul) et avec l'accord parfait du top-1 : les jetons changent de
-probabilité, pas d'identité.
+jetons, un autre calcul) : 14 positions sur 511 changent de jeton, et ces quelques
+basculements suffisent à déplacer une perplexité de 1 %. La perplexité GPU est
+MEILLEURE (18,35 contre 18,58) — ce n'est pas une supériorité, c'est du bruit de
+bascule sur un échantillon de 511 jetons.
 
 **Statut : hypothèse étayée, pas démontrée.** La démonstration demanderait de
 comparer les routages eux-mêmes (quels experts, quels poids) entre les deux
