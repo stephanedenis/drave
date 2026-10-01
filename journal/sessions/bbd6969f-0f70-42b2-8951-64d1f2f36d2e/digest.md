@@ -47172,3 +47172,16 @@ tail -5 /tmp/telechargement_lourds.log
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np = 'docs/plan-modeles-lourds.md'\ns = open(p).read().rstrip('\\n')\ns += '''\n\n## État au 01/10 à midi — l'inventaire est fait, et il recoupe\n\n`tools/inventaire_modeles_lourds.sh` lit les **en-têtes seuls** (le  … [2766 caractères tronqués]`
+
+  ```
+ok
+ae4531b Inventaire des modèles lourds : 984 Go de poids annoncés par les descripteurs, 984 Go annoncés par HuggingFace
+gpt-oss ctx 256 lot 1 : perplexité 15.1757 sur 510 tokens (0 événements, 1274.0 s)
+=== fin ===
+  ```
+
+### 🤖 Assistant
+
+⏵ **Porte gpt-oss verte sur le binaire final : 15,1757.** Je clôture.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np = 'reports/rapport-lecteur-multifichiers.md'\ns = open(p).read()\ns = s.replace('''| gpt-oss-120b ctx 256 | 15,1757 | **15,1757** |''',\n              '''| gpt-oss-120b ctx 256 (binaire final, mmap) | 15,1757 | ** … [1269 caractères tronqués]`

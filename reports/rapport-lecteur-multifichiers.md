@@ -62,7 +62,7 @@ qui couvre ce cas sans le traiter à part.
 | porte | attendu | obtenu |
 |---|---|---|
 | Qwen2.5-0.5B ctx 256 `--dense` | 19,3885 | **19,3885** |
-| gpt-oss-120b ctx 256 | 15,1757 | **15,1757** |
+| gpt-oss-120b ctx 256 (binaire final, mmap) | 15,1757 | **15,1757** |
 | `cargo test --release` | vert | **32 verts** (20 au début du sprint) |
 | modèle en clusters | 15,2789 | **15,2789** |
 | nœud partiel (cluster 0 seul) | 268 786,6218 | **268 786,6218** |
@@ -150,6 +150,20 @@ sabotage** : le bug d'origine les fait rougir.
 *Leçon : quand un correctif ne peut pas être testé, la question n'est pas
 « comment écrire le test ? » mais « qu'est-ce qui manque pour le rendre
 testable ? ». Ici, c'était un générateur de fichiers.*
+
+### Les modèles lourds, inventoriés par les en-têtes
+
+`tools/inventaire_modeles_lourds.sh` confronte les poids annoncés par les
+descripteurs GGUF aux tailles annoncées par HuggingFace. **La concordance porte
+sur 984 Go** : DeepSeek-V4.1-Flash 365,70 = 365,7 · GLM-5.3 216,71 = 216,7 ·
+Kimi-K2.7 303,90 = 303,9 · DeepSeek-V4-Flash 86,90 = 86,9. Une seule entrée
+fausse dans la table des types ggml donnerait un écart visible sur des centaines
+de gigaoctets — c'est ainsi que `iq1_m` manquant avait fait annoncer 8,56 Go pour
+86,9 Go.
+
+Les architectures sont lues (`deepseek41`, `deepseek2`, `deepseek4`, `glm-dsa`) ;
+aucune n'a encore de `forward`. Kimi est en huit fichiers, GLM en six : le lecteur
+les rassemble à partir d'un seul chemin.
 
 ### Le mmap : 3,3× plus rapide, 3× moins de mémoire
 

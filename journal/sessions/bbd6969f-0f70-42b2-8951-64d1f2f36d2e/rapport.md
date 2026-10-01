@@ -7,12 +7,12 @@
 | Début | 2026-09-28 14:46 |
 | Durée | 69.5 h |
 | Tours | 51 |
-| Messages | 2986 |
-| Appels d'outils | 2841 |
+| Messages | 2987 |
+| Appels d'outils | 2842 |
 | Fichiers touchés | 65 |
-| Commandes | 2454 |
+| Commandes | 2455 |
 | Sous-agents | 22 |
-| Commits | 247 |
+| Commits | 248 |
 | Compactages de contexte | 4 |
 
 ## Objectifs déclarés
@@ -2400,7 +2400,7 @@ Les téléchargements avancent en parallèle : **DeepSeek-V4.1-Flash 68 %** (249
 
 ### Tour 51 — continue jusqu'à 13h HAE
 
-*278 appels d'outils.* Actions notables :
+*279 appels d'outils.* Actions notables :
 
 - bash — Check time and running processes
 - job_list
@@ -2416,11 +2416,11 @@ Les téléchargements avancent en parallèle : **DeepSeek-V4.1-Flash 68 %** (249
 - todo_write
 - bash — Count buffer accesses in gguf.rs
 - bash — Map functions and base computations
-- … et 263 autres
+- … et 264 autres
 
 **Synthèse produite :**
 
-⏵ Concordance parfaite sur 984 Go. Je consigne et commit.
+⏵ **Porte gpt-oss verte sur le binaire final : 15,1757.** Je clôture.
 
 ## 3. Travail accompli
 
@@ -2561,7 +2561,7 @@ Les téléchargements avancent en parallèle : **DeepSeek-V4.1-Flash 68 %** (249
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 2414 autres
+- … et 2415 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2956,4 +2956,5 @@ Les téléchargements avancent en parallèle : **DeepSeek-V4.1-Flash 68 %** (249
 - Rapports et sprint : les cinq défauts de la revue n°2 et le test qui manquait" && git log --oneline -1; cat /tmp/gate_oss_final2.log
 - La table des types ggml confrontée à libggml, et les huit types ajoutés après NVFP4  tools/verifier_table_types.sh compile un programme lié à libggml, imprime g
 - Inventaire des modèles lourds : 984 Go de poids annoncés par les descripteurs, 984 Go annoncés par HuggingFace  tools/inventaire_modeles_lourds.sh lit les en-tê
+- Porte gpt-oss verte sur le binaire final : 15,1757 avec mmap, 21 minutes" && git log --oneline -1; echo "=== processus ==="; pgrep -af "drave-core|telecharger" 
 
