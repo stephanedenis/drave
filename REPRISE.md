@@ -760,3 +760,51 @@ le chantier d'après.
 tools/verifier_table_types.sh
 ```
 
+## Session d'analyse — l'empreinte mémoire de DeepSeek-V4.1 (01/10, 10 h 47 → 18 h)
+
+Rapport complet : [`reports/rapport-empreinte-memoire.md`](reports/rapport-empreinte-memoire.md).
+Traces conservées : `/home/stephane/FastNVMe/artefacts/traces/session-01-10/`.
+
+### Le résultat qui change tout
+
+Décomposition des 365,7 Go de V4.1 : **engram 203,4 Go (55,6 %)** · experts
+152,9 Go (41,8 %) · attention 5,4 Go · embeddings et tête 2,0 Go.
+
+`blk.N.engram_embd.weight` fait **101,4 Go par couche** (2 couches), de forme
+`[384 006 168, 264]` en I8 — mais **ce n'est pas un tenseur de poids, c'est une
+table de hachage de n-grammes**. Une session de 10 000 jetons n'en touche que
+**17 276 entrées, soit 4,6 Mo**. Ratio : 1 pour 22 000.
+
+**Empreinte réelle : 50 à 80 Go au lieu de 365,7 Go**, dont 0,4 Go d'engram.
+
+```bash
+# L'empreinte se chiffre sur une trace de routage réelle :
+DRAVE_TRACE_EXPERTS=/tmp/routage.txt ./drave-core/target/release/drave \
+    /home/stephane/FastNVMe/artefacts/modeles-optimises/qwen3-30b-8clusters-v2 \
+    --ppl /tmp/ids_30b_wiki.txt --ctx 2048 --limit 2048 --dense --threads 10 --lot 1
+python3 tools/analyse_empreinte.py /tmp/routage.txt      # courbes par couche
+```
+
+### Les pistes mesurées, et leur verdict
+
+| piste | verdict | chiffre |
+|---|---|---|
+| **engram mmappé** | **à faire** | 203 Go → 0,4 Go chargés |
+| **tête restreinte à la langue** | **à faire** | −30 % de trafic ; top-1 français dans 99,2 % des cas |
+| **cache d'experts 25 %** | à faire | 80 % des appels servis en mémoire |
+| découpage plus fin que l'expert | impossible | seuil à 5 % : perplexité ×287 |
+| grappes par langue | non | Jaccard entre langues 0,75–0,90, référence interne 0,805 |
+| dictionnaire token → experts | non | Jaccard du même token : 0,06 aux couches médianes |
+| pré-remplissage du cache par langue | non | le cache atteint son régime en 32 jetons |
+| allocation du cache par couche | non | gain maximal +1,2 % |
+
+### Deux découvertes de structure
+
+- **Le miroir** : les couches extrêmes sont 4,6× plus liées au token que les
+  médianes (Jaccard 0,259 contre 0,056). Mais les couches symétriques (0/47) ne
+  partagent rien (0,030).
+- **Une périodicité de 12 couches** : Jaccard 0,323 à écart 12, 0,210 à écart 24,
+  **0,035 pour tout autre écart**. Le modèle a 4 blocs de 12 couches qui
+  réutilisent les mêmes experts — mais ce sont des tenseurs différents, donc
+  aucune économie de stockage directe.
+

@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 69.8 h |
-| Tours | 51 |
-| Messages | 3017 |
-| Appels d'outils | 2872 |
-| Fichiers touchés | 65 |
-| Commandes | 2485 |
+| Durée | 74.9 h |
+| Tours | 63 |
+| Messages | 3143 |
+| Appels d'outils | 2976 |
+| Fichiers touchés | 68 |
+| Commandes | 2585 |
 | Sous-agents | 22 |
-| Commits | 255 |
+| Commits | 256 |
 | Compactages de contexte | 4 |
 
 ## Objectifs déclarés
@@ -137,6 +137,30 @@
 **Tour 50** — fais un convertisseur pour tous les formats vers un modèle de fichier optimal, où on sépare les clusters par fichier distinct pour un chargement indépendant rapide.
 
 **Tour 51** — continue jusqu'à 13h HAE
+
+**Tour 52** — que manque-t-il pour rouler un deepseek 4.1 localement avec notre approche par liste d'activation et chargement d'experts à la demande?
+
+**Tour 53** — peut-on avoir 1 expert par fichier pour simplifier? est-on flexible sur le matériel optimal/disponible pour chaque couche en tenant compte des débits anticipés des flux d'évenements et capacité des canaux entre les couches? Bref, jusqu'où peut-on segmenter le modèle dans ses blocs et opérer le tout de façon dynamique selon les ressources disponibles?
+
+**Tour 54** — peut-on découper par couche et expert, et fusionner seulement les grappes d'experts requis. on n'aura jamais besoin de tous les experts. Peut on avoir un arbre de dépendence des experts?
+
+**Tour 55** — cherche encore un moyen d'optimiser autour du moe ou mieux encore étudier des groupements différents par couche. tout le savoir des gros modèles est extrêmement large et encyclopédique à la base. Il est peu probable qu'il y ait autant de noeuds communs aprèes les premières couches
+
+**Tour 56** — on s'est arrêté a 128 commme granularité alors que les résultats devenaient de plus en plus intéressants. continue
+
+**Tour 57** — qu'en est-il de la langue des jetons? On doit bien pouvoir réduire la densité d'entrées si on connait déjà la langue, idem pour les domaines?
+
+**Tour 58** — on peut créer un dictionnaire de dictionnaire de tokens, c'est à dire charger uniquement les grappes de neuronnes correspondant aux tokens d'entrée. un token pouvant être dans plusieurs neuronnes ou déjà associé à un seul, on doit bien pouvoir faire des grappes par langues et domaines (les chargements d'experts seront aussi probablement associés à certains mots). L'idée est qu'il est trèes rare d' … [105 caractères tronqués]
+
+**Tour 59** — il y a probablement déjà beaucoup d'études sur les FFN qui concernent la symétrie entrée et sortie, le vocabulaire, morphologie et syntaxe étant dans les dernières couches comme dans les premières, il y a probablement des gains à faire sur ce mirroir. de plus, on aura aussi de fortes chance d'avoir une réponse dans la même langue que la question. Il est très rare qu'une question en français abouti … [32 caractères tronqués]
+
+**Tour 60** — peut-on faire des grappes dans les couches extrêmes? l'idée n'est pas d'accélérer le chargement, mais simplement réduire la quantité à charger avant d'opérer. moins de ram/vram = plus de noeuds en mémoire. si on n'a que des grappes pertinentes, on gagne en espace libre pour accélérer.
+
+**Tour 61** — peut-on faire des grappes dans les couches extrêmes? l'idée n'est pas d'accélérer le chargement, mais simplement réduire la quantité à charger avant d'opérer. moins de ram/vram = plus de noeuds en mémoire. si on n'a que des grappes pertinentes, on gagne en espace libre pour accélérer.
+
+**Tour 62** — peut-on faire des grappes dans les couches extrêmes? l'idée n'est pas d'accélérer le chargement, mais simplement réduire la quantité à charger avant d'opérer. moins de ram/vram = plus de noeuds en mémoire. si on n'a que des grappes pertinentes, on gagne en espace libre pour accélérer.
+
+**Tour 63** — nous venons de faire une longue session, il est temps de mettre à jour la doc, rapports, journal et reprise. Ensuite utilisons les logs de cette session pour les rejouer localement et analyser le comportement, couche par couche afin d'identifier d'autres pistes d'optimisation de l'empreinte mémoire deepseek 4.1.
 
 ## 2. Déroulé, étape par étape
 
@@ -2400,7 +2424,7 @@ Les téléchargements avancent en parallèle : **DeepSeek-V4.1-Flash 68 %** (249
 
 ### Tour 51 — continue jusqu'à 13h HAE
 
-*309 appels d'outils.* Actions notables :
+*310 appels d'outils.* Actions notables :
 
 - bash — Check time and running processes
 - job_list
@@ -2416,11 +2440,679 @@ Les téléchargements avancent en parallèle : **DeepSeek-V4.1-Flash 68 %** (249
 - todo_write
 - bash — Count buffer accesses in gguf.rs
 - bash — Map functions and base computations
-- … et 292 autres
+- … et 293 autres
 
 **Synthèse produite :**
 
-⏵ **File terminée : 1 163 Go de modèles lourds, tous complets et lisibles.** Je consigne.
+Bloc terminé. Tout est vert, commité, et la machine est rendue.
+
+\## Ce que le bloc a livré (11:13 → 12:40, 17 commits)
+
+**Le chantier principal** — un modèle éclaté se lit comme un seul :
+
+| mesure | résultat |
+|---|---|
+| épreuve appariée origine ↔ clusters | **15,2789 = 15,2789** (mêmes 63 jetons) |
+| chaîne complète par les outils du dépôt | convertisseur (351,7 s) → 1 587 tenseurs SHA-256 *tout concorde* → **15,2789** |
+| DeepSeek-V4-Flash, 3 shards, en-têtes seuls | **86,90 Go annoncés = 86,90 Go sur disque**, 54 ms |
+| Qwen3-30B en clusters | 9 fichiers · 1 587 tenseurs · 18,55 Go = l'original |
+
+**Deux chantiers nés de la preuve d'exécution** :
+
+- **mmap** : 9,32 s / 6,35 Go contre 30,68 s / 19,20 Go — perplexité identique
+- **nœud partiel** : 1 cluster → 2,35 Go · 2 → 2,83 · 4 → 4,60 · 8 → 6,28 Go, perplexité 268 786 → 63 780 → 3 379 → 800
+
+**Deux vérifications croisées larges** : la table ggml confrontée à `libggml` (41 types, 0 divergence) et les poids lus confrontés à HuggingFace sur **1 163 Go** — la file de téléchargement est terminée, sept modèles, six architectures reconnues.
+
+\## Ce que les revues adverses ont changé
+
+Douze défauts corrigés, dont un **bloquant silencieux** (`DRAVE_CLUSTERS` couvrant tous les clusters sur un dossier amputé faisait disparaître des experts sans un mot) et le plus instructif : **mon correctif de `Moe::ou` n'avait aucun test** — le remettre en cause laissait les trente tests verts. Le blocage était qu'aucun `Moe` n'était constructible en test ; un générateur Q8/Q4_0 a levé l'obstacle.
+
+Trois fois, la correction est venue d'avoir **rendu visible** ce qui était silencieux. Et une fois de plus : un test qui compare deux chemins ne prouve rien s'ils partagent leur origine — le NaN est passé sous 24 tests verts.
+
+\## Portes
+
+19,3885 · 15,1757 · 15,2789 = 15,2789 · **32 tests verts** (20 au départ).
+
+**Ouvert** : la somme des contributions entre nœuds (le nœud partiel saute les experts absents, rien ne les additionne encore) ; les biais d'experts en clusters ; le `forward` des architectures lourdes (`deepseek41`, `deepseek2`, `deepseek4`, `glm-dsa`) — maintenant qu'elles sont toutes téléchargées et lisibles.
+
+### Tour 52 — que manque-t-il pour rouler un deepseek 4.1 localement avec notre approche par liste d'activation et chargement d'expert … [15 caractères tronqués]
+
+*11 appels d'outils.* Actions notables :
+
+- bash — Inventory DeepSeek-V4.1 architecture and types
+- bash — Inspect DeepSeek-V4.1 layer structure
+- bash — Dump DeepSeek-V4.1 metadata
+- bash — Dump metadata with a script file
+- bash — Fix parser and dump metadata
+- bash — List distinct tensor names
+- bash — Compute per-token expert cost
+- bash — Check supported types and bias naming
+- bash — Extract embedded HuggingFace config
+- bash — List all text_config keys
+- bash — Compare both DeepSeek models and cache strategies
+
+**Synthèse produite :**
+
+Voici l'écart, mesuré sur le fichier lui-même (pas sur la fiche HuggingFace).
+
+\## Le modèle, tel que ses en-têtes le décrivent
+
+`deepseek41` · 40 couches · hidden 5120 · 1 046 tenseurs · **365,70 Go** · contexte 1 048 576
+
+| brique | paramètres |
+|---|---|
+| MoE | **384 experts** routés, top-6, + 1 expert partagé, intermédiaire 2304 |
+| MLA | q_lora 1280 · o_lora 1024, **o_groups 8** · head_dim 512 · qk_rope 64 · kv_heads 1 |
+| attention creuse | `index_topk 512` sur `candidate_topk_blocks 2048`, indexeur à 32 têtes sur 6 couches sources |
+| KV | `compress_ratios` variable (2 puis 1) · `kv_source_layer_ids [2, 8, 14, 20]` — **le KV est partagé entre couches** |
+| connexions | **`hc_mult 4`, sinkhorn 20 itérations** (`hc_attn_*`, `hc_ffn_*`, 6 tenseurs/couche) |
+| mémoire | **engram** : n-grammes jusqu'à 4, vocabulaire 16 M, 384 M embeddings, 2 couches |
+| MTP | `dspark` : 128 experts top-3 sur les couches 37–39 |
+| routage | `sqrtsoftplus`, `noaux_tc`, `routed_scaling 1.5`, `norm_topk_prob`, biais `exp_probs_b` |
+| divers | `swiglu_limit 10.0` · `sliding_window 128` · RoPE yarn ×16 |
+
+**Types de tenseurs : F32, Q8_0, F16, IQ2_XXS, Q2_K, I8** — le moteur lit les quatre premiers, pas les deux qui portent les experts.
+
+\## Le chiffre qui commande tout
+
+Un expert = 9,95 Mo. Un jeton lit `top-6 × 40 couches` = **2,39 Go**.
+
+| où sont les poids | coût par jeton |
+|---|---|
+| RAM (~100 Go/s) | 24 ms |
+| NVMe (2,1 Go/s) | **1,1 s** |
+| cache de 64 Go + NVMe | ~0,66 s |
+
+Les 153 Go d'experts ne tiennent pas dans 125 Go. Et un cluster de 48 experts (19,1 Go) tient — mais la probabilité qu'un jeton trouve ses 6 experts dans **un même** cluster est de **0,003 %**. Donc ici, la somme entre nœuds n'est pas une optimisation : c'est la condition d'existence. (Notre mesure sur Qwen3 donne une couverture de 0,607 pour 8 clusters, très au-dessus de l'uniforme — la trace de routage dirait le vrai chiffre.)
+
+**Point contre-intuitif** : IQ2_XXS fait 2,06 bits/poids. Notre approche par listes descend à ~1 bit sur du Q4_K, soit un gain de 4×. Sur un modèle déjà à 2 bits, la marge est presque nulle. **Sur ce modèle, la valeur n'est pas dans la sparsification des poids mais dans le chargement sélectif des experts** — ce que le moteur fait déjà pour le GPU (`CacheExperts`, LRU) et pas encore depuis le disque.
+
+\## Ce qui existe et se réutilise
+
+Déjà là : lecteur multi-fichiers et mmap · MoE avec expert partagé (`shexp` est présent dans V4.1) · MLA (vérifié à 5,2e-7 sur un modèle synth
+… [1966 caractères tronqués]
+
+### Tour 53 — peut-on avoir 1 expert par fichier pour simplifier? est-on flexible sur le matériel optimal/disponible pour chaque couch … [232 caractères tronqués]
+
+*11 appels d'outils.* Actions notables :
+
+- bash — Measure GGUF header sizes
+- bash — Measure system limits and bandwidths
+- bash — Measure random-read bandwidth on NVMe and HDD
+- bash — Check HDD result and cache state
+- bash — Measure NVMe with O_DIRECT bypassing cache
+- bash — Measure HDD random reads with O_DIRECT
+- bash — Rerun with error checking
+- bash — Launch 60 GB random read measurement on HDD
+- bash — Compute flux vs weights asymmetry
+- bash — Correct unit computation and read transport report
+- bash — Correct bandwidth computation
+
+**Synthèse produite :**
+
+Trois questions, trois réponses chiffrées. J'ai mesuré ce qui manquait.
+
+\## 1. Un expert par fichier ? Oui — mais ça ne sert pas à ce qu'on croit
+
+**Le coût qui tue** : l'en-tête d'un `cluster-XX.gguf` pèse **5,945 Mo**, dont l'essentiel est le tokenizer dupliqué. Pour V4.1 : 384 experts × 40 couches = **15 360 fichiers × 5,945 Mo = 91 Go**, soit 25 % du modèle en en-têtes. Rédhibitoire tel quel.
+
+Avec un en-tête minimal (zéro métadonnée, un tenseur) : ~16 Ko à cause de l'alignement de 16384 → **246 Mo**. Négligeable. Et `ulimit -n` est à **524 288**, donc 15 360 descripteurs ouverts ne posent aucun problème.
+
+**Mais voici le point important** : avec le `mmap`, découper en fichiers n'apporte **rien** à la lecture à la demande. Le noyau lit déjà les pages de 4 Ko une par une, quel que soit le nombre de fichiers. Un cluster de 2,2 Go mmappé et 138 fichiers de 16 Mo se comportent identiquement à la lecture — seul le `read_dir` change.
+
+Le découpage en fichiers n'a donc qu'**un** intérêt réel : le **placement** (mettre l'expert 42 sur le NVMe du nœud B). Pour la performance, c'est le mmap qui donne la granularité, pas le nombre de fichiers.
+
+\## 2. Flexibilité par couche ? L'asymétrie décide, et elle est énorme
+
+| | par jeton, V4.1 |
+|---|---|
+| **poids d'experts lus** | **2,39 Go** |
+| flux entre couches (dense) | 0,82 Mo |
+| flux entre couches (**listes**, mesuré) | 0,145 Mo |
+| **rapport** | **2 917× à 16 492×** |
+
+Conséquence directe : **le réseau n'est jamais le goulot**. À 1 Gb/s, le flux en listes coûte **1,2 ms par jeton** pour les 40 couches. Et le rapport de transport l'avait déjà montré : *« 0,25 Mbit/s suffisent, la latence compte quatre fois »* — l'attente de 97,6 ms venait de Nagle, pas du débit.
+
+D'où la recommandation : **découper par couches, pas par experts**. Le découpage par couches est déjà implémenté (`--couches-locales`, `--ppl-reparti`), donne 1/N de mémoire, et **ne demande pas la somme entre nœuds** — qui reste le chantier complexe. Pour V4.1 : **8 nœuds de 46 Go**, chacun avec ses 5 couches, le flux faisant 0,15 Mo par jeton entre eux.
+
+Le découpage par experts ne se justifie que pour paralléliser le calcul ou équilibrer une charge inégale — et il paie la somme, la renormalisation, et la latence.
+
+**Les débits mesurés**, qui alimenteraient un planificateur :
+
+| support | débit | source |
+|---|---|---|
+| VRAM (2 GPU) | ~750 Go/s | 9,7 Go en 13 ms (banc KV int4) |
+| RAM | ~20 Go/s | memcpy + recoupé par le banc KV |
+| NVMe (aléatoire, b
+… [2448 caractères tronqués]
+
+### Tour 54 — peut-on découper par couche et expert, et fusionner seulement les grappes d'experts requis. on n'aura jamais besoin de t … [66 caractères tronqués]
+
+*7 appels d'outils.* Actions notables :
+
+- bash — Find routing traces and tools
+- bash — Generate routing trace
+- bash — Check trace generation
+- bash — Analyse expert coverage over tokens
+- bash — Compute expert coverage correctly
+- bash — Analyse frequency distribution and LRU cache
+- bash — Measure cross-layer expert predictability
+
+**Synthèse produite :**
+
+Trois mesures, et elles répondent nettes — dont une qui contredit l'intuition.
+
+\## « On n'aura jamais besoin de tous les experts » — faux en couverture, vrai en fréquence
+
+Trace de routage réelle : 48 couches × 256 jetons sur Qwen3-30B-A3B (128 experts, top-8).
+
+| après N jetons | experts distincts vus (couche 0) |
+|---|---|
+| 1 | 8 / 128 |
+| 8 | 44 / 128 |
+| 32 | 88 / 128 |
+| 128 | 113 / 128 |
+| 255 | 116 / 128 |
+
+**Toutes couches confondues : 128/128 experts sollicités en 255 jetons.** Le catalogue entier sert dès les premières centaines de jetons.
+
+Mais la fréquence, elle, est très inégale :
+
+| | part des appels |
+|---|---|
+| les 64 experts les plus appelés (50 %) | **69,0 %** |
+| les 102 (80 %) | 90,7 % |
+| les 115 (90 %) | 96,1 % |
+
+Rapport entre le plus et le moins appelé : **10×**. Donc ce n'est pas la couverture qu'il faut exploiter, c'est la fréquence — et ça change complètement la conclusion.
+
+\## Un cache LRU bat toutes les découpages
+
+| cache par couche | appels servis en mémoire |
+|---|---|
+| 8 experts (6 %) | 35,2 % |
+| 16 (12,5 %) | 61,4 % |
+| **32 (25 %)** | **79,9 %** |
+| 64 (50 %) | 94,1 % |
+
+Pour V4.1 : 25 % des experts = **38 Go de RAM**, et il ne reste que 0,48 Go à lire par jeton → **87 ms/jeton sur le NVMe**. Sans cache : 0,43 s. Le cache vaut 5×.
+
+\## L'arbre de dépendance : il n'existe pas
+
+C'est la question la plus intéressante, et la réponse est non. J'ai mesuré le recouvrement entre les experts choisis en L et en L+1 — si un arbre existait, il serait là :
+
+| paire | recouvrement | hasard |
+|---|---|---|
+| 0 → 1 | 9,9 % | 6,2 % |
+| 10 → 11 | 6,5 % | 6,2 % |
+| 20 → 21 | 6,8 % | 6,2 % |
+| 30 → 31 | **0,7 %** | 6,2 % |
+| 40 → 41 | 6,1 % | 6,2 % |
+
+**Au niveau du hasard.** Les experts d'une couche ne prédisent rien de la suivante. Ajoutez à cela que le calcul d'une couche (0,6 ms) est **18× plus rapide** que sa lecture (10,9 ms) : un préchargement prédictif, même parfait, ne masquerait que **6 %** de l'attente. L'arbre n'apporterait rien même s'il existait.
+
+(Cohérent avec ce qu'on avait trouvé pour le découpage : la co-activation n'ajoute rien à la fréquence, accord 1,000.)
+
+\## Fusionner les grappes : contre-productif sur NVMe
+
+Pour couvrir les 8 experts d'un jeton avec 8 grappes de 16, il faut lire **3,08 grappes** — c'est la ventilation déjà mesurée. Soit 49 experts lus pour 8 utiles : **6× trop de données**.
+
+Ça ne se défend que sur disque mécanique, où j'ai mesuré que l'aléatoire est bien plus lent que le séquentiel :
+
+| disque mé
+… [1753 caractères tronqués]
+
+### Tour 55 — cherche encore un moyen d'optimiser autour du moe ou mieux encore étudier des groupements différents par couche. tout le … [161 caractères tronqués]
+
+*16 appels d'outils.* Actions notables :
+
+- bash — Find available token id files
+- bash — Check tokenize mode and id format
+- bash — Tokenize corpus and produce long trace
+- bash — Check long trace result
+- bash — Wait for long trace
+- bash — Prepare analysis script and wait for trace
+- bash — Wait for trace completion
+- bash — Analyse routing concentration by layer
+- bash — Test stability and adaptive cache gain
+- bash — Compute optimal per-layer cache allocation
+- bash — Debug the cache curve computation
+- bash — Recompute allocation with top-k floor
+- bash — Measure per-layer cluster fan-out
+- bash — Simulate clusters plus cache together
+- … et 2 autres
+
+**Synthèse produite :**
+
+Quatre mesures, et deux d'entre elles contredisent l'intuition — dont une qui contredit ma propre recommandation précédente.
+
+\## 1. La concentration varie bien avec la profondeur — mais pas où on l'attendait
+
+Trace de routage réelle : 48 couches × 1 436 jetons de WikiText-2, top-8 sur 128 experts.
+
+| | experts distincts | Gini | experts pour 80 % des appels |
+|---|---|---|---|
+| premiers 25 % | 104 | 0,619 | 36 |
+| derniers 25 % | 96 | 0,618 | 34 |
+
+**Aucun gradient début/fin.** Votre hypothèse d'un savoir « encyclopédique à la base » ne se lit pas dans le routage : les premières et dernières couches se ressemblent.
+
+En revanche, **couche par couche, l'écart est d'un facteur 4** :
+
+| couche | Gini | experts pour 80 % |
+|---|---|---|
+| 19 | 0,763 | **16** |
+| 31 | 0,763 | 17 |
+| 7 | 0,756 | 20 |
+| 0 | 0,446 | **59** |
+| 1 | 0,513 | 54 |
+
+Et cette structure est **très stable** : corrélation entre les deux moitiés de la trace **r = 0,983**, aucune couche ne change de régime. Ce n'est pas un artefact d'échantillon.
+
+\## 2. Mais l'allocation adaptative n'apporte rien
+
+J'ai alloué le cache par programmation gloutonne sur les gains marginaux, contre une taille uniforme :
+
+| budget/couche | mémoire | uniforme | adaptatif | gain |
+|---|---|---|---|---|
+| 16 | 2,34 Go | 59,6 % | 59,6 % | −0,0 % |
+| 32 | 4,68 Go | 79,0 % | 79,2 % | **+0,2 %** |
+| 48 | 7,03 Go | 89,4 % | 90,6 % | +1,2 % |
+| 64 | 9,37 Go | 95,4 % | 96,5 % | +1,1 % |
+
+**Le gain maximal est de 1,2 %.** Les couches diffèrent par leur concentration, mais leurs courbes de cache sont **parallèles** : le gain marginal décroît au même rythme partout, donc l'uniforme capture déjà l'essentiel. Votre intuition sur des groupements par couche est structurellement vraie et pratiquement sans valeur.
+
+\## 3. Fusionner les grappes : 27× plus de lectures
+
+C'est ici que la mesure est brutale. Simulation du volume lu par appel utile, quand un expert manque et qu'on charge **toute sa grappe** :
+
+| grappes | taille | cache 16 | cache 32 | cache 64 |
+|---|---|---|---|---|
+| 2 | 64 | 59,6 | 51,7 | 5,31 |
+| 8 | 16 | 9,72 | 5,73 | 0,87 |
+| 32 | 4 | 2,47 | 0,92 | 0,16 |
+| **128** | **1** | **0,40** | **0,21** | **0,04** |
+
+À cache égal (32 experts), une grappe d'un expert lit **0,21 expert par appel** ; une grappe de seize en lit **5,73** — **27× plus**. Le préchargement ne rembourse jamais la surlecture : charger 16 experts pour en utiliser un est une perte sèche.
+
+**Et ça contredit ce que je vous disais au bloc précédent** sur l
+… [1661 caractères tronqués]
+
+### Tour 56 — on s'est arrêté a 128 commme granularité alors que les résultats devenaient de plus en plus intéressants. continue
+
+*7 appels d'outils.* Actions notables :
+
+- bash — Inspect activation sparsity machinery
+- bash — Check for sparse matvec paths
+- bash — Inspect neuron profiling
+- bash — Measure activation sparsity at various thresholds
+- bash — Find neuron profile output
+- bash — Get full profile output
+- bash — Read sparsity sweep results
+
+**Synthèse produite :**
+
+La courbe s'arrête, et voici pourquoi — mesuré.
+
+\## La descente sous l'expert : la sparsité existe, mais elle n'est pas exploitable
+
+Le profil montre une sparsité **réelle** : seulement **12,5 % des neurones** tirent plus de 10 % du temps, et les 10 % les plus lourds portent **81,6 à 86,5 %** de la masse d'activation. De quoi rêver d'une granularité sous l'expert : ne lire que les lignes utiles de `down` (39 % du poids d'un expert).
+
+Sauf que :
+
+| seuil d'activation | perplexité | facteur |
+|---|---|---|
+| 0 (référence) | **7,6139** | — |
+| 0,05 | 2 182,37 | **×287** |
+| 0,10 | 10 592,25 | ×1 391 |
+| 0,25 | 727 099,03 | ×95 500 |
+
+**Dès 5 % de seuil, le modèle est détruit.** La sparsité est là, mais les activations faibles ne sont pas négligeables — elles portent le résultat. On ne peut donc pas sauter des lignes de matrice sur un critère d'amplitude.
+
+*(Le moteur, lui, calcule déjà sa liste creuse puis **reconstruit un vecteur dense** avant le produit — c'est écrit dans `matvec_q4`. Le compteur le confirme : « projections : 0,0 M événements par token ». La sparsité est calculée et jetée.)*
+
+\## Ce que la courbe dit vraiment, et où elle s'arrête
+
+En remettant les mesures bout à bout :
+
+| granularité | volume lu par appel utile (cache 32) |
+|---|---|
+| grappe de 64 experts | 51,69 |
+| grappe de 16 | 5,73 |
+| grappe de 4 | 0,92 |
+| **1 expert** | **0,21** |
+| sous l'expert (lignes) | *impossible — le seuil détruit le modèle* |
+
+La courbe s'améliore à chaque division **parce que le nombre de grappes tend vers le nombre d'experts** — et elle s'arrête là. En dessous, il n'y a **aucun signal** qui dise quoi charger : le routeur ne choisit pas des lignes, il choisit des experts. Le neurone n'est pas une unité de décision, c'est une unité de calcul.
+
+C'est la raison de fond : **on ne peut pas charger sélectivement ce qui n'est pas sélectivement choisi.**
+
+\## Et une mesure qui va dans votre sens — sur une fenêtre courte
+
+Le profil a compté : sur 127 jetons, **2 277 experts sur 6 144 (37 %) n'ont jamais été choisis**. C'est le seul régime où « on n'a pas besoin de tous les experts » est littéralement vrai. Mais la couverture croît vite :
+
+| jetons | experts couverts |
+|---|---|
+| 127 | 63 % |
+| 255 | ~100 % |
+| 1 436 | 100 % |
+
+Toute session réelle dépasse 255 jetons. Le bénéfice n'est donc pas « ne pas charger les experts inutiles », c'est **ne pas les recharger** — le cache.
+
+\## La courbe complète, en une image
+
+```
+grappe 64 ──► 51,7   ┐
+grappe 16 ──►  5,73  │  de
+… [959 caractères tronqués]
+
+### Tour 57 — qu'en est-il de la langue des jetons? On doit bien pouvoir réduire la densité d'entrées si on connait déjà la langue, id … [21 caractères tronqués]
+
+*9 appels d'outils.* Actions notables :
+
+- bash — Compute embedding and head weight
+- bash — Measure vocabulary coverage per language and domain
+- bash — Find more French corpus
+- bash — Measure vocabulary coverage growth curve
+- bash — Export logits for softmax mass analysis
+- bash — Analyse softmax mass outside French vocabulary
+- bash — Fix logits parsing and rerun
+- bash — Compute perplexity with restricted vocabulary
+- bash — Measure rank of true token, the comparable metric
+
+**Synthèse produite :**
+
+Oui, et c'est un gain **du même ordre que le cache d'experts** — mais il faut écarter un piège de mesure.
+
+\## Le vocabulaire est minuscule à l'usage
+
+Tokenisation de 8,3 Mo de français (journal + rapports + docs, 3 050 991 jetons) avec le tokenizer de Qwen3 (151 936 tokens) :
+
+| jetons lus | identifiants distincts | % du vocabulaire |
+|---|---|---|
+| 10 000 | 1 462 | 0,96 % |
+| 100 000 | 4 659 | 3,07 % |
+| 1 000 000 | 15 768 | 10,38 % |
+| 3 050 991 | **19 793** | **13,03 %** |
+
+Et la croissance est **très lente** : entre 1 M et 3 M jetons, la couverture passe de 10,4 % à 13,0 % — un exposant de Heaps d'environ **0,21**. Pour atteindre 50 % du vocabulaire il faudrait des milliards de jetons. Autrement dit : **on n'y arrivera jamais, et 13 % est un plafond de fait.**
+
+Par domaine, même chose — et ce sont des sous-ensembles **différents** : code 5,15 %, français 4,64 % sur petits corpus, anglais 5,83 %.
+
+\## Le piège : la perplexité restreinte *baisse*
+
+| | perplexité |
+|---|---|
+| complète (151 936 tokens) | **25,3748** |
+| restreinte aux 19 793 tokens français | **24,3108** |
+
+Elle **baisse** — et ce n'est pas une amélioration : en retirant des tokens, on retire de la masse au dénominateur du softmax, donc `p(vrai)` monte artificiellement. **Deux perplexités calculées sur des vocabulaires différents ne sont pas comparables.** C'est un piège classique, et il aurait suffi de le publier tel quel pour annoncer un gain inexistant.
+
+La mesure qui, elle, est comparable : le **rang** du vrai token.
+
+| | |
+|---|---|
+| rang médian | **3** |
+| p90 | 250 |
+| p99 | 2 719 |
+| rang maximum | 4 319 |
+
+| vocabulaire gardé | vrais jetons présents |
+|---|---|
+| top-1 024 | 96,1 % |
+| top-4 096 | 99,2 % |
+| **top-16 384** | **100,0 %** |
+| 19 793 (le français vu) | **127/127** |
+
+Donc **pour la génération, restreindre à 13 % du vocabulaire ne perd rien** : le token suivant y est toujours. Pour la perplexité, on ne peut pas le prouver par ce chemin — il faudrait une référence recalculée sur le même vocabulaire.
+
+\## Ce que ça vaut en bande passante
+
+C'est ici que l'idée paie, et c'est considérable :
+
+| | V4.1, par jeton |
+|---|---|
+| experts (top-6 × 40 couches) | 2,39 Go |
+| **tête de sortie** (129 280 × 5120, F16) | **1,32 Go — 36 % du trafic** |
+| embedding (une fois) | 1,32 Go en mémoire |
+
+La tête est relue **en entier à chaque jeton**, sans cache possible — elle est utilisée intégralement. La restreindre à 20 000 lignes la fait passer à **205 Mo**.
+
+**Gain : 1,12 Go par jet
+… [1447 caractères tronqués]
+
+### Tour 58 — on peut créer un dictionnaire de dictionnaire de tokens, c'est à dire charger uniquement les grappes de neuronnes corres … [385 caractères tronqués]
+
+*16 appels d'outils.* Actions notables :
+
+- bash — Produce traces for three languages/domains
+- bash — Follow multi-language traces
+- bash — Prepare language analysis and wait
+- bash — Wait for traces
+- bash — Test token-to-expert stability
+- bash — Fix and rerun token-expert analysis
+- bash — Wait for English and code traces
+- bash — Follow trace progress
+- bash — Wait for code trace
+- bash — Wait for code trace completion
+- bash — Check code trace
+- bash — Analyse expert overlap between languages
+- bash — Test frequency correlation and language classification
+- bash — Measure cache pre-warming by language
+
+**Synthèse produite :**
+
+Trois idées testées, et les trois tombent — mais la mesure qui les tue est instructive.
+
+\## 1. Les experts sont-ils associés à la langue ? Non
+
+Trois corpus de 1 024 jetons tokenisés et routés par le même modèle (48 couches, 128 experts, top-8) :
+
+| paire | Jaccard des experts |
+|---|---|
+| français / anglais | 0,752 |
+| français / code | 0,903 |
+| anglais / code | 0,751 |
+| **français / français** (deux moitiés du même texte) | **0,805** |
+
+Le recouvrement entre langues est **au niveau de la variabilité interne d'une seule langue**. Et les experts « propres » à une langue — jamais vus dans les deux autres — sont **1,7 % à 3,1 %**.
+
+Ce ne sont pas les mêmes *fréquences*, en revanche :
+
+| paire | corrélation des fréquences |
+|---|---|
+| français / anglais | **r = 0,102** |
+| anglais / code | **r = −0,009** |
+| français / français | r = 0,995 |
+
+Et un classifieur par plus proche voisin reconnaît le corpus d'origine dans **79,8 %** des cas (hasard : 33 %). **La langue est lisible dans le routage** — mais par des *rééquilibrages de fréquence*, pas par des experts dédiés. Les mêmes experts servent, dans des proportions différentes.
+
+*(Réserve : le corpus « code » contient les commentaires français de `tools/*.py`, ce qui explique le r = 0,82 avec le français. Le couple propre est français/anglais.)*
+
+\## 2. Un token prédit-il ses experts ? Non
+
+Pour chaque token apparaissant au moins 4 fois dans le corpus français, Jaccard entre ses occurrences :
+
+| couche | Jaccard du même token |
+|---|---|
+| 0 | **0,499** |
+| 8 | 0,088 |
+| 20 | 0,056 |
+| 36 | 0,065 |
+
+Au-delà de la première couche, c'est **au niveau du hasard** (≈ 0,03). Le routage dépend de la représentation **contextuelle** du token, pas du token : « chat » dans « le chat dort » et dans « chat domestique » n'appellent pas les mêmes experts.
+
+Le « dictionnaire de dictionnaires » token → neurones ne peut donc pas exister. Il n'y a **que la couche 0** où le token porte un signal — et c'est cohérent avec votre intuition que les premières couches sont plus « communes » : elles sont plus lexicales, les profondes plus contextuelles.
+
+\## 3. Pré-remplir le cache par langue ? Gain nul
+
+Puisque la langue est lisible, on pourrait amorcer le cache avec les experts chauds de la langue détectée :
+
+| pré-remplissage | → français | → anglais | → code |
+|---|---|---|---|
+| aucun (à froid) | 77,9 % | 78,5 % | 80,4 % |
+| chauds du français | 78,0 % | 78,5 % | 80,4 % |
+| chauds de l'anglais | 78,0 % | 78,6 % | 80,4 % |
+
+**Aucune
+… [1568 caractères tronqués]
+
+### Tour 59 — il y a probablement déjà beaucoup d'études sur les FFN qui concernent la symétrie entrée et sortie, le vocabulaire, morp … [312 caractères tronqués]
+
+*2 appels d'outils.* Actions notables :
+
+- bash — Test the layer mirror hypothesis
+- bash — Test whether output language follows input language
+
+**Synthèse produite :**
+
+Vos deux intuitions sont **confirmées par la mesure**, et la seconde ouvre un gain que je n'avais pas vu.
+
+\## 1. Le miroir existe : les couches extrêmes sont 4,6× plus liées au token
+
+Jaccard entre les occurrences du même token, couche par couche :
+
+| couche | 0 | 4 | 12 | 20 | 24 | 40 | 45 | **47** |
+|---|---|---|---|---|---|---|---|---|
+| Jaccard | **0,499** | 0,161 | 0,065 | 0,056 | 0,050 | 0,135 | 0,210 | **0,349** |
+
+| | Jaccard moyen |
+|---|---|
+| couches extrêmes (0-3, 44-47) | **0,259** |
+| couches médianes (20-27) | **0,056** |
+
+Un facteur **4,6×**, et la forme en U est nette. Votre lecture est la bonne : **les couches extrêmes portent le lexical et le morphosyntaxique, le milieu porte l'abstrait.** L'entrée est même un peu plus marquée que la sortie (0,50 contre 0,35 pour la première paire).
+
+C'est la première fois qu'on trouve une structure **exploitable par prédiction** : aux couches 0-3 et 44-47, connaître le token d'entrée dit quelque chose de ses experts (Jaccard 0,26-0,50, contre 0,06 au milieu). Au milieu, c'est le contexte qui décide — on l'avait mesuré, et c'est pour ça que le « dictionnaire token → experts » échouait partout : je l'avais testé sur la moyenne des couches, alors qu'il ne vaut que pour les extrêmes.
+
+\## 2. La langue de sortie suit celle de l'entrée : 99,2 %
+
+Sur 127 positions d'un texte français, le top-1 du modèle est un token français dans **126 cas**. Une seule exception.
+
+Et la masse du softmax :
+
+| | hors vocabulaire français |
+|---|---|
+| médiane | **0,44 %** |
+| moyenne | 3,85 % |
+| maximum | 40,4 % |
+
+Donc **restreindre la tête au vocabulaire de la langue d'entrée ne change pas la sortie** : le token choisi y est toujours. La masse perdue est négligeable en médiane — mais pas toujours, et c'est la nuance qui compte.
+
+\## 3. La nuance qui décide : confiant contre incertain
+
+Combien de tokens portent 99 % de la masse, selon la position :
+
+| position | rang du vrai token | tokens pour 99 % | pour 99,9 % |
+|---|---|---|---|
+| 0 | 1 087 | **20 212** | 50 999 |
+| 42 | 11 | 101 | 176 |
+| 84 | 3 | **9** | 9 |
+| 126 | 1 | **2** | 4 |
+
+**Quand le modèle est confiant, 2 à 9 tokens portent toute la masse. Quand il hésite, il en faut 20 000.**
+
+Donc la restriction linguistique (13 % du vocabulaire) est **toujours sûre** — elle rapporte 30 % du trafic. Une restriction plus agressive (top-4 096) serait sûre dans 99,2 % des cas mais casserait les positions incertaines — inacceptable pour une perplexité, acceptable pour une générati
+… [1872 caractères tronqués]
+
+### Tour 60 — peut-on faire des grappes dans les couches extrêmes? l'idée n'est pas d'accélérer le chargement, mais simplement réduire … [165 caractères tronqués]
+
+### Tour 61 — peut-on faire des grappes dans les couches extrêmes? l'idée n'est pas d'accélérer le chargement, mais simplement réduire … [165 caractères tronqués]
+
+### Tour 62 — peut-on faire des grappes dans les couches extrêmes? l'idée n'est pas d'accélérer le chargement, mais simplement réduire … [165 caractères tronqués]
+
+*3 appels d'outils.* Actions notables :
+
+- bash — Measure per-layer expert reducibility
+- bash — Test cross-layer expert prediction
+- bash — Map the periodic structure of expert reuse
+
+**Synthèse produite :**
+
+Trois mesures, dont une découverte que je n'attendais pas.
+
+\## 1. La réductibilité est **uniforme** — cibler les extrêmes n'apporte rien
+
+Combien d'experts faut-il garder pour couvrir X % des appels :
+
+| | 90 % | 99 % | Gini |
+|---|---|---|---|
+| couches extrêmes (0-3, 44-47) | **60,0** | 92,2 | 0,575 |
+| couches médianes (20-27) | 60,1 | 92,0 | 0,560 |
+| couches intermédiaires (4-43) | 59,1 | 92,1 | 0,576 |
+
+**Aucune différence.** Le miroir existe pour la *stabilité par token* (Jaccard 0,26 contre 0,06), mais **pas** pour la *concentration* : il faut 60 experts sur 128 partout pour couvrir 90 % des appels.
+
+Avec une exception notable, mais pas où on l'attendait :
+
+| couche | 90 % | 99 % | Gini |
+|---|---|---|---|
+| **47** (dernière) | **36** | 64 | 0,694 |
+| 45 | 40 | 76 | 0,700 |
+| 44 | 54 | 85 | 0,579 |
+| **0** (première) | **74** | 108 | 0,537 |
+
+**La dernière couche est la plus réductible, la première la moins.** Ce n'est pas symétrique : la couche 0 traite le token brut avec toute son ambiguïté, la couche 47 produit une distribution déjà resserrée. Si vous voulez cibler, c'est **la sortie**, pas « les extrêmes ».
+
+\## 2. Le miroir croisé n'existe pas
+
+| paire | Jaccard |
+|---|---|
+| 0 / 47 | 0,030 |
+| 1 / 46 | 0,028 |
+| 2 / 45 | 0,033 |
+| voisines (l, l+1) | 0,034 |
+
+Les couches symétriques ne partagent **rien**. Le miroir est une propriété de chaque couche (sa dépendance au token), pas une correspondance entre couches.
+
+\## 3. La découverte : une périodicité de **12** couches
+
+En cherchant le miroir croisé, j'ai trouvé autre chose :
+
+| écart entre couches | Jaccard moyen |
+|---|---|
+| 1 à 11 | ~0,035 |
+| **12** | **0,323** |
+| 16, 20 | ~0,035 |
+| **24** | **0,210** |
+
+Et les 14 paires les plus fortes ont **toutes** un écart de 12 :
+
+```
+16/28 : 0.549    15/27 : 0.503    12/24 : 0.477    8/20 : 0.465
+20/32 : 0.531    28/40 : 0.498    14/26 : 0.477   23/35 : 0.465
+21/33 : 0.518    18/30 : 0.485    17/29 : 0.475   19/31 : 0.461
+```
+
+**Les experts de la couche L et de la couche L+12 ont 32 à 55 % de recouvrement, contre 3,5 % pour tout autre écart.** Le modèle a une structure en **4 blocs de 12 couches** qui réutilisent les mêmes experts.
+
+**Mais je dois être honnête sur ce que ça ne permet pas** : ces experts sont des tenseurs **différents** (l'expert 5 de la couche 12 n'est pas l'expert 5 de la couche 24). La périodicité dit qu'ils sont *appelés ensemble*, pas qu'ils sont *identiques*. On ne peut donc pas en supprimer un — donc **pas d'économie de stock
+… [1351 caractères tronqués]
+
+### Tour 63 — nous venons de faire une longue session, il est temps de mettre à jour la doc, rapports, journal et reprise. Ensuite uti … [193 caractères tronqués]
+
+*21 appels d'outils.* Actions notables :
+
+- bash — Inventory session state and artifacts
+- bash — Start sprint 09
+- bash — Rename sprint to 09
+- write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-empreinte-memoire.md`
+- bash — Save session traces to NVMe
+- bash — Analyse memory footprint layer by layer
+- bash — Break down DeepSeek-V4.1 weight by family
+- bash — Inspect engram tensor shapes and config
+- bash — Quantify engram access cost
+- bash — Measure distinct n-grams by text length
+- bash — Measure n-gram counts in background
+- bash — Add engram discovery to report
+- bash — Update REPRISE with session findings
+- write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/analyse_empreinte.py`
+- … et 7 autres
+
+**Synthèse produite :**
+
+⏵ L'outil fonctionne. Je mets à jour le README et j'écris le sprint.
 
 ## 3. Travail accompli
 
@@ -2493,6 +3185,9 @@ Les téléchargements avancent en parallèle : **DeepSeek-V4.1-Flash 68 %** (249
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-lecteur-multifichiers.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/verifier_table_types.sh` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/inventaire_modeles_lourds.sh` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-empreinte-memoire.md` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/analyse_empreinte.py` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/sprints/09-empreinte-memoire-ce-qui-reduit-vraiment.md` | 2 | 0 |
 
 ### Sous-agents lancés
 
@@ -2561,7 +3256,7 @@ Les téléchargements avancent en parallèle : **DeepSeek-V4.1-Flash 68 %** (249
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 2445 autres
+- … et 2545 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2689,7 +3384,7 @@ Les téléchargements avancent en parallèle : **DeepSeek-V4.1-Flash 68 %** (249
 
 ## 5. Erreurs rencontrées
 
-154 sorties en erreur ou divergentes. Les premières :
+159 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : a8f2635f8 docs: record which models this box is good at, and why src/llama-hparams.cpp:8:void llama_hparams::set_swa_pattern(uint32_t n_pattern, bool dense_first) { src/llama-hparams.h:308:    void se
 - **T1** : 511 tokens notés — perplexité cumulée 247.031  (4.9 tok/s) === perplexité 247.0308 sur 511 tokens (0 événements, 104.5 s) ===  ### B3 harmony assistant 511 --- ref --- 0.0 0.0 0:00 ls: cannot access '
@@ -2964,4 +3659,5 @@ Les téléchargements avancent en parallèle : **DeepSeek-V4.1-Flash 68 %** (249
 - Journal de session" && git log --oneline --since="11:13" | wc -l && echo "commits sur le bloc" && git log --oneline -1 && echo "" && echo "=== RÉCAPITULATIF ===
 - Journal" 2>/dev/null; git status --short | wc -l; echo "---"; date +%H:%M; tail -1 /tmp/tl_file2.log
 - La file de 1 138 Go est terminée : 1 163 Go de modèles lourds, tous complets et lisibles  Sept modèles, six architectures reconnues (deepseek41, deepseek2, deep
+- L'empreinte memoire de DeepSeek-V4.1 : 365,7 Go -> 50-80 Go, et ce n'est pas en decoupant les experts  Decomposition des poids par famille : engram 203,4 Go (55
 

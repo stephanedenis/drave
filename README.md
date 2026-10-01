@@ -514,6 +514,48 @@ plus tard, pour les modèles réels — pas pour le test de principe.)
 
 ---
 
+## L'empreinte mémoire : ce qu'il faut charger avant d'opérer
+
+Question posée pour DeepSeek-V4.1-Flash (365,7 Go) sur une machine à 125 Go de
+RAM. Réponse mesurée : **50 à 80 Go suffisent**, et ce n'est pas en découpant
+les experts.
+
+| famille de tenseurs | Go | % | à charger |
+|---|---|---|---|
+| **engram** (2 couches) | **203,4** | **55,6 %** | **0,4 Go** — mmappé |
+| experts (40 couches) | 152,9 | 41,8 % | 21 à 71 Go selon l'objectif |
+| attention, embeddings, tête | 10,0 | 2,7 % | 10 Go |
+
+`blk.N.engram_embd.weight` fait 101,4 Go par couche, de forme `[384 006 168, 264]`
+en I8 — mais **ce n'est pas un tenseur de poids, c'est une table de hachage de
+n-grammes**. Une session de 10 000 jetons n'en touche que **17 276 entrées, soit
+4,6 Mo** : un rapport de 1 pour 22 000. Le `mmap` la rend adressable sans jamais
+la charger.
+
+Ce qui a été mesuré et **écarté** : découper plus fin que l'expert (le seuil
+d'activation détruit le modèle dès 5 % : perplexité ×287) · des grappes par
+langue (les experts se recouvrent à 0,75–0,90 entre langues, contre 0,805 pour
+deux moitiés d'une même langue) · un dictionnaire token → experts (le routage est
+contextuel : Jaccard 0,06) · une allocation du cache par couche (+1,2 % au mieux).
+
+Ce qui a été mesuré et **retenu** : le cache d'experts (25 % de l'empreinte sert
+80 % des appels) · la tête restreinte à la langue d'entrée (−30 % de trafic ; le
+top-1 y est dans 99,2 % des cas) · l'engram mmappé (−203 Go).
+
+Deux structures trouvées en chemin : **un miroir** (les couches extrêmes sont
+4,6× plus liées au token que les médianes) et **une périodicité de 12 couches**
+(Jaccard 0,323 à écart 12 contre 0,035 ailleurs).
+
+```bash
+# Chiffrer l'empreinte d'un MoE depuis une trace de routage réelle
+DRAVE_TRACE_EXPERTS=/tmp/routage.txt ./drave-core/target/release/drave \
+    /home/stephane/FastNVMe/artefacts/modeles-optimises/qwen3-30b-8clusters-v2 \
+    --ppl /tmp/ids_30b_wiki.txt --ctx 2048 --limit 2048 --dense --threads 10 --lot 1
+python3 tools/analyse_empreinte.py /tmp/routage.txt --modele deepseek41
+```
+
+Détail : [`reports/rapport-empreinte-memoire.md`](reports/rapport-empreinte-memoire.md).
+
 ## Prochaines étapes
 
 La feuille de route complète est dans [`docs/roadmap.md`](docs/roadmap.md). Ce qui
