@@ -46856,3 +46856,173 @@ gpt-oss ctx 256 lot 1 :
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np = 'sprints/08-un-modele-eclate-se-lit-comme-un-seul.md'\ns = open(p).read()\ns = s.replace('''| `cargo test --release` | **29 verts** (20 → 29) |''',\n              '''| `cargo test --release` | **32 verts** (20 → … [2071 caractères tronqués]`
+
+  ```
+ok
+400047e Rapports et sprint : les cinq défauts de la revue n°2 et le test qui manquait
+gpt-oss ctx 256 lot 1 :
+  ```
+
+- **bash** `{"command": "sleep 55; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat /tmp/gate_oss_final2.log; cat /proc/loadavg; date +%H:%M", "description": "Wait for gpt-oss gate"}`
+
+  ```
+gpt-oss ctx 256 lot 1 : 20.81 20.67 16.20 18/2676 2970360
+12:13
+  ```
+
+### 🤖 Assistant
+
+⏵ Je ferme le doute consigné : un outil qui confronte la table des types à `libggml`.
+
+- **write** `{"content": "#!/bin/bash\n# Confronte la table des tailles de types ggml du moteur à celle de `libggml`.\n#\n# Pourquoi cet outil existe : `octets_tensor` doit connaître, pour chaque type,\n# le nombre de poids par bloc et la taille d'un bloc. Cette table est **relevée**\n# depuis ggml et non deviné … [4108 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/verifier_table_types.sh</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && chmod +x tools/verifier_table_types.sh && ./tools/verifier_table_types.sh 2>&1 | head -20; echo \"EXIT $?\"", "description": "Run the type table verifier"}`
+
+  ```
+type 1   absent de la table du moteur (1/2)
+  type 2   absent de la table du moteur (32/18)
+  type 3   absent de la table du moteur (32/20)
+  type 6   absent de la table du moteur (32/22)
+  type 7   absent de la table du moteur (32/24)
+  type 8   absent de la table du moteur (32/34)
+  type 9   absent de la table du moteur (32/36)
+  type 10  absent de la table du moteur (256/84)
+  type 11  absent de la table du moteur (256/110)
+  type 12  absent de la table du moteur (256/144)
+  type 13  absent de la table du moteur (256/176)
+  type 14  absent de la table du moteur (256/210)
+  type 15  absent de la table du moteur (256/292)
+  type 16  absent de la table du moteur (256/66)
+  type 17  absent de la table du moteur (256/74)
+  type 18  absent de la table du moteur (256/98)
+  type 19  absent de la table du moteur (256/50)
+  type 20  absent de la table du moteur (32/18)
+  type 21  absent de la table du moteur (256/110)
+  type 22  absent de la table du moteur (256/82)
+EXIT 0
+  ```
+
+- **bash** `{"command": "cd /tmp && rm -rf dbgtypes && mkdir dbgtypes && cat > dbgtypes/t.c <<'C'\n#include <stdio.h>\n#include \"ggml.h\"\nint main(void) {\n    for (int t = 0; t <= 64; t++) {\n        enum ggml_type ty = (enum ggml_type)t;\n        const char *n = ggml_type_name(ty);\n        if (!n || n[0] = … [525 caractères tronqués]`
+
+  ```
+EXIT 0
+  ```
+
+### 🤖 Assistant
+
+⏵ Segfault : je lisais le nom d'un type inexistant avant de vérifier qu'il existe.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np = 'tools/verifier_table_types.sh'\ns = open(p).read()\ns = s.replace('''int main(void) {\n    for (int t = 0; t <= 64; t++) {\n        enum ggml_type ty = (enum ggml_type)t;\n        const char *n = ggml_type_name … [1071 caractères tronqués]`
+
+  ```
+types confondus : 32 · divergents : 0 · absents du moteur : 0
+types ggml que le moteur ne lit pas : 0 41 42 43 44 45 46 47 48 49 52 53 54 55 56 57 58 59 62 63
+EXIT 0
+  ```
+
+### 🤖 Assistant
+
+⏵ La table concorde (32 types, 0 divergence). Je liste les types ggml que le moteur ignore.
+
+- **bash** `{"command": "cd /tmp && L=/home/stephane/Data13TB/stephane/GitHub/llama.cpp; LD_LIBRARY_PATH=$L/build/bin ./dbgtypes/t | awk '$1>=41' ; echo \"=== noms ===\"; cat > /tmp/noms.c <<'C'\n#include <stdio.h>\n#include \"ggml.h\"\nint main(void){ for(int t=41;t<=64;t++){ int64_t b=ggml_blck_size((enum ggm … [404 caractères tronqués]`
+
+  ```
+=== noms ===
+[killed by signal: SIGSEGV]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np = 'tools/verifier_table_types.sh'\ns = open(p).read()\ns = s.replace('''inconnus=\"\"\nwhile read -r t bloc taille; do\n    grep -qE \"^$t \" \"$TMP/rust.txt\" || inconnus=\"$inconnus $t\"\ndone < \"$TMP/ggml.txt\ … [1122 caractères tronqués]`
+
+  ```
+types confondus : 32 · divergents : 0 · absents du moteur : 0
+types connus de ggml que le moteur ne lit pas :
+  type 0 : bloc 1, 4 octets
+  type 41 : bloc 128, 18 octets
+  type 42 : bloc 64, 18 octets
+  type 43 : bloc 32, 26 octets
+  type 44 : bloc 32, 28 octets
+  type 45 : bloc 32, 14 octets
+  type 46 : bloc 32, 16 octets
+  type 47 : bloc 32, 10 octets
+  type 48 : bloc 32, 12 octets
+  type 49 : bloc 139716407193616, 139716407193648 octets
+  type 52 : bloc 1, 1 octets
+  type 53 : bloc 27931, 27945 octets
+  type 54 : bloc 13, 25 octets
+  type 55 : bloc 890680, 8 octets
+  type 56 : bloc 5, 6 octets
+  type 57 : bloc 24, 139716407267304 octets
+  type 58 : bloc 23, 7 octets
+  type 59 : bloc 24, 66888 octets
+  type 62 : bloc 139716407272192, 139716407063824 octets
+  type 63 : bloc 139716407266544, 139716406036128 octets
+  (le moteur SIGNALE un type inconnu au lieu de le compter zéro ;
+   ajouter ces entrées à octets_tensor_opt pour les lire)
+  ```
+
+- **bash** `{"command": "grep -n \"GGML_TYPE_.*= 4[0-8],\" /home/stephane/Data13TB/stephane/GitHub/llama.cpp/ggml/include/ggml.h | head -12", "description": "Find names of new ggml types"}`
+
+  ```
+430:        GGML_TYPE_NVFP4   = 40, // NVFP4 (4 blocks, E4M3 scale)
+431:        GGML_TYPE_Q1_0    = 41,
+432:        GGML_TYPE_Q2_0    = 42,
+435:        GGML_TYPE_Q6_0    = 43,
+436:        GGML_TYPE_Q6_1    = 44,
+437:        GGML_TYPE_Q3_0    = 45,
+438:        GGML_TYPE_Q3_1    = 46,
+439:        GGML_TYPE_Q2_0S   = 47,
+440:        GGML_TYPE_Q2_1    = 48,
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\n# Le moteur apprend les types 41-48 (noms lus dans ggml.h, tailles relevées).\np = 'drave-core/src/gguf.rs'\ns = open(p).read()\na = '''            39 => (32, 17), 40 => (64, 36),\n            _ => return None,'''\n … [2603 caractères tronqués]`
+
+  ```
+table complétée
+outil corrigé
+types confondus : 40 · divergents : 0 · absents du moteur : 0
+types connus de ggml que le moteur ne lit pas :
+  type 0 : bloc 1, 4 octets
+  type 52 : bloc 1, 1 octets
+  type 54 : bloc 13, 25 octets
+  type 56 : bloc 5, 6 octets
+  type 58 : bloc 23, 7 octets
+  (le moteur SIGNALE un type inconnu au lieu de le compter zéro ;
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np = 'tools/verifier_table_types.sh'\ns = open(p).read()\ns = s.replace(r\"\"\"for m in re.finditer(r'(\\d+)\\s*=>\\s*\\(\\s*(\\d+)\\s*,\\s*([^)]+?)\\s*\\)', corps):\"\"\",\n              r\"\"\"for m in re.finditer( … [966 caractères tronqués]`
+
+  ```
+types confondus : 41 · divergents : 0 · absents du moteur : 0
+types connus de ggml que le moteur ne lit pas :
+  type 52 : bloc 1, 1 octets
+  type 54 : bloc 13, 25 octets
+  type 56 : bloc 5, 6 octets
+  type 58 : bloc 23, 7 octets
+  (le moteur SIGNALE un type inconnu au lieu de le compter zéro ;
+   ajouter ces entrées à octets_tensor_opt pour les lire)
+  ATTENTION : certains numéros ne correspondent à AUCUN type (trou dans
+  l'énumération) et ggml rend alors des valeurs non initialisées ; elles
+EXIT 141
+  ```
+
+### 🤖 Assistant
+
+⏵ 41 types concordants, 0 divergence. Je vérifie les tests et commite.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && (cd drave-core && cargo test --release 2>&1 | grep -E \"^test result\"); ./tools/verifier_table_types.sh > /tmp/verif_types.log 2>&1; echo \"outil EXIT $?\"; cat /tmp/gate_oss_final2.log", "description": "Run tests and type verifier" … [1 caractères tronqués]`
+
+  ```
+test result: ok. 32 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.11s
+outil EXIT 0
+gpt-oss ctx 256 lot 1 :
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np = 'docs/format-clusters.md'\ns = open(p).read()\ns = s.replace('''Deux fois, un type absent de cette table a rendu un inventaire faux : 8,56 Go\nannoncés pour 86,9 Go de fichiers (`iq1_m` manquant), puis 3,19 Go p … [2053 caractères tronqués]`

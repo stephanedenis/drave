@@ -135,6 +135,18 @@ annoncés pour 86,9 Go de fichiers (`iq1_m` manquant), puis 3,19 Go pour 18,55 G
 (préfixes non appliqués). Un type inconnu est donc désormais **signalé** au lieu
 d'être compté zéro.
 
+`tools/verifier_table_types.sh` **confronte la table à `libggml` elle-même** : il
+compile un petit programme lié à la bibliothèque, imprime `ggml_blck_size` et
+`ggml_type_size` pour chaque type, et compare au source Rust. Dernier passage :
+
+```
+types confondus : 41 · divergents : 0 · absents du moteur : 0
+```
+
+Il liste aussi les types que ggml connaît et que le moteur ignore — c'est ainsi
+que les huit types ajoutés après NVFP4 (`Q1_0`, `Q2_0`, `Q6_0`, `Q6_1`, `Q3_0`,
+`Q3_1`, `Q2_0S`, `Q2_1`) ont été relevés et ajoutés.
+
 ## Ce qui reste
 
 * **Le nœud partiel** : `DRAVE_CLUSTERS=0,3` ne charge que ces clusters — et un

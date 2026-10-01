@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 69.4 h |
+| Durée | 69.5 h |
 | Tours | 51 |
-| Messages | 2964 |
-| Appels d'outils | 2819 |
-| Fichiers touchés | 63 |
-| Commandes | 2434 |
+| Messages | 2976 |
+| Appels d'outils | 2831 |
+| Fichiers touchés | 64 |
+| Commandes | 2445 |
 | Sous-agents | 22 |
-| Commits | 245 |
+| Commits | 246 |
 | Compactages de contexte | 4 |
 
 ## Objectifs déclarés
@@ -2400,7 +2400,7 @@ Les téléchargements avancent en parallèle : **DeepSeek-V4.1-Flash 68 %** (249
 
 ### Tour 51 — continue jusqu'à 13h HAE
 
-*256 appels d'outils.* Actions notables :
+*268 appels d'outils.* Actions notables :
 
 - bash — Check time and running processes
 - job_list
@@ -2416,11 +2416,11 @@ Les téléchargements avancent en parallèle : **DeepSeek-V4.1-Flash 68 %** (249
 - todo_write
 - bash — Count buffer accesses in gguf.rs
 - bash — Map functions and base computations
-- … et 242 autres
+- … et 253 autres
 
 **Synthèse produite :**
 
-⏵ Je mets la doc à jour avec les correctifs de la revue.
+⏵ 41 types concordants, 0 divergence. Je vérifie les tests et commite.
 
 ## 3. Travail accompli
 
@@ -2491,6 +2491,7 @@ Les téléchargements avancent en parallèle : **DeepSeek-V4.1-Flash 68 %** (249
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/clusters.rs` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/sprints/08-un-modele-eclate-se-lit-comme-un-seul.md` | 2 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-lecteur-multifichiers.md` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/verifier_table_types.sh` | 1 | 0 |
 
 ### Sous-agents lancés
 
@@ -2559,7 +2560,7 @@ Les téléchargements avancent en parallèle : **DeepSeek-V4.1-Flash 68 %** (249
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 2394 autres
+- … et 2405 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2952,4 +2953,5 @@ Les téléchargements avancent en parallèle : **DeepSeek-V4.1-Flash 68 %** (249
 - Cérémonie du sprint 08 : quatre objectifs, deux nés de la preuve d'exécution  Rétrospective : garder le point d'étranglement unique (tbuf, Moe::ou) et le silenc
 - Revue adverse : un défaut bloquant silencieux, et le test qui manquait au correctif  Défauts corrigés (revue déléguée, lecture seule) :  - BLOQUANT SILENCIEUX :
 - Rapports et sprint : les cinq défauts de la revue n°2 et le test qui manquait" && git log --oneline -1; cat /tmp/gate_oss_final2.log
+- La table des types ggml confrontée à libggml, et les huit types ajoutés après NVFP4  tools/verifier_table_types.sh compile un programme lié à libggml, imprime g
 

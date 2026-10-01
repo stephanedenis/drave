@@ -640,6 +640,11 @@ zéro, l'inventaire sera sous-évalué", t.ttype, t.name);
             24 => (1, 1), 25 => (1, 2), 26 => (1, 4), 27 => (1, 8), 28 => (1, 8),
             29 => (256, 56), 30 => (1, 2), 34 => (256, 54), 35 => (256, 66),
             39 => (32, 17), 40 => (64, 36),
+            // Types ajoutés à ggml après NVFP4. Noms lus dans `ggml.h`, tailles
+            // relevées par `tools/verifier_table_types.sh` — qui les liste aussi
+            // longtemps qu'ils manquent ici.
+            41 => (128, 18), 42 => (64, 18), 43 => (32, 26), 44 => (32, 28),
+            45 => (32, 14), 46 => (32, 16), 47 => (32, 10), 48 => (32, 12),
             _ => return None,
         };
         Some(n / bloc * octets)
@@ -657,6 +662,8 @@ zéro, l'inventaire sera sous-évalué", t.ttype, t.name);
             24 => "I8", 25 => "I16", 26 => "I32", 27 => "I64", 28 => "F64",
             29 => "IQ1_M", 30 => "BF16", 34 => "TQ1_0", 35 => "TQ2_0",
             39 => "MXFP4", 40 => "NVFP4",
+            41 => "Q1_0", 42 => "Q2_0", 43 => "Q6_0", 44 => "Q6_1",
+            45 => "Q3_0", 46 => "Q3_1", 47 => "Q2_0S", 48 => "Q2_1",
             _ => return format!("type {ttype}"),
         };
         n.to_string()
