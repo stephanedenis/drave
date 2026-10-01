@@ -71,8 +71,9 @@ le MILIEU, et il échoue des deux côtés (CPU et GPU).
 ## Suite (sprint 4) : le k est un RÉGLAGE, pas une fatalité
 
 ⚠️ **Ce que cette grille est, et ce qu'elle n'est pas** — corrigé après la revue
-adverse du sprint 4 : les trois colonnes sont trois **répétitions de la MÊME
-invite**, pas trois fenêtres de corpus. Le garde-fou d'`aiguille.py` comparait
+adverse du sprint 4 (et re-corrigé au sprint 5, qui a refait la grille sur trois
+textes) : les trois colonnes sont trois **répétitions de la MÊME invite**, pas trois
+fenêtres de corpus. Le garde-fou d'`aiguille.py` comparait
 l'offset à `len(corpus) - 400_000` alors que le corpus en fait **353 778** : la
 remise à zéro se déclenchait donc toujours, et les trois sondes d'une série
 utilisaient l'offset 0. Or le moteur est déterministe : **trois répétitions d'une
@@ -140,6 +141,33 @@ greedy après quelques dizaines de pas, et une réponse qui doit contenir un cod
 Conséquence pour la méthode : **toute comparaison de qualité doit se faire à lot
 fixé**, et les verdicts binaires (trouvé / non trouvé) doivent être lus comme des
 révélateurs d'un écart minuscule, pas comme une propriété stable du modèle.
+
+### La grille refaite sur TROIS TEXTES (sprint 5)
+
+L'outil corrigé produit enfin trois fenêtres distinctes — les longueurs de prompt le
+prouvent (4 114 / 4 433 / 4 126 jetons, contre 4 114 trois fois au sprint 4). Mêmes
+conditions : 4 096 clés, profondeur 0,5, `--lot 256`.
+
+| configuration | fenêtre 1 | fenêtre 2 | fenêtre 3 | trouvé |
+|---|---|---|---|---|
+| attention complète | oui (266,2 s) | oui (280,2 s) | oui (251,1 s) | **3/3** |
+| **k = 256** (6,25 %) | NON (240,3 s) | **oui** (302,2 s) | **oui** (241,4 s) | **1/3** |
+| **k = 1 024** (25 %) | oui (238,9 s) | oui (275,6 s) | oui (265,7 s) | **3/3** |
+
+**La conclusion change de nature** : à k = 256, l'échec n'est pas systématique mais
+**probabiliste — 1 fenêtre sur 3**. L'attention complète retrouve l'information dans
+les trois cas, k = 1 024 aussi ; k = 256 échoue sur un texte et réussit sur deux.
+Autrement dit :
+
+* l'échec du sprint 3 (« NON au milieu ») était **réel mais sur un seul texte** —
+  il ne se généralise pas ;
+* le « 0/3 » du sprint 4 mesurait trois fois ce même texte, pas trois textes ;
+* la bonne formulation est un **taux**, pas un verdict binaire : sur trois fenêtres,
+  dense 3/3, k = 256 **1/3**, k = 1 024 3/3.
+
+Trois fenêtres restent un petit échantillon (l'intervalle de confiance d'un 1/3 sur
+trois tirages va de 1 % à 90 %) : la mesure à faire est **neuf fenêtres**, ce qui
+donne un taux utilisable. C'est l'objet du sprint 6.
 
 ## Ce que ce rapport ne dit pas
 

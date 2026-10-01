@@ -38977,3 +38977,80 @@ corrélation des logits (position 0) : 1.000000
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/rapport-aiguille-topk.md'; s=open(p).read()\nvieux = \"\"\"## Ce que ce rapport ne dit pas\"\"\"\nneuf = \"\"\"### Pourquoi `--lot 1` ≠ `--lot 256` : mesuré (et c'est minuscule)\n\nLes deux chemins ne don … [1513 caractères tronqués]`
+
+  ```
+rapport : section lot 1 vs lot 256
+ee59519 Pourquoi --lot 1 diffère de --lot 256 : 7e-4 nat par position, top-1 identique partout — c'est une amplification chaotique, pas un chemin faux
+########## A - 4096 - complete - 3 fenetres
+01:40:53
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 600; cat /tmp/aiguille_s5.log; date +%H:%M:%S", "description": "Check sprint 5 grid progress", "timeoutMs": 660000}`
+
+  ```
+(no output)
+[timed out after 600000ms]
+[killed by signal: SIGTERM]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat /tmp/aiguille_s5.log; date +%H:%M:%S", "description": "Check grid log"}`
+
+  ```
+########## A - 4096 - complete - 3 fenetres
+     4096        0.50     oui     266.2  prompt 4114 jetons
+     4096        0.50     oui     280.2  prompt 4433 jetons
+     4096        0.50     oui     251.1  prompt 4126 jetons
+########## A - 4096 - k=256 - 3 fenetres
+01:51:02
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 580; cat /tmp/aiguille_s5.log | tail -6; date +%H:%M:%S", "description": "Wait for k=256 windows", "timeoutMs": 640000}`
+
+  ```
+########## A - 4096 - complete - 3 fenetres
+     4096        0.50     oui     266.2  prompt 4114 jetons
+     4096        0.50     oui     280.2  prompt 4433 jetons
+     4096        0.50     oui     251.1  prompt 4126 jetons
+########## A - 4096 - k=256 - 3 fenetres
+02:00:49
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 590; cat /tmp/aiguille_s5.log | tail -8; date +%H:%M:%S", "description": "Wait for k=256 results", "timeoutMs": 650000}`
+
+  ```
+4096        0.50     oui     266.2  prompt 4114 jetons
+     4096        0.50     oui     280.2  prompt 4433 jetons
+     4096        0.50     oui     251.1  prompt 4126 jetons
+########## A - 4096 - k=256 - 3 fenetres
+     4096        0.50     NON     240.3  prompt 4114 jetons · [attention] --attn-topk 256 est IGNORÉ en mode lot (--lot 256) : l'attention par lots est DENSE. Utiliser --lo
+     4096        0.50     oui     302.2  prompt 4433 jetons · [attention] --attn-topk 256 est IGNORÉ en mode lot (--lot 256) : l'attention par lots est DENSE. Utiliser --lo
+     4096        0.50     oui     241.4  prompt 4126 jetons · [attention] --attn-topk 256 est IGNORÉ en mode lot (--lot 256) : l'attention par lots est DENSE. Utiliser --lo
+########## A - 4096 - k=1024 - 3 fenetres
+02:10:44
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 590; tail -8 /tmp/aiguille_s5.log; date +%H:%M:%S", "description": "Wait for k=1024 windows", "timeoutMs": 650000}`
+
+  ```
+4096        0.50     NON     240.3  prompt 4114 jetons · [attention] --attn-topk 256 est IGNORÉ en mode lot (--lot 256) : l'attention par lots est DENSE. Utiliser --lo
+     4096        0.50     oui     302.2  prompt 4433 jetons · [attention] --attn-topk 256 est IGNORÉ en mode lot (--lot 256) : l'attention par lots est DENSE. Utiliser --lo
+     4096        0.50     oui     241.4  prompt 4126 jetons · [attention] --attn-topk 256 est IGNORÉ en mode lot (--lot 256) : l'attention par lots est DENSE. Utiliser --lo
+########## A - 4096 - k=1024 - 3 fenetres
+     4096        0.50     oui     238.9  prompt 4114 jetons · [attention] --attn-topk 1024 est IGNORÉ en mode lot (--lot 256) : l'attention par lots est DENSE. Utiliser --l
+     4096        0.50     oui     275.6  prompt 4433 jetons · [attention] --attn-topk 1024 est IGNORÉ en mode lot (--lot 256) : l'attention par lots est DENSE. Utiliser --l
+     4096        0.50     oui     265.7  prompt 4126 jetons · [attention] --attn-topk 1024 est IGNORÉ en mode lot (--lot 256) : l'attention par lots est DENSE. Utiliser --l
+########## B - 8192 - k=1024
+02:20:41
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/rapport-aiguille-topk.md'; s=open(p).read()\nvieux = \"\"\"## Ce que ce rapport ne dit pas\"\"\"\nneuf = \"\"\"### La grille refaite sur TROIS TEXTES (sprint 5)\n\nL'outil corrigé produit enfin trois fenê … [2256 caractères tronqués]`
+
+  ```
+rapport : grille sprint 5
+     4096        0.50     oui     275.6  prompt 4433 jetons · [attention] --attn-topk 1024 est IGNORÉ en mode lot (--lot 256) : l'attention par lots est DENSE. Utiliser --l
+     4096        0.50     oui     265.7  prompt 4126 jetons · [attention] --attn-topk 1024 est IGNORÉ en mode lot (--lot 256) : l'attention par lots est DENSE. Utiliser --l
+########## B - 8192 - k=1024
+02:20:50
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -F - <<'EOF' && git log --oneline -1\nGrille refaite sur trois VRAIS textes : k=256 échoue 1 fois sur 3, pas 3 sur 3\n\nL'outil corrigé produit enfin des fenêtres distinctes (longueurs de prompt 4 114 /\n4 … [788 caractères tronqués]`

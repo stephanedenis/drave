@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 58.9 h |
+| Durée | 59.6 h |
 | Tours | 48 |
-| Messages | 2466 |
-| Appels d'outils | 2336 |
+| Messages | 2473 |
+| Appels d'outils | 2343 |
 | Fichiers touchés | 52 |
-| Commandes | 1977 |
+| Commandes | 1984 |
 | Sous-agents | 17 |
-| Commits | 214 |
+| Commits | 215 |
 | Compactages de contexte | 3 |
 
 ## Objectifs déclarés
@@ -2234,7 +2234,7 @@ Fusionner la sélection en un noyau par ligne (8 lancements → 2), supprimer le
 
 ### Tour 48 — Continue en blocs de 2h jusqu'à demain 8h HAE. pour chacun des blocs/sprints tu dois être en autonomie totale. C'est à d … [282 caractères tronqués]
 
-*184 appels d'outils.* Actions notables :
+*191 appels d'outils.* Actions notables :
 
 - bash — Check time and count remaining boxes
 - bash — Start sprint 2
@@ -2250,7 +2250,7 @@ Fusionner la sélection en un noyau par ligne (8 lancements → 2), supprimer le
 - bash — Add poison check and finiteness guard
 - bash — Locate the topk GPU branch
 - bash — Wire fused kernel into the model
-- … et 166 autres
+- … et 173 autres
 
 **Synthèse produite :**
 
@@ -2377,7 +2377,7 @@ Fusionner la sélection en un noyau par ligne (8 lancements → 2), supprimer le
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 1937 autres
+- … et 1944 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2739,4 +2739,5 @@ Fusionner la sélection en un noyau par ligne (8 lancements → 2), supprimer le
 - Contrôle dense à 8 192 : l'information est retrouvée (1002 s, prompt de 7963 jetons) — la question du k vs contexte est mesurable là" && git log --oneline -1; d
 - Sprint 4 : cérémonie (le k est un réglage, la leçon des trois répétitions, planning du sprint 5)" && ./tools/sprint.sh start "Refaire la grille avec de VRAIES f
 - Pourquoi --lot 1 diffère de --lot 256 : 7e-4 nat par position, top-1 identique partout — c'est une amplification chaotique, pas un chemin faux" && git log --one
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -F - <<'EOF' && git log --oneline -1 Grille refaite sur trois VRAIS textes : k
 
