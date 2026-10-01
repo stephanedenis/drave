@@ -52,6 +52,17 @@ def main():
     print(f"notre : {np_a} positions x {nv_a} · référence : {np_b} positions x {nv_b}")
     if np_a != np_b:
         print("ATTENTION : nombres de positions différents, comparaison sur le minimum")
+    # Le dénominateur des pourcentages et de la perplexité doit être le nombre de
+    # positions RÉELLEMENT comparées, pas `n` : avec un fichier d'ids plus court
+    # (ou absent), la boucle s'arrête tôt et « accord : 0/255 » était faux.
+    if not ids:
+        print("ERREUR : fichier d'ids absent ou vide — les cibles manquent, "
+              "la comparaison n'a pas de sens")
+        return 2
+    n = min(n, len(ids) - 1)
+    if n <= 0:
+        print("ERREUR : moins de deux identifiants fournis")
+        return 2
 
     print(f"{'pos':>5} {'cible':>7} {'NLL nous':>9} {'NLL réf':>9} {'écart':>8} "
           f"{'rang nous':>9} {'rang réf':>9} {'top1 nous':>9} {'top1 réf':>9} {'accord':>7}")
@@ -62,10 +73,12 @@ def main():
     # l'erreur commise au sprint 3 (511/511 annoncé, 497/511 mesuré). L'accord
     # global est donc compté ici, sur toutes les positions.
     accord_top1 = 0
+    n_comp = 0
     for i in range(n):
         cible = ids[i + 1] if ids and i + 1 < len(ids) else None
         if cible is None:
             break
+        n_comp += 1
         na, ra, t1a = nll_et_rang(A[i], cible)
         nb, rb, t1b = nll_et_rang(B[i], cible)
         tot_a += na; tot_b += nb
@@ -77,11 +90,13 @@ def main():
                   f"{ra:9d} {rb:9d} {t1a:9d} {t1b:9d} {'oui' if t1a == t1b else 'NON':>7}")
     if ecarts and np is not None:
         e = np.array(ecarts)
-        print(f"\nécart |NLL| : moyenne {e.mean():.4f} · médiane {np.median(e):.4f} · max {e.max():.4f}")
-    print(f"accord du top-1 : {accord_top1}/{n}"
-          + ("" if accord_top1 == n else f"  ({n - accord_top1} positions divergentes)"))
-    print(f"perplexité nous : {math.exp(tot_a/n):.4f}   référence : {math.exp(tot_b/n):.4f}   "
-          f"({n} positions)")
+        print(f"\nécart |NLL| : moyenne {e.mean():.4f} · médiane {np.median(e):.4f} "
+              f"· p90 {np.percentile(e, 90):.4f} · max {e.max():.4f}")
+    print(f"accord du top-1 : {accord_top1}/{n_comp}"
+          + ("" if accord_top1 == n_comp
+             else f"  ({n_comp - accord_top1} positions divergentes)"))
+    print(f"perplexité nous : {math.exp(tot_a/n_comp):.4f}   "
+          f"référence : {math.exp(tot_b/n_comp):.4f}   ({n_comp} positions comparées)")
     # corrélation ligne à ligne sur la première position
     if np is not None and n:
         a0 = np.asarray(A[0], dtype='f8'); b0 = np.asarray(B[0], dtype='f8')

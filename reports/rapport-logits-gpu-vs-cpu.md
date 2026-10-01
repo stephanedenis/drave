@@ -1,9 +1,9 @@
 # Rapport — pourquoi le déport des projections change (ou non) la perplexité
 
 **En une ligne** : sur un modèle **dense**, le déport des projections donne des
-logits **identiques** au CPU (écart moyen 0,0000) ; sur un **MoE**, il les décale de
-**0,038 nat** en moyenne — même top-1 partout, mais 1,2 % de perplexité à 511
-jetons. L'hypothèse la plus simple, fortement étayée par ce contraste, est que de
+logits **identiques** au CPU (écart moyen 0,0000, fichiers bit à bit égaux) ; sur un
+**MoE**, il les décale de **0,038 nat** en moyenne — **497 jetons sur 511 gardent le
+même top-1** (14 divergent), et cela suffit à déplacer la perplexité de 1,2 %. L'hypothèse la plus simple, fortement étayée par ce contraste, est que de
 minuscules écarts numériques **changent le routage des experts** (top-8 sur 128).
 
 ## Le doute, et d'où il vient
@@ -16,9 +16,10 @@ Au sprint 2, gpt-oss-120b MXFP4 à `--ctx 1024`, 511 jetons :
 | GPU, miroir KV seul (`DRAVE_GPU_KV`) | 18,3074 | −1,47 % |
 | GPU, projections seules (`DRAVE_GPU`) | 18,3538 | −1,22 % |
 
-Le miroir KV ne pèse donc que 0,25 % : l'essentiel vient du déport des
-**projections**. Or les noyaux GPU sont exacts (2e-7 sur la tête Q8_0, **0,00e0**
-sur un expert MXFP4, mesurés un par un). Une erreur de 1e-7 ne devrait pas peser
+Ajouter le miroir KV aux projections ne pèse que **0,25 % de plus** : l'essentiel
+(1,22 %) vient du déport des **projections** lui-même. Or les noyaux GPU sont exacts
+(2e-7 sur la tête Q8_0, **0,00e0** bit à bit sur un expert MXFP4 — `REPRISE.md` §6,
+huit chantiers, noyaux GPU). Une erreur de 1e-7 ne devrait pas peser
 1,2 % de perplexité — d'où le doute consigné.
 
 ## La mesure qui tranche
@@ -38,12 +39,14 @@ sur un expert MXFP4, mesurés un par un). Une erreur de 1e-7 ne devrait pas pese
 | | CPU | GPU (projections) |
 |---|---|---|
 | perplexité | 18,5803 | 18,3538 |
-| écart moyen \|ΔNLL\| | — | **0,0379** (médiane 0,0123, max 1,3708, p90 0,0836) |
+| écart moyen \|ΔNLL\| | — | **0,0379** (médiane 0,0123, p90 0,0836, max 1,3708) — p90 imprimé par l'outil depuis ce sprint |
 | accord du top-1 | — | **497/511** (14 positions divergentes) |
 | corrélation des logits (position 0) | — | 1,000000 |
 
-Le jeton choisi est le même sur 97 % des positions ; les 14 divergences sont
-justement là où l'écart de NLL est le plus grand (jusqu'à 1,37 nat). ⚠️ **Piège de
+Le jeton choisi est le même sur 97 % des positions. Les 14 divergences portent un
+écart de NLL **6× plus grand en moyenne** que les autres (0,198 contre 0,033), et le
+maximum global (1,3708 nat, position 284) est l'une d'elles — mais seules 3 des 14
+sont dans le top-14 des écarts : le lien est réel, pas exclusif. ⚠️ **Piège de
 lecture payé** : `compare_logits.py` n'imprimait qu'un ÉCHANTILLON de positions
 (`i < 24` ou `i % 32 == 0`), et « aucun NON dans l'échantillon » avait été lu comme
 « accord partout » (511/511 annoncé, **497/511** mesuré). L'outil imprime
@@ -74,9 +77,9 @@ chemins — c'est un chantier à part entière, noté au planning.
 * les chemins GPU sont **exacts** sur un modèle dense (à la précision de la
   machine) : aucun doute sur les noyaux ;
 * sur un MoE, `DRAVE_GPU` déplace la perplexité de l'ordre du pour cent au-delà de
-  ~500 jetons évalués, **sans changer les jetons choisis** en top-1 — c'est
-  acceptable pour un usage courant, mais à savoir avant de comparer deux
-  perplexités mesurées avec et sans GPU ;
+  ~500 jetons évalués, en changeant le top-1 sur **3 % des positions** (14 sur 511) —
+  acceptable pour un usage courant, mais à savoir avant de comparer deux perplexités
+  mesurées avec et sans GPU ;
 * les portes du dépôt (15,1757 CPU / 15,1667 GPU à ctx 256) restent valides : elles
   sont mesurées dans les mêmes conditions que leurs valeurs de référence.
 
@@ -84,9 +87,10 @@ chemins — c'est un chantier à part entière, noté au planning.
 
 ```bash
 # logits des deux chemins, mêmes jetons
-./drave-core/target/release/drave <modele> --ppl /tmp/ids.txt --ctx 1024 --dense \
+# (les mesures de ce rapport utilisent /tmp/ids_oss_512.txt, 512 identifiants)
+./drave-core/target/release/drave <modele> --ppl /tmp/ids_oss_512.txt --ctx 1024 --dense \
     --limit 512 --logits-bin /tmp/logits_cpu.bin
-DRAVE_GPU=1 ./drave-core/target/release/drave <modele> --ppl /tmp/ids.txt --ctx 1024 \
+DRAVE_GPU=1 ./drave-core/target/release/drave <modele> --ppl /tmp/ids_oss_512.txt --ctx 1024 \
     --dense --limit 512 --logits-bin /tmp/logits_gpu.bin
-python3 tools/compare_logits.py /tmp/logits_cpu.bin /tmp/logits_gpu.bin /tmp/ids.txt
+python3 tools/compare_logits.py /tmp/logits_cpu.bin /tmp/logits_gpu.bin /tmp/ids_oss_512.txt
 ```

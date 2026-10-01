@@ -88,6 +88,15 @@ def sonde(modele, corpus, ctx, profondeur, offset, args):
     except subprocess.TimeoutExpired:
         return None, time.time() - t0, "délai dépassé"
     sortie = r.stdout + r.stderr
+    # Le moteur DIT quand un drapeau ne s'applique pas (« --attn-topk ... est
+    # IGNORÉ en mode lot ») ; l'outil jetait ce message, et la grille a été
+    # interprétée comme si l'attention creuse valait pour tout le passage. On le
+    # remonte dans le détail de la sonde.
+    avert = ""
+    for ligne in sortie.splitlines():
+        if "IGNORÉ" in ligne or "inactif" in ligne.lower():
+            avert = " · " + ligne.strip()[:110]
+            break
     m = re.search(r"prompt\s*:\s*(\d+) tokens", sortie)
     n_prompt = int(m.group(1)) if m else 0
     if n_prompt == 0:
@@ -101,7 +110,7 @@ def sonde(modele, corpus, ctx, profondeur, offset, args):
         corps = corps.rsplit("assistant", 1)[-1]
     trouve = CODE in corps
     dt = time.time() - t0
-    detail = f"prompt {n_prompt} jetons"
+    detail = f"prompt {n_prompt} jetons{avert}"
     return trouve, dt, detail
 
 
@@ -126,6 +135,13 @@ def main():
                     help="DRAVE_GPU=1 DRAVE_GPU_KV=1 DRAVE_GPU_TOPK=1")
     ap.add_argument("--journal", default="")
     args = ap.parse_args()
+    # `--gpu-topk` sans `--attn-topk` affichait « top-k déporté » alors que le
+    # moteur ne fait RIEN (il n'imprime qu'un conditionnel au chargement) : une
+    # valeur affichée qui n'agit pas, exactement ce que ce dépôt traque.
+    if args.gpu_topk and args.attn_topk <= 0:
+        ap.error("--gpu-topk exige --attn-topk N (sinon le moteur ne déporte rien)")
+    if args.attn_topk < 0:
+        ap.error("--attn-topk doit être positif (0 = attention complète)")
 
     corpus = charger_corpus()
     longueurs = [int(x) for x in args.longueurs.split(",")]

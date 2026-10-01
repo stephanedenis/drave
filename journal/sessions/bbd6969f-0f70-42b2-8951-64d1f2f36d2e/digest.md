@@ -38159,3 +38159,236 @@ AssertionError: sprints/03-qualit-de-l-attention-creuse-long-contex.md::affirmat
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='/tmp/ceremonie3.md'; s=open(p).read()\nvieux = \"\"\"### 4. Trouvé en préparant la grille : `--infer` IGNORE `--lot`\n\n`run_infer` traite le prompt **jeton par jeton** (`for (pos, &t) in ids.iter()…`,\n`main.rs: … [3266 caractères tronqués]`
+
+  ```
+d29e043 Correction : `--infer` n'ignore PAS `--lot` (mon grep ne suivait pas la chaîne d'appels)
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 29, in <module>
+AssertionError
+  ```
+
+- **bash** `{"command": "grep -n \"Préremplissage par lots en inférence\\|inference\" /tmp/ceremonie3.md | head -3; grep -n \"Trouvé en préparant\" /tmp/ceremonie3.md | head -2", "description": "Find anchors in ceremony draft"}`
+
+  ```
+93:| 1 | **Préremplissage par lots en inférence** (`--infer` doit utiliser `forward_lot` sur des tranches de `lot`) | temps de prompt divisé par ≥ 2 sur 4 096 jetons · perplexité et jetons inchangés à la tolérance du chemin par lots (mesurée : 13,1368 → 13,1359) |
+61:### 4. Trouvé en préparant la grille : `--infer` IGNORE `--lot`
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='/tmp/ceremonie3.md'\nlignes = open(p).read().split('\\n')\n# section 4 : remplacer le bloc entier (de son titre au titre suivant)\ndeb = next(i for i,l in enumerate(lignes) if l.startswith(\"### 4. Trouvé en prép … [2013 caractères tronqués]`
+
+  ```
+cérémonie 3 corrigée
+61:### 4. ⚠️ Une affirmation fausse, écrite puis corrigée dans le box
+100:| 1 | **Où passe le temps d'un prompt ?** Le préremplissage par lots EST actif, mais une sonde de 4 096 jetons coûte 250 s : profiler (lots, attention, projections) et réduire | ≥ 2× sur le temps de prompt à 4 096 jetons, sortie inchangée à la tolérance du chemin par lots (13,1368 → 13,1359) |
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date +%H:%M:%S; git log --oneline --since=\"2026-09-30 21:49\" | wc -l; git status --short | head -3; sleep 420; date +%H:%M:%S", "description": "Check state and wait for box end", "timeoutMs": 500000}`
+
+  ```
+23:01:44
+5
+ M journal/README.md
+23:08:44
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c \"\nt=open('data/wikitext2_test.txt').read()[:17000]\nopen('/tmp/prompt4096.txt','w').write(t)\nprint('prompt écrit :', len(t), 'caractères')\n\" && timeout 600 ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gg … [262 caractères tronqués]`
+
+  ```
+prompt écrit : 17000 caractères
+prompt  : 3961 tokens en 286.638 s  (13.8 tok/s, TTFT 72.4 ms)
+généré  : 4 tokens en 0.358 s  (11.19 tok/s)
+postes (ms/token) : matvec-attn 1.3 | rope 0.0 | attention 52.6 | matvec+mlp 18.4 | total mesuré 72.2
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '2520,2545p' drave-core/src/model.rs && awk 'NR>=2545 && NR<=2620 && (/for |cle\\(|valeur\\(|groupe/)' drave-core/src/model.rs | head -20", "description": "Inspect forward_lot attention structure"}`
+
+  ```
+}
+                }
+                match self.cfg.yarn {
+                    Some((f, bf, bl, orig, ms)) => {
+                        Self::rope_yarn(qi, nh, hd, pos, self.cfg.rope_base, f, bf, bl, orig, ms, self.cfg.n_rot);
+                        Self::rope_yarn(ki, nkv, hd, pos, self.cfg.rope_base, f, bf, bl, orig, ms, self.cfg.n_rot);
+                    }
+                    None => {
+                        Self::rope(qi, nh, hd, pos, self.cfg.rope_base, self.cfg.n_rot);
+                        Self::rope(ki, nkv, hd, pos, self.cfg.rope_base, self.cfg.n_rot);
+                    }
+                }
+                qgpu[i * nq..(i + 1) * nq].copy_from_slice(qi);
+                {
+                    let kvc = &mut self.kv[l];
+                    for hh in 0..nkv {
+                        kvc.ecrire(hh, pos, &ki[hh * hd..(hh + 1) * hd],
+                                          &vi[hh * hd..(hh + 1) * hd]);
+                    }
+                }
+                // Miroir VRAM, une position à la fois : l'attention du jeton `i`
+                // a besoin des clés de TOUT le lot déjà écrit, donc la copie doit
+                // suivre l'écriture. Quelques centaines d'octets par
+… [1395 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && DRAVE_GPU=1 DRAVE_GPU_KV=1 timeout 900 ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf --infer --prompt \"$(cat /tmp/prompt4096.txt)\" --n 4 --ctx 4608 --lot 256 --threads 16 --temp 0 2>&1 | grep -E \"prompt  :|généré … [130 caractères tronqués]`
+
+  ```
+[gpu] KV déporté : 12 couches sur GPU 1, 0.03 Go ici (16.17 Go libres)
+[gpu] KV déporté : 12 couches sur GPU 0, 0.03 Go ici (15.11 Go libres)
+[gpu] KV déporté : 0.05 Go au total pour 24 couches
+prompt  : 3961 tokens en 63.793 s  (62.1 tok/s, TTFT 16.1 ms)
+généré  : 4 tokens en 0.125 s  (31.93 tok/s)
+postes (ms/token) : matvec-attn 0.9 | rope 0.0 | attention 2.2 | matvec+mlp 12.8 | total mesuré 15.9
+23:15:20
+  ```
+
+### 👤 Utilisateur
+
+Agent 4d7a793b-74d1-4c46-bb53-21953fe91d87 sent a message:
+REVUE ADVERSE SPRINT 3 — terminée. Aucun fichier du dépôt modifié. ATTENTION : rapport-aiguille-topk.md a changé pendant l'audit (77 l. à 22:55 → 83 l. à 23:00:49, md5 8c04d547585054ca87c367b5f294375a) ; j'audite la version courante (= HEAD). L'ancienne version affirmait « --infer ignore --lot » : c'était FAUX (voir Conforme) ; la correction lignes 22-32 est exacte.
+
+ÉCARTS, PAR GRAVITÉ
+
+1. GRAVE — rapport-logits-gpu-vs-cpu.md:5-6 et :77 : « même top-1 partout » puis « sans changer les jetons choisis en top-1 » → FAUX : 497/511 (14 positions divergentes), la mesure du rapport lui-même (:42). C'est l'erreur « 511/511 » rejouée dans le résumé, en contradiction avec :45 (« 97 % des positions »). Correction : « même top-1 sur 97 % des positions (497/511) ».
+
+2. GRAVE — rapport-aiguille-topk.md:3-12 et toute la grille : avec `--lot 256` (défaut d'aiguille.py, réglage de la grille), le moteur IGNORE `--attn-topk` au préremplissage. Seuls les 24 jetons générés (24/4138 = 0,58 % des passes) ont une attention à 256 clés. Preuve : le moteur imprime « [attention] --attn-topk 256 est IGNORÉ en mode lot (--lot 256) : l'attention par lots est DENSE » (model.rs:2357-2359) ; aiguille.py jette le message (il ne lit la sortie que si n_prompt==0, aiguille.py:93-97). La conclusion « perdu au milieu » tient pour le DÉCODAGE, mais le titre « une attention qui ne garde que 256 clés (6 %) » surestime la portée. Correction : le dire dans la méthode et refaire la grille avec `--lot 1` — mesuré gratuit (37,8 s à lot 1 contre 41,0 s à lot 256, mêmes 1133 jetons) — pour que l'affirmation soit littéralement vraie.
+
+3. MOYEN — rapport-aiguille-topk.md:63-67 : trois défauts. (i) « avec le préremplissage jeton par jeton » contredit la correction :22-32. (ii) « les trois sondes de 8 192 ont été LANCÉES puis arrêtées » → FAUX : une seule lancée (le log s'arrête sur « ctx 8192 · prof 0.5 · complete : » sans résultat ; le runner /tmp/aig2.sh les lance séquentiellement ; digest : kill à 22:55:13, 8 s après le lancement de 22:55:05). (iii) « ≈25 min par sonde à 8 192 » : 8704 × 0,175 s = 25,4 min, mais 175 ms/jeton est le taux du 1,5B (725,1/4114) ; le 0,5B mesuré fait 58-62 ms/jeton (238,5-256,5/4114) → ≈9 min. Même bullet : « Le sprint 4 branche le préremplissage par lots » est déjà fait (generate → forward_lot).
+
+4. MOYEN — tools/compare_logits.py:64-84 : le dénominateur affiché n'est pas le nombre de positions comparées. Démontré : sans ids → « accord du top-1 : 0/255 » et « perplexité 1.0000 » ; avec un fichier de 45 ids → « 44/255 ». La boucle `break` quand la cible manque (:66-68) mais les impressions gardent `n` (:81-84). Correction : compteur n_comp, imprimé ; refus si ids absent ou len(ids) < n+1.
+
+5. MOYEN — tools/aiguille.py : `--gpu-topk` sans `--attn-topk` affiche et journalise « GPU top-k déporté » (/tmp :135-138, :151-160) alors que le moteur ne fait rien : il n'imprime qu'un conditionnel (« [gpu] top-k déporté demandé … actif si --attn-topk vaut 1 à 1024 », model.rs:1683) ; l'explicite « inactif : --attn-topk n'est pas donné » n'apparaît que sous --options-actives, que l'outil ne passe jamais. Correction : refuser (ou avertir bruyamment) `--gpu-topk` sans `--attn-topk`.
+
+6. FAIBLE — rapport-logits-gpu-vs-cpu.md:87-91 : le bloc Reproductibilité cite /tmp/ids.txt (absent) ; le fichier réellement utilisé est /tmp/ids_oss_512.txt (vérifié : toutes les cibles échantillonnées du log concordent, 512 ids pour 511 positions).
+
+7. FAIBLE — rapport-logits-gpu-vs-cpu.md:46 : « les 14 divergences sont justement là où l'écart de NLL est le plus grand » → seules 3 des 14 sont dans le top-14 |ΔNLL| (rangs 1, 4, 9, puis 22…310). Exact : moyenne 0,198 aux divergentes contre 0,033 ailleurs, et le max global (1,3708, pos 284) est l'une d'elles.
+
+8. FAIBLE — rapport-logits-gpu-vs-cpu.md:41 : p90 0,0836 est exact (recalculé 0,083554) mais absent de compare_logits.py et de /tmp/compare_logits_gptoss.txt (calcul ad hoc, tracé seulement dans le digest). Correction : imprimer p90 dans l'outil ou citer le calcul.
+
+9. FAIBLE — citations/cohérence : « 2e-7 tête Q8_0, 0,00e0 MXFP4 » (:20) = REPRISE.md:162, non cité ; « le miroir KV ne pèse que 0,25 % » (:19-20) = écart entre les DEUX chemins GPU (18,3538 vs 18,3074), alors que le run KV seul est à −1,47 % — formulation ambiguë (la source rapport-gpu-topk-selection.md:314-317 dit « −0,25 % pour le miroir ») ; « 256 clés (6 %) » = 6,25 % ; aiguille.py:82 teste `> 0` mais :135/:155 testent la véracité → un --attn-topk négatif n'est pas transmis et pourtant affiché/journalisé.
+
+CONFORME (vérifié et reproduit)
+• Rapport logits : rerun de compare_logits.py sur /tmp/logits_cpu.bin + /tmp/logits_gpu.bin + /tmp/ids_oss_512.txt → 497/511 (14), moyenne 0,0379, médiane 0,0123, max 1,3708, perplexités 18,5803/18,3538, corrélation 1,000000 : identiques au rapport. Les 18,3074 (−1,47 %) et 18,3538 (−1,22 %) sont sourcés (rapport-gpu-topk-selection.md:302-307). 0,06 % à ctx 256 sourcé (:316). Portes 15,1757/15,1667 sourcées (rapport-session-2026-09-30.md:92-93).
+• Qwen dense refait à l'identique : perplexité 17,4315 des deux côtés ; les deux fichiers /tmp/rev_*.bin sont BIT À BIT identiques (np.array_equal True, 0 élément différent) ; écart moyen/médian/max 0,0000. « logits identiques » est exact.
+• Grille aiguille : les 9 durées et les 9 oui/NON sont digit pour digit dans /tmp/aiguille_topk2.log (256,5/238,5/243,1/246,5/242,0/267,6/249,9/236,4/248,3). « Mêmes fenêtres de corpus » vrai : /tmp/aig2.sh fait une invocation par (ctx, profondeur, mode), donc offset=0 partout. 725,1 s (1,5B, /tmp/aiguille_topk.log) et 667,6/690,5/651,5 s (30B à 2048, /tmp/aiguille_campagne.log) : ~725 et ~670 sont conformes.
+• « --infer ignore --lot » : FAUX (l'ancienne version). main.rs:886 (`for (pos,&t) in ids.iter()`) est dans la branche debug `--topk > 0` (main.rs:882) ; le chemin normal appelle mdl.generate (model.rs:3910), qui découpe par self.lot et appelle forward_lot (model.rs:3919-3927). Preuve empirique : le message « IGNORÉ en mode lot » sort pendant un `--infer --lot 256`. La correction lignes 22-32 du rapport est exacte.
+• Réponse à la sous-question : un --lot respecté change bien le RÉSULTAT, pas seulement le temps — `--lot 1` dense et `--lot 256` dense donnent des ids générés différents (même prompt, temp 0) ; et combiné à --attn-topk, --lot change la portée de l'élagage (lot>1 : décodage seul ; lot=1 : tout le passage). --attn-topk 0 est clair : drapeau non transmis, moteur à 0 = attention complète, en-tête et journal disent « attention complète ».
+• « Contrôle croisé CPU/GPU » : valide pour les 24 pas de décodage (conditions du noyau top-k GPU réunies : k=256 ≤ 1024, KV 32 bits, fenêtre 0, nkv×rep=nh=14, DRAVE_GPU_KV posé) — mais non démontrable depuis les artefacts, aiguille.py ne journalisant pas l'état moteur.
+
+### 👤 Utilisateur
+
+Background subagent 4d7a793b-74d1-4c46-bb53-21953fe91d87 finished and will do no further work unless you send it more.
+Its closing message:
+⏵ Audit terminé : rédaction du verdict final
+
+Aucun fichier du dépôt n'a été modifié. **Attention** : `reports/rapport-aiguille-topk.md` a changé pendant l'audit (77 lignes à 22:55 → 83 lignes à 23:00:49, md5 `8c04d547…`). J'audite la version courante ; l'ancienne version (celle du commit `6ad2bc6`) affirmait « `--infer` ignore `--lot` » — c'était **faux**, et la version courante le corrige exactement (§ lignes 22-32). Les écarts ci-dessous portent sur la version courante.
+
+---
+
+# Écarts, un par un
+
+## 1. « même top-1 partout » — FAUX
+- **(a)** `reports/rapport-logits-gpu-vs-cpu.md:5-6` (résumé) et `:77` (usage).
+- **(b)** « il les décale de 0,038 nat en moyenne — **même top-1 partout** » ; « … **sans changer les jetons choisis en top-1** ».
+- **(c)** La mesure du rapport lui-même (`:42`) : **497/511**, 14 positions divergentes. Recalcul indépendant sur `/tmp/logits_cpu.bin` + `/tmp/logits_gpu.bin` + `/tmp/ids_oss_512.txt` : 497/511, positions 126, 186, 207, 261, 284, 287, 343, 358, 368, 414, 443, 452, 492, 497.
+- **(d)** **FAUX** (et contradiction interne avec `:45` « 97 % des positions »).
+- **(e)** Remplacer par « même top-1 sur 97 % des positions (497/511) ». C'est exactement l'erreur « 511/511 » rejouée dans le résumé, à la fin du sprint qui prétendait l'avoir corrigée.
+
+## 2. `--attn-topk` n'agit qu'au décodage sous `--lot 256` — portée surestimée
+- **(a)** `reports/rapport-aiguille-topk.md:3-12` (méthode + titre) et toute la grille `:36-59`.
+- **(b)** « à 4 096 clés, une attention qui ne garde que **256 clés (6 %)** retrouve l'information… » avec `--lot 256`.
+- **(c)** Le moteur imprime, dans cette configuration exacte : « `[attention] --attn-topk 256 est IGNORÉ en mode lot (--lot 256) : l'attention par lots est DENSE.` » (repris à l'identique sur la commande `aiguille.py` du rapport). Seuls les **24 jetons générés** (24/4138 = **0,58 %** des passes avant) ont une attention à 256 clés ; le préremplissage de 4114 jetons est dense. `tools/aiguille.py:93-97` ne lit la sortie moteur que si `n_prompt == 0`, donc le message est jeté. Test A/B : `--lot 256` vs `--lot 256 --attn-topk 8` → ids générés différents (le top-k agit bien au décodage) ; `--lot 256 --attn-topk 256` vs `--lot 256` → identiques ici, mais la tâche aiguille est plus fragile.
+- **(d)** **IMPRÉCIS** (conclusion valable pour le décodage, mais l'affichage laisse croire que tout le passage était creux — « une valeur affichée qui n'agit qu'à 0,58 % »).
+- **(e)** Ajouter à la méthode : « avec `--lot 256`, le moteur ignore `--attn-topk` au préremplissage (il le dit) : le k=256 ne s'applique qu'aux 24 jetons générés » ; et refaire la grille en `--lot 1` — mesuré gratuit (37,8 s à lot 1 contre 41,0 s à lot 256 sur 1133 jetons) — pour que la phrase soit littéralement vraie.
+
+## 3. Trois affirmations fausses dans « Ce que ce rapport ne dit pas »
+- **(a)** `reports/rapport-aiguille-topk.md:63-67`.
+- **(b)** « ≈25 min par sonde à 8 192 **avec le préremplissage jeton par jeton** — les **trois** sondes de 8 192 ont été **LANCÉES** puis arrêtées » ; `:66` « Le sprint 4 **branche le préremplissage par lots** ».
+- **(c)** (i) « jeton par jeton » contredit la correction `:22-32` du même fichier : `generate` découpe par `self.lot` et appelle `forward_lot` (`drave-core/src/model.rs:3919-3927`). (ii) Le log `/tmp/aiguille_topk2.log` s'arrête sur **une seule** ligne ouverte, `ctx 8192 · prof 0.5 · complete   :` sans résultat, aucune ligne `=== AIG2 FINIE ===` ; le runner `/tmp/aig2.sh` lance les trois sondes 8192 **séquentiellement**, et le digest montre le kill à **22:55:13**, 8 s après le lancement de 22:55:05 → une seule lancée. (iii) 8704 jetons × 0,175 s = 25,4 min, mais **175 ms/jeton est le taux du 1,5B** (725,1 s / 4114) ; le 0,5B mesuré fait **58-62 ms/jeton** (238,5-256,5 / 4114) → **≈9 min**. (iv) le préremplissage par lots est déjà branché dans `--infer`.
+- **(d)** **FAUX** (ii, iv), **NON SOURCÉ/IMPRÉCIS** (iii), **CONTRADICTOIRE** (i).
+- **(e)** Remplacer par : « ≈9 min par sonde à 8 192 (taux 0,5B mesuré 58-62 ms/jeton) ; seule la sonde 8192/0,5/complète a été lancée puis arrêtée à 22:55:13 ; le sprint 4 mesure le gain du préremplissage par lots et reprend la grille ».
+
+## 4. `tools/compare_logits.py` : le dénominateur n'est pas le nombre de positions comparées
+- **(a)** `tools/compare_logits.py:64-84` (boucle `:65-68`, impressions `:81-84`).
+- **(b)** « accord du top-1 : `{accord_top1}/{n}` » et « perplexité … `({n} positions)` » avec `n = min(np_a, np_b)`.
+- **(c)** Démontré : sans fichier d'ids → `accord du top-1 : 0/255 (255 positions divergentes)` et `perplexité nous : 1.0000` ; avec un fichier de 45 ids → `accord du top-1 : 44/255 (211 positions divergentes)`, perplexité fausse. La boucle `break` dès que `ids[i+1]` manque, mais `n` reste le dénominateur.
+- **(d)** **FAUX** (défaut réel ; les deux runs du rapport avaient des ids assez longs, donc les chiffres publiés ne sont pas touchés).
+- **(e)** Compter `n_comp` (positions réellement comparées), l'utiliser pour l'accord **et** pour `exp(tot/n_comp)`, et sortir en erreur si `ids` est absent ou si `len(ids) < n+1`.
+
+## 5. `tools/aiguille.py` : `--gpu-topk` sans `--attn-topk` affiche un mode qui n'agit pas
+- **(a)** `tools/aiguille.py:75-78` (env), `:135-138` (en-tête), `:151-160` (journal).
+- **(b)** « GPU top-k déporté » affiché et écrit au journal.
+- **(c)** Le moteur ne fait rien : il n'imprime qu'un conditionnel « `[gpu] top-k déporté demandé (DRAVE_GPU_TOPK) : actif si --attn-topk vaut 1 à 1024…` » (`model.rs:1683`) ; l'explicite « `inactif : --attn-topk n'est pas donné` » n'est imprimé que dans `options_actives`, appelé seulement avec `--options-actives`, que l'outil ne passe jamais. Vérifié empiriquement : sans `--options-actives`, aucune ligne « inactif ».
+- **(d)** **IMPRÉCIS/FAUX** (journal qui ment — même classe que « une valeur affichée est une valeur qui agit »).
+- **(e)** Refuser (ou avertir) `--gpu-topk` quand `attn_topk <= 0` ; à défaut, passer `--options-actives` et faire échouer la sonde sur « inactif ». À noter aussi : `--attn-topk 0` est, lui, **clair et correct** (drapeau non transmis, moteur à 0 = attention complète, en-tête/journal « attention complète ») ; un `--attn-topk` négatif est le cas bancal (`:82` teste `>0`, `:135/:155` la véracité → affiché « attn-topk -N » mais non transmis).
+
+## 6. Autres écarts (faibles)
+| (a) | (b) chiffre écrit | (c) source | (d) verdict | (e) correction |
+|---|---|---|---|---|
+| logits `:87-91` | `/tmp/ids.txt` | le fichier réel est `/tmp/ids_oss_512.txt` (512 ids ; toutes les cibles échantillonnées concordent) ; `/tmp/ids.txt` n'existe pas | **NON SOURCÉ** (repro non exécutable) | citer `/tmp/ids_oss_512.txt` |
+| logits `:46` | « les 14 divergences sont justement là où l'écart de NLL est le plus grand » | seules **3** des 14 sont dans le top-14 \|Δ\| (rangs 1, 4, 9, puis 22…310) ; exact : moyenne 0,198 aux divergentes vs 0,033 ailleurs, max global 1,3708 (pos 284) dans le lot | **IMPRÉCIS** | « les divergences portent un écart ~6× plus grand en moyenne, et le maximum global en fait partie » |
+| logits `:41` | p90 0,0836 | exact (recalculé **0,083554**) mais ni `compare_logits.py` ni `/tmp/compare_logits_gptoss.txt` ne l'impriment (calcul ad hoc, tracé seulement dans le digest) | **NON SOURCÉ** (valeur exacte) | imprimer p90 dans l'outil |
+| logits `:20` | 2e-7 / 0,00e0 « mesurés un par un » | `REPRISE.md:162` (tête Q8_0 2e-7 ; MXFP4 0,00e0 bit à bit) — non cité ; la source ne dit pas « expert » | **CONFORME**, citation manquante | citer REPRISE.md:162 |
+| logits `:19-20` | « le miroir KV ne pèse donc que 0,25 % » | 0,25 % = écart entre les **deux chemins GPU** (18,3538 vs 18,3074) ; le run KV seul est à **−1,47 %** vs CPU (tableau `:16`) | **IMPRÉCIS** (ambigu) | « l'ajout du miroir KV aux projections ne pèse que 0,25 % de plus » |
+| aiguille `:3` | « 256 clés (6 %) » | 256/4096 = **6,25 %** | **IMPRÉCIS** | 6,25 % |
+| `compare_logits.py:78-80` | stats moyenne/médiane/max | silencieusement absentes si numpy manque | **défaut latent** | repli sans numpy ou message |
+
+---
+
+# Ce que j'ai vérifié et trouvé conforme
+
+**Rapport logits (re-mesuré, pas seulement relu)**
+- Rerun de `compare_logits.py` sur `/tmp/logits_cpu.bin` + `/tmp/logits_gpu.bin` + `/tmp/ids_oss_512.txt` : **497/511 (14)**, écart \|NLL\| **0,0379 / 0,0123 / 1,3708**, perplexités **18,5803 / 18,3538**, corrélation **1,000000** — identiques au rapport et à `/tmp/compare_logits_gptoss.txt`.
+- Qwen dense refait avec les commandes fournies : perplexité **17,4315** des deux côtés ; `/tmp/rev_cpu.bin` et `/tmp/rev_gpu.bin` sont **bit à bit identiques** (`np.array_equal` vrai, 0 élément différent) ; écart moyen/médian/max **0,0000**. « logits identiques au CPU » est donc exact, et même plus fort que ce que l'affichage 4 décimales montre.
+- Chiffres hérités du sprint 2 : 18,3074 (−1,47 %) et 18,3538 (−1,22 %) sourcés (`rapport-gpu-topk-selection.md:302-307`) ; 0,06 % à ctx 256 sourcé (`:316`) ; portes 15,1757/15,1667 sourcées (`rapport-session-2026-09-30.md:92-93`) ; « 1,2 % à 511 jetons » = 1,22 % exact.
+
+**Rapport aiguille**
+- Les 9 durées et les 9 oui/NON sont **digit pour digit** dans `/tmp/aiguille_topk2.log` (256,5 / 238,5 / 243,1 ; 246,5 / 242,0 / 267,6 ; 249,9 / 236,4 / 248,3 ; prompt 4114 jetons).
+- « Mêmes fenêtres de corpus » : vrai — `/tmp/aig2.sh` fait **une invocation `aiguille.py` par (ctx, profondeur, mode)**, donc `offset = 0` pour les neuf sondes.
+- Coûts par sonde : **725,1 s** (1,5B, `/tmp/aiguille_topk.log`) et **667,6 / 690,5 / 651,5 s** (30B à 2048, `/tmp/aiguille_campagne.log`, prompt 2147) → « ~725 » et « ~670 » conformes (mais le « ~175 ms/jeton » n'était valable que pour le 1,5B, et la version courante l'a retiré).
+- La correction des lignes 22-32 est exacte : `Model::generate` (`model.rs:3910`) découpe bien par `self.lot` et appelle `forward_lot` (`:3919-3927`).
+
+**Question 5 — « `--infer` ignore `--lot` »**
+- Verdict sur l'affirmation d'origine : **FAUSSE**. `main.rs:886` (`for (pos, &t) in ids.iter()…`) appartient à la branche debug `--topk > 0` (`main.rs:882`), pas au chemin normal, qui appelle `mdl.generate` (`model.rs:3910`) ; preuve empirique : le message « IGNORÉ en mode lot » est émis par `forward_lot` pendant un `--infer --lot 256`.
+- Un `--lot` respecté change bien le **résultat**, pas seulement le temps : `--lot 1` dense et `--lot 256` dense donnent des **ids générés différents** (même invite, `--temp 0`) ; et combiné à `--attn-topk`, `--lot` change la **portée** de l'élagage (lot > 1 : décodage seul ; lot = 1 : tout le passage). C'est l'argument le plus fort pour refaire la grille en `--lot 1`.
+- Le « contrôle croisé CPU/GPU » de la grille est valide pour les 24 pas de décodage (conditions du noyau top-k GPU réunies : k=256 ≤ 1024, KV 32 bits, fenêtre 0, nkv×rep = nh = 14, `DRAVE_GPU_KV` posé), mais **indémontrable depuis les artefacts** car `aiguille.py` ne journalise pas l'état moteur.
+
+**Résumé** : 2 écarts graves (un « top-1 partout » faux dans le résumé du rapport logits ; la portée du top-k dans la grille aiguille), 3 moyens (affirmations 8192/« jeton par jeton », dénominateur de `compare_logits.py`, `--gpu-topk` sans `--attn-topk`), 7 faibles. Aucun des chiffres centraux publiés n'est faux : les valeurs mesurées se reproduisent ; les défauts sont dans les **phrases qui les commentent** et dans deux garde-fous d'outils.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\ndef patch(p, paires):\n    s=open(p).read()\n    for v,n,nom in paires:\n        assert s.count(v)==1, f\"{p}::{nom}::{s.count(v)}\"\n        s=s.replace(v,n,1)\n    open(p,'w').write(s); print(f\"{p} : {len(paires) … [3525 caractères tronqués]`
+
+  ```
+reports/rapport-logits-gpu-vs-cpu.md : 6
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\ndef patch(p, paires):\n    s=open(p).read()\n    for v,n,nom in paires:\n        assert s.count(v)==1, f\"{p}::{nom}::{s.count(v)}\"\n        s=s.replace(v,n,1)\n    open(p,'w').write(s); print(f\"{p} : {len(paires) … [3207 caractères tronqués]`
+
+  ```
+reports/rapport-aiguille-topk.md : 3
+2
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\n# 4) compare_logits : compter les positions RÉELLEMENT comparées, imprimer p90,\n#    refuser un fichier d'ids trop court.\np='tools/compare_logits.py'; s=open(p).read()\ndef rep(v,n,nom):\n    global s\n    assert  … [3543 caractères tronqués]`
+
+  ```
+compare_logits corrigé
+aiguille corrigé
+                   modele longueurs profondeurs
+aiguille.py: error: --gpu-topk exige --attn-topk N (sinon le moteur ne déporte rien)
+---
+notre : 255 positions x 151936 · référence : 255 positions x 151936
+ERREUR : fichier d'ids absent ou vide — les cibles manquent, la comparaison n'a pas de sens
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='tools/aiguille.py'; s=open(p).read()\nvieux = \"\"\"    sortie = r.stdout + r.stderr\n    m = re.search(r\"prompt\\\\s*:\\\\s*(\\\\d+) tokens\", sortie)\"\"\"\nneuf = \"\"\"    sortie = r.stdout + r.stderr\n    # … [1899 caractères tronqués]`
+
+  ```
+aiguille : avertissements du moteur remontés
+syntaxe OK
+=== portes sprint 3 (final) ===
+Qwen : perplexité 19.3885 sur 510 tokens
+gpt-oss : perplexité 15.1757 sur 510 tokens
+tests : test result: ok. 17 passed
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\n# La cérémonie : ajouter la revue adverse (ses deux écarts graves) et le lever\n# mesuré du sprint 4 (le prompt tombe de 286,6 s à 63,8 s avec le KV déporté).\np='/tmp/ceremonie3.md'; s=open(p).read()\nvieux = \"\"\ … [5323 caractères tronqués]`
