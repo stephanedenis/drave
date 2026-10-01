@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 56.5 h |
+| Durée | 57.0 h |
 | Tours | 48 |
-| Messages | 2419 |
-| Appels d'outils | 2291 |
+| Messages | 2423 |
+| Appels d'outils | 2295 |
 | Fichiers touchés | 50 |
-| Commandes | 1936 |
+| Commandes | 1940 |
 | Sous-agents | 16 |
-| Commits | 207 |
+| Commits | 208 |
 | Compactages de contexte | 3 |
 
 ## Objectifs déclarés
@@ -2234,7 +2234,7 @@ Fusionner la sélection en un noyau par ligne (8 lancements → 2), supprimer le
 
 ### Tour 48 — Continue en blocs de 2h jusqu'à demain 8h HAE. pour chacun des blocs/sprints tu dois être en autonomie totale. C'est à d … [282 caractères tronqués]
 
-*139 appels d'outils.* Actions notables :
+*143 appels d'outils.* Actions notables :
 
 - bash — Check time and count remaining boxes
 - bash — Start sprint 2
@@ -2250,7 +2250,7 @@ Fusionner la sélection en un noyau par ligne (8 lancements → 2), supprimer le
 - bash — Add poison check and finiteness guard
 - bash — Locate the topk GPU branch
 - bash — Wire fused kernel into the model
-- … et 122 autres
+- … et 125 autres
 
 **Synthèse produite :**
 
@@ -2374,7 +2374,7 @@ Fusionner la sélection en un noyau par ligne (8 lancements → 2), supprimer le
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 1896 autres
+- … et 1900 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2729,4 +2729,5 @@ Fusionner la sélection en un noyau par ligne (8 lancements → 2), supprimer le
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' # La cérémonie : on remplace la grille partielle par la grille complète et on # ajoute la
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p='/tmp/ceremonie3.md'; s=open(p).read() vieux = """### 4. Trouvé en préparant la grille 
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' # La cérémonie : ajouter la revue adverse (ses deux écarts graves) et le lever # mesuré d
+- Sprint 3 : cérémonie (aiguille × attention creuse, revue adverse, planning du sprint 4)" && git log --oneline -1 && ./tools/sprint.sh start "Le k de l'attention
 

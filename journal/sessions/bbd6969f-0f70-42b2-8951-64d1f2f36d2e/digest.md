@@ -38392,3 +38392,36 @@ tests : test result: ok. 17 passed
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\n# La cérémonie : ajouter la revue adverse (ses deux écarts graves) et le lever\n# mesuré du sprint 4 (le prompt tombe de 286,6 s à 63,8 s avec le KV déporté).\np='/tmp/ceremonie3.md'; s=open(p).read()\nvieux = \"\"\ … [5323 caractères tronqués]`
+
+  ```
+cérémonie 3 : revue adverse et levier du sprint 4
+470e3e9 Revue adverse du sprint 3 : deux écarts graves, dans les phrases qui commentent les chiffres
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date +%H:%M:%S && sleep 420 && date +%H:%M:%S && ./tools/sprint.sh status | head -3", "description": "Wait for box end", "timeoutMs": 500000}`
+
+  ```
+23:19:10
+23:26:10
+── Sprint 3 ─────────────────────────────────────────────
+- **Début** : 21:49 · **Fin prévue** : 23:49 (boxing de 120 min)
+   temps : 23:26 · reste 0 h 23
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 560; date +%H:%M:%S; ./tools/sprint.sh status | head -2", "description": "Wait then check box end", "timeoutMs": 600000}`
+
+  ```
+23:35:36
+── Sprint 3 ─────────────────────────────────────────────
+- **Début** : 21:49 · **Fin prévue** : 23:49 (boxing de 120 min)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 500; date +%H:%M:%S; ./tools/sprint.sh close | tail -2", "description": "Close sprint 3 at box end", "timeoutMs": 600000}`
+
+  ```
+23:44:00
+=== clôture du sprint 3 (21:49 → 23:44, prévu 23:49) ===
+trame écrite dans sprints/03-qualit-de-l-attention-creuse-long-contex.md — à compléter (revue chiffrée, rétro, planning)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='sprints/03-qualit-de-l-attention-creuse-long-contex.md'\ns=open(p).read()\ni = s.index(\"## Rétrospective — garder / changer\")\nceremonie = open('/tmp/ceremonie3.md').read()\nopen(p,'w').write(s[:i] + ceremonie. … [517 caractères tronqués]`
