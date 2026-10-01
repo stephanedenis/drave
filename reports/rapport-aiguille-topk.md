@@ -241,10 +241,12 @@ cette mesure désigne comme le prochain chantier, et c'est un résultat en soi.
 
 La fenêtre 3 tokenise à **4 731 jetons** là où la cible était 4 096, et l'outil
 passait `--ctx 4608` : le prompt dépassait le contexte. Le moteur ne l'a pas refusé
-— il est devenu **10 à 20 fois plus lent en silence** (13 à 23 minutes par sonde
-contre 75 s), sans un mot. Marge portée à `ctx + 1024` dans l'outil (la sonde passe
-alors en 85 s) ; le comportement du moteur reste à corriger : un prompt plus long que
-le contexte devrait être tronqué proprement ou refusé, pas ralenti.
+— il est devenu **beaucoup plus lent en silence** : les deux exécutions de cette
+fenêtre à `--ctx 4608` ont été tuées après **13 et 23 minutes** sans avoir fini,
+là où la MÊME fenêtre rend en **85,1 s** avec `--ctx 5120` (marge `ctx + 1024`,
+correctif de l'outil). Le facteur « 10 à 20 » est donc un minorant observé, pas une
+mesure complète : ces exécutions n'ont jamais terminé. À corriger dans le moteur —
+un prompt plus long que le contexte devrait être tronqué proprement ou refusé.
 * **k plus grand : mesuré depuis** (512 et 1 024, section « Suite ») — le seuil est
   entre 12,5 % et 25 % du contexte sur ce cas.
 * le préremplissage reste DENSE avec `--lot > 1` : la mesure porte sur le décodage.

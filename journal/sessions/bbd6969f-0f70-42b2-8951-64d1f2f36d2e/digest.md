@@ -39703,3 +39703,59 @@ fenêtres distinctes utilisées : 9 sur 9 sondes
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\ndef patch(p, paires):\n    s=open(p).read()\n    for v,n,nom in paires:\n        assert s.count(v)==1, f\"{p}::{nom}::{s.count(v)}\"\n        s=s.replace(v,n,1)\n    open(p,'w').write(s); print(f\"{p} : {len(paires) … [4358 caractères tronqués]`
+
+  ```
+reports/rapport-aiguille-topk.md : 2
+e4b3ebc Le taux par fenêtre : 9 fenêtres contiguës, 8/9 en attention complète, et le mur du préremplissage
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/ceremonie6.md <<'EOF'\n\n**Objectif du sprint** : « Le TAUX de récupération de l'attention creuse : neuf\nfenêtres à 4 096 (dense, k = 256, k = 1 024) et le troisième point de la courbe\nk(contexte) à 16 384 ». **Le taux e … [4486 caractères tronqués]`
+
+  ```
+(no output)
+[timed out after 600000ms]
+[killed by signal: SIGTERM]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date +%H:%M:%S; ./tools/sprint.sh status | head -3", "description": "Check time"}`
+
+  ```
+05:10:16
+── Sprint 6 ─────────────────────────────────────────────
+- **Début** : 03:38 · **Fin prévue** : 05:38 (boxing de 120 min)
+   temps : 05:10 · reste 0 h 27
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && (echo \"=== portes sprint 6 ===\"; echo -n \"Qwen : \"; ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf --ppl /tmp/wt2_ids.txt --ctx 256 --abits 16 --threads 16 --limit 512 2>&1 | grep -oE \"perplexité [0-9.]+ sur [0- … [482 caractères tronqués]`
+
+  ```
+=== portes sprint 6 ===
+Qwen : perplexité 19.3885 sur 510 tokens
+gpt-oss : perplexité 15.1757 sur 510 tokens
+tests : test result: ok. 17 passed
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -c \"NON\" /tmp/aiguille_s6b.log; grep -E \"4231|4731\" /tmp/aiguille_s6b.log | head -2; echo \"--- vérification de la fenêtre 3 (4731 jetons) avec ctx plus grand ---\"; timeout 400 python3 - <<'PY'\n# Le moteur ralentit-il vrai … [1007 caractères tronqués]`
+
+  ```
+2
+     4096        0.50     NON      85.1  prompt 4731 jetons
+--- vérification de la fenêtre 3 (4731 jetons) avec ctx plus grand ---
+05:19:52
+  ```
+
+- **subagent** `{"description": "Revue ciblée sprint 6", "prompt": "Relecture ADVERSARIALE ciblée (10 minutes maximum) dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet. Tu vérifies TROIS affirmations du sprint 6 (03h38 → 05h38), et rien d'autre. Ne modifie aucun fichier. Sois bref : une ligne par écart … [1993 caractères tronqués]`
+
+  ```
+started subagent 18c3f6d0-5bb1-45bb-9f94-ab0e7812218d
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\ndef patch(p, paires):\n    s=open(p).read()\n    for v,n,nom in paires:\n        assert s.count(v)==1, f\"{p}::{nom}::{s.count(v)}\"\n        s=s.replace(v,n,1)\n    open(p,'w').write(s); print(f\"{p} : {len(paires) … [2510 caractères tronqués]`
+
+  ```
+reports/rapport-aiguille-topk.md : 1
+cérémonie : nuance du facteur
+05:25:09
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -m \"Nuance : le facteur de ralentissement est un minorant (les deux exécutions à ctx 4608 n'ont jamais fini ; la même fenêtre rend en 85,1 s à ctx 5120)\" && sleep 480; date +%H:%M:%S; ./tools/sprint.sh s … [91 caractères tronqués]`
