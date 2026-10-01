@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 69.5 h |
+| Durée | 69.6 h |
 | Tours | 51 |
-| Messages | 2988 |
-| Appels d'outils | 2843 |
+| Messages | 2990 |
+| Appels d'outils | 2845 |
 | Fichiers touchés | 65 |
-| Commandes | 2456 |
+| Commandes | 2458 |
 | Sous-agents | 22 |
-| Commits | 249 |
+| Commits | 250 |
 | Compactages de contexte | 4 |
 
 ## Objectifs déclarés
@@ -2400,7 +2400,7 @@ Les téléchargements avancent en parallèle : **DeepSeek-V4.1-Flash 68 %** (249
 
 ### Tour 51 — continue jusqu'à 13h HAE
 
-*280 appels d'outils.* Actions notables :
+*282 appels d'outils.* Actions notables :
 
 - bash — Check time and running processes
 - job_list
@@ -2416,11 +2416,11 @@ Les téléchargements avancent en parallèle : **DeepSeek-V4.1-Flash 68 %** (249
 - todo_write
 - bash — Count buffer accesses in gguf.rs
 - bash — Map functions and base computations
-- … et 265 autres
+- … et 267 autres
 
 **Synthèse produite :**
 
-⏵ Dernière mise à jour du journal et vérification finale.
+⏵ Il reste 40 min : je mesure la courbe mémoire/qualité du nœud partiel selon le nombre de clusters.
 
 ## 3. Travail accompli
 
@@ -2561,7 +2561,7 @@ Les téléchargements avancent en parallèle : **DeepSeek-V4.1-Flash 68 %** (249
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 2416 autres
+- … et 2418 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2958,4 +2958,5 @@ Les téléchargements avancent en parallèle : **DeepSeek-V4.1-Flash 68 %** (249
 - Inventaire des modèles lourds : 984 Go de poids annoncés par les descripteurs, 984 Go annoncés par HuggingFace  tools/inventaire_modeles_lourds.sh lit les en-tê
 - Porte gpt-oss verte sur le binaire final : 15,1757 avec mmap, 21 minutes" && git log --oneline -1; echo "=== processus ==="; pgrep -af "drave-core|telecharger" 
 - Journal : inventaire des modèles lourds et vérificateur de table dans REPRISE" && git log --oneline -12
+- Journal automatique" && cat > /tmp/courbe_partiel.sh <<'EOF' #!/bin/bash # Que coûte un nœud selon le nombre de clusters qu'il porte, et que rend-il ? # Mêmes j
 

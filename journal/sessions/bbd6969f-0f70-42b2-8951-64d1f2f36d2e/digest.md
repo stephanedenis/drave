@@ -47201,3 +47201,40 @@ ok
 ⏵ Dernière mise à jour du journal et vérification finale.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np = 'REPRISE.md'\ns = open(p).read().rstrip('\\n')\ns += '''\n\n## Inventaire des modèles lourds (01/10 midi)\n\n```bash\n# Lit les EN-TÊTES seuls (le plus gros fichier fait 366 Go) et confronte les\n# poids annoncé … [1130 caractères tronqués]`
+
+  ```
+ok
+907e5c3 Journal : inventaire des modèles lourds et vérificateur de table dans REPRISE
+8a2ff79 Porte gpt-oss verte sur le binaire final : 15,1757 avec mmap, 21 minutes
+ae4531b Inventaire des modèles lourds : 984 Go de poids annoncés par les descripteurs, 984 Go annoncés par HuggingFace
+9eea40b La table des types ggml confrontée à libggml, et les huit types ajoutés après NVFP4
+400047e Rapports et sprint : les cinq défauts de la revue n°2 et le test qui manquait
+f98816d Revue adverse : un défaut bloquant silencieux, et le test qui manquait au correctif
+1ab1b69 Cérémonie du sprint 08 : quatre objectifs, deux nés de la preuve d'exécution
+6a2dfcb Journal du bloc : mmap, nœud partiel, et le défaut prédit par la revue confirmé en vrai
+b24a2e6 mmap (3,3x plus rapide, 3x moins de mémoire) et nœud partiel (2,36 Go pour un huitième des experts)
+8f55e4f Clusters exécutables : origine 15,2789 = clusters 15,2789, et les défauts trouvés en chemin
+3eb0af7 Un modèle éclaté se lit comme un seul : lecteur multi-fichiers, shards et clusters
+7c1b9ff Convertisseur GGUF → modèle éclaté en clusters : un fichier par cluster, vérifié par empreintes
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== PORTES FINALES ===\"; (cd drave-core && cargo test --release 2>&1 | grep -E \"^test result\"); printf \"Qwen 0.5B (19,3885) : \"; timeout 120 ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf --ppl /tmp/ids_q … [393 caractères tronqués]`
+
+  ```
+=== PORTES FINALES ===
+test result: ok. 32 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.11s
+Qwen 0.5B (19,3885) : perplexité 19.3885 sur 510 tokens
+(gpt-oss 15,1757 mesuré au commit précédent)
+=== DÉPÔT ===
+ M journal/README.md
+propre si vide
+12:19
+/dev/mapper/system-root   11T  7,3T  3,6T  67% /home/stephane/Data13TB
+/dev/nvme0n1p2           828G  113G  716G  14% /home/stephane/FastNVMe
+  ```
+
+### 🤖 Assistant
+
+⏵ Il reste 40 min : je mesure la courbe mémoire/qualité du nœud partiel selon le nombre de clusters.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -m \"Journal automatique\" && cat > /tmp/courbe_partiel.sh <<'EOF'\n#!/bin/bash\n# Que coûte un nœud selon le nombre de clusters qu'il porte, et que rend-il ?\n# Mêmes jetons, même contexte ; la perplexité … [867 caractères tronqués]`
