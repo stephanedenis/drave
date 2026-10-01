@@ -159,8 +159,16 @@ def main():
     print(f"{'contexte':>9} {'profondeur':>11} {'trouvé':>7} {'secondes':>9}  détail")
     lignes = []
     offset = 0
+    fenetres = set()
+    besoin_max = int(max(longueurs) * 4.2) + 400
+    if besoin_max + 150_000 * (len(longueurs) * len(profondeurs) - 1) > len(corpus):
+        print(f"AVERTISSEMENT : le corpus ({len(corpus)} caractères) ne permet pas "
+              f"{len(longueurs) * len(profondeurs)} fenêtres distinctes de {besoin_max} "
+              f"caractères — certaines sondes rejoueront la même invite, et des "
+              f"répétitions d'un calcul déterministe ne mesurent rien de plus qu'une.")
     for ctx in longueurs:
         for p in profondeurs:
+            fenetres.add(offset)
             ok, dt, detail = sonde(args.modele, corpus, ctx, p, offset, args)
             # Fenêtre différente à chaque sonde — SAUF si le corpus est trop court
             # pour en contenir une deuxième. Le garde-fou d'origine comparait à
@@ -169,12 +177,19 @@ def main():
             # était TOUJOURS vraie et l'offset revenait à 0 à chaque sonde. Trois
             # sondes « sur trois fenêtres » étaient donc trois fois la même invite,
             # et trois répétitions d'un calcul déterministe ne mesurent rien.
+            # La marge se calcule depuis le BESOIN réel de la sonde
+            # (`int(ctx*4.2) + 400`), pas depuis une constante : avec 20 000 fixes,
+            # un contexte de 16 384 (besoin ≈ 69 213) aurait ramené la fenêtre à 0
+            # en silence, et un corpus court aurait rejoué la même invite pour
+            # toutes les sondes — le bug que ce garde-fou est censé empêcher.
             offset += 150_000
-            if offset + 20_000 > len(corpus):
+            if offset + int(ctx * 4.2) + 400 > len(corpus):
                 offset = 0
             etat = "délai" if ok is None else ("oui" if ok else "NON")
             print(f"{ctx:>9} {p:>11.2f} {etat:>7} {dt:>9.1f}  {detail}", flush=True)
             lignes.append((ctx, p, etat, dt, detail))
+    print(f"fenêtres distinctes utilisées : {len(fenetres)} sur "
+          f"{len(longueurs) * len(profondeurs)} sondes")
     if args.journal:
         with open(args.journal, "w", encoding="utf-8") as f:
             f.write(f"# aiguille v2 — {args.modele}\n")

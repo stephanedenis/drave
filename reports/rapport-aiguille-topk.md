@@ -129,11 +129,11 @@ disent l'écart réel (Qwen2.5-0.5B Q8_0, ctx 2 048, 511 jetons, mêmes identifi
 
 | | perplexité | écart moyen \|ΔNLL\| | accord top-1 |
 |---|---|---|---|
-| `--lot 1` | 13,1368 | — | — |
+| `--lot 1` | 13,1368 (moteur) / 13,1367 (comparateur) | — | — |
 | `--lot 256` | 13,1359 | **0,0007** (médiane 0,0003, p90 0,0017, max 0,0068) | **511/511** |
 
-Le désaccord entre les deux chemins est donc de **7e-4 nat par position au plus**, et
-le jeton choisi est le même PARTOUT : ce n'est pas un chemin faux, c'est une
+Le désaccord entre les deux chemins est donc de **7e-4 nat par position en moyenne**
+(max 6,8e-3, p90 1,7e-3), et le jeton choisi est le même PARTOUT : ce n'est pas un chemin faux, c'est une
 amplification chaotique — un écart de 1e-3 sur un logit suffit à changer un jeton
 greedy après quelques dizaines de pas, et une réponse qui doit contenir un code de
 8 caractères ne pardonne pas un jeton.
@@ -145,7 +145,8 @@ révélateurs d'un écart minuscule, pas comme une propriété stable du modèle
 ### La grille refaite sur TROIS TEXTES (sprint 5)
 
 L'outil corrigé produit enfin trois fenêtres distinctes — les longueurs de prompt le
-prouvent (4 114 / 4 433 / 4 126 jetons, contre 4 114 trois fois au sprint 4). Mêmes
+prouvent (4 114 / 4 433 / 4 126 jetons, contre 4 114 aux douze sondes du sprint 4 —
+trois répétitions par configuration, toutes à l'offset 0). Mêmes
 conditions : 4 096 clés, profondeur 0,5, `--lot 256`.
 
 | configuration | fenêtre 1 | fenêtre 2 | fenêtre 3 | trouvé |
@@ -169,16 +170,32 @@ Trois fenêtres restent un petit échantillon (l'intervalle de confiance d'un 1/
 trois tirages va de 1 % à 90 %) : la mesure à faire est **neuf fenêtres**, ce qui
 donne un taux utilisable. C'est l'objet du sprint 6.
 
+### Le k nécessaire croît-il avec le contexte ? (deux points, à 8 192)
+
+| contexte | dense | k = 1 024 | k = 2 048 |
+|---|---|---|---|
+| 4 096 (trois fenêtres) | **3/3** | **3/3** (25 % du contexte) | — |
+| 8 192 (UNE fenêtre) | **oui** (1 002,0 s) | **oui** (764,7 s, 12,5 %) | **oui** (755,7 s, 25 %) |
+
+⚠️ **Ce que ce tableau est, et ce qu'il n'est pas** : à 8 192, chaque ligne est UNE
+sonde, sur UNE fenêtre (prompt 7 963 jetons), les trois avec les mêmes réglages
+(`--lot 256`, sans `--gpu-kv`) et toutes trois portant l'avertissement « `--attn-topk`
+IGNORÉ en mode lot » (le k ne s'applique donc qu'aux 24 jetons générés). **Aucun k
+n'échoue à 8 192** : le seuil n'y est pas localisé, et « k = 1 024 suffit » est une
+borne supérieure sur un point. Ce qui est établi : à 4 096 clés il fallait 1 024
+(25 %), à 8 192 clés 1 024 suffit (12,5 %) — le k nécessaire croît donc **plus
+lentement que le contexte** sur ces deux points, ce qui est la direction favorable
+pour l'élagage à long contexte, sans être une courbe. Source : `/tmp/aiguille_s5.log`
+§B ; contrôle dense : `/tmp/aig8192.log`.
+
 ## Ce que ce rapport ne dit pas
 
 * **8 192 : le contrôle dense est mesuré** (sprint 4, une sonde : **trouvé**,
   1 002,0 s pour un prompt de 7 963 jetons) — la question « le k nécessaire
   croît-il avec le contexte ? » est donc mesurable à 8 192 ; 16 384 ne l'est pas.
-* 8 192 et 16 384 (grille creuse) : non mesurés dans ce box. Le taux mesuré du 0.5B est de 58 à
-  62 ms par jeton de prompt (238,5 à 256,5 s pour 4 114 jetons), donc ≈9 min par
-  sonde à 8 192 — et **seule** la sonde « 8 192 / 0,5 / complète » a été lancée,
-  puis arrêtée 8 s plus tard (22:55:13) pour laisser la place à la cérémonie. Le
-  sprint 4 reprend la grille là où elle s'arrête.
+* **8 192 : mesuré depuis** (dense, k = 1 024, k = 2 048 — une fenêtre chacun,
+  section précédente). **16 384 n'est pas mesuré** : le taux du 0.5B est de 58 à
+  62 ms par jeton de prompt, soit ≈20 min par sonde à 16 384.
 * plusieurs codes par sonde, **plusieurs fenêtres de corpus** : la mesure est
   binaire (trouvé / non trouvé), avec un seul code et — la correction ci-dessus le
   montre — **une seule fenêtre par (contexte, profondeur)**. Un « NON » peut être un

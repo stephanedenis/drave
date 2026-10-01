@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 60.1 h |
+| Durée | 60.2 h |
 | Tours | 48 |
-| Messages | 2478 |
-| Appels d'outils | 2348 |
+| Messages | 2485 |
+| Appels d'outils | 2353 |
 | Fichiers touchés | 52 |
-| Commandes | 1989 |
-| Sous-agents | 17 |
-| Commits | 216 |
+| Commandes | 1993 |
+| Sous-agents | 18 |
+| Commits | 217 |
 | Compactages de contexte | 3 |
 
 ## Objectifs déclarés
@@ -2234,7 +2234,7 @@ Fusionner la sélection en un noyau par ligne (8 lancements → 2), supprimer le
 
 ### Tour 48 — Continue en blocs de 2h jusqu'à demain 8h HAE. pour chacun des blocs/sprints tu dois être en autonomie totale. C'est à d … [282 caractères tronqués]
 
-*196 appels d'outils.* Actions notables :
+*201 appels d'outils.* Actions notables :
 
 - bash — Check time and count remaining boxes
 - bash — Start sprint 2
@@ -2250,7 +2250,7 @@ Fusionner la sélection en un noyau par ligne (8 lancements → 2), supprimer le
 - bash — Add poison check and finiteness guard
 - bash — Locate the topk GPU branch
 - bash — Wire fused kernel into the model
-- … et 178 autres
+- … et 183 autres
 
 **Synthèse produite :**
 
@@ -2334,6 +2334,7 @@ Fusionner la sélection en un noyau par ligne (8 lancements → 2), supprimer le
 - tour 48 — Revue adverse du noyau fusionné
 - tour 48 — Revue adverse des rapports du sprint 3
 - tour 48 — Revue adverse sprint 4
+- tour 48 — Revue adverse sprint 5
 
 ### Commandes exécutées (échantillon)
 
@@ -2377,7 +2378,7 @@ Fusionner la sélection en un noyau par ligne (8 lancements → 2), supprimer le
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 1949 autres
+- … et 1953 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2741,4 +2742,5 @@ Fusionner la sélection en un noyau par ligne (8 lancements → 2), supprimer le
 - Pourquoi --lot 1 diffère de --lot 256 : 7e-4 nat par position, top-1 identique partout — c'est une amplification chaotique, pas un chemin faux" && git log --one
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -F - <<'EOF' && git log --oneline -1 Grille refaite sur trois VRAIS textes : k
 - À 8 192 clés, k=1024 (12,5 %) suffit : le k nécessaire croît plus lentement que le contexte (deux points)" && git log --oneline -1
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' # avertissement quand une série ne produit pas autant de fenêtres distinctes que de sonde
 
