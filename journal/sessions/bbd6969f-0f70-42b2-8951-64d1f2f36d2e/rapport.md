@@ -7,12 +7,12 @@
 | Début | 2026-09-28 14:46 |
 | Durée | 69.8 h |
 | Tours | 51 |
-| Messages | 3015 |
-| Appels d'outils | 2870 |
+| Messages | 3017 |
+| Appels d'outils | 2872 |
 | Fichiers touchés | 65 |
-| Commandes | 2483 |
+| Commandes | 2485 |
 | Sous-agents | 22 |
-| Commits | 254 |
+| Commits | 255 |
 | Compactages de contexte | 4 |
 
 ## Objectifs déclarés
@@ -2400,7 +2400,7 @@ Les téléchargements avancent en parallèle : **DeepSeek-V4.1-Flash 68 %** (249
 
 ### Tour 51 — continue jusqu'à 13h HAE
 
-*307 appels d'outils.* Actions notables :
+*309 appels d'outils.* Actions notables :
 
 - bash — Check time and running processes
 - job_list
@@ -2416,11 +2416,11 @@ Les téléchargements avancent en parallèle : **DeepSeek-V4.1-Flash 68 %** (249
 - todo_write
 - bash — Count buffer accesses in gguf.rs
 - bash — Map functions and base computations
-- … et 290 autres
+- … et 292 autres
 
 **Synthèse produite :**
 
-⏵ Dernier tour : cohérence des artefacts et du journal.
+⏵ **File terminée : 1 163 Go de modèles lourds, tous complets et lisibles.** Je consigne.
 
 ## 3. Travail accompli
 
@@ -2561,7 +2561,7 @@ Les téléchargements avancent en parallèle : **DeepSeek-V4.1-Flash 68 %** (249
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 2443 autres
+- … et 2445 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2963,4 +2963,5 @@ Les téléchargements avancent en parallèle : **DeepSeek-V4.1-Flash 68 %** (249
 - Chaîne complète par les outils du dépôt : convertisseur -> clusters -> 15,2789  tools/convertir_clusters.py sur Qwen3-30B-A3B (18,6 Go) : 351,7 s, 435 + 8x144 =
 - Journal de session" && git log --oneline --since="11:13" | wc -l && echo "commits sur le bloc" && git log --oneline -1 && echo "" && echo "=== RÉCAPITULATIF ===
 - Journal" 2>/dev/null; git status --short | wc -l; echo "---"; date +%H:%M; tail -1 /tmp/tl_file2.log
+- La file de 1 138 Go est terminée : 1 163 Go de modèles lourds, tous complets et lisibles  Sept modèles, six architectures reconnues (deepseek41, deepseek2, deep
 

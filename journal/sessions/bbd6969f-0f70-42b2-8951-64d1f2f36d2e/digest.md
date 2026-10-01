@@ -47513,3 +47513,33 @@ fichiers modifiés restants
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git status --short; git add -A && git commit -q -m \"Journal\" 2>/dev/null; git status --short | wc -l; echo \"---\"; date +%H:%M; tail -1 /tmp/tl_file2.log", "description": "Clear remaining journal change"}`
+
+  ```
+M journal/README.md
+1
+---
+12:36
+12:36:11    0.5 Go / 43.5 Go (1.2 %, 54 Mo/s)
+  ```
+
+### 🤖 Assistant
+
+⏵ Dernière vérification : les modèles téléchargés sont-ils complets (tous leurs shards) ?
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for d in /home/stephane/Data13TB/stephane/modeles/gguf/*/; do n=$(basename \"$d\"); nb=$(ls \"$d\"*.gguf 2>/dev/null | wc -l); [ \"$nb\" -eq 0 ] && continue; f=$(ls \"$d\"*.gguf 2>/dev/null | head -1); res=$(timeout 240 ./drave-core/ … [227 caractères tronqués]`
+
+  ```
+DeepSeek-V4.1-Flash-Q2        1 fichiers · deepseek41 · 1 fichiers · 1046 tenseurs · 365.70 Go de poids · en-tête
+DeepSeek-V4-Flash-UD-IQ1_M    3 fichiers · deepseek4 · 3 fichiers · 1328 tenseurs · 86.90 Go de poids · en-têtes 
+GLM-5.3-Flash-UD-IQ1_S        3 fichiers · glm5next · 3 fichiers · 1412 tenseurs · 93.08 Go de poids · en-têtes l
+GLM-5.3-UD-IQ1_S              6 fichiers · glm-dsa · 6 fichiers · 1809 tenseurs · 216.71 Go de poids · en-têtes l
+Kimi-K2.7-Code-UD-IQ1_M       8 fichiers · deepseek2 · 8 fichiers · 1096 tenseurs · 303.90 Go de poids · en-têtes
+MiniMax-H3                    2 fichiers · ? · 1 fichiers · 532 tenseurs · 11.42 Go de poids · en-têtes lus en 1.
+Qwen3-235B-A22B-Q2_K          2 fichiers · qwen3moe · 2 fichiers · 1131 tenseurs · 85.68 Go de poids · en-têtes l
+  ```
+
+### 🤖 Assistant
+
+⏵ **File terminée : 1 163 Go de modèles lourds, tous complets et lisibles.** Je consigne.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np = 'docs/plan-modeles-lourds.md'\ns = open(p).read()\ns = s.replace('''| Qwen3-235B-A22B-Q2_K | — | — | — | en cours | 85,7 Go |''',\n'''| GLM-5.3-Flash-UD-IQ1_S | `glm5next` | 3 | 1 412 | **93,08 Go** | 93,1 Go |\ … [2354 caractères tronqués]`

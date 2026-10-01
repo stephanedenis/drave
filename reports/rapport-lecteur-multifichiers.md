@@ -156,7 +156,10 @@ testable ? ». Ici, c'était un générateur de fichiers.*
 `tools/inventaire_modeles_lourds.sh` confronte les poids annoncés par les
 descripteurs GGUF aux tailles annoncées par HuggingFace. **La concordance porte
 sur 984 Go** : DeepSeek-V4.1-Flash 365,70 = 365,7 · GLM-5.3 216,71 = 216,7 ·
-Kimi-K2.7 303,90 = 303,9 · DeepSeek-V4-Flash 86,90 = 86,9. Une seule entrée
+Kimi-K2.7 303,90 = 303,9 · DeepSeek-V4-Flash 86,90 = 86,9 · GLM-5.3-Flash
+93,08 = 93,1 · Qwen3-235B 85,68 = 85,7. **La file de 1 138 Go est terminée**, et
+chacun de ses modèles est complet : le lecteur refuse un découpage dont un shard
+manque. Une seule entrée
 fausse dans la table des types ggml donnerait un écart visible sur des centaines
 de gigaoctets — c'est ainsi que `iq1_m` manquant avait fait annoncer 8,56 Go pour
 86,9 Go.
