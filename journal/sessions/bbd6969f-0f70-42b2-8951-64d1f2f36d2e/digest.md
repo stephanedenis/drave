@@ -46514,3 +46514,317 @@ gpt-oss ctx 256 lot 1 : 12:04
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -m \"Cérémonie du sprint 08 : quatre objectifs, deux nés de la preuve d'exécution\n\nRétrospective : garder le point d'étranglement unique (tbuf, Moe::ou) et le\nsilence rendu visible ; changer le binaire  … [474 caractères tronqués]`
+
+  ```
+1ab1b69 Cérémonie du sprint 08 : quatre objectifs, deux nés de la preuve d'exécution
+--- revue adverse ---
+gpt-oss ctx 256 lot 1 :
+  ```
+
+### 👤 Utilisateur
+
+Agent 6551e4dc-b73d-4df7-8fc4-b8c9fdbb0688 sent a message:
+RAPPORT ADVERSE — lecteur multi-fichiers / mmap / nœud partiel / numeros.
+
+ATTENTION RÉVISION : HEAD a bougé pendant l'audit (6a2dfcb) et clusters.rs + README.md sont MODIFIÉS non commités (refactor `gardes_du_milieu`/`ouvrir_sous_ensemble` en cours). J'ai audité le code de b24a2e6 (= contenu de gguf.rs/model.rs sur disque, inchangés) ; pour clusters.rs les numéros cités sont ceux de b24a2e6, ajouter +26 après la ligne ~150 pour l'arbre courant. Aucun fichier du dépôt modifié ; tout est dans /tmp/revue.
+
+1) mmap utilisé après munmap ? NON, aucun cas atteignable.
+- Le seul point de sortie des pointeurs nus est `data_ptr` (gguf.rs:915-918 `Some(self.tbuf(t).as_ptr())`), appelé seulement par `charger_moe` (model.rs:161 et 178). Les `Vue4` (model.rs:240-246 `pub base: *const u8`) vivent dans `Moe` -> `Layer` -> `Model.layers` (model.rs:938), et le `Gguf` propriétaire est le MÊME `Model.g` (model.rs:936, construit par `Model::load`: `charger_moe(&g, …)` puis `Model { g, … }`). `Gguf`/`Tampon`/`Mappe` n'implémentent pas Clone (seul `Vue4` est `#[derive(Clone, Copy)]`, model.rs:239, et ses `expert`/`blocs_expert` sont privés) ; ni `Vue4`, ni `Moe`, ni `Layer`, ni `DenseQ4` n'ont de `Drop`. Aucun `mem::forget`/`Box::leak`/`ManuallyDrop` dans src/. Déplacer `Gguf` ne change pas la valeur du pointeur : un déménagement est sûr.
+- Risques LATENTS (pas des bugs atteignables) : (a) `Model` déclare `g` en premier, donc à la destruction `g` est droppé (munmap) AVANT `layers`/`head4` qui contiennent des pointeurs vers le mapping — sûr aujourd'hui uniquement parce qu'aucun Drop ne lit les poids ; (b) `Model.pool: Pool` est droppé après `g` et `impl Drop for Pool` (engine.rs:786-791) joint les fils — si un calcul était encore en vol, UAF ; (c) l'invariant « g survit aux pointeurs » n'est pas vérifié par le compilateur (un `let Model { g, layers, .. }` compilerait). Gravité : cosmétique/latent.
+
+2) Fuite si `Mappe::ouvrir` échoue ou si `entete_de` rend None ? NON, aucune fuite.
+- `bufs` est un local (gguf.rs:355 `let mut bufs: Vec<Tampon> = …`), droppé sur tout retour `?`/`Err` ; `Drop for Mappe` (gguf.rs:67-71) fait le `munmap`, et sans Clone il ne peut pas y avoir de double munmap. Si `entete_de` rend None (gguf.rs:360-363) le `buf` courant n'a pas encore été poussé et il est droppé comme les précédents.
+- La prémisse est en partie fausse : un échec de `Mappe::ouvrir` n'interrompt PAS l'ouverture — `ouvrir_tampon` (gguf.rs:109-115) imprime « mmap refusé … lecture complète » et retombe sur `read_to_end`. Le 3ᵉ fichier sur 9 qui refuse le mmap finit en `Tampon::Lu`, les 8 autres peuvent rester mappés.
+
+3) `Tampon::len` correct ? OUI. `(**self).len()` (gguf.rs:91) déréférence vers `[u8]` et rend la longueur de la tranche ; `is_empty` (92) est cohérent (et mort, `#![allow(dead_code)]` ligne 3). Fichier de longueur 0 : `Mappe::ouvrir` rend `Ok(Mappe{ptr: null_mut(), len: 0})` (gguf.rs:48) sans appeler mmap, `Deref` rend `&[]` (gguf.rs:62), `Drop` saute le munmap (gguf.rs:69). Vérifié sur un fichier de 0 octet : erreur propre « en-tête GGUF incomplet » (gguf.rs:675), pas de panique mémoire. Aucun défaut.
+
+4) DRAVE_CLUSTERS, cas par cas (mesuré avec le binaire sur des dossiers synthétiques /tmp/revue, `--tensors`) :
+- `0,0` : rc=0, charge le cluster 0 UNE fois (union silencieuse, `g.contains`, clusters.rs:219). Pas de résultat faux au sens strict, mais un doublon passe sans un mot -> cosmétique.
+- `0,` : erreur claire « DRAVE_CLUSTERS : «  » n'est pas un numéro de cluster ».
+- ` 0 ` : rc=0, marche (trim, clusters.rs:202-204).
+- `-1`, `1e3`, `1 2`, `0x1`, `99999999999999999999` : erreur claire, chacun nomme la valeur fautive.
+- chaîne vide : traitée comme « pas de mode partiel » (`Ok(v) if !v.trim().is_empty()`, clusters.rs:202), charge tout -> acceptable.
+- `8` sur 8 clusters : erreur claire « cluster 8 hors bornes (8 au total) » (clusters.rs:213-217).
+- `3,0` (désordre) : rc=0, correct — le filtre est ensembliste et les préfixes portent le numéro (clusters.rs:219 et 234-238).
+- Défaut réel (a) : un cluster DEMANDÉ mais absent du disque est ignoré en silence s'il en reste un autre. Mesuré sur un dossier à 7 fichiers : `DRAVE_CLUSTERS=7,3` -> rc=0, « 2 fichiers » (cluster 3 seulement) ; `DRAVE_CLUSTERS=7` seul -> erreur « ne retient aucun cluster ». Gravité gênant. Correctif minimal : après la liste des fichiers, exiger que chaque numéro demandé ait son `cluster-XX.gguf`, sinon erreur nommant le numéro absent.
+- Les erreurs sortent par `.expect()` du binaire (rc=134) mais le message est explicite : conforme à « erreur claire ».
+
+5) `Moe::numeros` / `Moe::ou` : cohérent, aucune indexation hors bornes atteignable.
+- `local = None` : `(vec![0], vec![base])` (model.rs:111) + `Some((0, e))` si `e < n_expert_global` (model.rs:329). `gate/up/down` ont alors exactement 1 élément, et `dims[0] == n_expert` est exigé (model.rs:147-148), donc `expert(e)` est dans la matrice.
+- `local = Some(m)` : `numeros` est construit par `v.iter().map(|(c,_)| *c)` (model.rs:128) donc `numeros.len() == gate.len()` par construction ; `num_up == numeros` et `num_down == numeros` sinon panique (model.rs:183-186) ; longueurs croisées vérifiées (model.rs:195-198) ; `k = numeros.position(cluster)` (model.rs:335) donc `k < numeros.len() == gate.len() == up.len() == down.len()`. `ligne < par_cluster` est garanti par `Mapping::lire` (clusters.rs:92-96) et `dims[0] == par_cluster` par model.rs:147-148, donc `expert(loc)` reste dans le tenseur.
+- Appelants : exactement deux, model.rs:2937 et 3745, tous deux `let Some((k, loc)) = moe.ou(e) else { continue; }`, suivis de `moe.gate[k]`/`up[k]`/`down[k]` (2944/2953/2983 et 3771/3775/3782) ; le `gate[0]` du chemin GPU (3753-3757) n'est pris que si `moe.local.is_none()`. Aucun défaut.
+
+6) Résultat FAUX avec DRAVE_CLUSTERS alors qu'on croit charger tout ? OUI, confirmé.
+- Le contrôle d'exhaustivité n'est fait que si `gardes.is_none()` (clusters.rs:223-227) et `charger_moe` ne vérifie `gate.len() == m.n_clusters` que si `!partiel()` (model.rs:191).
+- Reproduction : dossier `/tmp/revue/manque` = commun.gguf + cluster-00..06 (7 fichiers) + mapping.tsv annonçant 8 clusters. Sans variable : `Err "7 fichiers de cluster pour 8 annoncés dans mapping.tsv"`. Avec `DRAVE_CLUSTERS=0,1,2,3,4,5,6,7` : rc=0, « qwen3moe · 8 fichiers · 7 tenseurs », aucun avertissement (idem DRAVE_MMAP=0, donc ce n'est pas lié au mmap). Le cluster 7 manque, les experts globaux qui y sont mappés rendent `None` dans `Moe::ou` et leurs contributions sont perdues sans renormalisation (model.rs:2920 puis 2937 `else { continue; }`) — la somme inter-nœuds n'existe pas encore (REPRISE.md:733). Le cas « désordre » est sain ; le cas dangereux est `DRAVE_CLUSTERS` qui couvre TOUS les clusters annoncés alors qu'un fichier manque.
+- Gravité : bloquant (silencieux) dès qu'un artefact est incomplet. Correctif minimal : (i) vérifier que chaque cluster demandé existe sur disque ; (ii) ne poser `PARTIEL` que si l'ensemble chargé est un sous-ensemble STRICT de l'ensemble annoncé, c.-à-d. `let complet = clusters.len() == mapping.n_clusters; let _ = PARTIEL.set(!complet);` et garder l'erreur d'exhaustivité dès que la demande couvre tous les clusters annoncés.
+
+7) `PARTIEL: OnceLock<bool>` posé une fois (clusters.rs:135-138 et 222) : un 1ᵉʳ appel avec DRAVE_CLUSTERS puis un 2ᵉ sans, dans le même processus, laisse `partiel() == true` — et `ACTIF` (clusters.rs:124-128) garde en plus le mapping du PREMIER modèle : `charger_moe` traduirait les experts avec le mapping de l'autre modèle (mêmes formes => aucun bruit), ou, pour un GGUF ordinaire, chercherait `cl*/` et retomberait en silence sur le chemin dense. Atteignable en ligne de commande ? NON aujourd'hui : chaque mode ne fait qu'un `Model::load` (main.rs:687, 1353, 2030, 2162, 2998, 3874 — un par exécution). Atteignable dans les tests (plusieurs `ouvrir` par processus, commentaire clusters.rs:345-349) — le refactor en cours qui passe `gardes` explicitement va dans le bon sens. Détail : `PARTIEL.set` (222) est posé AVANT l'ouverture réelle (240-244) ; un échec d'ouverture laisse le drapeau armé pour le processus. Gravité : latent/gênant, aucun impact sur une invocation CLI actuelle.
+
+8) Le test `dossier_de_clusters_ouvre_et_apparie` peut-il passer avec du code faux ? OUI.
+- Il n'appelle jamais `charger_moe` ni `Moe::ou`, et il ne PEUT pas : `gguf_synth` n'écrit que des tenseurs F32 (gguf.rs:1264), type que `source_de` refuse (model.rs:81 `_ => None`), donc aucun `Moe` n'est constructible avec ces fixtures.
+- Défaut concret non détecté : remplacer model.rs:335 `self.numeros.iter().position(|c| *c == cluster)?` par `Some((cluster, ligne))` (le bug d'origine) laisse les 30 tests verts ; sur un nœud COMPLET c'est même invisible à l'exécution (position == numéro), seul un nœud partiel dont le cluster chargé n'est pas le rang 0 le révèle. Le correctif mis en avant par le commit b24a2e6 n'a donc AUCUN test.
+- Le test n'exerce que `tbuf`/`dequant` (les deux clusters s'appellent cluster-00/01, 2 noms à 2 chiffres) : ni le pas de `Vue4`, ni `blocs_expert`, ni `est_mappe()`, ni l'équivalence DRAVE_MMAP=0, ni `partiel()` ne sont couverts. Une régression de tri lexicographique n'y serait pas visible non plus (il faudrait ≥ 3 chiffres non padés) ; aujourd'hui seul le contrôle de continuité l'attrape.
+
+AUTRES DÉFAUTS trouvés (hors questions) :
+A. `octets_de` (gguf.rs:579-584) ne borne pas le DÉBUT : `&b[debut..(debut+besoin).min(b.len())]` panique si `debut > b.len()`. Reproduit avec 2 shards synthétiques dont le doublon a un offset à 1 Go : « range start index 1073741952 out of range for slice of length 128 » (au lieu d'une erreur d'assemblage). Gravité gênant, correctif : tester `debut` et `besoin` et rendre une `io::Error`.
+B. Commentaire périmé clusters.rs:168-171 (« les préfixes cl{c}/ sont attribués par POSITION ») qui contredit clusters.rs:234-238 (le préfixe porte le NUMÉRO). Conséquence : le contrôle de continuité (189-195) n'est plus nécessaire à la justesse ; il empêche un vrai nœud partiel de ne POSÉDER que ses fichiers. Mesuré : dossier ne contenant que commun.gguf + cluster-03.gguf + mapping -> refusé quel que soit DRAVE_CLUSTERS (« cluster 0 attendu, 3 trouvé »). Le mode partiel ne réduit donc que la RAM, pas le disque. Gravité gênant (bloque le déploiement distribué visé) ; correctif : appliquer la continuité après filtrage (ou la supprimer, les préfixes portant le numéro) et exiger en échange que chaque cluster demandé existe.
+C. Aucune vérification `mapping.n_experts == cfg.n_expert` (n_experts global) : un mapping d'un autre modèle aux mêmes formes ferait sauter en silence les experts routés au-delà de `n_experts` (model.rs:329 / clusters.rs:110-112).
+
+Non trouvé / rien à signaler : fuite mémoire, double munmap, dépassement d'index via `Moe::ou`, erreur de longueur dans `Tampon`, cas `len == 0`. `cargo test --release` : 30 tests, 0 échec.
+
+### 👤 Utilisateur
+
+Background subagent 6551e4dc-b73d-4df7-8fc4-b8c9fdbb0688 finished and will do no further work unless you send it more.
+Its closing message:
+⏵ Rapport final : réponses aux 8 questions, preuves et correctifs.
+
+**Révision auditée** : b24a2e6 (gguf.rs et model.rs inchangés sur disque). Pendant l'audit, HEAD est passé à 6a2dfcb et `clusters.rs` + `README.md` sont modifiés non commités (refactor `gardes_du_milieu`/`ouvrir_sous_ensemble`) : pour `clusters.rs`, ajouter **+26** après la ligne ~150. Aucun fichier du dépôt touché ; tout est dans `/tmp/revue`.
+
+---
+
+**1. mmap utilisé après munmap ? NON, aucun cas atteignable.**
+Seule sortie de pointeur nu : `data_ptr` — `gguf.rs:915-918` `Some(self.tbuf(t).as_ptr())` — appelé uniquement par `charger_moe` (`model.rs:161` et `178`). Les `Vue4` (`model.rs:241` `pub base: *const u8`) vivent dans `Moe` → `Layer` → `Model.layers` (`model.rs:938`), et le `Gguf` propriétaire est le même `Model.g` (`model.rs:936`), construit par `Model::load` : `charger_moe(&g, l, cfg.n_expert)` (`model.rs:1673`) puis `Model { g, … }` (`model.rs:1949`). `Gguf`/`Tampon`/`Mappe` ne sont pas `Clone` ; ni `Vue4`, ni `Moe`, ni `Layer`, ni `DenseQ4` n'ont de `Drop` ; aucun `mem::forget`/`Box::leak` dans `src/`. Déplacer `Gguf` ne change pas la valeur du pointeur → sûr.
+*Latent seulement* : (a) `Model` déclare `g` en premier, donc `munmap` a lieu avant le drop de `layers`/`head4` qui pointent dedans — sûr aujourd'hui parce qu'aucun `Drop` ne lit les poids ; (b) `Pool` est droppé après `g` et `impl Drop for Pool` (`engine.rs:786-791`) joint les fils ; (c) l'invariant « `g` survit aux pointeurs » n'est pas vérifié par le compilateur. Gravité : cosmétique/latent.
+
+**2. Fuite si `Mappe::ouvrir` échoue, ou si `entete_de` rend `None` après mmap ? NON.**
+`bufs` est un local (`gguf.rs:355`) droppé sur tout `?`/`Err` ; `Drop for Mappe` (`gguf.rs:67-71`) fait le `munmap` ; pas de `Clone` donc pas de double `munmap`. `entete_de` → `None` : `buf` n'est pas encore poussé et est droppé avec les précédents. Prémisse en partie fausse : un échec de `Mappe::ouvrir` **n'interrompt pas** l'ouverture — `ouvrir_tampon` (`gguf.rs:109-115`) imprime « mmap refusé … lecture complète » et retombe sur `read_to_end`. Seules les erreurs de lecture remontent.
+
+**3. `Tampon::len` : OUI, correct.** `gguf.rs:91` `(**self).len()` déréférence vers `[u8]` ; `is_empty` (92) cohérent (et mort, `allow(dead_code)` ligne 3). Fichier vide : `Mappe::ouvrir` rend `ptr: null_mut(), len: 0` (`gguf.rs:48`) sans mmap, `Deref` rend `&[]` (`gguf.rs:62`), `Drop` saute `munmap` (`gguf.rs:69`). Vérifié sur un fichier 0 octet → erreur propre « en-tête GGUF incomplet » (`gguf.rs:675`), aucune UB. Aucun défaut.
+
+**4. `DRAVE_CLUSTERS` (mesuré avec le binaire, dossiers synthétiques `/tmp/revue`, `--tensors`)**
+| valeur | résultat |
+|---|---|
+| `0,0` | rc=0, cluster 0 chargé une fois (union via `g.contains`, `clusters.rs:219`) — doublon silencieux, **cosmétique** |
+| `0,` | erreur claire « «  » n'est pas un numéro de cluster » |
+| `" 0 "` | rc=0, marche (`clusters.rs:202-204`) |
+| `-1`, `1e3`, `1 2`, `0x1`, `999…9` | erreur claire nommant la valeur |
+| `""` | = pas de mode partiel, charge tout (`clusters.rs:202`) |
+| `8` (8 clusters) | erreur « cluster 8 hors bornes (8 au total) » (`clusters.rs:213-217`) |
+| `3,0` | rc=0, correct : filtre ensembliste + préfixes par numéro (`clusters.rs:219`, `234-238`) |
+| **`7,3` avec cluster 7 absent du disque** | **rc=0, charge le seul cluster 3 en silence** — demandé mais absent = ignoré. **Gênant.** Correctif : exiger que chaque numéro demandé ait son `cluster-XX.gguf`, sinon erreur nommant le numéro. |
+
+**5. `Moe::numeros`/`Moe::ou` : cohérent, aucun hors-bornes atteignable.**
+`local = None` → `(vec![0], vec![base])` (`model.rs:111`) et `Some((0, e))` si `e < n_expert_global` (`model.rs:329`) ; `dims[0] == n_expert` exigé (`model.rs:147-148`). `local = Some(m)` → `numeros` construit par `v.iter().map(|(c,_)| *c)` (`model.rs:128`) donc `numeros.len() == gate.len()` par construction ; `num_up == numeros` et `num_down == numeros` sinon panique (`model.rs:183-186`) ; longueurs croisées vérifiées (`model.rs:195-198`) ; `k = numeros.position(cluster)` (`model.rs:335`) donc `k < gate.len() == up.len() == down.len()`. `ligne < par_cluster` garanti (`clusters.rs:92-96`) et `dims[0] == par_cluster` (`model.rs:147-148`) → `expert(loc)` dans le tenseur. Appelants : seulement `model.rs:2937` et `3745`, tous deux `let Some((k, loc)) = moe.ou(e) else { continue; }`. Aucun défaut.
+
+**6. `DRAVE_CLUSTERS` + contrôle d'exhaustivité désactivé : OUI, résultat faux possible — confirmé.**
+Contrôle fait seulement si `gardes.is_none()` (`clusters.rs:223-227`) et `gate.len() == n_clusters` seulement si `!partiel()` (`model.rs:191`). Reproduction : dossier de 7 fichiers `cluster-00..06` + mapping annonçant 8 clusters → sans variable : `Err "7 fichiers de cluster pour 8 annoncés"` ; avec `DRAVE_CLUSTERS=0,1,2,3,4,5,6,7` : **rc=0, « 8 fichiers · 7 tenseurs »**, sans un mot (idem `DRAVE_MMAP=0`, donc pas lié au mmap). Les experts du cluster manquant rendent `None` dans `Moe::ou` et leur contribution pondérée est perdue sans renormalisation (`model.rs:2920` puis `2937 else { continue; }`), la somme inter-nœuds n'existant pas (`REPRISE.md:733`). Le « désordre » est sain ; le danger est la var qui couvre tous les clusters annoncés alors qu'un fichier manque. **Gravité : bloquant (silencieux).** Correctif minimal : vérifier l'existence de chaque cluster demandé, et `let complet = clusters.len() == mapping.n_clusters; let _ = PARTIEL.set(!complet);` en gardant l'erreur d'exhaustivité dès que la demande couvre tous les clusters annoncés.
+
+**7. `PARTIEL` (OnceLock global, `clusters.rs:135-138`, posé ligne `222`) : 1ᵉʳ appel avec la var, 2ᵉ sans → `partiel()` reste `true`**, et `ACTIF` (`clusters.rs:124-128`) garde le mapping du **premier** modèle : `charger_moe` traduirait les experts avec le mapping de l'autre modèle (mêmes formes → muet), ou chercherait `cl*/` pour un GGUF ordinaire et retomberait en silence sur le chemin dense. Atteignable en CLI ? **NON aujourd'hui** : un seul `Model::load` par exécution (`main.rs:687, 1353, 2030, 2162, 2998, 3874`). Atteignable dans les tests (plusieurs `ouvrir` par processus). Détail : `PARTIEL.set` précède l'ouverture réelle (`240-244`) → un échec d'ouverture laisse le drapeau armé. Gravité : latent/gênant.
+
+**8. Le test `dossier_de_clusters_ouvre_et_apparie` peut passer avec du code faux : OUI.**
+Il n'appelle jamais `charger_moe`/`Moe::ou`, et il ne *peut* pas : `gguf_synth` n'écrit que des F32 (`gguf.rs:1264`), refusés par `source_de` (`model.rs:81`). Défaut concret non détecté : remplacer `model.rs:335` par `Some((cluster, ligne))` (le bug d'origine) laisse les 30 tests verts, et c'est invisible à l'exécution sur un nœud complet (position == numéro) — seul un nœud partiel dont le cluster chargé n'est pas le rang 0 le révèle : **le correctif mis en avant par le commit n'a aucun test**. Le test ne couvre que `tbuf`/`dequant` (2 clusters `cluster-00/01`), ni pas de `Vue4`, ni `est_mappe()`, ni `DRAVE_MMAP=0`, ni `partiel()`.
+
+**Autres défauts**
+- **A.** `octets_de` (`gguf.rs:579-584`) ne borne pas le début : `&b[debut..(debut+besoin).min(b.len())]` panique si `debut > b.len()`. Reproduit avec 2 shards dont le doublon a un offset à 1 Go : « range start index 1073741952 out of range for slice of length 128 ». Gênant ; correctif : borner et rendre une `io::Error`.
+- **B.** Commentaire périmé `clusters.rs:168-171` (« préfixes attribués par POSITION ») contredisant `clusters.rs:234-238`. Le contrôle de continuité `189-195` n'est plus nécessaire à la justesse et **empêche un nœud de ne posséder que ses fichiers** : dossier avec seulement `commun.gguf` + `cluster-03.gguf` → refusé quel que soit `DRAVE_CLUSTERS`. Le mode partiel ne réduit que la RAM, pas le disque. Gênant ; correctif : continuité après filtrage (ou supprimée) + existence de chaque cluster demandé.
+- **C.** Aucune vérification `mapping.n_experts == cfg.n_expert` : un mapping étranger aux mêmes formes ferait sauter en silence les experts routés au-delà (`model.rs:329`, `clusters.rs:110-112`).
+
+**Rien trouvé** sur : fuite mémoire, double `munmap`, dépassement d'index via `Moe::ou`, longueur de `Tampon`, cas `len == 0`. `cargo test --release` : 30 tests, 0 échec.
+
+### 🤖 Assistant
+
+⏵ La revue a trouvé un défaut bloquant silencieux et, surtout, que mon correctif `numeros` n'a aucun test. Je corrige.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '160,200p' drave-core/src/clusters.rs", "description": "Read the continuity check region"}`
+
+  ```
+/// paramètre est explicite pour que ce chemin soit **testable** — la variable
+/// d'environnement, elle, est globale au processus et ne se prête pas à un test
+/// qui s'exécute en parallèle d'autres.
+pub fn ouvrir_sous_ensemble(dossier: &Path, clusters: Option<&[usize]>)
+    -> std::io::Result<Modele> {
+    ouvrir_interne(dossier, false, clusters)
+}
+
+/// `DRAVE_CLUSTERS=0,3` : les numéros demandés, ou `None` pour tous.
+pub fn gardes_du_milieu() -> std::io::Result<Option<Vec<usize>>> {
+    match std::env::var("DRAVE_CLUSTERS") {
+        Ok(v) if !v.trim().is_empty() => Ok(Some(v.split(',')
+            .map(|x| x.trim().parse::<usize>().map_err(|_| std::io::Error::new(
+                std::io::ErrorKind::InvalidInput,
+                format!("DRAVE_CLUSTERS : « {x} » n'est pas un numéro de cluster"))))
+            .collect::<std::io::Result<Vec<usize>>>()?)),
+        _ => Ok(None),
+    }
+}
+
+/// Inventaire d'un dossier de clusters : mêmes vérifications, mais les poids ne
+/// sont pas lus. Un modèle de 366 Go doit pouvoir être inspecté.
+pub fn ouvrir_meta(dossier: &Path) -> std::io::Result<Modele> {
+    let gardes = gardes_du_milieu()?;
+    ouvrir_interne(dossier, true, gardes.as_dere
+… [777 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '200,250p' drave-core/src/clusters.rs", "description": "Read cluster validation block"}`
+
+  ```
+let p = e?.path();
+        let n = p.file_name().and_then(|x| x.to_str()).unwrap_or("").to_string();
+        let Some(num) = n.strip_prefix("cluster-")
+                          .and_then(|r| r.strip_suffix(".gguf")) else { continue };
+        let Ok(c) = num.parse::<usize>() else {
+            return Err(std::io::Error::new(std::io::ErrorKind::InvalidData, format!(
+                "{} : « {n} » ne porte pas un numéro de cluster lisible", dossier.display())));
+        };
+        clusters.push((c, p));
+    }
+    clusters.sort();
+    if clusters.is_empty() {
+        return Err(std::io::Error::new(std::io::ErrorKind::NotFound,
+            format!("{} : aucun cluster-*.gguf", dossier.display())));
+    }
+    for (attendu, (num, p)) in clusters.iter().enumerate() {
+        if *num != attendu {
+            return Err(std::io::Error::new(std::io::ErrorKind::InvalidData, format!(
+                "{} : cluster {attendu} attendu, {} trouvé — la numérotation doit être \
+continue à partir de 0", p.display(), num)));
+        }
+    }
+    let mapping = Mapping::lire(&dossier.join("mapping.tsv"))?;
+    // Un nœud peut ne porter qu'une PARTIE des clusters (`DRAVE_CLUSTERS=0,3`) :
+    // c'est le mod
+… [1274 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np = 'drave-core/src/clusters.rs'\ns = open(p).read()\na = '''    // Le numéro de cluster est lu, pas déduit du rang : un tri lexicographique\n    // range « cluster-100 » avant « cluster-20 », et les préfixes `cl{c} … [5412 caractères tronqués]`
+
+  ```
+ok
+BUILD 0
+  ```
+
+### 🤖 Assistant
+
+⏵ Corrections A et C, puis le test qui manque pour `Moe::ou`.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\n# A : borner le DÉBUT de la tranche, pas seulement la fin.\np = 'drave-core/src/gguf.rs'\ns = open(p).read()\na = '''    fn octets_de<'a>(bufs: &'a [Tampon], starts: &[usize], t: &TensorInfo) -> &'a [u8] {\n         … [3102 caractères tronqués]`
+
+  ```
+A ok
+C ok
+BUILD 0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np = 'drave-core/src/gguf.rs'\ns = open(p).read()\nancre = '''    /// GGUF synthétique Q8_0 : blocs de 34 octets'''\najout = '''    /// GGUF synthétique **Q4_0** : blocs de 18 octets (échelle f16 + 16 octets de\n     … [2827 caractères tronqués]`
+
+  ```
+générateur Q4_0 ajouté
+BUILD 0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"^#\\[cfg(test)\\]\" drave-core/src/model.rs | tail -2; grep -n \"mod tests_kv\" drave-core/src/model.rs | head -2", "description": "Find test module in model.rs"}`
+
+  ```
+4287:#[cfg(test)]
+4288:mod tests_kv {
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat >> drave-core/src/model.rs <<'RUST'\n\n/// Le nœud partiel : charger UN cluster et vérifier que la traduction des\n/// experts se fait par NUMÉRO de cluster, pas par rang dans la liste chargée.\n///\n/// Ce test existe parce que  … [5566 caractères tronqués]`
+
+  ```
+test model::tests_noeud_partiel::traduction_par_numero_de_cluster ... FAILED
+test tests_plafond::assurer_ne_boucle_pas_au_dela_du_contexte ... ok
+test tests_flux::flux_dense_aller_retour_par_la_vraie_mise_en_trame ... ok
+test tests_plafond::un_nombre_de_blocs_dement_grand_est_refuse ... ok
+--
+thread 'model::tests_noeud_partiel::traduction_par_numero_de_cluster' (2957163) panicked at src/model.rs:192:13:
+couche 0 : 1 fichiers portent les experts de gate, le mapping en annonce 2
+
+
+--
+test result: FAILED. 31 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.13s
+
+error: test failed, to rerun pass `--bin drave`
+  ```
+
+### 🤖 Assistant
+
+⏵ Le test révèle la dépendance à un état global. L'exhaustivité se vérifie à l'ouverture, pas par couche.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np = 'drave-core/src/model.rs'\ns = open(p).read()\na = '''    if let Some(m) = map {\n        // Sur un nœud COMPLET, les huit clusters doivent être là : un fichier\n        // manquant décalerait les index. Sur un  … [3154 caractères tronqués]`
+
+  ```
+ok
+test model::tests_noeud_partiel::mapping_dun_autre_modele_est_refuse ... FAILED
+test tests_flux::paires_blocs_aller_retour_avec_echappement ... ok
+test tests_flux::paires_blocs_tronquees_sont_refusees ... ok
+test model::tests_noeud_partiel::traduction_par_numero_de_cluster ... FAILED
+test tests_flux::flux_dense_aller_retour_par_la_vraie_mise_en_trame ... ok
+test tests_plafond::assurer_ne_boucle_pas_au_dela_du_contexte ... ok
+--
+thread 'model::tests_noeud_partiel::mapping_dun_autre_modele_est_refuse' (2957760) panicked at src/model.rs:4431:9:
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && cargo test --release traduction_par_numero 2>&1 | grep -A6 \"panicked\" | head -12", "description": "Show failure detail"}`
+
+  ```
+(no output)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && cargo test --release tests_noeud 2>&1 | grep -B2 -A8 \"panicked\" | head -30", "description": "Show partial node test failures"}`
+
+  ```
+[moe] couche 0 : aucun cluster chargé ne porte « blk.0.ffn_gate_exps.weight »
+
+thread 'model::tests_noeud_partiel::traduction_par_numero_de_cluster' (2957856) panicked at src/model.rs:4380:46:
+le MoE doit se charger
+
+
+failures:
+    model::tests_noeud_partiel::traduction_par_numero_de_cluster
+
+test result: FAILED. 1 passed; 1 failed; 0 ignored; 0 measured; 30 filtered out; finished in 0.00s
+  ```
+
+### 🤖 Assistant
+
+⏵ Deuxième état global en travers : `charger_moe` doit recevoir le mapping, pas le lire d'un `OnceLock`.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np = 'drave-core/src/clusters.rs'\ns = open(p).read()\ns = s.replace('''/// Où trouver chaque expert global.\npub struct Mapping {''', '''/// Où trouver chaque expert global.\n#[derive(Clone)]\npub struct Mapping {'' … [3127 caractères tronqués]`
+
+  ```
+ok
+BUILD 0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && cargo test --release 2>&1 | grep -E \"^test result|FAILED|panicked\" -A2 | head -10", "description": "Run tests after mapping refactor"}`
+
+  ```
+test result: ok. 32 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.14s
+  ```
+
+### 🤖 Assistant
+
+⏵ 32 tests verts. Vérification par sabotage du test `Moe::ou`, puis les portes.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cp drave-core/src/model.rs /tmp/model_bon.rs && python3 - <<'PY'\np = 'drave-core/src/model.rs'\ns = open(p).read()\ns = s.replace('''                let k = self.numeros.iter().position(|c| *c == cluster)?;\n                Some((k, … [458 caractères tronqués]`
+
+  ```
+--- SABOTAGE : numero de cluster pris pour un rang ---
+test model::tests_noeud_partiel::traduction_par_numero_de_cluster ... FAILED
+test model::tests_noeud_partiel::mapping_dun_autre_modele_est_refuse ... ok
+thread 'model::tests_noeud_partiel::traduction_par_numero_de_cluster' (2958836) panicked at src/model.rs:4381:9:
+test result: FAILED. 1 passed; 1 failed; 0 ignored; 0 measured; 30 filtered out; finished in 0.00s
+test result: ok. 32 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.09s
+  ```
+
+### 🤖 Assistant
+
+⏵ Test validé par sabotage. Je relance les portes après ce refactor.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat /tmp/gate_oss_final2.log; cat > /tmp/portes_finales.sh <<'EOF'\n#!/bin/bash\ncd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\nD=./drave-core/target/release/drave\nA=/home/stephane/FastNVMe/artefacts/modeles-optimises/qwen3-30b … [871 caractères tronqués]`
+
+  ```
+gpt-oss ctx 256 lot 1 : Qwen 0.5B ctx 256 (porte 19,3885)  : perplexité 19.3885 sur 510 tokens
+clusters Qwen3-30B (attendu 799,8557): perplexité 799.8557 sur 7 tokens
+noeud partiel cluster 0             : perplexité 268786.6218 sur 7 tokens
+=== fin ===
+  ```
+
+### 🤖 Assistant
+
+⏵ Toutes les portes vertes après correctifs. Je commit.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -m \"Revue adverse : un défaut bloquant silencieux, et le test qui manquait au correctif\n\nDéfauts corrigés (revue déléguée, lecture seule) :\n\n- BLOQUANT SILENCIEUX : DRAVE_CLUSTERS listant TOUS les clu … [1800 caractères tronqués]`

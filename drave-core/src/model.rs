@@ -82,22 +82,15 @@ fn source_de(t: u32) -> Option<crate::list::Source> {
     }
 }
 
-/// Le mapping global → local, quand le modèle est en clusters. Un modèle
-/// ordinaire n'en a pas : `None`, et le chemin de lecture reste celui d'avant.
-#[inline]
-fn clusters_actifs() -> Option<&'static crate::clusters::Mapping> {
-    crate::clusters::actif()
-}
-
 /// Charge le mélange d'experts d'une couche, s'il existe.
 ///
 /// Les trois tenseurs `ffn_*_exps` sont des tenseurs **3D** dont la première
 /// dimension (la plus lente) est l'expert : chaque expert est donc un bloc
 /// contigu, et le moteur n'a besoin que d'un pointeur et d'un pas.
-fn charger_moe(g: &Gguf, l: usize, n_expert: usize) -> Option<Moe> {
+fn charger_moe(g: &Gguf, l: usize, n_expert: usize, map: Option<&'static crate::clusters::Mapping>)
+    -> Option<Moe> {
     if n_expert == 0 { return None; }
     let p = |s: &str| format!("blk.{l}.{s}");
-    let map = clusters_actifs();
     // Un tenseur d'experts est soit en clair dans le fichier ouvert, soit dans
     // les fichiers de clusters sous le préfixe `cl{c}/`. Dans le second cas
     // chaque fichier ne porte QUE ses experts locaux : la dimension d'expert
@@ -184,14 +177,13 @@ au lieu de {n_expert}, et aucun mapping n'est actif"),
         panic!("couche {l} : les trois projections d'experts ne portent pas les mêmes \
 clusters ({numeros:?}, {num_up:?}, {num_down:?})");
     }
-    if let Some(m) = map {
-        // Sur un nœud COMPLET, les huit clusters doivent être là : un fichier
-        // manquant décalerait les index. Sur un nœud PARTIEL, c'est le contraire
-        // — n'en avoir qu'un est le but.
-        if !crate::clusters::partiel() && gate.len() != m.n_clusters {
-            panic!("couche {l} : {} fichiers portent les experts de gate, le mapping en \
-annonce {}", gate.len(), m.n_clusters);
-        }
+    if map.is_some() {
+        // L'EXHAUSTIVITÉ se vérifie à l'ouverture du dossier (numérotation
+        // continue, ou chaque cluster demandé présent), pas ici : un contrôle
+        // par couche devrait deviner si ce nœud est partiel, et le deviner par
+        // un état global l'a rendu intestable (les tests s'exécutent en
+        // parallèle, un `OnceLock` ne se pose qu'une fois). Ici, seule la
+        // cohérence ENTRE les trois projections est du ressort de la couche.
         if gate.len() != up.len() || gate.len() != down.len() {
             panic!("couche {l} : {} fichiers de gate, {} de up, {} de down — répartition \
 incohérente entre les trois projections d'experts", gate.len(), up.len(), down.len());
@@ -199,6 +191,14 @@ incohérente entre les trois projections d'experts", gate.len(), up.len(), down.
     }
     let routeur = g.dequant(&p("ffn_gate_inp.weight"));
     assert_eq!(routeur.len(), n_expert * gate[0].n_in, "routeur de taille inattendue");
+    // Le mapping et les métadonnées doivent décrire le MÊME modèle. Un mapping
+    // étranger aux mêmes formes ferait sauter en silence les experts routés
+    // au-delà de son propre compte.
+    if let Some(m) = map {
+        assert_eq!(m.n_experts, n_expert,
+            "couche {l} : le mapping décrit {} experts, le modèle en déclare {n_expert} \
+— mapping d'un autre modèle ?", m.n_experts);
+    }
     // Expert partagé (Qwen3-MoE d'origine, DeepSeek) : toujours actif.
     let shexp = match (vue_unique(&p("ffn_gate_shexp.weight")),
                        vue_unique(&p("ffn_up_shexp.weight")),
@@ -1637,6 +1637,10 @@ impl Model {
                 "n_head × head_dim doit couvrir hidden");
         // Capturé avant que `cfg` ne soit déplacé dans la structure.
         let n_layer_total = cfg.n_layer;
+        // Le mapping est lu UNE fois et passé aux couches : un état global lu
+        // par couche rendait ce chemin intestable (les tests s'exécutent en
+        // parallèle, un `OnceLock` ne se pose qu'une fois).
+        let map = crate::clusters::actif();
         let mut layers = Vec::with_capacity(cfg.n_layer);
         let mut bytes = 0u64;
         for l in 0..cfg.n_layer {
@@ -1670,7 +1674,7 @@ impl Model {
                     Proj::load(&g, &p("ffn_up.weight"), None, dense || q4 != 0, auto, keep, q4 & 1 != 0, b6 & 1 != 0) },
                 wdown: if cfg.n_expert > 0 { Proj::vide() } else {
                     Proj::load(&g, &p("ffn_down.weight"), None, dense || q4 != 0, auto, keep, q4 & 1 != 0, b6 & 1 != 0) },
-                moe: charger_moe(&g, l, cfg.n_expert),
+                moe: charger_moe(&g, l, cfg.n_expert, map),
             };
             for pj in [&lay.wq, &lay.wk, &lay.wv, &lay.wo, &lay.wgate, &lay.wup, &lay.wdown] {
                 if let Some(m) = &pj.m { bytes += m.data.len() as u64; }
@@ -1718,7 +1722,7 @@ impl Model {
         if cfg.n_expert > 0 {
             println!("[config] mélanges d'experts chargés : {moe_vus}/{n_layer} couches · \
 mapping {}",
-                     match clusters_actifs() {
+                     match map {
                          None => "absent (experts en clair dans le fichier)".to_string(),
                          Some(m) => format!("actif : {} clusters × {} experts",
                                             m.n_clusters, m.par_cluster),
@@ -4317,5 +4321,118 @@ mod tests_kv {
                         "réécriture {i} bits {bits} : {} contre {}", tk[i], k2[i]);
             }
         }
+    }
+}
+
+/// Le nœud partiel : charger UN cluster et vérifier que la traduction des
+/// experts se fait par NUMÉRO de cluster, pas par rang dans la liste chargée.
+///
+/// Ce test existe parce que la revue adverse a montré que le correctif n'en
+/// avait aucun : remplacer `self.numeros.iter().position(...)` par
+/// `Some((cluster, ligne))` laissait les trente tests verts. Sur un nœud complet
+/// les deux coïncident — il faut donc un nœud partiel dont le cluster chargé
+/// n'est PAS le rang 0.
+#[cfg(test)]
+mod tests_noeud_partiel {
+    use super::*;
+    use crate::gguf::tests::{ecrire, gguf_synth, gguf_synth_q4_0};
+
+    #[test]
+    fn traduction_par_numero_de_cluster() {
+        let d = std::env::temp_dir().join("drave_noeud_partiel");
+        let _ = std::fs::remove_dir_all(&d);
+        std::fs::create_dir_all(&d).unwrap();
+        // Quatre experts globaux, deux clusters de deux. n_in = 32 (un bloc),
+        // n_ff = 32 : les formes minimales acceptées par `charger_moe`.
+        let (n_in, n_ff, par_cluster, n_clusters) = (32u64, 32u64, 2u64, 2usize);
+        // Le commun : le routeur, en F32, dimensionné sur les experts GLOBAUX.
+        let routeur: Vec<(&str, Vec<u64>)> =
+            vec![("blk.0.ffn_gate_inp.weight", vec![4, n_in])];
+        std::fs::write(d.join("commun.gguf"), gguf_synth(&routeur, 0, 1.0)).unwrap();
+        // Chaque cluster : ses experts LOCAUX, en Q4_0 (le type que `source_de`
+        // accepte, donc le seul qui permette de construire un `Moe`).
+        for c in 0..n_clusters {
+            let t: Vec<(&str, Vec<u64>)> = vec![
+                ("blk.0.ffn_gate_exps.weight", vec![par_cluster, n_ff, n_in]),
+                ("blk.0.ffn_up_exps.weight",   vec![par_cluster, n_ff, n_in]),
+                ("blk.0.ffn_down_exps.weight", vec![par_cluster, n_ff, n_in]),
+            ];
+            std::fs::write(d.join(format!("cluster-{c:02}.gguf")),
+                           gguf_synth_q4_0(&t, 1.0)).unwrap();
+        }
+        // Experts globaux 0,1 → cluster 0 ; 2,3 → cluster 1.
+        std::fs::write(d.join("mapping.tsv"), "\
+# n_couches 1 · n_experts 4 · clusters 2 · experts_par_cluster 2
+0\t0\t0\t0
+0\t1\t1\t0
+0\t0\t2\t1
+0\t1\t3\t1
+").unwrap();
+
+        // On ne charge QUE le cluster 1 : les vues n'en contiennent qu'une, et
+        // le mapping continue de dire « cluster 1 ».
+        let m = crate::clusters::ouvrir_sous_ensemble(&d, Some(&[1]))
+            .expect("le nœud partiel doit s'ouvrir");
+        assert_eq!(m.gguf.nb_fichiers(), 2, "commun + le seul cluster demandé");
+        let map: &'static crate::clusters::Mapping =
+            Box::leak(Box::new(m.mapping.clone()));
+        let moe = charger_moe(&m.gguf, 0, 4, Some(map)).expect("le MoE doit se charger");
+        assert_eq!(moe.numeros, vec![1], "la vue porte le NUMÉRO 1, pas le rang 0");
+        // Expert 3 : dans le cluster 1 → présent, en tête des vues chargées.
+        assert_eq!(moe.ou(3), Some((0, 1)), "expert 3 = cluster 1, ligne locale 1");
+        assert_eq!(moe.ou(2), Some((0, 0)), "expert 2 = cluster 1, ligne locale 0");
+        // Experts 0 et 1 : dans le cluster 0, que ce nœud ne porte pas.
+        assert_eq!(moe.ou(0), None, "un expert absent du nœud n'est pas une erreur");
+        assert_eq!(moe.ou(1), None);
+        // Hors bornes : le routeur n'en parlera jamais, mais la réponse doit
+        // rester `None` et non une panique.
+        assert_eq!(moe.ou(99), None);
+
+        // Avec les DEUX clusters, la traduction doit rester juste et couvrir
+        // tout le monde — c'est le cas où le défaut d'origine était invisible.
+        let tous = crate::clusters::ouvrir_sous_ensemble(&d, None).unwrap();
+        let map2: &'static crate::clusters::Mapping =
+            Box::leak(Box::new(tous.mapping.clone()));
+        let moe2 = charger_moe(&tous.gguf, 0, 4, Some(map2)).unwrap();
+        assert_eq!(moe2.numeros, vec![0, 1]);
+        assert_eq!(moe2.ou(0), Some((0, 0)));
+        assert_eq!(moe2.ou(3), Some((1, 1)));
+
+        let _ = std::fs::remove_dir_all(&d);
+    }
+
+    /// `eguille` du garde-fou : un mapping d'un autre modèle (mêmes formes,
+    /// compte d'experts différent) doit être refusé, pas suivi en silence.
+    #[test]
+    fn mapping_dun_autre_modele_est_refuse() {
+        let d = std::env::temp_dir().join("drave_mapping_etranger");
+        let _ = std::fs::remove_dir_all(&d);
+        std::fs::create_dir_all(&d).unwrap();
+        let (n_in, n_ff) = (32u64, 32u64);
+        let routeur: Vec<(&str, Vec<u64>)> =
+            vec![("blk.0.ffn_gate_inp.weight", vec![4, n_in])];
+        std::fs::write(d.join("commun.gguf"), gguf_synth(&routeur, 0, 1.0)).unwrap();
+        let t: Vec<(&str, Vec<u64>)> = vec![
+            ("blk.0.ffn_gate_exps.weight", vec![2, n_ff, n_in]),
+            ("blk.0.ffn_up_exps.weight",   vec![2, n_ff, n_in]),
+            ("blk.0.ffn_down_exps.weight", vec![2, n_ff, n_in]),
+        ];
+        std::fs::write(d.join("cluster-00.gguf"), gguf_synth_q4_0(&t, 1.0)).unwrap();
+        // Le mapping annonce 6 experts, le modèle en a 4 : c'est un mapping
+        // étranger, et le suivre ferait sauter des experts sans un mot.
+        std::fs::write(d.join("mapping.tsv"), "\
+# n_couches 1 · n_experts 6 · clusters 1 · experts_par_cluster 2
+0\t0\t0\t0
+0\t1\t1\t0
+").unwrap();
+        let m = crate::clusters::ouvrir_sous_ensemble(&d, None).unwrap();
+        let map: &'static crate::clusters::Mapping =
+            Box::leak(Box::new(m.mapping.clone()));
+        let e = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+            charger_moe(&m.gguf, 0, 4, Some(map))
+        }));
+        assert!(e.is_err(), "un mapping de 6 experts pour un modèle qui en a 4 doit être \
+refusé, pas suivi en silence");
+        let _ = std::fs::remove_dir_all(&d);
     }
 }

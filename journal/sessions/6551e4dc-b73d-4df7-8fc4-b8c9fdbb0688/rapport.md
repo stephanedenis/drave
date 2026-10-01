@@ -7,7 +7,7 @@
 | Début | 2026-10-01 11:57 |
 | Durée | 0.1 h |
 | Tours | 1 |
-| Messages | 49 |
+| Messages | 50 |
 | Appels d'outils | 63 |
 | Fichiers touchés | 2 |
 | Commandes | 46 |
@@ -43,7 +43,21 @@
 
 **Synthèse produite :**
 
-⏵ Rédaction du rapport adverse et envoi au parent.
+⏵ Rapport final : réponses aux 8 questions, preuves et correctifs.
+
+**Révision auditée** : b24a2e6 (gguf.rs et model.rs inchangés sur disque). Pendant l'audit, HEAD est passé à 6a2dfcb et `clusters.rs` + `README.md` sont modifiés non commités (refactor `gardes_du_milieu`/`ouvrir_sous_ensemble`) : pour `clusters.rs`, ajouter **+26** après la ligne ~150. Aucun fichier du dépôt touché ; tout est dans `/tmp/revue`.
+
+---
+
+**1. mmap utilisé après munmap ? NON, aucun cas atteignable.**
+Seule sortie de pointeur nu : `data_ptr` — `gguf.rs:915-918` `Some(self.tbuf(t).as_ptr())` — appelé uniquement par `charger_moe` (`model.rs:161` et `178`). Les `Vue4` (`model.rs:241` `pub base: *const u8`) vivent dans `Moe` → `Layer` → `Model.layers` (`model.rs:938`), et le `Gguf` propriétaire est le même `Model.g` (`model.rs:936`), construit par `Model::load` : `charger_moe(&g, l, cfg.n_expert)` (`model.rs:1673`) puis `Model { g, … }` (`model.rs:1949`). `Gguf`/`Tampon`/`Mappe` ne sont pas `Clone` ; ni `Vue4`, ni `Moe`, ni `Layer`, ni `DenseQ4` n'ont de `Drop` ; aucun `mem::forget`/`Box::leak` dans `src/`. Déplacer `Gguf` ne change pas la valeur du pointeur → sûr.
+*Latent seulement* : (a) `Model` déclare `g` en premier, donc `munmap` a lieu avant le drop de `layers`/`head4` qui pointent dedans — sûr aujourd'hui parce qu'aucun `Drop` ne lit les poids ; (b) `Pool` est droppé après `g` et `impl Drop for Pool` (`engine.rs:786-791`) joint les fils ; (c) l'invariant « `g` survit aux pointeurs » n'est pas vérifié par le compilateur. Gravité : cosmétique/latent.
+
+**2. Fuite si `Mappe::ouvrir` échoue, ou si `entete_de` rend `None` après mmap ? NON.**
+`bufs` est un local (`gguf.rs:355`) droppé sur tout `?`/`Err` ; `Drop for Mappe` (`gguf.rs:67-71`) fait le `munmap` ; pas de `Clone` donc pas de double `munmap`. `entete_de` → `None` : `buf` n'est pas encore poussé et est droppé avec les précédents. Prémisse en partie fausse : un échec de `Mappe::ouvrir` **n'interrompt pas** l'ouverture — `ouvrir_tampon` (`gguf.rs:109-115`) imprime « mmap refusé … lecture complète » et retombe sur `read_to_end`. Seules les erreurs de lecture remontent.
+
+**3. `Tampon::len` : OUI, correct.** `gguf.rs:91` `(**self).len()` déréférence vers `[u8]` ; `is_empty` (92) cohérent (et mort, `allow(dead_code)` ligne 3). Fichier vide : `Mappe::ouvrir` rend `ptr: null_mut(), len: 0` (`gguf.rs:48`) sans mmap, `Deref` rend `&[]` (`gguf.rs:62`), `Drop` saute `munmap` (`gguf.rs:69`). Vérifié sur un fichier 0 octet → erreur propre
+… [5727 caractères tronqués]
 
 ## 3. Travail accompli
 

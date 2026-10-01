@@ -22,6 +22,7 @@ use crate::gguf::Gguf;
 use std::path::{Path, PathBuf};
 
 /// Où trouver chaque expert global.
+#[derive(Clone)]
 pub struct Mapping {
     pub n_couches: usize,
     pub n_experts: usize,
@@ -127,15 +128,12 @@ static ACTIF: std::sync::OnceLock<Mapping> = std::sync::OnceLock::new();
 #[inline]
 pub fn actif() -> Option<&'static Mapping> { ACTIF.get() }
 
-/// Ce nœud ne porte-t-il qu'une PARTIE des clusters (`DRAVE_CLUSTERS`) ?
-///
-/// La distinction compte : un contrôle d'exhaustivité a raison sur un nœud
-/// complet et tort sur un nœud partiel — c'est le principe même du découpage
-/// qu'un nœud ne porte pas tous les experts.
-static PARTIEL: std::sync::OnceLock<bool> = std::sync::OnceLock::new();
-
-#[inline]
-pub fn partiel() -> bool { PARTIEL.get().copied().unwrap_or(false) }
+// NOTE : il n'y a délibérément AUCUN drapeau global « ce nœud est partiel ».
+// Il y en a eu un, et il rendait la vérification d'exhaustivité intestable : un
+// `OnceLock` ne se pose qu'une fois, tandis que les tests s'exécutent en
+// parallèle dans un même processus. L'exhaustivité se vérifie à l'OUVERTURE du
+// dossier, là où les fichiers sont sous la main ; les couches, elles, ne
+// vérifient que la cohérence entre les trois projections d'experts.
 
 /// Un modèle prêt à tourner : le GGUF assemblé et le mapping des experts.
 pub struct Modele {
@@ -191,10 +189,10 @@ fn ouvrir_interne(dossier: &Path, meta_seule: bool, gardes: Option<&[usize]>)
         return Err(std::io::Error::new(std::io::ErrorKind::NotFound,
             format!("{} : commun.gguf absent", dossier.display())));
     }
-    // Le numéro de cluster est lu, pas déduit du rang : un tri lexicographique
-    // range « cluster-100 » avant « cluster-20 », et les préfixes `cl{c}/` sont
-    // attribués par POSITION. Un décalage ferait lire les experts d'un autre
-    // fichier — mêmes formes, donc aucune erreur, juste un résultat faux.
+    // Le numéro de cluster est LU, jamais déduit du rang : un tri lexicographique
+    // range « cluster-100 » avant « cluster-20 », et le préfixe `cl{c}/` porte ce
+    // numéro. Confondre les deux ferait lire les experts d'un autre fichier —
+    // mêmes formes, donc aucune erreur, juste un résultat faux.
     let mut clusters: Vec<(usize, PathBuf)> = Vec::new();
     for e in std::fs::read_dir(dossier)? {
         let p = e?.path();
@@ -212,14 +210,28 @@ fn ouvrir_interne(dossier: &Path, meta_seule: bool, gardes: Option<&[usize]>)
         return Err(std::io::Error::new(std::io::ErrorKind::NotFound,
             format!("{} : aucun cluster-*.gguf", dossier.display())));
     }
-    for (attendu, (num, p)) in clusters.iter().enumerate() {
-        if *num != attendu {
-            return Err(std::io::Error::new(std::io::ErrorKind::InvalidData, format!(
-                "{} : cluster {attendu} attendu, {} trouvé — la numérotation doit être \
-continue à partir de 0", p.display(), num)));
+    let mapping = Mapping::lire(&dossier.join("mapping.tsv"))?;
+    // Un dossier COMPLET doit porter tous les clusters annoncés, numérotés
+    // 0..N-1 sans trou. Un dossier PARTIEL (un nœud qui ne possède que ses
+    // fichiers) n'en porte qu'une partie — c'est le cas visé par le déploiement
+    // distribué, et exiger la continuité l'interdisait.
+    let complet = clusters.len() == mapping.n_clusters;
+    if complet {
+        for (attendu, (num, p)) in clusters.iter().enumerate() {
+            if *num != attendu {
+                return Err(std::io::Error::new(std::io::ErrorKind::InvalidData, format!(
+                    "{} : cluster {attendu} attendu, {} trouvé — un dossier complet doit \
+être numéroté 0..{} sans trou", p.display(), num, mapping.n_clusters - 1)));
+            }
         }
     }
-    let mapping = Mapping::lire(&dossier.join("mapping.tsv"))?;
+    for (num, p) in &clusters {
+        if *num >= mapping.n_clusters {
+            return Err(std::io::Error::new(std::io::ErrorKind::InvalidData, format!(
+                "{} : cluster {num} au-delà des {} annoncés par mapping.tsv",
+                p.display(), mapping.n_clusters)));
+        }
+    }
     // Un nœud peut ne porter qu'une PARTIE des clusters (`DRAVE_CLUSTERS=0,3`) :
     // c'est le mode « nœud partiel », où chaque nœud ne sert que ses experts et
     // où les contributions se somment entre nœuds. Le mapping, lui, reste
@@ -233,14 +245,26 @@ continue à partir de 0", p.display(), num)));
                         format!("DRAVE_CLUSTERS : cluster {c} hors bornes ({} au total)",
                                 mapping.n_clusters)));
                 }
+                // Un cluster DEMANDÉ mais absent du disque était ignoré en
+                // silence : le nœud tournait avec moins d'experts que voulu, et
+                // les contributions manquantes disparaissaient sans un mot.
+                if !clusters.iter().any(|(n, _)| n == c) {
+                    return Err(std::io::Error::new(std::io::ErrorKind::NotFound, format!(
+                        "DRAVE_CLUSTERS demande le cluster {c}, absent de {}",
+                        dossier.display())));
+                }
             }
             clusters.into_iter().filter(|(c, _)| g.contains(c)).collect()
         }
     };
-    let _ = PARTIEL.set(gardes.is_some());
-    if gardes.is_none() && clusters.len() != mapping.n_clusters {
+    // Un dossier incomplet n'est accepté que si on l'ASSUME. Sans cette règle,
+    // `DRAVE_CLUSTERS` listant tous les clusters annoncés faisait passer un
+    // artefact amputé pour complet — les contributions des experts absents
+    // disparaissaient sans un mot (défaut trouvé par la revue adverse).
+    if gardes.is_none() && !complet {
         return Err(std::io::Error::new(std::io::ErrorKind::InvalidData, format!(
-            "{} fichiers de cluster pour {} annoncés dans mapping.tsv",
+            "{} fichiers de cluster pour {} annoncés dans mapping.tsv : dossier incomplet \
+(dites DRAVE_CLUSTERS pour assumer un nœud partiel)",
             clusters.len(), mapping.n_clusters)));
     }
     if clusters.is_empty() {

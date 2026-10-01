@@ -11,6 +11,10 @@ use std::io::{Read, Seek, SeekFrom};
 use std::ops::Deref;
 use std::path::Path;
 
+/// Résultat empruntant à `self`. Écrit à la main parce qu'un tenseur peut vivre
+/// dans n'importe lequel des fichiers de l'assemblage.
+type io_result<'a> = std::io::Result<&'a [u8]>;
+
 /// Fichier **mappé** en mémoire plutôt que lu.
 ///
 /// `read_to_end` fait deux choses coûteuses : il lit tout le fichier (18,55 Go
@@ -391,7 +395,8 @@ impl Gguf {
                     // (certains découpages dupliquent les petits tenseurs) n'est
                     // pas une faute. Deux contenus différents, si.
                     let meme = v.dims == t.dims && v.ttype == t.ttype
-                        && Self::octets_de(&bufs, &starts, &t) == Self::octets_de(&bufs, &starts, v);
+                        && Self::octets_de(&bufs, &starts, &t)?
+                            == Self::octets_de(&bufs, &starts, v)?;
                     if !meme {
                         return Err(std::io::Error::new(std::io::ErrorKind::InvalidData,
                             format!("tenseur « {} » présent deux fois, contenu différent \
@@ -576,11 +581,23 @@ différents ({} et {})", t.name, v.fichier, t.fichier)));
 
     /// Octets d'un tenseur décrit par `t`, dans un assemblage en cours de
     /// construction (le `Gguf` n'existe pas encore).
-    fn octets_de<'a>(bufs: &'a [Tampon], starts: &[usize], t: &TensorInfo) -> &'a [u8] {
+    fn octets_de<'a>(bufs: &'a [Tampon], starts: &[usize], t: &TensorInfo) -> io_result<'a> {
         let besoin = Self::octets_tensor(t) as usize;
         let debut = starts[t.fichier] + t.offset as usize;
         let b = &bufs[t.fichier];
-        &b[debut..(debut + besoin).min(b.len())]
+        // Le DÉBUT doit être borné aussi : un décalage aberrant ne doit pas
+        // paniquer sur une tranche, mais se dire « assemblage incohérent ».
+        if debut > b.len() {
+            return Err(std::io::Error::new(std::io::ErrorKind::InvalidData, format!(
+                "tenseur « {} » : début {debut} au-delà du fichier {} ({} octets)",
+                t.name, t.fichier, b.len())));
+        }
+        if debut + besoin > b.len() {
+            return Err(std::io::Error::new(std::io::ErrorKind::UnexpectedEof, format!(
+                "tenseur « {} » : {besoin} octets annoncés, {} disponibles dans le fichier {}",
+                t.name, b.len() - debut, t.fichier)));
+        }
+        Ok(&b[debut..debut + besoin])
     }
 
     /// Taille en octets des données d'un tenseur, d'après son type ggml.
@@ -1271,6 +1288,61 @@ pub(crate) mod tests {
                 let v = valeur0 + (depart + i) as f32 * 1000.0 + k as f32;
                 b.extend_from_slice(&v.to_le_bytes());
             }
+        }
+        b
+    }
+
+    /// GGUF synthétique **Q4_0** : blocs de 18 octets (échelle f16 + 16 octets de
+    /// nibbles). C'est le type le plus simple que `source_de` accepte — sans lui,
+    /// aucun test ne peut construire un `Moe`, et donc le chemin des experts
+    /// n'est couvert par rien (un correctif sans test ne vaut rien).
+    ///
+    /// Les dims sont données en convention numpy (le plus lent d'abord) et
+    /// écrites à l'envers, comme ggml.
+    pub(crate) fn gguf_synth_q4_0(tensors: &[(&str, Vec<u64>)], valeur0: f32) -> Vec<u8> {
+        let mut b = Vec::new();
+        let mut s = |b: &mut Vec<u8>, v: &str| {
+            b.extend_from_slice(&(v.len() as u64).to_le_bytes());
+            b.extend_from_slice(v.as_bytes());
+        };
+        b.extend_from_slice(b"GGUF");
+        b.extend_from_slice(&3u32.to_le_bytes());
+        b.extend_from_slice(&(tensors.len() as u64).to_le_bytes());
+        b.extend_from_slice(&2u64.to_le_bytes());
+        s(&mut b, "general.architecture");
+        b.extend_from_slice(&8u32.to_le_bytes());
+        s(&mut b, "essai");
+        s(&mut b, "general.alignment");
+        b.extend_from_slice(&4u32.to_le_bytes());
+        b.extend_from_slice(&32u32.to_le_bytes());
+        let mut offsets = Vec::new();
+        let mut cur = 0u64;
+        for (_, dims) in tensors {
+            offsets.push(cur);
+            let n: u64 = dims.iter().product();
+            cur += n / 32 * 18;                      // Q4_0 : 18 octets par 32 poids
+        }
+        for ((nom, dims), off) in tensors.iter().zip(&offsets) {
+            s(&mut b, nom);
+            b.extend_from_slice(&(dims.len() as u32).to_le_bytes());
+            for d in dims.iter().rev() { b.extend_from_slice(&d.to_le_bytes()); }
+            b.extend_from_slice(&GGML_Q4_0.to_le_bytes());
+            b.extend_from_slice(&off.to_le_bytes());
+        }
+        while b.len() % 32 != 0 { b.push(0); }
+        for (i, (_, dims)) in tensors.iter().enumerate() {
+            let n: u64 = dims.iter().product();
+            for bloc in 0..n / 32 {
+                // Échelle 0,25 (exacte en f16), nibbles déterministes.
+                b.extend_from_slice(&Gguf::f32_to_f16(0.25).to_le_bytes());
+                for j in 0..16u64 {
+                    let idx = bloc * 32 + j;
+                    let bas = ((idx + i as u64) % 15) as u8;
+                    let haut = ((idx + i as u64 + 7) % 15) as u8;
+                    b.push(bas | (haut << 4));
+                }
+            }
+            let _ = valeur0;
         }
         b
     }
