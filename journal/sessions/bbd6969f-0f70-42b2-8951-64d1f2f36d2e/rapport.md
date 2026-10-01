@@ -5,15 +5,15 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 67.4 h |
-| Tours | 50 |
-| Messages | 2705 |
-| Appels d'outils | 2562 |
-| Fichiers touchés | 59 |
-| Commandes | 2190 |
+| Durée | 68.5 h |
+| Tours | 51 |
+| Messages | 2820 |
+| Appels d'outils | 2676 |
+| Fichiers touchés | 62 |
+| Commandes | 2294 |
 | Sous-agents | 20 |
-| Commits | 238 |
-| Compactages de contexte | 3 |
+| Commits | 239 |
+| Compactages de contexte | 4 |
 
 ## Objectifs déclarés
 
@@ -135,6 +135,8 @@
 **Tour 49** — prévoir de télécharger les modèles les plus lourds aussi pour les analyser et faire le découpage des MoE/clusters optimisé pour notre mode d'opération. ça peut impliquer un nouveau format de fichiers, mais on doit être capable de rouler du best of breed.
 
 **Tour 50** — fais un convertisseur pour tous les formats vers un modèle de fichier optimal, où on sépare les clusters par fichier distinct pour un chargement indépendant rapide.
+
+**Tour 51** — continue jusqu'à 13h HAE
 
 ## 2. Déroulé, étape par étape
 
@@ -2335,7 +2337,7 @@ J'ai ajouté la **trace de routage** au moteur (`DRAVE_TRACE_EXPERTS`, sur les d
 
 ### Tour 50 — fais un convertisseur pour tous les formats vers un modèle de fichier optimal, où on sépare les clusters par fichier dis … [44 caractères tronqués]
 
-*18 appels d'outils.* Actions notables :
+*19 appels d'outils.* Actions notables :
 
 - bash — Inspect the GGUF reader structures
 - bash — Read the GGUF open and header parsing
@@ -2351,7 +2353,74 @@ J'ai ajouté la **trace de routage** au moteur (`DRAVE_TRACE_EXPERTS`, sur les d
 - bash — Fix the split order and re-verify
 - bash — Convert Qwen3-30B to 8 clusters
 - bash — Add KV rewriting for cluster files
-- … et 4 autres
+- … et 5 autres
+
+**Synthèse produite :**
+
+**Le convertisseur est écrit, mesuré et vérifié** — `tools/convertir_clusters.py`, avec le format décrit dans [`docs/format-clusters.md`](docs/format-clusters.md).
+
+\## Ce qu'il produit
+
+N'importe quel GGUF que le moteur lit (Q4_K, Q6_K, Q4_0, Q8_0, MXFP4, F16, F32) devient :
+
+```
+modele/
+  commun.gguf          embeddings, tête de sortie, attention, normes, ROUTEURS
+  cluster-00.gguf      les tranches d'experts du cluster 0, toutes couches
+  cluster-01.gguf …    
+  manifeste.json       rôle, tenseurs, tailles, ordre des experts, local ↔ global
+```
+
+Chaque `cluster-XX.gguf` est un **GGUF autonome et cohérent** : `expert_count` y est réécrit à la taille du cluster (16, pas 128), donc un lecteur qui l'ouvre voit un MoE de 16 experts — pas un fichier qui ment.
+
+\## Trois garanties, chacune vérifiée
+
+- **Aucune requantification** : les octets des poids sont copiés tels quels. Les blocs sont alignés sur l'axe des experts (768 et 2048 sont multiples de 256), donc une tranche d'expert est une plage exacte — le convertisseur **refuse** si ce n'est pas le cas, il ne devine pas.
+- **Vérification par empreintes** : `--verifier` relit chaque fichier produit et compare le SHA-256 de **chaque** tenseur à sa tranche source. Qwen3-30B-A3B : **1 587 tenseurs, tout concorde**.
+- **Ordre des experts mesuré** : par fréquence d'usage lue dans une trace de routage (`DRAVE_TRACE_EXPERTS`), pas par index — `cluster-00.gguf` est donc celui qu'un nœud veut garder (`[28, 72, 91, 122, 64, …]` au lieu de `[0, 1, 2, …]`).
+
+\## Le gain de chargement indépendant (mesuré)
+
+| fichier | en-tête (mmap) | lecture totale | octets |
+|---|---|---|---|
+| `commun.gguf` | 1,4 ms | 201,6 ms | 1,00 Go |
+| `cluster-00.gguf` | 1,8 ms | 423,3 ms | 2,20 Go |
+| le modèle entier | 0,9 ms | **3 906,4 ms** | **18,56 Go** |
+
+**Un nœud qui sert un cluster charge 3,20 Go au lieu de 18,56 (5,8× moins), en 625 ms au lieu de 3,9 s (6,2× plus vite)** — et il n'ouvre que ses deux fichiers, sans toucher aux sept autres.
+
+Sur un modèle dense, `--mode couches` fait la même chose par groupes de couches (Qwen2.5-0.5B : `commun` + 4 fichiers de 6 couches, 290 tenseurs vérifiés).
+
+\## État du reste
+
+Les téléchargements avancent en parallèle : **DeepSeek-V4.1-Flash 68 %** (249/366 Go), **DeepSeek-V4-Flash complet** (86,9 Go, shards rattrapés), puis Kimi-K2.7-Code, GLM-5.3, GLM-5.3-Flash, Qwen3-235B et MiniMax-H3 dans la file (1,14 To au total).
+
+**Ce qui reste pour que ces fichiers soient *exécutables*** : le **lecteur multi-fic
+… [207 caractères tronqués]
+
+### Tour 51 — continue jusqu'à 13h HAE
+
+*113 appels d'outils.* Actions notables :
+
+- bash — Check time and running processes
+- job_list
+- bash — Inspect repo state and download progress
+- bash — Inventory downloaded models and disk usage
+- bash — Check why download queue stopped early
+- bash — Locate GGUF loading code
+- bash — Restart full download queue in background
+- bash — Read GGUF loading code
+- bash — Find GGUF struct definition
+- bash — Read the GGUF reader
+- bash — Read rest of GGUF reader and its callers
+- todo_write
+- bash — Count buffer accesses in gguf.rs
+- bash — Map functions and base computations
+- … et 99 autres
+
+**Synthèse produite :**
+
+⏵ Commit du bloc : code, sprint et journal.
 
 ## 3. Travail accompli
 
@@ -2418,6 +2487,9 @@ J'ai ajouté la **trace de routage** au moteur (`DRAVE_TRACE_EXPERTS`, sur les d
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/plan-modeles-lourds.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/convertir_clusters.py` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/format-clusters.md` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/gguf.rs` | 0 | 4 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/clusters.rs` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/sprints/08-un-modele-eclate-se-lit-comme-un-seul.md` | 2 | 0 |
 
 ### Sous-agents lancés
 
@@ -2484,7 +2556,7 @@ J'ai ajouté la **trace de routage** au moteur (`DRAVE_TRACE_EXPERTS`, sur les d
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 2150 autres
+- … et 2254 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2612,7 +2684,7 @@ J'ai ajouté la **trace de routage** au moteur (`DRAVE_TRACE_EXPERTS`, sur les d
 
 ## 5. Erreurs rencontrées
 
-118 sorties en erreur ou divergentes. Les premières :
+134 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : a8f2635f8 docs: record which models this box is good at, and why src/llama-hparams.cpp:8:void llama_hparams::set_swa_pattern(uint32_t n_pattern, bool dense_first) { src/llama-hparams.h:308:    void se
 - **T1** : 511 tokens notés — perplexité cumulée 247.031  (4.9 tok/s) === perplexité 247.0308 sur 511 tokens (0 événements, 104.5 s) ===  ### B3 harmony assistant 511 --- ref --- 0.0 0.0 0:00 ls: cannot access '
@@ -2870,4 +2942,5 @@ J'ai ajouté la **trace de routage** au moteur (`DRAVE_TRACE_EXPERTS`, sur les d
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -F - <<'EOF' && git log --oneline -1 Modèles lourds : file de 1,14 To en téléc
 - Politique de stockage : la bibliothèque brute sur le mécanique, le NVMe pour nos artefacts (mesures à l'appui)" && git log --oneline -1
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF' def patch(p, paires):     s = open(p).read()     for v, n, nom in paires:         asse
+- Un modèle éclaté se lit comme un seul : lecteur multi-fichiers, shards et clusters  Le lecteur GGUF ne connaissait qu'un fichier (un tampon, un début de données
 

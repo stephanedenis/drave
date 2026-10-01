@@ -8,6 +8,7 @@
 //!   2. débit du moteur d'événements selon la densité des activations,
 //!   3. exécution sans multiplieur (décalages + additions) vs multiplication.
 
+mod clusters;
 mod engine;
 mod gguf;
 mod list;
@@ -95,7 +96,7 @@ sont ignorés", modes.len(), modes.join(", "), modes[0]);
     }
 
     let t0 = Instant::now();
-    let g = Gguf::open(path).expect("ouverture du GGUF");
+    let g = Gguf::open_auto(path).expect("ouverture du GGUF");
     println!("GGUF ouvert en {:?} — {} tenseurs", t0.elapsed(), g.tensors.len());
     let arch = g.meta.get("general.architecture").and_then(|m| m.as_str()).unwrap_or("?");
     let n_layer = g.cfg("block_count").and_then(|m| m.as_u64()).unwrap_or(0);
@@ -1003,7 +1004,7 @@ fn mdl_cfg_vocab(path: &str) -> Option<usize> {
     // `open_meta` : le garde-fou n'a besoin que des dimensions du tenseur
     // d'embedding. Avec `open`, il lisait les 62 Go de gpt-oss AVANT que le
     // modèle ne soit chargé — deux lectures complètes du fichier par mesure.
-    let g = Gguf::open_meta(path).ok()?;
+    let g = Gguf::open_meta_auto(path).ok()?;
     g.tensor("token_embd.weight").map(|t| t.dims[0] as usize)
 }
 
@@ -1037,7 +1038,7 @@ fn erf(x: f32) -> f32 {
 fn run_banc_vision(sortie: &str) {
     use std::io::Write;
     let path = &modele_chemin();
-    let g = Gguf::open(path).expect("ouverture du GGUF");
+    let g = Gguf::open_auto(path).expect("ouverture du GGUF");
     let Some(t) = g.tensor("v.patch_embd.weight") else {
         println!("pas de v.patch_embd.weight dans ce fichier");
         return;
@@ -1372,17 +1373,44 @@ fn run_banc_vision(sortie: &str) {
 /// écrire un chemin de lecture (vision) sans deviner les noms.
 fn run_tensors() {
     let path = &modele_chemin();
-    let g = Gguf::open(path).expect("ouverture du GGUF");
-    let nom_type = |t: u32| match t {
-        0 => "F32", 1 => "F16", 2 => "Q4_0", 3 => "Q4_1", 6 => "Q5_0", 7 => "Q5_1",
-        8 => "Q8_0", 9 => "Q8_1", 10 => "Q2_K", 11 => "Q3_K", 12 => "Q4_K", 13 => "Q5_K",
-        14 => "Q6_K", 30 => "BF16", 39 => "MXFP4", _ => "?",
-    };
-    println!("{} tenseurs dans {}", g.tensors.len(), path);
+    // `open_meta_auto` : l'inventaire ne lit que les en-têtes. Avec `open`, un
+    // modèle de 366 Go devait tenir en mémoire pour qu'on lise sa liste de
+    // tenseurs — c'est-à-dire qu'on ne pouvait PAS l'inventorier.
+    let t0 = Instant::now();
+    let g = Gguf::open_meta_auto(path).expect("ouverture de l'en-tête GGUF");
+    let duree = t0.elapsed();
+    let arch = g.meta.get("general.architecture").and_then(|m| m.as_str()).unwrap_or("?");
+    println!("{} · {} fichiers · {} tenseurs · {:.2} Go de poids · en-têtes lus en {:?}",
+             arch, g.nb_fichiers(), g.tensors.len(),
+             g.octets_poids() as f64 / 1e9, duree);
+    if g.nb_fichiers() > 1 {
+        let mut par_fichier = vec![0usize; g.nb_fichiers()];
+        let mut octets = vec![0u64; g.nb_fichiers()];
+        for t in &g.tensors {
+            par_fichier[t.fichier] += 1;
+            octets[t.fichier] += Gguf::octets_tensor(t);
+        }
+        for (i, (n, o)) in par_fichier.iter().zip(&octets).enumerate() {
+            println!("  fichier {i} : {n:5} tenseurs · {:.2} Go", *o as f64 / 1e9);
+        }
+    }
+    // Les métadonnées d'architecture, celles qu'on relit à chaque fois.
+    for k in ["block_count", "embedding_length", "feed_forward_length", "attention.head_count",
+              "attention.head_count_kv", "expert_count", "expert_used_count",
+              "context_length", "vocab_size"] {
+        if let Some(v) = g.cfg(k) {
+            let s = v.as_u64().map(|x| x.to_string())
+                .or_else(|| v.as_f64().map(|x| format!("{x}")))
+                .or_else(|| v.as_str().map(str::to_string))
+                .unwrap_or_else(|| format!("{v:?}"));
+            print!(" · {k} {s}");
+        }
+    }
+    println!();
     for t in &g.tensors {
         let poids: u64 = t.dims.iter().product();
-        println!("  {:5} {:38} {:?} · {:.1} M poids", nom_type(t.ttype), t.name, t.dims,
-                 poids as f64 / 1e6);
+        println!("  {:8} {:38} {:?} · {:.1} M poids · fichier {}",
+                 Gguf::nom_type(t.ttype), t.name, t.dims, poids as f64 / 1e6, t.fichier);
     }
 }
 
@@ -2386,7 +2414,7 @@ pair incohérent. Rien n'a été calculé.", final_.len(), mdl.cfg.hidden);
 fn run_banc_topk(opt: Options) {
     use std::time::Instant;
     let path = &modele_chemin();
-    let g = Gguf::open(path).expect("ouverture du GGUF");
+    let g = Gguf::open_auto(path).expect("ouverture du GGUF");
     let n_kv = g.cfg("attention.head_count_kv").and_then(|m| m.as_u64()).unwrap_or(1) as usize;
     let n_head = g.cfg("attention.head_count").and_then(|m| m.as_u64()).unwrap_or(1) as usize;
     let hd = g.cfg("attention.key_length").and_then(|m| m.as_u64()).unwrap_or(64) as usize;
@@ -3001,7 +3029,7 @@ fn run_banc_kv(opt: Options) {
     use crate::model::{KvCache, Model};
     use std::time::Instant;
     let path = &modele_chemin();
-    let g = Gguf::open(path).expect("ouverture du GGUF");
+    let g = Gguf::open_auto(path).expect("ouverture du GGUF");
     let n_kv = g.cfg("attention.head_count_kv").and_then(|m| m.as_u64()).unwrap_or(1) as usize;
     let n_head = g.cfg("attention.head_count").and_then(|m| m.as_u64()).unwrap_or(1) as usize;
     let hidden = g.cfg("embedding_length").and_then(|m| m.as_u64()).unwrap_or(0) as usize;
@@ -3182,7 +3210,7 @@ fn run_gpu_banc(opt: Options) {
     let threads = if opt.threads_impose { opt.threads } else {
         (std::thread::available_parallelism().map(|n| n.get()).unwrap_or(8) * 3 / 4).max(1)
     };
-    let g = Gguf::open(path).expect("ouverture du GGUF");
+    let g = Gguf::open_auto(path).expect("ouverture du GGUF");
     // Le banc porte sur la tête Q8_0, ou sur le tenseur nommé (`--matrix`) quand
     // c'est une matrice d'experts MXFP4 — c'est le poste dominant de gpt-oss.
     let mx = g.mxfp4_blocks(&opt.matrix).is_some();
@@ -3457,7 +3485,7 @@ fn run_tokenize(opt: Options) {
     let sortie = opt.sortie.clone().unwrap_or_default();
     // En-tête seul : le décodage du vocabulaire n'a pas besoin des poids, et
     // `open` lisait le fichier entier (62 Go pour gpt-oss) à chaque appel.
-    let g = Gguf::open_meta(path).expect("ouverture du GGUF");
+    let g = Gguf::open_meta_auto(path).expect("ouverture du GGUF");
     let tk = build_tokenizer(&g);
     if !fichier.is_empty() {
         // Encoder un corpus ENTIER avec le tokenizer du modèle : chaque modèle
@@ -3503,7 +3531,7 @@ fn run_tokenize(opt: Options) {
 /// GPU 380 Go/s en lecture locale.
 fn run_plan(opt: Options) {
     let path = &modele_chemin();
-    let g = Gguf::open(path).expect("ouverture du GGUF");
+    let g = Gguf::open_auto(path).expect("ouverture du GGUF");
     let arch = g.meta.get("general.architecture").and_then(|m| m.as_str()).unwrap_or("?");
     let n_layer = g.cfg("block_count").and_then(|m| m.as_u64()).unwrap_or(0) as usize;
     let n_expert = g.cfg("expert_count").and_then(|m| m.as_u64()).unwrap_or(0) as usize;

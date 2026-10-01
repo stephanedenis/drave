@@ -44,6 +44,11 @@ pub struct TensorInfo {
     pub dims: Vec<u64>,     // en convention numpy (le plus lent d'abord)
     pub ttype: u32,
     pub offset: u64,
+    /// Index du fichier qui porte ce tenseur. Un modèle « éclaté » (shards
+    /// `-00001-of-00003`, ou notre format en clusters) est une seule liste de
+    /// tenseurs répartie sur plusieurs fichiers : sans ce champ, `offset`
+    /// désignerait le mauvais octet.
+    pub fichier: usize,
 }
 
 impl TensorInfo {
@@ -79,6 +84,8 @@ pub const GGML_Q8_0: u32 = 8;
 
 /// Pointeur pré-résolu vers les lignes d'un tenseur quantifié (Q8_0 ou Q4_0).
 pub struct Q8View {
+    /// Fichier qui porte le tenseur (un modèle éclaté en a plusieurs).
+    pub fichier: usize,
     pub base: usize,
     pub n_cols: usize,
     pub nb: usize,
@@ -91,8 +98,12 @@ pub struct Q8View {
 pub struct Gguf {
     pub meta: HashMap<String, Meta>,
     pub tensors: Vec<TensorInfo>,
-    buf: Vec<u8>,
-    data_start: usize,
+    /// Un tampon par fichier. Un GGUF ordinaire en a un seul ; un modèle
+    /// découpé en porte autant que de morceaux. Les données ne sont jamais
+    /// recopiées d'un fichier à l'autre : chaque tenseur reste chez lui.
+    bufs: Vec<Vec<u8>>,
+    /// Début des données de chaque fichier (après l'en-tête, aligné).
+    starts: Vec<usize>,
 }
 
 struct Cur<'a> { b: &'a [u8], p: usize, deborde: bool }
@@ -163,7 +174,7 @@ impl Gguf {
             std::io::Error::new(std::io::ErrorKind::UnexpectedEof, "en-tête GGUF incomplet")
         })?;
         let data_start = Self::debut_donnees(&meta, fin);
-        Ok(Gguf { meta, tensors, buf, data_start })
+        Ok(Gguf { meta, tensors, bufs: vec![buf], starts: vec![data_start] })
     }
 
     /// Ouvre un GGUF en ne lisant QUE l'en-tête (métadonnées et descripteurs de
@@ -189,7 +200,7 @@ impl Gguf {
             buf.truncate(lu);
             if let Some((meta, tensors, fin)) = Self::entete(&buf) {
                 let data_start = Self::debut_donnees(&meta, fin);
-                return Ok(Gguf { meta, tensors, buf: Vec::new(), data_start });
+                return Ok(Gguf { meta, tensors, bufs: Vec::new(), starts: vec![data_start] });
             }
             if lu < taille {
                 return Err(std::io::Error::new(std::io::ErrorKind::UnexpectedEof,
@@ -199,9 +210,316 @@ impl Gguf {
         }
     }
 
-    /// Analyse l'en-tête. Rend `None` si la tranche s'arrête avant la fin :
-    /// l'appelant relit alors une tranche plus grande.
+    /// Ouvre un modèle **éclaté en plusieurs fichiers** : soit les shards d'un
+    /// GGUF découpé (`…-00001-of-00003.gguf`), soit notre format en clusters
+    /// (`commun.gguf` + `cluster-XX.gguf`).
+    ///
+    /// Règles, toutes dictées par ce qu'on a observé sur les fichiers réels :
+    ///
+    /// * les métadonnées sont prises au **premier fichier qui en porte** — un
+    ///   GGUF découpé les duplique sur chaque shard, un modèle en clusters ne
+    ///   les met que dans `commun.gguf`, et le second shard de
+    ///   DeepSeek-V4-Flash porte 784 tenseurs sans aucune métadonnée ;
+    /// * les tenseurs sont concaténés **dans l'ordre des chemins**, chacun
+    ///   gardant le numéro du fichier qui le porte (les offsets sont relatifs
+    ///   au début des données de CE fichier) ;
+    /// * un nom de tenseur présent deux fois est **refusé**, sauf si les deux
+    ///   copies sont identiques en tout point : c'est le symptôme d'un
+    ///   assemblage incohérent, et un doublon silencieux ferait lire les poids
+    ///   du mauvais fichier sans que rien ne le signale.
+    pub fn open_multi<P: AsRef<Path>>(chemins: &[P]) -> std::io::Result<Self> {
+        let vides: Vec<&str> = vec![""; chemins.len()];
+        Self::open_avec_prefixes(chemins, &vides)
+    }
+
+    /// Comme [`Gguf::open_multi`], en préfixant les tenseurs de chaque fichier.
+    /// Sert au format en clusters : chaque fichier de cluster porte les MÊMES
+    /// noms de tenseurs d'experts, et le préfixe est ce qui les distingue.
+    pub fn open_avec_prefixes<P: AsRef<Path>>(chemins: &[P], prefixes: &[&str])
+        -> std::io::Result<Self> {
+        assert_eq!(chemins.len(), prefixes.len(), "un préfixe par fichier");
+        if chemins.is_empty() {
+            return Err(std::io::Error::new(std::io::ErrorKind::InvalidInput,
+                                           "open_multi : aucun fichier"));
+        }
+        let mut meta: Option<HashMap<String, Meta>> = None;
+        let mut tous: Vec<TensorInfo> = Vec::new();
+        let mut bufs: Vec<Vec<u8>> = Vec::with_capacity(chemins.len());
+        let mut starts: Vec<usize> = Vec::with_capacity(chemins.len());
+        let mut arch_ref: Option<String> = None;
+        for (i, c) in chemins.iter().enumerate() {
+            let mut buf = Vec::new();
+            File::open(c.as_ref())?.read_to_end(&mut buf)?;
+            let (m, ts, fin) = Self::entete_de(&buf, i, prefixes[i]).ok_or_else(|| {
+                std::io::Error::new(std::io::ErrorKind::UnexpectedEof,
+                    format!("en-tête GGUF incomplet : {}", c.as_ref().display()))
+            })?;
+            if m.contains_key("general.architecture") {
+                match &arch_ref {
+                    None => arch_ref = m.get("general.architecture")
+                        .and_then(|v| v.as_str()).map(str::to_string),
+                    Some(a) => {
+                        let ici = m.get("general.architecture").and_then(|v| v.as_str());
+                        if ici != Some(a.as_str()) {
+                            return Err(std::io::Error::new(std::io::ErrorKind::InvalidData,
+                                format!("architectures divergentes : {a} puis {ici:?} dans {}",
+                                        c.as_ref().display())));
+                        }
+                    }
+                }
+                if meta.is_none() { meta = Some(m); }
+            }
+            let ds = Self::debut_donnees(meta.as_ref().unwrap(), fin);
+            starts.push(ds);
+            bufs.push(buf);
+            for t in ts {
+                if let Some(v) = tous.iter().find(|u| u.name == t.name) {
+                    // Tolérance voulue : un même tenseur recopié à l'identique
+                    // (certains découpages dupliquent les petits tenseurs) n'est
+                    // pas une faute. Deux contenus différents, si.
+                    let meme = v.dims == t.dims && v.ttype == t.ttype
+                        && Self::octets_de(&bufs, &starts, &t) == Self::octets_de(&bufs, &starts, v);
+                    if !meme {
+                        return Err(std::io::Error::new(std::io::ErrorKind::InvalidData,
+                            format!("tenseur « {} » présent deux fois, contenu différent \
+                                     ({} et {})", t.name, v.fichier, t.fichier)));
+                    }
+                    continue;
+                }
+                tous.push(t);
+            }
+        }
+        let meta = meta.ok_or_else(|| std::io::Error::new(std::io::ErrorKind::InvalidData,
+            "aucun fichier ne porte de métadonnées (general.architecture absent partout)"))?;
+        Ok(Gguf { meta, tensors: tous, bufs, starts })
+    }
+
+    /// Reconnaît un nom de shard `…-00002-of-00007.gguf`.
+    ///
+    /// Rend `(préfixe, numéro, total)`. Le numéro doit être un groupe de
+    /// chiffres : un modèle dont le nom contiendrait « -of- » par hasard ne doit
+    /// pas être pris pour un découpage.
+    pub fn shard_de(nom: &str) -> Option<(String, usize, usize)> {
+        let base = nom.strip_suffix(".gguf")?;
+        let (avant, apres) = base.rsplit_once("-of-")?;
+        let total: usize = apres.parse().ok()?;
+        let (prefixe, num) = avant.rsplit_once('-')?;
+        if num.is_empty() || !num.bytes().all(|c| c.is_ascii_digit()) { return None; }
+        let n: usize = num.parse().ok()?;
+        if n == 0 || total == 0 { return None; }
+        Some((prefixe.to_string(), n, total))
+    }
+
+    /// Liste des fichiers d'un modèle : un seul, ou tous les shards dans l'ordre.
+    ///
+    /// C'est ce qui permet de désigner un modèle découpé par **n'importe lequel**
+    /// de ses morceaux — on écrit le chemin du shard 1 comme avant, et le moteur
+    /// va chercher les autres. Un shard manquant est une **erreur**, pas un
+    /// silence : sans lui, des tenseurs seraient absents et le moteur
+    /// paniquerait bien plus loin, sur un message qui ne dirait pas pourquoi.
+    pub fn chemins_du_modele(path: &Path) -> std::io::Result<Vec<std::path::PathBuf>> {
+        let nom = path.file_name().and_then(|n| n.to_str()).unwrap_or("");
+        let Some((prefixe, _, total)) = Self::shard_de(nom) else {
+            return Ok(vec![path.to_path_buf()]);
+        };
+        let dir = path.parent().unwrap_or(Path::new("."));
+        let mut trouves: Vec<(usize, std::path::PathBuf)> = Vec::new();
+        for e in std::fs::read_dir(dir)? {
+            let p = e?.path();
+            let n = p.file_name().and_then(|n| n.to_str()).unwrap_or("").to_string();
+            if let Some((pref, num, tot)) = Self::shard_de(&n) {
+                if pref == prefixe && tot == total { trouves.push((num, p)); }
+            }
+        }
+        trouves.sort();
+        if trouves.len() != total {
+            return Err(std::io::Error::new(std::io::ErrorKind::NotFound, format!(
+                "modèle découpé incomplet dans {} : {total} shards annoncés, {} présents",
+                dir.display(), trouves.len())));
+        }
+        for (attendu, (num, p)) in trouves.iter().enumerate() {
+            if *num != attendu + 1 {
+                return Err(std::io::Error::new(std::io::ErrorKind::NotFound, format!(
+                    "shard {} manquant (trouvé {}) dans {}", attendu + 1, p.display(), dir.display())));
+            }
+        }
+        Ok(trouves.into_iter().map(|(_, p)| p).collect())
+    }
+
+    /// Ouvre un modèle, découpé ou non : la même commande marche pour les deux.
+    ///
+    /// Un **dossier** qui contient `commun.gguf` est un modèle au format
+    /// clusters : il s'ouvre comme les autres, sans option supplémentaire. Le
+    /// mapping est publié au passage, c'est lui qui dira où sont les experts.
+    pub fn open_auto<P: AsRef<Path>>(path: P) -> std::io::Result<Self> {
+        let p = path.as_ref();
+        if p.is_dir() {
+            if !p.join("commun.gguf").is_file() {
+                return Err(std::io::Error::new(std::io::ErrorKind::NotFound, format!(
+                    "{} est un dossier mais ne contient pas commun.gguf", p.display())));
+            }
+            return Ok(crate::clusters::ouvrir(p)?.gguf);
+        }
+        let chemins = Self::chemins_du_modele(p)?;
+        if chemins.len() > 1 { Self::open_multi(&chemins) } else { Self::open(path) }
+    }
+
+    /// Idem, sans lire les poids.
+    pub fn open_meta_auto<P: AsRef<Path>>(path: P) -> std::io::Result<Self> {
+        let p = path.as_ref();
+        if p.is_dir() {
+            return Ok(crate::clusters::ouvrir_meta(p)?.gguf);
+        }
+        let chemins = Self::chemins_du_modele(p)?;
+        if chemins.len() > 1 { Self::open_multi_meta(&chemins) } else { Self::open_meta(path) }
+    }
+
+    /// Même chose que [`Gguf::open_multi`], mais **sans lire les poids** : seuls
+    /// les en-têtes sont lus, par tranches croissantes.
+    ///
+    /// C'est ce qui rend un modèle de 366 Go inspectable : l'inventaire des
+    /// tenseurs et des métadonnées coûte quelques mégaoctets de lecture au lieu
+    /// de la totalité du fichier. Aucun accès aux poids ne doit suivre.
+    pub fn open_multi_meta<P: AsRef<Path>>(chemins: &[P]) -> std::io::Result<Self> {
+        let vides: Vec<&str> = vec![""; chemins.len()];
+        Self::open_meta_avec_prefixes(chemins, &vides)
+    }
+
+    /// Comme [`Gguf::open_avec_prefixes`], mais sans lire les poids.
+    pub fn open_meta_avec_prefixes<P: AsRef<Path>>(chemins: &[P], prefixes: &[&str])
+        -> std::io::Result<Self> {
+        assert_eq!(chemins.len(), prefixes.len(), "un préfixe par fichier");
+        if chemins.is_empty() {
+            return Err(std::io::Error::new(std::io::ErrorKind::InvalidInput,
+                                           "open_multi_meta : aucun fichier"));
+        }
+        let mut meta: Option<HashMap<String, Meta>> = None;
+        let mut tous: Vec<TensorInfo> = Vec::new();
+        let mut starts: Vec<usize> = Vec::new();
+        let mut arch_ref: Option<String> = None;
+        for (i, c) in chemins.iter().enumerate() {
+            let mut f = File::open(c.as_ref())?;
+            let mut taille = 4usize << 20;
+            let (m, ts, fin) = loop {
+                f.seek(SeekFrom::Start(0))?;
+                let mut buf = vec![0u8; taille];
+                let mut lu = 0usize;
+                while lu < taille {
+                    let n = f.read(&mut buf[lu..])?;
+                    if n == 0 { break; }
+                    lu += n;
+                }
+                buf.truncate(lu);
+                if let Some(r) = Self::entete_de(&buf, i, prefixes[i]) { break r; }
+                if lu < taille {
+                    return Err(std::io::Error::new(std::io::ErrorKind::UnexpectedEof,
+                        format!("en-tête GGUF incomplet : {}", c.as_ref().display())));
+                }
+                taille *= 4;
+            };
+            if m.contains_key("general.architecture") {
+                match &arch_ref {
+                    None => arch_ref = m.get("general.architecture")
+                        .and_then(|v| v.as_str()).map(str::to_string),
+                    Some(a) => {
+                        let ici = m.get("general.architecture").and_then(|v| v.as_str());
+                        if ici != Some(a.as_str()) {
+                            return Err(std::io::Error::new(std::io::ErrorKind::InvalidData,
+                                format!("architectures divergentes : {a} puis {ici:?} dans {}",
+                                        c.as_ref().display())));
+                        }
+                    }
+                }
+                if meta.is_none() { meta = Some(m); }
+            }
+            starts.push(Self::debut_donnees(meta.as_ref().unwrap(), fin));
+            for t in ts {
+                if tous.iter().any(|u| u.name == t.name) { continue; }
+                tous.push(t);
+            }
+        }
+        let meta = meta.ok_or_else(|| std::io::Error::new(std::io::ErrorKind::InvalidData,
+            "aucun fichier ne porte de métadonnées (general.architecture absent partout)"))?;
+        Ok(Gguf { meta, tensors: tous, bufs: Vec::new(), starts })
+    }
+
+    /// Octets d'un tenseur décrit par `t`, dans un assemblage en cours de
+    /// construction (le `Gguf` n'existe pas encore).
+    fn octets_de<'a>(bufs: &'a [Vec<u8>], starts: &[usize], t: &TensorInfo) -> &'a [u8] {
+        let besoin = Self::octets_tensor(t) as usize;
+        let debut = starts[t.fichier] + t.offset as usize;
+        let b = &bufs[t.fichier];
+        &b[debut..(debut + besoin).min(b.len())]
+    }
+
+    /// Taille en octets des données d'un tenseur, d'après son type ggml.
+    /// `nelem()` compte des POIDS ; les types quantifiés rangent 32 ou 256
+    /// poids par bloc, donc la taille n'est pas `nelem × taille d'un poids`.
+    ///
+    /// La table est celle de ggml, **relevée** et non devinée : un petit
+    /// programme lié à `libggml` imprime `ggml_blck_size`/`ggml_type_size` pour
+    /// chaque type (voir `docs/format-clusters.md`). Une taille inventée ferait
+    /// un inventaire faux, et c'est exactement ainsi que l'inventaire de
+    /// DeepSeek-V4-Flash a annoncé 8,56 Go pour 86,9 Go de fichiers : les
+    /// tenseurs d'experts en `iq1_m` n'étaient pas dans la table.
+    pub fn octets_tensor(t: &TensorInfo) -> u64 {
+        let n = t.nelem() as u64;
+        let (bloc, octets) = match t.ttype {
+            0 => (1u64, 4u64), 1 => (1, 2), 2 => (32, 18), 3 => (32, 20),
+            6 => (32, 22), 7 => (32, 24), 8 => (32, 34), 9 => (32, 36),
+            10 => (256, 84), 11 => (256, 110), 12 => (256, TAILLE_Q4K as u64),
+            13 => (256, 176), 14 => (256, TAILLE_Q6K as u64), 15 => (256, 292),
+            16 => (256, 66), 17 => (256, 74), 18 => (256, 98), 19 => (256, 50),
+            20 => (32, 18), 21 => (256, 110), 22 => (256, 82), 23 => (256, 136),
+            24 => (1, 1), 25 => (1, 2), 26 => (1, 4), 27 => (1, 8), 28 => (1, 8),
+            29 => (256, 56), 30 => (1, 2), 34 => (256, 54), 35 => (256, 66),
+            39 => (32, 17), 40 => (64, 36),
+            _ => return 0,
+        };
+        n / bloc * octets
+    }
+
+    /// Nom lisible d'un type ggml. Rend `« type 29 »` pour un type inconnu
+    /// plutôt que `?` : un point d'interrogation ne dit pas lequel.
+    pub fn nom_type(ttype: u32) -> String {
+        let n = match ttype {
+            0 => "F32", 1 => "F16", 2 => "Q4_0", 3 => "Q4_1", 6 => "Q5_0", 7 => "Q5_1",
+            8 => "Q8_0", 9 => "Q8_1", 10 => "Q2_K", 11 => "Q3_K", 12 => "Q4_K",
+            13 => "Q5_K", 14 => "Q6_K", 15 => "Q8_K",
+            16 => "IQ2_XXS", 17 => "IQ2_XS", 18 => "IQ3_XXS", 19 => "IQ1_S",
+            20 => "IQ4_NL", 21 => "IQ3_S", 22 => "IQ2_S", 23 => "IQ4_XS",
+            24 => "I8", 25 => "I16", 26 => "I32", 27 => "I64", 28 => "F64",
+            29 => "IQ1_M", 30 => "BF16", 34 => "TQ1_0", 35 => "TQ2_0",
+            39 => "MXFP4", 40 => "NVFP4",
+            _ => return format!("type {ttype}"),
+        };
+        n.to_string()
+    }
+
+    /// Somme des tailles de données annoncées par les descripteurs.
+    pub fn octets_poids(&self) -> u64 {
+        self.tensors.iter().map(Self::octets_tensor).sum()
+    }
+
+    /// Nombre de fichiers de l'assemblage. `starts` fait foi et non `bufs` :
+    /// en mode en-tête seul (`--tensors`), les tampons ne sont pas chargés mais
+    /// le découpage, lui, est connu.
+    pub fn nb_fichiers(&self) -> usize { self.starts.len() }
+
+    /// Octets de poids effectivement lus (somme des fichiers).
+    pub fn octets_charges(&self) -> u64 { self.bufs.iter().map(|b| b.len() as u64).sum() }
+
+    /// Analyse l'en-tête d'UN fichier ; `fichier` marque l'origine des tenseurs.
     fn entete(buf: &[u8]) -> Option<(HashMap<String, Meta>, Vec<TensorInfo>, usize)> {
+        Self::entete_de(buf, 0, "")
+    }
+
+    /// Idem, en préfixant les noms de tenseurs. C'est ce qui permet de réunir
+    /// des fichiers de clusters : huit clusters portent chacun un tenseur nommé
+    /// `blk.0.ffn_gate_exps.weight` (16 experts chacun), et sans préfixe ils
+    /// seraient huit fois le même nom.
+    fn entete_de(buf: &[u8], fichier: usize, prefixe: &str)
+        -> Option<(HashMap<String, Meta>, Vec<TensorInfo>, usize)> {
         if buf.len() < 4 || &buf[0..4] != b"GGUF" { return None; }
         let mut c = Cur { b: buf, p: 4, deborde: false };
         let version = c.u32();
@@ -227,9 +545,25 @@ impl Gguf {
             let ttype = c.u32();
             let offset = c.u64();
             if c.deborde { return None; }
-            tensors.push(TensorInfo { name, dims, ttype, offset });
+            let name = if prefixe.is_empty() { name } else { format!("{prefixe}{name}") };
+            tensors.push(TensorInfo { name, dims, ttype, offset, fichier });
         }
         Some((meta, tensors, c.p))
+    }
+
+    /// Tranche d'octets d'un tenseur, à partir de son premier octet.
+    ///
+    /// C'est le SEUL point d'accès aux poids : rendre le fichier explicite ici
+    /// plutôt que de le laisser implicite est ce qui permet de servir un modèle
+    /// éclaté sans dupliquer le code de lecture.
+    #[inline]
+    fn tbuf(&self, t: &TensorInfo) -> &[u8] {
+        match self.bufs.get(t.fichier) {
+            Some(b) => &b[self.starts[t.fichier] + t.offset as usize..],
+            None => panic!(
+                "données de « {} » absentes : GGUF ouvert en mode en-tête seul (--meta)",
+                t.name),
+        }
     }
 
     fn debut_donnees(meta: &HashMap<String, Meta>, fin_entete: usize) -> usize {
@@ -244,6 +578,20 @@ impl Gguf {
 
     pub fn tensor(&self, name: &str) -> Option<&TensorInfo> {
         self.tensors.iter().find(|t| t.name == name)
+    }
+
+    /// Conversion f32 → f16 (arrondi au plus proche pair). Sert aux tests qui
+    /// fabriquent des blocs quantifiés ; le moteur, lui, ne fait que l'inverse.
+    pub fn f32_to_f16(f: f32) -> u16 {
+        let bits = f.to_bits();
+        let signe = ((bits >> 16) & 0x8000) as u16;
+        let exp = ((bits >> 23) & 0xFF) as i32 - 127 + 15;
+        let man = bits & 0x7F_FFFF;
+        if exp <= 0 { return signe; }                       // dénormal vers zéro
+        if exp >= 31 { return signe | 0x7C00; }             // infini
+        let mut h = signe | ((exp as u16) << 10) | ((man >> 13) as u16);
+        if man & 0x1FFF > 0x1000 || (man & 0x1FFF == 0x1000 && (h & 1) == 1) { h += 1; }
+        h
     }
 
     pub fn f16_to_f32(h: u16) -> f32 {
@@ -269,27 +617,27 @@ impl Gguf {
     /// Niveaux entiers bruts (avant mise à l'échelle) pour Q4_0 / Q8_0.
     pub fn raw_levels(&self, name: &str) -> Vec<i8> {
         let t = self.tensor(name).unwrap_or_else(|| panic!("tenseur {name} absent"));
-        let base = self.data_start + t.offset as usize;
+        let buf = self.tbuf(t);
         let n = t.nelem();
         let mut out = Vec::with_capacity(n);
         match t.ttype {
             GGML_Q8_0 => {
                 let nb = n / 32;
                 for b in 0..nb {
-                    let p = base + b * 34;
-                    for j in 0..32 { out.push(self.buf[p + 2 + j] as i8); }
+                    let p = b * 34;
+                    for j in 0..32 { out.push(buf[p + 2 + j] as i8); }
                 }
             }
             GGML_Q4_0 => {
                 let nb = n / 32;
                 for b in 0..nb {
-                    let p = base + b * 18;
+                    let p = b * 18;
                     for j in 0..16 {
-                        let q = self.buf[p + 2 + j];
+                        let q = buf[p + 2 + j];
                         out.push(((q & 0x0F) as i16 - 8) as i8);
                     }
                     for j in 0..16 {
-                        let q = self.buf[p + 2 + j];
+                        let q = buf[p + 2 + j];
                         out.push(((q >> 4) as i16 - 8) as i8);
                     }
                 }
@@ -302,46 +650,46 @@ impl Gguf {
     /// Déquantifie une ligne d'un tenseur 2D, en f32.
     pub fn row_f32(&self, name: &str, row: usize, n_cols: usize) -> Vec<f32> {
         let t = self.tensor(name).unwrap_or_else(|| panic!("tenseur {name} absent"));
-        let base = self.data_start + t.offset as usize;
+        let buf = self.tbuf(t);
         let mut out = Vec::with_capacity(n_cols);
         match t.ttype {
             GGML_F32 => {
-                let p = base + row * n_cols * 4;
+                let p = row * n_cols * 4;
                 for i in 0..n_cols {
-                    out.push(f32::from_le_bytes(self.buf[p + 4*i..p + 4*i + 4].try_into().unwrap()));
+                    out.push(f32::from_le_bytes(buf[p + 4*i..p + 4*i + 4].try_into().unwrap()));
                 }
             }
             GGML_F16 => {
-                let p = base + row * n_cols * 2;
+                let p = row * n_cols * 2;
                 for i in 0..n_cols {
-                    out.push(Self::f16_to_f32(u16::from_le_bytes(self.buf[p + 2*i..p + 2*i + 2].try_into().unwrap())));
+                    out.push(Self::f16_to_f32(u16::from_le_bytes(buf[p + 2*i..p + 2*i + 2].try_into().unwrap())));
                 }
             }
             GGML_Q8_0 => {
                 let nb = n_cols / 32;
                 for b in 0..nb {
-                    let p = base + (row * nb + b) * 34;
-                    let d = Self::f16_to_f32(u16::from_le_bytes(self.buf[p..p+2].try_into().unwrap()));
-                    for j in 0..32 { out.push(d * (self.buf[p + 2 + j] as i8) as f32); }
+                    let p = (row * nb + b) * 34;
+                    let d = Self::f16_to_f32(u16::from_le_bytes(buf[p..p+2].try_into().unwrap()));
+                    for j in 0..32 { out.push(d * (buf[p + 2 + j] as i8) as f32); }
                 }
             }
             GGML_Q4_0 => {
                 let nb = n_cols / 32;
                 for b in 0..nb {
-                    let p = base + (row * nb + b) * 18;
-                    let d = Self::f16_to_f32(u16::from_le_bytes(self.buf[p..p+2].try_into().unwrap()));
-                    for j in 0..16 { out.push(d * ((self.buf[p + 2 + j] & 0x0F) as i16 - 8) as f32); }
-                    for j in 0..16 { out.push(d * ((self.buf[p + 2 + j] >> 4) as i16 - 8) as f32); }
+                    let p = (row * nb + b) * 18;
+                    let d = Self::f16_to_f32(u16::from_le_bytes(buf[p..p+2].try_into().unwrap()));
+                    for j in 0..16 { out.push(d * ((buf[p + 2 + j] & 0x0F) as i16 - 8) as f32); }
+                    for j in 0..16 { out.push(d * ((buf[p + 2 + j] >> 4) as i16 - 8) as f32); }
                 }
             }
             GGML_Q4_K => {
                 let ns = n_cols / 256;
                 for sup in 0..ns {
-                    let p = base + (row * ns + sup) * TAILLE_Q4K;
-                    let d = Self::f16_to_f32(u16::from_le_bytes(self.buf[p..p+2].try_into().unwrap()));
-                    let dmin = Self::f16_to_f32(u16::from_le_bytes(self.buf[p+2..p+4].try_into().unwrap()));
-                    let sc = &self.buf[p + 4..p + 16];
-                    let qs = &self.buf[p + 16..p + 144];
+                    let p = (row * ns + sup) * TAILLE_Q4K;
+                    let d = Self::f16_to_f32(u16::from_le_bytes(buf[p..p+2].try_into().unwrap()));
+                    let dmin = Self::f16_to_f32(u16::from_le_bytes(buf[p+2..p+4].try_into().unwrap()));
+                    let sc = &buf[p + 4..p + 16];
+                    let qs = &buf[p + 16..p + 144];
                     for g in 0..4 {
                         let (s0, m0) = echelle_min_q4k(sc, 2 * g);
                         let (s1, m1) = echelle_min_q4k(sc, 2 * g + 1);
@@ -355,11 +703,11 @@ impl Gguf {
             GGML_Q6_K => {
                 let ns = n_cols / 256;
                 for sup in 0..ns {
-                    let p = base + (row * ns + sup) * TAILLE_Q6K;
-                    let ql = &self.buf[p..p + 128];
-                    let qh = &self.buf[p + 128..p + 192];
-                    let sc = &self.buf[p + 192..p + 208];
-                    let d = Self::f16_to_f32(u16::from_le_bytes(self.buf[p+208..p+210].try_into().unwrap()));
+                    let p = (row * ns + sup) * TAILLE_Q6K;
+                    let ql = &buf[p..p + 128];
+                    let qh = &buf[p + 128..p + 192];
+                    let sc = &buf[p + 192..p + 208];
+                    let d = Self::f16_to_f32(u16::from_le_bytes(buf[p+208..p+210].try_into().unwrap()));
                     for moitie in 0..2 {
                         let (ql, qh, sc) = (&ql[moitie*64..], &qh[moitie*32..], &sc[moitie*8..]);
                         let mut tmp = [0f32; 128];
@@ -382,11 +730,11 @@ impl Gguf {
             GGML_Q4_1 => {
                 let nb = n_cols / 32;
                 for b in 0..nb {
-                    let p = base + (row * nb + b) * 20;
-                    let d = Self::f16_to_f32(u16::from_le_bytes(self.buf[p..p+2].try_into().unwrap()));
-                    let m = Self::f16_to_f32(u16::from_le_bytes(self.buf[p+2..p+4].try_into().unwrap()));
-                    for j in 0..16 { out.push(d * (self.buf[p + 4 + j] & 0x0F) as f32 + m); }
-                    for j in 0..16 { out.push(d * (self.buf[p + 4 + j] >> 4) as f32 + m); }
+                    let p = (row * nb + b) * 20;
+                    let d = Self::f16_to_f32(u16::from_le_bytes(buf[p..p+2].try_into().unwrap()));
+                    let m = Self::f16_to_f32(u16::from_le_bytes(buf[p+2..p+4].try_into().unwrap()));
+                    for j in 0..16 { out.push(d * (buf[p + 4 + j] & 0x0F) as f32 + m); }
+                    for j in 0..16 { out.push(d * (buf[p + 4 + j] >> 4) as f32 + m); }
                 }
             }
             other => panic!("row_f32 : type {other} non géré"),
@@ -407,14 +755,14 @@ impl Gguf {
         };
         let n_cols = t.dims[1] as usize;
         let bloc = if t.ttype == GGML_Q4_K || t.ttype == GGML_Q6_K { 256 } else { 32 };
-        Q8View { base: self.data_start + t.offset as usize, n_cols, nb: n_cols / bloc,
+        Q8View { fichier: t.fichier, base: t.offset as usize, n_cols, nb: n_cols / bloc,
                  q4, ttype: t.ttype }
     }
 
     /// Pointeur sur le premier octet des données d'un tenseur.
     pub fn data_ptr(&self, name: &str) -> Option<*const u8> {
         let t = self.tensor(name)?;
-        Some(unsafe { self.buf.as_ptr().add(self.data_start + t.offset as usize) })
+        Some(self.tbuf(t).as_ptr())
     }
 
     /// Type ggml d'un tenseur.
@@ -426,7 +774,7 @@ impl Gguf {
     pub fn q8_blocks(&self, name: &str) -> Option<(&[u8], usize)> {
         let t = self.tensor(name)?;
         if t.ttype != GGML_Q8_0 { return None; }
-        Some((&self.buf[self.data_start + t.offset as usize..], t.dims[1] as usize / 32))
+        Some((self.tbuf(t), t.dims[1] as usize / 32))
     }
 
     /// Super-blocs **Q4_K** bruts : `(octets, nb de super-blocs de 256 poids par
@@ -434,14 +782,14 @@ impl Gguf {
     pub fn q4k_blocks(&self, name: &str) -> Option<(&[u8], usize)> {
         let t = self.tensor(name)?;
         if t.ttype != GGML_Q4_K { return None; }
-        Some((&self.buf[self.data_start + t.offset as usize..], t.dims[1] as usize / 256))
+        Some((self.tbuf(t), t.dims[1] as usize / 256))
     }
 
     /// Super-blocs **Q6_K** bruts (quelques tenseurs des mélanges `Q4_K_M`).
     pub fn q6k_blocks(&self, name: &str) -> Option<(&[u8], usize)> {
         let t = self.tensor(name)?;
         if t.ttype != GGML_Q6_K { return None; }
-        Some((&self.buf[self.data_start + t.offset as usize..], t.dims[1] as usize / 256))
+        Some((self.tbuf(t), t.dims[1] as usize / 256))
     }
 
     /// Blocs **MXFP4** bruts : `(octets à partir du premier bloc, nb de blocs
@@ -451,7 +799,7 @@ impl Gguf {
         let t = self.tensor(name)?;
         if t.ttype != GGML_MXFP4 { return None; }
         let nb = t.dims[1] as usize / 32;
-        Some((&self.buf[self.data_start + t.offset as usize..], nb))
+        Some((self.tbuf(t), nb))
     }
 
     /// Blocs Q4_0 bruts d'un tenseur : `(octets à partir du premier bloc, nb de
@@ -462,24 +810,25 @@ impl Gguf {
         let t = self.tensor(name)?;
         if t.ttype != GGML_Q4_0 { return None; }
         let nb = t.dims[1] as usize / 32;
-        Some((&self.buf[self.data_start + t.offset as usize..], nb))
+        Some((self.tbuf(t), nb))
     }
 
     /// Produit scalaire d'une ligne via une vue pré-résolue (Q8_0 ou Q4_0).
     #[inline]
     pub fn q8_dot_at(&self, v: &Q8View, row: usize, qx: &[i16]) -> f32 {
         let mut acc = 0f32;
+        let buf = &self.bufs[v.fichier][self.starts[v.fichier]..];
         if v.ttype == GGML_Q6_K {
             // Q6_K : quants signés sur 6 bits, une échelle signée par 16 poids,
             // aucune asymétrie — donc pas de terme de minimum.
             let ns = v.nb;
             for sup in 0..ns {
                 let p = v.base + (row * ns + sup) * TAILLE_Q6K;
-                let ql = &self.buf[p..p + 128];
-                let qh = &self.buf[p + 128..p + 192];
-                let sc = &self.buf[p + 192..p + 208];
+                let ql = &buf[p..p + 128];
+                let qh = &buf[p + 128..p + 192];
+                let sc = &buf[p + 192..p + 208];
                 let d = Self::f16_to_f32(
-                    u16::from_le_bytes(self.buf[p+208..p+210].try_into().unwrap()));
+                    u16::from_le_bytes(buf[p+208..p+210].try_into().unwrap()));
                 for moitie in 0..2usize {
                     let (ql, qh, sc) = (&ql[moitie*64..], &qh[moitie*32..], &sc[moitie*8..]);
                     let b = sup * 256 + moitie * 128;
@@ -515,10 +864,10 @@ impl Gguf {
             let ns = v.nb;
             for sup in 0..ns {
                 let p = v.base + (row * ns + sup) * TAILLE_Q4K;
-                let d = Self::f16_to_f32(u16::from_le_bytes(self.buf[p..p+2].try_into().unwrap()));
-                let dmin = Self::f16_to_f32(u16::from_le_bytes(self.buf[p+2..p+4].try_into().unwrap()));
-                let sc = &self.buf[p + 4..p + 16];
-                let qs = &self.buf[p + 16..p + 144];
+                let d = Self::f16_to_f32(u16::from_le_bytes(buf[p..p+2].try_into().unwrap()));
+                let dmin = Self::f16_to_f32(u16::from_le_bytes(buf[p+2..p+4].try_into().unwrap()));
+                let sc = &buf[p + 4..p + 16];
+                let qs = &buf[p + 16..p + 144];
                 for g in 0..4usize {
                     let (s0, m0) = echelle_min_q4k(sc, 2 * g);
                     let (s1, m1) = echelle_min_q4k(sc, 2 * g + 1);
@@ -542,8 +891,8 @@ impl Gguf {
             // les 16 premiers sont les nibbles BAS, les 16 suivants les HAUTS
             for b in 0..v.nb {
                 let p = v.base + (row * v.nb + b) * 18;
-                let d = Self::f16_to_f32(u16::from_le_bytes(self.buf[p..p+2].try_into().unwrap()));
-                let w = &self.buf[p + 2..p + 18];
+                let d = Self::f16_to_f32(u16::from_le_bytes(buf[p..p+2].try_into().unwrap()));
+                let w = &buf[p + 2..p + 18];
                 let x = &qx[b * 32..b * 32 + 32];
                 let mut s = 0i32;
                 for j in 0..16 {
@@ -559,8 +908,8 @@ impl Gguf {
             }
             for b in 0..v.nb {
                 let p = v.base + (row * v.nb + b) * 34;
-                let d = Self::f16_to_f32(u16::from_le_bytes(self.buf[p..p+2].try_into().unwrap()));
-                let w = &self.buf[p + 2..p + 34];
+                let d = Self::f16_to_f32(u16::from_le_bytes(buf[p..p+2].try_into().unwrap()));
+                let w = &buf[p + 2..p + 34];
                 let x = &qx[b * 32..b * 32 + 32];
                 let mut s = 0i32;
                 for j in 0..32 {
@@ -582,10 +931,11 @@ impl Gguf {
     unsafe fn q8_dot_avx2(&self, v: &Q8View, row: usize, qx: &[i16]) -> f32 {
         use std::arch::x86_64::*;
         let mut acc = 0f32;
+        let buf = &self.bufs[v.fichier][self.starts[v.fichier]..];
         for b in 0..v.nb {
             let p = v.base + (row * v.nb + b) * 34;
-            let d = Self::f16_to_f32(u16::from_le_bytes(self.buf[p..p+2].try_into().unwrap()));
-            let w = self.buf[p + 2..p + 34].as_ptr();
+            let d = Self::f16_to_f32(u16::from_le_bytes(buf[p..p+2].try_into().unwrap()));
+            let w = buf[p + 2..p + 34].as_ptr();
             let x = qx.as_ptr().add(b * 32);
             let q = _mm256_loadu_si256(w as *const __m256i);              // 32 × i8
             let bas = _mm256_cvtepi8_epi16(_mm256_castsi256_si128(q));    // 16 × i16
@@ -606,35 +956,35 @@ impl Gguf {
     /// Déquantification en f32 (F32 / F16 / Q8_0 / Q4_0).
     pub fn dequant(&self, name: &str) -> Vec<f32> {
         let t = self.tensor(name).unwrap_or_else(|| panic!("tenseur {name} absent"));
-        let base = self.data_start + t.offset as usize;
+        let buf = self.tbuf(t);
         let n = t.nelem();
         let mut out = Vec::with_capacity(n);
         match t.ttype {
             GGML_F32 => {
                 for i in 0..n {
-                    out.push(f32::from_le_bytes(self.buf[base + 4*i..base + 4*i + 4].try_into().unwrap()));
+                    out.push(f32::from_le_bytes(buf[4*i..4*i + 4].try_into().unwrap()));
                 }
             }
             GGML_F16 => {
                 for i in 0..n {
-                    out.push(Self::f16_to_f32(u16::from_le_bytes(self.buf[base + 2*i..base + 2*i + 2].try_into().unwrap())));
+                    out.push(Self::f16_to_f32(u16::from_le_bytes(buf[2*i..2*i + 2].try_into().unwrap())));
                 }
             }
             GGML_Q8_0 => {
                 let nb = n / 32;
                 for b in 0..nb {
-                    let p = base + b * 34;
-                    let d = Self::f16_to_f32(u16::from_le_bytes(self.buf[p..p+2].try_into().unwrap()));
-                    for j in 0..32 { out.push(d * (self.buf[p + 2 + j] as i8) as f32); }
+                    let p = b * 34;
+                    let d = Self::f16_to_f32(u16::from_le_bytes(buf[p..p+2].try_into().unwrap()));
+                    for j in 0..32 { out.push(d * (buf[p + 2 + j] as i8) as f32); }
                 }
             }
             GGML_Q4_0 => {
                 let nb = n / 32;
                 for b in 0..nb {
-                    let p = base + b * 18;
-                    let d = Self::f16_to_f32(u16::from_le_bytes(self.buf[p..p+2].try_into().unwrap()));
-                    for j in 0..16 { out.push(d * ((self.buf[p + 2 + j] & 0x0F) as i16 - 8) as f32); }
-                    for j in 0..16 { out.push(d * ((self.buf[p + 2 + j] >> 4) as i16 - 8) as f32); }
+                    let p = b * 18;
+                    let d = Self::f16_to_f32(u16::from_le_bytes(buf[p..p+2].try_into().unwrap()));
+                    for j in 0..16 { out.push(d * ((buf[p + 2 + j] & 0x0F) as i16 - 8) as f32); }
+                    for j in 0..16 { out.push(d * ((buf[p + 2 + j] >> 4) as i16 - 8) as f32); }
                 }
             }
             GGML_Q4_1 => {
@@ -642,11 +992,11 @@ impl Gguf {
                 // valeur = d · q + m, q ∈ 0..15 (pas de niveau zéro central)
                 let nb = n / 32;
                 for b in 0..nb {
-                    let p = base + b * 20;
-                    let d = Self::f16_to_f32(u16::from_le_bytes(self.buf[p..p+2].try_into().unwrap()));
-                    let m = Self::f16_to_f32(u16::from_le_bytes(self.buf[p+2..p+4].try_into().unwrap()));
-                    for j in 0..16 { out.push(d * (self.buf[p + 4 + j] & 0x0F) as f32 + m); }
-                    for j in 0..16 { out.push(d * (self.buf[p + 4 + j] >> 4) as f32 + m); }
+                    let p = b * 20;
+                    let d = Self::f16_to_f32(u16::from_le_bytes(buf[p..p+2].try_into().unwrap()));
+                    let m = Self::f16_to_f32(u16::from_le_bytes(buf[p+2..p+4].try_into().unwrap()));
+                    for j in 0..16 { out.push(d * (buf[p + 4 + j] & 0x0F) as f32 + m); }
+                    for j in 0..16 { out.push(d * (buf[p + 4 + j] >> 4) as f32 + m); }
                 }
             }
             GGML_MXFP4 => {
@@ -656,11 +1006,11 @@ impl Gguf {
                                        0.0, -0.5, -1.0, -1.5, -2.0, -3.0, -4.0, -6.0];
                 let nb = n / 32;
                 for b in 0..nb {
-                    let p = base + b * 17;
-                    let e = self.buf[p] as u32;
+                    let p = b * 17;
+                    let e = buf[p] as u32;
                     let d = if e == 0 || e == 255 { 0.0 } else { f32::from_bits((e - 1) << 23) };
-                    for j in 0..16 { out.push(KV[(self.buf[p + 1 + j] & 0x0F) as usize] * d); }
-                    for j in 0..16 { out.push(KV[(self.buf[p + 1 + j] >> 4) as usize] * d); }
+                    for j in 0..16 { out.push(KV[(buf[p + 1 + j] & 0x0F) as usize] * d); }
+                    for j in 0..16 { out.push(KV[(buf[p + 1 + j] >> 4) as usize] * d); }
                 }
             }
             GGML_Q4_K => {
@@ -668,11 +1018,11 @@ impl Gguf {
                 let _ = KV;
                 let nb = n / 256;
                 for b in 0..nb {
-                    let p = base + b * TAILLE_Q4K;
-                    let d = Self::f16_to_f32(u16::from_le_bytes(self.buf[p..p+2].try_into().unwrap()));
-                    let dmin = Self::f16_to_f32(u16::from_le_bytes(self.buf[p+2..p+4].try_into().unwrap()));
-                    let sc = &self.buf[p + 4..p + 16];
-                    let qs = &self.buf[p + 16..p + 144];
+                    let p = b * TAILLE_Q4K;
+                    let d = Self::f16_to_f32(u16::from_le_bytes(buf[p..p+2].try_into().unwrap()));
+                    let dmin = Self::f16_to_f32(u16::from_le_bytes(buf[p+2..p+4].try_into().unwrap()));
+                    let sc = &buf[p + 4..p + 16];
+                    let qs = &buf[p + 16..p + 144];
                     for g in 0..4 {
                         let (s0, m0) = echelle_min_q4k(sc, 2 * g);
                         let (s1, m1) = echelle_min_q4k(sc, 2 * g + 1);
@@ -686,11 +1036,11 @@ impl Gguf {
             GGML_Q6_K => {
                 let nb = n / 256;
                 for b in 0..nb {
-                    let p = base + b * TAILLE_Q6K;
-                    let ql = &self.buf[p..p + 128];
-                    let qh = &self.buf[p + 128..p + 192];
-                    let sc = &self.buf[p + 192..p + 208];
-                    let d = Self::f16_to_f32(u16::from_le_bytes(self.buf[p+208..p+210].try_into().unwrap()));
+                    let p = b * TAILLE_Q6K;
+                    let ql = &buf[p..p + 128];
+                    let qh = &buf[p + 128..p + 192];
+                    let sc = &buf[p + 192..p + 208];
+                    let d = Self::f16_to_f32(u16::from_le_bytes(buf[p+208..p+210].try_into().unwrap()));
                     for moitie in 0..2 {
                         let (ql, qh, sc) = (&ql[moitie*64..], &qh[moitie*32..], &sc[moitie*8..]);
                         // ggml écrit les quatre quants en QUARTS SUCCESSIFS :
@@ -717,5 +1067,201 @@ impl Gguf {
             other => panic!("dequant : type {other} non géré"),
         }
         out
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use std::io::Write;
+
+    /// Fabrique un GGUF minimal : `general.architecture` plus des tenseurs F32
+    /// dont la valeur de chaque poids est son indice global. Un GGUF de labo,
+    /// écrit à la main, uniquement pour éprouver le lecteur.
+    fn gguf_synth(tensors: &[(&str, Vec<u64>)], depart: usize, valeur0: f32) -> Vec<u8> {
+        let mut b = Vec::new();
+        let mut s = |b: &mut Vec<u8>, v: &str| {
+            b.extend_from_slice(&(v.len() as u64).to_le_bytes());
+            b.extend_from_slice(v.as_bytes());
+        };
+        b.extend_from_slice(b"GGUF");
+        b.extend_from_slice(&3u32.to_le_bytes());
+        b.extend_from_slice(&(tensors.len() as u64).to_le_bytes());
+        b.extend_from_slice(&2u64.to_le_bytes());        // deux métadonnées
+        // Ordre GGUF : clef, type (u32), valeur.
+        s(&mut b, "general.architecture");
+        b.extend_from_slice(&8u32.to_le_bytes());        // GGUF_TYPE_STRING
+        s(&mut b, "essai");
+        s(&mut b, "general.alignment");
+        b.extend_from_slice(&4u32.to_le_bytes());        // GGUF_TYPE_UINT32
+        b.extend_from_slice(&32u32.to_le_bytes());
+
+        // Les décalages sont relatifs au début du bloc de données de CE fichier.
+        let mut offsets = Vec::new();
+        let mut cur = 0u64;
+        for (_, dims) in tensors {
+            offsets.push(cur);
+            cur += dims.iter().product::<u64>() * 4;
+        }
+        for ((nom, dims), off) in tensors.iter().zip(&offsets) {
+            s(&mut b, nom);
+            b.extend_from_slice(&(dims.len() as u32).to_le_bytes());
+            for d in dims.iter().rev() {                  // ggml écrit à l'envers
+                b.extend_from_slice(&d.to_le_bytes());
+            }
+            b.extend_from_slice(&GGML_F32.to_le_bytes());
+            b.extend_from_slice(&off.to_le_bytes());
+        }
+        while b.len() % 32 != 0 { b.push(0); }
+        for (i, (_, dims)) in tensors.iter().enumerate() {
+            let n = dims.iter().product::<u64>();
+            for k in 0..n {
+                let v = valeur0 + (depart + i) as f32 * 1000.0 + k as f32;
+                b.extend_from_slice(&v.to_le_bytes());
+            }
+        }
+        b
+    }
+
+    /// GGUF synthétique Q8_0 : blocs de 34 octets (échelle f16 + 32 niveaux
+    /// i8). Les niveaux sont `(i % 200) - 100` et l'échelle vaut 0,25, ce qui
+    /// donne des valeurs exactement représentables : le produit scalaire attendu
+    /// se calcule à la main, sans arrondi.
+    fn gguf_synth_q8(nom: &str, n_lignes: usize, n_cols: usize, decalage: i32) -> Vec<u8> {
+        let mut b = Vec::new();
+        let mut s = |b: &mut Vec<u8>, v: &str| {
+            b.extend_from_slice(&(v.len() as u64).to_le_bytes());
+            b.extend_from_slice(v.as_bytes());
+        };
+        b.extend_from_slice(b"GGUF");
+        b.extend_from_slice(&3u32.to_le_bytes());
+        b.extend_from_slice(&1u64.to_le_bytes());
+        b.extend_from_slice(&2u64.to_le_bytes());
+        s(&mut b, "general.architecture");
+        b.extend_from_slice(&8u32.to_le_bytes());
+        s(&mut b, "essai");
+        s(&mut b, "general.alignment");
+        b.extend_from_slice(&4u32.to_le_bytes());
+        b.extend_from_slice(&32u32.to_le_bytes());
+        s(&mut b, nom);
+        b.extend_from_slice(&2u32.to_le_bytes());
+        b.extend_from_slice(&(n_cols as u64).to_le_bytes());
+        b.extend_from_slice(&(n_lignes as u64).to_le_bytes());
+        b.extend_from_slice(&GGML_Q8_0.to_le_bytes());
+        b.extend_from_slice(&0u64.to_le_bytes());
+        while b.len() % 32 != 0 { b.push(0); }
+        for l in 0..n_lignes {
+            for c in 0..n_cols / 32 {
+                b.extend_from_slice(&Gguf::f32_to_f16(0.25).to_le_bytes());
+                for j in 0..32 {
+                    let niveau = (((l * 32 + c * 32 + j) as i32 + decalage) % 200 - 100) as i8;
+                    b.push(niveau as u8);
+                }
+            }
+        }
+        b
+    }
+
+    /// `q8_dot_at` est le chemin le plus chaud du moteur (la tête de sortie) et
+    /// il passe par une vue pré-résolue, donc par un offset. Ce test l'exerce
+    /// contre un calcul direct : c'est le SEUL qui attrape une erreur d'origine
+    /// du pointeur, parce qu'un test comparant deux chemins qui partagent la
+    /// même origine ne peut pas la voir (c'est arrivé : le chemin AVX2 et le
+    /// chemin scalaire étaient faux de la même façon, et la perplexité est
+    /// passée à NaN sans qu'aucun test ne bronche).
+    #[test]
+    fn q8_dot_at_voit_les_bons_octets() {
+        let (n_lignes, n_cols, decalage) = (5usize, 64usize, 7i32);
+        let p = ecrire("drave_gguf_q8.gguf",
+                       &gguf_synth_q8("w", n_lignes, n_cols, decalage));
+        let g = Gguf::open(&p).unwrap();
+        let v = g.q8_view("w");
+        assert_eq!(v.n_cols, n_cols);
+        assert_eq!(v.nb, n_cols / 32);
+        let qx: Vec<i16> = (0..n_cols).map(|i| ((i as i32 % 13) - 6) as i16).collect();
+        for ligne in 0..n_lignes {
+            let attendu: f32 = (0..n_cols).map(|j| {
+                let niveau = (((ligne * 32 + j) as i32 + decalage) % 200 - 100) as f32;
+                0.25 * niveau * qx[j] as f32
+            }).sum();
+            let obtenu = g.q8_dot_at(&v, ligne, &qx);
+            assert!((obtenu - attendu).abs() < 1e-3,
+                    "ligne {ligne} : {obtenu} au lieu de {attendu}");
+        }
+        let _ = std::fs::remove_file(&p);
+    }
+
+    fn ecrire(nom: &str, octets: &[u8]) -> std::path::PathBuf {
+        let p = std::env::temp_dir().join(nom);
+        let mut f = File::create(&p).unwrap();
+        f.write_all(octets).unwrap();
+        p
+    }
+
+    /// Un modèle éclaté en deux fichiers doit se lire EXACTEMENT comme le même
+    /// modèle d'un seul tenant : mêmes métadonnées, mêmes tenseurs, mêmes poids.
+    /// C'est la propriété dont dépend tout le format en clusters — si elle est
+    /// fausse, les mesures faites dessus ne veulent rien dire.
+    #[test]
+    fn multi_fichiers_egale_mono_fichier() {
+        let t1: Vec<(&str, Vec<u64>)> =
+            vec![("blk.0.attn_q.weight", vec![4, 8]), ("blk.1.ffn_gate.weight", vec![2, 3])];
+        let t2: Vec<(&str, Vec<u64>)> =
+            vec![("blk.2.ffn_down.weight", vec![5, 2]), ("blk.3.token_embd.weight", vec![3, 3])];
+        // Mono-fichier : les quatre tenseurs, valeurs de référence.
+        let tous: Vec<(&str, Vec<u64>)> = t1.iter().chain(t2.iter()).cloned().collect();
+        let p_tous = ecrire("drave_gguf_tous.gguf", &gguf_synth(&tous, 0, 1.0));
+        // Éclaté : deux fichiers, quatre tenseurs répartis, valeurs distinctes
+        // PAR FICHIER (un lecteur qui se tromperait de fichier serait démasqué).
+        let p_a = ecrire("drave_gguf_a.gguf", &gguf_synth(&t1, 0, 1.0));
+        let p_b = ecrire("drave_gguf_b.gguf", &gguf_synth(&t2, 2, 1.0));
+
+        let mono = Gguf::open(&p_tous).unwrap();
+        let multi = Gguf::open_multi(&[&p_a, &p_b]).unwrap();
+
+        assert_eq!(mono.tensors.len(), 4);
+        assert_eq!(multi.tensors.len(), 4, "les tenseurs des deux fichiers doivent être réunis");
+        assert_eq!(multi.nb_fichiers(), 2);
+        assert_eq!(multi.meta.get("general.architecture").and_then(|m| m.as_str()),
+                   Some("essai"), "les métadonnées du premier fichier doivent être reprises");
+
+        for (a, b) in mono.tensors.iter().zip(&multi.tensors) {
+            assert_eq!(a.name, b.name);
+            assert_eq!(a.dims, b.dims);
+            assert_eq!(a.ttype, b.ttype);
+            assert_eq!(multi.dequant(&b.name), mono.dequant(&a.name),
+                       "poids divergents pour {}", a.name);
+        }
+        // Le tenseur du second fichier doit VRAIMENT venir du second fichier.
+        assert_eq!(multi.tensor("blk.3.token_embd.weight").unwrap().fichier, 1);
+        assert_eq!(multi.tensor("blk.1.ffn_gate.weight").unwrap().fichier, 0);
+        // Les POIDS sont identiques ; le total des fichiers ne l'est pas, et
+        // c'est normal : chaque morceau paie son propre en-tête. Le comparer
+        // serait comparer deux choses différentes.
+        assert_eq!(multi.octets_poids(), mono.octets_poids());
+        assert!(multi.octets_charges() > mono.octets_charges(),
+                "un modèle éclaté en deux fichiers paie deux en-têtes");
+        let _ = std::fs::remove_file(&p_tous);
+        let _ = std::fs::remove_file(&p_a);
+        let _ = std::fs::remove_file(&p_b);
+    }
+
+    /// Un même nom dans deux fichiers avec des poids différents est une faute
+    /// d'assemblage : elle doit être refusée, pas départagée en silence.
+    #[test]
+    fn multi_fichiers_refuse_les_doublons_divergents() {
+        let t: Vec<(&str, Vec<u64>)> = vec![("blk.0.attn_q.weight", vec![4, 4])];
+        let p_a = ecrire("drave_gguf_d1.gguf", &gguf_synth(&t, 0, 1.0));
+        let p_b = ecrire("drave_gguf_d2.gguf", &gguf_synth(&t, 5, 1.0));
+        let e = match Gguf::open_multi(&[&p_a, &p_b]) {
+            Ok(_) => panic!("un doublon divergent doit être refusé"),
+            Err(e) => e,
+        };
+        assert!(e.to_string().contains("deux fois"), "message inattendu : {e}");
+        // Le même tenseur recopié à l'identique, lui, est toléré.
+        let p_c = ecrire("drave_gguf_d3.gguf", &gguf_synth(&t, 0, 1.0));
+        let ok = Gguf::open_multi(&[&p_a, &p_c]).unwrap();
+        assert_eq!(ok.tensors.len(), 1);
+        for p in [&p_a, &p_b, &p_c] { let _ = std::fs::remove_file(p); }
     }
 }

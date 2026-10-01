@@ -692,3 +692,24 @@ python3 tools/pair_factice.py 45760 896 &
 ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf \
     --ppl-reparti 127.0.0.1:45760 --couches-locales 12 --limit 4 --ctx 256
 ```
+
+## Sprint 08 — un modèle éclaté se lit comme un seul (11:13 → 13:13)
+
+```bash
+# Un dossier qui contient commun.gguf + cluster-XX.gguf + mapping.tsv EST un
+# modèle : aucune option nouvelle. Inventaire par les seuls en-têtes :
+./drave-core/target/release/drave /home/stephane/FastNVMe/artefacts/modeles-optimises/qwen3-30b-8clusters --tensors
+# attendu : 9 fichiers · 1587 tenseurs · 18,55 Go · en-têtes lus en ~0,4 s
+
+# Un GGUF découpé en shards s'ouvre par n'importe lequel de ses morceaux :
+./drave-core/target/release/drave /home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek-V4-Flash-UD-IQ1_M/DeepSeek-V4-Flash-UD-IQ1_M-00001-of-00003.gguf --tensors
+# attendu : 3 fichiers · 1328 tenseurs · 86,90 Go (= la somme des fichiers)
+
+# Portes : Qwen 19,3885 · cargo test 24 verts.
+./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf --ppl /tmp/ids_qwen.txt \
+    --ctx 256 --abits 16 --threads 16 --limit 512 --dense
+```
+
+**Ouvert** : l'épreuve d'exécution origine/clusters (lancée, non lue) ; le chemin
+par lots qui panique sur les MoE (`model.rs:2945`, défaut préexistant) ; `mmap`
+pour les modèles plus gros que la RAM ; le nœud partiel (un seul cluster).

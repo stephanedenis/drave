@@ -82,6 +82,13 @@ fn source_de(t: u32) -> Option<crate::list::Source> {
     }
 }
 
+/// Le mapping global → local, quand le modèle est en clusters. Un modèle
+/// ordinaire n'en a pas : `None`, et le chemin de lecture reste celui d'avant.
+#[inline]
+fn clusters_actifs() -> Option<&'static crate::clusters::Mapping> {
+    crate::clusters::actif()
+}
+
 /// Charge le mélange d'experts d'une couche, s'il existe.
 ///
 /// Les trois tenseurs `ffn_*_exps` sont des tenseurs **3D** dont la première
@@ -90,27 +97,70 @@ fn source_de(t: u32) -> Option<crate::list::Source> {
 fn charger_moe(g: &Gguf, l: usize, n_expert: usize) -> Option<Moe> {
     if n_expert == 0 { return None; }
     let p = |s: &str| format!("blk.{l}.{s}");
-    let vue = |nom: &str| -> Option<Vue4> {
+    let map = clusters_actifs();
+    // Un tenseur d'experts est soit en clair dans le fichier ouvert, soit dans
+    // les fichiers de clusters sous le préfixe `cl{c}/`. Dans le second cas
+    // chaque fichier ne porte QUE ses experts locaux : la dimension d'expert
+    // du tenseur vaut `experts_par_cluster`, pas `n_expert`.
+    let vues = |s: &str| -> Option<Vec<Vue4>> {
+        let base = p(s);
+        let noms: Vec<String> = match map {
+            _ if g.tensor(&base).is_some() => vec![base],
+            Some(m) => (0..m.n_clusters).map(|c| format!("cl{c}/{base}"))
+                          .filter(|n| g.tensor(n).is_some()).collect(),
+            None => return None,
+        };
+        if noms.is_empty() { return None; }
+        let mut out = Vec::with_capacity(noms.len());
+        for nom in &noms {
+            let t = g.tensor(nom)?;
+            if t.dims.len() < 3 { return None; }
+            let ligne_experts = t.dims[0] as usize;
+            if ligne_experts != n_expert {
+                // Un fichier de cluster : sa dimension locale doit être celle
+                // annoncée par le mapping, sinon les lignes seraient lues au
+                // hasard.
+                match map {
+                    Some(m) if ligne_experts == m.par_cluster => {}
+                    _ => return None,
+                }
+            }
+            let src = source_de(t.ttype)?;
+            let (n_out, n_in) = (t.dims[1] as usize, t.dims[2] as usize);
+            let bloc = if t.ttype == crate::gguf::GGML_Q4_K || t.ttype == crate::gguf::GGML_Q6_K { 256 } else { 32 };
+            if n_in % bloc != 0 { return None; }
+            out.push(Vue4 { base: g.data_ptr(nom)?, n_out, n_in, nb: n_in / bloc, src });
+        }
+        Some(out)
+    };
+    // Vue d'un tenseur 3D NON découpé (l'expert partagé, qui reste dans le
+    // fichier commun) : aucune traduction d'index n'est nécessaire.
+    let vue_unique = |nom: &str| -> Option<Vue4> {
         let t = g.tensor(nom)?;
-        if t.dims.len() < 3 || t.dims[0] as usize != n_expert { return None; }
+        if t.dims.len() < 3 { return None; }
         let src = source_de(t.ttype)?;
         let (n_out, n_in) = (t.dims[1] as usize, t.dims[2] as usize);
         let bloc = if t.ttype == crate::gguf::GGML_Q4_K || t.ttype == crate::gguf::GGML_Q6_K { 256 } else { 32 };
         if n_in % bloc != 0 { return None; }
         Some(Vue4 { base: g.data_ptr(nom)?, n_out, n_in, nb: n_in / bloc, src })
     };
-    let gate = vue(&p("ffn_gate_exps.weight"))?;
-    let up = vue(&p("ffn_up_exps.weight"))?;
-    let down = vue(&p("ffn_down_exps.weight"))?;
+    let gate = vues(&p("ffn_gate_exps.weight"))?;
+    let up = vues(&p("ffn_up_exps.weight"))?;
+    let down = vues(&p("ffn_down_exps.weight"))?;
+    if map.is_some() && (gate.len() != up.len() || gate.len() != down.len()) {
+        panic!("couche {l} : {} fichiers de gate, {} de up, {} de down — répartition \
+incohérente entre les trois projections d'experts", gate.len(), up.len(), down.len());
+    }
     let routeur = g.dequant(&p("ffn_gate_inp.weight"));
-    assert_eq!(routeur.len(), n_expert * gate.n_in, "routeur de taille inattendue");
+    assert_eq!(routeur.len(), n_expert * gate[0].n_in, "routeur de taille inattendue");
     // Expert partagé (Qwen3-MoE d'origine, DeepSeek) : toujours actif.
-    let shexp = match (vue(&p("ffn_gate_shexp.weight")), vue(&p("ffn_up_shexp.weight")),
-                       vue(&p("ffn_down_shexp.weight"))) {
+    let shexp = match (vue_unique(&p("ffn_gate_shexp.weight")),
+                       vue_unique(&p("ffn_up_shexp.weight")),
+                       vue_unique(&p("ffn_down_shexp.weight"))) {
         (Some(a), Some(b), Some(c)) => Some((a, b, c)),
         _ => None,
     };
-    let n_ff = gate.n_out;
+    let n_ff = gate[0].n_out;
     let biais = |nom: &str| -> Option<Vec<f32>> {
         let t = g.tensor(nom)?;
         // ne = (n_ff, n_expert) : l'expert est la dimension la plus lente.
@@ -120,12 +170,20 @@ fn charger_moe(g: &Gguf, l: usize, n_expert: usize) -> Option<Moe> {
     let routeur_biais = if g.tensor(&p("ffn_gate_inp.bias")).is_some() {
         Some(g.dequant(&p("ffn_gate_inp.bias")))
     } else { None };
+    let (bg, bu, bd) = (biais(&p("ffn_gate_exps.bias")), biais(&p("ffn_up_exps.bias")),
+                        biais(&p("ffn_down_exps.bias")));
+    // Un modèle en clusters peut avoir des biais par expert : ils sont alors
+    // découpés eux aussi, et les indexer par l'expert GLOBAL lirait la mauvaise
+    // ligne. Plutôt qu'un résultat faux et silencieux, on refuse.
+    if map.is_some() && (bg.is_some() || bu.is_some() || bd.is_some()) {
+        panic!("couche {l} : biais d'experts + clusters — le découpage des biais \
+n'est pas implémenté, et les indexer par l'expert global serait faux");
+    }
     Some(Moe {
         routeur, routeur_biais,
-        biais_gate: biais(&p("ffn_gate_exps.bias")),
-        biais_up: biais(&p("ffn_up_exps.bias")),
-        biais_down: biais(&p("ffn_down_exps.bias")),
+        biais_gate: bg, biais_up: bu, biais_down: bd,
         n_ff, gate, up, down, shexp,
+        couche: l, n_expert_global: n_expert, local: map,
     })
 }
 
@@ -194,11 +252,33 @@ pub struct Moe {
     pub biais_up: Option<Vec<f32>>,
     pub biais_down: Option<Vec<f32>>,
     pub n_ff: usize,
-    pub gate: Vue4,
-    pub up: Vue4,
-    pub down: Vue4,
+    /// Une vue par fichier porteur d'experts. Un GGUF ordinaire n'en a qu'une ;
+    /// un modèle en clusters en a une par `cluster-XX.gguf`, chacune ne
+    /// contenant que ses `experts_par_cluster` lignes.
+    pub gate: Vec<Vue4>,
+    pub up: Vec<Vue4>,
+    pub down: Vec<Vue4>,
+    /// Couche dont ce mélange fait partie (pour le mapping).
+    pub couche: usize,
+    /// Nombre d'experts GLOBAUX : c'est lui qu'indexe le routeur, et lui seul.
+    pub n_expert_global: usize,
+    /// Mapping global → (fichier, ligne) quand le modèle est en clusters.
+    pub local: Option<&'static crate::clusters::Mapping>,
     /// Expert partagé, toujours actif (certains modèles seulement).
     pub shexp: Option<(Vue4, Vue4, Vue4)>,
+}
+
+impl Moe {
+    /// Où trouver l'expert GLOBAL `e` : `(vue, ligne locale)`. `None` signifie
+    /// que cet expert n'est pas dans ce nœud — ce n'est pas une erreur, c'est
+    /// le principe même du découpage.
+    #[inline]
+    pub fn ou(&self, e: usize) -> Option<(usize, usize)> {
+        match self.local {
+            None => if e < self.n_expert_global { Some((0, e)) } else { None },
+            Some(m) => m.ou(self.couche, e),
+        }
+    }
 }
 
 pub struct Layer {
@@ -1393,7 +1473,7 @@ impl Model {
     pub fn load(path: &str, ctx: usize, n_threads: usize, dense: bool, keep: f32,
                 auto: bool, q4: u8, b6: u8) -> Model {
         let t0 = Instant::now();
-        let g = Gguf::open(path).expect("ouverture du GGUF");
+        let g = Gguf::open_auto(path).expect("ouverture du GGUF");
         let cfg = Cfg {
             n_layer: g.cfg("block_count").and_then(|m| m.as_u64()).unwrap_or(0) as usize,
             hidden: g.cfg("embedding_length").and_then(|m| m.as_u64()).unwrap_or(0) as usize,
@@ -2780,13 +2860,15 @@ l'attention par lots est DENSE. Utiliser --lot 1 pour l'attention creuse.", self
                 for e in 0..ne {
                     let g = groupes[e].len();
                     if g == 0 { continue; }
+                    // L'expert global `e` peut ne pas être dans ce nœud.
+                    let Some((k, loc)) = moe.ou(e) else { continue; };
                     for (j, &(i, _)) in groupes[e].iter().enumerate() {
                         xg[j * h..(j + 1) * h].copy_from_slice(&x16[i * h..(i + 1) * h]);
                     }
                     s32g.clear();
                     sxg.clear();
                     for &(i, _) in groupes[e].iter() { s32g.push(s32[i].clone()); sxg.push(sx[i]); }
-                    let mg = moe.gate.expert(e);
+                    let mg = moe.gate[k].expert(loc);
                     self.pool.gemm_dense_q4(&mg, &xg[..g * h], g, &s32g, &sxg,
                                             &mut yq[..mg.n_out * g]);
                     for j in 0..g {
@@ -2795,7 +2877,7 @@ l'attention par lots est DENSE. Utiliser --lot 1 pour l'attention creuse.", self
                                 + moe.biais_gate.as_ref().map_or(0.0, |b| b[e * nff + oo]);
                         }
                     }
-                    let mu = moe.up.expert(e);
+                    let mu = moe.up[k].expert(loc);
                     self.pool.gemm_dense_q4(&mu, &xg[..g * h], g, &s32g, &sxg,
                                             &mut yq[..mu.n_out * g]);
                     for j in 0..g {
@@ -2825,7 +2907,7 @@ l'attention par lots est DENSE. Utiliser --lot 1 pour l'attention creuse.", self
                         s32a.push(crate::list::sommes32(&ga[j * nff..(j + 1) * nff]));
                         sxa.push(ech);
                     }
-                    let md = moe.down.expert(e);
+                    let md = moe.down[k].expert(loc);
                     let mut yd = vec![0f32; md.n_out * g];
                     self.pool.gemm_dense_q4(&md, &ga[..g * nff], g, &s32a, &sxa, &mut yd);
                     for (j, &(i, w)) in groupes[e].iter().enumerate() {
@@ -3585,6 +3667,9 @@ dynamique de {dyn_:.3e} (relatif {:.2e})", mx / dyn_.max(1e-9));
                 for v in down.iter_mut() { *v = 0.0; }
                 for &e in &idx {
                     let w_exp = sc_e[e as usize] * inv_k;
+                    // Traduction pour les modèles en clusters : l'expert global
+                    // `e` n'est pas forcément dans ce nœud.
+                    let Some((kexp, loc)) = moe.ou(e as usize) else { continue; };
                     // ---- experts MXFP4 sur le GPU ----
                     // Le noyau MXFP4 est BIT À BIT identique au chemin CPU
                     // (écart mesuré 0,00e0 sur un expert) : seule la vitesse
@@ -3592,11 +3677,11 @@ dynamique de {dyn_:.3e} (relatif {:.2e})", mx / dyn_.max(1e-9));
                     // montent une fois et restent (cache LRU), sinon on
                     // repasserait 4,4 Mo sur le bus à chaque jeton.
                     let mut fait = false;
-                    if moe.gate.src == crate::list::Source::Mxfp4 {
+                    if moe.gate[0].src == crate::list::Source::Mxfp4 && moe.local.is_none() {
                         if let (Some(machine), Some(cache)) =
                                 (crate::gpu::instance(), self.cache_experts.as_mut()) {
                             if let Some((mg, mu, md)) = cache.obtenir(machine, l, e as usize,
-                                                                      &moe.gate, &moe.up, &moe.down) {
+                                                                      &moe.gate[0], &moe.up[0], &moe.down[0]) {
                                 fait = Self::expert_mxfp4_gpu(
                                     machine, mg, mu, md, &hn, &mut gate, &mut up, &mut exp_out,
                                     &mut down, w_exp, moe, e as usize, cfg.ffn_exp, h,
@@ -3610,18 +3695,18 @@ dynamique de {dyn_:.3e} (relatif {:.2e})", mx / dyn_.max(1e-9));
                                                l, &gate[..cfg.ffn_exp]);
                         continue;
                     }
-                    let mg = moe.gate.expert(e as usize);
+                    let mg = moe.gate[kexp].expert(loc);
                     Self::matvec_q4(pool, &mg, &hn, &mut gate, self.act_levels,
                                     self.act_thresh, tk(4), self.act_renorm, &mut scratch,
                                     moe.biais_gate.as_ref().map(|b| &b[e as usize * moe.n_ff..]));
-                    let mu = moe.up.expert(e as usize);
+                    let mu = moe.up[kexp].expert(loc);
                     Self::matvec_q4(pool, &mu, &hn, &mut up, self.act_levels,
                                     self.act_thresh, tk(5), self.act_renorm, &mut scratch,
                                     moe.biais_up.as_ref().map(|b| &b[e as usize * moe.n_ff..]));
                     Self::activation(&mut gate, &up, cfg.ffn_exp, cfg.ffn_act_oss);
                     Self::compter_neurones(&mut self.profil_neurones, largeur_profil,
                                            l, &gate[..cfg.ffn_exp]);
-                    let md = moe.down.expert(e as usize);
+                    let md = moe.down[kexp].expert(loc);
                     Self::matvec_q4(pool, &md, &gate, &mut exp_out, self.act_levels,
                                     self.act_thresh, tk(6), self.act_renorm, &mut scratch,
                                     // Le biais de descente se découpe par la
