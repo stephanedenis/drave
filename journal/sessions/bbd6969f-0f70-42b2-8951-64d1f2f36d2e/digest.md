@@ -37734,3 +37734,203 @@ corrélation des logits (position 0) : 1.000000
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\ndef patch(p, paires):\n    s=open(p).read()\n    for v,n,nom in paires:\n        assert s.count(v)==1, f\"{p}::{nom}::{s.count(v)}\"\n        s=s.replace(v,n,1)\n    open(p,'w').write(s); print(f\"{p} ok\")\n\npatch … [2868 caractères tronqués]`
+
+  ```
+reports/rapport-logits-gpu-vs-cpu.md ok
+REPRISE.md ok
+6633338 « Accord du top-1 : 511/511 » était faux — 497/511, et l'outil ne le disait pas
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat /tmp/aiguille_topk2.log; date +%H:%M:%S", "description": "Check needle grid progress"}`
+
+  ```
+ctx 4096 · prof 0.1 · complete   :      4096        0.10     oui     256.5  prompt 4114 jetons
+ctx 4096 · prof 0.1 · topk-CPU   :      4096        0.10     oui     238.5  prompt 4114 jetons
+ctx 4096 · prof 0.1 · topk-GPU   : 22:25:45
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"fn run_infer\" -A 40 drave-core/src/main.rs | grep -nE \"forward_lot|forward\\(|lot|pour chaque|for tok\" | head -12", "description": "Check if infer uses lot prefill"}`
+
+  ```
+12:676-        hebb_layer, hebb_q, hebb_out, sans_yarn, lot, ffn_gain,
+27:691-    mdl.lot = lot.max(1);
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"fn run_infer\" drave-core/src/main.rs && sed -n \"$(grep -n 'fn run_infer' drave-core/src/main.rs | cut -d: -f1),+50p\" drave-core/src/main.rs | grep -nE \"forward|lot|prompt|jeton\" | head -12", "description": "Locate infe … [8 caractères tronqués]`
+
+  ```
+665:fn run_infer(opt: Options) {
+7:        ids: mut ids, ids_file, prompt, n: n_new, temp, top_p, topk, rep_pen, hist,
+12:        hebb_layer, hebb_q, hebb_out, sans_yarn, lot, ffn_gain,
+16:    // Défauts du mode INFÉRENCE : 512 jetons, la moitié des cœurs (l'attente
+27:    mdl.lot = lot.max(1);
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && awk 'NR>=665 && NR<=900 && (/forward_lot|forward\\(|--lot|lot >|prompt_len|préremplissage|prefill/)' drave-core/src/main.rs | head -12", "description": "Search infer body for lot usage"}`
+
+  ```
+for (pos, &t) in ids.iter().enumerate() { last = mdl.forward(t, pos); }
+            last = mdl.forward(next, ids.len() + step);
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"forward_lot\" drave-core/src/main.rs drave-core/src/model.rs | head -8; cat /tmp/aiguille_topk2.log | tail -3; date +%H:%M:%S", "description": "Confirm forward_lot callers"}`
+
+  ```
+drave-core/src/main.rs:1542:            // `forward_lot` qui le consomme. L'appeler ici serait une erreur de
+drave-core/src/main.rs:1585:    /// Le lot aplati, pour le nœud qui doit le rendre à `forward_lot`.
+drave-core/src/main.rs:2060:                    let hs = mdl.forward_lot(&vec![0u32; t], f.pos as usize);
+drave-core/src/main.rs:2153:            let hs = mdl.forward_lot(&ids[pos..pos + t], pos);
+drave-core/src/main.rs:2198:            let hs = mdl.forward_lot(&ids[pos..pos + t], pos);
+drave-core/src/main.rs:3997:            let hs = mdl.forward_lot(&chunk[pos..pos + t], pos);
+drave-core/src/model.rs:922:    /// États imposés pour un LOT entier (`forward_lot`) : `t × hidden`, aplati.
+drave-core/src/model.rs:1368:/// Un seul message pour `--attn-topk` ignoré en mode lot (voir `forward_lot`).
+ctx 4096 · prof 0.1 · complete   :      4096        0.10     oui     256.5  prompt 4114 jetons
+ctx 4096 · prof 0.1 · topk-CPU   :      4096        0.10     oui     238.5  prompt 4114 jetons
+ctx 4096 · prof 0.1 · topk-GPU   : 22:26:07
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/ceremonie3.md <<'EOF'\n\n**Objectif du sprint** : « Qualité de l'attention creuse à long contexte : aiguille à\n4k/8k/16k croisée avec `--attn-topk 256`, et instruction du doute sur le déport des\nprojections ». **Le doute … [5068 caractères tronqués]`
+
+  ```
+ctx 4096 · prof 0.1 · complete   :      4096        0.10     oui     256.5  prompt 4114 jetons
+ctx 4096 · prof 0.1 · topk-CPU   :      4096        0.10     oui     238.5  prompt 4114 jetons
+ctx 4096 · prof 0.1 · topk-GPU   :      4096        0.10     oui     243.1  prompt 4114 jetons
+ctx 4096 · prof 0.5 · complete   : 22:30:21
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"for (pos, &t) in ids.iter().enumerate()\" -B 8 -A 6 drave-core/src/main.rs | head -30", "description": "Read infer prompt loop for sprint 4 design"}`
+
+  ```
+878-        }
+879-        return;
+880-    }
+881-
+882-    let (out, st) = if topk > 0 {
+883-        // pas-à-pas : utile pour confronter les logits à la référence numpy
+884-        let t0 = Instant::now();
+885-        let mut last = Vec::new();
+886:        for (pos, &t) in ids.iter().enumerate() { last = mdl.forward(t, pos); }
+887-        let mut out = Vec::with_capacity(n_new);
+888-        for step in 0..n_new {
+889-            let lg = mdl.logits(&last);
+890-            let mut rank: Vec<u32> = (0..lg.len() as u32).collect();
+891-            rank.sort_unstable_by(|&a, &b| lg[b as usize].partial_cmp(&lg[a as usize]).unwrap());
+892-            print!("  pas {step:2} : ");
+--
+2155-            for i in 0..t {
+2156-                if pos + i + 1 < ids.len() {
+2157-                    nll_ref += nll_logits(&lgs[i], ids[pos + i + 1]);
+2158-                }
+2159-            }
+2160-            pos += t;
+2161-        }
+2162-    } else {
+2163:        for (pos, &t) in ids.iter().enumerate() {
+2164-            let last = mdl.forward(t, pos);
+2165-            if pos + 1 < ids.len() {
+2166-                nll_ref += nll_logits(&mdl.logits(&last), ids[pos + 1]);
+2167-            }
+2168-        }
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"let last = mdl.forward\" drave-core/src/main.rs | head -5 && sed -n '2140,2175p' drave-core/src/main.rs", "description": "Read the rest of infer prompt handling"}`
+
+  ```
+2164:            let last = mdl.forward(t, pos);
+(le premier ne prédit rien) — reçu {}. Rien n'a été calculé.", ids.len());
+        return;
+    }
+    println!("[flux] pilote : {couches_locales} couches en local, {} chez le pair, {} jetons",
+             n_layer - couches_locales, ids.len());
+
+    // 1. référence locale, tout le modèle (même découpage que le chemin réparti)
+    let t0 = Instant::now();
+    let mut nll_ref = 0f64;
+    if lot > 1 {
+        let mut pos = 0usize;
+        while pos < ids.len() {
+            let t = lot.min(ids.len() - pos);
+            let hs = mdl.forward_lot(&ids[pos..pos + t], pos);
+            let lgs = mdl.logits_lot(&hs);
+            for i in 0..t {
+                if pos + i + 1 < ids.len() {
+                    nll_ref += nll_logits(&lgs[i], ids[pos + i + 1]);
+                }
+            }
+            pos += t;
+        }
+    } else {
+        for (pos, &t) in ids.iter().enumerate() {
+            let last = mdl.forward(t, pos);
+            if pos + 1 < ids.len() {
+                nll_ref += nll_logits(&mdl.logits(&last), ids[pos + 1]);
+            }
+        }
+    }
+    let ppl_ref = (nll_ref / (ids.len() - 1) as f64).exp();
+    println!("  référe
+… [307 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 480; cat /tmp/aiguille_topk2.log; date +%H:%M:%S", "description": "Wait for more needle results", "timeoutMs": 540000}`
+
+  ```
+ctx 4096 · prof 0.1 · complete   :      4096        0.10     oui     256.5  prompt 4114 jetons
+ctx 4096 · prof 0.1 · topk-CPU   :      4096        0.10     oui     238.5  prompt 4114 jetons
+ctx 4096 · prof 0.1 · topk-GPU   :      4096        0.10     oui     243.1  prompt 4114 jetons
+ctx 4096 · prof 0.5 · complete   :      4096        0.50     oui     246.5  prompt 4114 jetons
+ctx 4096 · prof 0.5 · topk-CPU   :      4096        0.50     NON     242.0  prompt 4114 jetons
+ctx 4096 · prof 0.5 · topk-GPU   : 22:38:40
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 540; cat /tmp/aiguille_topk2.log; date +%H:%M:%S", "description": "Wait for depth 0.9 results", "timeoutMs": 600000}`
+
+  ```
+ctx 4096 · prof 0.1 · complete   :      4096        0.10     oui     256.5  prompt 4114 jetons
+ctx 4096 · prof 0.1 · topk-CPU   :      4096        0.10     oui     238.5  prompt 4114 jetons
+ctx 4096 · prof 0.1 · topk-GPU   :      4096        0.10     oui     243.1  prompt 4114 jetons
+ctx 4096 · prof 0.5 · complete   :      4096        0.50     oui     246.5  prompt 4114 jetons
+ctx 4096 · prof 0.5 · topk-CPU   :      4096        0.50     NON     242.0  prompt 4114 jetons
+ctx 4096 · prof 0.5 · topk-GPU   :      4096        0.50     NON     267.6  prompt 4114 jetons
+ctx 4096 · prof 0.9 · complete   :      4096        0.90     oui     249.9  prompt 4114 jetons
+ctx 4096 · prof 0.9 · topk-CPU   : 22:47:48
+  ```
+
+- **write** `{"content": "# Rapport — l'attention creuse perd-elle l'information ? (aiguille × `--attn-topk`)\n\n**En une ligne** : à 4 096 clés, une attention qui ne garde que **256 clés (6 %)** \nretrouve l'information placée **au début** (profondeur 0,1) et **à la fin**\n(0,9, mesuré ci-dessous), mais **pas a … [3568 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-aiguille-topk.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 420; cat /tmp/aiguille_topk2.log | tail -5; date +%H:%M:%S", "description": "Wait for depth 0.9 results", "timeoutMs": 480000}`
+
+  ```
+ctx 4096 · prof 0.5 · topk-GPU   :      4096        0.50     NON     267.6  prompt 4114 jetons
+ctx 4096 · prof 0.9 · complete   :      4096        0.90     oui     249.9  prompt 4114 jetons
+ctx 4096 · prof 0.9 · topk-CPU   :      4096        0.90     oui     236.4  prompt 4114 jetons
+ctx 4096 · prof 0.9 · topk-GPU   :      4096        0.90     oui     248.3  prompt 4114 jetons
+ctx 8192 · prof 0.5 · complete   : 22:55:05
+  ```
+
+- **bash** `{"command": "for pid in $(ps -eo pid,args | grep -E \"aig2\\.sh|tools/aiguille\\.py\" | grep -v grep | awk '{print $1}'); do kill $pid 2>/dev/null; done; sleep 2; ps -eo pid,args | grep -E \"aig2\\.sh|tools/aiguille\\.py\" | grep -v grep | wc -l; date +%H:%M:%S", "description": "Stop the 8192 probes … [2 caractères tronqués]`
+
+  ```
+0
+22:55:13
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/rapport-aiguille-topk.md'; s=open(p).read()\nvieux = \"\"\"| contexte | profondeur | attention complète | top-k 256 CPU | top-k 256 GPU |\n|---|---|---|---|---|\n| 4 096 | 0,1 | **oui** (256,5 s) | **oui* … [2224 caractères tronqués]`
+
+  ```
+rapport aiguille complet
+=== portes sprint 3 ===
+Qwen : perplexité 19.3885 sur 510 tokens
+gpt-oss : perplexité 15.1757 sur 510 tokens
+tests : test result: ok. 17 passed
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\n# La cérémonie : on remplace la grille partielle par la grille complète et on\n# ajoute la lecture qui compte pour la mission.\np='/tmp/ceremonie3.md'; s=open(p).read()\nvieux = \"\"\"| contexte | profondeur | compl … [4935 caractères tronqués]`
