@@ -145,11 +145,27 @@ def main():
             f.write(ligne + "\n")
 
     if args.etat:
+        # ⚠️ Le fichier est PRÉALLOCÉ à sa taille finale (pour écrire des tranches
+        # au bon endroit) : `getsize` dit donc 100 % dès le premier octet reçu.
+        # L'avancement réel est dans le sidecar de tranches.
         par_nom = {}
         for e in entrees:
             d = par_nom.setdefault(e["nom"], [0, 0])
             p = os.path.join(args.dest, e["nom"], os.path.basename(e["chemin"]))
-            d[0] += os.path.getsize(p) if os.path.exists(p) else 0
+            etat_side = p + ".etat.json"
+            fait = 0
+            if os.path.exists(etat_side):
+                # Les tranches notent leur prochaine position ABSOLUE : sommer les
+                # valeurs compterait les débuts de tranche. On retire ces débuts
+                # (mêmes bornes que `telecharger`, donc `fils` tranches égales).
+                et = json.load(open(etat_side))
+                fils = max(1, len(et))
+                pas = (e["octets"] + fils - 1) // fils
+                fait = min(sum(max(0, int(v) - int(i) * pas)
+                               for i, v in et.items()), e["octets"])
+            elif os.path.exists(p):
+                fait = min(os.path.getsize(p), e["octets"])
+            d[0] += fait
             d[1] += e["octets"]
         for nom, (fait, total) in sorted(par_nom.items()):
             print(f"{nom:28} {humain(fait):>10} / {humain(total):>10}  "

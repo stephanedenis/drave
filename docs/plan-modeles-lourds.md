@@ -1,0 +1,106 @@
+# Plan — les modèles lourds : les télécharger, les analyser, découper leurs MoE
+
+**En une ligne** : la bibliothèque brute vit sur le disque mécanique (4,7 To
+libres), le NVMe ne sert plus qu'aux fichiers que NOUS produisons ; une file de
+**1,14 To** de modèles lourds est en téléchargement, et le même protocole de mesure
+que celui du sprint précédent (trace de routage → découpage en clusters) doit
+passer sur eux pour décider du format.
+
+## Pourquoi eux
+
+Notre mode d'opération — listes d'événements, experts allumés un par un, mémoire
+paginée, déport GPU partiel — ne se juge pas sur un modèle de 0,5B. Les décisions
+de format (disposition des experts, manifeste multi-shards, index de routage) n'ont
+de sens que sur les modèles qui ont **beaucoup d'experts** et **1 M de contexte**.
+« Pouvoir rouler du best of breed » veut dire : ouvrir ces fichiers tels qu'ils sont
+publiés, sans les requantifier.
+
+## Ce qui est disponible (relevé sur Hugging Face, 01/10)
+
+| modèle | pourquoi lui | plus petit GGUF | contexte | état |
+|---|---|---|---|---|
+| **DeepSeek-V4.1-Flash** | le plus lourd des ouverts, MoE, agentique | **365,7 Go** (Q2) | — | **en cours** (26 % à 09h36) |
+| **DeepSeek-V4** | la version complète | 3 761 Go | 1 M | hors budget disque |
+| **Kimi-K2.7-Code** | le meilleur agent de code ouvert | **303,9 Go** (UD-IQ1_M) | 262 k | en file |
+| **GLM-5.3** | 1 M de contexte, MoE | **216,7 Go** (UD-IQ1_S) | 1 M | en file |
+| **GLM-5.3-Flash** | le même en plus léger | **93,1 Go** (UD-IQ1_S) | 1 M | en file |
+| **MiniMax-H3** | famille différente (vision+langage) | 22,8 Go (2 × Q4_K) | — | en file |
+| **Qwen3-235B-A22B** | la référence MoE de 2025 | **85,7 Go** (Q2_K) | 262 k | en file |
+| **DeepSeek-V4-Flash** | déjà téléchargé (86,9 Go) | — | 1 M | ✅ sur le disque mécanique |
+| gpt-oss-120b, Qwen3-30B-A3B, Muse-Glimmer-30B | déjà là, servent de témoins | — | 128 k–262 k | ✅ |
+
+**Budget** : 1,14 To de téléchargement pour ~4,9 To libres sur le disque
+mécanique. Le disque NVMe (474 Go) ne reçoit **que** les artefacts produits
+(experts réordonnés, index, traces, caches) — c'est la règle demandée.
+
+## La mécanique de téléchargement (écrite, mesurée, reprenable)
+
+`tools/telecharger_modeles.py` + `tools/manifeste_modeles_lourds.json` :
+
+* **tranches `Range` de 256 Mo sur 6 connexions** : mesuré nécessaire — le pont Xet
+  de Hugging Face refuse un GET plein sur le fichier de 365,7 Go (**HTTP 400**) et
+  sert très bien les requêtes par tranches (**206**). Débit obtenu : 56–81 Mo/s
+  contre 5–62 Mo/s en une seule connexion, et instable ;
+* **reprise par tranche** : l'avancement de chaque tranche est noté dans un sidecar
+  JSON, donc un arrêt (ou une coupure) ne coûte que la tranche en cours ;
+* **garde-fou de disque** : la file s'arrête sous 300 Go libres ;
+* **état** : `python3 tools/telecharger_modeles.py --etat`.
+
+```bash
+python3 tools/telecharger_modeles.py                 # toute la file
+python3 tools/telecharger_modeles.py --seulement GLM-5.3-UD-IQ1_S
+```
+
+## Ce qu'on leur fera (le protocole, déjà rodé)
+
+1. **Trace de routage** — `DRAVE_TRACE_EXPERTS=<fichier>`, une ligne par (couche,
+   jeton) : les experts retenus. Ajouté au moteur pour Qwen3-30B-A3B (voir
+   `reports/rapport-decoupage-moe.md`) et **indépendant du modèle**.
+2. **Découpage en clusters** — `tools/clusters_moe.py` : couverture, ventilation,
+   deux témoins (hasard, fréquence). Le premier résultat est un résultat NÉGATIF
+   utile : sur Qwen3-30B-A3B, trier les experts par fréquence donne exactement la
+   même partition que la co-activation (accord 1,000). À vérifier sur 256 experts
+   et plus — c'est là que la co-activation pourrait enfin apporter quelque chose.
+3. **Décision de format** à partir des mesures :
+   * **manifeste multi-shards** (`MANIFEST.json`) : indispensable de toute façon,
+     les modèles lourds sont livrés en 3 à 8 shards et le moteur n'ouvre qu'un
+     fichier ;
+   * **index MoE** (`*.moe.json`) : par couche, l'ordre des experts (fréquence ou
+     clusters) et leurs plages dans les shards ;
+   * **disposition contiguë par cluster** : un nœud ne lit que sa tranche, en
+     séquentiel (NVMe→RAM→VRAM), au lieu de sauter dans tout le fichier.
+4. **Le banc de bout en bout** : perplexité sur 512 jetons, comparable à
+   llama.cpp, ou l'écart expliqué — c'est la définition de « capable de rouler du
+   best of breed ».
+
+## Les architectures à implémenter (l'état des lieux)
+
+| modèle | architecture GGUF | ce que le moteur a | ce qui manque |
+|---|---|---|---|
+| DeepSeek-V4 / V4-Flash / V4.1-Flash | `deepseek4` (43 couches, 256 experts top-6, 1 M ctx) | lecture des métadonnées et du tokenizer ✅ (129 280 jetons, aller-retour identique) ; MoE 128/top-8 (gpt-oss, Qwen3) ; attention MLA validée sur modèle synthétique (5,2e-7) | le forward `deepseek4`, et le **lecteur multi-shards** |
+| Kimi-K2.7 | `kimi_k25` | — | tout le forward |
+| GLM-5.3 | à relever | — | tout le forward |
+| Qwen3-235B-A22B | `qwen3moe` | MoE Qwen3 ✅ (128/top-8) | le passage de 128 à 256 experts, le contexte 262 k |
+| MiniMax-H3 | vision+langage | vision Qwen2.5-VL ✅ | à relever |
+
+Le premier chantier est donc **commun à tous** : lire un GGUF en plusieurs
+fichiers. C'est de la plomberie, pas de la recherche, et ça débloque tout le reste
+(y compris DeepSeek-V4-Flash, déjà sur le disque).
+
+## Ordre de travail proposé
+
+| # | étape | critère de succès |
+|---|---|---|
+| 1 | **lecteur multi-shards** | les 3 shards de DeepSeek-V4-Flash ouverts ensemble, un tenseur du shard 2 résolu avec les métadonnées du shard 1 |
+| 2 | **tokenizer + gabarit** de DeepSeek-V4.1 | aller-retour identique sur Wikitext-2, un tour de conversation bien formé (jetons `｜User｜`/`｜Assistant｜`/`｜DSML｜`) |
+| 3 | **forward deepseek4** (attention latente + MoE 256/top-6) | perplexité sur 512 jetons comparable à llama.cpp, ou l'écart expliqué |
+| 4 | **trace + découpage** sur les trois gros MoE | la question « fréquence ou co-activation ? » tranchée à 256 experts et plus |
+| 5 | **format** : manifeste + index + disposition contiguë | un nœud ne lit que sa tranche, mesuré (octets lus par jeton, avant/après) |
+
+## Reprendre le téléchargement
+
+```bash
+cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet
+python3 tools/telecharger_modeles.py --etat
+tail -5 /tmp/telechargement_lourds.log
+```

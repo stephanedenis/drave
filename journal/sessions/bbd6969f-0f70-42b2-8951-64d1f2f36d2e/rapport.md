@@ -7,12 +7,12 @@
 | Début | 2026-09-28 14:46 |
 | Durée | 66.9 h |
 | Tours | 49 |
-| Messages | 2674 |
-| Appels d'outils | 2533 |
-| Fichiers touchés | 56 |
-| Commandes | 2164 |
+| Messages | 2682 |
+| Appels d'outils | 2541 |
+| Fichiers touchés | 57 |
+| Commandes | 2171 |
 | Sous-agents | 20 |
-| Commits | 235 |
+| Commits | 236 |
 | Compactages de contexte | 3 |
 
 ## Objectifs déclarés
@@ -2277,7 +2277,7 @@ Fusionner la sélection en un noyau par ligne (8 lancements → 2), supprimer le
 
 ### Tour 49 — prévoir de télécharger les modèles les plus lourds aussi pour les analyser et faire le découpage des MoE/clusters optimi … [134 caractères tronqués]
 
-*65 appels d'outils.* Actions notables :
+*73 appels d'outils.* Actions notables :
 
 - bash — Check time, disk and existing models
 - web_fetch
@@ -2293,7 +2293,7 @@ Fusionner la sélection en un noyau par ligne (8 lancements → 2), supprimer le
 - bash — Check HDD permissions
 - bash — Measure HDD write speed in my subtree
 - bash — Stop NVMe download, prepare HDD library
-- … et 51 autres
+- … et 59 autres
 
 ## 3. Travail accompli
 
@@ -2357,6 +2357,7 @@ Fusionner la sélection en un noyau par ligne (8 lancements → 2), supprimer le
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/telecharger_modeles.py` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/clusters_moe.py` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-decoupage-moe.md` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/plan-modeles-lourds.md` | 1 | 0 |
 
 ### Sous-agents lancés
 
@@ -2423,7 +2424,7 @@ Fusionner la sélection en un noyau par ligne (8 lancements → 2), supprimer le
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 2124 autres
+- … et 2131 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2551,7 +2552,7 @@ Fusionner la sélection en un noyau par ligne (8 lancements → 2), supprimer le
 
 ## 5. Erreurs rencontrées
 
-115 sorties en erreur ou divergentes. Les premières :
+116 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : a8f2635f8 docs: record which models this box is good at, and why src/llama-hparams.cpp:8:void llama_hparams::set_swa_pattern(uint32_t n_pattern, bool dense_first) { src/llama-hparams.h:308:    void se
 - **T1** : 511 tokens notés — perplexité cumulée 247.031  (4.9 tok/s) === perplexité 247.0308 sur 511 tokens (0 événements, 104.5 s) ===  ### B3 harmony assistant 511 --- ref --- 0.0 0.0 0:00 ls: cannot access '
@@ -2806,4 +2807,5 @@ Fusionner la sélection en un noyau par ligne (8 lancements → 2), supprimer le
 - Journal : index des sessions (fin de nuit)" 2>/dev/null; git status --short | wc -l; ls sprints/*.md | wc -l; du -sh /home/stephane/FastNVMe/models/DeepSeek-V4-
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF' # Le plan DeepSeek doit refléter le déménagement ET la reprise du téléchargement. p = 
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 120 python3 tools/clusters_moe.py --help > /dev/null 2>&1; echo "outil ok"; git add -A && git comm
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -F - <<'EOF' && git log --oneline -1 Modèles lourds : file de 1,14 To en téléc
 

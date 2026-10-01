@@ -41863,3 +41863,105 @@ M  journal/sessions/bbd6969f-0f70-42b2-8951-64d1f2f36d2e/rapport.md
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 120 python3 tools/clusters_moe.py --help > /dev/null 2>&1; echo \"outil ok\"; git add -A && git commit -q -F - <<'EOF' && git log --oneline -1\nDécoupage des MoE : la fréquence suffit, la co-activation n'ajoute rien (accord 1 … [1349 caractères tronqués]`
+
+  ```
+outil ok
+b83d284 Découpage des MoE : la fréquence suffit, la co-activation n'ajoute rien (accord 1,000)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && wc -l /tmp/routage_gptoss.txt 2>/dev/null; tail -2 /tmp/trace_oss.out; timeout 300 python3 tools/clusters_moe.py /tmp/routage_gptoss.txt --clusters 8 2>&1 | grep -E \"trace :|accord|MOYENNE\" | head -6", "description": "Analyze the g … [35 caractères tronqués]`
+
+  ```
+[attention] QT_IM_SWITCHER est l'ancien nom d'une variable d'environnement : elles s'appellent maintenant DRAVE_* (voir docs/histoire.md). Rien n'a été appliqué.
+/tmp/ids_oss_512.txt : 512 tokens, fenêtres de 512
+  ```
+
+- **write** `{"content": "# Plan — les modèles lourds : les télécharger, les analyser, découper leurs MoE\n\n**En une ligne** : la bibliothèque brute vit sur le disque mécanique (4,7 To\nlibres), le NVMe ne sert plus qu'aux fichiers que NOUS produisons ; une file de\n**1,14 To** de modèles lourds est en téléchar … [6206 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/plan-modeles-lourds.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/telecharger_modeles.py --etat 2>&1 | head -10; echo \"=== journal ===\"; tail -3 /tmp/telechargement_lourds.log; echo \"=== rattrapage V4-Flash ===\"; tail -2 /tmp/tl_v4flash_rattrapage.log; wc -l /tmp/routage_gptoss.tx … [61 caractères tronqués]`
+
+  ```
+DeepSeek-V4-Flash-UD-IQ1_M      50.0 Go /    50.0 Go  100.0 %
+DeepSeek-V4.1-Flash-Q2         365.7 Go /   365.7 Go  100.0 %
+GLM-5.3-Flash-UD-IQ1_S           0.0 Go /    93.1 Go    0.0 %
+GLM-5.3-UD-IQ1_S                 0.0 Go /   216.7 Go    0.0 %
+Kimi-K2.7-Code-UD-IQ1_M          0.0 Go /   303.9 Go    0.0 %
+MiniMax-H3                       0.0 Go /    22.8 Go    0.0 %
+Qwen3-235B-A22B-Q2_K             0.0 Go /    85.7 Go    0.0 %
+libre : 4835 Go
+=== journal ===
+09:39:43    97.2 Go / 365.7 Go (26.6 %, 52 Mo/s)
+09:40:18    97.7 Go / 365.7 Go (26.7 %, 51 Mo/s)
+09:40:48    98.2 Go / 365.7 Go (26.9 %, 51 Mo/s)
+=== rattrapage V4-Flash ===
+09:40:21    31.1 Go / 50.0 Go (62.3 %, 32 Mo/s)
+09:40:51    31.7 Go / 50.0 Go (63.4 %, 32 Mo/s)
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np = 'tools/telecharger_modeles.py'; s = open(p).read()\nv = \"\"\"    if args.etat:\n        par_nom = {}\n        for e in entrees:\n            d = par_nom.setdefault(e[\"nom\"], [0, 0])\n            p = os.pat … [1314 caractères tronqués]`
+
+  ```
+état corrigé (sidecar)
+DeepSeek-V4-Flash-UD-IQ1_M     156.6 Go /    50.0 Go  313.4 %
+DeepSeek-V4.1-Flash-Q2        1012.5 Go /   365.7 Go  276.9 %
+GLM-5.3-Flash-UD-IQ1_S           0.0 Go /    93.1 Go    0.0 %
+GLM-5.3-UD-IQ1_S                 0.0 Go /   216.7 Go    0.0 %
+Kimi-K2.7-Code-UD-IQ1_M          0.0 Go /   303.9 Go    0.0 %
+MiniMax-H3                       0.0 Go /    22.8 Go    0.0 %
+Qwen3-235B-A22B-Q2_K             0.0 Go /    85.7 Go    0.0 %
+libre : 4834 Go
+2818839       12:08 bash -c DRAVE_TRACE_EXPERTS=/tmp/routage_gptoss.txt timeout 3600 ./drave-core/target/release/drave /home/stephane/Data13TB/stephane/modeles/gguf/gpt-oss-120b-MXFP4.gguf --ppl /tmp/ids_oss_512.txt --ctx 512 --limit 512 --lot 64 --threads 16 > /tmp/trace_oss.out 2>&1; echo FINI >> /tmp/trace_oss.out
+2818841       12:08 timeout 3600 ./drave-core/target/release/drave /home/stephane/Data13TB/stephane/modeles/gguf/gpt-oss-120b-MXFP4.gguf --ppl /tmp/ids_oss_512.txt --ctx 512 --limit 512 --lot 64 --threads 16
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='tools/telecharger_modeles.py'; s=open(p).read()\ns = s.replace(\"\"\"                et = json.load(open(etat_side))\n                fait = sum(et.values())\"\"\",\n\"\"\"                et = json.load(open(e … [470 caractères tronqués]`
+
+  ```
+plafonné
+DeepSeek-V4-Flash-UD-IQ1_M      50.0 Go /    50.0 Go  100.0 %
+DeepSeek-V4.1-Flash-Q2         365.7 Go /   365.7 Go  100.0 %
+GLM-5.3-Flash-UD-IQ1_S           0.0 Go /    93.1 Go    0.0 %
+GLM-5.3-UD-IQ1_S                 0.0 Go /   216.7 Go    0.0 %
+syntaxe OK
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='tools/telecharger_modeles.py'; s=open(p).read()\nv = \"\"\"            if os.path.exists(etat_side):\n                et = json.load(open(etat_side))\n                fait = min(sum(et.values()), e[\"octets\"] … [800 caractères tronqués]`
+
+  ```
+état recalculé
+09:40:48    98.2 Go / 365.7 Go (26.9 %, 51 Mo/s)
+09:41:18    98.8 Go / 365.7 Go (27.0 %, 50 Mo/s)
+[stderr]
+Traceback (most recent call last):
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/telecharger_modeles.py", line 196, in <module>
+    sys.exit(main())
+             ~~~~^^
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/telecharger_modeles.py", line 164, in main
+    fait = min(sum(max(0, v - i * pas) for i, v in et.items()), e["octets"])
+               ~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/telecharger_modeles.py", line 164, in <genexpr>
+    fait = min(sum(max(0, v - i * pas) for i, v in et.items()), e["octets"])
+                          ~~^~~~~~~~~
+TypeError: unsupported operand type(s) for -: 'int' and 'str'
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='tools/telecharger_modeles.py'; s=open(p).read()\ns = s.replace(\"\"\"                fait = min(sum(max(0, v - i * pas) for i, v in et.items()), e[\"octets\"])\"\"\",\n\"\"\"                fait = min(sum(max( … [256 caractères tronqués]`
+
+  ```
+clés converties
+DeepSeek-V4-Flash-UD-IQ1_M      32.7 Go /    50.0 Go   65.5 %
+DeepSeek-V4.1-Flash-Q2          99.3 Go /   365.7 Go   27.2 %
+GLM-5.3-Flash-UD-IQ1_S           0.0 Go /    93.1 Go    0.0 %
+GLM-5.3-UD-IQ1_S                 0.0 Go /   216.7 Go    0.0 %
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -F - <<'EOF' && git log --oneline -1\nModèles lourds : file de 1,14 To en téléchargement, plan écrit, état honnête\n\n`docs/plan-modeles-lourds.md` : relevé des modèles les plus lourds disponibles\n(DeepSe … [962 caractères tronqués]`
