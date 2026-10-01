@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 75.3 h |
+| Durée | 75.4 h |
 | Tours | 64 |
-| Messages | 3161 |
-| Appels d'outils | 2992 |
+| Messages | 3165 |
+| Appels d'outils | 2996 |
 | Fichiers touchés | 68 |
-| Commandes | 2601 |
+| Commandes | 2605 |
 | Sous-agents | 22 |
-| Commits | 260 |
+| Commits | 261 |
 | Compactages de contexte | 4 |
 
 ## Objectifs déclarés
@@ -3161,7 +3161,7 @@ Ce dernier chiffre explique d'un coup pourquoi *aucune* piste de prédiction ne 
 
 ### Tour 64 — utilisons les logs de cette session (journal/session) pour les rejouer localement et analyser le comportement, couche pa … [94 caractères tronqués]
 
-*12 appels d'outils.* Actions notables :
+*16 appels d'outils.* Actions notables :
 
 - bash — Inventory session journal
 - bash — Tokenize journal and trace routing
@@ -3172,10 +3172,14 @@ Ce dernier chiffre explique d'un coup pourquoi *aucune* piste de prédiction ne 
 - bash — Run comparative analysis on journal trace
 - bash — Add journal analysis to report
 - bash — Commit journal analysis
+- bash — Check journal trace progress
+- bash — Wait for trace
+- bash — Layer-by-layer comparison of journal vs generic corpora
+- bash — Commit layer-by-layer journal analysis
 
 **Synthèse produite :**
 
-⏵ Résultat : notre usage réel se comporte comme le français — mais **l'anglais est 25 % plus réductible**. Je consigne.
+⏵ Analyse couche par couche faite. Je consigne et je conclus.
 
 ## 3. Travail accompli
 
@@ -3319,7 +3323,7 @@ Ce dernier chiffre explique d'un coup pourquoi *aucune* piste de prédiction ne 
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 2561 autres
+- … et 2565 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -3727,4 +3731,5 @@ Ce dernier chiffre explique d'un coup pourquoi *aucune* piste de prédiction ne 
 - Sprint 09 : ceremonie (onze pistes mesurees, trois retenues)" && git log --oneline -3; echo "=== état final ==="; (cd drave-core && cargo test --release 2>&1 | 
 - Journal" 2>/dev/null; echo "=== documents de la session ==="; for f in reports/rapport-empreinte-memoire.md sprints/09-empreinte-memoire-ce-qui-reduit-vraiment.
 - Rejouer notre propre journal : notre usage ne change pas l'empreinte, la langue si  Les 28 sessions du journal (59 Mo, 2,5 M jetons) tokenisees et routees. L'em
+- Analyse couche par couche du journal : il se place entre le francais et l'anglais  Le journal demande 58,1 experts pour 90 % des appels, entre le francais (59,3
 

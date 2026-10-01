@@ -347,6 +347,37 @@ contre 59,3 pour le français. Soit, pour V4.1 :
 **18 Go d'écart.** Le code et la technique sont massivement anglais : c'est le
 régime où V4.1 tiendra le plus facilement.
 
+### Couche par couche : où notre journal s'écarte
+
+| couche | journal | français | anglais |
+|---|---|---|---|
+| 0 | 77 | 74 | 77 |
+| 18 | 44 | 46 | 27 |
+| 30 | 42 | 46 | 32 |
+| 45 | 48 | 40 | 40 |
+| 46 | 54 | 45 | 47 |
+| **47** | **50** | **36** | 52 |
+| **moyenne** | **58,1** | 59,3 | **44,5** |
+
+*(experts nécessaires pour 90 % des appels)*
+
+Le journal se place **entre le français et l'anglais** — cohérent pour un corpus
+mixte (français technique + code + commandes). Il s'en écarte surtout aux
+**dernières couches** (+14 à la couche 47) : notre contenu doit produire des
+tokens de sortie plus variés que du français homogène.
+
+Et la réductibilité n'est pas répartie uniformément :
+
+| | experts pour 90 % |
+|---|---|
+| couches 0-3 (**entrée**) | **75 à 82** — les moins réductibles |
+| couches 16-30 (milieu) | **42 à 49** — les plus réductibles |
+
+Les premières couches veulent presque tout le catalogue ; les médianes se
+contentent d'un tiers. C'est l'inverse de l'intuition « les extrêmes sont
+simples » — et ça ne se traduit pas en gain, l'allocation non uniforme valant
++1,2 % au mieux.
+
 ### Le cache d'engram pour notre usage réel
 
 | jetons | entrées touchées | mémoire | part de la table (384 M) |

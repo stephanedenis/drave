@@ -50641,3 +50641,70 @@ fenêtre retenue : jetons 2000 à 6096 (on saute le préambule)
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np = 'REPRISE.md'\ns = open(p).read().rstrip('\\n')\ns += '''\n\n### Rejouer notre propre journal\n\nLes 28 sessions du `journal/` (59 Mo, 2,5 M jetons) ont été tokenisées et routées\npour voir si **notre** usage cha … [2410 caractères tronqués]`
+
+  ```
+34M	/home/stephane/FastNVMe/artefacts/traces/session-01-10/
+35aceac Rejouer notre propre journal : notre usage ne change pas l'empreinte, la langue si
+  ```
+
+### 🤖 Assistant
+
+⏵ J'attends la fin de la trace complète (4 096 jetons) pour refaire l'analyse sur un échantillon plus large.
+
+- **bash** `{"command": "sleep 55; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && wc -l /tmp/routage_journal.txt; tail -2 /tmp/trace_journal.log", "description": "Check journal trace progress"}`
+
+  ```
+107551 /tmp/routage_journal.txt
+2510800 jetons dans le journal
+fenêtre retenue : jetons 2000 à 6096 (on saute le préambule)
+  ```
+
+- **bash** `{"command": "sleep 55; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && wc -l /tmp/routage_journal.txt; date +%H:%M", "description": "Wait for trace"}`
+
+  ```
+115559 /tmp/routage_journal.txt
+18:07
+  ```
+
+### 🤖 Assistant
+
+⏵ Analyse couche par couche demandée : où notre journal diffère-t-il des corpus génériques ?
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/analyse_par_couche.py <<'PY'\nimport collections\nT = '/home/stephane/FastNVMe/artefacts/traces/session-01-10/'\ndef charge(p):\n    d = collections.defaultdict(dict)\n    for l in open(p):\n        x = l.split()\n         … [1944 caractères tronqués]`
+
+  ```
+=== EXPERTS POUR 90 % DES APPELS, COUCHE PAR COUCHE ===
+couche  journal  francais  anglais  écart J-F
+     0       77        74       77         +3
+     6       49        55       34         -6
+    12       61        60       41         +1
+    18       44        46       27         -2
+    24       66        62       41         +4
+    30       42        46       32         -4
+    36       65        66       44         -1
+    42       51        55       48         -4
+    46       54        45       47         +9
+    47       50        36       52        +14
+
+  moyenne journal  :  58.1 experts
+  moyenne français :  59.3
+  moyenne anglais  :  44.5
+
+=== LES COUCHES OÙ LE JOURNAL S'ÉCARTE LE PLUS DU FRANÇAIS GÉNÉRIQUE ===
+  couche 47 : journal  50 · français  36 · anglais  52 (écart +14)
+  couche 46 : journal  54 · français  45 · anglais  47 (écart +9)
+  couche 45 : journal  48 · français  40 · anglais  40 (écart +8)
+  couche 29 : journal  54 · français  62 · anglais  52 (écart -8)
+  couche 17 : journal  54 · français  60 · anglais  46 (écart -6)
+  couche  7 : journal  52 · français  58 · anglais  29 (écart -6)
+
+=== LES COUCHES LES PLUS / MOINS RÉDUCTIBLES (journal) ===
+  plus réductible
+… [97 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Analyse couche par couche faite. Je consigne et je conclus.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && wc -l /tmp/routage_journal.txt; python3 - <<'PY'\np = 'reports/rapport-empreinte-memoire.md'\ns = open(p).read()\ns = s.replace('''### Le cache d'engram pour notre usage réel''',\n'''### Couche par couche : où notre journal s'écarte\ … [1896 caractères tronqués]`
