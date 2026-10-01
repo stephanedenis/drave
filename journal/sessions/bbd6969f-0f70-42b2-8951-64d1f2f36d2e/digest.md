@@ -40033,3 +40033,368 @@ README : liste renumérotée
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\ndef patch(p, paires):\n    s=open(p).read()\n    for v,n,nom in paires:\n        assert s.count(v)==1, f\"{p}::{nom}::{s.count(v)}\"\n        s=s.replace(v,n,1)\n    open(p,'w').write(s); print(f\"{p} : {len(paires) … [1503 caractères tronqués]`
+
+  ```
+README.md : 2
+REPRISE.md : 1
+b3cba4c README et REPRISE : prochaines étapes et compteur de lignes après la nuit
+  ```
+
+- **subagent** `{"description": "Revue de clôture de la nuit", "prompt": "Relecture ADVERSARIALE de clôture, dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet. Tu vérifies les artefacts de la nuit (30/09 19h49 → 01/10 07h39) qui n'ont PAS encore été audités par une relecture. Budget : 20 minutes. Ne mod … [2179 caractères tronqués]`
+
+  ```
+started subagent ff364db0-d28f-47eb-973e-f13bdafd35a2
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/ceremonie7.md <<'EOF'\n\n**Objectif du sprint** : « Corriger le livelock du contexte et consolider la nuit :\nhandoff REPRISE/README, portes finales, revue de clôture ». **Le livelock est\ncorrigé, avec un test qui aurait  … [5088 caractères tronqués]`
+
+  ```
+05:58:34
+  ```
+
+### 👤 Utilisateur
+
+Agent ff364db0-d28f-47eb-973e-f13bdafd35a2 sent a message:
+REVUE ADVERSARIALE DE CLÔTURE (lecture seule, aucun fichier du dépôt modifié ; essais sur copies /tmp + binaire release existant). Budget tenu.
+
+MÉTHODE : chaque chiffre tracé vers rapport/commit/log /tmp/journal ; le livelock revu par lecture + reproduction empirique.
+
+=== 1. ÉCARTS, CLASSÉS PAR GRAVITÉ ===
+
+[A — CRITIQUE] « Vérifié : la même invite rend la main en 312 s » : c'est un SIGABRT.
+(a) REPRISE.md §« Sprint 7 » l.518-521, reports/rapport-aiguille-topk.md l.264-266, message du commit 32951e9.
+(b) « Correctif : la capacité est plafonnée… Model::generate tronque l'invite en le disant… Vérifié : la même invite rend la main en 312 s au lieu de ne jamais finir. »
+(c) FAUX quant à l'issue. `generate` (model.rs:3930-3934) tronque à EXACTEMENT ctx sans réserver n_new ; la boucle de décodage fait `let pos = ids.len() + step; self.forward(next, pos)` (model.rs:3976-3977) et `forward` assert `pos < self.ctx` (model.rs:3025). J'ai reproduit 3 fois sur le binaire release du dépôt (Qwen2.5-0.5B, ctx 256) : invite 300 > ctx → message de troncature puis `panicked at src/model.rs:3025: contexte dépassé (256 ≥ 256)`, exit 134 (Cargo.toml `panic = "abort"`). Idem avec invite == ctx (256). Le mode session, lui, réserve la place (main.rs:851-856 : `ids.len() + n_new + 8 > ctx`). Le script de vérification du journal ne lit ni `returncode` ni « panicked » et n'imprime que 3 lignes filtrées : l'abort est passé pour une réussite ; « code trouvé : False » s'explique par l'abort (l'aiguille était à mi-profondeur, donc conservée par la troncature).
+(d) GRAVE : le correctif échange un livelock contre un core dump sur le chemin même qu'il prétend réparer ; la doc affirme une réussite non mesurée.
+(e) Tronquer à `ctx - n_new` (comme la session), ou arrêter proprement la génération quand pos ≥ ctx ; re-vérifier en testant le code de sortie.
+
+[B — ÉLEVÉ] Le plafond d'`assurer` est posé au mauvais endroit : `ecrire` n'a aucun garde `pos < ctx`.
+(a) model.rs:1209-1213 (`let d = (kvh*self.cap + pos)*self.hd`), commentaire faux model.rs:1124-1125 (« l'appelant voit la troncature »), forward_lot sans garde (model.rs:2545).
+(b) REPRISE implique que le dépassement est désormais « tronqué ou refusé en le disant ».
+(c) `ecrire` ne teste que `pos+1 > cap` ; au-delà de ctx, `assurer` ne grandit plus → l'écriture part dans le bloc de la tête KV SUIVANTE (corruption silencieuse) avant de paniquer sur la dernière tête. Reproduit : `--ppl-reparti 127.0.0.1:9 --ids <300> --ctx 256 --lot 8` → `panicked at src/model.rs:1213: range end index 32832 out of range for slice of length 32768`, exit 134, AVANT toute connexion au pair. Cause : `run_ppl_reparti` calcule `limite = limit.min(ctx)` (main.rs:2114) mais l'ignore quand `--ids` est fourni (main.rs:2133-2135). Chemins restants : `--ppl-reparti --ids > ctx` (lot → OOB ; lot 1 → assert), `--infer --topk` (main.rs:886/897, aucune troncature → assert), harmony à petit ctx (main.rs:3706/3735/3748, latent). EN REVANCHE `run_ppl --limit > --ctx` est SÛR (`ids.chunks(ctx)`, main.rs:3924 ; `fin = (base+ctx).min(...)`, main.rs:3933) et le serveur de flux refuse les lots trop longs (main.rs:2053-2057, mais avec `break` alors que le message dit « le nœud continue »). Côté GPU les gardes existent bien (gpu.rs:445, 519, 1185).
+(d) ÉLEVÉ : trous de bornage réels, reproductibles, non couverts par les 18 tests.
+(e) Ajouter `assert/de garde pos+1 ≤ ctx` dans `ecrire` (ou refuser explicitement), tronquer `--ids` dans `run_ppl_reparti`, et `continue` au lieu de `break` main.rs:2057.
+
+[C — MOYEN] « Le même défaut avait été corrigé côté GPU au sprint 2 (kv_assurer) » : c'était le sprint 1.
+(a) REPRISE.md l.515-516, reports/rapport-aiguille-topk.md l.258, sprints/06 l.62, message du commit 32951e9.
+(b) « corrigé côté GPU au sprint 2 ».
+(c) Le garde `if besoin > m.ctx { return false; }` de `kv_assurer` a été ajouté par le commit 47ce9b7 du 30/09 18:16 — dans le sprint 1 (17:41→19:41), pas le sprint 2 (19:49→21:49). Vérifié par `git log -S "besoin > m.ctx"`. La description du sprint 1 dans REPRISE dit d'ailleurs elle-même « une boucle infinie latente » corrigée.
+(d) FAUX dans trois artefacts (off-by-one de sprint).
+(e) Écrire « sprint 1 (commit 47ce9b7) ».
+
+[D — MINEUR] Convention « 1/3 » incohérente entre REPRISE et README.
+(a) REPRISE.md l.532 (« k = 256 1/3 », dans une liste de taux de réussite à côté de « dense 3/3 » et « k = 1 024 3/3 ») ; README.md l.511-513 (« retrouve l'information 2 fois sur 3 ») ; report l.155 et sprints/05.
+(b) Les deux décrivent la MÊME mesure.
+(c) La source (rapport l.154-156, /tmp/aiguille_s5.log) donne NON, oui, oui = 2 réussites/3, et le texte dit « échoue sur un texte et réussit sur deux ». Le « 1/3 » est le nombre d'ÉCHECS, écrit sous une colonne « trouvé ».
+(d) Ambigu, arithmétiquement faux sous l'en-tête du rapport.
+(e) Écrire « 2/3 (1 échec) ».
+
+[E — MINEUR] Message du commit c7fd7ea : « le bilan des six résultats de la nuit » alors que le tableau inséré (REPRISE l.525-533) a 7 lignes. Les six premiers résultats + la ligne « artefacts » peuvent se lire ainsi, mais un lecteur en compte 7. (e) « six résultats et les six artefacts » ou « sept lignes ».
+
+[F — MINEUR] Le test ne teste qu'à moitié ce que le commit lui accole.
+(a) main.rs:4370-4381 ; message 32951e9 « Deux corrections… Test de non-régression ajouté ».
+(c) `KvCache::new` a déjà appelé `assurer(ctx.min(1024))` → `cap == 16` ; `assurer(1000)` sort au premier garde (model.rs:1118/1126) SANS exécuter la boucle de doublement. Il teste donc le plafond, pas la terminaison de la boucle (un cas ctx 4096 + assurer(10_000) serait plus fort), et rien ne couvre la troncature de generate → 18/18 verts alors que le scénario revendiqué abortit. Le test aurait bien pendu avant le correctif (vrai).
+(e) Ajouter un test de bout en bout (génération après troncature) et/ou un cas cap<besoin avec besoin>ctx.
+
+[G — MINEUR] Le tableau REPRISE omet le caveat de charge sur 286,6→63,8 s : docs/contexte-long.md porte « ×3,9 au lieu de ×4,5 sous charge » et « ces temps dépendent de la charge » ; le tableau garde ×4,5 sec. Sourcé mais optimiste. Idem « 23 minutes au lieu de 75 s » (REPRISE l.511-512) : la même fenêtre rend 85,1 s à ctx 5120 (/tmp/aiguille_s6b.log), donc le comparable est ×16 vs 85 s, pas 75 s nominal.
+
+=== 2. VÉRIFIÉ ET CONFORME (chaque chiffre a sa source) ===
+• Tableau « Ce que la nuit a établi » : 8→2 et le noyau fusionné → rapport-gpu-topk-selection.md l.243-248 ; 7,2e-7 (avec puits) et 8,4e-7 (sans) → sortie brute du banc dans journal/sessions/bbd6969f…/digest.md l.37058 (`relatif 7.19e-7` / `[DRAVE_BANC_SANS_PUITS=1] … 8.38e-7`) ; 4,5–5,0 ms/jeton de 255 à 4 095 clés → /tmp/grille_fusion.log (4,53→4,97) et rapport l.273-281 ; croisement ~300 clés et ×7,8 (38,84/4,97=7,81) → mêmes sources ; 4,26→38,84 → /tmp/grille_fusion.log et rapport l.273-277.
+• 286,6→63,8 s (×4,5) et 9,4335/9,4337 → docs/contexte-long.md l.300-316 (caveat de charge inclus) et /tmp/prefill_gpu.log ; 2,1e-5 est bien le RELATIF (2e-4/9,4335), l'absolu n'étant connu qu'à ±1e-4.
+• 0,0000 dense (fichiers bit à bit égaux) et 0,0379≈0,038 nat + 497/511 MoE → rapport-logits-gpu-vs-cpu.md l.3-7, 34-44.
+• k=1024 suffit à 8 192 (12,5 %) → rapport-aiguille-topk.md l.177-181, avec le caveat « borne supérieure sur UN point » (que le tableau REPRISE ne reprend pas, mais rien de faux).
+• 8/9 dense sur neuf fenêtres contiguës → /tmp/aiguille_s6b.log (8 oui, 1 NON = fenêtre 3, 4731 jetons) + sprints/06.
+• 18 tests → exact : 18 = main.rs 12 + model.rs 1 + engine.rs 2 + list.rs 3 ; `cargo test --release` = 18 passed (journal l.39987). Le chiffre n'était pas vérifiable par `grep -c` sur main.rs seul (12).
+• Livelock : `model.rs:1117` est bien la ligne du `while cap < besoin` avant correctif (`git show 45a0c44~1`), le mécanisme est réel, et le correctif fait bien TERMINER `assurer` (cap ≤ ctx pour toute entrée).
+• README « Prochaines étapes » : « le chemin par lots ignore --attn-topk (le moteur le dit) », « 246 s au lieu de 75 » → /tmp/aiguille_s6b.log (246,5 s + avertissement « --attn-topk 256 est IGNORÉ en mode lot ») contre 72,7-85,7 s en dense ; « k = 256 2 fenêtres sur 3 » → table du rapport l.154-156 (NON/oui/oui), correct ; « 8 fenêtres sur 9 » → idem ci-dessus. Sourcés et exacts.
+• Six artefacts de la ligne 7 : tous traçables (garde-fou sprint 2 ; échantillon compare_logits ; grep chaîne d'appels commit d29e043 sprint 3 ; décalage de fenêtre aiguille.py sprint 4→5 ; « section annoncée » = commit 783f1f9 qui annonce « le point 16 384 » alors que le rapport écrit « 16 384 n'est pas mesuré » ; livelock moteur).
+• Compteur 13 758 : exact (`wc -l` des .rs = 13 758), dans README ×2 + REPRISE. Portes 19,3885 / 15,1757 présentes dans REPRISE.
+• Quatre des cinq derniers messages de commit correspondent aux fichiers (b3cba4c, 3209dc5, 45a0c44, c7fd7ea aux réserves [E] près) ; 32951e9 est le seul à énoncer des choses fausses ([A],[C]).
+
+=== 3. LE PLUS FRAGILE ===
+Le garde-fou a été posé dans `assurer` (le symptôme) et non à l'invariant « pos < ctx » (`ecrire`) : la suite passe 18/18 et la doc clôt la nuit sur « vérifié », alors que le scénario revendiqué — une invite plus longue que le contexte — se reproduit en SIGABRT sur le binaire committé ; c'est la troisième fois cette nuit qu'un artefact affirme ce qu'il n'a pas mesuré (le script de vérification ne lisait pas le code de sortie).
+
+### 👤 Utilisateur
+
+Background subagent ff364db0-d28f-47eb-973e-f13bdafd35a2 finished and will do no further work unless you send it more.
+Its closing message:
+⏵ Review complete, result sent to the parent agent
+
+Relecture terminée (lecture seule ; aucun fichier du dépôt modifié — seuls `/tmp`, `target/` et le binaire release existant ont servi aux essais). Résultat transmis à l'agent parent.
+
+---
+
+# Relecture adversariale de clôture — artefacts non encore audités (30/09 19h49 → 01/10 07h39)
+
+## 1. Écarts classés par gravité
+
+### A — CRITIQUE : « Vérifié : la même invite rend la main en 312 s » est un SIGABRT
+- **(a)** `REPRISE.md` §« Sprint 7 » (l.518‑521), `reports/rapport-aiguille-topk.md` (l.264‑266), message du commit `32951e9`.
+- **(b)** « la capacité est plafonnée au contexte déclaré, et `Model::generate` tronque l'invite en le disant […] Vérifié : la même invite rend la main en 312 s au lieu de ne jamais finir. »
+- **(c)** FAUX quant à l'issue. `generate` (model.rs:3930‑3934) tronque à **exactement** `ctx` sans réserver `n_new` ; la décodage fait `let pos = ids.len() + step; self.forward(next, pos)` (model.rs:3976‑3977) et `forward` assert `pos < self.ctx` (model.rs:3025). **Reproduit 3×** sur le binaire release du dépôt (Qwen2.5‑0.5B, ctx 256) : invite 300 > ctx → message de troncature puis `panicked at src/model.rs:3025: contexte dépassé (256 ≥ 256)`, **exit 134** (`panic = "abort"`). Idem avec invite == ctx. Le mode session, lui, réserve la place (main.rs:851‑856). Le script de vérification du journal ne lisait ni `returncode` ni « panicked » : l'abort est passé pour une réussite ; « code trouvé : False » vient de l'abort, pas de la troncature (l'aiguille était à mi‑profondeur, donc conservée).
+- **(d)** Le correctif échange un livelock contre un core dump sur le chemin même qu'il prétend réparer.
+- **(e)** Tronquer à `ctx - n_new` (comme la session) ou arrêter proprement la génération quand `pos ≥ ctx`, puis re‑vérifier en testant le code de sortie.
+
+### B — ÉLEVÉ : le garde est au mauvais endroit, `ecrire` n'a aucun contrôle `pos < ctx`
+- **(a)** `model.rs:1209‑1213`, commentaire faux `model.rs:1124‑1125`, `forward_lot` sans garde (`model.rs:2545`).
+- **(c)** Au‑delà de `ctx`, `assurer` ne grandit plus : `d = (kvh*cap + pos)*hd` écrit dans le bloc de la **tête KV suivante** (corruption silencieuse) puis panique sur la dernière. Reproduit : `--ppl-reparti 127.0.0.1:9 --ids <300> --ctx 256 --lot 8` → `panicked at src/model.rs:1213: range end index 32832 out of range for slice of length 32768`, avant même la connexion au pair (cause : `limite` calculé puis ignoré quand `--ids` est fourni, main.rs:2114 vs 2133‑2135). Restent aussi `--infer --topk` (main.rs:886/897) et harmony à petit ctx (latent). **En revanche `run_ppl --limit > --ctx` est SÛR** (`ids.chunks(ctx)`, main.rs:3924/3933) et le serveur refuse les lots trop longs (main.rs:2053‑2057, mais avec `break` alors que le message dit « le nœud continue »). Côté GPU, les gardes existent bien (gpu.rs:445, 519, 1185).
+- **(e)** Garde `pos + 1 ≤ ctx` dans `ecrire`, troncature de `--ids` dans `run_ppl_reparti`, `continue` au lieu de `break`.
+
+### C — MOYEN : « corrigé au sprint 2 » était le sprint 1
+`REPRISE.md` l.515‑516, rapport l.258, sprints/06 l.62, commit `32951e9`. Le garde `kv_assurer` a été ajouté par **47ce9b7, 30/09 18:16** = sprint 1 (17:41→19:41), pas sprint 2 (vérifié par `git log -S "besoin > m.ctx"`). REPRISE se contredit (sa description du sprint 1 dit déjà « une boucle infinie latente » corrigée).
+
+### D — MINEUR : « 1/3 » vs « 2 fois sur 3 »
+REPRISE l.532 vs README l.511‑513 décrivent la même mesure. La source (rapport l.154‑156, `/tmp/aiguille_s5.log`) donne NON, oui, oui = **2 réussites/3** ; « 1/3 » est le nombre d'échecs, écrit sous une colonne « trouvé ». Correction : « 2/3 (1 échec) ».
+
+### E — MINEUR : commit `c7fd7ea` « six résultats » pour un tableau à 7 lignes.
+
+### F — MINEUR : le test ne couvre que la moitié du correctif.
+`KvCache::new` a déjà porté `cap` à 16 → `assurer(1000)` sort au premier garde sans exécuter la boucle de doublement ; rien ne couvre la troncature de `generate` (d'où 18/18 verts alors que le scénario revendiqué abortit). Il aurait bien pendu avant le correctif.
+
+### G — MINEUR : le tableau omet le caveat de charge sur 286,6→63,8 s (×3,9 sous charge, porté par `docs/contexte-long.md`) ; « 23 min au lieu de 75 s » — le comparable mesuré est **85,1 s** à ctx 5120.
+
+## 2. Vérifié et conforme
+Tous les chiffres du tableau ont leur source : 8→2 (rapport), **7,2e‑7 / 8,4e‑7** (sortie brute du banc dans le journal, l.37058), 4,53→4,97 ms (`/tmp/grille_fusion.log`), croisement ~300 clés et ×7,8 (=38,84/4,97), 286,6→63,8 s et 9,4335/9,4337 + 2,1e‑5 relatif (`docs/contexte-long.md`, `/tmp/prefill_gpu.log`), 0,0000 dense et 0,0379≈0,038 + 497/511 MoE (rapport logits), k=1024 à 8 192 (12,5 %, un point), **8/9 dense** (`/tmp/aiguille_s6b.log`), **18 tests** (12+1+2+3, `cargo test` 18 passed), `model.rs:1117` exact avant correctif. README « Prochaines étapes » : chemin par lots ignorant `--attn-topk` avec avertissement, 246 s contre 75 (246,5 s mesuré vs 72,7‑85,7 s), 2 fenêtres sur 3 à k=256 — sourcés et exacts. Compteur 13 758 exact. Les six artefacts de la ligne 7 sont tous traçables. Quatre des cinq derniers messages de commit correspondent aux fichiers.
+
+## 3. Le plus fragile
+Le garde‑fou a été posé dans `assurer` (le symptôme) et non à l'invariant « `pos < ctx` » (`ecrire`) : la suite passe 18/18 et la nuit est clôturée sur « vérifié », alors que le scénario revendiqué — une invite plus longue que le contexte — se reproduit en SIGABRT sur le binaire committé ; le script de vérification ne lisait pas le code de sortie, troisième occurrence cette nuit d'un artefact qui affirme plus qu'il n'a mesuré.
+
+### 🤖 Assistant
+
+⏵ La revue de clôture a trouvé que ma correction du livelock finit en SIGABRT — je corrige
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '3020,3030p' drave-core/src/model.rs && sed -n '3970,3985p' drave-core/src/model.rs && sed -n '1205,1215p' drave-core/src/model.rs", "description": "Read the assert, decode loop and ecrire"}`
+
+  ```
+out
+    }
+
+    /// Un token, une position. Retourne l'état caché après la dernière norme.
+    pub fn forward(&mut self, tok: u32, pos: usize) -> Vec<f32> {
+        assert!(pos < self.ctx, "contexte dépassé ({pos} ≥ {})", self.ctx);
+        self.jeton_trace += 1;
+        // lus AVANT l'emprunt destructuré : la parcimonie par projection
+        let tkp = self.act_topk_proj;
+        let tkg = self.act_topk;
+        let tk = |p: usize| if tkp[p] > 0 { tkp[p] } else { tkg };
+            } else {
+                sample_avance(&mut logits, temp.max(1e-4), top_p, &recents, rep_pen)
+            };
+            out.push(next);
+            if let Some(f) = flux.as_mut() { f(next); }
+            if Some(next) == self.stop_id || Some(next) == self.stop_id2 { break; }
+            let pos = ids.len() + step;
+            last = self.forward(next, pos);
+        }
+        let gen_s = t1.elapsed().as_secs_f64();
+        events0 = self.events - events0 - prompt_events;
+        let _ = events0;
+        let st = Stats {
+            events: self.events,
+            prompt_s, gen_s,
+            n_prompt: ids.len(), n_gen: out.len(),
+    }
+
+    /// Écrit un vecteur de clé et un de valeur à la position `pos`
+… [384 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/model.rs'; s=open(p).read()\ndef rep(v,n,nom):\n    global s\n    assert s.count(v)==1, f\"{nom}::{s.count(v)}\"\n    s=s.replace(v,n,1)\n\n# 1) ecrire : l'invariant « pos < ctx » doit être vérifié … [3627 caractères tronqués]`
+
+  ```
+ecrire, generate et la boucle corrigés
+--- build ---
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\n# 4) --ppl-reparti : la limite calculée était ignorée quand --ids est fourni\np='drave-core/src/main.rs'; s=open(p).read()\nimport re\ni = s.index(\"let limite = limit.min(ctx)\")\nprint(s[i-400:i+700])\nPY", "descr … [45 caractères tronqués]`
+
+  ```
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 4, in <module>
+ValueError: substring not found
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"limite\" drave-core/src/main.rs | head -8; sed -n '2130,2145p' drave-core/src/main.rs", "description": "Find the limit computation in ppl-reparti"}`
+
+  ```
+385:            "inactif : k > 1024 (limite du noyau 3)"
+2114:    let limite = opt.limit.max(1).min(ctx);
+2134:        (1..=limite as u32).collect()
+3805:            // `--depuis N` : on charge N jetons de plus que la limite, pour que
+    println!("[flux] quantification : {} niveaux, seuil {}, top-k {}, renorm {}",
+             mdl.act_levels, mdl.act_thresh, mdl.act_topk, mdl.act_renorm);
+    let n_layer = mdl.cfg.n_layer;
+    let ids: Vec<u32> = if opt.ids.is_empty() {
+        (1..=limite as u32).collect()
+    } else { opt.ids.clone() };
+    if ids.len() < 2 {
+        // La perplexité est une moyenne sur `len - 1` jetons notés : avec un seul
+        // jeton elle vaut NaN, et un NaN affiché comme un résultat ne dit rien.
+        println!("[flux] il faut au moins DEUX jetons pour noter une perplexité \
+(le premier ne prédit rien) — reçu {}. Rien n'a été calculé.", ids.len());
+        return;
+    }
+    println!("[flux] pilote : {couches_locales} couches en local, {} chez le pair, {} jetons",
+             n_layer - couches_locales, ids.len());
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/main.rs'; s=open(p).read()\nvieux = \"\"\"    let ids: Vec<u32> = if opt.ids.is_empty() {\n        (1..=limite as u32).collect()\n    } else { opt.ids.clone() };\"\"\"\nneuf = \"\"\"    // `limite` … [1681 caractères tronqués]`
+
+  ```
+motif serveur : False
+ppl-reparti tronqué, serveur : continue
+--- build ---
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '2050,2062p' drave-core/src/main.rs", "description": "Find the flux server lot guard"}`
+
+  ```
+// Refus EXPLICITE plutôt qu'une boucle sans fin : au-delà de
+                    // son contexte, `KvCache::assurer` ne peut pas agrandir et
+                    // tournerait indéfiniment (relevé dans `docs/plan-prefill-reparti.md`).
+                    if f.pos as usize + t > mdl.ctx {
+                        println!("[flux] lot refusé : {t} états à partir de la position {} \
+                                  dépassent le contexte {} de ce nœud",
+                                 f.pos, mdl.ctx);
+                        break;
+                    }
+                    mdl.emb_imposee_lot = Some(f.charge.plat().to_vec());
+                    let hs = mdl.forward_lot(&vec![0u32; t], f.pos as usize);
+                    let plat: Vec<f32> = hs.concat();
+                    if std::env::var("DRAVE_DEBUG_FLUX").is_ok() {
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/main.rs'; s=open(p).read()\nvieux = \"\"\"                    if f.pos as usize + t > mdl.ctx {\n                        println!(\"[flux] lot refusé : {t} états à partir de la position {} \\\\\n   … [3184 caractères tronqués]`
+
+  ```
+serveur : continue
+test renforcé
+
+test result: ok. 18 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.09s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 400 python3 - <<'PY'\n# Le contrôle que la revue reproche : lire le CODE DE SORTIE, pas seulement la sortie.\nimport subprocess, time, re\nfen = open('/tmp/fen_2.txt').read()   # fenêtre 3 : ~4731 jetons\ninvite = fen + \"\\n … [902 caractères tronqués]`
+
+  ```
+06:07:06
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 300 python3 - <<'PY'\nimport subprocess, time\n# Le cas exact de la revue : invite plus longue que le contexte, ctx 256.\ncorpus = \" \".join(open('data/wikitext2_test.txt').read().split())\ninvite = corpus[:1200] + \"\\n\\nQ … [801 caractères tronqués]`
+
+  ```
+ctx   256 · n   8 :   13.4 s · sortie 0 · ok
+      [contexte] invite de 306 jetons > 240 (ctx 256 − 8 de génération) : les 66 premiers sont ABANDONNÉS 
+ctx   512 · n   8 :   15.8 s · sortie 0 · ok
+ctx   256 · n 300 :   16.3 s · sortie 0 · ok
+      [contexte] invite de 306 jetons > 1 (ctx 256 − 300 de génération) : les 305 premiers sont ABANDONNÉS
+      [contexte] contexte plein (256) : génération arrêtée à 255 jetons
+06:07:57
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"ids: mut ids\" -A 3 drave-core/src/main.rs | head -6; grep -n \"fn run_infer\" drave-core/src/main.rs; sed -n '676,700p' drave-core/src/main.rs | grep -n \"ids\" | head -5", "description": "Find ids construction in run_infe … [3 caractères tronqués]`
+
+  ```
+671:        ids: mut ids, ids_file, prompt, n: n_new, temp, top_p, topk, rep_pen, hist,
+672-        flux, session, chat, ctx: ctx_opt, threads: threads_opt, abits: abits_opt,
+673-        ctx_impose, threads_impose, abits_impose, dense, auto, q4, b6,
+674-        keep, attn_window, swa_pattern, sans_fenetre, attn_sinks, attn_topk, qk_topk,
+665:fn run_infer(opt: Options) {
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && awk 'NR>=700 && NR<=760 && /ids/' drave-core/src/main.rs | head -8; grep -n \"let mut ids\" drave-core/src/main.rs | head -3", "description": "Locate ids assembly"}`
+
+  ```
+3810:    let mut ids: Vec<u32> = if idfile.is_empty() {
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '3805,3830p' drave-core/src/main.rs", "description": "Read the ids assembly for ppl"}`
+
+  ```
+let cpu = std::thread::available_parallelism().map(|n| n.get()).unwrap_or(8);
+    let ctx = if ctx_impose { ctx_opt } else { 256 };
+    let n_threads = if threads_impose { threads_opt } else { (cpu * 3 / 4).max(1) };
+    let abits = if abits_impose { abits_opt } else { 16 };
+    let idfile = idfile.unwrap_or_default();
+    let mut ids: Vec<u32> = if idfile.is_empty() {
+        Vec::new()
+    } else {
+        let raw = std::fs::read_to_string(&idfile).expect("fichier d'identifiants illisible");
+        raw.split(|c: char| c == ',' || c.is_whitespace())
+            .filter(|s| !s.is_empty())
+            .filter_map(|s| s.parse().ok())
+            // `--depuis N` : on charge N jetons de plus que la limite, pour que
+            // le premier jeton noté ait un contexte complet (voir plus bas).
+            .take(limit.saturating_add(depuis))
+            .collect()
+    };
+    // Garde-fou : des identifiants hors vocabulaire signifient qu'on nourrit le
+    // modèle avec le découpage d'un AUTRE modèle. La perplexité ne mesurerait
+    // alors que l'absurdité de l'entrée — vérifié : 42 127 au lieu de 11.
+    let vocab = mdl_cfg_vocab(path);
+    if let Some(v) = vocab {
+        if let Some(&
+… [208 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '840,885p' drave-core/src/main.rs", "description": "Read the infer ids handling"}`
+
+  ```
+let _ = std::io::Write::flush(&mut std::io::stderr());
+            let mut ligne = String::new();
+            if std::io::stdin().read_line(&mut ligne).unwrap_or(0) == 0 { break; }
+            let q = ligne.trim();
+            if q.is_empty() { continue; }
+            if q == "/quit" || q == "/q" { break; }
+            conversation.push_str(&format!(
+                "<|im_start|>user\n{q}<|im_end|>\n<|im_start|>assistant\n"));
+            let ids = tks.encode(&conversation);
+            // Garde-fou : la conversation doit tenir dans le contexte, avec de
+            // quoi générer. On garde la fin, on jette le début.
+            let ids = if ids.len() + n_new + 8 > ctx {
+                let garde = ctx.saturating_sub(n_new + 8);
+                let mut tronque = tks.encode("<|im_start|>system\n[conversation tronquée]<|im_end|>\n");
+                tronque.extend_from_slice(&ids[ids.len().saturating_sub(garde)..]);
+                tronque
+            } else { ids };
+            print!("assistant> ");
+            let _ = std::io::Write::flush(&mut std::io::stdout());
+            let mut accumules: Vec<u32> = Vec::new();
+            let mut deja = String::new();
+            let mut af
+… [985 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/main.rs'; s=open(p).read()\nvieux = \"\"\"    let (out, st) = if topk > 0 {\n        // pas-à-pas : utile pour confronter les logits à la référence numpy\n        let t0 = Instant::now();\n         … [2135 caractères tronqués]`
+
+  ```
+run_infer : borne de contexte avant les deux chemins
+--- build ---
+normal : 13.4 s · sortie 0 · ok
+--topk : 14.1 s · sortie 0 · ok
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\ndef patch(p, paires):\n    s=open(p).read()\n    for v,n,nom in paires:\n        assert s.count(v)==1, f\"{p}::{nom}::{s.count(v)}\"\n        s=s.replace(v,n,1)\n    open(p,'w').write(s); print(f\"{p} : {len(paires) … [3213 caractères tronqués]`
+
+  ```
+REPRISE.md : 4
+397:### Créneau 17h41 → 19h41 (sprint 1) : le top-k GPU, du banc au moteur
+515:plafonne à `ctx`). Le même défaut avait été corrigé côté GPU au **sprint 1**
+541:| 6 | **L'attention creuse à 6 % échoue sur 1 fenêtre sur 3** (4 096 clés, milieu) | dense 3/3 · k = 256 **2/3 (1 échec)** · k = 1 024 3/3 · par fenêtre, 8/9 en dense sur neuf fenêtres contiguës |
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 36, in <module>
+  File "<stdin>", line 4, in patch
+AssertionError: README.md::inchange::0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"1/3\\|2/3\\|1 échec\" README.md reports/rapport-aiguille-topk.md | head -6", "description": "Check the rate notation in README and report"}`
+
+  ```
+reports/rapport-aiguille-topk.md:155:| **k = 256** (6,25 %) | NON (240,3 s) | **oui** (302,2 s) | **oui** (241,4 s) | **1/3** |
+reports/rapport-aiguille-topk.md:167:  dense 3/3, k = 256 **1/3**, k = 1 024 3/3.
+reports/rapport-aiguille-topk.md:169:Trois fenêtres restent un petit échantillon (l'intervalle de confiance d'un 1/3 sur
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/rapport-aiguille-topk.md'; s=open(p).read()\ndef rep(v,n,nom):\n    global s\n    assert s.count(v)==1, f\"{nom}::{s.count(v)}\"\n    s=s.replace(v,n,1)\nrep(\"| **k = 256** (6,25 %) | NON (240,3 s) | **o … [4030 caractères tronqués]`

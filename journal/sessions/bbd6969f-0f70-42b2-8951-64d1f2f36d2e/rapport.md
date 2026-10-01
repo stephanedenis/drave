@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 63.1 h |
+| Durée | 63.4 h |
 | Tours | 48 |
-| Messages | 2549 |
-| Appels d'outils | 2415 |
+| Messages | 2570 |
+| Appels d'outils | 2434 |
 | Fichiers touchés | 52 |
-| Commandes | 2054 |
-| Sous-agents | 19 |
-| Commits | 226 |
+| Commandes | 2072 |
+| Sous-agents | 20 |
+| Commits | 227 |
 | Compactages de contexte | 3 |
 
 ## Objectifs déclarés
@@ -2234,7 +2234,7 @@ Fusionner la sélection en un noyau par ligne (8 lancements → 2), supprimer le
 
 ### Tour 48 — Continue en blocs de 2h jusqu'à demain 8h HAE. pour chacun des blocs/sprints tu dois être en autonomie totale. C'est à d … [282 caractères tronqués]
 
-*263 appels d'outils.* Actions notables :
+*282 appels d'outils.* Actions notables :
 
 - bash — Check time and count remaining boxes
 - bash — Start sprint 2
@@ -2250,11 +2250,11 @@ Fusionner la sélection en un noyau par ligne (8 lancements → 2), supprimer le
 - bash — Add poison check and finiteness guard
 - bash — Locate the topk GPU branch
 - bash — Wire fused kernel into the model
-- … et 245 autres
+- … et 264 autres
 
 **Synthèse produite :**
 
-⏵ La revue du sprint 4 a trouvé deux défauts graves dans ma mesure — je corrige tout
+⏵ La revue de clôture a trouvé que ma correction du livelock finit en SIGABRT — je corrige
 
 ## 3. Travail accompli
 
@@ -2336,6 +2336,7 @@ Fusionner la sélection en un noyau par ligne (8 lancements → 2), supprimer le
 - tour 48 — Revue adverse sprint 4
 - tour 48 — Revue adverse sprint 5
 - tour 48 — Revue ciblée sprint 6
+- tour 48 — Revue de clôture de la nuit
 
 ### Commandes exécutées (échantillon)
 
@@ -2379,7 +2380,7 @@ Fusionner la sélection en un noyau par ligne (8 lancements → 2), supprimer le
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 2014 autres
+- … et 2032 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2507,7 +2508,7 @@ Fusionner la sélection en un noyau par ligne (8 lancements → 2), supprimer le
 
 ## 5. Erreurs rencontrées
 
-107 sorties en erreur ou divergentes. Les premières :
+108 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : a8f2635f8 docs: record which models this box is good at, and why src/llama-hparams.cpp:8:void llama_hparams::set_swa_pattern(uint32_t n_pattern, bool dense_first) { src/llama-hparams.h:308:    void se
 - **T1** : 511 tokens notés — perplexité cumulée 247.031  (4.9 tok/s) === perplexité 247.0308 sur 511 tokens (0 événements, 104.5 s) ===  ### B3 harmony assistant 511 --- ref --- 0.0 0.0 0:00 ls: cannot access '
@@ -2753,4 +2754,5 @@ Fusionner la sélection en un noyau par ligne (8 lancements → 2), supprimer le
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p='reports/rapport-aiguille-topk.md'; s=open(p).read() vieux = """**Ce n'est pas un ralen
 - REPRISE : le livelock corrigé, et le bilan des six résultats de la nuit" && git log --oneline -1; date +%H:%M:%S
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' def patch(p, paires):     s=open(p).read()     for v,n,nom in paires:         assert s.co
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p='reports/rapport-aiguille-topk.md'; s=open(p).read() def rep(v,n,nom):     global s    
 

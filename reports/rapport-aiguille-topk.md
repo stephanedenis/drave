@@ -152,7 +152,7 @@ conditions : 4 096 clés, profondeur 0,5, `--lot 256`.
 | configuration | fenêtre 1 | fenêtre 2 | fenêtre 3 | trouvé |
 |---|---|---|---|---|
 | attention complète | oui (266,2 s) | oui (280,2 s) | oui (251,1 s) | **3/3** |
-| **k = 256** (6,25 %) | NON (240,3 s) | **oui** (302,2 s) | **oui** (241,4 s) | **1/3** |
+| **k = 256** (6,25 %) | NON (240,3 s) | **oui** (302,2 s) | **oui** (241,4 s) | **2/3 (1 échec)** |
 | **k = 1 024** (25 %) | oui (238,9 s) | oui (275,6 s) | oui (265,7 s) | **3/3** |
 
 **La conclusion change de nature** : à k = 256, l'échec n'est pas systématique mais
@@ -164,9 +164,9 @@ Autrement dit :
   il ne se généralise pas ;
 * le « 0/3 » du sprint 4 mesurait trois fois ce même texte, pas trois textes ;
 * la bonne formulation est un **taux**, pas un verdict binaire : sur trois fenêtres,
-  dense 3/3, k = 256 **1/3**, k = 1 024 3/3.
+  dense 3/3, k = 256 **2/3 (une fenêtre échoue)**, k = 1 024 3/3.
 
-Trois fenêtres restent un petit échantillon (l'intervalle de confiance d'un 1/3 sur
+Trois fenêtres restent un petit échantillon (l'intervalle de confiance d'un échec sur
 trois tirages va de 1 % à 90 %) : la mesure à faire est **neuf fenêtres**, ce qui
 donne un taux utilisable. C'est l'objet du sprint 6.
 

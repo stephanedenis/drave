@@ -1207,6 +1207,13 @@ impl KvCache {
     /// Écrit un vecteur de clé et un de valeur à la position `pos`.
     #[inline]
     pub fn ecrire(&mut self, kvh: usize, pos: usize, k: &[f32], v: &[f32]) {
+        // L'INVARIANT est ici, pas dans `assurer` : au-delà du contexte, `assurer`
+        // ne grandit plus et `d = (kvh*cap + pos)*hd` écrivait dans le bloc de la
+        // TÊTE KV SUIVANTE (corruption silencieuse) avant de paniquer sur la
+        // dernière. Mesuré : `--ppl-reparti --ids 300 --ctx 256 --lot 8` →
+        // « range end index 32832 out of range » avant même la connexion au pair.
+        // L'appelant doit borner ses positions ; ici on refuse net.
+        if pos >= self.ctx { return; }
         if pos + 1 > self.cap { self.assurer(pos + 1); }
         let d = (kvh * self.cap + pos) * self.hd;
         if self.bits >= 32 {
@@ -3927,10 +3934,16 @@ dynamique de {dyn_:.3e} (relatif {:.2e})", mx / dyn_.max(1e-9));
         // dégâts) et on le DIT. Sans ce garde, `KvCache::assurer` bouclait sans
         // fin — un hang, pas une erreur — et rien ne l'annonçait.
         let ctx_modele = self.ctx;
-        let ids = if ids.len() > ctx_modele {
-            let coupe = ids.len() - ctx_modele;
-            println!("[contexte] invite de {} jetons > ctx {} : les {} premiers sont \
-ABANDONNÉS (troncature, pas de fenêtrage)", ids.len(), ctx_modele, coupe);
+        // On réserve la place de la GÉNÉRATION : tronquer à `ctx` exactement
+        // laissait la boucle de décodage appeler `forward(pos = ctx)`, dont
+        // l'assertion tombait — un SIGABRT (exit 134) là où le correctif
+        // prétendait rendre la main. Marge de 8 comme le mode session.
+        let place = ctx_modele.saturating_sub(n_new + 8).max(1);
+        let ids = if ids.len() > place {
+            let coupe = ids.len() - place;
+            println!("[contexte] invite de {} jetons > {} (ctx {} − {} de génération) : les {} \
+premiers sont ABANDONNÉS (troncature, pas de fenêtrage)",
+                     ids.len(), place, ctx_modele, n_new, coupe);
             &ids[coupe..]
         } else {
             ids
@@ -3974,6 +3987,13 @@ ABANDONNÉS (troncature, pas de fenêtrage)", ids.len(), ctx_modele, coupe);
             if let Some(f) = flux.as_mut() { f(next); }
             if Some(next) == self.stop_id || Some(next) == self.stop_id2 { break; }
             let pos = ids.len() + step;
+            // Contexte plein : on s'arrête au lieu de dépasser. Sans cette borne,
+            // l'assertion de `forward` faisait tomber le processus (mesuré).
+            if pos + 1 >= ctx_modele {
+                println!("[contexte] contexte plein ({ctx_modele}) : génération arrêtée à \
+{} jetons", out.len());
+                break;
+            }
             last = self.forward(next, pos);
         }
         let gen_s = t1.elapsed().as_secs_f64();

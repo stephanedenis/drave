@@ -879,6 +879,16 @@ fn run_infer(opt: Options) {
         return;
     }
 
+    // Le mode `--topk` (diagnostic) appelle `forward` position par position SANS
+    // passer par `generate` : il lui faut la même borne de contexte, sinon
+    // l'assertion de `forward` fait tomber le processus (relevé par la relecture
+    // de clôture : `--infer --topk` avec une invite trop longue).
+    let ids: Vec<u32> = if ids.len() + n_new + 8 > ctx {
+        let garde = ctx.saturating_sub(n_new + 8).max(1);
+        println!("[contexte] invite de {} jetons > {} (ctx {} − {} de génération) : \
+troncature aux {} derniers", ids.len(), garde, ctx, n_new, garde);
+        ids[ids.len().saturating_sub(garde)..].to_vec()
+    } else { ids };
     let (out, st) = if topk > 0 {
         // pas-à-pas : utile pour confronter les logits à la référence numpy
         let t0 = Instant::now();
@@ -2051,10 +2061,14 @@ nœud continue", f.pos, ctx_local);
                     // son contexte, `KvCache::assurer` ne peut pas agrandir et
                     // tournerait indéfiniment (relevé dans `docs/plan-prefill-reparti.md`).
                     if f.pos as usize + t > mdl.ctx {
+                        // `continue` et non `break` : le nœud doit continuer à
+                        // servir les lots suivants (le message le disait déjà, le
+                        // code faisait l'inverse — relevé par la relecture de
+                        // clôture).
                         println!("[flux] lot refusé : {t} états à partir de la position {} \
-                                  dépassent le contexte {} de ce nœud",
-                                 f.pos, mdl.ctx);
-                        break;
+                                  dépassent le contexte {} de ce nœud — lot ignoré, le nœud \
+continue", f.pos, mdl.ctx);
+                        continue;
                     }
                     mdl.emb_imposee_lot = Some(f.charge.plat().to_vec());
                     let hs = mdl.forward_lot(&vec![0u32; t], f.pos as usize);
@@ -2130,8 +2144,16 @@ fn run_ppl_reparti(opt: Options, pair: &str) {
     println!("[flux] quantification : {} niveaux, seuil {}, top-k {}, renorm {}",
              mdl.act_levels, mdl.act_thresh, mdl.act_topk, mdl.act_renorm);
     let n_layer = mdl.cfg.n_layer;
+    // `limite` (≤ ctx) est respectée pour les ids SYNTHÉTIQUES, mais un `--ids`
+    // fourni la contournait : 300 jetons à ctx 256 faisaient écrire le cache
+    // au-delà du contexte — corruption silencieuse du bloc de la tête KV suivante,
+    // puis panique. On tronque, en le disant.
     let ids: Vec<u32> = if opt.ids.is_empty() {
         (1..=limite as u32).collect()
+    } else if opt.ids.len() > limite {
+        println!("[flux] --ids fournit {} jetons > limite {} (ctx {}) : troncature aux {} \
+derniers", opt.ids.len(), limite, ctx, limite);
+        opt.ids[opt.ids.len() - limite..].to_vec()
     } else { opt.ids.clone() };
     if ids.len() < 2 {
         // La perplexité est une moyenne sur `len - 1` jetons notés : avec un seul
@@ -4377,6 +4399,23 @@ mod tests_plafond {
         assert!(c.cap <= 16, "capacité {} au-delà du contexte 16", c.cap);
         c.assurer(8);
         assert!(c.cap <= 16);
+        // Et la BOUCLE elle-même, pas seulement le plafond : un cache de 4096
+        // positions démarre à 1024 (`new` assure `ctx.min(1024)`), donc
+        // `assurer(3000)` exécute vraiment les doublements, puis `assurer(10000)`
+        // dépasse le contexte et doit rendre la main.
+        let mut grand = model::KvCache::new(32, 2, 4096, 8);
+        assert!(grand.cap < 3000);
+        grand.assurer(3000);
+        assert!(grand.cap >= 3000 && grand.cap <= 4096);
+        grand.assurer(10_000);
+        assert!(grand.cap <= 4096, "capacité {} au-delà du contexte 4096", grand.cap);
+        // L'invariant du chemin d'écriture : au-delà du contexte, on ne corrompt
+        // pas le bloc de la tête KV suivante.
+        let mut c2 = model::KvCache::new(32, 2, 4, 8);
+        let (k, v) = (vec![1.0f32; 8], vec![2.0f32; 8]);
+        c2.ecrire(0, 3, &k, &v);
+        c2.ecrire(0, 99, &k, &v);   // hors contexte : ignoré, pas de panique
+        c2.ecrire(1, 99, &k, &v);
     }
 
     #[test]

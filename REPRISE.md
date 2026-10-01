@@ -512,13 +512,22 @@ KV, lui, ne pèse que 0,25 %.
 23 minutes au lieu de 75 s : son invite faisait 4 731 jetons pour un `--ctx 4608`.
 Le moteur ne refusait pas la demande — **il bouclait sans fin** (`KvCache::assurer`,
 `model.rs:1117` : `while cap < besoin { cap = (cap * 2).min(self.ctx) }`, où `cap`
-plafonne à `ctx`). Le même défaut avait été corrigé côté GPU au sprint 2
-(`kv_assurer`) ; le chemin CPU était resté.
+plafonne à `ctx`). Le même défaut avait été corrigé côté GPU au **sprint 1**
+(`kv_assurer`, commit `47ce9b7`) ; le chemin CPU était resté.
 
-Correctif : la capacité est plafonnée au contexte déclaré, et `Model::generate`
-**tronque l'invite en le disant** (« invite de 4788 jetons > ctx 4608 : les 180
-premiers sont ABANDONNÉS »). Vérifié : la même invite rend la main en 312 s au lieu
-de ne jamais finir. **18 tests** désormais (le nouveau aurait pendu avant).
+Correctif : la capacité est plafonnée au contexte déclaré, `Model::generate`
+**tronque l'invite en réservant la place de la génération** et la boucle de décodage
+**s'arrête** quand le contexte est plein — en le disant à chaque fois.
+
+⚠️ **Le premier correctif était faux, et la relecture de clôture l'a prouvé** :
+tronquer à `ctx` exactement laissait le décodage appeler `forward(pos = ctx)`, dont
+l'assertion tombait — un **SIGABRT** (exit 134) là où je croyais « rendu la main en
+312 s » (mon script de vérification ne lisait pas le code de sortie). Corrigé, et
+re-vérifié **en lisant le code de sortie** : ctx 256 avec une invite de 306 jetons →
+troncature annoncée, **exit 0** ; contexte plein → « génération arrêtée à 255
+jetons », **exit 0**. L'invariant `pos < ctx` est désormais gardé dans
+`KvCache::ecrire` (au-delà, l'écriture partait dans le bloc de la tête KV suivante),
+et `--infer --topk`, `--ppl-reparti --ids` sont bornés. **18 tests.**
 
 ### Ce que la nuit a établi (sprints 2 à 6)
 
@@ -529,8 +538,8 @@ de ne jamais finir. **18 tests** désormais (le nouveau aurait pendu avant).
 | 3 | **Le préremplissage déporté** | prompt de 3 961 jetons : **286,6 → 63,8 s** (×4,5) · perplexité 9,4335 / 9,4337 (écart relatif 2,1e-5) |
 | 4 | **Le déport des projections est EXACT sur un modèle dense** | logits bit à bit identiques (|ΔNLL| moyen 0,0000) ; sur un MoE, 0,038 nat de décalage et 497/511 top-1 identiques → routage des experts (hypothèse) |
 | 5 | **Le noyau fusionné gagne au décodage, jusqu'à 16 k clés** | GPU plat, CPU 4,26 → 38,84 ms/jeton · k = 1 024 suffit à 8 192 clés (12,5 %) |
-| 6 | **L'attention creuse à 6 % échoue sur 1 fenêtre sur 3** (4 096 clés, milieu) | dense 3/3 · k = 256 **1/3** · k = 1 024 3/3 · par fenêtre, 8/9 en dense sur neuf fenêtres contiguës |
-| 7 | **Six artefacts qui promettaient ce qu'ils ne faisaient pas** | garde-fou jamais déclenché · échantillon lu comme un accord global · grep qui ne suit pas la chaîne d'appels · décalage de fenêtre remis à zéro · section annoncée dans un commit mais absente · moteur qui boucle au lieu de refuser |
+| 6 | **L'attention creuse à 6 % échoue sur 1 fenêtre sur 3** (4 096 clés, milieu) | dense 3/3 · k = 256 **2/3 (1 échec)** · k = 1 024 3/3 · par fenêtre, 8/9 en dense sur neuf fenêtres contiguës |
+| 7 | **Six artefacts qui promettaient ce qu'ils ne faisaient pas** | garde-fou jamais déclenché · échantillon lu comme un accord global · grep qui ne suit pas la chaîne d'appels · décalage de fenêtre remis à zéro · section annoncée dans un commit mais absente · **script de vérification qui ne lisait pas le code de sortie** (le correctif du livelock a été cru bon alors qu'il finissait en SIGABRT) |
 
 ### La frontière du cache KV, mesurée en entier
 
