@@ -7,12 +7,12 @@
 | Début | 2026-09-28 14:46 |
 | Durée | 69.4 h |
 | Tours | 51 |
-| Messages | 2961 |
-| Appels d'outils | 2816 |
+| Messages | 2964 |
+| Appels d'outils | 2819 |
 | Fichiers touchés | 63 |
-| Commandes | 2431 |
+| Commandes | 2434 |
 | Sous-agents | 22 |
-| Commits | 244 |
+| Commits | 245 |
 | Compactages de contexte | 4 |
 
 ## Objectifs déclarés
@@ -2400,7 +2400,7 @@ Les téléchargements avancent en parallèle : **DeepSeek-V4.1-Flash 68 %** (249
 
 ### Tour 51 — continue jusqu'à 13h HAE
 
-*253 appels d'outils.* Actions notables :
+*256 appels d'outils.* Actions notables :
 
 - bash — Check time and running processes
 - job_list
@@ -2416,11 +2416,11 @@ Les téléchargements avancent en parallèle : **DeepSeek-V4.1-Flash 68 %** (249
 - todo_write
 - bash — Count buffer accesses in gguf.rs
 - bash — Map functions and base computations
-- … et 239 autres
+- … et 242 autres
 
 **Synthèse produite :**
 
-⏵ Toutes les portes vertes après correctifs. Je commit.
+⏵ Je mets la doc à jour avec les correctifs de la revue.
 
 ## 3. Travail accompli
 
@@ -2559,7 +2559,7 @@ Les téléchargements avancent en parallèle : **DeepSeek-V4.1-Flash 68 %** (249
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 2391 autres
+- … et 2394 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2951,4 +2951,5 @@ Les téléchargements avancent en parallèle : **DeepSeek-V4.1-Flash 68 %** (249
 - Journal du bloc : mmap, nœud partiel, et le défaut prédit par la revue confirmé en vrai  Sprint 08 complété, rapport de mesure écrit, REPRISE.md à jour avec les
 - Cérémonie du sprint 08 : quatre objectifs, deux nés de la preuve d'exécution  Rétrospective : garder le point d'étranglement unique (tbuf, Moe::ou) et le silenc
 - Revue adverse : un défaut bloquant silencieux, et le test qui manquait au correctif  Défauts corrigés (revue déléguée, lecture seule) :  - BLOQUANT SILENCIEUX :
+- Rapports et sprint : les cinq défauts de la revue n°2 et le test qui manquait" && git log --oneline -1; cat /tmp/gate_oss_final2.log
 

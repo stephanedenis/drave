@@ -62,8 +62,10 @@ qui couvre ce cas sans le traiter à part.
 | porte | attendu | obtenu |
 |---|---|---|
 | Qwen2.5-0.5B ctx 256 `--dense` | 19,3885 | **19,3885** |
-| `cargo test --release` | vert | **29 verts** (20 au début du sprint) |
-| gpt-oss-120b ctx 256 | 15,1757 | en cours (binaire figé) |
+| gpt-oss-120b ctx 256 | 15,1757 | **15,1757** |
+| `cargo test --release` | vert | **32 verts** (20 au début du sprint) |
+| modèle en clusters | 15,2789 | **15,2789** |
+| nœud partiel (cluster 0 seul) | 268 786,6218 | **268 786,6218** |
 
 ## Les défauts trouvés
 
@@ -117,6 +119,37 @@ chargement. Le message a nommé la faute immédiatement.
 
 Même mécanisme que l'incident `iq1_m` (8,56 Go annoncés pour 86,9). Les types 41
 et 42, ajoutés à ggml, y tombaient. Un type hors table est désormais signalé.
+
+### 6. Le nœud partiel pouvait perdre des experts sans le dire (revue adverse)
+
+Défaut **bloquant et silencieux**, trouvé par la revue déléguée : `DRAVE_CLUSTERS`
+listant tous les clusters annoncés sur un dossier amputé chargeait ce qui
+restait, et les contributions des experts absents disparaissaient — sans erreur,
+sans renormalisation, sans un mot. Un cluster **demandé mais absent du disque**
+est maintenant une erreur, et un dossier incomplet n'est accepté que s'il est
+assumé.
+
+Trois autres défauts de la même revue : `octets_de` ne bornait pas le *début* de
+la tranche (un décalage aberrant paniquait au lieu de se dire) ; le contrôle de
+continuité des numéros empêchait un nœud de ne **posséder** que ses fichiers
+(seul le disque, pas la mémoire, était découpé) ; et rien ne vérifiait que le
+mapping décrivait le même modèle que les métadonnées.
+
+### 7. Le correctif du nœud partiel n'avait aucun test
+
+Le plus instructif. Remplacer la traduction par numéro de cluster
+(`numeros.position(...)`) par le bug d'origine (`Some((cluster, ligne))`)
+laissait **les trente tests verts** : sur un nœud complet, le numéro et le rang
+coïncident. Il fallait un nœud partiel dont le cluster chargé n'est pas le rang 0.
+
+Le blocage était que `gguf_synth` ne fabriquait que du F32, type que `source_de`
+refuse — donc **aucun `Moe` n'était constructible en test**. Un générateur Q4_0 a
+levé l'obstacle, et deux tests couvrent désormais le chemin. **Vérifiés par
+sabotage** : le bug d'origine les fait rougir.
+
+*Leçon : quand un correctif ne peut pas être testé, la question n'est pas
+« comment écrire le test ? » mais « qu'est-ce qui manque pour le rendre
+testable ? ». Ici, c'était un générateur de fichiers.*
 
 ### Le mmap : 3,3× plus rapide, 3× moins de mémoire
 

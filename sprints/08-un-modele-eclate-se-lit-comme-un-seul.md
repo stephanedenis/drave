@@ -62,7 +62,7 @@ pire qu'un arrêt.
 | chargement du modèle en clusters | 48 couches en **27,8 s**, listes 0,91 Go |
 | **épreuve appariée origine contre clusters** | **15,2789 = 15,2789** (mêmes 63 jetons) |
 | porte Qwen2.5-0.5B ctx 256 | **19,3885** (inchangée) |
-| `cargo test --release` | **29 verts** (20 → 29) |
+| `cargo test --release` | **32 verts** (20 → 32) |
 | mapping produit par le convertisseur | **identique à l'octet près** à celui dérivé du manifeste |
 | **mmap** contre lecture complète (7 jetons) | **9,32 s / 6,35 Go** contre 30,68 s / 19,20 Go — perplexité identique (799,8557) |
 | **nœud partiel** à un cluster | **2,36 Go** de mémoire (contre 6,33 Go) · perplexité 268 786 → 17 929 → 800 en ajoutant des clusters |
@@ -220,6 +220,34 @@ Ses trois attaques les plus utiles :
    pas ; les avoir posés côte à côte dans un rapport aurait été fautif.
 3. **« Et si le dossier contenait neuf clusters au lieu de huit ? »** `ouvrir`
    refuse : `clusters.len() != mapping.n_clusters` est une erreur explicite.
+
+## Revue adverse n°2 (mmap, nœud partiel, numeros)
+
+Une seconde revue déléguée a porté sur le mmap, le nœud partiel et la table des
+numéros de cluster. Elle a répondu à huit questions et **confirmé l'absence de
+fuite, de double `munmap` et de dépassement d'index** — puis trouvé cinq défauts,
+tous corrigés dans le boxing :
+
+- **bloquant silencieux** : `DRAVE_CLUSTERS` couvrant tous les clusters annoncés
+  sur un dossier amputé chargeait ce qui restait ; les contributions des experts
+  absents disparaissaient. Un cluster demandé et absent est désormais une erreur ;
+- `octets_de` ne bornait pas le *début* de la tranche ;
+- le contrôle de continuité empêchait un nœud de ne **posséder** que ses fichiers
+  (seul le disque n'était pas découpé) ;
+- aucune vérification que le mapping et les métadonnées décrivent le même modèle ;
+- un doublon dans `DRAVE_CLUSTERS` passait sans un mot (cosmétique).
+
+Et son constat le plus utile : **le correctif de `Moe::ou` n'avait aucun test** —
+le remettre en cause laissait les trente tests verts. Le blocage était que
+`gguf_synth` ne produisait que du F32, refusé par `source_de`, donc aucun `Moe`
+n'était constructible en test. Un générateur Q4_0 a levé l'obstacle ; les deux
+nouveaux tests sont **vérifiés par sabotage**.
+
+*Ce qui a disparu au passage : deux états globaux du chemin de chargement (le
+drapeau `PARTIEL` et la lecture de `ACTIF` par couche). L'exhaustivité se vérifie
+à l'ouverture du dossier, où les fichiers sont sous la main ; les couches ne
+vérifient que la cohérence entre les trois projections. C'est plus juste, et
+c'est aussi ce qui rend le chemin testable.*
 
 ## Planning
 

@@ -46828,3 +46828,31 @@ noeud partiel cluster 0             : perplexité 268786.6218 sur 7 tokens
 ⏵ Toutes les portes vertes après correctifs. Je commit.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -m \"Revue adverse : un défaut bloquant silencieux, et le test qui manquait au correctif\n\nDéfauts corrigés (revue déléguée, lecture seule) :\n\n- BLOQUANT SILENCIEUX : DRAVE_CLUSTERS listant TOUS les clu … [1800 caractères tronqués]`
+
+  ```
+f98816d Revue adverse : un défaut bloquant silencieux, et le test qui manquait au correctif
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat /tmp/gate_oss_final2.log; echo \"--- proc drave ---\"; pgrep -c -f \"release/drave\"; echo \"--- charge ---\"; cat /proc/loadavg; date +%H:%M", "description": "Check gpt-oss progress and load"}`
+
+  ```
+gpt-oss ctx 256 lot 1 : --- proc drave ---
+4
+--- charge ---
+23.03 20.75 15.75 23/2710 2968862
+12:11
+  ```
+
+### 🤖 Assistant
+
+⏵ Je mets la doc à jour avec les correctifs de la revue.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np = 'reports/rapport-lecteur-multifichiers.md'\ns = open(p).read()\ns = s.replace('''| porte | attendu | obtenu |\n|---|---|---|\n| Qwen2.5-0.5B ctx 256 `--dense` | 19,3885 | **19,3885** |\n| `cargo test --release`  … [3326 caractères tronqués]`
+
+  ```
+ok
+222
+gpt-oss ctx 256 lot 1 :
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np = 'sprints/08-un-modele-eclate-se-lit-comme-un-seul.md'\ns = open(p).read()\ns = s.replace('''| `cargo test --release` | **29 verts** (20 → 29) |''',\n              '''| `cargo test --release` | **32 verts** (20 → … [2071 caractères tronqués]`

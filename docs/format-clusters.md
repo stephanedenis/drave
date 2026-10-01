@@ -137,7 +137,10 @@ d'être compté zéro.
 
 ## Ce qui reste
 
-* **Le nœud partiel** : `DRAVE_CLUSTERS=0,3` ne charge que ces clusters. Mesuré
+* **Le nœud partiel** : `DRAVE_CLUSTERS=0,3` ne charge que ces clusters — et un
+  cluster **demandé mais absent du disque est une erreur**, pas un silence : sans
+  cela, un artefact amputé passait pour complet et les contributions manquantes
+  disparaissaient sans un mot. Mesuré
   sur Qwen3-30B : un nœud à un cluster tient en **2,36 Go** contre 6,33 Go pour
   le modèle entier, et la perplexité décroît à mesure qu'on ajoute des clusters
   (268 786 → 17 929 → 800). **Ce qui manque** : la somme des contributions entre
