@@ -279,7 +279,48 @@ Sur 3 050 991 jetons de français :
 est de 1 pour 22 000. La table entière n'a jamais besoin d'être en mémoire : le
 `mmap` la rend adressable, et le noyau garde chaudes les quelques pages touchées.
 
-## 9. Ce que ça donne pour DeepSeek-V4.1-Flash
+## 9. Trois dernières pistes, et pourquoi elles ne paient pas
+
+### La localité temporelle existe, mais ne suffit pas
+
+Le jeton suivant réutilise-t-il les experts du précédent ?
+
+| couche | réutilisation | hasard |
+|---|---|---|
+| 0 | 27,3 % | 6,2 % |
+| 12 | **49,8 %** | 6,2 % |
+| 24 | 45,5 % | 6,2 % |
+| 47 | **51,9 %** | 6,2 % |
+
+**Facteur 4 à 8 sur le hasard.** Un cache « experts du jeton précédent » — 8
+entrées, prédiction gratuite — sert 27 à 52 % des appels. Mais un LRU de 32 fait
+**78 %** : la localité temporelle est réelle et insuffisante.
+
+### Les experts d'un jeton sont « rangés », mais ça n'aide pas sur NVMe
+
+Étendue moyenne des rangs (experts ordonnés par fréquence) :
+
+| couche | étendue | hasard |
+|---|---|---|
+| 0 | 68,6 | 99,6 |
+| 24 | 60,1 | 99,6 |
+| 47 | **30,8** | 99,6 |
+
+Les experts d'un même jeton sont plus groupés que le hasard — c'est ce
+qu'exploite `convertisseur --trace`, qui les réordonne par fréquence. Mais lire
+par bloc contigu coûterait 30 à 70 experts au lieu de 8. **Sur NVMe, où il n'y a
+pas de seek, lire 8 experts dispersés coûte exactement ce qu'ils pèsent.** La
+localité ne paierait que sur disque mécanique — disqualifié par ailleurs
+(0,06 Go/s en aléatoire).
+
+### Le préchargement ne peut rien masquer
+
+Le calcul d'une couche coûte **0,6 ms**, sa lecture **10,9 ms** : un rapport de
+**18×**. Un préchargement prédictif, même parfait, ne masquerait que **6 %** de
+l'attente. C'est le mur qui explique pourquoi aucune des pistes de prédiction
+(token, langue, périodicité, jeton précédent) ne se traduit en gain.
+
+## 10. Ce que ça donne pour DeepSeek-V4.1-Flash
 
 | | par jeton |
 |---|---|
@@ -319,7 +360,7 @@ le retour de `pread` et a chronométré ce disque à **2 211 Go/s**. C'est le ch
 absurde qui a alerté, pas le test. `O_DIRECT` échoue par ailleurs ici (errno 29),
 donc le régime réellement froid n'est pas mesuré proprement.*
 
-## 10. La conclusion : ce qu'il faut charger avant d'opérer
+## 11. La conclusion : ce qu'il faut charger avant d'opérer
 
 | | poids total | à charger | rapport |
 |---|---|---|---|
@@ -335,7 +376,7 @@ personne n'a besoin de charger.
 C'est aussi la réponse à la question posée au début de la session : ce qu'il faut
 réduire, ce ne sont ni les experts ni les couches, c'est **la table d'engram**.
 
-## 11. Ce qui reste à faire
+## 12. Ce qui reste à faire
 
 1. **L'accès mmappé à l'engram** : c'est la brique principale, et elle divise
    l'empreinte par 5 à lui seule. Elle est **plus simple** que le cache

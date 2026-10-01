@@ -36,6 +36,9 @@ puisqu'il n'y a même pas de LRU à écrire.
 | dictionnaire token → experts | écarté | Jaccard 0,06 aux couches médianes |
 | pré-remplissage du cache | écarté | régime atteint en **32 jetons** |
 | allocation du cache par couche | écarté | gain **+1,2 %** au mieux |
+| localité temporelle | écarté | réutilisation 27–52 % (hasard 6,2 %), mais un LRU de 32 fait 78 % |
+| ordre des experts dans le fichier | écarté | étendue 30–69 rangs ; lire par bloc coûterait 30–70 experts au lieu de 8 |
+| préchargement | écarté | le calcul (0,6 ms) est **18× plus rapide** que la lecture (10,9 ms) |
 
 ## Deux structures trouvées en chemin
 

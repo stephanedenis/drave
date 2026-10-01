@@ -7,12 +7,12 @@
 | Début | 2026-09-28 14:46 |
 | Durée | 74.9 h |
 | Tours | 63 |
-| Messages | 3143 |
-| Appels d'outils | 2976 |
+| Messages | 3145 |
+| Appels d'outils | 2978 |
 | Fichiers touchés | 68 |
-| Commandes | 2585 |
+| Commandes | 2587 |
 | Sous-agents | 22 |
-| Commits | 256 |
+| Commits | 257 |
 | Compactages de contexte | 4 |
 
 ## Objectifs déclarés
@@ -3092,7 +3092,7 @@ Et les 14 paires les plus fortes ont **toutes** un écart de 12 :
 
 ### Tour 63 — nous venons de faire une longue session, il est temps de mettre à jour la doc, rapports, journal et reprise. Ensuite uti … [193 caractères tronqués]
 
-*21 appels d'outils.* Actions notables :
+*23 appels d'outils.* Actions notables :
 
 - bash — Inventory session state and artifacts
 - bash — Start sprint 09
@@ -3108,11 +3108,11 @@ Et les 14 paires les plus fortes ont **toutes** un écart de 12 :
 - bash — Add engram discovery to report
 - bash — Update REPRISE with session findings
 - write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/analyse_empreinte.py`
-- … et 7 autres
+- … et 9 autres
 
 **Synthèse produite :**
 
-⏵ L'outil fonctionne. Je mets à jour le README et j'écris le sprint.
+⏵ Localité temporelle : 27–52 % contre 6,2 % au hasard, mais inexploitable sur NVMe. Je consigne et clôture.
 
 ## 3. Travail accompli
 
@@ -3256,7 +3256,7 @@ Et les 14 paires les plus fortes ont **toutes** un écart de 12 :
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 2545 autres
+- … et 2547 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -3660,4 +3660,5 @@ Et les 14 paires les plus fortes ont **toutes** un écart de 12 :
 - Journal" 2>/dev/null; git status --short | wc -l; echo "---"; date +%H:%M; tail -1 /tmp/tl_file2.log
 - La file de 1 138 Go est terminée : 1 163 Go de modèles lourds, tous complets et lisibles  Sept modèles, six architectures reconnues (deepseek41, deepseek2, deep
 - L'empreinte memoire de DeepSeek-V4.1 : 365,7 Go -> 50-80 Go, et ce n'est pas en decoupant les experts  Decomposition des poids par famille : engram 203,4 Go (55
+- Trois dernieres pistes mesurees et ecartees : localite temporelle, ordre des experts, prechargement  - localite temporelle : le jeton suivant reutilise 27 a 52 
 

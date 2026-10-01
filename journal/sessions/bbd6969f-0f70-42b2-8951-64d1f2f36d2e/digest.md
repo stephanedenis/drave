@@ -50354,3 +50354,38 @@ Created file
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && (cd drave-core && cargo test --release 2>&1 | grep -E \"^test result\"); git add -A && git commit -q -m \"L'empreinte memoire de DeepSeek-V4.1 : 365,7 Go -> 50-80 Go, et ce n'est pas en decoupant les experts\n\nDecomposition des poid … [2209 caractères tronqués]`
+
+  ```
+test result: ok. 32 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.08s
+c7c602d L'empreinte memoire de DeepSeek-V4.1 : 365,7 Go -> 50-80 Go, et ce n'est pas en decoupant les experts
+  ```
+
+### 🤖 Assistant
+
+⏵ Doc et outil commités. Reste la 2ᵉ demande : pousser l'analyse couche par couche. Une piste non explorée — la localité temporelle.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/analyse_localite.py <<'PY'\nimport collections\ntrace = collections.defaultdict(dict)\nfor l in open('/home/stephane/FastNVMe/artefacts/traces/session-01-10/routage_fr_1024.txt'):\n    p = l.split()\n    if len(p) < 3: con … [1987 caractères tronqués]`
+
+  ```
+=== LOCALITÉ TEMPORELLE : le jeton suivant réutilise-t-il les experts du précédent ? ===
+  couche  0 :  27.3 % des experts du jeton j+1 étaient déjà là en j   (hasard : 6.2 %)
+  couche 12 :  49.8 % des experts du jeton j+1 étaient déjà là en j   (hasard : 6.2 %)
+  couche 24 :  45.5 % des experts du jeton j+1 étaient déjà là en j   (hasard : 6.2 %)
+  couche 47 :  51.9 % des experts du jeton j+1 étaient déjà là en j   (hasard : 6.2 %)
+
+=== CACHE « experts du jeton précédent » (prédiction gratuite) ===
+  couche  0 :  27.3 % de succès avec 8 experts seulement
+  couche 24 :  45.4 % de succès avec 8 experts seulement
+  couche 47 :  51.8 % de succès avec 8 experts seulement
+
+=== DISTANCE DANS L'ORDRE DE FRÉQUENCE : les experts d'un jeton sont-ils voisins ? ===
+  couche  0 : étendue moyenne  68.6 rangs (hasard : 99.6)  -> rangés
+  couche 24 : étendue moyenne  60.1 rangs (hasard : 99.6)  -> rangés
+  couche 47 : étendue moyenne  30.8 rangs (hasard : 99.6)  -> rangés
+  ```
+
+### 🤖 Assistant
+
+⏵ Localité temporelle : 27–52 % contre 6,2 % au hasard, mais inexploitable sur NVMe. Je consigne et clôture.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np = 'reports/rapport-empreinte-memoire.md'\ns = open(p).read()\ns = s.replace('''## 9. Ce que ça donne pour DeepSeek-V4.1-Flash''',\n'''## 9. Trois dernières pistes, et pourquoi elles ne paient pas\n\n### La localit … [3693 caractères tronqués]`
