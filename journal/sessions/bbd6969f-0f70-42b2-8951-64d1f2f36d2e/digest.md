@@ -40764,3 +40764,13 @@ e7db33b DeepSeek-V4-Flash téléchargé (86,9 Go, 3 shards) : architecture et to
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ./tools/sprint.sh close | tail -2 && python3 - <<'PY'\np='sprints/07-cloture-de-la-nuit.md'\ns=open(p).read()\ni = s.index(\"## Rétrospective — garder / changer\")\nopen(p,'w').write(s[:i] + open('/tmp/ceremonie7.md').read().lstrip(' … [313 caractères tronqués]`
+
+  ```
+=== clôture du sprint 7 (05:39 → 07:40, prévu 07:39) ===
+trame écrite dans sprints/07-cloture-de-la-nuit.md — à compléter (revue chiffrée, rétro, planning)
+cérémonie 7 écrite
+2a7e6da Sprint 7 : cérémonie (livelock corrigé deux fois, le taux final 8/9 = 8/9, et DeepSeek-V4-Flash téléchargé)
+1
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -m \"Journal : index des sessions (clôture de la nuit)\" 2>/dev/null; (echo \"=== PORTES FINALES 07h42 ===\"; echo -n \"Qwen : \"; ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf --ppl /tmp … [710 caractères tronqués]`

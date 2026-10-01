@@ -7,12 +7,12 @@
 | Début | 2026-09-28 14:46 |
 | Durée | 64.9 h |
 | Tours | 48 |
-| Messages | 2604 |
-| Appels d'outils | 2466 |
+| Messages | 2605 |
+| Appels d'outils | 2467 |
 | Fichiers touchés | 53 |
-| Commandes | 2101 |
+| Commandes | 2102 |
 | Sous-agents | 20 |
-| Commits | 231 |
+| Commits | 232 |
 | Compactages de contexte | 3 |
 
 ## Objectifs déclarés
@@ -2234,7 +2234,7 @@ Fusionner la sélection en un noyau par ligne (8 lancements → 2), supprimer le
 
 ### Tour 48 — Continue en blocs de 2h jusqu'à demain 8h HAE. pour chacun des blocs/sprints tu dois être en autonomie totale. C'est à d … [282 caractères tronqués]
 
-*314 appels d'outils.* Actions notables :
+*315 appels d'outils.* Actions notables :
 
 - bash — Check time and count remaining boxes
 - bash — Start sprint 2
@@ -2250,7 +2250,7 @@ Fusionner la sélection en un noyau par ligne (8 lancements → 2), supprimer le
 - bash — Add poison check and finiteness guard
 - bash — Locate the topk GPU branch
 - bash — Wire fused kernel into the model
-- … et 294 autres
+- … et 295 autres
 
 **Synthèse produite :**
 
@@ -2381,7 +2381,7 @@ Fusionner la sélection en un noyau par ligne (8 lancements → 2), supprimer le
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 2061 autres
+- … et 2062 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2760,4 +2760,5 @@ Fusionner la sélection en un noyau par ligne (8 lancements → 2), supprimer le
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -F - <<'EOF' && git log --oneline -1 DeepSeek-V4.1-Flash : pas de poids ouvert
 - DeepSeek-V4-Flash téléchargé (86,9 Go, 3 shards) : architecture et tokenizer lus depuis le shard 1, 784 tenseurs depuis le shard 2 — il manque le lien entre les
 - Sprint 7 : cérémonie (livelock corrigé deux fois, le taux final 8/9 = 8/9, et DeepSeek-V4-Flash téléchargé)" && git log --oneline -1 && git status --short | wc 
+- Journal : index des sessions (clôture de la nuit)" 2>/dev/null; (echo "=== PORTES FINALES 07h42 ==="; echo -n "Qwen : "; ./drave-core/target/release/drave model
 
