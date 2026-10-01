@@ -40756,3 +40756,11 @@ réversibilité : texte reconstruit identique ✅ (359041 octets)
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='docs/plan-deepseek-v4-flash.md'; s=open(p).read()\nvieux = \"\"\"## Les deux obstacles, mesurés\"\"\"\nneuf = \"\"\"## Ce que le moteur sait déjà faire de ces fichiers (mesuré, 07h36)\n\n| fichier | ce que le mot … [1234 caractères tronqués]`
+
+  ```
+plan : état mesuré du téléchargement
+e7db33b DeepSeek-V4-Flash téléchargé (86,9 Go, 3 shards) : architecture et tokenizer lus depuis le shard 1, 784 tenseurs depuis le shard 2 — il manque le lien entre les deux
+07:40:49
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ./tools/sprint.sh close | tail -2 && python3 - <<'PY'\np='sprints/07-cloture-de-la-nuit.md'\ns=open(p).read()\ni = s.index(\"## Rétrospective — garder / changer\")\nopen(p,'w').write(s[:i] + open('/tmp/ceremonie7.md').read().lstrip(' … [313 caractères tronqués]`
