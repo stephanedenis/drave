@@ -37295,3 +37295,356 @@ trame écrite dans sprints/02-fusionner-la-cha-ne-du-top-k-d-port-desc.md — à
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='sprints/02-fusionner-la-cha-ne-du-top-k-d-port-desc.md'\ns=open(p).read()\ni = s.index(\"## Rétrospective — garder / changer\")\nceremonie = open('/tmp/ceremonie2.md').read()\nopen(p,'w').write(s[:i] + ceremonie. … [445 caractères tronqués]`
+
+  ```
+cérémonie écrite
+b795f09 Sprint 2 : cérémonie (revue adverse autonome, introspection, planning du sprint 3)
+Sprint 1 démarré à 21:49 → 23:49  ·  sprints/01-qualit-de-l-attention-creuse-long-contex.md
+21:49:41
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && mv sprints/01-qualit-de-l-attention-creuse-long-contex.md sprints/03-qualit-de-l-attention-creuse-long-contex.md && read num debut fin < sprints/COURANT && echo \"3 $debut $fin\" > sprints/COURANT && sed -i '1s/^# Sprint 1 /# Sprint  … [213 caractères tronqués]`
+
+  ```
+# Sprint 3 — Qualité de l'attention creuse à long contexte : aiguille à 4k/8k/16k croisée avec --attn-topk 256, et instruction du doute sur le déport des projections
+
+#!/usr/bin/env python3
+"""Aiguille dans la botte de foin — version 2, celle qui mesure vraiment.
+
+La perplexité ne dit pas si un modèle RETROUVE une information. Ce script plante
+un code à une profondeur donnée dans un contexte long, puis le redemande.
+
+Ce qui a changé par rapport à la v1 (mesurée et arrêtée) :
+
+1. **le remplissage est du vrai texte VARIÉ** (`data/wikitext2_test.txt`), et non
+   la même phrase recopiée jusqu'à la longueur voulue. Un remplissage répété ne
+   teste rien : le modèle pouvait répondre en devinant la structure. Chaque sonde
+   prend en plus une FENÊTRE DIFFÉRENTE du corpus, pour que les sondes ne
+   partagent pas leur remplissage ;
+2. **la réponse est longue** (`--n 40` par défaut) : un code peut sortir au
+   deuxième ou troisième jeton, et s'arrêter à 8 jetons faisait échouer des
+   sondes que le modèle savait résoudre ;
+3. **le préremplissage par lots** (`--lot`) rend chaque sonde abordable : le
+   moteur ne l'utilisait que pour la perplexité ;
+4. le contexte réellement atteint est **lu d
+… [681 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"attn-topk\\|add_argument\\|def main\" tools/aiguille.py | head -25 && ls -la data/wikitext2_test.txt 2>/dev/null | head -2 && head -30 reports/aiguille-gpt-oss.md 2>/dev/null", "description": "Inspect needle tool options an … [10 caractères tronqués]`
+
+  ```
+102:def main():
+104:    ap.add_argument("modele")
+105:    ap.add_argument("longueurs")
+106:    ap.add_argument("profondeurs")
+107:    ap.add_argument("--n", type=int, default=40, help="jetons générés (réponse)")
+108:    ap.add_argument("--threads", type=int, default=16)
+109:    ap.add_argument("--lot", type=int, default=256, help="lot de préremplissage")
+110:    ap.add_argument("--timeout", type=int, default=7200)
+111:    ap.add_argument("--gpu", action="store_true", help="DRAVE_GPU=1 (déport des projections)")
+112:    ap.add_argument("--gpu-kv", action="store_true", help="DRAVE_GPU=1 DRAVE_GPU_KV=1 (KV en VRAM)")
+113:    ap.add_argument("--journal", default="")
+-rw-r--r--. 1 stephane stephane 359041 25 sep 18:02 data/wikitext2_test.txt
+# aiguille v2 — /home/stephane/FastNVMe/models/gpt-oss-120b-MXFP4.gguf
+lot 512, 40 jetons de réponse, 16 fils
+
+| contexte | profondeur | trouvé | secondes | détail |
+|---|---|---|---|---|
+| 4096 | 0.1 | **oui** | 653.2 | prompt 3944 jetons |
+| 4096 | 0.5 | **oui** | 566.7 | prompt 3944 jetons |
+| 4096 | 0.9 | **oui** | 559.3 | prompt 3944 jetons |
+  ```
+
+- **bash** `{"command": "ls -la /home/stephane/FastNVMe/models/*.gguf 2>/dev/null | awk '{print $5/1e9\" Go\", $9}' | head -8; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '95,160p' tools/aiguille.py", "description": "List models and read needle tool main"}`
+
+  ```
+1.15767 Go /home/stephane/FastNVMe/models/bge-m3-FP16.gguf
+13.3412 Go /home/stephane/FastNVMe/models/codestral-22b-v0.1-q4_k_m.gguf
+8.98811 Go /home/stephane/FastNVMe/models/deepseek-r1-distill-qwen-14b-q4_k_m.gguf
+1.11732 Go /home/stephane/FastNVMe/models/deepseek-r1-distill-qwen-1.5b-q4_k_m.gguf
+0.849103 Go /home/stephane/FastNVMe/models/eagle3-gpt-oss-120b-Q8_0.gguf
+63.3873 Go /home/stephane/FastNVMe/models/gpt-oss-120b-MXFP4.gguf
+1.35416 Go /home/stephane/FastNVMe/models/mmproj-Qwen2.5-VL-7B-Instruct-f16.gguf
+19.06 Go /home/stephane/FastNVMe/models/Muse-Glimmer-30B-AD-Q4_K_M.gguf
+        corps = corps.rsplit("assistant", 1)[-1]
+    trouve = CODE in corps
+    dt = time.time() - t0
+    detail = f"prompt {n_prompt} jetons"
+    return trouve, dt, detail
+
+
+def main():
+    ap = argparse.ArgumentParser()
+    ap.add_argument("modele")
+    ap.add_argument("longueurs")
+    ap.add_argument("profondeurs")
+    ap.add_argument("--n", type=int, default=40, help="jetons générés (réponse)")
+    ap.add_argument("--threads", type=int, default=16)
+    ap.add_argument("--lot", type=int, default=256, help="lot de préremplissage")
+    ap.add_argument("--timeout", type=int, default=7200)
+    ap.add_ar
+… [1883 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '55,95p' tools/aiguille.py", "description": "Read the probe function"}`
+
+  ```
+# Les tokenizers anglais tournent autour de 4,2 caractères par jeton ; la
+    # longueur exacte est relue dans la sortie du moteur.
+    cible = int(ctx * 4.2)
+    besoin = cible + 400
+    if offset + besoin > len(corpus):
+        offset = 0
+    remplissage = corpus[offset:offset + besoin]
+    coupe = int(len(remplissage) * profondeur)
+    # On coupe sur un espace pour ne pas hacher un mot.
+    while coupe < len(remplissage) and remplissage[coupe] != " ":
+        coupe += 1
+    texte = remplissage[:coupe] + AIGUILLE + remplissage[coupe:]
+    invite = texte + "\n\n" + QUESTION
+
+    env = dict(os.environ)
+    if args.gpu:
+        env["DRAVE_GPU"] = "1"
+    if args.gpu_kv:
+        env["DRAVE_GPU"] = "1"
+        env["DRAVE_GPU_KV"] = "1"
+    cmd = [Q, modele, "--infer", "--chat", "--flux", "--prompt", invite,
+           "--n", str(args.n), "--ctx", str(ctx + 512), "--threads", str(args.threads),
+           "--temp", "0", "--lot", str(args.lot)]
+    t0 = time.time()
+    try:
+        r = subprocess.run(cmd, capture_output=True, text=True, timeout=args.timeout,
+                           env=env)
+    except subprocess.TimeoutExpired:
+        return None, time.time() - t0, "délai dépassé"
+ 
+… [662 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='tools/aiguille.py'; s=open(p).read()\ndef rep(v,n,nom):\n    global s\n    assert s.count(v)==1, f\"{nom}::{s.count(v)}\"\n    s=s.replace(v,n,1)\nrep(\"\"\"    ap.add_argument(\"--journal\", default=\"\")\"\"\", … [2972 caractères tronqués]`
+
+  ```
+aiguille : options top-k ajoutées
+syntaxe OK
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 900 python3 tools/aiguille.py models/Qwen2.5-0.5B-Q8_0.gguf 2048 0.5 --n 24 --lot 256 2>&1 | tail -6", "description": "Quick needle sanity check on Qwen 0.5B", "timeoutMs": 960000}`
+
+  ```
+aiguille v2 : models/Qwen2.5-0.5B-Q8_0.gguf
+  remplissage : data/wikitext2_test.txt (353778 caractères), fenêtres décalées
+  lot 256 · 24 jetons de réponse · GPU non · attention COMPLÈTE
+ contexte  profondeur  trouvé  secondes  détail
+     2048        0.50     oui      89.7  prompt 2147 jetons
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && head -14 reports/aiguille-30b.md 2>/dev/null; ls /home/stephane/FastNVMe/models/ | grep -i \"qwen3\\|1.5B\" | head -5", "description": "Check 30B needle timings"}`
+
+  ```
+# aiguille v2 — /home/stephane/FastNVMe/models/Qwen3-30B-A3B-Instruct-2507-Q4_K_M.gguf
+lot 256, 40 jetons de réponse, 16 fils
+
+| contexte | profondeur | trouvé | secondes | détail |
+|---|---|---|---|---|
+| 2048 | 0.1 | **oui** | 667.6 | prompt 2147 jetons |
+| 2048 | 0.5 | **oui** | 690.5 | prompt 2147 jetons |
+| 2048 | 0.9 | **oui** | 651.5 | prompt 2147 jetons |
+deepseek-r1-distill-qwen-1.5b-q4_k_m.gguf
+qwen2.5-1.5b-instruct-q4_k_m.gguf
+Qwen3-30B-A3B-Instruct-2507-Q4_K_M.gguf
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/aiguille_topk.sh <<'EOF'\n#!/bin/bash\n# L'attention creuse retrouve-t-elle l'information ? Aiguille à 4 k et 8 k,\n# profondeurs 0.1/0.5/0.9, trois chemins : complète (référence), top-k 256 CPU,\n# top-k 256 déporté (noya … [980 caractères tronqués]`
+
+  ```
+aiguille lancée
+21:51:58
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"logits_bin\" drave-core/src/main.rs | head -5 && head -20 tools/compare_logits.py", "description": "Check logits export options"}`
+
+  ```
+486:    logits_bin: Option<String>, ppl_profil: bool,
+557:            "--logits-bin" => { o.logits_bin = Some(suivant(i).clone()); 2 }
+3785:        ffn_gain, logits_bin, keep,
+3966:    let mut journal = match &logits_bin {
+4060:    if let (Some(w), Some(f)) = (journal, &logits_bin) {
+#!/usr/bin/env python3
+"""Compare deux fichiers de logits au format :
+   int32 n_vocab, int32 n_pos, puis n_pos lignes de n_vocab f32 (petit-boutiste).
+
+Usage : compare_logits.py <notre.bin> <reference.bin> [ids.txt]
+
+Rend : par position, la perte (NLL) de chacun, l'écart de NLL, le rang du jeton
+cible dans chacun, et l'accord du top-1. C'est ce qui localise une divergence :
+une erreur d'embedding ou de norme se voit dès la position 0 ; une erreur de
+position (RoPE) fait croître l'écart avec la position ; une erreur de MoE ou de
+tête fait décrocher toutes les positions d'un coup.
+"""
+import struct, sys, math
+
+try:
+    import numpy as np
+except ImportError:
+    np = None
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && O=/home/stephane/FastNVMe/models/gpt-oss-120b-MXFP4.gguf; nohup bash -c \"\ncd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\nO=$O\necho '--- CPU ---'\ntimeout 900 ./drave-core/target/release/drave \\$O --ppl /tmp/ids_oss_512.txt - … [607 caractères tronqués]`
+
+  ```
+logits lancés
+21:52:12
+########## ctx 4096 profondeur 0.1
+--- complete
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 420; cat /tmp/aiguille_topk.log; echo \"=== logits ===\"; cat /tmp/logits_run.log 2>/dev/null | tail -5; date +%H:%M:%S", "description": "Check needle and logits progress", "timeoutMs": 500000}`
+
+  ```
+########## ctx 4096 profondeur 0.1
+--- complete
+=== logits ===
+perplexité 18.5803 sur 511 tokens
+--- GPU (projections) ---
+perplexité 18.3538 sur 511 tokens
+-rw-r--r--. 1 stephane stephane 411023880 30 sep 21:55 /tmp/logits_cpu.bin
+-rw-r--r--. 1 stephane stephane 411023880 30 sep 21:58 /tmp/logits_gpu.bin
+21:59:16
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 600 python3 tools/compare_logits.py /tmp/logits_cpu.bin /tmp/logits_gpu.bin /tmp/ids_oss_512.txt 2>&1 | tail -25", "description": "Compare CPU and GPU logits", "timeoutMs": 660000}`
+
+  ```
+18   42149    1.0095    1.0092  +0.0003         2         2      9402      9402     oui
+   19   19556    0.0584    0.0585  -0.0000         1         1     19556     19556     oui
+   20     887    3.5958    3.5959  -0.0001         8         8        13        13     oui
+   21    1679    0.4486    0.4485  +0.0001         1         1      1679      1679     oui
+   22    1458    5.2481    5.2485  -0.0004        18        18       382       382     oui
+   23     261    0.9253    0.9255  -0.0002         1         1       261       261     oui
+   32   19123    2.4584    2.4579  +0.0005         2         2     28619     28619     oui
+   64      16    2.0471    2.0470  +0.0001         3         3        20        20     oui
+   96   50570    4.6295    4.5981  +0.0315        10        10     10518     10518     oui
+  128   20005    1.2264    1.1888  +0.0376         1         1     20005     20005     oui
+  160     290    1.4092    1.4175  -0.0082         1         1       290       290     oui
+  192    1366    0.3933    0.3791  +0.0143         1         1      1366      1366     oui
+  224   18030    3.7998    3.9793  -0.1794         8         9      1217      1217     oui
+  256     396    3.2
+… [880 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 600 python3 tools/compare_logits.py /tmp/logits_cpu.bin /tmp/logits_gpu.bin /tmp/ids_oss_512.txt > /tmp/compare_logits_gptoss.txt 2>&1; grep -E \"écart|perplexité|corrélation|accord\" /tmp/compare_logits_gptoss.txt | tail -5; … [199 caractères tronqués]`
+
+  ```
+pos   cible  NLL nous   NLL réf    écart rang nous  rang réf top1 nous  top1 réf  accord
+écart |NLL| : moyenne 0.0379 · médiane 0.0123 · max 1.3708
+perplexité nous : 18.5803   référence : 18.3538   (511 positions)
+corrélation des logits (position 0) : 1.000000
+0
+--- aiguille ---
+########## ctx 4096 profondeur 0.1
+--- complete
+     4096        0.10     oui     725.1  prompt 4114 jetons
+--- topk 256 CPU
+22:04:10
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && pkill -f aiguille_topk.sh; pkill -f \"tools/aiguille.py\"; sleep 2; pgrep -af aiguille | head -3; M=/home/stephane/FastNVMe/models/qwen2.5-1.5b-instruct-q4_k_m.gguf; time timeout 900 python3 tools/aiguille.py $M 4096 0.5 --n 16 --lot … [89 caractères tronqués]`
+
+  ```
+(no output)
+[killed by signal: SIGTERM]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && pgrep -af \"aiguille\" | head -3; M=/home/stephane/FastNVMe/models/qwen2.5-1.5b-instruct-q4_k_m.gguf; ( time timeout 900 python3 tools/aiguille.py $M 4096 0.5 --n 16 --lot 1024 2>&1 | tail -2 ) 2>&1 | tail -5", "description": "Time a … [43 caractères tronqués]`
+
+  ```
+2458729 timeout 1800 python3 tools/aiguille.py /home/stephane/FastNVMe/models/qwen2.5-1.5b-instruct-q4_k_m.gguf 4096 0.1 --n 32 --lot 256 --attn-topk 256
+2458731 python3 tools/aiguille.py /home/stephane/FastNVMe/models/qwen2.5-1.5b-instruct-q4_k_m.gguf 4096 0.1 --n 32 --lot 256 --attn-topk 256
+2458814 bash -c cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && pgrep -af "aiguille" | head -3; M=/home/stephane/FastNVMe/models/qwen2.5-1.5b-instruct-q4_k_m.gguf; ( time timeout 900 python3 tools/aiguille.py $M 4096 0.5 --n 16 --lot 1024 2>&1 | tail -2 ) 2>&1 | tail -5
+[timed out after 600000ms]
+[killed by signal: SIGTERM]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && pkill -f \"aiguille.py\" ; sleep 2; pgrep -af aiguille | grep -v pgrep | head -2; cat > /tmp/aig2.sh <<'EOF'\n#!/bin/bash\nset -u\ncd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\nM=models/Qwen2.5-0.5B-Q8_0.gguf\nJ=/tmp/aiguille_t … [799 caractères tronqués]`
+
+  ```
+(no output)
+[killed by signal: SIGTERM]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && pgrep -af \"aiguille.py\" | grep -v pgrep | wc -l; ls -la /tmp/aig2.sh 2>/dev/null; nohup /tmp/aig2.sh > /dev/null 2>&1 & sleep 5; pgrep -af \"aig2.sh\" | head -2; date +%H:%M:%S", "description": "Verify grid launched"}`
+
+  ```
+0
+2461579 bash -c cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && pgrep -af "aiguille.py" | grep -v pgrep | wc -l; ls -la /tmp/aig2.sh 2>/dev/null; nohup /tmp/aig2.sh > /dev/null 2>&1 & sleep 5; pgrep -af "aig2.sh" | head -2; date +%H:%M:%S
+22:14:44
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for pid in $(pgrep -f \"tools/aiguille\" | head -5); do kill $pid 2>/dev/null; done; sleep 1; pgrep -cf \"tools/aiguille\"; cat > /tmp/aig2.sh <<'SCRIPT'\n#!/bin/bash\nset -u\ncd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\nM=mod … [829 caractères tronqués]`
+
+  ```
+(no output)
+[killed by signal: SIGTERM]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls -la /tmp/aig2.sh; cat /tmp/aiguille_topk2.log 2>/dev/null | head -3; pgrep -cf \"tools/aiguille\"; date +%H:%M:%S", "description": "Check if script exists and is running"}`
+
+  ```
+1
+22:14:53
+[stderr]
+ls: cannot access '/tmp/aig2.sh': No such file or directory
+  ```
+
+- **bash** `{"command": "ps -eo pid,etime,args | grep -E \"python3 tools/aig|timeout 1800\" | grep -v grep | head -5; echo \"---\"; date +%H:%M:%S", "description": "List needle processes without self-match"}`
+
+  ```
+---
+22:14:58
+  ```
+
+- **write** `{"file_path": "/tmp/aig2.sh", "content": "#!/bin/bash\n# L'attention creuse RETROUVE-T-ELLE l'information ? Aiguille à 4096 (trois\n# profondeurs, trois chemins) puis 8192 (profondeur médiane, trois chemins).\n# Mesuré : une sonde coûte ~175 ms par jeton de prompt (le chemin `--infer`\n# préremplit  … [811 caractères tronqués]`
+
+  ```
+<path>/tmp/aig2.sh</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "chmod +x /tmp/aig2.sh && cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && nohup /tmp/aig2.sh > /dev/null 2>&1 & sleep 10; cat /tmp/aiguille_topk2.log; date +%H:%M:%S", "description": "Launch needle grid properly"}`
+
+  ```
+ctx 4096 · prof 0.1 · complete   : 22:15:17
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf --ppl /tmp/wt2_ids.txt --ctx 256 --abits 16 --threads 8 --limit 256 --logits-bin /tmp/l_cpu.bin 2>&1 | grep -oE \"perplexité [0-9.]+ sur [0-9]+ tokens\" | tail -1; DRAVE … [414 caractères tronqués]`
+
+  ```
+perplexité 17.4315 sur 255 tokens
+perplexité 17.4315 sur 255 tokens
+
+écart |NLL| : moyenne 0.0000 · médiane 0.0000 · max 0.0000
+perplexité nous : 17.4314   référence : 17.4314   (255 positions)
+corrélation des logits (position 0) : 1.000000
+  ```
+
+- **write** `{"content": "# Rapport — pourquoi le déport des projections change (ou non) la perplexité\n\n**En une ligne** : sur un modèle **dense**, le déport des projections donne des\nlogits **identiques** au CPU (écart moyen 0,0000) ; sur un **MoE**, il les décale de\n**0,038 nat** en moyenne — même top-1 pa … [3734 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-logits-gpu-vs-cpu.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat /tmp/aiguille_topk2.log; date +%H:%M:%S", "description": "Check needle progress"}`
+
+  ```
+ctx 4096 · prof 0.1 · complete   : 22:17:17
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='REPRISE.md'; s=open(p).read()\nvieux = \"\"\"⚠️ **Doute, à moitié levé** : le déport des projections change la perplexité de\ngpt-oss de **−1,22 %** quand l'attention porte sur 511 clés (ctx 512 et ctx 1024\ndonn … [2492 caractères tronqués]`

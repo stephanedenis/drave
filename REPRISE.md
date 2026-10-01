@@ -495,15 +495,15 @@ partagé par bloc), `k > n` accepté, comptages en `float` non bornés.
 sort avant la somme, et le sabotage redevient un refus propre. **Un garde-fou non
 testé est une décoration.**
 
-⚠️ **Doute, à moitié levé** : le déport des projections change la perplexité de
-gpt-oss de **−1,22 %** quand l'attention porte sur 511 clés (ctx 512 et ctx 1024
-donnent EXACTEMENT la même valeur, 18,5803 / 18,3538 — normal : 511 jetons < 512,
-donc le contexte ne joue plus), contre **−0,06 %** à ctx 256, où le moteur évalue
-deux fenêtres de 255 clés. Les deux mesures ne portent donc pas sur le même calcul,
-et l'effet croît avec la longueur d'attention — plausible (une perturbation de
-1e-7 sur les logits bascule d'autant plus de jetons que l'attention est longue),
-mais **non démontré**. Le miroir KV, lui, ne pèse que 0,25 %. À instruire en isolant
-tête, projections et experts, sur un jeu de jetons strictement identique.
+✅ **Doute instruit** (`reports/rapport-logits-gpu-vs-cpu.md`) : le déport des
+projections donne des logits **IDENTIQUES au CPU sur un modèle dense**
+(Qwen2.5-0.5B : écart moyen |ΔNLL| = 0,0000, perplexité 17,4315 des deux côtés) et
+les décale de **0,038 nat** sur gpt-oss (MxFP4, 128 experts top-8), avec le **même
+top-1 sur les 511 positions**. Les noyaux GPU sont donc exacts ; ce qui diffère,
+c'est le **routage des experts** — un top-8 est une opération discrète, qu'un écart
+de 1e-7 sur un logit de routeur peut faire basculer. Hypothèse fortement étayée par
+le contraste dense/MoE, à démontrer en comparant les routages eux-mêmes. Le miroir
+KV, lui, ne pèse que 0,25 %.
 
 ### La frontière du cache KV, mesurée en entier
 

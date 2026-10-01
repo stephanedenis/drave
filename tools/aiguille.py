@@ -72,9 +72,15 @@ def sonde(modele, corpus, ctx, profondeur, offset, args):
     if args.gpu_kv:
         env["DRAVE_GPU"] = "1"
         env["DRAVE_GPU_KV"] = "1"
+    if args.gpu_topk:
+        env["DRAVE_GPU"] = "1"
+        env["DRAVE_GPU_KV"] = "1"
+        env["DRAVE_GPU_TOPK"] = "1"
     cmd = [Q, modele, "--infer", "--chat", "--flux", "--prompt", invite,
            "--n", str(args.n), "--ctx", str(ctx + 512), "--threads", str(args.threads),
            "--temp", "0", "--lot", str(args.lot)]
+    if args.attn_topk > 0:
+        cmd += ["--attn-topk", str(args.attn_topk)]
     t0 = time.time()
     try:
         r = subprocess.run(cmd, capture_output=True, text=True, timeout=args.timeout,
@@ -110,6 +116,14 @@ def main():
     ap.add_argument("--timeout", type=int, default=7200)
     ap.add_argument("--gpu", action="store_true", help="DRAVE_GPU=1 (déport des projections)")
     ap.add_argument("--gpu-kv", action="store_true", help="DRAVE_GPU=1 DRAVE_GPU_KV=1 (KV en VRAM)")
+    # Croisement avec l'attention creuse : le sprint 2 a rendu le top-k déporté
+    # plus rapide que le CPU dès ~300 clés, mais la question qui compte pour la
+    # MISSION n'est pas la vitesse : une attention qui ne garde que k clés
+    # RETROUVE-T-ELLE encore l'information plantée à 4 k / 8 k / 16 k ?
+    ap.add_argument("--attn-topk", type=int, default=0,
+                    help="--attn-topk N (0 = attention complète)")
+    ap.add_argument("--gpu-topk", action="store_true",
+                    help="DRAVE_GPU=1 DRAVE_GPU_KV=1 DRAVE_GPU_TOPK=1")
     ap.add_argument("--journal", default="")
     args = ap.parse_args()
 
@@ -118,7 +132,10 @@ def main():
     profondeurs = [float(x) for x in args.profondeurs.split(",")]
     print(f"aiguille v2 : {args.modele}")
     print(f"  remplissage : {CORPUS} ({len(corpus)} caractères), fenêtres décalées")
-    print(f"  lot {args.lot} · {args.n} jetons de réponse · GPU {'KV ' if args.gpu_kv else ('proj ' if args.gpu else 'non')}")
+    topk = f" · attn-topk {args.attn_topk}" if args.attn_topk else " · attention COMPLÈTE"
+    gpu = ("top-k déporté" if args.gpu_topk
+           else ("KV " if args.gpu_kv else ("proj " if args.gpu else "non")))
+    print(f"  lot {args.lot} · {args.n} jetons de réponse · GPU {gpu}{topk}")
     print(f"{'contexte':>9} {'profondeur':>11} {'trouvé':>7} {'secondes':>9}  détail")
     lignes = []
     offset = 0
@@ -134,8 +151,9 @@ def main():
     if args.journal:
         with open(args.journal, "w", encoding="utf-8") as f:
             f.write(f"# aiguille v2 — {args.modele}\n")
-            f.write(f"lot {args.lot}, {args.n} jetons de réponse, "
-                    f"{args.threads} fils\n\n")
+            f.write(f"lot {args.lot}, {args.n} jetons de réponse, {args.threads} fils, "
+                    f"{'attn-topk ' + str(args.attn_topk) if args.attn_topk else 'attention complète'}, "
+                    f"GPU {'top-k déporté' if args.gpu_topk else ('KV' if args.gpu_kv else ('proj' if args.gpu else 'non'))}\n\n")
             f.write("| contexte | profondeur | trouvé | secondes | détail |\n")
             f.write("|---|---|---|---|---|\n")
             for ctx, p, etat, dt, detail in lignes:

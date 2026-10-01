@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 55.0 h |
+| Durée | 55.5 h |
 | Tours | 48 |
-| Messages | 2342 |
-| Appels d'outils | 2216 |
-| Fichiers touchés | 47 |
-| Commandes | 1865 |
+| Messages | 2368 |
+| Appels d'outils | 2242 |
+| Fichiers touchés | 49 |
+| Commandes | 1889 |
 | Sous-agents | 15 |
-| Commits | 202 |
+| Commits | 203 |
 | Compactages de contexte | 3 |
 
 ## Objectifs déclarés
@@ -2234,7 +2234,7 @@ Fusionner la sélection en un noyau par ligne (8 lancements → 2), supprimer le
 
 ### Tour 48 — Continue en blocs de 2h jusqu'à demain 8h HAE. pour chacun des blocs/sprints tu dois être en autonomie totale. C'est à d … [282 caractères tronqués]
 
-*64 appels d'outils.* Actions notables :
+*90 appels d'outils.* Actions notables :
 
 - bash — Check time and count remaining boxes
 - bash — Start sprint 2
@@ -2250,7 +2250,7 @@ Fusionner la sélection en un noyau par ligne (8 lancements → 2), supprimer le
 - bash — Add poison check and finiteness guard
 - bash — Locate the topk GPU branch
 - bash — Wire fused kernel into the model
-- … et 48 autres
+- … et 74 autres
 
 **Synthèse produite :**
 
@@ -2309,6 +2309,8 @@ Fusionner la sélection en un noyau par ligne (8 lancements → 2), supprimer le
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/gpu.rs` | 0 | 3 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-gpu-topk-selection.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/README.md` | 0 | 1 |
+| `/tmp/aig2.sh` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-logits-gpu-vs-cpu.md` | 1 | 0 |
 
 ### Sous-agents lancés
 
@@ -2370,7 +2372,7 @@ Fusionner la sélection en un noyau par ligne (8 lancements → 2), supprimer le
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 1825 autres
+- … et 1849 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2720,4 +2722,5 @@ Fusionner la sélection en un noyau par ligne (8 lancements → 2), supprimer le
 - REPRISE : sprint 2 (fusion du top-k, croisement à ~300 clés, le filet testé, le doute sur les projections)" && git log --oneline -1; date +%H:%M:%S
 - REPRISE : le doute sur les projections est à moitié levé (ctx 512 et 1024 identiques, ctx 256 évalue une autre chose)" && sleep 1400; date +%H:%M:%S; ./tools/sp
 - Sprint 2 : cérémonie (revue adverse autonome, introspection, planning du sprint 3)" && git log --oneline -1 && ./tools/sprint.sh start "Qualité de l'attention c
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p='REPRISE.md'; s=open(p).read() vieux = """⚠️ **Doute, à moitié levé** : le déport des p
 
