@@ -50389,3 +50389,13 @@ c7c602d L'empreinte memoire de DeepSeek-V4.1 : 365,7 Go -> 50-80 Go, et ce n'est
 ⏵ Localité temporelle : 27–52 % contre 6,2 % au hasard, mais inexploitable sur NVMe. Je consigne et clôture.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np = 'reports/rapport-empreinte-memoire.md'\ns = open(p).read()\ns = s.replace('''## 9. Ce que ça donne pour DeepSeek-V4.1-Flash''',\n'''## 9. Trois dernières pistes, et pourquoi elles ne paient pas\n\n### La localit … [3693 caractères tronqués]`
+
+  ```
+ok
+sprint ok
+6586008 Trois dernieres pistes mesurees et ecartees : localite temporelle, ordre des experts, prechargement
+=== clôture du sprint 9 (16:35 → 17:43, prévu 18:35) ===
+trame écrite dans sprints/09-empreinte-memoire-ce-qui-reduit-vraiment.md — à compléter (revue chiffrée, rétro, planning)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np = 'sprints/09-empreinte-memoire-ce-qui-reduit-vraiment.md'\ns = open(p).read()\n# La trame de clôture a été ajoutée en fin de fichier ; on la remplace par la\n# version remplie, cohérente avec le reste.\ni = s.fin … [1933 caractères tronqués]`

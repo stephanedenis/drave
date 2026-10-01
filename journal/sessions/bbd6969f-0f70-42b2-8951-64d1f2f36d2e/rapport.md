@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 74.9 h |
+| Durée | 75.0 h |
 | Tours | 63 |
-| Messages | 3145 |
-| Appels d'outils | 2978 |
+| Messages | 3146 |
+| Appels d'outils | 2979 |
 | Fichiers touchés | 68 |
-| Commandes | 2587 |
+| Commandes | 2588 |
 | Sous-agents | 22 |
-| Commits | 257 |
+| Commits | 258 |
 | Compactages de contexte | 4 |
 
 ## Objectifs déclarés
@@ -3092,7 +3092,7 @@ Et les 14 paires les plus fortes ont **toutes** un écart de 12 :
 
 ### Tour 63 — nous venons de faire une longue session, il est temps de mettre à jour la doc, rapports, journal et reprise. Ensuite uti … [193 caractères tronqués]
 
-*23 appels d'outils.* Actions notables :
+*24 appels d'outils.* Actions notables :
 
 - bash — Inventory session state and artifacts
 - bash — Start sprint 09
@@ -3108,7 +3108,7 @@ Et les 14 paires les plus fortes ont **toutes** un écart de 12 :
 - bash — Add engram discovery to report
 - bash — Update REPRISE with session findings
 - write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/analyse_empreinte.py`
-- … et 9 autres
+- … et 10 autres
 
 **Synthèse produite :**
 
@@ -3256,7 +3256,7 @@ Et les 14 paires les plus fortes ont **toutes** un écart de 12 :
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 2547 autres
+- … et 2548 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -3661,4 +3661,5 @@ Et les 14 paires les plus fortes ont **toutes** un écart de 12 :
 - La file de 1 138 Go est terminée : 1 163 Go de modèles lourds, tous complets et lisibles  Sept modèles, six architectures reconnues (deepseek41, deepseek2, deep
 - L'empreinte memoire de DeepSeek-V4.1 : 365,7 Go -> 50-80 Go, et ce n'est pas en decoupant les experts  Decomposition des poids par famille : engram 203,4 Go (55
 - Trois dernieres pistes mesurees et ecartees : localite temporelle, ordre des experts, prechargement  - localite temporelle : le jeton suivant reutilise 27 a 52 
+- Sprint 09 : ceremonie (onze pistes mesurees, trois retenues)" && git log --oneline -3; echo "=== état final ==="; (cd drave-core && cargo test --release 2>&1 | 
 

@@ -89,3 +89,36 @@ mais un index 1,56× plus petit si on regroupe par bloc.
 | 2 | Cache d'experts adossé au disque | 25 % d'empreinte → 80 % des appels servis |
 | 3 | Tête restreinte par langue | −30 % de trafic, perplexité inchangée sur le vocabulaire complet |
 | 4 | `forward` deepseek4 | la perplexité de V4-Flash égale celle de la référence llama.cpp |
+
+
+## Revue — ce qui est livré, mesuré
+
+Rapport [`reports/rapport-empreinte-memoire.md`](reports/rapport-empreinte-memoire.md),
+outil [`tools/analyse_empreinte.py`](../tools/analyse_empreinte.py), traces
+conservées sur le NVMe (21 Mo, rejouables).
+
+**Onze pistes mesurées, trois retenues.** Le résultat principal n'était pas
+attendu : l'engram pèse 55,6 % du modèle et n'est pas un tenseur de poids mais
+une table creuse — 203 Go qui tombent à 0,4 Go chargés.
+
+Durée : 68 min (boxing 120 min). Commits : 2.
+
+## Rétrospective — garder / changer
+
+- **Garder** : avoir cherché la décomposition des poids AVANT d'optimiser le
+  découpage. Six tours ont été passés sur les experts (42 % du modèle) alors que
+  le gisement était ailleurs (56 %).
+- **Garder** : les trois absurdités qui ont alerté — disque mécanique à
+  2 211 Go/s, allocation de cache à 4,1 %, total à 4 231 Go. Aucune n'a été
+  détectée par un test, toutes par invraisemblance.
+- **Changer** : vérifier le retour des appels système. `pread` sans contrôle a
+  produit un chiffre faux d'un facteur 37 000.
+- **Doute** : l'extrapolation à V4.1 suppose la même concentration relative, et
+  l'engram n'est pas exécuté (pas de `forward`). Les deux sont signalés dans le
+  rapport plutôt que lissés.
+
+## Planning
+
+Voir le tableau du sprint. Le premier chantier — l'accès mmappé à l'engram — est
+le seul qui divise l'empreinte par 5, et c'est aussi le plus simple : pas de LRU,
+le noyau fait le travail.
