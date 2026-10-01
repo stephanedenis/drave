@@ -506,6 +506,32 @@ de 1e-7 sur un logit de routeur peut faire basculer. Hypothèse fortement étay�
 le contraste dense/MoE, à démontrer en comparant les routages eux-mêmes. Le miroir
 KV, lui, ne pèse que 0,25 %.
 
+### Sprint 7 (05h39 → 07h39) : clôture de la nuit — le livelock du contexte
+
+**Un défaut bloquant trouvé par accident, et corrigé.** Une sonde d'aiguille a duré
+23 minutes au lieu de 75 s : son invite faisait 4 731 jetons pour un `--ctx 4608`.
+Le moteur ne refusait pas la demande — **il bouclait sans fin** (`KvCache::assurer`,
+`model.rs:1117` : `while cap < besoin { cap = (cap * 2).min(self.ctx) }`, où `cap`
+plafonne à `ctx`). Le même défaut avait été corrigé côté GPU au sprint 2
+(`kv_assurer`) ; le chemin CPU était resté.
+
+Correctif : la capacité est plafonnée au contexte déclaré, et `Model::generate`
+**tronque l'invite en le disant** (« invite de 4788 jetons > ctx 4608 : les 180
+premiers sont ABANDONNÉS »). Vérifié : la même invite rend la main en 312 s au lieu
+de ne jamais finir. **18 tests** désormais (le nouveau aurait pendu avant).
+
+### Ce que la nuit a établi (sprints 2 à 6)
+
+| # | résultat | mesure |
+|---|---|---|
+| 1 | **Noyau fusionné du top-k** : descente radix + collecte + somme en UN noyau par ligne | 8 lancements → 2 · tampon `nh × n × 4` supprimé · écart 7,2e-7 (avec puits) et 8,4e-7 (sans) |
+| 2 | **Le déport du top-k gagne** | attention plate 4,5–5,0 ms/jeton de 255 à 4 095 clés · croisement ~300 clés · ×7,8 à 4 095 clés |
+| 3 | **Le préremplissage déporté** | prompt de 3 961 jetons : **286,6 → 63,8 s** (×4,5) · perplexité 9,4335 / 9,4337 (écart relatif 2,1e-5) |
+| 4 | **Le déport des projections est EXACT sur un modèle dense** | logits bit à bit identiques (|ΔNLL| moyen 0,0000) ; sur un MoE, 0,038 nat de décalage et 497/511 top-1 identiques → routage des experts (hypothèse) |
+| 5 | **Le noyau fusionné gagne au décodage, jusqu'à 16 k clés** | GPU plat, CPU 4,26 → 38,84 ms/jeton · k = 1 024 suffit à 8 192 clés (12,5 %) |
+| 6 | **L'attention creuse à 6 % échoue sur 1 fenêtre sur 3** (4 096 clés, milieu) | dense 3/3 · k = 256 **1/3** · k = 1 024 3/3 · par fenêtre, 8/9 en dense sur neuf fenêtres contiguës |
+| 7 | **Six artefacts qui promettaient ce qu'ils ne faisaient pas** | garde-fou jamais déclenché · échantillon lu comme un accord global · grep qui ne suit pas la chaîne d'appels · décalage de fenêtre remis à zéro · section annoncée dans un commit mais absente · moteur qui boucle au lieu de refuser |
+
 ### La frontière du cache KV, mesurée en entier
 
 | réglage | octets/élément | % du f32 | écart |

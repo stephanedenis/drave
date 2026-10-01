@@ -39993,3 +39993,10 @@ code trouvé : False
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/rapport-aiguille-topk.md'; s=open(p).read()\nvieux = \"\"\"**Ce n'est pas un ralentissement, c'est un LIVELOCK**, et le mécanisme est visible\ndans le code : `KvCache::assurer` fait `while cap < besoin {  … [2635 caractères tronqués]`
+
+  ```
+rapport : livelock corrigé
+32951e9 Le livelock du contexte est corrigé : troncature annoncée au lieu d'une boucle infinie
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='REPRISE.md'; s=open(p).read()\nancre = \"\"\"### La frontière du cache KV, mesurée en entier\"\"\"\nneuf = \"\"\"### Sprint 7 (05h39 → 07h39) : clôture de la nuit — le livelock du contexte\n\n**Un défaut bloquant … [2579 caractères tronqués]`

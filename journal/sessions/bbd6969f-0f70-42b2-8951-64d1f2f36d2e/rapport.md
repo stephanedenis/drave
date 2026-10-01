@@ -7,12 +7,12 @@
 | Début | 2026-09-28 14:46 |
 | Durée | 63.0 h |
 | Tours | 48 |
-| Messages | 2545 |
-| Appels d'outils | 2411 |
+| Messages | 2546 |
+| Appels d'outils | 2412 |
 | Fichiers touchés | 52 |
-| Commandes | 2050 |
+| Commandes | 2051 |
 | Sous-agents | 19 |
-| Commits | 224 |
+| Commits | 225 |
 | Compactages de contexte | 3 |
 
 ## Objectifs déclarés
@@ -2234,7 +2234,7 @@ Fusionner la sélection en un noyau par ligne (8 lancements → 2), supprimer le
 
 ### Tour 48 — Continue en blocs de 2h jusqu'à demain 8h HAE. pour chacun des blocs/sprints tu dois être en autonomie totale. C'est à d … [282 caractères tronqués]
 
-*259 appels d'outils.* Actions notables :
+*260 appels d'outils.* Actions notables :
 
 - bash — Check time and count remaining boxes
 - bash — Start sprint 2
@@ -2250,7 +2250,7 @@ Fusionner la sélection en un noyau par ligne (8 lancements → 2), supprimer le
 - bash — Add poison check and finiteness guard
 - bash — Locate the topk GPU branch
 - bash — Wire fused kernel into the model
-- … et 241 autres
+- … et 242 autres
 
 **Synthèse produite :**
 
@@ -2379,7 +2379,7 @@ Fusionner la sélection en un noyau par ligne (8 lancements → 2), supprimer le
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 2010 autres
+- … et 2011 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2751,4 +2751,5 @@ Fusionner la sélection en un noyau par ligne (8 lancements → 2), supprimer le
 - Le « ralentissement » est un LIVELOCK : KvCache::assurer boucle sans fin si besoin > ctx (model.rs:1117)" && git log --oneline -1; date +%H:%M:%S
 - Sprint 6 : cérémonie (le taux par fenêtre, le livelock du contexte, planning du sprint 7)" && ./tools/sprint.sh start "Corriger le livelock du contexte (model.r
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p='reports/rapport-aiguille-topk.md'; s=open(p).read() vieux = """**Ce n'est pas un ralen
+- REPRISE : le livelock corrigé, et le bilan des six résultats de la nuit" && git log --oneline -1; date +%H:%M:%S
 
