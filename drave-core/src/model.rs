@@ -3407,11 +3407,34 @@ dynamique de {dyn_:.3e} (relatif {:.2e})", mx / dyn_.max(1e-9));
                 }
                 attn_idx.clear();
                 if k < n {
+                    // ⚠️ `select_nth_unstable_by` n'est PAS stable : lequel des
+                    // ex æquo tombe avant le rang k dépend de la partition. Le
+                    // noyau GPU, lui, garde les PREMIERS égaux par ordre d'indice
+                    // — deux chemins qui prétendaient au même départage et ne
+                    // l'avaient pas (relevé par une relecture adversariale). On
+                    // garde la sélection pour trouver la VALEUR du k-ième (elle
+                    // est juste même si l'élément choisi ne l'est pas), puis on
+                    // reconstruit l'ensemble en ordre d'indice : au-dessus du
+                    // seuil d'abord, puis les premiers égaux — exactement la
+                    // convention du noyau.
                     attn_idx.extend(0..n as u32);
                     attn_idx.select_nth_unstable_by(k, |&a, &b| {
                         sc[b as usize].partial_cmp(&sc[a as usize]).unwrap()
                     });
-                    attn_idx.truncate(k);
+                    let seuil = sc[attn_idx[k] as usize];
+                    attn_idx.clear();
+                    let mut sup = 0usize;
+                    for t in 0..n {
+                        if sc[t] > seuil { attn_idx.push(t as u32); sup += 1; }
+                    }
+                    let besoin = k - sup;
+                    let mut pris = 0usize;
+                    for t in 0..n {
+                        if sc[t] == seuil && pris < besoin {
+                            attn_idx.push(t as u32);
+                            pris += 1;
+                        }
+                    }
                 }
                 // en mode dense, seules les n premières clés existent : itérer
                 // sur tout le contexte lirait des scores au-delà de pos.

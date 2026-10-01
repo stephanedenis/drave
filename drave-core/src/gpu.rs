@@ -1083,6 +1083,22 @@ k = {k} (plafonné à 1024 : le partagé du noyau tient 2k + 256 flottants), hd 
 k = {k} (≤ 1024), hd = {hd}");
             return false;
         }
+        // `k > n` : la descente épuiserait les 256 seaux sans jamais atteindre k,
+        // la collecte ne remplirait que n places et le filet refuserait APRÈS un
+        // lancement complet — et avant lui, la somme lisait des indices non
+        // initialisés. La collecte de la chaîne refuse déjà ce cas ; le noyau
+        // fusionné doit le refuser aussi.
+        if k > n {
+            eprintln!("[topk] noyau 4 : k = {k} > n = {n} — sélection impossible");
+            return false;
+        }
+        // Les comptages de la collecte passent par des `float` (réductions en
+        // partagé) : exacts tant que n < 2^24.
+        if n >= (1 << 24) {
+            eprintln!("[topk] noyau 4 : n = {n} ≥ 2^24 — les comptages en float ne sont plus \
+exacts");
+            return false;
+        }
         if m.bits != 8 && m.bits != 32 {
             eprintln!("[topk] noyau 4 : valeurs {} bits non gérées (8 ou 32)", m.bits);
             return false;
@@ -1092,8 +1108,9 @@ k = {k} (≤ 1024), hd = {hd}");
             return false;
         }
         let fils = 1024usize;
-        // 256 compteurs + k clés + k indices + k poids, puis 2 réductions.
-        let partage = (256 + 3 * k) * 4 + 2 * fils * 4;
+        // 256 compteurs + k indices + k poids, puis 2 réductions (le tableau de
+        // clés « réservé » a été retiré : il ne servait à rien).
+        let partage = (256 + 2 * k) * 4 + 2 * fils * 4;
         if partage > 48 * 1024 {
             eprintln!("[topk] noyau 4 : {partage} octets de partagé demandés (48 ko au plus)");
             return false;

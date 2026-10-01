@@ -992,11 +992,14 @@ extern "C" __global__ void attn_topk_tout(const float* __restrict__ sc,
                                           int n, int ctx, int hd, int nb,
                                           int k, int rep, int bits) {
     extern __shared__ float sh[];
-    // Partagé : 256 compteurs, k clés (entier monotone), k indices, k poids,
-    // 2 × blockDim réductions. k ≤ 1024.
+    // Partagé : 256 compteurs, k indices, k poids (les scores retenus y vivent
+    // avant d'être remplacés par leurs poids), 2 × blockDim réductions. k ≤ 1024.
     unsigned int* shHisto = reinterpret_cast<unsigned int*>(sh);
-    unsigned int* shCle   = shHisto + 256;
-    int*          shIdx   = reinterpret_cast<int*>(shCle + k);
+    // Pas de tableau de clés : les scores retenus vivent dans `shW` (écrits
+    // pendant la collecte, puis remplacés par leurs poids). Un `shCle` réservé
+    // « au cas où » coûtait 4 ko de partagé PAR BLOC et un terme `3*k` à
+    // maintenir en double avec l'hôte — pour rien.
+    int*          shIdx   = reinterpret_cast<int*>(shHisto + 256);
     float*        shW     = reinterpret_cast<float*>(shIdx + k);
     float*        red     = shW + k;                 // blockDim.x cases
     float*        red2    = red + blockDim.x;        // blockDim.x cases
@@ -1030,6 +1033,15 @@ extern "C" __global__ void attn_topk_tout(const float* __restrict__ sc,
         __syncthreads();
         pref = shHisto[0];
         dessus = (int)shHisto[1];
+        // ⚠️ BARRIÈRE OBLIGATOIRE ici : la remise à zéro de la passe suivante
+        // (`shHisto[i] = 0`) s'exécute par les fils 0..255, et TOUS les fils
+        // lisent `shHisto[0]`/`[1]` juste au-dessus. Sans cette barrière, un warp
+        // relâché tard lit (pref, dessus) = (0, 0) : `monotone()` ne rendant
+        // jamais 0, son compte « au-dessus » vaut toute sa plage, le balayage
+        // exclusif est gonflé et la collecte écrit AU-DELÀ de `shIdx` — jusqu'à
+        // corrompre la mémoire partagée d'un autre bloc résident. Une course ne
+        // se voit pas parce qu'elle ne s'est pas produite ; elle est là.
+        __syncthreads();
     }
     const int besoin = k - dessus;      // ≥ 1 par construction
 
@@ -1062,11 +1074,19 @@ extern "C" __global__ void attn_topk_tout(const float* __restrict__ sc,
     for (int i = d0; i < d1; i++) {
         const float s = row[i];
         const unsigned int cle = monotone(s);
+        // Les bornes sont redondantes avec l'invariant (Σnsup = dessus < k), mais
+        // elles transforment une écriture hors bornes — corruption de la mémoire
+        // partagée, y compris celle d'autres blocs — en une case non remplie, que
+        // le filet attrape. Le compteur n'est incrémenté QUE si l'écriture a eu
+        // lieu, sans quoi le total vaudrait k sans que les k places soient
+        // remplies.
         if (cle > pref) {
-            shIdx[base_sup + rs] = i;
-            shW[base_sup + rs] = s;
-            rs++;
-        } else if (cle == pref && (base_eq + re) < besoin) {
+            if (base_sup + rs < k) {
+                shIdx[base_sup + rs] = i;
+                shW[base_sup + rs] = s;
+                rs++;
+            }
+        } else if (cle == pref && (dessus + base_eq + re) < k && (base_eq + re) < besoin) {
             shIdx[dessus + base_eq + re] = i;
             shW[dessus + base_eq + re] = s;
             re++;

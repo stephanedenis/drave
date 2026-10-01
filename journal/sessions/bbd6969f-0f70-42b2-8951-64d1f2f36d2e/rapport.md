@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 53.3 h |
+| Durée | 53.5 h |
 | Tours | 48 |
-| Messages | 2305 |
-| Appels d'outils | 2181 |
+| Messages | 2315 |
+| Appels d'outils | 2189 |
 | Fichiers touchés | 47 |
-| Commandes | 1830 |
+| Commandes | 1838 |
 | Sous-agents | 15 |
-| Commits | 197 |
+| Commits | 198 |
 | Compactages de contexte | 3 |
 
 ## Objectifs déclarés
@@ -2234,7 +2234,7 @@ Fusionner la sélection en un noyau par ligne (8 lancements → 2), supprimer le
 
 ### Tour 48 — Continue en blocs de 2h jusqu'à demain 8h HAE. pour chacun des blocs/sprints tu dois être en autonomie totale. C'est à d … [282 caractères tronqués]
 
-*29 appels d'outils.* Actions notables :
+*37 appels d'outils.* Actions notables :
 
 - bash — Check time and count remaining boxes
 - bash — Start sprint 2
@@ -2250,11 +2250,11 @@ Fusionner la sélection en un noyau par ligne (8 lancements → 2), supprimer le
 - bash — Add poison check and finiteness guard
 - bash — Locate the topk GPU branch
 - bash — Wire fused kernel into the model
-- … et 15 autres
+- … et 22 autres
 
 **Synthèse produite :**
 
-Maintenant le banc doit vérifier le noyau fusionné contre la référence CPU :
+⏵ La revue a trouvé une course bloquante dans le noyau fusionné — je corrige
 
 ## 3. Travail accompli
 
@@ -2370,7 +2370,7 @@ Maintenant le banc doit vérifier le noyau fusionné contre la référence CPU :
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 1790 autres
+- … et 1798 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2715,4 +2715,5 @@ Maintenant le banc doit vérifier le noyau fusionné contre la référence CPU :
 - Journal : index régénéré par l'outillage de session" && git log --oneline -3 && echo "--- reste ---" && git status --short | wc -l
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' def patch(p, paires):     s=open(p).read()     for v,n,nom in paires:         assert s.co
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -F - <<'EOF' && git log --oneline -1 Le filet du noyau 4 doit agir AVANT la so
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cargo test --release --manifest-path drave-core/Cargo.toml 2>&1 | tail -2 && git add -A && git commit -q -
 

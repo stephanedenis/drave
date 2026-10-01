@@ -688,3 +688,448 @@ Date:   Wed Sep 30 20:03:47 2026 -0400
 … [5769 caractères tronqués]
   ```
 
+### 🤖 Assistant
+
+⏵ Reading the end of the bench (step 5) to judge the fusion-vs-chain comparison fairness.
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/main.rs", "limit": 125, "offset": 2774}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/main.rs</path>
+<type>file</type>
+<content>
+2774:         let mut pref5 = vec![0u32; lignes];
+2775:         let mut dessus5 = vec![0usize; lignes];
+2776:         let mut hist5 = vec![0u32; lignes * 256];
+2777:         let t10 = Instant::now();
+2778:         let mut ok5 = machine.attn_scores_sans_relecture(&mut miroir, &q, n, scale);
+2779:         for decalage in [24i32, 16, 8, 0] {
+2780:             if !ok5 { break; }
+2781:             ok5 = machine.attn_topk_histo(&mut miroir, lignes, n, decalage, &pref5, &mut hist5);
+2782:             if !ok5 { break; }
+2783:             for l in 0..lignes {
+2784:                 let h = &hist5[l * 256..(l + 1) * 256];
+2785:                 let mut cum = dessus5[l];
+2786:                 let mut b = 256usize;
+2787:                 while b > 0 && cum < k { b -= 1; cum += h[b] as usize; }
+2788:                 dessus5[l] = cum - h[b] as usize;
+2789:                 pref5[l] = (pref5[l] << 8) | b as u32;
+2790:             }
+2791:         }
+2792:         let besoin5: Vec<i32> = (0..lignes).map(|l| (k - dessus5[l]) as i32).collect();
+2793:         let mut sel5 = vec![-1i32; lignes * k
+… [5916 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Checking that KvGpu bits/capacity always match the host cache the model gates on.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"kv_allouer\\|machines()\\[\" drave-core/src/*.rs | head -20 && echo === && grep -n \"fn kv_allouer\" -A 40 drave-core/src/gpu.rs | head -60", "description": "Inspect kv_allouer and its call sites"}`
+
+  ```
+drave-core/src/gpu.rs:424:    pub fn kv_allouer(&self, n_kv: usize, ctx: usize, hd: usize, bits: u32) -> Option<KvGpu> {
+drave-core/src/main.rs:2402:    let mut miroir = match machine.kv_allouer(n_kv, n, hd, bits) {
+drave-core/src/main.rs:3091:    let Some(mut m) = machine.kv_allouer(n_kv, n, hd, bits) else {
+drave-core/src/model.rs:1652:                    match machines[idx].kv_allouer(c.n_kv, c.ctx, c.hd, c.bits) {
+drave-core/src/model.rs:3192:                    let machine = crate::gpu::machines()[*idx];
+drave-core/src/model.rs:3279:                    let machine = crate::gpu::machines()[*idx];
+===
+424:    pub fn kv_allouer(&self, n_kv: usize, ctx: usize, hd: usize, bits: u32) -> Option<KvGpu> {
+425-        cu_ctx(self.ctx);
+426-        let nb = hd.div_ceil(32).max(1);
+427-        // Première tranche : de quoi couvrir un préremplissage courant. Le
+428-        // reste s'ajoute par doublement, à la demande.
+429-        let mut m = KvGpu { k: 0, v: 0, sk: 0, sv: 0, n_kv, ctx, capacite: 0, hd, nb, bits,
+430-                            scores_dev: 0, scores_cap: 0, histo_dev: 0, histo_cap: 0,
+431-                            prefixes_dev: 0, prefixes_cap: 0, topk: None,
+432-      
+… [2087 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Checking launch-count claims and looking for any other caller assumptions.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rn \"lancements\" drave-core/src/*.rs | head -20", "description": "Grep launch-count comments"}`
+
+  ```
+drave-core/src/gpu.rs:1070:    /// écriture + somme, soit 8 lancements et 17 transferts par couche et par
+drave-core/src/model.rs:372:        // faudra réduire (lancements groupés, flux) avant de descendre le seuil.
+drave-core/src/model.rs:3268:            // lancements : `--attn-topk 2048` ou `DRAVE_KV_BITS=4` refaisaient
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"shCle\\|shHisto\\|red2\\|\\bred\\[\" drave-core/gpu/drave_gpu.cu | sed -n '1,60p'", "description": "List all shared-array uses in kernel 4"}`
+
+  ```
+923:    red[tid] = m;
+926:        if (tid < pas) red[tid] = fmaxf(red[tid], red[tid + pas]);
+929:    m = red[0];
+931:    // fil rapide pourrait écraser sa case avant que les autres aient lu `red[0]`.
+945:    red[tid] = somme;
+948:        if (tid < pas) red[tid] += red[tid + pas];
+951:    const float inv = (red[0] > 0.0f) ? 1.0f / red[0] : 0.0f;
+997:    unsigned int* shHisto = reinterpret_cast<unsigned int*>(sh);
+998:    unsigned int* shCle   = shHisto + 256;
+999:    int*          shIdx   = reinterpret_cast<int*>(shCle + k);
+1002:    float*        red2    = red + blockDim.x;        // blockDim.x cases
+1013:        for (int i = tid; i < 256; i += blockDim.x) shHisto[i] = 0u;
+1018:                atomicAddPartage(&shHisto[(cle >> decalage) & 0xFFu], 1u);
+1024:            while (b > 0 && cum < k) { b--; cum += (int)shHisto[b]; }
+1025:            dessus = cum - (int)shHisto[b];
+1027:            shHisto[0] = pref;      // relu par tous après la barrière
+1028:            shHisto[1] = (unsigned int)dessus;
+1031:        pref = shHisto[0];
+1032:        dessus = (int)shHisto[1];
+1046:    red[tid] = (float)nsup;
+1047:    red2[tid] = (float)neq;
+1052:            const int s = (int)red[i], e = (
+… [719 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ The file changed under me — checking git status/diff to see whether another agent is editing.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git status --porcelain && echo \"=== diff stat ===\" && git diff --stat && echo \"=== mtimes ===\" && ls -l --time-style=full-iso drave-core/gpu/drave_gpu.cu drave-core/gpu/drave_gpu.ptx drave-core/src/gpu.rs && date", "description": … [36 caractères tronqués]`
+
+  ```
+M journal/README.md
+=== diff stat ===
+ journal/README.md | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+=== mtimes ===
+-rw-r--r--. 1 stephane stephane  53632 2026-09-30 20:06:56.262625634 -0400 drave-core/gpu/drave_gpu.cu
+-rw-r--r--. 1 stephane stephane 294668 2026-09-30 20:06:57.558646598 -0400 drave-core/gpu/drave_gpu.ptx
+-rw-r--r--. 1 stephane stephane  77518 2026-09-30 19:53:41.272589870 -0400 drave-core/src/gpu.rs
+mer 30 sep 2026 20:08:21 EDT
+  ```
+
+### 🤖 Assistant
+
+⏵ Unexpected: content shifted. Comparing working tree vs committed blob and reflog.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sha1sum drave-core/gpu/drave_gpu.cu && git hash-object drave-core/gpu/drave_gpu.cu && git rev-parse HEAD:drave-core/gpu/drave_gpu.cu && echo \"=== committed poison region ===\" && git cat-file -p HEAD:drave-core/gpu/drave_gpu.cu | se … [131 caractères tronqués]`
+
+  ```
+2d202d1567deaa1b9dd4c5b32b0329775033679b  drave-core/gpu/drave_gpu.cu
+613a162bd927540f23a7230e5207aa8bec547a46
+613a162bd927540f23a7230e5207aa8bec547a46
+=== committed poison region ===
+            shIdx[dessus + base_eq + re] = i;
+            shW[dessus + base_eq + re] = s;
+            re++;
+        }
+    }
+    // Poison : si la collecte n'a pas rempli EXACTEMENT les k places (ce que la
+    // descente garantit, mais un invariant non vérifié est un invariant qu'on
+    // espère), les cases restantes contiendraient de la mémoire partagée
+    // quelconque — une sortie plausible et fausse. Un NaN, lui, se voit : l'hôte
+    // refuse la sortie non finie et rend la main au CPU.
+    red[tid] = (float)(rs + re);
+    __syncthreads();
+    if (tid == 0) {
+        int total = 0;
+        for (int i = 0; i < blockDim.x; i++) total += (int)red[i];
+        shHisto[2] = (total == k) ? 0u : 1u;
+    }
+    __syncthreads();
+    // ⚠️ Le filet doit AGIR AVANT la somme, pas après : les cases de `shIdx` que
+    // la collecte n'a pas remplies contiennent n'importe quoi, et la somme s'en
+    // sert pour lire la VRAM — mesuré en sabotant la collecte exprès :
+    // CUDA_ERROR_ILLEGAL_ADDRESS (700) et cont
+… [942 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ A sibling committed a fix mid-audit (ea1d155). Reviewing that diff and re-auditing the current kernel.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git show --stat ea1d155 && echo \"=== FULL DIFF (code only) ===\" && git show ea1d155 -- drave-core/gpu/drave_gpu.cu drave-core/src/gpu.rs drave-core/src/model.rs drave-core/src/main.rs", "description": "Show the new commit's diff"}`
+
+  ```
+commit ea1d15572fac66d44d74efad210f60b3516e6668
+Author: Stéphane <stephane@localhost>
+Date:   Wed Sep 30 20:07:31 2026 -0400
+
+    Le filet du noyau 4 doit agir AVANT la somme (test du filet, saboté exprès)
+    
+    Trois défauts trouvés en vérifiant le filet au lieu de le croire :
+    
+    1. le NaN était écrit juste après la collecte, donc ÉCRASÉ par la somme pondérée
+       (`out[ligne*hd + 0]`) deux écrans plus bas — un filet qui ne retient rien ;
+    2. écrit plus tard, il ne servait pas davantage : les cases de `shIdx` non
+       remplies contiennent n'importe quoi, et la somme s'en sert pour LIRE la VRAM.
+       Mesuré en sabotant la collecte exprès (`if (0 && …)`) :
+       **CUDA_ERROR_ILLEGAL_ADDRESS (700)** et contexte empoisonné ;
+    3. une course étroite mais réelle sur `red` (un fil rapide pouvait écraser sa case
+       pendant qu'un autre lisait encore `red[0]` pour le max) — barrière ajoutée dans
+       le noyau 4 ET dans le noyau 3, qui avait le même motif.
+    
+    Le filet sort maintenant AVANT la somme, avec un NaN que l'hôte refuse :
+    « noyau 4 : sortie non finie à l'indice 0 — collecte incomplète, repli CPU », puis
+    repli sur la chaîne séparée. Sabotage r
+… [4170 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Re-reading the current (post-fix) kernel 4 to cite exact lines and re-verify barriers.
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/gpu/drave_gpu.cu", "limit": 135, "offset": 987}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/gpu/drave_gpu.cu</path>
+<type>file</type>
+<content>
+987: extern "C" __global__ void attn_topk_tout(const float* __restrict__ sc,
+988:                                           const void* __restrict__ vdata,
+989:                                           const float* __restrict__ vscale,
+990:                                           const float* __restrict__ sinks,
+991:                                           float* __restrict__ out,   // [lignes][hd]
+992:                                           int n, int ctx, int hd, int nb,
+993:                                           int k, int rep, int bits) {
+994:     extern __shared__ float sh[];
+995:     // Partagé : 256 compteurs, k clés (entier monotone), k indices, k poids,
+996:     // 2 × blockDim réductions. k ≤ 1024.
+997:     unsigned int* shHisto = reinterpret_cast<unsigned int*>(sh);
+998:     unsigned int* shCle   = shHisto + 256;
+999:     int*          shIdx   = reinterpret_cast<int*>(shCle + k);
+1000:     float*        shW     = reinterpret_cast<float*>(shIdx + k);
+1001:     float*        red     = shW + k;                 // blockDim.x cases
+1002:     float* 
+… [5530 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Reading the kernel tail and kernel-3 fix; verifying the PTX contains the new early-exit.
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/gpu/drave_gpu.cu", "limit": 18, "offset": 1121}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/gpu/drave_gpu.cu</path>
+<type>file</type>
+<content>
+1121:     if (sinks != nullptr && tid == 0) somme += expf(sinks[ligne] - m);
+1122:     red[tid] = somme;
+1123:     __syncthreads();
+1124:     for (int pas = blockDim.x >> 1; pas > 0; pas >>= 1) {
+1125:         if (tid < pas) red[tid] += red[tid + pas];
+1126:         __syncthreads();
+1127:     }
+1128:     const float inv = (red[0] > 0.0f) ? 1.0f / red[0] : 0.0f;
+1129:     for (int d = tid; d < hd; d += blockDim.x) {
+1130:         float acc = 0.0f;
+1131:         for (int j = 0; j < k; j++) {
+1132:             acc += shW[j] * valeur_v(vdata, vscale, base, shIdx[j], d, hd, nb, bits);
+1133:         }
+1134:         out[(size_t)ligne * hd + d] = acc * inv;
+1135:     }
+1136: }
+
+(End of file - total 1136 lines)
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== PTX around NaN store ===\" && grep -n \"2143289344\" -B 12 -A 6 drave-core/gpu/drave_gpu.ptx && echo \"=== bar.sync count in attn_topk_tout ===\" && awk '/visible .entry attn_topk_tout/,/visible .entry attn_topk_somme|^}/' … [100 caractères tronqués]`
+
+  ```
+=== PTX around NaN store ===
+8397-	ld.param.b32 	%r36, [attn_topk_tout_param_7];
+8398-	bar.sync 	0;
+8399-	ld.shared.b32 	%r219, [sh+8];
+8400-	setp.ne.b32 	%p82, %r219, 0;
+8401-	@!%p82 bra 	$L__BB14_85;
+8402-// %bb.112:
+8403-	@%p6 bra 	$L__BB14_114;
+8404-// %bb.113:
+8405-	cvt.s64.s32 	%rd110, %r36;
+8406-	mul.lo.s64 	%rd111, %rd110, %rd6;
+8407-	shl.b64 	%rd112, %rd111, 2;
+8408-	add.s64 	%rd24, %rd2, %rd112;
+8409:	st.global.b32 	[%rd24], 2143289344;
+8410-	bra.uni 	$L__BB14_114;
+8411-$L__BB14_85:
+8412-	setp.ge.s32 	%p83, %r289, %r38;
+8413-	mov.b32 	%r284, 0fF149F2CA;
+8414-	@%p83 bra 	$L__BB14_88;
+8415-// %bb.86:
+=== bar.sync count in attn_topk_tout ===
+21
+  ```
+
+### 🤖 Assistant
+
+⏵ Confirming in PTX that the histogram zeroing stores follow the pref/dessus loads with no bar.sync.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && awk '/visible .entry attn_topk_tout/,/^}/' drave-core/gpu/drave_gpu.ptx > /tmp/k4.ptx; wc -l /tmp/k4.ptx; grep -n \"ld.shared.b32.*\\[sh\\]\\|ld.shared.b32.*\\[sh+4\\]\\|st.shared.b32.*\\[sh\\], 0\\|st.shared.b32.*\\[sh+4\\], 0\\|bar … [105 caractères tronqués]`
+
+  ```
+1030 /tmp/k4.ptx
+57:	bar.sync 	0;
+87:	bar.sync 	0;
+116:	bar.sync 	0;
+117:	ld.shared.b32 	%r3, [sh];
+118:	ld.shared.b32 	%r253, [sh+4];
+130:	bar.sync 	0;
+165:	bar.sync 	0;
+194:	bar.sync 	0;
+195:	ld.shared.b32 	%r5, [sh];
+196:	ld.shared.b32 	%r257, [sh+4];
+208:	bar.sync 	0;
+243:	bar.sync 	0;
+272:	bar.sync 	0;
+273:	ld.shared.b32 	%r7, [sh];
+274:	ld.shared.b32 	%r261, [sh+4];
+286:	bar.sync 	0;
+321:	bar.sync 	0;
+350:	bar.sync 	0;
+351:	ld.shared.b32 	%r9, [sh];
+352:	ld.shared.b32 	%r10, [sh+4];
+470:	bar.sync 	0;
+560:	bar.sync 	0;
+695:	bar.sync 	0;
+761:	bar.sync 	0;
+803:	bar.sync 	0;
+811:	bar.sync 	0;
+829:	bar.sync 	0;
+866:	bar.sync 	0;
+902:	bar.sync 	0;
+  ```
+
+### 🤖 Assistant
+
+⏵ Printing the PTX window between the pref/dessus loads and the next barrier.
+
+- **bash** `{"command": "sed -n '112,134p' /tmp/k4.ptx", "description": "Show PTX between reads and next barrier"}`
+
+  ```
+sub.s32 	%r52, %r249, %r51;
+	st.shared.b32 	[sh], %r248;
+	st.shared.b32 	[sh+4], %r52;
+$L__BB14_11:
+	bar.sync 	0;
+	ld.shared.b32 	%r3, [sh];
+	ld.shared.b32 	%r253, [sh+4];
+	@%p1 bra 	$L__BB14_14;
+// %bb.12:
+	add.s64 	%rd168, %rd164, %rd163;
+	mov.b32 	%r250, %r289;
+$L__BB14_13:                            // =>This Inner Loop Header: Depth=1
+	st.shared.b32 	[%rd168], 0;
+	add.s32 	%r250, %r250, %r1;
+	add.s64 	%rd168, %rd168, %rd165;
+	setp.lt.u32 	%p11, %r250, 256;
+	@%p11 bra 	$L__BB14_13;
+$L__BB14_14:
+	bar.sync 	0;
+	@%p3 bra 	$L__BB14_19;
+// %bb.15:
+	mov.b32 	%r251, %r289;
+	bra.uni 	$L__BB14_16;
+  ```
+
+### 🤖 Assistant
+
+⏵ Verifying the KV mirror grows capacity before the fused path (else silent refusals).
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"fn miroir_gpu\" -A 30 drave-core/src/model.rs | head -45", "description": "Inspect miroir_gpu capacity handling"}`
+
+  ```
+1297:    pub fn miroir_gpu(miroirs: Option<&mut [(usize, crate::gpu::KvGpu)]>, l: usize,
+1298-                      kvc: &KvCache, pos0: usize, t: usize) {
+1299-        let Some((idx, m)) = miroirs.and_then(|v| v.get_mut(l)) else { return };
+1300-        let machines = crate::gpu::machines();
+1301-        let Some(machine) = machines.get(*idx) else { return };
+1302-        for kvh in 0..kvc.n_kv {
+1303-            kvc.vers_gpu_tranche(machine, m, kvh, pos0, t);
+1304-        }
+1305-    }
+1306-
+1307-    /// Déquantifie la clé `(kvh, t)` dans `dst`.
+1308-    #[inline]
+1309-    pub fn cle(&self, kvh: usize, t: usize, dst: &mut [f32]) {
+1310-        let d = (kvh * self.cap + t) * self.hd;
+1311-        if self.bits >= 32 { dst[..self.hd].copy_from_slice(&self.kf[d..d + self.hd]); return; }
+1312-        if self.k_f32 {
+1313-            let d = (kvh * self.cap + t) * self.hd;
+1314-            dst[..self.hd].copy_from_slice(&self.kf[d..d + self.hd]);
+1315-            return;
+1316-        }
+1317-        if self.k_f16 {
+1318-            let d = (kvh * self.cap + t) * self.hd;
+1319-            for i in 0..self.hd { dst[i] = f32_depuis_f16(self.kp[d + i]); }
+1320-            return;
+1321-      
+… [292 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Writing the adversarial report and sending it to the parent agent.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log --oneline -2 && sed -n '1013p;1014p;1030p;1031p;1032p;1033p' drave-core/gpu/drave_gpu.cu && sed -n '1081p' drave-core/src/gpu.rs && sed -n '820p' drave-core/src/gpu.rs && sed -n '812,814p' drave-core/src/gpu.rs", "description … [26 caractères tronqués]`
+
+  ```
+ea1d155 Le filet du noyau 4 doit agir AVANT la somme (test du filet, saboté exprès)
+8342f17 Noyau 4 : le top-k complet d'une ligne en UN lancement (8 lancements → 2)
+        for (int i = tid; i < 256; i += blockDim.x) shHisto[i] = 0u;
+        __syncthreads();
+        __syncthreads();
+        pref = shHisto[0];
+        dessus = (int)shHisto[1];
+    }
+        if lignes == 0 || n == 0 || k == 0 || k > 1024 || hd == 0 || hd > 1024 || rep == 0 {
+        if lignes == 0 || n == 0 || k == 0 || k > n { return false; }
+    /// premiers égaux au seuil (indices croissants). Ce n'est PAS l'ordre
+    /// croissant global, qui entrelace les deux groupes — mais c'est un ordre
+    /// fixe et reproductible, et le même départage des ex æquo que le CPU.
+  ```
+
+### 🤖 Assistant
+
+⏵ Report complete; sending the full adversarial review to the parent.
+
+- **send_message** `{"agent_id": "bbd6969f-0f70-42b2-8951-64d1f2f36d2e", "message": "REVUE ADVERSARIALE — noyau fusionné du top-k (`attn_topk_tout`). Aucun fichier modifié.\n\nNOTE DE RÉVISION : j'ai commencé sur `8342f17` ; pendant l'audit, `ea1d155` (« Le filet du noyau 4 doit agir AVANT la somme ») a été commis (le  … [17687 caractères tronqués]`
+
+  ```
+message delivered to agent bbd6969f-0f70-42b2-8951-64d1f2f36d2e
+  ```
+
+### 🤖 Assistant
+
+⏵ Revue terminée ; rapport envoyé à l'agent parent.
+
+## Revue adversariale — noyau fusionné `attn_topk_tout`
+
+**Note de révision** : j'ai commencé sur `8342f17` ; en cours d'audit, `ea1d155` (« Le filet du noyau 4 doit agir AVANT la somme ») a été commis par un autre agent (le `.cu` a changé sous moi à 20:06:56). Les constats sont donc donnés sur l'état **courant**, avec ce que `8342f17` avait de pire. Aucun fichier modifié.
+
+### 1. BLOQUANT (non corrigé) — course sur `shHisto[0]/[1]` entre deux passes de la descente
+- **(a)** `drave-core/gpu/drave_gpu.cu:1013` vs `:1031-1032` :
+  ```
+  1013:  for (int i = tid; i < 256; i += blockDim.x) shHisto[i] = 0u;
+  1027:      shHisto[0] = pref;  1028: shHisto[1] = (unsigned int)dessus;
+  1030:  __syncthreads();  1031: pref = shHisto[0];  1032: dessus = (int)shHisto[1];
+  1033:  }        // fin du corps : AUCUNE barrière
+  ```
+- **(b)** La barrière 1030 ordonne écriture→lecture *dans* une passe ; rien ne sépare les lectures 1031-1032 de la remise à zéro de la passe suivante. Les fils 0..255 écrivent, tous lisent → course (UB). **Preuve dans le PTX** : `bar.sync; ld.shared.b32 %r3,[sh]; ld.shared.b32 %r253,[sh+4]; @%p1 bra …; $L__BB14_13: st.shared.b32 [%rd168],0; … bra $L__BB14_13; $L__BB14_14: bar.sync 0;` — la boucle de zéro est bien entre les loads et la barrière suivante.
+- **(c)** Un warp relâché tard lit `pref=0, dessus=0` : `monotone()` ne rend jamais 0 pour un flottant normal, donc son `nsup` = toute sa plage (128 à n=131 072). Le balayage gonfle `base_sup` des fils suivants → `shIdx[base_sup+rs] = i;` (l.1066) écrit jusqu'à ~n entiers au-delà des 21 504 octets alloués. Le filet (l.1094) passe **après** : il ne peut pas l'empêcher. Corruption partagée possible d'autres blocs résidents (pas de protection MMU partagée), y compris de `red`/`red2`/`shHisto[2]` — le filet lui-même.
+- **(d)** Bloquant (UB + écriture non bornée), manifestation étroite.
+- **(e)** `__syncthreads();` après la l.1032 (+ borne `if (base_sup + rs < k)`). Vérifier par `compute-sanitizer --tool racecheck`.
+
+### 2. Déjà corrigé par `ea1d155` (vérifié, à conserver)
+Le NaN-poisen de `8342f17` (`l.1082`) était **écrasé** par la boucle finale (`out[ligne*hd + 0]`, fil 0) : filet mort, face au vrai contrôle hôte de la chaîne (`gpu.rs` ~905). ea1d155 le place avant la somme avec `return` uniforme — correct ; le PTX commis contient bien le correctif. Idem pour la course `m = red[0]` / `red[tid] = somme` (noyaux 3 et 4).
+
+### 3. Faux résultat silencieux (rare) — le départage des ex æquo n'est pas celui du CPU
+`gpu.rs:812-814` affirme « le même départage des ex æquo que le CPU » ; `model.rs:3411-3414` utilise `select_nth_unstable_by` (**non stable** : quels égaux passent avant k est arbitraire), alors que le noyau prend les **premiers égaux par indice** (`l.1069`). Divergence CPU ↔ GPU possible sur des égalités exactes ; le banc valide la convention du GPU (`main.rs:2725-2728`), pas celle du moteur. Correctif : tri `(score desc, index asc)` côté CPU.
+
+### 4. Latent — `k > n` accepté par l'API
+`gpu.rs:1081` n'a pas `|| k > n`, alors que la collecte de la chaîne le refuse (`gpu.rs:820`) et vérifie l'invariant côté hôte. Le modèle est protégé (`model.rs:3277 .min(n)`), le banc aussi ; un appel direct (k>n) vide le filet ou, avant ea1d155, publiait un faux résultat et lisait la VRAM hors bornes via `valeur_v`.
+
+### 5. Banc, latent, cosmétique
+`idx_ref` calculé puis jeté (`main.rs:2760`) ; tolérance 1e-6 frôlée à 6,4-9,2e-7 avec des ordres de sommation et des scores différents ; chemin `sinks == nullptr` jamais exercé. `red`/`red2` portent des comptages entiers en `float` (exact seulement si n < 2²⁴). `shCle` (`l.998`) est **mort** : le terme `3*k` de `gpu.rs:1096` et le commentaire paient 4 ko inutiles — piège de maintenance.
+
+### Vérifié sans défaut
+Taille du partagé **exactement** `(256+3k)*4 + 2·blockDim·4` (aucun débordement, alignements 4 octets OK, k=1 et k=1024 corrects) ; couverture exhaustive/disjointe de la collecte (`par` gère n < blockDim, rangs corrects, `shIdx ≤ k−1`) ; toutes les réutilisations de `red`/`red2` barrées ; `valeur_v` sain tant que k ≤ n ; seuil 131 072 appliqué au bon `n` avec branche « chaîne » intacte (`puits` toujours utilisé) ; échec DtoH sans résultat partiel (le CPU réécrit tout) ; puits `nullptr` de même contrat que la chaîne ; PTX à jour ; `attn_scores_sans_relecture` cohérent (unités, flux, allocations).
+

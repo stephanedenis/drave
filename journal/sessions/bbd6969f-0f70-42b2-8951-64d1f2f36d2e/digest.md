@@ -36823,3 +36823,239 @@ noyaux exportés : 15
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -F - <<'EOF' && git log --oneline -1\nLe filet du noyau 4 doit agir AVANT la somme (test du filet, saboté exprès)\n\nTrois défauts trouvés en vérifiant le filet au lieu de le croire :\n\n1. le NaN était éc … [939 caractères tronqués]`
+
+  ```
+ea1d155 Le filet du noyau 4 doit agir AVANT la somme (test du filet, saboté exprès)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date +%H:%M:%S && (echo \"=== portes sprint 2 ===\"; echo -n \"Qwen Q8_0 ctx 256 : \"; ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf --ppl /tmp/wt2_ids.txt --ctx 256 --abits 16 --threads 16 --limit 512 2>&1 | grep - … [536 caractères tronqués]`
+
+  ```
+20:07:46
+=== portes sprint 2 ===
+Qwen Q8_0 ctx 256 : perplexité 19.3885 sur 510 tokens
+gpt-oss MXFP4 ctx 256 : perplexité 15.1757 sur 510 tokens
+cargo test : test result: ok. 17 passed
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/grille.sh <<'EOF'\n#!/bin/bash\n# Grille PROPRE : on fait varier le NOMBRE DE JETONS (donc les clés réellement\n# notées), à contexte fixé, au lieu du contexte alloué — la leçon du sprint 1.\nset -u\ncd /home/stephane/Data … [1079 caractères tronqués]`
+
+  ```
+grille lancée
+20:10:56
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 240; cat /tmp/grille_fusion.log; date +%H:%M:%S", "description": "Check grid progress", "timeoutMs": 300000}`
+
+  ```
+cpu      511 : attention 4.26 | 
+gpu      511 : attention 4.53 | 
+cpu     1023 : attention 7.17 | 
+gpu     1023 : attention 4.62 | 
+cpu     2047 : attention 12.08 | 
+gpu     2047 : 20:15:08
+  ```
+
+### 👤 Utilisateur
+
+Agent 6d0c1d28-76e1-42f8-9e8c-7f88395f9e55 sent a message:
+REVUE ADVERSARIALE — noyau fusionné du top-k (`attn_topk_tout`). Aucun fichier modifié.
+
+NOTE DE RÉVISION : j'ai commencé sur `8342f17` ; pendant l'audit, `ea1d155` (« Le filet du noyau 4 doit agir AVANT la somme ») a été commis (le fichier a changé sous moi, .cu à 20:06:56, PTX régénéré à 20:06:57). Les constats ci-dessous sont donc donnés sur l'état COURANT (`ea1d155`), avec mention de ce que `8342f17` avait de pire. J'ai vérifié que le PTX commis est bien à jour (le NaN `2143289344` apparaît, suivi d'un `bra` vers le bloc de sortie) : le correctif est réellement dans le binaire chargé (`PTX: include_str!("../gpu/drave_gpu.ptx")`).
+
+=========================================================
+F1 — BLOQUANT (NON CORRIGÉ) : course sur `shHisto[0]/[1]` entre deux passes de la descente
+=========================================================
+(a) `drave-core/gpu/drave_gpu.cu:1013` (remise à zéro, passe suivante) contre `:1031-1032` (lectures) :
+```
+1013:  for (int i = tid; i < 256; i += blockDim.x) shHisto[i] = 0u;
+1027:      shHisto[0] = pref;      // relu par tous après la barrière
+1028:      shHisto[1] = (unsigned int)dessus;
+1030:  __syncthreads();
+1031:  pref = shHisto[0];
+1032:  dessus = (int)shHisto[1];
+1033:  }          // fin du corps de boucle : AUCUNE barrière
+```
+(b) Ce qui est faux : la barrière 1030 ordonne écriture→lecture DANS une passe, mais il n'y a aucune barrière entre les lectures 1031-1032 et la remise à zéro de la passe suivante (1013). Or ce sont les fils 0..255 (warps 0-7) qui écrivent `shHisto[0]` et `shHisto[1]`, et TOUS les fils qui les lisent. Un warp relâché tard par la barrière 1030 peut lire `pref = 0` / `dessus = 0` alors que warp 0 (lanes 0 et 1) a déjà exécuté la remise à zéro de la passe suivante. Aucun ordre inter-warp sur le partagé hors barrière → course de données (UB).
+PREUVE dans le code généré (`drave_gpu.ptx`, `attn_topk_tout`) : `bar.sync 0; ld.shared.b32 %r3, [sh]; ld.shared.b32 %r253, [sh+4]; @%p1 bra …; $L__BB14_13: st.shared.b32 [%rd168], 0; … bra $L__BB14_13; $L__BB14_14: bar.sync 0;` — la boucle de stores zéro est bien ENTRE les loads de `[sh]`/`[sh+4]` et la barrière suivante, sans rien entre les deux.
+(c) Scénario : 14 blocs × 1024 fils. À la passe p+1, un warp lit `(pref, dessus) = (0, 0)` tandis que les autres ont le bon préfixe. `monotone()` ne rend JAMAIS 0 pour un flottant normal (négatif → `~bits`, positif → `b|0x80000000`), donc `cle > pref == 0` est vrai pour 100 % de la plage de ce warp : son `nsup` vaut `par` (128 à n = 131072) au lieu de ~0. Ce `nsup` gonflé entre dans le balayage exclusif (`red`, 1046-1057), donc `base_sup = (int)red[tid]` des fils suivants est gonflé, et `shIdx[base_sup + rs] = i;` (l.1066) écrit au-delà de `k-1` — jusqu'à ~n entiers (≈ 512 ko) au-delà de `shIdx`, donc très au-delà des 21 504 octets de partagé dynamique alloués. Le filet (`shHisto[2]`, l.1094) s'exécute APRÈS la collecte : il ne peut pas empêcher cette écriture.
+(d) Gravité : bloquant (course/UB). La manifestation est étroite mais l'écriture hors bornes est non bornée : selon le matériel elle retombe dans la fenêtre partagée du bloc (corrompant `red`/`red2`/`shHisto[2]` — le filet lui-même, qui peut alors ne pas se déclencher) ou dans celle d'un AUTRE bloc résident (les accès partagés hors bornes ne sont pas protégés) → résultat faux silencieux pour d'autres lignes. C'est exactement la classe que ton commit ea1d155 dit vouloir ne plus laisser passer (« une course qui ne se voit pas n'est pas une course absente ») : il a corrigé la course sur `red` mais pas celle-ci.
+(e) Correctif minimal : ajouter une barrière en fin de corps de boucle :
+```c
+        pref = shHisto[0];
+        dessus = (int)shHisto[1];
+        __syncthreads();   // protège ces deux lectures de la remise à zéro (1013) de la passe suivante
+    }
+```
+(+ ceinture : borner l'écriture `if (base_sup + rs < k) shIdx[...] = i;`). Vérification : `compute-sanitizer --tool racecheck` sur `--banc-topk 4096 --attn-topk 256` (racecheck signale la violation de happens-before sans qu'elle ait besoin de se produire).
+
+=========================================================
+F2 — DÉJÀ CORRIGÉ PAR ea1d155 (à garder comme référence) : le NaN-poisen de 8342f17 était écrasé
+=========================================================
+(a) `8342f17`, `drave_gpu.cu:1082` : `if (total != k) out[(size_t)ligne * hd] = __int_as_float(0x7FC00000);  // NaN` … puis l.1111-1116 : `for (int d = tid; d < hd; d += blockDim.x) { … out[(size_t)ligne * hd + d] = acc * inv; }`.
+(b) Le fil 0 écrit `out[ligne*hd + 0]` dans la boucle finale (d = 0 < hd) : le NaN était donc toujours écrasé, le filet ne retenait rien. Vérifié par lecture, pas par exécution.
+(c) Scénario : n'importe quelle collecte incomplète (k > n, ou la course F1) → sortie finie plausible et fausse, publiée ; la chaîne séparée, elle, a un vrai contrôle hôte (`gpu.rs` ~905 : `if a != k as i32 - besoin[l] || b < besoin[l] { … "collecte refusée"; return false; }`) que le noyau fusionné avait perdu.
+(d) Corrigé par ea1d155 : le NoN est écrit AVANT la somme et le noyau `return` — correct, et le `return` est uniforme (le drapeau `shHisto[2]` est lu après barrière), donc pas de `__syncthreads()` divergent. Le contrôle hôte `gpu.rs:1153` (`position(|v| !v.is_finite())`) le voit. Résidu : le filet ne couvre toujours pas l'écriture partagée hors bornes de F1 (elle précède le contrôle).
+
+=========================================================
+F3 — FAUX RÉSULTAT SILENCIEUX (rare, latent) : « le même départage des ex æquo que le CPU » est FAUX
+=========================================================
+(a) `drave-core/src/gpu.rs:812-814` : « … mais c'est un ordre fixe et reproductible, et le même départage des ex æquo que le CPU. » — en face, `drave-core/src/model.rs:3411-3414` :
+```rust
+attn_idx.select_nth_unstable_by(k, |&a, &b| {
+    sc[b as usize].partial_cmp(&sc[a as usize]).unwrap()
+});
+attn_idx.truncate(k);
+```
+et le noyau `drave_gpu.cu:1069` : `} else if (cle == pref && (base_eq + re) < besoin) {` (premiers égaux par indice croissant).
+(b) `select_nth_unstable_by` n'est PAS stable (doc Rust) : lequel des ex æquo se retrouve avant l'indice k dépend de l'algorithme de partition. Le CPU peut donc garder un sous-ensemble d'égaux différent de « les premiers par indice » du GPU (noyaux 2b et 4).
+(c) Scénario : une ligne où le k-ième score est à égalité exacte avec plusieurs autres (deux positions KV identiques, cache uniforme/à zéro — le cas dégénéré que le banc avait avant son correctif de clé unique, `main.rs:2385-2390`). CPU : {i5, i9} ; GPU : {i2, i3} ; les sorties diffèrent alors que la porte de perplexité est censée voir l'égalité. Le banc ne peut pas le voir : sa référence pour le noyau 4 trie par `(score décroissant, index croissant)` (`main.rs:2725-2728`), c'est-à-dire la convention du GPU, pas celle du moteur CPU.
+(d) Gravité : faux résultat silencieux, rare (il faut des égalités exactes au seuil) — « à vérifier » par un test dédié (une ligne à scores volontairement égaux, CPU vs GPU).
+(e) Correctif minimal : dans `model.rs`, rendre le CPU déterministe comme le noyau, p.ex. `attn_idx.sort_unstable_by(|&a,&b| sc[b as usize].partial_cmp(&sc[a as usize]).unwrap().then(a.cmp(&b))); attn_idx.truncate(k);` (O(n log n), acceptable pour la porte), ou modifier la phrase de `gpu.rs:814`.
+
+=========================================================
+F4 — GARDE MANQUANTE (latent) : `attn_topk_tout` accepte `k > n`
+=========================================================
+(a) `drave-core/src/gpu.rs:1081` : `if lignes == 0 || n == 0 || k == 0 || k > 1024 || hd == 0 || hd > 1024 || rep == 0 {` — pas de `k > n`. À comparer à `gpu.rs:820` (collecte de la chaîne) : `if lignes == 0 || n == 0 || k == 0 || k > n { return false; }`.
+(b) Avec `k > n`, `while (b > 0 && cum < k)` (l.1024) épuise les 256 seaux avec `cum = n < k` à chaque passe : `dessus = n − nb(min)`, `besoin = k − dessus > nb(min)`, la collecte ne remplit que n places → avant ea1d155 : sortie fausse silencieuse + lecture VRAM hors bornes via `valeur_v` ; maintenant : filet → repli CPU (correct mais un lancement complet gaspillé et un message d'erreur trompeur).
+(c) Scénario : appel public `attn_topk_tout(m, 14, n=8, k=64, …)` (le modèle, lui, est protégé par `model.rs:3277 let k = self.attn_topk.min(n);` et le banc par `main.rs:2465 if k == 0 || k > n { … return; }`).
+(d) Gravité : latent (robustesse d'API) ; c'est la porte d'entrée du filet, donc à fermer.
+(e) Correctif minimal : `|| k > n` dans la condition de refus de `gpu.rs:1081` (message dédié).
+
+=========================================================
+F5 — COSMÉTIQUE/PERF : `shCle` est mort (4 ko de partagé par bloc)
+=========================================================
+(a) `drave_gpu.cu:998` : `unsigned int* shCle   = shHisto + 256;` — jamais lu ni écrit ailleurs dans le noyau (grep : une seule occurrence). Le commentaire l.995-996 (« k clés (entier monotone) ») et le calcul hôte `gpu.rs:1096 let partage = (256 + 3 * k) * 4 + 2 * fils * 4;` paient tous les deux ces k u32. Les scores retenus vivent en réalité dans `shW` (écrits l.1067/1071, lus l.1101, écrasés par les poids l.1118).
+(b) Impact : 21 504 octets demandés au lieu de 17 408 à k = 1024 — sans effet d'occupation sur sm_75 (blocs de 1024 fils ⇒ 2 blocs/SM au plus, les deux tailles tiennent). Le vrai risque est un piège de maintenance : le terme `3 * k` de l'hôte n'existe QUE pour ce tableau mort.
+(c) Gravité : cosmétique/perf.
+(d) Correctif : soit supprimer `shCle` ET passer à `(256 + 2k)*4 + 2*fils*4` (et corriger le commentaire), soit documenter explicitement « k clés réservées, non utilisées » pour que personne ne « nettoie » le terme côté hôte sans toucher au noyau.
+
+=========================================================
+F6 — FRAGILITÉ LATENTE : comptages entiers portés par des `float`
+=========================================================
+(a) `drave_gpu.cu:1046-1059` : `red[tid] = (float)nsup; red2[tid] = (float)neq;` … `red[i] = (float)a; red2[i] = (float)b;` … `const int base_sup = (int)red[tid];`
+(b) Exact tant que n < 2^24 ; au-delà, les sommes préfixées arrondissent et les écritures partent aux mauvais offsets. L'hôte ne borne `n` que par `n > m.capacite` (`gpu.rs:1090`), le seuil 131 072 n'étant que dans `model.rs`.
+(c) Scénario : appel direct avec n ≥ 16 777 217 (banc `--banc-topk` sur une machine à grosse VRAM). « à vérifier » — non atteignable par le moteur aujourd'hui.
+(d) Gravité : latent (fragilité).
+(e) Correctif : `int` pour les tableaux de comptage (ou `n > (1<<24)` refusé dans `gpu.rs:1081`).
+
+=========================================================
+F7 — BANC : la référence du noyau 4 est juste, mais faible
+=========================================================
+- `main.rs:2719` `let mut idx_ref = vec![0i32; lignes * k];` … `main.rs:2760` `let _ = idx_ref;` : référence d'indices calculée puis jetée (mort). Ce n'est pas un défaut de justesse : l'ordre des indices n'affecte pas Σ w·V, et l'ENSEMBLE du noyau (au-dessus par indice croissant, puis égaux par indice croissant) est bien celui du tri `(score décroissant, index croissant)` tronqué à k — même convention que la chaîne (noyau 2b), puits au dénominateur une seule fois (comparer `main.rs:2731-2734` au noyau 1102/1121 : identiques).
+- Faiblesses réelles : (i) la référence valide le départage « index croissant », pas celui du CPU du moteur (F3) ; (ii) le critère `main.rs:2755 if mx4 / dyn4.max(1e-9) < 1e-6` passe à 6,4-9,2e-7 (table du commit) : la marge est mince et une partie de l'écart vient de l'ordre de sommation (référence triée vs noyau par indices) et des scores différents (`obtenu` = scores GPU pour la référence, miroir VRAM pour le noyau) — une petite erreur de sélection pourrait se cacher sous le seuil ; (iii) le chemin `sinks == nullptr` du noyau 4 n'est jamais exercé (le banc passe toujours `Some(&sinks)`, `main.rs:2710`) alors que le moteur passe `None` pour les modèles sans puits.
+- Gravité : faiblesse de banc (pas un faux résultat).
+
+=========================================================
+VERSEAU DES HYPOTHÈSES VÉRIFIÉES SANS DÉFAUT (lecture seule)
+=========================================================
+1. Partagé : la disposition des pointeurs est EXACTEMENT `(256 + 3k)*4 + 2*blockDim*4` (shHisto 0→1024, shCle 1024+4k, shIdx 1024+8k, shW 1024+12k, red 1024+12k+4·blockDim, fin = 1024+12k+8·1024) = 21 504 à k = 1024, sous les 48 ko testés par l'hôte (`gpu.rs:1096-1100`). Tous les offsets sont multiples de 4 : les casts `unsigned int*`→`int*`→`float*` sont alignés. k = 1 : partage 9 228, boucles `j < k` correctes (seul le fil 0 lit, les autres contribuent 0 aux réductions) ; k = 1024 : tout tient et passe le contrôle hôte. Aucun débordement.
+2. Collecte : `par = (n + blockDim - 1)/blockDim` puis `[tid*par, min(n, tid*par+par))` : plages disjointes couvrant [0,n) exactement une fois pour tout n ≥ 1 (n = 1024 ⇒ par = 1 ; n = 1025 ⇒ par = 2, fil 512 = [1024,1025)). Les fils `d0 >= n` ont une plage vide, contribuent 0 au balayage, ne lisent/écrivent rien. `base_sup`/`base_eq` = balayage exclusif correct (thread 0 lit `s`/`e` AVANT d'écraser). Bornes : `shIdx[dessus + base_eq + re] ≤ k−1` car `(base_eq+re) < besoin = k − dessus` ; `shIdx[base_sup + rs] < dessus` ; et si n ≥ k, `cum ≥ k` à chaque passe (l'ensemble filtré contient ≥ k − dessus éléments), donc Σnsup = dessus et total = k exactement.
+3. Barrières sur `red`/`red2` : chaque réutilisation est séparée (balayage 1048/1058, poison 1081, max 1104, somme 1123) ; ea1d155 a fermé le dernier motif (`m = red[0]` puis `red[tid] = somme`, barrière ajoutée l.1114) et le même dans le noyau 3 — correct. `shIdx`/`shW` (collecte) → softmax : barrières 1087/1104 ✓. Pas de barrière dans une branche divergente (le `return` du filet est uniforme).
+4. `valeur_v` : `pos` vient de `shIdx[j]` sans borne dans le noyau, mais il est dans [0,n) dès que la collecte remplit k, ce que `model.rs:3277` garantit sur le chemin du moteur ; avec k > n (F4) c'est de la mémoire partagée non initialisée → indice arbitraire, potentiellement négatif (`(size_t)pos` énorme) → lecture VRAM hors bornes. Correctif = F4 (garde hôte) + F1 (course).
+5. Seuil 131 072 (`model.rs:3288-3289`) : appliqué au bon `n` (= `pos+1`, nombre de clés, l.3170), pas au contexte ; la branche au-dessus du seuil est intacte après le remaniement (`puits` défini l.3280 avant le `if/else`, réutilisé l.3333 ; `k` figé l.3277) — aucun défaut.
+6. `fait_en_gpu` : sur échec de la copie DtoH (`gpu.rs:1146-1147`), rien n'est publié ; si `att` a été partiellement écrite, le chemin CPU la réécrit entièrement (boucle l.3353 déclenchée quand `!groupe && !fait_en_gpu`, remise à zéro l.3437-3438 pour chaque `hh`). Aucun résultat partiel.
+7. Puits : `sinks == nullptr` ⇒ aucun terme de puits dans le noyau 4, EXACTEMENT comme le noyau 3 (1102/1121 identiques) et comme le CPU (`lay.sinks` → None). Indexation par LIGNE (`sinks[ligne]`, ligne = kvh*rep+qh = tête de requête globale car `nkv*rep == nh` est exigé l.3275) : cohérente.
+8. `attn_scores_sans_relecture` : `besoin = n_kv*rep*n` en ÉLÉMENTS et `scores_cap = besoin` en éléments (l.649/671) — toutes les comparaisons d'appelants sont dans la même unité ; l'absence de `cuCtxSynchronize` est correcte (même flux, puis DtoH bloquante, puis lancement du noyau 4 ordonné par le flux) ; les échecs d'allocation repassent bien par `vram_assurer` (pointeur remis à 0 avant `cuMemAlloc`, donc jamais de pointeur 0 publié). Rien trouvé.
+9. PTX : à jour avec le .cu pour `attn_topk_tout` (NaN `2143289344` + `bra` vers la sortie), donc le correctif ea1d155 est bien dans le binaire chargé (`drave_gpu.ptx` via `include_str!`).
+10. Perf (à titre indicatif, non bloquant) : le fil 0 fait en série la descente (jusqu'à 256 itérations partagées × 4 passes), le balayage exclusif de 1024 cases (1049-1057) et la somme du poison (1084), pendant que 1023 fils attendent — ~3 000 accès partagés sérieux par ligne sur le chemin critique. Un balayage en log(blockDim) pas et une descente coopérative (warp 0) les enlèveraient, mais les mesures du banc (0,85 ms à 131 k) ne montrent pas que ce soit le facteur dominant.
+
+=========================================================
+LISTE COURTE, CLASSÉE PAR GRAVITÉ
+=========================================================
+1. BLOQUANT — F1 : barrière manquante en fin de passe radix, course sur `shHisto[0]/[1]` (l.1013 vs 1031-1032), écriture partagée hors bornes en aval. NON CORRIGÉ. Correctif : `__syncthreads()` après l.1032 (+ borne sur l'écriture de la collecte).
+2. FAUX RÉSULTAT SILENCIEUX (rare) — F3 : le départage des ex æquo n'est PAS celui du CPU (`select_nth_unstable_by` instable) alors que `gpu.rs:814` l'affirme ; divergence possible CPU ↔ GPU, invisible au banc.
+3. LATENT / ROBUSTESSE — F4 : `k > n` accepté par `gpu.rs:1081` (la collecte de la chaîne le refuse, l.820) ; le filet ne protège que depuis ea1d155 et pas l'écriture partagée hors bornes.
+4. FAIBLESSE DE BANC (F7) : `idx_ref` mort (`main.rs:2760`), tolérance 1e-6 frôlée (6,4-9,2e-7) avec des ordres de sommation différents, chemin `sinks == nullptr` jamais exercé.
+5. LATENT — F6 : comptages entiers en `float` (`red`/`red2`), exacts seulement si n < 2^24, aucune borne hôte.
+6. COSMÉTIQUE/PERF — F5 : `shCle` mort (4 ko de partagé + terme `3*k` de l'hôte à maintenir en double).
+Déjà corrigé par ea1d155 (à conserver, vérifié) : le NaN-poisen écrasé de 8342f17 (F2) et la course sur `red` après `m = red[0]` (noyaux 3 et 4).
+
+Rien de ce qui précède n'est une supposition non lue : chaque point a été vérifié dans le source et, pour F1, dans le PTX généré. Les deux points marqués « à vérifier » sont F3 (test d'égalités exactes CPU vs GPU) et F6 (n ≥ 2^24, hors de portée du moteur actuel).
+
+### 👤 Utilisateur
+
+Background subagent 6d0c1d28-76e1-42f8-9e8c-7f88395f9e55 finished and will do no further work unless you send it more.
+Its closing message:
+⏵ Revue terminée ; rapport envoyé à l'agent parent.
+
+## Revue adversariale — noyau fusionné `attn_topk_tout`
+
+**Note de révision** : j'ai commencé sur `8342f17` ; en cours d'audit, `ea1d155` (« Le filet du noyau 4 doit agir AVANT la somme ») a été commis par un autre agent (le `.cu` a changé sous moi à 20:06:56). Les constats sont donc donnés sur l'état **courant**, avec ce que `8342f17` avait de pire. Aucun fichier modifié.
+
+### 1. BLOQUANT (non corrigé) — course sur `shHisto[0]/[1]` entre deux passes de la descente
+- **(a)** `drave-core/gpu/drave_gpu.cu:1013` vs `:1031-1032` :
+  ```
+  1013:  for (int i = tid; i < 256; i += blockDim.x) shHisto[i] = 0u;
+  1027:      shHisto[0] = pref;  1028: shHisto[1] = (unsigned int)dessus;
+  1030:  __syncthreads();  1031: pref = shHisto[0];  1032: dessus = (int)shHisto[1];
+  1033:  }        // fin du corps : AUCUNE barrière
+  ```
+- **(b)** La barrière 1030 ordonne écriture→lecture *dans* une passe ; rien ne sépare les lectures 1031-1032 de la remise à zéro de la passe suivante. Les fils 0..255 écrivent, tous lisent → course (UB). **Preuve dans le PTX** : `bar.sync; ld.shared.b32 %r3,[sh]; ld.shared.b32 %r253,[sh+4]; @%p1 bra …; $L__BB14_13: st.shared.b32 [%rd168],0; … bra $L__BB14_13; $L__BB14_14: bar.sync 0;` — la boucle de zéro est bien entre les loads et la barrière suivante.
+- **(c)** Un warp relâché tard lit `pref=0, dessus=0` : `monotone()` ne rend jamais 0 pour un flottant normal, donc son `nsup` = toute sa plage (128 à n=131 072). Le balayage gonfle `base_sup` des fils suivants → `shIdx[base_sup+rs] = i;` (l.1066) écrit jusqu'à ~n entiers au-delà des 21 504 octets alloués. Le filet (l.1094) passe **après** : il ne peut pas l'empêcher. Corruption partagée possible d'autres blocs résidents (pas de protection MMU partagée), y compris de `red`/`red2`/`shHisto[2]` — le filet lui-même.
+- **(d)** Bloquant (UB + écriture non bornée), manifestation étroite.
+- **(e)** `__syncthreads();` après la l.1032 (+ borne `if (base_sup + rs < k)`). Vérifier par `compute-sanitizer --tool racecheck`.
+
+### 2. Déjà corrigé par `ea1d155` (vérifié, à conserver)
+Le NaN-poisen de `8342f17` (`l.1082`) était **écrasé** par la boucle finale (`out[ligne*hd + 0]`, fil 0) : filet mort, face au vrai contrôle hôte de la chaîne (`gpu.rs` ~905). ea1d155 le place avant la somme avec `return` uniforme — correct ; le PTX commis contient bien le correctif. Idem pour la course `m = red[0]` / `red[tid] = somme` (noyaux 3 et 4).
+
+### 3. Faux résultat silencieux (rare) — le départage des ex æquo n'est pas celui du CPU
+`gpu.rs:812-814` affirme « le même départage des ex æquo que le CPU » ; `model.rs:3411-3414` utilise `select_nth_unstable_by` (**non stable** : quels égaux passent avant k est arbitraire), alors que le noyau prend les **premiers égaux par indice** (`l.1069`). Divergence CPU ↔ GPU possible sur des égalités exactes ; le banc valide la convention du GPU (`main.rs:2725-2728`), pas celle du moteur. Correctif : tri `(score desc, index asc)` côté CPU.
+
+### 4. Latent — `k > n` accepté par l'API
+`gpu.rs:1081` n'a pas `|| k > n`, alors que la collecte de la chaîne le refuse (`gpu.rs:820`) et vérifie l'invariant côté hôte. Le modèle est protégé (`model.rs:3277 .min(n)`), le banc aussi ; un appel direct (k>n) vide le filet ou, avant ea1d155, publiait un faux résultat et lisait la VRAM hors bornes via `valeur_v`.
+
+### 5. Banc, latent, cosmétique
+`idx_ref` calculé puis jeté (`main.rs:2760`) ; tolérance 1e-6 frôlée à 6,4-9,2e-7 avec des ordres de sommation et des scores différents ; chemin `sinks == nullptr` jamais exercé. `red`/`red2` portent des comptages entiers en `float` (exact seulement si n < 2²⁴). `shCle` (`l.998`) est **mort** : le terme `3*k` de `gpu.rs:1096` et le commentaire paient 4 ko inutiles — piège de maintenance.
+
+### Vérifié sans défaut
+Taille du partagé **exactement** `(256+3k)*4 + 2·blockDim·4` (aucun débordement, alignements 4 octets OK, k=1 et k=1024 corrects) ; couverture exhaustive/disjointe de la collecte (`par` gère n < blockDim, rangs corrects, `shIdx ≤ k−1`) ; toutes les réutilisations de `red`/`red2` barrées ; `valeur_v` sain tant que k ≤ n ; seuil 131 072 appliqué au bon `n` avec branche « chaîne » intacte (`puits` toujours utilisé) ; échec DtoH sans résultat partiel (le CPU réécrit tout) ; puits `nullptr` de même contrat que la chaîne ; PTX à jour ; `attn_scores_sans_relecture` cohérent (unités, flux, allocations).
+
+### 🤖 Assistant
+
+⏵ La revue a trouvé une course bloquante dans le noyau fusionné — je corrige
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/gpu/drave_gpu.cu'; s=open(p).read()\ndef rep(v,n,nom):\n    global s\n    assert s.count(v)==1, f\"{nom}::{s.count(v)}\"\n    s=s.replace(v,n,1)\n\n# F1 : barrière en fin de passe (les lectures de shHi … [6206 caractères tronqués]`
+
+  ```
+F1, ceinture, F5 (noyau)
+F4, F6, F5 (hôte)
+noyaux exportés : 15
+0
+    noyau 4 (UN lancement) : 0.13 ms · écart max 8.941e-8 sur 1.244e-1 (relatif 7.19e-7)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat /tmp/grille_fusion.log; date +%H:%M:%S", "description": "Check grid progress"}`
+
+  ```
+cpu      511 : attention 4.26 | 
+gpu      511 : attention 4.53 | 
+cpu     1023 : attention 7.17 | 
+gpu     1023 : attention 4.62 | 
+cpu     2047 : attention 12.08 | 
+gpu     2047 : attention 4.82 | 
+cpu     4095 : 20:16:05
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/model.rs'; s=open(p).read()\nvieux = \"\"\"                attn_idx.clear();\n                if k < n {\n                    attn_idx.extend(0..n as u32);\n                    attn_idx.select_nth_ … [4375 caractères tronqués]`
+
+  ```
+F3 : départage CPU déterministe
+F7 : idx_ref retiré, chemin sans puits exerçable
+build
+    ensembles identiques au CPU : 14/14 lignes · différence symétrique 0 indices
+    noyau 3 (softmax sur k + Σ w·V) : GPU 0.06 ms · CPU 0.73 ms · écart max 5.960e-8 sur 1.244e-1 (relatif 4.79e-7)
+    noyau 4 (UN lancement) : 0.13 ms · écart max 1.268e-4 sur 1.244e-1 (relatif 1.02e-3)
+    → AU-DESSUS du critère de 1e-6 : ne pas brancher le noyau 4
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/main.rs'; s=open(p).read()\nvieux = \"\"\"                    let kvh = l / rep;\n                    let mut m = sinks[l];\n                    for &j in ord.iter() { m = m.max(ligne[j as usize]); … [1813 caractères tronqués]`
+
+  ```
+référence du banc alignée sur les puits du noyau
+0
+[]  noyau 4 (UN lancement) : 0.14 ms · écart max 8.941e-8 sur 1.244e-1 (relatif 7.19e-7)
+[DRAVE_BANC_SANS_PUITS=1]  noyau 4 (UN lancement) : 0.13 ms · écart max 1.043e-7 sur 1.245e-1 (relatif 8.38e-7)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cargo test --release --manifest-path drave-core/Cargo.toml 2>&1 | tail -2 && git add -A && git commit -q -F - <<'EOF' && git log --oneline -1\nRevue adverse du noyau fusionné : une course bloquante, et cinq autres points\n\nLa relect … [2146 caractères tronqués]`

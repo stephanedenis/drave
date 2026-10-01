@@ -2645,7 +2645,11 @@ l'entrelace — c'est le seul écart attendu)");
     // noyau 3. Les puits comptent dans le dénominateur, jamais au numérateur —
     // c'est le piège que le plan signale, et il est testé ici avec des puits
     // différents par ligne.
+    // Le moteur passe `None` pour les modèles SANS puits (Qwen, la plupart) : ce
+    // chemin n'était exercé par aucun banc. `DRAVE_BANC_SANS_PUITS=1` le teste.
+    let avec_puits = std::env::var("DRAVE_BANC_SANS_PUITS").is_err();
     let sinks: Vec<f32> = (0..lignes).map(|l| -1.0 + 0.001 * l as f32).collect();
+    let sinks_opt: Option<&[f32]> = if avec_puits { Some(&sinks) } else { None };
     let mut att_gpu = vec![0f32; lignes * hd];
     let t8 = Instant::now();
     // Un refus du noyau 3 (k > 1024, valeurs 4 bits) ne doit pas interrompre le
@@ -2707,7 +2711,7 @@ poursuivies");
         let mut att4 = vec![0f32; lignes * hd];
         let t10 = Instant::now();
         let ok4 = machine.attn_scores_sans_relecture(&mut miroir, &q, n, scale)
-            && machine.attn_topk_tout(&mut miroir, lignes, n, k, hd, rep, Some(&sinks),
+            && machine.attn_topk_tout(&mut miroir, lignes, n, k, hd, rep, sinks_opt,
                                       &mut att4);
         let t_tout = t10.elapsed().as_secs_f64();
         if !ok4 {
@@ -2716,7 +2720,6 @@ poursuivies");
             // Référence : les mêmes k indices que le noyau 4 doit choisir, et les
             // mêmes valeurs — recalculés ici depuis le cache hôte.
             let mut att_ref = vec![0f32; lignes * hd];
-            let mut idx_ref = vec![0i32; lignes * k];
             {
                 let mut vd = vec![0f32; hd];
                 for l in 0..lignes {
@@ -2726,11 +2729,15 @@ poursuivies");
                         ligne[b as usize].partial_cmp(&ligne[a as usize]).unwrap().then(a.cmp(&b))
                     });
                     ord.truncate(k);
-                    for (i, &j) in ord.iter().enumerate() { idx_ref[l * k + i] = j as i32; }
                     let kvh = l / rep;
-                    let mut m = sinks[l];
+                    // La référence doit consommer LES MÊMES puits que le noyau,
+                    // sinon elle compare deux calculs différents : sans cette
+                    // ligne, le passage `DRAVE_BANC_SANS_PUITS=1` annonçait un
+                    // écart de 1,02e-3 qui n'était que celui du banc.
+                    let puits_l = sinks_opt.map(|s| s[l]);
+                    let mut m = puits_l.unwrap_or(f32::NEG_INFINITY);
                     for &j in ord.iter() { m = m.max(ligne[j as usize]); }
-                    let mut den = (sinks[l] - m).exp();
+                    let mut den = match puits_l { Some(s) => (s - m).exp(), None => 0.0 };
                     let mut w = vec![0f32; k];
                     for (i, &j) in ord.iter().enumerate() {
                         let e = (ligne[j as usize] - m).exp();
@@ -2757,7 +2764,6 @@ poursuivies");
             } else {
                 println!("    → AU-DESSUS du critère de 1e-6 : ne pas brancher le noyau 4");
             }
-            let _ = idx_ref;
         }
     }
 
