@@ -7,12 +7,12 @@
 | Début | 2026-09-28 14:46 |
 | Durée | 69.5 h |
 | Tours | 51 |
-| Messages | 2987 |
-| Appels d'outils | 2842 |
+| Messages | 2988 |
+| Appels d'outils | 2843 |
 | Fichiers touchés | 65 |
-| Commandes | 2455 |
+| Commandes | 2456 |
 | Sous-agents | 22 |
-| Commits | 248 |
+| Commits | 249 |
 | Compactages de contexte | 4 |
 
 ## Objectifs déclarés
@@ -2400,7 +2400,7 @@ Les téléchargements avancent en parallèle : **DeepSeek-V4.1-Flash 68 %** (249
 
 ### Tour 51 — continue jusqu'à 13h HAE
 
-*279 appels d'outils.* Actions notables :
+*280 appels d'outils.* Actions notables :
 
 - bash — Check time and running processes
 - job_list
@@ -2416,11 +2416,11 @@ Les téléchargements avancent en parallèle : **DeepSeek-V4.1-Flash 68 %** (249
 - todo_write
 - bash — Count buffer accesses in gguf.rs
 - bash — Map functions and base computations
-- … et 264 autres
+- … et 265 autres
 
 **Synthèse produite :**
 
-⏵ **Porte gpt-oss verte sur le binaire final : 15,1757.** Je clôture.
+⏵ Dernière mise à jour du journal et vérification finale.
 
 ## 3. Travail accompli
 
@@ -2561,7 +2561,7 @@ Les téléchargements avancent en parallèle : **DeepSeek-V4.1-Flash 68 %** (249
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 2415 autres
+- … et 2416 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2957,4 +2957,5 @@ Les téléchargements avancent en parallèle : **DeepSeek-V4.1-Flash 68 %** (249
 - La table des types ggml confrontée à libggml, et les huit types ajoutés après NVFP4  tools/verifier_table_types.sh compile un programme lié à libggml, imprime g
 - Inventaire des modèles lourds : 984 Go de poids annoncés par les descripteurs, 984 Go annoncés par HuggingFace  tools/inventaire_modeles_lourds.sh lit les en-tê
 - Porte gpt-oss verte sur le binaire final : 15,1757 avec mmap, 21 minutes" && git log --oneline -1; echo "=== processus ==="; pgrep -af "drave-core|telecharger" 
+- Journal : inventaire des modèles lourds et vérificateur de table dans REPRISE" && git log --oneline -12
 

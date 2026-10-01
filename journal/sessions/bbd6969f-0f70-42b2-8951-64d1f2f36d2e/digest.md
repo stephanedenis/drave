@@ -47185,3 +47185,19 @@ gpt-oss ctx 256 lot 1 : perplexité 15.1757 sur 510 tokens (0 événements, 1274
 ⏵ **Porte gpt-oss verte sur le binaire final : 15,1757.** Je clôture.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np = 'reports/rapport-lecteur-multifichiers.md'\ns = open(p).read()\ns = s.replace('''| gpt-oss-120b ctx 256 | 15,1757 | **15,1757** |''',\n              '''| gpt-oss-120b ctx 256 (binaire final, mmap) | 15,1757 | ** … [1269 caractères tronqués]`
+
+  ```
+ok
+8a2ff79 Porte gpt-oss verte sur le binaire final : 15,1757 avec mmap, 21 minutes
+=== processus ===
+2834449 bash -c cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && nohup python3 tools/telecharger_modeles.py --journal /tmp/tl_file2.log > /tmp/tl_file2_stdout.log 2>&1 & echo "PID $!"; sleep 20; tail -5 /tmp/tl_file2.log; df -h /home/stephane/Data13TB | tail -1
+2834451 python3 tools/telecharger_modeles.py --journal /tmp/tl_file2.log
+2979784 bash -c cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p = 'reports/rapport-lecteur-multifichiers.md' s = open(p).read() s = s.replace('''| gpt-oss-120b ctx 256 | 15,1757 | **15,1757** |''',               '''| gpt-oss-120b ctx 256 (binaire final, mmap) | 15,1757 | **15,1757** |''') s = s.replace('''### Le mmap : 3,3× plus rapide, 3× moins de mémoire''', '''### Les modèles lourds, inventoriés par les en-têtes  `tools/inventaire_modeles_lourds.sh` confronte les poids annoncés par les descripteurs GGUF aux tailles annoncées par HuggingFace. **La concordance porte sur 984 Go** : DeepSeek-V4.1-Flash 365,70 = 365,7 · GLM-5.3 216,71 = 216,7 · Kimi-K2.7 303,90 = 303,9 · DeepSeek-V4-Flash 86,90 = 86,9. Une seule entrée fausse
+… [751 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Dernière mise à jour du journal et vérification finale.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np = 'REPRISE.md'\ns = open(p).read().rstrip('\\n')\ns += '''\n\n## Inventaire des modèles lourds (01/10 midi)\n\n```bash\n# Lit les EN-TÊTES seuls (le plus gros fichier fait 366 Go) et confronte les\n# poids annoncé … [1130 caractères tronqués]`

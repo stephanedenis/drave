@@ -734,3 +734,29 @@ DRAVE_CLUSTERS=0 ./drave-core/target/release/drave \
 experts absents, mais rien n'additionne encore ce que deux nœuds calculent) ; les
 biais d'experts en clusters (gpt-oss en a, refusés explicitement) ; le
 rééquilibrage des clusters par charge et non par nombre d'experts.
+
+## Inventaire des modèles lourds (01/10 midi)
+
+```bash
+# Lit les EN-TÊTES seuls (le plus gros fichier fait 366 Go) et confronte les
+# poids annoncés par les descripteurs GGUF aux tailles annoncées par HuggingFace.
+tools/inventaire_modeles_lourds.sh
+```
+
+| modèle | architecture | fichiers | tenseurs | poids lus | annoncé HF |
+|---|---|---|---|---|---|
+| DeepSeek-V4.1-Flash-Q2 | `deepseek41` | 1 | 1 046 | 365,70 Go | 365,7 Go |
+| GLM-5.3-UD-IQ1_S | `glm-dsa` | 6 | 1 809 | 216,71 Go | 216,7 Go |
+| Kimi-K2.7-Code-UD-IQ1_M | `deepseek2` | 8 | 1 096 | 303,90 Go | 303,9 Go |
+| DeepSeek-V4-Flash-UD-IQ1_M | `deepseek4` | 3 | 1 328 | 86,90 Go | 86,9 Go |
+| MiniMax-H3 | `?` | 1 | 532 | 11,42 Go | 11,4 Go |
+
+**984 Go de concordance** : c'est la vérification la plus large de la table des
+types ggml. Aucune de ces architectures n'a de `forward` dans le moteur — c'est
+le chantier d'après.
+
+```bash
+# La table des types ggml, confrontée à libggml elle-même (41 types, 0 divergence)
+tools/verifier_table_types.sh
+```
+
