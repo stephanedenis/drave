@@ -40774,3 +40774,14 @@ cérémonie 7 écrite
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -m \"Journal : index des sessions (clôture de la nuit)\" 2>/dev/null; (echo \"=== PORTES FINALES 07h42 ===\"; echo -n \"Qwen : \"; ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf --ppl /tmp … [710 caractères tronqués]`
+
+  ```
+=== PORTES FINALES 07h42 ===
+Qwen : perplexité 19.3885 sur 510 tokens
+gpt-oss : perplexité 15.1757 sur 510 tokens
+tests : test result: ok. 18 passed
+processus drave restants : 0
+61
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -m \"Journal : index des sessions (fin de nuit)\" 2>/dev/null; git status --short | wc -l; ls sprints/*.md | wc -l; du -sh /home/stephane/FastNVMe/models/DeepSeek-V4-Flash-UD-IQ1_M; date +%H:%M:%S", "descr … [29 caractères tronqués]`
