@@ -7,12 +7,12 @@
 | Début | 2026-09-28 14:46 |
 | Durée | 60.9 h |
 | Tours | 48 |
-| Messages | 2495 |
-| Appels d'outils | 2363 |
+| Messages | 2499 |
+| Appels d'outils | 2367 |
 | Fichiers touchés | 52 |
-| Commandes | 2003 |
+| Commandes | 2007 |
 | Sous-agents | 18 |
-| Commits | 218 |
+| Commits | 219 |
 | Compactages de contexte | 3 |
 
 ## Objectifs déclarés
@@ -2234,7 +2234,7 @@ Fusionner la sélection en un noyau par ligne (8 lancements → 2), supprimer le
 
 ### Tour 48 — Continue en blocs de 2h jusqu'à demain 8h HAE. pour chacun des blocs/sprints tu dois être en autonomie totale. C'est à d … [282 caractères tronqués]
 
-*211 appels d'outils.* Actions notables :
+*215 appels d'outils.* Actions notables :
 
 - bash — Check time and count remaining boxes
 - bash — Start sprint 2
@@ -2250,7 +2250,7 @@ Fusionner la sélection en un noyau par ligne (8 lancements → 2), supprimer le
 - bash — Add poison check and finiteness guard
 - bash — Locate the topk GPU branch
 - bash — Wire fused kernel into the model
-- … et 193 autres
+- … et 197 autres
 
 **Synthèse produite :**
 
@@ -2378,7 +2378,7 @@ Fusionner la sélection en un noyau par ligne (8 lancements → 2), supprimer le
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 1963 autres
+- … et 1967 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2744,4 +2744,5 @@ Fusionner la sélection en un noyau par ligne (8 lancements → 2), supprimer le
 - À 8 192 clés, k=1024 (12,5 %) suffit : le k nécessaire croît plus lentement que le contexte (deux points)" && git log --oneline -1
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' # avertissement quand une série ne produit pas autant de fenêtres distinctes que de sonde
 - Sprint 5 : cérémonie (le taux remplace le verdict, la revue adverse, le pas de fenêtre corrigé)" && git log --oneline -1
+- Sprint 6 : le taux de récupération (9 fenêtres × 3 chemins) et le point 16 384" && git log --oneline -1 && sleep 540 && cat /tmp/aiguille_s6.log | head -12; dat
 

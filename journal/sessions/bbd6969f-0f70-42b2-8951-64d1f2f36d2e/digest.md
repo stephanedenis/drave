@@ -39359,3 +39359,51 @@ cérémonie 5 : revue adverse ajoutée
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date +%H:%M:%S; ./tools/sprint.sh close | tail -2; python3 - <<'PY'\np='sprints/05-refaire-la-grille-avec-de-vraies-fenetres.md'\ns=open(p).read()\ni = s.index(\"## Rétrospective — garder / changer\")\nopen(p,'w').write(s[:i] + open( … [309 caractères tronqués]`
+
+  ```
+03:37:55
+=== clôture du sprint 5 (01:37 → 03:37, prévu 03:37) ===
+trame écrite dans sprints/05-refaire-la-grille-avec-de-vraies-fenetres.md — à compléter (revue chiffrée, rétro, planning)
+cérémonie 5 écrite
+13a5c9c Sprint 5 : cérémonie (le taux remplace le verdict, la revue adverse, le pas de fenêtre corrigé)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ./tools/sprint.sh start \"Le TAUX de récupération de l'attention creuse : neuf fenêtres à 4096 (dense, k=256, k=1024) et le troisième point de la courbe k(contexte) à 16384\" && f=$(ls sprints/01-le-taux*.md 2>/dev/null | head -1); m … [445 caractères tronqués]`
+
+  ```
+Sprint 1 démarré à 03:38 → 05:38  ·  sprints/01-le-taux-de-r-cup-ration-de-l-attention-c.md
+# Sprint 6 — Le TAUX de récupération de l'attention creuse : neuf fenêtres à 4096 (dense, k=256, k=1024) et le troisième point de la courbe k(contexte) à 16384
+########## A - 4096 - complete - 9 fenetres
+03:38:29
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && f=$(ls sprints/01-le-taux*.md | head -1); mv \"$f\" sprints/06-le-taux-de-recuperation.md; read num debut fin < sprints/COURANT; echo \"6 $debut $fin\" > sprints/COURANT; sed -i '1s/^# Sprint 1 /# Sprint 6 /' sprints/06-le-taux-de-re … [162 caractères tronqués]`
+
+  ```
+06-le-taux-de-recuperation.md
+COURANT
+6 1790840289 1790847489
+# Sprint 6 — Le TAUX de récupération de l'attention creuse :
+[stderr]
+ls: cannot access 'sprints/01-le-taux*.md': No such file or directory
+mv: cannot stat '': No such file or directory
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls sprints/ && git status --short | head -4; cat /tmp/aiguille_s6.log 2>/dev/null | head -5; date +%H:%M:%S", "description": "Verify sprint files state"}`
+
+  ```
+01-premier-des-trois-noyaux-gpu-du-top-k-le.md
+02-fusionner-la-cha-ne-du-top-k-d-port-desc.md
+03-qualit-de-l-attention-creuse-long-contex.md
+04-le-k-de-l-attention-creuse-l-chec-au-mil.md
+05-refaire-la-grille-avec-de-vraies-fenetres.md
+06-le-taux-de-recuperation.md
+COURANT
+ M journal/README.md
+?? sprints/06-le-taux-de-recuperation.md
+?? sprints/COURANT
+########## A - 4096 - complete - 9 fenetres
+03:38:42
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -m \"Sprint 6 : le taux de récupération (9 fenêtres × 3 chemins) et le point 16 384\" && git log --oneline -1 && sleep 540 && cat /tmp/aiguille_s6.log | head -12; date +%H:%M:%S", "description": "Commit sp … [50 caractères tronqués]`
