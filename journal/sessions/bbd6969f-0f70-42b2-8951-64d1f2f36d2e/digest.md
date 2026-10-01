@@ -38911,3 +38911,28 @@ Error: cannot write "/tmp/aig_s5.sh": file changed since it was read — re-read
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\ncontenu = \"\"\"#!/bin/bash\n# SPRINT 5 — deux questions, deux grilles.\n#\n# (A) La conclusion du sprint 4 (« k est un réglage, seuil entre 512 et 1 024 »)\n#     tient-elle sur TROIS TEXTES DIFFÉRENTS ? Le sprint  … [2389 caractères tronqués]`
+
+  ```
+script sprint 5 réécrit
+rapport : contrôle 8192 noté
+b14e4f2 Contrôle dense à 8 192 : l'information est retrouvée (1002 s, prompt de 7963 jetons) — la question du k vs contexte est mesurable là
+01:18:48
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 560; date +%H:%M:%S; ./tools/sprint.sh status | head -2", "description": "Wait for sprint 4 box end", "timeoutMs": 600000}`
+
+  ```
+01:28:13
+── Sprint 4 ─────────────────────────────────────────────
+- **Début** : 23:44 · **Fin prévue** : 01:44 (boxing de 120 min)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 540; date +%H:%M:%S; ./tools/sprint.sh close | tail -2", "description": "Close sprint 4", "timeoutMs": 600000}`
+
+  ```
+01:37:17
+=== clôture du sprint 4 (23:44 → 01:37, prévu 01:44) ===
+trame écrite dans sprints/04-le-k-de-l-attention-creuse-l-chec-au-mil.md — à compléter (revue chiffrée, rétro, planning)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='sprints/04-le-k-de-l-attention-creuse-l-chec-au-mil.md'\ns=open(p).read()\ni = s.index(\"## Rétrospective — garder / changer\")\nopen(p,'w').write(s[:i] + open('/tmp/ceremonie4.md').read().lstrip('\\n'))\nprint(\ … [683 caractères tronqués]`
