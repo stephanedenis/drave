@@ -39820,3 +39820,20 @@ Its closing message:
 Aucun fichier modifié ; seule commande lancée : la vérification bornée à 240 s.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\ndef patch(p, paires):\n    s=open(p).read()\n    for v,n,nom in paires:\n        assert s.count(v)==1, f\"{p}::{nom}::{s.count(v)}\"\n        s=s.replace(v,n,1)\n    open(p,'w').write(s); print(f\"{p} : {len(paires) … [5073 caractères tronqués]`
+
+  ```
+reports/rapport-aiguille-topk.md : 5
+cérémonie : livelock et planning
+45a0c44 Le « ralentissement » est un LIVELOCK : KvCache::assurer boucle sans fin si besoin > ctx (model.rs:1117)
+05:33:51
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 300; date +%H:%M:%S; ./tools/sprint.sh close | tail -2", "description": "Close sprint 6", "timeoutMs": 400000}`
+
+  ```
+05:38:55
+=== clôture du sprint 6 (03:38 → 05:38, prévu 05:38) ===
+trame écrite dans sprints/06-le-taux-de-recuperation.md — à compléter (revue chiffrée, rétro, planning)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='sprints/06-le-taux-de-recuperation.md'\ns=open(p).read()\ni = s.index(\"## Rétrospective — garder / changer\")\nopen(p,'w').write(s[:i] + open('/tmp/ceremonie6.md').read().lstrip('\\n'))\nprint(\"cérémonie 6 écri … [683 caractères tronqués]`
