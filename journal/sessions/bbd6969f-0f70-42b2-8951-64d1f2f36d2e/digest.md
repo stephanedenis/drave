@@ -47499,3 +47499,17 @@ de la session ; le `digest.md` voisin en donne le verbatim complet.
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -m \"Journal de session\" && git log --oneline --since=\"11:13\" | wc -l && echo \"commits sur le bloc\" && git log --oneline -1 && echo \"\" && echo \"=== RÉCAPITULATIF ===\" && (cd drave-core && cargo te … [198 caractères tronqués]`
+
+  ```
+15
+commits sur le bloc
+56a6524 Journal de session
+
+=== RÉCAPITULATIF ===
+test result: ok. 32 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.09s
+ 15520 total
+1
+fichiers modifiés restants
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git status --short; git add -A && git commit -q -m \"Journal\" 2>/dev/null; git status --short | wc -l; echo \"---\"; date +%H:%M; tail -1 /tmp/tl_file2.log", "description": "Clear remaining journal change"}`
