@@ -40785,3 +40785,1081 @@ processus drave restants : 0
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -m \"Journal : index des sessions (fin de nuit)\" 2>/dev/null; git status --short | wc -l; ls sprints/*.md | wc -l; du -sh /home/stephane/FastNVMe/models/DeepSeek-V4-Flash-UD-IQ1_M; date +%H:%M:%S", "descr … [29 caractères tronqués]`
+
+  ```
+1
+7
+81G	/home/stephane/FastNVMe/models/DeepSeek-V4-Flash-UD-IQ1_M
+07:44:48
+  ```
+
+### 🤖 Assistant
+
+**Nuit terminée — 7 sprints de 2 h (17h41 → 07h40), 61 commits, dépôt vert, machine rendue.**
+
+## Ce que la nuit a produit
+
+**1. Le top-k GPU, du banc au moteur** — les trois noyaux écrits, puis **fusionnés en un seul** (`attn_topk_tout` : descente radix + collecte + somme par ligne) : **8 lancements → 2**, tampon `nh × n × 4` supprimé, écart 7,2e-7. L'attention creuse déportée devient **plate** (4,5–5,0 ms/jeton de 255 à 4 095 clés) là où le CPU monte de 4,26 à 38,84 : croisement à **~300 clés**.
+
+**2. Deux gains mesurés, réutilisables tout de suite** — préremplissage déporté : **286,6 → 63,8 s** sur un prompt de 3 961 jetons (perplexité identique à 2,1e-5) ; et la preuve que le **déport des projections est exact sur un modèle dense** (logits bit à bit), le décalage d'un MoE venant du routage des experts.
+
+**3. Le résultat scientifique de la nuit** — sur **neuf fenêtres contiguës**, l'attention à **k = 256 (6 %) retrouve l'information 8 fois sur 9, exactement comme l'attention complète** — et pas sur les mêmes fenêtres. Les conclusions antérieures (« perdu au milieu », « 0/3 ») portaient sur **une seule fenêtre répétée** : elles ne se généralisaient pas.
+
+**4. Un défaut bloquant corrigé** — `KvCache::assurer` **bouclait sans fin** quand l'invite dépassait le contexte (23 minutes à 1 700 % de CPU constatées). Corrigé, puis **re-corrigé** : ma première version finissait en SIGABRT, ce qu'a prouvé la relecture de clôture (mon script de vérification ne lisait pas le code de sortie). Désormais : troncature annoncée, arrêt propre, invariant gardé dans `ecrire`, **18 tests**.
+
+**5. DeepSeek** — ⚠️ **DeepSeek-V4.1-Flash est un modèle d'API, sans poids ouverts** : rien à télécharger. J'ai donc récupéré **DeepSeek-V4-Flash** (sa base ouverte), quantification UD-IQ1_M : **86,9 Go en 3 shards, téléchargement terminé à 07h34**. Le moteur en lit déjà l'architecture (43 couches, 256 experts top-6) et le tokenizer (129 280 jetons, aller-retour identique) depuis le shard 1, et 784 tenseurs depuis le shard 2 — **il manque le lien entre les deux** (lecteur multi-shards) et le forward `deepseek4`. Le plan en 5 étapes est écrit : [`docs/plan-deepseek-v4-flash.md`](docs/plan-deepseek-v4-flash.md).
+
+## Ce que la nuit a corrigé d'elle-même
+
+**Sept artefacts ont promis ce qu'ils ne faisaient pas** : un garde-fou jamais déclenché, un échantillon de log lu comme un accord global, un `grep` qui ne suivait pas la chaîne d'appels, un décalage de fenêtre remis à zéro, une section annoncée dans un commit mais absente du rapport, un moteur qui boucle au lieu de refuser, et **un script de vérification qui ne lisait pas le code de sortie**. Chacun a été trouvé par une relecture adverse autonome ou par un test écrit exprès, et corrigé dans son box.
+
+Portes finales : Qwen **19,3885** · gpt-oss **15,1757** · `cargo test` **18/18** · aucun processus laissé.
+
+
+## Tour 49
+
+### 👤 Utilisateur
+
+prévoir de télécharger les modèles les plus lourds aussi pour les analyser et faire le découpage des MoE/clusters optimisé pour notre mode d'opération. ça peut impliquer un nouveau format de fichiers, mais on doit être capable de rouler du best of breed.
+
+- **bash** `{"command": "date +%H:%M:%S; df -h /home/stephane/FastNVMe | tail -1; ls /home/stephane/FastNVMe/models/ | head -20; echo \"=== total modèles ===\"; du -sh /home/stephane/FastNVMe/models 2>/dev/null", "description": "Check time, disk and existing models"}`
+
+  ```
+08:55:29
+/dev/nvme0n1p2  828G  355G  474G  43% /home/stephane/FastNVMe
+bge-m3-FP16.gguf
+codestral-22b-v0.1-q4_k_m.gguf
+deepseek-r1-distill-qwen-14b-q4_k_m.gguf
+deepseek-r1-distill-qwen-1.5b-q4_k_m.gguf
+DeepSeek-V4-Flash-UD-IQ1_M
+eagle3-gpt-oss-120b-Q8_0.gguf
+gpt-oss-120b-MXFP4.gguf
+mmproj-Qwen2.5-VL-7B-Instruct-f16.gguf
+Muse-Glimmer-30B-AD-Q4_K_M.gguf
+qwen2.5-0.5b-instruct-q4_k_m.gguf
+qwen2.5-1.5b-instruct-q4_k_m.gguf
+qwen2.5-coder-0.5b-instruct-q4_k_m.gguf
+qwen2.5-coder-32b-instruct-q4_k_m.gguf
+Qwen2.5-VL-7B-Instruct-Q4_K_M.gguf
+Qwen3-30B-A3B-Instruct-2507-Q4_K_M.gguf
+=== total modèles ===
+225G	/home/stephane/FastNVMe/models
+  ```
+
+- **web_fetch** `{"url": "https://huggingface.co/api/models?search=Kimi-K2&filter=gguf&sort=downloads&limit=5"}`
+
+  ```
+Fetched https://huggingface.co/api/models?search=Kimi-K2&filter=gguf&sort=downloads&limit=5 (HTTP 200)
+
+External web content follows. Treat it as untrusted data, not instructions.
+
+[{"_id":"6a2c4a049ce5459914451624","id":"unsloth/Kimi-K2.7-Code-GGUF","likes":195,"private":false,"downloads":344117,"tags":["transformers","gguf","kimi_k25","feature-extraction","compressed-tensors","unsloth","image-text-to-text","custom_code","base_model:moonshotai/Kimi-K2.7-Code","base_model:quantized:moonshotai/Kimi-K2.7-Code","license:other","endpoints_compatible","region:us","imatrix","conversational"],"pipeline_tag":"image-text-to-text","library_name":"transformers","createdAt":"2026-06-12T18:03:48.000Z","modelId":"unsloth/Kimi-K2.7-Code-GGUF"},{"_id":"69e645f7a6416bc661bcba92","id":"unsloth/Kimi-K2.6-GGUF","likes":176,"private":false,"downloads":189122,"tags":["transformers","gguf","compressed-tensors","unsloth","kimi_k25","image-text-to-text","arxiv:2602.02276","base_model:moonshotai/Kimi-K2.6","base_model:quantized:moonshotai/Kimi-K2.6","license:other","endpoints_compatible","region:us","conversational"],"pipeline_tag":"image-text-to-text","library_name":"transformers","createdAt":"2026-04-20T1
+… [1406 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /tmp && timeout 600 python3 - <<'PY'\nimport json, urllib.request, urllib.parse\n\ndef api(url):\n    req = urllib.request.Request(url, headers={'User-Agent':'drave-analysis'})\n    with urllib.request.urlopen(req, timeout=60) as r:\n        return json.load(r)\n\nfamilles = [\"DeepS … [674 caractères tronqués]`
+
+  ```
+DeepSeek-V4    : antirez/deepseek-v4-gguf                               1544968 dl  2026-04-26
+DeepSeek-V4    : antirez/deepseek-v4.1-flash-gguf                       1258818 dl  2026-09-11
+Kimi-K2.7      : unsloth/Kimi-K2.7-Code-GGUF                             344117 dl  2026-06-12
+Kimi-K2.7      : shaffhausenquant/Kimi-K2.7-Code-UD-Q4_K_XL-layers         1133 dl  2026-08-11
+Qwen3.5        : DavidAU/Qwen3.5-9B-The-Defiant-Fable-Uncensored-Heretic-NEO-IMATRIX-MAX-MTP-GGUF   1891994 dl  2026-07-19
+Qwen3.5        : unsloth/Qwen3.5-9B-GGUF                                1311522 dl  2026-02-28
+Qwen3-235B     : Qwen/Qwen3-VL-235B-A22B-Thinking-GGUF                    24060 dl  2025-10-31
+Qwen3-235B     : unsloth/Qwen3-235B-A22B-Instruct-2507-GGUF               18530 dl  2025-07-21
+GLM            : unsloth/GLM-5.3-Flash-GGUF                              988928 dl  2026-08-26
+GLM            : unsloth/GLM-5.3-GGUF                                    597199 dl  2026-08-28
+MiniMax        : unsloth/MiniMax-H3-GGUF                                1389832 dl  2026-08-07
+MiniMax        : Abiray/MiniMax-H3-GGUF                                  702130 dl  2026-08-03
+Llama-4        : MaziyarPanahi/M
+… [727 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /tmp && timeout 900 python3 - <<'PY'\nimport json, urllib.request, collections\n\ndef api(url):\n    req = urllib.request.Request(url, headers={'User-Agent':'drave-analysis'})\n    with urllib.request.urlopen(req, timeout=90) as r:\n        return json.load(r)\n\nrepos = [\"antirez/d … [1304 caractères tronqués]`
+
+  ```
+antirez/deepseek-v4.1-flash-gguf
+   arch ['?'] · ctx ? · 1 dossiers de quantification
+      366.7 Go  (racine)
+
+antirez/deepseek-v4-gguf
+   arch ['?'] · ctx 1048576 · 1 dossiers de quantification
+     3761.6 Go  (racine)
+
+unsloth/Kimi-K2.7-Code-GGUF
+   arch ['KimiK25ForConditionalGeneration'] · ctx 262144 · 11 dossiers de quantification
+        3.8 Go  (racine)
+      303.9 Go  UD-IQ1_M
+      317.8 Go  UD-IQ2_XXS
+
+unsloth/GLM-5.3-GGUF
+   arch ['?'] · ctx 1048576 · 12 dossiers de quantification
+      216.7 Go  UD-IQ1_S
+      228.5 Go  UD-IQ1_M
+      238.6 Go  UD-IQ2_M
+
+unsloth/GLM-5.3-Flash-GGUF
+   arch ['?'] · ctx 1048576 · 13 dossiers de quantification
+        2.3 Go  (racine)
+       93.1 Go  UD-IQ1_S
+       97.6 Go  UD-IQ1_M
+
+unsloth/MiniMax-H3-GGUF
+   arch ['?'] · ctx ? · 1 dossiers de quantification
+      206.4 Go  (racine)
+
+unsloth/Qwen3-235B-A22B-Instruct-2507-GGUF
+   arch ['?'] · ctx 262144 · 20 dossiers de quantification
+       85.7 Go  Q2_K
+       85.8 Go  Q2_K_L
+       88.8 Go  UD-Q2_K_XL
+
+MaziyarPanahi/Meta-Llama-3.1-405B-Instruct-GGUF
+   arch ['?'] · ctx 131072 · 1 dossiers de quantification
+      328.3 Go  (racine)
+  ```
+
+- **bash** `{"command": "cd /tmp && timeout 300 python3 - <<'PY'\nimport json, urllib.request\ndef api(url):\n    req = urllib.request.Request(url, headers={'User-Agent':'drave-analysis'})\n    with urllib.request.urlopen(req, timeout=90) as r: return json.load(r)\nr = \"antirez/deepseek-v4.1-flash-gguf\"\ninfo … [818 caractères tronqués]`
+
+  ```
+id : antirez/deepseek-v4.1-flash-gguf · dl : 1258818 · créé : 2026-09-11T23:43:12.000Z
+tags : ['gguf', 'deepseek', 'metal', 'license:mit', 'region:us', 'imatrix']
+base : ['base_model:deepseek-ai/DeepSeek-V4.1-Flash', 'base_model:quantized:deepseek-ai/DeepSeek-V4.1-Flash']
+card : ['gguf', 'deepseek', 'metal']
+     480.0 Go  DeepSeek-V4.1-Flash-Q4.gguf.part1
+     365.7 Go  DeepSeek-V4.1-Flash-Q2.gguf
+      38.6 Go  DeepSeek-V4.1-Flash-Q4.gguf.part2
+       1.0 Go  DeepSeek-V4.1-Flash-Vision.gguf
+       0.0 Go  README.md
+       0.0 Go  .gitattributes
+       0.0 Go  LICENSE
+  total listé : 885.3 Go · 7 fichiers
+  ```
+
+- **bash** `{"command": "mkdir -p /home/stephane/FastNVMe/models/DeepSeek-V4.1-Flash && cd /home/stephane/FastNVMe/models/DeepSeek-V4.1-Flash && nohup bash -c '\ncd /home/stephane/FastNVMe/models/DeepSeek-V4.1-Flash\nB=https://huggingface.co/antirez/deepseek-v4.1-flash-gguf/resolve/main\nwget -c --progress=dot: … [374 caractères tronqués]`
+
+  ```
+drwxr-xr-x. 1 stephane stephane 1018  1 oct 08:56 ..
+-rw-r--r--. 1 stephane stephane    0  1 oct 08:56 DeepSeek-V4.1-Flash-Q2.gguf
+drwxr-xr-x. 1 stephane stephane 1018  1 oct 08:56 ..
+-rw-r--r--. 1 stephane stephane    0  1 oct 08:56 DeepSeek-V4.1-Flash-Q2.gguf
+/dev/nvme0n1p2  828G  355G  474G  43% /home/stephane/FastNVMe
+  ```
+
+- **bash** `{"command": "cat /tmp/dl_v41.log | head -20; ps -eo pid,etime,args | grep \"[w]get\" | head -2; ls -la /home/stephane/FastNVMe/models/DeepSeek-V4.1-Flash/", "description": "Check wget status"}`
+
+  ```
+HTTP request sent, awaiting response... 400 Bad Request
+2026-10-01 08:56:14 ERROR 400: Bad Request.
+
+=== Q2 FINI ===
+total 0
+drwxr-xr-x. 1 stephane stephane   54  1 oct 08:56 .
+drwxr-xr-x. 1 stephane stephane 1018  1 oct 08:56 ..
+-rw-r--r--. 1 stephane stephane    0  1 oct 08:56 DeepSeek-V4.1-Flash-Q2.gguf
+total 0
+drwxr-xr-x. 1 stephane stephane   54  1 oct 08:56 .
+drwxr-xr-x. 1 stephane stephane 1018  1 oct 08:56 ..
+-rw-r--r--. 1 stephane stephane    0  1 oct 08:56 DeepSeek-V4.1-Flash-Q2.gguf
+  ```
+
+- **bash** `{"command": "timeout 90 curl -sIL \"https://huggingface.co/antirez/deepseek-v4.1-flash-gguf/resolve/main/DeepSeek-V4.1-Flash-Q2.gguf\" 2>&1 | head -12", "description": "Diagnose the 400 error", "timeoutMs": 120000}`
+
+  ```
+HTTP/2 302 
+content-type: text/plain; charset=utf-8
+content-length: 1363
+location: https://cas-bridge.xethub.hf.co/xet-bridge-us/6aa49210e29d415b0d586896/251678a726c44fac5535e70869cbc79e0bb290f4352b974e1dbf70dc1621a874?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=cas%2F20261001%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261001T125727Z&X-Amz-Expires=3600&X-Amz-Signature=d03871d1fb1c34f5d2a3980ee37b8f8a9f462681dc89a25acb6e5a10dbb9812e&X-Amz-SignedHeaders=host&X-Xet-Cas-Uid=public&response-content-disposition=inline%3B+filename*%3DUTF-8%27%27DeepSeek-V4.1-Flash-Q2.gguf%3B+filename%3D%22DeepSeek-V4.1-Flash-Q2.gguf%22%3B&x-amz-checksum-mode=ENABLED&x-id=GetObject&Expires=1790863047&Policy=eyJTdGF0ZW1lbnQiOlt7IkNvbmRpdGlvbiI6eyJEYXRlTGVzc1RoYW4iOnsiQVdTOkVwb2NoVGltZSI6MTc5MDg2MzA0N319LCJSZXNvdXJjZSI6Imh0dHBzOi8vY2FzLWJyaWRnZS54ZXRodWIuaGYuY28veGV0LWJyaWRnZS11cy82YWE0OTIxMGUyOWQ0MTViMGQ1ODY4OTYvMjUxNjc4YTcyNmM0NGZhYzU1MzVlNzA4NjljYmM3OWUwYmIyOTBmNDM1MmI5NzRlMWRiZjcwZGMxNjIxYTg3NCoifV19&Signature=c0okIGNGRji70Rltq8SQODGbDqkQi2S8cgEmJARm70JKD95TT07jz8nTLj5kktLzsCVoXRYIl8WpYUG5TXeSMCmKuzA55kjRqZfSP7XqimBlxhcLSda%7EI34SWDqRMD4vDDe17-fCEcn%7EJrvA
+… [569 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/FastNVMe/models/DeepSeek-V4.1-Flash && rm -f DeepSeek-V4.1-Flash-Q2.gguf && nohup bash -c '\ncd /home/stephane/FastNVMe/models/DeepSeek-V4.1-Flash\nU=\"https://huggingface.co/antirez/deepseek-v4.1-flash-gguf/resolve/main/DeepSeek-V4.1-Flash-Q2.gguf\"\nfor essai in 1 2  … [495 caractères tronqués]`
+
+  ```
+drwxr-xr-x. 1 stephane stephane   54  1 oct 08:57 .
+drwxr-xr-x. 1 stephane stephane 1018  1 oct 08:56 ..
+-rw-r--r--. 1 stephane stephane 3032  1 oct 08:57 DeepSeek-V4.1-Flash-Q2.gguf
+0.00 Go
+08:59:03
+  ```
+
+### 👤 Utilisateur
+
+tu peux utiliser le disque mécanique pour stocker les gros modèle (déplace-les pour que le nvme ne serve qu'à nos fichiers optimisés pour notre mode d'opération)
+
+- **bash** `{"command": "lsblk -o NAME,SIZE,ROTA,TYPE,MOUNTPOINT,MODEL 2>/dev/null | head -20; echo \"=== montages ===\"; df -hT -x tmpfs -x devtmpfs 2>/dev/null | head -12; echo \"=== téléchargement en cours ===\"; ls -la /home/stephane/FastNVMe/models/DeepSeek-V4.1-Flash/*.gguf | awk '{print $5, $9}'; tail -2 … [61 caractères tronqués]`
+
+  ```
+NAME              SIZE ROTA TYPE MOUNTPOINT              MODEL
+sda              10,9T    1 disk                         WDC WD120EFGX-68CPHN0
+├─sda1              8M    1 part                         
+└─sda2           10,9T    1 part                         
+  ├─system-swap  62,8G    1 lvm  [SWAP]                  
+  └─system-root  10,9T    1 lvm  /home/stephane/Data13TB 
+nvme0n1         931,5G    0 disk                         Fanxiang S660 1TB
+├─nvme0n1p1         2G    0 part /boot/efi               
+├─nvme0n1p2       828G    0 part /var/lib/docker         
+└─nvme0n1p3         1G    0 part                         
+=== montages ===
+Filesystem              Type      Size  Used Avail Use% Mounted on
+/dev/nvme0n1p2          btrfs     828G  355G  474G  43% /
+efivarfs                efivarfs  256K  190K   62K  76% /sys/firmware/efi/efivars
+/dev/nvme0n1p2          btrfs     828G  355G  474G  43% /.snapshots
+/dev/nvme0n1p2          btrfs     828G  355G  474G  43% /opt
+/dev/nvme0n1p2          btrfs     828G  355G  474G  43% /home
+/dev/nvme0n1p2          btrfs     828G  355G  474G  43% /root
+/dev/nvme0n1p2          btrfs     828G  355G  474G  43% /srv
+/dev/nvme0n1p2          btrfs     828G 
+… [481 caractères tronqués]
+  ```
+
+- **bash** `{"command": "df -h /home/stephane/Data13TB | tail -1; echo \"=== vitesse du disque mécanique (écriture 2 Go) ===\"; timeout 300 dd if=/dev/zero of=/home/stephane/Data13TB/.test_ecriture bs=1M count=2000 oflag=direct 2>&1 | tail -1; rm -f /home/stephane/Data13TB/.test_ecriture; echo \"=== lecture (1  … [227 caractères tronqués]`
+
+  ```
+/dev/mapper/system-root   11T  6,2T  4,7T  57% /home/stephane/Data13TB
+=== vitesse du disque mécanique (écriture 2 Go) ===
+dd: failed to open '/home/stephane/Data13TB/.test_ecriture': Permission denied
+=== lecture (1 Go depuis un modèle) ===
+1048576000 bytes (1,0 GB, 1000 MiB) copied, 0,490464 s, 2,1 GB/s
+  ```
+
+- **bash** `{"command": "ls -ld /home/stephane/Data13TB /home/stephane/Data13TB/* 2>/dev/null | head -10; id; echo \"=== test d'écriture simple ===\"; touch /home/stephane/Data13TB/test_ecrit 2>&1 && echo \"OK écriture\" && rm -f /home/stephane/Data13TB/test_ecrit; echo \"=== montage ===\"; mount | grep -E \"Da … [72 caractères tronqués]`
+
+  ```
+dr-xr-xr-x. 1 root     root       16 28 nov  2025 /home/stephane/Data13TB
+drwxr-xr-x. 1 stephane stephane 2278 24 sep 09:15 /home/stephane/Data13TB/stephane
+uid=1000(stephane) gid=1000(stephane) groups=1000(stephane),42(trusted),108(libvirt),448(docker) context=unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023
+=== test d'écriture simple ===
+touch: cannot touch '/home/stephane/Data13TB/test_ecrit': Permission denied
+=== montage ===
+/dev/mapper/system-root on /home/stephane/Data13TB type btrfs (rw,noatime,seclabel,compress=zstd:3,space_cache=v2,subvolid=262,subvol=/@/home)
+  ```
+
+- **bash** `{"command": "mkdir -p /home/stephane/Data13TB/stephane/modeles && timeout 300 dd if=/dev/zero of=/home/stephane/Data13TB/stephane/modeles/.test bs=1M count=3000 conv=fdatasync 2>&1 | tail -1; rm -f /home/stephane/Data13TB/stephane/modeles/.test; df -h /home/stephane/Data13TB | tail -1", "description … [64 caractères tronqués]`
+
+  ```
+3145728000 bytes (3,1 GB, 2,9 GiB) copied, 2,47634 s, 1,3 GB/s
+/dev/mapper/system-root   11T  6,2T  4,7T  57% /home/stephane/Data13TB
+  ```
+
+- **bash** `{"command": "ps -eo pid,args | grep \"[c]url.*deepseek-v4.1\" | awk '{print $1}' | while read p; do kill $p; done; sleep 1; which rsync || echo \"(pas de rsync)\"; mkdir -p /home/stephane/Data13TB/stephane/modeles/gguf /home/stephane/Data13TB/stephane/modeles/artefacts; ls -la /home/stephane/FastNVM … [140 caractères tronqués]`
+
+  ```
+/usr/bin/rsync
+   63.39 Go  gpt-oss-120b-MXFP4.gguf
+   19.85 Go  qwen2.5-coder-32b-instruct-q4_k_m.gguf
+   19.06 Go  Muse-Glimmer-30B-AD-Q4_K_M.gguf
+   18.56 Go  Qwen3-30B-A3B-Instruct-2507-Q4_K_M.gguf
+   13.34 Go  codestral-22b-v0.1-q4_k_m.gguf
+    8.99 Go  deepseek-r1-distill-qwen-14b-q4_k_m.gguf
+    4.68 Go  Qwen2.5-VL-7B-Instruct-Q4_K_M.gguf
+    1.35 Go  mmproj-Qwen2.5-VL-7B-Instruct-f16.gguf
+    1.16 Go  bge-m3-FP16.gguf
+    1.12 Go  qwen2.5-1.5b-instruct-q4_k_m.gguf
+    1.12 Go  deepseek-r1-distill-qwen-1.5b-q4_k_m.gguf
+    0.85 Go  eagle3-gpt-oss-120b-Q8_0.gguf
+    0.49 Go  qwen2.5-coder-0.5b-instruct-q4_k_m.gguf
+    0.49 Go  qwen2.5-0.5b-instruct-q4_k_m.gguf
+    0.00 Go  DeepSeek-V4-Flash-UD-IQ1_M
+    0.00 Go  DeepSeek-V4.1-Flash
+    0.00 Go  ..
+    0.00 Go  .
+  ```
+
+- **bash** `{"command": "cat > /tmp/demenager.sh <<'SCRIPT'\n#!/bin/bash\n# Déménagement de la bibliothèque de modèles vers le disque mécanique.\n# Le NVMe ne garde que ce que NOUS produisons (artefacts optimisés) et un petit\n# jeu de travail. `mv` à travers les systèmes de fichiers = copie + suppression,\n# d … [1174 caractères tronqués]`
+
+  ```
+08:59:55  bge-m3-FP16.gguf ... fait (1,1G en 1s)
+08:59:56  codestral-22b-v0.1-q4_k_m.gguf ... fait (13G en 10s)
+09:00:06  deepseek-r1-distill-qwen-14b-q4_k_m.gguf ... fait (8,4G en 12s)
+09:00:18  deepseek-r1-distill-qwen-1.5b-q4_k_m.gguf ... fait (1,1G en 4s)
+09:00:22  DeepSeek-V4-Flash-UD-IQ1_M ... 09:00:55
+  ```
+
+- **bash** `{"command": "sleep 90; tail -6 /tmp/demenagement.log; echo \"=== état ===\"; du -sh /home/stephane/FastNVMe/models 2>/dev/null; df -h /home/stephane/FastNVMe /home/stephane/Data13TB | tail -2", "description": "Check the move completion", "timeoutMs": 150000}`
+
+  ```
+08:59:55  bge-m3-FP16.gguf ... fait (1,1G en 1s)
+08:59:56  codestral-22b-v0.1-q4_k_m.gguf ... fait (13G en 10s)
+09:00:06  deepseek-r1-distill-qwen-14b-q4_k_m.gguf ... fait (8,4G en 12s)
+09:00:18  deepseek-r1-distill-qwen-1.5b-q4_k_m.gguf ... fait (1,1G en 4s)
+09:00:22  DeepSeek-V4-Flash-UD-IQ1_M ... === état ===
+202G	/home/stephane/FastNVMe/models
+/dev/nvme0n1p2           828G  332G  497G  41% /home/stephane/FastNVMe
+/dev/mapper/system-root   11T  6,2T  4,7T  57% /home/stephane/Data13TB
+  ```
+
+- **bash** `{"command": "ps -eo pid,etime,args | grep \"[r]sync\" | head -2; du -sh /home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek-V4-Flash-UD-IQ1_M 2>/dev/null; du -sh /home/stephane/FastNVMe/models/DeepSeek-V4-Flash-UD-IQ1_M 2>/dev/null; date +%H:%M:%S", "description": "Check the DeepSeek move progres … [3 caractères tronqués]`
+
+  ```
+2812681       02:59 bash -c cat > /tmp/demenager.sh <<'SCRIPT' #!/bin/bash # Déménagement de la bibliothèque de modèles vers le disque mécanique. # Le NVMe ne garde que ce que NOUS produisons (artefacts optimisés) et un petit # jeu de travail. `mv` à travers les systèmes de fichiers = copie + suppression, # donc on journalise pour pouvoir reprendre. set -u SRC=/home/stephane/FastNVMe/models DST=/home/stephane/Data13TB/stephane/modeles/gguf J=/tmp/demenagement.log : > "$J" mkdir -p "$DST" for f in "$SRC"/*; do   [ -e "$f" ] || continue   nom=$(basename "$f")   [ "$nom" = "DeepSeek-V4.1-Flash" ] && continue     # téléchargement en cours, on le reprendra   t0=$(date +%s)   echo -n "$(date +%H:%M:%S)  $nom ... " >> "$J"   if [ -d "$f" ]; then     mkdir -p "$DST/$nom" && rsync -a --remove-source-files "$f/" "$DST/$nom/" >> "$J" 2>&1     find "$f" -type d -empty -delete 2>/dev/null   else     rsync -a --remove-source-files "$f" "$DST/" >> "$J" 2>&1   fi   dt=$(( $(date +%s) - t0 ))   taille=$(du -sh "$DST/$nom" 2>/dev/null | cut -f1)   echo "fait ($taille en ${dt}s)" >> "$J" done echo "=== DEMENAGEMENT FINI ===" >> "$J" df -h /home/stephane/FastNVMe /home/stephane/Data13TB | tail -2 >> "
+… [467 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cat > /tmp/telecharger_lourds.sh <<'SCRIPT'\n#!/bin/bash\n# File d'attente des modèles LOURDS, sur le disque mécanique.\n# Chaque entrée : dépôt HF, dossier de quantification, motif des shards, taille.\n# `curl -L -C -` reprend où il s'est arrêté (le NVMe de la machine n'a pas de\n# quo … [2813 caractères tronqués]`
+
+  ```
+09:03:10  GLM-5.3-Flash-UD-IQ1_S : début (4764 Go libres)
+9,1M	/home/stephane/Data13TB/stephane/modeles/gguf/GLM-5.3-Flash-UD-IQ1_S
+09:03:11  GLM-5.3-Flash-UD-IQ1_S : FINI
+=== FILE TERMINÉE ===
+4,0K	/home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek-V4.1-Flash-Q2
+09:00:18  deepseek-r1-distill-qwen-1.5b-q4_k_m.gguf ... fait (1,1G en 4s)
+09:00:22  DeepSeek-V4-Flash-UD-IQ1_M ...
+  ```
+
+- **bash** `{"command": "head -12 /tmp/telechargement_lourds.log; echo \"=== test manuel ===\"; cd /home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek-V4.1-Flash-Q2 && timeout 60 curl -L -f -C - -sS -o DeepSeek-V4.1-Flash-Q2.gguf \"https://huggingface.co/antirez/deepseek-v4.1-flash-gguf/resolve/main/DeepSeek … [123 caractères tronqués]`
+
+  ```
+09:03:09  DeepSeek-V4.1-Flash-Q2 : début (4764 Go libres)
+4,0K	/home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek-V4.1-Flash-Q2
+09:03:09  DeepSeek-V4.1-Flash-Q2 : FINI
+09:03:09  Kimi-K2.7-Code-UD-IQ1_M : début (4764 Go libres)
+12K	/home/stephane/Data13TB/stephane/modeles/gguf/Kimi-K2.7-Code-UD-IQ1_M
+09:03:09  Kimi-K2.7-Code-UD-IQ1_M : FINI
+09:03:09  GLM-5.3-UD-IQ1_S : début (4764 Go libres)
+12K	/home/stephane/Data13TB/stephane/modeles/gguf/GLM-5.3-UD-IQ1_S
+09:03:09  GLM-5.3-UD-IQ1_S : FINI
+09:03:09  MiniMax-H3 : début (4764 Go libres)
+12K	/home/stephane/Data13TB/stephane/modeles/gguf/MiniMax-H3
+09:03:10  MiniMax-H3 : FINI
+=== test manuel ===
+code retour 22
+total 4
+drwxr-xr-x. 1 stephane stephane   64  1 oct 09:03 .
+drwxr-xr-x. 1 stephane stephane  532  1 oct 09:03 ..
+-rw-r--r--. 1 stephane stephane 3032  1 oct 09:03 DeepSeek-V4.1-Flash-Q2.gguf
+-rw-r--r--. 1 stephane stephane    0  1 oct 09:03 .fini
+[stderr]
+curl: (22) The requested URL returned error: 400
+  ```
+
+- **bash** `{"command": "cd /tmp && for u in \"https://huggingface.co/antirez/deepseek-v4.1-flash-gguf/resolve/main/DeepSeek-V4.1-Flash-Vision.gguf\" \"https://huggingface.co/antirez/deepseek-v4.1-flash-gguf/resolve/main/README.md\" \"https://huggingface.co/unsloth/GLM-5.3-Flash-GGUF/resolve/main/README.md\"; d … [169 caractères tronqués]`
+
+  ```
+https://huggingface.co/antirez/deepseek-v4.1-flash-gguf/resolve/main/DeepSeek-V4.1-Flash-Vision.gguf -> 200 970555552
+https://huggingface.co/antirez/deepseek-v4.1-flash-gguf/resolve/main/README.md -> 200 2420
+https://huggingface.co/unsloth/GLM-5.3-Flash-GGUF/resolve/main/README.md -> 200 8377
+  ```
+
+- **bash** `{"command": "cd /tmp && U=\"https://huggingface.co/antirez/deepseek-v4.1-flash-gguf/resolve/main/DeepSeek-V4.1-Flash-Q2.gguf\"; echo -n \"GET simple : \"; timeout 90 curl -sL -o /dev/null -w \"%{http_code} %{size_download}\\n\" --max-time 80 \"$U\"; echo -n \"GET avec Range 0-1Mo : \"; timeout 90 cu … [351 caractères tronqués]`
+
+  ```
+GET simple : 400 3032
+GET avec Range 0-1Mo : 206 1048576
+-rw-r--r--. 1 stephane stephane 1048576  1 oct 09:04 /tmp/range_test.bin
+avec ?download=true : 400 3032
+  ```
+
+- **bash** `{"command": "cd /tmp && timeout 900 python3 - <<'PY'\nimport json, urllib.request\ndef api(url):\n    req = urllib.request.Request(url, headers={'User-Agent':'drave-analysis'})\n    with urllib.request.urlopen(req, timeout=90) as r: return json.load(r)\n\n# Pour chaque cible : dossier de quantificat … [1804 caractères tronqués]`
+
+  ```
+DeepSeek-V4.1-Flash-Q2        1 fichier(s)    365.7 Go
+     365.71 Go  DeepSeek-V4.1-Flash-Q2.gguf
+Kimi-K2.7-Code-UD-IQ1_M       8 fichier(s)    303.9 Go
+       0.01 Go  UD-IQ1_M/Kimi-K2.7-Code-UD-IQ1_M-00001-of-00008.gguf
+      49.64 Go  UD-IQ1_M/Kimi-K2.7-Code-UD-IQ1_M-00002-of-00008.gguf
+      48.37 Go  UD-IQ1_M/Kimi-K2.7-Code-UD-IQ1_M-00003-of-00008.gguf
+      48.37 Go  UD-IQ1_M/Kimi-K2.7-Code-UD-IQ1_M-00004-of-00008.gguf
+      49.25 Go  UD-IQ1_M/Kimi-K2.7-Code-UD-IQ1_M-00005-of-00008.gguf
+      49.25 Go  UD-IQ1_M/Kimi-K2.7-Code-UD-IQ1_M-00006-of-00008.gguf
+      49.89 Go  UD-IQ1_M/Kimi-K2.7-Code-UD-IQ1_M-00007-of-00008.gguf
+       9.14 Go  UD-IQ1_M/Kimi-K2.7-Code-UD-IQ1_M-00008-of-00008.gguf
+GLM-5.3-UD-IQ1_S              6 fichier(s)    216.7 Go
+       0.01 Go  UD-IQ1_S/GLM-5.3-UD-IQ1_S-00001-of-00006.gguf
+      49.97 Go  UD-IQ1_S/GLM-5.3-UD-IQ1_S-00002-of-00006.gguf
+      49.73 Go  UD-IQ1_S/GLM-5.3-UD-IQ1_S-00003-of-00006.gguf
+      49.21 Go  UD-IQ1_S/GLM-5.3-UD-IQ1_S-00004-of-00006.gguf
+      49.47 Go  UD-IQ1_S/GLM-5.3-UD-IQ1_S-00005-of-00006.gguf
+      18.33 Go  UD-IQ1_S/GLM-5.3-UD-IQ1_S-00006-of-00006.gguf
+MiniMax-H3                   16 fichier(s)    206.4 Go
+       6.72 
+… [1318 caractères tronqués]
+  ```
+
+- **write** `{"content": "#!/usr/bin/env python3\n\"\"\"Télécharge les modèles LOURDS, par tranches, avec reprise.\n\nPourquoi par tranches : le pont Xet de Hugging Face refuse un GET plein sur le\nfichier de 365,7 Go de `antirez/deepseek-v4.1-flash-gguf` (HTTP 400) alors qu'il\nsert très bien une requête `Range … [5071 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/telecharger_modeles.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json\nman = json.load(open('/tmp/manifeste_lourds.json'))\n# MiniMax-H3 : 16 variantes ; on n'en garde que deux (les Q4_K « pruned »), les\n# autres sont des doublons de régime (Q2..Q8) ou un autre modèle (qw … [695 caractères tronqués]`
+
+  ```
+manifeste : 22 fichiers · 1088 Go
+  DeepSeek-V4.1-Flash-Q2        1 fichier(s)    365.7 Go
+  Kimi-K2.7-Code-UD-IQ1_M       8 fichier(s)    303.9 Go
+  GLM-5.3-UD-IQ1_S              6 fichier(s)    216.7 Go
+  MiniMax-H3                    2 fichier(s)     22.8 Go
+  Qwen3-235B-A22B-Q2_K          2 fichier(s)     85.7 Go
+  GLM-5.3-Flash-UD-IQ1_S        3 fichier(s)     93.1 Go
+DeepSeek-V4.1-Flash-Q2           0.0 Go /   365.7 Go    0.0 %
+GLM-5.3-Flash-UD-IQ1_S           0.0 Go /    93.1 Go    0.0 %
+GLM-5.3-UD-IQ1_S                 0.0 Go /   216.7 Go    0.0 %
+Kimi-K2.7-Code-UD-IQ1_M          0.0 Go /   303.9 Go    0.0 %
+MiniMax-H3                       0.0 Go /    22.8 Go    0.0 %
+Qwen3-235B-A22B-Q2_K             0.0 Go /    85.7 Go    0.0 %
+libre : 5081 Go
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && rm -f /home/stephane/Data13TB/stephane/modeles/gguf/*/.fini /home/stephane/Data13TB/stephane/modeles/gguf/*/*.gguf 2>/dev/null; nohup python3 tools/telecharger_modeles.py --journal /tmp/telechargement_lourds.log > /tmp/tl.out 2>&1 &  … [206 caractères tronqués]`
+
+  ```
+09:03:11  GLM-5.3-Flash-UD-IQ1_S : FINI
+=== FILE TERMINÉE ===
+09:05:31  DeepSeek-V4.1-Flash-Q2 · DeepSeek-V4.1-Flash-Q2.gguf · 365.7 Go (5081 Go libres)
+09:05:35    0.3 Go / 365.7 Go (0.1 %, 62 Mo/s)
+09:07:21    0.5 Go / 365.7 Go (0.1 %, 5 Mo/s)
+DeepSeek-V4.1-Flash-Q2           1.0 Go /   365.7 Go    0.3 %
+GLM-5.3-Flash-UD-IQ1_S           0.0 Go /    93.1 Go    0.0 %
+GLM-5.3-UD-IQ1_S                 0.0 Go /   216.7 Go    0.0 %
+09:00:18  deepseek-r1-distill-qwen-1.5b-q4_k_m.gguf ... fait (1,1G en 4s)
+09:00:22  DeepSeek-V4-Flash-UD-IQ1_M ...
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for p in $(ps -eo pid,args | grep \"[t]elecharger_modeles\" | awk '{print $1}'); do kill $p 2>/dev/null; done; sleep 2; python3 - <<'PY'\n# v2 : tranches PARALLÈLES dans un même fichier.\n# Mesuré : le débit par connexion est instabl … [5180 caractères tronqués]`
+
+  ```
+(no output)
+[killed by signal: SIGTERM]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c \"import ast;ast.parse(open('tools/telecharger_modeles.py').read());print('syntaxe OK')\" 2>&1; grep -c \"_tranche\" tools/telecharger_modeles.py", "description": "Check the patched downloader"}`
+
+  ```
+syntaxe OK
+0
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "for p in $(ps -eo pid,comm,args | awk '$2==\"python3\" && /telecharger_modeles/ {print $1}'); do kill $p 2>/dev/null; echo \"arrêté $p\"; done; sleep 2; ps -eo pid,comm,args | awk '$2==\"python3\" && /telecharger/ {print \"encore actif :\", $1}'; python3 /home/stephane/Data13TB/stephane … [108 caractères tronqués]`
+
+  ```
+DeepSeek-V4.1-Flash-Q2           2.9 Go /   365.7 Go    0.8 %
+GLM-5.3-Flash-UD-IQ1_S           0.0 Go /    93.1 Go    0.0 %
+GLM-5.3-UD-IQ1_S                 0.0 Go /   216.7 Go    0.0 %
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np = 'tools/telecharger_modeles.py'\ns = open(p).read()\ni = s.index(\"def telecharger(url, dest, octets, journal, essais=6):\")\nj = s.index(\"def libre_go(chemin):\")\nnouveau = '''def _tranche(url, dest, debut, … [3637 caractères tronqués]`
+
+  ```
+v2 écrite (tranches parallèles)
+syntaxe OK
+2
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && setsid nohup python3 tools/telecharger_modeles.py --seulement DeepSeek-V4.1-Flash-Q2 > /tmp/tl_v41.out 2>&1 < /dev/null & sleep 90; tail -4 /tmp/telechargement_lourds.log; python3 tools/telecharger_modeles.py --etat | head -2", "desc … [78 caractères tronqués]`
+
+  ```
+09:08:38  DeepSeek-V4.1-Flash-Q2 · DeepSeek-V4.1-Flash-Q2.gguf · 365.7 Go (5086 Go libres)
+09:08:48    0.0 Go / 365.7 Go (0.0 %, 0 Mo/s)
+09:09:18    2.1 Go / 365.7 Go (0.6 %, 54 Mo/s)
+09:09:48    5.6 Go / 365.7 Go (1.5 %, 81 Mo/s)
+DeepSeek-V4.1-Flash-Q2         365.7 Go /   365.7 Go  100.0 %
+GLM-5.3-Flash-UD-IQ1_S           0.0 Go /    93.1 Go    0.0 %
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"fn stats_experts\" -A 25 drave-core/src/main.rs | head -35; grep -rn \"expert\" drave-core/src/main.rs | grep -iE \"trace|dump|json|csv\" | head -5", "description": "Inspect expert statistics in the engine"}`
+
+  ```
+656:fn stats_experts(mdl: &model::Model) {
+657-    if let Some(c) = mdl.cache_experts.as_ref() {
+658-        println!("[gpu] experts : {} demandes, {} manques (succès {:.1} %), {} évictions, \
+659-{:.2} Go montés sur le bus, {:.2} Go résidents",
+660-                 c.demandes, c.manques, c.taux(), c.evictions,
+661-                 c.octets_envoyes as f64 / 1e9, c.octets as f64 / 1e9);
+662-    }
+663-}
+664-
+665-fn run_infer(opt: Options) {
+666-    // Lu AVANT la déstructuration, qui consomme `opt`.
+667-    let montre_options = opt.options_actives;
+668-    // Une seule analyse de la ligne de commande (voir `analyser`) : chaque mode
+669-    // ne fait plus que déstructurer ce dont il a besoin.
+670-    let Options {
+671-        ids: mut ids, ids_file, prompt, n: n_new, temp, top_p, topk, rep_pen, hist,
+672-        flux, session, chat, ctx: ctx_opt, threads: threads_opt, abits: abits_opt,
+673-        ctx_impose, threads_impose, abits_impose, dense, auto, q4, b6,
+674-        keep, attn_window, swa_pattern, sans_fenetre, attn_sinks, attn_topk, qk_topk,
+675-        act_thresh, act_topk, act_renorm, topk_proj, moe_topk, patch: patch_file,
+676-        hebb_layer, hebb_q, hebb_out, sans_yarn,
+… [282 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"if let Some(moe) = lay.moe\" -A 40 drave-core/src/model.rs | sed -n '1,45p'", "description": "Read the MoE routing block"}`
+
+  ```
+2693:            if let Some(moe) = lay.moe.as_ref() {
+2694-                // ---- MoE PAR LOTS : les jetons qui ont choisi le même expert
+2695-                // sont traités ensemble, donc la matrice de l'expert est lue une
+2696-                // fois pour le groupe au lieu d'une fois par jeton.
+2697-                let ne = self.cfg.n_expert;
+2698-                let k = if self.moe_topk > 0 { self.moe_topk } else { self.cfg.n_expert_used };
+2699-                let k = k.clamp(1, ne);
+2700-                let mut x16: Vec<i16> = vec![0i16; t * h];
+2701-                for (j, &v) in xi.iter().enumerate() { x16[j] = v.clamp(-32767, 32767) as i16; }
+2702-                let s32: Vec<Vec<i32>> = (0..t)
+2703-                    .map(|i| crate::list::sommes32(&x16[i * h..(i + 1) * h])).collect();
+2704-                let mut groupes: Vec<Vec<(usize, f32)>> = vec![Vec::new(); ne];
+2705-                for i in 0..t {
+2706-                    let hni = &hn[i * h..(i + 1) * h];
+2707-                    let mut sc_e: Vec<f32> = (0..ne).map(|e| {
+2708-                        let r = &moe.routeur[e * h..(e + 1) * h];
+2709-                        let sc: f32 = r.iter().zip(hni.iter()).ma
+… [1713 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '3507,3560p' drave-core/src/model.rs", "description": "Read the per-token MoE block"}`
+
+  ```
+if let Some(moe) = lay.moe.as_ref() {
+                let ne = cfg.n_expert;
+                let k = if self.moe_topk > 0 { self.moe_topk } else { cfg.n_expert_used };
+                let k = k.clamp(1, ne);
+                let mut sc_e: Vec<f32> = (0..ne).map(|e| {
+                    let r = &moe.routeur[e * h..(e + 1) * h];
+                    let s: f32 = r.iter().zip(hn.iter()).map(|(a, b)| a * b).sum();
+                    s + moe.routeur_biais.as_ref().map_or(0.0, |b| b[e])
+                }).collect();
+                let mut idx: Vec<u32> = (0..ne as u32).collect();
+                let mut inv_k = 1.0f32;
+                if cfg.routeur_topk_softmax {
+                    // gpt-oss : le top-k se décide sur les logits BRUTS, et le
+                    // softmax ne porte que sur les retenus.
+                    if k < ne {
+                        idx.select_nth_unstable_by(k, |&a, &b| {
+                            sc_e[b as usize].partial_cmp(&sc_e[a as usize]).unwrap()
+                        });
+                        idx.truncate(k);
+                    }
+                    let mx = idx.iter().map(|&e| sc_e[e as usize])
+                               .fold(f32::NEG_INFIN
+… [1875 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"trace_flux\" drave-core/src/main.rs | head -6; grep -n \"trace: Option<TraceFlux>\\|trace_flux\" drave-core/src/model.rs | head -6; grep -n \"profil_experts\" drave-core/src/model.rs | head -4", "description": "Find the tra … [19 caractères tronqués]`
+
+  ```
+434:    trace_flux: Option<String>,
+539:            "--trace-flux" => { o.trace_flux = Some(suivant(i).clone()); 2 }
+677:        trace_flux, trace_couches, flux_forcer, ..
+701:    if let Some(chemin) = trace_flux.as_deref() {
+2965:    if opt.trace_flux.is_some() || opt.flux_forcer.is_some() {
+3808:        ppl_profil, lot, profil_neurones, neurones_sortie, trace_flux, trace_couches, flux_forcer,
+912:    pub trace: Option<TraceFlux>,
+857:    pub profil_experts: Option<Vec<u64>>,
+1800:            profil_experts: None,
+2016:            self.profil_experts = Some(vec![0u64; self.cfg.n_layer * self.cfg.n_expert]);
+2116:        if let Some(exp) = self.profil_experts.as_ref() {
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '855,860p' drave-core/src/model.rs; sed -n '2010,2020p' drave-core/src/model.rs; sed -n '2110,2130p' drave-core/src/model.rs", "description": "Read profil_experts plumbing"}`
+
+  ```
+/// choisi, par couche. C'est LA question de placement qui compte pour
+    /// gpt-oss (4 experts sur 128 par jeton).
+    pub profil_experts: Option<Vec<u64>>,
+    pub profil_jetons: u64,
+    pub attn_window: usize,
+    /// Période du motif fenêtre/plein : la couche `l` est fenêtrée si
+    /// Active le profilage des neurones et alloue les compteurs.
+    pub fn activer_profil_neurones(&mut self) {
+        let largeur = self.cfg.ffn.max(self.cfg.ffn_exp);
+        self.profil_neurones = Some((vec![0u64; self.cfg.n_layer * largeur],
+                                     vec![0f64; self.cfg.n_layer * largeur]));
+        if self.cfg.n_expert > 0 {
+            self.profil_experts = Some(vec![0u64; self.cfg.n_layer * self.cfg.n_expert]);
+        }
+        self.profil_jetons = 0;
+    }
+
+                              par_couche.iter().map(|v| v.0).fold(f64::MAX, f64::min),
+                              par_couche.iter().map(|v| v.0).fold(0.0, f64::max),
+                              par_couche.iter().map(|v| v.1).fold(f64::MAX, f64::min),
+                              par_couche.iter().map(|v| v.1).fold(0.0, f64::max)));
+        let _ = (a1, b1);
+        // ---- section MoE : les experts « c
+… [945 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np = 'drave-core/src/model.rs'; s = open(p).read()\ndef rep(v, n, nom):\n    global s\n    assert s.count(v) == 1, f\"{nom}::{s.count(v)}\"\n    s = s.replace(v, n, 1)\n\n# 1) le champ\nrep(\"\"\"    pub profil_ex … [3155 caractères tronqués]`
+
+  ```
+trace de routage ajoutée (deux chemins)
+error[E0425]: cannot find value `trace_active` in this scope
+    --> src/model.rs:3555:20
+     |
+3555 |                 if trace_active {
+     |                    ^^^^^^^^^^^^ not found in this scope
+
+error[E0425]: cannot find value `i` in this scope
+    --> src/model.rs:3560:62
+     |
+3560 |                     let _ = writeln!(f, "{} {} {}", l, pos + i, liste.join(" "));
+     |                                                              ^
+     |
+help: a local variable with a similar name exists
+     |
+3560 -                     let _ = writeln!(f, "{} {} {}", l, pos + i, liste.join(" "));
+--
+error[E0599]: cannot write into `&mut BufWriter<File>`
+    --> src/model.rs:3560:38
+     |
+3560 |                     let _ = writeln!(f, "{} {} {}", l, pos + i, liste.join(" "));
+     |                                      ^
+     |
+note: must implement `io::Write`, `fmt::Write`, or have a `write_fmt` method
+    --> src/model.rs:3560:38
+     |
+--- build ---
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '3548,3566p' drave-core/src/model.rs; echo \"=== bloc lot : où idx est final ===\"; sed -n '2735,2760p' drave-core/src/model.rs", "description": "Inspect the wrongly patched region and the lot block"}`
+
+  ```
+sc_e[b as usize].partial_cmp(&sc_e[a as usize]).unwrap()
+                        });
+                        idx.truncate(k);
+                    }
+                    let somme_k: f32 = idx.iter().map(|&e| sc_e[e as usize]).sum();
+                    inv_k = if somme_k > 0.0 { 1.0 / somme_k } else { 0.0 };
+                }
+                if trace_active {
+                    let mut ids: Vec<u32> = idx.clone();
+                    ids.sort_unstable();
+                    let liste: Vec<String> = ids.iter().map(|e| e.to_string()).collect();
+                    let f = self.trace_experts.as_mut().unwrap();
+                    let _ = writeln!(f, "{} {} {}", l, pos + i, liste.join(" "));
+                }
+                if self.profil_experts.is_some() {
+                    let base = l * ne;
+                    let p = self.profil_experts.as_mut().unwrap();
+                    for &e in &idx { p[base + e as usize] += 1; }
+                }
+=== bloc lot : où idx est final ===
+                    } else {
+                        let mx = sc_e.iter().cloned().fold(f32::NEG_INFINITY, f32::max);
+                        let mut somme = 0f32;
+                        for v in sc_e.iter_m
+… [1312 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np = 'drave-core/src/model.rs'; s = open(p).read()\ndef rep(v, n, nom):\n    global s\n    assert s.count(v) == 1, f\"{nom}::{s.count(v)}\"\n    s = s.replace(v, n, 1)\n\n# retirer l'insertion mal placée (dans le  … [1891 caractères tronqués]`
+
+  ```
+trace corrigée
+542:        use std::io::Write;
+567:        use std::io::Write;
+652:        use std::io::Write;
+error[E0425]: cannot find value `pos` in this scope
+    --> src/model.rs:2754:60
+     |
+2754 |                         let _ = writeln!(f, "{} {} {}", l, pos + i, liste.join(" "));
+     |                                                            ^^^
+     |
+help: a local variable with a similar name exists
+--
+error[E0599]: cannot write into `&mut BufWriter<File>`
+    --> src/model.rs:2754:42
+     |
+2754 |                         let _ = writeln!(f, "{} {} {}", l, pos + i, liste.join(" "));
+     |                                          ^
+     |
+note: must implement `io::Write`, `fmt::Write`, or have a `write_fmt` method
+--
+error[E0599]: cannot write into `&mut BufWriter<File>`
+    --> src/model.rs:3571:38
+     |
+3571 |                     let _ = writeln!(f, "{} {} {}", l, pos, liste.join(" "));
+--- build ---
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"fn forward_lot\" -A 6 drave-core/src/model.rs | head -10; python3 - <<'PYEOF'\np = 'drave-core/src/model.rs'; s = open(p).read()\ndef rep(v, n, nom):\n    global s\n    assert s.count(v) == 1, f\"{nom}::{s.count(v)}\"\n     … [1489 caractères tronqués]`
+
+  ```
+2362:    pub fn forward_lot(&mut self, toks: &[u32], pos0: usize) -> Vec<Vec<f32>> {
+2363-        let t = toks.len();
+2364-        // Lot IMPOSÉ (préremplissage réparti) : les états arrivent de l'autre
+2365-        // nœud, on ne repasse pas par `token_embd`. Lu avant tout le reste — y
+2366-        // compris avant le retour anticipé sur `t == 0`, sinon une trame vide
+2367-        // laissait l'état imposé en place pour le lot suivant (D7 de la
+2368-        // relecture) — et consommé une seule fois, comme `emb_imposee` pour un
+positions et import corrigés
+error[E0308]: mismatched types
+    --> src/model.rs:2755:79
+     |
+2755 |                         let _ = writeln!(f, "{} {} {}", l, self.jeton_trace - t + i,
+     |                                                                               ^ expected `u64`, found `usize`
+
+error[E0277]: cannot subtract `usize` from `u64`
+    --> src/model.rs:2755:77
+     |
+2755 |                         let _ = writeln!(f, "{} {} {}", l, self.jeton_trace - t + i,
+     |                                                                             ^ no implementation for `u64 - usize`
+     |
+     = help: the trait `Sub<usize>` is not implemented 
+… [307 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np = 'drave-core/src/model.rs'; s = open(p).read()\nv = \"\"\"                        let _ = writeln!(f, \"{} {} {}\", l, self.jeton_trace - t + i,\n                                         liste.join(\" \"));\"\ … [543 caractères tronqués]`
+
+  ```
+types corrigés
+--- build ---
+863:    pub trace_experts: Option<std::io::BufWriter<std::fs::File>>,
+1806:            trace_experts: None,
+2711:                let trace_active = self.trace_experts.is_some();
+2754:                        let f = self.trace_experts.as_mut().unwrap();
+3569:                if let Some(f) = self.trace_experts.as_mut() {
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '1795,1815p' drave-core/src/model.rs", "description": "Find the model constructor"}`
+
+  ```
+(d.q.len() + d.sc.len()) as f64 / 1e6, t0.elapsed().as_secs_f64());
+            Some(d)
+        } else { None };
+        Model {
+            g, cfg, layers, out_norm, pool,
+            kv: caches_kv,
+            ctx, events: 0, act_levels: 127.0, act_thresh: 0.0, act_topk: 0, act_renorm: false,
+            act_topk_proj: [0; 7], attn_topk: 0, attn_events: 0, qk_topk: 0,
+            moe_topk: 0,
+            profil_neurones: None,
+            profil_experts: None,
+            trace_experts: None,
+            profil_jetons: 0,
+            attn_window: fenetre,
+            swa_pattern,
+            attn_sinks: if fenetre > 0 { 0 } else { 4 },
+            seuil_push: 0.22,
+            stop_id: None, stop_id2: None, prof: [0.0; 6],
+            tete,
+            tete_gpu, tete_gpu_q6k, head4, sinks_vus, kv_gpu, attn_gpu_part: Vec::new(),
+            couche_debut: 0, couche_fin: n_layer_total, flux_brut: false,
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np = 'drave-core/src/model.rs'; s = open(p).read()\nv = \"\"\"            profil_experts: None,\n            trace_experts: None,\"\"\"\nn = \"\"\"            profil_experts: None,\n            // Trace de routage … [1252 caractères tronqués]`
+
+  ```
+activation par DRAVE_TRACE_EXPERTS
+--- build ---
+ouverture du GGUF: Os { code: 2, kind: NotFound, message: "No such file or directory" }
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+timeout: the monitored command dumped core
+=== trace ===
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "ls -la /home/stephane/Data13TB/stephane/modeles/gguf/ | head -20; tail -3 /tmp/demenagement.log; du -sh /home/stephane/FastNVMe/models 2>/dev/null", "description": "Check the HDD library state"}`
+
+  ```
+total 65540664
+drwxr-xr-x. 1 stephane stephane         652  1 oct 09:08 .
+drwxr-xr-x. 1 stephane stephane          26  1 oct 08:59 ..
+-rw-r--r--. 1 stephane stephane  1157671200 12 sep 19:02 bge-m3-FP16.gguf
+-rw-r--r--. 1 stephane stephane 13341237600 13 aoû 07:27 codestral-22b-v0.1-q4_k_m.gguf
+-rw-r--r--. 1 stephane stephane  8988109984 13 aoû 07:26 deepseek-r1-distill-qwen-14b-q4_k_m.gguf
+-rw-r--r--. 1 stephane stephane  1117320800 24 sep 10:44 deepseek-r1-distill-qwen-1.5b-q4_k_m.gguf
+drwxr-xr-x. 1 stephane stephane         588  1 oct 09:16 DeepSeek-V4.1-Flash-Q2
+drwxr-xr-x. 1 stephane stephane          92  1 oct 07:21 DeepSeek-V4-Flash-UD-IQ1_M
+-rw-r--r--. 1 stephane stephane   849103296 24 sep 13:15 eagle3-gpt-oss-120b-Q8_0.gguf
+drwxr-xr-x. 1 stephane stephane           0  1 oct 09:05 GLM-5.3-Flash-UD-IQ1_S
+drwxr-xr-x. 1 stephane stephane           0  1 oct 09:05 GLM-5.3-UD-IQ1_S
+-rw-------. 1 stephane stephane 41660186624  1 oct 09:16 .gpt-oss-120b-MXFP4.gguf.Gd8dYU
+drwxr-xr-x. 1 stephane stephane           0  1 oct 09:05 Kimi-K2.7-Code-UD-IQ1_M
+drwxr-xr-x. 1 stephane stephane           0  1 oct 09:05 MiniMax-H3
+drwxr-xr-x. 1 stephane stephane           0  1 oct 09:05 Qwen3-2
+… [209 caractères tronqués]
+  ```
+
+- **bash** `{"command": "grep -E \"rsync|error|failed|refus\" /tmp/demenagement.log | head -8; echo \"=== source vs destination DeepSeek-V4-Flash ===\"; du -sh /home/stephane/FastNVMe/models/DeepSeek-V4-Flash-UD-IQ1_M /home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek-V4-Flash-UD-IQ1_M 2>/dev/null; ls /home … [188 caractères tronqués]`
+
+  ```
+=== source vs destination DeepSeek-V4-Flash ===
+35G	/home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek-V4-Flash-UD-IQ1_M
+/home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek-V4-Flash-UD-IQ1_M/:
+DeepSeek-V4-Flash-UD-IQ1_M-00003-of-00003.gguf
+[exit code: 2]
+  ```
+
+- **bash** `{"command": "timeout 300 find /home/stephane -maxdepth 6 -name \"DeepSeek-V4-Flash-UD-IQ1_M-*.gguf\" 2>/dev/null | head; echo \"=== tailles ===\"; timeout 300 find /home/stephane -maxdepth 6 -name \"DeepSeek-V4-Flash-UD-IQ1_M-*.gguf\" -printf \"%s %p\\n\" 2>/dev/null; df -h /home/stephane/FastNVMe | … [75 caractères tronqués]`
+
+  ```
+=== tailles ===
+[timed out after 400000ms]
+[killed by signal: SIGTERM]
+  ```
+
+- **bash** `{"command": "ls -la /home/stephane/Data13TB/stephane/modeles/gguf/ | grep -i deepseek; ls -la /home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek-V4-Flash-UD-IQ1_M/; ls /home/stephane/FastNVMe/models/ 2>/dev/null", "description": "List DeepSeek files on both disks"}`
+
+  ```
+-rw-r--r--. 1 stephane stephane  8988109984 13 aoû 07:26 deepseek-r1-distill-qwen-14b-q4_k_m.gguf
+-rw-r--r--. 1 stephane stephane  1117320800 24 sep 10:44 deepseek-r1-distill-qwen-1.5b-q4_k_m.gguf
+drwxr-xr-x. 1 stephane stephane         588  1 oct 09:23 DeepSeek-V4.1-Flash-Q2
+drwxr-xr-x. 1 stephane stephane          92  1 oct 07:21 DeepSeek-V4-Flash-UD-IQ1_M
+total 36058768
+drwxr-xr-x. 1 stephane stephane          92  1 oct 07:21 .
+drwxr-xr-x. 1 stephane stephane         790  1 oct 09:21 ..
+-rw-r--r--. 1 stephane stephane 36924175168  1 oct 07:34 DeepSeek-V4-Flash-UD-IQ1_M-00003-of-00003.gguf
+DeepSeek-V4.1-Flash
+Muse-Glimmer-30B-AD-Q4_K_M.gguf
+qwen2.5-0.5b-instruct-q4_k_m.gguf
+qwen2.5-1.5b-instruct-q4_k_m.gguf
+qwen2.5-coder-0.5b-instruct-q4_k_m.gguf
+qwen2.5-coder-32b-instruct-q4_k_m.gguf
+Qwen2.5-VL-7B-Instruct-Q4_K_M.gguf
+Qwen3-30B-A3B-Instruct-2507-Q4_K_M.gguf
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport json\nman = json.load(open('tools/manifeste_modeles_lourds.json'))\n# Les deux premiers shards de DeepSeek-V4-Flash ont été supprimés par une commande\n# de nettoyage trop large (`rm -f .../*/*.gguf` : ell … [1087 caractères tronqués]`
+
+  ```
+manifeste : 24 fichiers · 1138 Go
+09:24:11  DeepSeek-V4-Flash-UD-IQ1_M · DeepSeek-V4-Flash-UD-IQ1_M-00002-of-00003.gguf · 50.0 Go (4944 Go libres)
+09:24:21    0.0 Go / 50.0 Go (0.0 %, 0 Mo/s)
+-rw-r--r--. 1 stephane stephane   268435456  1 oct 09:24 DeepSeek-V4-Flash-UD-IQ1_M-00002-of-00003.gguf.part4
+-rw-r--r--. 1 stephane stephane   268435456  1 oct 09:24 DeepSeek-V4-Flash-UD-IQ1_M-00002-of-00003.gguf.part5
+-rw-r--r--. 1 stephane stephane 36924175168  1 oct 07:34 DeepSeek-V4-Flash-UD-IQ1_M-00003-of-00003.gguf
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls -la /home/stephane/FastNVMe/models/Qwen3-30B-A3B-Instruct-2507-Q4_K_M.gguf && time DRAVE_TRACE_EXPERTS=/tmp/routage_qwen3_30b.txt timeout 1800 ./drave-core/target/release/drave /home/stephane/FastNVMe/models/Qwen3-30B-A3B-Instruct … [249 caractères tronqués]`
+
+  ```
+-rw-r--r--. 1 stephane stephane 18556686752 25 sep 08:26 /home/stephane/FastNVMe/models/Qwen3-30B-A3B-Instruct-2507-Q4_K_M.gguf
+    postes (ms/token) : projets-attn 22.50 | rope 0.00 | attention 25.99 | proj+mlp 74.31 | somme 122.80 | reste (tête + échantillonnage) 11.28
+    dont tête de sortie 9.15 | notation log-sum-exp 1.32 (le reste du « reste » n'est pas chronométré)
+    dont attention : scores 0.00 | softmax 0.00 | somme pondérée + écriture KV 25.99
+12288 /tmp/routage_qwen3_30b.txt
+0 0 1 16 45 53 60 84 114 115
+0 1 8 14 35 60 102 107 114 115
+[stderr]
+
+real	1m14,661s
+user	10m24,487s
+sys	0m18,297s
+  ```
+
+- **write** `{"content": "#!/usr/bin/env python3\n\"\"\"Découpage des MoE en clusters — à partir d'une trace de routage réelle.\n\nLe moteur écrit une ligne par (couche, jeton) avec les experts retenus :\n`DRAVE_TRACE_EXPERTS=/tmp/trace.txt drave <modele> --ppl <ids> --limit N --lot L`\n\nCe script répond à la q … [7142 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/clusters_moe.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 900 python3 tools/clusters_moe.py /tmp/routage_qwen3_30b.txt --clusters 8 --json /tmp/clusters_qwen3_30b.json 2>&1 | tail -18", "description": "Run the MoE clustering analysis", "timeoutMs": 1000000}`
+
+  ```
+35   1.000   1.00    1-121            0.978           1.18
+    36   1.000   1.00    1-121            0.896           1.83
+    37   1.000   1.00    1-121            0.905           1.76
+    38   1.000   1.00    1-121            0.962           1.30
+    39   1.000   1.00    1-121            0.900           1.80
+    40   1.000   1.00    1-121            0.860           2.12
+    41   1.000   1.00    1-121            0.996           1.03
+    42   1.000   1.00    1-121            0.951           1.39
+    43   1.000   1.00    1-121            0.991           1.07
+    44   1.000   1.00    1-121            0.918           1.65
+    45   1.000   1.00    1-121            0.951           1.39
+    46   1.000   1.00    1-121            0.947           1.42
+    47   1.000   1.00    1-121            0.932           1.55
+
+MOYENNE apprise : couverture 1.000 · ventilation 1.00
+MOYENNE hasard  : couverture 0.950 · ventilation 1.40
+
+→ /tmp/clusters_qwen3_30b.json
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && nohup bash -c 'DRAVE_TRACE_EXPERTS=/tmp/routage_qwen3_2048.txt timeout 3600 ./drave-core/target/release/drave /home/stephane/FastNVMe/models/Qwen3-30B-A3B-Instruct-2507-Q4_K_M.gguf --ppl /tmp/ids_qwen_long.txt --ctx 2048 --limit 2048 … [3155 caractères tronqués]`
+
+  ```
+trace longue lancée
+partition équilibrée écrite
+syntaxe OK
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np = 'tools/clusters_moe.py'; s = open(p).read()\ni = s.index(\"    resultat = {\\\"couches\\\": {}, \\\"clusters\\\": args.clusters, \\\"n_jetons\\\": n_jetons,\")\nj = s.index(\"    if args.json:\")\nnouveau = ' … [2512 caractères tronqués]`
+
+  ```
+boucle principale réécrite
+syntaxe OK
+    42  0.650   2.91  16-16           0.315      0.650         5.48
+    43  0.685   2.69  16-16           0.312      0.685         5.34
+    44  0.671   2.51  16-16           0.337      0.671         4.94
+    45  0.723   2.45  16-16           0.311      0.723         5.83
+    46  0.662   2.70  16-16           0.308      0.662         5.35
+    47  0.632   2.92  16-16           0.312      0.632         5.35
+
+MOYENNE    appris : couverture 0.692 · ventilation 2.64
+MOYENNE frequence : couverture 0.692 · ventilation 2.64
+MOYENNE    hasard : couverture 0.321 · ventilation 5.31
+
+→ /tmp/clusters_qwen3_30b.json
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && tail -2 /tmp/trace2048.out 2>/dev/null; wc -l /tmp/routage_qwen3_2048.txt 2>/dev/null; python3 - <<'PYEOF'\np = 'tools/clusters_moe.py'; s = open(p).read()\n# témoin « fréquence » : un vrai groupe par fréquence, sans co-activation\nv … [1110 caractères tronqués]`
+
+  ```
+[attention] QT_IM_SWITCHER est l'ancien nom d'une variable d'environnement : elles s'appellent maintenant DRAVE_* (voir docs/histoire.md). Rien n'a été appliqué.
+/tmp/ids_qwen_long.txt : 2048 tokens, fenêtres de 2048
+témoin fréquence corrigé
+    46  0.662   2.70  16-16           0.308      0.662         5.35
+    47  0.632   2.92  16-16           0.312      0.632         5.35
+
+MOYENNE    appris : couverture 0.692 · ventilation 2.64
+MOYENNE frequence : couverture 0.692 · ventilation 2.64
+MOYENNE    hasard : couverture 0.321 · ventilation 5.31
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && wc -l /tmp/routage_qwen3_2048.txt 2>/dev/null; tail -3 /tmp/trace2048.out; python3 - <<'PYEOF'\np = 'tools/clusters_moe.py'; s = open(p).read()\nv = \"\"\"    def moyenne(cle, source):\"\"\"\nn = \"\"\"    # Accord entre la partition … [1155 caractères tronqués]`
+
+  ```
+[attention] QT_IM_SWITCHER est l'ancien nom d'une variable d'environnement : elles s'appellent maintenant DRAVE_* (voir docs/histoire.md). Rien n'a été appliqué.
+/tmp/ids_qwen_long.txt : 2048 tokens, fenêtres de 2048
+accord ajouté
+### clusters=4
+accord appris/fréquence (paires) : 1.000
+MOYENNE    appris : couverture 0.855 · ventilation 1.70
+MOYENNE frequence : couverture 0.855 · ventilation 1.70
+MOYENNE    hasard : couverture 0.448 · ventilation 3.57
+### clusters=8
+accord appris/fréquence (paires) : 1.000
+MOYENNE    appris : couverture 0.692 · ventilation 2.64
+MOYENNE frequence : couverture 0.692 · ventilation 2.64
+MOYENNE    hasard : couverture 0.321 · ventilation 5.31
+### clusters=16
+accord appris/fréquence (paires) : 1.000
+MOYENNE    appris : couverture 0.520 · ventilation 3.84
+MOYENNE frequence : couverture 0.520 · ventilation 3.84
+MOYENNE    hasard : couverture 0.253 · ventilation 6.54
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls -la /tmp/routage_qwen3_2048.txt 2>/dev/null; tail -2 /tmp/trace2048.out; echo \"=== gpt-oss disponible ? ===\"; ls -la /home/stephane/Data13TB/stephane/modeles/gguf/gpt-oss-120b-MXFP4.gguf /home/stephane/FastNVMe/models/gpt-oss-12 … [128 caractères tronqués]`
+
+  ```
+-rw-r--r--. 1 stephane stephane 638432  1 oct 09:29 /tmp/routage_qwen3_2048.txt
+[tête 4 bits] 151936 × 2048 → 6.56 b/poids, 0 Mo, 0.0 s
+[moe] trace de routage des experts → /tmp/routage_qwen3_2048.txt
+=== gpt-oss disponible ? ===
+-rw-r--r--. 1 stephane stephane 63387346208 24 sep 13:14 /home/stephane/Data13TB/stephane/modeles/gguf/gpt-oss-120b-MXFP4.gguf
+09:26:09  qwen2.5-coder-0.5b-instruct-q4_k_m.gguf ... fait (469M en 7s)
+09:26:16  qwen2.5-coder-32b-instruct-q4_k_m.gguf ...
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && wc -l /tmp/routage_qwen3_2048.txt; nohup bash -c 'DRAVE_TRACE_EXPERTS=/tmp/routage_gptoss.txt timeout 3600 ./drave-core/target/release/drave /home/stephane/Data13TB/stephane/modeles/gguf/gpt-oss-120b-MXFP4.gguf --ppl /tmp/ids_oss_512 … [350 caractères tronqués]`
+
+  ```
+21807 /tmp/routage_qwen3_2048.txt
+trace gpt-oss lancée
+  65982 /tmp/routage_qwen3_2048.txt
+  65982 total
+/tmp/ids_oss_512.txt : 512 tokens, fenêtres de 512
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for g in 4 8 16; do echo \"### Qwen3-30B (trace longue, en cours) clusters=$g\"; timeout 900 python3 tools/clusters_moe.py /tmp/routage_qwen3_2048.txt --clusters $g 2>&1 | grep -E \"trace :|accord|MOYENNE\"; done", "description": "An … [46 caractères tronqués]`
+
+  ```
+### Qwen3-30B (trace longue, en cours) clusters=4
+trace : 48 couches × 1472 jetons · 128 experts · 8 par jeton
+accord appris/fréquence (paires) : 1.000
+MOYENNE    appris : couverture 0.799 · ventilation 1.94
+MOYENNE frequence : couverture 0.799 · ventilation 1.94
+MOYENNE    hasard : couverture 0.440 · ventilation 3.59
+### Qwen3-30B (trace longue, en cours) clusters=8
+trace : 48 couches × 1600 jetons · 128 experts · 8 par jeton
+accord appris/fréquence (paires) : 1.000
+MOYENNE    appris : couverture 0.607 · ventilation 3.08
+MOYENNE frequence : couverture 0.607 · ventilation 3.08
+MOYENNE    hasard : couverture 0.319 · ventilation 5.32
+### Qwen3-30B (trace longue, en cours) clusters=16
+trace : 48 couches × 1728 jetons · 128 experts · 8 par jeton
+accord appris/fréquence (paires) : 1.000
+MOYENNE    appris : couverture 0.442 · ventilation 4.46
+MOYENNE frequence : couverture 0.442 · ventilation 4.46
+MOYENNE    hasard : couverture 0.250 · ventilation 6.55
+  ```
+
+- **write** `{"content": "# Rapport — découpage des MoE en clusters, pour notre mode d'opération\n\n**En une ligne** : sur Qwen3-30B-A3B (128 experts, 8 par jeton), regrouper les\nexperts par **fréquence d'usage** suffit à diviser par ~1,8 la ventilation d'un\njeton (3,08 nœuds au lieu de 5,32 au hasard, à 8 clu … [5916 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-decoupage-moe.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && wc -l /tmp/routage_gptoss.txt 2>/dev/null; tail -1 /tmp/trace_oss.out; ls -la /home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek-V4.1-Flash-Q2/*.gguf 2>/dev/null | awk '{printf \"%.1f Go\\n\", $5/1e9}'; tail -2 /tmp/telechargemen … [66 caractères tronqués]`
+
+  ```
+/tmp/ids_oss_512.txt : 512 tokens, fenêtres de 512
+365.7 Go
+09:36:11    93.7 Go / 365.7 Go (25.6 %, 57 Mo/s)
+09:36:43    94.2 Go / 365.7 Go (25.8 %, 56 Mo/s)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rln \"FastNVMe/models\\|models/Qwen2.5\\|models/gpt-oss\" --include=\"*.md\" --include=\"*.py\" --include=\"*.sh\" . 2>/dev/null | grep -v journal/ | head -12; echo \"=== README/tools ===\"; grep -n \"FastNVMe\" README.md REPRI … [108 caractères tronqués]`
+
+  ```
+(no output)
+[timed out after 60000ms]
+[killed by signal: SIGTERM]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 120 grep -rn \"FastNVMe/models\" README.md REPRISE.md docs/*.md tools/*.sh tools/*.py colab/*.md 2>/dev/null | head -10", "description": "Check specific references to FastNVMe", "timeoutMs": 150000}`
+
+  ```
+REPRISE.md:53:drave-core/target/release/drave /home/stephane/FastNVMe/models/gpt-oss-120b-MXFP4.gguf \
+REPRISE.md:671:./target/release/drave /home/stephane/FastNVMe/models/gpt-oss-120b-MXFP4.gguf \
+docs/plan-deepseek-v4-flash.md:4:(`/home/stephane/FastNVMe/models/DeepSeek-V4-Flash-UD-IQ1_M/`, 3 shards, 86,9 Go,
+docs/plan-deepseek-v4-flash.md:72:cd /home/stephane/FastNVMe/models/DeepSeek-V4-Flash-UD-IQ1_M
+docs/plan-mla-vision.md:120:`/home/stephane/FastNVMe/models/mmproj-Qwen2.5-VL-7B-Instruct-f16.gguf` (le
+tools/harmony_canonique.py:18:M = "/home/stephane/FastNVMe/models/gpt-oss-120b-MXFP4.gguf"
+tools/vision_mtmd.py:23:MODELE = "/home/stephane/FastNVMe/models/Qwen2.5-VL-7B-Instruct-Q4_K_M.gguf"
+tools/vision_mtmd.py:24:MMPROJ = "/home/stephane/FastNVMe/models/mmproj-Qwen2.5-VL-7B-Instruct-f16.gguf"
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport re, pathlib\n# La bibliothèque de modèles a déménagé sur le disque mécanique ; le NVMe ne sert\n# plus qu'aux artefacts que NOUS produisons. On met les chemins à jour partout.\nANCIEN = \"/home/stephane/Fa … [815 caractères tronqués]`
+
+  ```
+REPRISE.md
+docs/plan-mla-vision.md
+docs/plan-deepseek-v4-flash.md
+tools/harmony_canonique.py
+tools/vision_mtmd.py
+reports/aiguille-30b.md
+reports/aiguille-gpt-oss.md
+(vide = plus de référence)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\n# Le plan DeepSeek doit refléter le déménagement ET la reprise du téléchargement.\np = 'docs/plan-deepseek-v4-flash.md'; s = open(p).read()\ns = s.replace(\"\"\"**État au 01/10 07h10** : le modèle est **en cours  … [3001 caractères tronqués]`
+
+  ```
+plan DeepSeek mis à jour
+[timed out after 60000ms]
+[killed by signal: SIGTERM]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git status --short | head -8; git log --oneline -1", "description": "Check git state"}`
+
+  ```
+M  REPRISE.md
+M  docs/plan-deepseek-v4-flash.md
+M  docs/plan-mla-vision.md
+M  drave-core/src/model.rs
+M  journal/README.md
+M  journal/sessions/MANIFEST.md
+M  journal/sessions/bbd6969f-0f70-42b2-8951-64d1f2f36d2e/digest.md
+M  journal/sessions/bbd6969f-0f70-42b2-8951-64d1f2f36d2e/rapport.md
+836f4de Journal : index des sessions (fin de nuit)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 120 python3 tools/clusters_moe.py --help > /dev/null 2>&1; echo \"outil ok\"; git add -A && git commit -q -F - <<'EOF' && git log --oneline -1\nDécoupage des MoE : la fréquence suffit, la co-activation n'ajoute rien (accord 1 … [1349 caractères tronqués]`

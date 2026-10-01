@@ -20,8 +20,8 @@ import struct
 import sys
 
 OLLAMA = "/usr/lib/ollama"
-MODELE = "/home/stephane/FastNVMe/models/Qwen2.5-VL-7B-Instruct-Q4_K_M.gguf"
-MMPROJ = "/home/stephane/FastNVMe/models/mmproj-Qwen2.5-VL-7B-Instruct-f16.gguf"
+MODELE = "/home/stephane/Data13TB/stephane/modeles/gguf/Qwen2.5-VL-7B-Instruct-Q4_K_M.gguf"
+MMPROJ = "/home/stephane/Data13TB/stephane/modeles/gguf/mmproj-Qwen2.5-VL-7B-Instruct-f16.gguf"
 TAILLE_PARAMS = 256
 
 

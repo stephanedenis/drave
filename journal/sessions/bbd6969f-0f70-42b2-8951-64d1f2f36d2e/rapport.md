@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 65.0 h |
-| Tours | 48 |
-| Messages | 2606 |
-| Appels d'outils | 2468 |
-| Fichiers touchés | 53 |
-| Commandes | 2103 |
+| Durée | 66.9 h |
+| Tours | 49 |
+| Messages | 2674 |
+| Appels d'outils | 2533 |
+| Fichiers touchés | 56 |
+| Commandes | 2164 |
 | Sous-agents | 20 |
-| Commits | 233 |
+| Commits | 235 |
 | Compactages de contexte | 3 |
 
 ## Objectifs déclarés
@@ -131,6 +131,8 @@
 **Tour 47** — pret pour des scrum de 2h (boxing temps réel, avec revue, rétro et planning)
 
 **Tour 48** — Continue en blocs de 2h jusqu'à demain 8h HAE. pour chacun des blocs/sprints tu dois être en autonomie totale. C'est à dire que pour cette période tu ne dois attendre après aucune interaction humaine. les rétros seront des introspections, les revues seront en mode adverse autonome. tu enchaine avec ce qui a le plus de valeur en fonction de la mission de haut niveau et de l'autonomie dont tu dispos … [2 caractères tronqués]
+
+**Tour 49** — prévoir de télécharger les modèles les plus lourds aussi pour les analyser et faire le découpage des MoE/clusters optimisé pour notre mode d'opération. ça peut impliquer un nouveau format de fichiers, mais on doit être capable de rouler du best of breed.
 
 ## 2. Déroulé, étape par étape
 
@@ -2254,7 +2256,44 @@ Fusionner la sélection en un noyau par ligne (8 lancements → 2), supprimer le
 
 **Synthèse produite :**
 
-⏵ La revue de clôture a trouvé que ma correction du livelock finit en SIGABRT — je corrige
+**Nuit terminée — 7 sprints de 2 h (17h41 → 07h40), 61 commits, dépôt vert, machine rendue.**
+
+\## Ce que la nuit a produit
+
+**1. Le top-k GPU, du banc au moteur** — les trois noyaux écrits, puis **fusionnés en un seul** (`attn_topk_tout` : descente radix + collecte + somme par ligne) : **8 lancements → 2**, tampon `nh × n × 4` supprimé, écart 7,2e-7. L'attention creuse déportée devient **plate** (4,5–5,0 ms/jeton de 255 à 4 095 clés) là où le CPU monte de 4,26 à 38,84 : croisement à **~300 clés**.
+
+**2. Deux gains mesurés, réutilisables tout de suite** — préremplissage déporté : **286,6 → 63,8 s** sur un prompt de 3 961 jetons (perplexité identique à 2,1e-5) ; et la preuve que le **déport des projections est exact sur un modèle dense** (logits bit à bit), le décalage d'un MoE venant du routage des experts.
+
+**3. Le résultat scientifique de la nuit** — sur **neuf fenêtres contiguës**, l'attention à **k = 256 (6 %) retrouve l'information 8 fois sur 9, exactement comme l'attention complète** — et pas sur les mêmes fenêtres. Les conclusions antérieures (« perdu au milieu », « 0/3 ») portaient sur **une seule fenêtre répétée** : elles ne se généralisaient pas.
+
+**4. Un défaut bloquant corrigé** — `KvCache::assurer` **bouclait sans fin** quand l'invite dépassait le contexte (23 minutes à 1 700 % de CPU constatées). Corrigé, puis **re-corrigé** : ma première version finissait en SIGABRT, ce qu'a prouvé la relecture de clôture (mon script de vérification ne lisait pas le code de sortie). Désormais : troncature annoncée, arrêt propre, invariant gardé dans `ecrire`, **18 tests**.
+
+**5. DeepSeek** — ⚠️ **DeepSeek-V4.1-Flash est un modèle d'API, sans poids ouverts** : rien à télécharger. J'ai donc récupéré **DeepSeek-V4-Flash** (sa base ouverte), quantification UD-IQ1_M : **86,9 Go en 3 shards, téléchargement terminé à 07h34**. Le moteur en lit déjà l'architecture (43 couches, 256 experts top-6) et le tokenizer (129 280 jetons, aller-retour identique) depuis le shard 1, et 784 tenseurs depuis le shard 2 — **il manque le lien entre les deux** (lecteur multi-shards) et le forward `deepseek4`. Le plan en 5 étapes est écrit : [`docs/plan-deepseek-v4-flash.md`](docs/plan-deepseek-v4-flash.md).
+
+\## Ce que la nuit a corrigé d'elle-même
+
+**Sept artefacts ont promis ce qu'ils ne faisaient pas** : un garde-fou jamais déclenché, un échantillon de log lu comme un accord global, un `grep` qui ne suivait pas la chaîne d'appels, un décalage de fenêtre remis à zéro, une section annon
+… [371 caractères tronqués]
+
+### Tour 49 — prévoir de télécharger les modèles les plus lourds aussi pour les analyser et faire le découpage des MoE/clusters optimi … [134 caractères tronqués]
+
+*65 appels d'outils.* Actions notables :
+
+- bash — Check time, disk and existing models
+- web_fetch
+- bash — Survey heavy MoE GGUF families on HF
+- bash — Get sizes of the heaviest GGUF models
+- bash — Inspect the DeepSeek-V4.1-Flash GGUF repo
+- bash — Start downloading DeepSeek-V4.1-Flash Q2
+- bash — Check wget status
+- bash — Diagnose the 400 error
+- bash — Download V4.1-Flash with curl resume
+- bash — Inspect disks and mounts
+- bash — Measure HDD space and speed
+- bash — Check HDD permissions
+- bash — Measure HDD write speed in my subtree
+- bash — Stop NVMe download, prepare HDD library
+- … et 51 autres
 
 ## 3. Travail accompli
 
@@ -2315,6 +2354,9 @@ Fusionner la sélection en un noyau par ligne (8 lancements → 2), supprimer le
 | `/tmp/aig5.sh` | 1 | 0 |
 | `/tmp/aig_s5.sh` | 2 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/plan-deepseek-v4-flash.md` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/telecharger_modeles.py` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/clusters_moe.py` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-decoupage-moe.md` | 1 | 0 |
 
 ### Sous-agents lancés
 
@@ -2381,7 +2423,7 @@ Fusionner la sélection en un noyau par ligne (8 lancements → 2), supprimer le
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 2063 autres
+- … et 2124 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2509,7 +2551,7 @@ Fusionner la sélection en un noyau par ligne (8 lancements → 2), supprimer le
 
 ## 5. Erreurs rencontrées
 
-109 sorties en erreur ou divergentes. Les premières :
+115 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : a8f2635f8 docs: record which models this box is good at, and why src/llama-hparams.cpp:8:void llama_hparams::set_swa_pattern(uint32_t n_pattern, bool dense_first) { src/llama-hparams.h:308:    void se
 - **T1** : 511 tokens notés — perplexité cumulée 247.031  (4.9 tok/s) === perplexité 247.0308 sur 511 tokens (0 événements, 104.5 s) ===  ### B3 harmony assistant 511 --- ref --- 0.0 0.0 0:00 ls: cannot access '
@@ -2762,4 +2804,6 @@ Fusionner la sélection en un noyau par ligne (8 lancements → 2), supprimer le
 - Sprint 7 : cérémonie (livelock corrigé deux fois, le taux final 8/9 = 8/9, et DeepSeek-V4-Flash téléchargé)" && git log --oneline -1 && git status --short | wc 
 - Journal : index des sessions (clôture de la nuit)" 2>/dev/null; (echo "=== PORTES FINALES 07h42 ==="; echo -n "Qwen : "; ./drave-core/target/release/drave model
 - Journal : index des sessions (fin de nuit)" 2>/dev/null; git status --short | wc -l; ls sprints/*.md | wc -l; du -sh /home/stephane/FastNVMe/models/DeepSeek-V4-
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF' # Le plan DeepSeek doit refléter le déménagement ET la reprise du téléchargement. p = 
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 120 python3 tools/clusters_moe.py --help > /dev/null 2>&1; echo "outil ok"; git add -A && git comm
 

@@ -1,0 +1,146 @@
+[
+ {
+  "nom": "DeepSeek-V4-Flash-UD-IQ1_M",
+  "repo": "unsloth/DeepSeek-V4-Flash-GGUF",
+  "chemin": "UD-IQ1_M/DeepSeek-V4-Flash-UD-IQ1_M-00002-of-00003.gguf",
+  "octets": 49971881124
+ },
+ {
+  "nom": "DeepSeek-V4-Flash-UD-IQ1_M",
+  "repo": "unsloth/DeepSeek-V4-Flash-GGUF",
+  "chemin": "UD-IQ1_M/DeepSeek-V4-Flash-UD-IQ1_M-00001-of-00003.gguf",
+  "octets": 5256864
+ },
+ {
+  "nom": "DeepSeek-V4.1-Flash-Q2",
+  "repo": "antirez/deepseek-v4.1-flash-gguf",
+  "chemin": "DeepSeek-V4.1-Flash-Q2.gguf",
+  "octets": 365713686528
+ },
+ {
+  "nom": "Kimi-K2.7-Code-UD-IQ1_M",
+  "repo": "unsloth/Kimi-K2.7-Code-GGUF",
+  "chemin": "UD-IQ1_M/Kimi-K2.7-Code-UD-IQ1_M-00001-of-00008.gguf",
+  "octets": 6913184
+ },
+ {
+  "nom": "Kimi-K2.7-Code-UD-IQ1_M",
+  "repo": "unsloth/Kimi-K2.7-Code-GGUF",
+  "chemin": "UD-IQ1_M/Kimi-K2.7-Code-UD-IQ1_M-00002-of-00008.gguf",
+  "octets": 49638722336
+ },
+ {
+  "nom": "Kimi-K2.7-Code-UD-IQ1_M",
+  "repo": "unsloth/Kimi-K2.7-Code-GGUF",
+  "chemin": "UD-IQ1_M/Kimi-K2.7-Code-UD-IQ1_M-00003-of-00008.gguf",
+  "octets": 48368994848
+ },
+ {
+  "nom": "Kimi-K2.7-Code-UD-IQ1_M",
+  "repo": "unsloth/Kimi-K2.7-Code-GGUF",
+  "chemin": "UD-IQ1_M/Kimi-K2.7-Code-UD-IQ1_M-00004-of-00008.gguf",
+  "octets": 48368994848
+ },
+ {
+  "nom": "Kimi-K2.7-Code-UD-IQ1_M",
+  "repo": "unsloth/Kimi-K2.7-Code-GGUF",
+  "chemin": "UD-IQ1_M/Kimi-K2.7-Code-UD-IQ1_M-00005-of-00008.gguf",
+  "octets": 49246454080
+ },
+ {
+  "nom": "Kimi-K2.7-Code-UD-IQ1_M",
+  "repo": "unsloth/Kimi-K2.7-Code-GGUF",
+  "chemin": "UD-IQ1_M/Kimi-K2.7-Code-UD-IQ1_M-00006-of-00008.gguf",
+  "octets": 49253143328
+ },
+ {
+  "nom": "Kimi-K2.7-Code-UD-IQ1_M",
+  "repo": "unsloth/Kimi-K2.7-Code-GGUF",
+  "chemin": "UD-IQ1_M/Kimi-K2.7-Code-UD-IQ1_M-00007-of-00008.gguf",
+  "octets": 49885925408
+ },
+ {
+  "nom": "Kimi-K2.7-Code-UD-IQ1_M",
+  "repo": "unsloth/Kimi-K2.7-Code-GGUF",
+  "chemin": "UD-IQ1_M/Kimi-K2.7-Code-UD-IQ1_M-00008-of-00008.gguf",
+  "octets": 9140022432
+ },
+ {
+  "nom": "GLM-5.3-UD-IQ1_S",
+  "repo": "unsloth/GLM-5.3-GGUF",
+  "chemin": "UD-IQ1_S/GLM-5.3-UD-IQ1_S-00001-of-00006.gguf",
+  "octets": 9428677
+ },
+ {
+  "nom": "GLM-5.3-UD-IQ1_S",
+  "repo": "unsloth/GLM-5.3-GGUF",
+  "chemin": "UD-IQ1_S/GLM-5.3-UD-IQ1_S-00002-of-00006.gguf",
+  "octets": 49968868928
+ },
+ {
+  "nom": "GLM-5.3-UD-IQ1_S",
+  "repo": "unsloth/GLM-5.3-GGUF",
+  "chemin": "UD-IQ1_S/GLM-5.3-UD-IQ1_S-00003-of-00006.gguf",
+  "octets": 49728982688
+ },
+ {
+  "nom": "GLM-5.3-UD-IQ1_S",
+  "repo": "unsloth/GLM-5.3-GGUF",
+  "chemin": "UD-IQ1_S/GLM-5.3-UD-IQ1_S-00004-of-00006.gguf",
+  "octets": 49210788064
+ },
+ {
+  "nom": "GLM-5.3-UD-IQ1_S",
+  "repo": "unsloth/GLM-5.3-GGUF",
+  "chemin": "UD-IQ1_S/GLM-5.3-UD-IQ1_S-00005-of-00006.gguf",
+  "octets": 49471673632
+ },
+ {
+  "nom": "GLM-5.3-UD-IQ1_S",
+  "repo": "unsloth/GLM-5.3-GGUF",
+  "chemin": "UD-IQ1_S/GLM-5.3-UD-IQ1_S-00006-of-00006.gguf",
+  "octets": 18325623904
+ },
+ {
+  "nom": "MiniMax-H3",
+  "repo": "unsloth/MiniMax-H3-GGUF",
+  "chemin": "minimax_h3_fl2va_pruned-Q4_K.gguf",
+  "octets": 11420663904
+ },
+ {
+  "nom": "MiniMax-H3",
+  "repo": "unsloth/MiniMax-H3-GGUF",
+  "chemin": "minimax_h3_ref2va_pruned-Q4_K.gguf",
+  "octets": 11381096544
+ },
+ {
+  "nom": "Qwen3-235B-A22B-Q2_K",
+  "repo": "unsloth/Qwen3-235B-A22B-Instruct-2507-GGUF",
+  "chemin": "Q2_K/Qwen3-235B-A22B-Instruct-2507-Q2_K-00001-of-00002.gguf",
+  "octets": 49906751904
+ },
+ {
+  "nom": "Qwen3-235B-A22B-Q2_K",
+  "repo": "unsloth/Qwen3-235B-A22B-Instruct-2507-GGUF",
+  "chemin": "Q2_K/Qwen3-235B-A22B-Instruct-2507-Q2_K-00002-of-00002.gguf",
+  "octets": 35784249568
+ },
+ {
+  "nom": "GLM-5.3-Flash-UD-IQ1_S",
+  "repo": "unsloth/GLM-5.3-Flash-GGUF",
+  "chemin": "UD-IQ1_S/GLM-5.3-Flash-UD-IQ1_S-00001-of-00003.gguf",
+  "octets": 9429859
+ },
+ {
+  "nom": "GLM-5.3-Flash-UD-IQ1_S",
+  "repo": "unsloth/GLM-5.3-Flash-GGUF",
+  "chemin": "UD-IQ1_S/GLM-5.3-Flash-UD-IQ1_S-00002-of-00003.gguf",
+  "octets": 49621122496
+ },
+ {
+  "nom": "GLM-5.3-Flash-UD-IQ1_S",
+  "repo": "unsloth/GLM-5.3-Flash-GGUF",
+  "chemin": "UD-IQ1_S/GLM-5.3-Flash-UD-IQ1_S-00003-of-00003.gguf",
+  "octets": 43456692608
+ }
+]

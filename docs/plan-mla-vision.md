@@ -117,7 +117,7 @@ implémentation déjà validée par les portes de non-régression.
 
 ### Ce qui est déjà là
 
-`/home/stephane/FastNVMe/models/mmproj-Qwen2.5-VL-7B-Instruct-f16.gguf` (le
+`/home/stephane/Data13TB/stephane/modeles/gguf/mmproj-Qwen2.5-VL-7B-Instruct-f16.gguf` (le
 projecteur) et `Qwen2.5-VL-7B-Instruct-Q4_K_M.gguf` (le modèle). Rien ne lit les
 patchs.
 

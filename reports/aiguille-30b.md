@@ -1,4 +1,4 @@
-# aiguille v2 — /home/stephane/FastNVMe/models/Qwen3-30B-A3B-Instruct-2507-Q4_K_M.gguf
+# aiguille v2 — /home/stephane/Data13TB/stephane/modeles/gguf/Qwen3-30B-A3B-Instruct-2507-Q4_K_M.gguf
 lot 256, 40 jetons de réponse, 16 fils
 
 | contexte | profondeur | trouvé | secondes | détail |

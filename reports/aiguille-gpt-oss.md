@@ -1,4 +1,4 @@
-# aiguille v2 — /home/stephane/FastNVMe/models/gpt-oss-120b-MXFP4.gguf
+# aiguille v2 — /home/stephane/Data13TB/stephane/modeles/gguf/gpt-oss-120b-MXFP4.gguf
 lot 512, 40 jetons de réponse, 16 fils
 
 | contexte | profondeur | trouvé | secondes | détail |

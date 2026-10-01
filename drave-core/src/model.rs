@@ -856,6 +856,11 @@ pub struct Model {
     /// gpt-oss (4 experts sur 128 par jeton).
     pub profil_experts: Option<Vec<u64>>,
     pub profil_jetons: u64,
+    /// **Trace de routage** (`DRAVE_TRACE_EXPERTS=chemin`) : une ligne par
+    /// (couche, jeton) avec les indices des experts retenus. C'est la matière
+    /// première du découpage en clusters : les compteurs par expert disent
+    /// lesquels sont chauds, la trace dit lesquels sont chauds ENSEMBLE.
+    pub trace_experts: Option<std::io::BufWriter<std::fs::File>>,
     pub attn_window: usize,
     /// Période du motif fenêtre/plein : la couche `l` est fenêtrée si
     /// `l % motif < motif - 1`. gpt-oss déclare 128 de fenêtre sur **une couche
@@ -1798,6 +1803,16 @@ impl Model {
             moe_topk: 0,
             profil_neurones: None,
             profil_experts: None,
+            // Trace de routage des experts : c'est la matière première du
+            // découpage en clusters (quels experts sont allumés ENSEMBLE). Le
+            // fichier est créé (tronqué) au chargement, tamponné, et fermé avec
+            // le modèle — une exécution = une trace.
+            trace_experts: std::env::var("DRAVE_TRACE_EXPERTS").ok().and_then(|c| {
+                std::fs::File::create(&c).ok().map(|f| {
+                    println!("[moe] trace de routage des experts → {c}");
+                    std::io::BufWriter::new(f)
+                })
+            }),
             profil_jetons: 0,
             attn_window: fenetre,
             swa_pattern,
@@ -2702,6 +2717,7 @@ l'attention par lots est DENSE. Utiliser --lot 1 pour l'attention creuse.", self
                 let s32: Vec<Vec<i32>> = (0..t)
                     .map(|i| crate::list::sommes32(&x16[i * h..(i + 1) * h])).collect();
                 let mut groupes: Vec<Vec<(usize, f32)>> = vec![Vec::new(); ne];
+                let trace_active = self.trace_experts.is_some();
                 for i in 0..t {
                     let hni = &hn[i * h..(i + 1) * h];
                     let mut sc_e: Vec<f32> = (0..ne).map(|e| {
@@ -2738,6 +2754,15 @@ l'attention par lots est DENSE. Utiliser --lot 1 pour l'attention creuse.", self
                         }
                         let somme_k: f32 = idx.iter().map(|&e| sc_e[e as usize]).sum();
                         inv_k = if somme_k > 0.0 { 1.0 / somme_k } else { 0.0 };
+                    }
+                    if trace_active {
+                        use std::io::Write;
+                        let mut ids: Vec<u32> = idx.clone();
+                        ids.sort_unstable();
+                        let liste: Vec<String> = ids.iter().map(|e| e.to_string()).collect();
+                        let f = self.trace_experts.as_mut().unwrap();
+                        let jeton = self.jeton_trace.saturating_sub(t as u64) + i as u64;
+                        let _ = writeln!(f, "{} {} {}", l, jeton, liste.join(" "));
                     }
                     for &e in &idx { groupes[e as usize].push((i, sc_e[e as usize] * inv_k)); }
                 }
@@ -3549,6 +3574,13 @@ dynamique de {dyn_:.3e} (relatif {:.2e})", mx / dyn_.max(1e-9));
                     let base = l * ne;
                     let p = self.profil_experts.as_mut().unwrap();
                     for &e in &idx { p[base + e as usize] += 1; }
+                }
+                if let Some(f) = self.trace_experts.as_mut() {
+                    use std::io::Write;
+                    let mut ids: Vec<u32> = idx.clone();
+                    ids.sort_unstable();       // l'ordre de `select_nth` est arbitraire
+                    let liste: Vec<String> = ids.iter().map(|e| e.to_string()).collect();
+                    let _ = writeln!(f, "{} {} {}", l, pos, liste.join(" "));
                 }
                 for v in down.iter_mut() { *v = 0.0; }
                 for &e in &idx {

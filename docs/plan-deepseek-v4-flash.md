@@ -1,8 +1,8 @@
 # Chantier — adapter les tests de contexte à DeepSeek-V4-Flash
 
-**État au 01/10 07h10** : le modèle est **en cours de téléchargement**
-(`/home/stephane/FastNVMe/models/DeepSeek-V4-Flash-UD-IQ1_M/`, 3 shards, 86,9 Go,
-~25 Mo/s → ~1 h). Le moteur **lit déjà ses métadonnées** : `--plan` affiche
+**État au 01/10 09h40** : le modèle **est téléchargé** dans la bibliothèque du
+disque mécanique (`/home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek-V4-Flash-UD-IQ1_M/`,
+3 shards, 86,9 Go). Le NVMe ne sert plus qu'aux artefacts que nous produisons. Le moteur **lit déjà ses métadonnées** : `--plan` affiche
 « deepseek4, 43 couches, 256 experts (top-6) ». Mais il ne peut pas encore le
 FAIRE TOURNER, pour deux raisons précises, et c'est ce document qui les cadre.
 
@@ -69,9 +69,12 @@ ce qui est exactement l'objet du premier chantier.
 ## Reprendre le téléchargement
 
 ```bash
-cd /home/stephane/FastNVMe/models/DeepSeek-V4-Flash-UD-IQ1_M
-B=https://huggingface.co/unsloth/DeepSeek-V4-Flash-GGUF/resolve/main/UD-IQ1_M
-for f in DeepSeek-V4-Flash-UD-IQ1_M-0000{1,2,3}-of-00003.gguf; do wget -c "$B/$f"; done
+# La file complète (tous les modèles lourds) est dans le manifeste :
+python3 tools/telecharger_modeles.py --seulement DeepSeek-V4-Flash-UD-IQ1_M
+python3 tools/telecharger_modeles.py --etat        # où en est chaque fichier
 ```
 
-`wget -c` reprend où il s'est arrêté : le journal est `/tmp/dl_v4flash.log`.
+Le téléchargement passe par **tranches `Range` de 256 Mo sur 6 connexions** : le
+pont Xet de Hugging Face refuse un GET plein sur les très gros fichiers (HTTP 400
+mesuré sur celui de 365,7 Go) mais sert très bien une requête par tranches (206).
+Le journal est `/tmp/telechargement_lourds.log`.

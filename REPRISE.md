@@ -50,7 +50,7 @@ head -c 20000 data/wikitext2_test.txt > /tmp/wt2_txt.txt
 # les identifiants DOIVENT venir du tokenizer du modèle — jamais croisés
 drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf \
     --tokenize --fichier /tmp/wt2_txt.txt --sortie /tmp/ids_qwen.txt
-drave-core/target/release/drave /home/stephane/FastNVMe/models/gpt-oss-120b-MXFP4.gguf \
+drave-core/target/release/drave /home/stephane/Data13TB/stephane/modeles/gguf/gpt-oss-120b-MXFP4.gguf \
     --tokenize --fichier /tmp/wt2_txt.txt --sortie /tmp/ids_oss.txt
 ```
 
@@ -668,7 +668,7 @@ cd drave-core && cargo build --release && cargo test --release
 #    ~100 s pour 510 jetons). SANS `DRAVE_GPU` : la variable ouvre le pilote, et le
 #    moteur déporte alors tout seul les projections Q8_0 de plus de 8 Mo — le
 #    chiffre devient 15,1667 (même calcul, ordre de sommation du noyau GPU).
-./target/release/drave /home/stephane/FastNVMe/models/gpt-oss-120b-MXFP4.gguf \
+./target/release/drave /home/stephane/Data13TB/stephane/modeles/gguf/gpt-oss-120b-MXFP4.gguf \
     --ppl /tmp/ids_oss_512.txt --ctx 256 --dense --threads 16 --limit 512  # attendu 15,1757
 
 # 4. puis §6.b : la rotation ne bascule plus qu'au-delà de 1,25 × la longueur
