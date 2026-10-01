@@ -47423,3 +47423,79 @@ perplexité 15.2789 sur 63 tokens (0 événements, 16.5 s)
 ⏵ **Chaîne complète validée : 15,2789 par les outils du dépôt.** Je consigne et clôture.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np = 'reports/rapport-lecteur-multifichiers.md'\ns = open(p).read()\ns = s.replace('''## Méthode''',\n'''### La chaîne complète, par les outils du dépôt\n\nJusqu'ici, le `mapping.tsv` de l'artefact avait été produit  … [3044 caractères tronqués]`
+
+  ```
+ok
+d8700ae Chaîne complète par les outils du dépôt : convertisseur -> clusters -> 15,2789
+12:35
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== ÉTAT FINAL ===\"; (cd drave-core && cargo test --release 2>&1 | grep -E \"^test result\"); git status --short | grep -v journal | head -3; echo \"(dépôt propre hors journal)\"; echo \"\"; du -sh /home/stephane/FastNVMe/art … [117 caractères tronqués]`
+
+  ```
+=== ÉTAT FINAL ===
+test result: ok. 32 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.10s
+(dépôt propre hors journal)
+
+18G	/home/stephane/FastNVMe/artefacts/modeles-optimises/qwen3-30b-8clusters
+18G	/home/stephane/FastNVMe/artefacts/modeles-optimises/qwen3-30b-8clusters-v2
+
+12:35:31    47.6 Go / 49.6 Go (95.9 %, 111 Mo/s)
+12:35
+  ```
+
+### 🤖 Assistant
+
+⏵ Dernier tour : cohérence des artefacts et du journal.
+
+- **bash** `{"command": "cd /home/stephane/FastNVMe/artefacts && cat README.md 2>/dev/null | head -20; echo \"=== contenu ===\"; ls -la modeles-optimises/", "description": "Check artifacts README"}`
+
+  ```
+# Ce que porte le NVMe
+
+Politique de stockage (01/10) : **les modèles bruts vivent sur le disque
+mécanique, le NVMe ne sert qu'aux fichiers que NOUS produisons.**
+
+| emplacement | contenu | pourquoi ici |
+|---|---|---|
+| `/home/stephane/Data13TB/stephane/modeles/gguf/` (mécanique, 4,4 To libres) | la bibliothèque brute : GGUF tels que publiés | volume, pas de latence critique : un modèle se lit une fois, en flux |
+| `/home/stephane/FastNVMe/artefacts/modeles-optimises/` | les modèles **réécrits** pour notre mode d'opération : experts réordonnés (chauds d'abord), disposition contiguë par cluster, manifeste multi-shards | c'est ce que le moteur lit à chaque jeton : il doit être rapide |
+| `/home/stephane/FastNVMe/artefacts/index/` | index MoE (`*.moe.json`), manifestes de shards, cartes expert→cluster | quelques kilo-octets, lus à chaque chargement |
+| `/home/stephane/FastNVMe/artefacts/traces/` | traces de routage (`DRAVE_TRACE_EXPERTS`), traces de flux (DRVF) | matière première des mesures, réécrite souvent |
+| `/home/stephane/FastNVMe/artefacts/caches/` | caches dérivés (logits de référence, jetons tokenisés, échantillons) | relecture fréquente pendant les campagnes de mesure |
+
+M
+… [672 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/FastNVMe/artefacts && python3 - <<'PY'\np = 'README.md'\ns = open(p).read().rstrip('\\n')\ns += '''\n\n## Les artefacts présents (01/10 midi)\n\n| dossier | ce que c'est | état |\n|---|---|---|\n| `modeles-optimises/qwen3-30b-8clusters/` | Qwen3-30B-A3B éclaté : `commu … [1116 caractères tronqués]`
+
+  ```
+ok
+--- journal ---
+ M journal/README.md
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\n# Le journal du dépôt doit refléter la session : vérifions ce qu'il contient.\nimport subprocess\nprint(subprocess.run(['git','diff','--stat','journal/'],capture_output=True,text=True).stdout)\nPY\nhead -20 journal/ … [51 caractères tronqués]`
+
+  ```
+journal/README.md | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+# Journal des sessions
+
+Un rapport par session, régénéré automatiquement à chaque commit et
+chaque heure (`tools/session_report.py`). Le rapport reconstitue l'essence
+de la session ; le `digest.md` voisin en donne le verbatim complet.
+
+| Session | Titre | Début | Durée | Tours | Outils | Fichiers | Commits | Rapport |
+|---|---|---|---|---|---|---|---|---|
+| `11b2d312` | Tu es relecteur ADVERSARIAL autonome | 2026-10-01 02:50 | 0.1 h | 1 | 60 | 0 | 0 | [rapport](sessions/11b2d312-9a7e-4a4e-814f-ed0384ed9d4d/rapport.md) |
+| `13446299` | Tu es relecteur ADVERSARIAL autonome | 2026-10-01 00:54 | 0.2 h | 1 | 68 | 0 | 0 | [rapport](sessions/13446299-79d8-497c-ba83-673c176a4637/rapport.md) |
+| `15fd322f` | Tu travailles dans le dépôt | 2026-09-30 11:47 | 0.2 h | 1 | 67 | 2 | 0 | [rapport](sessions/15fd322f-7e9e-48c0-a970-f36335eb622a/rapport.md) |
+| `18c3f6d0` | Relecture ADVERSARIALE ciblée (10 minut | 2026-10-01 05:20 | 0.1 h | 1 | 38 | 0 | 0 | [rapport](sessions/18c3f6d0-5bb1-45bb-9f94-ab0e7812218d/rapport.md) |
+| `22bcae27` | Étude de Qtrinet-bootstrap.md | 2026-09-25 11:56 | 74.8 h | 54 | 1227 | 69 | 60 | [rappo
+… [1201 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -m \"Journal de session\" && git log --oneline --since=\"11:13\" | wc -l && echo \"commits sur le bloc\" && git log --oneline -1 && echo \"\" && echo \"=== RÉCAPITULATIF ===\" && (cd drave-core && cargo te … [198 caractères tronqués]`
