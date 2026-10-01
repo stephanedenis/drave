@@ -38856,3 +38856,58 @@ docs/contexte-long.md : 2
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='/tmp/ceremonie4.md'; s=open(p).read()\nvieux = s[s.index(\"### 1. Le résultat qui tranche\"):s.index(\"### 3. Un levier qui existait déjà\")]\nneuf = \"\"\"### 1. Le balayage en k : 0 · 0 · 3\n\nLa grille du spri … [6156 caractères tronqués]`
+
+  ```
+cérémonie 4 corrigée
+1425c79 Revue du sprint 4 : « trois fenêtres » étaient trois fois la même invite, et la portée du k était surestimée
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat /tmp/aig8192.log 2>/dev/null; date +%H:%M:%S; ./tools/sprint.sh status | head -3", "description": "Check 8192 control and sprint status"}`
+
+  ```
+01:08:01
+── Sprint 4 ─────────────────────────────────────────────
+- **Début** : 23:44 · **Fin prévue** : 01:44 (boxing de 120 min)
+   temps : 01:08 · reste 0 h 36
+  ```
+
+- **write** `{"content": "#!/bin/bash\n# SPRINT 5 — deux questions, deux grilles.\n#\n# (A) La conclusion du sprint 4 (« k est un réglage, seuil entre 512 et 1 024 »)\n#     tient-elle sur TROIS TEXTES DIFFÉRENTS ? Le sprint 4 croyait le faire, mais\n#     son outil remettait l'offset à zéro : trois répétitions  … [1359 caractères tronqués]`
+
+  ```
+<path>/tmp/aig_s5.sh</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && chmod +x /tmp/aig_s5.sh && cat /tmp/aig8192.log 2>/dev/null; ps -eo pid,etime,args | grep \"aiguille.py\" | grep -v grep | head -2; date +%H:%M:%S", "description": "Check 8192 probe status"}`
+
+  ```
+2574337       10:12 bash -c cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && nohup bash -c 'cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 1800 python3 tools/aiguille.py models/Qwen2.5-0.5B-Q8_0.gguf 8192 0.5 --n 24 --lot 256 2>&1 | tail -2 > /tmp/aig8192.log; echo FINI >> /tmp/aig8192.log' > /dev/null 2>&1 & echo "contrôle 8192 dense lancé"; date +%H:%M:%S
+2574338       10:12 bash -c cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 1800 python3 tools/aiguille.py models/Qwen2.5-0.5B-Q8_0.gguf 8192 0.5 --n 24 --lot 256 2>&1 | tail -2 > /tmp/aig8192.log; echo FINI >> /tmp/aig8192.log
+01:08:15
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 300; cat /tmp/aig8192.log 2>/dev/null; date +%H:%M:%S", "description": "Wait for the 8192 dense control", "timeoutMs": 360000}`
+
+  ```
+01:13:19
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 300; cat /tmp/aig8192.log 2>/dev/null; date +%H:%M:%S", "description": "Wait more for the 8192 control", "timeoutMs": 360000}`
+
+  ```
+contexte  profondeur  trouvé  secondes  détail
+     8192        0.50     oui    1002.0  prompt 7963 jetons
+FINI
+01:18:25
+  ```
+
+- **write** `{"content": "#!/bin/bash\n# SPRINT 5 — deux questions, deux grilles.\n#\n# (A) La conclusion du sprint 4 (« k est un réglage, seuil entre 512 et 1 024 »)\n#     tient-elle sur TROIS TEXTES DIFFÉRENTS ? Le sprint 4 croyait le faire, mais\n#     son outil remettait l'offset à zéro : trois répétitions  … [1288 caractères tronqués]`
+
+  ```
+Error: cannot write "/tmp/aig_s5.sh": file changed since it was read — re-read the file, then retry
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\ncontenu = \"\"\"#!/bin/bash\n# SPRINT 5 — deux questions, deux grilles.\n#\n# (A) La conclusion du sprint 4 (« k est un réglage, seuil entre 512 et 1 024 »)\n#     tient-elle sur TROIS TEXTES DIFFÉRENTS ? Le sprint  … [2389 caractères tronqués]`

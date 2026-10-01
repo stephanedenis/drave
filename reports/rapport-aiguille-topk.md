@@ -122,7 +122,10 @@ attention complète et attention creuse.
 
 ## Ce que ce rapport ne dit pas
 
-* 8 192 et 16 384 : non mesurés dans ce box. Le taux mesuré du 0.5B est de 58 à
+* **8 192 : le contrôle dense est mesuré** (sprint 4, une sonde : **trouvé**,
+  1 002,0 s pour un prompt de 7 963 jetons) — la question « le k nécessaire
+  croît-il avec le contexte ? » est donc mesurable à 8 192 ; 16 384 ne l'est pas.
+* 8 192 et 16 384 (grille creuse) : non mesurés dans ce box. Le taux mesuré du 0.5B est de 58 à
   62 ms par jeton de prompt (238,5 à 256,5 s pour 4 114 jetons), donc ≈9 min par
   sonde à 8 192 — et **seule** la sonde « 8 192 / 0,5 / complète » a été lancée,
   puis arrêtée 8 s plus tard (22:55:13) pour laisser la place à la cérémonie. Le
