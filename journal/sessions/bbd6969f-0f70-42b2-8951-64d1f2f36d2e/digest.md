@@ -50399,3 +50399,15 @@ trame écrite dans sprints/09-empreinte-memoire-ce-qui-reduit-vraiment.md — à
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np = 'sprints/09-empreinte-memoire-ce-qui-reduit-vraiment.md'\ns = open(p).read()\n# La trame de clôture a été ajoutée en fin de fichier ; on la remplace par la\n# version remplie, cohérente avec le reste.\ni = s.fin … [1933 caractères tronqués]`
+
+  ```
+ok
+418b532 Sprint 09 : ceremonie (onze pistes mesurees, trois retenues)
+6586008 Trois dernieres pistes mesurees et ecartees : localite temporelle, ordre des experts, prechargement
+c7c602d L'empreinte memoire de DeepSeek-V4.1 : 365,7 Go -> 50-80 Go, et ce n'est pas en decoupant les experts
+=== état final ===
+test result: ok. 32 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.08s
+1
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -m \"Journal\" 2>/dev/null; echo \"=== documents de la session ===\"; for f in reports/rapport-empreinte-memoire.md sprints/09-empreinte-memoire-ce-qui-reduit-vraiment.md tools/analyse_empreinte.py REPRISE … [541 caractères tronqués]`

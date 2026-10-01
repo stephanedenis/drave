@@ -7,12 +7,12 @@
 | Début | 2026-09-28 14:46 |
 | Durée | 75.0 h |
 | Tours | 63 |
-| Messages | 3146 |
-| Appels d'outils | 2979 |
+| Messages | 3147 |
+| Appels d'outils | 2980 |
 | Fichiers touchés | 68 |
-| Commandes | 2588 |
+| Commandes | 2589 |
 | Sous-agents | 22 |
-| Commits | 258 |
+| Commits | 259 |
 | Compactages de contexte | 4 |
 
 ## Objectifs déclarés
@@ -3092,7 +3092,7 @@ Et les 14 paires les plus fortes ont **toutes** un écart de 12 :
 
 ### Tour 63 — nous venons de faire une longue session, il est temps de mettre à jour la doc, rapports, journal et reprise. Ensuite uti … [193 caractères tronqués]
 
-*24 appels d'outils.* Actions notables :
+*25 appels d'outils.* Actions notables :
 
 - bash — Inventory session state and artifacts
 - bash — Start sprint 09
@@ -3108,7 +3108,7 @@ Et les 14 paires les plus fortes ont **toutes** un écart de 12 :
 - bash — Add engram discovery to report
 - bash — Update REPRISE with session findings
 - write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/analyse_empreinte.py`
-- … et 10 autres
+- … et 11 autres
 
 **Synthèse produite :**
 
@@ -3256,7 +3256,7 @@ Et les 14 paires les plus fortes ont **toutes** un écart de 12 :
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 2548 autres
+- … et 2549 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -3662,4 +3662,5 @@ Et les 14 paires les plus fortes ont **toutes** un écart de 12 :
 - L'empreinte memoire de DeepSeek-V4.1 : 365,7 Go -> 50-80 Go, et ce n'est pas en decoupant les experts  Decomposition des poids par famille : engram 203,4 Go (55
 - Trois dernieres pistes mesurees et ecartees : localite temporelle, ordre des experts, prechargement  - localite temporelle : le jeton suivant reutilise 27 a 52 
 - Sprint 09 : ceremonie (onze pistes mesurees, trois retenues)" && git log --oneline -3; echo "=== état final ==="; (cd drave-core && cargo test --release 2>&1 | 
+- Journal" 2>/dev/null; echo "=== documents de la session ==="; for f in reports/rapport-empreinte-memoire.md sprints/09-empreinte-memoire-ce-qui-reduit-vraiment.
 
