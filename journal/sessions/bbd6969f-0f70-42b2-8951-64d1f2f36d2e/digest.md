@@ -40676,3 +40676,83 @@ cérémonie 7 : la demande DeepSeek
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -F - <<'EOF' && git log --oneline -1\nDeepSeek-V4.1-Flash : pas de poids ouverts — c'est DeepSeek-V4-Flash qui est téléchargé, et le plan d'adaptation est écrit\n\nL'utilisateur a demandé d'adapter les tes … [996 caractères tronqués]`
+
+  ```
+beacdf9 DeepSeek-V4.1-Flash : pas de poids ouverts — c'est DeepSeek-V4-Flash qui est téléchargé, et le plan d'adaptation est écrit
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 600; ls -la /home/stephane/FastNVMe/models/DeepSeek-V4-Flash-UD-IQ1_M/*.gguf | awk '{printf \"%.2f Go  %s\\n\", $5/1e9, $9}'; date +%H:%M:%S", "description": "Monitor the download", "timeoutMs": 660000}`
+
+  ```
+(no output)
+[timed out after 600000ms]
+[killed by signal: SIGTERM]
+  ```
+
+- **bash** `{"command": "ls -la /home/stephane/FastNVMe/models/DeepSeek-V4-Flash-UD-IQ1_M/*.gguf | awk '{printf \"%.2f Go  %s\\n\", $5/1e9, $9}'; date +%H:%M:%S; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ./tools/sprint.sh status | head -3", "description": "Check download and sprint status"}`
+
+  ```
+0.01 Go  /home/stephane/FastNVMe/models/DeepSeek-V4-Flash-UD-IQ1_M/DeepSeek-V4-Flash-UD-IQ1_M-00001-of-00003.gguf
+37.19 Go  /home/stephane/FastNVMe/models/DeepSeek-V4-Flash-UD-IQ1_M/DeepSeek-V4-Flash-UD-IQ1_M-00002-of-00003.gguf
+07:16:59
+── Sprint 7 ─────────────────────────────────────────────
+- **Début** : 05:39 · **Fin prévue** : 07:39 (boxing de 120 min)
+   temps : 07:16 · reste 0 h 22
+  ```
+
+- **bash** `{"command": "sleep 540; ls -la /home/stephane/FastNVMe/models/DeepSeek-V4-Flash-UD-IQ1_M/*.gguf | awk '{printf \"%.2f Go  %s\\n\", $5/1e9, $9}'; tail -3 /tmp/dl_v4flash.log; date +%H:%M:%S", "description": "Monitor the download", "timeoutMs": 600000}`
+
+  ```
+0.01 Go  /home/stephane/FastNVMe/models/DeepSeek-V4-Flash-UD-IQ1_M/DeepSeek-V4-Flash-UD-IQ1_M-00001-of-00003.gguf
+49.97 Go  /home/stephane/FastNVMe/models/DeepSeek-V4-Flash-UD-IQ1_M/DeepSeek-V4-Flash-UD-IQ1_M-00002-of-00003.gguf
+13.65 Go  /home/stephane/FastNVMe/models/DeepSeek-V4-Flash-UD-IQ1_M/DeepSeek-V4-Flash-UD-IQ1_M-00003-of-00003.gguf
+48791552K ........                           100% 36,0M=16m50s
+
+=== DeepSeek-V4-Flash-UD-IQ1_M-00003-of-00003.gguf ===
+07:26:07
+  ```
+
+- **bash** `{"command": "sleep 480; ls -la /home/stephane/FastNVMe/models/DeepSeek-V4-Flash-UD-IQ1_M/*.gguf | awk '{printf \"%.2f Go  %s\\n\", $5/1e9, $9}'; tail -2 /tmp/dl_v4flash.log; date +%H:%M:%S", "description": "Wait for the download to finish", "timeoutMs": 540000}`
+
+  ```
+0.01 Go  /home/stephane/FastNVMe/models/DeepSeek-V4-Flash-UD-IQ1_M/DeepSeek-V4-Flash-UD-IQ1_M-00001-of-00003.gguf
+49.97 Go  /home/stephane/FastNVMe/models/DeepSeek-V4-Flash-UD-IQ1_M/DeepSeek-V4-Flash-UD-IQ1_M-00002-of-00003.gguf
+36.08 Go  /home/stephane/FastNVMe/models/DeepSeek-V4-Flash-UD-IQ1_M/DeepSeek-V4-Flash-UD-IQ1_M-00003-of-00003.gguf
+
+=== DeepSeek-V4-Flash-UD-IQ1_M-00003-of-00003.gguf ===
+07:34:14
+  ```
+
+- **bash** `{"command": "sleep 120; ls -la /home/stephane/FastNVMe/models/DeepSeek-V4-Flash-UD-IQ1_M/*.gguf | awk '{printf \"%.2f Go  %s\\n\", $5/1e9, $9}'; tail -3 /tmp/dl_v4flash.log; date +%H:%M:%S; du -sh /home/stephane/FastNVMe/models/DeepSeek-V4-Flash-UD-IQ1_M 2>/dev/null", "description": "Check download  … [33 caractères tronqués]`
+
+  ```
+0.01 Go  /home/stephane/FastNVMe/models/DeepSeek-V4-Flash-UD-IQ1_M/DeepSeek-V4-Flash-UD-IQ1_M-00001-of-00003.gguf
+49.97 Go  /home/stephane/FastNVMe/models/DeepSeek-V4-Flash-UD-IQ1_M/DeepSeek-V4-Flash-UD-IQ1_M-00002-of-00003.gguf
+36.92 Go  /home/stephane/FastNVMe/models/DeepSeek-V4-Flash-UD-IQ1_M/DeepSeek-V4-Flash-UD-IQ1_M-00003-of-00003.gguf
+-rw-r--r--. 1 stephane stephane     5256864  1 oct 07:04 DeepSeek-V4-Flash-UD-IQ1_M-00001-of-00003.gguf
+-rw-r--r--. 1 stephane stephane 49971881120  1 oct 07:21 DeepSeek-V4-Flash-UD-IQ1_M-00002-of-00003.gguf
+-rw-r--r--. 1 stephane stephane 36924175168  1 oct 07:34 DeepSeek-V4-Flash-UD-IQ1_M-00003-of-00003.gguf
+07:36:20
+81G	/home/stephane/FastNVMe/models/DeepSeek-V4-Flash-UD-IQ1_M
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && M=/home/stephane/FastNVMe/models/DeepSeek-V4-Flash-UD-IQ1_M; echo \"=== plan sur le shard 2 (le gros) ===\"; timeout 300 ./drave-core/target/release/drave $M/DeepSeek-V4-Flash-UD-IQ1_M-00002-of-00003.gguf --plan 2>&1 | sed -n '2,6p'; … [432 caractères tronqués]`
+
+  ```
+=== plan sur le shard 2 (le gros) ===
+plan de placement — ?, 0 couches
+
+  couche     attention           ffn       experts          cumul  placement
+
+  total du fichier      : 0.00 Go
+=== jetons / gabarit ===
+85223 tokens écrits dans data/wikitext2_test.txt.ids (vocabulaire du modèle : 129280)
+réversibilité : texte reconstruit identique ✅ (359041 octets)
+=== architecture reconnue ? ===
+[attention] QT_IM_SWITCHER est l'ancien nom d'une variable d'environnement : elles s'appellent maintenant DRAVE_* (voir docs/histoire.md). Rien n'a été appliqué.
+784 tenseurs dans /home/stephane/FastNVMe/models/DeepSeek-V4-Flash-UD-IQ1_M/DeepSeek-V4-Flash-UD-IQ1_M-00002-of-00003.gguf
+  Q4_K  output.weight                          [129280, 4096] · 529.5 M poids
+  F32   output_hc_base.weight                  [4] · 0.0 M poids
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='docs/plan-deepseek-v4-flash.md'; s=open(p).read()\nvieux = \"\"\"## Les deux obstacles, mesurés\"\"\"\nneuf = \"\"\"## Ce que le moteur sait déjà faire de ces fichiers (mesuré, 07h36)\n\n| fichier | ce que le mot … [1234 caractères tronqués]`

@@ -20,6 +20,18 @@ complet pèse 1,67 To. Le choix est dicté par la place disque (586 Go libres) e
 le fait que le moteur lit le fichier EN PLACE : moins il y a d'octets, plus vite on
 saura si l'architecture passe.
 
+## Ce que le moteur sait déjà faire de ces fichiers (mesuré, 07h36)
+
+| fichier | ce que le moteur en tire |
+|---|---|
+| shard 1 (5,3 Mo) | ✅ l'**architecture** (`--plan` : « deepseek4, 43 couches, 256 experts (top-6) ») et le **tokenizer** : 129 280 jetons, aller-retour texte→jetons→texte **identique** sur `data/wikitext2_test.txt` |
+| shard 2 (49,97 Go) | ✅ **784 tenseurs** lisibles avec leurs noms, formes et quantifications (`Q4_K output.weight [129280, 4096]`, `F32 output_hc_base.weight [4]`…) — mais **sans métadonnées** : « 0 couches », architecture « ? » |
+| shard 3 (36,92 Go) | ✅ téléchargé (mêmes propriétés que le shard 2) |
+
+Autrement dit : le lecteur GGUF sait déjà tout lire, **séparément**. Ce qui manque
+est le lien entre les deux — les métadonnées d'un fichier, les tenseurs de trois —
+ce qui est exactement l'objet du premier chantier.
+
 ## Les deux obstacles, mesurés
 
 1. **Le GGUF est découpé en shards.** Le moteur ouvre UN fichier
