@@ -37249,3 +37249,49 @@ REPRISE.md ok
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -m \"REPRISE : le doute sur les projections est à moitié levé (ctx 512 et 1024 identiques, ctx 256 évalue une autre chose)\" && sleep 1400; date +%H:%M:%S; ./tools/sprint.sh status | head -4", "description … [55 caractères tronqués]`
+
+  ```
+(no output)
+[timed out after 600000ms]
+[killed by signal: SIGTERM]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date +%H:%M:%S && git log --oneline -1 && ./tools/sprint.sh status | head -4", "description": "Check time and sprint status"}`
+
+  ```
+21:30:31
+a76d8c8 REPRISE : le doute sur les projections est à moitié levé (ctx 512 et 1024 identiques, ctx 256 évalue une autre chose)
+── Sprint 2 ─────────────────────────────────────────────
+- **Début** : 19:49 · **Fin prévue** : 21:49 (boxing de 120 min)
+   temps : 21:30 · reste 0 h 19
+   commits depuis le début : 6
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && DRAVE_GPU=1 timeout 900 ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q4_0.gguf --banc-topk 1000000 2>&1 | grep -E \"noyau 4|chaîne top-k|ensembles identiques|ordre documenté\" | head -5; date +%H:%M:%S", "description": "Fina … [47 caractères tronqués]`
+
+  ```
+ensembles identiques au CPU : 14/14 lignes · différence symétrique 0 indices
+    ordre documenté (au-dessus puis égaux, croissants) : 14/14 lignes · doublons 0 · hors bornes 0 · cases non écrites 0
+    noyau 4 (UN lancement) : 5.66 ms · écart max 8.941e-8 sur 1.249e-1 (relatif 7.16e-7)
+      chaîne top-k GPU sans relecture des scores :     4.08 ms
+21:31:19
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 560; date +%H:%M:%S; ./tools/sprint.sh status | head -3", "description": "Wait for box end", "timeoutMs": 600000}`
+
+  ```
+21:40:43
+── Sprint 2 ─────────────────────────────────────────────
+- **Début** : 19:49 · **Fin prévue** : 21:49 (boxing de 120 min)
+   temps : 21:40 · reste 0 h 09
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 520; date +%H:%M:%S; ./tools/sprint.sh close | tail -2", "description": "Close sprint 2 box", "timeoutMs": 600000}`
+
+  ```
+21:49:27
+=== clôture du sprint 2 (19:49 → 21:49, prévu 21:49) ===
+trame écrite dans sprints/02-fusionner-la-cha-ne-du-top-k-d-port-desc.md — à compléter (revue chiffrée, rétro, planning)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='sprints/02-fusionner-la-cha-ne-du-top-k-d-port-desc.md'\ns=open(p).read()\ni = s.index(\"## Rétrospective — garder / changer\")\nceremonie = open('/tmp/ceremonie2.md').read()\nopen(p,'w').write(s[:i] + ceremonie. … [445 caractères tronqués]`
