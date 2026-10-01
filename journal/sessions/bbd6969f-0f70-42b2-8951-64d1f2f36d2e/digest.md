@@ -37225,3 +37225,27 @@ cérémonie complétée
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='REPRISE.md'; s=open(p).read()\nancre = \"\"\"### La frontière du cache KV, mesurée en entier\"\"\"\nneuf = \"\"\"### Sprint 2 (19h49 → 21h49) : la chaîne du top-k fusionnée en UN noyau\n\n**Le croisement avec le  … [2820 caractères tronqués]`
+
+  ```
+REPRISE : section sprint 2
+1dee0e6 REPRISE : sprint 2 (fusion du top-k, croisement à ~300 clés, le filet testé, le doute sur les projections)
+21:13:18
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && O=/home/stephane/FastNVMe/models/gpt-oss-120b-MXFP4.gguf; echo -n \"ctx 512 CPU : \"; timeout 600 ./drave-core/target/release/drave $O --ppl /tmp/ids_oss_512.txt --ctx 512 --dense --threads 16 --limit 512 2>&1 | grep -oE \"perplexité … [385 caractères tronqués]`
+
+  ```
+ctx 512 CPU : perplexité 18.5803 sur 511 tokens
+ctx 512 GPU (projections seules) : perplexité 18.3538 sur 511 tokens
+21:18:44
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\ndef patch(p, paires):\n    s=open(p).read()\n    for v,n,nom in paires:\n        assert s.count(v)==1, f\"{p}::{nom}::{s.count(v)}\"\n        s=s.replace(v,n,1)\n    open(p,'w').write(s); print(f\"{p} ok\")\npatch(' … [1329 caractères tronqués]`
+
+  ```
+REPRISE.md ok
+21:20:23
+5
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -m \"REPRISE : le doute sur les projections est à moitié levé (ctx 512 et 1024 identiques, ctx 256 évalue une autre chose)\" && sleep 1400; date +%H:%M:%S; ./tools/sprint.sh status | head -4", "description … [55 caractères tronqués]`

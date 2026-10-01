@@ -495,11 +495,15 @@ partagé par bloc), `k > n` accepté, comptages en `float` non bornés.
 sort avant la somme, et le sabotage redevient un refus propre. **Un garde-fou non
 testé est une décoration.**
 
-⚠️ **Doute à instruire** : sur gpt-oss à ctx 1024, le déport des projections change
-la perplexité de 1,22 % contre 0,06 % à ctx 256 (mêmes 511 jetons environ — à ctx
-256 le moteur en note 510, à ctx 1024 il en note 511, ce qui est un facteur
-confondant). Le miroir KV, lui, ne pèse que 0,25 %. À instruire en isolant tête,
-projections et experts, à jeu de jetons identique.
+⚠️ **Doute, à moitié levé** : le déport des projections change la perplexité de
+gpt-oss de **−1,22 %** quand l'attention porte sur 511 clés (ctx 512 et ctx 1024
+donnent EXACTEMENT la même valeur, 18,5803 / 18,3538 — normal : 511 jetons < 512,
+donc le contexte ne joue plus), contre **−0,06 %** à ctx 256, où le moteur évalue
+deux fenêtres de 255 clés. Les deux mesures ne portent donc pas sur le même calcul,
+et l'effet croît avec la longueur d'attention — plausible (une perturbation de
+1e-7 sur les logits bascule d'autant plus de jetons que l'attention est longue),
+mais **non démontré**. Le miroir KV, lui, ne pèse que 0,25 %. À instruire en isolant
+tête, projections et experts, sur un jeu de jetons strictement identique.
 
 ### La frontière du cache KV, mesurée en entier
 
