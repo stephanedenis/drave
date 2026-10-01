@@ -50708,3 +50708,24 @@ couche  journal  francais  anglais  écart J-F
 ⏵ Analyse couche par couche faite. Je consigne et je conclus.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && wc -l /tmp/routage_journal.txt; python3 - <<'PY'\np = 'reports/rapport-empreinte-memoire.md'\ns = open(p).read()\ns = s.replace('''### Le cache d'engram pour notre usage réel''',\n'''### Couche par couche : où notre journal s'écarte\ … [1896 caractères tronqués]`
+
+  ```
+122310 /tmp/routage_journal.txt
+ok
+27a642c Analyse couche par couche du journal : il se place entre le francais et l'anglais
+  ```
+
+- **bash** `{"command": "sleep 55; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && wc -l /tmp/routage_journal.txt; tail -2 /tmp/trace_journal.log; (cd drave-core && cargo test --release 2>&1 | grep -E \"^test result\")", "description": "Check trace and repo state"}`
+
+  ```
+131291 /tmp/routage_journal.txt
+2510800 jetons dans le journal
+fenêtre retenue : jetons 2000 à 6096 (on saute le préambule)
+test result: ok. 32 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.13s
+  ```
+
+### 🤖 Assistant
+
+⏵ La trace tourne encore ; l'analyse sur 1 024 jetons est déjà stable. Je fais le point final.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -m \"Journal\" 2>/dev/null; echo \"=== LIVRABLES DE LA DEMANDE ===\"; for f in reports/rapport-empreinte-memoire.md sprints/09-empreinte-memoire-ce-qui-reduit-vraiment.md tools/analyse_empreinte.py REPRISE … [532 caractères tronqués]`

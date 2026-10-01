@@ -7,12 +7,12 @@
 | Début | 2026-09-28 14:46 |
 | Durée | 75.4 h |
 | Tours | 64 |
-| Messages | 3165 |
-| Appels d'outils | 2996 |
+| Messages | 3167 |
+| Appels d'outils | 2998 |
 | Fichiers touchés | 68 |
-| Commandes | 2605 |
+| Commandes | 2607 |
 | Sous-agents | 22 |
-| Commits | 261 |
+| Commits | 262 |
 | Compactages de contexte | 4 |
 
 ## Objectifs déclarés
@@ -3161,7 +3161,7 @@ Ce dernier chiffre explique d'un coup pourquoi *aucune* piste de prédiction ne 
 
 ### Tour 64 — utilisons les logs de cette session (journal/session) pour les rejouer localement et analyser le comportement, couche pa … [94 caractères tronqués]
 
-*16 appels d'outils.* Actions notables :
+*18 appels d'outils.* Actions notables :
 
 - bash — Inventory session journal
 - bash — Tokenize journal and trace routing
@@ -3176,10 +3176,12 @@ Ce dernier chiffre explique d'un coup pourquoi *aucune* piste de prédiction ne 
 - bash — Wait for trace
 - bash — Layer-by-layer comparison of journal vs generic corpora
 - bash — Commit layer-by-layer journal analysis
+- bash — Check trace and repo state
+- … et 1 autres
 
 **Synthèse produite :**
 
-⏵ Analyse couche par couche faite. Je consigne et je conclus.
+⏵ La trace tourne encore ; l'analyse sur 1 024 jetons est déjà stable. Je fais le point final.
 
 ## 3. Travail accompli
 
@@ -3323,7 +3325,7 @@ Ce dernier chiffre explique d'un coup pourquoi *aucune* piste de prédiction ne 
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 2565 autres
+- … et 2567 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -3732,4 +3734,5 @@ Ce dernier chiffre explique d'un coup pourquoi *aucune* piste de prédiction ne 
 - Journal" 2>/dev/null; echo "=== documents de la session ==="; for f in reports/rapport-empreinte-memoire.md sprints/09-empreinte-memoire-ce-qui-reduit-vraiment.
 - Rejouer notre propre journal : notre usage ne change pas l'empreinte, la langue si  Les 28 sessions du journal (59 Mo, 2,5 M jetons) tokenisees et routees. L'em
 - Analyse couche par couche du journal : il se place entre le francais et l'anglais  Le journal demande 58,1 experts pour 90 % des appels, entre le francais (59,3
+- Journal" 2>/dev/null; echo "=== LIVRABLES DE LA DEMANDE ==="; for f in reports/rapport-empreinte-memoire.md sprints/09-empreinte-memoire-ce-qui-reduit-vraiment.
 
