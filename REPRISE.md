@@ -719,8 +719,18 @@ python3 tools/pair_factice.py 45760 896 &
 # et par lots (--lot 64) : 15,2736 — l'écart connu entre les deux ordres de sommation
 ```
 
-**Ouvert** : `mmap` pour les modèles plus gros que la RAM (DeepSeek-V4.1, 366 Go) ;
-le nœud partiel (charger UN cluster et sommer les experts entre nœuds) ; les biais
-d'experts en clusters (gpt-oss en a, refusés explicitement pour l'instant).
+# Les fichiers sont MAPPÉS : 3,3x plus rapide et 3x moins de mémoire qu'une
+# lecture complète (9,32 s / 6,35 Go contre 30,68 s / 19,20 Go sur Qwen3-30B,
+# perplexité identique). `DRAVE_MMAP=0` revient à la lecture complète.
 
-```bash
+# Un NŒUD PARTIEL ne charge que ses clusters : 2,36 Go pour un huitième des
+# experts, contre 6,33 Go pour le modèle entier.
+DRAVE_CLUSTERS=0 ./drave-core/target/release/drave \
+    /home/stephane/FastNVMe/artefacts/modeles-optimises/qwen3-30b-8clusters \
+    --ppl /tmp/ids_qwen.txt --ctx 64 --limit 8 --dense --threads 8 --lot 1
+```
+
+**Ouvert** : la SOMME des contributions entre nœuds (le nœud partiel saute les
+experts absents, mais rien n'additionne encore ce que deux nœuds calculent) ; les
+biais d'experts en clusters (gpt-oss en a, refusés explicitement) ; le
+rééquilibrage des clusters par charge et non par nombre d'experts.

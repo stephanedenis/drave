@@ -64,6 +64,8 @@ pire qu'un arrêt.
 | porte Qwen2.5-0.5B ctx 256 | **19,3885** (inchangée) |
 | `cargo test --release` | **29 verts** (20 → 29) |
 | mapping produit par le convertisseur | **identique à l'octet près** à celui dérivé du manifeste |
+| **mmap** contre lecture complète (7 jetons) | **9,32 s / 6,35 Go** contre 30,68 s / 19,20 Go — perplexité identique (799,8557) |
+| **nœud partiel** à un cluster | **2,36 Go** de mémoire (contre 6,33 Go) · perplexité 268 786 → 17 929 → 800 en ajoutant des clusters |
 
 ## Les défauts trouvés, et comment
 
@@ -133,6 +135,35 @@ mesure dit l'inverse. Une phrase de moins, un test de plus.*
 - `mapping.tsv` n'est pas encore écrit par le convertisseur ; il a été produit
   depuis le manifeste existant, ce qui a servi de vérification croisée
   (`experts[couche]` du manifeste = concaténation des clusters, accord 1,000).
+
+## Deux chantiers de plus, dans le même boxing
+
+Le sprint a débordé de son objectif initial — le lecteur multi-fichiers — parce
+que la preuve d'exécution a ouvert deux questions immédiates.
+
+**Le `mmap`.** `read_to_end` gardait une copie complète du modèle dans le tas,
+*en plus* du cache de pages : 19,20 Go de RSS pour un modèle de 18,55 Go. Les
+fichiers sont maintenant mappés (le noyau lit les pages à la demande) :
+**6,35 Go** et un chargement **3,3× plus rapide**, perplexité identique. C'est ce
+qui rendra DeepSeek-V4.1-Flash (366 Go) approchable.
+
+**Le nœud partiel.** `DRAVE_CLUSTERS=0` ne charge que `commun.gguf` et un
+cluster : **2,36 Go** contre 6,33 Go, et la perplexité décroît à mesure qu'on
+ajoute des clusters (268 786 → 17 929 → 800). Le résultat est volontairement
+dégradé — il manque la somme des contributions entre nœuds — mais le coût d'un
+nœud est mesuré, et c'est ce qui justifie le format.
+
+Ce chantier a **confirmé en vrai un défaut prédit par la revue adverse** :
+l'identifiant de cluster du mapping servait d'index direct dans le `Vec` des
+vues. Tant que les huit clusters étaient chargés, les deux coïncidaient et rien
+ne se voyait ; avec un seul cluster, le moteur est sorti du tableau
+(`index out of bounds: the len is 1 but the index is 6`). Les vues portent
+maintenant leur numéro et `Moe::ou` le cherche au lieu de le supposer.
+
+*Leçon : un défaut prédit par relecture et un défaut observé à l'exécution n'ont
+pas la même valeur, mais le premier dit où regarder. La revue avait raison sur le
+mécanisme et se trompait sur la gravité (« latent ») : il s'est déclenché dans
+l'heure.*
 
 ## Rétrospective (introspection)
 

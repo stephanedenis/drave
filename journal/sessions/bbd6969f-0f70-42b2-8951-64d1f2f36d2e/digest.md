@@ -46201,3 +46201,113 @@ gpt-oss ctx 256 lot 1 :
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -m \"mmap (3,3x plus rapide, 3x moins de mémoire) et nœud partiel (2,36 Go pour un huitième des experts)\n\nmmap : read_to_end lisait tout le fichier et en gardait une copie dans le tas, en\nplus du cache  … [1214 caractères tronqués]`
+
+  ```
+b24a2e6 mmap (3,3x plus rapide, 3x moins de mémoire) et nœud partiel (2,36 Go pour un huitième des experts)
+gpt-oss ctx 256 lot 1 :
+  ```
+
+### 🤖 Assistant
+
+⏵ Je délègue la revue adverse du nouveau code (mmap, nœud partiel) pendant que la porte tourne.
+
+- **subagent** `{"description": "Revue adverse mmap et nœud partiel", "prompt": "Tu es un relecteur adverse. Tu ne modifies AUCUN fichier du dépôt : tu lis, tu vérifies, tu rapportes. Ton travail est de trouver ce qui est FAUX, pas de confirmer ce qui va bien. Tu peux écrire uniquement dans /tmp.\n\nDépôt : /home/s … [4000 caractères tronqués]`
+
+  ```
+started subagent 6551e4dc-b73d-4df7-8fc4-b8c9fdbb0688
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat /tmp/gate_oss_final2.log; date +%H:%M", "description": "Check gate progress"}`
+
+  ```
+gpt-oss ctx 256 lot 1 : 11:57
+  ```
+
+### 🤖 Assistant
+
+⏵ Je complète le sprint avec les résultats mmap et nœud partiel.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np = 'sprints/08-un-modele-eclate-se-lit-comme-un-seul.md'\ns = open(p).read()\ns = s.replace('''| mapping produit par le convertisseur | **identique à l'octet près** à celui dérivé du manifeste |''',\n'''| mapping p … [3470 caractères tronqués]`
+
+  ```
+ok
+gpt-oss ctx 256 lot 1 :
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && tail -25 REPRISE.md | head -30; echo \"=== vérif structure ===\"; grep -c '```' REPRISE.md", "description": "Verify REPRISE structure integrity"}`
+
+  ```
+--ppl /tmp/ids_qwen.txt --ctx 64 --limit 64 --dense --threads 12 --lot 1   # 15,2789
+./drave-core/target/release/drave /home/stephane/FastNVMe/artefacts/modeles-optimises/qwen3-30b-8clusters \
+    --ppl /tmp/ids_qwen.txt --ctx 64 --limit 64 --dense --threads 12 --lot 1   # 15,2789
+# et par lots (--lot 64) : 15,2736 — l'écart connu entre les deux ordres de sommation
+```
+
+# Les fichiers sont MAPPÉS : 3,3x plus rapide et 3x moins de mémoire qu'une
+# lecture complète (9,32 s / 6,35 Go contre 30,68 s / 19,20 Go sur Qwen3-30B,
+# perplexité identique). `DRAVE_MMAP=0` revient à la lecture complète.
+
+# Un NŒUD PARTIEL ne charge que ses clusters : 2,36 Go pour un huitième des
+# experts, contre 6,33 Go pour le modèle entier.
+DRAVE_CLUSTERS=0 ./drave-core/target/release/drave \
+    /home/stephane/FastNVMe/artefacts/modeles-optimises/qwen3-30b-8clusters \
+    --ppl /tmp/ids_qwen.txt --ctx 64 --limit 8 --dense --threads 8 --lot 1
+```
+
+**Ouvert** : la SOMME des contributions entre nœuds (le nœud partiel saute les
+experts absents, mais rien n'additionne encore ce que deux nœuds calculent) ; les
+biais d'experts en clusters (gpt-oss en a, refusés explicitement) ; le
+rééquilibrage des clusters par ch
+… [78 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && tail -8 REPRISE.md | cat -A | sed 's/\\$$//' | head -10", "description": "Inspect REPRISE tail precisely"}`
+
+  ```
+**Ouvert** : la SOMME des contributions entre nM-EM-^Suds (le nM-EM-^Sud partiel saute les
+experts absents, mais rien n'additionne encore ce que deux nM-EM-^Suds calculent) ; les
+biais d'experts en clusters (gpt-oss en a, refusM-CM-)s explicitement) ; le
+rM-CM-)M-CM-)quilibrage des clusters par charge et non par nombre d'experts.
+
+```bash
+
+```bash
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np = 'REPRISE.md'\ns = open(p).read()\ns = s.rstrip('\\n')\n# Deux ouvertures de bloc orphelines en fin de fichier.\nif s.endswith('```bash\\n\\n```bash'):\n    s = s[:-len('\\n\\n```bash')]\nprint(repr(s[-120:]))\no … [164 caractères tronqués]`
+
+  ```
+"s (gpt-oss en a, refusés explicitement) ; le\nrééquilibrage des clusters par charge et non par nombre d'experts.\n\n```bash"
+[stderr]
+bash: -c: line 11: unexpected EOF while looking for matching `"'
+[exit code: 2]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 << 'PYEOF'\np = 'REPRISE.md'\ns = open(p).read().rstrip('\\n')\nif s.endswith('```bash'):\n    s = s[:-7].rstrip('\\n')\nopen(p, 'w').write(s + '\\n')\nPYEOF\ntail -5 REPRISE.md; echo \"=== fences ===\"; grep -c '^```' REPRIS … [57 caractères tronqués]`
+
+  ```
+**Ouvert** : la SOMME des contributions entre nœuds (le nœud partiel saute les
+experts absents, mais rien n'additionne encore ce que deux nœuds calculent) ; les
+biais d'experts en clusters (gpt-oss en a, refusés explicitement) ; le
+rééquilibrage des clusters par charge et non par nombre d'experts.
+=== fences ===
+12
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c \"\ns = open('REPRISE.md').read()\nn = s.count('\\`\\`\\`')\nprint('fences:', n, 'paire' if n % 2 == 0 else 'IMPAIR — à corriger')\nimport re\nprint('lignes:', len(s.split(chr(10))))\n\"; grep -n \"^## \\|^# \" REPRISE.md  … [91 caractères tronqués]`
+
+  ```
+fences: 12 paire
+lignes: 737
+713:# L'ÉPREUVE décisive : le modèle éclaté rend le MÊME chiffre que l'original.
+714:# (mêmes jetons, même contexte, chemin par jeton)
+719:# et par lots (--lot 64) : 15,2736 — l'écart connu entre les deux ordres de sommation
+722:# Les fichiers sont MAPPÉS : 3,3x plus rapide et 3x moins de mémoire qu'une
+723:# lecture complète (9,32 s / 6,35 Go contre 30,68 s / 19,20 Go sur Qwen3-30B,
+724:# perplexité identique). `DRAVE_MMAP=0` revient à la lecture complète.
+726:# Un NŒUD PARTIEL ne charge que ses clusters : 2,36 Go pour un huitième des
+727:# experts, contre 6,33 Go pour le modèle entier.
+gpt-oss ctx 256 lot 1 :
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -m \"Journal du bloc : mmap, nœud partiel, et le défaut prédit par la revue confirmé en vrai\n\nSprint 08 complété, rapport de mesure écrit, REPRISE.md à jour avec les commandes\nde reproduction. Le défaut … [262 caractères tronqués]`

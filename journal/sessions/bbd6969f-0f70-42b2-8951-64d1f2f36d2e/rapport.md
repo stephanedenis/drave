@@ -7,12 +7,12 @@
 | Début | 2026-09-28 14:46 |
 | Durée | 69.2 h |
 | Tours | 51 |
-| Messages | 2921 |
-| Appels d'outils | 2777 |
+| Messages | 2929 |
+| Appels d'outils | 2786 |
 | Fichiers touchés | 63 |
-| Commandes | 2393 |
-| Sous-agents | 21 |
-| Commits | 241 |
+| Commandes | 2401 |
+| Sous-agents | 22 |
+| Commits | 242 |
 | Compactages de contexte | 4 |
 
 ## Objectifs déclarés
@@ -2400,7 +2400,7 @@ Les téléchargements avancent en parallèle : **DeepSeek-V4.1-Flash 68 %** (249
 
 ### Tour 51 — continue jusqu'à 13h HAE
 
-*214 appels d'outils.* Actions notables :
+*223 appels d'outils.* Actions notables :
 
 - bash — Check time and running processes
 - job_list
@@ -2416,11 +2416,11 @@ Les téléchargements avancent en parallèle : **DeepSeek-V4.1-Flash 68 %** (249
 - todo_write
 - bash — Count buffer accesses in gguf.rs
 - bash — Map functions and base computations
-- … et 200 autres
+- … et 209 autres
 
 **Synthèse produite :**
 
-⏵ **Toutes les portes vertes** : gpt-oss 15,1757 · Qwen 19,3885. Je relance gpt-oss sur le binaire final (mmap).
+⏵ Je complète le sprint avec les résultats mmap et nœud partiel.
 
 ## 3. Travail accompli
 
@@ -2515,6 +2515,7 @@ Les téléchargements avancent en parallèle : **DeepSeek-V4.1-Flash 68 %** (249
 - tour 48 — Revue ciblée sprint 6
 - tour 48 — Revue de clôture de la nuit
 - tour 51 — Revue adverse du lecteur multi-fichiers
+- tour 51 — Revue adverse mmap et nœud partiel
 
 ### Commandes exécutées (échantillon)
 
@@ -2558,7 +2559,7 @@ Les téléchargements avancent en parallèle : **DeepSeek-V4.1-Flash 68 %** (249
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 2353 autres
+- … et 2361 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2686,7 +2687,7 @@ Les téléchargements avancent en parallèle : **DeepSeek-V4.1-Flash 68 %** (249
 
 ## 5. Erreurs rencontrées
 
-146 sorties en erreur ou divergentes. Les premières :
+147 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : a8f2635f8 docs: record which models this box is good at, and why src/llama-hparams.cpp:8:void llama_hparams::set_swa_pattern(uint32_t n_pattern, bool dense_first) { src/llama-hparams.h:308:    void se
 - **T1** : 511 tokens notés — perplexité cumulée 247.031  (4.9 tok/s) === perplexité 247.0308 sur 511 tokens (0 événements, 104.5 s) ===  ### B3 harmony assistant 511 --- ref --- 0.0 0.0 0:00 ls: cannot access '
@@ -2947,4 +2948,5 @@ Les téléchargements avancent en parallèle : **DeepSeek-V4.1-Flash 68 %** (249
 - Un modèle éclaté se lit comme un seul : lecteur multi-fichiers, shards et clusters  Le lecteur GGUF ne connaissait qu'un fichier (un tampon, un début de données
 - Clusters exécutables : origine 15,2789 = clusters 15,2789, et les défauts trouvés en chemin  L'épreuve appariée (mêmes jetons, même contexte, chemin par jeton) 
 - mmap (3,3x plus rapide, 3x moins de mémoire) et nœud partiel (2,36 Go pour un huitième des experts)  mmap : read_to_end lisait tout le fichier et en gardait une
+- Journal du bloc : mmap, nœud partiel, et le défaut prédit par la revue confirmé en vrai  Sprint 08 complété, rapport de mesure écrit, REPRISE.md à jour avec les
 
