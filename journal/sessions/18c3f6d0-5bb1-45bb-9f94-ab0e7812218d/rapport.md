@@ -7,10 +7,10 @@
 | Début | 2026-10-01 05:20 |
 | Durée | 0.1 h |
 | Tours | 1 |
-| Messages | 23 |
-| Appels d'outils | 35 |
+| Messages | 26 |
+| Appels d'outils | 38 |
 | Fichiers touchés | 0 |
-| Commandes | 23 |
+| Commandes | 24 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -23,7 +23,7 @@
 
 ### Tour 1 — Relecture ADVERSARIALE ciblée (10 minutes maximum) dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet. Tu vér … [2568 caractères tronqués]
 
-*35 appels d'outils.* Actions notables :
+*38 appels d'outils.* Actions notables :
 
 - bash — Check logs exist and sizes
 - bash — Inspect repo git log and status
@@ -39,11 +39,29 @@
 - bash — Check tool margin change in git history
 - bash — Find sprint 6 evidence lines in digest
 - bash — List logs modified during sprint 6 window
-- … et 11 autres
+- … et 13 autres
 
 **Synthèse produite :**
 
-⏵ Reading the logs and the aiguille tool to verify the three claims
+⏵ Rédaction du verdict final
+
+**A1 — 8/9 en dense, fenêtre 3 (4731) échoue — CONFIRMÉE.**
+- s6b.log : 8 « oui », 1 « NON » (ligne 4, prompt 4731) ; s6.log : mêmes 9 verdicts et mêmes longueurs (4114…4081) → verdicts déterministes, durées non (73,4 vs 76,1 s, etc.).
+- Réserve : s6.log n'est pas la 1ʳᵉ tentative — la vraie (03:38) n'a écrit que l'en-tête (grep sans `--line-buffered`) ; le déterminisme est établi entre les runs 2 et 3.
+- Compteur « fenêtres distinctes » : **peut mentir** — `fenetres.add(offset)` (aiguille.py:182) note l'offset *avant* l'appel, alors que `sonde()` le remet à 0 si `offset+besoin > len(corpus)` (l.63-64) ; il compte des offsets, jamais les invites. Ex. : à 16 384 (pas 69 213), la 6ᵉ sonde (offset 346 065) rejoue la fenêtre 0 et l'outil affiche quand même 6/6. Ici il est honnête : offsets 0…140 824, pas 17 603, max+pas = 158 427 ≤ 353 778 → aucun repli, 9 tranches disjointes.
+
+**A2 — fenêtre 1 : dense oui, k=256 NON — CONFIRMÉE au niveau commande, réserve de portée.**
+- Même invite (4114 jetons) dans les deux séries des deux logs ; commandes identiques sauf `--attn-topk 256 --gpu-topk` (aig_s6.sh l.24-25).
+- Réserve : le moteur dit « --attn-topk 256 est IGNORÉ en mode lot (--lot 256) : l'attention par lots est DENSE » → préremplissage dense dans les deux, l'élagage n'agit que sur les 24 jetons décodés (le rapport le dit l.252) ; le 246 s vs 75 s n'est pas l'élagage mais la perte du chemin groupé GPU.
+- Contre-exemple interne : fenêtre 2 en k=256 CPU = **oui** (230,4 s dans s6.log) → l'échec n'est pas systématique.
+
+**A3 — prompt > contexte = facteur 10-20 en silence — SOUTENUE, voire sous-estimée.**
+- Les deux tuées sont bien la fenêtre 3 : invites reconstruites = offset 35 206 → « ous ditty , " while Chris Younie… », identiques dans le journal à 03:57 et 04:20:45.
+- Durées : 04:20:45 ELAPSED 13:23 ; 04:03:17 ELAPSED 22:38 (~23 min à la mort).
+- Aucun autre coupable visible : à 03:57 la charge 19,2 vient du drave lui-même (1689 % CPU = 16,9 cœurs), GPU 20 %/14 %, seuls autres actifs node/gods-eye 33 % et plasmashell 19,5 % ; et dans le **même** run à --ctx 4608, les fenêtres 1 et 2 (4114/3996 ≤ 4608) finissent en 74,0/71,7 s.
+- Ma commande bornée (même invite, `--ctx 4608`, `--n 4`, timeout 240) : **NON FINI après 235,6 s** (référence : 85,1 s à `--ctx 5120` avec n=24).
+- Mécanisme visible : `model.rs:1117-1120` — `while cap < besoin { cap = (cap*2).min(self.ctx); }` ne termine jamais si `besoin > ctx` ; le garde-fou « Refus EXPL
+… [1232 caractères tronqués]
 
 ## 3. Travail accompli
 
@@ -77,6 +95,7 @@
 - **T1** Check engine for prompt-over-context warning
 - **T1** Check machine state after confirmation run
 - **T1** Look for context clamping in engine
+- **T1** Check KV cache growth loop and assertion
 
 ## 4. Mesures et résultats marquants
 

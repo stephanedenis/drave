@@ -39759,3 +39759,64 @@ cérémonie : nuance du facteur
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -m \"Nuance : le facteur de ralentissement est un minorant (les deux exécutions à ctx 4608 n'ont jamais fini ; la même fenêtre rend en 85,1 s à ctx 5120)\" && sleep 480; date +%H:%M:%S; ./tools/sprint.sh s … [91 caractères tronqués]`
+
+  ```
+05:33:29
+── Sprint 6 ─────────────────────────────────────────────
+- **Début** : 03:38 · **Fin prévue** : 05:38 (boxing de 120 min)
+   temps : 05:33 · reste 0 h 04
+  ```
+
+### 👤 Utilisateur
+
+Agent 18c3f6d0-5bb1-45bb-9f94-ab0e7812218d sent a message:
+Relecture adversariale sprint 6 — 3 affirmations, aucun fichier modifié.
+
+A1 « 8/9 en dense, fenêtre 3 (4731) échoue » : CONFIRMÉE. s6b.log = 9 lignes, 8 oui, le seul NON = ligne 4, prompt 4731. s6.log = mêmes 9 verdicts, mêmes longueurs de prompt (4114/3996/4731/4664/4096/4046/4152/4013/4081) ; seules les durées diffèrent (73,4 vs 76,1 etc.) → verdicts déterministes, chronos non. Nuance : s6.log n'est pas la 1re tentative, la vraie (03:38) n'a écrit que l'en-tête (grep sans --line-buffered) ; le déterminisme est établi entre les runs 2 et 3.
+Compteur « fenêtres distinctes » : PEUT MENTIR en général. `fenetres.add(offset)` (aiguille.py:182) enregistre l'offset AVANT l'appel, alors que `sonde()` le remet à 0 si `offset+besoin > len(corpus)` (l.63-64) ; il compte des offsets, jamais les invites. Ex. : à 16 384 (pas 69 213), la 6e sonde (offset 346 065) rejoue la fenêtre 0 et l'outil dira quand même 6/6. Ici il est honnête : offsets 0…140 824, pas 17 603, max+pas = 158 427 ≤ 353 778 → aucun repli, 9 tranches disjointes.
+
+A2 « fenêtre 1 : dense oui, k=256 NON, seul l'élagage change » : CONFIRMÉE au niveau commande, réserve de portée. Même invite (4114 jetons) dans les deux séries des deux logs ; commandes identiques sauf `--attn-topk 256 --gpu-topk` (aig_s6.sh l.24-25), `--n 24 --lot 256 --gpu-kv` inchangés. Mais le moteur dit « --attn-topk 256 est IGNORÉ en mode lot (--lot 256) : l'attention par lots est DENSE » → le préremplissage est dense dans les deux ; l'élagage n'agit que sur les 24 jetons décodés (le rapport le dit l.252). Et le 246 s vs 75 s n'est pas l'élagage mais la perte du chemin groupé GPU. Contre-exemple interne : fenêtre 2 en k=256 CPU = oui (230,4 s) dans s6.log → l'échec n'est pas systématique.
+
+A3 « prompt > contexte = facteur 10-20 en silence » : SOUTENUE, voire sous-estimée. Les deux tuées sont bien la fenêtre 3 : invites reconstruites = offset 35 206 → « ous ditty , " while Chris Younie… », identiques dans le journal à 03:57 et 04:20:45. Durées confirmées : 04:20:45 ELAPSED 13:23 ; 04:03:17 ELAPSED 22:38 (~23 min à la mort). Pas d'autre coupable visible : à 03:57 la charge 19,2 vient du drave lui-même (1689 % CPU = 16,9 cœurs), GPU 20 %/14 %, seuls autres actifs node/gods-eye 33 % et plasmashell 19,5 % ; et dans le MÊME run à --ctx 4608, les fenêtres 1 et 2 (4114/3996 ≤ 4608) finissent en 74,0/71,7 s. Ma commande bornée (même invite, --ctx 4608, --n 4, timeout 240) : NON FINI après 235,6 s (référence 85,1 s à --ctx 5120 avec n=24). Mécanisme visible : model.rs:1117-1120 `while cap < besoin { cap = (cap*2).min(self.ctx) }` ne termine jamais si besoin > ctx ; le garde-fou « Refus EXPLICITE plutôt qu'une boucle sans fin » n'existe que dans le chemin distribué (main.rs:2050-2057). Le CPU à ~1692 % colle à une boucle infinie dans les workers parallèles : c'est un livelock, pas un simple « ralentissement ». « En silence » est inféré (processus encore vivant à 1689 % ; le grep du runner ne garde que les lignes de sonde, un message moteur aurait été masqué).
+
+Écarts de chiffre rapport ↔ logs :
+1. Rapport l.202/237 : k=256 « 1 seule fenêtre (échec) », fenêtre 2 « (non mesuré) » — mais /tmp/aiguille_s6.log l.12-14 contient DEUX sondes k=256 : fenêtre 1 NON (243,1 s) et fenêtre 2 **oui** (230,4 s). (Série CPU, pas la série GPU, mais le compte global sous-déclare le log.)
+2. Facteur : 13 min (808 s)/85,1 = 9,5×, pas 10 ; 22 min 40 (1360 s)/85,1 = 16,0×. « 10 à 20 » surestime le plancher (le rapport le dit « minorant », mais 10 n'est pas atteint).
+3. Rapport l.194 cite « fenêtres distinctes utilisées : 9 sur 9 » ; le log dit « 9 sur 9 sondes » (citation tronquée, cosmétique).
+4. « 9 fenêtres à 4 096 clés » : prompts réels 3 996–4 731 ; fenêtres 3 et 4 dépassent 4 096 (4 731, 4 664) — 4 096 est la cible.
+5. s6b.log est partiel (k=256 GPU : 1 sonde, pas de série k=1024, pas de « === S6 FINI === ») : cohérent avec le rapport, pas avec le message de commit « 9 fenêtres × 3 chemins ».
+
+### 👤 Utilisateur
+
+Background subagent 18c3f6d0-5bb1-45bb-9f94-ab0e7812218d finished and will do no further work unless you send it more.
+Its closing message:
+⏵ Rédaction du verdict final
+
+**A1 — 8/9 en dense, fenêtre 3 (4731) échoue — CONFIRMÉE.**
+- s6b.log : 8 « oui », 1 « NON » (ligne 4, prompt 4731) ; s6.log : mêmes 9 verdicts et mêmes longueurs (4114…4081) → verdicts déterministes, durées non (73,4 vs 76,1 s, etc.).
+- Réserve : s6.log n'est pas la 1ʳᵉ tentative — la vraie (03:38) n'a écrit que l'en-tête (grep sans `--line-buffered`) ; le déterminisme est établi entre les runs 2 et 3.
+- Compteur « fenêtres distinctes » : **peut mentir** — `fenetres.add(offset)` (aiguille.py:182) note l'offset *avant* l'appel, alors que `sonde()` le remet à 0 si `offset+besoin > len(corpus)` (l.63-64) ; il compte des offsets, jamais les invites. Ex. : à 16 384 (pas 69 213), la 6ᵉ sonde (offset 346 065) rejoue la fenêtre 0 et l'outil affiche quand même 6/6. Ici il est honnête : offsets 0…140 824, pas 17 603, max+pas = 158 427 ≤ 353 778 → aucun repli, 9 tranches disjointes.
+
+**A2 — fenêtre 1 : dense oui, k=256 NON — CONFIRMÉE au niveau commande, réserve de portée.**
+- Même invite (4114 jetons) dans les deux séries des deux logs ; commandes identiques sauf `--attn-topk 256 --gpu-topk` (aig_s6.sh l.24-25).
+- Réserve : le moteur dit « --attn-topk 256 est IGNORÉ en mode lot (--lot 256) : l'attention par lots est DENSE » → préremplissage dense dans les deux, l'élagage n'agit que sur les 24 jetons décodés (le rapport le dit l.252) ; le 246 s vs 75 s n'est pas l'élagage mais la perte du chemin groupé GPU.
+- Contre-exemple interne : fenêtre 2 en k=256 CPU = **oui** (230,4 s dans s6.log) → l'échec n'est pas systématique.
+
+**A3 — prompt > contexte = facteur 10-20 en silence — SOUTENUE, voire sous-estimée.**
+- Les deux tuées sont bien la fenêtre 3 : invites reconstruites = offset 35 206 → « ous ditty , " while Chris Younie… », identiques dans le journal à 03:57 et 04:20:45.
+- Durées : 04:20:45 ELAPSED 13:23 ; 04:03:17 ELAPSED 22:38 (~23 min à la mort).
+- Aucun autre coupable visible : à 03:57 la charge 19,2 vient du drave lui-même (1689 % CPU = 16,9 cœurs), GPU 20 %/14 %, seuls autres actifs node/gods-eye 33 % et plasmashell 19,5 % ; et dans le **même** run à --ctx 4608, les fenêtres 1 et 2 (4114/3996 ≤ 4608) finissent en 74,0/71,7 s.
+- Ma commande bornée (même invite, `--ctx 4608`, `--n 4`, timeout 240) : **NON FINI après 235,6 s** (référence : 85,1 s à `--ctx 5120` avec n=24).
+- Mécanisme visible : `model.rs:1117-1120` — `while cap < besoin { cap = (cap*2).min(self.ctx); }` ne termine jamais si `besoin > ctx` ; le garde-fou « Refus EXPLICITE plutôt qu'une boucle sans fin » n'existe que dans le chemin distribué (main.rs:2050-2057). CPU ~1692 % = boucle infinie dans les workers parallèles → livelock, pas simple « ralentissement ».
+- « En silence » : inféré (processus encore vivant à 1689 % ; le grep du runner ne garde que les lignes de sonde, un message moteur aurait été masqué).
+
+**Écarts de chiffre rapport ↔ logs**
+1. Rapport l.202/237 : k=256 « 1 seule fenêtre (échec) », fenêtre 2 « (non mesuré) » — or `/tmp/aiguille_s6.log` l.12-14 contient **deux** sondes k=256 : fenêtre 1 NON (243,1 s) et fenêtre 2 **oui** (230,4 s) — série CPU, mais le compte global sous-déclare le log.
+2. Facteur : 808 s/85,1 = **9,5×** (pas 10) ; 1360 s/85,1 = **16,0×**. « 10 à 20 » surestime le plancher.
+3. Rapport l.194 cite « 9 sur 9 » ; le log dit « 9 sur 9 **sondes** » (citation tronquée, cosmétique).
+4. « 9 fenêtres à 4 096 clés » : prompts réels 3 996–4 731 ; fenêtres 3 et 4 dépassent 4 096 (4 731, 4 664).
+5. s6b.log est partiel (k=256 GPU : 1 sonde ; pas de série k=1024 ; pas de « === S6 FINI === ») — cohérent avec le rapport, pas avec le message de commit « 9 fenêtres × 3 chemins ».
+
+Aucun fichier modifié ; seule commande lancée : la vérification bornée à 240 s.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\ndef patch(p, paires):\n    s=open(p).read()\n    for v,n,nom in paires:\n        assert s.count(v)==1, f\"{p}::{nom}::{s.count(v)}\"\n        s=s.replace(v,n,1)\n    open(p,'w').write(s); print(f\"{p} : {len(paires) … [5073 caractères tronqués]`

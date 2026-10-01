@@ -191,8 +191,8 @@ pour l'élagage à long contexte, sans être une courbe. Source : `/tmp/aiguille
 ### Le taux, par fenêtre (sprint 6, mesure partielle)
 
 Neuf fenêtres **contiguës** (l'outil avance d'un « besoin » de sonde : « fenêtres
-distinctes utilisées : 9 sur 9 »), 4 096 clés, profondeur 0,5, `--lot 256
---gpu-kv` — une sonde tombe de ~250 s à 75 s, ce qui rend la grille possible dans un
+distinctes utilisées : 9 sur 9 **sondes** »), cible de 4 096 clés (prompts réels de
+3 996 à 4 731 jetons), profondeur 0,5, `--lot 256 --gpu-kv` — une sonde tombe de ~250 s à 75 s, ce qui rend la grille possible dans un
 box ; toutes les configurations partagent ce chemin.
 
 | fenêtre | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 |
@@ -200,6 +200,7 @@ box ; toutes les configurations partagent ce chemin.
 | jetons du prompt | 4114 | 3996 | **4731** | 4664 | 4096 | 4046 | 4152 | 4013 | 4081 |
 | attention complète | oui | oui | **NON** | oui | oui | oui | oui | oui | oui |
 | k = 256 (GPU) | **NON** | (non mesuré) | | | | | | | |
+| k = 256 (CPU, autre série) | **NON** | **oui** | — | — | — | — | — | — | — |
 
 ⚠️ **Deux lectures, et il faut les deux** :
 
@@ -208,8 +209,11 @@ box ; toutes les configurations partagent ce chemin.
    difficulté propre, et une comparaison honnête est **appariée** (même fenêtre,
    deux chemins), pas un taux global ;
 2. **sur la fenêtre 1, la comparaison appariée est nette** : l'attention complète
-   retrouve l'information, `k = 256` ne la retrouve pas — même invite, mêmes
-   réglages, seul l'élagage change.
+   retrouve l'information, `k = 256` ne la retrouve pas — même invite (4 114
+   jetons), mêmes réglages, seule la ligne `--attn-topk 256 --gpu-topk` change. La
+   portée reste celle du DÉCODAGE (le préremplissage est dense dans les deux, le
+   moteur le dit) ; et **l'échec n'est pas systématique** : dans une autre série
+   (k = 256 sur CPU, `/tmp/aiguille_s6.log`), la fenêtre 2 RÉUSSIT (230,4 s).
 
 La série `k = 256` n'a pas pu être terminée dans le box : avec `--attn-topk`, le
 PRÉREMPLISSAGE perd l'accélération GPU (le chemin groupé exige `attn_topk == 0`) et
@@ -241,12 +245,19 @@ cette mesure désigne comme le prochain chantier, et c'est un résultat en soi.
 
 La fenêtre 3 tokenise à **4 731 jetons** là où la cible était 4 096, et l'outil
 passait `--ctx 4608` : le prompt dépassait le contexte. Le moteur ne l'a pas refusé
-— il est devenu **beaucoup plus lent en silence** : les deux exécutions de cette
-fenêtre à `--ctx 4608` ont été tuées après **13 et 23 minutes** sans avoir fini,
-là où la MÊME fenêtre rend en **85,1 s** avec `--ctx 5120` (marge `ctx + 1024`,
-correctif de l'outil). Le facteur « 10 à 20 » est donc un minorant observé, pas une
-mesure complète : ces exécutions n'ont jamais terminé. À corriger dans le moteur —
-un prompt plus long que le contexte devrait être tronqué proprement ou refusé.
+— il est resté **bloqué** : les deux exécutions de cette fenêtre ont été tuées après
+**13 min 23 s et 22 min 38 s** à ~1 700 % de CPU, là où la MÊME fenêtre rend en
+**85,1 s** avec `--ctx 5120` (marge `ctx + 1024`, correctif de l'outil). Une
+vérification bornée (même invite, `--ctx 4608`, `--n 4`, `timeout 240`) n'a pas
+fini non plus.
+
+**Ce n'est pas un ralentissement, c'est un LIVELOCK**, et le mécanisme est visible
+dans le code : `KvCache::assurer` fait `while cap < besoin { cap = (cap * 2).min(self.ctx) }`
+(`model.rs:1117`) — si `besoin > ctx`, `cap` plafonne à `ctx` et la boucle ne
+termine **jamais**. Le même défaut a été corrigé côté GPU au sprint 2
+(`kv_assurer`, D7 d'une relecture) ; le chemin CPU, lui, est resté. Un prompt plus
+long que le contexte devrait être **tronqué proprement ou refusé** : c'est le
+premier chantier du sprint 7.
 * **k plus grand : mesuré depuis** (512 et 1 024, section « Suite ») — le seuil est
   entre 12,5 % et 25 % du contexte sur ce cas.
 * le préremplissage reste DENSE avec `--lot > 1` : la mesure porte sur le décodage.

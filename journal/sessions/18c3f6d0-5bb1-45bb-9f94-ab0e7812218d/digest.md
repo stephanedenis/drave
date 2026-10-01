@@ -761,3 +761,136 @@ drave-core/src/model.rs:1420:            // dépasse
  3.2  7-10:08:02 node-MainThread
   ```
 
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/main.rs", "limit": 30, "offset": 2040}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/main.rs</path>
+<type>file</type>
+<content>
+2040:                 // seul. C'est ce qui manquait — 798,3 au lieu de 18,2.
+2041:                 mdl.flux_brut = true;
+2042:                 // Les DEUX modes de lot : 3 (dense f32) et 4 (listes). Oublier le
+2043:                 // second faisait tomber un flux de listes dans le chemin « un seul
+2044:                 // vecteur » et paniquait sur `en_dense` — attrapé au premier essai.
+2045:                 if f.mode == MODE_LOT || f.mode == MODE_LOT_LISTES {
+2046:                     // Préremplissage réparti : N états d'un coup. Le nœud n'a pas
+2047:                     // les identifiants de jetons — il n'en a pas besoin, les
+2048:                     // états entrent directement dans SA première couche.
+2049:                     let t = f.n;
+2050:                     // Refus EXPLICITE plutôt qu'une boucle sans fin : au-delà de
+2051:                     // son contexte, `KvCache::assurer` ne peut pas agrandir et
+2052:                     // tournerait indéfiniment (relevé dans `docs/plan-prefill-reparti.md`).
+2053:                     if f.pos as usize + t > mdl.ct
+… [1186 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rn \"ctx\\b\" --include=*.rs drave-core/src/main.rs | grep -in \"refus\\|erreur\\|Err(\\|limite\" | head -10; echo \"=== infer ctx clamp ===\"; grep -rn \"min(self.ctx\\|min(ctx\\|\\.ctx)\" --include=*.rs drave-core/src/model.r … [68 caractères tronqués]`
+
+  ```
+21:2114:    let limite = opt.limit.max(1).min(ctx);
+=== infer ctx clamp ===
+1120:        while cap < besoin { cap = (cap * 2).min(self.ctx); }
+1690:                             machines.len(), caches_kv.first().map(|c| c.ctx).unwrap_or(0));
+3016:        assert!(pos < self.ctx, "contexte dépassé ({pos} ≥ {})", self.ctx);
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs", "limit": 40, "offset": 1100}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs</path>
+<type>file</type>
+<content>
+1100:         let nb = hd.div_ceil(32).max(1);
+1101:         let (k_f32, v_f32) = (std::env::var("DRAVE_KV_K_F32").is_ok(),
+1102:                               std::env::var("DRAVE_KV_V_F32").is_ok());
+1103:         let k_f16 = bits < 32 && std::env::var("DRAVE_KV_K_F16").is_ok();
+1104:         let mut c = KvCache { bits, n_kv, ctx, cap: 0, hd,
+1105:                               f16_avant: std::env::var("DRAVE_KV_F16").is_ok(), k_f32, v_f32,
+1106:                               k_f16, kp: Vec::new(),
+1107:                               kf: Vec::new(), vf: Vec::new(),
+1108:                               kq: Vec::new(), vq: Vec::new(), sk: Vec::new(), sv: Vec::new(),
+1109:                               nb };
+1110:         c.assurer(ctx.min(1024));
+1111:         c
+1112:     }
+1113: 
+1114:     /// Garantit `besoin` positions allouées (doublement, avec recopie : les
+1115:     /// positions déjà écrites le restent). Chaque tête KV a son bloc contigu,
+1116:     /// donc la recopie se fait tête par tête.
+1117:     pub fn assurer(&mut self, besoin: usize) {
+1118:         if besoi
+… [1141 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '3005,3025p' drave-core/src/model.rs; echo \"=== assurer callers ===\"; grep -rn \"assurer(\" --include=*.rs drave-core/src | head", "description": "Check KV cache growth loop and assertion"}`
+
+  ```
+for o in 0..v {
+            let ligne = self.g.row_f32("token_embd.weight", o, h);
+            let mut acc = 0f32;
+            for i in 0..h { acc += ligne[i] * hn[i]; }
+            out[o] = acc;
+        }
+        out
+    }
+
+    /// Un token, une position. Retourne l'état caché après la dernière norme.
+    pub fn forward(&mut self, tok: u32, pos: usize) -> Vec<f32> {
+        assert!(pos < self.ctx, "contexte dépassé ({pos} ≥ {})", self.ctx);
+        self.jeton_trace += 1;
+        // lus AVANT l'emprunt destructuré : la parcimonie par projection
+        let tkp = self.act_topk_proj;
+        let tkg = self.act_topk;
+        let tk = |p: usize| if tkp[p] > 0 { tkp[p] } else { tkg };
+        // Lus AVANT l'emprunt destructuré (comme la parcimonie par projection).
+        let largeur_profil = self.cfg.ffn.max(self.cfg.ffn_exp);
+        self.profil_jetons += 1;
+        let Model { g, cfg, layers, out_norm, pool, kv, events, attn_events, kv_gpu,
+=== assurer callers ===
+drave-core/src/model.rs:1110:        c.assurer(ctx.min(1024));
+drave-core/src/model.rs:1117:    pub fn assurer(&mut self, besoin: usize) {
+drave-core/src/model.rs:1201:        if pos + 1 > self.cap { self.assurer(pos + 1); 
+… [691 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Verdicts ready — sending the self-contained result to the parent agent
+
+- **send_message** `{"agent_id": "bbd6969f-0f70-42b2-8951-64d1f2f36d2e", "message": "Relecture adversariale sprint 6 — 3 affirmations, aucun fichier modifié.\n\nA1 « 8/9 en dense, fenêtre 3 (4731) échoue » : CONFIRMÉE. s6b.log = 9 lignes, 8 oui, le seul NON = ligne 4, prompt 4731. s6.log = mêmes 9 verdicts, mêmes longu … [3740 caractères tronqués]`
+
+  ```
+message delivered to agent bbd6969f-0f70-42b2-8951-64d1f2f36d2e
+  ```
+
+### 🤖 Assistant
+
+⏵ Rédaction du verdict final
+
+**A1 — 8/9 en dense, fenêtre 3 (4731) échoue — CONFIRMÉE.**
+- s6b.log : 8 « oui », 1 « NON » (ligne 4, prompt 4731) ; s6.log : mêmes 9 verdicts et mêmes longueurs (4114…4081) → verdicts déterministes, durées non (73,4 vs 76,1 s, etc.).
+- Réserve : s6.log n'est pas la 1ʳᵉ tentative — la vraie (03:38) n'a écrit que l'en-tête (grep sans `--line-buffered`) ; le déterminisme est établi entre les runs 2 et 3.
+- Compteur « fenêtres distinctes » : **peut mentir** — `fenetres.add(offset)` (aiguille.py:182) note l'offset *avant* l'appel, alors que `sonde()` le remet à 0 si `offset+besoin > len(corpus)` (l.63-64) ; il compte des offsets, jamais les invites. Ex. : à 16 384 (pas 69 213), la 6ᵉ sonde (offset 346 065) rejoue la fenêtre 0 et l'outil affiche quand même 6/6. Ici il est honnête : offsets 0…140 824, pas 17 603, max+pas = 158 427 ≤ 353 778 → aucun repli, 9 tranches disjointes.
+
+**A2 — fenêtre 1 : dense oui, k=256 NON — CONFIRMÉE au niveau commande, réserve de portée.**
+- Même invite (4114 jetons) dans les deux séries des deux logs ; commandes identiques sauf `--attn-topk 256 --gpu-topk` (aig_s6.sh l.24-25).
+- Réserve : le moteur dit « --attn-topk 256 est IGNORÉ en mode lot (--lot 256) : l'attention par lots est DENSE » → préremplissage dense dans les deux, l'élagage n'agit que sur les 24 jetons décodés (le rapport le dit l.252) ; le 246 s vs 75 s n'est pas l'élagage mais la perte du chemin groupé GPU.
+- Contre-exemple interne : fenêtre 2 en k=256 CPU = **oui** (230,4 s dans s6.log) → l'échec n'est pas systématique.
+
+**A3 — prompt > contexte = facteur 10-20 en silence — SOUTENUE, voire sous-estimée.**
+- Les deux tuées sont bien la fenêtre 3 : invites reconstruites = offset 35 206 → « ous ditty , " while Chris Younie… », identiques dans le journal à 03:57 et 04:20:45.
+- Durées : 04:20:45 ELAPSED 13:23 ; 04:03:17 ELAPSED 22:38 (~23 min à la mort).
+- Aucun autre coupable visible : à 03:57 la charge 19,2 vient du drave lui-même (1689 % CPU = 16,9 cœurs), GPU 20 %/14 %, seuls autres actifs node/gods-eye 33 % et plasmashell 19,5 % ; et dans le **même** run à --ctx 4608, les fenêtres 1 et 2 (4114/3996 ≤ 4608) finissent en 74,0/71,7 s.
+- Ma commande bornée (même invite, `--ctx 4608`, `--n 4`, timeout 240) : **NON FINI après 235,6 s** (référence : 85,1 s à `--ctx 5120` avec n=24).
+- Mécanisme visible : `model.rs:1117-1120` — `while cap < besoin { cap = (cap*2).min(self.ctx); }` ne termine jamais si `besoin > ctx` ; le garde-fou « Refus EXPLICITE plutôt qu'une boucle sans fin » n'existe que dans le chemin distribué (main.rs:2050-2057). CPU ~1692 % = boucle infinie dans les workers parallèles → livelock, pas simple « ralentissement ».
+- « En silence » : inféré (processus encore vivant à 1689 % ; le grep du runner ne garde que les lignes de sonde, un message moteur aurait été masqué).
+
+**Écarts de chiffre rapport ↔ logs**
+1. Rapport l.202/237 : k=256 « 1 seule fenêtre (échec) », fenêtre 2 « (non mesuré) » — or `/tmp/aiguille_s6.log` l.12-14 contient **deux** sondes k=256 : fenêtre 1 NON (243,1 s) et fenêtre 2 **oui** (230,4 s) — série CPU, mais le compte global sous-déclare le log.
+2. Facteur : 808 s/85,1 = **9,5×** (pas 10) ; 1360 s/85,1 = **16,0×**. « 10 à 20 » surestime le plancher.
+3. Rapport l.194 cite « 9 sur 9 » ; le log dit « 9 sur 9 **sondes** » (citation tronquée, cosmétique).
+4. « 9 fenêtres à 4 096 clés » : prompts réels 3 996–4 731 ; fenêtres 3 et 4 dépassent 4 096 (4 731, 4 664).
+5. s6b.log est partiel (k=256 GPU : 1 sonde ; pas de série k=1024 ; pas de « === S6 FINI === ») — cohérent avec le rapport, pas avec le message de commit « 9 fenêtres × 3 chemins ».
+
+Aucun fichier modifié ; seule commande lancée : la vérification bornée à 240 s.
+
