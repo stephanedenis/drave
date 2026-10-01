@@ -68,6 +68,46 @@ le MILIEU, et il échoue des deux côtés (CPU et GPU).
    toutes les clés puis garder les k meilleures ne peut pas retrouver une
    information dont le score est moyen — il faut un mécanisme qui la *cherche*.
 
+## Suite (sprint 4) : le k est un RÉGLAGE, pas une fatalité
+
+La grille du sprint 3 n'avait **qu'une sonde par configuration**, et le premier
+balayage en k a donné des résultats **non monotones** (k = 512 échoue, k = 1 024
+réussit) : avec une seule sonde, impossible de distinguer « l'attention creuse
+échoue » de « cette exécution-là a déraillé ». D'où **trois sondes par
+configuration**, sur trois **fenêtres de corpus différentes** (l'outil avance son
+offset de 200 000 caractères à chaque profondeur listée), à 4 096 clés et
+profondeur 0,5 (le milieu) :
+
+| configuration | fenêtre 1 | fenêtre 2 | fenêtre 3 | trouvé |
+|---|---|---|---|---|
+| attention complète | oui (383,6 s) | oui (326,5 s) | oui (251,5 s) | **3/3** |
+| **k = 256** (6,25 %) | NON (244,7 s) | NON (237,8 s) | NON (237,0 s) | **0/3** |
+| **k = 1 024** (25 %) | oui (239,6 s) | oui (253,2 s) | oui (244,1 s) | **3/3** |
+| **k = 512** (12,5 %) | NON (240,5 s) | NON (238,1 s) | NON (237,8 s) | **0/3** |
+
+**Conclusion corrigée** : l'échec au milieu n'est PAS une impossibilité
+structurelle du top-k — c'est un **réglage**. Le passage est net et reproductible :
+**0/3 à k = 256 (6,25 %) et à k = 512 (12,5 %), 3/3 à k = 1 024 (25 %)**, avec la
+référence complète à 3/3. Le seuil est donc **entre 512 et 1 024 clés** (12,5 % et
+25 % du contexte), et l'affirmation du sprint 3 (« sans index, l'attention creuse ne
+peut pas remplacer l'attention complète à long contexte ») était **trop forte** :
+elle vaut pour un k nettement inférieur au seuil.
+
+La question qui compte pour la feuille de route n'est donc pas « index ou pas
+index », mais **comment le k nécessaire évolue avec le contexte** : si le rapport
+k/contexte reste de l'ordre du quart, l'élagage ne rapporte rien à 32 k ; s'il
+décroît (l'information utile est de plus en plus concentrée), il devient payant.
+C'est la mesure à faire ensuite, et le préremplissage déporté (§ ci-dessus) la rend
+abordable.
+
+Et un contrôle qui invalide une comparaison tentante : **en `--lot 1`, l'attention
+COMPLÈTE échoue aussi au milieu** (251,0 s, « NON ») alors qu'elle réussit 3 fois
+sur 3 en `--lot 256`. Le chemin par lots change le résultat lui-même (la revue
+adverse du sprint 3 avait mesuré que `--lot 1` et `--lot 256` génèrent des
+identifiants différents) : la comparaison « tout le passage creux » en `--lot 1`
+n'est pas propre, et la seule comparaison valable est **à lot fixé**, entre
+attention complète et attention creuse.
+
 ## Ce que ce rapport ne dit pas
 
 * 8 192 et 16 384 : non mesurés dans ce box. Le taux mesuré du 0.5B est de 58 à

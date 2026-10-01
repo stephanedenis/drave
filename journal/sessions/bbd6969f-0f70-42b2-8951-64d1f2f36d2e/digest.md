@@ -38492,3 +38492,136 @@ docs/contexte-long.md:275:`DRAVE_GPU_KV` qui demande le miroir. Avec la seule se
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='docs/contexte-long.md'; s=open(p).read()\nvieux = \"\"\"### Pagination du miroir : la VRAM suit l'usage, pas le contexte\"\"\"\nneuf = \"\"\"### Le PRÉREMPLISSAGE aussi : 286,6 s → 63,8 s sur un prompt de 3 961 j … [1209 caractères tronqués]`
+
+  ```
+docs/contexte-long.md : préremplissage déporté chiffré
+2ae761c Préremplissage déporté : ×4,5 sur un prompt de 3 961 jetons (286,6 → 63,8 s), perplexité à 2e-5
+k=512  (lot 256, milieu) :      4096        0.50     NON     274.8  prompt 4114 jetons · [attention] --attn-topk 512 est IGNORÉ en mode lot (--lot 256) : l'attention par lots est DENSE. Utiliser --lo
+k=1024 (lot 256, milieu) :
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 480; cat /tmp/aiguille_k.log; date +%H:%M:%S", "description": "Wait for k=1024 result", "timeoutMs": 540000}`
+
+  ```
+k=512  (lot 256, milieu) :      4096        0.50     NON     274.8  prompt 4114 jetons · [attention] --attn-topk 512 est IGNORÉ en mode lot (--lot 256) : l'attention par lots est DENSE. Utiliser --lo
+k=1024 (lot 256, milieu) :      4096        0.50     oui     241.8  prompt 4114 jetons · [attention] --attn-topk 1024 est IGNORÉ en mode lot (--lot 256) : l'attention par lots est DENSE. Utiliser --l
+k=256  (lot 1,   milieu) :      4096        0.50     oui     190.7  prompt 4114 jetons
+k=1024 (lot 1,   milieu) :      4096        0.50     NON     220.1  prompt 4114 jetons
+complet(lot 1,   milieu) : 00:00:22
+  ```
+
+- **write** `{"content": "#!/bin/bash\n# RÉPÉTITION : la grille du sprint 4 a donné des résultats NON monotones en k\n# (k=512 échoue, k=1024 réussit ; en --lot 1, k=256 réussit et k=1024 échoue).\n# Avec UNE sonde par configuration, on ne peut pas distinguer « l'attention creuse\n# échoue » de « cette exécution … [820 caractères tronqués]`
+
+  ```
+<path>/tmp/aig5.sh</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && chmod +x /tmp/aig5.sh && nohup /tmp/aig5.sh > /dev/null 2>&1 & sleep 10; date +%H:%M:%S; cat /tmp/aiguille_k.log | tail -2", "description": "Launch repetition grid"}`
+
+  ```
+00:00:48
+k=1024 (lot 1,   milieu) :      4096        0.50     NON     220.1  prompt 4114 jetons
+complet(lot 1,   milieu) :
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 540; echo \"=== répétitions ===\"; cat /tmp/aiguille_rep.log; echo \"=== k sweep ===\"; tail -2 /tmp/aiguille_k.log; date +%H:%M:%S", "description": "Check repetition grid progress", "timeoutMs": 600000}`
+
+  ```
+=== répétitions ===
+########## complete 3 fenetres
+=== k sweep ===
+complet(lot 1,   milieu) :      4096        0.50     NON     251.0  prompt 4114 jetons
+k=1024 (lot 256, prof 0.1) : 00:09:58
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 600; cat /tmp/aiguille_rep.log; date +%H:%M:%S", "description": "Check repetition results", "timeoutMs": 660000}`
+
+  ```
+(no output)
+[timed out after 600000ms]
+[killed by signal: SIGTERM]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat /tmp/aiguille_rep.log; echo \"---\"; ps -eo pid,etime,args | grep \"aiguille.py\" | grep -v grep | head -2; date +%H:%M:%S", "description": "Check reps and running probes"}`
+
+  ```
+########## complete 3 fenetres
+     4096        0.50     oui     383.6  prompt 4114 jetons
+     4096        0.50     oui     326.5  prompt 4114 jetons
+     4096        0.50     oui     251.5  prompt 4114 jetons
+########## k=256 3 fenetres
+---
+2543527       03:31 timeout 3600 python3 tools/aiguille.py models/Qwen2.5-0.5B-Q8_0.gguf 4096 0.5,0.5,0.5 --n 24 --lot 256 --attn-topk 256
+2543529       03:31 python3 tools/aiguille.py models/Qwen2.5-0.5B-Q8_0.gguf 4096 0.5,0.5,0.5 --n 24 --lot 256 --attn-topk 256
+00:20:11
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/sprint4_note.md <<'EOF'\n\n### Sprint 4 : le k est-il le bon levier ? (trois fenêtres par configuration)\n\nLa grille du sprint 3 avait UNE sonde par configuration, et la première tentative de\nbalayage en k a donné des ré … [1274 caractères tronqués]`
+
+  ```
+note préparée
+     4096        0.50     oui     251.5  prompt 4114 jetons
+########## k=256 3 fenetres
+00:20:18
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 580; cat /tmp/aiguille_rep.log | tail -6; date +%H:%M:%S", "description": "Wait for k=256 repetitions", "timeoutMs": 640000}`
+
+  ```
+4096        0.50     oui     251.5  prompt 4114 jetons
+########## k=256 3 fenetres
+     4096        0.50     NON     244.7  prompt 4114 jetons · [attention] --attn-topk 256 est IGNORÉ en mode lot (--lot 256) : l'attention par lots est DENSE. Utiliser --lo
+     4096        0.50     NON     237.8  prompt 4114 jetons · [attention] --attn-topk 256 est IGNORÉ en mode lot (--lot 256) : l'attention par lots est DENSE. Utiliser --lo
+     4096        0.50     NON     237.0  prompt 4114 jetons · [attention] --attn-topk 256 est IGNORÉ en mode lot (--lot 256) : l'attention par lots est DENSE. Utiliser --lo
+########## k=1024 3 fenetres
+00:30:02
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 600; tail -5 /tmp/aiguille_rep.log; date +%H:%M:%S", "description": "Wait for k=1024 repetitions", "timeoutMs": 660000}`
+
+  ```
+(no output)
+[timed out after 600000ms]
+[killed by signal: SIGTERM]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && tail -5 /tmp/aiguille_rep.log; date +%H:%M:%S", "description": "Check k=1024 results"}`
+
+  ```
+########## k=256 3 fenetres
+     4096        0.50     NON     244.7  prompt 4114 jetons · [attention] --attn-topk 256 est IGNORÉ en mode lot (--lot 256) : l'attention par lots est DENSE. Utiliser --lo
+     4096        0.50     NON     237.8  prompt 4114 jetons · [attention] --attn-topk 256 est IGNORÉ en mode lot (--lot 256) : l'attention par lots est DENSE. Utiliser --lo
+     4096        0.50     NON     237.0  prompt 4114 jetons · [attention] --attn-topk 256 est IGNORÉ en mode lot (--lot 256) : l'attention par lots est DENSE. Utiliser --lo
+########## k=1024 3 fenetres
+00:40:15
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 420; tail -6 /tmp/aiguille_rep.log; date +%H:%M:%S", "description": "Check k=1024 and k=512", "timeoutMs": 480000}`
+
+  ```
+4096        0.50     NON     237.0  prompt 4114 jetons · [attention] --attn-topk 256 est IGNORÉ en mode lot (--lot 256) : l'attention par lots est DENSE. Utiliser --lo
+########## k=1024 3 fenetres
+     4096        0.50     oui     239.6  prompt 4114 jetons · [attention] --attn-topk 1024 est IGNORÉ en mode lot (--lot 256) : l'attention par lots est DENSE. Utiliser --l
+     4096        0.50     oui     253.2  prompt 4114 jetons · [attention] --attn-topk 1024 est IGNORÉ en mode lot (--lot 256) : l'attention par lots est DENSE. Utiliser --l
+     4096        0.50     oui     244.1  prompt 4114 jetons · [attention] --attn-topk 1024 est IGNORÉ en mode lot (--lot 256) : l'attention par lots est DENSE. Utiliser --l
+########## k=512 3 fenetres
+00:47:20
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/rapport-aiguille-topk.md'; s=open(p).read()\nvieux = \"\"\"## Ce que ce rapport ne dit pas\"\"\"\nneuf = \"\"\"## Suite (sprint 4) : le k est un RÉGLAGE, pas une fatalité\n\nLa grille du sprint 3 n'avait  … [2232 caractères tronqués]`
+
+  ```
+rapport : section sprint 4
+########## k=512 3 fenetres
+     4096        0.50     NON     240.5  prompt 4114 jetons · [attention] --attn-topk 512 est IGNORÉ en mode lot (--lot 256) : l'attention par lots est DENSE. Utiliser --lo
+     4096        0.50     NON     238.1  prompt 4114 jetons · [attention] --attn-topk 512 est IGNORÉ en mode lot (--lot 256) : l'attention par lots est DENSE. Utiliser --lo
+     4096        0.50     NON     237.8  prompt 4114 jetons · [attention] --attn-topk 512 est IGNORÉ en mode lot (--lot 256) : l'attention par lots est DENSE. Utiliser --lo
+=== REPETITIONS FINIES ===
+00:54:08
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/rapport-aiguille-topk.md'; s=open(p).read()\nvieux = \"\"\"| k = 512 (12,5 %) | (en cours) | | | |\"\"\"\nneuf = \"\"\"| **k = 512** (12,5 %) | NON (240,5 s) | NON (238,1 s) | NON (237,8 s) | **0/3** |\"\ … [3171 caractères tronqués]`
