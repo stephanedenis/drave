@@ -39837,3 +39837,159 @@ trame écrite dans sprints/06-le-taux-de-recuperation.md — à compléter (revu
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='sprints/06-le-taux-de-recuperation.md'\ns=open(p).read()\ni = s.index(\"## Rétrospective — garder / changer\")\nopen(p,'w').write(s[:i] + open('/tmp/ceremonie6.md').read().lstrip('\\n'))\nprint(\"cérémonie 6 écri … [683 caractères tronqués]`
+
+  ```
+cérémonie 6 écrite
+Sprint 1 démarré à 05:39 → 07:39  ·  sprints/01-corriger-le-livelock-du-contexte-model-r.md
+# Sprint 7 — Corriger le livelock du contexte (model.rs:1117) et conso
+05:39:11
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '1114,1125p' drave-core/src/model.rs", "description": "Read the assurer loop"}`
+
+  ```
+/// Garantit `besoin` positions allouées (doublement, avec recopie : les
+    /// positions déjà écrites le restent). Chaque tête KV a son bloc contigu,
+    /// donc la recopie se fait tête par tête.
+    pub fn assurer(&mut self, besoin: usize) {
+        if besoin <= self.cap { return; }
+        let mut cap = self.cap.max(1);
+        while cap < besoin { cap = (cap * 2).min(self.ctx); }
+        let hd = self.hd;
+        let nb = self.nb;
+        let pas = self.pas();
+        let (n_kv, bits) = (self.n_kv, self.bits);
+        let f32_k = bits >= 32 || self.k_f32;
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/model.rs'; s=open(p).read()\ndef rep(v,n,nom):\n    global s\n    assert s.count(v)==1, f\"{nom}::{s.count(v)}\"\n    s=s.replace(v,n,1)\n\n# 1) le livelock : la boucle ne termine pas si besoin > c … [3655 caractères tronqués]`
+
+  ```
+livelock et troncature corrigés
+For more information about this error, try `rustc --explain E0609`.
+warning: `drave-core` (bin "drave" test) generated 12 warnings
+error: could not compile `drave-core` (bin "drave" test) due to 3 previous errors; 12 warnings emitted
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 22, in <module>
+AssertionError
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cargo build --release --manifest-path drave-core/Cargo.toml 2>&1 | grep -E \"^error\" -A 6 | head -20; grep -n \"pub struct Cfg\" -A 12 drave-core/src/model.rs | head -16", "description": "See the compile errors", "timeoutMs": 300000 … [1 caractères tronqués]`
+
+  ```
+error[E0609]: no field `ctx` on type `Cfg`
+    --> src/model.rs:3929:43
+     |
+3929 |         let ids = if ids.len() > self.cfg.ctx {
+     |                                           ^^^ unknown field
+     |
+     = note: available fields are: `n_layer`, `hidden`, `n_head`, `n_kv_head`, `head_dim` ... and 11 others
+--
+error[E0609]: no field `ctx` on type `Cfg`
+    --> src/model.rs:3930:46
+     |
+3930 |             let coupe = ids.len() - self.cfg.ctx;
+     |                                              ^^^ unknown field
+     |
+     = note: available fields are: `n_layer`, `hidden`, `n_head`, `n_kv_head`, `head_dim` ... and 11 others
+--
+error[E0609]: no field `ctx` on type `Cfg`
+    --> src/model.rs:3932:65
+     |
+3932 | ABANDONNÉS (troncature, pas de fenêtrage)", ids.len(), self.cfg.ctx, coupe);
+25:pub struct Cfg {
+26-    pub n_layer: usize,
+27-    pub hidden: usize,
+28-    pub n_head: usize,
+29-    pub n_kv_head: usize,
+30-    pub head_dim: usize,
+31-    pub ffn: usize,
+32-    pub eps: f32,
+33-    pub rope_base: f32,
+34-    pub vocab: usize,
+35-    /// MoE : nombre d'experts, combien sont allumés par jeton, et leur taille
+36-    /// intermédiaire. `n_expert = 0` pour un modèle dens
+… [30 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"self.kv\\[0\\].ctx\\|kv\\[l\\].ctx\\|\\.ctx\\b\" drave-core/src/model.rs | grep -v \"cfg.ctx\" | head -6", "description": "Find the context length accessor"}`
+
+  ```
+1126:        let besoin = besoin.min(self.ctx);
+1129:        while cap < besoin { cap = (cap * 2).min(self.ctx); }
+1661:                    match machines[idx].kv_allouer(c.n_kv, c.ctx, c.hd, c.bits) {
+1699:                             machines.len(), caches_kv.first().map(|c| c.ctx).unwrap_or(0));
+2393:        let ctx = self.ctx;
+2442:        let mut sc2 = vec![0f32; nh * self.ctx];
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/model.rs'; s=open(p).read()\ndef rep(v,n,nom):\n    global s\n    assert s.count(v)==1, f\"{nom}::{s.count(v)}\"\n    s=s.replace(v,n,1)\nrep(\"\"\"        let ids = if ids.len() > self.cfg.ctx {\n … [716 caractères tronqués]`
+
+  ```
+champ ctx corrigé
+808:    pub ctx: usize,
+1058:    pub ctx: usize,
+--- build ---
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"pub ctx: usize\" -B 3 drave-core/src/model.rs | sed -n '1,8p'; grep -n \"    #\\[test\\]\" drave-core/src/main.rs | tail -3", "description": "Verify Model has ctx and find test anchor"}`
+
+  ```
+805-    /// montre ce que le moteur utilise vraiment — et c'est là qu'on voit si
+806-    /// `DRAVE_KV_K_F32` ou `DRAVE_KV_K_F16` a réellement pris).
+807-    pub kv: Vec<KvCache>,
+808:    pub ctx: usize,
+--
+1055-    pub bits: u32,          // 32 = f32 (défaut), 8 = i8
+1056-    pub n_kv: usize,
+1057-    /// Longueur LOGIQUE (positions adressables par le moteur).
+4346:    #[test]
+4370:    #[test]
+4383:    #[test]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '4370,4390p' drave-core/src/main.rs", "description": "Find the tests module structure"}`
+
+  ```
+#[test]
+    fn un_nombre_de_blocs_dement_grand_est_refuse() {
+        // mode blocs : `n_blocs` vient de l'en-tête et servait à allouer
+        // `n_blocs × 4` octets + un Vec<f32> (mesuré : 16 Gio sur une trame de
+        // 83 octets). Le plafond doit refuser AVANT d'allouer.
+        let mut corps = Vec::new();
+        corps.extend_from_slice(&100_000_000u32.to_le_bytes());
+        let r = decoder_une_trame(MODE_BLOCS, 1, corps, 896);
+        assert!(r.is_err(), "100 millions de blocs doivent être refusés");
+        let msg = format!("{}", r.err().unwrap());
+        assert!(msg.contains("plafond"), "le refus doit nommer le plafond : {msg}");
+    }
+
+    #[test]
+    fn un_lot_dement_grand_est_refuse_avant_allocation() {
+        let ecoute = TcpListener::bind("127.0.0.1:0").unwrap();
+        let adresse = ecoute.local_addr().unwrap();
+        let serveur = std::thread::spawn(move || {
+            let (mut sock, _) = ecoute.accept().unwrap();
+            // en-tête v4 complet, mode lot, n = 100 millions d'états
+            let mut tete: Vec<u8> = Vec::new();
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/main.rs'; s=open(p).read()\nancre = \"\"\"    #[test]\n    fn un_nombre_de_blocs_dement_grand_est_refuse() {\"\"\"\nneuf = \"\"\"    /// Le livelock du contexte : `KvCache::assurer(besoin)` avec `b … [877 caractères tronqués]`
+
+  ```
+test ajouté
+
+test result: ok. 18 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.11s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 400 python3 - <<'PY'\nimport subprocess, time, re\nfen = open('/tmp/fen_2.txt').read()   # fenêtre 3 : 4731 jetons\ninvite = fen + \"\\n\\nQuel est le code de verification de la reunion ? Reponds par le code seul, puis une ph … [787 caractères tronqués]`
+
+  ```
+durée 312.5 s · prompt 4788 jetons
+troncature : [contexte] invite de 4788 jetons > ctx 4608 : les 180 premiers sont ABANDONNÉS (troncature, pas de fenêtrage)
+code trouvé : False
+05:45:57
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/rapport-aiguille-topk.md'; s=open(p).read()\nvieux = \"\"\"**Ce n'est pas un ralentissement, c'est un LIVELOCK**, et le mécanisme est visible\ndans le code : `KvCache::assurer` fait `while cap < besoin {  … [2635 caractères tronqués]`

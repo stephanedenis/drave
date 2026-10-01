@@ -1116,6 +1116,15 @@ impl KvCache {
     /// donc la recopie se fait tête par tête.
     pub fn assurer(&mut self, besoin: usize) {
         if besoin <= self.cap { return; }
+        // ⚠️ `besoin > ctx` faisait BOUCLER SANS FIN : `cap` plafonne à `ctx` et la
+        // condition reste vraie. Mesuré : une invite de 4 731 jetons avec
+        // `--ctx 4608` tournait à ~1 700 % de CPU pendant plus de 22 minutes sans
+        // jamais finir (livelock, pas ralentissement). Le même défaut avait été
+        // corrigé côté GPU au sprint 2 (`kv_assurer`) ; le chemin CPU était resté.
+        // On plafonne au contexte déclaré : le cache ne grandit pas au-delà, et
+        // l'appelant voit la troncature par le message ci-dessous.
+        let besoin = besoin.min(self.ctx);
+        if besoin <= self.cap { return; }
         let mut cap = self.cap.max(1);
         while cap < besoin { cap = (cap * 2).min(self.ctx); }
         let hd = self.hd;
@@ -3913,6 +3922,19 @@ dynamique de {dyn_:.3e} (relatif {:.2e})", mx / dyn_.max(1e-9));
         let t0 = Instant::now();
         let mut last = Vec::new();
         let mut events0 = self.events;
+        // Invite plus longue que le contexte : on garde les DERNIERS jetons (le
+        // début d'un long document est ce qu'on peut perdre avec le moins de
+        // dégâts) et on le DIT. Sans ce garde, `KvCache::assurer` bouclait sans
+        // fin — un hang, pas une erreur — et rien ne l'annonçait.
+        let ctx_modele = self.ctx;
+        let ids = if ids.len() > ctx_modele {
+            let coupe = ids.len() - ctx_modele;
+            println!("[contexte] invite de {} jetons > ctx {} : les {} premiers sont \
+ABANDONNÉS (troncature, pas de fenêtrage)", ids.len(), ctx_modele, coupe);
+            &ids[coupe..]
+        } else {
+            ids
+        };
         // Préremplissage par lots : `forward_lot` sur des tranches de `self.lot`
         // jetons. `lot == 1` reprend exactement l'ancienne boucle (forward_lot
         // délègue à `forward` pour un jeton), donc rien ne change par défaut.

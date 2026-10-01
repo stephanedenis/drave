@@ -252,12 +252,18 @@ vérification bornée (même invite, `--ctx 4608`, `--n 4`, `timeout 240`) n'a p
 fini non plus.
 
 **Ce n'est pas un ralentissement, c'est un LIVELOCK**, et le mécanisme est visible
-dans le code : `KvCache::assurer` fait `while cap < besoin { cap = (cap * 2).min(self.ctx) }`
+dans le code : `KvCache::assurer` faisait `while cap < besoin { cap = (cap * 2).min(self.ctx) }`
 (`model.rs:1117`) — si `besoin > ctx`, `cap` plafonne à `ctx` et la boucle ne
-termine **jamais**. Le même défaut a été corrigé côté GPU au sprint 2
-(`kv_assurer`, D7 d'une relecture) ; le chemin CPU, lui, est resté. Un prompt plus
-long que le contexte devrait être **tronqué proprement ou refusé** : c'est le
-premier chantier du sprint 7.
+termine **jamais**. Le même défaut avait été corrigé côté GPU au sprint 2
+(`kv_assurer`, D7 d'une relecture) ; le chemin CPU était resté.
+
+✅ **Corrigé au sprint 7** : la capacité est plafonnée au contexte déclaré, et
+`Model::generate` **tronque** l'invite en le disant —
+« `[contexte] invite de 4788 jetons > ctx 4608 : les 180 premiers sont ABANDONNÉS
+(troncature, pas de fenêtrage)` ». La même invite qui tournait plus de 22 minutes
+sans finir rend maintenant la main en **312 s** (le coût normal du chemin CPU, sans
+`--gpu-kv`). Un test de non-régression l'accompagne (18 tests au lieu de 17) :
+`assurer(1000)` sur un cache de 16 positions doit rendre la main, pas boucler.
 * **k plus grand : mesuré depuis** (512 et 1 024, section « Suite ») — le seuil est
   entre 12,5 % et 25 % du contexte sur ce cas.
 * le préremplissage reste DENSE avec `--lot > 1` : la mesure porte sur le décodage.

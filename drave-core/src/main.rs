@@ -4367,6 +4367,18 @@ mod tests_plafond {
         }
     }
 
+    /// Le livelock du contexte : `KvCache::assurer(besoin)` avec `besoin > ctx`
+    /// bouclait SANS FIN (`while cap < besoin { cap = (cap * 2).min(self.ctx) }`).
+    /// Un test qui boucle est un test qui pend : celui-ci doit rendre la main.
+    #[test]
+    fn assurer_ne_boucle_pas_au_dela_du_contexte() {
+        let mut c = model::KvCache::new(32, 2, 16, 8);   // ctx = 16 positions
+        c.assurer(1000);          // 1000 >> 16 : la boucle doit se terminer
+        assert!(c.cap <= 16, "capacité {} au-delà du contexte 16", c.cap);
+        c.assurer(8);
+        assert!(c.cap <= 16);
+    }
+
     #[test]
     fn un_nombre_de_blocs_dement_grand_est_refuse() {
         // mode blocs : `n_blocs` vient de l'en-tête et servait à allouer
