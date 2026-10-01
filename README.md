@@ -296,7 +296,7 @@ n'étaient pas le goulot. Et il coûte 838 ms là où l'accumulation en coûte 1
 
 Le moteur d'exécution par listes est maintenant écrit en Rust — **std seul, zéro
 dépendance** (crates.io est inaccessible depuis cette machine, et c'est très bien :
-le moteur tenait en 386 lignes à ses débuts ; il en fait 13 480 aujourd'hui). Détail complet :
+le moteur tenait en 386 lignes à ses débuts ; il en fait 13 758 aujourd'hui). Détail complet :
 [`reports/rapport-optimisations.md`](reports/rapport-optimisations.md).
 
 ```bash
@@ -370,7 +370,7 @@ et [`reports/rapport-passage-a-l-echelle.md`](reports/rapport-passage-a-l-echell
 ## Inférence complète en Rust (`--infer`)
 
 Qwen2.5-0.5B-Instruct Q8_0 tourne **en mode listes d'événements**, sans GPU, sans
-BLAS, sans aucune dépendance : **13 480 lignes de Rust, `std` seul** au 30/09 au soir (2 319 au premier prototype). Détail :
+BLAS, sans aucune dépendance : **13 758 lignes de Rust, `std` seul** au 01/10 au matin (2 319 au premier prototype). Détail :
 [`reports/rapport-inference.md`](reports/rapport-inference.md).
 
 ```bash
@@ -498,24 +498,30 @@ plus tard, pour les modèles réels — pas pour le test de principe.)
 La feuille de route complète est dans [`docs/roadmap.md`](docs/roadmap.md). Ce qui
 est ouvert aujourd'hui, par ordre de valeur mesurée :
 
-1. **Noyau GPU de top-k** (phase 1.1) : c'est le seul poste GPU neuf. Le chemin GPU
-   de l'attention est conditionné à `attn_topk == 0`, donc le mode creux retombe
-   sur le CPU où il coûte 968 ms par couche à 1 M de clés, contre 13,2 ms avec le
-   miroir VRAM. **Deux des trois noyaux sont écrits et mesurés** : les scores
-   (`reports/rapport-gpu-scores.md`, écart 1,6–2,3e-7, 26,7–40× le CPU), la sélection
-   radix et la somme (`reports/rapport-gpu-topk-selection.md`, ensemble identique au
-   CPU sur 14/14 lignes, sortie à 1,0–4,8e-7, temps GPU constant 0,07 ms). Reste le
-   branchement dans `model.rs` (autoriser le GPU quand `attn_topk > 0`) et la mesure
-   à 1 M de clés — plan chiffré : [`docs/plan-gpu-topk.md`](docs/plan-gpu-topk.md).
-2. **Second GPU** : 16 Go dorment. Le cache d'experts MXFP4 et le KV paginé à 1 M
+1. **Le top-k déporté fonctionne — mais pas dans le préremplissage.** Les trois
+   noyaux sont écrits, fusionnés en un seul (`attn_topk_tout` : descente radix,
+   collecte et somme par ligne, 8 lancements → 2) et branchés dans le moteur
+   (`DRAVE_GPU_TOPK=1`) : l'attention creuse déportée est **plate** (4,5–5,0
+   ms/jeton de 255 à 4 095 clés) là où le CPU monte de 4,26 à 38,84, et le
+   croisement tombe à ~300 clés. Détail : `reports/rapport-gpu-topk-selection.md`.
+   **Ce qui manque** : le chemin par lots ignore `--attn-topk` (le moteur le dit),
+   donc le préremplissage reste dense et coûte 246 s par sonde de 4 096 jetons au
+   lieu de 75 — c'est le premier chantier de la prochaine session, avec la courbe
+   du k nécessaire ([`reports/rapport-aiguille-topk.md`](reports/rapport-aiguille-topk.md)).
+2. **La qualité de l'attention creuse** : à 4 096 clés, k = 256 (6 %) retrouve
+   l'information 2 fois sur 3 (trois fenêtres distinctes) et k = 1 024 (25 %) 3 fois
+   sur 3, l'attention complète 3 fois sur 3 — mais 8 fenêtres sur 9 seulement quand
+   on en essaie neuf. Le **taux** est la bonne mesure, et il demande le top-k dans le
+   préremplissage (point 1) pour être mesuré à moindre coût.
+3. **Second GPU** : 16 Go dorment. Le cache d'experts MXFP4 et le KV paginé à 1 M
    les rempliraient utilement ; il faut un second contexte CUDA et une règle de
    répartition.
-3. **Démonstration Colab** : tout est prêt côté code
+4. **Démonstration Colab** : tout est prêt côté code
    ([`colab/`](colab/README.md)), la manipulation demande un compte et un tunnel.
-4. **Phase 2 locale** : ordonnanceur de flux (2 GPU, CPU, VRAM, RAM, NVMe),
+5. **Phase 2 locale** : ordonnanceur de flux (2 GPU, CPU, VRAM, RAM, NVMe),
    streaming des poids depuis le NVMe (3,5 Go/s) pour ce qui ne tient pas en RAM,
    cache d'experts rentable (+6 % aujourd'hui, l'objectif est ≥ +30 %).
-5. **Phase 5, sur matériel** : le PE événementiel et le lecteur DDR3 existent et
+6. **Phase 5, sur matériel** : le PE événementiel et le lecteur DDR3 existent et
    sont vérifiés ; il manque un accès à la carte pour la comparaison
    énergie/jeton. Le prototype C mesure 7,79 G événements/s et le croisement
    push/pull (~22 % de densité) — de quoi décider si le mode événementiel vaut le

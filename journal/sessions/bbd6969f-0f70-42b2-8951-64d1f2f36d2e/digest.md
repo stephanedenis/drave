@@ -40000,3 +40000,36 @@ rapport : livelock corrigé
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='REPRISE.md'; s=open(p).read()\nancre = \"\"\"### La frontière du cache KV, mesurée en entier\"\"\"\nneuf = \"\"\"### Sprint 7 (05h39 → 07h39) : clôture de la nuit — le livelock du contexte\n\n**Un défaut bloquant … [2579 caractères tronqués]`
+
+  ```
+REPRISE : section sprint 7 + bilan de la nuit
+c7fd7ea REPRISE : le livelock corrigé, et le bilan des six résultats de la nuit
+05:46:32
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && (echo \"=== portes sprint 7 ===\"; echo -n \"Qwen : \"; ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf --ppl /tmp/wt2_ids.txt --ctx 256 --abits 16 --threads 16 --limit 512 2>&1 | grep -oE \"perplexité [0-9.]+ sur [0- … [655 caractères tronqués]`
+
+  ```
+=== portes sprint 7 ===
+Qwen : perplexité 19.3885 sur 510 tokens
+gpt-oss : perplexité 15.1757 sur 510 tokens
+tests : test result: ok. 18 passed
+lignes Rust : 13758
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\ndef patch(p, paires):\n    s=open(p).read()\n    for v,n,nom in paires:\n        assert s.count(v)==1, f\"{p}::{nom}::{s.count(v)}\"\n        s=s.replace(v,n,1)\n    open(p,'w').write(s); print(f\"{p} : {len(paires) … [3145 caractères tronqués]`
+
+  ```
+README.md : 2
+README : liste renumérotée
+313:3. **Vecteur creux explicite** (`SparseVec`) — indices triés + valeurs contiguës,
+315:4. **Listes fusionnées** (`FusedSign`) — une seule liste triée + plan de signe, au
+501:1. **Le top-k déporté fonctionne — mais pas dans le préremplissage.** Les trois
+511:2. **La qualité de l'attention creuse** : à 4 096 clés, k = 256 (6 %) retrouve
+516:3. **Second GPU** : 16 Go dorment. Le cache d'experts MXFP4 et le KV paginé à 1 M
+519:4. **Démonstration Colab** : tout est prêt côté code
+521:5. **Phase 2 locale** : ordonnanceur de flux (2 GPU, CPU, VRAM, RAM, NVMe),
+524:6. **Phase 5, sur matériel** : le PE événementiel et le lecteur DDR3 existent et
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\ndef patch(p, paires):\n    s=open(p).read()\n    for v,n,nom in paires:\n        assert s.count(v)==1, f\"{p}::{nom}::{s.count(v)}\"\n        s=s.replace(v,n,1)\n    open(p,'w').write(s); print(f\"{p} : {len(paires) … [1503 caractères tronqués]`
