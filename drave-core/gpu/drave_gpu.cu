@@ -927,6 +927,9 @@ extern "C" __global__ void attn_topk_somme(const float* __restrict__ sc,
         __syncthreads();
     }
     m = red[0];
+    // Même course que dans le noyau 4 : `red` est réutilisé pour la somme, et un
+    // fil rapide pourrait écraser sa case avant que les autres aient lu `red[0]`.
+    __syncthreads();
     float somme = 0.0f;
     for (int j = tid; j < k; j += blockDim.x) {
         const float w = expf(shS[j] - m);
@@ -1079,9 +1082,19 @@ extern "C" __global__ void attn_topk_tout(const float* __restrict__ sc,
     if (tid == 0) {
         int total = 0;
         for (int i = 0; i < blockDim.x; i++) total += (int)red[i];
-        if (total != k) out[(size_t)ligne * hd] = __int_as_float(0x7FC00000);  // NaN
+        shHisto[2] = (total == k) ? 0u : 1u;
     }
     __syncthreads();
+    // ⚠️ Le filet doit AGIR AVANT la somme, pas après : les cases de `shIdx` que
+    // la collecte n'a pas remplies contiennent n'importe quoi, et la somme s'en
+    // sert pour lire la VRAM — mesuré en sabotant la collecte exprès :
+    // CUDA_ERROR_ILLEGAL_ADDRESS (700) et contexte empoisonné, le NaN écrit après
+    // coup n'ayant jamais eu l'occasion d'être vu. On sort donc ici, sans somme,
+    // avec un NaN que l'hôte refuse.
+    if (shHisto[2] != 0u) {
+        if (tid == 0) out[(size_t)ligne * hd] = __int_as_float(0x7FC00000);  // NaN
+        return;
+    }
 
     // ---- softmax sur ces k scores (indices en partagé, plus de relecture)
     float m = -1e30f;
@@ -1094,6 +1107,11 @@ extern "C" __global__ void attn_topk_tout(const float* __restrict__ sc,
         __syncthreads();
     }
     m = red[0];
+    // Barrière AVANT de réutiliser `red` : sans elle, un fil assez rapide peut
+    // écraser sa case pendant qu'un autre lit encore `red[0]` — la fenêtre est
+    // étroite (il faut être désordonnancé pendant toute la boucle de somme), mais
+    // elle existe, et une course qui ne se voit pas n'est pas une course absente.
+    __syncthreads();
     float somme = 0.0f;
     for (int j = tid; j < k; j += blockDim.x) {
         const float w = expf(shW[j] - m);

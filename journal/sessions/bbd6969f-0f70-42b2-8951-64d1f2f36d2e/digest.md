@@ -36772,3 +36772,54 @@ banc : refus du noyau 3 non bloquant
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\ndef patch(p, paires):\n    s=open(p).read()\n    for v,n,nom in paires:\n        assert s.count(v)==1, f\"{p}::{nom}::{s.count(v)}\"\n        s=s.replace(v,n,1)\n    open(p,'w').write(s); print(f\"{p} ok\")\npatch(' … [2843 caractères tronqués]`
+
+  ```
+reports/rapport-gpu-topk-selection.md ok
+8342f17 Noyau 4 : le top-k complet d'une ligne en UN lancement (8 lancements → 2)
+  ```
+
+- **subagent** `{"description": "Revue adverse du noyau fusionné", "prompt": "Tu es relecteur ADVERSARIAL de code dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (moteur d'inférence Rust « Drave », std seul, noyaux PTX compilés par clang sans en-têtes CUDA). Ton but : TROUVER DES DÉFAUTS RÉELS en LISA … [4476 caractères tronqués]`
+
+  ```
+started subagent 6d0c1d28-76e1-42f8-9e8c-7f88395f9e55
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/gpu/drave_gpu.cu'; s=open(p).read()\ndef rep(v,n,nom):\n    global s\n    assert s.count(v)==1, f\"{nom}::{s.count(v)}\"\n    s=s.replace(v,n,1)\n\n# (1) le poison doit survivre à l'écriture de la sort … [4173 caractères tronqués]`
+
+  ```
+noyau 4 : poison et barrières corrigés
+noyau 3 : barrière ajoutée
+noyaux exportés : 15
+0
+    noyau 3 (softmax sur k + Σ w·V) : GPU 0.07 ms · CPU 0.60 ms · écart max 5.960e-8 sur 1.244e-1 (relatif 4.79e-7)
+    noyau 4 (UN lancement) : 0.13 ms · écart max 8.941e-8 sur 1.244e-1 (relatif 7.19e-7)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cp drave-core/gpu/drave_gpu.cu /tmp/cu_sauve.cu && python3 - <<'PY'\n# Test du test : on casse volontairement la collecte (on ne prend plus les égaux)\n# pour vérifier que le poison NaN se déclenche ET que l'hôte refuse la sortie.\np … [1038 caractères tronqués]`
+
+  ```
+collecte sabotée (test du filet)
+0
+CUDA relecture du noyau 4 : CUDA_ERROR_ILLEGAL_ADDRESS (700)
+    noyau 4 : refusé (repli sur la chaîne séparée)
+noyaux exportés : 15
+0
+    noyau 4 (UN lancement) : 0.13 ms · écart max 8.941e-8 sur 1.244e-1 (relatif 7.19e-7)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/gpu/drave_gpu.cu'; s=open(p).read()\ndef rep(v,n,nom):\n    global s\n    assert s.count(v)==1, f\"{nom}::{s.count(v)}\"\n    s=s.replace(v,n,1)\n\nrep(\"\"\"    red[tid] = (float)(rs + re);\n    __syn … [2946 caractères tronqués]`
+
+  ```
+filet déplacé avant la somme
+0
+=== test du filet (collecte sabotée) ===
+sabotage
+0
+[topk] noyau 4 : sortie non finie à l'indice 0 — collecte incomplète, repli CPU
+    noyau 4 : refusé (repli sur la chaîne séparée)
+noyaux exportés : 15
+0
+    noyau 4 (UN lancement) : 0.13 ms · écart max 8.941e-8 sur 1.244e-1 (relatif 7.19e-7)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -F - <<'EOF' && git log --oneline -1\nLe filet du noyau 4 doit agir AVANT la somme (test du filet, saboté exprès)\n\nTrois défauts trouvés en vérifiant le filet au lieu de le croire :\n\n1. le NaN était éc … [939 caractères tronqués]`

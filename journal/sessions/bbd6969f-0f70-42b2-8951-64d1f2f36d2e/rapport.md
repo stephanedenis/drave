@@ -7,12 +7,12 @@
 | Début | 2026-09-28 14:46 |
 | Durée | 53.3 h |
 | Tours | 48 |
-| Messages | 2300 |
-| Appels d'outils | 2176 |
+| Messages | 2305 |
+| Appels d'outils | 2181 |
 | Fichiers touchés | 47 |
-| Commandes | 1826 |
-| Sous-agents | 14 |
-| Commits | 196 |
+| Commandes | 1830 |
+| Sous-agents | 15 |
+| Commits | 197 |
 | Compactages de contexte | 3 |
 
 ## Objectifs déclarés
@@ -2234,7 +2234,7 @@ Fusionner la sélection en un noyau par ligne (8 lancements → 2), supprimer le
 
 ### Tour 48 — Continue en blocs de 2h jusqu'à demain 8h HAE. pour chacun des blocs/sprints tu dois être en autonomie totale. C'est à d … [282 caractères tronqués]
 
-*24 appels d'outils.* Actions notables :
+*29 appels d'outils.* Actions notables :
 
 - bash — Check time and count remaining boxes
 - bash — Start sprint 2
@@ -2250,7 +2250,7 @@ Fusionner la sélection en un noyau par ligne (8 lancements → 2), supprimer le
 - bash — Add poison check and finiteness guard
 - bash — Locate the topk GPU branch
 - bash — Wire fused kernel into the model
-- … et 10 autres
+- … et 15 autres
 
 **Synthèse produite :**
 
@@ -2326,6 +2326,7 @@ Maintenant le banc doit vérifier le noyau fusionné contre la référence CPU :
 - tour 47 — Adversarial review GPU topk
 - tour 47 — Vérifier chiffres et cohérence docs
 - tour 47 — Revue adversariale du branchement top-k
+- tour 48 — Revue adverse du noyau fusionné
 
 ### Commandes exécutées (échantillon)
 
@@ -2369,7 +2370,7 @@ Maintenant le banc doit vérifier le noyau fusionné contre la référence CPU :
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 1786 autres
+- … et 1790 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2713,4 +2714,5 @@ Maintenant le banc doit vérifier le noyau fusionné contre la référence CPU :
 - Journal : index des sessions (clôture)" 2>/dev/null; git status --short; echo "--- 22 commits, aucun processus, dépôt propre ---"; pgrep -c -x drave; ps -eo pcp
 - Journal : index régénéré par l'outillage de session" && git log --oneline -3 && echo "--- reste ---" && git status --short | wc -l
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' def patch(p, paires):     s=open(p).read()     for v,n,nom in paires:         assert s.co
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -F - <<'EOF' && git log --oneline -1 Le filet du noyau 4 doit agir AVANT la so
 
