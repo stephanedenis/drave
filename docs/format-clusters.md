@@ -153,11 +153,19 @@ que les huit types ajoutés après NVFP4 (`Q1_0`, `Q2_0`, `Q6_0`, `Q6_1`, `Q3_0`
   cluster **demandé mais absent du disque est une erreur**, pas un silence : sans
   cela, un artefact amputé passait pour complet et les contributions manquantes
   disparaissaient sans un mot. Mesuré
-  sur Qwen3-30B : un nœud à un cluster tient en **2,36 Go** contre 6,33 Go pour
-  le modèle entier, et la perplexité décroît à mesure qu'on ajoute des clusters
-  (268 786 → 17 929 → 800). **Ce qui manque** : la somme des contributions entre
-  nœuds. Le moteur saute déjà un expert absent, mais rien n'additionne encore ce
-  que deux nœuds calculent chacun de leur côté.
+  sur Qwen3-30B, mêmes 7 jetons :
+
+  | clusters | perplexité | mémoire |
+  |---|---|---|
+  | 1 | 268 786,62 | **2,35 Go** |
+  | 2 | 63 780,09 | 2,83 Go |
+  | 4 | 3 378,91 | 4,60 Go |
+  | 8 | **799,8557** | 6,28 Go |
+
+  **Ce qui manque** : la somme des contributions entre nœuds. Le moteur saute
+  déjà un expert absent, mais rien n'additionne encore ce que deux nœuds calculent
+  chacun de leur côté. Avec elle, deux nœuds à quatre clusters rendraient
+  799,8557 pour 4,60 Go chacun — moins que les 6,28 Go d'un nœud complet.
 * **Les biais d'experts + clusters** : refusés explicitement. Les indexer par
   l'expert global lirait la mauvaise ligne.
 * **Le mmap** : FAIT. `read_to_end` dupliquait le modèle (18,55 Go sur le tas en

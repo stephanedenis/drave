@@ -47238,3 +47238,25 @@ propre si vide
 ⏵ Il reste 40 min : je mesure la courbe mémoire/qualité du nœud partiel selon le nombre de clusters.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -m \"Journal automatique\" && cat > /tmp/courbe_partiel.sh <<'EOF'\n#!/bin/bash\n# Que coûte un nœud selon le nombre de clusters qu'il porte, et que rend-il ?\n# Mêmes jetons, même contexte ; la perplexité … [867 caractères tronqués]`
+
+  ```
+(no output)
+[timed out after 60000ms]
+[killed by signal: SIGTERM]
+  ```
+
+- **bash** `{"command": "sleep 30; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat /tmp/courbe_partiel.log", "description": "Read partial node curve"}`
+
+  ```
+1 cluster(s) : === perplexité 268786.6218 sur 7 tokens (0 événements, 2.0 s) ===|9.64 s · MAXRSS 2347620 Ko|
+2 cluster(s) : === perplexité 63780.0899 sur 7 tokens (0 événements, 1.7 s) ===|9.33 s · MAXRSS 2831132 Ko|
+4 cluster(s) : === perplexité 3378.9149 sur 7 tokens (0 événements, 2.8 s) ===|10.27 s · MAXRSS 4596380 Ko|
+8 cluster(s) : === perplexité 799.8557 sur 7 tokens (0 événements, 2.6 s) ===|10.65 s · MAXRSS 6280784 Ko|
+=== fin ===
+  ```
+
+### 🤖 Assistant
+
+⏵ Courbe nette : la perplexité décroît et la mémoire suit. Je consigne.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np = 'reports/rapport-lecteur-multifichiers.md'\ns = open(p).read()\ns = s.replace('''| clusters chargés | perplexité (7 jetons) | mémoire maximale |\n|---|---|---|\n| les 8 | **799,8557** | 6,33 Go |\n| 0 et 3 | 17  … [2381 caractères tronqués]`

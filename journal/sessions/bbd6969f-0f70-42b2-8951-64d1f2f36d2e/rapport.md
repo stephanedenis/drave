@@ -7,12 +7,12 @@
 | Début | 2026-09-28 14:46 |
 | Durée | 69.6 h |
 | Tours | 51 |
-| Messages | 2990 |
-| Appels d'outils | 2845 |
+| Messages | 2992 |
+| Appels d'outils | 2847 |
 | Fichiers touchés | 65 |
-| Commandes | 2458 |
+| Commandes | 2460 |
 | Sous-agents | 22 |
-| Commits | 250 |
+| Commits | 251 |
 | Compactages de contexte | 4 |
 
 ## Objectifs déclarés
@@ -2400,7 +2400,7 @@ Les téléchargements avancent en parallèle : **DeepSeek-V4.1-Flash 68 %** (249
 
 ### Tour 51 — continue jusqu'à 13h HAE
 
-*282 appels d'outils.* Actions notables :
+*284 appels d'outils.* Actions notables :
 
 - bash — Check time and running processes
 - job_list
@@ -2416,11 +2416,11 @@ Les téléchargements avancent en parallèle : **DeepSeek-V4.1-Flash 68 %** (249
 - todo_write
 - bash — Count buffer accesses in gguf.rs
 - bash — Map functions and base computations
-- … et 267 autres
+- … et 269 autres
 
 **Synthèse produite :**
 
-⏵ Il reste 40 min : je mesure la courbe mémoire/qualité du nœud partiel selon le nombre de clusters.
+⏵ Courbe nette : la perplexité décroît et la mémoire suit. Je consigne.
 
 ## 3. Travail accompli
 
@@ -2561,7 +2561,7 @@ Les téléchargements avancent en parallèle : **DeepSeek-V4.1-Flash 68 %** (249
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 2418 autres
+- … et 2420 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2959,4 +2959,5 @@ Les téléchargements avancent en parallèle : **DeepSeek-V4.1-Flash 68 %** (249
 - Porte gpt-oss verte sur le binaire final : 15,1757 avec mmap, 21 minutes" && git log --oneline -1; echo "=== processus ==="; pgrep -af "drave-core|telecharger" 
 - Journal : inventaire des modèles lourds et vérificateur de table dans REPRISE" && git log --oneline -12
 - Journal automatique" && cat > /tmp/courbe_partiel.sh <<'EOF' #!/bin/bash # Que coûte un nœud selon le nombre de clusters qu'il porte, et que rend-il ? # Mêmes j
+- Courbe du nœud partiel : 1, 2, 4, 8 clusters — perplexité et mémoire  1 cluster 268 786,62 / 2,35 Go · 2 clusters 63 780,09 / 2,83 Go · 4 clusters 3 378,91 / 4,
 

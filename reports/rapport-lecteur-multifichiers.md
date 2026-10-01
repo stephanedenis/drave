@@ -193,11 +193,18 @@ moteur saute les experts absents (`Moe::ou` rend `None`) : le résultat est
 Ce que la mesure montre, c'est le coût d'un nœud et la décroissance de l'erreur
 quand on ajoute des clusters :
 
-| clusters chargés | perplexité (7 jetons) | mémoire maximale |
-|---|---|---|
-| les 8 | **799,8557** | 6,33 Go |
-| 0 et 3 | 17 929,10 | 3,02 Go |
-| 0 seul | 268 786,62 | **2,36 Go** |
+| clusters chargés | perplexité (7 jetons) | mémoire maximale | chargement + passe |
+|---|---|---|---|
+| 1 | 268 786,62 | **2,35 Go** | 9,64 s |
+| 2 | 63 780,09 | 2,83 Go | 9,33 s |
+| 4 | 3 378,91 | 4,60 Go | 10,27 s |
+| **8** | **799,8557** | 6,28 Go | 10,65 s |
+
+La perplexité décroît de façon monotone et la mémoire suit — **2,7× moins pour un
+nœud à un cluster que pour le modèle entier**. C'est le compromis que le format
+achète, et c'est aussi ce qui manque : la somme des contributions entre nœuds.
+Deux nœuds à quatre clusters rendraient 799,8557 pour 4,60 Go chacun, soit moins
+que les 6,28 Go d'un nœud complet.
 
 La mémoire d'un nœud à un cluster est **2,7× moindre** que celle du modèle
 entier. C'est la mesure qui justifie le format — et elle montre aussi, par la
