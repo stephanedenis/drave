@@ -102,25 +102,31 @@ fn charger_moe(g: &Gguf, l: usize, n_expert: usize) -> Option<Moe> {
     // les fichiers de clusters sous le préfixe `cl{c}/`. Dans le second cas
     // chaque fichier ne porte QUE ses experts locaux : la dimension d'expert
     // du tenseur vaut `experts_par_cluster`, pas `n_expert`.
-    let vues = |s: &str| -> Option<Vec<Vue4>> {
+    let vues = |s: &str| -> Option<(Vec<usize>, Vec<Vue4>)> {
         let base = p(s);
-        let noms: Vec<String> = match map {
+        let (numeros, noms): (Vec<usize>, Vec<String>) = match map {
             // Un mapping actif prime sur le nom en clair : si les deux existent,
             // c'est le découpage qui dit où sont les experts, et lire le tenseur
             // entier indexerait ensuite une ligne locale dans un tenseur global.
-            None if g.tensor(&base).is_some() => vec![base.clone()],
+            None if g.tensor(&base).is_some() => (vec![0], vec![base.clone()]),
             Some(m) => {
                 // Les préfixes sont attribués par POSITION dans la liste des
                 // fichiers ; un fichier qui ne porte pas ce tenseur décalerait
                 // tous les suivants, en silence (mêmes formes). On exige donc la
                 // série complète, dans l'ordre.
-                let v: Vec<String> = (0..m.n_clusters).map(|c| format!("cl{c}/{base}")).collect();
-                if let Some(i) = v.iter().position(|n| g.tensor(n).is_none()) {
-                    eprintln!("[moe] couche {l} : « {} » manquant — {}/{} fichiers portent \
-« {base} »", v[i], v.iter().filter(|n| g.tensor(n).is_some()).count(), m.n_clusters);
+                // Un nœud partiel ne charge qu'une partie des clusters : les
+                // absents sont NORMAUX. On garde ceux qui sont là, dans l'ordre
+                // des numéros — c'est le préfixe qui porte le numéro, donc
+                // `mapping.tsv` continue de désigner le bon fichier.
+                let v: Vec<(usize, String)> = (0..m.n_clusters)
+                    .map(|c| (c, format!("cl{c}/{base}")))
+                    .filter(|(_, n)| g.tensor(n).is_some()).collect();
+                if v.is_empty() {
+                    eprintln!("[moe] couche {l} : aucun cluster chargé ne porte « {base} »");
                     return None;
                 }
-                v
+                (v.iter().map(|(c, _)| *c).collect(),
+                 v.into_iter().map(|(_, n)| n).collect())
             }
             None => { eprintln!("[moe] couche {l} : « {base} » absent et aucun mapping"); return None; }
         };
@@ -158,7 +164,7 @@ au lieu de {n_expert}, et aucun mapping n'est actif"),
             };
             out.push(Vue4 { base: ptr, n_out, n_in, nb: n_in / bloc, src });
         }
-        Some(out)
+        Some((numeros, out))
     };
     // Vue d'un tenseur 3D NON découpé (l'expert partagé, qui reste dans le
     // fichier commun) : aucune traduction d'index n'est nécessaire.
@@ -171,11 +177,18 @@ au lieu de {n_expert}, et aucun mapping n'est actif"),
         if n_in % bloc != 0 { return None; }
         Some(Vue4 { base: g.data_ptr(nom)?, n_out, n_in, nb: n_in / bloc, src })
     };
-    let gate = vues("ffn_gate_exps.weight")?;
-    let up = vues("ffn_up_exps.weight")?;
-    let down = vues("ffn_down_exps.weight")?;
+    let (numeros, gate) = vues("ffn_gate_exps.weight")?;
+    let (num_up, up) = vues("ffn_up_exps.weight")?;
+    let (num_down, down) = vues("ffn_down_exps.weight")?;
+    if num_up != numeros || num_down != numeros {
+        panic!("couche {l} : les trois projections d'experts ne portent pas les mêmes \
+clusters ({numeros:?}, {num_up:?}, {num_down:?})");
+    }
     if let Some(m) = map {
-        if gate.len() != m.n_clusters {
+        // Sur un nœud COMPLET, les huit clusters doivent être là : un fichier
+        // manquant décalerait les index. Sur un nœud PARTIEL, c'est le contraire
+        // — n'en avoir qu'un est le but.
+        if !crate::clusters::partiel() && gate.len() != m.n_clusters {
             panic!("couche {l} : {} fichiers portent les experts de gate, le mapping en \
 annonce {}", gate.len(), m.n_clusters);
         }
@@ -216,7 +229,7 @@ n'est pas implémenté, et les indexer par l'expert global serait faux");
         routeur, routeur_biais,
         biais_gate: bg, biais_up: bu, biais_down: bd,
         n_ff, gate, up, down, shexp,
-        couche: l, n_expert_global: n_expert, local: map,
+        couche: l, numeros, n_expert_global: n_expert, local: map,
     })
 }
 
@@ -293,6 +306,11 @@ pub struct Moe {
     pub down: Vec<Vue4>,
     /// Couche dont ce mélange fait partie (pour le mapping).
     pub couche: usize,
+    /// Numéro de cluster de chaque vue de `gate`/`up`/`down`. L'identifiant du
+    /// mapping est un NUMÉRO ; sa place dans le `Vec` dépend de ce que ce nœud a
+    /// chargé. Les confondre marchait tant que les huit clusters étaient là —
+    /// et sortait du tableau dès qu'un nœud n'en portait qu'un.
+    pub numeros: Vec<usize>,
     /// Nombre d'experts GLOBAUX : c'est lui qu'indexe le routeur, et lui seul.
     pub n_expert_global: usize,
     /// Mapping global → (fichier, ligne) quand le modèle est en clusters.
@@ -309,7 +327,14 @@ impl Moe {
     pub fn ou(&self, e: usize) -> Option<(usize, usize)> {
         match self.local {
             None => if e < self.n_expert_global { Some((0, e)) } else { None },
-            Some(m) => m.ou(self.couche, e),
+            Some(m) => {
+                let (cluster, ligne) = m.ou(self.couche, e)?;
+                // Le cluster de l'expert n'est pas forcément chargé ici : c'est
+                // exactement ce que veut dire « nœud partiel », et ce n'est pas
+                // une erreur.
+                let k = self.numeros.iter().position(|c| *c == cluster)?;
+                Some((k, ligne))
+            }
         }
     }
 }

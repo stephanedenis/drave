@@ -127,6 +127,16 @@ static ACTIF: std::sync::OnceLock<Mapping> = std::sync::OnceLock::new();
 #[inline]
 pub fn actif() -> Option<&'static Mapping> { ACTIF.get() }
 
+/// Ce nœud ne porte-t-il qu'une PARTIE des clusters (`DRAVE_CLUSTERS`) ?
+///
+/// La distinction compte : un contrôle d'exhaustivité a raison sur un nœud
+/// complet et tort sur un nœud partiel — c'est le principe même du découpage
+/// qu'un nœud ne porte pas tous les experts.
+static PARTIEL: std::sync::OnceLock<bool> = std::sync::OnceLock::new();
+
+#[inline]
+pub fn partiel() -> bool { PARTIEL.get().copied().unwrap_or(false) }
+
 /// Un modèle prêt à tourner : le GGUF assemblé et le mapping des experts.
 pub struct Modele {
     pub gguf: Gguf,
@@ -183,17 +193,49 @@ fn ouvrir_interne(dossier: &Path, meta_seule: bool) -> std::io::Result<Modele> {
 continue à partir de 0", p.display(), num)));
         }
     }
-    let clusters: Vec<PathBuf> = clusters.into_iter().map(|(_, p)| p).collect();
     let mapping = Mapping::lire(&dossier.join("mapping.tsv"))?;
-    if clusters.len() != mapping.n_clusters {
+    // Un nœud peut ne porter qu'une PARTIE des clusters (`DRAVE_CLUSTERS=0,3`) :
+    // c'est le mode « nœud partiel », où chaque nœud ne sert que ses experts et
+    // où les contributions se somment entre nœuds. Le mapping, lui, reste
+    // global : il dit où est chaque expert, pas ce que ce nœud-ci possède.
+    let gardes: Option<Vec<usize>> = match std::env::var("DRAVE_CLUSTERS") {
+        Ok(v) if !v.trim().is_empty() => Some(v.split(',')
+            .map(|x| x.trim().parse::<usize>().map_err(|_| std::io::Error::new(
+                std::io::ErrorKind::InvalidInput,
+                format!("DRAVE_CLUSTERS : « {x} » n'est pas un numéro de cluster"))))
+            .collect::<std::io::Result<Vec<usize>>>()?),
+        _ => None,
+    };
+    let clusters: Vec<(usize, PathBuf)> = match &gardes {
+        None => clusters,
+        Some(g) => {
+            for c in g {
+                if *c >= mapping.n_clusters {
+                    return Err(std::io::Error::new(std::io::ErrorKind::InvalidInput,
+                        format!("DRAVE_CLUSTERS : cluster {c} hors bornes ({} au total)",
+                                mapping.n_clusters)));
+                }
+            }
+            clusters.into_iter().filter(|(c, _)| g.contains(c)).collect()
+        }
+    };
+    let _ = PARTIEL.set(gardes.is_some());
+    if gardes.is_none() && clusters.len() != mapping.n_clusters {
         return Err(std::io::Error::new(std::io::ErrorKind::InvalidData, format!(
             "{} fichiers de cluster pour {} annoncés dans mapping.tsv",
             clusters.len(), mapping.n_clusters)));
     }
+    if clusters.is_empty() {
+        return Err(std::io::Error::new(std::io::ErrorKind::InvalidInput,
+            "DRAVE_CLUSTERS ne retient aucun cluster"));
+    }
     let mut chemins: Vec<PathBuf> = vec![commun];
-    chemins.extend(clusters.iter().cloned());
+    chemins.extend(clusters.iter().map(|(_, p)| p.clone()));
+    // Le préfixe porte le NUMÉRO du cluster, pas son rang dans la liste : c'est
+    // ce numéro que `mapping.tsv` utilise pour dire où est chaque expert. Un
+    // nœud qui ne charge que le cluster 3 doit exposer `cl3/`, pas `cl0/`.
     let mut prefixes: Vec<String> = vec![String::new()];
-    prefixes.extend((0..clusters.len()).map(|c| format!("cl{c}/")));
+    prefixes.extend(clusters.iter().map(|(c, _)| format!("cl{c}/")));
     let refs: Vec<&str> = prefixes.iter().map(String::as_str).collect();
     let gguf = if meta_seule {
         Gguf::open_meta_avec_prefixes(&chemins, &refs)?

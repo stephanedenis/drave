@@ -118,6 +118,52 @@ chargement. Le message a nommé la faute immédiatement.
 Même mécanisme que l'incident `iq1_m` (8,56 Go annoncés pour 86,9). Les types 41
 et 42, ajoutés à ggml, y tombaient. Un type hors table est désormais signalé.
 
+### Le mmap : 3,3× plus rapide, 3× moins de mémoire
+
+`read_to_end` lisait tout le fichier et en gardait une copie dans le tas, **en
+plus** du cache de pages du noyau — deux fois la taille du modèle en mémoire
+physique. Les fichiers sont maintenant **mappés** (le noyau lit les pages à la
+demande). Sur Qwen3-30B-A3B en clusters, mêmes 7 jetons, perplexité identique
+(799,8557 dans les deux cas) :
+
+| | chargement + passe | mémoire maximale (RSS) |
+|---|---|---|
+| mappé (défaut) | **9,32 s** | **6,35 Go** |
+| lu en entier (`DRAVE_MMAP=0`) | 30,68 s | 19,20 Go |
+
+Les 19,20 Go sont exactement la taille du modèle : la copie complète. Le mappé
+n'en touche que 6,35 Go — les pages réellement lues. Un modèle dont on
+n'utiliserait qu'un huitième des experts ne lirait qu'un huitième des octets.
+
+Portes revérifiées dans les deux modes : Qwen2.5-0.5B ctx 256 = **19,3885** avec
+et sans mmap.
+
+### Le nœud partiel : un huitième des experts pour un huitième de la mémoire
+
+`DRAVE_CLUSTERS=0` ne fait charger que `commun.gguf` + `cluster-00.gguf`. Le
+moteur saute les experts absents (`Moe::ou` rend `None`) : le résultat est
+**volontairement dégradé**, puisqu'il manque les contributions des autres nœuds.
+Ce que la mesure montre, c'est le coût d'un nœud et la décroissance de l'erreur
+quand on ajoute des clusters :
+
+| clusters chargés | perplexité (7 jetons) | mémoire maximale |
+|---|---|---|
+| les 8 | **799,8557** | 6,33 Go |
+| 0 et 3 | 17 929,10 | 3,02 Go |
+| 0 seul | 268 786,62 | **2,36 Go** |
+
+La mémoire d'un nœud à un cluster est **2,7× moindre** que celle du modèle
+entier. C'est la mesure qui justifie le format — et elle montre aussi, par la
+décroissance, que ce qui manque n'est pas un bug mais bien la somme des
+contributions entre nœuds, qui reste à écrire.
+
+Au passage, cette manipulation a **confirmé en vrai un défaut prédit par la revue
+adverse** : l'identifiant de cluster du mapping servait d'index direct dans le
+`Vec` des vues. Tant que les huit clusters étaient chargés, les deux coïncidaient
+et rien ne se voyait ; avec un seul cluster, le moteur est sorti du tableau
+(`index out of bounds: the len is 1 but the index is 6`). Les vues portent
+maintenant leur numéro, et `Moe::ou` le cherche au lieu de le supposer.
+
 ## Méthode
 
 Trois fois dans ce sprint, la correction est venue d'avoir **rendu visible** ce
@@ -134,9 +180,10 @@ pouvait l'attraper confronte le chemin à une valeur calculée à la main.
 
 - Le **nœud partiel** : charger un seul cluster et sommer les experts entre
   nœuds. Le moteur sait déjà sauter un expert absent ; rien ne somme encore.
-- Le **chemin par lots** sur les MoE : `--lot 64` sur Qwen3-30B-A3B panique
-  (`wdown.d` est vide pour un MoE et le code y arrive quand même). Défaut
-  **préexistant**, sans rapport avec les clusters.
+- Le **chemin par lots** sur les MoE : il fonctionne. `--lot 64` rend 15,2736
+  contre 15,2789 par jeton — l'écart connu entre les deux ordres de sommation.
+  La panique observée venait du double préfixe décrit plus haut, donc bien de ce
+  sprint, et non d'un défaut antérieur.
 - Le **mmap** : `read_to_end` charge tout le fichier. DeepSeek-V4.1-Flash fait
   366 Go, il restera hors de portée sans lui.
 - Les **biais d'experts** en clusters : refusés explicitement.

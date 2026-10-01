@@ -137,15 +137,18 @@ d'être compté zéro.
 
 ## Ce qui reste
 
-* **Le nœud partiel** : charger UN cluster et sommer les experts entre nœuds. Le
-  moteur sait déjà sauter un expert absent (`Moe::ou` rend `None`), mais rien ne
-  somme encore les contributions de deux nœuds.
+* **Le nœud partiel** : `DRAVE_CLUSTERS=0,3` ne charge que ces clusters. Mesuré
+  sur Qwen3-30B : un nœud à un cluster tient en **2,36 Go** contre 6,33 Go pour
+  le modèle entier, et la perplexité décroît à mesure qu'on ajoute des clusters
+  (268 786 → 17 929 → 800). **Ce qui manque** : la somme des contributions entre
+  nœuds. Le moteur saute déjà un expert absent, mais rien n'additionne encore ce
+  que deux nœuds calculent chacun de leur côté.
 * **Les biais d'experts + clusters** : refusés explicitement. Les indexer par
   l'expert global lirait la mauvaise ligne.
-* **Le mmap au lieu du `read_to_end`** : `Gguf::open` lit tout le fichier en
-  mémoire (18,56 Go pour Qwen3-30B). Charger 3,20 Go est déjà 5,8× mieux, mais le
-  mmap rendrait le chargement **paresseux** (les experts jamais allumés ne seraient
-  jamais lus).
+* **Le mmap** : FAIT. `read_to_end` dupliquait le modèle (18,55 Go sur le tas en
+  plus du cache de pages) ; les fichiers sont mappés, le noyau lit à la demande.
+  Mesuré sur Qwen3-30B en clusters : **9,32 s et 6,35 Go** contre **30,68 s et
+  19,20 Go**, perplexité identique. `DRAVE_MMAP=0` revient à la lecture.
 * **Le format binaire du manifeste** : JSON convient à quelques kilo-octets ; si le
   nombre de fichiers grandit (un par expert), il faudra un index binaire.
 * **Le rééquilibrage par charge** : les clusters sont équilibrés en nombre

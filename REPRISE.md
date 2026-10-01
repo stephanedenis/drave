@@ -710,6 +710,17 @@ python3 tools/pair_factice.py 45760 896 &
     --ctx 256 --abits 16 --threads 16 --limit 512 --dense
 ```
 
-**Ouvert** : l'épreuve d'exécution origine/clusters (lancée, non lue) ; le chemin
-par lots qui panique sur les MoE (`model.rs:2945`, défaut préexistant) ; `mmap`
-pour les modèles plus gros que la RAM ; le nœud partiel (un seul cluster).
+# L'ÉPREUVE décisive : le modèle éclaté rend le MÊME chiffre que l'original.
+# (mêmes jetons, même contexte, chemin par jeton)
+./drave-core/target/release/drave /home/stephane/Data13TB/stephane/modeles/gguf/Qwen3-30B-A3B-Instruct-2507-Q4_K_M.gguf \
+    --ppl /tmp/ids_qwen.txt --ctx 64 --limit 64 --dense --threads 12 --lot 1   # 15,2789
+./drave-core/target/release/drave /home/stephane/FastNVMe/artefacts/modeles-optimises/qwen3-30b-8clusters \
+    --ppl /tmp/ids_qwen.txt --ctx 64 --limit 64 --dense --threads 12 --lot 1   # 15,2789
+# et par lots (--lot 64) : 15,2736 — l'écart connu entre les deux ordres de sommation
+```
+
+**Ouvert** : `mmap` pour les modèles plus gros que la RAM (DeepSeek-V4.1, 366 Go) ;
+le nœud partiel (charger UN cluster et sommer les experts entre nœuds) ; les biais
+d'experts en clusters (gpt-oss en a, refusés explicitement pour l'instant).
+
+```bash

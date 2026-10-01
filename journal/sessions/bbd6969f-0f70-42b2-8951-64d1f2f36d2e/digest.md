@@ -45810,3 +45810,394 @@ Created file
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && tail -2 /tmp/gate_oss_final.log 2>/dev/null; echo \"--- commit intermédiaire ---\"; git add -A && git commit -q -m \"Clusters exécutables : origine 15,2789 = clusters 15,2789, et les défauts trouvés en chemin\n\nL'épreuve appariée (m … [1576 caractères tronqués]`
+
+  ```
+gpt-oss ctx 256 (attendu 15,1757) : --- commit intermédiaire ---
+8f55e4f Clusters exécutables : origine 15,2789 = clusters 15,2789, et les défauts trouvés en chemin
+  ```
+
+### 🤖 Assistant
+
+⏵ Je complète le sprint avec les résultats définitifs pendant que la porte tourne.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np = 'sprints/08-un-modele-eclate-se-lit-comme-un-seul.md'\ns = open(p).read()\ns = s.replace('''- **Début** : 11:13 · **Fin** : 13:13 (boxing de 120 min)''',\n              '''- **Début** : 11:13 · **Fin** : 13:13 ( … [4080 caractères tronqués]`
+
+  ```
+sprint mis à jour
+gpt-oss ctx 256 (attendu 15,1757) :
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '/## Revue adverse/,$p' sprints/08-un-modele-eclate-se-lit-comme-un-seul.md | tail -40", "description": "Review the end of the sprint file"}`
+
+  ```
+- **le tri des clusters était lexicographique** (`cluster-100` avant
+  `cluster-20`) alors que les préfixes `cl{c}/` sont attribués par position :
+  au-delà de 99 clusters, chaque expert lu dans le mauvais fichier, sans erreur ;
+- **le mapping était publié avant l'ouverture** : un dossier refusé laissait le
+  mapping d'un autre modèle ;
+- **`chemins_du_modele` échouait sur un chemin sans dossier** (`read_dir("")`) ;
+- **`meta.as_ref().unwrap()` paniquait** quand le premier fichier n'a pas de
+  métadonnées, rendant inatteignable le message d'erreur prévu.
+
+Elle a aussi montré que **le test multi-fichiers ne pouvait pas attraper le NaN**
+(il ne fabrique que du F32 et ne passe que par `dequant`) et listé quatre angles
+morts. Quatre tests ont été ajoutés en conséquence : préfixes, mode en-tête seul,
+détection des shards, dossier de clusters de bout en bout, numérotation, type
+inconnu. Le test du dossier de clusters a d'ailleurs **révélé un cinquième
+défaut** (publication du mapping avant succès) que la relecture n'avait pas vu.
+
+Ses trois attaques les plus utiles :
+
+1. **« Le test multi-fichiers ne prouve pas la traduction d'experts. »** Exact :
+   il vérifie la concaténation des tense
+… [1130 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np = 'sprints/08-un-modele-eclate-se-lit-comme-un-seul.md'\ns = open(p).read()\ns = s.replace('''1. **« Le test multi-fichiers ne prouve pas la traduction d'experts. »** Exact :\n   il vérifie la concaténation des te … [1888 caractères tronqués]`
+
+  ```
+ok
+gpt-oss ctx 256 (attendu 15,1757) : 11:40
+  ```
+
+### 🤖 Assistant
+
+⏵ Je teste le chemin par lots sur les clusters (NVMe, rapide) — le défaut venait peut-être du double préfixe.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/lot_clusters.sh <<'EOF'\n#!/bin/bash\ncd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\nA=/home/stephane/FastNVMe/artefacts/modeles-optimises/qwen3-30b-8clusters\nfor lot in 64 1; do\n    printf \"lot %-3s : \" \"$lot\"\ … [526 caractères tronqués]`
+
+  ```
+[stderr]
+cp: cannot create regular file '/tmp/drave-fige': Text file busy
+cat: /tmp/lot_clusters.log: No such file or directory
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -i 's|/tmp/drave-fige |/tmp/drave-fige2 |' /tmp/lot_clusters.sh && cp drave-core/target/release/drave /tmp/drave-fige2 && nohup /tmp/lot_clusters.sh > /tmp/lot_clusters.log 2>&1 & sleep 55; cat /tmp/lot_clusters.log; echo \"--- g … [111 caractères tronqués]`
+
+  ```
+lot 64  : perplexité 15.2736 sur 63 tokens (0 événements, 9.9 s) 
+lot 1   : --- gpt-oss ---
+gpt-oss ctx 256 (attendu 15,1757) :
+  ```
+
+### 🤖 Assistant
+
+⏵ Le chemin par lots **fonctionne** (15,2736) : mon sprint affirmait à tort « défaut préexistant ». Je corrige.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np = 'sprints/08-un-modele-eclate-se-lit-comme-un-seul.md'\ns = open(p).read()\ns = s.replace('''- **Le chemin par lots achoppe sur les MoE** : `--lot 64` panique à\n  `model.rs:2945`, « projection dense requise » (` … [1823 caractères tronqués]`
+
+  ```
+ok
+gpt-oss ctx 256 (attendu 15,1757) : lot 64  : perplexité 15.2736 sur 63 tokens (0 événements, 9.9 s) 
+lot 1   : perplexité 15.2789 sur 63 tokens (0 événements, 12.4 s)
+  ```
+
+### 🤖 Assistant
+
+⏵ Mise à jour de REPRISE.md avec les chiffres définitifs.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np = 'REPRISE.md'\ns = open(p).read()\ns = s.replace('''**Ouvert** : l'épreuve d'exécution origine/clusters (lancée, non lue) ; le chemin\npar lots qui panique sur les MoE (`model.rs:2945`, défaut préexistant) ; `mma … [1153 caractères tronqués]`
+
+  ```
+ok
+gpt-oss ctx 256 (attendu 15,1757) : 11:42
+               total        used        free      shared  buff/cache   available
+Mem:             125          34          15           4          81          91
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"prochaine\\|Prochaine\\|## \" README.md | head -20", "description": "Inspect README structure"}`
+
+  ```
+18:## La journée du 30/09 — huit chantiers, mesurés
+36:## État du projet
+72:## Test de principe (`run_quantify.py`)
+122:## Élagage et approche par événement (`run_sparsity.py`)
+170:## Encodage de structure : éliminer complètement la valeur (`run_encoding.py`)
+213:## Architecture « push » (AER) et exécution CPU (`run_cpu.py`, `bench/cpu_aer.c`)
+260:## Tri et dédoublonnage des contributions (`bench/cpu_merge.c`)
+295:## Moteur d'événements Rust (`drave-core`)
+350:## Formats et modèles réellement lisibles
+370:## Inférence complète en Rust (`--infer`)
+452:## Écarts avec le CDC d'origine
+465:## Structure
+483:## Lancer
+496:## Prochaines étapes
+509:   lieu de 75 — c'est le premier chantier de la prochaine session, avec la courbe
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '496,520p' README.md; echo \"=== 350-370 ===\"; sed -n '350,372p' README.md", "description": "Read README next steps and formats"}`
+
+  ```
+## Prochaines étapes
+
+La feuille de route complète est dans [`docs/roadmap.md`](docs/roadmap.md). Ce qui
+est ouvert aujourd'hui, par ordre de valeur mesurée :
+
+1. **Le top-k déporté fonctionne — mais pas dans le préremplissage.** Les trois
+   noyaux sont écrits, fusionnés en un seul (`attn_topk_tout` : descente radix,
+   collecte et somme par ligne, 8 lancements → 2) et branchés dans le moteur
+   (`DRAVE_GPU_TOPK=1`) : l'attention creuse déportée est **plate** (4,5–5,0
+   ms/jeton de 255 à 4 095 clés) là où le CPU monte de 4,26 à 38,84, et le
+   croisement tombe à ~300 clés. Détail : `reports/rapport-gpu-topk-selection.md`.
+   **Ce qui manque** : le chemin par lots ignore `--attn-topk` (le moteur le dit),
+   donc le préremplissage reste dense et coûte 246 s par sonde de 4 096 jetons au
+   lieu de 75 — c'est le premier chantier de la prochaine session, avec la courbe
+   du k nécessaire ([`reports/rapport-aiguille-topk.md`](reports/rapport-aiguille-topk.md)).
+2. **La qualité de l'attention creuse** : à 4 096 clés, k = 256 (6 %) retrouve
+   l'information 2 fois sur 3 (trois fenêtres distinctes) et k = 1 024 (25 %) 3 fois
+   sur 3, l'attention complète 3 fois sur 3 — mais 8 fenêtres su
+… [1685 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np = 'README.md'\ns = open(p).read()\ns = s.replace('''Les lecteurs Q4_K et Q6_K sont vérifiés **tenseur par tenseur** contre une\nréférence F16 des mêmes poids produite par `llama-quantize`, et le routage MoE\nsur ` … [1798 caractères tronqués]`
+
+  ```
+ok
+gpt-oss ctx 256 (attendu 15,1757) : 11:43
+  ```
+
+### 🤖 Assistant
+
+⏵ Chantier suivant : `mmap` — sans lui, un modèle de 366 Go reste hors de portée.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np = 'drave-core/src/gguf.rs'\ns = open(p).read()\ndef rep(a, b):\n    global s\n    assert a in s, f\"ANCRE INTROUVABLE : {a[:70]!r}\"\n    s = s.replace(a, b, 1)\n\nrep('''use std::collections::HashMap;\nuse std::f … [5841 caractères tronqués]`
+
+  ```
+ok
+BUILD 0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && (cd drave-core && cargo test --release 2>&1 | grep -E \"^test result|FAILED\"); echo \"=== MESURE : mmap contre lecture, Qwen3-30B en clusters ===\"; cat > /tmp/mesure_mmap.sh <<'EOF'\n#!/bin/bash\ncd /home/stephane/Data13TB/stephane … [750 caractères tronqués]`
+
+  ```
+test result: ok. 29 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.11s
+=== MESURE : mmap contre lecture, Qwen3-30B en clusters ===
+[timed out after 60000ms]
+[killed by signal: SIGTERM]
+  ```
+
+- **bash** `{"command": "sleep 45; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat /tmp/mesure_mmap.log; echo \"--- gpt-oss ---\"; tail -1 /tmp/gate_oss_final.log", "description": "Read mmap measurement"}`
+
+  ```
+mappe  :        7 tokens notés — perplexité cumulée 799.856  (4.0 tok/s) === perplexité 799.8557 sur 7 tokens (0 événements, 1.8 s) === 9.32 s · MAXRSS 6346140 Ko 
+lu     :        7 tokens notés — perplexité cumulée 799.856  (4.3 tok/s) === perplexité 799.8557 sur 7 tokens (0 événements, 1.6 s) === 30.68 s · MAXRSS 19200204 Ko 
+--- gpt-oss ---
+gpt-oss ctx 256 (attendu 15,1757) :
+  ```
+
+### 🤖 Assistant
+
+⏵ mmap : 3,3× plus rapide et 3× moins de mémoire, résultat identique. Je vérifie les portes.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== PORTE QWEN (mmap par défaut) ===\"; timeout 300 ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf --ppl /tmp/ids_qwen.txt --ctx 256 --abits 16 --threads 16 --limit 512 --dense 2>&1 | grep -oE \"=== perplexité … [448 caractères tronqués]`
+
+  ```
+=== PORTE QWEN (mmap par défaut) ===
+[timed out after 60000ms]
+[killed by signal: SIGTERM]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/portes_mmap.sh <<'EOF'\n#!/bin/bash\ncd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\nD=./drave-core/target/release/drave\nfor v in 1 0; do\n    printf \"DRAVE_MMAP=%s : \" \"$v\"\n    env DRAVE_MMAP=$v timeout 600 $D m … [435 caractères tronqués]`
+
+  ```
+DRAVE_MMAP=1 : perplexité 19.3885 sur 510 tokens (0 événements, 18.7 s)
+DRAVE_MMAP=0 : perplexité 19.3885 sur 510 tokens (0 événements, 18.0 s)
+=== fin ===
+  ```
+
+### 🤖 Assistant
+
+⏵ Porte verte avec et sans mmap. Je documente la mesure.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np = 'reports/rapport-lecteur-multifichiers.md'\ns = open(p).read()\ns = s.replace('''## Méthode''',\n'''### Le mmap : 3,3× plus rapide, 3× moins de mémoire\n\n`read_to_end` lisait tout le fichier et en gardait une c … [1626 caractères tronqués]`
+
+  ```
+ok
+gpt-oss ctx 256 (attendu 15,1757) : 11:47
+  ```
+
+### 🤖 Assistant
+
+⏵ Nouveau chantier : le nœud partiel — charger seulement certains clusters, avec les bons préfixes.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np = 'drave-core/src/clusters.rs'\ns = open(p).read()\ndef rep(a, b):\n    global s\n    assert a in s, f\"ANCRE INTROUVABLE : {a[:70]!r}\"\n    s = s.replace(a, b, 1)\n\nrep('''    let clusters: Vec<PathBuf> = clust … [3929 caractères tronqués]`
+
+  ```
+BUILD 0
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 63, in <module>
+  File "<stdin>", line 5, in rep
+AssertionError: ANCRE INTROUVABLE : '                let v: Vec<String> = (0..m.n_clusters).map(|c| format!'
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"position(|n| g.tensor(n).is_none())\" drave-core/src/model.rs && python3 - <<'PY'\n# 1. clusters.rs : sélection partielle + préfixes par NUMÉRO\np = 'drave-core/src/clusters.rs'\ns = open(p).read()\na = '''    let clusters: … [4529 caractères tronqués]`
+
+  ```
+118:                if let Some(i) = v.iter().position(|n| g.tensor(n).is_none()) {
+clusters.rs ok
+model.rs ok
+BUILD 0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && (cd drave-core && cargo test --release 2>&1 | grep -E \"^test result|FAILED|panicked\" -A3 | head -6); cp drave-core/target/release/drave /tmp/drave-fige4; cat > /tmp/mesure_partiel.sh <<'EOF'\n#!/bin/bash\n# Nœud partiel : que coûte … [759 caractères tronqués]`
+
+  ```
+test result: ok. 29 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.11s
+
+[timed out after 60000ms]
+[killed by signal: SIGTERM]
+  ```
+
+- **bash** `{"command": "sleep 40; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat /tmp/mesure_partiel.log; echo \"--- gpt-oss ---\"; tail -2 /tmp/gate_oss_final.log; date +%H:%M", "description": "Read partial node measurements"}`
+
+  ```
+complet     : [config] mélanges d'experts chargés : 48/48 couches · mapping actif : 8 clusters × 16 experts|       7 tokens notés — perplexité cumulée 799.856  (3.8 tok/s)|=== perplexité 799.8557 sur 7 tokens (0 événements, 1.8 s) ===|10.34 s · MAXRSS 6334892 Ko|
+un_cluster  : 0.84 s · MAXRSS 127052 Ko|
+--- gpt-oss ---
+gpt-oss ctx 256 (attendu 15,1757) : 11:50
+  ```
+
+### 🤖 Assistant
+
+⏵ Nœud partiel : 0,84 s et 127 Mo contre 10,34 s et 6,33 Go. Je vérifie sa sortie complète.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/partiel_diag.sh <<'EOF'\n#!/bin/bash\ncd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\nA=/home/stephane/FastNVMe/artefacts/modeles-optimises/qwen3-30b-8clusters\nenv DRAVE_CLUSTERS=0 /tmp/drave-fige4 \"$A\" --ppl /tmp/i … [289 caractères tronqués]`
+
+  ```
+[attention] QT_IM_SWITCHER est l'ancien nom d'une variable d'environnement : elles s'appellent maintenant DRAVE_* (voir docs/histoire.md). Rien n'a été appliqué.
+/tmp/ids_qwen.txt : 8 tokens, fenêtres de 64
+
+thread 'main' (2931918) panicked at src/model.rs:183:13:
+couche 0 : 1 fichiers portent les experts de gate, le mapping en annonce 8
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+=== EXIT 0 ===
+  ```
+
+### 🤖 Assistant
+
+⏵ Mon propre garde-fou refuse le nœud partiel ; je le rends conscient du mode.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np = 'drave-core/src/clusters.rs'\ns = open(p).read()\na = '''/// Le mapping actif, s'il y en a un.\n#[inline]\npub fn actif() -> Option<&'static Mapping> { ACTIF.get() }'''\nb = '''/// Le mapping actif, s'il y en a  … [2040 caractères tronqués]`
+
+  ```
+ok
+BUILD 0
+[timed out after 60000ms]
+[killed by signal: SIGTERM]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat /tmp/partiel_diag.log | tail -8", "description": "Read partial node diagnostic"}`
+
+  ```
+[config] puits appris sur 0/48 couches · n_rot 128 · ffn 6144 · experts 128
+[config] rotation : RoPE simple (le modèle ne déclare pas YaRN)
+[tête 4 bits] 151936 × 2048 → 6.56 b/poids, 0 Mo, 0.0 s
+
+thread 'main' (2932400) panicked at src/model.rs:3753:38:
+index out of bounds: the len is 1 but the index is 6
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+=== EXIT 0 ===
+  ```
+
+### 🤖 Assistant
+
+⏵ Défaut de la revue confirmé en vrai : l'identifiant de cluster servait d'index. Je corrige.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np = 'drave-core/src/model.rs'\ns = open(p).read()\ndef rep(a, b):\n    global s\n    assert a in s, f\"ANCRE INTROUVABLE : {a[:70]!r}\"\n    s = s.replace(a, b, 1)\n\n# 1. `vues` rend aussi les NUMÉROS de cluster :  … [4660 caractères tronqués]`
+
+  ```
+ok
+error[E0308]: mismatched types
+   --> src/model.rs:111:50
+    |
+111 |             None if g.tensor(&base).is_some() => (vec![0], vec![base.clone()]),
+    |                                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ expected `Vec<String>`, found `(Vec<{integer}>, Vec<String>)`
+    |
+    = note: expected struct `Vec<String>`
+--
+error[E0308]: mismatched types
+   --> src/model.rs:128:17
+    |
+128 | /                 (v.iter().map(|(c, _)| *c).collect(),
+129 | |                  v.into_iter().map(|(_, n)| n).collect())
+    | |_________________________________________________________^ expected `Vec<String>`, found `(_, _)`
+    |
+--
+error: could not compile `drave-core` (bin "drave") due to 2 previous errors; 12 warnings emitted
+BUILD 101
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '105,135p' drave-core/src/model.rs", "description": "Read the mismatched code"}`
+
+  ```
+let vues = |s: &str| -> Option<(Vec<usize>, Vec<Vue4>)> {
+        let base = p(s);
+        let noms: Vec<String> = match map {
+            // Un mapping actif prime sur le nom en clair : si les deux existent,
+            // c'est le découpage qui dit où sont les experts, et lire le tenseur
+            // entier indexerait ensuite une ligne locale dans un tenseur global.
+            None if g.tensor(&base).is_some() => (vec![0], vec![base.clone()]),
+            Some(m) => {
+                // Les préfixes sont attribués par POSITION dans la liste des
+                // fichiers ; un fichier qui ne porte pas ce tenseur décalerait
+                // tous les suivants, en silence (mêmes formes). On exige donc la
+                // série complète, dans l'ordre.
+                // Un nœud partiel ne charge qu'une partie des clusters : les
+                // absents sont NORMAUX. On garde ceux qui sont là, dans l'ordre
+                // des numéros — c'est le préfixe qui porte le numéro, donc
+                // `mapping.tsv` continue de désigner le bon fichier.
+                let v: Vec<(usize, String)> = (0..m.n_clusters)
+                    .map(|c| (c, format!("cl{c}/{base}")))
+     
+… [644 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np = 'drave-core/src/model.rs'\ns = open(p).read()\ns = s.replace('''        let noms: Vec<String> = match map {''',\n              '''        let (numeros, noms): (Vec<usize>, Vec<String>) = match map {''')\ns = s.r … [936 caractères tronqués]`
+
+  ```
+BUILD 0
+test result: ok. 29 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.15s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cp drave-core/target/release/drave /tmp/drave-fige6 && cat > /tmp/partiel2.sh <<'EOF'\n#!/bin/bash\n# Nœud partiel : que coûte un nœud qui ne porte QU'UN cluster, et que rend-il ?\ncd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\n … [668 caractères tronqués]`
+
+  ```
+complet       : === perplexité 799.8557 sur 7 tokens (0 événements, 2.5 s) ===|12.66 s · MAXRSS 6330528 Ko|
+cluster_0     : === perplexité 268786.6218 sur 7 tokens (0 événements, 1.1 s) ===|9.62 s · MAXRSS 2361596 Ko|
+clusters_0_3  : === perplexité 17929.1038 sur 7 tokens (0 événements, 1.3 s) ===|8.63 s · MAXRSS 3022932 Ko|
+  ```
+
+### 🤖 Assistant
+
+⏵ Nœud partiel prouvé : 2,36 Go pour un huitième des experts. Je documente et vérifie les portes.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && tail -2 /tmp/gate_oss_final.log; cat > /tmp/porte_finale.sh <<'EOF'\n#!/bin/bash\ncd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\nD=./drave-core/target/release/drave\nprintf \"Qwen ctx 256 (porte 19,3885) : \"\n$D models/Qwen2.5- … [368 caractères tronqués]`
+
+  ```
+gpt-oss ctx 256 (attendu 15,1757) : perplexité 15.1757 sur 510 tokens (0 événements, 103.9 s)
+=== fin ===
+Qwen ctx 256 (porte 19,3885) : perplexité 19.3885 sur 510 tokens
+=== fin ===
+  ```
+
+### 🤖 Assistant
+
+⏵ **Toutes les portes vertes** : gpt-oss 15,1757 · Qwen 19,3885. Je relance gpt-oss sur le binaire final (mmap).
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/porte_oss_final2.sh <<'EOF'\n#!/bin/bash\n# Porte gpt-oss sur le binaire FINAL (mmap par défaut), 60 jetons suffisent à\n# détecter une divergence : ce qui compte c'est la valeur, pas la longueur.\ncd /home/stephane/Data13 … [667 caractères tronqués]`
+
+  ```
+lancé
+11:55:31    27.1 Go / 49.2 Go (55.1 %, 108 Mo/s)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np = 'reports/rapport-lecteur-multifichiers.md'\ns = open(p).read()\ns = s.replace('''## Méthode''',\n'''### Le nœud partiel : un huitième des experts pour un huitième de la mémoire\n\n`DRAVE_CLUSTERS=0` ne fait char … [2182 caractères tronqués]`
+
+  ```
+ok
+gpt-oss ctx 256 lot 1 :
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -m \"mmap (3,3x plus rapide, 3x moins de mémoire) et nœud partiel (2,36 Go pour un huitième des experts)\n\nmmap : read_to_end lisait tout le fichier et en gardait une copie dans le tas, en\nplus du cache  … [1214 caractères tronqués]`

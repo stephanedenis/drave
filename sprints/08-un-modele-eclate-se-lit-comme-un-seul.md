@@ -1,6 +1,6 @@
 # Sprint 08 — Un modèle éclaté se lit comme un seul : lecteur multi-fichiers, shards et clusters
 
-- **Début** : 11:13 · **Fin** : 13:13 (boxing de 120 min)
+- **Début** : 11:13 · **Fin** : 13:13 (boxing de 120 min) · **Close** : 11:50
 - **Objectif** : un modèle éclaté en plusieurs fichiers (shards d'un GGUF découpé,
   ou notre format en clusters) doit s'ouvrir avec **la même commande** qu'un
   modèle ordinaire, et rendre **le même résultat**.
@@ -60,10 +60,12 @@ pire qu'un arrêt.
 | répartition réelle | shard 1 : 0 tenseur (métadonnées seules), shard 2 : 784, shard 3 : 544 |
 | Qwen3-30B-A3B en clusters, inventaire | 9 fichiers · **1 587 tenseurs · 18,55 Go** = le modèle d'origine |
 | chargement du modèle en clusters | 48 couches en **27,8 s**, listes 0,91 Go |
+| **épreuve appariée origine contre clusters** | **15,2789 = 15,2789** (mêmes 63 jetons) |
 | porte Qwen2.5-0.5B ctx 256 | **19,3885** (inchangée) |
-| `cargo test --release` | **24 verts** (20 → 24) |
+| `cargo test --release` | **29 verts** (20 → 29) |
+| mapping produit par le convertisseur | **identique à l'octet près** à celui dérivé du manifeste |
 
-## Les deux défauts trouvés, et comment
+## Les défauts trouvés, et comment
 
 ### a) `q8_dot_at` lisait au début du fichier — perplexité NaN
 
@@ -87,7 +89,17 @@ main, et compare ligne par ligne. **Vérifié par sabotage** : offset retiré �
 rien s'ils partagent leur origine. Il faut confronter le chemin à une vérité
 extérieure — ici une valeur calculée à la main.*
 
-### b) L'inventaire sans poids ignorait les préfixes
+### b) Le nom des tenseurs d'experts était préfixé deux fois
+
+`vues()` applique déjà `blk.{l}.` ; les appels lui passaient
+`p("ffn_gate_exps.weight")`, soit `blk.0.blk.0.ffn_gate_exps.weight`. Résultat :
+`charger_moe` rendait `None` pour **les 48 couches**, sans un mot, et le moteur
+tombait dans le chemin FFN dense. Trouvé en **rendant le silence visible** : un
+message par refus dans `charger_moe`, et un compteur
+`mélanges d'experts chargés : 0/48` au chargement. Le message a nommé la faute
+du premier coup (`blk.0.blk.0.…`).
+
+### c) L'inventaire sans poids ignorait les préfixes
 
 `open_multi_meta` n'appliquait pas les préfixes : les huit clusters portaient
 les mêmes noms de tenseurs, et sept disparaissaient par déduplication. Symptôme
@@ -100,13 +112,20 @@ est en cause (la première : 8,56 Go au lieu de 86,9 Go, faute d'`iq1_m`).*
 
 ## Ce qui reste ouvert
 
-- **L'épreuve d'exécution du modèle en clusters** (origine contre clusters, mêmes
-  jetons) tournait encore à la clôture du boxing. Elle est lancée, son résultat
-  sera lu au bloc suivant — **je ne le déclare donc pas acquis**.
-- **Le chemin par lots achoppe sur les MoE** : `--lot 64` sur Qwen3-30B-A3B
-  panique à `model.rs:2945`, `projection dense requise` (`wdown.d` est vide pour
-  un MoE, et le code y arrive quand même). **Défaut préexistant**, sans rapport
-  avec les clusters — il se déclenche sur le modèle d'origine aussi.
+- **L'épreuve d'exécution** : ACQUISE, 15,2789 des deux côtés. Le chemin par
+  lots achoppait sur les MoE ; l'épreuve a donc été faite par jeton (`--lot 1`).
+- **Le chemin par lots sur les MoE** : il FONCTIONNE, et il n'était pas
+  préexistant — j'avais écrit le contraire dans une première version de ce
+  sprint, avant de le mesurer. `--lot 64` sur le modèle en clusters rend
+  **15,2736** contre **15,2789** par jeton (mêmes 63 jetons) : l'écart de
+  0,035 % est celui, connu, entre les deux ordres de sommation. La panique
+  « projection dense requise » venait entièrement du double préfixe, donc de ce
+  sprint.
+
+*Correction d'une affirmation non vérifiée : j'ai d'abord écrit « défaut
+préexistant, sans rapport avec les clusters » parce que la panique se produisait
+aussi sur le modèle d'origine — ce qui était une déduction, pas une mesure. La
+mesure dit l'inverse. Une phrase de moins, un test de plus.*
 - `read_to_end` charge tout le fichier : DeepSeek-V4.1-Flash fait 366 Go, il
   faudra `mmap`.
 - Le nœud partiel : charger UN cluster et sommer les experts entre nœuds.
@@ -136,12 +155,33 @@ deuxième fois cette nuit qu'un bon point d'étranglement paie — la première 
 
 ## Revue adverse (autonome)
 
-Trois attaques retenues :
+Une revue déléguée à un sous-agent (lecture seule, ne modifie rien) a rendu huit
+réponses avec preuves. Elle a confirmé ce qui est juste — les décalages, la table
+des types, `n_expert_global`, les mesures annoncées — et trouvé quatre défauts
+réels, tous corrigés dans ce boxing :
 
-1. **« Le test multi-fichiers ne prouve pas la traduction d'experts. »** Exact :
-   il vérifie la concaténation des tenseurs, pas le mapping. Le mapping n'a
-   qu'un test unitaire de lecture. La preuve manquante est l'épreuve
-   d'exécution — d'où son statut « en cours » et non « acquise ».
+- **le tri des clusters était lexicographique** (`cluster-100` avant
+  `cluster-20`) alors que les préfixes `cl{c}/` sont attribués par position :
+  au-delà de 99 clusters, chaque expert lu dans le mauvais fichier, sans erreur ;
+- **le mapping était publié avant l'ouverture** : un dossier refusé laissait le
+  mapping d'un autre modèle ;
+- **`chemins_du_modele` échouait sur un chemin sans dossier** (`read_dir("")`) ;
+- **`meta.as_ref().unwrap()` paniquait** quand le premier fichier n'a pas de
+  métadonnées, rendant inatteignable le message d'erreur prévu.
+
+Elle a aussi montré que **le test multi-fichiers ne pouvait pas attraper le NaN**
+(il ne fabrique que du F32 et ne passe que par `dequant`) et listé quatre angles
+morts. Quatre tests ont été ajoutés en conséquence : préfixes, mode en-tête seul,
+détection des shards, dossier de clusters de bout en bout, numérotation, type
+inconnu. Le test du dossier de clusters a d'ailleurs **révélé un cinquième
+défaut** (publication du mapping avant succès) que la relecture n'avait pas vu.
+
+Ses trois attaques les plus utiles :
+
+1. **« Le test multi-fichiers ne prouve pas la traduction d'experts. »** Exact,
+   et c'est ce qui a justifié de ne pas clore le sprint avant d'avoir le chiffre :
+   l'épreuve appariée rend 15,2789 des deux côtés. Le test a depuis été complété
+   par un dossier de clusters ouvert de bout en bout.
 2. **« 27,8 s de chargement, est-ce mieux ? »** Non, c'est **plus lent** que le
    fichier unique annoncé à 3,9 s — mais ce n'était pas la même chose : 3,9 s
    mesurait la lecture des tenseurs d'un cluster (3,20 Go), 27,8 s charge le
@@ -154,8 +194,14 @@ Trois attaques retenues :
 
 Bloc suivant, dans l'ordre de valeur :
 
-1. Lire le résultat de l'épreuve origine/clusters et le consigner, quel qu'il soit.
-2. Corriger le chemin par lots sur les MoE (le défaut bloque toute mesure de
-   perplexité par lots sur les modèles qu'on veut faire tourner).
-3. `mmap` : sans lui, DeepSeek-V4.1-Flash (366 Go) restera hors de portée.
-4. Le nœud partiel : charger un cluster, sommer entre nœuds.
+1. **Le chemin par lots sur les MoE** : établir d'abord s'il est cassé sur le
+   modèle d'origine aussi (l'épreuve a dû se rabattre sur `--lot 1`). C'est ce
+   défaut qui bloque toute mesure de perplexité rapide sur les modèles qu'on veut
+   faire tourner.
+2. **Le nœud partiel** : charger UN cluster et sommer les experts entre nœuds.
+   `Moe::ou` rend déjà `None` pour un expert absent ; il manque la somme.
+3. **`mmap`** : sans lui, DeepSeek-V4.1-Flash (366 Go) restera hors de portée.
+4. **Les biais d'experts en clusters** : refusés pour l'instant. gpt-oss en a,
+   donc le format ne couvre pas encore ce modèle-là.
+5. **Le rééquilibrage par charge** : les clusters sont équilibrés en nombre
+   d'experts, pas en nombre d'activations.

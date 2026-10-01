@@ -8,7 +8,116 @@
 use std::collections::HashMap;
 use std::fs::File;
 use std::io::{Read, Seek, SeekFrom};
+use std::ops::Deref;
 use std::path::Path;
+
+/// Fichier **mappé** en mémoire plutôt que lu.
+///
+/// `read_to_end` fait deux choses coûteuses : il lit tout le fichier (18,55 Go
+/// pour Qwen3-30B, 366 Go pour DeepSeek-V4.1-Flash) et il en garde une copie
+/// dans le tas, en plus du cache de pages du noyau — soit deux fois la taille du
+/// modèle en mémoire physique au premier accès.
+///
+/// Le mmap ne lit rien : il rend une plage d'adresses, et le noyau lit les pages
+/// à la demande. Un modèle qu'on inspecte coûte quelques mégaoctets ; un modèle
+/// dont on n'utilise qu'un huitième des experts ne lit qu'un huitième des
+/// octets. Les pages touchées sont partagées avec le cache de pages, donc pas
+/// dupliquées.
+pub struct Mappe {
+    ptr: *mut u8,
+    len: usize,
+}
+
+// Le noyau ne déplace jamais une page mappée : ces deux implémentations sont
+// sûres, et sans elles le moteur ne pourrait pas envoyer un `Gguf` à un fil.
+unsafe impl Send for Mappe {}
+unsafe impl Sync for Mappe {}
+
+extern "C" {
+    fn mmap(addr: *mut u8, len: usize, prot: i32, flags: i32, fd: i32, offset: i64) -> *mut u8;
+    fn munmap(addr: *mut u8, len: usize) -> i32;
+}
+
+const PROT_READ: i32 = 1;
+const MAP_PRIVATE: i32 = 2;
+
+impl Mappe {
+    /// Mappe le fichier entier en lecture seule.
+    fn ouvrir(f: &File, len: usize) -> std::io::Result<Mappe> {
+        use std::os::unix::io::AsRawFd;
+        if len == 0 { return Ok(Mappe { ptr: std::ptr::null_mut(), len: 0 }); }
+        let p = unsafe { mmap(std::ptr::null_mut(), len, PROT_READ, MAP_PRIVATE, f.as_raw_fd(), 0) };
+        // `mmap` rend `MAP_FAILED` (soit -1) en cas d'échec.
+        if p as isize == -1 {
+            return Err(std::io::Error::last_os_error());
+        }
+        Ok(Mappe { ptr: p, len })
+    }
+}
+
+impl Deref for Mappe {
+    type Target = [u8];
+    #[inline]
+    fn deref(&self) -> &[u8] {
+        if self.len == 0 { return &[]; }
+        unsafe { std::slice::from_raw_parts(self.ptr, self.len) }
+    }
+}
+
+impl Drop for Mappe {
+    fn drop(&mut self) {
+        if self.len > 0 { unsafe { munmap(self.ptr, self.len); } }
+    }
+}
+
+/// Les octets d'un fichier, lus ou mappés.
+///
+/// Le reste du lecteur ne fait pas la différence : les deux variantes se
+/// déréférencent en `&[u8]`. Le choix se fait une fois, à l'ouverture.
+pub enum Tampon {
+    Lu(Vec<u8>),
+    Mappe(Mappe),
+}
+
+impl Deref for Tampon {
+    type Target = [u8];
+    #[inline]
+    fn deref(&self) -> &[u8] {
+        match self { Tampon::Lu(v) => v, Tampon::Mappe(m) => m }
+    }
+}
+
+impl Tampon {
+    pub fn len(&self) -> usize { (**self).len() }
+    pub fn is_empty(&self) -> bool { self.len() == 0 }
+}
+
+/// Faut-il mapper les fichiers ? Mappé par défaut : c'est moins de mémoire et
+/// moins d'octets lus. `DRAVE_MMAP=0` force la lecture complète (utile pour
+/// comparer, ou sur un système de fichiers qui refuse le mmap).
+fn mmap_voulu() -> bool {
+    match std::env::var("DRAVE_MMAP") {
+        Ok(v) => !(v == "0" || v.eq_ignore_ascii_case("non") || v.eq_ignore_ascii_case("false")),
+        Err(_) => true,
+    }
+}
+
+/// Ouvre un fichier entier, mappé ou lu.
+fn ouvrir_tampon(chemin: &Path) -> std::io::Result<Tampon> {
+    let f = File::open(chemin)?;
+    let len = f.metadata()?.len() as usize;
+    if mmap_voulu() {
+        match Mappe::ouvrir(&f, len) {
+            Ok(m) => return Ok(Tampon::Mappe(m)),
+            Err(e) => eprintln!("[gguf] mmap refusé sur {} ({e}) : lecture complète",
+                                chemin.display()),
+        }
+    }
+    let mut buf = Vec::with_capacity(len);
+    let mut f = f;
+    f.read_to_end(&mut buf)?;
+    Ok(Tampon::Lu(buf))
+}
 
 #[derive(Debug, Clone)]
 pub enum Meta {
@@ -101,7 +210,7 @@ pub struct Gguf {
     /// Un tampon par fichier. Un GGUF ordinaire en a un seul ; un modèle
     /// découpé en porte autant que de morceaux. Les données ne sont jamais
     /// recopiées d'un fichier à l'autre : chaque tenseur reste chez lui.
-    bufs: Vec<Vec<u8>>,
+    bufs: Vec<Tampon>,
     /// Début des données de chaque fichier (après l'en-tête, aligné).
     starts: Vec<usize>,
 }
@@ -168,8 +277,7 @@ impl<'a> Cur<'a> {
 
 impl Gguf {
     pub fn open<P: AsRef<Path>>(path: P) -> std::io::Result<Self> {
-        let mut buf = Vec::new();
-        File::open(path)?.read_to_end(&mut buf)?;
+        let buf = ouvrir_tampon(path.as_ref())?;
         let (meta, tensors, fin) = Self::entete(&buf).ok_or_else(|| {
             std::io::Error::new(std::io::ErrorKind::UnexpectedEof, "en-tête GGUF incomplet")
         })?;
@@ -244,12 +352,11 @@ impl Gguf {
         }
         let mut meta: Option<HashMap<String, Meta>> = None;
         let mut tous: Vec<TensorInfo> = Vec::new();
-        let mut bufs: Vec<Vec<u8>> = Vec::with_capacity(chemins.len());
+        let mut bufs: Vec<Tampon> = Vec::with_capacity(chemins.len());
         let mut starts: Vec<usize> = Vec::with_capacity(chemins.len());
         let mut arch_ref: Option<String> = None;
         for (i, c) in chemins.iter().enumerate() {
-            let mut buf = Vec::new();
-            File::open(c.as_ref())?.read_to_end(&mut buf)?;
+            let buf = ouvrir_tampon(c.as_ref())?;
             let (m, ts, fin) = Self::entete_de(&buf, i, prefixes[i]).ok_or_else(|| {
                 std::io::Error::new(std::io::ErrorKind::UnexpectedEof,
                     format!("en-tête GGUF incomplet : {}", c.as_ref().display()))
@@ -469,7 +576,7 @@ différents ({} et {})", t.name, v.fichier, t.fichier)));
 
     /// Octets d'un tenseur décrit par `t`, dans un assemblage en cours de
     /// construction (le `Gguf` n'existe pas encore).
-    fn octets_de<'a>(bufs: &'a [Vec<u8>], starts: &[usize], t: &TensorInfo) -> &'a [u8] {
+    fn octets_de<'a>(bufs: &'a [Tampon], starts: &[usize], t: &TensorInfo) -> &'a [u8] {
         let besoin = Self::octets_tensor(t) as usize;
         let debut = starts[t.fichier] + t.offset as usize;
         let b = &bufs[t.fichier];
@@ -550,6 +657,9 @@ zéro, l'inventaire sera sous-évalué", t.ttype, t.name);
 
     /// Octets de poids effectivement lus (somme des fichiers).
     pub fn octets_charges(&self) -> u64 { self.bufs.iter().map(|b| b.len() as u64).sum() }
+
+    /// Les fichiers sont-ils mappés (vrai) ou lus en mémoire (faux) ?
+    pub fn est_mappe(&self) -> bool { self.bufs.iter().any(|b| matches!(b, Tampon::Mappe(_))) }
 
     /// Analyse l'en-tête d'UN fichier ; `fichier` marque l'origine des tenseurs.
     fn entete(buf: &[u8]) -> Option<(HashMap<String, Meta>, Vec<TensorInfo>, usize)> {

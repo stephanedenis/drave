@@ -367,6 +367,27 @@ référence F16 des mêmes poids produite par `llama-quantize`, et le routage Mo
 sur `Qwen3-30B-A3B`. Détail : [`docs/convertisseur.md`](docs/convertisseur.md)
 et [`reports/rapport-passage-a-l-echelle.md`](reports/rapport-passage-a-l-echelle.md).
 
+### Les modèles éclatés se lisent comme un seul
+
+Un modèle en **shards** (`…-00002-of-00003.gguf`) s'ouvre par n'importe lequel de
+ses morceaux, et un dossier au **format clusters** (`commun.gguf` + `cluster-XX.gguf`
++ `mapping.tsv`) **est** un modèle : `drave <dossier> …`, sans option nouvelle.
+Les tenseurs de chaque cluster sont exposés sous leur préfixe (`cl0/…`) et
+`Moe::ou(expert_global)` rend `(fichier, ligne locale)` — un expert absent du nœud
+est simplement sauté.
+
+| mesure | résultat |
+|---|---|
+| DeepSeek-V4-Flash, 3 shards, en-têtes seuls | 86,90 Go annoncés = **86,90 Go sur disque** · 1 328 tenseurs · 54 ms |
+| Qwen3-30B-A3B en clusters | 9 fichiers · **1 587 tenseurs · 18,55 Go** = l'original |
+| **origine contre clusters** (mêmes 63 jetons) | **15,2789 = 15,2789** |
+| chemin par lots sur le même modèle | 15,2736 (`--lot 64`) |
+
+Un lecteur d'inventaire (`--tensors`) travaille sur les **seuls en-têtes** : il
+faut cela pour inspecter un fichier de 366 Go. Détail :
+[`docs/format-clusters.md`](docs/format-clusters.md) et
+[`reports/rapport-lecteur-multifichiers.md`](reports/rapport-lecteur-multifichiers.md).
+
 ## Inférence complète en Rust (`--infer`)
 
 Qwen2.5-0.5B-Instruct Q8_0 tourne **en mode listes d'événements**, sans GPU, sans
