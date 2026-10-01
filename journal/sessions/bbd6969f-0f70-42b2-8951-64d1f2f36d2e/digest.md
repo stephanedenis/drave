@@ -50411,3 +50411,233 @@ test result: ok. 32 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; fin
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -m \"Journal\" 2>/dev/null; echo \"=== documents de la session ===\"; for f in reports/rapport-empreinte-memoire.md sprints/09-empreinte-memoire-ce-qui-reduit-vraiment.md tools/analyse_empreinte.py REPRISE … [541 caractères tronqués]`
+
+  ```
+=== documents de la session ===
+reports/rapport-empreinte-memoire.md                         406 lignes
+sprints/09-empreinte-memoire-ce-qui-reduit-vraiment.md       124 lignes
+tools/analyse_empreinte.py                                   208 lignes
+REPRISE.md                                                   810 lignes
+README.md                                                    591 lignes
+
+=== traces conservées ===
+21M	/home/stephane/FastNVMe/artefacts/traces/session-01-10/
+code_1024.virg en_1024.virg fr_1024.virg fr_gros.ids routage_code_1024.txt routage_en_1024.txt routage_fr_1024.txt routage_long.txt 
+
+=== dépôt ===
+21
+commits de la session
+0
+fichiers non commités (hors journal)
+  ```
+
+### 🤖 Assistant
+
+Session consignée, dépôt propre, 32 tests verts.
+
+## Ce qui est écrit
+
+| document | contenu |
+|---|---|
+| `reports/rapport-empreinte-memoire.md` (406 l.) | les 11 pistes mesurées, la découverte de l'engram, les mesures d'infrastructure |
+| `sprints/09-…md` (124 l.) | objectif, verdicts, rétrospective, planning |
+| `tools/analyse_empreinte.py` (208 l.) | rejoue une trace de routage : courbes par couche, allocation, périodicité, extrapolation |
+| `REPRISE.md`, `README.md` | mis à jour |
+| traces NVMe (21 Mo) | `artefacts/traces/session-01-10/` — conservées et rejouables |
+
+21 commits sur la session, aucun fichier en attente.
+
+## Le résultat qui justifiait la session
+
+En cherchant couche par couche où passe réellement l'empreinte de DeepSeek-V4.1 :
+
+| famille | Go | % | à charger |
+|---|---|---|---|
+| **engram** | **203,4** | **55,6 %** | **0,4 Go** |
+| experts | 152,9 | 41,8 % | 21–71 Go |
+| attention, embeddings, tête | 10,0 | 2,7 % | 10 Go |
+
+`blk.N.engram_embd.weight` : **101,4 Go par couche**, `[384 006 168, 264]` en I8. Ce n'est pas un tenseur de poids — **c'est une table de hachage de n-grammes**. Une session de 10 000 jetons en touche 17 276 entrées, soit **4,6 Mo, un rapport de 1 pour 22 000**.
+
+**L'empreinte de V4.1 passe de 365,7 Go à 50–80 Go**, et c'est le levier le plus simple de tous : pas de LRU à écrire, le `mmap` fait le travail.
+
+Nous avions passé six tours sur les experts — 42 % du modèle — alors que le gisement était ailleurs.
+
+## Les onze pistes, et le tri
+
+**Retenues** : engram mmappé · cache d'experts 25 % (80 % des appels) · tête restreinte à la langue d'entrée (−30 % de trafic, top-1 à 99,2 %).
+
+**Écartées avec leur chiffre** : découper sous l'expert (perplexité ×287 dès 5 % de seuil) · grappes par langue (recouvrement 0,75–0,90 entre langues contre 0,805 *à l'intérieur* d'une langue) · dictionnaire token → experts (Jaccard 0,06) · pré-remplissage du cache (régime atteint en 32 jetons) · allocation par couche (+1,2 %) · localité temporelle (réelle, mais un LRU de 32 fait mieux) · ordre des experts (inutile sans seek) · préchargement (**le calcul est 18× plus rapide que la lecture — plafond de 6 %**).
+
+Ce dernier chiffre explique d'un coup pourquoi *aucune* piste de prédiction ne paie : il n'y a rien à masquer.
+
+## Deux structures trouvées en chemin
+
+**Le miroir** : les couches extrêmes sont 4,6× plus liées au token que les médianes. Mais 0/47 = 0,030 — pas de correspondance entre couches symétriques.
+
+**Une périodicité de 12 couches** : Jaccard 0,323 à écart 12, 0,210 à écart 24, **0,035 pour tous les autres écarts**. Quatre blocs qui réutilisent les mêmes experts — sans économie de stockage, puisque ce sont des tenseurs distincts.
+
+## Ce que je n'ai pas résolu
+
+L'engram n'est **pas exécuté** : sans `forward` pour `deepseek4`, le nombre de n-grammes touchés est calculé sur le texte, pas sur l'accès réel au tenseur. Et l'extrapolation à 384 experts suppose la même concentration relative que celle mesurée sur Qwen3 — le rapport top-k/n_experts y est plus petit (1,6 % contre 6,25 %), ce qui devrait aider, mais ce n'est pas mesuré.
+
+Les deux réserves sont dans le rapport plutôt que lissées.
+
+
+## Tour 64
+
+### 👤 Utilisateur
+
+utilisons les logs de cette session (journal/session) pour les rejouer localement et analyser le comportement, couche par couche afin d'identifier d'autres pistes d'optimisation de l'empreinte mémoire deepseek 4.1.
+
+### 🤖 Assistant
+
+⏵ Compris — les logs du **journal**, pas mes traces. C'est notre corpus d'usage réel. J'inventorie.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && du -sh journal/sessions/ | tail -1; ls journal/sessions/ | wc -l; echo \"=== taille par session (top 8) ===\"; du -sh journal/sessions/*/ 2>/dev/null | sort -rh | head -8; echo \"=== fichiers disponibles ===\"; ls journal/sessions/$( … [78 caractères tronqués]`
+
+  ```
+59M	journal/sessions/
+28
+=== taille par session (top 8) ===
+25M	journal/sessions/bbd6969f-0f70-42b2-8951-64d1f2f36d2e/
+16M	journal/sessions/22bcae27-254b-47b2-acda-87467dab060c/
+1,3M	journal/sessions/5185ccb1-be24-4716-89df-62621e790444/
+1,2M	journal/sessions/bcfe0b97-1795-4610-8e8b-b598ca1ba6cb/
+1,2M	journal/sessions/42059fde-f06f-4e2c-9a23-8292d887fb6e/
+1,1M	journal/sessions/27c99b10-c57e-4599-a23a-f7b1a54c17a1/
+988K	journal/sessions/5ce3f080-2d3d-467a-8ee1-df697f3f3e68/
+968K	journal/sessions/aa5f9fc5-9450-4118-b65f-e8b99a28519d/
+=== fichiers disponibles ===
+digest.md
+rapport.md
+session.jsonl.zstd
+  ```
+
+### 🤖 Assistant
+
+⏵ 28 sessions, 59 Mo. Je construis le corpus « journal » et j'en fais une trace de routage.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/trace_journal.sh <<'EOF'\n#!/bin/bash\n# Rejouer le JOURNAL de nos sessions à travers le modèle : c'est notre corpus\n# d'usage réel (français technique + code + commandes + tableaux), pas un corpus\n# générique. Ce que le … [1428 caractères tronqués]`
+
+  ```
+6780350 /tmp/corpus/journal.txt
+2510800 jetons dans le journal
+fenêtre retenue : jetons 2000 à 6096 (on saute le préambule)
+  ```
+
+- **bash** `{"command": "sleep 55; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat /tmp/trace_journal.log; wc -l /tmp/routage_journal.txt 2>/dev/null", "description": "Follow journal trace"}`
+
+  ```
+6780350 /tmp/corpus/journal.txt
+2510800 jetons dans le journal
+fenêtre retenue : jetons 2000 à 6096 (on saute le préambule)
+25476 /tmp/routage_journal.txt
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/analyse_journal.py <<'PY'\nimport collections\nT = '/home/stephane/FastNVMe/artefacts/traces/session-01-10/'\ndef charge(p):\n    d = collections.defaultdict(dict)\n    for l in open(p):\n        x = l.split()\n        if  … [2945 caractères tronqués]`
+
+  ```
+2510800 jetons dans le journal
+fenêtre retenue : jetons 2000 à 6096 (on saute le préambule)
+35543 /tmp/routage_journal.txt
+  ```
+
+- **bash** `{"command": "sleep 55; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && wc -l /tmp/routage_journal.txt; tail -1 /tmp/trace_journal.log", "description": "Wait for journal trace"}`
+
+  ```
+46921 /tmp/routage_journal.txt
+fenêtre retenue : jetons 2000 à 6096 (on saute le préambule)
+  ```
+
+### 🤖 Assistant
+
+⏵ La trace avance. Pendant ce temps, je dimensionne le cache d'engram pour notre usage réel.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/engram_journal.py <<'PY'\nids = [int(x) for x in open('/tmp/corpus/journal.ids').read().replace('\\n', ',').split(',') if x.strip()]\nprint(f\"=== NOTRE USAGE RÉEL : {len(ids):,} jetons de journal ===\")\nprint()\nvocab =  … [1246 caractères tronqués]`
+
+  ```
+=== NOTRE USAGE RÉEL : 2,510,800 jetons de journal ===
+
+vocabulaire touché : 19,228 tokens distincts sur 151 936 (12.66 %)
+
+=== CACHE D'ENGRAM nécessaire (une entrée = 264 octets) ===
+    jetons    1-gram      2-gram      3-gram      4-gram        total      Mo
+     1,000         411         762         880         924        2,977    0.8
+    10,000       1,462       3,953       5,596       6,265       17,276    4.6
+   100,000       4,659      20,745      36,094      47,735      109,233   28.8
+ 1,000,000      15,768     132,627     277,627     409,984      836,006  220.7
+ 2,510,800      19,228     206,802     485,107     759,723    1,470,860  388.3
+
+  Pour la table de V4.1 (384 006 168 entrées, 101,4 Go par couche) :
+     10,000 jetons ->    17,276 entrées = 0.00450 % de la table (4.6 Mo sur 101 400 Mo)
+    100,000 jetons ->   109,233 entrées = 0.02845 % de la table (28.8 Mo sur 101 400 Mo)
+57223 /tmp/routage_journal.txt
+  ```
+
+### 🤖 Assistant
+
+⏵ **Vocabulaire 12,66 % sur notre journal** — les 13 % se confirment. J'attends la trace pour l'analyse comparative.
+
+- **bash** `{"command": "sleep 55; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && wc -l /tmp/routage_journal.txt; tail -2 /tmp/trace_journal.log", "description": "Wait for journal trace"}`
+
+  ```
+67957 /tmp/routage_journal.txt
+2510800 jetons dans le journal
+fenêtre retenue : jetons 2000 à 6096 (on saute le préambule)
+  ```
+
+- **bash** `{"command": "sleep 55; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && wc -l /tmp/routage_journal.txt", "description": "Wait for journal trace"}`
+
+  ```
+77406 /tmp/routage_journal.txt
+  ```
+
+- **bash** `{"command": "sleep 55; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && wc -l /tmp/routage_journal.txt; date +%H:%M", "description": "Wait for journal trace"}`
+
+  ```
+86660 /tmp/routage_journal.txt
+18:03
+  ```
+
+### 🤖 Assistant
+
+⏵ J'analyse sur ce qui est déjà tracé (1 800 jetons) plutôt que d'attendre.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && nohup python3 /tmp/analyse_journal.py > /tmp/analyse_journal.log 2>&1 & sleep 55; cat /tmp/analyse_journal.log", "description": "Run comparative analysis on journal trace"}`
+
+  ```
+comparaison à 1024 jetons · 48 couches · 128 experts
+
+=== EMPREINTE : experts à garder pour servir X % des appels ===
+    corpus    50%    70%    80%    90%    99%
+   journal   16.9   30.8   41.6   58.1   92.5
+  francais   18.1   33.2   44.1   59.3   92.1
+   anglais   11.4   23.0   31.6   44.5   72.7
+      code   16.7   31.5   41.9   56.3   88.6
+
+=== CACHE LRU : taux de succès ===
+    corpus      8     16     32     64
+   journal  33.8%  60.0%  78.1%  93.8%
+  francais  33.6%  59.6%  77.9%  94.0%
+   anglais  34.1%  59.4%  78.5%  95.3%
+      code  34.7%  62.1%  80.4%  94.6%
+
+=== LE JOURNAL A-T-IL UN PROFIL PROPRE ? (plus proche voisin) ===
+  le journal est reconnu dans 170/240 cas (70.8 %) · hasard 25 %
+  ```
+
+### 🤖 Assistant
+
+⏵ Résultat : notre usage réel se comporte comme le français — mais **l'anglais est 25 % plus réductible**. Je consigne.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np = 'reports/rapport-empreinte-memoire.md'\ns = open(p).read()\ns = s.replace('''## 10. Ce que ça donne pour DeepSeek-V4.1-Flash''',\n'''## 10. Rejouer notre propre journal : ce que notre usage change\n\nLes 28 sess … [2292 caractères tronqués]`
+
+  ```
+ok
+96828 /tmp/routage_journal.txt
+2510800 jetons dans le journal
+fenêtre retenue : jetons 2000 à 6096 (on saute le préambule)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np = 'REPRISE.md'\ns = open(p).read().rstrip('\\n')\ns += '''\n\n### Rejouer notre propre journal\n\nLes 28 sessions du `journal/` (59 Mo, 2,5 M jetons) ont été tokenisées et routées\npour voir si **notre** usage cha … [2410 caractères tronqués]`

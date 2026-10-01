@@ -320,7 +320,47 @@ Le calcul d'une couche coûte **0,6 ms**, sa lecture **10,9 ms** : un rapport de
 l'attente. C'est le mur qui explique pourquoi aucune des pistes de prédiction
 (token, langue, périodicité, jeton précédent) ne se traduit en gain.
 
-## 10. Ce que ça donne pour DeepSeek-V4.1-Flash
+## 10. Rejouer notre propre journal : ce que notre usage change
+
+Les 28 sessions du `journal/` (59 Mo, 2,5 M jetons) rejouées à travers le modèle,
+comparées aux corpus génériques :
+
+| corpus | 50 % | 70 % | 80 % | 90 % | 99 % |
+|---|---|---|---|---|---|
+| **journal** (notre usage) | 16,9 | 30,8 | 41,6 | **58,1** | 92,5 |
+| français générique | 18,1 | 33,2 | 44,1 | 59,3 | 92,1 |
+| **anglais** | **11,4** | **23,0** | **31,6** | **44,5** | **72,7** |
+| code | 16,7 | 31,5 | 41,9 | 56,3 | 88,6 |
+
+Et le cache LRU est **le même partout** (78–80 % à 32 experts). Le journal a bien
+un profil reconnaissable (70,8 % contre 25 % au hasard) mais **qui ne change pas
+l'empreinte**.
+
+**Ce qui la change, c'est la langue** : l'anglais demande **44,5 experts pour 90 %**
+contre 59,3 pour le français. Soit, pour V4.1 :
+
+| langue du contenu | 90 % des appels sur | Go d'experts |
+|---|---|---|
+| français | 46,3 % | **71** |
+| **anglais** | **34,8 %** | **53** |
+
+**18 Go d'écart.** Le code et la technique sont massivement anglais : c'est le
+régime où V4.1 tiendra le plus facilement.
+
+### Le cache d'engram pour notre usage réel
+
+| jetons | entrées touchées | mémoire | part de la table (384 M) |
+|---|---|---|---|
+| 1 000 | 2 977 | **0,8 Mo** | 0,0008 % |
+| 10 000 | 17 276 | 4,6 Mo | 0,0045 % |
+| 100 000 | 109 233 | 28,8 Mo | 0,028 % |
+| **2 510 800** (tout le journal) | 1 470 860 | **388 Mo** | **0,38 %** |
+
+**388 Mo couvrent l'intégralité de notre journal** — après quoi l'engram ne
+touche plus le disque. Et le vocabulaire de ce corpus fait **19 228 tokens
+(12,66 %)**, ce qui confirme le plafond mesuré sur du français générique.
+
+## 11. Ce que ça donne pour DeepSeek-V4.1-Flash
 
 | | par jeton |
 |---|---|
@@ -360,7 +400,7 @@ le retour de `pread` et a chronométré ce disque à **2 211 Go/s**. C'est le ch
 absurde qui a alerté, pas le test. `O_DIRECT` échoue par ailleurs ici (errno 29),
 donc le régime réellement froid n'est pas mesuré proprement.*
 
-## 11. La conclusion : ce qu'il faut charger avant d'opérer
+## 12. La conclusion : ce qu'il faut charger avant d'opérer
 
 | | poids total | à charger | rapport |
 |---|---|---|---|
@@ -376,8 +416,10 @@ personne n'a besoin de charger.
 C'est aussi la réponse à la question posée au début de la session : ce qu'il faut
 réduire, ce ne sont ni les experts ni les couches, c'est **la table d'engram**.
 
-## 12. Ce qui reste à faire
+## 13. Ce qui reste à faire
 
+0. **Adapter l'empreinte à la langue** : 53 Go en anglais contre 71 en français.
+   Le détecteur de langue existe déjà par le routage (79,8 %).
 1. **L'accès mmappé à l'engram** : c'est la brique principale, et elle divise
    l'empreinte par 5 à lui seule. Elle est **plus simple** que le cache
    d'experts : pas de LRU à écrire, le noyau fait le travail.

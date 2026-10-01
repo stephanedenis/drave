@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 75.0 h |
-| Tours | 63 |
-| Messages | 3147 |
-| Appels d'outils | 2980 |
+| Durée | 75.3 h |
+| Tours | 64 |
+| Messages | 3161 |
+| Appels d'outils | 2992 |
 | Fichiers touchés | 68 |
-| Commandes | 2589 |
+| Commandes | 2601 |
 | Sous-agents | 22 |
-| Commits | 259 |
+| Commits | 260 |
 | Compactages de contexte | 4 |
 
 ## Objectifs déclarés
@@ -161,6 +161,8 @@
 **Tour 62** — peut-on faire des grappes dans les couches extrêmes? l'idée n'est pas d'accélérer le chargement, mais simplement réduire la quantité à charger avant d'opérer. moins de ram/vram = plus de noeuds en mémoire. si on n'a que des grappes pertinentes, on gagne en espace libre pour accélérer.
 
 **Tour 63** — nous venons de faire une longue session, il est temps de mettre à jour la doc, rapports, journal et reprise. Ensuite utilisons les logs de cette session pour les rejouer localement et analyser le comportement, couche par couche afin d'identifier d'autres pistes d'optimisation de l'empreinte mémoire deepseek 4.1.
+
+**Tour 64** — utilisons les logs de cette session (journal/session) pour les rejouer localement et analyser le comportement, couche par couche afin d'identifier d'autres pistes d'optimisation de l'empreinte mémoire deepseek 4.1.
 
 ## 2. Déroulé, étape par étape
 
@@ -3112,7 +3114,68 @@ Et les 14 paires les plus fortes ont **toutes** un écart de 12 :
 
 **Synthèse produite :**
 
-⏵ Localité temporelle : 27–52 % contre 6,2 % au hasard, mais inexploitable sur NVMe. Je consigne et clôture.
+Session consignée, dépôt propre, 32 tests verts.
+
+\## Ce qui est écrit
+
+| document | contenu |
+|---|---|
+| `reports/rapport-empreinte-memoire.md` (406 l.) | les 11 pistes mesurées, la découverte de l'engram, les mesures d'infrastructure |
+| `sprints/09-…md` (124 l.) | objectif, verdicts, rétrospective, planning |
+| `tools/analyse_empreinte.py` (208 l.) | rejoue une trace de routage : courbes par couche, allocation, périodicité, extrapolation |
+| `REPRISE.md`, `README.md` | mis à jour |
+| traces NVMe (21 Mo) | `artefacts/traces/session-01-10/` — conservées et rejouables |
+
+21 commits sur la session, aucun fichier en attente.
+
+\## Le résultat qui justifiait la session
+
+En cherchant couche par couche où passe réellement l'empreinte de DeepSeek-V4.1 :
+
+| famille | Go | % | à charger |
+|---|---|---|---|
+| **engram** | **203,4** | **55,6 %** | **0,4 Go** |
+| experts | 152,9 | 41,8 % | 21–71 Go |
+| attention, embeddings, tête | 10,0 | 2,7 % | 10 Go |
+
+`blk.N.engram_embd.weight` : **101,4 Go par couche**, `[384 006 168, 264]` en I8. Ce n'est pas un tenseur de poids — **c'est une table de hachage de n-grammes**. Une session de 10 000 jetons en touche 17 276 entrées, soit **4,6 Mo, un rapport de 1 pour 22 000**.
+
+**L'empreinte de V4.1 passe de 365,7 Go à 50–80 Go**, et c'est le levier le plus simple de tous : pas de LRU à écrire, le `mmap` fait le travail.
+
+Nous avions passé six tours sur les experts — 42 % du modèle — alors que le gisement était ailleurs.
+
+\## Les onze pistes, et le tri
+
+**Retenues** : engram mmappé · cache d'experts 25 % (80 % des appels) · tête restreinte à la langue d'entrée (−30 % de trafic, top-1 à 99,2 %).
+
+**Écartées avec leur chiffre** : découper sous l'expert (perplexité ×287 dès 5 % de seuil) · grappes par langue (recouvrement 0,75–0,90 entre langues contre 0,805 *à l'intérieur* d'une langue) · dictionnaire token → experts (Jaccard 0,06) · pré-remplissage du cache (régime atteint en 32 jetons) · allocation par couche (+1,2 %) · localité temporelle (réelle, mais un LRU de 32 fait mieux) · ordre des experts (inutile sans seek) · préchargement (**le calcul est 18× plus rapide que la lecture — plafond de 6 %**).
+
+Ce dernier chiffre explique d'un coup pourquoi *aucune* piste de prédiction ne paie : il n'y a rien à masquer.
+
+\## Deux structures trouvées en chemin
+
+**Le miroir** : les couches extrêmes sont 4,6× plus liées au token que les médianes. Mais 0/47 = 0,030 — pas de correspondance entre couches symétriques.
+
+**Une périodicité de 12 couches*
+… [666 caractères tronqués]
+
+### Tour 64 — utilisons les logs de cette session (journal/session) pour les rejouer localement et analyser le comportement, couche pa … [94 caractères tronqués]
+
+*12 appels d'outils.* Actions notables :
+
+- bash — Inventory session journal
+- bash — Tokenize journal and trace routing
+- bash — Follow journal trace
+- bash — Prepare journal analysis; follow trace
+- bash — Wait for journal trace
+- bash — Size the engram cache for real usage
+- bash — Run comparative analysis on journal trace
+- bash — Add journal analysis to report
+- bash — Commit journal analysis
+
+**Synthèse produite :**
+
+⏵ Résultat : notre usage réel se comporte comme le français — mais **l'anglais est 25 % plus réductible**. Je consigne.
 
 ## 3. Travail accompli
 
@@ -3256,7 +3319,7 @@ Et les 14 paires les plus fortes ont **toutes** un écart de 12 :
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 2549 autres
+- … et 2561 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -3663,4 +3726,5 @@ Et les 14 paires les plus fortes ont **toutes** un écart de 12 :
 - Trois dernieres pistes mesurees et ecartees : localite temporelle, ordre des experts, prechargement  - localite temporelle : le jeton suivant reutilise 27 a 52 
 - Sprint 09 : ceremonie (onze pistes mesurees, trois retenues)" && git log --oneline -3; echo "=== état final ==="; (cd drave-core && cargo test --release 2>&1 | 
 - Journal" 2>/dev/null; echo "=== documents de la session ==="; for f in reports/rapport-empreinte-memoire.md sprints/09-empreinte-memoire-ce-qui-reduit-vraiment.
+- Rejouer notre propre journal : notre usage ne change pas l'empreinte, la langue si  Les 28 sessions du journal (59 Mo, 2,5 M jetons) tokenisees et routees. L'em
 

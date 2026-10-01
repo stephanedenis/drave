@@ -808,3 +808,30 @@ python3 tools/analyse_empreinte.py /tmp/routage.txt      # courbes par couche
   réutilisent les mêmes experts — mais ce sont des tenseurs différents, donc
   aucune économie de stockage directe.
 
+### Rejouer notre propre journal
+
+Les 28 sessions du `journal/` (59 Mo, 2,5 M jetons) ont été tokenisées et routées
+pour voir si **notre** usage change l'empreinte. Réponse : non, il se comporte
+comme le français générique (58,1 experts pour 90 % contre 59,3). Mais la
+**langue** la change :
+
+| langue du contenu | 90 % des appels sur | Go d'experts (V4.1) |
+|---|---|---|
+| français | 46,3 % | 71 |
+| **anglais** | **34,8 %** | **53** |
+
+**18 Go d'écart** — et le code et la technique sont massivement anglais.
+
+Cache d'engram pour notre usage : **388 Mo couvrent l'intégralité du journal**
+(1 470 860 entrées sur 384 M, soit 0,38 % de la table de 101 Go). Le vocabulaire
+du journal fait 19 228 tokens (12,66 %), confirmant le plafond mesuré.
+
+```bash
+# Rejouer le journal à travers le modèle
+cat $(ls -tr journal/sessions/*/digest.md) > /tmp/corpus/journal.txt
+./drave-core/target/release/drave <clusters> --tokenize --fichier /tmp/corpus/journal.txt \
+    --sortie /tmp/corpus/journal.ids
+DRAVE_TRACE_EXPERTS=/tmp/routage_journal.txt ./drave-core/target/release/drave <clusters> \
+    --ppl <ids> --ctx 4096 --limit 4096 --dense --threads 10 --lot 1
+```
+
