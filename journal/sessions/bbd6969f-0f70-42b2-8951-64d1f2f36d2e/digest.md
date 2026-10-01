@@ -37934,3 +37934,228 @@ tests : test result: ok. 17 passed
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\n# La cérémonie : on remplace la grille partielle par la grille complète et on\n# ajoute la lecture qui compte pour la mission.\np='/tmp/ceremonie3.md'; s=open(p).read()\nvieux = \"\"\"| contexte | profondeur | compl … [4935 caractères tronqués]`
+
+  ```
+cérémonie 3 complétée
+6ad2bc6 Aiguille × attention creuse : le milieu du contexte est perdu (et le doute sur les projections est instruit)
+  ```
+
+- **subagent** `{"description": "Revue adverse des rapports du sprint 3", "prompt": "Tu es relecteur ADVERSARIAL, en mode autonome, dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (moteur d'inférence Rust « Drave »). Ta mission : vérifier que les artefacts produits pendant le sprint 3 (21h49 → 23h49)  … [2870 caractères tronqués]`
+
+  ```
+started subagent 4d7a793b-74d1-4c46-bb53-21953fe91d87
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '880,900p' drave-core/src/main.rs && grep -n \"lot\" drave-core/src/main.rs | awk -F: '$1>800 && $1<1100' | head -8", "description": "Design the infer lot prefill"}`
+
+  ```
+}
+
+    let (out, st) = if topk > 0 {
+        // pas-à-pas : utile pour confronter les logits à la référence numpy
+        let t0 = Instant::now();
+        let mut last = Vec::new();
+        for (pos, &t) in ids.iter().enumerate() { last = mdl.forward(t, pos); }
+        let mut out = Vec::with_capacity(n_new);
+        for step in 0..n_new {
+            let lg = mdl.logits(&last);
+            let mut rank: Vec<u32> = (0..lg.len() as u32).collect();
+            rank.sort_unstable_by(|&a, &b| lg[b as usize].partial_cmp(&lg[a as usize]).unwrap());
+            print!("  pas {step:2} : ");
+            for &i in &rank[..topk] { print!("{i}({:.4}) ", lg[i as usize]); }
+            println!();
+            let next = rank[0];
+            out.push(next);
+            last = mdl.forward(next, ids.len() + step);
+        }
+        let dt = t0.elapsed().as_secs_f64();
+        let st = model::Stats { events: mdl.events_total(), prompt_s: dt / 2.0, gen_s: dt / 2.0,
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '900,960p' drave-core/src/main.rs | grep -n \"forward\\|for \\|lot\" | head -12; date +%H:%M:%S", "description": "Find the main infer generation loop"}`
+
+  ```
+44:        for v in &hb.h { f.write_all(&v.to_le_bytes()).unwrap(); }
+22:59:29
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && awk 'NR>=960 && NR<=1080 && (/forward\\(|for step|for \\(pos|logits\\(|lot/)' drave-core/src/main.rs | head -14", "description": "Locate the generation loop in run_infer"}`
+
+  ```
+(no output)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && awk 'NR>=665 && NR<=1200 && /mdl.forward|forward_lot/ {print NR\": \"$0}' drave-core/src/main.rs | head -12", "description": "Find all inference forward calls"}`
+
+  ```
+886:         for (pos, &t) in ids.iter().enumerate() { last = mdl.forward(t, pos); }
+897:             last = mdl.forward(next, ids.len() + step);
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && awk 'NR>=665 && NR<=1400 && (/^fn |^    let \\(out, st\\)|generer|inferer|prefill|preparer/)' drave-core/src/main.rs | head -20", "description": "Map run_infer structure"}`
+
+  ```
+fn run_infer(opt: Options) {
+    let (out, st) = if topk > 0 {
+fn all_ids_of(v: &[u32]) -> Vec<u32> { v.to_vec() }
+fn meta_strings(g: &Gguf, key: &str) -> Vec<String> {
+fn meta_ints(g: &Gguf, key: &str) -> Vec<i32> {
+fn build_tokenizer(g: &Gguf) -> tokenizer::Tokenizer {
+fn cfg_dims(m: &model::Model) -> usize { m.cfg.hidden }
+fn mdl_cfg_vocab(path: &str) -> Option<usize> {
+fn erf(x: f32) -> f32 {
+fn run_banc_vision(sortie: &str) {
+fn run_tensors() {
+fn appliquer_quantification(mdl: &mut model::Model, opt: &Options) {
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '905,1000p' drave-core/src/main.rs | grep -nE \"else|fn |forward|boucle|Chat|chat\" | head -12", "description": "Find the else branch of the infer path"}`
+
+  ```
+14:        let cb: Option<&mut dyn FnMut(u32)> = if flux { Some(&mut affiche) } else { None };
+24:    } else {
+59:fn all_ids_of(v: &[u32]) -> Vec<u32> { v.to_vec() }
+61:fn meta_strings(g: &Gguf, key: &str) -> Vec<String> {
+68:fn meta_ints(g: &Gguf, key: &str) -> Vec<i32> {
+75:fn build_tokenizer(g: &Gguf) -> tokenizer::Tokenizer {
+85:fn cfg_dims(m: &model::Model) -> usize { m.cfg.hidden }
+88:fn mdl_cfg_vocab(path: &str) -> Option<usize> {
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '926,955p' drave-core/src/main.rs", "description": "Read the normal infer branch"}`
+
+  ```
+print!("{}", tk.decode(&all));
+        println!("\n--- ids générés : {:?}", &out);
+    } else {
+        println!("tokens générés : {:?}", &out);
+    }
+    println!("\n--- mesure ---");
+    println!("prompt  : {} tokens en {:.3} s  ({:.1} tok/s, TTFT {:.1} ms)",
+             st.n_prompt, st.prompt_s, st.n_prompt as f64 / st.prompt_s,
+             st.prompt_s * 1e3 / st.n_prompt.max(1) as f64);
+    println!("généré  : {} tokens en {:.3} s  ({:.2} tok/s)",
+             st.n_gen, st.gen_s, st.n_gen as f64 / st.gen_s);
+    stats_experts(&mdl);
+    println!("événements : {} au total, {:.1} par token",
+             st.events, st.events as f64 / (st.n_prompt + st.n_gen) as f64);
+    if let Some(hb) = mdl.hebb.as_ref() {
+        use std::io::Write;
+        let mut f = std::fs::File::create(&hebb_out).expect("création du fichier hebbien");
+        for v in &hb.h { f.write_all(&v.to_le_bytes()).unwrap(); }
+        f.flush().unwrap();
+        let hb_ms = 0.0;   // le coût est mesuré à part
+        let _ = hb_ms;
+        println!("capteur hebbien : {} activations sur {} tokens, trace écrite dans {} ({:.1} Mo)",
+                 hb.n_fire, hb.n_token,
+                 hebb_out, (hb.h.len() * 4) 
+… [366 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && awk 'NR>=665 && NR<=882 && (/forward|lot|for pos|prompt/)' drave-core/src/main.rs | head -12", "description": "Find prompt processing before line 882"}`
+
+  ```
+ids: mut ids, ids_file, prompt, n: n_new, temp, top_p, topk, rep_pen, hist,
+        hebb_layer, hebb_q, hebb_out, sans_yarn, lot, ffn_gain,
+    mdl.lot = lot.max(1);
+    let _ = &prompt;
+    if let Some(p) = &prompt {
+        println!("prompt : {} tokens", ids.len());
+        eprintln!("rien à générer : --ids ou --prompt requis");
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"fn generer\\|fn generer_jetons\\|generate\\|fn chat\" drave-core/src/main.rs | head -8; awk 'NR>=700 && NR<=882 && (/mdl\\.|out\\.push|step/)' drave-core/src/main.rs | head -15", "description": "Find the generation helper"}`
+
+  ```
+870:            let (out, st) = mdl.generate(&ids, n_new, temp, top_p, rep_pen, hist,
+919:        mdl.generate(&ids, n_new, temp, top_p, rep_pen, hist, cb)
+        match model::TraceFlux::nouveau(chemin, trace_couches.clone(), mdl.cfg.hidden,
+                                        mdl.cfg.n_layer) {
+            Ok(t) => { println!("[trace] flux enregistré dans {chemin}"); mdl.trace = Some(t); }
+                mdl.flux_force = Some(r);
+        mdl.ffn_gain = Some((l, g));
+    mdl.attn_topk = attn_topk;
+    mdl.qk_topk = qk_topk;
+    if sans_yarn { mdl.cfg_yarn_off(); }
+        mdl.stop_id = build_tokenizer(&mdl.g).special_id("<|im_end|>");
+    let cfg = &mdl.cfg;
+        let tk = build_tokenizer(&mdl.g);
+            mdl.stop_id = tk.special_id("<|return|>");
+            mdl.stop_id2 = Some(fin);
+        mdl.patch = Some(pt);
+        let n_out = mdl.cfg.ffn;
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"pub fn generate\" -A 40 drave-core/src/model.rs | grep -nE \"forward|lot|for |prompt\" | head -12", "description": "Read Model::generate"}`
+
+  ```
+7:3916-        // Préremplissage par lots : `forward_lot` sur des tranches de `self.lot`
+8:3917-        // jetons. `lot == 1` reprend exactement l'ancienne boucle (forward_lot
+9:3918-        // délègue à `forward` pour un jeton), donc rien ne change par défaut.
+10:3919-        let lot = self.lot.max(1);
+13:3922-            let t = lot.min(ids.len() - pos);
+15:3924-                last = self.forward(ids[pos], pos);
+17:3926-                let hs = self.forward_lot(&ids[pos..pos + t], pos);
+18:3927-                last = hs.into_iter().next_back().expect("lot non vide");
+22:3931-        let prompt_s = t0.elapsed().as_secs_f64();
+23:3932-        let prompt_events = self.events - events0;
+26:3935-        for step in 0..n_new {
+37:3946-                for (i, &v) in logits.iter().enumerate() { if v > logits[best] { best = i; } }
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '3910,3932p' drave-core/src/model.rs", "description": "Read the generate prefill to confirm"}`
+
+  ```
+pub fn generate(&mut self, ids: &[u32], n_new: usize, temp: f32, top_p: f32,
+                    rep_pen: f32, hist: usize, mut flux: Option<&mut dyn FnMut(u32)>)
+                    -> (Vec<u32>, Stats) {
+        let t0 = Instant::now();
+        let mut last = Vec::new();
+        let mut events0 = self.events;
+        // Préremplissage par lots : `forward_lot` sur des tranches de `self.lot`
+        // jetons. `lot == 1` reprend exactement l'ancienne boucle (forward_lot
+        // délègue à `forward` pour un jeton), donc rien ne change par défaut.
+        let lot = self.lot.max(1);
+        let mut pos = 0usize;
+        while pos < ids.len() {
+            let t = lot.min(ids.len() - pos);
+            if t == 1 {
+                last = self.forward(ids[pos], pos);
+            } else {
+                let hs = self.forward_lot(&ids[pos..pos + t], pos);
+                last = hs.into_iter().next_back().expect("lot non vide");
+            }
+            pos += t;
+        }
+        let prompt_s = t0.elapsed().as_secs_f64();
+        let prompt_events = self.events - events0;
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\ndef patch(p, paires):\n    s=open(p).read()\n    for v,n,nom in paires:\n        assert s.count(v)==1, f\"{p}::{nom}::{s.count(v)}\"\n        s=s.replace(v,n,1)\n    open(p,'w').write(s); print(f\"{p} ok\")\n\npatch … [4090 caractères tronqués]`
+
+  ```
+reports/rapport-aiguille-topk.md ok
+reports/rapport-aiguille-topk.md:23:j'y avais écrit que « `--infer` ignore `--lot` », en me fondant sur un `grep` limité
+reports/rapport-aiguille-topk.md:27:lots est donc actif en inférence, et le chiffre « ~175 ms par jeton de prompt »
+reports/rapport-aiguille-topk.md:28:était faux lui aussi (4114 jetons à 175 ms feraient 720 s, alors que la sonde
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 43, in <module>
+  File "<stdin>", line 4, in patch
+AssertionError: sprints/03-qualit-de-l-attention-creuse-long-contex.md::affirmation fausse::0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"infer\" sprints/03-qualit-de-l-attention-creuse-long-contex.md | head -8", "description": "Find the section 4 text in the sprint file"}`
+
+  ```
+(no output)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"^#\" sprints/03-qualit-de-l-attention-creuse-long-contex.md | head -12 && wc -l sprints/03-qualit-de-l-attention-creuse-long-contex.md", "description": "Check sprint file structure"}`
+
+  ```
+1:# Sprint 3 — Qualité de l'attention creuse à long contexte : aiguille à 4k/8k/16k croisée avec --attn-topk 256, et instruction du doute sur le déport des projections
+6 sprints/03-qualit-de-l-attention-creuse-long-contex.md
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='/tmp/ceremonie3.md'; s=open(p).read()\nvieux = \"\"\"### 4. Trouvé en préparant la grille : `--infer` IGNORE `--lot`\n\n`run_infer` traite le prompt **jeton par jeton** (`for (pos, &t) in ids.iter()…`,\n`main.rs: … [3266 caractères tronqués]`

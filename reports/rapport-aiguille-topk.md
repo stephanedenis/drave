@@ -13,17 +13,23 @@ Outil : `tools/aiguille.py` (v2), auquel ce sprint a ajouté `--attn-topk` et
 
 ## Le coût d'une sonde, d'abord
 
-| modèle | contexte | secondes par sonde | cause |
-|---|---|---|---|
-| Qwen2.5-0.5B | 4 096 | ~250 | ~175 ms par jeton de prompt |
-| Qwen2.5-1.5B | 4 096 | ~725 | idem |
-| Qwen3-30B-A3B | 2 048 | ~670 | idem |
+| modèle | contexte | secondes par sonde |
+|---|---|---|
+| Qwen2.5-0.5B | 4 096 | ~250 |
+| Qwen2.5-1.5B | 4 096 | ~725 |
+| Qwen3-30B-A3B | 2 048 | ~670 |
 
-Ce coût n'est pas le modèle : `run_infer` traite le prompt **jeton par jeton**
-(`for (pos, &t) in ids.iter()…`), alors que `forward_lot` existe et n'est appelé
-que par la perplexité et le mode réparti. **`--infer` ignore `--lot`** — trouvé en
-préparant cette grille, et mis au planning (c'est le levier qui rendra les grilles
-longues abordables).
+⚠️ **Correction d'une affirmation fausse de la première version de ce rapport** :
+j'y avais écrit que « `--infer` ignore `--lot` », en me fondant sur un `grep` limité
+au corps de `run_infer` (qui ne contient qu'un `mdl.generate(...)`). Or
+`Model::generate` (`model.rs:3911`) **utilise bien `forward_lot`** sur des tranches
+de `self.lot` — le commentaire du code le dit mot pour mot. Le préremplissage par
+lots est donc actif en inférence, et le chiffre « ~175 ms par jeton de prompt »
+était faux lui aussi (4114 jetons à 175 ms feraient 720 s, alors que la sonde
+entière, génération comprise, en prend 250).
+
+**Leçon** : un `grep` qui s'arrête à la fonction qu'on regarde ne suit pas la
+chaîne d'appels. La vérification se fait dans le code appelé, pas dans l'appelant.
 
 ## La grille
 

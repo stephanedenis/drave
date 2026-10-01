@@ -7,12 +7,12 @@
 | Début | 2026-09-28 14:46 |
 | Durée | 56.2 h |
 | Tours | 48 |
-| Messages | 2390 |
-| Appels d'outils | 2264 |
+| Messages | 2406 |
+| Appels d'outils | 2280 |
 | Fichiers touchés | 50 |
-| Commandes | 1910 |
-| Sous-agents | 15 |
-| Commits | 205 |
+| Commandes | 1925 |
+| Sous-agents | 16 |
+| Commits | 206 |
 | Compactages de contexte | 3 |
 
 ## Objectifs déclarés
@@ -2234,7 +2234,7 @@ Fusionner la sélection en un noyau par ligne (8 lancements → 2), supprimer le
 
 ### Tour 48 — Continue en blocs de 2h jusqu'à demain 8h HAE. pour chacun des blocs/sprints tu dois être en autonomie totale. C'est à d … [282 caractères tronqués]
 
-*112 appels d'outils.* Actions notables :
+*128 appels d'outils.* Actions notables :
 
 - bash — Check time and count remaining boxes
 - bash — Start sprint 2
@@ -2250,7 +2250,7 @@ Fusionner la sélection en un noyau par ligne (8 lancements → 2), supprimer le
 - bash — Add poison check and finiteness guard
 - bash — Locate the topk GPU branch
 - bash — Wire fused kernel into the model
-- … et 95 autres
+- … et 111 autres
 
 **Synthèse produite :**
 
@@ -2330,6 +2330,7 @@ Fusionner la sélection en un noyau par ligne (8 lancements → 2), supprimer le
 - tour 47 — Vérifier chiffres et cohérence docs
 - tour 47 — Revue adversariale du branchement top-k
 - tour 48 — Revue adverse du noyau fusionné
+- tour 48 — Revue adverse des rapports du sprint 3
 
 ### Commandes exécutées (échantillon)
 
@@ -2373,7 +2374,7 @@ Fusionner la sélection en un noyau par ligne (8 lancements → 2), supprimer le
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 1870 autres
+- … et 1885 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2726,4 +2727,5 @@ Fusionner la sélection en un noyau par ligne (8 lancements → 2), supprimer le
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p='REPRISE.md'; s=open(p).read() vieux = """⚠️ **Doute, à moitié levé** : le déport des p
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' def patch(p, paires):     s=open(p).read()     for v,n,nom in paires:         assert s.co
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' # La cérémonie : on remplace la grille partielle par la grille complète et on # ajoute la
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p='/tmp/ceremonie3.md'; s=open(p).read() vieux = """### 4. Trouvé en préparant la grille 
 
