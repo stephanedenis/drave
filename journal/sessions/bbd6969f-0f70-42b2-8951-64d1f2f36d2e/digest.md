@@ -39407,3 +39407,299 @@ COURANT
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -m \"Sprint 6 : le taux de récupération (9 fenêtres × 3 chemins) et le point 16 384\" && git log --oneline -1 && sleep 540 && cat /tmp/aiguille_s6.log | head -12; date +%H:%M:%S", "description": "Commit sp … [50 caractères tronqués]`
+
+  ```
+783f1f9 Sprint 6 : le taux de récupération (9 fenêtres × 3 chemins) et le point 16 384
+########## A - 4096 - complete - 9 fenetres
+03:47:58
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 560; cat /tmp/aiguille_s6.log | head -14; date +%H:%M:%S", "description": "Check dense 9-window results", "timeoutMs": 620000}`
+
+  ```
+########## A - 4096 - complete - 9 fenetres
+03:57:24
+  ```
+
+- **bash** `{"command": "ps -eo pid,etime,pcpu,args | grep -E \"aiguille|drave\" | grep -v grep | head -4; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls -la /tmp/aiguille_s6.log; date +%H:%M:%S", "description": "Check running probes"}`
+
+  ```
+2642200       19:21  0.0 bash -c cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ./tools/sprint.sh start "Le TAUX de récupération de l'attention creuse : neuf fenêtres à 4096 (dense, k=256, k=1024) et le troisième point de la courbe k(contexte) à 16384" && f=$(ls sprints/01-le-taux*.md 2>/dev/null | head -1); mv "$f" sprints/06-le-taux-de-recuperation.md && read num debut fin < sprints/COURANT && echo "6 $debut $fin" > sprints/COURANT && sed -i '1s/^# Sprint 1 /# Sprint 6 /' sprints/06-le-taux-de-recuperation.md && head -1 sprints/06-le-taux-de-recuperation.md && nohup /tmp/aig_s6.sh > /dev/null 2>&1 & sleep 20; cat /tmp/aiguille_s6.log 2>/dev/null; date +%H:%M:%S
+2642206       19:21  0.0 timeout 7200 python3 tools/aiguille.py models/Qwen2.5-0.5B-Q8_0.gguf 4096 0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5 --n 24 --lot 256 --gpu-kv
+2642208       19:21  0.0 python3 tools/aiguille.py models/Qwen2.5-0.5B-Q8_0.gguf 4096 0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5 --n 24 --lot 256 --gpu-kv
+2643507       16:51 1689 ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf --infer --chat --flux --prompt ous ditty , " while Chris Younie , a critic from 4Music , deemed it an " amazing pop song " 
+… [17814 caractères tronqués]
+  ```
+
+- **bash** `{"command": "uptime; nvidia-smi --query-gpu=index,utilization.gpu,memory.used --format=csv 2>/dev/null | head -4; ps -eo pcpu,etime,comm --sort=-pcpu | head -6", "description": "Diagnose the slow probe"}`
+
+  ```
+03:57:39  up 9 days 17:09,  2 users,  load average: 19,22, 18,53, 13,78
+index, utilization.gpu [%], memory.used [MiB]
+0, 20 %, 1605 MiB
+1, 14 %, 602 MiB
+%CPU     ELAPSED COMMAND
+1689       17:00 drave
+33.7  9-12:56:51 node-MainThread
+30.7  5-16:01:21 node-MainThread
+19.5  9-13:09:10 plasmashell
+12.1       00:00 chrome
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 280; cat /tmp/aiguille_s6.log; date +%H:%M:%S", "description": "Check if the series flushed", "timeoutMs": 340000}`
+
+  ```
+########## A - 4096 - complete - 9 fenetres
+04:02:27
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ps -eo pid,etime,args | grep \"aiguille.py\" | grep -v grep | head -1 | cut -c1-100; ps -eo pid,etime,pcpu,args --sort=-pcpu | head -3 | tail -2 | cut -c1-80; date +%H:%M:%S", "description": "Check probe progress"}`
+
+  ```
+2642206       24:23 timeout 7200 python3 tools/aiguille.py models/Qwen2.5-0.5B-Q8_0.gguf 4096 0.5,0.
+2643507       21:53 1692 ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q
+  11117  9-13:01:44 33.7 node26 /home/stephane/Data13TB/stephane/GitHub/gods-eye
+04:02:32
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git show --stat a3691a5 | tail -5; ls -la --time-style=+%H:%M drave-core/target/release/drave drave-core/src/*.rs | head -5", "description": "Check for engine changes"}`
+
+  ```
+.../bbd6969f-0f70-42b2-8951-64d1f2f36d2e/digest.md |  167 +++
+ .../rapport.md                                     |   20 +-
+ reports/rapport-aiguille-topk.md                   |   35 +-
+ tools/aiguille.py                                  |   17 +-
+ 8 files changed, 1850 insertions(+), 22 deletions(-)
+-rw-r--r--. 1 stephane stephane   45442 13:49 drave-core/src/engine.rs
+-rw-------. 1 stephane stephane   33061 19:27 drave-core/src/gguf.rs
+-rw-r--r--. 1 stephane stephane   78414 20:15 drave-core/src/gpu.rs
+-rw-------. 1 stephane stephane   67760 07:30 drave-core/src/list.rs
+-rw-r--r--. 1 stephane stephane  225347 20:16 drave-core/src/main.rs
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '/def sonde/,/cmd = \\[/p' tools/aiguille.py | head -30", "description": "Inspect the probe env code"}`
+
+  ```
+def sonde(modele, corpus, ctx, profondeur, offset, args):
+    """Une sonde. `offset` décale la fenêtre de corpus pour varier le texte."""
+    # Les tokenizers anglais tournent autour de 4,2 caractères par jeton ; la
+    # longueur exacte est relue dans la sortie du moteur.
+    cible = int(ctx * 4.2)
+    besoin = cible + 400
+    if offset + besoin > len(corpus):
+        offset = 0
+    remplissage = corpus[offset:offset + besoin]
+    coupe = int(len(remplissage) * profondeur)
+    # On coupe sur un espace pour ne pas hacher un mot.
+    while coupe < len(remplissage) and remplissage[coupe] != " ":
+        coupe += 1
+    texte = remplissage[:coupe] + AIGUILLE + remplissage[coupe:]
+    invite = texte + "\n\n" + QUESTION
+
+    env = dict(os.environ)
+    if args.gpu:
+        env["DRAVE_GPU"] = "1"
+    if args.gpu_kv:
+        env["DRAVE_GPU"] = "1"
+        env["DRAVE_GPU_KV"] = "1"
+    if args.gpu_topk:
+        env["DRAVE_GPU"] = "1"
+        env["DRAVE_GPU_KV"] = "1"
+        env["DRAVE_GPU_TOPK"] = "1"
+    cmd = [Q, modele, "--infer", "--chat", "--flux", "--prompt", invite,
+  ```
+
+- **bash** `{"command": "ps -o pid,etime,time,pcpu -p 2643507; sleep 20; ps -o pid,etime,time,pcpu -p 2643507; date +%H:%M:%S", "description": "Check probe CPU progress", "timeoutMs": 60000}`
+
+  ```
+PID     ELAPSED     TIME %CPU
+2643507       22:18 06:17:34 1692
+    PID     ELAPSED     TIME %CPU
+2643507       22:38 06:23:14 1692
+04:03:17
+  ```
+
+- **bash** `{"command": "nvidia-smi --query-compute-apps=pid,used_memory --format=csv 2>/dev/null | head -5; for pid in $(ps -eo pid,args | grep \"aig_s6\\|tools/aiguille\" | grep -v grep | awk '{print $1}'); do kill $pid 2>/dev/null; done; sleep 2; pkill -f \"drave.*--infer\" ; sleep 1; nvidia-smi --query-comp … [129 caractères tronqués]`
+
+  ```
+pid, used_gpu_memory [MiB]
+2643507, 218 MiB
+2643507, 218 MiB
+[killed by signal: SIGTERM]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ps -eo pid,args | grep -c \"[d]rave\"; time timeout 600 python3 tools/aiguille.py models/Qwen2.5-0.5B-Q8_0.gguf 4096 0.5 --n 24 --lot 256 --gpu-kv 2>&1 | tail -4", "description": "Re-test a single probe", "timeoutMs": 700000}`
+
+  ```
+0
+  lot 256 · 24 jetons de réponse · GPU KV  · attention COMPLÈTE
+ contexte  profondeur  trouvé  secondes  détail
+     4096        0.50     oui      74.9  prompt 4114 jetons
+fenêtres distinctes utilisées : 1 sur 1 sondes
+[stderr]
+
+real	1m14,975s
+user	19m16,031s
+sys	0m1,462s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -i 's/| grep -E \"\\^ +\\[0-9\\]+ |fenêtres distinctes|AVERTISSEMENT\" >> \"\\$J\"/| grep --line-buffered -E \"^ +[0-9]+ |fenêtres distinctes|AVERTISSEMENT\" >> \"$J\"/' /tmp/aig_s6.sh && grep -n \"grep\" /tmp/aig_s6.sh && nohup  … [159 caractères tronqués]`
+
+  ```
+22:    | grep --line-buffered -E "^ +[0-9]+ |fenêtres distinctes|AVERTISSEMENT" >> "$J"
+########## A - 4096 - complete - 9 fenetres
+04:05:25
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 480; cat /tmp/aiguille_s6.log; date +%H:%M:%S", "description": "Watch the relaunched grid", "timeoutMs": 540000}`
+
+  ```
+########## A - 4096 - complete - 9 fenetres
+AVERTISSEMENT : le corpus (353778 caractères) ne permet pas 9 fenêtres distinctes de 17603 caractères — certaines sondes rejoueront la même invite, et des répétitions d'un calcul déterministe ne mesurent rien de plus qu'une.
+     4096        0.50     oui      74.0  prompt 4114 jetons
+     4096        0.50     oui      71.7  prompt 3996 jetons
+04:13:33
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='tools/aiguille.py'; s=open(p).read()\nvieux = \"\"\"    if besoin_max + 150_000 * (len(longueurs) * len(profondeurs) - 1) > len(corpus):\"\"\"\nneuf = \"\"\"    # Le pas RÉEL est `besoin` (fenêtres contiguës), pa … [625 caractères tronqués]`
+
+  ```
+avertissement corrigé
+syntaxe OK
+########## A - 4096 - complete - 9 fenetres
+AVERTISSEMENT : le corpus (353778 caractères) ne permet pas 9 fenêtres distinctes de 17603 caractères — certaines sondes rejoueront la même invite, et des répétitions d'un calcul déterministe ne mesurent rien de plus qu'une.
+     4096        0.50     oui      74.0  prompt 4114 jetons
+     4096        0.50     oui      71.7  prompt 3996 jetons
+04:20:39
+  ```
+
+- **bash** `{"command": "ps -eo pid,etime,pcpu,args --sort=-pcpu | grep \"[d]rave\" | head -2 | cut -c1-160; date +%H:%M:%S", "description": "Inspect the slow probe"}`
+
+  ```
+2651563       13:23 1686 ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf --infer --chat --flux --prompt ous ditty , " while Chris Younie , a cri
+04:20:45
+  ```
+
+- **bash** `{"command": "for pid in $(ps -eo pid,args | grep -E \"aig_s6|tools/aiguille|[d]rave.*--infer\" | grep -v grep | awk '{print $1}'); do kill $pid 2>/dev/null; done; sleep 2; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\n# La fenêtre fautive : on la localise en comptant les je … [413 caractères tronqués]`
+
+  ```
+normalisation de charger_corpus : " ".join(texte.split())
+
+
+def sonde(modele, corpus, ctx, profondeur, offset, arg
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport subprocess, re\ncorpus = \" \".join(open('data/wikitext2_test.txt').read().split())\npas = int(4096*4.2) + 400\nprint(\"corpus normalisé :\", len(corpus), \"caractères · pas =\", pas)\nfor i in range(9):\n    … [842 caractères tronqués]`
+
+  ```
+corpus normalisé : 355672 caractères · pas = 17603
+fenêtre 0 (offset 0) : 4098 jetons de texte
+fenêtre 1 (offset 17603) : 3987 jetons de texte
+fenêtre 2 (offset 35206) : 4752 jetons de texte
+fenêtre 3 (offset 52809) : 4799 jetons de texte
+fenêtre 4 (offset 70412) : 4113 jetons de texte
+fenêtre 5 (offset 88015) : 4071 jetons de texte
+fenêtre 6 (offset 105618) : 4158 jetons de texte
+fenêtre 7 (offset 123221) : 4008 jetons de texte
+fenêtre 8 (offset 140824) : 4058 jetons de texte
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='tools/aiguille.py'; s=open(p).read()\nvieux = \"\"\"           \"--n\", str(args.n), \"--ctx\", str(ctx + 512), \"--threads\", str(args.threads),\"\"\"\nneuf = \"\"\"           # Marge de 1024 et non 512 : certai … [1346 caractères tronqués]`
+
+  ```
+outil : marge de contexte portée à 1024
+script : 16 384 réduit à deux séries
+syntaxe OK
+########## A - 4096 - complete - 9 fenetres
+04:21:34
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 570; cat /tmp/aiguille_s6.log; date +%H:%M:%S", "description": "Monitor the relaunched grid", "timeoutMs": 640000}`
+
+  ```
+########## A - 4096 - complete - 9 fenetres
+     4096        0.50     oui      73.4  prompt 4114 jetons
+     4096        0.50     oui      74.2  prompt 3996 jetons
+     4096        0.50     NON      85.7  prompt 4731 jetons
+     4096        0.50     oui      83.9  prompt 4664 jetons
+     4096        0.50     oui      72.9  prompt 4096 jetons
+     4096        0.50     oui      72.8  prompt 4046 jetons
+     4096        0.50     oui      74.9  prompt 4152 jetons
+04:31:08
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 580; cat /tmp/aiguille_s6.log; date +%H:%M:%S", "description": "Monitor grid progress", "timeoutMs": 640000}`
+
+  ```
+########## A - 4096 - complete - 9 fenetres
+     4096        0.50     oui      73.4  prompt 4114 jetons
+     4096        0.50     oui      74.2  prompt 3996 jetons
+     4096        0.50     NON      85.7  prompt 4731 jetons
+     4096        0.50     oui      83.9  prompt 4664 jetons
+     4096        0.50     oui      72.9  prompt 4096 jetons
+     4096        0.50     oui      72.8  prompt 4046 jetons
+     4096        0.50     oui      74.9  prompt 4152 jetons
+     4096        0.50     oui      72.9  prompt 4013 jetons
+     4096        0.50     oui      72.7  prompt 4081 jetons
+fenêtres distinctes utilisées : 9 sur 9 sondes
+########## A - 4096 - k=256 - 9 fenetres
+     4096        0.50     NON     243.1  prompt 4114 jetons · [attention] --attn-topk 256 est IGNORÉ en mode lot (--lot 256) : l'attention par lots est DENSE. Utiliser --lo
+     4096        0.50     oui     230.4  prompt 3996 jetons · [attention] --attn-topk 256 est IGNORÉ en mode lot (--lot 256) : l'attention par lots est DENSE. Utiliser --lo
+04:40:56
+  ```
+
+- **bash** `{"command": "for pid in $(ps -eo pid,args | grep -E \"aig_s6|tools/aiguille|[d]rave.*--infer\" | grep -v grep | awk '{print $1}'); do kill $pid 2>/dev/null; done; sleep 2; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='/tmp/aig_s6.sh'\ns = open(p).read()\n# le top-k CPU c … [1233 caractères tronqués]`
+
+  ```
+script : top-k déporté, 16 k retiré
+24:serie "A - 4096 - complete - 9 fenetres" 4096 "$NEUF"
+25:serie "A - 4096 - k=256 GPU - 9 fenetres" 4096 "$NEUF" --attn-topk 256 --gpu-topk
+26:serie "A - 4096 - k=1024 GPU - 9 fenetres" 4096 "$NEUF" --attn-topk 1024 --gpu-topk
+########## A - 4096 - complete - 9 fenetres
+04:41:27
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 590; cat /tmp/aiguille_s6b.log; date +%H:%M:%S", "description": "Monitor the clean grid", "timeoutMs": 650000}`
+
+  ```
+########## A - 4096 - complete - 9 fenetres
+     4096        0.50     oui      76.1  prompt 4114 jetons
+     4096        0.50     oui      73.6  prompt 3996 jetons
+     4096        0.50     NON      85.1  prompt 4731 jetons
+     4096        0.50     oui      82.6  prompt 4664 jetons
+     4096        0.50     oui      74.2  prompt 4096 jetons
+     4096        0.50     oui      73.6  prompt 4046 jetons
+     4096        0.50     oui      74.4  prompt 4152 jetons
+     4096        0.50     oui      72.7  prompt 4013 jetons
+04:51:23
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/s6_note.md <<'EOF'\n### Le TAUX, et un piège du moteur trouvé en chemin\n\nNeuf fenêtres **contiguës** (l'outil avance d'un « besoin » de sonde, donc les\nfenêtres ne se recouvrent pas — « fenêtres distinctes utilisées : 9 … [1832 caractères tronqués]`
+
+  ```
+4096        0.50     oui      74.2  prompt 4096 jetons
+     4096        0.50     oui      73.6  prompt 4046 jetons
+     4096        0.50     oui      74.4  prompt 4152 jetons
+     4096        0.50     oui      72.7  prompt 4013 jetons
+     4096        0.50     oui      74.3  prompt 4081 jetons
+fenêtres distinctes utilisées : 9 sur 9 sondes
+########## A - 4096 - k=256 GPU - 9 fenetres
+     4096        0.50     NON     246.5  prompt 4114 jetons · [attention] --attn-topk 256 est IGNORÉ en mode lot (--lot 256) : l'attention par lots est DENSE. Utiliser --lo
+04:59:32
+  ```
+
+- **bash** `{"command": "for pid in $(ps -eo pid,args | grep -E \"aig_s6b|tools/aiguille|[d]rave.*--infer\" | grep -v grep | awk '{print $1}'); do kill $pid 2>/dev/null; done; sleep 2; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat /tmp/aiguille_s6b.log | tail -6; echo \"--- total sondes ---\"; grep  … [108 caractères tronqués]`
+
+  ```
+4096        0.50     oui      74.4  prompt 4152 jetons
+     4096        0.50     oui      72.7  prompt 4013 jetons
+     4096        0.50     oui      74.3  prompt 4081 jetons
+fenêtres distinctes utilisées : 9 sur 9 sondes
+########## A - 4096 - k=256 GPU - 9 fenetres
+     4096        0.50     NON     246.5  prompt 4114 jetons · [attention] --attn-topk 256 est IGNORÉ en mode lot (--lot 256) : l'attention par lots est DENSE. Utiliser --lo
+--- total sondes ---
+10
+04:59:42
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\ndef patch(p, paires):\n    s=open(p).read()\n    for v,n,nom in paires:\n        assert s.count(v)==1, f\"{p}::{nom}::{s.count(v)}\"\n        s=s.replace(v,n,1)\n    open(p,'w').write(s); print(f\"{p} : {len(paires) … [4358 caractères tronqués]`

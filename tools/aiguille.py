@@ -81,7 +81,11 @@ def sonde(modele, corpus, ctx, profondeur, offset, args):
         env["DRAVE_GPU_KV"] = "1"
         env["DRAVE_GPU_TOPK"] = "1"
     cmd = [Q, modele, "--infer", "--chat", "--flux", "--prompt", invite,
-           "--n", str(args.n), "--ctx", str(ctx + 512), "--threads", str(args.threads),
+           # Marge de 1024 et non 512 : certaines fenêtres de corpus tokenisent à
+           # 4 750 jetons pour une cible de 4 096 (Mesuré), et un prompt PLUS LONG
+           # que le contexte ne fait pas échouer le moteur — il le ralentit d'un
+           # facteur 10 à 20 sans un mot (mesuré : 13 à 23 min au lieu de 75 s).
+           "--n", str(args.n), "--ctx", str(ctx + 1024), "--threads", str(args.threads),
            "--temp", "0", "--lot", str(args.lot)]
     if args.attn_topk > 0:
         cmd += ["--attn-topk", str(args.attn_topk)]
@@ -165,7 +169,10 @@ def main():
     # 4 096 jetons avec le corpus actuel). Un pas fixe de 150 000 n'en donnait que
     # trois, et le pas précédent (200 000 avec un garde-fou à 400 000) aucune.
     besoin_max = int(max(longueurs) * 4.2) + 400
-    if besoin_max + 150_000 * (len(longueurs) * len(profondeurs) - 1) > len(corpus):
+    # Le pas RÉEL est `besoin` (fenêtres contiguës), pas 150 000 : la première
+    # version de cet avertissement criait au loup pour 9 fenêtres de 17 603
+    # caractères dans un corpus qui en contient 353 778 (20 tiennent).
+    if besoin_max * len(longueurs) * len(profondeurs) > len(corpus):
         print(f"AVERTISSEMENT : le corpus ({len(corpus)} caractères) ne permet pas "
               f"{len(longueurs) * len(profondeurs)} fenêtres distinctes de {besoin_max} "
               f"caractères — certaines sondes rejoueront la même invite, et des "

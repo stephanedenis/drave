@@ -188,6 +188,36 @@ lentement que le contexte** sur ces deux points, ce qui est la direction favorab
 pour l'élagage à long contexte, sans être une courbe. Source : `/tmp/aiguille_s5.log`
 §B ; contrôle dense : `/tmp/aig8192.log`.
 
+### Le taux, par fenêtre (sprint 6, mesure partielle)
+
+Neuf fenêtres **contiguës** (l'outil avance d'un « besoin » de sonde : « fenêtres
+distinctes utilisées : 9 sur 9 »), 4 096 clés, profondeur 0,5, `--lot 256
+--gpu-kv` — une sonde tombe de ~250 s à 75 s, ce qui rend la grille possible dans un
+box ; toutes les configurations partagent ce chemin.
+
+| fenêtre | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 |
+|---|---|---|---|---|---|---|---|---|---|
+| jetons du prompt | 4114 | 3996 | **4731** | 4664 | 4096 | 4046 | 4152 | 4013 | 4081 |
+| attention complète | oui | oui | **NON** | oui | oui | oui | oui | oui | oui |
+| k = 256 (GPU) | **NON** | (non mesuré) | | | | | | | |
+
+⚠️ **Deux lectures, et il faut les deux** :
+
+1. **le contrôle dense n'est pas parfait** : la fenêtre 3 (4 731 jetons, la plus
+   longue) échoue AUSSI avec l'attention complète. Le protocole a donc une
+   difficulté propre, et une comparaison honnête est **appariée** (même fenêtre,
+   deux chemins), pas un taux global ;
+2. **sur la fenêtre 1, la comparaison appariée est nette** : l'attention complète
+   retrouve l'information, `k = 256` ne la retrouve pas — même invite, mêmes
+   réglages, seul l'élagage change.
+
+La série `k = 256` n'a pas pu être terminée dans le box : avec `--attn-topk`, le
+PRÉREMPLISSAGE perd l'accélération GPU (le chemin groupé exige `attn_topk == 0`) et
+chaque sonde repasse de 75 s à **246 s** — mesuré, et c'est le même mur que celui
+documenté plus haut. Neuf sondes × 246 s ne tiennent pas dans un box. **La grille
+complète demande d'implémenter le top-k dans le chemin par lots** : c'est ce que
+cette mesure désigne comme le prochain chantier, et c'est un résultat en soi.
+
 ## Ce que ce rapport ne dit pas
 
 * **8 192 : le contrôle dense est mesuré** (sprint 4, une sonde : **trouvé**,
@@ -203,6 +233,18 @@ pour l'élagage à long contexte, sans être une courbe. Source : `/tmp/aiguille
   lecture, mais la généralité inter-fenêtres n'est pas mesurée.
 * **un seul modèle** (Qwen2.5-0.5B) : rien ne dit que le seuil k/contexte soit le
   même sur un modèle plus grand.
+* le TAUX de récupération par fenêtre reste partiel : 9 fenêtres mesurées en
+  attention complète (8 réussites), 1 seule en `k = 256` (échec) — la série
+  complète demande le top-k dans le chemin par lots (246 s par sonde sans lui).
+
+### Un piège du MOTEUR, trouvé parce qu'une sonde a duré 23 minutes
+
+La fenêtre 3 tokenise à **4 731 jetons** là où la cible était 4 096, et l'outil
+passait `--ctx 4608` : le prompt dépassait le contexte. Le moteur ne l'a pas refusé
+— il est devenu **10 à 20 fois plus lent en silence** (13 à 23 minutes par sonde
+contre 75 s), sans un mot. Marge portée à `ctx + 1024` dans l'outil (la sonde passe
+alors en 85 s) ; le comportement du moteur reste à corriger : un prompt plus long que
+le contexte devrait être tronqué proprement ou refusé, pas ralenti.
 * **k plus grand : mesuré depuis** (512 et 1 024, section « Suite ») — le seuil est
   entre 12,5 % et 25 % du contexte sur ce cas.
 * le préremplissage reste DENSE avec `--lot > 1` : la mesure porte sur le décodage.
