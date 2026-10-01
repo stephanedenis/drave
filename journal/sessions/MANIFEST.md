@@ -5,6 +5,7 @@ trace brute (`session.jsonl.zstd`) reste sur disque et n'est pas suivie par git.
 
 | Session | Début | Trace | Digest | Tours | Messages | Outils | Erreurs | Compactages |
 |---|---|---|---|---|---|---|---|---|
+| `13446299` | 2026-10-01 01:07 | 0.5 Mo | 84 Ko | 1 | 50 | 68 | 0 | 0 |
 | `15fd322f` | 2026-09-30 12:00 | 0.6 Mo | 66 Ko | 1 | 57 | 67 | 0 | 0 |
 | `22bcae27` | 2026-09-28 14:45 | 14.8 Mo | 1398 Ko | 54 | 1250 | 1227 | 19 | 4 |
 | `27c99b10` | 2026-09-25 19:50 | 1.0 Mo | 61 Ko | 1 | 57 | 54 | 1 | 0 |
@@ -18,11 +19,11 @@ trace brute (`session.jsonl.zstd`) reste sur disque et n'est pas suivie par git.
 | `7d0d2578` | 2026-09-30 11:53 | 0.6 Mo | 68 Ko | 1 | 41 | 53 | 0 | 0 |
 | `8e04c99a` | 2026-09-30 18:17 | 0.7 Mo | 118 Ko | 1 | 59 | 85 | 0 | 0 |
 | `aa5f9fc5` | 2026-09-30 15:17 | 0.8 Mo | 129 Ko | 1 | 78 | 100 | 0 | 0 |
-| `bbd6969f` | 2026-10-01 00:54 | 18.5 Mo | 2223 Ko | 48 | 2443 | 2315 | 10 | 6 |
+| `bbd6969f` | 2026-10-01 01:07 | 18.6 Mo | 2247 Ko | 48 | 2453 | 2323 | 10 | 6 |
 | `bcfe0b97` | 2026-09-30 12:39 | 1.0 Mo | 145 Ko | 1 | 102 | 110 | 0 | 0 |
 | `c25f97d1` | 2026-09-30 11:59 | 0.8 Mo | 126 Ko | 1 | 73 | 104 | 0 | 0 |
 | `c776b71f` | 2026-09-30 18:43 | 0.7 Mo | 82 Ko | 1 | 35 | 54 | 0 | 0 |
 | `da69b1fa` | 2026-09-30 15:13 | 0.5 Mo | 56 Ko | 1 | 37 | 45 | 0 | 0 |
 | `e7dfe34f` | 2026-09-28 14:59 | 0.2 Mo | 28 Ko | 1 | 20 | 21 | 0 | 0 |
 
-Total : 45.8 Mo de traces brutes.
+Total : 46.4 Mo de traces brutes.

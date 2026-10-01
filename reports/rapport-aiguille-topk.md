@@ -70,25 +70,37 @@ le MILIEU, et il échoue des deux côtés (CPU et GPU).
 
 ## Suite (sprint 4) : le k est un RÉGLAGE, pas une fatalité
 
-La grille du sprint 3 n'avait **qu'une sonde par configuration**, et le premier
-balayage en k a donné des résultats **non monotones** (k = 512 échoue, k = 1 024
-réussit) : avec une seule sonde, impossible de distinguer « l'attention creuse
-échoue » de « cette exécution-là a déraillé ». D'où **trois sondes par
-configuration**, sur trois **fenêtres de corpus différentes** (l'outil avance son
-offset de 200 000 caractères à chaque profondeur listée), à 4 096 clés et
-profondeur 0,5 (le milieu) :
+⚠️ **Ce que cette grille est, et ce qu'elle n'est pas** — corrigé après la revue
+adverse du sprint 4 : les trois colonnes sont trois **répétitions de la MÊME
+invite**, pas trois fenêtres de corpus. Le garde-fou d'`aiguille.py` comparait
+l'offset à `len(corpus) - 400_000` alors que le corpus en fait **353 778** : la
+remise à zéro se déclenchait donc toujours, et les trois sondes d'une série
+utilisaient l'offset 0. Or le moteur est déterministe : **trois répétitions d'une
+même invite ne mesurent rien de plus qu'une seule**. Ce qui reste établi, c'est la
+CONVERGENCE entre le premier balayage (une sonde) et cette série ; la généralité
+inter-fenêtres, elle, n'est pas mesurée. L'outil est corrigé (marge calculée sur la
+taille réelle du corpus) et la grille est à refaire.
 
-| configuration | fenêtre 1 | fenêtre 2 | fenêtre 3 | trouvé |
+La grille, à 4 096 clés et profondeur 0,5 (le milieu), `--lot 256` :
+
+| configuration | répétition 1 | répétition 2 | répétition 3 | verdict |
 |---|---|---|---|---|
 | attention complète | oui (383,6 s) | oui (326,5 s) | oui (251,5 s) | **3/3** |
 | **k = 256** (6,25 %) | NON (244,7 s) | NON (237,8 s) | NON (237,0 s) | **0/3** |
 | **k = 1 024** (25 %) | oui (239,6 s) | oui (253,2 s) | oui (244,1 s) | **3/3** |
 | **k = 512** (12,5 %) | NON (240,5 s) | NON (238,1 s) | NON (237,8 s) | **0/3** |
 
-**Conclusion corrigée** : l'échec au milieu n'est PAS une impossibilité
-structurelle du top-k — c'est un **réglage**. Le passage est net et reproductible :
-**0/3 à k = 256 (6,25 %) et à k = 512 (12,5 %), 3/3 à k = 1 024 (25 %)**, avec la
-référence complète à 3/3. Le seuil est donc **entre 512 et 1 024 clés** (12,5 % et
+(Les durées de la rangée « complète » ont été mesurées pendant qu'un autre balayage
+tournait : elles ne sont pas comparables à celles des autres rangées. Les verdicts,
+eux, ne dépendent pas de la charge.)
+
+**Conclusion corrigée, avec sa portée exacte** : à 4 096 clés, en `--lot 256` (où
+`--attn-topk` ne s'applique qu'aux **24 jetons du décodage**, le préremplissage
+restant dense — le moteur l'imprime), l'échec au milieu n'est PAS une impossibilité
+structurelle du top-k : **0 à k = 256 (6,25 %), 0 à k = 512 (12,5 %), 3/3 à
+k = 1 024 (25 %)**, référence complète à 3/3. Ce n'est pas « reproductible » au sens
+de trois fenêtres — c'est **convergent** : le premier balayage (une sonde) donnait
+déjà non à 512 et oui à 1 024. Le seuil est donc **entre 512 et 1 024 clés** (12,5 % et
 25 % du contexte), et l'affirmation du sprint 3 (« sans index, l'attention creuse ne
 peut pas remplacer l'attention complète à long contexte ») était **trop forte** :
 elle vaut pour un k nettement inférieur au seuil.
@@ -100,9 +112,9 @@ décroît (l'information utile est de plus en plus concentrée), il devient paya
 C'est la mesure à faire ensuite, et le préremplissage déporté (§ ci-dessus) la rend
 abordable.
 
-Et un contrôle qui invalide une comparaison tentante : **en `--lot 1`, l'attention
-COMPLÈTE échoue aussi au milieu** (251,0 s, « NON ») alors qu'elle réussit 3 fois
-sur 3 en `--lot 256`. Le chemin par lots change le résultat lui-même (la revue
+Et un contrôle (UNE sonde) qui invalide une comparaison tentante : **en `--lot 1`,
+l'attention COMPLÈTE échoue aussi au milieu** (251,0 s, « NON ») alors qu'elle
+réussit en `--lot 256`. Le chemin par lots change le résultat lui-même (la revue
 adverse du sprint 3 avait mesuré que `--lot 1` et `--lot 256` génèrent des
 identifiants différents) : la comparaison « tout le passage creux » en `--lot 1`
 n'est pas propre, et la seule comparaison valable est **à lot fixé**, entre
@@ -115,14 +127,15 @@ attention complète et attention creuse.
   sonde à 8 192 — et **seule** la sonde « 8 192 / 0,5 / complète » a été lancée,
   puis arrêtée 8 s plus tard (22:55:13) pour laisser la place à la cérémonie. Le
   sprint 4 reprend la grille là où elle s'arrête.
-* plusieurs codes par sonde, plusieurs fenêtres de corpus : la mesure est
-  binaire (trouvé / non trouvé), avec un seul code et une seule fenêtre par
-  (contexte, profondeur). Un « NON » peut être un échec de génération ; le détail
-  (« oui » dense au même endroit) protège de cette lecture, mais une répétition
-  serait plus solide.
-* l'effet d'un k plus grand (512, 1 024) : non mesuré. C'est la première
-  expérience à faire ensuite — si k = 1 024 (25 % du contexte) retrouve le milieu,
-  le problème est un réglage ; sinon c'est un mécanisme manquant.
+* plusieurs codes par sonde, **plusieurs fenêtres de corpus** : la mesure est
+  binaire (trouvé / non trouvé), avec un seul code et — la correction ci-dessus le
+  montre — **une seule fenêtre par (contexte, profondeur)**. Un « NON » peut être un
+  échec de génération ; le détail (« oui » dense au même endroit) protège de cette
+  lecture, mais la généralité inter-fenêtres n'est pas mesurée.
+* **un seul modèle** (Qwen2.5-0.5B) : rien ne dit que le seuil k/contexte soit le
+  même sur un modèle plus grand.
+* **k plus grand : mesuré depuis** (512 et 1 024, section « Suite ») — le seuil est
+  entre 12,5 % et 25 % du contexte sur ce cas.
 * le préremplissage reste DENSE avec `--lot > 1` : la mesure porte sur le décodage.
   Une grille en `--lot 1` (où tout le passage est creux) est la vérification qui
   manque, et elle serait d'autant plus abordable que le préremplissage par lots est
@@ -131,7 +144,16 @@ attention complète et attention creuse.
 ## Reproduire
 
 ```bash
+# grille du sprint 3 (une sonde par point)
 python3 tools/aiguille.py models/Qwen2.5-0.5B-Q8_0.gguf 4096 0.5 --n 24 --lot 256
 python3 tools/aiguille.py models/Qwen2.5-0.5B-Q8_0.gguf 4096 0.5 --n 24 --lot 256 --attn-topk 256
 python3 tools/aiguille.py models/Qwen2.5-0.5B-Q8_0.gguf 4096 0.5 --n 24 --lot 256 --attn-topk 256 --gpu-topk
+# grille du sprint 4 (le k), une invocation par k : trois sondes à trois offsets
+for k in 256 512 1024; do
+  python3 tools/aiguille.py models/Qwen2.5-0.5B-Q8_0.gguf 4096 0.5,0.5,0.5 \
+      --n 24 --lot 256 --attn-topk $k
+done
 ```
+
+Sources brutes : `/tmp/aiguille_topk2.log` (sprint 3), `/tmp/aiguille_k.log`
+(premier balayage en k), `/tmp/aiguille_rep.log` (les trois répétitions).

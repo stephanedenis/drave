@@ -16,6 +16,10 @@ Ce qui a changé par rapport à la v1 (mesurée et arrêtée) :
    sondes que le modèle savait résoudre ;
 3. **le préremplissage par lots** (`--lot`) rend chaque sonde abordable : le
    moteur ne l'utilisait que pour la perplexité ;
+   ⚠️ et depuis le sprint 4, le décalage de fenêtre est RÉELLEMENT appliqué (il
+   comparait à une marge de 400 000 caractères pour un corpus qui en fait 353 778,
+   donc il remettait l'offset à zéro à chaque sonde : « trois fenêtres » étaient
+   trois fois la même invite) ;
 4. le contexte réellement atteint est **lu dans la sortie du moteur** (le
    tokenizer ne fait pas 4 caractères par jeton pour tout le monde), et une
    sonde n'est comptée que si le contexte demandé a bien été construit.
@@ -158,8 +162,15 @@ def main():
     for ctx in longueurs:
         for p in profondeurs:
             ok, dt, detail = sonde(args.modele, corpus, ctx, p, offset, args)
-            offset += 200_000          # fenêtre différente à chaque sonde
-            if offset > len(corpus) - 400_000:
+            # Fenêtre différente à chaque sonde — SAUF si le corpus est trop court
+            # pour en contenir une deuxième. Le garde-fou d'origine comparait à
+            # `len(corpus) - 400_000`, une constante qui supposait 400 000
+            # caractères de marge : avec les 353 778 du corpus réel, la condition
+            # était TOUJOURS vraie et l'offset revenait à 0 à chaque sonde. Trois
+            # sondes « sur trois fenêtres » étaient donc trois fois la même invite,
+            # et trois répétitions d'un calcul déterministe ne mesurent rien.
+            offset += 150_000
+            if offset + 20_000 > len(corpus):
                 offset = 0
             etat = "délai" if ok is None else ("oui" if ok else "NON")
             print(f"{ctx:>9} {p:>11.2f} {etat:>7} {dt:>9.1f}  {detail}", flush=True)

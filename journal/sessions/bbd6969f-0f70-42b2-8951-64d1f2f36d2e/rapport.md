@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 58.1 h |
+| Durée | 58.4 h |
 | Tours | 48 |
-| Messages | 2443 |
-| Appels d'outils | 2315 |
+| Messages | 2453 |
+| Appels d'outils | 2323 |
 | Fichiers touchés | 51 |
-| Commandes | 1959 |
-| Sous-agents | 16 |
-| Commits | 210 |
+| Commandes | 1966 |
+| Sous-agents | 17 |
+| Commits | 211 |
 | Compactages de contexte | 3 |
 
 ## Objectifs déclarés
@@ -2234,7 +2234,7 @@ Fusionner la sélection en un noyau par ligne (8 lancements → 2), supprimer le
 
 ### Tour 48 — Continue en blocs de 2h jusqu'à demain 8h HAE. pour chacun des blocs/sprints tu dois être en autonomie totale. C'est à d … [282 caractères tronqués]
 
-*163 appels d'outils.* Actions notables :
+*171 appels d'outils.* Actions notables :
 
 - bash — Check time and count remaining boxes
 - bash — Start sprint 2
@@ -2250,11 +2250,11 @@ Fusionner la sélection en un noyau par ligne (8 lancements → 2), supprimer le
 - bash — Add poison check and finiteness guard
 - bash — Locate the topk GPU branch
 - bash — Wire fused kernel into the model
-- … et 145 autres
+- … et 153 autres
 
 **Synthèse produite :**
 
-⏵ La revue a trouvé une course bloquante dans le noyau fusionné — je corrige
+⏵ La revue du sprint 4 a trouvé deux défauts graves dans ma mesure — je corrige tout
 
 ## 3. Travail accompli
 
@@ -2332,6 +2332,7 @@ Fusionner la sélection en un noyau par ligne (8 lancements → 2), supprimer le
 - tour 47 — Revue adversariale du branchement top-k
 - tour 48 — Revue adverse du noyau fusionné
 - tour 48 — Revue adverse des rapports du sprint 3
+- tour 48 — Revue adverse sprint 4
 
 ### Commandes exécutées (échantillon)
 
@@ -2375,7 +2376,7 @@ Fusionner la sélection en un noyau par ligne (8 lancements → 2), supprimer le
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 1919 autres
+- … et 1926 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2733,4 +2734,5 @@ Fusionner la sélection en un noyau par ligne (8 lancements → 2), supprimer le
 - Sprint 3 : cérémonie (aiguille × attention creuse, revue adverse, planning du sprint 4)" && git log --oneline -1 && ./tools/sprint.sh start "Le k de l'attention
 - Préremplissage déporté : ×4,5 sur un prompt de 3 961 jetons (286,6 → 63,8 s), perplexité à 2e-5" && git log --oneline -1; cat /tmp/aiguille_k.log | tail -3
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p='reports/rapport-aiguille-topk.md'; s=open(p).read() vieux = """| k = 512 (12,5 %) | (e
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p='/tmp/ceremonie4.md'; s=open(p).read() vieux = s[s.index("### 1. Le résultat qui tranch
 

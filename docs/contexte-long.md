@@ -298,8 +298,10 @@ jetons au lieu de 2,9. Les réutiliser a ramené l'attention déportée à 3,2 m
 
 ### Le PRÉREMPLISSAGE aussi : 286,6 s → 63,8 s sur un prompt de 3 961 jetons
 
-Mesuré au sprint 4 (Qwen2.5-0.5B Q8_0, prompt de 3 961 jetons, `--lot 256`,
-`--infer`) :
+Mesuré à la fin du sprint 3, avant le sprint 4 (Qwen2.5-0.5B Q8_0, prompt de
+3 961 jetons, `--lot 256`, `--infer`) ; ⚠️ ces temps dépendent de la charge — une
+re-mesure sous charge (deux autres tâches sur 40 cœurs) donne 372,0 s et 95,9 s,
+soit ×3,9 au lieu de ×4,5 :
 
 | chemin | prompt | postes (ms/jeton) |
 |---|---|---|
@@ -309,7 +311,10 @@ Mesuré au sprint 4 (Qwen2.5-0.5B Q8_0, prompt de 3 961 jetons, `--lot 256`,
 L'attention du préremplissage est **le** poste dominant sur CPU (73 % du temps :
 le terme quadratique), et le miroir VRAM la divise par 24. La qualité ne bouge
 pas : à ctx 4 096 et 1 023 jetons, perplexité **9,4335 (CPU)** contre **9,4337
-(GPU KV)**, soit 2e-5. Autrement dit, pour tout prompt long, `DRAVE_GPU_KV=1` est
+(GPU KV)**, soit un écart **relatif** de 2,1e-5 (2e-4 sur les valeurs affichées) —
+reproduit à l'identique par la revue adverse. En revanche, les jetons GÉNÉRÉS
+peuvent différer à température 0 (le chemin de calcul n'est pas le même) : la
+perplexité est identique, pas la continuation. Autrement dit, pour tout prompt long, `DRAVE_GPU_KV=1` est
 le réglage à prendre — et il l'était déjà avant ce sprint, sans que le chiffre
 existe.
 

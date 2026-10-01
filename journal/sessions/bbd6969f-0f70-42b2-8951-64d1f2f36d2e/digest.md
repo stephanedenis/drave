@@ -38625,3 +38625,234 @@ rapport : section sprint 4
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/rapport-aiguille-topk.md'; s=open(p).read()\nvieux = \"\"\"| k = 512 (12,5 %) | (en cours) | | | |\"\"\"\nneuf = \"\"\"| **k = 512** (12,5 %) | NON (240,5 s) | NON (238,1 s) | NON (237,8 s) | **0/3** |\"\ … [3171 caractères tronqués]`
+
+  ```
+tableau complet
+09adea5 Le k est un réglage : 0/3 au milieu à k=512, 3/3 à k=1024 (trois fenêtres par point)
+  ```
+
+- **subagent** `{"description": "Revue adverse sprint 4", "prompt": "Tu es relecteur ADVERSARIAL autonome dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (moteur d'inférence Rust « Drave »). Mission : vérifier les artefacts du sprint 4 (23h44 → 01h44) — aucun chiffre sans source, aucune affirmation no … [3101 caractères tronqués]`
+
+  ```
+started subagent 13446299-79d8-497c-ba83-673c176a4637
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/ceremonie4.md <<'EOF'\n\n**Objectif du sprint** : « Le k de l'attention creuse : l'échec au milieu est-il un\nréglage (k plus grand) ou un mécanisme manquant ? Grille en `--lot 1` (tout le\npassage creux) et k = 256/512/10 … [5428 caractères tronqués]`
+
+  ```
+cérémonie 4 prête (90 lignes)
+00:54:48
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && (echo \"=== portes sprint 4 ===\"; echo -n \"Qwen : \"; ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf --ppl /tmp/wt2_ids.txt --ctx 256 --abits 16 --threads 16 --limit 512 2>&1 | grep -oE \"perplexité [0-9.]+ sur [0- … [482 caractères tronqués]`
+
+  ```
+=== portes sprint 4 ===
+Qwen : perplexité 19.3885 sur 510 tokens
+gpt-oss : perplexité 15.1757 sur 510 tokens
+tests : test result: ok. 17 passed
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && nohup bash -c 'cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 1800 python3 tools/aiguille.py models/Qwen2.5-0.5B-Q8_0.gguf 8192 0.5 --n 24 --lot 256 2>&1 | tail -2 > /tmp/aig8192.log; echo FINI >> /tmp/aig8192.log' > / … [118 caractères tronqués]`
+
+  ```
+contrôle 8192 dense lancé
+00:58:02
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 540; cat /tmp/aig8192.log 2>/dev/null; date +%H:%M:%S", "description": "Check 8192 control probe", "timeoutMs": 600000}`
+
+  ```
+01:07:09
+  ```
+
+### 👤 Utilisateur
+
+Agent 13446299-79d8-497c-ba83-673c176a4637 sent a message:
+REVUE ADVERSE SPRINT 4 — terminée. Aucun fichier du dépôt modifié (seuls des logs neufs dans /tmp : /tmp/audit_prefill.log, /tmp/audit_ppl.log). Toutes les sondes/prefill relancés ont été mesurés sous charge (load 8,7 → 35,4 ; un job gpt-oss-120b ppl + une sonde aiguille d'un autre agent tournaient en parallèle, 40 cœurs).
+
+ÉCARTS, PAR GRAVITÉ
+
+1. GRAVE — « trois fenêtres de corpus différentes » est FAUX (rapport-aiguille-topk.md:76-79, en-têtes de colonnes « fenêtre 1/2/3 », et message de commit 09adea5 « trois fenêtres de corpus »).
+   (a) reports/rapport-aiguille-topk.md:76-79 et table :83-86 ; commit 09adea5.
+   (b) « trois fenêtres de corpus différentes (l'outil avance son offset de 200 000 caractères à chaque profondeur listée) » ; « fenêtre 1 / fenêtre 2 / fenêtre 3 ».
+   (c) tools/aiguille.py:161-163 : après CHAQUE sonde, `offset += 200_000` puis `if offset > len(corpus) - 400_000 { offset = 0 }`. Or `aiguille.charger_corpus()` = 353 778 caractères (data/wikitext2_test.txt, inchangé depuis le 25/09) ⇒ le seuil vaut −46 222, donc la remise à zéro se déclenche TOUJOURS. Offsets réellement utilisés par les 3 sondes : [0, 0, 0]. Preuve : les 3 invites reconstruites avec le vrai module ont le même md5 (6a94ff027ad0 ×3). Même sans le garde-fou, l'offset 400 000 est hors corpus (400 000 + 17 603 > 353 778) : au mieux 2 fenêtres distinctes étaient possibles, pas 3. Les 12 lignes du log disent d'ailleurs « prompt 4114 jetons ».
+   (d) FAUX. Les « 3/3 » et « 0/3 » sont trois répétitions de la MÊME invite (même texte, même position d'aiguille), pas trois textes. La justification annoncée (« avec une seule sonde, impossible de distinguer "l'attention creuse échoue" de "cette exécution a déraillé" ») n'est donc pas servie : les trois sondes ne peuvent rien dire de la généralité inter-fenêtres.
+   (e) Correction minimale : écrire « trois répétitions de la même invite (l'offset est remis à 0 par le garde-fou de aiguille.py ; le corpus normalisé fait 353 778 caractères, le seuil en suppose ≥ 400 000) », remplacer « fenêtre 1/2/3 » par « répétition 1/2/3 », et borner la conclusion à cette fenêtre — ou corriger l'outil (gardien `len(corpus)` au lieu de 400 000, ou corpus complet wikitext2) et refaire la grille. Le commentaire de /tmp/aig5.sh porte la même affirmation fausse.
+
+2. GRAVE (feuille de route) — la grille qui soutient « le k est un réglage » n'est pas celle de l'objectif du sprint : sprints/04-…md exige « Grille en --lot 1 (tout le passage creux) et k = 256/512/1024 », or aig5.sh et aiguille_k.log tournent en --lot 256, où le moteur IGNORE --attn-topk au préremplissage (model.rs:2357-2359 ; préremplissage par forward_lot, décodage par forward → top-k seulement sur les 24 jetons générés, 0,58 %).
+   (a) section « Suite (sprint 4) » ; (b) « l'échec au milieu n'est PAS une impossibilité structurelle du top-k — c'est un réglage » ; (c) la mesure porte sur le décodage seul, et le log le dit (avertissement « IGNORÉ en mode lot » sur les 9 lignes k=256/512/1024) ; (d) la conclusion est plus générale que la mesure ; le fichier porte bien l'avertissement de portée en tête (:9-17) et le bullet :126-129, mais la SECTION sprint 4 ne redit ni « --lot 256 » ni « décodage seul », et la grille --lot 1 exigée par le sprint 3 (revue adverse, écart GRAVE n° 2) comme par l'objectif du sprint 4 n'a pas été faite ; (e) ajouter dans la section « grille en --lot 256 : seul le décodage est élagué » et acter que la grille --lot 1 reste à faire.
+
+3. MOYEN — « perplexité … 9,4335 contre 9,4337, soit 2e-5 » : l'écart n'est pas qualifié.
+   (a) docs/contexte-long.md:311-312 et message de commit 2ae761c.
+   (b) « soit 2e-5 ».
+   (c) 9,4337 − 9,4335 = 2e-4 en absolu ; 2e-4/9,4335 = 2,1e-5 en relatif. Les deux valeurs sont imprimées à 4 décimales, donc l'absolu n'est connu qu'à ±1e-4.
+   (d) TROMPEUR tel qu'écrit : « 2e-5 » ne vaut que comme écart RELATIF.
+   (e) « soit un écart relatif de 2,1e-5 (2e-4 sur les valeurs affichées) ».
+
+4. MOYEN — « Ce que ce rapport ne dit pas » contredit la nouvelle section (rapport:111-129).
+   (b) :123-125 « l'effet d'un k plus grand (512, 1 024) : non mesuré. C'est la première expérience à faire ensuite » ; :118-122 « un seul code et une seule fenêtre par (contexte, profondeur) ».
+   (c) la section :71-101 mesure précisément k = 512/1 024 et affirme TROIS fenêtres ; la réalité est une seule fenêtre (écart 1).
+   (d) INCOHÉRENT (bullets non mis à jour) ; ironiquement le bullet « une seule fenêtre » est le vrai.
+   (e) réécrire ces deux bullets (k 512/1024 mesuré ; fenêtre unique) et garder « autres modèles non mesurés », absent aujourd'hui.
+
+5. MOYEN — le contrôle « en --lot 1, l'attention COMPLÈTE échoue aussi au milieu » repose sur UNE sonde, non dit.
+   (a) rapport:103-105 ; (b) « (251,0 s, « NON ») » ; (c) /tmp/aiguille_k.log:5 « complet(lot 1, milieu) : ... NON 251.0 » — une seule sonde, comme tout le premier balayage ; (d) l'énoncé est exact mais présenté sans n=1, et il sert à écarter la comparaison --lot 1 ; (e) ajouter « (une sonde) ». Noter aussi que ce même balayage donne k=256(lot 1)=oui et k=1024(lot 1)=NON, inversion d'ordre cohérente avec la mise en garde mais n=1 elle aussi.
+
+6. MOYEN — « Mesuré au sprint 4 » pour les temps de préremplissage est faux d'environ 30 min.
+   (a) docs:299-302 ; (b) « Mesuré au sprint 4 » ; (c) le run CPU suit le `date` 23:08:44 et le run GPU se termine sur `date` 23:15:20 (digest, sorties brutes : 286.638 s / 63.793 s) ⇒ mesurés à 23:09-23:15, dans le box sprint 3 (21:49-23:49) ; seul /tmp/prefill_gpu.log (23:44:46-23:46:10) est dans le sprint 4 ; le fichier sprints/03 dit d'ailleurs « Ce que le sprint 4 a déjà, mesuré » ; (d) inexact ; (e) « mesuré à la fin du sprint 3, avant le sprint 4 ».
+
+7. FAIBLE — aucun artefact ne cite sa source : le rapport ne référence ni /tmp/aiguille_rep.log, ni /tmp/aiguille_k.log, ni /tmp/aiguille_topk2.log ; la section « Le PRÉREMPLISSAGE » ne cite pas /tmp/prefill_gpu.log ; et « Reproduire » (:131-137) ne donne que les commandes de la grille sprint 3, pas celle de la grille k du sprint 4 (`4096 0.5,0.5,0.5 --n 24 --lot 256 --attn-topk 256|512|1024`, script /tmp/aig5.sh non commité). La règle « chaque chiffre publié doit avoir une source » n'est donc pas satisfaite dans les artefacts (d'autres rapports citent leurs /tmp, ex. rapport-gpt-oss-perplexite.md:206). Correction : citer les logs + ajouter la commande.
+
+8. FAIBLE — les durées de la rangée « attention complète » (383,6 / 326,5 s) sont gonflées par la concurrence : aig5.sh a été lancé à 00:00:48 (digest) alors que le balayage k tournait encore (mtime de /tmp/aiguille_k.log = 00:10:37 ; label de la dernière sonde visible à 00:09:58) ⇒ ~10 min à deux jobs 16 fils. Les autres séries (~237-253 s) sont seules. Les verdicts ne sont pas affectés, mais les durées ne sont pas comparables entre rangées comme le tableau le suggère ; le rapport n'en dit rien.
+
+9. FAIBLE — rapport:21 « remplissage Wikitext-2 (fenêtres décalées) » : faux (même cause que l'écart 1). La docstring de tools/aiguille.py:12 (« Chaque sonde prend en plus une FENÊTRE DIFFÉRENTE ») est fausse aussi.
+
+RE-MESURES (demandées)
+- Préremplissage, mêmes commandes que le digest (`--infer --prompt "$(cat /tmp/prompt4096.txt)" --n 4 --ctx 4608 --lot 256 --threads 16 --temp 0`) : CPU 371,959 s (attention 71,0 ms/jeton, matvec+mlp 21,2) contre 286,638 s publié (52,6 / 18,4) ; GPU KV 95,941 s (attention 2,5, matvec+mlp 20,1) contre 63,793 s (2,2 / 12,8). Écarts : +29,8 % CPU, +50,4 % GPU ; ratio mesuré ×3,88 contre ×4,49 publié. Prompt reproduit à l'identique (3961 jetons). Conditions : load 8,66 → 35,45 pendant les runs, un ppl gpt-oss-120b (16 fils) + une sonde aiguille d'un autre agent en parallèle ; les conditions du run publié ne sont écrites nulle part. Les valeurs publiées restent plausibles mais ne se reproduisent pas telles quelles sous charge ; le « ×4,5 » est sensible à la charge (3,9 mesuré).
+- Perplexité déportée : REPRODUITE À L'IDENTIQUE — CPU 9,4335 sur 1023 jetons, GPU KV 9,4337 sur 1023 jetons (ctx 4096, lot 256, 51,2 s / 34,2 s sous charge). L'écart est donc bien reproductible ; seule sa qualification « 2e-5 » est à corriger (écart 3).
+- Observation annexe : à temp 0 et invite identique, le run CPU et le run GPU KV produisent des continuations différentes (ids [77238,572,264,46741] vs [64750,1033,279,1429]). « La qualité ne bouge pas » reste vrai au sens de la perplexité (2e-5), mais pas au sens « jetons identiques » ; les ids générés n'ont pas été journalisés lors de la mesure d'origine.
+
+RÉPONSES AUX QUESTIONS POSÉES
+- Conclusion « le k est un réglage » : soutenue pour la fenêtre testée (k=512 : 4/4 NON ; k=1024 : 4/4 oui, en comptant le premier balayage) mais PAS dans la forme publiée : les 3 sondes sont 3 fois la même invite. Le seuil dans (512, 1024] est correct pour ce cas.
+- Comparaison valide ? Oui sur un axe (toutes les séries partagent la même fenêtre, même invite, même lot), non sur l'axe annoncé (aucune diversité de texte). `4096 0.5,0.5,0.5` fait bien TROIS sondes, mais aux trois MÊMES offsets (0,0,0).
+- k=512 : les 3 nouvelles concordent (NON ×3) et concordent avec la sonde unique du premier balayage (NON) ⇒ 4/4 NON, sur la même invite.
+- --lot 1 complet : oui, la ligne dit bien NON (251,0 s) ; une seule sonde, non dit.
+- Non mesuré : le rapport dit clairement 8 192 / 16 384 et « un seul code par sonde » ; il ne dit PAS « autres modèles » (grille uniquement 0,5B) et son bullet « une seule fenêtre » contredit la section sprint 4.
+
+CONFORME (vérifié, rien à redire)
+- /tmp/aiguille_rep.log : complete 3/3 oui, k=256 0/3, k=1024 3/3, k=512 0/3 — exactement le tableau et le message de commit ; les 12 durées citées sont identiques au log, chiffre pour chiffre.
+- Premier balayage : k=512 NON (274,8 s), k=1024 oui (241,8 s) ⇒ la non-monotonie annoncée est bien dans /tmp/aiguille_k.log ; concordance avec les répétitions.
+- Portée « --lot 256 : top-k ignoré au préremplissage, 24 jetons / 0,58 % » : exacte (model.rs:2350-2371, décodage par forward).
+- Valeurs dérivées du préremplissage : 286,638/63,793 = 4,49 → « ×4,5 » ; 3961/286,638 = 13,8 tok/s ; 3961/63,793 = 62,1 tok/s ; 52,6/72,2 = 73 % ; 52,6/2,2 = 23,9 → « ÷24 » : toutes exactes.
+- /tmp/prefill_gpu.log existe et porte exactement 9,4335 et 9,4337 (ctx 4096, 1023 jetons) ; reproductibles.
+- k=256 = 6,25 %, k=512 = 12,5 %, k=1024 = 25 % de 4096 : arithmétiquement exacts.
+- Messages de commit 09adea5 et 2ae761c : disent la même chose que les fichiers, y compris les deux défauts partagés (« trois fenêtres », « 2e-5 » non qualifié) — aucune divergence message/fichier par ailleurs.
+
+### 👤 Utilisateur
+
+Background subagent 13446299-79d8-497c-ba83-673c176a4637 finished and will do no further work unless you send it more.
+Its closing message:
+⏵ Rédaction du verdict final
+
+## Verdict de la revue adverse — sprint 4
+
+Aucun fichier du dépôt modifié. Deux re-mesures lancées (préremplissage, perplexité) ; toutes deux sous **charge** (load 8,7 → 35,4 ; un ppl gpt-oss-120b 16 fils + une sonde aiguille d'un autre agent tournaient en parallèle sur 40 cœurs). Logs neufs : `/tmp/audit_prefill.log`, `/tmp/audit_ppl.log`.
+
+---
+
+### ÉCARTS
+
+**1. GRAVE — « trois fenêtres de corpus différentes » est faux**
+- **(a)** `reports/rapport-aiguille-topk.md:76-79` + en-têtes « fenêtre 1/2/3 » (:81-86) ; commit `09adea5` (« trois fenêtres de corpus »).
+- **(b)** « trois **fenêtres de corpus différentes** (l'outil avance son offset de 200 000 caractères à chaque profondeur listée) ».
+- **(c)** `tools/aiguille.py:161-163` : après **chaque** sonde, `offset += 200_000` puis `if offset > len(corpus) - 400_000 { offset = 0 }`. Or `aiguille.charger_corpus()` rend **353 778** caractères (`data/wikitext2_test.txt`, inchangé depuis le 25/09) → le seuil vaut **−46 222** → la remise à zéro se déclenche **toujours**. Offsets réellement utilisés : **[0, 0, 0]**. Preuve par le vrai module : les 3 invites reconstruites ont le **même md5** (`6a94ff027ad0` ×3). Même sans le garde-fou, l'offset 400 000 est hors corpus (400 000 + 17 603 > 353 778) : au mieux **2** fenêtres distinctes étaient possibles. Les 12 lignes du log disent d'ailleurs toutes « prompt 4114 jetons ».
+- **(d)** **FAUX.** Les « 3/3 » et « 0/3 » sont trois répétitions de la **même invite**. La justification annoncée (« avec une seule sonde, impossible de distinguer *l'attention creuse échoue* de *cette exécution a déraillé* ») n'est pas servie : trois fois la même invite ne dit rien de la généralité inter-fenêtres.
+- **(e)** Écrire « trois **répétitions** de la même invite (offset remis à 0 par le garde-fou ; corpus de 353 778 car. < 400 000 supposés) », remplacer « fenêtre 1/2/3 » par « répétition 1/2/3 », borner la conclusion à cette fenêtre — ou corriger l'outil et refaire la grille. Le commentaire de `/tmp/aig5.sh` porte la même erreur.
+
+**2. GRAVE (feuille de route) — la grille n'est pas celle de l'objectif du sprint**
+- **(a)** section « Suite (sprint 4) » ; `sprints/04-…md`.
+- **(b)** « l'échec au milieu n'est PAS une impossibilité structurelle du top-k — c'est un **réglage** ».
+- **(c)** L'objectif du sprint exige « Grille en **--lot 1** (tout le passage creux) et k = 256/512/1024 ». `aig5.sh` et `aiguille_k.log` tournent en **--lot 256**, où `--attn-topk` est **IGNORÉ au préremplissage** (`model.rs:2357-2359` ; préremplissage `forward_lot`, décodage `forward` → top-k sur les **24 jetons générés**, 0,58 %).
+- **(d)** La conclusion est **plus générale que la mesure** (décodage seul). Le fichier porte l'avertissement en tête (:9-17) et le bullet :126-129, mais **la section sprint 4 ne redit ni « --lot 256 » ni « décodage seul »**, et la grille `--lot 1` — exigée par la revue adverse du sprint 3 *et* par l'objectif du sprint 4 — n'a pas été faite.
+- **(e)** Ajouter dans la section : « grille en `--lot 256` : seul le décodage est élagué ; la grille `--lot 1` reste à faire ».
+
+**3. MOYEN — l'écart « 2e-5 » n'est pas qualifié**
+- **(a)** `docs/contexte-long.md:311-312` ; message de commit `2ae761c`.
+- **(b)** « perplexité **9,4335 (CPU)** contre **9,4337 (GPU KV)**, soit **2e-5** ».
+- **(c)** 9,4337 − 9,4335 = **2e-4 en absolu** ; 2e-4/9,4335 = **2,1e-5 en relatif**. Les deux valeurs sont imprimées à 4 décimales (absolu connu à ±1e-4).
+- **(d)** **TROMPEUR tel qu'écrit** : « 2e-5 » ne vaut que comme écart **relatif**.
+- **(e)** « soit un écart **relatif** de 2,1e-5 (2e-4 sur les valeurs affichées) ».
+
+**4. MOYEN — « Ce que ce rapport ne dit pas » contredit la nouvelle section**
+- **(a)** `rapport:111-129`.
+- **(b)** :123-125 « l'effet d'un k plus grand (512, 1 024) : **non mesuré**. C'est la première expérience à faire ensuite » ; :118-122 « un seul code et **une seule fenêtre** par (contexte, profondeur) ».
+- **(c)** La section :71-101 mesure k = 512/1 024 et **affirme trois fenêtres**.
+- **(d)** **INCOHÉRENT** (bullets non mis à jour) ; ironiquement, c'est le bullet « une seule fenêtre » qui est vrai.
+- **(e)** Réécrire ces deux bullets (k mesuré ; fenêtre unique) et ajouter « autres modèles non mesurés », absent aujourd'hui.
+
+**5. MOYEN — le contrôle `--lot 1` repose sur UNE sonde, non dit**
+- **(a)** `rapport:103-105`.
+- **(b)** « en `--lot 1`, l'attention **COMPLÈTE** échoue aussi au milieu (251,0 s, « NON ») ».
+- **(c)** `/tmp/aiguille_k.log:5` : `complet(lot 1, milieu) : … NON 251.0` — **une seule** sonde (tout ce balayage est à une sonde par point).
+- **(d)** Exact mais présenté **sans n=1**, alors qu'il sert à écarter la comparaison `--lot 1`. Le même balayage donne k=256(lot 1)=**oui** et k=1024(lot 1)=**NON** : inversion cohérente avec la mise en garde, mais n=1 aussi.
+- **(e)** Ajouter « (une sonde) ».
+
+**6. MOYEN — « Mesuré au sprint 4 » est faux d'environ 30 minutes**
+- **(a)** `docs:299-302`.
+- **(b)** « **Mesuré au sprint 4** (… prompt de 3 961 jetons, `--lot 256`, `--infer`) ».
+- **(c)** Le run CPU suit le `date` 23:08:44 et le run GPU se termine sur `date` 23:15:20 (digest, sorties brutes 286.638 s / 63.793 s) → mesurés à **23:09-23:15**, dans le box **sprint 3** (21:49-23:49). Seul `/tmp/prefill_gpu.log` (23:44:46-23:46:10) est dans le sprint 4. `sprints/03` dit d'ailleurs « Ce que le sprint 4 a **déjà**, mesuré ».
+- **(d)** Inexact. **(e)** « mesuré à la fin du sprint 3, avant le sprint 4 ».
+
+**7. FAIBLE — aucune source citée, commande du sprint 4 absente**
+- **(a)** les deux artefacts ; « Reproduire » `rapport:131-137`.
+- **(b)** Aucun renvoi à `/tmp/aiguille_rep.log`, `/tmp/aiguille_k.log`, `/tmp/aiguille_topk2.log`, `/tmp/prefill_gpu.log`.
+- **(c)** Ces logs existent et contiennent les chiffres ; d'autres rapports citent leurs `/tmp` (ex. `rapport-gpt-oss-perplexite.md:206`). La commande de la grille k (`4096 0.5,0.5,0.5 --n 24 --lot 256 --attn-topk 256|512|1024`, script `/tmp/aig5.sh` non commité) n'est nulle part.
+- **(d)** Règle « chaque chiffre publié doit avoir une source » **non satisfaite dans les artefacts**. **(e)** Citer les logs + ajouter la commande.
+
+**8. FAIBLE — durées de la rangée « complète » gonflées par la concurrence**
+- **(a)** `rapport:83`.
+- **(b)** « oui (383,6 s) | oui (326,5 s) | oui (251,5 s) ».
+- **(c)** `aig5.sh` lancé à **00:00:48** (digest) alors que le balayage k tournait encore (mtime de `/tmp/aiguille_k.log` = **00:10:37** ; label de la dernière sonde visible à 00:09:58) → ~10 min à deux jobs 16 fils. Les autres séries (~237-253 s) tournaient seules.
+- **(d)** Les **verdicts** ne sont pas affectés, mais les durées ne sont pas comparables entre rangées comme le tableau le suggère. **(e)** Le noter ou refaire la rangée au calme.
+
+**9. FAIBLE — « fenêtres décalées »** : `rapport:21` et la docstring `tools/aiguille.py:12` (« Chaque sonde prend une FENÊTRE DIFFÉRENTE ») sont faux (même cause que l'écart 1).
+
+---
+
+### RE-MESURES (question posée)
+
+| | publié | re-mesuré | écart |
+|---|---|---|---|
+| préremplissage CPU | 286,638 s (13,8 tok/s) · attention 52,6 · matvec+mlp 18,4 | **371,959 s** (10,6 tok/s) · **71,0** · **21,2** | **+29,8 %** |
+| préremplissage GPU KV | 63,793 s (62,1 tok/s) · attention 2,2 · matvec+mlp 12,8 | **95,941 s** (41,3 tok/s) · **2,5** · **20,1** | **+50,4 %** |
+| ratio | ×4,49 | **×3,88** | −13 % |
+| perplexité CPU / GPU KV | 9,4335 / 9,4337 (1023 jetons) | **9,4335 / 9,4337** | **identiques** |
+
+Prompt reproduit à l'identique (3961 jetons). Le `×4,5` est donc **sensible à la charge** ; les conditions du run publié ne sont écrites nulle part. La perplexité, elle, se **reproduit au chiffre près** (51,2 s / 34,2 s sous charge). Observation annexe : à temp 0 et invite identique, CPU et GPU KV génèrent des continuations **différentes** (`[77238,572,264,46741]` vs `[64750,1033,279,1429]`) — « la qualité ne bouge pas » vaut au sens de la perplexité, pas au sens « jetons identiques » (ids non journalisés à l'origine).
+
+---
+
+### CLASSEMENT PAR GRAVITÉ
+
+1. **GRAVE** — « trois fenêtres de corpus différentes » : faux (3 fois la même invite, offsets 0/0/0). *(écart 1)*
+2. **GRAVE** — la conclusion « le k est un réglage » est tirée d'une grille `--lot 256` (décodage seul) alors que l'objectif du sprint exigeait `--lot 1`. *(écart 2)*
+3. **MOYEN** — « 2e-5 » non qualifié (absolu 2e-4). *(3)*
+4. **MOYEN** — bullets « non mesuré / une seule fenêtre » en contradiction avec la section. *(4)*
+5. **MOYEN** — contrôle `--lot 1` à une sonde, n=1 non dit. *(5)*
+6. **MOYEN** — « Mesuré au sprint 4 » : mesuré en sprint 3. *(6)*
+7. **FAIBLE** — sources non citées, commande du sprint 4 absente. *(7)*
+8. **FAIBLE** — durées « complète » mesurées en concurrence. *(8)*
+9. **FAIBLE** — « fenêtres décalées » / docstring de l'outil. *(9)*
+
+### VÉRIFIÉ ET CONFORME
+
+- `/tmp/aiguille_rep.log` : complete **3/3 oui**, k=256 **0/3**, k=1024 **3/3**, k=512 **0/3** — exactement le tableau et le message de commit ; **les 12 durées citées sont identiques au log, chiffre pour chiffre**.
+- Premier balayage : k=512 NON (274,8 s), k=1024 oui (241,8 s) → la non-monotonie annoncée est bien dans `/tmp/aiguille_k.log` ; les 3 nouvelles sondes **concordent** avec elle (k=512 : 4/4 NON ; k=1024 : 4/4 oui).
+- La ligne `complet(lot 1, milieu)` dit bien **NON** (251,0 s), citée exactement.
+- Portée « `--lot 256` : top-k ignoré au préremplissage, 24 jetons / 0,58 % » : **exacte** (`model.rs:2350-2371`).
+- Toutes les valeurs dérivées du préremplissage : 286,638/63,793 = 4,49 → « ×4,5 » ; 3961/286,638 = 13,8 ; 3961/63,793 = 62,1 ; 52,6/72,2 = **73 %** ; 52,6/2,2 = 23,9 → « ÷24 » : **exactes**.
+- `/tmp/prefill_gpu.log` porte exactement 9,4335 et 9,4337 (ctx 4096, 1023 jetons) ; **reproductibles**.
+- Ratios k/contexte : 256/4096 = 6,25 %, 512/4096 = 12,5 %, 1024/4096 = 25 % : exacts ; seuil dans (512, 1024] correct pour le cas testé.
+- Messages `09adea5` et `2ae761c` : disent la même chose que les fichiers, **y compris les deux défauts partagés** (« trois fenêtres », « 2e-5 » non qualifié) — aucune divergence message/fichier par ailleurs.
+- Le rapport dit clairement « 8 192 / 16 384 non mesurés » et « un seul code par sonde » ; il **ne dit pas** « autres modèles non mesurés » (grille 0,5B uniquement).
+
+### 🤖 Assistant
+
+⏵ La revue du sprint 4 a trouvé deux défauts graves dans ma mesure — je corrige tout
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\n# 1) L'outil : le décalage de fenêtre ne s'appliquait JAMAIS (corpus 353 778 < le\n#    seuil supposé 400 000) — trois sondes « différentes » étaient trois fois la\n#    même invite.\np='tools/aiguille.py'; s=open(p … [2240 caractères tronqués]`
+
+  ```
+outil corrigé (fenêtres réellement décalées)
+syntaxe OK
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\ndef patch(p, paires):\n    s=open(p).read()\n    for v,n,nom in paires:\n        assert s.count(v)==1, f\"{p}::{nom}::{s.count(v)}\"\n        s=s.replace(v,n,1)\n    open(p,'w').write(s); print(f\"{p} : {len(paires) … [7390 caractères tronqués]`
+
+  ```
+reports/rapport-aiguille-topk.md : 7
+docs/contexte-long.md : 2
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='/tmp/ceremonie4.md'; s=open(p).read()\nvieux = s[s.index(\"### 1. Le résultat qui tranche\"):s.index(\"### 3. Un levier qui existait déjà\")]\nneuf = \"\"\"### 1. Le balayage en k : 0 · 0 · 3\n\nLa grille du spri … [6156 caractères tronqués]`
