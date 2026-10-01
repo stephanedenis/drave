@@ -38936,3 +38936,44 @@ trame écrite dans sprints/04-le-k-de-l-attention-creuse-l-chec-au-mil.md — à
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='sprints/04-le-k-de-l-attention-creuse-l-chec-au-mil.md'\ns=open(p).read()\ni = s.index(\"## Rétrospective — garder / changer\")\nopen(p,'w').write(s[:i] + open('/tmp/ceremonie4.md').read().lstrip('\\n'))\nprint(\ … [683 caractères tronqués]`
+
+  ```
+cérémonie 4 écrite
+Sprint 1 démarré à 01:37 → 03:37  ·  sprints/01-refaire-la-grille-avec-de-vraies-fen-tre.md
+03-qualit-de-l-attention-creuse-long-contex.md
+04-le-k-de-l-attention-creuse-l-chec-au-mil.md
+COURANT
+01:37:32
+[stderr]
+ls: cannot access 'sprints/05-*.md': No such file or directory
+sed: can't read : No such file or directory
+head: cannot open '' for reading: No such file or directory
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls sprints/ && mv sprints/01-refaire-la-grille-avec-de-vraies-fen-tre.md sprints/05-refaire-la-grille-avec-de-vraies-fenetres.md && sed -i '1s/^# Sprint 1 /# Sprint 5 /' sprints/05-refaire-la-grille-avec-de-vraies-fenetres.md && head … [243 caractères tronqués]`
+
+  ```
+01-premier-des-trois-noyaux-gpu-du-top-k-le.md
+01-refaire-la-grille-avec-de-vraies-fen-tre.md
+02-fusionner-la-cha-ne-du-top-k-d-port-desc.md
+03-qualit-de-l-attention-creuse-long-contex.md
+04-le-k-de-l-attention-creuse-l-chec-au-mil.md
+COURANT
+# Sprint 5 — Refaire la grille avec de VRAIES fenêtres (outil corrigé) et mesurer si le k nécessaire croît avec le contexte (8192 : k=1024 et 2048)
+5 1790833052 1790840252
+########## A - 4096 - complete - 3 fenetres
+01:37:46
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && M=models/Qwen2.5-0.5B-Q8_0.gguf; echo -n \"lot 1   : \"; ./drave-core/target/release/drave $M --ppl /tmp/ids_qwen_long.txt --ctx 2048 --limit 512 --dense --threads 8 --lot 1 --logits-bin /tmp/lot1.bin 2>&1 | grep -oE \"perplexité [0- … [460 caractères tronqués]`
+
+  ```
+lot 1   : perplexité 13.1368 sur 511 tokens
+lot 256 : perplexité 13.1359 sur 511 tokens
+écart |NLL| : moyenne 0.0007 · médiane 0.0003 · p90 0.0017 · max 0.0068
+accord du top-1 : 511/511
+perplexité nous : 13.1367   référence : 13.1359   (511 positions comparées)
+corrélation des logits (position 0) : 1.000000
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/rapport-aiguille-topk.md'; s=open(p).read()\nvieux = \"\"\"## Ce que ce rapport ne dit pas\"\"\"\nneuf = \"\"\"### Pourquoi `--lot 1` ≠ `--lot 256` : mesuré (et c'est minuscule)\n\nLes deux chemins ne don … [1513 caractères tronqués]`

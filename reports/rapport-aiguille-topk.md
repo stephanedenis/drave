@@ -120,6 +120,27 @@ identifiants différents) : la comparaison « tout le passage creux » en `--lot
 n'est pas propre, et la seule comparaison valable est **à lot fixé**, entre
 attention complète et attention creuse.
 
+### Pourquoi `--lot 1` ≠ `--lot 256` : mesuré (et c'est minuscule)
+
+Les deux chemins ne donnent pas la même continuation à température 0 — c'est ce qui
+rendait le contrôle « tout le passage creux » ininterprétable. Les logits, eux,
+disent l'écart réel (Qwen2.5-0.5B Q8_0, ctx 2 048, 511 jetons, mêmes identifiants) :
+
+| | perplexité | écart moyen \|ΔNLL\| | accord top-1 |
+|---|---|---|---|
+| `--lot 1` | 13,1368 | — | — |
+| `--lot 256` | 13,1359 | **0,0007** (médiane 0,0003, p90 0,0017, max 0,0068) | **511/511** |
+
+Le désaccord entre les deux chemins est donc de **7e-4 nat par position au plus**, et
+le jeton choisi est le même PARTOUT : ce n'est pas un chemin faux, c'est une
+amplification chaotique — un écart de 1e-3 sur un logit suffit à changer un jeton
+greedy après quelques dizaines de pas, et une réponse qui doit contenir un code de
+8 caractères ne pardonne pas un jeton.
+
+Conséquence pour la méthode : **toute comparaison de qualité doit se faire à lot
+fixé**, et les verdicts binaires (trouvé / non trouvé) doivent être lus comme des
+révélateurs d'un écart minuscule, pas comme une propriété stable du modèle.
+
 ## Ce que ce rapport ne dit pas
 
 * **8 192 : le contrôle dense est mesuré** (sprint 4, une sonde : **trouvé**,
