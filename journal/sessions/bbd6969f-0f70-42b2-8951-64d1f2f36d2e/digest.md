@@ -39271,3 +39271,91 @@ syntaxe OK
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\n# avertissement quand une série ne produit pas autant de fenêtres distinctes que de sondes\np='tools/aiguille.py'; s=open(p).read()\nvieux = \"\"\"    lignes = []\n    offset = 0\n    for ctx in longueurs:\n         … [2783 caractères tronqués]`
+
+  ```
+outil : avertissement de fenêtres dupliquées
+syntaxe OK
+a3691a5 Revue du sprint 5 : la section 8 192 manquait, et « au plus » dépassait la mesure d'un facteur 10
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && md5sum reports/rapport-aiguille-topk.md && grep -c \"PLUS LENTEMENT\\|plus lentement\" reports/rapport-aiguille-topk.md && grep -n \"8 192 | oui\" reports/rapport-aiguille-topk.md | head -2; date +%H:%M:%S", "description": "Verify th … [36 caractères tronqués]`
+
+  ```
+f517caae91f80d429c349ce28154108a  reports/rapport-aiguille-topk.md
+0
+02:59:05
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"lentement\" reports/rapport-aiguille-topk.md | head -3; grep -n \"1 002,0 s\" reports/rapport-aiguille-topk.md | head -3; grep -n \"aiguille_s5.log\" reports/rapport-aiguille-topk.md | head -2", "description": "Verify repor … [19 caractères tronqués]`
+
+  ```
+187:lentement que le contexte** sur ces deux points, ce qui est la direction favorable
+178:| 8 192 (UNE fenêtre) | **oui** (1 002,0 s) | **oui** (764,7 s, 12,5 %) | **oui** (755,7 s, 25 %) |
+194:  1 002,0 s pour un prompt de 7 963 jetons) — la question « le k nécessaire
+188:pour l'élagage à long contexte, sans être une courbe. Source : `/tmp/aiguille_s5.log`
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 400; date +%H:%M:%S; ./tools/sprint.sh status | head -3", "description": "Wait for the sprint 5 box end", "timeoutMs": 460000}`
+
+  ```
+03:05:54
+── Sprint 5 ─────────────────────────────────────────────
+- **Début** : 01:37 · **Fin prévue** : 03:37 (boxing de 120 min)
+   temps : 03:05 · reste 0 h 31
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && time timeout 900 python3 tools/aiguille.py models/Qwen2.5-0.5B-Q8_0.gguf 4096 0.5 --n 24 --lot 256 --gpu-kv 2>&1 | tail -3", "description": "Test needle probe speed with GPU KV", "timeoutMs": 960000}`
+
+  ```
+contexte  profondeur  trouvé  secondes  détail
+     4096        0.50     oui      76.1  prompt 4114 jetons
+fenêtres distinctes utilisées : 1 sur 1 sondes
+[stderr]
+
+real	1m16,131s
+user	19m35,294s
+sys	0m1,473s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='tools/aiguille.py'; s=open(p).read()\nvieux = \"\"\"    lignes = []\n    offset = 0\n    fenetres = set()\n    besoin_max = int(max(longueurs) * 4.2) + 400\"\"\"\nneuf = \"\"\"    lignes = []\n    offset = 0\n    … [1076 caractères tronqués]`
+
+  ```
+outil : pas = besoin (fenêtres contiguës)
+syntaxe OK
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/aig_s6.sh <<'SCRIPT'\n#!/bin/bash\n# SPRINT 6 — le TAUX, pas le verdict.\n#\n# 1) Neuf fenêtres contiguës (l'outil avance d'un « besoin » de sonde à chaque\n#    fois, donc non recouvrantes) à 4 096 clés, profondeur 0,5, t … [1515 caractères tronqués]`
+
+  ```
+script sprint 6 prêt
+03:07:32
+[timed out after 600000ms]
+[killed by signal: SIGTERM]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date +%H:%M:%S; ./tools/sprint.sh status | head -2; git log --oneline -1", "description": "Check time and state"}`
+
+  ```
+03:17:36
+── Sprint 5 ─────────────────────────────────────────────
+- **Début** : 01:37 · **Fin prévue** : 03:37 (boxing de 120 min)
+a3691a5 Revue du sprint 5 : la section 8 192 manquait, et « au plus » dépassait la mesure d'un facteur 10
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='/tmp/ceremonie5.md'; s=open(p).read()\nvieux = \"\"\"## Introspection\"\"\"\nneuf = \"\"\"### 4. Revue adverse : deux écarts graves — dont une mesure publiée dans un commit et absente des fichiers\n\n1. **La mesu … [2080 caractères tronqués]`
+
+  ```
+cérémonie 5 : revue adverse ajoutée
+[timed out after 600000ms]
+[killed by signal: SIGTERM]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date +%H:%M:%S; sleep 660; date +%H:%M:%S; ./tools/sprint.sh close | tail -2", "description": "Close sprint 5 at box end", "timeoutMs": 720000}`
+
+  ```
+03:27:49
+[timed out after 600000ms]
+[killed by signal: SIGTERM]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date +%H:%M:%S; ./tools/sprint.sh close | tail -2; python3 - <<'PY'\np='sprints/05-refaire-la-grille-avec-de-vraies-fenetres.md'\ns=open(p).read()\ni = s.index(\"## Rétrospective — garder / changer\")\nopen(p,'w').write(s[:i] + open( … [309 caractères tronqués]`

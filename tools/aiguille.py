@@ -160,6 +160,10 @@ def main():
     lignes = []
     offset = 0
     fenetres = set()
+    # Pas = BESOIN d'une sonde : les fenêtres sont alors contiguës et
+    # non recouvrantes, ce qui en donne len(corpus)/besoin (une vingtaine à
+    # 4 096 jetons avec le corpus actuel). Un pas fixe de 150 000 n'en donnait que
+    # trois, et le pas précédent (200 000 avec un garde-fou à 400 000) aucune.
     besoin_max = int(max(longueurs) * 4.2) + 400
     if besoin_max + 150_000 * (len(longueurs) * len(profondeurs) - 1) > len(corpus):
         print(f"AVERTISSEMENT : le corpus ({len(corpus)} caractères) ne permet pas "
@@ -182,8 +186,9 @@ def main():
             # un contexte de 16 384 (besoin ≈ 69 213) aurait ramené la fenêtre à 0
             # en silence, et un corpus court aurait rejoué la même invite pour
             # toutes les sondes — le bug que ce garde-fou est censé empêcher.
-            offset += 150_000
-            if offset + int(ctx * 4.2) + 400 > len(corpus):
+            pas = int(ctx * 4.2) + 400
+            offset += pas
+            if offset + pas > len(corpus):
                 offset = 0
             etat = "délai" if ok is None else ("oui" if ok else "NON")
             print(f"{ctx:>9} {p:>11.2f} {etat:>7} {dt:>9.1f}  {detail}", flush=True)
