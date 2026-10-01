@@ -7,12 +7,12 @@
 | Début | 2026-09-28 14:46 |
 | Durée | 54.4 h |
 | Tours | 48 |
-| Messages | 2333 |
-| Appels d'outils | 2207 |
+| Messages | 2334 |
+| Appels d'outils | 2208 |
 | Fichiers touchés | 47 |
-| Commandes | 1856 |
+| Commandes | 1857 |
 | Sous-agents | 15 |
-| Commits | 199 |
+| Commits | 200 |
 | Compactages de contexte | 3 |
 
 ## Objectifs déclarés
@@ -2234,7 +2234,7 @@ Fusionner la sélection en un noyau par ligne (8 lancements → 2), supprimer le
 
 ### Tour 48 — Continue en blocs de 2h jusqu'à demain 8h HAE. pour chacun des blocs/sprints tu dois être en autonomie totale. C'est à d … [282 caractères tronqués]
 
-*55 appels d'outils.* Actions notables :
+*56 appels d'outils.* Actions notables :
 
 - bash — Check time and count remaining boxes
 - bash — Start sprint 2
@@ -2250,7 +2250,7 @@ Fusionner la sélection en un noyau par ligne (8 lancements → 2), supprimer le
 - bash — Add poison check and finiteness guard
 - bash — Locate the topk GPU branch
 - bash — Wire fused kernel into the model
-- … et 39 autres
+- … et 40 autres
 
 **Synthèse produite :**
 
@@ -2370,7 +2370,7 @@ Fusionner la sélection en un noyau par ligne (8 lancements → 2), supprimer le
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 1816 autres
+- … et 1817 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2717,4 +2717,5 @@ Fusionner la sélection en un noyau par ligne (8 lancements → 2), supprimer le
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -F - <<'EOF' && git log --oneline -1 Le filet du noyau 4 doit agir AVANT la so
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cargo test --release --manifest-path drave-core/Cargo.toml 2>&1 | tail -2 && git add -A && git commit -q -
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' # La cérémonie : on ajoute les chiffres gpt-oss et le doute sur les projections. p='/tmp/
+- REPRISE : sprint 2 (fusion du top-k, croisement à ~300 clés, le filet testé, le doute sur les projections)" && git log --oneline -1; date +%H:%M:%S
 

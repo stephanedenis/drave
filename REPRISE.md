@@ -467,6 +467,40 @@ Portes du sprint, mesurées sur le binaire final : **Qwen2.5-0.5B Q8_0 ctx 256 =
 19,3885** · **gpt-oss-120b MXFP4 ctx 256 = 15,1757** · `cargo test --release` =
 **17/17** · `--banc-topk` toujours vert de n = 1 à n = 1 000 000.
 
+### Sprint 2 (19h49 → 21h49) : la chaîne du top-k fusionnée en UN noyau
+
+**Le croisement avec le CPU tombe de ~255-2 047 clés à ~300 clés**, et le déport
+devient franchement gagnant : c'est le sprint qui rend l'attention creuse déportée
+utilisable.
+
+| # | livrable | mesure |
+|---|---|---|
+| 1 | `attn_topk_tout` : descente radix + collecte + somme en UN noyau par ligne (256 compteurs, k indices et k poids en partagé, aucun indice ne quitte la VRAM) | **2 lancements au lieu de 8** · plus de tampon `nh × n × 4` |
+| 2 | seuil de bascule avec la chaîne, **mesuré** | noyau 4 plus rapide jusqu'à 131 072 clés (0,13 contre 0,22 ms à 4 k), la chaîne au-delà (1,35 contre 1,58 à 262 k) |
+| 3 | grille PROPRE (une seule variable : le nombre de jetons) | CPU 4,26 → 38,84 ms/jeton de 255 à 4 095 clés · **GPU plat 4,53 → 4,97** · croisement ~300 clés · **7,8× à 4 095 clés** |
+| 4 | perplexité | identique à 2e-5 à chaque point (13,1355/13,1358 · 9,4162/9,4167 · 12,2265/12,2267) |
+| 5 | gpt-oss (seul modèle à puits), ctx 1024 | pruning +2,66 % (CPU) et +2,90 % (GPU) — **même effet des deux côtés** |
+| 6 | filets | NaN si la collecte ne remplit pas les k places (AVANT la somme), bornes sur les écritures partagées, `k > n` / `n ≥ 2^24` / k > 1024 / 4 bits refusés |
+
+**Trois défauts trouvés par la revue adverse autonome** : une COURSE bloquante
+(aucune barrière entre la lecture du préfixe et la remise à zéro de la passe
+suivante — prouvée dans le PTX, écriture partagée hors bornes en aval) ; le CPU et
+le GPU ne départageaient PAS les ex æquo de la même façon (`select_nth_unstable_by`
+n'est pas stable) alors que la documentation l'affirmait ; `shCle` mort (4 ko de
+partagé par bloc), `k > n` accepté, comptages en `float` non bornés.
+
+**Et un filet de sécurité qui ne retenait rien** : le NaN-poisen était écrit puis
+écrasé par la somme, et les indices non remplis servaient à LIRE la VRAM avant lui
+(mesuré en sabotant la collecte : CUDA_ERROR_ILLEGAL_ADDRESS). Corrigé — le filet
+sort avant la somme, et le sabotage redevient un refus propre. **Un garde-fou non
+testé est une décoration.**
+
+⚠️ **Doute à instruire** : sur gpt-oss à ctx 1024, le déport des projections change
+la perplexité de 1,22 % contre 0,06 % à ctx 256 (mêmes 511 jetons environ — à ctx
+256 le moteur en note 510, à ctx 1024 il en note 511, ce qui est un facteur
+confondant). Le miroir KV, lui, ne pèse que 0,25 %. À instruire en isolant tête,
+projections et experts, à jeu de jetons identique.
+
 ### La frontière du cache KV, mesurée en entier
 
 | réglage | octets/élément | % du f32 | écart |

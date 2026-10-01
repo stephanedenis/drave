@@ -37218,3 +37218,10 @@ cargo test : test result: ok. 17 passed
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\n# La cérémonie : on ajoute les chiffres gpt-oss et le doute sur les projections.\np='/tmp/ceremonie2.md'; s=open(p).read()\ns = s.replace(\"\"\"### Revue adverse (sous-agent, autonome) — et ce qu'elle a trouvé\"\"\" … [2562 caractères tronqués]`
+
+  ```
+cérémonie complétée
+5bc4c0c Grille propre, noyau fusionné dans le moteur, et gpt-oss (les puits en vrai)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='REPRISE.md'; s=open(p).read()\nancre = \"\"\"### La frontière du cache KV, mesurée en entier\"\"\"\nneuf = \"\"\"### Sprint 2 (19h49 → 21h49) : la chaîne du top-k fusionnée en UN noyau\n\n**Le croisement avec le  … [2820 caractères tronqués]`
