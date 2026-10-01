@@ -7,12 +7,12 @@
 | Début | 2026-09-28 14:46 |
 | Durée | 66.9 h |
 | Tours | 49 |
-| Messages | 2682 |
-| Appels d'outils | 2541 |
+| Messages | 2684 |
+| Appels d'outils | 2543 |
 | Fichiers touchés | 57 |
-| Commandes | 2171 |
+| Commandes | 2173 |
 | Sous-agents | 20 |
-| Commits | 236 |
+| Commits | 237 |
 | Compactages de contexte | 3 |
 
 ## Objectifs déclarés
@@ -2277,7 +2277,7 @@ Fusionner la sélection en un noyau par ligne (8 lancements → 2), supprimer le
 
 ### Tour 49 — prévoir de télécharger les modèles les plus lourds aussi pour les analyser et faire le découpage des MoE/clusters optimi … [134 caractères tronqués]
 
-*73 appels d'outils.* Actions notables :
+*75 appels d'outils.* Actions notables :
 
 - bash — Check time, disk and existing models
 - web_fetch
@@ -2293,7 +2293,7 @@ Fusionner la sélection en un noyau par ligne (8 lancements → 2), supprimer le
 - bash — Check HDD permissions
 - bash — Measure HDD write speed in my subtree
 - bash — Stop NVMe download, prepare HDD library
-- … et 59 autres
+- … et 61 autres
 
 ## 3. Travail accompli
 
@@ -2424,7 +2424,7 @@ Fusionner la sélection en un noyau par ligne (8 lancements → 2), supprimer le
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 2131 autres
+- … et 2133 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2808,4 +2808,5 @@ Fusionner la sélection en un noyau par ligne (8 lancements → 2), supprimer le
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF' # Le plan DeepSeek doit refléter le déménagement ET la reprise du téléchargement. p = 
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 120 python3 tools/clusters_moe.py --help > /dev/null 2>&1; echo "outil ok"; git add -A && git comm
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -F - <<'EOF' && git log --oneline -1 Modèles lourds : file de 1,14 To en téléc
+- Politique de stockage : la bibliothèque brute sur le mécanique, le NVMe pour nos artefacts (mesures à l'appui)" && git log --oneline -1
 

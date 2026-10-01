@@ -29,9 +29,12 @@ publiés, sans les requantifier.
 | **DeepSeek-V4-Flash** | déjà téléchargé (86,9 Go) | — | 1 M | ✅ sur le disque mécanique |
 | gpt-oss-120b, Qwen3-30B-A3B, Muse-Glimmer-30B | déjà là, servent de témoins | — | 128 k–262 k | ✅ |
 
-**Budget** : 1,14 To de téléchargement pour ~4,9 To libres sur le disque
-mécanique. Le disque NVMe (474 Go) ne reçoit **que** les artefacts produits
-(experts réordonnés, index, traces, caches) — c'est la règle demandée.
+**Budget** : 1,14 To de téléchargement pour ~4,4 To libres sur le disque
+mécanique. Le NVMe ne reçoit **que** les artefacts produits : la politique complète
+et les mesures qui la motivent sont dans `/home/stephane/FastNVMe/artefacts/README.md`
+(mécanique ~210 Mo/s en écriture soutenue, NVMe 2,1 Go/s en lecture — notre mode
+d'opération lit les poids en flux à chaque jeton, donc c'est le chemin chaud qui
+doit être rapide).
 
 ## La mécanique de téléchargement (écrite, mesurée, reprenable)
 

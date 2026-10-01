@@ -41965,3 +41965,27 @@ GLM-5.3-UD-IQ1_S                 0.0 Go /   216.7 Go    0.0 %
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -F - <<'EOF' && git log --oneline -1\nModèles lourds : file de 1,14 To en téléchargement, plan écrit, état honnête\n\n`docs/plan-modeles-lourds.md` : relevé des modèles les plus lourds disponibles\n(DeepSe … [962 caractères tronqués]`
+
+  ```
+e9cc44f Modèles lourds : file de 1,14 To en téléchargement, plan écrit, état honnête
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && df -h /home/stephane/FastNVMe /home/stephane/Data13TB | tail -2; echo \"=== NVMe : ne reste-t-il que nos artefacts ? ===\"; du -sh /home/stephane/FastNVMe/models 2>/dev/null; ls /home/stephane/FastNVMe/models/ 2>/dev/null; echo \"=== … [178 caractères tronqués]`
+
+  ```
+/dev/nvme0n1p2           828G  112G  717G  14% /home/stephane/FastNVMe
+/dev/mapper/system-root   11T  6,5T  4,4T  60% /home/stephane/Data13TB
+=== NVMe : ne reste-t-il que nos artefacts ? ===
+18G	/home/stephane/FastNVMe/models
+DeepSeek-V4.1-Flash
+Qwen3-30B-A3B-Instruct-2507-Q4_K_M.gguf
+=== processus ===
+2812681 bash
+2814042 bash
+2814044 python3
+2817481 python3
+2820115 rsync
+2820116 rsync
+  ```
+
+- **bash** `{"command": "mkdir -p /home/stephane/FastNVMe/artefacts/{modeles-optimises,index,traces,caches} && cat > /home/stephane/FastNVMe/artefacts/README.md <<'EOF'\n# Ce que porte le NVMe\n\nPolitique de stockage (01/10) : **les modèles bruts vivent sur le disque\nmécanique, le NVMe ne sert qu'aux fichiers … [2702 caractères tronqués]`
