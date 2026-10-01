@@ -296,6 +296,23 @@ Piège de mesure noté au passage : les tampons du noyau étaient alloués à ch
 appel — 24 couches × 6 appels CUDA par jeton, mesuré **24,5 ms/jeton** à 512
 jetons au lieu de 2,9. Les réutiliser a ramené l'attention déportée à 3,2 ms.
 
+### Le PRÉREMPLISSAGE aussi : 286,6 s → 63,8 s sur un prompt de 3 961 jetons
+
+Mesuré au sprint 4 (Qwen2.5-0.5B Q8_0, prompt de 3 961 jetons, `--lot 256`,
+`--infer`) :
+
+| chemin | prompt | postes (ms/jeton) |
+|---|---|---|
+| CPU | **286,6 s** (13,8 tok/s) | attention **52,6** · matvec+mlp 18,4 |
+| `DRAVE_GPU=1 DRAVE_GPU_KV=1` | **63,8 s** (62,1 tok/s) | attention **2,2** · matvec+mlp 12,8 |
+
+L'attention du préremplissage est **le** poste dominant sur CPU (73 % du temps :
+le terme quadratique), et le miroir VRAM la divise par 24. La qualité ne bouge
+pas : à ctx 4 096 et 1 023 jetons, perplexité **9,4335 (CPU)** contre **9,4337
+(GPU KV)**, soit 2e-5. Autrement dit, pour tout prompt long, `DRAVE_GPU_KV=1` est
+le réglage à prendre — et il l'était déjà avant ce sprint, sans que le chiffre
+existe.
+
 ### Pagination du miroir : la VRAM suit l'usage, pas le contexte
 
 Le miroir n'est plus alloué pour `ctx` positions d'un coup : il démarre à

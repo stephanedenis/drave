@@ -38425,3 +38425,70 @@ trame écrite dans sprints/03-qualit-de-l-attention-creuse-long-contex.md — à
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='sprints/03-qualit-de-l-attention-creuse-long-contex.md'\ns=open(p).read()\ni = s.index(\"## Rétrospective — garder / changer\")\nceremonie = open('/tmp/ceremonie3.md').read()\nopen(p,'w').write(s[:i] + ceremonie. … [517 caractères tronqués]`
+
+  ```
+cérémonie 3 écrite
+9e22ed8 Sprint 3 : cérémonie (aiguille × attention creuse, revue adverse, planning du sprint 4)
+Sprint 1 démarré à 23:44 → 01:44  ·  sprints/01-le-k-de-l-attention-creuse-l-chec-au-mil.md
+03-qualit-de-l-attention-creuse-long-contex.md
+COURANT
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && mv sprints/01-le-k-de-l-attention-creuse-l-chec-au-mil.md sprints/04-le-k-de-l-attention-creuse-l-chec-au-mil.md && read num debut fin < sprints/COURANT && echo \"4 $debut $fin\" > sprints/COURANT && sed -i '1s/^# Sprint 1 /# Sprint  … [1286 caractères tronqués]`
+
+  ```
+# Sprint 4 — Le k de l'attention creuse : l'échec au milieu est-il un réglage (k plus grand) ou un mécanisme manquant ? Grille en --lot 1 (tout le passage creux) et k = 256/512/1024
+script sprint 4 prêt
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"attn-topk\\|--lot\" tools/aiguille.py | sed -n '1,12p'", "description": "Check aiguille lot option exists"}`
+
+  ```
+17:3. **le préremplissage par lots** (`--lot`) rend chaque sonde abordable : le
+27:    aiguille.py models/Qwen2.5-1.5B-Q4_K_M.gguf 1024,2048 0.1,0.5,0.9 --lot 256
+28:    aiguille.py /chemin/gpt-oss-120b-MXFP4.gguf 4096 0.1,0.5,0.9 --lot 512 --gpu
+81:           "--temp", "0", "--lot", str(args.lot)]
+83:        cmd += ["--attn-topk", str(args.attn_topk)]
+91:    # Le moteur DIT quand un drapeau ne s'applique pas (« --attn-topk ... est
+124:    ap.add_argument("--lot", type=int, default=256, help="lot de préremplissage")
+132:    ap.add_argument("--attn-topk", type=int, default=0,
+133:                    help="--attn-topk N (0 = attention complète)")
+138:    # `--gpu-topk` sans `--attn-topk` affichait « top-k déporté » alors que le
+142:        ap.error("--gpu-topk exige --attn-topk N (sinon le moteur ne déporte rien)")
+144:        ap.error("--attn-topk doit être positif (0 = attention complète)")
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && nohup /tmp/aig4.sh > /dev/null 2>&1 & sleep 5; cat /tmp/aiguille_k.log 2>/dev/null; date +%H:%M:%S", "description": "Launch sprint 4 needle grid"}`
+
+  ```
+k=512  (lot 256, milieu) : 23:44:34
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && nohup bash -c '\ncd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\nD=./drave-core/target/release/drave\nM=models/Qwen2.5-0.5B-Q8_0.gguf\nJ=/tmp/prefill_gpu.log\n: > $J\necho -n \"CPU      (lot 256, ctx 4096, 1023 jetons) : \" >> $J … [583 caractères tronqués]`
+
+  ```
+A/B préremplissage lancé
+23:44:46
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 420; echo \"=== aiguille k ===\"; cat /tmp/aiguille_k.log; echo \"=== préremplissage GPU ===\"; cat /tmp/prefill_gpu.log; date +%H:%M:%S", "description": "Check sprint 4 measurements", "timeoutMs": 500000}`
+
+  ```
+=== aiguille k ===
+k=512  (lot 256, milieu) :      4096        0.50     NON     274.8  prompt 4114 jetons · [attention] --attn-topk 512 est IGNORÉ en mode lot (--lot 256) : l'attention par lots est DENSE. Utiliser --lo
+k=1024 (lot 256, milieu) : === préremplissage GPU ===
+CPU      (lot 256, ctx 4096, 1023 jetons) : perplexité 9.4335 sur 1023 tokens
+GPU KV   (lot 256, ctx 4096, 1023 jetons) : perplexité 9.4337 sur 1023 tokens
+=== PREFILL GPU FINI ===
+23:51:55
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"DRAVE_GPU_KV\" README.md docs/contexte-long.md | head -6", "description": "Find where to document the prefill lever"}`
+
+  ```
+docs/contexte-long.md:104:| E4 | **KV déporté sur les 2 GPU** (pagination, préchargement) | **fait** : noyau `attn_kv_*` (tuiles de 32 clés en mémoire partagée, une passe par (tête KV, tranche), recombinaison + puits), miroir VRAM du cache (`DRAVE_GPU_KV=1`) — mesuré **×12 à ×73** sur l'attention selon le format, PPL identique ; voir §4.ter | décodage à 1 M borné par la VRAM et non par la RAM | moyen |
+docs/contexte-long.md:272:### Dans le moteur (`DRAVE_GPU=1 DRAVE_GPU_KV=1`)
+docs/contexte-long.md:275:`DRAVE_GPU_KV` qui demande le miroir. Avec la seule seconde, il ne se passe rien — et
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='docs/contexte-long.md'; s=open(p).read()\nvieux = \"\"\"### Pagination du miroir : la VRAM suit l'usage, pas le contexte\"\"\"\nneuf = \"\"\"### Le PRÉREMPLISSAGE aussi : 286,6 s → 63,8 s sur un prompt de 3 961 j … [1209 caractères tronqués]`
