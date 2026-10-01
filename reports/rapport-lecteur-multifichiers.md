@@ -218,6 +218,29 @@ et rien ne se voyait ; avec un seul cluster, le moteur est sorti du tableau
 (`index out of bounds: the len is 1 but the index is 6`). Les vues portent
 maintenant leur numéro, et `Moe::ou` le cherche au lieu de le supposer.
 
+### La chaîne complète, par les outils du dépôt
+
+Jusqu'ici, le `mapping.tsv` de l'artefact avait été produit par un script ad hoc
+depuis le manifeste. La chaîne entière a été rejouée **par les outils du dépôt**,
+sur Qwen3-30B-A3B (18,6 Go) :
+
+```
+source GGUF ──► tools/convertir_clusters.py ──► commun.gguf + 8 clusters + mapping.tsv
+                 (351,7 s, SHA-256 sur chaque tenseur)          │
+                                                                ▼
+                                          drave <dossier> ──► 15,2789
+```
+
+| étape | résultat |
+|---|---|
+| conversion | 435 + 8 × 144 = **1 587 tenseurs**, 18,60 Go, 351,7 s |
+| `mapping.tsv` écrit par le convertisseur | 6 144 entrées · 48 couches · 128 experts · 8 clusters |
+| vérification par empreintes | **1 587 tenseurs · TOUT CONCORDE** |
+| exécution du modèle converti | **15,2789** — exactement l'original |
+
+C'est la preuve de bout en bout : la source, l'outil de conversion, le format, le
+lecteur et le moteur s'accordent, sans intervention manuelle entre les étapes.
+
 ## Méthode
 
 Trois fois dans ce sprint, la correction est venue d'avoir **rendu visible** ce

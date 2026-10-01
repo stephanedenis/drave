@@ -47260,3 +47260,166 @@ propre si vide
 ⏵ Courbe nette : la perplexité décroît et la mémoire suit. Je consigne.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np = 'reports/rapport-lecteur-multifichiers.md'\ns = open(p).read()\ns = s.replace('''| clusters chargés | perplexité (7 jetons) | mémoire maximale |\n|---|---|---|\n| les 8 | **799,8557** | 6,33 Go |\n| 0 et 3 | 17  … [2381 caractères tronqués]`
+
+  ```
+ok
+73b2c1f Courbe du nœud partiel : 1, 2, 4, 8 clusters — perplexité et mémoire
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date +%H:%M; tail -1 /tmp/tl_file2.log; git status --short | head -3; echo \"--- récapitulatif du bloc ---\"; git log --oneline --since=\"11:13\" | wc -l; echo \"commits depuis 11:13\"; (cd drave-core && cargo test --release 2>&1 | g … [99 caractères tronqués]`
+
+  ```
+12:21
+12:21:31    44.6 Go / 49.9 Go (89.3 %, 104 Mo/s)
+ M journal/README.md
+--- récapitulatif du bloc ---
+13
+commits depuis 11:13
+test result: ok. 32 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.09s
+ 15520 total
+  ```
+
+### 🤖 Assistant
+
+⏵ Clôture en beauté : la chaîne complète, du convertisseur à l'exécution, sans script ad hoc.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/chaine_complete.sh <<'EOF'\n#!/bin/bash\n# La CHAÎNE COMPLÈTE, par les outils du dépôt : source GGUF -> convertisseur ->\n# clusters + mapping.tsv -> exécution. Jusqu'ici le mapping.tsv de l'artefact\n# avait été produit p … [1008 caractères tronqués]`
+
+  ```
+lancé
+### conversion (avec vérification par empreintes)
+  ```
+
+- **bash** `{"command": "sleep 55; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && tail -14 /tmp/chaine_complete.log", "description": "Follow full toolchain run"}`
+
+  ```
+### conversion (avec vérification par empreintes)
+  ```
+
+- **bash** `{"command": "sleep 60; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && tail -16 /tmp/chaine_complete.log; echo \"--- fichiers ---\"; ls -la /home/stephane/FastNVMe/artefacts/modeles-optimises/qwen3-30b-8clusters-v2/ 2>/dev/null | tail -4", "description": "Check conversion progress"}`
+
+  ```
+(no output)
+[timed out after 60000ms]
+[killed by signal: SIGTERM]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && tail -8 /tmp/chaine_complete.log; ls /home/stephane/FastNVMe/artefacts/modeles-optimises/qwen3-30b-8clusters-v2/ 2>/dev/null | wc -l; date +%H:%M", "description": "Check conversion output"}`
+
+  ```
+### conversion (avec vérification par empreintes)
+6
+12:24
+  ```
+
+- **bash** `{"command": "sleep 55; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && tail -10 /tmp/chaine_complete.log; ls /home/stephane/FastNVMe/artefacts/modeles-optimises/qwen3-30b-8clusters-v2/ 2>/dev/null | wc -l", "description": "Follow conversion"}`
+
+  ```
+### conversion (avec vérification par empreintes)
+7
+  ```
+
+- **bash** `{"command": "sleep 55; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && tail -12 /tmp/chaine_complete.log; ls /home/stephane/FastNVMe/artefacts/modeles-optimises/qwen3-30b-8clusters-v2/ 2>/dev/null | wc -l; date +%H:%M", "description": "Follow conversion progress"}`
+
+  ```
+### conversion (avec vérification par empreintes)
+8
+12:26
+  ```
+
+- **bash** `{"command": "sleep 55; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && tail -14 /tmp/chaine_complete.log; ls /home/stephane/FastNVMe/artefacts/modeles-optimises/qwen3-30b-8clusters-v2/ 2>/dev/null | wc -l", "description": "Follow conversion"}`
+
+  ```
+### conversion (avec vérification par empreintes)
+11
+  ```
+
+- **bash** `{"command": "sleep 60; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && tail -16 /tmp/chaine_complete.log; echo \"---\"; ls /home/stephane/FastNVMe/artefacts/modeles-optimises/qwen3-30b-8clusters-v2/ ; date +%H:%M", "description": "Check conversion completion"}`
+
+  ```
+(no output)
+[timed out after 60000ms]
+[killed by signal: SIGTERM]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && tail -20 /tmp/chaine_complete.log; date +%H:%M", "description": "Read toolchain log"}`
+
+  ```
+### conversion (avec vérification par empreintes)
+12:29
+  ```
+
+- **bash** `{"command": "sleep 55; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && tail -22 /tmp/chaine_complete.log", "description": "Follow the toolchain"}`
+
+  ```
+### conversion (avec vérification par empreintes)
+  ```
+
+- **bash** `{"command": "sleep 55; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && tail -24 /tmp/chaine_complete.log; pgrep -c -f convertir_clusters", "description": "Wait for conversion to complete"}`
+
+  ```
+### conversion (avec vérification par empreintes)
+2
+  ```
+
+- **bash** `{"command": "sleep 55; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && tail -26 /tmp/chaine_complete.log; date +%H:%M", "description": "Wait for toolchain completion"}`
+
+  ```
+### conversion (avec vérification par empreintes)
+12:32
+  ```
+
+- **bash** `{"command": "sleep 55; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && tail -26 /tmp/chaine_complete.log; echo \"--- proc ---\"; pgrep -c -f convertir_clusters; date +%H:%M", "description": "Wait for toolchain"}`
+
+  ```
+### conversion (avec vérification par empreintes)
+--- proc ---
+3
+12:33
+  ```
+
+- **bash** `{"command": "sleep 55; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat /tmp/chaine_complete.log | tail -30; date +%H:%M", "description": "Wait for toolchain completion"}`
+
+  ```
+### conversion (avec vérification par empreintes)
+Qwen3-30B-A3B-Instruct-2507-Q4_K_M.gguf : 579 tenseurs, 18.6 Go, arch qwen3moe, alignement 32
+MoE : 48 couches × 128 experts · 144 tenseurs d'experts
+commun.gguf      :  435 tenseurs ·    1.00 Go
+cluster-00.gguf   :  144 tenseurs ·    2.20 Go · experts locaux 0..15
+cluster-01.gguf   :  144 tenseurs ·    2.20 Go · experts locaux 0..15
+cluster-02.gguf   :  144 tenseurs ·    2.20 Go · experts locaux 0..15
+cluster-03.gguf   :  144 tenseurs ·    2.20 Go · experts locaux 0..15
+cluster-04.gguf   :  144 tenseurs ·    2.20 Go · experts locaux 0..15
+cluster-05.gguf   :  144 tenseurs ·    2.20 Go · experts locaux 0..15
+cluster-06.gguf   :  144 tenseurs ·    2.20 Go · experts locaux 0..15
+cluster-07.gguf   :  144 tenseurs ·    2.20 Go · experts locaux 0..15
+mapping.tsv · 6144 entrées · 48 couches · 128 experts · 8 clusters
+
+manifeste.json · 9 fichiers · 18.60 Go · 351.7 s
+vérification par empreintes…
+  1587 tenseurs vérifiés · TOUT CONCORDE
+
+### exécution du modèle converti
+12:34
+  ```
+
+### 🤖 Assistant
+
+⏵ Chaîne complète : 1 587 tenseurs vérifiés, TOUT CONCORDE. J'attends la perplexité.
+
+- **bash** `{"command": "sleep 55; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && tail -6 /tmp/chaine_complete.log", "description": "Wait for execution result"}`
+
+  ```
+vérification par empreintes…
+  1587 tenseurs vérifiés · TOUT CONCORDE
+
+### exécution du modèle converti
+perplexité 15.2789 sur 63 tokens (0 événements, 16.5 s)
+=== fin ===
+  ```
+
+### 🤖 Assistant
+
+⏵ **Chaîne complète validée : 15,2789 par les outils du dépôt.** Je consigne et clôture.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np = 'reports/rapport-lecteur-multifichiers.md'\ns = open(p).read()\ns = s.replace('''## Méthode''',\n'''### La chaîne complète, par les outils du dépôt\n\nJusqu'ici, le `mapping.tsv` de l'artefact avait été produit  … [3044 caractères tronqués]`

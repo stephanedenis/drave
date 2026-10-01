@@ -112,6 +112,11 @@ Vérifié : **origine 15,2789 · clusters 15,2789** (mêmes 63 jetons, même con
 et l'identité des deux lectures tient au chiffre près. L'inventaire annonce
 1 587 tenseurs et 18,55 Go, exactement le modèle d'origine.
 
+**La chaîne complète rejouée par les outils du dépôt** : `tools/convertir_clusters.py`
+(351,7 s, 1 587 tenseurs vérifiés par SHA-256, *tout concorde*) écrit
+`commun.gguf`, les huit clusters et `mapping.tsv` — puis `drave <dossier>` rend
+**15,2789**, exactement le modèle d'origine. Aucune étape manuelle entre les deux.
+
 ## La table des types ggml
 
 `octets_tensor` doit connaître la taille de chaque type : `nelem()` compte des

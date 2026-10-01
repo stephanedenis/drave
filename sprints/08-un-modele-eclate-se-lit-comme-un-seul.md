@@ -64,6 +64,7 @@ pire qu'un arrêt.
 | porte Qwen2.5-0.5B ctx 256 | **19,3885** (inchangée) |
 | `cargo test --release` | **32 verts** (20 → 32) |
 | mapping produit par le convertisseur | **identique à l'octet près** à celui dérivé du manifeste |
+| **chaîne complète** : convertisseur → clusters → exécution | 1 587 tenseurs vérifiés (*tout concorde*) → **15,2789** |
 | **mmap** contre lecture complète (7 jetons) | **9,32 s / 6,35 Go** contre 30,68 s / 19,20 Go — perplexité identique (799,8557) |
 | **nœud partiel** à un cluster | **2,36 Go** de mémoire (contre 6,33 Go) · perplexité 268 786 → 17 929 → 800 en ajoutant des clusters |
 
