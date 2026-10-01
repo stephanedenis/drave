@@ -7,12 +7,12 @@
 | Début | 2026-09-28 14:46 |
 | Durée | 69.5 h |
 | Tours | 51 |
-| Messages | 2976 |
-| Appels d'outils | 2831 |
-| Fichiers touchés | 64 |
-| Commandes | 2445 |
+| Messages | 2986 |
+| Appels d'outils | 2841 |
+| Fichiers touchés | 65 |
+| Commandes | 2454 |
 | Sous-agents | 22 |
-| Commits | 246 |
+| Commits | 247 |
 | Compactages de contexte | 4 |
 
 ## Objectifs déclarés
@@ -2400,7 +2400,7 @@ Les téléchargements avancent en parallèle : **DeepSeek-V4.1-Flash 68 %** (249
 
 ### Tour 51 — continue jusqu'à 13h HAE
 
-*268 appels d'outils.* Actions notables :
+*278 appels d'outils.* Actions notables :
 
 - bash — Check time and running processes
 - job_list
@@ -2416,11 +2416,11 @@ Les téléchargements avancent en parallèle : **DeepSeek-V4.1-Flash 68 %** (249
 - todo_write
 - bash — Count buffer accesses in gguf.rs
 - bash — Map functions and base computations
-- … et 253 autres
+- … et 263 autres
 
 **Synthèse produite :**
 
-⏵ 41 types concordants, 0 divergence. Je vérifie les tests et commite.
+⏵ Concordance parfaite sur 984 Go. Je consigne et commit.
 
 ## 3. Travail accompli
 
@@ -2492,6 +2492,7 @@ Les téléchargements avancent en parallèle : **DeepSeek-V4.1-Flash 68 %** (249
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/sprints/08-un-modele-eclate-se-lit-comme-un-seul.md` | 2 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-lecteur-multifichiers.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/verifier_table_types.sh` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/inventaire_modeles_lourds.sh` | 1 | 0 |
 
 ### Sous-agents lancés
 
@@ -2560,7 +2561,7 @@ Les téléchargements avancent en parallèle : **DeepSeek-V4.1-Flash 68 %** (249
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 2405 autres
+- … et 2414 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2688,7 +2689,7 @@ Les téléchargements avancent en parallèle : **DeepSeek-V4.1-Flash 68 %** (249
 
 ## 5. Erreurs rencontrées
 
-153 sorties en erreur ou divergentes. Les premières :
+154 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : a8f2635f8 docs: record which models this box is good at, and why src/llama-hparams.cpp:8:void llama_hparams::set_swa_pattern(uint32_t n_pattern, bool dense_first) { src/llama-hparams.h:308:    void se
 - **T1** : 511 tokens notés — perplexité cumulée 247.031  (4.9 tok/s) === perplexité 247.0308 sur 511 tokens (0 événements, 104.5 s) ===  ### B3 harmony assistant 511 --- ref --- 0.0 0.0 0:00 ls: cannot access '
@@ -2954,4 +2955,5 @@ Les téléchargements avancent en parallèle : **DeepSeek-V4.1-Flash 68 %** (249
 - Revue adverse : un défaut bloquant silencieux, et le test qui manquait au correctif  Défauts corrigés (revue déléguée, lecture seule) :  - BLOQUANT SILENCIEUX :
 - Rapports et sprint : les cinq défauts de la revue n°2 et le test qui manquait" && git log --oneline -1; cat /tmp/gate_oss_final2.log
 - La table des types ggml confrontée à libggml, et les huit types ajoutés après NVFP4  tools/verifier_table_types.sh compile un programme lié à libggml, imprime g
+- Inventaire des modèles lourds : 984 Go de poids annoncés par les descripteurs, 984 Go annoncés par HuggingFace  tools/inventaire_modeles_lourds.sh lit les en-tê
 

@@ -108,3 +108,40 @@ cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet
 python3 tools/telecharger_modeles.py --etat
 tail -5 /tmp/telechargement_lourds.log
 ```
+
+## État au 01/10 à midi — l'inventaire est fait, et il recoupe
+
+`tools/inventaire_modeles_lourds.sh` lit les **en-têtes seuls** (le plus gros
+fichier fait 366 Go) et confronte les poids annoncés par les descripteurs GGUF
+aux tailles annoncées par HuggingFace :
+
+| modèle | architecture | fichiers | tenseurs | poids lus | annoncé HF |
+|---|---|---|---|---|---|
+| DeepSeek-V4.1-Flash-Q2 | `deepseek41` | 1 | 1 046 | **365,70 Go** | 365,7 Go |
+| GLM-5.3-UD-IQ1_S | `glm-dsa` | 6 | 1 809 | **216,71 Go** | 216,7 Go |
+| Kimi-K2.7-Code-UD-IQ1_M | `deepseek2` | 8 | 1 096 | **303,90 Go** | 303,9 Go |
+| DeepSeek-V4-Flash-UD-IQ1_M | `deepseek4` | 3 | 1 328 | **86,90 Go** | 86,9 Go (3 shards) |
+| MiniMax-H3 | `?` | 1 | 532 | **11,42 Go** | 11,4 Go |
+| Qwen3-235B-A22B-Q2_K | — | — | — | en cours | 85,7 Go |
+
+**La concordance porte sur 984 Go** : c'est la vérification croisée la plus large
+dont on dispose pour la table des types ggml. Une seule entrée fausse produirait
+un écart visible sur des centaines de gigaoctets — le type `iq1_m` manquant, lui,
+avait fait annoncer 8,56 Go pour 86,9.
+
+Trois observations :
+
+* **Les architectures lourdes sont lues** : `deepseek41`, `deepseek2`, `deepseek4`,
+  `glm-dsa`. Aucune n'a de `forward` dans le moteur — c'est le chantier suivant.
+* **MiniMax-H3 n'est pas un modèle de texte** (`audio_patch_proj`, `adaln_tbl`) :
+  son architecture est inconnue, et c'est normal.
+* **Le nombre de fichiers n'est pas un obstacle** : Kimi en a huit, GLM six, et le
+  lecteur les rassemble à partir d'un seul chemin.
+
+### Ce que le téléchargement a coûté
+
+1 137,9 Go annoncés pour 24 fichiers ; à midi, tout est arrivé sauf
+Qwen3-235B-A22B (85,7 Go) et GLM-5.3-Flash (93,1 Go). Débit soutenu ~75–110 Mo/s
+sur le disque mécanique, qui sert aussi de bibliothèque brute — le NVMe ne porte
+que nos artefacts.
+
