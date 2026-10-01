@@ -269,7 +269,13 @@ impl Gguf {
                 }
                 if meta.is_none() { meta = Some(m); }
             }
-            let ds = Self::debut_donnees(meta.as_ref().unwrap(), fin);
+            // Tant qu'aucun fichier n'a donné ses métadonnées, on aligne sur la
+            // valeur par défaut de GGUF (32). Les fichiers réels partagent tous
+            // la même ; l'alignement n'est pas une propriété par fichier.
+            let ds = match &meta {
+                Some(m) => Self::debut_donnees(m, fin),
+                None => Self::debut_donnees(&HashMap::new(), fin),
+            };
             starts.push(ds);
             bufs.push(buf);
             for t in ts {
@@ -322,7 +328,12 @@ impl Gguf {
         let Some((prefixe, _, total)) = Self::shard_de(nom) else {
             return Ok(vec![path.to_path_buf()]);
         };
-        let dir = path.parent().unwrap_or(Path::new("."));
+        // `parent()` d'un nom nu rend `Some("")`, et `read_dir("")` échoue : le
+        // fichier existe pourtant, dans le dossier courant.
+        let dir = match path.parent() {
+            Some(d) if !d.as_os_str().is_empty() => d,
+            _ => Path::new("."),
+        };
         let mut trouves: Vec<(usize, std::path::PathBuf)> = Vec::new();
         for e in std::fs::read_dir(dir)? {
             let p = e?.path();
@@ -432,9 +443,22 @@ impl Gguf {
                 }
                 if meta.is_none() { meta = Some(m); }
             }
-            starts.push(Self::debut_donnees(meta.as_ref().unwrap(), fin));
+            starts.push(match &meta {
+                Some(m) => Self::debut_donnees(m, fin),
+                None => Self::debut_donnees(&HashMap::new(), fin),
+            });
             for t in ts {
-                if tous.iter().any(|u| u.name == t.name) { continue; }
+                // Doublon : en mode en-tête seul on ne peut pas comparer les
+                // octets. On compare ce qu'on a — dimensions et type — et on
+                // SIGNALE une divergence au lieu de l'avaler.
+                if let Some(v) = tous.iter().find(|u| u.name == t.name) {
+                    if v.dims != t.dims || v.ttype != t.ttype {
+                        return Err(std::io::Error::new(std::io::ErrorKind::InvalidData,
+                            format!("tenseur « {} » présent deux fois, dimensions ou type \
+différents ({} et {})", t.name, v.fichier, t.fichier)));
+                    }
+                    continue;
+                }
                 tous.push(t);
             }
         }
@@ -463,6 +487,24 @@ impl Gguf {
     /// DeepSeek-V4-Flash a annoncé 8,56 Go pour 86,9 Go de fichiers : les
     /// tenseurs d'experts en `iq1_m` n'étaient pas dans la table.
     pub fn octets_tensor(t: &TensorInfo) -> u64 {
+        if let Some(v) = Self::octets_tensor_opt(t) { return v; }
+        // Un type hors table est compté zéro : le total serait faux, et c'est
+        // ainsi qu'un inventaire a annoncé 8,56 Go pour 86,9 Go de fichiers
+        // (les tenseurs d'experts en `iq1_m` n'étaient pas dans la table). On le
+        // dit, une fois par type, plutôt que de rendre un chiffre trop petit.
+        static SIGNALES: std::sync::Mutex<Vec<u32>> = std::sync::Mutex::new(Vec::new());
+        if let Ok(mut v) = SIGNALES.lock() {
+            if !v.contains(&t.ttype) {
+                v.push(t.ttype);
+                eprintln!("[gguf] type {} inconnu (tenseur « {} ») : sa taille compte pour \
+zéro, l'inventaire sera sous-évalué", t.ttype, t.name);
+            }
+        }
+        0
+    }
+
+    /// Taille d'un tenseur, ou `None` si son type n'est pas dans la table.
+    pub fn octets_tensor_opt(t: &TensorInfo) -> Option<u64> {
         let n = t.nelem() as u64;
         let (bloc, octets) = match t.ttype {
             0 => (1u64, 4u64), 1 => (1, 2), 2 => (32, 18), 3 => (32, 20),
@@ -474,9 +516,9 @@ impl Gguf {
             24 => (1, 1), 25 => (1, 2), 26 => (1, 4), 27 => (1, 8), 28 => (1, 8),
             29 => (256, 56), 30 => (1, 2), 34 => (256, 54), 35 => (256, 66),
             39 => (32, 17), 40 => (64, 36),
-            _ => return 0,
+            _ => return None,
         };
-        n / bloc * octets
+        Some(n / bloc * octets)
     }
 
     /// Nom lisible d'un type ggml. Rend `« type 29 »` pour un type inconnu
@@ -1071,14 +1113,14 @@ impl Gguf {
 }
 
 #[cfg(test)]
-mod tests {
+pub(crate) mod tests {
     use super::*;
     use std::io::Write;
 
     /// Fabrique un GGUF minimal : `general.architecture` plus des tenseurs F32
     /// dont la valeur de chaque poids est son indice global. Un GGUF de labo,
     /// écrit à la main, uniquement pour éprouver le lecteur.
-    fn gguf_synth(tensors: &[(&str, Vec<u64>)], depart: usize, valeur0: f32) -> Vec<u8> {
+    pub(crate) fn gguf_synth(tensors: &[(&str, Vec<u64>)], depart: usize, valeur0: f32) -> Vec<u8> {
         let mut b = Vec::new();
         let mut s = |b: &mut Vec<u8>, v: &str| {
             b.extend_from_slice(&(v.len() as u64).to_le_bytes());
@@ -1191,7 +1233,7 @@ mod tests {
         let _ = std::fs::remove_file(&p);
     }
 
-    fn ecrire(nom: &str, octets: &[u8]) -> std::path::PathBuf {
+    pub(crate) fn ecrire(nom: &str, octets: &[u8]) -> std::path::PathBuf {
         let p = std::env::temp_dir().join(nom);
         let mut f = File::create(&p).unwrap();
         f.write_all(octets).unwrap();
@@ -1244,6 +1286,91 @@ mod tests {
         let _ = std::fs::remove_file(&p_tous);
         let _ = std::fs::remove_file(&p_a);
         let _ = std::fs::remove_file(&p_b);
+    }
+
+    /// `open_avec_prefixes` est la route des clusters : huit fichiers portent
+    /// les MÊMES noms de tenseurs, et seul le préfixe les distingue. Sans test,
+    /// un défaut ici ferait disparaître sept clusters sur huit (c'est arrivé :
+    /// l'inventaire annonçait 3,19 Go au lieu de 18,55).
+    #[test]
+    fn prefixes_distinguent_les_homonymes() {
+        let t: Vec<(&str, Vec<u64>)> = vec![("blk.0.ffn_gate_exps.weight", vec![2, 3])];
+        let p0 = ecrire("drave_gguf_p0.gguf", &gguf_synth(&t, 0, 1.0));
+        let p1 = ecrire("drave_gguf_p1.gguf", &gguf_synth(&t, 1, 1.0));
+        let p2 = ecrire("drave_gguf_p2.gguf", &gguf_synth(&t, 2, 1.0));
+        let g = Gguf::open_avec_prefixes(&[&p0, &p1, &p2], &["", "cl0/", "cl1/"]).unwrap();
+        assert_eq!(g.tensors.len(), 3, "trois fichiers, trois tenseurs homonymes");
+        assert_eq!(g.nb_fichiers(), 3);
+        assert_eq!(g.octets_poids(), 3 * 6 * 4);
+        for (nom, f) in [("blk.0.ffn_gate_exps.weight", 0), ("cl0/blk.0.ffn_gate_exps.weight", 1),
+                         ("cl1/blk.0.ffn_gate_exps.weight", 2)] {
+            let t = g.tensor(nom).unwrap_or_else(|| panic!("{nom} absent"));
+            assert_eq!(t.fichier, f, "« {nom} » doit venir du fichier {f}");
+        }
+        // Les trois valeurs sont distinctes : unlecteur qui se tromperait de
+        // fichier serait démasqué.
+        let v0 = g.dequant("blk.0.ffn_gate_exps.weight");
+        let v1 = g.dequant("cl0/blk.0.ffn_gate_exps.weight");
+        let v2 = g.dequant("cl1/blk.0.ffn_gate_exps.weight");
+        assert_ne!(v0, v1);
+        assert_ne!(v1, v2);
+        assert!((v1[0] - v0[0] - 1000.0).abs() < 1e-3, "décalage de fichier attendu");
+        // Et le mode en-tête seul doit voir la MÊME chose, sans les poids.
+        let m = Gguf::open_meta_avec_prefixes(&[&p0, &p1, &p2], &["", "cl0/", "cl1/"]).unwrap();
+        assert_eq!(m.tensors.len(), 3);
+        assert_eq!(m.tensor("cl1/blk.0.ffn_gate_exps.weight").unwrap().fichier, 2);
+        for p in [&p0, &p1, &p2] { let _ = std::fs::remove_file(p); }
+    }
+
+    /// Un type ggml hors table était compté zéro octet en silence. Le total
+    /// devenait faux sans le dire — c'est le mécanisme exact qui avait fait
+    /// annoncer 8,56 Go pour 86,9 Go de fichiers.
+    #[test]
+    fn type_inconnu_ne_compte_pas_zero_en_silence() {
+        let t = TensorInfo { name: "x".into(), dims: vec![256, 4], ttype: 4_242,
+                             offset: 0, fichier: 0 };
+        assert_eq!(Gguf::octets_tensor_opt(&t), None);
+        // Les types connus, eux, sont tous dans la table.
+        for (ttype, attendu) in [(GGML_F32, 4 * 1024u64), (GGML_Q8_0, 34 * 32),
+                                 (GGML_Q4_K, 144 * 4), (GGML_Q6_K, 210 * 4),
+                                 (GGML_MXFP4, 17 * 32), (29, 56 * 4), (30, 2 * 1024)] {
+            let t = TensorInfo { name: "x".into(), dims: vec![1024], ttype,
+                                 offset: 0, fichier: 0 };
+            assert_eq!(Gguf::octets_tensor_opt(&t), Some(attendu),
+                       "type {ttype} : table fausse");
+        }
+    }
+
+    /// `shard_de` et `chemins_du_modele` : la détection automatique des shards.
+    #[test]
+    fn shards_reconnus_et_rassembles() {
+        assert_eq!(Gguf::shard_de("m-00002-of-00003.gguf"),
+                   Some(("m".to_string(), 2, 3)));
+        assert_eq!(Gguf::shard_de("a-b-c-00010-of-00012.gguf"),
+                   Some(("a-b-c".to_string(), 10, 12)));
+        // Un nom qui n'est pas un découpage ne doit pas être pris pour un.
+        assert_eq!(Gguf::shard_de("modele.gguf"), None);
+        assert_eq!(Gguf::shard_de("modele-of-3.gguf"), None);
+        assert_eq!(Gguf::shard_de("modele-abc-of-00003.gguf"), None);
+
+        // Deux morceaux sur trois : c'est INCOMPLET, et ça doit se dire.
+        let d = std::env::temp_dir().join("drave_shards_test");
+        let _ = std::fs::remove_dir_all(&d);
+        std::fs::create_dir_all(&d).unwrap();
+        let t: Vec<(&str, Vec<u64>)> = vec![("w", vec![2, 2])];
+        for n in 1..=3 {
+            std::fs::write(d.join(format!("m-{n:05}-of-00003.gguf")), gguf_synth(&t, n, 1.0)).unwrap();
+        }
+        let l = Gguf::chemins_du_modele(&d.join("m-00002-of-00003.gguf")).unwrap();
+        assert_eq!(l.len(), 3, "les trois morceaux doivent être rassemblés dans l'ordre");
+        assert!(l[0].to_string_lossy().ends_with("m-00001-of-00003.gguf"));
+        std::fs::remove_file(d.join("m-00002-of-00003.gguf")).unwrap();
+        let e = match Gguf::chemins_du_modele(&d.join("m-00001-of-00003.gguf")) {
+            Ok(_) => panic!("un shard manquant doit être refusé"),
+            Err(e) => e,
+        };
+        assert!(e.to_string().contains("incomplet"), "{e}");
+        let _ = std::fs::remove_dir_all(&d);
     }
 
     /// Un même nom dans deux fichiers avec des poids différents est une faute

@@ -305,6 +305,51 @@ def lire_trace(chemin):
     return par_couche
 
 
+def ecrire_mapping(dossier, manifeste):
+    """Écrit `mapping.tsv` : la seule chose qui relie un expert GLOBAL à sa ligne
+    LOCALE. Le moteur est en Rust sans dépendance ; un JSON demanderait un
+    parseur de plus à éprouver, alors qu'un tableau de trois colonnes se relit à
+    l'œil — ce qui n'est pas un luxe pour la pièce dont dépend chaque expert.
+
+    Vérifie au passage que la répartition est complète et sans doublon : un
+    expert manquant ferait un modèle silencieusement amputé.
+    """
+    if manifeste.get("mode") != "experts":
+        # En mode « couches », il n'y a pas d'experts à répartir : chaque fichier
+        # porte des couches entières, et le moteur les lit en clair.
+        return
+    n_exp, K = manifeste["n_experts"], manifeste["clusters"]
+    clusters = sorted((f for f in manifeste["fichiers"]
+                       if f.get("role", "").startswith("cluster-")),
+                      key=lambda f: f["role"])
+    lignes, vus = [], {}
+    for c, f in enumerate(clusters):
+        assert f["role"] == f"cluster-{c:02d}", f["role"]
+        for couche, globaux in sorted(f["experts_globaux_par_couche"].items(),
+                                      key=lambda kv: int(kv[0])):
+            for local, g in enumerate(globaux):
+                if (int(couche), g) in vus:
+                    raise SystemExit(f"mapping : expert {g} de la couche {couche} "
+                                     f"placé deux fois")
+                vus[(int(couche), g)] = (c, local)
+                lignes.append((int(couche), local, g, c))
+    n_couches = len(manifeste.get("experts", {}))
+    attendu = n_couches * n_exp
+    if len(vus) != attendu:
+        raise SystemExit(f"mapping incomplet : {len(vus)} entrées pour "
+                         f"{n_couches} couches × {n_exp} experts")
+    chemin = os.path.join(dossier, "mapping.tsv")
+    with open(chemin, "w", encoding="utf-8") as fo:
+        fo.write("# drave-clusters-mapping v1\n")
+        fo.write(f"# n_couches {n_couches} · n_experts {n_exp} · clusters {K}"
+                 f" · experts_par_cluster {n_exp // K}\n")
+        fo.write("# couche\tlocal\tglobal\tcluster\n")
+        for couche, local, g, c in lignes:
+            fo.write(f"{couche}\t{local}\t{g}\t{c}\n")
+    print(f"mapping.tsv · {len(lignes)} entrées · {n_couches} couches · "
+          f"{n_exp} experts · {K} clusters")
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("source")
@@ -428,6 +473,7 @@ def main():
 
     with open(os.path.join(args.dossier, "manifeste.json"), "w", encoding="utf-8") as f:
         json.dump(manifeste, f, indent=1, ensure_ascii=False)
+    ecrire_mapping(args.dossier, manifeste)
     total = sum(x["octets"] for x in manifeste["fichiers"])
     print(f"\nmanifeste.json · {len(manifeste['fichiers'])} fichiers · "
           f"{total / 1e9:.2f} Go · {time.time() - t0:.1f} s")

@@ -155,17 +155,35 @@ fn ouvrir_interne(dossier: &Path, meta_seule: bool) -> std::io::Result<Modele> {
         return Err(std::io::Error::new(std::io::ErrorKind::NotFound,
             format!("{} : commun.gguf absent", dossier.display())));
     }
-    let mut clusters: Vec<PathBuf> = Vec::new();
+    // Le numéro de cluster est lu, pas déduit du rang : un tri lexicographique
+    // range « cluster-100 » avant « cluster-20 », et les préfixes `cl{c}/` sont
+    // attribués par POSITION. Un décalage ferait lire les experts d'un autre
+    // fichier — mêmes formes, donc aucune erreur, juste un résultat faux.
+    let mut clusters: Vec<(usize, PathBuf)> = Vec::new();
     for e in std::fs::read_dir(dossier)? {
         let p = e?.path();
         let n = p.file_name().and_then(|x| x.to_str()).unwrap_or("").to_string();
-        if n.starts_with("cluster-") && n.ends_with(".gguf") { clusters.push(p); }
+        let Some(num) = n.strip_prefix("cluster-")
+                          .and_then(|r| r.strip_suffix(".gguf")) else { continue };
+        let Ok(c) = num.parse::<usize>() else {
+            return Err(std::io::Error::new(std::io::ErrorKind::InvalidData, format!(
+                "{} : « {n} » ne porte pas un numéro de cluster lisible", dossier.display())));
+        };
+        clusters.push((c, p));
     }
     clusters.sort();
     if clusters.is_empty() {
         return Err(std::io::Error::new(std::io::ErrorKind::NotFound,
             format!("{} : aucun cluster-*.gguf", dossier.display())));
     }
+    for (attendu, (num, p)) in clusters.iter().enumerate() {
+        if *num != attendu {
+            return Err(std::io::Error::new(std::io::ErrorKind::InvalidData, format!(
+                "{} : cluster {attendu} attendu, {} trouvé — la numérotation doit être \
+continue à partir de 0", p.display(), num)));
+        }
+    }
+    let clusters: Vec<PathBuf> = clusters.into_iter().map(|(_, p)| p).collect();
     let mapping = Mapping::lire(&dossier.join("mapping.tsv"))?;
     if clusters.len() != mapping.n_clusters {
         return Err(std::io::Error::new(std::io::ErrorKind::InvalidData, format!(
@@ -176,19 +194,21 @@ fn ouvrir_interne(dossier: &Path, meta_seule: bool) -> std::io::Result<Modele> {
     chemins.extend(clusters.iter().cloned());
     let mut prefixes: Vec<String> = vec![String::new()];
     prefixes.extend((0..clusters.len()).map(|c| format!("cl{c}/")));
-    // Le mapping est publié AVANT que les poids ne soient lus : c'est lui qui
-    // dit à `charger_moe` où sont les experts.
-    let _ = ACTIF.set(Mapping {
-        n_couches: mapping.n_couches, n_experts: mapping.n_experts,
-        n_clusters: mapping.n_clusters, par_cluster: mapping.par_cluster,
-        local: mapping.local.clone(),
-    });
     let refs: Vec<&str> = prefixes.iter().map(String::as_str).collect();
     let gguf = if meta_seule {
         Gguf::open_meta_avec_prefixes(&chemins, &refs)?
     } else {
         Gguf::open_avec_prefixes(&chemins, &refs)?
     };
+    // Le mapping n'est publié qu'APRÈS une ouverture réussie. Le publier avant
+    // laissait derrière lui le mapping d'un modèle qu'on venait de refuser : le
+    // moteur aurait alors traduit les experts d'un autre modèle, en silence
+    // (c'est un test qui l'a montré, pas une relecture).
+    let _ = ACTIF.set(Mapping {
+        n_couches: mapping.n_couches, n_experts: mapping.n_experts,
+        n_clusters: mapping.n_clusters, par_cluster: mapping.par_cluster,
+        local: mapping.local.clone(),
+    });
     Ok(Modele { gguf, mapping, chemins })
 }
 
@@ -241,6 +261,90 @@ mod tests {
         let e = match Mapping::lire(&p) { Ok(_) => panic!("doublon accepté"), Err(e) => e };
         assert!(e.to_string().contains("deux fois"), "{e}");
         let _ = std::fs::remove_file(&p);
+    }
+
+    /// Le test qui manquait : un DOSSIER de clusters complet, ouvert de bout en
+    /// bout. Aucun test n'exerçait `ouvrir` — donc rien ne vérifiait que les
+    /// tenseurs préfixés arrivent bien, que le mapping est publié, ni que les
+    /// fichiers sont appariés au bon numéro. Un défaut y ferait lire les experts
+    /// d'un autre cluster, mêmes formes, sans la moindre erreur.
+    #[test]
+    fn dossier_de_clusters_ouvre_et_apparie() {
+        use crate::gguf::tests::{ecrire, gguf_synth};
+        let d = std::env::temp_dir().join("drave_dossier_clusters");
+        let _ = std::fs::remove_dir_all(&d);
+        std::fs::create_dir_all(&d).unwrap();
+        // Le commun porte le routeur (n_experts global) et un tenseur partagé.
+        let commun: Vec<(&str, Vec<u64>)> =
+            vec![("blk.0.ffn_gate_inp.weight", vec![4, 3]), ("token_embd.weight", vec![8, 3])];
+        std::fs::write(d.join("commun.gguf"), gguf_synth(&commun, 0, 1.0)).unwrap();
+        // Deux clusters : chacun SON tenseur d'experts, à 2 lignes locales.
+        // Les valeurs diffèrent d'un fichier à l'autre, donc une inversion se voit.
+        for c in 0..2usize {
+            let t: Vec<(&str, Vec<u64>)> =
+                vec![("blk.0.ffn_gate_exps.weight", vec![2, 3, 3])];
+            std::fs::write(d.join(format!("cluster-{c:02}.gguf")),
+                           gguf_synth(&t, c * 10, 1.0)).unwrap();
+        }
+        // couche 0 : expert global 3 → cluster 0 ligne 1 ; global 0 → cluster 1 ligne 0
+        std::fs::write(d.join("mapping.tsv"), "\
+# n_couches 1 · n_experts 4 · clusters 2 · experts_par_cluster 2
+0\t0\t3\t0
+0\t1\t1\t0
+0\t0\t0\t1
+0\t1\t2\t1
+").unwrap();
+
+        let m = ouvrir(&d).expect("le dossier doit s'ouvrir");
+        assert_eq!(m.chemins.len(), 3, "commun + deux clusters");
+        assert_eq!(m.gguf.nb_fichiers(), 3);
+        assert_eq!(m.mapping.n_clusters, 2);
+        assert_eq!(m.mapping.par_cluster, 2);
+        // On vérifie le mapping RENDU, pas le mapping publié : les tests
+        // tournent en parallèle dans un même processus, et `ACTIF` est un
+        // `OnceLock` qui ne se pose qu'une fois — le premier test arrivé
+        // gagnerait. `charger_moe` lit le publié, mais il ne s'exécute que dans
+        // le binaire, où un seul modèle est ouvert.
+        // Le TSV dit : couche 0, local 0, global 3, cluster 0.
+        assert_eq!(m.mapping.ou(0, 3), Some((0, 0)));
+        assert_eq!(m.mapping.ou(0, 1), Some((0, 1)));
+        assert_eq!(m.mapping.ou(0, 0), Some((1, 0)));
+        assert_eq!(m.mapping.ou(0, 2), Some((1, 1)));
+        // Le commun reste en clair, les experts sont préfixés.
+        assert!(m.gguf.tensor("blk.0.ffn_gate_inp.weight").is_some());
+        assert!(m.gguf.tensor("blk.0.ffn_gate_exps.weight").is_none(),
+                "l'expert ne doit exister QUE sous son préfixe de cluster");
+        for c in 0..2 {
+            let nom = format!("cl{c}/blk.0.ffn_gate_exps.weight");
+            let t = m.gguf.tensor(&nom).unwrap_or_else(|| panic!("{nom} absent"));
+            assert_eq!(t.fichier, c + 1, "« {nom} » doit venir du fichier {}", c + 1);
+            assert_eq!(t.dims[0], 2, "dimension locale d'experts");
+        }
+        // Les deux fichiers portent des valeurs distinctes.
+        let v0 = m.gguf.dequant("cl0/blk.0.ffn_gate_exps.weight");
+        let v1 = m.gguf.dequant("cl1/blk.0.ffn_gate_exps.weight");
+        assert_ne!(v0, v1, "une inversion de cluster doit se voir");
+        let _ = std::fs::remove_dir_all(&d);
+    }
+
+    /// Un numéro de cluster manquant doit être refusé, pas renuméroté : les
+    /// préfixes `cl{c}/` sont attribués par position, donc un trou décalerait
+    /// tous les experts suivants sans le moindre bruit.
+    #[test]
+    fn numerotation_des_clusters_exigee_continue() {
+        let d = std::env::temp_dir().join("drave_clusters_trou");
+        let _ = std::fs::remove_dir_all(&d);
+        std::fs::create_dir_all(&d).unwrap();
+        std::fs::write(d.join("commun.gguf"), b"GGUF").unwrap();
+        for c in [0usize, 2] {
+            std::fs::write(d.join(format!("cluster-{c:02}.gguf")), b"GGUF").unwrap();
+        }
+        std::fs::write(d.join("mapping.tsv"),
+            "# n_couches 1 · n_experts 4 · clusters 3 · experts_par_cluster 2\n").unwrap();
+        let e = match ouvrir(&d) { Ok(_) => panic!("un trou doit être refusé"), Err(e) => e };
+        assert!(e.to_string().contains("cluster 1 attendu") || e.to_string().contains("incomplet"),
+                "message inattendu : {e}");
+        let _ = std::fs::remove_dir_all(&d);
     }
 
     /// Un cluster partiel est le cas NORMAL en nœud unique : la couche ne doit

@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 68.5 h |
+| Durée | 68.9 h |
 | Tours | 51 |
-| Messages | 2820 |
-| Appels d'outils | 2676 |
-| Fichiers touchés | 62 |
-| Commandes | 2294 |
-| Sous-agents | 20 |
-| Commits | 239 |
+| Messages | 2890 |
+| Appels d'outils | 2746 |
+| Fichiers touchés | 63 |
+| Commandes | 2362 |
+| Sous-agents | 21 |
+| Commits | 240 |
 | Compactages de contexte | 4 |
 
 ## Objectifs déclarés
@@ -2400,7 +2400,7 @@ Les téléchargements avancent en parallèle : **DeepSeek-V4.1-Flash 68 %** (249
 
 ### Tour 51 — continue jusqu'à 13h HAE
 
-*113 appels d'outils.* Actions notables :
+*183 appels d'outils.* Actions notables :
 
 - bash — Check time and running processes
 - job_list
@@ -2416,11 +2416,11 @@ Les téléchargements avancent en parallèle : **DeepSeek-V4.1-Flash 68 %** (249
 - todo_write
 - bash — Count buffer accesses in gguf.rs
 - bash — Map functions and base computations
-- … et 99 autres
+- … et 169 autres
 
 **Synthèse produite :**
 
-⏵ Commit du bloc : code, sprint et journal.
+⏵ Je rédige le rapport de mesure du bloc pendant que la porte tourne.
 
 ## 3. Travail accompli
 
@@ -2490,6 +2490,7 @@ Les téléchargements avancent en parallèle : **DeepSeek-V4.1-Flash 68 %** (249
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/gguf.rs` | 0 | 4 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/clusters.rs` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/sprints/08-un-modele-eclate-se-lit-comme-un-seul.md` | 2 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-lecteur-multifichiers.md` | 1 | 0 |
 
 ### Sous-agents lancés
 
@@ -2513,6 +2514,7 @@ Les téléchargements avancent en parallèle : **DeepSeek-V4.1-Flash 68 %** (249
 - tour 48 — Revue adverse sprint 5
 - tour 48 — Revue ciblée sprint 6
 - tour 48 — Revue de clôture de la nuit
+- tour 51 — Revue adverse du lecteur multi-fichiers
 
 ### Commandes exécutées (échantillon)
 
@@ -2556,7 +2558,7 @@ Les téléchargements avancent en parallèle : **DeepSeek-V4.1-Flash 68 %** (249
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 2254 autres
+- … et 2322 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2684,7 +2686,7 @@ Les téléchargements avancent en parallèle : **DeepSeek-V4.1-Flash 68 %** (249
 
 ## 5. Erreurs rencontrées
 
-134 sorties en erreur ou divergentes. Les premières :
+142 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : a8f2635f8 docs: record which models this box is good at, and why src/llama-hparams.cpp:8:void llama_hparams::set_swa_pattern(uint32_t n_pattern, bool dense_first) { src/llama-hparams.h:308:    void se
 - **T1** : 511 tokens notés — perplexité cumulée 247.031  (4.9 tok/s) === perplexité 247.0308 sur 511 tokens (0 événements, 104.5 s) ===  ### B3 harmony assistant 511 --- ref --- 0.0 0.0 0:00 ls: cannot access '
@@ -2943,4 +2945,5 @@ Les téléchargements avancent en parallèle : **DeepSeek-V4.1-Flash 68 %** (249
 - Politique de stockage : la bibliothèque brute sur le mécanique, le NVMe pour nos artefacts (mesures à l'appui)" && git log --oneline -1
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF' def patch(p, paires):     s = open(p).read()     for v, n, nom in paires:         asse
 - Un modèle éclaté se lit comme un seul : lecteur multi-fichiers, shards et clusters  Le lecteur GGUF ne connaissait qu'un fichier (un tampon, un début de données
+- Clusters exécutables : origine 15,2789 = clusters 15,2789, et les défauts trouvés en chemin  L'épreuve appariée (mêmes jetons, même contexte, chemin par jeton) 
 

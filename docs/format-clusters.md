@@ -28,9 +28,18 @@ modele/
   commun.gguf          embeddings, tête de sortie, attention, normes, ROUTEURS
   cluster-00.gguf      les tranches d'experts du cluster 0, toutes couches
   cluster-01.gguf      …
+  cluster-XX.gguf      … (un par cluster, XX numéroté à partir de 00, sans trou)
+  mapping.tsv          couche · ligne locale · expert global · cluster
   manifeste.json       rôle de chaque fichier, tenseurs, tailles, ordre des
                        experts (par fréquence), correspondance local ↔ global
 ```
+
+**`mapping.tsv` est la pièce critique** et elle est en texte, délibérément : le
+moteur est en Rust sans dépendance, et un JSON demanderait un parseur de plus à
+éprouver. Trois colonnes se relisent à l'œil — ce qui n'est pas un luxe pour la
+seule chose qui relie un expert global à sa ligne locale. Le convertisseur
+vérifie en l'écrivant que chaque expert global est placé **exactement une fois** ;
+le moteur, en le lisant, refuse un doublon.
 
 Trois propriétés, et chacune est vérifiée :
 
@@ -91,11 +100,48 @@ groupe), ce qui sert au même usage : un nœud ne charge que sa tranche. Mesuré
 Qwen2.5-0.5B : `commun.gguf` (embeddings + tête) + 4 fichiers de 6 couches,
 290 tenseurs vérifiés.
 
+## Le lecteur (fait, sprint 08)
+
+Un dossier qui contient `commun.gguf` **est** un modèle : `drave <dossier> …`,
+sans option nouvelle. Le lecteur ouvre le commun puis les clusters, en préfixant
+les tenseurs de chaque cluster (`cl0/blk.0.ffn_gate_exps.weight`) — sans quoi les
+huit fichiers porteraient huit fois le même nom. `Moe::ou(expert_global)` rend
+`(fichier, ligne locale)` et les neuf points de lecture d'experts passent par lui.
+
+Vérifié : **origine 15,2789 · clusters 15,2789** (mêmes 63 jetons, même contexte),
+et l'identité des deux lectures tient au chiffre près. L'inventaire annonce
+1 587 tenseurs et 18,55 Go, exactement le modèle d'origine.
+
+## La table des types ggml
+
+`octets_tensor` doit connaître la taille de chaque type : `nelem()` compte des
+**poids**, et un type quantifié range 32 ou 256 poids par bloc. Cette table est
+**relevée, pas devinée** — un petit programme lié à `libggml` imprime
+`ggml_blck_size` et `ggml_type_size` :
+
+```
+ 0 f32   1/4     8 q8_0  32/34   16 iq2_xxs 256/66   24 i8   1/1    39 mxfp4 32/17
+ 1 f16   1/2     9 q8_1  32/36   17 iq2_xs  256/74   29 iq1_m 256/56  40 nvfp4 64/36
+ 2 q4_0 32/18   10 q2_K 256/84   18 iq3_xxs 256/98   30 bf16  1/2
+ 3 q4_1 32/20   11 q3_K 256/110  19 iq1_s  256/50   34 tq1_0 256/54
+ 6 q5_0 32/22   12 q4_K 256/144  20 iq4_nl 32/18    35 tq2_0 256/66
+ 7 q5_1 32/24   13 q5_K 256/176  21 iq3_s  256/110
+                14 q6_K 256/210  22 iq2_s  256/82
+                15 q8_K 256/292  23 iq4_xs 256/136
+```
+
+Deux fois, un type absent de cette table a rendu un inventaire faux : 8,56 Go
+annoncés pour 86,9 Go de fichiers (`iq1_m` manquant), puis 3,19 Go pour 18,55 Go
+(préfixes non appliqués). Un type inconnu est donc désormais **signalé** au lieu
+d'être compté zéro.
+
 ## Ce qui reste
 
-* **Le lecteur multi-fichiers** : chaque fichier est un GGUF valide, mais le moteur
-  n'ouvre qu'un fichier à la fois. C'est la prochaine étape, et elle vaut aussi
-  pour les modèles lourds livrés en shards (DeepSeek-V4-Flash, Kimi-K2.7, GLM-5.3).
+* **Le nœud partiel** : charger UN cluster et sommer les experts entre nœuds. Le
+  moteur sait déjà sauter un expert absent (`Moe::ou` rend `None`), mais rien ne
+  somme encore les contributions de deux nœuds.
+* **Les biais d'experts + clusters** : refusés explicitement. Les indexer par
+  l'expert global lirait la mauvaise ligne.
 * **Le mmap au lieu du `read_to_end`** : `Gguf::open` lit tout le fichier en
   mémoire (18,56 Go pour Qwen3-30B). Charger 3,20 Go est déjà 5,8× mieux, mais le
   mmap rendrait le chargement **paresseux** (les experts jamais allumés ne seraient

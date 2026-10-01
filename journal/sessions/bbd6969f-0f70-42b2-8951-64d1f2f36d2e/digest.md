@@ -44662,3 +44662,1151 @@ sleep 3
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat >> REPRISE.md <<'EOF'\n\n## Sprint 08 — un modèle éclaté se lit comme un seul (11:13 → 13:13)\n\n```bash\n# Un dossier qui contient commun.gguf + cluster-XX.gguf + mapping.tsv EST un\n# modèle : aucune option nouvelle. Inventaire … [2788 caractères tronqués]`
+
+  ```
+3eb0af7 Un modèle éclaté se lit comme un seul : lecteur multi-fichiers, shards et clusters
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat /tmp/preuve_clusters.log; echo \"--- gpt-oss ---\"; cat /tmp/oss_diag.log | tail -4; echo \"--- heure ---\"; date +%H:%M", "description": "Check running proofs one more time"}`
+
+  ```
+origine   : --- gpt-oss ---
+[attention] QT_IM_SWITCHER est l'ancien nom d'une variable d'environnement : elles s'appellent maintenant DRAVE_* (voir docs/histoire.md). Rien n'a été appliqué.
+/tmp/ids_oss.txt : 32 tokens, fenêtres de 256
+--- heure ---
+11:15
+  ```
+
+### 🤖 Assistant
+
+⏵ Il est 11h15, pas 13h : j'ai deux heures devant moi. Je lance la revue adverse et j'attaque le chemin par lots.
+
+- **subagent** `{"description": "Revue adverse du lecteur multi-fichiers", "prompt": "Tu es un relecteur adverse. Tu ne modifies AUCUN fichier : tu lis, tu vérifies, tu rapportes. Ton travail est de trouver ce qui est FAUX, pas de confirmer ce qui va bien.\n\nContexte : dépôt Rust à /home/stephane/Data13TB/stephane … [3427 caractères tronqués]`
+
+  ```
+started subagent 8a0aa6e5-1a5e-450f-a6ea-070eed249d63
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '2820,2850p' drave-core/src/model.rs", "description": "Read forward_lot MoE/dense boundary"}`
+
+  ```
+for &e in &idx {
+                            let v = (sc_e[e as usize] - mx).exp(); sc_e[e as usize] = v; somme += v;
+                        }
+                        if somme > 0.0 { inv_k = 1.0 / somme; }
+                    } else {
+                        let mx = sc_e.iter().cloned().fold(f32::NEG_INFINITY, f32::max);
+                        let mut somme = 0f32;
+                        for v in sc_e.iter_mut() { *v = (*v - mx).exp(); somme += *v; }
+                        if somme > 0.0 { for v in sc_e.iter_mut() { *v /= somme; } }
+                        if k < ne {
+                            idx.select_nth_unstable_by(k, |&a, &b| {
+                                sc_e[b as usize].partial_cmp(&sc_e[a as usize]).unwrap()
+                            });
+                            idx.truncate(k);
+                        }
+                        let somme_k: f32 = idx.iter().map(|&e| sc_e[e as usize]).sum();
+                        inv_k = if somme_k > 0.0 { 1.0 / somme_k } else { 0.0 };
+                    }
+                    if trace_active {
+                        use std::io::Write;
+                        let mut ids: Vec<u32> = idx.clone();
+                        
+… [632 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/git 2>/dev/null; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '2955,2985p' drave-core/src/model.rs", "description": "Read code after the MoE block in forward_lot"}`
+
+  ```
+self.prof[3] += t_ffn.elapsed().as_secs_f64();
+        }
+        if self.flux_brut || self.couche_fin < self.cfg.n_layer {
+            // Nœud intermédiaire : on rend le flux résiduel brut, sans norme.
+            return (0..t).map(|i| x[i * h..(i + 1) * h].to_vec()).collect();
+        }
+        for i in 0..t {
+            let r = x[i * h..(i + 1) * h].to_vec();
+            Self::rmsnorm(&r, &self.out_norm, self.cfg.eps, &mut hn[i * h..(i + 1) * h]);
+        }
+        (0..t).map(|i| hn[i * h..(i + 1) * h].to_vec()).collect()
+    }
+
+    /// Trace OU impose le flux d'un LOT : `xi` porte les entiers quantifiés du
+    /// lot (t × h) et `sx` une échelle par jeton. Sur ce chemin, le rejeu est
+    /// EXACT — on remplace les entiers et l'échelle, sans repasser par une
+    /// déquantification suivie d'une requantification.
+    #[allow(clippy::too_many_arguments)]
+    /// `j0` est la clé du PREMIER jeton du lot (compteur global, 1-based comme
+    /// sur le chemin jeton par jeton) : elle est calculée UNE fois par lot par
+    /// `forward_lot`, et non à chaque appel — `flux_lot` est appelé deux fois par
+    /// couche (famille attention, base 0, et famille FFN, base 1000) et les deux
+    /
+… [556 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '2770,2800p' drave-core/src/model.rs", "description": "Read the branch before the MoE block"}`
+
+  ```
+self.pool.gemm_dense_i8(d8, &ai[..t * n_in_wo], t, &sa, &mut yl[..d8.n_out * t]);
+                    d8.n_out
+                };
+                let bias = self.layers[l].wo.bias.clone();
+                for i in 0..t {
+                    for oo in 0..n_out {
+                        o[i * h + oo] = yl[oo * t + i]
+                            + bias.as_ref().map_or(0.0, |b| b[oo]) + x[i * h + oo];
+                    }
+                }
+            }
+            for i in 0..t {
+                let r = &o[i * h..(i + 1) * h];
+                Self::rmsnorm(r, &lay.ffn_norm, self.cfg.eps, &mut hn[i * h..(i + 1) * h]);
+            }
+            quantifier(&hn, &mut xi, &mut sx, self.act_levels, self.act_thresh);
+            Self::flux_lot(&mut self.trace, &mut self.flux_force, j0,
+                           1000, l, t, &mut xi, &mut sx, h);
+            if let Some(moe) = lay.moe.as_ref() {
+                // ---- MoE PAR LOTS : les jetons qui ont choisi le même expert
+                // sont traités ensemble, donc la matrice de l'expert est lue une
+                // fois pour le groupe au lieu d'une fois par jeton.
+                let ne = self.cfg.n_expert;
+                let k = if
+… [547 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && awk 'NR>=2850 && NR<=2960 && (/^            } else \\{/ || /^            \\}/ || /^        \\}/ || /wdown/ || /^            if let Some/)' drave-core/src/model.rs | head; echo \"=== avec numéros ===\"; grep -n \"^            } else { … [144 caractères tronqués]`
+
+  ```
+} else {
+                    let d8 = self.layers[l].wdown.d.as_ref().expect("projection dense requise");
+            }
+        }
+        }
+=== avec numéros ===
+2925:            } else {
+2954:            }
+2956:        }
+  ```
+
+### 🤖 Assistant
+
+⏵ Je vérifie si les tenseurs préfixés sont bien trouvés par le chargeur.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && A=/home/stephane/FastNVMe/artefacts/modeles-optimises/qwen3-30b-8clusters; ./drave-core/target/release/drave $A --tensors 2>&1 | grep -E \"cl0/blk.0.ffn|cl7/blk.47.ffn|blk.0.ffn_gate_inp\" | head -6; echo \"=== config moe du diag === … [106 caractères tronqués]`
+
+  ```
+F32      blk.0.ffn_gate_inp.weight              [128, 2048] · 0.3 M poids · fichier 0
+  Q6_K     cl0/blk.0.ffn_down_exps.weight         [16, 2048, 768] · 25.2 M poids · fichier 1
+  Q4_K     cl0/blk.0.ffn_gate_exps.weight         [16, 768, 2048] · 25.2 M poids · fichier 1
+  Q4_K     cl0/blk.0.ffn_up_exps.weight           [16, 768, 2048] · 25.2 M poids · fichier 1
+  Q6_K     cl7/blk.47.ffn_down_exps.weight        [16, 2048, 768] · 25.2 M poids · fichier 8
+  Q4_K     cl7/blk.47.ffn_gate_exps.weight        [16, 768, 2048] · 25.2 M poids · fichier 8
+=== config moe du diag ===
+[config] 48 couches, hidden 2048 · moe 
+[config] puits appris sur 0/48 couches · n_rot 128 · ffn 6144 · experts 128
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nlignes = open('drave-core/src/model.rs').read().split('\\n')\n# Suivre l'imbrication depuis la ligne 2788 (1-based) pour trouver le `else` de 2925.\nprof = 0\ndepart = 2788 - 1\nfor i in range(depart, 2960):\n    l  … [326 caractères tronqués]`
+
+  ```
+2788 prof  0-> 1 |             if let Some(moe) = lay.moe.as_ref() {
+ 2920 prof  3-> 2 |                     }
+ 2921 prof  2-> 1 |                 }
+ 2922 prof  1-> 2 |                 for i in 0..t {
+ 2923 prof  2-> 2 |                     for oo in 0..h { x[i * h + oo] = o[i * h + oo] + down[i * 
+ 2924 prof  2-> 1 |                 }
+ 2925 prof  1-> 1 |             } else {
+ 2926 prof  1-> 1 |                 // ---- FFN DENSE PAR LOTS
+ 2927 prof  1-> 1 |                 for (pj, dst, taille) in [(&lay.wgate, &mut gate, self.cfg.ffn
+ 2928 prof  1-> 2 |                                           (&lay.wup, &mut up, self.cfg.ffn)] {
+ 2929 prof  2-> 3 |                     if let Some(d8) = pj.d.as_ref() {
+ 2930 prof  3-> 3 |                         self.pool.gemm_dense_i8(d8, &xi, t, &sx, &mut yl[..d8.
+ 2954 prof  1-> 0 |             }
+ 2956 prof  0->-1 |         }
+  ```
+
+### 🤖 Assistant
+
+⏵ Test décisif : le chemin par lots plante-t-il aussi sur le modèle d'origine ?
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && nohup bash -c 'timeout 1800 ./drave-core/target/release/drave /home/stephane/Data13TB/stephane/modeles/gguf/Qwen3-30B-A3B-Instruct-2507-Q4_K_M.gguf --ppl /tmp/ids_qwen.txt --ctx 64 --limit 8 --dense --threads 6 --lot 8 > /tmp/lot_ori … [221 caractères tronqués]`
+
+  ```
+[attention] QT_IM_SWITCHER est l'ancien nom d'une variable d'environnement : elles s'appellent maintenant DRAVE_* (voir docs/histoire.md). Rien n'a été appliqué.
+/tmp/ids_qwen.txt : 8 tokens, fenêtres de 64
+--- épreuve ---
+origine   :
+  ```
+
+- **bash** `{"command": "sleep 60; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"--- lot origine ---\"; tail -5 /tmp/lot_origine.log; echo \"--- épreuve clusters ---\"; cat /tmp/preuve_clusters.log; echo \"--- gpt-oss ---\"; tail -3 /tmp/oss_diag.log", "description": "Wait and check all three job … [3 caractères tronqués]`
+
+  ```
+(no output)
+[timed out after 60000ms]
+[killed by signal: SIGTERM]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"--- lot origine ---\"; tail -4 /tmp/lot_origine.log 2>/dev/null; echo \"--- épreuve clusters ---\"; cat /tmp/preuve_clusters.log 2>/dev/null; echo \"--- gpt-oss ---\"; tail -3 /tmp/oss_diag.log 2>/dev/null", "description": "Ch … [14 caractères tronqués]`
+
+  ```
+--- lot origine ---
+[attention] QT_IM_SWITCHER est l'ancien nom d'une variable d'environnement : elles s'appellent maintenant DRAVE_* (voir docs/histoire.md). Rien n'a été appliqué.
+/tmp/ids_qwen.txt : 8 tokens, fenêtres de 64
+--- épreuve clusters ---
+origine   : --- gpt-oss ---
+[attention] QT_IM_SWITCHER est l'ancien nom d'une variable d'environnement : elles s'appellent maintenant DRAVE_* (voir docs/histoire.md). Rien n'a été appliqué.
+/tmp/ids_oss.txt : 32 tokens, fenêtres de 256
+  ```
+
+### 🤖 Assistant
+
+⏵ Les trois chargements se disputent le disque. J'analyse le chargement des couches pendant ce temps.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '1555,1590p' drave-core/src/model.rs", "description": "Read layer loading for MoE"}`
+
+  ```
+// Seuil de bascule : mesuré au protocole apparié (`--depuis`,
+                // mêmes 512 jetons notés) à 5 120 jetons — RoPE simple **9,6986**
+                // contre **1 269,1777** en interpolation seule — puis à 16 384 :
+                // **35,18** contre **1 133,02**. L'interpolation n'a JAMAIS gagné
+                // sur l'étendue mesurée (128 → 16 384), et l'écart se creuse avec
+                // la longueur. Le seuil passe donc à 4 × la longueur déclarée
+                // (16 384 pour gpt-oss, la plus grande longueur mesurée) : elle ne
+                // s'active plus là où on sait qu'elle nuit. Au-delà, extrapolation
+                // non mesurée — le corpus disponible s'arrête à 17 k jetons.
+                match declare {
+                    Some(y) if toujours => Some(y),
+                    Some(y) if !jamais && ctx as f32 > y.3 * 4.0 => Some(y),
+                    _ => None,
+                }
+            },
+        };
+
+        let cfg = {
+            let mut c = cfg;
+            if c.head_dim == 0 { c.head_dim = c.hidden / c.n_head.max(1); }
+            c
+        };
+        assert!(cfg.head_dim > 0, "dimension de tête indéterminée");
+        assert!(cfg.head_
+… [882 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '1590,1615p' drave-core/src/model.rs; echo \"--- LOG ---\"; tail -3 /tmp/lot_origine.log; cat /tmp/preuve_clusters.log", "description": "Read moe assignment in Layer construction"}`
+
+  ```
+wv: Proj::load(&g, &p("attn_v.weight"), Some(&p("attn_v.bias")), dense || q4 != 0, auto, keep, q4 & 2 != 0, b6 & 2 != 0),
+                // gpt-oss porte un biais sur la projection de sortie
+                // (`attention_bias = true` dans sa config : Q, K, V **et** O).
+                // Le passer à `None` l'ignorait silencieusement — un décalage
+                // constant ajouté à chaque couche, donc amplifié 36 fois.
+                wo: Proj::load(&g, &p("attn_output.weight"), Some(&p("attn_output.bias")), dense || q4 != 0, auto, keep, q4 & 2 != 0, b6 & 2 != 0),
+                // gpt-oss nomme `post_attention_norm` la normale d'entrée du
+                // FFN ; c'est le même tenseur sous un autre nom.
+                ffn_norm: if g.tensor(&p("ffn_norm.weight")).is_some() {
+                    g.dequant(&p("ffn_norm.weight"))
+                } else {
+                    g.dequant(&p("post_attention_norm.weight"))
+                },
+                q_norm: if g.tensor(&p("attn_q_norm.weight")).is_some() {
+                    Some(g.dequant(&p("attn_q_norm.weight"))) } else { None },
+                k_norm: if g.tensor(&p("attn_k_norm.weight")).is_some() {
+                    S
+… [1059 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ J'ajoute un compteur de couches MoE chargées pour trancher, et je relance le diagnostic.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n '\\[config\\] .* couches, hidden' drave-core/src/main.rs drave-core/src/model.rs | head -3; grep -n \"couches, hidden\" drave-core/src/*.rs | head -3", "description": "Find the config display line"}`
+
+  ```
+drave-core/src/model.rs:1646:        println!("[config] {} couches, hidden {} · {}{}{}{}{}{}",
+drave-core/src/model.rs:1646:        println!("[config] {} couches, hidden {} · {}{}{}{}{}{}",
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '1640,1660p' drave-core/src/model.rs", "description": "Read the config print block"}`
+
+  ```
+pool.threads());
+        let n_layer = cfg.n_layer;
+        let sinks_vus = layers.iter().filter(|l| l.sinks.is_some()).count();
+        // Trace de configuration : une ligne qui dit quelles particularités
+        // d'architecture ont été reconnues. Sans elle, on débogue à l'aveugle
+        // sur un modèle de 60 Go.
+        println!("[config] {} couches, hidden {} · {}{}{}{}{}{}",
+                 cfg.n_layer, cfg.hidden,
+                 if cfg.yarn.is_some() { "yarn " } else { "" },
+                 if cfg.ffn_act_oss { "activation-oss " } else { "" },
+                 if cfg.routeur_topk_softmax { "routeur-topk " } else { "" },
+                 if cfg.n_expert > 0 { "moe " } else { "" },
+                 if cfg.n_expert > 0 { "" } else { "" },
+                 if cfg.head_dim > 0 { "" } else { "" });
+        println!("[config] puits appris sur {sinks_vus}/{n_layer} couches · n_rot {} · ffn {} · experts {}{}",
+                 if cfg.n_rot == 0 { cfg.head_dim } else { cfg.n_rot },
+                 cfg.ffn, cfg.n_expert,
+                 cfg.yarn.map(|y| format!(" · yarn ×{}", y.0)).unwrap_or_default());
+        let tete = if g.tensor("output.weight").is_some() { "output.weight"
+… [148 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np = 'drave-core/src/model.rs'\ns = open(p).read()\ns = s.replace('''        let sinks_vus = layers.iter().filter(|l| l.sinks.is_some()).count();''',\n'''        let sinks_vus = layers.iter().filter(|l| l.sinks.is_so … [1375 caractères tronqués]`
+
+  ```
+(no output)
+[timed out after 60000ms]
+[killed by signal: SIGTERM]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -E \"config|panicked|perplex\" /tmp/count_moe.log; echo \"--- autres jobs ---\"; tail -2 /tmp/lot_origine.log; cat /tmp/preuve_clusters.log", "description": "Read MoE counter output"}`
+
+  ```
+--- autres jobs ---
+[attention] QT_IM_SWITCHER est l'ancien nom d'une variable d'environnement : elles s'appellent maintenant DRAVE_* (voir docs/histoire.md). Rien n'a été appliqué.
+/tmp/ids_qwen.txt : 8 tokens, fenêtres de 64
+origine   :
+  ```
+
+### 🤖 Assistant
+
+⏵ Trop de jobs se disputent le disque : je sérialise. D'abord le diagnostic MoE, seul.
+
+- **bash** `{"command": "pkill -f \"preuve_clusters\" ; pkill -f \"lot_origine\" ; pkill -f \"oss_diag\" ; pkill -x drave; pkill -f \"timeout 5400 ./drave-core\" ; sleep 3; pgrep -af drave | head -3; echo \"--- relance count_moe seul ---\"; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && nohup bash -c './ … [398 caractères tronqués]`
+
+  ```
+(no output)
+[killed by signal: SIGTERM]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -E \"config|panicked|perplex|EXIT\" /tmp/count_moe.log; echo \"=== procs ===\"; pgrep -c drave", "description": "Check diagnostic result"}`
+
+  ```
+=== procs ===
+3
+  ```
+
+- **bash** `{"command": "sleep 45; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -E \"config|panicked|perplex|EXIT\" /tmp/count_moe.log", "description": "Wait for diagnostic to finish"}`
+
+  ```
+(no output)
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "sleep 50; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat /tmp/count_moe.log | grep -vE \"^\\[attention\\]\" | head -12", "description": "Read diagnostic log"}`
+
+  ```
+/tmp/ids_qwen.txt : 8 tokens, fenêtres de 64
+  ```
+
+- **bash** `{"command": "pgrep -af \"drave|preuve|lot_origine|oss_diag\" | head -6; echo \"--- io ---\"; cat /proc/loadavg; sleep 40; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -vE \"^\\[attention\\]\" /tmp/count_moe.log | head -10", "description": "Check competing processes and load"}`
+
+  ```
+2885470 bash -c timeout 5400 ./drave-core/target/release/drave /home/stephane/Data13TB/stephane/modeles/gguf/gpt-oss-120b-MXFP4.gguf --ppl /tmp/ids_oss.txt --ctx 256 --dense --threads 16 --limit 32 > /tmp/oss_diag.log 2>&1; echo "EXIT $?" >> /tmp/oss_diag.log
+2885472 timeout 5400 ./drave-core/target/release/drave /home/stephane/Data13TB/stephane/modeles/gguf/gpt-oss-120b-MXFP4.gguf --ppl /tmp/ids_oss.txt --ctx 256 --dense --threads 16 --limit 32
+2885473 ./drave-core/target/release/drave /home/stephane/Data13TB/stephane/modeles/gguf/gpt-oss-120b-MXFP4.gguf --ppl /tmp/ids_oss.txt --ctx 256 --dense --threads 16 --limit 32
+2886342 timeout 5400 ./drave-core/target/release/drave /home/stephane/Data13TB/stephane/modeles/gguf/Qwen3-30B-A3B-Instruct-2507-Q4_K_M.gguf --ppl /tmp/ids_qwen.txt --ctx 128 --limit 128 --dense --threads 12 --lot 1
+2886345 ./drave-core/target/release/drave /home/stephane/Data13TB/stephane/modeles/gguf/Qwen3-30B-A3B-Instruct-2507-Q4_K_M.gguf --ppl /tmp/ids_qwen.txt --ctx 128 --limit 128 --dense --threads 12 --lot 1
+2888562 bash -c timeout 1800 ./drave-core/target/release/drave /home/stephane/Data13TB/stephane/modeles/gguf/Qwen3-30B-A3B-Instruct-2507-Q4_K_M.gguf --ppl
+… [219 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Les anciens processus survivent au pkill ; je les tue par PID.
+
+- **bash** `{"command": "for p in $(pgrep -f \"drave-core/target/release/drave\"); do kill -9 $p 2>/dev/null; done; sleep 3; pgrep -af \"drave-core\" | head -3; echo \"--- reste ---\"; pgrep -c -f drave-core; echo \"--- relance count_moe ---\"; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && nohup bash -c … [406 caractères tronqués]`
+
+  ```
+(no output)
+[killed by signal: SIGKILL]
+  ```
+
+- **bash** `{"command": "pgrep -af \"drave-core\" | head -3; echo \"=== log ===\"; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -E \"config|panicked|perplex|EXIT\" /tmp/count_moe.log 2>/dev/null", "description": "Check state after kill"}`
+
+  ```
+2891834 bash -c pgrep -af "drave-core" | head -3; echo "=== log ==="; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -E "config|panicked|perplex|EXIT" /tmp/count_moe.log 2>/dev/null
+=== log ===
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/diag_moe.sh <<'EOF'\n#!/bin/bash\ncd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\nA=/home/stephane/FastNVMe/artefacts/modeles-optimises/qwen3-30b-8clusters\n./drave-core/target/release/drave \"$A\" --ppl /tmp/ids_qwen. … [320 caractères tronqués]`
+
+  ```
+[config] cache KV : 32 bits, 0.01 Go pour 64 jetons
+[config] 48 couches, hidden 2048 · moe 
+[config] mélanges d'experts chargés : 0/48 couches
+[config] puits appris sur 0/48 couches · n_rot 128 · ffn 6144 · experts 128
+[config] rotation : RoPE simple (le modèle ne déclare pas YaRN)
+thread 'main' (2891866) panicked at src/model.rs:2015:29:
+  ```
+
+### 🤖 Assistant
+
+⏵ « 0/48 couches » : le mapping n'est pas publié. Je vérifie `clusters.rs`.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"ACTIF\" drave-core/src/clusters.rs; echo \"=== fin de ouvrir_interne ===\"; grep -n \"fn ouvrir_interne\" -A 60 drave-core/src/clusters.rs | tail -25", "description": "Check whether ACTIF is published"}`
+
+  ```
+124:static ACTIF: std::sync::OnceLock<Mapping> = std::sync::OnceLock::new();
+128:pub fn actif() -> Option<&'static Mapping> { ACTIF.get() }
+181:    let _ = ACTIF.set(Mapping {
+=== fin de ouvrir_interne ===
+188-        Gguf::open_meta_avec_prefixes(&chemins, &refs)?
+189-    } else {
+190-        Gguf::open_avec_prefixes(&chemins, &refs)?
+191-    };
+192-    Ok(Modele { gguf, mapping, chemins })
+193-}
+194-
+195-#[cfg(test)]
+196-mod tests {
+197-    use super::*;
+198-
+199-    fn ecrire(nom: &str, contenu: &str) -> PathBuf {
+200-        let p = std::env::temp_dir().join(nom);
+201-        std::fs::write(&p, contenu).unwrap();
+202-        p
+203-    }
+204-
+205-    #[test]
+206-    fn mapping_lu_et_traduit() {
+207-        let p = ecrire("drave_mapping_ok.tsv", "\
+208-# drave-clusters-mapping v1
+209-# n_couches 2 · n_experts 4 · clusters 2 · experts_par_cluster 2
+210-# couche\tlocal\tglobal\tcluster
+211-0\t0\t3\t0
+212-0\t1\t1\t0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '170,195p' drave-core/src/clusters.rs", "description": "Read the publish block"}`
+
+  ```
+if clusters.len() != mapping.n_clusters {
+        return Err(std::io::Error::new(std::io::ErrorKind::InvalidData, format!(
+            "{} fichiers de cluster pour {} annoncés dans mapping.tsv",
+            clusters.len(), mapping.n_clusters)));
+    }
+    let mut chemins: Vec<PathBuf> = vec![commun];
+    chemins.extend(clusters.iter().cloned());
+    let mut prefixes: Vec<String> = vec![String::new()];
+    prefixes.extend((0..clusters.len()).map(|c| format!("cl{c}/")));
+    // Le mapping est publié AVANT que les poids ne soient lus : c'est lui qui
+    // dit à `charger_moe` où sont les experts.
+    let _ = ACTIF.set(Mapping {
+        n_couches: mapping.n_couches, n_experts: mapping.n_experts,
+        n_clusters: mapping.n_clusters, par_cluster: mapping.par_cluster,
+        local: mapping.local.clone(),
+    });
+    let refs: Vec<&str> = prefixes.iter().map(String::as_str).collect();
+    let gguf = if meta_seule {
+        Gguf::open_meta_avec_prefixes(&chemins, &refs)?
+    } else {
+        Gguf::open_avec_prefixes(&chemins, &refs)?
+    };
+    Ok(Modele { gguf, mapping, chemins })
+}
+
+#[cfg(test)]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '100,145p' drave-core/src/model.rs", "description": "Read actual charger_moe code"}`
+
+  ```
+let map = clusters_actifs();
+    // Un tenseur d'experts est soit en clair dans le fichier ouvert, soit dans
+    // les fichiers de clusters sous le préfixe `cl{c}/`. Dans le second cas
+    // chaque fichier ne porte QUE ses experts locaux : la dimension d'expert
+    // du tenseur vaut `experts_par_cluster`, pas `n_expert`.
+    let vues = |s: &str| -> Option<Vec<Vue4>> {
+        let base = p(s);
+        let noms: Vec<String> = match map {
+            _ if g.tensor(&base).is_some() => vec![base],
+            Some(m) => (0..m.n_clusters).map(|c| format!("cl{c}/{base}"))
+                          .filter(|n| g.tensor(n).is_some()).collect(),
+            None => return None,
+        };
+        if noms.is_empty() { return None; }
+        let mut out = Vec::with_capacity(noms.len());
+        for nom in &noms {
+            let t = g.tensor(nom)?;
+            if t.dims.len() < 3 { return None; }
+            let ligne_experts = t.dims[0] as usize;
+            if ligne_experts != n_expert {
+                // Un fichier de cluster : sa dimension locale doit être celle
+                // annoncée par le mapping, sinon les lignes seraient lues au
+                // hasard.
+                matc
+… [1176 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ J'affiche l'état du mapping au chargement pour trancher définitivement.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np = 'drave-core/src/model.rs'\ns = open(p).read()\ns = s.replace('''        if cfg.n_expert > 0 {\n            println!(\"[config] mélanges d'experts chargés : {moe_vus}/{n_layer} couches\");\n        }''',\n'''     … [749 caractères tronqués]`
+
+  ```
+(no output)
+[timed out after 60000ms]
+[killed by signal: SIGTERM]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -E \"config|panicked\" /tmp/count_moe.log | head -5", "description": "Read mapping diagnostic"}`
+
+  ```
+[config] cache KV : 32 bits, 0.01 Go pour 64 jetons
+[config] 48 couches, hidden 2048 · moe 
+[config] mélanges d'experts chargés : 0/48 couches · mapping actif : 8 clusters × 16 experts
+[config] puits appris sur 0/48 couches · n_rot 128 · ffn 6144 · experts 128
+[config] rotation : RoPE simple (le modèle ne déclare pas YaRN)
+  ```
+
+### 👤 Utilisateur
+
+Background subagent 8a0aa6e5-1a5e-450f-a6ea-070eed249d63 finished and will do no further work unless you send it more.
+Its closing message:
+⏵ Rédaction du rapport adverse et envoi au parent
+
+Review complete. Here is the report.
+
+---
+
+# Rapport adverse — commit 3eb0af7 (lecteur multi-fichiers + clusters)
+
+**État vérifié** : `gguf.rs` md5 `10b97dcd…`, `clusters.rs` `35cbad5f…` (identiques au commit) ; `model.rs` `d6b11c43…` **modifié après le commit** (+9 lignes non commitées vers 1640, un diagnostic `mélanges d'experts chargés`). Les numéros de ligne `model.rs` ci-dessous sont ceux de l'arbre de travail actuel ; `gguf.rs`/`clusters.rs` sont ceux du commit.
+**Vérifié empiriquement** : `cargo test --release` → **24 passed** ; inventaire DeepSeek → **3 fichiers · 1328 tenseurs · 86.90 Go · 54 ms**, répartition **0 / 784 / 544**, total disque **86.90 Go** — les mesures du sprint sont exactes.
+
+## 1. Décalage des données — **OUI, tous les chemins sont corrects**
+Aucun chemin ne lit plus au début du fichier : `tbuf` (`gguf.rs:560-567`), `octets_de` (`450-452`), `data_ptr` (`763-766`, passe par `tbuf`), `q8_dot_at` (`820` : `&self.bufs[v.fichier][self.starts[v.fichier]..]`), `q8_dot_avx2` (`934`, idem), `q8_blocks`/`q4k_blocks`/`q6k_blocks`/`mxfp4_blocks`/`q4_blocks` (`774-814`, tous `self.tbuf(t)`), `dequant` (`959`), `raw_levels` (`620`), `row_f32` (`653`).
+Deux nuances, pas des défauts : `Q8View.base` est un offset **local au fichier** (`758`) — correct uniquement parce que les deux `q8_dot_*` tranchent `starts[...]` eux-mêmes ; tout nouveau lecteur de `Q8View` doit le refaire. Et `starts` des fichiers 2..N est calculé avec l'`alignment` du **premier fichier porteur de métadonnées** (`272`, `435`), pas du fichier concerné (`cosmétique` : tous les découpages réels partagent la même valeur).
+
+## 2. `octets_tensor` — **OUI, juste pour tous les types listés**
+Confronté à l'amont ggml (`ggml-common.h` `static_assert(sizeof(block…))` + table `type_size` de `ggml.c`) : Q4_K 144/256 ✓, Q6_K 210/256 ✓, Q8_0 34/32 ✓, MXFP4 17/32 ✓, **IQ1_M 56/256** ✓ (`sizeof(block_iq1_m) == QK_K/8+QK_K/16+QK_K/32`), BF16 2/1 ✓, F32 4/1 ✓, plus Q4_0/Q4_1/Q5_0/Q5_1/Q8_1/Q2_K/Q3_K/Q5_K/Q8_K/IQ2_XXS/IQ2_XS/IQ2_S/IQ3_XXS/IQ3_S/IQ1_S/IQ4_NL/IQ4_XS/TQ1_0/TQ2_0/NVFP4 (36/64) ✓. Aucun type mal apparié.
+**Défaut (gênant)** : `_ => return 0,` (`gguf.rs:477`) — un type inconnu est compté **0 octet en silence**, exactement le mécanisme de l'incident iq1_m. Les types 41 (`Q1_0`) et 42 (`Q2_0`), ajoutés à ggml (`ggml.h:431-432`), tombent dedans. Correctif minimal : rendre `Option<u64>`/paniquer avec le numéro de type. À noter aussi : le commentaire `gguf.rs:461` renvoie à `docs/format-clusters.md`, qui **ne contient pas** la table.
+
+## 3. `chemins_du_modele` — 2 défauts
+- Deux modèles dans un dossier (`modele-…` + `autre-…`) : **OK**, le filtre `pref == prefixe && tot == total` (`330-331`) écarte l'autre ; `total == 1` : **OK** ; préfixe contenant `-of-` : **OK** (`rsplit_once` prend le dernier `-of-`) — vérifié en exécutant le binaire sur des fichiers factices dans /tmp.
+- **Défaut A (gênant)** : chemin **sans dossier** (`cwd$ drave x-00001-of-00002.gguf`) → `path.parent()` vaut `Some("")` (`325`), `read_dir("")` échoue → panic `No such file or directory` alors que le fichier existe (reproduit ; avec `./x-…` ça passe). Correctif : `.filter(|d| !d.as_os_str().is_empty())` avant `unwrap_or(Path::new("."))`.
+- **Défaut B (gênant)** : un **fichier unique** nommé `essai-3-of-8.gguf` est pris pour un shard → `open_auto` échoue en dur (`modèle découpé incomplet dans /tmp : 8 shards annoncés, 1 présents`, reproduit), alors que `shard_de` promet l'inverse (`298-301`). Correctif : exiger un numéro zero-paddé (largeur ≥ 5, comme llama.cpp) ou retomber sur l'ouverture mono-fichier si le fichier demandé existe.
+
+## 4. Mapping incomplet — **OUI, accepté en silence ; incohérent avec `charger_moe`**
+`local` est initialisé à `-1` (`clusters.rs:85`) et **jamais** contrôlé en complétude ; un `mapping.tsv` réduit à ses commentaires passe (tous les experts à -1), `Moe::ou` rend toujours `None`, les deux sites font `continue` (`model.rs:2873`, `3681`) : la couche MoE ne contribue plus rien, sans erreur ni message. Le test `mapping_partiel_est_permis` (`clusters.rs:249-259`) l'assume. Mais rien ne distingue « ce nœud ne porte pas cet expert » (voulu) d'« un mapping tronqué » ; le seul diagnostic, `presents()` (`clusters.rs:116`), n'est appelé que par des tests (`227`, `255`). Correctif minimal : à l'ouverture, imprimer `presents(l)/n_experts` par couche et refuser (ou exiger un drapeau `--nœud-partiel`) quand l'assemblage est complet.
+**Défaut lié (gênant, bloquant si atteint)** : l'identifiant de cluster du TSV est utilisé comme **index direct** dans `Vec<Vue4>` (`model.rs:110`, `278`), mais le `Vec` est **compacté** par `.filter(|n| g.tensor(n).is_some())` (`110`) ; le contrôle `150` ne compare que gate/up/down entre eux, **jamais** à `m.n_clusters`. Un fichier de cluster sans le tenseur d'une couche décale silencieusement tous les index suivants (mêmes formes → aucune erreur) ; pire, si `ligne_experts == n_expert` (fichiers produits par `--mode couches`, qui gardent tous les experts), la branche `110` est acceptée et `loc` (< `par_cluster`) indexe le mauvais expert **sans bruit**. Correctifs : exiger `noms.len() == m.n_clusters`, et en mode clusters refuser `ligne_experts != par_cluster`.
+
+## 5. `Moe::ou` et `n_expert_global` — **OUI, valeur attendue**
+`n_expert_global = cfg.n_expert` (`model.rs:186`), lu depuis `expert_count` (`1491`) dans les métadonnées **du premier fichier qui en porte** (`gguf.rs:257-271`), qui est `commun.gguf` (`clusters.rs:175`) — le convertisseur y laisse le KV d'origine et ne réduit `expert_count` que dans les fichiers de cluster (`tools/convertir_clusters.py:372-374` vs `405-407`). Vérifié sur le vrai modèle : `expert_count 256`. La borne `e < n_expert_global` est donc **du code mort** : les deux sites itèrent `0..cfg.n_expert` (`2807`, `3630`), et avec `local == None` la `Vec` a exactement 1 élément (seule la branche `vec![base]` est atteignable), donc `(0, e)` est toujours valide. Aucun défaut ici. Nuance `cosmétique` : en clusters, le chemin GPU MXFP4 est désactivé en silence (`3695`, `&& moe.local.is_none()`) — le modèle tourne sur CPU sans le dire.
+
+## 6. Tri des clusters — **NON, il est faux dès 100 clusters**
+`clusters.sort()` (`clusters.rs:164`) est lexicographique : `cluster-100.gguf` arrive en position **11**, `cluster-10` en 10, `cluster-99` en 127 (mesuré : **117 des 128** positions diffèrent). Les préfixes sont attribués par **position** (`178` : `cl{c}/` avec `c` = rang) alors que `Mapping::ou` rend l'identifiant du TSV (`102`, `112`) → chaque expert est lu dans le mauvais fichier, **sans erreur** (formes identiques), et aucun test n'ouvre un dossier de clusters. Le nommage du convertisseur (`cluster-{c:02d}`) ne protège pas au-delà de 99 ; un nom non paddé casse dès 10. Gravité : **bloquant au-delà de 99 clusters**, latent sinon (défaut gênant aujourd'hui). Correctif minimal : trier par l'entier extrait de `cluster-<n>.gguf` et refuser si les numéros ne sont pas exactement `0..len-1`.
+
+## 7. Erreurs avalées — oui, mais pas sur le chemin des poids
+- `gguf.rs:437` : en mode en-tête seul, un doublon de nom est **silencieusement ignoré sans comparer dims/ttype**, alors que `open_avec_prefixes` refuse les divergents (`276-288`) → l'inventaire `--tensors` peut sous-compter sans le dire (`gênant`).
+- `gguf.rs:477` (type inconnu → 0 octet) et `gguf.rs:452` (`.min(b.len())`, tranche tronquée silencieuse) — même famille (`gênant`).
+- `gguf.rs:272` et `435` : `meta.as_ref().unwrap()` **panique** si le premier fichier ne porte pas `general.architecture`, ce qui rend l'erreur propre de `292`/`441` **inatteignable** et contredit le contrat documenté (« les métadonnées sont prises au premier fichier qui en porte », `219-222`). Reproduit : deux GGUF factices, le premier sans KV → `panicked at src/gguf.rs:435: unwrap() on None` (`gênant`).
+- `clusters.rs:181` `let _ = ACTIF.set(...)` : un second modèle ouvert dans le même processus garde le premier mapping en silence (`cosmétique`, le processus ne sert qu'un modèle) ; `clusters.rs:56` `unwrap_or(0)` sur l'en-tête retombe en silence sur `n_experts/n_clusters` (`84`) (`cosmétique`) ; `gguf.rs:526` `assert!(version >= 2)` panique sur un fichier corrompu au lieu de rendre `Err` (`cosmétique`, préexistant).
+
+## 8. `multi_fichiers_egale_mono_fichier` — **OUI, il peut passer sur du code faux**
+Il ne fabrique que des tenseurs **F32** (`gguf.rs:1112`) et ne compare que via `dequant` : tout le chemin quantifié (`q8_dot_at`/`avx2`, `q4k/q6k/mxfp4/q8_blocks`, `raw_levels`, `Vue4`) lui échappe — c'est écrit noir sur blanc dans le sprint (`73-79`) pour le défaut qui a mis la perplexité à NaN. Autres angles morts : `open_avec_prefixes` (la route des clusters) n'est jamais appelé par un test ; `open_multi_meta` — le chemin où le défaut (b) a été trouvé — **n'a aucun test** ; `chemins_du_modele`/`open_auto` non plus ; `octets_poids()` compare la **même** fonction des deux côtés, donc une erreur de table s'annule ; et deux fichiers aux octets identiques (cas réel des petits tenseurs dupliqués dans les shards) rendraient une inversion d'origine invisible — le test l'évite exprès en donnant des valeurs distinctes par fichier.
+
+## Mesures du sprint : vérifiées / non vérifiées
+Vérifiés : 24 tests verts ; DeepSeek 3 shards, 1328 tenseurs, 86.90 Go annoncés = 86.90 Go sur disque, 54 ms, 0/784/544 ; l'histogramme des types du modèle réel (F32, Q8_0, Q5_K, Q6_K, IQ1_M, BF16, IQ2_XXS, IQ3_XXS, I32, Q4_K, MXFP4) ne contient **aucun type hors table**, ce qui recoupe Q2. Non vérifiables ici : les 27,8 s de chargement en clusters, la porte 19,3885, et l'inventaire Qwen3-30B en clusters — **aucun dossier de clusters n'existe plus sur disque** (`commun.gguf`/`mapping.tsv`/`cluster-*.gguf` introuvables sous `modeles/`).
+
+**Ce que je n'ai pas trouvé** : aucune erreur de décalage restante (Q1), aucune entrée fausse dans la table ggml (Q2), aucun défaut sur `n_expert_global` (Q5).
+
+### 🤖 Assistant
+
+⏵ Le mapping est actif mais 0/48 MoE : j'instrumente `charger_moe` pour rendre le silence visible.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date +%H:%M && sed -n '96,100p' drave-core/src/model.rs", "description": "Check time and charger_moe head"}`
+
+  ```
+11:27
+/// contigu, et le moteur n'a besoin que d'un pointeur et d'un pas.
+fn charger_moe(g: &Gguf, l: usize, n_expert: usize) -> Option<Moe> {
+    if n_expert == 0 { return None; }
+    let p = |s: &str| format!("blk.{l}.{s}");
+    let map = clusters_actifs();
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np = 'drave-core/src/model.rs'\ns = open(p).read()\ns = s.replace('''    let vues = |s: &str| -> Option<Vec<Vue4>> {\n        let base = p(s);\n        let noms: Vec<String> = match map {\n            _ if g.tensor(& … [2942 caractères tronqués]`
+
+  ```
+error[E0382]: borrow of moved value: `base`
+   --> src/model.rs:114:69
+    |
+106 |         let base = p(s);
+    |             ---- move occurs because `base` has type `String`, which does not implement the `Copy` trait
+--
+error: could not compile `drave-core` (bin "drave") due to 1 previous error; 12 warnings emitted
+[config] cache KV : 32 bits, 0.01 Go pour 64 jetons
+[config] 48 couches, hidden 2048 · moe 
+[config] mélanges d'experts chargés : 0/48 couches · mapping actif : 8 clusters × 16 experts
+[config] puits appris sur 0/48 couches · n_rot 128 · ffn 6144 · experts 128
+[config] rotation : RoPE simple (le modèle ne déclare pas YaRN)
+thread 'main' (2893235) panicked at src/model.rs:2021:29:
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np = 'drave-core/src/model.rs'\ns = open(p).read()\ns = s.replace('''            eprintln!(\"[moe] couche {l} : aucun fichier ne porte « {base} » (essayé {base} et cl0..cl{})\",\n                      map.map(|m| m.n … [521 caractères tronqués]`
+
+  ```
+error[E0382]: borrow of moved value: `base`
+   --> src/model.rs:114:69
+    |
+106 |         let base = p(s);
+    |             ---- move occurs because `base` has type `String`, which does not implement the `Copy` trait
+--
+[config] cache KV : 32 bits, 0.01 Go pour 64 jetons
+[config] 48 couches, hidden 2048 · moe 
+[config] mélanges d'experts chargés : 0/48 couches · mapping actif : 8 clusters × 16 experts
+[config] puits appris sur 0/48 couches · n_rot 128 · ffn 6144 · experts 128
+[config] rotation : RoPE simple (le modèle ne déclare pas YaRN)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '104,118p' drave-core/src/model.rs", "description": "Inspect the borrow error site"}`
+
+  ```
+// du tenseur vaut `experts_par_cluster`, pas `n_expert`.
+    let vues = |s: &str| -> Option<Vec<Vue4>> {
+        let base = p(s);
+        let noms: Vec<String> = match map {
+            _ if g.tensor(&base).is_some() => vec![base],
+            Some(m) => (0..m.n_clusters).map(|c| format!("cl{c}/{base}"))
+                          .filter(|n| g.tensor(n).is_some()).collect(),
+            None => { eprintln!("[moe] couche {l} : « {base} » absent et aucun mapping"); return None; }
+        };
+        if noms.is_empty() {
+            eprintln!("[moe] couche {l} : aucun fichier ne porte « {base} » (essayé le nom \
+en clair et cl0..cl{})", map.map(|m| m.n_clusters.saturating_sub(1)).unwrap_or(0));
+            return None;
+        }
+        let mut out = Vec::with_capacity(noms.len());
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -i 's|            _ if g.tensor(&base).is_some() => vec!\\[base\\],|            _ if g.tensor(\\&base).is_some() => vec![base.clone()],|' drave-core/src/model.rs && cd drave-core && cargo build --release 2>&1 | grep -E \"^error\" … [223 caractères tronqués]`
+
+  ```
+BUILD 0
+[timed out after 60000ms]
+[killed by signal: SIGTERM]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -E \"moe\\]|config|panick\" /tmp/count_moe.log | head -8", "description": "Read instrumented output"}`
+
+  ```
+[moe] couche 0 : aucun fichier ne porte « blk.0.blk.0.ffn_gate_exps.weight » (essayé le nom en clair et cl0..cl7)
+[moe] couche 1 : aucun fichier ne porte « blk.1.blk.1.ffn_gate_exps.weight » (essayé le nom en clair et cl0..cl7)
+[moe] couche 2 : aucun fichier ne porte « blk.2.blk.2.ffn_gate_exps.weight » (essayé le nom en clair et cl0..cl7)
+[moe] couche 3 : aucun fichier ne porte « blk.3.blk.3.ffn_gate_exps.weight » (essayé le nom en clair et cl0..cl7)
+[moe] couche 4 : aucun fichier ne porte « blk.4.blk.4.ffn_gate_exps.weight » (essayé le nom en clair et cl0..cl7)
+[moe] couche 5 : aucun fichier ne porte « blk.5.blk.5.ffn_gate_exps.weight » (essayé le nom en clair et cl0..cl7)
+[moe] couche 6 : aucun fichier ne porte « blk.6.blk.6.ffn_gate_exps.weight » (essayé le nom en clair et cl0..cl7)
+[moe] couche 7 : aucun fichier ne porte « blk.7.blk.7.ffn_gate_exps.weight » (essayé le nom en clair et cl0..cl7)
+  ```
+
+### 🤖 Assistant
+
+⏵ Trouvé : le nom était préfixé deux fois (`blk.0.blk.0.…`). Le message d'erreur l'a révélé.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np = 'drave-core/src/model.rs'\ns = open(p).read()\n# `vues` applique déjà `p()` : lui passer `p(...)` préfixait deux fois.\nfor nom in [\"ffn_gate_exps.weight\", \"ffn_up_exps.weight\", \"ffn_down_exps.weight\"]:\n  … [447 caractères tronqués]`
+
+  ```
+3 appels corrigés
+BUILD 0
+[timed out after 60000ms]
+[killed by signal: SIGTERM]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -E \"moe\\]|config|perplex|panick\" /tmp/count_moe.log | head -8", "description": "Read result after fix"}`
+
+  ```
+[config] cache KV : 32 bits, 0.01 Go pour 64 jetons
+[config] 48 couches, hidden 2048 · moe 
+[config] mélanges d'experts chargés : 48/48 couches · mapping actif : 8 clusters × 16 experts
+[config] puits appris sur 0/48 couches · n_rot 128 · ffn 6144 · experts 128
+[config] rotation : RoPE simple (le modèle ne déclare pas YaRN)
+       7 tokens notés — perplexité cumulée 799.856  (4.4 tok/s)
+=== perplexité 799.8557 sur 7 tokens (0 événements, 1.6 s) ===
+  ```
+
+### 🤖 Assistant
+
+⏵ **48/48 couches MoE chargées.** Je lance l'épreuve appariée origine contre clusters.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/preuve_clusters.sh <<'EOF'\n#!/bin/bash\n# Épreuve décisive : le modèle ÉCLATÉ doit rendre la MÊME perplexité que le\n# modèle d'origine, sur les mêmes jetons, au même contexte.\ncd /home/stephane/Data13TB/stephane/GitHub/ … [859 caractères tronqués]`
+
+  ```
+épreuve lancée
+11:31
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np = 'drave-core/src/clusters.rs'\ns = open(p).read()\ndef rep(a, b):\n    global s\n    assert a in s, f\"ANCRE INTROUVABLE : {a[:70]!r}\"\n    s = s.replace(a, b, 1)\n\n# Q6 de la revue adverse : le tri lexicograph … [2400 caractères tronqués]`
+
+  ```
+tri corrigé
+BUILD 0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np = 'drave-core/src/model.rs'\ns = open(p).read()\ndef rep(a, b):\n    global s\n    assert a in s, f\"ANCRE INTROUVABLE : {a[:70]!r}\"\n    s = s.replace(a, b, 1)\n\nrep('''        let noms: Vec<String> = match map … [4418 caractères tronqués]`
+
+  ```
+ok
+BUILD 0
+test result: ok. 24 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.09s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat /tmp/preuve_clusters.log; echo \"--- proc ---\"; pgrep -c -f \"release/drave\" 2>/dev/null; date +%H:%M", "description": "Check paired proof progress"}`
+
+  ```
+origine   : --- proc ---
+4
+11:33
+  ```
+
+### 🤖 Assistant
+
+⏵ J'applique les autres correctifs de la revue : `unwrap` sur les métadonnées, dossier vide, type inconnu.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np = 'drave-core/src/gguf.rs'\ns = open(p).read()\ndef rep(a, b, n=1):\n    global s\n    assert s.count(a) >= 1, f\"ANCRE INTROUVABLE : {a[:80]!r}\"\n    s = s.replace(a, b, n)\n\n# Q7 (revue) : `meta.as_ref().unwra … [4236 caractères tronqués]`
+
+  ```
+ok
+BUILD 0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat /tmp/preuve_clusters.log; echo \"--- tests ---\"; (cd drave-core && cargo test --release 2>&1 | grep -E \"^test result\"); echo \"--- inventaire deepseek (après correctifs) ---\"; timeout 120 ./drave-core/target/release/drave /ho … [238 caractères tronqués]`
+
+  ```
+origine   : --- tests ---
+test result: ok. 24 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.10s
+--- inventaire deepseek (après correctifs) ---
+deepseek4 · 3 fichiers · 1328 tenseurs · 86.90 Go de poids · en-têtes lus en 1.600845421s
+  fichier 0 :     0 tenseurs · 0.00 Go
+  fichier 1 :   784 tenseurs · 49.97 Go
+  ```
+
+### 🤖 Assistant
+
+⏵ La revue a pointé les angles morts des tests : je les comble (préfixes, méta, shards, type inconnu).
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np = 'drave-core/src/gguf.rs'\ns = open(p).read()\nancre = '''    /// Un même nom dans deux fichiers avec des poids différents est une faute\n    /// d'assemblage : elle doit être refusée, pas départagée en silence.' … [5247 caractères tronqués]`
+
+  ```
+ok
+test result: ok. 27 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.12s
+  ```
+
+### 🤖 Assistant
+
+⏵ Il manque le test le plus important : ouvrir un dossier de clusters complet, de bout en bout.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np = 'drave-core/src/gguf.rs'\ns = open(p).read()\n# Rendre le générateur de GGUF synthétique accessible aux tests de clusters.rs.\ns = s.replace('''#[cfg(test)]\nmod tests {\n    use super::*;\n    use std::io::Writ … [1625 caractères tronqués]`
+
+  ```
+error: unexpected closing delimiter: `}`
+    --> src/gguf.rs:1392:1
+     |
+1116 | mod tests {
+--
+error: could not compile `drave-core` (bin "drave" test) due to 1 previous error
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 4, in <module>
+ValueError: substring not found
+  ```
+
+### 🤖 Assistant
+
+⏵ Mon script a cassé `gguf.rs` ; je répare immédiatement.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cp drave-core/src/gguf.rs /tmp/gguf_casse.rs && grep -n \"pub(crate) use super::tests_synth\" drave-core/src/gguf.rs; grep -n \"Fabrique un GGUF minimal\" drave-core/src/gguf.rs; grep -n \"fn gguf_synth\\|fn ecrire\" drave-core/src/g … [52 caractères tronqués]`
+
+  ```
+1120:    pub(crate) use super::tests_synth::*;
+1170:    fn gguf_synth_q8(nom: &str, n_lignes: usize, n_cols: usize, decalage: i32) -> Vec<u8> {
+1234:    fn ecrire(nom: &str, octets: &[u8]) -> std::path::PathBuf {
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '1112,1125p' drave-core/src/gguf.rs; echo \"...\"; sed -n '1165,1175p' drave-core/src/gguf.rs; echo \"=== fin de fichier ===\"; tail -5 drave-core/src/gguf.rs; wc -l drave-core/src/gguf.rs", "description": "See exact damage"}`
+
+  ```
+}
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use std::io::Write;
+
+    pub(crate) use super::tests_synth::*;
+tensors: &[(&str, Vec<u64>)], depart: usize, valeur0: f32) -> Vec<u8> {
+        let mut b = Vec::new();
+        let mut s = |b: &mut Vec<u8>, v: &str| {
+            b.extend_from_slice(&(v.len() as u64).to_le_bytes());
+            b.extend_from_slice(v.as_bytes());
+...
+
+    /// GGUF synthétique Q8_0 : blocs de 34 octets (échelle f16 + 32 niveaux
+    /// i8). Les niveaux sont `(i % 200) - 100` et l'échelle vaut 0,25, ce qui
+    /// donne des valeurs exactement représentables : le produit scalaire attendu
+    /// se calcule à la main, sans arrondi.
+    fn gguf_synth_q8(nom: &str, n_lignes: usize, n_cols: usize, decalage: i32) -> Vec<u8> {
+        let mut b = Vec::new();
+        let mut s = |b: &mut Vec<u8>, v: &str| {
+            b.extend_from_slice(&(v.len() as u64).to_le_bytes());
+            b.extend_from_slice(v.as_bytes());
+        };
+=== fin de fichier ===
+        let ok = Gguf::open_multi(&[&p_a, &p_c]).unwrap();
+        assert_eq!(ok.tensors.len(), 1);
+        for p in [&p_a, &p_b, &p_c] { let _ = std::fs::remove_file(p); }
+    }
+}
+1392 drave-core/src/gguf.rs
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '1156,1172p' drave-core/src/gguf.rs", "description": "Read the orphaned code region"}`
+
+  ```
+for (i, (_, dims)) in tensors.iter().enumerate() {
+            let n = dims.iter().product::<u64>();
+            for k in 0..n {
+                let v = valeur0 + (depart + i) as f32 * 1000.0 + k as f32;
+                b.extend_from_slice(&v.to_le_bytes());
+            }
+        }
+        b
+    }
+
+    /// GGUF synthétique Q8_0 : blocs de 34 octets (échelle f16 + 32 niveaux
+    /// i8). Les niveaux sont `(i % 200) - 100` et l'échelle vaut 0,25, ce qui
+    /// donne des valeurs exactement représentables : le produit scalaire attendu
+    /// se calcule à la main, sans arrondi.
+    fn gguf_synth_q8(nom: &str, n_lignes: usize, n_cols: usize, decalage: i32) -> Vec<u8> {
+        let mut b = Vec::new();
+        let mut s = |b: &mut Vec<u8>, v: &str| {
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '1135,1156p' drave-core/src/gguf.rs", "description": "Read lines before the orphan body"}`
+
+  ```
+s(&mut b, "general.alignment");
+        b.extend_from_slice(&4u32.to_le_bytes());        // GGUF_TYPE_UINT32
+        b.extend_from_slice(&32u32.to_le_bytes());
+
+        // Les décalages sont relatifs au début du bloc de données de CE fichier.
+        let mut offsets = Vec::new();
+        let mut cur = 0u64;
+        for (_, dims) in tensors {
+            offsets.push(cur);
+            cur += dims.iter().product::<u64>() * 4;
+        }
+        for ((nom, dims), off) in tensors.iter().zip(&offsets) {
+            s(&mut b, nom);
+            b.extend_from_slice(&(dims.len() as u32).to_le_bytes());
+            for d in dims.iter().rev() {                  // ggml écrit à l'envers
+                b.extend_from_slice(&d.to_le_bytes());
+            }
+            b.extend_from_slice(&GGML_F32.to_le_bytes());
+            b.extend_from_slice(&off.to_le_bytes());
+        }
+        while b.len() % 32 != 0 { b.push(0); }
+        for (i, (_, dims)) in tensors.iter().enumerate() {
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '1124,1135p' drave-core/src/gguf.rs", "description": "Read the insertion point"}`
+
+  ```
+b.extend_from_slice(&(v.len() as u64).to_le_bytes());
+            b.extend_from_slice(v.as_bytes());
+        };
+        b.extend_from_slice(b"GGUF");
+        b.extend_from_slice(&3u32.to_le_bytes());
+        b.extend_from_slice(&(tensors.len() as u64).to_le_bytes());
+        b.extend_from_slice(&2u64.to_le_bytes());        // deux métadonnées
+        // Ordre GGUF : clef, type (u32), valeur.
+        s(&mut b, "general.architecture");
+        b.extend_from_slice(&8u32.to_le_bytes());        // GGUF_TYPE_STRING
+        s(&mut b, "essai");
+        s(&mut b, "general.alignment");
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '1119,1124p' drave-core/src/gguf.rs", "description": "Read lines 1119-1124"}`
+
+  ```
+pub(crate) use super::tests_synth::*;
+tensors: &[(&str, Vec<u64>)], depart: usize, valeur0: f32) -> Vec<u8> {
+        let mut b = Vec::new();
+        let mut s = |b: &mut Vec<u8>, v: &str| {
+            b.extend_from_slice(&(v.len() as u64).to_le_bytes());
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np = 'drave-core/src/gguf.rs'\ns = open(p).read()\ns = s.replace('''    pub(crate) use super::tests_synth::*;\ntensors: &[(&str, Vec<u64>)], depart: usize, valeur0: f32) -> Vec<u8> {''',\n'''    /// Fabrique un GGUF  … [661 caractères tronqués]`
+
+  ```
+test result: ok. 27 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.09s
+  ```
+
+### 🤖 Assistant
+
+⏵ J'écris le test de bout en bout d'un dossier de clusters (l'angle mort principal).
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -i 's|^#\\[cfg(test)\\]\\nmod tests {|X|' drave-core/src/gguf.rs && python3 - <<'PY'\np = 'drave-core/src/gguf.rs'\ns = open(p).read()\ns = s.replace('''#[cfg(test)]\nmod tests {\n    use super::*;\n    use std::io::Write;''',\n' … [5257 caractères tronqués]`
+
+  ```
+ok
+error[E0716]: temporary value dropped while borrowed
+   --> src/clusters.rs:283:25
+    |
+283 |                 vec![(&*format!("blk.0.ffn_gate_exps.weight"), vec![2, 3, 3])];
+--
+error: could not compile `drave-core` (bin "drave" test) due to 1 previous error; 15 warnings emitted
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np = 'drave-core/src/clusters.rs'\ns = open(p).read()\ns = s.replace('''        for c in 0..2usize {\n            let t: Vec<(&str, Vec<u64>)> =\n                vec![(&*format!(\"blk.0.ffn_gate_exps.weight\"), vec![ … [830 caractères tronqués]`
+
+  ```
+test clusters::tests::dossier_de_clusters_ouvre_et_apparie ... FAILED
+test clusters::tests::mapping_refuse_les_doublons ... ok
+test clusters::tests::mapping_partiel_est_permis ... ok
+test clusters::tests::numerotation_des_clusters_exigee_continue ... ok
+--
+thread 'clusters::tests::dossier_de_clusters_ouvre_et_apparie' (2898926) panicked at src/clusters.rs:303:9:
+assertion `left == right` failed
+  left: Some((0, 0))
+ right: Some((0, 1))
+--
+test result: FAILED. 28 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.09s
+  ```
+
+### 🤖 Assistant
+
+⏵ Le test révèle un vrai défaut : un échec d'ouverture publiait quand même son mapping. Je corrige.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np = 'drave-core/src/clusters.rs'\ns = open(p).read()\ndef rep(a, b):\n    global s\n    assert a in s, f\"ANCRE INTROUVABLE : {a[:70]!r}\"\n    s = s.replace(a, b, 1)\n\n# Le mapping n'est publié qu'APRÈS une ouvert … [2758 caractères tronqués]`
+
+  ```
+ok
+test clusters::tests::dossier_de_clusters_ouvre_et_apparie ... FAILED
+test clusters::tests::numerotation_des_clusters_exigee_continue ... ok
+test gguf::tests::multi_fichiers_egale_mono_fichier ... ok
+test gguf::tests::multi_fichiers_refuse_les_doublons_divergents ... ok
+--
+thread 'clusters::tests::dossier_de_clusters_ouvre_et_apparie' (2899194) panicked at src/clusters.rs:308:9:
+assertion `left == right` failed
+  left: Some((0, 0))
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np = 'drave-core/src/clusters.rs'\ns = open(p).read()\ns = s.replace('''        assert_eq!(m.mapping.ou(0, 3), Some((0, 1)));''',\n              '''        // Le TSV dit : couche 0, local 0, global 3, cluster 0.\n    … [348 caractères tronqués]`
+
+  ```
+test result: ok. 29 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.09s
+
+--- épreuve ---
+origine   : perplexité 15.2789 sur 63 tokens (0 événements, 12.4 s)
+clusters  : perplexité 15.2789 sur 63 tokens (0 événements, 12.1 s)
+=== fin ===
+  ```
+
+### 🤖 Assistant
+
+⏵ **Preuve obtenue** : origine et clusters rendent 15,2789 tous les deux. Je relance sur le binaire final.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== PORTE QWEN ===\"; timeout 300 ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf --ppl /tmp/ids_qwen.txt --ctx 256 --abits 16 --threads 16 --limit 512 --dense 2>&1 | grep -oE \"=== perplexité [0-9.]+ sur [0-9] … [209 caractères tronqués]`
+
+  ```
+=== PORTE QWEN ===
+=== perplexité 19.3885 sur 510 tokens (0 événements, 16.8 s) ===
+épreuve finale lancée sur le binaire final
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/convertir_clusters.py --help 2>&1 | head -20; echo \"=== écriture du mapping ? ===\"; grep -n \"mapping.tsv\\|mapping\" tools/convertir_clusters.py | head -10", "description": "Check converter for mapping output"}`
+
+  ```
+usage: convertir_clusters.py [-h] [--clusters CLUSTERS] [--trace TRACE]
+                             [--mode {experts,couches}] [--verifier]
+                             source dossier
+
+positional arguments:
+  source
+  dossier
+
+options:
+  -h, --help            show this help message and exit
+  --clusters CLUSTERS
+  --trace TRACE         trace de routage (ordre des experts)
+  --mode {experts,couches}
+  --verifier            relit chaque fichier produit et compare les empreintes
+=== écriture du mapping ? ===
+  ```
+
+### 🤖 Assistant
+
+⏵ Le convertisseur n'écrit pas `mapping.tsv` : je boucle la chaîne.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"manifeste\\|json.dump\\|experts_globaux\\|def main\\|ecrire\" tools/convertir_clusters.py | head -20", "description": "Find manifest writing in converter"}`
+
+  ```
+21:    manifeste.json       rôle de chaque fichier, tenseurs portés, tailles, ordre des
+25:`<arch>.expert_count` y est ajusté au nombre d'experts du fichier, et le manifeste
+150:def ecrire_gguf(chemin, kv_brut, tenseurs, source, debut_donnees, alignement,
+222:def reecrire_kv(kv_brut, remplacements):
+308:def main():
+346:    manifeste = {"source": os.path.abspath(args.source), "mode": args.mode,
+373:        octets = ecrire_gguf(chemin, kv_brut, commun, args.source, debut_donnees,
+375:        manifeste["fichiers"].append({"fichier": "commun.gguf", "role": "commun",
+385:        manifeste["experts"] = {str(l): ordres[l] for l in sorted(ordres)}
+407:                kv_cluster = reecrire_kv(kv_brut, {f"{arch}.expert_count": len(ids)})
+408:            octets = ecrire_gguf(chemin, kv_cluster, nouveaux, args.source, debut_donnees,
+410:            manifeste["fichiers"].append({
+413:                "experts_globaux_par_couche": {str(l): [ordres[l][e] for e in ids]
+420:        octets = ecrire_gguf(chemin, kv_brut, tlist, args.source, debut_donnees,
+422:        manifeste["fichiers"].append({
+429:    with open(os.path.join(args.dossier, "manifeste.json"), "w", encoding="utf-8") as f:
+430:        
+… [238 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '425,445p' tools/convertir_clusters.py; echo \"=== 405-418 ===\"; sed -n '405,418p' tools/convertir_clusters.py", "description": "Read converter output section"}`
+
+  ```
+"tenseurs": [t["nom"] for t in tlist]})
+        print(f"cluster-{c:02d}.gguf   : {len(tlist):4} tenseurs · "
+              f"{octets / 1e9:7.2f} Go · couches {prises[0]}..{prises[-1]}")
+
+    with open(os.path.join(args.dossier, "manifeste.json"), "w", encoding="utf-8") as f:
+        json.dump(manifeste, f, indent=1, ensure_ascii=False)
+    total = sum(x["octets"] for x in manifeste["fichiers"])
+    print(f"\nmanifeste.json · {len(manifeste['fichiers'])} fichiers · "
+          f"{total / 1e9:.2f} Go · {time.time() - t0:.1f} s")
+
+    if args.verifier:
+        # Vérification par EMPREINTES : on relit chaque fichier produit, on
+        # recalcule l'empreinte de chaque tenseur, et on la compare à celle de la
+        # tranche correspondante de la source. Une copie « qui a l'air bonne » ne
+        # suffit pas : un décalage d'un bloc passerait inaperçu.
+        print("vérification par empreintes…")
+        source = open(args.source, "rb")
+        erreurs, verifies = [], 0
+        for x in manifeste["fichiers"]:
+            chemin = os.path.join(args.dossier, x["fichier"])
+            kv2, tens2, dd2, _, _, _ = lire_entete(chemin)
+=== 405-418 ===
+            kv_cluster = kv_brut
+        
+… [792 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np = 'tools/convertir_clusters.py'\ns = open(p).read()\nvieux = '''    with open(os.path.join(args.dossier, \"manifeste.json\"), \"w\", encoding=\"utf-8\") as f:\n        json.dump(manifeste, f, indent=1, ensure_asci … [3174 caractères tronqués]`
+
+  ```
+ok
+syntaxe ok
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && A=/home/stephane/FastNVMe/artefacts/modeles-optimises/qwen3-30b-8clusters && cp $A/mapping.tsv /tmp/mapping_reference.tsv && python3 - <<PY\nimport json, sys\nsys.path.insert(0, 'tools')\nimport importlib.util\nspec = importlib.util. … [571 caractères tronqués]`
+
+  ```
+mapping.tsv · 6144 entrées · 48 couches · 128 experts · 8 clusters
+=== comparaison avec la référence ===
+IDENTIQUE à l'octet près (hors commentaires)
+# drave-clusters-mapping v1
+# n_couches 48 · n_experts 128 · clusters 8 · experts_par_cluster 16
+# couche	local	global	cluster
+0	0	28	0
+origine   :
+  ```
+
+### 🤖 Assistant
+
+⏵ Mapping identique à l'octet près. Je mets la doc à jour pendant l'épreuve.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && wc -l docs/format-clusters.md && grep -n \"^#\\|^##\" docs/format-clusters.md | head -20", "description": "Inspect cluster format doc"}`
+
+  ```
+107 docs/format-clusters.md
+1:# Format — le modèle éclaté en clusters (un fichier par cluster)
+10:## Le problème
+24:## Ce que produit le convertisseur
+51:## L'ordre des experts : mesuré, pas deviné
+64:## Mesures (Qwen3-30B-A3B-Instruct Q4_K_M, 18,56 Go, 48 couches, 128 experts)
+77:## Conversion
+80:# trace de routage (facultative mais recommandée : elle ordonne les experts)
+84:# conversion : un cluster = 16 experts ; --mode couches pour un modèle dense
+94:## Ce qui reste
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '24,50p' docs/format-clusters.md; echo \"...\"; sed -n '94,107p' docs/format-clusters.md", "description": "Read format doc sections"}`
+
+  ```
+## Ce que produit le convertisseur
+
+```
+modele/
+  commun.gguf          embeddings, tête de sortie, attention, normes, ROUTEURS
+  cluster-00.gguf      les tranches d'experts du cluster 0, toutes couches
+  cluster-01.gguf      …
+  manifeste.json       rôle de chaque fichier, tenseurs, tailles, ordre des
+                       experts (par fréquence), correspondance local ↔ global
+```
+
+Trois propriétés, et chacune est vérifiée :
+
+1. **Aucune requantification.** Les octets des poids sont copiés tels quels. Les
+   blocs de quantification sont alignés sur l'axe des experts (768 et 2048 sont
+   des multiples de 256), donc la tranche d'un expert est une **plage d'octets
+   exacte** — le convertisseur le vérifie (`par_expert * ne == octets`) et
+   s'arrête si ce n'est pas le cas.
+2. **Chaque fichier est un GGUF valide et cohérent.** Le champ
+   `{arch}.expert_count` est **réécrit** dans chaque cluster (16 et non 128), donc
+   un lecteur qui ouvre `cluster-00.gguf` voit un MoE de 16 experts, pas un fichier
+   menteur. Le reste des métadonnées (tokenizer compris) voyage à l'identique.
+3. **Vérification par empreintes.** `--verifier` relit chaque fichier produit et
+   compare le SHA-256 de **c
+… [1058 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np = 'docs/format-clusters.md'\ns = open(p).read()\ns = s.replace('''  manifeste.json       rôle de chaque fichier, tenseurs, tailles, ordre des\n                       experts (par fréquence), correspondance local ↔ … [3445 caractères tronqués]`
+
+  ```
+doc mise à jour
+origine   : perplexité 15.2789 sur 63 tokens (0 événements, 12.2 s)
+clusters  :
+  ```
+
+- **bash** `{"command": "sleep 50; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat /tmp/preuve_clusters.log; date +%H:%M", "description": "Wait for final proof completion"}`
+
+  ```
+origine   : perplexité 15.2789 sur 63 tokens (0 événements, 12.2 s)
+clusters  : perplexité 15.2789 sur 63 tokens (0 événements, 11.6 s)
+=== fin ===
+11:39
+  ```
+
+### 🤖 Assistant
+
+⏵ Preuve finale confirmée (15,2789 des deux côtés). Je lance la porte gpt-oss sur un binaire figé.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cp drave-core/target/release/drave /tmp/drave-fige && cat > /tmp/porte_oss.sh <<'EOF'\n#!/bin/bash\n# Porte gpt-oss (MXFP4, MoE, 63 Go) : le binaire est FIGÉ dans /tmp pour que la\n# mesure porte sur ce qui a été compilé, et pas sur  … [788 caractères tronqués]`
+
+  ```
+porte lancée
+11:38:30    17.4 Go / 50.0 Go (34.9 %, 109 Mo/s)
+11:39:00    20.9 Go / 50.0 Go (41.9 %, 110 Mo/s)
+  ```
+
+### 🤖 Assistant
+
+⏵ Je rédige le rapport de mesure du bloc pendant que la porte tourne.
+
+- **write** `{"content": "# Rapport — un modèle éclaté se lit comme un seul\n\nSprint 08 · 11:13 → 13:13 · binaire `drave-core` (release), commit à venir.\n\n## La question\n\nUn modèle trop gros pour un nœud, ou un MoE dont un nœud ne sert qu'un huitième\ndes experts, doit pouvoir être lu **par morceaux** — san … [6303 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-lecteur-multifichiers.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && tail -2 /tmp/gate_oss_final.log 2>/dev/null; echo \"--- commit intermédiaire ---\"; git add -A && git commit -q -m \"Clusters exécutables : origine 15,2789 = clusters 15,2789, et les défauts trouvés en chemin\n\nL'épreuve appariée (m … [1576 caractères tronqués]`

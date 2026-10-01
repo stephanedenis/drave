@@ -105,31 +105,58 @@ fn charger_moe(g: &Gguf, l: usize, n_expert: usize) -> Option<Moe> {
     let vues = |s: &str| -> Option<Vec<Vue4>> {
         let base = p(s);
         let noms: Vec<String> = match map {
-            _ if g.tensor(&base).is_some() => vec![base],
-            Some(m) => (0..m.n_clusters).map(|c| format!("cl{c}/{base}"))
-                          .filter(|n| g.tensor(n).is_some()).collect(),
-            None => return None,
+            // Un mapping actif prime sur le nom en clair : si les deux existent,
+            // c'est le découpage qui dit où sont les experts, et lire le tenseur
+            // entier indexerait ensuite une ligne locale dans un tenseur global.
+            None if g.tensor(&base).is_some() => vec![base.clone()],
+            Some(m) => {
+                // Les préfixes sont attribués par POSITION dans la liste des
+                // fichiers ; un fichier qui ne porte pas ce tenseur décalerait
+                // tous les suivants, en silence (mêmes formes). On exige donc la
+                // série complète, dans l'ordre.
+                let v: Vec<String> = (0..m.n_clusters).map(|c| format!("cl{c}/{base}")).collect();
+                if let Some(i) = v.iter().position(|n| g.tensor(n).is_none()) {
+                    eprintln!("[moe] couche {l} : « {} » manquant — {}/{} fichiers portent \
+« {base} »", v[i], v.iter().filter(|n| g.tensor(n).is_some()).count(), m.n_clusters);
+                    return None;
+                }
+                v
+            }
+            None => { eprintln!("[moe] couche {l} : « {base} » absent et aucun mapping"); return None; }
         };
-        if noms.is_empty() { return None; }
+        if noms.is_empty() {
+            eprintln!("[moe] couche {l} : aucun fichier ne porte « {base} » (essayé le nom \
+en clair et cl0..cl{})", map.map(|m| m.n_clusters.saturating_sub(1)).unwrap_or(0));
+            return None;
+        }
         let mut out = Vec::with_capacity(noms.len());
         for nom in &noms {
             let t = g.tensor(nom)?;
             if t.dims.len() < 3 { return None; }
             let ligne_experts = t.dims[0] as usize;
-            if ligne_experts != n_expert {
-                // Un fichier de cluster : sa dimension locale doit être celle
-                // annoncée par le mapping, sinon les lignes seraient lues au
-                // hasard.
+            // La dimension d'expert du tenseur doit être EXACTEMENT celle que
+            // le mapping annonce : ni le nombre global (ce serait un tenseur non
+            // découpé, dont les lignes locales n'ont pas le même sens), ni autre
+            // chose. Une tolérance ici ferait lire le mauvais expert sans bruit.
+            let attendu = match map { Some(m) => m.par_cluster, None => n_expert };
+            if ligne_experts != attendu {
                 match map {
-                    Some(m) if ligne_experts == m.par_cluster => {}
-                    _ => return None,
+                    Some(m) => eprintln!("[moe] couche {l} : « {nom} » a {ligne_experts} \
+experts, le mapping en annonce {} par cluster", m.par_cluster),
+                    None => eprintln!("[moe] couche {l} : « {nom} » a {ligne_experts} experts \
+au lieu de {n_expert}, et aucun mapping n'est actif"),
                 }
+                return None;
             }
             let src = source_de(t.ttype)?;
             let (n_out, n_in) = (t.dims[1] as usize, t.dims[2] as usize);
             let bloc = if t.ttype == crate::gguf::GGML_Q4_K || t.ttype == crate::gguf::GGML_Q6_K { 256 } else { 32 };
             if n_in % bloc != 0 { return None; }
-            out.push(Vue4 { base: g.data_ptr(nom)?, n_out, n_in, nb: n_in / bloc, src });
+            let Some(ptr) = g.data_ptr(nom) else {
+                eprintln!("[moe] couche {l} : données de « {nom} » introuvables");
+                return None;
+            };
+            out.push(Vue4 { base: ptr, n_out, n_in, nb: n_in / bloc, src });
         }
         Some(out)
     };
@@ -144,12 +171,18 @@ fn charger_moe(g: &Gguf, l: usize, n_expert: usize) -> Option<Moe> {
         if n_in % bloc != 0 { return None; }
         Some(Vue4 { base: g.data_ptr(nom)?, n_out, n_in, nb: n_in / bloc, src })
     };
-    let gate = vues(&p("ffn_gate_exps.weight"))?;
-    let up = vues(&p("ffn_up_exps.weight"))?;
-    let down = vues(&p("ffn_down_exps.weight"))?;
-    if map.is_some() && (gate.len() != up.len() || gate.len() != down.len()) {
-        panic!("couche {l} : {} fichiers de gate, {} de up, {} de down — répartition \
+    let gate = vues("ffn_gate_exps.weight")?;
+    let up = vues("ffn_up_exps.weight")?;
+    let down = vues("ffn_down_exps.weight")?;
+    if let Some(m) = map {
+        if gate.len() != m.n_clusters {
+            panic!("couche {l} : {} fichiers portent les experts de gate, le mapping en \
+annonce {}", gate.len(), m.n_clusters);
+        }
+        if gate.len() != up.len() || gate.len() != down.len() {
+            panic!("couche {l} : {} fichiers de gate, {} de up, {} de down — répartition \
 incohérente entre les trois projections d'experts", gate.len(), up.len(), down.len());
+        }
     }
     let routeur = g.dequant(&p("ffn_gate_inp.weight"));
     assert_eq!(routeur.len(), n_expert * gate[0].n_in, "routeur de taille inattendue");
@@ -1640,6 +1673,12 @@ impl Model {
                   pool.threads());
         let n_layer = cfg.n_layer;
         let sinks_vus = layers.iter().filter(|l| l.sinks.is_some()).count();
+        // Combien de couches ont RÉELLEMENT un mélange d'experts chargé. La
+        // configuration dit que le modèle en a ; elle ne dit pas que le
+        // chargeur les a trouvés. Quand les deux diffèrent, le moteur tombe
+        // dans le chemin dense et panique cent lignes plus loin, sur un
+        // message (« projection dense requise ») qui ne dit pas pourquoi.
+        let moe_vus = layers.iter().filter(|l| l.moe.is_some()).count();
         // Trace de configuration : une ligne qui dit quelles particularités
         // d'architecture ont été reconnues. Sans elle, on débogue à l'aveugle
         // sur un modèle de 60 Go.
@@ -1651,6 +1690,15 @@ impl Model {
                  if cfg.n_expert > 0 { "moe " } else { "" },
                  if cfg.n_expert > 0 { "" } else { "" },
                  if cfg.head_dim > 0 { "" } else { "" });
+        if cfg.n_expert > 0 {
+            println!("[config] mélanges d'experts chargés : {moe_vus}/{n_layer} couches · \
+mapping {}",
+                     match clusters_actifs() {
+                         None => "absent (experts en clair dans le fichier)".to_string(),
+                         Some(m) => format!("actif : {} clusters × {} experts",
+                                            m.n_clusters, m.par_cluster),
+                     });
+        }
         println!("[config] puits appris sur {sinks_vus}/{n_layer} couches · n_rot {} · ffn {} · experts {}{}",
                  if cfg.n_rot == 0 { cfg.head_dim } else { cfg.n_rot },
                  cfg.ffn, cfg.n_expert,
