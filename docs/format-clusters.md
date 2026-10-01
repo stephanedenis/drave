@@ -1,0 +1,107 @@
+# Format — le modèle éclaté en clusters (un fichier par cluster)
+
+**En une ligne** : un GGUF est converti en `commun.gguf` + `cluster-XX.gguf`, un
+fichier **GGUF autonome par cluster d'experts**, avec un manifeste qui porte la
+correspondance ; un nœud n'ouvre que ce qu'il sert — mesuré **3,20 Go au lieu de
+18,56** et **625 ms au lieu de 3,9 s** sur Qwen3-30B-A3B.
+
+Outil : [`tools/convertir_clusters.py`](../tools/convertir_clusters.py).
+
+## Le problème
+
+Un MoE publié en GGUF met **tous** les experts d'une couche dans un seul tenseur :
+
+```
+blk.0.ffn_gate_exps.weight   [128, 768, 2048]   Q4_K
+blk.0.ffn_up_exps.weight     [128, 768, 2048]   Q4_K
+blk.0.ffn_down_exps.weight   [128, 2048, 768]   Q6_K
+```
+
+Un nœud qui n'héberge que 16 experts sur 128 lit donc 18 Go pour en utiliser un
+huitième — et notre mode d'opération lit les poids **en flux à chaque jeton** :
+c'est le chemin le plus chaud du moteur.
+
+## Ce que produit le convertisseur
+
+```
+modele/
+  commun.gguf          embeddings, tête de sortie, attention, normes, ROUTEURS
+  cluster-00.gguf      les tranches d'experts du cluster 0, toutes couches
+  cluster-01.gguf      …
+  manifeste.json       rôle de chaque fichier, tenseurs, tailles, ordre des
+                       experts (par fréquence), correspondance local ↔ global
+```
+
+Trois propriétés, et chacune est vérifiée :
+
+1. **Aucune requantification.** Les octets des poids sont copiés tels quels. Les
+   blocs de quantification sont alignés sur l'axe des experts (768 et 2048 sont
+   des multiples de 256), donc la tranche d'un expert est une **plage d'octets
+   exacte** — le convertisseur le vérifie (`par_expert * ne == octets`) et
+   s'arrête si ce n'est pas le cas.
+2. **Chaque fichier est un GGUF valide et cohérent.** Le champ
+   `{arch}.expert_count` est **réécrit** dans chaque cluster (16 et non 128), donc
+   un lecteur qui ouvre `cluster-00.gguf` voit un MoE de 16 experts, pas un fichier
+   menteur. Le reste des métadonnées (tokenizer compris) voyage à l'identique.
+3. **Vérification par empreintes.** `--verifier` relit chaque fichier produit et
+   compare le SHA-256 de **chaque** tenseur — pour les clusters, la concaténation
+   des tranches dans l'ordre du manifeste — à la tranche correspondante de la
+   source. Sur Qwen3-30B-A3B : **1 587 tenseurs, tout concorde**.
+
+## L'ordre des experts : mesuré, pas deviné
+
+Les experts d'un cluster sont pris **par fréquence d'usage décroissante**, lue dans
+une trace de routage (`--trace`, produite par `DRAVE_TRACE_EXPERTS`) — et non par
+index. C'est ce qui fait que `cluster-00.gguf` est le cluster qu'un nœud veut
+garder : sur Qwen3-30B-A3B, ses 16 experts sont `[28, 72, 91, 122, 64, 75, 100,
+51, …]` au lieu de `[0, 1, 2, …]`.
+
+Sans trace, l'ordre naturel est utilisé : le format reste correct, il est seulement
+moins bien ordonné. Le rapport [`rapport-decoupage-moe.md`](../reports/rapport-decoupage-moe.md)
+montre que cette seule mise en ordre divise la ventilation d'un jeton par ~1,8
+(3,08 nœuds au lieu de 5,32 à 8 clusters).
+
+## Mesures (Qwen3-30B-A3B-Instruct Q4_K_M, 18,56 Go, 48 couches, 128 experts)
+
+| fichier | en-tête (mmap) | lecture totale | octets |
+|---|---|---|---|
+| `commun.gguf` | 1,4 ms | 201,6 ms | 1,00 Go |
+| `cluster-00.gguf` | 1,8 ms | 423,3 ms | 2,20 Go |
+| le modèle entier | 0,9 ms | **3 906,4 ms** | **18,56 Go** |
+
+Un nœud qui sert le cluster 0 charge **3,20 Go au lieu de 18,56 (5,8× moins)** et
+**625 ms au lieu de 3,9 s (6,2× plus vite)**. Avec huit nœuds, chacun ne lit que
+son cluster ; le surcoût est la duplication des métadonnées (8 × ~4 Mo, soit
+0,2 % du modèle).
+
+## Conversion
+
+```bash
+# trace de routage (facultative mais recommandée : elle ordonne les experts)
+DRAVE_TRACE_EXPERTS=/tmp/routage.txt ./drave-core/target/release/drave <modele.gguf> \
+    --ppl <ids.txt> --ctx 2048 --limit 2048 --lot 64 --threads 16
+
+# conversion : un cluster = 16 experts ; --mode couches pour un modèle dense
+python3 tools/convertir_clusters.py <modele.gguf> <dossier> \
+    --clusters 8 --trace /tmp/routage.txt --verifier
+```
+
+`--mode couches` découpe un modèle **dense** en groupes de couches (un fichier par
+groupe), ce qui sert au même usage : un nœud ne charge que sa tranche. Mesuré sur
+Qwen2.5-0.5B : `commun.gguf` (embeddings + tête) + 4 fichiers de 6 couches,
+290 tenseurs vérifiés.
+
+## Ce qui reste
+
+* **Le lecteur multi-fichiers** : chaque fichier est un GGUF valide, mais le moteur
+  n'ouvre qu'un fichier à la fois. C'est la prochaine étape, et elle vaut aussi
+  pour les modèles lourds livrés en shards (DeepSeek-V4-Flash, Kimi-K2.7, GLM-5.3).
+* **Le mmap au lieu du `read_to_end`** : `Gguf::open` lit tout le fichier en
+  mémoire (18,56 Go pour Qwen3-30B). Charger 3,20 Go est déjà 5,8× mieux, mais le
+  mmap rendrait le chargement **paresseux** (les experts jamais allumés ne seraient
+  jamais lus).
+* **Le format binaire du manifeste** : JSON convient à quelques kilo-octets ; si le
+  nombre de fichiers grandit (un par expert), il faudra un index binaire.
+* **Le rééquilibrage par charge** : les clusters sont équilibrés en nombre
+  d'experts, pas en nombre d'activations — le nœud qui garde les experts chauds
+  travaillera plus.

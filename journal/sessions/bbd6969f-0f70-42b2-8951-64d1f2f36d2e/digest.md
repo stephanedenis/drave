@@ -41989,3 +41989,363 @@ Qwen3-30B-A3B-Instruct-2507-Q4_K_M.gguf
   ```
 
 - **bash** `{"command": "mkdir -p /home/stephane/FastNVMe/artefacts/{modeles-optimises,index,traces,caches} && cat > /home/stephane/FastNVMe/artefacts/README.md <<'EOF'\n# Ce que porte le NVMe\n\nPolitique de stockage (01/10) : **les modèles bruts vivent sur le disque\nmécanique, le NVMe ne sert qu'aux fichiers … [2702 caractères tronqués]`
+
+  ```
+total 4
+drwxr-xr-x. 1 stephane stephane   86  1 oct 09:42 .
+drwxr-xr-x  1 stephane stephane  114  1 oct 09:42 ..
+drwxr-xr-x. 1 stephane stephane    0  1 oct 09:42 caches
+drwxr-xr-x. 1 stephane stephane    0  1 oct 09:42 index
+drwxr-xr-x. 1 stephane stephane    0  1 oct 09:42 modeles-optimises
+-rw-r--r--. 1 stephane stephane 1671  1 oct 09:42 README.md
+drwxr-xr-x. 1 stephane stephane    0  1 oct 09:42 traces
+plan : politique de stockage
+aea1b10 Politique de stockage : la bibliothèque brute sur le mécanique, le NVMe pour nos artefacts (mesures à l'appui)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/telecharger_modeles.py --etat | head -4; tail -1 /tmp/telechargement_lourds.log; tail -1 /tmp/tl_v4flash_rattrapage.log; tail -1 /tmp/demenagement.log; df -h /home/stephane/FastNVMe | tail -1", "description": "Final sta … [11 caractères tronqués]`
+
+  ```
+DeepSeek-V4-Flash-UD-IQ1_M      34.6 Go /    50.0 Go   69.3 %
+DeepSeek-V4.1-Flash-Q2         101.2 Go /   365.7 Go   27.7 %
+GLM-5.3-Flash-UD-IQ1_S           0.0 Go /    93.1 Go    0.0 %
+GLM-5.3-UD-IQ1_S                 0.0 Go /   216.7 Go    0.0 %
+09:43:18    101.2 Go / 365.7 Go (27.7 %, 49 Mo/s)
+09:43:21    34.6 Go / 50.0 Go (69.3 %, 30 Mo/s)
+09:35:08  Qwen3-30B-A3B-Instruct-2507-Q4_K_M.gguf ... /dev/nvme0n1p2  828G  112G  717G  14% /home/stephane/FastNVMe
+  ```
+
+### 🤖 Assistant
+
+**Fait — trois choses, dans l'ordre que tu as demandé.**
+
+## 1. Le NVMe ne sert plus qu'à nos fichiers
+
+La bibliothèque brute est déménagée sur le disque mécanique : `/home/stephane/Data13TB/stephane/modeles/gguf/` (4,4 To libres). Le NVMe est passé de 355 à **112 Go utilisés**, et j'y ai créé la structure des artefacts que **nous** produisons, avec la politique écrite et les mesures qui la motivent (`/home/stephane/FastNVMe/artefacts/README.md`) : `modeles-optimises/`, `index/`, `traces/`, `caches/`.
+
+Mesures qui justifient la répartition : mécanique **~210 Mo/s** en écriture soutenue (mesuré sur 81 Go ; les 1,3 Go/s de pointe étaient de la compression de zéros), NVMe **2,1 Go/s** en lecture. Notre mode d'opération lit les poids **en flux à chaque jeton** : c'est le chemin chaud qui doit être rapide, pas le stockage froid.
+
+## 2. Les modèles les plus lourds : 1,14 To en file
+
+| modèle | taille | état |
+|---|---|---|
+| **DeepSeek-V4.1-Flash** Q2 | 365,7 Go | **27,7 %** (101 Go, ~50 Mo/s) |
+| **Kimi-K2.7-Code** UD-IQ1_M | 303,9 Go | en file |
+| **GLM-5.3** 1 M ctx | 216,7 Go | en file |
+| **GLM-5.3-Flash** | 93,1 Go | en file |
+| **Qwen3-235B-A22B** Q2_K | 85,7 Go | en file |
+| **DeepSeek-V4-Flash** | 86,9 Go | ✅ (+ 2 shards perdus par une commande de nettoyage trop large, en rattrapage : 69 %) |
+
+Mécanique écrite et mesurée (`tools/telecharger_modeles.py` + manifeste) : **tranches `Range` de 256 Mo sur 6 connexions** — nécessaire, le pont Xet refuse un GET plein sur le fichier de 365,7 Go (HTTP 400) mais sert les tranches (206) — avec reprise par tranche, garde-fou de disque et état honnête.
+
+## 3. Le découpage des MoE : un résultat négatif, et il vaut cher
+
+J'ai ajouté la **trace de routage** au moteur (`DRAVE_TRACE_EXPERTS`, sur les deux chemins d'exécution) et écrit `tools/clusters_moe.py` (partition équilibrée + **deux témoins** : hasard et fréquence). Sur Qwen3-30B-A3B, ~1 600 jetons :
+
+| clusters | couverture | ventilation | au hasard |
+|---|---|---|---|
+| 4 | 0,799 | **1,94 nœud** | 3,59 |
+| 8 | 0,607 | **3,08 nœuds** | 5,32 |
+| 16 | 0,442 | 4,46 | 6,55 |
+
+**La partition apprise par co-activation et celle qui trie simplement les experts par fréquence sont identiques (accord 1,000).** Autrement dit : le découpage n'a pas besoin d'un partitionneur de graphe — il a besoin d'un **ordre** (experts chauds d'abord) et d'une **disposition contiguë**. Le format proposé en découle : manifeste multi-shards + index MoE + experts contigus par cluster ([`reports/rapport-decoupage-moe.md`](reports/rapport-decoupage-moe.md), [`docs/plan-modeles-lourds.md`](docs/plan-modeles-lourds.md)).
+
+**Le premier blocage pour « rouler du best of breed » est commun à tous** : le moteur n'ouvre qu'**un** fichier, et ces modèles sont livrés en 3 à 8 shards. C'est la prochaine étape, et elle débloque même DeepSeek-V4-Flash, déjà sur le disque.
+
+
+## Tour 50
+
+### 👤 Utilisateur
+
+fais un convertisseur pour tous les formats vers un modèle de fichier optimal, où on sépare les clusters par fichier distinct pour un chargement indépendant rapide.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"pub struct Gguf\\|pub struct Tensor\\|offset\\|alignment\\|ALIGN\" drave-core/src/gguf.rs | head -20; echo \"=== constantes ===\"; grep -n \"const \\|fn lire_tete\\|fn open\" drave-core/src/gguf.rs | head -12", "description … [40 caractères tronqués]`
+
+  ```
+42:pub struct TensorInfo {
+46:    pub offset: u64,
+91:pub struct Gguf {
+228:            let offset = c.u64();
+230:            tensors.push(TensorInfo { name, dims, ttype, offset });
+236:        let align = meta.get("general.alignment").and_then(|m| m.as_u64()).unwrap_or(32) as usize;
+272:        let base = self.data_start + t.offset as usize;
+305:        let base = self.data_start + t.offset as usize;
+410:        Q8View { base: self.data_start + t.offset as usize, n_cols, nb: n_cols / bloc,
+417:        Some(unsafe { self.buf.as_ptr().add(self.data_start + t.offset as usize) })
+429:        Some((&self.buf[self.data_start + t.offset as usize..], t.dims[1] as usize / 32))
+437:        Some((&self.buf[self.data_start + t.offset as usize..], t.dims[1] as usize / 256))
+444:        Some((&self.buf[self.data_start + t.offset as usize..], t.dims[1] as usize / 256))
+454:        Some((&self.buf[self.data_start + t.offset as usize..], nb))
+465:        Some((&self.buf[self.data_start + t.offset as usize..], nb))
+609:        let base = self.data_start + t.offset as usize;
+=== constantes ===
+53:pub const GGML_F32: u32 = 0;
+54:pub const GGML_F16: u32 = 1;
+55:pub const GGML_Q4_0: u32 = 2;
+56:pub con
+… [383 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '85,110p' drave-core/src/gguf.rs; sed -n '155,200p' drave-core/src/gguf.rs; sed -n '225,250p' drave-core/src/gguf.rs", "description": "Read the GGUF open and header parsing"}`
+
+  ```
+pub q4: bool,
+    /// Type ggml d'origine : la tête de sortie peut être Q8_0, Q4_0 ou Q4_K
+    /// selon le modèle, et se lit **en place** dans les trois cas.
+    pub ttype: u32,
+}
+
+pub struct Gguf {
+    pub meta: HashMap<String, Meta>,
+    pub tensors: Vec<TensorInfo>,
+    buf: Vec<u8>,
+    data_start: usize,
+}
+
+struct Cur<'a> { b: &'a [u8], p: usize, deborde: bool }
+
+impl<'a> Cur<'a> {
+    // Toutes les lectures sont bornées : un en-tête lu dans une tranche trop
+    // courte doit être SIGNALÉ, pas provoquer une panique d'indexation. C'est
+    // ce qui permet à `open_meta` de relire une tranche plus grande.
+    fn reste(&self, n: usize) -> bool { self.p + n <= self.b.len() }
+    fn u8(&mut self) -> u8 {
+        if !self.reste(1) { self.deborde = true; return 0; }
+        let v = self.b[self.p]; self.p += 1; v
+    }
+    fn u32(&mut self) -> u32 {
+        if !self.reste(4) { self.deborde = true; return 0; }
+    }
+}
+
+impl Gguf {
+    pub fn open<P: AsRef<Path>>(path: P) -> std::io::Result<Self> {
+        let mut buf = Vec::new();
+        File::open(path)?.read_to_end(&mut buf)?;
+        let (meta, tensors, fin) = Self::entete(&buf).ok_or_else(|| {
+            std::io::Error::new(std
+… [2665 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 300 ./drave-core/target/release/drave /home/stephane/FastNVMe/models/Qwen3-30B-A3B-Instruct-2507-Q4_K_M.gguf --tensors 2>&1 | grep -iE \"exps|ffn_gate_inp|router\" | head -8; echo \"=== total tenseurs ===\"; timeout 300 ./dra … [197 caractères tronqués]`
+
+  ```
+=== total tenseurs ===
+0
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 300 ./drave-core/target/release/drave /home/stephane/FastNVMe/models/Qwen3-30B-A3B-Instruct-2507-Q4_K_M.gguf --tensors 2>&1 | head -20", "description": "Dump tensor list", "timeoutMs": 400000}`
+
+  ```
+[attention] QT_IM_SWITCHER est l'ancien nom d'une variable d'environnement : elles s'appellent maintenant DRAVE_* (voir docs/histoire.md). Rien n'a été appliqué.
+
+thread 'main' (2824553) panicked at src/main.rs:1375:30:
+ouverture du GGUF: Os { code: 2, kind: NotFound, message: "No such file or directory" }
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+timeout: the monitored command dumped core
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && M=/home/stephane/Data13TB/stephane/modeles/gguf/Qwen3-30B-A3B-Instruct-2507-Q4_K_M.gguf; timeout 300 ./drave-core/target/release/drave $M --tensors 2>&1 | head -8; echo \"...\"; timeout 300 ./drave-core/target/release/drave $M --tens … [108 caractères tronqués]`
+
+  ```
+[attention] QT_IM_SWITCHER est l'ancien nom d'une variable d'environnement : elles s'appellent maintenant DRAVE_* (voir docs/histoire.md). Rien n'a été appliqué.
+579 tenseurs dans /home/stephane/Data13TB/stephane/modeles/gguf/Qwen3-30B-A3B-Instruct-2507-Q4_K_M.gguf
+  Q6_K  output.weight                          [151936, 2048] · 311.2 M poids
+  F32   output_norm.weight                     [2048] · 0.0 M poids
+  Q4_K  token_embd.weight                      [151936, 2048] · 311.2 M poids
+  Q4_K  blk.0.attn_k.weight                    [512, 2048] · 1.0 M poids
+  F32   blk.0.attn_k_norm.weight               [128] · 0.0 M poids
+  F32   blk.0.attn_norm.weight                 [2048] · 0.0 M poids
+...
+579
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && M=/home/stephane/Data13TB/stephane/modeles/gguf/Qwen3-30B-A3B-Instruct-2507-Q4_K_M.gguf; timeout 300 ./drave-core/target/release/drave $M --tensors 2>&1 | grep -E \"exps|gate_inp|gate_exps|up_exps|down_exps\" | head -8; echo \"=== un … [189 caractères tronqués]`
+
+  ```
+Q6_K  blk.0.ffn_down_exps.weight             [128, 2048, 768] · 201.3 M poids
+  Q4_K  blk.0.ffn_gate_exps.weight             [128, 768, 2048] · 201.3 M poids
+  F32   blk.0.ffn_gate_inp.weight              [128, 2048] · 0.3 M poids
+  Q4_K  blk.0.ffn_up_exps.weight               [128, 768, 2048] · 201.3 M poids
+  Q6_K  blk.1.ffn_down_exps.weight             [128, 2048, 768] · 201.3 M poids
+  Q4_K  blk.1.ffn_gate_exps.weight             [128, 768, 2048] · 201.3 M poids
+  F32   blk.1.ffn_gate_inp.weight              [128, 2048] · 0.3 M poids
+  Q4_K  blk.1.ffn_up_exps.weight               [128, 768, 2048] · 201.3 M poids
+=== une couche complète ===
+  Q4_K  blk.3.attn_k.weight                    [512, 2048] · 1.0 M poids
+  F32   blk.3.attn_k_norm.weight               [128] · 0.0 M poids
+  F32   blk.3.attn_norm.weight                 [2048] · 0.0 M poids
+  Q4_K  blk.3.attn_output.weight               [2048, 4096] · 8.4 M poids
+  Q4_K  blk.3.attn_q.weight                    [4096, 2048] · 8.4 M poids
+  F32   blk.3.attn_q_norm.weight               [128] · 0.0 M poids
+  Q6_K  blk.3.attn_v.weight                    [512, 2048] · 1.0 M poids
+  Q6_K  blk.3.ffn_down_exps.weight             [128,
+… [328 caractères tronqués]
+  ```
+
+- **write** `{"content": "#!/usr/bin/env python3\n\"\"\"Convertisseur GGUF → « modèle éclaté en clusters », un fichier par cluster.\n\n**Pourquoi.** Notre mode d'opération ne lit que les experts qu'un jeton allume, et\nles modèles MoE publient leurs experts dans UN tenseur par couche\n(`blk.N.ffn_gate_exps.weigh … [15136 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/convertir_clusters.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 600 python3 tools/convertir_clusters.py /home/stephane/Data13TB/stephane/modeles/gguf/Qwen2.5-0.5B-Q8_0.gguf /tmp/opt_test --clusters 4 2>&1 | tail -8; ls -la /tmp/opt_test/ 2>/dev/null | head -8", "description": "Test the co … [53 caractères tronqués]`
+
+  ```
+lire_entete(args.source)
+    ~~~~~~~~~~~^^^^^^^^^^^^^
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/convertir_clusters.py", line 115, in lire_entete
+    l = Lecteur(chemin)
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/convertir_clusters.py", line 66, in __init__
+    self.f = open(chemin, "rb")
+             ~~~~^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: '/home/stephane/Data13TB/stephane/modeles/gguf/Qwen2.5-0.5B-Q8_0.gguf'
+  ```
+
+- **bash** `{"command": "ls /home/stephane/Data13TB/stephane/modeles/gguf/ | head; ls /home/stephane/Data13TB/stephane/GitHub/Qtrinet/models/ 2>/dev/null", "description": "Find available small models"}`
+
+  ```
+bge-m3-FP16.gguf
+codestral-22b-v0.1-q4_k_m.gguf
+deepseek-r1-distill-qwen-14b-q4_k_m.gguf
+deepseek-r1-distill-qwen-1.5b-q4_k_m.gguf
+DeepSeek-V4.1-Flash-Q2
+DeepSeek-V4-Flash-UD-IQ1_M
+eagle3-gpt-oss-120b-Q8_0.gguf
+GLM-5.3-Flash-UD-IQ1_S
+GLM-5.3-UD-IQ1_S
+gpt-oss-120b-MXFP4.gguf
+Qwen2.5-0.5B-Q4_0.gguf
+Qwen2.5-0.5B-Q8_0.gguf
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 600 python3 tools/convertir_clusters.py models/Qwen2.5-0.5B-Q8_0.gguf /tmp/opt_test --clusters 4 --mode couches 2>&1 | tail -8; ls -la /tmp/opt_test/ 2>/dev/null | head -8; timeout 120 ./drave-core/target/release/drave /tmp/o … [121 caractères tronqués]`
+
+  ```
+{%- endfor %}
+{%- if add_generation_prompt %}
+    {{- '<|im_start|>assistant\n' }}
+{%- endif %}
+       general.quantization_version             quantize.imatrix.file   D       /models_out/Qwen2.5-0.5B-Instruct-GGUF/Qwen2.5-0.5B-Instruct.imatrix       quantize.imatrix.dataset   $       /training_dir/calibration_datav3.txt       quantize.imatrix.entries_count   �          quantize.imatrix.chunks_count   �   , alignement 32
+commun.gguf      :  290 tenseurs ·    0.53 Go
+
+manifeste.json · 1 fichiers · 0.53 Go · 9.8 s
+total 518636
+drwxr-xr-x.  2 stephane stephane        80  1 oct 10:02 .
+drwxrwxrwt. 76 root     root         21940  1 oct 10:02 ..
+-rw-r--r--.  1 stephane stephane 531068480  1 oct 10:02 commun.gguf
+-rw-r--r--.  1 stephane stephane      8472  1 oct 10:02 manifeste.json
+[attention] QT_IM_SWITCHER est l'ancien nom d'une variable d'environnement : elles s'appellent maintenant DRAVE_* (voir docs/histoire.md). Rien n'a été appliqué.
+290 tenseurs dans /tmp/opt_test/commun.gguf
+  Q8_0  token_embd.weight                      [151936, 896] · 136.1 M poids
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np = 'tools/convertir_clusters.py'; s = open(p).read()\n\n# (a) une vraie lecture du bloc KV : on en tire l'architecture proprement\ns = s.replace('''def compter_kv(kv_brut):\n    \"\"\"Recompte les paires KV d'un … [6774 caractères tronqués]`
+
+  ```
+convertisseur corrigé (KV, mode couches, vérification)
+syntaxe OK
+Qwen2.5-0.5B-Q8_0.gguf : 290 tenseurs, 0.5 Go, arch qwen2, alignement 32
+commun.gguf      :  290 tenseurs ·    0.53 Go
+cluster-00.gguf   :   72 tenseurs ·    0.10 Go · couches 0..5
+cluster-01.gguf   :   72 tenseurs ·    0.10 Go · couches 6..11
+cluster-02.gguf   :   72 tenseurs ·    0.10 Go · couches 12..17
+cluster-03.gguf   :   72 tenseurs ·    0.10 Go · couches 18..23
+
+manifeste.json · 5 fichiers · 0.94 Go · 3.3 s
+vérification par empreintes…
+  290 tenseurs vérifiés · TOUT CONCORDE
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np = 'tools/convertir_clusters.py'; s = open(p).read()\n\n# (a) le découpage par couches doit être calculé AVANT d'écrire le commun, sinon\n#     les tenseurs de blocs sont écrits deux fois (dans le commun ET le c … [3378 caractères tronqués]`
+
+  ```
+ordre corrigé + vérification des couches
+syntaxe OK
+commun.gguf      :    2 tenseurs ·    0.15 Go
+cluster-00.gguf   :   72 tenseurs ·    0.10 Go · couches 0..5
+cluster-01.gguf   :   72 tenseurs ·    0.10 Go · couches 6..11
+cluster-02.gguf   :   72 tenseurs ·    0.10 Go · couches 12..17
+cluster-03.gguf   :   72 tenseurs ·    0.10 Go · couches 18..23
+
+manifeste.json · 5 fichiers · 0.55 Go · 3.1 s
+vérification par empreintes…
+  290 tenseurs vérifiés · TOUT CONCORDE
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && nohup bash -c 'python3 tools/convertir_clusters.py /home/stephane/Data13TB/stephane/modeles/gguf/Qwen3-30B-A3B-Instruct-2507-Q4_K_M.gguf /home/stephane/FastNVMe/artefacts/modeles-optimises/qwen3-30b-8clusters --clusters 8 --trace /tm … [349 caractères tronqués]`
+
+  ```
+cluster-07.gguf   :  144 tenseurs ·    2.20 Go · experts locaux 0..15
+
+manifeste.json · 9 fichiers · 18.60 Go · 11.8 s
+vérification par empreintes…
+  1587 tenseurs vérifiés · TOUT CONCORDE
+FINI
+total 18168340
+drwxr-xr-x. 1 stephane stephane        290  1 oct 10:03 .
+drwxr-xr-x. 1 stephane stephane         38  1 oct 10:03 ..
+-rw-r--r--. 1 stephane stephane 2200089920  1 oct 10:03 cluster-00.gguf
+-rw-r--r--. 1 stephane stephane 2200089920  1 oct 10:03 cluster-01.gguf
+-rw-r--r--. 1 stephane stephane 2200089920  1 oct 10:03 cluster-02.gguf
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np = 'tools/convertir_clusters.py'; s = open(p).read()\n\n# Lecture/écriture du bloc KV sous forme d'entrées, pour pouvoir RÉÉCRIRE une\n# valeur : un fichier de cluster qui annonce « 128 experts » alors qu'il en  … [3185 caractères tronqués]`
+
+  ```
+réécriture du KV ajoutée
+syntaxe OK
+[attention] QT_IM_SWITCHER est l'ancien nom d'une variable d'environnement : elles s'appellent maintenant DRAVE_* (voir docs/histoire.md). Rien n'a été appliqué.
+144 tenseurs dans /home/stephane/FastNVMe/artefacts/modeles-optimises/qwen3-30b-8clusters/cluster-00.gguf
+  Q6_K  blk.0.ffn_down_exps.weight             [16, 2048, 768] · 25.2 M poids
+  Q4_K  blk.0.ffn_gate_exps.weight             [16, 768, 2048] · 25.2 M poids
+  Q4_K  blk.0.ffn_up_exps.weight               [16, 768, 2048] · 25.2 M poids
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && rm -rf /home/stephane/FastNVMe/artefacts/modeles-optimises/qwen3-30b-8clusters && timeout 900 python3 tools/convertir_clusters.py /home/stephane/Data13TB/stephane/modeles/gguf/Qwen3-30B-A3B-Instruct-2507-Q4_K_M.gguf /home/stephane/Fa … [977 caractères tronqués]`
+
+  ```
+cluster-07.gguf   :  144 tenseurs ·    2.20 Go · experts locaux 0..15
+
+manifeste.json · 9 fichiers · 18.60 Go · 15.1 s
+vérification par empreintes…
+  1587 tenseurs vérifiés · TOUT CONCORDE
+
+manifeste : 9 fichiers · 128 experts
+  commun.gguf commun 1.00 Go
+  cluster-00.gguf cluster-00 2.20 Go
+  cluster-01.gguf cluster-01 2.20 Go
+cluster-00, couche 0 : experts globaux [28, 72, 91, 122, 64, 75, 100, 51, 33, 87, 120, 110, 61, 82, 124, 77]
+=== metadata du cluster 0 ===
+plan de placement — qwen3moe, 48 couches, 16 experts (top-8)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport mmap, os, time, json\nD = '/home/stephane/FastNVMe/artefacts/modeles-optimises/qwen3-30b-8clusters'\ndef mesurer(chemin):\n    t0 = time.time()\n    with open(chemin, 'rb') as f:\n        mm = mmap.mmap(f. … [1338 caractères tronqués]`
+
+  ```
+fichier                 entête (mmap)  lecture totale     octets
+commun.gguf                    1.4 ms        201.6 ms     1.00 Go
+cluster-00.gguf                1.8 ms        423.3 ms     2.20 Go
+modèle entier                  0.9 ms       3906.4 ms    18.56 Go
+
+un nœud qui sert le cluster 0 charge 3.20 Go au lieu de 18.56 Go (5.8× moins)
+et l'ouverture-métadonnées de SES deux fichiers : 3.2 ms contre 0.9 ms
+10:07:49    242.4 Go / 365.7 Go (66.3 %, 68 Mo/s)
+  ```
+
+- **write** `{"content": "# Format — le modèle éclaté en clusters (un fichier par cluster)\n\n**En une ligne** : un GGUF est converti en `commun.gguf` + `cluster-XX.gguf`, un\nfichier **GGUF autonome par cluster d'experts**, avec un manifeste qui porte la\ncorrespondance ; un nœud n'ouvre que ce qu'il sert — mes … [5077 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/format-clusters.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\ndef patch(p, paires):\n    s = open(p).read()\n    for v, n, nom in paires:\n        assert s.count(v) == 1, f\"{p}::{nom}::{s.count(v)}\"\n        s = s.replace(v, n, 1)\n    open(p, 'w').write(s); print(f\"{p}  … [3046 caractères tronqués]`

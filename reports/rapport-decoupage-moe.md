@@ -97,6 +97,15 @@ index sophistiqué. Il faut un **ordre** (experts chauds d'abord) et une
   (certains n'apparaissent qu'une fois). La trace de 2 048 jetons en cours et les
   traces longues sur les gros modèles trancheront.
 
+## Le fichier qui en découle
+
+Le découpage n'est pas resté théorique : `tools/convertir_clusters.py` produit
+`commun.gguf` + un `cluster-XX.gguf` par cluster (GGUF autonomes, octets copiés
+sans requantification, `expert_count` réécrit, vérification par empreintes). Sur
+Qwen3-30B-A3B : **3,20 Go chargés au lieu de 18,56** pour un nœud qui sert un
+cluster, 625 ms au lieu de 3,9 s, 1 587 tenseurs vérifiés — le format est décrit
+dans [`docs/format-clusters.md`](../docs/format-clusters.md).
+
 ## Reproduire
 
 ```bash

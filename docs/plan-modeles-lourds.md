@@ -98,7 +98,8 @@ fichiers. C'est de la plomberie, pas de la recherche, et ça débloque tout le r
 | 2 | **tokenizer + gabarit** de DeepSeek-V4.1 | aller-retour identique sur Wikitext-2, un tour de conversation bien formé (jetons `｜User｜`/`｜Assistant｜`/`｜DSML｜`) |
 | 3 | **forward deepseek4** (attention latente + MoE 256/top-6) | perplexité sur 512 jetons comparable à llama.cpp, ou l'écart expliqué |
 | 4 | **trace + découpage** sur les trois gros MoE | la question « fréquence ou co-activation ? » tranchée à 256 experts et plus |
-| 5 | **format** : manifeste + index + disposition contiguë | un nœud ne lit que sa tranche, mesuré (octets lus par jeton, avant/après) |
+| 5 | **format** : manifeste + index + disposition contiguë | ✅ **écrit et mesuré sur Qwen3-30B-A3B** : `commun.gguf` + 8 `cluster-XX.gguf`, un nœud charge **3,20 Go au lieu de 18,56** et 625 ms au lieu de 3,9 s, 1 587 tenseurs vérifiés par empreinte — [`docs/format-clusters.md`](format-clusters.md) |
+| 6 | **lecteur multi-fichiers** (le même que pour les shards) | le moteur ouvre `commun.gguf` + un cluster et tourne |
 
 ## Reprendre le téléchargement
 

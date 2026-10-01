@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 66.9 h |
-| Tours | 49 |
-| Messages | 2684 |
-| Appels d'outils | 2543 |
-| Fichiers touchés | 57 |
-| Commandes | 2173 |
+| Durée | 67.4 h |
+| Tours | 50 |
+| Messages | 2705 |
+| Appels d'outils | 2562 |
+| Fichiers touchés | 59 |
+| Commandes | 2190 |
 | Sous-agents | 20 |
-| Commits | 237 |
+| Commits | 238 |
 | Compactages de contexte | 3 |
 
 ## Objectifs déclarés
@@ -133,6 +133,8 @@
 **Tour 48** — Continue en blocs de 2h jusqu'à demain 8h HAE. pour chacun des blocs/sprints tu dois être en autonomie totale. C'est à dire que pour cette période tu ne dois attendre après aucune interaction humaine. les rétros seront des introspections, les revues seront en mode adverse autonome. tu enchaine avec ce qui a le plus de valeur en fonction de la mission de haut niveau et de l'autonomie dont tu dispos … [2 caractères tronqués]
 
 **Tour 49** — prévoir de télécharger les modèles les plus lourds aussi pour les analyser et faire le découpage des MoE/clusters optimisé pour notre mode d'opération. ça peut impliquer un nouveau format de fichiers, mais on doit être capable de rouler du best of breed.
+
+**Tour 50** — fais un convertisseur pour tous les formats vers un modèle de fichier optimal, où on sépare les clusters par fichier distinct pour un chargement indépendant rapide.
 
 ## 2. Déroulé, étape par étape
 
@@ -2277,7 +2279,7 @@ Fusionner la sélection en un noyau par ligne (8 lancements → 2), supprimer le
 
 ### Tour 49 — prévoir de télécharger les modèles les plus lourds aussi pour les analyser et faire le découpage des MoE/clusters optimi … [134 caractères tronqués]
 
-*75 appels d'outils.* Actions notables :
+*76 appels d'outils.* Actions notables :
 
 - bash — Check time, disk and existing models
 - web_fetch
@@ -2293,7 +2295,63 @@ Fusionner la sélection en un noyau par ligne (8 lancements → 2), supprimer le
 - bash — Check HDD permissions
 - bash — Measure HDD write speed in my subtree
 - bash — Stop NVMe download, prepare HDD library
-- … et 61 autres
+- … et 62 autres
+
+**Synthèse produite :**
+
+**Fait — trois choses, dans l'ordre que tu as demandé.**
+
+\## 1. Le NVMe ne sert plus qu'à nos fichiers
+
+La bibliothèque brute est déménagée sur le disque mécanique : `/home/stephane/Data13TB/stephane/modeles/gguf/` (4,4 To libres). Le NVMe est passé de 355 à **112 Go utilisés**, et j'y ai créé la structure des artefacts que **nous** produisons, avec la politique écrite et les mesures qui la motivent (`/home/stephane/FastNVMe/artefacts/README.md`) : `modeles-optimises/`, `index/`, `traces/`, `caches/`.
+
+Mesures qui justifient la répartition : mécanique **~210 Mo/s** en écriture soutenue (mesuré sur 81 Go ; les 1,3 Go/s de pointe étaient de la compression de zéros), NVMe **2,1 Go/s** en lecture. Notre mode d'opération lit les poids **en flux à chaque jeton** : c'est le chemin chaud qui doit être rapide, pas le stockage froid.
+
+\## 2. Les modèles les plus lourds : 1,14 To en file
+
+| modèle | taille | état |
+|---|---|---|
+| **DeepSeek-V4.1-Flash** Q2 | 365,7 Go | **27,7 %** (101 Go, ~50 Mo/s) |
+| **Kimi-K2.7-Code** UD-IQ1_M | 303,9 Go | en file |
+| **GLM-5.3** 1 M ctx | 216,7 Go | en file |
+| **GLM-5.3-Flash** | 93,1 Go | en file |
+| **Qwen3-235B-A22B** Q2_K | 85,7 Go | en file |
+| **DeepSeek-V4-Flash** | 86,9 Go | ✅ (+ 2 shards perdus par une commande de nettoyage trop large, en rattrapage : 69 %) |
+
+Mécanique écrite et mesurée (`tools/telecharger_modeles.py` + manifeste) : **tranches `Range` de 256 Mo sur 6 connexions** — nécessaire, le pont Xet refuse un GET plein sur le fichier de 365,7 Go (HTTP 400) mais sert les tranches (206) — avec reprise par tranche, garde-fou de disque et état honnête.
+
+\## 3. Le découpage des MoE : un résultat négatif, et il vaut cher
+
+J'ai ajouté la **trace de routage** au moteur (`DRAVE_TRACE_EXPERTS`, sur les deux chemins d'exécution) et écrit `tools/clusters_moe.py` (partition équilibrée + **deux témoins** : hasard et fréquence). Sur Qwen3-30B-A3B, ~1 600 jetons :
+
+| clusters | couverture | ventilation | au hasard |
+|---|---|---|---|
+| 4 | 0,799 | **1,94 nœud** | 3,59 |
+| 8 | 0,607 | **3,08 nœuds** | 5,32 |
+| 16 | 0,442 | 4,46 | 6,55 |
+
+**La partition apprise par co-activation et celle qui trie simplement les experts par fréquence sont identiques (accord 1,000).** Autrement dit : le découpage n'a pas besoin d'un partitionneur de graphe — il a besoin d'un **ordre** (experts chauds d'abord) et d'une **disposition contiguë**. Le format proposé en découle : manifeste multi-shards + index MoE + experts contigus par cluster ([`reports/
+… [369 caractères tronqués]
+
+### Tour 50 — fais un convertisseur pour tous les formats vers un modèle de fichier optimal, où on sépare les clusters par fichier dis … [44 caractères tronqués]
+
+*18 appels d'outils.* Actions notables :
+
+- bash — Inspect the GGUF reader structures
+- bash — Read the GGUF open and header parsing
+- bash — Inspect MoE tensor naming
+- bash — Dump tensor list
+- bash — Dump the Qwen3-30B tensor names
+- bash — Find the expert tensor names
+- write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/convertir_clusters.py`
+- bash — Test the converter on a small dense model
+- bash — Find available small models
+- bash — Test the converter on a dense model
+- bash — Fix the converter and verify on a dense model
+- bash — Fix the split order and re-verify
+- bash — Convert Qwen3-30B to 8 clusters
+- bash — Add KV rewriting for cluster files
+- … et 4 autres
 
 ## 3. Travail accompli
 
@@ -2358,6 +2416,8 @@ Fusionner la sélection en un noyau par ligne (8 lancements → 2), supprimer le
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/clusters_moe.py` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-decoupage-moe.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/plan-modeles-lourds.md` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/convertir_clusters.py` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/format-clusters.md` | 1 | 0 |
 
 ### Sous-agents lancés
 
@@ -2424,7 +2484,7 @@ Fusionner la sélection en un noyau par ligne (8 lancements → 2), supprimer le
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 2133 autres
+- … et 2150 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2552,7 +2612,7 @@ Fusionner la sélection en un noyau par ligne (8 lancements → 2), supprimer le
 
 ## 5. Erreurs rencontrées
 
-116 sorties en erreur ou divergentes. Les premières :
+118 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : a8f2635f8 docs: record which models this box is good at, and why src/llama-hparams.cpp:8:void llama_hparams::set_swa_pattern(uint32_t n_pattern, bool dense_first) { src/llama-hparams.h:308:    void se
 - **T1** : 511 tokens notés — perplexité cumulée 247.031  (4.9 tok/s) === perplexité 247.0308 sur 511 tokens (0 événements, 104.5 s) ===  ### B3 harmony assistant 511 --- ref --- 0.0 0.0 0:00 ls: cannot access '
@@ -2809,4 +2869,5 @@ Fusionner la sélection en un noyau par ligne (8 lancements → 2), supprimer le
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 120 python3 tools/clusters_moe.py --help > /dev/null 2>&1; echo "outil ok"; git add -A && git comm
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -F - <<'EOF' && git log --oneline -1 Modèles lourds : file de 1,14 To en téléc
 - Politique de stockage : la bibliothèque brute sur le mécanique, le NVMe pour nos artefacts (mesures à l'appui)" && git log --oneline -1
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF' def patch(p, paires):     s = open(p).read()     for v, n, nom in paires:         asse
 
