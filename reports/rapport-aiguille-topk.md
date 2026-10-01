@@ -188,6 +188,39 @@ lentement que le contexte** sur ces deux points, ce qui est la direction favorab
 pour l'élagage à long contexte, sans être une courbe. Source : `/tmp/aiguille_s5.log`
 §B ; contrôle dense : `/tmp/aig8192.log`.
 
+### LE RÉSULTAT DE LA NUIT : le taux est le même, et les échecs ne sont pas les mêmes fenêtres
+
+Neuf fenêtres contiguës (4 096 clés, profondeur 0,5, `--lot 256 --gpu-kv`), les deux
+chemins sur **exactement les mêmes invites** :
+
+| fenêtre | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | trouvé |
+|---|---|---|---|---|---|---|---|---|---|---|
+| jetons du prompt | 4114 | 3996 | 4731 | 4664 | 4096 | 4046 | 4152 | 4013 | 4081 | |
+| **attention complète** | oui | oui | **NON** | oui | oui | oui | oui | oui | oui | **8/9** |
+| **k = 256** (6,25 %) | **NON** | oui | **oui** | oui | oui | oui | oui | oui | oui | **8/9** |
+
+**Le taux est identique — 8 sur 9 des deux côtés — et ce ne sont PAS les mêmes
+fenêtres qui échouent** : l'attention complète perd la fenêtre 3 (la plus longue,
+4 731 jetons) là où l'attention creuse la retrouve, et l'attention creuse perd la
+fenêtre 1 (4 114 jetons) là où l'attention complète la retrouve.
+
+Autrement dit : sur cette tâche et à cette échelle, **l'attention qui ne garde que
+6 % des clés n'est pas moins fiable que l'attention complète**. Ce qui décide du
+succès n'est pas le budget d'attention mais la **divergence chaotique du décodage
+greedy** : un écart minuscule (7e-4 nat, mesuré) suffit à changer un jeton, et une
+réponse qui doit contenir un code de 8 caractères ne pardonne pas un jeton.
+
+**Ce que cela corrige dans ce rapport même** : les conclusions des sprints 3 à 5
+(« NON au milieu », « 0/3 à k = 512 », « 1/3 à k = 256 ») portaient sur UNE fenêtre
+répétée. Elles décrivaient correctement cette fenêtre, et **ne se généralisent
+pas** : ici, à k = 256, sept fenêtres sur huit réussissent, dont celle que
+l'attention complète rate.
+
+**Ce qui reste vrai** : l'échec du sprint 3 sur la fenêtre 1 est réel et
+reproductible (dense oui, creux NON, quatre fois de suite) ; et la fenêtre 3 échoue
+en dense de façon également reproductible. Les deux méthodes ont des angles morts
+différents, aucun des deux n'est uniformément meilleur.
+
 ### Le taux, par fenêtre (sprint 6, mesure partielle)
 
 Neuf fenêtres **contiguës** (l'outil avance d'un « besoin » de sonde : « fenêtres

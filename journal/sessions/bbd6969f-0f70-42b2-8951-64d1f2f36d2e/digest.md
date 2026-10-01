@@ -40398,3 +40398,95 @@ reports/rapport-aiguille-topk.md:169:Trois fenêtres restent un petit échantill
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/rapport-aiguille-topk.md'; s=open(p).read()\ndef rep(v,n,nom):\n    global s\n    assert s.count(v)==1, f\"{nom}::{s.count(v)}\"\n    s=s.replace(v,n,1)\nrep(\"| **k = 256** (6,25 %) | NON (240,3 s) | **o … [4030 caractères tronqués]`
+
+  ```
+rapport : notation 2/3
+cérémonie 7 corrigée
+test result: ok. 18 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.08s
+
+1b9808e Le correctif du livelock finissait en SIGABRT : c'est corrigé, et vérifié par le code de sortie
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && (echo \"=== portes finales de la nuit ===\"; echo -n \"Qwen : \"; ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf --ppl /tmp/wt2_ids.txt --ctx 256 --abits 16 --threads 16 --limit 512 2>&1 | grep -oE \"perplexité [0-9. … [754 caractères tronqués]`
+
+  ```
+=== portes finales de la nuit ===
+Qwen : perplexité 19.3885 sur 510 tokens
+gpt-oss : perplexité 15.1757 sur 510 tokens
+tests : test result: ok. 18 passed
+banc top-k (n=4096) : 06:13:00
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/aig_s7.sh <<'SCRIPT'\n#!/bin/bash\n# Le taux creux restant : 9 fenêtres contiguës à 4 096 clés, k = 256, mêmes\n# réglages que le contrôle dense (--lot 256 --gpu-kv). Chaque sonde coûte ~246 s\n# (le préremplissage perd l' … [778 caractères tronqués]`
+
+  ```
+########## 4096 - k=256 - 9 fenetres (controle dense : 8/9)
+06:13:24
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 900; cat /tmp/aiguille_s7.log; date +%H:%M:%S", "description": "Monitor the rate grid", "timeoutMs": 960000}`
+
+  ```
+(no output)
+[timed out after 600000ms]
+[killed by signal: SIGTERM]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat /tmp/aiguille_s7.log; date +%H:%M:%S", "description": "Check the rate grid progress"}`
+
+  ```
+########## 4096 - k=256 - 9 fenetres (controle dense : 8/9)
+     4096        0.50     NON     242.6  prompt 4114 jetons · [attention] --attn-topk 256 est IGNORÉ en mode lot (--lot 256) : l'attention par lots est DENSE. Utiliser --lo
+     4096        0.50     oui     233.1  prompt 3996 jetons · [attention] --attn-topk 256 est IGNORÉ en mode lot (--lot 256) : l'attention par lots est DENSE. Utiliser --lo
+06:23:37
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 720; cat /tmp/aiguille_s7.log | tail -6; date +%H:%M:%S", "description": "Monitor the rate grid", "timeoutMs": 780000}`
+
+  ```
+(no output)
+[timed out after 600000ms]
+[killed by signal: SIGTERM]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -c \"4096 \" /tmp/aiguille_s7.log; tail -4 /tmp/aiguille_s7.log; date +%H:%M:%S", "description": "Check rate grid results"}`
+
+  ```
+5
+     4096        0.50     NON     242.6  prompt 4114 jetons · [attention] --attn-topk 256 est IGNORÉ en mode lot (--lot 256) : l'attention par lots est DENSE. Utiliser --lo
+     4096        0.50     oui     233.1  prompt 3996 jetons · [attention] --attn-topk 256 est IGNORÉ en mode lot (--lot 256) : l'attention par lots est DENSE. Utiliser --lo
+     4096        0.50     oui     338.9  prompt 4731 jetons · [attention] --attn-topk 256 est IGNORÉ en mode lot (--lot 256) : l'attention par lots est DENSE. Utiliser --lo
+     4096        0.50     oui     299.7  prompt 4664 jetons · [attention] --attn-topk 256 est IGNORÉ en mode lot (--lot 256) : l'attention par lots est DENSE. Utiliser --lo
+06:33:47
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 900; grep -c \"4096 \" /tmp/aiguille_s7.log; tail -5 /tmp/aiguille_s7.log; date +%H:%M:%S", "description": "Wait for the rate grid to finish", "timeoutMs": 960000}`
+
+  ```
+(no output)
+[timed out after 600000ms]
+[killed by signal: SIGTERM]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -c \"4096 \" /tmp/aiguille_s7.log; tail -4 /tmp/aiguille_s7.log; date +%H:%M:%S", "description": "Check the final rate results"}`
+
+  ```
+8
+     4096        0.50     oui     299.7  prompt 4664 jetons · [attention] --attn-topk 256 est IGNORÉ en mode lot (--lot 256) : l'attention par lots est DENSE. Utiliser --lo
+     4096        0.50     oui     240.7  prompt 4096 jetons · [attention] --attn-topk 256 est IGNORÉ en mode lot (--lot 256) : l'attention par lots est DENSE. Utiliser --lo
+     4096        0.50     oui     236.1  prompt 4046 jetons · [attention] --attn-topk 256 est IGNORÉ en mode lot (--lot 256) : l'attention par lots est DENSE. Utiliser --lo
+     4096        0.50     oui     256.2  prompt 4152 jetons · [attention] --attn-topk 256 est IGNORÉ en mode lot (--lot 256) : l'attention par lots est DENSE. Utiliser --lo
+06:44:00
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 540; cat /tmp/aiguille_s7.log | tail -4; date +%H:%M:%S", "description": "Get the final rate results", "timeoutMs": 600000}`
+
+  ```
+4096        0.50     oui     241.3  prompt 4013 jetons · [attention] --attn-topk 256 est IGNORÉ en mode lot (--lot 256) : l'attention par lots est DENSE. Utiliser --lo
+     4096        0.50     oui     242.0  prompt 4081 jetons · [attention] --attn-topk 256 est IGNORÉ en mode lot (--lot 256) : l'attention par lots est DENSE. Utiliser --lo
+fenêtres distinctes utilisées : 9 sur 9 sondes
+=== S7 FINI ===
+06:53:06
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/rapport-aiguille-topk.md'; s=open(p).read()\nvieux = \"\"\"### Le taux, par fenêtre (sprint 6, mesure partielle)\"\"\"\nneuf = \"\"\"### LE RÉSULTAT DE LA NUIT : le taux est le même, et les échecs ne sont … [4323 caractères tronqués]`

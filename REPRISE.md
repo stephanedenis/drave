@@ -538,7 +538,7 @@ et `--infer --topk`, `--ppl-reparti --ids` sont bornés. **18 tests.**
 | 3 | **Le préremplissage déporté** | prompt de 3 961 jetons : **286,6 → 63,8 s** (×4,5) · perplexité 9,4335 / 9,4337 (écart relatif 2,1e-5) |
 | 4 | **Le déport des projections est EXACT sur un modèle dense** | logits bit à bit identiques (|ΔNLL| moyen 0,0000) ; sur un MoE, 0,038 nat de décalage et 497/511 top-1 identiques → routage des experts (hypothèse) |
 | 5 | **Le noyau fusionné gagne au décodage, jusqu'à 16 k clés** | GPU plat, CPU 4,26 → 38,84 ms/jeton · k = 1 024 suffit à 8 192 clés (12,5 %) |
-| 6 | **L'attention creuse à 6 % échoue sur 1 fenêtre sur 3** (4 096 clés, milieu) | dense 3/3 · k = 256 **2/3 (1 échec)** · k = 1 024 3/3 · par fenêtre, 8/9 en dense sur neuf fenêtres contiguës |
+| 6 | **L'attention creuse à 6 % n'est PAS moins fiable que l'attention complète** | neuf fenêtres contiguës, mêmes invites : **dense 8/9, k = 256 8/9**, et les échecs ne sont pas les mêmes fenêtres (dense rate la 3e, k = 256 rate la 1re) — le succès dépend de la divergence chaotique du décodage, pas du budget d'attention |
 | 7 | **Six artefacts qui promettaient ce qu'ils ne faisaient pas** | garde-fou jamais déclenché · échantillon lu comme un accord global · grep qui ne suit pas la chaîne d'appels · décalage de fenêtre remis à zéro · section annoncée dans un commit mais absente · **script de vérification qui ne lisait pas le code de sortie** (le correctif du livelock a été cru bon alors qu'il finissait en SIGABRT) |
 
 ### La frontière du cache KV, mesurée en entier
