@@ -37059,3 +37059,162 @@ référence du banc alignée sur les puits du noyau
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cargo test --release --manifest-path drave-core/Cargo.toml 2>&1 | tail -2 && git add -A && git commit -q -F - <<'EOF' && git log --oneline -1\nRevue adverse du noyau fusionné : une course bloquante, et cinq autres points\n\nLa relect … [2146 caractères tronqués]`
+
+  ```
+test result: ok. 17 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.13s
+
+ed4ce47 Revue adverse du noyau fusionné : une course bloquante, et cinq autres points
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 200; cat /tmp/grille_fusion.log; date +%H:%M:%S", "description": "Check grid progress", "timeoutMs": 260000}`
+
+  ```
+cpu      511 : attention 4.26 | 
+gpu      511 : attention 4.53 | 
+cpu     1023 : attention 7.17 | 
+gpu     1023 : attention 4.62 | 
+cpu     2047 : attention 12.08 | 
+gpu     2047 : attention 4.82 | 
+cpu     4095 : attention 19.77 | 
+gpu     4095 : attention 4.86 | 
+cpu     8191 : 20:21:29
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\ndef patch(p, paires):\n    s=open(p).read()\n    for v,n,nom in paires:\n        assert s.count(v)==1, f\"{p}::{nom}::{s.count(v)}\"\n        s=s.replace(v,n,1)\n    open(p,'w').write(s); print(f\"{p} ok\")\n\npatch … [2030 caractères tronqués]`
+
+  ```
+reports/rapport-gpu-topk-selection.md ok
+gpu     2047 : attention 4.82 | 
+cpu     4095 : attention 19.77 | 
+gpu     4095 : attention 4.86 | 
+cpu     8191 :
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 300; tail -4 /tmp/grille_fusion.log; date +%H:%M:%S", "description": "Wait for 8191-token grid point", "timeoutMs": 340000}`
+
+  ```
+gpu     2047 : attention 4.82 | 
+cpu     4095 : attention 19.77 | 
+gpu     4095 : attention 4.86 | 
+cpu     8191 : 20:29:17
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 280; tail -3 /tmp/grille_fusion.log; date +%H:%M:%S", "description": "Wait more for the grid", "timeoutMs": 320000}`
+
+  ```
+gpu     4095 : attention 4.86 | 
+cpu     8191 : attention 38.84 | 
+gpu     8191 : 20:34:03
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/ceremonie2.md <<'EOF'\n\n**Objectif du sprint** : « Fusionner la chaîne du top-k déporté : descente radix,\ncollecte et somme dans UN noyau par ligne (8 lancements → 2, plus de tampon\nnh×n×4), et gagner dès ~1 000 clés ». … [6315 caractères tronqués]`
+
+  ```
+cpu     8191 : attention 38.84 | 
+gpu     8191 : attention 4.97 | 
+=== GRILLE FINIE ===
+20:37:38
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && nohup bash -c '\ncd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\nD=./drave-core/target/release/drave\nO=/home/stephane/FastNVMe/models/gpt-oss-120b-MXFP4.gguf\nJ=/tmp/oss_topk.log\n: > $J\nfor mode in cpu gpu; do\n  echo \"###### … [1448 caractères tronqués]`
+
+  ```
+gpt-oss top-k A/B lancé
+grille complète dans le rapport
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 270; cat /tmp/oss_topk.log; date +%H:%M:%S", "description": "Check gpt-oss topk A/B", "timeoutMs": 320000}`
+
+  ```
+########## gpt-oss --attn-topk 256 : cpu
+=== perplexité 15.1757 sur 510 tokens (0 événements, 99.3 s) ===
+    postes (ms/token) : projets-attn 30.04 | rope 2.86 | attention 13.17 | proj+mlp 125.19 | somme 171.26 | reste (tête + échantillonnage) 23.40
+########## gpt-oss --attn-topk 256 : gpu
+20:42:21
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 150; cat /tmp/oss_topk.log | tail -6; date +%H:%M:%S", "description": "Wait for gpt-oss GPU run", "timeoutMs": 200000}`
+
+  ```
+postes (ms/token) : projets-attn 30.04 | rope 2.86 | attention 13.17 | proj+mlp 125.19 | somme 171.26 | reste (tête + échantillonnage) 23.40
+########## gpt-oss --attn-topk 256 : gpu
+[gpu] top-k déporté demandé (DRAVE_GPU_TOPK) : actif si --attn-topk vaut 1 à 1024, sans fenêtre, et si nkv × rep = nh
+=== perplexité 15.1666 sur 510 tokens (0 événements, 107.7 s) ===
+    postes (ms/token) : projets-attn 26.09 | rope 2.87 | attention 14.35 | proj+mlp 144.68 | somme 187.99 | reste (tête + échantillonnage) 23.29
+=== OSS TOPK FINI ===
+20:44:58
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && nohup bash -c '\ncd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\nD=./drave-core/target/release/drave\nO=/home/stephane/FastNVMe/models/gpt-oss-120b-MXFP4.gguf\nJ=/tmp/oss_topk2.log\n: > $J\necho \"########## gpt-oss --attn-topk 2 … [903 caractères tronqués]`
+
+  ```
+gpt-oss ctx 1024 lancé
+20:45:07
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\ndef patch(p, paires):\n    s=open(p).read()\n    for v,n,nom in paires:\n        assert s.count(v)==1, f\"{p}::{nom}::{s.count(v)}\"\n        s=s.replace(v,n,1)\n    open(p,'w').write(s); print(f\"{p} ok\")\n\npatch … [1042 caractères tronqués]`
+
+  ```
+reports/rapport-gpu-topk-selection.md ok
+########## gpt-oss --attn-topk 256 --ctx 1024 (k < n : le top-k retire vraiment)
+cpu : gpu : 20:48:35
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 280; cat /tmp/oss_topk2.log; date +%H:%M:%S", "description": "Wait for gpt-oss ctx1024 results", "timeoutMs": 320000}`
+
+  ```
+########## gpt-oss --attn-topk 256 --ctx 1024 (k < n : le top-k retire vraiment)
+cpu : gpu : gpu sans top-k (référence dense) : 
+20:53:20
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 600 ./drave-core/target/release/drave /home/stephane/FastNVMe/models/gpt-oss-120b-MXFP4.gguf --ppl /tmp/ids_oss_512.txt --ctx 1024 --dense --threads 16 --limit 512 --attn-topk 256 2>&1 | tail -6", "description": "Run gpt-oss  … [48 caractères tronqués]`
+
+  ```
+attention : 0.35 M paires (requête, clé) par token
+    projections : 0.0 M événements par token
+    part de l'attention dans le flux d'événements : 100.0 %
+    postes (ms/token) : projets-attn 30.17 | rope 2.96 | attention 21.65 | proj+mlp 125.87 | somme 180.65 | reste (tête + échantillonnage) 21.08
+    dont tête de sortie 19.18 | notation log-sum-exp 1.79 (le reste du « reste » n'est pas chronométré)
+    dont attention : scores 0.00 | softmax 0.00 | somme pondérée + écriture KV 21.65
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 600 ./drave-core/target/release/drave /home/stephane/FastNVMe/models/gpt-oss-120b-MXFP4.gguf --ppl /tmp/ids_oss_512.txt --ctx 1024 --dense --threads 16 --limit 512 --attn-topk 256 2>&1 | grep -E \"perplexité\" | tail -3", "de … [70 caractères tronqués]`
+
+  ```
+511 tokens notés — perplexité cumulée 19.074  (4.9 tok/s)
+=== perplexité 19.0740 sur 511 tokens (0 événements, 104.3 s) ===
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && O=/home/stephane/FastNVMe/models/gpt-oss-120b-MXFP4.gguf; echo -n \"GPU top-k 256 : \"; DRAVE_GPU=1 DRAVE_GPU_KV=1 DRAVE_GPU_TOPK=1 timeout 600 ./drave-core/target/release/drave $O --ppl /tmp/ids_oss_512.txt --ctx 1024 --dense --thre … [429 caractères tronqués]`
+
+  ```
+GPU top-k 256 : perplexité 18.8391 sur 511 tokens
+GPU dense (sans top-k) : perplexité 18.3074 sur 511 tokens
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && O=/home/stephane/FastNVMe/models/gpt-oss-120b-MXFP4.gguf; echo -n \"CPU dense (sans top-k) ctx 1024 : \"; timeout 600 ./drave-core/target/release/drave $O --ppl /tmp/ids_oss_512.txt --ctx 1024 --dense --threads 16 --limit 512 2>&1 |  … [148 caractères tronqués]`
+
+  ```
+CPU dense (sans top-k) ctx 1024 : perplexité 18.5803 sur 511 tokens
+21:07:10
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && O=/home/stephane/FastNVMe/models/gpt-oss-120b-MXFP4.gguf; echo -n \"GPU sans miroir KV (DRAVE_GPU seul) ctx 1024 : \"; DRAVE_GPU=1 timeout 600 ./drave-core/target/release/drave $O --ppl /tmp/ids_oss_512.txt --ctx 1024 --dense --threa … [181 caractères tronqués]`
+
+  ```
+GPU sans miroir KV (DRAVE_GPU seul) ctx 1024 : perplexité 18.3538 sur 511 tokens
+21:09:49
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\ndef patch(p, paires):\n    s=open(p).read()\n    for v,n,nom in paires:\n        assert s.count(v)==1, f\"{p}::{nom}::{s.count(v)}\"\n        s=s.replace(v,n,1)\n    open(p,'w').write(s); print(f\"{p} ok\")\n\npatch … [2808 caractères tronqués]`
+
+  ```
+reports/rapport-gpu-topk-selection.md ok
+=== portes sprint 2 (binaire final) ===
+Qwen Q8_0 ctx 256 : perplexité 19.3885 sur 510 tokens
+gpt-oss MXFP4 ctx 256 : perplexité 15.1757 sur 510 tokens
+cargo test : test result: ok. 17 passed
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\n# La cérémonie : on ajoute les chiffres gpt-oss et le doute sur les projections.\np='/tmp/ceremonie2.md'; s=open(p).read()\ns = s.replace(\"\"\"### Revue adverse (sous-agent, autonome) — et ce qu'elle a trouvé\"\"\" … [2562 caractères tronqués]`

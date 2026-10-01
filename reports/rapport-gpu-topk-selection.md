@@ -261,20 +261,61 @@ de 8 lancements à **2** (les scores, puis le noyau fusionné) et le tampon
 chaîne. Le seuil de bascule est donc **mesuré** (131 072) et câblé dans le modèle :
 noyau 4 en dessous, chaîne au-dessus.
 
-**Dans le moteur** (`--attn-topk 256`, 24 couches, attention en ms/jeton) :
+### La grille propre : une seule variable bouge
 
-| jetons | clés vues (moy.) | CPU | GPU avant fusion | **GPU fusionné** |
+Le sprint précédent avait comparé des lignes qui différaient par DEUX variables
+(le contexte alloué ET le nombre de jetons). Ici, contexte fixé (16 384), on fait
+varier le NOMBRE DE JETONS — donc les clés réellement notées (`n = pos + 1`).
+`--attn-topk 256`, 24 couches, Qwen2.5-0.5B Q8_0 :
+
+| jetons | clés vues (moy.) | attention CPU | attention GPU | PPL CPU / GPU |
 |---|---|---|---|---|
-| 511 | 255 | **4,04** | 7,68 | 4,46 |
-| 1 023 | 512 | 7,20 | — | **4,59** |
-| 4 095 | 2 047 | 19,58 | 7,59 | **4,76** |
+| 511 | 255 | **4,26** | 4,53 | 13,1358 / 13,1355 |
+| 1 023 | 512 | 7,17 | **4,62** | 9,4167 / 9,4162 |
+| 2 047 | 1 024 | 12,08 | **4,82** | — |
+| 4 095 | 2 047 | 19,77 | **4,86** | 12,2267 / 12,2265 |
+| 8 191 | 4 095 | 38,84 | **4,97** | — |
 
-Le croisement avec le CPU passe de « entre 255 et 2 047 clés » à **~300 clés**, et
-le gain à 512 clés est déjà de **−36 %** sur l'attention (7,20 → 4,59 ms/jeton).
-À 2 047 clés : attention **19,58 → 4,76 ms/jeton (−76 %)**, balayage 203,7 →
-**142,9 s (−30 %)**, perplexité identique (12,2267 / 12,2265). Le noyau
-fusionné est plat (4,46 / 4,59 / 4,76 ms/jeton de 255 à 2 047 clés) là où le CPU
-double deux fois.
+**Le croisement est à ~300 clés** : à 255 clés le CPU garde 6 % d'avance, à 512 le
+GPU en prend 36 %, à 4 095 clés il est **7,8× plus rapide** (4,97 contre
+38,84 ms/jeton).
+Le GPU est **plat** (4,53 → 4,86 sur un facteur 16 en clés) ; le CPU, lui, croît
+linéairement (+0,0043 ms par clé et par jeton). La perplexité est identique à 2e-5
+près à chaque point où les deux chemins ont été mesurés.
+
+## Les puits en vrai : gpt-oss (le seul modèle qui en a) sous `DRAVE_GPU_TOPK`
+
+Qwen2.5 n'a pas de puits : le chemin des puits du noyau 4 n'était exercé que par le
+banc, avec des puits fabriqués. gpt-oss-120b en a (64 valeurs, une par tête de
+requête, de −1,95 à +3,38), et c'est aussi le modèle dont une relecture avait
+trouvé le mauvais indexage des puits dans `attn_kv_recombine`.
+
+À `--ctx 256`, k = 256 ≥ n : **le top-k ne retire rien**, et c'est exactement ce
+qu'on mesure — la valeur du chemin top-k déporté (15,1666) est celle du chemin GPU
+dense (15,1667), l'écart de 6,6e-5 avec le CPU (15,1757) étant celui, connu et
+documenté, du calcul d'attention en VRAM. Les puits traversent donc le noyau 4 sans
+changement mesurable.
+
+À `--ctx 1024` (k = 256 < n jusqu'à 511 clés), le top-k retire vraiment, et les
+quatre combinaisons disent deux choses :
+
+| gpt-oss, ctx 1024, 511 jetons | perplexité | effet |
+|---|---|---|
+| CPU, dense | 18,5803 | — |
+| CPU, top-k 256 | 19,0740 | **+2,66 %** : le coût du pruning |
+| GPU, dense (`DRAVE_GPU_KV`) | 18,3074 | −1,47 % vs CPU |
+| GPU, top-k 256 (`DRAVE_GPU_TOPK`) | 18,8391 | **+2,90 %** : même coût |
+| GPU sans miroir KV (`DRAVE_GPU` seul) | 18,3538 | −1,22 % vs CPU |
+
+1. **le coût du pruning est le même des deux côtés** (+2,7 % CPU, +2,9 % GPU) :
+   c'est la réponse à « le top-k déporté calcule-t-il la même chose que le CPU ? »
+   — oui, à la bascule de rang près ;
+2. **l'écart CPU/GPU de 1,2 à 1,5 % n'est PAS le miroir KV** (−1,22 % avec les
+   seules projections déportées, −1,47 % avec le miroir en plus, soit −0,25 % pour
+   le miroir). Il vient du déport des PROJECTIONS Q8_0/MXFP4, dont l'ordre de
+   sommation diffère — un effet de 0,06 % à ctx 256 sur le même modèle, donc
+   amplifié ici par la sensibilité de la perplexité à 511 jetons. C'est un doute à
+   instruire, pas une explication : il est noté dans l'introspection du sprint.
 
 ## Limites connues du contrat
 
