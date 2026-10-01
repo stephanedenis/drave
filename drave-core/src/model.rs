@@ -3277,6 +3277,28 @@ dynamique de {dyn_:.3e} (relatif {:.2e})", mx / dyn_.max(1e-9));
                 let k = self.attn_topk.min(n);
                 if let Some((idx, m)) = kv_gpu.as_mut().and_then(|v| v.get_mut(l)) {
                     let machine = crate::gpu::machines()[*idx];
+                    let puits: Option<Vec<f32>> = lay.sinks.as_ref()
+                        .map(|s| (0..nh).map(|h| s[h]).collect());
+                    // Noyau fusionné (descente + collecte + somme en UN lancement)
+                    // tant qu'il est mesuré plus rapide que la chaîne séparée :
+                    // 0,13 contre 0,22 ms à 4 k clés, 0,85 contre 0,89 à 131 k —
+                    // au-delà (262 k : 1,58 contre 1,35) la chaîne reprend, car
+                    // ses 1 792 blocs saturent mieux la VRAM que les 14 blocs du
+                    // noyau fusionné. Le seuil est MESURÉ, pas choisi.
+                    const SEUIL_NOYAU4: usize = 131_072;
+                    if n <= SEUIL_NOYAU4 {
+                        let mut ok = machine.attn_scores_sans_relecture(m, &q[..nh * hd], n, scale);
+                        if ok {
+                            ok = machine.attn_topk_tout(m, nh, n, k, hd, rep, puits.as_deref(),
+                                                        &mut att[..nh * hd]);
+                        }
+                        if ok {
+                            *attn_events += (nh * k) as u64;
+                            fait_en_gpu = true;
+                        } else if !TOPK_GPU_ECHEC.swap(true, std::sync::atomic::Ordering::Relaxed) {
+                            eprintln!("[topk] noyau fusionné en échec : repli CPU (message unique)");
+                        }
+                    } else {
                     let mut pref = vec![0u32; nh];
                     let mut dessus = vec![0usize; nh];
                     let mut hist = vec![0u32; nh * 256];
@@ -3307,8 +3329,6 @@ dynamique de {dyn_:.3e} (relatif {:.2e})", mx / dyn_.max(1e-9));
                         eprintln!("[topk] collecte incomplète (case non écrite) : repli CPU");
                         ok = false;
                     }
-                    let puits: Option<Vec<f32>> = lay.sinks.as_ref()
-                        .map(|s| (0..nh).map(|h| s[h]).collect());
                     if ok {
                         ok = machine.attn_topk_somme(m, nh, n, k, hd, rep, puits.as_deref(),
                                                      &mut att[..nh * hd]);
@@ -3326,6 +3346,7 @@ dynamique de {dyn_:.3e} (relatif {:.2e})", mx / dyn_.max(1e-9));
                         // silencieux ensuite (les raisons, elles, sont imprimées
                         // par le noyau fautif).
                         eprintln!("[topk] chaîne déportée en échec : repli CPU (message unique)");
+                    }
                     }
                 }
             }

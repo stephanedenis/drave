@@ -238,6 +238,44 @@ aucun banc ne le couvrait (les bancs KV n'ont pas de puits non plus). C'est la
 démonstration la plus nette de la journée qu'une relecture **par un autre** trouve
 ce que les mesures ne cherchent pas.
 
+## Noyau 4 : tout le top-k d'une ligne en UN lancement
+
+La chaîne séparée coûtait 8 lancements et 17 transferts par couche et par jeton —
+d'où un croisement avec le CPU repoussé au-delà de 255 clés. `attn_topk_tout`
+fusionne **descente radix, collecte et somme** dans un seul noyau par ligne : les
+256 compteurs d'histogramme, les k clés, les k indices et les k poids vivent en
+mémoire partagée, et **aucun indice ne quitte la VRAM**. La chaîne complète passe
+de 8 lancements à **2** (les scores, puis le noyau fusionné) et le tampon
+`nh × n × 4` du plan disparaît.
+
+| n clés | noyau 4 (2 lancements) | chaîne (9 lancements) | écart relatif du noyau 4 |
+|---|---|---|---|
+| 4 096 | **0,13 ms** | 0,22 ms | 7,19e-7 |
+| 16 384 | **0,18 ms** | 0,43 ms | 9,15e-7 |
+| 65 536 | **0,43 ms** | 0,57 ms | 5,68e-7 |
+| 131 072 | **0,85 ms** | 0,89 ms | 6,36e-7 |
+| 262 144 | 1,58 ms | **1,35 ms** | 7,01e-7 |
+
+⚠️ **Le noyau fusionné perd au-delà de 131 072 clés** (1,58 contre 1,35 ms) : ses
+14 blocs (un par ligne) saturent moins bien la VRAM que les 1 792 blocs de la
+chaîne. Le seuil de bascule est donc **mesuré** (131 072) et câblé dans le modèle :
+noyau 4 en dessous, chaîne au-dessus.
+
+**Dans le moteur** (`--attn-topk 256`, 24 couches, attention en ms/jeton) :
+
+| jetons | clés vues (moy.) | CPU | GPU avant fusion | **GPU fusionné** |
+|---|---|---|---|---|
+| 511 | 255 | **4,04** | 7,68 | 4,46 |
+| 1 023 | 512 | 7,20 | — | **4,59** |
+| 4 095 | 2 047 | 19,58 | 7,59 | **4,76** |
+
+Le croisement avec le CPU passe de « entre 255 et 2 047 clés » à **~300 clés**, et
+le gain à 512 clés est déjà de **−36 %** sur l'attention (7,20 → 4,59 ms/jeton).
+À 2 047 clés : attention **19,58 → 4,76 ms/jeton (−76 %)**, balayage 203,7 →
+**142,9 s (−30 %)**, perplexité identique (12,2267 / 12,2265). Le noyau
+fusionné est plat (4,46 / 4,59 / 4,76 ms/jeton de 255 à 2 047 clés) là où le CPU
+double deux fois.
+
 ## Limites connues du contrat
 
 Le radix select s'appuie sur la transformation monotone du f32. Elle est

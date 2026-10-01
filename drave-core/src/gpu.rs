@@ -170,6 +170,9 @@ pub struct Gpu {
     f_attn_topk_ecrit: *mut c_void,
     /// Softmax sur les k retenus + somme pondérée des V (noyau 3 du plan).
     f_attn_topk_somme: *mut c_void,
+    /// Le top-k COMPLET d'une ligne en un lancement (noyau 4) : descente radix,
+    /// collecte et somme, sans aucun aller-retour par l'hôte.
+    f_attn_topk_tout: *mut c_void,
     pub nom: String,
     /// Numéro du périphérique, pour savoir qui est qui quand il y en a deux.
     pub ordinal: c_int,
@@ -316,6 +319,13 @@ impl Gpu {
                 eprintln!("{}", erreur(rc, "fonction attn_topk_somme"));
                 return None;
             }
+            let nom_tt = std::ffi::CString::new("attn_topk_tout").unwrap();
+            let mut f_attn_topk_tout: *mut c_void = std::ptr::null_mut();
+            let rc = cuModuleGetFunction(&mut f_attn_topk_tout, module, nom_tt.as_ptr());
+            if rc != 0 {
+                eprintln!("{}", erreur(rc, "fonction attn_topk_tout"));
+                return None;
+            }
             let nom_r = std::ffi::CString::new("attn_kv_recombine").unwrap();
             let mut f_attn_recombine: *mut c_void = std::ptr::null_mut();
             let rc = cuModuleGetFunction(&mut f_attn_recombine, module, nom_r.as_ptr());
@@ -332,7 +342,7 @@ impl Gpu {
             Some(Gpu { ctx, module, f_tete, f_proj, f_tete_warp, f_proj_warp,
                        f_mxfp4_warp, f_q4k_warp, f_q6k_warp, f_attn_scores,
                        f_attn_topk_histo, f_attn_topk_compte, f_attn_topk_ecrit,
-                       f_attn_topk_somme,
+                       f_attn_topk_somme, f_attn_topk_tout,
                        f_attn_part, f_attn_recombine, ordinal,
                        nom: format!("GPU {ordinal}"), memoire_libre: libre })
         }
@@ -1050,6 +1060,100 @@ k = {k} (plafonné à 1024 : le partagé du noyau tient 2k + 256 flottants), hd 
             }
             let rc = cuMemcpyDtoH_v2(out.as_mut_ptr() as *mut c_void, p_out, octets_out);
             if rc != 0 { eprintln!("{}", erreur(rc, "relecture de l'attention")); return false; }
+        }
+        true
+    }
+
+    /// **Le top-k d'une ligne en UN lancement** (noyau 4, `docs/plan-gpu-topk.md`).
+    ///
+    /// Remplace la chaîne historique (4 passes d'histogramme + comptage +
+    /// écriture + somme, soit 8 lancements et 17 transferts par couche et par
+    /// jeton) par un seul noyau : descente radix en mémoire partagée, collecte
+    /// déterministe des k indices, softmax et somme pondérée des V.
+    ///
+    /// **Contrat** : `m.scores_dev` doit déjà contenir `lignes × n` scores
+    /// (appeler [`Gpu::attn_scores_sans_relecture`] juste avant — 1 lancement).
+    /// `k ≤ 1024`, valeurs 8 ou 32 bits, `hd ≤ 1024`.
+    pub fn attn_topk_tout(&self, m: &mut KvGpu, lignes: usize, n: usize, k: usize,
+                          hd: usize, rep: usize, sinks: Option<&[f32]>,
+                          out: &mut [f32]) -> bool {
+        cu_ctx(self.ctx);
+        if lignes == 0 || n == 0 || k == 0 || k > 1024 || hd == 0 || hd > 1024 || rep == 0 {
+            eprintln!("[topk] noyau 4 : dimensions refusées — {lignes} lignes, {n} clés, \
+k = {k} (≤ 1024), hd = {hd}");
+            return false;
+        }
+        if m.bits != 8 && m.bits != 32 {
+            eprintln!("[topk] noyau 4 : valeurs {} bits non gérées (8 ou 32)", m.bits);
+            return false;
+        }
+        if m.scores_cap < lignes * n || out.len() < lignes * hd || n > m.capacite {
+            eprintln!("[topk] noyau 4 : scores, sortie ou capacité KV trop courts");
+            return false;
+        }
+        let fils = 1024usize;
+        // 256 compteurs + k clés + k indices + k poids, puis 2 réductions.
+        let partage = (256 + 3 * k) * 4 + 2 * fils * 4;
+        if partage > 48 * 1024 {
+            eprintln!("[topk] noyau 4 : {partage} octets de partagé demandés (48 ko au plus)");
+            return false;
+        }
+        let mut p_sinks: u64 = 0;
+        if let Some(si) = sinks {
+            if si.len() < lignes { return false; }
+            unsafe {
+                if !vram_assurer(&mut m.sinks_dev, &mut m.sinks_cap, lignes * 4) { return false; }
+                if cuMemcpyHtoD_v2(m.sinks_dev, si.as_ptr() as *const c_void, lignes * 4) != 0 {
+                    return false;
+                }
+            }
+            p_sinks = m.sinks_dev;
+        }
+        unsafe {
+            if !vram_assurer(&mut m.out_dev, &mut m.out_cap, lignes * hd * 4) { return false; }
+            let mut p_sc = m.scores_dev;
+            let mut p_v = m.v;
+            let mut p_vs = m.sv;
+            let mut p_out = m.out_dev;
+            let (n_i, ctx_i, hd_i, nb_i, k_i, rep_i, bits_i) =
+                (n as c_int, m.capacite as c_int, hd as c_int, m.nb as c_int,
+                 k as c_int, rep as c_int, m.bits as c_int);
+            // Douze paramètres, exactement ceux du noyau (un tableau plus long
+            // serait sans effet mais trompeur — un paramètre en trop ne se voit
+            // qu'à la relecture).
+            let mut params: [*mut c_void; 12] = [
+                &mut p_sc as *mut u64 as *mut c_void,
+                &mut p_v as *mut u64 as *mut c_void,
+                &mut p_vs as *mut u64 as *mut c_void,
+                &mut p_sinks as *mut u64 as *mut c_void,
+                &mut p_out as *mut u64 as *mut c_void,
+                &n_i as *const c_int as *mut c_void,
+                &ctx_i as *const c_int as *mut c_void,
+                &hd_i as *const c_int as *mut c_void,
+                &nb_i as *const c_int as *mut c_void,
+                &k_i as *const c_int as *mut c_void,
+                &rep_i as *const c_int as *mut c_void,
+                &bits_i as *const c_int as *mut c_void,
+            ];
+            let rc = cuLaunchKernel(self.f_attn_topk_tout, lignes as c_uint, 1, 1,
+                                    fils as c_uint, 1, 1, partage as c_uint,
+                                    std::ptr::null_mut(), params.as_mut_ptr(),
+                                    std::ptr::null_mut());
+            if rc != 0 {
+                eprintln!("{}", erreur(rc, "lancement attn_topk_tout"));
+                return false;
+            }
+            let rc = cuMemcpyDtoH_v2(out.as_mut_ptr() as *mut c_void, p_out, lignes * hd * 4);
+            if rc != 0 { eprintln!("{}", erreur(rc, "relecture du noyau 4")); return false; }
+        }
+        // Contrôle de la sortie : le noyau 4 écrit un NaN si sa collecte n'a pas
+        // rempli les k places. Une sortie non finie est refusée plutôt que
+        // publiée — c'est le seul filet possible, les indices ne quittant plus la
+        // VRAM.
+        if let Some(pos) = out.iter().position(|v| !v.is_finite()) {
+            eprintln!("[topk] noyau 4 : sortie non finie à l'indice {pos} — collecte incomplète, \
+repli CPU");
+            return false;
         }
         true
     }

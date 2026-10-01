@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 52.9 h |
-| Tours | 47 |
-| Messages | 2274 |
-| Appels d'outils | 2152 |
+| Durée | 53.3 h |
+| Tours | 48 |
+| Messages | 2300 |
+| Appels d'outils | 2176 |
 | Fichiers touchés | 47 |
-| Commandes | 1803 |
+| Commandes | 1826 |
 | Sous-agents | 14 |
-| Commits | 195 |
+| Commits | 196 |
 | Compactages de contexte | 3 |
 
 ## Objectifs déclarés
@@ -129,6 +129,8 @@
 **Tour 46** — continue jusqu'à 18h HAE
 
 **Tour 47** — pret pour des scrum de 2h (boxing temps réel, avec revue, rétro et planning)
+
+**Tour 48** — Continue en blocs de 2h jusqu'à demain 8h HAE. pour chacun des blocs/sprints tu dois être en autonomie totale. C'est à dire que pour cette période tu ne dois attendre après aucune interaction humaine. les rétros seront des introspections, les revues seront en mode adverse autonome. tu enchaine avec ce qui a le plus de valeur en fonction de la mission de haut niveau et de l'autonomie dont tu dispos … [2 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -2197,7 +2199,62 @@ Le mode creux ne peut pas utiliser le miroir VRAM (le chemin GPU est conditionn�
 
 **Synthèse produite :**
 
-⏵ Box clos à 19:41 pile, je remplis la cérémonie (revue, rétro, planning)
+**Sprint 1 clos — box 17:41 → 19:41 (120 min pleines), 22 commits, dépôt vert, machine rendue.**
+
+L'objectif (le premier des trois noyaux du top-k GPU) est livré — et les deux autres avec, plus le branchement dans le moteur.
+
+\## Livré, chiffre par chiffre
+
+| # | livrable | mesure |
+|---|---|---|
+| 1 | `attn_scores` (objectif du sprint) | écart **1,6–2,3e-7** · **26,7–40×** le CPU |
+| 2 | seuil radix 4 passes | k-ième score **exact au bit près, 14/14 lignes** à 4 k → **1 M** clés |
+| 3 | collecte des k indices | **même ensemble que le CPU** (diff. symétrique **0**), **0,95 ms** contre 1 653 ms de tri à 1 M |
+| 4 | `attn_topk_somme` | écart **1,0–4,8e-7** · temps GPU **constant (0,07 ms)** |
+| 5 | `DRAVE_GPU_TOPK=1` dans `forward` | PPL identique (12,2265 vs 12,2267) · **à 2 047 clés vues : attention 19,58 → 7,59 ms/jeton (−61 %), balayage −24 %** |
+| 6 | à 1 M clés | chaîne complète **3,90 ms** contre 539,9 ms CPU (×138), **0,3×** le complet en VRAM |
+| 7 | portes | Qwen **19,3885** · gpt-oss **15,1757** (CPU) et **15,1667** (GPU) · tests **17/17** |
+
+\## Cinq défauts, cinq moyens de les trouver
+
+- **le banc était dégénéré** (même clé partout → descente radix jamais exercée) : trouvé **en le relisant**, pas en le faisant échouer ;
+- **le puits compté 256 fois** dans le noyau 3 (une fois par fil) : trouvé **par le banc** en une ligne — 2,05e-1 → 4,79e-7 ;
+- **un pointeur 0 après échec d'allocation** (garde piloté par les dimensions) : **relecture adversariale n° 1**, 7 défauts ;
+- **`attn_kv_recombine` lisait `sinks[warp]`** au lieu de la tête globale : **relecture n° 2** — gpt-oss `DRAVE_GPU_KV=1` **17,6531 → 15,1786** (référence CPU 15,1757), invisible pour toutes les portes ;
+- **quatre chiffres de documentation faux ou périmés** : **audit de documentation** dédié.
+
+\## Ce que la rétrospective a acté
+
+Trois corrections que je me suis imposées en cours de route : j'avais annoncé un gain **sans mesurer le coût fixe** (8 lancements + 17 transferts par couche et par jeton rendaient le déport 1,8× plus lent à 255 clés) ; j'avais écrit « le croisement est entre 8 k et 16 k clés » alors que ces lignes différaient aussi par le **nombre de jetons** (le croisement en clés est entre 255 et 2 047) ; et j'ai écrit un **chiffre non mesuré dans un message de commit**, amendé dans la minute.
+
+\## Sprint 2 (planning écrit dans `sprints/01-…md`)
+
+Fusionner la sélection en un noyau par ligne (8 lancements → 2), supprimer le tampon `nh × n × 4` par couche, refuser bruyamment `-
+… [82 caractères tronqués]
+
+### Tour 48 — Continue en blocs de 2h jusqu'à demain 8h HAE. pour chacun des blocs/sprints tu dois être en autonomie totale. C'est à d … [282 caractères tronqués]
+
+*24 appels d'outils.* Actions notables :
+
+- bash — Check time and count remaining boxes
+- bash — Start sprint 2
+- bash — Fix sprint numbering to 2
+- todo_write
+- bash — Write fused kernel and compile
+- bash — Add fused kernel FFI
+- bash — Fix kernel params count
+- bash — Add fused kernel bench and run
+- bash — Bench fused kernel at 262k
+- bash — Compare fused vs chain at 3 sizes
+- bash — Build comparison table fused vs chain
+- bash — Add poison check and finiteness guard
+- bash — Locate the topk GPU branch
+- bash — Wire fused kernel into the model
+- … et 10 autres
+
+**Synthèse produite :**
+
+Maintenant le banc doit vérifier le noyau fusionné contre la référence CPU :
 
 ## 3. Travail accompli
 
@@ -2312,7 +2369,7 @@ Le mode creux ne peut pas utiliser le miroir VRAM (le chemin GPU est conditionn�
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 1763 autres
+- … et 1786 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2655,4 +2712,5 @@ Le mode creux ne peut pas utiliser le miroir VRAM (le chemin GPU est conditionn�
 - Journal : index des sessions (fin de sprint 1)" && git log --oneline --since="2026-09-30 17:41" | wc -l && git status --short | wc -l && pgrep -c -x drave; echo
 - Journal : index des sessions (clôture)" 2>/dev/null; git status --short; echo "--- 22 commits, aucun processus, dépôt propre ---"; pgrep -c -x drave; ps -eo pcp
 - Journal : index régénéré par l'outillage de session" && git log --oneline -3 && echo "--- reste ---" && git status --short | wc -l
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' def patch(p, paires):     s=open(p).read()     for v,n,nom in paires:         assert s.co
 

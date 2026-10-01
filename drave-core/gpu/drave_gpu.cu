@@ -954,3 +954,165 @@ extern "C" __global__ void attn_topk_somme(const float* __restrict__ sc,
         out[(size_t)ligne * hd + d] = acc * inv;
     }
 }
+
+// ---------------------------------------------------------------------------
+// Noyau 4 : TOUT le top-k d'une ligne en UN lancement.
+//
+// Pourquoi : la chaîne séparée (histogramme ×4, comptage, écriture, somme) coûte
+// 8 lancements et 17 transferts par couche et par jeton — mesuré 12 µs par
+// opération, soit ~65 % du temps d'attention déportée, ce qui repoussait le
+// croisement avec le CPU entre 255 et 2 047 clés. Ici, un bloc par ligne :
+//
+//   1. quatre passes d'octets de la descente radix, chacune : histogramme de 256
+//      seaux EN PARTAGÉ, puis le fil 0 descend les seaux et fixe l'octet du
+//      préfixe (aucun aller-retour par l'hôte) ;
+//   2. collecte des k indices dans l'ordre déterministe du contrat : ceux
+//      strictement au-dessus du seuil, puis les égaux, chacun par indices
+//      croissants (plages CONTIGUËS par fil, comme `attn_topk_ecrit`) ;
+//   3. softmax sur ces k scores (puits compris au dénominateur) et somme
+//      pondérée des V, lus en VRAM par les indices.
+//
+// Le tampon de scores complet `nh × n × 4` du plan disparaît : les scores ne sont
+// lus qu'en VRAM, et les k indices retenus vivent en partagé.
+//
+// Contrainte de parallélisme, mesurée et assumée : 14 blocs (un par ligne) avec
+// 1024 fils. Le travail est une lecture en flux (4 passes + 1 collecte), donc
+// borné par la bande passante et non par le nombre d'unités : c'est le banc qui
+// tranchera, pas l'intuition.
+// ---------------------------------------------------------------------------
+
+extern "C" __global__ void attn_topk_tout(const float* __restrict__ sc,
+                                          const void* __restrict__ vdata,
+                                          const float* __restrict__ vscale,
+                                          const float* __restrict__ sinks,
+                                          float* __restrict__ out,   // [lignes][hd]
+                                          int n, int ctx, int hd, int nb,
+                                          int k, int rep, int bits) {
+    extern __shared__ float sh[];
+    // Partagé : 256 compteurs, k clés (entier monotone), k indices, k poids,
+    // 2 × blockDim réductions. k ≤ 1024.
+    unsigned int* shHisto = reinterpret_cast<unsigned int*>(sh);
+    unsigned int* shCle   = shHisto + 256;
+    int*          shIdx   = reinterpret_cast<int*>(shCle + k);
+    float*        shW     = reinterpret_cast<float*>(shIdx + k);
+    float*        red     = shW + k;                 // blockDim.x cases
+    float*        red2    = red + blockDim.x;        // blockDim.x cases
+    const int ligne = blockIdx.x;
+    const int tid = threadIdx.x;
+    const int kvh = ligne / rep;
+    const float* row = sc + (size_t)ligne * n;
+    const size_t base = (size_t)kvh * ctx;
+
+    unsigned int pref = 0u;
+    int dessus = 0;
+    for (int etape = 0; etape < 4; etape++) {
+        const int decalage = 24 - 8 * etape;
+        for (int i = tid; i < 256; i += blockDim.x) shHisto[i] = 0u;
+        __syncthreads();
+        for (int i = tid; i < n; i += blockDim.x) {
+            const unsigned int cle = monotone(row[i]);
+            if (((cle >> decalage) >> 8) == pref)
+                atomicAddPartage(&shHisto[(cle >> decalage) & 0xFFu], 1u);
+        }
+        __syncthreads();
+        if (tid == 0) {
+            int cum = dessus;
+            int b = 256;
+            while (b > 0 && cum < k) { b--; cum += (int)shHisto[b]; }
+            dessus = cum - (int)shHisto[b];
+            pref = (pref << 8) | (unsigned int)b;
+            shHisto[0] = pref;      // relu par tous après la barrière
+            shHisto[1] = (unsigned int)dessus;
+        }
+        __syncthreads();
+        pref = shHisto[0];
+        dessus = (int)shHisto[1];
+    }
+    const int besoin = k - dessus;      // ≥ 1 par construction
+
+    // ---- collecte : compte par fil sur une plage contiguë, balayage, écriture
+    const int par = (n + blockDim.x - 1) / blockDim.x;
+    const int d0 = tid * par;
+    const int d1 = min(n, d0 + par);
+    int nsup = 0, neq = 0;
+    for (int i = d0; i < d1; i++) {
+        const unsigned int cle = monotone(row[i]);
+        if (cle > pref) nsup++;
+        else if (cle == pref) neq++;
+    }
+    red[tid] = (float)nsup;
+    red2[tid] = (float)neq;
+    __syncthreads();
+    if (tid == 0) {
+        int a = 0, b = 0;
+        for (int i = 0; i < blockDim.x; i++) {
+            const int s = (int)red[i], e = (int)red2[i];
+            red[i] = (float)a;
+            red2[i] = (float)b;
+            a += s; b += e;
+        }
+    }
+    __syncthreads();
+    const int base_sup = (int)red[tid];
+    const int base_eq = (int)red2[tid];
+    int rs = 0, re = 0;
+    for (int i = d0; i < d1; i++) {
+        const float s = row[i];
+        const unsigned int cle = monotone(s);
+        if (cle > pref) {
+            shIdx[base_sup + rs] = i;
+            shW[base_sup + rs] = s;
+            rs++;
+        } else if (cle == pref && (base_eq + re) < besoin) {
+            shIdx[dessus + base_eq + re] = i;
+            shW[dessus + base_eq + re] = s;
+            re++;
+        }
+    }
+    // Poison : si la collecte n'a pas rempli EXACTEMENT les k places (ce que la
+    // descente garantit, mais un invariant non vérifié est un invariant qu'on
+    // espère), les cases restantes contiendraient de la mémoire partagée
+    // quelconque — une sortie plausible et fausse. Un NaN, lui, se voit : l'hôte
+    // refuse la sortie non finie et rend la main au CPU.
+    red[tid] = (float)(rs + re);
+    __syncthreads();
+    if (tid == 0) {
+        int total = 0;
+        for (int i = 0; i < blockDim.x; i++) total += (int)red[i];
+        if (total != k) out[(size_t)ligne * hd] = __int_as_float(0x7FC00000);  // NaN
+    }
+    __syncthreads();
+
+    // ---- softmax sur ces k scores (indices en partagé, plus de relecture)
+    float m = -1e30f;
+    for (int j = tid; j < k; j += blockDim.x) m = fmaxf(m, shW[j]);
+    if (sinks != nullptr) m = fmaxf(m, sinks[ligne]);
+    red[tid] = m;
+    __syncthreads();
+    for (int pas = blockDim.x >> 1; pas > 0; pas >>= 1) {
+        if (tid < pas) red[tid] = fmaxf(red[tid], red[tid + pas]);
+        __syncthreads();
+    }
+    m = red[0];
+    float somme = 0.0f;
+    for (int j = tid; j < k; j += blockDim.x) {
+        const float w = expf(shW[j] - m);
+        shW[j] = w;
+        somme += w;
+    }
+    if (sinks != nullptr && tid == 0) somme += expf(sinks[ligne] - m);
+    red[tid] = somme;
+    __syncthreads();
+    for (int pas = blockDim.x >> 1; pas > 0; pas >>= 1) {
+        if (tid < pas) red[tid] += red[tid + pas];
+        __syncthreads();
+    }
+    const float inv = (red[0] > 0.0f) ? 1.0f / red[0] : 0.0f;
+    for (int d = tid; d < hd; d += blockDim.x) {
+        float acc = 0.0f;
+        for (int j = 0; j < k; j++) {
+            acc += shW[j] * valeur_v(vdata, vscale, base, shIdx[j], d, hd, nb, bits);
+        }
+        out[(size_t)ligne * hd + d] = acc * inv;
+    }
+}

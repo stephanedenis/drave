@@ -2648,9 +2648,14 @@ l'entrelace — c'est le seul écart attendu)");
     let sinks: Vec<f32> = (0..lignes).map(|l| -1.0 + 0.001 * l as f32).collect();
     let mut att_gpu = vec![0f32; lignes * hd];
     let t8 = Instant::now();
-    if !machine.attn_topk_somme(&mut miroir, lignes, n, k, hd, rep, Some(&sinks), &mut att_gpu) {
-        println!("    le noyau 3 a refusé la configuration");
-        return;
+    // Un refus du noyau 3 (k > 1024, valeurs 4 bits) ne doit pas interrompre le
+    // banc : les blocs suivants (noyau fusionné, second passage) restent
+    // mesurables, et c'est justement là qu'on veut voir le repli.
+    let ok3 = machine.attn_topk_somme(&mut miroir, lignes, n, k, hd, rep, Some(&sinks),
+                                      &mut att_gpu);
+    if !ok3 {
+        println!("    le noyau 3 a refusé la configuration (k = {k} ?) — suites du banc \
+poursuivies");
     }
     let t_somme = t8.elapsed().as_secs_f64();
     let t9 = Instant::now();
@@ -2679,17 +2684,81 @@ l'entrelace — c'est le seul écart attendu)");
     let t_cpu_somme = t9.elapsed().as_secs_f64();
     let mut mx3 = 0f32;
     let mut dyn3 = 0f32;
-    for (a, b) in att_cpu.iter().zip(att_gpu.iter()) {
-        mx3 = mx3.max((a - b).abs());
-        dyn3 = dyn3.max(a.abs());
+    if ok3 {
+        for (a, b) in att_cpu.iter().zip(att_gpu.iter()) {
+            mx3 = mx3.max((a - b).abs());
+            dyn3 = dyn3.max(a.abs());
+        }
     }
     println!("    noyau 3 (softmax sur k + Σ w·V) : GPU {:.2} ms · CPU {:.2} ms · écart max \
 {mx3:.3e} sur {dyn3:.3e} (relatif {:.2e})",
              t_somme * 1e3, t_cpu_somme * 1e3, mx3 / dyn3.max(1e-9));
-    if mx3 / dyn3.max(1e-9) < 1e-6 {
+    if ok3 && mx3 / dyn3.max(1e-9) < 1e-6 {
         println!("    → conforme au critère du plan pour la sortie (1e-6)");
-    } else {
+    } else if ok3 {
         println!("    → AU-DESSUS du critère de 1e-6 : ne pas brancher dans le moteur");
+    }
+
+    // ---------------- noyau 4 : tout le top-k d'une ligne en UN lancement
+    // Même vérification que la chaîne séparée, mais par le noyau fusionné : les
+    // indices ne sortent plus de la VRAM, donc la comparaison porte sur la
+    // SORTIE (le vecteur d'attention) et non sur l'ensemble des indices.
+    {
+        let mut att4 = vec![0f32; lignes * hd];
+        let t10 = Instant::now();
+        let ok4 = machine.attn_scores_sans_relecture(&mut miroir, &q, n, scale)
+            && machine.attn_topk_tout(&mut miroir, lignes, n, k, hd, rep, Some(&sinks),
+                                      &mut att4);
+        let t_tout = t10.elapsed().as_secs_f64();
+        if !ok4 {
+            println!("    noyau 4 : refusé (repli sur la chaîne séparée)");
+        } else {
+            // Référence : les mêmes k indices que le noyau 4 doit choisir, et les
+            // mêmes valeurs — recalculés ici depuis le cache hôte.
+            let mut att_ref = vec![0f32; lignes * hd];
+            let mut idx_ref = vec![0i32; lignes * k];
+            {
+                let mut vd = vec![0f32; hd];
+                for l in 0..lignes {
+                    let ligne = &obtenu[l * n..(l + 1) * n];
+                    let mut ord: Vec<u32> = (0..n as u32).collect();
+                    ord.sort_unstable_by(|&a, &b| {
+                        ligne[b as usize].partial_cmp(&ligne[a as usize]).unwrap().then(a.cmp(&b))
+                    });
+                    ord.truncate(k);
+                    for (i, &j) in ord.iter().enumerate() { idx_ref[l * k + i] = j as i32; }
+                    let kvh = l / rep;
+                    let mut m = sinks[l];
+                    for &j in ord.iter() { m = m.max(ligne[j as usize]); }
+                    let mut den = (sinks[l] - m).exp();
+                    let mut w = vec![0f32; k];
+                    for (i, &j) in ord.iter().enumerate() {
+                        let e = (ligne[j as usize] - m).exp();
+                        w[i] = e;
+                        den += e;
+                    }
+                    for i in 0..k {
+                        cache.valeur(kvh, ord[i] as usize, &mut vd);
+                        for d in 0..hd { att_ref[l * hd + d] += w[i] * vd[d]; }
+                    }
+                    for d in 0..hd { att_ref[l * hd + d] /= den; }
+                }
+            }
+            let mut mx4 = 0f32;
+            let mut dyn4 = 0f32;
+            for (a, b) in att_ref.iter().zip(att4.iter()) {
+                mx4 = mx4.max((a - b).abs());
+                dyn4 = dyn4.max(a.abs());
+            }
+            println!("    noyau 4 (UN lancement) : {:.2} ms · écart max {mx4:.3e} sur {dyn4:.3e} \
+(relatif {:.2e})", t_tout * 1e3, mx4 / dyn4.max(1e-9));
+            if mx4 / dyn4.max(1e-9) < 1e-6 {
+                println!("    → conforme au critère du plan (1e-6), en UN lancement au lieu de huit");
+            } else {
+                println!("    → AU-DESSUS du critère de 1e-6 : ne pas brancher le noyau 4");
+            }
+            let _ = idx_ref;
+        }
     }
 
     // ------------------- étape 5 : ce que coûtera le chemin du MOTEUR à 1 M
@@ -2697,7 +2766,11 @@ l'entrelace — c'est le seul écart attendu)");
     // VRAM. On mesure donc la chaîne complète SANS relecture, et on la compare à
     // l'attention complète sur CPU (toutes les clés notées, softmax, somme
     // pondérée) — la référence que le plan cite : 968 ms par couche à 1 M de clés.
-    if n >= 65536 {
+    // Seuil de mesure : 4 096 clés suffisent à comparer les deux chemins, et le
+    // point de croisement entre le noyau fusionné et la chaîne séparée est
+    // justement ce qu'on cherche (mesuré : 65 536 pour le premier, 262 144 pour
+    // la seconde).
+    if n >= 4096 {
         let mut pref5 = vec![0u32; lignes];
         let mut dessus5 = vec![0usize; lignes];
         let mut hist5 = vec![0u32; lignes * 256];

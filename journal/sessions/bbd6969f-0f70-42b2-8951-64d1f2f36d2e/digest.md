@@ -36501,3 +36501,274 @@ M journal/README.md
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add journal/README.md && git commit -q -m \"Journal : index régénéré par l'outillage de session\" && git log --oneline -3 && echo \"--- reste ---\" && git status --short | wc -l", "description": "Final journal commit"}`
+
+  ```
+04c817b Journal : index régénéré par l'outillage de session
+37f9692 Journal : index des sessions (clôture)
+0f76879 Journal : index des sessions (fin de sprint 1)
+--- reste ---
+1
+  ```
+
+### 🤖 Assistant
+
+**Sprint 1 clos — box 17:41 → 19:41 (120 min pleines), 22 commits, dépôt vert, machine rendue.**
+
+L'objectif (le premier des trois noyaux du top-k GPU) est livré — et les deux autres avec, plus le branchement dans le moteur.
+
+## Livré, chiffre par chiffre
+
+| # | livrable | mesure |
+|---|---|---|
+| 1 | `attn_scores` (objectif du sprint) | écart **1,6–2,3e-7** · **26,7–40×** le CPU |
+| 2 | seuil radix 4 passes | k-ième score **exact au bit près, 14/14 lignes** à 4 k → **1 M** clés |
+| 3 | collecte des k indices | **même ensemble que le CPU** (diff. symétrique **0**), **0,95 ms** contre 1 653 ms de tri à 1 M |
+| 4 | `attn_topk_somme` | écart **1,0–4,8e-7** · temps GPU **constant (0,07 ms)** |
+| 5 | `DRAVE_GPU_TOPK=1` dans `forward` | PPL identique (12,2265 vs 12,2267) · **à 2 047 clés vues : attention 19,58 → 7,59 ms/jeton (−61 %), balayage −24 %** |
+| 6 | à 1 M clés | chaîne complète **3,90 ms** contre 539,9 ms CPU (×138), **0,3×** le complet en VRAM |
+| 7 | portes | Qwen **19,3885** · gpt-oss **15,1757** (CPU) et **15,1667** (GPU) · tests **17/17** |
+
+## Cinq défauts, cinq moyens de les trouver
+
+- **le banc était dégénéré** (même clé partout → descente radix jamais exercée) : trouvé **en le relisant**, pas en le faisant échouer ;
+- **le puits compté 256 fois** dans le noyau 3 (une fois par fil) : trouvé **par le banc** en une ligne — 2,05e-1 → 4,79e-7 ;
+- **un pointeur 0 après échec d'allocation** (garde piloté par les dimensions) : **relecture adversariale n° 1**, 7 défauts ;
+- **`attn_kv_recombine` lisait `sinks[warp]`** au lieu de la tête globale : **relecture n° 2** — gpt-oss `DRAVE_GPU_KV=1` **17,6531 → 15,1786** (référence CPU 15,1757), invisible pour toutes les portes ;
+- **quatre chiffres de documentation faux ou périmés** : **audit de documentation** dédié.
+
+## Ce que la rétrospective a acté
+
+Trois corrections que je me suis imposées en cours de route : j'avais annoncé un gain **sans mesurer le coût fixe** (8 lancements + 17 transferts par couche et par jeton rendaient le déport 1,8× plus lent à 255 clés) ; j'avais écrit « le croisement est entre 8 k et 16 k clés » alors que ces lignes différaient aussi par le **nombre de jetons** (le croisement en clés est entre 255 et 2 047) ; et j'ai écrit un **chiffre non mesuré dans un message de commit**, amendé dans la minute.
+
+## Sprint 2 (planning écrit dans `sprints/01-…md`)
+
+Fusionner la sélection en un noyau par ligne (8 lancements → 2), supprimer le tampon `nh × n × 4` par couche, refuser bruyamment `--attn-topk` en mode lot, et une grille de mesures où **une seule variable bouge**.
+
+
+## Tour 48
+
+### 👤 Utilisateur
+
+Continue en blocs de 2h jusqu'à demain 8h HAE. pour chacun des blocs/sprints tu dois être en autonomie totale. C'est à dire que pour cette période tu ne dois attendre après aucune interaction humaine. les rétros seront des introspections, les revues seront en mode adverse autonome. tu enchaine avec ce qui a le plus de valeur en fonction de la mission de haut niveau et de l'autonomie dont tu dispose.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date \"+%H:%M:%S\" && python3 -c \"\nimport datetime\nm=datetime.datetime.now()\nfin=m.replace(hour=8,minute=0,second=0)\nif fin<m: fin+=datetime.timedelta(days=1)\nprint('blocs de 2 h possibles d ici a 8h00 :', round((fin-m).total_s … [78 caractères tronqués]`
+
+  ```
+19:49:42
+blocs de 2 h possibles d ici a 8h00 : 6.09
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ./tools/sprint.sh start \"Fusionner la chaîne du top-k déporté : descente radix, collecte et somme dans UN noyau par ligne (8 lancements → 2, plus de tampon nh×n×4), et gagner dès ~1 000 clés\" && date +%H:%M:%S", "description": "Sta … [13 caractères tronqués]`
+
+  ```
+Sprint 1 démarré à 19:49 → 21:49  ·  sprints/01-fusionner-la-cha-ne-du-top-k-d-port-desc.md
+19:49:56
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat sprints/COURANT && ls sprints/ && git mv sprints/01-fusionner-la-cha-ne-du-top-k-d-port-desc.md sprints/02-fusionner-la-cha-ne-du-top-k-d-port-desc.md 2>/dev/null || mv sprints/01-fusionner-la-cha-ne-du-top-k-d-port-desc.md sprin … [354 caractères tronqués]`
+
+  ```
+1 1790812196 1790819396
+01-fusionner-la-cha-ne-du-top-k-d-port-desc.md
+01-premier-des-trois-noyaux-gpu-du-top-k-le.md
+COURANT
+2 1790812196 1790819396
+# Sprint 2 — Fusionner la chaîne du top-k déporté : descente radix, collecte et somme dans UN noyau par ligne (8 lancements → 2, plus de tampon nh×n×4), et gagner dès ~1 000 clés
+  ```
+
+- **todo_write** `{"todos": [{"content": "Sprint 2 : écrire le noyau fusionné attn_topk_tout (descente radix + collecte + somme par ligne)", "status": "in_progress"}, {"content": "Sprint 2 : FFI + branchement dans le modèle (une seule voie, repli CPU)", "status": "pending"}, {"content": "Sprint 2 : valider au banc (e … [369 caractères tronqués]`
+
+  ```
+Updated todo list: 5 pending, 1 in progress, 0 completed.
+  ```
+
+### 🤖 Assistant
+
+⏵ Sprint 2 : j'écris le noyau fusionné (descente radix + collecte + somme par ligne)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat >> drave-core/gpu/drave_gpu.cu <<'EOF'\n\n// ---------------------------------------------------------------------------\n// Noyau 4 : TOUT le top-k d'une ligne en UN lancement.\n//\n// Pourquoi : la chaîne séparée (histogramme × … [6344 caractères tronqués]`
+
+  ```
+drave_gpu.ptx régénéré (8579 lignes)
+noyaux exportés : 15
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/gpu.rs'; s=open(p).read()\ndef rep(v,n,nom):\n    global s\n    assert s.count(v)==1, f\"{nom}::{s.count(v)}\"\n    s=s.replace(v,n,1)\n\nrep(\"\"\"    /// Softmax sur les k retenus + somme pondéré … [6024 caractères tronqués]`
+
+  ```
+FFI noyau 4 posé
+build
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/gpu.rs'; s=open(p).read()\nvieux = \"\"\"            let mut params: [*mut c_void; 13] = [\n                &mut p_sc as *mut u64 as *mut c_void,\n                &mut p_v as *mut u64 as *mut c_voi … [1974 caractères tronqués]`
+
+  ```
+paramètres corrigés (12)
+build
+  ```
+
+### 🤖 Assistant
+
+Maintenant le banc doit vérifier le noyau fusionné contre la référence CPU :
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/main.rs'; s=open(p).read()\nvieux = \"\"\"    // ------------------- étape 5 : ce que coûtera le chemin du MOTEUR à 1 M\"\"\"\nneuf = \"\"\"    // ---------------- noyau 4 : tout le top-k d'une lig … [3557 caractères tronqués]`
+
+  ```
+banc noyau 4 posé
+    → conforme au critère du plan pour la sortie (1e-6)
+    noyau 4 (UN lancement) : 0.13 ms · écart max 8.941e-8 sur 1.244e-1 (relatif 7.19e-7)
+    → conforme au critère du plan (1e-6), en UN lancement au lieu de huit
+    second passage k = 512, mêmes tampons : 14/14 lignes · 0.08 ms (0.12 ms de seuil) · cases non écrites 0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && DRAVE_GPU=1 timeout 600 ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q4_0.gguf --banc-topk 262144 2>&1 | grep -E \"noyau 4|chaîne top-k|attention COMPLÈTE|étape 5\"", "description": "Bench fused kernel at 262k", "timeoutMs": … [8 caractères tronqués]`
+
+  ```
+noyau 4 (UN lancement) : 1.60 ms · écart max 9.686e-8 sur 1.382e-1 (relatif 7.01e-7)
+    étape 5 — 14 lignes × 262144 clés :
+      chaîne top-k GPU sans relecture des scores :     1.34 ms
+      attention COMPLÈTE sur CPU (14 fils)   :   124.78 ms  (×92.8)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for n in 4096 16384 65536; do echo \"### n=$n\"; DRAVE_GPU=1 timeout 600 ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q4_0.gguf --banc-topk $n 2>&1 | grep -E \"noyau 4 \\(|chaîne top-k\"; done", "description": "Compare fused … [43 caractères tronqués]`
+
+  ```
+### n=4096
+    noyau 4 (UN lancement) : 0.12 ms · écart max 8.941e-8 sur 1.244e-1 (relatif 7.19e-7)
+### n=16384
+    noyau 4 (UN lancement) : 0.17 ms · écart max 1.043e-7 sur 1.140e-1 (relatif 9.15e-7)
+### n=65536
+    noyau 4 (UN lancement) : 0.44 ms · écart max 8.196e-8 sur 1.443e-1 (relatif 5.68e-7)
+      chaîne top-k GPU sans relecture des scores :     0.58 ms
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/main.rs'; s=open(p).read()\nvieux = \"\"\"    if n >= 65536 {\n        let mut pref5 = vec![0u32; lignes];\"\"\"\nneuf = \"\"\"    // Seuil de mesure : 4 096 clés suffisent à comparer les deux chem … [802 caractères tronqués]`
+
+  ```
+seuil de mesure abaissé
+0
+n=4096 :  noyau 4 (UN lancement) : 0.13 ms · écart max 8.941e-8 sur 1.244e-1 (relatif 7.19e-7)  chaîne top-k GPU sans relecture des scores : 0.22 ms 
+n=16384 :  noyau 4 (UN lancement) : 0.18 ms · écart max 1.043e-7 sur 1.140e-1 (relatif 9.15e-7)  chaîne top-k GPU sans relecture des scores : 0.43 ms 
+n=65536 :  noyau 4 (UN lancement) : 0.43 ms · écart max 8.196e-8 sur 1.443e-1 (relatif 5.68e-7)  chaîne top-k GPU sans relecture des scores : 0.57 ms 
+n=131072 :  noyau 4 (UN lancement) : 0.85 ms · écart max 7.451e-8 sur 1.172e-1 (relatif 6.36e-7)  chaîne top-k GPU sans relecture des scores : 0.89 ms 
+n=262144 :  noyau 4 (UN lancement) : 1.58 ms · écart max 9.686e-8 sur 1.382e-1 (relatif 7.01e-7)  chaîne top-k GPU sans relecture des scores : 1.35 ms
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date +%H:%M:%S && python3 - <<'PY'\n# 1) noyau : poison si la collecte n'a pas rempli les k places (invariant)\np='drave-core/gpu/drave_gpu.cu'; s=open(p).read()\nvieux = \"\"\"    const int base_sup = (int)red[tid];\n    const int b … [3389 caractères tronqués]`
+
+  ```
+19:53:41
+poison ajouté
+contrôle de finitude ajouté
+noyaux exportés : 15
+0
+    noyau 4 (UN lancement) : 0.13 ms · écart max 8.941e-8 sur 1.244e-1 (relatif 7.19e-7)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"topk_gpu_possible && fen == 0\" -A 6 drave-core/src/model.rs | head -12 && grep -n \"if ok {\" drave-core/src/model.rs | sed -n '1,4p'", "description": "Locate the topk GPU branch"}`
+
+  ```
+3274:            if topk_gpu_possible && fen == 0 && kv_gpu.is_some()
+3275-                && nkv * rep == nh && n > 1 && topk_gpu_demande
+3276-            {
+3277-                let k = self.attn_topk.min(n);
+3278-                if let Some((idx, m)) = kv_gpu.as_mut().and_then(|v| v.get_mut(l)) {
+3279-                    let machine = crate::gpu::machines()[*idx];
+3280-                    let mut pref = vec![0u32; nh];
+3299:                    if ok {
+3312:                    if ok {
+3316:                    if ok {
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/model.rs'; s=open(p).read()\nvieux = \"\"\"                let k = self.attn_topk.min(n);\n                if let Some((idx, m)) = kv_gpu.as_mut().and_then(|v| v.get_mut(l)) {\n                     … [4339 caractères tronqués]`
+
+  ```
+branchement noyau 4 posé
+build
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cargo test --release --manifest-path drave-core/Cargo.toml 2>&1 | tail -2 && for cfg in \"cpu\" \"gpu\"; do echo -n \"$cfg ctx2048 : \"; if [ $cfg = cpu ]; then ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf --ppl /t … [482 caractères tronqués]`
+
+  ```
+test result: ok. 17 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.13s
+
+cpu ctx2048 : perplexité 9.4167 sur 1023 tokens
+gpu ctx2048 : perplexité 9.4162 sur 1023 tokens
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== CPU (ctx 2048, 1023 jetons) ===\"; ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf --ppl /tmp/ids_qwen_long.txt --ctx 2048 --limit 1024 --dense --threads 16 --attn-topk 256 2>&1 | grep -E \"perplexité [0-9] … [359 caractères tronqués]`
+
+  ```
+=== CPU (ctx 2048, 1023 jetons) ===
+=== perplexité 9.4167 sur 1023 tokens (0 événements, 38.0 s) ===
+    postes (ms/token) : projets-attn 2.51 | rope 0.39 | attention 7.20 | proj+mlp 20.21 | somme 30.30 | reste (tête + échantillonnage) 6.89
+=== GPU noyau fusionné ===
+=== perplexité 9.4162 sur 1023 tokens (0 événements, 35.8 s) ===
+    postes (ms/token) : projets-attn 2.54 | rope 0.55 | attention 4.59 | proj+mlp 20.32 | somme 28.01 | reste (tête + échantillonnage) 6.97
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== 511 jetons : CPU ===\"; ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf --ppl /tmp/ids_qwen_long.txt --ctx 2048 --limit 512 --dense --threads 16 --attn-topk 256 2>&1 | grep -E \"perplexité [0-9]|postes\"; e … [363 caractères tronqués]`
+
+  ```
+=== 511 jetons : CPU ===
+=== perplexité 13.1358 sur 511 tokens (0 événements, 17.5 s) ===
+    postes (ms/token) : projets-attn 2.49 | rope 0.41 | attention 4.04 | proj+mlp 20.37 | somme 27.30 | reste (tête + échantillonnage) 6.97
+=== 511 jetons : GPU fusionné ===
+=== perplexité 13.1355 sur 511 tokens (0 événements, 17.6 s) ===
+    postes (ms/token) : projets-attn 2.52 | rope 0.53 | attention 4.46 | proj+mlp 20.04 | somme 27.54 | reste (tête + échantillonnage) 6.93
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && nohup bash -c 'cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && DRAVE_GPU=1 DRAVE_GPU_KV=1 DRAVE_GPU_TOPK=1 ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf --ppl /tmp/ids_qwen_long.txt --ctx 16384 --limit 4096 -- … [239 caractères tronqués]`
+
+  ```
+lancé
+19:58:29
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\ndef patch(p, paires):\n    s=open(p).read()\n    for v,n,nom in paires:\n        assert s.count(v)==1, f\"{p}::{nom}::{s.count(v)}\"\n        s=s.replace(v,n,1)\n    open(p,'w').write(s); print(f\"{p} ok\")\n\npatch … [1962 caractères tronqués]`
+
+  ```
+reports/rapport-gpu-topk-selection.md ok
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 120; cat /tmp/fusion_4095.log; date +%H:%M:%S", "description": "Wait for 4095-token measurement", "timeoutMs": 300000}`
+
+  ```
+=== perplexité 12.2265 sur 4095 tokens (0 événements, 142.9 s) ===
+    postes (ms/token) : projets-attn 2.49 | rope 0.57 | attention 4.76 | proj+mlp 20.07 | somme 27.89 | reste (tête + échantillonnage) 7.02
+FINI
+20:02:45
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for spec in \"1 1\" \"100 3\" \"4097 256\" \"5000 256\" \"8191 4096\" \"2048 256\"; do set -- $spec; echo -n \"n=$1 k=$2 : \"; DRAVE_GPU=1 timeout 300 ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q4_0.gguf --banc-topk $1 --a … [169 caractères tronqués]`
+
+  ```
+n=1 k=1 :  ensembles identiques au CPU : 14/14 lignes · différence symétrique 0 indices  noyau 4 (UN lancement) : 0.09 ms · écart max 5.960e-8 sur 7.855e-1 (relatif 7.59e-8) 
+n=100 k=3 :  ensembles identiques au CPU : 14/14 lignes · différence symétrique 0 indices  noyau 4 (UN lancement) : 0.10 ms · écart max 8.941e-8 sur 8.573e-1 (relatif 1.04e-7) 
+n=4097 k=256 :  ensembles identiques au CPU : 14/14 lignes · différence symétrique 0 indices  noyau 4 (UN lancement) : 0.13 ms · écart max 1.192e-7 sur 1.247e-1 (relatif 9.56e-7) 
+n=5000 k=256 :  ensembles identiques au CPU : 14/14 lignes · différence symétrique 0 indices  noyau 4 (UN lancement) : 0.15 ms · écart max 8.196e-8 sur 1.195e-1 (relatif 6.86e-7) 
+n=8191 k=4096 :  ensembles identiques au CPU : 14/14 lignes · différence symétrique 0 indices 
+n=2048 k=256 :  ensembles identiques au CPU : 14/14 lignes · différence symétrique 0 indices  noyau 4 (UN lancement) : 0.15 ms · écart max 8.941e-8 sur 1.324e-1 (relatif 6.75e-7)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && DRAVE_GPU=1 timeout 300 ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q4_0.gguf --banc-topk 8191 --attn-topk 4096 2>&1 | tail -5", "description": "Check kernel 4 refusal at k=4096", "timeoutMs": 400000}`
+
+  ```
+ensembles identiques au CPU : 14/14 lignes · différence symétrique 0 indices
+    ordre documenté (au-dessus puis égaux, croissants) : 14/14 lignes · doublons 0 · hors bornes 0 · cases non écrites 0
+    → l'ensemble retenu est le MÊME que celui du CPU, et l'ordre est celui qui est écrit dans le noyau
+[topk] noyau 3 : dimensions refusées — 14 lignes, 8191 clés, k = 4096 (plafonné à 1024 : le partagé du noyau tient 2k + 256 flottants), hd = 64
+    le noyau 3 a refusé la configuration
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/main.rs'; s=open(p).read()\nvieux = \"\"\"    if !machine.attn_topk_somme(&mut miroir, lignes, n, k, hd, rep, Some(&sinks), &mut att_gpu) {\n        println!(\"    le noyau 3 a refusé la configurat … [2280 caractères tronqués]`
+
+  ```
+banc : refus du noyau 3 non bloquant
+[topk] noyau 4 : dimensions refusées — 14 lignes, 8191 clés, k = 4096 (≤ 1024), hd = 64
+    noyau 4 : refusé (repli sur la chaîne séparée)
+[topk] noyau 3 : dimensions refusées — 14 lignes, 8191 clés, k = 4096 (plafonné à 1024 : le partagé du noyau tient 2k + 256 flottants), hd = 64
+    étape 5 : chaîne complète refusée
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\ndef patch(p, paires):\n    s=open(p).read()\n    for v,n,nom in paires:\n        assert s.count(v)==1, f\"{p}::{nom}::{s.count(v)}\"\n        s=s.replace(v,n,1)\n    open(p,'w').write(s); print(f\"{p} ok\")\npatch(' … [2843 caractères tronqués]`
