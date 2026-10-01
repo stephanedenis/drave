@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 64.1 h |
+| Durée | 64.3 h |
 | Tours | 48 |
-| Messages | 2580 |
-| Appels d'outils | 2444 |
-| Fichiers touchés | 52 |
-| Commandes | 2082 |
+| Messages | 2596 |
+| Appels d'outils | 2458 |
+| Fichiers touchés | 53 |
+| Commandes | 2093 |
 | Sous-agents | 20 |
-| Commits | 228 |
+| Commits | 229 |
 | Compactages de contexte | 3 |
 
 ## Objectifs déclarés
@@ -2234,7 +2234,7 @@ Fusionner la sélection en un noyau par ligne (8 lancements → 2), supprimer le
 
 ### Tour 48 — Continue en blocs de 2h jusqu'à demain 8h HAE. pour chacun des blocs/sprints tu dois être en autonomie totale. C'est à d … [282 caractères tronqués]
 
-*292 appels d'outils.* Actions notables :
+*306 appels d'outils.* Actions notables :
 
 - bash — Check time and count remaining boxes
 - bash — Start sprint 2
@@ -2250,7 +2250,7 @@ Fusionner la sélection en un noyau par ligne (8 lancements → 2), supprimer le
 - bash — Add poison check and finiteness guard
 - bash — Locate the topk GPU branch
 - bash — Wire fused kernel into the model
-- … et 273 autres
+- … et 287 autres
 
 **Synthèse produite :**
 
@@ -2314,6 +2314,7 @@ Fusionner la sélection en un noyau par ligne (8 lancements → 2), supprimer le
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-aiguille-topk.md` | 1 | 0 |
 | `/tmp/aig5.sh` | 1 | 0 |
 | `/tmp/aig_s5.sh` | 2 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/plan-deepseek-v4-flash.md` | 1 | 0 |
 
 ### Sous-agents lancés
 
@@ -2380,7 +2381,7 @@ Fusionner la sélection en un noyau par ligne (8 lancements → 2), supprimer le
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 2042 autres
+- … et 2053 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2508,7 +2509,7 @@ Fusionner la sélection en un noyau par ligne (8 lancements → 2), supprimer le
 
 ## 5. Erreurs rencontrées
 
-108 sorties en erreur ou divergentes. Les premières :
+109 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : a8f2635f8 docs: record which models this box is good at, and why src/llama-hparams.cpp:8:void llama_hparams::set_swa_pattern(uint32_t n_pattern, bool dense_first) { src/llama-hparams.h:308:    void se
 - **T1** : 511 tokens notés — perplexité cumulée 247.031  (4.9 tok/s) === perplexité 247.0308 sur 511 tokens (0 événements, 104.5 s) ===  ### B3 harmony assistant 511 --- ref --- 0.0 0.0 0:00 ls: cannot access '
@@ -2756,4 +2757,5 @@ Fusionner la sélection en un noyau par ligne (8 lancements → 2), supprimer le
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' def patch(p, paires):     s=open(p).read()     for v,n,nom in paires:         assert s.co
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p='reports/rapport-aiguille-topk.md'; s=open(p).read() def rep(v,n,nom):     global s    
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p='reports/rapport-aiguille-topk.md'; s=open(p).read() vieux = """### Le taux, par fenêtr
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -F - <<'EOF' && git log --oneline -1 DeepSeek-V4.1-Flash : pas de poids ouvert
 
