@@ -64702,3 +64702,10 @@ drwxr-xr-x  1 stephane stephane          142  1 oct 22:17 ..
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls reports/ | grep -i \"prelect\\|prelire\\|charge\" ; cat >> reports/rapport-tete-garantie.md <<'EOF'\n\n---\n\n# Annexe — chargeur d'experts : lecteurs parallèles, mesurés sur fichier froid\n\nChantier 4. Le disque NVMe de cette ma … [2536 caractères tronqués]`
+
+  ```
+7844b18 Chargeur d'experts : les lecteurs parallèles ne donnent rien, et on sait pourquoi
+HAE 07:05
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='REPRISE.md'; s=open(p).read()\ns = s.replace(\"\"\"**Ce qui reste ouvert, par ordre de valeur :**\"\"\",\n\"\"\"**Chantiers 3 et 4 de la feuille de route.**\n\n- **(3) accès mmappé à la table d'engram** : fait (` … [985 caractères tronqués]`

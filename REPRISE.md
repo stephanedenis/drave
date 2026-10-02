@@ -1128,6 +1128,20 @@ lignes hors liste avant de les avoir lues : le seul gain réel reste
 `--tete-restreinte` (×7), qui change la sortie. Détail :
 [`reports/rapport-tete-garantie.md`](reports/rapport-tete-garantie.md).
 
+**Chantiers 3 et 4 de la feuille de route.**
+
+- **(3) accès mmappé à la table d'engram** : fait (`--sonder-engram`), mesuré
+  sur le NVMe — une entrée de 264 octets coûte 17 276 entrées pour 10 000 jetons,
+  soit 4,6 Mo touchés sur 203 Go adressés.
+- **(4) chargeur d'experts à lecteurs parallèles** : mesuré sur fichier **froid**
+  (fadvise DONTNEED, zones distinctes, 120 blocs de 4 Mo) — **×0,78 sur le
+  disque mécanique et ×0,88 sur le NVMe**. Le parallélisme ne sert à rien ici :
+  en défaut de page, le readahead du noyau sature déjà le périphérique avec un
+  seul flux séquentiel, et sur le mécanique il s'ajoute aux déplacements de tête.
+  Cinquième mesure de prélecture du dépôt, cinquième résultat nul — mais la
+  première dont on connaît la raison. Outil :
+  `tools/mesurer_lecture_experts.py`.
+
 **Ce qui reste ouvert, par ordre de valeur :**
 
 | chantier | où c'en est |

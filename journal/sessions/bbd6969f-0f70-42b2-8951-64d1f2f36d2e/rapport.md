@@ -7,12 +7,12 @@
 | Début | 2026-09-28 14:46 |
 | Durée | 88.3 h |
 | Tours | 70 |
-| Messages | 4075 |
-| Appels d'outils | 3879 |
+| Messages | 4076 |
+| Appels d'outils | 3880 |
 | Fichiers touchés | 81 |
-| Commandes | 3414 |
+| Commandes | 3415 |
 | Sous-agents | 22 |
-| Commits | 311 |
+| Commits | 312 |
 | Compactages de contexte | 5 |
 
 ## Objectifs déclarés
@@ -3581,7 +3581,7 @@ Le plus important est peut-être ailleurs : trois des cinq plus gros modèles de
 
 ### Tour 70 — <goal_round> Objective: "Session autonome jusqu'à 8h HAE (02/10). Mener les optimisations d'architecture mémoire du mote … [1317 caractères tronqués]
 
-*25 appels d'outils.* Actions notables :
+*26 appels d'outils.* Actions notables :
 
 - get_goal
 - bash — Check time and the head restriction code
@@ -3597,7 +3597,7 @@ Le plus important est peut-être ailleurs : trois des cinq plus gros modèles de
 - bash — Check where the option block sits
 - bash — Test the guaranteed head on a real generation
 - bash — Generate without the guarantee for comparison
-- … et 11 autres
+- … et 12 autres
 
 ## 3. Travail accompli
 
@@ -3754,7 +3754,7 @@ Le plus important est peut-être ailleurs : trois des cinq plus gros modèles de
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 3374 autres
+- … et 3375 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4213,4 +4213,5 @@ Le plus important est peut-être ailleurs : trois des cinq plus gros modèles de
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-tete-garantie.md <<'EOF' # Rapport — restriction de tête GARANTIE : exacte, et sans 
 - REPRISE : le chantier 2 (tête garantie) est clos par une mesure" && grep -n "fn prelire_expert" -A 25 drave-core/src/model.rs | head -30
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls reports/ | grep -i "prelect\|prelire\|charge" ; cat >> reports/rapport-tete-garantie.md <<'EOF'  ---  #
+- REPRISE : chantiers 3 et 4 de la feuille de route, mesurés" && git log --oneline -1
 
