@@ -53711,3 +53711,52 @@ gpt-oss ctx 256 (attendu 15,1757) :
 ⏵ Copie à 46 %. Je mets à jour REPRISE avec les optimisations de la session.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np = 'REPRISE.md'\ns = open(p).read().rstrip('\\n')\ns += '''\n\n## Session d'implémentation — détection matérielle et configuration automatique\n\nNuit du 01/10 au 02/10. Rapports :\n[`reports/rapport-optimisations- … [3120 caractères tronqués]`
+
+  ```
+6e38bab REPRISE : session d'implementation (detection materielle, heuristiques, engram)
+copie : 170.0 Go / 365.7
+gpt-oss ctx 256 (attendu 15,1757) :
+  ```
+
+### 🤖 Assistant
+
+⏵ Pendant la copie, je documente les nouvelles options dans l'aide et le README.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '31,42p' drave-core/src/main.rs", "description": "Read usage text"}`
+
+  ```
+if args.len() < 2 {
+        eprintln!("usage: drave-core <modele.gguf> [--matrix NOM] [--threads N]");
+        eprintln!("       drave-core <modele.gguf> --infer (--ids 1,2,3 | --prompt TEXTE)");
+        eprintln!("                    [--n 32] [--temp 0] [--ctx 512] [--threads N]");
+        std::process::exit(1);
+    }
+    // Une seule analyse, puis un aiguillage : `--plan`, `--tokenize`,
+    // `--ppl`/`--ppl-texte` et `--infer` partagent désormais la même structure
+    // d'options, donc les mêmes drapeaux.
+    // Les variables d'environnement ont été renommées QT_* -> DRAVE_* : un
+    // ancien nom encore présent dans un script ne ferait RIEN, en silence. On le
+    // dit, plutôt que de laisser croire que l'option est active.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np = 'drave-core/src/main.rs'\ns = open(p).read()\na = '''    if args.len() < 2 {\n        eprintln!(\"usage: drave-core <modele.gguf> [--matrix NOM] [--threads N]\");\n        eprintln!(\"       drave-core <modele.g … [1887 caractères tronqués]`
+
+  ```
+aide mise à jour
+usage: drave <modele.gguf|dossier-de-clusters> [--matrix NOM] [--threads N]
+       drave <modele> --infer (--ids 1,2,3 | --prompt TEXTE | --ids-file F)
+             [--n 32] [--temp 0] [--ctx 512] [--threads N]
+       drave <modele> --ppl FICHIER-IDS [--ctx N] [--limit N] [--dense]
+       drave <modele> --tensors      inventaire par les en-têtes seuls
+       drave <modele> --materiel     détection matérielle et plan de
+                                     configuration, AVEC la raison de chaque
+                                     choix — ne charge pas le modèle
+       drave <modele> --sonder-engram N   accès mmappé à une table d'engram
+       drave <modele> --tete-restreinte F  génération CONTRAINTE : la tête ne
+                                     calcule que les tokens de F. Change la
+                                     sortie — refusé en perplexité.
+       (un dossier contenant commun.gguf EST un modèle ; DRAVE_CLUSTERS=0,3
+        ne charge que certains clusters ; DRAVE_MMAP=0 lit au lieu de mapper)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -m \"Aide du moteur : les modes recents, et ce que chacun ne fait pas\n\nUsage reecrit : --materiel (avec sa raison d'etre), --sonder-engram,\n--tete-restreinte (et son avertissement : change la sortie, re … [409 caractères tronqués]`

@@ -29,9 +29,20 @@ fn fmt_bits(b: u64, n: usize) -> String {
 fn main() {
     let args: Vec<String> = std::env::args().collect();
     if args.len() < 2 {
-        eprintln!("usage: drave-core <modele.gguf> [--matrix NOM] [--threads N]");
-        eprintln!("       drave-core <modele.gguf> --infer (--ids 1,2,3 | --prompt TEXTE)");
-        eprintln!("                    [--n 32] [--temp 0] [--ctx 512] [--threads N]");
+        eprintln!("usage: drave <modele.gguf|dossier-de-clusters> [--matrix NOM] [--threads N]");
+        eprintln!("       drave <modele> --infer (--ids 1,2,3 | --prompt TEXTE | --ids-file F)");
+        eprintln!("             [--n 32] [--temp 0] [--ctx 512] [--threads N]");
+        eprintln!("       drave <modele> --ppl FICHIER-IDS [--ctx N] [--limit N] [--dense]");
+        eprintln!("       drave <modele> --tensors      inventaire par les en-têtes seuls");
+        eprintln!("       drave <modele> --materiel     détection matérielle et plan de");
+        eprintln!("                                     configuration, AVEC la raison de chaque");
+        eprintln!("                                     choix — ne charge pas le modèle");
+        eprintln!("       drave <modele> --sonder-engram N   accès mmappé à une table d'engram");
+        eprintln!("       drave <modele> --tete-restreinte F  génération CONTRAINTE : la tête ne");
+        eprintln!("                                     calcule que les tokens de F. Change la");
+        eprintln!("                                     sortie — refusé en perplexité.");
+        eprintln!("       (un dossier contenant commun.gguf EST un modèle ; DRAVE_CLUSTERS=0,3");
+        eprintln!("        ne charge que certains clusters ; DRAVE_MMAP=0 lit au lieu de mapper)");
         std::process::exit(1);
     }
     // Une seule analyse, puis un aiguillage : `--plan`, `--tokenize`,

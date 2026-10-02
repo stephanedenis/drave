@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 79.7 h |
+| Durée | 79.8 h |
 | Tours | 69 |
-| Messages | 3339 |
-| Appels d'outils | 3159 |
+| Messages | 3342 |
+| Appels d'outils | 3162 |
 | Fichiers touchés | 73 |
-| Commandes | 2760 |
+| Commandes | 2763 |
 | Sous-agents | 22 |
-| Commits | 281 |
+| Commits | 282 |
 | Compactages de contexte | 4 |
 
 ## Objectifs déclarés
@@ -3526,7 +3526,7 @@ Sur cette session, les mesures m
 
 ### Tour 69 — implémente toute les optimisation et détection de matériel avec heuristiques de configuration automatique.
 
-*120 appels d'outils.* Actions notables :
+*123 appels d'outils.* Actions notables :
 
 - bash — Inspect existing GPU detection
 - write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/materiel.rs`
@@ -3542,11 +3542,11 @@ Sur cette session, les mesures m
 - bash — Read KV bits resolution
 - bash — Integrate KV and VRAM heuristics
 - bash — Lighten detection and run gates
-- … et 104 autres
+- … et 107 autres
 
 **Synthèse produite :**
 
-⏵ Copie à 46 %. Je mets à jour REPRISE avec les optimisations de la session.
+⏵ Pendant la copie, je documente les nouvelles options dans l'aide et le README.
 
 ## 3. Travail accompli
 
@@ -3695,7 +3695,7 @@ Sur cette session, les mesures m
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 2720 autres
+- … et 2723 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4124,4 +4124,5 @@ Sur cette session, les mesures m
 - Defauts de threads : les cœurs physiques, sans le 3/4 ni le /2  Mesure au banc, epingle sur 20 cœurs : 10 threads = 14,3 Go/s, 15 = 19,9, 18 = 22,6, 20 = 18,7 (
 - Defauts de threads : les cœurs physiques, sans le 3/4 ni le /2  Mesure au banc, epingle sur 20 cœurs : 10 threads = 14,3 Go/s, 15 = 19,9, 18 = 22,6, 20 = 18,7 (
 - REPRISE : session d'implementation (detection materielle, heuristiques, engram)" && git log --oneline -1; ls -la /home/stephane/FastNVMe/modeles-lourds/*.gguf 2
+- Aide du moteur : les modes recents, et ce que chacun ne fait pas  Usage reecrit : --materiel (avec sa raison d'etre), --sonder-engram, --tete-restreinte (et son
 
