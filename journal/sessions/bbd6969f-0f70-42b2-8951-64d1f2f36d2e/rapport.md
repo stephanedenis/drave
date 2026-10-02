@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 78.8 h |
+| Durée | 78.9 h |
 | Tours | 69 |
-| Messages | 3242 |
-| Appels d'outils | 3062 |
+| Messages | 3245 |
+| Appels d'outils | 3065 |
 | Fichiers touchés | 71 |
-| Commandes | 2667 |
+| Commandes | 2670 |
 | Sous-agents | 22 |
-| Commits | 272 |
+| Commits | 273 |
 | Compactages de contexte | 4 |
 
 ## Objectifs déclarés
@@ -3524,7 +3524,7 @@ Sur cette session, les mesures m
 
 ### Tour 69 — implémente toute les optimisation et détection de matériel avec heuristiques de configuration automatique.
 
-*23 appels d'outils.* Actions notables :
+*26 appels d'outils.* Actions notables :
 
 - bash — Inspect existing GPU detection
 - write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/materiel.rs`
@@ -3540,11 +3540,11 @@ Sur cette session, les mesures m
 - bash — Read KV bits resolution
 - bash — Integrate KV and VRAM heuristics
 - bash — Lighten detection and run gates
-- … et 9 autres
+- … et 12 autres
 
 **Synthèse produite :**
 
-⏵ La comparaison tourne. Je commite le module matériel pendant ce temps.
+⏵ Verdict : **0,3 % de différence** — la prélecture ne sert à rien quand le modèle est en cache. Je le consigne et je passe au chantier suivant.
 
 ## 3. Travail accompli
 
@@ -3691,7 +3691,7 @@ Sur cette session, les mesures m
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 2627 autres
+- … et 2630 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4111,4 +4111,5 @@ Sur cette session, les mesures m
 - Paires hyperthread : +27 % quand les cœurs manquent, rien quand on les a tous  Banc memoire, chaque configuration repetee trois fois : - 10 cœurs, 10 fils (1 pa
 - REPRISE : topologie materielle et affinites" && echo "=== ÉTAT FINAL ==="; (cd drave-core && cargo test --release 2>&1 | grep -E "^test result"); git status --s
 - Detection materielle et heuristiques de configuration automatique  Nouveau module drave-core/src/materiel.rs : detecte CPU (cœurs physiques contre logiques, pai
+- Prelecture parallele : implementee, mesuree, sans effet (0,3 %)  madvise(MADV_WILLNEED) sur les trois tenseurs de chaque expert retenu, appele apres le routage 
 

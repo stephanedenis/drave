@@ -288,7 +288,33 @@ placement explicite `0-9,20-29` plutôt que `0-9`.
 4. **Les paires hyperthread sur un nœud restreint** : +27 % à dix cœurs, rien à
    vingt. À régler au déploiement, pas par défaut.
 
-## 11. Le FPGA : pas de cas d'usage aujourd'hui
+## 11. La prélecture parallèle : implémentée, et sans effet ici
+
+Le routeur connaît ses `k` experts **avant** de les calculer : on peut donc
+demander au noyau de lancer les lectures d'un coup avec
+`madvise(MADV_WILLNEED)` — c'est la seule forme de parallélisme de lecture
+accessible quand les poids sont mmappés. Implémenté (`gguf::prelire`, appelé
+après le routage, désactivable par `DRAVE_PRELIRE=0`).
+
+Comparaison appariée, trois tours alternés, mêmes 127 jetons :
+
+| | tour 1 | tour 2 | tour 3 | moyenne |
+|---|---|---|---|---|
+| avec prélecture | 25,3 s | 25,9 s | 26,0 s | **25,73 s** |
+| sans | 25,8 s | 25,8 s | — | **25,80 s** |
+
+**0,3 % — aucun effet.** L'explication est simple : le modèle de test (18,6 Go)
+tient dans les 115 Go de cache RAM, donc les lectures ne vont jamais au disque et
+`MADV_WILLNEED` n'a rien à lancer.
+
+Le code est conservé — il ne coûte rien et servira sur un modèle **plus gros que
+le cache**, ce qui est précisément le cas de V4.1 (365 Go) — mais **il ne faut pas
+le compter comme un gain** : sur cette machine et ces modèles, il n'en produit
+aucun. Trois autres optimisations de la même famille se sont heurtées au même
+mur : le calcul est 18× plus rapide que la lecture, et le noyau fait déjà son
+travail.
+
+## 12. Le FPGA : pas de cas d'usage aujourd'hui
 
 Un Stratix V est branché, mais **en USB seulement** (pas de PCIe configuré), soit
 **625 Mo/s au mieux** — cinquante fois moins que le NVMe parallélisé.

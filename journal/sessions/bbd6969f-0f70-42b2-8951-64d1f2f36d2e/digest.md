@@ -52245,3 +52245,44 @@ tour 1 sans  :
 ⏵ La comparaison tourne. Je commite le module matériel pendant ce temps.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && (cd drave-core && cargo test --release 2>&1 | grep -E \"^test result\"); git add -A && git commit -q -m \"Detection materielle et heuristiques de configuration automatique\n\nNouveau module drave-core/src/materiel.rs : detecte CPU (c … [1671 caractères tronqués]`
+
+  ```
+test result: ok. 35 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.11s
+b2bc093 Detection materielle et heuristiques de configuration automatique
+tour 1 avec  : (0 événements, 25.3 s)
+tour 1 sans  : (0 événements, 25.8 s)
+tour 2 avec  :
+  ```
+
+### 🤖 Assistant
+
+⏵ Premier signal : 25,3 s avec prélecture contre 25,8 sans — négligeable. J'attends les autres tours.
+
+- **bash** `{"command": "sleep 55; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat /tmp/compare_prelire.log", "description": "Follow prefetch comparison"}`
+
+  ```
+tour 1 avec  : (0 événements, 25.3 s)
+tour 1 sans  : (0 événements, 25.8 s)
+tour 2 avec  : (0 événements, 25.9 s)
+tour 2 sans  : (0 événements, 25.8 s)
+tour 3 avec  :
+  ```
+
+- **bash** `{"command": "sleep 50; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat /tmp/compare_prelire.log; echo \"=== moyenne ===\"; grep -oE \"(avec|sans)  : \\(0 événements, [0-9.]+ s\\)\" /tmp/compare_prelire.log | sed -E 's/.*(avec|sans).* ([0-9.]+) s.*/\\1 \\2/' | python3 -c \"\nimport sys, col … [263 caractères tronqués]`
+
+  ```
+tour 1 avec  : (0 événements, 25.3 s)
+tour 1 sans  : (0 événements, 25.8 s)
+tour 2 avec  : (0 événements, 25.9 s)
+tour 2 sans  : (0 événements, 25.8 s)
+tour 3 avec  : (0 événements, 26.0 s)
+tour 3 sans  : === moyenne ===
+  avec  : moyenne 25.73 s  (3 mesures)
+  sans  : moyenne 25.80 s  (2 mesures)
+  ```
+
+### 🤖 Assistant
+
+⏵ Verdict : **0,3 % de différence** — la prélecture ne sert à rien quand le modèle est en cache. Je le consigne et je passe au chantier suivant.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np = 'reports/rapport-architecture-memoire.md'\ns = open(p).read()\ns = s.replace('''## 11. Le FPGA : pas de cas d'usage aujourd'hui''',\n'''## 11. La prélecture parallèle : implémentée, et sans effet ici\n\nLe route … [2139 caractères tronqués]`
