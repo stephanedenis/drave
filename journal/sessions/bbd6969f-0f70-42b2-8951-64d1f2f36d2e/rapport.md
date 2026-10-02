@@ -7,12 +7,12 @@
 | Début | 2026-09-28 14:46 |
 | Durée | 86.2 h |
 | Tours | 69 |
-| Messages | 3990 |
-| Appels d'outils | 3798 |
+| Messages | 3994 |
+| Appels d'outils | 3802 |
 | Fichiers touchés | 81 |
-| Commandes | 3347 |
+| Commandes | 3351 |
 | Sous-agents | 22 |
-| Commits | 302 |
+| Commits | 303 |
 | Compactages de contexte | 5 |
 
 ## Objectifs déclarés
@@ -3526,7 +3526,7 @@ Sur cette session, les mesures m
 
 ### Tour 69 — implémente toute les optimisation et détection de matériel avec heuristiques de configuration automatique.
 
-*759 appels d'outils.* Actions notables :
+*763 appels d'outils.* Actions notables :
 
 - bash — Inspect existing GPU detection
 - write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/materiel.rs`
@@ -3542,7 +3542,7 @@ Sur cette session, les mesures m
 - bash — Read KV bits resolution
 - bash — Integrate KV and VRAM heuristics
 - bash — Lighten detection and run gates
-- … et 685 autres
+- … et 689 autres
 
 **Synthèse produite :**
 
@@ -3703,7 +3703,7 @@ Sur cette session, les mesures m
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 3307 autres
+- … et 3311 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4153,4 +4153,5 @@ Sur cette session, les mesures m
 - MLA : dire NON VALIDÉE partout où elle est annoncée  Le moteur écrit maintenant, à l'ouverture et dans --config, que le chemin MLA à rang faible n'est pas valid
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git commit -q --amend -F - <<'EOF' MLA : dire NON VALIDÉE partout où elle est annoncée  Le moteur écrit ma
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p='REPRISE.md'; s=open(p).read() s = s.replace("""### Le piège à ne pas rouvrir : la MLA 
+- Rapport MLA : le bug, la méthode qui l'a trouvé, et ce qui reste ouvert  Le rapport dit maintenant ce qui est mesuré (corrélation 0,999024, top-1 3/3, 5 966 con
 

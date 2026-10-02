@@ -99,7 +99,7 @@ couche pour un format lisible, ce qui est exactement l'histoire des « 0/79 ».
   aiguillage : Qwen2.5-0.5B **19,3885**, Qwen3-30B en clusters **799,8557**.
 - **48 tests** (46 avant, +2 sur la cohérence des tables de formats).
 
-## 6. GLM-5.3 tourne — et le chiffre n'est pas encore croyable
+## 6. GLM-5.3 tourne, et son résultat est validé
 
 | mesure | valeur |
 |---|---|
@@ -108,19 +108,16 @@ couche pour un format lisible, ce qui est exactement l'histoire des « 0/79 ».
 | couches | 79 MLA, 76/79 avec mélange d'experts chargé (les 3 autres sont denses) |
 | débit, première mesure | **253 s par jeton** |
 | débit, après suppression des allocations par bloc | **53 s par jeton** (dont 20 s d'attention) |
-| perplexité sur 3 jetons | **7 300 931** — inexploitable |
+| perplexité, 3 jetons froids | **5 966** contre **4 286** chez llama.cpp |
+| corrélation des logits (pos. 0) | **0,999024** |
+| accord du top-1 | **3/3** |
 
-Deux choses, et il faut les séparer :
+La mécanique fonctionne — les 79 couches s'enchaînent, les experts IQ sont
+déquantifiés, la MLA tient son cache latent — **et le résultat concorde avec la
+référence externe**. Le chemin a d'abord été faux (7,3 M de perplexité,
+corrélation −0,04) ; la cause et sa localisation sont au § 6bis.
 
-1. **La mécanique fonctionne** : les 79 couches s'enchaînent, les experts IQ sont
-   déquantifiés, la MLA tient son cache latent, rien ne panique. C'est la
-   première fois que ce modèle calcule quoi que ce soit ici.
-2. **Le résultat est faux ou non validé** — et une perplexité de 7 millions n'est
-   pas « un peu faux » : le modèle est *sûr de lui et à côté*. Les causes
-   possibles sont listées ci-dessous ; tant qu'aucune n'est écartée par une
-   mesure, ce chiffre ne doit pas être publié comme un résultat.
-
-Ce qui a déjà été écarté par lecture du code de référence : les dimensions
+Ce qui avait été écarté par lecture du code de référence : les dimensions
 (`qk_nope = 192`, `qk_rope = 64`, `v = 256`, `kv_lora = 512` — toutes cohérentes
 avec `attention.key_length_mla` et les formes des tenseurs), le type de rotation
 (`LLAMA_ROPE_TYPE_NORM`, appariement `i` / `i + n_rot/2`), la base de rotation
@@ -135,13 +132,30 @@ et un FFN entier, toujours actif, manquait à chaque couche de chaque modèle
 DeepSeek/GLM/Kimi. C'est le genre d'omission qui ne se voit pas à la lecture et
 qui ne se pardonne pas au calcul.
 
+## 6bis. Le bug, et comment il a été trouvé
+
+`wv_b` n'est pas rangé comme `wk_b` :
+
+| tenseur | déclaration llama.cpp | dimension **rapide** |
+|---|---|---|
+| `attn_k_b` | `{qk_nope, kv_lora, nh}` | la **sortie** |
+| `attn_v_b` | `{kv_lora, v, nh}` | l'**entrée** |
+
+Écrire les deux « sortie rapide » donne des valeurs fausses de la bonne forme.
+La descente étage par étage, instrumentée des deux côtés (`ref_logits
+--tensors REGEX` côté llama.cpp, `DRAVE_DEBUG_MLA=1` côté moteur), a montré que
+`q_a`, `q_a_norm`, `c_kv`, `k_rope` et `q_rope` concordaient à 1 %, puis que
+`kqv_out-0` divergeait. La position 0 explique tout en une ligne : à la position
+0 l'attention n'a qu'une clé, donc `kqv_out = v_0 = wv_b · c_kv`.
+
 ## 7. Ce qui reste ouvert, et qui est le plus important
 
-1. **Aucune validation externe de la MLA.** Elle est implémentée d'après le C de
-   llama.cpp, testée par ses portes internes, mais elle n'a pas encore été
-   comparée à une référence sur les mêmes jetons. Tant que ce n'est pas fait,
-   « GLM-5.3 tourne » ne veut pas dire « GLM-5.3 est juste » — et vu l'histoire
-   de cette session, la distinction vaut.
+1. **La validation MLA ne porte que sur 3 jetons et une position de référence.**
+   La corrélation de 0,999 et le top-1 3/3 sont solides, mais ils ne disent rien
+   de la tenue sur une séquence longue (le cache latent est réécrit à chaque
+   position, et l'attention MLA est en scalaire non vectorisé ; ~20 s/jeton pour
+   la seule attention). Une passe à 64 jetons contre la référence est le
+   prochain jalon.
 2. **Pas de noyau IQ.** Le débit des gros modèles est celui de la
    déquantification, pas celui du produit. C'est un choix assumé
    (exactitude d'abord) mais il plafonne Kimi et V4.

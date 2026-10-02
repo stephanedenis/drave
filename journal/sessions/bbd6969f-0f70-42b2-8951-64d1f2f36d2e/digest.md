@@ -63718,3 +63718,53 @@ test result: ok. 48 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; fin
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='REPRISE.md'; s=open(p).read()\ns = s.replace(\"\"\"### Le piège à ne pas rouvrir : la MLA tourne mais n'est pas validée\"\"\",\n\"\"\"### La MLA à rang faible : trouvée fausse, puis validée\"\"\")\ns = s.replace( … [4756 caractères tronqués]`
+
+  ```
+REPRISE.md:1
+reports/rapport-mla-experts.md:0
+51dc4b7 MLA : `wv_b` est rangé à l'envers de `wk_b` — corrélation 0,999 après correction
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"NON VALIDÉE\\|non validée\\|n'est pas validée\" reports/rapport-mla-experts.md | head -5", "description": "Check remaining stale claims in the report"}`
+
+  ```
+(no output)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"inexploitable\\|pas croyable\\|ne doit pas être publiée\\|42 617 589\\|7 300 931\" reports/rapport-mla-experts.md | head -6", "description": "Find stale numbers in the report"}`
+
+  ```
+111:| perplexité sur 3 jetons | **7 300 931** — inexploitable |
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '100,125p' reports/rapport-mla-experts.md", "description": "Read the section to update"}`
+
+  ```
+- **48 tests** (46 avant, +2 sur la cohérence des tables de formats).
+
+## 6. GLM-5.3 tourne — et le chiffre n'est pas encore croyable
+
+| mesure | valeur |
+|---|---|
+| chargement | 379 à 553 s (216 Go, dont ~52 Go de MLA déquantifiée en f32) |
+| mémoire de pointe | ~90 Go de RSS |
+| couches | 79 MLA, 76/79 avec mélange d'experts chargé (les 3 autres sont denses) |
+| débit, première mesure | **253 s par jeton** |
+| débit, après suppression des allocations par bloc | **53 s par jeton** (dont 20 s d'attention) |
+| perplexité sur 3 jetons | **7 300 931** — inexploitable |
+
+Deux choses, et il faut les séparer :
+
+1. **La mécanique fonctionne** : les 79 couches s'enchaînent, les experts IQ sont
+   déquantifiés, la MLA tient son cache latent, rien ne panique. C'est la
+   première fois que ce modèle calcule quoi que ce soit ici.
+2. **Le résultat est faux ou non validé** — et une perplexité de 7 millions n'est
+   pas « un peu faux » : le modèle est *sûr de lui et à côté*. Les causes
+   possibles sont listées ci-dessous ; tant qu'aucune n'est écartée par une
+   mesure, ce chiffre ne doit pas être publié comme un résultat.
+
+Ce qui a déjà été écarté par lecture du code de référence : les dimensi
+… [165 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/rapport-mla-experts.md'; s=open(p).read()\ns = s.replace(\"\"\"## 6. GLM-5.3 tourne — et le chiffre n'est pas encore croyable\"\"\",\n\"\"\"## 6. GLM-5.3 tourne, et son résultat est validé\"\"\")\ns = s.r … [3558 caractères tronqués]`
