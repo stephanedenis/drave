@@ -61,7 +61,7 @@ parc, qu'**aucun verdict de calculabilité ne bascule à tort** après le correc
 | `convertisseur.md` | **corrigé, 7 sites** | « Ordre de marche » remis à l'état réel (mmap, NUMA, Q8_0, routeur MoE, lecteur Q4_K/Q6_K étaient **faits**) ; hypothèses « suspects restants » remplacées par ce qui a été **testé le jour même** ; conteneur renommé (ex-`QTNT`) ; « calque » → « couche » |
 | `contexte-long.md` | **corrigé, 5 sites** | E1 mesuré (−20 % / −31 %) ; E2 et E3 aux valeurs **par bloc de 32** ; **E6 MLA « non testable » → validée** ; **E7 vision « non testable » → faite** ; seuil YaRN à **4 ×** ; aiguille v2 **12/12** ; provenance des 234,88 |
 | `plan-modeles-lourds.md` | **corrigé, 7 sites** | bandeau de statut, état d'arrivée des modèles, architectures `deepseek2`/`glm-dsa`, porte de flux |
-| `plan-gpu-topk.md` | **corrigé, 4 sites** | cadrage axe 2, provenance du 234,88, 15,6017, 48 tests |
+| `plan-gpu-topk.md` | **corrigé, 4 sites** | cadrage axe 2, provenance du 234,88, 15,6017, 48 tests (49 depuis l'ajout du test d'identité paire/événement) |
 | `plan-mla-vision.md` | **corrigé, 5 sites** | en-tête « non commencé » → **fait**, réserve du chemin dense, modèles MLA réellement présents |
 | `plan-prefill-reparti.md` | **corrigé, 1 site** | le corps garde le plan historique à 39 octets, un bandeau dit que l'en-tête en fait **79** depuis la v4 |
 | `plan-mode4-lot-listes.md` | **corrigé, 6 sites** | le document n'est plus « la spécification à implémenter » mais **la référence de conception d'une implémentation faite** ; protocole **v5, modes 0–4** ; durcissement fait ; message « mode 4 non écrit » disparu |

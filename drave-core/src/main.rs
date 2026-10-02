@@ -1050,6 +1050,11 @@ troncature aux {} derniers", ids.len(), garde, ctx, n_new, garde);
     stats_experts(&mdl);
     println!("événements : {} au total, {:.1} par token",
              st.events, st.events as f64 / (st.n_prompt + st.n_gen) as f64);
+    let pa = mdl.paires;
+    let ng = (st.n_prompt + st.n_gen).max(1) as f64;
+    println!("paires (poids × activation) : {} au total, {:.1} M par token — attention {:.1} M · experts {:.1} M · partagé {:.1} M",
+             pa.iter().sum::<u64>(), pa.iter().sum::<u64>() as f64 / ng / 1e6,
+             pa[0] as f64 / ng / 1e6, pa[1] as f64 / ng / 1e6, pa[2] as f64 / ng / 1e6);
     if let Some(hb) = mdl.hebb.as_ref() {
         use std::io::Write;
         let mut f = std::fs::File::create(&hebb_out).expect("création du fichier hebbien");
@@ -4590,13 +4595,29 @@ prédit rien) — la perplexité cumulée n'a pas de sens ici");
     let fe = mdl.events_total() as f64 / n.max(1) as f64;
     println!("    attention : {:.2} M paires (requête, clé) par token", ae / 1e6);
     println!("    projections : {:.1} M événements par token", fe / 1e6);
-    if ae + fe > 0.0 {
-        println!("    part de l'attention dans le flux d'événements : {:.1} %",
-                 100.0 * ae / (ae + fe));
-    } else {
-        // Aucun événement : le mode dense ne compte rien. Annoncer « 100 % »
-        // serait un artefact de division par zéro, pas une mesure.
-        println!("    part de l'attention dans le flux d'événements : — (aucun événement)");
+    // Le flux par provenance : la question que la vision pose au modèle est
+    // « d'où vient le flux », parce que la réponse dit ce qu'on peut déporter,
+    // découper ou simplifier. Les paires sont ce qui est PAYÉ ; les événements
+    // sont ce qui est payé sur un chemin en listes. Un modèle MLA ou IQ
+    // n'affichait que des zéros avant ce compteur.
+    let pa = mdl.paires;
+    // Les scores d'attention (paires requête-clé) ne sont pas dans `paires` :
+    // ils sont comptés par `attn_events` depuis toujours. Le flux TOTAL d'un
+    // jeton est donc la somme des deux, sinon la part de l'attention serait
+    // fausse — et c'est la ligne qui dit où porter l'effort.
+    let scores = mdl.attn_events;
+    let pt: u64 = pa.iter().sum::<u64>() + scores;
+    // Les scores sont souvent des ordres de grandeur sous les projections :
+    // « 0.0 M » n'est pas une mesure, donc on les donne en kilo-paires.
+    println!("    paires (poids × activation) par token : attention {:.1} M · experts {:.1} M · partagé {:.1} M · scores {:.0} K · total {:.1} M",
+             pa[0] as f64 / n as f64 / 1e6, pa[1] as f64 / n as f64 / 1e6,
+             pa[2] as f64 / n as f64 / 1e6, scores as f64 / n as f64 / 1e3,
+             pt as f64 / n as f64 / 1e6);
+    println!("    dont en listes (une paire y est un événement) : {:.1} M — le reste est dense (déquantifié ou f32)",
+             mdl.events_total() as f64 / n as f64 / 1e6);
+    if pt > 0 {
+        println!("    part de l'attention dans le flux total : {:.1} %",
+                 100.0 * (pa[0] + scores) as f64 / pt as f64);
     }
     // Où passe VRAIMENT le temps du token : sans ce découpage, on optimise à
     // l'aveugle. Le poste non compté contient la tête de sortie (151 936 × 896

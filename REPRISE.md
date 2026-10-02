@@ -41,7 +41,7 @@ cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && cargo build --r
 > **799,8557** · gpt-oss-120b MXFP4 ctx 256 = **15,6017** (**changée** par le
 > correctif de routage : le biais `exp_probs_b` ne doit pas entrer dans le softmax
 > des poids — `reports/rapport-routage-experts.md`) · `cargo test --release` =
-> **48** · protocole **v5**, modes 0–4. Les lignes gpt-oss plus bas qui portent
+> **49** · protocole **v5**, modes 0–4. Les lignes gpt-oss plus bas qui portent
 > encore 15,1757, 15,1667, 15,0757 ou 18,5803 datent d'AVANT ce correctif : à
 > revérifier avant de s'en servir comme porte.
 >
@@ -114,6 +114,7 @@ Un garde-fou le détecte maintenant (identifiant ≥ vocabulaire = erreur franch
 | Rotation | **YaRN à retardement** : RoPE simple tant que `--ctx` ne dépasse pas **4 ×** `rope.scaling.original_context_length` (16 384 pour gpt-oss), **interpolation YaRN seule au-delà** (la température `mscale` est la moitié nuisible : divise la perplexité par 8,9 à 512 jetons). `DRAVE_YARN=1` = YaRN complet des références, `DRAVE_YARN_NON=1` (ou `--sans-yarn`) = jamais, `DRAVE_YARN_MSCALE=0/1` = température seule. La trace `[config] rotation` dit lequel est actif |
 | Budget de contexte | `--plan --ctx N` : KV f32/int8/int4, relecture par jeton, décodage selon les bandes passantes, coût du préremplissage séquentiel, portée du YaRN |
 | Référence externe | `tools/ref_logits` (llama.cpp, mêmes identifiants, sans BOS) + `tools/compare_logits.py` |
+| **Flux mesuré** | le rapport de `--ppl` donne les **paires** (poids × activation) par provenance — **attention / experts / partagé** — et les scores : c'est ce qui dit *où* passe le flux, donc ce qu'on peut déporter, découper ou simplifier. Les **événements** ne comptent que le chemin en listes (poids non nuls) ; les paires comptent tout ce qui est payé, y compris les chemins **déquantifiés (IQ)** et **MLA f32** qui n'affichaient que des zéros (`reports/rapport-p0-flux.md`) |
 
 **Vérifications externes déjà faites** (elles ont trouvé les bugs) : déquantification
 Q4_K/Q6_K comparée à une référence F16 des mêmes poids ; tokenizer o200k comparé

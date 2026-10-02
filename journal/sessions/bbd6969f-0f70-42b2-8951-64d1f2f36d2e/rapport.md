@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 91.6 h |
+| Durée | 92.2 h |
 | Tours | 74 |
-| Messages | 4380 |
-| Appels d'outils | 4170 |
-| Fichiers touchés | 86 |
-| Commandes | 3611 |
+| Messages | 4479 |
+| Appels d'outils | 4272 |
+| Fichiers touchés | 88 |
+| Commandes | 3683 |
 | Sous-agents | 28 |
-| Commits | 321 |
+| Commits | 322 |
 | Compactages de contexte | 6 |
 
 ## Objectifs déclarés
@@ -3779,7 +3779,7 @@ Trois autres points qui découlent de votre définition :
 
 ### Tour 74 — révise tous les documents du dossie docs afin de t'asssurer qu'ils sont cohérent avec la vision Drave
 
-*190 appels d'outils.* Actions notables :
+*292 appels d'outils.* Actions notables :
 
 - bash — Survey the docs folder
 - read
@@ -3795,11 +3795,11 @@ Trois autres points qui découlent de votre définition :
 - list_agents
 - bash — Find docs that never mention lists or clusters
 - bash — Read the openings of the three vision-silent docs
-- … et 134 autres
+- … et 208 autres
 
 **Synthèse produite :**
 
-⏵ Commit des corrections documentaires et des deux correctifs de code.
+⏵ Le compteur confirme exactement le travail retiré (−1 988,1 M paires, sortie identique).
 
 ## 3. Travail accompli
 
@@ -3818,7 +3818,7 @@ Trois autres points qui découlent de votre définition :
 | `/tmp/mesures_oss4.sh` | 2 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-gpt-oss-perplexite.md` | 1 | 4 |
 | `/tmp/controles_oss.sh` | 1 | 0 |
-| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/REPRISE.md` | 0 | 14 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/REPRISE.md` | 0 | 15 |
 | `/tmp/controles2_oss.sh` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/harmony_canonique.py` | 1 | 1 |
 | `/tmp/controles3_oss.sh` | 1 | 0 |
@@ -3893,6 +3893,8 @@ Trois autres points qui découlent de votre définition :
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/convertisseur.md` | 0 | 3 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/plan-mode4-lot-listes.md` | 0 | 2 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-coherence-vision.md` | 1 | 5 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/list.rs` | 0 | 1 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-p0-flux.md` | 1 | 0 |
 
 ### Sous-agents lancés
 
@@ -3967,7 +3969,7 @@ Trois autres points qui découlent de votre définition :
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 3571 autres
+- … et 3643 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4095,7 +4097,7 @@ Trois autres points qui découlent de votre définition :
 
 ## 5. Erreurs rencontrées
 
-243 sorties en erreur ou divergentes. Les premières :
+250 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : a8f2635f8 docs: record which models this box is good at, and why src/llama-hparams.cpp:8:void llama_hparams::set_swa_pattern(uint32_t n_pattern, bool dense_first) { src/llama-hparams.h:308:    void se
 - **T1** : 511 tokens notés — perplexité cumulée 247.031  (4.9 tok/s) === perplexité 247.0308 sur 511 tokens (0 événements, 104.5 s) ===  ### B3 harmony assistant 511 --- ref --- 0.0 0.0 0:00 ls: cannot access '
@@ -4436,4 +4438,5 @@ Trois autres points qui découlent de votre définition :
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' # Le plan doit être référencé depuis la roadmap et REPRISE, sinon il se perd. p='REPRISE.
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p='REPRISE.md'; s=open(p).read() s = s.replace("""## Plan pour exécuter DeepSeek-V4.1 (02
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git commit -q -F - <<'EOF' docs : révision de cohérence avec la vision (18 documents, 88 sites)  Cinq rele
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A drave-core/src/ REPRISE.md reports/rapport-p0-flux.md docs/plan-deepseek41-complet.md reports/r
 

@@ -199,7 +199,7 @@ Une phase qui ne passe pas ses deux portes ne passe pas à la suivante.
   3. **découpage en grappes** : V4-Flash en `cluster-XX.gguf`, puis
      `--ppl-reparti` entre **deux processus** (voire deux machines), perplexité
      égale à celle d'un nœud unique ;
-  4. les portes du dépôt vertes (48 tests, Qwen 19,3885, **gpt-oss 15,6017**,
+  4. les portes du dépôt vertes (49 tests, Qwen 19,3885, **gpt-oss 15,6017**,
      clusters 799,8557, 18 formats lisibles dont 17 vérifiés à la porte,
      4 routages).
 

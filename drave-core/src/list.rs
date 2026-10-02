@@ -1544,4 +1544,29 @@ mod tests_grille {
         assert_eq!(octets_grille(23), 136);  // IQ4_XS
         assert_eq!(octets_grille(29), 56);   // IQ1_M
     }
+
+    /// **Une paire est un événement, en listes.** C'est l'identité sur laquelle
+    /// repose le compteur de flux : `row_ev[i]` doit valoir exactement le nombre
+    /// de poids non nuls de la colonne `i`, et leur somme le nombre d'événements
+    /// de la matrice. Si elle casse, le rapport annonce un flux qui n'a pas été
+    /// payé — et c'est le chiffre qui sert à décider ce qu'on déporte.
+    ///
+    /// Un zéro quantifié ne produit AUCUN événement (c'est la définition du
+    /// chemin creux) : la matrice ci-dessous en contient un nombre connu.
+    #[test]
+    fn une_paire_est_un_evenement_en_listes() {
+        // 3 sorties × 4 entrées, avec deux zéros exacts.
+        let w = vec![
+            1.0f32, 0.0, -2.0, 0.5,
+            0.0,   3.0,  0.0, 0.0,
+            -1.0,  0.0,  4.0, 0.0,
+        ];
+        let m = PushMat::build(&w, 3, 4);
+        assert_eq!(m.n_events, 6, "6 poids non nuls sur 12 (1+3+2 par ligne)");
+        assert_eq!(m.row_ev.iter().map(|v| *v as usize).sum::<usize>(), m.n_events);
+        assert_eq!(m.row_ev, vec![2, 1, 2, 1], "événements par source");
+        // Une activation sur la source 1 ne paie que SA colonne : 1 événement —
+        // c'est ce que le moteur ajoute au compteur (`matvec`, chemin en listes).
+        assert_eq!(m.row_ev[1], 1);
+    }
 }

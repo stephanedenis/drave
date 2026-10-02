@@ -1462,6 +1462,19 @@ pub struct Model {
     pub kv: Vec<KvCache>,
     pub ctx: usize,
     pub events: u64,
+    /// **Paires** (poids × activation) effectivement multipliées, par
+    /// provenance : 0 = attention, 1 = experts routés, 2 = partagé (FFN dense,
+    /// expert partagé, tête).
+    ///
+    /// Pourquoi une seconde mesure à côté des `events` : les chemins qui
+    /// **déquantifient** (IQ, formats sans noyau) et le chemin MLA en f32 ne
+    /// construisent aucune liste, donc ne produisent aucun événement — le
+    /// rapport annonçait « 0 événement » pour des modèles qui calculaient des
+    /// milliards de produits. Une paire est ce qu'on **paie** : un chemin en
+    /// listes ne paie que ses poids non nuls, un chemin dense paie la matrice
+    /// entière, et l'écart entre les deux est exactement ce que le croisement
+    /// push/pull de 22 % arbitre (`reports/rapport-croisement-push-pull.md`).
+    pub paires: [u64; 3],
     /// Nombre de niveaux de quantification des **activations** (127 pour int8,
     /// 32767 pour int16). Les poids restent int8 : c'est la précision de
     /// l'activation qui décide de la fidélité au modèle flottant.
@@ -2611,7 +2624,7 @@ mapping {}",
         Model {
             g, cfg, layers, out_norm, pool,
             kv: caches_kv,
-            ctx, events: 0, act_levels: 127.0, act_thresh: 0.0, act_topk: 0, act_renorm: false,
+            ctx, events: 0, paires: [0; 3], act_levels: 127.0, act_thresh: 0.0, act_topk: 0, act_renorm: false,
             act_topk_proj: [0; 7], attn_topk: 0, attn_events: 0, qk_topk: 0,
             moe_topk: 0,
             profil_neurones: None,
@@ -2712,6 +2725,7 @@ mapping {}",
     /// Produit matrice-vecteur **par événements** : les activations actives
     /// poussent leur contribution dans les sorties de leur liste.
     fn matvec(pool: &mut Pool, p: &Proj, x: &[f32], out: &mut [f32], events: &mut u64,
+              paires: &mut u64,
               levels: f32, thresh: f32, topk: usize, renorm: bool, scratch: &mut Vec<f32>,
               thresh_auto: f32) {
         // On ne quantifie QUE la tranche utile de l'activation. Les appelants
@@ -2741,6 +2755,7 @@ mapping {}",
             let mut xd = vec![0i32; x.len()];
             for (&i, &v) in sv.idx.iter().zip(sv.val.iter()) { xd[i as usize] = v; }
             let y = pool.matvec_dense_q4(q, &xd, sx);
+            *paires += (q.n_in as u64) * (q.n_out as u64);
             for o in 0..q.n_out {
                 out[o] = y[o] + p.bias.as_ref().map_or(0.0, |b| b[o]);
             }
@@ -2766,6 +2781,7 @@ mapping {}",
             if let Some(y) = machine.proj(mg, &xd, sx) {
                 // Le biais fait partie de la projection : l'oublier donnait une
                 // perplexité de 27 millions sur un modèle à biais QKV.
+                *paires += (x.len() as u64) * (mg.n_out as u64);
                 for o in 0..mg.n_out.min(out.len()) {
                     out[o] = y[o] + p.bias.as_ref().map_or(0.0, |b| b[o]);
                 }
@@ -2779,6 +2795,7 @@ mapping {}",
             let mut xd = vec![0i32; x.len()];
             for (&i, &v) in sv.idx.iter().zip(sv.val.iter()) { xd[i as usize] = v; }
             let y = pool.matvec_dense_i8(d, &xd, sx);
+            *paires += (d.n_in as u64) * (d.n_out as u64);
             for o in 0..d.n_out {
                 out[o] = y[o] + p.bias.as_ref().map_or(0.0, |b| b[o]);
             }
@@ -2787,7 +2804,12 @@ mapping {}",
         }
         {
             let m = p.m.as_ref().expect("projection sans format");
+            // En listes, une paire EST un événement : on ne paie que les poids
+            // non nuls. Les deux compteurs doivent donc avancer ensemble ici —
+            // c'est ce qui rend l'écart avec un chemin dense lisible.
+            let avant = *events;
             for &i in &sv.idx { *events += m.row_ev[i as usize] as u64; }
+            *paires += *events - avant;
             let acc = pool.accumulate_push(m, &sv);
             for o in 0..m.n_out {
                 let mut y = acc[o] as f32 * (sx * m.scale[o]);
@@ -2845,6 +2867,7 @@ mapping {}",
     /// refuser rendait ces modèles inchargeables — « mélanges d'experts
     /// chargés : 0/79 » était la seule trace, sans dire pourquoi.
     fn matvec4_ou_iq(pool: &mut Pool, vue: &Vue4, loc: usize, x: &[f32], out: &mut [f32],
+                     paires: &mut u64,
                      levels: f32, thresh: f32, topk: usize, renorm: bool,
                      scratch: &mut Vec<f32>, biais: Option<&[f32]>, n_fils: usize) {
         if let crate::list::Source::Dequant(t) = vue.src {
@@ -2858,16 +2881,21 @@ mapping {}",
             };
             let mut xd = vec![0f32; x.len()];
             for (&i, &v) in sv.idx.iter().zip(sv.val.iter()) { xd[i as usize] = v as f32 * sx; }
+            // Déquantification puis produit f32 : la matrice ENTIÈRE est payée,
+            // quel que soit le nombre d'activations. C'est le chemin le plus
+            // cher du moteur, et il ne produisait aucun compteur.
+            *paires += (vue.n_in as u64) * (vue.n_out as u64);
             vue.matvec_dequant(loc, t, &xd, &mut out[..vue.n_out], n_fils);
             if let Some(b) = biais { for o in 0..vue.n_out { out[o] += b[o]; } }
             return;
         }
         let d = vue.expert(loc);
-        Self::matvec_q4(pool, &d, &x[..vue.n_in.min(x.len())], out, levels, thresh, topk,
+        Self::matvec_q4(pool, &d, &x[..vue.n_in.min(x.len())], out, paires, levels, thresh, topk,
                         renorm, scratch, biais);
     }
 
     fn matvec_q4(pool: &mut Pool, m: &crate::list::DenseQ4, x: &[f32], out: &mut [f32],
+                 paires: &mut u64,
                  levels: f32, thresh: f32, topk: usize, renorm: bool,
                  scratch: &mut Vec<f32>, biais: Option<&[f32]>) {
         let x = &x[..m.n_in.min(x.len())];
@@ -2878,6 +2906,7 @@ mapping {}",
         let mut xd = vec![0i32; x.len()];
         for (&i, &v) in sv.idx.iter().zip(sv.val.iter()) { xd[i as usize] = v; }
         let y = pool.matvec_dense_q4(m, &xd, sx);
+        *paires += (m.n_in as u64) * (m.n_out as u64);
         match biais {
             Some(b) => for o in 0..m.n_out { out[o] = y[o] + b[o]; },
             None => out[..m.n_out].copy_from_slice(&y[..m.n_out]),
@@ -3378,6 +3407,7 @@ l'attention par lots est DENSE. Utiliser --lot 1 pour l'attention creuse.", self
                                       (&lay.wk, &mut ka, nk),
                                       (&lay.wv, &mut va, nk)] {
                 if let Some(d8) = pj.d.as_ref() {
+                    self.paires[0] += (d8.n_in as u64) * (d8.n_out as u64) * t as u64;
                     self.pool.gemm_dense_i8(d8, &xi, t, &sx, &mut yl[..d8.n_out * t]);
                     for i in 0..t {
                         for oo in 0..taille {
@@ -3390,7 +3420,8 @@ l'attention par lots est DENSE. Utiliser --lot 1 pour l'attention creuse.", self
                     for i in 0..t {
                         let mut out = vec![0f32; taille];
                         Self::matvec(&mut self.pool, pj, &hn[i * h..(i + 1) * h], &mut out,
-                                     &mut self.events, self.act_levels, self.act_thresh, 0,
+                                     &mut self.events, &mut self.paires[0], self.act_levels,
+                                     self.act_thresh, 0,
                                      self.act_renorm, &mut scratch, self.seuil_push);
                         dst[i * taille..(i + 1) * taille].copy_from_slice(&out);
                     }
@@ -3795,7 +3826,7 @@ s'applique pas — utilisez --lot 1, ou réenregistrez sans DRAVE_TRACE_BLOCS");
     /// Laquelle s'applique se lit à la présence des tenseurs, jamais au nom de
     /// l'architecture.
     fn attn_mla(m: &Mla, cache: &mut (Vec<f32>, Vec<f32>), hn: &[f32], pos: usize,
-                rope_base: f32, att: &mut [f32]) {
+                rope_base: f32, att: &mut [f32], paires: &mut u64, scores: &mut u64) {
         // `DRAVE_DEBUG_MLA=1` : les premières valeurs des projections MLA, à
         // comparer à `llama-debug --tensor-filter Kcur-0` sur les mêmes jetons.
         // Une divergence de corrélation sur les LOGITS ne dit pas où elle
@@ -3804,6 +3835,11 @@ s'applique pas — utilisez --lot 1, ou réenregistrez sans DRAVE_TRACE_BLOCS");
         let (nh, qkn, qkr, vd, kvl) = (m.nh, m.qkn, m.qkr, m.vd, m.kv_lora);
         let eps = m.eps;
         let h = hn.len();
+        // **Flux de ce chemin** : les projections de rang faible sont des
+        // matrices f32 PLEINES (aucune liste n'est construite ici), donc elles
+        // ne produisent pas d'événements — on compte les paires payées. C'est
+        // la mesure qui manquait : un modèle MLA annonçait « 0 événement ».
+        *paires += (m.q_a.len() + m.q_b.len() + m.kv_a.len()) as u64;
         // --- requête : descente, norme, remontée, découpage nope / rope
         let mut qa = vec![0f32; m.q_lora];
         matvec_f32(&m.q_a, hn, h, m.q_lora, &mut qa);
@@ -3841,10 +3877,31 @@ s'applique pas — utilisez --lot 1, ou réenregistrez sans DRAVE_TRACE_BLOCS");
         }
         let (ckv, krop) = (&cache.0, &cache.1);
         let n = pos + 1;
+        // Par (tête, position), le chemin paie : la remontée `k_b` (kvl × qkn),
+        // la remontée `v_b` (vd × kvl), le score (qkn + qkr), et l'accumulation
+        // (vd). La disposition combinée (`kv_b`) paie le produit entier
+        // kvl × nh × (qkn + vd) dans les DEUX boucles, d'où le facteur 2.
+        //
+        // La remontée `v_b` n'est comptée qu'UNE fois : la boucle de scores la
+        // calculait aussi, dans une variable jamais relue (`vv`), et ce calcul
+        // mort a été supprimé le 02/10 — il payait un tiers du travail de la
+        // boucle de scores pour un résultat jeté.
+        //
+        // Les scores vont dans le MÊME compteur que l'attention dense
+        // (`attn_events`) : sans ça, un modèle MLA affichait « 0 paire
+        // (requête, clé) » alors qu'il en calcule autant qu'un autre — et la
+        // comparaison entre les deux familles aurait été fausse.
+        let sep = m.k_b.is_some() && m.v_b.is_some();
+        let remontees: u64 = if sep {
+            (kvl * qkn + vd * kvl + vd) as u64        // k_b (scores) + v_b (sortie) + accumulation
+        } else {
+            (2 * kvl * nh * (qkn + vd) + vd) as u64   // `kv_b` est payé dans les DEUX boucles
+        };
+        *paires += nh as u64 * n as u64 * remontees;
+        *scores += nh as u64 * n as u64 * (qkn + qkr) as u64;
         let scale = 1.0 / ((qkn + qkr) as f32).sqrt();
         let mut sc = vec![0f32; n];
         let mut kn = vec![0f32; qkn];
-        let mut vv = vec![0f32; vd];
         for hh in 0..nh {
             let q_nope = &qb[hh * (qkn + qkr)..hh * (qkn + qkr) + qkn];
             let qr = &q_rope[hh * qkr..(hh + 1) * qkr];
@@ -3855,7 +3912,7 @@ s'applique pas — utilisez --lot 1, ou réenregistrez sans DRAVE_TRACE_BLOCS");
                     // `k_nope[o] = Σ_c k_b[hh][c][o] · c_kv[c]` — l'index de
                     // sortie est le PLUS LENT. L'écrire dans l'autre sens donne
                     // des scores plausibles et faux.
-                    (Some(kb), Some(vb)) => {
+                    (Some(kb), Some(_)) => {
                         // ATTENTION à l'asymétrie des deux remontées, qui ne se
                         // devine pas : llama.cpp déclare
                         //   wk_b = {qk_nope, kv_lora, nh}  → la dimension RAPIDE
@@ -3874,19 +3931,15 @@ s'applique pas — utilisez --lot 1, ou réenregistrez sans DRAVE_TRACE_BLOCS");
                             for (c_, &cc) in c.iter().enumerate() { s += bk[c_ * qkn + o] * cc; }
                             kn[o] = s;
                         }
-                        let bv = &vb[hh * vd * kvl..(hh + 1) * vd * kvl];
-                        for o in 0..vd {
-                            let mut s = 0f32;
-                            for (c_, &cc) in c.iter().enumerate() { s += bv[o * kvl + c_] * cc; }
-                            vv[o] = s;
-                        }
+                        // La remontée `v_b` n'est PAS faite ici : elle l'était,
+                        // pour un résultat que personne ne relisait (`vv`). Elle
+                        // se fait dans la boucle de sortie, une fois.
                     }
                     // Disposition combinée : un seul tenseur par tête.
                     _ => {
                         let mut kvt = vec![0f32; nh * (qkn + vd)];
                         matvec_f32(&m.kv_b, c, kvl, nh * (qkn + vd), &mut kvt);
                         kn.copy_from_slice(&kvt[hh * (qkn + vd)..hh * (qkn + vd) + qkn]);
-                        vv.copy_from_slice(&kvt[hh * (qkn + vd) + qkn..(hh + 1) * (qkn + vd)]);
                     }
                 }
                 let mut s = 0f32;
@@ -4066,7 +4119,7 @@ s'applique pas — utilisez --lot 1, ou réenregistrez sans DRAVE_TRACE_BLOCS");
         let debug_mla = std::env::var("DRAVE_DEBUG_MLA").is_ok();
         self.profil_jetons += 1;
         let Model { g, cfg, layers, out_norm, pool, kv, events, attn_events, kv_gpu,
-                    attn_gpu_part, emb_imposee, .. } = self;
+                    attn_gpu_part, emb_imposee, paires, .. } = self;
         let h = cfg.hidden;
         let hd = cfg.head_dim;
         let nh = cfg.n_head;
@@ -4170,15 +4223,16 @@ dynamique de {dyn_:.3e} (relatif {:.2e})", mx / dyn_.max(1e-9));
             // deux attentions aurait donné deux MoE qui divergent.
             let ta = Instant::now();
             if let Some(m) = self.mla.as_ref().map(|v| &v[l]) {
-                Self::attn_mla(m, &mut self.mla_cache[l], &hn, pos, cfg.rope_base, &mut att);
+                Self::attn_mla(m, &mut self.mla_cache[l], &hn, pos, cfg.rope_base, &mut att,
+                               &mut paires[0], attn_events);
                 if debug_mla && l == 0 {
                     eprintln!("[mla] couche 0 pos {pos} att[..8] {:.5e} {:.5e} {:.5e} {:.5e} {:.5e} {:.5e} {:.5e} {:.5e}",
                               att[0], att[1], att[2], att[3], att[4], att[5], att[6], att[7]);
                 }
             } else {
-                Self::matvec(pool, &lay.wq, &hn, &mut q, events, self.act_levels, self.act_thresh, tk(0), self.act_renorm, &mut scratch, self.seuil_push);
-                Self::matvec(pool, &lay.wk, &hn, &mut k, events, self.act_levels, self.act_thresh, tk(1), self.act_renorm, &mut scratch, self.seuil_push);
-                Self::matvec(pool, &lay.wv, &hn, &mut v, events, self.act_levels, self.act_thresh, tk(2), self.act_renorm, &mut scratch, self.seuil_push);
+                Self::matvec(pool, &lay.wq, &hn, &mut q, events, &mut paires[0], self.act_levels, self.act_thresh, tk(0), self.act_renorm, &mut scratch, self.seuil_push);
+                Self::matvec(pool, &lay.wk, &hn, &mut k, events, &mut paires[0], self.act_levels, self.act_thresh, tk(1), self.act_renorm, &mut scratch, self.seuil_push);
+                Self::matvec(pool, &lay.wv, &hn, &mut v, events, &mut paires[0], self.act_levels, self.act_thresh, tk(2), self.act_renorm, &mut scratch, self.seuil_push);
                 self.prof[0] += tm.elapsed().as_secs_f64();
                 // Qwen3 normalise chaque tête de Q et K avant la rotation.
                 if lay.q_norm.is_some() || lay.k_norm.is_some() {
@@ -4540,7 +4594,7 @@ dynamique de {dyn_:.3e} (relatif {:.2e})", mx / dyn_.max(1e-9));
                 Some(m) => m.nh * m.vd,
                 None => att.len(),
             };
-            Self::matvec(pool, &lay.wo, &att[..n_att.min(att.len())], &mut o, events, self.act_levels, self.act_thresh, tk(3), self.act_renorm, &mut scratch, self.seuil_push);
+            Self::matvec(pool, &lay.wo, &att[..n_att.min(att.len())], &mut o, events, &mut paires[0], self.act_levels, self.act_thresh, tk(3), self.act_renorm, &mut scratch, self.seuil_push);
             for i in 0..h { o[i] += x[i]; }
             Self::rmsnorm(&o, &lay.ffn_norm, cfg.eps, &mut hn);
             if let Some(r) = self.flux_force.as_mut() {
@@ -4624,12 +4678,14 @@ dynamique de {dyn_:.3e} (relatif {:.2e})", mx / dyn_.max(1e-9));
                         continue;
                     }
                     let mg = moe.gate[kexp].expert(loc);
-                    Self::matvec4_ou_iq(pool, &moe.gate[kexp], loc, &hn, &mut gate, self.act_levels,
+                    Self::matvec4_ou_iq(pool, &moe.gate[kexp], loc, &hn, &mut gate, &mut paires[1],
+                                        self.act_levels,
                                         self.act_thresh, tk(4), self.act_renorm, &mut scratch,
                                         moe.biais_gate.as_ref().map(|b| &b[e as usize * moe.n_ff..]),
                                         threads_iq);
                     let mu = moe.up[kexp].expert(loc);
-                    Self::matvec4_ou_iq(pool, &moe.up[kexp], loc, &hn, &mut up, self.act_levels,
+                    Self::matvec4_ou_iq(pool, &moe.up[kexp], loc, &hn, &mut up, &mut paires[1],
+                                        self.act_levels,
                                         self.act_thresh, tk(5), self.act_renorm, &mut scratch,
                                         moe.biais_up.as_ref().map(|b| &b[e as usize * moe.n_ff..]),
                                         threads_iq);
@@ -4637,8 +4693,8 @@ dynamique de {dyn_:.3e} (relatif {:.2e})", mx / dyn_.max(1e-9));
                     Self::compter_neurones(&mut self.profil_neurones, largeur_profil,
                                            l, &gate[..cfg.ffn_exp]);
                     let md = moe.down[kexp].expert(loc);
-                    Self::matvec4_ou_iq(pool, &moe.down[kexp], loc, &gate, &mut exp_out, self.act_levels,
-                                    self.act_thresh, tk(6), self.act_renorm, &mut scratch,
+                    Self::matvec4_ou_iq(pool, &moe.down[kexp], loc, &gate, &mut exp_out, &mut paires[1],
+                                    self.act_levels, self.act_thresh, tk(6), self.act_renorm, &mut scratch,
                                     // Le biais de descente se découpe par la
                                     // largeur de SORTIE (h), pas par n_ff : les
                                     // deux coïncident sur gpt-oss (2 880) mais
@@ -4648,14 +4704,14 @@ dynamique de {dyn_:.3e} (relatif {:.2e})", mx / dyn_.max(1e-9));
                     for i in 0..h { down[i] += w_exp * exp_out[i]; }
                 }
                 if let Some((sg, su, sd)) = moe.shexp.as_ref() {
-                    Self::matvec4_ou_iq(pool, sg, 0, &hn, &mut gate, self.act_levels,
+                    Self::matvec4_ou_iq(pool, sg, 0, &hn, &mut gate, &mut paires[2], self.act_levels,
                                     self.act_thresh, tk(4), self.act_renorm, &mut scratch, None,
                                     threads_iq);
-                    Self::matvec4_ou_iq(pool, su, 0, &hn, &mut up, self.act_levels,
+                    Self::matvec4_ou_iq(pool, su, 0, &hn, &mut up, &mut paires[2], self.act_levels,
                                     self.act_thresh, tk(5), self.act_renorm, &mut scratch, None,
                                     threads_iq);
                     Self::activation(&mut gate, &up, cfg.ffn_exp, cfg.ffn_act_oss);
-                    Self::matvec4_ou_iq(pool, sd, 0, &gate, &mut exp_out, self.act_levels,
+                    Self::matvec4_ou_iq(pool, sd, 0, &gate, &mut exp_out, &mut paires[2], self.act_levels,
                                     self.act_thresh, tk(6), self.act_renorm, &mut scratch, None,
                                     threads_iq);
                     for i in 0..h { down[i] += exp_out[i]; }
@@ -4674,7 +4730,7 @@ dynamique de {dyn_:.3e} (relatif {:.2e})", mx / dyn_.max(1e-9));
                 self.prof[3] += tf.elapsed().as_secs_f64();
                 continue;
             }
-            Self::matvec(pool, &lay.wgate, &hn, &mut gate, events, self.act_levels, self.act_thresh, tk(4), self.act_renorm, &mut scratch, self.seuil_push);
+            Self::matvec(pool, &lay.wgate, &hn, &mut gate, events, &mut paires[2], self.act_levels, self.act_thresh, tk(4), self.act_renorm, &mut scratch, self.seuil_push);
             // --- capteur hebbien : espionne la co-activation (entrée, sortie)
             // de la projection gate. Aucun effet sur le calcul.
             if let Some(hb) = self.hebb.as_mut() {
@@ -4686,11 +4742,11 @@ dynamique de {dyn_:.3e} (relatif {:.2e})", mx / dyn_.max(1e-9));
                     scratch = seuil;
                 }
             }
-            Self::matvec(pool, &lay.wup, &hn, &mut up, events, self.act_levels, self.act_thresh, tk(5), self.act_renorm, &mut scratch, self.seuil_push);
+            Self::matvec(pool, &lay.wup, &hn, &mut up, events, &mut paires[2], self.act_levels, self.act_thresh, tk(5), self.act_renorm, &mut scratch, self.seuil_push);
             Self::activation(&mut gate, &up, cfg.ffn, cfg.ffn_act_oss);
             Self::compter_neurones(&mut self.profil_neurones, largeur_profil,
                                    l, &gate[..cfg.ffn]);
-            Self::matvec(pool, &lay.wdown, &gate, &mut down, events, self.act_levels, self.act_thresh, tk(6), self.act_renorm, &mut scratch, self.seuil_push);
+            Self::matvec(pool, &lay.wdown, &gate, &mut down, events, &mut paires[2], self.act_levels, self.act_thresh, tk(6), self.act_renorm, &mut scratch, self.seuil_push);
             // --- greffon : neurone supplémentaire, sans réentraînement
             if let Some(pt) = self.patch.as_ref() {
                 if pt.layer == l {
@@ -4938,6 +4994,11 @@ dynamique de {dyn_:.3e} (relatif {:.2e})", mx / dyn_.max(1e-9));
             Some(v) => v,
             None => return vec![0f32; self.cfg.vocab],
         };
+        // La tête est la plus grosse matrice du modèle et elle est TOUJOURS
+        // dense : la compter dans « partagé » est ce qui explique qu'un petit
+        // modèle ait un flux partagé énorme (Qwen 0.5B : 136 M paires pour la
+        // seule tête, contre 313 M pour ses 24 FFN).
+        self.paires[2] += (h.len() as u64) * (self.cfg.vocab as u64);
         // Chemin GPU : les poids de la tête sont déjà en mémoire vidéo ; seules
         // les activations montent et les logits descendent.
         if self.tete_gpu.is_some() {
