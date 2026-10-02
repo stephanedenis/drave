@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 79.6 h |
+| Durée | 79.7 h |
 | Tours | 69 |
-| Messages | 3329 |
-| Appels d'outils | 3149 |
+| Messages | 3330 |
+| Appels d'outils | 3150 |
 | Fichiers touchés | 73 |
-| Commandes | 2750 |
+| Commandes | 2751 |
 | Sous-agents | 22 |
-| Commits | 277 |
+| Commits | 278 |
 | Compactages de contexte | 4 |
 
 ## Objectifs déclarés
@@ -3526,7 +3526,7 @@ Sur cette session, les mesures m
 
 ### Tour 69 — implémente toute les optimisation et détection de matériel avec heuristiques de configuration automatique.
 
-*110 appels d'outils.* Actions notables :
+*111 appels d'outils.* Actions notables :
 
 - bash — Inspect existing GPU detection
 - write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/materiel.rs`
@@ -3542,11 +3542,11 @@ Sur cette session, les mesures m
 - bash — Read KV bits resolution
 - bash — Integrate KV and VRAM heuristics
 - bash — Lighten detection and run gates
-- … et 94 autres
+- … et 95 autres
 
 **Synthèse produite :**
 
-⏵ Le plan bascule le KV en 8 bits à 1 M avec sa raison. Je commite et je mesure le mmap selon la taille.
+⏵ **Le mmap tient quelle que soit la taille** : 365,7 Go en 0,08 s et 47 Mo. Je consigne.
 
 ## 3. Travail accompli
 
@@ -3695,7 +3695,7 @@ Sur cette session, les mesures m
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 2710 autres
+- … et 2711 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4120,4 +4120,5 @@ Sur cette session, les mesures m
 - Restreindre la tete de sortie : trois voies explorees, une seule survit  Question : peut-on calculer moins de logits sans JAMAIS changer la sortie ? Reponse mes
 - Rapport : detection materielle et configuration automatique  Ce qui est implemente (materiel.rs + --materiel + heuristiques), ce que chaque regle s'appuie comme
 - Plan materiel sensible au modele : il lit ses dimensions au lieu de les supposer  --materiel lit desormais l'architecture, le nombre d'experts et la taille reel
+- mmap : 365,7 Go adresses en 0,08 s et 47 Mo de RSS" && git log --oneline -1; ls -la /home/stephane/FastNVMe/modeles-lourds/*.gguf 2>/dev/null | awk '{printf "co
 

@@ -53565,3 +53565,17 @@ jeu 01 oct 2026 22:24:48 EDT
 ⏵ Le plan bascule le KV en 8 bits à 1 M avec sa raison. Je commite et je mesure le mmap selon la taille.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -m \"Plan materiel sensible au modele : il lit ses dimensions au lieu de les supposer\n\n--materiel lit desormais l'architecture, le nombre d'experts et la taille reelle\nd'un expert depuis les tenseurs. T … [1728 caractères tronqués]`
+
+  ```
+3372be4 Plan materiel sensible au modele : il lit ses dimensions au lieu de les supposer
+qwen3-30b-8clusters-v2       qwen3moe · 9 fichiers · 1587 tenseurs · 18.55 Go de poids · en-têtes lus en 455.240905ms 0.46 s · MAXRSS 71988 Ko 
+DeepSeek-V4-Flash-UD-IQ1_M-0 deepseek4 · 3 fichiers · 1328 tenseurs · 86.90 Go de poids · en-têtes lus en 65.123962ms 0.07 s · MAXRSS 35136 Ko 
+DeepSeek-V4.1-Flash-Q2.gguf  deepseek41 · 1 fichiers · 1046 tenseurs · 365.70 Go de poids · en-têtes lus en 73.003547ms 0.08 s · MAXRSS 47380 Ko 
+=== fin ===
+  ```
+
+### 🤖 Assistant
+
+⏵ **Le mmap tient quelle que soit la taille** : 365,7 Go en 0,08 s et 47 Mo. Je consigne.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np = 'reports/rapport-architecture-memoire.md'\ns = open(p).read()\ns = s.replace('''## 13. Le FPGA : pas de cas d'usage aujourd'hui''',\n'''## 13. Le mmap tient quelle que soit la taille\n\nOuverture par les en-tête … [1010 caractères tronqués]`

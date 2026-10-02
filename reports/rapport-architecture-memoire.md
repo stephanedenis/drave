@@ -363,7 +363,24 @@ seulement si elle n'atteint pas 99,9 %. Les mesures de la section 2 montrent que
 c'est possible — 2 à 9 tokens portent la masse quand le modèle est confiant,
 20 000 quand il hésite.
 
-## 13. Le FPGA : pas de cas d'usage aujourd'hui
+## 13. Le mmap tient quelle que soit la taille
+
+Ouverture par les en-têtes seuls, temps et mémoire résidente :
+
+| modèle | taille | temps | RSS |
+|---|---|---|---|
+| Qwen3-30B en clusters (9 fichiers) | 18,55 Go | 0,46 s | 72 Mo |
+| DeepSeek-V4-Flash (3 shards) | 86,90 Go | 0,07 s | 35 Mo |
+| **DeepSeek-V4.1-Flash** | **365,70 Go** | **0,08 s** | **47 Mo** |
+
+**47 Mo de mémoire résidente pour 365,7 Go adressés.** Le mmap ne dépend pas de
+la taille, et c'est ce qui rend l'engram (203 Go, table à accès aléatoire)
+simplement *adressable* au lieu d'être chargé.
+
+Le cas en clusters est plus lent (0,46 s) parce qu'il ouvre neuf fichiers et lit
+neuf en-têtes, pas parce que les fichiers sont gros.
+
+## 14. Le FPGA : pas de cas d'usage aujourd'hui
 
 Un Stratix V est branché, mais **en USB seulement** (pas de PCIe configuré), soit
 **625 Mo/s au mieux** — cinquante fois moins que le NVMe parallélisé.
