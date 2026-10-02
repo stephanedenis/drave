@@ -246,6 +246,33 @@ sature pas assez la mémoire hôte pour que la distance compte.
 **Pas de FPGA dans cette machine.** Le relevé PCI ne montre que le NVMe, les deux
 GPU, deux cartes Ethernet et les contrôleurs du chipset. La piste est close.
 
+### Les paires hyperthread : utiles quand les cœurs manquent
+
+Le banc mémoire, chaque configuration répétée trois fois :
+
+| cœurs utilisés | fils | Go/s (médiane) |
+|---|---|---|
+| **10 cœurs** | 10 (1 par cœur) | 14,7 |
+| **10 cœurs** | **20 (2 par cœur, HT)** | **18,7** ← **+27 %** |
+| 10 cœurs | 30 (3 par cœur) | 15,0 — régression |
+| **20 cœurs** | 20 | **22,5** |
+| 20 cœurs | 40 (HT) | 18,9 (essais 18,6 · 18,9 · 26,3 — très bruité) |
+| 20 cœurs | 60 | 20,7 |
+
+**L'hyperthreading n'aide pas quand on a tous les cœurs** (la bande passante
+sature à ~22 Go/s), **mais il rend 27 % quand on n'en a que dix.** C'est le cas
+d'un nœud partiel : dix cœurs physiques avec leurs jumeaux valent mieux que dix
+cœurs seuls, parce que deux fils d'une même paire masquent mutuellement la
+latence mémoire — et partagent le L2 de 256 Ko.
+
+**Et trois fils par cœur est une régression** (15,0 contre 18,7) : au-delà de
+deux, la contention du cœur dépasse le gain de latence.
+
+**Conséquence pour le moteur** : sa configuration par défaut (20 fils sur
+20 cœurs, via `coeurs_physiques()`) est la bonne. Mais un nœud **restreint** à
+dix cœurs devrait prendre **vingt fils sur les paires HT** — soit `--pin` avec un
+placement explicite `0-9,20-29` plutôt que `0-9`.
+
 ### Ce qui reste exploitable de la topologie
 
 1. **Le NVLink** : tout échange entre les deux GPU devrait passer par lui plutôt
@@ -258,6 +285,33 @@ GPU, deux cartes Ethernet et les contrôleurs du chipset. La piste est close.
 3. **Le NVMe *DRAM-less*** : ses performances dépendent du HMB (Host Memory
    Buffer), donc de la RAM hôte. Les 31 Go/s mesurés en parallèle en dépendent
    peut-être — c'est une raison de plus de ne pas conclure sur le régime froid.
+4. **Les paires hyperthread sur un nœud restreint** : +27 % à dix cœurs, rien à
+   vingt. À régler au déploiement, pas par défaut.
+
+## 11. Le FPGA : pas de cas d'usage aujourd'hui
+
+Un Stratix V est branché, mais **en USB seulement** (pas de PCIe configuré), soit
+**625 Mo/s au mieux** — cinquante fois moins que le NVMe parallélisé.
+
+Et surtout, **il n'y a rien à lui donner**. Le mur de cette architecture n'est pas
+le calcul :
+
+| | |
+|---|---|
+| lecture d'une couche | 10,9 ms |
+| **calcul de la même couche** | **0,6 ms** |
+| rapport | **18×** |
+
+Un accélérateur de calcul sur un chemin où le calcul pèse 5 % ne peut rien
+gagner. Et le déplacement de données est déjà en DMA par le noyau : un FPGA qui
+lirait le NVMe pour le pousser en VRAM ne ferait pas mieux que `pread` à
+31 Go/s.
+
+**La condition qui le rendrait utile** : une tâche où le **calcul** domine. Il n'y
+en a aucune dans le chemin actuel — ni le matvec (limité par la mémoire), ni la
+déquantification (le moteur ne déquantifie que les têtes de tenseurs), ni le
+routage (384 logits par couche). En PCIe et avec une charge de calcul dense, la
+question se reposerait ; en USB, elle est close.
 
 ## 11. Ce qui reste à vérifier
 

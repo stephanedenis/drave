@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 78.4 h |
-| Tours | 67 |
-| Messages | 3211 |
-| Appels d'outils | 3035 |
+| Durée | 78.6 h |
+| Tours | 68 |
+| Messages | 3216 |
+| Appels d'outils | 3038 |
 | Fichiers touchés | 70 |
-| Commandes | 2642 |
+| Commandes | 2645 |
 | Sous-agents | 22 |
-| Commits | 269 |
+| Commits | 270 |
 | Compactages de contexte | 4 |
 
 ## Objectifs déclarés
@@ -169,6 +169,8 @@
 **Tour 66** — maintenant, les optimisations d'architecture pour chaque grappe et couche afin de faire le meilleur usage du vram et ram
 
 **Tour 67** — nvme et multi-cpu, cores purs vs hyperthread (cache partagée) as-t-on évalué les impacts
+
+**Tour 68** — peut-on explorer les affinités cpu pour du HT, c'est à dire parallélisation interne de certaines boucles ayant des affinités fines de mémoire pour les tandems de cpu. Pour le FPGS Stratix V, il est branché, mais pas configuré pcie en ce moment, usb seulement. A étudier seulement si on sait quoi lui donner.
 
 ## 2. Déroulé, étape par étape
 
@@ -3407,7 +3409,70 @@ Le KV de MLA n'est pas la concaténation des têtes mais un latent comprimé —
 
 **Synthèse produite :**
 
-⏵ NUMA : 22,4 contre 21,5 Go/s — négligeable. Je consigne la topologie et je vérifie ma modification.
+Question matérielle traitée — et elle a trouvé une optimisation concrète.
+
+\## La topologie relevée
+
+| périphérique | adresse | NUMA | lien |
+|---|---|---|---|
+| **NVMe** (MAP1602, *DRAM-less*) | 02:00.0 | **node 0** | PCIe 3.0 |
+| GPU 0 (Quadro RTX 5000) | 03:00.0 | **node 0** | PCIe 3.0 ×16 |
+| GPU 1 | 04:00.0 | **node 0** | PCIe 3.0 ×16 |
+| **GPU 0 ↔ GPU 1** | | | **NVLink, 25,78 Go/s** |
+
+**Le NVLink est là, et il vaut 2× le PCIe** (25,78 contre ~12 Go/s réels). CUDA l'emprunte automatiquement pour tout transfert entre GPU, donc `DRAVE_GPU_KV` — qui répartit le KV sur les deux cartes — en bénéficie déjà sans réglage.
+
+**Tout le chemin critique est sur le node 0** : NVMe, les deux GPU, et les CPU 0-9.
+
+\## Mais l'affinité NUMA ne paie pas
+
+| chemin | node 0 | node 1 | écart |
+|---|---|---|---|
+| banc mémoire (calcul pur) | 13,8 | 14,2 Go/s | bruit |
+| **lecture NVMe** (8 lecteurs) | 22,41 | 21,45 Go/s | **4 %** |
+
+4 % sur le seul chemin qui traverse réellement l'UPI. L'UPI de ce Xeon est rapide, et le SSD *DRAM-less* ne sature pas assez la mémoire hôte. **Aucune politique de placement à écrire.**
+
+\## Pas de FPGA
+
+Le relevé PCI ne montre que le NVMe, les deux GPU, deux cartes Ethernet et les contrôleurs du chipset. La piste est close.
+
+\## En revanche, l'hyperthreading : corrigé
+
+| | débit |
+|---|---|
+| 10 cœurs purs | 11,8–13,8 Go/s |
+| **20 cœurs** | **22,6 Go/s** |
+| 40 threads | 22,8 Go/s |
+
+**40 threads ne font pas mieux que 20 cœurs.** La charge est limitée par la mémoire, et les hyperthreads se partagent un L2 de 256 Ko pour rien. Or le moteur prenait `cpu × 3/4` = **30 fils** sur 40 threads logiques.
+
+Corrigé : `engine::coeurs_physiques()` lit `/sys/devices/system/cpu/cpu*/topology/` — défaut passé de **30 à 20 fils**, porte Qwen inchangée (19,3885), 32 tests verts.
+
+\## Et la mesure qui retourne l'architecture
+
+| lecteurs NVMe | 1 | 2 | 4 | 8 | **16** |
+|---|---|---|---|---|---|
+| Go/s | 5,37 | 9,68 | 18,08 | 28,29 | **31,08** |
+
+**Le NVMe parallélisé dépasse la RAM** (31 contre 22 Go/s). Les 2,39 Go d'experts par jeton de V4.1 passent de **435 ms à 77 ms sans aucun cache**.
+
+**Donc la brique à écrire n'est plus un cache d'experts, c'est un chargeur parallèle** — plus simple, sans index, sans politique d'éviction, et ça libère les 71 Go de RAM pour le KV, qui est le vrai goulot à long contexte (96,6 Go en F16 à 1 M).
+
+**Réserve consignée** : les 50,5 Go lus tiennent dans les 112 Go de cache RAM, donc le régime froid n'est pas isolé (`O_DIRECT` échou
+… [116 caractères tronqués]
+
+### Tour 68 — peut-on explorer les affinités cpu pour du HT, c'est à dire parallélisation interne de certaines boucles ayant des affin … [187 caractères tronqués]
+
+*3 appels d'outils.* Actions notables :
+
+- bash — Measure cache behaviour with and without HT
+- bash — Measure threads per core ratio
+- bash — Document HT pairs and FPGA assessment
+
+**Synthèse produite :**
+
+⏵ Résultat net : **+27 % avec les paires HT quand on n'a que 10 cœurs**, rien avec 20. Je consigne.
 
 ## 3. Travail accompli
 
@@ -3553,7 +3618,7 @@ Le KV de MLA n'est pas la concaténation des têtes mais un latent comprimé —
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 2602 autres
+- … et 2605 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -3970,4 +4035,5 @@ Le KV de MLA n'est pas la concaténation des têtes mais un latent comprimé —
 - CPU, hyperthreading, NUMA et NVMe : mesures, et la conclusion qui se retourne  CPU : plateau a 22 Go/s des 16 fils, la charge est limitee par la memoire. Hypert
 - Topologie materielle : NVLink 25,8 Go/s, NUMA negligeable, pas de FPGA  Releve : le NVMe (02:00.0), les deux GPU (03:00.0, 04:00.0) et les CPU 0-9 sont tous sur
 - README : la topologie et la conclusion qui se retourne" && echo "=== ÉTAT FINAL ==="; (cd drave-core && cargo test --release 2>&1 | grep -E "^test result"); git
+- Paires hyperthread : +27 % quand les cœurs manquent, rien quand on les a tous  Banc memoire, chaque configuration repetee trois fois : - 10 cœurs, 10 fils (1 pa
 

@@ -51679,3 +51679,123 @@ ok
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np = 'README.md'\ns = open(p).read()\ns = s.replace('''Débits **mesurés** : VRAM **84,9 Go/s** (noyau warp) · RAM **20,9 Go/s** (CPU 30\nfils) · NVMe aléatoire 5,5 Go/s · PCIe 3.0 ×16 ~12 Go/s. Le noyau GPU `warp par … [2314 caractères tronqués]`
+
+  ```
+README ok
+=== ÉTAT FINAL ===
+test result: ok. 32 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.09s
+en attente : 0
+
+Documents :
+  reports/rapport-architecture-memoire.md             282 lignes
+  reports/rapport-empreinte-memoire.md                545 lignes
+  README.md                                           628 lignes
+  REPRISE.md                                          891 lignes
+
+Commits session : 31
+  ```
+
+### 🤖 Assistant
+
+Question matérielle traitée — et elle a trouvé une optimisation concrète.
+
+## La topologie relevée
+
+| périphérique | adresse | NUMA | lien |
+|---|---|---|---|
+| **NVMe** (MAP1602, *DRAM-less*) | 02:00.0 | **node 0** | PCIe 3.0 |
+| GPU 0 (Quadro RTX 5000) | 03:00.0 | **node 0** | PCIe 3.0 ×16 |
+| GPU 1 | 04:00.0 | **node 0** | PCIe 3.0 ×16 |
+| **GPU 0 ↔ GPU 1** | | | **NVLink, 25,78 Go/s** |
+
+**Le NVLink est là, et il vaut 2× le PCIe** (25,78 contre ~12 Go/s réels). CUDA l'emprunte automatiquement pour tout transfert entre GPU, donc `DRAVE_GPU_KV` — qui répartit le KV sur les deux cartes — en bénéficie déjà sans réglage.
+
+**Tout le chemin critique est sur le node 0** : NVMe, les deux GPU, et les CPU 0-9.
+
+## Mais l'affinité NUMA ne paie pas
+
+| chemin | node 0 | node 1 | écart |
+|---|---|---|---|
+| banc mémoire (calcul pur) | 13,8 | 14,2 Go/s | bruit |
+| **lecture NVMe** (8 lecteurs) | 22,41 | 21,45 Go/s | **4 %** |
+
+4 % sur le seul chemin qui traverse réellement l'UPI. L'UPI de ce Xeon est rapide, et le SSD *DRAM-less* ne sature pas assez la mémoire hôte. **Aucune politique de placement à écrire.**
+
+## Pas de FPGA
+
+Le relevé PCI ne montre que le NVMe, les deux GPU, deux cartes Ethernet et les contrôleurs du chipset. La piste est close.
+
+## En revanche, l'hyperthreading : corrigé
+
+| | débit |
+|---|---|
+| 10 cœurs purs | 11,8–13,8 Go/s |
+| **20 cœurs** | **22,6 Go/s** |
+| 40 threads | 22,8 Go/s |
+
+**40 threads ne font pas mieux que 20 cœurs.** La charge est limitée par la mémoire, et les hyperthreads se partagent un L2 de 256 Ko pour rien. Or le moteur prenait `cpu × 3/4` = **30 fils** sur 40 threads logiques.
+
+Corrigé : `engine::coeurs_physiques()` lit `/sys/devices/system/cpu/cpu*/topology/` — défaut passé de **30 à 20 fils**, porte Qwen inchangée (19,3885), 32 tests verts.
+
+## Et la mesure qui retourne l'architecture
+
+| lecteurs NVMe | 1 | 2 | 4 | 8 | **16** |
+|---|---|---|---|---|---|
+| Go/s | 5,37 | 9,68 | 18,08 | 28,29 | **31,08** |
+
+**Le NVMe parallélisé dépasse la RAM** (31 contre 22 Go/s). Les 2,39 Go d'experts par jeton de V4.1 passent de **435 ms à 77 ms sans aucun cache**.
+
+**Donc la brique à écrire n'est plus un cache d'experts, c'est un chargeur parallèle** — plus simple, sans index, sans politique d'éviction, et ça libère les 71 Go de RAM pour le KV, qui est le vrai goulot à long contexte (96,6 Go en F16 à 1 M).
+
+**Réserve consignée** : les 50,5 Go lus tiennent dans les 112 Go de cache RAM, donc le régime froid n'est pas isolé (`O_DIRECT` échoue ici, errno 29, et le disque n'héberge que 114 Go). Ce qui est solide est le **scaling ×6**, pas la valeur absolue.
+
+
+## Tour 68
+
+### 👤 Utilisateur
+
+peut-on explorer les affinités cpu pour du HT, c'est à dire parallélisation interne de certaines boucles ayant des affinités fines de mémoire pour les tandems de cpu. Pour le FPGS Stratix V, il est branché, mais pas configuré pcie en ce moment, usb seulement. A étudier seulement si on sait quoi lui donner.
+
+### 🤖 Assistant
+
+⏵ Deux pistes. D'abord le HT : mesurons les défauts de cache à 20 cœurs contre 40 threads.
+
+- **bash** `{"command": "which perf 2>/dev/null || echo \"perf absent\"; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/ht_cache.sh <<'EOF'\n#!/bin/bash\n# Les hyperthreads d'un cœur partagent L1 (32 Ko) et L2 (256 Ko). Dans un matvec\n# découpé par LIGNES DE SORTIE, tous les threads lisent le … [1484 caractères tronqués]`
+
+  ```
+perf absent
+20 threads sur 20 cœurs (0-19)         CPU 20 fils : 6.1 ms ( 23.9 Go/s)
+
+40 threads sur 20 paires HT (0-39)      CPU 40 fils : 5.9 ms ( 24.4 Go/s)
+
+10 cœurs du node 0 (0-9)               CPU 10 fils : 14.1 ms ( 10.2 Go/s)
+
+10 paires HT du node 0 (0-9,20-29)      CPU 20 fils : 7.4 ms ( 19.5 Go/s)
+
+=== fin ===
+  ```
+
+### 🤖 Assistant
+
+⏵ **Découverte** : avec seulement 10 cœurs, leurs hyperthreads **doublent** le débit (10,2 → 19,5 Go/s). Je vérifie et je consigne.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/ht_fin.sh <<'EOF'\n#!/bin/bash\n# L'hyperthreading n'aide pas quand on a TOUS les cœurs (la bande passante\n# sature), mais il double le débit quand on n'en a que la moitié. C'est ce qui\n# compte pour un nœud partiel.\ncd … [1408 caractères tronqués]`
+
+  ```
+### Combien de fils par CŒUR ? (mêmes 10 cœurs, 0-9+20-29)
+10 cœurs, 10 fils (1 par cœur)               mediane  14.7 Go/s  (14.5, 14.7, 15.0)
+10 cœurs, 20 fils (2 par cœur, HT)           mediane  18.7 Go/s  (13.6, 18.7, 19.6)
+10 cœurs, 30 fils (3 par cœur)               mediane  15.0 Go/s  (14.5, 15.0, 15.2)
+
+### Et avec 20 cœurs ? (0-19 + 20-39)
+20 cœurs, 20 fils                            mediane  22.5 Go/s  (18.9, 22.5, 22.7)
+20 cœurs, 40 fils (HT)                       mediane  18.9 Go/s  (18.6, 18.9, 26.3)
+20 cœurs, 60 fils (sur-souscription)         mediane  20.7 Go/s  (19.3, 20.7, 21.7)
+=== fin ===
+  ```
+
+### 🤖 Assistant
+
+⏵ Résultat net : **+27 % avec les paires HT quand on n'a que 10 cœurs**, rien avec 20. Je consigne.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np = 'reports/rapport-architecture-memoire.md'\ns = open(p).read()\ns = s.replace('''### Ce qui reste exploitable de la topologie''',\n'''### Les paires hyperthread : utiles quand les cœurs manquent\n\nLe banc mémoir … [4443 caractères tronqués]`
