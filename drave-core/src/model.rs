@@ -1047,6 +1047,20 @@ pub struct Model {
     /// plus grosse matrice du modèle — 151 936 × 896 — donc le poste où le
     /// demi-octet par poids rapporte le plus.
     pub head4: Option<DenseQ4>,
+    /// Tokens sur lesquels la tête de sortie est calculée. `None` = tout le
+    /// vocabulaire.
+    ///
+    /// Mesuré : le vocabulaire d'une langue tient en **13 %** des tokens (19 793
+    /// sur 151 936 pour 3 M de jetons français, et la couverture croît si
+    /// lentement qu'atteindre 50 % demanderait des milliards de jetons). La tête
+    /// pèse par ailleurs 36 % du trafic par jeton sur V4.1. Restreindre la boucle
+    /// aux lignes utiles divise donc ce poste par sept.
+    ///
+    /// **Ne s'applique pas à la perplexité** : le softmax normalise sur tout le
+    /// vocabulaire, et retirer des termes en retire aussi de la masse au
+    /// dénominateur — mesuré, la perplexité *baisse* artificiellement (24,31
+    /// contre 25,37). Elle n'est alors plus comparable à rien.
+    pub tete_restreinte: Option<Vec<u32>>,
     /// Vrai quand la tête déportée est en Q6_K (`proj_q6k_warp`) et non en
     /// Q8_0 (`tete_q8_warp`) : les deux noyaux ne rendent pas la même chose —
     /// celui de Q8_0 ne multiplie PAS par l'échelle d'activation, celui de Q6_K
@@ -2018,7 +2032,8 @@ mapping {}",
             seuil_push: 0.22,
             stop_id: None, stop_id2: None, prof: [0.0; 6],
             tete,
-            tete_gpu, tete_gpu_q6k, head4, sinks_vus, kv_gpu, attn_gpu_part: Vec::new(),
+            tete_gpu, tete_gpu_q6k, head4, tete_restreinte: None,
+            sinks_vus, kv_gpu, attn_gpu_part: Vec::new(),
             couche_debut: 0, couche_fin: n_layer_total, flux_brut: false,
             cache_experts, mla, mla_cache, jeton_trace: 0, trace: None, flux_force: None,
             emb_imposee: None, emb_imposee_lot: None, lot: 1,
@@ -3953,24 +3968,40 @@ dynamique de {dyn_:.3e} (relatif {:.2e})", mx / dyn_.max(1e-9));
         }
         let vocab = self.cfg.vocab;
         let nt = self.pool.threads().max(1);
-        let chunk = vocab.div_ceil(nt);
+        // Liste restreinte : on ne calcule QUE ces lignes. Les autres restent à
+        // zéro, ce qui suffit à la génération (elles ne seront jamais choisies)
+        // et serait faux pour une perplexité — d'où le refus explicite ailleurs.
+        let lignes: Vec<u32> = match &self.tete_restreinte {
+            Some(l) => l.clone(),
+            None => (0..vocab as u32).collect(),
+        };
+        // Répartition sur les THREADS par sous-listes disjointes, et non par
+        // tranches de `out` : avec une liste restreinte, les lignes à écrire ne
+        // sont plus contiguës, donc `chunks_mut` écrirait aux mauvaises places.
+        // L'écriture passe par un pointeur brut ; la sûreté tient à ce que les
+        // sous-listes sont disjointes par construction, donc les indices
+        // `o * t + i` aussi.
+        let tranche = lignes.len().div_ceil(nt.max(1)).max(1);
+        let sous_listes: Vec<&[u32]> = lignes.chunks(tranche).collect();
         let mut out = vec![0f32; vocab * t];
         if let Some(d) = self.head4.take() {
             let dref = &d;
             let s32: Vec<Vec<i32>> = (0..t)
                 .map(|i| crate::list::sommes32(&qx[i * h..(i + 1) * h])).collect();
             let (qxr, s32r, sxsr) = (&qx, &s32, &sxs);
+            let base_out = out.as_mut_ptr() as usize;
             std::thread::scope(|sc| {
-                for (ci, part) in out.chunks_mut(chunk * t).enumerate() {
-                    let base = ci * chunk;
+                for sous in &sous_listes {
+                    let base_out = base_out;
                     sc.spawn(move || {
                         for i0 in (0..t).step_by(TUILE_TETE) {
                             let i1 = (i0 + TUILE_TETE).min(t);
-                            for j in 0..(part.len() / t) {
-                                let o = base + j;
+                            for &o in sous.iter() {
+                                let o = o as usize;
                                 for i in i0..i1 {
-                                    part[j * t + i] = dref.dot16(o, &qxr[i * h..(i + 1) * h],
-                                                                 &s32r[i]) * sxsr[i];
+                                    let v = dref.dot16(o, &qxr[i * h..(i + 1) * h],
+                                                      &s32r[i]) * sxsr[i];
+                                    unsafe { *(base_out as *mut f32).add(o * t + i) = v; }
                                 }
                             }
                         }
@@ -3983,17 +4014,18 @@ dynamique de {dyn_:.3e} (relatif {:.2e})", mx / dyn_.max(1e-9));
             let g = &self.g;
             let view = &view;
             let (qxr, sxsr) = (&qx, &sxs);
+            let base_out = out.as_mut_ptr() as usize;
             std::thread::scope(|sc| {
-                for (ci, part) in out.chunks_mut(chunk * t).enumerate() {
-                    let base = ci * chunk;
+                for sous in &sous_listes {
+                    let base_out = base_out;
                     sc.spawn(move || {
                         for i0 in (0..t).step_by(TUILE_TETE) {
                             let i1 = (i0 + TUILE_TETE).min(t);
-                            for j in 0..(part.len() / t) {
-                                let o = base + j;
+                            for &o in sous.iter() {
+                                let o = o as usize;
                                 for i in i0..i1 {
-                                    part[j * t + i] =
-                                        g.q8_dot_at(view, o, &qxr[i * h..(i + 1) * h]) * sxsr[i];
+                                    let v = g.q8_dot_at(view, o, &qxr[i * h..(i + 1) * h]) * sxsr[i];
+                                    unsafe { *(base_out as *mut f32).add(o * t + i) = v; }
                                 }
                             }
                         }
@@ -4121,17 +4153,26 @@ dynamique de {dyn_:.3e} (relatif {:.2e})", mx / dyn_.max(1e-9));
             let d = self.head4.take().unwrap();
             let dref = &d;
             let vocab = d.n_out;
+            // Liste restreinte : ne calculer que ces lignes. `chunks_mut` ne
+            // convient plus, les lignes n'étant pas contiguës — on passe par un
+            // pointeur brut, sûr parce que les sous-listes sont disjointes.
+            let lignes: Vec<u32> = match &self.tete_restreinte {
+                Some(l) => l.clone(),
+                None => (0..vocab as u32).collect(),
+            };
             let nt = self.pool.threads().max(1);
-            let chunk = vocab.div_ceil(nt);
+            let tranche = lignes.len().div_ceil(nt).max(1);
             let mut out = vec![0f32; vocab];
             let xi = &xi;
             let sx32 = &crate::list::sommes32(xi);
+            let base_out = out.as_mut_ptr() as usize;
             std::thread::scope(|sc| {
-                for (ci, part) in out.chunks_mut(chunk).enumerate() {
+                for sous in lignes.chunks(tranche) {
+                    let base_out = base_out;
                     sc.spawn(move || {
-                        let base = ci * chunk;
-                        for (j, o) in part.iter_mut().enumerate() {
-                            *o = dref.dot16(base + j, xi, sx32) * sx;
+                        for &o in sous.iter() {
+                            let v = dref.dot16(o as usize, xi, sx32) * sx;
+                            unsafe { *(base_out as *mut f32).add(o as usize) = v; }
                         }
                     });
                 }
@@ -4147,17 +4188,23 @@ dynamique de {dyn_:.3e} (relatif {:.2e})", mx / dyn_.max(1e-9));
         let vocab = self.cfg.vocab;
         let view = self.g.q8_view(&self.tete);
         let nt = self.pool.threads().max(1);
-        let chunk = (vocab + nt - 1) / nt;
+        let lignes: Vec<u32> = match &self.tete_restreinte {
+            Some(l) => l.clone(),
+            None => (0..vocab as u32).collect(),
+        };
+        let tranche = lignes.len().div_ceil(nt).max(1);
         let mut out = vec![0f32; vocab];
         let g = &self.g;
         let view = &view;
+        let base_out = out.as_mut_ptr() as usize;
         std::thread::scope(|s| {
-            for (ci, part) in out.chunks_mut(chunk).enumerate() {
+            for sous in lignes.chunks(tranche) {
                 let qx = &qx;
+                let base_out = base_out;
                 s.spawn(move || {
-                    let base = ci * chunk;
-                    for (j, o) in part.iter_mut().enumerate() {
-                        *o = g.q8_dot_at(view, base + j, qx) * sx;
+                    for &o in sous.iter() {
+                        let v = g.q8_dot_at(view, o as usize, qx) * sx;
+                        unsafe { *(base_out as *mut f32).add(o as usize) = v; }
                     }
                 });
             }

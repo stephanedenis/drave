@@ -52286,3 +52286,597 @@ tour 3 sans  : === moyenne ===
 ⏵ Verdict : **0,3 % de différence** — la prélecture ne sert à rien quand le modèle est en cache. Je le consigne et je passe au chantier suivant.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np = 'reports/rapport-architecture-memoire.md'\ns = open(p).read()\ns = s.replace('''## 11. Le FPGA : pas de cas d'usage aujourd'hui''',\n'''## 11. La prélecture parallèle : implémentée, et sans effet ici\n\nLe route … [2139 caractères tronqués]`
+
+  ```
+ok
+954e086 Prelecture parallele : implementee, mesuree, sans effet (0,3 %)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"head4\\|fn tete\\|dont tête de sortie\" drave-core/src/model.rs | head -12; echo \"=== le calcul de la tête ===\"; grep -n \"head4\" -A 12 drave-core/src/model.rs | sed -n '20,50p'", "description": "Find head computation co … [4 caractères tronqués]`
+
+  ```
+1049:    pub head4: Option<DenseQ4>,
+1976:        let head4 = if q4 & 4 != 0 || tete_quantifiee {
+2021:            tete_gpu, tete_gpu_q6k, head4, sinks_vus, kv_gpu, attn_gpu_part: Vec::new(),
+3958:        if let Some(d) = self.head4.take() {
+3980:            self.head4 = Some(d);
+4116:        if self.head4.is_some() {
+4121:            let d = self.head4.take().unwrap();
+4139:            self.head4 = Some(d);
+=== le calcul de la tête ===
+1981-                unsafe { DenseQ4::emprunter_q6k(buf.as_ptr(), v, h, nb) }
+1982-            } else if let Some((buf, nb)) = g.q4k_blocks(&tete) {
+1983-                unsafe { DenseQ4::emprunter_q4k(buf.as_ptr(), v, h, nb) }
+1984-            } else if let Some((buf, nb)) = g.mxfp4_blocks(&tete) {
+1985-                unsafe { DenseQ4::emprunter(buf.as_ptr(), v, h, nb, true) }
+1986-            } else if let Some((buf, nb)) = g.q4_blocks(&tete) {
+1987-                unsafe { DenseQ4::emprunter(buf.as_ptr(), v, h, nb, false) }
+1988-            } else {
+--
+2021:            tete_gpu, tete_gpu_q6k, head4, sinks_vus, kv_gpu, attn_gpu_part: Vec::new(),
+2022-            couche_debut: 0, couche_fin: n_layer_total, flux_brut: false,
+2023-            cache
+… [962 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '3950,3995p' drave-core/src/model.rs", "description": "Read head computation in detail"}`
+
+  ```
+}
+            }
+            if complet { return tous; }
+        }
+        let vocab = self.cfg.vocab;
+        let nt = self.pool.threads().max(1);
+        let chunk = vocab.div_ceil(nt);
+        let mut out = vec![0f32; vocab * t];
+        if let Some(d) = self.head4.take() {
+            let dref = &d;
+            let s32: Vec<Vec<i32>> = (0..t)
+                .map(|i| crate::list::sommes32(&qx[i * h..(i + 1) * h])).collect();
+            let (qxr, s32r, sxsr) = (&qx, &s32, &sxs);
+            std::thread::scope(|sc| {
+                for (ci, part) in out.chunks_mut(chunk * t).enumerate() {
+                    let base = ci * chunk;
+                    sc.spawn(move || {
+                        for i0 in (0..t).step_by(TUILE_TETE) {
+                            let i1 = (i0 + TUILE_TETE).min(t);
+                            for j in 0..(part.len() / t) {
+                                let o = base + j;
+                                for i in i0..i1 {
+                                    part[j * t + i] = dref.dot16(o, &qxr[i * h..(i + 1) * h],
+                                                                 &s32r[i]) * sxsr[i];
+                                }
+                    
+… [830 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ La restriction de tête est ciblable. Je l'implémente : liste de tokens, appliquée au calcul de la tête.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np = 'drave-core/src/model.rs'\ns = open(p).read()\ndef rep(a, b):\n    global s\n    assert a in s, f\"ANCRE INTROUVABLE : {a[:70]!r}\"\n    s = s.replace(a, b, 1)\n\n# 1. Le champ, sur le Model.\nrep('''    pub hea … [3532 caractères tronqués]`
+
+  ```
+ok
+3992:                                let o = lignes[base + j] as usize;
+            let view = self.g.q8_view(&self.tete);
+            let g = &self.g;
+            let view = &view;
+            let (qxr, sxsr) = (&qx, &sxs);
+            std::thread::scope(|sc| {
+                for (ci, part) in out.chunks_mut(chunk * t).enumerate() {
+                    let base = ci * chunk;
+                    sc.spawn(move || {
+                        for i0 in (0..t).step_by(TUILE_TETE) {
+                            let i1 = (i0 + TUILE_TETE).min(t);
+                            for j in 0..(part.len() / t) {
+                                let o = base + j;
+                                for i in i0..i1 {
+                                    part[j * t + i] =
+                                        g.q8_dot_at(view, o, &qxr[i * h..(i + 1) * h]) * sxsr[i];
+                                }
+                            }
+                        }
+                    });
+                }
+  ```
+
+### 🤖 Assistant
+
+⏵ Attention : ma modification écrivait les logits aux mauvaises lignes. Je réécris les deux boucles correctement.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '3955,4010p' drave-core/src/model.rs", "description": "Read the full head computation block"}`
+
+  ```
+let mut xd = vec![0i32; h];
+            let mut tous: Vec<Vec<f32>> = Vec::with_capacity(t);
+            let mut complet = true;
+            for i in 0..t {
+                for (a, &b) in xd.iter_mut().zip(qx[i * h..(i + 1) * h].iter()) {
+                    *a = b as i32;
+                }
+                match self.logits_gpu(&xd, sxs[i]) {
+                    Some(y) => tous.push(y),
+                    None => { complet = false; break; }
+                }
+            }
+            if complet { return tous; }
+        }
+        let vocab = self.cfg.vocab;
+        let nt = self.pool.threads().max(1);
+        // Liste restreinte : on ne calcule QUE ces lignes. Les autres restent à
+        // zéro, ce qui suffit à la génération (elles ne seront jamais choisies)
+        // et serait faux pour une perplexité — d'où le refus explicite ailleurs.
+        let lignes: Vec<u32> = match &self.tete_restreinte {
+            Some(l) => l.clone(),
+            None => (0..vocab as u32).collect(),
+        };
+        let chunk = lignes.len().div_ceil(nt.max(1)).max(1);
+        let mut out = vec![0f32; vocab * t];
+        if let Some(d) = self.head4.take() {
+            let dref = &d;
+            le
+… [1351 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np = 'drave-core/src/model.rs'\ns = open(p).read()\na = '''        let chunk = lignes.len().div_ceil(nt.max(1)).max(1);\n        let mut out = vec![0f32; vocab * t];\n        if let Some(d) = self.head4.take() {\n    … [5015 caractères tronqués]`
+
+  ```
+ok
+BUILD 0
+  ```
+
+### 🤖 Assistant
+
+⏵ Ça compile. J'ajoute le drapeau et je vérifie l'équivalence avec la liste complète.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np = 'drave-core/src/main.rs'\ns = open(p).read()\ndef rep(a, b):\n    global s\n    assert a in s, f\"ANCRE INTROUVABLE : {a[:70]!r}\"\n    s = s.replace(a, b, 1)\n\nrep('''    /// Détection du matériel et plan de c … [1788 caractères tronqués]`
+
+  ```
+ok
+498:    tete_restreinte: Option<String>,
+623:                o.tete_restreinte = Some(suivant(i).clone()); 2 }
+3995:    if let Some(f) = &tete_restreinte {
+4008:            mdl.tete_restreinte = Some(ids);
+  ```
+
+- **bash** `{"command": "cd drave-core && cargo build --release 2>&1 | grep -E \"^error\" -A5 | head -15; echo \"BUILD ${PIPESTATUS[0]}\"; cd .. && sed -n '3985,4015p' drave-core/src/main.rs", "description": "Check compilation and insertion point"}`
+
+  ```
+error[E0425]: cannot find value `tete_restreinte` in this scope
+    --> src/main.rs:3995:23
+     |
+3865 |       let Options {
+     |  _________-
+3866 | |         ids_file: idfile, texte_file, ppl_texte: _, limit, depuis,
+--
+error: could not compile `drave-core` (bin "drave") due to 1 previous error; 13 warnings emitted
+BUILD 101
+    // de tableau du tout, puisque c'est exactement ce qu'il est censé démasquer.
+    if montre_options {
+        options_actives(&mdl, "perplexité", ctx_impose, dense, keep);
+    }
+    if let Some(l) = hebb_layer {
+        let mut hb = model::Hebb::new(l, mdl.cfg.ffn, mdl.cfg.hidden, hebb_q);
+        hb.log_on = true;
+        mdl.hebb = Some(hb);
+        println!("journalisation : couche {l}, entrée FFN ({} dim)", mdl.cfg.hidden);
+    }
+    if let Some(f) = &tete_restreinte {
+        let mut ids: Vec<u32> = Vec::new();
+        if let Ok(t) = std::fs::read_to_string(f) {
+            for x in t.split(|c: char| c == ',' || c.is_whitespace()) {
+                if let Ok(v) = x.trim().parse::<u32>() { ids.push(v); }
+            }
+        }
+        ids.sort_unstable(); ids.dedup();
+        if ids.is_empty() {
+            eprintln!("[tete] {f} ne contient aucun i
+… [531 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Le bloc a atterri dans `run_ppl` — or la restriction ne vaut que pour la génération. Je le déplace.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np = 'drave-core/src/main.rs'\ns = open(p).read()\nbloc = '''    if let Some(f) = &tete_restreinte {\n        let mut ids: Vec<u32> = Vec::new();\n        if let Ok(t) = std::fs::read_to_string(f) {\n            for  … [2948 caractères tronqués]`
+
+  ```
+ok
+error: expected item, found keyword `if`
+    --> src/main.rs:4565:5
+     |
+4565 |     if let Some(f) = &opt.tete_restreinte {
+     |     ^^ expected item
+     |
+--
+error: could not compile `drave-core` (bin "drave") due to 1 previous error
+BUILD 101
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '4555,4575p' drave-core/src/main.rs; echo \"=== run_ppl : premières lignes ===\"; grep -n \"^fn run_ppl\" drave-core/src/main.rs; sed -n \"$(grep -n '^fn run_ppl' drave-core/src/main.rs | cut -d: -f1),+14p\" drave-core/src/mai … [51 caractères tronqués]`
+
+  ```
+assert!(r.is_err(), "un lot de 100 millions d'états doit être refusé");
+        let msg = format!("{}", r.err().unwrap());
+        assert!(msg.contains("plafond"), "le refus doit nommer le plafond : {msg}");
+        serveur.join().unwrap();
+    }
+}
+    // La restriction de la tête n'a pas de sens ici : le softmax normalise sur
+    // tout le vocabulaire, et retirer des termes en retire aussi de la masse au
+    // dénominateur. Mesuré, la perplexité BAISSE alors artificiellement (24,31
+    // contre 25,37) — elle n'est plus comparable à rien.
+    if let Some(f) = &opt.tete_restreinte {
+        eprintln!("[tete] --tete-restreinte ignore en perplexite ({f}) : une perplexite \
+calculee sur un vocabulaire restreint n'est comparable a rien. Utilisez --infer.");
+    }
+=== run_ppl : premières lignes ===
+2215:fn run_ppl_reparti(opt: Options, pair: &str) {
+3889:fn run_ppl(opt: Options) {
+[stderr]
+sed: -e expression #1, char 5: unknown command: '
+'
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np = 'drave-core/src/main.rs'\ns = open(p).read()\n# Le bloc a été inséré après la fin du module : on le retire.\nbloc = '''    // La restriction de la tête n'a pas de sens ici : le softmax normalise sur\n    // tout … [1024 caractères tronqués]`
+
+  ```
+ok
+BUILD 0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\n# Une liste de tokens pour le français, depuis le corpus du journal.\nids = [int(x) for x in open('/tmp/corpus/fr_gros.ids').read().replace('\\n', ',').split(',') if x.strip()]\nvus = sorted(set(ids))\nopen('/tmp/to … [1812 caractères tronqués]`
+
+  ```
+19793 tokens francais sur 151936 (13.0 %) -> /tmp/tokens_fr.txt
+=== test 1 : liste COMPLÈTE (doit être identique à sans restriction) ===
+### 1. équivalence : liste complète contre tête entière
+sans       
+complete   [tete] restreinte à 151936 tokens sur 151936 (100.0 %) — le routeur, lui, reste global 
+francais   [tete] restreinte à 19793 tokens sur 151936 (13.0 %) — le routeur, lui, reste global 
+=== fin ===
+  ```
+
+### 🤖 Assistant
+
+⏵ Le profil n'existe pas en mode `--infer`. Je mesure le temps de génération et compare les tokens produits.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/test_restriction2.sh <<'EOF'\n#!/bin/bash\n# 1. ÉQUIVALENCE : avec la liste COMPLÈTE, la sortie doit être identique à la\n#    tête non restreinte — sinon on ne saurait pas distinguer un gain d'une erreur.\n# 2. GAIN : tem … [1475 caractères tronqués]`
+
+  ```
+### ÉQUIVALENCE (liste complète contre tête entière)
+  sans      : 
+  complete  : 
+
+### GAIN (trois tours alternés)
+  tour 1 sans   :   tour 1 fr13   :   tour 2 sans   :   tour 2 fr13   :   tour 3 sans   :   tour 3 fr13   :
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 120 ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf --infer --ids /tmp/ids_qwen.txt --n 8 --ctx 64 --temp 0 --threads 8 2>&1 | tail -8", "description": "Check infer output format"}`
+
+  ```
+[attention] QT_IM_SWITCHER est l'ancien nom d'une variable d'environnement : elles s'appellent maintenant DRAVE_* (voir docs/histoire.md). Rien n'a été appliqué.
+[config] cache KV : 32 bits, 0.00 Go pour 64 jetons
+[modele] 24 couches chargées en 6.212983905s — listes 0.71 Go , 8 threads
+[config] 24 couches, hidden 896 · 
+[config] puits appris sur 0/24 couches · n_rot 64 · ffn 4864 · experts 0
+[config] rotation : RoPE simple (le modèle ne déclare pas YaRN)
+Qwen2 · 24 couches · hidden 896 · 14 têtes / 2 KV · FFN 4864 · vocab 151936
+rien à générer : --ids ou --prompt requis
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n '\"--ids\"\\|\"--fichier\"\\|\"--texte\"\\|ids_file' drave-core/src/main.rs | head -8; grep -n \"rien à générer\" -B 8 drave-core/src/main.rs | head -14", "description": "Find infer input options"}`
+
+  ```
+471:    ids: Vec<u32>, ids_file: Option<String>, texte_file: Option<String>,
+538:            "--ppl" => { o.ppl = true; o.ids_file = Some(suivant(i).clone()); 2 }
+558:            "--ids" => { o.ids = suivant(i).split(',')
+560:            "--ids-file" => { o.ids_file = Some(suivant(i).clone()); 2 }
+562:            "--texte" => { o.texte = Some(suivant(i).clone()); 2 }
+563:            "--fichier" => { o.fichier = Some(suivant(i).clone()); 2 }
+683:        ids: mut ids, ids_file, prompt, n: n_new, temp, top_p, topk, rep_pen, hist,
+815:    if let Some(f) = &ids_file {
+830-    if let Some(l) = hebb_layer {
+831-        let n_out = mdl.cfg.ffn;
+832-        let n_in = mdl.cfg.hidden;
+833-        mdl.hebb = Some(model::Hebb::new(l, n_out, n_in, hebb_q));
+834-        println!("capteur hebbien : couche {l}, projection gate ({n_out} x {n_in}), \
+835-                  quantile {hebb_q} -> {hebb_out}");
+836-    }
+837-    if ids.is_empty() && !session {
+838:        eprintln!("rien à générer : --ids ou --prompt requis");
+  ```
+
+### 🤖 Assistant
+
+⏵ C'est `--ids-file` pour un fichier. Je corrige le test.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -i 's|--infer --ids /tmp/ids_qwen.txt|--infer --ids-file /tmp/ids_qwen.txt|g' /tmp/test_restriction2.sh && sed -i '/^ta=\\$(gen/d; /^echo \"ok\" > \\/dev\\/null/d' /tmp/test_restriction2.sh && nohup /tmp/test_restriction2.sh > /d … [98 caractères tronqués]`
+
+  ```
+### ÉQUIVALENCE (liste complète contre tête entière)
+  sans      : généré  : 32 tokens en 1.188 s  (26.93 tok/s)
+  complete  : généré  : 32 tokens en 1.147 s  (27.90 tok/s)
+
+### GAIN (trois tours alternés)
+  tour 1 sans   : généré  : 32 tokens en 1.183 s  (27.05 tok/s)
+  tour 1 fr13   : généré  : 32 tokens en 1.168 s  (27.40 tok/s)
+  tour 2 sans   : généré  : 32 tokens en 1.189 s  (26.92 tok/s)
+  tour 2 fr13   :
+  ```
+
+### 🤖 Assistant
+
+⏵ Équivalence confirmée (1,188 vs 1,147 s), mais **aucun gain visible** à 13 %. J'attends les autres tours.
+
+- **bash** `{"command": "sleep 55; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat /tmp/test_restriction2.log; echo \"=== moyenne ===\"; grep -oE \"(sans|fr13) +: généré  : 32 tokens en [0-9.]+ s\" /tmp/test_restriction2.log | sed -E 's/(sans|fr13).* ([0-9.]+) s/\\1 \\2/' | python3 -c \"\nimport sys,  … [273 caractères tronqués]`
+
+  ```
+### ÉQUIVALENCE (liste complète contre tête entière)
+  sans      : généré  : 32 tokens en 1.188 s  (26.93 tok/s)
+  complete  : généré  : 32 tokens en 1.147 s  (27.90 tok/s)
+
+### GAIN (trois tours alternés)
+  tour 1 sans   : généré  : 32 tokens en 1.183 s  (27.05 tok/s)
+  tour 1 fr13   : généré  : 32 tokens en 1.168 s  (27.40 tok/s)
+  tour 2 sans   : généré  : 32 tokens en 1.189 s  (26.92 tok/s)
+  tour 2 fr13   : généré  : 32 tokens en 1.210 s  (26.44 tok/s)
+  tour 3 sans   : généré  : 32 tokens en 1.159 s  (27.61 tok/s)
+  tour 3 fr13   : généré  : 32 tokens en 1.150 s  (27.83 tok/s)
+=== fin ===
+=== moyenne ===
+  fr13  : 1.176 s  (3 mesures)
+  sans  : 1.180 s  (4 mesures)
+  ```
+
+### 🤖 Assistant
+
+⏵ Toujours 0,3 % d'écart. Je fais une mesure plus longue pour sortir du bruit.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/test_long.sh <<'EOF'\n#!/bin/bash\n# 256 jetons au lieu de 32 : sur 1,2 s la tête pèse quelques pour cent, noyés\n# dans le bruit. Et on mesure AUSSI le débit de la tête seule par le banc, qui\n# donne un chiffre directeme … [866 caractères tronqués]`
+
+  ```
+### 256 jetons, trois tours alternés
+  tour 1 sans  : généré  : 256 tokens en 9.440 s  (27.12 tok/s)
+  tour 1 fr13  : généré  : 256 tokens en 9.373 s  (27.31 tok/s)
+  tour 2 sans  : généré  : 256 tokens en 9.368 s  (27.33 tok/s)
+  tour 2 fr13  :
+  ```
+
+### 🤖 Assistant
+
+⏵ Le gain devrait être de ~20 % si la tête coûte ce que le profil dit en `--ppl`. Je vérifie le chemin d'échantillonnage.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"fn logits\\b\\|fn logits(\" -A 20 drave-core/src/model.rs | head -30; echo \"=== qui appelle logits ===\"; grep -n \"\\.logits(\" drave-core/src/main.rs | head -5", "description": "Inspect logits computation path"}`
+
+  ```
+4129:    pub fn logits(&mut self, h: &[f32]) -> Vec<f32> {
+4130-        let mut scratch = Vec::with_capacity(h.len());
+4131-        let (sv, sx) = match Self::quant_scratch(h, self.act_levels, self.act_thresh,
+4132-                                                self.act_topk, self.act_renorm, &mut scratch) {
+4133-            Some(v) => v,
+4134-            None => return vec![0f32; self.cfg.vocab],
+4135-        };
+4136-        // Chemin GPU : les poids de la tête sont déjà en mémoire vidéo ; seules
+4137-        // les activations montent et les logits descendent.
+4138-        if self.tete_gpu.is_some() {
+4139-            let mut xd = vec![0i32; h.len()];
+4140-            for (&i, &v) in sv.idx.iter().zip(sv.val.iter()) { xd[i as usize] = v; }
+4141-            if let Some(y) = self.logits_gpu(&xd, sx) { return y; }
+4142-        }
+4143-        // Tête 4 bits : chemin DIRECT par tranches de vocabulaire, comme la tête
+4144-        // int8 — et non par le pool. Le pool coûtait 4 ms de plus par jeton pour
+4145-        // 72 Mo lus au lieu de 136 : ses seize tampons de sortie (9,7 Mo) sont
+4146-        // écrits, remis à zéro puis réduits, soit plus de trafic que les poids
+4147-        //
+… [455 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Attention : il y a plusieurs chemins de calcul. Je vérifie que mon patch est dans le bon.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && awk 'NR>=3900 && NR<=3990 && /^    (pub )?fn |^    fn /' drave-core/src/model.rs; echo \"--- quelle fonction contient la ligne 3975 (lignes/base_out) ---\"; awk 'NR<=3975 && /^    (pub )?fn /{l=NR\": \"$0} END{}' drave-core/src/model … [292 caractères tronqués]`
+
+  ```
+pub fn logits_lot(&mut self, hs: &[Vec<f32>]) -> Vec<Vec<f32>> {
+--- quelle fonction contient la ligne 3975 (lignes/base_out) ---
+3271:    pub fn forward(&mut self, tok: u32, pos: usize) -> Vec<f32> {
+3929:    pub fn logits_lot(&mut self, hs: &[Vec<f32>]) -> Vec<Vec<f32>> {
+--- et la ligne 4148 (head4 dans logits) ---
+4129:    pub fn logits(&mut self, h: &[f32]) -> Vec<f32> {
+  ```
+
+### 🤖 Assistant
+
+⏵ **Trouvé** : j'ai patché `logits_lot` (chemin par lots), pas `logits` (par jeton). Je patche le bon.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '4143,4200p' drave-core/src/model.rs", "description": "Read the per-token logits path"}`
+
+  ```
+// Tête 4 bits : chemin DIRECT par tranches de vocabulaire, comme la tête
+        // int8 — et non par le pool. Le pool coûtait 4 ms de plus par jeton pour
+        // 72 Mo lus au lieu de 136 : ses seize tampons de sortie (9,7 Mo) sont
+        // écrits, remis à zéro puis réduits, soit plus de trafic que les poids
+        // économisés.
+        if self.head4.is_some() {
+            let xi: Vec<i16> = sv.idx.iter().zip(sv.val.iter())
+                .fold(vec![0i16; h.len()], |mut a, (&i, &v)| {
+                    a[i as usize] = v.clamp(-32767, 32767) as i16; a
+                });
+            let d = self.head4.take().unwrap();
+            let dref = &d;
+            let vocab = d.n_out;
+            let nt = self.pool.threads().max(1);
+            let chunk = vocab.div_ceil(nt);
+            let mut out = vec![0f32; vocab];
+            let xi = &xi;
+            let sx32 = &crate::list::sommes32(xi);
+            std::thread::scope(|sc| {
+                for (ci, part) in out.chunks_mut(chunk).enumerate() {
+                    sc.spawn(move || {
+                        let base = ci * chunk;
+                        for (j, o) in part.iter_mut().enumerate() {
+                          
+… [1300 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np = 'drave-core/src/model.rs'\ns = open(p).read()\na = '''        if self.head4.is_some() {\n            let xi: Vec<i16> = sv.idx.iter().zip(sv.val.iter())\n                .fold(vec![0i16; h.len()], |mut a, (&i, & … [4572 caractères tronqués]`
+
+  ```
+ok
+BUILD 0
+### 256 jetons, trois tours alternés
+  tour 1 sans  : généré  : 256 tokens en 9.440 s  (27.12 tok/s)
+  tour 1 fr13  : généré  : 256 tokens en 9.373 s  (27.31 tok/s)
+  tour 2 sans  : généré  : 256 tokens en 9.368 s  (27.33 tok/s)
+  tour 2 fr13  : généré  : 256 tokens en 9.427 s  (27.16 tok/s)
+  tour 3 sans  : généré  : 256 tokens en 9.484 s  (26.99 tok/s)
+  tour 3 fr13  : généré  : 256 tokens en 9.560 s  (26.78 tok/s)
+=== fin ===
+  ```
+
+### 🤖 Assistant
+
+⏵ Le patch manquant est en place. Je refais la mesure.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/test_long2.sh <<'EOF'\n#!/bin/bash\n# Après avoir patché le BON chemin (`logits`, par jeton) et non `logits_lot`.\ncd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\nD=./drave-core/target/release/drave\nM=models/Qwen2.5-0 … [1206 caractères tronqués]`
+
+  ```
+### équivalence : liste complète contre tête entière
+  sans      : généré  : 64 tokens en 2.286 s  (28.00 tok/s)
+  complete  : généré  : 64 tokens en 2.353 s  (27.20 tok/s)
+### gain : 13 % du vocabulaire, trois tours alternés
+  tour 1 sans  : généré  : 256 tokens en 9.406 s  (27.22 tok/s)
+  tour 1 fr13  :
+  ```
+
+- **bash** `{"command": "sleep 55; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat /tmp/test_long2.log", "description": "Follow restricted head measurement"}`
+
+  ```
+### équivalence : liste complète contre tête entière
+  sans      : généré  : 64 tokens en 2.286 s  (28.00 tok/s)
+  complete  : généré  : 64 tokens en 2.353 s  (27.20 tok/s)
+### gain : 13 % du vocabulaire, trois tours alternés
+  tour 1 sans  : généré  : 256 tokens en 9.406 s  (27.22 tok/s)
+  tour 1 fr13  : généré  : 256 tokens en 8.377 s  (30.56 tok/s)
+  tour 2 sans  : généré  : 256 tokens en 9.355 s  (27.37 tok/s)
+  tour 2 fr13  : généré  : 256 tokens en 8.345 s  (30.68 tok/s)
+  tour 3 sans  : généré  : 256 tokens en 9.392 s  (27.26 tok/s)
+  tour 3 fr13  :
+  ```
+
+### 🤖 Assistant
+
+⏵ **Le gain est là : 9,38 s → 8,36 s, soit +11 %** (27,3 → 30,6 tok/s). Je vérifie que la sortie est identique.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/equiv_sortie.sh <<'EOF'\n#!/bin/bash\n# Le gain de vitesse ne vaut que si la SORTIE est la même. On compare les\n# identifiants générés, avec la liste complète puis avec la tête entière.\ncd /home/stephane/Data13TB/stephan … [1008 caractères tronqués]`
+
+  ```
+sans     : 
+complete : 
+différents (ou sortie vide) — à examiner
+0 /tmp/gen_sans.txt
+0 /tmp/gen_tous.txt
+0 total
+=== fin ===
+--- suite ---
+  tour 2 fr13  : généré  : 256 tokens en 8.345 s  (30.68 tok/s)
+  tour 3 sans  : généré  : 256 tokens en 9.392 s  (27.26 tok/s)
+  tour 3 fr13  : généré  : 256 tokens en 8.478 s  (30.19 tok/s)
+=== fin ===
+  ```
+
+### 🤖 Assistant
+
+⏵ Gain confirmé : **10,5 % stable**. Reste à vérifier l'équivalence de sortie — je cherche le format.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 120 ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf --infer --ids-file /tmp/ids_qwen.txt --n 8 --ctx 64 --temp 0 --threads 8 2>&1 | tail -6", "description": "Inspect infer output for generated tokens"}`
+
+  ```
+--- mesure ---
+prompt  : 48 tokens en 1.395 s  (34.4 tok/s, TTFT 29.1 ms)
+généré  : 8 tokens en 0.298 s  (26.87 tok/s)
+événements : 18454340 au total, 329541.8 par token
+postes (ms/token) : matvec-attn 2.7 | rope 0.6 | attention 0.4 | matvec+mlp 25.6 | total mesuré 29.3
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 120 ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf --infer --ids-file /tmp/ids_qwen.txt --n 8 --ctx 64 --temp 0 --threads 8 2>&1 | head -12", "description": "See full infer output"}`
+
+  ```
+[attention] QT_IM_SWITCHER est l'ancien nom d'une variable d'environnement : elles s'appellent maintenant DRAVE_* (voir docs/histoire.md). Rien n'a été appliqué.
+[config] cache KV : 32 bits, 0.00 Go pour 64 jetons
+[modele] 24 couches chargées en 6.630505703s — listes 0.71 Go , 8 threads
+[config] 24 couches, hidden 896 · 
+[config] puits appris sur 0/24 couches · n_rot 64 · ffn 4864 · experts 0
+[config] rotation : RoPE simple (le modèle ne déclare pas YaRN)
+Qwen2 · 24 couches · hidden 896 · 14 têtes / 2 KV · FFN 4864 · vocab 151936
+ids depuis /tmp/ids_qwen.txt : 4592 tokens
+[contexte] invite de 4592 jetons > 48 (ctx 64 − 8 de génération) : troncature aux 48 derniers
+tokens générés : [3310, 330, 304, 806, 32794, 330, 576, 431]
+
+--- mesure ---
+  ```
+
+### 🤖 Assistant
+
+⏵ Format trouvé. Je vérifie l'équivalence de sortie.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/equiv2.sh <<'EOF'\n#!/bin/bash\n# Le gain ne vaut que si la SORTIE est identique. On compare les identifiants\n# générés : tête entière contre liste COMPLÈTE (équivalence du refactor), puis\n# liste française (doit pouvoir … [1011 caractères tronqués]`
+
+  ```
+sans     : tokens générés : [6224, 1076, 330, 438, 264, 1352, 315, 31249, 429, 374, 330, 721, 481, 16941, 31365, 330, 323, 330, 656, 481, 16941, 330, 374, 264, 4647, 429, 374, 1483, 311, 7512, 279, 39260]
+complete : tokens générés : [6224, 1076, 330, 438, 264, 1352, 315, 31249, 429, 374, 330, 721, 481, 16941, 31365, 330, 323, 330, 656, 481, 16941, 330, 374, 264, 4647, 429, 374, 1483, 311, 7512, 279, 39260]
+francais : tokens générés : [1129, 269, 330, 304, 279, 1156, 1555, 315, 806, 330, 576, 1154, 330, 323, 279, 330, 435, 1129, 269, 330, 304, 279, 1156, 1555, 315, 806, 330, 576, 1154, 330, 323, 279]
+
+COMPLÈTE == SANS : identiques ✅
+FRANÇAIS != SANS : la restriction change la sortie (à mesurer)
+=== fin ===
+  ```
+
+### 🤖 Assistant
+
+⏵ **Équivalence parfaite** (liste complète = identique). Mais la liste française dégénère sur un corpus anglais. Je teste avec la bonne langue.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c \"\nids = [int(x) for x in open('/tmp/corpus/anglais.ids').read().replace('\\n', ',').split(',') if x.strip()]\nvus = sorted(set(ids))\nopen('/tmp/tokens_en.txt', 'w').write('\\n'.join(str(x) for x in vus))\nprint(f'{len(v … [1439 caractères tronqués]`
+
+  ```
+8852 tokens anglais (5.8 % du vocabulaire)
+sans  : tokens générés : [6224, 1076, 330, 438, 264, 1352, 315, 31249, 429, 374, 330, 721, 481, 16941, 31
+angl. : tokens générés : [77455, 330, 315, 279, 32794, 330, 576, 9536, 2806, 4429, 330, 438, 264, 330, 43
+ANGLAIS != SANS : différents
+
+### temps, trois tours alternés (256 jetons)
+  tour 1 sans  : généré  : 32 tokens en 1.167 s  (27.43 tok/s)
+  tour 1 en    : généré  : 32 tokens en 1.003 s  (31.92 tok/s)
+  tour 2 sans  : généré  : 32 tokens en 1.140 s  (28.06 tok/s)
+  tour 2 en    :
+  ```
+
+### 🤖 Assistant
+
+⏵ Point crucial : même avec la bonne langue, **la sortie change**. Ce n'est pas une optimisation transparente. Je mesure et je documente honnêtement.
+
+- **bash** `{"command": "sleep 45; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat /tmp/equiv3.log | tail -8; (cd drave-core && cargo test --release 2>&1 | grep -E \"^test result\"); printf \"porte Qwen : \"; timeout 120 ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf --ppl /tmp/ids_qw … [174 caractères tronqués]`
+
+  ```
+### temps, trois tours alternés (256 jetons)
+  tour 1 sans  : généré  : 32 tokens en 1.167 s  (27.43 tok/s)
+  tour 1 en    : généré  : 32 tokens en 1.003 s  (31.92 tok/s)
+  tour 2 sans  : généré  : 32 tokens en 1.140 s  (28.06 tok/s)
+  tour 2 en    : généré  : 32 tokens en 0.978 s  (32.70 tok/s)
+  tour 3 sans  : généré  : 32 tokens en 1.158 s  (27.63 tok/s)
+  tour 3 en    : généré  : 32 tokens en 0.965 s  (33.17 tok/s)
+=== fin ===
+[timed out after 60000ms]
+[killed by signal: SIGTERM]
+  ```
+
+### 🤖 Assistant
+
+⏵ Gain net : **15 %** avec la liste anglaise. Je relance les tests seuls et je documente.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && cargo test --release 2>&1 | grep -E \"^test result|FAILED\" | head -3; cd .. && python3 - <<'PY'\np = 'reports/rapport-architecture-memoire.md'\ns = open(p).read()\ns = s.replace('''## 12. Le FPGA : pas de cas d'usage aujo … [3559 caractères tronqués]`

@@ -492,6 +492,10 @@ struct Options {
     profil_neurones: bool, neurones_sortie: Option<String>,
     /// Détection du matériel et plan de configuration, sans charger de modèle.
     materiel: bool,
+    /// Fichier d'identifiants de tokens : la tête de sortie ne calcule que
+    /// ceux-là. **Génération seulement** — une perplexité calculée sur un
+    /// vocabulaire restreint n'est comparable à rien.
+    tete_restreinte: Option<String>,
     /// Taille du lot de préremplissage : 1 = jeton par jeton (défaut).
     lot: usize,
     harmony: Option<String>, harmony_contexte: Option<String>,
@@ -615,6 +619,8 @@ fn analyser(args: &[String]) -> Options {
             "--sans-yarn" => { o.sans_yarn = true; 1 }
             "--act-renorm" => { o.act_renorm = true; 1 }
             "--materiel" => { o.materiel = true; 1 }
+            "--tete-restreinte" if i + 1 < args.len() => {
+                o.tete_restreinte = Some(suivant(i).clone()); 2 }
             "--ppl-profil" => { o.ppl_profil = true; 1 }
             "--profil-neurones" => { o.profil_neurones = true; 1 }
             "--harmony" => { o.harmony = Some("alterne".into()); 1 }
@@ -690,6 +696,9 @@ fn run_infer(opt: Options) {
     let n_threads = if threads_impose { threads_opt } else { (cpu / 2).max(1) };
     let abits = if abits_impose { abits_opt } else { 8 };
     let mut mdl = model::Model::load(path, ctx, n_threads, dense, keep, auto, q4, b6);
+    if let Some(f) = &opt.tete_restreinte {
+        poser_tete_restreinte(&mut mdl, f);
+    }
     mdl.act_levels = ((1u32 << (abits - 1)) - 1) as f32;
     mdl.moe_topk = moe_topk;
     mdl.act_thresh = act_thresh;
@@ -1000,6 +1009,29 @@ fn build_tokenizer(g: &Gguf) -> tokenizer::Tokenizer {
         meta_ints(g, "tokenizer.ggml.token_type"),
         &pre,
     )
+}
+
+/// Charge une liste d'identifiants et la pose sur le modèle.
+///
+/// Rend `false` si le fichier est vide ou illisible — auquel cas la tête reste
+/// complète, ce qui est le comportement sûr.
+fn poser_tete_restreinte(mdl: &mut model::Model, fichier: &str) -> bool {
+    let mut ids: Vec<u32> = Vec::new();
+    if let Ok(t) = std::fs::read_to_string(fichier) {
+        for x in t.split(|c: char| c == ',' || c.is_whitespace()) {
+            if let Ok(v) = x.trim().parse::<u32>() { ids.push(v); }
+        }
+    }
+    ids.sort_unstable();
+    ids.dedup();
+    if ids.is_empty() {
+        eprintln!("[tete] {fichier} ne contient aucun identifiant utilisable : tête complète");
+        return false;
+    }
+    println!("[tete] restreinte à {} tokens sur {} ({:.1} %) — le routeur, lui, reste global",
+             ids.len(), mdl.cfg.vocab, 100.0 * ids.len() as f64 / mdl.cfg.vocab as f64);
+    mdl.tete_restreinte = Some(ids);
+    true
 }
 
 fn cfg_dims(m: &model::Model) -> usize { m.cfg.hidden }
@@ -3855,6 +3887,14 @@ fn fenetres_harmony(tk: &tokenizer::Tokenizer, ids: &[u32], ctx: usize, mode: &s
 }
 
 fn run_ppl(opt: Options) {
+    // La restriction de la tête n'a pas de sens ici : le softmax normalise sur
+    // tout le vocabulaire, et retirer des termes en retire aussi de la masse au
+    // dénominateur. Mesuré, la perplexité BAISSE alors artificiellement (24,31
+    // contre 25,37) — elle n'est plus comparable à rien.
+    if let Some(f) = &opt.tete_restreinte {
+        eprintln!("[tete] --tete-restreinte ignore en perplexite ({f}) : une perplexite \
+calculee sur un vocabulaire restreint n'est comparable a rien. Utilisez --infer.");
+    }
     let montre_options = opt.options_actives;
     let Options {
         ids_file: idfile, texte_file, ppl_texte: _, limit, depuis,

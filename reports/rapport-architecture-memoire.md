@@ -314,7 +314,56 @@ aucun. Trois autres optimisations de la même famille se sont heurtées au même
 mur : le calcul est 18× plus rapide que la lecture, et le noyau fait déjà son
 travail.
 
-## 12. Le FPGA : pas de cas d'usage aujourd'hui
+## 12. La tête restreinte à une liste de tokens : +15 %, mais pas transparent
+
+Implémentée (`--tete-restreinte <fichier>`), sur les deux chemins de calcul —
+`logits` par jeton et `logits_lot` par lots. **J'avais d'abord patché le mauvais**
+et mesuré « aucun gain » : c'est en cherchant pourquoi que j'ai trouvé que
+`--infer` passe par `logits`.
+
+### Équivalence du refactor : parfaite
+
+Avec la liste **complète** (151 936 tokens), la sortie est **identique au token
+près** à la tête non restreinte :
+
+```
+sans     : [6224, 1076, 330, 438, 264, 1352, 315, 31249, 429, 374, …]
+complete : [6224, 1076, 330, 438, 264, 1352, 315, 31249, 429, 374, …]   ✅
+```
+
+C'est le contrôle qui distingue un gain d'une erreur, et il passe.
+
+### Le gain, mesuré
+
+| liste | couverture | sans | avec | gain |
+|---|---|---|---|---|
+| français | 13,0 % | 9,384 s | 8,400 s | **+10,5 %** |
+| anglais | 5,8 % | 1,155 s | 0,982 s | **+15 %** |
+
+Trois tours alternés chaque fois, stable.
+
+### Mais la sortie change — dans les deux cas
+
+| liste | sortie |
+|---|---|
+| complète | `[6224, 1076, 330, 438, …]` — identique à sans ✅ |
+| **française** | `[1129, 269, 330, 304, …]` puis **boucle** |
+| **anglaise** | `[77455, 330, 315, 279, …]` — différent |
+
+**Même avec la bonne langue**, la sortie diffère : les tokens hors liste sont à
+zéro, donc le modèle ne peut plus les choisir — et il en aurait eu besoin. La
+restriction n'est **pas une optimisation transparente** : c'est une
+**génération contrainte**, qui change ce que le modèle peut dire.
+
+**Ce n'est donc pas un défaut à activer par défaut.** C'est un outil pour les cas
+où l'on *veut* restreindre la sortie (sortie dans une langue imposée, énumération
+fermée), et le seul moyen de le rendre transparent serait un **raffinement en
+deux passes** : calculer sur la liste, mesurer la masse cumulée, et compléter
+seulement si elle n'atteint pas 99,9 %. Les mesures de la section 2 montrent que
+c'est possible — 2 à 9 tokens portent la masse quand le modèle est confiant,
+20 000 quand il hésite.
+
+## 13. Le FPGA : pas de cas d'usage aujourd'hui
 
 Un Stratix V est branché, mais **en USB seulement** (pas de PCIe configuré), soit
 **625 Mo/s au mieux** — cinquante fois moins que le NVMe parallélisé.
