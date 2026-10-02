@@ -1677,6 +1677,17 @@ fn run_config() {
                      r.hash_layers, n_layer);
         }
     }
+    // Hyper-connexions : les montrer même quand le modèle n'est pas encore
+    // calculable — c'est un chiffre du modèle, pas une promesse du moteur.
+    if g.tensor("blk.0.hc_attn_fn.weight").is_some() {
+        match g.hc_params() {
+            Some((mult, iters, eps)) => println!(
+                "hyper-conn.   : {mult} copies · {} mélanges par couche (pre/post/comb) · \
+                 Sinkhorn {iters} itérations · eps {eps:e}",
+                2 * mult + mult * mult),
+            None => println!("hyper-conn.   : présentes, mais `hc_mult` introuvable"),
+        }
+    }
     // Ce que le moteur ne sait pas calculer, dit avant la panne — par la MÊME
     // fonction que le refus à l'ouverture : deux listes divergentes ont déjà
     // annoncé deux manques là où la passe avant en refusait trois.

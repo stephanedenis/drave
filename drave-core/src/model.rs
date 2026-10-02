@@ -90,8 +90,14 @@ pub fn manques_architecture(g: &Gguf, cfg: &Cfg, ctx: usize, clusters: bool) -> 
     // laissait passer le modèle jusqu'au panic « attn_q absent » de la couche 3.
     let quelque_part = |suffixe: &str| g.tensors.iter().any(|t| t.name.ends_with(suffixe));
     let mut manques: Vec<&str> = Vec::new();
-    if quelque_part("hc_attn_fn.weight") || quelque_part("hc_ffn_fn.weight") {
-        manques.push("hyper-connexions (hc_attn_fn, hc_ffn_fn, hc_mult)");
+    // Les **hyper-connexions** (DeepSeek-V4) ne sont plus un manque : elles sont
+    // lues (`Hc`, `hc_params`) et consommées par la passe avant — l'entrée d'une
+    // sous-couche est le mélange des `hc` copies, la sortie se route par `comb`
+    // (Sinkhorn), et la tête les réduit en un état. Ce qui reste à faire sur ce
+    // chemin est nommé ailleurs (sortie à rang faible groupée, attentions
+    // compressées).
+    if quelque_part("hc_attn_fn.weight") && g.hc_params().is_none() {
+        manques.push("hyper-connexions : `hc_mult` absent des métadonnées");
     }
     // Attention par index (DSA) : l'indexeur choisit les clés gardées. Il ne
     // sert QUE si la séquence dépasse `index_topk` — en deçà, llama.cpp garde
@@ -1798,6 +1804,12 @@ pub struct Model {
     pub flux_brut: bool,
     /// Couches MLA, si le modèle en est un (`attn_kv_a_mqa` présent).
     pub mla: Option<Vec<Mla>>,
+    /// **Hyper-connexions** par couche : `(attention, FFN)`. Présentes sur
+    /// DeepSeek-V4 / V4.1 (`hc_attn_fn`), absentes partout ailleurs.
+    pub hc: Option<Vec<(Hc, Hc)>>,
+    /// Mélange de **tête** : réduit les `hc` copies en un seul état avant la
+    /// norme finale et les logits (`hc_head_fn/base/scale`).
+    pub hc_tete: Option<Hc>,
     /// Cache LATENT par couche : `c_kv` (kv_lora) et `k_rope` (qkr) par position.
     pub mla_cache: Vec<(Vec<f32>, Vec<f32>)>,
     /// Cache VRAM des experts MoE (`DRAVE_GPU_EXPERTS=1`).
@@ -2460,6 +2472,41 @@ impl Model {
                      m0.kv_lora + m0.qkr, cfg.n_kv_head * (m0.qkn + m0.vd));
             Some(v)
         } else { None };
+        // ---- Hyper-connexions (DeepSeek-V4 / V4.1) ------------------------
+        // Deux sources pour les trois hyper-paramètres, et il faut les deux :
+        // V4-Flash les déclare en clés GGUF normalisées
+        // (`deepseek4.hyper_connection.*`), V4.1 seulement dans le `config.json`
+        // recopié sous `deepseek41.config` (`hc_mult`, `hc_sinkhorn_iters`,
+        // `hc_eps`). Lire une seule des deux donne `hc = 0` — donc un modèle
+        // silencieusement traité comme s'il n'avait pas d'hyper-connexions.
+        let (hc, hc_tete) = if g.tensor("blk.0.hc_attn_fn.weight").is_some() {
+            let (mult, iters, eps) = g.hc_params()
+                .unwrap_or_else(|| panic!("hyper-connexions : `hc_mult` introuvable"));
+            let mut v = Vec::with_capacity(cfg.n_layer);
+            for l in 0..cfg.n_layer {
+                let q = |s: &str| format!("blk.{l}.{s}");
+                let mk = |nom: &str| Hc {
+                    melange: g.dequant(&q(&format!("{nom}_fn.weight"))),
+                    base: g.dequant(&q(&format!("{nom}_base.weight"))),
+                    scale: g.dequant(&q(&format!("{nom}_scale.weight"))),
+                    hc: mult, h: cfg.hidden, iters, eps,
+                };
+                v.push((mk("hc_attn"), mk("hc_ffn")));
+            }
+            // Mélange de TÊTE : une seule sortie (`hc` poids), donc son `fn`
+            // est `[hc × hc·h]` et sa base `[hc]` — pas de `post` ni de `comb`.
+            let tete = Hc {
+                melange: g.dequant("hc_head_fn.weight"),
+                base: g.dequant("hc_head_base.weight"),
+                scale: g.dequant("hc_head_scale.weight"),
+                hc: mult, h: cfg.hidden, iters, eps,
+            };
+            let mix = v[0].0.hc_mix();
+            println!("[config] hyper-connexions : {} copies · {} mélanges par couche \
+                      (pre {} + post {} + comb {}) · Sinkhorn {} itérations · eps {:e} · tête {} poids",
+                     mult, mix, mult, mult, mult * mult, iters, eps, tete.melange.len());
+            (Some(v), Some(tete))
+        } else { (None, None) };
         let mut layers = Vec::with_capacity(cfg.n_layer);
         let mut bytes = 0u64;
         for l in 0..cfg.n_layer {
@@ -2777,6 +2824,7 @@ mapping {}",
         } else { None };
         Model {
             g, cfg, layers, out_norm, pool,
+            hc, hc_tete,
             kv: caches_kv,
             ctx, events: 0, paires: [0; 3], act_levels: 127.0, act_thresh: 0.0, act_topk: 0, act_renorm: false,
             act_topk_proj: [0; 7], attn_topk: 0, attn_events: 0, qk_topk: 0,
@@ -4288,6 +4336,14 @@ s'applique pas — utilisez --lot 1, ou réenregistrez sans DRAVE_TRACE_BLOCS");
             Some(v) => v,
             None => g.row_f32("token_embd.weight", tok as usize, h),
         };
+        // Hyper-connexions : l'état résiduel naît en `hc` copies IDENTIQUES de
+        // l'embarquement (la référence fait `ggml_repeat_4d(inp, n_embd, hc)`),
+        // et chaque sous-couche les remélangera.
+        if let Some((ha, _)) = self.hc.as_ref().map(|v| &v[0]) {
+            let mut copies = Vec::with_capacity(ha.hc * h);
+            for _ in 0..ha.hc { copies.extend_from_slice(&x); }
+            x = copies;
+        }
         let mut hn = vec![0f32; h];
         if debug_etat {
             let n2: f32 = x.iter().map(|v| v * v).sum();
@@ -4337,8 +4393,22 @@ s'applique pas — utilisez --lot 1, ou réenregistrez sans DRAVE_TRACE_BLOCS");
                       else if self.swa_pattern <= 1 { self.attn_window }
                       else if l % self.swa_pattern < self.swa_pattern - 1 { self.attn_window }
                       else { 0 };
+            // ---- hyper-connexions : l'entrée de l'attention n'est pas l'état,
+            // c'est le MÉLANGE de ses `hc` copies (`pre`), et la sortie sera
+            // re-router par `comb` au lieu d'être additionnée.
+            let hc_l = self.hc.as_ref().map(|v| &v[l]);
+            let mut hc_attn: Option<HcSortie> = None;
+            let mut xin = vec![0f32; h];
+            match hc_l {
+                Some((ha, _)) => {
+                    let s = ha.sortie(&x);
+                    Hc::melanger(&x, &s.pre, ha.hc, h, &mut xin);
+                    hc_attn = Some(s);
+                }
+                None => xin.copy_from_slice(&x),
+            }
             let tm = Instant::now();
-            Self::rmsnorm(&x, &lay.attn_norm, cfg.eps, &mut hn);
+            Self::rmsnorm(&xin, &lay.attn_norm, cfg.eps, &mut hn);
             if self.flux_force.is_some() {
                 // Diagnostic : comparer ce que la trace impose à ce que le
                 // calcul vient de produire. Un écart minuscule = la liste est
@@ -4749,8 +4819,27 @@ dynamique de {dyn_:.3e} (relatif {:.2e})", mx / dyn_.max(1e-9));
                 None => att.len(),
             };
             Self::matvec(pool, &lay.wo, &att[..n_att.min(att.len())], &mut o, events, &mut paires[0], self.act_levels, self.act_thresh, tk(3), self.act_renorm, &mut scratch, self.seuil_push);
-            for i in 0..h { o[i] += x[i]; }
-            Self::rmsnorm(&o, &lay.ffn_norm, cfg.eps, &mut hn);
+            // Hyper-connexions : `o` reste la SORTIE PURE de l'attention ; ce
+            // sont les copies qui se rechargent (`comb`), et l'entrée de la FFN
+            // est le mélange de ces copies — jamais `o`.
+            let mut hc_x: Option<Vec<f32>> = None;
+            let mut hc_ffn: Option<HcSortie> = None;
+            match (hc_l, hc_attn.as_ref()) {
+                (Some((_, hf)), Some(sa)) => {
+                    let mut nx = vec![0f32; hf.hc * h];
+                    Hc::retro(&o, &x, sa, hf.hc, h, &mut nx);
+                    let sf = hf.sortie(&nx);
+                    let mut mel = vec![0f32; h];
+                    Hc::melanger(&nx, &sf.pre, hf.hc, h, &mut mel);
+                    Self::rmsnorm(&mel, &lay.ffn_norm, cfg.eps, &mut hn);
+                    hc_x = Some(nx);
+                    hc_ffn = Some(sf);
+                }
+                _ => {
+                    for i in 0..h { o[i] += x[i]; }
+                    Self::rmsnorm(&o, &lay.ffn_norm, cfg.eps, &mut hn);
+                }
+            }
             if let Some(r) = self.flux_force.as_mut() {
                 let j = self.jeton_trace;
                 r.appliquer(l + 1000, j as usize, &mut hn);
@@ -4873,7 +4962,14 @@ dynamique de {dyn_:.3e} (relatif {:.2e})", mx / dyn_.max(1e-9));
                 if let Some((gl, gg)) = self.ffn_gain {
                     if gl == l { for v in down.iter_mut() { *v *= gg; } }
                 }
-                for i in 0..h { x[i] = o[i] + down[i]; }
+                match (hc_x.as_ref(), hc_ffn.as_ref(), hc_l) {
+                    (Some(nx), Some(sf), Some((_, hf))) => {
+                        let mut suite = vec![0f32; hf.hc * h];
+                        Hc::retro(&down, nx, sf, hf.hc, h, &mut suite);
+                        x = suite;
+                    }
+                    _ => for i in 0..h { x[i] = o[i] + down[i]; },
+                }
                 if debug_etat {
                     let n2: f32 = x.iter().map(|v| v * v).sum();
                     let na: f32 = att.iter().map(|v| v * v).sum();
@@ -4914,7 +5010,14 @@ dynamique de {dyn_:.3e} (relatif {:.2e})", mx / dyn_.max(1e-9));
             if let Some((gl, g)) = self.ffn_gain {
                 if gl == l { for v in down.iter_mut() { *v *= g; } }
             }
-            for i in 0..h { x[i] = o[i] + down[i]; }
+            match (hc_x.as_ref(), hc_ffn.as_ref(), hc_l) {
+                (Some(nx), Some(sf), Some((_, hf))) => {
+                    let mut suite = vec![0f32; hf.hc * h];
+                    Hc::retro(&down, nx, sf, hf.hc, h, &mut suite);
+                    x = suite;
+                }
+                _ => for i in 0..h { x[i] = o[i] + down[i]; },
+            }
             if debug_mla && l == 0 {
                 eprintln!("[mla] couche 0 pos {pos} x[..8] {:.5e} {:.5e} {:.5e} {:.5e} \
 {:.5e} {:.5e} {:.5e} {:.5e}", x[0], x[1], x[2], x[3], x[4], x[5], x[6], x[7]);
@@ -4927,6 +5030,14 @@ dynamique de {dyn_:.3e} (relatif {:.2e})", mx / dyn_.max(1e-9));
 |ffn| {:.4e} (dense)", n2.sqrt(), na.sqrt(), nd.sqrt());
             }
             self.prof[3] += tf.elapsed().as_secs_f64();
+        }
+        // Mélange de TÊTE : les `hc` copies redeviennent un seul état, qui voit
+        // ensuite la norme finale puis les logits (`build_hc_head`).
+        if let Some(ht) = self.hc_tete.as_ref() {
+            let s = ht.sortie(&x);
+            let mut mel = vec![0f32; h];
+            Hc::melanger(&x, &s.pre, ht.hc, h, &mut mel);
+            x = mel;
         }
         if self.flux_brut || self.couche_fin < cfg.n_layer {
             return x;                       // nœud intermédiaire : flux brut

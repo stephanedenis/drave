@@ -72425,3 +72425,435 @@ AssertionError: ('## 3. Les phases', 0)
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='docs/plan-deepseek41-complet.md'\ns=open(p).read()\nsubs=[\n(\"\"\"### P0 — Le harnais, sur V4-Flash, et le coût d'un jeton (≈ 3 h)\n\n- V4-Flash chargé dans le moteur ;\"\"\",\n \"\"\"### P0 — Le harnais, sur … [2158 caractères tronqués]`
+
+  ```
+ok
+47cd68a Plan V4.1 : P0 marqué fait, et les hyper-paramètres sont dans le GGUF (`deepseek41.config`)
+b2f48b7 P1 (1/3) : le cœur des hyper-connexions, contre une référence indépendante
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git status --porcelain | grep -v \"^?? journal\" | head; echo \"---\"; cd drave-core && cargo test --release 2>&1 | tail -3", "description": "Final repo and test check", "timeoutMs": 600000}`
+
+  ```
+M journal/README.md
+---
+
+test result: ok. 52 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.11s
+  ```
+
+### 🤖 Assistant
+
+⏵ Bloc 1 terminé : docs révisés, P0 commité, P1 amorcé. Bilan.
+
+## Bloc 1 (10h25 → 12h45) — ce qui est fait
+
+**1. Révision de cohérence des `docs/` avec la vision — terminée et commitée** (`477de44`)
+
+18 documents relus par cinq relectures adverses, puis **84 sites corrigés** dans `docs/` (95 avec `REPRISE.md`), et une **sixième relecture du diff** qui a rattrapé 13 défauts de plus — dont **un faux que j'avais introduit** (« `--config` affiche puits appris sur 36/36 » : `--config` ne charge pas le modèle).
+
+Le fond, qui répond à ta demande : la vision était **muette dans quatre documents** — le format de flux servait trace, rejeu et transport mais pas l'**analyse** (sa 4ᵉ finalité), et les grappes/clusters/transport ne disaient nulle part qu'ils sont le **mécanisme de placement** des neurones. Le reste était de la péremption datée. Rapport : `reports/rapport-coherence-vision.md`.
+
+**2. Deux trouvailles dans le code, corrigées et mesurées**
+- `manques_architecture` rangeait `attn_sinks` dans un manque V4 → `--config` répondait « calculable : NON » pour **gpt-oss**, dont la porte tourne. Corrigé ; `tools/portes.sh` **exécute maintenant la porte gpt-oss** (15,6017 mesurée ce soir par le script).
+- `attn_mla` calculait la remontée `v_b` dans la boucle de scores **pour un résultat jeté**. Delta prédit avant mesure : 662,7 M paires/passe → mesuré **29 224,8 → 27 236,7 M**, exactement la prédiction, perplexité identique. Le chronomètre ne conclut pas (2ᵉ passe chaude), le compteur si.
+
+**3. P0 du plan V4.1 — fait** (`e0328fb`, `reports/rapport-p0-flux.md`)
+
+Le flux se compte par **provenance** (attention / experts / partagé) en **paires**, là où `events` ne voyait que les chemins en listes. GLM-5.3, un jeton : **21,9 G · 30,6 G · 5,6 G — dont 0 en listes**. Autrement dit, sur MLA et sur IQ, Drave ne conduit aucune liste aujourd'hui : c'est le constat qui commande P4/P5.
+
+**4. P1 amorcé** (`b2f48b7`) — cœur des hyper-connexions (`Hc`, Sinkhorn, `melanger`/`retro`) validé contre une référence numpy transcrite des opérations ggml de llama.cpp. La référence s'est trompée la première (transposition de `comb` — dans ggml l'index rapide est la **destination**) ; c'est écrit dans le script.
+
+## Introspection du bloc
+
+- **Ce qui a payé** : écrire la prédiction *avant* la mesure (le delta de paires est tombé juste au million près, ce qui valide le compteur *et* la suppression) ; faire relire son propre diff par un adversaire.
+- **Ce qui a coûté** : deux passes GLM-5.3 de 10 min pour un A/B que le chronomètre ne pouvait pas trancher (passe froide, 216 Go depuis le disque mécanique) ; et un candidat de mesure (GLM-5.3-Flash) qui s'est révélé **refusé** par le moteur — j'aurais dû lire `--config` avant de bâtir un protocole dessus. Règle que je m'applique : *vérifier qu'un modèle est exécutable avant de planifier une mesure sur lui*.
+- **Hygiène** : jobs lourds sérialisés, 52 tests verts, portes complètes vertes, arbre propre (hors `journal/` régénéré par le hook).
+
+Prochain bloc : finir P1 (chargement des six tenseurs par couche + trois de tête, `--config`, puis câblage dans la passe avant avec P2).
+
+
+## Tour 75
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Exécuter le plan docs/plan-deepseek41-complet.md phase par phase (P0→P9), en autonomie, en respectant pour chaque phase ses deux portes : porte de correction (comparaison étage par étage à llama.cpp sur V4-Flash) et porte Drave (flux : événements/paires par jeton, trace rejouée à l'identique, découpage en grappes, flux lisible par un outil d'analyse). Aucune phase ne passe à la suivante sans ses deux portes. Jamais de forward muet, jamais d'optimisation qui change une sortie sans le dire."
+Round: 1/30
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ P1 (2/3) : chargement des tenseurs de hyper-connexions dans le modèle.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log --oneline -2 && grep -n \"let mla = \\|mla: \\|hc_attn_fn\" drave-core/src/model.rs | head -20", "description": "Locate MLA loader and HC absence"}`
+
+  ```
+47cd68a Plan V4.1 : P0 marqué fait, et les hyper-paramètres sont dans le GGUF (`deepseek41.config`)
+b2f48b7 P1 (1/3) : le cœur des hyper-connexions, contre une référence indépendante
+93:    if quelque_part("hc_attn_fn.weight") || quelque_part("hc_ffn_fn.weight") {
+94:        manques.push("hyper-connexions (hc_attn_fn, hc_ffn_fn, hc_mult)");
+164:            if g.tensors.iter().any(|t| t.name.ends_with("hc_attn_fn.weight")) { "hc_attn_fn " } else { "" },
+1800:    pub mla: Option<Vec<Mla>>,
+2405:        let mla = if g.tensor("blk.0.attn_kv_a_mqa.weight").is_some() {
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs", "limit": 60, "offset": 2400}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs</path>
+<type>file</type>
+<content>
+2400:         // Capturé avant que `cfg` ne soit déplacé dans la structure.
+2401:         let n_layer_total = cfg.n_layer;
+2402:         // Le mapping est lu UNE fois et passé aux couches : un état global lu
+2403:         // par couche rendait ce chemin intestable (les tests s'exécutent en
+2404:         // parallèle, un `OnceLock` ne se pose qu'une fois).
+2405:         let mla = if g.tensor("blk.0.attn_kv_a_mqa.weight").is_some() {
+2406:             let mut v = Vec::with_capacity(cfg.n_layer);
+2407:             for l in 0..cfg.n_layer {
+2408:                 let p = |s: &str| format!("blk.{l}.{s}");
+2409:                 let opt = |n: &str| g.dequant_optionnel(&p(n));
+2410:                 let t = |n: &str| g.tensor(&p(n)).unwrap_or_else(|| panic!("tenseur MLA {n} absent"));
+2411:                 // Le fichier déclare (entrée, sortie) ; le moteur renverse à la
+2412:                 // lecture, donc `dims[0]` est ici la SORTIE (= le rang).
+2413:                 let q_lora = t("attn_q_a.weight").dims[0] as usize;
+2414:                 let q_b = g.dequant(&p("attn_q_b.weigh
+… [2997 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n \"$(grep -n 'pub fn cfg' drave-core/src/gguf.rs | head -1 | cut -d: -f1),+12p\" drave-core/src/gguf.rs; echo \"=== clés V4.1 ===\"; timeout 120 bash -c 'strings -n 8 /home/stephane/FastNVMe/modeles-lourds/DeepSeek-V4.1-Flash-Q … [131 caractères tronqués]`
+
+  ```
+pub fn cfg(&self, key: &str) -> Option<&Meta> {
+        let arch = self.meta.get("general.architecture")?.as_str()?;
+        self.meta.get(&format!("{arch}.{key}"))
+    }
+
+    /// Première clef PRÉSENTE parmi plusieurs noms possibles.
+    ///
+    /// Deux conventions de nommage coexistent dans les GGUF de cette machine :
+    /// les clefs normalisées de llama.cpp (`expert_count`, `expert_used_count`)
+    /// et les noms d'origine de DeepSeek, recopiés tels quels par le
+    /// convertisseur (`n_routed_experts`, `num_experts_per_tok`). Lire une seule
+    /// convention ne donne pas une erreur : cela donne `n_expert = 0`, donc un
+    /// modèle **sans experts** — un V4.1 qui tourne en dense et dont la
+=== clés V4.1 ===
+0
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"pub fn cfg_ou\\|pub fn json_brut\\|pub fn json_nombre\\|pub fn json_texte\\|pub fn json_bool\" drave-core/src/gguf.rs; sed -n \"$(grep -n 'pub fn cfg_ou' drave-core/src/gguf.rs | head -1 | cut -d: -f1),+18p\" drave-core/src … [57 caractères tronqués]`
+
+  ```
+875:    pub fn cfg_ou(&self, cles: &[&str]) -> Option<&Meta> {
+892:    pub fn json_brut(&self, cle: &str) -> Option<String> {
+919:    pub fn json_nombre(&self, cle: &str) -> Option<f64> {
+923:    pub fn json_texte(&self, cle: &str) -> Option<String> { self.json_brut(cle) }
+925:    pub fn json_bool(&self, cle: &str) -> Option<bool> {
+    pub fn cfg_ou(&self, cles: &[&str]) -> Option<&Meta> {
+        cles.iter().find_map(|c| self.cfg(c))
+    }
+
+    /// Chaîne du bloc `<arch>.config` — le JSON d'origine, recopié par le
+    /// convertisseur. Dernier recours quand ni les clefs normalisées ni les noms
+    /// DeepSeek ne sont présents.
+    fn config_brut(&self) -> Option<&str> {
+        self.cfg("config")?.as_str()
+    }
+
+    /// Valeur d'une clef du JSON `<arch>.config`.
+    ///
+    /// Analyseur minuscule et volontairement limité (nombre, booléen, chaîne) :
+    /// le JSON n'est pas là pour être interprété, seulement pour retrouver six
+    /// scalaires que le convertisseur a recopiés. Il évite d'inventer des
+    /// valeurs par défaut pour un modèle qu'on ne sait pas décrire.
+    pub fn json_brut(&self, cle: &str) -> Option<String> {
+        let texte = self.config_brut()?;
+  ```
+
+### 🤖 Assistant
+
+⏵ Écriture du chargeur HC (clés GGUF et repli JSON) dans `model.rs`.
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs", "limit": 25, "offset": 2456}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs</path>
+<type>file</type>
+<content>
+2456:             let m0 = &v[0];
+2457:             println!("[config] MLA : {} couches · q_lora {} · kv_lora {} · qk_nope {} + qk_rope {} · v {} · \
+2458:                       cache latente {} valeurs par jeton (au lieu de {})",
+2459:                      v.len(), m0.q_lora, m0.kv_lora, m0.qkn, m0.qkr, m0.vd,
+2460:                      m0.kv_lora + m0.qkr, cfg.n_kv_head * (m0.qkn + m0.vd));
+2461:             Some(v)
+2462:         } else { None };
+2463:         let mut layers = Vec::with_capacity(cfg.n_layer);
+2464:         let mut bytes = 0u64;
+2465:         for l in 0..cfg.n_layer {
+2466:             let p = |s: &str| format!("blk.{l}.{s}");
+2467:             let moe = charger_moe(&g, l, cfg.n_expert, map);
+2468:             let lay = Layer {
+2469:                 attn_norm: g.dequant(&p("attn_norm.weight")),
+2470:                 // Couche MLA : Q, K et V n'existent pas en dense — ils sont
+2471:                 // calculés par `attn_mla` depuis les projections de rang faible.
+2472:                 // Charger `attn_q.weight` ici, c'est chercher un tenseur que le
+2473:
+… [857 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs", "new_string": "            Some(v)\n        } else { None };\n        // ---- Hyper-connexions (DeepSeek-V4 / V4.1) ------------------------\n        // Deux sources pour les trois hyper-paramètres, et il faut l … [3338 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='drave-core/src/model.rs'\ns=open(p).read()\na=\"\"\"            let lire = |p: &str, hc: usize, h: usize| -> Hc {\n                Hc {\n                    melange: g.dequant(p),\n                    base: g. … [600 caractères tronqués]`
+
+  ```
+ok
+186:    pub fn as_u64(&self) -> Option<u64> {
+206:    pub fn as_f64(&self) -> Option<f64> {
+  ```
+
+### 🤖 Assistant
+
+⏵ Ajout des champs `hc`/`hc_tete` au modèle et affichage dans `--config`.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '1795,1810p' drave-core/src/model.rs", "description": "Read Model struct near mla field"}`
+
+  ```
+/// flux (`couche_fin >= n_layer`) et le pilote le normait une SECONDE fois :
+    /// perplexité répartie **798,3** au lieu de **18,2**. La norme finale est
+    /// appliquée par le nœud qui possède la tête de sortie — une seule fois.
+    pub flux_brut: bool,
+    /// Couches MLA, si le modèle en est un (`attn_kv_a_mqa` présent).
+    pub mla: Option<Vec<Mla>>,
+    /// Cache LATENT par couche : `c_kv` (kv_lora) et `k_rope` (qkr) par position.
+    pub mla_cache: Vec<(Vec<f32>, Vec<f32>)>,
+    /// Cache VRAM des experts MoE (`DRAVE_GPU_EXPERTS=1`).
+    pub cache_experts: Option<CacheExperts>,
+    /// Taille du lot de PRÉREMPLISSAGE en inférence (1 = jeton par jeton).
+    /// Le préremplissage par lots n'était branché que sur la perplexité : une
+    /// invite de 4 000 jetons se payait donc jeton par jeton en génération.
+    pub lot: usize,
+    /// Greffon : un neurone supplémentaire, chargé sans réentraînement.
+    pub patch: Option<Patch>,
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='drave-core/src/model.rs'\ns=open(p).read()\nsubs=[\n# --- champ dans la structure\n(\"\"\"    /// Couches MLA, si le modèle en est un (`attn_kv_a_mqa` présent).\n    pub mla: Option<Vec<Mla>>,\"\"\",\n \"\"\"  … [1036 caractères tronqués]`
+
+  ```
+ok
+--- fin ---
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 300 ./drave-core/target/release/drave /home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek-V4-Flash-UD-IQ1_M/DeepSeek-V4-Flash-UD-IQ1_M-00001-of-00003.gguf --config 2>&1 | tail -5", "description": "Check HC loading on V4-Fl … [33 caractères tronqués]`
+
+  ```
+experts       : 256 par couche, 6 par jeton · FFN expert 2048
+routage       : racine de softplus (source : expert_gating_func) · renormalisation oui · échelle 1.500
+routage table : 3/43 premières couches par `ffn_gate_tid2eid`
+[mla] attention MLA à rang faible : cache LATENT (c_kv + k_rope), pas de fenêtre glissante ni de YaRN sur ce chemin. Validée contre llama.cpp sur GLM-5.3 à la POSITION 0 : corrélation des logits 0,999024, top-1 3/3 ; l'écart croît ensuite (+0,009 / +0,372 / +0,611 puis +4,070 nat à la position 3 — voir reports/rapport-mla-experts.md §7).
+calculable    : NON — il manque : hyper-connexions (hc_attn_fn, hc_ffn_fn, hc_mult), projection de sortie à rang faible groupée (attn_output_a/attn_output_b, o_groups)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"fn run_config\\|calculable    :\\|manques_architecture\" drave-core/src/main.rs | head", "description": "Find --config implementation"}`
+
+  ```
+1657:fn run_config() {
+1690:    let manques = model::manques_architecture(&g, &c, 0, false);
+1692:        println!("calculable    : oui (passe avant implémentée)");
+1694:        println!("calculable    : NON — il manque : {}", manques.join(", "));
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/main.rs", "limit": 45, "offset": 1657}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/main.rs</path>
+<type>file</type>
+<content>
+1657: fn run_config() {
+1658:     let g = Gguf::open_meta_auto(&modele_chemin()).expect("ouverture du GGUF (en-tête)");
+1659:     let arch = g.meta.get("general.architecture").and_then(|m| m.as_str()).unwrap_or("?");
+1660:     println!("modèle        : {}", modele_chemin());
+1661:     println!("architecture  : {arch}");
+1662:     let n_layer = model::dim_gguf(&g, &["block_count", "num_hidden_layers"], "num_hidden_layers")
+1663:                       .unwrap_or(0);
+1664:     let hidden = model::dim_gguf(&g, &["embedding_length", "hidden_size"], "hidden_size")
+1665:                      .unwrap_or(0);
+1666:     println!("couches       : {n_layer} · cachés {hidden}");
+1667:     let r = model::routage_du_gguf(&g);
+1668:     println!("experts       : {} par couche, {} par jeton · FFN expert {}",
+1669:              r.n_expert, r.n_expert_used, r.ffn_exp);
+1670:     if r.n_expert > 0 {
+1671:         println!("routage       : {} (source : {}) · renormalisation {} · échelle {}",
+1672:                  r.gating.nom(), r.source,
+1673:                  if r.norm { "oui" } else { "non
+… [1563 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='drave-core/src/gguf.rs'\ns=open(p).read()\na=\"\"\"    /// Chaîne du bloc `<arch>.config` — le JSON d'origine, recopié par le\n    /// convertisseur. Dernier recours quand ni les clefs normalisées ni les noms\ … [3103 caractères tronqués]`
+
+  ```
+ok
+ok2
+--- fin ---
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='drave-core/src/main.rs'\ns=open(p).read()\na=\"\"\"    // Ce que le moteur ne sait pas calculer, dit avant la panne — par la MÊME\n    // fonction que le refus à l'ouverture : deux listes divergentes ont déjà\ … [1482 caractères tronqués]`
+
+  ```
+ok
+routage       : racine de softplus (source : expert_gating_func) · renormalisation oui · échelle 1.500
+routage table : 3/43 premières couches par `ffn_gate_tid2eid`
+hyper-conn.   : 4 copies · 24 mélanges par couche (pre/post/comb) · Sinkhorn 20 itérations · eps 1e-6
+calculable    : NON — il manque : hyper-connexions (hc_attn_fn, hc_ffn_fn, hc_mult), projection de sortie à rang faible groupée (attn_output_a/attn_output_b, o_groups)
+=== V4.1 ===
+routage       : racine de softplus (source : JSON scoring_func) · renormalisation oui · échelle 1.500
+hyper-conn.   : 4 copies · 24 mélanges par couche (pre/post/comb) · Sinkhorn 20 itérations · eps 1e-6
+calculable    : NON — il manque : hyper-connexions (hc_attn_fn, hc_ffn_fn, hc_mult), projection de sortie à rang faible groupée (attn_output_a/attn_output_b, o_groups), attentions compressées CSA/HCA (compress_ratios, candidate_*)
+  ```
+
+### 🤖 Assistant
+
+⏵ Recensement des usages de `x` dans la boucle de couches avant de câbler les hyper-connexions.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && awk 'NR>=4330 && NR<=5000' drave-core/src/model.rs | grep -n \"\\bx\\b\" | grep -vE \"^\\s*[0-9]+:\\s*//\" | head -40", "description": "List x usages in the layer loop"}`
+
+  ```
+6:            let n2: f32 = x.iter().map(|v| v * v).sum();
+8:                      n2.sqrt(), x[0], x[1], x[2]);
+54:            Self::rmsnorm(&x, &lay.attn_norm, cfg.eps, &mut hn);
+227:                                for (o, x) in out.iter_mut().zip(vd.iter()) { *o += w * x; }
+387:                            for (o, x) in out.iter_mut().zip(vd.iter()) { *o += w * x; }
+448:                        for (o, x) in out.iter_mut().zip(vd.iter()) { *o += w * x; }
+465:            for i in 0..h { o[i] += x[i]; }
+589:                for i in 0..h { x[i] = o[i] + down[i]; }
+591:                    let n2: f32 = x.iter().map(|v| v * v).sum();
+594:                    eprintln!("[etat] couche {l:3} pos {pos} : |x| {:.4e} · |att| {:.4e} · \
+630:            for i in 0..h { x[i] = o[i] + down[i]; }
+632:                eprintln!("[mla] couche 0 pos {pos} x[..8] {:.5e} {:.5e} {:.5e} {:.5e} \
+633:{:.5e} {:.5e} {:.5e} {:.5e}", x[0], x[1], x[2], x[3], x[4], x[5], x[6], x[7]);
+636:                let n2: f32 = x.iter().map(|v| v * v).sum();
+639:                eprintln!("[etat] couche {l:3} pos {pos} : |x| {:.4e} · |att| {:.4e} · \
+645:            return x;                       // nœud intermédiaire : fl
+… [66 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs", "limit": 40, "offset": 4848}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs</path>
+<type>file</type>
+<content>
+4848:                     // Traduction pour les modèles en clusters : l'expert global
+4849:                     // `e` n'est pas forcément dans ce nœud.
+4850:                     let Some((kexp, loc)) = moe.ou(e) else { continue; };
+4851:                     // ---- experts MXFP4 sur le GPU ----
+4852:                     // Le noyau MXFP4 est BIT À BIT identique au chemin CPU
+4853:                     // (écart mesuré 0,00e0 sur un expert) : seule la vitesse
+4854:                     // change, la perplexité ne peut pas bouger. Les poids
+4855:                     // montent une fois et restent (cache LRU), sinon on
+4856:                     // repasserait 4,4 Mo sur le bus à chaque jeton.
+4857:                     let mut fait = false;
+4858:                     if moe.gate[0].src == crate::list::Source::Mxfp4 && moe.local.is_none() {
+4859:                         if let (Some(machine), Some(cache)) =
+4860:                                 (crate::gpu::instance(), self.cache_experts.as_mut()) {
+4861:                             if let Some((mg, mu, md)) = cache.obtenir(ma
+… [2034 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"for i in 0..h { o\\[i\\] += x\\[i\\]; }\\|Self::rmsnorm(&o, &lay.ffn_norm\\|for i in 0..h { x\\[i\\] = o\\[i\\] + down\\[i\\]; }\" drave-core/src/model.rs", "description": "Locate the three residual sites"}`
+
+  ```
+4794:            for i in 0..h { o[i] += x[i]; }
+4795:            Self::rmsnorm(&o, &lay.ffn_norm, cfg.eps, &mut hn);
+4918:                for i in 0..h { x[i] = o[i] + down[i]; }
+4959:            for i in 0..h { x[i] = o[i] + down[i]; }
+  ```
+
+### 🤖 Assistant
+
+⏵ Câblage des hyper-connexions dans la passe avant (mélange, `comb`, tête).
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '4460,4475p' drave-core/src/model.rs; echo \"=== init de x ===\"; grep -n \"let mut x = match emb_imposee.take()\" -A 12 drave-core/src/model.rs | head -16", "description": "Read rmsnorm site and x initialization"}`
+
+  ```
+}
+                }
+                if self.qk_topk > 0 {
+                    Self::creuse_tetes(&mut q, nh, hd, self.qk_topk);
+                    Self::creuse_tetes(&mut k, nkv, hd, self.qk_topk);
+                }
+                self.prof[1] += tr.elapsed().as_secs_f64();
+                // écriture du cache KV à la position courante
+                {
+                    let kvc = &mut kv[l];
+                    for hh in 0..nkv {
+                        kvc.ecrire(hh, pos, &k[hh * hd..(hh + 1) * hd], &v[hh * hd..(hh + 1) * hd]);
+                    }
+                }
+                KvCache::miroir_gpu(kv_gpu.as_deref_mut(), l, &kv[l], pos, 1);
+                // attention groupée
+=== init de x ===
+4329:        let mut x = match emb_imposee.take() {
+4330-            Some(v) => v,
+4331-            None => g.row_f32("token_embd.weight", tok as usize, h),
+4332-        };
+4333-        let mut hn = vec![0f32; h];
+4334-        if debug_etat {
+4335-            let n2: f32 = x.iter().map(|v| v * v).sum();
+4336-            eprintln!("[etat] jeton {tok} pos {pos} : |emb| {:.4e} · début {:.4e} {:.4e} {:.4e}",
+4337-                      n2.sqrt(), x[0], x[1], x[2]);
+4338-        }
+4339- 
+… [133 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='drave-core/src/model.rs'\ns=open(p).read()\nsubs=[]\n\n# ---- 1. l'état initial : hc copies identiques de l'embarquement (référence :\n#         `ggml_repeat_4d(inp, n_embd, hc, ...)`)\nsubs.append((\n\"\"\"   … [5533 caractères tronqués]`
+
+  ```
+ok 6
+--- fin ---
+  ```
+
+### 🤖 Assistant
+
+⏵ Retrait du manque « hyper-connexions » (désormais consommées) et vérification des portes.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='drave-core/src/model.rs'\ns=open(p).read()\na=\"\"\"    if quelque_part(\"hc_attn_fn.weight\") || quelque_part(\"hc_ffn_fn.weight\") {\n        manques.push(\"hyper-connexions (hc_attn_fn, hc_ffn_fn, hc_mult)\ … [1181 caractères tronqués]`
+
+  ```
+ok
+routage table : 3/43 premières couches par `ffn_gate_tid2eid`
+hyper-conn.   : 4 copies · 24 mélanges par couche (pre/post/comb) · Sinkhorn 20 itérations · eps 1e-6
+calculable    : NON — il manque : projection de sortie à rang faible groupée (attn_output_a/attn_output_b, o_groups)
+=== V4.1 ===
+hyper-conn.   : 4 copies · 24 mélanges par couche (pre/post/comb) · Sinkhorn 20 itérations · eps 1e-6
+calculable    : NON — il manque : projection de sortie à rang faible groupée (attn_output_a/attn_output_b, o_groups), attentions compressées CSA/HCA (compress_ratios, candidate_*)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && bash tools/portes.sh rapide 2>&1 | tail -11", "description": "Verify no regression from the HC wiring", "timeoutMs": 1800000}`
+
+  ```
+cargo test --release                       52 verts  ✅
+  Qwen2.5-0.5B ctx 256                       19.3885  ✅
+  Qwen3-30B en clusters (origine : 799,8557) 799.8557  ✅
+  threads par défaut (physiques)            20  ✅
+  (portes de formats : ignorées en mode rapide)
+  GLM-5.3 : sigmoïde ×2,5                  sigmoïde  ✅
+  Kimi-K2.7 : sigmoïde ×2,827              sigmoïde  ✅
+  V4-Flash : racine de softplus              racine de softplus  ✅
+  Qwen3-235B : softmax                       softmax  ✅
+
+toutes les portes sont vertes
+  ```
+
+### 🤖 Assistant
+
+⏵ Commit de P1, puis inventaire exact des tenseurs d'attention de V4-Flash pour P2.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A drave-core/src/ && git commit -q -F - <<'EOF'\nP1 (2/3) : les hyper-connexions sont chargées ET consommées par la passe avant\n\n- `Gguf::hc_params()` lit les trois hyper-paramètres des DEUX sources : clés\n  GGUF `deepsee … [1533 caractères tronqués]`

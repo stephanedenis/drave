@@ -876,6 +876,29 @@ zéro, l'inventaire sera sous-évalué", t.ttype, t.name);
         cles.iter().find_map(|c| self.cfg(c))
     }
 
+    /// Les trois hyper-paramètres des **hyper-connexions** de DeepSeek-V4 :
+    /// `(hc_mult, sinkhorn_iterations, epsilon)`.
+    ///
+    /// Deux sources, et il faut les DEUX : V4-Flash les déclare en clés GGUF
+    /// normalisées (`deepseek4.hyper_connection.*`), V4.1 seulement dans le
+    /// `config.json` recopié sous `deepseek41.config` (`hc_mult`,
+    /// `hc_sinkhorn_iters`, `hc_eps`). N'en lire qu'une donne « pas
+    /// d'hyper-connexions » sur un modèle qui en a — un silence, pas une erreur.
+    pub fn hc_params(&self) -> Option<(usize, usize, f32)> {
+        let entier = |cles: &[&str], json: &str| -> Option<usize> {
+            self.cfg_ou(cles).and_then(|m| m.as_u64()).map(|v| v as usize)
+                .or_else(|| self.json_nombre(json).map(|v| v as usize))
+        };
+        let mult = entier(&["hyper_connection.count"], "hc_mult")?;
+        let iters = entier(&["hyper_connection.sinkhorn_iterations"], "hc_sinkhorn_iters")
+            .unwrap_or(20);
+        let eps = self.cfg_ou(&["hyper_connection.epsilon"]).and_then(|m| m.as_f64())
+            .map(|v| v as f32)
+            .or_else(|| self.json_nombre("hc_eps").map(|v| v as f32))
+            .unwrap_or(1e-6);
+        Some((mult, iters, eps))
+    }
+
     /// Chaîne du bloc `<arch>.config` — le JSON d'origine, recopié par le
     /// convertisseur. Dernier recours quand ni les clefs normalisées ni les noms
     /// DeepSeek ne sont présents.

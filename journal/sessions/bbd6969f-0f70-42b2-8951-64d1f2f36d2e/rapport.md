@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 92.3 h |
-| Tours | 74 |
-| Messages | 4506 |
-| Appels d'outils | 4299 |
+| Durée | 92.4 h |
+| Tours | 75 |
+| Messages | 4531 |
+| Appels d'outils | 4322 |
 | Fichiers touchés | 89 |
-| Commandes | 3705 |
+| Commandes | 3723 |
 | Sous-agents | 28 |
-| Commits | 324 |
+| Commits | 325 |
 | Compactages de contexte | 6 |
 
 ## Objectifs déclarés
@@ -191,6 +191,8 @@
 **Tour 73** — quand je parle de philosophie, je parle de ce qui distingue Drave de llama.cpp et autre moteurs : les listes d'activation, qu'elles soient trinaires (double liste) ou en connexions pondérés, le coeur de Drave est de conduire ces flux de données sur des grappes de neuronnes qui peuvent être sur des composants ou machines différentes d'un système. Ces flux de logs sont aussi utiles pour déboguer et  … [115 caractères tronqués]
 
 **Tour 74** — révise tous les documents du dossie docs afin de t'asssurer qu'ils sont cohérent avec la vision Drave
+
+**Tour 75** — <goal_round> Objective: "Exécuter le plan docs/plan-deepseek41-complet.md phase par phase (P0→P9), en autonomie, en respectant pour chaque phase ses deux portes : porte de correction (comparaison étage par étage à llama.cpp sur V4-Flash) et porte Drave (flux : événements/paires par jeton, trace rejouée à l'identique, découpage en grappes, flux lisible par un outil d'analyse). Aucune phase ne passe … [661 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -3781,7 +3783,7 @@ Trois autres points qui découlent de votre définition :
 
 ### Tour 74 — révise tous les documents du dossie docs afin de t'asssurer qu'ils sont cohérent avec la vision Drave
 
-*319 appels d'outils.* Actions notables :
+*320 appels d'outils.* Actions notables :
 
 - bash — Survey the docs folder
 - read
@@ -3797,11 +3799,59 @@ Trois autres points qui découlent de votre définition :
 - list_agents
 - bash — Find docs that never mention lists or clusters
 - bash — Read the openings of the three vision-silent docs
-- … et 234 autres
+- … et 235 autres
 
 **Synthèse produite :**
 
-⏵ Marquage de P0 dans le plan et commit de la première brique de P1.
+⏵ Bloc 1 terminé : docs révisés, P0 commité, P1 amorcé. Bilan.
+
+\## Bloc 1 (10h25 → 12h45) — ce qui est fait
+
+**1. Révision de cohérence des `docs/` avec la vision — terminée et commitée** (`477de44`)
+
+18 documents relus par cinq relectures adverses, puis **84 sites corrigés** dans `docs/` (95 avec `REPRISE.md`), et une **sixième relecture du diff** qui a rattrapé 13 défauts de plus — dont **un faux que j'avais introduit** (« `--config` affiche puits appris sur 36/36 » : `--config` ne charge pas le modèle).
+
+Le fond, qui répond à ta demande : la vision était **muette dans quatre documents** — le format de flux servait trace, rejeu et transport mais pas l'**analyse** (sa 4ᵉ finalité), et les grappes/clusters/transport ne disaient nulle part qu'ils sont le **mécanisme de placement** des neurones. Le reste était de la péremption datée. Rapport : `reports/rapport-coherence-vision.md`.
+
+**2. Deux trouvailles dans le code, corrigées et mesurées**
+- `manques_architecture` rangeait `attn_sinks` dans un manque V4 → `--config` répondait « calculable : NON » pour **gpt-oss**, dont la porte tourne. Corrigé ; `tools/portes.sh` **exécute maintenant la porte gpt-oss** (15,6017 mesurée ce soir par le script).
+- `attn_mla` calculait la remontée `v_b` dans la boucle de scores **pour un résultat jeté**. Delta prédit avant mesure : 662,7 M paires/passe → mesuré **29 224,8 → 27 236,7 M**, exactement la prédiction, perplexité identique. Le chronomètre ne conclut pas (2ᵉ passe chaude), le compteur si.
+
+**3. P0 du plan V4.1 — fait** (`e0328fb`, `reports/rapport-p0-flux.md`)
+
+Le flux se compte par **provenance** (attention / experts / partagé) en **paires**, là où `events` ne voyait que les chemins en listes. GLM-5.3, un jeton : **21,9 G · 30,6 G · 5,6 G — dont 0 en listes**. Autrement dit, sur MLA et sur IQ, Drave ne conduit aucune liste aujourd'hui : c'est le constat qui commande P4/P5.
+
+**4. P1 amorcé** (`b2f48b7`) — cœur des hyper-connexions (`Hc`, Sinkhorn, `melanger`/`retro`) validé contre une référence numpy transcrite des opérations ggml de llama.cpp. La référence s'est trompée la première (transposition de `comb` — dans ggml l'index rapide est la **destination**) ; c'est écrit dans le script.
+
+\## Introspection du bloc
+
+- **Ce qui a payé** : écrire la prédiction *avant* la mesure (le delta de paires est tombé juste au million près, ce qui valide le compteur *et* la suppression) ; faire relire son propre diff par un adversaire.
+- **Ce qui a coûté** : deux passes GLM-5.3 de 1
+… [637 caractères tronqués]
+
+### Tour 75 — <goal_round> Objective: "Exécuter le plan docs/plan-deepseek41-complet.md phase par phase (P0→P9), en autonomie, en resp … [941 caractères tronqués]
+
+*22 appels d'outils.* Actions notables :
+
+- bash — Locate MLA loader and HC absence
+- read
+- bash — Check cfg lookup and V4.1 HC keys
+- bash — Read cfg_ou and JSON helpers
+- edit `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs`
+- bash — Clean dead closure, check Meta::as_f64
+- bash — Read Model struct near mla field
+- bash — Wire HC fields into Model and build
+- bash — Check HC loading on V4-Flash config
+- bash — Find --config implementation
+- bash — Extract hc_params helper and use it
+- bash — Report HC params in --config and verify
+- bash — List x usages in the layer loop
+- bash — Locate the three residual sites
+- … et 5 autres
+
+**Synthèse produite :**
+
+⏵ Commit de P1, puis inventaire exact des tenseurs d'attention de V4-Flash pour P2.
 
 ## 3. Travail accompli
 
@@ -3851,7 +3901,7 @@ Trois autres points qui découlent de votre définition :
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/vision.md` | 1 | 3 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/histoire.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/roadmap.md` | 1 | 0 |
-| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs` | 0 | 9 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs` | 0 | 10 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/main.rs` | 0 | 3 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/gpu.rs` | 0 | 3 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-gpu-topk-selection.md` | 1 | 0 |
@@ -3972,7 +4022,7 @@ Trois autres points qui découlent de votre définition :
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 3665 autres
+- … et 3683 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4100,7 +4150,7 @@ Trois autres points qui découlent de votre définition :
 
 ## 5. Erreurs rencontrées
 
-251 sorties en erreur ou divergentes. Les premières :
+252 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : a8f2635f8 docs: record which models this box is good at, and why src/llama-hparams.cpp:8:void llama_hparams::set_swa_pattern(uint32_t n_pattern, bool dense_first) { src/llama-hparams.h:308:    void se
 - **T1** : 511 tokens notés — perplexité cumulée 247.031  (4.9 tok/s) === perplexité 247.0308 sur 511 tokens (0 événements, 104.5 s) ===  ### B3 harmony assistant 511 --- ref --- 0.0 0.0 0:00 ls: cannot access '
@@ -4444,4 +4494,5 @@ Trois autres points qui découlent de votre définition :
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A drave-core/src/ REPRISE.md reports/rapport-p0-flux.md docs/plan-deepseek41-complet.md reports/r
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF' p='docs/plan-deepseek41-complet.md' s=open(p).read() subs=[ ("""### P0 — Le harnais, s
 - Plan V4.1 : P0 marqué fait, et les hyper-paramètres sont dans le GGUF (\`deepseek41.config\`)" && git log --oneline -2
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A drave-core/src/ && git commit -q -F - <<'EOF' P1 (2/3) : les hyper-connexions sont chargées ET 
 
