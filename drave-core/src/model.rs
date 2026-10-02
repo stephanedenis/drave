@@ -1157,6 +1157,37 @@ pub struct Mla4 {
     pub o_lora: usize,
     pub rope_base: f32,
     pub eps: f32,
+    /// Ratio de compression de la couche (`attention.compress_ratios`) :
+    /// **0** = couche brute (toute la chaîne est celle de P3), **128** = HCA
+    /// (implémenté), **4** = CSA (avec indexeur — P5).
+    pub ratio: usize,
+    /// Base RoPE des couches compressées : `compress_rope_freq_base` (160 000
+    /// pour V4-Flash) au lieu de `rope.freq_base` (10 000). Les deux chemins
+    /// tournent à des bases différentes, et se tromper donne des scores
+    /// plausibles **et faux** dès que la position dépasse 0.
+    pub rope_base_compresse: f32,
+    /// Fenêtre brute des couches compressées (`attention.sliding_window`) : ce
+    /// que l'attention garde en clair, le reste passant par les blocs.
+    pub fenetre: usize,
+    /// Compresseur (`None` sur une couche brute) : `coff·head_dim × h` pour la
+    /// valeur et la porte, `coff·head_dim × ratio` pour l'`ape`, `head_dim` pour
+    /// la norme.
+    pub comp_kv: Vec<f32>,
+    pub comp_gate: Vec<f32>,
+    pub comp_ape: Vec<f32>,
+    pub comp_norm: Vec<f32>,
+}
+
+/// Les quatre tampons du chemin d'attention V4, regroupés : les clés brutes,
+/// l'état du compresseur (valeur et porte de chaque jeton) et les **clés
+/// compressées** (une par bloc complet). Les regrouper évite une signature à
+/// quinze paramètres, et surtout oblige à les passer ENSEMBLE : un cache oublié
+/// ne se voit pas, il donne des clés périmées.
+pub struct EtatV4<'a> {
+    pub cles: &'a mut Vec<f32>,
+    pub comp_kv: &'a mut Vec<f32>,
+    pub comp_gate: &'a mut Vec<f32>,
+    pub cles_comp: &'a mut Vec<f32>,
 }
 
 /// **Hyper-connexions** (DeepSeek-V4 / V4.1) : au lieu d'additionner la sortie
@@ -1860,6 +1891,14 @@ pub struct Model {
     pub flux_brut: bool,
     /// Couches MLA, si le modèle en est un (`attn_kv_a_mqa` présent).
     pub mla: Option<Vec<Mla>>,
+    /// Fichier d'état d'ENTRÉE (`DRAVE_ETAT_ENTREE`) : le résidu du premier
+    /// jeton est lu du disque au lieu de venir de l'embarquement. C'est ce qui
+    /// permet d'exécuter **une seule couche** et de la comparer à la référence
+    /// quand la précédente n'est pas encore implémentée : on part de l'état que
+    /// llama.cpp a produit (`l_last-<k-1>`), et on regarde ce que Drave en fait.
+    /// Le fichier est au format `REF_DUMP` (`REFD`, dimensions, f32) ; la
+    /// position demandée en est extraite.
+    pub etat_entree: Option<String>,
     /// Préfixe de vidage des états de couche (`DRAVE_DUMP_COUCHES`) : après
     /// chaque couche, l'état résiduel est écrit en f32 brut dans
     /// `<préfixe>-<couche>.bin`. C'est le harnais de la porte de correction —
@@ -1871,6 +1910,14 @@ pub struct Model {
     /// Cache de l'attention V4 : une tête latente de `head_dim` par position,
     /// le vecteur déjà tourné (il sert de clé **et** de valeur).
     pub mla4_cache: Vec<Vec<f32>>,
+    /// État du compresseur par couche : la valeur et la porte de chaque jeton,
+    /// `ctx × coff·head_dim`. Elles servent à fabriquer une clé par bloc.
+    pub mla4_comp_kv: Vec<Vec<f32>>,
+    pub mla4_comp_gate: Vec<Vec<f32>>,
+    /// Clés **compressées** : une par bloc complet (`ctx/ratio + 1`), déjà
+    /// normées et tournées. Ce sont des clés d'activation au sens de la vision :
+    /// un bloc est un résumé qu'on peut tracer, compter et transporter.
+    pub mla4_cles_comp: Vec<Vec<f32>>,
     /// **Hyper-connexions** par couche : `(attention, FFN)`. Présentes sur
     /// DeepSeek-V4 / V4.1 (`hc_attn_fn`), absentes partout ailleurs.
     pub hc: Option<Vec<(Hc, Hc)>>,
@@ -2486,16 +2533,26 @@ impl Model {
         // que s'il tombe DANS la plage demandée. On le retire en le disant —
         // jamais en silence, et jamais au-delà de la plage.
         if let (Some((a, b)), true) = (couches, !manques.is_empty()) {
-            let compressees = g.couches_compressees();
-            let dedans: Vec<usize> = compressees.iter().copied()
+            // Ce qui reste non implémenté dans la compression, c'est le chemin
+            // **CSA** (ratio 4 : compresseur à chevauchement + indexeur, P5).
+            // HCA (ratio 128) est fait ; une plage qui ne contient que du HCA
+            // est donc exécutable, et le dire couche par couche vaut mieux
+            // qu'un « compressé / pas compressé » binaire.
+            let ratios = g.couches_ratios();
+            let csa: Vec<usize> = ratios.iter().enumerate()
+                .filter(|(_, r)| **r == 4).map(|(i, _)| i).collect();
+            let dedans: Vec<usize> = csa.iter().copied()
                 .filter(|l| *l >= a && *l < b).collect();
             if dedans.is_empty() {
                 let avant = manques.len();
                 manques.retain(|m| !m.starts_with("attentions compressées"));
                 if manques.len() != avant {
-                    println!("[partiel] couches {a}..{b} : aucune n'a d'attention compressée \
-(les couches compressées sont {:?}) — le manque ne s'applique pas à cette plage, \
-le RESTE du modèle reste non implémenté.", compressees);
+                    let hca: Vec<usize> = ratios.iter().enumerate()
+                        .filter(|(_, r)| **r == 128).map(|(i, _)| i).collect();
+                    println!("[partiel] couches {a}..{b} : aucune n'est CSA (ratio 4, non \
+implémenté) — les couches HCA (ratio 128) de la plage sont calculées par le \
+compresseur, les CSA sont {:?} (HCA : {:?}). Le RESTE du modèle reste non implémenté.",
+                             csa, hca);
                 }
             }
         }
@@ -2592,9 +2649,28 @@ le RESTE du modèle reste non implémenté.", compressees);
                 .and_then(|m| m.as_f64()).map(|v| v as f32)
                 .or_else(|| g.json_nombre("rope_theta").map(|v| v as f32))
                 .unwrap_or(10000.0);
+            let ratios = g.couches_ratios();
+            let base_comp = g.cfg_ou(&["attention.compress_rope_freq_base", "compress_rope_freq_base"])
+                .and_then(|m| m.as_f64()).map(|v| v as f32)
+                .or_else(|| g.json_nombre("compress_rope_theta").map(|v| v as f32))
+                .unwrap_or(base);
+            let fenetre = g.cfg_ou(&["attention.sliding_window", "sliding_window"])
+                .and_then(|m| m.as_u64()).map(|v| v as usize)
+                .or_else(|| g.json_nombre("sliding_window").map(|v| v as usize))
+                .unwrap_or(0);
             let mut v = Vec::with_capacity(cfg.n_layer);
             for l in 0..cfg.n_layer {
                 let p = |s: &str| format!("blk.{l}.{s}");
+                let ratio = ratios.get(l).copied().unwrap_or(0) as usize;
+                // Compresseur : `coff = 2` pour CSA (ratio 4), `1` pour HCA
+                // (ratio 128). La largeur se lit dans le tenseur, pas dans une
+                // constante recopiée : c'est elle qui décide.
+                let (comp_kv, comp_gate, comp_ape, comp_norm) = if ratio != 0 {
+                    (g.dequant(&p("attn_compressor_kv.weight")),
+                     g.dequant(&p("attn_compressor_gate.weight")),
+                     g.dequant(&p("attn_compressor_ape.weight")),
+                     g.dequant(&p("attn_compressor_norm.weight")))
+                } else { (Vec::new(), Vec::new(), Vec::new(), Vec::new()) };
                 v.push(Mla4 {
                     q_a: g.dequant(&p("attn_q_a.weight")),
                     q_a_norm: g.dequant(&p("attn_q_a_norm.weight")),
@@ -2606,6 +2682,8 @@ le RESTE du modèle reste non implémenté.", compressees);
                     sinks: g.dequant_optionnel(&p("attn_sinks.weight")).unwrap_or_default(),
                     nh: cfg.n_head, h: cfg.hidden, head_dim: hd, rope: nr,
                     n_groups, o_lora, rope_base: base, eps: cfg.eps,
+                    ratio, rope_base_compresse: base_comp, fenetre,
+                    comp_kv, comp_gate, comp_ape, comp_norm,
                 });
             }
             let m0 = &v[0];
@@ -2618,6 +2696,19 @@ le RESTE du modèle reste non implémenté.", compressees);
         } else { None };
         let mla4_cache = match mla4.as_ref() {
             Some(v) => v.iter().map(|m| vec![0f32; ctx * m.head_dim]).collect(),
+            None => Vec::new(),
+        };
+        let largeur_comp = |m: &Mla4| m.comp_kv.len() / m.h.max(1);
+        let mla4_comp_kv = match mla4.as_ref() {
+            Some(v) => v.iter().map(|m| vec![0f32; ctx * largeur_comp(m)]).collect(),
+            None => Vec::new(),
+        };
+        let mla4_comp_gate = match mla4.as_ref() {
+            Some(v) => v.iter().map(|m| vec![0f32; ctx * largeur_comp(m)]).collect(),
+            None => Vec::new(),
+        };
+        let mla4_cles_comp = match mla4.as_ref() {
+            Some(v) => v.iter().map(|m| vec![0f32; (ctx / m.ratio.max(1) + 2) * m.head_dim]).collect(),
             None => Vec::new(),
         };
 
@@ -2985,7 +3076,7 @@ mapping {}",
         } else { None };
         Model {
             g, cfg, layers, out_norm, pool,
-            mla4, mla4_cache,
+            mla4, mla4_cache, mla4_comp_kv, mla4_comp_gate, mla4_cles_comp,
             hc, hc_tete,
             kv: caches_kv,
             ctx, events: 0, paires: [0; 3], act_levels: 127.0, act_thresh: 0.0, act_topk: 0, act_renorm: false,
@@ -3014,6 +3105,7 @@ mapping {}",
             normes_tete: None, ordre_normes: None, tete_garantie: None,
             tete_calculees: 0, tete_appels_g: 0,
             sinks_vus, kv_gpu, attn_gpu_part: Vec::new(),
+            etat_entree: std::env::var("DRAVE_ETAT_ENTREE").ok(),
             dump_couches: std::env::var("DRAVE_DUMP_COUCHES").ok(),
             couche_debut: couches.map(|(a, _)| a).unwrap_or(0),
             couche_fin: couches.map(|(_, b)| b).unwrap_or(n_layer_total),
@@ -3613,6 +3705,30 @@ mapping {}",
                 t[i] = a * c - b * s;
                 t[i + half] = b * c + a * s;
             }
+        }
+    }
+
+    /// Lit un état d'entrée : le fichier de llama.cpp (`REFD`, dimensions,
+    /// f32 — la position `pos` est extraite) ou un fichier plat de f32 (celui
+    /// que Drave écrit, une position par fichier).
+    fn lire_etat(chemin: &str, pos: usize) -> Vec<f32> {
+        let b = std::fs::read(chemin).unwrap_or_else(|e|
+            panic!("état d'entrée {chemin} : {e}"));
+        if b.len() >= 24 && &b[0..4] == b"REFD" {
+            let ndim = i32::from_le_bytes(b[4..8].try_into().unwrap()).max(1) as usize;
+            let mut ne = [1i32; 4];
+            for i in 0..ndim.min(4) {
+                ne[i] = i32::from_le_bytes(b[8 + 4 * i..12 + 4 * i].try_into().unwrap());
+            }
+            let (n0, n1, _n2) = (ne[0].max(1) as usize, ne[1].max(1) as usize, ne[2].max(1) as usize);
+            let bloc = n0 * n1;
+            let debut = 24 + pos * bloc * 4;
+            assert!(debut + bloc * 4 <= b.len(),
+                    "état d'entrée {chemin} : position {pos} hors du tenseur {:?}", ne);
+            b[debut..debut + bloc * 4].chunks_exact(4)
+                .map(|c| f32::from_le_bytes(c.try_into().unwrap())).collect()
+        } else {
+            b.chunks_exact(4).map(|c| f32::from_le_bytes(c.try_into().unwrap())).collect()
         }
     }
 
@@ -4428,12 +4544,20 @@ s'applique pas — utilisez --lot 1, ou réenregistrez sans DRAVE_TRACE_BLOCS");
     /// ici) ; `sinks` sont les logits appris ajoutés au **dénominateur** du
     /// softmax, comme le fait `ggml_soft_max_add_sinks`.
     #[allow(clippy::too_many_arguments)]
-    fn attn_v4(m: &Mla4, cache: &mut Vec<f32>, x: &[f32], pos: usize, att: &mut [f32],
+    fn attn_v4(m: &Mla4, etat: &mut EtatV4, x: &[f32], pos: usize, att: &mut [f32],
                paires: &mut u64, dump: Option<&str>, l: usize) {
+        if m.ratio == 4 {
+            panic!("couche CSA (ratio 4) : le compresseur à chevauchement et \
+l'indexeur ne sont pas implémentés (P5) — la couche 3 (HCA, ratio 128) l'est");
+        }
         let (nh, hd, nr) = (m.nh, m.head_dim, m.rope);
         let nope = hd - nr;
         let h = m.h;
         let n = pos + 1;
+        // Les couches compressées tournent à `compress_rope_freq_base`
+        // (160 000) ; les couches brutes à `rope.freq_base` (10 000). Deux
+        // régimes, deux bases — et le même `rope_norm` des deux côtés.
+        let base_rope = if m.ratio != 0 { m.rope_base_compresse } else { m.rope_base };
         // --- requête : descente, norme, remontée, norme PAR TÊTE sans poids
         let mut qr = vec![0f32; m.q_a.len() / h];
         matvec_f32(&m.q_a, x, h, qr.len(), &mut qr);
@@ -4460,7 +4584,7 @@ s'applique pas — utilisez --lot 1, ou réenregistrez sans DRAVE_TRACE_BLOCS");
                 qp[hh * nr..(hh + 1) * nr]
                     .copy_from_slice(&q[hh * hd + nope..(hh + 1) * hd]);
             }
-            Self::rope_norm(&mut qp, nh, nr, pos, m.rope_base, nr, false);
+            Self::rope_norm(&mut qp, nh, nr, pos, base_rope, nr, false);
             for hh in 0..nh {
                 q[hh * hd + nope..(hh + 1) * hd].copy_from_slice(&qp[hh * nr..(hh + 1) * nr]);
             }
@@ -4473,24 +4597,96 @@ s'applique pas — utilisez --lot 1, ou réenregistrez sans DRAVE_TRACE_BLOCS");
         {
             let mut kp = vec![0f32; nr];
             kp.copy_from_slice(&kvn[nope..]);
-            Self::rope_norm(&mut kp, 1, nr, pos, m.rope_base, nr, false);
+            Self::rope_norm(&mut kp, 1, nr, pos, base_rope, nr, false);
             kvn[nope..].copy_from_slice(&kp);
         }
         Self::vider_couche(dump, "kv_norm", l, pos, &kvn);
+        Self::vider_couche(dump, "q_rope", l, pos, &q);
+        Self::vider_couche(dump, "kv_rope", l, pos, &kvn);
+        // ---- compresseur : la valeur et la porte de CE jeton, puis un bloc
+        // s'il est complet. Un bloc = un résumé de `ratio` jetons, obtenu par
+        // un softmax **par canal** sur les portes (avec l'`ape` du rang dans le
+        // bloc), suivi de la norme et d'une rotation à la position du PREMIER
+        // jeton du bloc.
+        let n_vis = if m.ratio > 0 { (pos + 1) / m.ratio } else { 0 };
+        if m.ratio > 0 {
+            let coff_hd = m.comp_kv.len() / h.max(1);
+            matvec_f32(&m.comp_kv, x, h, coff_hd, &mut etat.comp_kv[pos * coff_hd..(pos + 1) * coff_hd]);
+            matvec_f32(&m.comp_gate, x, h, coff_hd, &mut etat.comp_gate[pos * coff_hd..(pos + 1) * coff_hd]);
+            let sp = pos % m.ratio;
+            for c in 0..coff_hd {
+                etat.comp_gate[pos * coff_hd + c] += m.comp_ape[sp * coff_hd + c];
+            }
+            *paires += (m.comp_kv.len() + m.comp_gate.len()) as u64;
+            if (pos + 1) % m.ratio == 0 {
+                let bloc = pos / m.ratio;
+                let debut = pos + 1 - m.ratio;
+                let (portes, valeurs, cles) = (&etat.comp_gate, &etat.comp_kv, &mut etat.cles_comp);
+                for c in 0..hd {
+                    let mut mx = f32::NEG_INFINITY;
+                    for t in debut..=pos {
+                        let sc = portes[t * coff_hd + c];
+                        if sc > mx { mx = sc; }
+                    }
+                    let mut somme = 0f32;
+                    for t in debut..=pos { somme += (portes[t * coff_hd + c] - mx).exp(); }
+                    let inv = if somme > 0.0 { 1.0 / somme } else { 0.0 };
+                    let mut acc = 0f32;
+                    for t in debut..=pos {
+                        let w = (portes[t * coff_hd + c] - mx).exp() * inv;
+                        acc += w * valeurs[t * coff_hd + c];
+                    }
+                    cles[bloc * hd + c] = acc;
+                }
+                // norme RMS du bloc, puis rotation de sa partie rope
+                let mut norm = vec![0f32; hd];
+                Self::rmsnorm(&cles[bloc * hd..(bloc + 1) * hd], &m.comp_norm, m.eps, &mut norm);
+                {
+                    let mut kp = vec![0f32; nr];
+                    kp.copy_from_slice(&norm[nope..]);
+                    Self::rope_norm(&mut kp, 1, nr, debut, base_rope, nr, false);
+                    norm[nope..].copy_from_slice(&kp);
+                }
+                cles[bloc * hd..(bloc + 1) * hd].copy_from_slice(&norm);
+                *paires += (hd as u64) * (m.ratio as u64) * 2;
+            }
+        }
+        // Ce que l'attention voit en clair : la fenêtre des derniers jetons
+        // (`attention.sliding_window`), le reste étant résumé en blocs.
+        let debut_fenetre = if m.fenetre > 0 && n > m.fenetre { n - m.fenetre } else { 0 };
         *paires += (m.q_a.len() + m.q_b.len() + m.kv.len()) as u64;
-        cache[pos * hd..(pos + 1) * hd].copy_from_slice(&kvn);
-        // --- scores : `1/sqrt(head_dim)`, puits appris dans le dénominateur
+        {
+            let cache = &mut etat.cles;
+            cache[pos * hd..(pos + 1) * hd].copy_from_slice(&kvn);
+        }
+        // --- scores : `1/sqrt(head_dim)`, puits appris dans le dénominateur.
+        //
+        // Les clés sont de DEUX sortes, dans cet ordre : la fenêtre brute (les
+        // derniers jetons en clair) puis les **blocs compressés** complets. Le
+        // masque est celui de la référence : un jeton voit les jetons de sa
+        // fenêtre et tous les blocs entièrement révolus — `n_visible =
+        // (pos + 1) / ratio`, ce qui est exactement « un bloc n'est visible
+        // qu'une fois complet » (`llama-kv-cache-dsv4.cpp`).
         let scale = 1.0 / (hd as f32).sqrt();
-        *paires += (nh as u64) * (n as u64) * (hd as u64);
+        let n_clair = n - debut_fenetre;
+        *paires += (nh as u64) * ((n_clair + n_vis) as u64) * (hd as u64);
         let mut sortie = vec![0f32; nh * hd];
-        let mut sc = vec![0f32; n + 1];
+        let n_cles = n_clair + n_vis + 1;
+        let mut sc = vec![0f32; n_cles];
+        let cles_comp = &etat.cles_comp;
         for hh in 0..nh {
             let qh = &q[hh * hd..(hh + 1) * hd];
-            for t in 0..n {
-                let kt = &cache[t * hd..(t + 1) * hd];
+            for t in debut_fenetre..n {
+                let kt = &etat.cles[t * hd..(t + 1) * hd];
                 let mut s = 0f32;
                 for i in 0..hd { s += qh[i] * kt[i]; }
-                sc[t] = s * scale;
+                sc[t - debut_fenetre] = s * scale;
+            }
+            for b in 0..n_vis {
+                let kt = &cles_comp[b * hd..(b + 1) * hd];
+                let mut s = 0f32;
+                for i in 0..hd { s += qh[i] * kt[i]; }
+                sc[n_clair + b] = s * scale;
             }
             // le puits : un logit appris, présent dans la somme du softmax mais
             // sans valeur associée — c'est ce qui « draine » l'attention.
@@ -4502,20 +4698,27 @@ s'applique pas — utilisez --lot 1, ou réenregistrez sans DRAVE_TRACE_BLOCS");
             // sortie dès la position 0 (où l'attention est triviale), ce qui a
             // mis la puce à l'oreille : un écart qui n'attend pas la longueur.
             let puits = m.sinks.get(hh).copied().unwrap_or(0.0);
-            sc[n] = puits;
+            sc[n_clair + n_vis] = puits;
             let mut mx = f32::NEG_INFINITY;
             for &v in sc.iter() { if v > mx { mx = v; } }
             let mut somme = 0f32;
             for v in sc.iter_mut() { let e = (*v - mx).exp(); *v = e; somme += e; }
             let inv = if somme > 0.0 { 1.0 / somme } else { 0.0 };
             let out = &mut sortie[hh * hd..(hh + 1) * hd];
-            for t in 0..n {
-                let w = sc[t] * inv;
+            for t in debut_fenetre..n {
+                let w = sc[t - debut_fenetre] * inv;
                 if w == 0.0 { continue; }
-                let kt = &cache[t * hd..(t + 1) * hd];
+                let kt = &etat.cles[t * hd..(t + 1) * hd];
+                for i in 0..hd { out[i] += w * kt[i]; }
+            }
+            for b in 0..n_vis {
+                let w = sc[n_clair + b] * inv;
+                if w == 0.0 { continue; }
+                let kt = &cles_comp[b * hd..(b + 1) * hd];
                 for i in 0..hd { out[i] += w * kt[i]; }
             }
         }
+        Self::vider_couche(dump, "attn_brut", l, pos, &sortie);
         // --- dé-rotation de la partie rope, par tête
         {
             let mut op = vec![0f32; nh * nr];
@@ -4523,7 +4726,13 @@ s'applique pas — utilisez --lot 1, ou réenregistrez sans DRAVE_TRACE_BLOCS");
                 op[hh * nr..(hh + 1) * nr]
                     .copy_from_slice(&sortie[hh * hd + nope..(hh + 1) * hd]);
             }
-            Self::rope_norm(&mut op, nh, nr, pos, m.rope_base, nr, true);
+            // `base_rope` et non `m.rope_base` : la dé-rotation doit être
+            // l'inverse EXACTE de la rotation appliquée à `q` et `kv`, sinon on
+            // « dé-tourne » d'un angle qui n'a jamais été appliqué. C'est le
+            // bug qui a coûté le plus cher à voir : les 448 dimensions nope
+            // étaient justes à 0,4 %, les 64 dimensions rope fausses de 10 %,
+            // et la corrélation globale (0,996) restait « plausible ».
+            Self::rope_norm(&mut op, nh, nr, pos, base_rope, nr, true);
             for hh in 0..nh {
                 sortie[hh * hd + nope..(hh + 1) * hd]
                     .copy_from_slice(&op[hh * nr..(hh + 1) * nr]);
@@ -4697,9 +4906,16 @@ s'applique pas — utilisez --lot 1, ou réenregistrez sans DRAVE_TRACE_BLOCS");
         // Injection : un vecteur imposé (embedding d'image) remplace la ligne
         // `token_embd` pour cet appel, et seulement pour lui — c'est le seul
         // ajout d'architecture que la vision demande au moteur.
-        let mut x = match emb_imposee.take() {
-            Some(v) => v,
-            None => g.row_f32("token_embd.weight", tok as usize, h),
+        let mut x = match self.etat_entree.as_ref() {
+            // État d'entrée imposé : on démarre la boucle de couches avec le
+            // résidu d'un AUTRE moteur, à la position demandée. Le fichier est
+            // celui de llama.cpp (`REFD`) ; un fichier plat de f32 est accepté
+            // aussi, parce que c'est ce que Drave écrit.
+            Some(chemin) => Self::lire_etat(chemin, pos),
+            None => match emb_imposee.take() {
+                Some(v) => v,
+                None => g.row_f32("token_embd.weight", tok as usize, h),
+            },
         };
         // Hyper-connexions : l'état résiduel naît en `hc` copies IDENTIQUES de
         // l'embarquement (la référence fait `ggml_repeat_4d(inp, n_embd, hc)`),
@@ -4821,7 +5037,13 @@ dynamique de {dyn_:.3e} (relatif {:.2e})", mx / dyn_.max(1e-9));
                 // chemins. Passer `xin` donnait une corrélation de 0,9986 —
                 // « presque juste », le pire des écarts parce qu'il ne se voit
                 // pas sur un coup d'œil.
-                Self::attn_v4(m4, &mut self.mla4_cache[l], &hn, pos, &mut att,
+                let mut etat = EtatV4 {
+                    cles: &mut self.mla4_cache[l],
+                    comp_kv: &mut self.mla4_comp_kv[l],
+                    comp_gate: &mut self.mla4_comp_gate[l],
+                    cles_comp: &mut self.mla4_cles_comp[l],
+                };
+                Self::attn_v4(m4, &mut etat, &hn, pos, &mut att,
                               &mut paires[0], self.dump_couches.as_deref(), l);
             } else if let Some(m) = self.mla.as_ref().map(|v| &v[l]) {
                 Self::attn_mla(m, &mut self.mla_cache[l], &hn, pos, cfg.rope_base, &mut att,
@@ -6317,6 +6539,34 @@ mod tests_hc {
         let mut sortie = vec![0f32; 12];
         Hc::retro(&Y, &X, &s, 4, 3, &mut sortie);
         proche(&sortie, &SORTIE, 1e-6, "copies de sortie");
+    }
+
+    /// **La rotation doit être réversible**, dans les deux conventions et pour
+    /// toutes les bases : `rope_norm(forward)` puis `rope_norm(inverse)` doit
+    /// redonner le vecteur d'origine. C'est l'invariant qui manquait le 02/10 :
+    /// la dé-rotation d'une couche compressée utilisait la base des couches
+    /// brutes, et 64 dimensions sur 512 étaient fausses de 10 % pendant que les
+    /// 448 autres restaient justes à 0,4 % — une corrélation de 0,996, donc
+    /// « plausible ». Un test de 6 lignes l'aurait dit.
+    #[test]
+    fn rotation_reversible_dans_les_deux_conventions() {
+        for base in [10_000.0f32, 160_000.0] {
+            for pos in [0usize, 1, 3, 37, 131] {
+                let origine: Vec<f32> = (0..64).map(|i| ((i * 7 % 13) as f32) - 6.0).collect();
+                let mut v = origine.clone();
+                Model::rope_norm(&mut v, 2, 32, pos, base, 32, false);
+                // À la position 0 la rotation est l'IDENTITÉ (angle nul) : c'est
+                // précisément pour ça que le bug de base ne se voyait pas à la
+                // position 0 et apparaissait à la position 1.
+                assert_eq!(v != origine, pos > 0,
+                           "rotation identité attendue à la position 0 (pos {pos}, base {base})");
+                Model::rope_norm(&mut v, 2, 32, pos, base, 32, true);
+                for (a, b) in v.iter().zip(origine.iter()) {
+                    assert!((a - b).abs() < 1e-4,
+                            "aller-retour rope_norm : {a} contre {b} (pos {pos}, base {base})");
+                }
+            }
+        }
     }
 
     /// Le cas dégénéré doit redonner le résidu ordinaire : si `pre` vaut 1 sur

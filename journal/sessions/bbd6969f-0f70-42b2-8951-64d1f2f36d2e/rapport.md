@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 93.4 h |
-| Tours | 75 |
-| Messages | 4651 |
-| Appels d'outils | 4439 |
-| Fichiers touchés | 92 |
-| Commandes | 3830 |
+| Durée | 93.9 h |
+| Tours | 76 |
+| Messages | 4708 |
+| Appels d'outils | 4493 |
+| Fichiers touchés | 93 |
+| Commandes | 3882 |
 | Sous-agents | 28 |
-| Commits | 330 |
+| Commits | 331 |
 | Compactages de contexte | 6 |
 
 ## Objectifs déclarés
@@ -193,6 +193,8 @@
 **Tour 74** — révise tous les documents du dossie docs afin de t'asssurer qu'ils sont cohérent avec la vision Drave
 
 **Tour 75** — <goal_round> Objective: "Exécuter le plan docs/plan-deepseek41-complet.md phase par phase (P0→P9), en autonomie, en respectant pour chaque phase ses deux portes : porte de correction (comparaison étage par étage à llama.cpp sur V4-Flash) et porte Drave (flux : événements/paires par jeton, trace rejouée à l'identique, découpage en grappes, flux lisible par un outil d'analyse). Aucune phase ne passe … [661 caractères tronqués]
+
+**Tour 76** — <goal_round> Objective: "Exécuter le plan docs/plan-deepseek41-complet.md phase par phase (P0→P9), en autonomie, en respectant pour chaque phase ses deux portes : porte de correction (comparaison étage par étage à llama.cpp sur V4-Flash) et porte Drave (flux : événements/paires par jeton, trace rejouée à l'identique, découpage en grappes, flux lisible par un outil d'analyse). Aucune phase ne passe … [661 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -3831,7 +3833,7 @@ Le flux se compte par **provenance** (attention / experts / partagé) en **paire
 
 ### Tour 75 — <goal_round> Objective: "Exécuter le plan docs/plan-deepseek41-complet.md phase par phase (P0→P9), en autonomie, en resp … [941 caractères tronqués]
 
-*139 appels d'outils.* Actions notables :
+*141 appels d'outils.* Actions notables :
 
 - bash — Locate MLA loader and HC absence
 - read
@@ -3847,11 +3849,64 @@ Le flux se compte par **provenance** (attention / experts / partagé) en **paire
 - bash — Report HC params in --config and verify
 - bash — List x usages in the layer loop
 - bash — Locate the three residual sites
-- … et 117 autres
+- … et 118 autres
 
 **Synthèse produite :**
 
-⏵ Mise à jour de REPRISE (nouveaux chemins, variables et outils) pendant que les portes tournent.
+⏵ Round terminé : P0→P3 franchies, portes vertes. Bilan.
+
+\## Ce qui a été fait dans ce round
+
+**P0 — le flux se compte par provenance** (`e0328fb`, `reports/rapport-p0-flux.md`)
+
+Les chemins MLA et experts-IQ annonçaient « 0 événement » alors qu'ils calculent des dizaines de milliards de produits. `Model::paires` compte maintenant ce qui est **payé**, par provenance. GLM-5.3, un jeton : **21,9 G (attention) · 30,6 G (experts) · 5,6 G (partagé)** — et **0 en listes**. Vérifié analytiquement sur Qwen (44,2 M = 24 × (wq+wk+wv+wo) à la main). Au passage : un calcul mort dans `attn_mla` (la remontée `v_b` jetée), delta **prédit avant mesure** 662,7 M/passe → mesuré **1 988,1 M**, perplexité identique.
+
+**P1 — hyper-connexions** (`b2f48b7`, `28ed9a1`)
+
+`Hc` (24 mélanges, Sinkhorn 20 itérations, `pre`/`post`/`comb`), hyper-paramètres lus des **deux** sources (clés GGUF pour V4-Flash, `deepseek41.config` pour V4.1), câblé dans la passe avant. **Validé contre llama.cpp : `hc_attn_pre` à 1e-7.**
+
+**P2/P3 — le troisième chemin d'attention, et la porte de correction** (`567d3b3`, `ae2e9ac`, `47a859d`)
+
+V4 n'a ni `attn_kv_a_mqa` ni `k_b`/`v_b` : c'est une autre architecture. Implémentée d'après `deepseek4.cpp`, puis **comparée étage par étage** aux couches 0-1 de V4-Flash :
+
+| | corrélation | écart |
+|---|---|---|
+| `hc_attn_pre` | 1,000000 | **1,5e-8** |
+| `attn_derope` | **0,999996** | 1,9e-2 |
+| `l_last` | 0,9998–0,99996 | 1,7e-2 |
+
+L'écart résiduel est du **bruit** (49,5 % de signes positifs, plat en position) : llama.cpp quantifie ses activations, Drave déquantifie exactement.
+
+**Trois bugs, tous trouvés par cette comparaison** : l'attention recevait le mélange **avant** `attn_norm` (0,99866 → 0,999993) ; le puits appris était **mis à l'échelle** alors que la référence l'ajoute brut (d'où une divergence dès la position 0, où l'attention est triviale) ; et V4 est en RoPE **NORM** (paires 2i, 2i+1), pas NEOX comme GLM/Kimi — les deux coïncident à la position 0 et divergent de 30 % à la position 1.
+
+**Deux faux « calculable » corrigés** : `attention.compress_ratios` et `attention.indexer.top_k` étaient lus sous de mauvais noms — le moteur ne voyait pas que **41 des 44 couches** de V4-Flash sont compressées. Un nouvel outil (`tools/lire_meta_gguf.py`) rend ces vérifications possibles, et `--config` affiche désormais les ratios.
+
+**La porte cachait un échec** : `≥ 48 verts` laissait passer un « 51 passed; 1 failed ». `tools/portes.sh` vérifie maintenant le compte d'éch
+… [999 caractères tronqués]
+
+### Tour 76 — <goal_round> Objective: "Exécuter le plan docs/plan-deepseek41-complet.md phase par phase (P0→P9), en autonomie, en resp … [941 caractères tronqués]
+
+*52 appels d'outils.* Actions notables :
+
+- bash — Check state and list compressed-layer tensors
+- bash — Compare HCA layer 3 and CSA layer 4 tensors
+- bash — Read compressor tensor creation
+- bash — Read HCA attention builder
+- bash — Read HCA compression function fully
+- bash — Find HCA mask construction
+- bash — Find HCA input structure
+- bash — Read the comp_input structure
+- bash — Find HCA input setup
+- bash — Read the compressed-input builder (mask)
+- bash — Find the comp mask fill logic
+- bash — Read the comp plan (state_pos, n_visible)
+- bash — Confirm block rope positions
+- bash — Read V4-Flash rope parameters
+- … et 38 autres
+
+**Synthèse produite :**
+
+⏵ P4 franchie : le compresseur HCA est validé (0,999992) au premier bloc complet. Rapport et commit.
 
 ## 3. Travail accompli
 
@@ -3951,6 +4006,7 @@ Le flux se compte par **provenance** (attention / experts / partagé) en **paire
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/lire_meta_gguf.py` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/compare_etats.py` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-v4-couches-0-1.md` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-v4-hca.md` | 1 | 0 |
 
 ### Sous-agents lancés
 
@@ -4025,7 +4081,7 @@ Le flux se compte par **provenance** (attention / experts / partagé) en **paire
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 3790 autres
+- … et 3842 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4153,7 +4209,7 @@ Le flux se compte par **provenance** (attention / experts / partagé) en **paire
 
 ## 5. Erreurs rencontrées
 
-257 sorties en erreur ou divergentes. Les premières :
+260 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : a8f2635f8 docs: record which models this box is good at, and why src/llama-hparams.cpp:8:void llama_hparams::set_swa_pattern(uint32_t n_pattern, bool dense_first) { src/llama-hparams.h:308:    void se
 - **T1** : 511 tokens notés — perplexité cumulée 247.031  (4.9 tok/s) === perplexité 247.0308 sur 511 tokens (0 événements, 104.5 s) ===  ### B3 harmony assistant 511 --- ref --- 0.0 0.0 0:00 ls: cannot access '
@@ -4503,4 +4559,5 @@ Le flux se compte par **provenance** (attention / experts / partagé) en **paire
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A drave-core/src/ tools/ docs/ 2>/dev/null; git commit -q -F - <<'EOF' P2/P3 : le harnais de comp
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF' p='docs/plan-deepseek41-complet.md' s=open(p).read() subs=[ ("""### P1 — Hyper-connexi
 - REPRISE : les trois chemins d'attention, les hyper-connexions, l'exécution bornée et les outils de comparaison" && git log --oneline -3
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A drave-core/src/ tools/ reports/ docs/ REPRISE.md && git commit -q -F - <<'EOF' P4 : le compress
 

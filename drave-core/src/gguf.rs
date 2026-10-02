@@ -889,6 +889,13 @@ zéro, l'inventaire sera sous-évalué", t.ttype, t.name);
         cles.iter().find_map(|c| self.cfg(c))
     }
 
+    /// Les ratios de compression, **couche par couche** (0 = brute).
+    pub fn couches_ratios(&self) -> Vec<i64> {
+        self.cfg_ou(&["attention.compress_ratios", "compress_ratios"])
+            .and_then(|m| m.as_liste_i64())
+            .unwrap_or_default()
+    }
+
     /// **Quelles couches ont une attention compressée** (`attention.compress_ratios`
     /// ≠ 0). C'est ce qui décide si une exécution BORNÉE est légitime : les
     /// couches 0 et 1 de V4-Flash n'en ont pas, donc on peut les exécuter —

@@ -223,6 +223,19 @@ Une phase qui ne passe pas ses deux portes ne passe pas à la suivante.
 - **Porte Drave** : `--trace-flux` sur ces deux couches, puis `--flux-forcer` :
   perplexité **identique**. Et un premier chiffre d'événements par neurone actif.
 
+### P4 — Compresseur et HCA : le premier flux qui n'existe nulle part (≈ ½ journée) — **HCA FAIT** (02/10)
+
+> Le compresseur HCA (ratio 128) est implémenté et **validé contre llama.cpp** :
+> corrélation **0,999992** sur `attn_derope` au 128ᵉ jeton, donc au **premier
+> bloc compressé complet** (`reports/rapport-v4-hca.md`). Le softmax par canal,
+> l'`ape` de rang dans le bloc, la norme, le RoPE de bloc (à la position de son
+> premier jeton) et la concaténation fenêtre + blocs concordent. Quatrième bug
+> trouvé par la comparaison : la **dé-rotation** utilisait la base RoPE des
+> couches brutes (10 000) au lieu de la base compressée (160 000) — invisible
+> dans la corrélation globale (0,996) et localisé en séparant nope et rope.
+> **Reste pour P5** : le CSA (ratio 4), son compresseur à chevauchement, son
+> indexeur et le masque top-k.
+
 ### P4 — Compresseur et HCA : le premier flux qui n'existe nulle part (≈ ½ journée)
 
 - `attn_compressor_kv` + `attn_compressor_norm` (+ `_ape`, `_gate` sur V4-Flash).

@@ -106,6 +106,8 @@ Un garde-fou le détecte maintenant (identifiant ≥ vocabulaire = erreur franch
 | Trois attentions | dense (Qwen/gpt-oss), MLA latente (GLM/Kimi, `attn_kv_a_mqa`), **MLA V4** (`attn_kv`, une tête normée en entier, seconde RMS par tête, valeurs = clés, dé-rotation, sortie groupée `attn_output_a/b`) |
 | Hyper-connexions | DeepSeek-V4/V4.1 : résidu en `hc` copies (4), mélanges `pre`/`post`/`comb` par couche, **Sinkhorn** (20 itérations), mélange de tête optionnel. Validé contre llama.cpp à **1e-7** (`reports/rapport-v4-couches-0-1.md`) |
 | Exécution bornée | `--couches a:b` : exécute une plage de couches pour comparer à la référence avant que le reste du modèle existe. Le manque retiré est **annoncé**, jamais silencieux |
+| États injectés | `DRAVE_ETAT_ENTREE=<fichier REFD>` : démarre la boucle de couches avec le résidu qu'a produit **llama.cpp** (`l_last-<k-1>`), pour valider **une seule couche** quand la précédente n'est pas encore implémentée |
+| Attention V4 compressée | **HCA** (ratio 128) faite et validée : valeur + porte par jeton, `ape` de rang, softmax **par canal** sur les 128 jetons du bloc, norme, RoPE de bloc (base 160 000, position du premier jeton), puis fenêtre brute + blocs complets (`n_visible = (pos+1)/ratio`). **CSA** (ratio 4) refusé explicitement (P5) |
 | Tête de sortie | `output.weight` si non lié (bug corrigé), sinon `token_embd` |
 | Tokenizers | Qwen2 **et** o200k (gpt-4o), tous deux lus du GGUF, sélectionnés par `tokenizer.ggml.pre` |
 | Échantillonnage | température, top-k 40, top-p, **pénalité de répétition** (`--rep-penalty`, fenêtre `--hist`) |
