@@ -74834,3 +74834,44 @@ test result: ok. 52 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; fin
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='docs/plan-deepseek41-complet.md'\ns=open(p).read()\nsubs=[\n(\"\"\"### P1 — Hyper-connexions : les connexions pondérées (≈ ½ journée)\"\"\",\n \"\"\"### P1 — Hyper-connexions : les connexions pondérées (≈ ½ jo … [3758 caractères tronqués]`
+
+  ```
+ok
+47a859d P2/P3 : V4-Flash concorde avec llama.cpp sur les couches 0 et 1
+  ```
+
+### 🤖 Assistant
+
+⏵ Campagne de portes complète (formats + gpt-oss) sur l'arbre final, en arrière-plan.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && bash tools/portes.sh 2>&1 | tail -16", "description": "Full gate suite on the final tree", "run_in_background": true, "timeoutMs": 5400000}`
+
+  ```
+started background job bash-140
+  ```
+
+- **get_goal** `{}`
+
+  ```
+{"goal":{"id":"goal-87d1ebcb-3cbb-43a1-845f-1e93df13d949","revision":1,"objective":"Exécuter le plan docs/plan-deepseek41-complet.md phase par phase (P0→P9), en autonomie, en respectant pour chaque phase ses deux portes : porte de correction (comparaison étage par étage à llama.cpp sur V4-Flash) et porte Drave (flux : événements/paires par jeton, trace rejouée à l'identique, découpage en grappes, flux lisible par un outil d'analyse). Aucune phase ne passe à la suivante sans ses deux portes. Jamais de forward muet, jamais d'optimisation qui change une sortie sans le dire.","phase":"active","roundsStarted":1,"maxGoalRounds":30},"activation":"armed"}
+  ```
+
+### 🤖 Assistant
+
+⏵ Mise à jour de REPRISE (nouveaux chemins, variables et outils) pendant que les portes tournent.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='REPRISE.md'\ns=open(p).read()\nsubs=[\n# --- §3 : les trois chemins d'attention + hyper-connexions\n(\"\"\"| Architectures | q/k-norm (Qwen3), `post_attention_norm` (gpt-oss), sinks appris, fenêtre glissante,  … [1655 caractères tronqués]`
+
+  ```
+ok
+REPRISE.md:269:| `DRAVE_DUMP_COUCHES=<préfixe>` | écrit en f32 brut l'état résiduel et les intermédiaires (`hc_attn_pre`, `qr`, `qr_norm`, `q_norm`, `kv_norm`, `attn_derope`, `attn_out`, `l_last`), **par couche et par position** — à comparer avec `REF_DUMP` de `tools/ref_logits` via `tools/compare_etats.py` |
+  ```
+
+- **job_output** `{"job_id": "bash-140", "timeout_ms": 900000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A REPRISE.md && git commit -q -m \"REPRISE : les trois chemins d'attention, les hyper-connexions, l'exécution bornée et les outils de comparaison\" && git log --oneline -3", "description": "Commit REPRISE update"}`

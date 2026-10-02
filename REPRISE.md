@@ -102,7 +102,10 @@ Un garde-fou le détecte maintenant (identifiant ≥ vocabulaire = erreur franch
 |---|---|
 | Formats lus **en place** | Q4_K, Q6_K, Q4_0, Q8_0, MXFP4, F16, F32 |
 | MoE | routeur + biais de routeur, biais par expert, top-k, expert partagé, tranches contiguës |
-| Architectures | q/k-norm (Qwen3), `post_attention_norm` (gpt-oss), sinks appris, fenêtre glissante, YaRN (défaut **off**), RoPE simple et partiel, `head_dim` déclaré |
+| Architectures | q/k-norm (Qwen3), `post_attention_norm` (gpt-oss), sinks appris, fenêtre glissante, YaRN (défaut **off**), RoPE simple et partiel (conventions **NEOX** et **NORM**), `head_dim` déclaré |
+| Trois attentions | dense (Qwen/gpt-oss), MLA latente (GLM/Kimi, `attn_kv_a_mqa`), **MLA V4** (`attn_kv`, une tête normée en entier, seconde RMS par tête, valeurs = clés, dé-rotation, sortie groupée `attn_output_a/b`) |
+| Hyper-connexions | DeepSeek-V4/V4.1 : résidu en `hc` copies (4), mélanges `pre`/`post`/`comb` par couche, **Sinkhorn** (20 itérations), mélange de tête optionnel. Validé contre llama.cpp à **1e-7** (`reports/rapport-v4-couches-0-1.md`) |
+| Exécution bornée | `--couches a:b` : exécute une plage de couches pour comparer à la référence avant que le reste du modèle existe. Le manque retiré est **annoncé**, jamais silencieux |
 | Tête de sortie | `output.weight` si non lié (bug corrigé), sinon `token_embd` |
 | Tokenizers | Qwen2 **et** o200k (gpt-4o), tous deux lus du GGUF, sélectionnés par `tokenizer.ggml.pre` |
 | Échantillonnage | température, top-k 40, top-p, **pénalité de répétition** (`--rep-penalty`, fenêtre `--hist`) |
@@ -263,6 +266,7 @@ qui reste est classé par rentabilité mesurée.
 | `DRAVE_KV_K_F32=1` | garde les CLÉS en f32 (valeurs quantifiées) | mesuré : à 8 192, **64 %** de la taille f32 (5,125 octets par élément, échelles comprises) pour +0,023 %, contre +3,04 % pour l'int8 complet (28 % de la taille) — l'écart int8 vient des clés à 99 % (`reports/rapport-attribution-kv.md`) |
 | `DRAVE_KV_V_F32=1` | garde les VALEURS en f32 | +3,01 % : ne sert à rien, l'erreur ne passe pas par là |
 | `DRAVE_KV_K_F16=1` | clés en **f16** (2 octets/valeur, précision relative) | **le meilleur réglage mesuré** : à 8 192 jetons, clés f16 + valeurs int8 = **+0,018 %** pour **39 % de la taille f32** — contre +0,023 % pour les clés f32 (64 % de la taille) et +3,04 % pour l'int8 complet (28 %) |
+| `DRAVE_DUMP_COUCHES=<préfixe>` | écrit en f32 brut l'état résiduel et les intermédiaires (`hc_attn_pre`, `qr`, `qr_norm`, `q_norm`, `kv_norm`, `attn_derope`, `attn_out`, `l_last`), **par couche et par position** — à comparer avec `REF_DUMP` de `tools/ref_logits` via `tools/compare_etats.py` |
 | `DRAVE_TRACE_BLOCS=1` | trace DRVF **v3** : valeurs i8, échelle f16 par bloc de 32 | 45 079 930 o contre 66 370 408 en v2 (−32 %), rejeu 19,4029 contre 19,3885 (+0,074 %) |
 | `DRAVE_FLUX_VERIF=1` | vérifie l'écart entre l'activation calculée et celle que la trace impose | 1,5e-5 en v2 ; **muet dès que `--lot > 1`** (le rejeu par lots passe par `flux_lot`) |
 | `DRAVE_HARMONY_TRACE=1` | trace les fenêtres du découpage « harmony » (gpt-oss) | diagnostic |

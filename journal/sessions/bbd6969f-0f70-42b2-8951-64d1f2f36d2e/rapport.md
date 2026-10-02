@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 93.2 h |
+| Durée | 93.4 h |
 | Tours | 75 |
-| Messages | 4646 |
-| Appels d'outils | 4434 |
+| Messages | 4651 |
+| Appels d'outils | 4439 |
 | Fichiers touchés | 92 |
-| Commandes | 3827 |
+| Commandes | 3830 |
 | Sous-agents | 28 |
-| Commits | 329 |
+| Commits | 330 |
 | Compactages de contexte | 6 |
 
 ## Objectifs déclarés
@@ -3831,7 +3831,7 @@ Le flux se compte par **provenance** (attention / experts / partagé) en **paire
 
 ### Tour 75 — <goal_round> Objective: "Exécuter le plan docs/plan-deepseek41-complet.md phase par phase (P0→P9), en autonomie, en resp … [941 caractères tronqués]
 
-*134 appels d'outils.* Actions notables :
+*139 appels d'outils.* Actions notables :
 
 - bash — Locate MLA loader and HC absence
 - read
@@ -3847,11 +3847,11 @@ Le flux se compte par **provenance** (attention / experts / partagé) en **paire
 - bash — Report HC params in --config and verify
 - bash — List x usages in the layer loop
 - bash — Locate the three residual sites
-- … et 113 autres
+- … et 117 autres
 
 **Synthèse produite :**
 
-⏵ Le test d'inventaire des variables a détecté le nouveau `DRAVE_DUMP_COUCHES`, et la porte cachait l'échec. Je corrige les deux.
+⏵ Mise à jour de REPRISE (nouveaux chemins, variables et outils) pendant que les portes tournent.
 
 ## 3. Travail accompli
 
@@ -4025,7 +4025,7 @@ Le flux se compte par **provenance** (attention / experts / partagé) en **paire
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 3787 autres
+- … et 3790 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4502,4 +4502,5 @@ Le flux se compte par **provenance** (attention / experts / partagé) en **paire
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A drave-core/src/ && git commit -q -F - <<'EOF' P2 (1/2) : le troisième chemin d'attention — celu
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A drave-core/src/ tools/ docs/ 2>/dev/null; git commit -q -F - <<'EOF' P2/P3 : le harnais de comp
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF' p='docs/plan-deepseek41-complet.md' s=open(p).read() subs=[ ("""### P1 — Hyper-connexi
+- REPRISE : les trois chemins d'attention, les hyper-connexions, l'exécution bornée et les outils de comparaison" && git log --oneline -3
 
