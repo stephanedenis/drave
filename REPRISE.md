@@ -1089,3 +1089,41 @@ noyau dédié, et c'est ce qui rend GLM-5.3 et Kimi chargeables.
 tools/portes_formats.sh          # 17 formats × 2 blocs, contre libggml
 tools/extraire_tables_ggml.sh verifier   # les grilles IQ embarquées = celles de ggml
 ```
+
+---
+
+## Bilan de la session « routage, MLA et formats » (01/10 22 h → 02/10 07 h)
+
+**16 commits.** Ce qui a changé, dans l'ordre d'importance :
+
+1. **Le routage des experts était faux pour quatre gros modèles sur cinq.** Le
+   moteur n'avait qu'un booléen là où les GGUF déclarent quatre conventions
+   (`expert_gating_func`), et il ne lisait ni `expert_weights_scale` (1,5 · 2,5 ·
+   2,827) ni `hash_layer_count` (la table `ffn_gate_tid2eid` de V4-Flash). Une
+   seule implémentation les porte maintenant, partagée par le jeton seul et le
+   lot ; quatre tests unitaires les encodent. Porte gpt-oss : 15,1757 → 15,6017,
+   changement justifié par `build_moe_ffn` de llama.cpp (le biais ne départage
+   que la sélection).
+2. **Six déquantificateurs de plus** (Q5_K, Q5_0, Q5_1, Q3_K, IQ3_XXS, IQ1_S,
+   IQ4_XS) et **un bug de facteur 2** trouvé dans MXFP4 (échelle E8M0 mélangée
+   avec la grille doublée). 18 formats lisibles, 17 vérifiés contre libggml.
+3. **L'attention MLA à rang faible**, qui débloque GLM-5.3 (754 G) et
+   Kimi-K2.7 (1 026 G) — jamais calculés ici avant cette session. Deux bugs de
+   disposition trouvés par comparaison à llama.cpp : `wv_b` rangé à l'envers de
+   `wk_b` (corrélation −0,04 → **0,999024**) et l'indexation de tranche dans le
+   lot parallèle.
+4. **Trois tenseurs lus nulle part** : l'expert partagé (2D, jamais calculé !),
+   le biais de sélection `exp_probs_b`, et la table `tid2eid`.
+5. **`verifier_architecture` + `--config`** : le moteur dit en 50 ms, sans
+   charger le modèle, ce qu'il sait calculer et ce qui manque — au lieu de mourir
+   sur « tenseur blk.3.attn_q.weight absent », qui accuse le fichier.
+
+**Ce qui reste ouvert, par ordre de valeur :**
+
+| chantier | où c'en est |
+|---|---|
+| l'écart MLA qui saute à la position 3 | mesuré (+4,07 nats), outillé, non expliqué |
+| hyper-connexions (GLM-5.3-Flash, V4 x2) | non implémentées |
+| attention par index (DSA) au-delà de `index_topk` | non implémentée |
+| noyaux IQ | remplacés par déquantification + produit f32 (juste, lent) |
+| vitesse MLA | ~190 s/jeton sur GLM-5.3, attention scalaire |

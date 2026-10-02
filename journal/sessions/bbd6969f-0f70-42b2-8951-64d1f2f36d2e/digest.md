@@ -64164,3 +64164,105 @@ accord du top-1 : 4/7  (3 positions divergentes)
 background job bash-125 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in $(seq 1 300); do if grep -q "écart |NLL|" /tmp/glm8b.log; then break; fi; sleep 10; done; cat /tmp/glm8b.log) finished [status: completed, exit code: 0]. Read its output with job_output.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\n# 1) README : préciser la portée de la validation.\np='README.md'; s=open(p).read()\ns = s.replace(\"\"\"| **GLM-5.3** (79 couches MLA, 256 experts) | IQ1_S/IQ3_XXS/IQ4_XS | 3 jetons : 5 966 contre **4 286** chez ll … [4757 caractères tronqués]`
+
+  ```
+c4f55fd La validation MLA s'arrête à la position 2, et c'est maintenant écrit partout
+  ```
+
+- **bash** `{"command": "TZ=America/New_York date \"+HAE %H:%M\"; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && nohup timeout 2000 bash tools/portes.sh > /tmp/portes_final2.log 2>&1 & sleep 50; cat /tmp/portes_final2.log; git log --oneline --since=\"2026-10-01 22:00\" | wc -l", "description": "Final gat … [24 caractères tronqués]`
+
+  ```
+HAE 06:57
+=== Portes ===
+  cargo test --release                       48 verts  ✅
+  Qwen2.5-0.5B ctx 256                       19.3885  ✅
+  Qwen3-30B en clusters (origine : 799,8557) 799.8557  ✅
+  threads par défaut (physiques)            20  ✅
+  formats contre libggml                     17 concorde(s), 0 divergence(s), 0 absent(s)  ✅
+  GLM-5.3 : sigmoïde ×2,5                  sigmoïde  ✅
+  Kimi-K2.7 : sigmoïde ×2,827              sigmoïde  ✅
+31
+  ```
+
+- **bash** `{"command": "sleep 40; cat /tmp/portes_final2.log | tail -6; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git status --short | head -3", "description": "Read the final gate result"}`
+
+  ```
+Kimi-K2.7 : sigmoïde ×2,827              sigmoïde  ✅
+  V4-Flash : racine de softplus              racine de softplus  ✅
+  Qwen3-235B : softmax                       softmax  ✅
+  (gpt-oss ~20 min et les portes de formats : lancez-les, ils sont hors de ce script)
+
+toutes les portes sont vertes
+ M journal/README.md
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log --oneline --since=\"2026-10-01 21:00\" | cat | head -40", "description": "List the session's commits"}`
+
+  ```
+c4f55fd La validation MLA s'arrête à la position 2, et c'est maintenant écrit partout
+935fe71 Quantification des activations : lire la TRANCHE utile, pas le tampon entier
+86b403f ref_logits : --tensors REGEX, l'outil qui a trouvé le bug MLA
+3c6eef5 Kimi-K2.7 (1 026 G poids) calcule : 161 s de chargement, 73 s/jeton
+3b9c04a Rapport MLA : le bug, la méthode qui l'a trouvé, et ce qui reste ouvert
+51dc4b7 MLA : `wv_b` est rangé à l'envers de `wk_b` — corrélation 0,999 après correction
+44f634e MLA : dire NON VALIDÉE partout où elle est annoncée
+4cc7056 Portes : formats et routage vérifiés automatiquement ; la comparaison gpt-oss encadrée par le YaRN
+78fdc67 README : 18 formats lisibles, portes de formats, et le diagnostic DRAVE_DEBUG_ETAT
+44288ff Rapports : la référence externe (llama.cpp) mesurée — gpt-oss cohérent, MLA fausse
+78e9c94 Expert partagé (2D) et biais de sélection `exp_probs_b` : deux tenseurs lus nulle part
+776409b Déquantification par bloc sans allocation : 253 s/jeton → à remesurer
+0c4bad0 MLA : le lot de lignes indexait sa tranche avec l'indice global
+7674684 MLA à rang faible + formats sans noyau : GLM-5.3 et Kimi deviennent calculables
+475bee4 routage des experts : qu
+… [1926 caractères tronqués]
+  ```
+
+- **bash** `{"command": "TZ=America/New_York date \"+HAE %H:%M\"; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== état final ===\"; git log --oneline -1 | cat; git status --short | head -3; echo \"--- taille des livrables ---\"; wc -l reports/rapport-routage-experts.md reports/rapport-mla-exper … [281 caractères tronqués]`
+
+  ```
+HAE 06:59
+=== état final ===
+c4f55fd La validation MLA s'arrête à la position 2, et c'est maintenant écrit partout
+ M journal/README.md
+--- taille des livrables ---
+   170 reports/rapport-routage-experts.md
+   202 reports/rapport-mla-experts.md
+  1091 REPRISE.md
+   650 README.md
+  2113 total
+--- outils ajoutés ---
+2244 tools/extraire_tables_ggml.c
+2136 tools/extraire_tables_ggml.sh
+4778 tools/portes_formats.sh
+4531 tools/ref_ggml_bloc.c
+4009 tools/verifier_formats.py
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -E \"couche 0 pos [01] x\\[\\.\\.8\\]|att\\[\\.\\.8\\]\" /tmp/glm53_fix.log | head -4; echo \"=== référence llama.cpp (position 0) ===\"; grep -E \"^\\[tensor\\] (l_out|ffn_out|kqv_out)-0\" -A 1 /tmp/ref_glm_att.log | grep -E \" … [81 caractères tronqués]`
+
+  ```
+[mla] couche 0 pos 0 att[..8] -1.51671e-4 -2.28325e-3 -1.56624e-3 -8.61327e-4 2.32388e-3 1.58774e-3 3.49736e-4 -1.39764e-3
+[mla] couche 0 pos 1 att[..8] -1.49113e-4 -2.29303e-3 -1.57951e-3 -8.65177e-4 2.35958e-3 1.61568e-3 3.32378e-4 -1.39311e-3
+=== référence llama.cpp (position 0) ===
+[tensor] kqv_out-0 : type 0 · ne = [16384, 2, 1, 1]
+          [0..8) = -1.552319e-04 -2.284382e-03 -1.569172e-03 -8.625589e-04 2.324393e-03 1.588683e-03 3.477836e-04 -1.398706e-03
+[tensor] ffn_out-0 : type 0 · ne = [6144, 2, 1, 1]
+          [0..8) = -9.297418e-04 -2.893236e-04 -2.298555e-03 -1.397638e-03 -1.775885e-03 -1.284966e-04 7.749733e-04 -1.996567e-03
+[tensor] l_out-0 : type 0 · ne = [6144, 2, 1, 1]
+          [0..8) = 3.958318e-03 2.302623e-04 1.874789e-03 1.564195e-03 -2.974730e-03 -3.872524e-03 2.699937e-04 -6.190604e-04
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"x\\[\\.\\.8\\]\" drave-core/src/model.rs | head -3", "description": "Check whether the x dump exists"}`
+
+  ```
+(no output)
+  ```
+
+- **bash** `{"command": "ps -eo pid,etimes,rss,args --sort=-rss | grep -E \"[d]rave|[r]ef_logits|[l]lama-perplexity\" | cut -c1-80 | head -5; echo \"--- aucun job lourd restant si vide ---\"; free -g | sed -n 2p", "description": "Check for leftover heavy jobs"}`
+
+  ```
+--- aucun job lourd restant si vide ---
+Mem:             125          11          61           2          56         114
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat >> REPRISE.md <<'EOF'\n\n---\n\n## Bilan de la session « routage, MLA et formats » (01/10 22 h → 02/10 07 h)\n\n**16 commits.** Ce qui a changé, dans l'ordre d'importance :\n\n1. **Le routage des experts était faux pour quatre gr … [2170 caractères tronqués]`

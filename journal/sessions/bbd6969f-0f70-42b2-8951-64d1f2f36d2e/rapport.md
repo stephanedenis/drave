@@ -7,12 +7,12 @@
 | Début | 2026-09-28 14:46 |
 | Durée | 88.2 h |
 | Tours | 69 |
-| Messages | 4040 |
-| Appels d'outils | 3846 |
+| Messages | 4048 |
+| Appels d'outils | 3854 |
 | Fichiers touchés | 81 |
-| Commandes | 3382 |
+| Commandes | 3390 |
 | Sous-agents | 22 |
-| Commits | 307 |
+| Commits | 308 |
 | Compactages de contexte | 5 |
 
 ## Objectifs déclarés
@@ -3526,7 +3526,7 @@ Sur cette session, les mesures m
 
 ### Tour 69 — implémente toute les optimisation et détection de matériel avec heuristiques de configuration automatique.
 
-*807 appels d'outils.* Actions notables :
+*815 appels d'outils.* Actions notables :
 
 - bash — Inspect existing GPU detection
 - write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/materiel.rs`
@@ -3542,7 +3542,7 @@ Sur cette session, les mesures m
 - bash — Read KV bits resolution
 - bash — Integrate KV and VRAM heuristics
 - bash — Lighten detection and run gates
-- … et 715 autres
+- … et 723 autres
 
 **Synthèse produite :**
 
@@ -3703,7 +3703,7 @@ Sur cette session, les mesures m
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 3342 autres
+- … et 3350 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4158,4 +4158,5 @@ Sur cette session, les mesures m
 - ref_logits : --tensors REGEX, l'outil qui a trouvé le bug MLA  Il imprime les tenseurs NOMMÉS du graphe llama.cpp pendant l'évaluation (les cb(...) de glm-dsa.c
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/glm8b.sh <<'EOF' #!/usr/bin/env bash cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet M=/home
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' # 1) README : préciser la portée de la validation. p='README.md'; s=open(p).read() s = s.
+- REPRISE : bilan de la session (16 commits, 5 changements, 5 chantiers ouverts)" && git log --oneline -1; git status --short | head -2
 
