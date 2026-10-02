@@ -7,12 +7,12 @@
 | Début | 2026-09-28 14:46 |
 | Durée | 78.4 h |
 | Tours | 67 |
-| Messages | 3210 |
-| Appels d'outils | 3034 |
+| Messages | 3211 |
+| Appels d'outils | 3035 |
 | Fichiers touchés | 70 |
-| Commandes | 2641 |
+| Commandes | 2642 |
 | Sous-agents | 22 |
-| Commits | 268 |
+| Commits | 269 |
 | Compactages de contexte | 4 |
 
 ## Objectifs déclarés
@@ -3387,7 +3387,7 @@ Le KV de MLA n'est pas la concaténation des têtes mais un latent comprimé —
 
 ### Tour 67 — nvme et multi-cpu, cores purs vs hyperthread (cache partagée) as-t-on évalué les impacts
 
-*19 appels d'outils.* Actions notables :
+*20 appels d'outils.* Actions notables :
 
 - bash — Inspect CPU topology and caches
 - bash — Measure CPU thread scaling
@@ -3403,7 +3403,7 @@ Le KV de MLA n'est pas la concaténation des têtes mais un latent comprimé —
 - bash — Find thread count defaults
 - bash — Use physical core count by default
 - bash — Check GPU topology and NVLink
-- … et 5 autres
+- … et 6 autres
 
 **Synthèse produite :**
 
@@ -3553,7 +3553,7 @@ Le KV de MLA n'est pas la concaténation des têtes mais un latent comprimé —
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 2601 autres
+- … et 2602 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -3969,4 +3969,5 @@ Le KV de MLA n'est pas la concaténation des têtes mais un latent comprimé —
 - REPRISE : architecture memoire" && echo "=== ÉTAT FINAL ==="; (cd drave-core && cargo test --release 2>&1 | grep -E "^test result"); git status --short | grep -
 - CPU, hyperthreading, NUMA et NVMe : mesures, et la conclusion qui se retourne  CPU : plateau a 22 Go/s des 16 fils, la charge est limitee par la memoire. Hypert
 - Topologie materielle : NVLink 25,8 Go/s, NUMA negligeable, pas de FPGA  Releve : le NVMe (02:00.0), les deux GPU (03:00.0, 04:00.0) et les CPU 0-9 sont tous sur
+- README : la topologie et la conclusion qui se retourne" && echo "=== ÉTAT FINAL ==="; (cd drave-core && cargo test --release 2>&1 | grep -E "^test result"); git
 

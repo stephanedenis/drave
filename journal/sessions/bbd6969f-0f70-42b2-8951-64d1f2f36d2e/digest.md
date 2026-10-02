@@ -51672,3 +51672,10 @@ test result: ok. 32 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; fin
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np = 'reports/rapport-architecture-memoire.md'\ns = open(p).read()\ns = s.replace('''## 10. Ce qui reste à vérifier''',\n'''## 10. La topologie matérielle : NVLink, NUMA, et pas de FPGA\n\nRelevé complet de la machin … [3477 caractères tronqués]`
+
+  ```
+ok
+887d751 Topologie materielle : NVLink 25,8 Go/s, NUMA negligeable, pas de FPGA
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np = 'README.md'\ns = open(p).read()\ns = s.replace('''Débits **mesurés** : VRAM **84,9 Go/s** (noyau warp) · RAM **20,9 Go/s** (CPU 30\nfils) · NVMe aléatoire 5,5 Go/s · PCIe 3.0 ×16 ~12 Go/s. Le noyau GPU `warp par … [2314 caractères tronqués]`

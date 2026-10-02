@@ -558,9 +558,16 @@ Détail : [`reports/rapport-empreinte-memoire.md`](reports/rapport-empreinte-mem
 
 ## Architecture mémoire : ce qui va en VRAM, en RAM, sur le disque
 
-Débits **mesurés** : VRAM **84,9 Go/s** (noyau warp) · RAM **20,9 Go/s** (CPU 30
-fils) · NVMe aléatoire 5,5 Go/s · PCIe 3.0 ×16 ~12 Go/s. Le noyau GPU `warp par
-ligne` est **4× plus rapide que le CPU**.
+Débits **mesurés** : VRAM **84,9 Go/s** (noyau warp) · RAM **22 Go/s** (20 cœurs
+physiques) · **NVMe 31 Go/s à 16 lecteurs parallèles** (5,4 à un seul) · PCIe 3.0
+×16 ~12 Go/s · **NVLink GPU↔GPU 25,8 Go/s**. Le noyau GPU est **4× plus rapide
+que le CPU**, et **le NVMe parallélisé dépasse la RAM**.
+
+Trois mesures de topologie qui ferment des pistes : **l'hyperthreading n'apporte
+rien** (40 threads = 22,8 Go/s, 20 cœurs = 22,6 — le moteur est corrigé pour
+prendre les cœurs physiques, 30 → 20 fils) · **le NUMA ne paie pas** (4 % sur le
+chemin NVMe, du bruit sur le calcul — l'UPI est rapide) · **pas de FPGA** dans
+cette machine.
 
 | niveau | capacité | contenu |
 |---|---|---|
@@ -570,8 +577,14 @@ ligne` est **4× plus rapide que le CPU**.
 
 **Ce qui manque, par ordre de gain** : un noyau **attention MLA** (−194 ms/jeton,
 c'est le premier poste et il n'est pas déportable) · un noyau **IQ2_XXS/Q2_K**
-pour les experts de V4.1 (−86 ms) · le reste existe déjà (Q4_K, Q6_K, Q8_0,
-MXFP4). Cumul : **499 → ~210 ms par jeton**.
+pour les experts de V4.1 (−86 ms) · **un chargeur parallèle d'experts** (les
+2,39 Go par jeton passent de 435 ms à 77 ms sans aucun cache). Cumul :
+**499 → ~150 ms par jeton**.
+
+**Et une conclusion qui se retourne** : puisque le NVMe parallélisé (31 Go/s)
+dépasse la RAM (22 Go/s), **ne rien cacher devient presque aussi rapide que tout
+garder** — et ça libère les 71 Go de RAM du cache pour le **KV**, qui est le vrai
+goulot à long contexte (96,6 Go en F16 à 1 M).
 
 **Et le poste qu'on oublie** : le cache KV fait **96,6 Go en F16 à 1 M de
 contexte** — plus que les 71 Go d'experts. Sa quantification n'est pas une
