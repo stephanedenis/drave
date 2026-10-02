@@ -79672,3 +79672,183 @@ adresses IDENTIQUES : True (0 écarts sur 480000)
 ⏵ **480 000 adresses identiques** à la référence. Commit de l'adressage validé.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='tools/portes.sh'\ns=open(p).read()\na=\"\"\"# 7. gpt-oss : `--config` d'abord (gratuit), puis la perplexité (~20 min).\"\"\"\nb=\"\"\"# 6ter. Engram : l'adressage des tables de V4.1 doit tomber dans les bornes … [2952 caractères tronqués]`
+
+  ```
+ok
+  Qwen3-235B : softmax                       softmax  ✅
+  V4-Flash : --config le dit calculable      oui  ✅
+  V4-Flash 43 couches ctx 32                 8430.2968  ✅
+  engram V4.1 : adressage                    rangées DISTINCTES : 479723  ✅
+
+toutes les portes sont vertes
+90b588e P8 : l'adressage de l'engram porté et validé — 480 000 adresses identiques à la référence
+  ```
+
+### 🤖 Assistant
+
+⏵ Suite de P8 : la **lecture d'une rangée** (e4m3 × e8m0 par bloc de 32), validée sur les vraies tables.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c \"\nimport struct, sys\nsys.path.insert(0,'tools')\nfrom lire_meta_gguf import Lecteur\np='/home/stephane/FastNVMe/modeles-lourds/DeepSeek-V4.1-Flash-Q2.gguf'\nr=Lecteur(p); assert r.octets(4)==b'GGUF'\nstruct.unpack('<I', … [622 caractères tronqués]`
+
+  ```
+blk.1.engram_embd.weight [264, 384006168] type 24 offset 162949808128
+blk.14.engram_embd.weight [264, 384016682] type 24 offset 264327446528
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c \"\nimport struct, sys\nsys.path.insert(0,'tools')\nfrom lire_meta_gguf import Lecteur\np='/home/stephane/FastNVMe/modeles-lourds/DeepSeek-V4.1-Flash-Q2.gguf'\n# La table 1 commence à l'offset 162949808128 (section de donn … [1078 caractères tronqués]`
+
+  ```
+rangée 0: 8 octets avant la fin = [226, 235, 105, 98, 112, 97, 245, 84]
+          les 8 derniers = [120, 120, 119, 120, 120, 120, 120, 120]  → comme exposants e8m0 (127 = 1,0) : plausible
+rangée 12345678: 8 octets avant la fin = [232, 99, 108, 244, 243, 237, 236, 233]
+          les 8 derniers = [120, 120, 120, 120, 120, 120, 120, 121]  → comme exposants e8m0 (127 = 1,0) : plausible
+rangée 384006167: 8 octets avant la fin = [232, 242, 227, 242, 101, 204, 113, 225]
+          les 8 derniers = [120, 119, 120, 119, 120, 120, 119, 120]  → comme exposants e8m0 (127 = 1,0) : plausible
+  ```
+
+### 🤖 Assistant
+
+⏵ Format de rangée confirmé. J'implémente la lecture (e4m3 × e8m0) et je la vérifie.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='drave-core/src/engram.rs'\ns=open(p).read()\na=\"\"\"#[cfg(test)]\nmod tests {\"\"\"\nb='''/// **Le format d'une rangée**, tel que le nomme l'encodage du fichier\n/// (`e4m3_e8m0_32_row264`) : **256 valeurs e4 … [2625 caractères tronqués]`
+
+  ```
+ok
+811:    pub fn octets_charges(&self) -> u64 { self.bufs.iter().map(|b| b.len() as u64).sum() }
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"fn tbuf\" -A 12 drave-core/src/gguf.rs | head -16", "description": "Read the tensor buffer accessor"}`
+
+  ```
+870:    fn tbuf(&self, t: &TensorInfo) -> &[u8] {
+871-        match self.bufs.get(t.fichier) {
+872-            Some(b) => &b[self.starts[t.fichier] + t.offset as usize..],
+873-            None => panic!(
+874-                "données de « {} » absentes : GGUF ouvert en mode en-tête seul (--meta)",
+875-                t.name),
+876-        }
+877-    }
+878-
+879-    fn debut_donnees(meta: &HashMap<String, Meta>, fin_entete: usize) -> usize {
+880-        let align = meta.get("general.alignment").and_then(|m| m.as_u64()).unwrap_or(32) as usize;
+881-        (fin_entete + align - 1) / align * align
+882-    }
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='drave-core/src/gguf.rs'\ns=open(p).read()\na=\"\"\"    fn tbuf(&self, t: &TensorInfo) -> &[u8] {\"\"\"\nb=\"\"\"    /// Les octets d'un tenseur, par son nom — la même vue que `tbuf`, exposée\n    /// pour les  … [695 caractères tronqués]`
+
+  ```
+ok
+--- build ---
+  ```
+
+### 🤖 Assistant
+
+⏵ Adresses → rangées : l'outil lit les rangées adressées et les écrit pour comparaison.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='drave-core/src/main.rs'\ns=open(p).read()\na=\"\"\"    println!(\"adresses écrites dans {sortie} (i32, {} octets)\", total * 4);\n}\"\"\"\nb=\"\"\"    println!(\"adresses écrites dans {sortie} (i32, {} octets) … [2241 caractères tronqués]`
+
+  ```
+ok
+recouvrement entre jetons consécutifs : 0 adresses identiques (0.0 %)
+adresses écrites dans /tmp/v41_adr2.bin (i32, 1920000 octets)
+rangées LUES : 0 sur 2000 adresses (couches [1, 14]) · 0 valeurs · min inf · max -inf · RMS -0.000000 · somme 0.000000
+valeurs écrites dans /tmp/v41_adr2.bin.valeurs (f32)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='drave-core/src/main.rs'\ns=open(p).read()\na=\"\"\"    let g2 = Gguf::open_meta_auto(&path).expect(\"ouverture des métadonnées\");\n    let n_lire = total.min(2000);\"\"\"\nb=\"\"\"    // `open` (mmap) et non  … [805 caractères tronqués]`
+
+  ```
+ok
+adresses écrites dans /tmp/v41_adr3.bin (i32, 1920000 octets)
+rangées LUES : 2000 sur 2000 adresses (couches [1, 14]) · 512000 valeurs · min -5.000000 · max 5.000000 · RMS 0.872183 · somme -805.234474
+valeurs écrites dans /tmp/v41_adr3.bin.valeurs (f32)
+  ```
+
+### 🤖 Assistant
+
+⏵ Comparaison des valeurs lues : moteur contre décodage Python des mêmes rangées.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport struct, sys\nsys.path.insert(0,'tools')\nfrom lire_meta_gguf import Lecteur\n\ndef e4m3(b):\n    s,e,m = (b>>7)&1, (b>>3)&0xf, b&7\n    if e==0x0f and m==7: return 0.0\n    sig = -1.0 if s else 1.0\n    if … [1835 caractères tronqués]`
+
+  ```
+valeurs comparées : 512000
+écart max : 0.000e+00 · IDENTIQUES
+min/max des valeurs : -5.0000 / 5.0000
+  ```
+
+### 🤖 Assistant
+
+⏵ Dernière fonction de P8 : l'**injection** (porte + valeur), avec valeurs-témoins.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport random\nrandom.seed(20261002)\nhc, dim = 4, 8\neps, clamp = 1e-20, 1e-6\ntok = 2\nhidden = [[random.uniform(-2,2) for _ in range(dim)] for _ in range(hc)]\nkv = [[random.uniform(-2,2) for _ in range((hc+1) … [1112 caractères tronqués]`
+
+  ```
+const HC: usize = 4;
+const DIM: usize = 8;
+const HIDDEN: [f32; 32] = [ -1.356065521e+00, -1.433920894e+00, 1.660085903e+00, -5.181554137e-01, 8.014732407e-01, 1.642417136e+00, 6.029931276e-01, -6.106605636e-03, -9.117290533e-01, 4.353818814e-01, 1.455874312e+00, 1.588993157e+00, 1.052089103e+00, -1.945740703e+00, 1.511120966e+00, -2.003208184e-01, -1.167631975e+00, -4.861369575e-01, -1.666736588e+00, 5.369454656e-01, -1.935807742e+00, -1.143254440e+00, -1.562124018e+00, 1.566808098e+00, -1.486865391e+00, -1.698932260e+00, 7.827763275e-01, 1.684936844e+00, -1.426676940e+00, -1.836209469e-01, -9.580840232e-01, -6.958014523e-01 ];
+const KV: [f32; 40] = [ 3.697002760e-01, -1.042727754e+00, 1.264138302e+00, -4.337073446e-01, -1.250534612e+00, 1.484952381e+00, -1.219439922e+00, 1.229107189e+00, 1.880418027e+00, -1.091883079e+00, -6.060928406e-01, -1.966306220e+00, -9.822897029e-01, 1.562895481e+00, 8.483555735e-01, -1.812623341e+00, 2.941221855e-01, 1.684291720e-01, 1.817103387e+00, -1.054359100e+00, -6.481017304e-01, 5.565720731e-01, -8.271037684e-01, -3.594652579e-01, 1.324215523e+00, -1.260724101e+00, 1.674046476e+00, -3.040798166e-01, -1.746986832e+00, 5.412257932e-01, -1.667367514e+
+… [1920 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='drave-core/src/engram.rs'\ns=open(p).read()\na=\"\"\"#[cfg(test)]\nmod tests {\"\"\"\nb='''/// **L'injection** (`EngramPostWkv`, `engram.py:765-854`) : ce que fait l'engram\n/// de ses rangées lues.\n///\n///  … [5529 caractères tronqués]`
+
+  ```
+ok
+[stderr]
+bash: line 80: EngramPostWkv: command not found
+  File "<string>", line 36
+    ''' + t + '''
+              ^
+SyntaxError: unterminated triple-quoted string literal (detected at line 44)
+bash: -c: line 138: syntax error near unexpected token `('
+bash: -c: line 138: `src = src.rstrip()'
+[exit code: 2]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport random, math\nrandom.seed(20261002)\nhc, dim = 4, 8\neps, clamp = 1e-20, 1e-6\nhidden=[[random.uniform(-2,2) for _ in range(dim)] for _ in range(hc)]\nkv=[[random.uniform(-2,2) for _ in range((hc+1)*dim)]] … [2251 caractères tronqués]`
+
+  ```
+test ajouté
+test engram::tests::les_adresses_tombent_dans_leur_seau ... ok
+test engram::tests::le_repli_est_collant ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 53 filtered out; finished in 0.00s
+  ```
+
+### 🤖 Assistant
+
+⏵ P8 : les trois fonctions sont portées et validées. Portes puis commit.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='reports/rapport-engram-etat.md'\ns=open(p).read()\na=\"\"\"## 3. Ce qui n'est pas encore fait\"\"\"\nb=\"\"\"## 2.bis Ce que le moteur sait faire maintenant (et ce qui le prouve)\n\n| pièce | état | preuve |\n … [3624 caractères tronqués]`
+
+  ```
+ok rapport
+=== Portes ===
+  cargo test --release                       58 verts  ✅
+  Qwen2.5-0.5B ctx 256                       19.3885  ✅
+test result: ok. 58 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.09s
+
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 8, in <module>
+AssertionError
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"phase est donc rouverte\\|référence trouvée, phase rouverte\" docs/plan-deepseek41-complet.md | head -3; sed -n \"$(grep -n '### P8' docs/plan-deepseek41-complet.md | cut -d: -f1),+8p\" docs/plan-deepseek41-complet.md", "de … [41 caractères tronqués]`
+
+  ```
+353:### P8 — Engram : la liste d'adresses, et sa référence à écrire (≈ 1 à 2 journées) — **référence trouvée, phase rouverte** (02/10)
+372:> 1e-6)))`) sont écrites noir sur blanc. **La phase est donc rouverte**, et sa
+### P8 — Engram : la liste d'adresses, et sa référence à écrire (≈ 1 à 2 journées) — **référence trouvée, phase rouverte** (02/10)
+
+> **Inventorié** : deux tables de **101,38 Go** chacune
+> (`blk.{1,14}.engram_embd` I8 [384 006 168, 264]), soit **202,8 Go = 55 % du
+> fichier**. Le format de rangée est **entièrement déterminé** par les
+> métadonnées : `e4m3_e8m0_32_row264` = 8 blocs de 32 valeurs e4m3 + 8 échelles
+> e8m0 = **264 octets**. La sonde (`--sonder-engram 10000`) touche 2,6 Mo par
+> table en 219-524 ms, à 120 Mo de RSS.
+> **Ce qui manque n'est pas le code, c'est la RECETTE** : les métadonnées donnent
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='docs/plan-deepseek41-complet.md'\ns=open(p).read()\na=\"\"\"> 1e-6)))`) sont écrites noir sur blanc. **La phase est donc rouverte**, et sa\n> première porte est déjà franchie : les 48 premiers du fichier sont\ … [3906 caractères tronqués]`

@@ -83,15 +83,36 @@ La suite de P8 est donc bornée : porter ces trois fonctions, les faire concorde
 avec la référence sur les 10 000 entrées de la sonde, et **annoncer** le
 changement de sortie.
 
+## 2.bis Ce que le moteur sait faire maintenant (et ce qui le prouve)
+
+| pièce | état | preuve |
+|---|---|---|
+| **adressage** (`^=` sur un repli collant, modulo par colonne) | **porté** | 10 000 jetons × 2 couches × 24 colonnes = **480 000 adresses, 0 écart** avec `tools/engram_reference.py`, sur les métadonnées **réelles** de V4.1 |
+| invariants du fichier | **vérifiés** | les 48 premiers recalculés sont identiques ; table de correspondance dense (99 092) ; 8 multiplicateurs impairs sous la borne ; chaque adresse tombe dans le seau de sa colonne |
+| **lecture d'une rangée** (e4m3 × e8m0 par bloc de 32) | **portée** | 2 000 rangées lues → **512 000 valeurs, identiques au bit près** au décodage Python des mêmes octets |
+| **injection** (porte `sigmoid(±sqrt(max(|dot|, 1e-6)))`, valeur partagée entre les `hc` copies) | **portée** | deux tests : conformité à la transcription Python (valeurs générées) et masque qui éteint la porte en rendant l'entrée **exactement** |
+
+Ce que la liste coûte et ce qu'elle dit, mesuré (`--engram-adresses`) : 10 000
+jetons en **5,9 ms**, **99,9 % de rangées distinctes**, **0,06 %** des 768 022 850
+rangées adressées, et **0 % de recouvrement entre jetons consécutifs** — le
+hachage décorrèle, c'est sa raison d'être. Porte permanente ajoutée à
+`tools/portes.sh`.
+
+**Ce qui n'est PAS fait, et pourquoi** : l'injection n'est **branchée dans aucune
+passe avant**, parce qu'aucun modèle exécutable ne la porte — V4.1 est le seul à
+avoir un engram, et il reste refusé pour deux raisons indépendantes (compression
+de ratio 2 sans référence, réduction des `hc` copies non spécifiée). Le jour où
+il tournera, l'engram **changera la sortie** : c'est écrit ici, et ce sera écrit
+à l'ouverture.
+
 ## 3. Ce qui n'est pas encore fait
 
-- **Le portage** des trois fonctions dans le moteur (hachage, lecture, injection).
-- **La porte** : la sonde et la référence doivent concorder sur 10 000 entrées,
-  et le flux d'adresses doit être **tracé** (rangées touchées, recouvrement entre
-  jetons consécutifs) — c'est le flux le plus intéressant du modèle après les
-  candidats de l'indexeur : il dit quels n-grammes le modèle consulte.
-- **L'annonce** : l'engram **change la sortie** ; il devra être dit à l'ouverture,
-  comme le reste.
+- **Brancher** l'injection dans une passe avant (bloqué : aucun modèle exécutable
+  ne porte d'engram).
+- **Un outil d'analyse du flux d'adresses** : la liste est écrite (`--engram-adresses`),
+  mais rien ne la relit encore — c'est pourtant le flux le plus intéressant du
+  modèle après les candidats de l'indexeur : il dit quels n-grammes le modèle
+  consulte, et sa stabilité d'un jeton à l'autre est une question ouverte.
 
 Tant que ce n'est pas fait, la seule chose honnête que le moteur puisse faire de
 l'engram est ce qu'il fait : **l'adresser** (`--sonder-engram`), le **compter**

@@ -867,6 +867,17 @@ zéro, l'inventaire sera sous-évalué", t.ttype, t.name);
     /// plutôt que de le laisser implicite est ce qui permet de servir un modèle
     /// éclaté sans dupliquer le code de lecture.
     #[inline]
+    /// Les octets d'un tenseur, par son nom — la même vue que `tbuf`, exposée
+    /// pour les lecteurs qui ne déquantifient pas (l'engram lit ses rangées de
+    /// 264 octets telles quelles).
+    pub fn octets_tenseur(&self, nom: &str) -> Option<&[u8]> {
+        let t = self.tensor(nom)?;
+        let buf = self.bufs.get(t.fichier)?;
+        let debut = self.starts[t.fichier] + t.offset as usize;
+        let n = t.nelem();
+        buf.get(debut..debut + n)
+    }
+
     fn tbuf(&self, t: &TensorInfo) -> &[u8] {
         match self.bufs.get(t.fichier) {
             Some(b) => &b[self.starts[t.fichier] + t.offset as usize..],

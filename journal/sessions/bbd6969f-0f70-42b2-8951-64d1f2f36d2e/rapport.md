@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 98.6 h |
+| Durée | 98.7 h |
 | Tours | 78 |
-| Messages | 4946 |
-| Appels d'outils | 4722 |
+| Messages | 4960 |
+| Appels d'outils | 4736 |
 | Fichiers touchés | 97 |
-| Commandes | 4083 |
+| Commandes | 4097 |
 | Sous-agents | 29 |
-| Commits | 349 |
+| Commits | 350 |
 | Compactages de contexte | 6 |
 
 ## Objectifs déclarés
@@ -3986,7 +3986,7 @@ J'avais écrit deux conclusions que **la recherche de sources a démenties** —
 
 ### Tour 78 — <goal_round> Objective: "Exécuter le plan docs/plan-deepseek41-complet.md phase par phase (P0→P9), en autonomie, en resp … [941 caractères tronqués]
 
-*13 appels d'outils.* Actions notables :
+*27 appels d'outils.* Actions notables :
 
 - write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/engram_reference.py`
 - bash — Run the engram reference self-test
@@ -4001,10 +4001,12 @@ J'avais écrit deux conclusions que **la recherche de sources a démenties** —
 - bash — Compute the real V4.1 engram addresses
 - bash — Compare the engine against the reference on real data
 - bash — Commit the validated engram addressing
+- bash — Inspect the engram table tensor layout
+- … et 13 autres
 
 **Synthèse produite :**
 
-⏵ **480 000 adresses identiques** à la référence. Commit de l'adressage validé.
+⏵ P8 : les trois fonctions sont portées et validées. Portes puis commit.
 
 ## 3. Travail accompli
 
@@ -4184,7 +4186,7 @@ J'avais écrit deux conclusions que **la recherche de sources a démenties** —
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 4043 autres
+- … et 4057 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4312,7 +4314,7 @@ J'avais écrit deux conclusions que **la recherche de sources a démenties** —
 
 ## 5. Erreurs rencontrées
 
-271 sorties en erreur ou divergentes. Les premières :
+272 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : a8f2635f8 docs: record which models this box is good at, and why src/llama-hparams.cpp:8:void llama_hparams::set_swa_pattern(uint32_t n_pattern, bool dense_first) { src/llama-hparams.h:308:    void se
 - **T1** : 511 tokens notés — perplexité cumulée 247.031  (4.9 tok/s) === perplexité 247.0308 sur 511 tokens (0 événements, 104.5 s) ===  ### B3 harmony assistant 511 --- ref --- 0.0 0.0 0:00 ls: cannot access '
@@ -4681,4 +4683,5 @@ J'avais écrit deux conclusions que **la recherche de sources a démenties** —
 - Plan : P6 sans doublon et marquée faite (le modèle tourne, la trace se rejoue, le découpage est exact, les grappes concordent)" && git log --oneline -1
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF' p='docs/plan-deepseek41-complet.md' s=open(p).read() a="""> Conclusion : V4.1 ne peut 
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF' p='tools/portes.sh' s=open(p).read() a="""# 7. gpt-oss : `--config` d'abord (gratuit),
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF' p='docs/plan-deepseek41-complet.md' s=open(p).read() a="""> 1e-6)))`) sont écrites noi
 

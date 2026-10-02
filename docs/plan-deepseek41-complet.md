@@ -369,13 +369,26 @@ Une phase qui ne passe pas ses deux portes ne passe pas à la suivante.
 > ([`mudler/vllm.cpp`](https://github.com/mudler/vllm.cpp/blob/main/src/vllm/model_executor/models/deepseek_v4_1_engram.cpp)) :
 > la formule (`^=` sur un repli collant, modulo par colonne), la lecture
 > (e4m3 × e8m0 par bloc de 32) et l'injection (porte `sigmoid(±sqrt(max(|dot|,
-> 1e-6)))`) sont écrites noir sur blanc. **La phase est donc rouverte**, et sa
-> première porte est déjà franchie : les 48 premiers du fichier sont
-> **identiques** à ceux que l'algorithme de la référence recalcule (Miller-Rabin
-> (2,7,61), défaut d'origine compris), la table de correspondance est **dense** et
-> fait exactement `compressed_vocab_size`, et les 8 multiplicateurs sont impairs
-> et sous la borne. Reste à porter les trois fonctions et à les faire concorder
-> avec la référence sur 10 000 entrées (`reports/rapport-engram-etat.md`).
+> 1e-6)))`) sont écrites noir sur blanc.
+>
+> **Les trois fonctions sont portées et validées** (`drave-core/src/engram.rs`) :
+> **adressage** — 10 000 jetons × 2 couches × 24 colonnes = **480 000 adresses,
+> 0 écart** avec la transcription Python, sur les métadonnées réelles ; **lecture
+> d'une rangée** — 2 000 rangées, **512 000 valeurs identiques au bit près** au
+> décodage Python des mêmes octets ; **injection** — testée contre la
+> transcription (valeurs générées) et par le masque, qui doit rendre l'entrée
+> exactement. Les invariants du fichier sont vérifiés : 48 premiers recalculés
+> identiques, table de correspondance dense (99 092), multiplicateurs impairs
+> sous la borne, chaque adresse dans le seau de sa colonne.
+>
+> **Ce qui la liste coûte et dit** (`--engram-adresses`) : 10 000 jetons en
+> **5,9 ms**, 99,9 % de rangées distinctes, **0,06 %** des 768 022 850 rangées
+> adressées, **0 % de recouvrement entre jetons consécutifs**. Porte permanente
+> dans `tools/portes.sh`.
+>
+> **Reste** : brancher l'injection dans une passe avant (bloqué — aucun modèle
+> exécutable ne porte d'engram) et relire la liste avec un outil d'analyse
+> (`reports/rapport-engram-etat.md`).
 
 - Deux tables de 101,4 Go (couches 1 et 14) : hachage de n-grammes
   (`engram.primes`, `multipliers`, `token_map`), recherche, injection.

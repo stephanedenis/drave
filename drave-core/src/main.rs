@@ -1644,6 +1644,44 @@ fn run_engram_adresses(sortie: &str, opt: &Options) {
     println!("recouvrement entre jetons consécutifs : {recouvrement} adresses identiques \
               ({:.1} %)", 100.0 * recouvrement as f64 / total as f64);
     println!("adresses écrites dans {sortie} (i32, {} octets)", total * 4);
+    // ---- les rangées ADRESSÉES : on les lit et on en écrit les valeurs.
+    // C'est la chaîne complète de l'adressage — la liste dit quoi lire, la
+    // lecture dit ce qu'on y trouve — et elle se vérifie contre la référence
+    // sans charger un poids du reste du modèle.
+    // `open` (mmap) et non `open_meta_auto` : lire une rangée demande les
+    // DONNÉES, pas seulement les métadonnées — l'ouverture « méta » ne mappe pas
+    // les tenseurs, et `octets_tenseur` y rend `None` (constaté : 0 rangée lue
+    // sur 2000). Le mmap ne lit rien tant qu'on ne touche pas aux pages.
+    let g2 = Gguf::open(&path).expect("ouverture du GGUF en mmap");
+    let n_lire = total.min(2000);
+    let mut valeurs: Vec<f32> = Vec::with_capacity(n_lire * engram::VALEURS_PAR_RANGEE);
+    let mut lues = 0usize;
+    let mut somme = 0f64;
+    for k in 0..n_lire {
+        let jeton = k / (e.couches.len() * n_hash_cols);
+        let couche = e.couches[(k / n_hash_cols) % e.couches.len()];
+        let rangee = a[k] as i64;
+        if let Some(v) = engram::lire_rangee(&g2, couche, rangee) {
+            for x in &v { somme += *x as f64; }
+            valeurs.extend_from_slice(&v);
+            lues += 1;
+        }
+    }
+    let chemin_valeurs = format!("{sortie}.valeurs");
+    {
+        use std::io::Write;
+        let mut f = std::io::BufWriter::new(std::fs::File::create(&chemin_valeurs).unwrap());
+        for v in &valeurs { f.write_all(&v.to_le_bytes()).unwrap(); }
+        f.flush().unwrap();
+    }
+    let mini = valeurs.iter().cloned().fold(f32::INFINITY, f32::min);
+    let maxi = valeurs.iter().cloned().fold(f32::NEG_INFINITY, f32::max);
+    let rms = (valeurs.iter().map(|x| (*x as f64) * (*x as f64)).sum::<f64>()
+               / valeurs.len().max(1) as f64).sqrt();
+    println!("rangées LUES : {lues} sur {n_lire} adresses (couches {:?}) · {:?} valeurs · \
+              min {mini:.6} · max {maxi:.6} · RMS {rms:.6} · somme {somme:.6}",
+             e.couches, valeurs.len());
+    println!("valeurs écrites dans {chemin_valeurs} (f32)");
 }
 
 fn run_sonder_engram(n: usize) {

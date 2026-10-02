@@ -172,6 +172,122 @@ impl Engram {
     }
 }
 
+/// **Le format d'une rangée**, tel que le nomme l'encodage du fichier
+/// (`e4m3_e8m0_32_row264`) : **256 valeurs e4m3** puis **8 échelles e8m0**, une
+/// par bloc de 32 valeurs — 264 octets en tout.
+///
+/// La disposition a été vérifiée sur les tables réelles avant d'écrire ce code :
+/// les 8 derniers octets d'une rangée valent 119-121 sur toutes celles qu'on a
+/// lues (des exposants e8m0, `2^(b-127)`, soit ≈ 0,008 — l'échelle attendue
+/// d'un plongement quantifié), là où les 256 premiers sont quelconques. La
+/// disposition inverse aurait fait passer des exposants pour des valeurs.
+pub const VALEURS_PAR_RANGEE: usize = 256;
+pub const ECHELLES_PAR_RANGEE: usize = 8;
+pub const OCTETS_PAR_RANGEE: usize = VALEURS_PAR_RANGEE + ECHELLES_PAR_RANGEE;
+
+/// e4m3 (OCP FP8) → f32. Pas d'infini dans ce format : l'exposant plein avec
+/// mantisse pleine est un NaN, et on le rend 0 — une table d'engram ne doit pas
+/// injecter de NaN dans un état résiduel.
+pub fn e4m3_vers_f32(b: u8) -> f32 {
+    let (s, e, m) = ((b >> 7) & 1, (b >> 3) & 0x0f, b & 0x07);
+    if e == 0x0f && m == 0x07 { return 0.0; }
+    let signe = if s == 1 { -1.0f32 } else { 1.0 };
+    if e == 0 {
+        // Sous-normal : mantisse / 8 × 2^(1-7).
+        signe * (m as f32 / 8.0) * 2f32.powi(1 - 7)
+    } else {
+        signe * (1.0 + m as f32 / 8.0) * 2f32.powi(e as i32 - 7)
+    }
+}
+
+/// e8m0 → f32 : l'octet EST l'exposant biaisé de 127 (`2^(b-127)`), et 255 est un
+/// NaN (rendu 0 pour la même raison que ci-dessus).
+pub fn e8m0_vers_f32(b: u8) -> f32 {
+    if b == 255 { 0.0 } else { 2f32.powi(b as i32 - 127) }
+}
+
+/// Lit une rangée d'une table et rend ses 256 valeurs **déquantifiées**.
+///
+/// `couche` est l'indice du tenseur `blk.<l>.engram_embd.weight` (le fichier
+/// range 264 octets par rangée, valeurs puis échelles).
+pub fn lire_rangee(g: &Gguf, couche: usize, rangee: i64) -> Option<Vec<f32>> {
+    let nom = format!("blk.{couche}.engram_embd.weight");
+    let t = g.tensor(&nom)?;
+    let octets = g.octets_tenseur(&nom)?;
+    let debut = (rangee as usize) * OCTETS_PAR_RANGEE;
+    if debut + OCTETS_PAR_RANGEE > octets.len() { return None; }
+    let r = &octets[debut..debut + OCTETS_PAR_RANGEE];
+    let mut out = vec![0f32; VALEURS_PAR_RANGEE];
+    for i in 0..VALEURS_PAR_RANGEE {
+        let ech = e8m0_vers_f32(r[VALEURS_PAR_RANGEE + i / 32]);
+        out[i] = e4m3_vers_f32(r[i]) * ech;
+    }
+    let _ = t;
+    Some(out)
+}
+
+/// **L'injection** (`EngramPostWkv`, `engram.py:765-854`) : ce que fait l'engram
+/// de ses rangées lues.
+///
+/// Pour chaque jeton et chacune des `hc` copies : une **porte** — sigmoïde d'un
+/// produit scalaire normalisé deux fois — multiplie une **valeur partagée** par
+/// les copies, et le tout s'ajoute à l'état.
+///
+/// Trois détails qui ne se devinent pas :
+///
+/// 1. le clamp est **DANS** la racine et c'est un **maximum** :
+///    `sqrt(max(|dot|, 1e-6))` — donc un produit scalaire minuscule est
+///    *amplifié* (la porte tend vers ½) au lieu d'être écrasé ;
+/// 2. la valeur est **partagée** entre les `hc` copies, alors que la clé ne
+///    l'est pas : le `kv` range `hc` clés PUIS une valeur ;
+/// 3. `token_mask` est un **garder** (polarité inverse de `dead_mask` du
+///    hachage) — s'y tromper inverse l'injection sur les jetons masqués.
+pub struct PorteEngram {
+    pub hc: usize,
+    pub dim: usize,
+    pub eps: f32,
+    pub clamp: f32,
+}
+
+impl PorteEngram {
+    /// `kv` range `(hc + 1) × dim` valeurs : les `hc` clés puis la valeur.
+    /// `masque` (optionnel) : 1 = garder.
+    pub fn injecter(&self, hidden: &[f32], kv: &[f32], q_weight: &[f32],
+                    k_weight: &[f32], masque: Option<&[u8]>, sortie: &mut [f32]) {
+        let (hc, dim) = (self.hc, self.dim);
+        let kv_row = (hc + 1) * dim;
+        let n_jetons = hidden.len() / (hc * dim);
+        for token in 0..n_jetons {
+            let actif = masque.map(|m| m.get(token).copied().unwrap_or(0) != 0)
+                              .unwrap_or(true);
+            for h in 0..hc {
+                let (mut hs, mut ks, mut dot) = (0f32, 0f32, 0f32);
+                for d in 0..dim {
+                    let hd = hidden[(token * hc + h) * dim + d];
+                    let key = kv[token * kv_row + h * dim + d];
+                    let q = q_weight[h * dim + d];
+                    let k = k_weight[h * dim + d];
+                    hs += hd * hd;
+                    ks += key * key;
+                    dot += hd * q * k * key;
+                }
+                let hr = 1.0 / (hs / dim as f32 + self.eps).sqrt();
+                let kr = 1.0 / (ks / dim as f32 + self.eps).sqrt();
+                let dot = dot * hr * kr / (dim as f32).sqrt();
+                let mut g = dot.abs().max(self.clamp).sqrt();
+                if dot < 0.0 { g = -g; }
+                let mut porte = 1.0 / (1.0 + (-g).exp());
+                if !actif { porte = 0.0; }
+                for d in 0..dim {
+                    let hd = hidden[(token * hc + h) * dim + d];
+                    let valeur = kv[token * kv_row + hc * dim + d];
+                    sortie[(token * hc + h) * dim + d] = hd + porte * valeur;
+                }
+            }
+        }
+    }
+}
+
 #[cfg(test)]
 mod tests {
     //! Concordance avec `tools/engram_reference.py`, transcription du portage
@@ -259,5 +375,34 @@ mod tests {
         // Et le jeton 0, deux rangs avant le trou, ne bouge pas : le repli ne
         // remonte pas le temps.
         assert_eq!(&sans[0..48], &avec[0..48]);
+    }
+
+    /// **L'injection** contre la transcription Python de `EngramPostWkv`.
+    /// Valeurs GÉNÉRÉES (même graine que le reste) — ne pas les retoucher.
+    const HIDDEN: [f32; 32] = [-1.356065521e+00, -1.433920894e+00, 1.660085903e+00, -5.181554137e-01, 8.014732407e-01, 1.642417136e+00, 6.029931276e-01, -6.106605636e-03, -9.117290533e-01, 4.353818814e-01, 1.455874312e+00, 1.588993157e+00, 1.052089103e+00, -1.945740703e+00, 1.511120966e+00, -2.003208184e-01, -1.167631975e+00, -4.861369575e-01, -1.666736588e+00, 5.369454656e-01, -1.935807742e+00, -1.143254440e+00, -1.562124018e+00, 1.566808098e+00, -1.486865391e+00, -1.698932260e+00, 7.827763275e-01, 1.684936844e+00, -1.426676940e+00, -1.836209469e-01, -9.580840232e-01, -6.958014523e-01];
+    const KV: [f32; 40] = [3.697002760e-01, -1.042727754e+00, 1.264138302e+00, -4.337073446e-01, -1.250534612e+00, 1.484952381e+00, -1.219439922e+00, 1.229107189e+00, 1.880418027e+00, -1.091883079e+00, -6.060928406e-01, -1.966306220e+00, -9.822897029e-01, 1.562895481e+00, 8.483555735e-01, -1.812623341e+00, 2.941221855e-01, 1.684291720e-01, 1.817103387e+00, -1.054359100e+00, -6.481017304e-01, 5.565720731e-01, -8.271037684e-01, -3.594652579e-01, 1.324215523e+00, -1.260724101e+00, 1.674046476e+00, -3.040798166e-01, -1.746986832e+00, 5.412257932e-01, -1.667367514e+00, 1.842129232e+00, 1.931316575e+00, 1.502067958e-01, -1.755679961e+00, -1.000126807e+00, 4.191034791e-02, 1.960323843e+00, 9.851909275e-01, -8.769597227e-03];
+    const QW: [f32; 32] = [-3.752987056e-01, 1.676520983e+00, -4.148318032e-01, 1.519990840e+00, -1.851066757e+00, -2.438827703e-01, 4.857791847e-01, 2.070205562e-01, 1.194855076e+00, -4.292194766e-01, -4.777781886e-01, -2.839719733e-01, -6.856401539e-02, 8.596341167e-03, 1.305555131e+00, -4.475572508e-01, 1.495618076e+00, 1.238193129e-01, -1.323114428e+00, 1.222802666e-02, -1.586613973e-01, 1.772190721e+00, 1.663752683e+00, -1.105282235e+00, 2.623989945e-01, 6.187670776e-01, -1.557775149e+00, -1.436563360e+00, 2.801449839e-01, 6.334866022e-01, 1.392492337e+00, -1.994577032e+00];
+    const KW: [f32; 32] = [-2.950232879e-01, 1.791783121e+00, 2.376765597e-01, 7.917618159e-01, 1.128081913e+00, -1.803581269e-01, -1.559716484e+00, 1.027947794e+00, -4.301770960e-01, 1.843875476e+00, 1.350920468e+00, 1.241314878e+00, 1.359489088e+00, -3.397072610e-01, -7.118844328e-01, 9.399598330e-01, 5.436518017e-01, 1.625479453e+00, 5.041433459e-01, -5.371072939e-01, 1.724095089e+00, -4.857705701e-01, 6.622024750e-01, 1.683187993e+00, -1.687463469e+00, -1.334748990e+00, -6.020459433e-01, 1.254564722e+00, -1.467432817e+00, -5.782837691e-01, -9.061440110e-01, -5.374918662e-02];
+    const SORTIE: [f32; 32] = [1.990007132e-01, -1.312976705e+00, 2.464395534e-01, -1.323442050e+00, 8.352188046e-01, 3.220839573e+00, 1.396253624e+00, -1.316774968e-02, 3.235194265e-01, 5.314524680e-01, 3.329610463e-01, 9.493232371e-01, 1.078894493e+00, -6.919394998e-01, 2.141238063e+00, -2.059297547e-01, 2.992005720e-01, -3.720550821e-01, -3.000173344e+00, -2.226496058e-01, -1.903976885e+00, 3.456090912e-01, -8.138727287e-01, 1.560147599e+00, -8.124718335e-01, -1.646481773e+00, 1.697130574e-01, 1.335704054e+00, -1.412042328e+00, 5.009016154e-01, -6.140666709e-01, -6.988636949e-01];
+
+    #[test]
+    fn injection_conforme_a_la_reference() {
+        let porte = PorteEngram { hc: 4, dim: 8, eps: 1e-20, clamp: 1e-6 };
+        let mut sortie = vec![0f32; 32];
+        porte.injecter(&HIDDEN, &KV, &QW, &KW, None, &mut sortie);
+        for (i, (a, b)) in sortie.iter().zip(SORTIE.iter()).enumerate() {
+            assert!((a - b).abs() <= 1e-5, "valeur {i} : {a:e} contre {b:e}");
+        }
+    }
+
+    /// Le **masque** éteint la porte : la sortie redevient l'entrée, exactement.
+    #[test]
+    fn le_masque_eteint_la_porte() {
+        let porte = PorteEngram { hc: 4, dim: 8, eps: 1e-20, clamp: 1e-6 };
+        let mut sortie = vec![0f32; 32];
+        porte.injecter(&HIDDEN, &KV, &QW, &KW, Some(&[0u8]), &mut sortie);
+        for (i, (a, b)) in sortie.iter().zip(HIDDEN.iter()).enumerate() {
+            assert_eq!(a, b, "valeur {i} : la porte éteinte doit rendre l'entrée");
+        }
     }
 }
