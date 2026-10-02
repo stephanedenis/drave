@@ -74273,3 +74273,564 @@ started background job bash-139
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A drave-core/src/ tools/ docs/ 2>/dev/null; git commit -q -F - <<'EOF'\nP2/P3 : le harnais de comparaison étage par étage, et le bug qu'il a trouvé\n\nTrois pièces, toutes vérifiables :\n\n1. `--couches a:b` + `Model::load_p … [1601 caractères tronqués]`
+
+  ```
+ae2e9ac P2/P3 : le harnais de comparaison étage par étage, et le bug qu'il a trouvé
+  ```
+
+### 👤 Utilisateur
+
+background job bash-139 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && rm -f /tmp/ref_v4f-*.bin && LD_LIBRARY_PATH=/home/stephane/Data13TB/stephane/GitHub/llama.cpp/build/bin REF_DUMP=/tmp/ref_v4f REF_TENSORS='^(qr|qr_norm|q_norm|kv_norm|attn_derope|attn_out|hc_attn_pre|hc_attn_post|l_last)-[01]$' timeout 2400 ./tools/ref_logits /home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek-V4-Flash-UD-IQ1_M/DeepSeek-V4-Flash-UD-IQ1_M-00001-of-00003.gguf /tmp/ids_v4flash.txt /tmp/ref_v4f.bin 4 2>&1 | tail -3) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls /tmp/ref_v4f-*.bin | head -20; echo \"=== comparaisons ===\"; for nom in qr qr_norm q_norm attn_derope attn_out l_last; do for l in 0 1; do python3 tools/compare_etats.py /tmp/v4flash /tmp/ref_v4f $nom $l 0,1,2,3 2>/dev/null | sed … [76 caractères tronqués]`
+
+  ```
+/tmp/ref_v4f-attn_derope-0.bin
+/tmp/ref_v4f-attn_derope-1.bin
+/tmp/ref_v4f-attn_out-0.bin
+/tmp/ref_v4f-attn_out-1.bin
+/tmp/ref_v4f-hc_attn_post-0.bin
+/tmp/ref_v4f-hc_attn_post-1.bin
+/tmp/ref_v4f-hc_attn_pre-0.bin
+/tmp/ref_v4f-hc_attn_pre-1.bin
+/tmp/ref_v4f-kv_norm-0.bin
+/tmp/ref_v4f-kv_norm-1.bin
+/tmp/ref_v4f-l_last-0.bin
+/tmp/ref_v4f-l_last-1.bin
+/tmp/ref_v4f-q_norm-0.bin
+/tmp/ref_v4f-q_norm-1.bin
+/tmp/ref_v4f-qr-0.bin
+/tmp/ref_v4f-qr-1.bin
+/tmp/ref_v4f-qr_norm-0.bin
+/tmp/ref_v4f-qr_norm-1.bin
+=== comparaisons ===
+# qr-0 : référence ne=(1024, 4, 1, 1) → 1024 valeurs × 1 par position
+  pos 0 : écart max 1.148e-03 (indice 250, dynamique 2.886e-01) · corrélation 0.999993 ~
+  pos 1 : écart max 9.200e-04 (indice 171, dynamique 2.475e-01) · corrélation 0.999994 ~
+# qr-1 : référence ne=(1024, 4, 1, 1) → 1024 valeurs × 1 par position
+  pos 0 : écart max 2.418e-02 (indice 596, dynamique 3.042e-01) · corrélation 0.997698 ❌
+  pos 1 : écart max 1.687e-01 (indice 288, dynamique 3.962e-01) · corrélation 0.924502 ❌
+# qr_norm-0 : référence ne=(1024, 4, 1, 1) → 1024 valeurs × 1 par position
+  pos 0 : écart max 6.089e-04 (indice 250, dynamique 1.327e-01) · corrélation 0.999993 ~
+  pos 1 : écart max
+… [2228 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Localisation : le puits est-il mis à l'échelle ? Lecture de `build_attn_mha` et test de `kv_norm`.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/llama.cpp && sed -n '2940,2975p' src/llama-graph.cpp; echo \"=== kq_scale usage ===\"; sed -n '2780,2800p' src/llama-graph.cpp | head -25", "description": "Check sink scaling in reference attention"}`
+
+  ```
+cb(kq, "kq_scaled", il);
+        }
+
+        if (hparams.attn_soft_cap) {
+            kq = ggml_scale(ctx0, kq, 1.0f / hparams.f_attn_logit_softcapping);
+            cb(kq, "kq_scaled_1", il);
+            kq = ggml_tanh (ctx0, kq);
+            cb(kq, "kq_tanh", il);
+            kq = ggml_scale(ctx0, kq, hparams.f_attn_logit_softcapping);
+            cb(kq, "kq_scaled_2", il);
+        }
+
+        if (kq_b) {
+            kq = ggml_add(ctx0, kq, kq_b);
+            cb(kq, "kq_plus_kq_b", il);
+        }
+
+        kq = ggml_soft_max_ext(ctx0, kq, kq_mask, kq_scale, hparams.f_max_alibi_bias);
+        ggml_soft_max_add_sinks(kq, sinks);
+        cb(kq, "kq_soft_max", il);
+
+        const bool quant_v_body = v_tail && ggml_is_quantized(v->type);
+        if (!v_trans && !quant_v_body) {
+            // note: avoid this branch
+            v = ggml_cont(ctx0, ggml_transpose(ctx0, v));
+            cb(v, "v_cont", il);
+        }
+
+        ggml_tensor * kqv;
+        if (v_tail) {
+            const int64_t n_kv_tail = kq->ne[0] - n_kv_body;
+            ggml_tensor * weights_body = ggml_view_4d(ctx0, kq,
+                    n_kv_body, kq->ne[1], kq->ne[2], kq->ne[3],
+                    kq->nb[1], kq->nb[
+… [897 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Bug n°2 : le puits était mis à l'échelle alors que la référence l'ajoute brut au softmax.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='drave-core/src/model.rs'\ns=open(p).read()\na=\"\"\"            // le puits : un logit appris, présent dans la somme du softmax mais\n            // sans valeur associée — c'est ce qui « draine » l'attention.\ … [1544 caractères tronqués]`
+
+  ```
+ok
+# attn_derope-0 : référence ne=(512, 64, 4, 1) → 512 valeurs × 64 copies
+  pos 0 : écart max 1.048e-02 (indice 20442, dynamique 4.939e+00) · corrélation 0.999996 ~
+  pos 1 : écart max 2.980e+00 (indice 14784, dynamique 5.504e+00) · corrélation 0.933250 ❌
+# attn_derope-1 : référence ne=(512, 64, 4, 1) → 512 valeurs × 64 copies
+  pos 0 : écart max 4.852e-02 (indice 12764, dynamique 4.488e+00) · corrélation 0.999836 ~
+  pos 1 : écart max 3.418e+00 (indice 28124, dynamique 7.124e+00) · corrélation 0.934125 ❌
+# l_last-0 : référence ne=(4096, 4, 4, 1) → 4096 valeurs × 4 copies
+  pos 0 : écart max 1.701e-02 (indice 14021, dynamique 9.045e-01) · corrélation 0.999811 ~
+  pos 1 : écart max 5.669e-01 (indice 14917, dynamique 8.942e-01) · corrélation 0.883881 ❌
+# l_last-1 : référence ne=(4096, 4, 4, 1) → 4096 valeurs × 4 copies
+  pos 0 : écart max 2.002e-02 (indice 10407, dynamique 3.574e+00) · corrélation 0.999865 ~
+  pos 1 : écart max 1.540e+00 (indice 10693, dynamique 8.818e-01) · corrélation 0.762193 ❌
+  ```
+
+### 🤖 Assistant
+
+⏵ Position 0 juste, position 1 fausse → la rotation. Vérification de la convention RoPE de V4.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/llama.cpp && grep -rn \"rope_type\" src/models/deepseek4.cpp | head -8; grep -rn \"LLAMA_ROPE_TYPE_NEOX\\|rope_type =\" src/llama-model.cpp | grep -i \"deepseek4\\|MOSTLY\" | head -5; grep -n \"case LLM_ARCH_DEEPSEEK4\" -A 12 src/llama-model.cp … [81 caractères tronqués]`
+
+  ```
+430:    comp_pe = ggml_rope_ext(ctx0, comp_pe, comp_pos, nullptr, n_embd_head_rope, rope_type, n_ctx_orig,
+514:    comp_pe = ggml_rope_ext(ctx0, comp_pe, comp_pos, nullptr, n_embd_head_rope, rope_type, n_ctx_orig,
+558:            rope_type, n_ctx_orig, hparams.dsv4_compress_rope_base, freq_scale,
+900:    q_pe = ggml_rope_ext(ctx0, q_pe, inp_pos, nullptr, n_embd_head_rope, rope_type, n_ctx_orig_l,
+919:    kv_pe = ggml_rope_ext(ctx0, kv_pe, inp_pos, nullptr, n_embd_head_rope, rope_type, n_ctx_orig_l,
+1124:    out_pe = ggml_rope_ext_back(ctx0, out_pe, inp_pos, nullptr, n_embd_head_rope, rope_type, n_ctx_orig_l,
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/llama.cpp && grep -rn \"rope_type\" src/models/deepseek4.h src/llama-model.h 2>/dev/null | head -5; grep -rn \"LLM_ARCH_DEEPSEEK4\" -A 30 src/llama-model.cpp | grep -n \"rope\" | head -6; grep -rn \"dsv4\\|deepseek4\" src/llama-model.cpp | grep … [75 caractères tronqués]`
+
+  ```
+(no output)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/llama.cpp && grep -rn \"rope_type\" src/llama-model.h | head -3; grep -rn \"LLAMA_ROPE_TYPE_NEOX\" src/llama-model.cpp | head -8", "description": "Check rope_type declaration and NEOX usage"}`
+
+  ```
+2715:            return LLAMA_ROPE_TYPE_NEOX;
+2729:            return model->hparams.use_mrope() ? LLAMA_ROPE_TYPE_MROPE : LLAMA_ROPE_TYPE_NEOX;
+2732:            return model->hparams.use_mrope() ? LLAMA_ROPE_TYPE_MROPE : LLAMA_ROPE_TYPE_NEOX;
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/llama.cpp && grep -n \"rope_type()\" -B 5 -A 25 src/llama-model.cpp | sed -n '1,60p' | grep -n \"case LLM_ARCH\" | head; sed -n '2700,2740p' src/llama-model.cpp", "description": "Read the rope_type switch"}`
+
+  ```
+case LLM_ARCH_SEED_OSS:
+        case LLM_ARCH_GROVEMOE:
+        case LLM_ARCH_APERTUS:
+        case LLM_ARCH_MINIMAX_M2:
+        case LLM_ARCH_MINIMAX_M3:
+        case LLM_ARCH_COGVLM:
+        case LLM_ARCH_PANGU_EMBED:
+        case LLM_ARCH_AFMOE:
+        case LLM_ARCH_LAGUNA:
+        case LLM_ARCH_QWEN3NEXT:
+        case LLM_ARCH_MIMO2:
+        case LLM_ARCH_STEP35:
+        case LLM_ARCH_TALKIE:
+        case LLM_ARCH_MELLUM:
+        case LLM_ARCH_DFLASH:
+            return LLAMA_ROPE_TYPE_NEOX;
+
+        case LLM_ARCH_QWEN2VL:
+        case LLM_ARCH_PADDLEOCR:
+            return LLAMA_ROPE_TYPE_MROPE;
+        case LLM_ARCH_QWEN3VL:
+        case LLM_ARCH_QWEN3VLMOE:
+        case LLM_ARCH_QWEN35:
+        case LLM_ARCH_QWEN35MOE:
+            return LLAMA_ROPE_TYPE_IMROPE;
+
+        case LLM_ARCH_GLM4:
+            return model->hparams.use_mrope() ? LLAMA_ROPE_TYPE_MROPE : LLAMA_ROPE_TYPE_NORM;
+        case LLM_ARCH_GLM4_MOE:
+            return model->hparams.use_mrope() ? LLAMA_ROPE_TYPE_MROPE : LLAMA_ROPE_TYPE_NEOX;
+
+        case LLM_ARCH_HUNYUAN_VL:
+            return model->hparams.use_mrope() ? LLAMA_ROPE_TYPE_MROPE : LLAMA_ROPE_TYPE_NEOX;
+
+        // all model arches should be lis
+… [140 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/llama.cpp && sed -n '2660,2700p' src/llama-model.cpp | grep -n \"DEEPSEEK\" ; grep -n \"LLM_ARCH_DEEPSEEK4\" src/llama-model.cpp | head -5", "description": "Locate DEEPSEEK4 in the rope switch"}`
+
+  ```
+192:        case LLM_ARCH_DEEPSEEK4:
+2295:                    if (arch == LLM_ARCH_DEEPSEEK4) {
+2537:    if (model->arch == LLM_ARCH_DEEPSEEK4) {
+2621:        case LLM_ARCH_DEEPSEEK4:
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/llama.cpp && sed -n '2605,2640p' src/llama-model.cpp", "description": "Read DEEPSEEK4 rope type branch"}`
+
+  ```
+case LLM_ARCH_LLAMA4:
+        case LLM_ARCH_DECI:
+        case LLM_ARCH_BAICHUAN:
+        case LLM_ARCH_STARCODER:
+        case LLM_ARCH_INTERNLM2:
+        case LLM_ARCH_MINICPM:
+        case LLM_ARCH_XVERSE:
+        case LLM_ARCH_COMMAND_R:
+        case LLM_ARCH_COHERE2:
+        case LLM_ARCH_COHERE2MOE:
+        case LLM_ARCH_OLMO:
+        case LLM_ARCH_ARCTIC:
+        case LLM_ARCH_DEEPSEEK:
+        case LLM_ARCH_DEEPSEEK2:
+        case LLM_ARCH_DEEPSEEK2OCR:
+        case LLM_ARCH_DEEPSEEK32:
+        case LLM_ARCH_DEEPSEEK4:
+        case LLM_ARCH_MUSE_GLIMMER:
+        case LLM_ARCH_PLM:
+        case LLM_ARCH_CHATGLM:
+        case LLM_ARCH_GRANITE:
+        case LLM_ARCH_GRANITE_MOE:
+        case LLM_ARCH_GRANITE_HYBRID:
+        case LLM_ARCH_CHAMELEON:
+        case LLM_ARCH_BAILINGMOE:
+        case LLM_ARCH_NEO_BERT:
+        case LLM_ARCH_SMOLLM3:
+        case LLM_ARCH_ARCEE:
+        case LLM_ARCH_ERNIE4_5:
+        case LLM_ARCH_ERNIE4_5_MOE:
+        case LLM_ARCH_MISTRAL3:
+        case LLM_ARCH_EAGLE3:
+        case LLM_ARCH_MISTRAL4:
+        case LLM_ARCH_LLAMA_EMBED:
+        case LLM_ARCH_MAINCODER:
+        case LLM_ARCH_GLM_DSA:
+  ```
+
+### 🤖 Assistant
+
+⏵ La convention RoPE de V4 est « NORM », pas « NEOX ». Vérification dans ggml puis implémentation.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/llama.cpp && grep -n \"rope_norm\\|rope_neox\" ggml/src/ggml-cpu/ops.cpp | head -6; sed -n \"$(grep -n 'static void rope_norm(' ggml/src/ggml-cpu/ops.cpp | head -1 | cut -d: -f1),+30p\" ggml/src/ggml-cpu/ops.cpp | grep -A 12 \"theta_base\"| hea … [52 caractères tronqués]`
+
+  ```
+[stderr]
+sed: -e expression #1, char 1: unknown command: ','
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/llama.cpp && grep -rn \"theta_base = powf\\|rope_norm(\" ggml/src/ggml-cpu/*.c* 2>/dev/null | head -8", "description": "Find rope kernels in ggml-cpu"}`
+
+  ```
+(no output)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/llama.cpp && grep -rln \"rope_norm\" ggml/src/ | head -5", "description": "Locate rope_norm definition files"}`
+
+  ```
+ggml/src/ggml-cuda/rope.cu
+ggml/src/ggml-metal/ggml-metal-device.cpp
+ggml/src/ggml-metal/ggml-metal.metal
+ggml/src/ggml-opencl/kernels/rope.cl
+ggml/src/ggml-opencl/ggml-opencl.cpp
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/llama.cpp && grep -rn \"rope_norm\" ggml/src/ggml-cpu/ggml-cpu.c 2>/dev/null | head -3; ls ggml/src/ggml-cpu/ | head; grep -rn \"theta_base\" ggml/src/ggml-cpu/ops.cpp | head -4", "description": "Find the CPU rope implementation"}`
+
+  ```
+amx
+arch
+arch-fallback.h
+binary-ops.cpp
+binary-ops.h
+cmake
+CMakeLists.txt
+common.h
+ggml-cpu.c
+ggml-cpu.cpp
+5984:     float theta_base, float freq_scale, const float * freq_factors, float corr_dims[2], int64_t ne0, float ext_factor, float mscale,
+5987:    float theta = theta_base;
+6000:     float theta_base_t, float theta_base_h, float theta_base_w, float theta_base_e, int sections[4], bool is_imrope, bool indep_sects,
+6004:    float theta_t = theta_base_t;
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/llama.cpp && sed -n '5975,6010p' ggml/src/ggml-cpu/ops.cpp; grep -n \"case GGML_ROPE_TYPE_NORM\" -A 30 ggml/src/ggml-cpu/ops.cpp | grep -n \"i0\\|i1\\|rope_\" | head -10", "description": "Read the rope pair index computation"}`
+
+  ```
+// Get n-d magnitude scaling corrected for interpolation
+        mscale *= 1.0f + 0.1f * logf(1.0f / freq_scale);
+    }
+    *cos_theta = cosf(theta) * mscale;
+    *sin_theta = sinf(theta) * mscale;
+}
+
+static void ggml_rope_cache_init(
+     float theta_base, float freq_scale, const float * freq_factors, float corr_dims[2], int64_t ne0, float ext_factor, float mscale,
+     float * cache, float sin_sign, float theta_scale) {
+    // ref: https://github.com/jquesnelle/yarn/blob/master/scaled_rope/LlamaYaRNScaledRotaryEmbedding.py
+    float theta = theta_base;
+    for (int64_t i0 = 0; i0 < ne0; i0 += 2) {
+        const float ff = freq_factors ? freq_factors[i0/2] : 1.0f;
+        rope_yarn(
+            theta/ff, freq_scale, corr_dims, i0, ext_factor, mscale, &cache[i0 + 0], &cache[i0 + 1]
+        );
+        cache[i0 + 1] *= sin_sign;
+
+        theta *= theta_scale;
+    }
+}
+
+static void ggml_mrope_cache_init(
+     float theta_base_t, float theta_base_h, float theta_base_w, float theta_base_e, int sections[4], bool is_imrope, bool indep_sects,
+     float freq_scale, const float * freq_factors, float corr_dims[2], int64_t ne0, float ext_factor, float mscale,
+     float * cache, float sin_sign
+… [771 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/llama.cpp && sed -n '6150,6215p' ggml/src/ggml-cpu/ops.cpp", "description": "Read the NORM rope branch"}`
+
+  ```
+const bool is_imrope = mode == GGML_ROPE_TYPE_IMROPE; // qwen3vl apply interleaved mrope
+    const bool mrope_used = mode & GGML_ROPE_TYPE_MROPE;  // ggml_rope_multi, note: also true for vision (24 & 8 == true) and for imrope
+    const bool is_vision = mode == GGML_ROPE_TYPE_VISION;
+
+    if (mrope_used) {
+        GGML_ASSERT(sections[0] > 0 || sections[1] > 0 || sections[2] > 0);
+    }
+
+    if (is_vision) {
+        GGML_ASSERT(n_dims == ne0/2);
+    }
+
+    const float * freq_factors = NULL;
+    if (src2 != NULL) {
+        GGML_ASSERT(src2->type == GGML_TYPE_F32);
+        GGML_ASSERT(src2->ne[0] >= n_dims / 2);
+        freq_factors = (const float *) src2->data;
+    }
+
+    // backward process uses inverse rotation by cos and sin.
+    // cos and sin build a rotation matrix, where the inverse is the transpose.
+    // this essentially just switches the sign of sin.
+    const float sin_sign = forward ? 1.0f : -1.0f;
+
+    const int32_t * pos = (const int32_t *) src1->data;
+
+    int64_t last_i2 = -1;
+
+    for (int64_t i3 = 0; i3 < ne3; i3++) { // batch
+        for (int64_t i2 = 0; i2 < ne2; i2++) { // seq-len
+            for (int64_t i1 = 0; i1 < ne1; i1++) { // attn-heads
+                i
+… [1744 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/llama.cpp && grep -n \"rotate_pairs\" -A 20 ggml/src/ggml-cpu/ops.cpp | sed -n '1,30p'", "description": "Read rotate_pairs implementation"}`
+
+  ```
+6071:static void rotate_pairs(const int64_t n, const int64_t n_offset, const float * cache, const T * src_data, T * dst_data, const int scale = 2) {
+6072-  for (int64_t i0 = 0; i0 < n; i0 += 2) {
+6073-    const int64_t ic = i0/scale; // hack for GGML_ROPE_TYPE_NORMAL, where we need ic = i0; for all other cases, ic = i0/2
+6074-
+6075-    const float cos_theta = cache[i0 + 0];
+6076-    const float sin_theta = cache[i0 + 1];
+6077-
+6078-    const T * const src = src_data + ic;
+6079-    T * dst             = dst_data + ic;
+6080-
+6081-    const float x0 = type_conversion_table<T>::to_f32(src[0]);
+6082-    const float x1 = type_conversion_table<T>::to_f32(src[n_offset]);
+6083-
+6084-    dst[0]        = type_conversion_table<T>::from_f32(x0*cos_theta - x1*sin_theta);
+6085-    dst[n_offset] = type_conversion_table<T>::from_f32(x0*sin_theta + x1*cos_theta);
+6086-  }
+6087-}
+6088-
+6089-template<typename T> //float or ggml_fp16_t
+6090-static void ggml_compute_forward_rope_flt(
+6091-        const ggml_compute_params * params,
+--
+6208:                        rotate_pairs<T>(n_dims, 1, cache, src, dst_data, 1);
+6209-                        break;
+6210-                    case GGML_ROPE_TYPE_NEOX:
+62
+… [277 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Implémentation du RoPE « NORM » (paires 2i, 2i+1) et de son inverse pour le chemin V4.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='drave-core/src/model.rs'\ns=open(p).read()\na=\"\"\"    /// **Rotation INVERSE** (dé-rotation), celle de `ggml_rope_ext_back` :\"\"\"\nb='''    /// **RoPE « NORM »** — l'autre convention d'appariement, celle d … [2806 caractères tronqués]`
+
+  ```
+ok
+warning: function `ouvrir_sous_ensemble` is never used
+   --> src/clusters.rs:161:8
+    |
+161 | pub fn ouvrir_sous_ensemble(dossier: &Path, clusters: Option<&[usize]>)
+    |        ^^^^^^^^^^^^^^^^^^^^
+--
+warning: function `sample` is never used
+    --> src/model.rs:6005:4
+     |
+6005 | fn sample(logits: &[f32], temp: f32) -> u32 {
+     |    ^^^^^^
+--- fin ---
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && rm -f /tmp/v4flash-*.bin && DRAVE_DUMP_COUCHES=/tmp/v4flash timeout 1800 ./drave-core/target/release/drave /home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek-V4-Flash-UD-IQ1_M/DeepSeek-V4-Flash-UD-IQ1_M-00001-of-00003.gguf --couc … [347 caractères tronqués]`
+
+  ```
+# attn_derope-0 : référence ne=(512, 64, 4, 1) → 512 valeurs × 64 copies
+  pos 0 : écart max 1.048e-02 (indice 20442, dynamique 4.939e+00) · corrélation 0.999996 ~
+  pos 1 : écart max 1.343e-02 (indice 5594, dynamique 5.504e+00) · corrélation 0.999996 ~
+  pos 2 : écart max 1.898e-02 (indice 26049, dynamique 5.728e+00) · corrélation 0.999996 ~
+  pos 3 : écart max 1.763e-02 (indice 25025, dynamique 5.696e+00) · corrélation 0.999996 ~
+# attn_derope-1 : référence ne=(512, 64, 4, 1) → 512 valeurs × 64 copies
+  pos 0 : écart max 4.852e-02 (indice 12764, dynamique 4.488e+00) · corrélation 0.999836 ~
+  pos 1 : écart max 7.832e-02 (indice 19420, dynamique 7.124e+00) · corrélation 0.999895 ~
+  pos 2 : écart max 9.496e-02 (indice 21468, dynamique 9.531e+00) · corrélation 0.999935 ~
+  pos 3 : écart max 3.936e-02 (indice 12764, dynamique 1.015e+01) · corrélation 0.999989 ~
+# attn_out-0 : référence ne=(4096, 4, 1, 1) → 4096 valeurs × 1 par position
+  pos 0 : LONGUEURS DIFFÉRENTES — Drave 32768, référence 4096
+  pos 1 : LONGUEURS DIFFÉRENTES — Drave 32768, référence 4096
+  pos 2 : LONGUEURS DIFFÉRENTES — Drave 32768, référence 4096
+  pos 3 : LONGUEURS DIFFÉRENTES — Drave 32768, référence 4096
+# a
+… [1184 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Analyse de l'écart résiduel : bruit de quantification ou mécanisme manquant ?
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c \"\nimport struct, statistics\ndef rd(p):\n    b=open(p,'rb').read(); return list(struct.unpack(f'<{len(b)//4}f', b))\ndef rr(p):\n    b=open(p,'rb').read(); ne=struct.unpack('<4i', b[8:24]); n=1\n    for d in ne: n*=d\n   … [732 caractères tronqués]`
+
+  ```
+16384 valeurs · erreur relative : médiane 9.77e-04 · moyenne 2.90e-02 · >1% : 34.32% · >5% : 10.39%
+signes : 49.5% positifs (50% = bruit) · |écart| moyen 1.01e-03
+  ```
+
+### 🤖 Assistant
+
+⏵ Écart résiduel = bruit de quantification (49,5 % de signes positifs). Rédaction du rapport.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='drave-core/src/model.rs'\ns=open(p).read()\na=\"\"\"        matvec_f32(&m.wo_b, &oa, m.n_groups * m.o_lora, h, att);\n        Self::vider_couche(dump, \"attn_out\", l, pos, att);\"\"\"\nb=\"\"\"        matvec_ … [610 caractères tronqués]`
+
+  ```
+ok
+build ok
+  ```
+
+- **write** `{"content": "# V4-Flash, couches 0 et 1 — la première comparaison étage par étage\n\n**En une ligne** : les deux premières couches de **DeepSeek-V4-Flash** tournent\ndans Drave et **concordent avec llama.cpp** — hyper-connexions à **1e-7**,\nattention et sortie groupée à **0,99999** de corrélation — … [5257 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-v4-couches-0-1.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && bash tools/portes.sh rapide 2>&1 | tail -11", "description": "Run fast gates after all V4 changes", "timeoutMs": 1800000}`
+
+  ```
+cargo test --release                       51 verts  ✅
+  Qwen2.5-0.5B ctx 256                       19.3885  ✅
+  Qwen3-30B en clusters (origine : 799,8557) 799.8557  ✅
+  threads par défaut (physiques)            20  ✅
+  (portes de formats : ignorées en mode rapide)
+  GLM-5.3 : sigmoïde ×2,5                  sigmoïde  ✅
+  Kimi-K2.7 : sigmoïde ×2,827              sigmoïde  ✅
+  V4-Flash : racine de softplus              racine de softplus  ✅
+  Qwen3-235B : softmax                       softmax  ✅
+
+toutes les portes sont vertes
+  ```
+
+### 🤖 Assistant
+
+⏵ Le compte de tests a baissé (52 → 51) : vérification immédiate.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && cargo test --release 2>&1 | grep -E \"^test \" | sort > /tmp/tests_now.txt; wc -l /tmp/tests_now.txt; grep -c \"tests_hc\" /tmp/tests_now.txt; grep \"tests_hc\" /tmp/tests_now.txt", "description": "List current tests", "ti … [17 caractères tronqués]`
+
+  ```
+53 /tmp/tests_now.txt
+3
+test model::tests_hc::hyper_connexions_conforme_a_la_reference ... ok
+test model::tests_hc::hyper_connexions_degenere_egale_le_residu ... ok
+test model::tests_hc::sinkhorn_rend_les_connexions_doubles ... ok
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && cargo test --release 2>&1 | grep -E \"test result|running|^test .* FAILED|ignore\" | head -10; grep -c \"^test .* \\.\\.\\. ok\" /tmp/tests_now.txt", "description": "Check test summary details", "timeoutMs": 900000}`
+
+  ```
+= note: `Gpu` has derived impls for the traits `Clone` and `Debug`, but these are intentionally ignored during dead code analysis
+   = note: `Disque` has derived impls for the traits `Clone` and `Debug`, but these are intentionally ignored during dead code analysis
+running 52 tests
+test tests_vars::les_vars_lues_sont_completes ... FAILED
+test result: FAILED. 51 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.11s
+51
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && cargo test --release tests_vars 2>&1 | grep -A 12 \"les_vars_lues\" | head -20", "description": "Show the failing vars test detail", "timeoutMs": 900000}`
+
+  ```
+test tests_vars::les_vars_lues_sont_completes ... FAILED
+
+failures:
+
+---- tests_vars::les_vars_lues_sont_completes stdout ----
+
+thread 'tests_vars::les_vars_lues_sont_completes' (648821) panicked at src/main.rs:5010:13:
+DRAVE_DUMP_COUCHES est lu dans le source mais absent de VARS_LUES : un ancien nom QT_DUMP_COUCHES resterait muet
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    tests_vars::les_vars_lues_sont_completes
+
+test result: FAILED. 1 passed; 1 failed; 0 ignored; 0 measured; 50 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `--bin drave`
+  ```
+
+### 🤖 Assistant
+
+⏵ Le test d'inventaire des variables a détecté le nouveau `DRAVE_DUMP_COUCHES`, et la porte cachait l'échec. Je corrige les deux.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"VARS_LUES\" drave-core/src/main.rs | head -3; sed -n \"$(grep -n 'const VARS_LUES' drave-core/src/main.rs | cut -d: -f1),+12p\" drave-core/src/main.rs", "description": "Read the VARS_LUES inventory"}`
+
+  ```
+17:const VARS_LUES: &[&str] = &[
+80:        k.strip_prefix("QT_").map(|s| VARS_LUES.contains(&s)).unwrap_or(false)
+4976:    use super::VARS_LUES;
+const VARS_LUES: &[&str] = &[
+    "BANC_KV_DEBUG", "BANC_KV_GPU_SEUL", "BANC_KV_GRAD", "BANC_KV_K0",
+    "BANC_KV_KUNIT", "BANC_KV_UNIT", "BANC_KV_V1", "BANC_SANS_PUITS",
+    "CLUSTERS", "DEBUG_ETAT", "DEBUG_FLUX", "DEBUG_MLA", "FLUX_VERIF", "GPU", "GPU_EXPERTS",
+    "GPU_EXPERTS_GO", "GPU_KV", "GPU_TETE", "GPU_TOPK", "HARMONY_TRACE",
+    "KV_BITS", "KV_F16", "KV_K_F16", "KV_K_F32", "KV_V_F32", "MMAP",
+    "PRELIRE", "PRELIRE_TOUT", "Q8_BLOCS", "SANS_EMPRUNT", "TRACE_BLOCS",
+    "TRACE_EXPERTS", "VISION_TEXTE", "YARN", "YARN_MSCALE", "YARN_NON",
+    "YARN_RAMPE",
+];
+
+mod clusters;
+mod engine;
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='drave-core/src/main.rs'\ns=open(p).read()\na=\"\"\"    \"CLUSTERS\", \"DEBUG_ETAT\", \"DEBUG_FLUX\", \"DEBUG_MLA\", \"FLUX_VERIF\", \"GPU\", \"GPU_EXPERTS\",\"\"\"\nb=\"\"\"    \"CLUSTERS\", \"DEBUG_ETAT\", \" … [1809 caractères tronqués]`
+
+  ```
+ok main
+ok portes
+
+test result: ok. 52 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.12s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && bash tools/portes.sh rapide 2>&1 | head -4", "description": "Verify the strengthened gate passes", "timeoutMs": 1800000}`
+
+  ```
+=== Portes ===
+  cargo test --release                       52 verts  ✅
+  Qwen2.5-0.5B ctx 256                       19.3885  ✅
+  Qwen3-30B en clusters (origine : 799,8557) 799.8557  ✅
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='docs/plan-deepseek41-complet.md'\ns=open(p).read()\nsubs=[\n(\"\"\"### P1 — Hyper-connexions : les connexions pondérées (≈ ½ journée)\"\"\",\n \"\"\"### P1 — Hyper-connexions : les connexions pondérées (≈ ½ jo … [3758 caractères tronqués]`

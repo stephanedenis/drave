@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 93.1 h |
+| Durée | 93.2 h |
 | Tours | 75 |
-| Messages | 4616 |
-| Appels d'outils | 4405 |
-| Fichiers touchés | 91 |
-| Commandes | 3799 |
+| Messages | 4646 |
+| Appels d'outils | 4434 |
+| Fichiers touchés | 92 |
+| Commandes | 3827 |
 | Sous-agents | 28 |
-| Commits | 328 |
+| Commits | 329 |
 | Compactages de contexte | 6 |
 
 ## Objectifs déclarés
@@ -3831,7 +3831,7 @@ Le flux se compte par **provenance** (attention / experts / partagé) en **paire
 
 ### Tour 75 — <goal_round> Objective: "Exécuter le plan docs/plan-deepseek41-complet.md phase par phase (P0→P9), en autonomie, en resp … [941 caractères tronqués]
 
-*105 appels d'outils.* Actions notables :
+*134 appels d'outils.* Actions notables :
 
 - bash — Locate MLA loader and HC absence
 - read
@@ -3847,11 +3847,11 @@ Le flux se compte par **provenance** (attention / experts / partagé) en **paire
 - bash — Report HC params in --config and verify
 - bash — List x usages in the layer loop
 - bash — Locate the three residual sites
-- … et 84 autres
+- … et 113 autres
 
 **Synthèse produite :**
 
-⏵ Référence complète (qr, normes, derope, attn_out, états) pour la comparaison finale.
+⏵ Le test d'inventaire des variables a détecté le nouveau `DRAVE_DUMP_COUCHES`, et la porte cachait l'échec. Je corrige les deux.
 
 ## 3. Travail accompli
 
@@ -3950,6 +3950,7 @@ Le flux se compte par **provenance** (attention / experts / partagé) en **paire
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/hc_synthetique.py` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/lire_meta_gguf.py` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/compare_etats.py` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-v4-couches-0-1.md` | 1 | 0 |
 
 ### Sous-agents lancés
 
@@ -4024,7 +4025,7 @@ Le flux se compte par **provenance** (attention / experts / partagé) en **paire
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 3759 autres
+- … et 3787 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4152,7 +4153,7 @@ Le flux se compte par **provenance** (attention / experts / partagé) en **paire
 
 ## 5. Erreurs rencontrées
 
-256 sorties en erreur ou divergentes. Les premières :
+257 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : a8f2635f8 docs: record which models this box is good at, and why src/llama-hparams.cpp:8:void llama_hparams::set_swa_pattern(uint32_t n_pattern, bool dense_first) { src/llama-hparams.h:308:    void se
 - **T1** : 511 tokens notés — perplexité cumulée 247.031  (4.9 tok/s) === perplexité 247.0308 sur 511 tokens (0 événements, 104.5 s) ===  ### B3 harmony assistant 511 --- ref --- 0.0 0.0 0:00 ls: cannot access '
@@ -4500,4 +4501,5 @@ Le flux se compte par **provenance** (attention / experts / partagé) en **paire
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF' p='docs/plan-deepseek41-complet.md' s=open(p).read() a="""### 3.3 Les régimes d'attent
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A drave-core/src/ && git commit -q -F - <<'EOF' P2 (1/2) : le troisième chemin d'attention — celu
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A drave-core/src/ tools/ docs/ 2>/dev/null; git commit -q -F - <<'EOF' P2/P3 : le harnais de comp
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF' p='docs/plan-deepseek41-complet.md' s=open(p).read() subs=[ ("""### P1 — Hyper-connexi
 

@@ -3639,6 +3639,33 @@ mapping {}",
         }
     }
 
+    /// **RoPE « NORM »** — l'autre convention d'appariement, celle des modèles
+    /// Llama et **DeepSeek-V4** (`LLAMA_ROPE_TYPE_NORM` dans llama.cpp) :
+    /// les paires sont `(2i, 2i+1)`. Celle de Drave (`rope`) apparie
+    /// `(i, i + n_rot/2)`, ce que déclarent GLM et Kimi. Les deux donnent la
+    /// même rotation à la position 0 (identité) et divergent ensuite : c'est
+    /// exactement la signature qu'a montrée la comparaison à llama.cpp sur
+    /// V4-Flash — position 0 juste à 1e-3, position 1 fausse à 30 %.
+    fn rope_norm(v: &mut [f32], n_head: usize, head_dim: usize, pos: usize, base: f32,
+                 n_rot: usize, inverse: bool) {
+        let n_rot = if n_rot == 0 || n_rot > head_dim { head_dim } else { n_rot };
+        let half = n_rot / 2;
+        for h in 0..n_head {
+            let t = &mut v[h * head_dim..(h + 1) * head_dim];
+            for i in 0..half {
+                // La fréquence suit le même barème dans les deux conventions :
+                // seul l'appariement change (`ic = i0` contre `ic = i0/2`).
+                let freq = 1.0 / base.powf(2.0 * i as f32 / n_rot as f32);
+                let (s, c) = (pos as f32 * freq).sin_cos();
+                let (s, c) = if inverse { (-s, c) } else { (s, c) };
+                let a = t[2 * i];
+                let b = t[2 * i + 1];
+                t[2 * i] = a * c - b * s;
+                t[2 * i + 1] = b * c + a * s;
+            }
+        }
+    }
+
     /// **Rotation INVERSE** (dé-rotation), celle de `ggml_rope_ext_back` :
     /// mêmes appariements, angle opposé. Elle sert à l'attention de V4, qui
     /// tourne la partie rope de sa sortie AVANT la projection groupée.
@@ -4433,7 +4460,7 @@ s'applique pas — utilisez --lot 1, ou réenregistrez sans DRAVE_TRACE_BLOCS");
                 qp[hh * nr..(hh + 1) * nr]
                     .copy_from_slice(&q[hh * hd + nope..(hh + 1) * hd]);
             }
-            Self::rope(&mut qp, nh, nr, pos, m.rope_base, nr);
+            Self::rope_norm(&mut qp, nh, nr, pos, m.rope_base, nr, false);
             for hh in 0..nh {
                 q[hh * hd + nope..(hh + 1) * hd].copy_from_slice(&qp[hh * nr..(hh + 1) * nr]);
             }
@@ -4446,7 +4473,7 @@ s'applique pas — utilisez --lot 1, ou réenregistrez sans DRAVE_TRACE_BLOCS");
         {
             let mut kp = vec![0f32; nr];
             kp.copy_from_slice(&kvn[nope..]);
-            Self::rope(&mut kp, 1, nr, pos, m.rope_base, nr);
+            Self::rope_norm(&mut kp, 1, nr, pos, m.rope_base, nr, false);
             kvn[nope..].copy_from_slice(&kp);
         }
         Self::vider_couche(dump, "kv_norm", l, pos, &kvn);
@@ -4467,7 +4494,14 @@ s'applique pas — utilisez --lot 1, ou réenregistrez sans DRAVE_TRACE_BLOCS");
             }
             // le puits : un logit appris, présent dans la somme du softmax mais
             // sans valeur associée — c'est ce qui « draine » l'attention.
-            let puits = m.sinks.get(hh).copied().unwrap_or(0.0) * scale;
+            //
+            // Il entre BRUT : la référence appelle `ggml_soft_max_ext(kq, mask,
+            // kq_scale, …)` (l'échelle s'applique aux scores) PUIS
+            // `ggml_soft_max_add_sinks(kq, sinks)` — le puits n'est pas mis à
+            // l'échelle. Le multiplier par `1/sqrt(head_dim)` faisait diverger la
+            // sortie dès la position 0 (où l'attention est triviale), ce qui a
+            // mis la puce à l'oreille : un écart qui n'attend pas la longueur.
+            let puits = m.sinks.get(hh).copied().unwrap_or(0.0);
             sc[n] = puits;
             let mut mx = f32::NEG_INFINITY;
             for &v in sc.iter() { if v > mx { mx = v; } }
@@ -4489,7 +4523,7 @@ s'applique pas — utilisez --lot 1, ou réenregistrez sans DRAVE_TRACE_BLOCS");
                 op[hh * nr..(hh + 1) * nr]
                     .copy_from_slice(&sortie[hh * hd + nope..(hh + 1) * hd]);
             }
-            Self::rope_inverse(&mut op, nh, nr, pos, m.rope_base, nr);
+            Self::rope_norm(&mut op, nh, nr, pos, m.rope_base, nr, true);
             for hh in 0..nh {
                 sortie[hh * hd + nope..(hh + 1) * hd]
                     .copy_from_slice(&op[hh * nr..(hh + 1) * nr]);
@@ -4507,7 +4541,10 @@ s'applique pas — utilisez --lot 1, ou réenregistrez sans DRAVE_TRACE_BLOCS");
         Self::vider_couche(dump, "attn_derope", l, pos, &sortie);
         *paires += (m.wo_a.len() + m.wo_b.len()) as u64;
         matvec_f32(&m.wo_b, &oa, m.n_groups * m.o_lora, h, att);
-        Self::vider_couche(dump, "attn_out", l, pos, att);
+        // Seulement `h` valeurs : `att` est dimensionné `nh × head_dim` pour le
+        // chemin dense, et vider le tampon entier noierait la sortie dans des
+        // valeurs périmées (la comparaison a signalé « longueurs différentes »).
+        Self::vider_couche(dump, "attn_out", l, pos, &att[..h]);
     }
 
     /// Passe avant d'un modèle **MLA**, un jeton à la fois, avec le cache

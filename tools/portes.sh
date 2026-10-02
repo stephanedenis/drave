@@ -32,10 +32,20 @@ valeur() { grep -oE "=== perplexité [0-9]+\.[0-9]+" | grep -oE "[0-9]+\.[0-9]+"
 
 echo "=== Portes ==="
 
-# 1. Tests unitaires.
-n=$( (cd drave-core && cargo test --release 2>&1) | grep -oE "[0-9]+ passed" | head -1 | cut -d' ' -f1)
-[ "${n:-0}" -ge 48 ] && printf "  %-42s %s  ✅\n" "cargo test --release" "${n} verts" \
-                     || { printf "  %-42s %s  ❌\n" "cargo test --release" "${n:-0} verts"; ECHEC=1; }
+# 1. Tests unitaires. Le seuil (48) protège le NOMBRE ; il ne dit rien d'un
+#    test qui échoue au milieu — un `51 passed; 1 failed` passait la porte. Le
+#    compte de tests en échec est donc vérifié séparément : une porte qui cache
+#    un échec est une porte cassée (constaté le 02/10).
+sortie=$( (cd drave-core && cargo test --release 2>&1) )
+n=$(printf '%s' "$sortie" | grep -oE "[0-9]+ passed" | head -1 | cut -d' ' -f1)
+ko=$(printf '%s' "$sortie" | grep -cE "^test result: FAILED|^error: test failed")
+if [ "${n:-0}" -ge 48 ] && [ "${ko:-1}" -eq 0 ]; then
+    printf "  %-42s %s  ✅\n" "cargo test --release" "${n} verts"
+else
+    printf "  %-42s %s  ❌ (échecs : %s)\n" "cargo test --release" "${n:-0} verts" "${ko:-?}"
+    printf '%s' "$sortie" | grep -E "^test .* FAILED" | head -5
+    ECHEC=1
+fi
 
 # 2. Perplexité Qwen2.5-0.5B, contexte 256.
 v=$(timeout 600 $D models/Qwen2.5-0.5B-Q8_0.gguf --ppl /tmp/ids_qwen.txt --ctx 256 \

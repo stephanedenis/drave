@@ -161,6 +161,13 @@ Une phase qui ne passe pas ses deux portes ne passe pas à la suivante.
 - **Porte Drave** : un jeton sur V4-Flash affiche un **nombre d'événements non
   nul** avec sa provenance (attention / experts / partagé), et son coût.
 
+### P1 — Hyper-connexions : les connexions pondérées (≈ ½ journée) — **FAIT** (02/10)
+
+> `Hc` (mélanges, Sinkhorn, mélanger/retro), chargé des deux sources de
+> métadonnées (clés GGUF et `deepseek41.config`), câblé dans la passe avant.
+> **Validé contre llama.cpp** : `hc_attn_pre` concorde à **1e-7** (l'arrondi f32)
+> sur quatre positions — `reports/rapport-v4-couches-0-1.md`.
+
 ### P1 — Hyper-connexions : les connexions pondérées (≈ ½ journée)
 
 - État résiduel en 4 copies ; par couche `hc_pre` (RMSNorm → `hc_fn` → 24
@@ -178,6 +185,14 @@ Une phase qui ne passe pas ses deux portes ne passe pas à la suivante.
 - **Interdit** : « les 4 copies sans le Sinkhorn ». Une HC approximative ne se
   voit pas — les quatre copies restent plausibles.
 
+### P2 — Épilogue d'attention : dé-rotation, puits, sortie groupée (≈ 3 h) — **FAIT** (02/10)
+
+> `attn_v4` (troisième chemin d'attention) : une tête latente normée en entier,
+> seconde norme RMS par tête, valeurs = clés, puits **bruts** dans le softmax,
+> dé-rotation, sortie groupée 8×1024. Corrélation **0,999996** avec llama.cpp
+> sur `attn_derope`. Trois bugs trouvés par la comparaison : `attn_norm` manqué,
+> puits mis à l'échelle, convention RoPE **NORM** (et non NEOX comme GLM/Kimi).
+
 ### P2 — Épilogue d'attention : dé-rotation, puits, sortie groupée (≈ 3 h)
 
 - Dé-rotation (`attn_derope`) et sortie groupée (`attn_output_a` →
@@ -189,6 +204,15 @@ Une phase qui ne passe pas ses deux portes ne passe pas à la suivante.
   `attn_output_a` doit être **la même liste** que celle qui sort de l'attention —
   c'est le contrat du flux.
 - **Interdit** : fusionner `attn_output_a/b` en une matrice dense.
+
+### P3 — Les couches brutes, de bout en bout (≈ 2 h) — **FAIT pour V4-Flash** (02/10)
+
+> Couches 0 et 1 exécutées de bout en bout (`--couches 0:2`) et comparées à
+> llama.cpp : `l_last` corrélation **0,9998 – 0,99996** sur les quatre
+> positions, écart résiduel = bruit de quantification (49,5 % de signes
+> positifs, 0,1 % d'erreur relative médiane). Restent la fenêtre glissante et la
+> « queue » de l'attention brute, sans effet à 4 positions — à traiter avant de
+> dépasser 128 jetons.
 
 ### P3 — Les couches brutes, de bout en bout (≈ 2 h)
 
