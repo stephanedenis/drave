@@ -55,6 +55,7 @@ elles s'appellent maintenant DRAVE_* (voir docs/histoire.md). Rien n'a été app
         (opt.tensors, "--tensors"), (opt.banc_mla.is_some(), "--banc-mla"),
         (opt.banc_kv > 0, "--banc-kv"), (opt.banc_topk > 0, "--banc-topk"),
         (opt.gpu_banc, "--gpu-banc"), (opt.materiel, "--materiel"),
+        (opt.sonder_engram > 0, "--sonder-engram"),
         (opt.plan, "--plan"), (opt.tokenize, "--tokenize"),
         (opt.ppl, "--ppl"), (opt.infer, "--infer"),
     ].iter().filter(|(v, _)| *v).map(|(_, n)| *n).collect();
@@ -63,6 +64,7 @@ elles s'appellent maintenant DRAVE_* (voir docs/histoire.md). Rien n'a été app
 sont ignorés", modes.len(), modes.join(", "), modes[0]);
     }
     if opt.materiel { run_materiel(&opt); return; }
+    if opt.sonder_engram > 0 { run_sonder_engram(opt.sonder_engram); return; }
     if let Some(f) = opt.banc_vision.clone() { run_banc_vision(&f); return; }
     if let Some(adresse) = opt.flux_serveur.clone() { run_serveur_flux(opt, &adresse); return; }
     if let Some(pair) = opt.ppl_reparti.clone() { run_ppl_reparti(opt, &pair); return; }
@@ -492,6 +494,10 @@ struct Options {
     profil_neurones: bool, neurones_sortie: Option<String>,
     /// Détection du matériel et plan de configuration, sans charger de modèle.
     materiel: bool,
+    /// Sonde d'accès mmappé à la table d'engram : combien d'entrées lire, à des
+    /// indices dispersés. Démontre qu'une table de 101 Go s'adresse sans se
+    /// charger.
+    sonder_engram: usize,
     /// Fichier d'identifiants de tokens : la tête de sortie ne calcule que
     /// ceux-là. **Génération seulement** — une perplexité calculée sur un
     /// vocabulaire restreint n'est comparable à rien.
@@ -619,9 +625,9 @@ fn analyser(args: &[String]) -> Options {
             "--sans-yarn" => { o.sans_yarn = true; 1 }
             "--act-renorm" => { o.act_renorm = true; 1 }
             "--materiel" => { o.materiel = true; 1 }
+            "--sonder-engram" => { o.sonder_engram = suivant(i).parse().unwrap_or(1000); 2 }
             "--tete-restreinte" if i + 1 < args.len() => {
                 o.tete_restreinte = Some(suivant(i).clone()); 2 }
-            "--ppl-profil" => { o.ppl_profil = true; 1 }
             "--profil-neurones" => { o.profil_neurones = true; 1 }
             "--harmony" => { o.harmony = Some("alterne".into()); 1 }
             "--harmony-assistant" => { o.harmony = Some("assistant".into()); 1 }
@@ -978,6 +984,20 @@ troncature aux {} derniers", ids.len(), garde, ctx, n_new, garde);
     println!("postes (ms/token) : matvec-attn {:.1} | rope {:.1} | attention {:.1} | matvec+mlp {:.1} | total mesuré {:.1}",
              p[0] / n_tok * 1e3, p[1] / n_tok * 1e3, p[2] / n_tok * 1e3, p[3] / n_tok * 1e3,
              (p[0] + p[1] + p[2] + p[3]) / n_tok * 1e3);
+
+    {
+        use std::sync::atomic::Ordering;
+        let a = model::TETE_ACTIFS.load(Ordering::Relaxed);
+        let t = model::TETE_TOTAL.load(Ordering::Relaxed);
+        let n = model::TETE_APPELS.load(Ordering::Relaxed);
+        if n > 0 && t > 0 {
+            let pc = 100.0 * a as f64 / t as f64;
+            println!("[tete] densite de l'entree : {:.1} % de coordonnees vivantes sur {n} jetons", pc);
+            println!("[tete] -> un stockage par COLONNES ne lirait que ces coordonnees : \
+{:.1} % de la matrice au lieu de 100 %", pc);
+        }
+    }
+
 }
 
 
@@ -1408,6 +1428,71 @@ fn run_banc_vision(sortie: &str) {
 
 /// Liste les tenseurs d'un GGUF : nom, dimensions, type, taille. Utile pour
 /// écrire un chemin de lecture (vision) sans deviner les noms.
+/// Sonde d'accès mmappé à la table d'engram.
+///
+/// `blk.N.engram_embd.weight` pèse 101,4 Go par couche sur DeepSeek-V4.1 — plus
+/// que tous les experts réunis. Ce n'est pourtant **pas un tenseur de poids** :
+/// c'est une table de hachage de n-grammes, et un jeton n'en lit que quelques
+/// entrées de 264 octets. La charger serait une faute ; il faut l'**adresser**.
+///
+/// Cette sonde le démontre : elle ouvre le fichier entier en mmap, lit `n`
+/// entrées dispersées, et affiche le temps comme la mémoire. Le noyau ne lit que
+/// les pages touchées.
+fn run_sonder_engram(n: usize) {
+    let path = modele_chemin();
+    let t0 = Instant::now();
+    let g = Gguf::open(&path).expect("ouverture du GGUF en mmap");
+    println!("mmap du fichier en {:?} ({} fichiers, {:.1} Go adressés)",
+             t0.elapsed(), g.nb_fichiers(), g.octets_charges() as f64 / 1e9);
+    // Les tables d'engram, par couche.
+    let tables: Vec<(String, usize)> = g.tensors.iter()
+        .filter(|t| t.name.contains("engram_embd"))
+        .map(|t| (t.name.clone(), t.nelem()))
+        .collect();
+    if tables.is_empty() {
+        println!("aucun tenseur engram_embd dans ce modèle");
+        return;
+    }
+    for (nom, nelem) in &tables {
+        let t = g.tensor(nom).unwrap();
+        let lignes = t.dims[0];
+        let largeur = if t.dims.len() > 1 { t.dims[1] } else { 1 };
+        println!("  {nom} : {lignes} entrées × {largeur} octets = {:.1} Go",
+                 *nelem as f64 / 1e9);
+        // Lectures dispersées, déterministes : ce sont les entrées qu'un texte
+        // irait chercher, une par n-gramme.
+        let octets_ligne = largeur as usize;
+        let t1 = Instant::now();
+        let mut somme = 0u64;
+        let mut etat = 12345u64;
+        for _ in 0..n {
+            // Un générateur congruentiel : les indices balaient la table, comme
+            // le ferait un hachage de n-grammes.
+            etat = etat.wrapping_mul(6364136223846793005).wrapping_add(1442695040888963407);
+            let idx = (etat >> 16) % lignes;
+            if let Some(p) = g.data_ptr(nom) {
+                let p = unsafe { p.add(idx as usize * octets_ligne) };
+                let tranche = unsafe { std::slice::from_raw_parts(p, octets_ligne) };
+                somme = somme.wrapping_add(tranche[tranche.len() - 1] as u64);
+            }
+        }
+        let d = t1.elapsed();
+        println!("    {n} entrées lues en {d:?} ({:.1} µs chacune, {:.1} Mo touchés)",
+                 d.as_secs_f64() * 1e6 / n as f64,
+                 (n * octets_ligne) as f64 / 1e6);
+        println!("    somme de contrôle : {somme}");
+    }
+    // La mémoire résidente, lue dans /proc : c'est elle qui prouve qu'on n'a
+    // rien chargé.
+    if let Ok(s) = std::fs::read_to_string("/proc/self/status") {
+        for l in s.lines() {
+            if l.starts_with("VmRSS") || l.starts_with("VmSize") {
+                println!("  {l}");
+            }
+        }
+    }
+}
+
 /// Détection du matériel et plan de configuration, **sans charger de modèle**.
 ///
 /// Chaque ligne du plan porte le chiffre qui la justifie : un réglage

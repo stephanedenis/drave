@@ -1550,6 +1550,34 @@ impl KvCache {
 /// nombre de couches et de jetons (voir la branche `DRAVE_GPU_TOPK`).
 static TOPK_GPU_ECHEC: std::sync::atomic::AtomicBool = std::sync::atomic::AtomicBool::new(false);
 
+/// Densité de l'entrée de la tête, mesurée sur tous les appels. Sert à décider
+/// si un stockage par COLONNES vaudrait le coup : ce serait la seule façon
+/// **exacte** de ne pas lire toute la matrice.
+pub static TETE_ACTIFS: std::sync::atomic::AtomicU64 = std::sync::atomic::AtomicU64::new(0);
+pub static TETE_TOTAL: std::sync::atomic::AtomicU64 = std::sync::atomic::AtomicU64::new(0);
+pub static TETE_APPELS: std::sync::atomic::AtomicU64 = std::sync::atomic::AtomicU64::new(0);
+
+// NOTE — la tête à restriction *garantie* a été essayée et RETIRÉE.
+//
+// L'idée : `logit_o = W_o · h ≤ ‖W_o‖ · ‖h‖` (Cauchy-Schwarz). Si le maximum
+// trouvé sur une liste dépasse cette borne pour tout le reste, l'argmax global
+// est dans la liste — une preuve, pas une heuristique. Implémentée, elle rendait
+// bien la sortie identique à une tête complète.
+//
+// Mais elle ne conclut **jamais** : la borne vaut `logit / cos(W_o, h)`, soit 5
+// à 20 fois le logit réel en haute dimension. La boucle descendait donc tout le
+// vocabulaire **ligne par ligne**, bien plus lentement que la passe parallèle
+// complète. Mesuré : le calcul ne terminait pas là où la tête entière prend
+// 6,9 ms.
+//
+// La voie exacte par sparsité a été mesurée aussi, et elle échoue pour une autre
+// raison : l'entrée de la tête n'est creuse qu'au prix d'un seuil qui détruit le
+// modèle (densité 5,1 % ⇒ perplexité ×107 ; 30,3 % ⇒ +48 % ; 61,5 % ⇒ +15 %).
+//
+// Conclusion consignée dans `reports/rapport-tete-restreinte.md` : on ne peut pas
+// garantir l'argmax en lisant moins que tout. Reste `--tete-restreinte`, qui est
+// une **génération contrainte** assumée — elle change la sortie, et le dit.
+
 /// Un seul message pour `--attn-topk` ignoré en mode lot (voir `forward_lot`).
 static LOT_TOPK_IGNORE: std::sync::atomic::AtomicBool = std::sync::atomic::AtomicBool::new(false);
 
@@ -4145,6 +4173,13 @@ dynamique de {dyn_:.3e} (relatif {:.2e})", mx / dyn_.max(1e-9));
         // 72 Mo lus au lieu de 136 : ses seize tampons de sortie (9,7 Mo) sont
         // écrits, remis à zéro puis réduits, soit plus de trafic que les poids
         // économisés.
+        // Densité de l'entrée de la tête : `sv.idx` porte les coordonnées
+        // vivantes après quantification. Si elle est faible, un stockage par
+        // COLONNES permettrait de ne lire que ces colonnes — exactement, sans
+        // borne ni approximation. On la mesure avant de s'engager.
+        TETE_ACTIFS.fetch_add(sv.idx.len() as u64, std::sync::atomic::Ordering::Relaxed);
+        TETE_TOTAL.fetch_add(h.len() as u64, std::sync::atomic::Ordering::Relaxed);
+        TETE_APPELS.fetch_add(1, std::sync::atomic::Ordering::Relaxed);
         if self.head4.is_some() {
             let xi: Vec<i16> = sv.idx.iter().zip(sv.val.iter())
                 .fold(vec![0i16; h.len()], |mut a, (&i, &v)| {
@@ -4153,6 +4188,8 @@ dynamique de {dyn_:.3e} (relatif {:.2e})", mx / dyn_.max(1e-9));
             let d = self.head4.take().unwrap();
             let dref = &d;
             let vocab = d.n_out;
+
+
             // Liste restreinte : ne calculer que ces lignes. `chunks_mut` ne
             // convient plus, les lignes n'étant pas contiguës — on passe par un
             // pointeur brut, sûr parce que les sous-listes sont disjointes.

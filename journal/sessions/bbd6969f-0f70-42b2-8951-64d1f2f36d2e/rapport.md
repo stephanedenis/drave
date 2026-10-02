@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 79.1 h |
+| Durée | 79.5 h |
 | Tours | 69 |
-| Messages | 3275 |
-| Appels d'outils | 3095 |
-| Fichiers touchés | 71 |
-| Commandes | 2700 |
+| Messages | 3311 |
+| Appels d'outils | 3131 |
+| Fichiers touchés | 72 |
+| Commandes | 2733 |
 | Sous-agents | 22 |
-| Commits | 274 |
+| Commits | 275 |
 | Compactages de contexte | 4 |
 
 ## Objectifs déclarés
@@ -35,6 +35,8 @@
 … [321 caractères tronqués]
 - **create** — Mener à terme, en autonomie, les optimisations d'architecture mémoire du moteur Drave : détection matérielle et heuristiques automatiques (faites), prélecture parallèle des experts (mesurée et validée ou retirée), puis les chantiers suivants par ordre de valeur — chargeur d'experts à la demande, acc
 … [246 caractères tronqués]
+- **edit** — Session autonome jusqu'à 8h HAE (02/10). Mener les optimisations d'architecture mémoire du moteur Drave, par ordre de valeur, chacune mesurée par comparaison appariée et consignée : (1) détection matérielle et heuristiques automatiques — FAIT ; (2) restriction de tête GARANTIE : ne jamais changer la
+… [569 caractères tronqués]
 
 ## 1. Ce qui a été demandé
 
@@ -3524,7 +3526,7 @@ Sur cette session, les mesures m
 
 ### Tour 69 — implémente toute les optimisation et détection de matériel avec heuristiques de configuration automatique.
 
-*56 appels d'outils.* Actions notables :
+*92 appels d'outils.* Actions notables :
 
 - bash — Inspect existing GPU detection
 - write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/materiel.rs`
@@ -3540,11 +3542,11 @@ Sur cette session, les mesures m
 - bash — Read KV bits resolution
 - bash — Integrate KV and VRAM heuristics
 - bash — Lighten detection and run gates
-- … et 42 autres
+- … et 76 autres
 
 **Synthèse produite :**
 
-⏵ Gain net : **15 %** avec la liste anglaise. Je relance les tests seuls et je documente.
+⏵ Dépôt vert après nettoyage. J'écris le rapport sur les trois voies explorées.
 
 ## 3. Travail accompli
 
@@ -3623,6 +3625,7 @@ Sur cette session, les mesures m
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/analyse_experts_statique.py` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-architecture-memoire.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/materiel.rs` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-tete-restreinte.md` | 1 | 0 |
 
 ### Sous-agents lancés
 
@@ -3691,7 +3694,7 @@ Sur cette session, les mesures m
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 2660 autres
+- … et 2693 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -3819,7 +3822,7 @@ Sur cette session, les mesures m
 
 ## 5. Erreurs rencontrées
 
-162 sorties en erreur ou divergentes. Les premières :
+163 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : a8f2635f8 docs: record which models this box is good at, and why src/llama-hparams.cpp:8:void llama_hparams::set_swa_pattern(uint32_t n_pattern, bool dense_first) { src/llama-hparams.h:308:    void se
 - **T1** : 511 tokens notés — perplexité cumulée 247.031  (4.9 tok/s) === perplexité 247.0308 sur 511 tokens (0 événements, 104.5 s) ===  ### B3 harmony assistant 511 --- ref --- 0.0 0.0 0:00 ls: cannot access '
@@ -4113,4 +4116,5 @@ Sur cette session, les mesures m
 - Detection materielle et heuristiques de configuration automatique  Nouveau module drave-core/src/materiel.rs : detecte CPU (cœurs physiques contre logiques, pai
 - Prelecture parallele : implementee, mesuree, sans effet (0,3 %)  madvise(MADV_WILLNEED) sur les trois tenseurs de chaque expert retenu, appele apres le routage 
 - Tete restreinte a une liste de tokens : +15 %, mais la sortie change  Implementee sur les DEUX chemins (logits par jeton et logits_lot par lots) -- j'avais d'ab
+- Restreindre la tete de sortie : trois voies explorees, une seule survit  Question : peut-on calculer moins de logits sans JAMAIS changer la sortie ? Reponse mes
 
