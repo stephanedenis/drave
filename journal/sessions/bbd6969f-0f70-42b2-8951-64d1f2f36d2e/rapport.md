@@ -7,12 +7,12 @@
 | Début | 2026-09-28 14:46 |
 | Durée | 92.3 h |
 | Tours | 74 |
-| Messages | 4505 |
-| Appels d'outils | 4298 |
+| Messages | 4506 |
+| Appels d'outils | 4299 |
 | Fichiers touchés | 89 |
-| Commandes | 3704 |
+| Commandes | 3705 |
 | Sous-agents | 28 |
-| Commits | 323 |
+| Commits | 324 |
 | Compactages de contexte | 6 |
 
 ## Objectifs déclarés
@@ -3781,7 +3781,7 @@ Trois autres points qui découlent de votre définition :
 
 ### Tour 74 — révise tous les documents du dossie docs afin de t'asssurer qu'ils sont cohérent avec la vision Drave
 
-*318 appels d'outils.* Actions notables :
+*319 appels d'outils.* Actions notables :
 
 - bash — Survey the docs folder
 - read
@@ -3797,7 +3797,7 @@ Trois autres points qui découlent de votre définition :
 - list_agents
 - bash — Find docs that never mention lists or clusters
 - bash — Read the openings of the three vision-silent docs
-- … et 233 autres
+- … et 234 autres
 
 **Synthèse produite :**
 
@@ -3972,7 +3972,7 @@ Trois autres points qui découlent de votre définition :
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 3664 autres
+- … et 3665 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4443,4 +4443,5 @@ Trois autres points qui découlent de votre définition :
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git commit -q -F - <<'EOF' docs : révision de cohérence avec la vision (18 documents, 88 sites)  Cinq rele
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A drave-core/src/ REPRISE.md reports/rapport-p0-flux.md docs/plan-deepseek41-complet.md reports/r
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF' p='docs/plan-deepseek41-complet.md' s=open(p).read() subs=[ ("""### P0 — Le harnais, s
+- Plan V4.1 : P0 marqué fait, et les hyper-paramètres sont dans le GGUF (\`deepseek41.config\`)" && git log --oneline -2
 

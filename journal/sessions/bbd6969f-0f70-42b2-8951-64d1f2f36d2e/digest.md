@@ -72415,3 +72415,13 @@ Une phase qui ne passe pas ses deux portes ne passe pas à la suivante.
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='docs/plan-deepseek41-complet.md'\ns=open(p).read()\nsubs=[\n(\"\"\"### P0 — Le harnais, sur V4-Flash, et le coût d'un jeton (≈ 3 h)\n\n- V4-Flash chargé dans le moteur ;\"\"\",\n \"\"\"### P0 — Le harnais, sur … [3515 caractères tronqués]`
+
+  ```
+b2f48b7 P1 (1/3) : le cœur des hyper-connexions, contre une référence indépendante
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 23, in <module>
+AssertionError: ('## 3. Les phases', 0)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='docs/plan-deepseek41-complet.md'\ns=open(p).read()\nsubs=[\n(\"\"\"### P0 — Le harnais, sur V4-Flash, et le coût d'un jeton (≈ 3 h)\n\n- V4-Flash chargé dans le moteur ;\"\"\",\n \"\"\"### P0 — Le harnais, sur … [2158 caractères tronqués]`

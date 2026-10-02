@@ -75,6 +75,17 @@ détail d'implémentation.
 
 ### 3.2 Trois faits vérifiés le 02/10, qui commandent l'ordre
 
+0. **Les hyper-paramètres de V4.1 sont DANS le GGUF** (clé `deepseek41.config`,
+   le `config.json` d'origine, que le moteur sait déjà lire) : `hc_mult: 4`,
+   `hc_sinkhorn_iters: 20`, `hc_eps: 1e-06`, `q_lora_rank: 1280`, `o_groups: 8`,
+   `o_lora_rank: 1024`, `head_dim: 512`, `index_topk: 512`,
+   `candidate_topk_blocks: 2048`, `candidate_block_size: 8`,
+   `index_source_layer_ids: [2,8,14,20,24,28,32,36]`,
+   `kv_source_layer_ids: [2,8,14,20]`, `sliding_window: 128`,
+   `compress_ratios`, `rms_norm_eps: 1e-20`, `swiglu_limit: 10.0`,
+   `dspark_*` (décodage spéculatif, cibles 37-39). Presque rien n'est à
+   deviner — et ce qui reste (`compress_ratios` de V4-Flash, `hc_*` de V4-Flash)
+   est dans ses propres clés `deepseek4.hyper_connection.*`.
 1. **llama.cpp ne connaît pas `deepseek41`** (`unknown model architecture`) :
    aucune référence externe n'existe pour V4.1.
 2. **llama.cpp exécute V4-Flash** (`deepseek4`) : 1 325 tenseurs chargés,
@@ -105,7 +116,16 @@ Chaque phase porte **deux portes** :
 
 Une phase qui ne passe pas ses deux portes ne passe pas à la suivante.
 
-### P0 — Le harnais, sur V4-Flash, et le coût d'un jeton (≈ 3 h)
+### P0 — Le harnais, sur V4-Flash, et le coût d'un jeton (≈ 3 h) — **FAIT** (02/10)
+
+> Bilan dans `reports/rapport-p0-flux.md`. Ce qui est fait : le flux se compte
+> par **provenance** (attention / experts / partagé) en **paires**, et les deux
+> chemins muets parlent — GLM-5.3, un jeton : 21,9 G · 30,6 G · 5,6 G, dont
+> **0 en listes**. Un calcul mort d'`attn_mla` (la remontée `v_b` de la boucle
+> de scores) a été trouvé, mesuré (delta prédit = delta mesuré, −1 988,1 M
+> paires) et retiré. La porte `--config` est franchie pour gpt-oss (elle ne
+> l'était pas : les puits appris y étaient comptés comme un manque). Reste à
+> refaire la porte Drave **sur V4-Flash lui-même**, ce qui demande P2/P3.
 
 - V4-Flash chargé dans le moteur ; comparaison par étage opérationnelle des deux
   côtés (`ref_logits --tensors` / `DRAVE_DEBUG_MLA`, `DRAVE_DEBUG_ETAT`) ;
