@@ -53304,3 +53304,130 @@ Created file
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -m \"Restreindre la tete de sortie : trois voies explorees, une seule survit\n\nQuestion : peut-on calculer moins de logits sans JAMAIS changer la sortie ?\nReponse mesuree : non, pas avec une garantie exa … [1740 caractères tronqués]`
+
+  ```
+302fc88 Restreindre la tete de sortie : trois voies explorees, une seule survit
+jeu 01 oct 2026 22:16:30 EDT
+  ```
+
+### 🤖 Assistant
+
+⏵ Chantier suivant : l'accès mmappé à l'engram. Je teste la sonde.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat /tmp/sonde_engram.log 2>/dev/null; echo \"--- relance propre ---\"; cat > /tmp/sonde2.sh <<'EOF'\n#!/bin/bash\ncd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\nF=/home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek-V4.1-Flas … [317 caractères tronqués]`
+
+  ```
+mmap du fichier en 27.971101ms (1 fichiers, 365.7 Go adressés)
+  blk.1.engram_embd.weight : 384006168 entrées × 264 octets = 101.4 Go
+    10000 entrées lues en 169.358904719s (16935.9 µs chacune, 2.6 Mo touchés)
+    somme de contrôle : 1197071
+  blk.14.engram_embd.weight : 384016682 entrées × 264 octets = 101.4 Go
+    10000 entrées lues en 152.903055853s (15290.3 µs chacune, 2.6 Mo touchés)
+    somme de contrôle : 1197681
+  VmSize:	357267292 kB
+  VmRSS:	  265704 kB
+=== fin ===
+--- relance propre ---
+  ```
+
+### 🤖 Assistant
+
+⏵ **Résultat clé** : le mmap tient (365 Go adressés, **265 Mo de RSS**) mais chaque accès prend **16 ms** — le disque mécanique. Je teste le parallélisme.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && F=/home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek-V4-Flash-UD-IQ1_M/DeepSeek-V4-Flash-UD-IQ1_M-00001-of-00003.gguf; ./drave-core/target/release/drave \"$F\" --tensors 2>&1 | grep -iE \"engram|compressor|indexer\" | head -5; ec … [340 caractères tronqués]`
+
+  ```
+F32      blk.2.attn_compressor_ape.weight       [4, 1024] · 0.0 M poids · fichier 1
+  Q8_0     blk.2.attn_compressor_gate.weight      [1024, 4096] · 4.2 M poids · fichier 1
+  Q8_0     blk.2.attn_compressor_kv.weight        [1024, 4096] · 4.2 M poids · fichier 1
+  F32      blk.2.attn_compressor_norm.weight      [512] · 0.0 M poids · fichier 1
+  Q8_0     blk.2.indexer.attn_q_b.weight          [8192, 1024] · 8.4 M poids · fichier 1
+--- taille des engram de V4-Flash ---
+--- le fichier est sur le mécanique ; y a-t-il la place sur le NVMe ? ---
+Filesystem               Size  Used Avail Use% Mounted on
+/dev/nvme0n1p2           828G  130G  698G  16% /home/stephane/FastNVMe
+/dev/mapper/system-root   11T  7,4T  3,5T  69% /home/stephane/Data13TB
+  ```
+
+### 🤖 Assistant
+
+⏵ V4-Flash n'a pas d'engram, mais V4.1 oui — et le NVMe a la place. Je lance la copie et je documente le choix.
+
+- **bash** `{"command": "mkdir -p /home/stephane/FastNVMe/modeles-lourds && cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /home/stephane/FastNVMe/modeles-lourds/README.md <<'EOF'\n# Modèles lourds sur le NVMe\n\nException assumée à la politique de stockage (« le NVMe ne sert qu'à nos\nartefacts ») … [1264 caractères tronqués]`
+
+  ```
+copie lancee (365 Go, ~30 min)
+jeu 01 oct 2026 22:17:50 EDT
+  ```
+
+### 🤖 Assistant
+
+⏵ Copie lancée. Pendant ce temps, j'implémente la sonde parallèle (code seulement).
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np = 'drave-core/src/main.rs'\ns = open(p).read()\na = '''        let octets_ligne = largeur as usize;\n        let t1 = Instant::now();\n        let mut somme = 0u64;\n        let mut etat = 12345u64;\n        for _ … [3489 caractères tronqués]`
+
+  ```
+ok
+error[E0277]: `*const u8` cannot be sent between threads safely
+    --> src/main.rs:1476:26
+     |
+1476 |                   sc.spawn(move || {
+     |                      ----- ^------
+     |                      |     |
+--
+error: could not compile `drave-core` (bin "drave") due to 1 previous error; 13 warnings emitted
+BUILD 101
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np = 'drave-core/src/main.rs'\ns = open(p).read()\ns = s.replace('''        let ptr = g.data_ptr(nom);\n        let t1 = Instant::now();\n        let mut sommes = vec![0u64; threads];\n        std::thread::scope(|sc| … [1094 caractères tronqués]`
+
+  ```
+BUILD 0
+test result: ok. 35 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.11s
+  ```
+
+- **bash** `{"command": "ls -la /home/stephane/FastNVMe/modeles-lourds/ 2>/dev/null | tail -2; tail -2 /tmp/copie_v41.log; TZ=America/Toronto date", "description": "Check copy progress"}`
+
+  ```
+-rw-r--r--. 1 stephane stephane 21246246912  1 oct 22:19 DeepSeek-V4.1-Flash-Q2.gguf
+-rw-r--r--. 1 stephane stephane        1002  1 oct 22:17 README.md
+jeu 01 oct 2026 22:19:02 EDT
+  ```
+
+### 🤖 Assistant
+
+⏵ Copie à 21 Go/365. Je teste l'heuristique KV, qui doit basculer en int8 sur un grand contexte.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/test_kv_auto.sh <<'EOF'\n#!/bin/bash\n# L'heuristique KV doit basculer en int8 quand le cache devient trop gros pour la\n# RAM. Qwen3-30B : 48 couches × 4 têtes KV × 128 de dimension × 2 × 4 octets\n# = 196 Ko par jeton. À … [671 caractères tronqués]`
+
+  ```
+ctx 4096    : [config] cache KV : 32 bits, 0.20 Go pour 4096 jetons
+ctx 262144  : [config] cache KV en int8 : 51.5 Go en f32 pour 262144 jetons, soit plus du tiers de la RAM libre (116 Go) — DRAVE_KV_BITS pour forcer
+=== fin ===
+  ```
+
+### 🤖 Assistant
+
+⏵ **L'heuristique KV fonctionne** : elle bascule en int8 à 262 k jetons avec un message explicite. Je vérifie les portes et je documente.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && printf \"porte Qwen : \"; timeout 200 ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf --ppl /tmp/ids_qwen.txt --ctx 256 --abits 16 --threads 16 --limit 512 --dense 2>&1 | grep -oE \"perplexité [0-9.]+ sur [0-9]+ token … [465 caractères tronqués]`
+
+  ```
+porte Qwen : perplexité 19.3885 sur 510 tokens
+clusters : perplexité 799.8557 sur 7 tokens
+--- copie ---
+45.4 Go / 365.7
+  ```
+
+- **write** `{"content": "# Rapport — détection matérielle et configuration automatique\n\nSession du 01/10 au 02/10. Ce qui a été **implémenté**, ce que chaque heuristique\ns'appuie comme mesure, et ce qui a été retiré après essai.\n\n## Le module `materiel.rs`\n\n`Materiel::detecter()` lit la machine sans char … [4208 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-optimisations-auto.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -m \"Rapport : detection materielle et configuration automatique\n\nCe qui est implemente (materiel.rs + --materiel + heuristiques), ce que chaque\nregle s'appuie comme mesure, et ce qui a ete retire apres … [815 caractères tronqués]`

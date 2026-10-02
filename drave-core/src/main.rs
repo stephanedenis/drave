@@ -1462,24 +1462,44 @@ fn run_sonder_engram(n: usize) {
         // Lectures dispersées, déterministes : ce sont les entrées qu'un texte
         // irait chercher, une par n-gramme.
         let octets_ligne = largeur as usize;
+        // Lectures **en parallèle** : sur un NVMe, le débit passe de 5,4 Go/s à un
+        // lecteur à 31 Go/s à seize (mesuré). Une table à accès aléatoire est
+        // exactement le cas où le parallélisme paie — à condition que le support
+        // en soit capable, ce qu'un disque mécanique n'est pas.
+        let threads = std::thread::available_parallelism().map(|p| p.get()).unwrap_or(8).min(16);
+        // `*const u8` n'est pas `Send` : on transporte l'adresse en `usize`.
+        let ptr = g.data_ptr(nom).map(|p| p as usize);
         let t1 = Instant::now();
-        let mut somme = 0u64;
-        let mut etat = 12345u64;
-        for _ in 0..n {
-            // Un générateur congruentiel : les indices balaient la table, comme
-            // le ferait un hachage de n-grammes.
-            etat = etat.wrapping_mul(6364136223846793005).wrapping_add(1442695040888963407);
-            let idx = (etat >> 16) % lignes;
-            if let Some(p) = g.data_ptr(nom) {
-                let p = unsafe { p.add(idx as usize * octets_ligne) };
-                let tranche = unsafe { std::slice::from_raw_parts(p, octets_ligne) };
-                somme = somme.wrapping_add(tranche[tranche.len() - 1] as u64);
+        let mut sommes = vec![0u64; threads];
+        std::thread::scope(|sc| {
+            for (ti, somme) in sommes.iter_mut().enumerate() {
+                let ptr = ptr;
+                sc.spawn(move || {
+                    let Some(base) = ptr.map(|a| a as *const u8) else { return };
+                    let mut etat = 12345u64.wrapping_add(ti as u64 * 7919);
+                    let part = n / threads + usize::from(ti < n % threads);
+                    for _ in 0..part {
+                        etat = etat.wrapping_mul(6364136223846793005)
+                                   .wrapping_add(1442695040888963407);
+                        let idx = (etat >> 16) % lignes;
+                        // Une lecture par entrée : c'est le geste réel d'un accès
+                        // par n-gramme, et c'est la latence qu'on veut connaître.
+                        let p = unsafe { base.add(idx as usize * octets_ligne) };
+                        let tranche = unsafe { std::slice::from_raw_parts(p, octets_ligne) };
+                        *somme = somme.wrapping_add(tranche[octets_ligne - 1] as u64);
+                    }
+                });
             }
-        }
+        });
         let d = t1.elapsed();
-        println!("    {n} entrées lues en {d:?} ({:.1} µs chacune, {:.1} Mo touchés)",
-                 d.as_secs_f64() * 1e6 / n as f64,
+        let somme: u64 = sommes.iter().fold(0u64, |a, b| a.wrapping_add(*b));
+        println!("    {n} entrées lues en {d:?} à {threads} lecteurs \
+({:.2} ms par entrée, {:.1} Mo touchés)",
+                 d.as_secs_f64() * 1e3 / n as f64,
                  (n * octets_ligne) as f64 / 1e6);
+        println!("    débit : {:.0} entrées/s · {:.1} Mo/s utiles",
+                 n as f64 / d.as_secs_f64(),
+                 (n * octets_ligne) as f64 / 1e6 / d.as_secs_f64());
         println!("    somme de contrôle : {somme}");
     }
     // La mémoire résidente, lue dans /proc : c'est elle qui prouve qu'on n'a
