@@ -4637,6 +4637,10 @@ dynamique de {dyn_:.3e} (relatif {:.2e})", mx / dyn_.max(1e-9));
                 if gl == l { for v in down.iter_mut() { *v *= g; } }
             }
             for i in 0..h { x[i] = o[i] + down[i]; }
+            if debug_mla && l == 0 {
+                eprintln!("[mla] couche 0 pos {pos} x[..8] {:.5e} {:.5e} {:.5e} {:.5e} \
+{:.5e} {:.5e} {:.5e} {:.5e}", x[0], x[1], x[2], x[3], x[4], x[5], x[6], x[7]);
+            }
             if debug_etat {
                 let n2: f32 = x.iter().map(|v| v * v).sum();
                 let na: f32 = att.iter().map(|v| v * v).sum();

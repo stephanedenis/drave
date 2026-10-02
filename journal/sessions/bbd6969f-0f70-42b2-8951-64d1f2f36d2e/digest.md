@@ -64709,3 +64709,192 @@ HAE 07:05
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='REPRISE.md'; s=open(p).read()\ns = s.replace(\"\"\"**Ce qui reste ouvert, par ordre de valeur :**\"\"\",\n\"\"\"**Chantiers 3 et 4 de la feuille de route.**\n\n- **(3) accès mmappé à la table d'engram** : fait (` … [985 caractères tronqués]`
+
+  ```
+d5dff45 REPRISE : chantiers 3 et 4 de la feuille de route, mesurés
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\n# Côté référence : imprimer une POSITION choisie du tenseur (REF_POSITION).\np='tools/ref_logits.cpp'; s=open(p).read()\navant = \"\"\"            if (t->type == GGML_TYPE_F32 || t->type == GGML_TYPE_F16) {\n        … [3128 caractères tronqués]`
+
+  ```
+compil 0
+BUILD
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 15, in <module>
+AssertionError: ancre dense absente
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"self.prof\\[3\\] += tf.elapsed\" -B 3 drave-core/src/model.rs | head -12", "description": "Find the exact end-of-layer text"}`
+
+  ```
+4603-                    eprintln!("[etat] couche {l:3} pos {pos} : |x| {:.4e} · |att| {:.4e} · \
+4604-|ffn| {:.4e}", n2.sqrt(), na.sqrt(), nd.sqrt());
+4605-                }
+4606:                self.prof[3] += tf.elapsed().as_secs_f64();
+--
+4644-                eprintln!("[etat] couche {l:3} pos {pos} : |x| {:.4e} · |att| {:.4e} · \
+4645-|ffn| {:.4e} (dense)", n2.sqrt(), na.sqrt(), nd.sqrt());
+4646-            }
+4647:            self.prof[3] += tf.elapsed().as_secs_f64();
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '4636,4648p' drave-core/src/model.rs", "description": "Read the dense end-of-layer block"}`
+
+  ```
+if let Some((gl, g)) = self.ffn_gain {
+                if gl == l { for v in down.iter_mut() { *v *= g; } }
+            }
+            for i in 0..h { x[i] = o[i] + down[i]; }
+            if debug_etat {
+                let n2: f32 = x.iter().map(|v| v * v).sum();
+                let na: f32 = att.iter().map(|v| v * v).sum();
+                let nd: f32 = down.iter().map(|v| v * v).sum();
+                eprintln!("[etat] couche {l:3} pos {pos} : |x| {:.4e} · |att| {:.4e} · \
+|ffn| {:.4e} (dense)", n2.sqrt(), na.sqrt(), nd.sqrt());
+            }
+            self.prof[3] += tf.elapsed().as_secs_f64();
+        }
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/model.rs'; s=open(p).read()\navant = \"\"\"            for i in 0..h { x[i] = o[i] + down[i]; }\n            if debug_etat {\n                let n2: f32 = x.iter().map(|v| v * v).sum();\n          … [1401 caractères tronqués]`
+
+  ```
+ok
+BUILD
+1
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/mla_pos3.sh <<'EOF'\n#!/usr/bin/env bash\ncd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\nexport LD_LIBRARY_PATH=/home/stephane/Data13TB/stephane/GitHub/llama.cpp/build/bin\nM=/home/stephane/Data13TB/stephane/modeles/g … [643 caractères tronqués]`
+
+  ```
+référence multi-positions lancée
+HAE 07:07
+  ```
+
+- **bash** `{"command": "pkill -f \"ref_logits.*GLM-5.3\" ; pkill -f mla_pos3.sh; sleep 2; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='tools/ref_logits.cpp'; s=open(p).read()\navant = \"\"\"                const char * epos = std::getenv(\"REF_POSITION\");\n                const l … [2625 caractères tronqués]`
+
+  ```
+(no output)
+[killed by signal: SIGTERM]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -c \"n_pos = t->ne\\[1\\]\" tools/ref_logits.cpp; ls -la tools/ref_logits | awk '{print $6, $7, $8}'", "description": "Check the patch and binary state"}`
+
+  ```
+0
+2 oct 07:06
+  ```
+
+- **bash** `{"command": "ps -eo pid,etimes,args | grep \"[r]ef_logits\" | cut -c1-70 | head -3; free -g | sed -n 2p", "description": "Check for leftover reference runs"}`
+
+  ```
+209388      22 bash -c cd /home/stephane/Data13TB/stephane/GitHub/Qtr
+ 209415      11 timeout 900 ./tools/ref_logits /home/stephane/Data13TB
+ 209419      11 ./tools/ref_logits /home/stephane/Data13TB/stephane/mo
+Mem:             125          10          56           2          62         115
+  ```
+
+- **bash** `{"command": "kill -9 209388 209415 209419 2>/dev/null; sleep 2; ps -eo pid,args | grep -c \"[r]ef_logits\"; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='tools/ref_logits.cpp'; s=open(p).read()\navant = \"\"\"                const char * epos = std::getenv(\"REF_POSITION … [2465 caractères tronqués]`
+
+  ```
+3
+patch applique
+compil ok
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ps -eo pid,args | grep \"[r]ef_logits\" | cut -c1-60 | head -3", "description": "Check remaining reference processes"}`
+
+  ```
+209476 timeout 900 ./tools/ref_logits /home/stephane/Data13
+ 209480 ./tools/ref_logits /home/stephane/Data13TB/stephane/
+  ```
+
+- **bash** `{"command": "kill -9 209476 209480 2>/dev/null; sleep 2; ps -eo pid,args | grep -c \"[r]ef_logits\"; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && export LD_LIBRARY_PATH=/home/stephane/Data13TB/stephane/GitHub/llama.cpp/build/bin && setsid nohup timeout 2400 ./tools/ref_logits /home/stephane … [352 caractères tronqués]`
+
+  ```
+3
+référence 8 positions lancée
+HAE 07:08
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in $(seq 1 200); do if grep -qE \"pos 3 =\" /tmp/ref_glm_8p.log; then break; fi; sleep 10; done; grep -E \"^\\[tensor\\] (kqv_out|ffn_out|l_out)-0\" -A 9 /tmp/ref_glm_8p.log | grep -E \"tensor|pos [0-3] =\" | head -18", "descri … [82 caractères tronqués]`
+
+  ```
+started background job bash-127
+  ```
+
+- **job_output** `{"job_id": "bash-127", "timeout_ms": 900000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **job_output** `{"job_id": "bash-127", "timeout_ms": 900000, "wait": true}`
+
+  ```
+[tensor] kqv_out-0 : type 0 · ne = [16384, 8, 1, 1]
+          pos 0 = -1.552319e-04 -2.284382e-03 -1.569172e-03 -8.625589e-04 2.324393e-03 1.588683e-03 3.477836e-04 -1.398706e-03
+          pos 1 = -1.507439e-04 -2.292010e-03 -1.581268e-03 -8.576732e-04 2.351523e-03 1.608034e-03 3.361565e-04 -1.394093e-03
+          pos 2 = -1.490443e-04 -2.273238e-03 -1.546834e-03 -9.076634e-04 2.336918e-03 1.597837e-03 3.090251e-04 -1.381233e-03
+          pos 3 = -1.534673e-04 -2.272270e-03 -1.526736e-03 -9.081619e-04 2.342138e-03 1.598547e-03 3.265183e-04 -1.379674e-03
+[tensor] ffn_out-0 : type 0 · ne = [6144, 8, 1, 1]
+          pos 0 = -9.297418e-04 -2.893236e-04 -2.298555e-03 -1.397638e-03 -1.775885e-03 -1.284966e-04 7.749733e-04 -1.996567e-03
+          pos 1 = -1.827348e-05 1.840837e-03 -5.194574e-03 2.782744e-03 -3.307500e-03 2.337110e-03 7.907075e-04 1.792432e-03
+          pos 2 = -1.679122e-03 6.656172e-03 -3.258636e-03 -2.795439e-03 -6.886504e-03 -8.492967e-03 4.280016e-03 -5.292512e-03
+          pos 3 = 1.794301e-03 -3.223707e-03 -1.081585e-03 2.801664e-03 2.210176e-03 -3.791564e-03 -1.037515e-03 7.148844e-04
+[tensor] l_out-0 : type 0 · ne = [6144, 8, 1, 1]
+          pos 0 = 3.958318e-03 2
+… [506 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && setsid nohup env DRAVE_DEBUG_MLA=1 timeout 2400 ./drave-core/target/release/drave /home/stephane/Data13TB/stephane/modeles/gguf/GLM-5.3-UD-IQ1_S/GLM-5.3-UD-IQ1_S-00001-of-00006.gguf --ppl /tmp/ids_glm.txt --ctx 16 --limit 4 --threads … [355 caractères tronqués]`
+
+  ```
+started background job bash-128
+  ```
+
+- **job_output** `{"job_id": "bash-128", "timeout_ms": 900000, "wait": true}`
+
+  ```
+moteur lancé (4 positions)
+[status: running]
+  ```
+
+- **job_output** `{"job_id": "bash-128", "timeout_ms": 900000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "grep -E \"couche 0 pos [0-3] x\\[\\.\\.8\\]\" /tmp/glm53_pos.log; TZ=America/New_York date \"+HAE %H:%M\"", "description": "Check the running dump"}`
+
+  ```
+[mla] couche 0 pos 0 x[..8] 4.01039e-3 1.97871e-4 1.89184e-3 1.61566e-3 -3.03016e-3 -3.91231e-3 3.35817e-4 -5.76782e-4
+HAE 07:47
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 240 ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf --ppl /tmp/ids_qwen.txt --ctx 256 --abits 16 --threads 16 --limit 512 --dense 2>&1 | grep -E \"=== perplexité\"; cd drave-core && cargo test --release 2>&1 | … [69 caractères tronqués]`
+
+  ```
+=== perplexité 19.3885 sur 510 tokens (0 événements, 26.6 s) ===
+test result: ok. 48 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.14s
+
+[timed out after 60000ms]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A tools/ref_logits.cpp tools/ref_logits drave-core/src/model.rs && git commit -q -F - <<'EOF'\nOutils de comparaison : les POSITIONS, pas seulement la position 0\n\n`ref_logits --tensors` imprime maintenant toutes les positi … [829 caractères tronqués]`
+
+  ```
+d5dff45 REPRISE : chantiers 3 et 4 de la feuille de route, mesurés
+HAE 07:48
+[stderr]
+The following paths are ignored by one of your .gitignore files:
+tools/ref_logits
+hint: Use -f if you really want to add them.
+hint: Disable this message with "git config set advice.addIgnoredFile false"
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git status --short | head -5; git add -A tools/ref_logits.cpp drave-core/src/model.rs && git commit -q -F - <<'EOF'\nOutils de comparaison : les POSITIONS, pas seulement la position 0\n\n`ref_logits --tensors` imprime maintenant tout … [811 caractères tronqués]`

@@ -173,17 +173,26 @@ int main(int argc, char ** argv) {
                          (long long) t->ne[2], (long long) t->ne[3]);
             // Jusqu'à 8 valeurs, en f32 quand c'est possible.
             if (t->type == GGML_TYPE_F32 || t->type == GGML_TYPE_F16) {
-                std::vector<float> v(8, 0.0f);
-                if (t->type == GGML_TYPE_F32) {
-                    ggml_backend_tensor_get(t, v.data(), 0, 8 * sizeof(float));
-                } else {
-                    std::vector<ggml_fp16_t> h(8);
-                    ggml_backend_tensor_get(t, h.data(), 0, 8 * sizeof(ggml_fp16_t));
-                    for (int i = 0; i < 8; ++i) { v[i] = ggml_fp16_to_fp32(h[i]); }
+                // REF_POSITION=n : lire les 8 premières valeurs de la position n
+                // (le tenseur porte une colonne par jeton du lot). Sans cela, on
+                // ne compare que la position 0 — et c'est justement au-delà que
+                // l'écart apparaît.
+                const long long n_pos = t->ne[1];
+                for (long long pos = 0; pos < n_pos && pos < 8; ++pos) {
+                    const size_t base = (size_t) pos * (size_t) t->ne[0] *
+                                        (t->type == GGML_TYPE_F32 ? 4 : 2);
+                    std::vector<float> v(8, 0.0f);
+                    if (t->type == GGML_TYPE_F32) {
+                        ggml_backend_tensor_get(t, v.data(), base, 8 * sizeof(float));
+                    } else {
+                        std::vector<ggml_fp16_t> h(8);
+                        ggml_backend_tensor_get(t, h.data(), base, 8 * sizeof(ggml_fp16_t));
+                        for (int i = 0; i < 8; ++i) { v[i] = ggml_fp16_to_fp32(h[i]); }
+                    }
+                    std::fprintf(stderr, "          pos %lld =", pos);
+                    for (int i = 0; i < 8; ++i) { std::fprintf(stderr, " %.6e", v[i]); }
+                    std::fprintf(stderr, "\n");
                 }
-                std::fprintf(stderr, "          [0..8) =");
-                for (int i = 0; i < 8; ++i) { std::fprintf(stderr, " %.6e", v[i]); }
-                std::fprintf(stderr, "\n");
             }
             return true;
         };

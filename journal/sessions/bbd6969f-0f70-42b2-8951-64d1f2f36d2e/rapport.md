@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 88.3 h |
+| Durée | 89.0 h |
 | Tours | 70 |
-| Messages | 4076 |
-| Appels d'outils | 3880 |
+| Messages | 4097 |
+| Appels d'outils | 3901 |
 | Fichiers touchés | 81 |
-| Commandes | 3415 |
+| Commandes | 3432 |
 | Sous-agents | 22 |
-| Commits | 312 |
+| Commits | 314 |
 | Compactages de contexte | 5 |
 
 ## Objectifs déclarés
@@ -3581,7 +3581,7 @@ Le plus important est peut-être ailleurs : trois des cinq plus gros modèles de
 
 ### Tour 70 — <goal_round> Objective: "Session autonome jusqu'à 8h HAE (02/10). Mener les optimisations d'architecture mémoire du mote … [1317 caractères tronqués]
 
-*26 appels d'outils.* Actions notables :
+*47 appels d'outils.* Actions notables :
 
 - get_goal
 - bash — Check time and the head restriction code
@@ -3597,7 +3597,7 @@ Le plus important est peut-être ailleurs : trois des cinq plus gros modèles de
 - bash — Check where the option block sits
 - bash — Test the guaranteed head on a real generation
 - bash — Generate without the guarantee for comparison
-- … et 12 autres
+- … et 30 autres
 
 ## 3. Travail accompli
 
@@ -3754,7 +3754,7 @@ Le plus important est peut-être ailleurs : trois des cinq plus gros modèles de
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 3375 autres
+- … et 3392 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4214,4 +4214,6 @@ Le plus important est peut-être ailleurs : trois des cinq plus gros modèles de
 - REPRISE : le chantier 2 (tête garantie) est clos par une mesure" && grep -n "fn prelire_expert" -A 25 drave-core/src/model.rs | head -30
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls reports/ | grep -i "prelect\|prelire\|charge" ; cat >> reports/rapport-tete-garantie.md <<'EOF'  ---  #
 - REPRISE : chantiers 3 et 4 de la feuille de route, mesurés" && git log --oneline -1
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A tools/ref_logits.cpp tools/ref_logits drave-core/src/model.rs && git commit -q -F - <<'EOF' Out
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git status --short | head -5; git add -A tools/ref_logits.cpp drave-core/src/model.rs && git commit -q -F 
 
