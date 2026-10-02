@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 80.2 h |
+| Durée | 80.3 h |
 | Tours | 69 |
-| Messages | 3394 |
-| Appels d'outils | 3214 |
+| Messages | 3403 |
+| Appels d'outils | 3223 |
 | Fichiers touchés | 74 |
-| Commandes | 2814 |
+| Commandes | 2823 |
 | Sous-agents | 22 |
-| Commits | 288 |
+| Commits | 289 |
 | Compactages de contexte | 4 |
 
 ## Objectifs déclarés
@@ -3526,7 +3526,7 @@ Sur cette session, les mesures m
 
 ### Tour 69 — implémente toute les optimisation et détection de matériel avec heuristiques de configuration automatique.
 
-*175 appels d'outils.* Actions notables :
+*184 appels d'outils.* Actions notables :
 
 - bash — Inspect existing GPU detection
 - write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/materiel.rs`
@@ -3542,11 +3542,11 @@ Sur cette session, les mesures m
 - bash — Read KV bits resolution
 - bash — Integrate KV and VRAM heuristics
 - bash — Lighten detection and run gates
-- … et 159 autres
+- … et 168 autres
 
 **Synthèse produite :**
 
-⏵ **IQ2_XXS : écart 0,00e+00, 256/256 exactes.** La vérification croisée a attrapé un bug invisible à la lecture.
+⏵ **IQ1_M : 0,00e+00 aussi.** Les trois formats sont débloqués. Je commite et j'inventorie ce qui manque encore.
 
 ## 3. Travail accompli
 
@@ -3696,7 +3696,7 @@ Sur cette session, les mesures m
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 2774 autres
+- … et 2783 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4132,4 +4132,5 @@ Sur cette session, les mesures m
 - Prelecture : quatrieme mecanisme mesure, quatrieme fois sans effet  - madvise sur les experts apres le routage : 25,73 contre 25,80 s (0,3 %) ; - madvise sur to
 - Q2_K : dequantification implementee et verifiee contre ggml  Q2_K, c'est 59 Go des ffn_down_exps de DeepSeek-V4.1 -- sans lui, cette part du modele restait illi
 - IQ2_XXS : 93 Go de V4.1 debloques, et un bug que la lecture n'aurait pas vu  Tables de grille EXTRAITES de ggml-common.h par un programme C (GGML_COMMON_IMPL_C)
+- IQ1_M : 61 Go de DeepSeek-V4-Flash debloques (ecart 0,00e+00 avec ggml)  Troisieme format a grille. La grille IQ1_S (2048 codes signes) est extraite de ggml-com
 

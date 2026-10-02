@@ -54572,3 +54572,147 @@ ecart max 0.00e+00 · 256/256 exactement egales · CONCORDE
 ⏵ **IQ2_XXS : écart 0,00e+00, 256/256 exactes.** La vérification croisée a attrapé un bug invisible à la lecture.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && (cd drave-core && cargo test --release 2>&1 | grep -E \"^test result\"); git add -A && git commit -q -m \"IQ2_XXS : 93 Go de V4.1 debloques, et un bug que la lecture n'aurait pas vu\n\nTables de grille EXTRAITES de ggml-common.h par  … [1093 caractères tronqués]`
+
+  ```
+test result: ok. 37 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.13s
+aa92cfc IQ2_XXS : 93 Go de V4.1 debloques, et un bug que la lecture n'aurait pas vu
+1215:#define NGRID_IQ1S 2048
+1219:GGML_TABLE_BEGIN(uint64_t, iq1s_grid, NGRID_IQ1S)
+void dequantize_row_iq1_m(const block_iq1_m * GGML_RESTRICT x, float * GGML_RESTRICT y, int64_t k) {
+    assert(k % QK_K == 0);
+    const int64_t nb = k / QK_K;
+
+    float delta[4];
+    uint16_t idx[4];
+
+    iq1m_scale_t scale;
+
+    for (int i = 0; i < nb; i++) {
+
+        const uint16_t * sc = (const uint16_t *)x[i].scales;
+        scale.u16 = (sc[0] >> 12) | ((sc[1] >> 8) & 0x00f0) | ((sc[2] >> 4) & 0x0f00) | (sc[3] & 0xf000);
+        const float d = GGML_FP16_TO_FP32(scale.f16);
+
+        const uint8_t * qs = x[i].qs;
+        const uint8_t * qh = x[i].qh;
+
+        for (int ib = 0; ib < QK_K/32; ++ib) {
+            const float dl1 = d * (2*((sc[ib/2] >> (6*(ib%2)+0)) & 0x7) + 1);
+            const float dl2 = d * (2*((sc[ib/2] >> (6*(ib%2)+3)) & 0x7) + 1);
+
+            idx[0] = qs[0] | ((qh[0] << 8) & 0x700);
+            idx[1] = qs[1] | ((qh[0] << 4) & 0x700);
+            idx[2] = qs[2] | ((qh[1] << 8) & 0x700);
+  ```
+
+- **bash** `{"command": "L=/home/stephane/Data13TB/stephane/GitHub/llama.cpp; sed -n '/void dequantize_row_iq1_m/,/^}/p' $L/ggml/src/ggml-quants.c | sed -n '25,45p'", "description": "Read the rest of IQ1_M dequantization"}`
+
+  ```
+idx[2] = qs[2] | ((qh[1] << 8) & 0x700);
+            idx[3] = qs[3] | ((qh[1] << 4) & 0x700);
+            delta[0] = qh[0] & 0x08 ? -IQ1S_DELTA : IQ1S_DELTA;
+            delta[1] = qh[0] & 0x80 ? -IQ1S_DELTA : IQ1S_DELTA;
+            delta[2] = qh[1] & 0x08 ? -IQ1S_DELTA : IQ1S_DELTA;
+            delta[3] = qh[1] & 0x80 ? -IQ1S_DELTA : IQ1S_DELTA;
+            for (int l = 0; l < 2; ++l) {
+                const int8_t * grid = (const int8_t *)(iq1s_grid + idx[l]);
+                for (int j = 0; j < 8; ++j) {
+                    y[j] = dl1 * (grid[j] + delta[l]);
+                }
+                y += 8;
+            }
+            for (int l = 2; l < 4; ++l) {
+                const int8_t * grid = (const int8_t *)(iq1s_grid + idx[l]);
+                for (int j = 0; j < 8; ++j) {
+                    y[j] = dl2 * (grid[j] + delta[l]);
+                }
+                y += 8;
+            }
+            qs += 4;
+  ```
+
+### 🤖 Assistant
+
+⏵ Je lis `IQ1S_DELTA` et j'extrais la grille IQ1_S (2 048 entrées).
+
+- **bash** `{"command": "grep -n \"IQ1S_DELTA\" /home/stephane/Data13TB/stephane/GitHub/llama.cpp/ggml/src/ggml-quants.c | head -2; cd /tmp && cat > extraire_iq1.c <<'EOF'\n#define GGML_COMMON_IMPL_C\n#include <stdio.h>\n#include <stdint.h>\n#include \"ggml.h\"\n#include \"ggml-common.h\"\nint main(void) {\n    … [783 caractères tronqués]`
+
+  ```
+3085:            const float delta = qh[ib] & 0x8000 ? -IQ1S_DELTA : IQ1S_DELTA;
+3124:            delta[0] = qh[0] & 0x08 ? -IQ1S_DELTA : IQ1S_DELTA;
+// Grille IQ1_S : 2048 codes de 8 niveaux signes (extraits de ggml-common.h).
+pub static IQ1S_GRID: [[i8; 8]; 2048] = [
+    [-1,-1,-1,-1,-1,-1,-1,-1,],
+2051 /tmp/grille_iq1s.rs
+  ```
+
+- **bash** `{"command": "grep -rn \"define IQ1S_DELTA\" /home/stephane/Data13TB/stephane/GitHub/llama.cpp/ggml/src/*.c /home/stephane/Data13TB/stephane/GitHub/llama.cpp/ggml/src/*.h 2>/dev/null | head -2", "description": "Find IQ1S_DELTA value"}`
+
+  ```
+/home/stephane/Data13TB/stephane/GitHub/llama.cpp/ggml/src/ggml-common.h:1216:#define IQ1S_DELTA 0.125f
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np = 'drave-core/src/formats.rs'\ns = open(p).read()\ngrille = open('/tmp/grille_iq1s.rs').read()\n# Insérer la grille avant la section de tests, et la fonction juste après.\ni = s.find('#[cfg(test)]')\nimpl = '''\n/ … [2889 caractères tronqués]`
+
+  ```
+ok
+BUILD 0
+  ```
+
+- **bash** `{"command": "cd /tmp && cat > ref_iq1m.c <<'EOF'\n#include <stdio.h>\n#include <stdlib.h>\n#include \"ggml.h\"\n#include \"ggml-common.h\"\n#include \"ggml-quants.h\"\nint main(int argc, char **argv) {\n    FILE *f = fopen(argv[1], \"rb\");\n    fseek(f, atol(argv[2]), SEEK_SET);\n    block_iq1_m b; … [885 caractères tronqués]`
+
+  ```
+blk.0.ffn_gate_exps.weight [256, 2048, 4096] type 29 debut 1537105568
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && F=/home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek-V4-Flash-UD-IQ1_M/DeepSeek-V4-Flash-UD-IQ1_M-00002-of-00003.gguf; ./drave-core/target/release/drave \"$F\" --bloc blk.0.ffn_gate_exps.weight:0 2>/dev/null | tail -n +2 > /tmp/n … [689 caractères tronqués]`
+
+  ```
+IQ1_M : 256 valeurs · ecart max 2.39e+05 · 0/256 exactes · DIVERGE
+  pires : [('2.1e+05', 143), ('2.4e+05', 4), ('2.4e+05', 224), ('2.4e+05', 227), ('2.4e+05', 233)]
+  ```
+
+### 🤖 Assistant
+
+⏵ IQ1_M diverge massivement. Je vérifie l'avancement des pointeurs dans la boucle ggml.
+
+- **bash** `{"command": "L=/home/stephane/Data13TB/stephane/GitHub/llama.cpp; sed -n '/void dequantize_row_iq1_m/,/^}/p' $L/ggml/src/ggml-quants.c | tail -8; echo \"=== la structure block_iq1_m ===\"; sed -n '512,522p' $L/ggml/src/ggml-common.h", "description": "Check pointer advance in IQ1_M loop"}`
+
+  ```
+}
+                y += 8;
+            }
+            qs += 4;
+            qh += 2;
+        }
+    }
+}
+=== la structure block_iq1_m ===
+    uint16_t qh[QK_K/32];
+} block_iq1_s;
+static_assert(sizeof(block_iq1_s) == sizeof(ggml_half) + QK_K/8 + QK_K/16, "wrong iq1_s block size/padding");
+
+// 1.75 bpw
+typedef struct {
+    uint8_t  qs[QK_K/8];      // grid index, low 8 bits
+    uint8_t  qh[QK_K/16];     // grid index, high 3 bits + grid shift bit (for two groups of 8)
+    uint8_t  scales[QK_K/32]; // 3-bit block scales (4-bit if QK_K == 64)
+} block_iq1_m;
+static_assert(sizeof(block_iq1_m) == QK_K/8 + QK_K/16 + QK_K/32, "wrong iq1_m block size/padding");
+  ```
+
+### 🤖 Assistant
+
+⏵ **Trouvé** : dans `block_iq1_m`, les échelles sont en **dernier** (qs, qh, scales), je les lisais en premier. Je corrige.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np = 'drave-core/src/formats.rs'\ns = open(p).read()\ns = s.replace('''    let sc: [u16; 4] = [\n        u16::from_le_bytes([bloc[0], bloc[1]]),\n        u16::from_le_bytes([bloc[2], bloc[3]]),\n        u16::from_le_ … [1459 caractères tronqués]`
+
+  ```
+IQ1_M : ecart max 0.00e+00 · 256/256 exactes · CONCORDE
+  ```
+
+### 🤖 Assistant
+
+⏵ **IQ1_M : 0,00e+00 aussi.** Les trois formats sont débloqués. Je commite et j'inventorie ce qui manque encore.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && (cd drave-core && cargo test --release 2>&1 | grep -E \"^test result\"); git add -A && git commit -q -m \"IQ1_M : 61 Go de DeepSeek-V4-Flash debloques (ecart 0,00e+00 avec ggml)\n\nTroisieme format a grille. La grille IQ1_S (2048 cod … [1251 caractères tronqués]`

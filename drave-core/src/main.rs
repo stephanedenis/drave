@@ -1481,6 +1481,7 @@ fn run_bloc(spec: &str) {
     let v = match t.ttype {
         gguf::GGML_Q2_K => Gguf::dequant_q2k(&buf[base..]),
         16 => formats::dequant_iq2xxs(&buf[base..]),
+        29 => formats::dequant_iq1m(&buf[base..]),
         autre => panic!("type {autre} non implémenté"),
     };
     println!("tenseur {nom} · type {} · bloc {index}", Gguf::nom_type(t.ttype));
