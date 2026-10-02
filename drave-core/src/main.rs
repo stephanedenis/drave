@@ -93,7 +93,7 @@ il faut écrire DRAVE_{} (voir docs/histoire.md). Rien n'a été appliqué.", &v
         (opt.ppl_reparti.is_some(), "--ppl-reparti"),
         (opt.tensors, "--tensors"), (opt.banc_mla.is_some(), "--banc-mla"),
         (opt.banc_kv > 0, "--banc-kv"), (opt.banc_topk > 0, "--banc-topk"),
-        (opt.gpu_banc, "--gpu-banc"), (opt.materiel, "--materiel"),
+        (opt.gpu_banc, "--gpu-banc"), (opt.materiel, "--materiel"), (opt.config, "--config"),
         (opt.sonder_engram > 0, "--sonder-engram"),
         (opt.plan, "--plan"), (opt.tokenize, "--tokenize"),
         (opt.ppl, "--ppl"), (opt.infer, "--infer"),
@@ -103,6 +103,7 @@ il faut écrire DRAVE_{} (voir docs/histoire.md). Rien n'a été appliqué.", &v
 sont ignorés", modes.len(), modes.join(", "), modes[0]);
     }
     if opt.materiel { run_materiel(&opt); return; }
+    if opt.config { run_config(); return; }
     if opt.sonder_engram > 0 { run_sonder_engram(opt.sonder_engram); return; }
     if let Some(b) = opt.bloc.clone() { run_bloc(&b); return; }
     if let Some(f) = opt.banc_vision.clone() { run_banc_vision(&f); return; }
@@ -533,6 +534,7 @@ struct Options {
     act_thresh: f32, act_topk: usize, act_renorm: bool, topk_proj: [usize; 7],
     // --- mesure
     logits_bin: Option<String>, ppl_profil: bool,
+    config: bool,
     /// Profilage des neurones « chauds » (idée de PowerInfer) et fichier de
     /// sortie du classement.
     profil_neurones: bool, neurones_sortie: Option<String>,
@@ -674,6 +676,7 @@ fn analyser(args: &[String]) -> Options {
             "--sans-yarn" => { o.sans_yarn = true; 1 }
             "--act-renorm" => { o.act_renorm = true; 1 }
             "--materiel" => { o.materiel = true; 1 }
+            "--config" => { o.config = true; 1 }
             "--sonder-engram" => { o.sonder_engram = suivant(i).parse().unwrap_or(1000); 2 }
             "--bloc" if i + 1 < args.len() => { o.bloc = Some(suivant(i).clone()); 2 }
             "--tete-restreinte" if i + 1 < args.len() => {
@@ -1609,6 +1612,52 @@ fn run_sonder_engram(n: usize) {
 ///
 /// Chaque ligne du plan porte le chiffre qui la justifie : un réglage
 /// surprenant doit pouvoir être contesté, pas subi.
+/// **Ce que le moteur comprend d'un modèle** (`--config`), sans le charger.
+///
+/// Le mode ne lit que l'en-tête du GGUF : quelques dizaines de millisecondes,
+/// même sur 341 Go. Il sert à voir la décision de ROUTAGE et sa provenance, et
+/// à savoir si l'architecture est calculable — deux choses qui n'étaient
+/// visibles qu'après un chargement complet, c'est-à-dire jamais pour les gros
+/// modèles.
+///
+/// Il est né d'un constat : trois des cinq plus gros modèles de cette machine
+/// n'avaient jamais été exécutés, et rien ne le disait avant la panne.
+fn run_config() {
+    let g = Gguf::open_meta_auto(&modele_chemin()).expect("ouverture du GGUF (en-tête)");
+    let arch = g.meta.get("general.architecture").and_then(|m| m.as_str()).unwrap_or("?");
+    println!("modèle        : {}", modele_chemin());
+    println!("architecture  : {arch}");
+    println!("couches       : {}", g.cfg("block_count").and_then(|m| m.as_u64()).unwrap_or(0));
+    let r = model::routage_du_gguf(&g);
+    println!("experts       : {} par couche, {} par jeton · FFN expert {}",
+             r.n_expert, r.n_expert_used, r.ffn_exp);
+    if r.n_expert > 0 {
+        println!("routage       : {} (source : {}) · renormalisation {} · échelle {}",
+                 r.gating.nom(), r.source,
+                 if r.norm { "oui" } else { "non" },
+                 if r.echelle == 0.0 { "aucune".to_string() } else { format!("{:.3}", r.echelle) });
+        if r.hash_layers > 0 {
+            println!("routage table : {}/{} premières couches par `ffn_gate_tid2eid`",
+                     r.hash_layers, g.cfg("block_count").and_then(|m| m.as_u64()).unwrap_or(0));
+        }
+    }
+    // Ce que le moteur ne sait pas calculer, dit avant la panne.
+    let quelque_part = |suffixe: &str| g.tensors.iter().any(|t| t.name.ends_with(suffixe));
+    let mut manques: Vec<&str> = Vec::new();
+    let mla_rang_faible = quelque_part("attn_q_a.weight");
+    if mla_rang_faible { println!("attention     : MLA à rang faible (cache latent)"); }
+    if quelque_part("hc_attn_fn.weight") { manques.push("hyper-connexions"); }
+    let topk = g.cfg("index_topk").and_then(|m| m.as_u64()).unwrap_or(0) as usize;
+    if quelque_part("indexer.") && topk > 0 { manques.push("attention par index (inutile si contexte ≤ index_topk)"); }
+    if quelque_part("attn_output_a.weight") { manques.push("sortie à rang faible"); }
+    if quelque_part("engram.weight") { manques.push("engram"); }
+    if manques.is_empty() {
+        println!("calculable    : oui (passe avant implémentée)");
+    } else {
+        println!("calculable    : NON — il manque : {}", manques.join(", "));
+    }
+}
+
 fn run_materiel(opt: &Options) {
     let m = materiel::Materiel::detecter();
     print!("{}", m.resume());

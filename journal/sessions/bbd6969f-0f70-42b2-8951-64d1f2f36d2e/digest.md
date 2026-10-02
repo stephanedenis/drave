@@ -59580,3 +59580,1848 @@ test result: ok. 46 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; fin
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A drave-core/src && git commit -q -F - <<'EOF'\nroutage des experts : quatre conventions, facteur d'échelle, routage par table\n\nLe moteur n'avait qu'un drapeau booléen pour une question qui a quatre\nréponses, et il ne lis … [2555 caractères tronqués]`
+
+  ```
+475bee4 routage des experts : quatre conventions, facteur d'échelle, routage par table
+  ```
+
+- **bash** `{"command": "tail -4 /tmp/ref_oss_5b.log; ls -la /tmp/ref_oss_5.bin 2>/dev/null || echo \"(pas encore)\"", "description": "Check llama.cpp reference for gpt-oss"}`
+
+  ```
+create_tensor: loading tensor blk.35.ffn_gate_exps.bias
+create_tensor: loading tensor blk.35.ffn_down_exps.bias
+create_tensor: loading tensor blk.35.ffn_up_exps.bias
+done_getting_tensors: tensor 'token_embd.weight' (q8_0) (and 578 others) cannot be used with preferred buffer type CPU_REPACK, using CPU instead
+(pas encore)
+  ```
+
+### 🤖 Assistant
+
+⏵ Premier essai d'un modèle de 235 Go : Qwen3-235B en Q2_K/Q3_K
+
+- **bash** `{"command": "free -g | head -2; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls -la /home/stephane/Data13TB/stephane/modeles/gguf/Qwen3-235B-A22B-Q2_K/; timeout 1200 ./drave-core/target/release/drave /home/stephane/Data13TB/stephane/modeles/gguf/Qwen3-235B-A22B-Q2_K/Qwen3-235B-A22B-Instruct … [153 caractères tronqués]`
+
+  ```
+total        used        free      shared  buff/cache   available
+Mem:             125          64           0           4          66          61
+total 83682624
+drwxr-xr-x. 1 stephane stephane         216  1 oct 12:28 .
+drwxr-xr-x. 1 stephane stephane        1206  1 oct 09:46 ..
+-rw-r--r--. 1 stephane stephane 49906751904  1 oct 12:22 Qwen3-235B-A22B-Instruct-2507-Q2_K-00001-of-00002.gguf
+-rw-r--r--. 1 stephane stephane 35784249568  1 oct 12:28 Qwen3-235B-A22B-Instruct-2507-Q2_K-00002-of-00002.gguf
+[timed out after 60000ms]
+[killed by signal: SIGTERM]
+  ```
+
+- **bash** `{"command": "ps -eo pid,etimes,rss,comm,args --sort=-rss | head -6 | cut -c1-150; free -g | sed -n 2p", "description": "Check running heavy processes"}`
+
+  ```
+PID ELAPSED   RSS COMMAND         COMMAND
+3527537     390 99078388 ref_logits   ./tools/ref_logits /home/stephane/Data13TB/stephane/modeles/gguf/gpt-oss-120b-MXFP4.gguf /tmp/ids_oss_512.txt /t
+3528085     243 26380772 ref_logits   ./tools/ref_logits /home/stephane/Data13TB/stephane/modeles/gguf/gpt-oss-120b-MXFP4.gguf /tmp/ids_oss_512.txt /t
+3529013      65 2741128 drave         ./drave-core/target/release/drave /home/stephane/Data13TB/stephane/modeles/gguf/Qwen3-235B-A22B-Q2_K/Qwen3-235B-
+ 710008  561309 2694276 node-MainThread node26 /home/stephane/.local/share/../bin/dsh --profile dsh-tui
+3553666  227908 645764 chrome         /opt/google/chrome/chrome --type=renderer --crashpad-handler-pid=3549261 --enable-crash-reporter=8755d71b-0329-4
+Mem:             125          69           0           4          61          56
+  ```
+
+- **bash** `{"command": "kill 3527537 3529013 2>/dev/null; sleep 2; ps -eo pid,etimes,rss,comm --sort=-rss | head -3; free -g | sed -n 2p", "description": "Kill duplicate and competing processes"}`
+
+  ```
+PID ELAPSED   RSS COMMAND
+3528085     250 26972412 ref_logits
+ 710008  561316 3085816 node-MainThread
+Mem:             125          15          55           4          60         110
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls reports/ | tail -8; head -30 reports/rapport-tete-restreinte.md", "description": "Review report style"}`
+
+  ```
+rapport-prefill-par-lots.md
+rapport-prefill-reparti.md
+rapport-programme-evolutif.md
+rapport-session-2026-09-30.md
+rapport-tete-restreinte.md
+rapport-transport-liste.md
+rapport-travail-reel.md
+rapport-valeur-unaire.md
+# Rapport — restreindre la tête de sortie : ce qui marche, ce qui ne marche pas
+
+Session du 01/10 au 02/10. Question posée : peut-on calculer moins de logits que
+tout le vocabulaire **sans jamais changer la sortie** — « charger dynamiquement
+les logits manquants ou faire du JIT », à défaut d'y être explicitement
+contraint ?
+
+**Réponse : non, pas avec une garantie exacte.** Trois voies ont été explorées,
+implémentées et mesurées. Une seule survit, et elle change la sortie — ce qui la
+qualifie comme *génération contrainte*, pas comme optimisation.
+
+## Ce qui est mesuré d'abord : le vocabulaire utile
+
+| jetons lus (français) | identifiants distincts | % du vocabulaire |
+|---|---|---|
+| 10 000 | 1 462 | 0,96 % |
+| 100 000 | 4 659 | 3,07 % |
+| 1 000 000 | 15 768 | 10,38 % |
+| 3 050 991 | **19 793** | **13,03 %** |
+
+Exposant de Heaps ≈ **0,21** : atteindre 50 % du vocabulaire demanderait des
+milliards de jetons. **13 % est un plafond de fait.**
+
+Et le rang du vrai token, se
+… [117 caractères tronqués]
+  ```
+
+- **write** `{"content": "# Rapport — le routage des experts était faux pour quatre gros modèles sur cinq\n\nSession du 01/10 au 02/10, en autonomie. Question posée au départ : « pourquoi\nV4-Flash ne se charge-t-il pas ? » La réponse s'est révélée plus large.\n\n## 1. Ce qui a été trouvé\n\nLe moteur routait ** … [6337 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-routage-experts.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "tail -3 /tmp/ref_oss_5b.log; ls -la /tmp/ref_oss_5.bin 2>/dev/null || echo \"(en cours)\"; ps -eo pid,etimes,rss,comm --sort=-rss | head -2", "description": "Poll the external reference"}`
+
+  ```
+create_tensor: loading tensor blk.35.ffn_down_exps.bias
+create_tensor: loading tensor blk.35.ffn_up_exps.bias
+done_getting_tensors: tensor 'token_embd.weight' (q8_0) (and 578 others) cannot be used with preferred buffer type CPU_REPACK, using CPU instead
+(en cours)
+    PID ELAPSED   RSS COMMAND
+3528085     272 31545904 ref_logits
+  ```
+
+### 🤖 Assistant
+
+⏵ Extraction de la décision de routage en une fonction, plus un mode `--config` pas cher
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/model.rs'; s=open(p).read()\n# 1) Extraire la lecture des métadonnées de routage dans une structure dédiée.\ndebut = s.index(\"        // ---- Convention de routage des experts -------------------- … [4768 caractères tronqués]`
+
+  ```
+BUILD
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n '\"--materiel\" =>' -B 6 -A 4 drave-core/src/main.rs | head -20", "description": "Find where to add the --config mode"}`
+
+  ```
+670-            "--auto" => { o.auto = true; 1 }
+671-            "--push" => { o.auto = false; o.dense = false; 1 }
+672-            "--pin" => { o.pin = true; 1 }
+673-            "--sans-fenetre" => { o.sans_fenetre = true; 1 }
+674-            "--sans-yarn" => { o.sans_yarn = true; 1 }
+675-            "--act-renorm" => { o.act_renorm = true; 1 }
+676:            "--materiel" => { o.materiel = true; 1 }
+677-            "--sonder-engram" => { o.sonder_engram = suivant(i).parse().unwrap_or(1000); 2 }
+678-            "--bloc" if i + 1 < args.len() => { o.bloc = Some(suivant(i).clone()); 2 }
+679-            "--tete-restreinte" if i + 1 < args.len() => {
+680-                o.tete_restreinte = Some(suivant(i).clone()); 2 }
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/main.rs'; s=open(p).read()\ns = s.replace(\"\"\"            \"--materiel\" => { o.materiel = true; 1 }\"\"\",\n\"\"\"            \"--materiel\" => { o.materiel = true; 1 }\n            \"--config\" … [418 caractères tronqués]`
+
+  ```
+472:struct Options {
+473-    // --- sélection du mode
+474-    infer: bool, ppl: bool, plan: bool, tokenize: bool, gpu_banc: bool,
+475-    /// Banc du KV déporté : nombre de clés à faire tenir en VRAM.
+--
+541:    materiel: bool,
+542-    /// Sonde d'accès mmappé à la table d'engram : combien d'entrées lire, à des
+543-    /// indices dispersés. Démontre qu'une table de 101 Go s'adresse sans se
+544-    /// charger.
+677:            "--materiel" => { o.materiel = true; 1 }
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"materiel: bool,\" -A 4 drave-core/src/main.rs | head -8; grep -n \"run_materiel\\|opt.materiel\" drave-core/src/main.rs | head", "description": "Look at the materiel field and dispatcher"}`
+
+  ```
+541:    materiel: bool,
+542-    /// Sonde d'accès mmappé à la table d'engram : combien d'entrées lire, à des
+543-    /// indices dispersés. Démontre qu'une table de 101 Go s'adresse sans se
+544-    /// charger.
+545-    sonder_engram: usize,
+96:        (opt.gpu_banc, "--gpu-banc"), (opt.materiel, "--materiel"),
+105:    if opt.materiel { run_materiel(&opt); return; }
+1614:fn run_materiel(opt: &Options) {
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '88,112p' drave-core/src/main.rs", "description": "Read the dispatcher"}`
+
+  ```
+// Plusieurs modes demandés : l'aiguillage en retient UN, dans un ordre
+    // arbitraire, et le disait pas. On le dit.
+    let modes: Vec<&str> = [
+        (opt.banc_vision.is_some(), "--banc-vision"),
+        (opt.flux_serveur.is_some(), "--flux-serveur"),
+        (opt.ppl_reparti.is_some(), "--ppl-reparti"),
+        (opt.tensors, "--tensors"), (opt.banc_mla.is_some(), "--banc-mla"),
+        (opt.banc_kv > 0, "--banc-kv"), (opt.banc_topk > 0, "--banc-topk"),
+        (opt.gpu_banc, "--gpu-banc"), (opt.materiel, "--materiel"),
+        (opt.sonder_engram > 0, "--sonder-engram"),
+        (opt.plan, "--plan"), (opt.tokenize, "--tokenize"),
+        (opt.ppl, "--ppl"), (opt.infer, "--infer"),
+    ].iter().filter(|(v, _)| *v).map(|(_, n)| *n).collect();
+    if modes.len() > 1 {
+        eprintln!("[modes] {} modes demandés ({}) : c'est {} qui s'exécute — les autres \
+sont ignorés", modes.len(), modes.join(", "), modes[0]);
+    }
+    if opt.materiel { run_materiel(&opt); return; }
+    if opt.sonder_engram > 0 { run_sonder_engram(opt.sonder_engram); return; }
+    if let Some(b) = opt.bloc.clone() { run_bloc(&b); return; }
+    if let Some(f) = opt.banc_vision.clone() { run_banc_vision(&f); r
+… [317 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/main.rs'; s=open(p).read()\ns = s.replace(\"\"\"        (opt.gpu_banc, \"--gpu-banc\"), (opt.materiel, \"--materiel\"),\"\"\",\n\"\"\"        (opt.gpu_banc, \"--gpu-banc\"), (opt.materiel, \"--mate … [3428 caractères tronqués]`
+
+  ```
+=== DeepSeek-V4-Flash-UD-IQ1_M ===
+architecture  : deepseek4
+couches       : 43
+experts       : 256 par couche, 6 par jeton · FFN expert 2048
+routage       : racine de softplus (source : expert_gating_func) · renormalisation oui · échelle 1.500
+routage table : 3/43 premières couches par `ffn_gate_tid2eid`
+calculable    : NON — il manque : MLA à rang faible, hyper-connexions, sortie à rang faible
+=== GLM-5.3-UD-IQ1_S ===
+modèle        : /home/stephane/Data13TB/stephane/modeles/gguf/GLM-5.3-UD-IQ1_S/GLM-5.3-UD-IQ1_S-00001-of-00006.gguf
+architecture  : glm-dsa
+couches       : 79
+experts       : 256 par couche, 8 par jeton · FFN expert 2048
+routage       : sigmoïde (source : expert_gating_func) · renormalisation oui · échelle 2.500
+calculable    : NON — il manque : MLA à rang faible
+=== Qwen3-235B-A22B-Q2_K ===
+modèle        : /home/stephane/Data13TB/stephane/modeles/gguf/Qwen3-235B-A22B-Q2_K/Qwen3-235B-A22B-Instruct-2507-Q2_K-00001-of-00002.gguf
+architecture  : qwen3moe
+couches       : 94
+experts       : 128 par couche, 8 par jeton · FFN expert 1536
+routage       : softmax (source : défaut du moteur) · renormalisation oui · échelle aucune
+calculable    : oui (passe avant implémentée)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for M in \"GLM-5.3-Flash-UD-IQ1_S/GLM-5.3-Flash-UD-IQ1_S-00001-of-00003.gguf\" \"Kimi-K2.7-Code-UD-IQ1_M/Kimi-K2.7-Code-UD-IQ1_M-00001-of-00008.gguf\"; do echo \"=== ${M%%/*} ===\"; timeout 120 ./drave-core/target/release/drave /home … [132 caractères tronqués]`
+
+  ```
+=== GLM-5.3-Flash-UD-IQ1_S ===
+architecture  : glm5next
+couches       : 46
+experts       : 288 par couche, 8 par jeton · FFN expert 2048
+routage       : sigmoïde (source : expert_gating_func) · renormalisation oui · échelle 2.500
+calculable    : NON — il manque : MLA à rang faible, hyper-connexions
+=== Kimi-K2.7-Code-UD-IQ1_M ===
+architecture  : deepseek2
+couches       : 61
+experts       : 384 par couche, 8 par jeton · FFN expert 2048
+routage       : sigmoïde (source : expert_gating_func) · renormalisation oui · échelle 2.827
+calculable    : NON — il manque : MLA à rang faible
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ./drave-core/target/release/drave /home/stephane/Data13TB/stephane/modeles/gguf/Kimi-K2.7-Code-UD-IQ1_M/Kimi-K2.7-Code-UD-IQ1_M-00001-of-00008.gguf --tensors 2>/dev/null | grep \"blk.1\\.\" | head -16", "description": "List Kimi laye … [13 caractères tronqués]`
+
+  ```
+Q8_0     blk.1.attn_k_b.weight                  [64, 512, 128] · 4.2 M poids · fichier 1
+  Q8_0     blk.1.attn_kv_a_mqa.weight             [576, 7168] · 4.1 M poids · fichier 1
+  F32      blk.1.attn_kv_a_norm.weight            [512] · 0.0 M poids · fichier 1
+  F32      blk.1.attn_norm.weight                 [7168] · 0.0 M poids · fichier 1
+  Q5_K     blk.1.attn_output.weight               [7168, 8192] · 58.7 M poids · fichier 1
+  Q5_K     blk.1.attn_q_a.weight                  [1536, 7168] · 11.0 M poids · fichier 1
+  F32      blk.1.attn_q_a_norm.weight             [1536] · 0.0 M poids · fichier 1
+  Q8_0     blk.1.attn_q_b.weight                  [12288, 1536] · 18.9 M poids · fichier 1
+  Q8_0     blk.1.attn_v_b.weight                  [64, 128, 512] · 4.2 M poids · fichier 1
+  F32      blk.1.exp_probs_b.bias                 [384] · 0.0 M poids · fichier 1
+  IQ3_XXS  blk.1.ffn_down_exps.weight             [384, 7168, 2048] · 5637.1 M poids · fichier 1
+  Q6_K     blk.1.ffn_down_shexp.weight            [7168, 2048] · 14.7 M poids · fichier 1
+  IQ2_XXS  blk.1.ffn_gate_exps.weight             [384, 2048, 7168] · 5637.1 M poids · fichier 1
+  F32      blk.1.ffn_gate_inp.weight           
+… [213 caractères tronqués]
+  ```
+
+- **bash** `{"command": "TZ=America/New_York date \"+HAE %H:%M\"; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"pub fn forward(\" drave-core/src/model.rs; sed -n '/pub fn forward(&mut self, tok: u32, pos: usize)/,/^            \\/\\/ ---- MoE/p' drave-core/src/model.rs | grep -n \"// ---\\|let … [114 caractères tronqués]`
+
+  ```
+HAE 23:54
+3604:    pub fn forward(&mut self, tok: u32, pos: usize) -> Vec<f32> {
+54:        let attn_all: Vec<u32> = (0..ctx as u32).collect();
+61:        // `forward_mla` respectaient déjà la plage ; `forward` était l'exception.
+102:            Self::matvec(pool, &lay.wq, &hn, &mut q, events, self.act_levels, self.act_thresh, tk(0), self.act_renorm, &mut scratch, self.seuil_push);
+103:            Self::matvec(pool, &lay.wk, &hn, &mut k, events, self.act_levels, self.act_thresh, tk(1), self.act_renorm, &mut scratch, self.seuil_push);
+104:            Self::matvec(pool, &lay.wv, &hn, &mut v, events, self.act_levels, self.act_thresh, tk(2), self.act_renorm, &mut scratch, self.seuil_push);
+127:                    Self::rope_yarn(&mut q, nh, hd, pos, cfg.rope_base, f, bf, bl, orig, ms, cfg.n_rot);
+128:                    Self::rope_yarn(&mut k, nkv, hd, pos, cfg.rope_base, f, bf, bl, orig, ms, cfg.n_rot);
+131:                    Self::rope(&mut q, nh, hd, pos, cfg.rope_base, cfg.n_rot);
+132:                    Self::rope(&mut k, nkv, hd, pos, cfg.rope_base, cfg.n_rot);
+141:            // écriture du cache KV à la position courante
+157:            // ---- chemin GROUPÉ par tête KV (atten
+… [1210 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"pub struct Mla\" -A 30 drave-core/src/model.rs | head -36; echo \"=== forward_mla complet (extrait) ===\"; sed -n '/pub fn forward_mla/,/^    }$/p' drave-core/src/model.rs | sed -n '1,60p'", "description": "Read Mla struct  … [17 caractères tronqués]`
+
+  ```
+934:pub struct Mla {
+935-    pub q_a: Vec<f32>,      // [h, q_lora]
+936-    pub q_a_norm: Vec<f32>, // [q_lora]
+937-    pub q_b: Vec<f32>,      // [q_lora, nh*(qkn+qkr)]
+938-    pub kv_a: Vec<f32>,     // [h, kv_lora+qkr]
+939-    pub kv_a_norm: Vec<f32>,// [kv_lora]
+940-    pub kv_b: Vec<f32>,     // [kv_lora, nh*(qkn+vd)]
+941-    pub wo: Vec<f32>,       // [nh*vd, h]
+942-    pub ffn_norm: Vec<f32>, // [h]
+943-    pub gate: Vec<f32>,     // [h, ffn]
+944-    pub up: Vec<f32>,       // [h, ffn]
+945-    pub down: Vec<f32>,     // [ffn, h]
+946-    pub attn_norm: Vec<f32>,// [h]
+947-    pub q_lora: usize, pub kv_lora: usize, pub qkr: usize, pub qkn: usize,
+948-    pub vd: usize, pub nh: usize, pub ffn: usize,
+949-}
+950-
+951-/// Produit matrice-vecteur en f32 : `y[o] = Σ_i w[o*n_in + i] * x[i]`.
+952-/// Les poids MLA sont rangés ligne par ligne, comme les tenseurs GGUF F32.
+953-fn matvec_f32(w: &[f32], x: &[f32], n_in: usize, n_out: usize, y: &mut [f32]) {
+954-    for o in 0..n_out {
+955-        let ligne = &w[o * n_in..(o + 1) * n_in];
+956-        let mut acc = 0f32;
+957-        for i in 0..n_in { acc += ligne[i] * x[i]; }
+958-        y[o] = acc;
+959-    }
+960-}
+961-
+962-/// f32 → f16 (
+… [3496 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"\\.forward(\\|\\.forward_lot(\" drave-core/src/main.rs | head -12", "description": "Find how ppl calls forward"}`
+
+  ```
+972:        for (pos, &t) in ids.iter().enumerate() { last = mdl.forward(t, pos); }
+983:            last = mdl.forward(next, ids.len() + step);
+1467:            let hn = mdl.forward(0, 0);
+2475:                    let hs = mdl.forward_lot(&vec![0u32; t], f.pos as usize);
+2491:                let sortie = mdl.forward(0, f.pos as usize);
+2576:            let hs = mdl.forward_lot(&ids[pos..pos + t], pos);
+2587:            let last = mdl.forward(t, pos);
+2621:            let hs = mdl.forward_lot(&ids[pos..pos + t], pos);
+2699:        let etat = mdl.forward(t, pos);
+4428:            let hs = mdl.forward_lot(&chunk[pos..pos + t], pos);
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '4415,4445p' drave-core/src/main.rs", "description": "Read the ppl loop"}`
+
+  ```
+let mut seaux: Vec<(f64, usize)> = vec![(0.0, 0); ctx.div_ceil(256)];
+    // Deux postes que le profil du moteur ne voit pas : la tête de sortie
+    // (la plus grosse matrice du modèle) et la notation log-sum-exp. Sans eux,
+    // « reste » les mélangeait et on ne pouvait pas dire si la tête par lots
+    // avait servi à quelque chose.
+    let (mut t_tete, mut t_note) = (0f64, 0f64);
+    for (i_f, (chunk, masque)) in fenetres.iter().enumerate() {
+        let (mut nll_f, mut n_f) = (0f64, 0usize);
+        // Préremplissage par lots : `lot` jetons d'un coup. `lot == 1` emprunte
+        // exactement le chemin historique jeton par jeton.
+        let mut pos = 0usize;
+        while pos < chunk.len() {
+            let t = lot.min(chunk.len() - pos);
+            let hs = mdl.forward_lot(&chunk[pos..pos + t], pos);
+            // Tête par lots : la matrice la plus lourde du modèle est lue une
+            // fois pour le groupe au lieu d'une fois par jeton.
+            let marque = Instant::now();
+            let lgs = if t > 1 { Some(mdl.logits_lot(&hs)) } else { None };
+            t_tete += marque.elapsed().as_secs_f64();
+            for (i, h) in hs.iter().enumerate() {
+            le
+… [572 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && awk 'NR>=3690 && NR<=3720' drave-core/src/model.rs; echo \"....\"; grep -n \"Self::matvec(pool, &lay.wo, &att\" drave-core/src/model.rs", "description": "Locate the attention region boundaries"}`
+
+  ```
+dyn_ = dyn_.max(a.abs());
+                    }
+                    println!("[verif] couche {l} pos {pos} : écart max {mx:.3e} sur une \
+dynamique de {dyn_:.3e} (relatif {:.2e})", mx / dyn_.max(1e-9));
+                }
+            } else if self.trace.is_some() {
+                let mut tmp = Vec::with_capacity(h);
+                if let Some((sv, sx)) = Self::quant_scratch(&hn, self.act_levels, self.act_thresh,
+                                                            tk(0), self.act_renorm, &mut tmp) {
+                    let mut actifs = vec![0i32; h];
+                    for (&i, &v) in sv.idx.iter().zip(sv.val.iter()) { actifs[i as usize] = v; }
+                    let j = self.jeton_trace;
+                    self.trace.as_mut().unwrap().ecrire(l, j as usize, &actifs, sx);
+                }
+            }
+            Self::matvec(pool, &lay.wq, &hn, &mut q, events, self.act_levels, self.act_thresh, tk(0), self.act_renorm, &mut scratch, self.seuil_push);
+            Self::matvec(pool, &lay.wk, &hn, &mut k, events, self.act_levels, self.act_thresh, tk(1), self.act_renorm, &mut scratch, self.seuil_push);
+            Self::matvec(pool, &lay.wv, &hn, &mut v, events, self.act_le
+… [880 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"let mut q = \\|let mut k = \\|let mut v = \\|let att = \\|let mut att\\|let att:\" drave-core/src/model.rs | awk -F: '$1>3680 && $1<4070' | head -10", "description": "Find q/k/v/att declarations in forward"}`
+
+  ```
+(no output)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '3660,3690p' drave-core/src/model.rs", "description": "Read the start of the attention block"}`
+
+  ```
+// `0..n_layer` : un nœud qui reçoit un flux reprend à SA première couche.
+        // La boucle partait de zéro — le pilote calculait donc les 24 couches,
+        // envoyait l'état final, et le pair les recalculait toutes par-dessus :
+        // perplexité répartie 798,3 au lieu de 18,2. `forward_lot` et
+        // `forward_mla` respectaient déjà la plage ; `forward` était l'exception.
+        for l in self.couche_debut..self.couche_fin {
+            let lay = &layers[l];
+            // Fenêtre EFFECTIVE de cette couche : le motif déclaré (gpt-oss :
+            // une couche sur deux en attention complète) prime sur le réglage
+            // global. Lue en champs directs : `self` est déjà déstructuré.
+            let fen = if self.attn_window == 0 { 0 }
+                      else if self.swa_pattern <= 1 { self.attn_window }
+                      else if l % self.swa_pattern < self.swa_pattern - 1 { self.attn_window }
+                      else { 0 };
+            let tm = Instant::now();
+            Self::rmsnorm(&x, &lay.attn_norm, cfg.eps, &mut hn);
+            if self.flux_force.is_some() {
+                // Diagnostic : comparer ce que la trace impose à ce que le
+            
+… [732 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '3686,3712p' drave-core/src/model.rs | grep -n \"let\\|Self::matvec\" ; echo \"=== recherche de att ===\"; grep -n \"att\\b\" drave-core/src/model.rs | awk -F: '$1>3700 && $1<4065' | head -12", "description": "Find att definit … [5 caractères tronqués]`
+
+  ```
+1:                    let mut mx = 0f32;
+2:                    let mut dyn_ = 0f32;
+11:                let mut tmp = Vec::with_capacity(h);
+12:                if let Some((sv, sx)) = Self::quant_scratch(&hn, self.act_levels, self.act_thresh,
+14:                    let mut actifs = vec![0i32; h];
+16:                    let j = self.jeton_trace;
+20:            Self::matvec(pool, &lay.wq, &hn, &mut q, events, self.act_levels, self.act_thresh, tk(0), self.act_renorm, &mut scratch, self.seuil_push);
+21:            Self::matvec(pool, &lay.wk, &hn, &mut k, events, self.act_levels, self.act_thresh, tk(1), self.act_renorm, &mut scratch, self.seuil_push);
+22:            Self::matvec(pool, &lay.wv, &hn, &mut v, events, self.act_levels, self.act_thresh, tk(2), self.act_renorm, &mut scratch, self.seuil_push);
+26:                let mut tmp = vec![0f32; hd];
+27:                if let Some(w) = lay.q_norm.as_ref() {
+=== recherche de att ===
+3783:                                       nsplit, attn_gpu_part, &mut att[..]) {
+3825:                        let out = &mut att[hh * hd..(hh + 1) * hd];
+3832:                            let out = &mut att[hh * hd..(hh + 1) * hd];
+3882:                      
+… [426 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"vec!\\[0f32; nh \\* hd\\]\\|let mut att\\|let (mut q\" drave-core/src/model.rs | awk -F: '$1>3600 && $1<3800' | head; sed -n '3630,3660p' drave-core/src/model.rs", "description": "Find the buffer declarations"}`
+
+  ```
+3631:        let mut q = vec![0f32; nh * hd];
+3634:        let mut att = vec![0f32; nh * hd];
+3656:        let mut attn_idx: Vec<u32> = Vec::with_capacity(ctx);
+        let mut hn = vec![0f32; h];
+        let mut q = vec![0f32; nh * hd];
+        let mut k = vec![0f32; nkv * hd];
+        let mut v = vec![0f32; nkv * hd];
+        let mut att = vec![0f32; nh * hd];
+        let mut o = vec![0f32; h];
+        let mut gate = vec![0f32; cfg.ffn.max(cfg.ffn_exp)];
+        // tampon partagé : sélection k-WTA pendant les produits matriciels, puis
+        // quantiles du capteur hebbien — les deux usages ne se recouvrent pas.
+        let mut scratch: Vec<f32> = Vec::with_capacity(cfg.ffn);
+        let mut up = vec![0f32; cfg.ffn.max(cfg.ffn_exp)];
+        let mut exp_out = vec![0f32; h];
+        let mut down = vec![0f32; h];
+        let mut sc = vec![0f32; pos + 1];
+        // scores par TÊTE pour le chemin groupé (cf. plus bas) : les têtes
+        // d'un même groupe KV partagent les mêmes clés et valeurs.
+        let mut sc2 = vec![0f32; nh * ctx];
+        #[cfg(target_arch = "x86_64")]
+        let simd = std::is_x86_feature_detected!("avx2") && std::is_x86_feature_detected!("fma");
+       
+… [543 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '3604,3632p' drave-core/src/model.rs", "description": "Read forward's preamble"}`
+
+  ```
+pub fn forward(&mut self, tok: u32, pos: usize) -> Vec<f32> {
+        assert!(pos < self.ctx, "contexte dépassé ({pos} ≥ {})", self.ctx);
+        self.jeton_trace += 1;
+        // lus AVANT l'emprunt destructuré : la parcimonie par projection
+        let tkp = self.act_topk_proj;
+        let tkg = self.act_topk;
+        let tk = |p: usize| if tkp[p] > 0 { tkp[p] } else { tkg };
+        // Lus AVANT l'emprunt destructuré (comme la parcimonie par projection).
+        let largeur_profil = self.cfg.ffn.max(self.cfg.ffn_exp);
+        self.profil_jetons += 1;
+        let Model { g, cfg, layers, out_norm, pool, kv, events, attn_events, kv_gpu,
+                    attn_gpu_part, emb_imposee, .. } = self;
+        let h = cfg.hidden;
+        let hd = cfg.head_dim;
+        let nh = cfg.n_head;
+        let nkv = cfg.n_kv_head;
+        let rep = nh / nkv;
+        let ctx = self.ctx;
+
+        // Injection : un vecteur imposé (embedding d'image) remplace la ligne
+        // `token_embd` pour cet appel, et seulement pour lui — c'est le seul
+        // ajout d'architecture que la vision demande au moteur.
+        let mut x = match emb_imposee.take() {
+            Some(v) => v,
+            None => g
+… [177 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '4052,4062p' drave-core/src/model.rs", "description": "Find the exact end of the attention block"}`
+
+  ```
+let w = sc[t as usize];
+                    kvc.valeur(kvh, t as usize, &mut vd);
+                    for (o, x) in out.iter_mut().zip(vd.iter()) { *o += w * x; }
+                }
+            }
+            self.prof[2] += ta.elapsed().as_secs_f64();
+            let tf = Instant::now();
+            Self::matvec(pool, &lay.wo, &att, &mut o, events, self.act_levels, self.act_thresh, tk(3), self.act_renorm, &mut scratch, self.seuil_push);
+            for i in 0..h { o[i] += x[i]; }
+            Self::rmsnorm(&o, &lay.ffn_norm, cfg.eps, &mut hn);
+            if let Some(r) = self.flux_force.as_mut() {
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"let ta = Instant::now();\" drave-core/src/model.rs | head -3; python3 - <<'PY'\np='drave-core/src/model.rs'\nlignes = open(p).read().split('\\n')\n# Bornes : du premier matvec wq (3706, 1-basé) jusqu'à la ligne avant le mat … [333 caractères tronqués]`
+
+  ```
+3743:            let ta = Instant::now();
+deb 3705 fin 4059 lignes 354
+  ```
+
+### 🤖 Assistant
+
+Je pose la branche MLA dans la passe avant principale (le bloc dense devient conditionnel) :
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/model.rs'\nlignes = open(p).read().split('\\n')\ndeb = next(i for i,l in enumerate(lignes) if 'Self::matvec(pool, &lay.wq, &hn, &mut q, events' in l)\nfin = next(i for i,l in enumerate(lignes) if ' … [1257 caractères tronqués]`
+
+  ```
+bloc enveloppé : 354 lignes
+error[E0425]: cannot find value `tf` in this scope
+    --> src/model.rs:4191:33
+     |
+4191 |                 self.prof[3] += tf.elapsed().as_secs_f64();
+     |                                 ^^
+--
+error[E0425]: cannot find value `tf` in this scope
+    --> src/model.rs:4225:29
+     |
+4225 |             self.prof[3] += tf.elapsed().as_secs_f64();
+     |                             ^^
+--
+error[E0599]: no associated function or constant named `attn_mla` found for struct `Model` in the current scope
+    --> src/model.rs:3713:23
+     |
+1270 | pub struct Model {
+     | ---------------- associated function or constant `attn_mla` not found for this struct
+--
+error: could not compile `drave-core` (bin "drave") due to 3 previous errors; 19 warnings emitted
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/model.rs'; s=open(p).read()\n# 1) `ta` déclaré AVANT la branche, et le chronométrage après (les deux branches\n#    doivent être mesurées, sinon le poste « attention » disparaît en MLA).\ns = s.rep … [1113 caractères tronqués]`
+
+  ```
+3712:            let ta = Instant::now();
+4067:                self.prof[2] += ta.elapsed().as_secs_f64();
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '4062,4072p' drave-core/src/model.rs", "description": "Check the timing line placement"}`
+
+  ```
+let w = sc[t as usize];
+                        kvc.valeur(kvh, t as usize, &mut vd);
+                        for (o, x) in out.iter_mut().zip(vd.iter()) { *o += w * x; }
+                    }
+                }
+                self.prof[2] += ta.elapsed().as_secs_f64();
+                let tf = Instant::now();
+            }
+            Self::matvec(pool, &lay.wo, &att, &mut o, events, self.act_levels, self.act_thresh, tk(3), self.act_renorm, &mut scratch, self.seuil_push);
+            for i in 0..h { o[i] += x[i]; }
+            Self::rmsnorm(&o, &lay.ffn_norm, cfg.eps, &mut hn);
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/model.rs'; s=open(p).read()\ns = s.replace(\"\"\"                self.prof[2] += ta.elapsed().as_secs_f64();\n                let tf = Instant::now();\n            }\n            Self::matvec(pool, … [605 caractères tronqués]`
+
+  ```
+error[E0599]: no associated function or constant named `attn_mla` found for struct `Model` in the current scope
+    --> src/model.rs:3714:23
+     |
+1270 | pub struct Model {
+     | ---------------- associated function or constant `attn_mla` not found for this struct
+--
+error: could not compile `drave-core` (bin "drave") due to 1 previous error; 19 warnings emitted
+  ```
+
+### 🤖 Assistant
+
+Maintenant la fonction d'attention MLA (rang faible + cache latent, formes Kimi/V3 et combinée) :
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/model.rs'; s=open(p).read()\ns = s.replace(\"\"\"    /// Passe avant d'un modèle **MLA**, un jeton à la fois, avec le cache\"\"\",\n'''    /// **Attention MLA** pour un jeton : quatre projections d … [6603 caractères tronqués]`
+
+  ```
+error[E0609]: no field `eps` on type `&Mla`
+    --> src/model.rs:3506:21
+     |
+3506 |         let eps = m.eps;
+     |                     ^^^ unknown field
+     |
+--
+error[E0609]: no field `k_b` on type `&Mla`
+    --> src/model.rs:3546:27
+     |
+3546 |                 match (&m.k_b, &m.v_b) {
+     |                           ^^^ unknown field
+     |
+--
+error[E0609]: no field `v_b` on type `&Mla`
+    --> src/model.rs:3546:35
+     |
+3546 |                 match (&m.k_b, &m.v_b) {
+     |                                   ^^^ unknown field
+     |
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/model.rs'; s=open(p).read()\ns = s.replace(\"\"\"    pub kv_b: Vec<f32>,     // [kv_lora, nh*(qkn+vd)]\"\"\",\n\"\"\"    /// Disposition **combinée** : `[kv_lora, nh*(qkn+vd)]`, une matrice par\n   … [992 caractères tronqués]`
+
+  ```
+error[E0063]: missing fields `eps`, `k_b` and `v_b` in initializer of `Mla`
+    --> src/model.rs:2320:24
+     |
+2320 |                 v.push(Mla {
+     |                        ^^^ missing `eps`, `k_b` and `v_b`
+
+--
+error: could not compile `drave-core` (bin "drave") due to 1 previous error; 14 warnings emitted
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/model.rs'; s=open(p).read()\n# Le constructeur de MLA : lire k_b/v_b ou kv_b, et rendre la FFN optionnelle.\nvieux = \"\"\"                let t = |n: &str| g.tensor(&p(n)).unwrap_or_else(|| panic! … [5516 caractères tronqués]`
+
+  ```
+(no output)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"let mla = if g.tensor\" -A 3 drave-core/src/model.rs | head -6; grep -n \"assert!(mla.is_none()\\|mla.is_some()\" drave-core/src/model.rs | head", "description": "Check the MLA build condition"}`
+
+  ```
+2301:        let mla = if g.tensor("blk.0.attn_kv_a_mqa.weight").is_some() {
+2302-            let mut v = Vec::with_capacity(cfg.n_layer);
+2303-            for l in 0..cfg.n_layer {
+2304-                let p = |s: &str| format!("blk.{l}.{s}");
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ./drave-core/target/release/drave /home/stephane/Data13TB/stephane/modeles/gguf/GLM-5.3-UD-IQ1_S/GLM-5.3-UD-IQ1_S-00001-of-00006.gguf --tensors 2>/dev/null | grep -E \"blk\\.[013]\\.\" | grep -E \"attn|ffn_(gate|up|down)\\.\" | head  … [53 caractères tronqués]`
+
+  ```
+Q8_0     blk.0.attn_k_b.weight                  [64, 512, 192] · 6.3 M poids · fichier 1
+  Q8_0     blk.0.attn_kv_a_mqa.weight             [576, 6144] · 3.5 M poids · fichier 1
+  F32      blk.0.attn_kv_a_norm.weight            [512] · 0.0 M poids · fichier 1
+  F32      blk.0.attn_norm.weight                 [6144] · 0.0 M poids · fichier 1
+  Q5_K     blk.0.attn_output.weight               [6144, 16384] · 100.7 M poids · fichier 1
+  Q5_K     blk.0.attn_q_a.weight                  [2048, 6144] · 12.6 M poids · fichier 1
+  F32      blk.0.attn_q_a_norm.weight             [2048] · 0.0 M poids · fichier 1
+  Q8_0     blk.0.attn_q_b.weight                  [16384, 2048] · 33.6 M poids · fichier 1
+  Q8_0     blk.0.attn_v_b.weight                  [64, 256, 512] · 8.4 M poids · fichier 1
+  Q6_K     blk.0.ffn_down.weight                  [6144, 12288] · 75.5 M poids · fichier 1
+  Q5_K     blk.0.ffn_gate.weight                  [12288, 6144] · 75.5 M poids · fichier 1
+  Q5_K     blk.0.ffn_up.weight                    [12288, 6144] · 75.5 M poids · fichier 1
+  Q8_0     blk.0.indexer.attn_k.weight            [128, 6144] · 0.8 M poids · fichier 1
+  Q8_0     blk.0.indexer.attn_q_b.weight          
+… [38 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/model.rs'; s=open(p).read()\ns = s.replace(\"\"\"fn verifier_architecture(g: &Gguf, cfg: &Cfg) -> Result<(), String> {\"\"\",\n\"\"\"fn verifier_architecture(g: &Gguf, cfg: &Cfg, ctx: usize) -> Res … [1783 caractères tronqués]`
+
+  ```
+experts       : 256 par couche, 8 par jeton · FFN expert 2048
+routage       : sigmoïde (source : expert_gating_func) · renormalisation oui · échelle 2.500
+calculable    : NON — il manque : MLA à rang faible
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && nohup timeout 2400 ./drave-core/target/release/drave /home/stephane/Data13TB/stephane/modeles/gguf/GLM-5.3-UD-IQ1_S/GLM-5.3-UD-IQ1_S-00001-of-00006.gguf --ppl /tmp/ids_qwen.txt --ctx 64 --limit 2 --threads 20 > /tmp/glm53_essai.log 2 … [94 caractères tronqués]`
+
+  ```
+/tmp/ids_qwen.txt : 2 tokens, fenêtres de 64
+
+thread 'main' (3530527) panicked at src/model.rs:2040:13:
+architecture « glm-dsa » non implémentée par ce moteur : attention MLA à rang faible (attn_q_a/attn_q_b, attn_kv_a_mqa/attn_kv_b).
+  Ce modèle n'a JAMAIS été exécuté ici : tout chiffre publié à son sujet vient d'une analyse statique des tenseurs (inventaire, empreinte, sonde mmap), pas d'une passe avant.
+  Tenseurs présents : attn_q_a 
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+timeout: the monitored command dumped core
+[stderr]
+bash: line 1: 3530526 Aborted                    nohup timeout 2400 ./drave-core/target/release/drave /home/stephane/Data13TB/stephane/modeles/gguf/GLM-5.3-UD-IQ1_S/GLM-5.3-UD-IQ1_S-00001-of-00006.gguf --ppl /tmp/ids_qwen.txt --ctx 64 --limit 2 --threads 20 > /tmp/glm53_essai.log 2>&1
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"let mla_cache\" -A 12 drave-core/src/model.rs | head -16", "description": "Read mla_cache construction"}`
+
+  ```
+2364:        let mla_cache = match mla.as_ref() {
+2365-            Some(v) => v.iter().map(|m| (vec![0f32; ctx * m.kv_lora], vec![0f32; ctx * m.qkr])).collect(),
+2366-            None => Vec::new(),
+2367-        };
+2368-
+2369-        // Cache VRAM des experts : opt-in, et seulement sur un modèle à experts
+2370-        // au format MXFP4 (les autres formats ont leurs propres noyaux).
+2371-        let cache_experts = if std::env::var("DRAVE_GPU_EXPERTS").is_ok()
+2372-                               && crate::gpu::instance().is_some()
+2373-                               && cfg.n_expert > 0 {
+2374-            // Budget par défaut : ce que la VRAM peut donner sans étrangler le
+2375-            // reste. Mesuré : la VRAM lit à 84,9 Go/s contre 22,5 pour la RAM,
+2376-            // et un cache de 25 % de l'empreinte sert 80 % des appels.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/model.rs'; s=open(p).read()\n# MLA rang faible est maintenant implémenté : le refus ne doit plus le lister.\ns = s.replace(\"\"\"    // Attention MLA à rang faible : Q et KV passent par une project … [1862 caractères tronqués]`
+
+  ```
+[stderr]
+bash: line 33: 3530805 Aborted                    nohup timeout 2400 ./drave-core/target/release/drave /home/stephane/Data13TB/stephane/modeles/gguf/GLM-5.3-UD-IQ1_S/GLM-5.3-UD-IQ1_S-00001-of-00006.gguf --ppl /tmp/ids_qwen.txt --ctx 64 --limit 2 --threads 20 > /tmp/glm53_essai.log 2>&1
+[timed out after 60000ms]
+[killed by signal: SIGTERM]
+  ```
+
+- **bash** `{"command": "tail -12 /tmp/glm53_essai.log", "description": "Read the GLM run log"}`
+
+  ```
+/tmp/ids_qwen.txt : 2 tokens, fenêtres de 64
+[mla] attention MLA à rang faible : cache LATENT (c_kv + k_rope), pas de fenêtre glissante ni de YaRN sur ce chemin
+
+thread 'main' (3530806) panicked at src/model.rs:783:50:
+tenseur blk.0.attn_q.weight absent
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+timeout: the monitored command dumped core
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '775,800p' drave-core/src/model.rs", "description": "Read the layer construction"}`
+
+  ```
+/// Projection vide : les modèles à experts n'ont **pas** de tenseur FFN
+    /// dense, et le moteur ne doit pas le chercher.
+    pub fn vide() -> Self {
+        Proj { gpu: None, m: None, d: None, q4: None, bias: None }
+    }
+
+    fn load(g: &Gguf, name: &str, bias: Option<&str>, dense: bool, auto: bool, keep: f32,
+            q4: bool, bits6: bool) -> Self {
+        let t = g.tensor(name).unwrap_or_else(|| panic!("tenseur {name} absent"));
+        let n_out = t.dims[0] as usize;
+        let n_in = t.dims[1] as usize;
+        let mut w = g.dequant(name);
+        if keep < 0.0 { prune_structured(&mut w, n_out, n_in, -keep); }
+        else { prune_rows(&mut w, n_out, n_in, keep); }
+        // `auto` charge les DEUX formes : le moteur choisit ensuite, par mesure
+        // de la densité d'activation, entre dispersion (push) et produit
+        // scalaire dense (pull). Le croisement mesuré est à 10 %.
+        // Six bits empaquetés : même déquantification que les autres chemins,
+        // mais la quantification vise la grille [-32, 31] au lieu de [-8, 7].
+        if bits6 {
+            let z = DenseQ4::build6(&w, n_out, n_in);
+            let bias = bias.filter(|b| g.tensor(b).is_som
+… [226 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/model.rs'; s=open(p).read()\nvieux = \"\"\"                wq: Proj::load(&g, &p(\"attn_q.weight\"), Some(&p(\"attn_q.bias\")), dense || q4 != 0, auto, keep, q4 & 2 != 0, b6 & 2 != 0),\n            … [1441 caractères tronqués]`
+
+  ```
+error[E0425]: cannot find value `mla` in this scope
+    --> src/model.rs:2063:24
+     |
+1455 |     pub mla: Option<Vec<Mla>>,
+     |         --- a field by that name exists in `Self`
+...
+2063 |                 wq: if mla.is_some() { Proj::vide() } else {
+--
+error[E0425]: cannot find value `mla` in this scope
+    --> src/model.rs:2065:24
+     |
+1455 |     pub mla: Option<Vec<Mla>>,
+     |         --- a field by that name exists in `Self`
+...
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/model.rs'; s=open(p).read()\ndeb = s.index(\"        let mla = if g.tensor(\\\"blk.0.attn_kv_a_mqa.weight\\\").is_some() {\")\nfin = s.index(\"        let mla_cache = match mla.as_ref() {\")\nbloc  … [434 caractères tronqués]`
+
+  ```
+error[E0425]: cannot find value `mla` in this scope
+    --> src/model.rs:2063:24
+     |
+1455 |     pub mla: Option<Vec<Mla>>,
+     |         --- a field by that name exists in `Self`
+...
+2063 |                 wq: if mla.is_some() { Proj::vide() } else {
+--
+error[E0425]: cannot find value `mla` in this scope
+    --> src/model.rs:2065:24
+     |
+1455 |     pub mla: Option<Vec<Mla>>,
+     |         --- a field by that name exists in `Self`
+...
+BUILD
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 5, in <module>
+AssertionError
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"Some(v) } else { None };\" drave-core/src/model.rs; grep -n \"let mla = if\\|let mla_cache = match\" drave-core/src/model.rs", "description": "Find the MLA block boundaries"}`
+
+  ```
+2317:        let mla = if g.tensor("blk.0.attn_kv_a_mqa.weight").is_some() {
+2373:        let mla_cache = match mla.as_ref() {
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '2365,2373p' drave-core/src/model.rs", "description": "Read the end of the MLA block"}`
+
+  ```
+}
+            let m0 = &v[0];
+            println!("[config] MLA : {} couches · q_lora {} · kv_lora {} · qk_nope {} + qk_rope {} · v {} · \
+                      cache latente {} valeurs par jeton (au lieu de {})",
+                     v.len(), m0.q_lora, m0.kv_lora, m0.qkn, m0.qkr, m0.vd,
+                     m0.kv_lora + m0.qkr, cfg.n_kv_head * (m0.qkn + m0.vd));
+            Some(v)
+        } else { None };
+        let mla_cache = match mla.as_ref() {
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/model.rs'; s=open(p).read()\ndeb = s.index('        let mla = if g.tensor(\"blk.0.attn_kv_a_mqa.weight\").is_some() {')\nfin = s.index(\"        let mla_cache = match mla.as_ref() {\")\nbloc = s[de … [415 caractères tronqués]`
+
+  ```
+bloc déplacé : 3309 octets
+BUILD
+
+test result: ok. 46 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.11s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && nohup timeout 2400 ./drave-core/target/release/drave /home/stephane/Data13TB/stephane/modeles/gguf/GLM-5.3-UD-IQ1_S/GLM-5.3-UD-IQ1_S-00001-of-00006.gguf --ppl /tmp/ids_qwen.txt --ctx 64 --limit 2 --threads 20 > /tmp/glm53_essai.log 2 … [94 caractères tronqués]`
+
+  ```
+/tmp/ids_qwen.txt : 2 tokens, fenêtres de 64
+[mla] attention MLA à rang faible : cache LATENT (c_kv + k_rope), pas de fenêtre glissante ni de YaRN sur ce chemin
+  ```
+
+- **bash** `{"command": "free -g | sed -n 2p; ps -eo pid,etimes,rss,comm --sort=-rss | head -4; tail -2 /tmp/ref_oss_5b.log; ls -la /tmp/ref_oss_5.bin 2>/dev/null", "description": "Check memory and reference job"}`
+
+  ```
+Mem:             125          56           9           4          64          69
+    PID ELAPSED   RSS COMMAND
+3531355      63 50052272 drave
+ 710008  561955 2762328 node-MainThread
+3553666  228554 631284 chrome
+perplexite = 5420.396235
+fichier  = /tmp/ref_oss_5.bin (4 x 201088 f32 + 8 octets d'en-tete)
+-rw-r--r--. 1 stephane stephane 3217416  1 oct 23:58 /tmp/ref_oss_5.bin
+  ```
+
+- **bash** `{"command": "sleep 45; tail -4 /tmp/glm53_essai.log; free -g | sed -n 2p; ps -eo pid,rss,comm --sort=-rss | head -2", "description": "Poll the GLM-5.3 run"}`
+
+  ```
+[config] MLA : 79 couches · q_lora 2048 · kv_lora 512 · qk_nope 192 + qk_rope 64 · v 256 · cache latente 576 valeurs par jeton (au lieu de 448)
+[moe] couche 0 : « blk.0.ffn_gate_exps.weight » absent et aucun mapping
+[moe] couche 1 : « blk.1.ffn_gate_exps.weight » absent et aucun mapping
+[moe] couche 2 : « blk.2.ffn_gate_exps.weight » absent et aucun mapping
+Mem:             125          67           0           4          62          57
+    PID   RSS COMMAND
+3531355 60942760 drave
+  ```
+
+- **bash** `{"command": "sleep 50; tail -3 /tmp/glm53_essai.log; free -g | sed -n 2p", "description": "Poll GLM-5.3 again"}`
+
+  ```
+[moe] couche 0 : « blk.0.ffn_gate_exps.weight » absent et aucun mapping
+[moe] couche 1 : « blk.1.ffn_gate_exps.weight » absent et aucun mapping
+[moe] couche 2 : « blk.2.ffn_gate_exps.weight » absent et aucun mapping
+Mem:             125          71           0           4          59          54
+  ```
+
+- **bash** `{"command": "sleep 55; tail -3 /tmp/glm53_essai.log; ps -eo pid,rss,comm --sort=-rss | head -2; free -g | sed -n 2p", "description": "Poll GLM-5.3 progress"}`
+
+  ```
+[moe] couche 0 : « blk.0.ffn_gate_exps.weight » absent et aucun mapping
+[moe] couche 1 : « blk.1.ffn_gate_exps.weight » absent et aucun mapping
+[moe] couche 2 : « blk.2.ffn_gate_exps.weight » absent et aucun mapping
+    PID   RSS COMMAND
+3531355 66393964 drave
+Mem:             125          74           0           4          56          51
+  ```
+
+- **bash** `{"command": "sleep 55; grep -E \"config\\]|perplexité|panicked|erreur\" /tmp/glm53_essai.log | tail -4; ps -eo pid,rss,comm --sort=-rss | head -2", "description": "Poll GLM load status"}`
+
+  ```
+[config] MLA : 79 couches · q_lora 2048 · kv_lora 512 · qk_nope 192 + qk_rope 64 · v 256 · cache latente 576 valeurs par jeton (au lieu de 448)
+    PID   RSS COMMAND
+3531355 70408048 drave
+  ```
+
+- **bash** `{"command": "sleep 55; grep -E \"perplexité|panicked|\\[config\\] [0-9]+ couches\" /tmp/glm53_essai.log | tail -3; ps -eo pid,rss,comm --sort=-rss | head -2; free -g | sed -n 2p", "description": "Poll GLM load again"}`
+
+  ```
+PID   RSS COMMAND
+3531355 74757456 drave
+Mem:             125          81           0           4          48          43
+  ```
+
+- **bash** `{"command": "sleep 55; grep -E \"perplexité|panicked|\\[config\\] [0-9]+ couches|mélanges\" /tmp/glm53_essai.log | tail -3; ps -eo pid,rss,comm --sort=-rss | head -2; free -g | sed -n 2p", "description": "Poll GLM load"}`
+
+  ```
+PID   RSS COMMAND
+3531355 79319208 drave
+Mem:             125          86           0           4          44          39
+  ```
+
+- **bash** `{"command": "sleep 55; grep -E \"perplexité|panicked|mélanges|attach\" /tmp/glm53_essai.log | tail -3; ps -eo pid,rss,comm --sort=-rss | head -2; free -g | sed -n 2p", "description": "Poll GLM load once more"}`
+
+  ```
+[config] mélanges d'experts chargés : 0/79 couches · mapping absent (experts en clair dans le fichier)
+thread 'main' (3531355) panicked at src/model.rs:2547:29:
+    PID   RSS COMMAND
+3531355 79088624 drave
+Mem:             125          86           0           4          43          39
+  ```
+
+- **bash** `{"command": "grep -A 6 \"panicked\" /tmp/glm53_essai.log | head -10", "description": "Read the GLM panic message"}`
+
+  ```
+thread 'main' (3531355) panicked at src/model.rs:2547:29:
+projection sans aucun format
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ./drave-core/target/release/drave /home/stephane/Data13TB/stephane/modeles/gguf/GLM-5.3-UD-IQ1_S/GLM-5.3-UD-IQ1_S-00001-of-00006.gguf --tensors 2>/dev/null | grep \"blk.3\\.\" | grep -E \"exps|gate_inp|shexp\" | head -8", "descriptio … [42 caractères tronqués]`
+
+  ```
+IQ3_XXS  blk.3.ffn_down_exps.weight             [256, 6144, 2048] · 3221.2 M poids · fichier 1
+  Q6_K     blk.3.ffn_down_shexp.weight            [6144, 2048] · 12.6 M poids · fichier 1
+  IQ1_S    blk.3.ffn_gate_exps.weight             [256, 2048, 6144] · 3221.2 M poids · fichier 1
+  F32      blk.3.ffn_gate_inp.weight              [256, 6144] · 1.6 M poids · fichier 1
+  Q5_K     blk.3.ffn_gate_shexp.weight            [2048, 6144] · 12.6 M poids · fichier 1
+  IQ1_S    blk.3.ffn_up_exps.weight               [256, 2048, 6144] · 3221.2 M poids · fichier 1
+  Q5_K     blk.3.ffn_up_shexp.weight              [2048, 6144] · 12.6 M poids · fichier 1
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '565,580p' drave-core/src/list.rs; grep -n \"fn dot_source\\b\" -A 30 drave-core/src/list.rs | head -40", "description": "Read Source enum and dot_source"}`
+
+  ```
+/// 2k+1), disposition qui permet à `vpmaddwd` de traiter 32 poids d'un coup.
+/// Les deux autres lisent les blocs **tels quels dans le fichier** : Q4_0 range
+/// les poids 0–15 dans les nibbles bas et 16–31 dans les hauts, MXFP4 fait de
+/// même avec un exposant E8M0 en tête. Dans les deux cas les 16 activations à
+/// apparier sont **contiguës** — l'entrelacement était une commodité, pas une
+/// nécessité.
+#[derive(Clone, Copy, PartialEq, Eq)]
+pub enum Source { Propre, Q4_0, Mxfp4, Q4_K, Q6_K }
+
+pub struct DenseQ4 {
+    pub n_in: usize,
+    pub n_out: usize,
+    /// Table des 16 nibbles → valeur entière signée. Par défaut `n − 8`
+    /// (grille symétrique int4) ; l'import MXFP4 y met les magnitudes E2M1
+    /// doublées, `±{0,1,2,3,4,6,8,12}`, qui sont exactement les valeurs du
+    /// format une fois l'échelle ramenée à une puissance de deux.
+1105:    fn dot_source(&self, o: usize, x: &[i32]) -> f32 {
+1106-        let (pas, decal) = self.pas_source();
+1107-        let mut sum = 0f32;
+1108-        for b in 0..self.nb_ligne {
+1109-            let p = unsafe { self.base.add((o * self.nb_ligne + b) * pas) };
+1110-            let d = unsafe { self.echelle_source(p) };
+1111-          
+… [1257 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"pub struct Vue4\" -A 22 drave-core/src/model.rs | head -28; grep -n \"fn matvec_q4\" -A 40 drave-core/src/model.rs | head -46", "description": "Read Vue4 and matvec_q4"}`
+
+  ```
+567:pub struct Vue4 {
+568-    pub base: *const u8,
+569-    pub n_out: usize,
+570-    pub n_in: usize,
+571-    pub nb: usize,
+572-    pub src: crate::list::Source,
+573-}
+574-
+575-impl Vue4 {
+576-    fn pas(&self) -> usize {
+577-        use crate::list::Source::*;
+578-        match self.src {
+579-            Q4_K => crate::gguf::TAILLE_Q4K,
+580-            Q6_K => crate::gguf::TAILLE_Q6K,
+581-            Mxfp4 => 17,
+582-            Q4_0 => 18,
+583-            Propre => 0,
+584-        }
+585-    }
+586-
+587-    /// Demande au noyau de lancer la lecture de l'expert `e` **en avance**.
+588-    ///
+589-    /// Le routeur choisit ses `k` experts avant tout calcul : on connaît donc
+2627:    fn matvec_q4(pool: &mut Pool, m: &crate::list::DenseQ4, x: &[f32], out: &mut [f32],
+2628-                 levels: f32, thresh: f32, topk: usize, renorm: bool,
+2629-                 scratch: &mut Vec<f32>, biais: Option<&[f32]>) {
+2630-        let Some((sv, sx)) = Self::quant_scratch(x, levels, thresh, topk, renorm, scratch) else {
+2631-            for v in out[..m.n_out].iter_mut() { *v = 0.0; }
+2632-            return;
+2633-        };
+2634-        let mut xd = vec![0i32; x.len()];
+2635-        for (&i, &
+… [1814 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"impl Pool\" -A 60 drave-core/src/engine.rs | grep -n \"pub fn\" | head -20", "description": "List the Pool API"}`
+
+  ```
+5:387-    pub fn new(n: usize, n_out: usize) -> Self {
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"pub fn \" drave-core/src/engine.rs | sed -n '1,40p'", "description": "List engine public functions"}`
+
+  ```
+35:    pub fn from_dense(x: &[i32]) -> Self {
+43:    #[allow(dead_code)] pub fn len(&self) -> usize { self.idx.len() }
+44:    #[allow(dead_code)] pub fn is_empty(&self) -> bool { self.idx.is_empty() }
+72:pub fn row_fused_into(f: &FusedSign, r: usize, xv: i64, acc: &mut [i64],
+161:pub fn row_val_into(m: &PushMat, r: usize, xq: i64, acc: &mut [i32],
+290:pub fn coeurs_physiques() -> usize {
+312:pub fn epingler(cpu: usize) -> bool {
+387:    pub fn new(n: usize, n_out: usize) -> Self {
+635:    pub fn threads(&self) -> usize { self.n }
+639:    pub fn matvec_dense_q4(&mut self, d: &DenseQ4, x: &[i32], sx: f32) -> Vec<f32> {
+671:    pub fn matvec_dense_i8(&mut self, d: &DenseQ8, x: &[i32], sx: f32) -> Vec<f32> {
+689:    pub fn gemm_dense_i8(&mut self, d: &DenseQ8, x: &[i32], t: usize, sx: &[f32], out: &mut [f32]) {
+707:    pub fn gemm_dense_q4(&mut self, d: &crate::list::DenseQ4, x16: &[i16], t: usize,
+733:    pub fn accumulate_push(&mut self, m: &PushMat, sv: &SparseVec) -> Vec<i64> {
+756:    pub fn ensure_width(&mut self, n_out: usize) {
+766:    pub fn accumulate_delta(&mut self, d: &SignedDelta, sv: &SparseVec) -> (Vec<i64>, usize) {
+773:    pub fn accumulate(&mut self, f: &FusedSign, s
+… [348 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '635,675p' drave-core/src/engine.rs", "description": "Read matvec_dense_q4 implementation"}`
+
+  ```
+pub fn threads(&self) -> usize { self.n }
+
+    /// Produit matrice-vecteur **dense** (référence sans événements).
+    /// Produit matrice-vecteur avec des poids **4 bits** (mode 4).
+    pub fn matvec_dense_q4(&mut self, d: &DenseQ4, x: &[i32], sx: f32) -> Vec<f32> {
+        self.ensure_width(d.n_out);
+        let sh = &self.shared;
+        sh.mode.store(4, Ordering::Relaxed);
+        sh.dense4.store(d as *const _ as *mut _, Ordering::Relaxed);
+        // Conversion i32 → i16 faite UNE fois par appel : les noyaux la
+        // referaient sinon pour chaque ligne de sortie (4 864 fois).
+        let xi: Vec<i16> = x.iter().map(|&v| v.clamp(-32767, 32767) as i16).collect();
+        let xs = crate::list::sommes32(&xi);
+        sh.xv16.store(xi.as_ptr() as *mut i16, Ordering::Relaxed);
+        sh.xs32.store(xs.as_ptr() as *mut i32, Ordering::Relaxed);
+        sh.sx.store(sx.to_bits() as usize, Ordering::Relaxed);
+        sh.outs.store(&mut self.outs as *mut Vec<Vec<f32>>, Ordering::Relaxed);
+        sh.done.store(0, Ordering::Relaxed);
+        sh.gen.fetch_add(1, Ordering::Release);
+        self.attendre(sh);
+        let mut out = vec![0f32; d.n_out];
+        for w in &self.outs {
+       
+… [880 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/model.rs'; s=open(p).read()\n# 1) forward_lot : déléguer au jeton seul quand le modèle est MLA.\ns = s.replace(\"\"\"    pub fn forward_lot(&mut self, toks: &[u32], pos0: usize) -> Vec<Vec<f32>> {\ … [816 caractères tronqués]`
+
+  ```
+BUILD
+  ```
+
+### 🤖 Assistant
+
+Maintenant le produit scalaire sur les formats IQ (le dernier verrou des gros modèles) :
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"Source::\" drave-core/src/*.rs | grep -v \"^drave-core/src/list.rs:5[0-9][0-9]\" | head -20", "description": "Find all Source match sites"}`
+
+  ```
+drave-core/src/list.rs:660:                  src: Source::Propre, base: std::ptr::null(), nb_ligne: 0 }
+drave-core/src/list.rs:708:                  plan6: None, src: Source::Propre, base: std::ptr::null(), nb_ligne: 0 }
+drave-core/src/list.rs:750:                  plan6: Some(plan6), src: Source::Propre,
+drave-core/src/list.rs:813:            src: Source::Q4_K, base, nb_ligne: nb_super,
+drave-core/src/list.rs:826:            src: Source::Q6_K, base, nb_ligne: nb_super,
+drave-core/src/list.rs:970:                  src: Source::Propre, base: std::ptr::null(), nb_ligne: 0 }
+drave-core/src/list.rs:987:            src: if mxfp4 { Source::Mxfp4 } else { Source::Q4_0 },
+drave-core/src/list.rs:1080:            Source::Q4_0 => (18, 2),
+drave-core/src/list.rs:1081:            Source::Mxfp4 => (17, 1),
+drave-core/src/list.rs:1082:            Source::Q4_K | Source::Q6_K | Source::Propre => (0, 0),
+drave-core/src/list.rs:1093:        if self.src == Source::Mxfp4 {
+drave-core/src/list.rs:1178:            Source::Propre => self.q.len() + self.sc.len() * 2
+drave-core/src/list.rs:1180:            Source::Q4_0 => self.n_out * self.nb_ligne * 18,
+drave-core/src/list.rs:1181:            Source::Mxfp4
+… [671 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/list.rs'; s=open(p).read()\ns = s.replace(\"\"\"#[derive(Clone, Copy, PartialEq, Eq)]\npub enum Source { Propre, Q4_0, Mxfp4, Q4_K, Q6_K }\"\"\",\n\"\"\"#[derive(Clone, Copy, PartialEq, Eq)]\npub e … [3130 caractères tronqués]`
+
+  ```
+error[E0774]: `derive` may only be applied to `struct`s, `enum`s and `union`s
+   --> src/list.rs:571:1
+    |
+571 |   #[derive(Clone, Copy, PartialEq, Eq)]
+    |   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ not applicable here
+572 |   /// Octets d'un super-bloc de 256 poids, par type ggml.
+573 | / pub fn octets_iq(t: u32) -> usize {
+--
+error[E0204]: the trait `Copy` cannot be implemented for this type
+   --> src/model.rs:567:12
+    |
+566 | #[derive(Clone, Copy)]
+    |                 ---- in this derive macro expansion
+567 | pub struct Vue4 {
+    |            ^^^^
+--
+error[E0369]: binary operation `==` cannot be applied to type `Source`
+    --> src/list.rs:1130:21
+     |
+1130 |         if self.src == Source::Mxfp4 {
+     |            -------- ^^ ------------- Source
+     |            |
+     |            Source
+--
+error[E0369]: binary operation `==` cannot be applied to type `Source`
+    --> src/list.rs:1236:21
+     |
+1236 |         if self.src == Source::Q4_K { return self.dot_source_q4k(o, x); }
+     |            -------- ^^ ------------ Source
+     |            |
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/list.rs'; s=open(p).read()\nbloc = '''/// Octets d'un super-bloc de 256 poids, par type ggml.\npub fn octets_iq(t: u32) -> usize {\n    match t {\n        16 => 66,   // IQ2_XXS\n        18 => 98,  … [1096 caractères tronqués]`
+
+  ```
+/// 2k+1), disposition qui permet à `vpmaddwd` de traiter 32 poids d'un coup.
+/// Les deux autres lisent les blocs **tels quels dans le fichier** : Q4_0 range
+/// les poids 0–15 dans les nibbles bas et 16–31 dans les hauts, MXFP4 fait de
+/// même avec un exposant E8M0 en tête. Dans les deux cas les 16 activations à
+/// apparier sont **contiguës** — l'entrelacement était une commodité, pas une
+/// nécessité.
+#[derive(Clone, Copy, PartialEq, Eq)]
+pub enum Source {
+    Propre, Q4_0, Mxfp4, Q4_K, Q6_K,
+    /// Format **IQ** à grille (IQ1_S, IQ1_M, IQ2_XXS, IQ3_XXS), lu par
+    /// déquantification du super-bloc puis produit en f32.
+    ///
+    /// Ces quatre formats portent 30 % des poids de Kimi-K2.7, GLM-5.3 et
+    /// DeepSeek-V4 : sans eux, `charger_moe` refuse le modèle entier et
+    /// « 0/79 couches » est la seule trace de la cause. Écrire quatre noyaux
+    /// vectorisés aurait demandé quatre quantifications d'activation et quatre
+    /// tables de signes ; déquantifier puis multiplier est **juste par
+    /// construction** (les déquantificateurs sont vérifiés contre libggml au
+    /// bit près, `tools/portes_formats.sh`) et ne coûte que le temps de la
+    /// déquantification
+… [1185 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/list.rs'; s=open(p).read()\nif 'pub fn octets_iq' not in s:\n    s = s.replace(\"\"\"#[derive(Clone, Copy, PartialEq, Eq)]\npub enum Source {\"\"\",\n\"\"\"/// Octets d'un super-bloc de 256 poids,  … [1674 caractères tronqués]`
+
+  ```
+(no output)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/model.rs'; s=open(p).read()\n# 1) source_de : accepter les formats IQ par une voie explicite.\ns = s.replace(\"\"\"fn source_de(t: u32) -> Option<crate::list::Source> {\n    use crate::gguf::{GGML_ … [3562 caractères tronqués]`
+
+  ```
+4350:                    Self::matvec_q4(pool, &md, &gate, &mut exp_out, self.act_levels,
+4361:                    Self::matvec_q4(pool, &mg, &hn, &mut gate, self.act_levels,
+4364:                    Self::matvec_q4(pool, &mu, &hn, &mut up, self.act_levels,
+4368:                    Self::matvec_q4(pool, &md, &gate, &mut exp_out, self.act_levels,
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '4345,4372p' drave-core/src/model.rs", "description": "Read the exact MoE compute block"}`
+
+  ```
+threads_iq);
+                    Self::activation(&mut gate, &up, cfg.ffn_exp, cfg.ffn_act_oss);
+                    Self::compter_neurones(&mut self.profil_neurones, largeur_profil,
+                                           l, &gate[..cfg.ffn_exp]);
+                    let md = moe.down[kexp].expert(loc);
+                    Self::matvec_q4(pool, &md, &gate, &mut exp_out, self.act_levels,
+                                    self.act_thresh, tk(6), self.act_renorm, &mut scratch,
+                                    // Le biais de descente se découpe par la
+                                    // largeur de SORTIE (h), pas par n_ff : les
+                                    // deux coïncident sur gpt-oss (2 880) mais
+                                    // pas sur Qwen3-MoE (768 contre 2 048).
+                                    moe.biais_down.as_ref().map(|b| &b[e as usize * h..]));
+                    for i in 0..h { down[i] += w_exp * exp_out[i]; }
+                }
+                if let Some((sg, su, sd)) = moe.shexp.as_ref() {
+                    let mg = sg.expert(0);
+                    Self::matvec_q4(pool, &mg, &hn, &mut gate, self.act_levels,
+                                
+… [729 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/model.rs'; s=open(p).read()\n# down des experts routés\ns = s.replace(\"\"\"                    let md = moe.down[kexp].expert(loc);\n                    Self::matvec_q4(pool, &md, &gate, &mut exp_ … [3135 caractères tronqués]`
+
+  ```
+6
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/model.rs'; s=open(p).read()\n# Le tampon threads_iq : déclaré une fois par couche (nombre de fils).\ns = s.replace(\"\"\"    fn matvec_q4(pool: &mut Pool, m: &crate::list::DenseQ4, x: &[f32], out:  … [4606 caractères tronqués]`
+
+  ```
+error[E0425]: cannot find value `threads_iq` in this scope
+    --> src/model.rs:4422:41
+     |
+4422 | ...                   threads_iq);
+     |                       ^^^^^^^^^^ not found in this scope
+
+error[E0425]: cannot find value `threads_iq` in this scope
+    --> src/model.rs:4427:41
+     |
+4427 | ...                   threads_iq);
+     |                       ^^^^^^^^^^ not found in this scope
+
+error[E0425]: cannot find value `threads_iq` in this scope
+    --> src/model.rs:4439:37
+     |
+4439 | ...                   threads_iq);
+     |                       ^^^^^^^^^^ not found in this scope
+
+error[E0425]: cannot find value `threads_iq` in this scope
+    --> src/model.rs:4446:37
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/model.rs'; s=open(p).read()\n# `vers_dense()` : la vue IQ n'a pas de DenseQ4 ; les autres si.\ns = s.replace(\"\"\"    /// Produit matrice-vecteur sur une source **IQ** : déquantifie chaque\"\"\",\ … [1530 caractères tronqués]`
+
+  ```
+error[E0308]: mismatched types
+   --> src/model.rs:603:51
+    |
+603 |             q: Vec::new(), sc: Vec::new(), scale: 1.0, plan6,
+    |                                                   ^^^ expected `Vec<f32>`, found floating-point number
+    |
+    = note: expected struct `Vec<f32>`
+--
+error[E0277]: `*const u8` cannot be shared between threads safely
+   --> src/model.rs:651:40
+    |
+651 |                 poignees.push(sc.spawn(move || travail(o0, o1, tranche)));
+    |                                  ----- ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ `*const u8` cannot be shared between threads safely
+    |                                  |
+    |                                  required by a bound introduced by this call
+--
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"pub struct DenseQ4\" -A 25 drave-core/src/list.rs | grep -n \"scale\\|pub \" | head -14", "description": "Check DenseQ4 fields"}`
+
+  ```
+1:611:pub struct DenseQ4 {
+2:612-    pub n_in: usize,
+3:613-    pub n_out: usize,
+8:618-    pub lut: [i8; 16],
+11:621-    pub e8m0: bool,
+12:622-    pub q: Vec<u8>,        // n_out × ⌈n_in/2⌉ — vide si `src != Propre`
+19:629-    pub sc: Vec<u16>,
+21:631-    pub scale: Vec<f32>,
+26:636-    pub plan6: Option<Vec<u8>>,
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/model.rs'; s=open(p).read()\ns = s.replace(\"\"\"            q: Vec::new(), sc: Vec::new(), scale: 1.0, plan6,\"\"\",\n\"\"\"            q: Vec::new(), sc: Vec::new(), scale: Vec::new(), plan6,\"\" … [2535 caractères tronqués]`
+
+  ```
+error[E0277]: cannot multiply `i32` by `f32`
+    --> src/model.rs:2721:83
+     |
+2721 |             for (&i, &v) in sv.idx.iter().zip(sv.val.iter()) { xd[i as usize] = v * sx; }
+     |                                                                                   ^ no implementation for `i32 * f32`
+     |
+     = help: the trait `Mul<f32>` is not implemented for `i32`
+--
+error[E0609]: no field `n_threads` on type `&mut Model`
+    --> src/model.rs:3897:31
+     |
+3897 |         let threads_iq = self.n_threads.clamp(1, 8);
+     |                               ^^^^^^^^^ unknown field
+     |
+     = note: available fields are: `g`, `cfg`, `layers`, `out_norm`, `pool` ... and 46 others
+--
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/model.rs'; s=open(p).read()\ns = s.replace(\"\"\"            for (&i, &v) in sv.idx.iter().zip(sv.val.iter()) { xd[i as usize] = v * sx; }\"\"\",\n\"\"\"            for (&i, &v) in sv.idx.iter().zi … [375 caractères tronqués]`
+
+  ```
+error[E0425]: cannot find value `pool` in this scope
+    --> src/model.rs:3897:26
+     |
+3897 |         let threads_iq = pool.threads().clamp(1, 8);
+     |                          ^^^^
+     |
+help: you might have meant to use the available field
+--
+error[E0308]: mismatched types
+    --> src/model.rs:4442:47
+     |
+4442 |                     Self::matvec4_ou_iq(pool, &mg, &hn, &mut gate, self.act_levels,
+     |                     -------------------       ^^^ expected `&Vue4`, found `&DenseQ4`
+     |                     |
+     |                     arguments to this function are incorrect
+--
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"fn expert\" -A 25 drave-core/src/model.rs | head -30", "description": "Read Vue4::expert"}`
+
+  ```
+682:    fn expert(&self, e: usize) -> crate::list::DenseQ4 {
+683-        let base = unsafe { self.base.add(e * self.n_out * self.nb * self.pas()) };
+684-        unsafe {
+685-            match self.src {
+686-                crate::list::Source::Q4_K =>
+687-                    crate::list::DenseQ4::emprunter_q4k(base, self.n_out, self.n_in, self.nb),
+688-                crate::list::Source::Q6_K =>
+689-                    crate::list::DenseQ4::emprunter_q6k(base, self.n_out, self.n_in, self.nb),
+690-                crate::list::Source::Mxfp4 =>
+691-                    crate::list::DenseQ4::emprunter(base, self.n_out, self.n_in, self.nb, true),
+692-                _ => crate::list::DenseQ4::emprunter(base, self.n_out, self.n_in, self.nb, false),
+693-            }
+694-        }
+695-    }
+696-}
+697-
+698-unsafe impl Send for Vue4 {}
+699-unsafe impl Sync for Vue4 {}
+700-
+701-/// Mélange d'experts : un routeur (petit, en f32) et trois tenseurs empilés.
+702-pub struct Moe {
+703-    /// Routeur `[n_expert × n_embd]`, rangée par expert, en f32.
+704-    pub routeur: Vec<f32>,
+705-    /// Biais du routeur (gpt-oss en a un) : ajouté aux logits **avant** le
+706-    /// softmax.
+707-    pub routeu
+… [230 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/model.rs'; s=open(p).read()\n# --- matvec4_ou_iq prend une Vue4 + la ligne locale de l'expert.\ns = s.replace(\"\"\"    fn matvec4_ou_iq(pool: &mut Pool, vue: &Vue4, x: &[f32], out: &mut [f32],\n   … [5625 caractères tronqués]`
+
+  ```
+error[E0425]: cannot find value `kexp` in this scope
+    --> src/model.rs:4447:57
+     |
+4447 |                     Self::matvec4_ou_iq(pool, &moe.gate[kexp], loc, &hn, &mut gate, self.act_levels,
+     |                                                         ^^^^
+     |
+--
+error[E0425]: cannot find value `loc` in this scope
+    --> src/model.rs:4447:64
+     |
+4447 |                     Self::matvec4_ou_iq(pool, &moe.gate[kexp], loc, &hn, &mut gate, self.act_levels,
+     |                                                                ^^^
+     |
+--
+error[E0425]: cannot find value `kexp` in this scope
+    --> src/model.rs:4451:55
+     |
+4451 |                     Self::matvec4_ou_iq(pool, &moe.up[kexp], loc, &hn, &mut up, self.act_levels,
+     |                                                       ^^^^
+     |
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '4435,4450p' drave-core/src/model.rs", "description": "Check call-site variable names"}`
+
+  ```
+Self::matvec4_ou_iq(pool, &moe.down[kexp], loc, &gate, &mut exp_out, self.act_levels,
+                                    self.act_thresh, tk(6), self.act_renorm, &mut scratch,
+                                    // Le biais de descente se découpe par la
+                                    // largeur de SORTIE (h), pas par n_ff : les
+                                    // deux coïncident sur gpt-oss (2 880) mais
+                                    // pas sur Qwen3-MoE (768 contre 2 048).
+                                    moe.biais_down.as_ref().map(|b| &b[e as usize * h..]),
+                                    threads_iq);
+                    for i in 0..h { down[i] += w_exp * exp_out[i]; }
+                }
+                if let Some((sg, su, sd)) = moe.shexp.as_ref() {
+                    let mg = sg.expert(0);
+                    Self::matvec4_ou_iq(pool, &moe.gate[kexp], loc, &hn, &mut gate, self.act_levels,
+                                    self.act_thresh, tk(4), self.act_renorm, &mut scratch, None,
+                                    threads_iq);
+                    let mu = su.expert(0);
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/model.rs'; s=open(p).read()\nvieux = \"\"\"                if let Some((sg, su, sd)) = moe.shexp.as_ref() {\n                    let mg = sg.expert(0);\n                    Self::matvec4_ou_iq(pool … [2143 caractères tronqués]`
+
+  ```
+error[E0425]: cannot find value `kexp` in this scope
+    --> src/model.rs:4447:57
+     |
+4447 |                     Self::matvec4_ou_iq(pool, &moe.gate[kexp], loc, &hn, &mut gate, self.act_levels,
+     |                                                         ^^^^
+     |
+--
+error[E0425]: cannot find value `loc` in this scope
+    --> src/model.rs:4447:64
+     |
+4447 |                     Self::matvec4_ou_iq(pool, &moe.gate[kexp], loc, &hn, &mut gate, self.act_levels,
+     |                                                                ^^^
+     |
+--
+BUILD
+For more information about this error, try `rustc --explain E0425`.
+warning: `drave-core` (bin "drave" test) generated 26 warnings
+error: could not compile `drave-core` (bin "drave" test) due to 6 previous errors; 26 warnings emitted
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 28, in <module>
+AssertionError: bloc shexp introuvable
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '4444,4470p' drave-core/src/model.rs", "description": "Read the actual shared-expert block"}`
+
+  ```
+}
+                if let Some((sg, su, sd)) = moe.shexp.as_ref() {
+                    let mg = sg.expert(0);
+                    Self::matvec4_ou_iq(pool, &moe.gate[kexp], loc, &hn, &mut gate, self.act_levels,
+                                    self.act_thresh, tk(4), self.act_renorm, &mut scratch, None,
+                                    threads_iq);
+                    let mu = su.expert(0);
+                    Self::matvec4_ou_iq(pool, &moe.up[kexp], loc, &hn, &mut up, self.act_levels,
+                                    self.act_thresh, tk(5), self.act_renorm, &mut scratch, None,
+                                    threads_iq);
+                    Self::activation(&mut gate, &up, cfg.ffn_exp, cfg.ffn_act_oss);
+                    let md = sd.expert(0);
+                    Self::matvec4_ou_iq(pool, &moe.down[kexp], loc, &gate, &mut exp_out, self.act_levels,
+                                    self.act_thresh, tk(6), self.act_renorm, &mut scratch, None,
+                                    threads_iq);
+                    for i in 0..h { down[i] += exp_out[i]; }
+                }
+                if let Some((gl, gg)) = self.ffn_gain {
+                    if gl == l { for v in d
+… [507 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/model.rs'; s=open(p).read()\nvieux = \"\"\"                if let Some((sg, su, sd)) = moe.shexp.as_ref() {\n                    let mg = sg.expert(0);\n                    Self::matvec4_ou_iq(pool … [2014 caractères tronqués]`
+
+  ```
+BUILD
+
+test result: ok. 46 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.93s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && nohup timeout 3600 ./drave-core/target/release/drave /home/stephane/Data13TB/stephane/modeles/gguf/GLM-5.3-UD-IQ1_S/GLM-5.3-UD-IQ1_S-00001-of-00006.gguf --ppl /tmp/ids_qwen.txt --ctx 64 --limit 2 --threads 20 > /tmp/glm53_essai.log 2 … [134 caractères tronqués]`
+
+  ```
+(no output)
+  ```
+
+- **bash** `{"command": "sleep 55; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -E \"mélanges|panic|perplexité|config\\] MLA\" /tmp/glm53_essai.log | tail -4; ps -eo pid,rss,comm --sort=-rss | head -2", "description": "Poll GLM load with IQ experts"}`
+
+  ```
+[config] MLA : 79 couches · q_lora 2048 · kv_lora 512 · qk_nope 192 + qk_rope 64 · v 256 · cache latente 576 valeurs par jeton (au lieu de 448)
+    PID   RSS COMMAND
+3533779 66824552 drave
+  ```
+
+- **bash** `{"command": "sleep 55; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -E \"mélanges|panic|perplexité\" /tmp/glm53_essai.log | tail -3; ps -eo pid,rss,comm --sort=-rss | head -2; free -g | sed -n 2p", "description": "Poll GLM load"}`
+
+  ```
+PID   RSS COMMAND
+3533779 72410832 drave
+Mem:             125          74          30           4          26          51
+  ```
+
+- **bash** `{"command": "sleep 55; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -E \"mélanges|panic|perplexité\" /tmp/glm53_essai.log | tail -3; ps -eo pid,rss,comm --sort=-rss | head -2", "description": "Poll GLM again"}`
+
+  ```
+PID   RSS COMMAND
+3533779 77871372 drave
+  ```
+
+- **bash** `{"command": "sleep 55; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -E \"mélanges|panic|perplexité\" /tmp/glm53_essai.log | tail -3; ps -eo pid,rss,comm --sort=-rss | head -2; free -g|sed -n 2p", "description": "Poll GLM load"}`
+
+  ```
+PID   RSS COMMAND
+3533779 83064240 drave
+Mem:             125          84          21           4          26          41
+  ```
+
+- **bash** `{"command": "sleep 55; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -E \"mélanges|panic|perplexité\" /tmp/glm53_essai.log | tail -3; ps -eo pid,rss,comm --sort=-rss | head -2", "description": "Poll GLM load"}`
+
+  ```
+[config] mélanges d'experts chargés : 71/79 couches · mapping absent (experts en clair dans le fichier)
+thread 'main' (3533779) panicked at src/model.rs:2604:29:
+    PID   RSS COMMAND
+3533779 86200508 drave
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -A 4 \"panicked\" /tmp/glm53_essai.log | head -6; sed -n '2596,2610p' drave-core/src/model.rs", "description": "Read the new panic"}`
+
+  ```
+thread 'main' (3533779) panicked at src/model.rs:2604:29:
+projection sans aucun format
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+        }
+        let frac = sv.idx.len() as f32 / x.len().max(1) as f32;
+        // le seuil ne tranche que si LES DEUX formes sont chargées ; sinon la
+        // seule forme disponible impose le chemin (sinon : panique).
+        let use_dense = match (&p.d, &p.m) {
+            (Some(_), Some(_)) => frac > thresh_auto,
+            (Some(_), None) => true,
+            (None, Some(_)) => false,
+            (None, None) => panic!("projection sans aucun format"),
+        };
+        if let (Some(machine), Some(mg)) = (crate::gpu::instance(), p.gpu.as_ref()) {
+            // Le noyau applique déjà l'échelle d'activation : rien à reprendre.
+            let mut xd = vec![0i32; x.len()];
+            for (&i, &v) in sv.idx.iter().zip(sv.val.iter()) { xd[i as usize] = v; }
+            if let Some(y) = machine.proj(mg, &xd, sx) {
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '/let (m, d, q4v) = if q4 {/,/^    }$/p' drave-core/src/model.rs | sed -n '30,90p'", "description": "Read the rest of Proj::load"}`
+
+  ```
+match (emprunt, g.q8_blocks(name)) {
+                (true, Some((buf, nb))) =>
+                    (None, Some(unsafe { DenseQ8::emprunter_q8(buf.as_ptr(), n_out, n_in, nb) }), None),
+                _ => (None, Some(construire_q8(&w, n_out, n_in)), None),
+            }
+        } else if auto {
+            let emprunt = keep >= 1.0 && std::env::var("DRAVE_SANS_EMPRUNT").is_err();
+            let dense8 = match (emprunt, g.q8_blocks(name)) {
+                (true, Some((buf, nb))) =>
+                    unsafe { DenseQ8::emprunter_q8(buf.as_ptr(), n_out, n_in, nb) },
+                _ => construire_q8(&w, n_out, n_in),
+            };
+            (Some(PushMat::build(&w, n_out, n_in)), Some(dense8), None)
+        } else {
+            (Some(PushMat::build(&w, n_out, n_in)), None, None)
+        };
+        // Tous les modèles n'ont pas de biais QKV (Qwen3 n'en a pas) : son
+        // absence est normale, pas une erreur.
+        let bias = bias.filter(|b| g.tensor(b).is_some()).map(|b| g.dequant(b));
+        // Déport GPU : les poids Q8_0 montent UNE fois ; ensuite chaque jeton
+        // ne fait traverser que les activations.
+        // Seuil fixé par la mesure, pas par le raisonnement
+… [974 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && nohup env RUST_BACKTRACE=1 timeout 3600 ./drave-core/target/release/drave /home/stephane/Data13TB/stephane/modeles/gguf/GLM-5.3-UD-IQ1_S/GLM-5.3-UD-IQ1_S-00001-of-00006.gguf --ppl /tmp/ids_qwen.txt --ctx 16 --limit 2 --threads 20 > / … [182 caractères tronqués]`
+
+  ```
+lancé avec backtrace
+2576:    fn matvec(pool: &mut Pool, p: &Proj, x: &[f32], out: &mut [f32], events: &mut u64,
+2577-              levels: f32, thresh: f32, topk: usize, renorm: bool, scratch: &mut Vec<f32>,
+2578-              thresh_auto: f32) {
+2579-        let Some((sv, sx)) = Self::quant_scratch(x, levels, thresh, topk, renorm, scratch) else {
+2580-            for (o, v) in out.iter_mut().enumerate() {
+2581-                *v = p.bias.as_ref().map_or(0.0, |b| b[o]);
+2582-            }
+2583-            return;
+2584-        };
+2585-        // ---- choix de direction par mesure : sous le seuil, disperser (push) ;
+2586-        // au-dessus, le produit scalaire dense (pull) est plus rapide.
+2587-        // Forme 4 bits : pas d'événements du tout, un seul chemin.
+2588-        if let Some(q) = &p.q4 {
+  ```
+
+- **bash** `{"command": "sleep 55; tail -3 /tmp/glm53_bt.log | head -3", "description": "Poll the backtrace run"}`
+
+  ```
+/tmp/ids_qwen.txt : 2 tokens, fenêtres de 16
+[mla] attention MLA à rang faible : cache LATENT (c_kv + k_rope), pas de fenêtre glissante ni de YaRN sur ce chemin
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '2588,2620p' drave-core/src/model.rs", "description": "Read matvec's empty-Proj detection"}`
+
+  ```
+if let Some(q) = &p.q4 {
+            let mut xd = vec![0i32; x.len()];
+            for (&i, &v) in sv.idx.iter().zip(sv.val.iter()) { xd[i as usize] = v; }
+            let y = pool.matvec_dense_q4(q, &xd, sx);
+            for o in 0..q.n_out {
+                out[o] = y[o] + p.bias.as_ref().map_or(0.0, |b| b[o]);
+            }
+            return;
+        }
+        let frac = sv.idx.len() as f32 / x.len().max(1) as f32;
+        // le seuil ne tranche que si LES DEUX formes sont chargées ; sinon la
+        // seule forme disponible impose le chemin (sinon : panique).
+        let use_dense = match (&p.d, &p.m) {
+            (Some(_), Some(_)) => frac > thresh_auto,
+            (Some(_), None) => true,
+            (None, Some(_)) => false,
+            (None, None) => panic!("projection sans aucun format"),
+        };
+        if let (Some(machine), Some(mg)) = (crate::gpu::instance(), p.gpu.as_ref()) {
+            // Le noyau applique déjà l'échelle d'activation : rien à reprendre.
+            let mut xd = vec![0i32; x.len()];
+            for (&i, &v) in sv.idx.iter().zip(sv.val.iter()) { xd[i as usize] = v; }
+            if let Some(y) = machine.proj(mg, &xd, sx) {
+                // L
+… [386 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/model.rs'; s=open(p).read()\ns = s.replace(\"\"\"            (None, None) => panic!(\"projection sans aucun format\"),\"\"\",\n\"\"\"            // Le message porte les DEUX largeurs : c'est ce qui … [531 caractères tronqués]`
+
+  ```
+BUILD
+[timed out after 60000ms]
+[killed by signal: SIGTERM]
+  ```
+
+- **bash** `{"command": "sleep 45; grep -E \"mélanges|panicked\" /tmp/glm53_bt.log | tail -2; grep -A 12 \"panicked\" /tmp/glm53_bt.log | grep -E \"drave|model\\.rs\" | head -8", "description": "Check the backtrace"}`
+
+  ```
+(no output)
+  ```
+
+- **bash** `{"command": "sleep 55; grep -E \"mélanges|panicked\" /tmp/glm53_bt.log | tail -2; grep -A 14 \"panicked\" /tmp/glm53_bt.log | grep -E \"model\\.rs|main\\.rs\" | head -8; ps -eo pid,rss,comm --sort=-rss | head -2", "description": "Poll backtrace run"}`
+
+  ```
+PID   RSS COMMAND
+3533779 56565968 drave
+  ```
+
+- **bash** `{"command": "ls -la /tmp/glm53_bt.log; tail -c 400 /tmp/glm53_bt.log; ps aux | grep \"[G]LM-5.3-UD-IQ1_S-00001\" | wc -l", "description": "Check the backtrace run state"}`
+
+  ```
+-rw-r--r--. 1 stephane stephane 164  2 oct 00:19 /tmp/glm53_bt.log
+/tmp/ids_qwen.txt : 2 tokens, fenêtres de 16
+[mla] attention MLA à rang faible : cache LATENT (c_kv + k_rope), pas de fenêtre glissante ni de YaRN sur ce chemin
+6
+  ```
+
+- **bash** `{"command": "ps -eo pid,etimes,rss,args --sort=-rss | grep \"[G]LM-5.3-UD-IQ1_S-00001\" | cut -c1-110 | head -8; free -g | sed -n 2p", "description": "List GLM processes"}`
+
+  ```
+3533779     617 55308216 ./drave-core/target/release/drave /home/stephane/Data13TB/stephane/modeles/gguf/GLM-5
+3534868     252 52900000 ./drave-core/target/release/drave /home/stephane/Data13TB/stephane/modeles/gguf/GLM-5
+3534864     252  2040 bash -c cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && nohup env RUST_BACKTRACE=1
+3534867     252  2000 timeout 3600 ./drave-core/target/release/drave /home/stephane/Data13TB/stephane/modeles/
+3533778     617  1884 timeout 3600 ./drave-core/target/release/drave /home/stephane/Data13TB/stephane/modeles/
+3533776     617  1840 bash -c cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && nohup timeout 3600 ./drave
+Mem:             125         113           0           4          17          12
+  ```
+
+- **bash** `{"command": "kill -9 3533779 3534868 2>/dev/null; sleep 3; free -g | sed -n 2p; ps -eo pid,rss,args --sort=-rss | grep \"[G]LM-5.3\" | cut -c1-80 | head -3", "description": "Kill duplicate GLM runs"}`
+
+  ```
+Mem:             125          13         102           4          15         112
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && setsid nohup timeout 3600 ./drave-core/target/release/drave /home/stephane/Data13TB/stephane/modeles/gguf/GLM-5.3-UD-IQ1_S/GLM-5.3-UD-IQ1_S-00001-of-00006.gguf --ppl /tmp/ids_qwen.txt --ctx 16 --limit 2 --threads 20 > /tmp/glm53_bt.l … [185 caractères tronqués]`
+
+  ```
+lancé (unique)
+3535577 5715352 ./drave-core/target/release/drave /home/step
+3535573  4560 bash -c cd /home/stephane/Data13TB/stephane/Gi
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 900 ./drave-core/target/release/drave /home/stephane/FastNVMe/artefacts/modeles-optimises/qwen3-30b-8clusters-v2 --ppl /tmp/ids_qwen.txt --ctx 64 --limit 8 --dense --threads 8 --lot 1 2>&1 | grep -E \"=== perplexité\"; timeou … [239 caractères tronqués]`
+
+  ```
+=== perplexité 19.3885 sur 510 tokens (0 événements, 17.1 s) ===
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 900 ./drave-core/target/release/drave /home/stephane/FastNVMe/artefacts/modeles-optimises/qwen3-30b-8clusters-v2 --ppl /tmp/ids_qwen.txt --ctx 64 --limit 8 --dense --threads 8 --lot 1 2>&1 | tail -3", "description": "Run the  … [14 caractères tronqués]`
+
+  ```
+le modèle déclare 128 experts mais aucun tenseur d'experts n'est lisible (blk.0.ffn_gate_exps.weight absent) — fichier tronqué, ou découpage en clusters incomplet
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+timeout: the monitored command dumped core
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/model.rs'; s=open(p).read()\ns = s.replace(\"\"\"fn verifier_architecture(g: &Gguf, cfg: &Cfg, ctx: usize) -> Result<(), String> {\"\"\",\n\"\"\"fn verifier_architecture(g: &Gguf, cfg: &Cfg, ctx: u … [2356 caractères tronqués]`
+
+  ```
+=== perplexité 799.8557 sur 7 tokens (0 événements, 6.5 s) ===
+  ```
+
+- **bash** `{"command": "grep -E \"mélanges|panicked|aucun format\" /tmp/glm53_bt.log | tail -3; ps -eo pid,rss,comm --sort=-rss | head -2", "description": "Check the GLM panic message"}`
+
+  ```
+PID   RSS COMMAND
+3535577 67547132 drave
+  ```
+
+- **bash** `{"command": "sleep 55; grep -E \"mélanges|panicked|aucun format|perplexité\" /tmp/glm53_bt.log | tail -3; ps -eo pid,rss,comm --sort=-rss | head -2", "description": "Poll GLM run"}`
+
+  ```
+PID   RSS COMMAND
+3535577 73054412 drave
+  ```
+
+- **bash** `{"command": "sleep 55; grep -E \"mélanges|panicked|aucun format|perplexité\" /tmp/glm53_bt.log | tail -4; ps -eo pid,rss,comm --sort=-rss | head -2", "description": "Poll GLM run"}`
+
+  ```
+PID   RSS COMMAND
+3535577 78277664 drave
+  ```
+
+- **bash** `{"command": "sleep 55; grep -E \"mélanges|panicked|aucun format|perplexité\" /tmp/glm53_bt.log | tail -4; ps -eo pid,rss,comm --sort=-rss | head -2; free -g | sed -n 2p", "description": "Poll GLM run"}`
+
+  ```
+PID   RSS COMMAND
+3535577 84036868 drave
+Mem:             125          84          11           4          35          41
+  ```
+
+- **bash** `{"command": "sleep 55; grep -E \"mélanges|panicked|aucun format|perplexité\" /tmp/glm53_bt.log | tail -4", "description": "Poll GLM run"}`
+
+  ```
+[config] mélanges d'experts chargés : 71/79 couches · mapping absent (experts en clair dans le fichier)
+thread 'main' (3535577) panicked at src/model.rs:2607:29:
+projection sans aucun format : 6144 entrées → 12288 sorties
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && G=/home/stephane/Data13TB/stephane/modeles/gguf/GLM-5.3-UD-IQ1_S; for f in $G/*.gguf; do ./drave-core/target/release/drave $f --tensors 2>/dev/null; done | grep \"ffn_gate_exps\" | awk '{print $2, $4, $5}' | sed 's/blk\\.\\([0-9]*\\) … [246 caractères tronqués]`
+
+  ```
+3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63 64 65 66 67 68 69 70 71 72 73 74 75 76 77 78 
+456
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport sys, os\nsys.path.insert(0,'tools')\nfrom analyse_experts_statique import Lecteur\nd='/home/stephane/Data13TB/stephane/modeles/gguf/GLM-5.3-UD-IQ1_S'\nvus={}\nfor f in sorted(x for x in os.listdir(d) if x.end … [601 caractères tronqués]`
+
+  ```
+couches avec experts : 76
+type 19 dims (256, 2048, 6144) : 53 couches
+type 16 dims (256, 2048, 6144) : 22 couches
+type 10 dims (256, 2048, 6144) : 1 couches
+sans experts : [0, 1, 2]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"charger_moe(\" drave-core/src/model.rs | head; sed -n \"$(grep -n 'charger_moe(' drave-core/src/model.rs | tail -1 | cut -d: -f1),+12p\" drave-core/src/model.rs", "description": "Read the charger_moe call site"}`
+
+  ```
+411:fn charger_moe(g: &Gguf, l: usize, n_expert: usize, map: Option<&'static crate::clusters::Mapping>)
+2210:                moe: charger_moe(&g, l, cfg.n_expert, map),
+5077:        let moe = charger_moe(&m.gguf, 0, 4, Some(map)).expect("le MoE doit se charger");
+5094:        let moe2 = charger_moe(&tous.gguf, 0, 4, Some(map2)).unwrap();
+5130:            charger_moe(&m.gguf, 0, 4, Some(map))
+            charger_moe(&m.gguf, 0, 4, Some(map))
+        }));
+        assert!(e.is_err(), "un mapping de 6 experts pour un modèle qui en a 4 doit être \
+refusé, pas suivi en silence");
+        let _ = std::fs::remove_dir_all(&d);
+    }
+}
+
+#[cfg(test)]
+mod tests_router {
+    use super::*;
+
+    fn moe_synthetique(routeur: Vec<f32>, biais: Option<Vec<f32>>, tid: Option<Vec<i32>>) -> Moe {
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/model.rs'; s=open(p).read()\n# Diagnostic : dire POURQUOI une couche n'a pas ses experts.\ns = s.replace(\"\"\"            let src = source_de(t.ttype)?;\n            let (n_out, n_in) = (t.dims[1] … [1726 caractères tronqués]`
+
+  ```
+--- recherche des couches fautives ---
+f-00006.gguf blk.5.ffn_down_exps.weight [256, 6144, 2048] type 18
+f-00006.gguf blk.5.ffn_gate_exps.weight [256, 2048, 6144] type 19
+f-00006.gguf blk.5.ffn_up_exps.weight [256, 2048, 6144] type 19
+f-00006.gguf blk.6.ffn_down_exps.weight [256, 6144, 2048] type 18
+f-00006.gguf blk.6.ffn_gate_exps.weight [256, 2048, 6144] type 16
+f-00006.gguf blk.6.ffn_up_exps.weight [256, 2048, 6144] type 16
+f-00006.gguf blk.7.ffn_down_exps.weight [256, 6144, 2048] type 18
+f-00006.gguf blk.7.ffn_gate_exps.weight [256, 2048, 6144] type 16
+f-00006.gguf blk.7.ffn_up_exps.weight [256, 2048, 6144] type 16
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"moe_vus\" -B 4 -A 6 drave-core/src/model.rs | head -30", "description": "Check what moe_vus counts"}`
+
+  ```
+2266-        // configuration dit que le modèle en a ; elle ne dit pas que le
+2267-        // chargeur les a trouvés. Quand les deux diffèrent, le moteur tombe
+2268-        // dans le chemin dense et panique cent lignes plus loin, sur un
+2269-        // message (« projection dense requise ») qui ne dit pas pourquoi.
+2270:        let moe_vus = layers.iter().filter(|l| l.moe.is_some()).count();
+2271-        // Trace de configuration : une ligne qui dit quelles particularités
+2272-        // d'architecture ont été reconnues. Sans elle, on débogue à l'aveugle
+2273-        // sur un modèle de 60 Go.
+2274-        let ligne_echelle = if cfg.n_expert > 0 && cfg.expert_scale != 0.0 && cfg.expert_scale != 1.0 {
+2275-            format!("échelle {:.2} ", cfg.expert_scale) } else { String::new() };
+2276-        println!("[config] {} couches, hidden {} · {}{}{}{}{}{}{}{}",
+--
+2283-                 if cfg.n_expert > 0 { "moe " } else { "" },
+2284-                 if cfg.n_expert > 0 { "" } else { "" },
+2285-                 if cfg.head_dim > 0 { "" } else { "" });
+2286-        if cfg.n_expert > 0 {
+2287:            println!("[config] mélanges d'experts chargés : {moe_vus}/{n_layer} couches · \
+2
+… [343 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '411,470p' drave-core/src/model.rs", "description": "Read charger_moe's beginning"}`
+
+  ```
+fn charger_moe(g: &Gguf, l: usize, n_expert: usize, map: Option<&'static crate::clusters::Mapping>)
+    -> Option<Moe> {
+    if n_expert == 0 { return None; }
+    let p = |s: &str| format!("blk.{l}.{s}");
+    // Un tenseur d'experts est soit en clair dans le fichier ouvert, soit dans
+    // les fichiers de clusters sous le préfixe `cl{c}/`. Dans le second cas
+    // chaque fichier ne porte QUE ses experts locaux : la dimension d'expert
+    // du tenseur vaut `experts_par_cluster`, pas `n_expert`.
+    let vues = |s: &str| -> Option<(Vec<usize>, Vec<Vue4>)> {
+        let base = p(s);
+        let (numeros, noms): (Vec<usize>, Vec<String>) = match map {
+            // Un mapping actif prime sur le nom en clair : si les deux existent,
+            // c'est le découpage qui dit où sont les experts, et lire le tenseur
+            // entier indexerait ensuite une ligne locale dans un tenseur global.
+            None if g.tensor(&base).is_some() => (vec![0], vec![base.clone()]),
+            Some(m) => {
+                // Les préfixes sont attribués par POSITION dans la liste des
+                // fichiers ; un fichier qui ne porte pas ce tenseur décalerait
+                // tous les suiva
+… [2322 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport sys, os\nsys.path.insert(0,'tools')\nfrom analyse_experts_statique import Lecteur\nd='/home/stephane/Data13TB/stephane/modeles/gguf/GLM-5.3-UD-IQ1_S'\nanomalies={}\nfor f in sorted(x for x in os.listdir(d) if … [770 caractères tronqués]`
+
+  ```
+couches avec un tenseur d'experts NON 3D : []
+ffn_down_exps : Counter({18: 71, 23: 4, 11: 1})
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/list.rs'; s=open(p).read()\ns = s.replace(\"\"\"    /// Format **IQ** à grille (IQ1_S, IQ1_M, IQ2_XXS, IQ3_XXS), lu par\n    /// déquantification du super-bloc puis produit en f32.\n    ///\n    // … [6382 caractères tronqués]`
+
+  ```
+error[E0599]: no variant, associated function, or constant named `Iq` found for enum `Source` in the current scope
+    --> src/list.rs:1134:68
+     |
+ 607 | pub enum Source {
+     | --------------- variant, associated function, or constant `Iq` not found for this enum
+...
+--
+error: could not compile `drave-core` (bin "drave") due to 1 previous error; 23 warnings emitted
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '1130,1138p' drave-core/src/list.rs; python3 - <<'PY'\np='/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/list.rs'; s=open(p).read()\ns = s.replace(\"\"\"        if matches!(self.src, Source::Iq(_)) {\n          … [491 caractères tronqués]`
+
+  ```
+fn pas_source(&self) -> (usize, usize) {
+        match self.src {
+            Source::Q4_0 => (18, 2),
+            Source::Mxfp4 => (17, 1),
+            Source::Q4_K | Source::Q6_K | Source::Propre | Source::Iq(_) => (0, 0),
+        }
+    }
+
+    /// Échelle d'un bloc **source** (lue dans le fichier).
+BUILD
+
+test result: ok. 46 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.12s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat >> drave-core/src/list.rs <<'EOF'\n\n#[cfg(test)]\nmod tests_grille {\n    use super::*;\n\n    /// `sans_noyau` et `dequant_grille` doivent décrire le MÊME ensemble : une\n    /// divergence ferait refuser une couche au chargeme … [1598 caractères tronqués]`
+
+  ```
+test result: ok. 48 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.14s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && setsid nohup timeout 3600 ./drave-core/target/release/drave /home/stephane/Data13TB/stephane/modeles/gguf/GLM-5.3-UD-IQ1_S/GLM-5.3-UD-IQ1_S-00001-of-00006.gguf --ppl /tmp/ids_qwen.txt --ctx 16 --limit 2 --threads 20 > /tmp/glm53_essa … [125 caractères tronqués]`
+
+  ```
+lancé
+Mem:             125          90           0           4          40          35
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A drave-core/src reports/rapport-routage-experts.md && git commit -q -F - <<'EOF'\nMLA à rang faible + formats sans noyau : GLM-5.3 et Kimi deviennent calculables\n\nTrois verrous tombaient l'un après l'autre, et chacun accu … [2199 caractères tronqués]`

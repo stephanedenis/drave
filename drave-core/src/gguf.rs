@@ -1195,6 +1195,15 @@ zéro, l'inventaire sera sous-évalué", t.ttype, t.name);
     }
 
     /// Déquantifie une ligne d'un tenseur 2D, en f32.
+    /// Déquantifie un tenseur **s'il existe**, sinon `None`.
+    ///
+    /// Sert aux tenseurs d'une architecture dont une partie seulement est
+    /// présente : les modèles MLA à experts n'ont pas de FFN dense, et exiger
+    /// `ffn_gate.weight` pour construire la couche refusait le modèle entier.
+    pub fn dequant_optionnel(&self, name: &str) -> Option<Vec<f32>> {
+        if self.tensor(name).is_some() { Some(self.dequant(name)) } else { None }
+    }
+
     /// Lit un tenseur **I32** (entiers 32 bits signés), tel quel.
     ///
     /// Un seul usage dans les modèles de cette machine : la table

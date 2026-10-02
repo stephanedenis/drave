@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 81.1 h |
+| Durée | 81.8 h |
 | Tours | 69 |
-| Messages | 3666 |
-| Appels d'outils | 3480 |
-| Fichiers touchés | 79 |
-| Commandes | 3060 |
+| Messages | 3786 |
+| Appels d'outils | 3600 |
+| Fichiers touchés | 80 |
+| Commandes | 3179 |
 | Sous-agents | 22 |
-| Commits | 292 |
+| Commits | 293 |
 | Compactages de contexte | 5 |
 
 ## Objectifs déclarés
@@ -3526,7 +3526,7 @@ Sur cette session, les mesures m
 
 ### Tour 69 — implémente toute les optimisation et détection de matériel avec heuristiques de configuration automatique.
 
-*441 appels d'outils.* Actions notables :
+*561 appels d'outils.* Actions notables :
 
 - bash — Inspect existing GPU detection
 - write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/materiel.rs`
@@ -3542,11 +3542,11 @@ Sur cette session, les mesures m
 - bash — Read KV bits resolution
 - bash — Integrate KV and VRAM heuristics
 - bash — Lighten detection and run gates
-- … et 416 autres
+- … et 530 autres
 
 **Synthèse produite :**
 
-⏵ Porte gpt-oss : 15,6017 (contre 15,1757) — vérification externe en cours
+Maintenant le produit scalaire sur les formats IQ (le dernier verrou des gros modèles) :
 
 ## 3. Travail accompli
 
@@ -3633,6 +3633,7 @@ Sur cette session, les mesures m
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/portes_formats.sh` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/extraire_tables_ggml.c` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/extraire_tables_ggml.sh` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-routage-experts.md` | 1 | 0 |
 
 ### Sous-agents lancés
 
@@ -3701,7 +3702,7 @@ Sur cette session, les mesures m
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 3020 autres
+- … et 3139 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -3829,7 +3830,7 @@ Sur cette session, les mesures m
 
 ## 5. Erreurs rencontrées
 
-201 sorties en erreur ou divergentes. Les premières :
+223 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : a8f2635f8 docs: record which models this box is good at, and why src/llama-hparams.cpp:8:void llama_hparams::set_swa_pattern(uint32_t n_pattern, bool dense_first) { src/llama-hparams.h:308:    void se
 - **T1** : 511 tokens notés — perplexité cumulée 247.031  (4.9 tok/s) === perplexité 247.0308 sur 511 tokens (0 événements, 104.5 s) ===  ### B3 harmony assistant 511 --- ref --- 0.0 0.0 0:00 ls: cannot access '
@@ -4141,4 +4142,5 @@ Sur cette session, les mesures m
 - BF16 : lu et verifie (le f32 tronque a ses 16 bits de poids fort, exactement)  Deux modeles lourds l'utilisent (V4-Flash pour ses routeurs, MiniMax-H3). Verifie
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add drave-core/src/gguf.rs drave-core/src/formats.rs drave-core/src/main.rs tools/extraire_tables_ggml
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A drave-core/src && git commit -q -F - <<'EOF' routage des experts : quatre conventions, facteur 
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A drave-core/src reports/rapport-routage-experts.md && git commit -q -F - <<'EOF' MLA à rang faib
 

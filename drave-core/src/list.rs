@@ -568,8 +568,60 @@ pub const LUT_MXFP4: [i8; 16] = [0, 1, 2, 3, 4, 6, 8, 12, 0, -1, -2, -3, -4, -6,
 /// même avec un exposant E8M0 en tête. Dans les deux cas les 16 activations à
 /// apparier sont **contiguës** — l'entrelacement était une commodité, pas une
 /// nécessité.
+/// Octets d'un super-bloc de 256 poids, par type ggml sans noyau dédié.
+pub fn octets_grille(t: u32) -> usize {
+    match t {
+        10 => 84,   // Q2_K
+        11 => 110,  // Q3_K
+        13 => 176,  // Q5_K
+        16 => 66,   // IQ2_XXS
+        18 => 98,   // IQ3_XXS
+        19 => 50,   // IQ1_S
+        23 => 136,  // IQ4_XS
+        29 => 56,   // IQ1_M
+        _ => panic!("type {t} sans taille de super-bloc"),
+    }
+}
+
+/// Vrai si ce type ggml se lit par super-bloc de 256 poids **sans noyau**.
+pub fn sans_noyau(t: u32) -> bool {
+    matches!(t, 10 | 11 | 13 | 16 | 18 | 19 | 23 | 29)
+}
+
+/// Déquantifie un super-bloc de 256 poids d'un format sans noyau dédié.
+pub fn dequant_grille(t: u32, bloc: &[u8]) -> Vec<f32> {
+    match t {
+        10 => crate::gguf::Gguf::dequant_q2k(bloc),
+        11 => crate::gguf::Gguf::dequant_q3k(bloc),
+        13 => crate::gguf::Gguf::dequant_q5k(bloc),
+        16 => crate::formats::dequant_iq2xxs(bloc),
+        18 => crate::formats::dequant_iq3xxs(bloc),
+        19 => crate::formats::dequant_iq1s(bloc),
+        23 => crate::formats::dequant_iq4xs(bloc),
+        29 => crate::formats::dequant_iq1m(bloc),
+        _ => panic!("type {t} n'est pas un format à grille"),
+    }
+}
+
 #[derive(Clone, Copy, PartialEq, Eq)]
-pub enum Source { Propre, Q4_0, Mxfp4, Q4_K, Q6_K }
+pub enum Source {
+    Propre, Q4_0, Mxfp4, Q4_K, Q6_K,
+    /// Super-bloc de 256 poids **sans noyau dédié** : Q2_K, Q3_K, Q5_K, IQ1_S,
+    /// IQ1_M, IQ2_XXS, IQ3_XXS, IQ4_XS. Le produit se fait en déquantifiant le
+    /// super-bloc puis en accumulant en f32.
+    ///
+    /// Ces formats portent 30 % des poids de Kimi-K2.7, GLM-5.3 et
+    /// DeepSeek-V4, et **cinq couches de GLM-5.3 sur 79** mélangent trois
+    /// d'entre eux : sans cette voie, le chargeur refuse ces couches une à une
+    /// et le modèle tombe dans le chemin dense, où il meurt sur « projection
+    /// sans aucun format ». Écrire huit noyaux vectorisés aurait demandé huit
+    /// quantifications d'activation et huit tables ; déquantifier puis
+    /// multiplier est **juste par construction** — les déquantificateurs sont
+    /// comparés à libggml au bit près (`tools/portes_formats.sh`) — et ne coûte
+    /// que le temps de la déquantification. À remplacer par des noyaux dédiés
+    /// le jour où le débit comptera plus que l'exactitude.
+    Dequant(u32),
+}
 
 pub struct DenseQ4 {
     pub n_in: usize,
@@ -1079,7 +1131,7 @@ impl DenseQ4 {
         match self.src {
             Source::Q4_0 => (18, 2),
             Source::Mxfp4 => (17, 1),
-            Source::Q4_K | Source::Q6_K | Source::Propre => (0, 0),
+            Source::Q4_K | Source::Q6_K | Source::Propre | Source::Dequant(_) => (0, 0),
         }
     }
 
@@ -1181,6 +1233,7 @@ impl DenseQ4 {
             Source::Mxfp4 => self.n_out * self.nb_ligne * 17,
             Source::Q4_K => self.n_out * self.nb_ligne * crate::gguf::TAILLE_Q4K,
             Source::Q6_K => self.n_out * self.nb_ligne * crate::gguf::TAILLE_Q6K,
+            Source::Dequant(t) => self.n_out * self.nb_ligne * octets_grille(t),
         };
         octets as f64 * 8.0 / (self.n_out * self.n_in) as f64
     }
@@ -1197,6 +1250,10 @@ impl DenseQ4 {
         }
         if self.src == Source::Q4_K { return self.dot_source_q4k(o, x); }
         if self.src == Source::Q6_K { return self.dot_source_q6k(o, x); }
+        // Un format IQ n'a pas de noyau ici : il passe par `Vue4::matvec_iq`.
+        if matches!(self.src, Source::Dequant(_)) {
+            panic!("format sans noyau : passer par matvec_dequant");
+        }
         if self.src != Source::Propre { return self.dot_source(o, x); }
         let half = self.n_in.div_ceil(2);
         let n_bloc = self.n_in.div_ceil(BLOC_Q4);
@@ -1436,5 +1493,43 @@ mod tests_q6k {
             let got16 = d.dot16(0, &x16, &sommes32(&x16));
             assert_eq!(got.to_bits(), got16.to_bits(), "AVX2 ≠ scalaire en {pos}");
         }
+    }
+}
+
+#[cfg(test)]
+mod tests_grille {
+    use super::*;
+
+    /// `sans_noyau` et `dequant_grille` doivent décrire le MÊME ensemble : une
+    /// divergence ferait refuser une couche au chargement pour un format que le
+    /// moteur sait pourtant lire — c'est exactement l'histoire des « 0/79 ».
+    #[test]
+    fn sans_noyau_et_dequant_grille_couvrent_le_meme_ensemble() {
+        for t in 0..64u32 {
+            let taille = std::panic::catch_unwind(|| octets_grille(t)).ok();
+            let dequantifiable = std::panic::catch_unwind(|| {
+                let _ = dequant_grille(t, &[0u8; 256]);
+            }).is_ok();
+            if sans_noyau(t) {
+                assert!(taille.is_some(), "type {t} annoncé sans noyau mais sans taille");
+                assert!(dequantifiable, "type {t} annoncé sans noyau mais sans déquantificateur");
+            } else {
+                assert!(taille.is_none(), "type {t} a une taille de super-bloc mais pas sans_noyau");
+            }
+        }
+    }
+
+    /// Les tailles sont celles de ggml : une erreur d'un octet décalerait tous
+    /// les super-blocs suivants, et la couche serait « plausible ».
+    #[test]
+    fn tailles_de_super_bloc() {
+        assert_eq!(octets_grille(10), 84);   // Q2_K
+        assert_eq!(octets_grille(11), 110);  // Q3_K
+        assert_eq!(octets_grille(13), 176);  // Q5_K
+        assert_eq!(octets_grille(16), 66);   // IQ2_XXS
+        assert_eq!(octets_grille(18), 98);   // IQ3_XXS
+        assert_eq!(octets_grille(19), 50);   // IQ1_S
+        assert_eq!(octets_grille(23), 136);  // IQ4_XS
+        assert_eq!(octets_grille(29), 56);   // IQ1_M
     }
 }

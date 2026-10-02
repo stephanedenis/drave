@@ -79,30 +79,39 @@ impl Gating {
 /// (`hc_*`), attention par index (`indexer`), routage par table (`tid2eid`) et
 /// engram. Aucun n'a jamais été exécuté par ce moteur ; leurs chiffres publiés
 /// viennent d'analyses STATIQUES des tenseurs, pas d'une passe avant.
-fn verifier_architecture(g: &Gguf, cfg: &Cfg) -> Result<(), String> {
+fn verifier_architecture(g: &Gguf, cfg: &Cfg, ctx: usize, clusters: bool) -> Result<(), String> {
     // Le test porte sur TOUTES les couches, pas sur la couche 0 : GLM-5.3 a
     // trois couches denses puis des couches MLA, et regarder la première
     // laissait passer le modèle jusqu'au panic « attn_q absent » de la couche 3.
     let quelque_part = |suffixe: &str| g.tensors.iter().any(|t| t.name.ends_with(suffixe));
     let a = |n: &str| g.tensor(n).is_some();
     let mut manques: Vec<&str> = Vec::new();
-    // Attention MLA à rang faible : Q et KV passent par une projection
-    // intermédiaire. Le moteur ne connaît que la MLA dense
-    // (`--mla`, `forward_mla`), sans experts.
-    if quelque_part("attn_q_a.weight") {
-        manques.push("attention MLA à rang faible (attn_q_a/attn_q_b, attn_kv_a_mqa/attn_kv_b)");
-    }
     if quelque_part("hc_attn_fn.weight") || quelque_part("hc_ffn_fn.weight") {
         manques.push("hyper-connexions (hc_attn_fn, hc_ffn_fn, hc_mult)");
     }
-    if quelque_part("indexer.weight") || g.cfg("index_topk").is_some() {
-        manques.push("attention par index appris (indexer, index_topk)");
+    // Attention par index (DSA) : l'indexeur choisit les clés gardées. Il ne
+    // sert QUE si la séquence dépasse `index_topk` — en deçà, llama.cpp garde
+    // toutes les clés et l'indexeur n'est pas appelé. On refuse donc seulement
+    // les contextes où il changerait le résultat.
+    if quelque_part("indexer.") {
+        let topk = g.cfg("index_topk").and_then(|m| m.as_u64()).unwrap_or(0) as usize;
+        if topk == 0 || ctx > topk {
+            manques.push("attention par index appris (indexer) au-delà de index_topk");
+        }
     }
     if quelque_part("engram.weight") || g.cfg("engram.layer_ids").is_some() {
         manques.push("engram (table de n-grammes mmappée)");
     }
     if quelque_part("attn_output_a.weight") {
         manques.push("projection de sortie à rang faible (attn_output_a/attn_output_b)");
+    }
+    if quelque_part("attn_q_a.weight") {
+        // Informatif : la MLA à rang faible EST implémentée (`attn_mla`), mais
+        // elle n'a jamais été validée contre une référence sur cette machine —
+        // le dire une fois, à l'ouverture, plutôt que de laisser croire qu'un
+        // modèle qui tourne est un modèle juste.
+        eprintln!("[mla] attention MLA à rang faible : cache LATENT (c_kv + k_rope), \
+pas de fenêtre glissante ni de YaRN sur ce chemin");
     }
     if !manques.is_empty() {
         return Err(format!(
@@ -118,14 +127,90 @@ d'une passe avant.\n  Tenseurs présents : {}{}{}",
     }
     // Modèle à experts dont les tenseurs d'experts sont absents : ce n'est pas
     // une architecture inconnue, c'est un fichier incomplet — dit autrement.
-    if cfg.n_expert > 0 && !a("blk.0.ffn_gate_exps.weight") && !a("blk.1.ffn_gate_exps.weight")
-        && g.tensor("blk.0.ffn_gate.weight").is_none() {
+    // Sauf en mode CLUSTERS : les experts y sont préfixés (`cl0/blk.0.…`), donc
+    // « blk.0.ffn_gate_exps.weight absent » y est normal. Ce contrôle a refusé
+    // le modèle en clusters de la porte publiée — un garde-fou qui casse une
+    // porte verte est un garde-fou mal placé.
+    if !clusters && cfg.n_expert > 0 && !a("blk.0.ffn_gate_exps.weight")
+        && !a("blk.1.ffn_gate_exps.weight") && g.tensor("blk.0.ffn_gate.weight").is_none() {
         return Err(format!(
             "le modèle déclare {} experts mais aucun tenseur d'experts n'est lisible \
 (blk.0.ffn_gate_exps.weight absent) — fichier tronqué, ou découpage en clusters \
 incomplet", cfg.n_expert));
     }
     Ok(())
+}
+
+/// Décision de **routage** lue dans les métadonnées, avec sa provenance.
+///
+/// La provenance compte : « sigmoïde » peut venir d'une clef GGUF explicite, du
+/// nom d'origine de DeepSeek, du JSON `<arch>.config`, ou d'un défaut choisi par
+/// le moteur. Les quatre ne se valent pas — un défaut est une hypothèse, et le
+/// mode `--config` la montre comme telle.
+pub struct Routage {
+    pub n_expert: usize,
+    pub n_expert_used: usize,
+    pub ffn_exp: usize,
+    pub gating: Gating,
+    /// D'où vient `gating` : `expert_gating_func`, le JSON, ou le défaut.
+    pub source: &'static str,
+    pub norm: bool,
+    pub echelle: f32,
+    pub hash_layers: usize,
+}
+
+/// Lit la convention de routage des experts — **une seule fois, à un seul
+/// endroit** : le chargement du modèle et le mode `--config` appellent ceci.
+pub fn routage_du_gguf(g: &Gguf) -> Routage {
+    let arch = g.meta.get("general.architecture").and_then(|m| m.as_str())
+                   .unwrap_or("").to_string();
+    // Trois sources, dans cet ordre : la clef normalisée du GGUF, le nom
+    // d'origine de DeepSeek, puis le JSON `<arch>.config` recopié par le
+    // convertisseur. V4.1-Flash-Q2 n'a QUE la troisième : sans elle, il était
+    // pris pour un modèle dense (`n_expert = 0`), donc exécuté sans un seul
+    // expert.
+    let n_expert = g.cfg_ou(&["expert_count", "n_routed_experts"])
+                    .and_then(|m| m.as_u64())
+                    .or_else(|| g.json_nombre("n_routed_experts").map(|v| v as u64))
+                    .unwrap_or(0) as usize;
+    let n_expert_used = g.cfg_ou(&["expert_used_count", "num_experts_per_tok"])
+                    .and_then(|m| m.as_u64())
+                    .or_else(|| g.json_nombre("num_experts_per_tok").map(|v| v as u64))
+                    .unwrap_or(0) as usize;
+    let ffn_exp = g.cfg_ou(&["expert_feed_forward_length", "moe_intermediate_size"])
+                    .and_then(|m| m.as_u64())
+                    .or_else(|| g.json_nombre("moe_intermediate_size").map(|v| v as u64))
+                    .unwrap_or(0) as usize;
+    let declare = g.cfg_ou(&["expert_gating_func"]).and_then(|m| m.as_u64())
+                    .and_then(Gating::du_numero);
+    let du_json = || g.json_texte("scoring_func").and_then(|v| match v.as_str() {
+        "softmax" => Some(Gating::Softmax),
+        "sigmoid" => Some(Gating::Sigmoid),
+        "sqrtsoftplus" => Some(Gating::SqrtSoftplus),
+        _ => None,
+    });
+    let (gating, source) = match declare {
+        Some(x) => (x, "expert_gating_func"),
+        None => match du_json() {
+            Some(x) => (x, "JSON scoring_func"),
+            None => (if arch == "gpt-oss" { Gating::SoftmaxPoids } else { Gating::Softmax },
+                     "défaut du moteur"),
+        },
+    };
+    // `expert_weights_norm` : vrai partout sauf gpt-oss, dont le softmax sur
+    // les k somme déjà à 1. Le défaut « vrai » conserve les portes publiées
+    // (Qwen2.5 dense, Qwen3-MoE, gpt-oss) ; les modèles qui déclarent
+    // explicitement la clef sont lus, eux.
+    let norm = g.cfg_ou(&["expert_weights_norm", "norm_topk_prob"])
+                    .and_then(|m| m.as_bool())
+                    .or_else(|| g.json_bool("norm_topk_prob"))
+                    .unwrap_or(gating != Gating::SoftmaxPoids);
+    let echelle = g.cfg_ou(&["expert_weights_scale", "routed_scaling_factor"])
+                    .and_then(|m| m.as_f64())
+                    .or_else(|| g.json_nombre("routed_scaling_factor"))
+                    .unwrap_or(0.0) as f32;
+    let hash_layers = g.cfg("hash_layer_count").and_then(|m| m.as_u64()).unwrap_or(0) as usize;
+    Routage { n_expert, n_expert_used, ffn_exp, gating, source, norm, echelle, hash_layers }
 }
 
 /// Calcule `sqrt(softplus(x))` comme llama.cpp : `softplus(x) = log(1+e^x)`,
@@ -304,13 +389,18 @@ pub struct Proj {
 
 /// Type ggml → origine des blocs pour `Vue4`.
 fn source_de(t: u32) -> Option<crate::list::Source> {
-    use crate::gguf::{GGML_MXFP4, GGML_Q4_0, GGML_Q4_K, GGML_Q6_K};
+    use crate::gguf::{GGML_IQ1_M, GGML_IQ1_S, GGML_IQ2_XXS, GGML_IQ3_XXS,
+                      GGML_MXFP4, GGML_Q4_0, GGML_Q4_K, GGML_Q6_K};
     use crate::list::Source;
     match t {
         GGML_Q4_K => Some(Source::Q4_K),
         GGML_Q6_K => Some(Source::Q6_K),
         GGML_MXFP4 => Some(Source::Mxfp4),
         GGML_Q4_0 => Some(Source::Q4_0),
+        // Super-blocs de 256 poids SANS noyau dédié : déquantification puis
+        // produit en f32. La liste est celle de `list::sans_noyau` — un test
+        // vérifie que les deux ne peuvent pas diverger.
+        _ if crate::list::sans_noyau(t) => Some(Source::Dequant(t)),
         _ => None,
     }
 }
@@ -380,10 +470,16 @@ au lieu de {n_expert}, et aucun mapping n'est actif"),
                 }
                 return None;
             }
-            let src = source_de(t.ttype)?;
+            let Some(src) = source_de(t.ttype) else {
+                eprintln!("[moe] couche {l} : « {nom} » de type {} — format sans noyau ni déquantification", crate::gguf::Gguf::nom_type(t.ttype));
+                return None;
+            };
             let (n_out, n_in) = (t.dims[1] as usize, t.dims[2] as usize);
             let bloc = if t.ttype == crate::gguf::GGML_Q4_K || t.ttype == crate::gguf::GGML_Q6_K { 256 } else { 32 };
-            if n_in % bloc != 0 { return None; }
+            if n_in % bloc != 0 {
+                eprintln!("[moe] couche {l} : « {nom} » a {n_in} entrées, non multiple de {bloc}");
+                return None;
+            }
             let Some(ptr) = g.data_ptr(nom) else {
                 eprintln!("[moe] couche {l} : données de « {nom} » introuvables");
                 return None;
@@ -500,7 +596,61 @@ impl Vue4 {
             Mxfp4 => 17,
             Q4_0 => 18,
             Propre => 0,
+            Dequant(t) => crate::list::octets_grille(t),
         }
+    }
+
+    /// Produit matrice-vecteur sur une source **sans noyau** : déquantifie
+    /// chaque super-bloc de 256 poids et accumule en f32.
+    ///
+    /// Le travail est découpé par LIGNES de sortie entre `n_fils` fils : les
+    /// super-blocs d'une ligne sont indépendants, et la déquantification domine
+    /// le coût (recherches dans les grilles), donc le parallélisme paie.
+    fn matvec_dequant(&self, loc: usize, t: u32, x: &[f32], out: &mut [f32], n_fils: usize) {
+        let taille = crate::list::octets_grille(t);
+        assert!(self.n_in % 256 == 0, "largeur {} non multiple de 256", self.n_in);
+        let nb = self.n_in / 256;
+        // Le pointeur vient d'un mmap qui vit plus longtemps que l'appel ; il
+        // est transmis comme entier pour traverser `thread::scope` sans
+        // `unsafe impl Send`.
+        let base = unsafe { self.base.add(loc * self.n_out * nb * taille) } as usize;
+        let n_out = self.n_out;
+        let n_in = self.n_in;
+        let travail = move |o0: usize, o1: usize, out: &mut [f32]| {
+            for o in o0..o1 {
+                let mut acc = 0f32;
+                for b in 0..nb {
+                    let p = unsafe { (base as *const u8).add((o * nb + b) * taille) };
+                    let bloc = unsafe { std::slice::from_raw_parts(p, taille) };
+                    let valeurs = crate::list::dequant_grille(t, bloc);
+                    let lo = b * 256;
+                    let hi = (lo + 256).min(n_in);
+                    let mut s = 0f32;
+                    for j in lo..hi { s += valeurs[j - lo] * x[j]; }
+                    acc += s;
+                }
+                out[o] = acc;
+            }
+        };
+        let n_fils = n_fils.clamp(1, n_out.max(1));
+        if n_fils <= 1 {
+            travail(0, n_out, out);
+            return;
+        }
+        let par = n_out.div_ceil(n_fils);
+        std::thread::scope(|sc| {
+            let mut reste = out;
+            let mut o0 = 0usize;
+            let mut poignees = Vec::new();
+            while o0 < n_out {
+                let o1 = (o0 + par).min(n_out);
+                let (tranche, reste2) = reste.split_at_mut(o1 - o0);
+                reste = reste2;
+                poignees.push(sc.spawn(move || travail(o0, o1, tranche)));
+                o0 = o1;
+            }
+            for p in poignees { let _ = p.join(); }
+        });
     }
 
     /// Demande au noyau de lancer la lecture de l'expert `e` **en avance**.
@@ -865,7 +1015,14 @@ pub struct Mla {
     pub q_b: Vec<f32>,      // [q_lora, nh*(qkn+qkr)]
     pub kv_a: Vec<f32>,     // [h, kv_lora+qkr]
     pub kv_a_norm: Vec<f32>,// [kv_lora]
-    pub kv_b: Vec<f32>,     // [kv_lora, nh*(qkn+vd)]
+    /// Disposition **combinée** : `[kv_lora, nh*(qkn+vd)]`, une matrice par
+    /// tête concaténée. Vide quand le modèle utilise la disposition séparée
+    /// (`attn_k_b` + `attn_v_b`), qui est celle de Kimi-K2.7 et DeepSeek-V3/V4.
+    pub kv_b: Vec<f32>,
+    /// Disposition **séparée** : `k_b` `[nh, kv_lora, qkn]` et `v_b`
+    /// `[nh, kv_lora, vd]` (convention numpy, le plus lent d'abord).
+    pub k_b: Option<Vec<f32>>,
+    pub v_b: Option<Vec<f32>>,
     pub wo: Vec<f32>,       // [nh*vd, h]
     pub ffn_norm: Vec<f32>, // [h]
     pub gate: Vec<f32>,     // [h, ffn]
@@ -874,6 +1031,11 @@ pub struct Mla {
     pub attn_norm: Vec<f32>,// [h]
     pub q_lora: usize, pub kv_lora: usize, pub qkr: usize, pub qkn: usize,
     pub vd: usize, pub nh: usize, pub ffn: usize,
+    /// Epsilon de normalisation du modèle : la MLA normalise `q_a` et `c_kv`
+    /// AVANT de les remonter, et l'oublier donnerait des scores faux d'un
+    /// facteur qui dépend de la norme de l'état — donc invisibles sur un jeton
+    /// et fatals sur une séquence.
+    pub eps: f32,
 }
 
 /// Produit matrice-vecteur en f32 : `y[o] = Σ_i w[o*n_in + i] * x[i]`.
@@ -1839,47 +2001,8 @@ impl Model {
         let g = Gguf::open_auto(path).expect("ouverture du GGUF");
         let arch = g.meta.get("general.architecture").and_then(|m| m.as_str())
                        .unwrap_or("").to_string();
-        // ---- Convention de routage des experts -------------------------
-        // Trois sources, dans cet ordre : la clef normalisée du GGUF, le nom
-        // d'origine de DeepSeek, puis le JSON `<arch>.config` recopié par le
-        // convertisseur. V4.1-Flash-Q2 n'a QUE la troisième : sans elle, il
-        // était pris pour un modèle dense (`n_expert = 0`), donc exécuté sans
-        // un seul expert.
-        let n_expert = g.cfg_ou(&["expert_count", "n_routed_experts"])
-                        .and_then(|m| m.as_u64())
-                        .or_else(|| g.json_nombre("n_routed_experts").map(|v| v as u64))
-                        .unwrap_or(0) as usize;
-        let n_expert_used = g.cfg_ou(&["expert_used_count", "num_experts_per_tok"])
-                        .and_then(|m| m.as_u64())
-                        .or_else(|| g.json_nombre("num_experts_per_tok").map(|v| v as u64))
-                        .unwrap_or(0) as usize;
-        let ffn_exp = g.cfg_ou(&["expert_feed_forward_length", "moe_intermediate_size"])
-                        .and_then(|m| m.as_u64())
-                        .or_else(|| g.json_nombre("moe_intermediate_size").map(|v| v as u64))
-                        .unwrap_or(0) as usize;
-        let gating = g.cfg_ou(&["expert_gating_func"]).and_then(|m| m.as_u64())
-                        .and_then(Gating::du_numero)
-                        .or_else(|| g.json_texte("scoring_func").and_then(|v| match v.as_str() {
-                            "softmax" => Some(Gating::Softmax),
-                            "sigmoid" => Some(Gating::Sigmoid),
-                            "sqrtsoftplus" => Some(Gating::SqrtSoftplus),
-                            _ => None,
-                        }))
-                        .unwrap_or_else(|| if arch == "gpt-oss" { Gating::SoftmaxPoids }
-                                           else { Gating::Softmax });
-        // `expert_weights_norm` : vrai partout sauf gpt-oss, dont le softmax sur
-        // les k sommme déjà à 1. Le défaut « vrai » conserve les portes
-        // publiées (Qwen2.5 dense, Qwen3-MoE, gpt-oss) ; les modèles qui
-        // déclarent explicitement la clef sont lus, eux.
-        let expert_norm = g.cfg_ou(&["expert_weights_norm", "norm_topk_prob"])
-                        .and_then(|m| m.as_bool())
-                        .or_else(|| g.json_bool("norm_topk_prob"))
-                        .unwrap_or(gating != Gating::SoftmaxPoids);
-        let expert_scale = g.cfg_ou(&["expert_weights_scale", "routed_scaling_factor"])
-                        .and_then(|m| m.as_f64())
-                        .or_else(|| g.json_nombre("routed_scaling_factor"))
-                        .unwrap_or(0.0) as f32;
-        let hash_layers = g.cfg("hash_layer_count").and_then(|m| m.as_u64()).unwrap_or(0) as usize;
+        let r = routage_du_gguf(&g);
+        let (n_expert, n_expert_used, ffn_exp) = (r.n_expert, r.n_expert_used, r.ffn_exp);
         let cfg = Cfg {
             n_layer: g.cfg("block_count").and_then(|m| m.as_u64()).unwrap_or(0) as usize,
             hidden: g.cfg("embedding_length").and_then(|m| m.as_u64()).unwrap_or(0) as usize,
@@ -1901,7 +2024,8 @@ impl Model {
             // n'est pas déclarée dans les métadonnées.
             ffn_act_oss: g.meta.get("general.architecture").and_then(|m| m.as_str())
                              == Some("gpt-oss"),
-            gating, expert_norm, expert_scale, hash_layers,
+            gating: r.gating, expert_norm: r.norm, expert_scale: r.echelle,
+            hash_layers: r.hash_layers,
             n_rot: {
                 let arch = g.meta.get("general.architecture").and_then(|m| m.as_str());
                 let declare = g.cfg("rope.dimension_count").and_then(|m| m.as_u64()).unwrap_or(0) as usize;
@@ -1983,7 +2107,8 @@ impl Model {
         // architecture, le dire ici, avec la liste de ce qui manque. Sinon la
         // panne arrive trente lignes plus loin sous la forme « tenseur
         // blk.3.attn_q.weight absent » — qui accuse le fichier au lieu du moteur.
-        if let Err(raison) = verifier_architecture(&g, &cfg) {
+        let map = crate::clusters::actif();
+        if let Err(raison) = verifier_architecture(&g, &cfg, ctx, map.is_some()) {
             panic!("{raison}");
         }
         assert!(cfg.head_dim > 0, "dimension de tête indéterminée");
@@ -1994,16 +2119,78 @@ impl Model {
         // Le mapping est lu UNE fois et passé aux couches : un état global lu
         // par couche rendait ce chemin intestable (les tests s'exécutent en
         // parallèle, un `OnceLock` ne se pose qu'une fois).
-        let map = crate::clusters::actif();
+        let mla = if g.tensor("blk.0.attn_kv_a_mqa.weight").is_some() {
+            let mut v = Vec::with_capacity(cfg.n_layer);
+            for l in 0..cfg.n_layer {
+                let p = |s: &str| format!("blk.{l}.{s}");
+                let opt = |n: &str| g.dequant_optionnel(&p(n));
+                let t = |n: &str| g.tensor(&p(n)).unwrap_or_else(|| panic!("tenseur MLA {n} absent"));
+                // Le fichier déclare (entrée, sortie) ; le moteur renverse à la
+                // lecture, donc `dims[0]` est ici la SORTIE (= le rang).
+                let q_lora = t("attn_q_a.weight").dims[0] as usize;
+                let q_b = g.dequant(&p("attn_q_b.weight"));
+                let qkr = g.cfg("rope.dimension_count").and_then(|m| m.as_u64())
+                    .unwrap_or(0) as usize;
+                let cle = t("attn_kv_a_mqa.weight").dims[0] as usize;
+                let kv_lora = cle - qkr;
+                let nh = cfg.n_head;
+                let total = q_b.len() / q_lora;              // nh*(qkn+qkr)
+                let qkn = total / nh - qkr;
+                // Deux dispositions, lues à la présence des tenseurs : un
+                // `attn_kv_b` combiné (V3 ancien, harnais synthétique), ou
+                // `attn_k_b` + `attn_v_b` séparés (Kimi-K2.7, V4). Deviner
+                // d'après le nom de l'architecture marcherait jusqu'au premier
+                // modèle qui mélange les deux.
+                let (kv_b, k_b, v_b, vd) = if g.tensor(&p("attn_kv_b.weight")).is_some() {
+                    let kv_b = g.dequant(&p("attn_kv_b.weight"));
+                    let per = kv_b.len() / kv_lora;          // nh*(qkn+vd)
+                    (kv_b, None, None, per / nh - qkn)
+                } else {
+                    let k_b = g.dequant(&p("attn_k_b.weight"));
+                    let v_b = g.dequant(&p("attn_v_b.weight"));
+                    let vd = v_b.len() / (nh * kv_lora);
+                    (Vec::new(), Some(k_b), Some(v_b), vd)
+                };
+                v.push(Mla {
+                    q_a: g.dequant(&p("attn_q_a.weight")),
+                    q_a_norm: g.dequant(&p("attn_q_a_norm.weight")),
+                    q_b,
+                    kv_a: g.dequant(&p("attn_kv_a_mqa.weight")),
+                    kv_a_norm: g.dequant(&p("attn_kv_a_norm.weight")),
+                    kv_b, k_b, v_b,
+                    wo: g.dequant(&p("attn_output.weight")),
+                    ffn_norm: opt("ffn_norm.weight").unwrap_or_default(),
+                    gate: opt("ffn_gate.weight").unwrap_or_default(),
+                    up: opt("ffn_up.weight").unwrap_or_default(),
+                    down: opt("ffn_down.weight").unwrap_or_default(),
+                    attn_norm: g.dequant(&p("attn_norm.weight")),
+                    q_lora, kv_lora, qkr, qkn, vd, nh, ffn: cfg.ffn,
+                    eps: cfg.eps,
+                });
+            }
+            let m0 = &v[0];
+            println!("[config] MLA : {} couches · q_lora {} · kv_lora {} · qk_nope {} + qk_rope {} · v {} · \
+                      cache latente {} valeurs par jeton (au lieu de {})",
+                     v.len(), m0.q_lora, m0.kv_lora, m0.qkn, m0.qkr, m0.vd,
+                     m0.kv_lora + m0.qkr, cfg.n_kv_head * (m0.qkn + m0.vd));
+            Some(v)
+        } else { None };
         let mut layers = Vec::with_capacity(cfg.n_layer);
         let mut bytes = 0u64;
         for l in 0..cfg.n_layer {
             let p = |s: &str| format!("blk.{l}.{s}");
             let lay = Layer {
                 attn_norm: g.dequant(&p("attn_norm.weight")),
-                wq: Proj::load(&g, &p("attn_q.weight"), Some(&p("attn_q.bias")), dense || q4 != 0, auto, keep, q4 & 2 != 0, b6 & 2 != 0),
-                wk: Proj::load(&g, &p("attn_k.weight"), Some(&p("attn_k.bias")), dense || q4 != 0, auto, keep, q4 & 2 != 0, b6 & 2 != 0),
-                wv: Proj::load(&g, &p("attn_v.weight"), Some(&p("attn_v.bias")), dense || q4 != 0, auto, keep, q4 & 2 != 0, b6 & 2 != 0),
+                // Couche MLA : Q, K et V n'existent pas en dense — ils sont
+                // calculés par `attn_mla` depuis les projections de rang faible.
+                // Charger `attn_q.weight` ici, c'est chercher un tenseur que le
+                // modèle n'a pas, et refuser 216 Go pour un nom.
+                wq: if mla.is_some() { Proj::vide() } else {
+                    Proj::load(&g, &p("attn_q.weight"), Some(&p("attn_q.bias")), dense || q4 != 0, auto, keep, q4 & 2 != 0, b6 & 2 != 0) },
+                wk: if mla.is_some() { Proj::vide() } else {
+                    Proj::load(&g, &p("attn_k.weight"), Some(&p("attn_k.bias")), dense || q4 != 0, auto, keep, q4 & 2 != 0, b6 & 2 != 0) },
+                wv: if mla.is_some() { Proj::vide() } else {
+                    Proj::load(&g, &p("attn_v.weight"), Some(&p("attn_v.bias")), dense || q4 != 0, auto, keep, q4 & 2 != 0, b6 & 2 != 0) },
                 // gpt-oss porte un biais sur la projection de sortie
                 // (`attention_bias = true` dans sa config : Q, K, V **et** O).
                 // Le passer à `None` l'ignorait silencieusement — un décalage
@@ -2252,48 +2439,6 @@ mapping {}",
         // ---- MLA : reconnu à ses tenseurs, sans aucune clé de configuration
         // (les rangs se lisent dans les FORMES, ce qui évite d'ajouter cinq
         // champs à `Cfg` et de les tenir à jour).
-        let mla = if g.tensor("blk.0.attn_kv_a_mqa.weight").is_some() {
-            let mut v = Vec::with_capacity(cfg.n_layer);
-            for l in 0..cfg.n_layer {
-                let p = |s: &str| format!("blk.{l}.{s}");
-                let t = |n: &str| g.tensor(&p(n)).unwrap_or_else(|| panic!("tenseur MLA {n} absent"));
-                // Le fichier déclare (entrée, sortie) ; le moteur renverse à la
-                // lecture, donc `dims[0]` est ici la SORTIE (= le rang).
-                let q_lora = t("attn_q_a.weight").dims[0] as usize;
-                let q_b = g.dequant(&p("attn_q_b.weight"));
-                let qkr = g.cfg("rope.dimension_count").and_then(|m| m.as_u64())
-                    .unwrap_or(0) as usize;
-                let cle = t("attn_kv_a_mqa.weight").dims[0] as usize;
-                let kv_lora = cle - qkr;
-                let kv_b = g.dequant(&p("attn_kv_b.weight"));
-                let nh = cfg.n_head;
-                let total = q_b.len() / q_lora;              // nh*(qkn+qkr)
-                let qkn = total / nh - qkr;
-                let per = kv_b.len() / kv_lora;              // nh*(qkn+vd)
-                let vd = per / nh - qkn;
-                v.push(Mla {
-                    q_a: g.dequant(&p("attn_q_a.weight")),
-                    q_a_norm: g.dequant(&p("attn_q_a_norm.weight")),
-                    q_b,
-                    kv_a: g.dequant(&p("attn_kv_a_mqa.weight")),
-                    kv_a_norm: g.dequant(&p("attn_kv_a_norm.weight")),
-                    kv_b,
-                    wo: g.dequant(&p("attn_output.weight")),
-                    ffn_norm: g.dequant(&p("ffn_norm.weight")),
-                    gate: g.dequant(&p("ffn_gate.weight")),
-                    up: g.dequant(&p("ffn_up.weight")),
-                    down: g.dequant(&p("ffn_down.weight")),
-                    attn_norm: g.dequant(&p("attn_norm.weight")),
-                    q_lora, kv_lora, qkr, qkn, vd, nh, ffn: cfg.ffn,
-                });
-            }
-            let m0 = &v[0];
-            println!("[config] MLA : {} couches · q_lora {} · kv_lora {} · qk_nope {} + qk_rope {} · v {} · \
-                      cache latente {} valeurs par jeton (au lieu de {})",
-                     v.len(), m0.q_lora, m0.kv_lora, m0.qkn, m0.qkr, m0.vd,
-                     m0.kv_lora + m0.qkr, cfg.n_kv_head * (m0.qkn + m0.vd));
-            Some(v)
-        } else { None };
         let mla_cache = match mla.as_ref() {
             Some(v) => v.iter().map(|m| (vec![0f32; ctx * m.kv_lora], vec![0f32; ctx * m.qkr])).collect(),
             None => Vec::new(),
@@ -2468,7 +2613,11 @@ mapping {}",
             (Some(_), Some(_)) => frac > thresh_auto,
             (Some(_), None) => true,
             (None, Some(_)) => false,
-            (None, None) => panic!("projection sans aucun format"),
+            // Le message porte les DEUX largeurs : c'est ce qui permet de
+            // reconnaître la projection fautive (une MLA a wq/wk/wv vides, un
+            // modèle à experts a la FFN dense vide) sans backtrace.
+            (None, None) => panic!("projection sans aucun format : {} entrées → {} sorties",
+                                   x.len(), out.len()),
         };
         if let (Some(machine), Some(mg)) = (crate::gpu::instance(), p.gpu.as_ref()) {
             // Le noyau applique déjà l'échelle d'activation : rien à reprendre.
@@ -2546,6 +2695,35 @@ mapping {}",
         for i in 0..h { exp_out[i] = yd[i] + bd.map_or(0.0, |b| b[i]); }
         for i in 0..h { down[i] += w_exp * exp_out[i]; }
         true
+    }
+
+    /// Produit scalaire d'un expert, **quel que soit son format** : noyau 4 bits
+    /// emprunté quand il existe, déquantification sinon.
+    ///
+    /// Les formats IQ (IQ1_S, IQ1_M, IQ2_XXS, IQ3_XXS) portent 30 % des poids de
+    /// Kimi-K2.7, GLM-5.3 et DeepSeek-V4. Ils n'ont pas de noyau ici, et les
+    /// refuser rendait ces modèles inchargeables — « mélanges d'experts
+    /// chargés : 0/79 » était la seule trace, sans dire pourquoi.
+    fn matvec4_ou_iq(pool: &mut Pool, vue: &Vue4, loc: usize, x: &[f32], out: &mut [f32],
+                     levels: f32, thresh: f32, topk: usize, renorm: bool,
+                     scratch: &mut Vec<f32>, biais: Option<&[f32]>, n_fils: usize) {
+        if let crate::list::Source::Dequant(t) = vue.src {
+            // Quantification de l'activation par le MÊME chemin que les autres
+            // formats (niveaux, seuil, top-k), puis produit en f32 sur le
+            // super-bloc déquantifié : la seule différence est que les poids
+            // sont reconstruits au lieu d'être lus quantifiés.
+            let Some((sv, sx)) = Self::quant_scratch(x, levels, thresh, topk, renorm, scratch) else {
+                for v in out[..vue.n_out].iter_mut() { *v = 0.0; }
+                return;
+            };
+            let mut xd = vec![0f32; x.len()];
+            for (&i, &v) in sv.idx.iter().zip(sv.val.iter()) { xd[i as usize] = v as f32 * sx; }
+            vue.matvec_dequant(loc, t, &xd, &mut out[..vue.n_out], n_fils);
+            if let Some(b) = biais { for o in 0..vue.n_out { out[o] += b[o]; } }
+            return;
+        }
+        let d = vue.expert(loc);
+        Self::matvec_q4(pool, &d, x, out, levels, thresh, topk, renorm, scratch, biais);
     }
 
     fn matvec_q4(pool: &mut Pool, m: &crate::list::DenseQ4, x: &[f32], out: &mut [f32],
@@ -2914,6 +3092,14 @@ mapping {}",
     /// en lot. Les modèles à experts retombent sur le chemin jeton par jeton :
     /// leur regroupement par expert est l'étape suivante.
     pub fn forward_lot(&mut self, toks: &[u32], pos0: usize) -> Vec<Vec<f32>> {
+        // Modèle MLA : le chemin par lots ne connaît que Q/K/V denses. On
+        // repasse par le jeton seul, qui porte la MLA et le cache latent. Le
+        // préremplissage par lots perd son intérêt sur ces modèles — c'est dit
+        // ici plutôt que découvert par un panic « projection sans format ».
+        if self.mla.is_some() {
+            return toks.iter().enumerate()
+                .map(|(i, &t)| self.forward(t, pos0 + i)).collect();
+        }
         let t = toks.len();
         // Lot IMPOSÉ (préremplissage réparti) : les états arrivent de l'autre
         // nœud, on ne repasse pas par `token_embd`. Lu avant tout le reste — y
@@ -3448,6 +3634,132 @@ s'applique pas — utilisez --lot 1, ou réenregistrez sans DRAVE_TRACE_BLOCS");
         }
     }
 
+    /// **Attention MLA** pour un jeton : quatre projections de rang faible et
+    /// un cache LATENT.
+    ///
+    /// `Q = W_q_b · norm(W_q_a · h)` ; `c_kv = norm(W_kv_a · h)` et
+    /// `k_rope = RoPE(W_kv_a · h)` ; puis, à la lecture, `k_nope` et `v` sont
+    /// **reconstruits** depuis `c_kv` par `W_k_b` et `W_v_b`. Le cache ne
+    /// stocke donc que `c_kv` (512 valeurs) et `k_rope` (64) par position, au
+    /// lieu de `n_head × (qk_nope + v)` — 8 192 pour Kimi. C'est tout l'intérêt
+    /// de MLA, et c'est aussi ce qui rend le cache indépendant du nombre de
+    /// têtes.
+    ///
+    /// Deux dispositions existent, et elles ne se devinent pas :
+    ///   - **séparée** (Kimi-K2.7, DeepSeek-V3) : `attn_k_b` `[nh, kv_lora,
+    ///     qk_nope]` et `attn_v_b` `[nh, kv_lora, v]` ;
+    ///   - **combinée** (harnais `tools/mla_synthetique.py`) : un seul
+    ///     `attn_kv_b` `[kv_lora, nh*(qk_nope+v)]`.
+    /// Laquelle s'applique se lit à la présence des tenseurs, jamais au nom de
+    /// l'architecture.
+    fn attn_mla(m: &Mla, cache: &mut (Vec<f32>, Vec<f32>), hn: &[f32], pos: usize,
+                rope_base: f32, att: &mut [f32]) {
+        let (nh, qkn, qkr, vd, kvl) = (m.nh, m.qkn, m.qkr, m.vd, m.kv_lora);
+        let eps = m.eps;
+        let h = hn.len();
+        // --- requête : descente, norme, remontée, découpage nope / rope
+        let mut qa = vec![0f32; m.q_lora];
+        matvec_f32(&m.q_a, hn, h, m.q_lora, &mut qa);
+        let mut qan = vec![0f32; m.q_lora];
+        Self::rmsnorm(&qa, &m.q_a_norm, eps, &mut qan);
+        let nq = nh * (qkn + qkr);
+        let mut qb = vec![0f32; nq];
+        matvec_f32(&m.q_b, &qan, m.q_lora, nq, &mut qb);
+        // --- KV : descente, norme sur la partie latente, rotation de l'autre
+        let mut kva = vec![0f32; kvl + qkr];
+        matvec_f32(&m.kv_a, hn, h, kvl + qkr, &mut kva);
+        let mut c_n = vec![0f32; kvl];
+        Self::rmsnorm(&kva[..kvl], &m.kv_a_norm, eps, &mut c_n);
+        let mut k_rope = kva[kvl..].to_vec();
+        Self::rope(&mut k_rope, 1, qkr, pos, rope_base, qkr);
+        let mut q_rope = vec![0f32; nh * qkr];
+        for hh in 0..nh {
+            q_rope[hh * qkr..(hh + 1) * qkr]
+                .copy_from_slice(&qb[hh * (qkn + qkr) + qkn..(hh + 1) * (qkn + qkr)]);
+        }
+        Self::rope(&mut q_rope, nh, qkr, pos, rope_base, qkr);
+        // --- écriture du cache latent
+        {
+            let (ckv, krop) = cache;
+            ckv[pos * kvl..(pos + 1) * kvl].copy_from_slice(&c_n);
+            krop[pos * qkr..(pos + 1) * qkr].copy_from_slice(&k_rope);
+        }
+        let (ckv, krop) = (&cache.0, &cache.1);
+        let n = pos + 1;
+        let scale = 1.0 / ((qkn + qkr) as f32).sqrt();
+        let mut sc = vec![0f32; n];
+        let mut kn = vec![0f32; qkn];
+        let mut vv = vec![0f32; vd];
+        for hh in 0..nh {
+            let q_nope = &qb[hh * (qkn + qkr)..hh * (qkn + qkr) + qkn];
+            let qr = &q_rope[hh * qkr..(hh + 1) * qkr];
+            for t in 0..n {
+                let c = &ckv[t * kvl..(t + 1) * kvl];
+                match (&m.k_b, &m.v_b) {
+                    // Disposition séparée : `k_b[hh]` est `[kvl, qkn]`, donc
+                    // `k_nope[o] = Σ_c k_b[hh][c][o] · c_kv[c]` — l'index de
+                    // sortie est le PLUS LENT. L'écrire dans l'autre sens donne
+                    // des scores plausibles et faux.
+                    (Some(kb), Some(vb)) => {
+                        let bk = &kb[hh * kvl * qkn..(hh + 1) * kvl * qkn];
+                        for o in 0..qkn {
+                            let mut s = 0f32;
+                            for (c_, &cc) in c.iter().enumerate() { s += bk[c_ * qkn + o] * cc; }
+                            kn[o] = s;
+                        }
+                        let bv = &vb[hh * kvl * vd..(hh + 1) * kvl * vd];
+                        for o in 0..vd {
+                            let mut s = 0f32;
+                            for (c_, &cc) in c.iter().enumerate() { s += bv[c_ * vd + o] * cc; }
+                            vv[o] = s;
+                        }
+                    }
+                    // Disposition combinée : un seul tenseur par tête.
+                    _ => {
+                        let mut kvt = vec![0f32; nh * (qkn + vd)];
+                        matvec_f32(&m.kv_b, c, kvl, nh * (qkn + vd), &mut kvt);
+                        kn.copy_from_slice(&kvt[hh * (qkn + vd)..hh * (qkn + vd) + qkn]);
+                        vv.copy_from_slice(&kvt[hh * (qkn + vd) + qkn..(hh + 1) * (qkn + vd)]);
+                    }
+                }
+                let mut s = 0f32;
+                for i in 0..qkn { s += q_nope[i] * kn[i]; }
+                for i in 0..qkr { s += qr[i] * krop[t * qkr + i]; }
+                sc[t] = s * scale;
+            }
+            // softmax sur la fenêtre
+            let mx = sc.iter().cloned().fold(f32::NEG_INFINITY, f32::max);
+            let mut somme = 0f32;
+            for v in sc.iter_mut() { *v = (*v - mx).exp(); somme += *v; }
+            let inv = if somme > 0.0 { 1.0 / somme } else { 0.0 };
+            for v in sc.iter_mut() { *v *= inv; }
+            // somme pondérée : les valeurs sont reconstruites par `v_b` à la
+            // lecture, donc le cache reste latent.
+            let out = &mut att[hh * vd..(hh + 1) * vd];
+            for v in out.iter_mut() { *v = 0.0; }
+            for t in 0..n {
+                let w = sc[t];
+                if w == 0.0 { continue; }
+                let c = &ckv[t * kvl..(t + 1) * kvl];
+                match (&m.k_b, &m.v_b) {
+                    (Some(_), Some(vb)) => {
+                        let bv = &vb[hh * kvl * vd..(hh + 1) * kvl * vd];
+                        for o in 0..vd {
+                            let mut s = 0f32;
+                            for (c_, &cc) in c.iter().enumerate() { s += bv[c_ * vd + o] * cc; }
+                            out[o] += w * s;
+                        }
+                    }
+                    _ => {
+                        let mut kvt = vec![0f32; nh * (qkn + vd)];
+                        matvec_f32(&m.kv_b, c, kvl, nh * (qkn + vd), &mut kvt);
+                        for o in 0..vd { out[o] += w * kvt[hh * (qkn + vd) + qkn + o]; }
+                    }
+                }
+            }
+        }
+    }
+
     /// Passe avant d'un modèle **MLA**, un jeton à la fois, avec le cache
     /// LATENT : `c_kv` (la seule tête latente) et `k_rope` (les composantes
     /// tournées) sont écrites une fois par position, et `k_nope`/`v` sont
@@ -3576,6 +3888,9 @@ s'applique pas — utilisez --lot 1, ou réenregistrez sans DRAVE_TRACE_BLOCS");
         let tk = |p: usize| if tkp[p] > 0 { tkp[p] } else { tkg };
         // Lus AVANT l'emprunt destructuré (comme la parcimonie par projection).
         let largeur_profil = self.cfg.ffn.max(self.cfg.ffn_exp);
+        // Fils à donner à la déquantification des experts IQ. Lus avant
+        // l'emprunt destructuré, comme le reste.
+        let threads_iq = self.pool.threads().clamp(1, 8);
         self.profil_jetons += 1;
         let Model { g, cfg, layers, out_norm, pool, kv, events, attn_events, kv_gpu,
                     attn_gpu_part, emb_imposee, .. } = self;
@@ -3668,289 +3983,360 @@ dynamique de {dyn_:.3e} (relatif {:.2e})", mx / dyn_.max(1e-9));
                     self.trace.as_mut().unwrap().ecrire(l, j as usize, &actifs, sx);
                 }
             }
-            Self::matvec(pool, &lay.wq, &hn, &mut q, events, self.act_levels, self.act_thresh, tk(0), self.act_renorm, &mut scratch, self.seuil_push);
-            Self::matvec(pool, &lay.wk, &hn, &mut k, events, self.act_levels, self.act_thresh, tk(1), self.act_renorm, &mut scratch, self.seuil_push);
-            Self::matvec(pool, &lay.wv, &hn, &mut v, events, self.act_levels, self.act_thresh, tk(2), self.act_renorm, &mut scratch, self.seuil_push);
-            self.prof[0] += tm.elapsed().as_secs_f64();
-            // Qwen3 normalise chaque tête de Q et K avant la rotation.
-            if lay.q_norm.is_some() || lay.k_norm.is_some() {
-                let mut tmp = vec![0f32; hd];
-                if let Some(w) = lay.q_norm.as_ref() {
-                    for hh in 0..nh {
-                        let t = &mut q[hh * hd..(hh + 1) * hd];
-                        Self::rmsnorm(t, w, cfg.eps, &mut tmp);
-                        t.copy_from_slice(&tmp);
-                    }
-                }
-                if let Some(w) = lay.k_norm.as_ref() {
-                    for hh in 0..nkv {
-                        let t = &mut k[hh * hd..(hh + 1) * hd];
-                        Self::rmsnorm(t, w, cfg.eps, &mut tmp);
-                        t.copy_from_slice(&tmp);
-                    }
-                }
-            }
-            let tr = Instant::now();
-            match cfg.yarn {
-                Some((f, bf, bl, orig, ms)) => {
-                    Self::rope_yarn(&mut q, nh, hd, pos, cfg.rope_base, f, bf, bl, orig, ms, cfg.n_rot);
-                    Self::rope_yarn(&mut k, nkv, hd, pos, cfg.rope_base, f, bf, bl, orig, ms, cfg.n_rot);
-                }
-                None => {
-                    Self::rope(&mut q, nh, hd, pos, cfg.rope_base, cfg.n_rot);
-                    Self::rope(&mut k, nkv, hd, pos, cfg.rope_base, cfg.n_rot);
-                }
-            }
-            if self.qk_topk > 0 {
-                Self::creuse_tetes(&mut q, nh, hd, self.qk_topk);
-                Self::creuse_tetes(&mut k, nkv, hd, self.qk_topk);
-            }
-            self.prof[1] += tr.elapsed().as_secs_f64();
+            // ---- attention MLA ------------------------------------------
+            // Deux architectures d'attention dans la même passe avant :
+            // Q/K/V denses (Qwen, gpt-oss, Llama) ou projections de rang
+            // faible avec cache LATENT (DeepSeek-V3/V4, Kimi, GLM). Le reste
+            // de la couche — résidu, FFN dense ou mélange d'experts, tête —
+            // est partagé, et c'est ce qui compte : dupliquer la couche pour
+            // deux attentions aurait donné deux MoE qui divergent.
             let ta = Instant::now();
-            // écriture du cache KV à la position courante
-            {
-                let kvc = &mut kv[l];
-                for hh in 0..nkv {
-                    kvc.ecrire(hh, pos, &k[hh * hd..(hh + 1) * hd], &v[hh * hd..(hh + 1) * hd]);
-                }
-            }
-            KvCache::miroir_gpu(kv_gpu.as_deref_mut(), l, &kv[l], pos, 1);
-            // attention groupée
-            let scale = 1.0 / (hd as f32).sqrt();
-            let kvc = &kv[l];
-            // Tampons de déquantification : en f32 ils ne servent pas, en 8 bits
-            // la clé (ou la valeur) y est reconstruite une fois par groupe.
-            let mut kd = vec![0f32; hd];
-            let mut vd = vec![0f32; hd];
-            let n = pos + 1;
-            // ---- chemin GROUPÉ par tête KV (attention complète sans top-k) ----
-            // Mesuré : « attention » croît exactement linéairement avec le
-            // contexte (0,88 / 1,91 / 3,20 ms à 64 / 128 / 256) — c'est la
-            // relecture du cache KV, pas le calcul. Or `rep` têtes de requête
-            // partagent une même tête KV : la boucle par tête relisait donc les
-            // mêmes clés `rep` fois (7 ici). En parcourant les clés une fois par
-            // groupe et en tenant `nh` scores, on divise ce trafic par `rep`.
-            // L'arithmétique par tête est inchangée et dans le même ordre : les
-            // sorties restent bit à bit identiques.
-            let groupe = fen == 0 && self.attn_topk == 0 && rep > 1;
-            // ---- KV déporté (étape E4) : la MÊME attention, calculée en VRAM.
-            // Le noyau a besoin d'un nombre entier de têtes de requête par tête
-            // KV ; la fenêtre et le top-k gardent le chemin CPU.
-            let mut fait_en_gpu = false;
-            if groupe && kv_gpu.is_some() && nkv * rep == nh && n > 1 {
-                let nsplit = (n / 256).clamp(1, 128);
-                let besoin = nsplit * nkv * rep * (hd + 2);
-                if attn_gpu_part.len() < besoin { attn_gpu_part.resize(besoin, 0.0); }
-                let puits: Option<Vec<f32>> = lay.sinks.as_ref()
-                    .map(|s| (0..nh).map(|h| s[h]).collect());
-                if let Some((idx, m)) = kv_gpu.as_mut().and_then(|v| v.get_mut(l)) {
-                    let machine = crate::gpu::machines()[*idx];
-                    if machine.attn_kv(m, &q[..nh * hd], n, scale, puits.as_deref(),
-                                       nsplit, attn_gpu_part, &mut att[..]) {
-                        *attn_events += (nh * n) as u64;
-                        fait_en_gpu = true;
+            if let Some(m) = self.mla.as_ref().map(|v| &v[l]) {
+                Self::attn_mla(m, &mut self.mla_cache[l], &hn, pos, cfg.rope_base, &mut att);
+            } else {
+                Self::matvec(pool, &lay.wq, &hn, &mut q, events, self.act_levels, self.act_thresh, tk(0), self.act_renorm, &mut scratch, self.seuil_push);
+                Self::matvec(pool, &lay.wk, &hn, &mut k, events, self.act_levels, self.act_thresh, tk(1), self.act_renorm, &mut scratch, self.seuil_push);
+                Self::matvec(pool, &lay.wv, &hn, &mut v, events, self.act_levels, self.act_thresh, tk(2), self.act_renorm, &mut scratch, self.seuil_push);
+                self.prof[0] += tm.elapsed().as_secs_f64();
+                // Qwen3 normalise chaque tête de Q et K avant la rotation.
+                if lay.q_norm.is_some() || lay.k_norm.is_some() {
+                    let mut tmp = vec![0f32; hd];
+                    if let Some(w) = lay.q_norm.as_ref() {
+                        for hh in 0..nh {
+                            let t = &mut q[hh * hd..(hh + 1) * hd];
+                            Self::rmsnorm(t, w, cfg.eps, &mut tmp);
+                            t.copy_from_slice(&tmp);
+                        }
                     }
-                }
-            }
-            if groupe && !fait_en_gpu {
-                let t_scores = Instant::now();
-                for kvh in 0..nkv {
-                    let h0 = kvh * rep;
-                    let h1 = (h0 + rep).min(nh);
-                    for t in 0..n {
-                        kvc.cle(kvh, t, &mut kd);
-                        for hh in h0..h1 {
-                            let qh = &q[hh * hd..(hh + 1) * hd];
-                            sc2[hh * ctx + t] = point(qh, &kd) * scale;
+                    if let Some(w) = lay.k_norm.as_ref() {
+                        for hh in 0..nkv {
+                            let t = &mut k[hh * hd..(hh + 1) * hd];
+                            Self::rmsnorm(t, w, cfg.eps, &mut tmp);
+                            t.copy_from_slice(&tmp);
                         }
                     }
                 }
-                self.prof[4] += t_scores.elapsed().as_secs_f64();
-                let t_soft = Instant::now();
-                for kvh in 0..nkv {
-                    let h0 = kvh * rep;
-                    let h1 = (h0 + rep).min(nh);
-                    for hh in h0..h1 {
-                        let row = &mut sc2[hh * ctx..hh * ctx + n];
-                        let mut mx = f32::NEG_INFINITY;
-                        for &v in row.iter() { if v > mx { mx = v; } }
-                        let puits = lay.sinks.as_ref().map(|s| s[hh]);
-                        if let Some(s) = puits { if s > mx { mx = s; } }
-                        let mut sum = 0f32;
-                        for v in row.iter_mut() { let e = (*v - mx).exp(); *v = e; sum += e; }
-                        if let Some(s) = puits { sum += (s - mx).exp(); }
-                        let inv = 1.0 / sum;
-                        for v in row.iter_mut() { *v *= inv; }
+                let tr = Instant::now();
+                match cfg.yarn {
+                    Some((f, bf, bl, orig, ms)) => {
+                        Self::rope_yarn(&mut q, nh, hd, pos, cfg.rope_base, f, bf, bl, orig, ms, cfg.n_rot);
+                        Self::rope_yarn(&mut k, nkv, hd, pos, cfg.rope_base, f, bf, bl, orig, ms, cfg.n_rot);
+                    }
+                    None => {
+                        Self::rope(&mut q, nh, hd, pos, cfg.rope_base, cfg.n_rot);
+                        Self::rope(&mut k, nkv, hd, pos, cfg.rope_base, cfg.n_rot);
                     }
                 }
-                self.prof[5] += t_soft.elapsed().as_secs_f64();
-                for kvh in 0..nkv {
-                    let h0 = kvh * rep;
-                    let h1 = (h0 + rep).min(nh);
-                    for hh in h0..h1 {
-                        let out = &mut att[hh * hd..(hh + 1) * hd];
-                        for v in out.iter_mut() { *v = 0.0; }
-                    }
-                    for t in 0..n {
-                        kvc.valeur(kvh, t, &mut vd);
-                        for hh in h0..h1 {
-                            let w = sc2[hh * ctx + t];
-                            let out = &mut att[hh * hd..(hh + 1) * hd];
-                            for (o, x) in out.iter_mut().zip(vd.iter()) { *o += w * x; }
-                        }
-                    }
-                    *attn_events += ((h1 - h0) * n) as u64;
+                if self.qk_topk > 0 {
+                    Self::creuse_tetes(&mut q, nh, hd, self.qk_topk);
+                    Self::creuse_tetes(&mut k, nkv, hd, self.qk_topk);
                 }
-            }
-            // ---- top-k déporté (étape 4 du plan) -------------------------
-            // Le miroir VRAM était interdit dès que `attn_topk > 0` : la
-            // notation restait donc sur CPU, où elle coûte 968 ms par couche à
-            // 1 M de clés. Les trois noyaux du plan (scores sans relecture,
-            // seuil radix, collecte, somme) rendent maintenant le chemin
-            // complet en VRAM — mesuré 3,90 ms pour 14 lignes × 1 M de clés,
-            // contre 539,9 ms pour l'attention complète sur CPU.
-            //
-            // Opt-in par `DRAVE_GPU_TOPK=1` : le chemin CPU reste le défaut tant
-            // que la porte de perplexité n'a pas montré l'égalité, et tout refus
-            // d'un noyau retombe proprement sur le CPU (aucun résultat partiel
-            // n'est publié).
-            // `=0` veut dire NON : la convention `is_ok()` du dépôt fait qu'une
-            // variable mise à 0 par un script active le chemin — un piège de
-            // mesure pour un A/B qui ne bascule que par la variable.
-            let topk_gpu_demande = std::env::var("DRAVE_GPU_TOPK")
-                .map(|v| v != "0" && !v.is_empty()).unwrap_or(false);
-            // Les limites du noyau 3 sont testées ICI, pas après sept
-            // lancements : `--attn-topk 2048` ou `DRAVE_KV_BITS=4` refaisaient
-            // toute la chaîne GPU par couche et par jeton avant de rendre la
-            // main au CPU — plus lent que le CPU seul, et une ligne d'erreur par
-            // couche et par jeton.
-            let topk_gpu_possible = self.attn_topk > 0 && self.attn_topk.min(n) <= 1024
-                && (kvc.bits == 8 || kvc.bits == 32);
-            if topk_gpu_possible && fen == 0 && kv_gpu.is_some()
-                && nkv * rep == nh && n > 1 && topk_gpu_demande
-            {
-                let k = self.attn_topk.min(n);
-                if let Some((idx, m)) = kv_gpu.as_mut().and_then(|v| v.get_mut(l)) {
-                    let machine = crate::gpu::machines()[*idx];
+                self.prof[1] += tr.elapsed().as_secs_f64();
+                // écriture du cache KV à la position courante
+                {
+                    let kvc = &mut kv[l];
+                    for hh in 0..nkv {
+                        kvc.ecrire(hh, pos, &k[hh * hd..(hh + 1) * hd], &v[hh * hd..(hh + 1) * hd]);
+                    }
+                }
+                KvCache::miroir_gpu(kv_gpu.as_deref_mut(), l, &kv[l], pos, 1);
+                // attention groupée
+                let scale = 1.0 / (hd as f32).sqrt();
+                let kvc = &kv[l];
+                // Tampons de déquantification : en f32 ils ne servent pas, en 8 bits
+                // la clé (ou la valeur) y est reconstruite une fois par groupe.
+                let mut kd = vec![0f32; hd];
+                let mut vd = vec![0f32; hd];
+                let n = pos + 1;
+                // ---- chemin GROUPÉ par tête KV (attention complète sans top-k) ----
+                // Mesuré : « attention » croît exactement linéairement avec le
+                // contexte (0,88 / 1,91 / 3,20 ms à 64 / 128 / 256) — c'est la
+                // relecture du cache KV, pas le calcul. Or `rep` têtes de requête
+                // partagent une même tête KV : la boucle par tête relisait donc les
+                // mêmes clés `rep` fois (7 ici). En parcourant les clés une fois par
+                // groupe et en tenant `nh` scores, on divise ce trafic par `rep`.
+                // L'arithmétique par tête est inchangée et dans le même ordre : les
+                // sorties restent bit à bit identiques.
+                let groupe = fen == 0 && self.attn_topk == 0 && rep > 1;
+                // ---- KV déporté (étape E4) : la MÊME attention, calculée en VRAM.
+                // Le noyau a besoin d'un nombre entier de têtes de requête par tête
+                // KV ; la fenêtre et le top-k gardent le chemin CPU.
+                let mut fait_en_gpu = false;
+                if groupe && kv_gpu.is_some() && nkv * rep == nh && n > 1 {
+                    let nsplit = (n / 256).clamp(1, 128);
+                    let besoin = nsplit * nkv * rep * (hd + 2);
+                    if attn_gpu_part.len() < besoin { attn_gpu_part.resize(besoin, 0.0); }
                     let puits: Option<Vec<f32>> = lay.sinks.as_ref()
                         .map(|s| (0..nh).map(|h| s[h]).collect());
-                    // Noyau fusionné (descente + collecte + somme en UN lancement)
-                    // tant qu'il est mesuré plus rapide que la chaîne séparée :
-                    // 0,13 contre 0,22 ms à 4 k clés, 0,85 contre 0,89 à 131 k —
-                    // au-delà (262 k : 1,58 contre 1,35) la chaîne reprend, car
-                    // ses 1 792 blocs saturent mieux la VRAM que les 14 blocs du
-                    // noyau fusionné. Le seuil est MESURÉ, pas choisi.
-                    const SEUIL_NOYAU4: usize = 131_072;
-                    if n <= SEUIL_NOYAU4 {
+                    if let Some((idx, m)) = kv_gpu.as_mut().and_then(|v| v.get_mut(l)) {
+                        let machine = crate::gpu::machines()[*idx];
+                        if machine.attn_kv(m, &q[..nh * hd], n, scale, puits.as_deref(),
+                                           nsplit, attn_gpu_part, &mut att[..]) {
+                            *attn_events += (nh * n) as u64;
+                            fait_en_gpu = true;
+                        }
+                    }
+                }
+                if groupe && !fait_en_gpu {
+                    let t_scores = Instant::now();
+                    for kvh in 0..nkv {
+                        let h0 = kvh * rep;
+                        let h1 = (h0 + rep).min(nh);
+                        for t in 0..n {
+                            kvc.cle(kvh, t, &mut kd);
+                            for hh in h0..h1 {
+                                let qh = &q[hh * hd..(hh + 1) * hd];
+                                sc2[hh * ctx + t] = point(qh, &kd) * scale;
+                            }
+                        }
+                    }
+                    self.prof[4] += t_scores.elapsed().as_secs_f64();
+                    let t_soft = Instant::now();
+                    for kvh in 0..nkv {
+                        let h0 = kvh * rep;
+                        let h1 = (h0 + rep).min(nh);
+                        for hh in h0..h1 {
+                            let row = &mut sc2[hh * ctx..hh * ctx + n];
+                            let mut mx = f32::NEG_INFINITY;
+                            for &v in row.iter() { if v > mx { mx = v; } }
+                            let puits = lay.sinks.as_ref().map(|s| s[hh]);
+                            if let Some(s) = puits { if s > mx { mx = s; } }
+                            let mut sum = 0f32;
+                            for v in row.iter_mut() { let e = (*v - mx).exp(); *v = e; sum += e; }
+                            if let Some(s) = puits { sum += (s - mx).exp(); }
+                            let inv = 1.0 / sum;
+                            for v in row.iter_mut() { *v *= inv; }
+                        }
+                    }
+                    self.prof[5] += t_soft.elapsed().as_secs_f64();
+                    for kvh in 0..nkv {
+                        let h0 = kvh * rep;
+                        let h1 = (h0 + rep).min(nh);
+                        for hh in h0..h1 {
+                            let out = &mut att[hh * hd..(hh + 1) * hd];
+                            for v in out.iter_mut() { *v = 0.0; }
+                        }
+                        for t in 0..n {
+                            kvc.valeur(kvh, t, &mut vd);
+                            for hh in h0..h1 {
+                                let w = sc2[hh * ctx + t];
+                                let out = &mut att[hh * hd..(hh + 1) * hd];
+                                for (o, x) in out.iter_mut().zip(vd.iter()) { *o += w * x; }
+                            }
+                        }
+                        *attn_events += ((h1 - h0) * n) as u64;
+                    }
+                }
+                // ---- top-k déporté (étape 4 du plan) -------------------------
+                // Le miroir VRAM était interdit dès que `attn_topk > 0` : la
+                // notation restait donc sur CPU, où elle coûte 968 ms par couche à
+                // 1 M de clés. Les trois noyaux du plan (scores sans relecture,
+                // seuil radix, collecte, somme) rendent maintenant le chemin
+                // complet en VRAM — mesuré 3,90 ms pour 14 lignes × 1 M de clés,
+                // contre 539,9 ms pour l'attention complète sur CPU.
+                //
+                // Opt-in par `DRAVE_GPU_TOPK=1` : le chemin CPU reste le défaut tant
+                // que la porte de perplexité n'a pas montré l'égalité, et tout refus
+                // d'un noyau retombe proprement sur le CPU (aucun résultat partiel
+                // n'est publié).
+                // `=0` veut dire NON : la convention `is_ok()` du dépôt fait qu'une
+                // variable mise à 0 par un script active le chemin — un piège de
+                // mesure pour un A/B qui ne bascule que par la variable.
+                let topk_gpu_demande = std::env::var("DRAVE_GPU_TOPK")
+                    .map(|v| v != "0" && !v.is_empty()).unwrap_or(false);
+                // Les limites du noyau 3 sont testées ICI, pas après sept
+                // lancements : `--attn-topk 2048` ou `DRAVE_KV_BITS=4` refaisaient
+                // toute la chaîne GPU par couche et par jeton avant de rendre la
+                // main au CPU — plus lent que le CPU seul, et une ligne d'erreur par
+                // couche et par jeton.
+                let topk_gpu_possible = self.attn_topk > 0 && self.attn_topk.min(n) <= 1024
+                    && (kvc.bits == 8 || kvc.bits == 32);
+                if topk_gpu_possible && fen == 0 && kv_gpu.is_some()
+                    && nkv * rep == nh && n > 1 && topk_gpu_demande
+                {
+                    let k = self.attn_topk.min(n);
+                    if let Some((idx, m)) = kv_gpu.as_mut().and_then(|v| v.get_mut(l)) {
+                        let machine = crate::gpu::machines()[*idx];
+                        let puits: Option<Vec<f32>> = lay.sinks.as_ref()
+                            .map(|s| (0..nh).map(|h| s[h]).collect());
+                        // Noyau fusionné (descente + collecte + somme en UN lancement)
+                        // tant qu'il est mesuré plus rapide que la chaîne séparée :
+                        // 0,13 contre 0,22 ms à 4 k clés, 0,85 contre 0,89 à 131 k —
+                        // au-delà (262 k : 1,58 contre 1,35) la chaîne reprend, car
+                        // ses 1 792 blocs saturent mieux la VRAM que les 14 blocs du
+                        // noyau fusionné. Le seuil est MESURÉ, pas choisi.
+                        const SEUIL_NOYAU4: usize = 131_072;
+                        if n <= SEUIL_NOYAU4 {
+                            let mut ok = machine.attn_scores_sans_relecture(m, &q[..nh * hd], n, scale);
+                            if ok {
+                                ok = machine.attn_topk_tout(m, nh, n, k, hd, rep, puits.as_deref(),
+                                                            &mut att[..nh * hd]);
+                            }
+                            if ok {
+                                *attn_events += (nh * k) as u64;
+                                fait_en_gpu = true;
+                            } else if !TOPK_GPU_ECHEC.swap(true, std::sync::atomic::Ordering::Relaxed) {
+                                eprintln!("[topk] noyau fusionné en échec : repli CPU (message unique)");
+                            }
+                        } else {
+                        let mut pref = vec![0u32; nh];
+                        let mut dessus = vec![0usize; nh];
+                        let mut hist = vec![0u32; nh * 256];
                         let mut ok = machine.attn_scores_sans_relecture(m, &q[..nh * hd], n, scale);
+                        let mut dec = 24i32;
+                        while ok && dec >= 0 {
+                            ok = machine.attn_topk_histo(m, nh, n, dec, &pref, &mut hist);
+                            for hh in 0..nh {
+                                let h = &hist[hh * 256..(hh + 1) * 256];
+                                let mut cum = dessus[hh];
+                                let mut b = 256usize;
+                                while b > 0 && cum < k { b -= 1; cum += h[b] as usize; }
+                                dessus[hh] = cum - h[b] as usize;
+                                pref[hh] = (pref[hh] << 8) | b as u32;
+                            }
+                            dec -= 8;
+                        }
+                        let besoin: Vec<i32> = (0..nh).map(|hh| (k - dessus[hh]) as i32).collect();
+                        let mut sel = vec![-1i32; nh * k];
                         if ok {
-                            ok = machine.attn_topk_tout(m, nh, n, k, hd, rep, puits.as_deref(),
-                                                        &mut att[..nh * hd]);
+                            ok = machine.attn_topk_collecte(m, nh, n, k, &pref, &besoin, &mut sel);
+                        }
+                        // Une case non écrite laisserait le noyau 3 lire un indice
+                        // PÉRIMÉ du jeton précédent (le tampon VRAM n'est pas remis à
+                        // zéro) : sortie plausible et fausse, publiée sans un mot. Le
+                        // contrôle est gratuit — `sel` vient d'être recopié.
+                        if ok && sel.iter().any(|&v| v < 0) {
+                            eprintln!("[topk] collecte incomplète (case non écrite) : repli CPU");
+                            ok = false;
                         }
                         if ok {
+                            ok = machine.attn_topk_somme(m, nh, n, k, hd, rep, puits.as_deref(),
+                                                         &mut att[..nh * hd]);
+                        }
+                        if ok {
+                            // Même unité que le chemin CPU (`iter.len()` = k paires
+                            // retenues par tête) : compter `nh * n` ici faisait
+                            // varier la ligne « paires (requête, clé) par token »
+                            // d'un facteur n/k selon le drapeau, à calcul identique.
                             *attn_events += (nh * k) as u64;
                             fait_en_gpu = true;
                         } else if !TOPK_GPU_ECHEC.swap(true, std::sync::atomic::Ordering::Relaxed) {
-                            eprintln!("[topk] noyau fusionné en échec : repli CPU (message unique)");
+                            // Un échec par couche et par jeton ferait des milliers de
+                            // lignes : on le dit UNE fois, et le repli CPU est
+                            // silencieux ensuite (les raisons, elles, sont imprimées
+                            // par le noyau fautif).
+                            eprintln!("[topk] chaîne déportée en échec : repli CPU (message unique)");
                         }
-                    } else {
-                    let mut pref = vec![0u32; nh];
-                    let mut dessus = vec![0usize; nh];
-                    let mut hist = vec![0u32; nh * 256];
-                    let mut ok = machine.attn_scores_sans_relecture(m, &q[..nh * hd], n, scale);
-                    let mut dec = 24i32;
-                    while ok && dec >= 0 {
-                        ok = machine.attn_topk_histo(m, nh, n, dec, &pref, &mut hist);
-                        for hh in 0..nh {
-                            let h = &hist[hh * 256..(hh + 1) * 256];
-                            let mut cum = dessus[hh];
-                            let mut b = 256usize;
-                            while b > 0 && cum < k { b -= 1; cum += h[b] as usize; }
-                            dessus[hh] = cum - h[b] as usize;
-                            pref[hh] = (pref[hh] << 8) | b as u32;
                         }
-                        dec -= 8;
-                    }
-                    let besoin: Vec<i32> = (0..nh).map(|hh| (k - dessus[hh]) as i32).collect();
-                    let mut sel = vec![-1i32; nh * k];
-                    if ok {
-                        ok = machine.attn_topk_collecte(m, nh, n, k, &pref, &besoin, &mut sel);
-                    }
-                    // Une case non écrite laisserait le noyau 3 lire un indice
-                    // PÉRIMÉ du jeton précédent (le tampon VRAM n'est pas remis à
-                    // zéro) : sortie plausible et fausse, publiée sans un mot. Le
-                    // contrôle est gratuit — `sel` vient d'être recopié.
-                    if ok && sel.iter().any(|&v| v < 0) {
-                        eprintln!("[topk] collecte incomplète (case non écrite) : repli CPU");
-                        ok = false;
-                    }
-                    if ok {
-                        ok = machine.attn_topk_somme(m, nh, n, k, hd, rep, puits.as_deref(),
-                                                     &mut att[..nh * hd]);
-                    }
-                    if ok {
-                        // Même unité que le chemin CPU (`iter.len()` = k paires
-                        // retenues par tête) : compter `nh * n` ici faisait
-                        // varier la ligne « paires (requête, clé) par token »
-                        // d'un facteur n/k selon le drapeau, à calcul identique.
-                        *attn_events += (nh * k) as u64;
-                        fait_en_gpu = true;
-                    } else if !TOPK_GPU_ECHEC.swap(true, std::sync::atomic::Ordering::Relaxed) {
-                        // Un échec par couche et par jeton ferait des milliers de
-                        // lignes : on le dit UNE fois, et le repli CPU est
-                        // silencieux ensuite (les raisons, elles, sont imprimées
-                        // par le noyau fautif).
-                        eprintln!("[topk] chaîne déportée en échec : repli CPU (message unique)");
-                    }
                     }
                 }
-            }
-            for hh in 0..(if groupe || fait_en_gpu { 0 } else { nh }) {
-                let kvh = hh / rep;
-                let qh = &q[hh * hd..(hh + 1) * hd];
-                // produit scalaire écrit en itérateurs : la forme indexée
-                // (`for d in 0..hd { s += qh[d]*kt[d] }`) ne se vectorise pas —
-                // mesuré à 1,9 GFLOP/s sur un cœur, soit 0,6 opération par cycle.
-                // fenêtre glissante : seules les clés de la fenêtre sont notées,
-                // plus quelques puits au début (leur attention sert de drain).
-                let nw = pos + 1;
-                let lo = if fen > 0 && nw > fen {
-                    nw - fen
-                } else { 0 };
-                let ns = if lo > 0 { self.attn_sinks.min(lo) } else { 0 };
-                // les puits sont NOTÉS comme les autres : leur donner un score
-                // arbitraire (0) fausse la distribution au lieu de la drainer.
-                for t in (0..ns).chain(lo..nw) {
-                    kvc.cle(kvh, t, &mut kd);
-                    sc[t] = point(qh, &kd) * scale;
-                }
-                for t in ns..lo { sc[t] = f32::NEG_INFINITY; }
-                // Attention à k clés. Le CALCUL DES SCORES reste sur toutes les
-                // clés — il faut les noter pour savoir lesquelles garder. En
-                // revanche le softmax ET la somme pondérée n'itèrent plus que sur
-                // les k retenues : c'est là qu'est le O(N·k). Masquer sans
-                // réécrire les boucles ne gagnait rien (mesuré : 12,4 → 12,5 ms).
-                let n = pos + 1;
-                let k = if self.attn_topk > 0 { self.attn_topk.min(n) } else { n };
-                if fen > 0 {
-                    // pas de top-k : on note exactement les clés de la fenêtre
-                    attn_idx.clear();
+                for hh in 0..(if groupe || fait_en_gpu { 0 } else { nh }) {
+                    let kvh = hh / rep;
+                    let qh = &q[hh * hd..(hh + 1) * hd];
+                    // produit scalaire écrit en itérateurs : la forme indexée
+                    // (`for d in 0..hd { s += qh[d]*kt[d] }`) ne se vectorise pas —
+                    // mesuré à 1,9 GFLOP/s sur un cœur, soit 0,6 opération par cycle.
+                    // fenêtre glissante : seules les clés de la fenêtre sont notées,
+                    // plus quelques puits au début (leur attention sert de drain).
+                    let nw = pos + 1;
+                    let lo = if fen > 0 && nw > fen {
+                        nw - fen
+                    } else { 0 };
                     let ns = if lo > 0 { self.attn_sinks.min(lo) } else { 0 };
-                    attn_idx.extend((0..ns as u32).chain(lo as u32..n as u32));
-                    let iter: &[u32] = &attn_idx;
+                    // les puits sont NOTÉS comme les autres : leur donner un score
+                    // arbitraire (0) fausse la distribution au lieu de la drainer.
+                    for t in (0..ns).chain(lo..nw) {
+                        kvc.cle(kvh, t, &mut kd);
+                        sc[t] = point(qh, &kd) * scale;
+                    }
+                    for t in ns..lo { sc[t] = f32::NEG_INFINITY; }
+                    // Attention à k clés. Le CALCUL DES SCORES reste sur toutes les
+                    // clés — il faut les noter pour savoir lesquelles garder. En
+                    // revanche le softmax ET la somme pondérée n'itèrent plus que sur
+                    // les k retenues : c'est là qu'est le O(N·k). Masquer sans
+                    // réécrire les boucles ne gagnait rien (mesuré : 12,4 → 12,5 ms).
+                    let n = pos + 1;
+                    let k = if self.attn_topk > 0 { self.attn_topk.min(n) } else { n };
+                    if fen > 0 {
+                        // pas de top-k : on note exactement les clés de la fenêtre
+                        attn_idx.clear();
+                        let ns = if lo > 0 { self.attn_sinks.min(lo) } else { 0 };
+                        attn_idx.extend((0..ns as u32).chain(lo as u32..n as u32));
+                        let iter: &[u32] = &attn_idx;
+                        *attn_events += iter.len() as u64;
+                        let mut mx = f32::NEG_INFINITY;
+                        for &t in iter { let v = sc[t as usize]; if v > mx { mx = v; } }
+                        // Le puits appris compte dans le dénominateur même quand la
+                        // fenêtre est active — c'est même son rôle : drainer
+                        // l'attention que la fenêtre ne peut pas absorber.
+                        let puits = lay.sinks.as_ref().map(|s| s[hh]);
+                        if let Some(s) = puits { if s > mx { mx = s; } }
+                        let mut sum = 0f32;
+                        for &t in iter { let e = (sc[t as usize] - mx).exp(); sc[t as usize] = e; sum += e; }
+                        if let Some(s) = puits { sum += (s - mx).exp(); }
+                        let inv = 1.0 / sum;
+                        for &t in iter { sc[t as usize] *= inv; }
+                        let out = &mut att[hh * hd..(hh + 1) * hd];
+                        for v in out.iter_mut() { *v = 0.0; }
+                        for &t in iter {
+                            let w = sc[t as usize];
+                            kvc.valeur(kvh, t as usize, &mut vd);
+                            for (o, x) in out.iter_mut().zip(vd.iter()) { *o += w * x; }
+                        }
+                        continue;
+                    }
+                    attn_idx.clear();
+                    if k < n {
+                        // ⚠️ `select_nth_unstable_by` n'est PAS stable : lequel des
+                        // ex æquo tombe avant le rang k dépend de la partition. Le
+                        // noyau GPU, lui, garde les PREMIERS égaux par ordre d'indice
+                        // — deux chemins qui prétendaient au même départage et ne
+                        // l'avaient pas (relevé par une relecture adversariale). On
+                        // garde la sélection pour trouver la VALEUR du k-ième (elle
+                        // est juste même si l'élément choisi ne l'est pas), puis on
+                        // reconstruit l'ensemble en ordre d'indice : au-dessus du
+                        // seuil d'abord, puis les premiers égaux — exactement la
+                        // convention du noyau.
+                        attn_idx.extend(0..n as u32);
+                        attn_idx.select_nth_unstable_by(k, |&a, &b| {
+                            sc[b as usize].partial_cmp(&sc[a as usize]).unwrap()
+                        });
+                        let seuil = sc[attn_idx[k] as usize];
+                        attn_idx.clear();
+                        let mut sup = 0usize;
+                        for t in 0..n {
+                            if sc[t] > seuil { attn_idx.push(t as u32); sup += 1; }
+                        }
+                        let besoin = k - sup;
+                        let mut pris = 0usize;
+                        for t in 0..n {
+                            if sc[t] == seuil && pris < besoin {
+                                attn_idx.push(t as u32);
+                                pris += 1;
+                            }
+                        }
+                    }
+                    // en mode dense, seules les n premières clés existent : itérer
+                    // sur tout le contexte lirait des scores au-delà de pos.
+                    let iter: &[u32] = if k < n { &attn_idx } else { &attn_all[..n] };
                     *attn_events += iter.len() as u64;
+                    // softmax stable sur les seules clés retenues. Le puits appris
+                    // compte dans le dénominateur MÊME en attention complète : c'est
+                    // un logit de plus (HF concatène la colonne du puits avant le
+                    // softmax, puis la retire du numérateur). L'oublier ici ne
+                    // touchait que les couches non fenêtrées — sur gpt-oss, la
+                    // moitié du réseau, et précisément celles qui voient loin.
+                    let puits = lay.sinks.as_ref().map(|s| s[hh]);
                     let mut mx = f32::NEG_INFINITY;
                     for &t in iter { let v = sc[t as usize]; if v > mx { mx = v; } }
-                    // Le puits appris compte dans le dénominateur même quand la
-                    // fenêtre est active — c'est même son rôle : drainer
-                    // l'attention que la fenêtre ne peut pas absorber.
-                    let puits = lay.sinks.as_ref().map(|s| s[hh]);
                     if let Some(s) = puits { if s > mx { mx = s; } }
                     let mut sum = 0f32;
                     for &t in iter { let e = (sc[t as usize] - mx).exp(); sc[t as usize] = e; sum += e; }
                     if let Some(s) = puits { sum += (s - mx).exp(); }
                     let inv = 1.0 / sum;
                     for &t in iter { sc[t as usize] *= inv; }
+                    // somme pondérée : on accumule par clé dans le vecteur de sortie,
+                    // ce qui lit vc séquentiellement au lieu de le parcourir à stride.
                     let out = &mut att[hh * hd..(hh + 1) * hd];
                     for v in out.iter_mut() { *v = 0.0; }
                     for &t in iter {
@@ -3958,68 +4344,11 @@ dynamique de {dyn_:.3e} (relatif {:.2e})", mx / dyn_.max(1e-9));
                         kvc.valeur(kvh, t as usize, &mut vd);
                         for (o, x) in out.iter_mut().zip(vd.iter()) { *o += w * x; }
                     }
-                    continue;
-                }
-                attn_idx.clear();
-                if k < n {
-                    // ⚠️ `select_nth_unstable_by` n'est PAS stable : lequel des
-                    // ex æquo tombe avant le rang k dépend de la partition. Le
-                    // noyau GPU, lui, garde les PREMIERS égaux par ordre d'indice
-                    // — deux chemins qui prétendaient au même départage et ne
-                    // l'avaient pas (relevé par une relecture adversariale). On
-                    // garde la sélection pour trouver la VALEUR du k-ième (elle
-                    // est juste même si l'élément choisi ne l'est pas), puis on
-                    // reconstruit l'ensemble en ordre d'indice : au-dessus du
-                    // seuil d'abord, puis les premiers égaux — exactement la
-                    // convention du noyau.
-                    attn_idx.extend(0..n as u32);
-                    attn_idx.select_nth_unstable_by(k, |&a, &b| {
-                        sc[b as usize].partial_cmp(&sc[a as usize]).unwrap()
-                    });
-                    let seuil = sc[attn_idx[k] as usize];
-                    attn_idx.clear();
-                    let mut sup = 0usize;
-                    for t in 0..n {
-                        if sc[t] > seuil { attn_idx.push(t as u32); sup += 1; }
-                    }
-                    let besoin = k - sup;
-                    let mut pris = 0usize;
-                    for t in 0..n {
-                        if sc[t] == seuil && pris < besoin {
-                            attn_idx.push(t as u32);
-                            pris += 1;
-                        }
-                    }
-                }
-                // en mode dense, seules les n premières clés existent : itérer
-                // sur tout le contexte lirait des scores au-delà de pos.
-                let iter: &[u32] = if k < n { &attn_idx } else { &attn_all[..n] };
-                *attn_events += iter.len() as u64;
-                // softmax stable sur les seules clés retenues. Le puits appris
-                // compte dans le dénominateur MÊME en attention complète : c'est
-                // un logit de plus (HF concatène la colonne du puits avant le
-                // softmax, puis la retire du numérateur). L'oublier ici ne
-                // touchait que les couches non fenêtrées — sur gpt-oss, la
-                // moitié du réseau, et précisément celles qui voient loin.
-                let puits = lay.sinks.as_ref().map(|s| s[hh]);
-                let mut mx = f32::NEG_INFINITY;
-                for &t in iter { let v = sc[t as usize]; if v > mx { mx = v; } }
-                if let Some(s) = puits { if s > mx { mx = s; } }
-                let mut sum = 0f32;
-                for &t in iter { let e = (sc[t as usize] - mx).exp(); sc[t as usize] = e; sum += e; }
-                if let Some(s) = puits { sum += (s - mx).exp(); }
-                let inv = 1.0 / sum;
-                for &t in iter { sc[t as usize] *= inv; }
-                // somme pondérée : on accumule par clé dans le vecteur de sortie,
-                // ce qui lit vc séquentiellement au lieu de le parcourir à stride.
-                let out = &mut att[hh * hd..(hh + 1) * hd];
-                for v in out.iter_mut() { *v = 0.0; }
-                for &t in iter {
-                    let w = sc[t as usize];
-                    kvc.valeur(kvh, t as usize, &mut vd);
-                    for (o, x) in out.iter_mut().zip(vd.iter()) { *o += w * x; }
                 }
             }
+            // Chronométré APRÈS la branche : les deux chemins d'attention
+            // doivent apparaître dans le même poste, sinon la comparaison des
+            // profils entre un modèle MLA et un modèle dense serait fausse.
             self.prof[2] += ta.elapsed().as_secs_f64();
             let tf = Instant::now();
             Self::matvec(pool, &lay.wo, &att, &mut o, events, self.act_levels, self.act_thresh, tk(3), self.act_renorm, &mut scratch, self.seuil_push);
@@ -4106,37 +4435,40 @@ dynamique de {dyn_:.3e} (relatif {:.2e})", mx / dyn_.max(1e-9));
                         continue;
                     }
                     let mg = moe.gate[kexp].expert(loc);
-                    Self::matvec_q4(pool, &mg, &hn, &mut gate, self.act_levels,
-                                    self.act_thresh, tk(4), self.act_renorm, &mut scratch,
-                                    moe.biais_gate.as_ref().map(|b| &b[e as usize * moe.n_ff..]));
+                    Self::matvec4_ou_iq(pool, &moe.gate[kexp], loc, &hn, &mut gate, self.act_levels,
+                                        self.act_thresh, tk(4), self.act_renorm, &mut scratch,
+                                        moe.biais_gate.as_ref().map(|b| &b[e as usize * moe.n_ff..]),
+                                        threads_iq);
                     let mu = moe.up[kexp].expert(loc);
-                    Self::matvec_q4(pool, &mu, &hn, &mut up, self.act_levels,
-                                    self.act_thresh, tk(5), self.act_renorm, &mut scratch,
-                                    moe.biais_up.as_ref().map(|b| &b[e as usize * moe.n_ff..]));
+                    Self::matvec4_ou_iq(pool, &moe.up[kexp], loc, &hn, &mut up, self.act_levels,
+                                        self.act_thresh, tk(5), self.act_renorm, &mut scratch,
+                                        moe.biais_up.as_ref().map(|b| &b[e as usize * moe.n_ff..]),
+                                        threads_iq);
                     Self::activation(&mut gate, &up, cfg.ffn_exp, cfg.ffn_act_oss);
                     Self::compter_neurones(&mut self.profil_neurones, largeur_profil,
                                            l, &gate[..cfg.ffn_exp]);
                     let md = moe.down[kexp].expert(loc);
-                    Self::matvec_q4(pool, &md, &gate, &mut exp_out, self.act_levels,
+                    Self::matvec4_ou_iq(pool, &moe.down[kexp], loc, &gate, &mut exp_out, self.act_levels,
                                     self.act_thresh, tk(6), self.act_renorm, &mut scratch,
                                     // Le biais de descente se découpe par la
                                     // largeur de SORTIE (h), pas par n_ff : les
                                     // deux coïncident sur gpt-oss (2 880) mais
                                     // pas sur Qwen3-MoE (768 contre 2 048).
-                                    moe.biais_down.as_ref().map(|b| &b[e as usize * h..]));
+                                    moe.biais_down.as_ref().map(|b| &b[e as usize * h..]),
+                                    threads_iq);
                     for i in 0..h { down[i] += w_exp * exp_out[i]; }
                 }
                 if let Some((sg, su, sd)) = moe.shexp.as_ref() {
-                    let mg = sg.expert(0);
-                    Self::matvec_q4(pool, &mg, &hn, &mut gate, self.act_levels,
-                                    self.act_thresh, tk(4), self.act_renorm, &mut scratch, None);
-                    let mu = su.expert(0);
-                    Self::matvec_q4(pool, &mu, &hn, &mut up, self.act_levels,
-                                    self.act_thresh, tk(5), self.act_renorm, &mut scratch, None);
+                    Self::matvec4_ou_iq(pool, sg, 0, &hn, &mut gate, self.act_levels,
+                                    self.act_thresh, tk(4), self.act_renorm, &mut scratch, None,
+                                    threads_iq);
+                    Self::matvec4_ou_iq(pool, su, 0, &hn, &mut up, self.act_levels,
+                                    self.act_thresh, tk(5), self.act_renorm, &mut scratch, None,
+                                    threads_iq);
                     Self::activation(&mut gate, &up, cfg.ffn_exp, cfg.ffn_act_oss);
-                    let md = sd.expert(0);
-                    Self::matvec_q4(pool, &md, &gate, &mut exp_out, self.act_levels,
-                                    self.act_thresh, tk(6), self.act_renorm, &mut scratch, None);
+                    Self::matvec4_ou_iq(pool, sd, 0, &gate, &mut exp_out, self.act_levels,
+                                    self.act_thresh, tk(6), self.act_renorm, &mut scratch, None,
+                                    threads_iq);
                     for i in 0..h { down[i] += exp_out[i]; }
                 }
                 if let Some((gl, gg)) = self.ffn_gain {
