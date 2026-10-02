@@ -64898,3 +64898,21 @@ hint: Disable this message with "git config set advice.addIgnoredFile false"
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git status --short | head -5; git add -A tools/ref_logits.cpp drave-core/src/model.rs && git commit -q -F - <<'EOF'\nOutils de comparaison : les POSITIONS, pas seulement la position 0\n\n`ref_logits --tensors` imprime maintenant tout … [811 caractères tronqués]`
+
+  ```
+M  drave-core/src/model.rs
+ M journal/README.md
+ M journal/sessions/MANIFEST.md
+ M journal/sessions/bbd6969f-0f70-42b2-8951-64d1f2f36d2e/digest.md
+ M journal/sessions/bbd6969f-0f70-42b2-8951-64d1f2f36d2e/rapport.md
+118445c Outils de comparaison : les POSITIONS, pas seulement la position 0
+  ```
+
+- **bash** `{"command": "grep -E \"couche 0 pos [0-3] x\\[\\.\\.8\\]\" /tmp/glm53_pos.log; grep -E \"perplexité\" /tmp/glm53_pos.log | tail -1; TZ=America/New_York date \"+HAE %H:%M\"", "description": "Check the dump progress before closing"}`
+
+  ```
+[mla] couche 0 pos 0 x[..8] 4.01039e-3 1.97871e-4 1.89184e-3 1.61566e-3 -3.03016e-3 -3.91231e-3 3.35817e-4 -5.76782e-4
+HAE 07:49
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat >> reports/rapport-mla-experts.md <<'EOF'\n\n---\n\n## Annexe — l'écart à la position 3 : ce qui est déjà exclu\n\nComparaison étagée des deux moteurs sur la **couche 0** de GLM-5.3, aux\npositions 0 à 3 (`ref_logits --tensors '^ … [1507 caractères tronqués]`

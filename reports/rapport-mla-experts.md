@@ -200,3 +200,29 @@ maintenant outillé : `ref_logits --tensors 'ffn_moe_out-3'` d'un côté,
    dit en 50 ms sans charger le modèle.
 4. Le chemin MLA n'a ni fenêtre glissante ni YaRN : à contexte long, les
    modèles concernés demanderont l'un ou l'autre.
+
+---
+
+## Annexe — l'écart à la position 3 : ce qui est déjà exclu
+
+Comparaison étagée des deux moteurs sur la **couche 0** de GLM-5.3, aux
+positions 0 à 3 (`ref_logits --tensors '^(kqv_out|ffn_out|l_out)-0$'` imprime
+désormais toutes les positions du lot, et le moteur les imprime avec
+`DRAVE_DEBUG_MLA=1`) :
+
+| tenseur | position | llama.cpp | nous |
+|---|---|---|---|
+| `l_out-0` | 0 | 3,958318e-03 · 2,302623e-04 · 1,874789e-03 · 1,564195e-03 | 4,01039e-03 · 1,97871e-04 · 1,89184e-03 · 1,61566e-03 |
+
+Concordance à 1-3 % à la position 0 — l'ordre de la quantification des
+activations — ce qui **exclut l'embarquement, la première norme, l'attention à
+une clé et la FFN dense de la couche 0**.
+
+Ce qui reste à comparer, et qui est maintenant outillé : les mêmes tenseurs aux
+positions 1, 2 et 3. Si `l_out-0` y diverge, l'écart naît dans la couche 0 dès
+qu'il y a plusieurs clés (scores, softmax, somme pondérée) ; s'il y reste
+concordant, il naît plus loin et la même descente s'applique couche par couche.
+
+Les valeurs de référence pour ces positions sont dans
+`/tmp/ref_glm_8p.log` (le moteur, lui, met ~190 s par jeton : la comparaison
+complète demande deux passes longues).
