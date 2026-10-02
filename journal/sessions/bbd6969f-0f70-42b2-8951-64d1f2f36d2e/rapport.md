@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 80.1 h |
+| Durée | 80.2 h |
 | Tours | 69 |
-| Messages | 3377 |
-| Appels d'outils | 3197 |
+| Messages | 3394 |
+| Appels d'outils | 3214 |
 | Fichiers touchés | 74 |
-| Commandes | 2797 |
+| Commandes | 2814 |
 | Sous-agents | 22 |
-| Commits | 287 |
+| Commits | 288 |
 | Compactages de contexte | 4 |
 
 ## Objectifs déclarés
@@ -3526,7 +3526,7 @@ Sur cette session, les mesures m
 
 ### Tour 69 — implémente toute les optimisation et détection de matériel avec heuristiques de configuration automatique.
 
-*158 appels d'outils.* Actions notables :
+*175 appels d'outils.* Actions notables :
 
 - bash — Inspect existing GPU detection
 - write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/materiel.rs`
@@ -3542,11 +3542,11 @@ Sur cette session, les mesures m
 - bash — Read KV bits resolution
 - bash — Integrate KV and VRAM heuristics
 - bash — Lighten detection and run gates
-- … et 142 autres
+- … et 159 autres
 
 **Synthèse produite :**
 
-⏵ Q2_K validé. Je commite et j'attaque IQ2_XXS (93 Go de V4.1).
+⏵ **IQ2_XXS : écart 0,00e+00, 256/256 exactes.** La vérification croisée a attrapé un bug invisible à la lecture.
 
 ## 3. Travail accompli
 
@@ -3696,7 +3696,7 @@ Sur cette session, les mesures m
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 2757 autres
+- … et 2774 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -3824,7 +3824,7 @@ Sur cette session, les mesures m
 
 ## 5. Erreurs rencontrées
 
-167 sorties en erreur ou divergentes. Les premières :
+168 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : a8f2635f8 docs: record which models this box is good at, and why src/llama-hparams.cpp:8:void llama_hparams::set_swa_pattern(uint32_t n_pattern, bool dense_first) { src/llama-hparams.h:308:    void se
 - **T1** : 511 tokens notés — perplexité cumulée 247.031  (4.9 tok/s) === perplexité 247.0308 sur 511 tokens (0 événements, 104.5 s) ===  ### B3 harmony assistant 511 --- ref --- 0.0 0.0 0:00 ls: cannot access '
@@ -4131,4 +4131,5 @@ Sur cette session, les mesures m
 - Materiel : estimation du cout par jeton, d'apres les debits mesures  D'abord FAUX : le modele placait en VRAM les experts LUS par jeton, alors qu'ils viennent d
 - Prelecture : quatrieme mecanisme mesure, quatrieme fois sans effet  - madvise sur les experts apres le routage : 25,73 contre 25,80 s (0,3 %) ; - madvise sur to
 - Q2_K : dequantification implementee et verifiee contre ggml  Q2_K, c'est 59 Go des ffn_down_exps de DeepSeek-V4.1 -- sans lui, cette part du modele restait illi
+- IQ2_XXS : 93 Go de V4.1 debloques, et un bug que la lecture n'aurait pas vu  Tables de grille EXTRAITES de ggml-common.h par un programme C (GGML_COMMON_IMPL_C)
 

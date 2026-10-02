@@ -10,6 +10,7 @@
 
 mod clusters;
 mod engine;
+mod formats;
 mod gguf;
 mod list;
 mod materiel;
@@ -76,6 +77,7 @@ sont ignorés", modes.len(), modes.join(", "), modes[0]);
     }
     if opt.materiel { run_materiel(&opt); return; }
     if opt.sonder_engram > 0 { run_sonder_engram(opt.sonder_engram); return; }
+    if let Some(b) = opt.bloc.clone() { run_bloc(&b); return; }
     if let Some(f) = opt.banc_vision.clone() { run_banc_vision(&f); return; }
     if let Some(adresse) = opt.flux_serveur.clone() { run_serveur_flux(opt, &adresse); return; }
     if let Some(pair) = opt.ppl_reparti.clone() { run_ppl_reparti(opt, &pair); return; }
@@ -513,6 +515,11 @@ struct Options {
     /// indices dispersés. Démontre qu'une table de 101 Go s'adresse sans se
     /// charger.
     sonder_engram: usize,
+    /// `TENSEUR:INDEX` : déquantifie UN bloc et l'imprime. Sert à confronter
+    /// notre déquantification à celle de ggml sur un bloc réel, sans dépendre
+    /// d'une réimplémentation en script — c'est le code du moteur qu'on veut
+    /// éprouver, pas une copie.
+    bloc: Option<String>,
     /// Fichier d'identifiants de tokens : la tête de sortie ne calcule que
     /// ceux-là. **Génération seulement** — une perplexité calculée sur un
     /// vocabulaire restreint n'est comparable à rien.
@@ -641,6 +648,7 @@ fn analyser(args: &[String]) -> Options {
             "--act-renorm" => { o.act_renorm = true; 1 }
             "--materiel" => { o.materiel = true; 1 }
             "--sonder-engram" => { o.sonder_engram = suivant(i).parse().unwrap_or(1000); 2 }
+            "--bloc" if i + 1 < args.len() => { o.bloc = Some(suivant(i).clone()); 2 }
             "--tete-restreinte" if i + 1 < args.len() => {
                 o.tete_restreinte = Some(suivant(i).clone()); 2 }
             "--profil-neurones" => { o.profil_neurones = true; 1 }
@@ -1445,6 +1453,40 @@ fn run_banc_vision(sortie: &str) {
 
 /// Liste les tenseurs d'un GGUF : nom, dimensions, type, taille. Utile pour
 /// écrire un chemin de lecture (vision) sans deviner les noms.
+/// Déquantifie **un bloc** d'un tenseur et l'imprime, une valeur par ligne.
+///
+/// Sert à confronter notre déquantification à celle de ggml sur un bloc réel.
+/// Un test qui réimplémenterait la formule en script ne prouverait rien sur le
+/// code du moteur — c'est le code qu'on veut éprouver.
+fn run_bloc(spec: &str) {
+    let (nom, index) = match spec.rsplit_once(':') {
+        Some((n, i)) => (n.to_string(), i.parse::<usize>().unwrap_or(0)),
+        None => (spec.to_string(), 0),
+    };
+    let g = Gguf::open_auto(&modele_chemin()).expect("ouverture du GGUF");
+    let t = g.tensor(&nom).unwrap_or_else(|| panic!("tenseur « {nom} » absent"));
+    let bloc_octets = match t.ttype {
+        gguf::GGML_Q2_K => 84,
+        16 => 66,                       // IQ2_XXS
+        29 => 56,                       // IQ1_M
+        autre => panic!("type {autre} non géré par --bloc"),
+    };
+    let n_cols = if t.dims.len() > 1 { t.dims[1] as usize } else { 256 };
+    let super_blocs = (n_cols / 256).max(1);
+    // Un bloc par super-bloc de 256 poids : `index` compte les blocs.
+    let ligne = index / super_blocs;
+    let dans_ligne = index % super_blocs;
+    let base = ligne * super_blocs * bloc_octets + dans_ligne * bloc_octets;
+    let buf = g.tranche_publique(&nom).expect("données absentes");
+    let v = match t.ttype {
+        gguf::GGML_Q2_K => Gguf::dequant_q2k(&buf[base..]),
+        16 => formats::dequant_iq2xxs(&buf[base..]),
+        autre => panic!("type {autre} non implémenté"),
+    };
+    println!("tenseur {nom} · type {} · bloc {index}", Gguf::nom_type(t.ttype));
+    for x in v.iter().take(256) { println!("{x:.7}"); }
+}
+
 /// Sonde d'accès mmappé à la table d'engram.
 ///
 /// `blk.N.engram_embd.weight` pèse 101,4 Go par couche sur DeepSeek-V4.1 — plus

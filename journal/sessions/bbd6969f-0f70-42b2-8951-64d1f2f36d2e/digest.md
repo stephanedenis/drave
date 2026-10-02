@@ -54295,3 +54295,280 @@ test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 35 filtered out; fin
 ⏵ Q2_K validé. Je commite et j'attaque IQ2_XXS (93 Go de V4.1).
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -m \"Q2_K : dequantification implementee et verifiee contre ggml\n\nQ2_K, c'est 59 Go des ffn_down_exps de DeepSeek-V4.1 -- sans lui, cette part du\nmodele restait illisible.\n\nVerification croisee : un p … [777 caractères tronqués]`
+
+  ```
+4291728 Q2_K : dequantification implementee et verifiee contre ggml
+void dequantize_row_iq2_xxs(const block_iq2_xxs * GGML_RESTRICT x, float * GGML_RESTRICT y, int64_t k) {
+    assert(k % QK_K == 0);
+    const int64_t nb = k / QK_K;
+
+    uint32_t aux32[2];
+    const uint8_t * aux8 = (const uint8_t *)aux32;
+
+    for (int i = 0; i < nb; i++) {
+
+        const float d = GGML_FP16_TO_FP32(x[i].d);
+
+        for (int ib32 = 0; ib32 < QK_K/32; ++ib32) {
+            memcpy(aux32, x[i].qs + 4*ib32, 2*sizeof(uint32_t));
+            const float db = d * (0.5f + (aux32[1] >> 28)) * 0.25f;
+            for (int l = 0; l < 4; ++l) {
+                const uint8_t * grid = (const uint8_t *)(iq2xxs_grid + aux8[l]);
+                const uint8_t  signs = ksigns_iq2xs[(aux32[1] >> 7*l) & 127];
+                for (int j = 0; j < 8; ++j) {
+                    y[j] = db * grid[j] * (signs & kmask_iq2xs[j] ? -1.f : 1.f);
+                }
+                y += 8;
+            }
+        }
+    }
+}
+  ```
+
+### 🤖 Assistant
+
+⏵ IQ2_XXS utilise deux tables de grille. Je les extrais de ggml.
+
+- **bash** `{"command": "cd /tmp && cat > extraire_tables.c <<'EOF'\n// Imprime les tables d'IQ2_XXS au format Rust, pour les embarquer sans les\n// recopier à la main (une seule erreur de copie ruinerait 93 Go de poids).\n#include <stdio.h>\n#include <stdint.h>\n#include \"ggml.h\"\n#include \"ggml-common.h\"\ … [933 caractères tronqués]`
+
+  ```
+extraire_tables.c: In function ‘main’:
+extraire_tables.c:11:51: error: ‘iq2xxs_grid’ undeclared (first use in this function)
+   11 |         for (int j = 0; j < 8; j++) printf("%u,", iq2xxs_grid[i].u8[j]);
+bash: line 25: ./extraire_tables: No such file or directory
+1 /tmp/tables_iq2xxs.rs
+0
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "grep -rn \"iq2xxs_grid\\[\\]\" /home/stephane/Data13TB/stephane/GitHub/llama.cpp/ggml/src/*.c /home/stephane/Data13TB/stephane/GitHub/llama.cpp/ggml/src/*.h 2>/dev/null | head -3; grep -rn \"ksigns_iq2xs\" /home/stephane/Data13TB/stephane/GitHub/llama.cpp/ggml/src/*.c /home/stephane/Dat … [120 caractères tronqués]`
+
+  ```
+/home/stephane/Data13TB/stephane/GitHub/llama.cpp/ggml/src/ggml-quants.c:2927:                const uint8_t  signs = ksigns_iq2xs[(aux32[1] >> 7*l) & 127];
+/home/stephane/Data13TB/stephane/GitHub/llama.cpp/ggml/src/ggml-quants.c:2954:                const uint8_t  signs = ksigns_iq2xs[x[i].qs[4*ib32 + l] >> 9];
+/home/stephane/Data13TB/stephane/GitHub/llama.cpp/ggml/src/ggml-quants.c:3014:                const uint8_t  signs = ksigns_iq2xs[(aux32 >> 7*l) & 127];
+  ```
+
+- **bash** `{"command": "grep -rn \"iq2xxs_grid\" /home/stephane/Data13TB/stephane/GitHub/llama.cpp/ggml/src/ 2>/dev/null | grep -v \"const uint8_t \\* grid\" | head -4; echo \"--- ksigns ---\"; grep -rn \"ksigns_iq2xs\\s*\\[\" /home/stephane/Data13TB/stephane/GitHub/llama.cpp/ggml/src/ 2>/dev/null | head -3; e … [157 caractères tronqués]`
+
+  ```
+(no output)
+[timed out after 60000ms]
+[killed by signal: SIGTERM]
+  ```
+
+- **bash** `{"command": "ls /home/stephane/Data13TB/stephane/GitHub/llama.cpp/ggml/src/*.c 2>/dev/null | head; echo \"--- ggml-common.h contient-il les grilles ? ---\"; grep -c \"grid\" /home/stephane/Data13TB/stephane/GitHub/llama.cpp/ggml/src/ggml-common.h 2>/dev/null; grep -n \"static const.*grid\" /home/ste … [128 caractères tronqués]`
+
+  ```
+/home/stephane/Data13TB/stephane/GitHub/llama.cpp/ggml/src/ggml-alloc.c
+/home/stephane/Data13TB/stephane/GitHub/llama.cpp/ggml/src/ggml.c
+/home/stephane/Data13TB/stephane/GitHub/llama.cpp/ggml/src/ggml-quants.c
+--- ggml-common.h contient-il les grilles ? ---
+9
+  ```
+
+- **bash** `{"command": "grep -n \"grid\" /home/stephane/Data13TB/stephane/GitHub/llama.cpp/ggml/src/ggml-common.h | head -10; echo \"--- où est définie iq2xxs_grid ? ---\"; grep -rn \"iq2xxs_grid\" /home/stephane/Data13TB/stephane/GitHub/llama.cpp/ggml/src/ggml-common.h | head -3", "description": "Search grid  … [14 caractères tronqués]`
+
+  ```
+518:    uint8_t  qs[QK_K/8];      // grid index, low 8 bits
+519:    uint8_t  qh[QK_K/16];     // grid index, high 3 bits + grid shift bit (for two groups of 8)
+644:GGML_TABLE_BEGIN(uint64_t, iq2xxs_grid, 256)
+711:GGML_TABLE_BEGIN(uint64_t, iq2xs_grid, 512)
+842:GGML_TABLE_BEGIN(uint64_t, iq2s_grid, 1024)
+1101:GGML_TABLE_BEGIN(uint32_t, iq3xxs_grid, 256)
+1136:GGML_TABLE_BEGIN(uint32_t, iq3s_grid, 512)
+1219:GGML_TABLE_BEGIN(uint64_t, iq1s_grid, NGRID_IQ1S)
+1734:GGML_TABLE_BEGIN(uint32_t, iq1s_grid_gpu, NGRID_IQ1S)
+--- où est définie iq2xxs_grid ? ---
+644:GGML_TABLE_BEGIN(uint64_t, iq2xxs_grid, 256)
+  ```
+
+### 🤖 Assistant
+
+⏵ Les tables passent par une macro d'implémentation. Je l'active et j'extrais.
+
+- **bash** `{"command": "cd /tmp && head -20 /home/stephane/Data13TB/stephane/GitHub/llama.cpp/ggml/src/ggml-common.h | grep -n \"IMPL\\|ifdef\" ; cat > extraire2.c <<'EOF'\n#define GGML_COMMON_IMPL\n#include <stdio.h>\n#include <stdint.h>\n#include \"ggml.h\"\n#include \"ggml-common.h\"\nint main(void) {\n     … [1114 caractères tronqués]`
+
+  ```
+extraire2.c:11:22: error: ‘iq2xxs_grid’ undeclared (first use in this function)
+extraire2.c:19:23: error: ‘ksigns_iq2xs’ undeclared (first use in this function)
+bash: line 27: ./extraire2: No such file or directory
+1 /tmp/tables_iq2xxs.rs
+  ```
+
+- **bash** `{"command": "grep -n \"GGML_TABLE_BEGIN\" -A 3 /home/stephane/Data13TB/stephane/GitHub/llama.cpp/ggml/src/ggml-common.h | head -8; echo \"=== définition de la macro ===\"; grep -rn \"define GGML_TABLE_BEGIN\" /home/stephane/Data13TB/stephane/GitHub/llama.cpp/ggml/src/*.h /home/stephane/Data13TB/step … [112 caractères tronqués]`
+
+  ```
+556:#define GGML_TABLE_BEGIN(type, name, size) static const type name[size] = {
+557-#define GGML_TABLE_END() };
+558-
+559-#define GGML_COMMON_IMPL
+--
+563:#define GGML_TABLE_BEGIN(type, name, size) static const type name[size] = {
+564-#define GGML_TABLE_END() };
+565-
+=== définition de la macro ===
+/home/stephane/Data13TB/stephane/GitHub/llama.cpp/ggml/src/ggml-common.h:556:#define GGML_TABLE_BEGIN(type, name, size) static const type name[size] = {
+/home/stephane/Data13TB/stephane/GitHub/llama.cpp/ggml/src/ggml-common.h:563:#define GGML_TABLE_BEGIN(type, name, size) static const type name[size] = {
+/home/stephane/Data13TB/stephane/GitHub/llama.cpp/ggml/src/ggml-common.h:570:#define GGML_TABLE_BEGIN(type, name, size) static const constant type name[size] = {
+  ```
+
+- **bash** `{"command": "sed -n '540,580p' /home/stephane/Data13TB/stephane/GitHub/llama.cpp/ggml/src/ggml-common.h", "description": "Read the conditional structure around tables"}`
+
+  ```
+uint16_t scales_h;
+    uint8_t  scales_l[QK_K/64];
+    uint8_t  qs[QK_K/2];
+} block_iq4_xs;
+static_assert(sizeof(block_iq4_xs) == sizeof(ggml_half) + sizeof(uint16_t) + QK_K/64 + QK_K/2, "wrong iq4_xs block size/padding");
+
+#endif // GGML_COMMON_DECL
+#endif // GGML_COMMON_DECL
+
+////////////////////////////////////////////////////////////////////////////////
+
+#ifndef GGML_COMMON_IMPL
+
+#if defined(GGML_COMMON_IMPL_C)
+#include <stdint.h>
+
+#define GGML_TABLE_BEGIN(type, name, size) static const type name[size] = {
+#define GGML_TABLE_END() };
+
+#define GGML_COMMON_IMPL
+#elif defined(GGML_COMMON_IMPL_CPP)
+#include <cstdint>
+
+#define GGML_TABLE_BEGIN(type, name, size) static const type name[size] = {
+#define GGML_TABLE_END() };
+
+#define GGML_COMMON_IMPL
+#elif defined(GGML_COMMON_IMPL_METAL)
+#include <metal_stdlib>
+
+#define GGML_TABLE_BEGIN(type, name, size) static const constant type name[size] = {
+#define GGML_TABLE_END() };
+
+#define GGML_COMMON_IMPL
+#elif defined(GGML_COMMON_IMPL_CUDA) || defined(GGML_COMMON_IMPL_HIP) || defined(GGML_COMMON_IMPL_MUSA)
+#include <cstdint>
+
+#define GGML_TABLE_BEGIN(type, name, size) static const __device__ type name[size] = {
+#define GGML_TABLE_END() };
+
+#d
+… [22 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ C'est `GGML_COMMON_IMPL_C` qu'il faut définir. Je corrige.
+
+- **bash** `{"command": "cd /tmp && sed -i 's/#define GGML_COMMON_IMPL$/#define GGML_COMMON_IMPL_C/' extraire2.c && L=/home/stephane/Data13TB/stephane/GitHub/llama.cpp; gcc -I$L/ggml/include -I$L/ggml/src extraire2.c -o extraire2 -L$L/build/bin -lggml -lggml-base 2>&1 | grep -E \"error\" | head -3; LD_LIBRARY_P … [193 caractères tronqués]`
+
+  ```
+// Tables extraites de ggml-common.h par programme, jamais recopiees a
+// la main : une seule valeur fausse ruinerait 93 Go de poids.
+
+pub static IQ2XXS_GRID: [[u8; 8]; 256] = [
+273 /tmp/tables_iq2xxs.rs
+    240,113,114,243,116,245,246,119,120,249,250,123,252,125,126,255,
+    
+];
+  ```
+
+### 🤖 Assistant
+
+⏵ Tables extraites. Je crée le module de formats avec IQ2_XXS.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && { cat <<'ENTETE'\n//! Déquantification des formats **non triviaux** : ceux qui reposent sur une\n//! grille de codes plutôt que sur des échelles.\n//!\n//! Les formats « simples » (Q4_0, Q8_0, Q4_K, Q6_K, Q2_K, MXFP4) vivent dans\n// … [3329 caractères tronqués]`
+
+  ```
+BUILD 0
+test formats::tests::iq2xxs_taille_et_plausibilite ... ok
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 36 filtered out; finished in 0.00s
+  ```
+
+### 🤖 Assistant
+
+⏵ Test de plausibilité vert. Maintenant la vraie vérification : contre ggml sur un bloc réel.
+
+- **bash** `{"command": "cd /tmp && cat > ref_iq2.c <<'EOF'\n#include <stdio.h>\n#include <stdlib.h>\n#include \"ggml.h\"\n#include \"ggml-common.h\"\n#include \"ggml-quants.h\"\nint main(int argc, char **argv) {\n    FILE *f = fopen(argv[1], \"rb\");\n    fseek(f, atol(argv[2]), SEEK_SET);\n    block_iq2_xxs b … [2665 caractères tronqués]`
+
+  ```
+blk.0.ffn_gate_exps.weight       type 16 · 256 valeurs · ecart max 9.42e-02 · DIVERGE
+blk.30.ffn_up_exps.weight        type 16 · 256 valeurs · ecart max 8.38e-02 · DIVERGE
+  ```
+
+### 🤖 Assistant
+
+⏵ Mon test Python réimplémente au lieu de tester le code Rust. J'ajoute une commande qui expose la vraie déquantification.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np = 'drave-core/src/main.rs'\ns = open(p).read()\ndef rep(a, b):\n    global s\n    assert a in s, f\"ANCRE INTROUVABLE : {a[:70]!r}\"\n    s = s.replace(a, b, 1)\nrep('''    /// Sonde d'accès mmappé à la table d'en … [3819 caractères tronqués]`
+
+  ```
+ok
+BUILD 0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && F=/home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek-V4.1-Flash-Q2/DeepSeek-V4.1-Flash-Q2.gguf; ./drave-core/target/release/drave \"$F\" --bloc blk.0.ffn_gate_exps.weight:0 2>&1 | grep -vE \"^\\[\" | head -5; echo \"--- reference … [298 caractères tronqués]`
+
+  ```
+tenseur blk.0.ffn_gate_exps.weight · type IQ2_XXS · bloc 0
+-0.0074472
+-0.0074472
+0.0074472
+-0.0074472
+--- reference ggml ---
+debut 2190082048
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && F=/home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek-V4.1-Flash-Q2/DeepSeek-V4.1-Flash-Q2.gguf; LD_LIBRARY_PATH=/home/stephane/Data13TB/stephane/GitHub/llama.cpp/build/bin /tmp/ref_iq2 \"$F\" 2190082048 | head -5; echo \"--- les  … [188 caractères tronqués]`
+
+  ```
+-0.0074472
+-0.0074472
+0.0074472
+-0.0074472
+-0.0232726
+--- les notres ---
+-0.0074472
+-0.0074472
+0.0074472
+-0.0074472
+-0.0232726
+  ```
+
+### 🤖 Assistant
+
+⏵ Les premières valeurs concordent. Je compare les 256.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && F=/home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek-V4.1-Flash-Q2/DeepSeek-V4.1-Flash-Q2.gguf; ./drave-core/target/release/drave \"$F\" --bloc blk.0.ffn_gate_exps.weight:0 2>/dev/null | tail -n +2 > /tmp/nous_iq2.txt; LD_LIBRARY … [975 caractères tronqués]`
+
+  ```
+256 /tmp/nous_iq2.txt
+ 256 /tmp/ref_iq2.txt
+ 512 total
+256 valeurs comparees · ecart max 9.417e-02 a l'indice 38
+10 plus grands ecarts : [('9.4e-02', 38), ('9.2e-02', 63), ('8.6e-02', 107), ('8.6e-02', 106), ('8.4e-02', 144), ('7.8e-02', 95), ('7.8e-02', 82), ('7.4e-02', 222), ('7.4e-02', 203), ('7.2e-02', 59)]
+valeurs exactement egales : 32/256
+indices fautifs : 224
+  premiers : [32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43]
+  par bloc de 32 : [1, 2, 3, 4, 5, 6, 7]
+  ```
+
+### 🤖 Assistant
+
+⏵ **Trouvé** : `qs` est un `uint16_t*`, donc `+4*ib32` avance de 8 octets, pas 4. Je corrige.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np = 'drave-core/src/formats.rs'\ns = open(p).read()\ns = s.replace('''        let aux = &bloc[2 + 4 * ib32..2 + 4 * ib32 + 8];''',\n'''        // ATTENTION : dans ggml, `qs` est un `uint16_t[32]`, donc `qs + 4*ib32` … [976 caractères tronqués]`
+
+  ```
+ecart max 0.00e+00 · 256/256 exactement egales · CONCORDE
+  ```
+
+### 🤖 Assistant
+
+⏵ **IQ2_XXS : écart 0,00e+00, 256/256 exactes.** La vérification croisée a attrapé un bug invisible à la lecture.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && (cd drave-core && cargo test --release 2>&1 | grep -E \"^test result\"); git add -A && git commit -q -m \"IQ2_XXS : 93 Go de V4.1 debloques, et un bug que la lecture n'aurait pas vu\n\nTables de grille EXTRAITES de ggml-common.h par  … [1093 caractères tronqués]`

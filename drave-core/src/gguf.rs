@@ -787,6 +787,12 @@ zéro, l'inventaire sera sous-évalué", t.ttype, t.name);
         Some((meta, tensors, c.p))
     }
 
+    /// Tranche d'octets d'un tenseur, exposée pour les outils de vérification
+    /// (`--bloc`), qui doivent lire exactement ce que lit le moteur.
+    pub fn tranche_publique(&self, nom: &str) -> Option<&[u8]> {
+        self.tensor(nom).map(|t| self.tbuf(t))
+    }
+
     /// Tranche d'octets d'un tenseur, à partir de son premier octet.
     ///
     /// C'est le SEUL point d'accès aux poids : rendre le fichier explicite ici
