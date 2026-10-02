@@ -196,6 +196,16 @@ impl Meta {
         }
     }
 
+    /// Une liste de métadonnées en flottants — `swiglu_clamp_exp` est une liste
+    /// par couche, et la lire comme un scalaire donnerait « pas de clamp ».
+    pub fn as_liste_f32(&self) -> Option<Vec<f32>> {
+        match self {
+            Meta::Array(v) => v.iter().map(|m| m.as_f64().map(|x| x as f32)
+                .or_else(|| m.as_u64().map(|x| x as f32))).collect(),
+            _ => None,
+        }
+    }
+
     pub fn as_u64(&self) -> Option<u64> {
         match self {
             Meta::U32(v) => Some(*v as u64),

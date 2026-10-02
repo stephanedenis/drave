@@ -122,7 +122,21 @@ top-k les garde **tous** : le résultat est alors exact sans l'indexeur, et c'es
 la plage dans laquelle les validations ci-dessus ont été faites (4 × 512 =
 2 048 jetons). Au-delà, le moteur **refuse** au lieu de calculer faux.
 
-## 7. Reste à faire
+## 7.bis Un manque trouvé en relisant les métadonnées : le **clamp SwiGLU**
+
+V4-Flash déclare `swiglu_clamp_exp = 10.0` et `swiglu_clamp_shexp = 10.0`,
+**couche par couche** — et le moteur ne l'appliquait pas. La référence
+(`llama.cpp/src/llama-graph.cpp`) borne les activations d'expert avant le
+produit : `gate = min(gate, limite)`, `up = clamp(up, ±limite)`, puis
+`silu(gate) · up`. Implémenté (`activation`, troisième régime).
+
+Il ne s'est pas vu dans les validations de couches 0-3 parce que les activations
+y restent sous 10 : le clamp n'y change rien. C'est un manque qui ne se serait
+manifesté que **plus loin dans le modèle**, sur les jetons où l'activation
+dépasse la borne — le genre d'écart qui n'apparaît ni au début ni dans une
+corrélation globale.
+
+## 8. Reste à faire
 
 - **Le top-k au-delà de 2 048 jetons** : la sélection est écrite, mais sa
   justesse ne peut se mesurer qu'avec plus de 512 blocs — donc un run long, à

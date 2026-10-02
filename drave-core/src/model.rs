@@ -1946,6 +1946,11 @@ pub struct Model {
     /// normées et tournées. Ce sont des clés d'activation au sens de la vision :
     /// un bloc est un résumé qu'on peut tracer, compter et transporter.
     pub mla4_cles_comp: Vec<Vec<f32>>,
+    /// Bornes du **clamp SwiGLU** de DeepSeek-V4, par couche : `swiglu_clamp_exp`
+    /// pour les experts, `swiglu_clamp_shexp` pour l'expert partagé (qui
+    /// retombe sur la première quand elle est absente). Vide ailleurs.
+    pub clamp_exp: Vec<f32>,
+    pub clamp_shexp: Vec<f32>,
     /// État et blocs de l'**indexeur** (128 valeurs par bloc).
     pub mla4_idx_kv: Vec<Vec<f32>>,
     pub mla4_idx_gate: Vec<Vec<f32>>,
@@ -2598,6 +2603,11 @@ reste non implémenté.");
                 "n_head × head_dim doit couvrir hidden");
         // Capturé avant que `cfg` ne soit déplacé dans la structure.
         let n_layer_total = cfg.n_layer;
+        // Le clamp SwiGLU de V4, par couche — lu AVANT que `g` ne soit déplacé.
+        let clamp_exp: Vec<f32> = g.cfg_ou(&["swiglu_clamp_exp"])
+            .and_then(|m| m.as_liste_f32()).unwrap_or_default();
+        let clamp_shexp: Vec<f32> = g.cfg_ou(&["swiglu_clamp_shexp"])
+            .and_then(|m| m.as_liste_f32()).unwrap_or_default();
         // Le mapping est lu UNE fois et passé aux couches : un état global lu
         // par couche rendait ce chemin intestable (les tests s'exécutent en
         // parallèle, un `OnceLock` ne se pose qu'une fois).
@@ -3168,6 +3178,7 @@ mapping {}",
             normes_tete: None, ordre_normes: None, tete_garantie: None,
             tete_calculees: 0, tete_appels_g: 0,
             sinks_vus, kv_gpu, attn_gpu_part: Vec::new(),
+            clamp_exp, clamp_shexp,
             etat_entree: std::env::var("DRAVE_ETAT_ENTREE").ok(),
             dump_couches: std::env::var("DRAVE_DUMP_COUCHES").ok(),
             couche_debut: couches.map(|(a, _)| a).unwrap_or(0),
@@ -3368,7 +3379,7 @@ mapping {}",
         let Some(yu) = machine.proj_mxfp4(mu, &xd, sx) else { return false };
         let bu = moe.biais_up.as_ref().map(|b| &b[e * n_ff..]);
         for o in 0..n_ff { up[o] = yu[o] + bu.map_or(0.0, |b| b[o]); }
-        Self::activation(gate, up, n_ff, act_oss);
+        Self::activation(gate, up, n_ff, act_oss, 0.0);
         // La descente part de l'activation (non linéaire) : nouvelle
         // quantification, exactement comme `matvec_q4` sur la porte activée.
         let Some((sv2, sx2)) = quant(&gate[..n_ff], tk6, scratch) else { return false };
@@ -3592,7 +3603,11 @@ mapping {}",
     /// - gpt-oss : `g` et `u` écrêtés à ±7, `a = g·σ(1,702·g)`, résultat
     ///   `a·(u+1)`.
     #[inline]
-    fn activation(gate: &mut [f32], up: &[f32], n: usize, oss: bool) {
+    /// `clamp_v4` : borne des activations d'expert de DeepSeek-V4 — `gate` est
+    /// borné SUPÉRIEUREMENT (`min(g, limite)`), `up` des deux côtés, puis
+    /// `silu(gate) * up`. C'est le `swiglu_clamp_exp` du modèle, par couche, et
+    /// l'oublier ne se voit que sur les jetons où l'activation dépasse 10.
+    fn activation(gate: &mut [f32], up: &[f32], n: usize, oss: bool, clamp_v4: f32) {
         if oss {
             const LIMITE: f32 = 7.0;
             const ALPHA: f32 = 1.702;
@@ -3600,6 +3615,12 @@ mapping {}",
                 let g = gate[i].min(LIMITE);
                 let u = up[i].clamp(-LIMITE, LIMITE);
                 gate[i] = (g / (1.0 + (-ALPHA * g).exp())) * (u + 1.0);
+            }
+        } else if clamp_v4 > 1e-6 {
+            for i in 0..n {
+                let g = gate[i].min(clamp_v4);
+                let u = up[i].clamp(-clamp_v4, clamp_v4);
+                gate[i] = (g / (1.0 + (-g).exp())) * u;
             }
         } else {
             for i in 0..n { gate[i] = (gate[i] / (1.0 + (-gate[i]).exp())) * up[i]; }
@@ -4304,7 +4325,7 @@ l'attention par lots est DENSE. Utiliser --lot 1 pour l'attention creuse.", self
                             col[oo] = gate[oo * g + j];
                             colu[oo] = up[oo * g + j];
                         }
-                        Self::activation(&mut col, &colu, nff, self.cfg.ffn_act_oss);
+                        Self::activation(&mut col, &colu, nff, self.cfg.ffn_act_oss, 0.0);
                         let mut mx = 0f32;
                         for &v in col.iter() { mx = mx.max(v.abs()); }
                         let ech = if mx > 0.0 { mx / self.act_levels } else { 1.0 };
@@ -4345,7 +4366,7 @@ l'attention par lots est DENSE. Utiliser --lot 1 pour l'attention creuse.", self
                     let g0 = gate[i * self.cfg.ffn..(i + 1) * self.cfg.ffn].to_vec();
                     let u0 = up[i * self.cfg.ffn..(i + 1) * self.cfg.ffn].to_vec();
                     let mut gg = g0;
-                    Self::activation(&mut gg, &u0, self.cfg.ffn, self.cfg.ffn_act_oss);
+                    Self::activation(&mut gg, &u0, self.cfg.ffn, self.cfg.ffn_act_oss, 0.0);
                     gate[i * self.cfg.ffn..(i + 1) * self.cfg.ffn].copy_from_slice(&gg);
                 }
                 quantifier(&gate, &mut gi, &mut sg, self.act_levels, self.act_thresh);
@@ -5071,7 +5092,7 @@ s'applique pas — utilisez --lot 1, ou réenregistrez sans DRAVE_TRACE_BLOCS");
             matvec_f32(&m.gate, &hn, h, m.ffn, &mut g_t);
             matvec_f32(&m.up, &hn, h, m.ffn, &mut u_t);
             let mut act = vec![0f32; m.ffn];
-            Self::activation(&mut g_t, &u_t, m.ffn, false);
+            Self::activation(&mut g_t, &u_t, m.ffn, false, 0.0);
             for i in 0..m.ffn { act[i] = g_t[i]; }
             let mut d = vec![0f32; h];
             matvec_f32(&m.down, &act, m.ffn, h, &mut d);
@@ -5121,7 +5142,15 @@ s'applique pas — utilisez --lot 1, ou réenregistrez sans DRAVE_TRACE_BLOCS");
         let debug_mla = std::env::var("DRAVE_DEBUG_MLA").is_ok();
         self.profil_jetons += 1;
         let Model { g, cfg, layers, out_norm, pool, kv, events, attn_events, kv_gpu,
-                    attn_gpu_part, emb_imposee, paires, .. } = self;
+                    attn_gpu_part, emb_imposee, paires, clamp_exp, clamp_shexp, .. } = self;
+        // Borne du clamp SwiGLU de la couche : celle des experts, ou celle de
+        // l'expert partagé (qui retombe sur la première si le modèle ne déclare
+        // que `swiglu_clamp_exp` — c'est le cas de V4-Flash).
+        let limite = |l: usize, partage: bool| -> f32 {
+            let v = if partage { clamp_shexp.get(l).copied().unwrap_or(0.0) }
+                    else { clamp_exp.get(l).copied().unwrap_or(0.0) };
+            if v > 0.0 { v } else { clamp_exp.get(l).copied().unwrap_or(0.0) }
+        };
         let h = cfg.hidden;
         let hd = cfg.head_dim;
         let nh = cfg.n_head;
@@ -5769,7 +5798,8 @@ dynamique de {dyn_:.3e} (relatif {:.2e})", mx / dyn_.max(1e-9));
                                         self.act_thresh, tk(5), self.act_renorm, &mut scratch,
                                         moe.biais_up.as_ref().map(|b| &b[e as usize * moe.n_ff..]),
                                         threads_iq);
-                    Self::activation(&mut gate, &up, cfg.ffn_exp, cfg.ffn_act_oss);
+                    Self::activation(&mut gate, &up, cfg.ffn_exp, cfg.ffn_act_oss,
+                                     limite(l, false));
                     Self::compter_neurones(&mut self.profil_neurones, largeur_profil,
                                            l, &gate[..cfg.ffn_exp]);
                     let md = moe.down[kexp].expert(loc);
@@ -5790,7 +5820,8 @@ dynamique de {dyn_:.3e} (relatif {:.2e})", mx / dyn_.max(1e-9));
                     Self::matvec4_ou_iq(pool, su, 0, &hn, &mut up, &mut paires[2], self.act_levels,
                                     self.act_thresh, tk(5), self.act_renorm, &mut scratch, None,
                                     threads_iq);
-                    Self::activation(&mut gate, &up, cfg.ffn_exp, cfg.ffn_act_oss);
+                    Self::activation(&mut gate, &up, cfg.ffn_exp, cfg.ffn_act_oss,
+                                     limite(l, true));
                     Self::matvec4_ou_iq(pool, sd, 0, &gate, &mut exp_out, &mut paires[2], self.act_levels,
                                     self.act_thresh, tk(6), self.act_renorm, &mut scratch, None,
                                     threads_iq);
@@ -5831,7 +5862,7 @@ dynamique de {dyn_:.3e} (relatif {:.2e})", mx / dyn_.max(1e-9));
                 }
             }
             Self::matvec(pool, &lay.wup, &hn, &mut up, events, &mut paires[2], self.act_levels, self.act_thresh, tk(5), self.act_renorm, &mut scratch, self.seuil_push);
-            Self::activation(&mut gate, &up, cfg.ffn, cfg.ffn_act_oss);
+            Self::activation(&mut gate, &up, cfg.ffn, cfg.ffn_act_oss, 0.0);
             Self::compter_neurones(&mut self.profil_neurones, largeur_profil,
                                    l, &gate[..cfg.ffn]);
             Self::matvec(pool, &lay.wdown, &gate, &mut down, events, &mut paires[2], self.act_levels, self.act_thresh, tk(6), self.act_renorm, &mut scratch, self.seuil_push);

@@ -76629,3 +76629,235 @@ test result: ok. 53 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; fin
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='reports/rapport-v4-hca.md'\ns=open(p).read()\na=\"\"\"## 5. Ce qui reste de P5 : l'indexeur\"\"\"\nb=\"\"\"## 5. L'indexeur, à son tour validé\n\nL'indexeur (« lightning indexer ») note chaque bloc compressé e … [4750 caractères tronqués]`
+
+  ```
+ok
+ok plan
+4a0c99b P5 (2/2) : l'indexeur — scores validés à 0,1 % contre llama.cpp
+  ```
+
+### 🤖 Assistant
+
+⏵ Vérification de la porte gpt-oss seule (le message de commit l'annonce : je dois la mesurer).
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ./drave-core/target/release/drave /home/stephane/Data13TB/stephane/modeles/gguf/gpt-oss-120b-MXFP4.gguf --ppl /tmp/ids_oss_512.txt --ctx 256 --dense --threads 16 --limit 512 2>&1 | grep -E \"=== perplexité\"", "description": "Run the … [70 caractères tronqués]`
+
+  ```
+started background job bash-144
+  ```
+
+- **job_output** `{"job_id": "bash-144", "timeout_ms": 1500000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **job_output** `{"job_id": "bash-144", "timeout_ms": 1500000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+### 🤖 Assistant
+
+⏵ Pendant la porte : vérification du clamp SwiGLU (clé `swiglu_clamp_exp` de V4).
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rn \"swiglu_clamp\\|swiglu_limit\\|act_oss\" drave-core/src/*.rs | head -8; echo \"=== valeurs ===\"; python3 tools/lire_meta_gguf.py /home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek-V4-Flash-UD-IQ1_M/DeepSeek-V4-Flash-UD … [124 caractères tronqués]`
+
+  ```
+drave-core/src/main.rs:1726:        ffn_act_oss: false, gating: r.gating, expert_norm: r.norm, expert_scale: r.echelle,
+drave-core/src/model.rs:429:    pub ffn_act_oss: bool,
+drave-core/src/model.rs:2480:            ffn_act_oss: g.meta.get("general.architecture").and_then(|m| m.as_str())
+drave-core/src/model.rs:2933:                 if cfg.ffn_act_oss { "activation-oss " } else { "" },
+drave-core/src/model.rs:3356:                        act_oss: bool, scratch: &mut Vec<f32>) -> bool {
+drave-core/src/model.rs:3371:        Self::activation(gate, up, n_ff, act_oss);
+drave-core/src/model.rs:4307:                        Self::activation(&mut col, &colu, nff, self.cfg.ffn_act_oss);
+drave-core/src/model.rs:4348:                    Self::activation(&mut gg, &u0, self.cfg.ffn, self.cfg.ffn_act_oss);
+=== valeurs ===
+# version 3 · 0 tenseurs · 72 paires clé/valeur
+deepseek4.swiglu_clamp_exp = [10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0]
+deepseek4.swiglu_clamp_shexp = [10.0, 10.0, 1
+… [244 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Lacune trouvée : le **clamp SwiGLU** de V4 n'est pas implémenté. Vérification dans la référence.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/llama.cpp && grep -rn \"swiglu_clamp\\|SwiGLU_CLAMP\\|swiglu_limit\" src/models/deepseek4.cpp src/llama-arch.cpp src/llama-model.cpp 2>/dev/null | head -8", "description": "Find the swiglu clamp in the reference"}`
+
+  ```
+src/models/deepseek4.cpp:28:    ml.get_key_or_arr(LLM_KV_SWIGLU_CLAMP_EXP,     hparams.swiglu_clamp_exp,   hparams.n_layer());
+src/models/deepseek4.cpp:29:    if (!ml.get_key_or_arr(LLM_KV_SWIGLU_CLAMP_SHEXP,   hparams.swiglu_clamp_shexp, hparams.n_layer(), 0)) {
+src/models/deepseek4.cpp:30:        hparams.swiglu_clamp_shexp = hparams.swiglu_clamp_exp;
+src/llama-arch.cpp:190:    { LLM_KV_SWIGLU_CLAMP_EXP,                  "%s.swiglu_clamp_exp"                  },
+src/llama-arch.cpp:191:    { LLM_KV_SWIGLU_CLAMP_SHEXP,                "%s.swiglu_clamp_shexp"                },
+src/llama-model.cpp:1169:    std::fill(hparams.swiglu_clamp_exp.begin(),   hparams.swiglu_clamp_exp.end(),   0.0f);
+src/llama-model.cpp:1170:    std::fill(hparams.swiglu_clamp_shexp.begin(), hparams.swiglu_clamp_shexp.end(), 0.0f);
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/llama.cpp && grep -rn \"swiglu_clamp_exp\\|swiglu_clamp_shexp\" src/*.cpp src/*.h | grep -v \"deepseek4.cpp:2[89]\\|llama-arch\\|llama-model.cpp:116\" | head -8", "description": "Find where the clamp is applied"}`
+
+  ```
+src/llama-graph.cpp:2015:                    const float limit = hparams.swiglu_clamp_shexp[il];
+src/llama-graph.cpp:2410:                    const float limit = hparams.swiglu_clamp_exp[il];
+src/llama-model.cpp:1170:    std::fill(hparams.swiglu_clamp_shexp.begin(), hparams.swiglu_clamp_shexp.end(), 0.0f);
+src/llama-model-saver.cpp:218:    add_kv(LLM_KV_SWIGLU_CLAMP_EXP,                  hparams.swiglu_clamp_exp);
+src/llama-model-saver.cpp:219:    add_kv(LLM_KV_SWIGLU_CLAMP_SHEXP,                hparams.swiglu_clamp_shexp);
+src/llama-hparams.h:286:    std::array<float, LLAMA_MAX_LAYERS> swiglu_clamp_exp; // clamping for expert FFN
+src/llama-hparams.h:287:    std::array<float, LLAMA_MAX_LAYERS> swiglu_clamp_shexp; // shared expert
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/llama.cpp && sed -n '2400,2425p' src/llama-graph.cpp", "description": "Read the clamp application"}`
+
+  ```
+cb(cur, "ffn_moe_gate_biased", il);
+        }
+    }
+
+    const bool has_gate = gate_exps || gate_up_exps;
+
+    switch (type_op) {
+        case LLM_FFN_SILU:
+            if (gate_exps) {
+                if (il >= 0) {
+                    const float limit = hparams.swiglu_clamp_exp[il];
+                    constexpr float eps = 1e-6f;
+                    if (limit > eps) {
+                        up = ggml_clamp(ctx0, up, -limit, limit);
+                        cb(up, "ffn_moe_up_clamped", il);
+
+                        if (arch == LLM_ARCH_DEEPSEEK4) {
+                            cur = ggml_clamp(ctx0, cur, -INFINITY, limit);
+                            cb(cur, "ffn_moe_gate_clamped", il);
+                            cur = ggml_swiglu_split(ctx0, cur, up);
+                        } else {
+                            ggml_tensor * gate_act = ggml_silu(ctx0, cur);
+                            cb(gate_act, "ffn_moe_silu", il);
+                            gate_act = ggml_clamp(ctx0, gate_act, -INFINITY, limit);
+                            cb(gate_act, "ffn_moe_silu_clamped", il);
+                            cur = ggml_mul(ctx0, gate_act, up);
+  ```
+
+### 🤖 Assistant
+
+⏵ Implémentation du clamp SwiGLU de V4 (`gate ≤ limite`, `up ∈ [−limite, limite]`).
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"Self::activation(\" drave-core/src/model.rs | head; sed -n \"$(grep -n 'fn activation' drave-core/src/model.rs | head -1 | cut -d: -f1),+14p\" drave-core/src/model.rs", "description": "Read the activation function and call  … [7 caractères tronqués]`
+
+  ```
+3371:        Self::activation(gate, up, n_ff, act_oss);
+4307:                        Self::activation(&mut col, &colu, nff, self.cfg.ffn_act_oss);
+4348:                    Self::activation(&mut gg, &u0, self.cfg.ffn, self.cfg.ffn_act_oss);
+5074:            Self::activation(&mut g_t, &u_t, m.ffn, false);
+5772:                    Self::activation(&mut gate, &up, cfg.ffn_exp, cfg.ffn_act_oss);
+5793:                    Self::activation(&mut gate, &up, cfg.ffn_exp, cfg.ffn_act_oss);
+5834:            Self::activation(&mut gate, &up, cfg.ffn, cfg.ffn_act_oss);
+    fn activation(gate: &mut [f32], up: &[f32], n: usize, oss: bool) {
+        if oss {
+            const LIMITE: f32 = 7.0;
+            const ALPHA: f32 = 1.702;
+            for i in 0..n {
+                let g = gate[i].min(LIMITE);
+                let u = up[i].clamp(-LIMITE, LIMITE);
+                gate[i] = (g / (1.0 + (-ALPHA * g).exp())) * (u + 1.0);
+            }
+        } else {
+            for i in 0..n { gate[i] = (gate[i] / (1.0 + (-gate[i]).exp())) * up[i]; }
+        }
+    }
+
+    /// Produit scalaire f32 à huit accumulateurs indépendants.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='drave-core/src/model.rs'\ns=open(p).read()\nsubs=[]\n# --- activation : troisième régime (V4)\nsubs.append((\n\"\"\"    fn activation(gate: &mut [f32], up: &[f32], n: usize, oss: bool) {\n        if oss {\"\"\ … [3319 caractères tronqués]`
+
+  ```
+ok
+5782:                    Self::activation(&mut gate, &up, cfg.ffn_exp, cfg.ffn_act_oss,
+5804:                    Self::activation(&mut gate, &up, cfg.ffn_exp, cfg.ffn_act_oss,
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='drave-core/src/model.rs'\ns=open(p).read()\nsubs=[]\n# --- champs de modèle : les limites par couche\nsubs.append((\n\"\"\"    /// État et blocs de l'**indexeur** (128 valeurs par bloc).\"\"\",\n\"\"\"    ///  … [2564 caractères tronqués]`
+
+  ```
+ok model
+ok gguf
+error[E0382]: borrow of moved value: `g`
+    --> src/model.rs:3176:24
+     |
+2455 |         let g = Gguf::open_auto(path).expect("ouverture du GGUF");
+     |             - move occurs because `g` has type `Gguf`, which does not implement the `Copy` trait
+...
+3145 |             g, cfg, layers, out_norm, pool,
+     |             - value moved here
+...
+--
+error[E0502]: cannot borrow `*self` as immutable because it is also borrowed as mutable
+    --> src/model.rs:5804:38
+     |
+5154 |         let Model { g, cfg, layers, out_norm, pool, kv, events, attn_events, kv_gpu,
+     |                        --- mutable borrow occurs here
+...
+5804 |                                      self.activation_clamp(l, false));
+     |                                      ^^^^ immutable borrow occurs here
+5805 |                     Self::compter_neurones(&mut self.profil_neurones, largeur_profil,
+--
+error[E0502]: cannot borrow `*self` as immutable because it is also borrowed as mutable
+    --> src/model.rs:5826:38
+     |
+5154 |         let Model { g, cfg, layers, out_norm, pool, kv, events, attn_events, kv_gpu,
+     |                        --- mutable borrow occurs here
+--- fin ---
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='drave-core/src/model.rs'\ns=open(p).read()\nsubs=[]\n# 1. lire les clamps AVANT le déplacement de `g`\nsubs.append((\n\"\"\"            clamp_exp: g.cfg_ou(&[\"swiglu_clamp_exp\"]).and_then(|m| m.as_liste_f32( … [2583 caractères tronqués]`
+
+  ```
+ok
+--- fin ---
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"activation_clamp\" drave-core/src/model.rs | head -3; cd drave-core && cargo test --release 2>&1 | tail -2", "description": "Check for dead code and run tests", "timeoutMs": 900000}`
+
+  ```
+3798:    fn activation_clamp(&self, l: usize, partage: bool) -> f32 {
+test result: ok. 53 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.13s
+  ```
+
+- **job_output** `{"job_id": "bash-144"}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='drave-core/src/model.rs'\ns=open(p).read()\na=\"\"\"    /// La borne du clamp SwiGLU de la couche `l` : celle des experts, ou celle\n    /// de l'expert partagé — qui retombe sur la première quand le modèle ne … [684 caractères tronqués]`
+
+  ```
+ok
+warning: method `actifs` is never used
+    --> src/main.rs:2067:8
+     |
+2024 | impl ChargeFlux {
+--
+warning: method `presents` is never used
+   --> src/clusters.rs:117:12
+    |
+--- fin ---
+  ```
+
+- **job_output** `{"job_id": "bash-144", "timeout_ms": 1200000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+### 🤖 Assistant
+
+⏵ Pendant la porte : note du clamp SwiGLU dans le rapport.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='reports/rapport-v4-hca.md'\ns=open(p).read()\na=\"\"\"## 7. Reste à faire\"\"\"\nb=\"\"\"## 7.bis Un manque trouvé en relisant les métadonnées : le **clamp SwiGLU**\n\nV4-Flash déclare `swiglu_clamp_exp = 10.0 … [1007 caractères tronqués]`
