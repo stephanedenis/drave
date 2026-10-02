@@ -1581,7 +1581,12 @@ utilisera 9,95 Mo par expert, valeur de DeepSeek-V4.1");
             let _ = (ffn, embd);
             let total = g.octets_poids() as f64 / 1e9;
             let _ = couches;
-            println!("Modèle : {} · {:.1} Go · {} experts de {:.2} Mo\n", arch, total, n_exp, mo);
+            if n_exp > 0 {
+                println!("Modèle : {} · {:.1} Go · {} experts de {:.2} Mo\n",
+                         arch, total, n_exp, mo);
+            } else {
+                println!("Modèle : {} · {:.1} Go · dense (aucun expert)\n", arch, total);
+            }
             (total, n_exp, mo, arch)
         }
         Err(_) => (0.0, 384, 9.95, String::from("DeepSeek-V4.1 (défaut)")),

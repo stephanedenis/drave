@@ -53760,3 +53760,30 @@ usage: drave <modele.gguf|dossier-de-clusters> [--matrix NOM] [--threads N]
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -m \"Aide du moteur : les modes recents, et ce que chacun ne fait pas\n\nUsage reecrit : --materiel (avec sa raison d'etre), --sonder-engram,\n--tete-restreinte (et son avertissement : change la sortie, re … [409 caractères tronqués]`
+
+  ```
+0c6bca8 Aide du moteur : les modes recents, et ce que chacun ne fait pas
+copie : 176.8 Go / 365.7
+gpt-oss ctx 256 (attendu 15,1757) :
+  ```
+
+### 🤖 Assistant
+
+⏵ Copie ralentie par gpt-oss. Je teste la robustesse de `--materiel` sur tous les modèles.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for m in models/Qwen2.5-0.5B-Q8_0.gguf /home/stephane/Data13TB/stephane/modeles/gguf/qwen2.5-1.5b-instruct-q4_k_m.gguf /home/stephane/Data13TB/stephane/modeles/gguf/Qwen3-30B-A3B-Instruct-2507-Q4_K_M.gguf /home/stephane/FastNVMe/arte … [448 caractères tronqués]`
+
+  ```
+Qwen2.5-0.5B-Q8_0.gguf                     Modèle : qwen2 · 0.5 Go · 0 experts de 9.95 Mo
+qwen2.5-1.5b-instruct-q4_k_m.gguf          Modèle : qwen2 · 1.1 Go · 0 experts de 9.95 Mo
+Qwen3-30B-A3B-Instruct-2507-Q4_K_M.gguf    Modèle : qwen3moe · 18.6 Go · 128 experts de 3.06 Mo
+qwen3-30b-8clusters-v2                     Modèle : qwen3moe · 18.6 Go · 128 experts de 3.06 Mo
+gpt-oss-120b-MXFP4.gguf                    Modèle : gpt-oss · 63.4 Go · 128 experts de 13.22 Mo
+DeepSeek-V4-Flash-UD-IQ1_M-00001-of-00003. Modèle : deepseek4 · 86.9 Go · 256 experts de 6.88 Mo
+  ```
+
+### 🤖 Assistant
+
+⏵ Ça marche partout. Un détail : les modèles denses affichent « 0 experts de 9,95 Mo ». Je corrige.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np = 'drave-core/src/main.rs'\ns = open(p).read()\na = '''            println!(\"Modèle : {} · {:.1} Go · {} experts de {:.2} Mo\\\\n\", arch, total, n_exp, mo);'''\nb = '''            if n_exp > 0 {\n                … [911 caractères tronqués]`
