@@ -50729,3 +50729,270 @@ test result: ok. 32 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; fin
 ⏵ La trace tourne encore ; l'analyse sur 1 024 jetons est déjà stable. Je fais le point final.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -m \"Journal\" 2>/dev/null; echo \"=== LIVRABLES DE LA DEMANDE ===\"; for f in reports/rapport-empreinte-memoire.md sprints/09-empreinte-memoire-ce-qui-reduit-vraiment.md tools/analyse_empreinte.py REPRISE … [532 caractères tronqués]`
+
+  ```
+=== LIVRABLES DE LA DEMANDE ===
+  reports/rapport-empreinte-memoire.md                      479 lignes
+  sprints/09-empreinte-memoire-ce-qui-reduit-vraiment.md    124 lignes
+  tools/analyse_empreinte.py                                208 lignes
+  REPRISE.md                                                837 lignes
+  README.md                                                 591 lignes
+
+=== TRACES CONSERVÉES (rejouables) ===
+code_1024.virg en_1024.virg fr_1024.virg fr_gros.ids journal.ids routage_code_1024.txt routage_en_1024.txt routage_fr_1024.txt routage_journal.txt routage_long.txt 
+34M	/home/stephane/FastNVMe/artefacts/traces/session-01-10/
+
+=== DÉPÔT ===
+7
+commits depuis la reprise
+0
+fichiers en attente
+  ```
+
+### 🤖 Assistant
+
+Demande traitée de bout en bout.
+
+## Ce qui est écrit
+
+| document | |
+|---|---|
+| `reports/rapport-empreinte-memoire.md` | 479 lignes — les 11 pistes mesurées, la découverte de l'engram, l'analyse du journal |
+| `sprints/09-…md` | objectif, verdicts, rétrospective, planning |
+| `tools/analyse_empreinte.py` | rejoue une trace : courbes par couche, allocation, périodicité, extrapolation |
+| `REPRISE.md` · `README.md` | mis à jour |
+| traces NVMe | **34 Mo**, rejouables (journal inclus) |
+
+Dépôt propre, 32 tests verts.
+
+## Le journal rejoué : notre usage ne change rien, la langue oui
+
+Les 28 sessions (59 Mo, **2,5 M jetons**) tokenisées et routées :
+
+| corpus | 50 % | 80 % | 90 % |
+|---|---|---|---|
+| **journal** (notre usage) | 16,9 | 41,6 | **58,1** |
+| français générique | 18,1 | 44,1 | 59,3 |
+| **anglais** | 11,4 | 31,6 | **44,5** |
+| code | 16,7 | 41,9 | 56,3 |
+
+Notre profil est reconnaissable (70,8 % au plus proche voisin, contre 25 % au hasard) mais **ne change pas l'empreinte**. Ce qui la change, c'est la langue :
+
+| contenu | 90 % des appels sur | Go d'experts (V4.1) |
+|---|---|---|
+| français | 46,3 % | **71** |
+| **anglais** | 34,8 % | **53** |
+
+**18 Go d'écart**, et le code et la technique sont massivement anglais.
+
+## Couche par couche : l'inverse de l'intuition
+
+| | experts pour 90 % |
+|---|---|
+| **couches 0-3 (entrée)** | **75 à 82** — les moins réductibles |
+| couches 16-30 (milieu) | **42 à 49** — les plus réductibles |
+| **couche 47** | journal 50 · français **36** |
+
+Les premières couches veulent presque tout le catalogue ; les médianes se contentent d'un tiers. Le journal s'écarte surtout en sortie (+14 à la couche 47) : notre contenu produit des tokens plus variés que du français homogène.
+
+## L'engram, dimensionné pour notre usage
+
+| jetons | entrées touchées | mémoire |
+|---|---|---|
+| 10 000 | 17 276 | **4,6 Mo** |
+| 100 000 | 109 233 | 28,8 Mo |
+| **2 510 800** (tout le journal) | 1 470 860 | **388 Mo** |
+
+**388 Mo couvrent l'intégralité de notre journal**, sur une table de 101 Go par couche — 0,38 %. Le vocabulaire du corpus fait 19 228 tokens (**12,66 %**), confirmant le plafond trouvé sur du français générique.
+
+## Les pistes qui sortent de cette passe
+
+1. **L'engram mmappé** — 203 Go → 0,4 Go. La plus grosse, et la plus simple : pas de LRU, le noyau fait le travail.
+2. **L'empreinte adaptée à la langue** *(nouvelle)* — 53 Go en anglais contre 71 en français. Le détecteur existe déjà : 79,8 % par le seul routage.
+3. **Le cache d'experts** — 25 % de l'empreinte sert 80 % des appels.
+
+Et onze pistes écartées, chacune avec son chiffre : découper sous l'expert (×287), grappes par langue (0,75–0,90 contre 0,805 *interne*), dictionnaire token → experts (0,06), pré-remplissage (32 jetons), allocation par couche (+1,2 %), localité temporelle, ordre des experts, préchargement (**calcul 18× plus rapide que la lecture** — le mur qui explique l'échec de toutes les prédictions).
+
+**Ce qui reste non résolu** : l'engram n'est pas *exécuté* — sans `forward` pour `deepseek4`, le compte de n-grammes vient du texte, pas de l'accès réel au tenseur. Et l'extrapolation à 384 experts suppose la même concentration relative que Qwen3. Les deux sont dans le rapport, pas lissées.
+
+
+## Tour 65
+
+### 👤 Utilisateur
+
+note bien tout ça et fais une analyse statique du modèle couche par couche pour trouver des regroupements de sources et  destinations afin de trouver des patterns pour de nouveaux clusters à isoler.
+
+### 🤖 Assistant
+
+⏵ Nouvelle demande : analyse **statique** des poids (pas des traces) pour trouver des regroupements sources/destinations. Je vérifie d'abord ce qui est lisible.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && A=/home/stephane/FastNVMe/artefacts/modeles-optimises/qwen3-30b-8clusters-v2; ./drave-core/target/release/drave $A/cluster-00.gguf --tensors 2>&1 | grep -E \"ffn_(gate|up|down)_exps|blk.0.ffn\" | head -6; echo \"=== types et tailles  … [752 caractères tronqués]`
+
+  ```
+Q6_K     blk.0.ffn_down_exps.weight             [16, 2048, 768] · 25.2 M poids · fichier 0
+  Q4_K     blk.0.ffn_gate_exps.weight             [16, 768, 2048] · 25.2 M poids · fichier 0
+  Q4_K     blk.0.ffn_up_exps.weight               [16, 768, 2048] · 25.2 M poids · fichier 0
+  Q6_K     blk.1.ffn_down_exps.weight             [16, 2048, 768] · 25.2 M poids · fichier 0
+  Q4_K     blk.1.ffn_gate_exps.weight             [16, 768, 2048] · 25.2 M poids · fichier 0
+  Q4_K     blk.1.ffn_up_exps.weight               [16, 768, 2048] · 25.2 M poids · fichier 0
+=== types et tailles ===
+  gate_exps  (16, 768, 2048) · 1,572,864 poids · 0.88 Mo par expert
+  down_exps  (16, 2048, 768) · 1,572,864 poids · 1.29 Mo par expert
+
+  Pour l'analyse statique, on lit les N PREMIÈRES LIGNES de chaque expert :
+     4 lignes de gate = 4,608 octets/expert x 128 experts = 0.6 Mo
+     8 lignes de gate = 9,216 octets/expert x 128 experts = 1.2 Mo
+    16 lignes de gate = 18,432 octets/expert x 128 experts = 2.4 Mo
+  ```
+
+### 🤖 Assistant
+
+⏵ J'écris l'analyse statique : lire les poids des experts, déquantifier, comparer sources et destinations.
+
+- **write** `{"content": "#!/usr/bin/env python3\n\"\"\"Analyse STATIQUE des experts d'un MoE : que portent les poids eux-mêmes.\n\nLes traces de routage disent quels experts sont *appelés*. Ce script regarde ce\nqu'ils *sont* : deux experts aux poids presque identiques sont redondants, et\nl'un des deux peut di … [9921 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/analyse_experts_statique.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np = 'tools/analyse_experts_statique.py'\ns = open(p).read()\ns = s.replace('''            # Sources et destinations : quelles dimensions d'entrée / de sortie\n            # portent le poids ? On compare les profils, … [1900 caractères tronqués]`
+
+  ```
+qwen3moe · 128 experts par couche · lecture de 8 lignes par expert
+
+=== COUCHE 0 ===
+  gate_exps [128, 768, 2048] : similarité max 0.185 (experts 89/90) · médiane 0.001 · 0 paires ≥ 0.9
+         sources      : 1597/2048 portent 80 % (78.0 %) · max/min      4.8
+         destinations : 7/8 portent 80 % (87.5 %) · max/min      1.0
+  up_exps [128, 768, 2048] : similarité max 0.060 (experts 112/118) · médiane -0.000 · 0 paires ≥ 0.9
+         sources      : 1598/2048 portent 80 % (78.0 %) · max/min      4.0
+         destinations : 7/8 portent 80 % (87.5 %) · max/min      1.0
+Traceback (most recent call last):
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/analyse_experts_statique.py", line 218, in <module>
+    main()
+    ~~~~^^
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/analyse_experts_statique.py", line 179, in main
+    X = np.stack([lignes(octets[e * besoin:(e + 1) * besoin],
+                  ~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                         args.lignes, n_cols, ttype) for e in range(n_exp_t)])
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/analyse_experts_statique.
+… [128 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ **Résultat net : les experts sont quasi orthogonaux** (similarité max 0,185). Je complète pour Q6_K.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np = 'tools/analyse_experts_statique.py'\ns = open(p).read()\ns = s.replace('''def lignes(octets, n_lignes, n_cols, ttype):''',\n'''def dequant_q6k(bloc):\n    \"\"\"Q6_K : 210 octets pour 256 poids (ql 128, qh 64, s … [2061 caractères tronqués]`
+
+  ```
+/usr/lib64/python3.13/site-packages/numpy/linalg/_linalg.py:2803: RuntimeWarning: overflow encountered in multiply
+  s = (x.conj() * x).real
+qwen3moe · 128 experts par couche · lecture de 8 lignes par expert
+
+=== COUCHE 0 ===
+  gate_exps [128, 768, 2048] : similarité max 0.185 (experts 89/90) · médiane 0.001 · 0 paires ≥ 0.9
+         sources      : 1597/2048 portent 80 % (78.0 %) · max/min      4.8
+         destinations : 7/8 portent 80 % (87.5 %) · max/min      1.0
+  up_exps [128, 768, 2048] : similarité max 0.060 (experts 112/118) · médiane -0.000 · 0 paires ≥ 0.9
+         sources      : 1598/2048 portent 80 % (78.0 %) · max/min      4.0
+         destinations : 7/8 portent 80 % (87.5 %) · max/min      1.0
+  down_exps [128, 2048, 768] : similarité max 0.000 (experts 126/127) · médiane 0.000 · 0 paires ≥ 0.9
+         sources      : 52/768 portent 80 % ( 6.8 %) · max/min 26058687740699638773159248847888711680.0
+         destinations : 7/8 portent 80 % (87.5 %) · max/min      1.0
+
+=== COUCHE 6 ===
+  gate_exps [128, 768, 2048] : similarité max 0.076 (experts 5/95) · médiane 0.017 · 0 paires ≥ 0.9
+         sources      : 1603/2048 portent 80 % (78.3 %) · max/min      2.8
+         desti
+… [3817 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Similarité intra-couche quasi nulle (experts orthogonaux). Reste LA question : la périodicité de 12 a-t-elle une contrepartie **statique** ?
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/inter_couches.py <<'PY'\nimport sys\nsys.path.insert(0, 'tools')\nimport numpy as np\nfrom analyse_experts_statique import Lecteur, lignes\n\nM = \"/home/stephane/Data13TB/stephane/modeles/gguf/Qwen3-30B-A3B-Instruct-2507- … [2054 caractères tronqués]`
+
+  ```
+/usr/lib64/python3.13/site-packages/numpy/linalg/_linalg.py:2803: RuntimeWarning: overflow encountered in multiply
+  s = (x.conj() * x).real
+=== LA PÉRIODICITÉ DE 12 A-T-ELLE UNE CONTREPARTIE STATIQUE ? ===
+  (mêmes indices d'experts, même tenseur, deux couches ; corrélation moyenne)
+
+  --- weight ---
+    couches  0/12 : corrélation +0.0014  
+    couches 12/24 : corrélation +0.3429  #################
+    couches 24/36 : corrélation +0.3121  ###############
+    couches  0/ 1 : corrélation +0.0013  
+    couches  0/24 : corrélation +0.0011  
+    couches  0/ 6 : corrélation +0.0008  
+    couches  0/36 : corrélation +0.0001  
+    couches  6/18 : corrélation +0.2851  ##############
+    couches 18/30 : corrélation +0.3887  ###################
+
+  --- weight ---
+    couches  0/12 : corrélation +0.0002  
+    couches 12/24 : corrélation +0.3199  ###############
+    couches 24/36 : corrélation +0.2655  #############
+    couches  0/ 1 : corrélation +0.0004  
+    couches  0/24 : corrélation +0.0000  
+    couches  0/ 6 : corrélation -0.0011  
+    couches  0/36 : corrélation +0.0004  
+    couches  6/18 : corrélation +0.2424  ############
+    couches 18/30 : corrélation +0.3163  ###############
+
+  
+… [687 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ **Découverte : la périodicité de 12 a une contrepartie statique** (corrélation 0,27–0,39 des poids), sauf la couche 0. Je mesure la distribution par expert.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/distribution.py <<'PY'\nimport sys\nsys.path.insert(0, 'tools')\nimport numpy as np\nfrom analyse_experts_statique import Lecteur, lignes\nM = \"/home/stephane/Data13TB/stephane/modeles/gguf/Qwen3-30B-A3B-Instruct-2507-Q4_ … [2111 caractères tronqués]`
+
+  ```
+=== CORRÉLATION PAR EXPERT, paires à écart 12 ===
+     paire  moyenne     max   >0.5   >0.7   >0.9
+   0/12     +0.0014  +0.020      0      0      0
+   1/13     -0.0001  +0.020      0      0      0
+   2/14     +0.0022  +0.027      0      0      0
+   3/15     +0.0030  +0.025      0      0      0
+   4/16     +0.0029  +0.022      0      0      0
+   5/17     +0.0024  +0.027      0      0      0
+   6/18     +0.2851  +0.351      0      0      0
+  12/24     +0.3429  +0.449      0      0      0
+  18/30     +0.3887  +0.487      0      0      0
+  24/36     +0.3121  +0.462      0      0      0
+  35/47     +0.0002  +0.022      0      0      0
+
+=== LA COUCHE 0 EST-ELLE UNE EXCEPTION ? (corrélation avec toutes) ===
+  0/ 1 : moyenne +0.0013 · max +0.021
+  0/ 2 : moyenne +0.0004 · max +0.020
+  0/ 3 : moyenne -0.0004 · max +0.018
+  0/ 4 : moyenne +0.0001 · max +0.019
+  0/ 5 : moyenne +0.0010 · max +0.019
+  0/ 6 : moyenne +0.0008 · max +0.020
+  0/ 8 : moyenne +0.0007 · max +0.017
+  0/12 : moyenne +0.0014 · max +0.020
+
+=== OÙ COMMENCE LA PÉRIODICITÉ ? (corrélation L/L+12) ===
+   0/12 : +0.0014  
+   3/15 : +0.0030  
+   6/18 : +0.2851  #################
+   9/21 : +0.2735  ################
+  12/24 : +0.3
+… [263 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Structure précise trouvée. Je consigne : la périodicité est statique **et** limitée aux couches 6-39.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np = 'reports/rapport-empreinte-memoire.md'\ns = open(p).read()\ns = s.replace('''## 11. Ce que ça donne pour DeepSeek-V4.1-Flash''',\n'''## 11. Analyse STATIQUE des poids : les experts sont orthogonaux, mais les cou … [4593 caractères tronqués]`

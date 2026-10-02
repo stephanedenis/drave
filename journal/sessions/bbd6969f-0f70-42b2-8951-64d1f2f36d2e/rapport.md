@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 75.4 h |
-| Tours | 64 |
-| Messages | 3167 |
-| Appels d'outils | 2998 |
-| Fichiers touchés | 68 |
-| Commandes | 2607 |
+| Durée | 77.5 h |
+| Tours | 65 |
+| Messages | 3176 |
+| Appels d'outils | 3005 |
+| Fichiers touchés | 69 |
+| Commandes | 2613 |
 | Sous-agents | 22 |
-| Commits | 262 |
+| Commits | 263 |
 | Compactages de contexte | 4 |
 
 ## Objectifs déclarés
@@ -163,6 +163,8 @@
 **Tour 63** — nous venons de faire une longue session, il est temps de mettre à jour la doc, rapports, journal et reprise. Ensuite utilisons les logs de cette session pour les rejouer localement et analyser le comportement, couche par couche afin d'identifier d'autres pistes d'optimisation de l'empreinte mémoire deepseek 4.1.
 
 **Tour 64** — utilisons les logs de cette session (journal/session) pour les rejouer localement et analyser le comportement, couche par couche afin d'identifier d'autres pistes d'optimisation de l'empreinte mémoire deepseek 4.1.
+
+**Tour 65** — note bien tout ça et fais une analyse statique du modèle couche par couche pour trouver des regroupements de sources et  destinations afin de trouver des patterns pour de nouveaux clusters à isoler.
 
 ## 2. Déroulé, étape par étape
 
@@ -3181,7 +3183,82 @@ Ce dernier chiffre explique d'un coup pourquoi *aucune* piste de prédiction ne 
 
 **Synthèse produite :**
 
-⏵ La trace tourne encore ; l'analyse sur 1 024 jetons est déjà stable. Je fais le point final.
+Demande traitée de bout en bout.
+
+\## Ce qui est écrit
+
+| document | |
+|---|---|
+| `reports/rapport-empreinte-memoire.md` | 479 lignes — les 11 pistes mesurées, la découverte de l'engram, l'analyse du journal |
+| `sprints/09-…md` | objectif, verdicts, rétrospective, planning |
+| `tools/analyse_empreinte.py` | rejoue une trace : courbes par couche, allocation, périodicité, extrapolation |
+| `REPRISE.md` · `README.md` | mis à jour |
+| traces NVMe | **34 Mo**, rejouables (journal inclus) |
+
+Dépôt propre, 32 tests verts.
+
+\## Le journal rejoué : notre usage ne change rien, la langue oui
+
+Les 28 sessions (59 Mo, **2,5 M jetons**) tokenisées et routées :
+
+| corpus | 50 % | 80 % | 90 % |
+|---|---|---|---|
+| **journal** (notre usage) | 16,9 | 41,6 | **58,1** |
+| français générique | 18,1 | 44,1 | 59,3 |
+| **anglais** | 11,4 | 31,6 | **44,5** |
+| code | 16,7 | 41,9 | 56,3 |
+
+Notre profil est reconnaissable (70,8 % au plus proche voisin, contre 25 % au hasard) mais **ne change pas l'empreinte**. Ce qui la change, c'est la langue :
+
+| contenu | 90 % des appels sur | Go d'experts (V4.1) |
+|---|---|---|
+| français | 46,3 % | **71** |
+| **anglais** | 34,8 % | **53** |
+
+**18 Go d'écart**, et le code et la technique sont massivement anglais.
+
+\## Couche par couche : l'inverse de l'intuition
+
+| | experts pour 90 % |
+|---|---|
+| **couches 0-3 (entrée)** | **75 à 82** — les moins réductibles |
+| couches 16-30 (milieu) | **42 à 49** — les plus réductibles |
+| **couche 47** | journal 50 · français **36** |
+
+Les premières couches veulent presque tout le catalogue ; les médianes se contentent d'un tiers. Le journal s'écarte surtout en sortie (+14 à la couche 47) : notre contenu produit des tokens plus variés que du français homogène.
+
+\## L'engram, dimensionné pour notre usage
+
+| jetons | entrées touchées | mémoire |
+|---|---|---|
+| 10 000 | 17 276 | **4,6 Mo** |
+| 100 000 | 109 233 | 28,8 Mo |
+| **2 510 800** (tout le journal) | 1 470 860 | **388 Mo** |
+
+**388 Mo couvrent l'intégralité de notre journal**, sur une table de 101 Go par couche — 0,38 %. Le vocabulaire du corpus fait 19 228 tokens (**12,66 %**), confirmant le plafond trouvé sur du français générique.
+
+\## Les pistes qui sortent de cette passe
+
+1. **L'engram mmappé** — 203 Go → 0,4 Go. La plus grosse, et la plus simple : pas de LRU, le noyau fait le travail.
+2. **L'empreinte adaptée à la langue** *(nouvelle)* — 53 Go en anglais contre 71 en français. Le détecteur existe déjà : 79,8 % par le seul routage.
+3. **Le cache d'e
+… [737 caractères tronqués]
+
+### Tour 65 — note bien tout ça et fais une analyse statique du modèle couche par couche pour trouver des regroupements de sources et  … [78 caractères tronqués]
+
+*7 appels d'outils.* Actions notables :
+
+- bash — Check expert tensor layout for static analysis
+- write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/analyse_experts_statique.py`
+- bash — Run static expert analysis
+- bash — Add Q6_K support and run full analysis
+- bash — Test static counterpart of the periodicity
+- bash — Per-expert correlation distribution
+- bash — Document static analysis findings
+
+**Synthèse produite :**
+
+⏵ Structure précise trouvée. Je consigne : la périodicité est statique **et** limitée aux couches 6-39.
 
 ## 3. Travail accompli
 
@@ -3257,6 +3334,7 @@ Ce dernier chiffre explique d'un coup pourquoi *aucune* piste de prédiction ne 
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-empreinte-memoire.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/analyse_empreinte.py` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/sprints/09-empreinte-memoire-ce-qui-reduit-vraiment.md` | 2 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/analyse_experts_statique.py` | 1 | 0 |
 
 ### Sous-agents lancés
 
@@ -3325,7 +3403,7 @@ Ce dernier chiffre explique d'un coup pourquoi *aucune* piste de prédiction ne 
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 2567 autres
+- … et 2573 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -3735,4 +3813,5 @@ Ce dernier chiffre explique d'un coup pourquoi *aucune* piste de prédiction ne 
 - Rejouer notre propre journal : notre usage ne change pas l'empreinte, la langue si  Les 28 sessions du journal (59 Mo, 2,5 M jetons) tokenisees et routees. L'em
 - Analyse couche par couche du journal : il se place entre le francais et l'anglais  Le journal demande 58,1 experts pour 90 % des appels, entre le francais (59,3
 - Journal" 2>/dev/null; echo "=== LIVRABLES DE LA DEMANDE ==="; for f in reports/rapport-empreinte-memoire.md sprints/09-empreinte-memoire-ce-qui-reduit-vraiment.
+- Analyse statique : les experts sont orthogonaux, mais la periodicite de 12 est dans les POIDS  tools/analyse_experts_statique.py dequantifie les experts (Q4_K, 
 

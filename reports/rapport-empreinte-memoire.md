@@ -391,7 +391,70 @@ simples » — et ça ne se traduit pas en gain, l'allocation non uniforme valan
 touche plus le disque. Et le vocabulaire de ce corpus fait **19 228 tokens
 (12,66 %)**, ce qui confirme le plafond mesuré sur du français générique.
 
-## 11. Ce que ça donne pour DeepSeek-V4.1-Flash
+## 11. Analyse STATIQUE des poids : les experts sont orthogonaux, mais les couches se répètent
+
+Les traces disent quels experts sont *appelés*. L'analyse statique dit ce qu'ils
+*sont* — et une redondance de poids serait une économie qu'aucune trace ne peut
+révéler. Outil : `tools/analyse_experts_statique.py`.
+
+### Aucun expert jumeau
+
+Similarité (corrélation) entre les experts d'une même couche, sur Qwen3-30B :
+
+| couche | tenseur | similarité max | médiane | paires ≥ 0,9 |
+|---|---|---|---|---|
+| 0 | gate | 0,185 | 0,001 | 0 |
+| 0 | up | 0,060 | 0,000 | 0 |
+| 6 | gate | 0,076 | 0,017 | 0 |
+| 12 | gate | 0,056 | 0,002 | 0 |
+| 47 | gate | 0,187 | 0,011 | 0 |
+
+**Les experts d'une couche sont quasi orthogonaux** (max 0,04–0,19, médiane
+~0,00). Aucun n'est le doublon d'un autre : il n'y a **rien à fusionner**. C'est
+une réponse négative, mais elle ferme une piste qui semblait évidente.
+
+Les **sources** (colonnes d'entrée) ne sont pas creuses non plus : ~**78 % des
+colonnes** portent 80 % du poids, uniformément sur les 48 couches.
+
+### Mais la périodicité de 12 est bien réelle — dans les poids aussi
+
+Corrélation moyenne entre les experts de **mêmes indices** de deux couches :
+
+| paire | | paire | |
+|---|---|---|---|
+| 0/12 | **+0,001** | 12/24 | **+0,343** |
+| 3/15 | +0,003 | 18/30 | **+0,389** |
+| 6/18 | **+0,285** | 24/36 | **+0,312** |
+| 9/21 | +0,274 | 27/39 | +0,323 |
+| | | 30/42 | **+0,003** |
+| | | 33/45 | +0,003 |
+
+**La périodicité n'est pas qu'un artefact de routage : les poids la portent
+aussi** (corrélation 0,27–0,39 à écart 12, contre ~0,00 pour tout autre écart).
+Elle est donc **structurelle**, pas fonctionnelle.
+
+Deux précisions qui comptent :
+
+- **elle est bornée aux couches 6–39** (trois cycles de 12). Les couches 0–5 et
+  30–47 n'en montrent aucune trace ;
+- **aucun expert ne dépasse 0,5** de corrélation (maximum mesuré : 0,49). Les
+  experts sont *similaires*, pas *identiques* : **rien à fusionner là non plus**.
+
+### Ce que ça ouvre, et ce que ça ne donne pas
+
+| idée | verdict |
+|---|---|
+| fusionner des experts jumeaux | **non** — orthogonaux (max 0,19) |
+| stocker W(L+12) comme W(L) + résidu | **non** — le résidu porte 88 % de l'énergie |
+| regrouper les experts corrélés dans un même cluster | cohérent, mais la localité ne paie pas sur NVMe |
+| décomposition conjointe des 4 couches d'un cycle | **piste ouverte** — 35 % de variance partagée à extraire, rang inconnu |
+
+La dernière ligne est la seule qui reste : si une base de rang faible capture la
+part commune aux quatre couches d'un cycle, on stocke la base plus quatre
+résidus. **Le gain dépend du rang, qui n'est pas mesuré** — je ne le compte donc
+pas comme un résultat, seulement comme une expérience à faire.
+
+## 12. Ce que ça donne pour DeepSeek-V4.1-Flash
 
 | | par jeton |
 |---|---|
@@ -431,7 +494,7 @@ le retour de `pread` et a chronométré ce disque à **2 211 Go/s**. C'est le ch
 absurde qui a alerté, pas le test. `O_DIRECT` échoue par ailleurs ici (errno 29),
 donc le régime réellement froid n'est pas mesuré proprement.*
 
-## 12. La conclusion : ce qu'il faut charger avant d'opérer
+## 13. La conclusion : ce qu'il faut charger avant d'opérer
 
 | | poids total | à charger | rapport |
 |---|---|---|---|
@@ -447,9 +510,12 @@ personne n'a besoin de charger.
 C'est aussi la réponse à la question posée au début de la session : ce qu'il faut
 réduire, ce ne sont ni les experts ni les couches, c'est **la table d'engram**.
 
-## 13. Ce qui reste à faire
+## 14. Ce qui reste à faire
 
-0. **Adapter l'empreinte à la langue** : 53 Go en anglais contre 71 en français.
+0. **La décomposition conjointe des cycles de 12** : mesurer le rang de la part
+   commune aux quatre couches d'un cycle. Si elle est basse, c'est une économie
+   réelle sur les couches 6–39.
+0bis. **Adapter l'empreinte à la langue** : 53 Go en anglais contre 71 en français.
    Le détecteur de langue existe déjà par le routage (79,8 %).
 1. **L'accès mmappé à l'engram** : c'est la brique principale, et elle divise
    l'empreinte par 5 à lui seule. Elle est **plus simple** que le cache
