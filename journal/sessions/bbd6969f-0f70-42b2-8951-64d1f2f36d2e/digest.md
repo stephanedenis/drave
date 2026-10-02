@@ -73174,3 +73174,393 @@ toutes les portes sont vertes
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='docs/plan-deepseek41-complet.md'\ns=open(p).read()\na=\"\"\"### 3.3 Les régimes d'attention de V4.1\"\"\"\nb=\"\"\"### 3.2bis Les régimes d'attention de V4-Flash (corrigé le 02/10)\n\n`attention.compress_ratio … [3053 caractères tronqués]`
+
+  ```
+ok
+8e47ff9 V4-Flash n'était pas « calculable » : deux clés lues sous le mauvais nom
+  ```
+
+### 🤖 Assistant
+
+⏵ P2 : lecture de l'attention V4 « brute » et de la sortie groupée dans la référence.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/llama.cpp && grep -n \"build_raw_attention\\|build_attn_out\\|attn_output_a\\|wo_a\\|wo_b\\|n_groups\\|output_group\" src/models/deepseek4.cpp | head -20", "description": "Find raw attention and grouped output in reference"}`
+
+  ```
+99:        layer.wo_a          = create_tensor(tn(LLM_TENSOR_ATTN_OUT_A,    "weight", i), {n_head * n_embd_head / o_groups, o_lora_rank * o_groups}, 0);
+100:        layer.wo_b          = create_tensor(tn(LLM_TENSOR_ATTN_OUT_B,    "weight", i), {o_groups * o_lora_rank, n_embd}, 0);
+810:ggml_tensor * llama_model_deepseek4::graph::build_raw_attention(
+863:    const int64_t n_groups         = hparams.dsv4_o_group_count;
+864:    const int64_t n_heads_group    = n_head / n_groups;
+870:    GGML_ASSERT(n_head % n_groups == 0);
+1111:        out = build_raw_attention(inp_attn, q, kv, layer.attn_sinks,
+1129:    out = ggml_reshape_3d(ctx0, out, o_group_dim, n_groups, nt);
+1131:    ggml_tensor * oa = ggml_mul_mat(ctx0, ggml_reshape_3d(ctx0, layer.wo_a, layer.wo_a->ne[0], o_lora_rank, n_groups), out);
+1132:    cb(oa, "attn_wo_a", il);
+1134:    oa = ggml_cont_2d(ctx0, oa, o_lora_rank*n_groups, nt);
+1136:    out = build_lora_mm(layer.wo_b, oa);
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/llama.cpp && sed -n '810,870p' src/models/deepseek4.cpp; echo \"=== sortie groupée 1118-1140 ===\"; sed -n '1118,1140p' src/models/deepseek4.cpp", "description": "Read raw attention and grouped output code"}`
+
+  ```
+ggml_tensor * llama_model_deepseek4::graph::build_raw_attention(
+        llm_graph_input_dsv4_raw * inp_attn,
+        ggml_tensor * q,
+        ggml_tensor * kv,
+        ggml_tensor * sinks,
+        float kq_scale,
+        int il) const {
+    GGML_ASSERT(hparams.is_swa(il));
+
+    ggml_tensor * k_rot = inp_attn->self_k_rot;
+
+    if (k_rot) {
+        q  = llama_mul_mat_hadamard(ctx0, q, k_rot);
+        kv = llama_mul_mat_hadamard(ctx0, kv, k_rot);
+    }
+
+    ggml_build_forward_expand(gf, q);
+    ggml_build_forward_expand(gf, kv);
+
+    const llama_kv_cache_dsv4_raw_context * mctx_cur = inp_attn->mctx;
+
+    ggml_build_forward_expand(gf, mctx_cur->cpy_k(ctx0, kv, inp_attn->get_k_idxs(), il));
+    if (ggml_tensor * tail_write = mctx_cur->cpy_k_tail(ctx0, kv, inp_attn->self_tail_idxs, il)) {
+        ggml_build_forward_expand(gf, tail_write);
+    }
+
+    ggml_tensor * kq_mask = inp_attn->get_kq_mask();
+
+    ggml_tensor * k = mctx_cur->get_k(ctx0, il);
+
+    ggml_tensor * raw_tail = build_raw_tail(inp_attn, il);
+    ggml_tensor * out = build_attn_mha(q, k, k, nullptr, kq_mask, sinks, nullptr, kq_scale, il,
+            raw_tail, raw_tail, inp_attn->get_kq_mask_tail(), nullptr);
+    if (k_rot) {
+… [2107 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/llama.cpp && sed -n '1090,1118p' src/models/deepseek4.cpp; echo \"=== kq_scale ===\"; grep -n \"kq_scale\" src/models/deepseek4.cpp | head; echo \"=== sinks dans build_attn_mha ===\"; grep -n \"sinks\" src/llama-graph.cpp | head -12", "descript … [50 caractères tronqués]`
+
+  ```
+hca_state_kv = inp_dsv4->mctx->get_hca_state()->cpy_kv(ctx0,
+                hca_persist_kv, inp_dsv4->get_hca().state_persist_dst_idxs, il);
+        hca_state_score = inp_dsv4->mctx->get_hca_state()->cpy_score(ctx0,
+                hca_persist_score, inp_dsv4->get_hca().state_persist_dst_idxs, il);
+
+        ggml_build_forward_expand(gf, hca_state_kv);
+        ggml_build_forward_expand(gf, hca_state_score);
+    }
+
+    ggml_tensor * out = nullptr;
+    if (ratio == DSV4_CSA_RATIO &&
+            inp_dsv4->get_csa().kq_mask &&
+            inp_dsv4->get_lid().kq_mask &&
+            inp_dsv4->get_lid().k_rot) {
+        out = build_csa_lid_attention(model, inp_dsv4, inp_attn, q, kv, qr, cur, inp_pos, layer.attn_sinks,
+                1.0f/sqrtf(float(n_embd_head)), il);
+    } else if (ratio == DSV4_HCA_RATIO &&
+            inp_dsv4->get_hca().kq_mask) {
+        out = build_hca_attention(inp_dsv4, inp_attn, q, kv, layer.attn_sinks,
+                1.0f/sqrtf(float(n_embd_head)), il);
+    } else {
+        out = build_raw_attention(inp_attn, q, kv, layer.attn_sinks,
+                1.0f/sqrtf(float(n_embd_head)), il);
+    }
+
+    out = ggml_reshape_3d(ctx0, out, n_embd_head, n_head, nt);
+    
+… [1348 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ P2 : implémentation de l'attention V4 (une seule tête latente, valeurs = clés, sortie groupée).
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"mla_cache\" drave-core/src/model.rs | head; sed -n \"$(grep -n 'let mla_cache' drave-core/src/model.rs | head -1 | cut -d: -f1),+12p\" drave-core/src/model.rs", "description": "Inspect MLA cache allocation"}`
+
+  ```
+1827:    pub mla_cache: Vec<(Vec<f32>, Vec<f32>)>,
+2793:        let mla_cache = match mla.as_ref() {
+2869:            cache_experts, mla, mla_cache, jeton_trace: 0, trace: None, flux_force: None,
+4243:                let (ckv, krop) = &mut self.mla_cache[l];
+4249:            let (ckv, krop) = &self.mla_cache[l];
+4463:                Self::attn_mla(m, &mut self.mla_cache[l], &hn, pos, cfg.rope_base, &mut att,
+        let mla_cache = match mla.as_ref() {
+            Some(v) => v.iter().map(|m| (vec![0f32; ctx * m.kv_lora], vec![0f32; ctx * m.qkr])).collect(),
+            None => Vec::new(),
+        };
+
+        // Cache VRAM des experts : opt-in, et seulement sur un modèle à experts
+        // au format MXFP4 (les autres formats ont leurs propres noyaux).
+        let cache_experts = if std::env::var("DRAVE_GPU_EXPERTS").is_ok()
+                               && crate::gpu::instance().is_some()
+                               && cfg.n_expert > 0 {
+            // Budget par défaut : ce que la VRAM peut donner sans étrangler le
+            // reste. Mesuré : la VRAM lit à 84,9 Go/s contre 22,5 pour la RAM,
+            // et un cache de 25 % de l'empreinte sert 80 % des appels.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '4235,4270p' drave-core/src/model.rs", "description": "Read MLA cache usage in forward"}`
+
+  ```
+let mut q_rope = vec![0f32; nh * qkr];
+            for hh in 0..nh {
+                q_rope[hh * qkr..(hh + 1) * qkr]
+                    .copy_from_slice(&qb[hh * (qkn + qkr) + qkn..(hh + 1) * (qkn + qkr)]);
+            }
+            Self::rope(&mut q_rope, nh, qkr, pos, self.cfg.rope_base, qkr);
+            // --- écriture du cache LATENT
+            {
+                let (ckv, krop) = &mut self.mla_cache[l];
+                ckv[pos * kvl..(pos + 1) * kvl].copy_from_slice(&c_n);
+                krop[pos * qkr..(pos + 1) * qkr].copy_from_slice(&k_rope);
+            }
+            // --- attention : k_nope et v reconstruits à la lecture
+            let n = pos + 1;
+            let (ckv, krop) = &self.mla_cache[l];
+            let mut sortie = vec![0f32; nh * vd];
+            let mut kvt = vec![0f32; nh * (qkn + vd)];
+            let mut sc = vec![0f32; n];
+            for hh in 0..nh {
+                let q_nope = &qb[hh * (qkn + qkr)..hh * (qkn + qkr) + qkn];
+                let qr = &q_rope[hh * qkr..(hh + 1) * qkr];
+                for t in 0..n {
+                    matvec_f32(&m.kv_b, &ckv[t * kvl..(t + 1) * kvl], kvl, nh * (qkn + vd), &mut kvt);
+                    let kt = &k
+… [684 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n \"$(grep -n 'pub fn dequant(' drave-core/src/gguf.rs | head -1 | cut -d: -f1),+30p\" drave-core/src/gguf.rs", "description": "Inspect Gguf::dequant layout"}`
+
+  ```
+pub fn dequant(&self, name: &str) -> Vec<f32> {
+        let t = self.tensor(name).unwrap_or_else(|| panic!("tenseur {name} absent"));
+        let buf = self.tbuf(t);
+        let n = t.nelem();
+        let mut out = Vec::with_capacity(n);
+        match t.ttype {
+            GGML_BF16 => {
+                for i in 0..n {
+                    out.push(bf16_to_f32(u16::from_le_bytes(
+                        buf[2 * i..2 * i + 2].try_into().unwrap())));
+                }
+            }
+            GGML_F32 => {
+                for i in 0..n {
+                    out.push(f32::from_le_bytes(buf[4*i..4*i + 4].try_into().unwrap()));
+                }
+            }
+            GGML_F16 => {
+                for i in 0..n {
+                    out.push(Self::f16_to_f32(u16::from_le_bytes(buf[2*i..2*i + 2].try_into().unwrap())));
+                }
+            }
+            GGML_Q8_0 => {
+                let nb = n / 32;
+                for b in 0..nb {
+                    let p = b * 34;
+                    let d = Self::f16_to_f32(u16::from_le_bytes(buf[p..p+2].try_into().unwrap()));
+                    for j in 0..32 { out.push(d * (buf[p + 2 + j] as i8) as f32); }
+                }
+          
+… [30 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Écriture du chemin d'attention V4 (structure, chargeur, fonction) dans `model.rs`.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='drave-core/src/model.rs'\ns=open(p).read()\na=\"\"\"/// **Hyper-connexions** (DeepSeek-V4 / V4.1) :\"\"\"\nb=\"\"\"/// **L'attention de DeepSeek-V4** — un troisième chemin, qui n'est ni la MLA de\n/// GLM/Kimi … [1727 caractères tronqués]`
+
+  ```
+ok
+1135:pub struct Mla4 {
+  ```
+
+### 🤖 Assistant
+
+⏵ Fonction d'attention V4 (`attn_v4`) : q, kv, scores avec puits, dé-rotation, sortie groupée.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"    /// Passe avant d'un modèle \\*\\*MLA\\*\\*, un jeton à la fois\" drave-core/src/model.rs | head -2; grep -n \"pub fn forward_mla\" drave-core/src/model.rs", "description": "Find insertion point for attn_v4"}`
+
+  ```
+4233:    /// Passe avant d'un modèle **MLA**, un jeton à la fois, avec le cache
+4241:    pub fn forward_mla(&mut self, tok: u32, pos: usize) -> Vec<f32> {
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='drave-core/src/model.rs'\ns=open(p).read()\na=\"\"\"    /// Passe avant d'un modèle **MLA**, un jeton à la fois, avec le cache\"\"\"\nb='''    /// **Attention V4** (`build_raw_attention` + sortie groupée) pour … [5562 caractères tronqués]`
+
+  ```
+ok
+3484:    fn rope(v: &mut [f32], n_head: usize, head_dim: usize, pos: usize, base: f32, n_rot: usize) {
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs", "limit": 30, "offset": 3484}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs</path>
+<type>file</type>
+<content>
+3484:     fn rope(v: &mut [f32], n_head: usize, head_dim: usize, pos: usize, base: f32, n_rot: usize) {
+3485:         // `n_rot` = dimensions tournées ; les autres restent intactes. La
+3486:         // rotation « neox » apparie `i` et `i + n_rot/2`.
+3487:         let n_rot = if n_rot == 0 || n_rot > head_dim { head_dim } else { n_rot };
+3488:         let half = n_rot / 2;
+3489:         for h in 0..n_head {
+3490:             let t = &mut v[h * head_dim..(h + 1) * head_dim];
+3491:             for i in 0..half {
+3492:                 let freq = 1.0 / base.powf(2.0 * i as f32 / head_dim as f32);
+3493:                 let (s, c) = (pos as f32 * freq).sin_cos();
+3494:                 let a = t[i];
+3495:                 let b = t[i + half];
+3496:                 t[i] = a * c - b * s;
+3497:                 t[i + half] = b * c + a * s;
+3498:             }
+3499:         }
+3500:     }
+3501: 
+3502:     /// **Préremplissage par lots** : `t` jetons d'un coup, aux positions
+3503:     /// `pos0..pos0+t`.
+3504:     ///
+3505:     /// Toute la différence avec `forward` est dans les project
+… [641 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='drave-core/src/model.rs'\ns=open(p).read()\na=\"\"\"    /// **Préremplissage par lots** : `t` jetons d'un coup, aux positions\"\"\"\nb='''    /// **Rotation INVERSE** (dé-rotation), celle de `ggml_rope_ext_bac … [1253 caractères tronqués]`
+
+  ```
+ok
+--- fin ---
+  ```
+
+### 🤖 Assistant
+
+⏵ Chargeur `Mla4` et câblage dans la passe avant (dimensions et cache propres).
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"let mut att = \\|head_dim:\" drave-core/src/model.rs | head -8; grep -n \"head_dim\" drave-core/src/model.rs | sed -n '1,12p'", "description": "Check att buffer and head_dim derivation"}`
+
+  ```
+407:    pub head_dim: usize,
+1146:    pub head_dim: usize,
+2360:            head_dim: g.cfg("attention.key_length").and_then(|m| m.as_u64()).unwrap_or(0) as usize,
+3405:    fn creuse_tetes(v: &mut [f32], n_head: usize, head_dim: usize, milliemes: usize) {
+3431:    fn rope_yarn(v: &mut [f32], n_head: usize, head_dim: usize, pos: usize, base: f32,
+3484:    fn rope(v: &mut [f32], n_head: usize, head_dim: usize, pos: usize, base: f32, n_rot: usize) {
+3505:    fn rope_inverse(v: &mut [f32], n_head: usize, head_dim: usize, pos: usize,
+3612:        let mut att = vec![0f32; t * nh * hd];
+407:    pub head_dim: usize,
+1125:/// * la KV est **une seule tête latente** de `head_dim` (512 = 448 nope + 64
+1138:    pub q_b: Vec<f32>,      // [nh·head_dim × q_lora]
+1139:    pub kv: Vec<f32>,       // [head_dim × h]
+1140:    pub kv_norm: Vec<f32>,  // [head_dim]
+1141:    pub wo_a: Vec<f32>,     // [o_lora·n_groups × (nh/n_groups)·head_dim], par groupe
+1146:    pub head_dim: usize,
+1309:/// PAS `(n_kv, ctx, head_dim)` mais **une seule tête latente** par couche —
+1666:    /// cache KV, par couche : `[n_kv_head × ctx × head_dim]`, en f32 ou quantifié
+2360:            head_dim: g.cfg("attention.key_lengt
+… [206 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"let mut att = vec\" drave-core/src/model.rs; sed -n \"$(grep -n 'let mut att = vec' drave-core/src/model.rs | tail -1 | cut -d: -f1),+3p\" drave-core/src/model.rs", "description": "Locate att buffer in forward"}`
+
+  ```
+3612:        let mut att = vec![0f32; t * nh * hd];
+4538:        let mut att = vec![0f32; nh * hd];
+        let mut att = vec![0f32; nh * hd];
+        let mut o = vec![0f32; h];
+        let mut gate = vec![0f32; cfg.ffn.max(cfg.ffn_exp)];
+        // tampon partagé : sélection k-WTA pendant les produits matriciels, puis
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='drave-core/src/model.rs'\ns=open(p).read()\nsubs=[]\n\n# ---- champs du modèle\nsubs.append((\n\"\"\"    /// **Hyper-connexions** par couche : `(attention, FFN)`. Présentes sur\n    /// DeepSeek-V4 / V4.1 (`hc … [4699 caractères tronqués]`
+
+  ```
+ok 3
+--- fin ---
+  ```
+
+### 🤖 Assistant
+
+⏵ Câblage du chemin V4 dans la boucle de couches et mise à jour des manques.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='drave-core/src/model.rs'\ns=open(p).read()\nsubs=[]\n# --- branchement dans forward\nsubs.append((\n\"\"\"            let ta = Instant::now();\n            if let Some(m) = self.mla.as_ref().map(|v| &v[l]) {\" … [1353 caractères tronqués]`
+
+  ```
+ok
+5071:            Self::matvec(pool, &lay.wo, &att[..n_att.min(att.len())], &mut o, events, &mut paires[0], self.act_levels, self.act_thresh, tk(3), self.act_renorm, &mut scratch, self.seuil_push);
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '5058,5075p' drave-core/src/model.rs", "description": "Read the wo projection region"}`
+
+  ```
+// doivent apparaître dans le même poste, sinon la comparaison des
+            // profils entre un modèle MLA et un modèle dense serait fausse.
+            self.prof[2] += ta.elapsed().as_secs_f64();
+            let tf = Instant::now();
+            // `att` est dimensionné en `nh × head_dim`, mais un chemin MLA n'en
+            // remplit que `nh × vd` : passer le tampon entier quantifiait des
+            // valeurs périmées (voir `matvec`).
+            let n_att = match (self.mla4.as_ref().map(|v| &v[l]),
+                               self.mla.as_ref().map(|v| &v[l])) {
+                (Some(m4), _) => m4.nh * m4.head_dim,
+                (None, Some(m)) => m.nh * m.vd,
+                (None, None) => att.len(),
+            };
+            Self::matvec(pool, &lay.wo, &att[..n_att.min(att.len())], &mut o, events, &mut paires[0], self.act_levels, self.act_thresh, tk(3), self.act_renorm, &mut scratch, self.seuil_push);
+            // Hyper-connexions : `o` reste la SORTIE PURE de l'attention ; ce
+            // sont les copies qui se rechargent (`comb`), et l'entrée de la FFN
+            // est le mélange de ces copies — jamais `o`.
+            let mut hc_x: Option<Vec<f32>> = None;
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='drave-core/src/model.rs'\ns=open(p).read()\na=\"\"\"            let n_att = match (self.mla4.as_ref().map(|v| &v[l]),\n                               self.mla.as_ref().map(|v| &v[l])) {\n                (Some( … [1400 caractères tronqués]`
+
+  ```
+ok
+--- fin ---
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='drave-core/src/model.rs'\ns=open(p).read()\na=\"\"\"    if quelque_part(\"attn_output_a.weight\") {\n        manques.push(\"projection de sortie à rang faible groupée (attn_output_a/attn_output_b, o_groups)\") … [1025 caractères tronqués]`
+
+  ```
+ok
+routage       : racine de softplus (source : expert_gating_func) · renormalisation oui · échelle 1.500
+routage table : 3/43 premières couches par `ffn_gate_tid2eid`
+attn compress.: 44 couches · 21 CSA (ratio 4) · 20 HCA (ratio 128) · brutes aux couches [0, 1, 43]
+hyper-conn.   : 4 copies · 24 mélanges par couche (pre/post/comb) · Sinkhorn 20 itérations · eps 1e-6
+[mla] attention MLA à rang faible : cache LATENT (c_kv + k_rope), pas de fenêtre glissante ni de YaRN sur ce chemin. Validée contre llama.cpp sur GLM-5.3 à la POSITION 0 : corrélation des logits 0,999024, top-1 3/3 ; l'écart croît ensuite (+0,009 / +0,372 / +0,611 puis +4,070 nat à la position 3 — voir reports/rapport-mla-experts.md §7).
+calculable    : NON — il manque : attentions compressées CSA/HCA (compress_ratios, candidate_*)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='drave-core/src/model.rs'\ns=open(p).read()\na=\"\"\"    if quelque_part(\"attn_q_a.weight\") {\"\"\"\nb=\"\"\"    // Ce message décrit le cache LATENT de la MLA « GLM/Kimi »\n    // (`attn_kv_a_mqa`) : sur l'a … [656 caractères tronqués]`
+
+  ```
+ok
+attn compress.: 44 couches · 21 CSA (ratio 4) · 20 HCA (ratio 128) · brutes aux couches [0, 1, 43]
+hyper-conn.   : 4 copies · 24 mélanges par couche (pre/post/comb) · Sinkhorn 20 itérations · eps 1e-6
+calculable    : NON — il manque : attentions compressées CSA/HCA (compress_ratios, candidate_*)
+  ```
+
+### 🤖 Assistant
+
+⏵ Vérification des portes après P2, puis commit.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && bash tools/portes.sh rapide 2>&1 | tail -11", "description": "Run fast gates after P2 implementation", "timeoutMs": 1800000}`
+
+  ```
+cargo test --release                       52 verts  ✅
+  Qwen2.5-0.5B ctx 256                       19.3885  ✅
+  Qwen3-30B en clusters (origine : 799,8557) 799.8557  ✅
+  threads par défaut (physiques)            20  ✅
+  (portes de formats : ignorées en mode rapide)
+  GLM-5.3 : sigmoïde ×2,5                  sigmoïde  ✅
+  Kimi-K2.7 : sigmoïde ×2,827              sigmoïde  ✅
+  V4-Flash : racine de softplus              racine de softplus  ✅
+  Qwen3-235B : softmax                       softmax  ✅
+
+toutes les portes sont vertes
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A drave-core/src/ && git commit -q -F - <<'EOF'\nP2 (1/2) : le troisième chemin d'attention — celui de DeepSeek-V4\n\nV4 n'a ni `attn_kv_a_mqa` (GLM/Kimi) ni `k_b`/`attn_v_b` : sa MLA est une AUTRE\narchitecture, et la confo … [1569 caractères tronqués]`

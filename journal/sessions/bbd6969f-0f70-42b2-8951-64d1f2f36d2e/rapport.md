@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 92.5 h |
+| Durée | 92.6 h |
 | Tours | 75 |
-| Messages | 4547 |
-| Appels d'outils | 4338 |
+| Messages | 4568 |
+| Appels d'outils | 4359 |
 | Fichiers touchés | 90 |
-| Commandes | 3737 |
+| Commandes | 3757 |
 | Sous-agents | 28 |
-| Commits | 326 |
+| Commits | 327 |
 | Compactages de contexte | 6 |
 
 ## Objectifs déclarés
@@ -3831,7 +3831,7 @@ Le flux se compte par **provenance** (attention / experts / partagé) en **paire
 
 ### Tour 75 — <goal_round> Objective: "Exécuter le plan docs/plan-deepseek41-complet.md phase par phase (P0→P9), en autonomie, en resp … [941 caractères tronqués]
 
-*38 appels d'outils.* Actions notables :
+*59 appels d'outils.* Actions notables :
 
 - bash — Locate MLA loader and HC absence
 - read
@@ -3847,11 +3847,11 @@ Le flux se compte par **provenance** (attention / experts / partagé) en **paire
 - bash — Report HC params in --config and verify
 - bash — List x usages in the layer loop
 - bash — Locate the three residual sites
-- … et 20 autres
+- … et 40 autres
 
 **Synthèse produite :**
 
-⏵ Vérification qu'aucun modèle du parc ne change de verdict, et affichage des ratios dans `--config`.
+⏵ Vérification des portes après P2, puis commit.
 
 ## 3. Travail accompli
 
@@ -4023,7 +4023,7 @@ Le flux se compte par **provenance** (attention / experts / partagé) en **paire
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 3697 autres
+- … et 3717 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4497,4 +4497,5 @@ Le flux se compte par **provenance** (attention / experts / partagé) en **paire
 - Plan V4.1 : P0 marqué fait, et les hyper-paramètres sont dans le GGUF (\`deepseek41.config\`)" && git log --oneline -2
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A drave-core/src/ && git commit -q -F - <<'EOF' P1 (2/3) : les hyper-connexions sont chargées ET 
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF' p='docs/plan-deepseek41-complet.md' s=open(p).read() a="""### 3.3 Les régimes d'attent
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A drave-core/src/ && git commit -q -F - <<'EOF' P2 (1/2) : le troisième chemin d'attention — celu
 

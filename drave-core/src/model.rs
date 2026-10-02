@@ -124,7 +124,12 @@ pub fn manques_architecture(g: &Gguf, cfg: &Cfg, ctx: usize, clusters: bool) -> 
         || g.cfg("engram.layer_ids").is_some() || g.json_brut("engram_layer_ids").is_some() {
         // informatif seulement : voir `--sonder-engram`
     }
-    if quelque_part("attn_output_a.weight") {
+    // La sortie à rang faible groupée (`attn_output_a`/`attn_output_b`,
+    // `o_groups`) est implémentée : `attn_v4` la calcule par groupe de têtes,
+    // comme `build_attention` de la référence. Elle ne compte donc plus comme un
+    // manque — mais elle n'existe QUE sur le chemin V4, d'où le test sur le
+    // chemin lui-même plutôt que sur la présence du tenseur.
+    if quelque_part("attn_output_a.weight") && !quelque_part("attn_kv.weight") {
         manques.push("projection de sortie à rang faible groupée (attn_output_a/attn_output_b, o_groups)");
     }
     // DeepSeek-V4 : l'attention n'est pas la MLA « simple » de GLM/Kimi.
@@ -155,7 +160,10 @@ pub fn manques_architecture(g: &Gguf, cfg: &Cfg, ctx: usize, clusters: bool) -> 
         || g.json_brut("compress_ratios").is_some() {
         manques.push("attentions compressées CSA/HCA (compress_ratios, candidate_*)");
     }
-    if quelque_part("attn_q_a.weight") {
+    // Ce message décrit le cache LATENT de la MLA « GLM/Kimi »
+    // (`attn_kv_a_mqa`) : sur l'attention V4, qui a aussi un `attn_q_a` mais un
+    // cache d'une seule tête déjà tournée, il serait faux.
+    if quelque_part("attn_q_a.weight") && quelque_part("attn_kv_a_mqa.weight") {
         // Informatif : la MLA à rang faible EST implémentée (`attn_mla`) et
         // validée à la position 0 contre llama.cpp (GLM-5.3) ; l'écart croît
         // ensuite. Le dire une fois, à l'ouverture, plutôt que de laisser
@@ -1116,6 +1124,41 @@ impl CacheExperts {
     }
 }
 
+/// **L'attention de DeepSeek-V4** — un troisième chemin, qui n'est ni la MLA de
+/// GLM/Kimi ni l'attention dense.
+///
+/// Ce qui la distingue, mesuré sur les tenseurs (`--tensors`, `--config`) et
+/// relevé dans `llama.cpp/src/models/deepseek4.cpp` :
+///
+/// * la KV est **une seule tête latente** de `head_dim` (512 = 448 nope + 64
+///   rope), normée **en entier** (`attn_kv_a_norm`) — pas de `k_b`/`v_b` ;
+/// * la requête passe par `attn_q_a` → norme → `attn_q_b`, puis par une
+///   **seconde norme RMS sans poids, par tête** (`ggml_rms_norm` seul) ;
+/// * les **valeurs SONT les clés** (`build_attn_mha(q, k, k, …)`) : le même
+///   vecteur sert de clé et de valeur ;
+/// * la sortie subit une **dé-rotation** (`ggml_rope_ext_back`) avant d'être
+///   projetée par groupes : `attn_output_a` par groupe de `nh/o_groups` têtes,
+///   puis `attn_output_b` sur les groupes concaténés ;
+/// * les puits appris (`attn_sinks`, un par tête) entrent dans le **softmax**.
+pub struct Mla4 {
+    pub q_a: Vec<f32>,      // [q_lora × h]
+    pub q_a_norm: Vec<f32>, // [q_lora]
+    pub q_b: Vec<f32>,      // [nh·head_dim × q_lora]
+    pub kv: Vec<f32>,       // [head_dim × h]
+    pub kv_norm: Vec<f32>,  // [head_dim]
+    pub wo_a: Vec<f32>,     // [o_lora·n_groups × (nh/n_groups)·head_dim], par groupe
+    pub wo_b: Vec<f32>,     // [h × o_lora·n_groups]
+    pub sinks: Vec<f32>,    // [nh]
+    pub nh: usize,
+    pub h: usize,
+    pub head_dim: usize,
+    pub rope: usize,
+    pub n_groups: usize,
+    pub o_lora: usize,
+    pub rope_base: f32,
+    pub eps: f32,
+}
+
 /// **Hyper-connexions** (DeepSeek-V4 / V4.1) : au lieu d'additionner la sortie
 /// d'une sous-couche au résidu, l'état résiduel est porté en **`hc` copies**
 /// (4) qui se **mélangent** — c'est le « cas général en connexions pondérées »
@@ -1817,6 +1860,12 @@ pub struct Model {
     pub flux_brut: bool,
     /// Couches MLA, si le modèle en est un (`attn_kv_a_mqa` présent).
     pub mla: Option<Vec<Mla>>,
+    /// **Attention V4** par couche (DeepSeek-V4 / V4.1), quand elle est
+    /// reconnue (`attn_kv.weight`). Troisième chemin d'attention du moteur.
+    pub mla4: Option<Vec<Mla4>>,
+    /// Cache de l'attention V4 : une tête latente de `head_dim` par position,
+    /// le vecteur déjà tourné (il sert de clé **et** de valeur).
+    pub mla4_cache: Vec<Vec<f32>>,
     /// **Hyper-connexions** par couche : `(attention, FFN)`. Présentes sur
     /// DeepSeek-V4 / V4.1 (`hc_attn_fn`), absentes partout ailleurs.
     pub hc: Option<Vec<(Hc, Hc)>>,
@@ -2485,6 +2534,59 @@ impl Model {
                      m0.kv_lora + m0.qkr, cfg.n_kv_head * (m0.qkn + m0.vd));
             Some(v)
         } else { None };
+        // ---- Attention V4 (DeepSeek-V4 / V4.1) ----------------------------
+        // Reconnue à `attn_kv.weight` : V4 n'a ni `attn_kv_a_mqa` (GLM/Kimi) ni
+        // `k_b`/`v_b`. C'est un TROISIÈME chemin, et le confondre avec la MLA
+        // existante donnerait des nombres faux de la bonne forme.
+        let mla4 = if g.tensor("blk.0.attn_kv.weight").is_some() {
+            let dim = |cles: &[&str], json: &str| -> Option<usize> {
+                g.cfg_ou(cles).and_then(|m| m.as_u64()).map(|v| v as usize)
+                    .or_else(|| g.json_nombre(json).map(|v| v as usize))
+            };
+            let hd = dim(&["attention.key_length"], "head_dim")
+                .unwrap_or_else(|| panic!("attention V4 : `head_dim` introuvable"));
+            let nr = dim(&["rope.dimension_count"], "qk_rope_head_dim").unwrap_or(64);
+            let q_lora = dim(&["attention.q_lora_rank"], "q_lora_rank")
+                .unwrap_or_else(|| g.dequant("blk.0.attn_q_a.weight").len() / cfg.hidden);
+            let n_groups = dim(&["attention.output_group_count"], "o_groups").unwrap_or(1);
+            let o_lora = dim(&["attention.output_lora_rank"], "o_lora_rank")
+                .unwrap_or_else(|| {
+                    let n = g.dequant("blk.0.attn_output_a.weight").len();
+                    n / (cfg.n_head * hd / n_groups)
+                });
+            let base = g.cfg_ou(&["rope.freq_base", "rope_theta"])
+                .and_then(|m| m.as_f64()).map(|v| v as f32)
+                .or_else(|| g.json_nombre("rope_theta").map(|v| v as f32))
+                .unwrap_or(10000.0);
+            let mut v = Vec::with_capacity(cfg.n_layer);
+            for l in 0..cfg.n_layer {
+                let p = |s: &str| format!("blk.{l}.{s}");
+                v.push(Mla4 {
+                    q_a: g.dequant(&p("attn_q_a.weight")),
+                    q_a_norm: g.dequant(&p("attn_q_a_norm.weight")),
+                    q_b: g.dequant(&p("attn_q_b.weight")),
+                    kv: g.dequant(&p("attn_kv.weight")),
+                    kv_norm: g.dequant(&p("attn_kv_a_norm.weight")),
+                    wo_a: g.dequant(&p("attn_output_a.weight")),
+                    wo_b: g.dequant(&p("attn_output_b.weight")),
+                    sinks: g.dequant_optionnel(&p("attn_sinks.weight")).unwrap_or_default(),
+                    nh: cfg.n_head, h: cfg.hidden, head_dim: hd, rope: nr,
+                    n_groups, o_lora, rope_base: base, eps: cfg.eps,
+                });
+            }
+            let m0 = &v[0];
+            println!("[config] attention V4 : {} couches · 1 tête latente de {} ({} nope + {} rope) \
+                      · {} têtes de requête · sortie groupée {}×{} · puits {}",
+                     v.len(), m0.head_dim, m0.head_dim - m0.rope, m0.rope, m0.nh,
+                     m0.n_groups, m0.o_lora,
+                     if m0.sinks.is_empty() { "aucun" } else { "par tête" });
+            Some(v)
+        } else { None };
+        let mla4_cache = match mla4.as_ref() {
+            Some(v) => v.iter().map(|m| vec![0f32; ctx * m.head_dim]).collect(),
+            None => Vec::new(),
+        };
+
         // ---- Hyper-connexions (DeepSeek-V4 / V4.1) ------------------------
         // Deux sources pour les trois hyper-paramètres, et il faut les deux :
         // V4-Flash les déclare en clés GGUF normalisées
@@ -2837,6 +2939,7 @@ mapping {}",
         } else { None };
         Model {
             g, cfg, layers, out_norm, pool,
+            mla4, mla4_cache,
             hc, hc_tete,
             kv: caches_kv,
             ctx, events: 0, paires: [0; 3], act_levels: 127.0, act_thresh: 0.0, act_topk: 0, act_renorm: false,
@@ -3460,6 +3563,27 @@ mapping {}",
                 let b = t[i + half];
                 t[i] = a * c - b * s;
                 t[i + half] = b * c + a * s;
+            }
+        }
+    }
+
+    /// **Rotation INVERSE** (dé-rotation), celle de `ggml_rope_ext_back` :
+    /// mêmes appariements, angle opposé. Elle sert à l'attention de V4, qui
+    /// tourne la partie rope de sa sortie AVANT la projection groupée.
+    fn rope_inverse(v: &mut [f32], n_head: usize, head_dim: usize, pos: usize,
+                    base: f32, n_rot: usize) {
+        let n_rot = if n_rot == 0 || n_rot > head_dim { head_dim } else { n_rot };
+        let half = n_rot / 2;
+        for h in 0..n_head {
+            let t = &mut v[h * head_dim..(h + 1) * head_dim];
+            for i in 0..half {
+                let freq = 1.0 / base.powf(2.0 * i as f32 / head_dim as f32);
+                let (s, c) = (pos as f32 * freq).sin_cos();
+                let a = t[i];
+                let b = t[i + half];
+                // rotation d'angle −θ : la matrice inverse de `rope`.
+                t[i] = a * c + b * s;
+                t[i + half] = b * c - a * s;
             }
         }
     }
@@ -4195,6 +4319,119 @@ s'applique pas — utilisez --lot 1, ou réenregistrez sans DRAVE_TRACE_BLOCS");
         }
     }
 
+    /// **Attention V4** (`build_raw_attention` + sortie groupée) pour un jeton.
+    ///
+    /// `cache` porte une seule tête latente par position : `head_dim` valeurs,
+    /// le vecteur **déjà tourné** (nope et rope concaténés), puisque c'est lui
+    /// qui sert à la fois de clé et de valeur.
+    ///
+    /// `paires` compte ce que le chemin paie (aucune liste n'est construite
+    /// ici) ; `sinks` sont les logits appris ajoutés au **dénominateur** du
+    /// softmax, comme le fait `ggml_soft_max_add_sinks`.
+    #[allow(clippy::too_many_arguments)]
+    fn attn_v4(m: &Mla4, cache: &mut Vec<f32>, x: &[f32], pos: usize, att: &mut [f32],
+               paires: &mut u64) {
+        let (nh, hd, nr) = (m.nh, m.head_dim, m.rope);
+        let nope = hd - nr;
+        let h = m.h;
+        let n = pos + 1;
+        // --- requête : descente, norme, remontée, norme PAR TÊTE sans poids
+        let mut qr = vec![0f32; m.q_a.len() / h];
+        matvec_f32(&m.q_a, x, h, qr.len(), &mut qr);
+        let mut qrn = vec![0f32; qr.len()];
+        Self::rmsnorm(&qr, &m.q_a_norm, m.eps, &mut qrn);
+        let mut q = vec![0f32; nh * hd];
+        matvec_f32(&m.q_b, &qrn, qr.len(), nh * hd, &mut q);
+        // `ggml_rms_norm` SEUL, sur chaque tête : la seconde norme de la
+        // référence, sans échelle apprise.
+        {
+            let mut t = vec![0f32; hd];
+            for hh in 0..nh {
+                rms_norm_sans_poids(&q[hh * hd..(hh + 1) * hd], m.eps, &mut t);
+                q[hh * hd..(hh + 1) * hd].copy_from_slice(&t);
+            }
+        }
+        // rotation de la partie rope de chaque tête
+        {
+            let mut qp = vec![0f32; nh * nr];
+            for hh in 0..nh {
+                qp[hh * nr..(hh + 1) * nr]
+                    .copy_from_slice(&q[hh * hd + nope..(hh + 1) * hd]);
+            }
+            Self::rope(&mut qp, nh, nr, pos, m.rope_base, nr);
+            for hh in 0..nh {
+                q[hh * hd + nope..(hh + 1) * hd].copy_from_slice(&qp[hh * nr..(hh + 1) * nr]);
+            }
+        }
+        // --- clé/valeur : une seule tête latente, normée EN ENTIER
+        let mut kv = vec![0f32; hd];
+        matvec_f32(&m.kv, x, h, hd, &mut kv);
+        let mut kvn = vec![0f32; hd];
+        Self::rmsnorm(&kv, &m.kv_norm, m.eps, &mut kvn);
+        {
+            let mut kp = vec![0f32; nr];
+            kp.copy_from_slice(&kvn[nope..]);
+            Self::rope(&mut kp, 1, nr, pos, m.rope_base, nr);
+            kvn[nope..].copy_from_slice(&kp);
+        }
+        *paires += (m.q_a.len() + m.q_b.len() + m.kv.len()) as u64;
+        cache[pos * hd..(pos + 1) * hd].copy_from_slice(&kvn);
+        // --- scores : `1/sqrt(head_dim)`, puits appris dans le dénominateur
+        let scale = 1.0 / (hd as f32).sqrt();
+        *paires += (nh as u64) * (n as u64) * (hd as u64);
+        let mut sortie = vec![0f32; nh * hd];
+        let mut sc = vec![0f32; n + 1];
+        for hh in 0..nh {
+            let qh = &q[hh * hd..(hh + 1) * hd];
+            for t in 0..n {
+                let kt = &cache[t * hd..(t + 1) * hd];
+                let mut s = 0f32;
+                for i in 0..hd { s += qh[i] * kt[i]; }
+                sc[t] = s * scale;
+            }
+            // le puits : un logit appris, présent dans la somme du softmax mais
+            // sans valeur associée — c'est ce qui « draine » l'attention.
+            let puits = m.sinks.get(hh).copied().unwrap_or(0.0) * scale;
+            sc[n] = puits;
+            let mut mx = f32::NEG_INFINITY;
+            for &v in sc.iter() { if v > mx { mx = v; } }
+            let mut somme = 0f32;
+            for v in sc.iter_mut() { let e = (*v - mx).exp(); *v = e; somme += e; }
+            let inv = if somme > 0.0 { 1.0 / somme } else { 0.0 };
+            let out = &mut sortie[hh * hd..(hh + 1) * hd];
+            for t in 0..n {
+                let w = sc[t] * inv;
+                if w == 0.0 { continue; }
+                let kt = &cache[t * hd..(t + 1) * hd];
+                for i in 0..hd { out[i] += w * kt[i]; }
+            }
+        }
+        // --- dé-rotation de la partie rope, par tête
+        {
+            let mut op = vec![0f32; nh * nr];
+            for hh in 0..nh {
+                op[hh * nr..(hh + 1) * nr]
+                    .copy_from_slice(&sortie[hh * hd + nope..(hh + 1) * hd]);
+            }
+            Self::rope_inverse(&mut op, nh, nr, pos, m.rope_base, nr);
+            for hh in 0..nh {
+                sortie[hh * hd + nope..(hh + 1) * hd]
+                    .copy_from_slice(&op[hh * nr..(hh + 1) * nr]);
+            }
+        }
+        // --- sortie GROUPÉE : `wo_a` par groupe de têtes, puis `wo_b`
+        let hpg = nh / m.n_groups;                 // têtes par groupe
+        let gdim = hpg * hd;                       // entrée d'un groupe
+        let mut oa = vec![0f32; m.n_groups * m.o_lora];
+        for g in 0..m.n_groups {
+            let bloc = &m.wo_a[g * m.o_lora * gdim..(g + 1) * m.o_lora * gdim];
+            let entree = &sortie[g * gdim..(g + 1) * gdim];
+            matvec_f32(bloc, entree, gdim, m.o_lora, &mut oa[g * m.o_lora..(g + 1) * m.o_lora]);
+        }
+        *paires += (m.wo_a.len() + m.wo_b.len()) as u64;
+        matvec_f32(&m.wo_b, &oa, m.n_groups * m.o_lora, h, att);
+    }
+
     /// Passe avant d'un modèle **MLA**, un jeton à la fois, avec le cache
     /// LATENT : `c_kv` (la seule tête latente) et `k_rope` (les composantes
     /// tournées) sont écrites une fois par position, et `k_nope`/`v` sont
@@ -4459,7 +4696,13 @@ dynamique de {dyn_:.3e} (relatif {:.2e})", mx / dyn_.max(1e-9));
             // est partagé, et c'est ce qui compte : dupliquer la couche pour
             // deux attentions aurait donné deux MoE qui divergent.
             let ta = Instant::now();
-            if let Some(m) = self.mla.as_ref().map(|v| &v[l]) {
+            if let Some(m4) = self.mla4.as_ref().map(|v| &v[l]) {
+                // Attention V4 : une tête latente, valeurs = clés, sortie
+                // groupée. `att` fait `nh × head_dim` — la même taille que le
+                // chemin dense quand `key_length` est déclaré.
+                Self::attn_v4(m4, &mut self.mla4_cache[l], &xin, pos, &mut att,
+                              &mut paires[0]);
+            } else if let Some(m) = self.mla.as_ref().map(|v| &v[l]) {
                 Self::attn_mla(m, &mut self.mla_cache[l], &hn, pos, cfg.rope_base, &mut att,
                                &mut paires[0], attn_events);
                 if debug_mla && l == 0 {
@@ -4827,11 +5070,19 @@ dynamique de {dyn_:.3e} (relatif {:.2e})", mx / dyn_.max(1e-9));
             // `att` est dimensionné en `nh × head_dim`, mais un chemin MLA n'en
             // remplit que `nh × vd` : passer le tampon entier quantifiait des
             // valeurs périmées (voir `matvec`).
-            let n_att = match self.mla.as_ref().map(|v| &v[l]) {
-                Some(m) => m.nh * m.vd,
-                None => att.len(),
-            };
-            Self::matvec(pool, &lay.wo, &att[..n_att.min(att.len())], &mut o, events, &mut paires[0], self.act_levels, self.act_thresh, tk(3), self.act_renorm, &mut scratch, self.seuil_push);
+            // L'attention V4 a DÉJÀ projeté sa sortie (`attn_v4` applique
+            // `attn_output_a` par groupe puis `attn_output_b`) : il n'y a pas de
+            // `attn_output.weight` à charger, et refaire une projection ici
+            // multiplierait la sortie par une matrice vide.
+            if self.mla4.is_some() {
+                o[..h].copy_from_slice(&att[..h]);
+            } else {
+                let n_att = match self.mla.as_ref().map(|v| &v[l]) {
+                    Some(m) => m.nh * m.vd,
+                    None => att.len(),
+                };
+                Self::matvec(pool, &lay.wo, &att[..n_att.min(att.len())], &mut o, events, &mut paires[0], self.act_levels, self.act_thresh, tk(3), self.act_renorm, &mut scratch, self.seuil_push);
+            }
             // Hyper-connexions : `o` reste la SORTIE PURE de l'attention ; ce
             // sont les copies qui se rechargent (`comb`), et l'entrée de la FFN
             // est le mélange de ces copies — jamais `o`.
