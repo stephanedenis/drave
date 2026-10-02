@@ -50,6 +50,20 @@ cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && cargo build --r
 > du pilote, et `--gpu-banc` retrouve l'exactitude des noyaux — 1,6 ms par ligne
 > en warp-par-ligne contre 7,2 ms sur 30 fils CPU, **écart max 1,99e-7**.
 >
+> **Mise à jour du 02/10 (22h) — l'ENGRAM de V4.1 est branché, et une passe avant
+> V4.1 COMPLÈTE devient possible.** Le hachage glissant (O(1) par jeton : la
+> fenêtre de `max_ngram − 1` suffit), la lecture des 24 rangées de 264 octets dans
+> les tables de 101 Go, la projection `wkv` [25 600, 6 144] et l'injection sur les
+> `hc` copies sont dans la passe avant, en tête des couches 1 et 14. Vérifié de
+> bout en bout (`tools/verifier_v41_engram.py` : adresses recalculées par la
+> référence, rangées relues dans la vraie table) : projection à ~1e-5
+> (accumulation f32 sur 6 144 termes), injection à ~1e-6. Coût annoncé :
+> **6 336 octets par jeton et par table**. La liste des manques de V4.1 est
+> désormais **vide** : le modèle des 40 couches tourne, l'indexeur gardant tous les
+> blocs, exact sous `indexer.top_k` (512) et refusé au-delà. Le chemin par LOTS,
+> lui, refuse maintenant les modèles à hyper-connexions (`--lot > 1`) : son corps
+> n'a aucune occurrence de `hc_*`, donc il calculait un autre modèle en silence.
+>
 > **Mise à jour du 02/10 (20h) — le cache compressé partagé, et une régression
 > attrapée par la porte.** Les **34 couches consommatrices** de V4.1 lisent
 > maintenant les tampons de leur source (`comp_source`), prouvé par un contrôle

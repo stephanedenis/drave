@@ -87112,3 +87112,1112 @@ Ronde de corrections après relecture ADVERSARiale (sous-agent, lecture seule) :
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log -1 --format=%B > /tmp/msg_old.txt && python3 - <<'PY'\nm = open('/tmp/msg_old.txt').read()\nm = m.replace(\"Le partage () est branché\", \"Le partage (`kv_source_layer_ids`) est branché\")\nm = m.replace(\"ADVERSARiale\", \"a … [181 caractères tronqués]`
+
+  ```
+P7 : le cache compressé partagé de V4.1, la 4e égalité, et une régression attrapée par la porte
+
+Le partage (`kv_source_layer_ids`) est branché : une couche consommatrice n'a pas
+  ```
+
+### 🤖 Assistant
+
+⏵ Attacking the last P7 blocker: wiring the V4.1 engram into the forward
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && wc -l drave-core/src/engram.rs tools/engram_reference.py && grep -n \"pub fn \\|pub struct \\|pub enum \" drave-core/src/engram.rs | head -30", "description": "Survey my engram implementation"}`
+
+  ```
+408 drave-core/src/engram.rs
+  200 tools/engram_reference.py
+  608 total
+50:pub struct Engram {
+74:    pub fn depuis_gguf(g: &Gguf) -> Option<Engram> {
+121:    pub fn n_hash_cols(&self) -> usize { (self.max_ngram - 1) * self.n_heads }
+129:    pub fn adresses(&self, ids: &[u32], positions: &[usize], morts: &[bool]) -> Vec<i32> {
+191:pub fn e4m3_vers_f32(b: u8) -> f32 {
+205:pub fn e8m0_vers_f32(b: u8) -> f32 {
+213:pub fn lire_rangee(g: &Gguf, couche: usize, rangee: i64) -> Option<Vec<f32>> {
+245:pub struct PorteEngram {
+255:    pub fn injecter(&self, hidden: &[f32], kv: &[f32], q_weight: &[f32],
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/engram.rs", "offset": 240}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/engram.rs</path>
+<type>file</type>
+<content>
+240: ///    *amplifié* (la porte tend vers ½) au lieu d'être écrasé ;
+241: /// 2. la valeur est **partagée** entre les `hc` copies, alors que la clé ne
+242: ///    l'est pas : le `kv` range `hc` clés PUIS une valeur ;
+243: /// 3. `token_mask` est un **garder** (polarité inverse de `dead_mask` du
+244: ///    hachage) — s'y tromper inverse l'injection sur les jetons masqués.
+245: pub struct PorteEngram {
+246:     pub hc: usize,
+247:     pub dim: usize,
+248:     pub eps: f32,
+249:     pub clamp: f32,
+250: }
+251: 
+252: impl PorteEngram {
+253:     /// `kv` range `(hc + 1) × dim` valeurs : les `hc` clés puis la valeur.
+254:     /// `masque` (optionnel) : 1 = garder.
+255:     pub fn injecter(&self, hidden: &[f32], kv: &[f32], q_weight: &[f32],
+256:                     k_weight: &[f32], masque: Option<&[u8]>, sortie: &mut [f32]) {
+257:         let (hc, dim) = (self.hc, self.dim);
+258:         let kv_row = (hc + 1) * dim;
+259:         let n_jetons = hidden.len() / (hc * dim);
+260:         for token in 0..n_jetons {
+261:             let actif = masque.map(|m| m.get(token).copied(
+… [12405 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '1,60p' tools/engram_reference.py", "description": "Read my engram reference transcription"}`
+
+  ```
+#!/usr/bin/env python3
+"""Référence **Python** de l'adressage de l'engram de DeepSeek-V4.1.
+
+Transcription de `vllm/models/deepseek_v4_1/common/engram.py` **via** son portage
+1:1 en C++ (`mudler/vllm.cpp`, `deepseek_v4_1_engram.cpp`) : les noms de
+fonctions et les commentaires citent les lignes de l'original.
+
+Ce que ce script calcule : pour chaque jeton d'une séquence, la **rangée** à
+lire dans chacune des deux tables d'engram (couches 1 et 14), pour chacune des
+`n_hash_cols = (max_ngram - 1) × n_heads = 24` colonnes de hachage. C'est la
+« liste d'adresses » du plan (P8).
+
+Ce qu'il ne calcule pas : la lecture des rangées (e4m3 × e8m0) ni l'injection.
+Ils viendront après, contre la même référence.
+
+Les trois détails qui portent tout le comportement — et qu'aucune
+reconnaissance de forme ne devinerait :
+
+1. le repli se fait par **OU exclusif** (`^=`), pas par somme ;
+2. `blocked` est **collant** : dès qu'un n-gramme est cassé (début de séquence,
+   jeton mort), tous les reculs plus profonds sont remplacés par le pad ;
+3. le modulo se fait **par colonne** — premier et offset propres à chaque
+   (couche, groupe de recul, tête).
+
+Usage :
+    python3 tools/engram_reference.py           
+… [1162 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Fetching vLLM's engram module to pin the injection layout
+
+- **bash** `{"command": "curl -s \"https://raw.githubusercontent.com/vllm-project/vllm/main/vllm/models/deepseek_v41/common/engram.py\" -o /tmp/v41_engram.py; wc -l /tmp/v41_engram.py; grep -n \"class \\|def forward\" /tmp/v41_engram.py | head -40", "description": "Fetch and outline vLLM's engram module"}`
+
+  ```
+1537 /tmp/v41_engram.py
+197:class EngramLayout:
+412:class NgramHashState(nn.Module):
+509:    def forward(
+744:class DPSharedEngramStorage:
+914:class ParallelEngramEmbedding(nn.Module):
+1136:    def forward(self, indices: torch.Tensor) -> torch.Tensor:
+1314:class Engram(nn.Module):
+1476:    def forward(
+  ```
+
+- **bash** `{"command": "sed -n '1314,1400p' /tmp/v41_engram.py", "description": "Read the Engram module definition"}`
+
+  ```
+class Engram(nn.Module):
+    """Writes an n-gram lookup into the residual stream, gated by how well it
+    matches that stream.
+
+    The hash ids fetch `n_hash_cols` rows; `wkv` turns them into one key per
+    hc copy plus a shared value. The gate is a normalized dot product of the
+    stream against the key, signed-sqrt'ed before the sigmoid (matching the
+    training kernel).
+    """
+
+    _prefetch_stream: torch.cuda.Stream | None = None
+    _prefetch_done: torch.cuda.Event | None = None
+
+    def __init__(
+        self,
+        config,
+        quant_config: QuantizationConfig | None,
+        layout: EngramLayout,
+        layer_hash_index: int,
+        use_sequence_parallel: bool,
+        prefix: str,
+        prefetch_stream: torch.cuda.Stream | None = None,
+    ) -> None:
+        super().__init__()
+        # Layers sharing one stream serialize their offloaded lookups, so they
+        # take turns instead of jointly starving decoder compute of SMs.
+        self._prefetch_stream = prefetch_stream
+        self.layer_hash_index = layer_hash_index
+        self.dim = config.hidden_size
+        self.hc_mult = config.hc_mult
+        self.eps = config.rms_norm_eps
+        self.clamp_value
+… [2379 caractères tronqués]
+  ```
+
+- **bash** `{"command": "sed -n '509,600p' /tmp/v41_engram.py", "description": "Read NgramHashState.forward"}`
+
+  ```
+def forward(
+        self,
+        input_ids: torch.Tensor,
+        positions: torch.Tensor,
+        query_start_loc: torch.Tensor,
+        dead_mask: torch.Tensor,
+        lookback_token_ids: torch.Tensor,
+        lookback_dead_mask: torch.Tensor,
+        slot_mapping: torch.Tensor | None,
+        block_table: torch.Tensor | None,
+    ) -> torch.Tensor:
+        """Compute [tokens, layers, hash columns] int32 n-gram hashes.
+
+        History comes from the current chunk, then the runner's lookback
+        window, then the optional V1 slot cache. V2 needs only one launch.
+        """
+        cache = self._cache if self.use_slot_cache else None
+        num_tokens = input_ids.shape[0]
+        num_layers, max_ngram = self.multipliers.shape
+        num_heads = self.primes.shape[-1]
+        output = input_ids.new_empty(
+            (num_tokens, num_layers, (max_ngram - 1) * num_heads), dtype=torch.int32
+        )
+        if num_tokens == 0:
+            return output
+        if self.use_slot_cache:
+            assert cache is not None and slot_mapping is not None
+            assert block_table is not None
+            # Finish writes before other thread blocks read fallback history.
+       
+… [2469 caractères tronqués]
+  ```
+
+- **bash** `{"command": "sed -n '1476,1537p' /tmp/v41_engram.py", "description": "Read Engram.forward"}`
+
+  ```
+def forward(
+        self,
+        hidden_states: torch.Tensor,
+        hash_ids: torch.Tensor,
+        token_mask: torch.Tensor | None = None,
+    ) -> torch.Tensor:
+        """hidden_states: [T, hc_mult, dim]; hash_ids: [T, n_hash_cols] (all
+        tokens, pre sequence-parallel shard); token_mask: [T], False shuts
+        the gate so those positions pass through untouched."""
+        kv = self.wkv(self.embed(hash_ids).flatten(-2))
+        num_kv_tokens = hash_ids.shape[0]
+        assert token_mask is None or token_mask.shape == (num_kv_tokens,)
+        if self.use_sequence_parallel:
+            tp_size = get_tensor_model_parallel_world_size()
+            tp_rank = get_tensor_model_parallel_rank()
+            shard_size = (num_kv_tokens + tp_size - 1) // tp_size
+            assert hidden_states.shape[0] == shard_size
+            start = min(tp_rank * shard_size, num_kv_tokens)
+            num_kv_tokens = min(shard_size, num_kv_tokens - start)
+            if token_mask is not None:
+                token_mask = token_mask[start : start + num_kv_tokens]
+
+        num_tokens, hc_mult, dim = hidden_states.shape
+        assert hc_mult == self.hc_mult and dim == self.dim
+        assert k
+… [1266 caractères tronqués]
+  ```
+
+- **bash** `{"command": "grep -n \"dead_mask\\|engram_mask\" /tmp/v41_model.py | head -20; echo \"=== state ===\"; grep -n \"dead_mask\\|engram_mask\\|DEAD_ID\" /tmp/v41_state.py | head -20", "description": "Find how dead/engram masks are built"}`
+
+  ```
+464:        engram_mask: torch.Tensor | None = None,
+545:                engram_mask,
+883:        engram_mask: torch.Tensor | None = None
+901:                engram_mask = ~image_mask
+925:                engram_hashes, engram_mask = self.engram_hash.dummy_hashes(input_ids)
+966:            engram_mask,
+1048:        engram_mask: torch.Tensor | None = None,
+1067:                    engram_mask,
+=== state ===
+  ```
+
+- **bash** `{"command": "sed -n '880,935p' /tmp/v41_model.py", "description": "Read the engram hash/mask setup in the model"}`
+
+  ```
+# and consumed by the engram layers (1 and 14) below. Skipped on
+        # profile runs (KV cache unbound).
+        engram_hashes: torch.Tensor | None = None
+        engram_mask: torch.Tensor | None = None
+        if (
+            self.engram_hash is not None
+            and input_ids is not None
+            and is_forward_context_available()
+        ):
+            attn_metadata = get_forward_context().attn_metadata
+            if isinstance(attn_metadata, list):
+                attn_metadata = attn_metadata[dbo_current_ubatch_id()]
+            if isinstance(attn_metadata, dict) and self.engram_hash.ensure_cache():
+                assert self.engram_swa_prefix is not None
+                swa_metadata = typing.cast(
+                    "DeepseekSparseSWAMetadata", attn_metadata[self.engram_swa_prefix]
+                )
+                # Image-span tokens are dead: they break n-grams (hash op
+                # takes True=dead) and their gate is zeroed (Engram.forward
+                # takes True=keep).
+                image_mask = image_sentinel_mask(input_ids)
+                engram_mask = ~image_mask
+                if lookback_token_ids is None:
+                    if not self.eng
+… [1787 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Adding an HC guard for the batched path, then wiring the engram
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '4150,4165p' drave-core/src/model.rs; grep -n \"pub engram\\|engram:\" drave-core/src/model.rs | head", "description": "Check forward_lot head and engram fields"}`
+
+  ```
+}
+            Err(e) => eprintln!("[dump] {chemin} : {e}"),
+        }
+    }
+
+    /// **RoPE « NORM »** — l'autre convention d'appariement, celle des modèles
+    /// Llama et **DeepSeek-V4** (`LLAMA_ROPE_TYPE_NORM` dans llama.cpp) :
+    /// les paires sont `(2i, 2i+1)`. Celle de Drave (`rope`) apparie
+    /// `(i, i + n_rot/2)`, ce que déclarent GLM et Kimi. Les deux donnent la
+    /// même rotation à la position 0 (identité) et divergent ensuite : c'est
+    /// exactement la signature qu'a montrée la comparaison à llama.cpp sur
+    /// V4-Flash — position 0 juste à 1e-3, position 1 fausse à 30 %.
+    fn rope_norm(v: &mut [f32], n_head: usize, head_dim: usize, pos: usize, base: f32,
+                 n_rot: usize, inverse: bool) {
+        let n_rot = if n_rot == 0 || n_rot > head_dim { head_dim } else { n_rot };
+        let half = n_rot / 2;
+2750:            let engram: Vec<i64> = g.cfg_ou(&["engram.layer_ids"])
+2757:plage (elles sont en {engram:?}) — l'injection n'est pas exercée.");
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"pub fn forward_lot\" -A 12 drave-core/src/model.rs | head -16", "description": "Locate forward_lot precisely"}`
+
+  ```
+4216:    pub fn forward_lot(&mut self, toks: &[u32], pos0: usize) -> Vec<Vec<f32>> {
+4217-        // Modèle MLA : le chemin par lots ne connaît que Q/K/V denses. On
+4218-        // repasse par le jeton seul, qui porte la MLA et le cache latent. Le
+4219-        // préremplissage par lots perd son intérêt sur ces modèles — c'est dit
+4220-        // ici plutôt que découvert par un panic « projection sans format ».
+4221-        if self.mla.is_some() {
+4222-            return toks.iter().enumerate()
+4223-                .map(|(i, &t)| self.forward(t, pos0 + i)).collect();
+4224-        }
+4225-        let t = toks.len();
+4226-        // Lot IMPOSÉ (préremplissage réparti) : les états arrivent de l'autre
+4227-        // nœud, on ne repasse pas par `token_embd`. Lu avant tout le reste — y
+4228-        // compris avant le retour anticipé sur `t == 0`, sinon une trame vide
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs", "new_string": "    pub fn forward_lot(&mut self, toks: &[u32], pos0: usize) -> Vec<Vec<f32>> {\n        // **Le chemin par lots ne porte PAS les hyper-connexions** : son corps\n        // n'a aucune occurrence d … [1520 caractères tronqués]`
+
+  ```
+Error: cannot edit "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs": file changed since it was read — re-read the file, then retry
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs", "limit": 10, "offset": 4216}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs</path>
+<type>file</type>
+<content>
+4216:     pub fn forward_lot(&mut self, toks: &[u32], pos0: usize) -> Vec<Vec<f32>> {
+4217:         // Modèle MLA : le chemin par lots ne connaît que Q/K/V denses. On
+4218:         // repasse par le jeton seul, qui porte la MLA et le cache latent. Le
+4219:         // préremplissage par lots perd son intérêt sur ces modèles — c'est dit
+4220:         // ici plutôt que découvert par un panic « projection sans format ».
+4221:         if self.mla.is_some() {
+4222:             return toks.iter().enumerate()
+4223:                 .map(|(i, &t)| self.forward(t, pos0 + i)).collect();
+4224:         }
+4225:         let t = toks.len();
+
+(Showing lines 4216-4225 of 7627. Use offset=4226 to continue.)
+</content>
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs", "new_string": "    pub fn forward_lot(&mut self, toks: &[u32], pos0: usize) -> Vec<Vec<f32>> {\n        // **Le chemin par lots ne porte PAS les hyper-connexions** : son corps\n        // n'a aucune occurrence d … [1478 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs has been updated successfully.
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/engram.rs", "limit": 70, "offset": 40}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/engram.rs</path>
+<type>file</type>
+<content>
+40:     16000133, 16000183, 16000189, 16000207, 16000211, 16000253,
+41:     16000277, 16000289, 16000307, 16000321, 16000339, 16000381,
+42:     16000393, 16000399, 16000403, 16000409, 16000447, 16000463,
+43:     16000477, 16000487, 16000499, 16000507, 16000511, 16000573,
+44:     16000609, 16000627, 16000667, 16000669, 16000693, 16000697,
+45:     16000711, 16000729, 16000759, 16000769, 16000781, 16000799,
+46:     16000813, 16000819, 16000841, 16000877, 16000879, 16000889,
+47: ];
+48: 
+49: 
+50: pub struct Engram {
+51:     /// `engram.layer_ids` : les couches qui portent une table (1 et 14).
+52:     pub couches: Vec<usize>,
+53:     /// `engram.rows` : le nombre de rangées de chaque table.
+54:     pub rangees: Vec<i64>,
+55:     /// Les `n_layers × n_hash_cols` premiers, tels que le fichier les donne.
+56:     pub primes: Vec<i64>,
+57:     /// Somme préfixe EXCLUSIVE **dans chaque couche** : la rangée est
+58:     /// `reste + offset`, donc les seaux d'une couche ne se chevauchent pas.
+59:     pub offsets: Vec<i64>,
+60:     /// Un multiplicateur par (couche, recul) : `n_layers 
+… [2782 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/engram.rs", "limit": 80, "offset": 110}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/engram.rs</path>
+<type>file</type>
+<content>
+110:                 courant += *primes.get(idx)?;
+111:             }
+112:         }
+113:         if primes.len() != couches.len() * n_hash_cols
+114:             || multipliers.len() != couches.len() * max_ngram {
+115:             return None;
+116:         }
+117:         Some(Engram { couches, rangees, primes, offsets, multipliers, token_map,
+118:                       max_ngram, n_heads, compressed_vocab, pad })
+119:     }
+120: 
+121:     pub fn n_hash_cols(&self) -> usize { (self.max_ngram - 1) * self.n_heads }
+122: 
+123:     /// **La liste d'adresses** : pour chaque jeton, `n_layers × n_hash_cols`
+124:     /// indices de rangée — un par (couche, groupe de recul, tête).
+125:     ///
+126:     /// `positions[i]` est la position du jeton `ids[i]`. Une séquence complète
+127:     /// dans un seul lot (le cas du préremplissage) suffit : le palier
+128:     /// « historique » de la référence ne sert qu'aux décodages incrémentaux.
+129:     pub fn adresses(&self, ids: &[u32], positions: &[usize], morts: &[bool]) -> Vec<i32> {
+130:         let nl = self.couches.len();
+131:       
+… [3496 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/engram.rs", "limit": 40, "offset": 205}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/engram.rs</path>
+<type>file</type>
+<content>
+205: pub fn e8m0_vers_f32(b: u8) -> f32 {
+206:     if b == 255 { 0.0 } else { 2f32.powi(b as i32 - 127) }
+207: }
+208: 
+209: /// Lit une rangée d'une table et rend ses 256 valeurs **déquantifiées**.
+210: ///
+211: /// `couche` est l'indice du tenseur `blk.<l>.engram_embd.weight` (le fichier
+212: /// range 264 octets par rangée, valeurs puis échelles).
+213: pub fn lire_rangee(g: &Gguf, couche: usize, rangee: i64) -> Option<Vec<f32>> {
+214:     let nom = format!("blk.{couche}.engram_embd.weight");
+215:     let t = g.tensor(&nom)?;
+216:     let octets = g.octets_tenseur(&nom)?;
+217:     let debut = (rangee as usize) * OCTETS_PAR_RANGEE;
+218:     if debut + OCTETS_PAR_RANGEE > octets.len() { return None; }
+219:     let r = &octets[debut..debut + OCTETS_PAR_RANGEE];
+220:     let mut out = vec![0f32; VALEURS_PAR_RANGEE];
+221:     for i in 0..VALEURS_PAR_RANGEE {
+222:         let ech = e8m0_vers_f32(r[VALEURS_PAR_RANGEE + i / 32]);
+223:         out[i] = e4m3_vers_f32(r[i]) * ech;
+224:     }
+225:     let _ = t;
+226:     Some(out)
+227: }
+228: 
+229: /// **L'injection** (`EngramPost
+… [973 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs", "new_string": "    pub hc_retarde: bool,\n    /// **Engram** (V4.1) : le hachage d'n-grammes et les tables de 101 Go. Les\n    /// tables ne sont PAS chargées (elles s'adressent par rangée de 264 octets) ;\n     … [758 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"^use \\|use crate::engram\" drave-core/src/model.rs | head -8", "description": "Check the engram import"}`
+
+  ```
+16:use crate::engine::{Pool, SparseVec};
+17:use crate::gguf::Gguf;
+18:use crate::list::{DenseQ4, DenseQ8, PushMat};
+19:use std::time::Instant;
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs", "new_string": "use crate::engine::{Pool, SparseVec};\nuse crate::engram::{Engram, PorteEngram, OCTETS_PAR_RANGEE, VALEURS_PAR_RANGEE};\nuse crate::gguf::Gguf;", "old_string": "use crate::engine::{Pool, SparseVec … [28 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs has been updated successfully.
+  ```
+
+### 🤖 Assistant
+
+Now the loader (build the engram + its injection weights):
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"let mut layers = Vec::with_capacity(cfg.n_layer);\" -B 4 drave-core/src/model.rs | head -8", "description": "Find the loader insertion point"}`
+
+  ```
+3142-                         "directe (V4) : chaque raccord se replie avec ses propres coefficients"
+3143-                     });
+3144-            (Some(v), tete)
+3145-        } else { (None, None) };
+3146:        let mut layers = Vec::with_capacity(cfg.n_layer);
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs", "new_string": "            (Some(v), tete)\n        } else { (None, None) };\n        // **Engram (V4.1)** : les tables de 101 Go chacune ne se CHARGENT pas —\n        // elles s'adressent par rangée de 264 octe … [1443 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"hc, hc_tete, hc_retarde,\" -B 2 -A 2 drave-core/src/model.rs", "description": "Find the struct literal site"}`
+
+  ```
+3501-            mla4, mla4_cache, mla4_comp_kv, mla4_comp_gate, mla4_cles_comp,
+3502-            mla4_idx_kv, mla4_idx_gate, mla4_idx_cles, mla4_idx_scores,
+3503:            hc, hc_tete, hc_retarde,
+3504-            kv: caches_kv,
+3505-            ctx, events: 0, paires: [0; 3], act_levels: 127.0, act_thresh: 0.0, act_topk: 0, act_renorm: false,
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs", "new_string": "            hc, hc_tete, hc_retarde,\n            engram, engram_poids, historique: Vec::new(),", "old_string": "            hc, hc_tete, hc_retarde,"}`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs has been updated successfully.
+  ```
+
+### 🤖 Assistant
+
+Now the forward: history, then the injection at the top of the layer iteration.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"Self::vider_couche(dump, \\\"hc_attn_pre\\\", l, pos, &xin);\" -B 45 drave-core/src/model.rs | grep -n \"let hc_l\\|for l in self.couche_debut\\|let lay = \\|hc_porte: Option\" | head", "description": "Locate the loop head" … [1 caractères tronqués]`
+
+  ```
+(no output)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"for l in self.couche_debut..self.couche_fin {\" -A 6 drave-core/src/model.rs | head -12; grep -n \"if pos == 0 { self.historique\" drave-core/src/model.rs | head -2", "description": "Read the loop head"}`
+
+  ```
+3885:        for l in self.couche_debut..self.couche_fin {
+3886-            let t = &tirs[l * largeur..(l + 1) * largeur];
+3887-            let p = &poids[l * largeur..(l + 1) * largeur];
+3888-            let mut ip: Vec<usize> = (0..largeur).collect();
+3889-            ip.sort_by(|&a, &b| p[b].partial_cmp(&p[a]).unwrap());
+3890-            let k = (largeur / 10).max(1);
+3891-            let part: f64 = ip[..k].iter().map(|&i| p[i]).sum::<f64>()
+--
+3918:                for l in self.couche_debut..self.couche_fin {
+3919-                    let mut t: Vec<u64> = exp[l * ne..(l + 1) * ne].to_vec();
+3920-                    t.sort_unstable_by(|a, b| b.cmp(a));
+3921-                    let tot: u64 = t.iter().sum();
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"for l in self.couche_debut..self.couche_fin {\" drave-core/src/model.rs | tail -3; grep -n \"// ---- hyper-connexions : l'entrée de l'attention\" drave-core/src/model.rs", "description": "Find the forward loop by the HC com … [6 caractères tronqués]`
+
+  ```
+4390:        for l in self.couche_debut..self.couche_fin {
+5485:        for l in self.couche_debut..self.couche_fin {
+5727:        for l in self.couche_debut..self.couche_fin {
+5736:            // ---- hyper-connexions : l'entrée de l'attention n'est pas l'état,
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs", "limit": 18, "offset": 5725}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs</path>
+<type>file</type>
+<content>
+5725:         // perplexité répartie 798,3 au lieu de 18,2. `forward_lot` et
+5726:         // `forward_mla` respectaient déjà la plage ; `forward` était l'exception.
+5727:         for l in self.couche_debut..self.couche_fin {
+5728:             let lay = &layers[l];
+5729:             // Fenêtre EFFECTIVE de cette couche : le motif déclaré (gpt-oss :
+5730:             // une couche sur deux en attention complète) prime sur le réglage
+5731:             // global. Lue en champs directs : `self` est déjà déstructuré.
+5732:             let fen = if self.attn_window == 0 { 0 }
+5733:                       else if self.swa_pattern <= 1 { self.attn_window }
+5734:                       else if l % self.swa_pattern < self.swa_pattern - 1 { self.attn_window }
+5735:                       else { 0 };
+5736:             // ---- hyper-connexions : l'entrée de l'attention n'est pas l'état,
+5737:             // c'est le MÉLANGE de ses `hc` copies (`pre`), et la sortie sera
+5738:             // re-router par `comb` au lieu d'être additionnée.
+5739:             let hc_l = self.hc.as_ref().map
+… [226 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs", "new_string": "        for l in self.couche_debut..self.couche_fin {\n            let lay = &layers[l];\n            // **Engram (V4.1)** : l'injection se fait AVANT les mélanges du\n            // raccord d'ent … [3154 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs", "new_string": "                    x = injecte;\n                    // Ce que l'injection coûte : les 24 rangées lues, la\n                    // projection `wkv` (24×256 → 5×5120) et les deux normes.\n         … [400 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"None => g.row_f32(\\\"token_embd.weight\\\", tok as usize, h),\" -B 12 drave-core/src/model.rs | head -20", "description": "Find the embedding site in forward"}`
+
+  ```
+5623-
+5624-        // Injection : un vecteur imposé (embedding d'image) remplace la ligne
+5625-        // `token_embd` pour cet appel, et seulement pour lui — c'est le seul
+5626-        // ajout d'architecture que la vision demande au moteur.
+5627-        let mut x = match self.etat_entree.as_ref() {
+5628-            // État d'entrée imposé : on démarre la boucle de couches avec le
+5629-            // résidu d'un AUTRE moteur, à la position demandée. Le fichier est
+5630-            // celui de llama.cpp (`REFD`) ; un fichier plat de f32 est accepté
+5631-            // aussi, parce que c'est ce que Drave écrit.
+5632-            Some(chemin) => Self::lire_etat(chemin, pos),
+5633-            None => match emb_imposee.take() {
+5634-                Some(v) => v,
+5635:                None => g.row_f32("token_embd.weight", tok as usize, h),
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs", "limit": 12, "offset": 5633}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs</path>
+<type>file</type>
+<content>
+5633:             None => match emb_imposee.take() {
+5634:                 Some(v) => v,
+5635:                 None => g.row_f32("token_embd.weight", tok as usize, h),
+5636:             },
+5637:         };
+5638:         // Hyper-connexions : l'état résiduel naît en `hc` copies IDENTIQUES de
+5639:         // l'embarquement (la référence fait `ggml_repeat_4d(inp, n_embd, hc)`),
+5640:         // et chaque sous-couche les remélangera.
+5641:         //
+5642:         // **Sans mélange de tête**, deux cas — et ils ne se confondent pas :
+5643:         //  · V4.1 (`hc_retarde`) : il n'y a PAS de tête apprise, la référence
+5644:         //    replie les copies avec la `pre` de la dernière FFN
+
+(Showing lines 5633-5644 of 7724. Use offset=5645 to continue.)
+</content>
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs", "new_string": "        };\n        // **Historique des jetons**, pour le hachage glissant de l'engram : le\n        // préfixe de la séquence courante. Remis à zéro quand `pos` repart à 0\n        // (chaque fen … [593 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '/Hyper-connexions : l.état résiduel naît en/,+2p' drave-core/src/model.rs | head -4; cd drave-core && cargo build --release 2>&1 | grep -E \"^error\" -A 8 | head -30; echo BUILD_END", "description": "Verify the edit and build … [2 caractères tronqués]`
+
+  ```
+error[E0368]: binary assignment operation `+=` cannot be applied to type `[u64; 3]`
+    --> src/model.rs:5778:21
+     |
+5778 |                       *paires += (nhc * VALEURS_PAR_RANGEE * kv_dim
+     |                       ^------
+     |                       |
+     |  _____________________cannot use `+=` on type `[u64; 3]`
+     | |
+5779 | |                                 + 2 * hcc * dim + hcc * dim) as u64;
+--
+error: could not compile `drave-core` (bin "drave") due to 1 previous error; 24 warnings emitted
+BUILD_END
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/model.rs'\ns=open(p).read()\ns=s.replace(\"\"\"                    *paires += (nhc * VALEURS_PAR_RANGEE * kv_dim\n                                + 2 * hcc * dim + hcc * dim) as u64;\"\"\",\n\"\"\" … [413 caractères tronqués]`
+
+  ```
+5646:        debug_assert_eq!(self.historique.len(), pos + 1);
+5647-        // l'embarquement (la référence fait `ggml_repeat_4d(inp, n_embd, hc)`),
+5648-        // et chaque sous-couche les remélangera.
+5649-        //
+5650-        // **Sans mélange de tête**, deux cas — et ils ne se confondent pas :
+5651-        //  · V4.1 (`hc_retarde`) : il n'y a PAS de tête apprise, la référence
+5652-        //    replie les copies avec la `pre` de la dernière FFN
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs", "new_string": "        debug_assert_eq!(self.historique.len(), pos + 1);\n        // Hyper-connexions : l'état résiduel naît en `hc` copies IDENTIQUES de\n        // l'embarquement (la référence fait `ggml_repea … [285 caractères tronqués]`
+
+  ```
+Error: cannot edit "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs": file changed since it was read — re-read the file, then retry
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs", "limit": 6, "offset": 5644}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs</path>
+<type>file</type>
+<content>
+5644:         if self.historique.len() == pos { self.historique.push(tok); }
+5645:         else if self.historique.len() > pos { self.historique.truncate(pos); self.historique.push(tok); }
+5646:         debug_assert_eq!(self.historique.len(), pos + 1);
+5647:         // l'embarquement (la référence fait `ggml_repeat_4d(inp, n_embd, hc)`),
+5648:         // et chaque sous-couche les remélangera.
+5649:         //
+
+(Showing lines 5644-5649 of 7732. Use offset=5650 to continue.)
+</content>
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs", "new_string": "        debug_assert_eq!(self.historique.len(), pos + 1);\n        // Hyper-connexions : l'état résiduel naît en `hc` copies IDENTIQUES de\n        // l'embarquement (la référence fait `ggml_repea … [285 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && cargo build --release 2>&1 | grep -E \"^error\" -A 8 | head -30; echo BUILD_END", "description": "Build with the engram wiring"}`
+
+  ```
+BUILD_END
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 55 ./drave-core/target/release/drave /home/stephane/FastNVMe/modeles-lourds/DeepSeek-V4.1-Flash-Q2.gguf --couches 0:2 --tete-partielle --ppl /tmp/v41_texte.txt.ids --ctx 8 --limit 4 2>&1 | head -12", "description": "Try the e … [36 caractères tronqués]`
+
+  ```
+/tmp/v41_texte.txt.ids : 4 tokens, fenêtres de 8
+[rope] YaRN déclaré par le JSON `<arch>.config` (`rope_scaling`), pas par une clef GGUF — lu là, et ANNONCÉ
+
+thread 'main' (2448560) panicked at src/model.rs:2776:13:
+architecture « deepseek41 » non implémentée par ce moteur : engram (V4.1) : l'injection dans la passe avant n'est pas branchée (l'adressage et la lecture des rangées le sont, et l'injection est écrite et testée à part).
+  Ce modèle n'est donc pas calculé. Les chiffres publiés à son sujet ne viennent pas d'une passe avant COMPLÈTE : analyse statique des tenseurs (inventaire, empreinte, sonde mmap), ou passe bornée `--couches a:b` — annoncée comme telle.
+  Tenseurs présents : attn_q_a hc_attn_fn 
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+timeout: the monitored command dumped core
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"L'engram de V4.1\" -B 8 -A 10 drave-core/src/model.rs | head -30", "description": "Read the engram gap block"}`
+
+  ```
+183-    // (`hc_retarde`), donc ce n'est plus un refus — mais ça reste ANNONCÉ.
+184-    if quelque_part("hc_attn_fn.weight") && g.tensor("output_hc_fn.weight").is_none()
+185-        && g.tensor("hc_head_fn.weight").is_none()
+186-        && g.meta.get("general.architecture").and_then(|m| m.as_str()) != Some("deepseek41") {
+187-        manques.push("réduction des copies avant la norme finale : `hc_*` sans \
+188-`output_hc_*` sur une architecture qui n'est pas `deepseek41` — la chaîne retardée de V4.1 \
+189-ne s'applique qu'à elle, et pour tout autre fichier le mode de réduction n'est pas écrit");
+190-    }
+191:    // **L'engram de V4.1** : ses tables et ses projections sont dans le fichier
+192-    // (`engram_embd`, `engram_kv`, `engram_q_norm`, `engram_k_norm` sur les
+193-    // couches 1 et 14), l'ADRESSAGE est porté et validé contre la référence
+194-    // (`reports/rapport-engram-etat.md`) — mais l'INJECTION n'est branchée sur
+195-    // aucune passe avant. Exécuter une couche d'engram sans elle donne un
+196-    // résultat faux en silence : c'est un manque tant que la passe ne l'appelle
+197-    // pas.
+198-    if g.cfg_ou(&["engram.layer_ids"]).is_some() || g.json_brut("engram_l
+… [226 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs", "new_string": "    // **L'engram de V4.1 est BRANCHÉ** (02/10) : le hachage glissant, la lecture\n    // des rangées de 264 octets, la projection `wkv` et l'injection sur les `hc`\n    // copies sont dans la pas … [1643 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"engram: Vec<i64>\\|engram (V4.1)\\|aucune couche d'ENGRAM\" drave-core/src/model.rs | head", "description": "Find the now-stale range filter for the engram"}`
+
+  ```
+2771:            let engram: Vec<i64> = g.cfg_ou(&["engram.layer_ids"])
+2775:                manques.retain(|m| !m.starts_with("engram (V4.1)"));
+2777:                    println!("[partiel] couches {a}..{b} : aucune couche d'ENGRAM dans la \
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs", "limit": 16, "offset": 2766}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs</path>
+<type>file</type>
+<content>
+2766:             let dans = |l: usize| l >= a && l < b;
+2767:             // Le partage du cache compressé de V4.1 (`kv_source_layer_ids`) est
+2768:             // implémenté : plus de filtre à faire ici. Ce qui reste non
+2769:             // implémenté dans une plage (engram, indexeur de V4.1) est traité
+2770:             // juste en dessous, nommément.
+2771:             let engram: Vec<i64> = g.cfg_ou(&["engram.layer_ids"])
+2772:                 .and_then(|m| m.as_liste_i64()).unwrap_or_default();
+2773:             if !engram.is_empty() && !engram.iter().any(|l| *l >= 0 && dans(*l as usize)) {
+2774:                 let avant = manques.len();
+2775:                 manques.retain(|m| !m.starts_with("engram (V4.1)"));
+2776:                 if manques.len() != avant {
+2777:                     println!("[partiel] couches {a}..{b} : aucune couche d'ENGRAM dans la \
+2778: plage (elles sont en {engram:?}) — l'injection n'est pas exercée.");
+2779:                 }
+2780:             }
+2781:         }
+
+(Showing lines 2766-2781 of 7740. Use offset=2782 to continue.)
+</content>
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs", "new_string": "            let dans = |l: usize| l >= a && l < b;\n            // **L'indexeur de V4.1** (clés tirées du latent du compresseur\n            // principal) n'est pas porté : dans une plage qui cont … [1890 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && cargo build --release 2>&1 | grep -E \"^error\" -A 8 | head -20; echo BUILD_END; cd .. && timeout 58 ./drave-core/target/release/drave /home/stephane/FastNVMe/modeles-lourds/DeepSeek-V4.1-Flash-Q2.gguf --couches 0:2 --tete … [130 caractères tronqués]`
+
+  ```
+BUILD_END
+/tmp/v41_texte.txt.ids : 4 tokens, fenêtres de 8
+[rope] YaRN déclaré par le JSON `<arch>.config` (`rope_scaling`), pas par une clef GGUF — lu là, et ANNONCÉ
+[config] cache compressé PARTAGÉ entre couches (`kv_source_layer_ids`) : 2..7 → 2 · 8..13 → 8 · 14..19 → 14 · 20..39 → 20. Les couches SOURCES projettent leur état ; les CONSOMMATRICES lisent les tampons de leur source au lieu d'en calculer d'autres — un compresseur par couche donnerait d'AUTRES clés, donc faux sans rien casser
+[config] indexeurs : couches [2, 8, 14, 20, 24, 28, 32, 36] · les quatre premières possèdent le cache de clés, les autres lisent celui de leur source de KV — une couche qui porte `indexer.proj` sans être dans cette liste serait un fichier contradictoire
+[config] attention V4 : 40 couches · 1 tête latente de 512 (448 nope + 64 rope) · 64 têtes de requête · sortie groupée 8×1024 · puits par tête
+[config] hyper-connexions : 4 copies · 24 mélanges par couche (pre 4 + post 4 + comb 16) · Sinkhorn 20 itérations · eps 1e-6 · pas de mélange de tête (absent du fichier) · chaîne RETARDÉE (V4.1) : la `pre` d'un raccord sert au raccord SUIVANT, et la tête se replie avec la `pre` de la dernière FFN
+[config]
+… [1056 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && rm -f /tmp/dump_eng-* && (date +%s > /tmp/eng_t0; DRAVE_DUMP_COUCHES=/tmp/dump_eng timeout 1200 ./drave-core/target/release/drave /home/stephane/FastNVMe/modeles-lourds/DeepSeek-V4.1-Flash-Q2.gguf --couches 0:2 --tete-partielle --ppl … [220 caractères tronqués]`
+
+  ```
+started background job bash-172
+  ```
+
+- **bash** `{"command": "sleep 50; tail -12 /tmp/v41_eng.log; echo \"=== engram dumps ===\"; ls /tmp/dump_eng-engram* 2>/dev/null | head -6", "description": "Check the engram run"}`
+
+  ```
+=== perplexité 2045733.6399 sur 3 tokens (0 événements, 2.6 s) ===
+    1.2 tok/s effectifs (avant + tête)
+    attention : 0.00 M paires (requête, clé) par token
+    projections : 0.0 M événements par token
+    paires (poids × activation) par token : attention 547.7 M · experts 566.2 M · partagé 661.9 M · scores 0 K · total 1775.8 M
+    dont en listes (une paire y est un événement) : 0.0 M — le reste est dense (déquantifié ou f32)
+    part de l'attention dans le flux total : 30.8 %
+    postes (ms/token) : projets-attn 0.00 | rope 0.00 | attention 356.10 | proj+mlp 247.66 | somme 603.76 | reste (tête + échantillonnage) 253.23
+    dont tête de sortie 25.81 | notation log-sum-exp 1.68 (le reste du « reste » n'est pas chronométré)
+    dont attention : scores 0.00 | softmax 0.00 | somme pondérée + écriture KV 356.10
+EXIT=0
+1790980869
+=== engram dumps ===
+/tmp/dump_eng-engram_kv-1-0.bin
+/tmp/dump_eng-engram_kv-1-1.bin
+/tmp/dump_eng-engram_kv-1-2.bin
+/tmp/dump_eng-engram_kv-1-3.bin
+/tmp/dump_eng-engram_sortie-1-0.bin
+/tmp/dump_eng-engram_sortie-1-1.bin
+  ```
+
+### 👤 Utilisateur
+
+background job bash-172 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && rm -f /tmp/dump_eng-* && (date +%s > /tmp/eng_t0; DRAVE_DUMP_COUCHES=/tmp/dump_eng timeout 1200 ./drave-core/target/release/drave /home/stephane/FastNVMe/modeles-lourds/DeepSeek-V4.1-Flash-Q2.gguf --couches 0:2 --tete-partielle --ppl /tmp/v41_texte.txt.ids --ctx 8 --limit 4 > /tmp/v41_eng.log 2>&1; echo "EXIT=$?" >> /tmp/v41_eng.log; date +%s >> /tmp/v41_eng.log)) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"^def \\|^    def \" tools/engram_reference.py | head -20", "description": "List functions in the engram reference"}`
+
+  ```
+39:def is_prime(n):
+70:def find_next_prime(start, seen):
+81:def layout_depuis_metadonnees(vocab_size, layer_ids, max_ngram_size, n_heads,
+108:def hachage(token_map, primes, offsets, multipliers, token_ids, positions,
+153:def _auto_test():
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '108,152p' tools/engram_reference.py", "description": "Read the reference hashing function"}`
+
+  ```
+def hachage(token_map, primes, offsets, multipliers, token_ids, positions,
+            layer_ids, max_ngram_size, n_heads, pad_token_id,
+            dead_mask=None, chunk_start=None):
+    """`engram.py:248-380` — la liste d'adresses, pour UNE séquence.
+
+    `token_ids[i]` est le jeton à `positions[i]` (le cas d'un préremplissage
+    complet : tout est « dans le lot », donc le palier 1 de la référence suffit).
+    Rend, pour chaque jeton, `n_layers × n_hash_cols` indices de rangée.
+    """
+    n_layers = len(layer_ids)
+    n_hash_cols = (max_ngram_size - 1) * n_heads
+    if dead_mask is None:
+        dead_mask = [0] * len(token_ids)
+    pad_id = token_map[pad_token_id]
+    sortie = []
+    for token in range(len(token_ids)):
+        position = positions[token]
+        debut_lot = positions[0] if chunk_start is None else chunk_start
+        rolling = [0] * n_layers
+        bloc = [0] * (n_layers * n_hash_cols)
+        blocked = False
+        for shift in range(max_ngram_size):
+            lookback = position - shift
+            source = pad_id
+            if lookback >= debut_lot:
+                i = token - shift
+                if i >= 0:
+                    source = (K_ENGRAM_DEAD_
+… [793 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Writing the end-to-end engram verifier
+
+- **write** `{"content": "#!/usr/bin/env python3\n\"\"\"Vérifie l'**engram de V4.1** de bout en bout, hors du moteur.\n\nLe moteur vide, pour chaque jeton et chaque couche d'engram, la projection `kv`\n(25 600 valeurs) et le flux APRÈS injection (`engram_sortie`). Ce script les\nrecalcule en Python :\n\n  1. les … [6935 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/verifier_v41_engram.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='tools/verifier_v41_mhc.py'\ns=open(p).read()\ns=s.replace(\"\"\"        self.alignement = 32\n        for _ in range(n_kv):\n            cle = self._chaine()\n            t = struct.unpack(\"<I\", self.f.read(4)) … [951 caractères tronqués]`
+
+  ```
+Traceback (most recent call last):
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/verifier_v41_engram.py", line 174, in <module>
+    sys.exit(main())
+             ~~~~^^
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/verifier_v41_engram.py", line 85, in main
+    modele, prefixe, ids_f, couche = (sys.argv[1], sys.argv[2], sys.argv[3], int(sys.argv[4]))
+                                                                             ~~~^^^^^^^^^^^^^
+ValueError: invalid literal for int() with base 10: '/tmp/v41_texte.txt.ids'
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/verifier_v41_engram.py /home/stephane/FastNVMe/modeles-lourds/DeepSeek-V4.1-Flash-Q2.gguf /tmp/dump_eng 1 /tmp/v41_texte.txt.ids 1 0 1 2 3 2>&1 | tail -8", "description": "Run with the correct argument order"}`
+
+  ```
+Traceback (most recent call last):
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/verifier_v41_engram.py", line 174, in <module>
+    sys.exit(main())
+             ~~~~^^
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/verifier_v41_engram.py", line 85, in main
+    modele, prefixe, ids_f, couche = (sys.argv[1], sys.argv[2], sys.argv[3], int(sys.argv[4]))
+                                                                             ~~~^^^^^^^^^^^^^
+ValueError: invalid literal for int() with base 10: '/tmp/v41_texte.txt.ids'
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/verifier_v41_engram.py /home/stephane/FastNVMe/modeles-lourds/DeepSeek-V4.1-Flash-Q2.gguf /tmp/dump_eng /tmp/v41_texte.txt.ids 1 0 1 2 3 2>&1 | tail -8", "description": "Run the engram verifier correctly"}`
+
+  ```
+métadonnée engram.max_ngram_size absente
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 300 python3 tools/lire_meta_gguf.py /home/stephane/FastNVMe/modeles-lourds/DeepSeek-V4.1-Flash-Q2.gguf 2>/dev/null | grep -o \"deepseek41.engram.[a-z_]*\" | sort -u", "description": "List the engram metadata keys"}`
+
+  ```
+deepseek41.engram.compressed_vocab_size
+deepseek41.engram.encoding
+deepseek41.engram.layer_ids
+deepseek41.engram.multipliers
+deepseek41.engram.pad_id
+deepseek41.engram.primes
+deepseek41.engram.rows
+deepseek41.engram.token_map
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/verifier_v41_engram.py", "new_string": "    def meta_i64(cle):\n        # les listes sont dans les métadonnées : on les relit par le même chemin\n        # que les tenseurs (le fichier les déclare sous `deepseek41.<cle>`).\n        … [2059 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/verifier_v41_engram.py has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && time python3 tools/verifier_v41_engram.py /home/stephane/FastNVMe/modeles-lourds/DeepSeek-V4.1-Flash-Q2.gguf /tmp/dump_eng /tmp/v41_texte.txt.ids 1 0 1 2 3 2>&1 | tail -8", "description": "Run the engram verifier"}`
+
+  ```
+# couche 1 (table 0) · hc 4 · dim 5120 · 24 colonnes · wkv (25600, 6144)
+  pos 0 : projection 3.135e-05 · injection 1.744e-07 (dynamique 5.378e-01)  OK 
+  pos 1 : projection 8.613e-06 · injection 1.057e-06 (dynamique 5.484e-01)  OK 
+  pos 2 : projection 2.789e-05 · injection 1.157e-06 (dynamique 1.160e+00)  OK 
+  pos 3 : projection 9.716e-06 · injection 1.089e-06 (dynamique 3.491e+00)  OK 
+VERDICT : la projection et l'injection tiennent
+[stderr]
+
+real	0m2,969s
+user	0m2,377s
+sys	0m0,594s
+  ```
+
+### 🤖 Assistant
+
+⏵ Making the engram hash O(1) per token, then re-verifying
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs", "new_string": "                    // Les adresses se calculent sur la FENÊTRE du hachage, pas sur\n                    // tout le préfixe : un n-gramme ne regarde que `max_ngram − 1`\n                    // jet … [1878 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && cargo build --release 2>&1 | grep -E \"^error\" -A 8 | head -20; echo BUILD_END; cd .. && rm -f /tmp/dump_eng2-* && (timeout 900 ./drave-core/target/release/drave /home/stephane/FastNVMe/modeles-lourds/DeepSeek-V4.1-Flash- … [293 caractères tronqués]`
+
+  ```
+BUILD_END
+[timed out after 60000ms]
+[killed by signal: SIGTERM]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && rm -f /tmp/dump_eng2-* && (DRAVE_DUMP_COUCHES=/tmp/dump_eng2 timeout 900 ./drave-core/target/release/drave /home/stephane/FastNVMe/modeles-lourds/DeepSeek-V4.1-Flash-Q2.gguf --couches 0:2 --tete-partielle --ppl /tmp/v41_texte.txt.ids … [386 caractères tronqués]`
+
+  ```
+started background job bash-173
+  ```
+
+- **bash** `{"command": "sleep 55; tail -7 /tmp/v41_eng2.log; grep -E \"perplexité cumulée\" /tmp/v41_eng2.log", "description": "Check the window-hash verification"}`
+
+  ```
+# couche 1 (table 0) · hc 4 · dim 5120 · 24 colonnes · wkv (25600, 6144)
+  pos 0 : projection 3.135e-05 · injection 1.744e-07 (dynamique 5.378e-01)  OK 
+  pos 1 : projection 8.613e-06 · injection 1.057e-06 (dynamique 5.484e-01)  OK 
+  pos 2 : projection 2.789e-05 · injection 1.157e-06 (dynamique 1.160e+00)  OK 
+  pos 3 : projection 9.716e-06 · injection 1.089e-06 (dynamique 3.491e+00)  OK 
+VERDICT : la projection et l'injection tiennent
+VERIF=0
+       3 tokens notés — perplexité cumulée 2045733.640  (1.2 tok/s)
+  ```
+
+### 👤 Utilisateur
+
+background job bash-173 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && rm -f /tmp/dump_eng2-* && (DRAVE_DUMP_COUCHES=/tmp/dump_eng2 timeout 900 ./drave-core/target/release/drave /home/stephane/FastNVMe/modeles-lourds/DeepSeek-V4.1-Flash-Q2.gguf --couches 0:2 --tete-partielle --ppl /tmp/v41_texte.txt.ids --ctx 8 --limit 4 > /tmp/v41_eng2.log 2>&1; echo "EXIT=$?" >> /tmp/v41_eng2.log; python3 tools/verifier_v41_engram.py /home/stephane/FastNVMe/modeles-lourds/DeepSeek-V4.1-Flash-Q2.gguf /tmp/dump_eng2 /tmp/v41_texte.txt.ids 1 0 1 2 3 >> /tmp/v41_eng2.log 2>&1; echo "VERIF=$?" >> /tmp/v41_eng2.log)) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && (timeout 5400 tools/portes.sh rapide > /tmp/portes_rapide5.log 2>&1; echo \"EXIT=$?\" >> /tmp/portes_rapide5.log)", "description": "Gates after the engram wiring", "run_in_background": true}`
+
+  ```
+started background job bash-174
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/rapport-v41-mhc.md'\ns=open(p).read()\ns=s.replace(\"\"\"## 7. Ce qui reste, nommé\"\"\",\n\"\"\"## 7. L'engram : branché, et vérifié de bout en bout\n\nDernier manque de code de P7, et le plus gros morce … [3061 caractères tronqués]`
+
+  ```
+10:## 1. Ce que le moteur disait, et pourquoi c'était faux
+34:## 2. La chaîne de V4.1, en trois phrases
+58:## 3. Ce qui a été implémenté
+78:## 4. La vérification, sur le fichier de 365,7 Go
+126:## 5. Le compresseur des ratios 1 et 2 : les couches SOURCES tournent, et sont vérifiées
+167:## 6. Le cache compressé partagé : les 34 couches consommatrices aussi
+195:## 7. L'engram : branché, et vérifié de bout en bout
+242:## 8. Ce qui reste, nommé
+263:## 9. Reproduire
+291:## 10. Sources
+[stderr]
+<stdin>:21: SyntaxWarning: invalid escape sequence '\|'
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/rapport-v41-mhc.md'\ns=open(p).read()\n# tableau des manques : l'engram n'en est plus un, et l'indexeur reste\ns=s.replace(\"\"\"| **engram** | couches 1 et 14 : `engram_embd` (101 Go), `engram_kv` [25600 … [3425 caractères tronqués]`
+
+  ```
+357:> **Fait aussi (02/10, 22h) : l'ENGRAM est branché et vérifié de bout en bout.**
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='docs/plan-deepseek41-complet.md'\ns=open(p).read()\ns=s.replace(\"### P7 — Adaptation à V4.1, et la question de provenance (≈ ½ journée + action externe) — **chaîne mHC et compression faites et vérifiées ; reste  … [361 caractères tronqués]`
+
+  ```
+322:### P7 — Adaptation à V4.1, et la question de provenance (≈ ½ journée + action externe) — **chaîne mHC, compression et engram faits et vérifiés** (02/10)
+=== Portes ===
+  cargo test --release                       60 verts  ✅
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='sprints/10-v41-la-chaine-retardee-et-le-compresseur.md'\ns=open(p).read()\ns=s.replace(\"\"\"| 4ᵉ égalité : le repli de l'entrée de la FFN | ajoutée après la relecture adverse | 1,0e-08 à 4,9e-08 |\"\"\",\n\"\"\" … [1313 caractères tronqués]`
+
+  ```
+=== Portes ===
+  cargo test --release                       60 verts  ✅
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='REPRISE.md'\ns=open(p).read()\ns=s.replace(\"\"\"> **Mise à jour du 02/10 (20h) — le cache compressé partagé, et une régression\n> attrapée par la porte.**\"\"\",\n\"\"\"> **Mise à jour du 02/10 (22h) — l'ENGRAM  … [1239 caractères tronqués]`
+
+  ```
+Kimi-K2.7 : sigmoïde ×2,827              sigmoïde  ✅
+  V4-Flash : racine de softplus              racine de softplus  ✅
+  Qwen3-235B : softmax                       softmax  ✅
+  V4-Flash : --config le dit calculable      oui  ✅
+  ```
+
+- **bash** `{"command": "sleep 110; tail -5 /tmp/portes_rapide5.log", "description": "Wait for the V4-Flash gate"}`
+
+  ```
+(no output)
+[timed out after 60000ms]
+[killed by signal: SIGTERM]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-174 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && (timeout 5400 tools/portes.sh rapide > /tmp/portes_rapide5.log 2>&1; echo "EXIT=$?" >> /tmp/portes_rapide5.log)) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "tail -6 /tmp/portes_rapide5.log", "description": "Read final gate results"}`
+
+  ```
+V4-Flash : --config le dit calculable      oui  ✅
+  V4-Flash 43 couches ctx 32                 8430.2968  ✅
+  engram V4.1 : adressage                    rangées DISTINCTES : 479723  ✅
+
+toutes les portes sont vertes
+EXIT=0
+  ```
+
+### 🤖 Assistant
+
+⏵ Running the first complete V4.1 forward (40 layers, engram included)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && (date +%s > /tmp/full_t0; timeout 2400 ./drave-core/target/release/drave /home/stephane/FastNVMe/modeles-lourds/DeepSeek-V4.1-Flash-Q2.gguf --ppl /tmp/v41_texte.txt.ids --ctx 8 --limit 4 > /tmp/v41_full.log 2>&1; echo \"EXIT=$?\" >>  … [125 caractères tronqués]`
+
+  ```
+started background job bash-175
+  ```
+
+- **bash** `{"command": "sleep 55; tail -14 /tmp/v41_full.log 2>/dev/null; echo \"=== duree ===\"; head -1 /tmp/full_t0 2>/dev/null; tail -2 /tmp/v41_full.log 2>/dev/null", "description": "Check the full V4.1 run"}`
+
+  ```
+3 tokens notés — perplexité cumulée 39839289.516  (0.1 tok/s)
+
+=== perplexité 39839289.5159 sur 3 tokens (0 événements, 44.1 s) ===
+    0.1 tok/s effectifs (avant + tête)
+    attention : 0.00 M paires (requête, clé) par token
+    projections : 0.0 M événements par token
+    paires (poids × activation) par token : attention 7204.2 M · experts 11324.6 M · partagé 661.9 M · scores 0 K · total 19190.8 M
+    dont en listes (une paire y est un événement) : 0.0 M — le reste est dense (déquantifié ou f32)
+    part de l'attention dans le flux total : 37.5 %
+    postes (ms/token) : projets-attn 0.00 | rope 0.00 | attention 7222.90 | proj+mlp 6873.53 | somme 14096.43 | reste (tête + échantillonnage) 599.77
+    dont tête de sortie 19.69 | notation log-sum-exp 1.69 (le reste du « reste » n'est pas chronométré)
+    dont attention : scores 0.00 | softmax 0.00 | somme pondérée + écriture KV 7222.90
+EXIT=0
+1790981334
+=== duree ===
+1790981279
+EXIT=0
+1790981334
+  ```
+
+### 👤 Utilisateur
+
+background job bash-175 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && (date +%s > /tmp/full_t0; timeout 2400 ./drave-core/target/release/drave /home/stephane/FastNVMe/modeles-lourds/DeepSeek-V4.1-Flash-Q2.gguf --ppl /tmp/v41_texte.txt.ids --ctx 8 --limit 4 > /tmp/v41_full.log 2>&1; echo "EXIT=$?" >> /tmp/v41_full.log; date +%s >> /tmp/v41_full.log)) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/rapport-v41-mhc.md'\ns=open(p).read()\ns=s.replace(\"\"\"## 8. Ce qui reste, nommé\"\"\",\n\"\"\"## 8. La première passe avant V4.1 **complète**\n\nAvec l'engram branché, la liste des manques de V4.1 est  … [1566 caractères tronqués]`
+
+  ```
+195:## 7. L'engram : branché, et vérifié de bout en bout
+242:## 8. La première passe avant V4.1 **complète**
+269:## 9. Ce qui reste, nommé
+290:## 10. Reproduire
+318:## 11. Sources
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='sprints/10-v41-la-chaine-retardee-et-le-compresseur.md'\ns=open(p).read()\ns=s.replace(\"\"\"## Ce qui reste, nommé\"\"\",\n\"\"\"## La passe avant COMPLÈTE\n\nAvec l'engram, la liste des manques de V4.1 est **vi … [2945 caractères tronqués]`
+
+  ```
+dcc1b06 P7 : l'engram de V4.1 branché dans la passe avant — et la première passe COMPLÈTE des 40 couches
+a38df1e P7 : le cache compressé partagé de V4.1, la 4e égalité, et une régression attrapée par la porte
+[stderr]
+bash: line 25: wkv: command not found
+bash: line 25: hc: command not found
+bash: line 25: tools/verifier_v41_engram.py: Permission denied
+bash: line 25: tools/engram_reference.py: Permission denied
+bash: line 25: --lot: command not found
+bash: line 25: forward_lot: command not found
+bash: line 25: hc_*: command not found
+bash: line 25: [partiel]: command not found
+bash: line 25: index_source_layer_ids: command not found
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nm = \"\"\"P7 : l'engram de V4.1 branché dans la passe avant — et la première passe COMPLÈTE des 40 couches\n\nLe dernier manque de code de P7 est levé. Sont dans la passe avant, en tête des\ncouches 1 et 14 : le hac … [1874 caractères tronqués]`

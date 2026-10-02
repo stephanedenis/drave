@@ -192,7 +192,81 @@ du softmax par canal, qui est maintenant couverte par un test unitaire à témoi
 (`model::tests_hc::pool_du_compresseur_est_par_canal` : deux jetons différents,
 poids 0,5/0,5 et 0,25/0,75).
 
-## 7. Ce qui reste, nommé
+## 7. L'engram : branché, et vérifié de bout en bout
+
+Dernier manque de code de P7, et le plus gros morceau de V4.1 : **deux tables de
+101 Go** (203 Go à elles deux, 55 % du fichier), un hachage d'n-grammes, et une
+injection sur le flux résiduel. La référence dit tout :
+`vllm/models/deepseek_v41/common/engram.py` — « The hash ids fetch `n_hash_cols`
+rows; `wkv` turns them into **one key per hc copy plus a shared value**. The gate
+is a normalized dot product of the stream against the key, signed-sqrt'ed before
+the sigmoid ».
+
+Ce qui a été branché dans la passe avant :
+
+| pièce | où | ce qu'elle fait |
+|---|---|---|
+| hachage glissant | `Engram::adresses` | 24 colonnes = 3 reculs × 8 têtes ; la FENÊTRE suffit (`max_ngram − 1` jetons), donc O(1) par jeton — le vérificateur recalcule, lui, sur tout le préfixe, ce qui contrôle l'équivalence |
+| lecture des rangées | `engram::lire_rangee` | 264 octets = 256 valeurs e4m3 + 8 échelles e8m0, par blocs de 32 |
+| projection | `wkv` [25 600, 6 144] | 24 colonnes × 256 valeurs → `hc` clés + **une valeur partagée** (5 × 5 120) |
+| injection | `PorteEngram::injecter` | par copie : `sigmoïde(signe(d)·racine(max(\|d\|, 1e-6)))` · valeur partagée, ajoutée au flux ; `eps` = `rms_norm_eps` = 1e-20 |
+| position | en tête de la couche, avant les mélanges | la référence : `residual = self.engram(previous_post, …)` **puis** `mhc_pre(residual, …)` |
+
+Vérification (`tools/verifier_v41_engram.py`), sur les couches 0 et 1 du fichier de
+365,7 Go — les adresses recalculées par la **référence** (`tools/engram_reference.py`,
+transcription de `engram.py`, déjà validée), les rangées relues dans la vraie
+table, puis la projection et l'injection :
+
+| position | projection (`engram_kv`) | injection (`engram_sortie`) | dynamique |
+|---|---|---|---|
+| 0 | 3,135e-05 | 1,744e-07 | 0,538 |
+| 1 | 8,613e-06 | 1,057e-06 | 0,548 |
+| 2 | 2,789e-05 | 1,157e-06 | 1,160 |
+| 3 | 9,716e-06 | 1,089e-06 | 3,491 |
+
+La projection est à ~1e-5 : c'est l'accumulation f32 sur 6 144 termes (le
+vérificateur calcule en f64), et une seule valeur de table mal déquantifiée
+donnerait un écart cent fois plus grand — donc la lecture des rangées et l'ordre
+d'assemblage des 24 colonnes sont justes. L'injection est à ~1e-6.
+
+Ce que ça coûte, annoncé au chargement : **6 336 octets par jeton et par table**
+(24 rangées de 264), soit 12 672 pour les deux — la mesure de flux antérieure
+(12 665) donnait 7 octets de moins, une rangée partagée entre deux colonnes.
+
+**Ce qui n'est pas fait sur l'engram** : le masque des jetons d'**image**
+(`dead_mask = image_sentinel_mask`) — un texte seul n'a aucun jeton sentinelle,
+donc l'équivalence est exacte ici, mais un modèle multimodal demanderait ce
+masque ; et le pas de temps du hachage sur de très longues séquences
+(l'implémentation est O(1) par jeton, le vérificateur O(préfixe)).
+
+## 8. La première passe avant V4.1 **complète**
+
+Avec l'engram branché, la liste des manques de V4.1 est **vide** : le moteur
+exécute les **40 couches** du fichier de 365,7 Go — hyper-connexions retardées,
+cache compressé partagé (ratios 1 et 2), engram, MoE à 384 experts, tête finale
+sans poids appris.
+
+```
+$ ./drave-core/target/release/drave DeepSeek-V4.1-Flash-Q2.gguf \
+      --ppl /tmp/v41_texte.txt.ids --ctx 8 --limit 4
+       3 tokens notés — perplexité cumulée 39839289.516  (0.1 tok/s)
+```
+
+Ce que ce chiffre est : **la preuve que la passe tourne**, pas une mesure de
+qualité. Ce qu'il n'est pas : une perplexité. Trois jetons et huit positions ne
+disent rien d'un modèle, et à cette taille l'indexeur garde tous les blocs
+(`n_vis` ≪ `top_k`). Le débit non plus n'est pas une mesure du modèle : 55 s pour
+la passe entière (chargement compris), dont **7 223 ms/jeton d'attention** et
+**6 874 ms/jeton de projections + MoE**, parce que le chemin V4 fait ses
+projections en `f32` naïf (`matvec_f32`) — c'est un poste de P9, pas un résultat.
+
+Ce que la passe établit, en revanche, et que rien d'autre ne pouvait établir :
+les 40 couches s'enchaînent sans incohérence, le flux est compté
+(**19 191 M paires/jeton**, dont 7 204 M pour l'attention et 11 325 M pour les
+experts — 37,5 % d'attention), et les 203 Go de tables d'engram sont lus sans
+être chargés.
+
+## 9. Ce qui reste, nommé
 
 L'inventaire de V4.1 (1 046 tenseurs, 40 couches) donne la liste exacte :
 
@@ -202,7 +276,7 @@ L'inventaire de V4.1 (1 046 tenseurs, 40 couches) donne la liste exacte :
 | ratios 1 et 2 | `attn_compressor_kv` sans `ape`, `attn_compressor_gate` seulement en ratio 2 | **fait** pour les couches sources, vérifié sur les couches 2 et 20 (§5) |
 | indexeur sans compresseur propre | `indexer.attn_k` [128,512], `indexer.k_norm` [128], `indexer.attn_q_b`, `indexer.proj` | les clés de l'indexeur viennent du **latent du compresseur principal** (le fichier n'a pas d'`indexer_compressor_*`), et il partage le cache de son `kv_source` |
 | sélection à deux niveaux | `candidate_source_layer_id = 20`, `candidate_topk_blocks = 2048`, `candidate_block_size = 8` | aucune source d'exécution lue à ce jour |
-| **engram** | couches 1 et 14 : `engram_embd` (101 Go), `engram_kv` [25600,6144], `engram_q_norm`/`k_norm` [4,5120] | l'adressage et la lecture sont portés et validés ; **l'injection n'est branchée sur aucune passe avant** |
+| **engram** | couches 1 et 14 : `engram_embd` (101 Go), `engram_kv` [25600,6144], `engram_q_norm`/`k_norm` [4,5120] | **fait** (§7) : hachage, lecture des rangées, projection et injection branchés et vérifiés ; restent le masque des jetons d'image (sans objet en texte seul) |
 | **pré-mix sur le fil** | — | la chaîne retardée a besoin de `hc` valeurs par jeton que le protocole DRVF ne transporte pas (16 octets/jeton) : un découpage de V4.1 est refusé |
 | YaRN toujours actif | `rope_scaling.factor = 16`, `original_max_position_embeddings = 65536` | le moteur ne l'applique qu'au-delà de 4 × la longueur déclarée (mesure gpt-oss) ; `DRAVE_YARN=1` l'applique partout, comme la référence — le message du chargement le dit désormais |
 | DSpark / MTP | `num_nextn_predict_layers = 3`, `dspark_*` | tête spéculative, hors du chemin d'un modèle autorégressif simple |
@@ -213,7 +287,7 @@ celui de `vision_config` (2816) et non le texte (2304). Le champ est **inerte**
 sur un modèle à experts (la largeur du FFN partagé vient de la forme du tenseur),
 mais le chiffre affiché est faux.
 
-## 8. Reproduire
+## 10. Reproduire
 
 ```bash
 # la chaîne, témoins numpy ↔ moteur
@@ -241,7 +315,7 @@ python3 tools/v41_compresseur_reference.py \
     /tmp/dump_l20 20 /tmp/etat_l2.bin 1 0 1 2 3
 ```
 
-## 9. Sources
+## 11. Sources
 
 - vLLM, `vllm/models/deepseek_v41/nvidia/model.py` (`mhc_shifted_post_pre`,
   `hc_collapse_triton`, `_collapse`, `kv_source_layer_ids`) —

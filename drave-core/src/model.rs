@@ -14,6 +14,7 @@
 //! précision. Le reste du modèle — 99,7 % des poids — passe par les événements.
 
 use crate::engine::{Pool, SparseVec};
+use crate::engram::{Engram, PorteEngram, OCTETS_PAR_RANGEE, VALEURS_PAR_RANGEE};
 use crate::gguf::Gguf;
 use crate::list::{DenseQ4, DenseQ8, PushMat};
 use std::time::Instant;
@@ -187,16 +188,23 @@ pub fn manques_architecture(g: &Gguf, cfg: &Cfg, ctx: usize, clusters: bool) -> 
 `output_hc_*` sur une architecture qui n'est pas `deepseek41` — la chaîne retardée de V4.1 \
 ne s'applique qu'à elle, et pour tout autre fichier le mode de réduction n'est pas écrit");
     }
-    // **L'engram de V4.1** : ses tables et ses projections sont dans le fichier
-    // (`engram_embd`, `engram_kv`, `engram_q_norm`, `engram_k_norm` sur les
-    // couches 1 et 14), l'ADRESSAGE est porté et validé contre la référence
-    // (`reports/rapport-engram-etat.md`) — mais l'INJECTION n'est branchée sur
-    // aucune passe avant. Exécuter une couche d'engram sans elle donne un
-    // résultat faux en silence : c'est un manque tant que la passe ne l'appelle
-    // pas.
-    if g.cfg_ou(&["engram.layer_ids"]).is_some() || g.json_brut("engram_layer_ids").is_some() {
-        manques.push("engram (V4.1) : l'injection dans la passe avant n'est pas branchée \
-(l'adressage et la lecture des rangées le sont, et l'injection est écrite et testée à part)");
+    // **L'engram de V4.1 est BRANCHÉ** (02/10) : le hachage glissant, la lecture
+    // des rangées de 264 octets, la projection `wkv` et l'injection sur les `hc`
+    // copies sont dans la passe avant (`forward`, en tête de chaque couche
+    // d'engram). Ce qui reste à vérifier n'est pas un manque de code : les
+    // tenseurs d'injection doivent être là, sinon il n'y a rien à projeter.
+    if let Some(couches) = g.cfg_ou(&["engram.layer_ids"]).and_then(|m| m.as_liste_i64()) {
+        for l in couches {
+            let p = |s: &str| format!("blk.{l}.{s}");
+            if g.tensor(&p("engram_kv.weight")).is_none()
+                || g.tensor(&p("engram_q_norm.weight")).is_none()
+                || g.tensor(&p("engram_k_norm.weight")).is_none() {
+                manques.push("engram : une couche déclarée n'a pas ses tenseurs \
+d'injection (`engram_kv`, `engram_q_norm`, `engram_k_norm`) — sans eux, l'injection n'a \
+rien à projeter");
+                break;
+            }
+        }
     }
     // Ce message décrit le cache LATENT de la MLA « GLM/Kimi »
     // (`attn_kv_a_mqa`) : sur l'attention V4, qui a aussi un `attn_q_a` mais un
@@ -2065,6 +2073,19 @@ pub struct Model {
     /// + commentaire « the reference collapses each sublayer's input with the
     /// *previous* sublayer's pre-mix », `docs/reports/rapport-v41-mhc.md`).
     pub hc_retarde: bool,
+    /// **Engram** (V4.1) : le hachage d'n-grammes et les tables de 101 Go. Les
+    /// tables ne sont PAS chargées (elles s'adressent par rangée de 264 octets) ;
+    /// ce champ porte le hachage, les premiers, le `token_map`.
+    pub engram: Option<Engram>,
+    /// Poids d'injection de chaque couche d'engram : `(indice de table, wkv,
+    /// q_norm, k_norm)`. `wkv` fait `[(hc+1)·dim, (max_ngram−1)·n_heads·256]` :
+    /// il transforme les 24 rangées lues (24 × 256 = 6 144) en `hc` clés plus
+    /// **une valeur partagée** (5 × 5120 = 25 600).
+    pub engram_poids: Vec<Option<(usize, Vec<f32>, Vec<f32>, Vec<f32>)>>,
+    /// Les identifiants déjà vus de la séquence courante : le hachage glissant
+    /// lit les `max_ngram − 1` jetons précédents. Rempli par `forward` (un jeton
+    /// par appel), remis à zéro en tête de séquence.
+    pub historique: Vec<u32>,
     /// Cache LATENT par couche : `c_kv` (kv_lora) et `k_rope` (qkr) par position.
     pub mla_cache: Vec<(Vec<f32>, Vec<f32>)>,
     /// Cache VRAM des experts MoE (`DRAVE_GPU_EXPERTS=1`).
@@ -2743,19 +2764,19 @@ reste non implémenté.");
             // soit fidèle, et l'inverse de l'inverse (retirer sans le dire)
             // ferait croire que tout V4.1 tourne.
             let dans = |l: usize| l >= a && l < b;
-            // Le partage du cache compressé de V4.1 (`kv_source_layer_ids`) est
-            // implémenté : plus de filtre à faire ici. Ce qui reste non
-            // implémenté dans une plage (engram, indexeur de V4.1) est traité
-            // juste en dessous, nommément.
-            let engram: Vec<i64> = g.cfg_ou(&["engram.layer_ids"])
-                .and_then(|m| m.as_liste_i64()).unwrap_or_default();
-            if !engram.is_empty() && !engram.iter().any(|l| *l >= 0 && dans(*l as usize)) {
-                let avant = manques.len();
-                manques.retain(|m| !m.starts_with("engram (V4.1)"));
-                if manques.len() != avant {
-                    println!("[partiel] couches {a}..{b} : aucune couche d'ENGRAM dans la \
-plage (elles sont en {engram:?}) — l'injection n'est pas exercée.");
-                }
+            // **L'indexeur de V4.1** (clés tirées du latent du compresseur
+            // principal) n'est pas porté : dans une plage qui contient une couche
+            // d'indexeur, il est CONTOURNÉ en gardant tous les blocs — exact sous
+            // `indexer.top_k`, refusé au-delà, et annoncé une fois à l'exécution.
+            // Le dire ici, pour que la plage ne passe pas pour complète.
+            let idx_src: Vec<usize> = g.cfg_ou(&["index_source_layer_ids"])
+                .and_then(|m| m.as_liste_i64()).unwrap_or_default()
+                .into_iter().filter(|l| *l >= 0).map(|l| l as usize).collect();
+            if idx_src.iter().any(|l| dans(*l))
+                && g.tensor(&format!("blk.0.indexer_compressor_kv.weight")).is_none() {
+                println!("[partiel] couches {a}..{b} : l'INDEXEUR de V4.1 (clés tirées du \
+latent du compresseur principal, `indexer.attn_k` + `indexer.k_norm`) n'est pas porté — \
+le moteur garde tous les blocs, ce qui est exact sous `indexer.top_k` et refusé au-delà.");
             }
         }
         if let Err(raison) = refus_architecture(&g, &cfg, ctx, map.is_some(), manques) {
@@ -3129,6 +3150,29 @@ et la tête se replie avec la `pre` de la dernière FFN"
                      });
             (Some(v), tete)
         } else { (None, None) };
+        // **Engram (V4.1)** : les tables de 101 Go chacune ne se CHARGENT pas —
+        // elles s'adressent par rangée de 264 octets (`lire_rangee`) ; on ne
+        // charge que les projections d'injection (`wkv` [25600, 6144],
+        // `q_norm`/`k_norm` [4, 5120]). Le hachage, les premiers et le
+        // `token_map` viennent des métadonnées.
+        let engram = Engram::depuis_gguf(&g);
+        let engram_poids: Vec<Option<(usize, Vec<f32>, Vec<f32>, Vec<f32>)>> =
+            (0..cfg.n_layer).map(|l| {
+                let idx = engram.as_ref()?
+                    .couches.iter().position(|c| *c == l)?;
+                let p = |s: &str| format!("blk.{l}.{s}");
+                Some((idx,
+                      g.dequant(&p("engram_kv.weight")),
+                      g.dequant(&p("engram_q_norm.weight")),
+                      g.dequant(&p("engram_k_norm.weight"))))
+            }).collect();
+        if let Some(e) = engram.as_ref() {
+            println!("[config] engram : tables sur les couches {:?} (rangées {:?}) · \
+{} colonnes de hachage ({} reculs × {} têtes) · injection BRANCHÉE · {} octets lus par \
+jeton et par table ({} rangées de 264)",
+                     e.couches, e.rangees, e.n_hash_cols(), e.max_ngram - 1, e.n_heads,
+                     e.n_hash_cols() * OCTETS_PAR_RANGEE, e.n_hash_cols());
+        }
         let mut layers = Vec::with_capacity(cfg.n_layer);
         let mut bytes = 0u64;
         for l in 0..cfg.n_layer {
@@ -3464,6 +3508,7 @@ l'applique partout, comme la référence",
             mla4, mla4_cache, mla4_comp_kv, mla4_comp_gate, mla4_cles_comp,
             mla4_idx_kv, mla4_idx_gate, mla4_idx_cles, mla4_idx_scores,
             hc, hc_tete, hc_retarde,
+            engram, engram_poids, historique: Vec::new(),
             kv: caches_kv,
             ctx, events: 0, paires: [0; 3], act_levels: 127.0, act_thresh: 0.0, act_topk: 0, act_renorm: false,
             act_topk_proj: [0; 7], attn_topk: 0, attn_events: 0, qk_topk: 0,
@@ -4214,6 +4259,17 @@ l'applique partout, comme la référence",
     /// en lot. Les modèles à experts retombent sur le chemin jeton par jeton :
     /// leur regroupement par expert est l'étape suivante.
     pub fn forward_lot(&mut self, toks: &[u32], pos0: usize) -> Vec<Vec<f32>> {
+        // **Le chemin par lots ne porte PAS les hyper-connexions** : son corps
+        // n'a aucune occurrence de `hc_*`, et l'état résiduel y est donc
+        // additionné au lieu d'être remélangé. Un `--lot 8` sur V4-Flash ou V4.1
+        // calculait donc un AUTRE modèle, sans un mot — le pire cas du dépôt.
+        // On refuse, au lieu de rendre un chiffre faux qui a l'air d'un chiffre.
+        // (Vérifié le 02/10 : `grep -c hc` dans le corps de `forward_lot` = 0.)
+        if self.hc.is_some() && toks.len() > 1 {
+            panic!("chemin par LOTS et hyper-connexions : ce chemin n'est pas porté (le \
+résidu y est additionné au lieu d'être remélangé par `hc_post`) — utilisez `--lot 1`, ou \
+implémentez-le. Le lot n'est pas neutre ici : il change le modèle");
+        }
         // Modèle MLA : le chemin par lots ne connaît que Q/K/V denses. On
         // repasse par le jeton seul, qui porte la MLA et le cache latent. Le
         // préremplissage par lots perd son intérêt sur ces modèles — c'est dit
@@ -5586,6 +5642,15 @@ ne sert à rien tant que le seuil n'est pas atteint", m.indexer_top_k);
                 None => g.row_f32("token_embd.weight", tok as usize, h),
             },
         };
+        // **Historique des jetons**, pour le hachage glissant de l'engram : le
+        // préfixe de la séquence courante. Remis à zéro quand `pos` repart à 0
+        // (chaque fenêtre de perplexité est une séquence neuve), puis complété.
+        // Sans cela, le hachage d'un n-gramme lirait les jetons d'une AUTRE
+        // fenêtre — des adresses plausibles et fausses.
+        if pos == 0 { self.historique.clear(); }
+        if self.historique.len() == pos { self.historique.push(tok); }
+        else if self.historique.len() > pos { self.historique.truncate(pos); self.historique.push(tok); }
+        debug_assert_eq!(self.historique.len(), pos + 1);
         // Hyper-connexions : l'état résiduel naît en `hc` copies IDENTIQUES de
         // l'embarquement (la référence fait `ggml_repeat_4d(inp, n_embd, hc)`),
         // et chaque sous-couche les remélangera.
@@ -5677,6 +5742,59 @@ le raccord précédent n'existe pas, le premier raccord se replie donc avec la C
         // `forward_mla` respectaient déjà la plage ; `forward` était l'exception.
         for l in self.couche_debut..self.couche_fin {
             let lay = &layers[l];
+            // **Engram (V4.1)** : l'injection se fait AVANT les mélanges du
+            // raccord d'entrée — la référence écrit `residual = self.engram(
+            // previous_post, …)` PUIS `mhc_pre(residual, …)` — et sur le flux
+            // ENTIER (`hc` copies), chaque copie ayant sa porte. Les 24 rangées
+            // (24 × 264 octets) sont lues dans la table de 101 Go : c'est le
+            // seul accès aléatoire du modèle, et il est mesuré.
+            if let Some(Some((ti, wkv, qn, kn))) = self.engram_poids.get(l) {
+                if let Some(eng) = self.engram.as_ref() {
+                    let nhc = eng.n_hash_cols();
+                    let dim = cfg.hidden;
+                    let hcc = self.hc.as_ref().map(|v| v[0].0.hc).unwrap_or(1);
+                    // Les adresses se calculent sur la FENÊTRE du hachage, pas sur
+                    // tout le préfixe : un n-gramme ne regarde que `max_ngram − 1`
+                    // jetons en arrière, donc la dernière ligne de `adresses` ne
+                    // dépend que d'eux. Recalculer le préfixe entier coûtait
+                    // O(position) par jeton et par couche — quadratique sur une
+                    // séquence, pour un résultat identique (le vérificateur compare
+                    // justement les deux : il recalcule, lui, sur tout le préfixe).
+                    let lo = pos.saturating_sub(eng.max_ngram - 1);
+                    let ids: Vec<u32> = self.historique[lo..=pos].to_vec();
+                    let positions: Vec<usize> = (lo..=pos).collect();
+                    // Texte seul : `dead_mask` est le masque des IMAGES
+                    // (`image_sentinel_mask`), vide ici — et le masque d'injection
+                    // est son complément, donc « garder partout ».
+                    let morts = vec![false; ids.len()];
+                    let adr = eng.adresses(&ids, &positions, &morts);
+                    let base = ((ids.len() - 1) * eng.couches.len() + *ti) * nhc;
+                    let mut rangee = vec![0f32; nhc * VALEURS_PAR_RANGEE];
+                    let lue = eng.couches[*ti];
+                    for col in 0..nhc {
+                        let r = adr[base + col] as i64;
+                        let vals = crate::engram::lire_rangee(g, lue, r)
+                            .unwrap_or_else(|| panic!("engram couche {lue} : rangée {r} \
+hors de la table ({} rangées)", eng.rangees[*ti]));
+                        rangee[col * VALEURS_PAR_RANGEE..(col + 1) * VALEURS_PAR_RANGEE]
+                            .copy_from_slice(&vals);
+                    }
+                    let kv_dim = (hcc + 1) * dim;
+                    let mut kv = vec![0f32; kv_dim];
+                    matvec_f32(wkv, &rangee, nhc * VALEURS_PAR_RANGEE, kv_dim, &mut kv);
+                    let porte = PorteEngram { hc: hcc, dim, eps: cfg.eps, clamp: 1e-6 };
+                    let mut injecte = vec![0f32; hcc * dim];
+                    porte.injecter(&x, &kv, qn, kn, None, &mut injecte);
+                    x = injecte;
+                    // Ce que l'injection coûte : les 24 rangées lues, la
+                    // projection `wkv` (24×256 → 5×5120) et les deux normes.
+                    paires[0] += (nhc * VALEURS_PAR_RANGEE * kv_dim
+                                  + 2 * hcc * dim + hcc * dim) as u64;
+                    Self::vider_couche(self.dump_couches.as_deref(), "engram_kv", l, pos, &kv);
+                    Self::vider_couche(self.dump_couches.as_deref(), "engram_sortie",
+                                       l, pos, &x);
+                }
+            }
             // Fenêtre EFFECTIVE de cette couche : le motif déclaré (gpt-oss :
             // une couche sur deux en attention complète) prime sur le réglage
             // global. Lue en champs directs : `self` est déjà déstructuré.

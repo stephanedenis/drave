@@ -319,7 +319,7 @@ Une phase qui ne passe pas ses deux portes ne passe pas à la suivante.
      clusters 799,8557, 18 formats lisibles dont 17 vérifiés à la porte,
      4 routages).
 
-### P7 — Adaptation à V4.1, et la question de provenance (≈ ½ journée + action externe) — **chaîne mHC et compression faites et vérifiées ; reste l'engram** (02/10)
+### P7 — Adaptation à V4.1, et la question de provenance (≈ ½ journée + action externe) — **chaîne mHC, compression et engram faits et vérifiés** (02/10)
 
 > **Les deux manques annoncés étaient faux tous les deux** (02/10, 17:33 → 18:02).
 > La **référence d'exécution existe** : vLLM porte V4.1 en entier
@@ -354,15 +354,25 @@ Une phase qui ne passe pas ses deux portes ne passe pas à la suivante.
 > couche 3 : écart 1,30 à 2,16 selon que sa source a tourné ou non ; sortie de la
 > source 2 identique au bit dans les deux cas).
 >
-> **Reste, nommé** (l'inventaire des 1 046 tenseurs le donne) : l'**injection de
-> l'engram** dans la passe avant (le seul manque qui empêche encore une passe
-> avant V4.1 complète, avec ses tables et ses projections déjà lues), l'**indexeur
-> de V4.1** (clés tirées du latent du compresseur principal — le moteur garde tous
-> les blocs, exact sous `indexer.top_k`, refusé au-delà) et la **sélection à deux
-> niveaux** (`candidate_*`), le **pré-mix sur le fil** du protocole DRVF (16
-> octets/jeton, sans quoi un découpage de V4.1 est refusé), et YaRN appliqué
-> partout comme la référence (le moteur ne l'applique qu'au-delà de 4 × la
-> longueur déclarée, et le dit).
+> **Fait aussi (02/10, 22h) : l'ENGRAM est branché et vérifié de bout en bout.**
+> Le hachage glissant (O(1) par jeton), la lecture des 24 rangées de 264 octets
+> dans les tables de 101 Go, la projection `wkv` [25 600, 6 144] et l'injection sur
+> les `hc` copies sont dans la passe avant, aux couches 1 et 14. Vérifié contre la
+> référence d'adressage (`tools/engram_reference.py`) plus une relecture des
+> rangées : projection à ~1e-5 (accumulation f32 sur 6 144 termes), injection à
+> ~1e-6. Coût annoncé : **6 336 octets par jeton et par table**. Une passe avant
+> V4.1 **complète** est donc possible dès maintenant (les 40 couches), à ceci près
+> que l'indexeur garde tous les blocs — exact sous `indexer.top_k` (512), refusé
+> au-delà.
+>
+> **Reste, nommé** : l'**indexeur de V4.1** (clés tirées du latent du compresseur
+> principal, `indexer.attn_k` + `indexer.k_norm` — le moteur garde tous les blocs,
+> exact sous `indexer.top_k`, refusé au-delà) et la **sélection à deux niveaux**
+> (`candidate_*`), le **masque des jetons d'image** de l'engram (sans objet en
+> texte seul), le **pré-mix sur le fil** du protocole DRVF (16 octets/jeton, sans
+> quoi un découpage de V4.1 est refusé), et YaRN appliqué partout comme la
+> référence (le moteur ne l'applique qu'au-delà de 4 × la longueur déclarée, et le
+> dit).
 
 
 - Code : métadonnées par couche (`compress_ratios` au lieu d'un régime global),

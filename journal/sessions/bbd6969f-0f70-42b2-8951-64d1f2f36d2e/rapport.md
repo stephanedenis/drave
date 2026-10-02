@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 99.8 h |
+| Durée | 100.1 h |
 | Tours | 79 |
-| Messages | 5357 |
-| Appels d'outils | 5138 |
-| Fichiers touchés | 104 |
-| Commandes | 4353 |
+| Messages | 5435 |
+| Appels d'outils | 5212 |
+| Fichiers touchés | 105 |
+| Commandes | 4402 |
 | Sous-agents | 30 |
-| Commits | 355 |
+| Commits | 357 |
 | Compactages de contexte | 7 |
 
 ## Objectifs déclarés
@@ -4037,7 +4037,7 @@ P0-P6 faites, P8 portée et val
 
 ### Tour 79 — <goal_round> Objective: "Exécuter le plan docs/plan-deepseek41-complet.md phase par phase (P0→P9), en autonomie, en resp … [941 caractères tronqués]
 
-*398 appels d'outils.* Actions notables :
+*472 appels d'outils.* Actions notables :
 
 - web_search
 - web_fetch
@@ -4053,11 +4053,11 @@ P0-P6 faites, P8 portée et val
 - bash — Locate hc_collapse_triton definition
 - read
 - bash — Read mHC init and pre/post call sites
-- … et 337 autres
+- … et 399 autres
 
 **Synthèse produite :**
 
-Now the YaRN message (F4) and the `--tete-partielle` visibility/warnings (T4):
+⏵ Running the first complete V4.1 forward (40 layers, engram included)
 
 ## 3. Travail accompli
 
@@ -4107,7 +4107,7 @@ Now the YaRN message (F4) and the `--tete-partielle` visibility/warnings (T4):
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/vision.md` | 1 | 3 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/histoire.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/roadmap.md` | 1 | 0 |
-| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs` | 0 | 69 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs` | 0 | 83 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/main.rs` | 0 | 13 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/gpu.rs` | 0 | 3 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-gpu-topk-selection.md` | 1 | 0 |
@@ -4169,6 +4169,7 @@ Now the YaRN message (F4) and the `--tete-partielle` visibility/warnings (T4):
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/glossaire.md` | 0 | 3 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/v41_compresseur_reference.py` | 1 | 1 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/sprints/10-v41-la-chaine-retardee-et-le-compresseur.md` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/verifier_v41_engram.py` | 1 | 1 |
 
 ### Sous-agents lancés
 
@@ -4245,7 +4246,7 @@ Now the YaRN message (F4) and the `--tete-partielle` visibility/warnings (T4):
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 4313 autres
+- … et 4362 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4373,7 +4374,7 @@ Now the YaRN message (F4) and the `--tete-partielle` visibility/warnings (T4):
 
 ## 5. Erreurs rencontrées
 
-286 sorties en erreur ou divergentes. Les premières :
+288 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : a8f2635f8 docs: record which models this box is good at, and why src/llama-hparams.cpp:8:void llama_hparams::set_swa_pattern(uint32_t n_pattern, bool dense_first) { src/llama-hparams.h:308:    void se
 - **T1** : 511 tokens notés — perplexité cumulée 247.031  (4.9 tok/s) === perplexité 247.0308 sur 511 tokens (0 événements, 104.5 s) ===  ### B3 harmony assistant 511 --- ref --- 0.0 0.0 0:00 ls: cannot access '
@@ -4748,4 +4749,6 @@ Now the YaRN message (F4) and the `--tete-partielle` visibility/warnings (T4):
 - P7 : le compresseur de V4.1 (ratios 1 et 2) tourne sur les couches SOURCES, et il est vérifié  Le second manque annoncé (« ratio 2 sans référence ») tombe à son
 - P7 : le cache compressé partagé de V4.1, la 4e égalité, et une régression attrapée par la porte  Le partage (`kv_source_layer_ids`) est branché : une couche con
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log -1 --format=%B > /tmp/msg_old.txt && python3 - <<'PY' m = open('/tmp/msg_old.txt').read() m = m.re
+- P7 : l'engram de V4.1 branché dans la passe avant — et la première passe COMPLÈTE des 40 couches  Le dernier manque de code de P7 est levé. Sont dans la passe a
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' m = """P7 : l'engram de V4.1 branché dans la passe avant — et la première passe COMPLÈTE 
 

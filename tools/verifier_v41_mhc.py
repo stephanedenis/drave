@@ -40,10 +40,15 @@ class Gguf:
         self.version = struct.unpack("<I", self.f.read(4))[0]
         n_tensors, n_kv = struct.unpack("<QQ", self.f.read(16))
         self.alignement = 32
+        # Les métadonnées sont GARDÉES : `verifier_v41_engram.py` a besoin des
+        # listes de l'engram (premiers, multiplicateurs, `token_map`) pour
+        # recalculer les adresses depuis la référence.
+        self.metadonnees = {}
         for _ in range(n_kv):
             cle = self._chaine()
             t = struct.unpack("<I", self.f.read(4))[0]
             v = self._valeur(t)
+            self.metadonnees[cle] = v
             if cle == "general.alignment":
                 self.alignement = int(v)
         self.tenseurs = {}

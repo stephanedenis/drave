@@ -23,6 +23,7 @@ Trois livraisons, toutes mesurées sur le fichier de **365,7 Go** :
 | compresseur ratio 1 (couche 20) | idem, sans porte ni `ape` | pool 3,47e-07 · 5,59e-06, un bloc par jeton |
 | cache compressé partagé (34 couches consommatrices) | contrôle positif/négatif sur la couche 3 | sortie 1,30–2,16 d'écart selon que sa source a tourné ; source identique au bit |
 | 4ᵉ égalité : le repli de l'entrée de la FFN | ajoutée après la relecture adverse | 1,0e-08 à 4,9e-08 |
+| **engram** : hachage, lecture des 24 rangées, projection `wkv`, injection | `tools/verifier_v41_engram.py`, adresses recalculées par la référence | projection ~1e-5 (f32 sur 6 144 termes) · injection ~1e-6 · **6 336 octets/jeton/table** |
 
 Et trois bugs de configuration trouvés **par** l'exécution, chacun muet :
 `n_expert` relu en GGUF-seul (le modèle partait **sans un seul expert**),
@@ -88,8 +89,28 @@ qui relisent les vides du moteur et les tenseurs du GGUF, écrits depuis la
 **source externe** (noyaux vLLM), pas depuis le code Rust. C'est le même
 instrument qu'en P4/P5, et c'est lui qui a trouvé quatre bugs d'attention en P3.
 
+## La passe avant COMPLÈTE
+
+Avec l'engram, la liste des manques de V4.1 est **vide** : les **40 couches** du
+fichier de 365,7 Go s'exécutent — hyper-connexions retardées, cache compressé
+partagé, engram (203 Go de tables lues sans être chargées), MoE 384 experts, tête
+sans poids appris.
+
+```
+3 tokens notés — perplexité cumulée 39839289.516  (0.1 tok/s)     [55 s en tout]
+paires par token : attention 7 204 M · experts 11 325 M · total 19 191 M
+```
+
+C'est la preuve que la passe **tourne**, pas une mesure de qualité (3 jetons,
+8 positions, indexeur gardant tous les blocs). Le débit, lui, n'est pas une
+mesure du modèle : 7 223 ms/jeton d'attention et 6 874 ms/jeton de projections +
+MoE, parce que le chemin V4 projette en `f32` naïf — un poste de P9.
+
 ## Ce qui reste, nommé
 
+- **Une passe avant V4.1 COMPLÈTE est possible** depuis ce sprint : 40 couches,
+  engram compris, à condition que le contexte reste sous `indexer.top_k` blocs
+  (512) — au-delà, l'indexeur de V4.1 manque et le moteur refuse.
 - **Partage du cache compressé** (`kv_source_layer_ids`) : **fait** — les
   consommatrices indexent les tampons de leur source, prouvé par un contrôle
   positif/négatif (et non par relecture). Reste non vérifié : la valeur ABSOLUE
@@ -104,8 +125,10 @@ instrument qu'en P4/P5, et c'est lui qui a trouvé quatre bugs d'attention en P3
   (`pool_du_compresseur_est_par_canal`, deux jetons différents, poids 0,5/0,5 et
   0,25/0,75). L'injection par position (fichier REFD) reste à faire pour un
   contrôle de bout en bout sur le vrai modèle.
-- **Engram** : adressage et lecture validés, injection toujours pas branchée sur
-  une passe avant.
+- **Engram** : **fait** — branché en tête des couches 1 et 14, vérifié de bout en
+  bout sur la vraie table. Restent le masque des jetons d'image (sans objet en
+  texte seul) et le coût du hachage sur de très longues séquences (O(1) par jeton
+  depuis la fenêtre, mais le vérificateur, lui, recalcule le préfixe).
 - **Pré-mix sur le fil DRVF** (16 octets par jeton) : sans lui, un découpage de
   V4.1 entre nœuds est refusé — le moteur le dit, mais une grappe V4.1 répartie
   demandera ce champ.
