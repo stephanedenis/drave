@@ -220,7 +220,7 @@ Une phase qui ne passe pas ses deux portes ne passe pas à la suivante.
 - **Porte Drave** : `--trace-flux` sur ces deux couches, puis `--flux-forcer` :
   perplexité **identique**. Et un premier chiffre d'événements par neurone actif.
 
-### P4 — Compresseur et HCA : le premier flux qui n'existe nulle part (≈ ½ journée) — **HCA FAIT** (02/10)
+### P4 — Compresseur et HCA : le premier flux qui n'existe nulle part (≈ ½ journée) — **FAIT** (02/10)
 
 > Le compresseur HCA (ratio 128) est implémenté et **validé contre llama.cpp** :
 > corrélation **0,999992** sur `attn_derope` au 128ᵉ jeton, donc au **premier
@@ -230,8 +230,8 @@ Une phase qui ne passe pas ses deux portes ne passe pas à la suivante.
 > trouvé par la comparaison : la **dé-rotation** utilisait la base RoPE des
 > couches brutes (10 000) au lieu de la base compressée (160 000) — invisible
 > dans la corrélation globale (0,996) et localisé en séparant nope et rope.
-> **Reste pour P5** : le CSA (ratio 4), son compresseur à chevauchement, son
-> indexeur et le masque top-k.
+> **CSA fait aussi** (P5) : compresseur à chevauchement (2×ratio), indexeur et
+> masque top-k — validés tous les trois contre llama.cpp.
 
 
 - `attn_compressor_kv` + `attn_compressor_norm` (+ `_ape`, `_gate` sur V4-Flash).
@@ -332,7 +332,6 @@ Une phase qui ne passe pas ses deux portes ne passe pas à la suivante.
 > L'action externe (demander à la source si la conversion est complète, ou si la
 > convention a changé) reste à faire — elle n'est pas dans ce dépôt.
 
-### P7 — Adaptation à V4.1, et la question de provenance (≈ ½ journée + action externe)
 
 - Code : métadonnées par couche (`compress_ratios` au lieu d'un régime global),
   experts IQ2_XXS/Q2_K, 384 experts, 40 couches, `exp_probs_b_vl`.

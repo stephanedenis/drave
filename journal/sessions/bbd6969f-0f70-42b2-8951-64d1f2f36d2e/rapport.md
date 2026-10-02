@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 98.4 h |
+| Durée | 98.5 h |
 | Tours | 77 |
-| Messages | 4920 |
-| Appels d'outils | 4698 |
+| Messages | 4922 |
+| Appels d'outils | 4700 |
 | Fichiers touchés | 96 |
-| Commandes | 4063 |
+| Commandes | 4065 |
 | Sous-agents | 29 |
-| Commits | 345 |
+| Commits | 346 |
 | Compactages de contexte | 6 |
 
 ## Objectifs déclarés
@@ -3941,7 +3941,7 @@ V4-Flash contre llama.cpp : perplexité **678,09 contre 548,32** (NLL +0,21 nat)
 
 ### Tour 77 — <goal_round> Objective: "Exécuter le plan docs/plan-deepseek41-complet.md phase par phase (P0→P9), en autonomie, en resp … [941 caractères tronqués]
 
-*85 appels d'outils.* Actions notables :
+*87 appels d'outils.* Actions notables :
 
 - bash — Find the channel-count validation
 - bash — Read the validation and the hidden definition
@@ -3957,11 +3957,11 @@ V4-Flash contre llama.cpp : perplexité **678,09 contre 548,32** (NLL +0,21 nat)
 - bash — Remove the refusal and run distributed
 - bash — Find the pilot's reply validation
 - bash — Fix the pilot reply validation
-- … et 65 autres
+- … et 67 autres
 
 **Synthèse produite :**
 
-⏵ Le top-k est validé (0,99992) — la porte longue de P5 est franchie par une astuce de métadonnée.
+⏵ Nettoyage des doublons de titres P6/P7 et mise à jour du statut de P4.
 
 ## 3. Travail accompli
 
@@ -4140,7 +4140,7 @@ V4-Flash contre llama.cpp : perplexité **678,09 contre 548,32** (NLL +0,21 nat)
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 4023 autres
+- … et 4025 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4633,4 +4633,5 @@ V4-Flash contre llama.cpp : perplexité **678,09 contre 548,32** (NLL +0,21 nat)
 - P9 : la mesure tranche — le goulot est la lecture (×2,8 en éclaté, même calcul), pas le déquant : noyaux natifs non justifiés aujourd'hui" && git log --oneline 
 - P5 : le top-k de l'indexeur validé sans run de 2 048 jetons (metadata top_k 512 → 1 sur une copie du shard 1) — l_last-2 concorde à 0,99992" && git log --onelin
 - Plan : P5 sans réserve — la porte longue du top-k est fermée par la mesure" && git log --oneline -1
+- Plan : plus de titres en double (P6, P7), et P4 dit ce qui est fait (HCA et CSA)" && git log --oneline -1
 
