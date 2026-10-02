@@ -7,12 +7,12 @@
 | Début | 2026-09-28 14:46 |
 | Durée | 79.6 h |
 | Tours | 69 |
-| Messages | 3321 |
-| Appels d'outils | 3141 |
+| Messages | 3329 |
+| Appels d'outils | 3149 |
 | Fichiers touchés | 73 |
-| Commandes | 2742 |
+| Commandes | 2750 |
 | Sous-agents | 22 |
-| Commits | 276 |
+| Commits | 277 |
 | Compactages de contexte | 4 |
 
 ## Objectifs déclarés
@@ -3526,7 +3526,7 @@ Sur cette session, les mesures m
 
 ### Tour 69 — implémente toute les optimisation et détection de matériel avec heuristiques de configuration automatique.
 
-*102 appels d'outils.* Actions notables :
+*110 appels d'outils.* Actions notables :
 
 - bash — Inspect existing GPU detection
 - write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/materiel.rs`
@@ -3542,11 +3542,11 @@ Sur cette session, les mesures m
 - bash — Read KV bits resolution
 - bash — Integrate KV and VRAM heuristics
 - bash — Lighten detection and run gates
-- … et 86 autres
+- … et 94 autres
 
 **Synthèse produite :**
 
-⏵ **L'heuristique KV fonctionne** : elle bascule en int8 à 262 k jetons avec un message explicite. Je vérifie les portes et je documente.
+⏵ Le plan bascule le KV en 8 bits à 1 M avec sa raison. Je commite et je mesure le mmap selon la taille.
 
 ## 3. Travail accompli
 
@@ -3695,7 +3695,7 @@ Sur cette session, les mesures m
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 2702 autres
+- … et 2710 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4119,4 +4119,5 @@ Sur cette session, les mesures m
 - Tete restreinte a une liste de tokens : +15 %, mais la sortie change  Implementee sur les DEUX chemins (logits par jeton et logits_lot par lots) -- j'avais d'ab
 - Restreindre la tete de sortie : trois voies explorees, une seule survit  Question : peut-on calculer moins de logits sans JAMAIS changer la sortie ? Reponse mes
 - Rapport : detection materielle et configuration automatique  Ce qui est implemente (materiel.rs + --materiel + heuristiques), ce que chaque regle s'appuie comme
+- Plan materiel sensible au modele : il lit ses dimensions au lieu de les supposer  --materiel lit desormais l'architecture, le nombre d'experts et la taille reel
 

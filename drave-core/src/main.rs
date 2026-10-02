@@ -1521,9 +1521,58 @@ fn run_materiel(opt: &Options) {
     let m = materiel::Materiel::detecter();
     print!("{}", m.resume());
     let ctx = opt.ctx;
-    let plan = m.plan(ctx, 0.0, 384, 9.95);
+    // Si un modèle est donné, le plan s'appuie sur SES dimensions au lieu de
+    // celles de V4.1 par défaut : un plan générique n'aide personne.
+    let (taille_go, n_experts, mo_expert, arch) = match Gguf::open_meta_auto(&modele_chemin()) {
+        Ok(g) => {
+            let arch = g.meta.get("general.architecture").and_then(|v| v.as_str())
+                          .unwrap_or("?").to_string();
+            // Le nombre d'experts est DÉCLARÉ par la plupart des modèles, mais
+            // pas par DeepSeek-V4.1 (il n'est que dans sa config imbriquée). On
+            // le déduit alors de la première dimension du tenseur d'experts —
+            // c'est la source qui ne peut pas mentir.
+            let n_exp = g.cfg("expert_count").and_then(|v| v.as_u64()).unwrap_or(0) as usize;
+            let n_exp = if n_exp > 0 { n_exp } else {
+                ["blk.0.ffn_gate_exps.weight", "cl0/blk.0.ffn_gate_exps.weight"].iter()
+                    .find_map(|n| g.tensor(n)).map(|t| t.dims[0] as usize).unwrap_or(0)
+            };
+            // Un expert : gate + up (n_ff × n_embd) + down (n_embd × n_ff).
+            let ffn = g.cfg("expert_feed_forward_length").and_then(|v| v.as_u64()).unwrap_or(0);
+            let embd = g.cfg("embedding_length").and_then(|v| v.as_u64()).unwrap_or(0);
+            let couches = g.cfg("block_count").and_then(|v| v.as_u64()).unwrap_or(0);
+            // Taille d'un expert : on la LIT sur les tenseurs réels plutôt que de
+            // la supposer. Un expert vaut gate + up (n_ff × n_embd) + down
+            // (n_embd × n_ff), chacun à son propre type de quantification.
+            // Un modèle en clusters préfixe ses tenseurs (`cl0/blk.0.…`) : on
+            // cherche les deux formes, sinon la taille tombe à zéro en silence.
+            let trouve = |base: &str| {
+                g.tensor(base).or_else(|| g.tensor(&format!("cl0/{base}")))
+            };
+            let mo = ["ffn_gate_exps.weight", "ffn_up_exps.weight", "ffn_down_exps.weight"]
+                .iter()
+                .filter_map(|s| trouve(&format!("blk.0.{s}")))
+                // On divise par le nombre d'experts RÉELS du tenseur : dans un
+                // fichier de cluster il n'y en a qu'une fraction (16 sur 128),
+                // et diviser par le total donnait 0,38 Mo au lieu de 3,05.
+                .map(|t| Gguf::octets_tensor(t) as f64 / (t.dims[0].max(1)) as f64)
+                .sum::<f64>() / 1e6;
+            if mo <= 0.0 {
+                eprintln!("[materiel] taille d'expert introuvable (couche 0) : le plan \
+utilisera 9,95 Mo par expert, valeur de DeepSeek-V4.1");
+            }
+            let mo = if mo > 0.0 { mo } else { 9.95 };
+            let _ = (ffn, embd);
+            let total = g.octets_poids() as f64 / 1e9;
+            let _ = couches;
+            println!("Modèle : {} · {:.1} Go · {} experts de {:.2} Mo\n", arch, total, n_exp, mo);
+            (total, n_exp, mo, arch)
+        }
+        Err(_) => (0.0, 384, 9.95, String::from("DeepSeek-V4.1 (défaut)")),
+    };
+    let _ = arch;
+    let plan = m.plan(ctx, taille_go, n_experts, mo_expert);
     println!();
-    println!("Plan pour un contexte de {ctx} jetons (chiffres de DeepSeek-V4.1) :");
+    println!("Plan pour un contexte de {ctx} jetons, d'après les dimensions du modèle :");
     println!("  threads          : {}", plan.threads);
     if let Some(e) = &plan.epinglage {
         println!("  épinglage        : {} processeurs ({})", e.len(),

@@ -53431,3 +53431,137 @@ Created file
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -m \"Rapport : detection materielle et configuration automatique\n\nCe qui est implemente (materiel.rs + --materiel + heuristiques), ce que chaque\nregle s'appuie comme mesure, et ce qui a ete retire apres … [815 caractères tronqués]`
+
+  ```
+8b1c0b9 Rapport : detection materielle et configuration automatique
+copie : 54.2 Go / 365.7
+  ```
+
+### 🤖 Assistant
+
+⏵ Pendant la copie, j'améliore `--materiel` : qu'il utilise les dimensions du modèle donné.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np = 'drave-core/src/main.rs'\ns = open(p).read()\na = '''fn run_materiel(opt: &Options) {\n    let m = materiel::Materiel::detecter();\n    print!(\"{}\", m.resume());\n    let ctx = opt.ctx;\n    let plan = m.plan( … [2164 caractères tronqués]`
+
+  ```
+ok
+error: redundant argument
+    --> src/main.rs:1542:93
+     |
+1542 |             println!("Modèle : {arch} · {:.1} Go · {n_exp} experts de {mo:.2} Mo\n", total, mo);
+     |                                                                                             ^^ help: this can be removed
+     |
+--
+error: could not compile `drave-core` (bin "drave") due to 1 previous error; 13 warnings emitted
+BUILD 101
+CPU  20 cœurs physiques · 40 threads logiques · 2 sockets NUMA · caches L1 32 Ko · L2 256 Ko · L3 25600 Ko
+     nœud 0 : 20 CPU · 66 Go
+     nœud 1 : 20 CPU · 66 Go
+RAM  132 Go au total · 117 Go disponibles
+GPU  0 · Quadro RTX 5000 · 14.3/16.0 Go libres · 1 lien(s) NVLink
+GPU  1 · Quadro RTX 5000 · 15.2/16.0 Go libres · 1 lien(s) NVLink
+DISQ /home/stephane/FastNVMe · 652 Go libres · nœud 0
+DISQ /home/stephane/Data13TB · 3542 Go libres · nœud ?
+
+Plan pour un contexte de 512 jetons (chiffres de DeepSeek-V4.1) :
+  threads          : 20
+  lecteurs disque  : 16
+  cache experts    : 19.5 Go en VRAM
+  cache KV         : 32 bits
+
+  · threads = 20 cœurs physiques (40 logiques détectés) — au-delà, la bande passante mémoire sature : 20 cœurs = 22,5 Go/s, 20 cœurs + hyperthreads = 18,9
+  
+… [547 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np = 'drave-core/src/main.rs'\ns = open(p).read()\ns = s.replace('''            println!(\"Modèle : {arch} · {:.1} Go · {n_exp} experts de {mo:.2} Mo\\\\n\", total, mo);''',\n              '''            println!(\"M … [488 caractères tronqués]`
+
+  ```
+BUILD 0
+Modèle : qwen3moe · 18.6 Go · 128 experts de 1.03 Mo
+Plan pour un contexte de 512 jetons (chiffres de DeepSeek-V4.1) :
+  threads          : 20
+  lecteurs disque  : 16
+  cache experts    : 19.5 Go en VRAM
+  cache KV         : 32 bits
+  · threads = 20 cœurs physiques (40 logiques détectés) — au-delà, la bande passante mémoire sature : 20 cœurs = 22,5 Go/s, 20 cœurs + hyperthreads = 18,9
+  · lecteurs disque = 16 — le NVMe passe de 5,4 Go/s (1 lecteur) à 31,1 (16), soit ×6 ; c'est ce qui rend le chargement à la demande viable
+  · cache d'experts VRAM = 19.5 Go — 29.5 Go libres moins 2 de réserve CUDA et 8 pour le commun ; la VRAM lit à 84,9 Go/s contre 22,5 pour la RAM
+  · NVLink détecté (25,8 Go/s, 2× le PCIe) : les échanges entre cartes passent par lui sans réglage
+  · cache KV en 32 bits — à 512 jetons il pèse 0.0 Go en F16, soit 0 % de la RAM libre (116 Go)
+  · modèle de 19 Go : mmap obligatoire, la RAM ne peut pas en garder une copie
+  ```
+
+### 🤖 Assistant
+
+⏵ Deux imprécisions : le titre est figé et la taille d'expert est estimée. Je lis le type réel.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np = 'drave-core/src/main.rs'\ns = open(p).read()\na = '''            let mo = if ffn > 0 && embd > 0 {\n                // Le type des experts décide de la taille ; faute de le lire ici,\n                // on prend … [1506 caractères tronqués]`
+
+  ```
+BUILD 0
+Modèle : qwen3moe · 18.6 Go · 128 experts de -0.00 Mo
+Modèle : deepseek4 · 86.9 Go · 256 experts de 6.88 Mo
+  ```
+
+### 🤖 Assistant
+
+⏵ Les clusters préfixent les noms — je cherche les deux formes.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np = 'drave-core/src/main.rs'\ns = open(p).read()\na = '''            let mo = [\"ffn_gate_exps.weight\", \"ffn_up_exps.weight\", \"ffn_down_exps.weight\"]\n                .iter()\n                .filter_map(|s| g. … [1578 caractères tronqués]`
+
+  ```
+ok
+BUILD 0
+Modèle : qwen3moe · 18.6 Go · 128 experts de 0.38 Mo
+Modèle : deepseek4 · 86.9 Go · 256 experts de 6.88 Mo
+  ```
+
+### 🤖 Assistant
+
+⏵ Le tenseur d'un cluster ne porte que 16 experts, pas 128. Je divise par la bonne dimension.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np = 'drave-core/src/main.rs'\ns = open(p).read()\na = '''                .map(|t| Gguf::octets_tensor(t) as f64 / n_exp.max(1) as f64)'''\nb = '''                // On divise par le nombre d'experts RÉELS du tenseur … [914 caractères tronqués]`
+
+  ```
+Modèle : qwen3moe · 18.6 Go · 128 experts de 3.06 Mo
+Modèle : deepseek4 · 86.9 Go · 256 experts de 6.88 Mo
+Modèle : deepseek41 · 365.7 Go · 0 experts de 9.95 Mo
+(attendu : 3,05 Mo pour Qwen3 · 6,88 pour V4-Flash · 9,95 pour V4.1)
+  ```
+
+### 🤖 Assistant
+
+⏵ V4.1 ne déclare pas `expert_count` dans ses métadonnées. Je le déduis du tenseur.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np = 'drave-core/src/main.rs'\ns = open(p).read()\na = '''            let n_exp = g.cfg(\"expert_count\").and_then(|v| v.as_u64()).unwrap_or(0) as usize;'''\nb = '''            // Le nombre d'experts est DÉCLARÉ par  … [1010 caractères tronqués]`
+
+  ```
+Modèle : deepseek41 · 365.7 Go · 384 experts de 9.95 Mo
+  · threads = 20 cœurs physiques (40 logiques détectés) — au-delà, la bande passante mémoire sature : 20 cœurs = 22,5 Go/s, 20 cœurs + hyperthreads = 18,9
+  · lecteurs disque = 16 — le NVMe passe de 5,4 Go/s (1 lecteur) à 31,1 (16), soit ×6 ; c'est ce qui rend le chargement à la demande viable
+  · cache d'experts VRAM = 19.5 Go — 29.5 Go libres moins 2 de réserve CUDA et 8 pour le commun ; la VRAM lit à 84,9 Go/s contre 22,5 pour la RAM
+  · NVLink détecté (25,8 Go/s, 2× le PCIe) : les échanges entre cartes passent par lui sans réglage
+  · cache KV en 32 bits — à 512 jetons il pèse 0.0 Go en F16, soit 0 % de la RAM libre (117 Go)
+  · modèle de 366 Go : mmap obligatoire, la RAM ne peut pas en garder une copie
+  ```
+
+### 🤖 Assistant
+
+⏵ Le plan est correct pour V4.1. Je teste avec un contexte de 1 M.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ./drave-core/target/release/drave /home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek-V4.1-Flash-Q2/DeepSeek-V4.1-Flash-Q2.gguf --materiel --ctx 1048576 2>&1 | grep -E \"cache KV|experts :\" ; echo \"--- copie ---\"; ls -la /home/ … [170 caractères tronqués]`
+
+  ```
+cache KV         : 8 bits
+  · cache KV en 8 bits — à 1048576 jetons il pèse 94.4 Go en F16, soit 81 % de la RAM libre (117 Go)
+--- copie ---
+99.3 Go / 365.7
+jeu 01 oct 2026 22:24:48 EDT
+  ```
+
+### 🤖 Assistant
+
+⏵ Le plan bascule le KV en 8 bits à 1 M avec sa raison. Je commite et je mesure le mmap selon la taille.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -m \"Plan materiel sensible au modele : il lit ses dimensions au lieu de les supposer\n\n--materiel lit desormais l'architecture, le nombre d'experts et la taille reelle\nd'un expert depuis les tenseurs. T … [1728 caractères tronqués]`
