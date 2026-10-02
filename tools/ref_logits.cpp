@@ -28,6 +28,8 @@
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
+#include <regex>
+#include <vector>
 #include <fstream>
 #include <string>
 #include <thread>
@@ -142,6 +144,50 @@ int main(int argc, char ** argv) {
     cparams.n_threads       = n_threads;
     cparams.n_threads_batch = n_threads;
 
+    // `--tensors REGEX` : imprime les premières valeurs des tenseurs dont le nom
+    // correspond, PENDANT l'évaluation. C'est ce qui localise une divergence :
+    // comparer les logits dit QU'il y a un écart, pas à quelle couche il naît.
+    // Les noms sont ceux des `cb(...)` du graphe (« qr-0 », « kv_cmpr-0 »,
+    // « k_pe-0 », « ffn_moe_out-3 »…).
+    static const char * filtre_tensors = nullptr;
+    for (int i = 1; i < argc; ++i) {
+        if (std::strcmp(argv[i], "--tensors") == 0 && i + 1 < argc) { filtre_tensors = argv[i + 1]; }
+    }
+    if (const char * e = std::getenv("REF_TENSORS")) { filtre_tensors = e; }
+    if (filtre_tensors != nullptr) {
+        std::fprintf(stderr, "ref_logits: tenseurs filtrés par « %s »\n", filtre_tensors);
+    }
+
+    // Le filtre est capturé par la lambda : une variable statique de fichier
+    // suffit, le programme est mono-modèle.
+    if (filtre_tensors != nullptr) {
+        cparams.cb_eval = [](ggml_tensor * t, bool ask, void * /*user*/) -> bool {
+            const char * motif = filtre_tensors;
+            if (t == nullptr || t->name == nullptr) { return false; }
+            if (ask) {
+                return std::regex_search(std::string(t->name), std::regex(motif));
+            }
+            std::fprintf(stderr, "[tensor] %s : type %d · ne = [%lld, %lld, %lld, %lld]\n",
+                         t->name, (int) t->type,
+                         (long long) t->ne[0], (long long) t->ne[1],
+                         (long long) t->ne[2], (long long) t->ne[3]);
+            // Jusqu'à 8 valeurs, en f32 quand c'est possible.
+            if (t->type == GGML_TYPE_F32 || t->type == GGML_TYPE_F16) {
+                std::vector<float> v(8, 0.0f);
+                if (t->type == GGML_TYPE_F32) {
+                    ggml_backend_tensor_get(t, v.data(), 0, 8 * sizeof(float));
+                } else {
+                    std::vector<ggml_fp16_t> h(8);
+                    ggml_backend_tensor_get(t, h.data(), 0, 8 * sizeof(ggml_fp16_t));
+                    for (int i = 0; i < 8; ++i) { v[i] = ggml_fp16_to_fp32(h[i]); }
+                }
+                std::fprintf(stderr, "          [0..8) =");
+                for (int i = 0; i < 8; ++i) { std::fprintf(stderr, " %.6e", v[i]); }
+                std::fprintf(stderr, "\n");
+            }
+            return true;
+        };
+    }
     llama_context * ctx = llama_init_from_model(modele, cparams);
     if (ctx == nullptr) {
         std::fprintf(stderr, "ref_logits: echec de la creation du contexte\n");

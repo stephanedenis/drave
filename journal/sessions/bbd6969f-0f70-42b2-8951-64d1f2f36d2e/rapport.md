@@ -7,12 +7,12 @@
 | Début | 2026-09-28 14:46 |
 | Durée | 86.5 h |
 | Tours | 69 |
-| Messages | 4002 |
-| Appels d'outils | 3810 |
+| Messages | 4004 |
+| Appels d'outils | 3812 |
 | Fichiers touchés | 81 |
-| Commandes | 3357 |
+| Commandes | 3359 |
 | Sous-agents | 22 |
-| Commits | 304 |
+| Commits | 305 |
 | Compactages de contexte | 5 |
 
 ## Objectifs déclarés
@@ -3526,7 +3526,7 @@ Sur cette session, les mesures m
 
 ### Tour 69 — implémente toute les optimisation et détection de matériel avec heuristiques de configuration automatique.
 
-*771 appels d'outils.* Actions notables :
+*773 appels d'outils.* Actions notables :
 
 - bash — Inspect existing GPU detection
 - write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/materiel.rs`
@@ -3542,7 +3542,7 @@ Sur cette session, les mesures m
 - bash — Read KV bits resolution
 - bash — Integrate KV and VRAM heuristics
 - bash — Lighten detection and run gates
-- … et 695 autres
+- … et 697 autres
 
 **Synthèse produite :**
 
@@ -3703,7 +3703,7 @@ Sur cette session, les mesures m
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 3317 autres
+- … et 3319 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4155,4 +4155,5 @@ Sur cette session, les mesures m
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p='REPRISE.md'; s=open(p).read() s = s.replace("""### Le piège à ne pas rouvrir : la MLA 
 - Rapport MLA : le bug, la méthode qui l'a trouvé, et ce qui reste ouvert  Le rapport dit maintenant ce qui est mesuré (corrélation 0,999024, top-1 3/3, 5 966 con
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p='REPRISE.md'; s=open(p).read() s = s.replace("""| GLM-5.3 (glm-dsa) | 754 G | **oui dep
+- ref_logits : --tensors REGEX, l'outil qui a trouvé le bug MLA  Il imprime les tenseurs NOMMÉS du graphe llama.cpp pendant l'évaluation (les cb(...) de glm-dsa.c
 

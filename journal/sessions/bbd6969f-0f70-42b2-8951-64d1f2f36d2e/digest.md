@@ -63840,3 +63840,27 @@ toutes les portes sont vertes
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='REPRISE.md'; s=open(p).read()\ns = s.replace(\"\"\"| GLM-5.3 (glm-dsa) | 754 G | **oui depuis cette session** (MLA rang faible) |\n| Kimi-K2.7 (deepseek2) | 1 026 G | **oui depuis cette session** |\"\"\",\n\"\"\" … [1222 caractères tronqués]`
+
+  ```
+3c6eef5 Kimi-K2.7 (1 026 G poids) calcule : 161 s de chargement, 73 s/jeton
+  ```
+
+- **bash** `{"command": "TZ=America/New_York date \"+HAE %H:%M\"; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log --oneline 129481f..HEAD | cat; echo \"--- état ---\"; git status --short | head -3; wc -l REPRISE.md README.md reports/rapport-mla-experts.md reports/rapport-routage-experts.md | tail  … [50 caractères tronqués]`
+
+  ```
+HAE 05:14
+3c6eef5 Kimi-K2.7 (1 026 G poids) calcule : 161 s de chargement, 73 s/jeton
+3b9c04a Rapport MLA : le bug, la méthode qui l'a trouvé, et ce qui reste ouvert
+51dc4b7 MLA : `wv_b` est rangé à l'envers de `wk_b` — corrélation 0,999 après correction
+44f634e MLA : dire NON VALIDÉE partout où elle est annoncée
+--- état ---
+ M journal/README.md
+ M tools/ref_logits.cpp
+  1081 REPRISE.md
+   639 README.md
+   185 reports/rapport-mla-experts.md
+   170 reports/rapport-routage-experts.md
+  2075 total
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A tools/ref_logits.cpp tools/ref_logits 2>/dev/null; git commit -q -m \"ref_logits : --tensors REGEX, l'outil qui a trouvé le bug MLA\n\nIl imprime les tenseurs NOMMÉS du graphe llama.cpp pendant l'évaluation (les\ncb(...) d … [413 caractères tronqués]`
