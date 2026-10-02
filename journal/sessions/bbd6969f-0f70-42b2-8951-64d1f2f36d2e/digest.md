@@ -72857,3 +72857,320 @@ toutes les portes sont vertes
 ⏵ Commit de P1, puis inventaire exact des tenseurs d'attention de V4-Flash pour P2.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A drave-core/src/ && git commit -q -F - <<'EOF'\nP1 (2/3) : les hyper-connexions sont chargées ET consommées par la passe avant\n\n- `Gguf::hc_params()` lit les trois hyper-paramètres des DEUX sources : clés\n  GGUF `deepsee … [1533 caractères tronqués]`
+
+  ```
+28ed9a1 P1 (2/3) : les hyper-connexions sont chargées ET consommées par la passe avant
+=== tenseurs attention couche 0 de V4-Flash ===
+  Q8_0     blk.0.attn_kv.weight                   [512, 4096] · 2.1 M poids · fichier 1
+  F32      blk.0.attn_kv_a_norm.weight            [512] · 0.0 M poids · fichier 1
+  F32      blk.0.attn_norm.weight                 [4096] · 0.0 M poids · fichier 1
+  Q8_0     blk.0.attn_output_a.weight             [8192, 4096] · 33.6 M poids · fichier 1
+  Q8_0     blk.0.attn_output_b.weight             [4096, 8192] · 33.6 M poids · fichier 1
+  Q5_K     blk.0.attn_q_a.weight                  [1024, 4096] · 4.2 M poids · fichier 1
+  F32      blk.0.attn_q_a_norm.weight             [1024] · 0.0 M poids · fichier 1
+  Q8_0     blk.0.attn_q_b.weight                  [32768, 1024] · 33.6 M poids · fichier 1
+  F32      blk.0.attn_sinks.weight                [64] · 0.0 M poids · fichier 1
+  F32      blk.0.hc_attn_base.weight              [24] · 0.0 M poids · fichier 1
+  F32      blk.0.hc_attn_fn.weight                [24, 16384] · 0.4 M poids · fichier 1
+  F32      blk.0.hc_attn_scale.weight             [3] · 0.0 M poids · fichier 1
+  F32      blk.0.hc_ffn_base.weight    
+… [209 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ./drave-core/target/release/drave /home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek-V4-Flash-UD-IQ1_M/DeepSeek-V4-Flash-UD-IQ1_M-00001-of-00003.gguf --tensors 2>/dev/null | grep -E \"blk\\.1\\.attn|kv_a_mqa|attn_k_b|attn_v_b\" | … [95 caractères tronqués]`
+
+  ```
+Q8_0     blk.1.attn_kv.weight                   [512, 4096] · 2.1 M poids · fichier 1
+  F32      blk.1.attn_kv_a_norm.weight            [512] · 0.0 M poids · fichier 1
+  F32      blk.1.attn_norm.weight                 [4096] · 0.0 M poids · fichier 1
+  Q8_0     blk.1.attn_output_a.weight             [8192, 4096] · 33.6 M poids · fichier 1
+  Q8_0     blk.1.attn_output_b.weight             [4096, 8192] · 33.6 M poids · fichier 1
+  Q5_K     blk.1.attn_q_a.weight                  [1024, 4096] · 4.2 M poids · fichier 1
+  F32      blk.1.attn_q_a_norm.weight             [1024] · 0.0 M poids · fichier 1
+  Q8_0     blk.1.attn_q_b.weight                  [32768, 1024] · 33.6 M poids · fichier 1
+  F32      blk.1.attn_sinks.weight                [64] · 0.0 M poids · fichier 1
+  ```
+
+### 🤖 Assistant
+
+⏵ V4-Flash n'a ni `attn_kv_a_mqa` ni `k_b`/`v_b` : l'attention V4 est une autre variante. Lecture de la référence.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/llama.cpp && grep -n \"attn_kv\\b\\|attn_kv\\.\\|attn_output_a\\|attn_output_b\\|attn_sinks\\|wq_a\\|wq_b\\|wkv\" src/models/deepseek4.cpp | head -30", "description": "Find V4 attention tensors in reference"}`
+
+  ```
+93:        layer.attn_sinks    = create_tensor(tn(LLM_TENSOR_ATTN_SINKS,    "weight", i), {n_head}, 0);
+94:        layer.wq_a          = create_tensor(tn(LLM_TENSOR_ATTN_Q_A,      "weight", i), {n_embd, q_lora_rank}, 0);
+96:        layer.wq_b          = create_tensor(tn(LLM_TENSOR_ATTN_Q_B,      "weight", i), {q_lora_rank, n_head * n_embd_head}, 0);
+97:        layer.wkv           = create_tensor(tn(LLM_TENSOR_ATTN_KV,       "weight", i), {n_embd, n_embd_head}, 0);
+113:            layer.attn_comp_wkv   = create_tensor(tn(LLM_TENSOR_ATTN_COMPRESSOR_WKV,   "weight", i), {n_embd, coff * n_embd_head}, 0);
+124:                layer.indexer_comp_wkv   = create_tensor(tn(LLM_TENSOR_INDEXER_COMPRESSOR_WKV,   "weight", i), {n_embd, 2 * n_embd_indexer}, 0);
+881:    ggml_tensor * qr = build_lora_mm(layer.wq_a, cur);
+887:    ggml_tensor * q = build_lora_mm(layer.wq_b, qr);
+906:    ggml_tensor * kv = build_lora_mm(layer.wkv, cur);
+930:        hca_state_kv = build_lora_mm(layer.attn_comp_wkv, cur);
+945:        ggml_tensor * csa_state_kv = build_lora_mm(layer.attn_comp_wkv, cur);
+997:        ggml_tensor * lid_state_kv = build_lora_mm(layer.indexer_comp_wkv, cur);
+1104:        out = build_csa_lid_a
+… [236 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/llama.cpp && sed -n '870,1000p' src/models/deepseek4.cpp", "description": "Read V4 attention Q/KV construction"}`
+
+  ```
+GGML_ASSERT(n_head % n_groups == 0);
+
+    const bool use_compress_rope = hparams.dsv4_compress_ratios[il] != 0;
+    const float freq_base_l      = use_compress_rope ? hparams.dsv4_compress_rope_base : freq_base;
+    const float freq_scale_l     = use_compress_rope ? freq_scale : 1.0f;
+    const float ext_factor_l     = use_compress_rope ? ext_factor : 0.0f;
+    const float attn_factor_l    = dsv4_rope_attn_factor(freq_scale_l, ext_factor_l);
+    const float beta_fast_l      = use_compress_rope ? beta_fast : 0.0f;
+    const float beta_slow_l      = use_compress_rope ? beta_slow : 0.0f;
+    const int32_t n_ctx_orig_l   = use_compress_rope ? n_ctx_orig : 0;
+
+    ggml_tensor * qr = build_lora_mm(layer.wq_a, cur);
+    cb(qr, "qr", il);
+
+    qr = build_norm(qr, layer.attn_q_a_norm, nullptr, LLM_NORM_RMS, il);
+    cb(qr, "qr_norm", il);
+
+    ggml_tensor * q = build_lora_mm(layer.wq_b, qr);
+    q = ggml_reshape_3d(ctx0, q, n_embd_head, n_head, nt);
+    q = ggml_rms_norm(ctx0, q, norm_rms_eps);
+    cb(q, "q_norm", il);
+
+    ggml_tensor * q_nope = ggml_view_3d(ctx0, q, n_embd_head_nope, n_head, nt,
+            ggml_row_size(q->type, n_embd_head),
+            ggml_row_size(q->type, n_embd_hea
+… [5012 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 60 bash -c 'strings -n 6 /home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek-V4-Flash-UD-IQ1_M/DeepSeek-V4-Flash-UD-IQ1_M-00001-of-00003.gguf | head -c 120000' | grep -E \"^deepseek4\\.|compress|candidate|indexer|hca|csa\" … [80 caractères tronqués]`
+
+  ```
+deepseek4.block_count
+deepseek4.context_length
+deepseek4.embedding_length
+deepseek4.attention.head_count
+deepseek4.attention.head_count_kv
+deepseek4.rope.scaling.type
+deepseek4.rope.scaling.factor
+deepseek4.rope.scaling.original_context_length
+deepseek4.rope.scaling.yarn_beta_fast
+deepseek4.rope.scaling.yarn_beta_slow
+deepseek4.rope.freq_base
+deepseek4.attention.layer_norm_rms_epsilon
+deepseek4.expert_count
+deepseek4.expert_used_count
+deepseek4.expert_gating_func
+deepseek4.attention.key_length
+deepseek4.attention.value_length
+deepseek4.rope.dimension_count
+deepseek4.attention.q_lora_rank
+deepseek4.attention.sliding_window
+deepseek4.expert_feed_forward_length
+deepseek4.expert_shared_count
+deepseek4.expert_weights_scale
+deepseek4.expert_weights_norm
+deepseek4.swiglu_clamp_exp	
+deepseek4.swiglu_clamp_shexp	
+deepseek4.attention.indexer.head_count
+deepseek4.attention.indexer.key_length
+deepseek4.attention.indexer.top_k
+deepseek4.attention.output_group_count
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 90 bash -c 'strings -n 6 /home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek-V4-Flash-UD-IQ1_M/DeepSeek-V4-Flash-UD-IQ1_M-00001-of-00003.gguf | head -c 250000' | grep -E \"^deepseek4\\.\" | tail -25", "description": "List  … [55 caractères tronqués]`
+
+  ```
+deepseek4.expert_count
+deepseek4.expert_used_count
+deepseek4.expert_gating_func
+deepseek4.attention.key_length
+deepseek4.attention.value_length
+deepseek4.rope.dimension_count
+deepseek4.attention.q_lora_rank
+deepseek4.attention.sliding_window
+deepseek4.expert_feed_forward_length
+deepseek4.expert_shared_count
+deepseek4.expert_weights_scale
+deepseek4.expert_weights_norm
+deepseek4.swiglu_clamp_exp	
+deepseek4.swiglu_clamp_shexp	
+deepseek4.attention.indexer.head_count
+deepseek4.attention.indexer.key_length
+deepseek4.attention.indexer.top_k
+deepseek4.attention.output_group_count
+deepseek4.attention.output_lora_rank
+deepseek4.attention.compress_ratios	
+deepseek4.attention.compress_rope_freq_base
+deepseek4.hyper_connection.count
+deepseek4.hyper_connection.sinkhorn_iterations
+deepseek4.hyper_connection.epsilon
+deepseek4.hash_layer_count
+  ```
+
+### 🤖 Assistant
+
+⏵ Découverte d'un faux négatif : la clé est `attention.compress_ratios`. Lecture des valeurs réelles.
+
+- **write** `{"content": "#!/usr/bin/env python3\n\"\"\"Lit les métadonnées d'un GGUF (en-tête seul) et imprime les clés demandées.\n\nPourquoi un outil séparé : le moteur expose `--tensors` (inventaire) et\n`--config` (résumé), mais ni l'un ni l'autre ne montre une **liste** de\nmétadonnées — et certaines décis … [2441 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/lire_meta_gguf.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/lire_meta_gguf.py /home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek-V4-Flash-UD-IQ1_M/DeepSeek-V4-Flash-UD-IQ1_M-00001-of-00003.gguf compress_ratios output_group output_lora indexer.top_k sliding_window 2>&1 | head … [93 caractères tronqués]`
+
+  ```
+# /home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek-V4-Flash-UD-IQ1_M/DeepSeek-V4-Flash-UD-IQ1_M-00001-of-00003.gguf
+# version 3 · 0 tenseurs · 72 paires clé/valeur
+deepseek4.attention.sliding_window = 128
+deepseek4.attention.indexer.top_k = 512
+deepseek4.attention.output_group_count = 8
+deepseek4.attention.output_lora_rank = 1024
+deepseek4.attention.compress_ratios = [0, 0, 4, 128, 4, 128, 4, 128, 4, 128, 4, 128, 4, 128, 4, 128, 4, 128, 4, 128, 4, 128, 4, 128, 4, 128, 4, 128, 4, 128, 4, 128, 4, 128, 4, 128, 4, 128, 4, 128, 4, 128, 4, 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/lire_meta_gguf.py /home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek-V4-Flash-UD-IQ1_M/DeepSeek-V4-Flash-UD-IQ1_M-00001-of-00003.gguf compress_ratios 2>/dev/null | tail -1 | python3 -c \"\nimport sys,ast\nl=ast.lite … [602 caractères tronqués]`
+
+  ```
+n = 44
+Counter({4: 21, 128: 20, 0: 3})
+couches brutes (0) : [0, 1, 43]
+CSA (4) : 21  HCA (128) : 20
+=== indexer tensors ===
+42
+  ```
+
+### 🤖 Assistant
+
+⏵ Correction de deux clés mal lues (faux « calculable » sur V4-Flash) dans `manques_architecture`.
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs", "limit": 30, "offset": 96}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs</path>
+<type>file</type>
+<content>
+96:     // (Sinkhorn), et la tête les réduit en un état. Ce qui reste à faire sur ce
+97:     // chemin est nommé ailleurs (sortie à rang faible groupée, attentions
+98:     // compressées).
+99:     if quelque_part("hc_attn_fn.weight") && g.hc_params().is_none() {
+100:         manques.push("hyper-connexions : `hc_mult` absent des métadonnées");
+101:     }
+102:     // Attention par index (DSA) : l'indexeur choisit les clés gardées. Il ne
+103:     // sert QUE si la séquence dépasse `index_topk` — en deçà, llama.cpp garde
+104:     // toutes les clés et l'indexeur n'est pas appelé. On refuse donc seulement
+105:     // les contextes où il changerait le résultat.
+106:     if quelque_part("indexer.") {
+107:         let topk = g.cfg("index_topk").and_then(|m| m.as_u64()).unwrap_or(0) as usize;
+108:         if topk == 0 || ctx > topk {
+109:             manques.push("attention par index appris (indexer) au-delà de index_topk");
+110:         }
+111:     }
+112:     // L'engram est une table mmappée que le moteur sait ADRESSER (`--sonder-engram`)
+113:     // mais pas encore CALCULER. ll
+… [950 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='drave-core/src/model.rs'\ns=open(p).read()\nsubs=[\n# --- indexer : la clé est `attention.indexer.top_k`\n(\"\"\"    if quelque_part(\"indexer.\") {\n        let topk = g.cfg(\"index_topk\").and_then(|m| m.as_ … [2381 caractères tronqués]`
+
+  ```
+ok
+--- DeepSeek-V4-Flash-UD-IQ1_M-00001-of-00003.gguf
+calculable    : NON — il manque : projection de sortie à rang faible groupée (attn_output_a/attn_output_b, o_groups), attentions compressées CSA/HCA (compress_ratios, candidate_*)
+--- DeepSeek-V4.1-Flash-Q2.gguf
+calculable    : NON — il manque : projection de sortie à rang faible groupée (attn_output_a/attn_output_b, o_groups), attentions compressées CSA/HCA (compress_ratios, candidate_*)
+  ```
+
+### 🤖 Assistant
+
+⏵ Vérification qu'aucun modèle du parc ne change de verdict, et affichage des ratios dans `--config`.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && M=/home/stephane/Data13TB/stephane/modeles/gguf; for f in \"$M/GLM-5.3-UD-IQ1_S/GLM-5.3-UD-IQ1_S-00001-of-00006.gguf\" \"$M/Kimi-K2.7-Code-UD-IQ1_M/Kimi-K2.7-Code-UD-IQ1_M-00001-of-00008.gguf\" \"models/Qwen2.5-0.5B-Q8_0.gguf\" \"$M/ … [342 caractères tronqués]`
+
+  ```
+GLM-5.3-UD-IQ1_S-00001-of-00006.gguf       calculable    : oui (passe avant implémentée)
+Kimi-K2.7-Code-UD-IQ1_M-00001-of-00008.g   calculable    : oui (passe avant implémentée)
+Qwen2.5-0.5B-Q8_0.gguf                     calculable    : oui (passe avant implémentée)
+gpt-oss-120b-MXFP4.gguf                    calculable    : oui (passe avant implémentée)
+Qwen3-235B-A22B-Instruct-2507-Q2_K-00001   calculable    : oui (passe avant implémentée)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='drave-core/src/main.rs'\ns=open(p).read()\na=\"\"\"    // Hyper-connexions : les montrer même quand le modèle n'est pas encore\n    // calculable — c'est un chiffre du modèle, pas une promesse du moteur.\"\"\" … [1277 caractères tronqués]`
+
+  ```
+ok
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n \"$(grep -n 'pub enum Meta' drave-core/src/gguf.rs | cut -d: -f1),+30p\" drave-core/src/gguf.rs", "description": "Inspect Meta enum for array support"}`
+
+  ```
+pub enum Meta {
+    U8(u8), I8(i8), U16(u16), I16(i16), U32(u32), I32(i32),
+    F32(f32), Bool(bool), Str(String), Array(Vec<Meta>), U64(u64), I64(i64), F64(f64),
+}
+
+impl Meta {
+    pub fn as_u64(&self) -> Option<u64> {
+        match self {
+            Meta::U32(v) => Some(*v as u64),
+            Meta::U64(v) => Some(*v),
+            Meta::I32(v) => Some(*v as u64),
+            Meta::I64(v) => Some(*v as u64),
+            _ => None,
+        }
+    }
+    pub fn as_bool(&self) -> Option<bool> {
+        match self {
+            Meta::Bool(v) => Some(*v),
+            // Certains convertisseurs écrivent 0/1 là où le type GGUF est
+            // BOOL : refuser ces fichiers ferait retomber sur le défaut, en
+            // silence, une option que le modèle déclare explicitement.
+            Meta::U8(v) => Some(*v != 0),
+            Meta::U32(v) => Some(*v != 0),
+            _ => None,
+        }
+    }
+    pub fn as_f64(&self) -> Option<f64> {
+        match self {
+            Meta::F32(v) => Some(*v as f64),
+            Meta::F64(v) => Some(*v),
+            _ => None,
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='drave-core/src/gguf.rs'\ns=open(p).read()\na=\"\"\"    pub fn as_u64(&self) -> Option<u64> {\"\"\"\nb=\"\"\"    /// Une liste de métadonnées en entiers — `attention.compress_ratios` est une\n    /// liste par  … [1046 caractères tronqués]`
+
+  ```
+ok
+--- V4-Flash ---
+attn compress.: 44 couches · 21 CSA (ratio 4) · 20 HCA (ratio 128) · brutes aux couches [0, 1, 43]
+hyper-conn.   : 4 copies · 24 mélanges par couche (pre/post/comb) · Sinkhorn 20 itérations · eps 1e-6
+calculable    : NON — il manque : projection de sortie à rang faible groupée (attn_output_a/attn_output_b, o_groups), attentions compressées CSA/HCA (compress_ratios, candidate_*)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/lire_meta_gguf.py /home/stephane/Data13TB/stephane/modeles/gguf/GLM-5.3-UD-IQ1_S/GLM-5.3-UD-IQ1_S-00001-of-00006.gguf indexer.top_k index_top_k 2>/dev/null | tail -3; bash tools/portes.sh rapide 2>&1 | tail -11", "descr … [71 caractères tronqués]`
+
+  ```
+# /home/stephane/Data13TB/stephane/modeles/gguf/GLM-5.3-UD-IQ1_S/GLM-5.3-UD-IQ1_S-00001-of-00006.gguf
+# version 3 · 0 tenseurs · 64 paires clé/valeur
+glm-dsa.attention.indexer.top_k = 2048
+  cargo test --release                       52 verts  ✅
+  Qwen2.5-0.5B ctx 256                       19.3885  ✅
+  Qwen3-30B en clusters (origine : 799,8557) 799.8557  ✅
+  threads par défaut (physiques)            20  ✅
+  (portes de formats : ignorées en mode rapide)
+  GLM-5.3 : sigmoïde ×2,5                  sigmoïde  ✅
+  Kimi-K2.7 : sigmoïde ×2,827              sigmoïde  ✅
+  V4-Flash : racine de softplus              racine de softplus  ✅
+  Qwen3-235B : softmax                       softmax  ✅
+
+toutes les portes sont vertes
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='docs/plan-deepseek41-complet.md'\ns=open(p).read()\na=\"\"\"### 3.3 Les régimes d'attention de V4.1\"\"\"\nb=\"\"\"### 3.2bis Les régimes d'attention de V4-Flash (corrigé le 02/10)\n\n`attention.compress_ratio … [3053 caractères tronqués]`

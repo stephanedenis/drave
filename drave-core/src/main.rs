@@ -1677,6 +1677,21 @@ fn run_config() {
                      r.hash_layers, n_layer);
         }
     }
+    // Régimes d'attention compressée : les MONTRER, parce que c'est ce qu'on
+    // avait cessé de lire — la clé est `attention.compress_ratios`, et la
+    // chercher sous `compress_ratios` faisait dire « calculable » à V4-Flash
+    // (41 couches compressées sur 44).
+    if let Some(m) = g.cfg_ou(&["attention.compress_ratios", "compress_ratios"]) {
+        let ratios: Vec<i64> = m.as_liste_i64().unwrap_or_default();
+        if !ratios.is_empty() {
+            let n = |v: i64| ratios.iter().filter(|x| **x == v).count();
+            let brutes: Vec<usize> = ratios.iter().enumerate()
+                .filter(|(_, v)| **v == 0).map(|(i, _)| i).collect();
+            println!("attn compress.: {} couches · {} CSA (ratio 4) · {} HCA (ratio 128) · \
+                     brutes aux couches {:?}",
+                     ratios.len(), n(4), n(128), brutes);
+        }
+    }
     // Hyper-connexions : les montrer même quand le modèle n'est pas encore
     // calculable — c'est un chiffre du modèle, pas une promesse du moteur.
     if g.tensor("blk.0.hc_attn_fn.weight").is_some() {

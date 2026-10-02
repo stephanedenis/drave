@@ -183,6 +183,19 @@ pub enum Meta {
 }
 
 impl Meta {
+    /// Une liste de métadonnées en entiers — `attention.compress_ratios` est une
+    /// liste par couche, et c'est une **décision d'architecture** : quelles
+    /// couches sont compressées, et à quel ratio. La lire comme un scalaire
+    /// donnait `None`, donc « pas d'attention compressée ».
+    pub fn as_liste_i64(&self) -> Option<Vec<i64>> {
+        match self {
+            Meta::Array(v) => v.iter().map(|m| m.as_u64().map(|x| x as i64)
+                                           .or_else(|| match m { Meta::I64(x) => Some(*x), _ => None }))
+                                  .collect(),
+            _ => None,
+        }
+    }
+
     pub fn as_u64(&self) -> Option<u64> {
         match self {
             Meta::U32(v) => Some(*v as u64),

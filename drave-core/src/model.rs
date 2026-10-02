@@ -104,7 +104,14 @@ pub fn manques_architecture(g: &Gguf, cfg: &Cfg, ctx: usize, clusters: bool) -> 
     // toutes les clés et l'indexeur n'est pas appelé. On refuse donc seulement
     // les contextes où il changerait le résultat.
     if quelque_part("indexer.") {
-        let topk = g.cfg("index_topk").and_then(|m| m.as_u64()).unwrap_or(0) as usize;
+        // La clé s'appelle `attention.indexer.top_k` dans les GGUF de V4
+        // (`index_topk` dans le `config.json`). Lire le mauvais nom donnait
+        // `topk = 0`, donc un refus — pas un silence, mais un refus dont le
+        // motif était faux.
+        let topk = g.cfg_ou(&["attention.indexer.top_k", "index_topk", "indexer.top_k"])
+            .and_then(|m| m.as_u64())
+            .or_else(|| g.json_nombre("index_topk").map(|v| v as u64))
+            .unwrap_or(0) as usize;
         if topk == 0 || ctx > topk {
             manques.push("attention par index appris (indexer) au-delà de index_topk");
         }
@@ -139,7 +146,13 @@ pub fn manques_architecture(g: &Gguf, cfg: &Cfg, ctx: usize, clusters: bool) -> 
     if quelque_part("attn_derope") {
         manques.push("attention V4 : dé-rotation de sortie");
     }
-    if g.cfg("compress_ratios").is_some() || g.json_brut("compress_ratios").is_some() {
+    // La clé des ratios est `attention.compress_ratios` (liste par couche), pas
+    // `compress_ratios` : la chercher sous le mauvais nom faisait dire
+    // « calculable » à V4-Flash, dont 41 couches sur 44 sont compressées
+    // (21 CSA + 20 HCA, mesuré : `tools/lire_meta_gguf.py`). Un faux « oui » est
+    // pire qu'un refus : il fait calculer faux sans rien dire.
+    if g.cfg_ou(&["attention.compress_ratios", "compress_ratios"]).is_some()
+        || g.json_brut("compress_ratios").is_some() {
         manques.push("attentions compressées CSA/HCA (compress_ratios, candidate_*)");
     }
     if quelque_part("attn_q_a.weight") {

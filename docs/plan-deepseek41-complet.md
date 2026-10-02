@@ -95,6 +95,31 @@ détail d'implémentation.
    `hc_mult = 4` : fichier incomplet ou conversion fautive. Question de
    **provenance**, à trancher avant d'écrire du code (P7).
 
+### 3.2bis Les régimes d'attention de V4-Flash (corrigé le 02/10)
+
+`attention.compress_ratios` (44 entrées, clé GGUF lue par
+`tools/lire_meta_gguf.py`) : **21 couches CSA** (ratio 4), **20 couches HCA**
+(ratio 128), **3 couches brutes** (0, 1, 43). Le moteur annonçait pourtant
+V4-Flash **calculable** après P2 : il cherchait la clé `compress_ratios`, qui
+n'existe pas (`attention.compress_ratios`). Corrigé — et c'est la leçon de la
+porte P0 : *un faux « oui » est pire qu'un refus, il fait calculer faux sans
+rien dire*.
+
+**Conséquence sur l'ordre** : V4-Flash n'est pas « MLA + hyper-connexions » mais
+**41 couches compressées sur 44** — il lui faut P4 (HCA) **et** P5 (CSA +
+indexeur) avant de tourner, comme V4.1. Ce qui reste spécifique à V4.1 : la
+sortie `output_hc_*` et la provenance du fichier. Les couches 0, 1 et 43 sont,
+elles, l'équivalent des couches brutes de V4.1 : c'est là que P3 valide la
+chaîne complète.
+
+Détail qui change l'implémentation par rapport à GLM/Kimi : l'attention V4 n'a
+**ni `attn_kv_a_mqa` ni `attn_k_b`/`attn_v_b`**. Elle a `attn_kv` (une seule
+tête latente de 512 = 448 nope + 64 rope, normée **en entier**), `attn_q_a` +
+`attn_q_a_norm` + `attn_q_b`, une **seconde norme RMS sur q** (par tête, sans
+poids), puis `attn_output_a`/`attn_output_b` (rang 1024, 8 groupes) et des
+`attn_sinks` par tête. La MLA « maison » de Drave (celle de GLM/Kimi) n'est donc
+pas réutilisable telle quelle : c'est un **troisième** chemin d'attention.
+
 ### 3.3 Les régimes d'attention de V4.1
 
 `compress_ratios` (40 entrées) : **18 couches CSA** (ratio 2, couches 2-19),

@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 92.4 h |
+| Durée | 92.5 h |
 | Tours | 75 |
-| Messages | 4531 |
-| Appels d'outils | 4322 |
-| Fichiers touchés | 89 |
-| Commandes | 3723 |
+| Messages | 4547 |
+| Appels d'outils | 4338 |
+| Fichiers touchés | 90 |
+| Commandes | 3737 |
 | Sous-agents | 28 |
-| Commits | 325 |
+| Commits | 326 |
 | Compactages de contexte | 6 |
 
 ## Objectifs déclarés
@@ -3831,7 +3831,7 @@ Le flux se compte par **provenance** (attention / experts / partagé) en **paire
 
 ### Tour 75 — <goal_round> Objective: "Exécuter le plan docs/plan-deepseek41-complet.md phase par phase (P0→P9), en autonomie, en resp … [941 caractères tronqués]
 
-*22 appels d'outils.* Actions notables :
+*38 appels d'outils.* Actions notables :
 
 - bash — Locate MLA loader and HC absence
 - read
@@ -3847,11 +3847,11 @@ Le flux se compte par **provenance** (attention / experts / partagé) en **paire
 - bash — Report HC params in --config and verify
 - bash — List x usages in the layer loop
 - bash — Locate the three residual sites
-- … et 5 autres
+- … et 20 autres
 
 **Synthèse produite :**
 
-⏵ Commit de P1, puis inventaire exact des tenseurs d'attention de V4-Flash pour P2.
+⏵ Vérification qu'aucun modèle du parc ne change de verdict, et affichage des ratios dans `--config`.
 
 ## 3. Travail accompli
 
@@ -3948,6 +3948,7 @@ Le flux se compte par **provenance** (attention / experts / partagé) en **paire
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/list.rs` | 0 | 1 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-p0-flux.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/hc_synthetique.py` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/lire_meta_gguf.py` | 1 | 0 |
 
 ### Sous-agents lancés
 
@@ -4022,7 +4023,7 @@ Le flux se compte par **provenance** (attention / experts / partagé) en **paire
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 3683 autres
+- … et 3697 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4495,4 +4496,5 @@ Le flux se compte par **provenance** (attention / experts / partagé) en **paire
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF' p='docs/plan-deepseek41-complet.md' s=open(p).read() subs=[ ("""### P0 — Le harnais, s
 - Plan V4.1 : P0 marqué fait, et les hyper-paramètres sont dans le GGUF (\`deepseek41.config\`)" && git log --oneline -2
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A drave-core/src/ && git commit -q -F - <<'EOF' P1 (2/3) : les hyper-connexions sont chargées ET 
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF' p='docs/plan-deepseek41-complet.md' s=open(p).read() a="""### 3.3 Les régimes d'attent
 
