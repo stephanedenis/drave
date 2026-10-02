@@ -166,6 +166,30 @@ pub fn manques_architecture(g: &Gguf, cfg: &Cfg, ctx: usize, clusters: bool) -> 
         && !quelque_part("attn_compressor_kv.weight") {
         manques.push("attentions compressées : `attn_compressor_kv` absent du fichier");
     }
+    // **V4.1 : un troisième ratio.** Ses couches compressées sont en ratio **2**,
+    // avec un `attn_compressor_kv` SANS porte ni `ape` — un régime que la
+    // référence elle-même n'implémente pas (`llama.cpp` refuse : « only supports
+    // compression ratios 0, 4, and 128 »). L'implémenter sans référence serait
+    // deviner : on le refuse en le nommant.
+    let ratios = g.couches_ratios();
+    let inconnus: Vec<i64> = {
+        let mut v: Vec<i64> = ratios.iter().copied()
+            .filter(|r| *r != 0 && *r != 4 && *r != 128).collect();
+        v.sort_unstable(); v.dedup(); v
+    };
+    if !inconnus.is_empty() {
+        manques.push("compression de ratio 2 (V4.1) : ni notre moteur ni la référence \
+ne l'implémentent (llama.cpp n'accepte que 0, 4 et 128)");
+    }
+    // **Le mélange de tête manquant de V4.1.** Le modèle déclare `hc_mult` mais
+    // n'a pas les tenseurs `output_hc_*` : llama.cpp les déclare REQUIS (`flags`
+    // nul) et refuserait ce fichier — « missing tensor 'output_hc_fn.weight' ».
+    // Question de PROVENANCE (P7), pas de code.
+    if quelque_part("hc_attn_fn.weight") && g.tensor("output_hc_fn.weight").is_none()
+        && g.tensor("hc_head_fn.weight").is_none() {
+        manques.push("mélange de tête des hyper-connexions (`output_hc_fn`) absent — \
+fichier incomplet, ou conversion fautive (question de provenance, P7)");
+    }
     // Ce message décrit le cache LATENT de la MLA « GLM/Kimi »
     // (`attn_kv_a_mqa`) : sur l'attention V4, qui a aussi un `attn_q_a` mais un
     // cache d'une seule tête déjà tournée, il serait faux.

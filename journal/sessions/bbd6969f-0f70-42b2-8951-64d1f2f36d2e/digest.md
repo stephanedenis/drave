@@ -78847,3 +78847,163 @@ paires (poids × activation) par token : attention 6225.4 M · experts 8116.0 M 
 ⏵ P6 franchie : le modèle éclaté redonne **exactement** la même perplexité (et 2,8× plus vite).
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='reports/rapport-v4-reparti.md'\ns=open(p).read()\na=\"\"\"## 4. Ce que ce n'est pas\"\"\"\nb=\"\"\"## 4. Le modèle **éclaté en grappes** : même perplexité, au chiffre près\n\n`tools/convertir_clusters.py` a dé … [4483 caractères tronqués]`
+
+  ```
+ok
+ok plan
+=== Portes ===
+  cargo test --release                       53 verts  ✅
+  Qwen2.5-0.5B ctx 256                       19.3885  ✅
+b983d89 P6 : V4-Flash éclaté en 8 grappes — perplexité identique au chiffre près, et 2,8× plus vite
+  ```
+
+### 🤖 Assistant
+
+⏵ P7 : la question de provenance de V4.1. Vérification du comportement de llama.cpp sur un tenseur requis absent.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/llama.cpp && grep -n \"create_tensor(const LLM_TN_IMPL\" -A 30 src/llama-model.cpp | grep -E \"TENSOR_NOT_REQUIRED|throw|tensor == nullptr|return nullptr\" | head -8", "description": "Check llama.cpp's required-tensor behavior"}`
+
+  ```
+2911-    layer.ffn_gate_up_exps = create_tensor(tn(LLM_TENSOR_FFN_GATE_UP_EXPS, "weight", bid), {n_embd_, n_ff_ * 2, n_expert_}, TENSOR_NOT_REQUIRED);
+2922-    layer.wqkv = create_tensor(tn(LLM_TENSOR_ATTN_QKV, "weight", bid), {n_embd_, n_embd_qkv}, TENSOR_NOT_REQUIRED | TENSOR_SKIP_IF_VIRTUAL);
+2924-        layer.wqkv_b = create_tensor(tn(LLM_TENSOR_ATTN_QKV, "bias", bid), {n_embd_qkv}, TENSOR_NOT_REQUIRED | TENSOR_SKIP_IF_VIRTUAL);
+2929-        layer.wq_b = create_tensor(tn(LLM_TENSOR_ATTN_Q, "bias", bid), {n_embd_q_}, TENSOR_NOT_REQUIRED);
+2930-        layer.wk_b = create_tensor(tn(LLM_TENSOR_ATTN_K, "bias", bid), {n_embd_k_}, TENSOR_NOT_REQUIRED);
+2931-        layer.wv_b = create_tensor(tn(LLM_TENSOR_ATTN_V, "bias", bid), {n_embd_v_}, TENSOR_NOT_REQUIRED);
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/llama.cpp && grep -n \"struct ggml_tensor \\* llama_model::create_tensor\" -A 40 src/llama-model.cpp | head -45 | grep -nE \"NOT_REQUIRED|missing|throw|return\" | head -8", "description": "Read create_tensor's missing-tensor path"}`
+
+  ```
+(no output)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/llama.cpp && grep -rn \"missing tensor\\|TENSOR_NOT_REQUIRED)\" src/llama-model.cpp | head -6", "description": "Find the missing-tensor error message"}`
+
+  ```
+1392:                layer.wq_s = create_tensor(tn(LLM_TENSOR_ATTN_Q,   "scale", i), {1}, TENSOR_NOT_REQUIRED);
+1395:                layer.wk_s = create_tensor(tn(LLM_TENSOR_ATTN_K,   "scale", i), {1}, TENSOR_NOT_REQUIRED);
+1398:                layer.wv_s = create_tensor(tn(LLM_TENSOR_ATTN_V,   "scale", i), {1}, TENSOR_NOT_REQUIRED);
+1401:                layer.wo_s = create_tensor(tn(LLM_TENSOR_ATTN_OUT, "scale", i), {1}, TENSOR_NOT_REQUIRED);
+1404:                layer.wqkv_s = create_tensor(tn(LLM_TENSOR_ATTN_QKV, "scale", i), {1}, TENSOR_NOT_REQUIRED);
+1407:                layer.wqkv_gate_s = create_tensor(tn(LLM_TENSOR_ATTN_GATE, "scale", i), {1}, TENSOR_NOT_REQUIRED);
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/llama.cpp && grep -rn \"missing tensor\" src/*.cpp | head -4; grep -n \"create_tensor\" -A 45 src/llama-model.cpp | grep -A 3 \"if (tensor == nullptr)\" | head -8", "description": "Locate the required-tensor failure"}`
+
+  ```
+src/llama-model-loader.cpp:1083:            throw std::runtime_error(format("missing tensor '%s'", tn.str().c_str()));
+src/llama-model-loader.cpp:1098:            throw std::runtime_error(format("missing tensor info mapping for %s", tn.str().c_str()));
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/llama.cpp && sed -n '1072,1100p' src/llama-model-loader.cpp", "description": "Read the loader's missing-tensor logic"}`
+
+  ```
+return ctx;
+        }
+        return it->second.get();
+    };
+
+    auto buft_for_tensor = [&](ggml_tensor * t_meta) -> ggml_backend_buffer_type_t {
+        if (!t_meta) {
+            if (flags & TENSOR_NOT_REQUIRED) {
+                return nullptr;
+            }
+            throw std::runtime_error(format("missing tensor '%s'", tn.str().c_str()));
+        }
+
+        // some models use the token embedding tensor as the output, but since these are used in different layers and with different ops
+        // the tensor is duplicated
+        // to handle this, we check if the tensor is duplicated, and if so, we assume that it is being loaded as the output tensor
+        llm_tensor tn_tensor = tn.tensor;
+        if (tn.tensor == LLM_TENSOR_TOKEN_EMBD && (flags & TENSOR_DUPLICATED)) {
+            tn_tensor = LLM_TENSOR_OUTPUT;
+        }
+
+        llm_tensor_info info;
+        try {
+            info = llm_tensor_info_for(tn_tensor);
+        } catch (const std::out_of_range & e) {
+            throw std::runtime_error(format("missing tensor info mapping for %s", tn.str().c_str()));
+        }
+  ```
+
+### 🤖 Assistant
+
+⏵ P7 : inventaire des tenseurs de tête de V4.1 (le fichier est-il complet ?).
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c \"\nimport struct, sys\nsys.path.insert(0,'tools')\nfrom lire_meta_gguf import Lecteur\np='/home/stephane/FastNVMe/modeles-lourds/DeepSeek-V4.1-Flash-Q2.gguf'\nr=Lecteur(p); assert r.octets(4)==b'GGUF'\nv=struct.unpack('<I … [853 caractères tronqués]`
+
+  ```
+tenseurs : 1046
+hors blk : ['token_embd.weight', 'output_norm.weight', 'output.weight']
+hc/output : ['output_norm.weight', 'output.weight', 'blk.0.hc_attn_fn.weight', 'blk.0.hc_attn_base.weight', 'blk.0.hc_attn_scale.weight', 'blk.0.hc_ffn_fn.weight']
+engram : ['blk.1.engram_q_norm.weight', 'blk.1.engram_k_norm.weight', 'blk.1.engram_kv.weight', 'blk.14.engram_q_norm.weight']
+blk.0 : ['blk.0.hc_attn_fn.weight', 'blk.0.hc_attn_base.weight', 'blk.0.hc_attn_scale.weight', 'blk.0.attn_norm.weight', 'blk.0.hc_ffn_fn.weight', 'blk.0.hc_ffn_base.weight', 'blk.0.hc_ffn_scale.weight', 'blk.0.ffn_norm.weight', 'blk.0.attn_sinks.weight', 'blk.0.attn_q_a.weight']
+  ```
+
+### 🤖 Assistant
+
+⏵ Exécution de V4.1 : Drave doit refuser en le disant (question de provenance P7).
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 900 ./drave-core/target/release/drave /home/stephane/FastNVMe/modeles-lourds/DeepSeek-V4.1-Flash-Q2.gguf --ppl /tmp/ids_v4flash.txt --ctx 32 --limit 3 --dense --threads 16 2>&1 | tail -5", "description": "Try running V4.1", " … [20 caractères tronqués]`
+
+  ```
+thread 'main' (1917232) panicked at src/gguf.rs:1655:53:
+tenseur blk.2.attn_compressor_ape.weight absent
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+timeout: the monitored command dumped core
+  ```
+
+### 🤖 Assistant
+
+⏵ V4.1 utilise un **ratio 2** inconnu de llama.cpp : inventaire de la couche 2.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ./drave-core/target/release/drave /home/stephane/FastNVMe/modeles-lourds/DeepSeek-V4.1-Flash-Q2.gguf --tensors 2>/dev/null | grep -E \"blk\\.2\\.\" | head -18", "description": "Inventory V4.1 layer 2", "timeoutMs": 300000}`
+
+  ```
+F16      blk.2.hc_attn_fn.weight                [24, 20480] · 0.5 M poids · fichier 0
+  F32      blk.2.hc_attn_base.weight              [24] · 0.0 M poids · fichier 0
+  F32      blk.2.hc_attn_scale.weight             [3] · 0.0 M poids · fichier 0
+  F32      blk.2.attn_norm.weight                 [5120] · 0.0 M poids · fichier 0
+  F16      blk.2.hc_ffn_fn.weight                 [24, 20480] · 0.5 M poids · fichier 0
+  F32      blk.2.hc_ffn_base.weight               [24] · 0.0 M poids · fichier 0
+  F32      blk.2.hc_ffn_scale.weight              [3] · 0.0 M poids · fichier 0
+  F32      blk.2.ffn_norm.weight                  [5120] · 0.0 M poids · fichier 0
+  F32      blk.2.attn_sinks.weight                [64] · 0.0 M poids · fichier 0
+  Q8_0     blk.2.attn_q_a.weight                  [1280, 5120] · 6.6 M poids · fichier 0
+  Q8_0     blk.2.attn_q_b.weight                  [32768, 1280] · 41.9 M poids · fichier 0
+  F32      blk.2.attn_q_a_norm.weight             [1280] · 0.0 M poids · fichier 0
+  Q8_0     blk.2.attn_kv.weight                   [512, 5120] · 2.6 M poids · fichier 0
+  F32      blk.2.attn_kv_a_norm.weight            [512] · 0.0 M poids · fichier 0
+  Q8_0     blk.2.attn_ou
+… [325 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Découverte P7 : V4.1 a un **ratio 2** et pas de porte/`ape` — et llama.cpp le refuse aussi. Refus explicite.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='drave-core/src/model.rs'\ns=open(p).read()\na=\"\"\"    if (g.cfg_ou(&[\"attention.compress_ratios\", \"compress_ratios\"]).is_some()\n        || g.json_brut(\"compress_ratios\").is_some())\n        && !quelqu … [2465 caractères tronqués]`
+
+  ```
+ok
+DeepSeek-V4.1-Flash-Q2.gguf            calculable    : NON — il manque : compression de ratio 2 (V4.1) : ni notre moteur ni la référence ne l'implémentent (llama.cpp n'accepte que 0, 4 et 1
+DeepSeek-V4-Flash-UD-IQ1_M-00001-of-   calculable    : oui (passe avant implémentée)
+  ```
+
+### 🤖 Assistant
+
+⏵ P7 : le constat de provenance est net. Rapport et mise à jour du plan.
+
+- **write** `{"content": "# DeepSeek-V4.1 : ce que le fichier dit, et ce qu'il ne dit pas\n\n**En une ligne** : le GGUF de V4.1 est **refusé proprement** par Drave, pour deux\nraisons qu'on peut montrer — il **manque les tenseurs du mélange de tête**\n(`output_hc_*`) que llama.cpp déclare *requis*, et ses couche … [3520 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-provenance-v41.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='docs/plan-deepseek41-complet.md'\ns=open(p).read()\na=\"\"\"### P7 — Adaptation à V4.1, et la question de provenance (≈ ½ journée + action externe)\"\"\"\nb=\"\"\"### P7 — Adaptation à V4.1, et la question de  … [2804 caractères tronqués]`

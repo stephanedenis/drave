@@ -312,6 +312,23 @@ Une phase qui ne passe pas ses deux portes ne passe pas à la suivante.
      clusters 799,8557, 18 formats lisibles dont 17 vérifiés à la porte,
      4 routages).
 
+### P7 — Adaptation à V4.1, et la question de provenance (≈ ½ journée + action externe) — **constat fait** (02/10)
+
+> **Les deux manques sont établis**, et aucun n'est du code à écrire :
+> 1. le fichier **n'a pas les tenseurs `output_hc_*`** (seuls trois tenseurs hors
+>    `blk.*` : `token_embd`, `output_norm`, `output`), que llama.cpp déclare
+>    **requis** — il refuserait ce fichier avec « missing tensor
+>    'output_hc_fn.weight' » ;
+> 2. ses couches compressées sont en **ratio 2**, avec `attn_compressor_kv` mais
+>    **sans porte ni `ape`** : un régime que llama.cpp **refuse explicitement**
+>    (« only supports compression ratios 0, 4, and 128 »).
+>
+> Conclusion : V4.1 ne peut être validé contre aucune référence aujourd'hui, et
+> l'implémenter sans référence serait deviner. Drave le **refuse à l'ouverture**
+> en nommant les deux motifs (`reports/rapport-provenance-v41.md`).
+> L'action externe (demander à la source si la conversion est complète, ou si la
+> convention a changé) reste à faire — elle n'est pas dans ce dépôt.
+
 ### P7 — Adaptation à V4.1, et la question de provenance (≈ ½ journée + action externe)
 
 - Code : métadonnées par couche (`compress_ratios` au lieu d'un régime global),
