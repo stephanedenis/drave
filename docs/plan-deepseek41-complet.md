@@ -68,8 +68,8 @@ détail d'implémentation.
 | en-têtes + inventaire | 1 046 tenseurs, 365,70 Go en **63,8 ms** (mmap) |
 | description | **74 ms** : 40 couches, 384 experts top-6, racine de softplus ×1,5, routage par table des 3 premières couches |
 | tables d'engram | 10 000 entrées en **219–524 ms**, 2,6 Mo touchés par table, **120 Mo de RSS** pour 365,7 Go |
-| formats | IQ2_XXS, Q2_K, Q8_0, F16, F32, I32 — **vérifiés contre libggml** |
-| MLA à rang faible | **validée** contre llama.cpp sur GLM-5.3 (corrélation 0,999024) |
+| formats | IQ2_XXS, Q2_K, Q8_0, F16, F32 **vérifiés contre libggml**, plus **I8** (2 tenseurs d'engram, lus par déquantification générique — **pas** couverts par la porte) ; aucun I32 dans ce fichier (vérifié sur les deux copies) |
+| MLA à rang faible | **validée à la position 0** contre llama.cpp sur GLM-5.3 (corrélation 0,999024 ; l'écart croît ensuite — `reports/rapport-mla-experts.md` §7) |
 | grappes | `commun.gguf` + `cluster-XX.gguf` + `mapping.tsv`, nœuds partiels |
 | transport | protocole v5, modes 0-4 (dont **lot en listes**) |
 
@@ -133,10 +133,12 @@ Une phase qui ne passe pas ses deux portes ne passe pas à la suivante.
 - **Interdit** : « les 4 copies sans le Sinkhorn ». Une HC approximative ne se
   voit pas — les quatre copies restent plausibles.
 
-### P2 — Épilogue d'attention : puits, dé-rotation, sortie groupée (≈ 3 h)
+### P2 — Épilogue d'attention : dé-rotation, puits, sortie groupée (≈ 3 h)
 
-- Dé-rotation (`attn_derope`), puits par tête (`attn_sinks`), sortie groupée
-  (`attn_output_a` → `attn_output_b`, `o_groups = 8`).
+- Dé-rotation (`attn_derope`) et sortie groupée (`attn_output_a` →
+  `attn_output_b`, `o_groups = 8`). Les **puits par tête** (`attn_sinks`) sont
+  déjà implémentés sur le chemin dense, mais `attn_mla` ne les consomme pas :
+  il faut les **brancher sur le chemin MLA** que V4 utilise.
 - **Porte de correction** : `kqv_out-0`, `attn_out-0`.
 - **Porte Drave** : rien de nouveau à tracer ici, mais l'activation d'entrée de
   `attn_output_a` doit être **la même liste** que celle qui sort de l'attention —
@@ -197,8 +199,9 @@ Une phase qui ne passe pas ses deux portes ne passe pas à la suivante.
   3. **découpage en grappes** : V4-Flash en `cluster-XX.gguf`, puis
      `--ppl-reparti` entre **deux processus** (voire deux machines), perplexité
      égale à celle d'un nœud unique ;
-  4. les portes du dépôt vertes (48 tests, Qwen 19,3885, clusters 799,8557,
-     17 formats, 4 routages).
+  4. les portes du dépôt vertes (48 tests, Qwen 19,3885, **gpt-oss 15,6017**,
+     clusters 799,8557, 18 formats lisibles dont 17 vérifiés à la porte,
+     4 routages).
 
 ### P7 — Adaptation à V4.1, et la question de provenance (≈ ½ journée + action externe)
 
@@ -270,8 +273,10 @@ réparti sur deux nœuds** (P6) → V4.1 exécutable ou provenance tranchée (P7
   le message d'ouverture.
 - **Si une phase coûte plus du double de son estimation, on s'arrête** et on
   documente — comme la tête garantie.
-- **Aucun chiffre de V4.1 n'est publié avant P7.** Jusque-là s'applique la phrase
-  du moteur : « ce modèle n'a jamais été exécuté ici ».
+- **Aucun chiffre de CALCUL de V4.1 n'est publié avant P7** — les mesures
+  statiques de §3.1 (inventaire, en-têtes, engram) restent permises, elles disent
+  ce que le fichier contient, pas ce que le modèle calcule. Jusque-là s'applique
+  la phrase du moteur : « ce modèle n'a jamais été exécuté ici ».
 
 ---
 

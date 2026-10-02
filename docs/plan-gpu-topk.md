@@ -3,7 +3,10 @@
 **En une ligne** : l'attention creuse (`--attn-topk`) ne peut pas se servir du KV
 déporté en VRAM — le code l'interdit explicitement — donc à long contexte elle
 retombe sur le CPU et coûte **~70 fois** le chemin GPU complet. Ce plan
-chiffre l'écart et décrit les trois noyaux qui le comblent.
+chiffre l'écart et décrit les trois noyaux qui le comblent. C'est un chantier de
+**placement d'opérateur** (axe 2 de `docs/vision.md` : « on place un opérateur là
+où son flux coûte le moins cher »), local à une machine ; ni la répartition entre
+grappes ni la lecture des flux ne sont traitées ici.
 
 ## Pourquoi (mesuré, pas supposé)
 
@@ -81,7 +84,9 @@ Le banc doit donc vérifier deux choses séparément :
    hors ex æquo.
 
 Puis, à l'échelle du modèle : la perplexité de `--attn-topk 256` à contexte 2 048
-doit rester **234,88** (la valeur CPU mesurée) à la tolérance près, et le banc 1 M
+doit rester **celle du CPU** à la tolérance près — le critère chiffré d'origine
+(234,88, gpt-oss, contexte 2 048, mêmes 512 jetons notés : `docs/contexte-long.md`
+§6) dépend des réglages et n'a pas été reproduit par ce binaire — et le banc 1 M
 doit montrer l'effet cherché : **968 ms → quelques dizaines de ms par couche**.
 
 ## Le plan, en étapes
@@ -91,9 +96,9 @@ doit montrer l'effet cherché : **968 ms → quelques dizaines de ms par couche*
 | 1 | `attn_scores` + FFI + banc `--banc-topk` sur 4 k de contexte | ✅ **fait** : écart **1,6 à 2,3e-7** de 4 096 à 262 144 clés (clés distinctes — la valeur de 1,03e-7 venait d'un banc dégénéré), **26,7 à 40× plus rapide** que le CPU ; c'est la re-mesure du 30/09 au soir qui fait foi dans `reports/rapport-gpu-scores.md` |
 | 2 | `attn_topk_select` (radix, 3 noyaux) | ✅ **fait** : ensemble retenu identique au CPU, 14/14 lignes (différence symétrique 0) — `reports/rapport-gpu-topk-selection.md` |
 | 3 | `attn_topk_somme` (softmax sur k + puits) | ✅ **fait** : 1,0–4,8e-7 à toutes les tailles (critère 1e-6) — `reports/rapport-gpu-topk-selection.md` |
-| 4 | branchement dans `model.rs` (autoriser le GPU quand `attn_topk > 0` **et** que le noyau rend `true`, garder le repli CPU sinon) | ✅ **fait**, en opt-in (`DRAVE_GPU_TOPK=1`) : PPL à ctx 2 048 = **9,4162** contre **9,4167** au CPU (le critère chiffré était faux d'avance : 234,88 ne correspond à aucun réglage reproductible — c'est la comparaison A/B qui fait foi) · ⚠️ le gain de TEMPS n'est pas là à 2 048 clés : six lancements et cinq recopies par couche et par jeton — la fusion des quatre passes est la prochaine étape |
+| 4 | branchement dans `model.rs` (autoriser le GPU quand `attn_topk > 0` **et** que le noyau rend `true`, garder le repli CPU sinon) | ✅ **fait**, en opt-in (`DRAVE_GPU_TOPK=1`) : PPL à ctx 2 048 = **9,4162** contre **9,4167** au CPU (le critère chiffré d'origine (234,88, `docs/contexte-long.md` §6) n'est pas reproduit par ce binaire — c'est la comparaison A/B qui fait foi) · ⚠️ le gain de TEMPS n'est pas là à 2 048 clés : six lancements et cinq recopies par couche et par jeton — la fusion des quatre passes est la prochaine étape |
 | 5 | mesure 1 M : ms/layer avec et sans top-k, sur GPU | ✅ **fait au niveau des noyaux** : la chaîne complète (scores sans relecture + 4 passes + collecte + somme) coûte **3,90 ms** pour 14 lignes × 1 M de clés, contre **539,9 ms** pour l'attention complète sur CPU (×138) et 13,2 ms pour l'attention complète en VRAM — soit **0,3×** le complet, mieux que le critère des 2× |
-| 6 | porte de non-régression : les deux valeurs restent 19,3885 et 15,1757 | ✅ **inchangées**, mesurées sur le binaire final : Qwen 19,3885 (CPU **et** avec `DRAVE_GPU_KV`) · gpt-oss 15,1757 (CPU) et 15,1667 (`DRAVE_GPU`) · `cargo test` 17/17 |
+| 6 | porte de non-régression : les deux valeurs restent 19,3885 et 15,6017 | ✅ **vertes**, mesurées sur le binaire final : Qwen 19,3885 (CPU **et** avec `DRAVE_GPU_KV`) · gpt-oss 15,6017 (CPU) — 15,1757 était la valeur d'avant la correction du biais de routage du 02/10, voir `reports/rapport-routage-experts.md` |
 
 ## Les pièges, déjà payés une fois chacun
 

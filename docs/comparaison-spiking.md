@@ -3,6 +3,17 @@
 Comparaison des trois architectures neuromorphiques de référence avec la nôtre,
 et inventaire des astuces transposables.
 
+Le cœur de Drave n'est pas remis en cause par cette comparaison : **router des
+flux d'activation sur des grappes de neurones réparties entre composants et
+machines** (`docs/vision.md`, axes 2-3) et **lire ces flux pour adapter
+l'architecture à la tâche** (§2) restent les deux dimensions structurantes. Le
+spike n'est examiné ici que comme **moyen d'obtenir la parcimonie** que nos
+modèles quantifiés n'ont pas naturellement.
+
+Mesures internes : `reports/rapport-inference.md`,
+`reports/rapport-attention-creuse.md`, `reports/rapport-localite-activation.md`,
+`reports/bilan-multi-materiel.md`.
+
 Sources : [Spikformer](https://ar5iv.labs.arxiv.org/html/2209.15425) (Zhang et
 al., ICLR 2023), [SpikeGPT](https://ar5iv.labs.arxiv.org/html/2302.13939) (Zhu
 et al., 2023), [Spikingformer](https://ar5iv.labs.arxiv.org/html/2304.11954)
@@ -49,14 +60,17 @@ d'énergie** sur ImageNet.
 | Attention | SSA sans softmax, décomposable | **absente du domaine événementiel** |
 | Résiduel | flottant, entrée des couches discrète (Spikingformer) | **idem** : `x = o + down` flottant, entrée quantifiée int8 |
 | Entraînement | gradient de substitution, rétropropagation dans le temps | aucun (quantification après coup) |
-| Énergie par opération | E_AC = 0,9 pJ contre E_MAC = 4,5 pJ (Horowitz) | 8,3 nJ/événement (FPGA) contre 57 nJ (CPU) — rapport 6,9× |
+| Énergie par opération | E_AC = 0,9 pJ contre E_MAC = 4,5 pJ (Horowitz) | 8,3 nJ/événement (FPGA, **projeté** : 4,83 G évts/s, limite DDR3) contre 57 nJ (CPU, **mesuré**) — rapport 6,9× |
 
 **Deux observations qui nous concernent directement.**
 
 **a) Ils ont résolu par construction le problème qui nous bloque.** Nous avons
 mesuré que les activations d'un LLM dense ne sont **jamais** exactement nulles :
-notre débit est donc constant, et l'argument « on ne paie que ce qui s'active »
-reste théorique. Un réseau à spikes **impose** cette parcimonie : R̂ = 0,15, soit
+notre débit est donc constant **à seuil nul**, et l'argument « on ne paie que ce
+qui s'active » reste théorique. À seuil 5 % du max, la densité mesurée tombe à
+**17,9 %** — sous le croisement push/pull de **22 %**
+(`reports/rapport-localite-activation.md`, `reports/rapport-croisement-push-pull.md`) —,
+et c'est là que le coût redevient proportionnel à l'activité. Un réseau à spikes **impose** cette parcimonie : R̂ = 0,15, soit
 **6,7× moins d'événements** dans notre moteur. Notre architecture événementielle
 est mieux adaptée aux modèles à spikes qu'aux modèles quantifiés denses — c'est
 un renversement de perspective.
@@ -140,6 +154,7 @@ d'avoir un modèle à spikes, donc de savoir l'entraîner.
   des corpus bien plus petits que ceux des LLM actuels.
 - Les gains annoncés (32×, 57 %) sont **théoriques**, calculés avec
   E_AC = 0,9 pJ et E_MAC = 4,5 pJ sur du 45 nm — pas mesurés sur silicium.
-  Notre mesure, elle, donne 6,9× entre CPU et FPGA, du même ordre.
+  Notre chiffre, lui, donne 6,9× entre CPU et FPGA, du même ordre — mais la
+  consommation FPGA est **projetée** (limite DDR3), seule la CPU est mesurée.
 - Aucun de ces modèles n'est un modèle de langage à l'échelle des LLM actuels :
   SpikeGPT-216M est le plus gros SNN entraîné par rétropropagation à sa sortie.

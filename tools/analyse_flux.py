@@ -5,7 +5,7 @@ neurone par neurone », mais chiffré par couche et sans exécuter le moteur.
 Ce que l'outil répond, et pourquoi ces questions-là :
 
 * **quelle couche est creuse** ? C'est la décision push/pull du projet (le
-  croisement mesuré est à ~10 % de densité) — mais elle se prend PAR COUCHE, pas
+  croisement mesuré est à ~22 % de densité) — mais elle se prend PAR COUCHE, pas
   pour le modèle entier ;
 * **quels neurones sont PERSISTANTS** (actifs dans presque tous les jetons) ?
   Ceux-là ne bénéficient d'aucune sparsité : les compter dit combien de

@@ -5,6 +5,11 @@ fichier **GGUF autonome par cluster d'experts**, avec un manifeste qui porte la
 correspondance ; un nœud n'ouvre que ce qu'il sert — mesuré **3,20 Go au lieu de
 18,56** et **625 ms au lieu de 3,9 s** sur Qwen3-30B-A3B.
 
+**Et c'est le mécanisme de placement** : ces grappes sont les neurones qu'on
+répartit entre nœuds, et le flux d'activation se route de l'une à l'autre
+(`docs/vision.md`, axes 2-3). Le découpage n'est donc pas qu'un rangement de
+fichiers : c'est la carte des grappes entre composants et machines.
+
 Outil : [`tools/convertir_clusters.py`](../tools/convertir_clusters.py).
 
 ## Le problème

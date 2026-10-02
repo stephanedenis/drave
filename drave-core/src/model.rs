@@ -89,7 +89,6 @@ pub fn manques_architecture(g: &Gguf, cfg: &Cfg, ctx: usize, clusters: bool) -> 
     // trois couches denses puis des couches MLA, et regarder la première
     // laissait passer le modèle jusqu'au panic « attn_q absent » de la couche 3.
     let quelque_part = |suffixe: &str| g.tensors.iter().any(|t| t.name.ends_with(suffixe));
-    let a = |n: &str| g.tensor(n).is_some();
     let mut manques: Vec<&str> = Vec::new();
     if quelque_part("hc_attn_fn.weight") || quelque_part("hc_ffn_fn.weight") {
         manques.push("hyper-connexions (hc_attn_fn, hc_ffn_fn, hc_mult)");
@@ -116,26 +115,36 @@ pub fn manques_architecture(g: &Gguf, cfg: &Cfg, ctx: usize, clusters: bool) -> 
         manques.push("projection de sortie à rang faible groupée (attn_output_a/attn_output_b, o_groups)");
     }
     // DeepSeek-V4 : l'attention n'est pas la MLA « simple » de GLM/Kimi.
-    // `attn_derope` renvoie la sortie d'attention dans le repère non tourné,
-    // les sinks sont des logits appris par tête, et surtout `compress_ratios`
-    // fait cohabiter TROIS attentions dans le même modèle : compressée à
-    // candidats (CSA/LID), compressée simple (HCA) et brute. Les implémenter à
-    // moitié donnerait des nombres faux sans rien casser — c'est exactement ce
-    // que ce contrôle doit empêcher.
-    if quelque_part("attn_derope") || a("blk.0.attn_sinks.weight") {
-        manques.push("attention V4 : dé-rotation de sortie et puits par tête");
+    // `attn_derope` renvoie la sortie d'attention dans le repère non tourné et
+    // surtout `compress_ratios` fait cohabiter TROIS attentions dans le même
+    // modèle : compressée à candidats (CSA/LID), compressée simple (HCA) et
+    // brute. Les implémenter à moitié donnerait des nombres faux sans rien
+    // casser — c'est exactement ce que ce contrôle doit empêcher.
+    //
+    // Les puits par tête (`attn_sinks.weight`), eux, SONT implémentés : gpt-oss
+    // en a et sa porte tourne (`--config` répond « calculable : oui » ; le
+    // chargement, lui, affiche « puits appris sur 36/36 »). Les ranger dans le
+    // même manque faisait répondre « calculable : NON » à un modèle que le
+    // moteur calcule — un refus faux est un refus trompeur.
+    //
+    // Réserve connue : `attn_mla` ne consomme PAS `lay.sinks`. Aucun modèle du
+    // parc ne combine le chemin MLA (`attn_kv_a_mqa`) et des puits ; le jour où
+    // ça arrive, ce test devra refuser (ou `attn_mla` devra les appliquer).
+    if quelque_part("attn_derope") {
+        manques.push("attention V4 : dé-rotation de sortie");
     }
     if g.cfg("compress_ratios").is_some() || g.json_brut("compress_ratios").is_some() {
         manques.push("attentions compressées CSA/HCA (compress_ratios, candidate_*)");
     }
     if quelque_part("attn_q_a.weight") {
-        // Informatif : la MLA à rang faible EST implémentée (`attn_mla`), mais
-        // elle n'a jamais été validée contre une référence sur cette machine —
-        // le dire une fois, à l'ouverture, plutôt que de laisser croire qu'un
-        // modèle qui tourne est un modèle juste.
+        // Informatif : la MLA à rang faible EST implémentée (`attn_mla`) et
+        // validée à la position 0 contre llama.cpp (GLM-5.3) ; l'écart croît
+        // ensuite. Le dire une fois, à l'ouverture, plutôt que de laisser
+        // croire qu'un modèle qui tourne est un modèle juste.
         eprintln!("[mla] attention MLA à rang faible : cache LATENT (c_kv + k_rope), pas de \
-fenêtre glissante ni de YaRN sur ce chemin. Validée contre llama.cpp sur GLM-5.3 : \
-corrélation des logits 0,999024, top-1 3/3 (voir reports/rapport-mla-experts.md).");
+fenêtre glissante ni de YaRN sur ce chemin. Validée contre llama.cpp sur GLM-5.3 à la \
+POSITION 0 : corrélation des logits 0,999024, top-1 3/3 ; l'écart croît ensuite \
+(+0,009 / +0,372 / +0,611 puis +4,070 nat à la position 3 — voir reports/rapport-mla-experts.md §7).");
     }
     manques
 }
@@ -939,7 +948,8 @@ impl Proj {
         else { prune_rows(&mut w, n_out, n_in, keep); }
         // `auto` charge les DEUX formes : le moteur choisit ensuite, par mesure
         // de la densité d'activation, entre dispersion (push) et produit
-        // scalaire dense (pull). Le croisement mesuré est à 10 %.
+        // scalaire dense (pull). Le croisement mesuré est à 22 %
+        // (`seuil_push = 0.22`, `reports/rapport-croisement-push-pull.md`).
         // Six bits empaquetés : même déquantification que les autres chemins,
         // mais la quantification vise la grille [-32, 31] au lieu de [-8, 7].
         if bits6 {
@@ -1516,8 +1526,10 @@ pub struct Model {
     pub swa_pattern: usize,
     pub attn_sinks: usize,
     /// Seuil de bascule push/pull, en fraction de sources actives. Mesuré : les
-    /// deux architectures se croisent à 10 % de densité ; on bascule un peu
-    /// au-dessus pour absorber la marge d'erreur.
+    /// deux architectures se croisent à **22 %** de densité
+    /// (`reports/rapport-croisement-push-pull.md` : le seuil est passé de 0,15 à
+    /// 0,22 après la mesure) ; on bascule un peu au-dessus pour absorber la
+    /// marge d'erreur.
     pub seuil_push: f32,
     /// Token d'arrêt (EOS / <|im_end|>) : la génération s'interrompt dessus.
     pub stop_id: Option<u32>,

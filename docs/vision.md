@@ -46,8 +46,11 @@ Le projet ne prétend pas que la sparsité gagne toujours. Le croisement a été
 **mesuré** : en dessous d'environ **22 % de densité**, le push (listes) bat le
 pull (matvec dense) ; au-dessus, le dense gagne
 (`reports/rapport-croisement-push-pull.md`). C'est pourquoi le moteur garde **les
-deux chemins** et choisit par la mesure, pas par principe — `--dense` existe, et
-les portes de non-régression tournent sur les deux.
+deux chemins** et choisit par la mesure, pas par principe — `--dense` existe, les
+portes de non-régression tournent en dense (`tools/portes.sh`), et le chemin par
+listes a les siennes : **le rejeu d'une trace redonne la même perplexité à
++0,074 % près** (19,4029 contre 19,3885) et l'écart d'activation entre le calcul
+et la trace est de **1,5e-5** (`REPRISE.md` §6, `DRAVE_FLUX_VERIF=1`).
 
 La densité observée, elle, dépend du modèle et de la couche : **17,9 %** sur
 Qwen2.5-0.5B à 512 jetons, mais les FFN denses de certaines familles ne sont pas
@@ -75,9 +78,12 @@ Ce que ces mesures ont appris, et qui n'aurait pas été visible autrement :
 
 * **top 10 % des neurones portent 33,1 % de la magnitude** ; seuls **0,08 %** sont
   « chauds » plus de 90 % du temps — donc un préchargement statique ne paie pas,
-  alors qu'un cache dynamique, si ;
-* `--attn-topk 256` **améliore** la perplexité (234,88 contre 298,56 à contexte
-  2 048) : restreindre l'attention lointaine retire du bruit ;
+  alors qu'un cache dynamique, si (`reports/rapport-localite-activation.md`) ;
+* `--attn-topk 256` **améliore** la perplexité (**gpt-oss**, contexte 2 048, mêmes
+  512 jetons notés : 234,88 contre 298,56 — `docs/contexte-long.md` §6) :
+  restreindre l'attention lointaine retire du bruit ; l'écart A/B fait foi, la
+  valeur absolue dépend des réglages et n'a pas été reproduite depuis
+  (`docs/plan-gpu-topk.md`) ;
 * le capteur hebbien apprend des **journaux d'activation** eux-mêmes
   (`reports/rapport-capteur-hebbien.md`) — le flux n'est pas qu'un objet
   d'exécution, c'est une donnée d'apprentissage.
@@ -87,6 +93,13 @@ un format de trace stable, par couche et par neurone, qu'on puisse rejouer,
 diffuser et comparer entre deux versions d'un modèle ou deux configurations du
 moteur. Le débogage cesse d'être « la perplexité a bougé de 0,01 » pour devenir
 « la couche 23 a changé de régime au jeton 4 096 ».
+
+Et, au-delà du débogage : **lire ces flux pour comprendre le modèle et adapter
+l'architecture à la tâche**. Un flux dit quels experts se réveillent, quels blocs
+une sélection garde, quelles rangées d'une table sont touchées — et une
+architecture qui se règle sur ces mesures n'est plus choisie une fois pour
+toutes. C'est la finalité d'un moteur qui conduit des listes : le journal n'est
+pas un sous-produit, c'est l'instrument de réglage.
 
 ---
 
@@ -103,10 +116,13 @@ C'est l'axe le plus avancé, et il est **mesuré** :
 | experts MXFP4 | cache VRAM LRU | **+6 %** — mesuré, verdict : ne pas activer tel quel |
 | cache KV (hôte) | pagination à la demande | contexte 1 M : **0,03 Go** au lieu de 25,77 Go |
 
+Sources de ce tableau : `docs/contexte-long.md` (KV paginé, attention GPU),
+`reports/rapport-session-2026-09-30.md`, `REPRISE.md` §6.
+
 La leçon de cet axe est une règle de placement : **on place un opérateur là où
 son flux coûte le moins cher**, et on le vérifie. Le même raisonnement mène au
 FPGA : le projecteur événementiel sur Stratix V existe et a été synthétisé
-(../FPGA-Stratix-V/docs/rapport-pe-evenementiel.md), et le bilan multi-matériel
+(../../FPGA-Stratix-V/docs/rapport-pe-evenementiel.md), et le bilan multi-matériel
 (`reports/bilan-multi-materiel.md`) donne le cadre CPU / FPGA / GPU.
 
 Ce qui reste ouvert : la **politique** de placement (aujourd'hui : des seuils
@@ -118,12 +134,12 @@ noyau d'attention — le dernier chemin qui retombe sur le CPU.
 ## 4. Axe 3 — Répartir sur plusieurs machines
 
 **Le transport existe, et c'est l'axe où le projet a le plus avancé depuis.**
-Deux processus se passent des flux (protocole v4 : version, modes dense / listes /
-blocs / **lot**, contrat d'activation complet), le découpage est fidèle au bit
-près (`0,00e0`), le préremplissage par lots tient en un aller-retour par lot, et
+Deux processus se passent des flux (protocole **v5** : version, modes dense /
+listes / blocs / **lot dense** / **lot en listes**, contrat d'activation complet),
+le découpage est fidèle au bit près (`0,00e0`), le préremplissage par lots tient en un aller-retour par lot, et
 `colab/` contient de quoi faire la démonstration sur un runtime distant. Ce qui
-reste : le lot en listes, l'ordonnanceur de placement, le flux de poids depuis le
-NVMe. La
+reste : l'ordonnanceur de placement, le flux de poids depuis le NVMe, et la
+granularité par bloc. La
 raison est dans la nature de la représentation : si le calcul est un flux de
 listes adressées, alors **une liste est une unité de travail autonome**, avec ses
 entrées (les activations), sa sortie (les activations produites) et sa
@@ -144,11 +160,13 @@ Ce qu'il faut définir, dans l'ordre :
 4. **ce qui ne se parallélise pas** : le décodage est **séquentiel** (un jeton
    dépend du précédent) ; c'est le **préremplissage** qui est parallèle par
    nature, et c'est donc là qu'il faut commencer ;
-5. **les mesures à faire** : débit d'un flux sérialisé, latence aller-retour,
-   taille moyenne d'une tranche par couche, et le point où le réseau coûte plus
-   que le calcul économisé.
+5. **les mesures faites** : **1 608 octets** par flux à 256 jetons, 0,25 Mbit/s,
+   latence aller-retour jusqu'à 20 ms, attente ≈ calcul distant + 3,2 × latence
+   (`docs/roadmap.md`) ; restent la granularité par bloc et le point où le réseau
+   coûte plus que le calcul économisé.
 
-Cette section est une **hypothèse de travail**, pas un résultat. Elle est écrite
+Cette section mêle un **acquis** (le transport, fidèle à `0,00e0`) et une
+**hypothèse de travail** (placement, granularité). Elle est écrite
 ici parce qu'aucun autre moteur ne peut l'aborder aussi directement : dans une
 architecture par matrices, l'unité de travail est une matrice entière — dans une
 architecture par listes, c'est une poignée de faits.
@@ -160,10 +178,11 @@ architecture par listes, c'est une poignée de faits.
 Un flux est un **journal**, et un journal se rejoue.
 
 * les **portes de non-régression** du dépôt (Qwen ctx 256 = **19,3885**,
-  gpt-oss ctx 256 = **15,1757**) sont l'application minimale de cette idée :
+  gpt-oss ctx 256 = **15,6017**) sont l'application minimale de cette idée :
   deux chemins d'exécution doivent rendre le même résultat ;
 * les tranches du projet qui ont été validées contre une **référence
-  indépendante** (MLA à **5,2e-7** contre numpy ; vision : patchs 5,4e-7,
+  indépendante** (MLA à **5,2e-7** contre numpy et **0,999024** contre llama.cpp
+  sur GLM-5.3 — `reports/rapport-mla-experts.md` ; vision : patchs 5,4e-7,
   projecteur 1,7e-6) montrent la méthode : une seconde implémentation de la même
   formule, pas une seconde exécution de la même implémentation ;
 * l'enregistrement du flux permettrait le **diff par couche** : après un
@@ -183,11 +202,22 @@ listes **par source** avec échelle par bloc de 32 (`Q8_0`, `Q4_K`, `Q6_K`,
 `MXFP4`), KV quantifié int8/int4 avec échelles par bloc, et des noyaux écrits
 pour **trois matériels** (SIMD x86, PTX sur Quadro, logique FPGA).
 
+Deux cas méritent d'être nommés, parce qu'ils commandent la suite :
+
+* le cas général est la **connexion pondérée** — `(source → destination, poids)` :
+  c'est ce que le moteur transporte, et ce qu'un mélange appris entre plusieurs
+  copies d'un état produit naturellement (les hyper-connexions d'un modèle
+  récent en sont un exemple) ;
+* le cas **trinaire** se passe de valeur : **deux listes**, celle des « + » et
+  celle des « − », le signe étant porté par l'appartenance
+  (`reports/rapport-encodage.md`). L'information est alors dans la structure, pas
+  dans un octet — c'est le point extrême de la représentation choisie ici.
+
 Les chiffres qui comptent, du point de vue de la vision :
 
 * l'int8 sur le cache KV coûte **+1,5 %** de perplexité à 512 jetons et
   **+3,0 %** à 8 192, là où l'int4 coûte +364 % — le débat n'est pas « combien de
-  bits » mais **où sont les échelles** ;
+  bits » mais **où sont les échelles** (`reports/rapport-placement-bits-kv.md`) ;
 * le dépaquetage vectorisé du noyau d'attention a fait passer le f32 de 13,6 à
   **7,0 ms** par couche à 1 M (308 Go/s, 69 % de la bande VRAM) : quand le
   format est bien lu, la mémoire cesse d'être le mur ;
@@ -206,8 +236,10 @@ Pour que le document serve à quelque chose, il doit aussi refuser des choses :
 * **ce n'est pas « un neurone = une décision »** : le profiler montre qu'un petit
   nombre de neurones portent l'essentiel, et qu'un préchargement statique ne paie
   pas — le dynamisme est la condition, pas l'ornement ;
-* **ce n'est pas « distribuer, c'est gratuit »** : l'axe 3 est une hypothèse,
-  avec ses mesures à faire, et le décodage restera séquentiel ;
+* **ce n'est pas « distribuer, c'est gratuit »** : l'axe 3 est **engagé** (le
+  transport est fidèle), avec ses mesures faites (latence, débit, taille des
+  tranches) — mais l'ordonnanceur de placement n'existe pas, et le décodage
+  restera séquentiel ;
 * **ce n'est pas une réécriture** : le moteur Rust actuel *est* cette
   architecture — Drave est le nom de ce qu'il fait déjà, pas un projet parallèle.
 
@@ -219,7 +251,7 @@ Pour que le document serve à quelque chose, il doit aussi refuser des choses :
 |---|---|---|
 | **1. Observer/régler par neurone** | outils en place, mesures faites | format de trace stable + diff par couche |
 | **2. Répartir sur composants** | mesuré (KV, attention, tête, experts) | top-k dans le noyau GPU ; politique de placement réglée par la mesure |
-| **3. Répartir sur machines** | **rien** — hypothèse écrite | contrat d'échange, granularité, mesures de débit |
+| **3. Répartir sur machines** | **transport en place et fidèle** (`0,00e0`, protocole v5, cinq modes) ; mesuré : 1 608 octets/flux, 0,25 Mbit/s, latence ≤ 20 ms | ordonnanceur de placement ; granularité par bloc ; démonstration distante |
 | **4. Rejouer/comparer** | portes de non-régression + références indépendantes | enregistrement du flux, diff |
 | **5. Formats/matériels/énergie** | trois matériels, formats au point | politique de quantification par bloc *choisie* par la mesure, pas par défaut |
 

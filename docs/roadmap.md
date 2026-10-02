@@ -1,6 +1,6 @@
 # Roadmap
 
-> Suite de [`docs/vision.md`](vision.md). Cinq phases, de ce qui se fait **tout de
+> Suite de [`docs/vision.md`](vision.md). Six phases, de ce qui se fait **tout de
 > suite sur cette machine** à ce qui demande une infra (Colab, FPGA). Chaque
 > phase a un critère de succès **mesurable**, et l'état de chaque chantier est
 > marqué : ✅ fait · 🔬 en cours · ⏳ à faire · 🧱 bloqué par une infra absente.
@@ -24,7 +24,7 @@ plus aucun repli silencieux.
 
 | # | chantier | état | critère de succès |
 |---|---|---|---|
-| 1.1 | **Top-k dans le noyau d'attention GPU** — `--attn-topk 256` améliore la perplexité (234,88 contre 298,56 à 2 048) mais retombe sur le CPU | ⏳ | plus aucun repli CPU dans le chemin long contexte |
+| 1.1 | **Top-k dans le noyau d'attention GPU** — `--attn-topk 256` améliore la perplexité (gpt-oss, 234,88 contre 298,56 à 2 048 — `docs/contexte-long.md` §6 ; valeur absolue non reproduite depuis, cf. `docs/plan-gpu-topk.md`) mais retombe sur le CPU | ⏳ | plus aucun repli CPU dans le chemin long contexte |
 | 1.2 | **Quantification choisie par la mesure** : par couche, par tenseur, plutôt qu'un réglage global | 🔬 | la densité par couche varie de **20 % à 56 %** (`reports/rapport-analyse-flux.md`) : la décision push/pull est une propriété de la COUCHE, pas du modèle |
 | 1.3 | **Purge des seuils codés en dur** : le placement (KV, experts, tête) décidé par une règle explicite, pas par un `if` | ⏳ | une table de décision documentée, réglée par des mesures |
 | 1.4 | **Écart int8 résiduel** (+3,0 % contre +0,8 % chez llama.cpp à 8 192) | ✅ | **attribué** : tout l'écart est dans les CLÉS (clés f32 + valeurs int8 = +0,023 % ; l'inverse = +3,01 %) ; **courbe du placement des bits faite** (`reports/rapport-placement-bits-kv.md`) — à taille égale, mettre les bits sur les clés change l'erreur d'un facteur 130 à 840. Suite FAITE : **clés f16 = +0,018 % pour 39 % de la taille f32** — le meilleur réglage mesuré (`DRAVE_KV_BITS=8 DRAVE_KV_K_F16=1`) |
@@ -52,7 +52,7 @@ défini avant.
 
 | # | chantier | état | critère de succès |
 |---|---|---|---|
-| 3.1 | **Contrat d'échange v1** : tranche de liste = en-tête (couche, source, échelle, bits) + paires (destination, valeur) | ✅ | format écrit, relu, rejoué sans perte (phase 0.3/0.3bis) ; **transport TCP en place et FIDÈLE** (`--flux-serveur`, `--ppl-reparti`) — écart local/réparti **0,00e0** sur 40 et 200 jetons (39 et 199 flux : le dernier n'a rien à prédire), après correction de deux défauts (plage de couches ignorée par `forward`, norme finale appliquée deux fois) |
+| 3.1 | **Contrat d'échange** (protocole v5) : tranche de liste = en-tête (couche, source, échelle, bits) + paires (destination, valeur) | ✅ | format écrit, relu, rejoué sans perte (phase 0.3/0.3bis) ; **transport TCP en place et FIDÈLE** (`--flux-serveur`, `--ppl-reparti`) — écart local/réparti **0,00e0** sur 40 et 200 jetons (39 et 199 flux : le dernier n'a rien à prédire), après correction de deux défauts (plage de couches ignorée par `forward`, norme finale appliquée deux fois) |
 | 3.2 | **Granularité** : par couche, par bloc de canaux, par expert | ✅ | listes i16, **échelles par bloc (i8)** et **indices par écarts** (1 608 octets par flux à 256 jetons) ; **mode 4 « lot en listes »** : 1,5 ko par jeton contre 3,5 en dense (÷2,3) pour 3,03e-2 d'écart ; reste le cas MoE |
 | 3.3 | **Seuil de rentabilité** : à partir de quel débit réseau le découpage gagne | 🔬 | mesuré jusqu'à 20 ms de latence par message (`tools/proxy_latence.py`) : **attente ≈ calcul distant + 3,2 × latence**, soit 1,01× le calcul local à 0 ms, 1,99× à 5 ms, 4,89× à 20 ms — le débit ne compte pas (0,25 Mbit/s), la latence compte quatre fois |
 | 3.4 | **Démonstration Colab** : préremplissage réparti (le décodage reste séquentiel — c'est écrit dans la vision) | 🔬 | **le préremplissage par lots sur le fil est FAIT et fidèle** (mode 3 : 256 jetons en 4 lots, écart **0,00e0** ; en 1 lot de 917 ko, **0,00e0**) — reste à le faire tourner sur le runtime Colab, recette dans `docs/colab-reparti.md` |
@@ -183,7 +183,8 @@ coûte +0,023 % là où clés int8 + valeurs f32 coûte +3,01 % (facteur 130), e
 Les **clés en f16** sont mesurées : clés f16 + valeurs int8 = **+0,018 %** à
 8 192 jetons pour **39 % de la taille f32** — le meilleur réglage de la courbe
 (les clés f32, à 64 % de la taille, font +0,023 % ; l'int8 complet, à 28 %, +3,04 %).
-La mesure clés f16 + valeurs int4 est en cours.
+Clés f16 + valeurs int4 : **+0,61 %** à 33 % de la taille f32
+(`reports/rapport-placement-bits-kv.md`).
 
 Deux suites, écrites avec leur critère de succès : **clés f32 · valeurs int4**
 (62,5 % de la taille f32 — si les valeurs tolèrent 4 bits, ce réglage bat l'int8
@@ -247,7 +248,8 @@ Il a fallu **deux corrections** pour y arriver, et la première ne suffisait pas
    flux résiduel brut, et la norme appartient au nœud qui possède la tête de
    sortie — une seule fois.
 
-Le protocole, lui, n'a pas changé d'un octet : c'est le moteur qui était faux.
+Le protocole, lui, n'a pas changé **pour cette correction** (l'en-tête, lui, est
+passé de 39 à 79 octets en v4) : c'est le moteur qui était faux.
 
 **Puis le transport lui-même** : `--flux-liste` fait voyager la LISTE (indice
 u16, valeur i16, une échelle), c'est-à-dire le format du disque, au lieu du
@@ -304,6 +306,6 @@ Chiffres des trois états, mesurés sur le même banc de 40 jetons :
 Ce qui est donc ACQUIS : le cadriciel d'échange, la séparation en deux nœuds, la
 plage de couches par nœud, la norme finale appliquée par le seul nœud qui a la
 tête — et la preuve que le découpage ne change pas un chiffre, **y compris par
-lots** (mode 3 : 256 jetons en 4 lots, écart 0,00e0). Ce qui reste : le lot en
-listes (mode 4), l'ordonnanceur de placement, et la démonstration sur Colab, dont
-la recette est prête (`colab/`).
+lots** (mode 3 : 256 jetons en 4 lots, écart 0,00e0). Ce qui reste :
+l'ordonnanceur de placement, et la démonstration sur Colab, dont la recette est
+prête (`colab/`). Le **mode 4 « lot en listes »** est fait et mesuré (§ 3.2).

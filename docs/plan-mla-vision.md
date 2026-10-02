@@ -1,9 +1,9 @@
 # Plan : MLA et vision (chantier 5)
 
-Ces deux-là ne sont pas « à moitié faits » : ils ne sont pas commencés, et ce
-document dit exactement par quoi commencer, pour qu'une session suivante n'ait
-pas à refaire l'enquête. Rien ici n'est mesuré — c'est une feuille de route, et
-elle est marquée comme telle.
+Ces deux-là n'étaient pas « à moitié faits », ils n'étaient pas commencés quand
+ce document a été écrit ; **ils ont été menés depuis**, et ce document consigne
+maintenant ce qui a été fait (les sections d'état portent leurs mesures) et ce
+qui reste. Ce qui reste à faire est marqué comme tel.
 
 ## 1. MLA (attention latente, DeepSeek-V2/V3)
 
@@ -52,7 +52,11 @@ partie « rope », le reste de Q/K est **non tourné**, c'est le « decoupled Ro
    (matrice `[512, n_head × 192]`, soit ~1 Mo en Q8 : le coût est réel mais petit
    devant le cache économisé).
 
-### ÉTAT : MLA EST FAIT ET VALIDÉ
+### ÉTAT : MLA EST FAIT ET VALIDÉ (chemin dense ; compteur d'événements à instrumenter)
+
+> Le chemin validé ici est **dense** : il ne produit aucune liste. C'est le premier
+> écart que le chantier DeepSeek-V4 doit combler — une passe de V4.1 afficherait
+> « 0 événements » (`docs/plan-deepseek41-complet.md`, P0).
 
 Le moteur charge un modèle MLA (`attn_kv_a_mqa` reconnu à ses tenseurs, sans
 aucune clé de configuration nouvelle — les rangs se lisent dans les FORMES) et
@@ -81,7 +85,9 @@ Reste à faire pour MLA : le contrôle négatif (avec `W_kv_b = I` et
 une MQA ordinaire) — la comparaison numpy le rend moins indispensable, mais il
 relierait l'implémentation à une autre DÉJÀ validée par les portes de
 non-régression. Et le branchement du cache latent dans le plan 1 M (mesurer le
-cache ÷50 sur un vrai modèle MLA, ce qu'on n'a pas ici).
+cache ÷50 sur un vrai modèle MLA — GLM-5.3, 79 couches MLA, est présent ici
+depuis le 01/10 — et la validation **au-delà de la position 2**, où l'écart à
+llama.cpp atteint 4,07 nats à la **position 3** (`reports/rapport-mla-experts.md` §7).
 
 ### État du harnais : FAIT
 
@@ -284,7 +290,9 @@ une tranche.
 C'est le plus gros morceau du dépôt : une tour ViT complète, un chemin
 d'injection d'embeddings, et une chaîne de pré-traitement d'image. À mener APRÈS
 MLA, dont le chemin d'injection (`c_kv`) est plus simple et dont le gain
-(cache ÷50) est mesurable sur le plan 1 M.
+(cache ÷50) est mesurable sur le plan 1 M. Ce plan ne traite ni la répartition
+entre grappes et machines, ni la lecture des flux : ces deux axes ont leurs
+propres chantiers (`docs/vision.md` §3-§4).
 
 ### Le point d'injection est en place (le seul ajout d'architecture)
 
@@ -294,7 +302,8 @@ d'injecter les embeddings d'image à la place des jetons `<|image_pad|>`, et
 c'était le seul ajout d'architecture que la vision demandait au moteur — le
 reste (MLA, tour ViT) vit dans des chemins séparés.
 
-Vérifié : `cargo test` 6/6 et la porte Qwen reste à **19,3885** (le vecteur
+Vérifié : `cargo test` 6/6 à cette étape (**48** aujourd'hui) et la porte Qwen
+reste à **19,3885** (le vecteur
 imposé est consommé une fois puis oublié, donc le chemin standard est intact).
 
 ### Ce qui reste, et ce qui le débloque

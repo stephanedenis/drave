@@ -88,9 +88,33 @@ route "Kimi-K2.7 : sigmoïde ×2,827" "$M/Kimi-K2.7-Code-UD-IQ1_M/Kimi-K2.7-Code
 route "V4-Flash : racine de softplus" "$M/DeepSeek-V4-Flash-UD-IQ1_M/DeepSeek-V4-Flash-UD-IQ1_M-00001-of-00003.gguf" "racine de softplus"
 route "Qwen3-235B : softmax" "$M/Qwen3-235B-A22B-Q2_K/Qwen3-235B-A22B-Instruct-2507-Q2_K-00001-of-00002.gguf" "softmax"
 
-# 7. gpt-oss : le seul long.
+# 7. gpt-oss : `--config` d'abord (gratuit), puis la perplexité (~20 min).
+#    La porte `--config` existe parce qu'un refus FAUX est un refus trompeur :
+#    `attn_sinks` était compté comme un manque V4 alors que les puits appris sont
+#    implémentés, et gpt-oss répondait « calculable : NON » (corrigé le 02/10).
 if [ "$RAPIDE" != "rapide" ]; then
-    echo "  (gpt-oss ~20 min et les portes de formats : lancez-les, ils sont hors de ce script)"
+    O=/home/stephane/Data13TB/stephane/modeles/gguf/gpt-oss-120b-MXFP4.gguf
+    if [ -f "$O" ]; then
+        v=$($D "$O" --config 2>/dev/null | grep -oE "calculable +: .*")
+        case "$v" in
+            *": oui"*) printf "  %-42s %s  ✅\n" "gpt-oss : --config le dit calculable" "oui" ;;
+            *)         printf "  %-42s %s  ❌\n" "gpt-oss : --config le dit calculable" "${v:-—}"; ECHEC=1 ;;
+        esac
+        # Les identifiants viennent du tokenizer du modèle, jamais d'un autre.
+        if [ ! -s /tmp/ids_oss_512.txt ]; then
+            [ -s /tmp/wt2_txt.txt ] || head -c 20000 data/wikitext2_test.txt > /tmp/wt2_txt.txt
+            $D "$O" --tokenize --fichier /tmp/wt2_txt.txt --sortie /tmp/ids_oss_512.txt >/dev/null 2>&1
+        fi
+        if [ -s /tmp/ids_oss_512.txt ]; then
+            p=$(timeout 2400 $D "$O" --ppl /tmp/ids_oss_512.txt --ctx 256 --dense \
+                --threads 16 --limit 512 2>&1 | valeur)
+            compare "gpt-oss-120b MXFP4 ctx 256" "15.6017" "$p"
+        else
+            printf "  %-42s %s\n" "gpt-oss-120b MXFP4 ctx 256" "identifiants indisponibles"
+        fi
+    else
+        printf "  %-42s %s\n" "gpt-oss-120b MXFP4 ctx 256" "modèle absent"
+    fi
 fi
 
 echo ""

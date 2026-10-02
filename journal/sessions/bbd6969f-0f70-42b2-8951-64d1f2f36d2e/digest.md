@@ -66447,3 +66447,3842 @@ Updated file
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='REPRISE.md'; s=open(p).read()\ns = s.replace(\"\"\"## Plan pour exécuter DeepSeek-V4.1 (02/10)\n\n[`docs/plan-deepseek41-complet.md`](docs/plan-deepseek41-complet.md) — neuf phases,\"\"\",\n\"\"\"## Plan pour exé … [3524 caractères tronqués]`
+
+  ```
+5a6ac96 Plan V4.1, version 2 : les flux d'abord — c'est ce qui distingue Drave
+  Qwen3-235B : softmax                       softmax  ✅
+
+toutes les portes sont vertes
+  ```
+
+### 🤖 Assistant
+
+Vous avez raison, et mon premier plan était à côté : il visait « faire passer le forward de V4.1 », c'est-à-dire refaire llama.cpp. Je l'ai réécrit (`docs/plan-deepseek41-complet.md`, version 2, commit `5a6ac96`).
+
+## Ce que la correction change
+
+**V4.1 est déjà fait de flux — et ce sont des listes au sens de Drave** :
+
+| mécanisme V4.1 | nature en langage Drave |
+|---|---|
+| 6 experts sur 384 | liste d'experts par jeton (déjà tracée) |
+| `ffn_gate_tid2eid` | routage par **table** : liste fixée par le jeton, aucun score |
+| `attn_compressor_gate` | **sélection de blocs** — une liste de blocs gardés par jeton |
+| indexeur CSA | **liste de 2 048 candidats** par jeton : ce que l'attention *voit* |
+| hyper-connexions | **24 connexions pondérées** (4 + 4 + 16) par jeton et par couche |
+| engram | **liste d'adresses** touchées : n-gramme → rangées |
+
+**Trois de ces flux n'existent dans aucun moteur connu** — le gate du compresseur, la sélection de candidats, le mélange HC. Les tracer n'est pas un accessoire d'implémentation : c'est l'apport.
+
+## Les deux conséquences dans le plan
+
+**1. Chaque phase a maintenant deux portes.** La correction (comparaison à llama.cpp sur V4-Flash, étage par étage) **et** Drave : nombre d'événements par jeton, trace écrite puis **rejouée à l'identique**, découpage en grappes qui donne la même perplexité, et le flux nouveau lisible par un outil.
+
+**2. Le premier écart à combler n'est pas la conformité des logits, c'est le silence.** Une passe de V4.1 afficherait aujourd'hui **« 0 événements »** : le chemin MLA et le chemin experts-IQ travaillent en f32 dense. La phase P0 instrumente ces compteurs avant toute autre chose — sinon on avancerait dans le sens d'un moteur dense sans s'en apercevoir.
+
+Trois autres points qui découlent de votre définition :
+
+- **P1 trace les hyper-connexions comme des connexions pondérées** et pose la question exploitable : combien des 16 poids de `comb` sont significatifs, et sont-ils stables d'un jeton à l'autre ? Si 12 sur 16 sont négligeables, la couche se simplifie — et c'est mesuré, pas supposé.
+- **P5 mesure la stabilité de la liste de candidats** (recouvrement entre jetons consécutifs, périodicité) et teste une variante « candidats du jeton précédent + vérification ». C'est exactement le genre de gain que llama.cpp ne cherche pas.
+- **P6 exige la répartition** : V4-Flash découpé en `cluster-XX.gguf`, puis `--ppl-reparti` entre **deux processus**, avec la même perplexité qu'un nœud unique. Un modèle qui ne se place pas sur des grappes n'est pas exécuté « dans Drave ».
+
+Les trois faits mesurés qui structurent l'ordre restent : llama.cpp ne connaît pas `deepseek41` (aucune référence externe) → **V4-Flash est le banc d'essai** (llama.cpp le lit : 1 325 tenseurs, NLL 11,737) → et V4.1-Flash-Q2 n'a pas ses tenseurs `output_hc_*` alors qu'il déclare `hc_mult = 4`, ce qui est une question de provenance à trancher avant d'écrire du code.
+
+Budget : 5 à 6 journées, ~20 passes de validation, nouveaux outils `analyse_hc.py` et `analyse_candidats.py`. Portes du dépôt vertes après le commit.
+
+
+## Tour 74
+
+### 👤 Utilisateur
+
+révise tous les documents du dossie docs afin de t'asssurer qu'ils sont cohérent avec la vision Drave
+
+### 🤖 Assistant
+
+⏵ Inventaire du dossier docs pour cadrer la révision
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && wc -w docs/*.md | sort -n | tail -20; echo \"=== total ===\"; cat docs/*.md | wc -w; echo \"=== git status docs ===\"; git log --oneline -3 -- docs/ | cat", "description": "Survey the docs folder"}`
+
+  ```
+575 docs/sprints.md
+   675 docs/histoire.md
+   855 docs/plan-deepseek-v4-flash.md
+  1072 docs/colab-reparti.md
+  1310 docs/comparaison-spiking.md
+  1451 docs/format-clusters.md
+  1502 docs/plan-modeles-lourds.md
+  1587 docs/plan-gpu-topk.md
+  1806 docs/format-flux.md
+  1830 docs/programme-recherche.md
+  2175 docs/vision.md
+  2785 docs/plan-deepseek41-complet.md
+  2807 docs/convertisseur.md
+  3812 docs/plan-prefill-reparti.md
+  3906 docs/roadmap.md
+  4897 docs/plan-mode4-lot-listes.md
+  5778 docs/contexte-long.md
+  6116 docs/plan-mla-vision.md
+ 44939 total
+=== total ===
+44939
+=== git status docs ===
+5a6ac96 Plan V4.1, version 2 : les flux d'abord — c'est ce qui distingue Drave
+386c857 Plan pour exécuter DeepSeek-V4.1 : neuf phases, chacune avec sa porte
+954e086 Prelecture parallele : implementee, mesuree, sans effet (0,3 %)
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/vision.md"}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/vision.md</path>
+<type>file</type>
+<content>
+1: # Drave — la vision
+2: 
+3: > *« Stream of logs »* : le flux des listes. Et, en français d'ici, **la drave** —
+4: > ces billots qu'on confiait à la rivière au printemps, qu'on guidait de
+5: > l'estacade jusqu'à la scierie. Le nom dit exactement ce que fait ce moteur :
+6: > il ne lit pas des matrices, il conduit un flux.
+7: 
+8: Ce document est la **vision** du projet : ce qu'il cherche, pourquoi la
+9: représentation qu'il a choisie change la nature des problèmes, et ce que cela
+10: ouvre sur chaque axe. Il ne remplace pas les rapports — chaque affirmation
+11: mesurée renvoie à celui qui la porte — et il distingue partout ce qui est
+12: **mesuré**, ce qui est **raisonné**, et ce qui est **à faire**.
+13: 
+14: Le projet s'appelait `Qtrinet`, du nom de son origine : un cahier des charges
+15: d'inférence ternaire sur un cluster de cartes Stratix V
+16: (`Qtrinet-bootstrap.md`). Ce cahier des charges reste l'acte de naissance ; le
+17: nom, lui, ne dit plus ce que le projet est devenu. **Drave** le dit.
+18: 
+19: ---
+20: 
+21: ## 1. Le cœur : des listes, pas des matrices
+22: 
+23: Un moteu
+… [12746 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/programme-recherche.md", "limit": 80}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/programme-recherche.md</path>
+<type>file</type>
+<content>
+1: # Programme de recherche — vers une intelligence locale
+2: 
+3: **Objet.** Définir une feuille de route vérifiable vers un système capable
+4: d'apprendre et d'évoluer *localement*, sur du matériel qu'une personne possède,
+5: sans centre de données. Ce document ne promet pas l'AGI : il définit des paliers
+6: **mesurables** et nomme ce qui, aujourd'hui, n'est pas démontré.
+7: 
+8: **Règle du programme.** Chaque affirmation est mesurée, chaque erreur est
+9: consignée. Sept affirmations de ce projet ont déjà été retirées ou corrigées
+10: (encodage ×2,17 retiré pour violation de Kraft, divergence fantôme, tokenizer
+11: non conforme, roofline corrigée, coût du mode liste inversé, 4 bits sans gain).
+12: C'est la méthode, pas un accident : **une trace de recherche qui ne contient pas
+13: ses erreurs ne vaut rien.**
+14: 
+15: ---
+16: 
+17: ## 1. Thèse
+18: 
+19: Une intelligence locale doit être **traçable**, **incrémentale**, **bornée en
+20: énergie** et **capable d'évoluer sans salle machine**. Les piles denses
+21: généralistes optimisent une seule de ces dimensions — le débit
+… [3684 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+Les deux documents de référence sont solides. Je lance quatre revues adverses en parallèle sur les 16 autres, puis j'appliquerai les corrections moi-même.
+
+- **subagent** `{"description": "Audit vision : pilotage", "prompt": "Tu es relecteur ADVERSE. Tu ne modifies AUCUN fichier : tu produis un rapport de constats, avec citations exactes et numéros de ligne.\n\nContexte : le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet contient un moteur d'inférence nommé **D … [4069 caractères tronqués]`
+
+  ```
+started subagent 8b315bb2-abba-4033-b3d4-177d04b4f194
+  ```
+
+- **subagent** `{"description": "Audit formats et transport", "prompt": "Tu es relecteur ADVERSE. Tu ne modifies AUCUN fichier : tu produis un rapport de constats, avec citations exactes et numéros de ligne.\n\nContexte : le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet contient un moteur d'inférence nommé  … [3862 caractères tronqués]`
+
+  ```
+started subagent 34e1d4be-3708-4065-ae77-eca21f86e857
+  ```
+
+- **subagent** `{"description": "Audit plans moteur", "prompt": "Tu es relecteur ADVERSE. Tu ne modifies AUCUN fichier : tu produis un rapport de constats, avec citations exactes et numéros de ligne.\n\nContexte : le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet contient un moteur d'inférence nommé **Drave* … [3418 caractères tronqués]`
+
+  ```
+started subagent 4b146dfd-ce0b-4af8-910f-610ab438d4e6
+  ```
+
+- **subagent** `{"description": "Audit plans lot et modèles", "prompt": "Tu es relecteur ADVERSE. Tu ne modifies AUCUN fichier : tu produis un rapport de constats, avec citations exactes et numéros de ligne.\n\nContexte : le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet contient un moteur d'inférence nommé  … [3544 caractères tronqués]`
+
+  ```
+started subagent 5c1bbea7-1d14-47b6-a48c-fea15f2b857e
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls reports/ | grep -i coherence; tail -30 reports/rapport-coherence-docs-2.md", "description": "Check the earlier coherence audits"}`
+
+  ```
+rapport-coherence-docs-2.md
+rapport-coherence-docs.md
+  `docs/plan-gpu-topk.md`) : seuls leurs points d'ancrage au code ont été vérifiés,
+  pas leurs projections.
+
+## Résumé (10 lignes)
+
+1. 66 affirmations revérifiées après les changements du 30/09 : 27 OK, 17 PÉRIMÉ,
+   14 CONTRADICTOIRE, 8 MANQUANT.
+2. Le défaut n°1 est le **cache KV** : « 75 %/50 % » (REPRISE, roadmap, rapport
+   d'attribution) contre « 64 %/28 % » dans le rapport de la campagne complète et
+   dans le tableau de REPRISE lui-même.
+3. Le défaut n°2 est **R4** : le plan affirme que `n == 0` et le plafond de 256 Mo
+   sont refusés ; seul le plafond est dans le code (`verifier_taille`), sans test
+   du cas `n == 0`.
+4. Le défaut n°3 est le **mélange des époques** de l'en-tête : « 39 octets +
+   version 4 » est impossible depuis `d59d061` (v4 = 79 octets) ; cela contamine
+   `rapport-transport-liste.md`, `REPRISE` §6bis, `roadmap:56` et `phase3:62`.
+5. `docs/plan-prefill-reparti.md` reste globalement un plan d'époque : son bandeau
+   dit v4 mais pas les 79 octets, et son diagnostic `DRAVE_FLUX_POS` n'existe pas.
+6. `docs/format-flux.md` est à jour sur la v4 mais pas sur le disque : la v3 n'a ni
+   disposition d'octets
+… [706 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== vision : axe 3 ===\"; grep -n \"rien.*hypothèse\\|hypothèse écrite\" docs/vision.md; echo \"=== en-tête 39/79 octets ===\"; grep -rn \"39 octets\\|79 octets\" docs/*.md | head -8; echo \"=== KV 75/50 vs 64/28 ===\"; grep - … [236 caractères tronqués]`
+
+  ```
+=== vision : axe 3 ===
+222:| **3. Répartir sur machines** | **rien** — hypothèse écrite | contrat d'échange, granularité, mesures de débit |
+=== en-tête 39/79 octets ===
+docs/format-flux.md:87:en-tête (79 octets, identique à l'aller et au retour)
+docs/format-flux.md:158:de **39 octets** (protocole v3, avant les top-k) : ajouter 40 octets par flux pour
+docs/plan-mode4-lot-listes.md:23:| nouveau mode ou nouveau champ ? | **mode 4** (`MODE_LOT_LISTES`), en-tête **inchangé** (79 octets) | le corps est variable par construction (chaque état a son nombre d'actifs) ; `n` (offset 18) porte déjà le nombre d'ÉTATS, comme en mode 3 |
+docs/plan-mode4-lot-listes.md:34:### 1.1 En-tête : 79 octets, identique aux modes 0–3
+docs/plan-mode4-lot-listes.md:112:mode 2 par jeton : l'en-tête de 79 octets est amorti et le corps du mode 2
+docs/plan-mode4-lot-listes.md:186:1. Lire les 79 octets d'en-tête ; magie ; **version == 5** (refus immédiat,
+docs/plan-mode4-lot-listes.md:241:   en-tête de 79 octets (mode 4, `n = t`, échelle 0, `Act::du_modele`), puis
+docs/plan-prefill-reparti.md:30:| nouveau mode ou champ `t` ? | **mode 3** (`MODE_LOT`), pas de champ | le corps dense d'un lot est `t × hidden × 4` : `n
+… [2040 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"39 octets\\|79 octets\" docs/plan-prefill-reparti.md | head -5; echo \"=== ce que dit le code ===\"; grep -n \"TAILLE_TETE\\|const TAILLE\" drave-core/src/main.rs | head -4; grep -n \"TAILLE_TETE: usize\" -A 2 drave-core/sr … [88 caractères tronqués]`
+
+  ```
+30:| nouveau mode ou champ `t` ? | **mode 3** (`MODE_LOT`), pas de champ | le corps dense d'un lot est `t × hidden × 4` : `n` (offset 18) porte déjà le compte, l'en-tête reste **39 octets**, tous les offsets existants sont stables |
+38:### 1.1 En-tête (39 octets, identique à l'aller et au retour)
+88:* L'ordre de lecture compte : `recevoir_flux` lit les **39 octets** de l'en-tête
+150:Même contrat qu'`envoyer_flux` : construit l'en-tête de 39 octets (mode 3, `n = t`,
+370:2. **Un octet de trop dans l'en-tête** — 39 octets lus, 39 à écrire. Le
+=== ce que dit le code ===
+1897:const TAILLE_TETE: usize = 4 + 1 + 1 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 1
+2048:    let mut t = Vec::with_capacity(TAILLE_TETE);
+2065:    assert_eq!(t.len(), TAILLE_TETE,
+2066:               "en-tête de flux de {} octets pour {TAILLE_TETE}", t.len());
+1897:const TAILLE_TETE: usize = 4 + 1 + 1 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 1
+1898-                            + 4 + 4 + 4 + 7 * 4;
+1899-
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"MODE_LOT_LISTES\\|MODE_LOT\\b\\|const VERSION\" drave-core/src/main.rs | head -8; echo \"=== ce que dit portes.sh / REPRISE sur le mode 4 ===\"; grep -rn \"mode 4\" REPRISE.md | head -4", "description": "Check whether mode  … [18 caractères tronqués]`
+
+  ```
+1862:const VERSION_FLUX: u8 = 5;
+1879:const MODE_LOT: u8 = 3;
+1886:const MODE_LOT_LISTES: u8 = 4;
+2180:    let tete = tete_flux(MODE_LOT, debut, fin, pos0, t, 0.0, Some(mdl));
+2216:    let tete = tete_flux(MODE_LOT_LISTES, debut, fin, pos0, t, 0.0, Some(mdl));
+2265:    if n == 0 && matches!(mode, MODE_DENSE | MODE_LOT | MODE_LOT_LISTES) {
+2271:        MODE_DENSE | MODE_LISTE | MODE_BLOCS | MODE_LOT | MODE_LOT_LISTES => {}
+2274:{MODE_LOT_LISTES}, protocole v{VERSION_FLUX})"))),
+=== ce que dit portes.sh / REPRISE sur le mode 4 ===
+368:### Créneau 15h07 → 18h00 : le mode 4, et la frontière KV confirmée
+370:**Le protocole est en version 5** avec un cinquième mode : le **mode 4 « lot en
+381:devenu IMMÉDIAT, avant tout octet de corps. **17 tests**, dont quatre sur le mode 4
+605:  dimension, 100 millions de blocs, cumul au-delà des 256 Mo), quatre sur le mode 4
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '1,12p' docs/plan-mode4-lot-listes.md; echo \"=== plan-prefill-reparti, en-tête ===\"; sed -n '1,12p' docs/plan-prefill-reparti.md", "description": "Read the two plans' headers"}`
+
+  ```
+# Spécification — mode 4 : le **lot en listes** (protocole v5)
+
+> **État : ÉCRIT, mesuré et relu** (voir `reports/rapport-mode4-lot-listes.md`) — ce plan
+> reste la référence de conception, et les écarts constatés à la mise en œuvre sont
+> consignés dans ce rapport (version 5, borne des actifs, garde cumulatif). Ce document est la spécification à implémenter ; aucun
+> fichier de code n'a été touché pour l'écrire. Il suppose connus
+> `docs/format-flux.md` (protocole v4, modes 0–3) et `docs/plan-prefill-reparti.md`
+> (le mode 3, mis en œuvre, et ses leçons). Les numéros de ligne sont ceux de
+> l'arbre au moment de la rédaction (`VERSION_FLUX = 4`, `TAILLE_TETE = 79`,
+> `MODE_LOT = 3`).
+
+**En une ligne** : le mode 3 transporte `t` états en f32 dense — 3 589 octets par
+=== plan-prefill-reparti, en-tête ===
+# Plan — le préremplissage par lots sur le fil (phase 3.4)
+
+> **État (30/09, après mise en œuvre).** Ce plan a été suivi : le mode 3 existe,
+> le préremplissage par lots est fidèle (écart **0,00e0** en 4 lots de 64 comme en
+> un seul lot) et `reports/rapport-prefill-reparti.md` consigne les mesures. Trois
+> écarts au plan, tous volontaires : la version du protocole est passée à **5**
+… [397 caractères tronqués]
+  ```
+
+- **list_agents** `{}`
+
+  ```
+e7dfe34f-d596-4f98-93c2-cad5a92d3b1e [ready] — Harness logits llama.cpp
+c25f97d1-9a4d-41da-b983-004f793afe43 [ready] — Audit ignored CLI flags
+7d0d2578-0048-4998-8494-7d2daef56769 [ready] — Spec batched prefill protocol
+15fd322f-7e9e-48c0-a970-f36335eb622a [ready] — Trace format compaction study
+bcfe0b97-1795-4610-8e8b-b598ca1ba6cb [ready] — Adversarial review of recent commits
+42059fde-f06f-4e2c-9a23-8292d887fb6e [ready] — Docs vs measurements consistency audit
+7c876089-605c-4836-930e-925a66028509 [ready] — Review the afternoon fixes
+da69b1fa-91b0-4c69-bb2b-58bf00e92e28 [ready] — Spec for lot-in-lists mode 4
+aa5f9fc5-9450-4118-b65f-e8b99a28519d [ready] — Docs audit after today's changes
+5ce3f080-2d3d-467a-8ee1-df697f3f3e68 [ready] — Adversarial review of mode 4
+5185ccb1-be24-4716-89df-62621e790444 [ready] — Review the last-hour fixes
+564fbe3a-a859-4b3b-bd17-4da73a2f4e22 [ready] — Adversarial review GPU topk
+8e04c99a-8ba1-4675-9f80-fa3338449b17 [ready] — Vérifier chiffres et cohérence docs
+c776b71f-525a-4bad-b83c-eff1c2d204ff [ready] — Revue adversariale du branchement top-k
+6d0c1d28-76e1-42f8-9e8c-7f88395f9e55 [ready] — Revue adverse du noyau fusionné
+4d7a793b-74d1-4c46-bb53-21953
+… [880 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== où la vision est-elle citée depuis les docs ? ===\"; grep -ln \"vision.md\" docs/*.md README.md REPRISE.md 2>/dev/null; echo \"=== docs qui ne mentionnent ni listes ni grappes ===\"; for f in docs/*.md; do if ! grep -qE \" … [131 caractères tronqués]`
+
+  ```
+=== où la vision est-elle citée depuis les docs ? ===
+docs/histoire.md
+docs/roadmap.md
+README.md
+REPRISE.md
+=== docs qui ne mentionnent ni listes ni grappes ===
+  docs/contexte-long.md
+  docs/plan-deepseek-v4-flash.md
+  docs/plan-gpu-topk.md
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for f in docs/contexte-long.md docs/plan-gpu-topk.md docs/plan-deepseek-v4-flash.md; do echo \"===== $f =====\"; head -12 \"$f\"; done", "description": "Read the openings of the three vision-silent docs"}`
+
+  ```
+===== docs/contexte-long.md =====
+# Contexte long : ce que 1 M veut dire, et par où ça casse
+
+> Tous les chiffres de budget viennent de `drave-core <modele> --plan --ctx N`,
+> qui les calcule depuis les métadonnées du GGUF. Les bandes passantes sont
+> celles mesurées sur cette machine (deux Quadro RTX 5000 16 Go, 125 Go de RAM,
+> NVMe à ~3,5 Go/s, 20 cœurs Haswell AVX2).
+
+## 1. Ce que les modèles déclarent
+
+| modèle | contexte entraîné | initial | facteur YaRN | 1 M, c'est… |
+|---|---|---|---|---|
+| gpt-oss-120b | 131 072 | 4 096 | ×32 | ×8 au-delà du déclaré → extrapolation |
+===== docs/plan-gpu-topk.md =====
+# Plan — le top-k de l'attention dans le noyau GPU (phase 1.1)
+
+**En une ligne** : l'attention creuse (`--attn-topk`) ne peut pas se servir du KV
+déporté en VRAM — le code l'interdit explicitement — donc à long contexte elle
+retombe sur le CPU et coûte **~70 fois** le chemin GPU complet. Ce plan
+chiffre l'écart et décrit les trois noyaux qui le comblent.
+
+## Pourquoi (mesuré, pas supposé)
+
+Le chemin GPU de l'attention est conditionné à `groupe = fen == 0 &&
+self.attn_topk == 0 && rep > 1` (`model.rs:3150`) : **dès que le top-k est
+demandé, le miroir VRAM est ignoré**. Les deu
+… [712 caractères tronqués]
+  ```
+
+- **bash** `{"command": "sleep 55; echo \"attente des revues adverses\"; date \"+%H:%M:%S\"", "description": "Wait for the audits"}`
+
+  ```
+attente des revues adverses
+09:55:27
+  ```
+
+- **bash** `{"command": "sleep 55; date \"+%H:%M:%S\"", "description": "Wait for the audits"}`
+
+  ```
+09:56:34
+  ```
+
+- **bash** `{"command": "sleep 55; date \"+%H:%M:%S\"; ls -la --time-style=+%H:%M docs/*.md | head -3", "description": "Wait for the audits"}`
+
+  ```
+09:57:40
+-rw-r--r--. 1 stephane stephane  6751 16:06 docs/colab-reparti.md
+-rw-------. 1 stephane stephane  8505 08:44 docs/comparaison-spiking.md
+-rw-------. 1 stephane stephane 32210 01:07 docs/contexte-long.md
+  ```
+
+### 👤 Utilisateur
+
+Agent 4b146dfd-ce0b-4af8-910f-610ab438d4e6 sent a message:
+RAPPORT DE RELECTURE ADVERSE — 4 plans audités contre docs/vision.md + docs/programme-recherche.md + faits du 02/10/2026. Aucun fichier modifié ; toutes les citations sont vérifiées ligne par ligne. 19 constats (≤25).
+
+| fichier:ligne | citation exacte (≤ 25 mots) | problème | correction minimale proposée (texte de remplacement exact) | gravité |
+|---|---|---|---|---|
+| docs/plan-modeles-lourds.md:75-77 | « comparable à llama.cpp, ou l'écart expliqué — c'est la définition de « capable de rouler du best of breed » » | Objectif affiché = égaler llama.cpp ; la vision fait du flux de listes le contrat et llama.cpp une porte de correction (cf. plan-deepseek41-complet.md:9). | Remplacer par : « comparable à llama.cpp, ou l'écart expliqué — la conformité à llama.cpp est une porte de correction, pas le but : le but est de conduire des flux. » | élevée |
+| docs/plan-modeles-lourds.md:99 | « perplexité sur 512 jetons comparable à llama.cpp, ou l'écart expliqué » | Critère de succès du forward réduit à la référence externe, sans porte de flux (tracé puis rejoué à l'identique) que le plan V4.1 impose (P0/P3). | Remplacer par : « perplexité comparable à llama.cpp **et** flux tracé puis rejoué à l'identique (portes Drave) ; sinon l'écart est expliqué » | moyenne |
+| docs/plan-mla-vision.md:55 | « ### ÉTAT : MLA EST FAIT ET VALIDÉ » | Le chemin MLA validé est dense (numpy, 5,2e-7) ; le plan ne dit nulle part qu'il doit produire des listes/événements — le plan V4.1 en fait le premier écart (« 0 événements », P0). | Remplacer par : « ### ÉTAT : MLA EST FAIT ET VALIDÉ (chemin dense ; compteur d'événements à instrumenter, cf. plan-deepseek41-complet.md P0) » | moyenne |
+| docs/plan-modeles-lourds.md:83 | « \| DeepSeek-V4 / V4-Flash / V4.1-Flash \| `deepseek4` (43 couches, 256 experts top-6, 1 M ctx) \| » | V4.1-Flash est `deepseek41` (même doc, l.120), 40 couches, 384 experts top-6 (plan V4.1, l.69) ; llama.cpp ne connaît pas `deepseek41`. | Remplacer par : « \| DeepSeek-V4 / V4-Flash \| `deepseek4` (43 couches, 256 experts top-6, 1 M ctx) ; V4.1-Flash : `deepseek41` (40 couches, 384 experts top-6) \| » | élevée |
+| docs/plan-modeles-lourds.md:135-136 | « Aucune n'a de `forward` dans le moteur — c'est le chantier suivant. » | Faux depuis le 02/10 : `deepseek2` (Kimi-K2.7, 1 026 G) et `glm-dsa` (GLM-5.3, 754 G) se calculent (README, rapport-mla-experts) ; restent `deepseek4`/`deepseek41`. | Remplacer par : « `deepseek4` et `deepseek41` n'ont pas encore de `forward` ; `deepseek2` et `glm-dsa` se calculent (Kimi-K2.7, GLM-5.3). » | élevée |
+| docs/plan-modeles-lourds.md:84 | « \| Kimi-K2.7 \| `kimi_k25` \| — \| tout le forward \| » | Architecture fausse (le même doc relève `deepseek2`, l.122) et état périmé : Kimi se calcule (1 026 G, 73 s/jeton ; non validé). | Remplacer par : « \| Kimi-K2.7 \| `deepseek2` \| MLA à rang faible ✅ (1 026 G, 73 s/jeton ; non validé) \| la validation au-delà de la position 2 \| » | élevée |
+| docs/plan-modeles-lourds.md:85 | « \| GLM-5.3 \| à relever \| — \| tout le forward \| » | Architecture relevée depuis (`glm-dsa`, l.121) et GLM-5.3 se calcule (216 Go ; validé pos. 0, corrélation 0,999024). | Remplacer par : « \| GLM-5.3 \| `glm-dsa` \| MLA à rang faible ✅ (216 Go, validé pos. 0) \| la validation au-delà de la position 2 \| » | élevée |
+| docs/plan-modeles-lourds.md:83 | « attention MLA validée sur modèle synthétique (5,2e-7) » | État MLA périmé : la MLA à rang faible est aussi validée contre llama.cpp sur GLM-5.3 (corrélation 0,999024, top-1 3/3). | Remplacer par : « attention MLA validée contre llama.cpp sur GLM-5.3 (0,999024, pos. 0 ; écart croissant au-delà) » | moyenne |
+| docs/plan-gpu-topk.md:96 | « porte de non-régression : les deux valeurs restent 19,3885 et 15,1757 » | Porte gpt-oss périmée : 15,6017 depuis le 02/10 (YaRN à retardement ; 15,1757 « était auto-cohérent, pas juste », rapport-routage-experts). | Remplacer par : « porte de non-régression : les deux valeurs restent 19,3885 et 15,6017 » | élevée |
+| docs/plan-gpu-topk.md:96 | « `cargo test` 17/17 » | Compte périmé : `cargo test --release` = 48 tests, et c'est le seuil de tools/portes.sh. | Remplacer par : « `cargo test --release` 48/48 » | moyenne |
+| docs/plan-mla-vision.md:3 | « ils ne sont pas commencés » | Faux : le même document conclut « MLA EST FAIT ET VALIDÉ » (l.55), « Le chemin image est COMPLET » (l.553), « La chaîne complète est DÉMONTRÉE » (l.645). | Remplacer par : « ces deux chantiers ont été menés depuis : ce document consigne ce qui a été fait et ce qui reste, » | élevée |
+| docs/plan-mla-vision.md:84 | « cache ÷50 sur un vrai modèle MLA, ce qu'on n'a pas ici) » | Faux depuis le 01/10 : GLM-5.3 (79 couches MLA) et Kimi-K2.7 (61) sont sur la machine et se calculent ; le point ouvert réel est la validation au-delà de la position 2 (4,07 nats d'écart à llama.cpp au jeton 7). | Remplacer par : « cache ÷50 sur un vrai modèle MLA — GLM-5.3, 79 couches MLA, est présent ici — et la validation au-delà de la position 2, où l'écart à llama.cpp atteint 4,07 nats au jeton 7) » | élevée |
+| docs/plan-mla-vision.md:5 | « Rien ici n'est mesuré — c'est une feuille de route » | Faux : le document porte des mesures (5,2e-7, 5,37e-7, 1,73e-6) et des sections d'état « FAIT ». | Remplacer par : « Les sections d'état ci-dessous portent les mesures ; ce qui reste à faire est marqué comme tel, » | moyenne |
+| docs/plan-gpu-topk.md:83-84 | « la perplexité de `--attn-topk 256` à contexte 2 048 doit rester **234,88** (la valeur CPU mesurée) » | Le même plan déclare ce chiffre non reproductible (l.94) et il n'est pas sourcé ici, alors que docs/contexte-long.md §6 le documente et que la vision le cite (l.79). | Remplacer par : « la perplexité de `--attn-topk 256` à contexte 2 048 doit rester celle du CPU à la tolérance près (critère d'origine 234,88, docs/contexte-long.md §6 — non reproduit, voir étape 4) » | moyenne |
+| docs/plan-gpu-topk.md:94 | « 234,88 ne correspond à aucun réglage reproductible » | Affirmation non sourcée qui invalide un chiffre publié (contexte-long §6, vision l.79) sans dire quel réglage l'avait produit ni ce qui a changé. | Remplacer par : « 234,88 (docs/contexte-long.md §6) n'est pas reproduit par ce binaire » | moyenne |
+| docs/plan-modeles-lourds.md:22 | « **en cours** (26 % à 09h36) » | État périmé : le même document (l.144) dit les 24 fichiers arrivés à 12h40, et les lignes 24–30 disent encore « en file ». | Remplacer par : « **✅ arrivé** (12h40) » | faible |
+| docs/plan-mla-vision.md:297 | « Vérifié : `cargo test` 6/6 » | Chiffre périmé (48 tests aujourd'hui) ; un lecteur y voit l'état courant. | Remplacer par : « Vérifié : `cargo test` 6/6 à cette étape (48 aujourd'hui) » | faible |
+| docs/plan-gpu-topk.md:6 | « chiffre l'écart et décrit les trois noyaux qui le comblent. » | Le document ne nomme jamais les deux dimensions structurantes (0 occurrence de « liste »/« événement », aucune grappe/machine) ; le noyau y reste un objet local. | Remplacer par : « chiffre l'écart et décrit les trois noyaux qui le comblent. Ce noyau reste local à une machine : sa place entre composants et son effet sur les flux ne sont pas traités ici. » | faible |
+| docs/plan-mla-vision.md:286-287 | « (cache ÷50) est mesurable sur le plan 1 M. » | Le plan ne dit jamais où ce chemin se place dans les axes 1 et 3 (flux, grappes/machines) — ni occurrence de « liste » ni de répartition. | Remplacer par : « (cache ÷50) est mesurable sur le plan 1 M. Ce plan ne traite ni la répartition entre grappes/machines ni la lecture des flux, qui ont leurs propres chantiers. » | faible |
+
+CE QUI EST DÉJÀ COHÉRENT ET NE DOIT PAS ÊTRE TOUCHÉ
+- docs/plan-prefill-reparti.md : cohérent de bout en bout — en-tête à jour (protocole v5, écart 0,00e0, R4 dans le code, échappement sur deux octets), corps conservé comme plan d'origine non réécrit, dimension machines (deux nœuds), et le changement de sortie est dit (l.317-324 : les lots changent l'ordre des accumulations, 6e-5 à 4e-4).
+- plan-gpu-topk : la règle « aucune optimisation ne change une sortie sans le dire » est respectée — même ensemble retenu aux ex æquo près, écart ≤ 1e-6, ordre de sommation GPU annoncé comme différent (l.109-111), PPL A/B donnée (l.94).
+- plan-modeles-lourds : décisions de format appuyées sur des empreintes (1 587 tenseurs) et la trace de routage ; dimension grappes présente (nœud/cluster, l.73-74 et 101).
+- docs/plan-deepseek41-complet.md (hors tableau, conforme à la vision) : « les flux d'abord », llama.cpp = porte de correction (l.9), grappes/machines en P6, 48 tests et clusters 799,8557 (l.200-201), protocole v5 (l.21).
+- Les quatre plans respectent le croisement mesuré à ~22 % : aucun ne prétend que le sparse gagne toujours, aucun ne supprime le chemin dense.
+
+POINTS À TRANCHER PAR L'HUMAIN
+1. Textes de référence : docs/vision.md:121 dit « protocole v4 » (fait : v5) ; docs/vision.md:162-163 donne gpt-oss à 15,1757 (fait : 15,6017) ; docs/vision.md:222 dit l'axe 3 « rien — hypothèse écrite » alors que son §4 (l.120) dit que le transport existe et que c'est l'axe le plus avancé — faut-il amender la vision ?
+2. 234,88 : mesuré (docs/contexte-long.md §6, cité par vision.md:79) ou non reproductible (plan-gpu-topk.md:94) ? Trancher et écrire la source.
+3. docs/plan-deepseek41-complet.md:201 dit « 17 formats » ; le fait à jour est 18 (non compté comme constat car le plan V4.1 est sinon conforme à la vision).
+4. docs/plan-modeles-lourds.md donne MiniMax-H3 à 22,8 Go (l.27, l.146) et 11,42 Go (l.124) : lequel est le poids total ?
+5. Les plans du 30/09-01/10 accumulent des sections d'état sans date de fin : ajouter un en-tête « état au … » (ou les marquer historiques) pour que le lecteur ne prenne pas les états intermédiaires pour l'état courant.
+
+### 👤 Utilisateur
+
+Agent 8b315bb2-abba-4033-b3d4-177d04b4f194 sent a message:
+RAPPORT DE RELECTURE ADVERSARIALE — docs/vision.md, roadmap.md, programme-recherche.md, sprints.md, histoire.md (aucun fichier modifié ; 24 constats, tous les numéros de ligne revérifiés par grep le 02/10/2026).
+
+| fichier:ligne | citation exacte | problème | correction minimale proposée | gravité |
+|---|---|---|---|---|
+| docs/vision.md:222 | `\| **3. Répartir sur machines** \| **rien** — hypothèse écrite \|` | Contredit vision.md:120 (« Le transport existe, et c'est l'axe où le projet a le plus avancé depuis ») et roadmap.md:55-59 (3.1 ✅ transport TCP fidèle 0,00e0, 3.2 ✅ mode 4, 3.5 ✅). | `\| **3. Répartir sur machines** \| **transport en place et fidèle** (0,00e0) ; restent l'ordonnanceur et Colab \|` | ÉLEVÉE |
+| docs/vision.md:151 | « Cette section est une **hypothèse de travail**, pas un résultat. » | Le §4 au-dessus donne des acquis mesurés ; même formule en §7 (vision.md:209-210). | « Cette section mêle un **acquis** (le transport, fidèle à 0,00e0) et une **hypothèse de travail** (placement, granularité). » | MOYENNE |
+| docs/vision.md:147 | « 5. **les mesures à faire** : débit d'un flux sérialisé, latence aller-retour, » | Déjà mesurées : roadmap.md:57 (latence jusqu'à 20 ms, 0,25 Mbit/s) et :112 (1 608 octets/flux). | « 5. **les mesures faites** : 1 608 octets par flux à 256 jetons, 0,25 Mbit/s, attente ≈ calcul distant + 3,2 × latence (`docs/roadmap.md`) ; » | MOYENNE |
+| docs/vision.md:209-210 | « l'axe 3 est une hypothèse, avec ses mesures à faire » | Même dérive : les mesures existent (roadmap.md:57, :112, :119). | « l'axe 3 est **engagé** (transport fidèle), avec ses mesures faites (latence, débit, taille des tranches) » | MOYENNE |
+| docs/vision.md:121 | « Deux processus se passent des flux (protocole v4 : version, modes dense / listes / » | Protocole en v5 à cinq modes (roadmap.md:96-97) ; il en manque un. | « (protocole v5 : version, modes dense / listes / blocs / **lot dense** / **lot en listes**, contrat d'activation complet) » | MOYENNE |
+| docs/vision.md:79 | « `--attn-topk 256` **améliore** la perplexité (234,88 contre 298,56 à contexte » | Chiffre sans source, déclaré non reproductible par docs/plan-gpu-topk.md:94 (« 234,88 ne correspond à aucun réglage reproductible »). | « `--attn-topk 256` **améliore** la perplexité (234,88 / 298,56 non reproductibles — `docs/plan-gpu-topk.md`) » | MOYENNE |
+| docs/vision.md:163 | « gpt-oss ctx 256 = **15,1757**) sont l'application minimale de cette idée : » | Porte périmée : 15,6017 depuis le 02/10 (REPRISE.md:1000 ; reports/rapport-routage-experts.md:66). | « gpt-oss ctx 256 = **15,6017**) sont l'application minimale de cette idée : » | MOYENNE |
+| docs/sprints.md:39 | « gpt-oss ctx 256 = **15,1757** (sans `DRAVE_GPU`), et le banc réparti donne » | Même porte périmée : la definition of done valide un chiffre faux. | « gpt-oss ctx 256 = **15,6017** (sans `DRAVE_GPU`), et le banc réparti donne » | MOYENNE |
+| docs/roadmap.md:3 | « Suite de [`docs/vision.md`](vision.md). Cinq phases, de ce qui se fait **tout de » | Le document compte six phases (0 à 5). | « Six phases, de ce qui se fait **tout de » | FAIBLE |
+| docs/roadmap.md:27 | « `--attn-topk 256` améliore la perplexité (234,88 contre 298,56 à 2 048) mais retombe sur le CPU » | docs/plan-gpu-topk.md:94 : ce critère chiffré « était faux d'avance ». | « `--attn-topk 256` améliore la perplexité (234,88 non reproductible — `docs/plan-gpu-topk.md`) mais retombe sur le CPU » | MOYENNE |
+| docs/roadmap.md:186 | « La mesure clés f16 + valeurs int4 est en cours. » | Mesure faite : +0,61 % à 33 % de la taille f32 (reports/rapport-placement-bits-kv.md:23). | « Clés f16 + valeurs int4 : **+0,61 %** à 33 % de la taille f32 (`reports/rapport-placement-bits-kv.md`). » | MOYENNE |
+| docs/roadmap.md:250 | « Le protocole, lui, n'a pas changé d'un octet : c'est le moteur qui était faux. » | Faux comme phrase de page : l'en-tête est passé de 39 à 79 octets (roadmap.md:96, :112). | « Le protocole, lui, n'a pas changé **pour cette correction** : c'est le moteur qui était faux. » | MOYENNE |
+| docs/roadmap.md:308 | « listes (mode 4), l'ordonnanceur de placement, et la démonstration sur Colab, dont » | Le mode 4 est fait et mesuré (roadmap.md:56 ✅ 1,5 ko/jeton, 3,03e-2 ; :118 ; MODE_LOT_LISTES, main.rs:1886). | « l'ordonnanceur de placement, et la démonstration sur Colab, dont » | MOYENNE |
+| docs/vision.md:125 | « reste : le lot en listes, l'ordonnanceur de placement, le flux de poids depuis le » | Même liste périmée : le lot en listes (mode 4) est fait. | « reste : l'ordonnanceur de placement, le flux de poids depuis le » | MOYENNE |
+| docs/roadmap.md:55 | « \| 3.1 \| **Contrat d'échange v1** : tranche de liste = en-tête (couche, source, échelle, bits) » | « v1 » face au protocole v5 annoncé en roadmap.md:96 : piège de lecture. | « \| 3.1 \| **Contrat d'échange** (protocole v5) : tranche de liste = en-tête (couche, source, échelle, bits) » | FAIBLE |
+| docs/vision.md:166 | « indépendante** (MLA à **5,2e-7** contre numpy ; vision : patchs 5,4e-7, » | Ne cite que la validation numpy synthétique ; la validation courante est contre llama.cpp sur GLM-5.3 (0,999024 — rapport-mla-experts.md:112). | « indépendante** (MLA à **5,2e-7** contre numpy et **0,999024** contre llama.cpp sur GLM-5.3 ; vision : patchs 5,4e-7, » | FAIBLE |
+| docs/programme-recherche.md:24 | « L'architecture événementielle défendue ici possède trois propriétés structurelles » | Aucune des trois ne dit que le flux se route entre composants et machines (cœur de la vision §3-§4 ; plan-deepseek41-complet.md:6-8). | « …possède quatre propriétés structurelles » + 4e puce : « **Le flux se route.** Une liste est une unité de travail autonome, plaçable sur un composant (CPU, GPU, FPGA) ou une autre machine, là où son coût est le plus faible. » | MOYENNE |
+| docs/programme-recherche.md:46 | « \| Inférence 0,5 B quantifié, CPU seul, sans GPU ni BLAS \| **15,8 tok/s**, perplexité 24,90 (référence float32 : 25,00) \| » | Ouvre le « point de départ mesuré » sur le débit dense, sans métrique d'activité ni renvoi (table :46-53 non sourcée). | « \| Inférence 0,5 B quantifié, CPU seul, sans GPU ni BLAS \| **15,8 tok/s** (et **5,3 G événements/s** : le coût suit l'activité), perplexité 24,90 (référence float32 : 25,00) — `reports/rapport-inference.md`, `reports/bilan-multi-materiel.md` \| » | MOYENNE |
+| docs/vision.md:89 | « « la couche 23 a changé de régime au jeton 4 096 ». » | La finalité « lire ces flux pour comprendre le modèle et adapter l'architecture à la tâche » (plan-deepseek41-complet.md:8,33) n'est écrite nulle part dans la vision. | Ajouter après la ligne 89 : « Et, au-delà du débogage : **lire ces flux pour comprendre le modèle et adapter l'architecture à la tâche**. » | MOYENNE |
+| docs/vision.md:181 | « La représentation par listes valuées impose ses formats, et ils sont déjà là : » | La vision n'énonce ni les **deux listes** (trinaire) ni les **connexions pondérées** (source → destination, poids), piliers du plan V4.1:16-19. | Ajouter après la ligne 184 : « Le cas général est la **connexion pondérée** (source → destination, poids) ; le cas trinaire se passe de valeur — **deux listes**, le signe est porté par l'appartenance à celle des « + » ou des « − ». » | MOYENNE |
+| docs/vision.md:99 | « \| cache KV d'une couche \| VRAM (paginée, sur **deux** cartes) \| attention à 1 M de clés : 968 → **13,2 ms** par couche \| » | Le tableau §3 (99-104) ne renvoie à aucun rapport, alors que la vision promet un renvoi par mesure (l.10-11). | Ajouter après la ligne 104 : « Sources : `docs/contexte-long.md` (KV paginé, attention GPU), `reports/rapport-session-2026-09-30.md`, `REPRISE.md` §5. » | FAIBLE |
+| docs/vision.md:188 | « l'int8 sur le cache KV coûte **+1,5 %** de perplexité à 512 jetons et » | Les chiffres du §6 (188-193) ne portent aucun renvoi. | « …**où sont les échelles** (`reports/rapport-placement-bits-kv.md`) ; » | FAIBLE |
+| docs/vision.md:76 | « **top 10 % des neurones portent 33,1 % de la magnitude** ; seuls **0,08 %** sont » | Deux chiffres clés sans source (source : reports/rapport-localite-activation.md:44-45). | « alors qu'un cache dynamique, si (`reports/rapport-localite-activation.md`) ; » | FAIBLE |
+| docs/programme-recherche.md:29 | « nommées. Journaliser les listes d'activations (1,2 Mo/token, **+3,0 %**) » | Chiffres sans renvoi ; sources : reports/rapport-programme-evolutif.md:19 et :118. | « les événements en sont une fonction déterministe (`reports/rapport-programme-evolutif.md`). » | FAIBLE |
+
+CE QUI EST DÉJÀ COHÉRENT ET NE DOIT PAS ÊTRE TOUCHÉ :
+- vision.md §1 (21-55) : listes valuées par source, push/AER, coût ∝ activité, et l'honnêteté du croisement ~22 % avec conservation du chemin dense ; §7 (200-212) : les quatre refus ; §9 (228-247) : nom, renommage, trois préservations.
+- roadmap.md 89-101 (format-flux.md source unique, DRVF v2/v3, protocole v5) et le journal daté 104-120 avec ses corrections écrites ; 235-250 (les deux défauts de fidélité) et 277-295 (réfutation de l'entrée normée, 5,61e0).
+- programme-recherche.md §1 « règle du programme », §3 « ce que la mesure interdit d'espérer », §6 méthode.
+- histoire.md : cohérent de bout en bout, chaque affirmation porte son renvoi ; rien à corriger.
+- sprints.md hors la porte gpt-oss : charte saine (definition of done, « tout chiffre a sa source », relecture déléguée).
+
+POINTS À TRANCHER PAR L'HUMAIN :
+1. sprints.md:38-40 ne liste que Qwen, gpt-oss et le banc réparti ; tools/portes.sh porte aussi Qwen3-30B clusters (799,8557), ≥48 tests, formats et routage — aligner la definition of done sur le script ?
+2. vision.md:49-50 affirme que les portes tournent « sur les deux » chemins ; tools/portes.sh ne lance Qwen et clusters qu'avec `--dense` — ajouter une porte listes ou corriger la phrase ?
+3. La roadmap ne mentionne ni GLM-5.3 / Kimi-K2.7 / DeepSeek-V4.1 ni docs/plan-deepseek41-complet.md (« les flux d'abord ») : ajouter une phase/chantier ?
+4. Formats : la référence dit 18 formats lisibles ; tools/portes_formats.sh en teste 17 et REPRISE.md:1002 écrit « 17 formats × 2 blocs » — à réconcilier.
+5. reports/rapport-analyse-flux.md:14 dit le croisement « mesuré à ~10 % de densité » alors que vision/roadmap/histoire disent ~22 % (rapport-croisement-push-pull.md:96) ; roadmap.md:28 cite ce rapport — trancher.
+6. Les valeurs 234,88 / 298,56 vivent aussi dans docs/contexte-long.md:559-560 : à retirer partout ou à encadrer d'un avertissement.
+
+### 👤 Utilisateur
+
+Background subagent 4b146dfd-ce0b-4af8-910f-610ab438d4e6 finished and will do no further work unless you send it more.
+Its closing message:
+⏵ Restitution du rapport adverse, 19 constats, aucune écriture.
+
+Rapport adverse — 4 plans audités contre `docs/vision.md`, `docs/programme-recherche.md` et les faits du 02/10/2026. Aucun fichier modifié ; chaque citation a été revérifiée à la ligne. **19 constats.**
+
+| fichier:ligne | citation exacte (≤ 25 mots) | problème | correction minimale proposée (texte de remplacement exact) | gravité |
+|---|---|---|---|---|
+| docs/plan-modeles-lourds.md:75-77 | « comparable à llama.cpp, ou l'écart expliqué — c'est la définition de « capable de rouler du best of breed » » | Objectif affiché = égaler llama.cpp ; la vision fait du flux de listes le contrat et llama.cpp une porte de correction (cf. plan-deepseek41-complet.md:9). | Remplacer par : « comparable à llama.cpp, ou l'écart expliqué — la conformité à llama.cpp est une porte de correction, pas le but : le but est de conduire des flux. » | élevée |
+| docs/plan-modeles-lourds.md:99 | « perplexité sur 512 jetons comparable à llama.cpp, ou l'écart expliqué » | Critère de succès du forward réduit à la référence externe, sans porte de flux (tracé puis rejoué à l'identique) que le plan V4.1 impose (P0/P3). | Remplacer par : « perplexité comparable à llama.cpp **et** flux tracé puis rejoué à l'identique (portes Drave) ; sinon l'écart est expliqué » | moyenne |
+| docs/plan-mla-vision.md:55 | « ### ÉTAT : MLA EST FAIT ET VALIDÉ » | Le chemin MLA validé est dense (numpy, 5,2e-7) ; le plan ne dit nulle part qu'il doit produire des listes/événements — le plan V4.1 en fait le premier écart (« 0 événements », P0). | Remplacer par : « ### ÉTAT : MLA EST FAIT ET VALIDÉ (chemin dense ; compteur d'événements à instrumenter, cf. plan-deepseek41-complet.md P0) » | moyenne |
+| docs/plan-modeles-lourds.md:83 | « \| DeepSeek-V4 / V4-Flash / V4.1-Flash \| `deepseek4` (43 couches, 256 experts top-6, 1 M ctx) \| » | V4.1-Flash est `deepseek41` (même doc, l.120), 40 couches, 384 experts top-6 (plan V4.1, l.69) ; llama.cpp ne connaît pas `deepseek41`. | Remplacer par : « \| DeepSeek-V4 / V4-Flash \| `deepseek4` (43 couches, 256 experts top-6, 1 M ctx) ; V4.1-Flash : `deepseek41` (40 couches, 384 experts top-6) \| » | élevée |
+| docs/plan-modeles-lourds.md:135-136 | « Aucune n'a de `forward` dans le moteur — c'est le chantier suivant. » | Faux depuis le 02/10 : `deepseek2` (Kimi-K2.7, 1 026 G) et `glm-dsa` (GLM-5.3, 754 G) se calculent (README, rapport-mla-experts) ; restent `deepseek4`/`deepseek41`. | Remplacer par : « `deepseek4` et `deepseek41` n'ont pas encore de `forward` ; `deepseek2` et `glm-dsa` se calculent (Kimi-K2.7, GLM-5.3). » | élevée |
+| docs/plan-modeles-lourds.md:84 | « \| Kimi-K2.7 \| `kimi_k25` \| — \| tout le forward \| » | Architecture fausse (le même doc relève `deepseek2`, l.122) et état périmé : Kimi se calcule (1 026 G, 73 s/jeton ; non validé). | Remplacer par : « \| Kimi-K2.7 \| `deepseek2` \| MLA à rang faible ✅ (1 026 G, 73 s/jeton ; non validé) \| la validation au-delà de la position 2 \| » | élevée |
+| docs/plan-modeles-lourds.md:85 | « \| GLM-5.3 \| à relever \| — \| tout le forward \| » | Architecture relevée depuis (`glm-dsa`, l.121) et GLM-5.3 se calcule (216 Go ; validé pos. 0, corrélation 0,999024). | Remplacer par : « \| GLM-5.3 \| `glm-dsa` \| MLA à rang faible ✅ (216 Go, validé pos. 0) \| la validation au-delà de la position 2 \| » | élevée |
+| docs/plan-modeles-lourds.md:83 | « attention MLA validée sur modèle synthétique (5,2e-7) » | État MLA périmé : la MLA à rang faible est aussi validée contre llama.cpp sur GLM-5.3 (corrélation 0,999024, top-1 3/3). | Remplacer par : « attention MLA validée contre llama.cpp sur GLM-5.3 (0,999024, pos. 0 ; écart croissant au-delà) » | moyenne |
+| docs/plan-gpu-topk.md:96 | « porte de non-régression : les deux valeurs restent 19,3885 et 15,1757 » | Porte gpt-oss périmée : 15,6017 depuis le 02/10 (YaRN à retardement ; 15,1757 « était auto-cohérent, pas juste », rapport-routage-experts). | Remplacer par : « porte de non-régression : les deux valeurs restent 19,3885 et 15,6017 » | élevée |
+| docs/plan-gpu-topk.md:96 | « `cargo test` 17/17 » | Compte périmé : `cargo test --release` = 48 tests, et c'est le seuil de tools/portes.sh. | Remplacer par : « `cargo test --release` 48/48 » | moyenne |
+| docs/plan-mla-vision.md:3 | « ils ne sont pas commencés » | Faux : le même document conclut « MLA EST FAIT ET VALIDÉ » (l.55), « Le chemin image est COMPLET » (l.553), « La chaîne complète est DÉMONTRÉE » (l.645). | Remplacer par : « ces deux chantiers ont été menés depuis : ce document consigne ce qui a été fait et ce qui reste, » | élevée |
+| docs/plan-mla-vision.md:84 | « cache ÷50 sur un vrai modèle MLA, ce qu'on n'a pas ici) » | Faux depuis le 01/10 : GLM-5.3 (79 couches MLA) et Kimi-K2.7 (61) sont sur la machine et se calculent ; le point ouvert réel est la validation au-delà de la position 2 (4,07 nats d'écart à llama.cpp au jeton 7). | Remplacer par : « cache ÷50 sur un vrai modèle MLA — GLM-5.3, 79 couches MLA, est présent ici — et la validation au-delà de la position 2, où l'écart à llama.cpp atteint 4,07 nats au jeton 7) » | élevée |
+| docs/plan-mla-vision.md:5 | « Rien ici n'est mesuré — c'est une feuille de route » | Faux : le document porte des mesures (5,2e-7, 5,37e-7, 1,73e-6) et des sections d'état « FAIT ». | Remplacer par : « Les sections d'état ci-dessous portent les mesures ; ce qui reste à faire est marqué comme tel, » | moyenne |
+| docs/plan-gpu-topk.md:83-84 | « la perplexité de `--attn-topk 256` à contexte 2 048 doit rester **234,88** (la valeur CPU mesurée) » | Le même plan déclare ce chiffre non reproductible (l.94) et il n'est pas sourcé ici, alors que docs/contexte-long.md §6 le documente et que la vision le cite (l.79). | Remplacer par : « la perplexité de `--attn-topk 256` à contexte 2 048 doit rester celle du CPU à la tolérance près (critère d'origine 234,88, docs/contexte-long.md §6 — non reproduit, voir étape 4) » | moyenne |
+| docs/plan-gpu-topk.md:94 | « 234,88 ne correspond à aucun réglage reproductible » | Affirmation non sourcée qui invalide un chiffre publié (contexte-long §6, vision l.79) sans dire quel réglage l'avait produit ni ce qui a changé. | Remplacer par : « 234,88 (docs/contexte-long.md §6) n'est pas reproduit par ce binaire » | moyenne |
+| docs/plan-modeles-lourds.md:22 | « **en cours** (26 % à 09h36) » | État périmé : le même document (l.144) dit les 24 fichiers arrivés à 12h40, et les lignes 24–30 disent encore « en file ». | Remplacer par : « **✅ arrivé** (12h40) » | faible |
+| docs/plan-mla-vision.md:297 | « Vérifié : `cargo test` 6/6 » | Chiffre périmé (48 tests aujourd'hui) ; un lecteur y voit l'état courant. | Remplacer par : « Vérifié : `cargo test` 6/6 à cette étape (48 aujourd'hui) » | faible |
+| docs/plan-gpu-topk.md:6 | « chiffre l'écart et décrit les trois noyaux qui le comblent. » | Le document ne nomme jamais les deux dimensions structurantes (0 occurrence de « liste »/« événement », aucune grappe/machine) ; le noyau y reste un objet local. | Remplacer par : « chiffre l'écart et décrit les trois noyaux qui le comblent. Ce noyau reste local à une machine : sa place entre composants et son effet sur les flux ne sont pas traités ici. » | faible |
+| docs/plan-mla-vision.md:286-287 | « (cache ÷50) est mesurable sur le plan 1 M. » | Le plan ne dit jamais où ce chemin se place dans les axes 1 et 3 (flux, grappes/machines) — ni occurrence de « liste » ni de répartition. | Remplacer par : « (cache ÷50) est mesurable sur le plan 1 M. Ce plan ne traite ni la répartition entre grappes/machines ni la lecture des flux, qui ont leurs propres chantiers. » | faible |
+
+### Ce qui est déjà cohérent et ne doit pas être touché
+- **docs/plan-prefill-reparti.md** : cohérent de bout en bout — en-tête à jour (protocole v5, écart 0,00e0, R4 dans le code, échappement sur deux octets), corps conservé comme plan d'origine non réécrit, dimension machines (deux nœuds), et le changement de sortie est dit (l.317-324 : les lots changent l'ordre des accumulations, 6e-5 à 4e-4).
+- **plan-gpu-topk** : la règle « aucune optimisation ne change une sortie sans le dire » est respectée — même ensemble retenu aux ex æquo près, écart ≤ 1e-6, ordre de sommation GPU annoncé comme différent (l.109-111), PPL A/B donnée (l.94).
+- **plan-modeles-lourds** : décisions de format appuyées sur des empreintes (1 587 tenseurs) et la trace de routage ; dimension grappes présente (nœud/cluster, l.73-74 et 101).
+- **docs/plan-deepseek41-complet.md** (hors tableau, conforme à la vision) : « les flux d'abord », llama.cpp = porte de correction (l.9), grappes/machines en P6, 48 tests et clusters 799,8557 (l.200-201), protocole v5 (l.21).
+- Les quatre plans respectent le croisement mesuré à ~22 % : aucun ne prétend que le sparse gagne toujours, aucun ne supprime le chemin dense.
+
+### Points à trancher par l'humain
+1. **Textes de référence** : `docs/vision.md:121` dit « protocole v4 » (fait : v5) ; `docs/vision.md:162-163` donne gpt-oss à 15,1757 (fait : 15,6017) ; `docs/vision.md:222` dit l'axe 3 « rien — hypothèse écrite » alors que son §4 (l.120) dit que le transport existe et que c'est l'axe le plus avancé — faut-il amender la vision ?
+2. **234,88** : mesuré (`docs/contexte-long.md` §6, cité par `vision.md:79`) ou non reproductible (`plan-gpu-topk.md:94`) ? Trancher et écrire la source.
+3. `docs/plan-deepseek41-complet.md:201` dit « 17 formats » ; le fait à jour est **18** (non compté comme constat, le plan V4.1 étant sinon conforme à la vision).
+4. `docs/plan-modeles-lourds.md` donne MiniMax-H3 à **22,8 Go** (l.27, l.146) et **11,42 Go** (l.124) : lequel est le poids total ?
+5. Les plans du 30/09-01/10 accumulent des sections d'état sans date de fin : ajouter un en-tête « état au … » (ou les marquer historiques) pour que les états intermédiaires ne passent pas pour l'état courant.
+
+### 👤 Utilisateur
+
+Background subagent 8b315bb2-abba-4033-b3d4-177d04b4f194 finished and will do no further work unless you send it more.
+Its closing message:
+⏵ Rapport terminé : 24 constats, envoyés au parent.
+
+Relecture adverse des cinq documents. Aucun fichier modifié. Tous les numéros de ligne ont été revérifiés par `grep` sur l'état courant du dépôt (attention : certaines références de l'audit précédent, `reports/rapport-coherence-docs-2.md`, pointent des lignes qui ont bougé — elles ont été recalculées ici).
+
+| fichier:ligne | citation exacte (≤ 25 mots) | problème | correction minimale proposée (texte de remplacement exact) | gravité |
+|---|---|---|---|---|
+| docs/vision.md:222 | `\| **3. Répartir sur machines** \| **rien** — hypothèse écrite \|` | Contredit vision.md:120 (« Le transport existe, et c'est l'axe où le projet a le plus avancé depuis ») et roadmap.md:55-59 (3.1 ✅ transport TCP fidèle 0,00e0, 3.2 ✅ mode 4, 3.5 ✅). | `\| **3. Répartir sur machines** \| **transport en place et fidèle** (0,00e0) ; restent l'ordonnanceur et Colab \|` | ÉLEVÉE |
+| docs/vision.md:151 | « Cette section est une **hypothèse de travail**, pas un résultat. » | Le §4 juste au-dessus donne des acquis mesurés ; la même formule revient en §7 (vision.md:209-210). | « Cette section mêle un **acquis** (le transport, fidèle à 0,00e0) et une **hypothèse de travail** (placement, granularité). » | MOYENNE |
+| docs/vision.md:147 | « 5. **les mesures à faire** : débit d'un flux sérialisé, latence aller-retour, » | Déjà mesurées : roadmap.md:57 (latence jusqu'à 20 ms, 0,25 Mbit/s) et :112 (1 608 octets/flux). | « 5. **les mesures faites** : 1 608 octets par flux à 256 jetons, 0,25 Mbit/s, attente ≈ calcul distant + 3,2 × latence (`docs/roadmap.md`) ; » | MOYENNE |
+| docs/vision.md:209-210 | « l'axe 3 est une hypothèse, avec ses mesures à faire » | Même dérive : les mesures existent (roadmap.md:57, :112, :119). | « l'axe 3 est **engagé** (transport fidèle), avec ses mesures faites (latence, débit, taille des tranches) » | MOYENNE |
+| docs/vision.md:121 | « Deux processus se passent des flux (protocole v4 : version, modes dense / listes / » | Protocole en **v5** à cinq modes (roadmap.md:96-97) ; la liste en omet un. | « (protocole v5 : version, modes dense / listes / blocs / **lot dense** / **lot en listes**, contrat d'activation complet) » | MOYENNE |
+| docs/vision.md:79 | « `--attn-topk 256` **améliore** la perplexité (234,88 contre 298,56 à contexte » | Chiffre sans source, déclaré non reproductible par docs/plan-gpu-topk.md:94 (« 234,88 ne correspond à aucun réglage reproductible »). | « `--attn-topk 256` **améliore** la perplexité (234,88 / 298,56 non reproductibles — `docs/plan-gpu-topk.md`) » | MOYENNE |
+| docs/vision.md:163 | « gpt-oss ctx 256 = **15,1757**) sont l'application minimale de cette idée : » | Porte périmée : **15,6017** depuis le 02/10 (REPRISE.md:1000 ; reports/rapport-routage-experts.md:66). | « gpt-oss ctx 256 = **15,6017**) sont l'application minimale de cette idée : » | MOYENNE |
+| docs/sprints.md:39 | « gpt-oss ctx 256 = **15,1757** (sans `DRAVE_GPU`), et le banc réparti donne » | Même porte périmée : la definition of done valide un chiffre faux. | « gpt-oss ctx 256 = **15,6017** (sans `DRAVE_GPU`), et le banc réparti donne » | MOYENNE |
+| docs/roadmap.md:3 | « Suite de [`docs/vision.md`](vision.md). Cinq phases, de ce qui se fait **tout de » | Le document compte **six** phases (0 à 5). | « Suite de [`docs/vision.md`](vision.md). Six phases, de ce qui se fait **tout de » | FAIBLE |
+| docs/roadmap.md:27 | « `--attn-topk 256` améliore la perplexité (234,88 contre 298,56 à 2 048) mais retombe sur le CPU » | docs/plan-gpu-topk.md:94 : ce critère chiffré « était faux d'avance ». | « `--attn-topk 256` améliore la perplexité (234,88 non reproductible — `docs/plan-gpu-topk.md`) mais retombe sur le CPU » | MOYENNE |
+| docs/roadmap.md:186 | « La mesure clés f16 + valeurs int4 est en cours. » | Mesure faite : +0,61 % à 33 % de la taille f32 (reports/rapport-placement-bits-kv.md:23). | « Clés f16 + valeurs int4 : **+0,61 %** à 33 % de la taille f32 (`reports/rapport-placement-bits-kv.md`). » | MOYENNE |
+| docs/roadmap.md:250 | « Le protocole, lui, n'a pas changé d'un octet : c'est le moteur qui était faux. » | Faux comme phrase de page : l'en-tête est passé de 39 à 79 octets (roadmap.md:96, :112). | « Le protocole, lui, n'a pas changé **pour cette correction** : c'est le moteur qui était faux. » | MOYENNE |
+| docs/roadmap.md:308 | « listes (mode 4), l'ordonnanceur de placement, et la démonstration sur Colab, dont » | Le mode 4 est fait et mesuré (roadmap.md:56 ✅ 1,5 ko/jeton, 3,03e-2 ; :118 ; `MODE_LOT_LISTES`, main.rs:1886). | « l'ordonnanceur de placement, et la démonstration sur Colab, dont » | MOYENNE |
+| docs/vision.md:125 | « reste : le lot en listes, l'ordonnanceur de placement, le flux de poids depuis le » | Même liste périmée : le lot en listes (mode 4) est fait (roadmap.md:56, :118). | « reste : l'ordonnanceur de placement, le flux de poids depuis le » | MOYENNE |
+| docs/roadmap.md:55 | « \| 3.1 \| **Contrat d'échange v1** : tranche de liste = en-tête (couche, source, échelle, bits) » | « v1 » face au protocole v5 annoncé en roadmap.md:96 : piège de lecture. | « \| 3.1 \| **Contrat d'échange** (protocole v5) : tranche de liste = en-tête (couche, source, échelle, bits) » | FAIBLE |
+| docs/vision.md:166 | « indépendante** (MLA à **5,2e-7** contre numpy ; vision : patchs 5,4e-7, » | Ne cite que la validation numpy synthétique ; la validation courante est contre llama.cpp sur GLM-5.3 (0,999024 — rapport-mla-experts.md:112). | « indépendante** (MLA à **5,2e-7** contre numpy et **0,999024** contre llama.cpp sur GLM-5.3 ; vision : patchs 5,4e-7, » | FAIBLE |
+| docs/programme-recherche.md:24 | « L'architecture événementielle défendue ici possède trois propriétés structurelles » | Aucune des trois ne dit que le flux se route entre composants et machines (cœur de la vision §3-§4 ; plan-deepseek41-complet.md:6-8). | « …possède **quatre** propriétés structurelles » + 4ᵉ puce : « **Le flux se route.** Une liste est une unité de travail autonome, plaçable sur un composant (CPU, GPU, FPGA) ou une autre machine, là où son coût est le plus faible. » | MOYENNE |
+| docs/programme-recherche.md:46 | « \| Inférence 0,5 B quantifié, CPU seul, sans GPU ni BLAS \| **15,8 tok/s**, perplexité 24,90 (référence float32 : 25,00) \| » | Ouvre le « point de départ mesuré » sur le débit dense, sans métrique d'activité ni renvoi (table :46-53 entièrement non sourcée). | « \| Inférence 0,5 B quantifié, CPU seul, sans GPU ni BLAS \| **15,8 tok/s** (et **5,3 G événements/s** : le coût suit l'activité), perplexité 24,90 (référence float32 : 25,00) — `reports/rapport-inference.md`, `reports/bilan-multi-materiel.md` \| » | MOYENNE |
+| docs/vision.md:89 | « « la couche 23 a changé de régime au jeton 4 096 ». » | La finalité « lire ces flux pour comprendre le modèle et adapter l'architecture à la tâche » (plan-deepseek41-complet.md:8,33) n'est écrite nulle part dans la vision. | Ajouter après la ligne 89 : « Et, au-delà du débogage : **lire ces flux pour comprendre le modèle et adapter l'architecture à la tâche**. » | MOYENNE |
+| docs/vision.md:181 | « La représentation par listes valuées impose ses formats, et ils sont déjà là : » | La vision n'énonce ni les **deux listes** (trinaire) ni les **connexions pondérées** (source → destination, poids), piliers du plan V4.1:16-19. | Ajouter après la ligne 184 : « Le cas général est la **connexion pondérée** (source → destination, poids) ; le cas trinaire se passe de valeur — **deux listes**, le signe est porté par l'appartenance à celle des « + » ou des « − ». » | MOYENNE |
+| docs/vision.md:99 | « \| cache KV d'une couche \| VRAM (paginée, sur **deux** cartes) \| attention à 1 M de clés : 968 → **13,2 ms** par couche \| » | Le tableau §3 (99-104) ne renvoie à aucun rapport, alors que la vision promet un renvoi par mesure (l.10-11). | Ajouter après la ligne 104 : « Sources : `docs/contexte-long.md` (KV paginé, attention GPU), `reports/rapport-session-2026-09-30.md`, `REPRISE.md` §5. » | FAIBLE |
+| docs/vision.md:188 | « l'int8 sur le cache KV coûte **+1,5 %** de perplexité à 512 jetons et » | Les chiffres du §6 (188-193) ne portent aucun renvoi. | « …**où sont les échelles** (`reports/rapport-placement-bits-kv.md`) ; » | FAIBLE |
+| docs/vision.md:76 | « **top 10 % des neurones portent 33,1 % de la magnitude** ; seuls **0,08 %** sont » | Deux chiffres clés sans source (source : reports/rapport-localite-activation.md:44-45). | « alors qu'un cache dynamique, si (`reports/rapport-localite-activation.md`) ; » | FAIBLE |
+| docs/programme-recherche.md:29 | « nommées. Journaliser les listes d'activations (1,2 Mo/token, **+3,0 %**) » | Chiffres sans renvoi ; sources : reports/rapport-programme-evolutif.md:19 et :118. | « les événements en sont une fonction déterministe (`reports/rapport-programme-evolutif.md`). » | FAIBLE |
+
+**Ce qui est déjà cohérent et ne doit pas être touché**
+- `vision.md` §1 (21-55) : listes valuées par source, push/AER, coût ∝ activité — et l'honnêteté du croisement ~22 % avec conservation du chemin dense ; §7 (200-212), les quatre refus ; §9 (228-247), nom, renommage, trois préservations.
+- `roadmap.md` 89-101 (format-flux.md source unique, DRVF v2/v3, protocole v5) et le journal daté 104-120 avec ses corrections écrites ; 235-250 (les deux défauts de fidélité) et 277-295 (réfutation de l'entrée normée, 5,61e0).
+- `programme-recherche.md` §1 « règle du programme », §3 « ce que la mesure interdit d'espérer », §6 méthode.
+- `histoire.md` : cohérent de bout en bout, chaque affirmation porte son renvoi — **rien à corriger**.
+- `sprints.md` hors la porte gpt-oss : charte saine (definition of done, « tout chiffre a sa source », relecture déléguée).
+
+**Points à trancher par l'humain**
+1. `sprints.md:38-40` ne liste que Qwen, gpt-oss et le banc réparti ; `tools/portes.sh` porte aussi Qwen3-30B clusters (**799,8557**), ≥ 48 tests, formats et routage — aligner la definition of done sur le script ?
+2. `vision.md:49-50` affirme que les portes tournent « sur les deux » chemins ; `tools/portes.sh` ne lance Qwen et clusters qu'avec `--dense` — ajouter une porte listes, ou corriger la phrase ?
+3. La roadmap ne mentionne ni GLM-5.3 / Kimi-K2.7 / DeepSeek-V4.1 ni `docs/plan-deepseek41-complet.md` (« les flux d'abord ») : ajouter une phase/chantier ?
+4. Formats : la référence dit **18** formats lisibles ; `tools/portes_formats.sh` en teste **17** et `REPRISE.md:1002` écrit « 17 formats × 2 blocs » — à réconcilier.
+5. `reports/rapport-analyse-flux.md:14` dit le croisement « mesuré à ~10 % de densité » alors que vision/roadmap/histoire disent ~22 % (`rapport-croisement-push-pull.md:96`) ; `roadmap.md:28` cite ce rapport — trancher.
+6. Les valeurs 234,88 / 298,56 vivent aussi dans `docs/contexte-long.md:559-560` : les retirer partout, ou les encadrer d'un avertissement ?
+
+### 🤖 Assistant
+
+Deux revues sont rentrées. Avant d'appliquer, je vérifie les faits contestés.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls reports/ | grep -E \"localite|croisement|placement-bits|programme-evolutif|inference|bilan-multi\" ; echo \"=== MiniMax-H3 ===\"; du -sh /home/stephane/Data13TB/stephane/modeles/gguf/MiniMax-H3; grep -n \"MiniMax\" docs/plan-model … [88 caractères tronqués]`
+
+  ```
+bilan-multi-materiel.md
+rapport-croisement-push-pull.md
+rapport-inference.md
+rapport-localite-activation.md
+rapport-placement-bits-kv.md
+rapport-programme-evolutif.md
+=== MiniMax-H3 ===
+22G	/home/stephane/Data13TB/stephane/modeles/gguf/MiniMax-H3
+27:| **MiniMax-H3** | famille différente (vision+langage) | 22,8 Go (2 × Q4_K) | — | en file |
+87:| MiniMax-H3 | vision+langage | vision Qwen2.5-VL ✅ | à relever |
+124:| MiniMax-H3 | `?` | 1 | 532 | **11,42 Go** | 11,4 Go |
+137:* **MiniMax-H3 n'est pas un modèle de texte** (`audio_patch_proj`, `adaln_tbl`) :
+146:DeepSeek-V4-Flash (86,9), Qwen3-235B (85,7), MiniMax-H3 (22,8). Débit soutenu
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"234,88\\|298,56\" docs/*.md reports/*.md | head -8; echo \"=== la commande qui l'a produit ===\"; grep -n \"attn-topk 256\" docs/contexte-long.md | head -5", "description": "Find the source of the 234,88 figure"}`
+
+  ```
+docs/contexte-long.md:105:| E5 | **Attention creuse** | **fait pour la mesure** — `--attn-topk 256` : 234,88 contre 298,56 (§6) ; le noyau GPU de top-k reste à écrire (phase 1.1) | casse le O(N) du décodage | moyen |
+docs/contexte-long.md:445:| 1 536 | **298,56** | 578,86 |
+docs/contexte-long.md:559:| aucune | 298,56 |
+docs/contexte-long.md:560:| **top-256 clés par requête** (`--attn-topk 256`) | **234,88** ← *meilleure* |
+docs/plan-gpu-topk.md:84:doit rester **234,88** (la valeur CPU mesurée) à la tolérance près, et le banc 1 M
+docs/plan-gpu-topk.md:94:| 4 | branchement dans `model.rs` (autoriser le GPU quand `attn_topk > 0` **et** que le noyau rend `true`, garder le repli CPU sinon) | ✅ **fait**, en opt-in (`DRAVE_GPU_TOPK=1`) : PPL à ctx 2 048 = **9,4162** contre **9,4167** au CPU (le critère chiffré était faux d'avance : 234,88 ne correspond à aucun réglage reproductible — c'est la comparaison A/B qui fait foi) · ⚠️ le gain de TEMPS n'est pas là à 2 048 clés : six lancements et cinq recopies par couche et par jeton — la fusion des quatre passes est la prochaine étape |
+docs/roadmap.md:27:| 1.1 | **Top-k dans le noyau d'attention GPU** — `--attn-topk 256` améliore la perplexité 
+… [525 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '540,565p' docs/contexte-long.md", "description": "Read the context of the 234,88 measurement"}`
+
+  ```
+référence ; l'essai est relancé sur Qwen3-30B-A3B. Ce n'est pas un défaut du
+   moteur : c'est la limite du modèle, et il valait mieux la mesurer que la
+   supposer. Second essai sur Qwen3-30B-A3B : **9,6 minutes pour une seule
+   sonde** (1 024 jetons de contexte) et un échec — le remplissage, répété à
+   l'identique, ne fait pas un banc d'essai valable, et le préremplissage
+   séquentiel rend chaque sonde hors de prix (1,8 jeton/s). Le test est donc
+   **arrêté** : il faudra un remplissage varié (du vrai texte), moins de sondes
+   et des réponses plus longues — et c'est le préremplissage par lots qui le
+   rendra abordable.
+2. **Attention creuse** : `--attn-topk N` et `--attn-window N` au protocole
+   `--depuis` (mêmes jetons, contexte long) donnent le prix en perplexité de
+   chaque restriction.
+3. **Débit du préremplissage** : `--lot N` sur un modèle dense et sur gpt-oss,
+   machine au calme ; c'est le chiffre qui dit si E1 tient ses promesses.
+
+### Premiers résultats d'attention creuse (gpt-oss, mêmes 512 jetons, contexte 2 048)
+
+| restriction | perplexité |
+|---|---|
+| aucune | 298,56 |
+| **top-256 clés par requête** (`--attn-topk 256`) | **234,88** ← *meilleure* |
+| fenêtre 
+… [199 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '74,90p;99,105p;118,130p' docs/vision.md", "description": "Read the exact vision lines to edit"}`
+
+  ```
+Ce que ces mesures ont appris, et qui n'aurait pas été visible autrement :
+
+* **top 10 % des neurones portent 33,1 % de la magnitude** ; seuls **0,08 %** sont
+  « chauds » plus de 90 % du temps — donc un préchargement statique ne paie pas,
+  alors qu'un cache dynamique, si ;
+* `--attn-topk 256` **améliore** la perplexité (234,88 contre 298,56 à contexte
+  2 048) : restreindre l'attention lointaine retire du bruit ;
+* le capteur hebbien apprend des **journaux d'activation** eux-mêmes
+  (`reports/rapport-capteur-hebbien.md`) — le flux n'est pas qu'un objet
+  d'exécution, c'est une donnée d'apprentissage.
+
+**Ce que la vision ajoute** : faire du flux un **objet de première classe** —
+un format de trace stable, par couche et par neurone, qu'on puisse rejouer,
+diffuser et comparer entre deux versions d'un modèle ou deux configurations du
+moteur. Le débogage cesse d'être « la perplexité a bougé de 0,01 » pour devenir
+« la couche 23 a changé de régime au jeton 4 096 ».
+
+| cache KV d'une couche | VRAM (paginée, sur **deux** cartes) | attention à 1 M de clés : 968 → **13,2 ms** par couche |
+| attention complète | noyau GPU, décodage **et** préremplissage | 22,16 → **3,29 ms/jeton** (÷6,7) ; 
+… [1174 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='docs/vision.md'; s=open(p).read()\nedits = [\n# a) la source et le modèle du chiffre 234,88\n(\"\"\"* `--attn-topk 256` **améliore** la perplexité (234,88 contre 298,56 à contexte\n  2 048) : restreindre l'attent … [2840 caractères tronqués]`
+
+  ```
+vision.md : 5 corrections appliquées
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '150,175p;190,215p;225,240p' docs/vision.md", "description": "Read the remaining vision sections"}`
+
+  ```
+transporte ;
+3. **le placement** : la même règle qu'à l'axe 2, appliquée entre machines — un
+   opérateur va là où son entrée est déjà, ou là où elle coûte le moins à
+   amener ;
+4. **ce qui ne se parallélise pas** : le décodage est **séquentiel** (un jeton
+   dépend du précédent) ; c'est le **préremplissage** qui est parallèle par
+   nature, et c'est donc là qu'il faut commencer ;
+5. **les mesures à faire** : débit d'un flux sérialisé, latence aller-retour,
+   taille moyenne d'une tranche par couche, et le point où le réseau coûte plus
+   que le calcul économisé.
+
+Cette section est une **hypothèse de travail**, pas un résultat. Elle est écrite
+ici parce qu'aucun autre moteur ne peut l'aborder aussi directement : dans une
+architecture par matrices, l'unité de travail est une matrice entière — dans une
+architecture par listes, c'est une poignée de faits.
+
+---
+
+## 5. Axe 4 — Rejouer, comparer, ne pas régresser
+
+Un flux est un **journal**, et un journal se rejoue.
+
+* les **portes de non-régression** du dépôt (Qwen ctx 256 = **19,3885**,
+  gpt-oss ctx 256 = **15,1757**) sont l'application minimale de cette idée :
+  deux chemins d'exécution doivent rendre le même résultat ;
+* les tranch
+… [2116 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='docs/vision.md'; s=open(p).read()\nedits = [\n# d bis) les mesures de l'axe 3 : faites, pas à faire\n(\"\"\"5. **les mesures à faire** : débit d'un flux sérialisé, latence aller-retour,\n   taille moyenne d'une t … [4851 caractères tronqués]`
+
+  ```
+vision.md : 7 corrections de plus
+0
+2465 docs/vision.md
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '1,5p;26,28p;54,57p;184,188p;248,252p;306,310p' docs/roadmap.md; echo \"=== sprints 36-42 ===\"; sed -n '36,42p' docs/sprints.md; echo \"=== programme 24-31, 46 ===\"; sed -n '24,31p;44,48p' docs/programme-recherche.md", "desc … [61 caractères tronqués]`
+
+  ```
+# Roadmap
+
+> Suite de [`docs/vision.md`](vision.md). Cinq phases, de ce qui se fait **tout de
+> suite sur cette machine** à ce qui demande une infra (Colab, FPGA). Chaque
+> phase a un critère de succès **mesurable**, et l'état de chaque chantier est
+|---|---|---|---|
+| 1.1 | **Top-k dans le noyau d'attention GPU** — `--attn-topk 256` améliore la perplexité (234,88 contre 298,56 à 2 048) mais retombe sur le CPU | ⏳ | plus aucun repli CPU dans le chemin long contexte |
+| 1.2 | **Quantification choisie par la mesure** : par couche, par tenseur, plutôt qu'un réglage global | 🔬 | la densité par couche varie de **20 % à 56 %** (`reports/rapport-analyse-flux.md`) : la décision push/pull est une propriété de la COUCHE, pas du modèle |
+|---|---|---|---|
+| 3.1 | **Contrat d'échange v1** : tranche de liste = en-tête (couche, source, échelle, bits) + paires (destination, valeur) | ✅ | format écrit, relu, rejoué sans perte (phase 0.3/0.3bis) ; **transport TCP en place et FIDÈLE** (`--flux-serveur`, `--ppl-reparti`) — écart local/réparti **0,00e0** sur 40 et 200 jetons (39 et 199 flux : le dernier n'a rien à prédire), après correction de deux défauts (plage de couches ignorée par `forward`, norm
+… [2578 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\n# --- roadmap.md ---\np='docs/roadmap.md'; s=open(p).read()\nedits = [\n(\"> Suite de [`docs/vision.md`](vision.md). Cinq phases, de ce qui se fait **tout de\",\n \"> Suite de [`docs/vision.md`](vision.md). Six phas … [4493 caractères tronqués]`
+
+  ```
+roadmap : 6 · programme-recherche : 4 · sprints : 1
+39:  gpt-oss ctx 256 = **15,6017** (sans `DRAVE_GPU`), Qwen3-30B en clusters =
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\n# --- plan-gpu-topk.md ---\np='docs/plan-gpu-topk.md'; s=open(p).read()\nedits = [\n(\"\"\"chiffre l'écart et décrit les trois noyaux qui le comble.\"\"\",\n \"\"\"chiffre l'écart et décrit les trois noyaux qui le c … [2110 caractères tronqués]`
+
+  ```
+(déjà à jour ou absent) chiffre l'écart et décrit les trois noyaux qu
+plan-gpu-topk.md traité
+88:(234,88, gpt-oss, contexte 2 048, mêmes 512 jetons notés : `docs/contexte-long.md`
+99:| 4 | branchement dans `model.rs` (autoriser le GPU quand `attn_topk > 0` **et** que le noyau rend `true`, garder le repli CPU sinon) | ✅ **fait**, en opt-in (`DRAVE_GPU_TOPK=1`) : PPL à ctx 2 048 = **9,4162** contre **9,4167** au CPU (le critère chiffré d'origine (234,88, `docs/contexte-long.md` §6) n'est pas reproduit par ce binaire — c'est la comparaison A/B qui fait foi) · ⚠️ le gain de TEMPS n'est pas là à 2 048 clés : six lancements et cinq recopies par couche et par jeton — la fusion des quatre passes est la prochaine étape |
+101:| 6 | porte de non-régression : les deux valeurs restent 19,3885 et 15,6017 | ✅ **inchangées**, mesurées sur le binaire final : Qwen 19,3885 (CPU **et** avec `DRAVE_GPU_KV`) · gpt-oss 15,1757 (CPU) et 15,1667 (`DRAVE_GPU`) · `cargo test --release` 48/48 |
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='docs/plan-gpu-topk.md'; s=open(p).read()\na = \"gpt-oss 15,1757 (CPU) et 15,1667 (`DRAVE_GPU`) · `cargo test --release` 48/48\"\nb = \"gpt-oss 15,6017 (CPU) — 15,1757 était la valeur d'avant la correction du biai … [357 caractères tronqués]`
+
+  ```
+ok
+101:| 6 | porte de non-régression : les deux valeurs restent 19,3885 et 15,6017 | ✅ **inchangées**, mesurées sur le binaire final : Qwen 19,3885 (CPU **et** avec `DRAVE_GPU_KV`) · gpt-oss 15,6017 (CPU) — 15,1757 était la valeur d'avant la correction du biais de routage du 02/10, voir `reports/rapport-routage-experts.md` |
+=== reste-t-il 15,1757 dans docs/ ? ===
+docs/plan-gpu-topk.md:101:| 6 | porte de non-régression : les deux valeurs restent 19,3885 et 15,6017 | ✅ **inchangées**, mesurées sur le binaire final : Qwen 19,3885 (CPU **et** avec `DRAVE_GPU_KV`) · gpt-oss 15,6017 (CPU) — 15,1757 était la valeur d'avant la correction du biais de routage du 02/10, voir `reports/rapport-routage-experts.md` |
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '1,8p;53,57p;82,86p;284,288p;295,299p' docs/plan-mla-vision.md", "description": "Read the plan-mla-vision anchors"}`
+
+  ```
+# Plan : MLA et vision (chantier 5)
+
+Ces deux-là ne sont pas « à moitié faits » : ils ne sont pas commencés, et ce
+document dit exactement par quoi commencer, pour qu'une session suivante n'ait
+pas à refaire l'enquête. Rien ici n'est mesuré — c'est une feuille de route, et
+elle est marquée comme telle.
+
+## 1. MLA (attention latente, DeepSeek-V2/V3)
+   devant le cache économisé).
+
+### ÉTAT : MLA EST FAIT ET VALIDÉ
+
+Le moteur charge un modèle MLA (`attn_kv_a_mqa` reconnu à ses tenseurs, sans
+relierait l'implémentation à une autre DÉJÀ validée par les portes de
+non-régression. Et le branchement du cache latent dans le plan 1 M (mesurer le
+cache ÷50 sur un vrai modèle MLA, ce qu'on n'a pas ici).
+
+### État du harnais : FAIT
+C'est le plus gros morceau du dépôt : une tour ViT complète, un chemin
+d'injection d'embeddings, et une chaîne de pré-traitement d'image. À mener APRÈS
+MLA, dont le chemin d'injection (`c_kv`) est plus simple et dont le gain
+(cache ÷50) est mesurable sur le plan 1 M.
+
+reste (MLA, tour ViT) vit dans des chemins séparés.
+
+Vérifié : `cargo test` 6/6 et la porte Qwen reste à **19,3885** (le vecteur
+imposé est consommé une fois puis oublié, donc le chemin standard est int
+… [5 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='docs/plan-mla-vision.md'; s=open(p).read()\nedits = [\n(\"\"\"Ces deux-là ne sont pas « à moitié faits » : ils ne sont pas commencés, et ce\ndocument dit exactement par quoi commencer, pour qu'une session suivant … [2093 caractères tronqués]`
+
+  ```
+plan-mla-vision.md : 5 corrections
+| modèle | pourquoi lui | plus petit GGUF | contexte | état |
+|---|---|---|---|---|
+| **DeepSeek-V4.1-Flash** | le plus lourd des ouverts, MoE, agentique | **365,7 Go** (Q2) | — | **en cours** (26 % à 09h36) |
+| **DeepSeek-V4** | la version complète | 3 761 Go | 1 M | hors budget disque |
+| **Kimi-K2.7-Code** | le meilleur agent de code ouvert | **303,9 Go** (UD-IQ1_M) | 262 k | en file |
+| **GLM-5.3** | 1 M de contexte, MoE | **216,7 Go** (UD-IQ1_S) | 1 M | en file |
+| **GLM-5.3-Flash** | le même en plus léger | **93,1 Go** (UD-IQ1_S) | 1 M | en file |
+| **MiniMax-H3** | famille différente (vision+langage) | 22,8 Go (2 × Q4_K) | — | en file |
+| **Qwen3-235B-A22B** | la référence MoE de 2025 | **85,7 Go** (Q2_K) | 262 k | en file |
+| **DeepSeek-V4-Flash** | déjà téléchargé (86,9 Go) | — | 1 M | ✅ sur le disque mécanique |
+| gpt-oss-120b, Qwen3-30B-A3B, Muse-Glimmer-30B | déjà là, servent de témoins | — | 128 k–262 k | ✅ |
+   * **disposition contiguë par cluster** : un nœud ne lit que sa tranche, en
+     séquentiel (NVMe→RAM→VRAM), au lieu de sauter dans tout le fichier.
+4. **Le banc de bout en bout** : perplexité sur 512 jetons, comparable à
+   ll
+… [3138 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='docs/plan-modeles-lourds.md'; s=open(p).read()\nedits = [\n# bandeau d'état en tête\n(\"\"\"| modèle | pourquoi lui | plus petit GGUF | contexte | état |\n|---|---|---|---|---|\"\"\",\n \"\"\"| modèle | pourquoi  … [4654 caractères tronqués]`
+
+  ```
+plan-modeles-lourds.md : 14/14 corrections
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\n# --- plan-prefill-reparti.md : prévenir que l'en-tête est passé de 39 à 79 octets\np='docs/plan-prefill-reparti.md'; s=open(p).read()\na = \"\"\"### 1.1 En-tête (39 octets, identique à l'aller et au retour)\"\"\"\n … [2464 caractères tronqués]`
+
+  ```
+docs/sprints.md              |  5 ++--
+ docs/vision.md               | 65 ++++++++++++++++++++++++++++++++------------
+ 8 files changed, 130 insertions(+), 59 deletions(-)
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 32, in <module>
+AssertionError
+  ```
+
+### 👤 Utilisateur
+
+Agent 34e1d4be-3708-4065-ae77-eca21f86e857 sent a message:
+RAPPORT DE RELECTURE ADVERSE — 5 documents (aucun fichier modifié). Note : docs/vision.md a été modifié pendant mon audit (02/10 09:59) ; je me suis recalé sur sa version courante (v5, gpt-oss 15,6017, finalité d'analyse l.94-99, connexion pondérée/trinaire l.202-211).
+
+| fichier:ligne | citation exacte (≤ 25 mots) | problème | correction minimale proposée (texte de remplacement exact) | gravité |
+|---|---|---|---|---|
+| docs/format-flux.md:3 | « Ce format sert **trois choses à la fois**, et c'est délibéré : » | Le format/transport ne nomme jamais la finalité d'analyse de la vision (« comprendre le modèle et adapter l'architecture à la tâche », vision.md:94-99), alors que les outils existent (`tools/analyse_flux.py`, `profil_flux.py`, `diff_flux.py`) et que la vision fait du journal « l'instrument de réglage ». | Remplacer par « Ce format sert **quatre choses à la fois**, et c'est délibéré : » puis ajouter après l'item 3 (ligne 10) : « 4. l'**analyse** : les mêmes octets, relus par `tools/profil_flux.py`, `tools/analyse_flux.py` et `tools/diff_flux.py`, disent quels neurones travaillent — la donnée qui adapte l'architecture à la tâche. » | moyenne |
+| docs/format-flux.md:119 | « est qu'il ne coûte pas plus de 1,5 fois celui-ci. » | Le critère des 1,5× n'est vérifié qu'à 256 jetons ; `reports/rapport-mode4-lot-listes.md` (tableau « selon la longueur ») mesure **5,6× à 20 jetons** et 0,50× à 64 : la réserve n'est pas portée. | « est qu'il ne coûte pas plus de 1,5 fois celui-ci **à 256 jetons** (5,6× à 20 jetons — `reports/rapport-mode4-lot-listes.md`). » | basse |
+| docs/format-clusters.md:5-6 | « un nœud n'ouvre que ce qu'il sert — mesuré **3,20 Go au lieu de 18,56** et **625 ms au lieu de 3,9 s** » | Les grappes sont cadrées comme un rangement de fichiers et un gain de chargement, alors que la vision en fait l'unité de **placement** des neurones entre machines (axe 3, vision.md:131-143) — le document ne dit jamais que les flux se routent entre grappes. | Ajouter après la ligne 6 : « **Et c'est le mécanisme de placement** : ces grappes sont les neurones qu'on répartit entre nœuds, et le flux d'activation se route de l'une à l'autre (vision, axe 3). » | moyenne |
+| docs/convertisseur.md:111 | « ## 5. Format proposé : `QTNT` » | `QTNT` porte l'ancien nom du projet (Qtrinet) alors que le renommage du 30/09 est « fait partout » (`docs/histoire.md:28-36`, vision.md:264-266) ; aucun autre fichier du dépôt ne l'emploie, et le conteneur n'est jamais relié au format de flux réellement implémenté (`DRVF`). | « ## 5. Format proposé : conteneur **Drave** (ex-`QTNT`), adossé au format de flux `DRVF` » — même remplacement du jeton à la ligne 166 (« conteneur **Drave** (ex-`QTNT`) + index de placement »). | basse |
+| docs/convertisseur.md:116 | « en-tête      magie, version, nb_calques, nb_tenseurs, alignement (2 Mo), graine » | « calque » n'apparaît nulle part ailleurs dans le dépôt hors ce document (le moteur dit « couche ») ; reste du vocabulaire d'avant le renommage (la citation de la directive, ligne 6, est une pièce datée et n'est pas visée). | « en-tête      magie, version, nb_couches, nb_tenseurs, alignement (2 Mo), graine » (idem « calque » → « couche », lignes 119, 139, 167). | basse |
+| docs/convertisseur.md:167 | « \| 7 \| mmap (appel système direct) \| à faire \| » | Contredit `docs/format-clusters.md:176-179` (« Le mmap : **FAIT** », 9,32 s / 6,35 Go contre 30,68 s / 19,20 Go). | « \| 7 \| mmap (appel système direct) \| **fait** \| grosses pages, partage entre processus (`docs/format-clusters.md:176`) \| » | basse |
+| docs/convertisseur.md:247 | « 2. **Épinglage NUMA** : 20 % mesurés, mais `sched_setaffinity` n'est pas dans » | Le drapeau `--pin` existe et a été mesuré **perdant** (ligne 186 : « ✅ mesuré, **négatif** », et § « L'épinglage NUMA ne paie pas ») : l'item « reste à faire » est périmé. | « 2. **Épinglage NUMA** : **fait** (`--pin`), mesuré **perdant** — 23,2 → 27,6 s sur le 30B MoE (ligne 186). » | moyenne |
+| docs/convertisseur.md:249 | « 3. **Q8_0 en place** pour les projections (la tête le fait déjà). » | Contredit le tableau « Ce qui est fait » du même document (ligne 187 : « Q8_0 en place (projections) ✅ — chargement 2,73 → 0,81 s, mémoire 921 → 566 Mo »). | « 3. **Q8_0 en place** pour les projections : **fait** — chargement 2,73 → 0,81 s, mémoire 921 → 566 Mo (ligne 187). » | moyenne |
+| docs/convertisseur.md:250 | « 4. **gpt-oss-120b** : le routeur MoE fonctionne (top-4 sur 128) mais le modèle » | Périmé : le même document dit plus bas qu'il « charge et tourne » (5 tok/s) et c'est une porte publiée — **15,6017** à ctx 256 (`README.md:374`, `reports/rapport-routage-experts.md:66`). | « 4. **gpt-oss-120b** : **charge et tourne** (voir ci-dessous) ; porte de non-régression **15,6017** à ctx 256 — `README.md:374`. » | moyenne |
+| docs/convertisseur.md:311-313 | « Les suspects restants sont donc plus fins : le facteur d'échelle de l'attention, l'ordre exact des normes, ou la rampe YaRN » | Hypothèse réfutée le jour même : le biais de `attn_output` était ignoré et la fenêtre s'appliquait à 36/36 couches — 39,80 → **20,84** à 63 jetons (`reports/rapport-gpt-oss-perplexite.md` §2.a-b). | « Les suspects restants ont été testés le jour même : biais de `attn_output` (ignoré) et fenêtre sur 36/36 couches — 39,80 → **20,84** à 63 jetons (`reports/rapport-gpt-oss-perplexite.md`). » | moyenne |
+| docs/colab-reparti.md:37 | « **Débit** : 3 663 octets par flux en dense (en-tête v4 compris) » | Version de protocole périmée : le protocole courant est **v5** (modes 0-4, dont « LOT en listes ») — `docs/format-flux.md:84-89`, `drave-core/src/main.rs:1862` ; la taille d'en-tête (79 o) est inchangée, le chiffre reste bon. | « **Débit** : 3 663 octets par flux en dense (en-tête **v5** compris) » | moyenne |
+| docs/colab-reparti.md:3-4 | « Objectif : deux machines qui se passent des **listes d'activation**, l'une sur le runtime Colab, l'autre en local » | Le document de transport cadre le flux comme une pure recette de fidélité ; la finalité d'analyse de la vision (vision.md:94-99) est absente des documents de format et de transport. | Ajouter après la ligne 4 : « Ce flux est aussi le **journal** qu'on relit (`--trace-flux`, `tools/analyse_flux.py`) pour comprendre le modèle et adapter l'architecture à la tâche. » | moyenne |
+| docs/contexte-long.md:101 | « débit bout en bout à chiffrer » | Mesuré depuis : 17,1 → 13,6 s (−20 %) sur Qwen ctx 512 et ≈50 → 34,4 s (−31 %) sur gpt-oss ctx 256 (`reports/rapport-prefill-par-lots.md:193-194`) ; la fin de la ligne (« reste à mesurer ») est du même tonneau. | Remplacer par « débit bout en bout **mesuré** (Qwen ctx 512 : 17,1 → 13,6 s, −20 % ; gpt-oss ctx 256 : ≈50 → 34,4 s, −31 %) — `reports/rapport-prefill-par-lots.md` ». | moyenne |
+| docs/contexte-long.md:102 | « mesuré : +7,1 % de perplexité (llama.cpp q8_0 : +3,1 %) » | Périmé : le même document (§4.bis) mesure **+1,5 %** à 512 et **+3,0 %** à 8 192 depuis les échelles par bloc de 32 ; « échelle par vecteur » (même ligne) ne décrit plus le code (vision.md:215-217, `REPRISE.md:179`). | « \| E2 \| **KV int8** \| **fait** (échelle **par bloc de 32**, dequantification à la lecture) \| ÷4 sur le KV ; 128 k confortable \| mesuré : **+1,5 %** à 512 jetons, **+3,0 %** à 8 192 (llama.cpp q8_0 : +0,8 %) \| » | moyenne |
+| docs/contexte-long.md:103 | « mesuré : **+384 %** à 512 jetons, **+364 % à 8 192** » | Le +384 % est la mesure d'avant les échelles par bloc de 32 ; la valeur courante à 512 est **+219 %** (`REPRISE.md:180` : « était +384 % et +450 % » ; même document §4.bis). | « mesuré : **+219 %** à 512 jetons, **+364 % à 8 192** » | basse |
+| docs/contexte-long.md:106 | « **non testable ici** : aucun modèle MLA en GGUF sur cette machine » | Périmé au 02/10 : MLA validée contre llama.cpp — GLM-5.3 corrélation **0,999024**, Kimi-K2.7 calculable (`reports/rapport-mla-experts.md:99-118`, `docs/plan-deepseek41-complet.md`) ; seule V4.1 reste bloquée. | « **validée** contre llama.cpp (GLM-5.3, corrélation **0,999024** ; Kimi-K2.7 calculable) — V4.1 encore bloquée (hyper-connexions, sortie à rang faible) ; `reports/rapport-mla-experts.md` » | haute |
+| docs/contexte-long.md:107 | « **non testable ici sans le chemin image** : le projecteur `mmproj` est présent, mais rien ne lit les patchs » | Périmé : chaîne image complète démontrée (patchs **5,4e-7**, projecteur **1,7e-6**, une couche 1,8e-6) — `REPRISE.md:220-229`, `docs/plan-mla-vision.md`. | « **faite** : chaîne complète démontrée (patchs **5,4e-7**, projecteur **1,7e-6**) — `docs/plan-mla-vision.md` » | haute |
+| docs/contexte-long.md:407-408 | « simple tant que le contexte demandé tient dans la longueur initiale déclarée (4 096 pour gpt-oss), interpolation YaRN au-delà » | Décrit l'ancienne politique : le code bascule à `ctx > original × 4` (`drave-core/src/model.rs:2198`) et le §5.quater du même document fixe le seuil à **4 ×** (16 384 pour gpt-oss). | « simple tant que le contexte demandé ne dépasse pas **4 ×** la longueur initiale déclarée (16 384 pour gpt-oss, §5.quater), interpolation YaRN au-delà » | moyenne |
+| docs/contexte-long.md:545-546 | « Le test est donc **arrêté** : il faudra un remplissage varié (du vrai texte) » | Périmé : l'aiguille v2 (remplissage WikiText-2, réponses de 40 jetons, préremplissage par lots) trouve **12/12** — `reports/rapport-aiguille.md:74`, `REPRISE.md:190`. | « Le test a depuis été relancé (v2 : remplissage Wikitext-2, réponses de 40 jetons, préremplissage par lots) et **12 sondes sur 12** sont trouvées — `reports/rapport-aiguille.md` » | moyenne |
+| docs/contexte-long.md:560 | « \| **top-256 clés par requête** (`--attn-topk 256`) \| **234,88** ← *meilleure* \| » | Les valeurs absolues de ce tableau ne sont pas reproduites par le binaire actuel : la vision (vision.md:79-83) et `docs/plan-gpu-topk.md:88-89,99` disent que seul l'écart A/B fait foi (ctx 2 048 : 9,4162 GPU contre 9,4167 CPU). | Ajouter après la ligne 561 : « (valeurs du 30/09, non reproduites depuis — l'écart A/B fait foi : `docs/plan-gpu-topk.md:88-89`) ». | basse |
+
+**Ce qui est déjà cohérent et ne doit pas être touché**
+- `format-flux.md` : protocole v5 et cinq modes dont le mode 4 « LOT en listes » (l.84-120) ; les trois usages posés d'emblée (l.3-14) ; « des listes, pas des matrices » jusque sur le câble (l.133-136) ; l'avertissement sur les 39 octets d'époque (l.157-160) ; la règle de la norme finale (l.162-169).
+- `format-clusters.md` : porte clusters 799,8557 / 6,28 Go (l.168) conforme aux faits ; § « Le nœud partiel » et la somme des contributions manquante entre nœuds (l.157-173) ; ordre des experts par trace de routage mesurée (l.60-71) ; chiffres adossés à `rapport-decoupage-moe.md` et `rapport-lecteur-multifichiers.md`.
+- `convertisseur.md` : résultats négatifs assumés (seuil des zéros à 25 %, l.47-59 ; NUMA perdant, l.231-236 ; plan qui surestime les MoE ×2, l.238-242) ; fidélité par emprunt (l.27-33, 144-157) ; aucune porte périmée (19,3885, l.193).
+- `colab-reparti.md` : les 14 champs du contrat d'activation (l.24) ; l'aveu que les deux nœuds chargent le modèle entier (l.27, 30-33) ; critère 0,00e0 (l.22, 104-112) ; modes 3/4 et leurs chiffres (l.28).
+- `contexte-long.md` : campagne de placement des bits et réglage recommandé (l.176-210) ; §5.quater (seuil 4×) ; chiffres du noyau KV GPU (l.226-250, 299-353) ; rappel de méthode (l.574-580).
+- Global : aucune porte périmée dans les cinq documents, aucun compte de tests ni liste de formats périmés ; renvois aux rapports présents partout sauf `convertisseur.md` (porteur de ses propres mesures).
+
+**Points à trancher par l'humain**
+1. Nom du conteneur `QTNT` : le renommer (quel nom ?) ou supprimer la section au profit de `DRVF`.
+2. Tableaux « Ordre de marche » / « Reste à faire » de `convertisseur.md` (28/09) : journal daté ou mise à jour ?
+3. Séries KV canoniques : `contexte-long.md` porte « par vecteur » (§4.bis, tableau E) et « par bloc de 32 » (§4.bis.3) — choisir celle qui fait référence dans le tableau E.
+4. Faut-il spécifier dans DRVF le cas général « connexion pondérée » et le cas trinaire « deux listes » (vision.md:202-211), absents du document de format ?
+5. Hors des cinq documents (code) : `model.rs:1518-1519` dit que le croisement push/pull est à « 10 % de densité » (repris par `tools/analyse_flux.py`) alors que `seuil_push = 0.22` (model.rs:2621) et que la vision/le rapport disent ~22 % — à aligner.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport sys\ndef applique(p, edits, nom):\n    s = open(p).read(); n = 0; manques = []\n    for a, b in edits:\n        if a in s:\n            s = s.replace(a, b, 1); n += 1\n        else:\n            manques.appen … [4986 caractères tronqués]`
+
+  ```
+format-flux.md : 3/3
+format-clusters.md : 0/1
+   ABSENT : un nœud n'ouvre que ce qu'il sert — mesuré **3,20 Go au lieu de 18,56*
+colab-reparti.md : 1/2
+   ABSENT : Objectif : deux machines qui se passent des **listes d'activation**, l
+convertisseur.md : 6/7
+   ABSENT : Les suspects restants sont donc plus fins : le facteur d'échelle de l'
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '1,8p' docs/format-clusters.md; echo \"=== colab 1-8 ===\"; sed -n '1,8p' docs/colab-reparti.md; echo \"=== convertisseur ===\"; grep -n \"suspects restants\" -A 3 docs/convertisseur.md | head -6", "description": "Read the exa … [37 caractères tronqués]`
+
+  ```
+# Format — le modèle éclaté en clusters (un fichier par cluster)
+
+**En une ligne** : un GGUF est converti en `commun.gguf` + `cluster-XX.gguf`, un
+fichier **GGUF autonome par cluster d'experts**, avec un manifeste qui porte la
+correspondance ; un nœud n'ouvre que ce qu'il sert — mesuré **3,20 Go au lieu de
+18,56** et **625 ms au lieu de 3,9 s** sur Qwen3-30B-A3B.
+
+Outil : [`tools/convertir_clusters.py`](../tools/convertir_clusters.py).
+=== colab 1-8 ===
+# Répétition Colab — la phase 3.4, pas à pas
+
+Objectif : deux machines qui se passent des **listes d'activation**, l'une sur le
+runtime Colab, l'autre en local, et **les mêmes logits** qu'en local.
+
+Ce document est la recette ; l'état du protocole et les chiffres qui la
+dimensionnent sont dans `docs/format-flux.md` et
+`reports/rapport-transport-liste.md`.
+=== convertisseur ===
+320:fenêtre glissante est sans effet en deçà de 128 jetons. Les suspects restants
+321-sont donc plus fins : le facteur d'échelle de l'attention, l'ordre exact des
+322-normes, ou la rampe YaRN (à corriger plutôt qu'à contourner, puisque gpt-oss a
+323-été entraîné avec).
+  ```
+
+### 👤 Utilisateur
+
+Background subagent 34e1d4be-3708-4065-ae77-eca21f86e857 finished and will do no further work unless you send it more.
+Its closing message:
+| fichier:ligne | citation exacte (≤ 25 mots) | problème | correction minimale proposée (texte de remplacement exact) | gravité |
+|---|---|---|---|---|
+| docs/format-flux.md:3 | « Ce format sert **trois choses à la fois**, et c'est délibéré : » | Le format/transport ne nomme jamais la finalité d'analyse de la vision (« comprendre le modèle et adapter l'architecture à la tâche », vision.md:94-99), alors que les outils existent (`tools/analyse_flux.py`, `profil_flux.py`, `diff_flux.py`) et que la vision fait du journal « l'instrument de réglage ». | Remplacer par « Ce format sert **quatre choses à la fois**, et c'est délibéré : » puis ajouter après l'item 3 (ligne 10) : « 4. l'**analyse** : les mêmes octets, relus par `tools/profil_flux.py`, `tools/analyse_flux.py` et `tools/diff_flux.py`, disent quels neurones travaillent — la donnée qui adapte l'architecture à la tâche. » | moyenne |
+| docs/format-flux.md:119 | « est qu'il ne coûte pas plus de 1,5 fois celui-ci. » | Le critère des 1,5× n'est vérifié qu'à 256 jetons ; `reports/rapport-mode4-lot-listes.md` (tableau « selon la longueur ») mesure **5,6× à 20 jetons** et 0,50× à 64 : la réserve n'est pas portée. | « est qu'il ne coûte pas plus de 1,5 fois celui-ci **à 256 jetons** (5,6× à 20 jetons — `reports/rapport-mode4-lot-listes.md`). » | basse |
+| docs/format-clusters.md:5-6 | « un nœud n'ouvre que ce qu'il sert — mesuré **3,20 Go au lieu de 18,56** et **625 ms au lieu de 3,9 s** » | Les grappes sont cadrées comme un rangement de fichiers et un gain de chargement, alors que la vision en fait l'unité de **placement** des neurones entre machines (axe 3, vision.md:131-143) — le document ne dit jamais que les flux se routent entre grappes. | Ajouter après la ligne 6 : « **Et c'est le mécanisme de placement** : ces grappes sont les neurones qu'on répartit entre nœuds, et le flux d'activation se route de l'une à l'autre (vision, axe 3). » | moyenne |
+| docs/convertisseur.md:111 | « ## 5. Format proposé : `QTNT` » | `QTNT` porte l'ancien nom du projet (Qtrinet) alors que le renommage du 30/09 est « fait partout » (`docs/histoire.md:28-36`, vision.md:264-266) ; aucun autre fichier du dépôt ne l'emploie, et le conteneur n'est jamais relié au format de flux réellement implémenté (`DRVF`). | « ## 5. Format proposé : conteneur **Drave** (ex-`QTNT`), adossé au format de flux `DRVF` » — même remplacement du jeton à la ligne 166 (« conteneur **Drave** (ex-`QTNT`) + index de placement »). | basse |
+| docs/convertisseur.md:116 | « en-tête      magie, version, nb_calques, nb_tenseurs, alignement (2 Mo), graine » | « calque » n'apparaît nulle part ailleurs dans le dépôt hors ce document (le moteur dit « couche ») ; reste du vocabulaire d'avant le renommage (la citation de la directive, ligne 6, est une pièce datée et n'est pas visée). | « en-tête      magie, version, nb_couches, nb_tenseurs, alignement (2 Mo), graine » (idem « calque » → « couche », lignes 119, 139, 167). | basse |
+| docs/convertisseur.md:167 | « \| 7 \| mmap (appel système direct) \| à faire \| » | Contredit `docs/format-clusters.md:176-179` (« Le mmap : **FAIT** », 9,32 s / 6,35 Go contre 30,68 s / 19,20 Go). | « \| 7 \| mmap (appel système direct) \| **fait** \| grosses pages, partage entre processus (`docs/format-clusters.md:176`) \| » | basse |
+| docs/convertisseur.md:247 | « 2. **Épinglage NUMA** : 20 % mesurés, mais `sched_setaffinity` n'est pas dans » | Le drapeau `--pin` existe et a été mesuré **perdant** (ligne 186 : « ✅ mesuré, **négatif** », et § « L'épinglage NUMA ne paie pas ») : l'item « reste à faire » est périmé. | « 2. **Épinglage NUMA** : **fait** (`--pin`), mesuré **perdant** — 23,2 → 27,6 s sur le 30B MoE (ligne 186). » | moyenne |
+| docs/convertisseur.md:249 | « 3. **Q8_0 en place** pour les projections (la tête le fait déjà). » | Contredit le tableau « Ce qui est fait » du même document (ligne 187 : « Q8_0 en place (projections) ✅ — chargement 2,73 → 0,81 s, mémoire 921 → 566 Mo »). | « 3. **Q8_0 en place** pour les projections : **fait** — chargement 2,73 → 0,81 s, mémoire 921 → 566 Mo (ligne 187). » | moyenne |
+| docs/convertisseur.md:250 | « 4. **gpt-oss-120b** : le routeur MoE fonctionne (top-4 sur 128) mais le modèle » | Périmé : le même document dit plus bas qu'il « charge et tourne » (5 tok/s) et c'est une porte publiée — **15,6017** à ctx 256 (`README.md:374`, `reports/rapport-routage-experts.md:66`). | « 4. **gpt-oss-120b** : **charge et tourne** (voir ci-dessous) ; porte de non-régression **15,6017** à ctx 256 — `README.md:374`. » | moyenne |
+| docs/convertisseur.md:311-313 | « Les suspects restants sont donc plus fins : le facteur d'échelle de l'attention, l'ordre exact des normes, ou la rampe YaRN » | Hypothèse réfutée le jour même : le biais de `attn_output` était ignoré et la fenêtre s'appliquait à 36/36 couches — 39,80 → **20,84** à 63 jetons (`reports/rapport-gpt-oss-perplexite.md` §2.a-b). | « Les suspects restants ont été testés le jour même : biais de `attn_output` (ignoré) et fenêtre sur 36/36 couches — 39,80 → **20,84** à 63 jetons (`reports/rapport-gpt-oss-perplexite.md`). » | moyenne |
+| docs/colab-reparti.md:37 | « **Débit** : 3 663 octets par flux en dense (en-tête v4 compris) » | Version de protocole périmée : le protocole courant est **v5** (modes 0-4, dont « LOT en listes ») — `docs/format-flux.md:84-89`, `drave-core/src/main.rs:1862` ; la taille d'en-tête (79 o) est inchangée, le chiffre reste bon. | « **Débit** : 3 663 octets par flux en dense (en-tête **v5** compris) » | moyenne |
+| docs/colab-reparti.md:3-4 | « Objectif : deux machines qui se passent des **listes d'activation**, l'une sur le runtime Colab, l'autre en local » | Le document de transport cadre le flux comme une pure recette de fidélité ; la finalité d'analyse de la vision (vision.md:94-99) est absente des documents de format et de transport. | Ajouter après la ligne 4 : « Ce flux est aussi le **journal** qu'on relit (`--trace-flux`, `tools/analyse_flux.py`) pour comprendre le modèle et adapter l'architecture à la tâche. » | moyenne |
+| docs/contexte-long.md:101 | « débit bout en bout à chiffrer » | Mesuré depuis : 17,1 → 13,6 s (−20 %) sur Qwen ctx 512 et ≈50 → 34,4 s (−31 %) sur gpt-oss ctx 256 (`reports/rapport-prefill-par-lots.md:193-194`) ; la fin de la ligne (« reste à mesurer ») est du même tonneau. | Remplacer par « débit bout en bout **mesuré** (Qwen ctx 512 : 17,1 → 13,6 s, −20 % ; gpt-oss ctx 256 : ≈50 → 34,4 s, −31 %) — `reports/rapport-prefill-par-lots.md` ». | moyenne |
+| docs/contexte-long.md:102 | « mesuré : +7,1 % de perplexité (llama.cpp q8_0 : +3,1 %) » | Périmé : le même document (§4.bis) mesure **+1,5 %** à 512 et **+3,0 %** à 8 192 depuis les échelles par bloc de 32 ; « échelle par vecteur » (même ligne) ne décrit plus le code (vision.md:215-217, `REPRISE.md:179`). | « \| E2 \| **KV int8** \| **fait** (échelle **par bloc de 32**, dequantification à la lecture) \| ÷4 sur le KV ; 128 k confortable \| mesuré : **+1,5 %** à 512 jetons, **+3,0 %** à 8 192 (llama.cpp q8_0 : +0,8 %) \| » | moyenne |
+| docs/contexte-long.md:103 | « mesuré : **+384 %** à 512 jetons, **+364 % à 8 192** » | Le +384 % est la mesure d'avant les échelles par bloc de 32 ; la valeur courante à 512 est **+219 %** (`REPRISE.md:180` : « était +384 % et +450 % » ; même document §4.bis). | « mesuré : **+219 %** à 512 jetons, **+364 % à 8 192** » | basse |
+| docs/contexte-long.md:106 | « **non testable ici** : aucun modèle MLA en GGUF sur cette machine » | Périmé au 02/10 : MLA validée contre llama.cpp — GLM-5.3 corrélation **0,999024**, Kimi-K2.7 calculable (`reports/rapport-mla-experts.md:99-118`, `docs/plan-deepseek41-complet.md`) ; seule V4.1 reste bloquée. | « **validée** contre llama.cpp (GLM-5.3, corrélation **0,999024** ; Kimi-K2.7 calculable) — V4.1 encore bloquée (hyper-connexions, sortie à rang faible) ; `reports/rapport-mla-experts.md` » | haute |
+| docs/contexte-long.md:107 | « **non testable ici sans le chemin image** : le projecteur `mmproj` est présent, mais rien ne lit les patchs » | Périmé : chaîne image complète démontrée (patchs **5,4e-7**, projecteur **1,7e-6**, une couche 1,8e-6) — `REPRISE.md:220-229`, `docs/plan-mla-vision.md`. | « **faite** : chaîne complète démontrée (patchs **5,4e-7**, projecteur **1,7e-6**) — `docs/plan-mla-vision.md` » | haute |
+| docs/contexte-long.md:407-408 | « simple tant que le contexte demandé tient dans la longueur initiale déclarée (4 096 pour gpt-oss), interpolation YaRN au-delà » | Décrit l'ancienne politique : le code bascule à `ctx > original × 4` (`drave-core/src/model.rs:2198`) et le §5.quater du même document fixe le seuil à **4 ×** (16 384 pour gpt-oss). | « simple tant que le contexte demandé ne dépasse pas **4 ×** la longueur initiale déclarée (16 384 pour gpt-oss, §5.quater), interpolation YaRN au-delà » | moyenne |
+| docs/contexte-long.md:545-546 | « Le test est donc **arrêté** : il faudra un remplissage varié (du vrai texte) » | Périmé : l'aiguille v2 (remplissage WikiText-2, réponses de 40 jetons, préremplissage par lots) trouve **12/12** — `reports/rapport-aiguille.md:74`, `REPRISE.md:190`. | « Le test a depuis été relancé (v2 : remplissage Wikitext-2, réponses de 40 jetons, préremplissage par lots) et **12 sondes sur 12** sont trouvées — `reports/rapport-aiguille.md` » | moyenne |
+| docs/contexte-long.md:560 | « \| **top-256 clés par requête** (`--attn-topk 256`) \| **234,88** ← *meilleure* \| » | Les valeurs absolues de ce tableau ne sont pas reproduites par le binaire actuel : la vision (vision.md:79-83) et `docs/plan-gpu-topk.md:88-89,99` disent que seul l'écart A/B fait foi (ctx 2 048 : 9,4162 GPU contre 9,4167 CPU). | Ajouter après la ligne 561 : « (valeurs du 30/09, non reproduites depuis — l'écart A/B fait foi : `docs/plan-gpu-topk.md:88-89`) ». | basse |
+
+**Ce qui est déjà cohérent et ne doit pas être touché**
+
+- `docs/format-flux.md` : protocole **v5** et cinq modes, dont le mode 4 « LOT en listes » (l.84-120) ; les trois usages posés d'emblée (l.3-14) ; « des listes, pas des matrices » jusque sur le câble (l.133-136) ; l'avertissement sur les 39 octets d'époque (l.157-160) ; la règle de la norme finale (l.162-169).
+- `docs/format-clusters.md` : porte clusters **799,8557** / 6,28 Go (l.168) conforme aux faits ; § « Le nœud partiel » et la somme des contributions manquante **entre nœuds** (l.157-173) ; ordre des experts par trace de routage mesurée (l.60-71) ; chiffres adossés à `rapport-decoupage-moe.md` et `rapport-lecteur-multifichiers.md`.
+- `docs/convertisseur.md` : les résultats négatifs assumés (seuil d'abolition des zéros à 25 %, l.47-59 ; épinglage NUMA perdant, l.231-236 ; plan qui surestime les MoE d'un facteur 2, l.238-242) ; la fidélité par emprunt (l.27-33 et l.144-157) ; aucune porte périmée (Qwen 0,5B = 19,3885, l.193).
+- `docs/colab-reparti.md` : les 14 champs du contrat d'activation (l.24) ; l'aveu que les deux nœuds chargent le modèle entier (l.27, 30-33) ; le critère d'écart `0,00e0` (l.22, 104-112) ; modes 3 et 4 avec leurs chiffres (l.28).
+- `docs/contexte-long.md` : la campagne de placement des bits et le réglage recommandé `DRAVE_KV_BITS=8 DRAVE_KV_K_F16=1` (l.176-210) ; §5.quater (seuil à 4 ×) ; les chiffres du noyau KV GPU (l.226-250, 299-353) ; le rappel de méthode final (l.574-580).
+- Global : dans les cinq documents, **aucune porte périmée** (19,3885 et 799,8557 exacts), aucun compte de tests ni liste de formats périmés, et les renvois aux rapports sont présents partout sauf `convertisseur.md` (qui est le porteur de ses propres mesures).
+
+**Points à trancher par l'humain**
+
+1. **Nom du conteneur `QTNT`** : le renommer (quel nom ? le document ne doit pas inventer d'acronyme) ou supprimer la section au profit du format de flux `DRVF` — décision de nommage, pas de contenu.
+2. **Tableaux « Ordre de marche » / « Reste à faire » de `convertisseur.md`** (daté du 28/09) : à garder comme journal daté ou à mettre à jour ? Les constats mmap / NUMA / Q8_0 / gpt-oss en découlent.
+3. **Séries KV canoniques** : `contexte-long.md` porte côte à côte les mesures « par vecteur » (§4.bis, tableau E) et « par bloc de 32 » (§4.bis.3) — choisir la série qui fait référence dans le tableau E.
+4. **DRVF et les deux cas de la vision** (vision.md:202-211) : faut-il spécifier dans le format le cas général « connexion pondérée » et le cas trinaire « deux listes » (le signe porté par l'appartenance), aujourd'hui absents du document de format ?
+5. **Hors des cinq documents (code)** : le commentaire `drave-core/src/model.rs:1518-1519` dit que le croisement push/pull est à « 10 % de densité » (repris par `tools/analyse_flux.py`) alors que `seuil_push = 0.22` (model.rs:2621) et que le rapport/la vision disent **~22 %** — à aligner.
+
+Note de méthode : `docs/vision.md` a été modifié pendant l'audit (02/10, 09:59) ; je me suis recalé sur sa version courante (v5, gpt-oss 15,6017, finalité d'analyse l.94-99, connexion pondérée/trinaire l.202-211) et aucun des cinq documents audités n'a bougé pendant l'audit. Rapport transmis au parent (`bbd6969f-0f70-42b2-8951-64d1f2f36d2e`).
+
+
+  ```
+[198, 284, 8397, 425, 10965, 465, 284, 14731, 8397, 425, 10965, 465, 374, 458, 6364, 4531, 1154, 12425, 323, 33496, 12089, 659, 1260, 1030, 264, 8640, 569, 12, 31, 39400, 3476, 389, 279, 12425, 4013, 576, 8596, 304, 220, 17, 15, 15, 15, 659, 1096, 572, 8110, 553, 264, 39400, 3476, 304, 279, 1486, 6252, 2382, 5326, 553, 21315, 75923, 1154, 892, 572, 10660, 304, 220, 17, 15, 15, 16, 518, 279, 16194, 7154, 26221, 659, 1260, 1030, 264, 8640, 3476, 304, 279, 12425, 4013, 20207, 3757, 1581, 291, 304, 220, 17, 15, 15, 17, 659, 758, 220, 17, 15, 15, 19, 425, 10965, 465, 26120, 264, 3476, 438, 330, 28417, 330, 304, 279, 9234, 330, 70066, 364, 82, 15106, 330, 315, 279, 12425, 4013, 576, 5724, 37625, 2587, 566, 58235, 16263, 19571, 4389, 26099, 323, 42323, 15035, 18337, 659, 1260, 572, 6311, 304, 279, 220, 17, 15, 15, 20, 33496, 53148, 315, 279, 25179, 92301, 1486, 43562, 49840, 1154, 892, 572, 10660, 518, 279, 45406, 26221, 304, 70998, 323, 279, 11012, 1268, 38420, 16937, 304, 7148, 659, 1260, 572, 15540, 553, 3757, 67473, 323, 58235, 16263, 7355, 1232, 812, 672, 1154, 49975, 1863, 12707, 1154, 13928, 17734, 1154, 55130, 23905, 416, 1154, 59310, 80664, 323, 67034, 10926, 659, 4710, 758, 220,
+… [3958 caractères tronqués]
+  ```
+
+
+  ```
+4592 /tmp/ids_llama_qwen.txt
+198
+ 284
+ 8397
+ 425
+ 10965
+ 465
+=== ids drave ===
+198,284,8397,425,10965,465,284,14731,8397,425,10965,465,374,458,6364,4531,1154,12425,323,33496,12089,659,1260,1030,264,8640,569,12,31,39400,3476,389,279,12425,4013,576,8596,304,220,17,15,15,15,659,1096,572,8110,553,264,39400,3476,304,279,1486,6252,2382,5326,553,21315,75923,1154,892,572,10660,304,220,17,15,15,16,518,279,16194,7154,26221,659,1260,1030,264,8640,3476,304,279,12425,4013,20207,3757,1581,291,304,220,17,15,15,17,659,758,220,17,15,15,19,425,10965,465,26120,264,3476,438,330,28417,330,304,279,9234,330,70066,364,82,15106,330,315,279,12425,4013,576,5724,37625,2587,566,58235,16263,19571,4389,26099,323,42323,15035,18337,659,1260,572,6311,304,279,220,17,15,15,20,33496,53148,315,279,25179,92301,1486,43562,49840,1154,892,572,10660,518,279,45406,26221,304,70998,323,279,11012,1268,38420,16937,304,7148,659,1260,572,15540,553,3757,67473,323,58235,16263,7355,1232,812,672,1154,49975,1863,12707,1154,13928,17734,1154,55130,23905,416,1154,59310,80664,323,67034,10926,659,4710,758,220,17,15,15,21,1154,425,10965,465,58235,16263,1232,812,672,304,279,1486,93736,5326,553,4389,45107,27507,659,1260,9723,389,264,220,17,15,
+… [3958 caractères tronqués]
+  ```
+
+
+  ```
+�è§Ĵ', 'Ġtransactional', 'à±ģà°µ', 'ĠÑģÑĢÐ°Ð²Ð½ÐµÐ½Ð¸Ñİ', 'ĠÑģÑĢÐµÐ´ÑļÐ¸Ð¼', 'HIGH', 'KES', 'Ġwink', 'ĠGomes', 'æ³¯', 'æĥĺ', 'æĿ¥æııè¿°', 'å¯¹ä»ĸä»¬çļĦ', 'ä½łä¸ª', 'å°ıçĮª', 'Ġscow', 'otho', 'æ°ĶçĽ¸', 'æķĻèĤ²æĶ¹éĿ©', 'lares', 'rtle', 'Ġ×ķ×ľ', 'Ġà¦¬à¦ĩ', 'ãĤĵãģ§ãģĻ', 'è§Ĩè§īæķĪæŀľ', 'Ġcushions', 'ĠÙģØ§Ø±Ø³ÛĮ', 'Ġàª¤à«ĩ', 'ä¸Ĭæĸ°åı°éĺ¶', 'çļĦè¿ĳ', 'å¯¹æľī', 'è¿ĩåįĬ', 'Ġspolu', 'çİ°è¡ĮçļĦ', 'é«ĺå¼ºåº¦', 'exerc', 'geno', 'ÑĢÐ¾ÑģÑĤÑĢÐ°', 'ĠĠĠĠĠĠĠĠĠĠĠĠĠĠĠĠĠĠĠĠĠĠĠĠĠĠĠĠĠĠĠĠĠĠĠĠĠĠĠĠĠĠĠĠĠĠĠĠĠĠ', '.jpeg', 'éĻĦåĽ¾', 'ĠMalaria', 'ãģłãģĮ', 'ĠPetri', 'HttpGet', 'åĩ¶çĮĽ', 'è¿Ľå±ķæĥħåĨµ', '-uniform', 'Ġindulgence', 'ĠÐ½Ð°Ð¸Ð±Ð¾Ð»ÑĮ', 'Ġutilitarian', '_tr', 'Ġvile', 'ÑĢÐ¾Ð¼Ð°', 'åºĶåĲĳ', 'spo', 'åİŁä½į', 'Threshold', 'åıĹç´¯', 'Ġantise', 'ĠByrd', 'ç¬¬ä¸īèĢħ', 'ÐŁÑĥ', 'åĤ¨èĹı', 'çīĻåĪ·', 'å°ĩä¾Ĩ', 'éķľæ£ĢæŁ¥', 'Ġìķ¼', 'Ġthermo', 'éĩįå¤§éĹ®é¢ĺ', '-Eight', 'ĠÃ¡mbito', 'Ġclarifies', 'Ġà¦Ĺà¦£', 'Ġmicrow', 'åıĳæĺİä¸ĵåĪ©', 'çŀİåŃĲ', 'à®ļà¯įà®ļ', 'Ġà°µà°¿à°', 'à¸Ńà¸¸à¸Ľ', 'ĠChampagne', 'ĠdÃ©partement', 'Ġqualsiasi', 'å¦©åªļ', 'Cities', 'Din', '\\varepsilon', 'heur', 'Ġduda', 'Ġlbl', 'è¿Ļè¿ĺæĺ¯', 'åı¯å®ŀçİ°', 'éķ¿åĩº', 'ä¸īéĹ¨', 'à¸Ļà¸µ', 'çĽ´åīį', 'æĺ¯ä¸Ģå®ļ', 'è¿ľè¶ħ', 'ä¸ºäºĨä¿ĿæĬ¤', 'Ø§Ø¨ÙĨ', 'æ²īé¦Ļ', '
+… [3959 caractères tronqués]
+  ```
+
+
+  ```
+bash-11 [bash] completed — cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && cargo build --release 2>&1 | tail -5 && echo "=== TESTS ===" && cargo test --release 2>&1 | tail -25
+bash-12 [bash] completed — cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ./qtrinet-core/target/release/qtrinet-core models/Qwen2.5-0.5B-Q8_0.gguf --ppl /tmp/ids_qwen.txt --ctx 256 --abits 16 --threads 16 --limit 512 --dense 2>&1 | tail -12
+bash-13 [bash] completed — cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo "=== H1 brut 64 jetons, motif 1 (ancien comportement fenêtre) ===" && /usr/bin/time -f "TEMPS %e s, MAXRSS %M Ko" ./qtrinet-core/target/release/qtrinet-core /home/stephane/FastNVMe/models/gpt-oss-120b-MXFP4.gguf --ppl /tmp/ids_oss.txt --ctx 256 --limit 64 --dense --threads 16 --swa-pattern 1 2>&1 | grep -vE "^\[modele\]|listes" | tail -25
+bash-14 [bash] killed — /tmp/mesures_oss.sh 2>&1 | tail -40
+bash-15 [bash] completed — cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && LD_LIBRARY_PATH=/home/stephane/Data13TB/stephane/GitHub/llama.cpp/build/bin ./tools/ref_logits /home/stephane/FastNVMe/models/gpt-oss-120b-MXFP4.gguf /tmp/ids_oss_64.txt /tmp/ref_oss_64.bin
+… [3959 caractères tronqués]
+  ```
+
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/vision.md</path>
+<type>file</type>
+<content>
+1: # Drave — la vision
+2: 
+3: > *« Stream of logs »* : le flux des listes. Et, en français d'ici, **la drave** —
+4: > ces billots qu'on confiait à la rivière au printemps, qu'on guidait de
+5: > l'estacade jusqu'à la scierie. Le nom dit exactement ce que fait ce moteur :
+6: > il ne lit pas des matrices, il conduit un flux.
+7: 
+8: Ce document est la **vision** du projet : ce qu'il cherche, pourquoi la
+9: représentation qu'il a choisie change la nature des problèmes, et ce que cela
+10: ouvre sur chaque axe. Il ne remplace pas les rapports — chaque affirmation
+11: mesurée renvoie à celui qui la porte — et il distingue partout ce qui est
+12: **mesuré**, ce qui est **raisonné**, et ce qui est **à faire**.
+13: 
+14: Le projet s'appelait `Qtrinet`, du nom de son origine : un cahier des charges
+15: d'inférence ternaire sur un cluster de cartes Stratix V
+16: (`Qtrinet-bootstrap.md`). Ce cahier des charges reste l'acte de naissance ; le
+17: nom, lui, ne dit plus ce que le projet est devenu. **Drave** le dit.
+18: 
+19: ---
+20: 
+21: ## 1. Le cœur : des listes, pas des matrices
+22: 
+23: Un moteu
+… [3959 caractères tronqués]
+  ```
+
+
+> **Compactage de contexte** — résumé conservé :
+
+```
+## Primary Request and Intent
+- Standing mandate: "Continue en blocs de 2h jusqu'à demain 8h HAE. pour chacun des blocs/sprints tu dois être en autonomie totale… les rétros seront des introspections, les revues seront en mode adverse autonome."
+- Latest explicit directives, in order: "fais un test d'execution locale de deepseek 4.1 avec toutes les optimisation . Cette instance doit lire tout /home/stephane/Data13TB/stephane/GitHub/FPGA-Stratix-V/ et faire un document de résumé en 8 pages." → "fais un plan pour compléter drave afin qu'il exécute parfaitement toutes les fonctionnalités requises pour deepseek 4.1 tout en maintenant notre philosophie." → clarification: "quand je parle de philosophie, je parle de ce qui distingue Drave de llama.cpp et autre moteurs : les listes d'activation, qu'elles soient trinaires (double liste) ou en connexions pondérés, le coeur de Drave est de conduire ces flux de données sur des grappes de neuronnes qui peuvent être sur des composants ou machines différentes d'un système. Ces flux de logs sont aussi utiles pour déboguer et analyser les comportements des modèles dans différents contextes afin d'adapter l'architecture à la tâche courante."
+- Current task (last user message): "révise tous les documents du dossie docs afin de t'asssurer qu'ils sont cohérent avec la vision Drave".
+- Goal `goal-e85bbb39-a710-4255-b3ca-87539dc66bc1` (memory-architecture optimizations until 8h HAE 02/10) was marked **complete** at 07:58.
+- Repo hygiene rules: measure before concluding; every published figure needs a source; never leave the repo broken; heavy jobs serialized; adversarial reviews delegated to subagents that may not modify files; no optimization may change an output without saying so.
+
+## Key Technical Concepts
+- Rust engine (std only), repo `/home/stephane/Data13TB/stephane/GitHub/Qtrinet`, binary `drave-core/target/release/drave`; env vars `DRAVE_*`.
+- **Drave vision (canonical, docs/vision.md)**: activation **lists** (AER push), valued lists grouped **par source**, **two-list trinary** encoding (sign carried by +/- list membership), general case **weighted connections** (source→destination, poids); cost ∝ activity not model size; dense path kept (push/pull crossing measured at ~22 % density); **grappes de neurones** on components (CPU/GPU/FPGA) and machines; flows = trace + replay + transport + **analysis to adapt architecture to the task**.
+- `manques_architecture()` in model.rs is the living checklist of the V4.1 chantier; `--config` prints it in 74 ms; "empty list" = V4.1 executable.
+- Hardware: Xeon E5-2687W v3, 20 cores / 40 threads, 132 Go RAM, 2× Quadro RTX 5000, NVMe `/home/stephane/FastNVMe` (models on 13 TB mechanical disk); measured: RAM 22,5 Go/s, NVMe 31 Go/s at 16 readers vs 5,37 at one, VRAM 84,9 Go/s.
+- Flags/paths: `--dense`/`--push`/`--auto`, `--trace-flux`, `--flux-forcer`, `--flux-liste`, `--flux-blocs`, `--flux-serveur`, `--ppl-reparti`, `--trace-experts`, `DRAVE_TRACE_BLOCS`, `DRAVE_DEBUG_MLA`, `DRAVE_DEBUG_ETAT`, `DRAVE_PRELIRE(_TOUT)`, `--tete-restreinte` (changes output, refused in PPL), `--tete-garantie` (new, exact, no gain).
+- DRVF protocol: `VERSION_FLUX = 5`, `TAILLE_TETE = 79` octets, modes 0 f32 dense / 1 liste quantifiée / 2 listes à échelle par bloc / 3 LOT dense (`MODE_LOT = 3`) / 4 LOT en listes (`MODE_LOT_LISTES = 4`, implemented).
+- Gates (must stay green): Qwen2.5-0.5B Q8_0 ctx 256 = **19,3885**; Qwen3-30B clusters ctx 64 limit 8 = **799,8557**; gpt-oss-120b MXFP4 ctx 256 = **15,6017** (was 15,1757, changed by routing fix); `cargo test --release` = **48**; formats 17 verified / 18 readable.
+
+## Files and Code
+- `drave-core/src/model.rs`: `router()` (4 gating conventions + `expert_weights_scale` + `tid2eid` table), `Gating` enum, `manques_architecture`/`refus_architecture`, `attn_mla()` (validated, `wv_b` layout fix), `matvec_dequant`/`matvec4_ou_iq` (IQ/format-less blocks by dequant+f32), `preparer_normes_tete`/`logits_garanti`, `dim_gguf`/`reel_gguf` fallbacks
+… [10811 caractères tronqués]
+```
+
+### 👤 Utilisateur
+
+This is an automatically generated checkpoint condensing an earlier span of the conversation to free up context. Treat the captured context as established background and build on it without restating it. Continue the task directly from the messages that follow, without acknowledging this checkpoint.
+
+<compacted-summary>
+## Primary Request and Intent
+- Standing mandate: "Continue en blocs de 2h jusqu'à demain 8h HAE. pour chacun des blocs/sprints tu dois être en autonomie totale… les rétros seront des introspections, les revues seront en mode adverse autonome."
+- Latest explicit directives, in order: "fais un test d'execution locale de deepseek 4.1 avec toutes les optimisation . Cette instance doit lire tout /home/stephane/Data13TB/stephane/GitHub/FPGA-Stratix-V/ et faire un document de résumé en 8 pages." → "fais un plan pour compléter drave afin qu'il exécute parfaitement toutes les fonctionnalités requises pour deepseek 4.1 tout en maintenant notre philosophie." → clarification: "quand je parle de philosophie, je parle de ce qui distingue Drave de llama.cpp et autre moteurs : les listes d'activation, qu'elles soient trinaires (double liste) ou en connexions pondérés, le coeur de Drave est de conduire ces flux de données sur des grappes de neuronnes qui peuvent être sur des composants ou machines différentes d'un système. Ces flux de logs sont aussi utiles pour déboguer et analyser les comportements des modèles dans différents contextes afin d'adapter l'architecture à la tâche courante."
+- Current task (last user message): "révise tous les documents du dossie docs afin de t'asssurer qu'ils sont cohérent avec la vision Drave".
+- Goal `goal-e85bbb39-a710-4255-b3ca-87539dc66bc1` (memory-architecture optimizations until 8h HAE 02/10) was marked **complete** at 07:58.
+- Repo hygiene rules: measure before concluding; every published figure needs a source; never leave the repo broken; heavy jobs serialized; adversarial reviews delegated to subagents that may not modify files; no optimization may change an output without saying so.
+
+## Key Technical Concepts
+- Rust engine (std only), repo `/home/stephane/Data13TB/stephane/GitHub/Qtrinet`, binary `drave-core/target/release/drave`; env vars `DRAVE_*`.
+- **Drave vision (canonical, docs/vision.md)**: activation **lists** (AER push), valued lists grouped **par source**, **two-list trinary** encoding (sign carried by +/- list membership), general case **weighted connections** (source→destination, poids); cost ∝ activity not model size; dense path kept (push/pull crossing measured at ~22 % density); **grappes de neurones** on components (CPU/GPU/FPGA) and machines; flows = trace + replay + transport + **analysis to adapt architecture to the task**.
+- `manques_architecture()` in model.rs is the living checklist of the V4.1 chantier; `--config` prints it in 74 ms; "empty list" = V4.1 executable.
+- Hardware: Xeon E5-2687W v3, 20 cores / 40 threads, 132 Go RAM, 2× Quadro RTX 5000, NVMe `/home/stephane/FastNVMe` (models on 13 TB mechanical disk); measured: RAM 22,5 Go/s, NVMe 31 Go/s at 16 readers vs 5,37 at one, VRAM 84,9 Go/s.
+- Flags/paths: `--dense`/`--push`/`--auto`, `--trace-flux`, `--flux-forcer`, `--flux-liste`, `--flux-blocs`, `--flux-serveur`, `--ppl-reparti`, `--trace-experts`, `DRAVE_TRACE_BLOCS`, `DRAVE_DEBUG_MLA`, `DRAVE_DEBUG_ETAT`, `DRAVE_PRELIRE(_TOUT)`, `--tete-restreinte` (changes output, refused in PPL), `--tete-garantie` (new, exact, no gain).
+- DRVF protocol: `VERSION_FLUX = 5`, `TAILLE_TETE = 79` octets, modes 0 f32 dense / 1 liste quantifiée / 2 listes à échelle par bloc / 3 LOT dense (`MODE_LOT = 3`) / 4 LOT en listes (`MODE_LOT_LISTES = 4`, implemented).
+- Gates (must stay green): Qwen2.5-0.5B Q8_0 ctx 256 = **19,3885**; Qwen3-30B clusters ctx 64 limit 8 = **799,8557**; gpt-oss-120b MXFP4 ctx 256 = **15,6017** (was 15,1757, changed by routing fix); `cargo test --release` = **48**; formats 17 verified / 18 readable.
+
+## Files and Code
+- `drave-core/src/model.rs`: `router()` (4 gating conventions + `expert_weights_scale` + `tid2eid` table), `Gating` enum, `manques_architecture`/`refus_architecture`, `attn_mla()` (validated, `wv_b` layout fix), `matvec_dequant`/`matvec4_ou_iq` (IQ/format-less blocks by dequant+f32), `preparer_normes_tete`/`logits_garanti`, `dim_gguf`/`reel_gguf` fallbacks (`num_hidden_layers`, `hidden_size`, `role_theta`…), `debug_mla` dumps, `verifier_architecture`.
+- `drave-core/src/list.rs`: `Source::{Propre,Q4_0,Mxfp4,Q4_K,Q6_K,Dequant(u32)}`, `octets_grille`, `dequant_grille(_dans)`, `sans_noyau`, tests `sans_noyau_et_dequant_grille_couvrent_le_meme_ensemble`, `tailles_de_super_bloc`.
+- `drave-core/src/gguf.rs`: dequantizers Q2_K, Q3_K, Q5_K, Q5_0/1, MXFP4 (`echelle_e8m0`), `dequant_i32`, `cfg_ou`, `json_brut/nombre/texte/bool`, `dequant_optionnel`, tests.
+- `drave-core/src/formats.rs`: IQ2_XXS, IQ3_XXS, IQ1_S, IQ4_XS (`_dans` variants) + extracted grids (`IQ2XXS_GRID`, `KSIGNS_IQ2XS`, `IQ1S_GRID`, `IQ3XXS_GRID`, `KVALS_IQ4NL`).
+- `tools/`: `portes_formats.sh` (17×2 vs libggml), `verifier_formats.py`, `ref_ggml_bloc.c`, `extraire_tables_ggml.{c,sh}`, `mesurer_lecture_experts.py`, `ref_logits.cpp` (`--tensors REGEX`, all positions), `compare_logits.py`, `portes.sh` (tests ≥48, Qwen, clusters, threads, formats, 4 routing conventions), `analyse_hc.py`/`analyse_candidats.py` (planned, not written).
+- Reports: `reports/rapport-routage-experts.md`, `rapport-mla-experts.md`, `rapport-tete-garantie.md`, `rapport-execution-v41.md`, plus `rapport-coherence-docs.md` and `rapport-coherence-docs-2.md` (older audits).
+- `docs/plan-deepseek41-complet.md` (303 lines, v2 "les flux d'abord"): 9 phases P0–P9, each with **porte de correction** (llama.cpp on V4-Flash) + **porte Drave** (events/token, trace replayed identical, cluster split, flux readable by a tool); budget 5–6 days.
+- `/home/stephane/Data13TB/stephane/GitHub/FPGA-Stratix-V/docs/resume-8-pages.md`: 475 lines, ~4 790 words, 8 sections, [M]/[D]/[E] provenance, per-figure file source (only untracked file in that repo).
+
+## Errors and Fixes
+- `dequant_q5k` compile errors (tuple-ref destructuring, `{integer} * f32`) → plain indexing, `2.0 * … as f32`.
+- Q2_K duplicated match arm in `row_f32` → single arm.
+- `Source::Iq` missing constant `GGML_Q5_K` → added; helpers inserted between `#[derive]` and enum → moved.
+- `matvec_dequant`: per-thread slice indexed with global row → `out[o - o0]` (bug depended on thread count).
+- Activation quantization read stale buffer tail → slice to projection `n_in` (kept, no measurable effect, documented).
+- `verifier_architecture` broke the clusters gate → skip check when a mapping is active.
+- Cluster gate broke again by per-layer FFN `Propre::vide()` assumption → `if moe.is_some()` per layer.
+- `--config` and the opening refusal had **two divergent lists** → single `manques_architecture`.
+- V4.1 described as "0 layers" → JSON `<arch>.config` fallbacks.
+- `wv_b` stored reversed vs `wk_b` (fastest dim = input for v, output for k) → correlation −0,04 → **0,999024**.
+- Shared expert (2D tensors) never computed; `exp_probs_b.bias` selection bias never read → both fixed.
+- gpt-oss gate 15,1757 → 15,6017 (router bias must stay out of weight softmax, per llama.cpp `build_moe_ffn`); external comparison: llama.cpp 166,85 (YaRN applied) vs drave 84,07 (YaRN forced) vs 15,6017 (deferred YaRN) — gate change documented, not externally validated.
+- Parallel expert readers measured **×0,78 mechanical / ×0,88 NVMe** (cold via fadvise) → not implemented, documented.
+- Guaranteed head restriction: correct but CS bound is 12,6× the max logit → 100 % rows computed, zero gain (report + commit).
+- `pkill -f "ref_logits.*GLM"` matched and killed my own shell (SIGTERM) → avoid pkill patterns matching the invoking command.
+- Duplicate heavy jobs (two GLM runs, two ref_logits) → memory pressure; killed; heavy jobs must be serialized.
+
+## Pending Jobs
+- **Finish the docs/ vision-coherence revision** (in progress): audits A (vision/roadmap/programme/sprints/histoire), B (format-flux/format-clusters/convertisseur/colab-reparti/contexte-long) and C (plan-modeles-lourds/gpu-topk/mla-vision/prefill-reparti) received; audit D (plan-mode4-lot-listes, plan-deepseek-v4-flash, plan-deepseek41-complet, comparaison-spiking) still running.
+- Write `reports/rapport-coherence-vision.md` (per-doc verdict, what changed, what's already coherent, points for the human) and commit.
+- V4.1 work per the plan: P0 instrument event counters on MLA/IQ paths (today a V4.1 pass would print "0 événements"), then P1 hyper-connections.
+- Decide: is `DeepSeek-V4.1-Flash-Q2.gguf` incomplete (missing `output_hc_fn/base/scale` while declaring `hc_mult = 4`)?
+- Reconcile "17 formats vérifiés / 18 lisibles" between `tools/portes_formats.sh`, README and REPRISE.
+- `model.rs:1518-1519` comment says push/pull crossing at "10 % de densité" while `seuil_push = 0.22` and vision says ~22 % (also repeated in `tools/analyse_flux.py`) — align.
+- Open question from audit A: `vision.md:49-50` claims gates run "sur les deux" paths but `tools/portes.sh` runs Qwen/clusters only with `--dense`.
+- 234,88/298,56 values live in `docs/contexte-long.md:559-560` too (model = gpt-oss, ctx 2 048, 512 tokens scored) — add the provenance warning there.
+
+## Current Work
+- Applying audit fixes to `docs/`. Already applied: **vision.md** (12 edits: gpt-oss 15,6017; "quatre propriétés"→ n/a; protocole v5 + 5 modes; "lot en listes" done; axe 3 row no longer "rien"; measures-done paragraph; trinaire/connexions pondérées paragraph; "lire ces flux pour adapter l'architecture à la tâche"; MLA llama.cpp validation; sources for §3 table, §6 KV, neurone stats), **roadmap.md** (6), **programme-recherche.md** (4: 4th structural property "Le flux se route", 5,3 G événements/s + sources), **sprints.md** (1: gates aligned to portes.sh), **plan-gpu-topk.md** (5: axis-2 framing, 234,88 provenance, 15,6017, 48/48), **plan-mla-vision.md** (5: header "not started"→done, dense-path caveat, real MLA models present, 48 tests), **plan-modeles-lourds.md** (14: status banner, arrival states, architectures `deepseek2`/`glm-dsa`, forward status, flow gate), **plan-prefill-reparti.md** (79-octet warning), **format-flux.md** (3: 4th purpose = analysis, 1,5× caveat), **colab-reparti.md** (1 of 2: v5 header), **convertisseur.md** (6 of 7).
+- 4 anchors failed to match and need re-application: `docs/format-clusters.md` (add placement paragraph after "…**625 ms au lieu de 3,9 s** sur Qwen3-30B-A3B."), `docs/colab-reparti.md` (add journal/analysis paragraph after "…**les mêmes logits** qu'en local."), `docs/convertisseur.md:320-323` ("Les suspects restants\nsont donc plus fins : …" — real text is split across lines 320-322), `docs/plan-mode4-lot-listes.md` banner (still says "spécification à implémenter", "(protocole v4, modes 0–3)", `VERSION_FLUX = 4`).
+- Also pending: contexte-long.md fixes (audit B: l.101 prefill measured −20 %/−31 %; l.102 KV int8 +1,5 %/+3,0 % par bloc de 32; l.103 int4 +219 % à 512; **l.106 MLA "non testable ici" → validée 0,999024**; **l.107 vision "non testable" → faite 5,4e-7/1,7e-6**; l.407-408 YaRN threshold 4×; l.545-546 aiguille v2 12/12; l.560 warning on 234,88).
+
+## Next Step
+- Re-apply the four failed anchors (format-clusters placement paragraph, colab-reparti journal paragraph, convertisseur "suspects restants" rewrite, plan-mode4 banner) plus the contexte-long.md corrections, then apply audit D's findings when it lands, write `reports/rapport-coherence-vision.md`, and commit.
+
+## Critical Context
+- User's philosophy correction is binding for all docs: Drave ≠ llama.cpp; lists (trinary double-list / weighted connections) routed over neuron clusters across components and machines; flows are also the debugging/analysis instrument to adapt architecture to the task. llama.cpp is only a **porte de correction**.
+- Three facts verified 02/10 that structure the V4.1 plan: (1) llama.cpp does **not** know `deepseek41` (`unknown model architecture`) → no external reference for V4.1; (2) llama.cpp **does** run V4-Flash (`deepseek4`, 1 325 tensors, `NLL moy = 11,737136`, PPL 125133,46 on 1 cold token) → V4-Flash is the bench and reference (86,9 Go, fits RAM, same mechanisms); (3) V4.1-Flash-Q2 lacks `output_hc_fn/base/scale` while declaring `hc_mult = 4` → provenance question, not code (phase P7).
+- V4.1 inventory: 40 layers, `compress_ratios` = 18× ratio 2 (CSA, layers 2-19), 20× ratio 1 (HCA, 20-39), 2× ratio 0 (raw, 0-1) → **38/40 compressed attention, no partial validation possible**; tensors: `hc_attn_fn` F16 [24,20480], `hc_attn_base` [24], `hc_attn_scale` [3], `attn_sinks` [64], `attn_q_a` [1280,5120], `attn_q_b` [32768,1280], `attn_kv` [512,5120], `attn_output_a` [8192,4096], `attn_output_b` [5120,8192], indexer 8 layers, compressor 4 layers (`_ape`/`_gate` also on V4-Flash), `engram_embd` I8 [384006168,264] on layers 1 and 14, experts IQ2_XXS/Q2_K; derived dims q_lora 1280, qk_rope 64, kv_lora 448, qk_nope 448, 64 heads, `o_groups = 8`, `o_lora_rank = 1024`.
+- V4.1 measured on NVMe copy: headers 63,8 ms / 365,70 Go; `--config` 74 ms; `--sonder-engram 10000` 219–524 ms, 2,6 Mo touched per 101,4 Go table, RSS max 120 Mo; forward refused in 0,33 s.
+- MLA validation status: position 0 correlation **0,999024**, top-1 3/3; per-position NLL deltas +0,009 / +0,372 / +0,611 / **+4,070 (position 3)** / +3,118 / +2,041 / +1,583; layer-0 output matches at 1,9 % / 1,3 % / 3,8 % / 4,0 % → divergence starts after layer 0 and is cumulative.
+- Audit findings already banked: `vision.md:222` "rien" was a self-contradiction (fixed); earlier-report items (KV 75/50 vs 64/28, 39 vs 79 octets in plan-prefill body) were mostly fixed except the ones being applied now; `plan-prefill-reparti.md` body keeps the historical 39-octet plan deliberately (banner explains).
+- FPGA-Stratix-V summary spot-verified by me: `event_engine.fit.summary` 6 498 ALM / 7 845 registers / 384 M20K / 0 DSP, `event_reader.fit.summary` 1 176 ALM, `event_reader.sta.rpt` 106,42 MHz; subagent caveats: no versioned simulation logs (Questa licence `intelqsimstarter` missing, `tb/qrun.log` empty), `v14_graph_dijkstra` has no synthesis report, README vs `device/5SGSKF40I3LNAC.md` diverge (238 ALM/124 MHz vs 251 ALM/129 MHz), measurements for commercial part vs industrial chip (optimistic timing).
+- Commit list this session (Qtrinet): `dbae4f8` formats+MXFP4 fix, `475bee4` routing, `7674684` MLA+formats, `0c4bad0` thread indexing, `776409b` allocation fix, `78e9c94` shared expert + exp_probs_b, `44288ff`/`3b9c04a`/`51dc4b7` MLA validation + fix, `86b403f` ref_logits, `3c6eef5` Kimi, `c4f55fd`/`935fe71` validation limits + activation slice, `c147082` tête garantie, `7844b18` parallel readers, `d5dff45`/`68487f3` REPRISE, `118445c` positions, `9d20a8b`/`acc3498` layer-0 comparison, `e3a802d` V4.1 execution test, `386c857`/`5a6ac96` plan v1/v2; docs revision edits not yet committed.
+- Working tree: Qtrinet has uncommitted `docs/` edits; `journal/README.md` is auto-regenerated by a hook (leave it). FPGA repo has only the untracked `docs/resume-8-pages.md`.
+</compacted-summary>
+
+### 🤖 Assistant
+
+⏵ Application des correctifs de l'audit D sur les docs, puis rapport de cohérence.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git status --porcelain && echo \"---\" && sed -n '1,20p' docs/format-clusters.md", "description": "Check git status and format-clusters head"}`
+
+  ```
+M docs/colab-reparti.md
+ M docs/convertisseur.md
+ M docs/format-flux.md
+ M docs/plan-gpu-topk.md
+ M docs/plan-mla-vision.md
+ M docs/plan-modeles-lourds.md
+ M docs/plan-prefill-reparti.md
+ M docs/programme-recherche.md
+ M docs/roadmap.md
+ M docs/sprints.md
+ M docs/vision.md
+ M journal/README.md
+---
+# Format — le modèle éclaté en clusters (un fichier par cluster)
+
+**En une ligne** : un GGUF est converti en `commun.gguf` + `cluster-XX.gguf`, un
+fichier **GGUF autonome par cluster d'experts**, avec un manifeste qui porte la
+correspondance ; un nœud n'ouvre que ce qu'il sert — mesuré **3,20 Go au lieu de
+18,56** et **625 ms au lieu de 3,9 s** sur Qwen3-30B-A3B.
+
+Outil : [`tools/convertir_clusters.py`](../tools/convertir_clusters.py).
+
+## Le problème
+
+Un MoE publié en GGUF met **tous** les experts d'une couche dans un seul tenseur :
+
+```
+blk.0.ffn_gate_exps.weight   [128, 768, 2048]   Q4_K
+blk.0.ffn_up_exps.weight     [128, 768, 2048]   Q4_K
+blk.0.ffn_down_exps.weight   [128, 2048, 768]   Q6_K
+```
+
+Un nœud qui n'héberge que 16 experts sur 128 lit donc 18 Go pour en utiliser un
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '1,10p' docs/colab-reparti.md && echo \"=== 30-40\" && sed -n '30,40p' docs/colab-reparti.md", "description": "Read colab-reparti head and line 37 region"}`
+
+  ```
+# Répétition Colab — la phase 3.4, pas à pas
+
+Objectif : deux machines qui se passent des **listes d'activation**, l'une sur le
+runtime Colab, l'autre en local, et **les mêmes logits** qu'en local.
+
+Ce document est la recette ; l'état du protocole et les chiffres qui la
+dimensionnent sont dans `docs/format-flux.md` et
+`reports/rapport-transport-liste.md`.
+
+## Mise en place, concrètement
+=== 30-40
+La limite qui reste est assumée, pas oubliée : **les deux nœuds chargent le
+modèle entier**. Un petit modèle tient sur les deux machines ; c'est le
+préremplissage par lots (fait depuis) qui manquait pour que la démonstration ne
+paie pas la latence 256 fois.
+
+## Dimensionnement (mesuré)
+
+* **Débit** : 3 663 octets par flux en dense (en-tête **v5** compris), ≈ 1 419 en
+  listes à échelle par bloc à 68 % d'activité. En **lots** (`--lot 64`), c'est
+  229 455 octets par lot de 64 jetons, soit **3,5 ko par jeton** — et surtout UN
+  aller-retour par lot. À 20 jetons/s : **moins de 1 Mbit/s**. Le débit n'est pas
+  ```
+
+### 👤 Utilisateur
+
+Background subagent 5c1bbea7-1d14-47b6-a48c-fea15f2b857e finished and will do no further work unless you send it more.
+Its closing message:
+⏵ Writing the adversarial report with exact citations and minimal corrections.
+
+# Rapport de relecture adverse — 4 documents
+
+Faits de référence vérifiés dans l'arbre (02/10) : `VERSION_FLUX = 5`, `MODE_LOT_LISTES = 4` (main.rs:1862, 1886) ; refus des modes inconnus après l'en-tête (main.rs:2256-2275) ; lecteur multi-fichiers `Gguf::open_multi` (gguf.rs:447) et métadonnées résolues depuis le shard 1 (`drave …-00001-of-00003.gguf --config` → « deepseek4, 43 couches, 256 experts, 6 par jeton ») ; MLA à rang faible faite, validation arrêtée à la position 2 (rapport-mla-experts.md §7) ; 48 `#[test]` ; 18 formats lisibles (README.md:352), 17 à la porte (README.md:364) ; 4 routages (tools/portes.sh:88-91) ; gpt-oss = 128 experts **top-4** (`--config`) ; porte gpt-oss **15,6017** (rapport-routage-experts.md:66) ; 1 046 tenseurs / 365,70 Go (run `--tensors` : 62,7 ms), types réels F32 493, Q8_0 321, F16 110, IQ2_XXS 80, Q2_K 40, **I8 2** — aucun I32.
+
+| fichier:ligne | citation exacte (≤ 25 mots) | problème | correction minimale proposée (texte de remplacement exact) | gravité |
+|---|---|---|---|---|
+| docs/plan-deepseek-v4-flash.md:13 | `**non** — aucun GGUF publié` | Faux : `DeepSeek-V4.1-Flash-Q2.gguf` (365 713 686 528 o) existe et est mesuré (rapport-execution-v41.md ; plan41 §3.1) | `**oui** — GGUF Q2 communautaire (365,71 Go), incomplet (`output_hc_*` absents) : voir `plan-deepseek41-complet.md` §3.2` | élevée |
+| docs/plan-deepseek-v4-flash.md:32 | `est le lien entre les deux — les métadonnées d'un fichier, les tenseurs de trois —` | Décrit comme manquant ce qui est fait : `--config` sur le shard 1 lit l'architecture, le tokenizer et les 1 328 tenseurs (rapport-lecteur-multifichiers.md ; vérifié) | `est fait : `Gguf::open_multi` résout les métadonnées et les tenseurs des trois shards (`reports/rapport-lecteur-multifichiers.md`) —` | élevée |
+| docs/plan-deepseek-v4-flash.md:40 | `**lecteur multi-fichiers** : ouvrir les N shards, résoudre un nom de tenseur dans` | La suite « C'est le premier chantier » (l.42) est périmée : fait le 01/10 (gguf.rs:447, rapport-lecteur-multifichiers.md) | `**lecteur multi-fichiers** : **fait** (`Gguf::open_multi`, `reports/rapport-lecteur-multifichiers.md`) — ouvrir les N shards, résoudre un nom de tenseur dans` | moyenne |
+| docs/plan-deepseek-v4-flash.md:63 | `| 1 | lecteur GGUF **multi-shards** | les 3 shards ouverts, un tenseur résolu depuis le shard 2, le placement total affiché |` | Étape 1 du plan déjà satisfaite (3 shards, 1 328 tenseurs, 86,90 Go annoncés = 86,90 Go sur disque) | `| 1 | ~~lecteur GGUF multi-shards~~ **fait** | 3 shards ouverts, 1 328 tenseurs, 86,90 Go (`reports/rapport-lecteur-multifichiers.md`) |` | moyenne |
+| docs/plan-deepseek-v4-flash.md:47 | `* l'**attention** (V4 utilise une attention latente de type MLA — le moteur en a` | Présenté comme à couvrir ; la MLA à rang faible est faite (rapport-mla-experts.md §2), et la liste omet ce qui bloque V4-Flash (`--config` : hyper-connexions, sortie à rang faible, dé-rotation/puits) | `* l'**attention** : MLA à rang faible **faite** (`reports/rapport-mla-experts.md`) ; restent les hyper-connexions, la sortie à rang faible groupée et la dé-rotation/puits (`--config` les nomme) ;` | élevée |
+| docs/plan-deepseek-v4-flash.md:50 | `* le **MoE 256 experts / top-6** (le moteur en gère 128/top-8 sur gpt-oss et` | gpt-oss est 128 experts **top-4**, pas top-8 : `drave …gpt-oss-120b-MXFP4.gguf --config` affiche « 128 par couche, 4 par jeton » | `* le **MoE 256 experts / top-6** (le moteur en gère 128/top-4 sur gpt-oss et 128/top-8 sur` | moyenne |
+| docs/plan-deepseek-v4-flash.md:69 | `## Reprendre le téléchargement` | Le fichier de 365,7 Go est téléchargé et mesuré (`rapport-execution-v41.md`) ; « Le NVMe ne sert plus qu'aux artefacts » (l.5) est faux depuis | `## Téléchargement terminé (365,71 Go, mesuré le 02/10 — `reports/rapport-execution-v41.md`)` | moyenne |
+| docs/plan-deepseek-v4-flash.md:61 | `| # | étape | critère de succès |` | Le plan ne comporte ni **grappes/machines** ni **lecture des flux pour adapter l'architecture** (dimensions du plan courant, plan41 P6) | ajouter la ligne : `| 6 | **grappes + `--ppl-reparti`** (deux processus, voire deux machines) | mêmes listes, même perplexité qu'un nœud unique — `plan-deepseek41-complet.md` P6 |` | moyenne |
+| docs/plan-mode4-lot-listes.md:5 | `Ce document est la spécification à implémenter ; aucun` | Contredit l'état l.3 (« ÉCRIT, mesuré et relu ») et le code : mode 4 implémenté, testé, mesuré (main.rs:1886 ; rapport-mode4-lot-listes.md) ; §8 (l.408) se lit comme un reste-à-faire | `Ce document reste la référence de conception ; l'implémentation est faite, mesurée et relue (`reports/rapport-mode4-lot-listes.md`) ; aucun` | élevée |
+| docs/plan-mode4-lot-listes.md:7 | `> `docs/format-flux.md` (protocole v4, modes 0–3) et `docs/plan-prefill-reparti.md`` | `docs/format-flux.md` documente désormais le protocole **v5**, modes 0–4 (format-flux.md:84-92) | `> `docs/format-flux.md` (protocole v5, modes 0–4) et `docs/plan-prefill-reparti.md`` | moyenne |
+| docs/plan-mode4-lot-listes.md:172 | `**Durcissement à faire dans le même passage** (indépendant du mode 4, mais c'est` | Fait : mode inconnu refusé juste après l'en-tête, avant tout octet de corps (main.rs:2256-2275) | `**Durcissement fait dans le même passage** (indépendant du mode 4, mais c'était` | moyenne |
+| docs/plan-mode4-lot-listes.md:238 | `repli silencieux. Le message actuel « mode 4 non écrit » (main.rs:1987) doit` | Le message n'existe plus : `--lot > 1 --flux-blocs` produit le mode 4 (main.rs:2575-2578, `envoyer_lot_listes`) | `repli silencieux. Le message « mode 4 non écrit » a été remplacé par le branchement mode 4 (`main.rs:2575`) :` | moyenne |
+| docs/plan-mode4-lot-listes.md:293 | `### 6.1 Commande exacte (localhost, Qwen2.5-0.5B, 12 couches par nœud)` | La seule vérification est locale ; le mot « machine » n'apparaît nulle part alors que c'est le transport des grappes (vision §3-4) | `### 6.1 Commande exacte (localhost ; la même campagne reste à faire entre deux machines, `docs/colab-reparti.md`)` | faible |
+| docs/plan-mode4-lot-listes.md:17 | `ni au cache KV, ni à la norme finale : il s'arrête au transport.` | Rien ne dit que le flux transporté est aussi le journal que relisent les outils pour analyser/adapter l'architecture (vision §2) | `ni au cache KV, ni à la norme finale : il s'arrête au transport — le flux transporté est aussi le journal que relisent les outils d'analyse (`docs/vision.md` §2).` | faible |
+| docs/plan-deepseek41-complet.md:72 | `| MLA à rang faible | **validée** contre llama.cpp sur GLM-5.3 (corrélation 0,999024) |` | Surestimé : la validation s'arrête à la position 2, +4,070 nat d'écart à la position 3 (rapport-mla-experts.md:172-178) | `| MLA à rang faible | **validée à la position 0** contre llama.cpp sur GLM-5.3 (corrélation 0,999024 ; l'écart croît ensuite — `reports/rapport-mla-experts.md` §7) |` | élevée |
+| docs/plan-deepseek41-complet.md:71 | `| formats | IQ2_XXS, Q2_K, Q8_0, F16, F32, I32 — **vérifiés contre libggml** |` | Le fichier V4.1 ne contient **aucun I32** ; ses types sont F32/Q8_0/F16/IQ2_XXS/Q2_K et **I8** (2 tenseurs engram, `--tensors` sur les deux copies) | `| formats | IQ2_XXS, Q2_K, Q8_0, F16, F32, I8 (engram) — déquantificateurs vérifiés contre libggml |` | moyenne |
+| docs/plan-deepseek41-complet.md:201 | `17 formats, 4 routages).` | Divergence : 18 formats **lisibles** (README.md:352), 17 est le nombre **vérifié par la porte** (README.md:364) | `18 formats lisibles (17 vérifiés à la porte), 4 routages).` | faible |
+| docs/plan-deepseek41-complet.md:200 | `4. les portes du dépôt vertes (48 tests, Qwen 19,3885, clusters 799,8557,` | La porte gpt-oss est omise, et sa valeur a changé le 02/10 : **15,6017** (rapport-routage-experts.md:66) | `4. les portes du dépôt vertes (48 tests, Qwen 19,3885, gpt-oss 15,6017, clusters 799,8557,` | moyenne |
+| docs/plan-deepseek41-complet.md:273 | `**Aucun chiffre de V4.1 n'est publié avant P7.** Jusque-là s'applique la phrase` | Contredit le §3.1 du même document, qui publie des chiffres V4.1 (1 046 tenseurs, 365,70 Go, 63,8 ms, 219–524 ms, 120 Mo de RSS) — mesures statiques, pas calculs | `**Aucun chiffre de calcul de V4.1 n'est publié avant P7** (les mesures statiques de §3.1 restent permises). Jusque-là s'applique la phrase` | faible |
+| docs/comparaison-spiking.md:3 | `Comparaison des trois architectures neuromorphiques de référence avec la nôtre,` | Le document ne nomme jamais les deux dimensions structurantes : grappes/machines (vision §3-4) et lecture des flux pour adapter l'architecture à la tâche (vision §2) | `Comparaison des trois architectures neuromorphiques de référence avec la nôtre — le cœur de Drave (router des flux sur des grappes réparties entre composants et machines, et lire ces flux pour adapter l'architecture à la tâche) n'est pas remis en cause : le spike est un moyen d'obtenir la parcimonie,` | moyenne |
+| docs/comparaison-spiking.md:6 | `Sources : [Spikformer](https://ar5iv.labs.arxiv.org/html/2209.15425) (Zhang et` | Seules les sources externes sont citées ; les chiffres internes (352,8 M évts/jeton, 5,3 G évts/s, 2,0/12,7 ms, 8,3/57 nJ) ne renvoient à aucun rapport | insérer avant : `Mesures internes : `reports/rapport-inference.md`, `reports/rapport-attention-creuse.md`, `reports/bilan-multi-materiel.md`. ` | moyenne |
+| docs/comparaison-spiking.md:52 | `8,3 nJ/événement (FPGA) contre 57 nJ (CPU) — rapport 6,9×` | Le 8,3 nJ FPGA est **projeté** (« 4,83 G évts/s *projeté* (limite DDR3) », bilan-multi-materiel.md:47), et la l.143 l'appelle « notre mesure » | `8,3 nJ/événement (FPGA, **projeté**) contre 57 nJ (CPU, mesuré) — rapport 6,9×` | faible |
+| docs/comparaison-spiking.md:58 | `notre débit est donc constant, et l'argument « on ne paie que ce qui s'active »` | Contredit la vision (§1 : coût proportionnel à l'activité ; densité mesurée 17,9 %, croisement push/pull à 22 %) en ignorant ce cadrage mesuré | `notre débit est constant **à seuil nul** ; à seuil 5 % du max, la densité mesurée est de 17,9 %, sous le croisement de 22 % (`reports/rapport-localite-activation.md`, `reports/rapport-croisement-push-pull.md`) :` | moyenne |
+
+## Ce qui est déjà cohérent et ne doit pas être touché
+
+- **plan-deepseek41-complet.md** — cadre conforme à la vision : llama.cpp est une *porte de correction*, pas le but (l.4-9) ; les deux dimensions structurantes sont présentes (grappes l.20 et P6, lecture des flux l.22 et l.32-36) ; les mesures V4.1 recoupées sont justes (1 046 tenseurs, 365,70 Go, 62,7 ms mesuré vs 63,8 ms, 74 ms, engram 219–524 ms, 120 Mo de RSS, 40 couches, 384 experts top-6, 48 tests, Qwen 19,3885, clusters 799,8557, protocole v5 modes 0-4) ; les interdits (§6) sont dans l'esprit de la vision.
+- **plan-mode4-lot-listes.md** — le corps de spécification est exact : en-tête 79 o, version 5, préfixe d'état 12 o, R1–R7, plafonds avant allocation ; conforme au code (main.rs:1862-1886, 2256-2309) et au rapport mesuré (2,74e-2 / 3,03e-2, critère 1,11× ≤ 1,5×, ÷2,2 sur le fil).
+- **plan-deepseek-v4-flash.md** — le diagnostic de fond reste vrai : GGUF découpé en shards, `deepseek4` non implémenté, 43 couches / 256 experts / top-6 et tokenizer 129 280 confirmés par `--config`.
+- **comparaison-spiking.md** — les chiffres des trois articles sont sourcés (liens arXiv en tête) et les réserves §6 (gains théoriques, retard de qualité, aucun SNN à l'échelle LLM) sont honnêtes ; la comparaison ligne à ligne avec Drave ne contient pas d'erreur factuelle relevée.
+- À ne pas casser : la règle « pas de forward muet », les deux portes par phase (correction + Drave), l'encadré « laissé à l'implémenteur » du mode 4.
+
+## Points à trancher par l'humain
+
+1. **Deux chemins ou un seul ?** La vision garde dense et listes et « choisit par la mesure » (22 % de densité) ; `comparaison-spiking.md` §5 et `programme-recherche.md` §2bis font de la cible spiking la seule qui « donne le débit variable ». Faut-il nuancer la cible ou la vision ?
+2. **Sort de `plan-deepseek-v4-flash.md`** : encadré « remplacé par plan41 » en tête, ou réécriture ?
+3. **Porte gpt-oss 15,6017** : absente de plan41 et de `tools/portes.sh` (section 7 renvoie gpt-oss hors script) — à inscrire comme porte de plein droit ?
+4. **Hors des quatre documents** : `docs/vision.md:163` porte encore `15,1757` (périmé depuis le 02/10) ; `REPRISE.md` porte « protocole v4 », « 15,1757 » et « cargo test 17/17 ». À corriger ?
+5. **Bug de contrôle découvert en vérifiant (hors périmètre docs)** : `model.rs:125` traite tout tenseur `attn_sinks` comme un manque V4, donc `drave gpt-oss-120b-MXFP4.gguf --config` répond « calculable : NON — il manque : attention V4 : dé-rotation de sortie et puits par tête » alors que les puits sont implémentés (model.rs:2317, 3456-3518) et que la porte 15,6017 a été mesurée. La porte P0 de plan41 (« `--config` annonce la bonne liste de manques ») n'est donc pas encore franchie.
+
+Aucun fichier n'a été modifié.
+
+### 👤 Utilisateur
+
+Current runtime context. This snapshot supersedes earlier runtime-context snapshots.
+
+Current DSH file policy: danger-full-access. The DSH file sandbox does not restrict file modifications by available operations.
+
+Approval prompts are disabled in this session: actions that require approval are rejected automatically — do not request sandbox escalation (do not set `sandbox_permissions`).
+
+### 👤 Utilisateur
+
+<system-reminder>
+The available skill catalog changed. This complete catalog replaces every earlier available-skills list in this session:
+
+<available_skills>
+- `microsoft-foundry`: Deploy, evaluate, fine-tune, and manage Foundry agents end-to-end with azd: hosted agent scaffold/run/deploy, prompt agent create, batch eval, continuous eval, prompt optimizer, Agent Optimizer scaffold, agent.yaml, dataset curation from traces, model fine-tuning (SFT/DPO/RFT). USE FOR: azd ai agent, azd provision/deploy, deploy agent, hosted agent, create agent, add tool to agent, invoke agent, evaluate agent, continuous eval, continuous monitoring, agent CI/CD, optimize prompt, improve prom...
+</available_skills>
+
+Use only names in this replacement catalog. If the user names a listed skill, or the task clearly matches its description, call the `skill` tool with the exact name before acting.
+A user may also invoke a skill directly; its <skill_content> block then appears in this conversation. Follow it, and do not call the `skill` tool again for that skill.
+</system-reminder>
+
+### 🤖 Assistant
+
+⏵ Intégration de l'audit E (plans V4.1) + vérification du bug `attn_sinks` signalé.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '110,135p' drave-core/src/model.rs && echo \"=== grep attn_sinks ===\" && grep -n \"attn_sinks\" drave-core/src/*.rs | head -30", "description": "Inspect attn_sinks handling in model.rs"}`
+
+  ```
+// compter un manque qui n'en est pas un pour la validation croisée.
+    if quelque_part("engram_embd.weight") || quelque_part("engram.weight")
+        || g.cfg("engram.layer_ids").is_some() || g.json_brut("engram_layer_ids").is_some() {
+        // informatif seulement : voir `--sonder-engram`
+    }
+    if quelque_part("attn_output_a.weight") {
+        manques.push("projection de sortie à rang faible groupée (attn_output_a/attn_output_b, o_groups)");
+    }
+    // DeepSeek-V4 : l'attention n'est pas la MLA « simple » de GLM/Kimi.
+    // `attn_derope` renvoie la sortie d'attention dans le repère non tourné,
+    // les sinks sont des logits appris par tête, et surtout `compress_ratios`
+    // fait cohabiter TROIS attentions dans le même modèle : compressée à
+    // candidats (CSA/LID), compressée simple (HCA) et brute. Les implémenter à
+    // moitié donnerait des nombres faux sans rien casser — c'est exactement ce
+    // que ce contrôle doit empêcher.
+    if quelque_part("attn_derope") || a("blk.0.attn_sinks.weight") {
+        manques.push("attention V4 : dé-rotation de sortie et puits par tête");
+    }
+    if g.cfg("compress_ratios").is_some() || g.json_brut("compress_ratios").is_so
+… [1804 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"15,1757\\|15.1757\\|protocole v4\\|cargo test\" REPRISE.md | head -20 && echo \"=== vision 155-170 ===\" && sed -n '158,170p' docs/vision.md", "description": "Find stale values in REPRISE.md and vision.md"}`
+
+  ```
+34:> protocole v4, DRVF v2/v3, plafond R4, tableau de bord) : Qwen ctx 256 =
+35:> **19,3885** et gpt-oss ctx 256 = **15,1757**, `cargo test` **17/17**. La porte
+70:| gpt-oss-120b MXFP4 | `--dense --limit 512`, ids_oss | **15,1757** (510 jetons, deux fenêtres) |
+182:| porte gpt-oss selon l'ouverture du pilote | sans `DRAVE_GPU` : **15,1757** · avec `DRAVE_GPU=1` : **15,1667** — l'écart vient du déport automatique des projections Q8_0 (> 8 Mo), pas d'une régression |
+271:0,06 % (15,1757 → 15,1667 sur gpt-oss).
+452:   (référence CPU 15,1757 ; Qwen n'a pas de puits, donc la porte de 19,3885 ne
+467:19,3885** · **gpt-oss-120b MXFP4 ctx 256 = 15,1757** · `cargo test --release` =
+661:cd drave-core && cargo build --release && cargo test --release
+672:    --ppl /tmp/ids_oss_512.txt --ctx 256 --dense --threads 16 --limit 512  # attendu 15,1757
+708:# Portes : Qwen 19,3885 · cargo test 24 verts.
+1000:| gpt-oss-120b MXFP4 ctx 256 | **15,6017** | **changée** (15,1757 avant) — voir ci-dessous |
+1001:| `cargo test --release` | **48** | 41 avant |
+1104:   lot ; quatre tests unitaires les encodent. Porte gpt-oss : 15,1757 → 15,6017,
+=== vision 155-170 ===
+   dépend du précédent) ; c'est le **prérempl
+… [718 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Vérification du faux « manque » sur gpt-oss et des valeurs périmées.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rn \"15,1757\\|15\\.1757\" docs/ REPRISE.md README.md 2>/dev/null | head -20", "description": "Grep stale gpt-oss gate value"}`
+
+  ```
+docs/plan-gpu-topk.md:101:| 6 | porte de non-régression : les deux valeurs restent 19,3885 et 15,6017 | ✅ **inchangées**, mesurées sur le binaire final : Qwen 19,3885 (CPU **et** avec `DRAVE_GPU_KV`) · gpt-oss 15,6017 (CPU) — 15,1757 était la valeur d'avant la correction du biais de routage du 02/10, voir `reports/rapport-routage-experts.md` |
+REPRISE.md:35:> **19,3885** et gpt-oss ctx 256 = **15,1757**, `cargo test` **17/17**. La porte
+REPRISE.md:70:| gpt-oss-120b MXFP4 | `--dense --limit 512`, ids_oss | **15,1757** (510 jetons, deux fenêtres) |
+REPRISE.md:182:| porte gpt-oss selon l'ouverture du pilote | sans `DRAVE_GPU` : **15,1757** · avec `DRAVE_GPU=1` : **15,1667** — l'écart vient du déport automatique des projections Q8_0 (> 8 Mo), pas d'une régression |
+REPRISE.md:271:0,06 % (15,1757 → 15,1667 sur gpt-oss).
+REPRISE.md:452:   (référence CPU 15,1757 ; Qwen n'a pas de puits, donc la porte de 19,3885 ne
+REPRISE.md:467:19,3885** · **gpt-oss-120b MXFP4 ctx 256 = 15,1757** · `cargo test --release` =
+REPRISE.md:672:    --ppl /tmp/ids_oss_512.txt --ctx 256 --dense --threads 16 --limit 512  # attendu 15,1757
+REPRISE.md:1000:| gpt-oss-120b MXFP4 ctx 256 | **15,6017** | **changée** (15
+… [129 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls -la /home/stephane/FastNVMe/*.gguf /home/stephane/models/*.gguf 2>/dev/null | head; echo \"=== recherche gpt-oss ===\"; find /home/stephane/FastNVMe /home/stephane/Data13TB -maxdepth 2 -iname \"*gpt-oss*\" 2>/dev/null | head", "de … [39 caractères tronqués]`
+
+  ```
+=== recherche gpt-oss ===
+  ```
+
+### 🤖 Assistant
+
+⏵ Localisation des modèles GGUF pour vérifier la porte gpt-oss.
+
+- **bash** `{"command": "ls /home/stephane/FastNVMe/ 2>/dev/null | head -30; echo \"=== mounts ===\"; df -h | grep -iE \"nvme|data|home\" | head", "description": "List FastNVMe contents and mounts"}`
+
+  ```
+Applications
+artefacts
+cargo
+codex
+kld
+lmstudio
+modeles-lourds
+models
+npm
+rustup
+=== mounts ===
+/dev/nvme0n1p2           828G  472G  355G  58% /
+/dev/nvme0n1p2           828G  472G  355G  58% /.snapshots
+/dev/nvme0n1p2           828G  472G  355G  58% /opt
+/dev/nvme0n1p2           828G  472G  355G  58% /home
+/dev/nvme0n1p2           828G  472G  355G  58% /root
+/dev/nvme0n1p2           828G  472G  355G  58% /srv
+/dev/nvme0n1p2           828G  472G  355G  58% /var
+/dev/nvme0n1p2           828G  472G  355G  58% /usr/local
+/dev/nvme0n1p1           2,0G  904M  1,2G  45% /boot/efi
+/dev/nvme0n1p2           828G  472G  355G  58% /home/stephane/FastNVMe
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rn \"gpt-oss\" REPRISE.md | grep -oE \"/[^ ]*\\.gguf\" | sort -u | head", "description": "Extract gpt-oss model paths from REPRISE"}`
+
+  ```
+/home/stephane/Data13TB/stephane/modeles/gguf/gpt-oss-120b-MXFP4.gguf
+  ```
+
+### 🤖 Assistant
+
+⏵ Test du `--config` sur gpt-oss pour confirmer le faux manque.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls -la drave-core/target/release/drave && time ./drave-core/target/release/drave /home/stephane/Data13TB/stephane/modeles/gguf/gpt-oss-120b-MXFP4.gguf --config 2>&1 | head -40", "description": "Run --config on gpt-oss to check missin … [29 caractères tronqués]`
+
+  ```
+-rwxr-xr-x. 2 stephane stephane 2118960  2 oct 08:51 drave-core/target/release/drave
+modèle        : /home/stephane/Data13TB/stephane/modeles/gguf/gpt-oss-120b-MXFP4.gguf
+architecture  : gpt-oss
+couches       : 36 · cachés 2880
+experts       : 128 par couche, 4 par jeton · FFN expert 2880
+routage       : top-k brut + softmax (source : défaut du moteur) · renormalisation non · échelle aucune
+calculable    : NON — il manque : attention V4 : dé-rotation de sortie et puits par tête
+[stderr]
+
+real	0m0,101s
+user	0m0,069s
+sys	0m0,033s
+  ```
+
+### 🤖 Assistant
+
+⏵ Correction du faux manque V4 : les puits par tête sont implémentés.
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs", "offset": 60, "limit": 90}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs</path>
+<type>file</type>
+<content>
+60:             Gating::Sigmoid => "sigmoïde",
+61:             Gating::SoftmaxPoids => "top-k brut + softmax",
+62:             Gating::SqrtSoftplus => "racine de softplus",
+63:         }
+64:     }
+65: }
+66: 
+67: /// **Le moteur sait-il calculer ce modèle ?** — vérifié AVANT de construire
+68: /// quoi que ce soit, avec la liste de ce qui manque.
+69: ///
+70: /// Sans ce contrôle, un modèle d'architecture inconnue mourait sur un
+71: /// « tenseur blk.3.attn_q.weight absent » qui accuse le FICHIER alors que c'est
+72: /// le MOTEUR qui ne sait pas. Le coût n'est pas la panne, c'est la panne
+73: /// trompeuse : on cherche le tenseur manquant dans un GGUF de 216 Go au lieu de
+74: /// lire que l'attention MLA à rang faible n'est pas implémentée.
+75: ///
+76: /// Trois des cinq plus gros modèles de cette machine sont dans ce cas —
+77: /// Kimi-K2.7 (1 026 G poids), GLM-5.3 (754 G), DeepSeek-V4-Flash (284 G) et
+78: /// V4.1 (755 G) : MLA à rang faible (`attn_q_a`/`attn_q_b`), hyper-connexions
+79: /// (`hc_*`), attention par index (`indexer`), routage par table (`tid2eid`) et
+80: //
+… [4578 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"sinks\" drave-core/src/model.rs | sed -n '1,60p'", "description": "Trace sinks field usage in attention"}`
+
+  ```
+120:    // les sinks sont des logits appris par tête, et surtout `compress_ratios`
+125:    if quelque_part("attn_derope") || a("blk.0.attn_sinks.weight") {
+852:    pub sinks: Option<Vec<f32>>,
+1488:    /// clés, plus `attn_sinks` jetons puits au début de la séquence.
+1517:    pub attn_sinks: usize,
+1536:    pub sinks_vus: usize,
+2317:                sinks: if g.tensor(&p("attn_sinks.weight")).is_some() {
+2318:                    Some(g.dequant(&p("attn_sinks.weight"))) } else { None },
+2378:        let sinks_vus = layers.iter().filter(|l| l.sinks.is_some()).count();
+2409:        println!("[config] puits appris sur {sinks_vus}/{n_layer} couches · n_rot {} · ffn {} · experts {}{}",
+2620:            attn_sinks: if fenetre > 0 { 0 } else { 4 },
+2627:            sinks_vus, kv_gpu, attn_gpu_part: Vec::new(),
+3456:                    let puits: Option<Vec<f32>> = lay.sinks.as_ref()
+3489:                            let puits = lay.sinks.as_ref().map(|s| s[hh]);
+3518:                    let puits = lay.sinks.as_ref().map(|s| s[hh]);
+4239:                    let puits: Option<Vec<f32>> = lay.sinks.as_ref()
+4272:                            let puits = lay.sinks.as_ref().map(|s| s[hh]);
+4330: 
+… [391 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rn \"attn_derope\\|attn_sinks\" drave-core/src/main.rs drave-core/tests/ tools/*.sh 2>/dev/null | head -20; echo \"=== tests count ===\"; grep -rc \"#\\[test\\]\" drave-core/src/*.rs | head", "description": "Check tests referen … [17 caractères tronqués]`
+
+  ```
+drave-core/src/main.rs:532:    attn_sinks: usize, attn_topk: usize, qk_topk: usize,
+drave-core/src/main.rs:649:            "--attn-sinks" => { o.attn_sinks = suivant(i).parse().unwrap(); 2 }
+drave-core/src/main.rs:752:        keep, attn_window, swa_pattern, sans_fenetre, attn_sinks, attn_topk, qk_topk,
+drave-core/src/main.rs:800:    if attn_sinks > 0 { mdl.attn_sinks = attn_sinks; }
+drave-core/src/main.rs:4248:        sans_fenetre, attn_sinks, attn_topk, qk_topk, act_thresh, act_topk, act_renorm,
+drave-core/src/main.rs:4352:    if attn_sinks > 0 { mdl.attn_sinks = attn_sinks; }
+=== tests count ===
+drave-core/src/clusters.rs:6
+drave-core/src/engine.rs:2
+drave-core/src/formats.rs:1
+drave-core/src/gguf.rs:10
+drave-core/src/gpu.rs:0
+drave-core/src/list.rs:5
+drave-core/src/main.rs:14
+drave-core/src/materiel.rs:3
+drave-core/src/model.rs:7
+drave-core/src/tokenizer.rs:0
+  ```
+
+### 🤖 Assistant
+
+⏵ Application du correctif `attn_sinks` et lancement de la compilation.
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs", "old_string": "    // DeepSeek-V4 : l'attention n'est pas la MLA « simple » de GLM/Kimi.\n    // `attn_derope` renvoie la sortie d'attention dans le repère non tourné,\n    // les sinks sont des logits appris pa … [1393 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && cargo build --release 2>&1 | tail -5", "description": "Rebuild drave release binary", "timeoutMs": 600000}`
+
+  ```
+|
+    = note: `#[warn(non_shorthand_field_patterns)]` on by default
+
+warning: `drave-core` (bin "drave") generated 41 warnings (run `cargo fix --bin "drave" -p drave-core` to apply 24 suggestions)
+    Finished `release` profile [optimized] target(s) in 29.17s
+  ```
+
+### 🤖 Assistant
+
+⏵ Vérification du refus corrigé sur gpt-oss et sur V4.1.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ./drave-core/target/release/drave /home/stephane/Data13TB/stephane/modeles/gguf/gpt-oss-120b-MXFP4.gguf --config 2>&1 | tail -6 && echo \"=== V4.1 ===\" && grep -rn \"V4.1-Flash\\|V41\" REPRISE.md | grep -oE \"/[^ ]*\\.gguf\" | sort  … [75 caractères tronqués]`
+
+  ```
+modèle        : /home/stephane/Data13TB/stephane/modeles/gguf/gpt-oss-120b-MXFP4.gguf
+architecture  : gpt-oss
+couches       : 36 · cachés 2880
+experts       : 128 par couche, 4 par jeton · FFN expert 2880
+routage       : top-k brut + softmax (source : défaut du moteur) · renormalisation non · échelle aucune
+calculable    : oui (passe avant implémentée)
+=== V4.1 ===
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rnoE \"/home/[^ \\`\\\"]*\\.gguf\" docs/plan-deepseek41-complet.md reports/rapport-execution-v41.md 2>/dev/null | sort -u -t: -k3 | awk -F: '{print $3}' | sort -u | head", "description": "Find V4.1 GGUF path in reports"}`
+
+  ```
+/home/stephane/FastNVMe/modeles-lourds/DeepSeek-V4.1-Flash-Q2.gguf
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && time ./drave-core/target/release/drave /home/stephane/FastNVMe/modeles-lourds/DeepSeek-V4.1-Flash-Q2.gguf --config 2>&1 | tail -12", "description": "Check V4.1 config refusal list", "timeoutMs": 300000}`
+
+  ```
+modèle        : /home/stephane/FastNVMe/modeles-lourds/DeepSeek-V4.1-Flash-Q2.gguf
+architecture  : deepseek41
+couches       : 40 · cachés 5120
+experts       : 384 par couche, 6 par jeton · FFN expert 2304
+routage       : racine de softplus (source : JSON scoring_func) · renormalisation oui · échelle 1.500
+[mla] attention MLA à rang faible : cache LATENT (c_kv + k_rope), pas de fenêtre glissante ni de YaRN sur ce chemin. Validée contre llama.cpp sur GLM-5.3 : corrélation des logits 0,999024, top-1 3/3 (voir reports/rapport-mla-experts.md).
+calculable    : NON — il manque : hyper-connexions (hc_attn_fn, hc_ffn_fn, hc_mult), projection de sortie à rang faible groupée (attn_output_a/attn_output_b, o_groups), attentions compressées CSA/HCA (compress_ratios, candidate_*)
+[stderr]
+
+real	0m0,077s
+user	0m0,044s
+sys	0m0,034s
+  ```
+
+### 🤖 Assistant
+
+⏵ Contrôle de la liste de manques de V4-Flash après le correctif.
+
+- **bash** `{"command": "ls /home/stephane/FastNVMe/modeles-lourds/ 2>/dev/null | head -20; ls /home/stephane/Data13TB/stephane/modeles/gguf/ 2>/dev/null | head -20", "description": "List available model files"}`
+
+  ```
+DeepSeek-V4.1-Flash-Q2.gguf
+README.md
+bge-m3-FP16.gguf
+codestral-22b-v0.1-q4_k_m.gguf
+deepseek-r1-distill-qwen-14b-q4_k_m.gguf
+deepseek-r1-distill-qwen-1.5b-q4_k_m.gguf
+DeepSeek-V4.1-Flash-Q2
+DeepSeek-V4-Flash-UD-IQ1_M
+eagle3-gpt-oss-120b-Q8_0.gguf
+GLM-5.3-Flash-UD-IQ1_S
+GLM-5.3-UD-IQ1_S
+gpt-oss-120b-MXFP4.gguf
+Kimi-K2.7-Code-UD-IQ1_M
+MiniMax-H3
+mmproj-Qwen2.5-VL-7B-Instruct-f16.gguf
+Muse-Glimmer-30B-AD-Q4_K_M.gguf
+qwen2.5-0.5b-instruct-q4_k_m.gguf
+qwen2.5-1.5b-instruct-q4_k_m.gguf
+qwen2.5-coder-0.5b-instruct-q4_k_m.gguf
+qwen2.5-coder-32b-instruct-q4_k_m.gguf
+Qwen2.5-VL-7B-Instruct-Q4_K_M.gguf
+Qwen3-235B-A22B-Q2_K
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && P=$(ls /home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek-V4-Flash-UD-IQ1_M/*.gguf 2>/dev/null | head -1); echo \"shard: $P\"; ./drave-core/target/release/drave \"$P\" --config 2>&1 | tail -6", "description": "Check V4-Flash conf … [33 caractères tronqués]`
+
+  ```
+shard: /home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek-V4-Flash-UD-IQ1_M/DeepSeek-V4-Flash-UD-IQ1_M-00001-of-00003.gguf
+couches       : 43 · cachés 4096
+experts       : 256 par couche, 6 par jeton · FFN expert 2048
+routage       : racine de softplus (source : expert_gating_func) · renormalisation oui · échelle 1.500
+routage table : 3/43 premières couches par `ffn_gate_tid2eid`
+[mla] attention MLA à rang faible : cache LATENT (c_kv + k_rope), pas de fenêtre glissante ni de YaRN sur ce chemin. Validée contre llama.cpp sur GLM-5.3 : corrélation des logits 0,999024, top-1 3/3 (voir reports/rapport-mla-experts.md).
+calculable    : NON — il manque : hyper-connexions (hc_attn_fn, hc_ffn_fn, hc_mult), projection de sortie à rang faible groupée (attn_output_a/attn_output_b, o_groups)
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs", "old_string": "        eprintln!(\"[mla] attention MLA à rang faible : cache LATENT (c_kv + k_rope), pas de \\\nfenêtre glissante ni de YaRN sur ce chemin. Validée contre llama.cpp sur GLM-5.3 : \\\ncorrélation  … [468 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '1,40p' tools/portes.sh && echo \"=== section 7 ===\" && grep -n \"gpt-oss\" tools/portes.sh", "description": "Read portes.sh header and gpt-oss section"}`
+
+  ```
+#!/bin/bash
+# Les portes du dépôt, en une commande.
+#
+# Un chiffre de référence qui dérive sans qu'on s'en aperçoive ne vaut rien :
+# chaque porte est comparée à la valeur ATTENDUE, et le script sort en erreur si
+# l'une diverge. Les valeurs sont celles publiées dans les rapports.
+#
+#   tools/portes.sh            toutes les portes
+#   tools/portes.sh rapide     sans gpt-oss (le seul qui prenne ~20 min)
+
+set -u
+cd "$(dirname "$0")/.."
+D=./drave-core/target/release/drave
+RAPIDE=${1:-}
+ECHEC=0
+
+[ -x "$D" ] || { echo "compiler d'abord : (cd drave-core && cargo build --release)"; exit 2; }
+
+compare() {  # nom, attendu, obtenu
+    if [ "$2" = "$3" ]; then
+        printf "  %-42s %s  ✅\n" "$1" "$3"
+    else
+        printf "  %-42s %s  ❌ (attendu %s)\n" "$1" "${3:-—}" "$2"
+        ECHEC=1
+    fi
+}
+
+# Attention : le moteur affiche AUSSI une perplexité cumulée par fenêtre, avant
+# le total. Prendre la première occurrence du motif donnait 17,431 (fenêtre 1) au
+# lieu de 19,3885 (total) — un instrument faux qui accuse le code.
+valeur() { grep -oE "=== perplexité [0-9]+\.[0-9]+" | grep -oE "[0-9]+\.[0-9]+" | head -1; }
+
+echo "=== Portes ==="
+
+# 1. Tests unitaires.
+n=$( (cd drave-core && cargo t
+… [532 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '85,105p' tools/portes.sh", "description": "Read portes.sh section 7 detail"}`
+
+  ```
+M=/home/stephane/Data13TB/stephane/modeles/gguf
+route "GLM-5.3 : sigmoïde ×2,5" "$M/GLM-5.3-UD-IQ1_S/GLM-5.3-UD-IQ1_S-00001-of-00006.gguf" "sigmoïde"
+route "Kimi-K2.7 : sigmoïde ×2,827" "$M/Kimi-K2.7-Code-UD-IQ1_M/Kimi-K2.7-Code-UD-IQ1_M-00001-of-00008.gguf" "sigmoïde"
+route "V4-Flash : racine de softplus" "$M/DeepSeek-V4-Flash-UD-IQ1_M/DeepSeek-V4-Flash-UD-IQ1_M-00001-of-00003.gguf" "racine de softplus"
+route "Qwen3-235B : softmax" "$M/Qwen3-235B-A22B-Q2_K/Qwen3-235B-A22B-Instruct-2507-Q2_K-00001-of-00002.gguf" "softmax"
+
+# 7. gpt-oss : le seul long.
+if [ "$RAPIDE" != "rapide" ]; then
+    echo "  (gpt-oss ~20 min et les portes de formats : lancez-les, ils sont hors de ce script)"
+fi
+
+echo ""
+[ "$ECHEC" = 0 ] && echo "toutes les portes sont vertes" || echo "AU MOINS UNE PORTE A DIVERGÉ"
+exit $ECHEC
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '40,85p' tools/portes.sh; echo \"=== ids files ===\"; ls -la /tmp/ids_*.txt 2>/dev/null | head", "description": "Read portes.sh gates 2-6 and check ids files"}`
+
+  ```
+# 2. Perplexité Qwen2.5-0.5B, contexte 256.
+v=$(timeout 600 $D models/Qwen2.5-0.5B-Q8_0.gguf --ppl /tmp/ids_qwen.txt --ctx 256 \
+    --abits 16 --threads 16 --limit 512 --dense 2>&1 | valeur)
+compare "Qwen2.5-0.5B ctx 256" "19.3885" "$v"
+
+# 3. Modèle en clusters, mêmes jetons que l'original.
+A=/home/stephane/FastNVMe/artefacts/modeles-optimises/qwen3-30b-8clusters-v2
+if [ -d "$A" ]; then
+    v=$(timeout 900 $D "$A" --ppl /tmp/ids_qwen.txt --ctx 64 --limit 8 --dense \
+        --threads 8 --lot 1 2>&1 | valeur)
+    compare "Qwen3-30B en clusters (origine : 799,8557)" "799.8557" "$v"
+fi
+
+# 4. Le plan matériel doit détecter les cœurs physiques, pas les threads.
+v=$($D models/Qwen2.5-0.5B-Q8_0.gguf --materiel 2>/dev/null | grep -oE "^  threads +: [0-9]+" | grep -oE "[0-9]+")
+att=$(nproc); att=$((att / 2))
+[ "${v:-0}" -gt 0 ] && [ "${v:-0}" -le "$att" ] \
+    && printf "  %-42s %s  ✅\n" "threads par défaut (physiques)" "$v" \
+    || { printf "  %-42s %s  ❌\n" "threads par défaut" "${v:-—}"; ECHEC=1; }
+
+# 5. Portes de FORMATS : chaque déquantificateur contre libggml.
+if [ "$RAPIDE" = "rapide" ]; then
+    echo "  (portes de formats : ignorées en mode rapide)"
+else
+    if command -v gcc >/d
+… [1741 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '660,680p' REPRISE.md", "description": "Read REPRISE gate recipe lines"}`
+
+  ```
+#    session ne touchent que les modèles à biais de sortie et à fenêtre par couche)
+cd drave-core && cargo build --release && cargo test --release
+./target/release/drave ../models/Qwen2.5-0.5B-Q8_0.gguf --ppl /tmp/ids_qwen.txt \
+    --ctx 256 --abits 16 --threads 16 --limit 512 --dense   # attendu 19,3885
+
+# 2. si /tmp a été vidé, régénérer le corpus et les identifiants (§2)
+
+# 3. gpt-oss : le chiffre de contrôle de cette session (≈ 45 s de chargement,
+#    ~100 s pour 510 jetons). SANS `DRAVE_GPU` : la variable ouvre le pilote, et le
+#    moteur déporte alors tout seul les projections Q8_0 de plus de 8 Mo — le
+#    chiffre devient 15,1667 (même calcul, ordre de sommation du noyau GPU).
+./target/release/drave /home/stephane/Data13TB/stephane/modeles/gguf/gpt-oss-120b-MXFP4.gguf \
+    --ppl /tmp/ids_oss_512.txt --ctx 256 --dense --threads 16 --limit 512  # attendu 15,1757
+
+# 4. puis §6.b : la rotation ne bascule plus qu'au-delà de 1,25 × la longueur
+#    d'origine déclarée (5 120 pour gpt-oss) — mesuré, voir docs/contexte-long.md §5.ter
+
+# 5. le calcul réparti (§6bis) : deux nœuds, 12 couches chacun, et le même chiffre
+#    des deux côtés. Le nœud moteur doit être lancé AVANT le pil
+… [97 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/REPRISE.md", "limit": 50, "offset": 1}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/REPRISE.md</path>
+<type>file</type>
+<content>
+1: # Reprise — état du projet et mode d'emploi pour une nouvelle session
+2: 
+3: > Rédigé à la fin d'une session longue. Tout ce qui suit est **mesuré**, pas
+4: > déduit. Les valeurs de perplexité sont des **références de non-régression** :
+5: > si une modification les change, c'est qu'elle a changé le calcul.
+6: >
+7: > **Nom** : le projet s'appelle **Drave** (binaire `drave`, paquet `drave-core`,
+8: > variables `DRAVE_*`, histoire du renommage dans `docs/histoire.md`). Le dossier
+9: > de travail, lui, s'appelle encore `Qtrinet` — les chemins ci-dessous sont ceux
+10: > qui existent.
+11: 
+12: ---
+13: 
+14: ## 1. En une phrase
+15: 
+16: `drave-core` est un moteur d'inférence Rust (~13 758 lignes, `std` seul) qui
+17: charge les GGUF **en place** (aucune copie, aucune requantification), exécute les
+18: projections soit en listes d'événements, soit en produit scalaire dense, gère les
+19: MoE, tient une conversation, et déporte au GPU ce qui y gagne. Il fait tourner du
+20: 0,5 B au 120 B sur le CPU de cette machine.
+21: 
+22: ```bash
+23: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave
+… [1429 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/REPRISE.md", "limit": 40, "offset": 440}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/REPRISE.md</path>
+<type>file</type>
+<content>
+440:    bloquant : le garde de réallocation de la collecte était piloté par les
+441:    dimensions au lieu des capacités, donc un échec d'allocation au milieu du `||`
+442:    laissait un pointeur 0 pour l'appel suivant. Corrigés, avec en plus une fuite
+443:    VRAM (`kv_assurer`), trois capacités périmées, quatre copies DtoD non
+444:    vérifiées, une boucle infinie latente et un `rep` tronqué ;
+445: 4. une SECONDE relecture adversariale, sur le branchement dans le moteur, a
+446:    trouvé **un faux résultat silencieux dans un noyau plus ancien** :
+447:    `attn_kv_recombine` lisait `sinks[warp]` (tête DANS le groupe KV) alors que la
+448:    sortie est écrite par tête GLOBALE — sur gpt-oss, `DRAVE_GPU_KV=1` donnait donc
+449:    à la tête `kvh×rep + w` le puits de la tête `w`, jusqu'à 4,65 logit d'écart
+450:    (facteur 105 sur le drainage). **Mesuré avant/après** : perplexité gpt-oss ctx
+451:    256 `DRAVE_GPU=1 DRAVE_GPU_KV=1` = **17,6531 AVANT** contre **15,1786 APRÈS**
+452:    (référence CPU 15,1757 ; Qwen n'a pas de puits, donc la porte de 19,3885 ne
+453:    pouvait pas le voir).
+… [1890 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/REPRISE.md", "limit": 40, "offset": 55}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/REPRISE.md</path>
+<type>file</type>
+<content>
+55: ```
+56: 
+57: Le mode `--tokenize --fichier` **vérifie la réversibilité** (texte reconstruit
+58: identique à la source) — les deux tokenizers la passent sur ce corpus.
+59: 
+60: | modèle | commande (abrégée) | perplexité attendue |
+61: |---|---|---|
+62: | Qwen2.5-0.5B Q8_0 | `--dense --limit 512` | **19,3885** |
+63: | Qwen2.5-0.5B Q4_0 | `--q4 --limit 512` | **21,0110** |
+64: | Qwen2.5-0.5B Q8_0, 6 bits | `--dense --bits-attn 6 --bits-ffn 6 --limit 512` (ctx 256) | **19,5633** ← bat l'int8 (19,8059), mais de moins loin qu'annoncé : la valeur **19,3045** qui figurait ici n'est PAS reproductible avec cette commande (re-mesuré le 30/09, deux fois) |
+65: | Qwen2.5-0.5B Q8_0, 4 bits | `--dense --q4 --limit 512` | **23,1323** |
+66: | Qwen2.5-1.5B Q4_K_M | `--q4 --limit 256` | **12,9228** |
+67: | Qwen2.5-VL-7B Q4_K_M | défaut, `--limit 128` | **10,9947** |
+68: | Qwen3-30B-A3B MoE | `--dense --limit 128` | **7,6139** |
+69: | gpt-oss-120b MXFP4 | `--dense --limit 64`, ids_oss | **20,8361** (63 jetons) |
+70: | gpt-oss-120b MXFP4 | `--dense --limit 512`, ids_oss | **15,1757** (510 jetons, deu
+… [1465 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Mise à jour des portes courantes dans REPRISE.md (valeurs du 02/10).
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/REPRISE.md", "new_string": "> **Revérifiées le 30/09 après tous les changements de la journée** (mode lot,\n> protocole v4, DRVF v2/v3, plafond R4, tableau de bord) : Qwen ctx 256 =\n> **19,3885** et gpt-oss ctx 256 = **15,1757**, `cargo … [1135 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/REPRISE.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/REPRISE.md", "new_string": "| gpt-oss-120b MXFP4 | `--dense --limit 512`, ids_oss | **15,6017** (510 jetons, deux fenêtres) — était 15,1757 avant le correctif de routage du 02/10 |", "old_string": "| gpt-oss-120b MXFP4 | `--dense --limit … [60 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/REPRISE.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/REPRISE.md", "new_string": "    --ppl /tmp/ids_oss_512.txt --ctx 256 --dense --threads 16 --limit 512  # attendu 15,6017\n#    (15,1757 avant le correctif de routage du 02/10 ; DRAVE_GPU=1 donne un écart\n#    du même ordre que les 0,06  … [152 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/REPRISE.md has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '170,190p' REPRISE.md; echo \"=== 262-275 ===\"; sed -n '262,275p' REPRISE.md", "description": "Check context of stale values in REPRISE"}`
+
+  ```
+| 6 | boucles CLI unifiées | **fait** | `struct Options` + `analyser` ; trois drapeaux de plus trouvés ignorés (`--attn-topk`, `--qk-topk`, `--sans-yarn` en inférence) et un bug de pas de lecture corrigé |
+| 7 | noyaux GPU | **fait, quatre formats** | warp par ligne : tête **Q8_0** (1,6 ms contre 7,3 CPU, écart 2e-7), **MXFP4** (0,1 ms, écart **0,00e0** — bit à bit), **Q4_K** (0,5 contre 1,2 ms, 4e-7), **Q6_K** (3,6 contre 8,3 ms sur la tête liée de 191 Mo, 3,3e-7 ; ×5 sur un tenseur de 11 Mo). **Tête Q6_K branchée** dans le moteur : `DRAVE_GPU=1 DRAVE_GPU_TETE=1` → 7,58 → **3,60 ms/jeton**, perplexité identique (13,6877). Reste le cache d'experts chauds en VRAM : la mesure d'activation (`rapport-localite-activation.md`) dit qu'un préchargement statique ne paie pas sur SiLU |
+| 8 | suite du plan 1 M | **fait pour E4/E5** | **E4 KV déporté en VRAM** : noyaux `attn_kv_*` (tuiles de 32 clés, softmax en ligne, recombinaison + puits), miroir du cache **paginé** (capacité doublée à la demande : 0,05 Go de VRAM à ctx 1 M après 512 jetons) et `DRAVE_GPU_KV=1` — à 1 M de clés l'attention passe de 968 ms à **13,2 ms** par couche (int4, ×73) et, dans le moteur à 4 096 de contexte, de **22,2 à
+… [4266 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '2190,2210p' drave-core/src/model.rs", "description": "Check YaRN activation threshold in code"}`
+
+  ```
+let toujours = std::env::var("DRAVE_YARN").is_ok();
+                let jamais = std::env::var("DRAVE_YARN_NON").is_ok();
+                // Seuil de bascule : mesuré au protocole apparié (`--depuis`,
+                // mêmes 512 jetons notés) à 5 120 jetons — RoPE simple **9,6986**
+                // contre **1 269,1777** en interpolation seule — puis à 16 384 :
+                // **35,18** contre **1 133,02**. L'interpolation n'a JAMAIS gagné
+                // sur l'étendue mesurée (128 → 16 384), et l'écart se creuse avec
+                // la longueur. Le seuil passe donc à 4 × la longueur déclarée
+                // (16 384 pour gpt-oss, la plus grande longueur mesurée) : elle ne
+                // s'active plus là où on sait qu'elle nuit. Au-delà, extrapolation
+                // non mesurée — le corpus disponible s'arrête à 17 k jetons.
+                match declare {
+                    Some(y) if toujours => Some(y),
+                    Some(y) if !jamais && ctx as f32 > y.3 * 4.0 => Some(y),
+                    _ => None,
+                }
+            },
+        };
+
+        let cfg = {
+            let mut c = cfg;
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rn \"1,25 ×\\|1.25 \\*\\|1,25×\" REPRISE.md docs/ README.md tools/ 2>/dev/null | head -20", "description": "Grep stale YaRN 1.25x threshold"}`
+
+  ```
+REPRISE.md:166:| 2 | seuil de rotation YaRN | **fait, seuil à 4 × la longueur déclarée** | comparaison appariée (mêmes 512 jetons) : contexte 128→1536, RoPE simple 39,52/49,79/49,93/298,56 contre interpolation 42,13/82,02/82,15/578,86 → le simple gagne partout. **Au-delà du seuil** (5 120 jetons, corpus de 17 k maintenant disponible) : simple **9,6986** contre interpolation seule **1 269,1777** → le seuil de 4 096 était **trop bas** ; le moteur ne bascule plus qu'à 1,25 × la longueur déclarée. Au-delà (16 k, 131 k) : non mesuré, une passe à 16 k coûte une heure |
+REPRISE.md:275:| `DRAVE_YARN=1` / `DRAVE_YARN_NON=1` / `DRAVE_YARN_MSCALE=0` | force / interdit / règle la rotation | le défaut ne bascule qu'à 1,25 × la longueur déclarée |
+REPRISE.md:685:# 4. puis §6.b : la rotation ne bascule plus qu'au-delà de 1,25 × la longueur
+docs/contexte-long.md:472:d'origine déclarée » n'est donc pas le bon : il ne bascule plus qu'à **1,25 ×**
+docs/contexte-long.md:493:Conséquence pour le moteur : le seuil de bascule passe de 1,25 × à **4 ×** la
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport re\np='REPRISE.md'\ns=open(p).read()\nsubs=[\n (\"le seuil de 4 096 était **trop bas** ; le moteur ne bascule plus qu'à 1,25 × la longueur déclarée. Au-delà (16 k, 131 k) : non mesuré, une passe à 16 k coûte … [978 caractères tronqués]`
+
+  ```
+ok
+  ```
+
+### 🤖 Assistant
+
+⏵ Lecture des zones à corriger dans les docs restants.
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/contexte-long.md", "limit": 14, "offset": 96}`
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/contexte-long.md", "limit": 8, "offset": 404}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/contexte-long.md</path>
+<type>file</type>
+<content>
+96: 
+97: ## 4. Plan par étapes
+98: 
+99: | # | étape | état | débloque | coût |
+100: |---|---|---|---|---|
+101: | E1 | **Préremplissage par lots** | **fait** : `gemm_dense_i8` et `gemm_dense_q4` (produits matrice-matrice par tranches), `forward_lot` juste sur dense **et** sur MoE avec regroupement des jetons par expert ; débit bout en bout à chiffrer | 32 k utilisable ; TTFT | le noyau est là ; reste à mesurer et à élargir les tranches |
+102: | E2 | **KV int8** | **fait** (échelle par vecteur, dequantification à la lecture) | ÷4 sur le KV ; 128 k confortable | mesuré : +7,1 % de perplexité (llama.cpp q8_0 : +3,1 %) |
+103: | E3 | **KV int4** | **fait** (nibbles empaquetés) | 1 M tient en RAM (9,7 Go) et en VRAM | mesuré : **+384 %** à 512 jetons, **+364 % à 8 192** — llama.cpp q4_0 : +411 % puis +494 % ; à réserver aux cas où la mémoire manque |
+104: | E4 | **KV déporté sur les 2 GPU** (pagination, préchargement) | **fait** : noyau `attn_kv_*` (tuiles de 32 clés en mémoire partagée, une passe par (tête KV, tranche), recombinaison + puits), miroir VRAM du cache (`DRAVE_GPU_KV
+… [845 caractères tronqués]
+  ```
+
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/contexte-long.md</path>
+<type>file</type>
+<content>
+404: ## 5. YaRN à retardement : ce que la mesure a dit
+405: 
+406: Politique implémentée (`[config] rotation` le dit à chaque chargement) : **RoPE
+407: simple tant que le contexte demandé tient dans la longueur initiale déclarée
+408: (4 096 pour gpt-oss), interpolation YaRN au-delà — sans la mise à l'échelle de
+409: température** ; `DRAVE_YARN=1` force le YaRN complet des implémentations de
+410: référence, `DRAVE_YARN_NON=1` jamais, `DRAVE_YARN_MSCALE=0/1` tranche sur la
+411: température seule. Décision **par séquence**, pas par position : la structure de
+
+(Showing lines 404-411 of 580. Use offset=412 to continue.)
+</content>
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/contexte-long.md", "limit": 10, "offset": 542}`
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/contexte-long.md", "limit": 12, "offset": 554}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/contexte-long.md</path>
+<type>file</type>
+<content>
+542:    supposer. Second essai sur Qwen3-30B-A3B : **9,6 minutes pour une seule
+543:    sonde** (1 024 jetons de contexte) et un échec — le remplissage, répété à
+544:    l'identique, ne fait pas un banc d'essai valable, et le préremplissage
+545:    séquentiel rend chaque sonde hors de prix (1,8 jeton/s). Le test est donc
+546:    **arrêté** : il faudra un remplissage varié (du vrai texte), moins de sondes
+547:    et des réponses plus longues — et c'est le préremplissage par lots qui le
+548:    rendra abordable.
+549: 2. **Attention creuse** : `--attn-topk N` et `--attn-window N` au protocole
+550:    `--depuis` (mêmes jetons, contexte long) donnent le prix en perplexité de
+551:    chaque restriction.
+
+(Showing lines 542-551 of 580. Use offset=552 to continue.)
+</content>
+  ```
+
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/contexte-long.md</path>
+<type>file</type>
+<content>
+554: 
+555: ### Premiers résultats d'attention creuse (gpt-oss, mêmes 512 jetons, contexte 2 048)
+556: 
+557: | restriction | perplexité |
+558: |---|---|
+559: | aucune | 298,56 |
+560: | **top-256 clés par requête** (`--attn-topk 256`) | **234,88** ← *meilleure* |
+561: | fenêtre de 512 sur les couches locales (`--attn-window 512`) | 3 269,34 |
+562: 
+563: Deux enseignements opposés, et tous deux utiles :
+564: 
+565: - **restreindre aux 256 meilleures clés AMÉLIORE la perplexité** (−21 %) : sur du
+
+(Showing lines 554-565 of 580. Use offset=566 to continue.)
+</content>
+  ```
+
+### 🤖 Assistant
+
+⏵ Corrections de `contexte-long.md` (E1–E7, YaRN, aiguille, provenance).
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/contexte-long.md", "new_string": "| E1 | **Préremplissage par lots** | **fait** : `gemm_dense_i8` et `gemm_dense_q4` (produits matrice-matrice par tranches), `forward_lot` juste sur dense **et** sur MoE avec regroupement des jetons  … [3521 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/contexte-long.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/contexte-long.md", "new_string": "Politique implémentée (`[config] rotation` le dit à chaque chargement) : **RoPE\nsimple tant que le contexte demandé ne dépasse pas 4 × la longueur initiale\ndéclarée (16 384 pour gpt-oss, voir §5.q … [476 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/contexte-long.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/contexte-long.md", "new_string": "   l'identique, ne fait pas un banc d'essai valable, et le préremplissage\n   séquentiel rend chaque sonde hors de prix (1,8 jeton/s). Le test est donc\n   **arrêté sur cette version** : il fallait  … [616 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/contexte-long.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/contexte-long.md", "new_string": "| **top-256 clés par requête** (`--attn-topk 256`) | **234,88** ← *meilleure* |\n| fenêtre de 512 sur les couches locales (`--attn-window 512`) | 3 269,34 |\n\n> Valeurs du **30/09** (gpt-oss, conte … [368 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/contexte-long.md has been updated successfully.
+  ```
+
+### 🤖 Assistant
+
+⏵ Ajout du cadrage « placement » dans format-clusters et du journal dans colab-reparti.
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/format-clusters.md", "new_string": "correspondance ; un nœud n'ouvre que ce qu'il sert — mesuré **3,20 Go au lieu de\n18,56** et **625 ms au lieu de 3,9 s** sur Qwen3-30B-A3B.\n\n**Et c'est le mécanisme de placement** : ces grappes  … [396 caractères tronqués]`
+
+  ```
+Error: cannot edit "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/format-clusters.md": file changed since it was read — re-read the file, then retry
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/format-clusters.md", "limit": 12}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/format-clusters.md</path>
+<type>file</type>
+<content>
+1: # Format — le modèle éclaté en clusters (un fichier par cluster)
+2: 
+3: **En une ligne** : un GGUF est converti en `commun.gguf` + `cluster-XX.gguf`, un
+4: fichier **GGUF autonome par cluster d'experts**, avec un manifeste qui porte la
+5: correspondance ; un nœud n'ouvre que ce qu'il sert — mesuré **3,20 Go au lieu de
+6: 18,56** et **625 ms au lieu de 3,9 s** sur Qwen3-30B-A3B.
+7: 
+8: Outil : [`tools/convertir_clusters.py`](../tools/convertir_clusters.py).
+9: 
+10: ## Le problème
+11: 
+12: Un MoE publié en GGUF met **tous** les experts d'une couche dans un seul tenseur :
+
+(Showing lines 1-12 of 184. Use offset=13 to continue.)
+</content>
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/format-clusters.md", "new_string": "correspondance ; un nœud n'ouvre que ce qu'il sert — mesuré **3,20 Go au lieu de\n18,56** et **625 ms au lieu de 3,9 s** sur Qwen3-30B-A3B.\n\n**Et c'est le mécanisme de placement** : ces grappes  … [401 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/format-clusters.md has been updated successfully.
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/colab-reparti.md", "limit": 10}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/colab-reparti.md</path>
+<type>file</type>
+<content>
+1: # Répétition Colab — la phase 3.4, pas à pas
+2: 
+3: Objectif : deux machines qui se passent des **listes d'activation**, l'une sur le
+4: runtime Colab, l'autre en local, et **les mêmes logits** qu'en local.
+5: 
+6: Ce document est la recette ; l'état du protocole et les chiffres qui la
+7: dimensionnent sont dans `docs/format-flux.md` et
+8: `reports/rapport-transport-liste.md`.
+9: 
+10: ## Mise en place, concrètement
+
+(Showing lines 1-10 of 127. Use offset=11 to continue.)
+</content>
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/colab-reparti.md", "new_string": "Objectif : deux machines qui se passent des **listes d'activation**, l'une sur le\nruntime Colab, l'autre en local, et **les mêmes logits** qu'en local.\n\nCe flux est aussi le **journal** qu'on rel … [408 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/colab-reparti.md has been updated successfully.
+  ```
+
+### 🤖 Assistant
+
+⏵ Correction de `convertisseur.md` (nommage, calques, items périmés, suspects testés).
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/convertisseur.md", "limit": 20, "offset": 107}`
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/convertisseur.md", "limit": 14, "offset": 160}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/convertisseur.md</path>
+<type>file</type>
+<content>
+107:   GPU par PCIe est donc proche de 1** : il ne se justifie que si le GPU calcule
+108:   *plus* que ce qu'on lui envoie — c'est-à-dire s'il garde les poids et ne reçoit
+109:   que les activations.
+110: 
+111: ## 5. Format proposé : conteneur **Drave** (ex-`QTNT`), adossé au format de flux `DRVF`
+112: 
+113: > Le sigle `QTNT` porte l'ancien nom du projet ; le renommage du 30/09 est « fait
+114: > partout » (`docs/histoire.md`). Le conteneur décrit ici reste **proposé** : ce
+115: > que le moteur sait lire aujourd'hui, c'est le format **clusters**
+116: > (`docs/format-clusters.md`) et le format de flux **DRVF**
+117: > (`docs/format-flux.md`).
+118: 
+119: Un conteneur, un index, des sections alignées.
+120: 
+121: ```
+122: en-tête      magie, version, nb_couches, nb_tenseurs, alignement (2 Mo), graine
+123: index        par tenseur :
+124:                nom, rôle (Wq/Wk/Wv/Wo/gate/up/down/routeur/expert),
+125:                calque, rang d'expert, dimensions,
+126:                encodage (blocs_source | dense4 | listes),
+
+(Showing lines 107-126 of 327. Use offset=127 to continue.)
+… [11 caractères tronqués]
+  ```
+
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/convertisseur.md</path>
+<type>file</type>
+<content>
+160: 
+161: Un convertisseur qui réencode doit prouver le niveau « exact » ou renoncer à
+162: l'appeler haute fidélité. C'est exactement ce que la double quantification avait
+163: coûté : **12 % de perplexité** sur Q4_0 avant qu'on s'en aperçoive.
+164: 
+165: ## 7. Ordre de marche
+166: 
+167: | # | chantier | état | gain mesuré ou attendu |
+168: |---|---|---|---|
+169: | 1 | emprunt des blocs en place (Q4_0, MXFP4) | ✅ **fait** | chargement ×3,2, mémoire ÷2, fidélité exacte |
+170: | 2 | lecteur **Q4_K / Q6_K** | à faire | ouvre 7B → 32B |
+171: | 3 | **routeur MoE** + tranches par expert | à faire | gpt-oss-120b : 61 Go/jeton → 2,7 Go/jeton |
+172: | 4 | conteneur `QTNT` + index de placement | à faire | plan CPU/GPU/NUMA lisible avant les poids |
+173: | 5 | placement : épinglage NUMA, threads par calque | à faire | 20,7 → 24,7 Go/s mesuré au banc |
+
+(Showing lines 160-173 of 327. Use offset=174 to continue.)
+</content>
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/convertisseur.md", "limit": 45, "offset": 165}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/convertisseur.md</path>
+<type>file</type>
+<content>
+165: ## 7. Ordre de marche
+166: 
+167: | # | chantier | état | gain mesuré ou attendu |
+168: |---|---|---|---|
+169: | 1 | emprunt des blocs en place (Q4_0, MXFP4) | ✅ **fait** | chargement ×3,2, mémoire ÷2, fidélité exacte |
+170: | 2 | lecteur **Q4_K / Q6_K** | à faire | ouvre 7B → 32B |
+171: | 3 | **routeur MoE** + tranches par expert | à faire | gpt-oss-120b : 61 Go/jeton → 2,7 Go/jeton |
+172: | 4 | conteneur `QTNT` + index de placement | à faire | plan CPU/GPU/NUMA lisible avant les poids |
+173: | 5 | placement : épinglage NUMA, threads par calque | à faire | 20,7 → 24,7 Go/s mesuré au banc |
+174: | 6 | **Q8_0 en place** (le noyau `q8_dot_at` existe déjà pour la tête) | à faire | supprime la dernière copie du chemin int8 |
+175: | 7 | mmap (appel système direct) | **fait** | grosses pages, partage entre processus (`docs/format-clusters.md`) | grosses pages, partage entre processus |
+176: 
+177: Les points 1 et 6 sont ce qui rend un modèle de 60 Go **chargeable** ; 2 et 3
+178: sont ce qui le rend **exécutable** ; 4 et 5 sont ce qui le rend **efficace**.
+179: 
+180: ---
+181: 
+… [1712 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/convertisseur.md", "new_string": "| # | chantier | état | gain mesuré ou attendu |\n|---|---|---|---|\n| 1 | emprunt des blocs en place (Q4_0, MXFP4) | ✅ **fait** | chargement ×3,2, mémoire ÷2, fidélité exacte |\n| 2 | lecteur **Q4_ … [1922 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/convertisseur.md has been updated successfully.
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/convertisseur.md", "limit": 40, "offset": 240}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/convertisseur.md</path>
+<type>file</type>
+<content>
+240: fils par cœur, et la barrière tournante souffre doublement de la contention SMT.
+241: Même en se limitant aux cœurs physiques des deux sockets : 25,5 s. L'ordonnanceur
+242: fait mieux seul. Le drapeau `--pin` reste disponible, documenté comme perdant ici.
+243: 
+244: **Le plan surestime le débit des MoE d'un facteur 2.** Il annonçait 12 tok/s pour
+245: le 30B-A3B à 20 Go/s ; nous en mesurons 5,4. Les tranches d'experts sont lues à
+246: **8 Go/s**, pas 20 : dix-huit mille tranches de 900 Ko dispersées sur 18 Go
+247: coûtent en TLB et en localité ce que la lecture séquentielle ne paie pas. Le plan
+248: chiffre maintenant aussi ce régime — 4,81 tok/s prévus contre 5,4 mesurés.
+249: 
+250: ## Reste à faire
+251: 
+252: 1. **Q4_K sur FPGA** : le format des modèles réels, à porter dans `event_reader`.
+253: 2. **Épinglage NUMA** : **fait** (`--pin`), et mesuré **perdant** (23,2 → 27,6 s
+254:    sur le 30B MoE, voir plus haut) ; `sched_setaffinity` n'est pas dans
+255:    `std` — il faut un appel système direct.
+256: 3. **Q8_0 en place** pour les projections : **fait** — chargemen
+… [1089 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/convertisseur.md", "limit": 30, "offset": 300}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/convertisseur.md</path>
+<type>file</type>
+<content>
+300: ## La descente de perplexité, mesurée
+301: 
+302: | étape | PPL (63 jetons) | ce qui a changé |
+303: |---|---|---|
+304: | départ | **42 127** | jetons Qwen donnés à un modèle o200k |
+305: | 1 | 1 396 | **tokenizer du modèle** (garde-fou ajouté : identifiant hors vocabulaire = erreur franche) |
+306: | 2 | **185** | **activation gpt-oss** : `g·σ(1,702·g)·(u+1)`, `g` et `u` écrêtés à ±7 — ce n'est PAS SiLU |
+307: | 3 | 185 | routage top-k puis softmax sur les seuls retenus : sans effet mesurable ici |
+308: | 4 | (1 095) | rotary partiel supposé — **hypothèse réfutée**, annulée |
+309: | 5 | **39,8** | **YaRN désactivé** : notre implémentation dégradait d'un facteur 4,6 |
+310: 
+311: Ce qui reste : la cible d'un 120 G MoE est de l'ordre de 6. La configuration
+312: reconnue est tracée au chargement :
+313: 
+314: ```
+315: [config] 36 couches, hidden 2880 · activation-oss routeur-topk moe
+316: [config] puits appris sur 36/36 couches · n_rot 64 · ffn 2880 · experts 128
+317: ```
+318: 
+319: Les puits **sont** chargés et appliqués (vérifié), le rotary est complet, la
+320: fenêtre gl
+… [490 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"20,84\\|20.84\\|39,80\\|39.80\\|15,6017\\|15,1757\" reports/rapport-gpt-oss-perplexite.md | head -20", "description": "Check gpt-oss perplexity report values"}`
+
+  ```
+28:| avant (biais O ignoré) | **39,80** |
+29:| après (biais O chargé) | **20,84** |
+91:| RoPE simple (défaut du moteur) | **20,84** | **18,58** |
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '20,40p' reports/rapport-gpt-oss-perplexite.md; echo \"=== 85-95 ===\"; sed -n '85,95p' reports/rapport-gpt-oss-perplexite.md", "description": "Read gpt-oss perplexity report context"}`
+
+  ```
+biais. Le chargeur passait bien les biais de Q, K et V, mais `None` pour
+`attn_output` — un décalage constant ajouté à la sortie de chaque couche, donc
+amplifié 36 fois.
+
+Mesure, 63 jetons, tout le reste identique :
+
+| | perplexité (63 jetons) |
+|---|---|
+| avant (biais O ignoré) | **39,80** |
+| après (biais O chargé) | **20,84** |
+
+### b. La fenêtre glissante s'appliquait aux 36 couches au lieu d'une sur deux
+
+gpt-oss alterne `sliding_attention` (couches paires) et `full_attention`
+(couches impaires) — c'est écrit dans son `config.json` (`layer_types`) et
+llama.cpp le reproduit par `set_swa_pattern(2)`. Notre moteur lisait bien la
+fenêtre déclarée (128) mais l'appliquait à **toutes** les couches : au-delà de
+128 jetons, la moitié du réseau perdait l'information lointaine. C'est
+exactement la signature observée « la perplexité croît avec la fenêtre ».
+
+Mesure, 511 jetons :
+=== 85-95 ===
+modèle, parce qu'il sait éteindre YaRN (voir §4).
+
+## 4. YaRN : le désactiver vaut ×9 sur ce modèle
+
+| configuration | 63 jetons | 511 jetons (une fenêtre) |
+|---|---|---|
+| RoPE simple (défaut du moteur) | **20,84** | **18,58** |
+| YaRN ×32 (ce que déclare le modèle) | 41,11 | 174,34 |
+
+Ce n'est pa
+… [27 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rn \"166,85\\|166.85\\|84,07\\|84.07\" reports/*.md docs/*.md REPRISE.md 2>/dev/null | head -20", "description": "Find external llama.cpp comparison values"}`
+
+  ```
+reports/rapport-routage-experts.md:125:| llama.cpp (`llama-perplexity -c 256 --chunks 2`) | **166,85** |
+reports/rapport-routage-experts.md:127:| drave, YaRN **forcé** (`DRAVE_YARN=1`) | **84,07** |
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '112,135p' reports/rapport-routage-experts.md", "description": "Read routing report external comparison"}`
+
+  ```
+construction) :
+
+| | perplexité | corrélation des logits (pos. 0) | écart \|NLL\| moyen | accord top-1 |
+|---|---|---|---|---|
+| llama.cpp (référence) | **5420,40** | — | — | — |
+| drave, biais **hors** des poids (nouveau) | **6443,13** | **0,989242** | 0,4364 | 2/4 |
+| drave, biais **dans** le softmax (ancien) | 6625,80 | 0,989142 | 0,4134 | 2/4 |
+
+**Et la comparaison à 510 jetons, elle, ne conclut pas** — mais pour une raison
+qui vaut d'être écrite :
+
+| gpt-oss-120b, ctx 256, 510 jetons | perplexité |
+|---|---|
+| llama.cpp (`llama-perplexity -c 256 --chunks 2`) | **166,85** |
+| drave, YaRN **à retardement** (le défaut) | **15,6017** |
+| drave, YaRN **forcé** (`DRAVE_YARN=1`) | **84,07** |
+
+Les deux moteurs ne suivent pas la même politique de YaRN : llama.cpp applique
+l'étirement déclaré par le modèle dès la première position, drave ne l'applique
+qu'au-delà de 4 × la longueur vue à l'entraînement — un choix mesuré dans une
+session précédente (à ctx 512, YaRN coûtait un facteur 9 : 174,34 contre 18,58).
+La comparaison externe **encadre** donc notre chiffre (84 forcé contre 167 chez
+llama.cpp) sans le valider : elle dit que l'écart est de l'ordre de celui du
+YaRN, pas d'une erreur d
+… [55 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/convertisseur.md", "new_string": "Les puits **sont** chargés et appliqués (vérifié), le rotary est complet, la\nfenêtre glissante est sans effet en deçà de 128 jetons. Les suspects restants ont\nété testés **le jour même** : le **bi … [1045 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/convertisseur.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/convertisseur.md", "new_string": "## Reste à faire\n\n1. **Q4_K sur FPGA** : le format des modèles réels, à porter dans `event_reader`.\n2. **gpt-oss-120b** : **charge et tourne** (voir plus bas) ; porte de\n   non-régression **15,6 … [1138 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/convertisseur.md has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"calque\" docs/convertisseur.md", "description": "Find remaining 'calque' occurrences"}`
+
+  ```
+5:> tuning CPU/hyperthread/core pour les calques sur CPU et similaires pour les
+6:> calques sur GPU avec optimisation des calques en fonction des routes PCIe ».
+125:               calque, rang d'expert, dimensions,
+145:   peut décider où charger chaque calque sans avoir lu le modèle.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\np='docs/convertisseur.md'\ns=open(p).read()\nsubs=[(\"               calque, rang d'expert, dimensions,\",\n       \"               couche, rang d'expert, dimensions,\"),\n      (\"   peut décider où charger chaque … [353 caractères tronqués]`
+
+  ```
+ok
+5:> tuning CPU/hyperthread/core pour les calques sur CPU et similaires pour les
+6:> calques sur GPU avec optimisation des calques en fonction des routes PCIe ».
+111:## 5. Format proposé : conteneur **Drave** (ex-`QTNT`), adossé au format de flux `DRVF`
+113:> Le sigle `QTNT` porte l'ancien nom du projet ; le renommage du 30/09 est « fait
+172:| 4 | conteneur **Drave** (ex-`QTNT`) + index de placement | index de placement ✅ (`--plan`) ; le conteneur reste **proposé** | plan CPU/GPU/NUMA lisible avant les poids |
+  ```
+
+### 🤖 Assistant
+
+⏵ Correction de `plan-mode4-lot-listes.md` (statut, v5, durcissement fait).
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/plan-mode4-lot-listes.md", "limit": 22}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/plan-mode4-lot-listes.md</path>
+<type>file</type>
+<content>
+1: # Spécification — mode 4 : le **lot en listes** (protocole v5)
+2: 
+3: > **État : ÉCRIT, mesuré et relu** (voir `reports/rapport-mode4-lot-listes.md`) — ce plan
+4: > reste la référence de conception, et les écarts constatés à la mise en œuvre sont
+5: > consignés dans ce rapport (version 5, borne des actifs, garde cumulatif). Ce document est la spécification à implémenter ; aucun
+6: > fichier de code n'a été touché pour l'écrire. Il suppose connus
+7: > `docs/format-flux.md` (protocole v4, modes 0–3) et `docs/plan-prefill-reparti.md`
+8: > (le mode 3, mis en œuvre, et ses leçons). Les numéros de ligne sont ceux de
+9: > l'arbre au moment de la rédaction (`VERSION_FLUX = 4`, `TAILLE_TETE = 79`,
+10: > `MODE_LOT = 3`).
+11: 
+12: **En une ligne** : le mode 3 transporte `t` états en f32 dense — 3 589 octets par
+13: jeton à `t = 16` pour Qwen2.5-0.5B ; le mode 4 transporte **les mêmes `t` états
+14: encodés en listes à échelle par bloc de 32 canaux**, soit ≈ 1 530 octets par état
+15: au seuil 0,01, **÷2,3 sur le fil**, au prix exact que le mode 2 paie déjà
+16: (2,7e-2 d'écar
+… [327 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/plan-mode4-lot-listes.md", "new_string": "> **État : ÉCRIT, mesuré et relu** (voir `reports/rapport-mode4-lot-listes.md`) — ce plan\n> reste la référence de conception, et les écarts constatés à la mise en œuvre sont\n> consignés da … [1293 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/plan-mode4-lot-listes.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/plan-mode4-lot-listes.md", "new_string": "(2,7e-2 d'écart à 256 jetons, 1,3e-2 à 1 024). Le mode 4 ne touche ni au calcul,\nni au cache KV, ni à la norme finale : il s'arrête au transport — le flux\ntransporté est aussi le journal q … [222 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/plan-mode4-lot-listes.md has been updated successfully.
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/plan-mode4-lot-listes.md", "limit": 18, "offset": 170}`
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/plan-mode4-lot-listes.md", "limit": 14, "offset": 234}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/plan-mode4-lot-listes.md</path>
+<type>file</type>
+<content>
+170: reconstruits ensemble, comme la recette Colab l'impose déjà
+171: (`docs/colab-reparti.md` : même commit des deux côtés).
+172: 
+173: **Règle à écrire dans le code** : un nouveau mode ⇒ une nouvelle version. Un mode
+174: est un contrat de corps ; le champ version est le seul endroit d'où un refus peut
+175: partir sans avoir rien interprété.
+176: 
+177: **Durcissement à faire dans le même passage** (indépendant du mode 4, mais c'est
+178: le même défaut) : dans `recevoir_flux`, refuser un mode inconnu **juste après
+179: l'en-tête**, avant la lecture du corps, au lieu d'attendre le `autre => Err`
+180: actuel. Après ce correctif, un mode 7 forgé en v5 est refusé sans qu'un seul
+181: octet de corps soit lu, et le prochain mode ajouté héritera de la même sûreté.
+182: 
+183: ## 4. Le garde-fou de taille (R4) : champs et ordre exact
+184: 
+185: `PLAFOND_FLUX` vaut 256 Mo et `verifier_taille` est la seule porte. En mode 4,
+186: **l'en-tête ne borne plus le corps** : `t` états peuvent annoncer chacun une
+187: taille licite et faire, ensemble, n'importe quoi. Il faut donc deu
+… [82 caractères tronqués]
+  ```
+
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/plan-mode4-lot-listes.md</path>
+<type>file</type>
+<content>
+234: ## 5. Les deux côtés
+235: 
+236: ### 5.1 Le pilote (`run_ppl_reparti`) — encoder N états
+237: 
+238: 1. La référence locale ne change pas : `forward_lot(&ids[pos..pos+t], pos)` puis
+239:    `logits_lot`, avec **le même découpage** que le chemin réparti.
+240: 2. Sélection du mode : `--lot > 1 && --flux-blocs` → **mode 4** ;
+241:    `--lot > 1` seul → mode 3 dense (inchangé) ; `--flux-liste` (i16) reste
+242:    **non défini** pour un lot : message nommé, et le lot part en mode 3 — pas de
+243:    repli silencieux. Le message actuel « mode 4 non écrit » (main.rs:1987) doit
+244:    être remplacé, sinon il ment.
+245: 3. Nouvelle fonction `envoyer_lot_listes(s, debut, fin, pos0, etats, t, mdl)` :
+246:    en-tête de 79 octets (mode 4, `n = t`, échelle 0, `Act::du_modele`), puis
+247:    **un seul** `Vec<u8>` de corps construit ainsi :
+
+(Showing lines 234-247 of 452. Use offset=248 to continue.)
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\np='docs/plan-mode4-lot-listes.md'\ns=open(p).read()\nsubs=[\n(\"**Durcissement à faire dans le même passage** (indépendant du mode 4, mais c'est\\nle même défaut) : dans `recevoir_flux`, refuser un mode inconnu **j … [1134 caractères tronqués]`
+
+  ```
+ok
+  ```
+
+### 🤖 Assistant
+
+⏵ Révision de `plan-deepseek-v4-flash.md` (périmé : modèle téléchargé, lecteur multi-shards fait).
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/plan-deepseek-v4-flash.md"}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/plan-deepseek-v4-flash.md</path>
+<type>file</type>
+<content>
+1: # Chantier — adapter les tests de contexte à DeepSeek-V4-Flash
+2: 
+3: **État au 01/10 09h40** : le modèle **est téléchargé** dans la bibliothèque du
+4: disque mécanique (`/home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek-V4-Flash-UD-IQ1_M/`,
+5: 3 shards, 86,9 Go). Le NVMe ne sert plus qu'aux artefacts que nous produisons. Le moteur **lit déjà ses métadonnées** : `--plan` affiche
+6: « deepseek4, 43 couches, 256 experts (top-6) ». Mais il ne peut pas encore le
+7: FAIRE TOURNER, pour deux raisons précises, et c'est ce document qui les cadre.
+8: 
+9: ## Ce qui a été téléchargé, et pourquoi celui-là
+10: 
+11: | nom | nature | poids ouverts ? |
+12: |---|---|---|
+13: | **DeepSeek-V4.1-Flash** | modèle d'API ([api-docs](https://api-docs.deepseek.com/news/news260910/), [deepseek.com](https://www.deepseek.com/news/deepseek-v4-1-flash/)) | **non** — aucun GGUF publié |
+14: | **DeepSeek-V4-Flash** | poids ouverts (base de V4.1) : [unsloth/DeepSeek-V4-Flash-GGUF](https://huggingface.co/unsloth/DeepSeek-V4-Flash-GGUF), [huihui-ai](https://huggingface.co/huihui-ai/Huihui-D
+… [4708 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='docs/plan-deepseek-v4-flash.md'\ns=open(p).read()\nsubs=[\n# --- bandeau d'état\n(\"\"\"# Chantier — adapter les tests de contexte à DeepSeek-V4-Flash\n\n**État au 01/10 09h40**\"\"\",\n\"\"\"# Chantier — adap … [5641 caractères tronqués]`
+
+  ```
+ok 10
+  ```
+
+### 🤖 Assistant
+
+⏵ Corrections de `plan-deepseek41-complet.md` (MLA position 0, formats I8, porte gpt-oss).
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/plan-deepseek41-complet.md", "limit": 14, "offset": 66}`
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/plan-deepseek41-complet.md", "limit": 12, "offset": 196}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/plan-deepseek41-complet.md</path>
+<type>file</type>
+<content>
+66: | capacité | mesure |
+67: |---|---|
+68: | en-têtes + inventaire | 1 046 tenseurs, 365,70 Go en **63,8 ms** (mmap) |
+69: | description | **74 ms** : 40 couches, 384 experts top-6, racine de softplus ×1,5, routage par table des 3 premières couches |
+70: | tables d'engram | 10 000 entrées en **219–524 ms**, 2,6 Mo touchés par table, **120 Mo de RSS** pour 365,7 Go |
+71: | formats | IQ2_XXS, Q2_K, Q8_0, F16, F32, I32 — **vérifiés contre libggml** |
+72: | MLA à rang faible | **validée** contre llama.cpp sur GLM-5.3 (corrélation 0,999024) |
+73: | grappes | `commun.gguf` + `cluster-XX.gguf` + `mapping.tsv`, nœuds partiels |
+74: | transport | protocole v5, modes 0-4 (dont **lot en listes**) |
+75: 
+76: ### 3.2 Trois faits vérifiés le 02/10, qui commandent l'ordre
+77: 
+78: 1. **llama.cpp ne connaît pas `deepseek41`** (`unknown model architecture`) :
+79:    aucune référence externe n'existe pour V4.1.
+
+(Showing lines 66-79 of 303. Use offset=80 to continue.)
+</content>
+  ```
+
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/plan-deepseek41-complet.md</path>
+<type>file</type>
+<content>
+196:      mesuré, pas supposé ;
+197:   3. **découpage en grappes** : V4-Flash en `cluster-XX.gguf`, puis
+198:      `--ppl-reparti` entre **deux processus** (voire deux machines), perplexité
+199:      égale à celle d'un nœud unique ;
+200:   4. les portes du dépôt vertes (48 tests, Qwen 19,3885, clusters 799,8557,
+201:      17 formats, 4 routages).
+202: 
+203: ### P7 — Adaptation à V4.1, et la question de provenance (≈ ½ journée + action externe)
+204: 
+205: - Code : métadonnées par couche (`compress_ratios` au lieu d'un régime global),
+206:   experts IQ2_XXS/Q2_K, 384 experts, 40 couches, `exp_probs_b_vl`.
+207: - **Action préalable, non-code** : établir si le GGUF V4.1-Flash-Q2 est complet.
+
+(Showing lines 196-207 of 303. Use offset=208 to continue.)
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='docs/plan-deepseek41-complet.md'\ns=open(p).read()\nsubs=[\n(\"| formats | IQ2_XXS, Q2_K, Q8_0, F16, F32, I32 — **vérifiés contre libggml** |\",\n \"| formats | IQ2_XXS, Q2_K, Q8_0, F16, F32, **I8** (engram) — … [947 caractères tronqués]`
+
+  ```
+ok
+274:- **Aucun chiffre de V4.1 n'est publié avant P7.** Jusque-là s'applique la phrase
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/plan-deepseek41-complet.md", "limit": 12, "offset": 270}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/plan-deepseek41-complet.md</path>
+<type>file</type>
+<content>
+270:   couche compressée traitée comme brute) est dit dans `--config`, le rapport et
+271:   le message d'ouverture.
+272: - **Si une phase coûte plus du double de son estimation, on s'arrête** et on
+273:   documente — comme la tête garantie.
+274: - **Aucun chiffre de V4.1 n'est publié avant P7.** Jusque-là s'applique la phrase
+275:   du moteur : « ce modèle n'a jamais été exécuté ici ».
+276: 
+277: ---
+278: 
+279: ## 7. Pourquoi cet ordre
+280: 
+281: - **V4-Flash avant V4.1** : seul modèle de la famille qui ait une référence
+
+(Showing lines 270-281 of 304. Use offset=282 to continue.)
+</content>
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/plan-deepseek41-complet.md", "new_string": "- **Aucun chiffre de CALCUL de V4.1 n'est publié avant P7** — les mesures\n  statiques de §3.1 (inventaire, en-têtes, engram) restent permises, elles disent\n  ce que le fichier contient,  … [275 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/plan-deepseek41-complet.md has been updated successfully.
+  ```
+
+### 🤖 Assistant
+
+⏵ Correction de `comparaison-spiking.md` (cadrage Drave, sources internes, nJ projetés, densité).
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/comparaison-spiking.md", "limit": 14}`
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/comparaison-spiking.md", "limit": 16, "offset": 48}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/comparaison-spiking.md</path>
+<type>file</type>
+<content>
+1: # SpikeGPT, Spikformer, Spikingformer — ce qu'ils nous apprennent
+2: 
+3: Comparaison des trois architectures neuromorphiques de référence avec la nôtre,
+4: et inventaire des astuces transposables.
+5: 
+6: Sources : [Spikformer](https://ar5iv.labs.arxiv.org/html/2209.15425) (Zhang et
+7: al., ICLR 2023), [SpikeGPT](https://ar5iv.labs.arxiv.org/html/2302.13939) (Zhu
+8: et al., 2023), [Spikingformer](https://ar5iv.labs.arxiv.org/html/2304.11954)
+9: (Zhou et al., AAAI 2024).
+10: 
+11: ---
+12: 
+13: ## 1. Ce que fait chacun
+14: 
+
+(Showing lines 1-14 of 145. Use offset=15 to continue.)
+</content>
+  ```
+
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/comparaison-spiking.md</path>
+<type>file</type>
+<content>
+48: | Arithmétique | ET logique + **AC** (accumulation) | MAC (mais décalages+additions validés, 0 DSP sur FPGA) |
+49: | Attention | SSA sans softmax, décomposable | **absente du domaine événementiel** |
+50: | Résiduel | flottant, entrée des couches discrète (Spikingformer) | **idem** : `x = o + down` flottant, entrée quantifiée int8 |
+51: | Entraînement | gradient de substitution, rétropropagation dans le temps | aucun (quantification après coup) |
+52: | Énergie par opération | E_AC = 0,9 pJ contre E_MAC = 4,5 pJ (Horowitz) | 8,3 nJ/événement (FPGA) contre 57 nJ (CPU) — rapport 6,9× |
+53: 
+54: **Deux observations qui nous concernent directement.**
+55: 
+56: **a) Ils ont résolu par construction le problème qui nous bloque.** Nous avons
+57: mesuré que les activations d'un LLM dense ne sont **jamais** exactement nulles :
+58: notre débit est donc constant, et l'argument « on ne paie que ce qui s'active »
+59: reste théorique. Un réseau à spikes **impose** cette parcimonie : R̂ = 0,15, soit
+60: **6,7× moins d'événements** dans notre moteur. Notre architecture événementiell
+… [195 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls reports/ | grep -iE \"localite|croisement|inference|attention-creuse|multi-materiel\" ; echo \"=== densité ===\"; grep -rn \"17,9\\|22 %\\|0,22\" reports/rapport-localite-activation.md reports/rapport-croisement-push-pull.md 2>/de … [159 caractères tronqués]`
+
+  ```
+bilan-multi-materiel.md
+rapport-attention-creuse.md
+rapport-croisement-push-pull.md
+rapport-inference.md
+rapport-localite-activation.md
+=== densité ===
+reports/rapport-localite-activation.md:24:| opérateurs creux par neurone | chemin par **listes d'événements** (`SparseVec`, push) | bascule push/pull mesurée à **22 % de densité** (`seuil_push = 0.22`) |
+reports/rapport-localite-activation.md:43:| densité d'activation (seuil 5 % du max) | **17,9 %** des neurones par jeton (82 % ne font rien) |
+reports/rapport-croisement-push-pull.md:43:➡️ **Les deux architectures se croisent à ~22 % de densité d'activation**, pas à
+reports/rapport-croisement-push-pull.md:48:Le seuil de bascule `seuil_push` est passé de 0,15 à **0,22**.
+reports/rapport-croisement-push-pull.md:96:| 200 | 22 % | 0 év — 9,6 s | 18,1 G év — 8,7 s (bascule) |
+reports/rapport-croisement-push-pull.md:100:➡️ La bascule tombe exactement au seuil mesuré (22 %), et le gain croît à mesure
+reports/rapport-croisement-push-pull.md:106:1. **Sur CPU, le mode pull est le bon choix** au-dessus de 22 % de densité. Le
+=== 352,8 / 5,3 G ===
+reports/bilan-multi-materiel.md
+reports/rapport-inference.md
+reports/rapport-parcimonie-imposee.md
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/comparaison-spiking.md", "limit": 16, "offset": 130}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/comparaison-spiking.md</path>
+<type>file</type>
+<content>
+130:    boucle d'apprentissage.
+131: 3. **La brique manquante reste la même** : l'entraînement. Les trois papiers
+132:    entraînent par rétropropagation avec gradient de substitution — c'est
+133:    précisément ce que notre pile ne sait pas faire, et cela confirme que c'est le
+134:    verrou principal, pas un détail.
+135: 
+136: ## 6. Réserves
+137: 
+138: - Les modèles à spikes restent **en retard de qualité** sur les transformeurs de
+139:   même taille ; SpikeGPT parle de « compétitif sur les benchmarks testés », sur
+140:   des corpus bien plus petits que ceux des LLM actuels.
+141: - Les gains annoncés (32×, 57 %) sont **théoriques**, calculés avec
+142:   E_AC = 0,9 pJ et E_MAC = 4,5 pJ sur du 45 nm — pas mesurés sur silicium.
+143:   Notre mesure, elle, donne 6,9× entre CPU et FPGA, du même ordre.
+144: - Aucun de ces modèles n'est un modèle de langage à l'échelle des LLM actuels :
+145:   SpikeGPT-216M est le plus gros SNN entraîné par rétropropagation à sa sortie.
+
+(End of file - total 145 lines)
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"8,3\\|57 nJ\\|projeté\" reports/bilan-multi-materiel.md | head -12", "description": "Verify nJ provenance in multi-hardware report"}`
+
+  ```
+4:été pris sur cette machine, avec le code de ce dépôt ; ceux marqués *projeté* ou
+38:| FPGA, 1 carte, 51 voies | ~73 | ~13,7 | *projeté* (PE et lecteur vérifiés et synthétisés) |
+46:| CPU (16 threads) | **5,3 G évts/s** mesuré | ~57 nJ |
+47:| FPGA (1 carte, 51 voies) | 4,83 G évts/s *projeté* (limite DDR3) | **~8,3 nJ** |
+111:(8,3 nJ contre 57 pour le CPU, soit 7×) et l'absence de multiplieur. Face au GPU
+117:le CPU (12,7 contre 57 nJ), et il consomme les mêmes listes. **Il n'y a pas de
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='docs/comparaison-spiking.md'\ns=open(p).read()\nsubs=[\n(\"\"\"Comparaison des trois architectures neuromorphiques de référence avec la nôtre,\net inventaire des astuces transposables.\n\nSources :\"\"\",\n \" … [2353 caractères tronqués]`
+
+  ```
+ok
+  ```
+
+### 🤖 Assistant
+
+⏵ Vérification globale des valeurs périmées restantes dans `docs/`.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"--- 15,1757 ---\" && grep -rn \"15,1757\" docs/ | head; echo \"--- protocole v4 / VERSION_FLUX = 4 ---\" && grep -rn \"protocole v4\\|VERSION_FLUX = 4\\|modes 0–3\\|modes 0-3\" docs/ | head; echo \"--- 17/17 / 17 verts ---\" & … [180 caractères tronqués]`
+
+  ```
+--- 15,1757 ---
+docs/plan-gpu-topk.md:101:| 6 | porte de non-régression : les deux valeurs restent 19,3885 et 15,6017 | ✅ **inchangées**, mesurées sur le binaire final : Qwen 19,3885 (CPU **et** avec `DRAVE_GPU_KV`) · gpt-oss 15,6017 (CPU) — 15,1757 était la valeur d'avant la correction du biais de routage du 02/10, voir `reports/rapport-routage-experts.md` |
+docs/convertisseur.md:323:pas toucher, ce qui déplace la référence ctx 256 de 15,1757 à **15,6017**
+--- protocole v4 / VERSION_FLUX = 4 ---
+docs/plan-prefill-reparti.md:42:> l'en-tête fait **79 octets** (et non 39) depuis le protocole v4 — le champ
+docs/plan-mode4-lot-listes.md:12:> l'arbre au moment de la rédaction (`VERSION_FLUX = 4`, `TAILLE_TETE = 79`,
+docs/plan-mode4-lot-listes.md:39:### 1.1 En-tête : 79 octets, identique aux modes 0–3
+--- 17/17 / 17 verts ---
+--- non testable ---
+docs/plan-mla-vision.md:579:| fenêtre locale | implémentée d'après la source, **non testable** sur les images du banc avant 224 px — et sans référence à cette taille |
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '1,16p' docs/format-flux.md; echo \"=== 1,5x ===\"; grep -n \"1,5 fois\\|1,5 ×\\|1,5×\" docs/format-flux.md", "description": "Check format-flux edits applied"}`
+
+  ```
+# Le format de flux (DRVF) — spécification
+
+Ce format sert **quatre choses à la fois**, et c'est délibéré :
+
+1. la **trace** d'exécution (`--trace-flux`) : ce qui s'est passé, couche par
+   couche ;
+2. le **rejeu** (`--flux-forcer`) : on réinjecte les activations enregistrées et
+   le calcul repart de là ;
+3. le **transport** (phase 3, `--flux-serveur` / `--ppl-reparti`) : ce qu'un nœud
+   distant reçoit pour continuer le calcul ;
+4. l'**analyse** : les mêmes octets, relus par `tools/profil_flux.py`,
+   `tools/analyse_flux.py` et `tools/diff_flux.py`, disent quels neurones
+   travaillent — c'est la donnée qui permet d'adapter l'architecture à la tâche,
+   et c'est la finalité du projet (`docs/vision.md` §2).
+
+Un seul format pour les trois, parce que ce sont les mêmes octets : une liste
+=== 1,5x ===
+123:est qu'il ne coûte pas plus de 1,5 fois celui-ci **à 256 jetons** (5,6× à
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='docs/format-flux.md'\ns=open(p).read()\na=\"Un seul format pour les trois, parce que ce sont les mêmes octets\"\nb=\"Un seul format pour les quatre, parce que ce sont les mêmes octets\"\nassert s.count(a)==1\n … [246 caractères tronqués]`
+
+  ```
+ok
+-rwxr-xr-x. 1 stephane stephane 3757 30 sep 10:35 tools/analyse_flux.py
+-rwxr-xr-x. 1 stephane stephane 3345 30 sep 08:58 tools/diff_flux.py
+-rwxr-xr-x. 1 stephane stephane 2945 30 sep 09:00 tools/profil_flux.py
+auto-délimité par ses trois tailles, lues avant toute allocation. Mesuré à 256
+jetons, 16 par lot, seuil 0,01 : **1,5 ko par jeton au lieu de 3,5** (÷2,3) pour
+un écart de **3,03e-2** — le mode est avec perte, comme le mode 2, et le critère
+est qu'il ne coûte pas plus de 1,5 fois celui-ci **à 256 jetons** (5,6× à
+20 jetons seulement — `reports/rapport-mode4-lot-listes.md`). Un mode inconnu est refusé
+**avant** toute lecture de corps (il l'était après, donc désynchronisé).
+
+Le **mode 3 est le préremplissage réparti** : `n` états d'un coup, la position
+étant celle du premier jeton du lot. La dimension ne voyage pas — chaque nœud la
+  ```
+
+### 🤖 Assistant
+
+⏵ Ajout d'une porte gpt-oss réelle à `tools/portes.sh`, puis campagne de portes.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rn \"ids_oss\" REPRISE.md tools/*.sh tools/*.py 2>/dev/null | head -10", "description": "Find how ids_oss files are generated"}`
+
+  ```
+REPRISE.md:63:    --tokenize --fichier /tmp/wt2_txt.txt --sortie /tmp/ids_oss.txt
+REPRISE.md:78:| gpt-oss-120b MXFP4 | `--dense --limit 64`, ids_oss | **20,8361** (63 jetons) |
+REPRISE.md:79:| gpt-oss-120b MXFP4 | `--dense --limit 512`, ids_oss | **15,6017** (510 jetons, deux fenêtres) — était 15,1757 avant le correctif de routage du 02/10 |
+REPRISE.md:81:| gpt-oss-120b MXFP4 | `--dense --ctx 512 --limit 512`, ids_oss | **18,5803** (511 jetons, une fenêtre) |
+REPRISE.md:681:    --ppl /tmp/ids_oss_512.txt --ctx 256 --dense --threads 16 --limit 512  # attendu 15,6017
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/REPRISE.md", "limit": 14, "offset": 56}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/REPRISE.md</path>
+<type>file</type>
+<content>
+56: ```bash
+57: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet
+58: head -c 20000 data/wikitext2_test.txt > /tmp/wt2_txt.txt
+59: # les identifiants DOIVENT venir du tokenizer du modèle — jamais croisés
+60: drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf \
+61:     --tokenize --fichier /tmp/wt2_txt.txt --sortie /tmp/ids_qwen.txt
+62: drave-core/target/release/drave /home/stephane/Data13TB/stephane/modeles/gguf/gpt-oss-120b-MXFP4.gguf \
+63:     --tokenize --fichier /tmp/wt2_txt.txt --sortie /tmp/ids_oss.txt
+64: ```
+65: 
+66: Le mode `--tokenize --fichier` **vérifie la réversibilité** (texte reconstruit
+67: identique à la source) — les deux tokenizers la passent sur ce corpus.
+68: 
+69: | modèle | commande (abrégée) | perplexité attendue |
+
+(Showing lines 56-69 of 1215. Use offset=70 to continue.)
+</content>
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/portes.sh", "limit": 10, "offset": 88}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/portes.sh</path>
+<type>file</type>
+<content>
+88: route "V4-Flash : racine de softplus" "$M/DeepSeek-V4-Flash-UD-IQ1_M/DeepSeek-V4-Flash-UD-IQ1_M-00001-of-00003.gguf" "racine de softplus"
+89: route "Qwen3-235B : softmax" "$M/Qwen3-235B-A22B-Q2_K/Qwen3-235B-A22B-Instruct-2507-Q2_K-00001-of-00002.gguf" "softmax"
+90: 
+91: # 7. gpt-oss : le seul long.
+92: if [ "$RAPIDE" != "rapide" ]; then
+93:     echo "  (gpt-oss ~20 min et les portes de formats : lancez-les, ils sont hors de ce script)"
+94: fi
+95: 
+96: echo ""
+97: [ "$ECHEC" = 0 ] && echo "toutes les portes sont vertes" || echo "AU MOINS UNE PORTE A DIVERGÉ"
+
+(Showing lines 88-97 of 98. Use offset=98 to continue.)
+</content>
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/portes.sh", "new_string": "# 7. gpt-oss : `--config` d'abord (gratuit), puis la perplexité (~20 min).\n#    La porte `--config` existe parce qu'un refus FAUX est un refus trompeur :\n#    `attn_sinks` était compté comme un manque V … [1679 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/portes.sh has been updated successfully.
+  ```
+
+### 🤖 Assistant
+
+⏵ Lancement des portes complètes en arrière-plan (tests, Qwen, clusters, formats, gpt-oss).
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && bash tools/portes.sh 2>&1 | tee /tmp/portes_0210.log", "description": "Run full gate suite in background", "run_in_background": true, "timeoutMs": 5400000}`
+
+  ```
+started background job bash-131
+  ```
+
+### 🤖 Assistant
+
+⏵ Préparation du diff et lancement d'une relecture adverse des corrections.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git diff --stat docs/ REPRISE.md drave-core/src/model.rs tools/portes.sh", "description": "Show diff stat of all changes"}`
+
+  ```
+REPRISE.md                      | 23 +++++++++++----
+ docs/colab-reparti.md           |  7 ++++-
+ docs/comparaison-spiking.md     | 23 ++++++++++++---
+ docs/contexte-long.md           | 28 +++++++++++-------
+ docs/convertisseur.md           | 55 +++++++++++++++++++++-------------
+ docs/format-clusters.md         |  5 ++++
+ docs/format-flux.md             | 13 ++++++---
+ docs/plan-deepseek-v4-flash.md  | 58 +++++++++++++++++++++++-------------
+ docs/plan-deepseek41-complet.md | 15 ++++++----
+ docs/plan-gpu-topk.md           | 13 ++++++---
+ docs/plan-mla-vision.md         | 25 +++++++++++-----
+ docs/plan-mode4-lot-listes.md   | 30 +++++++++++--------
+ docs/plan-modeles-lourds.md     | 38 +++++++++++++++---------
+ docs/plan-prefill-reparti.md    |  9 +++++-
+ docs/programme-recherche.md     | 16 +++++++---
+ docs/roadmap.md                 | 18 +++++++-----
+ docs/sprints.md                 |  5 ++--
+ docs/vision.md                  | 65 +++++++++++++++++++++++++++++------------
+ drave-core/src/model.rs         | 25 +++++++++-------
+ tools/portes.sh                 | 29 ++++++++++++++++--
+ 20 files changed, 344 insertions(+), 156 deletions(-)
+  ```
+
+- **subagent** `{"description": "Relecture adverse docs corrigés", "prompt": "Tu es un relecteur ADVERSARIAL. Tu travailles dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (moteur d'inférence Rust nommé Drave). Tu ne dois MODIFIER AUCUN fichier : ta sortie est un rapport en markdown, rien d'autre. N'u … [3857 caractères tronqués]`
+
+  ```
+started subagent 4e786d3f-0b66-4b23-8dc4-b452bc383bea
+  ```
+
+### 🤖 Assistant
+
+⏵ Rédaction du rapport de cohérence (vérification des rapports d'audit antérieurs).
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls reports/ | grep -i coherence && head -12 reports/rapport-coherence-docs.md && echo \"=== 2 ===\" && head -12 reports/rapport-coherence-docs-2.md", "description": "Inspect previous coherence reports"}`
+
+  ```
+rapport-coherence-docs-2.md
+rapport-coherence-docs.md
+# Cohérence des documents avec le code — audit
+
+**En une ligne** : **80 affirmations** vérifiées une par une contre le code (et
+contre les traces réelles du disque) ; **38 sont fausses (PÉRIMÉ)**, **15 se
+contredisent entre documents (CONTRADICTOIRE)**, **10 existent dans le code et
+manquent aux documents (MANQUANT)**, **17 tiennent (OK)** — les trois plus graves
+touchent la **version du protocole de flux** (deux binaires « v3 » aux contrats
+différents se croient compatibles), un **échappement d'indice écrit sur 4 octets et
+lu sur 2** en mode blocs, et `REPRISE.md` §6bis (pourtant écrit il y a une heure)
+déjà faux sur quatre points.
+
+## Révision auditée, méthode, réserves
+=== 2 ===
+# Cohérence des documents avec le code — second passage
+
+**En une ligne** : **66 affirmations** revérifiées contre le code et les rapports
+**après** les changements du 30/09 ; **27 tiennent**, **17 sont périmées**, **14 se
+contredisent** et **8 manquent** — les deux plus graves sont le **chiffre vedette du
+cache KV** (« 75 % / 50 % » contre « 64 % / 28 % » dans le rapport qui l'a mesuré) et
+la règle **R4** dont la moitié (`n == 0` refusé) n'est **pas*
+… [101 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls docs/ && echo \"=== lignes ===\" && wc -l docs/*.md | tail -3", "description": "List docs directory"}`
+
+  ```
+colab-reparti.md
+comparaison-spiking.md
+contexte-long.md
+convertisseur.md
+format-clusters.md
+format-flux.md
+histoire.md
+plan-deepseek41-complet.md
+plan-deepseek-v4-flash.md
+plan-gpu-topk.md
+plan-mla-vision.md
+plan-mode4-lot-listes.md
+plan-modeles-lourds.md
+plan-prefill-reparti.md
+programme-recherche.md
+roadmap.md
+sprints.md
+vision.md
+=== lignes ===
+    75 docs/sprints.md
+   276 docs/vision.md
+  4870 total
+  ```
+
+- **write** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-coherence-vision.md", "content": "# Cohérence des `docs/` avec la vision Drave — révision du 02/10\n\n**En une ligne** : les **18 documents** de `docs/` (4 870 lignes) ont été relus par\n**cinq relectures adverses** puis  … [11656 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-coherence-vision.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+### 🤖 Assistant
+
+⏵ Mesure du nombre réel de corrections pour ne publier aucun chiffre inventé.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"hunks docs+REPRISE:\" && git diff -U0 -- docs/ REPRISE.md | grep -c \"^@@\" && for f in $(git diff --name-only -- docs/ REPRISE.md); do n=$(git diff -U0 -- \"$f\" | grep -c \"^@@\"); echo \"$n $f\"; done", "description": "Coun … [29 caractères tronqués]`
+
+  ```
+hunks docs+REPRISE:
+90
+6 REPRISE.md
+2 docs/colab-reparti.md
+4 docs/comparaison-spiking.md
+5 docs/contexte-long.md
+7 docs/convertisseur.md
+1 docs/format-clusters.md
+4 docs/format-flux.md
+11 docs/plan-deepseek-v4-flash.md
+3 docs/plan-deepseek41-complet.md
+4 docs/plan-gpu-topk.md
+5 docs/plan-mla-vision.md
+6 docs/plan-mode4-lot-listes.md
+7 docs/plan-modeles-lourds.md
+1 docs/plan-prefill-reparti.md
+4 docs/programme-recherche.md
+6 docs/roadmap.md
+1 docs/sprints.md
+13 docs/vision.md
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-coherence-vision.md", "new_string": "**En une ligne** : les **18 documents** de `docs/` (4 870 lignes) ont été relus par\n**cinq relectures adverses** puis corrigés un par un — **90 sites de correction**\n(comptés dans le … [1245 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-coherence-vision.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-coherence-vision.md", "new_string": "Aucun des correctifs ne change un chiffre **mesuré** : ils alignent le document\nsur la mesure, ou datent une phrase qui ne l'était pas. **Aucune optimisation n'a\nchangé une sortie**  … [447 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-coherence-vision.md has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='reports/rapport-coherence-vision.md'\ns=open(p).read()\nsubs=[\n(\"**cinq relectures adverses** puis corrigés un par un — **90 sites de correction**\\n(comptés dans le diff de `docs/` et `REPRISE.md`) ;\",\n \ … [2670 caractères tronqués]`
+
+  ```
+ok
+  ```
+
+- **job_output** `{"job_id": "bash-131"}`
+
+  ```
+=== Portes ===
+  cargo test --release                       48 verts  ✅
+  Qwen2.5-0.5B ctx 256                       19.3885  ✅
+  Qwen3-30B en clusters (origine : 799,8557) 799.8557  ✅
+  threads par défaut (physiques)            20  ✅
+  formats contre libggml                     17 concorde(s), 0 divergence(s), 0 absent(s)  ✅
+  GLM-5.3 : sigmoïde ×2,5                  sigmoïde  ✅
+  Kimi-K2.7 : sigmoïde ×2,827              sigmoïde  ✅
+  V4-Flash : racine de softplus              racine de softplus  ✅
+  Qwen3-235B : softmax                       softmax  ✅
+  gpt-oss : --config le dit calculable       oui  ✅
+[status: running]
+  ```
+
+### 🤖 Assistant
+
+⏵ Alignement du commentaire densité push/pull (10 % → 22 %) et des formats 17/18.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rn \"10 %\\|10%\\|0,10\" drave-core/src/model.rs | grep -i \"densit\\|push\\|pull\" ; echo \"=== analyse_flux ===\"; grep -rn \"10 %\\|0,10\\|densit\" tools/analyse_flux.py | head; echo \"=== seuil_push ===\"; grep -rn \"seuil_ … [87 caractères tronqués]`
+
+  ```
+947:        // scalaire dense (pull). Le croisement mesuré est à 10 %.
+1524:    /// deux architectures se croisent à 10 % de densité ; on bascule un peu
+2982:        out.push_str(&format!("  selon la couche : tirs de {:.0} à {:.0} par jeton ;                               part des 10 % les plus lourds de {:.1} à {:.1} %\n",
+=== analyse_flux ===
+8:  croisement mesuré est à ~10 % de densité) — mais elle se prend PAR COUCHE, pas
+54:    print(f"{'couche':>9} {'densité':>8} {'persistants':>12} {'top1%':>7} {'top10%':>7} {'recouvrement':>13}")
+60:        densite = d["actifs"] / (j * hidden)
+75:        print(f"{nom_c:>9} {100*densite:>7.1f}% {100*persistants:>11.2f}% "
+77:        lignes.append((couche, densite, persistants, part10))
+=== seuil_push ===
+drave-core/src/main.rs:414:             mdl.attn_window, mdl.swa_pattern, mdl.seuil_push, mdl.lot,
+drave-core/src/model.rs:1526:    pub seuil_push: f32,
+drave-core/src/model.rs:2626:            seuil_push: 0.22,
+drave-core/src/model.rs:3387:                                     self.act_renorm, &mut scratch, self.seuil_push);
+drave-core/src/model.rs:4172:                Self::matvec(pool, &lay.wq, &hn, &mut q, events, self.act_levels, self.ac
+… [1006 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs", "limit": 10, "offset": 943}`
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs", "limit": 8, "offset": 1521}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs</path>
+<type>file</type>
+<content>
+943:         if keep < 0.0 { prune_structured(&mut w, n_out, n_in, -keep); }
+944:         else { prune_rows(&mut w, n_out, n_in, keep); }
+945:         // `auto` charge les DEUX formes : le moteur choisit ensuite, par mesure
+946:         // de la densité d'activation, entre dispersion (push) et produit
+947:         // scalaire dense (pull). Le croisement mesuré est à 10 %.
+948:         // Six bits empaquetés : même déquantification que les autres chemins,
+949:         // mais la quantification vise la grille [-32, 31] au lieu de [-8, 7].
+950:         if bits6 {
+951:             let z = DenseQ4::build6(&w, n_out, n_in);
+952:             let bias = bias.filter(|b| g.tensor(b).is_some()).map(|b| g.dequant(b));
+
+(Showing lines 943-952 of 5596. Use offset=953 to continue.)
+</content>
+  ```
+
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs</path>
+<type>file</type>
+<content>
+1521:     pub swa_pattern: usize,
+1522:     pub attn_sinks: usize,
+1523:     /// Seuil de bascule push/pull, en fraction de sources actives. Mesuré : les
+1524:     /// deux architectures se croisent à 10 % de densité ; on bascule un peu
+1525:     /// au-dessus pour absorber la marge d'erreur.
+1526:     pub seuil_push: f32,
+1527:     /// Token d'arrêt (EOS / <|im_end|>) : la génération s'interrompt dessus.
+1528:     pub stop_id: Option<u32>,
+
+(Showing lines 1521-1528 of 5596. Use offset=1529 to continue.)
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nedits = {\n 'drave-core/src/model.rs': [\n  (\"        // scalaire dense (pull). Le croisement mesuré est à 10 %.\",\n   \"        // scalaire dense (pull). Le croisement mesuré est à 22 %\\n        // (`seuil_pu … [1129 caractères tronqués]`
+
+  ```
+ok
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== README formats ===\" && grep -n \"18 formats\\|17 formats\\|formats lisibles\\|vérifiés\" README.md | head -10; echo \"=== REPRISE formats ===\" && grep -n \"18 formats\\|17 formats\" REPRISE.md | head -5", "description":  … [30 caractères tronqués]`
+
+  ```
+=== README formats ===
+364:tools/portes_formats.sh                   # 17 formats × 2 blocs, contre libggml
+387:Les lecteurs Q4_K et Q6_K sont vérifiés **tenseur par tenseur** contre une
+647:   sont vérifiés ; il manque un accès à la carte pour la comparaison
+=== REPRISE formats ===
+1013:| `tools/portes_formats.sh` | **17 formats × 2 blocs** | tous exacts contre libggml |
+1100:tools/portes_formats.sh          # 17 formats × 2 blocs, contre libggml
+1120:   avec la grille doublée). 18 formats lisibles, 17 vérifiés contre libggml.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '345,368p' README.md", "description": "Read README formats section"}`
+
+  ```
+> (39+1 threads sur 40 CPU : effondrement ×2,4 — et le `yield_now()` censé le
+> corriger a tout empiré). Détail dans le rapport.
+
+---
+
+## Formats et modèles réellement lisibles
+
+Le moteur lit **Q4_K, Q6_K, Q4_0, Q5_0, Q5_1, Q8_0, Q2_K, Q3_K, Q5_K, MXFP4,
+IQ1_S, IQ1_M, IQ2_XXS, IQ3_XXS, IQ4_XS, BF16, F16 et F32** — soit tout ce que
+l'écosystème public distribue — **sans copie ni requantification** : les blocs
+sont lus tels quels dans le fichier, et les experts d'un MoE sont des tranches
+contiguës adressées par un pointeur et un pas. Les formats de super-bloc sans
+noyau dédié (Q2_K, Q3_K, Q5_K, IQ*) sont lus par **déquantification puis produit
+en f32** : plus lent qu'un noyau, juste par construction.
+
+Chaque déquantificateur est comparé à **libggml** bloc par bloc, et les grilles
+IQ embarquées sont extraites de `ggml-common.h` par programme :
+
+```bash
+tools/portes_formats.sh                   # 17 formats × 2 blocs, contre libggml
+tools/extraire_tables_ggml.sh verifier    # les tables embarquées = celles de ggml
+```
+
+| modèle | format | perplexité | débit | mémoire |
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -oE \"GGML_TYPE_[A-Z0-9_]+|IQ[0-9]_[A-Z]+|BF16|Q[0-9]_[K01]\" tools/portes_formats.sh | sort -u | tr '\\n' ' '; echo; grep -n \"FORMATS\\|for f in\\|types=\" tools/portes_formats.sh | head", "description": "List formats covered  … [13 caractères tronqués]`
+
+  ```
+BF16 IQ1_M IQ1_S IQ2_XXS IQ3_XXS IQ4_XS Q2_K Q3_K Q4_0 Q4_K Q5_0 Q5_K Q6_K Q8_0 
+2:# Portes des FORMATS : chaque déquantificateur comparé à libggml, bloc par bloc.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"F16\\|F32\\|Q5_1\" tools/portes_formats.sh | head -10; echo \"=== liste ===\"; sed -n '/^FMT\\|^types\\|liste=/p' tools/portes_formats.sh | head; grep -n \"pour chaque\\|while read\\|^  *[A-Z]\" tools/portes_formats.sh | he … [59 caractères tronqués]`
+
+  ```
+28:  "F32        | $MODELES/codestral-22b-v0.1-q4_k_m.gguf                             | blk.0.attn_norm.weight              | 0"
+29:  "F16        | $MODELES/bge-m3-FP16.gguf                                            | token_embd.weight                   | 1"
+43:  "BF16       | $MODELES/DeepSeek-V4-Flash-UD-IQ1_M/DeepSeek-V4-Flash-UD-IQ1_M-00002-of-00003.gguf | blk.0.ffn_gate_inp.weight  | 30"
+=== liste ===
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '20,50p' tools/portes_formats.sh", "description": "Read the format list in the gate script"}`
+
+  ```
+LLAMA=${DRAVE_LLAMA:-/home/stephane/Data13TB/stephane/GitHub/llama.cpp}
+REF=${REF_GGML_BLOC:-/tmp/ref_ggml_bloc}
+VERIF=tools/verifier_formats.py
+IFS=$'\n'
+
+ok=0; ko=0; abs=0
+# libellé | fichier | tenseur | type ggml
+BATTERIE=(
+  "F32        | $MODELES/codestral-22b-v0.1-q4_k_m.gguf                             | blk.0.attn_norm.weight              | 0"
+  "F16        | $MODELES/bge-m3-FP16.gguf                                            | token_embd.weight                   | 1"
+  "Q4_0       | $RACINE/models/Qwen2.5-0.5B-Q4_0.gguf                                | token_embd.weight                   | 2"
+  "Q5_0       | $MODELES/qwen2.5-0.5b-instruct-q4_k_m.gguf                           | token_embd.weight                   | 6"
+  "Q8_0       | $MODELES/qwen2.5-0.5b-instruct-q4_k_m.gguf                           | output.weight                       | 8"
+  "Q2_K       | $MODELES/Qwen3-235B-A22B-Q2_K/Qwen3-235B-A22B-Instruct-2507-Q2_K-00001-of-00002.gguf | token_embd.weight                 | 10"
+  "Q3_K       | $MODELES/Qwen3-235B-A22B-Q2_K/Qwen3-235B-A22B-Instruct-2507-Q2_K-00001-of-00002.gguf | blk.0.attn_output.weight            | 11"
+  "Q4_K       | $MODELES/codestral-22b-v0.1-q4
+… [1563 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rn \"Q5_1\\|Q5_0\" drave-core/src/*.rs | head -12", "description": "Verify Q5_1 shares Q5_0 code path"}`
+
+  ```
+drave-core/src/gguf.rs:243:/// Bloc **Q5_0** (22 octets, 32 poids) et **Q5_1** (24 octets, 32 poids) :
+drave-core/src/gguf.rs:244:/// échelle f16 (+ minimum f16 pour Q5_1), 4 octets de bits hauts, 16 octets de
+drave-core/src/gguf.rs:245:/// quants 4 bits. Q5_0 est le type de `token_embd` et des `ffn_gate/up` de
+drave-core/src/gguf.rs:248:pub const GGML_Q5_0: u32 = 6;
+drave-core/src/gguf.rs:249:pub const GGML_Q5_1: u32 = 7;
+drave-core/src/gguf.rs:762:            0 => "F32", 1 => "F16", 2 => "Q4_0", 3 => "Q4_1", 6 => "Q5_0", 7 => "Q5_1",
+drave-core/src/gguf.rs:1029:    /// Déquantifie un bloc **Q5_0** (22 octets, 32 poids).
+drave-core/src/gguf.rs:1037:        assert!(bloc.len() >= 22, "bloc Q5_0 trop court : {}", bloc.len());
+drave-core/src/gguf.rs:1041:    /// Déquantifie un bloc **Q5_1** (24 octets, 32 poids) : identique à Q5_0
+drave-core/src/gguf.rs:1044:        assert!(bloc.len() >= 24, "bloc Q5_1 trop court : {}", bloc.len());
+drave-core/src/gguf.rs:1345:            GGML_Q5_0 | GGML_Q5_1 => {
+drave-core/src/gguf.rs:1346:                let (taille, f): (usize, fn(&[u8]) -> Vec<f32>) = if t.ttype == GGML_Q5_0 {
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/README.md", "new_string": "```bash\ntools/portes_formats.sh                   # 17 formats × 2 blocs, contre libggml\ntools/extraire_tables_ggml.sh verifier    # les tables embarquées = celles de ggml\n```\n\n**18 formats lisibles, 17 vé … [349 caractères tronqués]`
+
+  ```
+Error: cannot edit "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/README.md": file changed since it was read — re-read the file, then retry
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/README.md", "limit": 12, "offset": 358}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/README.md</path>
+<type>file</type>
+<content>
+358: en f32** : plus lent qu'un noyau, juste par construction.
+359: 
+360: Chaque déquantificateur est comparé à **libggml** bloc par bloc, et les grilles
+361: IQ embarquées sont extraites de `ggml-common.h` par programme :
+362: 
+363: ```bash
+364: tools/portes_formats.sh                   # 17 formats × 2 blocs, contre libggml
+365: tools/extraire_tables_ggml.sh verifier    # les tables embarquées = celles de ggml
+366: ```
+367: 
+368: | modèle | format | perplexité | débit | mémoire |
+369: |---|---|---|---|---|
+
+(Showing lines 358-369 of 650. Use offset=370 to continue.)
+</content>
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/README.md", "new_string": "```bash\ntools/portes_formats.sh                   # 17 formats × 2 blocs, contre libggml\ntools/extraire_tables_ggml.sh verifier    # les tables embarquées = celles de ggml\n```\n\n**18 formats lisibles, 17 vé … [349 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/README.md has been updated successfully.
+  ```
+
+- **job_output** `{"job_id": "bash-131"}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+### 🤖 Assistant
+
+⏵ Vérification du point ouvert : les portes tournent-elles sur les deux chemins ?
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/vision.md", "limit": 18, "offset": 42}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/vision.md</path>
+<type>file</type>
+<content>
+42: 
+43: ### Ce que la mesure impose de dire tout de suite
+44: 
+45: Le projet ne prétend pas que la sparsité gagne toujours. Le croisement a été
+46: **mesuré** : en dessous d'environ **22 % de densité**, le push (listes) bat le
+47: pull (matvec dense) ; au-dessus, le dense gagne
+48: (`reports/rapport-croisement-push-pull.md`). C'est pourquoi le moteur garde **les
+49: deux chemins** et choisit par la mesure, pas par principe — `--dense` existe, et
+50: les portes de non-régression tournent sur les deux.
+51: 
+52: La densité observée, elle, dépend du modèle et de la couche : **17,9 %** sur
+53: Qwen2.5-0.5B à 512 jetons, mais les FFN denses de certaines familles ne sont pas
+54: creux du tout (`reports/rapport-localite-activation.md`). Une vision honnête dit
+55: où elle s'applique — et où elle ne s'applique pas.
+56: 
+57: ---
+58: 
+59: ## 2. Axe 1 — Voir et régler le modèle, neurone par neurone
+
+(Showing lines 42-59 of 276. Use offset=60 to continue.)
+</content>
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/vision.md", "new_string": "(`reports/rapport-croisement-push-pull.md`). C'est pourquoi le moteur garde **les\ndeux chemins** et choisit par la mesure, pas par principe — `--dense` existe, les\nportes de non-régression tournent en de … [507 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/vision.md has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rn \"19,4029\\|1,5e-5\" REPRISE.md reports/*.md | head -6", "description": "Verify trace replay figures exist in reports"}`
+
+  ```
+REPRISE.md:265:| `DRAVE_TRACE_BLOCS=1` | trace DRVF **v3** : valeurs i8, échelle f16 par bloc de 32 | 45 079 930 o contre 66 370 408 en v2 (−32 %), rejeu 19,4029 contre 19,3885 (+0,074 %) |
+REPRISE.md:266:| `DRAVE_FLUX_VERIF=1` | vérifie l'écart entre l'activation calculée et celle que la trace impose | 1,5e-5 en v2 ; **muet dès que `--lot > 1`** (le rejeu par lots passe par `flux_lot`) |
+REPRISE.md:358:| rejeu `--flux-forcer` | 19,3885 | 19,3885 | 19,4029 (+0,074 %) |
+reports/rapport-coherence-docs-2.md:82:| 28 | `docs/format-flux.md:58-61`, `REPRISE.md:248,340-341`, `docs/roadmap.md:94` | v3 : **45 079 930 o** (−32,1 % vs v2), rejeu 19,4029 (+0,074 %), 21 630 645 actifs | valeurs cohérentes entre documents ; l'exécution courte confirme le sens (v3 plus petite, 166 206 actifs contre 171 554 sur la même trace de 4 jetons) | OK |
+reports/rapport-coherence-docs-2.md:84:| 30 | `reports/rapport-compacite-trace.md:231-243` et `:255-257` | « ce qu'il reste à valider : le rejeu i8, l'aller-retour Rust↔Python, la rétrocompatibilité » ; « les perplexités du rejeu … devront être refaites » | les trois sont faits : rejeu v3 = 19,4029 (bandeau `:13-18`), `flux_codec.py` lit 1/2/3, et le lecteu
+… [453 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Vérification des renvois de fichiers cités dans le nouveau rapport.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for f in $(grep -oE '(reports|docs|tools)/[A-Za-z0-9._-]+\\.(md|py|sh|rs)' reports/rapport-coherence-vision.md | sort -u); do [ -e \"$f\" ] || echo \"MANQUANT: $f\"; done; echo \"verif terminee\"", "description": "Verify all file ref … [29 caractères tronqués]`
+
+  ```
+verif terminee
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && bash -n tools/portes.sh && echo \"syntaxe ok\" && grep -c \"attn_sinks\" drave-core/src/model.rs", "description": "Check portes.sh syntax and model.rs sinks refs"}`
+
+  ```
+syntaxe ok
+8
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls journal/ | tail -8 && echo \"=== hook ===\" && ls .git/hooks/ | head -20 && git config core.hooksPath", "description": "Inspect journal directory and hooks"}`
+
+  ```
+README.md
+sessions
+=== hook ===
+applypatch-msg.sample
+commit-msg.sample
+fsmonitor-watchman.sample
+post-update.sample
+pre-applypatch.sample
+pre-commit
+pre-commit.sample
+pre-merge-commit.sample
+prepare-commit-msg.sample
+pre-push.sample
+pre-rebase.sample
+pre-receive.sample
+push-to-checkout.sample
+sendemail-validate.sample
+update.sample
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat .git/hooks/pre-commit | head -30; echo \"=== sessions ===\"; ls journal/sessions | tail -5", "description": "Read pre-commit hook and journal sessions"}`
+
+  ```
+#!/bin/sh
+# Archive les traces de session DSH avant chaque commit : le journal doit
+# accompagner le code, pas le suivre.
+cd "$(git rev-parse --show-toplevel)" || exit 0
+python3 tools/archive_sessions.py --quiet >/dev/null 2>&1 || true
+git add journal/sessions 2>/dev/null || true
+exit 0
+=== sessions ===
+c776b71f-525a-4bad-b83c-eff1c2d204ff
+da69b1fa-91b0-4c69-bb2b-58bf00e92e28
+e7dfe34f-d596-4f98-93c2-cad5a92d3b1e
+ff364db0-d28f-47eb-973e-f13bdafd35a2
+MANIFEST.md
+  ```
+
+- **job_output** `{"job_id": "bash-131", "wait": true, "timeout_ms": 600000}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+### 👤 Utilisateur
+
+Agent 4e786d3f-0b66-4b23-8dc4-b452bc383bea sent a message:
+RAPPORT DE VÉRIFICATION ADVERSARIALE — campagne cohérence docs (02/10). Diff revu : md5 f8fe1dd324fa3b8819ff6eeada793ad1, HEAD 5a6ac96, instantané 10:10 EDT. ⚠️ L'arbre a changé pendant la relecture (21→23 fichiers ; README.md, tools/analyse_flux.py, 2 hunks model.rs sur seuil_push ajoutés ; reports/rapport-coherence-vision.md non suivi est apparu).
+
+FAITS DE RÉFÉRENCE : tous vérifiés ✅ — VERSION_FLUX=5 + modes 0-4 + 79 o (main.rs:1862,1864-1886, test 4629) ; 19,3885 / 799,8557 / 15,6017 (rapport-routage-experts.md:66, « 15,1757 était auto-cohérent, pas juste ») ; 48 tests (48 #[test]) ; 17 formats à la porte ; MLA 0,999024 et +4,070 position 3 (rapport-mla-experts.md:112,178) ; YaRN `y.3*4.0` (model.rs:2203) ; KV +1,5/+3,0 % et +219/+364 % (contexte-long.md:145,152) ; préfill 17,1→13,6 / ≈50→34,4 s ; 17,9 % à seuil 5 % et seuil_push=0.22 ; open_multi (gguf.rs:447) + 1 328 tenseurs/86,90 Go. Tous les renvois de fichiers existent.
+
+CORRECTIONS FAUSSES/INCOMPLÈTES (fichier:ligne | problème | correction | gravité) :
+1) REPRISE.md:114 (HAUTE) — « RoPE simple tant que --ctx tient dans rope.scaling.original_context_length (4 096), interpolation YaRN au-delà » : politique périmée, le code bascule à 4× (16 384). Remplacer par « RoPE simple tant que --ctx ne dépasse pas 4 × rope.scaling.original_context_length (16 384 pour gpt-oss), interpolation YaRN seule au-delà ».
+2) drave-core/src/model.rs:126 (MOYENNE) — « (`--config` affiche « puits appris sur 36/36 ») » est FAUX : --config ne charge pas le modèle (main.rs:1642) ; vérifié en l'exécutant, aucune ligne [config]. Remplacer par « (`--config` répond « calculable : oui » ; le chargement affiche « puits appris sur 36/36 ») ».
+3) drave-core/src/model.rs:137-139 (MOYENNE) — commentaire « elle n'a jamais été validée contre une référence sur cette machine » contredit le message juste en dessous, réécrit par le diff (« Validée … à la POSITION 0 »). Remplacer par « elle est validée à la position 0 (GLM-5.3), l'écart croît ensuite — ».
+4) docs/plan-mla-vision.md:89-90 (MOYENNE) — « 4,07 nats au jeton 7 » : le rapport place +4,070 à la POSITION 3 (rapport-mla-experts.md:178 ; model.rs:143 dit « position 3 »). Remplacer « au jeton 7 » par « à la position 3 ».
+5) docs/programme-recherche.md:47 (MOYENNE) — « Ces trois propriétés » alors que le diff a mis « quatre propriétés » l.24 et ajouté un 4e item. Remplacer par « Ces quatre propriétés ».
+6) docs/convertisseur.md:175 (MOYENNE) — renvoi `docs/format-clusters.md:176` cassé par le diff lui-même (5 lignes insérées en tête) : la 176 est « déjà un expert absent… », le mmap est en 181. Remplacer par `docs/format-clusters.md:181`.
+7) README.md:368 (MOYENNE) — « 18 formats lisibles … seul Q5_1 non vérifié » : Q4_1 est aussi lisible (gguf.rs:1363 row_f32, :1629 dequant, table :734) et absent de portes_formats.sh (17 types, ni 3 ni 7) → 19 lisibles, 2 non vérifiés ; un modèle mixte Q4_0/Q4_1 existe (rapport-inference.md:328). Remplacer par « **19 formats lisibles, 17 vérifiés à la porte** : `Q4_1` et `Q5_1` sont lus par les mêmes branches que leurs voisins `Q4_0`/`Q5_0` ».
+8) docs/vision.md:53 (§3→§6) et :120 (§5→§6) (FAIBLE) — les valeurs citées (19,4029/1,5e-5 ; +6 %, 0,03 vs 25,77 Go, 15,6→6,2) sont dans REPRISE §6 (l.186-195,221,265-266), pas §3/§5.
+9) docs/plan-gpu-topk.md:101 (FAIBLE) — « les deux valeurs restent … ✅ inchangées » alors que la porte gpt-oss a changé (15,1757→15,6017, reconnu dans la même ligne). Remplacer « inchangées » par « vertes … valeur post-correctif ».
+10) docs/plan-modeles-lourds.md:91 et plan-deepseek41-complet.md:138 (FAIBLE) — listent encore « puits » comme manquants alors que le diff établit qu'ils sont implémentés (et --config ne les liste plus). Corriger en « puits : implémentés, à brancher sur le chemin V4 ».
+11) docs/comparaison-spiking.md:8 (FAIBLE) — « (docs/vision.md, axes 3-4) » → « axes 2-3 » (composants + machines).
+12) plan-deepseek41-complet.md:70 (FAIBLE) — I8 (engram) rangé avec les « déquantificateurs vérifiés contre libggml » : I8 n'a aucun bras dans row_f32/dequant et n'est pas dans portes_formats.sh. Le passage I32→I8 est juste (parsé : I8×2, I32×0 sur les deux copies).
+13) Cos métiques : plan-modeles-lourds.md:35 « 2 × 11,42 Go » (2e fichier = 11,38) ; convertisseur.md:113 « fait partout » (histoire.md dit « changé de nom, partout ») ; portes.sh:118 echo redondant (section 5 a déjà tourné).
+
+QUESTION 4 (model.rs / sinks) : sinks EST bien utilisé (chargé model.rs:2325 ; softmax décodage 3494-3498, 3523-3529, GPU 3461-3473, top-k 4277-4281/4338/4350/4391/4450/4507) → le correctif ne casse rien. Scan des 28 en-têtes GGUF : attn_sinks dans gpt-oss (36), V4.1 (40, 2 copies), V4-Flash (26+17=43) ; 0 ailleurs ; attn_derope = 0 PARTOUT. --config : gpt-oss oui, V4-Flash et V4.1 NON (hyper-connexions, attn_output_a, compress_ratios), GLM/Kimi/Qwen3-235B oui → aucun verdict ne bascule à tort. RISQUE LATENT : aucun modèle ne combine attn_kv_a_mqa (chemin MLA, model.rs:2231) et attn_sinks, mais attn_mla (model.rs:3793) n'utilise jamais lay.sinks ; un tel modèle dirait « oui » et calculerait sans puits → restreindre le test au chemin MLA plutôt que le supprimer.
+Aussi : closure morte `let a = |n| g.tensor(n).is_some();` en model.rs:92 (warning unused variable) — supprimer.
+
+PORTES.SH : bash -n OK ; section 7 logiquement saine (--config réel « calculable    : oui », case *": oui"* ; valeur() filtre sur « === perplexité » que seule la ligne totale porte, main.rs:4586 vs fenêtres 4517) ; commande ppl identique à REPRISE.md:681 ; tokenize→ids virgules accepté par --ppl (split ',' | whitespace) ; head -c 20000 tombe sur une frontière UTF-8 valide. Seule la ligne 118 est cosmétique.
+
+DÉJÀ COHÉRENT, NE PAS TOUCHER : docs/format-flux.md (4 fonctions, mode 4 ≤1,5× à 256 = 1,15×, 5,6× à 20), contexte-long.md (E1/E2/E3, §5.quater, §6), roadmap.md (« Six phases » = Phase 0-5 ; f16+int4 +0,61 %/33 %), sprints.md, colab-reparti.md, format-clusters.md, plan-prefill-reparti.md, plan-deepseek-v4-flash.md (hc_mult=4 déclaré, output_hc_* absents — vérifié), plan-mode4-lot-listes.md, journal/README.md (dossier 8b6d46ab existe), tools/analyse_flux.py, bloc 02/10 de REPRISE (exact).
+
+À TRANCHER : (a) REPRISE.md:114 à corriger ou marquer historique ; (b) 19 vs 18 formats — corriger le compte ou ajouter Q4_1 à la porte ; (c) programme-recherche.md:45 « identique à l'original » : aucune mesure du 30B non découpé à ctx 64/limit 8 n'est documentée, seule l'identité de l'artefact avec lui-même — à citer ou reformuler ; (d) suppression sèche du test attn_sinks vs restriction au chemin MLA ; (e) REPRISE.md:80-81 (15,0757 ; 18,5803) périmées sans marqueur en ligne ; (f) lien préexistant cassé docs/vision.md:125 (../FPGA-Stratix-V → ../../).
+
+### 👤 Utilisateur
+
+Background subagent 4e786d3f-0b66-4b23-8dc4-b452bc383bea finished and will do no further work unless you send it more.
+Its closing message:
+Le rapport complet est ci-dessus et a été transmis au parent (`bbd6969f…`) sous forme autonome. Résumé en trois lignes, sans flatterie :
+
+- **14 corrections problématiques** documentées avec citation exacte, correctif textuel et gravité, dont **une haute** : `REPRISE.md:114` affirme encore la politique YaRN périmée (bascule à 1× la longueur déclarée) que le moteur n'applique plus (4×, `model.rs:2203`) et que le reste du même fichier a été mis à jour.
+- **Le correctif `model.rs` est fonctionnellement sain** : `sinks` est bien consommé dans tous les chemins d'attention, aucun modèle du parc ne combine chemin MLA et `attn_sinks`, et `--config` donne gpt-oss = oui / V4-Flash et V4.1 = NON pour d'autres raisons. Deux résidus : une closure morte (l. 92) et un commentaire (l. 137-139) qui dit le contraire du message réécrit juste en dessous ; plus une affirmation fausse sur `--config` (l. 126).
+- **`tools/portes.sh` section 7 : rien à redire** sur le fond (`bash -n` OK, `valeur`/`compare` cohérents, commande identique à la recette) — seule la ligne 118 est cosmétique.
+
+Les six points à trancher (dont « 19 ou 18 formats lisibles » et l'affirmation « identique à l'original » non mesurée) sont en fin de rapport.
+
+### 🤖 Assistant
+
+⏵ Application de la relecture adverse : 13 correctifs, dont un faux sur `--config`.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== Q4_1 dans gguf.rs ===\" && grep -n \"Q4_1\\|GGML_Q4_1\" drave-core/src/gguf.rs | head -8; echo \"=== plan-mla-vision 85-95 ===\"; sed -n '85,95p' docs/plan-mla-vision.md; echo \"=== vision axes ===\"; grep -n \"^## .*Axe\\ … [107 caractères tronqués]`
+
+  ```
+=== Q4_1 dans gguf.rs ===
+291:pub const GGML_Q4_1: u32 = 3;
+762:            0 => "F32", 1 => "F16", 2 => "Q4_0", 3 => "Q4_1", 6 => "Q5_0", 7 => "Q5_1",
+1363:            GGML_Q4_1 => {
+1629:            GGML_Q4_1 => {
+=== plan-mla-vision 85-95 ===
+une MQA ordinaire) — la comparaison numpy le rend moins indispensable, mais il
+relierait l'implémentation à une autre DÉJÀ validée par les portes de
+non-régression. Et le branchement du cache latent dans le plan 1 M (mesurer le
+cache ÷50 sur un vrai modèle MLA — GLM-5.3, 79 couches MLA, est présent ici
+depuis le 01/10 — et la validation **au-delà de la position 2**, où l'écart à
+llama.cpp atteint 4,07 nats au jeton 7 (`reports/rapport-mla-experts.md`).
+
+### État du harnais : FAIT
+
+`tools/mla_synthetique.py` fabrique le modèle et la référence numpy :
+
+=== vision axes ===
+21:## 1. Le cœur : des listes, pas des matrices
+62:## 2. Axe 1 — Voir et régler le modèle, neurone par neurone
+106:## 3. Axe 2 — Répartir sur les composants d'une machine
+134:## 4. Axe 3 — Répartir sur plusieurs machines
+176:## 5. Axe 4 — Rejouer, comparer, ne pas régresser
+198:## 6. Axe 5 — Formats, matériels, énergie
+230:## 7. Ce que la vision n'est pas
+248:## 8. Feuille d
+… [33 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '168,182p' reports/rapport-mla-experts.md; echo \"=== REPRISE section of 265 ===\"; awk 'NR<=266 && /^## /{l=NR\": \"$0} END{}' REPRISE.md; grep -n \"^## \\|^### \" REPRISE.md | awk -F: '$1<266' | tail -3", "description": "Che … [48 caractères tronqués]`
+
+  ```
+GLM-5.3.
+
+## 7. Ce qui reste ouvert, et qui est le plus important
+
+### La validation s'arrête à la position 2, et c'est mesuré
+
+Comparaison à 7 jetons notés (llama.cpp : perplexité 890,4559) :
+
+| position | 0 | 1 | 2 | 3 | 4 | 5 | 6 |
+|---|---|---|---|---|---|---|---|
+| écart de NLL (nous − référence) | **+0,009** | +0,372 | +0,611 | **+4,070** | +3,118 | +2,041 | +1,583 |
+
+Le saut est à la position 3, pas une dérive progressive : c'est le signe d'un
+mécanisme qui s'enclenche, pas d'une accumulation d'arrondis. Une piste écartée
+en la testant : la quantification des activations lisait le tampon entier au
+=== REPRISE section of 265 ===
+174:### Mesures du tour « huit chantiers » (toutes commitées)
+204:### Ce qu'il faut faire ensuite, dans l'ordre
+252:### Les variables d'environnement, et leurs pièges
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"^## \" REPRISE.md | head -12", "description": "List REPRISE top-level sections"}`
+
+  ```
+14:## 1. En une phrase
+31:## 2. Références de non-régression
+99:## 3. Ce qui est implémenté et vérifié
+127:## 4. Pièges de l'environnement (tous rencontrés)
+142:## 5. Règles de méthode (chacune a coûté une erreur)
+161:## 6. Les huit chantiers : où ils en sont
+282:## 6bis. Session « Drave » — le calcul réparti tient debout
+637:## 7. Carte du dépôt
+665:## 8. Premier pas suggéré pour la nouvelle session
+707:## Sprint 08 — un modèle éclaté se lit comme un seul (11:13 → 13:13)
+749:## Inventaire des modèles lourds (01/10 midi)
+774:## Session d'analyse — l'empreinte mémoire de DeepSeek-V4.1 (01/10, 10 h 47 → 18 h)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"--- REPRISE 110-118\"; sed -n '110,118p' REPRISE.md; echo \"--- vision 116-126\"; sed -n '116,126p' docs/vision.md; echo \"--- gpu-topk 99-102\"; sed -n '99,102p' docs/plan-gpu-topk.md; echo \"--- programme 44-49\"; sed -n '44 … [80 caractères tronqués]`
+
+  ```
+--- REPRISE 110-118
+| Encodages | listes d'événements (push), dense int8 par ligne, dense 4 bits par bloc, **6 bits empaqueté par bloc** |
+| GPU | noyaux PTX + API pilote, tête et projections opt-in (`DRAVE_GPU=1`) |
+| Outils | `--ppl`, `--plan` (placement), `--tokenize`, `--bits N` (simulation de précision) |
+| Mesure | `--ppl-texte F` (identifiants du tokenizer du modèle), `--depuis N` (ne noter qu'à partir du jeton N, contexte ancré — les mêmes jetons deviennent comparables à 512, 1 024, 4 096… de contexte), `--ppl-profil` (perte par tranche de 256 positions), `--logits-bin F` (logits bruts), `--harmony*` (habillage harmony), `--swa-pattern N`, `--sans-fenetre` |
+| Rotation | **YaRN à retardement** : RoPE simple tant que `--ctx` tient dans `rope.scaling.original_context_length` (4 096), **interpolation YaRN seule au-delà** (la température `mscale` est la moitié nuisible : divise la perplexité par 8,9 à 512 jetons). `DRAVE_YARN=1` = YaRN complet des références, `DRAVE_YARN_NON=1` (ou `--sans-yarn`) = jamais, `DRAVE_YARN_MSCALE=0/1` = température seule. La trace `[config] rotation` dit lequel est actif |
+| Budget de contexte | `--plan --ctx N` : KV f32/int8/int4, relecture par jet
+… [2602 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs", "limit": 58, "offset": 87}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs</path>
+<type>file</type>
+<content>
+87: pub fn manques_architecture(g: &Gguf, cfg: &Cfg, ctx: usize, clusters: bool) -> Vec<&'static str> {
+88:     // Le test porte sur TOUTES les couches, pas sur la couche 0 : GLM-5.3 a
+89:     // trois couches denses puis des couches MLA, et regarder la première
+90:     // laissait passer le modèle jusqu'au panic « attn_q absent » de la couche 3.
+91:     let quelque_part = |suffixe: &str| g.tensors.iter().any(|t| t.name.ends_with(suffixe));
+92:     let a = |n: &str| g.tensor(n).is_some();
+93:     let mut manques: Vec<&str> = Vec::new();
+94:     if quelque_part("hc_attn_fn.weight") || quelque_part("hc_ffn_fn.weight") {
+95:         manques.push("hyper-connexions (hc_attn_fn, hc_ffn_fn, hc_mult)");
+96:     }
+97:     // Attention par index (DSA) : l'indexeur choisit les clés gardées. Il ne
+98:     // sert QUE si la séquence dépasse `index_topk` — en deçà, llama.cpp garde
+99:     // toutes les clés et l'indexeur n'est pas appelé. On refuse donc seulement
+100:     // les contextes où il changerait le résultat.
+101:     if quelque_part("indexer.") {
+102:         let topk = g.cf
+… [2960 caractères tronqués]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-131 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && bash tools/portes.sh 2>&1 | tee /tmp/portes_0210.log) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **job_output** `{"job_id": "bash-131"}`
+
+  ```
+gpt-oss-120b MXFP4 ctx 256                 15.6017  ✅
+  (portes de formats : voir section 5)
+
+toutes les portes sont vertes
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Portes vertes (gpt-oss 15,6017 inclus). Application des 13 correctifs de la relecture.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nedits = {\n'drave-core/src/model.rs': [\n (\"    let quelque_part = |suffixe: &str| g.tensors.iter().any(|t| t.name.ends_with(suffixe));\\n    let a = |n: &str| g.tensor(n).is_some();\\n\",\n  \"    let quelque_p … [4417 caractères tronqués]`
+
+  ```
+ok
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"--- pml 33-37\"; sed -n '33,37p' docs/plan-modeles-lourds.md; echo \"--- pml 88-94\"; sed -n '88,94p' docs/plan-modeles-lourds.md; echo \"--- p41 135-141\"; sed -n '135,141p' docs/plan-deepseek41-complet.md; echo \"--- conv 11 … [167 caractères tronqués]`
+
+  ```
+--- pml 33-37
+| **GLM-5.3** | 1 M de contexte, MoE | **216,7 Go** (UD-IQ1_S) | 1 M | ✅ arrivé |
+| **GLM-5.3-Flash** | le même en plus léger | **93,1 Go** (UD-IQ1_S) | 1 M | ✅ arrivé |
+| **MiniMax-H3** | famille différente (vision+langage) | 22,8 Go au total (2 × 11,42 Go, Q4_K) | — | ✅ arrivé |
+| **Qwen3-235B-A22B** | la référence MoE de 2025 | **85,7 Go** (Q2_K) | 262 k | ✅ arrivé |
+| **DeepSeek-V4-Flash** | déjà téléchargé (86,9 Go) | — | 1 M | ✅ sur le disque mécanique |
+--- pml 88-94
+
+| modèle | architecture GGUF | ce que le moteur a | ce qui manque |
+|---|---|---|---|
+| DeepSeek-V4 / V4-Flash | `deepseek4` (43 couches, 256 experts top-6, 1 M ctx) ; V4.1-Flash : `deepseek41` (40 couches, 384 experts top-6) | lecture des métadonnées et du tokenizer ✅ ; **lecteur multi-shards** ✅ ; MoE 128/top-8 ; attention MLA à rang faible **validée contre llama.cpp** (0,999024 sur GLM-5.3) | le forward `deepseek4`/`deepseek41` : hyper-connexions, sortie à rang faible, dé-rotation + puits, attentions compressées CSA/HCA |
+| Kimi-K2.7 | `deepseek2` | MLA à rang faible ✅ (1 026 G poids, ~73 s/jeton ; non validé) | la validation au-delà de la position 2 |
+| GLM-5.3 | `glm-dsa` | MLA à rang faible 
+… [1612 caractères tronqués]
+  ```
+
+- **bash** `{"command": "ls -la /home/stephane/Data13TB/stephane/modeles/gguf/MiniMax-H3/ 2>/dev/null | head; echo \"=== 799,8557 provenance ===\"; grep -rn \"799,8557\" reports/*.md | head -6", "description": "Check MiniMax sizes and cluster gate provenance"}`
+
+  ```
+total 22267352
+drwxr-xr-x. 1 stephane stephane         134  1 oct 12:14 .
+drwxr-xr-x. 1 stephane stephane        1206  1 oct 09:46 ..
+-rw-r--r--. 1 stephane stephane 11420663904  1 oct 12:11 minimax_h3_fl2va_pruned-Q4_K.gguf
+-rw-r--r--. 1 stephane stephane 11381096544  1 oct 12:14 minimax_h3_ref2va_pruned-Q4_K.gguf
+=== 799,8557 provenance ===
+reports/rapport-lecteur-multifichiers.md:177:(799,8557 dans les deux cas) :
+reports/rapport-lecteur-multifichiers.md:204:| **8** | **799,8557** | 6,28 Go | 10,65 s |
+reports/rapport-lecteur-multifichiers.md:209:Deux nœuds à quatre clusters rendraient 799,8557 pour 4,60 Go chacun, soit moins
+reports/rapport-mla-experts.md:99:  aiguillage : Qwen2.5-0.5B **19,3885**, Qwen3-30B en clusters **799,8557**.
+reports/rapport-optimisations-auto.md:135:**clusters 799,8557** inchangées, génération identique au token près.
+reports/rapport-routage-experts.md:65:| Qwen3-30B clusters ctx 64, 8 jetons | 799,8557 | **799,8557** | inchangée, au bit près |
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '170,185p' reports/rapport-lecteur-multifichiers.md; echo \"=== routage 58-70 ===\"; sed -n '58,70p' reports/rapport-routage-experts.md", "description": "Check whether original 30B was measured"}`
+
+  ```
+### Le mmap : 3,3× plus rapide, 3× moins de mémoire
+
+`read_to_end` lisait tout le fichier et en gardait une copie dans le tas, **en
+plus** du cache de pages du noyau — deux fois la taille du modèle en mémoire
+physique. Les fichiers sont maintenant **mappés** (le noyau lit les pages à la
+demande). Sur Qwen3-30B-A3B en clusters, mêmes 7 jetons, perplexité identique
+(799,8557 dans les deux cas) :
+
+| | chargement + passe | mémoire maximale (RSS) |
+|---|---|---|
+| mappé (défaut) | **9,32 s** | **6,35 Go** |
+| lu en entier (`DRAVE_MMAP=0`) | 30,68 s | 19,20 Go |
+
+Les 19,20 Go sont exactement la taille du modèle : la copie complète. Le mappé
+n'en touche que 6,35 Go — les pages réellement lues. Un modèle dont on
+=== routage 58-70 ===
+biais de gpt-oss ne départage que la **sélection** et n'entre pas dans les poids.
+
+## 3. Ce qui est mesuré, et ce qui a bougé
+
+| porte | avant | après | verdict |
+|---|---|---|---|
+| Qwen2.5-0.5B Q8_0 ctx 256 (dense) | 19,3885 | **19,3885** | inchangée, au bit près |
+| Qwen3-30B clusters ctx 64, 8 jetons | 799,8557 | **799,8557** | inchangée, au bit près |
+| gpt-oss-120b ctx 256 | 15,1757 | **15,6017** | **changée** — voir ci-dessous |
+
+Le changement de gpt-os
+… [203 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rn \"799\" reports/rapport-decoupage-moe.md | head -8; echo \"=== 6,28 ===\"; grep -rn \"6,28 Go\\|6.28\" reports/*.md | head -4", "description": "Find original 30B cluster comparison provenance"}`
+
+  ```
+41:| 4 | **0,799** | **1,94** | 0,440 | 3,59 | ×1,8 |
+=== 6,28 ===
+reports/rapport-empreinte-memoire.md:177:16/28 : 0.549    15/27 : 0.503    12/24 : 0.477    8/20  : 0.465
+reports/rapport-lecteur-multifichiers.md:204:| **8** | **799,8557** | 6,28 Go | 10,65 s |
+reports/rapport-lecteur-multifichiers.md:210:que les 6,28 Go d'un nœud complet.
+reports/rapport-modele-reel.md:35:| blk.0.ffn_gate.weight | 20 % | 20.0 % | 6.27 | 6.28 | 1.00× |
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rn \"origine\" tools/portes.sh docs/format-clusters.md REPRISE.md | grep -i \"799\\|cluster\" | head; echo \"---\"; grep -rn \"découp\" reports/rapport-decoupage-moe.md | head -6; echo \"--- 30B non découpé\"; grep -rn \"7,6139 … [88 caractères tronqués]`
+
+  ```
+tools/portes.sh:50:    compare "Qwen3-30B en clusters (origine : 799,8557)" "799.8557" "$v"
+docs/format-clusters.md:116:Vérifié : **origine 15,2789 · clusters 15,2789** (mêmes 63 jetons, même contexte),
+docs/format-clusters.md:118:1 587 tenseurs et 18,55 Go, exactement le modèle d'origine.
+docs/format-clusters.md:123:**15,2789**, exactement le modèle d'origine. Aucune étape manuelle entre les deux.
+---
+1:# Rapport — découpage des MoE en clusters, pour notre mode d'opération
+7:découpage n'a donc pas besoin d'un algorithme de graphes : il a besoin d'un
+24:2. **`tools/clusters_moe.py`** — construit la co-activation par couche, découpe en
+34:   découpage **au hasard** (mêmes tailles) et le même découpage **groupé par
+63:  corollaire est une mise en garde : un découpage **équilibré par taille** (ce que
+88:  contexte) sont en téléchargement — c'est là que le découpage compte vraiment, et
+--- 30B non découpé
+reports/rapport-empreinte-memoire.md:40:| 0 (référence) | **7,6139** | — |
+reports/rapport-prefill-par-lots.md:33:endroit. **Effet mesuré : nul** sur Qwen3-30B-A3B (7,6139 avant comme après — ce
+REPRISE.md:77:| Qwen3-30B-A3B MoE | `--dense --limit 128` | **7,6139** |
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nedits = {\n'docs/plan-modeles-lourds.md': [\n (\"le forward `deepseek4`/`deepseek41` : hyper-connexions, sortie à rang faible, dé-rotation + puits, attentions compressées CSA/HCA\",\n  \"le forward `deepseek4`/`d … [3191 caractères tronqués]`
+
+  ```
+ok
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"FPGA-Stratix-V\" docs/vision.md | head -5; ls ../FPGA-Stratix-V/docs/rapport-pe-evenementiel.md 2>&1 | tail -1", "description": "Check vision.md FPGA link path"}`
+
+  ```
+125:(../FPGA-Stratix-V/docs/rapport-pe-evenementiel.md), et le bilan multi-matériel
+../FPGA-Stratix-V/docs/rapport-pe-evenementiel.md
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rn \"\\.\\./FPGA-Stratix-V\\|\\.\\./\\.\\./FPGA-Stratix-V\" docs/ README.md REPRISE.md | head; echo \"=== test depuis docs/ ===\"; cd docs && ls ../FPGA-Stratix-V 2>&1 | head -2", "description": "Find and test cross-repo links" … [1 caractères tronqués]`
+
+  ```
+docs/vision.md:125:(../FPGA-Stratix-V/docs/rapport-pe-evenementiel.md), et le bilan multi-matériel
+README.md:48:| **PE événementiel vérifié et synthétisé (Stratix V)** | ✅ **fait** → [`../FPGA-Stratix-V/docs/rapport-pe-evenementiel.md`](../FPGA-Stratix-V/docs/rapport-pe-evenementiel.md) |
+README.md:49:| **Lecteur DDR3 vérifié de bout en bout** | ✅ **fait** → [`../FPGA-Stratix-V/docs/rapport-lecteur-ddr3.md`](../FPGA-Stratix-V/docs/rapport-lecteur-ddr3.md) |
+README.md:67:[`FPGA-Stratix-V`](../FPGA-Stratix-V) — carte détectée (Gen3 ×8), JTAG validé
+=== test depuis docs/ ===
+ls: cannot access '../FPGA-Stratix-V': No such file or directory
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/vision.md", "new_string": "(../../FPGA-Stratix-V/docs/rapport-pe-evenementiel.md), et le bilan multi-matériel", "old_string": "(../FPGA-Stratix-V/docs/rapport-pe-evenementiel.md), et le bilan multi-matériel"}`
+
+  ```
+Error: cannot edit "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/vision.md": file changed since it was read — re-read the file, then retry
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/vision.md", "limit": 8, "offset": 122}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/vision.md</path>
+<type>file</type>
+<content>
+122: La leçon de cet axe est une règle de placement : **on place un opérateur là où
+123: son flux coûte le moins cher**, et on le vérifie. Le même raisonnement mène au
+124: FPGA : le projecteur événementiel sur Stratix V existe et a été synthétisé
+125: (../FPGA-Stratix-V/docs/rapport-pe-evenementiel.md), et le bilan multi-matériel
+126: (`reports/bilan-multi-materiel.md`) donne le cadre CPU / FPGA / GPU.
+127: 
+128: Ce qui reste ouvert : la **politique** de placement (aujourd'hui : des seuils
+129: codés en dur, réglés à la main par la mesure) et le **déport du top-k** dans le
+
+(Showing lines 122-129 of 279. Use offset=130 to continue.)
+</content>
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/vision.md", "new_string": "(../../FPGA-Stratix-V/docs/rapport-pe-evenementiel.md), et le bilan multi-matériel", "old_string": "(../FPGA-Stratix-V/docs/rapport-pe-evenementiel.md), et le bilan multi-matériel"}`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/vision.md has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && cargo build --release 2>&1 | grep -E \"^(error|warning: unused)\" | head -5; echo \"build exit: $?\"; ls -la target/release/drave", "description": "Rebuild after model.rs fixes", "timeoutMs": 600000}`
+
+  ```
+warning: unused imports: `GGML_IQ1_M`, `GGML_IQ1_S`, `GGML_IQ2_XXS`, and `GGML_IQ3_XXS`
+warning: unused attribute
+warning: unused variable: `plan`
+warning: unused variable: `cfg`
+warning: unused variable: `clusters`
+build exit: 0
+-rwxr-xr-x. 2 stephane stephane 2118912  2 oct 10:22 target/release/drave
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git diff drave-core/src/model.rs | head -60", "description": "Review model.rs diff"}`
+
+  ```
+diff --git a/drave-core/src/model.rs b/drave-core/src/model.rs
+index 55ebe4a..7143d85 100644
+--- a/drave-core/src/model.rs
++++ b/drave-core/src/model.rs
+@@ -89,7 +89,6 @@ pub fn manques_architecture(g: &Gguf, cfg: &Cfg, ctx: usize, clusters: bool) ->
+     // trois couches denses puis des couches MLA, et regarder la première
+     // laissait passer le modèle jusqu'au panic « attn_q absent » de la couche 3.
+     let quelque_part = |suffixe: &str| g.tensors.iter().any(|t| t.name.ends_with(suffixe));
+-    let a = |n: &str| g.tensor(n).is_some();
+     let mut manques: Vec<&str> = Vec::new();
+     if quelque_part("hc_attn_fn.weight") || quelque_part("hc_ffn_fn.weight") {
+         manques.push("hyper-connexions (hc_attn_fn, hc_ffn_fn, hc_mult)");
+@@ -116,26 +115,36 @@ pub fn manques_architecture(g: &Gguf, cfg: &Cfg, ctx: usize, clusters: bool) ->
+         manques.push("projection de sortie à rang faible groupée (attn_output_a/attn_output_b, o_groups)");
+     }
+     // DeepSeek-V4 : l'attention n'est pas la MLA « simple » de GLM/Kimi.
+-    // `attn_derope` renvoie la sortie d'attention dans le repère non tourné,
+-    // les sinks sont des logits appris par tête, et surtout `compress_ratios
+… [2915 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Nouvelle campagne courte des portes sur le binaire reconstruit.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && bash tools/portes.sh rapide 2>&1 | tail -12", "description": "Run fast gates on rebuilt binary", "timeoutMs": 1800000}`
+
+  ```
+=== Portes ===
+  cargo test --release                       48 verts  ✅
+  Qwen2.5-0.5B ctx 256                       19.3885  ✅
+  Qwen3-30B en clusters (origine : 799,8557) 799.8557  ✅
+  threads par défaut (physiques)            20  ✅
+  (portes de formats : ignorées en mode rapide)
+  GLM-5.3 : sigmoïde ×2,5                  sigmoïde  ✅
+  Kimi-K2.7 : sigmoïde ×2,827              sigmoïde  ✅
+  V4-Flash : racine de softplus              racine de softplus  ✅
+  Qwen3-235B : softmax                       softmax  ✅
+
+toutes les portes sont vertes
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && D=./drave-core/target/release/drave; $D /home/stephane/Data13TB/stephane/modeles/gguf/gpt-oss-120b-MXFP4.gguf --config 2>/dev/null | tail -1; $D /home/stephane/FastNVMe/modeles-lourds/DeepSeek-V4.1-Flash-Q2.gguf --config 2>/dev/null  … [248 caractères tronqués]`
+
+  ```
+calculable    : oui (passe avant implémentée)
+calculable    : NON — il manque : hyper-connexions (hc_attn_fn, hc_ffn_fn, hc_mult), projection de sortie à rang faible groupée (attn_output_a/attn_output_b, o_groups), attentions compressées CSA/HCA (compress_ratios, candidate_*)
+calculable    : NON — il manque : hyper-connexions (hc_attn_fn, hc_ffn_fn, hc_mult), projection de sortie à rang faible groupée (attn_output_a/attn_output_b, o_groups)
+  ```
+
+### 🤖 Assistant
+
+⏵ Mise à jour du rapport avec les résultats du 2ᵉ tour et les portes.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"docs+REPRISE hunks: $(git diff -U0 -- docs/ REPRISE.md | grep -c '^@@')\"; echo \"docs hunks: $(git diff -U0 -- docs/ | grep -c '^@@')\"; git diff --stat -- docs/ REPRISE.md | tail -1", "description": "Recount correction hunks … [21 caractères tronqués]`
+
+  ```
+docs+REPRISE hunks: 95
+docs hunks: 88
+ 18 files changed, 320 insertions(+), 156 deletions(-)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for f in $(git diff --name-only -- docs/ REPRISE.md); do n=$(git diff -U0 -- \"$f\" | grep -c \"^@@\"); echo \"$n $f\"; done", "description": "Per-file hunk counts after round two"}`
+
+  ```
+7 REPRISE.md
+2 docs/colab-reparti.md
+4 docs/comparaison-spiking.md
+5 docs/contexte-long.md
+7 docs/convertisseur.md
+1 docs/format-clusters.md
+4 docs/format-flux.md
+11 docs/plan-deepseek-v4-flash.md
+5 docs/plan-deepseek41-complet.md
+4 docs/plan-gpu-topk.md
+5 docs/plan-mla-vision.md
+6 docs/plan-mode4-lot-listes.md
+7 docs/plan-modeles-lourds.md
+1 docs/plan-prefill-reparti.md
+4 docs/programme-recherche.md
+6 docs/roadmap.md
+1 docs/sprints.md
+15 docs/vision.md
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='reports/rapport-coherence-vision.md'\ns=open(p).read()\nsubs=[\n(\"**cinq relectures adverses** puis corrigés un par un — **84 sites de correction**\\ndans `docs/` (90 avec `REPRISE.md`, comptés dans le diff)  … [4334 caractères tronqués]`
+
+  ```
+ok
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-coherence-vision.md", "limit": 40, "offset": 118}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-coherence-vision.md</path>
+<type>file</type>
+<content>
+118: **Points à trancher par l'humain** (aucun n'est bloquant) :
+119: 
+120: 1. **Séries KV canoniques** : `contexte-long.md` porte encore côte à côte les
+121:    mesures « échelle par vecteur » (historique) et « par bloc de 32 » (courante).
+122:    Le tableau E a été mis à la série courante ; il reste à décider si la série
+123:    historique doit sortir du document ou rester comme trace datée.
+124: 2. **Porte gpt-oss de plein droit** : elle est désormais **exécutée** par
+125:    `tools/portes.sh` (section 7 : `--config` puis la perplexité si les
+126:    identifiants sont disponibles, ~20 min, hors mode `rapide`) — et elle est
+127:    verte (15,6017, mesurée ce soir par le script). Sa valeur
+128:    (15,6017) n'est **pas validée à l'extérieur** : llama.cpp applique YaRN dès la
+129:    première position (166,85) là où nous le différons (15,6017), et en le forçant
+130:    nous obtenons 84,07 — l'écart est du même ordre que celui du YaRN, ce qui
+131:    encadre le chiffre sans le valider.
+132: 3. **`plan-deepseek-v4-flash.md`** : conservé comme trace datée avec u
+… [1853 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-coherence-vision.md", "new_string": "5. **V4.1-Flash-Q2 est-il complet ?** Le fichier déclare `hc_mult = 4` mais ne\n   contient aucun `output_hc_fn/base/scale`. Question de **provenance**, pas de\n   code — elle commande … [798 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-coherence-vision.md has been updated successfully.
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-coherence-vision.md", "limit": 30, "offset": 19}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-coherence-vision.md</path>
+<type>file</type>
+<content>
+19: |---|---|
+20: | 1. cadrage | la vision retenue est celle de `docs/vision.md` **et** la précision du 02/10 : Drave ≠ llama.cpp ; listes d'activation (deux listes trinaires **ou** connexions pondérées) routées sur des **grappes de neurones** réparties entre composants et machines ; les flux sont aussi l'**instrument de débogage et d'analyse** qui adapte l'architecture à la tâche. llama.cpp n'est qu'une **porte de correction**. |
+21: | 2. relecture | cinq relectures adverses en parallèle (A : vision/roadmap/programme/sprints/histoire · B : format-flux/format-clusters/convertisseur/colab-reparti/contexte-long · C : plan-modeles-lourds/gpu-topk/mla-vision/prefill-reparti · D : plan-mode4/plan-v4-flash/plan41/comparaison-spiking). Chacune devait citer `fichier:ligne`, la citation exacte, le problème et une correction minimale, **sans toucher aux fichiers**. |
+22: | 3. correction | appliquée **par moi**, une assertion par remplacement (aucun remplacement silencieux : chaque ancre devait apparaître exactement une fois). |
+23: | 4. contrôle | une sixième relecture
+… [3396 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='reports/rapport-coherence-vision.md'\ns=open(p).read()\nstart = s.index(\"### Ce que la relecture du diff a rattrapé\")\nend = s.index(\"## 4. Ce que la relecture a trouvé\")\nblock = s[start:end]\ns = s[:star … [494 caractères tronqués]`
+
+  ```
+ok
+16:## 1. Méthode
+30:### Ce que la relecture du diff a rattrapé (13 défauts de plus)
+48:## 2. Le verdict, document par document
+76:## 3. L'incohérence de fond : la vision était muette là où elle devait être dite
+94:## 4. Ce que la relecture a trouvé **dans le code** (et qui a été corrigé)
+116:## 5. Ce qui reste ouvert
+150:## 6. Réserves de méthode
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '1,60p' reports/rapport-coherence-vision.md", "description": "Read final report top half"}`
+
+  ```
+# Cohérence des `docs/` avec la vision Drave — révision du 02/10
+
+**En une ligne** : les **18 documents** de `docs/` (4 870 lignes) ont été relus par
+**cinq relectures adverses** puis corrigés un par un — **88 sites de correction**
+dans `docs/` (95 avec `REPRISE.md`, comptés dans le diff), plus une **sixième
+relecture adverse du diff lui-même**, qui a trouvé 13 défauts de plus (dont un
+faux que j'avais introduit) ; le verdict est que **la
+vision est tenue partout, mais qu'elle était muette dans quatre documents** (le
+format, le transport, les grappes et le découpage en clusters ne disaient nulle
+part qu'ils servent à *router des flux sur des grappes réparties* ni à *lire ces
+flux pour adapter l'architecture*) — c'est la seule incohérence **de fond**
+trouvée, et elle est corrigée. Le reste est de la **péremption datée** : des
+chiffres ou des états de statut qui décrivaient l'état d'hier et contredisaient le
+code d'aujourd'hui.
+
+## 1. Méthode
+
+| étape | ce qui a été fait |
+|---|---|
+| 1. cadrage | la vision retenue est celle de `docs/vision.md` **et** la précision du 02/10 : Drave ≠ llama.cpp ; listes d'activation (deux listes trinaires **ou** connexions pondérées) routées sur des **
+… [4211 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-coherence-vision.md", "new_string": "Aucun des correctifs ne change un chiffre **mesuré** : ils alignent le document\nsur la mesure, ou datent une phrase qui ne l'était pas. **Aucune optimisation n'a\nchangé une sortie**  … [483 caractères tronqués]`
+
+  ```
+Error: cannot edit "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-coherence-vision.md": file changed since it was read — re-read the file, then retry
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-coherence-vision.md", "limit": 6, "offset": 24}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-coherence-vision.md</path>
+<type>file</type>
+<content>
+24: 
+25: Aucun des correctifs ne change un chiffre **mesuré** : ils alignent le document
+26: sur la mesure, ou datent une phrase qui ne l'était pas. **Aucune optimisation n'a
+27: changé une sortie** : deux corrections sont dans le code
+28: (§4) et l'une d'elles **change un verdict affiché** — c'est précisément son objet.
+29: 
+
+(Showing lines 24-29 of 169. Use offset=30 to continue.)
+</content>
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-coherence-vision.md", "new_string": "Aucun des correctifs ne change un chiffre **mesuré** : ils alignent le document\nsur la mesure, ou datent une phrase qui ne l'était pas. **Aucune optimisation n'a\nchangé une sortie**  … [483 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-coherence-vision.md has been updated successfully.
+  ```
+
+### 🤖 Assistant
+
+⏵ Commit des corrections documentaires et des deux correctifs de code.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A docs/ REPRISE.md README.md drave-core/src/model.rs tools/portes.sh tools/analyse_flux.py reports/rapport-coherence-vision.md && git status --porcelain | head -30", "description": "Stage all campaign changes"}`
+
+  ```
+M  README.md
+M  REPRISE.md
+M  docs/colab-reparti.md
+M  docs/comparaison-spiking.md
+M  docs/contexte-long.md
+M  docs/convertisseur.md
+M  docs/format-clusters.md
+M  docs/format-flux.md
+M  docs/plan-deepseek-v4-flash.md
+M  docs/plan-deepseek41-complet.md
+M  docs/plan-gpu-topk.md
+M  docs/plan-mla-vision.md
+M  docs/plan-mode4-lot-listes.md
+M  docs/plan-modeles-lourds.md
+M  docs/plan-prefill-reparti.md
+M  docs/programme-recherche.md
+M  docs/roadmap.md
+M  docs/sprints.md
+M  docs/vision.md
+M  drave-core/src/model.rs
+ M journal/README.md
+ M journal/sessions/MANIFEST.md
+ M journal/sessions/bbd6969f-0f70-42b2-8951-64d1f2f36d2e/digest.md
+ M journal/sessions/bbd6969f-0f70-42b2-8951-64d1f2f36d2e/rapport.md
+A  reports/rapport-coherence-vision.md
+M  tools/analyse_flux.py
+M  tools/portes.sh
+?? journal/sessions/34e1d4be-3708-4065-ae77-eca21f86e857/
+?? journal/sessions/4b146dfd-ce0b-4af8-910f-610ab438d4e6/
+?? journal/sessions/4e786d3f-0b66-4b23-8dc4-b452bc383bea/
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git commit -q -F - <<'EOF'\ndocs : révision de cohérence avec la vision (18 documents, 88 sites)\n\nCinq relectures adverses des 18 documents de `docs/`, corrections appliquées une\npar une, puis une sixième relecture du diff qui a r … [1681 caractères tronqués]`

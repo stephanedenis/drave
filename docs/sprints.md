@@ -36,8 +36,9 @@ Un sprint se ferme **vert**, et c'est non négociable :
 
 - `cargo test --release` passe ;
 - les portes de non-régression sont intactes : **Qwen ctx 256 = 19,3885**,
-  gpt-oss ctx 256 = **15,1757** (sans `DRAVE_GPU`), et le banc réparti donne
-  **0,00e0** en dense ;
+  gpt-oss ctx 256 = **15,6017** (sans `DRAVE_GPU`), Qwen3-30B en clusters =
+  **799,8557**, `tools/portes_formats.sh` sans divergence, et le banc réparti
+  donne **0,00e0** en dense ;
 - tout est **commité** ; ce qui ne l'est pas est explicitement jeté ou remis au
   planning ;
 - la machine est **rendue** (pas de processus de banc qui traîne) ;

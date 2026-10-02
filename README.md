@@ -365,6 +365,10 @@ tools/portes_formats.sh                   # 17 formats × 2 blocs, contre libggm
 tools/extraire_tables_ggml.sh verifier    # les tables embarquées = celles de ggml
 ```
 
+**19 formats lisibles, 17 vérifiés à la porte** : `Q4_1` et `Q5_1` sont lus par
+les mêmes branches que leurs voisins `Q4_0`/`Q5_0` (`drave-core/src/gguf.rs`)
+mais ne sont pas dans la batterie comparée bloc par bloc.
+
 | modèle | format | perplexité | débit | mémoire |
 |---|---|---|---|---|
 | Qwen2.5-0.5B | Q4_0 | 21,01 | 39 tok/s | 0,41 Go |

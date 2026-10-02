@@ -5,15 +5,15 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 90.5 h |
-| Tours | 73 |
-| Messages | 4186 |
-| Appels d'outils | 3980 |
-| Fichiers touchés | 82 |
-| Commandes | 3499 |
-| Sous-agents | 23 |
-| Commits | 320 |
-| Compactages de contexte | 5 |
+| Durée | 91.6 h |
+| Tours | 74 |
+| Messages | 4380 |
+| Appels d'outils | 4170 |
+| Fichiers touchés | 86 |
+| Commandes | 3611 |
+| Sous-agents | 28 |
+| Commits | 321 |
+| Compactages de contexte | 6 |
 
 ## Objectifs déclarés
 
@@ -187,6 +187,8 @@
 **Tour 72** — fais un plan pour compléter drave afin qu'il exécute parfaitement toutes les fonctionnalités requises pour deepseek 4.1 tout en maintenant notre philosophie.
 
 **Tour 73** — quand je parle de philosophie, je parle de ce qui distingue Drave de llama.cpp et autre moteurs : les listes d'activation, qu'elles soient trinaires (double liste) ou en connexions pondérés, le coeur de Drave est de conduire ces flux de données sur des grappes de neuronnes qui peuvent être sur des composants ou machines différentes d'un système. Ces flux de logs sont aussi utiles pour déboguer et  … [115 caractères tronqués]
+
+**Tour 74** — révise tous les documents du dossie docs afin de t'asssurer qu'ils sont cohérent avec la vision Drave
 
 ## 2. Déroulé, étape par étape
 
@@ -3745,7 +3747,59 @@ Chaque phase porte **sa porte** (commande + résultat attendu), **son interdit**
 
 **Synthèse produite :**
 
-Compris — et c'est une correction importante : mon plan était écrit comme « faire passer le forward de V4.1 », pas comme « conduire les flux de V4.1 en listes sur des grappes ». Je le réécris autour de ça.
+Vous avez raison, et mon premier plan était à côté : il visait « faire passer le forward de V4.1 », c'est-à-dire refaire llama.cpp. Je l'ai réécrit (`docs/plan-deepseek41-complet.md`, version 2, commit `5a6ac96`).
+
+\## Ce que la correction change
+
+**V4.1 est déjà fait de flux — et ce sont des listes au sens de Drave** :
+
+| mécanisme V4.1 | nature en langage Drave |
+|---|---|
+| 6 experts sur 384 | liste d'experts par jeton (déjà tracée) |
+| `ffn_gate_tid2eid` | routage par **table** : liste fixée par le jeton, aucun score |
+| `attn_compressor_gate` | **sélection de blocs** — une liste de blocs gardés par jeton |
+| indexeur CSA | **liste de 2 048 candidats** par jeton : ce que l'attention *voit* |
+| hyper-connexions | **24 connexions pondérées** (4 + 4 + 16) par jeton et par couche |
+| engram | **liste d'adresses** touchées : n-gramme → rangées |
+
+**Trois de ces flux n'existent dans aucun moteur connu** — le gate du compresseur, la sélection de candidats, le mélange HC. Les tracer n'est pas un accessoire d'implémentation : c'est l'apport.
+
+\## Les deux conséquences dans le plan
+
+**1. Chaque phase a maintenant deux portes.** La correction (comparaison à llama.cpp sur V4-Flash, étage par étage) **et** Drave : nombre d'événements par jeton, trace écrite puis **rejouée à l'identique**, découpage en grappes qui donne la même perplexité, et le flux nouveau lisible par un outil.
+
+**2. Le premier écart à combler n'est pas la conformité des logits, c'est le silence.** Une passe de V4.1 afficherait aujourd'hui **« 0 événements »** : le chemin MLA et le chemin experts-IQ travaillent en f32 dense. La phase P0 instrumente ces compteurs avant toute autre chose — sinon on avancerait dans le sens d'un moteur dense sans s'en apercevoir.
+
+Trois autres points qui découlent de votre définition :
+
+- **P1 trace les hyper-connexions comme des connexions pondérées** et pose la question exploitable : combien des 16 poids de `comb` sont significatifs, et sont-ils stables d'un jeton à l'autre ? Si 12 sur 16 sont négligeables, la couche se simplifie — et c'est mesuré, pas supposé.
+- **P5 mesure la stabilité de la liste de candidats** (recouvrement entre jetons consécutifs, périodicité) et teste une variante « candidats du jeton précédent + vérification ». C'est exactement le genre de gain que llama.cpp ne cherche pas.
+- **P6 exige la répartition** : V4-Flash découpé en `cluster-XX.gguf`, puis `--ppl-reparti` entre **deux processus**, avec la même perplexité qu'un nœud unique. Un modèle q
+… [588 caractères tronqués]
+
+### Tour 74 — révise tous les documents du dossie docs afin de t'asssurer qu'ils sont cohérent avec la vision Drave
+
+*190 appels d'outils.* Actions notables :
+
+- bash — Survey the docs folder
+- read
+- sous-agent — Audit vision : pilotage
+- sous-agent — Audit formats et transport
+- sous-agent — Audit plans moteur
+- sous-agent — Audit plans lot et modèles
+- bash — Check the earlier coherence audits
+- bash — Check whether earlier audit findings are still open
+- bash — Verify the header size claim in the prefill plan
+- bash — Check whether mode 4 is implemented
+- bash — Read the two plans' headers
+- list_agents
+- bash — Find docs that never mention lists or clusters
+- bash — Read the openings of the three vision-silent docs
+- … et 134 autres
+
+**Synthèse produite :**
+
+⏵ Commit des corrections documentaires et des deux correctifs de code.
 
 ## 3. Travail accompli
 
@@ -3764,7 +3818,7 @@ Compris — et c'est une correction importante : mon plan était écrit comme «
 | `/tmp/mesures_oss4.sh` | 2 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-gpt-oss-perplexite.md` | 1 | 4 |
 | `/tmp/controles_oss.sh` | 1 | 0 |
-| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/REPRISE.md` | 0 | 11 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/REPRISE.md` | 0 | 14 |
 | `/tmp/controles2_oss.sh` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/harmony_canonique.py` | 1 | 1 |
 | `/tmp/controles3_oss.sh` | 1 | 0 |
@@ -3772,7 +3826,7 @@ Compris — et c'est une correction importante : mon plan était écrit comme «
 | `/tmp/controles4_oss.sh` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/.gitignore` | 0 | 2 |
 | `/tmp/bascule_yarn.sh` | 1 | 0 |
-| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/contexte-long.md` | 1 | 3 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/contexte-long.md` | 1 | 7 |
 | `/tmp/croisement_yarn.sh` | 2 | 0 |
 | `/tmp/profil_profondeur.sh` | 1 | 0 |
 | `/tmp/contenu_ou_profondeur.sh` | 1 | 0 |
@@ -3792,14 +3846,14 @@ Compris — et c'est une correction importante : mon plan était écrit comme «
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/plan-mla-vision.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/mla_synthetique.py` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/vision_mtmd.py` | 1 | 0 |
-| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/vision.md` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/vision.md` | 1 | 3 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/histoire.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/roadmap.md` | 1 | 0 |
-| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs` | 0 | 5 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs` | 0 | 7 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/main.rs` | 0 | 3 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/gpu.rs` | 0 | 3 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-gpu-topk-selection.md` | 1 | 0 |
-| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/README.md` | 0 | 1 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/README.md` | 0 | 3 |
 | `/tmp/aig2.sh` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-logits-gpu-vs-cpu.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-aiguille-topk.md` | 1 | 0 |
@@ -3811,7 +3865,7 @@ Compris — et c'est une correction importante : mon plan était écrit comme «
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-decoupage-moe.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/plan-modeles-lourds.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/convertir_clusters.py` | 1 | 0 |
-| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/format-clusters.md` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/format-clusters.md` | 1 | 2 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/gguf.rs` | 0 | 6 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/clusters.rs` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/sprints/08-un-modele-eclate-se-lit-comme-un-seul.md` | 2 | 0 |
@@ -3826,7 +3880,7 @@ Compris — et c'est une correction importante : mon plan était écrit comme «
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/materiel.rs` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-tete-restreinte.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-optimisations-auto.md` | 1 | 0 |
-| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/portes.sh` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/portes.sh` | 1 | 1 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/ref_ggml_bloc.c` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/verifier_formats.py` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/portes_formats.sh` | 1 | 0 |
@@ -3834,7 +3888,11 @@ Compris — et c'est une correction importante : mon plan était écrit comme «
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/extraire_tables_ggml.sh` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-routage-experts.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-mla-experts.md` | 1 | 0 |
-| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/plan-deepseek41-complet.md` | 4 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/plan-deepseek41-complet.md` | 4 | 1 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/colab-reparti.md` | 0 | 1 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/convertisseur.md` | 0 | 3 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/plan-mode4-lot-listes.md` | 0 | 2 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-coherence-vision.md` | 1 | 5 |
 
 ### Sous-agents lancés
 
@@ -3861,6 +3919,11 @@ Compris — et c'est une correction importante : mon plan était écrit comme «
 - tour 51 — Revue adverse du lecteur multi-fichiers
 - tour 51 — Revue adverse mmap et nœud partiel
 - tour 71 — Lire FPGA-Stratix-V et résumer
+- tour 74 — Audit vision : pilotage
+- tour 74 — Audit formats et transport
+- tour 74 — Audit plans moteur
+- tour 74 — Audit plans lot et modèles
+- tour 74 — Relecture adverse docs corrigés
 
 ### Commandes exécutées (échantillon)
 
@@ -3904,7 +3967,7 @@ Compris — et c'est une correction importante : mon plan était écrit comme «
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 3459 autres
+- … et 3571 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4032,7 +4095,7 @@ Compris — et c'est une correction importante : mon plan était écrit comme «
 
 ## 5. Erreurs rencontrées
 
-239 sorties en erreur ou divergentes. Les premières :
+243 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : a8f2635f8 docs: record which models this box is good at, and why src/llama-hparams.cpp:8:void llama_hparams::set_swa_pattern(uint32_t n_pattern, bool dense_first) { src/llama-hparams.h:308:    void se
 - **T1** : 511 tokens notés — perplexité cumulée 247.031  (4.9 tok/s) === perplexité 247.0308 sur 511 tokens (0 événements, 104.5 s) ===  ### B3 harmony assistant 511 --- ref --- 0.0 0.0 0:00 ls: cannot access '
@@ -4372,4 +4435,5 @@ Compris — et c'est une correction importante : mon plan était écrit comme «
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-execution-v41.md <<'EOF' # Rapport — test d'exécution locale de DeepSeek-V4.1-Flash,
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' # Le plan doit être référencé depuis la roadmap et REPRISE, sinon il se perd. p='REPRISE.
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p='REPRISE.md'; s=open(p).read() s = s.replace("""## Plan pour exécuter DeepSeek-V4.1 (02
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git commit -q -F - <<'EOF' docs : révision de cohérence avec la vision (18 documents, 88 sites)  Cinq rele
 

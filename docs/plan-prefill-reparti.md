@@ -35,7 +35,14 @@ et `VERSION_FLUX` vaut encore **2** (§1.3).
 
 ## 1. Le protocole v3
 
-### 1.1 En-tête (39 octets, identique à l'aller et au retour)
+### 1.1 En-tête (39 octets à l'époque de ce plan — **79 aujourd'hui**)
+
+> ⚠️ **Le corps de ce plan est conservé tel qu'il a été écrit**, pour qu'on puisse
+> comparer. Deux choses ont changé depuis et ne doivent pas être recopiées :
+> l'en-tête fait **79 octets** (et non 39) depuis le protocole v4 — le champ
+> `TAILLE_TETE` et son test le vérifient dans `drave-core/src/main.rs` —, et la
+> version courante est la **v5** (mode 4 « lot en listes » inclus,
+> `docs/plan-mode4-lot-listes.md`).
 
 | off | octets | champ | type | mode 0 dense | mode 1 liste | mode 2 blocs | **mode 3 lot** |
 |---|---|---|---|---|---|---|---|

@@ -3,6 +3,11 @@
 Objectif : deux machines qui se passent des **listes d'activation**, l'une sur le
 runtime Colab, l'autre en local, et **les mêmes logits** qu'en local.
 
+Ce flux est aussi le **journal** qu'on relit (`--trace-flux`, puis
+`tools/analyse_flux.py`, `profil_flux.py`, `diff_flux.py`) pour comprendre où
+travaille le modèle et adapter l'architecture à la tâche — la fidélité du
+transport n'est pas le seul enjeu (`docs/vision.md` §2).
+
 Ce document est la recette ; l'état du protocole et les chiffres qui la
 dimensionnent sont dans `docs/format-flux.md` et
 `reports/rapport-transport-liste.md`.
@@ -34,7 +39,7 @@ paie pas la latence 256 fois.
 
 ## Dimensionnement (mesuré)
 
-* **Débit** : 3 663 octets par flux en dense (en-tête v4 compris), ≈ 1 419 en
+* **Débit** : 3 663 octets par flux en dense (en-tête **v5** compris), ≈ 1 419 en
   listes à échelle par bloc à 68 % d'activité. En **lots** (`--lot 64`), c'est
   229 455 octets par lot de 64 jetons, soit **3,5 ko par jeton** — et surtout UN
   aller-retour par lot. À 20 jetons/s : **moins de 1 Mbit/s**. Le débit n'est pas

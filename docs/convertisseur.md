@@ -108,15 +108,21 @@ Deux enseignements pour le placement :
   *plus* que ce qu'on lui envoie — c'est-à-dire s'il garde les poids et ne reçoit
   que les activations.
 
-## 5. Format proposé : `QTNT`
+## 5. Format proposé : conteneur **Drave** (ex-`QTNT`), adossé au format de flux `DRVF`
+
+> Le sigle `QTNT` porte l'ancien nom du projet ; le renommage du 30/09 a « changé de nom,
+> partout » (`docs/histoire.md`). Le conteneur décrit ici reste **proposé** : ce
+> que le moteur sait lire aujourd'hui, c'est le format **clusters**
+> (`docs/format-clusters.md`) et le format de flux **DRVF**
+> (`docs/format-flux.md`).
 
 Un conteneur, un index, des sections alignées.
 
 ```
-en-tête      magie, version, nb_calques, nb_tenseurs, alignement (2 Mo), graine
+en-tête      magie, version, nb_couches, nb_tenseurs, alignement (2 Mo), graine
 index        par tenseur :
                nom, rôle (Wq/Wk/Wv/Wo/gate/up/down/routeur/expert),
-               calque, rang d'expert, dimensions,
+               couche, rang d'expert, dimensions,
                encodage (blocs_source | dense4 | listes),
                offset (aligné), taille, empreinte,
                statistiques (zéros, blocs vides, variances de grappe),
@@ -136,7 +142,7 @@ Règles de conception, chacune adossée à une mesure :
 3. **Une tranche par expert**, alignée, pour que le chargement d'un expert soit
    une lecture contiguë — et pour que le cache d'experts chauds soit possible.
 4. **L'index est en tête** : le plan de placement se lit avant les poids, donc on
-   peut décider où charger chaque calque sans avoir lu le modèle.
+   peut décider où charger chaque couche sans avoir lu le modèle.
 5. **L'alignement 2 Mo** est ce qui permettra les grosses pages le jour où mmap
    sera disponible (`std` seul ne l'expose pas ; en attendant, `pread` par
    section donne déjà le chargement à la demande).
@@ -161,12 +167,12 @@ coûté : **12 % de perplexité** sur Q4_0 avant qu'on s'en aperçoive.
 | # | chantier | état | gain mesuré ou attendu |
 |---|---|---|---|
 | 1 | emprunt des blocs en place (Q4_0, MXFP4) | ✅ **fait** | chargement ×3,2, mémoire ÷2, fidélité exacte |
-| 2 | lecteur **Q4_K / Q6_K** | à faire | ouvre 7B → 32B |
-| 3 | **routeur MoE** + tranches par expert | à faire | gpt-oss-120b : 61 Go/jeton → 2,7 Go/jeton |
-| 4 | conteneur `QTNT` + index de placement | à faire | plan CPU/GPU/NUMA lisible avant les poids |
-| 5 | placement : épinglage NUMA, threads par calque | à faire | 20,7 → 24,7 Go/s mesuré au banc |
-| 6 | **Q8_0 en place** (le noyau `q8_dot_at` existe déjà pour la tête) | à faire | supprime la dernière copie du chemin int8 |
-| 7 | mmap (appel système direct) | à faire | grosses pages, partage entre processus |
+| 2 | lecteur **Q4_K / Q6_K** | ✅ **fait** | ouvre 7B → 32B (comparé à une référence F16 des mêmes poids) |
+| 3 | **routeur MoE** + tranches par expert | ✅ **fait** | gpt-oss-120b : 61 Go/jeton → 2,7 Go/jeton ; Qwen3-30B : PPL 7,6139 |
+| 4 | conteneur **Drave** (ex-`QTNT`) + index de placement | index de placement ✅ (`--plan`) ; le conteneur reste **proposé** | plan CPU/GPU/NUMA lisible avant les poids |
+| 5 | placement : épinglage NUMA, threads par couche | ✅ mesuré, **perdant** (`--pin` : 23,2 → 27,6 s) | 20,7 → 24,7 Go/s mesuré au banc |
+| 6 | **Q8_0 en place** (projections) | ✅ **fait** | chargement 2,73 → 0,81 s, mémoire 921 → 566 Mo |
+| 7 | mmap (appel système direct) | ✅ **fait** | grosses pages, partage entre processus (`docs/format-clusters.md:181`) |
 
 Les points 1 et 6 sont ce qui rend un modèle de 60 Go **chargeable** ; 2 et 3
 sont ce qui le rend **exécutable** ; 4 et 5 sont ce qui le rend **efficace**.
@@ -244,12 +250,14 @@ chiffre maintenant aussi ce régime — 4,81 tok/s prévus contre 5,4 mesurés.
 ## Reste à faire
 
 1. **Q4_K sur FPGA** : le format des modèles réels, à porter dans `event_reader`.
-2. **Épinglage NUMA** : 20 % mesurés, mais `sched_setaffinity` n'est pas dans
-   `std` — il faut un appel système direct.
-3. **Q8_0 en place** pour les projections (la tête le fait déjà).
-4. **gpt-oss-120b** : le routeur MoE fonctionne (top-4 sur 128) mais le modèle
-   pèse 60 Go et son encodage d'expert est en MXFP4 avec des tenseurs Q8_0 ;
-   c'est l'étape suivante naturelle.
+2. **gpt-oss-120b** : **charge et tourne** (voir plus bas) ; porte de
+   non-régression **15,6017** à ctx 256 (`README.md`) — reste à combler l'écart
+   de politique YaRN avec llama.cpp sur les longues séquences.
+
+> Deux points de cette liste sont depuis **faits** : l'épinglage NUMA (`--pin`,
+> mesuré **perdant** : 23,2 → 27,6 s sur le 30B MoE, voir plus haut) et le
+> **Q8_0 en place** pour les projections (chargement 2,73 → 0,81 s, mémoire
+> 921 → 566 Mo).
 
 ---
 
@@ -307,10 +315,17 @@ reconnue est tracée au chargement :
 ```
 
 Les puits **sont** chargés et appliqués (vérifié), le rotary est complet, la
-fenêtre glissante est sans effet en deçà de 128 jetons. Les suspects restants
-sont donc plus fins : le facteur d'échelle de l'attention, l'ordre exact des
-normes, ou la rampe YaRN (à corriger plutôt qu'à contourner, puisque gpt-oss a
-été entraîné avec).
+fenêtre glissante est sans effet en deçà de 128 jetons. Les suspects restants ont
+été testés **le jour même** : le **biais de `attn_output` était ignoré** et la
+**fenêtre glissante s'appliquait aux 36 couches** au lieu d'une sur deux — 39,80 →
+**20,84** à 63 jetons (`reports/rapport-gpt-oss-perplexite.md` §2.a-b) ; puis le
+**biais du routeur** (`exp_probs_b`) sortait du softmax des poids qu'il ne doit
+pas toucher, ce qui déplace la référence ctx 256 de 15,1757 à **15,6017**
+(`reports/rapport-routage-experts.md`). Le fossé restant ne se mesure plus contre
+la cible théorique de 6 mais contre **llama.cpp**, mêmes identifiants : 166,85
+avec sa politique de YaRN contre **15,6017** avec la nôtre (84,07 en forçant
+YaRN) — l'écart externe est de l'ordre de celui du YaRN, pas d'une erreur de
+calcul.
 
 Chaque hypothèse se teste maintenant en **une** exécution, et la trace de
 configuration dit ce qui est actif — c'est ce qui manquait pour déboguer un

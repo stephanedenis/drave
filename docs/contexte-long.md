@@ -98,13 +98,13 @@ plus tôt : c'est le préremplissage (§3.a).
 
 | # | étape | état | débloque | coût |
 |---|---|---|---|---|
-| E1 | **Préremplissage par lots** | **fait** : `gemm_dense_i8` et `gemm_dense_q4` (produits matrice-matrice par tranches), `forward_lot` juste sur dense **et** sur MoE avec regroupement des jetons par expert ; débit bout en bout à chiffrer | 32 k utilisable ; TTFT | le noyau est là ; reste à mesurer et à élargir les tranches |
-| E2 | **KV int8** | **fait** (échelle par vecteur, dequantification à la lecture) | ÷4 sur le KV ; 128 k confortable | mesuré : +7,1 % de perplexité (llama.cpp q8_0 : +3,1 %) |
-| E3 | **KV int4** | **fait** (nibbles empaquetés) | 1 M tient en RAM (9,7 Go) et en VRAM | mesuré : **+384 %** à 512 jetons, **+364 % à 8 192** — llama.cpp q4_0 : +411 % puis +494 % ; à réserver aux cas où la mémoire manque |
+| E1 | **Préremplissage par lots** | **fait** : `gemm_dense_i8` et `gemm_dense_q4` (produits matrice-matrice par tranches), `forward_lot` juste sur dense **et** sur MoE avec regroupement des jetons par expert ; débit bout en bout **mesuré** : Qwen ctx 512 **17,1 → 13,6 s** (−20 %), gpt-oss ctx 256 **≈ 50 → 34,4 s** (−31 %) — `reports/rapport-prefill-par-lots.md` | 32 k utilisable ; TTFT | le noyau est là ; reste à élargir les tranches |
+| E2 | **KV int8** | **fait** (échelle **par bloc de 32**, dequantification à la lecture) | ÷4 sur le KV ; 128 k confortable | mesuré : **+1,5 %** à 512 jetons, **+3,0 %** à 8 192 (llama.cpp q8_0 : +0,8 %) |
+| E3 | **KV int4** | **fait** (nibbles empaquetés) | 1 M tient en RAM (9,7 Go) et en VRAM | mesuré : **+219 %** à 512 jetons, **+364 % à 8 192** — llama.cpp q4_0 : +411 % puis +494 % ; à réserver aux cas où la mémoire manque |
 | E4 | **KV déporté sur les 2 GPU** (pagination, préchargement) | **fait** : noyau `attn_kv_*` (tuiles de 32 clés en mémoire partagée, une passe par (tête KV, tranche), recombinaison + puits), miroir VRAM du cache (`DRAVE_GPU_KV=1`) — mesuré **×12 à ×73** sur l'attention selon le format, PPL identique ; voir §4.ter | décodage à 1 M borné par la VRAM et non par la RAM | moyen |
-| E5 | **Attention creuse** | **fait pour la mesure** — `--attn-topk 256` : 234,88 contre 298,56 (§6) ; le noyau GPU de top-k reste à écrire (phase 1.1) | casse le O(N) du décodage | moyen |
-| E6 | **MLA** (DeepSeek) | **non testable ici** : aucun modèle MLA en GGUF sur cette machine (le « deepseek-r1-distill » local est un Qwen dense) | compression structurelle du KV | gros |
-| E7 | **Vision** | **non testable ici sans le chemin image** : le projecteur `mmproj` est présent, mais rien ne lit les patchs | images | gros |
+| E5 | **Attention creuse** | **fait pour la mesure** — `--attn-topk 256` : 234,88 contre 298,56 (§6, valeurs du 30/09, **non reproduites depuis** : l'écart A/B fait foi, `docs/plan-gpu-topk.md`) ; le noyau GPU de top-k reste à écrire (phase 1.1) | casse le O(N) du décodage | moyen |
+| E6 | **MLA** (DeepSeek) | **validée** contre llama.cpp (GLM-5.3, corrélation des logits **0,999024** à la position 0 ; l'écart croît ensuite, +4,070 nat à la position 3 ; Kimi-K2.7 calculable) — V4.1 encore bloquée (hyper-connexions, sortie à rang faible) ; `reports/rapport-mla-experts.md` | compression structurelle du KV | gros |
+| E7 | **Vision** | **faite** : chaîne image complète démontrée (patchs **5,4e-7**, projecteur **1,7e-6**, une couche 1,8e-6) — `docs/plan-mla-vision.md` | images | gros |
 
 Ordre recommandé : **E1 d'abord** (sans lui, aucun contexte long n'est
 utilisable), puis E2+E3 ensemble (la qualité se mesure sur un petit modèle en
@@ -404,8 +404,9 @@ l'arrondi des clés.
 ## 5. YaRN à retardement : ce que la mesure a dit
 
 Politique implémentée (`[config] rotation` le dit à chaque chargement) : **RoPE
-simple tant que le contexte demandé tient dans la longueur initiale déclarée
-(4 096 pour gpt-oss), interpolation YaRN au-delà — sans la mise à l'échelle de
+simple tant que le contexte demandé ne dépasse pas 4 × la longueur initiale
+déclarée (16 384 pour gpt-oss, voir §5.quater), interpolation YaRN au-delà —
+sans la mise à l'échelle de
 température** ; `DRAVE_YARN=1` force le YaRN complet des implémentations de
 référence, `DRAVE_YARN_NON=1` jamais, `DRAVE_YARN_MSCALE=0/1` tranche sur la
 température seule. Décision **par séquence**, pas par position : la structure de
@@ -543,9 +544,10 @@ discrimine donc rien sur la rotation, et il reste à le refaire avec
    sonde** (1 024 jetons de contexte) et un échec — le remplissage, répété à
    l'identique, ne fait pas un banc d'essai valable, et le préremplissage
    séquentiel rend chaque sonde hors de prix (1,8 jeton/s). Le test est donc
-   **arrêté** : il faudra un remplissage varié (du vrai texte), moins de sondes
-   et des réponses plus longues — et c'est le préremplissage par lots qui le
-   rendra abordable.
+   **arrêté sur cette version** : il fallait un remplissage varié (du vrai texte),
+   moins de sondes et des réponses plus longues. La **v2** (remplissage
+   Wikitext-2, réponses de 40 jetons, préremplissage par lots) a depuis été
+   relancée et trouve **12 sondes sur 12** — `reports/rapport-aiguille.md`.
 2. **Attention creuse** : `--attn-topk N` et `--attn-window N` au protocole
    `--depuis` (mêmes jetons, contexte long) donnent le prix en perplexité de
    chaque restriction.
@@ -559,6 +561,10 @@ discrimine donc rien sur la rotation, et il reste à le refaire avec
 | aucune | 298,56 |
 | **top-256 clés par requête** (`--attn-topk 256`) | **234,88** ← *meilleure* |
 | fenêtre de 512 sur les couches locales (`--attn-window 512`) | 3 269,34 |
+
+> Valeurs du **30/09** (gpt-oss, contexte 2 048, 512 jetons notés), **non
+> reproduites depuis** : les chiffres absolus de ce tableau ne sortent pas du
+> binaire courant — seul l'**écart A/B** fait foi (`docs/plan-gpu-topk.md`).
 
 Deux enseignements opposés, et tous deux utiles :
 

@@ -36,6 +36,15 @@ cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && cargo build --r
 > gpt-oss était la seule que la relecture adversariale n'avait pas pu faire
 > tourner (bornes de temps) ; elle est verte.
 >
+> **Mise à jour du 02/10 — c'est ce bloc qui fait foi** : Qwen2.5-0.5B Q8_0
+> ctx 256 = **19,3885** (inchangée) · clusters Qwen3-30B ctx 64 limit 8 =
+> **799,8557** · gpt-oss-120b MXFP4 ctx 256 = **15,6017** (**changée** par le
+> correctif de routage : le biais `exp_probs_b` ne doit pas entrer dans le softmax
+> des poids — `reports/rapport-routage-experts.md`) · `cargo test --release` =
+> **48** · protocole **v5**, modes 0–4. Les lignes gpt-oss plus bas qui portent
+> encore 15,1757, 15,1667, 15,0757 ou 18,5803 datent d'AVANT ce correctif : à
+> revérifier avant de s'en servir comme porte.
+>
 > **Chemin GPU revérifié le même jour** (personne ne l'avait exercé depuis les
 > changements) : gpt-oss avec `DRAVE_GPU=1` donne **15,1667**, la valeur attendue
 > du pilote, et `--gpu-banc` retrouve l'exactitude des noyaux — 1,6 ms par ligne
@@ -67,10 +76,10 @@ identique à la source) — les deux tokenizers la passent sur ce corpus.
 | Qwen2.5-VL-7B Q4_K_M | défaut, `--limit 128` | **10,9947** |
 | Qwen3-30B-A3B MoE | `--dense --limit 128` | **7,6139** |
 | gpt-oss-120b MXFP4 | `--dense --limit 64`, ids_oss | **20,8361** (63 jetons) |
-| gpt-oss-120b MXFP4 | `--dense --limit 512`, ids_oss | **15,1757** (510 jetons, deux fenêtres) |
-| gpt-oss-120b MXFP4 | `--ppl-texte`, `--limit 512` (mêmes jetons) | **15,0757** (509 jetons) |
-| gpt-oss-120b MXFP4 | `--dense --ctx 512 --limit 512`, ids_oss | **18,5803** (511 jetons, une fenêtre) |
-| gpt-oss-120b MXFP4, YaRN | `DRAVE_YARN=1`, `--ctx 512 --limit 512` | **174,3375** ← le YaRN statique du modèle |
+| gpt-oss-120b MXFP4 | `--dense --limit 512`, ids_oss | **15,6017** (510 jetons, deux fenêtres) — était 15,1757 avant le correctif de routage du 02/10 |
+| gpt-oss-120b MXFP4 | `--ppl-texte`, `--limit 512` (mêmes jetons) | **15,0757** (509 jetons) — *avant* le correctif de routage du 02/10 |
+| gpt-oss-120b MXFP4 | `--dense --ctx 512 --limit 512`, ids_oss | **18,5803** (511 jetons, une fenêtre) — *avant* le correctif de routage du 02/10 |
+| gpt-oss-120b MXFP4, YaRN | `DRAVE_YARN=1`, `--ctx 512 --limit 512` | **174,3375** ← le YaRN statique du modèle (mesure d'avant le correctif de routage) |
 
 > **gpt-oss : les anciens chiffres (39,8 puis 129,9) sont périmés.** Ils ont été
 > mesurés avec deux bugs depuis corrigés : le biais `attn_output` ignoré et la
@@ -102,7 +111,7 @@ Un garde-fou le détecte maintenant (identifiant ≥ vocabulaire = erreur franch
 | GPU | noyaux PTX + API pilote, tête et projections opt-in (`DRAVE_GPU=1`) |
 | Outils | `--ppl`, `--plan` (placement), `--tokenize`, `--bits N` (simulation de précision) |
 | Mesure | `--ppl-texte F` (identifiants du tokenizer du modèle), `--depuis N` (ne noter qu'à partir du jeton N, contexte ancré — les mêmes jetons deviennent comparables à 512, 1 024, 4 096… de contexte), `--ppl-profil` (perte par tranche de 256 positions), `--logits-bin F` (logits bruts), `--harmony*` (habillage harmony), `--swa-pattern N`, `--sans-fenetre` |
-| Rotation | **YaRN à retardement** : RoPE simple tant que `--ctx` tient dans `rope.scaling.original_context_length` (4 096), **interpolation YaRN seule au-delà** (la température `mscale` est la moitié nuisible : divise la perplexité par 8,9 à 512 jetons). `DRAVE_YARN=1` = YaRN complet des références, `DRAVE_YARN_NON=1` (ou `--sans-yarn`) = jamais, `DRAVE_YARN_MSCALE=0/1` = température seule. La trace `[config] rotation` dit lequel est actif |
+| Rotation | **YaRN à retardement** : RoPE simple tant que `--ctx` ne dépasse pas **4 ×** `rope.scaling.original_context_length` (16 384 pour gpt-oss), **interpolation YaRN seule au-delà** (la température `mscale` est la moitié nuisible : divise la perplexité par 8,9 à 512 jetons). `DRAVE_YARN=1` = YaRN complet des références, `DRAVE_YARN_NON=1` (ou `--sans-yarn`) = jamais, `DRAVE_YARN_MSCALE=0/1` = température seule. La trace `[config] rotation` dit lequel est actif |
 | Budget de contexte | `--plan --ctx N` : KV f32/int8/int4, relecture par jeton, décodage selon les bandes passantes, coût du préremplissage séquentiel, portée du YaRN |
 | Référence externe | `tools/ref_logits` (llama.cpp, mêmes identifiants, sans BOS) + `tools/compare_logits.py` |
 
@@ -154,7 +163,7 @@ comparé à `llama-tokenize` sur 4 424 jetons (0 écart).
 | # | chantier | état | mesure |
 |---|---|---|---|
 | 1 | protocole de perplexité longue | **fait** | `--depuis N` note les mêmes jetons à contexte variable ; `--depuis 256 --ctx 256` redonne exactement la fenêtre 2 historique (21,565) |
-| 2 | seuil de rotation YaRN | **fait, seuil à 4 × la longueur déclarée** | comparaison appariée (mêmes 512 jetons) : contexte 128→1536, RoPE simple 39,52/49,79/49,93/298,56 contre interpolation 42,13/82,02/82,15/578,86 → le simple gagne partout. **Au-delà du seuil** (5 120 jetons, corpus de 17 k maintenant disponible) : simple **9,6986** contre interpolation seule **1 269,1777** → le seuil de 4 096 était **trop bas** ; le moteur ne bascule plus qu'à 1,25 × la longueur déclarée. Au-delà (16 k, 131 k) : non mesuré, une passe à 16 k coûte une heure |
+| 2 | seuil de rotation YaRN | **fait, seuil à 4 × la longueur déclarée** | comparaison appariée (mêmes 512 jetons) : contexte 128→1536, RoPE simple 39,52/49,79/49,93/298,56 contre interpolation 42,13/82,02/82,15/578,86 → le simple gagne partout. **Au-delà du seuil** (5 120 jetons, corpus de 17 k maintenant disponible) : simple **9,6986** contre interpolation seule **1 269,1777** → le seuil de 4 096 était **trop bas**, puis celui de 1,25 × mesuré insuffisant ; le moteur ne bascule qu'à **4 × la longueur déclarée** (16 384 pour gpt-oss) — `docs/contexte-long.md` §5.quater. Au-delà (131 k) : non mesuré |
 | 3 | KV int8 puis int4 | **fait, jusqu'à 8 192** | **échelles par bloc de 32** : int8 +**1,5 %** à 512 (était +7,1 %), **+3,0 % à 8 192** (llama.cpp +0,8 %) ; int4 **+364 % à 8 192** contre +494 % pour llama.cpp — meilleur que la référence, et 1 M tient en int4 (9,7 Go). Prix caché : la passe coûte 864 s (f32) / 1 144 (int8) / 1 461 (int4), la déquantification par élément — c'est ce que le noyau GPU de E4 supprime |
 | 4 | préremplissage par lots | **fait, −20 % et attribué** | tuilage, **attention groupée dans le lot** et **tête en lot** (`logits_lot`) : Qwen ctx 512, **17,1 s → 13,6 s (−20 %)** à perplexité égale (13,1368 → 13,1359) ; gpt-oss ctx 256, ≈ 50 s → **34,4 s** (13,7205 partout). Postes : projections ÷2,6, FFN/wo ÷1,43, attention par lots encore **×1,7** (5,59 contre 3,24 ms/jeton), tête inchangée (5,47 contre 5,63 — noyau lié au calcul, pas à la mémoire). Au passage : pointeur gras sur les sommes par bloc (lot > 90 → blocage muet) corrigé et verrouillé par un test — voir `reports/rapport-prefill-par-lots.md` |
 | 5 | échelles par bloc pour `DenseQ8` | **fait, hypothèse réfutée** | 23,696 contre 23,612 : les échelles par bloc n'apportent rien ; l'avantage du 6 bits est son coût (25 % d'octets en moins à qualité égale) |
@@ -263,7 +272,7 @@ qui reste est classé par rentabilité mesurée.
 | `DRAVE_BANC_KV_UNIT`, `_KUNIT`, `_K0`, `_V1`, `_GRAD`, `_DEBUG` | variantes du **banc KV** (`--banc-kv`) : valeurs unitaires, clés nulles, dégradé | outil de mesure, pas des réglages de production |
 | `DRAVE_DEBUG_FLUX=1` | le nœud moteur imprime ce qu'il reçoit (n, positions, octets) | diagnostic du mode lot |
 | `DRAVE_KV_F16=1` | arrondit clés/valeurs en f16 avant quantification | mesuré : aucun effet (hypothèse réfutée) |
-| `DRAVE_YARN=1` / `DRAVE_YARN_NON=1` / `DRAVE_YARN_MSCALE=0` | force / interdit / règle la rotation | le défaut ne bascule qu'à 1,25 × la longueur déclarée |
+| `DRAVE_YARN=1` / `DRAVE_YARN_NON=1` / `DRAVE_YARN_MSCALE=0` | force / interdit / règle la rotation | le défaut ne bascule qu'à **4 ×** la longueur déclarée (16 384 pour gpt-oss, `docs/contexte-long.md` §5.quater) |
 | `DRAVE_BANC_KV_GPU_SEUL=1` | saute la référence CPU du banc de KV | à 1 M elle coûte 3 à 16 minutes |
 
 Une porte de non-régression se mesure **sans** `DRAVE_GPU` : la variable déporte à
@@ -669,10 +678,12 @@ cd drave-core && cargo build --release && cargo test --release
 #    moteur déporte alors tout seul les projections Q8_0 de plus de 8 Mo — le
 #    chiffre devient 15,1667 (même calcul, ordre de sommation du noyau GPU).
 ./target/release/drave /home/stephane/Data13TB/stephane/modeles/gguf/gpt-oss-120b-MXFP4.gguf \
-    --ppl /tmp/ids_oss_512.txt --ctx 256 --dense --threads 16 --limit 512  # attendu 15,1757
+    --ppl /tmp/ids_oss_512.txt --ctx 256 --dense --threads 16 --limit 512  # attendu 15,6017
+#    (15,1757 avant le correctif de routage du 02/10 ; DRAVE_GPU=1 donne un écart
+#    du même ordre que les 0,06 % mesurés alors — non re-mesuré depuis.)
 
-# 4. puis §6.b : la rotation ne bascule plus qu'au-delà de 1,25 × la longueur
-#    d'origine déclarée (5 120 pour gpt-oss) — mesuré, voir docs/contexte-long.md §5.ter
+# 4. puis §6.b : la rotation ne bascule plus qu'au-delà de 4 × la longueur
+#    d'origine déclarée (16 384 pour gpt-oss) — mesuré, voir docs/contexte-long.md §5.quater
 
 # 5. le calcul réparti (§6bis) : deux nœuds, 12 couches chacun, et le même chiffre
 #    des deux côtés. Le nœud moteur doit être lancé AVANT le pilote.

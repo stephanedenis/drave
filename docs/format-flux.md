@@ -1,15 +1,19 @@
 # Le format de flux (DRVF) — spécification
 
-Ce format sert **trois choses à la fois**, et c'est délibéré :
+Ce format sert **quatre choses à la fois**, et c'est délibéré :
 
 1. la **trace** d'exécution (`--trace-flux`) : ce qui s'est passé, couche par
    couche ;
 2. le **rejeu** (`--flux-forcer`) : on réinjecte les activations enregistrées et
    le calcul repart de là ;
 3. le **transport** (phase 3, `--flux-serveur` / `--ppl-reparti`) : ce qu'un nœud
-   distant reçoit pour continuer le calcul.
+   distant reçoit pour continuer le calcul ;
+4. l'**analyse** : les mêmes octets, relus par `tools/profil_flux.py`,
+   `tools/analyse_flux.py` et `tools/diff_flux.py`, disent quels neurones
+   travaillent — c'est la donnée qui permet d'adapter l'architecture à la tâche,
+   et c'est la finalité du projet (`docs/vision.md` §2).
 
-Un seul format pour les trois, parce que ce sont les mêmes octets : une liste
+Un seul format pour les quatre, parce que ce sont les mêmes octets : une liste
 d'activation est une liste d'activation, qu'elle aille sur le disque ou sur le
 réseau.
 
@@ -116,7 +120,8 @@ Le **mode 4 est le même lot, en listes** : chaque état est encodé comme le mo
 auto-délimité par ses trois tailles, lues avant toute allocation. Mesuré à 256
 jetons, 16 par lot, seuil 0,01 : **1,5 ko par jeton au lieu de 3,5** (÷2,3) pour
 un écart de **3,03e-2** — le mode est avec perte, comme le mode 2, et le critère
-est qu'il ne coûte pas plus de 1,5 fois celui-ci. Un mode inconnu est refusé
+est qu'il ne coûte pas plus de 1,5 fois celui-ci **à 256 jetons** (5,6× à
+20 jetons seulement — `reports/rapport-mode4-lot-listes.md`). Un mode inconnu est refusé
 **avant** toute lecture de corps (il l'était après, donc désynchronisé).
 
 Le **mode 3 est le préremplissage réparti** : `n` états d'un coup, la position

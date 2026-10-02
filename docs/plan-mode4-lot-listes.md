@@ -2,19 +2,24 @@
 
 > **État : ÉCRIT, mesuré et relu** (voir `reports/rapport-mode4-lot-listes.md`) — ce plan
 > reste la référence de conception, et les écarts constatés à la mise en œuvre sont
-> consignés dans ce rapport (version 5, borne des actifs, garde cumulatif). Ce document est la spécification à implémenter ; aucun
-> fichier de code n'a été touché pour l'écrire. Il suppose connus
-> `docs/format-flux.md` (protocole v4, modes 0–3) et `docs/plan-prefill-reparti.md`
+> consignés dans ce rapport (version 5, borne des actifs, garde cumulatif).
+> **L'implémentation est faite** : `--lot > 1 --flux-blocs` produit le mode 4
+> (`drave-core/src/main.rs`, `envoyer_lot_listes`). Le corps de spécification
+> ci-dessous est conservé tel quel — c'est le document de conception, pas un
+> reste-à-faire. Il suppose connus
+> `docs/format-flux.md` (protocole **v5**, modes 0–**4**) et `docs/plan-prefill-reparti.md`
 > (le mode 3, mis en œuvre, et ses leçons). Les numéros de ligne sont ceux de
 > l'arbre au moment de la rédaction (`VERSION_FLUX = 4`, `TAILLE_TETE = 79`,
-> `MODE_LOT = 3`).
+> `MODE_LOT = 3` — la version est passée à 5 depuis).
 
 **En une ligne** : le mode 3 transporte `t` états en f32 dense — 3 589 octets par
 jeton à `t = 16` pour Qwen2.5-0.5B ; le mode 4 transporte **les mêmes `t` états
 encodés en listes à échelle par bloc de 32 canaux**, soit ≈ 1 530 octets par état
 au seuil 0,01, **÷2,3 sur le fil**, au prix exact que le mode 2 paie déjà
 (2,7e-2 d'écart à 256 jetons, 1,3e-2 à 1 024). Le mode 4 ne touche ni au calcul,
-ni au cache KV, ni à la norme finale : il s'arrête au transport.
+ni au cache KV, ni à la norme finale : il s'arrête au transport — le flux
+transporté est aussi le journal que relisent les outils d'analyse
+(`docs/vision.md` §2).
 
 ## 0. Décisions d'architecture (à ne pas rediscuter)
 
@@ -169,10 +174,10 @@ reconstruits ensemble, comme la recette Colab l'impose déjà
 est un contrat de corps ; le champ version est le seul endroit d'où un refus peut
 partir sans avoir rien interprété.
 
-**Durcissement à faire dans le même passage** (indépendant du mode 4, mais c'est
-le même défaut) : dans `recevoir_flux`, refuser un mode inconnu **juste après
-l'en-tête**, avant la lecture du corps, au lieu d'attendre le `autre => Err`
-actuel. Après ce correctif, un mode 7 forgé en v5 est refusé sans qu'un seul
+**Durcissement fait dans le même passage** (indépendant du mode 4, mais c'était
+le même défaut) : dans `recevoir_flux`, un mode inconnu est désormais refusé
+**juste après l'en-tête**, avant la lecture du corps. Un mode 7 forgé en v5 est
+refusé sans qu'un seul
 octet de corps soit lu, et le prochain mode ajouté héritera de la même sûreté.
 
 ## 4. Le garde-fou de taille (R4) : champs et ordre exact
@@ -235,8 +240,8 @@ refuser sans lire l'état fautif.
 2. Sélection du mode : `--lot > 1 && --flux-blocs` → **mode 4** ;
    `--lot > 1` seul → mode 3 dense (inchangé) ; `--flux-liste` (i16) reste
    **non défini** pour un lot : message nommé, et le lot part en mode 3 — pas de
-   repli silencieux. Le message actuel « mode 4 non écrit » (main.rs:1987) doit
-   être remplacé, sinon il ment.
+   repli silencieux. Le message « mode 4 non écrit » a bien été remplacé par le
+   branchement du mode 4 (`envoyer_lot_listes`).
 3. Nouvelle fonction `envoyer_lot_listes(s, debut, fin, pos0, etats, t, mdl)` :
    en-tête de 79 octets (mode 4, `n = t`, échelle 0, `Act::du_modele`), puis
    **un seul** `Vec<u8>` de corps construit ainsi :
@@ -290,7 +295,8 @@ même ordre que l'aller (÷2,3) ; c'est la ligne `octets_recus` qui le prouvera.
 
 ## 6. La vérification
 
-### 6.1 Commande exacte (localhost, Qwen2.5-0.5B, 12 couches par nœud)
+### 6.1 Commande exacte (localhost, Qwen2.5-0.5B, 12 couches par nœud ; la même
+campagne entre **deux machines** reste à faire — `docs/colab-reparti.md`)
 
 ```bash
 # terminal 1 — le nœud moteur : inchangé

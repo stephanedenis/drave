@@ -21,29 +21,38 @@ Une intelligence locale doit être **traçable**, **incrémentale**, **bornée e
 généralistes optimisent une seule de ces dimensions — le débit par dollar de
 calcul — et sacrifient les trois autres.
 
-L'architecture événementielle défendue ici possède trois propriétés structurelles
-que ces piles n'ont pas :
+L'architecture événementielle défendue ici possède quatre propriétés
+structurelles que ces piles n'ont pas :
 
 1. **Traçabilité par construction.** Le calcul *est* une liste d'événements de
    cause à effet explicites : chaque sortie est la somme de contributions
    nommées. Journaliser les listes d'activations (1,2 Mo/token, **+3,0 %**)
    suffit à rejouer intégralement le raisonnement — les poids sont statiques et
-   les événements en sont une fonction déterministe.
+   les événements en sont une fonction déterministe
+   (`reports/rapport-programme-evolutif.md`).
 2. **Le coût suit ce qui tire.** Un poids nul coûte zéro octet ; un expert qui ne
    se déclenche pas coûte zéro octet ; un motif non activé n'est jamais lu. Un
    modèle à cent experts dont deux tirent coûte le prix de deux.
 3. **La récursion échange du calcul contre de la mémoire.** Le moteur mesuré est
    borné par la dispersion (10,4 Go/s utilisés sur 28,7) : **2,8× de marge
    mémoire** pour ~2,8 passes supplémentaires à paramètres constants.
+4. **Le flux se route.** Une liste est une **unité de travail autonome** : elle a
+   ses entrées, sa sortie et sa dépendance (les poids d'une couche), donc elle se
+   place — sur un composant (CPU, GPU, FPGA) ou sur une autre machine — là où son
+   coût est le plus faible. C'est ce que la vision appelle les **grappes de
+   neurones** : le moteur ne répartit pas des matrices, il route des listes
+   (`docs/vision.md` §3-§4), et le découpage en clusters d'experts le fait déjà
+   sans changer un chiffre (Qwen3-30B : **origine 15,2789 · clusters 15,2789**,
+   mêmes 63 jetons, même contexte — `docs/format-clusters.md`).
 
-Ces trois propriétés ne sont pas des opinions : elles sont mesurées, et elles
+Ces quatre propriétés ne sont pas des opinions : elles sont mesurées, et elles
 définissent ce que le programme peut tenter que d'autres ne peuvent pas.
 
 ## 2. Point de départ mesuré
 
 | Acquisition | Valeur |
 |---|---|
-| Inférence 0,5 B quantifié, CPU seul, sans GPU ni BLAS | **15,8 tok/s**, perplexité 24,90 (référence float32 : 25,00) |
+| Inférence 0,5 B quantifié, CPU seul, sans GPU ni BLAS | **15,8 tok/s**, perplexité 24,90 (référence float32 : 25,00) — et **5,3 G événements/s** : le coût suit l'activité (`reports/rapport-inference.md`) |
 | Exactitude | 16/16 tokens identiques à la référence numpy, 14/14 au banc des décodeurs |
 | Moteur d'événements | 5,3 G événements/s, 2 547 lignes de Rust sans dépendance |
 | Carte FPGA | PE vérifié sur 309 020 événements réels, synthétisé (176 ALMs, 0 DSP), lecteur DDR3 vérifié de bout en bout |

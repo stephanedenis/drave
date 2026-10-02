@@ -19,13 +19,21 @@ publiés, sans les requantifier.
 
 | modèle | pourquoi lui | plus petit GGUF | contexte | état |
 |---|---|---|---|---|
-| **DeepSeek-V4.1-Flash** | le plus lourd des ouverts, MoE, agentique | **365,7 Go** (Q2) | — | **en cours** (26 % à 09h36) |
+
+> **Où en est ce plan (02/10)** : les 24 fichiers sont arrivés ; le lecteur
+> multi-fichiers, les métadonnées et le tokenizer sont **faits** ;
+> `deepseek2` (Kimi-K2.7) et `glm-dsa` (GLM-5.3) **se calculent** ; restent
+> `deepseek4` et `deepseek41`, dont le plan est
+> [`docs/plan-deepseek41-complet.md`](plan-deepseek41-complet.md) — écrit « les
+> flux d'abord ». Les tableaux ci-dessous sont conservés tels quels, avec leur
+> état d'origine, pour qu'on puisse comparer.
+| **DeepSeek-V4.1-Flash** | le plus lourd des ouverts, MoE, agentique | **365,7 Go** (Q2) | — | **✅ arrivé** (12h40) |
 | **DeepSeek-V4** | la version complète | 3 761 Go | 1 M | hors budget disque |
-| **Kimi-K2.7-Code** | le meilleur agent de code ouvert | **303,9 Go** (UD-IQ1_M) | 262 k | en file |
-| **GLM-5.3** | 1 M de contexte, MoE | **216,7 Go** (UD-IQ1_S) | 1 M | en file |
-| **GLM-5.3-Flash** | le même en plus léger | **93,1 Go** (UD-IQ1_S) | 1 M | en file |
-| **MiniMax-H3** | famille différente (vision+langage) | 22,8 Go (2 × Q4_K) | — | en file |
-| **Qwen3-235B-A22B** | la référence MoE de 2025 | **85,7 Go** (Q2_K) | 262 k | en file |
+| **Kimi-K2.7-Code** | le meilleur agent de code ouvert | **303,9 Go** (UD-IQ1_M) | 262 k | ✅ arrivé |
+| **GLM-5.3** | 1 M de contexte, MoE | **216,7 Go** (UD-IQ1_S) | 1 M | ✅ arrivé |
+| **GLM-5.3-Flash** | le même en plus léger | **93,1 Go** (UD-IQ1_S) | 1 M | ✅ arrivé |
+| **MiniMax-H3** | famille différente (vision+langage) | 22,8 Go au total (11,42 + 11,38 Go, Q4_K) | — | ✅ arrivé |
+| **Qwen3-235B-A22B** | la référence MoE de 2025 | **85,7 Go** (Q2_K) | 262 k | ✅ arrivé |
 | **DeepSeek-V4-Flash** | déjà téléchargé (86,9 Go) | — | 1 M | ✅ sur le disque mécanique |
 | gpt-oss-120b, Qwen3-30B-A3B, Muse-Glimmer-30B | déjà là, servent de témoins | — | 128 k–262 k | ✅ |
 
@@ -73,18 +81,18 @@ python3 tools/telecharger_modeles.py --seulement GLM-5.3-UD-IQ1_S
    * **disposition contiguë par cluster** : un nœud ne lit que sa tranche, en
      séquentiel (NVMe→RAM→VRAM), au lieu de sauter dans tout le fichier.
 4. **Le banc de bout en bout** : perplexité sur 512 jetons, comparable à
-   llama.cpp, ou l'écart expliqué — c'est la définition de « capable de rouler du
-   best of breed ».
+   llama.cpp, ou l'écart expliqué — la conformité à llama.cpp est une **porte de
+   correction**, pas le but : le but est de **conduire des flux** (`docs/vision.md`).
 
 ## Les architectures à implémenter (l'état des lieux)
 
 | modèle | architecture GGUF | ce que le moteur a | ce qui manque |
 |---|---|---|---|
-| DeepSeek-V4 / V4-Flash / V4.1-Flash | `deepseek4` (43 couches, 256 experts top-6, 1 M ctx) | lecture des métadonnées et du tokenizer ✅ (129 280 jetons, aller-retour identique) ; MoE 128/top-8 (gpt-oss, Qwen3) ; attention MLA validée sur modèle synthétique (5,2e-7) | le forward `deepseek4`, et le **lecteur multi-shards** |
-| Kimi-K2.7 | `kimi_k25` | — | tout le forward |
-| GLM-5.3 | à relever | — | tout le forward |
+| DeepSeek-V4 / V4-Flash | `deepseek4` (43 couches, 256 experts top-6, 1 M ctx) ; V4.1-Flash : `deepseek41` (40 couches, 384 experts top-6) | lecture des métadonnées et du tokenizer ✅ ; **lecteur multi-shards** ✅ ; MoE 128/top-8 ; attention MLA à rang faible **validée contre llama.cpp** (0,999024 sur GLM-5.3) | le forward `deepseek4`/`deepseek41` : hyper-connexions, sortie à rang faible, dé-rotation, attentions compressées CSA/HCA (**les puits par tête sont implémentés, mais pas branchés sur le chemin MLA** qu'utilise V4) |
+| Kimi-K2.7 | `deepseek2` | MLA à rang faible ✅ (1 026 G poids, ~73 s/jeton ; non validé) | la validation au-delà de la position 2 |
+| GLM-5.3 | `glm-dsa` | MLA à rang faible ✅ (216 Go ; validé à la position 0, corrélation 0,999024) | la validation au-delà de la position 2 |
 | Qwen3-235B-A22B | `qwen3moe` | MoE Qwen3 ✅ (128/top-8) | le passage de 128 à 256 experts, le contexte 262 k |
-| MiniMax-H3 | vision+langage | vision Qwen2.5-VL ✅ | à relever |
+| MiniMax-H3 | vision+langage | vision Qwen2.5-VL ✅ | à relever (ce n'est pas un modèle de texte) |
 
 Le premier chantier est donc **commun à tous** : lire un GGUF en plusieurs
 fichiers. C'est de la plomberie, pas de la recherche, et ça débloque tout le reste
@@ -96,7 +104,7 @@ fichiers. C'est de la plomberie, pas de la recherche, et ça débloque tout le r
 |---|---|---|
 | 1 | **lecteur multi-shards** | les 3 shards de DeepSeek-V4-Flash ouverts ensemble, un tenseur du shard 2 résolu avec les métadonnées du shard 1 |
 | 2 | **tokenizer + gabarit** de DeepSeek-V4.1 | aller-retour identique sur Wikitext-2, un tour de conversation bien formé (jetons `｜User｜`/`｜Assistant｜`/`｜DSML｜`) |
-| 3 | **forward deepseek4** (attention latente + MoE 256/top-6) | perplexité sur 512 jetons comparable à llama.cpp, ou l'écart expliqué |
+| 3 | **forward deepseek4** (attention latente + MoE 256/top-6) | perplexité comparable à llama.cpp **et** flux tracé puis **rejoué à l'identique** (portes Drave) ; sinon l'écart est expliqué |
 | 4 | **trace + découpage** sur les trois gros MoE | la question « fréquence ou co-activation ? » tranchée à 256 experts et plus |
 | 5 | **format** : manifeste + index + disposition contiguë | ✅ **écrit et mesuré sur Qwen3-30B-A3B** : `commun.gguf` + 8 `cluster-XX.gguf`, un nœud charge **3,20 Go au lieu de 18,56** et 625 ms au lieu de 3,9 s, 1 587 tenseurs vérifiés par empreinte — [`docs/format-clusters.md`](format-clusters.md) |
 | 6 | **lecteur multi-fichiers** (le même que pour les shards) | le moteur ouvre `commun.gguf` + un cluster et tourne |
@@ -133,7 +141,9 @@ avait fait annoncer 8,56 Go pour 86,9.
 Trois observations :
 
 * **Les architectures lourdes sont lues** : `deepseek41`, `deepseek2`, `deepseek4`,
-  `glm-dsa`. Aucune n'a de `forward` dans le moteur — c'est le chantier suivant.
+  `glm-dsa`. `deepseek2` (Kimi-K2.7) et `glm-dsa` (GLM-5.3) **se calculent** depuis
+  le 02/10 ; `deepseek4` et `deepseek41` n'ont pas encore de `forward` — c'est le
+  chantier suivant ([`docs/plan-deepseek41-complet.md`](plan-deepseek41-complet.md)).
 * **MiniMax-H3 n'est pas un modèle de texte** (`audio_patch_proj`, `adaln_tbl`) :
   son architecture est inconnue, et c'est normal.
 * **Le nombre de fichiers n'est pas un obstacle** : Kimi en a huit, GLM six, et le
