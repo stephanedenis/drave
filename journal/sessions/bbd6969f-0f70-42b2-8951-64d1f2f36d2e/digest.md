@@ -66234,3 +66234,216 @@ V4-Flash globaux : ['output.weight', 'output_hc_base.weight', 'output_hc_fn.weig
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\n# Le plan doit être référencé depuis la roadmap et REPRISE, sinon il se perd.\np='REPRISE.md'; s=open(p).read()\ns += \"\"\"\n\n---\n\n## Plan pour exécuter DeepSeek-V4.1 (02/10)\n\n[`docs/plan-deepseek41-complet.md … [2839 caractères tronqués]`
+
+  ```
+386c857 Plan pour exécuter DeepSeek-V4.1 : neuf phases, chacune avec sa porte
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"V4-Flash le banc d'essai\\|banc d'essai\" REPRISE.md | head -3; echo \"--- portes ---\"; timeout 900 bash tools/portes.sh rapide 2>&1 | tail -4; ls -la --time-style=+%H:%M docs/plan-deepseek41-complet.md", "description": "F … [41 caractères tronqués]`
+
+  ```
+1182:   NLL 11,737 sur un jeton froid) — c'est donc **V4-Flash le banc d'essai**, avec
+--- portes ---
+  V4-Flash : racine de softplus              racine de softplus  ✅
+  Qwen3-235B : softmax                       softmax  ✅
+
+toutes les portes sont vertes
+-rw-------. 1 stephane stephane 15428 09:09 docs/plan-deepseek41-complet.md
+  ```
+
+### 🤖 Assistant
+
+Le plan est écrit et commité : **`docs/plan-deepseek41-complet.md`** (280 lignes, 9 phases, commit `386c857`).
+
+## Trois vérifications ont changé l'ordre du plan
+
+Avant d'écrire une seule ligne, j'ai testé ce que le plan suppose. Trois résultats：
+
+**1. llama.cpp ne connaît pas `deepseek41`.** `ref_logits` sur V4.1 rend `unknown model architecture: 'deepseek41'`. **Il n'existe donc aucune référence externe pour V4.1** — ni chez nous, ni chez llama.cpp. Un plan « j'implémente, puis je compare » était donc mort-né sur ce modèle.
+
+**2. Mais llama.cpp exécute V4-Flash.** Mesuré à l'instant : `deepseek4` reconnu, **1 325 tenseurs chargés**, NLL 11,737 sur un jeton froid. Et V4-Flash porte **les mêmes mécanismes** que V4.1 (hyper-connexions, MLA latente, compresseur `attn_compressor_*`, indexeur `indexer.*`, routage par table) en **86,9 Go, qui tiennent en RAM**. C'est lui, le banc d'essai.
+
+**3. V4.1-Flash-Q2 n'a pas les tenseurs de mélange de tête.** Ses seuls tenseurs globaux sont `output`, `output_norm`, `token_embd` ; V4-Flash a en plus `output_hc_fn` `[4, 20480]`, `output_hc_base` `[4]`, `output_hc_scale` `[1]`. Or V4.1 **déclare** `hc_mult = 4` et `hc_sinkhorn_iters = 20`. Un fichier qui déclare le mécanisme sans ses tenseurs de tête est incomplet ou mal converti : **c'est une question de provenance, pas de code**, et c'est la première action de la phase P7.
+
+J'ai aussi corrigé un chiffre que j'avais écrit de travers : **38 des 40 couches** de V4.1 utilisent une attention compressée (18 CSA + 20 HCA), et **2 seulement** sont brutes. Toute « exécution partielle » comme validation est donc exclue.
+
+## La structure du plan
+
+Chaque phase porte **sa porte** (commande + résultat attendu), **son interdit** et **son budget** :
+
+| phase | contenu | porte |
+|---|---|---|
+| P0 | harnais + coût d'un jeton, **sur V4-Flash** | les deux côtés produisent les mêmes tenseurs nommés |
+| P1 | hyper-connexions (4 copies, Sinkhorn 20 itérations, mélange de tête) | `hc_attn_pre-0` concorde |
+| P2 | dé-rotation, puits, sortie groupée | `attn_out-0` concorde |
+| P3 | couches **brutes** de bout en bout | `l_out-0` **et** `l_out-1`, positions 0 à 3 |
+| P4 | compresseur + HCA (20 couches) | première couche compressée juste |
+| P5 | indexeur + CSA à candidats (18 couches) | logits corrélés **≥ 0,99**, top-1 identique |
+| P6 | passe complète V4-Flash | perplexité contre llama.cpp, portes vertes |
+| P7 | adaptation V4.1 + **provenance** | liste des manques vidée, ou fichier déclaré incomplet |
+| P8 | engram (V4.1 seul, **sans référence** → décision, pas implémentation) | référence Python indépendante, sinon on ne fait pas |
+| P9 | noyaux IQ natifs | seulement si P6 le justifie par un chiffre |
+
+Budget : **4 à 5 journées**, ~20 passes de validation (sur V4-Flash, donc en minutes).
+
+## La philosophie, rendue opérationnelle
+
+Les huit règles sont dans le document, mais la plus utile est celle-ci : **le contrôle d'architecture est la liste vivante du chantier**. `manques_architecture` perd une ligne par phase franchie — `--config` le montre en 74 ms, sans charger le modèle. « Liste vide » **est** la définition de « fini ». Et aucune phase ne se termine sans comparaison externe étage par étage, parce que le 02/10 GLM-5.3 tournait avec une corrélation de −0,04.
+
+Deux choses à trancher de votre côté avant que je commence :
+
+1. **Le GGUF V4.1 est-il complet ?** Si `output_hc_*` a été perdu par le convertisseur, tout travail sur ce fichier est à refaire après retéléchargement — autant vérifier d'abord (je peux comparer la liste de tenseurs à celle du dépôt HF d'origine).
+2. **Par quoi je commence ?** P0+P1 (harnais et hyper-connexions sur V4-Flash) est le chemin qui donne le premier résultat vérifiable, en une journée environ.
+
+
+## Tour 73
+
+### 👤 Utilisateur
+
+quand je parle de philosophie, je parle de ce qui distingue Drave de llama.cpp et autre moteurs : les listes d'activation, qu'elles soient trinaires (double liste) ou en connexions pondérés, le coeur de Drave est de conduire ces flux de données sur des grappes de neuronnes qui peuvent être sur des composants ou machines différentes d'un système. Ces flux de logs sont aussi utiles pour déboguer et analyser les comportements des modèles dans différents contextes afin d'adapter l'architecture à la tâche courante.
+
+### 🤖 Assistant
+
+⏵ Relire le vocabulaire des flux dans le dépôt pour écrire le plan dans les termes de Drave
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && head -60 docs/format-flux.md", "description": "Read the flow format documentation"}`
+
+  ```
+# Le format de flux (DRVF) — spécification
+
+Ce format sert **trois choses à la fois**, et c'est délibéré :
+
+1. la **trace** d'exécution (`--trace-flux`) : ce qui s'est passé, couche par
+   couche ;
+2. le **rejeu** (`--flux-forcer`) : on réinjecte les activations enregistrées et
+   le calcul repart de là ;
+3. le **transport** (phase 3, `--flux-serveur` / `--ppl-reparti`) : ce qu'un nœud
+   distant reçoit pour continuer le calcul.
+
+Un seul format pour les trois, parce que ce sont les mêmes octets : une liste
+d'activation est une liste d'activation, qu'elle aille sur le disque ou sur le
+réseau.
+
+## Fichier (trace, `.bin`)
+
+```
+en-tête   "DRVF"                    4 octets
+          version      u16          = 2 (défaut) ou 3 (`DRAVE_TRACE_BLOCS=1`)
+          n_couches    u32
+          cachés       u32
+liste     couche       u16          < 1000 : entrée d'attention
+                                    >= 1000 : entrée de FFN (couche - 1000)
+          jeton        u32          COMPTEUR GLOBAL de jeton, pas la position
+          n_actifs     u32
+          échelle      f32
+          puis n_actifs × ( indice u32 · valeur i16 )           [version 1]
+          puis n_actifs × ( écart u8 · vale
+… [1573 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '60,140p' docs/format-flux.md | grep -nE \"^#|double|trinaire|connexion|poids|liste\" | head -20; echo \"=== vocabulaire dans le code ===\"; grep -rn \"double liste\\|trinaire\\|deux listes\\|connexions pondérées\" --include=* … [90 caractères tronqués]`
+
+  ```
+2:| erreur par valeur | nulle | RMS **0,085 %** du max de la liste (max 0,394 %) |
+5:v3 n'a plus) : il le dit au lieu de compter des listes manquantes en silence.
+8:nommant. Le rejeu annonce désormais ce qu'il a servi — `24 576 listes servies,
+12:## Le point qui a coûté un bug
+25:## Transport (phase 3, TCP) — protocole v5
+31:          mode         u8           0 = f32 dense · 1 = liste quantifiée
+32:                                    2 = listes à échelle par bloc · 3 = LOT dense
+33:                                    4 = LOT en listes (mode 2 répété par état)
+55:Le **mode 4 est le même lot, en listes** : chaque état est encodé comme le mode 2
+70:voir `reports/rapport-mode4-lot-listes.md`).
+73:deux octets de valeur, une échelle par liste. Transporter la liste plutôt que le
+74:vecteur dense, c'est le sujet même de la phase 3 — « des listes, pas des
+76:un pair qui parle en listes reçoit des listes, il n'y a pas deux réglages à
+=== vocabulaire dans le code ===
+./reports/rapport-encodage.md:3:Idée testée : remplacer `(position, valeur)` par **deux listes triées de
+./reports/rapport-valeur-unaire.md:53:2. le **signe**, qui n'est gratuit que dans l'encodage à deux listes signées.
+./repor
+… [1449 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+Compris — et c'est une correction importante : mon plan était écrit comme « faire passer le forward de V4.1 », pas comme « conduire les flux de V4.1 en listes sur des grappes ». Je le réécris autour de ça.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"trace-experts\\|trace-blocs\\|flux-liste\\|flux-blocs\\|flux-serveur\\|ppl-reparti\" docs/format-flux.md docs/colab-reparti.md 2>/dev/null | head -8; echo \"=== ce que produit un run V4 aujourd'hui ===\"; grep -n \"0 événem … [105 caractères tronqués]`
+
+  ```
+docs/format-flux.md:9:3. le **transport** (phase 3, `--flux-serveur` / `--ppl-reparti`) : ce qu'un nœud
+docs/colab-reparti.md:26:| au-delà de localhost | ✅ testé sur l'IP du réseau local (`--flux-serveur 0.0.0.0:PORT`) |
+docs/colab-reparti.md:74:   --ppl-reparti <hôte-public>:PORT  ─────────▶ --flux-serveur 0.0.0.0:PORT
+docs/colab-reparti.md:79:`ssh -R`, ou un Tailscale des deux côtés (`--flux-serveur 100.x.y.z:5599`).
+docs/colab-reparti.md:86:    --flux-serveur 0.0.0.0:5599 --ctx 256
+docs/colab-reparti.md:96:    --ppl-reparti <hôte-public>:5599 --couches-locales 12 --limit 200 --ctx 256
+docs/colab-reparti.md:112:utiliser `--flux-blocs --act-thresh 0.01` (÷2,3 sur le fil pour 1,3 % à 1 024 jetons).
+=== ce que produit un run V4 aujourd'hui ===
+17:=== perplexité 5966.3384 sur 3 tokens (0 événements, 589.3 s) ===
+  ```
+
+- **write** `{"content": "# Plan — exécuter DeepSeek-V4.1 **dans** Drave : les flux d'abord\n\n**État au 02/10 10h00.** Version 2 de ce plan. La première version traitait le\nsujet comme « faire passer le forward de V4.1 » — c'est-à-dire comme llama.cpp.\nC'était une erreur de cadre : la raison d'être de Drave n … [17237 caractères tronqués]`
+
+  ```
+Error: cannot write "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/plan-deepseek41-complet.md": file changed since it was read — re-read the file, then retry
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log --oneline -1 -- docs/plan-deepseek41-complet.md | cat; git diff --stat HEAD -- docs/plan-deepseek41-complet.md | cat; ls -la --time-style=+%H:%M:%S docs/plan-deepseek41-complet.md", "description": "Check the plan file state"}`
+
+  ```
+386c857 Plan pour exécuter DeepSeek-V4.1 : neuf phases, chacune avec sa porte
+-rw-------. 1 stephane stephane 15428 09:09:46 docs/plan-deepseek41-complet.md
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/plan-deepseek41-complet.md", "limit": 15}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/plan-deepseek41-complet.md</path>
+<type>file</type>
+<content>
+1: # Plan — compléter Drave pour exécuter DeepSeek-V4.1 (et V4-Flash), sans trahir la méthode
+2: 
+3: **État au 02/10 09h30.** Ce document est un plan : il dit ce qu'il reste à faire,
+4: dans quel ordre, **comment on saura que c'est fait** — et **sur quel modèle on le
+5: prouve**. Il a été écrit après trois vérifications qui changent l'ordre des
+6: choses (§1.2, §3.2, §4) et non d'après les intentions supposées.
+7: 
+8: ---
+9: 
+10: ## 1. Le point de départ, mesuré
+11: 
+12: ### 1.1 Ce qui marche déjà sur `DeepSeek-V4.1-Flash-Q2.gguf` (365,71 Go, NVMe)
+13: 
+14: | capacité | mesure |
+15: |---|---|
+
+(Showing lines 1-15 of 280. Use offset=16 to continue.)
+</content>
+  ```
+
+- **write** `{"content": "# Plan — exécuter DeepSeek-V4.1 **dans** Drave : les flux d'abord\n\n**État au 02/10 10h00.** Version 2 de ce plan. La première version traitait le\nsujet comme « faire passer le forward de V4.1 » — c'est-à-dire comme llama.cpp.\nC'était une erreur de cadre : la raison d'être de Drave n … [17315 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/plan-deepseek41-complet.md</path>
+<type>file</type>
+<content>
+Updated file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && wc -l -w docs/plan-deepseek41-complet.md; grep -c \"Porte Drave\\|porte Drave\" docs/plan-deepseek41-complet.md; grep -n \"^# \\|^## \" docs/plan-deepseek41-complet.md", "description": "Check the rewritten plan"}`
+
+  ```
+303  2785 docs/plan-deepseek41-complet.md
+8
+1:# Plan — exécuter DeepSeek-V4.1 **dans** Drave : les flux d'abord
+13:## 1. Ce que Drave fait, et que ce plan doit préserver
+44:## 2. V4.1 est déjà fait de flux — le tableau qui commande tout le plan
+62:## 3. Le point de départ, mesuré
+96:## 4. Les phases
+245:## 5. Budget et campagne
+261:## 6. Ce qu'on ne fera pas, et les conditions d'arrêt
+278:## 7. Pourquoi cet ordre
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='REPRISE.md'; s=open(p).read()\ns = s.replace(\"\"\"## Plan pour exécuter DeepSeek-V4.1 (02/10)\n\n[`docs/plan-deepseek41-complet.md`](docs/plan-deepseek41-complet.md) — neuf phases,\"\"\",\n\"\"\"## Plan pour exé … [3524 caractères tronqués]`

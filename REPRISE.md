@@ -1186,5 +1186,19 @@ Trois faits vérifiés le 02/10 le structurent :
    `hc_mult = 4` : fichier incomplet ou converti à tort — question de provenance à
    trancher avant d'écrire du code (phase P7).
 
+**Le plan est écrit dans le vocabulaire de Drave, pas dans celui de llama.cpp** :
+V4.1 est fait de flux qui sont déjà des listes — les 6 experts sur 384
+(`--trace-experts`), la table `tid2eid` des 3 premières couches, la sélection de
+blocs du compresseur (`attn_compressor_gate`), les **2 048 candidats** de
+l'indexeur CSA, les **24 connexions pondérées** du mélange hyper-connexions, et
+les adresses d'engram. Trois de ces flux n'existent dans aucun moteur connu, et
+les tracer est notre apport. Chaque phase a donc **deux portes** : la correction
+(comparaison à llama.cpp sur V4-Flash) **et** Drave (événements par jeton, trace
+rejouée à l'identique, découpage en grappes, flux lisible par un outil).
+
+Premier écart à combler, et il passe avant la conformité des logits : une passe
+de V4.1 afficherait aujourd'hui **« 0 événements »**, parce que le chemin MLA et
+le chemin experts-IQ travaillent en f32 dense.
+
 Le contrôle d'architecture est la liste vivante du chantier : il perd une ligne
 par phase franchie (`--config` le montre en 74 ms, sans charger le modèle).

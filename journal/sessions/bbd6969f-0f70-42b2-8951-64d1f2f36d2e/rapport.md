@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 90.4 h |
-| Tours | 72 |
-| Messages | 4174 |
-| Appels d'outils | 3970 |
+| Durée | 90.5 h |
+| Tours | 73 |
+| Messages | 4186 |
+| Appels d'outils | 3980 |
 | Fichiers touchés | 82 |
-| Commandes | 3492 |
+| Commandes | 3499 |
 | Sous-agents | 23 |
-| Commits | 319 |
+| Commits | 320 |
 | Compactages de contexte | 5 |
 
 ## Objectifs déclarés
@@ -185,6 +185,8 @@
 **Tour 71** — fais un test d'execution locale de deepseek 4.1 avec toutes les optimisation . Cette instance doit lire tout /home/stephane/Data13TB/stephane/GitHub/FPGA-Stratix-V/ et faire un document de résumé en 8 pages.
 
 **Tour 72** — fais un plan pour compléter drave afin qu'il exécute parfaitement toutes les fonctionnalités requises pour deepseek 4.1 tout en maintenant notre philosophie.
+
+**Tour 73** — quand je parle de philosophie, je parle de ce qui distingue Drave de llama.cpp et autre moteurs : les listes d'activation, qu'elles soient trinaires (double liste) ou en connexions pondérés, le coeur de Drave est de conduire ces flux de données sur des grappes de neuronnes qui peuvent être sur des composants ou machines différentes d'un système. Ces flux de logs sont aussi utiles pour déboguer et  … [115 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -3677,7 +3679,7 @@ Les cinq chiffres mesurés (rapports Quartus non versionnés) :
 
 ### Tour 72 — fais un plan pour compléter drave afin qu'il exécute parfaitement toutes les fonctionnalités requises pour deepseek 4.1  … [37 caractères tronqués]
 
-*15 appels d'outils.* Actions notables :
+*16 appels d'outils.* Actions notables :
 
 - bash — Inventory the V4.1 layer types and tensors
 - bash — Collect the exact shapes of the V4.1 mechanism tensors
@@ -3693,11 +3695,57 @@ Les cinq chiffres mesurés (rapports Quartus non versionnés) :
 - job_output
 - write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/plan-deepseek41-complet.md`
 - bash — Verify the plan's figures once more
-- … et 1 autres
+- … et 2 autres
 
 **Synthèse produite :**
 
-⏵ Avant le plan : inventaire exact des tenseurs V4.1 par type de couche
+Le plan est écrit et commité : **`docs/plan-deepseek41-complet.md`** (280 lignes, 9 phases, commit `386c857`).
+
+\## Trois vérifications ont changé l'ordre du plan
+
+Avant d'écrire une seule ligne, j'ai testé ce que le plan suppose. Trois résultats：
+
+**1. llama.cpp ne connaît pas `deepseek41`.** `ref_logits` sur V4.1 rend `unknown model architecture: 'deepseek41'`. **Il n'existe donc aucune référence externe pour V4.1** — ni chez nous, ni chez llama.cpp. Un plan « j'implémente, puis je compare » était donc mort-né sur ce modèle.
+
+**2. Mais llama.cpp exécute V4-Flash.** Mesuré à l'instant : `deepseek4` reconnu, **1 325 tenseurs chargés**, NLL 11,737 sur un jeton froid. Et V4-Flash porte **les mêmes mécanismes** que V4.1 (hyper-connexions, MLA latente, compresseur `attn_compressor_*`, indexeur `indexer.*`, routage par table) en **86,9 Go, qui tiennent en RAM**. C'est lui, le banc d'essai.
+
+**3. V4.1-Flash-Q2 n'a pas les tenseurs de mélange de tête.** Ses seuls tenseurs globaux sont `output`, `output_norm`, `token_embd` ; V4-Flash a en plus `output_hc_fn` `[4, 20480]`, `output_hc_base` `[4]`, `output_hc_scale` `[1]`. Or V4.1 **déclare** `hc_mult = 4` et `hc_sinkhorn_iters = 20`. Un fichier qui déclare le mécanisme sans ses tenseurs de tête est incomplet ou mal converti : **c'est une question de provenance, pas de code**, et c'est la première action de la phase P7.
+
+J'ai aussi corrigé un chiffre que j'avais écrit de travers : **38 des 40 couches** de V4.1 utilisent une attention compressée (18 CSA + 20 HCA), et **2 seulement** sont brutes. Toute « exécution partielle » comme validation est donc exclue.
+
+\## La structure du plan
+
+Chaque phase porte **sa porte** (commande + résultat attendu), **son interdit** et **son budget** :
+
+| phase | contenu | porte |
+|---|---|---|
+| P0 | harnais + coût d'un jeton, **sur V4-Flash** | les deux côtés produisent les mêmes tenseurs nommés |
+| P1 | hyper-connexions (4 copies, Sinkhorn 20 itérations, mélange de tête) | `hc_attn_pre-0` concorde |
+| P2 | dé-rotation, puits, sortie groupée | `attn_out-0` concorde |
+| P3 | couches **brutes** de bout en bout | `l_out-0` **et** `l_out-1`, positions 0 à 3 |
+| P4 | compresseur + HCA (20 couches) | première couche compressée juste |
+| P5 | indexeur + CSA à candidats (18 couches) | logits corrélés **≥ 0,99**, top-1 identique |
+| P6 | passe complète V4-Flash | perplexité contre llama.cpp, portes vertes |
+| P7 | adaptation V4.1 + **provenance** | liste des manques vidée, ou fichier déclaré inco
+… [1255 caractères tronqués]
+
+### Tour 73 — quand je parle de philosophie, je parle de ce qui distingue Drave de llama.cpp et autre moteurs : les listes d'activatio … [395 caractères tronqués]
+
+*9 appels d'outils.* Actions notables :
+
+- bash — Read the flow format documentation
+- bash — Find the trinary double-list vocabulary
+- bash — Check the flow flags and the current event count
+- write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/plan-deepseek41-complet.md`
+- bash — Check the plan file state
+- read
+- write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/plan-deepseek41-complet.md`
+- bash — Check the rewritten plan
+- bash — Commit the re-anchored plan
+
+**Synthèse produite :**
+
+Compris — et c'est une correction importante : mon plan était écrit comme « faire passer le forward de V4.1 », pas comme « conduire les flux de V4.1 en listes sur des grappes ». Je le réécris autour de ça.
 
 ## 3. Travail accompli
 
@@ -3786,7 +3834,7 @@ Les cinq chiffres mesurés (rapports Quartus non versionnés) :
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/extraire_tables_ggml.sh` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-routage-experts.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-mla-experts.md` | 1 | 0 |
-| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/plan-deepseek41-complet.md` | 2 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/plan-deepseek41-complet.md` | 4 | 0 |
 
 ### Sous-agents lancés
 
@@ -3856,7 +3904,7 @@ Les cinq chiffres mesurés (rapports Quartus non versionnés) :
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 3452 autres
+- … et 3459 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4323,4 +4371,5 @@ Les cinq chiffres mesurés (rapports Quartus non versionnés) :
 - REPRISE : l'écart MLA naît après la couche 0 (mesuré aux positions 0-3)" 2>/dev/null; git log --oneline -1
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-execution-v41.md <<'EOF' # Rapport — test d'exécution locale de DeepSeek-V4.1-Flash,
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' # Le plan doit être référencé depuis la roadmap et REPRISE, sinon il se perd. p='REPRISE.
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p='REPRISE.md'; s=open(p).read() s = s.replace("""## Plan pour exécuter DeepSeek-V4.1 (02
 
