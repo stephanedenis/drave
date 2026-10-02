@@ -54716,3 +54716,120 @@ IQ1_M : ecart max 0.00e+00 · 256/256 exactes · CONCORDE
 ⏵ **IQ1_M : 0,00e+00 aussi.** Les trois formats sont débloqués. Je commite et j'inventorie ce qui manque encore.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && (cd drave-core && cargo test --release 2>&1 | grep -E \"^test result\"); git add -A && git commit -q -m \"IQ1_M : 61 Go de DeepSeek-V4-Flash debloques (ecart 0,00e+00 avec ggml)\n\nTroisieme format a grille. La grille IQ1_S (2048 cod … [1251 caractères tronqués]`
+
+  ```
+test result: ok. 37 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.15s
+0358eec IQ1_M : 61 Go de DeepSeek-V4-Flash debloques (ecart 0,00e+00 avec ggml)
+=== types utilises par les modeles lourds ===
+DeepSeek-V4.1-Flash-Q2       F16F32I8IQ2_XXSQ2_KQ8_0
+DeepSeek-V4-Flash-UD-IQ1_M   BF16F32I32IQ1_MIQ2_XXSIQ3_XXSMXFP4Q4_KQ5_KQ6_KQ8_0
+GLM-5.3-Flash-UD-IQ1_S       F32IQ1_SIQ2_XXSIQ3_XXSIQ4_XSQ2_KQ3_KQ4_KQ5_KQ6_KQ8_0
+GLM-5.3-UD-IQ1_S             F32IQ1_SIQ2_XXSIQ3_XXSIQ4_XSQ2_KQ3_KQ4_KQ5_KQ6_KQ8_0
+Kimi-K2.7-Code-UD-IQ1_M      F32IQ1_MIQ2_XXSIQ3_XXSQ4_0Q4_KQ5_KQ6_KQ8_0
+MiniMax-H3                   BF16F16F32Q4_K
+Qwen3-235B-A22B-Q2_K         F32Q2_KQ3_KQ4_KQ6_K
+  ```
+
+### 🤖 Assistant
+
+⏵ Il manque IQ3_XXS, IQ1_S, IQ4_XS, Q3_K, Q5_K, BF16. Je commence par les plus simples.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np = 'drave-core/src/gguf.rs'\ns = open(p).read()\n# BF16 : le f32 tronqué à ses 16 bits de poids fort.\ns = s.replace('''pub const GGML_Q6_K: u32 = 14;''',\n'''pub const GGML_Q6_K: u32 = 14;\n\n/// BF16 : un f32 don … [1378 caractères tronqués]`
+
+  ```
+2 sites F32 trouves
+error[E0425]: cannot find value `n` in this scope
+   --> src/gguf.rs:937:29
+    |
+937 |                 for i in 0..n {
+    |                             ^
+    |
+--
+error[E0425]: cannot find value `n` in this scope
+   --> src/gguf.rs:943:29
+    |
+BUILD 101
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np = 'drave-core/src/gguf.rs'\ns = open(p).read()\n# La première occurrence est dans row_f32 (n_cols), la seconde dans dequant (n).\ni = s.find('''            GGML_BF16 => {\n                for i in 0..n {''')\nj =  … [888 caractères tronqués]`
+
+  ```
+error[E0425]: cannot find value `n` in this scope
+   --> src/gguf.rs:943:29
+    |
+943 |                 for i in 0..n {
+    |                             ^
+--
+error: could not compile `drave-core` (bin "drave") due to 1 previous error; 14 warnings emitted
+BUILD 101
+BF16 : blk.0.ffn_gate_inp.weight [256, 4096]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '925,950p' drave-core/src/gguf.rs", "description": "Inspect the two BF16 branches"}`
+
+  ```
+}
+        }
+        out
+    }
+
+    /// Déquantifie une ligne d'un tenseur 2D, en f32.
+    pub fn row_f32(&self, name: &str, row: usize, n_cols: usize) -> Vec<f32> {
+        let t = self.tensor(name).unwrap_or_else(|| panic!("tenseur {name} absent"));
+        let buf = self.tbuf(t);
+        let mut out = Vec::with_capacity(n_cols);
+        match t.ttype {
+            GGML_BF16 => {
+                for i in 0..n_cols {
+                    out.push(bf16_to_f32(u16::from_le_bytes(
+                        buf[2 * i..2 * i + 2].try_into().unwrap())));
+                }
+            }
+            GGML_BF16 => {
+                for i in 0..n {
+                    out.push(bf16_to_f32(u16::from_le_bytes(
+                        buf[2 * i..2 * i + 2].try_into().unwrap())));
+                }
+            }
+            GGML_F32 => {
+                let p = row * n_cols * 4;
+                for i in 0..n_cols {
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np = 'drave-core/src/gguf.rs'\ns = open(p).read()\n# Supprimer la branche BF16 dupliquée dans row_f32.\ndup = '''            GGML_BF16 => {\n                for i in 0..n {\n                    out.push(bf16_to_f32(u … [1048 caractères tronqués]`
+
+  ```
+ok
+BUILD 0
+  BF16     blk.0.ffn_gate_inp.weight              [256, 4096] · 1.0 M poids · fichier 1
+  BF16     blk.1.ffn_gate_inp.weight              [256, 4096] · 1.0 M poids · fichier 1
+  ```
+
+### 🤖 Assistant
+
+⏵ BF16 ajouté. Je vérifie contre une lecture directe, puis j'attaque Q5_K et Q3_K.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && F=/home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek-V4-Flash-UD-IQ1_M/DeepSeek-V4-Flash-UD-IQ1_M-00002-of-00003.gguf; python3 -c \"\nimport sys, struct; sys.path.insert(0,'tools')\nfrom analyse_experts_statique import Lecteur\ng … [432 caractères tronqués]`
+
+  ```
+reference : ['-0.003525', '0.078613', '-0.000587', '-0.031982', '-0.029053', '0.010742', '-0.008667', '-0.070312']
+[attention] QT_IM_SWITCHER est l'ancien nom d'une variable d'environnement : elles s'appellent maintenant DRAVE_* (voir docs/histoire.md). Rien n'a été appliqué.
+
+thread 'main' (3430403) panicked at src/main.rs:1472:18:
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np = 'drave-core/src/main.rs'\ns = open(p).read()\ns = s.replace('''        gguf::GGML_Q2_K => 84,\n        16 => 66,                       // IQ2_XXS\n        29 => 56,                       // IQ1_M''',\n'''        … [1055 caractères tronqués]`
+
+  ```
+-0.0035248
+0.0786133
+-0.0005875
+attendu : -0.003525  0.078613  -0.000587
+  ```
+
+### 🤖 Assistant
+
+⏵ BF16 concorde. Je commite et j'implémente Q5_K (176 octets).
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -m \"BF16 : lu et verifie (le f32 tronque a ses 16 bits de poids fort, exactement)\n\nDeux modeles lourds l'utilisent (V4-Flash pour ses routeurs, MiniMax-H3).\nVerifie contre une lecture directe : -0,0035 … [2046 caractères tronqués]`

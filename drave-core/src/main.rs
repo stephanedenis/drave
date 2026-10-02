@@ -1469,6 +1469,7 @@ fn run_bloc(spec: &str) {
         gguf::GGML_Q2_K => 84,
         16 => 66,                       // IQ2_XXS
         29 => 56,                       // IQ1_M
+        30 => 512,                      // BF16 : « bloc » = 256 poids × 2 octets
         autre => panic!("type {autre} non géré par --bloc"),
     };
     let n_cols = if t.dims.len() > 1 { t.dims[1] as usize } else { 256 };
@@ -1482,6 +1483,8 @@ fn run_bloc(spec: &str) {
         gguf::GGML_Q2_K => Gguf::dequant_q2k(&buf[base..]),
         16 => formats::dequant_iq2xxs(&buf[base..]),
         29 => formats::dequant_iq1m(&buf[base..]),
+        30 => (0..256).map(|i| gguf::bf16_to_f32(u16::from_le_bytes(
+                  [buf[base + 2 * i], buf[base + 2 * i + 1]]))).collect(),
         autre => panic!("type {autre} non implémenté"),
     };
     println!("tenseur {nom} · type {} · bloc {index}", Gguf::nom_type(t.ttype));

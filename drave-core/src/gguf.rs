@@ -226,8 +226,14 @@ pub const GGML_F16: u32 = 1;
 pub const GGML_Q4_0: u32 = 2;
 pub const GGML_MXFP4: u32 = 39;
 pub const GGML_Q2_K: u32 = 10;
+pub const GGML_BF16: u32 = 30;
 pub const GGML_Q4_K: u32 = 12;
 pub const GGML_Q6_K: u32 = 14;
+
+/// BF16 : un f32 dont on ne garde que les 16 bits de poids fort. Le convertir
+/// n'est pas une approximation — c'est exactement ce que le format stocke.
+#[inline]
+pub fn bf16_to_f32(h: u16) -> f32 { f32::from_bits((h as u32) << 16) }
 
 /// Octets par super-bloc : Q4_K = 2+2+12+128 (256 poids), Q6_K = 128+64+16+2.
 pub const TAILLE_Q4K: usize = 144;
@@ -927,6 +933,12 @@ zéro, l'inventaire sera sous-évalué", t.ttype, t.name);
         let buf = self.tbuf(t);
         let mut out = Vec::with_capacity(n_cols);
         match t.ttype {
+            GGML_BF16 => {
+                for i in 0..n_cols {
+                    out.push(bf16_to_f32(u16::from_le_bytes(
+                        buf[2 * i..2 * i + 2].try_into().unwrap())));
+                }
+            }
             GGML_F32 => {
                 let p = row * n_cols * 4;
                 for i in 0..n_cols {
@@ -1248,6 +1260,12 @@ zéro, l'inventaire sera sous-évalué", t.ttype, t.name);
         let n = t.nelem();
         let mut out = Vec::with_capacity(n);
         match t.ttype {
+            GGML_BF16 => {
+                for i in 0..n {
+                    out.push(bf16_to_f32(u16::from_le_bytes(
+                        buf[2 * i..2 * i + 2].try_into().unwrap())));
+                }
+            }
             GGML_F32 => {
                 for i in 0..n {
                     out.push(f32::from_le_bytes(buf[4*i..4*i + 4].try_into().unwrap()));
