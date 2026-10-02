@@ -72,3 +72,46 @@ if __name__ == "__main__":
     if len(sys.argv) < 2:
         raise SystemExit(__doc__)
     lire(sys.argv[1], sys.argv[2:])
+
+
+def lire_tenseur_f32(chemin, motif, index):
+    """Lit un tenseur F32 par nom (recherche par sous-chaîne) et le renvoie en
+    liste de f32. Sert à sortir une NORME ou une ÉCHELLE du GGUF pour recalculer
+    une étape hors du moteur — ce qui a permis de localiser l'écart CSA."""
+    r = Lecteur(chemin)
+    if r.octets(4) != b"GGUF":
+        raise SystemExit("ce n'est pas un GGUF")
+    version = struct.unpack("<I", r.octets(4))[0]
+    n_tensors, n_kv = struct.unpack("<QQ", r.octets(16))
+    alignement = 32
+    for _ in range(n_kv):
+        cle = r.chaine()
+        t = struct.unpack("<I", r.octets(4))[0]
+        v = r.valeur(t)
+        if cle == "general.alignment":
+            alignement = int(v)
+    infos = []
+    for _ in range(n_tensors):
+        nom = r.chaine()
+        nd = struct.unpack("<I", r.octets(4))[0]
+        dims = [struct.unpack("<Q", r.octets(8))[0] for _ in range(nd)]
+        ttype = struct.unpack("<I", r.octets(4))[0]
+        off = struct.unpack("<Q", r.octets(8))[0]
+        infos.append((nom, dims, ttype, off))
+    # La section de données commence après l'en-tête, ALIGNÉE : lire un tenseur
+    # sans ce décalage donne des valeurs absurdes (−5,8e26 pour une norme), ce
+    # qui est heureusement très visible.
+    fin_entete = r.f.tell()
+    donnees = (fin_entete + alignement - 1) // alignement * alignement
+    cible = [i for i in infos if motif in i[0]]
+    if not cible:
+        raise SystemExit(f"aucun tenseur ne contient « {motif} »")
+    nom, dims, ttype, off = cible[0]
+    n = 1
+    for d in dims:
+        n *= d
+    base = donnees + off
+    if ttype != 0:   # F32
+        raise SystemExit(f"{nom} : type {ttype}, pas F32 (ce lecteur ne fait que F32)")
+    r.f.seek(base)
+    return nom, dims, list(struct.unpack(f"<{n}f", r.octets(4 * n)))

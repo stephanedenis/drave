@@ -75922,3 +75922,447 @@ toutes les portes sont vertes
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A drave-core/src/ tools/ reports/ docs/ REPRISE.md && git commit -q -F - <<'EOF'\nP4 : le compresseur HCA, validé au premier bloc complet (0,999992)\n\nLa couche 3 de V4-Flash (première couche compressée, ratio 128) tourne e … [1778 caractères tronqués]`
+
+  ```
+8b967f7 P4 : le compresseur HCA, validé au premier bloc complet (0,999992)
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 2 : P4 franchie. État du temps avant d'attaquer P5 (CSA + indexeur).
+
+- **bash** `{"command": "date; TZ=America/Montreal date; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log --oneline -6 | cat", "description": "Check time and recent commits"}`
+
+  ```
+ven 02 oct 2026 12:38:59 EDT
+ven 02 oct 2026 12:38:59 EDT
+8b967f7 P4 : le compresseur HCA, validé au premier bloc complet (0,999992)
+329ce1d REPRISE : les trois chemins d'attention, les hyper-connexions, l'exécution bornée et les outils de comparaison
+47a859d P2/P3 : V4-Flash concorde avec llama.cpp sur les couches 0 et 1
+ae2e9ac P2/P3 : le harnais de comparaison étage par étage, et le bug qu'il a trouvé
+567d3b3 P2 (1/2) : le troisième chemin d'attention — celui de DeepSeek-V4
+8e47ff9 V4-Flash n'était pas « calculable » : deux clés lues sous le mauvais nom
+  ```
+
+### 🤖 Assistant
+
+⏵ P5 : lecture du compresseur à chevauchement CSA et de l'indexeur.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/llama.cpp && sed -n '470,540p' src/models/deepseek4.cpp", "description": "Read the overlap compressor"}`
+
+  ```
+ggml_tensor * kv_prev = ggml_cont(ctx0,
+            ggml_view_2d(ctx0, kv_rows, n_embd_head, n_read, kv_rows->nb[1], 0));
+    kv_prev = ggml_reshape_3d(ctx0, kv_prev, n_embd_head, ratio, n_blocks);
+    cb(kv_prev, name, il);
+
+    ggml_tensor * score_prev = ggml_cont(ctx0,
+            ggml_view_2d(ctx0, score_rows, n_embd_head, n_read, score_rows->nb[1], 0));
+    score_prev = ggml_reshape_3d(ctx0, score_prev, n_embd_head, ratio, n_blocks);
+    cb(score_prev, name, il);
+
+    ggml_tensor * kv_cur = ggml_cont(ctx0,
+            ggml_view_2d(ctx0, kv_rows, n_embd_head, n_read, kv_rows->nb[1],
+                n_read*kv_rows->nb[1] + ggml_row_size(kv_rows->type, n_embd_head)));
+    kv_cur = ggml_reshape_3d(ctx0, kv_cur, n_embd_head, ratio, n_blocks);
+
+    ggml_tensor * score_cur = ggml_cont(ctx0,
+            ggml_view_2d(ctx0, score_rows, n_embd_head, n_read, score_rows->nb[1],
+                n_read*score_rows->nb[1] + ggml_row_size(score_rows->type, n_embd_head)));
+    score_cur = ggml_reshape_3d(ctx0, score_cur, n_embd_head, ratio, n_blocks);
+
+    ggml_tensor * values = ggml_concat(ctx0, kv_prev, kv_cur, 1);
+    ggml_tensor * scores = ggml_concat(ctx0, score_prev, score_cur, 1);
+
+    va
+… [2022 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/llama.cpp && sed -n '540,620p' src/models/deepseek4.cpp", "description": "Read the indexer top-k"}`
+
+  ```
+GGML_ASSERT(inp_lid.kq_mask);
+    GGML_ASSERT(inp_lid.k_rot);
+    GGML_ASSERT(n_embd_indexer_head >= n_embd_indexer_head_rope);
+
+    ggml_tensor * indexer_q = build_lora_mm(layer.indexer_attn_q_b, qr);
+    indexer_q = ggml_reshape_3d(ctx0, indexer_q, n_embd_indexer_head, n_indexer_head, nt);
+    cb(indexer_q, "lid_q", il);
+
+    ggml_tensor * indexer_q_nope = ggml_view_3d(ctx0, indexer_q, n_embd_indexer_head_nope, n_indexer_head, nt,
+            ggml_row_size(indexer_q->type, n_embd_indexer_head),
+            ggml_row_size(indexer_q->type, n_embd_indexer_head)*n_indexer_head,
+            0);
+    ggml_tensor * indexer_q_pe = ggml_view_3d(ctx0, indexer_q, n_embd_indexer_head_rope, n_indexer_head, nt,
+            ggml_row_size(indexer_q->type, n_embd_indexer_head),
+            ggml_row_size(indexer_q->type, n_embd_indexer_head)*n_indexer_head,
+            ggml_row_size(indexer_q->type, n_embd_indexer_head_nope));
+
+    indexer_q_pe = ggml_rope_ext(ctx0, indexer_q_pe, inp_pos, nullptr, n_embd_indexer_head_rope,
+            rope_type, n_ctx_orig, hparams.dsv4_compress_rope_base, freq_scale,
+            ext_factor, dsv4_rope_attn_factor(freq_scale, ext_factor), beta_fast, beta_slow);
+    c
+… [2859 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ P5 : implémentation du compresseur CSA (chevauchement 2×ratio) réutilisant HCA.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='drave-core/src/model.rs'\ns=open(p).read()\nsubs=[]\n# --- lever le refus CSA et généraliser la compression\nsubs.append((\n\"\"\"        if m.ratio == 4 {\n            panic!(\"couche CSA (ratio 4) : le compr … [4685 caractères tronqués]`
+
+  ```
+ok
+--- fin ---
+  ```
+
+### 🤖 Assistant
+
+⏵ Garde-fou honnête : refus si le nombre de blocs dépasse `indexer_top_k` (sélection non implémentée).
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='drave-core/src/model.rs'\ns=open(p).read()\nsubs=[]\nsubs.append((\n\"\"\"    /// Fenêtre brute des couches compressées (`attention.sliding_window`) : ce\n    /// que l'attention garde en clair, le reste passa … [4375 caractères tronqués]`
+
+  ```
+ok
+ok2
+--- fin ---
+  ```
+
+### 🤖 Assistant
+
+⏵ Validation du CSA : couche 2, états injectés, positions autour des deux premiers blocs.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && rm -f /tmp/ref_csa-*.bin && LD_LIBRARY_PATH=/home/stephane/Data13TB/stephane/GitHub/llama.cpp/build/bin REF_DUMP=/tmp/ref_csa REF_TENSORS='^(l_last|attn_derope|attn_raw|hc_attn_pre)-[12]$' timeout 2400 ./tools/ref_logits /home/stepha … [270 caractères tronqués]`
+
+  ```
+/tmp/ref_csa-attn_derope-1.bin
+/tmp/ref_csa-attn_derope-2.bin
+/tmp/ref_csa-attn_raw-1.bin
+/tmp/ref_csa-hc_attn_pre-1.bin
+/tmp/ref_csa-hc_attn_pre-2.bin
+/tmp/ref_csa-l_last-1.bin
+/tmp/ref_csa-l_last-2.bin
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && rm -f /tmp/v4l2-*.bin && DRAVE_ETAT_ENTREE=/tmp/ref_csa-l_last-1.bin DRAVE_DUMP_COUCHES=/tmp/v4l2 timeout 1800 ./drave-core/target/release/drave /home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek-V4-Flash-UD-IQ1_M/DeepSeek-V4-Fla … [452 caractères tronqués]`
+
+  ```
+[partiel] couches 2..3 : le compresseur (HCA ratio 128 et CSA ratio 4) est implémenté ; l'INDEXEUR (choix des blocs gardés) ne l'est pas — le résultat n'est exact que tant que le nombre de blocs compressés reste sous `indexer.top_k`, ce que le moteur vérifie et refuse au-delà. Le RESTE du modèle reste non implémenté.
+hc_attn_pre   pos 3 : écart max 8.166e-06 (indice 3508, dynamique 8.161e-01) · corrélation 1.000000 ✅
+hc_attn_pre   pos 4 : écart max 8.397e-06 (indice 1855, dynamique 3.647e-01) · corrélation 1.000000 ✅
+hc_attn_pre   pos 5 : écart max 1.118e-06 (indice 2219, dynamique 1.011e-01) · corrélation 1.000000 ✅
+hc_attn_pre   pos 7 : écart max 4.739e-06 (indice 839, dynamique 5.920e-01) · corrélation 1.000000 ✅
+hc_attn_pre   pos 8 : écart max 8.225e-06 (indice 3508, dynamique 8.050e-01) · corrélation 1.000000 ✅
+hc_attn_pre   pos 9 : écart max 9.611e-06 (indice 1855, dynamique 3.479e-01) · corrélation 1.000000 ✅
+attn_derope   pos 3 : écart max 4.774e-01 (indice 24565, dynamique 3.318e+00) · corrélation 0.997491 ❌
+attn_derope   pos 4 : écart max 5.779e-01 (indice 24565, dynamique 3.290e+00) · corrélation 0.997168 ❌
+attn_derope   pos 5 : écart max 5.257e-01 (indice 15348, dynamiq
+… [955 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Vérification de l'ordre exact des lectures (bloc précédent / bloc courant) dans la référence.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/llama.cpp && sed -n '536,600p' src/llama-kv-cache-dsv4.cpp", "description": "Read index construction for the overlap"}`
+
+  ```
+if (overlap) {
+                const llama_pos prev_start = source_start - ratio;
+
+                for (uint32_t j = 0; j < ratio; ++j) {
+                    overlap_prev_reads.push_back(state_source_idx(seq_id, prev_start + j));
+                }
+                for (uint32_t j = 0; j < ratio; ++j) {
+                    overlap_cur_reads.push_back(state_source_idx(seq_id, source_start + j));
+                }
+            } else {
+                for (uint32_t j = 0; j < ratio; ++j) {
+                    plan.state_read_idxs.push_back(state_source_idx(seq_id, source_start + j));
+                }
+            }
+        }
+    }
+
+    if (ratio == DSV4_CSA_RATIO && plan.state_write_idxs.empty() && !plan.state_pos.empty()) {
+        // Non-boundary CSA steps still need a write op so their graph matches
+        // boundary steps. Use a padded scratch row that is masked from attention.
+        assert(kv_size > 0);
+
+        uint32_t i = 0;
+        while (i < ubatch.n_tokens && ubatch.pos[i] < 0) {
+            ++i;
+        }
+        assert(i < ubatch.n_tokens);
+
+        const llama_pos    pos    = ubatch.pos[i];
+        const llama_seq_id seq_id = ubatch.seq_id[i][0];
+        const int64_t 
+… [1334 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Diagnostic CSA : comparaison directe des **clés de bloc** avec `csa_state_compress`.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='drave-core/src/model.rs'\ns=open(p).read()\na=\"\"\"                cles[bloc * hd..(bloc + 1) * hd].copy_from_slice(&norm);\n                *paires += (hd as u64) * (m.ratio as u64) * 2;\"\"\"\nb=\"\"\"      … [904 caractères tronqués]`
+
+  ```
+ok
+/tmp/ref_csa2-attn_csa_lid-2.bin
+/tmp/ref_csa2-csa_state_compress-2.bin
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && rm -f /tmp/v4l2-*.bin && DRAVE_ETAT_ENTREE=/tmp/ref_csa-l_last-1.bin DRAVE_DUMP_COUCHES=/tmp/v4l2 timeout 1800 ./drave-core/target/release/drave /home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek-V4-Flash-UD-IQ1_M/DeepSeek-V4-Fla … [1164 caractères tronqués]`
+
+  ```
+/tmp/v4l2-comp_bloc0-2-3.bin
+/tmp/v4l2-comp_bloc1-2-7.bin
+ref csa_state_compress ne (512, 1, 2, 1)
+drave bloc 0 : 512
+ecart max 0.942960 · correlation approximative :
+corr 0.987407
+ref[0:4] [0.34284, -0.13127, -0.19487, 0.6591]
+dra[0:4] [0.25548, -0.09575, -0.1455, 0.54811]
+  ```
+
+### 🤖 Assistant
+
+⏵ Test des hypothèses sur les deux moitiés du projecteur CSA (analyse hors ligne).
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='drave-core/src/model.rs'\ns=open(p).read()\na=\"\"\"            let sp = pos % m.ratio;\n            for c in 0..coff_hd {\n                etat.comp_gate[pos * coff_hd + c] += m.comp_ape[sp * coff_hd + c];\n  … [1156 caractères tronqués]`
+
+  ```
+ok
+/tmp/v4l2-comp_state_kv-2-0.bin
+/tmp/v4l2-comp_state_kv-2-1.bin
+/tmp/v4l2-comp_state_kv-2-2.bin
+/tmp/v4l2-comp_state_kv-2-3.bin
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c \"\nimport struct, math\ndef rr(p):\n    b=open(p,'rb').read(); ne=struct.unpack('<4i', b[8:24]); n=1\n    for d in ne: n*=d\n    return ne, list(struct.unpack(f'<{n}f', b[24:24+4*n]))\ndef rd(p):\n    b=open(p,'rb').read( … [1807 caractères tronqués]`
+
+  ```
+H1 prev=0 cur=1 (mienne)   corr 0.555152 · ecart max 3.77849
+H2 tous=0                  corr 0.118846 · ecart max 4.95200
+H3 tous=1                  corr 0.555152 · ecart max 3.77849
+H4 prev=1 cur=0            corr 0.118846 · ecart max 4.95200
+mon calcul Rust            corr 0.633786 · ecart max 0.94296
+ref[0:4] [0.34284, -0.13127, -0.19487, 0.6591]
+H1 prev=0 cur=1 (mienne) [0.0304, -0.0117, -0.01659, 0.06277]
+H2 tous=0 [-0.04029, 0.02452, -0.04915, 0.02496]
+H3 tous=1 [0.0304, -0.0117, -0.01659, 0.06277]
+H4 prev=1 cur=0 [-0.04029, 0.02452, -0.04915, 0.02496]
+  ```
+
+### 🤖 Assistant
+
+⏵ Vidage du vecteur de bloc **avant norme** pour trancher entre les hypothèses.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='drave-core/src/model.rs'\ns=open(p).read()\na=\"\"\"                // norme RMS du bloc, puis rotation de sa partie rope\n                let mut norm = vec![0f32; hd];\"\"\"\nb=\"\"\"                Self::vi … [1149 caractères tronqués]`
+
+  ```
+ok
+mon comp_brut[0:4] [0.030404, -0.0117, -0.016594, 0.062774]
+racine moyenne carree : 0.106918
+  ```
+
+### 🤖 Assistant
+
+⏵ Comparaison des états par jeton (`csa_state_kv`, `csa_state_score_ape`) — la source de l'écart.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && rm -f /tmp/ref_csa3-*.bin && LD_LIBRARY_PATH=/home/stephane/Data13TB/stephane/GitHub/llama.cpp/build/bin REF_DUMP=/tmp/ref_csa3 REF_TENSORS='^(csa_state_kv|csa_state_score_ape)$' timeout 2400 ./tools/ref_logits /home/stephane/Data13T … [1038 caractères tronqués]`
+
+  ```
+[stderr]
+ls: cannot access '/tmp/ref_csa3-*.bin': No such file or directory
+Traceback (most recent call last):
+  File "<string>", line 10, in <module>
+    ne,r=rr(f'/tmp/ref_csa3-{fich}.bin'); print(fich, 'ne', ne)
+         ~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<string>", line 4, in rr
+    b=open(p,'rb').read(); ne=struct.unpack('<4i', b[8:24]); n=1
+      ~~~~^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: '/tmp/ref_csa3-csa_state_kv.bin'
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && rm -f /tmp/ref_csa3-*.bin && LD_LIBRARY_PATH=/home/stephane/Data13TB/stephane/GitHub/llama.cpp/build/bin REF_DUMP=/tmp/ref_csa3 REF_TENSORS='^(csa_state_kv|csa_state_score_ape)-2$' timeout 2400 ./tools/ref_logits /home/stephane/Data1 … [994 caractères tronqués]`
+
+  ```
+/tmp/ref_csa3-csa_state_kv-2.bin
+/tmp/ref_csa3-csa_state_score_ape-2.bin
+[stderr]
+Traceback (most recent call last):
+  File "<string>", line 10, in <module>
+    ne,r=rr(f'/tmp/ref_csa3-{fich}.bin'); print(fich, 'ne', ne)
+         ~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<string>", line 4, in rr
+    b=open(p,'rb').read(); ne=struct.unpack('<4i', b[8:24]); n=1
+      ~~~~^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: '/tmp/ref_csa3-csa_state_kv.bin'
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c \"\nimport struct\ndef rr(p):\n    b=open(p,'rb').read(); ne=struct.unpack('<4i', b[8:24]); n=1\n    for d in ne: n*=d\n    return ne, list(struct.unpack(f'<{n}f', b[24:24+4*n]))\ndef rd(p):\n    b=open(p,'rb').read(); ret … [560 caractères tronqués]`
+
+  ```
+csa_state_kv-2 ne (1024, 10, 1, 1)
+  jeton 0: ecart max 0.003173 · ref[0:3] [0.00886, 0.05989, -0.12954] · dra [0.0087, 0.0588, -0.13133]
+  jeton 3: ecart max 0.001719 · ref[0:3] [-0.21073, -0.02148, -0.05621] · dra [-0.21011, -0.02217, -0.05682]
+  jeton 9: ecart max 0.001571 · ref[0:3] [0.00285, -0.0932, -0.03958] · dra [0.00318, -0.09346, -0.0397]
+csa_state_score_ape-2 ne (1024, 10, 1, 1)
+  jeton 0: ecart max 0.004550 · ref[0:3] [0.39348, -0.56439, 0.55954] · dra [0.39287, -0.56671, 0.55997]
+  jeton 3: ecart max 0.001655 · ref[0:3] [-0.69535, 0.69181, 0.06671] · dra [-0.69558, 0.69101, 0.06717]
+  jeton 9: ecart max 0.002395 · ref[0:3] [0.5041, -0.1417, 0.22624] · dra [0.5043, -0.1414, 0.22575]
+  ```
+
+### 🤖 Assistant
+
+⏵ Lecture du tenseur de norme pour reconstruire le vecteur de bloc **avant** norme.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat >> tools/lire_meta_gguf.py <<'EOF'\n\n\ndef lire_tenseur_f32(chemin, motif, index):\n    \"\"\"Lit un tenseur F32 par nom (recherche par sous-chaîne) et le renvoie en\n    liste de f32. Sert à sortir une NORME ou une ÉCHELLE du G … [1688 caractères tronqués]`
+
+  ```
+[stderr]
+aucun tenseur ne contient « blk.2.attn_compressor_norm »
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c \"\nimport sys; sys.path.insert(0,'tools')\nfrom lire_meta_gguf import lire_tenseur_f32\np='/home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek-V4-Flash-UD-IQ1_M/DeepSeek-V4-Flash-UD-IQ1_M-00002-of-00003.gguf'\nnom, dim … [196 caractères tronqués]`
+
+  ```
+blk.2.attn_compressor_norm.weight [512] [-5.8534536833210866e+26, -0.0004, 0.0, 0.0, -2.4002834914396867e+29, 1.257417144696071e+26]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='tools/lire_meta_gguf.py'\ns=open(p).read()\na=\"\"\"    for _ in range(n_kv):\n        r.chaine()\n        t = struct.unpack(\"<I\", r.octets(4))[0]\n        r.valeur(t)\n    infos = []\"\"\"\nb=\"\"\"    alig … [1419 caractères tronqués]`
+
+  ```
+ok
+blk.2.attn_compressor_norm.weight [512]
+norme[0:6] [0.89844, 0.875, 0.9375, 0.93359, 0.89844, 0.92969]
+moyenne 0.83302 · min -0.12793 · max 1.24219
+  ```
+
+### 🤖 Assistant
+
+⏵ Ajustement hors ligne : quelle fenêtre et quels rôles reproduisent le bloc CSA de référence ?
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c \"\nimport struct, math, itertools\ndef rr(p):\n    b=open(p,'rb').read(); ne=struct.unpack('<4i', b[8:24]); n=1\n    for d in ne: n*=d\n    return ne, list(struct.unpack(f'<{n}f', b[24:24+4*n]))\ndef rd(p):\n    b=open(p, … [2041 caractères tronqués]`
+
+  ```
+corr 0.989015  chevauchement [-4..3]        tout 1
+corr 0.989015  chevauchement [-4..3]        prev=0 cur=1
+corr 0.956469  sans chevauchement [0..7]    tout 1
+corr 0.790308  sans chevauchement [0..7]    prev=1 cur=0
+corr 0.172677  sans chevauchement [0..7]    prev=0 cur=1
+corr 0.140607  sans chevauchement [0..7]    tout 0
+  ```
+
+### 🤖 Assistant
+
+⏵ Raffinement : la porte du softmax inclut-elle l'`ape` ? Test avec et sans.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c \"\nimport struct, math, sys\nsys.path.insert(0,'tools')\nfrom lire_meta_gguf import lire_tenseur_f32\ndef rr(p):\n    b=open(p,'rb').read(); ne=struct.unpack('<4i', b[8:24]); n=1\n    for d in ne: n*=d\n    return ne, lis … [1673 caractères tronqués]`
+
+  ```
+ape dims [1024, 4]
+role 1 avec ape    corr 0.989015
+role 1 sans ape    corr 0.988584
+role 0 avec ape    corr 0.114245
+role 0 sans ape    corr 0.100262
+  ```
+
+### 🤖 Assistant
+
+⏵ Le bloc 1 distingue les rôles (le bloc 0 a ses 4 jetons précédents nuls).
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c \"\nimport struct, math, sys\nsys.path.insert(0,'tools')\nfrom lire_meta_gguf import lire_tenseur_f32\ndef rr(p):\n    b=open(p,'rb').read(); ne=struct.unpack('<4i', b[8:24]); n=1\n    for d in ne: n*=d\n    return ne, lis … [1631 caractères tronqués]`
+
+  ```
+--- bloc 0 (jetons -4..3)
+   prev=0 cur=1   corr 0.989015
+   prev=1 cur=0   corr 0.114245
+   tout 0         corr 0.114245
+   tout 1         corr 0.989015
+--- bloc 1 (jetons 0..7)
+   prev=0 cur=1   corr 0.999989
+   prev=1 cur=0   corr 0.417592
+   tout 0         corr 0.801182
+   tout 1         corr 0.306962
+  ```
+
+### 🤖 Assistant
+
+⏵ Le bloc 0 diffère : la ligne ajoutée est peut-être `-inf` pour les portes. Vérification.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/llama.cpp && grep -n \"dsv4_append_zero_row\" -A 18 src/models/deepseek4.cpp | head -26", "description": "Read append_zero_row semantics"}`
+
+  ```
+172:static ggml_tensor * dsv4_append_zero_row(ggml_context * ctx, ggml_tensor * t, bool neg_inf) {
+173-    ggml_tensor * row = ggml_view_1d(ctx, t, t->ne[0], 0);
+174-    row = neg_inf ? ggml_scale_bias(ctx, row, 0.0f, -INFINITY) : ggml_scale(ctx, row, 0.0f);
+175-    row = ggml_reshape_2d(ctx, row, t->ne[0], 1);
+176-
+177-    return ggml_concat(ctx, t, row, 1);
+178-}
+179-
+180-static ggml_tensor * dsv4_with_zero_dep(ggml_context * ctx, ggml_tensor * t, ggml_tensor * dep) {
+181-    if (dep == nullptr) {
+182-        return t;
+183-    }
+184-
+185-    ggml_tensor * zero = ggml_scale(ctx, ggml_sum(ctx, dep), 0.0f);
+186-    return ggml_add(ctx, t, zero);
+187-}
+188-
+189-static constexpr int64_t DSV4_CSA_RATIO  = 4;
+190-static constexpr int64_t DSV4_HCA_RATIO  = 128;
+--
+462:    kv_state    = dsv4_append_zero_row(ctx0, kv_state,    false);
+463:    score_state = dsv4_append_zero_row(ctx0, score_state, true);
+464-
+465-    const int64_t n_read = ratio*n_blocks;
+466-
+467-    ggml_tensor * kv_rows = ggml_get_rows(ctx0, kv_state, state_read_idxs);
+  ```
+
+### 🤖 Assistant
+
+⏵ Correction : les jetons d'avant le texte ont une porte **−inf** (pas 0) dans le compresseur CSA.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='drave-core/src/model.rs'\ns=open(p).read()\nsubs=[\n(\"\"\"                        // Un jeton d'avant le début du texte est un VECTEUR NUL\n                        // (la référence ajoute une ligne de zéros), … [1949 caractères tronqués]`
+
+  ```
+ok
+attn_derope   pos 3 : écart max 1.074e-02 (indice 6634, dynamique 3.318e+00) · corrélation 0.999991 ~
+attn_derope   pos 4 : écart max 1.104e-02 (indice 6595, dynamique 3.290e+00) · corrélation 0.999990 ~
+attn_derope   pos 5 : écart max 9.457e-03 (indice 22897, dynamique 3.620e+00) · corrélation 0.999990 ~
+attn_derope   pos 7 : écart max 1.586e-02 (indice 10228, dynamique 3.302e+00) · corrélation 0.999991 ~
+attn_derope   pos 8 : écart max 1.314e-02 (indice 6592, dynamique 2.922e+00) · corrélation 0.999991 ~
+attn_derope   pos 9 : écart max 1.063e-02 (indice 23014, dynamique 2.803e+00) · corrélation 0.999990 ~
+l_last        pos 3 : écart max 1.655e-02 (indice 8631, dynamique 1.453e+00) · corrélation 0.999933 ~
+l_last        pos 4 : écart max 1.344e-02 (indice 12403, dynamique 1.145e+00) · corrélation 0.999919 ~
+l_last        pos 5 : écart max 1.462e-03 (indice 4056, dynamique 4.650e-01) · corrélation 0.999994 ~
+l_last        pos 7 : écart max 4.803e-03 (indice 1003, dynamique 8.648e-01) · corrélation 0.999989 ~
+l_last        pos 8 : écart max 1.623e-02 (indice 11023, dynamique 1.340e+00) · corrélation 0.999940 ~
+l_last        pos 9 : écart max 1.375e-02 (indice 15546, dynamique 1.0
+… [32 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ CSA validé (0,999990). Mise à jour du rapport, des portes et commit.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='reports/rapport-v4-hca.md'\ns=open(p).read()\ns = s.replace(\"# P4 — le compresseur HCA de DeepSeek-V4, validé contre llama.cpp\",\n              \"# Les compresseurs de DeepSeek-V4 (HCA et CSA), validés contr … [2431 caractères tronqués]`
+
+  ```
+ok rapport
+  Kimi-K2.7 : sigmoïde ×2,827              sigmoïde  ✅
+  V4-Flash : racine de softplus              racine de softplus  ✅
+  Qwen3-235B : softmax                       softmax  ✅
+
+toutes les portes sont vertes
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && bash tools/portes.sh rapide 2>&1 | head -3; python3 - <<'PYEOF'\np='docs/plan-deepseek41-complet.md'\ns=open(p).read()\na=\"\"\"### P5 — Indexeur et CSA : la liste de candidats (≈ 1 à 2 journées) — le gros morceau\"\"\"\nb=\"\"\"###  … [3008 caractères tronqués]`

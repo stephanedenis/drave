@@ -1169,6 +1169,14 @@ pub struct Mla4 {
     /// Fenêtre brute des couches compressées (`attention.sliding_window`) : ce
     /// que l'attention garde en clair, le reste passant par les blocs.
     pub fenetre: usize,
+    /// Nombre de blocs que l'**indexeur** garde (`attention.indexer.top_k`,
+    /// 512 pour V4-Flash). L'indexeur n'est pas encore implémenté : tant que le
+    /// nombre de blocs reste sous ce seuil, le top-k les garde TOUS et le
+    /// résultat est exact — au-delà, il faudrait choisir, et Drave refuse
+    /// plutôt que de calculer faux en silence.
+    pub indexer_top_k: usize,
+    /// La couche a-t-elle un indexeur (`indexer.proj` dans le fichier) ?
+    pub a_indexeur: bool,
     /// Compresseur (`None` sur une couche brute) : `coff·head_dim × h` pour la
     /// valeur et la porte, `coff·head_dim × ratio` pour l'`ape`, `head_dim` pour
     /// la norme.
@@ -2539,20 +2547,19 @@ impl Model {
             // est donc exécutable, et le dire couche par couche vaut mieux
             // qu'un « compressé / pas compressé » binaire.
             let ratios = g.couches_ratios();
-            let csa: Vec<usize> = ratios.iter().enumerate()
-                .filter(|(_, r)| **r == 4).map(|(i, _)| i).collect();
-            let dedans: Vec<usize> = csa.iter().copied()
+            let compressees: Vec<usize> = ratios.iter().enumerate()
+                .filter(|(_, r)| **r != 0).map(|(i, _)| i).collect();
+            let dedans: Vec<usize> = compressees.iter().copied()
                 .filter(|l| *l >= a && *l < b).collect();
-            if dedans.is_empty() {
+            if !dedans.is_empty() {
                 let avant = manques.len();
                 manques.retain(|m| !m.starts_with("attentions compressées"));
                 if manques.len() != avant {
-                    let hca: Vec<usize> = ratios.iter().enumerate()
-                        .filter(|(_, r)| **r == 128).map(|(i, _)| i).collect();
-                    println!("[partiel] couches {a}..{b} : aucune n'est CSA (ratio 4, non \
-implémenté) — les couches HCA (ratio 128) de la plage sont calculées par le \
-compresseur, les CSA sont {:?} (HCA : {:?}). Le RESTE du modèle reste non implémenté.",
-                             csa, hca);
+                    println!("[partiel] couches {a}..{b} : le compresseur (HCA ratio 128 et \
+CSA ratio 4) est implémenté ; l'INDEXEUR (choix des blocs gardés) ne l'est pas — \
+le résultat n'est exact que tant que le nombre de blocs compressés reste sous \
+`indexer.top_k`, ce que le moteur vérifie et refuse au-delà. Le RESTE du modèle \
+reste non implémenté.");
                 }
             }
         }
@@ -2672,6 +2679,9 @@ compresseur, les CSA sont {:?} (HCA : {:?}). Le RESTE du modèle reste non impl�
                      g.dequant(&p("attn_compressor_norm.weight")))
                 } else { (Vec::new(), Vec::new(), Vec::new(), Vec::new()) };
                 v.push(Mla4 {
+                    indexer_top_k: dim(&["attention.indexer.top_k", "index_topk"], "index_topk")
+                        .unwrap_or(512),
+                    a_indexeur: g.tensor(&p("indexer.proj.weight")).is_some(),
                     q_a: g.dequant(&p("attn_q_a.weight")),
                     q_a_norm: g.dequant(&p("attn_q_a_norm.weight")),
                     q_b: g.dequant(&p("attn_q_b.weight")),
@@ -4546,10 +4556,6 @@ s'applique pas — utilisez --lot 1, ou réenregistrez sans DRAVE_TRACE_BLOCS");
     #[allow(clippy::too_many_arguments)]
     fn attn_v4(m: &Mla4, etat: &mut EtatV4, x: &[f32], pos: usize, att: &mut [f32],
                paires: &mut u64, dump: Option<&str>, l: usize) {
-        if m.ratio == 4 {
-            panic!("couche CSA (ratio 4) : le compresseur à chevauchement et \
-l'indexeur ne sont pas implémentés (P5) — la couche 3 (HCA, ratio 128) l'est");
-        }
         let (nh, hd, nr) = (m.nh, m.head_dim, m.rope);
         let nope = hd - nr;
         let h = m.h;
@@ -4558,6 +4564,17 @@ l'indexeur ne sont pas implémentés (P5) — la couche 3 (HCA, ratio 128) l'est
         // (160 000) ; les couches brutes à `rope.freq_base` (10 000). Deux
         // régimes, deux bases — et le même `rope_norm` des deux côtés.
         let base_rope = if m.ratio != 0 { m.rope_base_compresse } else { m.rope_base };
+        // L'indexeur choisit les blocs gardés ; il n'est pas implémenté. Tant
+        // qu'il y a moins de blocs que son top-k, il les garde TOUS — le
+        // résultat est alors exact, et on l'exécute. Au-delà, on refuse : un
+        // chiffre faux qui a l'air juste coûte plus cher qu'un refus.
+        if m.a_indexeur {
+            let n_blocs = (pos + 1) / m.ratio.max(1);
+            assert!(n_blocs <= m.indexer_top_k,
+                    "couche {} : {} blocs compressés > indexer.top_k = {} — l'indexeur \
+n'est pas implémenté (P5), et sans lui le choix des blocs serait faux",
+                    l, n_blocs, m.indexer_top_k);
+        }
         // --- requête : descente, norme, remontée, norme PAR TÊTE sans poids
         let mut qr = vec![0f32; m.q_a.len() / h];
         matvec_f32(&m.q_a, x, h, qr.len(), &mut qr);
@@ -4617,27 +4634,67 @@ l'indexeur ne sont pas implémentés (P5) — la couche 3 (HCA, ratio 128) l'est
             for c in 0..coff_hd {
                 etat.comp_gate[pos * coff_hd + c] += m.comp_ape[sp * coff_hd + c];
             }
+            Self::vider_couche(dump, "comp_state_kv", l, pos,
+                               &etat.comp_kv[pos * coff_hd..(pos + 1) * coff_hd]);
+            Self::vider_couche(dump, "comp_state_gate", l, pos,
+                               &etat.comp_gate[pos * coff_hd..(pos + 1) * coff_hd]);
             *paires += (m.comp_kv.len() + m.comp_gate.len()) as u64;
             if (pos + 1) % m.ratio == 0 {
                 let bloc = pos / m.ratio;
                 let debut = pos + 1 - m.ratio;
                 let (portes, valeurs, cles) = (&etat.comp_gate, &etat.comp_kv, &mut etat.cles_comp);
+                // **CSA** (ratio 4) chevauche : la fenêtre d'un bloc est
+                // `2 × ratio` jetons — la seconde moitié du bloc PRÉCÉDENT puis le
+                // bloc courant. Et les deux moitiés du projecteur de 1024 valeurs
+                // ont deux rôles : la première sert quand le jeton est « contexte
+                // précédent », la seconde quand il est « bloc courant »
+                // (`build_overlap_compressed_kv_from_state`).
+                let chevauche = m.ratio == 4;
+                let t0 = if chevauche { debut as isize - m.ratio as isize } else { debut as isize };
+                let n_fenetre = (pos as isize - t0 + 1) as usize;
                 for c in 0..hd {
                     let mut mx = f32::NEG_INFINITY;
-                    for t in debut..=pos {
-                        let sc = portes[t * coff_hd + c];
+                    for k in 0..n_fenetre {
+                        let t = t0 + k as isize;
+                        // Un jeton d'avant le début du texte n'est pas un jeton
+                        // du début : la référence ajoute une ligne dont la VALEUR
+                        // est nulle mais dont la PORTE vaut **−infini**
+                        // (`dsv4_append_zero_row(score_state, true)`), donc son
+                        // poids de softmax est nul. Mettre 0 à la place laissait
+                        // ce slot compter dans le dénominateur — 0,989 de
+                        // corrélation au lieu de 1,000000, et seulement au
+                        // PREMIER bloc (les suivants ont de vrais jetons avant).
+                        let sc = if t < 0 { f32::NEG_INFINITY } else {
+                            let (role, idx) = if chevauche && k < m.ratio { (0, c) } else if chevauche { (1, c) }
+                                              else { (0, c) };
+                            portes[t as usize * coff_hd + role * hd + idx]
+                        };
                         if sc > mx { mx = sc; }
                     }
                     let mut somme = 0f32;
-                    for t in debut..=pos { somme += (portes[t * coff_hd + c] - mx).exp(); }
+                    for k in 0..n_fenetre {
+                        let t = t0 + k as isize;
+                        let sc = if t < 0 { f32::NEG_INFINITY } else {
+                            let (role, idx) = if chevauche && k < m.ratio { (0, c) } else if chevauche { (1, c) }
+                                              else { (0, c) };
+                            portes[t as usize * coff_hd + role * hd + idx]
+                        };
+                        somme += (sc - mx).exp();
+                    }
                     let inv = if somme > 0.0 { 1.0 / somme } else { 0.0 };
                     let mut acc = 0f32;
-                    for t in debut..=pos {
-                        let w = (portes[t * coff_hd + c] - mx).exp() * inv;
-                        acc += w * valeurs[t * coff_hd + c];
+                    for k in 0..n_fenetre {
+                        let t = t0 + k as isize;
+                        if t < 0 { continue; }
+                        let (role, idx) = if chevauche && k < m.ratio { (0, c) } else if chevauche { (1, c) }
+                                          else { (0, c) };
+                        let w = (portes[t as usize * coff_hd + role * hd + idx] - mx).exp() * inv;
+                        acc += w * valeurs[t as usize * coff_hd + role * hd + idx];
                     }
                     cles[bloc * hd + c] = acc;
                 }
+                Self::vider_couche(dump, &format!("comp_brut{bloc}"), l, pos,
+                                   &cles[bloc * hd..(bloc + 1) * hd]);
                 // norme RMS du bloc, puis rotation de sa partie rope
                 let mut norm = vec![0f32; hd];
                 Self::rmsnorm(&cles[bloc * hd..(bloc + 1) * hd], &m.comp_norm, m.eps, &mut norm);
@@ -4648,6 +4705,7 @@ l'indexeur ne sont pas implémentés (P5) — la couche 3 (HCA, ratio 128) l'est
                     norm[nope..].copy_from_slice(&kp);
                 }
                 cles[bloc * hd..(bloc + 1) * hd].copy_from_slice(&norm);
+                Self::vider_couche(dump, &format!("comp_bloc{bloc}"), l, pos, &norm);
                 *paires += (hd as u64) * (m.ratio as u64) * 2;
             }
         }

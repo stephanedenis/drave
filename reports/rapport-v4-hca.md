@@ -1,4 +1,4 @@
-# P4 — le compresseur HCA de DeepSeek-V4, validé contre llama.cpp
+# Les compresseurs de DeepSeek-V4 (HCA et CSA), validés contre llama.cpp
 
 **En une ligne** : la couche 3 de V4-Flash (première couche **compressée**, ratio
 128) tourne et **concorde avec llama.cpp** — corrélation **0,999992** sur la
@@ -63,7 +63,44 @@ Ce que ça a coûté à voir, et ce qui l'a montré :
 - puis un test de **réversibilité** (`rope_norm` puis son inverse) — six lignes,
   ajoutées depuis : il aurait dit le bug **avant** toute passe de 86 Go.
 
-## 4. Reste à faire (P5)
+## 4. Le compresseur **CSA** (ratio 4), même méthode
+
+CSA fait tout ce que fait HCA, avec deux différences :
+1. la fenêtre d'un bloc est **2 × ratio** jetons : la seconde moitié du bloc
+   **précédent** puis le bloc courant (chevauchement) ;
+2. le projecteur fait **1024** valeurs par jeton, et ses deux moitiés ont deux
+   rôles : la première (colonnes 0-511) sert quand le jeton est « contexte
+   précédent », la seconde (512-1023) quand il est « bloc courant ».
+
+Résultat sur la couche 2 (première couche CSA), positions 3 à 9, état injecté :
+`attn_derope` **0,999990-0,999991**, `l_last` **0,99992-0,999994**.
+
+Deux pièges, tous deux invisibles autrement :
+
+- **Le premier bloc.** Les quatre jetons « précédents » du bloc 0 n'existent
+  pas : la référence ajoute une ligne dont la **valeur est nulle mais la porte
+  vaut −∞** (`dsv4_append_zero_row(score_state, /*neg_inf=*/true)`), donc leur
+  poids de softmax est nul. Mettre 0 laissait ces slots compter dans le
+  dénominateur : corrélation **0,989** au lieu de 1,000000 — et **seulement au
+  premier bloc**, ce qui rend le symptôme difficile à croire.
+- **Les moitiés.** L'hypothèse inverse (précédent = seconde moitié) donne 0,42 de
+  corrélation ; « tout première moitié », 0,80. C'est le **bloc 1** qui tranche
+  (le bloc 0 ne peut pas : ses jetons précédents sont les slots nuls). Trouver
+  l'orientation a demandé de comparer les **états par jeton** — qui, eux,
+  concordaient déjà à 0,003 — puis de reconstruire la compression **hors du
+  moteur**, en lisant la norme directement dans le GGUF
+  (`tools/lire_meta_gguf.py --tenseur`).
+
+## 5. Ce qui reste de P5 : l'indexeur
+
+Les couches CSA gardent, en plus des blocs, ceux que l'**indexeur** choisit
+(`ggml_lightning_indexer` : `relu(q·k)` pondéré par tête, puis top-k). Tant que
+le nombre de blocs compressés reste sous `attention.indexer.top_k` (512), le
+top-k les garde **tous** : le résultat est alors exact sans l'indexeur, et c'est
+la plage dans laquelle les validations ci-dessus ont été faites (4 × 512 =
+2 048 jetons). Au-delà, le moteur **refuse** au lieu de calculer faux.
+
+## 6. Reste à faire
 
 - **CSA** (ratio 4) : compresseur à **chevauchement** (`build_overlap_…`, lit
   2×ratio jetons), **indexeur** (`ggml_lightning_indexer`, `indexer.proj`,
