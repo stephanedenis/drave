@@ -5224,10 +5224,14 @@ s'applique pas — utilisez --lot 1, ou réenregistrez sans DRAVE_TRACE_BLOCS");
 comment réduire les {} copies en un état avant la norme finale",
                     ha.hc);
         }
+        // Un état reçu d'un autre nœud arrive DÉJÀ en `hc` copies : ne pas les
+        // multiplier une seconde fois.
         if let Some((ha, _)) = self.hc.as_ref().map(|v| &v[0]) {
-            let mut copies = Vec::with_capacity(ha.hc * h);
-            for _ in 0..ha.hc { copies.extend_from_slice(&x); }
-            x = copies;
+            if x.len() == h {
+                let mut copies = Vec::with_capacity(ha.hc * h);
+                for _ in 0..ha.hc { copies.extend_from_slice(&x); }
+                x = copies;
+            }
         }
         let mut hn = vec![0f32; h];
         if debug_etat {
@@ -5950,13 +5954,19 @@ dynamique de {dyn_:.3e} (relatif {:.2e})", mx / dyn_.max(1e-9));
             }
             self.prof[3] += tf.elapsed().as_secs_f64();
         }
+        // **Coupure de grappe** : on rend le flux résiduel BRUT, tel qu'il est —
+        // et pour un modèle à hyper-connexions, cela veut dire les `hc` copies,
+        // PAS leur réduction. Réduire ici puis ré-étendre à l'arrivée change le
+        // modèle : mesuré, la perplexité répartie passait de 8 311 à 34 159
+        // (écart 3,11) alors que le transport dense est exact. Le flux d'un
+        // modèle à hyper-connexions coûte donc `hc` fois plus cher sur le fil.
+        if self.flux_brut || self.couche_fin < cfg.n_layer {
+            return x;                       // nœud intermédiaire : flux brut
+        }
         // Mélange de TÊTE : les `hc` copies redeviennent un seul état, qui voit
         // ensuite la norme finale puis les logits (`build_hc_head`).
         if let Some(ht) = self.hc_tete.as_ref() {
             x = ht.tete(&x);
-        }
-        if self.flux_brut || self.couche_fin < cfg.n_layer {
-            return x;                       // nœud intermédiaire : flux brut
         }
         Self::rmsnorm(&x, out_norm, cfg.eps, &mut hn);
         hn
@@ -6161,6 +6171,16 @@ dynamique de {dyn_:.3e} (relatif {:.2e})", mx / dyn_.max(1e-9));
     /// Norme finale, pour un état venu d'un AUTRE nœud : le nœud distant rend le
     /// flux résiduel brut, c'est le dernier qui norme.
     pub fn norme_finale(&self, x: &[f32]) -> Vec<f32> {
+        // Un état venu d'un autre nœud peut être en `hc` copies (modèle à
+        // hyper-connexions) : c'est ICI que la réduction a lieu, une fois, sur
+        // le nœud qui possède la tête — comme la norme finale.
+        let reduit;
+        let x = if x.len() > self.cfg.hidden {
+            match self.hc_tete.as_ref() {
+                Some(ht) => { reduit = ht.tete(x); &reduit[..] }
+                None => x,
+            }
+        } else { x };
         let mut hn = vec![0f32; self.cfg.hidden];
         Self::rmsnorm(x, &self.out_norm, self.cfg.eps, &mut hn);
         hn

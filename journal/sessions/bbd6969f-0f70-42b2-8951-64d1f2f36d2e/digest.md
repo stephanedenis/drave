@@ -77411,3 +77411,320 @@ ok reports/bilan-multi-materiel.md
 ⏵ Commit du glossaire, des correctifs et de l'exécution complète de V4-Flash.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && wc -l docs/glossaire.md && bash tools/portes.sh rapide 2>&1 | head -3 && git add -A docs/ reports/ drave-core/src/ tools/ && git commit -q -F - <<'EOF'\nV4-Flash tourne en ENTIER · glossaire de référence · trois points doc corrigés\n … [2394 caractères tronqués]`
+
+  ```
+1630 docs/glossaire.md
+=== Portes ===
+  cargo test --release                       53 verts  ✅
+  Qwen2.5-0.5B ctx 256                       19.3885  ✅
+4c15570 V4-Flash tourne en ENTIER · glossaire de référence · trois points doc corrigés
+  ```
+
+### 🤖 Assistant
+
+⏵ P6 — porte Drave : trace du flux sur V4-Flash puis rejeu à l'identique.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && M=/home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek-V4-Flash-UD-IQ1_M/DeepSeek-V4-Flash-UD-IQ1_M-00001-of-00003.gguf; rm -f /tmp/v4_trace.drvf; timeout 3000 ./drave-core/target/release/drave $M --ppl /tmp/ids_v4flash.txt --ctx 3 … [218 caractères tronqués]`
+
+  ```
+[trace] flux enregistré dans /tmp/v4_trace.drvf
+       4 tokens notés — perplexité cumulée 8430.297  (0.1 tok/s)
+[trace] 430 listes · 1760720 neurones actifs · 5 Mo
+=== perplexité 8430.2968 sur 4 tokens (0 événements, 49.1 s) ===
+-rw-r--r--. 1 stephane stephane 5288196  2 oct 15:34 /tmp/v4_trace.drvf
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && M=/home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek-V4-Flash-UD-IQ1_M/DeepSeek-V4-Flash-UD-IQ1_M-00001-of-00003.gguf; timeout 3000 ./drave-core/target/release/drave $M --ppl /tmp/ids_v4flash.txt --ctx 32 --limit 5 --dense --thre … [159 caractères tronqués]`
+
+  ```
+=== perplexité 8430.0379 sur 4 tokens (0 événements, 42.3 s) ===
+  ```
+
+### 🤖 Assistant
+
+⏵ P6 — porte Drave : perplexité répartie sur deux processus avec V4-Flash.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n \"$(grep -n 'ppl-reparti' REPRISE.md | head -1 | cut -d: -f1),+14p\" REPRISE.md", "description": "Find the distributed-run recipe"}`
+
+  ```
+et `--infer --topk`, `--ppl-reparti --ids` sont bornés. **18 tests.**
+
+### Ce que la nuit a établi (sprints 2 à 6)
+
+| # | résultat | mesure |
+|---|---|---|
+| 1 | **Noyau fusionné du top-k** : descente radix + collecte + somme en UN noyau par ligne | 8 lancements → 2 · tampon `nh × n × 4` supprimé · écart 7,2e-7 (avec puits) et 8,4e-7 (sans) |
+| 2 | **Le déport du top-k gagne** | attention plate 4,5–5,0 ms/jeton de 255 à 4 095 clés · croisement ~300 clés · ×7,8 à 4 095 clés |
+| 3 | **Le préremplissage déporté** | prompt de 3 961 jetons : **286,6 → 63,8 s** (×4,5) · perplexité 9,4335 / 9,4337 (écart relatif 2,1e-5) |
+| 4 | **Le déport des projections est EXACT sur un modèle dense** | logits bit à bit identiques (|ΔNLL| moyen 0,0000) ; sur un MoE, 0,038 nat de décalage et 497/511 top-1 identiques → routage des experts (hypothèse) |
+| 5 | **Le noyau fusionné gagne au décodage, jusqu'à 16 k clés** | GPU plat, CPU 4,26 → 38,84 ms/jeton · k = 1 024 suffit à 8 192 clés (12,5 %) |
+| 6 | **L'attention creuse à 6 % n'est PAS moins fiable que l'attention complète** | neuf fenêtres contiguës, mêmes invites : **dense 8/9, k = 256 8/9**, et les échecs ne sont pas les mêmes fenêtres (dense rate la
+… [563 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"flux-serveur\" REPRISE.md | head -3; sed -n \"$(grep -n 'flux-serveur' REPRISE.md | head -1 | cut -d: -f1),+12p\" REPRISE.md", "description": "Find the server-side command"}`
+
+  ```
+314:dense, listes, blocs et **lot** ; `--flux-serveur` accepte `hôte:port`, et
+699:     --flux-serveur 45999 --ctx 256 > /tmp/serveur.log 2>&1 &)
+dense, listes, blocs et **lot** ; `--flux-serveur` accepte `hôte:port`, et
+`colab/` (notebook + `tools/preparer_colab.sh`) porte la recette de la phase 3.4.
+
+**Ce que coûte le transport** (`reports/rapport-transport-liste.md`) :
+
+| | octets par flux | écart local/réparti |
+|---|---|---|
+| dense f32 | 3 663 | **0,00e0** |
+| listes à échelle par bloc, seuil 0,01 | 1 608 | 2,7e-2 |
+| échelles par bloc, seuil 0,01 | 2 268 | 2,7e-2 |
+
+`TCP_NODELAY` a divisé l'attente du pair par six (**97,6 → 16,1 ms** par jeton,
+soit 1,01× le calcul local) : le banc réparti prend maintenant le temps du calcul
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '694,712p' REPRISE.md", "description": "Read the two-process recipe"}`
+
+  ```
+# 5. le calcul réparti (§6bis) : deux nœuds, 12 couches chacun, et le même chiffre
+#    des deux côtés. Le nœud moteur doit être lancé AVANT le pilote.
+cd ..   # racine du dépôt
+(./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf \
+     --flux-serveur 45999 --ctx 256 > /tmp/serveur.log 2>&1 &)
+sleep 3
+./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf \
+    --ppl-reparti 127.0.0.1:45999 --couches-locales 12 --limit 40 --ctx 256
+# attendu : « écart : 0.00e0 » en mode dense (le transport f32 est exact)
+
+# 6. le contrôle qui attrape les fautes de banc : `tools/pair_factice.py` parle le
+#    protocole sans charger de modèle et DIT ce qu'il reçoit (tailles, modes,
+#    réglages). C'est lui qui a montré un flux de 919 canaux là où le modèle en a
+#    896 — mon compteur divisait par le nombre de jetons notés, pas de flux envoyés.
+python3 tools/pair_factice.py 45760 896 &
+./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf \
+    --ppl-reparti 127.0.0.1:45760 --couches-locales 12 --limit 4 --ctx 256
+```
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && M=/home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek-V4-Flash-UD-IQ1_M/DeepSeek-V4-Flash-UD-IQ1_M-00001-of-00003.gguf; (./drave-core/target/release/drave $M --flux-serveur 46021 --ctx 32 --dense --threads 16 > /tmp/serveur_v4.log … [321 caractères tronqués]`
+
+  ```
+[flux] pilote : 20 couches en local, 23 chez le pair, 5 jetons
+  référence locale  : perplexité 28223710151.9765  (151.4 s)
+  deux nœuds        : perplexité 162798893372.8662  (43.0 s)
+  écart             : 4.77e0
+  transport         : dense f32 · 16463 octets par flux (aller) · 16463 au retour · 100.0 % d'activité (4096 neurones par flux) · 4 flux
+  temps             : 4525.7 ms par jeton en local · 6203.7 ms à attendre le pair (son calcul + l'aller-retour) · soit 1.37× le calcul local seul
+--- serveur ---
+[flux] client connecté : 127.0.0.1:32670
+[flux] arrêt : failed to fill whole buffer
+[flux] 4 flux servis
+  ```
+
+### 🤖 Assistant
+
+⏵ La perplexité répartie est absurde des deux côtés : lecture du pilote (`run_ppl_reparti`).
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"référence locale\" -B 8 -A 12 drave-core/src/main.rs | head -40", "description": "Read the local reference computation"}`
+
+  ```
+2601-}
+2602-
+2603-fn run_ppl_reparti(opt: Options, pair: &str) {
+2604-    use std::time::Instant;
+2605-    let chemin = modele_chemin();
+2606-    let ctx = if opt.ctx_impose { opt.ctx } else { 256 };
+2607-    let limite = opt.limit.max(1).min(ctx);
+2608-    let couches_locales = if opt.couches_locales > 0 { opt.couches_locales } else { 12 };
+2609:    // `--lot T` : préremplissage par LOTS sur le fil. La référence locale est
+2610-    // alors calculée avec le MÊME découpage — sinon l'écart mesurerait la
+2611-    // différence entre deux ordres de sommation, pas celle du découpage.
+2612-    let lot = opt.lot.max(1);
+2613-    let mut mdl = model::Model::load(&chemin, ctx, fils(&opt), true, opt.keep, false, 0, 0);
+2614-    appliquer_quantification(&mut mdl, &opt);
+2615-    if opt.options_actives { options_actives(&mdl, "pilote du flux", opt.ctx_impose, true, opt.keep); }
+2616-    let mode = if opt.flux_blocs { MODE_BLOCS }
+2617-               else if opt.flux_liste { MODE_LISTE }
+2618-               else { MODE_DENSE };
+2619-    // Le mode des LOTS est distinct : `--flux-blocs` donne le mode 4 (lot en
+2620-    // listes), tout le reste donne le mode 3 (lot dense f32). Déclaré ici pour
+
+… [964 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '2656,2685p' drave-core/src/main.rs", "description": "Read the local reference loop"}`
+
+  ```
+for i in 0..t {
+                if pos + i + 1 < ids.len() {
+                    nll_ref += nll_logits(&lgs[i], ids[pos + i + 1]);
+                }
+            }
+            pos += t;
+        }
+    } else {
+        for (pos, &t) in ids.iter().enumerate() {
+            let last = mdl.forward(t, pos);
+            if pos + 1 < ids.len() {
+                nll_ref += nll_logits(&mdl.logits(&last), ids[pos + 1]);
+            }
+        }
+    }
+    let ppl_ref = (nll_ref / (ids.len() - 1) as f64).exp();
+    println!("  référence locale  : perplexité {ppl_ref:.4}  ({:.1} s)", t0.elapsed().as_secs_f64());
+
+    // 2. la même chose, coupée en deux nœuds
+    let mut sock = std::net::TcpStream::connect(pair).expect("connexion au nœud moteur");
+    sock.set_nodelay(true).expect("TCP_NODELAY");   // cf. le nœud moteur : Nagle coûte 6×
+    mdl.couche_fin = couches_locales;
+    let mut octets_envoyes = 0u64;
+    let mut octets_recus = 0u64;
+    let mut actifs_envoyes = 0u64;
+    let mut flux_envoyes = 0u64;
+    let mut jetons_envoyes = 0u64;   // Σt, pas `lot` : le dernier lot est partiel
+    let mut t_local = 0f64;
+    let mut t_pair = 0f64;
+    let t1 = Instant::now();
+  ```
+
+### 🤖 Assistant
+
+⏵ Test au même contexte que le mode réparti (ctx 256) pour isoler la cause.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && M=/home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek-V4-Flash-UD-IQ1_M/DeepSeek-V4-Flash-UD-IQ1_M-00001-of-00003.gguf; timeout 3000 ./drave-core/target/release/drave $M --ppl /tmp/ids_v4flash.txt --ctx 256 --limit 5 --dense --thr … [121 caractères tronqués]`
+
+  ```
+=== perplexité 8430.2968 sur 4 tokens (0 événements, 111.8 s) ===
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '2622,2640p' drave-core/src/main.rs", "description": "Find how the pilot gets its ids"}`
+
+  ```
+let mode_lot = if mode == MODE_BLOCS { MODE_LOT_LISTES } else { MODE_LOT };
+    println!("[flux] quantification : {} niveaux, seuil {}, top-k {}, renorm {}",
+             mdl.act_levels, mdl.act_thresh, mdl.act_topk, mdl.act_renorm);
+    let n_layer = mdl.cfg.n_layer;
+    // `limite` (≤ ctx) est respectée pour les ids SYNTHÉTIQUES, mais un `--ids`
+    // fourni la contournait : 300 jetons à ctx 256 faisaient écrire le cache
+    // au-delà du contexte — corruption silencieuse du bloc de la tête KV suivante,
+    // puis panique. On tronque, en le disant.
+    let ids: Vec<u32> = if opt.ids.is_empty() {
+        (1..=limite as u32).collect()
+    } else if opt.ids.len() > limite {
+        println!("[flux] --ids fournit {} jetons > limite {} (ctx {}) : troncature aux {} \
+derniers", opt.ids.len(), limite, ctx, limite);
+        opt.ids[opt.ids.len() - limite..].to_vec()
+    } else { opt.ids.clone() };
+    if ids.len() < 2 {
+        // La perplexité est une moyenne sur `len - 1` jetons notés : avec un seul
+        // jeton elle vaut NaN, et un NaN affiché comme un résultat ne dit rien.
+        println!("[flux] il faut au moins DEUX jetons pour noter une perplexité \
+  ```
+
+### 🤖 Assistant
+
+⏵ Le pilote prend `--ids` (ou des ids synthétiques) : je relance avec les vrais jetons.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && M=/home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek-V4-Flash-UD-IQ1_M/DeepSeek-V4-Flash-UD-IQ1_M-00001-of-00003.gguf; IDS=$(head -c 200 /tmp/ids_v4flash.txt | tr ',' ' ' | awk '{for(i=1;i<=5;i++) printf \"%s%s\", $i, (i<5?\",\": … [421 caractères tronqués]`
+
+  ```
+ids: 201,438,10498,102771,402
+  référence locale  : perplexité 8311.3347  (50.1 s)
+  deux nœuds        : perplexité 34158.9964  (51.8 s)
+  écart             : 3.11e0
+  transport         : dense f32 · 16463 octets par flux (aller) · 16463 au retour · 100.0 % d'activité (4096 neurones par flux) · 4 flux
+  temps             : 4561.4 ms par jeton en local · 8365.7 ms à attendre le pair (son calcul + l'aller-retour) · soit 1.83× le calcul local seul
+  ```
+
+### 🤖 Assistant
+
+⏵ Le split casse avec les hyper-connexions : l'état doit voyager en **4 copies** (et non réduit).
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"pub fn norme_finale\" -A 8 drave-core/src/model.rs | head -12; grep -n \"norme_finale(\" drave-core/src/main.rs | head -4", "description": "Inspect norme_finale and its callers"}`
+
+  ```
+6163:    pub fn norme_finale(&self, x: &[f32]) -> Vec<f32> {
+6164-        let mut hn = vec![0f32; self.cfg.hidden];
+6165-        Self::rmsnorm(x, &self.out_norm, self.cfg.eps, &mut hn);
+6166-        hn
+6167-    }
+6168-
+6169-    /// Tête de sortie : produits scalaires entiers sur les lignes Q8_0 du
+6170-    /// plafond d'embedding (poids liés). Parallélisé par tranches de vocabulaire.
+6171-    pub fn logits(&mut self, h: &[f32]) -> Vec<f32> {
+2756:                hn.push(mdl.norme_finale(&etats[i * mdl.cfg.hidden..(i + 1) * mdl.cfg.hidden]));
+2818:            nll += nll_logits(&mdl.logits(&mdl.norme_finale(&final_)), ids[pos + 1]);
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='drave-core/src/model.rs'\ns=open(p).read()\nsubs=[]\n# 1. la tête ne s'applique QU'À la fin, pas à une coupure de grappe\nsubs.append((\n\"\"\"        // Mélange de TÊTE : les `hc` copies redeviennent un seul  … [3401 caractères tronqués]`
+
+  ```
+ok
+--- fin ---
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && M=/home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek-V4-Flash-UD-IQ1_M/DeepSeek-V4-Flash-UD-IQ1_M-00001-of-00003.gguf; IDS=\"201,438,10498,102771,402\"; (./drave-core/target/release/drave $M --flux-serveur 46041 --ctx 32 --dense  … [378 caractères tronqués]`
+
+  ```
+(no output)
+[timed out after 600000ms]
+[killed by signal: SIGTERM]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && tail -6 /tmp/serveur_v4c.log 2>/dev/null; pgrep -af \"flux-serveur\" | head -3", "description": "Check the server log and leftover processes"}`
+
+  ```
+[config] fenêtre glissante 128 sur 43/43 couches (motif 0, toutes)
+[config] rotation : RoPE simple (contexte 32 ≤ 65536 initial ; YaRN ×16 prendrait le relais au-delà)
+[tête 4 bits] 129280 × 4096 → 4.50 b/poids, 0 Mo, 0.0 s
+[flux] nœud moteur sur 127.0.0.1:46041 · 4096 cachés · 43 couches · contexte 32
+[flux] client connecté : 127.0.0.1:10478
+[flux] flux refusé : 16384 canaux annoncés, 4096 attendus — le nœud continue
+1477390 bash -c cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && tail -6 /tmp/serveur_v4c.log 2>/dev/null; pgrep -af "flux-serveur" | head -3
+  ```
+
+### 🤖 Assistant
+
+⏵ Le protocole DRVF n'accepte que 4096 canaux : je refuse le découpage HC en le disant, plutôt que de calculer faux.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='drave-core/src/main.rs'\ns=open(p).read()\na=\"\"\"    let mode_lot = if mode == MODE_BLOCS { MODE_LOT_LISTES } else { MODE_LOT };\"\"\"\nb=\"\"\"    // Un modèle à **hyper-connexions** porte son état résiduel … [1641 caractères tronqués]`
+
+  ```
+ok
+error: argument never used
+    --> src/main.rs:2635:18
+     |
+2630 |           println!("[flux] ce modèle porte ses hyper-connexions : son état résiduel fait \
+     |  __________________-
+2631 | | {hc} copies, donc {} canaux par flux, et le protocole DRVF n'en accepte que {}. \
+2632 | | Un découpage en grappes demande d'étendre le protocole (P6) — rien n'a été calculé.",
+--
+error[E0425]: cannot find value `hc` in this scope
+    --> src/main.rs:2631:2
+     |
+2631 | {hc} copies, donc {} canaux par flux, et le protocole DRVF n'en accepte que {}. \
+connexion au nœud moteur: Os { code: 111, kind: ConnectionRefused, message: "Connection refused" }
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+timeout: the monitored command dumped core
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='drave-core/src/main.rs'\ns=open(p).read()\na=\"\"\"        println!(\"[flux] ce modèle porte ses hyper-connexions : son état résiduel fait \\\\\n{hc} copies, donc {} canaux par flux, et le protocole DRVF n'en  … [1270 caractères tronqués]`
+
+  ```
+ok
+[config] fenêtre glissante 128 sur 43/43 couches (motif 0, toutes)
+[config] rotation : RoPE simple (contexte 32 ≤ 65536 initial ; YaRN ×16 prendrait le relais au-delà)
+[tête 4 bits] 129280 × 4096 → 4.50 b/poids, 0 Mo, 0.0 s
+[flux] ce modèle porte ses hyper-connexions : son état résiduel fait 4 copies, donc 16384 canaux par flux, et le protocole DRVF n'en accepte que 4096. Un découpage en grappes demande d'étendre le protocole (P6) — rien n'a été calculé.
+  ```
+
+### 🤖 Assistant
+
+⏵ Vérification que le modèle complet donne toujours le même chiffre, puis portes et commit.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && M=/home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek-V4-Flash-UD-IQ1_M/DeepSeek-V4-Flash-UD-IQ1_M-00001-of-00003.gguf; timeout 2000 ./drave-core/target/release/drave $M --ppl /tmp/ids_v4flash.txt --ctx 32 --limit 5 --dense --thre … [118 caractères tronqués]`
+
+  ```
+=== perplexité 8430.2968 sur 4 tokens (0 événements, 170.8 s) ===
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && bash tools/portes.sh rapide 2>&1 | head -4; git add -A drave-core/src/ && git commit -q -F - <<'EOF'\nP6 : la coupure de grappe d'un modèle à hyper-connexions est REFUSÉE, pas approximée\n\nLe flux d'une coupure pour un modèle à hype … [1467 caractères tronqués]`

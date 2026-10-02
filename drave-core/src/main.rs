@@ -2619,6 +2619,21 @@ fn run_ppl_reparti(opt: Options, pair: &str) {
     // Le mode des LOTS est distinct : `--flux-blocs` donne le mode 4 (lot en
     // listes), tout le reste donne le mode 3 (lot dense f32). Déclaré ici pour
     // que l'affichage du transport, plus bas, le connaisse.
+    // Un modèle à **hyper-connexions** porte son état résiduel en `hc` copies :
+    // le flux d'une coupure fait donc `hc × cachés` valeurs, et le protocole
+    // DRVF n'accepte aujourd'hui que `cachés` canaux par flux (« 16384 canaux
+    // annoncés, 4096 attendus »). Étendre le protocole est un chantier de P6,
+    // pas une ligne à bâcler : tant qu'il n'est pas fait, on refuse — un
+    // découpage qui réduit les copies change le modèle (mesuré : 8 311 → 34 159
+    // de perplexité, écart 3,11 en mode dense où le transport est exact).
+    if mdl.hc.is_some() {
+        let hc = mdl.hc.as_ref().map(|v| v[0].0.hc).unwrap_or(0);
+        println!("[flux] ce modèle porte ses hyper-connexions : son état résiduel fait \
+{hc} copies, donc {} canaux par flux, et le protocole DRVF n'en accepte que {}. \
+Un découpage en grappes demande d'étendre le protocole (P6) — rien n'a été calculé.",
+                 hc * mdl.cfg.hidden, mdl.cfg.hidden);
+        return;
+    }
     let mode_lot = if mode == MODE_BLOCS { MODE_LOT_LISTES } else { MODE_LOT };
     println!("[flux] quantification : {} niveaux, seuil {}, top-k {}, renorm {}",
              mdl.act_levels, mdl.act_thresh, mdl.act_topk, mdl.act_renorm);
