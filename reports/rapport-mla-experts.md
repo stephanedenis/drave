@@ -99,7 +99,43 @@ couche pour un format lisible, ce qui est exactement l'histoire des « 0/79 ».
   aiguillage : Qwen2.5-0.5B **19,3885**, Qwen3-30B en clusters **799,8557**.
 - **48 tests** (46 avant, +2 sur la cohérence des tables de formats).
 
-## 6. Ce qui reste ouvert, et qui est le plus important
+## 6. GLM-5.3 tourne — et le chiffre n'est pas encore croyable
+
+| mesure | valeur |
+|---|---|
+| chargement | 379 à 553 s (216 Go, dont ~52 Go de MLA déquantifiée en f32) |
+| mémoire de pointe | ~90 Go de RSS |
+| couches | 79 MLA, 76/79 avec mélange d'experts chargé (les 3 autres sont denses) |
+| débit, première mesure | **253 s par jeton** |
+| débit, après suppression des allocations par bloc | **53 s par jeton** (dont 20 s d'attention) |
+| perplexité sur 3 jetons | **7 300 931** — inexploitable |
+
+Deux choses, et il faut les séparer :
+
+1. **La mécanique fonctionne** : les 79 couches s'enchaînent, les experts IQ sont
+   déquantifiés, la MLA tient son cache latent, rien ne panique. C'est la
+   première fois que ce modèle calcule quoi que ce soit ici.
+2. **Le résultat est faux ou non validé** — et une perplexité de 7 millions n'est
+   pas « un peu faux » : le modèle est *sûr de lui et à côté*. Les causes
+   possibles sont listées ci-dessous ; tant qu'aucune n'est écartée par une
+   mesure, ce chiffre ne doit pas être publié comme un résultat.
+
+Ce qui a déjà été écarté par lecture du code de référence : les dimensions
+(`qk_nope = 192`, `qk_rope = 64`, `v = 256`, `kv_lora = 512` — toutes cohérentes
+avec `attention.key_length_mla` et les formes des tenseurs), le type de rotation
+(`LLAMA_ROPE_TYPE_NORM`, appariement `i` / `i + n_rot/2`), la base de rotation
+(`rope.freq_base = 8e6`, lue), et l'indexeur DSA (il ne sert qu'au-delà de
+`index_topk = 2048`, et un contexte de 16 jetons garde toutes les clés — donc
+l'omettre est exact, pas approché).
+
+Corrigé au passage, et c'était un vrai bug : **l'expert partagé n'était jamais
+calculé**. `vue_unique` exigeait trois dimensions ; les tenseurs
+`ffn_*_shexp.weight` sont en 2D (`[n_ff, hidden]`), donc `shexp` restait `None`
+et un FFN entier, toujours actif, manquait à chaque couche de chaque modèle
+DeepSeek/GLM/Kimi. C'est le genre d'omission qui ne se voit pas à la lecture et
+qui ne se pardonne pas au calcul.
+
+## 7. Ce qui reste ouvert, et qui est le plus important
 
 1. **Aucune validation externe de la MLA.** Elle est implémentée d'après le C de
    llama.cpp, testée par ses portes internes, mais elle n'a pas encore été

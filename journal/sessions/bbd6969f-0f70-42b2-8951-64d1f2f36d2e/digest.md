@@ -62056,3 +62056,281 @@ Mem:             125          19          80           4          31         106
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A drave-core/src REPRISE.md && git commit -q -F - <<'EOF'\nDéquantification par bloc sans allocation : 253 s/jeton → à remesurer\n\nGLM-5.3 tourne de bout en bout (79 couches MLA, 76/79 mélanges d'experts, 1 jeton\nnoté en 2 … [831 caractères tronqués]`
+
+  ```
+776409b Déquantification par bloc sans allocation : 253 s/jeton → à remesurer
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in $(seq 1 500); do if grep -qE \"perplexité|panicked\" /tmp/glm53_essai7.log; then break; fi; sleep 10; done; echo \"=== GLM-5.3, 4 jetons, tampon réutilisé ===\"; grep -E \"perplexité|panicked|chargées en\" /tmp/glm53_essai7. … [144 caractères tronqués]`
+
+  ```
+started background job bash-102
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"gpt-oss\" tools/portes.sh | head -3; grep -n \"15,1757\\|15.1757\" README.md REPRISE.md | head -6", "description": "Locate gpt-oss gate references"}`
+
+  ```
+9:#   tools/portes.sh rapide     sans gpt-oss (le seul qui prenne ~20 min)
+60:# 5. gpt-oss : le seul long.
+62:    echo "  (gpt-oss : ~20 min, ignoré si non demandé)"
+README.md:363:| **gpt-oss-120b** (MoE, MXFP4) | MXFP4 | **15,1757** (ctx 256) | blocs lus | 60 Go |
+REPRISE.md:35:> **19,3885** et gpt-oss ctx 256 = **15,1757**, `cargo test` **17/17**. La porte
+REPRISE.md:70:| gpt-oss-120b MXFP4 | `--dense --limit 512`, ids_oss | **15,1757** (510 jetons, deux fenêtres) |
+REPRISE.md:182:| porte gpt-oss selon l'ouverture du pilote | sans `DRAVE_GPU` : **15,1757** · avec `DRAVE_GPU=1` : **15,1667** — l'écart vient du déport automatique des projections Q8_0 (> 8 Mo), pas d'une régression |
+REPRISE.md:271:0,06 % (15,1757 → 15,1667 sur gpt-oss).
+REPRISE.md:452:   (référence CPU 15,1757 ; Qwen n'a pas de puits, donc la porte de 19,3885 ne
+  ```
+
+- **job_output** `{"job_id": "bash-102", "timeout_ms": 900000, "wait": true}`
+
+  ```
+=== GLM-5.3, 4 jetons, tampon réutilisé ===
+[modele] 79 couches chargées en 378.777680839s — listes 25.62 Go , 20 threads
+       3 tokens notés — perplexité cumulée 7300930.916  (0.0 tok/s)
+=== perplexité 7300930.9163 sur 3 tokens (0 événements, 160.8 s) ===
+    postes (ms/token) : projets-attn 0.00 | rope 0.00 | attention 20480.59 | proj+mlp 33089.20 | somme 53569.79 | reste (tête + échantillonnage) 42.96
+    dont tête de sortie 21.10 | notation log-sum-exp 1.94 (le reste du « reste » n'est pas chronométré)
+    dont attention : scores 0.00 | softmax 0.00 | somme pondérée + écriture KV 20480.59
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/llama.cpp && grep -rn \"rope_type\\|ROPE_TYPE\" src/models/glm-dsa.cpp src/models/glm4-moe.cpp src/models/glm4.cpp 2>/dev/null | head -8; grep -rn \"LLM_ARCH_GLM_DSA\" -A 3 src/llama-model.cpp | grep -i rope | head -5; grep -rn \"case LLM_ARCH_ … [136 caractères tronqués]`
+
+  ```
+src/models/glm-dsa.cpp:276:                                     LLAMA_ROPE_TYPE_NORM, n_ctx_orig, freq_base, freq_scale,
+src/models/glm-dsa.cpp:306:                                     LLAMA_ROPE_TYPE_NORM, n_ctx_orig, freq_base, freq_scale,
+src/models/glm-dsa.cpp:425:            q_pe = ggml_rope_ext(ctx0, q_pe, inp_pos, nullptr, n_rot, rope_type, n_ctx_orig, freq_base, freq_scale,
+src/models/glm-dsa.cpp:429:            k_pe = ggml_rope_ext(ctx0, k_pe, inp_pos, nullptr, n_rot, rope_type, n_ctx_orig, freq_base, freq_scale,
+src/models/glm4-moe.cpp:185:                            n_rot, sections, rope_type, n_ctx_orig, freq_base, freq_scale,
+src/models/glm4-moe.cpp:189:                            n_rot, sections, rope_type, n_ctx_orig, freq_base, freq_scale,
+src/models/glm4-moe.cpp:194:                                    rope_type, n_ctx_orig, freq_base, freq_scale,
+src/models/glm4-moe.cpp:198:                                    rope_type, n_ctx_orig, freq_base, freq_scale,
+2642-            return LLAMA_ROPE_TYPE_NORM;
+2642-            return LLAMA_ROPE_TYPE_NORM;
+2644-        // the pairs of head values are offset by n_rot/2
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport sys\nsys.path.insert(0,'tools')\nfrom analyse_experts_statique import Lecteur\ng = Lecteur('/home/stephane/Data13TB/stephane/modeles/gguf/GLM-5.3-UD-IQ1_S/GLM-5.3-UD-IQ1_S-00001-of-00006.gguf')\nfor k in sort … [285 caractères tronqués]`
+
+  ```
+general.architecture = glm-dsa
+glm-dsa.attention.head_count = 64
+glm-dsa.attention.head_count_kv = 1
+glm-dsa.attention.indexer.head_count = 32
+glm-dsa.attention.indexer.key_length = 128
+glm-dsa.attention.indexer.top_k = 2048
+glm-dsa.attention.key_length = 576
+glm-dsa.attention.key_length_mla = 256
+glm-dsa.attention.kv_lora_rank = 512
+glm-dsa.attention.layer_norm_rms_epsilon = 9.999999747378752e-06
+glm-dsa.attention.q_lora_rank = 2048
+glm-dsa.attention.value_length = 512
+glm-dsa.attention.value_length_mla = 256
+glm-dsa.block_count = 79
+glm-dsa.expert_count = 256
+glm-dsa.expert_feed_forward_length = 2048
+glm-dsa.expert_gating_func = 2
+glm-dsa.expert_group_count = 1
+glm-dsa.expert_group_used_count = 1
+glm-dsa.expert_shared_count = 1
+glm-dsa.expert_used_count = 8
+glm-dsa.expert_weights_norm = True
+glm-dsa.expert_weights_scale = 2.5
+glm-dsa.leading_dense_block_count = 3
+glm-dsa.rope.dimension_count = 64
+glm-dsa.rope.freq_base = 8000000.0
+  ```
+
+### 🤖 Assistant
+
+⏵ Bug trouvé : l'expert partagé (2D) n'était jamais chargé
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/model.rs'; s=open(p).read()\ns = s.replace(\"\"\"    let vue_unique = |nom: &str| -> Option<Vue4> {\n        let t = g.tensor(nom)?;\n        if t.dims.len() < 3 { return None; }\n        let src = … [1064 caractères tronqués]`
+
+  ```
+BUILD
+
+test result: ok. 48 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.12s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && setsid nohup timeout 3600 ./drave-core/target/release/drave /home/stephane/Data13TB/stephane/modeles/gguf/GLM-5.3-UD-IQ1_S/GLM-5.3-UD-IQ1_S-00001-of-00006.gguf --ppl /tmp/ids_qwen.txt --ctx 16 --limit 4 --threads 20 > /tmp/glm53_essa … [440 caractères tronqués]`
+
+  ```
+started background job bash-103
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"fn rope\\b\" -A 30 drave-core/src/model.rs | head -36", "description": "Review the RoPE implementation while waiting"}`
+
+  ```
+3092:    fn rope(v: &mut [f32], n_head: usize, head_dim: usize, pos: usize, base: f32, n_rot: usize) {
+3093-        // `n_rot` = dimensions tournées ; les autres restent intactes. La
+3094-        // rotation « neox » apparie `i` et `i + n_rot/2`.
+3095-        let n_rot = if n_rot == 0 || n_rot > head_dim { head_dim } else { n_rot };
+3096-        let half = n_rot / 2;
+3097-        for h in 0..n_head {
+3098-            let t = &mut v[h * head_dim..(h + 1) * head_dim];
+3099-            for i in 0..half {
+3100-                let freq = 1.0 / base.powf(2.0 * i as f32 / head_dim as f32);
+3101-                let (s, c) = (pos as f32 * freq).sin_cos();
+3102-                let a = t[i];
+3103-                let b = t[i + half];
+3104-                t[i] = a * c - b * s;
+3105-                t[i + half] = b * c + a * s;
+3106-            }
+3107-        }
+3108-    }
+3109-
+3110-    /// **Préremplissage par lots** : `t` jetons d'un coup, aux positions
+3111-    /// `pos0..pos0+t`.
+3112-    ///
+3113-    /// Toute la différence avec `forward` est dans les projections : elles
+3114-    /// passent d'un produit matrice-vecteur par jeton à un produit
+3115-    /// matrice-matrice pour le lot, donc ch
+… [486 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/llama.cpp && grep -n \"indexer\\|top_k\" src/models/glm-dsa.cpp | sed -n '1,40p'", "description": "Check the DSA indexer usage"}`
+
+  ```
+51:    ml.get_key(LLM_KV_ATTENTION_INDEXER_HEAD_COUNT, hparams.indexer_n_head);
+52:    ml.get_key(LLM_KV_ATTENTION_INDEXER_KEY_LENGTH, hparams.indexer_head_size);
+53:    ml.get_key(LLM_KV_ATTENTION_INDEXER_TOP_K,      hparams.indexer_top_k);
+65:    // BC for GLM 5, 5.1 (full indexers) without indexer_types metadata
+68:        std::fill(hparams.is_indexer_full_impl.begin(), hparams.is_indexer_full_impl.end(), 1);
+70:        hparams.is_indexer_full_impl = GLM_5_2_DEFAULT_INDEXER_TYPES;
+72:    ml.get_key_or_arr(LLM_KV_ATTENTION_INDEXER_TYPES, hparams.is_indexer_full_impl, hparams.n_layer(), false);
+138:        // DSA indexer
+139:        layer.indexer_k_norm   = create_tensor(tn(LLM_TENSOR_INDEXER_K_NORM,   "weight", i), {hparams.indexer_head_size}, flags | TENSOR_NOT_REQUIRED);
+140:        layer.indexer_k_norm_b = create_tensor(tn(LLM_TENSOR_INDEXER_K_NORM,   "bias",   i), {hparams.indexer_head_size}, flags | TENSOR_NOT_REQUIRED);
+141:        layer.indexer_proj     = create_tensor(tn(LLM_TENSOR_INDEXER_PROJ,     "weight", i), {n_embd, hparams.indexer_n_head}, flags | TENSOR_NOT_REQUIRED);
+142:        layer.indexer_attn_k   = create_tensor(tn(LLM_TENSOR_INDEXER_ATTN_K,   "weight", i), 
+… [2317 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/llama.cpp && sed -n '/ggml_tensor \\* top_k = nullptr;/,/kb_idxs/p' src/models/glm-dsa.cpp | grep -nE \"if |n_tokens|top_k =|ggml_topk|argsort\" | head -12", "description": "Find when the indexer applies"}`
+
+  ```
+1:            ggml_tensor * top_k = nullptr;
+4:            if (hparams.is_indexer_full(il)) {
+9:                // split into {n_embd_indexer_head_rope, n_indexer_head, n_tokens}
+11:                    ggml_view_3d(ctx0, indexer_q, n_embd_indexer_head_rope, n_indexer_head, n_tokens,
+16:                // and {n_embd_indexer_head_nope, n_indexer_head, n_tokens}
+18:                    ggml_view_3d(ctx0, indexer_q, n_embd_indexer_head_nope, n_indexer_head, n_tokens,
+29:                // {n_embd_indexer_head_rope + n_embd_indexer_head_nope, n_head, n_tokens}
+39:                // split into {n_embd_indexer_head_rope, 1, n_tokens}
+41:                    ggml_view_3d(ctx0, indexer_k, n_embd_indexer_head_rope, 1, n_tokens,
+46:                // and {n_embd_indexer_head_nope, 1, n_tokens}
+48:                    ggml_view_3d(ctx0, indexer_k, n_embd_indexer_head_nope, 1, n_tokens,
+59:                // {n_embd_indexer_head_rope + n_embd_indexer_head_nope, 1, n_tokens}
+  ```
+
+- **job_kill** `{"job_id": "bash-103", "reason": "Priorité à la référence externe : libérer la RAM"}`
+
+  ```
+requested cancellation of job bash-103
+  ```
+
+- **bash** `{"command": "pkill -9 -f \"GLM-5.3-UD-IQ1_S-00001\" ; sleep 3; free -g | sed -n 2p; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 300 ./drave-core/target/release/drave /home/stephane/Data13TB/stephane/modeles/gguf/GLM-5.3-UD-IQ1_S/GLM-5.3-UD-IQ1_S-00001-of-00006.gguf --tokenize --fic … [148 caractères tronqués]`
+
+  ```
+(no output)
+[killed by signal: SIGKILL]
+  ```
+
+- **bash** `{"command": "ps -eo pid,args | grep \"[G]LM-5.3-UD-IQ1\" | head -2; free -g | sed -n 2p", "description": "Check leftover GLM processes"}`
+
+  ```
+Mem:             125          13          79           4          38         112
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 400 ./drave-core/target/release/drave /home/stephane/Data13TB/stephane/modeles/gguf/GLM-5.3-UD-IQ1_S/GLM-5.3-UD-IQ1_S-00001-of-00006.gguf --tokenize --fichier /tmp/wt2_txt.txt --sortie /tmp/ids_glm.txt 2>&1 | tail -2; ls -la  … [109 caractères tronqués]`
+
+  ```
+4591 tokens écrits dans /tmp/ids_glm.txt (vocabulaire du modèle : 154880)
+réversibilité : texte reconstruit identique ✅ (20000 octets)
+-rw-r--r--. 1 stephane stephane 21377  2 oct 01:25 /tmp/ids_glm.txt
+198,284,8396,425,10960,465,284,14721,8396,425,10960,465,374,458,6364,4531,1154,12419,323,33334,12083,659,1260,1030,264,8
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && export LD_LIBRARY_PATH=/home/stephane/Data13TB/stephane/GitHub/llama.cpp/build/bin && nohup timeout 3000 ./tools/ref_logits /home/stephane/Data13TB/stephane/modeles/gguf/GLM-5.3-UD-IQ1_S/GLM-5.3-UD-IQ1_S-00001-of-00006.gguf /tmp/ids_ … [182 caractères tronqués]`
+
+  ```
+référence GLM lancée
+model has unused tensor blk.78.nextn.shared_head_norm.weight (size = 24576 bytes) -- ignoring
+done_getting_tensors: tensor 'token_embd.weight' (q4_K) (and 1781 others) cannot be used with preferred buffer type CPU_REPACK, using CPU instead
+  ```
+
+- **bash** `{"command": "sleep 50; tail -3 /tmp/ref_glm_4.log; free -g | sed -n 2p; ps -eo pid,rss,comm --sort=-rss | head -2", "description": "Poll the GLM reference"}`
+
+  ```
+model has unused tensor blk.78.nextn.hnorm.weight (size = 24576 bytes) -- ignoring
+model has unused tensor blk.78.nextn.shared_head_norm.weight (size = 24576 bytes) -- ignoring
+done_getting_tensors: tensor 'token_embd.weight' (q4_K) (and 1781 others) cannot be used with preferred buffer type CPU_REPACK, using CPU instead
+Mem:             125          13          66           4          51         112
+    PID   RSS COMMAND
+3651376 19683908 ref_logits
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in $(seq 1 500); do if grep -qE \"perplexite|erreur|error\" /tmp/ref_glm_4.log; then break; fi; sleep 10; done; echo \"=== référence GLM (llama.cpp) ===\"; grep -E \"perplexite|NLL|fichier|error\" /tmp/ref_glm_4.log | tail -4", … [82 caractères tronqués]`
+
+  ```
+started background job bash-104
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/rapport-mla-experts.md'; s=open(p).read()\ns = s.replace(\"\"\"## 6. Ce qui reste ouvert, et qui est le plus important\"\"\",\n\"\"\"## 6. GLM-5.3 tourne — et le chiffre n'est pas encore croyable\n\n| mes … [2127 caractères tronqués]`
+
+  ```
+ok
+model has unused tensor blk.78.nextn.shared_head_norm.weight (size = 24576 bytes) -- ignoring
+done_getting_tensors: tensor 'token_embd.weight' (q4_K) (and 1781 others) cannot be used with preferred buffer type CPU_REPACK, using CPU instead
+  ```
+
+- **job_output** `{"job_id": "bash-104", "timeout_ms": 900000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "sleep 45; ps -eo pid,etimes,rss,comm --sort=-rss | head -2; free -g | sed -n 2p; tail -1 /tmp/ref_glm_4.log", "description": "Check reference progress"}`
+
+  ```
+PID ELAPSED   RSS COMMAND
+3651376     745 109336000 ref_logits
+Mem:             125          13           0           4         116         112
+done_getting_tensors: tensor 'token_embd.weight' (q4_K) (and 1781 others) cannot be used with preferred buffer type CPU_REPACK, using CPU instead
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for M in \"GLM-5.3-UD-IQ1_S/GLM-5.3-UD-IQ1_S-00001-of-00006.gguf\" \"Kimi-K2.7-Code-UD-IQ1_M/Kimi-K2.7-Code-UD-IQ1_M-00001-of-00008.gguf\"; do echo \"=== ${M%%/*} ===\"; ./drave-core/target/release/drave /home/stephane/Data13TB/steph … [261 caractères tronqués]`
+
+  ```
+=== GLM-5.3-UD-IQ1_S ===
+  F32      blk.3.exp_probs_b.bias                 [256] · 0.0 M poids · fichier 1
+  F32      blk.3.ffn_gate_inp.weight              [256, 6144] · 1.6 M poids · fichier 1
+  F32      blk.4.exp_probs_b.bias                 [256] · 0.0 M poids · fichier 1
+  F32      blk.4.ffn_gate_inp.weight              [256, 6144] · 1.6 M poids · fichier 1
+=== Kimi-K2.7-Code-UD-IQ1_M ===
+  F32      blk.1.exp_probs_b.bias                 [384] · 0.0 M poids · fichier 1
+  F32      blk.1.ffn_gate_inp.weight              [384, 7168] · 2.8 M poids · fichier 1
+  F32      blk.2.exp_probs_b.bias                 [384] · 0.0 M poids · fichier 1
+  F32      blk.2.ffn_gate_inp.weight              [384, 7168] · 2.8 M poids · fichier 1
+418:    { LLM_TENSOR_FFN_EXP_PROBS_B,                        "blk.%d.exp_probs_b" },
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/model.rs'; s=open(p).read()\ns = s.replace(\"\"\"    let routeur_biais = if g.tensor(&p(\"ffn_gate_inp.bias\")).is_some() {\n        Some(g.dequant(&p(\"ffn_gate_inp.bias\")))\n    } else { None }; … [984 caractères tronqués]`
+
+  ```
+BUILD
+
+test result: ok. 48 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.12s
+  ```
+
+- **bash** `{"command": "sleep 50; tail -1 /tmp/ref_glm_4.log; ps -eo pid,etimes,rss,comm --sort=-rss | head -2", "description": "Poll the GLM reference"}`
+
+  ```
+done_getting_tensors: tensor 'token_embd.weight' (q4_K) (and 1781 others) cannot be used with preferred buffer type CPU_REPACK, using CPU instead
+    PID ELAPSED   RSS COMMAND
+3651376     881 106544556 ref_logits
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat >> drave-core/src/model.rs <<'EOF'\nEOF\ngrep -n \"fn router\" -A 6 drave-core/src/model.rs | head -8; git add -A drave-core/src reports/ && git commit -q -F - <<'EOF'\nExpert partagé (2D) et biais de sélection `exp_probs_b` : de … [1181 caractères tronqués]`

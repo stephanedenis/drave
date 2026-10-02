@@ -490,11 +490,19 @@ au lieu de {n_expert}, et aucun mapping n'est actif"),
     };
     // Vue d'un tenseur 3D NON découpé (l'expert partagé, qui reste dans le
     // fichier commun) : aucune traduction d'index n'est nécessaire.
+    // Vue d'un tenseur NON découpé : l'expert partagé, qui reste dans le
+    // fichier commun. Il est en 2D (`[n_ff, hidden]`) — exiger 3 dimensions le
+    // refusait en silence, et l'expert partagé des modèles DeepSeek/GLM/Kimi
+    // n'était donc jamais calculé. Sa contribution n'est pas un détail : c'est
+    // un FFN entier, toujours actif, ajouté à la sortie des experts routés.
     let vue_unique = |nom: &str| -> Option<Vue4> {
         let t = g.tensor(nom)?;
-        if t.dims.len() < 3 { return None; }
         let src = source_de(t.ttype)?;
-        let (n_out, n_in) = (t.dims[1] as usize, t.dims[2] as usize);
+        let (n_out, n_in) = match t.dims.len() {
+            2 => (t.dims[0] as usize, t.dims[1] as usize),
+            n if n >= 3 => (t.dims[1] as usize, t.dims[2] as usize),
+            _ => return None,
+        };
         let bloc = if t.ttype == crate::gguf::GGML_Q4_K || t.ttype == crate::gguf::GGML_Q6_K { 256 } else { 32 };
         if n_in % bloc != 0 { return None; }
         Some(Vue4 { base: g.data_ptr(nom)?, n_out, n_in, nb: n_in / bloc, src })
@@ -542,7 +550,16 @@ incohérente entre les trois projections d'experts", gate.len(), up.len(), down.
         if t.dims.len() != 2 || t.dims[0] as usize != n_expert { return None; }
         Some(g.dequant(nom))
     };
-    let routeur_biais = if g.tensor(&p("ffn_gate_inp.bias")).is_some() {
+    // Biais de SÉLECTION, et il y en a deux sortes dans les GGUF :
+    //   - `ffn_gate_inp.bias` (gpt-oss) : ajouté aux logits avant le top-k ;
+    //   - `exp_probs_b.bias` (DeepSeek-V3/V4, GLM-5.3, Kimi) : le
+    //     `e_score_correction_bias` du routage `noaux_tc`, ajouté aux scores
+    //     pour la sélection SEULEMENT.
+    // Les confondre ou en oublier un change les experts choisis — et rien
+    // d'autre : la perplexité part en vrille sans qu'aucun tenseur ne manque.
+    let routeur_biais = if g.tensor(&p("exp_probs_b.bias")).is_some() {
+        Some(g.dequant(&p("exp_probs_b.bias")))
+    } else if g.tensor(&p("ffn_gate_inp.bias")).is_some() {
         Some(g.dequant(&p("ffn_gate_inp.bias")))
     } else { None };
     let (bg, bu, bd) = (biais(&p("ffn_gate_exps.bias")), biais(&p("ffn_up_exps.bias")),
