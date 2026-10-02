@@ -64592,3 +64592,18 @@ borne par blocs max : 17.6646  (×12.4)
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-tete-garantie.md <<'EOF'\n# Rapport — restriction de tête GARANTIE : exacte, et sans gain\n\nChantier 2 de la session. La question posée était précise : peut-on ne pas\ncalculer tous les logits **sans jamais cha … [5320 caractères tronqués]`
+
+  ```
+c147082 Tête garantie : implémentée, exacte, et mesurée sans gain
+  ```
+
+- **bash** `{"command": "TZ=America/New_York date \"+HAE %H:%M\"; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='REPRISE.md'; s=open(p).read()\ns = s.replace(\"\"\"**Ce qui reste ouvert, par ordre de valeur :**\n\n| chantier | où c'en est |\n|---|---|\n| l'écart MLA qui saute à la po … [1259 caractères tronqués]`
+
+  ```
+HAE 07:03
+test result: ok. 48 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.12s
+
+=== perplexité 19.3885 sur 510 tokens (0 événements, 15.1 s) ===
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A REPRISE.md && git commit -q -m \"REPRISE : le chantier 2 (tête garantie) est clos par une mesure\" && grep -n \"fn prelire_expert\" -A 25 drave-core/src/model.rs | head -30", "description": "Commit and read the prefetch im … [14 caractères tronqués]`

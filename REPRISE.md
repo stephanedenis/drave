@@ -1118,6 +1118,16 @@ tools/extraire_tables_ggml.sh verifier   # les grilles IQ embarquées = celles d
    charger le modèle, ce qu'il sait calculer et ce qui manque — au lieu de mourir
    sur « tenseur blk.3.attn_q.weight absent », qui accuse le fichier.
 
+**Chantier 2 de la feuille de route (tête garantie) : clos, et clos par une
+mesure.** `--tete-garantie` est implémenté et **exact** (mêmes jetons générés
+avec et sans), mais la borne de Cauchy-Schwarz vaut **12,6×** le logit maximal
+sur les poids réels (18,0381 contre 1,4283), le raffinement par blocs de 32
+n'apporte rien (12,4×), et la boucle finit par calculer **151 936 lignes sur
+151 936**. Gain nul. Il n'existe pas, sur ces poids, de borne qui distingue les
+lignes hors liste avant de les avoir lues : le seul gain réel reste
+`--tete-restreinte` (×7), qui change la sortie. Détail :
+[`reports/rapport-tete-garantie.md`](reports/rapport-tete-garantie.md).
+
 **Ce qui reste ouvert, par ordre de valeur :**
 
 | chantier | où c'en est |

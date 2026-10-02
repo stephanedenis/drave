@@ -7,12 +7,12 @@
 | Début | 2026-09-28 14:46 |
 | Durée | 88.3 h |
 | Tours | 70 |
-| Messages | 4067 |
-| Appels d'outils | 3871 |
+| Messages | 4069 |
+| Appels d'outils | 3873 |
 | Fichiers touchés | 81 |
-| Commandes | 3406 |
+| Commandes | 3408 |
 | Sous-agents | 22 |
-| Commits | 309 |
+| Commits | 310 |
 | Compactages de contexte | 5 |
 
 ## Objectifs déclarés
@@ -3581,7 +3581,7 @@ Le plus important est peut-être ailleurs : trois des cinq plus gros modèles de
 
 ### Tour 70 — <goal_round> Objective: "Session autonome jusqu'à 8h HAE (02/10). Mener les optimisations d'architecture mémoire du mote … [1317 caractères tronqués]
 
-*17 appels d'outils.* Actions notables :
+*19 appels d'outils.* Actions notables :
 
 - get_goal
 - bash — Check time and the head restriction code
@@ -3597,7 +3597,7 @@ Le plus important est peut-être ailleurs : trois des cinq plus gros modèles de
 - bash — Check where the option block sits
 - bash — Test the guaranteed head on a real generation
 - bash — Generate without the guarantee for comparison
-- … et 3 autres
+- … et 5 autres
 
 ## 3. Travail accompli
 
@@ -3754,7 +3754,7 @@ Le plus important est peut-être ailleurs : trois des cinq plus gros modèles de
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 3366 autres
+- … et 3368 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4211,4 +4211,5 @@ Le plus important est peut-être ailleurs : trois des cinq plus gros modèles de
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' # 1) README : préciser la portée de la validation. p='README.md'; s=open(p).read() s = s.
 - REPRISE : bilan de la session (16 commits, 5 changements, 5 chantiers ouverts)" && git log --oneline -1; git status --short | head -2
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-tete-garantie.md <<'EOF' # Rapport — restriction de tête GARANTIE : exacte, et sans 
+- REPRISE : le chantier 2 (tête garantie) est clos par une mesure" && grep -n "fn prelire_expert" -A 25 drave-core/src/model.rs | head -30
 
