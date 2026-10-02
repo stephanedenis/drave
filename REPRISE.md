@@ -1056,8 +1056,8 @@ déquantification domine le coût des experts).
 |---|---|---|
 | Qwen3-30B-A3B, Qwen3-235B-A22B | 30 / 235 G | **oui** |
 | gpt-oss-120b | 117 G | **oui** |
-| GLM-5.3 (glm-dsa) | 754 G | **oui depuis cette session** (MLA rang faible) |
-| Kimi-K2.7 (deepseek2) | 1 026 G | **oui depuis cette session** |
+| GLM-5.3 (glm-dsa) | 754 G | **oui**, et validé contre llama.cpp (corrélation 0,999) |
+| Kimi-K2.7 (deepseek2) | 1 026 G | **oui** (calculé : 161 s de chargement, 73 s/jeton) — non validé |
 | GLM-5.3-Flash | 321 G | non — hyper-connexions |
 | DeepSeek-V4-Flash / V4.1 | 284 / 755 G | non — hyper-connexions, index, sortie à rang faible |
 

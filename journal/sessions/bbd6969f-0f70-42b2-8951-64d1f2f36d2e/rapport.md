@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 86.2 h |
+| Durée | 86.5 h |
 | Tours | 69 |
-| Messages | 3994 |
-| Appels d'outils | 3802 |
+| Messages | 4002 |
+| Appels d'outils | 3810 |
 | Fichiers touchés | 81 |
-| Commandes | 3351 |
+| Commandes | 3357 |
 | Sous-agents | 22 |
-| Commits | 303 |
+| Commits | 304 |
 | Compactages de contexte | 5 |
 
 ## Objectifs déclarés
@@ -3526,7 +3526,7 @@ Sur cette session, les mesures m
 
 ### Tour 69 — implémente toute les optimisation et détection de matériel avec heuristiques de configuration automatique.
 
-*763 appels d'outils.* Actions notables :
+*771 appels d'outils.* Actions notables :
 
 - bash — Inspect existing GPU detection
 - write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/materiel.rs`
@@ -3542,7 +3542,7 @@ Sur cette session, les mesures m
 - bash — Read KV bits resolution
 - bash — Integrate KV and VRAM heuristics
 - bash — Lighten detection and run gates
-- … et 689 autres
+- … et 695 autres
 
 **Synthèse produite :**
 
@@ -3703,7 +3703,7 @@ Sur cette session, les mesures m
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 3311 autres
+- … et 3317 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4154,4 +4154,5 @@ Sur cette session, les mesures m
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git commit -q --amend -F - <<'EOF' MLA : dire NON VALIDÉE partout où elle est annoncée  Le moteur écrit ma
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p='REPRISE.md'; s=open(p).read() s = s.replace("""### Le piège à ne pas rouvrir : la MLA 
 - Rapport MLA : le bug, la méthode qui l'a trouvé, et ce qui reste ouvert  Le rapport dit maintenant ce qui est mesuré (corrélation 0,999024, top-1 3/3, 5 966 con
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p='REPRISE.md'; s=open(p).read() s = s.replace("""| GLM-5.3 (glm-dsa) | 754 G | **oui dep
 

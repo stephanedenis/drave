@@ -63768,3 +63768,75 @@ Ce qui a déjà été écarté par lecture du code de référence : les dimensi
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/rapport-mla-experts.md'; s=open(p).read()\ns = s.replace(\"\"\"## 6. GLM-5.3 tourne — et le chiffre n'est pas encore croyable\"\"\",\n\"\"\"## 6. GLM-5.3 tourne, et son résultat est validé\"\"\")\ns = s.r … [3558 caractères tronqués]`
+
+  ```
+3b9c04a Rapport MLA : le bug, la méthode qui l'a trouvé, et ce qui reste ouvert
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && setsid nohup timeout 3000 ./drave-core/target/release/drave /home/stephane/Data13TB/stephane/modeles/gguf/Kimi-K2.7-Code-UD-IQ1_M/Kimi-K2.7-Code-UD-IQ1_M-00001-of-00008.gguf --ppl /tmp/ids_glm.txt --ctx 16 --limit 3 --threads 20 > /t … [198 caractères tronqués]`
+
+  ```
+Kimi-K2.7 lancé (1 026 G poids)
+[config] MLA : 61 couches · q_lora 1536 · kv_lora 512 · qk_nope 128 + qk_rope 64 · v 128 · cache latente 576 valeurs par jeton (au lieu de 256)
+[moe] couche 0 : « blk.0.ffn_gate_exps.weight » absent et aucun mapping
+Mem:             125          37          43           2          48          88
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in $(seq 1 300); do if grep -qE \"perplexité|panicked\" /tmp/kimi_essai.log; then break; fi; sleep 10; done; echo \"=== Kimi-K2.7 ===\"; grep -E \"perplexité|panicked|chargées\" /tmp/kimi_essai.log | tail -3", "description": "W … [49 caractères tronqués]`
+
+  ```
+started background job bash-120
+  ```
+
+- **job_output** `{"job_id": "bash-120", "timeout_ms": 900000, "wait": true}`
+
+  ```
+=== Kimi-K2.7 ===
+[modele] 61 couches chargées en 161.228307842s — listes 11.82 Go , 20 threads
+       2 tokens notés — perplexité cumulée 1236804.390  (0.0 tok/s)
+=== perplexité 1236804.3900 sur 2 tokens (0 événements, 278.3 s) ===
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 400 ./drave-core/target/release/drave /home/stephane/Data13TB/stephane/modeles/gguf/Kimi-K2.7-Code-UD-IQ1_M/Kimi-K2.7-Code-UD-IQ1_M-00001-of-00008.gguf --tokenize --fichier /tmp/wt2_txt.txt --sortie /tmp/ids_kimi.txt 2>&1 | t … [418 caractères tronqués]`
+
+  ```
+réversibilité : texte reconstruit identique ✅ (20000 octets)
+198,327,16103,509,14791,442,327,67667,16103,509,14791,442,387,519,9159,7650,3100
+Kimi relancé avec ses propres jetons
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in $(seq 1 300); do if grep -qE \"perplexité|panicked\" /tmp/kimi_essai2.log; then break; fi; sleep 10; done; echo \"=== Kimi-K2.7, ses propres jetons ===\"; grep -E \"perplexité|panicked\" /tmp/kimi_essai2.log | tail -2", "des … [74 caractères tronqués]`
+
+  ```
+started background job bash-121
+  ```
+
+- **job_output** `{"job_id": "bash-121", "timeout_ms": 900000, "wait": true}`
+
+  ```
+=== Kimi-K2.7, ses propres jetons ===
+       2 tokens notés — perplexité cumulée 81383.543  (0.0 tok/s)
+=== perplexité 81383.5426 sur 2 tokens (0 événements, 145.6 s) ===
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/rapport-mla-experts.md'; s=open(p).read()\ns = s.replace(\"\"\"## 7. Ce qui reste ouvert, et qui est le plus important\"\"\",\n\"\"\"## 6ter. Kimi-K2.7 : 1 026 G poids, premier calcul\n\nMême chemin MLA,  … [1005 caractères tronqués]`
+
+  ```
+=== Portes ===
+  cargo test --release                       48 verts  ✅
+  Qwen2.5-0.5B ctx 256                       19.3885  ✅
+  Qwen3-30B en clusters (origine : 799,8557) 799.8557  ✅
+  threads par défaut (physiques)            20  ✅
+  formats contre libggml                     17 concorde(s), 0 divergence(s), 0 absent(s)  ✅
+  GLM-5.3 : sigmoïde ×2,5                  sigmoïde  ✅
+  Kimi-K2.7 : sigmoïde ×2,827              sigmoïde  ✅
+  V4-Flash : racine de softplus              racine de softplus  ✅
+  Qwen3-235B : softmax                       softmax  ✅
+  (gpt-oss ~20 min et les portes de formats : lancez-les, ils sont hors de ce script)
+
+toutes les portes sont vertes
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='REPRISE.md'; s=open(p).read()\ns = s.replace(\"\"\"| GLM-5.3 (glm-dsa) | 754 G | **oui depuis cette session** (MLA rang faible) |\n| Kimi-K2.7 (deepseek2) | 1 026 G | **oui depuis cette session** |\"\"\",\n\"\"\" … [1222 caractères tronqués]`

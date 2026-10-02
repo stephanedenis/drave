@@ -148,6 +148,25 @@ La descente étage par étage, instrumentée des deux côtés (`ref_logits
 `kqv_out-0` divergeait. La position 0 explique tout en une ligne : à la position
 0 l'attention n'a qu'une clé, donc `kqv_out = v_0 = wv_b · c_kv`.
 
+## 6ter. Kimi-K2.7 : 1 026 G poids, premier calcul
+
+Même chemin MLA, mêmes formats IQ, 61 couches, 384 experts dont 8 par jeton.
+
+| mesure | valeur |
+|---|---|
+| chargement | **161 s** (mmap, 1 026 G poids sur le NVMe) |
+| 2 jetons notés | **146 s** (73 s/jeton) |
+| perplexité (2 jetons froids, ses propres jetons) | 81 384 |
+| perplexité avec les jetons de GLM (erreur de ma part) | 1 236 804 |
+
+Le second chiffre est instructif : **un tiers de la perplexité venait des
+jetons**, pas du modèle. Une séquence tokenisée par un autre modèle n'est pas une
+entrée valide, et rien dans le moteur ne le dit — la leçon vaut d'être gardée.
+
+Aucune référence externe n'a été calculée pour Kimi (1 026 G, deux chargements de
+plusieurs minutes) : **ce chiffre n'est pas validé**, contrairement à celui de
+GLM-5.3.
+
 ## 7. Ce qui reste ouvert, et qui est le plus important
 
 1. **La validation MLA ne porte que sur 3 jetons et une position de référence.**
