@@ -1177,6 +1177,20 @@ pub struct Mla4 {
     pub indexer_top_k: usize,
     /// La couche a-t-elle un indexeur (`indexer.proj` dans le fichier) ?
     pub a_indexeur: bool,
+    /// **Indexeur** (« lightning indexer ») : il note chaque bloc compressé et
+    /// n'en garde que les `indexer_top_k` meilleurs. Ses propres tenseurs :
+    /// compresseur de 256 valeurs par jeton (deux moitiés de 128, comme le CSA
+    /// en a deux de 512), norme de 128, projection de requête et poids par tête.
+    pub idx_q_b: Vec<f32>,
+    pub idx_proj: Vec<f32>,
+    pub idx_comp_kv: Vec<f32>,
+    pub idx_comp_gate: Vec<f32>,
+    pub idx_comp_ape: Vec<f32>,
+    pub idx_comp_norm: Vec<f32>,
+    /// Têtes de l'indexeur (`indexer.head_count`).
+    pub idx_nh: usize,
+    /// Dimension d'une tête d'indexeur (`indexer.key_length`, 128).
+    pub idx_hd: usize,
     /// Compresseur (`None` sur une couche brute) : `coff·head_dim × h` pour la
     /// valeur et la porte, `coff·head_dim × ratio` pour l'`ape`, `head_dim` pour
     /// la norme.
@@ -1196,6 +1210,12 @@ pub struct EtatV4<'a> {
     pub comp_kv: &'a mut Vec<f32>,
     pub comp_gate: &'a mut Vec<f32>,
     pub cles_comp: &'a mut Vec<f32>,
+    /// L'indexeur a son propre compresseur et ses propres blocs (128 valeurs).
+    pub idx_kv: &'a mut Vec<f32>,
+    pub idx_gate: &'a mut Vec<f32>,
+    pub idx_cles: &'a mut Vec<f32>,
+    /// Scores de l'indexeur par bloc, gardés pour la trace et l'analyse.
+    pub idx_scores: &'a mut Vec<f32>,
 }
 
 /// **Hyper-connexions** (DeepSeek-V4 / V4.1) : au lieu d'additionner la sortie
@@ -1926,6 +1946,13 @@ pub struct Model {
     /// normées et tournées. Ce sont des clés d'activation au sens de la vision :
     /// un bloc est un résumé qu'on peut tracer, compter et transporter.
     pub mla4_cles_comp: Vec<Vec<f32>>,
+    /// État et blocs de l'**indexeur** (128 valeurs par bloc).
+    pub mla4_idx_kv: Vec<Vec<f32>>,
+    pub mla4_idx_gate: Vec<Vec<f32>>,
+    pub mla4_idx_cles: Vec<Vec<f32>>,
+    /// Scores de l'indexeur par bloc : la « liste de candidats » de la vision,
+    /// gardée même quand le top-k les garde tous.
+    pub mla4_idx_scores: Vec<Vec<f32>>,
     /// **Hyper-connexions** par couche : `(attention, FFN)`. Présentes sur
     /// DeepSeek-V4 / V4.1 (`hc_attn_fn`), absentes partout ailleurs.
     pub hc: Option<Vec<(Hc, Hc)>>,
@@ -2682,6 +2709,14 @@ reste non implémenté.");
                     indexer_top_k: dim(&["attention.indexer.top_k", "index_topk"], "index_topk")
                         .unwrap_or(512),
                     a_indexeur: g.tensor(&p("indexer.proj.weight")).is_some(),
+                    idx_q_b: g.dequant_optionnel(&p("indexer.attn_q_b.weight")).unwrap_or_default(),
+                    idx_proj: g.dequant_optionnel(&p("indexer.proj.weight")).unwrap_or_default(),
+                    idx_comp_kv: g.dequant_optionnel(&p("indexer_compressor_kv.weight")).unwrap_or_default(),
+                    idx_comp_gate: g.dequant_optionnel(&p("indexer_compressor_gate.weight")).unwrap_or_default(),
+                    idx_comp_ape: g.dequant_optionnel(&p("indexer_compressor_ape.weight")).unwrap_or_default(),
+                    idx_comp_norm: g.dequant_optionnel(&p("indexer_compressor_norm.weight")).unwrap_or_default(),
+                    idx_nh: dim(&["attention.indexer.head_count"], "index_n_heads").unwrap_or(0),
+                    idx_hd: dim(&["attention.indexer.key_length"], "index_head_dim").unwrap_or(0),
                     q_a: g.dequant(&p("attn_q_a.weight")),
                     q_a_norm: g.dequant(&p("attn_q_a_norm.weight")),
                     q_b: g.dequant(&p("attn_q_b.weight")),
@@ -2719,6 +2754,23 @@ reste non implémenté.");
         };
         let mla4_cles_comp = match mla4.as_ref() {
             Some(v) => v.iter().map(|m| vec![0f32; (ctx / m.ratio.max(1) + 2) * m.head_dim]).collect(),
+            None => Vec::new(),
+        };
+        let largeur_idx = |m: &Mla4| m.idx_comp_kv.len() / m.h.max(1);
+        let mla4_idx_kv = match mla4.as_ref() {
+            Some(v) => v.iter().map(|m| vec![0f32; ctx * largeur_idx(m)]).collect(),
+            None => Vec::new(),
+        };
+        let mla4_idx_gate = match mla4.as_ref() {
+            Some(v) => v.iter().map(|m| vec![0f32; ctx * largeur_idx(m)]).collect(),
+            None => Vec::new(),
+        };
+        let mla4_idx_cles = match mla4.as_ref() {
+            Some(v) => v.iter().map(|m| vec![0f32; (ctx / m.ratio.max(1) + 2) * m.idx_hd]).collect(),
+            None => Vec::new(),
+        };
+        let mla4_idx_scores = match mla4.as_ref() {
+            Some(v) => v.iter().map(|m| vec![0f32; ctx / m.ratio.max(1) + 2]).collect(),
             None => Vec::new(),
         };
 
@@ -3087,6 +3139,7 @@ mapping {}",
         Model {
             g, cfg, layers, out_norm, pool,
             mla4, mla4_cache, mla4_comp_kv, mla4_comp_gate, mla4_cles_comp,
+            mla4_idx_kv, mla4_idx_gate, mla4_idx_cles, mla4_idx_scores,
             hc, hc_tete,
             kv: caches_kv,
             ctx, events: 0, paires: [0; 3], act_levels: 127.0, act_thresh: 0.0, act_topk: 0, act_renorm: false,
@@ -4568,13 +4621,9 @@ s'applique pas — utilisez --lot 1, ou réenregistrez sans DRAVE_TRACE_BLOCS");
         // qu'il y a moins de blocs que son top-k, il les garde TOUS — le
         // résultat est alors exact, et on l'exécute. Au-delà, on refuse : un
         // chiffre faux qui a l'air juste coûte plus cher qu'un refus.
-        if m.a_indexeur {
-            let n_blocs = (pos + 1) / m.ratio.max(1);
-            assert!(n_blocs <= m.indexer_top_k,
-                    "couche {} : {} blocs compressés > indexer.top_k = {} — l'indexeur \
-n'est pas implémenté (P5), et sans lui le choix des blocs serait faux",
-                    l, n_blocs, m.indexer_top_k);
-        }
+        // L'indexeur est implémenté : il n'y a plus à refuser au-delà de son
+        // top-k, il CHOISIT les blocs. Le nombre gardé reste borné par lui.
+
         // --- requête : descente, norme, remontée, norme PAR TÊTE sans poids
         let mut qr = vec![0f32; m.q_a.len() / h];
         matvec_f32(&m.q_a, x, h, qr.len(), &mut qr);
@@ -4709,6 +4758,121 @@ n'est pas implémenté (P5), et sans lui le choix des blocs serait faux",
                 *paires += (hd as u64) * (m.ratio as u64) * 2;
             }
         }
+        // ---- indexeur : il NOTE chaque bloc compressé et n'en garde que les
+        // `indexer.top_k` meilleurs. Ses blocs sont plus étroits (128 valeurs)
+        // mais suivent exactement la même règle de chevauchement que le CSA.
+        let mut blocs_gardes: Option<Vec<u32>> = None;
+        if m.a_indexeur {
+            let idh = m.idx_hd;
+            let iw = m.idx_comp_kv.len() / h.max(1);        // 2 × idx_hd
+            matvec_f32(&m.idx_comp_kv, x, h, iw, &mut etat.idx_kv[pos * iw..(pos + 1) * iw]);
+            matvec_f32(&m.idx_comp_gate, x, h, iw, &mut etat.idx_gate[pos * iw..(pos + 1) * iw]);
+            let sp = pos % m.ratio;
+            for c in 0..iw {
+                etat.idx_gate[pos * iw + c] += m.idx_comp_ape[sp * iw + c];
+            }
+            *paires += (m.idx_comp_kv.len() + m.idx_comp_gate.len()) as u64;
+            if (pos + 1) % m.ratio == 0 {
+                let bloc = pos / m.ratio;
+                let debut = pos + 1 - m.ratio;
+                let t0 = debut as isize - m.ratio as isize;    // chevauchement CSA
+                let n_fen = (pos as isize - t0 + 1) as usize;
+                let (portes, valeurs) = (&etat.idx_gate, &etat.idx_kv);
+                let mut brut = vec![0f32; idh];
+                for c in 0..idh {
+                    let mut mx = f32::NEG_INFINITY;
+                    for k in 0..n_fen {
+                        let t = t0 + k as isize;
+                        let role = if k < m.ratio { 0 } else { 1 };
+                        let sc = if t < 0 { f32::NEG_INFINITY }
+                                 else { portes[t as usize * iw + role * idh + c] };
+                        if sc > mx { mx = sc; }
+                    }
+                    let mut somme = 0f32;
+                    for k in 0..n_fen {
+                        let t = t0 + k as isize;
+                        let role = if k < m.ratio { 0 } else { 1 };
+                        let sc = if t < 0 { f32::NEG_INFINITY }
+                                 else { portes[t as usize * iw + role * idh + c] };
+                        somme += (sc - mx).exp();
+                    }
+                    let inv = if somme > 0.0 { 1.0 / somme } else { 0.0 };
+                    let mut acc = 0f32;
+                    for k in 0..n_fen {
+                        let t = t0 + k as isize;
+                        if t < 0 { continue; }
+                        let role = if k < m.ratio { 0 } else { 1 };
+                        let w = (portes[t as usize * iw + role * idh + c] - mx).exp() * inv;
+                        acc += w * valeurs[t as usize * iw + role * idh + c];
+                    }
+                    brut[c] = acc;
+                }
+                // norme, puis rotation de la partie rope (comme les blocs CSA)
+                let mut norm = vec![0f32; idh];
+                Self::rmsnorm(&brut, &m.idx_comp_norm, m.eps, &mut norm);
+                let idr = nr.min(idh);
+                let idn = idh - idr;
+                {
+                    let mut kp = vec![0f32; idr];
+                    kp.copy_from_slice(&norm[idn..]);
+                    Self::rope_norm(&mut kp, 1, idr, debut, base_rope, idr, false);
+                    norm[idn..].copy_from_slice(&kp);
+                }
+                etat.idx_cles[bloc * idh..(bloc + 1) * idh].copy_from_slice(&norm);
+            }
+            // La requête de l'indexeur descend de `qr_norm` (la requête MLA
+            // normalisée), pas de l'état : c'est la même « question » posée à
+            // une autre résolution.
+            if n_vis > 0 {
+                let nq = m.idx_nh * idh;
+                let mut q = vec![0f32; nq];
+                matvec_f32(&m.idx_q_b, &qrn, qr.len(), nq, &mut q);
+                let idr = nr.min(idh);
+                let idn = idh - idr;
+                {
+                    let mut qp = vec![0f32; m.idx_nh * idr];
+                    for hh in 0..m.idx_nh {
+                        qp[hh * idr..(hh + 1) * idr]
+                            .copy_from_slice(&q[hh * idh + idn..(hh + 1) * idh]);
+                    }
+                    Self::rope_norm(&mut qp, m.idx_nh, idr, pos, base_rope, idr, false);
+                    for hh in 0..m.idx_nh {
+                        q[hh * idh + idn..(hh + 1) * idh]
+                            .copy_from_slice(&qp[hh * idr..(hh + 1) * idr]);
+                    }
+                }
+                let poids = {
+                    let mut p = vec![0f32; m.idx_nh];
+                    matvec_f32(&m.idx_proj, x, h, m.idx_nh, &mut p);
+                    let inv = 1.0 / (((idh * m.idx_nh) as f32).sqrt());
+                    for v in p.iter_mut() { *v *= inv; }
+                    p
+                };
+                *paires += (m.idx_q_b.len() + m.idx_proj.len()) as u64;
+                let mut scores = vec![0f32; n_vis];
+                for b in 0..n_vis {
+                    let kb = &etat.idx_cles[b * idh..(b + 1) * idh];
+                    let mut s = 0f32;
+                    for hh in 0..m.idx_nh.min(m.nh) {
+                        let mut d = 0f32;
+                        for i in 0..idh { d += q[hh * idh + i] * kb[i]; }
+                        s += poids[hh] * if d > 0.0 { d } else { 0.0 };   // relu
+                    }
+                    scores[b] = s;
+                }
+                Self::vider_couche(dump, "idx_scores", l, pos, &scores);
+                for (b, s) in scores.iter().enumerate() { etat.idx_scores[b] = *s; }
+                // top-k des blocs : au-delà de `indexer_top_k` il faut CHOISIR,
+                // et c'est ce choix qui décide ce que l'attention voit.
+                let k = n_vis.min(m.indexer_top_k);
+                let mut ordre: Vec<u32> = (0..n_vis as u32).collect();
+                ordre.sort_by(|&a, &b| scores[b as usize]
+                    .partial_cmp(&scores[a as usize]).unwrap_or(std::cmp::Ordering::Equal));
+                ordre.truncate(k);
+                ordre.sort_unstable();
+                blocs_gardes = Some(ordre);
+            }
+        }
         // Ce que l'attention voit en clair : la fenêtre des derniers jetons
         // (`attention.sliding_window`), le reste étant résumé en blocs.
         let debut_fenetre = if m.fenetre > 0 && n > m.fenetre { n - m.fenetre } else { 0 };
@@ -4727,9 +4891,13 @@ n'est pas implémenté (P5), et sans lui le choix des blocs serait faux",
         // qu'une fois complet » (`llama-kv-cache-dsv4.cpp`).
         let scale = 1.0 / (hd as f32).sqrt();
         let n_clair = n - debut_fenetre;
-        *paires += (nh as u64) * ((n_clair + n_vis) as u64) * (hd as u64);
+        // Les blocs que l'indexeur a gardés (tous, s'il n'y en a pas).
+        let gardes: Vec<u32> = blocs_gardes.clone()
+            .unwrap_or_else(|| (0..n_vis as u32).collect());
+        let n_gardes = gardes.len();
+        *paires += (nh as u64) * ((n_clair + n_gardes) as u64) * (hd as u64);
         let mut sortie = vec![0f32; nh * hd];
-        let n_cles = n_clair + n_vis + 1;
+        let n_cles = n_clair + n_gardes + 1;
         let mut sc = vec![0f32; n_cles];
         let cles_comp = &etat.cles_comp;
         for hh in 0..nh {
@@ -4740,11 +4908,11 @@ n'est pas implémenté (P5), et sans lui le choix des blocs serait faux",
                 for i in 0..hd { s += qh[i] * kt[i]; }
                 sc[t - debut_fenetre] = s * scale;
             }
-            for b in 0..n_vis {
-                let kt = &cles_comp[b * hd..(b + 1) * hd];
+            for (j, &b) in gardes.iter().enumerate() {
+                let kt = &cles_comp[b as usize * hd..(b as usize + 1) * hd];
                 let mut s = 0f32;
                 for i in 0..hd { s += qh[i] * kt[i]; }
-                sc[n_clair + b] = s * scale;
+                sc[n_clair + j] = s * scale;
             }
             // le puits : un logit appris, présent dans la somme du softmax mais
             // sans valeur associée — c'est ce qui « draine » l'attention.
@@ -4756,7 +4924,7 @@ n'est pas implémenté (P5), et sans lui le choix des blocs serait faux",
             // sortie dès la position 0 (où l'attention est triviale), ce qui a
             // mis la puce à l'oreille : un écart qui n'attend pas la longueur.
             let puits = m.sinks.get(hh).copied().unwrap_or(0.0);
-            sc[n_clair + n_vis] = puits;
+            sc[n_clair + n_gardes] = puits;
             let mut mx = f32::NEG_INFINITY;
             for &v in sc.iter() { if v > mx { mx = v; } }
             let mut somme = 0f32;
@@ -4769,10 +4937,10 @@ n'est pas implémenté (P5), et sans lui le choix des blocs serait faux",
                 let kt = &etat.cles[t * hd..(t + 1) * hd];
                 for i in 0..hd { out[i] += w * kt[i]; }
             }
-            for b in 0..n_vis {
-                let w = sc[n_clair + b] * inv;
+            for (j, &b) in gardes.iter().enumerate() {
+                let w = sc[n_clair + j] * inv;
                 if w == 0.0 { continue; }
-                let kt = &cles_comp[b * hd..(b + 1) * hd];
+                let kt = &cles_comp[b as usize * hd..(b as usize + 1) * hd];
                 for i in 0..hd { out[i] += w * kt[i]; }
             }
         }
@@ -5100,6 +5268,10 @@ dynamique de {dyn_:.3e} (relatif {:.2e})", mx / dyn_.max(1e-9));
                     comp_kv: &mut self.mla4_comp_kv[l],
                     comp_gate: &mut self.mla4_comp_gate[l],
                     cles_comp: &mut self.mla4_cles_comp[l],
+                    idx_kv: &mut self.mla4_idx_kv[l],
+                    idx_gate: &mut self.mla4_idx_gate[l],
+                    idx_cles: &mut self.mla4_idx_cles[l],
+                    idx_scores: &mut self.mla4_idx_scores[l],
                 };
                 Self::attn_v4(m4, &mut etat, &hn, pos, &mut att,
                               &mut paires[0], self.dump_couches.as_deref(), l);

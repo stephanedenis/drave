@@ -249,7 +249,7 @@ Une phase qui ne passe pas ses deux portes ne passe pas à la suivante.
   blocs/s. Si la liste est stable, elle est compressible — et c'est une
   optimisation mesurable, pas une intuition.
 
-### P5 — Indexeur et CSA : la liste de candidats (≈ 1 à 2 journées) — **CSA FAIT, INDEXEUR RESTANT** (02/10)
+### P5 — Indexeur et CSA : la liste de candidats (≈ 1 à 2 journées) — **FAIT** (02/10, sauf porte longue)
 
 > Le compresseur **CSA** (ratio 4) est implémenté et validé : `attn_derope`
 > **0,999990** sur la couche 2 aux positions 3-9 (blocs 0 et 1). Deux pièges
@@ -257,10 +257,12 @@ Une phase qui ne passe pas ses deux portes ne passe pas à la suivante.
 > (pas 0) — 0,989 au lieu de 1,000000 au **premier bloc seulement** — et les
 > deux moitiés du projecteur de 1024 ont des rôles distincts (précédent /
 > courant), ce que seul le **bloc 1** pouvait trancher.
-> **Reste** : l'indexeur (`ggml_lightning_indexer` : relu(q·k) pondéré, top-k des
-> blocs). Tant que les blocs restent sous `indexer.top_k` (512), le top-k les
-> garde tous et le calcul est exact ; au-delà le moteur **refuse** — c'est la
-> porte qui empêche un chiffre faux d'avoir l'air juste.
+> **Indexeur fait aussi** : blocs de 128 valeurs (même chevauchement), requête
+> issue de `qr_norm`, `relu(q·k)` pondéré par tête, échelle
+> `1/sqrt(128 × têtes)`, puis top-k. Scores comparés à `lid_score_masked` :
+> **0,1 à 0,3 % d'écart** (positions 4-9). Ce qui reste de cette phase est une
+> **porte longue** : le top-k ne change rien en deçà de 512 blocs (2 048 jetons),
+> donc sa justesse au-delà n'est pas encore mesurée — c'est écrit comme tel.
 
 ### P5 — Indexeur et CSA : la liste de candidats (≈ 1 à 2 journées) — le gros morceau
 

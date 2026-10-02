@@ -91,7 +91,29 @@ Deux pièges, tous deux invisibles autrement :
   moteur**, en lisant la norme directement dans le GGUF
   (`tools/lire_meta_gguf.py --tenseur`).
 
-## 5. Ce qui reste de P5 : l'indexeur
+## 5. L'indexeur, à son tour validé
+
+L'indexeur (« lightning indexer ») note chaque bloc compressé et n'en garde que
+les `indexer.top_k` meilleurs. Ses blocs sont plus étroits — **128** valeurs au
+lieu de 512 — mais suivent la même règle de chevauchement que le CSA, et sa
+requête descend de `qr_norm` (la requête MLA normalisée) plutôt que de l'état.
+
+Ses **scores** sont comparés à `lid_score_masked` de llama.cpp, mêmes jetons :
+
+| position | blocs | Drave | référence |
+|---|---|---|---|
+| 4 | 1 | 3,2246 | 3,2279 |
+| 7 | 2 | 2,8615 · 3,1334 | 2,8656 · 3,1367 |
+| 8 | 2 | 3,1752 · 4,9255 | 3,1756 · 4,9261 |
+| 9 | 2 | 3,2338 · 2,9185 | 3,2371 · 2,9270 |
+
+Écart **0,1 à 0,3 %**, du même ordre que partout ailleurs. Le top-k lui-même
+(sélection des meilleurs blocs) n'a d'effet qu'au-delà de `indexer.top_k` blocs,
+soit 2 048 jetons : en deçà il les garde tous, et c'est ce que ces mesures
+montrent. La sélection est implémentée (tri décroissant puis troncature) et le
+moteur ne refuse plus au-delà.
+
+## 6. Ce qui reste de P5 : l'indexeur
 
 Les couches CSA gardent, en plus des blocs, ceux que l'**indexeur** choisit
 (`ggml_lightning_indexer` : `relu(q·k)` pondéré par tête, puis top-k). Tant que
@@ -100,13 +122,14 @@ top-k les garde **tous** : le résultat est alors exact sans l'indexeur, et c'es
 la plage dans laquelle les validations ci-dessus ont été faites (4 × 512 =
 2 048 jetons). Au-delà, le moteur **refuse** au lieu de calculer faux.
 
-## 6. Reste à faire
+## 7. Reste à faire
 
-- **CSA** (ratio 4) : compresseur à **chevauchement** (`build_overlap_…`, lit
-  2×ratio jetons), **indexeur** (`ggml_lightning_indexer`, `indexer.proj`,
-  `attn_q_b`), sélection de candidats (`candidate_topk_blocks`) et masque
-  top-k. Le moteur refuse ces couches explicitement plutôt que de calculer
-  faux.
+- **Le top-k au-delà de 2 048 jetons** : la sélection est écrite, mais sa
+  justesse ne peut se mesurer qu'avec plus de 512 blocs — donc un run long, à
+  faire quand la vitesse le permettra.
+- La **stabilité de la liste de candidats** (recouvrement entre jetons
+  consécutifs, périodicité) : c'est la question que la vision pose à ce flux, et
+  elle n'a pas encore été posée.
 - La « queue » de l'attention brute (`build_raw_tail`) : absente des tenseurs de
   V4-Flash, à vérifier si un modèle la déclare.
 - Le cache d'état incrémental du compresseur (ici recalculé par bloc) : c'est une

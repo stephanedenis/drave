@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 94.1 h |
+| Durée | 95.3 h |
 | Tours | 76 |
-| Messages | 4734 |
-| Appels d'outils | 4519 |
+| Messages | 4760 |
+| Appels d'outils | 4543 |
 | Fichiers touchés | 93 |
-| Commandes | 3908 |
+| Commandes | 3926 |
 | Sous-agents | 28 |
-| Commits | 332 |
+| Commits | 333 |
 | Compactages de contexte | 6 |
 
 ## Objectifs déclarés
@@ -3886,7 +3886,7 @@ L'écart résiduel est du **bruit** (49,5 % de signes positifs, plat en position
 
 ### Tour 76 — <goal_round> Objective: "Exécuter le plan docs/plan-deepseek41-complet.md phase par phase (P0→P9), en autonomie, en resp … [941 caractères tronqués]
 
-*78 appels d'outils.* Actions notables :
+*102 appels d'outils.* Actions notables :
 
 - bash — Check state and list compressed-layer tensors
 - bash — Compare HCA layer 3 and CSA layer 4 tensors
@@ -3902,11 +3902,11 @@ L'écart résiduel est du **bruit** (49,5 % de signes positifs, plat en position
 - bash — Read the comp plan (state_pos, n_visible)
 - bash — Confirm block rope positions
 - bash — Read V4-Flash rope parameters
-- … et 64 autres
+- … et 83 autres
 
 **Synthèse produite :**
 
-⏵ CSA validé (0,999990). Mise à jour du rapport, des portes et commit.
+⏵ Indexeur validé (scores à 0,1 % de la référence). Portes puis commit de P5.
 
 ## 3. Travail accompli
 
@@ -4081,7 +4081,7 @@ L'écart résiduel est du **bruit** (49,5 % de signes positifs, plat en position
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 3868 autres
+- … et 3886 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4561,4 +4561,5 @@ L'écart résiduel est du **bruit** (49,5 % de signes positifs, plat en position
 - REPRISE : les trois chemins d'attention, les hyper-connexions, l'exécution bornée et les outils de comparaison" && git log --oneline -3
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A drave-core/src/ tools/ reports/ docs/ REPRISE.md && git commit -q -F - <<'EOF' P4 : le compress
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && bash tools/portes.sh rapide 2>&1 | head -3; python3 - <<'PYEOF' p='docs/plan-deepseek41-complet.md' s=open
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF' p='reports/rapport-v4-hca.md' s=open(p).read() a="""## 5. Ce qui reste de P5 : l'index
 
