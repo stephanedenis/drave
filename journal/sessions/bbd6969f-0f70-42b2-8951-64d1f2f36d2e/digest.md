@@ -77765,3 +77765,595 @@ ok
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='docs/vision.md'\ns=open(p).read()\na=\"\"\"5. **les mesures faites** : **1 608 octets** par flux à 256 jetons, 0,25 Mbit/s,\n   latence aller-retour jusqu'à 20 ms, attente ≈ calcul distant + 3,2 × latence\n    … [1470 caractères tronqués]`
+
+  ```
+ok
+1e0fc30 Vision : le flux d'un modèle à hyper-connexions coûte hc fois la taille d'un état (mesuré, et refusé tant que le protocole ne le porte pas)
+3fefbaf P6 : la coupure de grappe d'un modèle à hyper-connexions est REFUSÉE, pas approximée
+4c15570 V4-Flash tourne en ENTIER · glossaire de référence · trois points doc corrigés
+  ```
+
+### 🤖 Assistant
+
+⏵ Bilan du round : V4-Flash tourne, P4/P5 franchies, glossaire livré.
+
+## Ce qui a été fait dans ce round
+
+**Le glossaire** (demandé en parallèle) — `docs/glossaire.md`, **1 630 lignes, 187 entrées** en 7 thèmes, chacune avec forme développée FR/EN, définition sans prérequis, référence `chemin:ligne` du dépôt et source externe (60 liens, tous testés). Plus un **parcours de lecture néophyte** en 9 étapes, l'index des outils, la table des drapeaux et des 39 variables `DRAVE_*`. L'agent a relevé **21 points non corrigés** ; j'ai traité les trois principaux (voir plus bas).
+
+**P4 — le compresseur HCA** : implémenté et validé contre llama.cpp, corrélation **0,999992** au 128ᵉ jeton — c'est-à-dire **au premier bloc compressé complet**. Le softmax *par canal* sur les 128 jetons du bloc, l'`ape` de rang, la norme, le RoPE de bloc à la position de son premier jeton, et la concaténation fenêtre + blocs concordent.
+
+**P5 — le compresseur CSA et l'indexeur** : validés aussi (0,999990 pour le CSA aux positions 3-9 ; scores d'indexeur à **0,1-0,3 %** de `lid_score_masked`).
+
+**P6 — V4-Flash tourne en ENTIER** : 43 couches, les trois régimes d'attention dans la même passe.
+
+## Les bugs trouvés — tous par la comparaison, aucun par les tests
+
+| # | bug | ce qui l'a révélé |
+|---|---|---|
+| 1 | l'attention V4 recevait le mélange **avant** `attn_norm` | `qr` à 0,99866 au lieu de 0,999993 |
+| 2 | le **puits** mis à l'échelle alors que la référence l'ajoute brut | divergence **dès la position 0**, où l'attention est triviale |
+| 3 | RoPE **NORM** (paires 2i, 2i+1) et non NEOX | position 0 juste, position 1 fausse de 30 % |
+| 4 | la **dé-rotation** utilisait la base des couches brutes | 64 dimensions sur 512 fausses de 10 %, corrélation globale 0,996 — « plausible » |
+| 5 | les jetons d'avant le texte ont une porte **−∞**, pas 0 | 0,989 **au premier bloc seulement** |
+| 6 | les deux moitiés du projecteur CSA ont des rôles distincts | seul le **bloc 1** pouvait trancher (le bloc 0 a ses précédents nuls) |
+| 7 | la tête s'appelle **`output_hc_*`**, pas `hc_head_*` (nom de variable) | panique à la norme finale |
+| 8 | la tête n'a que `hc` sorties, pas `2·hc + hc²` | panique au 5ᵉ mélange |
+| 9 | le **clamp SwiGLU** de V4 n'était pas appliqué | relecture des métadonnées (`swiglu_clamp_exp`, par couche) |
+
+## La divergence restante, mesurée et expliquée
+
+V4-Flash contre llama.cpp : perplexité **678,09 contre 548,32** (NLL +0,21 nat), corrélation des logits **0,988-0,998**, top-1 7/9. Le profil **couche par couche** montre une erreur relative oscillant entre 1,8 % et 13,6 % **sans croissance exponentielle** : une accumulation, pas une divergence. Et j'ai vérifié que **llama.cpp est bit-à-bit identique à 4 et à 16 fils** (nouveau `REF_THREADS`) — donc l'écart n'est pas du bruit de la référence, il vient de la différence de conception : Drave déquantifie exactement et calcule en f32, llama.cpp quantifie ses activations en Q8 à chaque produit.
+
+## Découverte architecturale
+
+Un modèle à **hyper-connexions** porte son état résiduel en `hc` copies : son flux de coupure fait **4× la taille** (16 384 canaux, 64 Ko par flux). Réduire les copies au point de coupure **change le modèle** (perplexité répartie 8 311 → 34 159, écart 3,11 alors que le transport dense est exact). Le découpage est donc **refusé** en le disant, et la vision porte maintenant ce coût.
+
+## Introspection
+
+Ce round confirme une règle : **les tests internes ne trouvent pas les erreurs d'architecture**. Neuf bugs, zéro détecté par les 53 tests ; tous par la comparaison étage par étage avec une référence externe. Le corollaire pratique que je retiens : quand un écart est « presque juste », il faut **séparer les régions** (nope/rope, bloc 0/bloc 1) — la corrélation globale, elle, lisse exactement ce qu'on cherche.
+
+Reste : l'extension du protocole pour les flux en `hc` copies (P6), P7 (V4.1 + provenance), P8 (engram), P9 (noyaux natifs).
+
+
+## Tour 77
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Exécuter le plan docs/plan-deepseek41-complet.md phase par phase (P0→P9), en autonomie, en respectant pour chaque phase ses deux portes : porte de correction (comparaison étage par étage à llama.cpp sur V4-Flash) et porte Drave (flux : événements/paires par jeton, trace rejouée à l'identique, découpage en grappes, flux lisible par un outil d'analyse). Aucune phase ne passe à la suivante sans ses deux portes. Jamais de forward muet, jamais d'optimisation qui change une sortie sans le dire."
+Round: 3/30
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Round 3 — P6 : étendre le protocole au flux en `hc` copies pour débloquer le découpage.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"canaux annoncés\" -B 12 drave-core/src/main.rs | head -30", "description": "Find the channel-count validation"}`
+
+  ```
+2499-            Ok(f) => {
+2500-                // Un en-tête FORGÉ ne doit pas tuer le nœud : `debut`, `fin` et
+2501-                // `pos` venaient du réseau sans contrôle, et une trame de 83
+2502-                // octets suffisait à faire tomber le moteur (assert sur `pos`,
+2503-                // index hors `layers`, dimension fausse — relecture adversariale).
+2504-                let (n_layer_local, ctx_local) = (mdl.cfg.n_layer, mdl.ctx);
+2505-                if f.fin as usize > n_layer_local || f.debut >= f.fin {
+2506-                    println!("[flux] flux refusé : plage de couches {}..{} invalide pour {} \
+2507-couches — le nœud continue", f.debut, f.fin, n_layer_local);
+2508-                    continue;
+2509-                }
+2510-                if f.mode == MODE_DENSE && f.n != hidden {
+2511:                    println!("[flux] flux refusé : {} canaux annoncés, {hidden} attendus — \
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '2510,2532p' drave-core/src/main.rs; grep -n \"let hidden\" drave-core/src/main.rs | head -3", "description": "Read the validation and the hidden definition"}`
+
+  ```
+if f.mode == MODE_DENSE && f.n != hidden {
+                    println!("[flux] flux refusé : {} canaux annoncés, {hidden} attendus — \
+le nœud continue", f.n);
+                    continue;
+                }
+                if f.pos as usize >= ctx_local
+                   && !(f.mode == MODE_LOT || f.mode == MODE_LOT_LISTES) {
+                    println!("[flux] flux refusé : position {} au-delà du contexte {} — le \
+nœud continue", f.pos, ctx_local);
+                    continue;
+                }
+                // Les réglages du client s'appliquent ICI : les deux nœuds
+                // doivent quantifier les activations pareil, sinon ils ne
+                // calculent pas la même chose.
+                f.act.appliquer(&mut mdl);
+                mdl.couche_debut = f.debut as usize;
+                mdl.couche_fin = f.fin as usize;
+                // Le nœud moteur rend TOUJOURS un flux résiduel brut : la norme
+                // finale appartient au nœud qui a la tête de sortie, et à lui
+                // seul. C'est ce qui manquait — 798,3 au lieu de 18,2.
+                mdl.flux_brut = true;
+                // Les DEUX modes de lot : 3 (dense f32) et 4 (listes). Oublier
+… [306 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '2532,2560p' drave-core/src/main.rs", "description": "Read how the received state is applied"}`
+
+  ```
+// second faisait tomber un flux de listes dans le chemin « un seul
+                // vecteur » et paniquait sur `en_dense` — attrapé au premier essai.
+                if f.mode == MODE_LOT || f.mode == MODE_LOT_LISTES {
+                    // Préremplissage réparti : N états d'un coup. Le nœud n'a pas
+                    // les identifiants de jetons — il n'en a pas besoin, les
+                    // états entrent directement dans SA première couche.
+                    let t = f.n;
+                    // Refus EXPLICITE plutôt qu'une boucle sans fin : au-delà de
+                    // son contexte, `KvCache::assurer` ne peut pas agrandir et
+                    // tournerait indéfiniment (relevé dans `docs/plan-prefill-reparti.md`).
+                    if f.pos as usize + t > mdl.ctx {
+                        // `continue` et non `break` : le nœud doit continuer à
+                        // servir les lots suivants (le message le disait déjà, le
+                        // code faisait l'inverse — relevé par la relecture de
+                        // clôture).
+                        println!("[flux] lot refusé : {t} états à partir de la position {} \
+                             
+… [776 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '2560,2600p' drave-core/src/main.rs", "description": "Read the single-vector receive path"}`
+
+  ```
+envoyer_lot_listes(&mut sock, f.debut, f.fin, f.pos, &plat, t, &mdl)
+                    } else {
+                        envoyer_lot(&mut sock, f.debut, f.fin, f.pos, &plat, t, &mdl)
+                    };
+                    if reponse.is_err() { break; }
+                    servis += 1;
+                    continue;
+                }
+                mdl.emb_imposee = Some(f.charge.en_dense(hidden));
+                let sortie = mdl.forward(0, f.pos as usize);
+                // La RÉPONSE est encodée comme la demande : un pair qui parle en
+                // listes reçoit des listes, sans second réglage à faire tenir
+                // cohérent entre les deux machines.
+                if envoyer_flux(&mut sock, f.debut, f.fin, f.pos, &sortie, f.mode,
+                                Some(&mdl)).is_err() {
+                    break;
+                }
+                servis += 1;
+            }
+            Err(e) => {
+                // Un pair incompatible doit s'entendre dire POURQUOI : sans cela,
+                // la session se termine sur « 0 flux servi » et rien d'autre.
+                println!("[flux] arrêt : {e}");
+                break;
+            }
+        }
+    }
+    pr
+… [648 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"fn envoyer_flux\" -A 18 drave-core/src/main.rs | head -24; grep -n \"fn en_dense\" -A 10 drave-core/src/main.rs | head -12", "description": "Read the flux send and decode functions"}`
+
+  ```
+2173:fn envoyer_flux(s: &mut std::net::TcpStream, debut: u32, fin: u32, pos: u32,
+2174-                actifs: &[f32], mode: u8, mdl: Option<&model::Model>)
+2175-                -> std::io::Result<(usize, usize)> {
+2176-    use std::io::Write;
+2177-    let (n, echelle, corps): (usize, f32, Vec<u8>) = if mode == MODE_BLOCS {
+2178-        let (idx, val, echelles) = mdl.expect("modèle requis pour quantifier un flux")
+2179-                                      .flux_en_liste_blocs(actifs);
+2180-        // Indices par ÉCARTS : la liste est triée (les blocs sont parcourus dans
+2181-        // l'ordre), donc l'écart au neurone précédent tient sur un octet dans
+2182-        // l'immense majorité des cas — 255 est l'échappement vers l'indice absolu.
+2183-        // Deux octets par neurone actif au lieu de trois, à quantification
+2184-        // IDENTIQUE : c'est du rangement, pas de la perte.
+2185-        let mut c = Vec::with_capacity(4 + echelles.len() * 4 + idx.len() * 2);
+2186-        c.extend_from_slice(&(echelles.len() as u32).to_le_bytes());
+2187-        for e in &echelles { c.extend_from_slice(&e.to_le_bytes()); }
+2188-        let paires = encoder_paires_blocs(&idx, &val);
+2189-    
+… [874 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Extension du protocole : accepter `hc × cachés` canaux, et le documenter dans le format.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='drave-core/src/main.rs'\ns=open(p).read()\nsubs=[]\nsubs.append((\n\"\"\"                if f.mode == MODE_DENSE && f.n != hidden {\n                    println!(\"[flux] flux refusé : {} canaux annoncés, {hid … [1845 caractères tronqués]`
+
+  ```
+ok
+398:/// (`--keep` en perplexité, `--ffn-gain` en inférence, les top-k dans les modes
+412:             mdl.couche_debut, mdl.couche_fin, mdl.flux_brut,
+676:            "--ffn-gain" => {
+681:            "--bits-ffn" => { if suivant(i).parse::<u32>().unwrap() == 6 { o.b6 |= 1; } 2 }
+709:            "--q4-ffn" => { o.q4 = (o.q4 & 4) | 1; 1 }
+713:            // pour le dire à la fin plutôt que de l'avaler.
+--- fin ---
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && M=/home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek-V4-Flash-UD-IQ1_M/DeepSeek-V4-Flash-UD-IQ1_M-00001-of-00003.gguf; pkill -f \"flux-serveur 460\" 2>/dev/null; (./drave-core/target/release/drave $M --flux-serveur 46051 --ctx 32 … [360 caractères tronqués]`
+
+  ```
+(no output)
+[killed by signal: SIGTERM]
+  ```
+
+- **bash** `{"command": "sleep 5; tail -5 /tmp/serveur_v4d.log 2>/dev/null; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && pgrep -af \"flux-serveur\" | head -2", "description": "Check the server log after the test"}`
+
+  ```
+1555902 bash -c sleep 5; tail -5 /tmp/serveur_v4d.log 2>/dev/null; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && pgrep -af "flux-serveur" | head -2
+  ```
+
+### 🤖 Assistant
+
+⏵ Test réparti relancé proprement (serveur vérifié, client en arrière-plan).
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && M=/home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek-V4-Flash-UD-IQ1_M/DeepSeek-V4-Flash-UD-IQ1_M-00001-of-00003.gguf; nohup ./drave-core/target/release/drave $M --flux-serveur 46061 --ctx 32 --dense --threads 16 > /tmp/serveur_v … [197 caractères tronqués]`
+
+  ```
+--- serveur ---
+[config] rotation : RoPE simple (contexte 32 ≤ 65536 initial ; YaRN ×16 prendrait le relais au-delà)
+[tête 4 bits] 129280 × 4096 → 4.50 b/poids, 0 Mo, 0.0 s
+[flux] nœud moteur sur 127.0.0.1:46061 · 4096 cachés · 43 couches · contexte 32
+1
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && M=/home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek-V4-Flash-UD-IQ1_M/DeepSeek-V4-Flash-UD-IQ1_M-00001-of-00003.gguf; timeout 2000 ./drave-core/target/release/drave $M --ppl-reparti 127.0.0.1:46061 --couches-locales 20 --limit 5 … [292 caractères tronqués]`
+
+  ```
+started background job bash-147
+  ```
+
+- **job_output** `{"job_id": "bash-147", "timeout_ms": 1200000, "wait": true}`
+
+  ```
+[config] mélanges d'experts chargés : 43/43 couches · mapping absent (experts en clair dans le fichier)
+[config] puits appris sur 43/43 couches · n_rot 64 · ffn 0 · experts 256
+[config] fenêtre glissante 128 sur 43/43 couches (motif 0, toutes)
+[config] rotation : RoPE simple (contexte 32 ≤ 65536 initial ; YaRN ×16 prendrait le relais au-delà)
+[tête 4 bits] 129280 × 4096 → 4.50 b/poids, 0 Mo, 0.0 s
+[flux] ce modèle porte ses hyper-connexions : son état résiduel fait 4 copies, donc 16384 canaux par flux, et le protocole DRVF n'en accepte que 4096. Un découpage en grappes demande d'étendre le protocole (P6) — rien n'a été calculé.
+--- serveur ---
+[tête 4 bits] 129280 × 4096 → 4.50 b/poids, 0 Mo, 0.0 s
+[flux] nœud moteur sur 127.0.0.1:46061 · 4096 cachés · 43 couches · contexte 32
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Le protocole accepte désormais les 16 384 canaux : je retire le refus et relance.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='drave-core/src/main.rs'\ns=open(p).read()\ni=s.find(\"    // Un modèle à **hyper-connexions** porte son état résiduel en `hc` copies :\")\nassert i>0\nj=s.find(\"    let mode_lot = if mode == MODE_BLOCS { MODE … [1108 caractères tronqués]`
+
+  ```
+started background job bash-148
+  ```
+
+- **job_output** `{"job_id": "bash-148", "timeout_ms": 1500000, "wait": true}`
+
+  ```
+ok
+--- build ok ---
+[config] rotation : RoPE simple (contexte 32 ≤ 65536 initial ; YaRN ×16 prendrait le relais au-delà)
+[tête 4 bits] 129280 × 4096 → 4.50 b/poids, 0 Mo, 0.0 s
+[flux] quantification : 127 niveaux, seuil 0, top-k 0, renorm false
+[flux] pilote : 20 couches en local, 23 chez le pair, 5 jetons
+  référence locale  : perplexité 8311.3347  (50.0 s)
+[flux] le nœud moteur a renvoyé 16384 canaux pour 4096 attendus — pair incohérent. Rien n'a été calculé.
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"a renvoyé\" -B 6 -A 4 drave-core/src/main.rs | head -20", "description": "Find the pilot's reply validation"}`
+
+  ```
+2824-            eprintln!("[flux] le nœud moteur a répondu en mode {} alors que la demande \
+2825-était en mode {mode} — pair incompatible ? Rien n'a été calculé.", rep.mode);
+2826-            std::process::exit(1);
+2827-        }
+2828-        let final_ = rep.charge.en_dense(mdl.cfg.hidden);
+2829-        if final_.len() != mdl.cfg.hidden {
+2830:            eprintln!("[flux] le nœud moteur a renvoyé {} canaux pour {} attendus — \
+2831-pair incohérent. Rien n'a été calculé.", final_.len(), mdl.cfg.hidden);
+2832-            std::process::exit(1);
+2833-        }
+2834-        if pos + 1 < ids.len() {
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='drave-core/src/main.rs'\ns=open(p).read()\na=\"\"\"        let final_ = rep.charge.en_dense(mdl.cfg.hidden);\n        if final_.len() != mdl.cfg.hidden {\n            eprintln!(\"[flux] le nœud moteur a renvoy … [1223 caractères tronqués]`
+
+  ```
+ok
+321:            let rep = |lbl: &str, got: &[i64]| {
+2739:            let rep = match recevoir_flux(&mut sock, mdl.cfg.hidden) {
+2760:            if rep.n != t {
+2762:— pair incohérent. Rien n'a été calculé.", rep.n);
+2807:        let rep = match recevoir_flux(&mut sock, mdl.cfg.hidden) {
+--- fin ---
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && M=/home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek-V4-Flash-UD-IQ1_M/DeepSeek-V4-Flash-UD-IQ1_M-00001-of-00003.gguf; timeout 2000 ./drave-core/target/release/drave $M --ppl-reparti 127.0.0.1:46061 --couches-locales 20 --limit 5 … [255 caractères tronqués]`
+
+  ```
+started background job bash-149
+  ```
+
+- **job_output** `{"job_id": "bash-149", "timeout_ms": 1500000, "wait": true}`
+
+  ```
+référence locale  : perplexité 8311.3347  (40.1 s)
+
+thread 'main' (1597058) panicked at src/main.rs:2692:55:
+connexion au nœud moteur: Os { code: 111, kind: ConnectionRefused, message: "Connection refused" }
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+timeout: the monitored command dumped core
+[stderr]
+bash: line 1: 1597057 Aborted                    timeout 2000 ./drave-core/target/release/drave $M --ppl-reparti 127.0.0.1:46061 --couches-locales 20 --limit 5 --ctx 32 --ctx-impose --ids "201,438,10498,102771,402" --dense --threads 16 > /tmp/pilote_v4g.log 2>&1
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "tail -8 /tmp/serveur_v4e.log", "description": "Check why the server died"}`
+
+  ```
+[config] puits appris sur 43/43 couches · n_rot 64 · ffn 0 · experts 256
+[config] fenêtre glissante 128 sur 43/43 couches (motif 0, toutes)
+[config] rotation : RoPE simple (contexte 32 ≤ 65536 initial ; YaRN ×16 prendrait le relais au-delà)
+[tête 4 bits] 129280 × 4096 → 4.50 b/poids, 0 Mo, 0.0 s
+[flux] nœud moteur sur 127.0.0.1:46061 · 4096 cachés · 43 couches · contexte 32
+[flux] client connecté : 127.0.0.1:36842
+[flux] arrêt : failed to fill whole buffer
+[flux] 1 flux servis
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/test_reparti_v4.sh <<'EOF'\n#!/bin/bash\ncd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\nM=/home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek-V4-Flash-UD-IQ1_M/DeepSeek-V4-Flash-UD-IQ1_M-00001-of-00003.gguf\nPORT=$ … [637 caractères tronqués]`
+
+  ```
+started background job bash-150
+  ```
+
+- **job_output** `{"job_id": "bash-150", "timeout_ms": 1500000, "wait": true}`
+
+  ```
+référence locale  : perplexité 8311.3347  (47.6 s)
+  deux nœuds        : perplexité 8311.3347  (37.1 s)
+  écart             : 0.00e0
+  transport         : dense f32 · 65615 octets par flux (aller) · 65615 au retour · 400.0 % d'activité (16384 neurones par flux) · 4 flux
+  temps             : 4376.9 ms par jeton en local · 4873.4 ms à attendre le pair (son calcul + l'aller-retour) · soit 1.11× le calcul local seul
+--- serveur ---
+[flux] arrêt : failed to fill whole buffer
+[flux] 4 flux servis
+[status: completed, exit code: 1]
+  ```
+
+### 🤖 Assistant
+
+⏵ Découpage exact (écart 0,00e0) et coût mesuré : 4× (hyper-connexions). Mesure en listes maintenant.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='/tmp/test_reparti_v4.sh'\ns=open(p).read()\ns=s.replace('--ids \"201,438,10498,102771,402\" --dense --threads 16', '--ids \"201,438,10498,102771,402\" --dense --threads 16 $2')\nopen(p,'w').write(s)\nprint(\"o … [157 caractères tronqués]`
+
+  ```
+started background job bash-151
+  ```
+
+- **job_output** `{"job_id": "bash-151", "timeout_ms": 1500000, "wait": true}`
+
+  ```
+ok
+[tête 4 bits] 129280 × 4096 → 4.50 b/poids, 0 Mo, 0.0 s
+[flux] quantification : 127 niveaux, seuil 0, top-k 0, renorm false
+[flux] pilote : 20 couches en local, 23 chez le pair, 5 jetons
+  référence locale  : perplexité 8311.3347  (46.9 s)
+[flux] le nœud moteur a fermé la connexion (failed to fill whole buffer) — version du protocole, réglages, ou contexte : il a dit pourquoi de son côté.
+--- serveur ---
+range end index 16384 out of range for slice of length 16362
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+[stderr]
+/tmp/test_reparti_v4.sh: line 10: 1693108 Aborted                    (core dumped) ./drave-core/target/release/drave $M --flux-serveur $PORT --ctx 32 --dense --threads 16 > /tmp/serveur_$PORT.log 2>&1
+[status: completed, exit code: 1]
+  ```
+
+### 🤖 Assistant
+
+⏵ Bug de protocole : le décodeur dimensionne la liste avec la mauvaise largeur. Correction.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"fn recevoir_flux\" -A 30 drave-core/src/main.rs | head -36", "description": "Read recevoir_flux"}`
+
+  ```
+2268:fn recevoir_flux(s: &mut std::net::TcpStream, hidden: usize) -> std::io::Result<Flux> {
+2269-    use std::io::Read;
+2270-    let mut tete = [0u8; TAILLE_TETE];
+2271-    s.read_exact(&mut tete)?;
+2272-    let u = |o: usize| u32::from_le_bytes([tete[o], tete[o+1], tete[o+2], tete[o+3]]);
+2273-    if u(0) != MAGIE_FLUX {
+2274-        return Err(std::io::Error::new(std::io::ErrorKind::InvalidData,
+2275-                                       "magie de flux absente"));
+2276-    }
+2277-    let version = tete[4];
+2278-    let mode = tete[5];
+2279-    if version != VERSION_FLUX {
+2280-        // Refus EXPLICITE : on ne devine pas la version du pair, on la nomme.
+2281-        return Err(std::io::Error::new(std::io::ErrorKind::InvalidData,
+2282-            format!("flux en version {version}, cette build parle la {VERSION_FLUX} \
+2283-                     (pair incompatible : rien n'a été interprété)")));
+2284-    }
+2285-    let (debut, fin, pos) = (u(6), u(10), u(14));
+2286-    let n = u(18) as usize;
+2287-    let echelle = f32::from_le_bytes([tete[22], tete[23], tete[24], tete[25]]);
+2288-    let mut topk_proj = [0u32; 7];
+2289-    for (i, v) in topk_proj.iter_mut().enumerate() { *v = u
+… [382 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '2298,2340p' drave-core/src/main.rs", "description": "Read the payload decoding"}`
+
+  ```
+moe_topk: u(75),
+    };
+    // Le mode est vérifié AVANT de lire le moindre octet de corps : un mode
+    // inconnu se refusait après avoir lu `n × 4` octets et s'être désynchronisé,
+    // en disant « mode inconnu » — exact, tardif, et muet sur la cause.
+    // Un flux à zéro élément n'est illégitime que là où `n` est une DIMENSION
+    // (mode 0) ou un nombre d'ÉTATS (modes 3 et 4). En modes 1 et 2, `n` est un
+    // nombre de PAIRES : une liste VIDE est légitime — un vecteur d'activation
+    // peut n'avoir aucun actif (seuil au-dessus du maximum, état exactement nul),
+    // et c'est même ce que répond le pair factice du dépôt. Refuser n == 0 partout
+    // tuait ces sessions (relevé par la relecture adversariale du mode 4).
+    if n == 0 && matches!(mode, MODE_DENSE | MODE_LOT | MODE_LOT_LISTES) {
+        return Err(std::io::Error::new(std::io::ErrorKind::InvalidData,
+            format!("flux de zéro {} : refusé (R4 de docs/plan-prefill-reparti.md)",
+                    if mode == MODE_DENSE { "canal" } else { "état" })));
+    }
+    match mode {
+        MODE_DENSE | MODE_LISTE | MODE_BLOCS | MODE_LOT | MODE_LOT_LISTES => {}
+        autre => return Err(std::io::Error::new(std:
+… [1468 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"hidden\" drave-core/src/main.rs | awk -F: '$1>2340 && $1<2470' | head -12", "description": "Find hidden uses in the decoder"}`
+
+  ```
+2345:                if a > hidden {
+2347:                        format!("état {j} : {a} actifs pour {hidden} canaux — un \
+2352:                        format!("état {j} : {nb} blocs d'échelles pour {hidden} canaux \
+2372:                plat.resize(base + hidden, 0.0);
+2376:                    if (i as usize) < hidden && b < echelles.len() {
+2393:l'ensemble du lot (flux reçu de {hidden} canaux)");
+2404:            let taille = n.checked_mul(hidden).and_then(|x| x.checked_mul(4))
+2406:            verifier_taille(taille, &format!("lot de {n} états × {hidden} canaux"))?;
+2409:            let etats = (0..n * hidden).map(|k| f32::from_le_bytes(
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"MODE_LISTE | MODE_BLOCS\" -A 22 drave-core/src/main.rs | sed -n '1,26p'", "description": "Read the list-mode decoding"}`
+
+  ```
+2315:        MODE_DENSE | MODE_LISTE | MODE_BLOCS | MODE_LOT | MODE_LOT_LISTES => {}
+2316-        autre => return Err(std::io::Error::new(std::io::ErrorKind::InvalidData,
+2317-            format!("mode de flux inconnu : {autre} (cette build parle les modes 0 à \
+2318-{MODE_LOT_LISTES}, protocole v{VERSION_FLUX})"))),
+2319-    }
+2320-    let charge = match mode {
+2321-        MODE_LOT_LISTES => {
+2322-            // `n` = nombre d'ÉTATS. Chaque état est auto-délimité :
+2323-            // `a_j · n_blocs_j · longueur_j`, puis les échelles f32 par bloc de 32,
+2324-            // puis les paires (écart u8, valeur i8). Les trois tailles se lisent
+2325-            // AVANT toute allocation, et le corps entier n'est plus borné par
+2326-            // l'en-tête : chaque taille passe donc par le plafond R4.
+2327-            verifier_taille(n.checked_mul(hidden).and_then(|x| x.checked_mul(4))
+2328-                              .unwrap_or(usize::MAX),
+2329-                            &format!("lot en listes de {n} états × {hidden} canaux"))?;
+2330-            let attendu = hidden.div_ceil(32);
+2331-            let mut plat: Vec<f32> = Vec::with_capacity(n * hidden);
+2332-            let mut l
+… [263 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '2425,2455p' drave-core/src/main.rs", "description": "Read the MODE_LISTE/MODE_BLOCS branch"}`
+
+  ```
+s.read_exact(&mut eb)?;
+            let echelles = (0..n_blocs).map(|k| f32::from_le_bytes(
+                [eb[k*4], eb[k*4+1], eb[k*4+2], eb[k*4+3]])).collect();
+            let mut lg = [0u8; 4];
+            s.read_exact(&mut lg)?;
+            let longueur = u32::from_le_bytes(lg) as usize;
+            verifier_taille(longueur, &format!("corps de {n} paires"))?;
+            let mut corps = vec![0u8; longueur];
+            s.read_exact(&mut corps)?;
+            let (idx, val) = match decoder_paires_blocs(&corps, n) {
+                Ok(v) => v,
+                Err(e) => return Err(std::io::Error::new(std::io::ErrorKind::InvalidData, e)),
+            };
+            let octets_corps = 4 + n_blocs * 4 + 4 + longueur;
+            return Ok(Flux { n, debut, fin, pos, mode, act, octets_corps, charge:
+                             ChargeFlux::Blocs { idx, val, echelles } });
+        }
+        _ => {}
+    };
+    verifier_taille(n.saturating_mul(4), &format!("flux de {n} valeurs"))?;
+    let mut octets = vec![0u8; n * 4];
+    s.read_exact(&mut octets)?;
+    let charge = match mode {
+        MODE_DENSE => ChargeFlux::Dense((0..n).map(|k| f32::from_le_bytes(
+            [octets[k*4], octets[
+… [355 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Trace complète côté serveur pour localiser la panique du mode listes.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -i 's|--flux-serveur \\$PORT --ctx 32 --dense --threads 16 > /tmp/serveur_\\$PORT.log|--flux-serveur $PORT --ctx 32 --dense --threads 16 > /tmp/serveur_$PORT.log|' /tmp/test_reparti_v4.sh; RUST_BACKTRACE=1 /tmp/test_reparti_v4.sh … [235 caractères tronqués]`
+
+  ```
+started background job bash-152
+  ```
+
+- **job_output** `{"job_id": "bash-152", "timeout_ms": 1500000, "wait": true}`
+
+  ```
+/tmp/test_reparti_v4.sh: line 10: 1730917 Aborted                    (core dumped) ./drave-core/target/release/drave $M --flux-serveur $PORT --ctx 32 --dense --threads 16 > /tmp/serveur_$PORT.log 2>&1
+[tête 4 bits] 129280 × 4096 → 4.50 b/poids, 0 Mo, 0.0 s
+[flux] quantification : 127 niveaux, seuil 0, top-k 0, renorm false
+[flux] pilote : 20 couches en local, 23 chez le pair, 5 jetons
+  référence locale  : perplexité 8311.3347  (46.7 s)
+[flux] le nœud moteur a fermé la connexion (failed to fill whole buffer) — version du protocole, réglages, ou contexte : il a dit pourquoi de son côté.
+--- serveur ---
+   6: drave::main
+note: Some details are omitted, run with `RUST_BACKTRACE=full` for a verbose backtrace.
+=== serveur (trace) ===
+thread 'main' (1730917) panicked at src/model.rs:1380:27:
+range end index 16384 out of range for slice of length 16362
+stack backtrace:
+   0: __rustc::rust_begin_unwind
+   1: core::panicking::panic_fmt
+   2: core::slice::index::slice_index_fail
+   3: <drave::model::Hc>::melanger
+   4: <drave::model::Model>::forward
+   5: drave::run_serveur_flux
+   6: drave::main
+note: Some details are omitted, run with `RUST_BACKTRACE=full` for a verbose backtrace.
+[status:
+… [25 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Bug que j'ai introduit : en mode listes, `n` est un nombre de **paires**, pas de canaux. Correction.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='drave-core/src/main.rs'\ns=open(p).read()\nsubs=[]\nsubs.append((\n\"\"\"                // La charge se décode à SA largeur : un état en `hc` copies\n                // (16 384 canaux pour V4-Flash) ne se déc … [1710 caractères tronqués]`
+
+  ```
+started background job bash-153
+  ```
+
+- **job_output** `{"job_id": "bash-153", "timeout_ms": 1500000, "wait": true}`
+
+  ```
+ok
+--- build ---
+  écart             : 9.13e-2
+  transport         : listes quantifiées · 65544 octets par flux (aller) · 65588 au retour · 399.6 % d'activité (16366 neurones par flux) · 4 flux
+  temps             : 4419.1 ms par jeton en local · 5122.7 ms à attendre le pair (son calcul + l'aller-retour) · soit 1.16× le calcul local seul
+--- serveur ---
+[flux] arrêt : failed to fill whole buffer
+[flux] 4 flux servis
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ P6 : le découpage de V4-Flash est exact — les mesures de transport valent un rapport.
+
+- **write** `{"content": "# V4-Flash réparti sur deux nœuds — exact, et ce qu'il coûte\n\n**En une ligne** : un modèle à **hyper-connexions** se découpe entre deux\nprocessus et rend **exactement** la même perplexité (écart `0,00e0` en mode\ndense), au prix de **4× le transport** — parce que son état résiduel vo … [3237 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-v4-reparti.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='docs/plan-deepseek41-complet.md'\ns=open(p).read()\na=\"\"\"### P6 — V4-Flash complet, en listes, et **sur plusieurs grappes** (≈ 1 journée)\"\"\"\nb=\"\"\"### P6 — V4-Flash complet, en listes, et **sur plusie … [2551 caractères tronqués]`

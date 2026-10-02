@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 97.4 h |
-| Tours | 76 |
-| Messages | 4833 |
-| Appels d'outils | 4613 |
-| Fichiers touchés | 93 |
-| Commandes | 3988 |
+| Durée | 97.8 h |
+| Tours | 77 |
+| Messages | 4868 |
+| Appels d'outils | 4646 |
+| Fichiers touchés | 94 |
+| Commandes | 4013 |
 | Sous-agents | 29 |
-| Commits | 337 |
+| Commits | 338 |
 | Compactages de contexte | 6 |
 
 ## Objectifs déclarés
@@ -195,6 +195,8 @@
 **Tour 75** — <goal_round> Objective: "Exécuter le plan docs/plan-deepseek41-complet.md phase par phase (P0→P9), en autonomie, en respectant pour chaque phase ses deux portes : porte de correction (comparaison étage par étage à llama.cpp sur V4-Flash) et porte Drave (flux : événements/paires par jeton, trace rejouée à l'identique, découpage en grappes, flux lisible par un outil d'analyse). Aucune phase ne passe … [661 caractères tronqués]
 
 **Tour 76** — <goal_round> Objective: "Exécuter le plan docs/plan-deepseek41-complet.md phase par phase (P0→P9), en autonomie, en respectant pour chaque phase ses deux portes : porte de correction (comparaison étage par étage à llama.cpp sur V4-Flash) et porte Drave (flux : événements/paires par jeton, trace rejouée à l'identique, découpage en grappes, flux lisible par un outil d'analyse). Aucune phase ne passe … [661 caractères tronqués]
+
+**Tour 77** — <goal_round> Objective: "Exécuter le plan docs/plan-deepseek41-complet.md phase par phase (P0→P9), en autonomie, en respectant pour chaque phase ses deux portes : porte de correction (comparaison étage par étage à llama.cpp sur V4-Flash) et porte Drave (flux : événements/paires par jeton, trace rejouée à l'identique, découpage en grappes, flux lisible par un outil d'analyse). Aucune phase ne passe … [661 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -3906,7 +3908,60 @@ L'écart résiduel est du **bruit** (49,5 % de signes positifs, plat en position
 
 **Synthèse produite :**
 
-⏵ Tenir la promesse du commit : noter dans la vision le coût `hc ×` du flux.
+⏵ Bilan du round : V4-Flash tourne, P4/P5 franchies, glossaire livré.
+
+\## Ce qui a été fait dans ce round
+
+**Le glossaire** (demandé en parallèle) — `docs/glossaire.md`, **1 630 lignes, 187 entrées** en 7 thèmes, chacune avec forme développée FR/EN, définition sans prérequis, référence `chemin:ligne` du dépôt et source externe (60 liens, tous testés). Plus un **parcours de lecture néophyte** en 9 étapes, l'index des outils, la table des drapeaux et des 39 variables `DRAVE_*`. L'agent a relevé **21 points non corrigés** ; j'ai traité les trois principaux (voir plus bas).
+
+**P4 — le compresseur HCA** : implémenté et validé contre llama.cpp, corrélation **0,999992** au 128ᵉ jeton — c'est-à-dire **au premier bloc compressé complet**. Le softmax *par canal* sur les 128 jetons du bloc, l'`ape` de rang, la norme, le RoPE de bloc à la position de son premier jeton, et la concaténation fenêtre + blocs concordent.
+
+**P5 — le compresseur CSA et l'indexeur** : validés aussi (0,999990 pour le CSA aux positions 3-9 ; scores d'indexeur à **0,1-0,3 %** de `lid_score_masked`).
+
+**P6 — V4-Flash tourne en ENTIER** : 43 couches, les trois régimes d'attention dans la même passe.
+
+\## Les bugs trouvés — tous par la comparaison, aucun par les tests
+
+| # | bug | ce qui l'a révélé |
+|---|---|---|
+| 1 | l'attention V4 recevait le mélange **avant** `attn_norm` | `qr` à 0,99866 au lieu de 0,999993 |
+| 2 | le **puits** mis à l'échelle alors que la référence l'ajoute brut | divergence **dès la position 0**, où l'attention est triviale |
+| 3 | RoPE **NORM** (paires 2i, 2i+1) et non NEOX | position 0 juste, position 1 fausse de 30 % |
+| 4 | la **dé-rotation** utilisait la base des couches brutes | 64 dimensions sur 512 fausses de 10 %, corrélation globale 0,996 — « plausible » |
+| 5 | les jetons d'avant le texte ont une porte **−∞**, pas 0 | 0,989 **au premier bloc seulement** |
+| 6 | les deux moitiés du projecteur CSA ont des rôles distincts | seul le **bloc 1** pouvait trancher (le bloc 0 a ses précédents nuls) |
+| 7 | la tête s'appelle **`output_hc_*`**, pas `hc_head_*` (nom de variable) | panique à la norme finale |
+| 8 | la tête n'a que `hc` sorties, pas `2·hc + hc²` | panique au 5ᵉ mélange |
+| 9 | le **clamp SwiGLU** de V4 n'était pas appliqué | relecture des métadonnées (`swiglu_clamp_exp`, par couche) |
+
+\## La divergence restante, mesurée et expliquée
+
+V4-Flash contre llama.cpp : perplexité **678,09 contre 548,32** (NLL +0,21 nat), corrélation des logits **0,988-0,998**, top-1 7/9
+… [1438 caractères tronqués]
+
+### Tour 77 — <goal_round> Objective: "Exécuter le plan docs/plan-deepseek41-complet.md phase par phase (P0→P9), en autonomie, en resp … [941 caractères tronqués]
+
+*33 appels d'outils.* Actions notables :
+
+- bash — Find the channel-count validation
+- bash — Read the validation and the hidden definition
+- bash — Read how the received state is applied
+- bash — Read the single-vector receive path
+- bash — Read the flux send and decode functions
+- bash — Accept hc×hidden channels in the protocol
+- bash — Test the distributed run with the extended protocol
+- bash — Check the server log after the test
+- bash — Start the flux server and verify it is up
+- bash — Run the pilot against the server
+- job_output
+- bash — Remove the refusal and run distributed
+- bash — Find the pilot's reply validation
+- bash — Fix the pilot reply validation
+- … et 13 autres
+
+**Synthèse produite :**
+
+⏵ P6 : le découpage de V4-Flash est exact — les mesures de transport valent un rapport.
 
 ## 3. Travail accompli
 
@@ -4007,6 +4062,7 @@ L'écart résiduel est du **bruit** (49,5 % de signes positifs, plat en position
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/compare_etats.py` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-v4-couches-0-1.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-v4-hca.md` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-v4-reparti.md` | 1 | 0 |
 
 ### Sous-agents lancés
 
@@ -4082,7 +4138,7 @@ L'écart résiduel est du **bruit** (49,5 % de signes positifs, plat en position
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 3948 autres
+- … et 3973 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4567,4 +4623,5 @@ L'écart résiduel est du **bruit** (49,5 % de signes positifs, plat en position
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && wc -l docs/glossaire.md && bash tools/portes.sh rapide 2>&1 | head -3 && git add -A docs/ reports/ drave-c
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && bash tools/portes.sh rapide 2>&1 | head -4; git add -A drave-core/src/ && git commit -q -F - <<'EOF' P6 : 
 - Vision : le flux d'un modèle à hyper-connexions coûte hc fois la taille d'un état (mesuré, et refusé tant que le protocole ne le porte pas)" && git log --onelin
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF' p='docs/plan-deepseek41-complet.md' s=open(p).read() a="""### P6 — V4-Flash complet, e
 

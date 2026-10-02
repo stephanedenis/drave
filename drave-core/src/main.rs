@@ -2507,9 +2507,17 @@ fn run_serveur_flux(opt: Options, adresse: &str) {
 couches — le nœud continue", f.debut, f.fin, n_layer_local);
                     continue;
                 }
-                if f.mode == MODE_DENSE && f.n != hidden {
-                    println!("[flux] flux refusé : {} canaux annoncés, {hidden} attendus — \
-le nœud continue", f.n);
+                // Largeur attendue : `cachés` — ou `hc × cachés` pour un modèle
+                // à **hyper-connexions**, dont l'état résiduel voyage en `hc`
+                // copies (les réduire au point de coupure change le modèle :
+                // perplexité répartie 8 311 → 34 159). Le protocole accepte donc
+                // les deux largeurs, et c'est le MODÈLE des deux côtés qui dit
+                // laquelle est légitime.
+                let hc_mult = mdl.hc.as_ref().map(|v| v[0].0.hc).unwrap_or(1);
+                let largeur_etat = hidden * hc_mult;
+                if f.mode == MODE_DENSE && f.n != hidden && f.n != largeur_etat {
+                    println!("[flux] flux refusé : {} canaux annoncés, {hidden} (ou \
+{largeur_etat} avec hyper-connexions) attendus — le nœud continue", f.n);
                     continue;
                 }
                 if f.pos as usize >= ctx_local
@@ -2565,7 +2573,12 @@ continue", f.pos, mdl.ctx);
                     servis += 1;
                     continue;
                 }
-                mdl.emb_imposee = Some(f.charge.en_dense(hidden));
+                // Largeur de DÉCODAGE : celle du modèle (4096, ou 16 384 avec
+                // hyper-connexions) — jamais `f.n`, qui vaut le nombre de
+                // CANAUX en mode dense mais le nombre de PAIRES en modes 1 et 2.
+                // Les confondre donnait un état de 16 362 valeurs au lieu de
+                // 16 384, et `Hc::melanger` sortait de la tranche.
+                mdl.emb_imposee = Some(f.charge.en_dense(largeur_etat));
                 let sortie = mdl.forward(0, f.pos as usize);
                 // La RÉPONSE est encodée comme la demande : un pair qui parle en
                 // listes reçoit des listes, sans second réglage à faire tenir
@@ -2619,21 +2632,11 @@ fn run_ppl_reparti(opt: Options, pair: &str) {
     // Le mode des LOTS est distinct : `--flux-blocs` donne le mode 4 (lot en
     // listes), tout le reste donne le mode 3 (lot dense f32). Déclaré ici pour
     // que l'affichage du transport, plus bas, le connaisse.
-    // Un modèle à **hyper-connexions** porte son état résiduel en `hc` copies :
-    // le flux d'une coupure fait donc `hc × cachés` valeurs, et le protocole
-    // DRVF n'accepte aujourd'hui que `cachés` canaux par flux (« 16384 canaux
-    // annoncés, 4096 attendus »). Étendre le protocole est un chantier de P6,
-    // pas une ligne à bâcler : tant qu'il n'est pas fait, on refuse — un
-    // découpage qui réduit les copies change le modèle (mesuré : 8 311 → 34 159
-    // de perplexité, écart 3,11 en mode dense où le transport est exact).
-    if mdl.hc.is_some() {
-        let hc = mdl.hc.as_ref().map(|v| v[0].0.hc).unwrap_or(0);
-        println!("[flux] ce modèle porte ses hyper-connexions : son état résiduel fait \
-{hc} copies, donc {} canaux par flux, et le protocole DRVF n'en accepte que {}. \
-Un découpage en grappes demande d'étendre le protocole (P6) — rien n'a été calculé.",
-                 hc * mdl.cfg.hidden, mdl.cfg.hidden);
-        return;
-    }
+    // Un modèle à **hyper-connexions** transporte son état en `hc` copies
+    // (16 384 canaux pour V4-Flash au lieu de 4 096) : le protocole accepte les
+    // deux largeurs depuis que le nœud distant les valide contre SON modèle, et
+    // le nœud qui possède la tête fait la réduction une seule fois
+    // (`norme_finale`). Ce que ça coûte est mesuré plus bas, pas supposé.
     let mode_lot = if mode == MODE_BLOCS { MODE_LOT_LISTES } else { MODE_LOT };
     println!("[flux] quantification : {} niveaux, seuil {}, top-k {}, renorm {}",
              mdl.act_levels, mdl.act_thresh, mdl.act_topk, mdl.act_renorm);
@@ -2823,12 +2826,17 @@ protocole, réglages, ou contexte : il a dit pourquoi de son côté.");
 était en mode {mode} — pair incompatible ? Rien n'a été calculé.", rep.mode);
             std::process::exit(1);
         }
-        let final_ = rep.charge.en_dense(mdl.cfg.hidden);
-        if final_.len() != mdl.cfg.hidden {
-            eprintln!("[flux] le nœud moteur a renvoyé {} canaux pour {} attendus — \
-pair incohérent. Rien n'a été calculé.", final_.len(), mdl.cfg.hidden);
+        // Le pair rend l'état BRUT de SA dernière couche : `cachés` canaux, ou
+        // `hc × cachés` pour un modèle à hyper-connexions (c'est `norme_finale`
+        // qui réduit, une seule fois, sur le nœud qui possède la tête).
+        let hc_mult = mdl.hc.as_ref().map(|v| v[0].0.hc).unwrap_or(1);
+        let largeur_etat = mdl.cfg.hidden * hc_mult;
+        if rep.mode == MODE_DENSE && rep.n != mdl.cfg.hidden && rep.n != largeur_etat {
+            eprintln!("[flux] le nœud moteur a renvoyé {} canaux pour {} (ou {}) \
+attendus — pair incohérent. Rien n'a été calculé.", rep.n, mdl.cfg.hidden, largeur_etat);
             std::process::exit(1);
         }
+        let final_ = rep.charge.en_dense(largeur_etat);
         if pos + 1 < ids.len() {
             nll += nll_logits(&mdl.logits(&mdl.norme_finale(&final_)), ids[pos + 1]);
         }

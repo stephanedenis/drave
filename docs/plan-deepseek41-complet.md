@@ -279,6 +279,20 @@ Une phase qui ne passe pas ses deux portes ne passe pas à la suivante.
   un banc d'essai, faux pour un moteur. Si ce raccourci est retenu pour le
   premier jet, il est **écrit** dans `--config` et borné par `--ctx`.
 
+### P6 — V4-Flash complet, en listes, et **sur plusieurs grappes** (≈ 1 journée) — **en cours**
+
+> **Fait** : le modèle tourne **en entier** (43 couches, les trois régimes
+> d'attention) ; `--trace-flux` puis `--flux-forcer` redonnent la même
+> perplexité (**8 430,2968 → 8 430,0379**, soit 0,003 %, la perte du codage en
+> listes) ; le découpage entre deux processus est **exact** — écart **0,00e0** en
+> dense, écart 9,13e-2 en listes — au prix de **4× le transport**, parce que
+> l'état voyage en `hc` copies et qu'il est **dense à 99,9 %** (le mode listes
+> n'y compresse rien). Rapport : `reports/rapport-v4-reparti.md`.
+> **Reste** : le découpage en **fichiers de grappes** (`cluster-XX.gguf`) et la
+> comparaison à llama.cpp sur 8 à 64 jetons, dont on sait déjà ce qu'elle donne
+> pour 10 (corrélation 0,988-0,998, écart expliqué par la quantification des
+> activations de ggml).
+
 ### P6 — V4-Flash complet, en listes, et **sur plusieurs grappes** (≈ 1 journée)
 
 - 43 couches, 86,9 Go, cache latent, mémoire, débit.
