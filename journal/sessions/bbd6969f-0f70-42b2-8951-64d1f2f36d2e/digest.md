@@ -50996,3 +50996,10 @@ qwen3moe · 128 experts par couche · lecture de 8 lignes par expert
 ⏵ Structure précise trouvée. Je consigne : la périodicité est statique **et** limitée aux couches 6-39.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np = 'reports/rapport-empreinte-memoire.md'\ns = open(p).read()\ns = s.replace('''## 11. Ce que ça donne pour DeepSeek-V4.1-Flash''',\n'''## 11. Analyse STATIQUE des poids : les experts sont orthogonaux, mais les cou … [4593 caractères tronqués]`
+
+  ```
+ok
+958eb29 Analyse statique : les experts sont orthogonaux, mais la periodicite de 12 est dans les POIDS
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np = 'REPRISE.md'\ns = open(p).read().rstrip('\\n')\ns += '''\n\n### Analyse STATIQUE des poids (pas des traces)\n\n`tools/analyse_experts_statique.py` déquantifie les experts (Q4_K, Q6_K, Q8_0,\nF32, F16) et compare … [1877 caractères tronqués]`

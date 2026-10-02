@@ -7,12 +7,12 @@
 | Début | 2026-09-28 14:46 |
 | Durée | 77.5 h |
 | Tours | 65 |
-| Messages | 3176 |
-| Appels d'outils | 3005 |
+| Messages | 3177 |
+| Appels d'outils | 3006 |
 | Fichiers touchés | 69 |
-| Commandes | 2613 |
+| Commandes | 2614 |
 | Sous-agents | 22 |
-| Commits | 263 |
+| Commits | 264 |
 | Compactages de contexte | 4 |
 
 ## Objectifs déclarés
@@ -3246,7 +3246,7 @@ Les premières couches veulent presque tout le catalogue ; les médianes se cont
 
 ### Tour 65 — note bien tout ça et fais une analyse statique du modèle couche par couche pour trouver des regroupements de sources et  … [78 caractères tronqués]
 
-*7 appels d'outils.* Actions notables :
+*8 appels d'outils.* Actions notables :
 
 - bash — Check expert tensor layout for static analysis
 - write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/analyse_experts_statique.py`
@@ -3255,6 +3255,7 @@ Les premières couches veulent presque tout le catalogue ; les médianes se cont
 - bash — Test static counterpart of the periodicity
 - bash — Per-expert correlation distribution
 - bash — Document static analysis findings
+- bash — Final commit and summary
 
 **Synthèse produite :**
 
@@ -3403,7 +3404,7 @@ Les premières couches veulent presque tout le catalogue ; les médianes se cont
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 2573 autres
+- … et 2574 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -3814,4 +3815,5 @@ Les premières couches veulent presque tout le catalogue ; les médianes se cont
 - Analyse couche par couche du journal : il se place entre le francais et l'anglais  Le journal demande 58,1 experts pour 90 % des appels, entre le francais (59,3
 - Journal" 2>/dev/null; echo "=== LIVRABLES DE LA DEMANDE ==="; for f in reports/rapport-empreinte-memoire.md sprints/09-empreinte-memoire-ce-qui-reduit-vraiment.
 - Analyse statique : les experts sont orthogonaux, mais la periodicite de 12 est dans les POIDS  tools/analyse_experts_statique.py dequantifie les experts (Q4_K, 
+- REPRISE : analyse statique des poids" && echo "=== RÉCAPITULATIF FINAL ==="; echo ""; echo "Rapports :"; ls -la reports/rapport-empreinte-memoire.md | awk '{pri
 

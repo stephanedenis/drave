@@ -835,3 +835,28 @@ DRAVE_TRACE_EXPERTS=/tmp/routage_journal.txt ./drave-core/target/release/drave <
     --ppl <ids> --ctx 4096 --limit 4096 --dense --threads 10 --lot 1
 ```
 
+### Analyse STATIQUE des poids (pas des traces)
+
+`tools/analyse_experts_statique.py` déquantifie les experts (Q4_K, Q6_K, Q8_0,
+F32, F16) et compare **ce qu'ils sont**, pas ce qu'ils font.
+
+| question | réponse mesurée |
+|---|---|
+| des experts jumeaux à fusionner ? | **non** — similarité intra-couche max 0,04–0,19, médiane ~0,00 |
+| des sources creuses ? | **non** — 78 % des colonnes portent 80 % du poids |
+| la périodicité de 12 est-elle dans les poids ? | **oui** — corrélation 0,27–0,39 à écart 12, ~0,00 ailleurs |
+| peut-on fusionner deux couches du cycle ? | **non** — aucun expert ne dépasse 0,5 (max 0,49) |
+
+**La périodicité est structurelle, pas seulement fonctionnelle** — et elle est
+**bornée aux couches 6–39** (trois cycles de 12) : 0/12 = 0,001, 30/42 = 0,003.
+
+```bash
+python3 tools/analyse_experts_statique.py \
+    /home/stephane/Data13TB/stephane/modeles/gguf/Qwen3-30B-A3B-Instruct-2507-Q4_K_M.gguf \
+    --couches 0,6,12,24,36,47 --lignes 8
+```
+
+**Seule piste ouverte** : une décomposition conjointe des quatre couches d'un
+cycle. 35 % de variance partagée à extraire, **rang inconnu** — donc pas compté
+comme un résultat.
+
