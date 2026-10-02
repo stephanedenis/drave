@@ -7,12 +7,12 @@
 | Début | 2026-09-28 14:46 |
 | Durée | 79.7 h |
 | Tours | 69 |
-| Messages | 3338 |
-| Appels d'outils | 3158 |
+| Messages | 3339 |
+| Appels d'outils | 3159 |
 | Fichiers touchés | 73 |
-| Commandes | 2759 |
+| Commandes | 2760 |
 | Sous-agents | 22 |
-| Commits | 280 |
+| Commits | 281 |
 | Compactages de contexte | 4 |
 
 ## Objectifs déclarés
@@ -3526,7 +3526,7 @@ Sur cette session, les mesures m
 
 ### Tour 69 — implémente toute les optimisation et détection de matériel avec heuristiques de configuration automatique.
 
-*119 appels d'outils.* Actions notables :
+*120 appels d'outils.* Actions notables :
 
 - bash — Inspect existing GPU detection
 - write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/materiel.rs`
@@ -3542,11 +3542,11 @@ Sur cette session, les mesures m
 - bash — Read KV bits resolution
 - bash — Integrate KV and VRAM heuristics
 - bash — Lighten detection and run gates
-- … et 103 autres
+- … et 104 autres
 
 **Synthèse produite :**
 
-⏵ Deux `cpu / 2` subsistent (10 threads = 14,3 Go/s au lieu de 22,5). Je les corrige.
+⏵ Copie à 46 %. Je mets à jour REPRISE avec les optimisations de la session.
 
 ## 3. Travail accompli
 
@@ -3695,7 +3695,7 @@ Sur cette session, les mesures m
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 2719 autres
+- … et 2720 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4123,4 +4123,5 @@ Sur cette session, les mesures m
 - mmap : 365,7 Go adresses en 0,08 s et 47 Mo de RSS" && git log --oneline -1; ls -la /home/stephane/FastNVMe/modeles-lourds/*.gguf 2>/dev/null | awk '{printf "co
 - Defauts de threads : les cœurs physiques, sans le 3/4 ni le /2  Mesure au banc, epingle sur 20 cœurs : 10 threads = 14,3 Go/s, 15 = 19,9, 18 = 22,6, 20 = 18,7 (
 - Defauts de threads : les cœurs physiques, sans le 3/4 ni le /2  Mesure au banc, epingle sur 20 cœurs : 10 threads = 14,3 Go/s, 15 = 19,9, 18 = 22,6, 20 = 18,7 (
+- REPRISE : session d'implementation (detection materielle, heuristiques, engram)" && git log --oneline -1; ls -la /home/stephane/FastNVMe/modeles-lourds/*.gguf 2
 

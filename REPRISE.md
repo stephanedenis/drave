@@ -926,3 +926,63 @@ taskset -c 0-9,20-29 env DRAVE_GPU=1 ./drave-core/target/release/drave \
     models/Qwen2.5-0.5B-Q8_0.gguf --gpu-banc --threads 20   # 18,7 Go/s (10 cœurs + HT)
 ```
 
+## Session d'implémentation — détection matérielle et configuration automatique
+
+Nuit du 01/10 au 02/10. Rapports :
+[`reports/rapport-optimisations-auto.md`](reports/rapport-optimisations-auto.md) et
+[`reports/rapport-tete-restreinte.md`](reports/rapport-tete-restreinte.md).
+
+### Ce qui est implémenté
+
+| brique | ce qu'elle décide | mesure qui la justifie |
+|---|---|---|
+| `materiel.rs` | cœurs physiques, paires HT, NUMA, caches, GPU, NVLink, disques | `available_parallelism` rend 40 threads pour 20 cœurs |
+| `--materiel` | le plan complet, **avec la raison de chaque ligne** | chaque règle porte son chiffre |
+| threads par défaut | **20** (cœurs physiques) | 20 cœurs = 22,5 Go/s · 10 = 14,3 · 40 = 18,9 |
+| cache KV | f32 tant qu'il tient dans **un tiers** de la RAM, int8 au-delà | 90 Ko/jeton en F16 sur V4.1 ⇒ 96,6 Go à 1 M |
+| cache d'experts VRAM | VRAM libre − 2 Go − le commun | VRAM 84,9 Go/s contre RAM 22,5 |
+| épinglage HT | si la machine a moins de 8 cœurs | 10 cœurs + HT = 18,7 contre 14,7 secs |
+| prélecture | `madvise(WILLNEED)` après le routage | **sans effet mesuré** (0,3 %) — conservée, pas comptée |
+
+Vérifié en vrai : `--materiel` sur V4.1 donne **384 experts de 9,95 Mo**, et à 1 M
+de jetons il bascule le KV en 8 bits avec sa raison (« 94,4 Go en F16, soit 81 %
+de la RAM libre »).
+
+### Ce qui a été mesuré puis RETIRÉ
+
+**La tête à restriction garantie** : trois voies, aucune ne tient.
+
+| voie | résultat |
+|---|---|
+| restriction simple | +10,5 à +15 %, mais **la sortie change** |
+| borne de Cauchy-Schwarz | exacte, **ne conclut jamais** (5 à 20× trop haute) |
+| sparsité de l'entrée | densité 5,1 % ⇒ perplexité **×107** |
+
+**On ne peut pas garantir l'argmax en lisant moins que tout.** `--tete-restreinte`
+reste, comme **génération contrainte** assumée, refusée en perplexité.
+
+### Le mmap, toutes tailles
+
+| modèle | taille | temps | RSS |
+|---|---|---|---|
+| Qwen3-30B en clusters | 18,55 Go | 0,46 s | 72 Mo |
+| DeepSeek-V4-Flash (3 shards) | 86,90 Go | 0,07 s | 35 Mo |
+| **DeepSeek-V4.1-Flash** | **365,70 Go** | **0,08 s** | **47 Mo** |
+
+### L'engram : 16 ms par entrée sur le disque mécanique
+
+La sonde le chiffre : 10 000 entrées de 264 octets lues en 169 s depuis le
+mécanique, soit **16 936 µs chacune** — un seek. Un jeton lit ~4 n-grammes × 2
+couches : **128 ms par jeton** rien qu'en accès à la table.
+
+D'où la copie de V4.1 sur le NVMe (`/home/stephane/FastNVMe/modeles-lourds/`,
+exception documentée à la politique de stockage) : 698 Go libres, et un NVMe fait
+0,07 ms par page au lieu de 16 ms.
+
+```bash
+# Le plan, avec ses raisons, sans charger de modèle
+./drave-core/target/release/drave <modele-ou-dossier> --materiel --ctx 1048576
+# La sonde d'engram (lecture parallèle, mémoire résidente affichée)
+./drave-core/target/release/drave <modele-v4.1> --sonder-engram 20000
+```
+

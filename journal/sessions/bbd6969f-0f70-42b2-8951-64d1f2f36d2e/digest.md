@@ -53698,3 +53698,16 @@ test result: ok. 35 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; fin
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -m \"Defauts de threads : les cœurs physiques, sans le 3/4 ni le /2\n\nMesure au banc, epingle sur 20 cœurs : 10 threads = 14,3 Go/s, 15 = 19,9,\n18 = 22,6, 20 = 18,7 (bruite). Le defaut valait cœurs x 3/4 … [661 caractères tronqués]`
+
+  ```
+65036dd Defauts de threads : les cœurs physiques, sans le 3/4 ni le /2
+--- copie et porte ---
+copie : 167.1 Go / 365.7
+gpt-oss ctx 256 (attendu 15,1757) :
+  ```
+
+### 🤖 Assistant
+
+⏵ Copie à 46 %. Je mets à jour REPRISE avec les optimisations de la session.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np = 'REPRISE.md'\ns = open(p).read().rstrip('\\n')\ns += '''\n\n## Session d'implémentation — détection matérielle et configuration automatique\n\nNuit du 01/10 au 02/10. Rapports :\n[`reports/rapport-optimisations- … [3120 caractères tronqués]`
