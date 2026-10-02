@@ -319,7 +319,7 @@ Une phase qui ne passe pas ses deux portes ne passe pas à la suivante.
      clusters 799,8557, 18 formats lisibles dont 17 vérifiés à la porte,
      4 routages).
 
-### P7 — Adaptation à V4.1, et la question de provenance (≈ ½ journée + action externe) — **chaîne mHC faite et vérifiée ; reste la compression** (02/10)
+### P7 — Adaptation à V4.1, et la question de provenance (≈ ½ journée + action externe) — **chaîne mHC et compression faites et vérifiées ; reste l'engram** (02/10)
 
 > **Les deux manques annoncés étaient faux tous les deux** (02/10, 17:33 → 18:02).
 > La **référence d'exécution existe** : vLLM porte V4.1 en entier
@@ -344,15 +344,25 @@ Une phase qui ne passe pas ses deux portes ne passe pas à la suivante.
 > tête à ~1e-7 (arrondi f32). Rapport :
 > [`reports/rapport-v41-mhc.md`](../reports/rapport-v41-mhc.md).
 >
-> **Reste, nommé** (l'inventaire des 1 046 tenseurs le donne) : le **cache
-> compressé partagé entre couches** (`kv_source_layer_ids = [2,8,14,20]` : les
-> couches 3..7 lisent les clés publiées par la 2, 21..39 celles de la 20 — le
-> calculer couche par couche donnerait d'AUTRES clés), les ratios 1 et 2, la
-> **sélection à deux niveaux** (`candidate_*`), l'**injection de l'engram** dans
-> la passe avant, le **pré-mix sur le fil** du protocole DRVF (16 octets/jeton,
-> sans quoi un découpage de V4.1 est refusé), et YaRN appliqué partout comme la
-> référence (le moteur ne l'applique qu'au-delà de 4 × la longueur déclarée, et
-> le dit désormais).
+> **Fait aussi (02/10, 19h)** : le **compresseur des ratios 1 et 2** (softmax
+> PAR CANAL sur le groupe, norme du latent, RoPE de bloc à la position du premier
+> jeton, pas d'`ape`) est implémenté et vérifié sur les couches sources 2 et 20
+> contre une référence numpy écrite depuis `fused_save_compress_norm` (pool
+> ~5e-07, norme+RoPE ~5e-06) ; et le **cache compressé partagé**
+> (`kv_source_layer_ids`) est branché — les couches consommatrices lisent les
+> tampons de leur source, ce qu'un contrôle positif/négatif établit (sortie de la
+> couche 3 : écart 1,30 à 2,16 selon que sa source a tourné ou non ; sortie de la
+> source 2 identique au bit dans les deux cas).
+>
+> **Reste, nommé** (l'inventaire des 1 046 tenseurs le donne) : l'**injection de
+> l'engram** dans la passe avant (le seul manque qui empêche encore une passe
+> avant V4.1 complète, avec ses tables et ses projections déjà lues), l'**indexeur
+> de V4.1** (clés tirées du latent du compresseur principal — le moteur garde tous
+> les blocs, exact sous `indexer.top_k`, refusé au-delà) et la **sélection à deux
+> niveaux** (`candidate_*`), le **pré-mix sur le fil** du protocole DRVF (16
+> octets/jeton, sans quoi un découpage de V4.1 est refusé), et YaRN appliqué
+> partout comme la référence (le moteur ne l'applique qu'au-delà de 4 × la
+> longueur déclarée, et le dit).
 
 
 - Code : métadonnées par couche (`compress_ratios` au lieu d'un régime global),

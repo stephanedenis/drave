@@ -14,10 +14,14 @@ f32 par tenseur, couche et position) ; ce script les relit et refait le calcul
      — les 24 mélanges, calculés sur le flux d'APRÈS le post de l'attention ;
   3. `hidden_final(0, pos) == rms_norm(Σ_c hc_ffn_pre[c]·l_last[c], output_norm)`
      — la tête de V4.1, qui n'a **aucun poids appris** : sa réduction EST la
-     `pre` de la dernière FFN.
+     `pre` de la dernière FFN ;
+  4. `hc_mel_ffn == Σ_c hc_pre_attn[c]·hc_ffn_in[c]` — **le maillon central** :
+     l'entrée de la FFN se replie avec la `pre` de l'ATTENTION, pas avec la
+     sienne. Sans ce contrôle, échanger les deux ne changerait ni ①, ni ②, ni ③
+     (elles vivent toutes en aval de `l_last`).
 
 Usage :
-    python3 tools/verifier_v41_mhc.py <modele.gguf> <prefixe_dump> <tokens.ids>
+    python3 tools/verifier_v41_mhc.py <modele.gguf> <prefixe_dump> <tokens.ids> [couche]
 """
 import struct
 import sys
@@ -97,6 +101,14 @@ def rms_norm(x, poids, eps):
 
 def main():
     chemin, prefixe, ids_f = sys.argv[1], sys.argv[2], sys.argv[3]
+    # La COUCHE : elle se lit dans les vides (le préfixe est le même, seul le
+    # numéro de couche change). La câbler en dur sur 0 ferait comparer la tête à
+    # la `pre` d'une autre couche dès que la plage en contient deux.
+    import glob as _g, re as _re
+    couches = sorted({int(_re.search(r"-hc_attn_pre-(\d+)-", f).group(1))
+                      for f in _g.glob(f"{prefixe}-hc_attn_pre-*-*.bin")})
+    assert len(couches) == 1, f"vides de plusieurs couches {couches} : relancer plage par plage"
+    couche = int(sys.argv[4]) if len(sys.argv) > 4 else couches[-1]
     ids = [int(v) for v in open(ids_f).read().strip().split(",") if v != ""]
     g = Gguf(chemin)
     fn = g.lire("blk.0.hc_ffn_fn.weight")            # [24, 4·5120]
@@ -122,29 +134,34 @@ def main():
     echecs = 0
     for pos in positions:
         tok = ids[pos]
-        pre = dump(prefixe, "hc_attn_pre", 0, pos)
+        pre = dump(prefixe, "hc_attn_pre", couche, pos)
         ligne = emb[tok - min(ids)]
         e1 = np.max(np.abs(pre - ligne))
         # 2. les mélanges du raccord FFN
-        xin = dump(prefixe, "hc_ffn_in", 0, pos)
-        mel_attendu = dump(prefixe, "hc_ffn_pre", 0, pos)
+        xin = dump(prefixe, "hc_ffn_in", couche, pos)
+        mel_attendu = dump(prefixe, "hc_ffn_pre", couche, pos)
+        # ④ le maillon central : le repliement de l'entrée de la FFN
+        pre_attn = dump(prefixe, "hc_pre_attn", couche, pos)
+        mel_ffn = dump(prefixe, "hc_mel_ffn", couche, pos)
+        mel_calcule = (pre_attn.reshape(hc, 1) * xin.reshape(hc, h)).sum(axis=0)
+        e4 = np.max(np.abs(mel_calcule - mel_ffn))
         plat = xin / np.sqrt(np.mean(xin * xin) + eps)
         mixes = fn @ plat
         sig = 1.0 / (1.0 + np.exp(-(mixes[:hc] * scale[0] + base[:hc])))
         mel = sig + hc_eps
         e2 = np.max(np.abs(mel - mel_attendu))
         # 3. la tête : repliement par `hc_ffn_pre` puis norme finale
-        llast = dump(prefixe, "l_last", 0, pos).reshape(hc, h)
+        llast = dump(prefixe, "l_last", couche, pos).reshape(hc, h)
         attendu = rms_norm((mel_attendu.reshape(hc, 1) * llast).sum(axis=0), norme, eps)
-        obtenu = dump(prefixe, "hidden_final", 0, pos)
+        obtenu = dump(prefixe, "hidden_final", couche, pos)
         e3 = np.max(np.abs(attendu - obtenu))
         dyn = np.max(np.abs(obtenu))
-        etat = "OK " if max(e1, e2, e3) < 1e-4 * max(dyn, 1e-9) + 1e-6 else "ÉCART"
+        etat = "OK " if max(e1, e2, e3, e4) < 1e-4 * max(dyn, 1e-9) + 1e-6 else "ÉCART"
         print(f"  pos {pos} (jeton {tok}) : copie0 {e1:.3e} · mélanges {e2:.3e} · "
-              f"tête {e3:.3e}   (dynamique {dyn:.3e})  {etat}")
+              f"repli FFN {e4:.3e} · tête {e3:.3e}   (dynamique {dyn:.3e})  {etat}")
         if etat == "ÉCART":
             echecs += 1
-    print("VERDICT : " + ("les trois égalités tiennent" if echecs == 0
+    print("VERDICT : " + ("les quatre égalités tiennent" if echecs == 0
                           else f"{echecs} position(s) en écart"))
     return 1 if echecs else 0
 

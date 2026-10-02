@@ -343,9 +343,12 @@ synthétique : ce n'est pas une variante d'écriture
 couches (**2, 8, 14, 20**) portent un compresseur et publient les clés compressées ;
 les couches suivantes (3..7, 9..13, 15..19, 21..39) **lisent les mêmes clés** au
 lieu de calculer les leurs. Un compresseur calculé couche par couche donnerait
-d'autres clés — un résultat faux qui ne casse rien
-(`reports/rapport-v41-mhc.md:130-140`).
-**Où** : `comp_source`.
+d'autres clés — un résultat faux qui ne casse rien. Le moteur indexe donc les
+tampons par **source** (`comp_source`), et la preuve que la couche 3 lit bien
+l'état de la 2 est un contrôle positif/négatif : sa sortie change de 1,30 à 2,16
+selon que sa source a tourné ou non, tandis que la sortie de la source est
+identique au bit (`reports/rapport-v41-mhc.md`, §6).
+**Où** : `comp_source`, `Mla4::a_compresseur`.
 
 **Compression de contexte (ratio 1, 2, 4, 128)** — Résumer `ratio` jetons en un
 seul latent de clé, afin que l'attention ne croisse plus avec la longueur. V4-Flash

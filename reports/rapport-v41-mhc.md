@@ -72,12 +72,15 @@ rendait le modèle faux en silence, et aucun n'était visible dans un inventaire
 | symptôme | cause | correctif |
 |---|---|---|
 | `tenseur blk.0.ffn_gate.weight absent` | `n_expert` relu en GGUF-seul (`expert_count`) alors que V4.1 ne déclare que `n_routed_experts` ; `routage_du_gguf` lisait déjà correctement les trois sources, mais **le résultat était jeté** (variables mortes) | `Cfg` prend les valeurs de `routage_du_gguf` |
-| toutes les normes décalées d'environ 1e-6 | `rms_norm_eps` (JSON, **1e-20**) au lieu de `attention.layer_norm_rms_epsilon` (absent) → repli sur 1e-6 | `reel_gguf([... , "rms_norm_eps"], …)` |
-| « le modèle ne déclare pas YaRN » | V4.1 déclare YaRN dans le **JSON** (`rope_scaling`, facteur 16), pas en clef GGUF | troisième source lue, et message qui dit ce qui est appliqué |
+| toutes les normes décalées d'environ 1e-6 | `rms_norm_eps` (**1e-20**, déclaré par le GGUF `deepseek41.rms_norm_eps` et par le JSON) au lieu de `attention.layer_norm_rms_epsilon` (absent) → repli sur 1e-6 | `reel_gguf([... , "rms_norm_eps"], …)` |
+| « le modèle ne déclare pas YaRN » | V4.1 déclare YaRN dans le **JSON** (`rope_scaling`, facteur 16), pas en clef GGUF | troisième source lue, et message qui dit ce qui est appliqué. **Ce que ce correctif ne fait pas** : changer la rotation aux contextes courts — le moteur bascule à 4 × 65536 = 262144 jetons, donc à `--ctx 8` le RoPE appliqué est le même avant et après. Ce qui change vraiment : le message, `DRAVE_YARN=1` (inerte tant que la déclaration n'était pas lue) et l'application au-delà du seuil |
 
 ## 4. La vérification, sur le fichier de 365,7 Go
 
-Commande (couches 0 et 1 : les seules en ratio 0, donc sans compression) :
+Commande — `--couches 0:1` exécute la couche **0** seule (`[0,1)`) : c'est la
+seule couche du modèle sans compression ET sans engram, donc la seule dont la
+passe avant soit complète à ce stade. La couche 1 porte l'engram (dont l'injection
+n'est pas branchée), la 2 ouvre les couches compressées :
 
 ```
 DRAVE_DUMP_COUCHES=/tmp/dump_v41 ./drave-core/target/release/drave \
@@ -86,22 +89,28 @@ DRAVE_DUMP_COUCHES=/tmp/dump_v41 ./drave-core/target/release/drave \
 ```
 
 `tools/verifier_v41_mhc.py` relit les vides et recalcule **en numpy**, depuis les
-tenseurs du GGUF, les trois étapes — sans passer par le code Rust :
+tenseurs du GGUF, les quatre étapes — sans passer par le code Rust :
 
-| position (jeton) | ① copie 0 = embarquement | ② les 24 mélanges | ③ la tête | dynamique |
-|---|---|---|---|---|
-| 0 (201) | **0,000e+00** | 8,354e-08 | 6,753e-07 | 3,113 |
-| 1 (438) | **0,000e+00** | 8,210e-08 | 4,031e-07 | 2,939 |
-| 2 (10498) | **0,000e+00** | 4,327e-08 | 4,696e-07 | 1,167 |
-| 3 (102771) | **0,000e+00** | 8,594e-08 | 2,273e-07 | 1,178 |
+| position (jeton) | ① copie 0 = embarquement | ② les 24 mélanges | ④ repli de la FFN | ③ la tête | dynamique |
+|---|---|---|---|---|---|
+| 0 (201) | **0,000e+00** | 8,354e-08 | 1,049e-08 | 6,753e-07 | 3,113 |
+| 1 (438) | **0,000e+00** | 8,210e-08 | 1,449e-08 | 4,031e-07 | 2,939 |
+| 2 (10498) | **0,000e+00** | 4,327e-08 | 2,846e-08 | 4,696e-07 | 1,167 |
+| 3 (102771) | **0,000e+00** | 8,594e-08 | 4,885e-08 | 2,273e-07 | 1,178 |
+
+④ est le **maillon central** de la chaîne retardée : l'entrée de la FFN se replie
+avec la `pre` de l'**attention**, pas avec la sienne. Les trois premières égalités
+ne le couvraient pas (elles vivent toutes en aval de `l_last`) : une relecture
+adverse l'a relevé, et ces deux vides (`hc_pre_attn`, `hc_mel_ffn`) le rendent
+vérifiable — échanger les deux coefficients à cet endroit ferait tomber ④.
 
 - ① est **exact** : au premier raccord, le flux replié *est* la copie 0, au bit
   près. La chaîne de V4 donnerait `(Σ pre)·embarquement` — un vecteur différent,
   donc ce zéro est un discriminant, pas une tautologie.
-- ② et ③ sont à ~1e-7 sur une dynamique de 1 à 3 : l'arrondi f32 (le moteur
-  calcule en f32, le vérificateur en f64).
+- ②, ③ et ④ sont à 1e-8…7e-7 sur une dynamique de 1 à 3 : l'arrondi f32 (le
+  moteur calcule en f32, le vérificateur en f64).
 
-**Verdict : les trois égalités tiennent.** Et la chaîne écrite à l'envers n'est
+**Verdict : les quatre égalités tiennent.** Et la chaîne écrite à l'envers n'est
 pas une variante cosmétique : sur le témoin synthétique
 (`tools/mhc_v41_synthetique.py`), la tête retardée diffère de **67 %** de la tête
 directe. C'est aussi ce que fixe le test unitaire
@@ -114,7 +123,7 @@ n'existe pas encore — c'est une vérification **interne**, de bout en bout, de
 chaîne mHC. Les logits publiés ci-dessus appartiennent à un modèle **tronqué**
 (1 couche sur 40) : ils ne disent rien de sa qualité.
 
-## 5. Le compresseur des ratios 1 et 2 : les couches SOURCES tournent
+## 5. Le compresseur des ratios 1 et 2 : les couches SOURCES tournent, et sont vérifiées
 
 Deuxième manque annoncé, deuxième manque faux. Le compresseur de V4.1 est
 spécifié par `DeepseekCompressor` + `fused_save_compress_norm` : une **valeur** de
@@ -137,11 +146,16 @@ GGUF, la projection, la norme RMS du latent et le RoPE appliqué aux **64
 dernières** composantes à la position du **premier** jeton du groupe (`position //
 ratio * ratio`, appariement NORM) : l'écart est de l'ordre de l'arrondi f32, donc
 la projection, l'instant d'émission du bloc, le groupe et la rotation sont justes.
-Réserve assumée : l'état injecté est le même à toutes les positions, donc le pool
-d'un groupe y vaut la valeur du jeton **quel que soit** le jeu de poids — ce
-tableau ne prouve pas l'orientation du softmax par canal (prochain test à écrire :
-un témoin synthétique à deux jetons DIFFÉRENTS), et il ne prouve pas encore le
-partage entre couches.
+Réserves assumées, et elles sont plus larges que « l'orientation du softmax » :
+l'état injecté est le même à toutes les positions, donc le pool d'un groupe y vaut
+la valeur du jeton **quel que soit** le jeu de poids — ce tableau ne prouve ni le
+groupe, ni l'orientation du softmax par canal, ni la **projection de porte**
+(`attn_compressor_gate`, jamais comparée) ; il ne prouve pas non plus la
+comparaison à une référence EXTERNE, puisque la rotation du moteur est ici le RoPE
+simple alors que vLLM applique YaRN (facteur 16) à toutes les positions des couches
+compressées. Ce qui est prouvé : la projection de valeur, la norme du latent, la
+position du RoPE de bloc, et l'instant d'émission du bloc (un par jeton en ratio 1,
+un par groupe de deux en ratio 2).
 
 L'**indexeur** de V4.1 n'a pas de compresseur propre : ses clés viennent du latent
 du compresseur principal (`indexer.attn_k` [128,512] + `indexer.k_norm`) et il
@@ -150,17 +164,41 @@ l'est pas, le moteur **garde tous les blocs**, ce qui est exact sous `indexer.to
 (512) — et il **refuse** au-delà plutôt que de choisir au hasard. Les deux
 comportements sont annoncés une fois.
 
-Ce qui reste pour que les 38 couches compressées tournent : le **partage du cache
-compressé** (les 34 couches consommatrices lisent les clés de leur source ; le
-moteur les refuse aujourd'hui avec ce motif) et l'indexeur de V4.1.
+## 6. Le cache compressé partagé : les 34 couches consommatrices aussi
 
-## 6. Ce qui reste, nommé
+« Compressors and compressed-KV caches live only on `kv_source_layer_ids`;
+consumers reuse the most recently published source below them » (vLLM,
+`deepseek_v41/attention.py`). Le moteur **n'indexe donc pas** les tampons du
+compresseur par couche, mais par **source** (`comp_source`) : une couche
+consommatrice lit l'état et les blocs publiés par sa source, qui a déjà été
+calculée pour ce jeton (sa couche est en dessous). Elle ne projette rien — elle
+n'a pas de tenseurs — et ne réécrit aucun bloc.
+
+Vérification, par **contrôle positif/négatif** plutôt que par relecture : la même
+couche 3, exécutée (a) après sa source (plage 2..5) et (b) seule (plage 3..4, donc
+avec un cache de source jamais rempli).
+
+| mesure | résultat |
+|---|---|
+| sortie de la couche 3 (a) contre (b) | **écart max 1,30 à 2,16** sur une dynamique de 2,49 à 3,53 → la couche 3 dépend bien de l'état de sa source |
+| sortie de la couche **2** dans les deux exécutions | **0,000000e+00** (identique au bit) → le partage ne perturbe pas la source, et le harnais est stable |
+| sortie de la couche 3 contre la couche 2 | écart 0,76 à 1,12 → la couche 3 a bien ses propres requêtes et poids |
+
+Si la couche 3 lisait un état à elle (ou un tampon vide), les deux exécutions
+donneraient le **même** résultat : c'est ce que ce contrôle exclut. Reste non
+vérifié : la valeur *absolue* de la sortie d'une couche consommatrice contre une
+référence externe (aucun runtime public ne charge ce fichier) ; et l'orientation
+du softmax par canal, qui est maintenant couverte par un test unitaire à témoin
+(`model::tests_hc::pool_du_compresseur_est_par_canal` : deux jetons différents,
+poids 0,5/0,5 et 0,25/0,75).
+
+## 7. Ce qui reste, nommé
 
 L'inventaire de V4.1 (1 046 tenseurs, 40 couches) donne la liste exacte :
 
 | manque | ce que dit le fichier | pourquoi ce n'est pas fait |
 |---|---|---|
-| **cache compressé partagé** | `kv_source_layer_ids = [2,8,14,20]`, `compress_ratios = [0,0,2×18,1×20]` | « Compressors and compressed-KV caches live only on `kv_source_layer_ids`; consumers reuse the most recently published source below them » : les couches 3..7 lisent les clés publiées par la 2, 21..39 celles de la 20. Un compresseur par couche donnerait d'AUTRES clés. **Les 4 couches sources tournent** (§5) ; les 34 consommatrices sont refusées, avec ce motif |
+| **cache compressé partagé** | `kv_source_layer_ids = [2,8,14,20]`, `compress_ratios = [0,0,2×18,1×20]` | **fait** : les sources projettent, les consommatrices lisent leurs tampons (`comp_source`), et le contrôle positif/négatif est concluant (§6). La couche 14 (source ET engram) reste refusée par le manque engram |
 | ratios 1 et 2 | `attn_compressor_kv` sans `ape`, `attn_compressor_gate` seulement en ratio 2 | **fait** pour les couches sources, vérifié sur les couches 2 et 20 (§5) |
 | indexeur sans compresseur propre | `indexer.attn_k` [128,512], `indexer.k_norm` [128], `indexer.attn_q_b`, `indexer.proj` | les clés de l'indexeur viennent du **latent du compresseur principal** (le fichier n'a pas d'`indexer_compressor_*`), et il partage le cache de son `kv_source` |
 | sélection à deux niveaux | `candidate_source_layer_id = 20`, `candidate_topk_blocks = 2048`, `candidate_block_size = 8` | aucune source d'exécution lue à ce jour |
@@ -175,7 +213,7 @@ celui de `vision_config` (2816) et non le texte (2304). Le champ est **inerte**
 sur un modèle à experts (la largeur du FFN partagé vient de la forme du tenseur),
 mais le chiffre affiché est faux.
 
-## 7. Reproduire
+## 8. Reproduire
 
 ```bash
 # la chaîne, témoins numpy ↔ moteur
@@ -203,7 +241,7 @@ python3 tools/v41_compresseur_reference.py \
     /tmp/dump_l20 20 /tmp/etat_l2.bin 1 0 1 2 3
 ```
 
-## 8. Sources
+## 9. Sources
 
 - vLLM, `vllm/models/deepseek_v41/nvidia/model.py` (`mhc_shifted_post_pre`,
   `hc_collapse_triton`, `_collapse`, `kv_source_layer_ids`) —

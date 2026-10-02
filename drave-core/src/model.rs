@@ -166,39 +166,13 @@ pub fn manques_architecture(g: &Gguf, cfg: &Cfg, ctx: usize, clusters: bool) -> 
         && !quelque_part("attn_compressor_kv.weight") {
         manques.push("attentions compressées : `attn_compressor_kv` absent du fichier");
     }
-    // **V4.1 : deux autres ratios (1 et 2).** Ils ont une RÉFÉRENCE
-    // d'exécution, contrairement à ce que ce message disait : vLLM porte
-    // `vllm/models/deepseek_v41/compressor.py` (`DeepseekCompressor`, ratios 1
-    // et 2 ; « ratio-4/128 kernels are v4.0-specific ») et le noyau
-    // `fused_save_compress_norm` donne le calcul exact — softmax **par canal**
-    // sur le groupe (`tl.softmax(score, 0)`), norme RMS du latent, RoPE à la
-    // position du premier jeton du groupe ; ratio 1 = aucun groupe, aucune
-    // porte, aucun `ape`. Ce qui manque n'est donc pas le compresseur :
-    let ratios = g.couches_ratios();
-    let inconnus: Vec<i64> = {
-        let mut v: Vec<i64> = ratios.iter().copied()
-            .filter(|r| *r != 0 && *r != 4 && *r != 128).collect();
-        v.sort_unstable(); v.dedup(); v
-    };
-    if !inconnus.is_empty() {
-        //  · le **partage du cache compressé entre couches**
-        //    (`kv_source_layer_ids = [2,8,14,20]`) : « Compressors and
-        //    compressed-KV caches live only on kv_source_layer_ids; consumers
-        //    reuse the most recently published source below them ». Les couches
-        //    3..7 lisent donc les clés publiées par la 2, 9..13 celles de la 8,
-        //    et 21..39 celles de la 20 — un compresseur calculé couche par couche
-        //    donnerait d'autres clés, donc un résultat faux en silence ;
-        //  · l'**indexeur sans compresseur propre** : V4.1 n'a pas
-        //    `indexer_compressor_*` ; ses clés viennent du latent du compresseur
-        //    principal (`indexer.attn_k` [128,512] puis `indexer.k_norm`), et il
-        //    partage le cache de clés de son `kv_source` ;
-        //  · la **sélection à deux niveaux** (`candidate_source_layer_id = 20`,
-        //    `candidate_topk_blocks = 2048`, `candidate_block_size = 8`).
-        manques.push("compression V4.1 (ratios 1 et 2) : le compresseur est \
-spécifié (vLLM `compressor.py` + `fused_save_compress_norm`) mais le cache compressé est \
-PARTAGÉ entre couches (`kv_source_layer_ids`) et ce partage n'est pas implémenté — le \
-calculer couche par couche donnerait des clés différentes, donc faux sans rien casser");
-    }
+    // **V4.1 : les ratios 1 et 2, et le cache compressé partagé.** Ce n'est plus
+    // un manque, c'est implémenté : le compresseur (softmax PAR CANAL sur le
+    // groupe, norme du latent, RoPE de bloc à la position du premier jeton, pas
+    // d'`ape`) tourne sur les couches SOURCES, et les couches CONSOMMATRICES
+    // lisent les tampons de leur source (`kv_source_layer_ids`, indexation par
+    // `comp_source`) au lieu d'en calculer d'autres. Ce qui reste est nommé plus
+    // bas (engram, indexeur de V4.1).
     // **Le mélange de tête manquant de V4.1** : ce n'est PAS un manque, c'est
     // une AUTRE chaîne. V4.1 n'a pas de `output_hc_*` parce qu'il n'a pas de
     // tête apprise : la référence replie le flux final avec la `pre` de la
@@ -246,9 +220,10 @@ fn refus_architecture(g: &Gguf, cfg: &Cfg, ctx: usize, clusters: bool, manques: 
     if !manques.is_empty() {
         return Err(format!(
             "architecture « {} » non implémentée par ce moteur : {}.\n  \
-Ce modèle n'a JAMAIS été exécuté ici : tout chiffre publié à son sujet vient \
-d'une analyse statique des tenseurs (inventaire, empreinte, sonde mmap), pas \
-d'une passe avant.\n  Tenseurs présents : {}{}{}",
+Ce modèle n'est donc pas calculé. Les chiffres publiés à son sujet ne viennent pas \
+d'une passe avant COMPLÈTE : analyse statique des tenseurs (inventaire, empreinte, \
+sonde mmap), ou passe bornée `--couches a:b` — annoncée comme telle.\n  \
+Tenseurs présents : {}{}{}",
             g.meta.get("general.architecture").and_then(|m| m.as_str()).unwrap_or("?"),
             manques.join(" · "),
             if g.tensors.iter().any(|t| t.name.ends_with("attn_q_a.weight")) { "attn_q_a " } else { "" },
@@ -1246,6 +1221,14 @@ pub struct Mla4 {
     /// (`kv_source_layer_ids` = [2,8,14,20]) — les autres n'ont même pas
     /// `attn_compressor_kv` et lisent l'état publié par leur source.
     pub a_compresseur: bool,
+    /// **Y a-t-il une porte ?** Celle de la SOURCE : une couche consommatrice de
+    /// V4.1 n'a pas de tenseur de porte, mais le pool qu'elle lit en a une (c'est
+    /// le compresseur de sa source qui l'a remplie). Lire la présence sur la
+    /// couche elle-même donnerait un pool SANS porte là où la référence en a une.
+    pub a_porte: bool,
+    /// **Largeur de l'état du compresseur** (`coff × head_dim`), celle de la
+    /// SOURCE : une couche consommatrice n'a pas de tenseur d'où la lire.
+    pub comp_largeur: usize,
     /// **De quelle couche viennent les blocs compressés ?** V4 : la couche
     /// elle-même (chaque couche compressée a son compresseur). **V4.1 : une
     /// couche SOURCE**, d'après `kv_source_layer_ids` — « Compressors and
@@ -2760,27 +2743,10 @@ reste non implémenté.");
             // soit fidèle, et l'inverse de l'inverse (retirer sans le dire)
             // ferait croire que tout V4.1 tourne.
             let dans = |l: usize| l >= a && l < b;
-            // Une plage n'exerce le partage du cache compressé de V4.1 que si
-            // elle contient une couche CONSOMMATRICE (sans ses propres tenseurs
-            // de compresseur). Une plage qui ne contient que des couches SOURCES
-            // — ou aucune couche compressée — n'a pas besoin de ce partage : le
-            // compresseur de chaque couche y est le sien, comme en V4.
-            let consommatrice = (a..b).any(|l| {
-                ratios.get(l).copied().unwrap_or(0) != 0
-                    && g.tensor(&format!("blk.{l}.attn_compressor_kv.weight")).is_none()
-            });
-            if !consommatrice {
-                let avant = manques.len();
-                manques.retain(|m| !m.starts_with("compression V4.1"));
-                if manques.len() != avant {
-                    let dedans: Vec<usize> = (a..b)
-                        .filter(|l| ratios.get(*l).copied().unwrap_or(0) != 0).collect();
-                    println!("[partiel] couches {a}..{b} : aucune couche CONSOMMATRICE dans \
-la plage (compressées : {dedans:?}, toutes SOURCES de leur compresseur) — le partage du \
-cache compressé de V4.1 n'est donc pas exercé. Ce qui reste non implémenté n'est PAS \
-contourné : il n'est pas atteint.");
-                }
-            }
+            // Le partage du cache compressé de V4.1 (`kv_source_layer_ids`) est
+            // implémenté : plus de filtre à faire ici. Ce qui reste non
+            // implémenté dans une plage (engram, indexeur de V4.1) est traité
+            // juste en dessous, nommément.
             let engram: Vec<i64> = g.cfg_ou(&["engram.layer_ids"])
                 .and_then(|m| m.as_liste_i64()).unwrap_or_default();
             if !engram.is_empty() && !engram.iter().any(|l| *l >= 0 && dans(*l as usize)) {
@@ -2915,17 +2881,77 @@ plage (elles sont en {engram:?}) — l'injection n'est pas exercée.");
                     }
                 }
                 println!("[config] cache compressé PARTAGÉ entre couches \
-(`kv_source_layer_ids`) : {}. Une couche SOURCE a son compresseur et tourne ; une couche \
-CONSOMMATRICE lit ses clés et le moteur la REFUSE (un compresseur par couche donnerait \
-d'autres clés)", groupes.join(" · "));
+(`kv_source_layer_ids`) : {}. Les couches SOURCES projettent leur état ; les \
+CONSOMMATRICES lisent les tampons de leur source au lieu d'en calculer d'autres — un \
+compresseur par couche donnerait d'AUTRES clés, donc faux sans rien casser",
+                         groupes.join(" · "));
             }
             let source_de = |l: usize| -> usize {
                 sources.iter().copied().filter(|s| *s <= l).max().unwrap_or(l)
             };
+            // **Les couches qui PORTENT un indexeur** (`index_source_layer_ids`,
+            // V4.1 : [2,8,14,20,24,28,32,36]). La clé était déclarée par le
+            // fichier et lue par personne : les quatre dernières n'ont pourtant
+            // pas de compresseur propre, leur cache de clés d'indexeur est celui
+            // de leur source de KV (20). Le dire ici, et VÉRIFIER la cohérence :
+            // un indexeur hors de cette liste serait un fichier qui se contredit.
+            let idx_sources: Vec<usize> = g.cfg_ou(&["index_source_layer_ids"])
+                .and_then(|m| m.as_liste_i64())
+                .unwrap_or_default()
+                .into_iter().filter(|s| *s >= 0).map(|s| s as usize).collect();
+            if !idx_sources.is_empty() {
+                println!("[config] indexeurs : couches {:?} · les quatre premières \
+possèdent le cache de clés, les autres lisent celui de leur source de KV — une couche \
+qui porte `indexer.proj` sans être dans cette liste serait un fichier contradictoire",
+                         idx_sources);
+            }
             let mut v = Vec::with_capacity(cfg.n_layer);
             for l in 0..cfg.n_layer {
                 let p = |s: &str| format!("blk.{l}.{s}");
                 let ratio = ratios.get(l).copied().unwrap_or(0) as usize;
+                let src = if ratio != 0 { source_de(l) } else { l };
+                // **Cohérence de la source.** Une couche consommatrice lit l'état
+                // publié par sa source : si les deux ratios diffèrent, le nombre
+                // de jetons par bloc diffère aussi et le cache lu n'est pas le
+                // sien. Le fichier de V4.1 est cohérent (2..7 en ratio 2 autour de
+                // la source 2, 21..39 en ratio 1 autour de la 20) ; on le VÉRIFIE
+                // plutôt que de l'espérer.
+                if ratio != 0 && src != l {
+                    let r_src = ratios.get(src).copied().unwrap_or(0) as usize;
+                    assert_eq!(r_src, ratio, "couche {l} (ratio {ratio}) : sa source de cache \
+compressé est la couche {src} (ratio {r_src}) — les deux ratios doivent être égaux, sinon \
+le cache lu n'est pas le sien");
+                }
+                // Présence de la porte et largeur de l'état : lues sur la SOURCE
+                // quand la couche n'a pas ses propres tenseurs.
+                let q_src = |s: &str| format!("blk.{src}.{s}");
+                let a_porte = ratio > 1
+                    && g.tensor(&q_src("attn_compressor_gate.weight")).is_some();
+                let comp_largeur = if ratio != 0 {
+                    let t = g.tensor(&q_src("attn_compressor_kv.weight"))
+                        .unwrap_or_else(|| panic!("couche {l} : ratio {ratio} mais ni elle ni \
+sa source {src} n'a d'`attn_compressor_kv` — le fichier ne dit pas d'où viennent ses clés"));
+                    // **Le nombre de RANGÉES du tenseur**, c'est-à-dire
+                    // `coff·head_dim` (`dims[0]` : le GGUF range (sortie, entrée) et
+                    // le moteur lit ainsi). Ne PAS le diviser par `hidden` : pour un
+                    // CSA de V4-Flash le tenseur fait `[1024, 4096]`, et
+                    // `1024 / 4096` vaut **0** en arithmétique entière — le
+                    // compresseur écrivait alors 512 valeurs au lieu de 1024, et la
+                    // porte V4-Flash est tombée de 8430,2968 à 5026,4538 (mesuré,
+                    // 02/10, attrapé par la porte et non par les sondes d'une couche,
+                    // qui ne voient pas le bloc du DERNIER jeton évalué).
+                    t.dims[0] as usize
+                } else { 0 };
+                // **Un fichier qui se contredit** : une couche qui a ses propres
+                // tenseurs de compresseur ET une source déclarée. La référence dit
+                // que le compresseur ne vit QUE sur les sources ; la laisser
+                // projeter écrirait son état dans les tampons de sa source (le site
+                // d'appel les alias) et corromprait les clés de tout le groupe.
+                if ratio != 0 && src != l && g.tensor(&p("attn_compressor_kv.weight")).is_some() {
+                    panic!("couche {l} : elle a ses propres tenseurs de compresseur ET une \
+source de cache compressé déclarée (couche {src}) — le fichier se contredit ; le compresseur \
+ne vit que sur les sources (`kv_source_layer_ids`)");
+                }
                 // Compresseur : `coff = 2` pour CSA (ratio 4), `1` pour HCA
                 // (ratio 128). La largeur se lit dans le tenseur, pas dans une
                 // constante recopiée : c'est elle qui décide.
@@ -2953,9 +2979,21 @@ d'autres clés)", groupes.join(" · "));
                 v.push(Mla4 {
                     indexer_top_k: dim(&["attention.indexer.top_k", "index_topk"], "index_topk")
                         .unwrap_or(512),
-                    a_indexeur: g.tensor(&p("indexer.proj.weight")).is_some(),
+                    a_indexeur: {
+                        let porte = g.tensor(&p("indexer.proj.weight")).is_some();
+                        // Un indexeur hors de la liste déclarée : le fichier se
+                        // contredit (`index_source_layer_ids`). On le dit, on ne
+                        // le calcule pas — la liste est la source de la topologie.
+                        if porte && !idx_sources.is_empty() && !idx_sources.contains(&l) {
+                            panic!("couche {l} : elle porte un indexeur (`indexer.proj`) mais \
+n'est pas dans `index_source_layer_ids` {idx_sources:?} — le fichier se contredit");
+                        }
+                        porte
+                    },
                     a_compresseur: !comp_kv.is_empty(),
-                    comp_source: if ratio != 0 { source_de(l) } else { l },
+                    a_porte,
+                    comp_largeur,
+                    comp_source: if ratio != 0 { src } else { l },
                     idx_q_b: g.dequant_optionnel(&p("indexer.attn_q_b.weight")).unwrap_or_default(),
                     idx_proj: g.dequant_optionnel(&p("indexer.proj.weight")).unwrap_or_default(),
                     idx_comp_kv: g.dequant_optionnel(&p("indexer_compressor_kv.weight")).unwrap_or_default(),
@@ -3269,10 +3307,11 @@ mapping {}",
             // toutes les positions, comme la référence.
             (None, _, _) if g.json_texte("rope_type").as_deref() == Some("yarn") =>
                 println!("[config] rotation : RoPE simple — le modèle DÉCLARE YaRN \
-(JSON `rope_scaling`, facteur {}) mais le moteur ne l'applique qu'au-delà de {} jetons ; \
-`DRAVE_YARN=1` l'applique partout, comme la référence",
+(JSON `rope_scaling`, facteur {}) mais le moteur ne l'applique qu'au-delà de QUATRE FOIS la \
+longueur d'origine (soit {} jetons ici), seuil mesuré sur gpt-oss ; `DRAVE_YARN=1` \
+l'applique partout, comme la référence",
                          g.json_nombre("factor").unwrap_or(1.0),
-                         g.json_nombre("original_max_position_embeddings").unwrap_or(0.0)),
+                         4.0 * g.json_nombre("original_max_position_embeddings").unwrap_or(0.0)),
             _ => println!("[config] rotation : RoPE simple (le modèle ne déclare pas YaRN)"),
         }
         // Tête en 4 bits : la plus grosse matrice du modèle, donc le plus gros
@@ -4902,6 +4941,30 @@ s'applique pas — utilisez --lot 1, ou réenregistrez sans DRAVE_TRACE_BLOCS");
     /// `paires` compte ce que le chemin paie (aucune liste n'est construite
     /// ici) ; `sinks` sont les logits appris ajoutés au **dénominateur** du
     /// softmax, comme le fait `ggml_soft_max_add_sinks`.
+    /// **Pool d'un groupe du compresseur** : `Σ_k valeur_k · softmax_k(porte_k)`,
+    /// le softmax portant sur l'axe du **groupe** — donc **par canal**, ce que la
+    /// référence écrit `tl.softmax(score, 0)` (`fused_save_compress_norm`). Un
+    /// softmax par jeton (sur les canaux) donnerait des poids différents et des
+    /// blocs faux, sans rien casser.
+    ///
+    /// `portes = None` : pas de porte (V4.1 en ratio 1) — le groupe fait un seul
+    /// jeton et la valeur passe telle quelle. `base` est l'indice du premier jeton
+    /// du groupe dans les tampons, `largeur` le pas entre deux jetons.
+    fn pool_groupe(valeurs: &[f32], portes: Option<&[f32]>, largeur: usize, n: usize,
+                   base: usize, c: usize) -> f32 {
+        let Some(p) = portes else { return valeurs[base + c]; };
+        let mut mx = f32::NEG_INFINITY;
+        for k in 0..n { let v = p[base + k * largeur + c]; if v > mx { mx = v; } }
+        let mut somme = 0f32;
+        for k in 0..n { somme += (p[base + k * largeur + c] - mx).exp(); }
+        let inv = if somme > 0.0 { 1.0 / somme } else { 0.0 };
+        let mut acc = 0f32;
+        for k in 0..n {
+            acc += (p[base + k * largeur + c] - mx).exp() * inv * valeurs[base + k * largeur + c];
+        }
+        acc
+    }
+
     #[allow(clippy::too_many_arguments)]
     fn attn_v4(m: &Mla4, etat: &mut EtatV4, x: &[f32], pos: usize, att: &mut [f32],
                paires: &mut u64, dump: Option<&str>, l: usize) {
@@ -4988,29 +5051,32 @@ s'applique pas — utilisez --lot 1, ou réenregistrez sans DRAVE_TRACE_BLOCS");
             assert!(matches!(m.ratio, 1 | 2 | 4 | 128),
                     "compression de ratio {} : le moteur ne connaît que 1 et 2 (V4.1) \
 et 4, 128 (V4)", m.ratio);
-            assert!(m.a_compresseur,
-                    "couche {l} : ratio {} mais AUCUN tenseur de compresseur — c'est une \
-couche CONSOMMATRICE de V4.1 (elle lit les clés publiées par sa source, \
-`kv_source_layer_ids`), et ce partage de cache n'est pas porté", m.ratio);
-            let coff_hd = m.comp_kv.len() / h.max(1);
-            matvec_f32(&m.comp_kv, x, h, coff_hd, &mut etat.comp_kv[pos * coff_hd..(pos + 1) * coff_hd]);
-            let sp = pos % m.ratio;
-            if !m.comp_gate.is_empty() {
-                matvec_f32(&m.comp_gate, x, h, coff_hd, &mut etat.comp_gate[pos * coff_hd..(pos + 1) * coff_hd]);
-                // L'`ape` est FACULTATIF : V4.1 n'en a aucun (son compresseur n'a
-                // que `kv`, `gate` et `norm`), V4 en a un par rang dans le bloc.
-                if !m.comp_ape.is_empty() {
-                    for c in 0..coff_hd {
-                        etat.comp_gate[pos * coff_hd + c] += m.comp_ape[sp * coff_hd + c];
+            // Une couche CONSOMMATRICE (V4.1) n'a pas de tenseurs : elle lit
+            // l'état et les blocs publiés par sa SOURCE, dont les tampons sont
+            // ceux qu'on lui a passés (le site d'appel les alias). Elle ne
+            // projette donc rien et ne réécrit aucun bloc — le faire recalculerait
+            // les mêmes nombres avec SES poids, qui n'existent pas.
+            let coff_hd = if m.comp_largeur > 0 { m.comp_largeur } else { hd };
+            if m.a_compresseur {
+                matvec_f32(&m.comp_kv, x, h, coff_hd, &mut etat.comp_kv[pos * coff_hd..(pos + 1) * coff_hd]);
+                let sp = pos % m.ratio;
+                if m.a_porte {
+                    matvec_f32(&m.comp_gate, x, h, coff_hd, &mut etat.comp_gate[pos * coff_hd..(pos + 1) * coff_hd]);
+                    // L'`ape` est FACULTATIF : V4.1 n'en a aucun (son compresseur n'a
+                    // que `kv`, `gate` et `norm`), V4 en a un par rang dans le bloc.
+                    if !m.comp_ape.is_empty() {
+                        for c in 0..coff_hd {
+                            etat.comp_gate[pos * coff_hd + c] += m.comp_ape[sp * coff_hd + c];
+                        }
                     }
                 }
+                Self::vider_couche(dump, "comp_state_kv", l, pos,
+                                   &etat.comp_kv[pos * coff_hd..(pos + 1) * coff_hd]);
+                Self::vider_couche(dump, "comp_state_gate", l, pos,
+                                   &etat.comp_gate[pos * coff_hd..(pos + 1) * coff_hd]);
+                *paires += (m.comp_kv.len() + m.comp_gate.len()) as u64;
             }
-            Self::vider_couche(dump, "comp_state_kv", l, pos,
-                               &etat.comp_kv[pos * coff_hd..(pos + 1) * coff_hd]);
-            Self::vider_couche(dump, "comp_state_gate", l, pos,
-                               &etat.comp_gate[pos * coff_hd..(pos + 1) * coff_hd]);
-            *paires += (m.comp_kv.len() + m.comp_gate.len()) as u64;
-            if (pos + 1) % m.ratio == 0 {
+            if m.a_compresseur && (pos + 1) % m.ratio == 0 {
                 let bloc = pos / m.ratio;
                 let debut = pos + 1 - m.ratio;
                 let (portes, valeurs, cles) = (&etat.comp_gate, &etat.comp_kv, &mut etat.cles_comp);
@@ -5026,9 +5092,23 @@ couche CONSOMMATRICE de V4.1 (elle lit les clés publiées par sa source, \
                 // **Sans porte** (V4.1 en ratio 1) : le groupe fait UN jeton et le
                 // softmax d'un singleton vaut 1 — la valeur passe telle quelle.
                 // La référence le dit en une ligne : `if COMPRESS_RATIO == 1:
-                // pooled = tl.load(raw + ...)`.
-                let sans_porte = m.comp_gate.is_empty();
+                // pooled = tl.load(raw + ...)`. La présence de la porte se lit sur
+                // la SOURCE (`a_porte`) : une couche consommatrice n'a pas le
+                // tenseur, mais l'état qu'elle lit a bien été projeté avec lui.
+                let sans_porte = !m.a_porte;
                 for c in 0..hd {
+                    // **Cas SANS chevauchement** (V4.1 ratios 1 et 2, V4 HCA 128) :
+                    // le groupe est une fenêtre contiguë qui commence à `t0 ≥ 0`,
+                    // donc le pool est exactement `Σ_k valeur_k · softmax_k(porte_k)`
+                    // — sorti en fonction pour être testable (l'orientation du
+                    // softmax, par canal et non par jeton, ne se voit pas sur un
+                    // état constant).
+                    if !chevauche {
+                        cles[bloc * hd + c] = Self::pool_groupe(
+                            valeurs, if sans_porte { None } else { Some(portes) },
+                            coff_hd, n_fenetre, t0 as usize * coff_hd, c);
+                        continue;
+                    }
                     if sans_porte {
                         let t = debut.max(0) as usize;
                         cles[bloc * hd + c] = valeurs[t * hd + c];
@@ -5676,14 +5756,26 @@ dynamique de {dyn_:.3e} (relatif {:.2e})", mx / dyn_.max(1e-9));
                 // chemins. Passer `xin` donnait une corrélation de 0,9986 —
                 // « presque juste », le pire des écarts parce qu'il ne se voit
                 // pas sur un coup d'œil.
+                // **V4.1 : le cache compressé est PARTAGÉ.** Les compresseurs et
+                // les caches de clés compressées ne vivent que sur les couches
+                // SOURCES (`kv_source_layer_ids`) ; les suivantes « reuse the
+                // most recently published source below them » (vLLM,
+                // `deepseek_v41/attention.py`). On ne recopie donc pas l'état :
+                // on indexe les tampons de la SOURCE, qui a déjà été calculée
+                // pour ce jeton (sa couche est en dessous). Recopier donnerait un
+                // cache par couche, donc d'AUTRES clés — faux, et muet.
+                let src = m4.comp_source;
                 let mut etat = EtatV4 {
                     cles: &mut self.mla4_cache[l],
-                    comp_kv: &mut self.mla4_comp_kv[l],
-                    comp_gate: &mut self.mla4_comp_gate[l],
-                    cles_comp: &mut self.mla4_cles_comp[l],
+                    comp_kv: &mut self.mla4_comp_kv[src],
+                    comp_gate: &mut self.mla4_comp_gate[src],
+                    cles_comp: &mut self.mla4_cles_comp[src],
                     idx_kv: &mut self.mla4_idx_kv[l],
                     idx_gate: &mut self.mla4_idx_gate[l],
-                    idx_cles: &mut self.mla4_idx_cles[l],
+                    // Les clés de l'indexeur sont, elles aussi, celles de la
+                    // SOURCE (`owns_k` côté vLLM) : une couche qui note les blocs
+                    // le fait avec SA requête, mais sur les mêmes clés.
+                    idx_cles: &mut self.mla4_idx_cles[src],
                     idx_scores: &mut self.mla4_idx_scores[l],
                 };
                 Self::attn_v4(m4, &mut etat, &hn, pos, &mut att,
@@ -6089,6 +6181,19 @@ dynamique de {dyn_:.3e} (relatif {:.2e})", mx / dyn_.max(1e-9));
                     // pre-mix »), et sa propre `pre` part au raccord suivant.
                     let poids: &[f32] = if self.hc_retarde { &sa.pre } else { &sf.pre };
                     Hc::melanger(&nx, poids, hf.hc, h, &mut mel);
+                    if self.hc_retarde {
+                        // **Le maillon central de la chaîne retardée** : l'entrée de
+                        // la FFN se replie avec la `pre` de l'ATTENTION. Aucune des
+                        // trois égalités de `verifier_v41_mhc.py` ne le couvrait
+                        // (elles lisent `l_last`, qui est en aval) : échanger
+                        // `sa.pre` contre `sf.pre` ici passait inaperçu. Ces deux
+                        // vides le rendent vérifiable — les coefficients employés
+                        // ET le repliement qu'ils produisent.
+                        Self::vider_couche(self.dump_couches.as_deref(), "hc_pre_attn",
+                                           l, pos, &sa.pre);
+                        Self::vider_couche(self.dump_couches.as_deref(), "hc_mel_ffn",
+                                           l, pos, &mel);
+                    }
                     Self::rmsnorm(&mel, &lay.ffn_norm, cfg.eps, &mut hn);
                     if self.hc_retarde {
                         // Ce que la chaîne retarde : la `pre` de CE raccord FFN
@@ -7276,6 +7381,34 @@ mod tests_hc {
                 }
             }
         }
+    }
+
+    /// **Le softmax du compresseur est PAR CANAL, pas par jeton.** C'est la
+    /// seule chose que la vérification sur le vrai modèle ne pouvait pas prouver
+    /// (l'état injecté y était identique à toutes les positions, donc le pool
+    /// était insensible aux poids). Témoin à la main, deux jetons DIFFÉRENTS :
+    ///
+    /// ```text
+    /// largeur 2, groupe de 2 jetons
+    /// valeurs = [ 1, 10 | 3, 4 ]      portes = [ 0, 0 | 0, ln 3 ]
+    /// canal 0 : poids (0,5 ; 0,5)      → 0,5·1 + 0,5·3 = 2,0
+    /// canal 1 : poids (1/4 ; 3/4)      → 0,25·10 + 0,75·4 = 5,5
+    /// ```
+    ///
+    /// Un softmax par jeton (sur les canaux) puis une moyenne donnerait 4,625 :
+    /// la valeur témoin l'exclut.
+    #[test]
+    fn pool_du_compresseur_est_par_canal() {
+        let valeurs = [1.0f32, 10.0, 3.0, 4.0];
+        let portes = [0.0f32, 0.0, 0.0, 3.0f32.ln()];
+        let p0 = Model::pool_groupe(&valeurs, Some(&portes), 2, 2, 0, 0);
+        let p1 = Model::pool_groupe(&valeurs, Some(&portes), 2, 2, 0, 1);
+        assert!((p0 - 2.0).abs() < 1e-6, "canal 0 : {p0} au lieu de 2,0");
+        assert!((p1 - 5.5).abs() < 1e-6, "canal 1 : {p1} au lieu de 5,5");
+        // Sans porte (V4.1 en ratio 1) : la valeur passe telle quelle, et `base`
+        // décale bien le jeton lu (le groupe d'un seul jeton est le jeton même).
+        let p2 = Model::pool_groupe(&valeurs, None, 2, 1, 2, 1);
+        assert_eq!(p2, 4.0, "sans porte, `base` doit désigner le jeton");
     }
 
     /// Le cas dégénéré doit redonner le résidu ordinaire : si `pre` vaut 1 sur

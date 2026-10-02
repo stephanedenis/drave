@@ -425,6 +425,13 @@ fn options_actives(mdl: &model::Model, mode: &str, ctx_impose: bool, dense: bool
     println!("[options] couches {}..{} · flux brut {} · trace {} · rejeu {}",
              mdl.couche_debut, mdl.couche_fin, mdl.flux_brut,
              mdl.trace.is_some(), mdl.flux_force.is_some());
+    // `--tete-partielle` CHANGE ce que rend une plage : le dire ici, sinon un
+    // tableau de bord qui existe pour rendre les drapeaux visibles cache le seul
+    // drapeau qui décide si la tête est appliquée.
+    if mdl.tete_partielle {
+        println!("[options] plage : la TÊTE DE SORTIE est appliquée à la fin de la plage \
+(`--tete-partielle`) — résultat d'un modèle TRONQUÉ");
+    }
     println!("[options] fenêtre {} · motif {} · seuil push {} · lot {} · ffn_gain {:?} · hebb {}",
              mdl.attn_window, mdl.swa_pattern, mdl.seuil_push, mdl.lot,
              mdl.ffn_gain, mdl.hebb.is_some());
@@ -2594,6 +2601,10 @@ l'ensemble du lot (flux reçu de {hidden} canaux)");
 /// flux reçu et renvoie le flux résultant. Un seul client à la fois — c'est un
 /// banc d'essai, pas un service.
 fn run_serveur_flux(opt: Options, adresse: &str) {
+    if opt.tete_partielle {
+        eprintln!("[plage] `--tete-partielle` est sans effet sur un SERVEUR de flux : ce \
+nœud rend un flux résiduel BRUT par contrat (la tête appartient au nœud qui la possède)");
+    }
     // `port` reste localhost ; `hôte:port` écoute sur l'interface nommée
     // (« 0.0.0.0:5599 » pour un pair distant). Le pair distant est le cas de la
     // phase 3.4 : un nœud Colab, ou une autre machine du réseau.
@@ -2751,8 +2762,16 @@ fn run_ppl_reparti(opt: Options, pair: &str) {
     // alors calculée avec le MÊME découpage — sinon l'écart mesurerait la
     // différence entre deux ordres de sommation, pas celle du découpage.
     let lot = opt.lot.max(1);
-    let mut mdl = model::Model::load(&chemin, ctx, fils(&opt), true, opt.keep, false, 0, 0);
+    let mut mdl = model::Model::load(&chemin,
+                                     ctx, fils(&opt), true, opt.keep, false, 0, 0);
     appliquer_quantification(&mut mdl, &opt);
+    // `--tete-partielle` n'a pas d'objet ici : la « plage » de ce mode est le
+    // découpage entre les DEUX nœuds, et le modèle local est le modèle entier.
+    // Le taire serait exactement le défaut que `--options-actives` combat.
+    if opt.tete_partielle {
+        eprintln!("[plage] `--tete-partielle` est sans effet en `--ppl-reparti` : la plage \
+y est le découpage entre nœuds (voir `--couches-locales`), pas un `--couches a:b`");
+    }
     if opt.options_actives { options_actives(&mdl, "pilote du flux", opt.ctx_impose, true, opt.keep); }
     let mode = if opt.flux_blocs { MODE_BLOCS }
                else if opt.flux_liste { MODE_LISTE }

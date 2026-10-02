@@ -85663,3 +85663,1452 @@ EXIT=134
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A REPRISE.md docs/plan-deepseek41-complet.md reports/rapport-v41-mhc.md tools/v41_compresseur_reference.py drave-core/src/model.rs && git commit -q -m \"P7 : le compresseur de V4.1 (ratios 1 et 2) tourne sur les couches SOUR … [1304 caractères tronqués]`
+
+  ```
+e4331d4 P7 : le compresseur de V4.1 (ratios 1 et 2) tourne sur les couches SOURCES, et il est vérifié
+93cb1b7 P7 : la chaîne mHC RETARDÉE de V4.1 — implémentée, exécutée sur 365,7 Go, vérifiée
+  ```
+
+- **bash** `{"command": "tail -6 /tmp/portes_rapide2.log", "description": "Check final gate results"}`
+
+  ```
+(portes de formats : ignorées en mode rapide)
+  GLM-5.3 : sigmoïde ×2,5                  sigmoïde  ✅
+  Kimi-K2.7 : sigmoïde ×2,827              sigmoïde  ✅
+  V4-Flash : racine de softplus              racine de softplus  ✅
+  Qwen3-235B : softmax                       softmax  ✅
+  V4-Flash : --config le dit calculable      oui  ✅
+  ```
+
+- **bash** `{"command": "sleep 120; tail -5 /tmp/portes_rapide2.log", "description": "Wait for the V4-Flash gate"}`
+
+  ```
+(no output)
+[timed out after 60000ms]
+[killed by signal: SIGTERM]
+  ```
+
+- **bash** `{"command": "tail -5 /tmp/portes_rapide2.log", "description": "Read gate log tail"}`
+
+  ```
+GLM-5.3 : sigmoïde ×2,5                  sigmoïde  ✅
+  Kimi-K2.7 : sigmoïde ×2,827              sigmoïde  ✅
+  V4-Flash : racine de softplus              racine de softplus  ✅
+  Qwen3-235B : softmax                       softmax  ✅
+  V4-Flash : --config le dit calculable      oui  ✅
+  ```
+
+- **subagent** `{"description": "Adversarial review of V4.1 mHC work", "prompt": "Tu es un relecteur ADVERSARIAL autonome, en lecture seule. Tu ne dois MODIFIER AUCUN fichier (ni édition, ni `git commit`, ni écriture) — ta sortie est un rapport en français, dans ta réponse finale.\n\nDépôt : /home/stephane/Data13TB … [3564 caractères tronqués]`
+
+  ```
+started subagent 8734fc13-aeb8-4cdf-b005-c182f77be0dc
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls journal/ sprints/ 2>/dev/null | head -20; ls sprints/*.md 2>/dev/null | tail -3", "description": "Find where block retros are written"}`
+
+  ```
+journal/:
+README.md
+sessions
+
+sprints/:
+01-premier-des-trois-noyaux-gpu-du-top-k-le.md
+02-fusionner-la-cha-ne-du-top-k-d-port-desc.md
+03-qualit-de-l-attention-creuse-long-contex.md
+04-le-k-de-l-attention-creuse-l-chec-au-mil.md
+05-refaire-la-grille-avec-de-vraies-fenetres.md
+06-le-taux-de-recuperation.md
+07-cloture-de-la-nuit.md
+08-un-modele-eclate-se-lit-comme-un-seul.md
+09-empreinte-memoire-ce-qui-reduit-vraiment.md
+sprints/07-cloture-de-la-nuit.md
+sprints/08-un-modele-eclate-se-lit-comme-un-seul.md
+sprints/09-empreinte-memoire-ce-qui-reduit-vraiment.md
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && head -40 sprints/09-empreinte-memoire-ce-qui-reduit-vraiment.md; echo \"...\"; grep -n \"^## \" sprints/09-empreinte-memoire-ce-qui-reduit-vraiment.md | head", "description": "Read a sprint retro for format"}`
+
+  ```
+# Sprint 09 — L'empreinte mémoire : ce qui réduit vraiment ce qu'il faut charger
+
+- **Début** : 16:35 · **Fin prévue** : 18:35 (boxing de 120 min)
+- **Objectif** : chiffrer ce qu'un MoE doit charger **avant d'opérer**, et écarter
+  les pistes qui ne paient pas. Cible : DeepSeek-V4.1-Flash (365,7 Go) sur 125 Go.
+- **Engagement de fin** : dépôt vert, mesures consignées, machine rendue.
+
+## Le résultat
+
+L'empreinte de V4.1 tombe de **365,7 Go à 50–80 Go** — et pas en découpant les
+experts. En décomposant les poids par famille :
+
+| famille | Go | % | à charger |
+|---|---|---|---|
+| **engram** | **203,4** | **55,6 %** | **0,4 Go** |
+| experts | 152,9 | 41,8 % | 21–71 Go |
+| attention, embeddings, tête | 10,0 | 2,7 % | 10 Go |
+
+`blk.N.engram_embd.weight` : **101,4 Go par couche**, `[384 006 168, 264]` en I8.
+Ce n'est **pas un tenseur de poids mais une table de hachage de n-grammes**
+(jusqu'à 4 tokens, 48 nombres premiers de hâchage). Une session de 10 000 jetons
+n'en touche que **17 276 entrées = 4,6 Mo** : **1 pour 22 000**.
+
+C'est le cas d'usage exact du `mmap` — et la brique la plus simple de toutes,
+puisqu'il n'y a même pas de LRU à écrire.
+
+## Les pistes mesurées
+
+| piste | verdict 
+… [1085 caractères tronqués]
+  ```
+
+- **write** `{"content": "# Sprint 10 — V4.1 : la chaîne retardée, et le compresseur des ratios 1 et 2\n\n- **Début** : 17:30 · **Fin prévue** : 19:30 (bloc de 120 min)\n- **Objectif** : P7 du plan — « adapter le moteur à V4.1 », dont l'état était\n  « constat fait : deux manques, aucun n'est du code à écrire ». … [6146 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/sprints/10-v41-la-chaine-retardee-et-le-compresseur.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "tail -6 /tmp/portes_rapide2.log", "description": "Check final gates"}`
+
+  ```
+(portes de formats : ignorées en mode rapide)
+  GLM-5.3 : sigmoïde ×2,5                  sigmoïde  ✅
+  Kimi-K2.7 : sigmoïde ×2,827              sigmoïde  ✅
+  V4-Flash : racine de softplus              racine de softplus  ✅
+  Qwen3-235B : softmax                       softmax  ✅
+  V4-Flash : --config le dit calculable      oui  ✅
+  ```
+
+### 🤖 Assistant
+
+⏵ Implementing the shared compressed cache for V4.1 consumer layers
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '5580,5615p' drave-core/src/model.rs", "description": "Read the attn_v4 call site"}`
+
+  ```
+#[cfg(target_arch = "x86_64")]
+        let simd = std::is_x86_feature_detected!("avx2") && std::is_x86_feature_detected!("fma");
+        #[cfg(not(target_arch = "x86_64"))]
+        let simd = false;
+        let point = |a: &[f32], b: &[f32]| -> f32 {
+            #[cfg(target_arch = "x86_64")]
+            if simd { return unsafe { Self::dot8_avx(a, b) }; }
+            Self::dot8(a, b)
+        };
+        let mut attn_idx: Vec<u32> = Vec::with_capacity(ctx);
+        let attn_all: Vec<u32> = (0..ctx as u32).collect();
+
+        // La plage PORTÉE par ce nœud (`couche_debut..couche_fin`), et non
+        // `0..n_layer` : un nœud qui reçoit un flux reprend à SA première couche.
+        // La boucle partait de zéro — le pilote calculait donc les 24 couches,
+        // envoyait l'état final, et le pair les recalculait toutes par-dessus :
+        // perplexité répartie 798,3 au lieu de 18,2. `forward_lot` et
+        // `forward_mla` respectaient déjà la plage ; `forward` était l'exception.
+        for l in self.couche_debut..self.couche_fin {
+            let lay = &layers[l];
+            // Fenêtre EFFECTIVE de cette couche : le motif déclaré (gpt-oss :
+            // une couche sur deux en 
+… [848 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '5660,5700p' drave-core/src/model.rs", "description": "Read the etat construction for attn_v4"}`
+
+  ```
+}
+            }
+            // ---- attention MLA ------------------------------------------
+            // Deux architectures d'attention dans la même passe avant :
+            // Q/K/V denses (Qwen, gpt-oss, Llama) ou projections de rang
+            // faible avec cache LATENT (DeepSeek-V3/V4, Kimi, GLM). Le reste
+            // de la couche — résidu, FFN dense ou mélange d'experts, tête —
+            // est partagé, et c'est ce qui compte : dupliquer la couche pour
+            // deux attentions aurait donné deux MoE qui divergent.
+            let ta = Instant::now();
+            if let Some(m4) = self.mla4.as_ref().map(|v| &v[l]) {
+                // Attention V4 : une tête latente, valeurs = clés, sortie
+                // groupée. `att` fait `nh × head_dim` — la même taille que le
+                // chemin dense quand `key_length` est déclaré.
+                // `hn` et non `xin` : l'attention reçoit l'entrée MÉLANGÉE puis
+                // NORMÉE (`hc_attn_pre` → `attn_norm`), comme les deux autres
+                // chemins. Passer `xin` donnait une corrélation de 0,9986 —
+                // « presque juste », le pire des écarts parce qu'il ne se voit
+                // pa
+… [1548 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs", "new_string": "                // **V4.1 : le cache compressé est PARTAGÉ.** Les compresseurs et\n                // les caches de clés compressées ne vivent que sur les couches\n                // SOURCES (`kv_ … [1799 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs", "new_string": "    /// La couche a-t-elle un indexeur (`indexer.proj` dans le fichier) ?\n    pub a_indexeur: bool,\n    /// **La couche POSSÈDE-t-elle son compresseur ?** V4 : oui, chaque couche\n    /// compre … [1221 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs", "new_string": "            let mut v = Vec::with_capacity(cfg.n_layer);\n            for l in 0..cfg.n_layer {\n                let p = |s: &str| format!(\"blk.{l}.{s}\");\n                let ratio = ratios.get … [1948 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs", "new_string": "                    a_indexeur: g.tensor(&p(\"indexer.proj.weight\")).is_some(),\n                    a_compresseur: !comp_kv.is_empty(),\n                    a_porte,\n                    comp_la … [308 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs has been updated successfully.
+  ```
+
+### 🤖 Assistant
+
+Now the compressor block in `attn_v4` must accept consumer layers:
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs", "new_string": "            assert!(matches!(m.ratio, 1 | 2 | 4 | 128),\n                    \"compression de ratio {} : le moteur ne connaît que 1 et 2 (V4.1) \\\net 4, 128 (V4)\", m.ratio);\n            // Une  … [3349 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs", "new_string": "                // **Sans porte** (V4.1 en ratio 1) : le groupe fait UN jeton et le\n                // softmax d'un singleton vaut 1 — la valeur passe telle quelle.\n                // La référen … [715 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && cargo build --release 2>&1 | grep -E \"^error\" -A 10 | head -30; echo BUILD_END", "description": "Build the shared-cache change"}`
+
+  ```
+BUILD_END
+  ```
+
+- **bash** `{"command": "tail -4 /tmp/portes_rapide2.log; job_list 2>/dev/null | head -5", "description": "Check if the gate finished"}`
+
+  ```
+Kimi-K2.7 : sigmoïde ×2,827              sigmoïde  ✅
+  V4-Flash : racine de softplus              racine de softplus  ✅
+  Qwen3-235B : softmax                       softmax  ✅
+  V4-Flash : --config le dit calculable      oui  ✅
+  ```
+
+- **job_list** `{}`
+
+  ```
+bash-11 [bash] completed — cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && cargo build --release 2>&1 | tail -5 && echo "=== TESTS ===" && cargo test --release 2>&1 | tail -25
+bash-12 [bash] completed — cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ./qtrinet-core/target/release/qtrinet-core models/Qwen2.5-0.5B-Q8_0.gguf --ppl /tmp/ids_qwen.txt --ctx 256 --abits 16 --threads 16 --limit 512 --dense 2>&1 | tail -12
+bash-13 [bash] completed — cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo "=== H1 brut 64 jetons, motif 1 (ancien comportement fenêtre) ===" && /usr/bin/time -f "TEMPS %e s, MAXRSS %M Ko" ./qtrinet-core/target/release/qtrinet-core /home/stephane/FastNVMe/models/gpt-oss-120b-MXFP4.gguf --ppl /tmp/ids_oss.txt --ctx 256 --limit 64 --dense --threads 16 --swa-pattern 1 2>&1 | grep -vE "^\[modele\]|listes" | tail -25
+bash-14 [bash] killed — /tmp/mesures_oss.sh 2>&1 | tail -40
+bash-15 [bash] completed — cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && LD_LIBRARY_PATH=/home/stephane/Data13TB/stephane/GitHub/llama.cpp/build/bin ./tools/ref_logits /home/stephane/FastNVMe/models/gpt-oss-120b-MXFP4.gguf /tmp/ids_oss_64.txt /tmp/ref_oss_64.bin
+… [48365 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '/let sans_porte = !m.a_porte;/,/cles\\[bloc \\* hd + c\\] = acc;/p' drave-core/src/model.rs | head -50", "description": "Read the pool loop to refactor"}`
+
+  ```
+let sans_porte = !m.a_porte;
+                for c in 0..hd {
+                    if sans_porte {
+                        let t = debut.max(0) as usize;
+                        cles[bloc * hd + c] = valeurs[t * hd + c];
+                        continue;
+                    }
+                    let mut mx = f32::NEG_INFINITY;
+                    for k in 0..n_fenetre {
+                        let t = t0 + k as isize;
+                        // Un jeton d'avant le début du texte n'est pas un jeton
+                        // du début : la référence ajoute une ligne dont la VALEUR
+                        // est nulle mais dont la PORTE vaut **−infini**
+                        // (`dsv4_append_zero_row(score_state, true)`), donc son
+                        // poids de softmax est nul. Mettre 0 à la place laissait
+                        // ce slot compter dans le dénominateur — 0,989 de
+                        // corrélation au lieu de 1,000000, et seulement au
+                        // PREMIER bloc (les suivants ont de vrais jetons avant).
+                        let sc = if t < 0 { f32::NEG_INFINITY } else {
+                            let (role, idx) = if chevauche && k < m.ratio {
+… [1506 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs", "new_string": "                let sans_porte = !m.a_porte;\n                for c in 0..hd {\n                    if sans_porte {\n                        let t = debut.max(0) as usize;\n                        … [449 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs", "new_string": "                let sans_porte = !m.a_porte;\n                for c in 0..hd {\n                    // **Cas SANS chevauchement** (V4.1 ratios 1 et 2, V4 HCA 128) :\n                    // le grou … [1232 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"fn attn_v4\" drave-core/src/model.rs | head -2", "description": "Find attn_v4 definition line"}`
+
+  ```
+4940:    fn attn_v4(m: &Mla4, etat: &mut EtatV4, x: &[f32], pos: usize, att: &mut [f32],
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs", "limit": 6, "offset": 4935}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs</path>
+<type>file</type>
+<content>
+4935:     ///
+4936:     /// `paires` compte ce que le chemin paie (aucune liste n'est construite
+4937:     /// ici) ; `sinks` sont les logits appris ajoutés au **dénominateur** du
+4938:     /// softmax, comme le fait `ggml_soft_max_add_sinks`.
+4939:     #[allow(clippy::too_many_arguments)]
+4940:     fn attn_v4(m: &Mla4, etat: &mut EtatV4, x: &[f32], pos: usize, att: &mut [f32],
+
+(Showing lines 4935-4940 of 7557. Use offset=4941 to continue.)
+</content>
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs", "new_string": "    /// **Pool d'un groupe du compresseur** : `Σ_k valeur_k · softmax_k(porte_k)`,\n    /// le softmax portant sur l'axe du **groupe** — donc **par canal**, ce que la\n    /// référence écrit `tl. … [1382 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && cargo build --release 2>&1 | grep -E \"^error\" -A 10 | head -30; echo BUILD_END", "description": "Build the pool refactor"}`
+
+  ```
+BUILD_END
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"fn hyper_connexions_degenere_egale_le_residu\" drave-core/src/model.rs", "description": "Find an insertion point in tests_hc"}`
+
+  ```
+7373:    fn hyper_connexions_degenere_egale_le_residu() {
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs", "limit": 14, "offset": 7362}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs</path>
+<type>file</type>
+<content>
+7362:                             "aller-retour rope_norm : {a} contre {b} (pos {pos}, base {base})");
+7363:                 }
+7364:             }
+7365:         }
+7366:     }
+7367: 
+7368:     /// Le cas dégénéré doit redonner le résidu ordinaire : si `pre` vaut 1 sur
+7369:     /// la première copie et 0 ailleurs, `post` vaut 1 partout et `comb` est
+7370:     /// l'identité, alors `x ← x + y` — c'est le cas où les hyper-connexions ne
+7371:     /// font rien, et il doit être exactement ça.
+7372:     #[test]
+7373:     fn hyper_connexions_degenere_egale_le_residu() {
+7374:         let hc = 4usize; let h = 2usize;
+7375:         let x = vec![1.0f32, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0];
+
+(Showing lines 7362-7375 of 7581. Use offset=7376 to continue.)
+</content>
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs", "new_string": "    /// **Le softmax du compresseur est PAR CANAL, pas par jeton.** C'est la\n    /// seule chose que la vérification sur le vrai modèle ne pouvait pas prouver\n    /// (l'état injecté y était ide … [2050 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && cargo test --release pool_du_compresseur 2>&1 | grep -E \"^test |test result|^error\" -A 3 | head -12", "description": "Run the new pooling test"}`
+
+  ```
+test model::tests_hc::pool_du_compresseur_est_par_canal ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 59 filtered out; finished in 0.00s
+  ```
+
+- **bash** `{"command": "sleep 55; tail -4 /tmp/portes_rapide2.log", "description": "Wait and check the gate"}`
+
+  ```
+Kimi-K2.7 : sigmoïde ×2,827              sigmoïde  ✅
+  V4-Flash : racine de softplus              racine de softplus  ✅
+  Qwen3-235B : softmax                       softmax  ✅
+  V4-Flash : --config le dit calculable      oui  ✅
+  ```
+
+- **bash** `{"command": "sleep 55; tail -3 /tmp/portes_rapide2.log; pgrep -c drave 2>/dev/null || echo \"aucun drave\"", "description": "Check gate completion"}`
+
+  ```
+toutes les portes sont vertes
+EXIT=0
+0
+aucun drave
+  ```
+
+### 👤 Utilisateur
+
+background job bash-163 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && (timeout 5400 tools/portes.sh rapide > /tmp/portes_rapide2.log 2>&1; echo "EXIT=$?" >> /tmp/portes_rapide2.log)) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs", "new_string": "    // **V4.1 : les ratios 1 et 2, et le cache compressé partagé.** Ce n'est plus\n    // un manque, c'est implémenté : le compresseur (softmax PAR CANAL sur le\n    // groupe, norme du latent, Ro … [2605 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"let _ = inconnus;\" -B 8 -A 3 drave-core/src/model.rs; grep -n \"inconnus\" drave-core/src/model.rs | head", "description": "Inspect the edited gap block"}`
+
+  ```
+168-    }
+169-    // **V4.1 : les ratios 1 et 2, et le cache compressé partagé.** Ce n'est plus
+170-    // un manque, c'est implémenté : le compresseur (softmax PAR CANAL sur le
+171-    // groupe, norme du latent, RoPE de bloc à la position du premier jeton, pas
+172-    // d'`ape`) tourne sur les couches SOURCES, et les couches CONSOMMATRICES
+173-    // lisent les tampons de leur source (`kv_source_layer_ids`, indexation par
+174-    // `comp_source`) au lieu d'en calculer d'autres. Ce qui reste est nommé plus
+175-    // bas (engram, indexeur de V4.1).
+176:    let _ = inconnus;
+177-    // **Le mélange de tête manquant de V4.1** : ce n'est PAS un manque, c'est
+178-    // une AUTRE chaîne. V4.1 n'a pas de `output_hc_*` parce qu'il n'a pas de
+179-    // tête apprise : la référence replie le flux final avec la `pre` de la
+176:    let _ = inconnus;
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs", "new_string": "    // bas (engram, indexeur de V4.1).\n    // **Le mélange de tête manquant de V4.1** : ce n'est PAS un manque, c'est", "old_string": "    // bas (engram, indexeur de V4.1).\n    let _ = inconnus … [83 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs has been updated successfully.
+  ```
+
+### 🤖 Assistant
+
+Now update the shared-cache announcement and drop the obsolete range filter:
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs", "new_string": "                println!(\"[config] cache compressé PARTAGÉ entre couches \\\n(`kv_source_layer_ids`) : {}. Les couches SOURCES projettent leur état ; les \\\nCONSOMMATRICES lisent les tampons de  … [502 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '/Une plage n.exerce le partage du cache compressé/,/^            }$/p' drave-core/src/model.rs | head -40", "description": "Read the range filter block to clean"}`
+
+  ```
+// Une plage n'exerce le partage du cache compressé de V4.1 que si
+            // elle contient une couche CONSOMMATRICE (sans ses propres tenseurs
+            // de compresseur). Une plage qui ne contient que des couches SOURCES
+            // — ou aucune couche compressée — n'a pas besoin de ce partage : le
+            // compresseur de chaque couche y est le sien, comme en V4.
+            let consommatrice = (a..b).any(|l| {
+                ratios.get(l).copied().unwrap_or(0) != 0
+                    && g.tensor(&format!("blk.{l}.attn_compressor_kv.weight")).is_none()
+            });
+            if !consommatrice {
+                let avant = manques.len();
+                manques.retain(|m| !m.starts_with("compression V4.1"));
+                if manques.len() != avant {
+                    let dedans: Vec<usize> = (a..b)
+                        .filter(|l| ratios.get(*l).copied().unwrap_or(0) != 0).collect();
+                    println!("[partiel] couches {a}..{b} : aucune couche CONSOMMATRICE dans \
+la plage (compressées : {dedans:?}, toutes SOURCES de leur compresseur) — le partage du \
+cache compressé de V4.1 n'est donc pas exercé. Ce qui reste non implémenté n'est PAS \
+co
+… [66 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs", "new_string": "            // Le partage du cache compressé de V4.1 (`kv_source_layer_ids`) est\n            // implémenté : plus de filtre à faire ici. Ce qui reste non\n            // implémenté dans une plage … [1414 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && cargo build --release 2>&1 | grep -E \"^error|^warning: unused variable: .ratios|^warning: unused variable: .inconnus\" -A 6 | head -20; echo BUILD_END", "description": "Build after gap removal"}`
+
+  ```
+BUILD_END
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && rm -f /tmp/dump_c25-* /tmp/dump_c3-* && (DRAVE_ETAT_ENTREE=/tmp/etat_l2.bin DRAVE_DUMP_COUCHES=/tmp/dump_c25 timeout 1200 ./drave-core/target/release/drave /home/stephane/FastNVMe/modeles-lourds/DeepSeek-V4.1-Flash-Q2.gguf --couches  … [539 caractères tronqués]`
+
+  ```
+started background job bash-164
+  ```
+
+- **bash** `{"command": "sleep 90; grep -E \"cache compressé|indexeur|plage|EXIT|perplexité cumulée\" /tmp/v41_c25.log 2>/dev/null | head -8; echo \"=== c3 ===\"; grep -E \"cache compressé|indexeur|plage|EXIT|perplexité cumulée\" /tmp/v41_c3.log 2>/dev/null | head -6", "description": "Check the two consumer run … [3 caractères tronqués]`
+
+  ```
+(no output)
+[timed out after 60000ms]
+[killed by signal: SIGTERM]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-164 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && rm -f /tmp/dump_c25-* /tmp/dump_c3-* && (DRAVE_ETAT_ENTREE=/tmp/etat_l2.bin DRAVE_DUMP_COUCHES=/tmp/dump_c25 timeout 1200 ./drave-core/target/release/drave /home/stephane/FastNVMe/modeles-lourds/DeepSeek-V4.1-Flash-Q2.gguf --couches 2:5 --tete-partielle --ppl /tmp/v41_texte.txt.ids --ctx 8 --limit 4 > /tmp/v41_c25.log 2>&1; echo "EXIT=$?" >> /tmp/v41_c25.log; DRAVE_ETAT_ENTREE=/tmp/etat_l2.bin DRAVE_DUMP_COUCHES=/tmp/dump_c3 timeout 1200 ./drave-core/target/release/drave /home/stephane/FastNVMe/modeles-lourds/DeepSeek-V4.1-Flash-Q2.gguf --couches 3:4 --tete-partielle --ppl /tmp/v41_texte.txt.ids --ctx 8 --limit 4 > /tmp/v41_c3.log 2>&1; echo "EXIT=$?" >> /tmp/v41_c3.log)) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -E \"cache compressé|indexeur|plage|EXIT|perplexité cumulée|paires \\(poids\" /tmp/v41_c25.log | head -8; echo \"=== c3 (consommateur SEUL) ===\"; grep -E \"cache compressé|indexeur|plage|EXIT|perplexité cumulée|paires \\(poids\ … [73 caractères tronqués]`
+
+  ```
+[partiel] couches 2..5 : aucune couche d'ENGRAM dans la plage (elles sont en [1, 14]) — l'injection n'est pas exercée.
+[config] cache compressé PARTAGÉ entre couches (`kv_source_layer_ids`) : 2..7 → 2 · 8..13 → 8 · 14..19 → 14 · 20..39 → 20. Les couches SOURCES projettent leur état ; les CONSOMMATRICES lisent les tampons de leur source au lieu d'en calculer d'autres — un compresseur par couche donnerait d'AUTRES clés, donc faux sans rien casser
+[plage] `--tete-partielle` : la tête de sortie est appliquée à la fin de la plage — le résultat est celui d'un modèle TRONQUÉ, pas du modèle entier
+[plage] V4.1 : la plage commence à la couche 2 — la `pre` portée par le raccord précédent n'existe pas, le premier raccord se replie donc avec la COPIE 0 (convention de sonde, comme au tout premier raccord du modèle)
+[plage] V4.1 : la plage commence à la couche 2 — la `pre` portée par le raccord précédent n'existe pas, le premier raccord se replie donc avec la COPIE 0 (convention de sonde, comme au tout premier raccord du modèle)
+[indexeur] V4.1 : les clés de l'indexeur viennent du latent du compresseur principal (`indexer.attn_k` + `indexer.k_norm`) et ce chemin n'est pas porté ; le moteur garde
+… [2119 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Running the decisive control: does the consumer read the source's cache?
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport numpy as np, glob\ndef lire(p): return np.fromfile(p, dtype='<f4').astype(np.float64)\nprint(\"=== couche 3 : avec sa source (2:5) contre sans (3:4) ===\")\nfor pos in range(4):\n    a = lire(f'/tmp/dump_c25- … [1239 caractères tronqués]`
+
+  ```
+=== couche 3 : avec sa source (2:5) contre sans (3:4) ===
+  pos 0 : écart max 1.300363e+00 (dynamique 2.4949e+00) — DIFFÉRENT
+  pos 1 : écart max 1.938664e+00 (dynamique 3.2101e+00) — DIFFÉRENT
+  pos 2 : écart max 2.049234e+00 (dynamique 3.3622e+00) — DIFFÉRENT
+  pos 3 : écart max 2.162652e+00 (dynamique 3.5312e+00) — DIFFÉRENT
+=== couche 2 : témoin de stabilité (2:3 contre 2:5) ===
+  pos 0 : écart max 0.000000e+00 (dynamique 2.5137e+00) — identique
+  pos 1 : écart max 0.000000e+00 (dynamique 3.1538e+00) — identique
+  pos 2 : écart max 0.000000e+00 (dynamique 3.3024e+00) — identique
+  pos 3 : écart max 0.000000e+00 (dynamique 3.4779e+00) — identique
+=== couche 3 contre couche 2 (mêmes jetons, poids différents) ===
+  pos 0 : écart max 7.5522e-01
+  pos 1 : écart max 1.0280e+00
+  pos 2 : écart max 1.0013e+00
+  pos 3 : écart max 1.1215e+00
+=== blocs utilisés par le consommateur : présents ? ===
+  comp_bloc* en couche 3 (avec source) : 0 · en couche 3 (seul) : 0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && (timeout 5400 tools/portes.sh rapide > /tmp/portes_rapide3.log 2>&1; echo \"EXIT=$?\" >> /tmp/portes_rapide3.log)", "description": "Gates on the final tree (sharing + pool refactor)", "run_in_background": true}`
+
+  ```
+started background job bash-165
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-v41-mhc.md", "new_string": "L'**indexeur** de V4.1 n'a pas de compresseur propre : ses clés viennent du latent\ndu compresseur principal (`indexer.attn_k` [128,512] + `indexer.k_norm`) et il\npartage le cache de clés de s … [2782 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-v41-mhc.md has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/rapport-v41-mhc.md'\ns=open(p).read()\ns=s.replace(\"## 7. Reproduire\",\"## 8. Reproduire\",1)\ns=s.replace(\"## 8. Sources\",\"## 9. Sources\",1)\n# le tableau des manques : le partage n'est plus un man … [890 caractères tronqués]`
+
+  ```
+10:## 1. Ce que le moteur disait, et pourquoi c'était faux
+34:## 2. La chaîne de V4.1, en trois phrases
+58:## 3. Ce qui a été implémenté
+78:## 4. La vérification, sur le fichier de 365,7 Go
+117:## 5. Le compresseur des ratios 1 et 2 : les couches SOURCES tournent
+153:## 6. Le cache compressé partagé : les 34 couches consommatrices aussi
+181:## 7. Ce qui reste, nommé
+202:## 8. Reproduire
+230:## 9. Sources
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '/^## 5\\. Le compresseur/,/^## 6\\./p' reports/rapport-v41-mhc.md | grep -n \"SOURCES\\|sources\" | head -5", "description": "Check section 5 title wording"}`
+
+  ```
+1:## 5. Le compresseur des ratios 1 et 2 : les couches SOURCES tournent
+10:Ce chemin est implémenté pour les couches **sources** (celles qui possèdent leurs
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/rapport-v41-mhc.md'\ns=open(p).read()\ns=s.replace(\"## 5. Le compresseur des ratios 1 et 2 : les couches SOURCES tournent\",\n            \"## 5. Le compresseur des ratios 1 et 2 : les couches SOURCES to … [2344 caractères tronqués]`
+
+  ```
+plan mis à jour
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '/### P7 — /,/^- Code : métadonnées/p' docs/plan-deepseek41-complet.md | head -45", "description": "Review the updated P7 section"}`
+
+  ```
+### P7 — Adaptation à V4.1, et la question de provenance (≈ ½ journée + action externe) — **chaîne mHC faite et vérifiée ; reste la compression** (02/10)
+
+> **Les deux manques annoncés étaient faux tous les deux** (02/10, 17:33 → 18:02).
+> La **référence d'exécution existe** : vLLM porte V4.1 en entier
+> (`vllm/models/deepseek_v41/`), et elle dit
+> 1. que V4.1 **n'a pas de tête apprise** : le flux final se replie avec la
+>    `pre` de la **dernière FFN** (`hc_collapse_triton(hidden_states, pre_mix)`,
+>    commentaire « v4.1 has no learned hc_head »). Les `output_hc_*` manquent
+>    parce qu'ils n'existent pas — le jeu de tenseurs `deepseek41` les retire ;
+> 2. que les coefficients des hyper-connexions **se retardent d'un raccord** :
+>    l'attention se replie avec la `pre` de la FFN précédente, la FFN avec la
+>    `pre` de l'attention courante, la copie 0 au tout premier raccord
+>    (`mhc_shifted_post_pre`, `mhc_pre_delayed_torch`) ;
+> 3. que le compresseur des ratios **1 et 2** est spécifié
+>    (`DeepseekCompressor` + `fused_save_compress_norm` : softmax **par canal**
+>    sur le groupe, norme du latent, RoPE à la position du premier jeton du
+>    groupe ; ratio 1 : aucune porte
+… [1782 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='docs/plan-deepseek41-complet.md'\ns=open(p).read()\ns=s.replace(\"### P7 — Adaptation à V4.1, et la question de provenance (≈ ½ journée + action externe) — **chaîne mHC faite et vérifiée ; reste la compression**  … [420 caractères tronqués]`
+
+  ```
+V4-Flash : racine de softplus              racine de softplus  ✅
+  Qwen3-235B : softmax                       softmax  ✅
+  V4-Flash : --config le dit calculable      oui  ✅
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='sprints/10-v41-la-chaine-retardee-et-le-compresseur.md'\ns=open(p).read()\ns=s.replace(\"\"\"| compresseur ratio 1 (couche 20) | idem, sans porte ni `ape` | pool 3,47e-07 · 5,59e-06, un bloc par jeton |\"\"\",\n\ … [1735 caractères tronqués]`
+
+  ```
+sprint mis à jour
+
+AU MOINS UNE PORTE A DIVERGÉ
+EXIT=1
+  ```
+
+### 👤 Utilisateur
+
+background job bash-165 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && (timeout 5400 tools/portes.sh rapide > /tmp/portes_rapide3.log 2>&1; echo "EXIT=$?" >> /tmp/portes_rapide3.log)) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "cat /tmp/portes_rapide3.log", "description": "Read the diverging gate"}`
+
+  ```
+=== Portes ===
+  cargo test --release                       60 verts  ✅
+  Qwen2.5-0.5B ctx 256                       19.3885  ✅
+  Qwen3-30B en clusters (origine : 799,8557) 799.8557  ✅
+  threads par défaut (physiques)            20  ✅
+  (portes de formats : ignorées en mode rapide)
+  GLM-5.3 : sigmoïde ×2,5                  sigmoïde  ✅
+  Kimi-K2.7 : sigmoïde ×2,827              sigmoïde  ✅
+  V4-Flash : racine de softplus              racine de softplus  ✅
+  Qwen3-235B : softmax                       softmax  ✅
+  V4-Flash : --config le dit calculable      oui  ✅
+  V4-Flash 43 couches ctx 32                 5026.4538  ❌ (attendu 8430.2968)
+  engram V4.1 : adressage                    rangées DISTINCTES : 479723  ✅
+
+AU MOINS UNE PORTE A DIVERGÉ
+EXIT=1
+  ```
+
+### 🤖 Assistant
+
+⏵ Investigating the V4-Flash gate divergence (5026 vs 8430)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git diff --stat && git diff -U3 drave-core/src/model.rs | grep -E \"^[-+].*(pool_groupe|sans_porte|chevauche|coff_hd|a_porte|comp_largeur)\" | head -40", "description": "Diff the compressor-related changes"}`
+
+  ```
+docs/plan-deepseek41-complet.md                    |  30 +-
+ drave-core/src/model.rs                            | 241 ++++++++-----
+ journal/README.md                                  |  18 +-
+ journal/sessions/MANIFEST.md                       |   5 +-
+ .../bbd6969f-0f70-42b2-8951-64d1f2f36d2e/digest.md | 382 +++++++++++++++++++++
+ .../rapport.md                                     |  24 +-
+ reports/rapport-v41-mhc.md                         |  40 ++-
+ 7 files changed, 624 insertions(+), 116 deletions(-)
++    pub a_porte: bool,
++    pub comp_largeur: usize,
++                let a_porte = ratio > 1
++                let comp_largeur = if ratio != 0 {
++                    a_porte,
++                    comp_largeur,
++    fn pool_groupe(valeurs: &[f32], portes: Option<&[f32]>, largeur: usize, n: usize,
+-            let coff_hd = m.comp_kv.len() / h.max(1);
+-            matvec_f32(&m.comp_kv, x, h, coff_hd, &mut etat.comp_kv[pos * coff_hd..(pos + 1) * coff_hd]);
+-                matvec_f32(&m.comp_gate, x, h, coff_hd, &mut etat.comp_gate[pos * coff_hd..(pos + 1) * coff_hd]);
+-                    for c in 0..coff_hd {
+-                        etat.comp_gate[pos * coff_hd + c] += m.comp_a
+… [1604 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git stash list | head -2; git stash -q -- drave-core/src/model.rs && cd drave-core && cargo build --release 2>&1 | grep -E \"^error\" | head -3; cd .. && timeout 300 ./drave-core/target/release/drave /home/stephane/FastNVMe/artefacts … [270 caractères tronqués]`
+
+  ```
+3 tokens notés — perplexité cumulée 3808105211.768  (3.7 tok/s)
+    attention : 0.00 M paires (requête, clé) par token
+    paires (poids × activation) par token : attention 159.6 M · experts 201.3 M · partagé 563.1 M · scores 0 K · total 924.0 M
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls /tmp/dump_l2-* 2>/dev/null | head -2; git stash pop -q && cd drave-core && cargo build --release 2>&1 | grep -E \"^error\" | head -3; cd .. && rm -f /tmp/dump_v4l2-* && DRAVE_DUMP_COUCHES=/tmp/dump_v4l2 timeout 300 ./drave-core/ta … [375 caractères tronqués]`
+
+  ```
+/tmp/dump_l2-attn_brut-2-0.bin
+/tmp/dump_l2-attn_brut-2-1.bin
+       3 tokens notés — perplexité cumulée 3808105211.768  (3.8 tok/s)
+    attention : 0.00 M paires (requête, clé) par token
+    paires (poids × activation) par token : attention 159.6 M · experts 201.3 M · partagé 563.1 M · scores 0 K · total 924.0 M
+/tmp/dump_v4l2-comp_bloc0-2-3.bin /tmp/dump_v4l2-comp_brut0-2-3.bin /tmp/dump_v4l2-comp_state_gate-2-0.bin /tmp/dump_v4l2-comp_state_gate-2-1.bin /tmp/dump_v4l2-comp_state_gate-2-2.bin /tmp/dump_v4l2-comp_state_gate-2-3.bin /tmp/dump_v4l2-comp_state_kv-2-0.bin /tmp/dump_v4l2-comp_state_kv-2-1.bin /tmp/dump_v4l2-comp_state_kv-2-2.bin /tmp/dump_v4l2-comp_state_kv-2-3.bin
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && rm -f /tmp/dump_v4l3n-* && DRAVE_DUMP_COUCHES=/tmp/dump_v4l3n timeout 300 ./drave-core/target/release/drave /home/stephane/FastNVMe/artefacts/modeles-optimises/v4flash-topk2/DeepSeek-V4-Flash-UD-IQ1_M-00001-of-00003.gguf --couches 3: … [242 caractères tronqués]`
+
+  ```
+3 tokens notés — perplexité cumulée 61028052.878  (1.1 tok/s)
+    attention : 0.00 M paires (requête, clé) par token
+/tmp/dump_v4l3n-comp_state_gate-3-0.bin /tmp/dump_v4l3n-comp_state_gate-3-1.bin /tmp/dump_v4l3n-comp_state_gate-3-2.bin /tmp/dump_v4l3n-comp_state_gate-3-3.bin /tmp/dump_v4l3n-comp_state_kv-3-0.bin /tmp/dump_v4l3n-comp_state_kv-3-1.bin /tmp/dump_v4l3n-comp_state_kv-3-2.bin /tmp/dump_v4l3n-comp_state_kv-3-3.bin
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git stash -q -- drave-core/src/model.rs && cd drave-core && cargo build --release 2>&1 | grep -E \"^error\" | head -3; cd .. && timeout 300 ./drave-core/target/release/drave /home/stephane/FastNVMe/artefacts/modeles-optimises/v4flash … [356 caractères tronqués]`
+
+  ```
+3 tokens notés — perplexité cumulée 61028052.878  (3.9 tok/s)
+[timed out after 60000ms]
+[killed by signal: SIGTERM]
+  ```
+
+### 👤 Utilisateur
+
+Agent 8734fc13-aeb8-4cdf-b005-c182f77be0dc sent a message:
+RAPPORT ADVERSARIAL — commits 93cb1b7 et e4331d4 (DeepSeek-V4.1 mHC + compresseur)
+
+ÉTAT REVIEWÉ : HEAD = e4331d4. Attention : l'arbre de travail a bougé PENDANT la revue (implémentation du partage de cache consommateur dans model.rs à 18:17, puis RETOUR à HEAD à 18:22:13, rebuild à 18:22:45). Toutes mes mesures sur binaire utilisent le binaire 18:22:45, qui correspond à HEAD (prouvé : `--couches 3:4` y est refusé comme le code HEAD le prescrit, alors que la version 18:18 de l'arbre le laissait tourner). Le rapport reports/rapport-v41-mhc.md est lui aussi modifié dans l'arbre (non commité) : je cite les numéros de ligne de la version COMMITÉE.
+
+VERDICT : rien de grave dans le moteur — aucun calcul faux en silence trouvé sur les chemins vérifiés. Les 4 affirmations tiennent, avec 4 déformations factuelles, 4 trous de couverture et 5 formulations trop fortes. Détail ci-dessous, chaque point avec fichier/ligne et la commande.
+
+=== FAUX ===
+
+F1. « les couches 0 et 1 tournent » (rapport §4 l.80 et l.85 ; message de commit 93cb1b7). La commande est `--couches 0:1`, soit [0,1) : UNE seule couche. Les vides le prouvent : 56 fichiers, tous `-0-` (aucun `-1-`), et le rapport lui-même écrit « (1 couche sur 40) » l.115.
+   Preuve : `ls /tmp/dump_v41-* | sed 's/.*-\([0-9]*\)-[0-9]*\.bin/\1/' | sort -u` → `0`. J'ai refait la passe avec le binaire HEAD (`DRAVE_DUMP_COUCHES=/tmp/dump_v41_bis ... --couches 0:1 --tete-partielle --ppl /tmp/v41_texte.txt.ids --ctx 8 --limit 4`) : mêmes vides, même verdict. Conséquence : ① ne peut de toute façon porter que sur la couche 0 (sur la couche 1, la copie 0 n'est plus l'embarquement) ; le §4 ne mesure donc que la couche 0.
+
+F2. « Les 4 couches sources tournent (§5) » (rapport §6, l.163). La couche 14 est un SOURCE (compresseur ratio 2) mais aussi une couche ENGRAM (`deepseek41.engram.layer_ids = [1,14]`), et le manque engram n'est retiré que si aucune couche d'engram n'est dans la plage (model.rs 2784-2793). Mesuré avec le binaire HEAD :
+   `./drave-core/target/release/drave <V4.1.gguf> --couches 14:15 --tete-partielle --ppl /tmp/v41_texte.txt.ids --ctx 8 --limit 1` → panic « engram (V4.1) : l'injection dans la passe avant n'est pas branchée », EXIT=134.
+   Donc au plus 3 sources (2, 8, 20) peuvent charger, et 2 seulement sont vérifiées. Le §5 est correct (« vérifié sur 2 et 20 ») ; c'est la ligne du §6 qui est fausse.
+
+F3. « YaRN … la rotation était fausse dès la position 1 » (message de commit 93cb1b7 ; le tableau §3 du rapport, lui, est juste). À la configuration exécutée (ctx 8), `cfg.yarn` vaut None AVANT et APRÈS le correctif : le seuil est `ctx > y.3 * 4.0` (model.rs 2710-2714), soit 4 × 65536 = 262144. La rotation appliquée est donc identique ; pour les couches ratio 0 (les seules exécutées), vLLM lui-même utilise `factor = 1.0` et `original_max_position_embeddings = max_position` (vérifié dans `vllm/models/deepseek_v41/common/rope.py`), soit un YaRN identité = RoPE simple. Effets réels du correctif : le message de chargement, `DRAVE_YARN=1` qui était INERT avant (le `match` sur `declare` ne force rien quand la déclaration n'est pas lue), et l'application au-delà de 262144 — pas la rotation à ctx 8.
+
+F4. Message faux dans le moteur (model.rs 3270-3275, sorti dans /tmp/v41_l2.log l.13) : « le moteur ne l'applique qu'au-delà de 65536 jetons ». Le code bascule à `ctx > 4 × original` = 262144 (model.rs 2712). Le rapport §6 dit correctement « au-delà de 4 × la longueur déclarée » : le message et le rapport se contredisent, et le chiffre affiché est faux d'un facteur 4.
+
+=== TROU ===
+
+T1. Les trois égalités ne couvrent PAS le maillon central de la chaîne retardée : le repliement de l'entrée de la FFN avec la `pre` de l'ATTENTION (model.rs 6090, `let poids = if self.hc_retarde { &sa.pre } else { &sf.pre }`). La vérification ③ lit `hc_ffn_pre` et `l_last` dans les VIDES DU MOTEUR (tools/verifier_v41_mhc.py l.130 et l.137), donc tout ce qui est en amont de `l_last` est invisible : échanger `sa.pre` par `sf.pre` à la ligne 6090 laisserait ①, ② et ③ intactes. Seul le témoin synthétique fixe la convention, et il n'appelle pas `forward`. C'est le seul endroit où « le moteur ferait autre chose que ce qu'il annonce » sans qu'aucune des trois égalités ne bouge.
+
+T2. `Mla4::comp_source` (model.rs 1258) est ÉCRIT (2958) et jamais lu dans l'état commité : champ mort dont le commentaire décrit le partage que le même commit refuse. (Il devient vivant dans l'arbre non commité de 18:17, puis l'arbre est revenu à HEAD.)
+
+T3. Le refus des consommatrices est indexé sur la PRÉSENCE DU TENSEUR, pas sur `kv_source_layer_ids` : `consommatrice` = « ratio ≠ 0 ET `blk.l.attn_compressor_kv.weight` absent » (model.rs 2768-2771), et le garde-fou d'exécution est `assert!(m.a_compresseur)` (4991). Un fichier converti où une couche consommatrice porterait ses propres tenseurs de compresseur passerait les deux gardes et serait calculée couche par couche — exactement le mode d'échec que le refus décrit — alors que le fichier DÉCLARE la liste des sources, que le moteur lit déjà (pour le message). Sur le fichier réel, le refus est bien là : mesuré, `--couches 3:4` → panic « compression V4.1 … le cache compressé est PARTAGÉ … », EXIT=134.
+
+T4. `--tete-partielle` n'est appliqué que dans `run_infer` (main.rs 807) et `run_ppl` (4486). Dans `run_ppl_reparti` et `run_serveur_flux`, le drapeau est accepté par l'analyseur et silencieusement sans effet.
+
+=== FAIBLE ===
+
+W1. §5 l.139 : « la projection, l'instant d'émission du bloc, le groupe et la rotation sont justes ». Avec un état injecté CONSTANT, le pool d'un groupe vaut la valeur du jeton quel que soit le jeu de poids : ni le « groupe », ni le softmax par canal, ni la PROJECTION DE PORTE (`attn_compressor_gate`, jamais comparée) ne sont exercés — la réserve du §5 ne nomme que le softmax. Et « la rotation » n'est vérifiée que contre la formule du script (RoPE simple, base 160000), alors que vLLM applique YaRN (facteur 16) à TOUTES les positions des couches ratio > 0 (rope.py → `deepseek_yarn`) : la rotation est juste vis-à-vis de la convention du moteur, pas vis-à-vis de la référence. Les nombres, eux, se reproduisent exactement (voir OK3).
+
+W2. §6 l.163 : « les couches 3..7 lisent les clés publiées par la 2, 21..39 celles de la 20 » omet les groupes 9..13 (source 8) et 15..19 (source 14) ; le commentaire jumeau dans model.rs (1254-1256) omet lui aussi 15..19. Le code, lui, est juste (`source_de` = plus grande source ≤ l, model.rs 2955), et c'est exactement la règle de vLLM (`kv_source_layer_id = max(s for s in kv_source_layers if s <= layer_id)`, attention.py).
+
+W3. §6 l.166 : « sélection à deux niveaux … aucune source d'exécution lue à ce jour » — la source existe et je l'ai lue : `vllm/models/deepseek_v41/attention.py` (DeepseekV4Indexer : `candidate_write`, masquage des scores par les indexeurs postérieurs, `candidate_topk_blocks`). Surtout, le rapport ne mentionne NULLE PART `index_source_layer_ids = [2,8,14,20,24,28,32,36]`, déclaré par le fichier et JAMAIS lu par le moteur (`grep -c index_source drave-core/src/model.rs` → 0). La clé de l'indexeur des couches 24/28/32/36 n'est pas « le latent du compresseur principal » (elles n'en ont pas) : leur cache K d'indexeur est celui de leur `kv_source` (20) — ce que le texte dit par ailleurs, mais l'inventaire omet le champ qui le déclare.
+
+W4. Provenance de `rms_norm_eps` : le rapport et le message de commit disent « (JSON, 1e-20) ». En fait le GGUF déclare aussi `deepseek41.rms_norm_eps = 1e-20`, et le correctif lit ce nom-là (`reel_gguf(["attention.layer_norm_rms_epsilon", "rms_norm_eps"], "rms_norm_eps")`, model.rs 2588). Le bug et le correctif sont réels — j'ai même mesuré que les vides ont été produits avec 1e-20 (voir OK2) — mais la provenance annoncée est inexacte.
+
+W5. Texte de refus générique : « Ce modèle n'a JAMAIS été exécuté ici : tout chiffre publié à son sujet vient d'une analyse statique des tenseurs » — affiché pour V4.1, dont le rapport publie des chiffres de passe avant (mesuré dans les deux refus ci-dessus).
+
+=== OK (vérifié) ===
+
+OK1. Les trois égalités du §4 se reproduisent AU BIT PRÈS, y compris avec un binaire HEAD : passe `--couches 0:1` refaite dans /tmp/dump_v41_bis puis `python3 tools/verifier_v41_mhc.py <gguf> /tmp/dump_v41_bis /tmp/v41_texte.txt.ids` → copie0 0.000e+00 (×4), mélanges 4,3-8,6e-08, tête 2,3-6,8e-07. Les chiffres du tableau §4 sont exacts.
+OK2. ① n'est PAS une tautologie, et les vides valident aussi l'eps : j'ai recalculé `hidden_final` depuis les vides avec eps=1e-20 (écart 2,3e-07 à 6,8e-07) et eps=1e-06 (écart 1,9e-05 à 1,0e-03) → le moteur tournait bien à 1e-20. Et Σ`pre` du premier raccord = 0,963 (calculé depuis les tenseurs), donc la chaîne V4 aurait donné un vecteur différent (max |Δ| = 1,47e-02) : le zéro est un discriminant.
+OK3. §5 se reproduit exactement : `python3 tools/v41_compresseur_reference.py <gguf> /tmp/dump_l2 2 /tmp/etat_l2.bin 2 0 1 2 3` → pool 5,082e-07, norme+rope 3,042e-06 ; idem couche 20 → 3,473e-07 / 5,593e-06, un bloc par jeton. Les vides n'ont pas été trafiqués.
+OK4. Témoin synthétique : les 16 tableaux de constantes du test Rust sont IDENTIQUES à la sortie de `python3 tools/mhc_v41_synthetique.py` (écart 0,000e+00, script de comparaison) et l'écart tête retardée/directe vaut 0,6694 → « 67 % » exact.
+OK5. `hc_retarde` ne s'active que sur `general.architecture == "deepseek41"` (model.rs 3036-3038) et il est ANNONCÉ au chargement ; la chaîne V4 (deepseek4) est intacte branche par branche (`&s.pre`, `&sf.pre`, `ht.tete`, `poids.is_empty()` jamais vrai) — et les trois correctifs de config sont INERTES pour les autres modèles : j'ai lu les métadonnées de gpt-oss (attention.layer_norm_rms_epsilon, expert_count, expert_feed_forward_length, rope.scaling.type), GLM-5.3, Kimi, Qwen3-235B et Qwen2.5 : aucune ne déclare `rms_norm_eps`/JSON, toutes déclarent les clés déjà lues. Les portes sont datées : /tmp/portes_rapide2.log (18:16) = 59 tests, Qwen 19.3885, clusters 799.8557, V4-Flash 8430.2968, engram — toutes vertes.
+OK6. Refus consommateur réel (mesuré, cf. T3) ; refus du découpage V4.1 réel : `assert!(!(hc_retarde && flux_brut && couche_debut > 0))` (model.rs 5535) et le nœud serveur pose `flux_brut = true` (main.rs 2666) ; `norme_finale` refuse aussi un état hc reçu (model.rs 6559). Le chemin LOT du pair est protégé par un `assert_eq` sur la largeur.
+OK7. J'ai relu la référence vLLM réelle (elle existe, HTTP 200) et elle confirme le rapport point par point : copie 0 si `pre_mix is None` (`mhc_pre_delayed_torch`), la FFN repliée avec la `pre` de l'attention (`pre_mix=attn_pre`), tête = `hc_collapse_triton(hidden_states, pre_mix)` + `self.norm` (« v4.1 has no learned hc_head »), `hc_post_alpha = 2.0`, `has_gate = compress_ratio > 1`, `pooled = kv` en ratio 1, `pooled = sum(kv*softmax(score,0),0)` en ratio 2, norme APRÈS le pool (`_store_latent`), RoPE sur les 64 dernières composantes en paires (2i,2i+1) à `position // ratio * ratio`, `rope_theta = compress_rope_theta` (160000) pour ratio > 0, `kv_source_layer_id = max(s ≤ l)`. Le contournement de l'indexeur « garder tous les blocs » est exactement ce que fait vLLM lui-même sous le top-k (`_fill_short_context_topk_indices`, « every candidate is selected »). Sources : raw.githubusercontent.com/vllm-project/vllm/main/vllm/model_executor/kernels/mhc/torch.py, .../models/deepseek_v41/compressor.py, .../common/ops/fused_compress_quant_cache.py, .../nvidia/model.py, .../nvidia/ops/mhc.py, .../attention.py, .../common/rope.py.
+
+CE QUE JE N'AI PAS FAIT : pas de `cargo build` (donc pas de mesure de la version 18:18 de l'arbre autrement que par le binaire qu'elle a produit) ; pas de comparaison à un vLLM exécuté ; la passe 0:1 et les refus 3:4 / 14:15 sont les seules exécutions que j'ai lancées (bornées, dans /tmp).
+
+Détail cosmétique supplémentaire : `verifier_v41_mhc.py` est câblé en dur sur la couche 0 (l.125, 129-130, 137-139) ; sur une plage `0:2` il comparerait la tête à la `pre` de la couche 0 alors que le moteur a utilisé celle de la couche 1 (échec bruyant, pas silencieux). Et `--tete-partielle` n'apparaît pas dans `--options-actives` (main.rs 417-430), alors que ce tableau existe précisément pour rendre visibles les drapeaux actifs.
+
+### 👤 Utilisateur
+
+Background subagent 8734fc13-aeb8-4cdf-b005-c182f77be0dc finished and will do no further work unless you send it more.
+Its closing message:
+⏵ Rapport final
+
+## Cadre et méthode
+
+J'ai attaqué l'état **commité** (HEAD = `e4331d4`), en lisant les deux diffs, `model.rs` (extrait de `git show e4331d4`), les quatre scripts Python, puis en **re-mesurant** sur les vides et le GGUF. J'ai aussi relu la **référence vLLM réelle** (elle existe, accessible) pour tester les affirmations de provenance.
+
+⚠️ **L'arbre de travail a bougé pendant la revue** : implémentation du partage de cache consommateur dans `model.rs` vers 18:17, puis **retour à HEAD** (18:22:13) et reconstruction du binaire (18:22:45). Toutes mes mesures sur binaire utilisent ce binaire 18:22:45, qui correspond à HEAD — prouvé par le fait que `--couches 3:4` y est refusé comme le code HEAD le prescrit, alors que la version 18:18 de l'arbre le laissait tourner. Je cite les lignes de la version **committée** du rapport.
+
+**Verdict : rien de grave dans le moteur.** Aucun calcul faux en silence trouvé sur les chemins vérifiés. Les quatre affirmations tiennent, avec 4 déformations factuelles, 4 trous de couverture et 5 formulations trop fortes.
+
+---
+
+## FAUX
+
+**F1 — « les couches 0 et 1 tournent »** (rapport §4 l.80 et 85 ; message de commit `93cb1b7`).
+La commande est `--couches 0:1` = **[0,1)**, donc une seule couche. Les vides le prouvent : 56 fichiers, tous `-0-` ; le rapport écrit lui-même « (1 couche sur 40) » l.115.
+`ls /tmp/dump_v41-* | sed 's/.*-\([0-9]*\)-[0-9]*\.bin/\1/' | sort -u` → `0`. J'ai refait la passe avec le binaire HEAD (`DRAVE_DUMP_COUCHES=/tmp/dump_v41_bis … --couches 0:1 --tete-partielle --ppl /tmp/v41_texte.txt.ids --ctx 8 --limit 4`) : mêmes vides, mêmes chiffres. De toute façon ① ne peut porter que sur la couche 0.
+
+**F2 — « Les 4 couches sources tournent (§5) »** (rapport §6, l.163).
+La couche 14 est source (ratio 2) **et** couche engram (`deepseek41.engram.layer_ids = [1,14]`) ; le manque engram n'est retiré que si aucune couche d'engram n'est dans la plage (`model.rs` 2784-2793). Mesuré avec le binaire HEAD :
+`… --couches 14:15 --tete-partielle --ppl … --limit 1` → panic « engram (V4.1) : l'injection dans la passe avant n'est pas branchée », EXIT=134. Donc au plus **3** sources chargent, 2 sont vérifiées.
+
+**F3 — « YaRN … la rotation était fausse dès la position 1 »** (message de commit `93cb1b7` ; le tableau §3 du rapport, lui, est juste).
+À ctx 8, `cfg.yarn = None` **avant et après** le correctif : le seuil est `ctx > y.3 * 4.0` (`model.rs` 2710-2714) = 262144. Pour les couches ratio 0 (les seules exécutées), vLLM utilise `factor = 1.0` / `original = max_position` (`vllm/models/deepseek_v41/common/rope.py`) → YaRN identité = RoPE simple. Effets réels du correctif : le message, `DRAVE_YARN=1` qui était **inert** avant, et l'application au-delà de 262144.
+
+**F4 — chiffre faux dans un message du moteur** (`model.rs` 3270-3275, visible dans `/tmp/v41_l2.log` l.13) : « le moteur ne l'applique qu'au-delà de **65536** jetons » alors que le code bascule à **4 × 65536 = 262144** (`model.rs` 2712). Le rapport §6 dit correctement « 4 × la longueur déclarée » : message et rapport se contredisent.
+
+---
+
+## TROU
+
+**T1 — le maillon central de la chaîne retardée n'est couvert par aucune égalité.**
+L'entrée de la FFN est repliée avec la `pre` de l'attention (`model.rs` 6090 : `if hc_retarde { &sa.pre } else { &sf.pre }`). Or ③ lit `hc_ffn_pre` **et** `l_last` dans les vides du moteur (`verifier_v41_mhc.py` l.130 et 137) : échanger `sa.pre`/`sf.pre` à la 6090 laisserait ①, ② et ③ intactes. Seul le témoin synthétique fixe la convention, et il n'appelle pas `forward`.
+
+**T2 — champ mort.** `Mla4::comp_source` (`model.rs` 1258) est écrit (2958) et **jamais lu** dans l'état commité.
+
+**T3 — refus indexé sur la présence du tenseur, pas sur `kv_source_layer_ids`.** `consommatrice` = « ratio ≠ 0 ET `attn_compressor_kv` absent » (2768-2771) + `assert!(m.a_compresseur)` (4991). Un fichier où une consommatrice porterait ses propres tenseurs passerait les deux gardes et serait calculée couche par couche — le mode d'échec décrit — alors que le fichier déclare ses sources. Sur le fichier réel le refus est bien là : `--couches 3:4` → panic « compression V4.1 … PARTAGÉ … », EXIT=134.
+
+**T4 — `--tete-partielle` inerte dans deux modes.** Appliqué seulement dans `run_infer` (main.rs 807) et `run_ppl` (4486), ignoré sans un mot dans `run_ppl_reparti` et `run_serveur_flux`.
+
+---
+
+## FAIBLE
+
+**W1 — §5 l.139 « la projection, l'instant d'émission, le groupe et la rotation sont justes ».** Avec un état constant, ni le groupe, ni le softmax par canal, ni la **projection de porte** (jamais comparée) ne sont exercés — la réserve du §5 ne nomme que le softmax. Et la rotation n'est vérifiée que contre la formule du script (RoPE simple, base 160000), alors que vLLM applique **YaRN (facteur 16) à toutes les positions** des couches ratio > 0 : la rotation est juste vis-à-vis de la convention du moteur, pas de la référence.
+
+**W2 — §6 l.163** omet les groupes 9..13 (source 8) et 15..19 (source 14) ; le commentaire jumeau `model.rs` 1254-1256 omet aussi 15..19. Le code, lui, est juste (`source_de`, 2955).
+
+**W3 — §6 l.166 « aucune source d'exécution lue à ce jour »** : elle existe (`attention.py`, `DeepseekV4Indexer`, `candidate_write`, masquage). Et le rapport ne mentionne nulle part `index_source_layer_ids = [2,8,14,20,24,28,32,36]`, déclaré et **jamais lu** par le moteur (`grep -c index_source drave-core/src/model.rs` → 0) : les clés d'indexeur de 24/28/32/36 viennent du cache de leur `kv_source` (20), pas d'un compresseur propre.
+
+**W4 — provenance de `rms_norm_eps`** : le GGUF déclare `deepseek41.rms_norm_eps = 1e-20` (pas seulement le JSON), et le correctif lit ce nom-là (`model.rs` 2588). Bug et correctif réels, provenance annoncée inexacte.
+
+**W5 — texte de refus générique** « Ce modèle n'a JAMAIS été exécuté ici… » affiché pour V4.1, dont le rapport publie des chiffres de passe avant (vu dans les deux refus mesurés).
+
+---
+
+## OK (vérifié)
+
+- **OK1** Les trois égalités se reproduisent au bit près, **avec un binaire HEAD** : passe `--couches 0:1` refaite → `verifier_v41_mhc.py` → copie0 `0.000e+00` (×4), mélanges 4,3–8,6e-08, tête 2,3–6,8e-07. Tableau §4 exact.
+- **OK2** ① n'est pas une tautologie, et les vides valident l'eps : `hidden_final` recalculé avec eps=1e-20 donne 2,3e-07–6,8e-07, avec eps=1e-06 donne 1,9e-05–1,0e-03. Et Σ`pre` du premier raccord = **0,963** (calculé depuis le GGUF) → la chaîne V4 aurait donné max |Δ| = 1,47e-02 : le zéro est discriminant.
+- **OK3** §5 reproduit exactement : couche 2 → pool 5,082e-07 / norme+rope 3,042e-06 ; couche 20 → 3,473e-07 / 5,593e-06, un bloc par jeton.
+- **OK4** Les 16 tableaux de constantes du test Rust sont **identiques** à la sortie de `mhc_v41_synthetique.py` (écart 0,000e+00) ; l'écart tête retardée/directe = 0,6694 → « 67 % » exact.
+- **OK5** `hc_retarde` limité à `general.architecture == "deepseek41"` (3036-3038) et **annoncé** ; chaîne V4 intacte branche par branche ; les trois correctifs sont **inertes** pour gpt-oss / GLM-5.3 / Kimi / Qwen3-235B / Qwen2.5 (métadonnées lues) ; portes datées vertes dans `/tmp/portes_rapide2.log` (59 tests, 19.3885, 799.8557, 8430.2968).
+- **OK6** Refus consommateur **mesuré** ; refus du découpage V4.1 réel (5535 + `flux_brut` posé par le serveur, main.rs 2666 ; `norme_finale` 6559) ; chemin lot protégé par un `assert_eq` de largeur.
+- **OK7** La référence vLLM confirme le rapport point par point : copie 0 si `pre_mix is None`, FFN repliée avec la `pre` de l'attention, tête `hc_collapse_triton(hidden, pre_mix)` + `norm` (« v4.1 has no learned hc_head »), `hc_post_alpha = 2.0`, `has_gate = ratio > 1`, `pooled = kv` en ratio 1, `softmax(score, 0)` en ratio 2, norme après le pool, RoPE 64 dernières composantes en paires (2i,2i+1) à `position // ratio * ratio`, `compress_rope_theta` en ratio > 0, `kv_source_layer_id = max(s ≤ l)`. Le « garder tous les blocs » est exactement le comportement vLLM sous le top-k (`_fill_short_context_topk_indices`). Sources : [torch.py](https://raw.githubusercontent.com/vllm-project/vllm/main/vllm/model_executor/kernels/mhc/torch.py), [compressor.py](https://raw.githubusercontent.com/vllm-project/vllm/main/vllm/models/deepseek_v41/compressor.py), [fused_compress_quant_cache.py](https://raw.githubusercontent.com/vllm-project/vllm/main/vllm/models/deepseek_v41/common/ops/fused_compress_quant_cache.py), [model.py](https://raw.githubusercontent.com/vllm-project/vllm/main/vllm/models/deepseek_v41/nvidia/model.py), [ops/mhc.py](https://raw.githubusercontent.com/vllm-project/vllm/main/vllm/models/deepseek_v41/nvidia/ops/mhc.py), [attention.py](https://raw.githubusercontent.com/vllm-project/vllm/main/vllm/models/deepseek_v41/attention.py), [rope.py](https://raw.githubusercontent.com/vllm-project/vllm/main/vllm/models/deepseek_v41/common/rope.py).
+
+**Non fait** : pas de `cargo build`, pas de vLLM exécuté ; seules exécutions lancées : passe 0:1 et refus 3:4 / 14:15 (bornées, écritures dans /tmp uniquement). Détail cosmétique : `verifier_v41_mhc.py` est câblé en dur sur la couche 0 (l.125, 129-130, 137-139) ; `--tete-partielle` n'apparaît pas dans `--options-actives` (main.rs 417-430).
+
+### 🤖 Assistant
+
+⏵ Recovering the tree state and hunting the V4-Flash regression
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git stash list; git status --porcelain | head -8; echo \"=== la porte V4-Flash ===\"; sed -n '101,125p' tools/portes.sh", "description": "Check stash state and the gate command"}`
+
+  ```
+M docs/plan-deepseek41-complet.md
+ M drave-core/src/model.rs
+ M journal/README.md
+ M journal/sessions/MANIFEST.md
+ M journal/sessions/bbd6969f-0f70-42b2-8951-64d1f2f36d2e/digest.md
+ M journal/sessions/bbd6969f-0f70-42b2-8951-64d1f2f36d2e/rapport.md
+ M reports/rapport-v41-mhc.md
+?? journal/sessions/8734fc13-aeb8-4cdf-b005-c182f77be0dc/
+=== la porte V4-Flash ===
+# 6bis. V4-Flash : le modèle de la famille V4 tourne EN ENTIER (43 couches, les
+#       trois régimes d'attention : brute, HCA, CSA + indexeur). Sa perplexité
+#       est un chiffre de référence : si elle dérive, c'est que le calcul a
+#       changé. Les identifiants viennent de SON tokenizer, jamais d'un autre.
+V4=/home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek-V4-Flash-UD-IQ1_M/DeepSeek-V4-Flash-UD-IQ1_M-00001-of-00003.gguf
+if [ -f "$V4" ]; then
+    v=$($D "$V4" --config 2>/dev/null | grep -oE "calculable +: .*")
+    case "$v" in
+        *": oui"*) printf "  %-42s %s  ✅\n" "V4-Flash : --config le dit calculable" "oui" ;;
+        *)         printf "  %-42s %s  ❌\n" "V4-Flash : --config le dit calculable" "${v:-—}"; ECHEC=1 ;;
+    esac
+    if [ ! -s /tmp/ids_v4flash.txt ]; then
+        [ -s /tmp/wt2_txt.txt ] || head -
+… [589 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git diff -U2 drave-core/src/model.rs | sed -n '1,120p'", "description": "Read the first part of the model.rs diff"}`
+
+  ```
+diff --git a/drave-core/src/model.rs b/drave-core/src/model.rs
+index 1ff01fa..528b9b1 100644
+--- a/drave-core/src/model.rs
++++ b/drave-core/src/model.rs
+@@ -167,37 +167,11 @@ pub fn manques_architecture(g: &Gguf, cfg: &Cfg, ctx: usize, clusters: bool) ->
+         manques.push("attentions compressées : `attn_compressor_kv` absent du fichier");
+     }
+-    // **V4.1 : deux autres ratios (1 et 2).** Ils ont une RÉFÉRENCE
+-    // d'exécution, contrairement à ce que ce message disait : vLLM porte
+-    // `vllm/models/deepseek_v41/compressor.py` (`DeepseekCompressor`, ratios 1
+-    // et 2 ; « ratio-4/128 kernels are v4.0-specific ») et le noyau
+-    // `fused_save_compress_norm` donne le calcul exact — softmax **par canal**
+-    // sur le groupe (`tl.softmax(score, 0)`), norme RMS du latent, RoPE à la
+-    // position du premier jeton du groupe ; ratio 1 = aucun groupe, aucune
+-    // porte, aucun `ape`. Ce qui manque n'est donc pas le compresseur :
+-    let ratios = g.couches_ratios();
+-    let inconnus: Vec<i64> = {
+-        let mut v: Vec<i64> = ratios.iter().copied()
+-            .filter(|r| *r != 0 && *r != 4 && *r != 128).collect();
+-        v.sort_unstable(); v.dedup(); v
+-    };
+… [6639 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git diff -U2 drave-core/src/model.rs | sed -n '120,260p'", "description": "Read the rest of the model.rs diff"}`
+
+  ```
++                }
++                // Présence de la porte et largeur de l'état : lues sur la SOURCE
++                // quand la couche n'a pas ses propres tenseurs.
++                let q_src = |s: &str| format!("blk.{src}.{s}");
++                let a_porte = ratio > 1
++                    && g.tensor(&q_src("attn_compressor_gate.weight")).is_some();
++                let comp_largeur = if ratio != 0 {
++                    let t = g.tensor(&q_src("attn_compressor_kv.weight"))
++                        .unwrap_or_else(|| panic!("couche {l} : ratio {ratio} mais ni elle ni \
++sa source {src} n'a d'`attn_compressor_kv` — le fichier ne dit pas d'où viennent ses clés"));
++                    t.dims[0] as usize / cfg.hidden.max(1)
++                } else { 0 };
+                 // Compresseur : `coff = 2` pour CSA (ratio 4), `1` pour HCA
+                 // (ratio 128). La largeur se lit dans le tenseur, pas dans une
+@@ -2956,5 +2946,7 @@ d'autres clés)", groupes.join(" · "));
+                     a_indexeur: g.tensor(&p("indexer.proj.weight")).is_some(),
+                     a_compresseur: !comp_kv.is_empty(),
+-                    comp_source: if ratio != 0 { source_de(l) } else { l },
+… [7977 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Found it: `comp_largeur` truncated a 1024-wide compressor to 0
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs", "new_string": "                let comp_largeur = if ratio != 0 {\n                    let t = g.tensor(&q_src(\"attn_compressor_kv.weight\"))\n                        .unwrap_or_else(|| panic!(\"couche {l} : ra … [1197 caractères tronqués]`
+
+  ```
+Error: cannot edit "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs": file changed since it was read — re-read the file, then retry
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"t.dims\\[0\\] as usize / cfg.hidden\" drave-core/src/model.rs", "description": "Locate the faulty line"}`
+
+  ```
+2917:                    t.dims[0] as usize / cfg.hidden.max(1)
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs", "limit": 10, "offset": 2910}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs</path>
+<type>file</type>
+<content>
+2910:                 let q_src = |s: &str| format!("blk.{src}.{s}");
+2911:                 let a_porte = ratio > 1
+2912:                     && g.tensor(&q_src("attn_compressor_gate.weight")).is_some();
+2913:                 let comp_largeur = if ratio != 0 {
+2914:                     let t = g.tensor(&q_src("attn_compressor_kv.weight"))
+2915:                         .unwrap_or_else(|| panic!("couche {l} : ratio {ratio} mais ni elle ni \
+2916: sa source {src} n'a d'`attn_compressor_kv` — le fichier ne dit pas d'où viennent ses clés"));
+2917:                     t.dims[0] as usize / cfg.hidden.max(1)
+2918:                 } else { 0 };
+2919:                 // Compresseur : `coff = 2` pour CSA (ratio 4), `1` pour HCA
+
+(Showing lines 2910-2919 of 7567. Use offset=2920 to continue.)
+</content>
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs", "new_string": "                    // **Le nombre de RANGÉES du tenseur**, c'est-à-dire\n                    // `coff·head_dim` (`dims[0]` : le GGUF range (sortie, entrée) et\n                    // le moteur li … [717 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && cargo build --release 2>&1 | grep -E \"^error\" -A 6 | head -10; echo BUILD_END; cd .. && timeout 550 ./drave-core/target/release/drave /home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek-V4-Flash-UD-IQ1_M/DeepSeek-V4-F … [216 caractères tronqués]`
+
+  ```
+BUILD_END
+[timed out after 60000ms]
+[killed by signal: SIGTERM]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && (timeout 1200 ./drave-core/target/release/drave /home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek-V4-Flash-UD-IQ1_M/DeepSeek-V4-Flash-UD-IQ1_M-00001-of-00003.gguf --ppl /tmp/ids_v4flash.txt --ctx 32 --limit 5 --dense --threads 1 … [209 caractères tronqués]`
+
+  ```
+started background job bash-169
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n 'vider_couche(self.dump_couches.as_deref(), \"hc_ffn_in\"' -B 6 -A 22 drave-core/src/model.rs | head -45", "description": "Read the FFN HC block for the new dumps"}`
+
+  ```
+6134-                    Hc::retro(&o, &x, sa, hf.hc, h, &mut nx);
+6135-                    let sf = hf.sortie(&nx);
+6136-                    let mut mel = vec![0f32; h];
+6137-                    // Le flux que voit le raccord FFN : c'est sur LUI que la
+6138-                    // référence calcule ses mélanges (`mixes = fn · rms_norm(x)`),
+6139-                    // et c'est ce que la vérification indépendante relit.
+6140:                    Self::vider_couche(self.dump_couches.as_deref(), "hc_ffn_in", l, pos, &nx);
+6141-                    // Idem pour la FFN : V4.1 la replie avec la `pre` de
+6142-                    // l'ATTENTION courante (« the FFN uses this layer's attention
+6143-                    // pre-mix »), et sa propre `pre` part au raccord suivant.
+6144-                    let poids: &[f32] = if self.hc_retarde { &sa.pre } else { &sf.pre };
+6145-                    Hc::melanger(&nx, poids, hf.hc, h, &mut mel);
+6146-                    Self::rmsnorm(&mel, &lay.ffn_norm, cfg.eps, &mut hn);
+6147-                    if self.hc_retarde {
+6148-                        // Ce que la chaîne retarde : la `pre` de CE raccord FFN
+6149-                        // part au raccord s
+… [746 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs", "new_string": "                    let poids: &[f32] = if self.hc_retarde { &sa.pre } else { &sf.pre };\n                    Hc::melanger(&nx, poids, hf.hc, h, &mut mel);\n                    if self.hc_retarde  … [1219 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs", "new_string": "                let comp_largeur = if ratio != 0 {\n                    let t = g.tensor(&q_src(\"attn_compressor_kv.weight\"))\n                        .unwrap_or_else(|| panic!(\"couche {l} : ra … [2831 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs has been updated successfully.
+  ```
+
+### 🤖 Assistant
+
+Now the YaRN message (F4) and the `--tete-partielle` visibility/warnings (T4):
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs", "new_string": "            (None, _, _) if g.json_texte(\"rope_type\").as_deref() == Some(\"yarn\") =>\n                println!(\"[config] rotation : RoPE simple — le modèle DÉCLARE YaRN \\\n(JSON `rope_scaling … [883 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"tete_partielle\\|tete_restreinte\" drave-core/src/main.rs | head -12; echo \"=== options-actives ===\"; sed -n '417,435p' drave-core/src/main.rs", "description": "Find tete flags and options-actives"}`
+
+  ```
+401:fn poser_tete_partielle(mdl: &mut model::Model) {
+402:    mdl.tete_partielle = true;
+571:    tete_partielle: bool,
+584:    tete_restreinte: Option<String>,
+644:            "--tete-partielle" => { o.tete_partielle = true; 1 }
+728:                o.tete_restreinte = Some(suivant(i).clone()); 2 }
+806:    if opt.tete_partielle {
+807:        poser_tete_partielle(&mut mdl);
+809:    if let Some(f) = &opt.tete_restreinte {
+810:        poser_tete_restreinte(&mut mdl, f);
+1167:fn poser_tete_restreinte(mdl: &mut model::Model, fichier: &str) -> bool {
+1182:    mdl.tete_restreinte = Some(ids);
+=== options-actives ===
+fn options_actives(mdl: &model::Model, mode: &str, ctx_impose: bool, dense: bool, keep: f32) {
+    let oui = |b: bool| if b { "imposé" } else { "défaut" };
+    println!("[options] mode {mode} · contexte {} ({}) · dense {} · keep {:.3}",
+             mdl.ctx, oui(ctx_impose), dense, keep);
+    println!("[options] activation : niveaux {:.0} · seuil {} · k-WTA {} · renorm {}",
+             mdl.act_levels, mdl.act_thresh, mdl.act_topk, mdl.act_renorm);
+    println!("[options] top-k : attn {} · q·k {} · MoE {} · par projection {:?}",
+             mdl.attn_topk, mdl.qk_topk, mdl.moe_
+… [681 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/main.rs", "new_string": "    println!(\"[options] couches {}..{} · flux brut {} · trace {} · rejeu {}\",\n             mdl.couche_debut, mdl.couche_fin, mdl.flux_brut,\n             mdl.trace.is_some(), mdl.flux_force.is_s … [634 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/main.rs has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"fn run_ppl_reparti\\|fn run_serveur_flux\" drave-core/src/main.rs | head; grep -n \"Model::load_partiel\" drave-core/src/main.rs", "description": "Locate the other two modes"}`
+
+  ```
+2603:fn run_serveur_flux(opt: Options, adresse: &str) {
+2751:fn run_ppl_reparti(opt: Options, pair: &str) {
+811:    let mut mdl = model::Model::load_partiel(path, ctx, n_threads, dense, keep, auto, q4, b6,
+4491:    let mut mdl = model::Model::load_partiel(path, ctx, n_threads, dense, keep, auto, q4, b6,
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '2820,2840p' drave-core/src/main.rs", "description": "Find the ppl_reparti model load"}`
+
+  ```
+nll_ref += nll_logits(&mdl.logits(&last), ids[pos + 1]);
+            }
+        }
+    }
+    let ppl_ref = (nll_ref / (ids.len() - 1) as f64).exp();
+    println!("  référence locale  : perplexité {ppl_ref:.4}  ({:.1} s)", t0.elapsed().as_secs_f64());
+
+    // 2. la même chose, coupée en deux nœuds
+    let mut sock = std::net::TcpStream::connect(pair).expect("connexion au nœud moteur");
+    sock.set_nodelay(true).expect("TCP_NODELAY");   // cf. le nœud moteur : Nagle coûte 6×
+    mdl.couche_fin = couches_locales;
+    let mut octets_envoyes = 0u64;
+    let mut octets_recus = 0u64;
+    let mut actifs_envoyes = 0u64;
+    let mut flux_envoyes = 0u64;
+    let mut jetons_envoyes = 0u64;   // Σt, pas `lot` : le dernier lot est partiel
+    let mut t_local = 0f64;
+    let mut t_pair = 0f64;
+    let t1 = Instant::now();
+    let mut nll = 0f64;
+    if lot > 1 {
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"let mut mdl = model::Model::load_partiel\" -A 3 drave-core/src/main.rs | sed -n '1,12p'", "description": "Find where ppl_reparti loads its model"}`
+
+  ```
+811:    let mut mdl = model::Model::load_partiel(path, ctx, n_threads, dense, keep, auto, q4, b6,
+812-                                             opt.couches);
+813-    if opt.tete_partielle {
+814-        poser_tete_partielle(&mut mdl);
+--
+4491:    let mut mdl = model::Model::load_partiel(path, ctx, n_threads, dense, keep, auto, q4, b6,
+4492-                                             opt.couches);
+4493-    if opt.tete_partielle { poser_tete_partielle(&mut mdl); }
+4494-    if let Some(chemin) = flux_forcer.as_deref() {
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '2603,2615p' drave-core/src/main.rs; echo \"=== 2751 ===\"; sed -n '2751,2762p' drave-core/src/main.rs", "description": "Read the two mode headers"}`
+
+  ```
+fn run_serveur_flux(opt: Options, adresse: &str) {
+    // `port` reste localhost ; `hôte:port` écoute sur l'interface nommée
+    // (« 0.0.0.0:5599 » pour un pair distant). Le pair distant est le cas de la
+    // phase 3.4 : un nœud Colab, ou une autre machine du réseau.
+    let (hote, port) = match adresse.rsplit_once(':') {
+        Some((h, p)) => (h.to_string(), p.parse().expect("port invalide")),
+        None => ("127.0.0.1".to_string(), adresse.parse().expect("port invalide")),
+    };
+    let chemin = modele_chemin();
+    // Le contexte du nœud moteur suit `--ctx` : figé à 4096, il faisait payer au
+    // pair des tampons d'attention seize fois plus grands que le banc (mesuré :
+    // 4,8 s contre 1,7 s pour le même calcul, à contexte 256).
+    let ctx = if opt.ctx_impose { opt.ctx } else { 4096 };
+=== 2751 ===
+fn run_ppl_reparti(opt: Options, pair: &str) {
+    use std::time::Instant;
+    let chemin = modele_chemin();
+    let ctx = if opt.ctx_impose { opt.ctx } else { 256 };
+    let limite = opt.limit.max(1).min(ctx);
+    let couches_locales = if opt.couches_locales > 0 { opt.couches_locales } else { 12 };
+    // `--lot T` : préremplissage par LOTS sur le fil. La référence loc
+… [325 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/main.rs'\ns=open(p).read()\n# 1. ppl_reparti : le modèle local est le modèle ENTIER, tete_partielle n'a pas d'objet\na = \"\"\"    let mut mdl = model::Model::load(&chemin, ctx, fils(&opt), true, o … [1404 caractères tronqués]`
+
+  ```
+error[E0425]: cannot find value `comp_kv` in this scope
+    --> src/model.rs:2933:47
+     |
+2933 |                 if ratio != 0 && src != l && !comp_kv.is_empty() {
+     |                                               ^^^^^^^ not found in this scope
+
+warning: type `io_result` should have an upper camel case name
+--
+error: could not compile `drave-core` (bin "drave") due to 1 previous error; 24 warnings emitted
+BUILD_END
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 15, in <module>
+AssertionError: 2
+  ```
+
+### 👤 Utilisateur
+
+background job bash-169 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && (timeout 1200 ./drave-core/target/release/drave /home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek-V4-Flash-UD-IQ1_M/DeepSeek-V4-Flash-UD-IQ1_M-00001-of-00003.gguf --ppl /tmp/ids_v4flash.txt --ctx 32 --limit 5 --dense --threads 16 2>&1 | grep -oE "=== perplexité [0-9]+\.[0-9]+" > /tmp/gate_v4f_fix.log; echo "FIN" >> /tmp/gate_v4f_fix.log)) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "cat /tmp/gate_v4f_fix.log; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"appliquer_quantification(&mut mdl, &opt);\" drave-core/src/main.rs | head", "description": "Check the gate value and locate the edit sites"}`
+
+  ```
+=== perplexité 8430.2968
+FIN
+2617:    appliquer_quantification(&mut mdl, &opt);
+2762:    appliquer_quantification(&mut mdl, &opt);
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs", "new_string": "                if ratio != 0 && src != l && g.tensor(&p(\"attn_compressor_kv.weight\")).is_some() {", "old_string": "                if ratio != 0 && src != l && !comp_kv.is_empty() {"}`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/main.rs'\ns=open(p).read()\nc = \"fn run_serveur_flux(opt: Options, adresse: &str) {\"\nd = \"\"\"fn run_serveur_flux(opt: Options, adresse: &str) {\n    if opt.tete_partielle {\n        eprintln!( … [1511 caractères tronqués]`
+
+  ```
+ok
+error: expected one of `)`, `,`, `.`, `?`, `else`, or an operator, found `ctx`
+    --> src/main.rs:2772:7
+     |
+2772 |     } ctx, fils(&opt), true, opt.keep, false, 0, 0);
+     |      -^^^ expected one of `)`, `,`, `.`, `?`, `else`, or an operator
+     |      |
+     |      help: missing `,`
+--
+error[E0308]: mismatched types
+    --> src/main.rs:2769:27
+     |
+2769 |       if opt.tete_partielle {
+     |  ___________________________^
+2770 | |         eprintln!("[plage] `--tete-partielle` est sans effet en `--ppl-reparti` : la plage \
+2771 | | y est le découpage entre nœuds (voir `--couches-locales`), pas un `--couches a:b`");
+--
+error[E0061]: this function takes 8 arguments but 9 arguments were supplied
+    --> src/main.rs:2765:19
+     |
+2765 |       let mut mdl = model::Model::load(&chemin,
+BUILD_END
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/main.rs", "limit": 18, "offset": 2760}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/main.rs</path>
+<type>file</type>
+<content>
+2760:     let couches_locales = if opt.couches_locales > 0 { opt.couches_locales } else { 12 };
+2761:     // `--lot T` : préremplissage par LOTS sur le fil. La référence locale est
+2762:     // alors calculée avec le MÊME découpage — sinon l'écart mesurerait la
+2763:     // différence entre deux ordres de sommation, pas celle du découpage.
+2764:     let lot = opt.lot.max(1);
+2765:     let mut mdl = model::Model::load(&chemin,
+2766:     // `--tete-partielle` n'a pas d'objet ici : la « plage » de ce mode est le
+2767:     // découpage entre les DEUX nœuds, et le modèle local est le modèle entier.
+2768:     // Le taire serait exactement le défaut que `--options-actives` combat.
+2769:     if opt.tete_partielle {
+2770:         eprintln!("[plage] `--tete-partielle` est sans effet en `--ppl-reparti` : la plage \
+2771: y est le découpage entre nœuds (voir `--couches-locales`), pas un `--couches a:b`");
+2772:     } ctx, fils(&opt), true, opt.keep, false, 0, 0);
+2773:     appliquer_quantification(&mut mdl, &opt);
+2774:     if opt.options_actives { options_actives(&mdl, "pilote du fl
+… [270 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/main.rs", "new_string": "    let mut mdl = model::Model::load(&chemin,\n                                     ctx, fils(&opt), true, opt.keep, false, 0, 0);\n    appliquer_quantification(&mut mdl, &opt);\n    // `--tete-par … [1053 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/main.rs has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && cargo build --release 2>&1 | grep -E \"^error\" -A 6 | head -20; echo BUILD_END", "description": "Rebuild after fixing the insertion"}`
+
+  ```
+BUILD_END
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='tools/verifier_v41_mhc.py'\ns=open(p).read()\ns=s.replace('''  3. `hidden_final(0, pos) == rms_norm(Σ_c hc_ffn_pre[c]·l_last[c], output_norm)`\n     — la tête de V4.1, qui n'a **aucun poids appris** : sa réductio … [3558 caractères tronqués]`
+
+  ```
+vérificateur mis à jour
+111:    couche = int(sys.argv[4]) if len(sys.argv) > 4 else couches[-1]
+147:        e4 = np.max(np.abs(mel_calcule - mel_ffn))
+164:    print("VERDICT : " + ("les quatre égalités tiennent" if echecs == 0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && rm -f /tmp/dump_v41b-* && (DRAVE_DUMP_COUCHES=/tmp/dump_v41b timeout 1200 ./drave-core/target/release/drave /home/stephane/FastNVMe/modeles-lourds/DeepSeek-V4.1-Flash-Q2.gguf --couches 0:1 --tete-partielle --ppl /tmp/v41_texte.txt.id … [387 caractères tronqués]`
+
+  ```
+started background job bash-170
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs", "new_string": "            \"architecture « {} » non implémentée par ce moteur : {}.\\n  \\\nCe modèle n'est donc pas calculé. Les chiffres publiés à son sujet ne viennent pas \\\nd'une passe avant COMPLÈTE : an … [474 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs", "new_string": "            let source_de = |l: usize| -> usize {\n                sources.iter().copied().filter(|s| *s <= l).max().unwrap_or(l)\n            };\n            // **Les couches qui PORTENT un index … [1222 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/model.rs'\ns=open(p).read()\na = \"\"\"                    a_indexeur: g.tensor(&p(\"indexer.proj.weight\")).is_some(),\"\"\"\nb = \"\"\"                    a_indexeur: {\n                        l … [918 caractères tronqués]`
+
+  ```
+ok
+BUILD_END
+  ```
+
+### 👤 Utilisateur
+
+background job bash-170 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && rm -f /tmp/dump_v41b-* && (DRAVE_DUMP_COUCHES=/tmp/dump_v41b timeout 1200 ./drave-core/target/release/drave /home/stephane/FastNVMe/modeles-lourds/DeepSeek-V4.1-Flash-Q2.gguf --couches 0:1 --tete-partielle --ppl /tmp/v41_texte.txt.ids --ctx 8 --limit 4 > /tmp/v41_runb.log 2>&1; echo "EXIT=$?" >> /tmp/v41_runb.log; python3 tools/verifier_v41_mhc.py /home/stephane/FastNVMe/modeles-lourds/DeepSeek-V4.1-Flash-Q2.gguf /tmp/dump_v41b /tmp/v41_texte.txt.ids > /tmp/v41_verifb.log 2>&1; echo "VERIF=$?" >> /tmp/v41_verifb.log)) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "tail -8 /tmp/v41_verifb.log", "description": "Read the four-equality verdict"}`
+
+  ```
+# h=5120 · hc=4 · eps=1e-20 · hc_eps=1e-06 · 24 lignes de mélange
+# positions vides : [0, 1, 2, 3]
+  pos 0 (jeton 201) : copie0 0.000e+00 · mélanges 8.354e-08 · repli FFN 1.049e-08 · tête 6.753e-07   (dynamique 3.113e+00)  OK 
+  pos 1 (jeton 438) : copie0 0.000e+00 · mélanges 8.210e-08 · repli FFN 1.449e-08 · tête 4.031e-07   (dynamique 2.939e+00)  OK 
+  pos 2 (jeton 10498) : copie0 0.000e+00 · mélanges 4.327e-08 · repli FFN 2.846e-08 · tête 4.696e-07   (dynamique 1.167e+00)  OK 
+  pos 3 (jeton 102771) : copie0 0.000e+00 · mélanges 8.594e-08 · repli FFN 4.885e-08 · tête 2.273e-07   (dynamique 1.178e+00)  OK 
+VERDICT : les quatre égalités tiennent
+VERIF=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '78,100p' reports/rapport-v41-mhc.md", "description": "Read report section 4"}`
+
+  ```
+## 4. La vérification, sur le fichier de 365,7 Go
+
+Commande (couches 0 et 1 : les seules en ratio 0, donc sans compression) :
+
+```
+DRAVE_DUMP_COUCHES=/tmp/dump_v41 ./drave-core/target/release/drave \
+    /home/stephane/FastNVMe/modeles-lourds/DeepSeek-V4.1-Flash-Q2.gguf \
+    --couches 0:1 --tete-partielle --ppl /tmp/v41_texte.txt.ids --ctx 8 --limit 4
+```
+
+`tools/verifier_v41_mhc.py` relit les vides et recalcule **en numpy**, depuis les
+tenseurs du GGUF, les trois étapes — sans passer par le code Rust :
+
+| position (jeton) | ① copie 0 = embarquement | ② les 24 mélanges | ③ la tête | dynamique |
+|---|---|---|---|---|
+| 0 (201) | **0,000e+00** | 8,354e-08 | 6,753e-07 | 3,113 |
+| 1 (438) | **0,000e+00** | 8,210e-08 | 4,031e-07 | 2,939 |
+| 2 (10498) | **0,000e+00** | 4,327e-08 | 4,696e-07 | 1,167 |
+| 3 (102771) | **0,000e+00** | 8,594e-08 | 2,273e-07 | 1,178 |
+
+- ① est **exact** : au premier raccord, le flux replié *est* la copie 0, au bit
+  près. La chaîne de V4 donnerait `(Σ pre)·embarquement` — un vecteur différent,
+  donc ce zéro est un discriminant, pas une tautologie.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/rapport-v41-mhc.md'\ns=open(p).read()\ns=s.replace(\"\"\"Commande (couches 0 et 1 : les seules en ratio 0, donc sans compression) :\"\"\",\n\"\"\"Commande — `--couches 0:1` exécute la couche **0** seule ( … [2347 caractères tronqués]`
+
+  ```
+ok
+80:Commande — `--couches 0:1` exécute la couche **0** seule (`[0,1)`) : c'est la
+88:    --couches 0:1 --tete-partielle --ppl /tmp/v41_texte.txt.ids --ctx 8 --limit 4
+113:**Verdict : les quatre égalités tiennent.** Et la chaîne écrite à l'envers n'est
+221:    --couches 0:1 --tete-partielle --ppl /tmp/v41_texte.txt.ids --ctx 8 --limit 4
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/rapport-v41-mhc.md'\ns=open(p).read()\n# W1 : ce que §5 ne prouve pas\ns=s.replace(\"\"\"Réserve assumée : l'état injecté est le même à toutes les positions, donc le pool\nd'un groupe y vaut la valeur du  … [4172 caractères tronqués]`
+
+  ```
+ok
+261
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='sprints/10-v41-la-chaine-retardee-et-le-compresseur.md'\ns=open(p).read()\ns=s.replace(\"\"\"| chaîne mHC retardée + tête sans poids | recalcul numpy depuis les tenseurs du GGUF, 4 positions | copie 0 **exacte**  … [3498 caractères tronqués]`
+
+  ```
+ok
+`rms_norm_eps` (le GGUF le déclare aussi), groupes de sources oubliés (9..13,
+15..19), `--tete-partielle` invisible dans `--options-actives` et silencieusement
+sans effet dans deux modes (il le dit maintenant). Un champ déclaré par le fichier
+et lu par personne a aussi été trouvé — `index_source_layer_ids` — et il est
+désormais lu, imprimé et vérifié contre la présence des indexeurs.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='sprints/10-v41-la-chaine-retardee-et-le-compresseur.md'\ns=open(p).read()\ns=s.replace(\"**2bis. La porte a attrapé\",\"**2. La porte a attrapé\")\ns=s.replace(\"**2. Un chiffre publié sans vérifier\",\"**3. Un c … [369 caractères tronqués]`
+
+  ```
+49:**1. « Je n'ai pas trouvé » n'est pas « ça n'existe pas ».** Le refus précédent
+57:**2. La porte a attrapé ce que mes sondes ne pouvaient pas voir.** En calculant
+67:**3. Un chiffre publié sans vérifier ce qu'il mesure est un chiffre faux.** La
+77:**4. Deux gros travaux en parallèle se sont écrasés.** Le premier essai de la
+84:**5. Ce qui a le mieux marché : le vérificateur écrit avant la confiance.** Les
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='sprints/10-v41-la-chaine-retardee-et-le-compresseur.md'\ns=open(p).read()\n# le tableau des livraisons : ajouter la quatrième égalité et le partage\ns=s.replace(\"\"\"| cache compressé partagé (34 couches consomm … [1228 caractères tronqués]`
+
+  ```
+started background job bash-171
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='docs/glossaire.md'\ns=open(p).read()\ns=s.replace(\"\"\"**Cache compressé partagé (`kv_source_layer_ids`)** — Dans V4.1, seules quelques\ncouches (**2, 8, 14, 20**) portent un compresseur et publient les clés com … [1215 caractères tronqués]`
+
+  ```
+ok
+342:**Cache compressé partagé (`kv_source_layer_ids`)** — Dans V4.1, seules quelques
+343-couches (**2, 8, 14, 20**) portent un compresseur et publient les clés compressées ;
+344-les couches suivantes (3..7, 9..13, 15..19, 21..39) **lisent les mêmes clés** au
+345-lieu de calculer les leurs. Un compresseur calculé couche par couche donnerait
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='REPRISE.md'\ns=open(p).read()\ns=s.replace(\"\"\"> **Mise à jour du 02/10 (19h) — le compresseur de V4.1, ratios 1 et 2.**\"\"\",\n\"\"\"> **Mise à jour du 02/10 (20h) — le cache compressé partagé, et une régress … [939 caractères tronqués]`
+
+  ```
+ok
+  Kimi-K2.7 : sigmoïde ×2,827              sigmoïde  ✅
+  V4-Flash : racine de softplus              racine de softplus  ✅
+  Qwen3-235B : softmax                       softmax  ✅
+  V4-Flash : --config le dit calculable      oui  ✅
+  ```
+
+- **bash** `{"command": "sleep 100; tail -5 /tmp/portes_rapide4.log", "description": "Wait for the V4-Flash gate"}`
+
+  ```
+(no output)
+[timed out after 60000ms]
+[killed by signal: SIGTERM]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-171 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'
+p='sprints/10-v41-la-chaine-retardee-et-le-compresseur.md'
+s=open(p).read()
+# le tableau des livraisons : ajouter la quatrième égalité et le partage
+s=s.replace("""| cache compressé partagé (34 couches consommatrices) | contrôle positif/négatif sur la couche 3 | sortie 1,30–2,16 d'écart selon que sa source a tourné ; source identique au bit |""",
+"""| cache compressé partagé (34 couches consommatrices) | contrôle positif/négatif sur la couche 3 | sortie 1,30–2,16 d'écart selon que sa source a tourné ; source identique au bit |
+| 4ᵉ égalité : le repli de l'entrée de la FFN | ajoutée après la relecture adverse | 1,0e-08 à 4,9e-08 |""")
+s=s.replace("""Commits : `93cb1b7` (chaîne mHC + trois correctifs de configuration + rapport),
+`e4331d4` (compresseur des ratios 1 et 2 + référence numpy).""",
+"""Commits : `93cb1b7` (chaîne mHC + trois correctifs de configuration + rapport),
+`e4331d4` (compresseur des ratios 1 et 2 + référence numpy), puis le partage du
+cache compressé, la 4ᵉ égalité, les correctifs de la revue et la régression
+`comp_largeur` (portes vertes remesurées : V4-Flash **8430,2968**).""")
+open(p,'w').write(s)
+print("ok")
+PY
+cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && (timeout 5400 tools/portes.sh rapide > /tmp/portes_rapide4.log 2>&1; echo "EXIT=$?" >> /tmp/portes_rapide4.log)) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "tail -8 /tmp/portes_rapide4.log", "description": "Read final gate results"}`
+
+  ```
+V4-Flash : racine de softplus              racine de softplus  ✅
+  Qwen3-235B : softmax                       softmax  ✅
+  V4-Flash : --config le dit calculable      oui  ✅
+  V4-Flash 43 couches ctx 32                 8430.2968  ✅
+  engram V4.1 : adressage                    rangées DISTINCTES : 479723  ✅
+
+toutes les portes sont vertes
+EXIT=0
+  ```
+
+- **bash** `{"command": "head -4 /tmp/portes_rapide4.log; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git status --porcelain | head -12", "description": "Check test count and files to commit"}`
+
+  ```
+=== Portes ===
+  cargo test --release                       60 verts  ✅
+  Qwen2.5-0.5B ctx 256                       19.3885  ✅
+  Qwen3-30B en clusters (origine : 799,8557) 799.8557  ✅
+ M REPRISE.md
+ M docs/glossaire.md
+ M docs/plan-deepseek41-complet.md
+ M drave-core/src/main.rs
+ M drave-core/src/model.rs
+ M journal/README.md
+ M journal/sessions/MANIFEST.md
+ M journal/sessions/bbd6969f-0f70-42b2-8951-64d1f2f36d2e/digest.md
+ M journal/sessions/bbd6969f-0f70-42b2-8951-64d1f2f36d2e/rapport.md
+ M reports/rapport-v41-mhc.md
+ M tools/verifier_v41_mhc.py
+?? journal/sessions/8734fc13-aeb8-4cdf-b005-c182f77be0dc/
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A REPRISE.md docs/glossaire.md docs/plan-deepseek41-complet.md drave-core/src/main.rs drave-core/src/model.rs reports/rapport-v41-mhc.md tools/verifier_v41_mhc.py sprints/10-v41-la-chaine-retardee-et-le-compresseur.md journa … [2653 caractères tronqués]`
+
+  ```
+6208ccf P7 : le cache compressé partagé de V4.1, la 4e égalité, et une régression attrapée par la porte
+e4331d4 P7 : le compresseur de V4.1 (ratios 1 et 2) tourne sur les couches SOURCES, et il est vérifié
+93cb1b7 P7 : la chaîne mHC RETARDÉE de V4.1 — implémentée, exécutée sur 365,7 Go, vérifiée
+[stderr]
+bash: line 1: kv_source_layer_ids: command not found
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log -1 --format=%B | head -20", "description": "Check the commit message integrity"}`
+
+  ```
+P7 : le cache compressé partagé de V4.1, la 4e égalité, et une régression attrapée par la porte
+
+Le partage () est branché : une couche consommatrice n'a pas
+de tenseurs de compresseur, elle lit les tampons de sa SOURCE (indexation par
+`comp_source` au lieu de `l`), et ne réécrit aucun bloc. Prouvé par un contrôle
+positif/négatif plutôt que par relecture : la sortie de la couche 3 change de 1,30
+à 2,16 selon que sa source (couche 2) a tourné ou non, tandis que la sortie de la
+source est identique AU BIT dans les deux exécutions. Une couche qui porterait à
+la fois ses tenseurs et une source déclarée est refusée (fichier contradictoire).
+
+Régression trouvée par la porte V4-Flash, pas par mes sondes : la largeur du
+compresseur calculée par `dims[0] / hidden` vaut 0 pour un CSA de V4-Flash
+(`1024 / 4096` en arithmétique entière) — 8430,2968 tombait à 5026,4538. Les
+sondes d'une seule couche ne pouvaient pas le voir : le bloc compressé n'y est
+construit qu'à la DERNIÈRE position évaluée, jamais notée. Corrigé (`dims[0]`),
+portes remesurées vertes : V4-Flash 8430,2968, 60 tests.
+
+Ronde de corrections après relecture ADVERSARiale (sous-agent, lecture seule) :
+ · 4e égalité qui ferme un vr
+… [131 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log -1 --format=%B > /tmp/msg_old.txt && python3 - <<'PY'\nm = open('/tmp/msg_old.txt').read()\nm = m.replace(\"Le partage () est branché\", \"Le partage (`kv_source_layer_ids`) est branché\")\nm = m.replace(\"ADVERSARiale\", \"a … [181 caractères tronqués]`

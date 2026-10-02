@@ -50,6 +50,17 @@ cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && cargo build --r
 > du pilote, et `--gpu-banc` retrouve l'exactitude des noyaux — 1,6 ms par ligne
 > en warp-par-ligne contre 7,2 ms sur 30 fils CPU, **écart max 1,99e-7**.
 >
+> **Mise à jour du 02/10 (20h) — le cache compressé partagé, et une régression
+> attrapée par la porte.** Les **34 couches consommatrices** de V4.1 lisent
+> maintenant les tampons de leur source (`comp_source`), prouvé par un contrôle
+> positif/négatif (sortie de la couche 3 : 1,30 à 2,16 d'écart selon que sa source
+> a tourné ; sortie de la source 2 identique au bit). En chemin, une régression :
+> la largeur du compresseur calculée par `dims[0] / hidden` donnait **0** aux
+> couches CSA de V4-Flash (`1024 / 4096` en entiers) et la porte est tombée de
+> **8430,2968** à **5026,4538** — attrapée par la porte du modèle entier, pas par
+> les sondes d'une seule couche (le bloc compressé n'y est construit qu'à la
+> dernière position, jamais notée). Corrigé, remesuré : **8430,2968**.
+>
 > **Mise à jour du 02/10 (19h) — le compresseur de V4.1, ratios 1 et 2.** Les
 > **couches sources** (celles qui possèdent leurs tenseurs de compresseur : 2, 8,
 > 14, 20) tournent et sont vérifiées contre une référence numpy écrite depuis le
