@@ -98,6 +98,30 @@ route "Kimi-K2.7 : sigmoïde ×2,827" "$M/Kimi-K2.7-Code-UD-IQ1_M/Kimi-K2.7-Code
 route "V4-Flash : racine de softplus" "$M/DeepSeek-V4-Flash-UD-IQ1_M/DeepSeek-V4-Flash-UD-IQ1_M-00001-of-00003.gguf" "racine de softplus"
 route "Qwen3-235B : softmax" "$M/Qwen3-235B-A22B-Q2_K/Qwen3-235B-A22B-Instruct-2507-Q2_K-00001-of-00002.gguf" "softmax"
 
+# 6bis. V4-Flash : le modèle de la famille V4 tourne EN ENTIER (43 couches, les
+#       trois régimes d'attention : brute, HCA, CSA + indexeur). Sa perplexité
+#       est un chiffre de référence : si elle dérive, c'est que le calcul a
+#       changé. Les identifiants viennent de SON tokenizer, jamais d'un autre.
+V4=/home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek-V4-Flash-UD-IQ1_M/DeepSeek-V4-Flash-UD-IQ1_M-00001-of-00003.gguf
+if [ -f "$V4" ]; then
+    v=$($D "$V4" --config 2>/dev/null | grep -oE "calculable +: .*")
+    case "$v" in
+        *": oui"*) printf "  %-42s %s  ✅\n" "V4-Flash : --config le dit calculable" "oui" ;;
+        *)         printf "  %-42s %s  ❌\n" "V4-Flash : --config le dit calculable" "${v:-—}"; ECHEC=1 ;;
+    esac
+    if [ ! -s /tmp/ids_v4flash.txt ]; then
+        [ -s /tmp/wt2_txt.txt ] || head -c 20000 data/wikitext2_test.txt > /tmp/wt2_txt.txt
+        $D "$V4" --tokenize --fichier /tmp/wt2_txt.txt --sortie /tmp/ids_v4flash.txt >/dev/null 2>&1
+    fi
+    if [ -s /tmp/ids_v4flash.txt ]; then
+        p=$(timeout 2400 $D "$V4" --ppl /tmp/ids_v4flash.txt --ctx 32 --limit 5 \
+            --dense --threads 16 2>&1 | valeur)
+        compare "V4-Flash 43 couches ctx 32" "8430.2968" "$p"
+    fi
+elif [ "$RAPIDE" != "rapide" ]; then
+    printf "  %-42s %s\n" "V4-Flash 43 couches ctx 32" "modèle absent"
+fi
+
 # 7. gpt-oss : `--config` d'abord (gratuit), puis la perplexité (~20 min).
 #    La porte `--config` existe parce qu'un refus FAUX est un refus trompeur :
 #    `attn_sinks` était compté comme un manque V4 alors que les puits appris sont

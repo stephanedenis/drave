@@ -79007,3 +79007,38 @@ Created file
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='docs/plan-deepseek41-complet.md'\ns=open(p).read()\na=\"\"\"### P7 — Adaptation à V4.1, et la question de provenance (≈ ½ journée + action externe)\"\"\"\nb=\"\"\"### P7 — Adaptation à V4.1, et la question de  … [2804 caractères tronqués]`
+
+  ```
+ok
+=== Portes ===
+  cargo test --release                       53 verts  ✅
+  Qwen2.5-0.5B ctx 256                       19.3885  ✅
+c1b7197 P7 : le constat de provenance de V4.1, établi et nommé (aucun code à écrire, deux manques)
+  ```
+
+### 🤖 Assistant
+
+⏵ Pérenniser : ajout d'une porte V4-Flash à `tools/portes.sh` (le chiffre ne doit pas dériver).
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='tools/portes.sh'\ns=open(p).read()\na=\"\"\"# 7. gpt-oss : `--config` d'abord (gratuit), puis la perplexité (~20 min).\"\"\"\nb=\"\"\"# 6bis. V4-Flash : le modèle de la famille V4 tourne EN ENTIER (43 couches, … [1669 caractères tronqués]`
+
+  ```
+ok
+syntaxe ok
+=== Portes ===
+  cargo test --release                       53 verts  ✅
+  Qwen2.5-0.5B ctx 256                       19.3885  ✅
+  Qwen3-30B en clusters (origine : 799,8557) 799.8557  ✅
+  threads par défaut (physiques)            20  ✅
+  (portes de formats : ignorées en mode rapide)
+  GLM-5.3 : sigmoïde ×2,5                  sigmoïde  ✅
+  Kimi-K2.7 : sigmoïde ×2,827              sigmoïde  ✅
+  V4-Flash : racine de softplus              racine de softplus  ✅
+  Qwen3-235B : softmax                       softmax  ✅
+  V4-Flash : --config le dit calculable      oui  ✅
+  V4-Flash 43 couches ctx 32                 8430.2968  ✅
+
+toutes les portes sont vertes
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='REPRISE.md'\ns=open(p).read()\na=\"\"\"| `tools/portes_formats.sh` | **17 formats × 2 blocs** | tous exacts contre libggml |\"\"\"\nb=\"\"\"| `tools/portes_formats.sh` | **17 formats × 2 blocs** | tous exacts  … [621 caractères tronqués]`

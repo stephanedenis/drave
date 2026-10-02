@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 98.1 h |
+| Durée | 98.2 h |
 | Tours | 77 |
-| Messages | 4903 |
-| Appels d'outils | 4681 |
+| Messages | 4905 |
+| Appels d'outils | 4683 |
 | Fichiers touchés | 95 |
-| Commandes | 4047 |
+| Commandes | 4049 |
 | Sous-agents | 29 |
-| Commits | 340 |
+| Commits | 341 |
 | Compactages de contexte | 6 |
 
 ## Objectifs déclarés
@@ -3941,7 +3941,7 @@ V4-Flash contre llama.cpp : perplexité **678,09 contre 548,32** (NLL +0,21 nat)
 
 ### Tour 77 — <goal_round> Objective: "Exécuter le plan docs/plan-deepseek41-complet.md phase par phase (P0→P9), en autonomie, en resp … [941 caractères tronqués]
 
-*68 appels d'outils.* Actions notables :
+*70 appels d'outils.* Actions notables :
 
 - bash — Find the channel-count validation
 - bash — Read the validation and the hidden definition
@@ -3957,11 +3957,11 @@ V4-Flash contre llama.cpp : perplexité **678,09 contre 548,32** (NLL +0,21 nat)
 - bash — Remove the refusal and run distributed
 - bash — Find the pilot's reply validation
 - bash — Fix the pilot reply validation
-- … et 48 autres
+- … et 50 autres
 
 **Synthèse produite :**
 
-⏵ P7 : le constat de provenance est net. Rapport et mise à jour du plan.
+⏵ Pérenniser : ajout d'une porte V4-Flash à `tools/portes.sh` (le chiffre ne doit pas dériver).
 
 ## 3. Travail accompli
 
@@ -4139,7 +4139,7 @@ V4-Flash contre llama.cpp : perplexité **678,09 contre 548,32** (NLL +0,21 nat)
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 4007 autres
+- … et 4009 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4627,4 +4627,5 @@ V4-Flash contre llama.cpp : perplexité **678,09 contre 548,32** (NLL +0,21 nat)
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF' p='docs/plan-deepseek41-complet.md' s=open(p).read() a="""### P6 — V4-Flash complet, e
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF' p='reports/rapport-v4-reparti.md' s=open(p).read() a="""## 4. Ce que ce n'est pas""" b
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF' p='docs/plan-deepseek41-complet.md' s=open(p).read() a="""### P7 — Adaptation à V4.1, 
+- Portes : V4-Flash entre dans tools/portes.sh (--config calculable + perplexité 8430,2968) — un chiffre de référence qui dérive sans qu'on s'en aperçoive ne vaut
 

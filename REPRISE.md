@@ -1018,6 +1018,7 @@ exception documentée à la politique de stockage) : 698 Go libres, et un NVMe f
 | gpt-oss-120b MXFP4 ctx 256 | **15,6017** | **changée** (15,1757 avant) — voir ci-dessous |
 | `cargo test --release` | **48** | 41 avant |
 | `tools/portes_formats.sh` | **17 formats × 2 blocs** | tous exacts contre libggml |
+| V4-Flash, 43 couches | **8 430,2968** à ctx 32 (4 jetons notés) | le modèle de la famille V4 tourne en entier — les trois régimes d'attention (brute, HCA, CSA + indexeur) dans la même passe. `tools/portes.sh` le vérifie |
 
 **Pourquoi gpt-oss a changé.** Le moteur mettait le biais du routeur dans le
 softmax des poids ; llama.cpp le met dans la **sélection** seulement
