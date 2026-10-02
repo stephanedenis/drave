@@ -505,6 +505,16 @@ pub struct Cfg {
     /// Étirement de contexte YaRN : `(facteur, beta_rapide, beta_lent,
     /// contexte d'origine)`. `None` pour un RoPE ordinaire.
     pub yarn: Option<(f32, f32, f32, f32, bool)>,
+    /// **Ce que le modèle DÉCLARE**, indépendamment de la décision du moteur :
+    /// `(facteur, beta_rapide, beta_lent, contexte d'origine)`. La distinction
+    /// compte : `yarn` porte le régime RETARDÉ (RoPE simple sous 4 × la longueur
+    /// d'origine, mesuré sur gpt-oss), tandis qu'ici on garde la déclaration
+    /// brute — dont les couches COMPRESSÉES de V4 ont besoin, parce que llama.cpp
+    /// (`src/models/deepseek4.cpp:872-879`) ET vLLM
+    /// (`models/deepseek_v41/common/rope.py:28-46`) appliquent YaRN à TOUTES les
+    /// positions dès que `compress_ratio > 0`, et le RoPE simple seulement sur
+    /// les couches brutes.
+    pub yarn_declare: Option<(f32, f32, f32, f32)>,
 }
 
 /// Une projection, dans l'un des deux formats, plus son biais éventuel.
@@ -1213,6 +1223,13 @@ pub struct Mla4 {
     /// tournent à des bases différentes, et se tromper donne des scores
     /// plausibles **et faux** dès que la position dépasse 0.
     pub rope_base_compresse: f32,
+    /// **YaRN des couches compressées** (`facteur, beta_rapide, beta_lent,
+    /// contexte d'origine`) : la déclaration du modèle, appliquée à TOUTES les
+    /// positions dès que `ratio > 0` — c'est ce que font llama.cpp
+    /// (`deepseek4.cpp:872-879`) et vLLM (`rope.py:28-46`). `None` sur une couche
+    /// brute (leur RoPE reste simple, YaRN y étant l'identité) ou quand le modèle
+    /// ne déclare pas YaRN.
+    pub yarn_compresse: Option<(f32, f32, f32, f32)>,
     /// Fenêtre brute des couches compressées (`attention.sliding_window`) : ce
     /// que l'attention garde en clair, le reste passant par les blocs.
     pub fenetre: usize,
@@ -2594,6 +2611,9 @@ impl Model {
                        .unwrap_or("").to_string();
         let r = routage_du_gguf(&g);
         let (n_expert, n_expert_used, ffn_exp) = (r.n_expert, r.n_expert_used, r.ffn_exp);
+        // Ce que le modèle déclare en YaRN : lu DANS le littéral (une seule fois),
+        // ressorti ici pour les couches compressées.
+        let mut declaration_yarn: Option<(f32, f32, f32, f32)> = None;
         let cfg = Cfg {
             n_layer: dim_gguf(&g, &["block_count", "num_hidden_layers"], "num_hidden_layers")
                          .unwrap_or(0) as usize,
@@ -2666,6 +2686,10 @@ impl Model {
             // fréquences en cours de séquence détruit cette propriété pour
             // toutes les paires qui traversent la frontière — c'est un choix de
             // conception, pas une simplification.
+            // Ce que le modèle DÉCLARE : rempli juste après le littéral, depuis
+            // la lecture faite dans le bloc `yarn:` ci-dessous (une seule lecture
+            // des métadonnées, deux usages).
+            yarn_declare: None,
             yarn: {
                 // **Trois sources, dans cet ordre** (le même schéma que le
                 // routage) : la clef GGUF normalisée, puis le JSON `<arch>.config`
@@ -2689,7 +2713,7 @@ impl Model {
                         .or_else(|| g.json_nombre(cle_json))
                         .unwrap_or(def)
                 };
-                let declare = match type_declare.as_deref() {
+                let declare_yarn = match type_declare.as_deref() {
                     Some("yarn") => Some((
                         nombre("rope.scaling.factor", "factor", 1.0) as f32,
                         nombre("rope.scaling.yarn_beta_fast", "beta_fast", 32.0) as f32,
@@ -2710,6 +2734,15 @@ impl Model {
                     )),
                     _ => None,
                 };
+                // La déclaration brute, sans la composante `mscale` (qui est une
+                // décision, pas une déclaration).
+                let declare_yarn = declare_yarn.map(|(f, bf, bl, o, _)| (f, bf, bl, o));
+                declaration_yarn = declare_yarn;
+                let declare = declare_yarn.map(|(f, bf, bl, o)| (
+                    f, bf, bl, o,
+                    std::env::var("DRAVE_YARN_MSCALE").map(|v| v != "0")
+                        .unwrap_or_else(|_| std::env::var("DRAVE_YARN").is_ok()),
+                ));
                 let toujours = std::env::var("DRAVE_YARN").is_ok();
                 let jamais = std::env::var("DRAVE_YARN_NON").is_ok();
                 // Seuil de bascule : mesuré au protocole apparié (`--depuis`,
@@ -2732,6 +2765,7 @@ impl Model {
         let cfg = {
             let mut c = cfg;
             if c.head_dim == 0 { c.head_dim = c.hidden / c.n_head.max(1); }
+            c.yarn_declare = declaration_yarn;
             c
         };
         // AVANT toute construction : si le moteur ne sait pas calculer cette
@@ -3047,6 +3081,12 @@ n'est pas dans `index_source_layer_ids` {idx_sources:?} — le fichier se contre
                     nh: cfg.n_head, h: cfg.hidden, head_dim: hd, rope: nr,
                     n_groups, o_lora, rope_base: base, eps: cfg.eps,
                     ratio, rope_base_compresse: base_comp, fenetre,
+                    // `DRAVE_YARN_NON` (et `--sans-yarn`) veut dire « JAMAIS de YaRN » : il
+                    // doit donc aussi couper celui des couches compressées, sinon le
+                    // drapeau ne ferait plus ce qu'il annonce. C'est ce qui permet de
+                    // MESURER les deux régimes contre llama.cpp.
+                    yarn_compresse: if ratio != 0
+                        && std::env::var("DRAVE_YARN_NON").is_err() { cfg.yarn_declare } else { None },
                     comp_kv, comp_gate, comp_ape, comp_norm,
                 });
             }
@@ -4237,6 +4277,69 @@ l'applique partout, comme la référence",
         }
     }
 
+    /// **Le RoPE des couches COMPRESSÉES de V4 : convention NORM + YaRN.**
+    ///
+    /// Pourquoi il existe : llama.cpp (`src/models/deepseek4.cpp:872-879`) **et**
+    /// vLLM (`models/deepseek_v41/common/rope.py:28-46`) appliquent YaRN à
+    /// TOUTES les positions dès que `compress_ratio > 0`, et le RoPE simple
+    /// seulement sur les couches brutes :
+    ///
+    /// ```c
+    /// const bool use_compress_rope = hparams.dsv4_compress_ratios[il] != 0;
+    /// const float freq_scale_l = use_compress_rope ? freq_scale : 1.0f;
+    /// const float ext_factor_l = use_compress_rope ? ext_factor : 0.0f;
+    /// ```
+    ///
+    /// Le moteur appliquait son régime *retardé* (RoPE simple sous 4 × la
+    /// longueur d'origine) sur ces couches aussi, et **aucune vérification ne
+    /// pouvait le voir** : YaRN n'interpole que les basses fréquences, dont les
+    /// angles sont minuscules aux positions courtes (à la position 4, la paire la
+    /// plus lente tourne de 4e-4 rad contre 2,5e-5 interpolée). Les comparaisons
+    /// à 0,9999 contre llama.cpp (bloc tourné à la position 4, positions 8-9)
+    /// étaient donc aveugles à ce choix ; à la position 1 024 l'écart d'angle
+    /// passe à 0,1 rad contre 6,4e-3.
+    ///
+    /// `mscale` est **désactivé** : llama.cpp le calcule puis l'annule
+    /// (`llama-context.cpp:492-494` : « when YARN is applied with yarn_ext_factor
+    /// != 0.0f, we need to cancel this factor »), et vLLM le met à 0
+    /// (`rope.py:44-45`) — les deux références concordent.
+    #[allow(clippy::too_many_arguments)]
+    fn rope_norm_yarn(v: &mut [f32], n_head: usize, head_dim: usize, pos: usize, base: f32,
+                      facteur: f32, beta_rapide: f32, beta_lent: f32, ctx_origine: f32,
+                      n_rot: usize, inverse: bool) {
+        let n_rot = if n_rot == 0 || n_rot > head_dim { head_dim } else { n_rot };
+        let half = n_rot / 2;
+        let ln_base = base.ln();
+        // Les dimensions de correction se comptent sur les dimensions TOURNÉES
+        // (`rope_yarn_corr_dims(n_dims = rot_dim, …)`), pas sur la tête entière :
+        // pour V4 elles font 64, pas 512.
+        let corr0 = (n_rot as f32 * (ctx_origine / (beta_rapide * 2.0 * std::f32::consts::PI)).ln()
+                     / (2.0 * ln_base)).floor();
+        let corr1 = (n_rot as f32 * (ctx_origine / (beta_lent * 2.0 * std::f32::consts::PI)).ln()
+                     / (2.0 * ln_base)).ceil();
+        for h in 0..n_head {
+            let t = &mut v[h * head_dim..(h + 1) * head_dim];
+            for i in 0..half {
+                let freq = 1.0 / base.powf(2.0 * i as f32 / n_rot as f32);
+                let theta_extrap = pos as f32 * freq;
+                let theta_interp = theta_extrap / facteur;
+                let rampe = if std::env::var("DRAVE_YARN_RAMPE").map_or(false, |v| v == "0") {
+                    0.0
+                } else {
+                    let y = (i as f32 - corr0) / (corr1 - corr0).max(0.001);
+                    1.0 - y.clamp(0.0, 1.0)
+                };
+                let theta = theta_interp * (1.0 - rampe) + theta_extrap * rampe;
+                let (s, c) = theta.sin_cos();
+                let (s, c) = if inverse { (-s, c) } else { (s, c) };
+                let a = t[2 * i];
+                let bb = t[2 * i + 1];
+                t[2 * i] = a * c - bb * s;
+                t[2 * i + 1] = bb * c + a * s;
+            }
+        }
+    }
+
     /// **Rotation INVERSE** (dé-rotation), celle de `ggml_rope_ext_back` :
     /// mêmes appariements, angle opposé. Elle sert à l'attention de V4, qui
     /// tourne la partie rope de sa sortie AVANT la projection groupée.
@@ -5045,6 +5148,19 @@ s'applique pas — utilisez --lot 1, ou réenregistrez sans DRAVE_TRACE_BLOCS");
         // (160 000) ; les couches brutes à `rope.freq_base` (10 000). Deux
         // régimes, deux bases — et le même `rope_norm` des deux côtés.
         let base_rope = if m.ratio != 0 { m.rope_base_compresse } else { m.rope_base };
+        // **La rotation d'une couche compressée est YaRN, pas le RoPE simple.**
+        // Une seule porte pour les six rotations de cette fonction (requête, clé,
+        // clé de bloc, clé et requête d'indexeur, dé-rotation) : llama.cpp utilise
+        // les MÊMES paramètres de rotation pour toutes (`freq_base_l`,
+        // `freq_scale_l`, `ext_factor_l`, `n_ctx_orig_l` — `deepseek4.cpp:900`,
+        // `:919`, `:1124`), et le moteur doit faire pareil, sinon deux rotations
+        // d'une même couche divergeraient.
+        let tourner = |v: &mut [f32], nh: usize, hd: usize, p: usize, nr: usize, inv: bool| {
+            match m.yarn_compresse {
+                Some((f, bf, bl, o)) => Self::rope_norm_yarn(v, nh, hd, p, base_rope, f, bf, bl, o, nr, inv),
+                None => Self::rope_norm(v, nh, hd, p, base_rope, nr, inv),
+            }
+        };
         // L'indexeur choisit les blocs gardés ; il n'est pas implémenté. Tant
         // qu'il y a moins de blocs que son top-k, il les garde TOUS — le
         // résultat est alors exact, et on l'exécute. Au-delà, on refuse : un
@@ -5078,7 +5194,7 @@ s'applique pas — utilisez --lot 1, ou réenregistrez sans DRAVE_TRACE_BLOCS");
                 qp[hh * nr..(hh + 1) * nr]
                     .copy_from_slice(&q[hh * hd + nope..(hh + 1) * hd]);
             }
-            Self::rope_norm(&mut qp, nh, nr, pos, base_rope, nr, false);
+            tourner(&mut qp, nh, nr, pos, nr, false);
             for hh in 0..nh {
                 q[hh * hd + nope..(hh + 1) * hd].copy_from_slice(&qp[hh * nr..(hh + 1) * nr]);
             }
@@ -5091,7 +5207,7 @@ s'applique pas — utilisez --lot 1, ou réenregistrez sans DRAVE_TRACE_BLOCS");
         {
             let mut kp = vec![0f32; nr];
             kp.copy_from_slice(&kvn[nope..]);
-            Self::rope_norm(&mut kp, 1, nr, pos, base_rope, nr, false);
+            tourner(&mut kp, 1, nr, pos, nr, false);
             kvn[nope..].copy_from_slice(&kp);
         }
         Self::vider_couche(dump, "kv_norm", l, pos, &kvn);
@@ -5242,7 +5358,7 @@ et 4, 128 (V4)", m.ratio);
                     let idn = idh - idr;
                     let mut kp = vec![0f32; idr];
                     kp.copy_from_slice(&kn[idn..]);
-                    Self::rope_norm(&mut kp, 1, idr, debut, base_rope, idr, false);
+                    tourner(&mut kp, 1, idr, debut, idr, false);
                     kn[idn..].copy_from_slice(&kp);
                     etat.idx_cles[bloc * idh..(bloc + 1) * idh].copy_from_slice(&kn);
                     *paires += (m.idx_k.len() + idh) as u64;
@@ -5251,7 +5367,7 @@ et 4, 128 (V4)", m.ratio);
                 {
                     let mut kp = vec![0f32; nr];
                     kp.copy_from_slice(&norm[nope..]);
-                    Self::rope_norm(&mut kp, 1, nr, debut, base_rope, nr, false);
+                    tourner(&mut kp, 1, nr, debut, nr, false);
                     norm[nope..].copy_from_slice(&kp);
                 }
                 cles[bloc * hd..(bloc + 1) * hd].copy_from_slice(&norm);
@@ -5332,7 +5448,7 @@ d'indexeur — ni la couche ni sa source de KV n'a `indexer.attn_k`");
                 {
                     let mut kp = vec![0f32; idr];
                     kp.copy_from_slice(&norm[idn..]);
-                    Self::rope_norm(&mut kp, 1, idr, debut, base_rope, idr, false);
+                    tourner(&mut kp, 1, idr, debut, idr, false);
                     norm[idn..].copy_from_slice(&kp);
                 }
                 etat.idx_cles[bloc * idh..(bloc + 1) * idh].copy_from_slice(&norm);
@@ -5352,7 +5468,7 @@ d'indexeur — ni la couche ni sa source de KV n'a `indexer.attn_k`");
                         qp[hh * idr..(hh + 1) * idr]
                             .copy_from_slice(&q[hh * idh + idn..(hh + 1) * idh]);
                     }
-                    Self::rope_norm(&mut qp, m.idx_nh, idr, pos, base_rope, idr, false);
+                    tourner(&mut qp, m.idx_nh, idr, pos, idr, false);
                     for hh in 0..m.idx_nh {
                         q[hh * idh + idn..(hh + 1) * idh]
                             .copy_from_slice(&qp[hh * idr..(hh + 1) * idr]);
@@ -5475,7 +5591,7 @@ d'indexeur — ni la couche ni sa source de KV n'a `indexer.attn_k`");
             // bug qui a coûté le plus cher à voir : les 448 dimensions nope
             // étaient justes à 0,4 %, les 64 dimensions rope fausses de 10 %,
             // et la corrélation globale (0,996) restait « plausible ».
-            Self::rope_norm(&mut op, nh, nr, pos, base_rope, nr, true);
+            tourner(&mut op, nh, nr, pos, nr, true);
             for hh in 0..nh {
                 sortie[hh * hd + nope..(hh + 1) * hd]
                     .copy_from_slice(&op[hh * nr..(hh + 1) * nr]);

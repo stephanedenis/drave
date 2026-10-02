@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 100.2 h |
+| Durée | 100.5 h |
 | Tours | 79 |
-| Messages | 5474 |
-| Appels d'outils | 5249 |
-| Fichiers touchés | 105 |
-| Commandes | 4432 |
+| Messages | 5543 |
+| Appels d'outils | 5311 |
+| Fichiers touchés | 106 |
+| Commandes | 4492 |
 | Sous-agents | 30 |
-| Commits | 358 |
+| Commits | 359 |
 | Compactages de contexte | 7 |
 
 ## Objectifs déclarés
@@ -4037,7 +4037,7 @@ P0-P6 faites, P8 portée et val
 
 ### Tour 79 — <goal_round> Objective: "Exécuter le plan docs/plan-deepseek41-complet.md phase par phase (P0→P9), en autonomie, en resp … [941 caractères tronqués]
 
-*509 appels d'outils.* Actions notables :
+*571 appels d'outils.* Actions notables :
 
 - web_search
 - web_fetch
@@ -4053,11 +4053,11 @@ P0-P6 faites, P8 portée et val
 - bash — Locate hc_collapse_triton definition
 - read
 - bash — Read mHC init and pre/post call sites
-- … et 434 autres
+- … et 496 autres
 
 **Synthèse produite :**
 
-Now the key construction inside the block builder, and removing the bypass:
+⏵ Comparing YaRN vs plain against llama.cpp with the right layout
 
 ## 3. Travail accompli
 
@@ -4107,7 +4107,7 @@ Now the key construction inside the block builder, and removing the bypass:
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/vision.md` | 1 | 3 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/histoire.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/roadmap.md` | 1 | 0 |
-| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs` | 0 | 88 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs` | 0 | 89 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/main.rs` | 0 | 13 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/gpu.rs` | 0 | 3 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-gpu-topk-selection.md` | 1 | 0 |
@@ -4170,6 +4170,7 @@ Now the key construction inside the block builder, and removing the bypass:
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/v41_compresseur_reference.py` | 1 | 1 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/sprints/10-v41-la-chaine-retardee-et-le-compresseur.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/verifier_v41_engram.py` | 1 | 1 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-v4-yarn-compresse.md` | 1 | 0 |
 
 ### Sous-agents lancés
 
@@ -4246,7 +4247,7 @@ Now the key construction inside the block builder, and removing the bypass:
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 4392 autres
+- … et 4452 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4374,7 +4375,7 @@ Now the key construction inside the block builder, and removing the bypass:
 
 ## 5. Erreurs rencontrées
 
-289 sorties en erreur ou divergentes. Les premières :
+293 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : a8f2635f8 docs: record which models this box is good at, and why src/llama-hparams.cpp:8:void llama_hparams::set_swa_pattern(uint32_t n_pattern, bool dense_first) { src/llama-hparams.h:308:    void se
 - **T1** : 511 tokens notés — perplexité cumulée 247.031  (4.9 tok/s) === perplexité 247.0308 sur 511 tokens (0 événements, 104.5 s) ===  ### B3 harmony assistant 511 --- ref --- 0.0 0.0 0:00 ls: cannot access '
@@ -4752,4 +4753,5 @@ Now the key construction inside the block builder, and removing the bypass:
 - P7 : l'engram de V4.1 branché dans la passe avant — et la première passe COMPLÈTE des 40 couches  Le dernier manque de code de P7 est levé. Sont dans la passe a
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' m = """P7 : l'engram de V4.1 branché dans la passe avant — et la première passe COMPLÈTE 
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -E "V4-Flash 43|cargo test|Qwen2.5" /tmp/portes_rapide6.log; python3 - <<'PY' m = """P7 : l'indexeur 
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' m = """V4-Flash : la rotation des couches compressées passe au YaRN (et la porte change) 
 

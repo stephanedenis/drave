@@ -88747,3 +88747,908 @@ EXIT=0
 background job bash-177 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && (timeout 5400 tools/portes.sh rapide > /tmp/portes_rapide6.log 2>&1; echo "EXIT=$?" >> /tmp/portes_rapide6.log)) finished [status: completed, exit code: 0]. Read its output with job_output.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -E \"V4-Flash 43|cargo test|Qwen2.5\" /tmp/portes_rapide6.log; python3 - <<'PY'\nm = \"\"\"P7 : l'indexeur de V4.1 — clés tirées du latent, cache partagé, et vérifié\n\nDernier manque de code de P7. L'indexeur de V4.1 n'a PAS de … [2139 caractères tronqués]`
+
+  ```
+cargo test --release                       60 verts  ✅
+  Qwen2.5-0.5B ctx 256                       19.3885  ✅
+  V4-Flash 43 couches ctx 32                 8430.2968  ✅
+43c677d P7 : l'indexeur de V4.1 — clés tirées du latent, cache partagé, et vérifié
+  ```
+
+### 🤖 Assistant
+
+⏵ Settling the YaRN question by reading llama.cpp's V4 rope code
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/llama.cpp 2>/dev/null && git log --oneline -1 && ls src/models/ | head -20 && ls src/models/ | grep -i deep", "description": "Check the llama.cpp checkout"}`
+
+  ```
+a8f2635f8 docs: record which models this box is good at, and why
+afmoe.cpp
+apertus.cpp
+arcee.cpp
+arctic.cpp
+arwkv7.cpp
+baichuan.cpp
+bailingmoe2.cpp
+bailingmoe.cpp
+bert.cpp
+bitnet.cpp
+bloom.cpp
+chameleon.cpp
+chatglm.cpp
+codeshell.cpp
+cogvlm.cpp
+cohere2.cpp
+cohere2moe.cpp
+command-r.cpp
+dbrx.cpp
+deci.cpp
+deepseek2.cpp
+deepseek2ocr.cpp
+deepseek32.cpp
+deepseek4.cpp
+deepseek.cpp
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/llama.cpp && wc -l src/models/deepseek4.cpp && grep -n \"yarn\\|rope_scaling\\|freq_base\\|rope_type\\|compress_rope\" src/models/deepseek4.cpp | head -25", "description": "Search llama.cpp's V4 for yarn handling"}`
+
+  ```
+1253 src/models/deepseek4.cpp
+39:    ml.get_key(LLM_KV_ATTENTION_COMPRESS_ROPE_FREQ_BASE,    hparams.dsv4_compress_rope_base);
+430:    comp_pe = ggml_rope_ext(ctx0, comp_pe, comp_pos, nullptr, n_embd_head_rope, rope_type, n_ctx_orig,
+431:            hparams.dsv4_compress_rope_base, freq_scale, ext_factor,
+514:    comp_pe = ggml_rope_ext(ctx0, comp_pe, comp_pos, nullptr, n_embd_head_rope, rope_type, n_ctx_orig,
+515:            hparams.dsv4_compress_rope_base, freq_scale, ext_factor,
+558:            rope_type, n_ctx_orig, hparams.dsv4_compress_rope_base, freq_scale,
+872:    const bool use_compress_rope = hparams.dsv4_compress_ratios[il] != 0;
+873:    const float freq_base_l      = use_compress_rope ? hparams.dsv4_compress_rope_base : freq_base;
+874:    const float freq_scale_l     = use_compress_rope ? freq_scale : 1.0f;
+875:    const float ext_factor_l     = use_compress_rope ? ext_factor : 0.0f;
+877:    const float beta_fast_l      = use_compress_rope ? beta_fast : 0.0f;
+878:    const float beta_slow_l      = use_compress_rope ? beta_slow : 0.0f;
+879:    const int32_t n_ctx_orig_l   = use_compress_rope ? n_ctx_orig : 0;
+900:    q_pe = ggml_rope_ext(ctx0, q_pe, inp_pos, nullptr, n_e
+… [553 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"fn rope_yarn\" -A 45 drave-core/src/model.rs | head -55", "description": "Read my YaRN implementation"}`
+
+  ```
+4095:    fn rope_yarn(v: &mut [f32], n_head: usize, head_dim: usize, pos: usize, base: f32,
+4096-                 facteur: f32, beta_rapide: f32, beta_lent: f32, ctx_origine: f32,
+4097-                 mscale_actif: bool, n_rot: usize) {
+4098-        let n_rot = if n_rot == 0 || n_rot > head_dim { head_dim } else { n_rot };
+4099-        let half = n_rot / 2;
+4100-        let ln_base = base.ln();
+4101-        let corr0 = (head_dim as f32 * (ctx_origine / (beta_rapide * 2.0 * std::f32::consts::PI)).ln()
+4102-                     / (2.0 * ln_base)).floor();
+4103-        let corr1 = (head_dim as f32 * (ctx_origine / (beta_lent * 2.0 * std::f32::consts::PI)).ln()
+4104-                     / (2.0 * ln_base)).ceil();
+4105-        // La mise à l'échelle de température compense l'entropie du softmax
+4106-        // quand le nombre de clés grandit ; à contexte court, elle rend
+4107-        // l'attention trop tranchée. Séparable de l'interpolation.
+4108-        let mscale = if mscale_actif { 1.0 + 0.1 * facteur.ln() } else { 1.0 };
+4109-        for h in 0..n_head {
+4110-            let t = &mut v[h * head_dim..(h + 1) * head_dim];
+4111-            for i in 0..half {
+4112-                let 
+… [1873 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"fn rope_norm\" -A 30 drave-core/src/model.rs | head -35", "description": "Read rope_norm"}`
+
+  ```
+4220:    fn rope_norm(v: &mut [f32], n_head: usize, head_dim: usize, pos: usize, base: f32,
+4221-                 n_rot: usize, inverse: bool) {
+4222-        let n_rot = if n_rot == 0 || n_rot > head_dim { head_dim } else { n_rot };
+4223-        let half = n_rot / 2;
+4224-        for h in 0..n_head {
+4225-            let t = &mut v[h * head_dim..(h + 1) * head_dim];
+4226-            for i in 0..half {
+4227-                // La fréquence suit le même barème dans les deux conventions :
+4228-                // seul l'appariement change (`ic = i0` contre `ic = i0/2`).
+4229-                let freq = 1.0 / base.powf(2.0 * i as f32 / n_rot as f32);
+4230-                let (s, c) = (pos as f32 * freq).sin_cos();
+4231-                let (s, c) = if inverse { (-s, c) } else { (s, c) };
+4232-                let a = t[2 * i];
+4233-                let b = t[2 * i + 1];
+4234-                t[2 * i] = a * c - b * s;
+4235-                t[2 * i + 1] = b * c + a * s;
+4236-            }
+4237-        }
+4238-    }
+4239-
+4240-    /// **Rotation INVERSE** (dé-rotation), celle de `ggml_rope_ext_back` :
+4241-    /// mêmes appariements, angle opposé. Elle sert à l'attention de V4, qui
+4242-    /// to
+… [540 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/llama.cpp && grep -rn \"rope_attn_factor\\|attn_factor\" src/llama-hparams.cpp src/llama-model.cpp 2>/dev/null | head -12", "description": "Find llama.cpp's attn_factor default"}`
+
+  ```
+src/llama-model.cpp:1208:    ml.get_key(LLM_KV_ROPE_SCALING_ATTN_FACTOR, hparams.rope_attn_factor, false);
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/llama.cpp && sed -n '1185,1215p' src/llama-model.cpp; grep -rn \"rope_attn_factor\" src/*.cpp src/*.h | head", "description": "Read the rope attn_factor loading"}`
+
+  ```
+hparams.rope_finetuned = rope_finetuned;
+
+    hparams.n_ctx_orig_yarn = hparams.n_ctx_train;
+    ml.get_key(LLM_KV_ROPE_SCALING_ORIG_CTX_LEN, hparams.n_ctx_orig_yarn, false);
+
+    // rope_freq_base (optional)
+    hparams.rope_freq_base_train = 10000.0f;
+    ml.get_key(LLM_KV_ROPE_FREQ_BASE, hparams.rope_freq_base_train, false);
+
+    std::string rope_scaling("linear");
+    ml.get_key(LLM_KV_ROPE_SCALING_TYPE, rope_scaling, false);
+    hparams.rope_scaling_type_train = llama_rope_scaling_type_from_string(rope_scaling);
+    GGML_ASSERT(hparams.rope_scaling_type_train != LLAMA_ROPE_SCALING_TYPE_UNSPECIFIED);
+
+    // TODO: Handle SWA metadata similarly when models start implementing it
+    // rope_freq_scale (inverse of the kv) is optional
+    float ropescale = 0.0f;
+    if (!ml.get_key(LLM_KV_ROPE_SCALING_FACTOR, ropescale, false)) {
+        // try the old key name
+        ml.get_key(LLM_KV_ROPE_SCALE_LINEAR, ropescale, false);
+    }
+    hparams.rope_freq_scale_train = ropescale == 0.0f ? 1.0f : 1.0f/ropescale;
+
+    ml.get_key(LLM_KV_ROPE_SCALING_ATTN_FACTOR, hparams.rope_attn_factor, false);
+    ml.get_key(LLM_KV_ROPE_SCALING_ALPHA,       hparams.rope_scaling_alpha, false);
+
+    // no
+… [539 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/llama.cpp && sed -n '485,505p' src/llama-context.cpp; grep -rn \"yarn_attn_factor\" src/llama-context.cpp | head -5", "description": "Read yarn_attn_factor usage"}`
+
+  ```
+} else {
+            cparams.yarn_attn_factor = get_mscale(factor, 1.0f);
+        }
+
+        // when YARN is applied with yarn_ext_factor != 0.0f, we need to cancel this factor:
+        // https://github.com/ggml-org/llama.cpp/blob/a81a569577cc38b32558958b048228150be63eae/ggml/src/ggml-cpu/ops.cpp#L5541-L5544
+        //
+        // ref: https://github.com/ggml-org/llama.cpp/discussions/7416
+        //      https://github.com/ggml-org/llama.cpp/pull/17945
+        cparams.yarn_attn_factor *= 1.0f / (1.0f + 0.1f * logf(factor));
+    }
+
+    cparams.yarn_attn_factor *= hparams.rope_attn_factor;
+
+    if (cparams.pooling_type == LLAMA_POOLING_TYPE_UNSPECIFIED) {
+        if (hparams.pooling_type == LLAMA_POOLING_TYPE_UNSPECIFIED) {
+            cparams.pooling_type = LLAMA_POOLING_TYPE_NONE;
+        } else {
+            cparams.pooling_type = hparams.pooling_type;
+        }
+    }
+297:    cparams.yarn_attn_factor        = params.yarn_attn_factor >= 0.0f ? params.yarn_attn_factor : hparams.yarn_attn_factor;
+481:            cparams.yarn_attn_factor = get_mscale(factor, mscale) / get_mscale(factor, mscale_all_dims);
+483:            LLAMA_LOG_WARN("%s: setting new yarn_attn_factor = %.4f (mscale 
+… [190 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+**Finding**: llama.cpp and vLLM agree — compressed layers get YaRN (factor 16, **no mscale**) at **all** positions. My engine applies plain RoPE there. Implementing the fix:
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"pub yarn: Option<(f32, f32, f32, f32, bool)>,\" -B 8 drave-core/src/model.rs | head -14", "description": "Find the yarn field"}`
+
+  ```
+499-    /// n'ont pas de top-k : l'expert est une fonction de l'identifiant du jeton.
+500-    pub hash_layers: usize,
+501-    /// Dimensions réellement tournées par tête. gpt-oss n'en tourne que la
+502-    /// moitié (`partial_rotary_factor = 0,5`), là où Qwen et Llama tournent
+503-    /// toute la tête.
+504-    pub n_rot: usize,
+505-    /// Étirement de contexte YaRN : `(facteur, beta_rapide, beta_lent,
+506-    /// contexte d'origine)`. `None` pour un RoPE ordinaire.
+507:    pub yarn: Option<(f32, f32, f32, f32, bool)>,
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs", "new_string": "    /// Étirement de contexte YaRN : `(facteur, beta_rapide, beta_lent,\n    /// contexte d'origine)`. `None` pour un RoPE ordinaire.\n    pub yarn: Option<(f32, f32, f32, f32, bool)>,\n    /// ** … [1032 caractères tronqués]`
+
+  ```
+Error: cannot edit "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs": file changed since it was read — re-read the file, then retry
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/model.rs'\ns=open(p).read()\na = \"\"\"    /// Étirement de contexte YaRN : `(facteur, beta_rapide, beta_lent,\n    /// contexte d'origine)`. `None` pour un RoPE ordinaire.\n    pub yarn: Option<(f … [1223 caractères tronqués]`
+
+  ```
+ok
+2679:            yarn: {
+2680-                // **Trois sources, dans cet ordre** (le même schéma que le
+2681-                // routage) : la clef GGUF normalisée, puis le JSON `<arch>.config`
+2682-                // recopié par le convertisseur. V4.1-Flash n'a QUE la seconde —
+7683:            hash_layers: hash, n_rot: 0, yarn: None,
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/model.rs'\ns=open(p).read()\n# 1. construire yarn_declare juste avant le bloc `yarn:` (la déclaration brute)\na = \"\"\"            yarn: {\"\"\"\nb = \"\"\"            // Ce que le modèle DÉCLARE  … [438 caractères tronqués]`
+
+  ```
+// `"rope_scaling":{"rope_type":"yarn","factor":16,…}` — et s'en
+                // tenir au GGUF faisait dire « le modèle ne déclare pas YaRN »
+                // alors qu'il le déclare, ailleurs. Une rotation fausse ne casse
+                // rien : elle donne des scores plausibles dès la position 1.
+                let type_declare = g.cfg("rope.scaling.type").and_then(|m| m.as_str())
+                    .map(str::to_string)
+                    .or_else(|| match g.json_texte("rope_type") {
+                        Some(t) if t == "yarn" => Some({
+                            println!("[rope] YaRN déclaré par le JSON `<arch>.config` \
+(`rope_scaling`), pas par une clef GGUF — lu là, et ANNONCÉ");
+                            t
+                        }),
+                        _ => None,
+                    });
+                let nombre = |cle_gguf: &str, cle_json: &str, def: f64| -> f64 {
+                    g.cfg(cle_gguf).and_then(|m| m.as_f64())
+                        .or_else(|| g.json_nombre(cle_json))
+                        .unwrap_or(def)
+                };
+                let declare = match type_declare.as_deref() {
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/model.rs'\ns=open(p).read()\n# `declare` est la déclaration brute : on la garde, et la décision reste `yarn:`\na = \"\"\"                let declare = match type_declare.as_deref() {\n              … [1573 caractères tronqués]`
+
+  ```
+ok
+error[E0425]: cannot find value `declare_yarn` in this scope
+    --> src/model.rs:2681:27
+     |
+2681 |             yarn_declare: declare_yarn,
+     |                           ^^^^^^^^^^^^ not found in this scope
+
+warning: type `io_result` should have an upper camel case name
+  --> src/gguf.rs:16:6
+   |
+--
+error[E0063]: missing field `yarn_declare` in initializer of `Cfg`
+    --> src/main.rs:1857:13
+     |
+1857 |     let c = model::Cfg {
+     |             ^^^^^^^^^^ missing `yarn_declare`
+
+warning: unused variable: `id`
+   --> src/engram.rs:134:23
+    |
+--
+error: could not compile `drave-core` (bin "drave") due to 2 previous errors; 24 warnings emitted
+BUILD_END
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/model.rs'\ns=open(p).read()\ns=s.replace(\"\"\"            // Ce que le modèle DÉCLARE (avant la décision retardée) : les\n            // couches compressées en ont besoin, elles, à TOUTES les posi … [2037 caractères tronqués]`
+
+  ```
+error[E0063]: missing field `yarn_declare` in initializer of `Cfg`
+    --> src/main.rs:1857:13
+     |
+1857 |     let c = model::Cfg {
+     |             ^^^^^^^^^^ missing `yarn_declare`
+
+warning: unused variable: `id`
+   --> src/engram.rs:134:23
+    |
+--
+error: could not compile `drave-core` (bin "drave") due to 1 previous error; 28 warnings emitted
+BUILD_END
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '1857,1862p' drave-core/src/main.rs; python3 - <<'PY'\np='/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/main.rs'\ns=open(p).read()\nimport re\ni = s.find(\"    let c = model::Cfg {\")\nassert i > 0\nj = s.find … [315 caractères tronqués]`
+
+  ```
+let c = model::Cfg {
+        n_layer: n_layer as usize, hidden: hidden as usize, n_head: 0, n_kv_head: 0,
+        head_dim: 0, ffn: 0, eps: 1e-6, rope_base: 10000.0, vocab: 0,
+        n_expert: r.n_expert, n_expert_used: r.n_expert_used, ffn_exp: r.ffn_exp,
+        ffn_act_oss: false, gating: r.gating, expert_norm: r.norm, expert_scale: r.echelle,
+        hash_layers: r.hash_layers, n_rot: 0, yarn: None,
+ligne: hash_layers: r.hash_layers, n_rot: 0, yarn: None,
+BUILD_END
+  ```
+
+### 🤖 Assistant
+
+Now the YaRN variant of `rope_norm` and its use on compressed layers:
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/model.rs'\ns=open(p).read()\na = \"\"\"    /// **Rotation INVERSE** (dé-rotation), celle de `ggml_rope_ext_back` :\"\"\"\nb = '''    /// **Le RoPE des couches COMPRESSÉES de V4 : convention NORM +  … [3725 caractères tronqués]`
+
+  ```
+ok
+BUILD_END
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"Self::rope_norm\\|Self::rope_inverse\" drave-core/src/model.rs | sed -n '1,20p'", "description": "List rope call sites"}`
+
+  ```
+5171:            Self::rope_norm(&mut qp, nh, nr, pos, base_rope, nr, false);
+5184:            Self::rope_norm(&mut kp, 1, nr, pos, base_rope, nr, false);
+5335:                    Self::rope_norm(&mut kp, 1, idr, debut, base_rope, idr, false);
+5344:                    Self::rope_norm(&mut kp, 1, nr, debut, base_rope, nr, false);
+5425:                    Self::rope_norm(&mut kp, 1, idr, debut, base_rope, idr, false);
+5445:                    Self::rope_norm(&mut qp, m.idx_nh, idr, pos, base_rope, idr, false);
+5568:            Self::rope_norm(&mut op, nh, nr, pos, base_rope, nr, true);
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/model.rs'\ns=open(p).read()\n# 1. champ Mla4\na = \"\"\"    /// Base RoPE des couches compressées : `compress_rope_freq_base` (160 000\n    /// pour V4-Flash) au lieu de `rope.freq_base` (10 000).  … [1233 caractères tronqués]`
+
+  ```
+ok
+5145:        let base_rope = if m.ratio != 0 { m.rope_base_compresse } else { m.rope_base };
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/model.rs'\ns=open(p).read()\na = \"\"\"        let base_rope = if m.ratio != 0 { m.rope_base_compresse } else { m.rope_base };\"\"\"\nb = \"\"\"        let base_rope = if m.ratio != 0 { m.rope_base … [2043 caractères tronqués]`
+
+  ```
+ok
+error[E0425]: cannot find value `yarn_declare` in this scope
+    --> src/model.rs:3084:53
+     |
+3084 |                     yarn_compresse: if ratio != 0 { yarn_declare } else { None },
+     |                                                     ^^^^^^^^^^^^ not found in this scope
+
+warning: type `io_result` should have an upper camel case name
+  --> src/gguf.rs:16:6
+   |
+--
+error: could not compile `drave-core` (bin "drave") due to 1 previous error; 24 warnings emitted
+BUILD_END
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/model.rs'\ns=open(p).read()\ns=s.replace(\"yarn_compresse: if ratio != 0 { yarn_declare } else { None },\",\n            \"yarn_compresse: if ratio != 0 { cfg.yarn_declare } else { None },\",1)\nop … [173 caractères tronqués]`
+
+  ```
+BUILD_END
+  ```
+
+### 🤖 Assistant
+
+⏵ Measuring the effect of the compressed-layer YaRN on the V4-Flash gate
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && (timeout 1800 ./drave-core/target/release/drave /home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek-V4-Flash-UD-IQ1_M/DeepSeek-V4-Flash-UD-IQ1_M-00001-of-00003.gguf --ppl /tmp/ids_v4flash.txt --ctx 32 --limit 5 --dense --threads 1 … [200 caractères tronqués]`
+
+  ```
+started background job bash-178
+  ```
+
+- **bash** `{"command": "sleep 55; cat /tmp/yarn_gate.log 2>/dev/null; grep -E \"rotation|YaRN\" /tmp/v41_full.log | head -3", "description": "Check the new gate value"}`
+
+  ```
+=== perplexité 8405.9477
+FIN
+[rope] YaRN déclaré par le JSON `<arch>.config` (`rope_scaling`), pas par une clef GGUF — lu là, et ANNONCÉ
+[config] rotation : RoPE simple — le modèle DÉCLARE YaRN (JSON `rope_scaling`, facteur 16) mais le moteur ne l'applique qu'au-delà de QUATRE FOIS la longueur d'origine (soit 262144 jetons ici), seuil mesuré sur gpt-oss ; `DRAVE_YARN=1` l'applique partout, comme la référence
+  ```
+
+### 👤 Utilisateur
+
+background job bash-178 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && (timeout 1800 ./drave-core/target/release/drave /home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek-V4-Flash-UD-IQ1_M/DeepSeek-V4-Flash-UD-IQ1_M-00001-of-00003.gguf --ppl /tmp/ids_v4flash.txt --ctx 32 --limit 5 --dense --threads 16 2>&1 | grep -oE "=== perplexité [0-9]+\.[0-9]+" > /tmp/yarn_gate.log; echo FIN >> /tmp/yarn_gate.log)) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"678\\|548\" reports/*.md | head -8", "description": "Find the 678/548 comparison"}`
+
+  ```
+reports/rapport-coherence-docs-2.md:58:| 9 | `docs/format-flux.md:30` | indice 255 → « l'indice ABSOLU sur les deux octets suivants » | vrai **aussi** pour le réseau depuis le correctif : `encoder_paires_blocs` écrit 2 octets (1548-1564), le décodeur en lit 2 (1566-1594), et ils sont testés ensemble | OK |
+reports/rapport-drapeaux-ignores.md:71:| `--threads` | I (548) · P (2678) · BK (1937) · GB (2047) | **FS (1575), PR (1675), BM (1835), BV (1172) : `16` en dur** · **D : avalé par la boucle `i += 2`** (main.rs:65-73, §7.4) | 🟠 |
+reports/rapport-v41-mhc.md:223:| 1 | 8,613e-06 | 1,057e-06 | 0,548 |
+reports/rapport-v41-mhc.md:261:| 1 (groupe {0,1}) | 1,678e-06 | 2,336e-07 | 0,123 |
+reports/rapport-v4-hca.md:138:deux côtés (546,3 contre 548,3 chez llama.cpp ; 677,3 contre 678,1 chez Drave).
+reports/rapport-v4-reparti.md:87:  678,09 contre 548,32 (voir `reports/rapport-v4-hca.md`).
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '125,145p' reports/rapport-v4-hca.md", "description": "Read the context of the 678/548 comparison"}`
+
+  ```
+```
+
+Les deux moteurs lisent cette clé au chargement ; à la position 8, deux blocs
+existent et **un seul est gardé** — la sélection s'exerce donc dès 10 jetons.
+
+| `l_last-2`, `top_k = 1` | corrélation | écart max |
+|---|---|---|
+| pos 4 (1 bloc) | 0,999919 | 1,3e-2 |
+| pos 8 (**2 blocs, 1 gardé**) | **0,999943** | 1,8e-2 |
+| pos 9 (2 blocs, 1 gardé) | **0,999920** | 1,3e-2 |
+
+Même niveau d'accord qu'avec tous les blocs (0,9999x) : la **sélection** est
+juste, pas seulement les scores. La perplexité, elle, bouge dans le même sens des
+deux côtés (546,3 contre 548,3 chez llama.cpp ; 677,3 contre 678,1 chez Drave).
+
+## 6. Ce qui reste de P5 : l'indexeur
+
+Les couches CSA gardent, en plus des blocs, ceux que l'**indexeur** choisit
+(`ggml_lightning_indexer` : `relu(q·k)` pondéré par tête, puis top-k). Tant que
+le nombre de blocs compressés reste sous `attention.indexer.top_k` (512), le
+top-k les garde **tous** : le résultat est alors exact sans l'indexeur, et c'est
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && (timeout 2400 ./drave-core/target/release/drave /home/stephane/FastNVMe/artefacts/modeles-optimises/v4flash-topk2/DeepSeek-V4-Flash-UD-IQ1_M-00001-of-00003.gguf --ppl /tmp/ids_v4flash.txt --ctx 32 --limit 10 --dense --threads 16 2>&1 … [207 caractères tronqués]`
+
+  ```
+started background job bash-179
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='tools/portes.sh'\ns=open(p).read()\na = \"\"\"        p=$(timeout 2400 $D \"$V4\" --ppl /tmp/ids_v4flash.txt --ctx 32 --limit 5 \\\\\n            --dense --threads 16 2>&1 | valeur)\n        compare \"V4-Flash 43 … [976 caractères tronqués]`
+
+  ```
+porte mise à jour
+  ```
+
+### 👤 Utilisateur
+
+background job bash-179 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && (timeout 2400 ./drave-core/target/release/drave /home/stephane/FastNVMe/artefacts/modeles-optimises/v4flash-topk2/DeepSeek-V4-Flash-UD-IQ1_M-00001-of-00003.gguf --ppl /tmp/ids_v4flash.txt --ctx 32 --limit 10 --dense --threads 16 2>&1 | grep -oE "=== perplexité [0-9]+\.[0-9]+" > /tmp/yarn_topk2.log; echo FIN >> /tmp/yarn_topk2.log) & sleep 5; echo "lancé") finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "sleep 90; cat /tmp/yarn_topk2.log 2>/dev/null; ps aux | grep -c \"[d]rave\"", "description": "Check the topk2 measurement"}`
+
+  ```
+(no output)
+[timed out after 60000ms]
+[killed by signal: SIGTERM]
+  ```
+
+- **bash** `{"command": "cat /tmp/yarn_topk2.log 2>/dev/null; pgrep -c drave 2>/dev/null || echo \"fini\"", "description": "Read the measurement result"}`
+
+  ```
+1
+  ```
+
+- **bash** `{"command": "sleep 120; cat /tmp/yarn_topk2.log 2>/dev/null; pgrep -c drave 2>/dev/null || echo \"fini\"", "description": "Wait for the 10-token comparison"}`
+
+  ```
+(no output)
+[timed out after 60000ms]
+[killed by signal: SIGTERM]
+  ```
+
+- **bash** `{"command": "cat /tmp/yarn_topk2.log 2>/dev/null; pgrep -c drave 2>/dev/null || echo \"fini\"", "description": "Check again"}`
+
+  ```
+=== perplexité 715.5850
+FIN
+0
+fini
+  ```
+
+### 🤖 Assistant
+
+⏵ Checking llama.cpp's YaRN ramp orientation in the local source
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/llama.cpp && grep -rn \"rope_yarn_ramp\\|rope_yarn_corr_dim\" ggml/src/*.c ggml/src/ggml-cpu/*.cpp 2>/dev/null | head -8", "description": "Locate the yarn ramp functions"}`
+
+  ```
+ggml/src/ggml.c:4467:static float ggml_rope_yarn_corr_dim(int n_dims, int n_ctx_orig, float n_rot, float base) {
+ggml/src/ggml.c:4471:void ggml_rope_yarn_corr_dims(
+ggml/src/ggml.c:4475:    float start = floorf(ggml_rope_yarn_corr_dim(n_dims, n_ctx_orig, beta_fast, freq_base));
+ggml/src/ggml.c:4476:    float end   =  ceilf(ggml_rope_yarn_corr_dim(n_dims, n_ctx_orig, beta_slow, freq_base));
+ggml/src/ggml-cpu/ops.cpp:5959:static float rope_yarn_ramp(const float low, const float high, const int i0) {
+ggml/src/ggml-cpu/ops.cpp:5973:        float ramp_mix = rope_yarn_ramp(corr_dims[0], corr_dims[1], i0) * ext_factor;
+ggml/src/ggml-cpu/ops.cpp:6148:    ggml_rope_yarn_corr_dims(n_dims, n_ctx_orig, freq_base, beta_fast, beta_slow, corr_dims);
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/llama.cpp && sed -n '5955,5985p' ggml/src/ggml-cpu/ops.cpp; echo \"=== rope_yarn (CPU) ===\"; grep -n \"static void rope_yarn\" -A 20 ggml/src/ggml-cpu/ops.cpp | head -26", "description": "Read the ramp and yarn implementations"}`
+
+  ```
+}
+
+// ggml_compute_forward_rope
+
+static float rope_yarn_ramp(const float low, const float high, const int i0) {
+    const float y = (i0 / 2 - low) / MAX(0.001f, high - low);
+    return 1 - MIN(1, MAX(0, y));
+}
+
+// YaRN algorithm based on LlamaYaRNScaledRotaryEmbedding.py from https://github.com/jquesnelle/yarn
+// MIT licensed. Copyright (c) 2023 Jeffrey Quesnelle and Bowen Peng.
+static void rope_yarn(
+    float theta_extrap, float freq_scale, float corr_dims[2], int64_t i0, float ext_factor, float mscale,
+    float * cos_theta, float * sin_theta) {
+    // Get n-d rotational scaling corrected for extrapolation
+    float theta_interp = freq_scale * theta_extrap;
+    float theta = theta_interp;
+    if (ext_factor != 0.0f) {
+        float ramp_mix = rope_yarn_ramp(corr_dims[0], corr_dims[1], i0) * ext_factor;
+        theta = theta_interp * (1 - ramp_mix) + theta_extrap * ramp_mix;
+
+        // Get n-d magnitude scaling corrected for interpolation
+        mscale *= 1.0f + 0.1f * logf(1.0f / freq_scale);
+    }
+    *cos_theta = cosf(theta) * mscale;
+    *sin_theta = sinf(theta) * mscale;
+}
+
+static void ggml_rope_cache_init(
+     float theta_base, float freq_scale, const float * freq_factor
+… [1301 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/llama.cpp && sed -n '6135,6160p' ggml/src/ggml-cpu/ops.cpp; sed -n '4460,4480p' ggml/src/ggml.c", "description": "Read the corr_dims call site and formula"}`
+
+  ```
+// rows per thread
+    const int dr = (nr + nth - 1)/nth;
+
+    // row range for this thread
+    const int ir0 = dr*ith;
+    const int ir1 = MIN(ir0 + dr, nr);
+
+    // row index used to determine which thread to use
+    int ir = 0;
+
+    const float theta_scale = powf(freq_base, -2.0f/n_dims);
+
+    float corr_dims[2];
+    ggml_rope_yarn_corr_dims(n_dims, n_ctx_orig, freq_base, beta_fast, beta_slow, corr_dims);
+
+    const bool is_imrope = mode == GGML_ROPE_TYPE_IMROPE; // qwen3vl apply interleaved mrope
+    const bool mrope_used = mode & GGML_ROPE_TYPE_MROPE;  // ggml_rope_multi, note: also true for vision (24 & 8 == true) and for imrope
+    const bool is_vision = mode == GGML_ROPE_TYPE_VISION;
+
+    if (mrope_used) {
+        GGML_ASSERT(sections[0] > 0 || sections[1] > 0 || sections[2] > 0);
+    }
+
+    if (is_vision) {
+        GGML_ASSERT(n_dims == ne0/2);
+    }
+        ctx, a, b, NULL, n_dims, NULL, mode, n_ctx_orig, freq_base, freq_scale,
+        ext_factor, attn_factor, beta_fast, beta_slow, true
+    );
+}
+
+// Apparently solving `n_rot = 2pi * x * base^((2 * max_pos_emb) / n_dims)` for x, we get
+// `corr_dim(n_rot) = n_dims * log(max_pos_emb / (n_rot * 2pi)) / (2 * log(base))`
+stati
+… [596 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Running the decisive tensor-level test: YaRN vs plain on compressed layers
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && head -30 tools/ref_logits.cpp | grep -E \"Usage|argv|REF_\" | head; ls -la tools/ref_logits 2>/dev/null | head -2", "description": "Check the ref_logits tool usage"}`
+
+  ```
+// Usage : ref_logits <modele.gguf> <ids.txt> <sortie.bin> [n_max]
+-rwxr-xr-x. 1 stephane stephane 207032  2 oct 15:30 tools/ref_logits
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && rm -f /tmp/ref_yarn-*.bin && (LD_LIBRARY_PATH=/home/stephane/Data13TB/stephane/GitHub/llama.cpp/build/bin REF_DUMP=/tmp/ref_yarn REF_TENSORS='^(qr_norm|q_norm|kv_norm|attn_derope|l_last)-2$' timeout 3600 ./tools/ref_logits /home/step … [293 caractères tronqués]`
+
+  ```
+started background job bash-180
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/model.rs'\ns=open(p).read()\na = \"yarn_compresse: if ratio != 0 { cfg.yarn_declare } else { None },\"\nb = \"\"\"// `DRAVE_YARN_NON` (et `--sans-yarn`) veut dire « JAMAIS de YaRN » : il\n          … [631 caractères tronqués]`
+
+  ```
+BUILD_END
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && rm -f /tmp/dump_yarn-* /tmp/dump_plain-* && (DRAVE_DUMP_COUCHES=/tmp/dump_yarn timeout 900 ./drave-core/target/release/drave /home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek-V4-Flash-UD-IQ1_M/DeepSeek-V4-Flash-UD-IQ1_M-00001-of … [652 caractères tronqués]`
+
+  ```
+started background job bash-181
+  ```
+
+- **bash** `{"command": "sleep 55; tail -3 /tmp/ref_yarn.log 2>/dev/null; echo \"=== moteur ===\"; grep -E \"perplexité cumulée|EXIT\" /tmp/eng_yarn.log /tmp/eng_plain.log 2>/dev/null | head -4; ls /tmp/dump_yarn-l_last-2-*.bin 2>/dev/null | wc -l", "description": "Check the reference and engine dumps"}`
+
+  ```
+create_tensor: loading tensor blk.42.ffn_down_shexp.weight
+create_tensor: loading tensor blk.42.ffn_up_shexp.weight
+done_getting_tensors: tensor 'token_embd.weight' (q4_K) (and 1324 others) cannot be used with preferred buffer type CPU_REPACK, using CPU instead
+=== moteur ===
+/tmp/eng_yarn.log:       9 tokens notés — perplexité cumulée 102880068.690  (4.3 tok/s)
+/tmp/eng_yarn.log:EXIT=0
+/tmp/eng_plain.log:       9 tokens notés — perplexité cumulée 102850523.979  (4.3 tok/s)
+/tmp/eng_plain.log:EXIT=0
+10
+  ```
+
+### 👤 Utilisateur
+
+background job bash-181 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && rm -f /tmp/dump_yarn-* /tmp/dump_plain-* && (DRAVE_DUMP_COUCHES=/tmp/dump_yarn timeout 900 ./drave-core/target/release/drave /home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek-V4-Flash-UD-IQ1_M/DeepSeek-V4-Flash-UD-IQ1_M-00001-of-00003.gguf --couches 2:3 --tete-partielle --ppl /tmp/ids_v4flash.txt --ctx 32 --limit 10 --dense --threads 16 > /tmp/eng_yarn.log 2>&1; echo "EXIT=$?" >> /tmp/eng_yarn.log; DRAVE_YARN_NON=1 DRAVE_DUMP_COUCHES=/tmp/dump_plain timeout 900 ./drave-core/target/release/drave /home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek-V4-Flash-UD-IQ1_M/DeepSeek-V4-Flash-UD-IQ1_M-00001-of-00003.gguf --couches 2:3 --tete-partielle --ppl /tmp/ids_v4flash.txt --ctx 32 --limit 10 --dense --threads 16 > /tmp/eng_plain.log 2>&1; echo "EXIT=$?" >> /tmp/eng_plain.log)) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport numpy as np\ndef lire(p): return np.fromfile(p, dtype='<f4').astype(np.float64)\nprint(\"=== l_last-2 : YaRN (nouveau) contre RoPE simple (ancien) ===\")\nfor pos in range(10):\n    try:\n        a = lire(f'/ … [360 caractères tronqués]`
+
+  ```
+=== l_last-2 : YaRN (nouveau) contre RoPE simple (ancien) ===
+  pos 0 : écart max 0.000e+00 (dynamique 4.628e-01) — relatif 0.00e+00
+  pos 1 : écart max 3.559e-04 (dynamique 5.130e-01) — relatif 6.94e-04
+  pos 2 : écart max 1.305e-03 (dynamique 1.170e+00) — relatif 1.12e-03
+  pos 3 : écart max 2.650e-03 (dynamique 1.280e+00) — relatif 2.07e-03
+  pos 4 : écart max 3.926e-03 (dynamique 1.543e+00) — relatif 2.54e-03
+  pos 5 : écart max 5.733e-03 (dynamique 7.513e-01) — relatif 7.63e-03
+  pos 6 : écart max 8.349e-03 (dynamique 1.166e+00) — relatif 7.16e-03
+  pos 7 : écart max 6.019e-03 (dynamique 1.496e+00) — relatif 4.02e-03
+  pos 8 : écart max 8.164e-03 (dynamique 1.577e+00) — relatif 5.18e-03
+  pos 9 : écart max 1.213e-02 (dynamique 1.683e+00) — relatif 7.21e-03
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && pkill -f \"ref_logits.*V4-Flash\" ; sleep 2; rm -f /tmp/ref_yarn-*.bin && (LD_LIBRARY_PATH=/home/stephane/Data13TB/stephane/GitHub/llama.cpp/build/bin REF_DUMP=/tmp/ref_yarn REF_TENSORS='^(attn_derope|l_last)-2$' timeout 3600 ./tools … [340 caractères tronqués]`
+
+  ```
+started background job bash-182
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && rm -f /tmp/dump_y128-* /tmp/dump_p128-* && (DRAVE_DUMP_COUCHES=/tmp/dump_y128 timeout 1800 ./drave-core/target/release/drave /home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek-V4-Flash-UD-IQ1_M/DeepSeek-V4-Flash-UD-IQ1_M-00001-of … [661 caractères tronqués]`
+
+  ```
+started background job bash-183
+  ```
+
+### 👤 Utilisateur
+
+background job bash-182 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && pkill -f "ref_logits.*V4-Flash" ; sleep 2; rm -f /tmp/ref_yarn-*.bin && (LD_LIBRARY_PATH=/home/stephane/Data13TB/stephane/GitHub/llama.cpp/build/bin REF_DUMP=/tmp/ref_yarn REF_TENSORS='^(attn_derope|l_last)-2$' timeout 3600 ./tools/ref_logits /home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek-V4-Flash-UD-IQ1_M/DeepSeek-V4-Flash-UD-IQ1_M-00001-of-00003.gguf /tmp/ids_v4flash.txt /tmp/ref_yarn.bin 128 > /tmp/ref_yarn128.log 2>&1; echo "EXIT=$?" >> /tmp/ref_yarn128.log)) finished [status: killed, signal: SIGTERM]. Read its output with job_output.
+
+### 👤 Utilisateur
+
+background job bash-180 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && rm -f /tmp/ref_yarn-*.bin && (LD_LIBRARY_PATH=/home/stephane/Data13TB/stephane/GitHub/llama.cpp/build/bin REF_DUMP=/tmp/ref_yarn REF_TENSORS='^(qr_norm|q_norm|kv_norm|attn_derope|l_last)-2$' timeout 3600 ./tools/ref_logits /home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek-V4-Flash-UD-IQ1_M/DeepSeek-V4-Flash-UD-IQ1_M-00001-of-00003.gguf /tmp/ids_v4flash.txt /tmp/ref_yarn.bin 10 > /tmp/ref_yarn.log 2>&1; echo "EXIT=$?" >> /tmp/ref_yarn.log)) finished [status: killed, signal: SIGTERM]. Read its output with job_output.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && rm -f /tmp/ref_yarn-*.bin && (LD_LIBRARY_PATH=/home/stephane/Data13TB/stephane/GitHub/llama.cpp/build/bin REF_DUMP=/tmp/ref_yarn REF_TENSORS='^(attn_derope|l_last)-2$' timeout 3600 ./tools/ref_logits /home/stephane/Data13TB/stephane/ … [288 caractères tronqués]`
+
+  ```
+started background job bash-184
+  ```
+
+- **bash** `{"command": "sleep 55; tail -2 /tmp/eng_y128.log 2>/dev/null; tail -2 /tmp/eng_p128.log 2>/dev/null; echo \"=== ref ===\"; tail -2 /tmp/ref_yarn128.log 2>/dev/null; ls /tmp/ref_yarn-* 2>/dev/null | head -3", "description": "Check the three runs"}`
+
+  ```
+dont attention : scores 0.00 | softmax 0.00 | somme pondérée + écriture KV 138.29
+EXIT=0
+[tête 4 bits] 129280 × 4096 → 4.50 b/poids, 0 Mo, 0.0 s
+[plage] `--tete-partielle` : la tête de sortie est appliquée à la fin de la plage — le résultat est celui d'un modèle TRONQUÉ, pas du modèle entier
+=== ref ===
+create_tensor: loading tensor blk.42.ffn_up_shexp.weight
+done_getting_tensors: tensor 'token_embd.weight' (q4_K) (and 1324 others) cannot be used with preferred buffer type CPU_REPACK, using CPU instead
+  ```
+
+- **bash** `{"command": "sleep 120; ls /tmp/ref_yarn-* 2>/dev/null | head -3; tail -2 /tmp/ref_yarn128.log 2>/dev/null; grep -c \"\" /tmp/ref_yarn128.log 2>/dev/null; pgrep -c ref_logits 2>/dev/null || echo \"ref fini\"; pgrep -c drave 2>/dev/null || echo \"drave fini\"", "description": "Wait for the reference  … [6 caractères tronqués]`
+
+  ```
+(no output)
+[timed out after 60000ms]
+[killed by signal: SIGTERM]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-183 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && rm -f /tmp/dump_y128-* /tmp/dump_p128-* && (DRAVE_DUMP_COUCHES=/tmp/dump_y128 timeout 1800 ./drave-core/target/release/drave /home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek-V4-Flash-UD-IQ1_M/DeepSeek-V4-Flash-UD-IQ1_M-00001-of-00003.gguf --couches 2:3 --tete-partielle --ppl /tmp/ids_v4flash.txt --ctx 128 --limit 128 --dense --threads 16 > /tmp/eng_y128.log 2>&1; echo "EXIT=$?" >> /tmp/eng_y128.log; DRAVE_YARN_NON=1 DRAVE_DUMP_COUCHES=/tmp/dump_p128 timeout 1800 ./drave-core/target/release/drave /home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek-V4-Flash-UD-IQ1_M/DeepSeek-V4-Flash-UD-IQ1_M-00001-of-00003.gguf --couches 2:3 --tete-partielle --ppl /tmp/ids_v4flash.txt --ctx 128 --limit 128 --dense --threads 16 > /tmp/eng_p128.log 2>&1; echo "EXIT=$?" >> /tmp/eng_p128.log)) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "ls /tmp/ref_yarn-* 2>/dev/null | head -3; pgrep -c ref_logits 2>/dev/null || echo \"ref fini\"; ls /tmp/dump_y128-l_last-2-*.bin 2>/dev/null | wc -l; ls /tmp/dump_p128-l_last-2-*.bin 2>/dev/null | wc -l; tail -2 /tmp/ref_yarn128.log", "description": "Check artifact availability"}`
+
+  ```
+1
+128
+128
+create_tensor: loading tensor blk.42.ffn_up_shexp.weight
+done_getting_tensors: tensor 'token_embd.weight' (q4_K) (and 1324 others) cannot be used with preferred buffer type CPU_REPACK, using CPU instead
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/compare_yarn.py <<'PY'\nimport numpy as np, struct, sys, os\n\ndef lire_ref(prefixe, nom, couche, pos):\n    \"\"\"Les vides de llama.cpp : en-tête REFD, ne[], puis les f32.\"\"\"\n    f = f\"{prefixe}-{nom}-{couche}.bin\" … [1559 caractères tronqués]`
+
+  ```
+prêt
+0
+  ```
+
+- **bash** `{"command": "sleep 150; ls /tmp/ref_yarn-* 2>/dev/null | wc -l; pgrep -c ref_logits 2>/dev/null || echo \"ref fini\"", "description": "Wait for the reference dump files"}`
+
+  ```
+(no output)
+[timed out after 60000ms]
+[killed by signal: SIGTERM]
+  ```
+
+- **bash** `{"command": "ls /tmp/ref_yarn-* 2>/dev/null | wc -l; pgrep -c ref_logits 2>/dev/null || echo \"ref fini\"", "description": "Check reference progress"}`
+
+  ```
+0
+1
+  ```
+
+- **bash** `{"command": "sleep 170; ls /tmp/ref_yarn-* 2>/dev/null | wc -l; pgrep -c ref_logits 2>/dev/null || echo \"ref fini\"; tail -3 /tmp/ref_yarn128.log", "description": "Wait more for the reference"}`
+
+  ```
+(no output)
+[timed out after 60000ms]
+[killed by signal: SIGTERM]
+  ```
+
+- **bash** `{"command": "ls /tmp/ref_yarn-* 2>/dev/null | wc -l; pgrep -c ref_logits 2>/dev/null || echo \"ref fini\"; tail -3 /tmp/ref_yarn128.log", "description": "Check reference status"}`
+
+  ```
+0
+1
+create_tensor: loading tensor blk.42.ffn_down_shexp.weight
+create_tensor: loading tensor blk.42.ffn_up_shexp.weight
+done_getting_tensors: tensor 'token_embd.weight' (q4_K) (and 1324 others) cannot be used with preferred buffer type CPU_REPACK, using CPU instead
+  ```
+
+- **write** `{"content": "# V4-Flash : la rotation des couches compressées était le RoPE simple\n\n**En une ligne** : sur les 41 couches compressées de V4-Flash, le moteur appliquait\nson régime *retardé* (RoPE simple sous 4 × la longueur d'origine) là où **llama.cpp\net vLLM appliquent tous deux YaRN ×16 à tout … [5013 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-v4-yarn-compresse.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "ls /tmp/ref_yarn-* 2>/dev/null | wc -l; pgrep -c ref_logits 2>/dev/null || echo \"ref fini\"; tail -2 /tmp/ref_yarn128.log", "description": "Check the reference dump again"}`
+
+  ```
+0
+1
+create_tensor: loading tensor blk.42.ffn_up_shexp.weight
+done_getting_tensors: tensor 'token_embd.weight' (q4_K) (and 1324 others) cannot be used with preferred buffer type CPU_REPACK, using CPU instead
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && (date +%s > /tmp/t32; timeout 3000 ./drave-core/target/release/drave /home/stephane/FastNVMe/modeles-lourds/DeepSeek-V4.1-Flash-Q2.gguf --ppl /tmp/v41_texte.txt.ids --ctx 32 --limit 32 > /tmp/v41_ctx32.log 2>&1; echo \"EXIT=$?\" >> / … [123 caractères tronqués]`
+
+  ```
+started background job bash-185
+  ```
+
+- **bash** `{"command": "sleep 58; ls /tmp/ref_yarn-* 2>/dev/null | wc -l; grep -E \"perplexité cumulée|EXIT\" /tmp/v41_ctx32.log 2>/dev/null | tail -2; head -1 /tmp/t32 2>/dev/null; tail -1 /tmp/v41_ctx32.log 2>/dev/null", "description": "Check both long runs"}`
+
+  ```
+2
+1790982848
+[config] rotation : RoPE simple — le modèle DÉCLARE YaRN (JSON `rope_scaling`, facteur 16) mais le moteur ne l'applique qu'au-delà de QUATRE FOIS la longueur d'origine (soit 262144 jetons ici), seuil mesuré sur gpt-oss ; `DRAVE_YARN=1` l'applique partout, comme la référence
+  ```
+
+### 👤 Utilisateur
+
+background job bash-184 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && rm -f /tmp/ref_yarn-*.bin && (LD_LIBRARY_PATH=/home/stephane/Data13TB/stephane/GitHub/llama.cpp/build/bin REF_DUMP=/tmp/ref_yarn REF_TENSORS='^(attn_derope|l_last)-2$' timeout 3600 ./tools/ref_logits /home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek-V4-Flash-UD-IQ1_M/DeepSeek-V4-Flash-UD-IQ1_M-00001-of-00003.gguf /tmp/ids_v4flash.txt /tmp/ref_yarn.bin 128 > /tmp/ref_yarn128.log 2>&1; echo "EXIT=$?" >> /tmp/ref_yarn128.log)) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+### 🤖 Assistant
+
+⏵ Running the decisive comparison: YaRN vs plain against llama.cpp
+
+- **bash** `{"command": "ls /tmp/ref_yarn-* | head; tail -3 /tmp/ref_yarn128.log; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 /tmp/compare_yarn.py /tmp/ref_yarn 2>&1 | head -20", "description": "Compare both variants against llama.cpp"}`
+
+  ```
+/tmp/ref_yarn-attn_derope-2.bin
+/tmp/ref_yarn-l_last-2.bin
+perplexite = 9.545433
+fichier  = /tmp/ref_yarn.bin (127 x 129280 f32 + 8 octets d'en-tete)
+EXIT=0
+=== l_last-2 : moteur (YaRN / RoPE simple) contre llama.cpp ===
+Traceback (most recent call last):
+  File "/tmp/compare_yarn.py", line 36, in <module>
+    cy, ey = stats(y, r); cp, ep = stats(p_, r)
+             ~~~~~^^^^^^
+  File "/tmp/compare_yarn.py", line 34, in stats
+    c = float(np.corrcoef(a, b)[0, 1])
+              ~~~~~~~~~~~^^^^^^
+  File "/usr/lib64/python3.13/site-packages/numpy/lib/_function_base_impl.py", line 3028, in corrcoef
+    c = cov(x, y, rowvar, dtype=dtype)
+  File "/usr/lib64/python3.13/site-packages/numpy/lib/_function_base_impl.py", line 2836, in cov
+    X = np.concatenate((X, y), axis=0)
+ValueError: all the input array dimensions except for the concatenation axis must match exactly, but along dimension 1, the array at index 0 has size 16384 and the array at index 1 has size 4096
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '/^def lire/,/^def main/p' tools/compare_etats.py | head -30; ls -la /tmp/dump_y128-l_last-2-4.bin /tmp/ref_yarn-l_last-2.bin", "description": "Read compare_etats' reader"}`
+
+  ```
+def lire_drave(chemin):
+    with open(chemin, "rb") as f:
+        b = f.read()
+    return list(struct.unpack(f"<{len(b) // 4}f", b))
+
+
+def lire_ref(chemin):
+    with open(chemin, "rb") as f:
+        b = f.read()
+    if b[:4] != b"REFD":
+        raise SystemExit(f"{chemin} : magie REFD absente")
+    ndim = struct.unpack("<i", b[4:8])[0]
+    ne = struct.unpack("<4i", b[8:24])[0:ndim]
+    n = 1
+    for d in ne:
+        n *= d
+    vals = struct.unpack(f"<{n}f", b[24:24 + 4 * n])
+    return ne, list(vals)
+
+
+def main():
+-rw-r--r--. 1 stephane stephane   65536  2 oct 19:09 /tmp/dump_y128-l_last-2-4.bin
+-rw-r--r--. 1 stephane stephane 8388632  2 oct 19:14 /tmp/ref_yarn-l_last-2.bin
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '/^def main/,$p' tools/compare_etats.py | head -40", "description": "Read how compare_etats slices positions"}`
+
+  ```
+def main():
+    if len(sys.argv) != 6:
+        raise SystemExit(__doc__)
+    pd, pr, nom, couche, positions = sys.argv[1:6]
+    ne, ref = lire_ref(f"{pr}-{nom}-{couche}.bin")
+    n_embd = ne[0]
+    # Deux dispositions selon le tenseur : `l_last` est [embd, hc, position],
+    # `hc_attn_pre` est [embd, position] (le mélange est déjà fait). Confondre
+    # les deux compare des copies à des jetons — et « longueurs différentes »
+    # est alors le seul avertissement.
+    par_position = (ne[1] * (ne[2] if len(ne) > 2 else 1)) == 1 or ne[1] == 1 \
+        or (len(ne) > 2 and ne[2] == 1)
+    hc = 1 if par_position else ne[1]
+    print(f"# {nom}-{couche} : référence ne={ne} → {n_embd} valeurs × "
+          f"{'1 par position' if par_position else str(hc) + ' copies'}")
+    for p in (int(x) for x in positions.split(",")):
+        d = lire_drave(f"{pd}-{nom}-{couche}-{p}.bin")
+        # llama.cpp : ne0 = embd (rapide), puis les copies, puis la position.
+        base = p * n_embd * hc
+        r = ref[base:base + n_embd * hc]
+        if len(d) != len(r):
+            print(f"  pos {p} : LONGUEURS DIFFÉRENTES — Drave {len(d)}, référence {len(r)}")
+            continue
+        ecarts = [abs(a - b
+… [717 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Comparing YaRN vs plain against llama.cpp with the right layout
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport numpy as np, struct\ndef lire_ref(nom, couche, pos):\n    b = open(f\"/tmp/ref_yarn-{nom}-{couche}.bin\",\"rb\").read()\n    ndim = struct.unpack(\"<i\", b[4:8])[0]\n    ne = list(struct.unpack(\"<4i\", b[8:2 … [1326 caractères tronqués]`
+
+  ```
+=== l_last-2 (V4-Flash, couche 2 CSA) : moteur contre llama.cpp ===
+  pos   4 : YaRN corr 0.049637 écart 1.810e+00 | simple corr 0.049700 écart 1.809e+00  → SIMPLE
+  pos  16 : YaRN corr 0.140727 écart 8.564e-01 | simple corr 0.140077 écart 8.537e-01  → YaRN
+  pos  32 : YaRN corr 0.159382 écart 1.019e+00 | simple corr 0.160570 écart 1.001e+00  → SIMPLE
+  pos  64 : YaRN corr 0.060353 écart 6.815e-01 | simple corr 0.059989 écart 6.717e-01  → YaRN
+  pos  96 : YaRN corr 0.051446 écart 7.181e-01 | simple corr 0.050583 écart 7.020e-01  → YaRN
+  pos 120 : YaRN corr 0.250080 écart 1.203e+00 | simple corr 0.252404 écart 1.198e+00  → SIMPLE
+  pos 127 : YaRN corr 0.397141 écart 1.012e+00 | simple corr 0.397943 écart 1.012e+00  → SIMPLE
+=== attn_derope-2 (V4-Flash, couche 2 CSA) : moteur contre llama.cpp ===
+  pos   4 : YaRN corr 0.294022 écart 3.008e+00 | simple corr 0.294113 écart 3.008e+00  → SIMPLE
+  pos  16 : YaRN corr 0.347415 écart 3.521e+00 | simple corr 0.347679 écart 3.520e+00  → SIMPLE
+  pos  32 : YaRN corr 0.360283 écart 2.016e+00 | simple corr 0.360355 écart 2.016e+00  → SIMPLE
+  pos  64 : YaRN corr 0.308540 écart 3.122e+00 | simple corr 0.308205 écart 3.123e+00  → YaRN
+  pos  96 :
+… [270 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -E \"perplexité cumulée|EXIT\" /tmp/v41_ctx32.log | tail -3; head -1 /tmp/t32; tail -1 /tmp/v41_ctx32.log; grep -E \"paires \\(poids\" /tmp/v41_ctx32.log", "description": "Read the V4.1 ctx-32 milestone run"}`
+
+  ```
+1790982848
+[config] rotation : RoPE simple — le modèle DÉCLARE YaRN (JSON `rope_scaling`, facteur 16) mais le moteur ne l'applique qu'au-delà de QUATRE FOIS la longueur d'origine (soit 262144 jetons ici), seuil mesuré sur gpt-oss ; `DRAVE_YARN=1` l'applique partout, comme la référence
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && tail -20 /tmp/v41_ctx32.log", "description": "Check the ctx-32 run status"}`
+
+  ```
+/tmp/v41_texte.txt.ids : 32 tokens, fenêtres de 32
+[rope] YaRN déclaré par le JSON `<arch>.config` (`rope_scaling`), pas par une clef GGUF — lu là, et ANNONCÉ
+[config] cache compressé PARTAGÉ entre couches (`kv_source_layer_ids`) : 2..7 → 2 · 8..13 → 8 · 14..19 → 14 · 20..39 → 20. Les couches SOURCES projettent leur état ; les CONSOMMATRICES lisent les tampons de leur source au lieu d'en calculer d'autres — un compresseur par couche donnerait d'AUTRES clés, donc faux sans rien casser
+[config] indexeurs : couches [2, 8, 14, 20, 24, 28, 32, 36] · les quatre premières possèdent le cache de clés, les autres lisent celui de leur source de KV — une couche qui porte `indexer.proj` sans être dans cette liste serait un fichier contradictoire
+[config] attention V4 : 40 couches · 1 tête latente de 512 (448 nope + 64 rope) · 64 têtes de requête · sortie groupée 8×1024 · puits par tête
+[config] hyper-connexions : 4 copies · 24 mélanges par couche (pre 4 + post 4 + comb 16) · Sinkhorn 20 itérations · eps 1e-6 · pas de mélange de tête (absent du fichier) · chaîne RETARDÉE (V4.1) : la `pre` d'un raccord sert au raccord SUIVANT, et la tête se replie avec la `pre` de la dernière FFN
+[config] engram 
+… [847 caractères tronqués]
+  ```
+
+- **bash** `{"command": "pgrep -c drave 2>/dev/null || echo \"aucun drave\"; tail -3 /tmp/v41_ctx32.log; ls -la /tmp/v41_ctx32.log", "description": "Check the V4.1 ctx-32 process"}`
+
+  ```
+1
+[config] mélanges d'experts chargés : 40/40 couches · mapping absent (experts en clair dans le fichier)
+[config] puits appris sur 40/40 couches · n_rot 80 · ffn 2816 · experts 384
+[config] rotation : RoPE simple — le modèle DÉCLARE YaRN (JSON `rope_scaling`, facteur 16) mais le moteur ne l'applique qu'au-delà de QUATRE FOIS la longueur d'origine (soit 262144 jetons ici), seuil mesuré sur gpt-oss ; `DRAVE_YARN=1` l'applique partout, comme la référence
+-rw-r--r--. 1 stephane stephane 2129  2 oct 19:14 /tmp/v41_ctx32.log
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/rapport-v4-yarn-compresse.md'\ns=open(p).read()\na = \"\"\"## 5. La comparaison décisive (128 positions, contre llama.cpp)\n\n`attn_derope-2` et `l_last-2`, positions 4 à 127, corrélation et écart max con … [3486 caractères tronqués]`
+
+  ```
+ok
+134
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nm = \"\"\"V4-Flash : la rotation des couches compressées passe au YaRN (et la porte change)\n\nllama.cpp et vLLM le disent tous les deux, dans leur code : dès que\n`compress_ratio > 0`, la rotation est YaRN ×16 (bas … [2469 caractères tronqués]`

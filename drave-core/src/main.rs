@@ -1860,6 +1860,7 @@ fn run_config() {
         n_expert: r.n_expert, n_expert_used: r.n_expert_used, ffn_exp: r.ffn_exp,
         ffn_act_oss: false, gating: r.gating, expert_norm: r.norm, expert_scale: r.echelle,
         hash_layers: r.hash_layers, n_rot: 0, yarn: None,
+        yarn_declare: None,
     };
     let manques = model::manques_architecture(&g, &c, 0, false);
     if manques.is_empty() {
