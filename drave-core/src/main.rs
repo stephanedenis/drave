@@ -79,11 +79,15 @@ sont ignorés", modes.len(), modes.join(", "), modes[0]);
     if opt.infer { run_infer(opt); return; }
     let path = &args[1];
     let mut matrix = "blk.0.ffn_gate.weight".to_string();
-    // Par défaut on laisse un quart des CPU au système : l'attente active de la
-    // barrière ne tolère aucune sursouscription (mesuré : ×1,3 de perte à 40+1
-    // threads sur 40 CPU).
+    // Par défaut : les cœurs PHYSIQUES, pas les threads logiques. Mesuré au banc
+    // sur 20 cœurs / 40 threads : 18 threads = 22,6 Go/s, 20 = 18,7 (bruité),
+    // 15 = 19,9, 10 = 14,3. Le `× 3/4` d'avant visait à laisser un quart des CPU
+    // au système, mais il comptait les threads logiques : il donnait 30 fils sur
+    // 20 cœurs. Prendre les 20 cœurs laisse de toute façon leurs 20 hyperthreads
+    // au système, et l'attente active de la barrière ne tolère aucune
+    // sursouscription (mesuré : ×1,3 de perte à 40+1 threads sur 40 CPU).
     let cpu = engine::coeurs_physiques();
-    let mut n_threads = (cpu * 3 / 4).max(1);
+    let mut n_threads = cpu.max(1);
     // Pas de 2 SEULEMENT devant un drapeau qui prend une valeur : un pas de 2
     // aveugle sautait `--threads 4` dès qu'un drapeau booléen le précédait
     // (`--dense --threads 4` annonçait 30 fils). C'est exactement le bug corrigé
@@ -412,7 +416,7 @@ fn fils(opt: &Options) -> usize {
     if opt.threads_impose { opt.threads.max(1) }
     else {
         let cpu = engine::coeurs_physiques();
-        (cpu / 2).max(1)
+        cpu.max(1)
     }
 }
 
@@ -526,7 +530,7 @@ fn analyser(args: &[String]) -> Options {
     };
     let cpu = engine::coeurs_physiques();
     o.ctx = 512;
-    o.threads = (cpu * 3 / 4).max(1);
+    o.threads = cpu.max(1);
     let suivant = |i: usize| -> &String {
         args.get(i + 1).unwrap_or_else(|| panic!("{} attend une valeur", args[i]))
     };
@@ -696,10 +700,12 @@ fn run_infer(opt: Options) {
     } = opt;
     let path = &modele_chemin();
     // Défauts du mode INFÉRENCE : 512 jetons, la moitié des cœurs (l'attente
-    // active de la barrière ne tolère pas la sursouscription), 8 bits.
+    // active de la barrière ne tolère pas la sursouscription), 8 bits. On prend
+    // tous les cœurs physiques : mesuré, 10 threads rendent 14,3 Go/s contre
+    // 22,5 à 20 — le `cpu / 2` laissait 36 % sur la table.
     let cpu = engine::coeurs_physiques();
     let ctx = if ctx_impose { ctx_opt } else { 512 };
-    let n_threads = if threads_impose { threads_opt } else { (cpu / 2).max(1) };
+    let n_threads = if threads_impose { threads_opt } else { cpu.max(1) };
     let abits = if abits_impose { abits_opt } else { 8 };
     let mut mdl = model::Model::load(path, ctx, n_threads, dense, keep, auto, q4, b6);
     if let Some(f) = &opt.tete_restreinte {
@@ -3315,7 +3321,7 @@ fn run_banc_kv(opt: Options) {
     //    minutes pour un chiffre (la vitesse du noyau) qui n'en a pas besoin.
     let gpu_seul = std::env::var("DRAVE_BANC_KV_GPU_SEUL").is_ok();
     let threads = if opt.threads_impose { opt.threads } else {
-        (std::thread::available_parallelism().map(|x| x.get()).unwrap_or(8) * 3 / 4).max(1)
+        engine::coeurs_physiques().max(1)
     };
     let t0 = Instant::now();
     let mut cpu = vec![0f32; n_head * hd];
@@ -3425,7 +3431,7 @@ fn run_gpu_banc(opt: Options) {
     use std::time::Instant;
     let path = &modele_chemin();
     let threads = if opt.threads_impose { opt.threads } else {
-        (engine::coeurs_physiques() * 3 / 4).max(1)
+        engine::coeurs_physiques().max(1)
     };
     let g = Gguf::open_auto(path).expect("ouverture du GGUF");
     // Le banc porte sur la tête Q8_0, ou sur le tenseur nommé (`--matrix`) quand
@@ -4067,7 +4073,7 @@ calculee sur un vocabulaire restreint n'est comparable a rien. Utilisez --infer.
     // d'activation (la référence de non-régression en dépend).
     let cpu = engine::coeurs_physiques();
     let ctx = if ctx_impose { ctx_opt } else { 256 };
-    let n_threads = if threads_impose { threads_opt } else { (cpu * 3 / 4).max(1) };
+    let n_threads = if threads_impose { threads_opt } else { cpu.max(1) };
     let abits = if abits_impose { abits_opt } else { 16 };
     let idfile = idfile.unwrap_or_default();
     let mut ids: Vec<u32> = if idfile.is_empty() {

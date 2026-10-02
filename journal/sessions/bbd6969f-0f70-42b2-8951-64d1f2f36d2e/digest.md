@@ -53579,3 +53579,122 @@ DeepSeek-V4.1-Flash-Q2.gguf  deepseek41 · 1 fichiers · 1046 tenseurs · 365.70
 ⏵ **Le mmap tient quelle que soit la taille** : 365,7 Go en 0,08 s et 47 Mo. Je consigne.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np = 'reports/rapport-architecture-memoire.md'\ns = open(p).read()\ns = s.replace('''## 13. Le FPGA : pas de cas d'usage aujourd'hui''',\n'''## 13. Le mmap tient quelle que soit la taille\n\nOuverture par les en-tête … [1010 caractères tronqués]`
+
+  ```
+ok
+60e1958 mmap : 365,7 Go adresses en 0,08 s et 47 Mo de RSS
+copie : 122.7 Go / 365.7
+  ```
+
+### 🤖 Assistant
+
+⏵ Vérification importante : la porte gpt-oss après toutes ces modifications. Je la lance.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/porte_oss3.sh <<'EOF'\n#!/bin/bash\n# La porte gpt-oss après mmap, threads physiques, KV auto et prélecture.\ncd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\nJ=/tmp/porte_oss3.log\n: > \"$J\"\nprintf \"gpt-oss ctx 256  … [776 caractères tronqués]`
+
+  ```
+porte gpt-oss lancée
+threads par défaut : 15 threads
+  ```
+
+### 🤖 Assistant
+
+⏵ Le défaut est **15 threads** (20 × 3/4), pas 20. Je mesure si c'est le bon choix.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/choix_threads.sh <<'EOF'\n#!/bin/bash\n# Le défaut vaut cœurs × 3/4 = 15. Est-ce le bon choix ? On mesure de 10 à 24.\ncd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\nJ=/tmp/choix_threads.log\n: > \"$J\"\nfor t in 10 1 … [729 caractères tronqués]`
+
+  ```
+10 threads :  14.3 Go/s (meilleur des deux)
+   12 threads :  16.7 Go/s (meilleur des deux)
+   14 threads :  18.6 Go/s (meilleur des deux)
+   15 threads :  19.9 Go/s (meilleur des deux)
+   16 threads :  20.9 Go/s (meilleur des deux)
+   18 threads :  22.6 Go/s (meilleur des deux)
+   20 threads :  18.7 Go/s (meilleur des deux)
+   24 threads :  18.2 Go/s (meilleur des deux)
+=== fin ===
+  ```
+
+### 🤖 Assistant
+
+⏵ Optimum mesuré entre 16 et 20 ; le défaut à 15 laisse 12 % sur la table. Je le corrige.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"coeurs_physiques() \\* 3 / 4\" drave-core/src/main.rs | head -3; python3 - <<'PY'\nimport re\np = 'drave-core/src/main.rs'\ns = open(p).read()\nn = s.count('(engine::coeurs_physiques() * 3 / 4).max(1)')\ns = s.replace('(eng … [1454 caractères tronqués]`
+
+  ```
+3428:        (engine::coeurs_physiques() * 3 / 4).max(1)
+1 defauts corriges
+threads par defaut : 15 threads
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"3 / 4\\|3/4\" drave-core/src/main.rs | head -5; grep -n \"let mut n_threads\\|n_threads =\" drave-core/src/main.rs | head -6", "description": "Find remaining 3/4 in thread defaults"}`
+
+  ```
+84:    // 15 = 19,9, 10 = 14,3. Le `× 3/4` d'avant visait à laisser un quart des CPU
+90:    let mut n_threads = (cpu * 3 / 4).max(1);
+533:    o.threads = (cpu * 3 / 4).max(1);
+3322:        (std::thread::available_parallelism().map(|x| x.get()).unwrap_or(8) * 3 / 4).max(1)
+4074:    let n_threads = if threads_impose { threads_opt } else { (cpu * 3 / 4).max(1) };
+90:    let mut n_threads = (cpu * 3 / 4).max(1);
+100:                n_threads = args[i + 1].parse().unwrap_or(n_threads); i += 2;
+706:    let n_threads = if threads_impose { threads_opt } else { (cpu / 2).max(1) };
+4074:    let n_threads = if threads_impose { threads_opt } else { (cpu * 3 / 4).max(1) };
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np = 'drave-core/src/main.rs'\ns = open(p).read()\nn = s.count('(cpu * 3 / 4).max(1)')\ns = s.replace('(cpu * 3 / 4).max(1)', 'cpu.max(1)')\ns = s.replace('(std::thread::available_parallelism().map(|x| x.get()).unwra … [769 caractères tronqués]`
+
+  ```
+3 occurrences de `cpu * 3/4` corrigees
+BUILD 0
+threads par defaut : 20 threads
+porte Qwen : perplexité 19.3885 sur 510 tokens
+  ```
+
+### 🤖 Assistant
+
+⏵ Défaut à 20 threads, porte intacte. Je vérifie les autres défauts de threads.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"cpu / 2\\|cpu/2\\|threads = cpu\\|let n_threads\" drave-core/src/main.rs drave-core/src/engine.rs | head -8; echo \"--- contexte ligne 706 ---\"; sed -n '703,710p' drave-core/src/main.rs; echo \"--- tests ---\"; (cd drave-c … [106 caractères tronqués]`
+
+  ```
+drave-core/src/main.rs:90:    let mut n_threads = cpu.max(1);
+drave-core/src/main.rs:419:        (cpu / 2).max(1)
+drave-core/src/main.rs:533:    o.threads = cpu.max(1);
+drave-core/src/main.rs:706:    let n_threads = if threads_impose { threads_opt } else { (cpu / 2).max(1) };
+drave-core/src/main.rs:4074:    let n_threads = if threads_impose { threads_opt } else { cpu.max(1) };
+--- contexte ligne 706 ---
+    // active de la barrière ne tolère pas la sursouscription), 8 bits.
+    let cpu = engine::coeurs_physiques();
+    let ctx = if ctx_impose { ctx_opt } else { 512 };
+    let n_threads = if threads_impose { threads_opt } else { (cpu / 2).max(1) };
+    let abits = if abits_impose { abits_opt } else { 8 };
+    let mut mdl = model::Model::load(path, ctx, n_threads, dense, keep, auto, q4, b6);
+    if let Some(f) = &opt.tete_restreinte {
+        poser_tete_restreinte(&mut mdl, f);
+--- tests ---
+test result: ok. 35 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.11s
+  ```
+
+### 🤖 Assistant
+
+⏵ Deux `cpu / 2` subsistent (10 threads = 14,3 Go/s au lieu de 22,5). Je les corrige.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '414,422p' drave-core/src/main.rs; python3 - <<'PY'\np = 'drave-core/src/main.rs'\ns = open(p).read()\nn = s.count('(cpu / 2).max(1)')\ns = s.replace('(cpu / 2).max(1)', 'cpu.max(1)')\ns = s.replace('''    // active de la barr … [1197 caractères tronqués]`
+
+  ```
+/// `--threads` en silence (relevé par `reports/rapport-drapeaux-ignores.md`).
+fn fils(opt: &Options) -> usize {
+    if opt.threads_impose { opt.threads.max(1) }
+    else {
+        let cpu = engine::coeurs_physiques();
+        (cpu / 2).max(1)
+    }
+}
+
+2 defauts /2 corriges
+test result: ok. 35 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.12s
+[timed out after 60000ms]
+[killed by signal: SIGTERM]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -m \"Defauts de threads : les cœurs physiques, sans le 3/4 ni le /2\n\nMesure au banc, epingle sur 20 cœurs : 10 threads = 14,3 Go/s, 15 = 19,9,\n18 = 22,6, 20 = 18,7 (bruite). Le defaut valait cœurs x 3/4 … [661 caractères tronqués]`

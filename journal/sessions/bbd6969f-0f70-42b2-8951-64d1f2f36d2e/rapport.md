@@ -7,12 +7,12 @@
 | Début | 2026-09-28 14:46 |
 | Durée | 79.7 h |
 | Tours | 69 |
-| Messages | 3330 |
-| Appels d'outils | 3150 |
+| Messages | 3338 |
+| Appels d'outils | 3158 |
 | Fichiers touchés | 73 |
-| Commandes | 2751 |
+| Commandes | 2759 |
 | Sous-agents | 22 |
-| Commits | 278 |
+| Commits | 280 |
 | Compactages de contexte | 4 |
 
 ## Objectifs déclarés
@@ -3526,7 +3526,7 @@ Sur cette session, les mesures m
 
 ### Tour 69 — implémente toute les optimisation et détection de matériel avec heuristiques de configuration automatique.
 
-*111 appels d'outils.* Actions notables :
+*119 appels d'outils.* Actions notables :
 
 - bash — Inspect existing GPU detection
 - write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/materiel.rs`
@@ -3542,11 +3542,11 @@ Sur cette session, les mesures m
 - bash — Read KV bits resolution
 - bash — Integrate KV and VRAM heuristics
 - bash — Lighten detection and run gates
-- … et 95 autres
+- … et 103 autres
 
 **Synthèse produite :**
 
-⏵ **Le mmap tient quelle que soit la taille** : 365,7 Go en 0,08 s et 47 Mo. Je consigne.
+⏵ Deux `cpu / 2` subsistent (10 threads = 14,3 Go/s au lieu de 22,5). Je les corrige.
 
 ## 3. Travail accompli
 
@@ -3695,7 +3695,7 @@ Sur cette session, les mesures m
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 2711 autres
+- … et 2719 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4121,4 +4121,6 @@ Sur cette session, les mesures m
 - Rapport : detection materielle et configuration automatique  Ce qui est implemente (materiel.rs + --materiel + heuristiques), ce que chaque regle s'appuie comme
 - Plan materiel sensible au modele : il lit ses dimensions au lieu de les supposer  --materiel lit desormais l'architecture, le nombre d'experts et la taille reel
 - mmap : 365,7 Go adresses en 0,08 s et 47 Mo de RSS" && git log --oneline -1; ls -la /home/stephane/FastNVMe/modeles-lourds/*.gguf 2>/dev/null | awk '{printf "co
+- Defauts de threads : les cœurs physiques, sans le 3/4 ni le /2  Mesure au banc, epingle sur 20 cœurs : 10 threads = 14,3 Go/s, 15 = 19,9, 18 = 22,6, 20 = 18,7 (
+- Defauts de threads : les cœurs physiques, sans le 3/4 ni le /2  Mesure au banc, epingle sur 20 cœurs : 10 threads = 14,3 Go/s, 15 = 19,9, 18 = 22,6, 20 = 18,7 (
 
