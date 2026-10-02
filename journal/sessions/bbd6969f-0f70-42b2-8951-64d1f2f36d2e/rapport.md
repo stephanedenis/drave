@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 92.2 h |
+| Durée | 92.3 h |
 | Tours | 74 |
-| Messages | 4479 |
-| Appels d'outils | 4272 |
-| Fichiers touchés | 88 |
-| Commandes | 3683 |
+| Messages | 4505 |
+| Appels d'outils | 4298 |
+| Fichiers touchés | 89 |
+| Commandes | 3704 |
 | Sous-agents | 28 |
-| Commits | 322 |
+| Commits | 323 |
 | Compactages de contexte | 6 |
 
 ## Objectifs déclarés
@@ -39,6 +39,8 @@
 … [569 caractères tronqués]
 - **complete** — Session autonome jusqu'à 8h HAE (02/10). Mener les optimisations d'architecture mémoire du moteur Drave, par ordre de valeur, chacune mesurée par comparaison appariée et consignée : (1) détection matérielle et heuristiques automatiques — FAIT ; (2) restriction de tête GARANTIE : ne jamais changer la
 … [569 caractères tronqués]
+- **create** — Exécuter le plan docs/plan-deepseek41-complet.md phase par phase (P0→P9), en autonomie, en respectant pour chaque phase ses deux portes : porte de correction (comparaison étage par étage à llama.cpp sur V4-Flash) et porte Drave (flux : événements/paires par jeton, trace rejouée à l'identique, découp
+… [193 caractères tronqués]
 
 ## 1. Ce qui a été demandé
 
@@ -3779,7 +3781,7 @@ Trois autres points qui découlent de votre définition :
 
 ### Tour 74 — révise tous les documents du dossie docs afin de t'asssurer qu'ils sont cohérent avec la vision Drave
 
-*292 appels d'outils.* Actions notables :
+*318 appels d'outils.* Actions notables :
 
 - bash — Survey the docs folder
 - read
@@ -3795,11 +3797,11 @@ Trois autres points qui découlent de votre définition :
 - list_agents
 - bash — Find docs that never mention lists or clusters
 - bash — Read the openings of the three vision-silent docs
-- … et 208 autres
+- … et 233 autres
 
 **Synthèse produite :**
 
-⏵ Le compteur confirme exactement le travail retiré (−1 988,1 M paires, sortie identique).
+⏵ Marquage de P0 dans le plan et commit de la première brique de P1.
 
 ## 3. Travail accompli
 
@@ -3849,7 +3851,7 @@ Trois autres points qui découlent de votre définition :
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/vision.md` | 1 | 3 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/histoire.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/roadmap.md` | 1 | 0 |
-| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs` | 0 | 7 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs` | 0 | 9 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/main.rs` | 0 | 3 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/gpu.rs` | 0 | 3 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-gpu-topk-selection.md` | 1 | 0 |
@@ -3895,6 +3897,7 @@ Trois autres points qui découlent de votre définition :
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-coherence-vision.md` | 1 | 5 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/list.rs` | 0 | 1 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-p0-flux.md` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/hc_synthetique.py` | 1 | 0 |
 
 ### Sous-agents lancés
 
@@ -3969,7 +3972,7 @@ Trois autres points qui découlent de votre définition :
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 3643 autres
+- … et 3664 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4097,7 +4100,7 @@ Trois autres points qui découlent de votre définition :
 
 ## 5. Erreurs rencontrées
 
-250 sorties en erreur ou divergentes. Les premières :
+251 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : a8f2635f8 docs: record which models this box is good at, and why src/llama-hparams.cpp:8:void llama_hparams::set_swa_pattern(uint32_t n_pattern, bool dense_first) { src/llama-hparams.h:308:    void se
 - **T1** : 511 tokens notés — perplexité cumulée 247.031  (4.9 tok/s) === perplexité 247.0308 sur 511 tokens (0 événements, 104.5 s) ===  ### B3 harmony assistant 511 --- ref --- 0.0 0.0 0:00 ls: cannot access '
@@ -4439,4 +4442,5 @@ Trois autres points qui découlent de votre définition :
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p='REPRISE.md'; s=open(p).read() s = s.replace("""## Plan pour exécuter DeepSeek-V4.1 (02
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git commit -q -F - <<'EOF' docs : révision de cohérence avec la vision (18 documents, 88 sites)  Cinq rele
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A drave-core/src/ REPRISE.md reports/rapport-p0-flux.md docs/plan-deepseek41-complet.md reports/r
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF' p='docs/plan-deepseek41-complet.md' s=open(p).read() subs=[ ("""### P0 — Le harnais, s
 

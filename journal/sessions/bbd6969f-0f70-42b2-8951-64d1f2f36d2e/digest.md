@@ -71989,3 +71989,429 @@ The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/REPRISE.md has been upd
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A drave-core/src/ REPRISE.md reports/rapport-p0-flux.md docs/plan-deepseek41-complet.md reports/rapport-coherence-vision.md && git commit -q -F - <<'EOF'\nP0 : le flux se compte par provenance — attention, experts, partagé\n … [1579 caractères tronqués]`
+
+  ```
+e0328fb P0 : le flux se compte par provenance — attention, experts, partagé
+  ```
+
+### 🤖 Assistant
+
+⏵ P0 commité. Ouverture du chantier V4.1 (P1 : hyper-connexions) avec un objectif de session.
+
+- **create_goal** `{"objective": "Exécuter le plan docs/plan-deepseek41-complet.md phase par phase (P0→P9), en autonomie, en respectant pour chaque phase ses deux portes : porte de correction (comparaison étage par étage à llama.cpp sur V4-Flash) et porte Drave (flux : événements/paires par jeton, trace rejouée à l'id … [233 caractères tronqués]`
+
+> **Objectif** (create) : Exécuter le plan docs/plan-deepseek41-complet.md phase par phase (P0→P9), en autonomie, en respectant pour chaque phase ses deux portes : porte de correction (comparaison étage par étage à llama.cpp sur V4-Flash) et porte Drave (flux : événements/paires par jeton, trace rejouée à l'identique, découpage en grappes, flux lisible par un outil d'analyse). Aucune phase ne passe à la suivante sans ses deux portes. Jamais de forward muet, jamais d'optimisation qui change une sortie sans le dire.
+
+
+  ```
+{"goal":{"id":"goal-87d1ebcb-3cbb-43a1-845f-1e93df13d949","revision":1,"objective":"Exécuter le plan docs/plan-deepseek41-complet.md phase par phase (P0→P9), en autonomie, en respectant pour chaque phase ses deux portes : porte de correction (comparaison étage par étage à llama.cpp sur V4-Flash) et porte Drave (flux : événements/paires par jeton, trace rejouée à l'identique, découpage en grappes, flux lisible par un outil d'analyse). Aucune phase ne passe à la suivante sans ses deux portes. Jamais de forward muet, jamais d'optimisation qui change une sortie sans le dire.","phase":"active","roundsStarted":0,"maxGoalRounds":30},"activation":"armed"}
+  ```
+
+### 🤖 Assistant
+
+⏵ P1 : lecture de l'implémentation de référence des hyper-connexions dans llama.cpp.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/llama.cpp && git log --oneline -1 2>/dev/null; grep -rln \"hc_attn_fn\\|hc_mult\" --include=*.cpp --include=*.h --include=*.hpp src/ 2>/dev/null | head", "description": "Find hyper-connection implementation in llama.cpp"}`
+
+  ```
+a8f2635f8 docs: record which models this box is good at, and why
+src/models/deepseek4.cpp
+src/llama-hparams.h
+src/llama-model.h
+src/llama-arch.cpp
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/llama.cpp && wc -l src/models/deepseek4.cpp && grep -n \"hc_\" src/models/deepseek4.cpp | head -40", "description": "Map HC usage in deepseek4.cpp"}`
+
+  ```
+1253 src/models/deepseek4.cpp
+40:    ml.get_key(LLM_KV_HYPER_CONNECTION_COUNT,               hparams.dsv4_hc_mult);
+41:    ml.get_key(LLM_KV_HYPER_CONNECTION_SINKHORN_ITERATIONS, hparams.dsv4_hc_sinkhorn_iters);
+42:    ml.get_key(LLM_KV_HYPER_CONNECTION_EPSILON,             hparams.dsv4_hc_eps);
+76:    const int64_t hc_mult     = hparams.dsv4_hc_mult;
+77:    const int64_t hc_dim      = hc_mult * n_embd;
+78:    const int64_t hc_mix_dim  = (2 + hc_mult) * hc_mult;
+85:    hc_head_fn    = create_tensor(tn(LLM_TENSOR_HC_HEAD_FN, "weight"),    {hc_dim, hc_mult}, 0);
+86:    hc_head_base  = create_tensor(tn(LLM_TENSOR_HC_HEAD_BASE, "weight"),  {hc_mult}, 0);
+87:    hc_head_scale = create_tensor(tn(LLM_TENSOR_HC_HEAD_SCALE, "weight"), {1}, 0);
+102:        layer.hc_attn_fn    = create_tensor(tn(LLM_TENSOR_HC_ATTN_FN,    "weight", i), {hc_dim, hc_mix_dim}, 0);
+103:        layer.hc_attn_base  = create_tensor(tn(LLM_TENSOR_HC_ATTN_BASE,  "weight", i), {hc_mix_dim}, 0);
+104:        layer.hc_attn_scale = create_tensor(tn(LLM_TENSOR_HC_ATTN_SCALE, "weight", i), {3}, 0);
+105:        layer.hc_ffn_fn     = create_tensor(tn(LLM_TENSOR_HC_FFN_FN,     "weight", i), {hc_dim, hc_mix_dim}, 0);
+106:        
+… [1603 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/llama.cpp && sed -n '186,330p' src/models/deepseek4.cpp", "description": "Read HC pre and Sinkhorn reference code"}`
+
+  ```
+return ggml_add(ctx, t, zero);
+}
+
+static constexpr int64_t DSV4_CSA_RATIO  = 4;
+static constexpr int64_t DSV4_HCA_RATIO  = 128;
+
+static ggml_tensor * dsv4_hc_affine(
+        ggml_context * ctx,
+        ggml_tensor  * x,
+        ggml_tensor  * scale,
+        ggml_tensor  * base) {
+    x = ggml_mul(ctx, x, scale);
+    x = ggml_add(ctx, x, base);
+    return x;
+}
+
+ggml_tensor * llama_model_deepseek4::graph::build_hc_pre(
+        ggml_tensor * x,
+        ggml_tensor * weights,
+        int           il) const {
+    GGML_ASSERT(x->ne[0] == n_embd);
+    GGML_ASSERT(x->ne[1] == hparams.dsv4_hc_mult);
+
+    const int64_t hc = hparams.dsv4_hc_mult;
+    const int64_t nt = x->ne[2];
+
+    if (cparams.fused_dsv4_hc_pre && il >= 0) {
+        ggml_tensor * result = ggml_dsv4_hc_pre(ctx0, x, weights);
+        res->add_fused_node({LLM_FUSED_OP_DSV4_HC_PRE, result, il});
+        return result;
+    }
+
+    ggml_tensor * result = nullptr;
+    for (int64_t ih = 0; ih < hc; ++ih) {
+        ggml_tensor * xh = ggml_view_2d(ctx0, x, n_embd, nt, x->nb[2], ih*x->nb[1]);
+        ggml_tensor * wh = ggml_view_2d(ctx0, weights, 1, nt, weights->nb[1], ih*weights->nb[0]);
+        ggml_tensor * cur = ggml_mul(ctx0, xh,
+… [3782 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/llama.cpp && sed -n '330,430p' src/models/deepseek4.cpp", "description": "Read HC post and head mixture"}`
+
+  ```
+GGML_ASSERT(x->ne[0] == n_embd);
+    GGML_ASSERT(residual->ne[1] == hparams.dsv4_hc_mult);
+
+    if (cparams.fused_dsv4_hc_post) {
+        ggml_tensor * result = ggml_dsv4_hc_post(ctx0, x, residual, post, comb);
+        res->add_fused_node({LLM_FUSED_OP_DSV4_HC_POST, result, il});
+        return result;
+    }
+
+    const int64_t hc = hparams.dsv4_hc_mult;
+    const int64_t nt = x->ne[1];
+
+    ggml_tensor * out = nullptr;
+    for (int64_t dst = 0; dst < hc; ++dst) {
+        ggml_tensor * post_dst = ggml_view_2d(ctx0, post, 1, nt, post->nb[1], dst*post->nb[0]);
+        ggml_tensor * cur = ggml_mul(ctx0, x, post_dst);
+
+        for (int64_t src = 0; src < hc; ++src) {
+            ggml_tensor * res_src = ggml_view_2d(ctx0, residual, n_embd, nt, residual->nb[2], src*residual->nb[1]);
+            ggml_tensor * comb_src_dst = ggml_view_2d(ctx0, comb, 1, nt, comb->nb[2],
+                    dst*comb->nb[0] + src*comb->nb[1]);
+            cur = ggml_add(ctx0, cur, ggml_mul(ctx0, res_src, comb_src_dst));
+        }
+
+        cur = ggml_reshape_3d(ctx0, cur, n_embd, 1, nt);
+        out = out ? ggml_concat(ctx0, out, cur, 1) : cur;
+    }
+
+    return out;
+}
+
+ggml_tensor * llama_model_deepseek4::grap
+… [2854 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/llama.cpp && grep -n \"build_hc_pre\\|build_hc_post\\|build_hc_head\\|hc_attn_fn\\|hc_ffn_fn\\|hc_head_fn\" src/models/deepseek4.cpp | sed -n '5,40p'", "description": "Find HC call sites in the layer graph"}`
+
+  ```
+266:ggml_tensor * llama_model_deepseek4::graph::build_hc_pre(
+320:    ggml_tensor * result = build_hc_pre(x, pre, il);
+324:ggml_tensor * llama_model_deepseek4::graph::build_hc_post(
+361:ggml_tensor * llama_model_deepseek4::graph::build_hc_head(
+380:    return build_hc_pre(x, pre, -1);
+1163:        cur = build_hc_pre(inpL,
+1164:                model.layers[il].hc_attn_fn,
+1175:        inpL = build_hc_post(cur, residual, post, comb, il);
+1179:        cur = build_hc_pre(inpL,
+1180:                model.layers[il].hc_ffn_fn,
+1230:        inpL = build_hc_post(cur, residual, post, comb, il);
+1241:    cur = build_hc_head(inpL, model.hc_head_fn, model.hc_head_scale, model.hc_head_base);
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/llama.cpp && sed -n '1150,1253p' src/models/deepseek4.cpp", "description": "Read the full V4 layer loop"}`
+
+  ```
+llm_graph_input_dsv4_raw * inp_attn = inp_dsv4->get_raw();
+    ggml_build_forward_expand(gf, inp_attn->self_kq_mask);
+
+    const int64_t hc = hparams.dsv4_hc_mult;
+    ggml_tensor * inpL = ggml_reshape_3d(ctx0, inp, n_embd, 1, n_tokens);
+    inpL = ggml_repeat_4d(ctx0, inpL, n_embd, hc, n_tokens, 1);
+    cb(inpL, "hc_init", -1);
+
+    for (int il = 0; il < n_layer; ++il) {
+        ggml_tensor * residual = inpL;
+        ggml_tensor * post = nullptr;
+        ggml_tensor * comb = nullptr;
+
+        cur = build_hc_pre(inpL,
+                model.layers[il].hc_attn_fn,
+                model.layers[il].hc_attn_scale,
+                model.layers[il].hc_attn_base,
+                &post, &comb, il);
+        cb(cur, "hc_attn_pre", il);
+
+        cur = build_norm(cur, model.layers[il].attn_norm, nullptr, LLM_NORM_RMS, il);
+        cb(cur, "attn_norm", il);
+
+        cur = build_attention(model, inp_dsv4, cur, inp_pos, il);
+
+        inpL = build_hc_post(cur, residual, post, comb, il);
+        cb(inpL, "hc_attn_post", il);
+
+        residual = inpL;
+        cur = build_hc_pre(inpL,
+                model.layers[il].hc_ffn_fn,
+                model.layers[il].hc_ffn_scale,
+                model.layer
+… [2545 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Spécification complète des hyper-connexions acquise. Lecture des clés GGUF de référence.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/llama.cpp && grep -n \"HYPER_CONNECTION\" src/llama-arch.cpp | head; grep -n \"hyper_connection\" src/llama-arch.cpp | head", "description": "Find GGUF metadata keys for HC"}`
+
+  ```
+271:    { LLM_KV_HYPER_CONNECTION_COUNT,                 "%s.hyper_connection.count"                 },
+272:    { LLM_KV_HYPER_CONNECTION_SINKHORN_ITERATIONS,   "%s.hyper_connection.sinkhorn_iterations"   },
+273:    { LLM_KV_HYPER_CONNECTION_EPSILON,               "%s.hyper_connection.epsilon"               },
+271:    { LLM_KV_HYPER_CONNECTION_COUNT,                 "%s.hyper_connection.count"                 },
+272:    { LLM_KV_HYPER_CONNECTION_SINKHORN_ITERATIONS,   "%s.hyper_connection.sinkhorn_iterations"   },
+273:    { LLM_KV_HYPER_CONNECTION_EPSILON,               "%s.hyper_connection.epsilon"               },
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for f in /home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek-V4-Flash-UD-IQ1_M/DeepSeek-V4-Flash-UD-IQ1_M-00001-of-00003.gguf /home/stephane/FastNVMe/modeles-lourds/DeepSeek-V4.1-Flash-Q2.gguf; do echo \"--- $(basename $f)\"; stri … [178 caractères tronqués]`
+
+  ```
+--- DeepSeek-V4-Flash-UD-IQ1_M-00001-of-00003.gguf
+deepseek4.hyper_connection.count
+deepseek4.hyper_connection.sinkhorn_iterations
+deepseek4.hyper_connection.epsilon
+--- DeepSeek-V4.1-Flash-Q2.gguf
+{"architectures":["DeepseekV41ForCausalLM"],"bos_token_id":0,"dtype":"bfloat16","eos_token_id":1,"image_token_id":129264,"model_type":"deepseek_v41","pad_token_id":2,"quantization_config":{"activation_scheme":"dynamic","expert_dtype":"fp4","quant_method":"fp8","scale_fmt":"ue8m0","weight_block_size":[32,32]},"text_config":{"attention_bias":false,"attention_dropout":0.0,"candidate_block_size":8,"candidate_source_layer_id":20,"candidate_topk_blocks":2048,"compress_ratios":[0,0,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0],"compress_rope_theta":160000,"dspark_block_size":5,"dspark_markov_rank":256,"dspark_n_routed_experts":128,"dspark_noise_token_id":128799,"dspark_num_experts_per_tok":3,"dspark_target_layer_ids":[37,38,39],"engram_compressed_vocab_size":99092,"engram_head_dim":256,"engram_layer_ids":[1,14],"engram_max_ngram_size":4,"engram_n_heads":8,"engram_num_embeddings":[384006168,384016682],"engram_pad_token_id":2,"engram_vocab_size":16000000,"hc_e
+… [1268 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && strings -n 4 /home/stephane/FastNVMe/modeles-lourds/DeepSeek-V4.1-Flash-Q2.gguf | grep -n \"architectures\" | head -3; echo \"--- clés autour ---\"; strings -n 4 /home/stephane/FastNVMe/modeles-lourds/DeepSeek-V4.1-Flash-Q2.gguf | gr … [118 caractères tronqués]`
+
+  ```
+(no output)
+[timed out after 300000ms]
+[killed by signal: SIGTERM]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 120 bash -c 'strings -n 4 /home/stephane/FastNVMe/modeles-lourds/DeepSeek-V4.1-Flash-Q2.gguf | head -c 300000' | grep -B 4 \"architectures\" | head -10", "description": "Get the GGUF key name for the config JSON", "timeoutMs" … [9 caractères tronqués]`
+
+  ```
+general.source.revision
+df42c109f1defefcbfcedbe7d905718a12266e40
+general.alignment
+deepseek41.config
+{"architectures":["DeepseekV41ForCausalLM"],"bos_token_id":0,"dtype":"bfloat16","eos_token_id":1,"image_token_id":129264,"model_type":"deepseek_v41","pad_token_id":2,"quantization_config":{"activation_scheme":"dynamic","expert_dtype":"fp4","quant_method":"fp8","scale_fmt":"ue8m0","weight_block_size":[32,32]},"text_config":{"attention_bias":false,"attention_dropout":0.0,"candidate_block_size":8,"candidate_source_layer_id":20,"candidate_topk_blocks":2048,"compress_ratios":[0,0,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0],"compress_rope_theta":160000,"dspark_block_size":5,"dspark_markov_rank":256,"dspark_n_routed_experts":128,"dspark_noise_token_id":128799,"dspark_num_experts_per_tok":3,"dspark_target_layer_ids":[37,38,39],"engram_compressed_vocab_size":99092,"engram_head_dim":256,"engram_layer_ids":[1,14],"engram_max_ngram_size":4,"engram_n_heads":8,"engram_num_embeddings":[384006168,384016682],"engram_pad_token_id":2,"engram_vocab_size":16000000,"hc_eps":1e-06,"hc_mult":4,"hc_sinkhorn_iters":20,"head_dim":512,"hidden_act":"silu","hidden_size":512
+… [1209 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 60 bash -c 'strings -n 4 /home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek-V4-Flash-UD-IQ1_M/DeepSeek-V4-Flash-UD-IQ1_M-00001-of-00003.gguf | head -c 200000' | grep -A 2 \"hyper_connection\" | head -12", "description": " … [69 caractères tronqués]`
+
+  ```
+deepseek4.hyper_connection.count
+deepseek4.hyper_connection.sinkhorn_iterations
+deepseek4.hyper_connection.epsilon
+deepseek4.hash_layer_count
+tokenizer.ggml.model
+  ```
+
+### 🤖 Assistant
+
+⏵ Implémentation du cœur des hyper-connexions (mélanges, Sinkhorn, rétroaction).
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"pub struct Mla\" drave-core/src/model.rs; sed -n \"$(grep -n 'pub struct Mla' drave-core/src/model.rs | cut -d: -f1),+8p\" drave-core/src/model.rs", "description": "Locate Mla struct for insertion point"}`
+
+  ```
+1104:pub struct Mla {
+pub struct Mla {
+    pub q_a: Vec<f32>,      // [h, q_lora]
+    pub q_a_norm: Vec<f32>, // [q_lora]
+    pub q_b: Vec<f32>,      // [q_lora, nh*(qkn+qkr)]
+    pub kv_a: Vec<f32>,     // [h, kv_lora+qkr]
+    pub kv_a_norm: Vec<f32>,// [kv_lora]
+    /// Disposition **combinée** : `[kv_lora, nh*(qkn+vd)]`, une matrice par
+    /// tête concaténée. Vide quand le modèle utilise la disposition séparée
+    /// (`attn_k_b` + `attn_v_b`), qui est celle de Kimi-K2.7 et DeepSeek-V3/V4.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs", "new_string": "pub struct Mla {", "old_string": "pub struct Mla {"}`
+
+  ```
+Error: old_string and new_string must differ
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs", "limit": 10, "offset": 1096}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs</path>
+<type>file</type>
+<content>
+1096:         Some((&v.0, &v.1, &v.2))
+1097:     }
+1098: }
+1099: 
+1100: /// MLA (attention latente) : les poids d'une couche, lus en f32. Le cache n'est
+1101: /// PAS `(n_kv, ctx, head_dim)` mais **une seule tête latente** par couche —
+1102: /// `kv_lora` valeurs, plus les `qk_rope` composantes tournées. C'est tout
+1103: /// l'intérêt de MLA : le cache ne dépend plus du nombre de têtes.
+1104: pub struct Mla {
+1105:     pub q_a: Vec<f32>,      // [h, q_lora]
+
+(Showing lines 1096-1105 of 5664. Use offset=1106 to continue.)
+</content>
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs", "new_string": "/// **Hyper-connexions** (DeepSeek-V4 / V4.1) : au lieu d'additionner la sortie\n/// d'une sous-couche au résidu, l'état résiduel est porté en **`hc` copies**\n/// (4) qui se **mélangent** — c'est … [6990 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && cargo build --release 2>&1 | grep -E \"^error\" -A 6 | head -20; echo \"--- fin ---\"", "description": "Build the HC core", "timeoutMs": 600000}`
+
+  ```
+--- fin ---
+  ```
+
+### 🤖 Assistant
+
+⏵ Référence numpy des hyper-connexions pour fabriquer les valeurs-témoins du test.
+
+- **write** `{"content": "#!/usr/bin/env python3\n\"\"\"Référence **numpy** des hyper-connexions de DeepSeek-V4, et valeurs-témoins.\n\nLes formules sont recopiées des opérations ggml de\n`llama.cpp/src/models/deepseek4.cpp` (`build_hc_pre`, `build_hc_sinkhorn`,\n`build_hc_post`, `build_hc_head`), **pas** de l'i … [4080 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/hc_synthetique.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/hc_synthetique.py 2>&1 | head -20", "description": "Generate golden HC values"}`
+
+  ```
+// généré par tools/hc_synthetique.py — ne pas éditer à la main
+const MELANGE: [f32; 288] = [2.000000000e+00, -2.000000000e+00, -2.000000000e+00, -2.000000000e+00, -1.000000000e+00, -1.000000000e+00, -1.000000000e+00, 1.000000000e+00, -1.000000000e+00, 2.000000000e+00, -2.000000000e+00, 1.000000000e+00, 1.000000000e+00, 0.000000000e+00, 0.000000000e+00, 0.000000000e+00, 2.000000000e+00, 2.000000000e+00, -2.000000000e+00, -1.000000000e+00, -2.000000000e+00, 0.000000000e+00, 2.000000000e+00, 1.000000000e+00, -2.000000000e+00, 2.000000000e+00, 2.000000000e+00, 1.000000000e+00, 2.000000000e+00, 0.000000000e+00, -1.000000000e+00, 1.000000000e+00, 1.000000000e+00, 0.000000000e+00, 2.000000000e+00, -1.000000000e+00, 0.000000000e+00, -1.000000000e+00, 0.000000000e+00, 2.000000000e+00, -2.000000000e+00, -2.000000000e+00, 0.000000000e+00, 2.000000000e+00, 0.000000000e+00, -2.000000000e+00, -1.000000000e+00, -2.000000000e+00, -2.000000000e+00, 2.000000000e+00, -2.000000000e+00, 1.000000000e+00, -2.000000000e+00, -2.000000000e+00, -2.000000000e+00, 2.000000000e+00, -1.000000000e+00, 0.000000000e+00, 1.000000000e+00, 1.000000000e+00, 0.000000000e+00, 1.000000000e+00, -2.000000000e+00, -1.000000
+… [5781 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Test unitaire comparant le Rust à la référence numpy des hyper-connexions.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport subprocess, textwrap\nout = subprocess.run(['python3','tools/hc_synthetique.py'],capture_output=True,text=True).stdout\nconsts = [l for l in out.splitlines() if l.startswith('const ')]\n# reformate les tab … [4330 caractères tronqués]`
+
+  ```
+#[cfg(test)]
+mod tests_hc {
+    //! Les hyper-connexions de DeepSeek-V4, comparées à une **seconde**
+    //! implémentation : `tools/hc_synthetique.py` recopie les opérations ggml de
+    //! `llama.cpp/src/models/deepseek4.cpp` en numpy. Les mêmes formules écrites
+    //! deux fois dans deux langages : un écart se voit.
+    //!
+    //! Les valeurs ci-dessous sont GÉNÉRÉES (`python3 tools/hc_synthetique.py`) ;
+    //! ne pas les retoucher à la main. Dimensions minuscules (`hc = 4`, `h = 3`)
+    //! et poids entiers pour que le test se relise sans calculatrice.
+    use super::*;
+
+    const MELANGE: [f32; 288] = [
+        2.000000000e+00, -2.000000000e+00, -2.000000000e+00, -2.000000000e+00, -1.000000000e+00, -1.000000000e+00, -1.000000000e+00, 1.000000000e+00,
+        -1.000000000e+00, 2.000000000e+00, -2.000000000e+00, 1.000000000e+00, 1.000000000e+00, 0.000000000e+00, 0.000000000e+00, 0.000000000e+00,
+        2.000000000e+00, 2.000000000e+00, -2.000000000e+00, -1.000000000e+00, -2.000000000e+00, 0.000000000e+00, 2.000000000e+00, 1.000000000e+00,
+        -2.000000000e+00, 2.000000000e+00, 2.000000000e+00, 1.000000000e+00, 2.000000000e+00, 0.000000000e+00, -1.000000000e+00, 1.000000
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='drave-core/src/model.rs'\ns=open(p).read()\ntest=open('/tmp/test_hc.rs').read()\n# insérer avant le dernier '}' du fichier (fin du module de tests existant)\nassert s.rstrip().endswith('}')\ns = s.rstrip()\n#  … [430 caractères tronqués]`
+
+  ```
+inséré
+error: test failed, to rerun pass `--bin drave`
+--- fin ---
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && cargo test --release 2>&1 | grep -A 12 \"failures:\" | head -40", "description": "Show HC test failures", "timeoutMs": 900000}`
+
+  ```
+failures:
+
+---- model::tests_hc::hyper_connexions_conforme_a_la_reference stdout ----
+
+thread 'model::tests_hc::hyper_connexions_conforme_a_la_reference' (543365) panicked at src/model.rs:5774:13:
+comb[0] : 1.3374146e-5 contre 3.5522943e-3 (écart 3.53892e-3)
+
+
+failures:
+    model::tests_hc::hyper_connexions_conforme_a_la_reference
+
+test result: FAILED. 51 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.12s
+
+error: test failed, to rerun pass `--bin drave`
+  ```
+
+### 🤖 Assistant
+
+⏵ Désaccord détecté : la disposition mémoire de `comb` (index rapide = destination). Je corrige la référence.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='tools/hc_synthetique.py'\ns=open(p).read()\nsubs=[\n(\"\"\"def sinkhorn(comb, hc, iters, eps):\n    \\\"\\\"\\\"comb[d, s] = destination d, source s. Ordre exact de la référence :\n    softmax sur les destinat … [3378 caractères tronqués]`
+
+  ```
+ok
+const POST: [f32; 4] = [1.999999977e+00, 1.960112879e+00, 9.824524421e-01, 1.013996532e-01];
+const COMB: [f32; 16] = [1.337415487e-05, 2.076609642e-06, 9.989694829e-01, 2.014161513e-05, 1.287439464e-06, 9.038835995e-07, 9.279701907e-05, 9.990398264e-01, 1.625873293e-06, 9.922175094e-01, 1.347101468e-06, 1.176386955e-06, 9.999827027e-01, 7.778517899e-03, 9.353739472e-04, 9.378564322e-04];
+const ENTREE: [f32; 3] = [5.229211011e-01, 1.062983348e+00, 1.785206568e-01];
+const SORTIE: [f32; 12] = [-5.711946950e-05, 4.999981709e+00, -5.214681907e-05, -9.523406790e-01, 4.920219977e+00, -2.936777237e+00, -2.978333719e+00, 1.965656011e+00, -1.979738118e+00, 1.898516606e+00, -1.794341314e+00, -2.097624911e+00];
+// sommes par destination (doivent valoir 1 à eps près) : 9.999989902e-01, 9.999990078e-01, 9.999990010e-01, 9.999990009e-01
+// sommes par source      : 9.990050753e-01, 9.991348148e-01, 9.922216587e-01, 1.009634451e+00 (dérivent de eps)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport subprocess, re\nout = subprocess.run(['python3','tools/hc_synthetique.py'],capture_output=True,text=True).stdout\nconsts = {}\nfor l in out.splitlines():\n    m = re.match(r'const (\\w+): \\[f32; (\\d+)\\] … [844 caractères tronqués]`
+
+  ```
+constantes mises à jour : ['MELANGE', 'BASE', 'SCALE', 'X', 'Y', 'PRE', 'POST', 'COMB', 'ENTREE', 'SORTIE']
+
+test result: ok. 52 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.14s
+  ```
+
+### 🤖 Assistant
+
+⏵ Marquage de P0 dans le plan et commit de la première brique de P1.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '104,116p' docs/plan-deepseek41-complet.md", "description": "Read plan P0 section for status marking"}`
+
+  ```
+et le flux nouveau lisible par un outil d'analyse.
+
+Une phase qui ne passe pas ses deux portes ne passe pas à la suivante.
+
+### P0 — Le harnais, sur V4-Flash, et le coût d'un jeton (≈ 3 h)
+
+- V4-Flash chargé dans le moteur ; comparaison par étage opérationnelle des deux
+  côtés (`ref_logits --tensors` / `DRAVE_DEBUG_MLA`, `DRAVE_DEBUG_ETAT`) ;
+  **compteur d'événements** instrumenté sur le chemin MLA et sur le chemin
+  experts-IQ (aujourd'hui muets).
+- **Porte de correction** : `--config` annonce la bonne liste de manques ;
+  les deux côtés produisent les mêmes tenseurs nommés.
+- **Porte Drave** : un jeton sur V4-Flash affiche un **nombre d'événements non
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='docs/plan-deepseek41-complet.md'\ns=open(p).read()\nsubs=[\n(\"\"\"### P0 — Le harnais, sur V4-Flash, et le coût d'un jeton (≈ 3 h)\n\n- V4-Flash chargé dans le moteur ;\"\"\",\n \"\"\"### P0 — Le harnais, sur … [3515 caractères tronqués]`

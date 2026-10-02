@@ -1097,6 +1097,160 @@ impl CacheExperts {
     }
 }
 
+/// **Hyper-connexions** (DeepSeek-V4 / V4.1) : au lieu d'additionner la sortie
+/// d'une sous-couche au résidu, l'état résiduel est porté en **`hc` copies**
+/// (4) qui se **mélangent** — c'est le « cas général en connexions pondérées »
+/// de la vision, et `comb` en est la matrice : `hc × hc` connexions **par
+/// jeton**, rendues doublement stochastiques par Sinkhorn.
+///
+/// Les formules sont celles de `src/models/deepseek4.cpp` de llama.cpp
+/// (`build_hc_pre`, `build_hc_sinkhorn`, `build_hc_post`), recopiées ici pour
+/// qu'un écart se voie ligne par ligne :
+///
+/// ```text
+///   aplat      = rms_norm(x aplati sur hc × h)          (SANS poids appris)
+///   mélanges   = hc_fn · aplat                          [2·hc + hc² = 24]
+///   pre[ih]    = σ(mélanges[ih]·scale₀ + base[ih]) + eps          → entrée
+///   post[ih]   = 2·σ(mélanges[hc+ih]·scale₁ + base[hc+ih])        → sortie
+///   comb[d,s]  = Sinkhorn(mélanges[2hc + d + s·hc]·scale₂ + base[…])
+///   entrée     = Σ_ih x[ih]·pre[ih]
+///   sortie[d]  = y·post[d] + Σ_s résidu[s]·comb[d,s]
+/// ```
+pub struct Hc {
+    /// `hc_fn` : `[hc_mix × hc·h]`, ligne par mélange — tel que rangé dans le GGUF.
+    pub melange: Vec<f32>,
+    /// `hc_base` : `[2·hc + hc²]` — les biais des trois groupes.
+    pub base: Vec<f32>,
+    /// `hc_scale` : `[3]` — une échelle pour `pre`, `post` et `comb`.
+    pub scale: Vec<f32>,
+    pub hc: usize,
+    pub h: usize,
+    /// `hyper_connection.sinkhorn_iterations` (20 pour V4.1).
+    pub iters: usize,
+    /// `hyper_connection.epsilon` (1e-6 pour V4.1).
+    pub eps: f32,
+}
+
+/// Ce que `Hc::mélanges` rend pour une sous-couche : de quoi mélanger l'entrée,
+/// remettre à l'échelle la sortie, et router les copies entre elles.
+pub struct HcSortie {
+    pub pre: Vec<f32>,   // [hc]
+    pub post: Vec<f32>,  // [hc]
+    pub comb: Vec<f32>,  // [hc·hc], `comb[d + s·hc]`
+}
+
+/// Normalisation RMS **sans poids** (celle de `ggml_rms_norm` seul, que les
+/// hyper-connexions utilisent sur l'état aplati).
+fn rms_norm_sans_poids(x: &[f32], eps: f32, out: &mut [f32]) {
+    let mut s = 0f64;
+    for &v in x { s += (v as f64) * (v as f64); }
+    let inv = 1.0 / ((s / x.len().max(1) as f64) as f32 + eps).sqrt();
+    for (o, &v) in out.iter_mut().zip(x.iter()) { *o = v * inv; }
+}
+
+/// **Sinkhorn** des connexions : softmax sur les destinations, puis
+/// normalisations alternées lignes/colonnes avec `eps` — l'ordre exact du
+/// modèle de référence (une passe « sources » d'abord, puis `iters − 1` paires).
+pub fn sinkhorn(comb: &mut [f32], hc: usize, iters: usize, eps: f32) {
+    // softmax sur `dst` (ne0 de ggml), pour chaque `src`
+    for s in 0..hc {
+        let mut mx = f32::NEG_INFINITY;
+        for d in 0..hc { let v = comb[d + s * hc]; if v > mx { mx = v; } }
+        let mut somme = 0f32;
+        for d in 0..hc { let e = (comb[d + s * hc] - mx).exp(); comb[d + s * hc] = e; somme += e; }
+        let inv = if somme > 0.0 { 1.0 / somme } else { 0.0 };
+        for d in 0..hc { comb[d + s * hc] *= inv; }
+    }
+    for v in comb.iter_mut() { *v += eps; }
+    // normalise sur les SOURCES, pour chaque destination (« norm_cols »)
+    let norm_src = |c: &mut [f32]| {
+        for d in 0..hc {
+            let mut s = eps;
+            for src in 0..hc { s += c[d + src * hc]; }
+            for src in 0..hc { c[d + src * hc] /= s; }
+        }
+    };
+    // normalise sur les DESTINATIONS, pour chaque source (« norm_rows »)
+    let norm_dst = |c: &mut [f32]| {
+        for src in 0..hc {
+            let mut s = eps;
+            for d in 0..hc { s += c[d + src * hc]; }
+            for d in 0..hc { c[d + src * hc] /= s; }
+        }
+    };
+    norm_src(comb);
+    for _ in 1..iters { norm_dst(comb); norm_src(comb); }
+}
+
+impl Hc {
+    pub fn hc_mix(&self) -> usize { 2 * self.hc + self.hc * self.hc }
+
+    /// Les `24` mélanges d'un jeton : `hc_fn · rms_norm(x aplati)`.
+    pub fn melanges(&self, x: &[f32]) -> Vec<f32> {
+        let hc_dim = self.hc * self.h;
+        let mut plat = vec![0f32; hc_dim];
+        rms_norm_sans_poids(&x[..hc_dim.min(x.len())], 1e-20, &mut plat);
+        let mut out = vec![0f32; self.hc_mix()];
+        for (m, o) in out.iter_mut().enumerate() {
+            let ligne = &self.melange[m * hc_dim..(m + 1) * hc_dim];
+            let mut acc = 0f32;
+            for i in 0..hc_dim { acc += ligne[i] * plat[i]; }
+            *o = acc;
+        }
+        out
+    }
+
+    /// Les trois sorties d'un `hc_pre` : `pre`, `post`, `comb`.
+    pub fn sortie(&self, x: &[f32]) -> HcSortie {
+        let mel = self.melanges(x);
+        let (hc, eps) = (self.hc, self.eps);
+        let sig = |v: f32| 1.0 / (1.0 + (-v).exp());
+        let mut pre = vec![0f32; hc];
+        for i in 0..hc { pre[i] = sig(mel[i] * self.scale[0] + self.base[i]) + eps; }
+        let mut post = vec![0f32; hc];
+        for i in 0..hc {
+            post[i] = 2.0 * sig(mel[hc + i] * self.scale[1] + self.base[hc + i]);
+        }
+        let mut comb = vec![0f32; hc * hc];
+        for d in 0..hc {
+            for s in 0..hc {
+                let m = 2 * hc + d + s * hc;
+                comb[d + s * hc] = mel[m] * self.scale[2] + self.base[m];
+            }
+        }
+        sinkhorn(&mut comb, hc, self.iters, eps);
+        HcSortie { pre, post, comb }
+    }
+
+    /// `hc_pre` : l'entrée de la sous-couche est le **mélange** des copies.
+    pub fn melanger(x: &[f32], poids: &[f32], hc: usize, h: usize, out: &mut [f32]) {
+        for o in out[..h].iter_mut() { *o = 0.0; }
+        for ih in 0..hc {
+            let p = poids[ih];
+            if p == 0.0 { continue; }
+            let copie = &x[ih * h..(ih + 1) * h];
+            for e in 0..h { out[e] += copie[e] * p; }
+        }
+    }
+
+    /// `hc_post` : les copies de sortie, à partir de la sortie de la
+    /// sous-couche (`y`), du résidu gardé et des connexions `comb`.
+    pub fn retro(y: &[f32], residu: &[f32], s: &HcSortie, hc: usize, h: usize,
+                 out: &mut [f32]) {
+        for d in 0..hc {
+            let copie = &mut out[d * h..(d + 1) * h];
+            let pd = s.post[d];
+            for e in 0..h { copie[e] = y[e] * pd; }
+            for src in 0..hc {
+                let c = s.comb[d + src * hc];
+                if c == 0.0 { continue; }
+                let r = &residu[src * h..(src + 1) * h];
+                for e in 0..h { copie[e] += r[e] * c; }
+            }
+        }
+    }
+}
+
 /// MLA (attention latente) : les poids d'une couche, lus en f32. Le cache n'est
 /// PAS `(n_kv, ctx, head_dim)` mais **une seule tête latente** par couche —
 /// `kv_lora` valeurs, plus les `qk_rope` composantes tournées. C'est tout
@@ -5538,6 +5692,155 @@ mod tests_noeud_partiel {
         assert!(e.is_err(), "un mapping de 6 experts pour un modèle qui en a 4 doit être \
 refusé, pas suivi en silence");
         let _ = std::fs::remove_dir_all(&d);
+    }
+}
+
+#[cfg(test)]
+mod tests_hc {
+    //! Les hyper-connexions de DeepSeek-V4, comparées à une **seconde**
+    //! implémentation : `tools/hc_synthetique.py` recopie les opérations ggml de
+    //! `llama.cpp/src/models/deepseek4.cpp` en numpy. Les mêmes formules écrites
+    //! deux fois dans deux langages : un écart se voit.
+    //!
+    //! Les valeurs ci-dessous sont GÉNÉRÉES (`python3 tools/hc_synthetique.py`) ;
+    //! ne pas les retoucher à la main. Dimensions minuscules (`hc = 4`, `h = 3`)
+    //! et poids entiers pour que le test se relise sans calculatrice.
+    use super::*;
+
+    const MELANGE: [f32; 288] = [
+        2.000000000e+00, -2.000000000e+00, -2.000000000e+00, -2.000000000e+00, -1.000000000e+00, -1.000000000e+00, -1.000000000e+00, 1.000000000e+00,
+        -1.000000000e+00, 2.000000000e+00, -2.000000000e+00, 1.000000000e+00, 1.000000000e+00, 0.000000000e+00, 0.000000000e+00, 0.000000000e+00,
+        2.000000000e+00, 2.000000000e+00, -2.000000000e+00, -1.000000000e+00, -2.000000000e+00, 0.000000000e+00, 2.000000000e+00, 1.000000000e+00,
+        -2.000000000e+00, 2.000000000e+00, 2.000000000e+00, 1.000000000e+00, 2.000000000e+00, 0.000000000e+00, -1.000000000e+00, 1.000000000e+00,
+        1.000000000e+00, 0.000000000e+00, 2.000000000e+00, -1.000000000e+00, 0.000000000e+00, -1.000000000e+00, 0.000000000e+00, 2.000000000e+00,
+        -2.000000000e+00, -2.000000000e+00, 0.000000000e+00, 2.000000000e+00, 0.000000000e+00, -2.000000000e+00, -1.000000000e+00, -2.000000000e+00,
+        -2.000000000e+00, 2.000000000e+00, -2.000000000e+00, 1.000000000e+00, -2.000000000e+00, -2.000000000e+00, -2.000000000e+00, 2.000000000e+00,
+        -1.000000000e+00, 0.000000000e+00, 1.000000000e+00, 1.000000000e+00, 0.000000000e+00, 1.000000000e+00, -2.000000000e+00, -1.000000000e+00,
+        0.000000000e+00, -2.000000000e+00, 1.000000000e+00, -1.000000000e+00, -2.000000000e+00, 1.000000000e+00, -1.000000000e+00, -2.000000000e+00,
+        1.000000000e+00, 2.000000000e+00, 2.000000000e+00, -1.000000000e+00, -1.000000000e+00, -2.000000000e+00, 2.000000000e+00, 2.000000000e+00,
+        -1.000000000e+00, 0.000000000e+00, 0.000000000e+00, -2.000000000e+00, -1.000000000e+00, 2.000000000e+00, 0.000000000e+00, 1.000000000e+00,
+        2.000000000e+00, 0.000000000e+00, -2.000000000e+00, 1.000000000e+00, -2.000000000e+00, -1.000000000e+00, 1.000000000e+00, -1.000000000e+00,
+        -2.000000000e+00, 0.000000000e+00, -2.000000000e+00, 0.000000000e+00, -1.000000000e+00, 2.000000000e+00, 0.000000000e+00, 1.000000000e+00,
+        0.000000000e+00, 1.000000000e+00, -2.000000000e+00, -1.000000000e+00, 0.000000000e+00, 2.000000000e+00, -2.000000000e+00, 2.000000000e+00,
+        2.000000000e+00, -2.000000000e+00, 1.000000000e+00, -2.000000000e+00, -1.000000000e+00, -2.000000000e+00, 0.000000000e+00, -1.000000000e+00,
+        1.000000000e+00, 0.000000000e+00, 1.000000000e+00, 1.000000000e+00, 1.000000000e+00, -2.000000000e+00, 2.000000000e+00, 1.000000000e+00,
+        -2.000000000e+00, 2.000000000e+00, 2.000000000e+00, 0.000000000e+00, -2.000000000e+00, -1.000000000e+00, 0.000000000e+00, 2.000000000e+00,
+        0.000000000e+00, -1.000000000e+00, -1.000000000e+00, -1.000000000e+00, 2.000000000e+00, -2.000000000e+00, 0.000000000e+00, 0.000000000e+00,
+        2.000000000e+00, -2.000000000e+00, -1.000000000e+00, -1.000000000e+00, 2.000000000e+00, 2.000000000e+00, 1.000000000e+00, -1.000000000e+00,
+        -1.000000000e+00, -2.000000000e+00, -1.000000000e+00, -1.000000000e+00, -2.000000000e+00, -1.000000000e+00, -2.000000000e+00, 0.000000000e+00,
+        2.000000000e+00, 1.000000000e+00, 2.000000000e+00, 0.000000000e+00, 2.000000000e+00, 1.000000000e+00, -2.000000000e+00, -2.000000000e+00,
+        1.000000000e+00, 0.000000000e+00, 0.000000000e+00, -2.000000000e+00, -2.000000000e+00, 0.000000000e+00, -1.000000000e+00, 2.000000000e+00,
+        1.000000000e+00, -1.000000000e+00, 2.000000000e+00, 1.000000000e+00, -2.000000000e+00, 0.000000000e+00, -2.000000000e+00, 2.000000000e+00,
+        0.000000000e+00, 1.000000000e+00, 0.000000000e+00, 1.000000000e+00, 1.000000000e+00, 1.000000000e+00, 2.000000000e+00, -2.000000000e+00,
+        -1.000000000e+00, 2.000000000e+00, -1.000000000e+00, 2.000000000e+00, 2.000000000e+00, -1.000000000e+00, 0.000000000e+00, 1.000000000e+00,
+        0.000000000e+00, -1.000000000e+00, 2.000000000e+00, -1.000000000e+00, -1.000000000e+00, 2.000000000e+00, 2.000000000e+00, 1.000000000e+00,
+        -2.000000000e+00, -1.000000000e+00, 0.000000000e+00, -2.000000000e+00, 0.000000000e+00, 2.000000000e+00, 2.000000000e+00, 2.000000000e+00,
+        -1.000000000e+00, -1.000000000e+00, -1.000000000e+00, -1.000000000e+00, -2.000000000e+00, -1.000000000e+00, 1.000000000e+00, 1.000000000e+00,
+        1.000000000e+00, -2.000000000e+00, 1.000000000e+00, -1.000000000e+00, 0.000000000e+00, 0.000000000e+00, 2.000000000e+00, 0.000000000e+00,
+        0.000000000e+00, -1.000000000e+00, 0.000000000e+00, 0.000000000e+00, 1.000000000e+00, -1.000000000e+00, 2.000000000e+00, -2.000000000e+00,
+        -2.000000000e+00, -2.000000000e+00, 2.000000000e+00, 0.000000000e+00, 0.000000000e+00, 0.000000000e+00, 1.000000000e+00, -1.000000000e+00,
+        0.000000000e+00, 0.000000000e+00, 1.000000000e+00, 2.000000000e+00, 0.000000000e+00, -1.000000000e+00, -2.000000000e+00, -1.000000000e+00,
+        0.000000000e+00, 2.000000000e+00, 1.000000000e+00, 1.000000000e+00, -2.000000000e+00, 0.000000000e+00, 2.000000000e+00, 0.000000000e+00,
+        -1.000000000e+00, 2.000000000e+00, 1.000000000e+00, 0.000000000e+00, 1.000000000e+00, 2.000000000e+00, 2.000000000e+00, -1.000000000e+00,
+        1.000000000e+00, 1.000000000e+00, 0.000000000e+00, 2.000000000e+00, -2.000000000e+00, 1.000000000e+00, -2.000000000e+00, -2.000000000e+00,
+        1.000000000e+00, 0.000000000e+00, -2.000000000e+00, -1.000000000e+00, -2.000000000e+00, 0.000000000e+00, 0.000000000e+00, 1.000000000e+00,
+    ];
+    const BASE: [f32; 24] = [
+        1.000000000e+00, 0.000000000e+00, 0.000000000e+00, 0.000000000e+00, -1.000000000e+00, 1.000000000e+00, -1.000000000e+00, -1.000000000e+00,
+        -1.000000000e+00, 1.000000000e+00, -1.000000000e+00, 1.000000000e+00, 0.000000000e+00, -1.000000000e+00, 1.000000000e+00, 0.000000000e+00,
+        -1.000000000e+00, 0.000000000e+00, 1.000000000e+00, 1.000000000e+00, -1.000000000e+00, 1.000000000e+00, 0.000000000e+00, 0.000000000e+00,
+    ];
+    const SCALE: [f32; 3] = [
+        5.000000000e-01, 1.500000000e+00, 2.000000000e+00,
+    ];
+    const X: [f32; 12] = [
+        -2.000000000e+00, 0.000000000e+00, -1.000000000e+00, 2.000000000e+00, -2.000000000e+00, -2.000000000e+00, 1.000000000e+00, 1.000000000e+00,
+        -1.000000000e+00, 2.000000000e+00, 1.000000000e+00, 2.000000000e+00,
+    ];
+    const Y: [f32; 3] = [
+        -1.000000000e+00, 2.000000000e+00, -1.000000000e+00,
+    ];
+    const PRE: [f32; 4] = [
+        8.770634053e-01, 9.522664260e-02, 4.202786396e-01, 8.331579935e-01,
+    ];
+    const POST: [f32; 4] = [
+        1.999999977e+00, 1.960112879e+00, 9.824524421e-01, 1.013996532e-01,
+    ];
+    const COMB: [f32; 16] = [
+        1.337415487e-05, 2.076609642e-06, 9.989694829e-01, 2.014161513e-05, 1.287439464e-06, 9.038835995e-07, 9.279701907e-05, 9.990398264e-01,
+        1.625873293e-06, 9.922175094e-01, 1.347101468e-06, 1.176386955e-06, 9.999827027e-01, 7.778517899e-03, 9.353739472e-04, 9.378564322e-04,
+    ];
+    const ENTREE: [f32; 3] = [
+        5.229211011e-01, 1.062983348e+00, 1.785206568e-01,
+    ];
+    const SORTIE: [f32; 12] = [
+        -5.711946950e-05, 4.999981709e+00, -5.214681907e-05, -9.523406790e-01, 4.920219977e+00, -2.936777237e+00, -2.978333719e+00, 1.965656011e+00,
+        -1.979738118e+00, 1.898516606e+00, -1.794341314e+00, -2.097624911e+00,
+    ];
+
+    fn proche(a: &[f32], b: &[f32], tol: f32, quoi: &str) {
+        assert_eq!(a.len(), b.len(), "{quoi} : longueurs {} contre {}", a.len(), b.len());
+        for (i, (x, y)) in a.iter().zip(b.iter()).enumerate() {
+            assert!((x - y).abs() <= tol,
+                    "{quoi}[{i}] : {x:e} contre {y:e} (écart {:e})", (x - y).abs());
+        }
+    }
+
+    /// `Sinkhorn` rend la matrice de connexions **doublement stochastique** :
+    /// c'est ce qui autorise à lire `comb` comme un routage et non comme des
+    /// poids arbitraires — et c'est la première chose à vérifier, avant même la
+    /// comparaison à la référence.
+    #[test]
+    fn sinkhorn_rend_les_connexions_doubles() {
+        let mut c = vec![0.7f32, -0.3, 1.2, 0.0, -1.1, 0.4, 0.2, 0.9,
+                         0.05, -2.0, 0.3, 1.7, 0.6, 0.1, -0.8, 0.25];
+        sinkhorn(&mut c, 4, 20, 1e-6);
+        for d in 0..4 {
+            let s: f32 = (0..4).map(|src| c[d + src * 4]).sum();
+            assert!((s - 1.0).abs() < 1e-4, "somme des sources de la destination {d} = {s}");
+        }
+    }
+
+    /// La sortie complète : `pre`, `post`, `comb`, l'entrée mélangée et les
+    /// quatre copies de sortie, contre la référence numpy.
+    #[test]
+    fn hyper_connexions_conforme_a_la_reference() {
+        let hc = Hc { melange: MELANGE.to_vec(), base: BASE.to_vec(),
+                      scale: SCALE.to_vec(), hc: 4, h: 3, iters: 20, eps: 1e-6 };
+        let s = hc.sortie(&X);
+        proche(&s.pre, &PRE, 1e-6, "pre");
+        proche(&s.post, &POST, 1e-6, "post");
+        proche(&s.comb, &COMB, 1e-6, "comb");
+
+        let mut entree = vec![0f32; 3];
+        Hc::melanger(&X, &s.pre, 4, 3, &mut entree);
+        proche(&entree, &ENTREE, 1e-6, "entrée mélangée");
+
+        let mut sortie = vec![0f32; 12];
+        Hc::retro(&Y, &X, &s, 4, 3, &mut sortie);
+        proche(&sortie, &SORTIE, 1e-6, "copies de sortie");
+    }
+
+    /// Le cas dégénéré doit redonner le résidu ordinaire : si `pre` vaut 1 sur
+    /// la première copie et 0 ailleurs, `post` vaut 1 partout et `comb` est
+    /// l'identité, alors `x ← x + y` — c'est le cas où les hyper-connexions ne
+    /// font rien, et il doit être exactement ça.
+    #[test]
+    fn hyper_connexions_degenere_egale_le_residu() {
+        let hc = 4usize; let h = 2usize;
+        let x = vec![1.0f32, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0];
+        let y = vec![0.5f32, -0.5];
+        let mut s = HcSortie { pre: vec![1.0, 0.0, 0.0, 0.0], post: vec![1.0; 4],
+                               comb: vec![0.0; 16] };
+        for d in 0..hc { s.comb[d + d * hc] = 1.0; }   // identité
+        let mut entree = vec![0f32; h];
+        Hc::melanger(&x, &s.pre, hc, h, &mut entree);
+        assert_eq!(entree, vec![1.0, 2.0]);
+        let mut sortie = vec![0f32; hc * h];
+        Hc::retro(&y, &x, &s, hc, h, &mut sortie);
+        for d in 0..hc {
+            assert_eq!(&sortie[d * h..(d + 1) * h], &[x[d * h] + y[0], x[d * h + 1] + y[1]]);
+        }
     }
 }
 
