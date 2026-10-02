@@ -51519,3 +51519,156 @@ CPU  10 fils :    10.3 ms  (  14.0 Go/s)$
 ⏵ **Le NVMe parallélisé (31 Go/s) dépasse la RAM (22 Go/s).** Ça change l'architecture. Je consigne.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np = 'reports/rapport-architecture-memoire.md'\ns = open(p).read()\ns = s.replace('''## 8. Ce qui reste à vérifier''',\n'''## 8. CPU, hyperthreading, NUMA et NVMe : ce qui n'avait pas été évalué\n\n### Le CPU sature  … [5429 caractères tronqués]`
+
+  ```
+ok
+3b2e0d8 CPU, hyperthreading, NUMA et NVMe : mesures, et la conclusion qui se retourne
+  ```
+
+### 🤖 Assistant
+
+⏵ Optimisation concrète : le moteur prend 30 fils alors que 20 cœurs suffisent. Je corrige le défaut.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"available_parallelism\" drave-core/src/*.rs | head -5; sed -n '/fn epingler/,/^}/p' drave-core/src/engine.rs | head -20", "description": "Find thread count defaults"}`
+
+  ```
+drave-core/src/engine.rs:354:        let cpu = std::thread::available_parallelism().map(|p| p.get()).unwrap_or(1);
+drave-core/src/main.rs:81:    let cpu = std::thread::available_parallelism().map(|n| n.get()).unwrap_or(8);
+drave-core/src/main.rs:410:        let cpu = std::thread::available_parallelism().map(|n| n.get()).unwrap_or(8);
+drave-core/src/main.rs:513:    let cpu = std::thread::available_parallelism().map(|n| n.get()).unwrap_or(8);
+drave-core/src/main.rs:683:    let cpu = std::thread::available_parallelism().map(|n| n.get()).unwrap_or(8);
+pub fn epingler(cpu: usize) -> bool {
+    if cpu >= 1024 { return false; }
+    let mut masque = [0u64; 16];
+    masque[cpu / 64] |= 1u64 << (cpu % 64);
+    let ret: i64;
+    unsafe {
+        std::arch::asm!(
+            "syscall",
+            inlateout("rax") 203i64 => ret,   // SYS_sched_setaffinity
+            in("rdi") 0usize,                 // 0 = fil courant
+            in("rsi") 128usize,               // taille du masque en octets
+            in("rdx") masque.as_ptr(),
+            lateout("rcx") _,
+            lateout("r11") _,
+            options(nostack)
+        );
+    }
+    ret == 0
+}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\n# Une seule fonction, utilisée partout : le nombre de fils par défaut.\np = 'drave-core/src/engine.rs'\ns = open(p).read()\ns = s.replace('''pub fn epingler(cpu: usize) -> bool {''',\n'''/// Nombre de **cœurs physiq … [2393 caractères tronqués]`
+
+  ```
+main.rs : 6 occurrences remplacées
+81:    let cpu = engine::coeurs_physiques();
+410:        let cpu = engine::coeurs_physiques();
+513:    let cpu = engine::coeurs_physiques();
+683:    let cpu = engine::coeurs_physiques();
+3211:        (engine::coeurs_physiques() * 3 / 4).max(1)
+BUILD 0
+  ```
+
+### 👤 Utilisateur
+
+attention aux affinités dess canaux pcie : gpu sur un cpu, nvme sur un autre peut-être. ne pas oublier nvlink. jeter un coup d'oeil au fpga au cas où ça peut être utile.
+
+### 🤖 Assistant
+
+⏵ Question matérielle importante. Je vérifie PCIe, NVLink et la présence d'un FPGA.
+
+- **bash** `{"command": "echo \"=== MATRICE DE TOPOLOGIE GPU (NVLink ?) ===\"; nvidia-smi topo -m 2>/dev/null; echo \"\"; echo \"=== NVLINK ===\"; nvidia-smi nvlink -s 2>&1 | head -8", "description": "Check GPU topology and NVLink"}`
+
+  ```
+=== MATRICE DE TOPOLOGIE GPU (NVLink ?) ===
+	[4mGPU0	GPU1	CPU Affinity	NUMA Affinity	GPU NUMA ID[0m
+GPU0	 X 	NV1	0-9,20-29	0		N/A
+GPU1	NV1	 X 	0-9,20-29	0		N/A
+
+Legend:
+
+  X    = Self
+  SYS  = Connection traversing PCIe as well as the SMP interconnect between NUMA nodes (e.g., QPI/UPI)
+  NODE = Connection traversing PCIe as well as the interconnect between PCIe Host Bridges within a NUMA node
+  PHB  = Connection traversing PCIe as well as a PCIe Host Bridge (typically the CPU)
+  PXB  = Connection traversing multiple PCIe bridges (without traversing the PCIe Host Bridge)
+  PIX  = Connection traversing at most a single PCIe bridge
+  NV#  = Connection traversing a bonded set of # NVLinks
+
+=== NVLINK ===
+GPU 0: Quadro RTX 5000 (UUID: GPU-ff8cc368-1bb8-ccef-8a76-4d17375e212e)
+	 Link 0: 25.781 GB/s
+GPU 1: Quadro RTX 5000 (UUID: GPU-bd161106-3e3e-c50f-161a-2550ab688ce2)
+	 Link 0: 25.781 GB/s
+  ```
+
+### 🤖 Assistant
+
+⏵ **NVLink présent à 25,8 Go/s** (2× le PCIe), et les deux GPU sont sur le **NUMA node 0**. Je vérifie le NVMe et le FPGA.
+
+- **bash** `{"command": "echo \"=== NVMe : nœud NUMA et lien PCIe ===\"; for d in /sys/class/nvme/nvme*; do [ -e \"$d\" ] || continue; n=$(basename $d); printf \"%-8s \" \"$n\"; cat $d/device/numa_node 2>/dev/null | tr -d '\\n'; printf \" (numa) · \"; readlink -f $d/device | sed 's|.*/||' | tr -d '\\n'; echo \" … [406 caractères tronqués]`
+
+  ```
+=== NVMe : nœud NUMA et lien PCIe ===
+nvme0    0 (numa) · 0000:02:00.0
+
+=== PÉRIPHÉRIQUES PCI NOTABLES ===
+02:00.0 Non-Volatile memory controller: MAXIO Technology (Hangzhou) Ltd. NVMe SSD Controller MAP1602 (DRAM-less) (rev 01)
+03:00.0 VGA compatible controller: NVIDIA Corporation TU104GL [Quadro RTX 5000] (rev a1)
+04:00.0 VGA compatible controller: NVIDIA Corporation TU104GL [Quadro RTX 5000] (rev a1)
+
+=== TOUS les périphériques non-standard ===
+00:05.0 System peripheral: Intel Corporation Xeon E7 v3/Xeon E5 v3/Core i7 Address Map, VTd_Misc, System Management (rev 02)
+00:05.1 System peripheral: Intel Corporation Xeon E7 v3/Xeon E5 v3/Core i7 Hot Plug (rev 02)
+00:05.2 System peripheral: Intel Corporation Xeon E7 v3/Xeon E5 v3/Core i7 RAS, Control Status and Global Errors (rev 02)
+00:05.4 PIC: Intel Corporation Xeon E7 v3/Xeon E5 v3/Core i7 I/O APIC (rev 02)
+00:11.0 Unassigned class [ff00]: Intel Corporation C610/X99 series chipset SPSR (rev 05)
+00:16.0 Communication controller: Intel Corporation C610/X99 series chipset MEI Controller #1 (rev 05)
+00:19.0 Ethernet controller: Intel Corporation Ethernet Connection I217-LM (rev 05)
+02:00.0 Non-Volatile memory controller: MAXIO Technol
+… [717 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Topologie complète : **NVMe et GPU tous sur le node 0**, pas de FPGA. Reste à mesurer l'impact de l'affinité.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/affinite.sh <<'EOF'\n#!/bin/bash\n# Le NVMe (02:00.0) et les deux GPU (03:00.0, 04:00.0) sont sur le NUMA node 0,\n# avec les CPU 0-9 et leurs hyperthreads 20-29. Les CPU 10-19 et 30-39 sont sur\n# le node 1 : chaque acces … [1383 caractères tronqués]`
+
+  ```
+### Ou placer les fils, sachant que NVMe et GPU sont sur le node 0 ?
+node 0 seul, 10 cœurs physiques (0-9)    mediane  13.8 Go/s  (12.3, 13.8, 14.2)
+node 0 seul, 20 threads (0-9,20-29)      mediane  14.6 Go/s  (11.6, 14.6, 16.7)
+node 1 seul, 10 cœurs physiques (10-19)  mediane  14.2 Go/s  (13.9, 14.2, 14.3)
+2 nœuds, 20 cœurs physiques (0-19)       mediane  15.0 Go/s  (11.4, 15.0, 22.4)
+defaut du moteur, 15 fils (0-14)         mediane  16.5 Go/s  (14.4, 16.5, 18.8)
+=== fin ===
+  ```
+
+### 🤖 Assistant
+
+⏵ Le NUMA ne change rien pour le calcul pur. Mais le chemin NVMe→RAM pourrait compter. Je mesure.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/nvme_numa.sh <<'EOF'\n#!/bin/bash\n# Le NVMe (02:00.0) est sur le NUMA node 0. Un lecteur place sur le node 1 fait\n# traverser l'UPI a chaque transfert. C'est le chemin que le chargement\n# d'experts a la demande emprunte … [1697 caractères tronqués]`
+
+  ```
+node0          mediane 22.41 Go/s   (20.61, 22.41, 22.46)
+  node1          mediane 21.45 Go/s   (18.12, 21.45, 21.62)
+  0-7+10-17      mediane 22.57 Go/s   (21.67, 22.57, 22.98)
+=== fin ===
+  ```
+
+### 🤖 Assistant
+
+⏵ NUMA : 22,4 contre 21,5 Go/s — négligeable. Je consigne la topologie et je vérifie ma modification.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && (cd drave-core && cargo test --release 2>&1 | grep -E \"^test result\"); echo \"=== threads par défaut après correction ===\"; ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf --ppl /tmp/ids_qwen.txt --ctx 256 --abits  … [146 caractères tronqués]`
+
+  ```
+test result: ok. 32 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.09s
+=== threads par défaut après correction ===
+=== perplexité 19.3885 sur 510 tokens (0 événements, 15.2 s) ===
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np = 'reports/rapport-architecture-memoire.md'\ns = open(p).read()\ns = s.replace('''## 10. Ce qui reste à vérifier''',\n'''## 10. La topologie matérielle : NVLink, NUMA, et pas de FPGA\n\nRelevé complet de la machin … [3477 caractères tronqués]`

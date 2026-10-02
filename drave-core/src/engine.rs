@@ -275,6 +275,40 @@ pub static EPINGLER: std::sync::atomic::AtomicBool = std::sync::atomic::AtomicBo
 /// QPI. Au banc : 20,7 Go/s en laissant l'ordonnanceur placer les fils,
 /// **24,7 Go/s** en les liant à un socket.
 #[cfg(all(target_arch = "x86_64", target_os = "linux"))]
+/// Nombre de **cœurs physiques**.
+///
+/// `available_parallelism` rend les threads logiques — 40 sur cette machine,
+/// pour 20 cœurs. Or la charge du moteur est limitée par la **bande passante
+/// mémoire**, pas par le calcul : mesuré au banc, 40 threads font 22,8 Go/s et
+/// 20 cœurs 22,6. Les hyperthreads n'apportent rien et se partagent un L2 de
+/// 256 Ko. S'en servir ne coûte pas grand-chose, mais les compter fait prendre
+/// 30 fils là où 20 suffisent — et les notes du projet relèvent déjà ×1,3 de
+/// perte à 40+1 fils.
+///
+/// On lit la topologie dans `/sys` : c'est la seule source qui distingue un cœur
+/// d'un thread logique. Si elle manque, on retombe sur `available_parallelism`.
+pub fn coeurs_physiques() -> usize {
+    let mut vus = std::collections::HashSet::new();
+    if let Ok(entrees) = std::fs::read_dir("/sys/devices/system/cpu") {
+        for e in entrees.flatten() {
+            let p = e.path();
+            let nom = match p.file_name().and_then(|n| n.to_str()) { Some(n) => n, None => continue };
+            let Some(num) = nom.strip_prefix("cpu") else { continue };
+            if num.is_empty() || !num.bytes().all(|c| c.is_ascii_digit()) { continue; }
+            let paquet = std::fs::read_to_string(p.join("topology/physical_package_id")).ok();
+            let coeur = std::fs::read_to_string(p.join("topology/core_id")).ok();
+            if let (Some(a), Some(b)) = (paquet, coeur) {
+                vus.insert((a.trim().to_string(), b.trim().to_string()));
+            }
+        }
+    }
+    if vus.is_empty() {
+        std::thread::available_parallelism().map(|p| p.get()).unwrap_or(1)
+    } else {
+        vus.len()
+    }
+}
+
 pub fn epingler(cpu: usize) -> bool {
     if cpu >= 1024 { return false; }
     let mut masque = [0u64; 16];

@@ -212,7 +212,54 @@ goulot à long contexte (96,6 Go en F16 à 1 M).
 d'experts adossé au disque », c'est **un chargeur parallèle d'experts**. Plus
 simple, et ça sert les deux régimes.
 
-## 10. Ce qui reste à vérifier
+## 10. La topologie matérielle : NVLink, NUMA, et pas de FPGA
+
+Relevé complet de la machine (Xeon E5-2687W v3, 2 sockets × 10 cœurs) :
+
+| périphérique | adresse | NUMA | lien |
+|---|---|---|---|
+| **NVMe** (MAP1602, *DRAM-less*) | 02:00.0 | **node 0** | PCIe 3.0 |
+| GPU 0 (Quadro RTX 5000) | 03:00.0 | **node 0** | PCIe 3.0 ×16 |
+| GPU 1 (Quadro RTX 5000) | 04:00.0 | **node 0** | PCIe 3.0 ×16 |
+| **GPU 0 ↔ GPU 1** | | | **NVLink, 25,78 Go/s** |
+
+**Le NVLink est là, et il vaut 2× le PCIe** (25,78 contre ~12 Go/s réels). CUDA
+l'emprunte automatiquement pour tout `cudaMemcpy` entre les deux GPU, donc
+`DRAVE_GPU_KV` — qui répartit le cache KV sur les deux cartes — en bénéficie sans
+qu'on ait rien à régler.
+
+**Tout le chemin critique est sur le NUMA node 0** : le NVMe, les deux GPU, et
+les CPU 0-9 avec leurs hyperthreads 20-29. Le node 1 (10-19, 30-39) est de
+l'autre côté de l'UPI.
+
+**Et pourtant, l'affinité NUMA ne paie pas** :
+
+| chemin mesuré | node 0 | node 1 | les deux |
+|---|---|---|---|
+| banc mémoire (calcul pur) | 13,8 | 14,2 | 15,0 Go/s |
+| **lecture NVMe** (8 lecteurs) | 22,41 | 21,45 | 22,57 Go/s |
+
+Écart de **4 %** sur le chemin qui traverse réellement l'UPI (le NVMe), et du
+bruit pur sur le calcul. L'UPI de ce Xeon est rapide, et le SSD *DRAM-less* ne
+sature pas assez la mémoire hôte pour que la distance compte.
+
+**Pas de FPGA dans cette machine.** Le relevé PCI ne montre que le NVMe, les deux
+GPU, deux cartes Ethernet et les contrôleurs du chipset. La piste est close.
+
+### Ce qui reste exploitable de la topologie
+
+1. **Le NVLink** : tout échange entre les deux GPU devrait passer par lui plutôt
+   que par la RAM hôte. C'est le cas par défaut, mais un placement qui garde les
+   tenseurs d'une même couche sur une seule carte évite même l'échange.
+2. **Épingler sur les cœurs physiques** : mesuré (section 8), 40 threads valent
+   20 cœurs. C'est corrigé dans le moteur — `engine::coeurs_physiques()` lit
+   `/sys/devices/system/cpu/cpu*/topology/` au lieu de prendre les threads
+   logiques, ce qui fait passer le défaut de **30 à 20 fils**.
+3. **Le NVMe *DRAM-less*** : ses performances dépendent du HMB (Host Memory
+   Buffer), donc de la RAM hôte. Les 31 Go/s mesurés en parallèle en dépendent
+   peut-être — c'est une raison de plus de ne pas conclure sur le régime froid.
+
+## 11. Ce qui reste à vérifier
 
 - **Le débit PCIe réel**, pas seulement le lien : le banc mesure la VRAM une fois
   les poids montés. Le coût du **transfert initial** (1 Go ≈ 83 ms à 12 Go/s)

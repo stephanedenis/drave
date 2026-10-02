@@ -7,12 +7,12 @@
 | Début | 2026-09-28 14:46 |
 | Durée | 78.4 h |
 | Tours | 67 |
-| Messages | 3201 |
-| Appels d'outils | 3026 |
+| Messages | 3210 |
+| Appels d'outils | 3034 |
 | Fichiers touchés | 70 |
-| Commandes | 2633 |
+| Commandes | 2641 |
 | Sous-agents | 22 |
-| Commits | 267 |
+| Commits | 268 |
 | Compactages de contexte | 4 |
 
 ## Objectifs déclarés
@@ -3387,7 +3387,7 @@ Le KV de MLA n'est pas la concaténation des têtes mais un latent comprimé —
 
 ### Tour 67 — nvme et multi-cpu, cores purs vs hyperthread (cache partagée) as-t-on évalué les impacts
 
-*11 appels d'outils.* Actions notables :
+*19 appels d'outils.* Actions notables :
 
 - bash — Inspect CPU topology and caches
 - bash — Measure CPU thread scaling
@@ -3400,10 +3400,14 @@ Le KV de MLA n'est pas la concaténation des têtes mais un latent comprimé —
 - bash — Measure NUMA impact and NVMe parallelism
 - bash — Measure NVMe on the full disk to defeat cache
 - bash — Document CPU/hyperthreading/NVMe findings
+- bash — Find thread count defaults
+- bash — Use physical core count by default
+- bash — Check GPU topology and NVLink
+- … et 5 autres
 
 **Synthèse produite :**
 
-⏵ **Le NVMe parallélisé (31 Go/s) dépasse la RAM (22 Go/s).** Ça change l'architecture. Je consigne.
+⏵ NUMA : 22,4 contre 21,5 Go/s — négligeable. Je consigne la topologie et je vérifie ma modification.
 
 ## 3. Travail accompli
 
@@ -3549,7 +3553,7 @@ Le KV de MLA n'est pas la concaténation des têtes mais un latent comprimé —
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 2593 autres
+- … et 2601 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -3964,4 +3968,5 @@ Le KV de MLA n'est pas la concaténation des têtes mais un latent comprimé —
 - Architecture memoire : ou mettre quoi, et le KV qu'on oubliait  Debits mesures : VRAM 84,9 Go/s (noyau warp) contre 20,9 pour le CPU -- le deport vaut un facteu
 - REPRISE : architecture memoire" && echo "=== ÉTAT FINAL ==="; (cd drave-core && cargo test --release 2>&1 | grep -E "^test result"); git status --short | grep -
 - CPU, hyperthreading, NUMA et NVMe : mesures, et la conclusion qui se retourne  CPU : plateau a 22 Go/s des 16 fils, la charge est limitee par la memoire. Hypert
+- Topologie materielle : NVLink 25,8 Go/s, NUMA negligeable, pas de FPGA  Releve : le NVMe (02:00.0), les deux GPU (03:00.0, 04:00.0) et les CPU 0-9 sont tous sur
 
