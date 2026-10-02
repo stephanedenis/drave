@@ -3929,6 +3929,11 @@ s'applique pas — utilisez --lot 1, ou réenregistrez sans DRAVE_TRACE_BLOCS");
         // Fils à donner à la déquantification des experts IQ. Lus avant
         // l'emprunt destructuré, comme le reste.
         let threads_iq = self.pool.threads().clamp(1, 8);
+        // Diagnostic `DRAVE_DEBUG_ETAT=1` : la norme de l'état résiduel à chaque
+        // couche. Un modèle qui prédit le MÊME jeton à toutes les positions a un
+        // état qui ne dépend plus de l'entrée ; cette ligne dit à quelle couche
+        // il cesse d'en dépendre (explosion, effondrement, ou rien du tout).
+        let debug_etat = std::env::var("DRAVE_DEBUG_ETAT").is_ok();
         self.profil_jetons += 1;
         let Model { g, cfg, layers, out_norm, pool, kv, events, attn_events, kv_gpu,
                     attn_gpu_part, emb_imposee, .. } = self;
@@ -4513,6 +4518,13 @@ dynamique de {dyn_:.3e} (relatif {:.2e})", mx / dyn_.max(1e-9));
                     if gl == l { for v in down.iter_mut() { *v *= gg; } }
                 }
                 for i in 0..h { x[i] = o[i] + down[i]; }
+                if debug_etat {
+                    let n2: f32 = x.iter().map(|v| v * v).sum();
+                    let na: f32 = att.iter().map(|v| v * v).sum();
+                    let nd: f32 = down.iter().map(|v| v * v).sum();
+                    eprintln!("[etat] couche {l:3} pos {pos} : |x| {:.4e} · |att| {:.4e} · \
+|ffn| {:.4e}", n2.sqrt(), na.sqrt(), nd.sqrt());
+                }
                 self.prof[3] += tf.elapsed().as_secs_f64();
                 continue;
             }
@@ -4547,6 +4559,13 @@ dynamique de {dyn_:.3e} (relatif {:.2e})", mx / dyn_.max(1e-9));
                 if gl == l { for v in down.iter_mut() { *v *= g; } }
             }
             for i in 0..h { x[i] = o[i] + down[i]; }
+            if debug_etat {
+                let n2: f32 = x.iter().map(|v| v * v).sum();
+                let na: f32 = att.iter().map(|v| v * v).sum();
+                let nd: f32 = down.iter().map(|v| v * v).sum();
+                eprintln!("[etat] couche {l:3} pos {pos} : |x| {:.4e} · |att| {:.4e} · \
+|ffn| {:.4e} (dense)", n2.sqrt(), na.sqrt(), nd.sqrt());
+            }
             self.prof[3] += tf.elapsed().as_secs_f64();
         }
         if self.flux_brut || self.couche_fin < cfg.n_layer {

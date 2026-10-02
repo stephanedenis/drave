@@ -349,10 +349,21 @@ pas**, et la contrainte du CDC est satisfaite sans réentraînement ni élagage.
 
 ## Formats et modèles réellement lisibles
 
-Le moteur lit **Q4_K, Q6_K, Q4_0, Q8_0, MXFP4, F16 et F32** — soit tout ce que
+Le moteur lit **Q4_K, Q6_K, Q4_0, Q5_0, Q5_1, Q8_0, Q2_K, Q3_K, Q5_K, MXFP4,
+IQ1_S, IQ1_M, IQ2_XXS, IQ3_XXS, IQ4_XS, BF16, F16 et F32** — soit tout ce que
 l'écosystème public distribue — **sans copie ni requantification** : les blocs
 sont lus tels quels dans le fichier, et les experts d'un MoE sont des tranches
-contiguës adressées par un pointeur et un pas.
+contiguës adressées par un pointeur et un pas. Les formats de super-bloc sans
+noyau dédié (Q2_K, Q3_K, Q5_K, IQ*) sont lus par **déquantification puis produit
+en f32** : plus lent qu'un noyau, juste par construction.
+
+Chaque déquantificateur est comparé à **libggml** bloc par bloc, et les grilles
+IQ embarquées sont extraites de `ggml-common.h` par programme :
+
+```bash
+tools/portes_formats.sh                   # 17 formats × 2 blocs, contre libggml
+tools/extraire_tables_ggml.sh verifier    # les tables embarquées = celles de ggml
+```
 
 | modèle | format | perplexité | débit | mémoire |
 |---|---|---|---|---|
@@ -360,7 +371,7 @@ contiguës adressées par un pointeur et un pas.
 | Qwen2.5-1.5B | Q4_K_M | 12,92 | 17 tok/s | 1,1 Go |
 | Qwen2.5-VL-7B | Q4_K_M | 10,99 | 2,8 tok/s | 4,5 Go |
 | **Qwen3-30B-A3B** (MoE 128 experts, top-8) | Q4_K_M | **7,61** | 5,4 tok/s | **17,7 Go** |
-| **gpt-oss-120b** (MoE, MXFP4) | MXFP4 | **15,1757** (ctx 256) | blocs lus | 60 Go |
+| **gpt-oss-120b** (MoE, MXFP4) | MXFP4 | **15,6017** (ctx 256) | blocs lus | 60 Go |
 
 Les lecteurs Q4_K et Q6_K sont vérifiés **tenseur par tenseur** contre une
 référence F16 des mêmes poids produite par `llama-quantize`, et le routage MoE

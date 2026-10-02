@@ -62483,3 +62483,125 @@ ok
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A reports/ REPRISE.md && git commit -q -m \"Rapports : la référence externe (llama.cpp) mesurée — gpt-oss cohérent, MLA fausse\n\n- gpt-oss 4 jetons ctx 16 : llama.cpp 5420,40 · nous 6443,13 (biais hors des\n  poids) contre  … [545 caractères tronqués]`
+
+  ```
+44288ff Rapports : la référence externe (llama.cpp) mesurée — gpt-oss cohérent, MLA fausse
+  ```
+
+### 🤖 Assistant
+
+⏵ Diagnostic : norme de l'état couche par couche (GLM-5.3)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/model.rs'; s=open(p).read()\ns = s.replace(\"\"\"        let threads_iq = self.pool.threads().clamp(1, 8);\"\"\",\n\"\"\"        let threads_iq = self.pool.threads().clamp(1, 8);\n        // Diagno … [1849 caractères tronqués]`
+
+  ```
+BUILD
+2
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"debug_etat\" drave-core/src/model.rs | head; grep -n \"self.prof\\[3\\] += tf.elapsed\" drave-core/src/model.rs | head", "description": "Check the diagnostic insertion points"}`
+
+  ```
+3936:        let debug_etat = std::env::var("DRAVE_DEBUG_ETAT").is_ok();
+4521:                if debug_etat {
+4528:                self.prof[3] += tf.elapsed().as_secs_f64();
+4562:            self.prof[3] += tf.elapsed().as_secs_f64();
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '4550,4566p' drave-core/src/model.rs", "description": "Find the dense-FFN end of the layer"}`
+
+  ```
+if pt.layer == l {
+                    let mut g = 0f32;
+                    let mut uu = 0f32;
+                    for i in 0..h { g += pt.u[i] * hn[i]; uu += pt.v[i] * hn[i]; }
+                    let a = (g / (1.0 + (-g).exp())) * uu;
+                    for i in 0..h { down[i] += pt.d[i] * a; }
+                }
+            }
+            if let Some((gl, g)) = self.ffn_gain {
+                if gl == l { for v in down.iter_mut() { *v *= g; } }
+            }
+            for i in 0..h { x[i] = o[i] + down[i]; }
+            self.prof[3] += tf.elapsed().as_secs_f64();
+        }
+        if self.flux_brut || self.couche_fin < cfg.n_layer {
+            return x;                       // nœud intermédiaire : flux brut
+        }
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/model.rs'; s=open(p).read()\ns = s.replace(\"\"\"            for i in 0..h { x[i] = o[i] + down[i]; }\n            self.prof[3] += tf.elapsed().as_secs_f64();\n        }\n        if self.flux_brut  … [1110 caractères tronqués]`
+
+  ```
+diagnostic lancé
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in $(seq 1 400); do if grep -qE \"perplexité|panicked\" /tmp/glm53_etat.log; then break; fi; sleep 10; done; echo \"=== normes d'état, couches choisies ===\"; grep \"\\[etat\\]\" /tmp/glm53_etat.log | awk 'NR%10==1' | head -12; … [139 caractères tronqués]`
+
+  ```
+started background job bash-108
+  ```
+
+- **job_output** `{"job_id": "bash-108", "timeout_ms": 900000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "grep -c \"\\[etat\\]\" /tmp/glm53_etat.log; grep \"\\[etat\\]\" /tmp/glm53_etat.log | head -4; ps -eo pid,rss,comm --sort=-rss | head -2; tail -1 /tmp/ref_oss_ppl.log", "description": "Poll both jobs"}`
+
+  ```
+0
+    PID   RSS COMMAND
+3722389 59410832 drave
+0.01.108.856 W load: special_eog_ids contains both '<|return|>' and '<|call|>', or '<|calls|>' and '<|flush|>' tokens, removing '<|end|>' token from EOG list
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '335,375p' README.md", "description": "Read the README model table"}`
+
+  ```
+et vaut `3/4 × CPU` par défaut.
+
+**Sans multiplieur** : décalages + additions donnent le résultat exact en 112,3 ms
+contre 2,5 ms pour i8×i8 (×44,9 sur CPU) — mais **sur FPGA le multiplieur n'existe
+pas**, et la contrainte du CDC est satisfaite sans réentraînement ni élagage.
+
+> ⚠️ Trois pièges ont coûté une campagne de mesures fausses chacun : un état
+> partagé avec **deux contrats de nettoyage** (d'où une « divergence » fantôme et
+> un débit surestimé à 7,53 G év/s), un `&mut` dans la boucle chaude (barrière
+> d'aliasing : 3,09 → 0,97 G év/s), et la **sursouscription** de l'attente active
+> (39+1 threads sur 40 CPU : effondrement ×2,4 — et le `yield_now()` censé le
+> corriger a tout empiré). Détail dans le rapport.
+
+---
+
+## Formats et modèles réellement lisibles
+
+Le moteur lit **Q4_K, Q6_K, Q4_0, Q8_0, MXFP4, F16 et F32** — soit tout ce que
+l'écosystème public distribue — **sans copie ni requantification** : les blocs
+sont lus tels quels dans le fichier, et les experts d'un MoE sont des tranches
+contiguës adressées par un pointeur et un pas.
+
+| modèle | format | perplexité | débit | mémoire |
+|---|---|---|---|---|
+| Qwen2.5-0.5B | Q4_0 | 21,01 | 39 tok/s | 0,41 Go |
+| Qwen2.5-1.5
+… [969 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='README.md'; s=open(p).read()\ns = s.replace(\"\"\"Le moteur lit **Q4_K, Q6_K, Q4_0, Q8_0, MXFP4, F16 et F32** — soit tout ce que\nl'écosystème public distribue — **sans copie ni requantification** : les blocs\nso … [1377 caractères tronqués]`
+
+  ```
+374:| **gpt-oss-120b** (MoE, MXFP4) | MXFP4 | **15,6017** (ctx 256) | blocs lus | 60 Go |
+505
+  ```
+
+- **bash** `{"command": "grep -E \"Final estimate|\\[etat\\]\" /tmp/ref_oss_ppl.log /tmp/glm53_etat.log 2>/dev/null | tail -3; grep -c \"\\[etat\\]\" /tmp/glm53_etat.log", "description": "Poll the two background jobs"}`
+
+  ```
+0
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A README.md drave-core/src && git commit -q -m \"README : 18 formats lisibles, portes de formats, et le diagnostic DRAVE_DEBUG_ETAT\n\n- La liste des formats passe de 7 à 18, avec la distinction entre noyau dédié et\n  déqua … [431 caractères tronqués]`
