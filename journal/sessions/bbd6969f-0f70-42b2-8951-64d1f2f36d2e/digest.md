@@ -64607,3 +64607,98 @@ test result: ok. 48 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; fin
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A REPRISE.md && git commit -q -m \"REPRISE : le chantier 2 (tête garantie) est clos par une mesure\" && grep -n \"fn prelire_expert\" -A 25 drave-core/src/model.rs | head -30", "description": "Commit and read the prefetch im … [14 caractères tronqués]`
+
+  ```
+695:    fn prelire_expert(&self, e: usize) {
+696-        let octets = self.n_out * self.nb * self.pas();
+697-        let p = unsafe { self.base.add(e * octets) };
+698-        crate::gguf::prelire(p, octets);
+699-    }
+700-
+701-    /// Octets bruts de l'expert `e` (tels qu'ils sont dans le fichier) : c'est
+702-    /// ce qu'il faut copier en VRAM pour que le noyau y travaille.
+703-    fn blocs_expert(&self, e: usize) -> &[u8] {
+704-        let octets = self.n_out * self.nb * self.pas();
+705-        let p = unsafe { self.base.add(e * octets) };
+706-        unsafe { std::slice::from_raw_parts(p, octets) }
+707-    }
+708-
+709-    /// Matrice 4 bits de l'expert `e`, **empruntée** au fichier.
+710-    fn expert(&self, e: usize) -> crate::list::DenseQ4 {
+711-        let base = unsafe { self.base.add(e * self.n_out * self.nb * self.pas()) };
+712-        unsafe {
+713-            match self.src {
+714-                crate::list::Source::Q4_K =>
+715-                    crate::list::DenseQ4::emprunter_q4k(base, self.n_out, self.n_in, self.nb),
+716-                crate::list::Source::Q6_K =>
+717-                    crate::list::DenseQ4::emprunter_q6k(base, self.n_out, self.n_in, self.nb),
+718-  
+… [247 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"pub fn prelire\\b\" -A 20 drave-core/src/gguf.rs | head -26", "description": "Read the prefetch primitive"}`
+
+  ```
+65:pub fn prelire(ptr: *const u8, octets: usize) {
+66-    if ptr.is_null() || octets == 0 { return; }
+67-    // `DRAVE_PRELIRE=0` la désactive : sans ce témoin, on ne pourrait pas dire
+68-    // si un gain vient d'elle ou du cache qui se réchauffe d'un passage à
+69-    // l'autre.
+70-    if !prelire_active() { return; }
+71-    unsafe { madvise(ptr as *mut u8, octets, MADV_WILLNEED); }
+72-}
+73-
+74-/// Demande au noyau de lancer la lecture du fichier ENTIER, une fois, au
+75-/// chargement. Le noyau parallélise ses lectures de pages, là où le mmap
+76-/// paresseux les déclenche une par une au fil des accès.
+77-///
+78-/// Mesuré : charger 18,6 Go prend 6,8 s en mmap paresseux (2,7 Go/s) — proche du
+79-/// débit séquentiel du NVMe, et 4,5× mieux qu'une lecture complète (30,5 s).
+80-/// Cette demande vise le débit parallèle, 31 Go/s.
+81-///
+82-/// Désactivée par défaut : sur un modèle plus gros que la RAM, elle chargerait
+83-/// tout ce qu'on cherche justement à ne pas charger.
+84-pub fn prelire_tout(ptr: *const u8, octets: usize) {
+85-    if ptr.is_null() || octets == 0 { return; }
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls -la /home/stephane/Data13TB/stephane/modeles/gguf/Kimi-K2.7-Code-UD-IQ1_M/ | head -4; python3 -c \"import mmap; print('madvise', hasattr(mmap.mmap, 'madvise'))\"", "description": "Check the Kimi files and mmap madvise support"}`
+
+  ```
+total 296786316
+drwxr-xr-x. 1 stephane stephane         688  1 oct 11:35 .
+drwxr-xr-x. 1 stephane stephane        1206  1 oct 09:46 ..
+-rw-r--r--. 1 stephane stephane     6913184  1 oct 10:48 Kimi-K2.7-Code-UD-IQ1_M-00001-of-00008.gguf
+madvise True
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > tools/mesurer_lecture_experts.py <<'PY'\n#!/usr/bin/env python3\n\"\"\"Lectures d'experts : série contre parallèle, sur un VRAI fichier froid.\n\n    tools/mesurer_lecture_experts.py <shard.gguf> [nb_blocs] [nb_fils]\n\nPourquo … [3265 caractères tronqués]`
+
+  ```
+120 blocs de 4 Mo
+  série      (1 lecteur) :   0.26 Go/s en   1.94 s
+  parallèle (16 fils)   :   0.20 Go/s en   2.48 s
+  rapport                : ×0.78
+  ```
+
+- **bash** `{"command": "ls -la /home/stephane/FastNVMe/modeles-lourds/ 2>/dev/null | head -8; findmnt -no SOURCE,FSTYPE /home/stephane/Data13TB /home/stephane/FastNVMe 2>/dev/null", "description": "Check the NVMe copies and filesystems"}`
+
+  ```
+total 357142276
+drwxr-xr-x. 1 stephane stephane           72  1 oct 22:17 .
+drwxr-xr-x  1 stephane stephane          142  1 oct 22:17 ..
+-rw-r--r--. 1 stephane stephane 365713686528  1 oct 22:59 DeepSeek-V4.1-Flash-Q2.gguf
+-rw-r--r--. 1 stephane stephane         1017  1 oct 22:59 README.md
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 600 python3 tools/mesurer_lecture_experts.py /home/stephane/FastNVMe/modeles-lourds/DeepSeek-V4.1-Flash-Q2.gguf 120 16 2>&1 | tail -5", "description": "Measure on the NVMe copy instead"}`
+
+  ```
+120 blocs de 4 Mo
+  série      (1 lecteur) :   3.11 Go/s en   0.16 s
+  parallèle (16 fils)   :   2.72 Go/s en   0.18 s
+  rapport                : ×0.88
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls reports/ | grep -i \"prelect\\|prelire\\|charge\" ; cat >> reports/rapport-tete-garantie.md <<'EOF'\n\n---\n\n# Annexe — chargeur d'experts : lecteurs parallèles, mesurés sur fichier froid\n\nChantier 4. Le disque NVMe de cette ma … [2536 caractères tronqués]`

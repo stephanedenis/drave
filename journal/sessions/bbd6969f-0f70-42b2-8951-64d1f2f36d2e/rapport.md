@@ -7,12 +7,12 @@
 | Début | 2026-09-28 14:46 |
 | Durée | 88.3 h |
 | Tours | 70 |
-| Messages | 4069 |
-| Appels d'outils | 3873 |
+| Messages | 4075 |
+| Appels d'outils | 3879 |
 | Fichiers touchés | 81 |
-| Commandes | 3408 |
+| Commandes | 3414 |
 | Sous-agents | 22 |
-| Commits | 310 |
+| Commits | 311 |
 | Compactages de contexte | 5 |
 
 ## Objectifs déclarés
@@ -3581,7 +3581,7 @@ Le plus important est peut-être ailleurs : trois des cinq plus gros modèles de
 
 ### Tour 70 — <goal_round> Objective: "Session autonome jusqu'à 8h HAE (02/10). Mener les optimisations d'architecture mémoire du mote … [1317 caractères tronqués]
 
-*19 appels d'outils.* Actions notables :
+*25 appels d'outils.* Actions notables :
 
 - get_goal
 - bash — Check time and the head restriction code
@@ -3597,7 +3597,7 @@ Le plus important est peut-être ailleurs : trois des cinq plus gros modèles de
 - bash — Check where the option block sits
 - bash — Test the guaranteed head on a real generation
 - bash — Generate without the guarantee for comparison
-- … et 5 autres
+- … et 11 autres
 
 ## 3. Travail accompli
 
@@ -3754,7 +3754,7 @@ Le plus important est peut-être ailleurs : trois des cinq plus gros modèles de
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 3368 autres
+- … et 3374 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -3882,7 +3882,7 @@ Le plus important est peut-être ailleurs : trois des cinq plus gros modèles de
 
 ## 5. Erreurs rencontrées
 
-235 sorties en erreur ou divergentes. Les premières :
+236 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : a8f2635f8 docs: record which models this box is good at, and why src/llama-hparams.cpp:8:void llama_hparams::set_swa_pattern(uint32_t n_pattern, bool dense_first) { src/llama-hparams.h:308:    void se
 - **T1** : 511 tokens notés — perplexité cumulée 247.031  (4.9 tok/s) === perplexité 247.0308 sur 511 tokens (0 événements, 104.5 s) ===  ### B3 harmony assistant 511 --- ref --- 0.0 0.0 0:00 ls: cannot access '
@@ -4212,4 +4212,5 @@ Le plus important est peut-être ailleurs : trois des cinq plus gros modèles de
 - REPRISE : bilan de la session (16 commits, 5 changements, 5 chantiers ouverts)" && git log --oneline -1; git status --short | head -2
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-tete-garantie.md <<'EOF' # Rapport — restriction de tête GARANTIE : exacte, et sans 
 - REPRISE : le chantier 2 (tête garantie) est clos par une mesure" && grep -n "fn prelire_expert" -A 25 drave-core/src/model.rs | head -30
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls reports/ | grep -i "prelect\|prelire\|charge" ; cat >> reports/rapport-tete-garantie.md <<'EOF'  ---  #
 
