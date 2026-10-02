@@ -889,3 +889,40 @@ DRAVE_GPU=1 ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf --gp
 # attendu : CPU 20,9 Go/s · GPU ligne par fil 41,9 · GPU warp par ligne 84,9
 ```
 
+### Topologie matérielle et affinités
+
+Relevé : NVMe (02:00.0), **les deux GPU** (03:00.0, 04:00.0) et les CPU 0-9 sont
+sur le **NUMA node 0**. **NVLink présent entre les GPU : 25,78 Go/s** (2× le
+PCIe). **Pas de FPGA.**
+
+| mesure | résultat |
+|---|---|
+| NUMA, calcul pur | 13,8 (node 0) vs 14,2 (node 1) Go/s — **bruit** |
+| NUMA, lecture NVMe | 22,41 vs 21,45 Go/s — **4 %** |
+| **10 cœurs, 10 fils** | 14,7 Go/s |
+| **10 cœurs, 20 fils (paires HT)** | **18,7 Go/s — +27 %** |
+| 10 cœurs, 30 fils | 15,0 Go/s — régression |
+| 20 cœurs, 20 fils | **22,5 Go/s** |
+| 20 cœurs, 40 fils (HT) | 18,9 Go/s — rien, et très bruité |
+
+**La règle** : l'hyperthreading n'apporte rien quand on a tous les cœurs (la
+bande passante sature), mais **+27 % quand on n'en a que dix**. Un nœud restreint
+doit donc prendre ses **paires HT** (`0-9,20-29`), pas dix cœurs secs. Trois fils
+par cœur est une régression.
+
+**Corrigé dans le moteur** : `engine::coeurs_physiques()` lit
+`/sys/devices/system/cpu/cpu*/topology/` au lieu des threads logiques — le défaut
+passe de **30 à 20 fils**. Porte Qwen inchangée (19,3885), 32 tests verts.
+
+**FPGA Stratix V** : branché en USB seulement (625 Mo/s), et **aucun cas d'usage**
+— le mur n'est pas le calcul (0,6 ms par couche contre 10,9 ms de lecture, un
+rapport de 18×). À réévaluer si une charge de calcul dense apparaît, et en PCIe.
+
+```bash
+# Les mesures d'affinité
+taskset -c 0-19 env DRAVE_GPU=1 ./drave-core/target/release/drave \
+    models/Qwen2.5-0.5B-Q8_0.gguf --gpu-banc --threads 20   # 22,5 Go/s
+taskset -c 0-9,20-29 env DRAVE_GPU=1 ./drave-core/target/release/drave \
+    models/Qwen2.5-0.5B-Q8_0.gguf --gpu-banc --threads 20   # 18,7 Go/s (10 cœurs + HT)
+```
+

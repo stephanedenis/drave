@@ -7,12 +7,12 @@
 | Début | 2026-09-28 14:46 |
 | Durée | 78.6 h |
 | Tours | 68 |
-| Messages | 3216 |
-| Appels d'outils | 3038 |
+| Messages | 3217 |
+| Appels d'outils | 3039 |
 | Fichiers touchés | 70 |
-| Commandes | 2645 |
+| Commandes | 2646 |
 | Sous-agents | 22 |
-| Commits | 270 |
+| Commits | 271 |
 | Compactages de contexte | 4 |
 
 ## Objectifs déclarés
@@ -3464,11 +3464,12 @@ Corrigé : `engine::coeurs_physiques()` lit `/sys/devices/system/cpu/cpu*/topolo
 
 ### Tour 68 — peut-on explorer les affinités cpu pour du HT, c'est à dire parallélisation interne de certaines boucles ayant des affin … [187 caractères tronqués]
 
-*3 appels d'outils.* Actions notables :
+*4 appels d'outils.* Actions notables :
 
 - bash — Measure cache behaviour with and without HT
 - bash — Measure threads per core ratio
 - bash — Document HT pairs and FPGA assessment
+- bash — Final REPRISE update and state
 
 **Synthèse produite :**
 
@@ -3618,7 +3619,7 @@ Corrigé : `engine::coeurs_physiques()` lit `/sys/devices/system/cpu/cpu*/topolo
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 2605 autres
+- … et 2606 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4036,4 +4037,5 @@ Corrigé : `engine::coeurs_physiques()` lit `/sys/devices/system/cpu/cpu*/topolo
 - Topologie materielle : NVLink 25,8 Go/s, NUMA negligeable, pas de FPGA  Releve : le NVMe (02:00.0), les deux GPU (03:00.0, 04:00.0) et les CPU 0-9 sont tous sur
 - README : la topologie et la conclusion qui se retourne" && echo "=== ÉTAT FINAL ==="; (cd drave-core && cargo test --release 2>&1 | grep -E "^test result"); git
 - Paires hyperthread : +27 % quand les cœurs manquent, rien quand on les a tous  Banc memoire, chaque configuration repetee trois fois : - 10 cœurs, 10 fils (1 pa
+- REPRISE : topologie materielle et affinites" && echo "=== ÉTAT FINAL ==="; (cd drave-core && cargo test --release 2>&1 | grep -E "^test result"); git status --s
 

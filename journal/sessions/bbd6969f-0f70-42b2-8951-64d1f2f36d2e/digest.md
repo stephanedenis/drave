@@ -51799,3 +51799,10 @@ perf absent
 ⏵ Résultat net : **+27 % avec les paires HT quand on n'a que 10 cœurs**, rien avec 20. Je consigne.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np = 'reports/rapport-architecture-memoire.md'\ns = open(p).read()\ns = s.replace('''### Ce qui reste exploitable de la topologie''',\n'''### Les paires hyperthread : utiles quand les cœurs manquent\n\nLe banc mémoir … [4443 caractères tronqués]`
+
+  ```
+ok
+3de4623 Paires hyperthread : +27 % quand les cœurs manquent, rien quand on les a tous
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np = 'REPRISE.md'\ns = open(p).read().rstrip('\\n')\ns += '''\n\n### Topologie matérielle et affinités\n\nRelevé : NVMe (02:00.0), **les deux GPU** (03:00.0, 04:00.0) et les CPU 0-9 sont\nsur le **NUMA node 0**. **NV … [2126 caractères tronqués]`
