@@ -64061,3 +64061,106 @@ test result: ok. 48 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; fin
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/glm8b.sh <<'EOF'\n#!/usr/bin/env bash\ncd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\nM=/home/stephane/Data13TB/stephane/modeles/gguf/GLM-5.3-UD-IQ1_S/GLM-5.3-UD-IQ1_S-00001-of-00006.gguf\necho \"=== drave, 8 jetons,  … [1734 caractères tronqués]`
+
+  ```
+lancé
+935fe71 Quantification des activations : lire la TRANCHE utile, pas le tampon entier
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in $(seq 1 300); do if grep -q \"écart |NLL|\" /tmp/glm8b.log; then break; fi; sleep 10; done; cat /tmp/glm8b.log", "description": "Wait for the corrected comparison", "run_in_background": true}`
+
+  ```
+started background job bash-125
+  ```
+
+- **job_output** `{"job_id": "bash-125", "timeout_ms": 900000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "cat /tmp/glm8b.log; ps -eo pid,etimes,rss,comm --sort=-rss | head -2", "description": "Poll the corrected run"}`
+
+  ```
+=== drave, 8 jetons, tranches corrigées ===
+    PID ELAPSED   RSS COMMAND
+  57347     632 93719660 drave
+  ```
+
+- **job_output** `{"job_id": "bash-125", "timeout_ms": 900000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "sleep 55; cat /tmp/glm8b.log | tail -3", "description": "Poll the corrected run"}`
+
+  ```
+=== drave, 8 jetons, tranches corrigées ===
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in $(seq 1 110); do if grep -q \"écart |NLL|\" /tmp/glm8b.log; then break; fi; sleep 10; done; echo fini", "description": "Wait for the comparison result", "run_in_background": true}`
+
+  ```
+started background job bash-126
+  ```
+
+- **job_output** `{"job_id": "bash-126", "timeout_ms": 900000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "cat /tmp/glm8b.log | tail -8", "description": "Read the corrected comparison"}`
+
+  ```
+=== drave, 8 jetons, tranches corrigées ===
+  ```
+
+- **job_output** `{"job_id": "bash-126", "timeout_ms": 600000, "wait": true}`
+
+  ```
+fini
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cat /tmp/glm8b.log | tail -10; TZ=America/New_York date \"+HAE %H:%M\"", "description": "Read the result and check time"}`
+
+  ```
+=== drave, 8 jetons, tranches corrigées ===
+=== perplexité 4807.7573 sur 7 tokens (0 événements, 1532.3 s) ===
+=== comparaison (référence : /tmp/ref_glm_8.bin, PPL 890,4559) ===
+    6   14721   13.0016   11.4191  +1.5825     22212      3904       284       621     NON
+
+écart |NLL| : moyenne 1.6863 · médiane 1.5825 · p90 3.4988 · max 4.0703
+accord du top-1 : 4/7  (3 positions divergentes)
+perplexité nous : 4807.7589   référence : 890.4552   (7 positions comparées)
+corrélation des logits (position 0) : 0.999024
+HAE 06:56
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/compare_logits.py /tmp/nous_glm_8b.bin /tmp/ref_glm_8.bin /tmp/ids_glm.txt 2>&1 | head -12", "description": "Read the per-position comparison table"}`
+
+  ```
+notre : 7 positions x 154880 · référence : 7 positions x 154880
+  pos   cible  NLL nous   NLL réf    écart rang nous  rang réf top1 nous  top1 réf  accord
+    0     284    9.5842    9.5749  +0.0093       102        93    154820    154820     oui
+    1    8396   11.4024   11.0308  +0.3716      1373      1003    154820    154820     oui
+    2     425    5.0946    4.4837  +0.6109        22        15        64        64     oui
+    3   10960   10.8656    6.7952  +4.0703      1798        52      4035        13     NON
+    4     465    4.4452    1.3275  +3.1178        11         2       777       777     oui
+    5     284    4.9523    2.9109  +2.0413        10         5     88619      4035     NON
+    6   14721   13.0016   11.4191  +1.5825     22212      3904       284       621     NON
+
+écart |NLL| : moyenne 1.6863 · médiane 1.5825 · p90 3.4988 · max 4.0703
+accord du top-1 : 4/7  (3 positions divergentes)
+  ```
+
+### 👤 Utilisateur
+
+background job bash-125 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in $(seq 1 300); do if grep -q "écart |NLL|" /tmp/glm8b.log; then break; fi; sleep 10; done; cat /tmp/glm8b.log) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\n# 1) README : préciser la portée de la validation.\np='README.md'; s=open(p).read()\ns = s.replace(\"\"\"| **GLM-5.3** (79 couches MLA, 256 experts) | IQ1_S/IQ3_XXS/IQ4_XS | 3 jetons : 5 966 contre **4 286** chez ll … [4757 caractères tronqués]`

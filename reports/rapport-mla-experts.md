@@ -169,6 +169,23 @@ GLM-5.3.
 
 ## 7. Ce qui reste ouvert, et qui est le plus important
 
+### La validation s'arrête à la position 2, et c'est mesuré
+
+Comparaison à 7 jetons notés (llama.cpp : perplexité 890,4559) :
+
+| position | 0 | 1 | 2 | 3 | 4 | 5 | 6 |
+|---|---|---|---|---|---|---|---|
+| écart de NLL (nous − référence) | **+0,009** | +0,372 | +0,611 | **+4,070** | +3,118 | +2,041 | +1,583 |
+
+Le saut est à la position 3, pas une dérive progressive : c'est le signe d'un
+mécanisme qui s'enclenche, pas d'une accumulation d'arrondis. Une piste écartée
+en la testant : la quantification des activations lisait le tampon entier au
+lieu de la tranche utile (elle pouvait donc dépendre de valeurs périmées de la
+position précédente) — corrigé, **et l'écart n'a pas bougé d'un chiffre**
+(4 807,76 contre 4 807,07). La piste est donc ailleurs, et le prochain pas est
+maintenant outillé : `ref_logits --tensors 'ffn_moe_out-3'` d'un côté,
+`DRAVE_DEBUG_MLA=1`/`DRAVE_DEBUG_ETAT=1` de l'autre, à comparer À LA POSITION 3.
+
 1. **La validation MLA ne porte que sur 3 jetons et une position de référence.**
    La corrélation de 0,999 et le top-1 3/3 sont solides, mais ils ne disent rien
    de la tenue sur une séquence longue (le cache latent est réécrit à chaque

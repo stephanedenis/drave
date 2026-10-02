@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 87.6 h |
+| Durée | 88.2 h |
 | Tours | 69 |
-| Messages | 4027 |
-| Appels d'outils | 3834 |
+| Messages | 4040 |
+| Appels d'outils | 3846 |
 | Fichiers touchés | 81 |
-| Commandes | 3374 |
+| Commandes | 3382 |
 | Sous-agents | 22 |
-| Commits | 306 |
+| Commits | 307 |
 | Compactages de contexte | 5 |
 
 ## Objectifs déclarés
@@ -3526,7 +3526,7 @@ Sur cette session, les mesures m
 
 ### Tour 69 — implémente toute les optimisation et détection de matériel avec heuristiques de configuration automatique.
 
-*795 appels d'outils.* Actions notables :
+*807 appels d'outils.* Actions notables :
 
 - bash — Inspect existing GPU detection
 - write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/materiel.rs`
@@ -3542,7 +3542,7 @@ Sur cette session, les mesures m
 - bash — Read KV bits resolution
 - bash — Integrate KV and VRAM heuristics
 - bash — Lighten detection and run gates
-- … et 709 autres
+- … et 715 autres
 
 **Synthèse produite :**
 
@@ -3703,7 +3703,7 @@ Sur cette session, les mesures m
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 3334 autres
+- … et 3342 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4157,4 +4157,5 @@ Sur cette session, les mesures m
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p='REPRISE.md'; s=open(p).read() s = s.replace("""| GLM-5.3 (glm-dsa) | 754 G | **oui dep
 - ref_logits : --tensors REGEX, l'outil qui a trouvé le bug MLA  Il imprime les tenseurs NOMMÉS du graphe llama.cpp pendant l'évaluation (les cb(...) de glm-dsa.c
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/glm8b.sh <<'EOF' #!/usr/bin/env bash cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet M=/home
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' # 1) README : préciser la portée de la validation. p='README.md'; s=open(p).read() s = s.
 

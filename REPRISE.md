@@ -1035,6 +1035,16 @@ Les écrire toutes deux « sortie rapide » donne des valeurs fausses de la bonn
 forme. Après correction : **corrélation 0,999024**, **top-1 3/3**, perplexité
 5 966 contre 4 286 (3 jetons froids).
 
+**Mais la validation s'arrête là.** Sur 7 jetons notés, l'écart de NLL à
+llama.cpp est de +0,009 à la position 0, +0,372 à la position 1, +0,611 à la
+position 2, puis **+4,070 à la position 3** et redescend ensuite (perplexité
+4 807,76 contre 890,4559). Un saut à une position précise n'est pas une
+accumulation d'arrondis : un mécanisme s'enclenche. Première piste testée et
+écartée : la quantification des activations lisait le tampon entier au lieu de
+la tranche utile — corrigé, écart inchangé. Le prochain pas est outillé :
+`ref_logits --tensors 'ffn_moe_out-3'` contre `DRAVE_DEBUG_MLA=1`, à la
+position 3.
+
 Ce qui a permis de le trouver, et qu'il faut réutiliser : `ref_logits` accepte
 maintenant `--tensors REGEX` (il imprime les tenseurs nommés du graphe llama.cpp
 pendant l'évaluation) et le moteur accepte `DRAVE_DEBUG_MLA=1` (mêmes grandeurs).
