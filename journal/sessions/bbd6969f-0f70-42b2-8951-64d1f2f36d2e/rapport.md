@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 82.9 h |
+| Durée | 83.4 h |
 | Tours | 69 |
-| Messages | 3865 |
-| Appels d'outils | 3678 |
+| Messages | 3880 |
+| Appels d'outils | 3693 |
 | Fichiers touchés | 81 |
-| Commandes | 3249 |
+| Commandes | 3260 |
 | Sous-agents | 22 |
-| Commits | 296 |
+| Commits | 297 |
 | Compactages de contexte | 5 |
 
 ## Objectifs déclarés
@@ -3526,7 +3526,7 @@ Sur cette session, les mesures m
 
 ### Tour 69 — implémente toute les optimisation et détection de matériel avec heuristiques de configuration automatique.
 
-*639 appels d'outils.* Actions notables :
+*654 appels d'outils.* Actions notables :
 
 - bash — Inspect existing GPU detection
 - write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/materiel.rs`
@@ -3542,11 +3542,11 @@ Sur cette session, les mesures m
 - bash — Read KV bits resolution
 - bash — Integrate KV and VRAM heuristics
 - bash — Lighten detection and run gates
-- … et 590 autres
+- … et 601 autres
 
 **Synthèse produite :**
 
-⏵ Bug trouvé : l'expert partagé (2D) n'était jamais chargé
+⏵ Comparaison ancien/nouveau routeur contre llama.cpp sur gpt-oss
 
 ## 3. Travail accompli
 
@@ -3703,7 +3703,7 @@ Sur cette session, les mesures m
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 3209 autres
+- … et 3220 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4147,4 +4147,5 @@ Sur cette session, les mesures m
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A drave-core/src reports/ && git commit -q -F - <<'EOF' MLA : le lot de lignes indexait sa tranch
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A drave-core/src REPRISE.md && git commit -q -F - <<'EOF' Déquantification par bloc sans allocati
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat >> drave-core/src/model.rs <<'EOF' EOF grep -n "fn router" -A 6 drave-core/src/model.rs | head -8; git
+- Rapports : la référence externe (llama.cpp) mesurée — gpt-oss cohérent, MLA fausse  - gpt-oss 4 jetons ctx 16 : llama.cpp 5420,40 · nous 6443,13 (biais hors des
 

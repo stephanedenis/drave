@@ -102,6 +102,42 @@ C'est écrit dans le message de refus, et ça doit être écrit dans les rapport
 concernés : un chiffre statique n'est pas invalidé, mais il ne dit rien du
 calcul, et surtout rien du routage — qui, lui, était faux.
 
+## 4bis. La référence externe, mesurée
+
+Comparaison directe avec **llama.cpp** (`tools/ref_logits.cpp`), mêmes
+identifiants, même contexte, même fenêtre — c'est la seule mesure qui sépare
+« le moteur a maintenant raison » de « le moteur a changé de bug ».
+
+**gpt-oss-120b, 4 jetons, ctx 16** (jetons froids, donc perplexités hautes par
+construction) :
+
+| | perplexité | corrélation des logits (pos. 0) | écart \|NLL\| moyen | accord top-1 |
+|---|---|---|---|---|
+| llama.cpp (référence) | **5420,40** | — | — | — |
+| drave, biais **hors** des poids (nouveau) | **6443,13** | **0,989242** | 0,4364 | 2/4 |
+| drave, biais **dans** le softmax (ancien) | 6625,80 | 0,989142 | 0,4134 | 2/4 |
+
+Le nouveau est plus proche de la référence en perplexité **et** en corrélation ;
+l'ancien a un écart \|NLL\| moyen légèrement plus faible, mais un top-1 identique
+et une corrélation moins bonne. Sur quatre jetons l'écart est trop mince pour
+trancher à lui seul — c'est le code de `build_moe_ffn` qui tranche (llama.cpp
+met bien le biais dans `selection_probs` et pas dans `probs`), et cette mesure
+dit seulement qu'il n'y a pas de contradiction. La comparaison à 510 jetons est
+lancée pour confirmer.
+
+**GLM-5.3, 3 jetons, ctx 16** — le même protocole, et là le verdict est net :
+
+| | perplexité | corrélation | accord top-1 |
+|---|---|---|---|
+| llama.cpp (référence) | **4286,13** | — | — |
+| drave | 42 617 589 | **−0,039** | **0/3** |
+
+Une corrélation de −0,04 n'est pas « un peu faux » : c'est du bruit. Et le
+moteur prédit le MÊME jeton (106880) aux trois positions, ce qui veut dire que
+son état caché final ne dépend presque plus de l'entrée. **La MLA à rang faible
+n'est donc pas validée** : elle est implémentée, elle tourne, elle est fausse
+quelque part. C'est écrit ici pour que personne ne s'appuie dessus en attendant.
+
 ## 5. Ce qui reste ouvert
 
 - La référence externe (llama.cpp) sur gpt-oss aux mêmes jetons est **lancée** ;

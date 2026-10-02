@@ -62334,3 +62334,152 @@ done_getting_tensors: tensor 'token_embd.weight' (q4_K) (and 1781 others) cannot
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat >> drave-core/src/model.rs <<'EOF'\nEOF\ngrep -n \"fn router\" -A 6 drave-core/src/model.rs | head -8; git add -A drave-core/src reports/ && git commit -q -F - <<'EOF'\nExpert partagé (2D) et biais de sélection `exp_probs_b` : de … [1181 caractères tronqués]`
+
+  ```
+244:fn router(cfg: &Cfg, moe: &Moe, x: &[f32], tid: u32, k: usize) -> Vec<(usize, f32)> {
+245-    let ne = moe.routeur.len() / x.len().max(1);
+246-    let h = x.len();
+247-    let mut logits = vec![0f32; ne];
+248-    for e in 0..ne {
+249-        let r = &moe.routeur[e * h..(e + 1) * h];
+250-        logits[e] = r.iter().zip(x.iter()).map(|(a, b)| a * b).sum();
+78e9c94 Expert partagé (2D) et biais de sélection `exp_probs_b` : deux tenseurs lus nulle part
+  ```
+
+- **job_output** `{"job_id": "bash-104", "timeout_ms": 900000, "wait": true}`
+
+  ```
+=== référence GLM (llama.cpp) ===
+NLL moy  = 8.363140
+perplexite = 4286.132874
+fichier  = /tmp/ref_glm_4.bin (3 x 154880 f32 + 8 octets d'en-tete)
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Référence obtenue (llama.cpp : 4286 sur 3 jetons) — comparaison directe des logits
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && setsid nohup timeout 3600 ./drave-core/target/release/drave /home/stephane/Data13TB/stephane/modeles/gguf/GLM-5.3-UD-IQ1_S/GLM-5.3-UD-IQ1_S-00001-of-00006.gguf --ppl /tmp/ids_glm.txt --ctx 16 --limit 4 --threads 20 --logits-bin /tmp/ … [196 caractères tronqués]`
+
+  ```
+lancé avec les deux correctifs
+Mem:             125          17           1           4         111         108
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in $(seq 1 500); do if grep -qE \"perplexité|panicked\" /tmp/glm53_essai9.log; then break; fi; sleep 10; done; echo \"=== GLM-5.3 avec expert partagé + biais de sélection ===\"; grep -E \"perplexité|panicked\" /tmp/glm53_essai9 … [201 caractères tronqués]`
+
+  ```
+started background job bash-105
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"tete\\b\" drave-core/src/model.rs | grep -n \"output.weight\" | head -3; grep -n \"if g.tensor(\\\"output.weight\\\")\" -B 3 -A 3 drave-core/src/model.rs | head -12", "description": "Check the head tensor selection"}`
+
+  ```
+11:2339:        let tete = if g.tensor("output.weight").is_some() { "output.weight" } else { "token_embd.weight" };
+2336-                 if cfg.n_rot == 0 { cfg.head_dim } else { cfg.n_rot },
+2337-                 cfg.ffn, cfg.n_expert,
+2338-                 cfg.yarn.map(|y| format!(" · yarn ×{}", y.0)).unwrap_or_default());
+2339:        let tete = if g.tensor("output.weight").is_some() { "output.weight" } else { "token_embd.weight" };
+2340-        let tete = tete.to_string();
+2341-        // Le modèle peut déclarer une fenêtre glissante (gpt-oss : 128) : lue
+2342-        // AVANT que `g` ne soit déplacé dans la structure.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ./drave-core/target/release/drave /home/stephane/Data13TB/stephane/modeles/gguf/GLM-5.3-UD-IQ1_S/GLM-5.3-UD-IQ1_S-00001-of-00006.gguf --tensors 2>/dev/null | grep -E \"^  [A-Z0-9_]+ +(output|token_embd|output_norm)\" | head -4", "des … [54 caractères tronqués]`
+
+  ```
+Q4_K     output.weight                          [154880, 6144] · 951.6 M poids · fichier 1
+  F32      output_norm.weight                     [6144] · 0.0 M poids · fichier 1
+  Q4_K     token_embd.weight                      [154880, 6144] · 951.6 M poids · fichier 1
+  ```
+
+- **job_output** `{"job_id": "bash-105", "timeout_ms": 900000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "grep -E \"perplexité|panicked|chargées\" /tmp/glm53_essai9.log | tail -2; ps -eo pid,rss,comm --sort=-rss | head -2", "description": "Poll the GLM run with fixes"}`
+
+  ```
+[modele] 79 couches chargées en 386.215253584s — listes 25.62 Go , 20 threads
+    PID   RSS COMMAND
+3655580 95847768 drave
+  ```
+
+- **job_output** `{"job_id": "bash-105", "timeout_ms": 900000, "wait": true}`
+
+  ```
+=== GLM-5.3 avec expert partagé + biais de sélection ===
+       3 tokens notés — perplexité cumulée 42617610.392  (0.0 tok/s)
+=== perplexité 42617610.3922 sur 3 tokens (0 événements, 565.9 s) ===
+    0     284   16.5176    9.5749  +6.9427    147038        93    106880    154820     NON
+    1    8396   17.5260   11.0308  +6.4952    152540      1003    106880    154820     NON
+    2     425   18.6597    4.4837 +14.1760    154391        15    106880        64     NON
+
+écart |NLL| : moyenne 9.2046 · médiane 6.9427 · p90 12.7294 · max 14.1760
+accord du top-1 : 0/3  (3 positions divergentes)
+perplexité nous : 42617589.8659   référence : 4286.1326   (3 positions comparées)
+corrélation des logits (position 0) : -0.039403
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Comparaison ancien/nouveau routeur contre llama.cpp sur gpt-oss
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && M=/home/stephane/Data13TB/stephane/modeles/gguf/gpt-oss-120b-MXFP4.gguf; echo \"=== NOUVEAU (biais hors des poids) ===\"; timeout 900 ./drave-core/target/release/drave $M --ppl /tmp/ids_oss_512.txt --ctx 16 --limit 5 --dense --thread … [247 caractères tronqués]`
+
+  ```
+=== NOUVEAU (biais hors des poids) ===
+[timed out after 60000ms]
+[killed by signal: SIGTERM]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/compare_oss.sh <<'EOF'\n#!/usr/bin/env bash\ncd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\nM=/home/stephane/Data13TB/stephane/modeles/gguf/gpt-oss-120b-MXFP4.gguf\necho \"=== NOUVEAU (biais hors des poids) ===\"\n./d … [814 caractères tronqués]`
+
+  ```
+comparaison lancée
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in $(seq 1 300); do if grep -q \"ANCIEN\" /tmp/compare_oss.log && grep -c \"écart |NLL|\" /tmp/compare_oss.log | grep -q 2; then break; fi; sleep 10; done; cat /tmp/compare_oss.log", "description": "Wait for the comparison resu … [32 caractères tronqués]`
+
+  ```
+started background job bash-106
+  ```
+
+- **job_output** `{"job_id": "bash-106", "timeout_ms": 900000, "wait": true}`
+
+  ```
+=== NOUVEAU (biais hors des poids) ===
+       4 tokens notés — perplexité cumulée 6443.129  (0.1 tok/s)
+=== perplexité 6443.1285 sur 4 tokens (0 événements, 73.0 s) ===
+écart |NLL| : moyenne 0.4364 · médiane 0.5111 · p90 0.6315 · max 0.6648
+accord du top-1 : 2/4  (2 positions divergentes)
+perplexité nous : 6443.1261   référence : 5420.3964   (4 positions comparées)
+corrélation des logits (position 0) : 0.989242
+=== ANCIEN (biais dans le softmax) ===
+       4 tokens notés — perplexité cumulée 6625.797  (2.1 tok/s)
+=== perplexité 6625.7975 sur 4 tokens (0 événements, 1.9 s) ===
+écart |NLL| : moyenne 0.4134 · médiane 0.4664 · p90 0.6227 · max 0.6355
+accord du top-1 : 2/4  (2 positions divergentes)
+perplexité nous : 6625.7916   référence : 5420.3964   (4 positions comparées)
+corrélation des logits (position 0) : 0.989142
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && export LD_LIBRARY_PATH=/home/stephane/Data13TB/stephane/GitHub/llama.cpp/build/bin && nohup timeout 5400 /home/stephane/Data13TB/stephane/GitHub/llama.cpp/build/bin/llama-perplexity -m /home/stephane/Data13TB/stephane/modeles/gguf/gp … [440 caractères tronqués]`
+
+  ```
+started background job bash-107
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/rapport-routage-experts.md'; s=open(p).read()\ns = s.replace(\"\"\"## 5. Ce qui reste ouvert\"\"\",\n\"\"\"## 4bis. La référence externe, mesurée\n\nComparaison directe avec **llama.cpp** (`tools/ref_logi … [1905 caractères tronqués]`
+
+  ```
+ok
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A reports/ REPRISE.md && git commit -q -m \"Rapports : la référence externe (llama.cpp) mesurée — gpt-oss cohérent, MLA fausse\n\n- gpt-oss 4 jetons ctx 16 : llama.cpp 5420,40 · nous 6443,13 (biais hors des\n  poids) contre  … [545 caractères tronqués]`
