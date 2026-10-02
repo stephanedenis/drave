@@ -79139,3 +79139,85 @@ a26d407 P8 : l'engram inventorié, et l'issue (b) retenue — pas d'implémentat
 ⏵ P9 : la mesure tranche déjà — le goulot est la lecture, pas le déquant. Constat écrit.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='docs/plan-deepseek41-complet.md'\ns=open(p).read()\na=\"\"\"### P9 — Noyaux natifs et encodage des poids : après la mesure (≈ 1 journée, optionnel)\"\"\"\nb=\"\"\"### P9 — Noyaux natifs et encodage des poids : … [1409 caractères tronqués]`
+
+  ```
+ok
+362b3ed P9 : la mesure tranche — le goulot est la lecture (×2,8 en éclaté, même calcul), pas le déquant : noyaux natifs non justifiés aujourd'hui
+a26d407 P8 : l'engram inventorié, et l'issue (b) retenue — pas d'implémentation sans référence
+259f24c Portes : V4-Flash entre dans tools/portes.sh (--config calculable + perplexité 8430,2968) — un chiffre de référence qui dérive sans qu'on s'en aperçoive ne vaut rien
+  ```
+
+### 🤖 Assistant
+
+⏵ Il reste une porte mesurable (P5 : le top-k au-delà de 512 blocs). Je la rends testable en baissant `indexer.top_k` dans les métadonnées.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c \"\nimport struct, sys\nsys.path.insert(0,'tools')\nfrom lire_meta_gguf import Lecteur\np='/home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek-V4-Flash-UD-IQ1_M/DeepSeek-V4-Flash-UD-IQ1_M-00001-of-00003.gguf'\nr=Lecteur … [551 caractères tronqués]`
+
+  ```
+clé deepseek4.attention.indexer.top_k · offset de la valeur 2524 · valeur 512
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && D=/home/stephane/FastNVMe/artefacts/modeles-optimises/v4flash-topk2; mkdir -p $D && S=/home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek-V4-Flash-UD-IQ1_M; ln -sf $S/DeepSeek-V4-Flash-UD-IQ1_M-00002-of-00003.gguf $D/ 2>/dev/null; … [620 caractères tronqués]`
+
+  ```
+indexer.top_k : 512 -> 2
+deepseek4.attention.indexer.top_k = 2
+  ```
+
+### 🤖 Assistant
+
+⏵ Validation du top-k : référence llama.cpp avec `indexer.top_k = 2` (les blocs doivent être choisis).
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && rm -f /tmp/ref_topk2-*.bin && LD_LIBRARY_PATH=/home/stephane/Data13TB/stephane/GitHub/llama.cpp/build/bin REF_DUMP=/tmp/ref_topk2 REF_TENSORS='^(attn_derope|l_last)-2$' timeout 2400 ./tools/ref_logits /home/stephane/FastNVMe/artefact … [246 caractères tronqués]`
+
+  ```
+NLL moy  = 6.306855
+perplexite = 548.317778
+fichier  = /tmp/ref_topk2.bin (9 x 129280 f32 + 8 octets d'en-tete)
+/tmp/ref_topk2-attn_derope-2.bin
+/tmp/ref_topk2-l_last-2.bin
+  ```
+
+### 🤖 Assistant
+
+⏵ Test discriminant : `top_k = 1` avec deux blocs disponibles (position 8-9).
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c \"\nimport struct\np='/home/stephane/FastNVMe/artefacts/modeles-optimises/v4flash-topk2/DeepSeek-V4-Flash-UD-IQ1_M-00001-of-00003.gguf'\nb=bytearray(open(p,'rb').read()); b[2524:2528]=struct.pack('<I',1); open(p,'wb').writ … [545 caractères tronqués]`
+
+  ```
+top_k = 1
+NLL moy  = 6.303229
+perplexite = 546.333049
+/tmp/ref_topk1-attn_derope-2.bin
+/tmp/ref_topk1-l_last-2.bin
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && D=/home/stephane/FastNVMe/artefacts/modeles-optimises/v4flash-topk2/DeepSeek-V4-Flash-UD-IQ1_M-00001-of-00003.gguf; timeout 2400 ./drave-core/target/release/drave $D --ppl /tmp/ids_v4flash.txt --ctx 32 --limit 10 --dense --threads 16 … [237 caractères tronqués]`
+
+  ```
+=== perplexité 677.3058 sur 9 tokens (0 événements, 226.2 s) ===
+--- comparaison ---
+# l_last-2 : référence ne=(4096, 4, 10, 1) → 4096 valeurs × 4 copies
+  ```
+
+### 🤖 Assistant
+
+⏵ Test propre : état injecté + `top_k = 1`, comparaison de la couche 2 couche par couche.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && D=/home/stephane/FastNVMe/artefacts/modeles-optimises/v4flash-topk2/DeepSeek-V4-Flash-UD-IQ1_M-00001-of-00003.gguf; rm -f /tmp/v4k1-*.bin; DRAVE_ETAT_ENTREE=/tmp/ref_csa-l_last-1.bin DRAVE_DUMP_COUCHES=/tmp/v4k1 timeout 2400 ./drave- … [320 caractères tronqués]`
+
+  ```
+# l_last-2 : référence ne=(4096, 4, 10, 1) → 4096 valeurs × 4 copies
+  pos 4 : écart max 1.344e-02 (indice 12403, dynamique 1.145e+00) · corrélation 0.999919 ~
+  pos 5 : écart max 1.462e-03 (indice 4056, dynamique 4.650e-01) · corrélation 0.999994 ~
+  pos 6 : écart max 3.422e-03 (indice 1926, dynamique 7.658e-01) · corrélation 0.999990 ~
+  pos 7 : écart max 5.348e-03 (indice 3753, dynamique 8.677e-01) · corrélation 0.999990 ~
+  pos 8 : écart max 1.814e-02 (indice 9206, dynamique 1.340e+00) · corrélation 0.999943 ~
+  pos 9 : écart max 1.316e-02 (indice 15301, dynamique 1.019e+00) · corrélation 0.999920 ~
+  ```
+
+### 🤖 Assistant
+
+⏵ Le top-k est validé (0,99992) — la porte longue de P5 est franchie par une astuce de métadonnée.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='reports/rapport-v4-hca.md'\ns=open(p).read()\na=\"\"\"## 6. Ce qui reste de P5 : l'indexeur\"\"\"\nb=\"\"\"## 5.bis Le top-k de l'indexeur, validé sans attendre 2 048 jetons\n\nLa sélection des blocs ne change … [2362 caractères tronqués]`

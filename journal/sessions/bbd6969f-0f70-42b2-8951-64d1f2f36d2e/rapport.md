@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 98.2 h |
+| Durée | 98.4 h |
 | Tours | 77 |
-| Messages | 4911 |
-| Appels d'outils | 4689 |
+| Messages | 4918 |
+| Appels d'outils | 4696 |
 | Fichiers touchés | 96 |
-| Commandes | 4054 |
+| Commandes | 4061 |
 | Sous-agents | 29 |
-| Commits | 343 |
+| Commits | 344 |
 | Compactages de contexte | 6 |
 
 ## Objectifs déclarés
@@ -3941,7 +3941,7 @@ V4-Flash contre llama.cpp : perplexité **678,09 contre 548,32** (NLL +0,21 nat)
 
 ### Tour 77 — <goal_round> Objective: "Exécuter le plan docs/plan-deepseek41-complet.md phase par phase (P0→P9), en autonomie, en resp … [941 caractères tronqués]
 
-*76 appels d'outils.* Actions notables :
+*83 appels d'outils.* Actions notables :
 
 - bash — Find the channel-count validation
 - bash — Read the validation and the hidden definition
@@ -3957,11 +3957,11 @@ V4-Flash contre llama.cpp : perplexité **678,09 contre 548,32** (NLL +0,21 nat)
 - bash — Remove the refusal and run distributed
 - bash — Find the pilot's reply validation
 - bash — Fix the pilot reply validation
-- … et 56 autres
+- … et 63 autres
 
 **Synthèse produite :**
 
-⏵ P9 : la mesure tranche déjà — le goulot est la lecture, pas le déquant. Constat écrit.
+⏵ Le top-k est validé (0,99992) — la porte longue de P5 est franchie par une astuce de métadonnée.
 
 ## 3. Travail accompli
 
@@ -4140,7 +4140,7 @@ V4-Flash contre llama.cpp : perplexité **678,09 contre 548,32** (NLL +0,21 nat)
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 4014 autres
+- … et 4021 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4631,4 +4631,5 @@ V4-Flash contre llama.cpp : perplexité **678,09 contre 548,32** (NLL +0,21 nat)
 - Portes : V4-Flash entre dans tools/portes.sh (--config calculable + perplexité 8430,2968) — un chiffre de référence qui dérive sans qu'on s'en aperçoive ne vaut
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF' p='docs/plan-deepseek41-complet.md' s=open(p).read() a="""### P8 — Engram : la liste d
 - P9 : la mesure tranche — le goulot est la lecture (×2,8 en éclaté, même calcul), pas le déquant : noyaux natifs non justifiés aujourd'hui" && git log --oneline 
+- P5 : le top-k de l'indexeur validé sans run de 2 048 jetons (metadata top_k 512 → 1 sur une copie du shard 1) — l_last-2 concorde à 0,99992" && git log --onelin
 

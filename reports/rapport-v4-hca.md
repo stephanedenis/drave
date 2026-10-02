@@ -113,6 +113,30 @@ soit 2 048 jetons : en deçà il les garde tous, et c'est ce que ces mesures
 montrent. La sélection est implémentée (tri décroissant puis troncature) et le
 moteur ne refuse plus au-delà.
 
+## 5.bis Le top-k de l'indexeur, validé sans attendre 2 048 jetons
+
+La sélection des blocs ne change rien tant qu'il y a moins de blocs que son
+`top_k` (512) : il les garde tous. La valider demandait donc soit un run de
+2 048 jetons (plusieurs heures sur ce modèle), soit de **rendre la sélection
+active tout de suite** — en changeant un **entier dans les métadonnées** :
+
+```
+deepseek4.attention.indexer.top_k : 512 → 1     (4 octets, aucune weight touchée)
+```
+
+Les deux moteurs lisent cette clé au chargement ; à la position 8, deux blocs
+existent et **un seul est gardé** — la sélection s'exerce donc dès 10 jetons.
+
+| `l_last-2`, `top_k = 1` | corrélation | écart max |
+|---|---|---|
+| pos 4 (1 bloc) | 0,999919 | 1,3e-2 |
+| pos 8 (**2 blocs, 1 gardé**) | **0,999943** | 1,8e-2 |
+| pos 9 (2 blocs, 1 gardé) | **0,999920** | 1,3e-2 |
+
+Même niveau d'accord qu'avec tous les blocs (0,9999x) : la **sélection** est
+juste, pas seulement les scores. La perplexité, elle, bouge dans le même sens des
+deux côtés (546,3 contre 548,3 chez llama.cpp ; 677,3 contre 678,1 chez Drave).
+
 ## 6. Ce qui reste de P5 : l'indexeur
 
 Les couches CSA gardent, en plus des blocs, ceux que l'**indexeur** choisit
@@ -138,9 +162,6 @@ corrélation globale.
 
 ## 8. Reste à faire
 
-- **Le top-k au-delà de 2 048 jetons** : la sélection est écrite, mais sa
-  justesse ne peut se mesurer qu'avec plus de 512 blocs — donc un run long, à
-  faire quand la vitesse le permettra.
 - La **stabilité de la liste de candidats** (recouvrement entre jetons
   consécutifs, périodicité) : c'est la question que la vision pose à ce flux, et
   elle n'a pas encore été posée.
