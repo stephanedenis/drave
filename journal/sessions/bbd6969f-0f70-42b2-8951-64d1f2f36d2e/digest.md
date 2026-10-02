@@ -79221,3 +79221,31 @@ perplexite = 546.333049
 ⏵ Le top-k est validé (0,99992) — la porte longue de P5 est franchie par une astuce de métadonnée.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='reports/rapport-v4-hca.md'\ns=open(p).read()\na=\"\"\"## 6. Ce qui reste de P5 : l'indexeur\"\"\"\nb=\"\"\"## 5.bis Le top-k de l'indexeur, validé sans attendre 2 048 jetons\n\nLa sélection des blocs ne change … [2362 caractères tronqués]`
+
+  ```
+ok
+2145e0a P5 : le top-k de l'indexeur validé sans run de 2 048 jetons (metadata top_k 512 → 1 sur une copie du shard 1) — l_last-2 concorde à 0,99992
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 10, in <module>
+AssertionError
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"porte longue\" docs/plan-deepseek41-complet.md | head -3; sed -n \"$(grep -n '### P5' docs/plan-deepseek41-complet.md | cut -d: -f1),+22p\" docs/plan-deepseek41-complet.md | tail -10", "description": "Find the P5 long-gate  … [6 caractères tronqués]`
+
+  ```
+248:### P5 — Indexeur et CSA : la liste de candidats (≈ 1 à 2 journées) — **FAIT** (02/10, sauf porte longue)
+260:> **porte longue** : le top-k ne change rien en deçà de 512 blocs (2 048 jetons),
+> donc sa justesse au-delà n'est pas encore mesurée — c'est écrit comme tel.
+
+
+- `indexer.proj`, `indexer.attn_q_b`, `indexer.attn_k`, `indexer.k_norm`, les
+  compresseurs d'indexeur, la sélection (`candidate_topk_blocks = 2048`,
+  `candidate_block_size = 8`, `candidate_source_layer_id = 20`), puis l'attention
+  sur les seuls candidats.
+- **Flux nouveau** : la **liste des candidats par jeton** — 2 048 blocs sur
+  l'ensemble des clés. C'est le flux le plus intéressant du modèle : il décide de
+  ce que l'attention *voit*.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='docs/plan-deepseek41-complet.md'\ns=open(p).read()\na=\"\"\"> **porte longue** : le top-k ne change rien en deçà de 512 blocs (2 048 jetons),\n> donc sa justesse au-delà n'est pas encore mesurée — c'est écrit  … [973 caractères tronqués]`

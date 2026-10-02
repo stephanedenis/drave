@@ -245,7 +245,7 @@ Une phase qui ne passe pas ses deux portes ne passe pas à la suivante.
   blocs/s. Si la liste est stable, elle est compressible — et c'est une
   optimisation mesurable, pas une intuition.
 
-### P5 — Indexeur et CSA : la liste de candidats (≈ 1 à 2 journées) — **FAIT** (02/10, sauf porte longue)
+### P5 — Indexeur et CSA : la liste de candidats (≈ 1 à 2 journées) — **FAIT** (02/10)
 
 > Le compresseur **CSA** (ratio 4) est implémenté et validé : `attn_derope`
 > **0,999990** sur la couche 2 aux positions 3-9 (blocs 0 et 1). Deux pièges
@@ -257,8 +257,11 @@ Une phase qui ne passe pas ses deux portes ne passe pas à la suivante.
 > issue de `qr_norm`, `relu(q·k)` pondéré par tête, échelle
 > `1/sqrt(128 × têtes)`, puis top-k. Scores comparés à `lid_score_masked` :
 > **0,1 à 0,3 % d'écart** (positions 4-9). Ce qui reste de cette phase est une
-> **porte longue** : le top-k ne change rien en deçà de 512 blocs (2 048 jetons),
-> donc sa justesse au-delà n'est pas encore mesurée — c'est écrit comme tel.
+> **porte longue fermée autrement** : au lieu d'un run de 2 048 jetons (plusieurs
+> heures sur ce modèle), `deepseek4.attention.indexer.top_k` a été ramené de 512
+> à **1** dans une copie du shard 1 — **4 octets**, aucune weight touchée. La
+> sélection s'exerce alors dès 2 blocs, et `l_last-2` concorde à
+> **0,999920-0,999994** : la sélection est juste, pas seulement les scores.
 
 
 - `indexer.proj`, `indexer.attn_q_b`, `indexer.attn_k`, `indexer.k_norm`, les
