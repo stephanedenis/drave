@@ -7,12 +7,12 @@
 | Début | 2026-09-28 14:46 |
 | Durée | 78.1 h |
 | Tours | 66 |
-| Messages | 3187 |
-| Appels d'outils | 3014 |
+| Messages | 3188 |
+| Appels d'outils | 3015 |
 | Fichiers touchés | 70 |
-| Commandes | 2621 |
+| Commandes | 2622 |
 | Sous-agents | 22 |
-| Commits | 265 |
+| Commits | 266 |
 | Compactages de contexte | 4 |
 
 ## Objectifs déclarés
@@ -3308,7 +3308,7 @@ Ce qui n'a pas payé, avec son chiffre : découper sous l'expert (×287), grappe
 
 ### Tour 66 — maintenant, les optimisations d'architecture pour chaque grappe et couche afin de faire le meilleur usage du vram et ram
 
-*8 appels d'outils.* Actions notables :
+*9 appels d'outils.* Actions notables :
 
 - bash — Inventory GPU kernels and offloadable formats
 - bash — Check GPU memory and cache budget
@@ -3318,6 +3318,7 @@ Ce qui n'a pas payé, avec son chiffre : découper sous l'expert (×287), grappe
 - write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-architecture-memoire.md`
 - bash — Compute KV cache cost at long context
 - bash — Document architecture and commit
+- bash — Final state check
 
 **Synthèse produite :**
 
@@ -3467,7 +3468,7 @@ Ce qui n'a pas payé, avec son chiffre : découper sous l'expert (×287), grappe
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 2581 autres
+- … et 2582 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -3880,4 +3881,5 @@ Ce qui n'a pas payé, avec son chiffre : découper sous l'expert (×287), grappe
 - Analyse statique : les experts sont orthogonaux, mais la periodicite de 12 est dans les POIDS  tools/analyse_experts_statique.py dequantifie les experts (Q4_K, 
 - REPRISE : analyse statique des poids" && echo "=== RÉCAPITULATIF FINAL ==="; echo ""; echo "Rapports :"; ls -la reports/rapport-empreinte-memoire.md | awk '{pri
 - Architecture memoire : ou mettre quoi, et le KV qu'on oubliait  Debits mesures : VRAM 84,9 Go/s (noyau warp) contre 20,9 pour le CPU -- le deport vaut un facteu
+- REPRISE : architecture memoire" && echo "=== ÉTAT FINAL ==="; (cd drave-core && cargo test --release 2>&1 | grep -E "^test result"); git status --short | grep -
 

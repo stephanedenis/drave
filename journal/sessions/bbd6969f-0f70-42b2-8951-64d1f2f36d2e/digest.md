@@ -51256,3 +51256,11 @@ KV en F16   :    90.0 Ko par jeton
 ⏵ **Le KV devient le premier poste à 1 M** (96,6 Go en F16, 48,3 en int8). Je complète le rapport.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np = 'reports/rapport-architecture-memoire.md'\ns = open(p).read()\ns = s.replace('''## 6. Ce qui reste à vérifier''',\n'''## 6. Le poste que j'avais oublié : le KV à long contexte\n\nLe KV de MLA n'est pas la concat … [4549 caractères tronqués]`
+
+  ```
+ok
+README ok
+ed832ce Architecture memoire : ou mettre quoi, et le KV qu'on oubliait
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np = 'REPRISE.md'\ns = open(p).read().rstrip('\\n')\ns += '''\n\n### Architecture mémoire : VRAM, RAM, disque\n\nRapport : [`reports/rapport-architecture-memoire.md`](reports/rapport-architecture-memoire.md).\n\nDébi … [1993 caractères tronqués]`

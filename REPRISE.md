@@ -860,3 +860,32 @@ python3 tools/analyse_experts_statique.py \
 cycle. 35 % de variance partagée à extraire, **rang inconnu** — donc pas compté
 comme un résultat.
 
+### Architecture mémoire : VRAM, RAM, disque
+
+Rapport : [`reports/rapport-architecture-memoire.md`](reports/rapport-architecture-memoire.md).
+
+Débits **mesurés** : VRAM **84,9 Go/s** (noyau `warp par ligne`) · RAM **20,9 Go/s**
+(CPU 30 fils) · NVMe aléatoire 5,5 Go/s · PCIe 3.0 ×16 ~12 Go/s. **Le noyau GPU
+est 4× plus rapide que le CPU** — le déport n'est pas marginal.
+
+| niveau | capacité | contenu |
+|---|---|---|
+| VRAM | 30,2 Go | commun 8,0 + **22,2 Go d'experts chauds** (2 227) |
+| RAM | 102 Go | jusqu'à 10 247 experts — 90 % des appels dans **71 Go** |
+| NVMe | 828 Go | le reste + **engram mmappé** |
+
+**Noyaux manquants, par ordre de gain** : attention MLA (−194 ms/jeton : 5,40 Go
+par jeton, premier poste, **pas déportable aujourd'hui**) · IQ2_XXS/Q2_K
+(−86 ms). Cumul 499 → ~210 ms par jeton.
+
+**Le KV qu'on oublie** : à 1 M de contexte, **96,6 Go en F16** — plus que les
+71 Go d'experts. En int8 : 48,3 Go. **Sa quantification est une condition, pas une
+optimisation** : au-delà de 0,77 M de jetons en F16, il n'y a plus de place pour
+les experts. Le seuil de bascule VRAM (KV contre experts) est ~100 K jetons.
+
+```bash
+# Le banc qui donne les débits (sans DRAVE_GPU, il rend « GPU absent »)
+DRAVE_GPU=1 ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf --gpu-banc
+# attendu : CPU 20,9 Go/s · GPU ligne par fil 41,9 · GPU warp par ligne 84,9
+```
+
