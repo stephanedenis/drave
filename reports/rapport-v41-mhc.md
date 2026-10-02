@@ -114,14 +114,54 @@ n'existe pas encore — c'est une vérification **interne**, de bout en bout, de
 chaîne mHC. Les logits publiés ci-dessus appartiennent à un modèle **tronqué**
 (1 couche sur 40) : ils ne disent rien de sa qualité.
 
-## 5. Ce qui reste, nommé
+## 5. Le compresseur des ratios 1 et 2 : les couches SOURCES tournent
+
+Deuxième manque annoncé, deuxième manque faux. Le compresseur de V4.1 est
+spécifié par `DeepseekCompressor` + `fused_save_compress_norm` : une **valeur** de
+512 par jeton, une **porte** de 512 seulement si `ratio > 1` (`has_gate =
+compress_ratio > 1`), **aucun `ape`**, et un pool qui est un softmax **par canal**
+sur le groupe (`pooled = tl.sum(kv * tl.softmax(score, 0), 0)`) — pour le ratio 1,
+la référence écrit simplement `pooled = kv`.
+
+Ce chemin est implémenté pour les couches **sources** (celles qui possèdent leurs
+tenseurs de compresseur), et vérifié sur le fichier réel :
+
+| couche (ratio) | bloc | pool (`comp_brut`) | norme + RoPE de bloc (`comp_bloc`) | dynamique |
+|---|---|---|---|---|
+| 2 (ratio 2) | 0, groupe {0,1} | 5,08e-07 | 3,04e-06 | 1,245 |
+| 2 (ratio 2) | 1, groupe {2,3} | 5,08e-07 | 3,04e-06 | 1,245 |
+| 20 (ratio 1) | 0..3, un par jeton | 3,47e-07 | 5,59e-06 | 2,561 |
+
+`tools/v41_compresseur_reference.py` recalcule en numpy, depuis les tenseurs du
+GGUF, la projection, la norme RMS du latent et le RoPE appliqué aux **64
+dernières** composantes à la position du **premier** jeton du groupe (`position //
+ratio * ratio`, appariement NORM) : l'écart est de l'ordre de l'arrondi f32, donc
+la projection, l'instant d'émission du bloc, le groupe et la rotation sont justes.
+Réserve assumée : l'état injecté est le même à toutes les positions, donc le pool
+d'un groupe y vaut la valeur du jeton **quel que soit** le jeu de poids — ce
+tableau ne prouve pas l'orientation du softmax par canal (prochain test à écrire :
+un témoin synthétique à deux jetons DIFFÉRENTS), et il ne prouve pas encore le
+partage entre couches.
+
+L'**indexeur** de V4.1 n'a pas de compresseur propre : ses clés viennent du latent
+du compresseur principal (`indexer.attn_k` [128,512] + `indexer.k_norm`) et il
+partage le cache de clés de sa source. Ce chemin n'est pas porté ; tant qu'il ne
+l'est pas, le moteur **garde tous les blocs**, ce qui est exact sous `indexer.top_k`
+(512) — et il **refuse** au-delà plutôt que de choisir au hasard. Les deux
+comportements sont annoncés une fois.
+
+Ce qui reste pour que les 38 couches compressées tournent : le **partage du cache
+compressé** (les 34 couches consommatrices lisent les clés de leur source ; le
+moteur les refuse aujourd'hui avec ce motif) et l'indexeur de V4.1.
+
+## 6. Ce qui reste, nommé
 
 L'inventaire de V4.1 (1 046 tenseurs, 40 couches) donne la liste exacte :
 
 | manque | ce que dit le fichier | pourquoi ce n'est pas fait |
 |---|---|---|
-| **cache compressé partagé** | `kv_source_layer_ids = [2,8,14,20]`, `compress_ratios = [0,0,2×18,1×20]` | « Compressors and compressed-KV caches live only on `kv_source_layer_ids`; consumers reuse the most recently published source below them » : les couches 3..7 lisent les clés publiées par la 2, 21..39 celles de la 20. Un compresseur par couche donnerait d'AUTRES clés |
-| ratios 1 et 2 | `attn_compressor_kv` sans `ape`, `attn_compressor_gate` seulement en ratio 2 | le calcul est spécifié (vLLM) ; il n'est pas écrit ici, et le brancher sans le partage ci-dessus serait faux |
+| **cache compressé partagé** | `kv_source_layer_ids = [2,8,14,20]`, `compress_ratios = [0,0,2×18,1×20]` | « Compressors and compressed-KV caches live only on `kv_source_layer_ids`; consumers reuse the most recently published source below them » : les couches 3..7 lisent les clés publiées par la 2, 21..39 celles de la 20. Un compresseur par couche donnerait d'AUTRES clés. **Les 4 couches sources tournent** (§5) ; les 34 consommatrices sont refusées, avec ce motif |
+| ratios 1 et 2 | `attn_compressor_kv` sans `ape`, `attn_compressor_gate` seulement en ratio 2 | **fait** pour les couches sources, vérifié sur les couches 2 et 20 (§5) |
 | indexeur sans compresseur propre | `indexer.attn_k` [128,512], `indexer.k_norm` [128], `indexer.attn_q_b`, `indexer.proj` | les clés de l'indexeur viennent du **latent du compresseur principal** (le fichier n'a pas d'`indexer_compressor_*`), et il partage le cache de son `kv_source` |
 | sélection à deux niveaux | `candidate_source_layer_id = 20`, `candidate_topk_blocks = 2048`, `candidate_block_size = 8` | aucune source d'exécution lue à ce jour |
 | **engram** | couches 1 et 14 : `engram_embd` (101 Go), `engram_kv` [25600,6144], `engram_q_norm`/`k_norm` [4,5120] | l'adressage et la lecture sont portés et validés ; **l'injection n'est branchée sur aucune passe avant** |
@@ -135,7 +175,7 @@ celui de `vision_config` (2816) et non le texte (2304). Le champ est **inerte**
 sur un modèle à experts (la largeur du FFN partagé vient de la forme du tenseur),
 mais le chiffre affiché est faux.
 
-## 6. Reproduire
+## 7. Reproduire
 
 ```bash
 # la chaîne, témoins numpy ↔ moteur
@@ -149,9 +189,21 @@ DRAVE_DUMP_COUCHES=/tmp/dump_v41 ./drave-core/target/release/drave \
 python3 tools/verifier_v41_mhc.py \
     /home/stephane/FastNVMe/modeles-lourds/DeepSeek-V4.1-Flash-Q2.gguf \
     /tmp/dump_v41 /tmp/v41_texte.txt.ids
+
+# le compresseur d'une couche SOURCE (ratio 2 : couche 2 ; ratio 1 : couche 20).
+# La plage commence au milieu du modèle : le moteur l'annonce, et l'état est
+# INJECTÉ pour que l'entrée du compresseur soit reproductible.
+python3 -c "import numpy as np; h=5120; v=(np.sin(np.arange(h)*0.01)+(np.arange(h)%7)*0.1).astype(np.float32); np.tile(v,4).astype('<f4').tofile('/tmp/etat_l2.bin')"
+DRAVE_ETAT_ENTREE=/tmp/etat_l2.bin DRAVE_DUMP_COUCHES=/tmp/dump_l20 \
+  ./drave-core/target/release/drave \
+    /home/stephane/FastNVMe/modeles-lourds/DeepSeek-V4.1-Flash-Q2.gguf \
+    --couches 20:21 --tete-partielle --ppl /tmp/v41_texte.txt.ids --ctx 8 --limit 4
+python3 tools/v41_compresseur_reference.py \
+    /home/stephane/FastNVMe/modeles-lourds/DeepSeek-V4.1-Flash-Q2.gguf \
+    /tmp/dump_l20 20 /tmp/etat_l2.bin 1 0 1 2 3
 ```
 
-## 7. Sources
+## 8. Sources
 
 - vLLM, `vllm/models/deepseek_v41/nvidia/model.py` (`mhc_shifted_post_pre`,
   `hc_collapse_triton`, `_collapse`, `kv_source_layer_ids`) —

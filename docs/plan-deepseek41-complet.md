@@ -122,10 +122,16 @@ pas réutilisable telle quelle : c'est un **troisième** chemin d'attention.
 
 ### 3.3 Les régimes d'attention de V4.1
 
-`compress_ratios` (40 entrées) : **18 couches CSA** (ratio 2, couches 2-19),
-**20 couches HCA** (ratio 1, couches 20-39), **2 couches brutes** (0, 1).
-**38 des 40 couches** passent par une attention compressée : il n'y a pas de
-validation « partielle » possible.
+`compress_ratios` (40 entrées) : **18 couches en ratio 2** (couches 2-19),
+**20 couches en ratio 1** (couches 20-39), **2 couches brutes** (0, 1).
+Mais les compresseurs ne vivent **que sur les couches sources**
+(`kv_source_layer_ids = [2, 8, 14, 20]`) : les couches 3..7 lisent les clés
+publiées par la 2, 9..13 celles de la 8, 15..19 celles de la 14, et **21..39
+celles de la 20** — « Compressors and compressed-KV caches live only on
+`kv_source_layer_ids`; consumers reuse the most recently published source below
+them » (vLLM, `deepseek_v41/attention.py`). Les 38 couches compressées se
+répartissent donc en **4 sources** (exécutables seules, chacune avec son
+compresseur) et **34 consommatrices** (qui exigent le partage du cache).
 
 ---
 

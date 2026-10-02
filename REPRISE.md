@@ -50,7 +50,17 @@ cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && cargo build --r
 > du pilote, et `--gpu-banc` retrouve l'exactitude des noyaux — 1,6 ms par ligne
 > en warp-par-ligne contre 7,2 ms sur 30 fils CPU, **écart max 1,99e-7**.
 >
-> **Mise à jour du 02/10 (18h) — V4.1 tourne sur ses deux premières couches.**
+> **Mise à jour du 02/10 (19h) — le compresseur de V4.1, ratios 1 et 2.** Les
+> **couches sources** (celles qui possèdent leurs tenseurs de compresseur : 2, 8,
+> 14, 20) tournent et sont vérifiées contre une référence numpy écrite depuis le
+> noyau `fused_save_compress_norm` : pool `comp_brut` à ~5e-07, norme + RoPE de
+> bloc à ~5e-06 sur une dynamique de 1,2 à 2,6 (arrondi f32). La couche 20
+> (ratio 1, **sans porte ni `ape`**) publie bien un bloc par jeton, la couche 2
+> (ratio 2) un bloc par groupe de deux. L'indexeur de V4.1 (clés tirées du latent
+> du compresseur principal) n'est pas porté : le moteur garde tous les blocs —
+> exact sous `indexer.top_k` (512), refusé au-delà — et le dit. Les **34 couches
+> consommatrices** (partage du cache compressé) sont refusées avec ce motif.
+
 > La chaîne **mHC retardée** de V4.1 est implémentée et vérifiée sur le fichier de
 > **365,7 Go** : la copie 0 du premier raccord est **exacte** (0,000e+00), les 24
 > mélanges et la réduction finale (pas de tête apprise) tiennent à ~1e-7, recalculés

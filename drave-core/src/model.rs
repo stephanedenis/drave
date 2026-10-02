@@ -1241,6 +1241,11 @@ pub struct Mla4 {
     pub indexer_top_k: usize,
     /// La couche a-t-elle un indexeur (`indexer.proj` dans le fichier) ?
     pub a_indexeur: bool,
+    /// **La couche POSSÈDE-t-elle son compresseur ?** V4 : oui, chaque couche
+    /// compressée a ses tenseurs. V4.1 : seulement les couches SOURCES
+    /// (`kv_source_layer_ids` = [2,8,14,20]) — les autres n'ont même pas
+    /// `attn_compressor_kv` et lisent l'état publié par leur source.
+    pub a_compresseur: bool,
     /// **De quelle couche viennent les blocs compressés ?** V4 : la couche
     /// elle-même (chaque couche compressée a son compresseur). **V4.1 : une
     /// couche SOURCE**, d'après `kv_source_layer_ids` — « Compressors and
@@ -2549,6 +2554,11 @@ pub static TETE_APPELS: std::sync::atomic::AtomicU64 = std::sync::atomic::Atomic
 /// Un seul message pour `--attn-topk` ignoré en mode lot (voir `forward_lot`).
 static LOT_TOPK_IGNORE: std::sync::atomic::AtomicBool = std::sync::atomic::AtomicBool::new(false);
 
+/// L'indexeur de V4.1 (clés tirées du latent du compresseur principal) n'est pas
+/// porté : le moteur le dit UNE fois, puis garde tous les blocs — ce qui est
+/// exact tant que le nombre de blocs reste sous `indexer.top_k`.
+static INDEXEUR_V41_DIT: std::sync::atomic::AtomicBool = std::sync::atomic::AtomicBool::new(false);
+
 impl Model {
     /// `couches` : exécution **bornée** `[a, b)` — le harnais qui permet
     /// d'exécuter et de COMPARER les couches qui n'ont pas besoin de ce qui
@@ -2750,14 +2760,25 @@ reste non implémenté.");
             // soit fidèle, et l'inverse de l'inverse (retirer sans le dire)
             // ferait croire que tout V4.1 tourne.
             let dans = |l: usize| l >= a && l < b;
-            if !(a..b).any(|l| ratios.get(l).copied().unwrap_or(0) != 0) {
+            // Une plage n'exerce le partage du cache compressé de V4.1 que si
+            // elle contient une couche CONSOMMATRICE (sans ses propres tenseurs
+            // de compresseur). Une plage qui ne contient que des couches SOURCES
+            // — ou aucune couche compressée — n'a pas besoin de ce partage : le
+            // compresseur de chaque couche y est le sien, comme en V4.
+            let consommatrice = (a..b).any(|l| {
+                ratios.get(l).copied().unwrap_or(0) != 0
+                    && g.tensor(&format!("blk.{l}.attn_compressor_kv.weight")).is_none()
+            });
+            if !consommatrice {
                 let avant = manques.len();
                 manques.retain(|m| !m.starts_with("compression V4.1"));
                 if manques.len() != avant {
-                    println!("[partiel] couches {a}..{b} : aucune couche COMPRESSÉE dans la \
-plage (ratios {:?}) — le partage du cache compressé de V4.1 n'est donc pas exercé. \
-Ce qui reste non implémenté n'est PAS contourné : il n'est pas atteint.",
-                             ratios.get(a..b.min(ratios.len())).unwrap_or(&[]));
+                    let dedans: Vec<usize> = (a..b)
+                        .filter(|l| ratios.get(*l).copied().unwrap_or(0) != 0).collect();
+                    println!("[partiel] couches {a}..{b} : aucune couche CONSOMMATRICE dans \
+la plage (compressées : {dedans:?}, toutes SOURCES de leur compresseur) — le partage du \
+cache compressé de V4.1 n'est donc pas exercé. Ce qui reste non implémenté n'est PAS \
+contourné : il n'est pas atteint.");
                 }
             }
             let engram: Vec<i64> = g.cfg_ou(&["engram.layer_ids"])
@@ -2894,9 +2915,9 @@ plage (elles sont en {engram:?}) — l'injection n'est pas exercée.");
                     }
                 }
                 println!("[config] cache compressé PARTAGÉ entre couches \
-(`kv_source_layer_ids`) : {}. Un compresseur par couche donnerait d'autres clés — \
-le moteur refuse les ratios 1 et 2 tant que ce partage n'est pas implémenté",
-                         groupes.join(" · "));
+(`kv_source_layer_ids`) : {}. Une couche SOURCE a son compresseur et tourne ; une couche \
+CONSOMMATRICE lit ses clés et le moteur la REFUSE (un compresseur par couche donnerait \
+d'autres clés)", groupes.join(" · "));
             }
             let source_de = |l: usize| -> usize {
                 sources.iter().copied().filter(|s| *s <= l).max().unwrap_or(l)
@@ -2933,6 +2954,7 @@ le moteur refuse les ratios 1 et 2 tant que ce partage n'est pas implémenté",
                     indexer_top_k: dim(&["attention.indexer.top_k", "index_topk"], "index_topk")
                         .unwrap_or(512),
                     a_indexeur: g.tensor(&p("indexer.proj.weight")).is_some(),
+                    a_compresseur: !comp_kv.is_empty(),
                     comp_source: if ratio != 0 { source_de(l) } else { l },
                     idx_q_b: g.dequant_optionnel(&p("indexer.attn_q_b.weight")).unwrap_or_default(),
                     idx_proj: g.dequant_optionnel(&p("indexer.proj.weight")).unwrap_or_default(),
@@ -4950,19 +4972,38 @@ s'applique pas — utilisez --lot 1, ou réenregistrez sans DRAVE_TRACE_BLOCS");
         // jeton du bloc.
         let n_vis = if m.ratio > 0 { (pos + 1) / m.ratio } else { 0 };
         if m.ratio > 0 {
-            // Les ratios 1 et 2 (V4.1) n'ont pas de code ici — et ne doivent pas
-            // en avoir un approximatif : le cache compressé y est PARTAGÉ entre
-            // couches, donc un compresseur calculé couche par couche donnerait
-            // des clés différentes de la référence, sans rien casser.
-            assert!(m.ratio == 4 || m.ratio == 128,
-                    "compression de ratio {} : implémentée pour 4 (CSA) et 128 (HCA) \
-seulement ; V4.1 (1 et 2) est refusé au chargement, avec la raison", m.ratio);
+            // **Deux formes de compresseur, et deux ratios de plus.** V4 (ratios
+            // 4 et 128) : la couche projette sa valeur ET sa porte, chacune en
+            // `coff·hd` valeurs, plus un `ape` par rang dans le bloc. V4.1
+            // (ratios 1 et 2, `vllm/models/deepseek_v41/compressor.py` +
+            // `fused_save_compress_norm`) : une valeur de `hd` par jeton, une
+            // porte seulement si `ratio > 1` (`has_gate = compress_ratio > 1`),
+            // **aucun `ape`**, et le pool est un softmax **par canal** sur le
+            // groupe (`tl.softmax(score, 0)`) — ratio 1 = aucun groupe.
+            //
+            // Une couche CONSOMMATRICE (V4.1, `kv_source_layer_ids`) n'a pas de
+            // tenseurs de compresseur : elle lit l'état publié par sa source,
+            // dont les tampons sont ceux de la source (le site d'appel les
+            // alias). Elle ne réécrit donc pas les blocs.
+            assert!(matches!(m.ratio, 1 | 2 | 4 | 128),
+                    "compression de ratio {} : le moteur ne connaît que 1 et 2 (V4.1) \
+et 4, 128 (V4)", m.ratio);
+            assert!(m.a_compresseur,
+                    "couche {l} : ratio {} mais AUCUN tenseur de compresseur — c'est une \
+couche CONSOMMATRICE de V4.1 (elle lit les clés publiées par sa source, \
+`kv_source_layer_ids`), et ce partage de cache n'est pas porté", m.ratio);
             let coff_hd = m.comp_kv.len() / h.max(1);
             matvec_f32(&m.comp_kv, x, h, coff_hd, &mut etat.comp_kv[pos * coff_hd..(pos + 1) * coff_hd]);
-            matvec_f32(&m.comp_gate, x, h, coff_hd, &mut etat.comp_gate[pos * coff_hd..(pos + 1) * coff_hd]);
             let sp = pos % m.ratio;
-            for c in 0..coff_hd {
-                etat.comp_gate[pos * coff_hd + c] += m.comp_ape[sp * coff_hd + c];
+            if !m.comp_gate.is_empty() {
+                matvec_f32(&m.comp_gate, x, h, coff_hd, &mut etat.comp_gate[pos * coff_hd..(pos + 1) * coff_hd]);
+                // L'`ape` est FACULTATIF : V4.1 n'en a aucun (son compresseur n'a
+                // que `kv`, `gate` et `norm`), V4 en a un par rang dans le bloc.
+                if !m.comp_ape.is_empty() {
+                    for c in 0..coff_hd {
+                        etat.comp_gate[pos * coff_hd + c] += m.comp_ape[sp * coff_hd + c];
+                    }
+                }
             }
             Self::vider_couche(dump, "comp_state_kv", l, pos,
                                &etat.comp_kv[pos * coff_hd..(pos + 1) * coff_hd]);
@@ -4982,7 +5023,17 @@ seulement ; V4.1 (1 et 2) est refusé au chargement, avec la raison", m.ratio);
                 let chevauche = m.ratio == 4;
                 let t0 = if chevauche { debut as isize - m.ratio as isize } else { debut as isize };
                 let n_fenetre = (pos as isize - t0 + 1) as usize;
+                // **Sans porte** (V4.1 en ratio 1) : le groupe fait UN jeton et le
+                // softmax d'un singleton vaut 1 — la valeur passe telle quelle.
+                // La référence le dit en une ligne : `if COMPRESS_RATIO == 1:
+                // pooled = tl.load(raw + ...)`.
+                let sans_porte = m.comp_gate.is_empty();
                 for c in 0..hd {
+                    if sans_porte {
+                        let t = debut.max(0) as usize;
+                        cles[bloc * hd + c] = valeurs[t * hd + c];
+                        continue;
+                    }
                     let mut mx = f32::NEG_INFINITY;
                     for k in 0..n_fenetre {
                         let t = t0 + k as isize;
@@ -5043,7 +5094,30 @@ seulement ; V4.1 (1 et 2) est refusé au chargement, avec la raison", m.ratio);
         // `indexer.top_k` meilleurs. Ses blocs sont plus étroits (128 valeurs)
         // mais suivent exactement la même règle de chevauchement que le CSA.
         let mut blocs_gardes: Option<Vec<u32>> = None;
-        if m.a_indexeur {
+        // **L'indexeur de V4.1 n'a pas de compresseur propre.** Ses clés viennent
+        // du latent du compresseur PRINCIPAL (`indexer.attn_k` [128,512] puis
+        // `indexer.k_norm`), et il partage le cache de clés de sa source de KV
+        // (`attention.py` : « non-owning index sources share the K cache of the
+        // latest kv source below them »). Ce chemin n'est pas porté : tant qu'il
+        // ne l'est pas, garder TOUS les blocs est **exact** — un top-k qui garde
+        // tout ne choisit rien — et le moteur refuse au-delà de `indexer.top_k`,
+        // exactement comme pour V4 avant l'indexeur.
+        let indexeur_v41 = m.a_indexeur && m.idx_comp_kv.is_empty() && m.idx_comp_norm.is_empty();
+        if indexeur_v41 {
+            if n_vis > m.indexer_top_k {
+                panic!("indexeur de V4.1 (couche {l}) : {n_vis} blocs compressés > \
+`indexer.top_k` {} — ses clés viennent du latent du compresseur principal \
+(`indexer.attn_k`, `indexer.k_norm`), un chemin que ce moteur n'a pas ; garder tous les \
+blocs n'est exact que SOUS ce seuil", m.indexer_top_k);
+            }
+            if n_vis > 0 && !INDEXEUR_V41_DIT.swap(true, std::sync::atomic::Ordering::Relaxed) {
+                eprintln!("[indexeur] V4.1 : les clés de l'indexeur viennent du latent du \
+compresseur principal (`indexer.attn_k` + `indexer.k_norm`) et ce chemin n'est pas porté ; \
+le moteur garde donc TOUS les blocs ({n_vis} ≤ top_k {}) — résultat exact, mais l'indexeur \
+ne sert à rien tant que le seuil n'est pas atteint", m.indexer_top_k);
+            }
+        }
+        if m.a_indexeur && !indexeur_v41 {
             let idh = m.idx_hd;
             let iw = m.idx_comp_kv.len() / h.max(1);        // 2 × idx_hd
             matvec_f32(&m.idx_comp_kv, x, h, iw, &mut etat.idx_kv[pos * iw..(pos + 1) * iw]);
@@ -5458,10 +5532,20 @@ n'est pas `deepseek41`, donc la chaîne retardée de V4.1 ne s'applique pas)",
         // coefficients : V4.1 replierait alors avec la copie 0, c'est-à-dire
         // faux, et sans le dire. Tant que le flux DRVF ne les transporte pas,
         // un découpage de V4.1 à une frontière de couche est refusé.
-        assert!(!(self.hc_retarde && self.couche_debut > 0),
+        assert!(!(self.hc_retarde && self.flux_brut && self.couche_debut > 0),
                 "V4.1 découpé : la chaîne mHC retardée a besoin de la `pre` portée par \
 le raccord précédent, que le flux ne transporte pas — un nœud qui reprend à la couche {} \
 replierait avec la copie 0 (faux, et muet)", self.couche_debut);
+        // SONDE LOCALE (`--couches a:b`, pas de flux) : la plage commence au
+        // milieu du modèle, donc la `pre` du raccord précédent n'existe pas. On
+        // replie le premier raccord avec la copie 0 — la convention de la
+        // référence au PREMIER raccord du modèle — et on le DIT : ce n'est plus
+        // la chaîne du modèle, c'est une convention de sonde.
+        if self.hc_retarde && self.couche_debut > 0 && !self.flux_brut {
+            eprintln!("[plage] V4.1 : la plage commence à la couche {} — la `pre` portée par \
+le raccord précédent n'existe pas, le premier raccord se replie donc avec la COPIE 0 \
+(convention de sonde, comme au tout premier raccord du modèle)", self.couche_debut);
+        }
         // Un état reçu d'un autre nœud arrive DÉJÀ en `hc` copies : ne pas les
         // multiplier une seconde fois.
         if let Some((ha, _)) = self.hc.as_ref().map(|v| &v[0]) {
