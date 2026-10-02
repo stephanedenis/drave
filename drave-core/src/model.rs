@@ -110,8 +110,12 @@ fn verifier_architecture(g: &Gguf, cfg: &Cfg, ctx: usize, clusters: bool) -> Res
         // elle n'a jamais été validée contre une référence sur cette machine —
         // le dire une fois, à l'ouverture, plutôt que de laisser croire qu'un
         // modèle qui tourne est un modèle juste.
-        eprintln!("[mla] attention MLA à rang faible : cache LATENT (c_kv + k_rope), \
-pas de fenêtre glissante ni de YaRN sur ce chemin");
+        eprintln!("[mla] attention MLA à rang faible (cache latent c_kv + k_rope) : chemin \
+NON VALIDÉ. Comparé à llama.cpp sur GLM-5.3, mêmes jetons, même fenêtre, ce chemin \
+donne des logits de corrélation −0,04 avec la référence et prédit le même jeton à \
+toutes les positions. Les chiffres qu'il produit ne veulent rien dire tant que ce \
+n'est pas expliqué — voir reports/rapport-mla-experts.md. Q/K/V denses et MLA dense \
+(`--banc-mla`) ne sont pas concernés.");
     }
     if !manques.is_empty() {
         return Err(format!(
@@ -3952,6 +3956,11 @@ s'applique pas — utilisez --lot 1, ou réenregistrez sans DRAVE_TRACE_BLOCS");
             None => g.row_f32("token_embd.weight", tok as usize, h),
         };
         let mut hn = vec![0f32; h];
+        if debug_etat {
+            let n2: f32 = x.iter().map(|v| v * v).sum();
+            eprintln!("[etat] jeton {tok} pos {pos} : |emb| {:.4e} · début {:.4e} {:.4e} {:.4e}",
+                      n2.sqrt(), x[0], x[1], x[2]);
+        }
         let mut q = vec![0f32; nh * hd];
         let mut k = vec![0f32; nkv * hd];
         let mut v = vec![0f32; nkv * hd];

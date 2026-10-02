@@ -1020,6 +1020,28 @@ V4-Flash. `--config` montre la convention retenue ET sa provenance :
 ./target/release/drave <modele.gguf> --config     # 50 ms, sans charger le modèle
 ```
 
+### Le piège à ne pas rouvrir : la MLA tourne mais n'est pas validée
+
+`--config` dit « calculable : oui » pour GLM-5.3 et Kimi-K2.7, et c'est vrai au
+sens où le calcul s'enchaîne sans erreur. Ce n'est PAS vrai au sens du résultat :
+comparé à llama.cpp sur les mêmes jetons et la même fenêtre, le chemin MLA donne
+des logits de **corrélation −0,04** avec la référence et prédit **le même jeton aux
+trois positions**. La perplexité mesurée est de 42,6 M contre 4 286 chez
+llama.cpp.
+
+Pistes déjà écartées par lecture du code de référence : les dimensions
+(`qk_nope` 192, `qk_rope` 64, `v` 256, `kv_lora` 512), le type de rotation
+(`LLAMA_ROPE_TYPE_NORM`), la base (8e6), l'indexeur DSA (inutile en deçà de
+`index_topk` = 2048). Piste la plus probable qui reste : le **facteur `mscale`**
+de llama.cpp (`glm-dsa.cpp:219`, `kq_scale = mscale²/√n_embd_head_k`, où
+`mscale` dépend de `freq_scale` et de `rope_yarn_log_mul`) — un facteur ~1,94 sur
+les logits d'attention suffirait à rendre l'attention méconnaissable.
+
+**Premier pas de la prochaine session** : instrumenter la comparaison couche par
+couche (le harnais `tools/mla_synthetique.py` + `--banc-mla` valide déjà la MLA
+*dense* contre numpy ; il faut le faire tourner sur le chemin `forward`/`attn_mla`
+pour isoler la couche où les deux divergent).
+
 ### Ce que le moteur sait calculer, et ce qu'il ne sait pas
 
 `--config` le dit avant toute panne. Au 02/10 :

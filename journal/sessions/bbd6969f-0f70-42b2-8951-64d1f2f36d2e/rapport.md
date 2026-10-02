@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 83.9 h |
+| Durée | 84.2 h |
 | Tours | 69 |
-| Messages | 3915 |
-| Appels d'outils | 3727 |
+| Messages | 3935 |
+| Appels d'outils | 3747 |
 | Fichiers touchés | 81 |
-| Commandes | 3291 |
+| Commandes | 3309 |
 | Sous-agents | 22 |
-| Commits | 299 |
+| Commits | 301 |
 | Compactages de contexte | 5 |
 
 ## Objectifs déclarés
@@ -3526,7 +3526,7 @@ Sur cette session, les mesures m
 
 ### Tour 69 — implémente toute les optimisation et détection de matériel avec heuristiques de configuration automatique.
 
-*688 appels d'outils.* Actions notables :
+*708 appels d'outils.* Actions notables :
 
 - bash — Inspect existing GPU detection
 - write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/materiel.rs`
@@ -3542,11 +3542,11 @@ Sur cette session, les mesures m
 - bash — Read KV bits resolution
 - bash — Integrate KV and VRAM heuristics
 - bash — Lighten detection and run gates
-- … et 629 autres
+- … et 647 autres
 
 **Synthèse produite :**
 
-⏵ La référence gpt-oss diverge d'un facteur 10 : vérifier d'abord la tokenisation
+⏵ La MLA n'est pas validée : je le rends explicite et je consigne l'état
 
 ## 3. Travail accompli
 
@@ -3703,7 +3703,7 @@ Sur cette session, les mesures m
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 3251 autres
+- … et 3269 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -3831,7 +3831,7 @@ Sur cette session, les mesures m
 
 ## 5. Erreurs rencontrées
 
-230 sorties en erreur ou divergentes. Les premières :
+231 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : a8f2635f8 docs: record which models this box is good at, and why src/llama-hparams.cpp:8:void llama_hparams::set_swa_pattern(uint32_t n_pattern, bool dense_first) { src/llama-hparams.h:308:    void se
 - **T1** : 511 tokens notés — perplexité cumulée 247.031  (4.9 tok/s) === perplexité 247.0308 sur 511 tokens (0 événements, 104.5 s) ===  ### B3 harmony assistant 511 --- ref --- 0.0 0.0 0:00 ls: cannot access '
@@ -4150,4 +4150,6 @@ Sur cette session, les mesures m
 - Rapports : la référence externe (llama.cpp) mesurée — gpt-oss cohérent, MLA fausse  - gpt-oss 4 jetons ctx 16 : llama.cpp 5420,40 · nous 6443,13 (biais hors des
 - README : 18 formats lisibles, portes de formats, et le diagnostic DRAVE_DEBUG_ETAT  - La liste des formats passe de 7 à 18, avec la distinction entre noyau dédi
 - Portes : formats et routage vérifiés automatiquement ; la comparaison gpt-oss encadrée par le YaRN  - tools/portes.sh vérifie maintenant la convention de routag
+- MLA : dire NON VALIDÉE partout où elle est annoncée  Le moteur écrit maintenant, à l'ouverture et dans --config, que le chemin MLA à rang faible n'est pas valid
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git commit -q --amend -F - <<'EOF' MLA : dire NON VALIDÉE partout où elle est annoncée  Le moteur écrit ma
 

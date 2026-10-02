@@ -1645,7 +1645,10 @@ fn run_config() {
     let quelque_part = |suffixe: &str| g.tensors.iter().any(|t| t.name.ends_with(suffixe));
     let mut manques: Vec<&str> = Vec::new();
     let mla_rang_faible = quelque_part("attn_q_a.weight");
-    if mla_rang_faible { println!("attention     : MLA à rang faible (cache latent)"); }
+    if mla_rang_faible {
+        println!("attention     : MLA à rang faible (cache latent) — chemin NON VALIDÉ \
+(corrélation −0,04 avec llama.cpp sur GLM-5.3, voir reports/rapport-mla-experts.md)");
+    }
     if quelque_part("hc_attn_fn.weight") { manques.push("hyper-connexions"); }
     let topk = g.cfg("index_topk").and_then(|m| m.as_u64()).unwrap_or(0) as usize;
     if quelque_part("indexer.") && topk > 0 { manques.push("attention par index (inutile si contexte ≤ index_topk)"); }

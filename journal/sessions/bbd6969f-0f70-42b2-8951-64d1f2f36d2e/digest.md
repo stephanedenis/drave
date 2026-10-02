@@ -62841,3 +62841,284 @@ started background job bash-110
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/rapport-routage-experts.md'; s=open(p).read()\ns = s.replace(\"\"\"Le nouveau est plus proche de la référence en perplexité **et** en corrélation ;\"\"\",\n\"\"\"**Et la comparaison à 510 jetons, elle, ne … [1919 caractères tronqués]`
+
+  ```
+4cc7056 Portes : formats et routage vérifiés automatiquement ; la comparaison gpt-oss encadrée par le YaRN
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -i 's/et 84,07 (YeRN forcé)/et 84,07 (YaRN forcé)/; s/sigmotide ×2,5/sigmoïde ×2,5/' <(git log -1 --format=%B) >/dev/null 2>&1; git log --oneline -1; git status --short | head -5", "description": "Check the commit and tree state" … [1 caractères tronqués]`
+
+  ```
+4cc7056 Portes : formats et routage vérifiés automatiquement ; la comparaison gpt-oss encadrée par le YaRN
+ M journal/README.md
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && nohup timeout 3000 bash tools/portes.sh > /tmp/portes_complet.log 2>&1 & echo \"portes complètes lancées\"; sleep 55; cat /tmp/portes_complet.log", "description": "Run the full gate battery"}`
+
+  ```
+portes complètes lancées
+=== Portes ===
+  cargo test --release                       48 verts  ✅
+  Qwen2.5-0.5B ctx 256                       19.3885  ✅
+  Qwen3-30B en clusters (origine : 799,8557) 799.8557  ✅
+  threads par défaut (physiques)            20  ✅
+  formats contre libggml                     17 concorde(s), 0 divergence(s), 0 absent(s)  ✅
+  GLM-5.3 : sigmoïde ×2,5                  sigmoïde  ✅
+  Kimi-K2.7 : sigmoïde ×2,827              sigmoïde  ✅
+  V4-Flash : racine de softplus              racine de softplus  ✅
+  Qwen3-235B : softmax                       softmax  ✅
+  (gpt-oss ~20 min et les portes de formats : lancez-les, ils sont hors de ce script)
+
+toutes les portes sont vertes
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && setsid nohup env DRAVE_DEBUG_ETAT=1 timeout 2400 ./drave-core/target/release/drave /home/stephane/Data13TB/stephane/modeles/gguf/GLM-5.3-UD-IQ1_S/GLM-5.3-UD-IQ1_S-00001-of-00006.gguf --ppl /tmp/ids_glm.txt --ctx 16 --limit 2 --thread … [468 caractères tronqués]`
+
+  ```
+started background job bash-111
+  ```
+
+- **job_output** `{"job_id": "bash-111", "timeout_ms": 900000, "wait": true}`
+
+  ```
+diagnostic relancé
+=== normes d'état (1 sur 8) ===
+[etat] couche   0 pos 0 : |x| 6.1046e-1 · |att| 4.9282e-2 · |ffn| 3.4436e-1 (dense)
+[etat] couche   8 pos 0 : |x| 1.5317e0 · |att| 3.0107e-1 · |ffn| 2.0914e-1
+[etat] couche  16 pos 0 : |x| 1.4664e1 · |att| 1.9594e0 · |ffn| 5.3411e-1
+[etat] couche  24 pos 0 : |x| 2.6338e1 · |att| 7.4408e0 · |ffn| 1.5966e0
+[etat] couche  32 pos 0 : |x| 4.5500e1 · |att| 9.5399e0 · |ffn| 2.7975e0
+[etat] couche  40 pos 0 : |x| 7.8071e1 · |att| 1.7568e1 · |ffn| 5.1306e0
+[etat] couche  48 pos 0 : |x| 1.2836e2 · |att| 2.0533e1 · |ffn| 7.1162e0
+[etat] couche  56 pos 0 : |x| 1.7118e2 · |att| 3.1828e1 · |ffn| 1.0073e1
+[etat] couche  64 pos 0 : |x| 2.2916e2 · |att| 4.4832e1 · |ffn| 1.4191e1
+[etat] couche  72 pos 0 : |x| 2.8891e2 · |att| 4.0208e1 · |ffn| 2.4926e1
+=== dernières ===
+[etat] couche  76 pos 1 : |x| 3.4211e2 · |att| 5.4267e1 · |ffn| 3.3290e1
+[etat] couche  77 pos 1 : |x| 3.5203e2 · |att| 4.5079e1 · |ffn| 1.7347e1
+[etat] couche  78 pos 1 : |x| 3.5268e2 · |att| 1.9693e1 · |ffn| 8.0189e0
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport struct\nimport numpy as np\ndef lire(p):\n    with open(p,'rb') as f:\n        nv, npos = struct.unpack('<ii', f.read(8))\n        a = np.frombuffer(f.read(npos*nv*4), dtype='<f4').reshape(npos, nv)\n    retu … [630 caractères tronqués]`
+
+  ```
+formes (3, 154880) (3, 154880)
+--- position 0 ---
+  nous : min -9.10 max 8.40 écart-type 1.769 | top5 [106880 101065  38312  20628  46970]
+  réf  : min -22.90 max 7.83 écart-type 1.205 | top5 [154820    565     59   4102    319]
+  moyenne : nous +0.045 · réf -6.537
+--- position 1 ---
+  nous : min -8.73 max 8.58 écart-type 1.770 | top5 [106880  38312 101065  20628  29448]
+  réf  : min -20.77 max 8.62 écart-type 1.407 | top5 [154820    565     59     16   4102]
+  moyenne : nous +0.043 · réf -6.459
+--- position 2 ---
+  nous : min -9.09 max 8.51 écart-type 1.770 | top5 [106880 101065  37245  38312   5720]
+  réf  : min -5.33 max 15.38 écart-type 2.023 | top5 [ 64 198 594 468 434]
+  moyenne : nous +0.101 · réf +1.826
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/llama.cpp && sed -n '190,235p' src/models/glm-dsa.cpp | grep -nE \"scale|kq|sqrt|softmax|n_embd_head\" ; grep -n \"kq_scale\" src/models/glm-dsa.cpp | head -5; grep -n \"n_embd_head_k_mla_impl\\|n_embd_head_k_mla\" src/models/glm-dsa.cpp | head … [64 caractères tronqués]`
+
+  ```
+5:    const int64_t n_embd_head_k = hparams.n_embd_head_k_mla();
+6:    const int64_t n_embd_head_v = hparams.n_embd_head_v_mla();
+7:    GGML_UNUSED(n_embd_head_v);
+9:    const int64_t n_embd_head_qk_rope = hparams.n_rot();
+10:    const int64_t n_embd_head_qk_nope = n_embd_head_k - n_embd_head_qk_rope;
+20:    // We have to pre-scale kq_scale and attn_factor to make the YaRN RoPE work correctly.
+26:    const float attn_factor_org = attn_factor * (1.0f + 0.1f * logf(1.0f / freq_scale));
+28:    // use the original attn_factor to pre-scale the kq_scale
+29:    const float mscale   = attn_factor_org * (1.0f + 0.1f * hparams.rope_yarn_log_mul * logf(1.0f / freq_scale));
+30:    const float kq_scale = 1.0f * mscale * mscale / sqrtf(float(n_embd_head_k));
+209:    // We have to pre-scale kq_scale and attn_factor to make the YaRN RoPE work correctly.
+217:    // use the original attn_factor to pre-scale the kq_scale
+219:    const float kq_scale = 1.0f * mscale * mscale / sqrtf(float(n_embd_head_k));
+469:                        Qcur, Kcur, Vcur, nullptr, nullptr, model.layers[il].wv_b, top_k, kq_scale, il);
+45:    ml.get_key(LLM_KV_ATTENTION_KEY_LENGTH_MLA,   hparams.n_embd_head_k_mla_impl, false
+… [351 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/model.rs'; s=open(p).read()\ns = s.replace(\"\"\"            Self::matmul_ou_rien();\"\"\", \"\"\"            Self::matmul_ou_rien();\"\"\")\ns = s.replace(\"\"\"        let mut hn = vec![0f32; h]; … [631 caractères tronqués]`
+
+  ```
+3957:            eprintln!("[etat] jeton {tok} pos {pos} : |emb| {:.4e} · début {:.4e} {:.4e} {:.4e}",
+BUILD
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && setsid nohup env DRAVE_DEBUG_ETAT=1 timeout 2400 ./drave-core/target/release/drave /home/stephane/Data13TB/stephane/modeles/gguf/GLM-5.3-UD-IQ1_S/GLM-5.3-UD-IQ1_S-00001-of-00006.gguf --ppl /tmp/ids_glm.txt --ctx 16 --limit 2 --thread … [415 caractères tronqués]`
+
+  ```
+started background job bash-112
+  ```
+
+- **job_output** `{"job_id": "bash-112", "timeout_ms": 900000, "wait": true}`
+
+  ```
+=== embarquement (2 jetons) ===
+[etat] jeton 198 pos 0 : |emb| 3.8281e-1 · début 2.4114e-3 -1.4077e-3 2.4114e-3
+[etat] jeton 284 pos 1 : |emb| 4.4588e-1 · début 3.1756e-3 4.6248e-3 8.9723e-3
+[etat] couche   0 pos 0 : |x| 6.1046e-1 · |att| 4.9282e-2 · |ffn| 3.4436e-1 (dense)
+[etat] couche   0 pos 1 : |x| 5.8995e-1 · |att| 5.2104e-2 · |ffn| 2.4355e-1 (dense)
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && head -40 tools/mla_synthetique.py; grep -n \"banc_mla\" -A 20 drave-core/src/main.rs | grep -nE \"fn run_banc_mla|forward_mla|forward\\(\" | head -8", "description": "Inspect the synthetic MLA harness"}`
+
+  ```
+#!/usr/bin/env python3
+"""Modèle MLA synthétique + référence numpy — le harnais du chantier 5.
+
+MLA (attention latente, DeepSeek-V2/V3) n'est pas testable en l'état : aucun
+modèle MLA en GGUF sur cette machine (le « deepseek-r1-distill » local est un
+Qwen dense). Ce script fabrique donc un modèle minuscule dont les poids sont
+aléatoires mais les FORMES correctes, l'écrit en GGUF, et calcule une référence
+indépendante en numpy — c'est elle que le moteur devra retrouver.
+
+Pourquoi c'est un vrai test : la référence est écrite à partir des formules, pas
+du code Rust ; si les deux tombent d'accord sur un modèle dont le cache KV est
+LATENT (une seule tête de 128 + 32 valeurs par jeton au lieu de n_head × 192),
+alors l'implémentation est validée sur ce qu'elle a de spécifique.
+
+Usage :
+    mla_synthetique.py --sortie /tmp/mla_minuscule.gguf --dossier /tmp/mla_ref
+"""
+import argparse
+import json
+import os
+import struct
+
+import numpy as np
+
+# ---------------------------------------------------------------------------
+# Hyperparamètres du modèle jouet : assez petits pour être lisibles, assez
+# généraux pour que le découpage qk_nope / qk_rope soit celui de DeepSeek.
+H = 64          # hidden
+N
+… [499 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '3362,3400p' drave-core/src/main.rs; grep -n \"attn_kv_b\\|attn_k_b\\|attn_v_b\" tools/mla_synthetique.py | head -5", "description": "Read the MLA bench harness"}`
+
+  ```
+fn run_banc_mla(opt: Options, sortie: &str) {
+    use std::io::Write;
+    // Le chemin MLA est un banc de comparaison avec numpy (`forward_mla` part des
+    // embeddings et n'appelle ni `flux_lot` ni le compteur de jeton global) : la
+    // trace et le rejeu n'y sont pas branchés, et le dire vaut mieux que de laisser
+    // croire qu'ils le sont (relevé par la relecture adversariale).
+    if opt.trace_flux.is_some() || opt.flux_forcer.is_some() {
+        eprintln!("[banc-mla] ni --trace-flux ni --flux-forcer ne s'appliquent à ce \
+banc : il écrit des logits pour la comparaison numpy, sans passer par le flux.");
+    }
+    let path = &modele_chemin();
+    let mut mdl = model::Model::load(path, 4096, fils(&opt), opt.dense, opt.keep, false, 0, 0);
+    if mdl.mla.is_none() {
+        println!("pas un modèle MLA (attn_kv_a_mqa absent)");
+        return;
+    }
+    let ids: Vec<u32> = if opt.ids.is_empty() {
+        (1..=8u32).collect()
+    } else { opt.ids.clone() };
+    let vocab = mdl.cfg.vocab;
+    let mut f = std::io::BufWriter::new(std::fs::File::create(sortie).expect("création"));
+    let t0 = std::time::Instant::now();
+    for (pos, &t) in ids.iter().enumerate() {
+        let hn = 
+… [901 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls /tmp/mla_ref 2>/dev/null | head; grep -n \"dossier\\|np.save\\|logits\" tools/mla_synthetique.py | tail -12", "description": "Check the synthetic reference outputs"}`
+
+  ```
+forme.json
+ids.npy
+logits.npy
+16:    mla_synthetique.py --sortie /tmp/mla_minuscule.gguf --dossier /tmp/mla_ref
+227:    ap.add_argument("--dossier", default="/tmp/mla_ref")
+232:    os.makedirs(args.dossier, exist_ok=True)
+236:    logits = avant(p, ids)
+237:    np.save(os.path.join(args.dossier, "logits.npy"), logits)
+238:    np.save(os.path.join(args.dossier, "ids.npy"), np.array(ids, np.int64))
+239:    with open(os.path.join(args.dossier, "forme.json"), "w") as f:
+244:    print(f"référence: {args.dossier}/logits.npy  (forme {logits.shape})")
+245:    print(f"logits[0, :4] = {logits[0, :4]}")
+246:    print(f"logits[-1, :4] = {logits[-1, :4]}")
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/mla_synthetique.py --sortie /tmp/mla_minuscule.gguf --dossier /tmp/mla_ref 2>&1 | tail -4; ls -la /tmp/mla_minuscule.gguf", "description": "Generate the synthetic MLA model"}`
+
+  ```
+modèle   : /tmp/mla_minuscule.gguf
+référence: /tmp/mla_ref/logits.npy  (forme (8, 64))
+logits[0, :4] = [0.17972525 1.15947698 0.78481714 0.09325328]
+logits[-1, :4] = [ 0.49157753 -0.78283381 -1.04950143 -0.72938024]
+-rw-r--r--. 1 stephane stephane 480448  2 oct 02:58 /tmp/mla_minuscule.gguf
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== ancien chemin (forward_mla) ===\"; ./drave-core/target/release/drave /tmp/mla_minuscule.gguf --banc-mla /tmp/mla_ancien.bin 2>&1 | tail -3; echo \"=== nouveau chemin (forward + attn_mla) ===\"; ./drave-core/target/release/ … [193 caractères tronqués]`
+
+  ```
+=== ancien chemin (forward_mla) ===
+  position 6 : logits[0..4] = [0.3863, -0.1013, -0.9722, -0.5898]
+  position 7 : logits[0..4] = [0.4916, -0.7828, -1.0495, -0.7294]
+8 positions × 64 logits écrits dans /tmp/mla_ancien.bin (0.00 s)
+=== nouveau chemin (forward + attn_mla) ===
+fichier d'identifiants illisible: Os { code: 2, kind: NotFound, message: "No such file or directory" }
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c \"\nimport numpy as np\nids = np.load('/tmp/mla_ref/ids.npy')\nopen('/tmp/mla_ids.txt','w').write(','.join(str(int(x)) for x in ids))\nprint('ids', ids)\n\" && ./drave-core/target/release/drave /tmp/mla_minuscule.gguf --pp … [137 caractères tronqués]`
+
+  ```
+ids [1 2 3 4 5 6 7 8]
+thread '<unnamed>' (3828552) panicked at src/engine.rs:557:37:
+range end index 76 out of range for slice of length 64
+  ```
+
+### 🤖 Assistant
+
+⏵ La MLA n'est pas validée : je le rends explicite et je consigne l'état
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/model.rs'; s=open(p).read()\ns = s.replace(\"\"\"        eprintln!(\"[mla] attention MLA à rang faible : cache LATENT (c_kv + k_rope), \\\\\npas de fenêtre glissante ni de YaRN sur ce chemin\");\"\ … [835 caractères tronqués]`
+
+  ```
+routage       : sigmoïde (source : expert_gating_func) · renormalisation oui · échelle 2.500
+attention     : MLA à rang faible (cache latent)
+calculable    : oui (passe avant implémentée)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/main.rs'; s=open(p).read()\ns = s.replace(\"\"\"    let mla_rang_faible = quelque_part(\"attn_q_a.weight\");\n    if mla_rang_faible { println!(\"attention     : MLA à rang faible (cache latent)\") … [617 caractères tronqués]`
+
+  ```
+attention     : MLA à rang faible (cache latent) — chemin NON VALIDÉ (corrélation −0,04 avec llama.cpp sur GLM-5.3, voir reports/rapport-mla-experts.md)
+calculable    : oui (passe avant implémentée)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='REPRISE.md'; s=open(p).read()\ns = s.replace(\"\"\"### Ce que le moteur sait calculer, et ce qu'il ne sait pas\"\"\",\n\"\"\"### Le piège à ne pas rouvrir : la MLA tourne mais n'est pas validée\n\n`--config` dit  … [2149 caractères tronqués]`
+
+  ```
+test result: ok. 48 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.10s
+
+129481f MLA : dire NON VALIDÉE partout où elle est annoncée
+[stderr]
+bash: line 29: mscale: command not found
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log -1 --format=%B | head -12", "description": "Check the mangled commit message"}`
+
+  ```
+MLA : dire NON VALIDÉE partout où elle est annoncée
+
+Le moteur écrit maintenant, à l'ouverture et dans --config, que le chemin MLA à
+rang faible n'est pas validé — avec le chiffre qui le prouve (corrélation −0,04
+avec llama.cpp sur GLM-5.3, même jeton prédit à toutes les positions). Un
+« calculable : oui » sans cette réserve laisserait croire qu'un modèle qui
+tourne est un modèle juste ; c'est exactement le piège que cette session a
+trouvé quatre fois.
+
+REPRISE gagne les pistes écartées, la piste la plus probable (le facteur
+ de glm-dsa.cpp) et le premier pas de la session suivante.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git commit -q --amend -F - <<'EOF'\nMLA : dire NON VALIDÉE partout où elle est annoncée\n\nLe moteur écrit maintenant, à l'ouverture et dans --config, que le chemin MLA à\nrang faible n'est pas validé — avec le chiffre qui le prouve  … [733 caractères tronqués]`
