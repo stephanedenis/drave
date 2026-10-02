@@ -79279,3 +79279,22 @@ ok
 ⏵ Nettoyage des doublons de titres P6/P7 et mise à jour du statut de P4.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport re\np='docs/plan-deepseek41-complet.md'\nlignes=open(p).read().split('\\n')\nvues={}\na_supprimer=[]\nfor i,l in enumerate(lignes):\n    m=re.match(r'^### (P[0-9]) — ', l)\n    if m:\n        ph=m.group(1) … [1024 caractères tronqués]`
+
+  ```
+retiré : ### P7 — Adaptation à V4.1, et la question de provenance (≈ ½ journée 
+144:### P0 — Le harnais, sur V4-Flash, et le coût d'un jeton (≈ 3 h) — **FAIT** (02/10)
+164:### P1 — Hyper-connexions : les connexions pondérées (≈ ½ journée) — **FAIT** (02/10)
+187:### P2 — Épilogue d'attention : dé-rotation, puits, sortie groupée (≈ 3 h) — **FAIT** (02/10)
+206:### P3 — Les couches brutes, de bout en bout (≈ 2 h) — **FAIT pour V4-Flash** (02/10)
+223:### P4 — Compresseur et HCA : le premier flux qui n'existe nulle part (≈ ½ journée) — **FAIT** (02/10)
+248:### P5 — Indexeur et CSA : la liste de candidats (≈ 1 à 2 journées) — **FAIT** (02/10)
+285:### P6 — V4-Flash complet, en listes, et **sur plusieurs grappes** (≈ 1 journée) — **en cours**
+302:### P6 — V4-Flash complet, en listes, et **sur plusieurs grappes** (≈ 1 journée)
+318:### P7 — Adaptation à V4.1, et la question de provenance (≈ ½ journée + action externe) — **constat fait** (02/10)
+348:### P8 — Engram : la liste d'adresses, et sa référence à écrire (≈ 1 à 2 journées) — **issue (b) retenue** (02/10)
+378:### P9 — Noyaux natifs et encodage des poids : après la mesure (≈ 1 journée, optionnel) — **mesure faite, pas justifié** (02/10)
+
+… [88 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='docs/plan-deepseek41-complet.md'\ns=open(p).read()\n# 1. retirer le doublon de P6 (le titre sans statut)\na=\"\"\"### P6 — V4-Flash complet, en listes, et **sur plusieurs grappes** (≈ 1 journée)\n\n\"\"\"\nass … [739 caractères tronqués]`

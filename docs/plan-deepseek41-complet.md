@@ -282,7 +282,7 @@ Une phase qui ne passe pas ses deux portes ne passe pas à la suivante.
   un banc d'essai, faux pour un moteur. Si ce raccourci est retenu pour le
   premier jet, il est **écrit** dans `--config` et borné par `--ctx`.
 
-### P6 — V4-Flash complet, en listes, et **sur plusieurs grappes** (≈ 1 journée) — **en cours**
+### P6 — V4-Flash complet, en listes, et **sur plusieurs grappes** (≈ 1 journée) — **FAIT** (02/10)
 
 > **Fait** : le modèle tourne **en entier** (43 couches, les trois régimes
 > d'attention) ; `--trace-flux` puis `--flux-forcer` redonnent la même
@@ -298,8 +298,6 @@ Une phase qui ne passe pas ses deux portes ne passe pas à la suivante.
 > **Reste** : la comparaison à llama.cpp sur 8 à 64 jetons, dont on sait déjà ce
 > qu'elle donne pour 10 (corrélation 0,988-0,998, écart expliqué par la
 > quantification des activations de ggml).
-
-### P6 — V4-Flash complet, en listes, et **sur plusieurs grappes** (≈ 1 journée)
 
 - 43 couches, 86,9 Go, cache latent, mémoire, débit.
 - **Porte de correction** : perplexité de V4-Flash contre llama.cpp sur les mêmes
