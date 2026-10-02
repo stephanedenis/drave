@@ -122,6 +122,20 @@ elif [ "$RAPIDE" != "rapide" ]; then
     printf "  %-42s %s\n" "V4-Flash 43 couches ctx 32" "modèle absent"
 fi
 
+# 6ter. Engram : l'adressage des tables de V4.1 doit tomber dans les bornes de
+#       chaque colonne. C'est gratuit (métadonnées seules) et c'est la porte qui
+#       protège la seule partie de l'engram qui est validée.
+V41=/home/stephane/FastNVMe/modeles-lourds/DeepSeek-V4.1-Flash-Q2.gguf
+if [ -f "$V41" ]; then
+    r=$($D "$V41" --engram-adresses /tmp/portes_adresses.bin 2>/dev/null)
+    case "$r" in
+        *"480000 adresses"*)
+            printf "  %-42s %s  ✅\n" "engram V4.1 : adressage" \
+                "$(printf '%s' "$r" | grep -oE 'rangées DISTINCTES : [0-9]+' | head -1)" ;;
+        *)  printf "  %-42s %s  ❌\n" "engram V4.1 : adressage" "pas de sortie"; ECHEC=1 ;;
+    esac
+fi
+
 # 7. gpt-oss : `--config` d'abord (gratuit), puis la perplexité (~20 min).
 #    La porte `--config` existe parce qu'un refus FAUX est un refus trompeur :
 #    `attn_sinks` était compté comme un manque V4 alors que les puits appris sont

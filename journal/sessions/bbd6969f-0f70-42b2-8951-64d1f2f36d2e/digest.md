@@ -79444,3 +79444,231 @@ ok engram
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='docs/plan-deepseek41-complet.md'\ns=open(p).read()\na=\"\"\"> Conclusion : V4.1 ne peut être validé contre aucune référence aujourd'hui, et\n> l'implémenter sans référence serait deviner. Drave le **refuse à l … [4629 caractères tronqués]`
+
+  ```
+ok plan
+=== Portes ===
+  cargo test --release                       53 verts  ✅
+  Qwen2.5-0.5B ctx 256                       19.3885  ✅
+07f1c8f P7/P8 : mes deux conclusions étaient prématurées — les sources externes existent
+  ```
+
+- **bash** `{"command": "date; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git status --porcelain | grep -v \"^?? journal\" | head -3; echo \"--- acquis du round ---\"; git log --oneline --since=\"2 hours ago\" | head -12", "description": "Check time and round commits"}`
+
+  ```
+ven 02 oct 2026 17:18:09 EDT
+ M journal/README.md
+--- acquis du round ---
+07f1c8f P7/P8 : mes deux conclusions étaient prématurées — les sources externes existent
+c94a7cd Plan : P6 sans doublon et marquée faite (le modèle tourne, la trace se rejoue, le découpage est exact, les grappes concordent)
+13aae7f Plan : plus de titres en double (P6, P7), et P4 dit ce qui est fait (HCA et CSA)
+6c08aab Plan : P5 sans réserve — la porte longue du top-k est fermée par la mesure
+2145e0a P5 : le top-k de l'indexeur validé sans run de 2 048 jetons (metadata top_k 512 → 1 sur une copie du shard 1) — l_last-2 concorde à 0,99992
+362b3ed P9 : la mesure tranche — le goulot est la lecture (×2,8 en éclaté, même calcul), pas le déquant : noyaux natifs non justifiés aujourd'hui
+a26d407 P8 : l'engram inventorié, et l'issue (b) retenue — pas d'implémentation sans référence
+259f24c Portes : V4-Flash entre dans tools/portes.sh (--config calculable + perplexité 8430,2968) — un chiffre de référence qui dérive sans qu'on s'en aperçoive ne vaut rien
+c1b7197 P7 : le constat de provenance de V4.1, établi et nommé (aucun code à écrire, deux manques)
+b983d89 P6 : V4-Flash éclaté en 8 grappes — perplexité identique au 
+… [271 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 3 terminé. Bilan.
+
+## Ce qui a été fait (12 commits)
+
+**P6 — franchie.** Le protocole de flux accepte maintenant les états en **`hc` copies** (16 384 canaux au lieu de 4 096), et le découpage de V4-Flash entre deux processus est **exact** : perplexité **8 311,3347 des deux côtés, écart 0,00e0**. Le modèle **éclaté en 8 grappes** redonne le même chiffre au bit près (8 430,2968), en **39,9 s contre 111,8** — chaque expert routé vit dans un seul fichier. Trois bugs d'outillage corrigés au passage (le convertisseur ne lisait qu'une tranche sur trois, ignorait les grilles IQ, et ses descripteurs d'experts perdaient fichier et base).
+
+**Une mesure qui déplace un arbitrage** : l'état d'un modèle à hyper-connexions est **dense à 99,9 %** → le mode listes ne le compresse pas (65 544 octets contre 65 615 en dense), alors qu'il divise par 2,3 des activations ordinaires. *Là où le flux est dense, la liste ne compresse pas.*
+
+**P5 — sa porte longue est fermée** sans run de 2 048 jetons : `indexer.top_k` ramené de 512 à **1** dans une copie du shard 1 (4 octets, aucune weight touchée). La sélection s'exerce dès 2 blocs, et `l_last-2` concorde à **0,999920-0,999994**.
+
+**P9 — la mesure tranche** : le goulot est la **lecture**, pas le déquant (×2,8 en éclaté, même calcul). Noyaux natifs non justifiés.
+
+## Et une correction que je dois signaler
+
+J'avais écrit deux conclusions que **la recherche de sources a démenties** — c'est ma faute de méthode : j'avais déduit « aucune référence n'existe » de l'absence *locale*.
+
+**P7** : le fichier de V4.1 **n'est pas incomplet**. Le [patch de conversion](https://huggingface.co/vcruz305/DeepSeek-V4.1-Flash-GGUF/blob/main/llama.cpp/patches/README.md) montre que le jeu de tenseurs `deepseek41` **retire volontairement** `HC_HEAD_{FN,BASE,SCALE}` de celui de V4. Ce qui reste vrai, et que personne n'a résolu : **comment les `hc` copies se réduisent avant la norme finale** — le support d'exécution de V4.1 n'existe pas encore en amont (PR [#28696](https://github.com/ggml-org/llama.cpp/pull/28696)). Le moteur refuse toujours, mais en nommant les bons motifs.
+
+**P8 — la phase est rouverte** : un portage 1:1 de l'engram de vLLM est publié ([`mudler/vllm.cpp`](https://github.com/mudler/vllm.cpp/blob/main/src/vllm/model_executor/models/deepseek_v4_1_engram.cpp)) — la formule (`^=` sur un repli **collant**, modulo **par colonne**), la lecture (e4m3 × e8m0 par bloc de 32) et l'injection (porte `sigmoid(±sqrt(max(|dot|, 1e-6)))`) sont écrites. Et sa première porte est **déjà franchie**, sans charger le modèle : les 48 premiers recalculés par l'algorithme de la référence sont **identiques** à ceux du fichier (Miller-Rabin (2,7,61), défaut d'origine compris), la table de correspondance est dense et vaut exactement 99 092, les 8 multiplicateurs sont conformes.
+
+## État
+
+Portes vertes : **53 tests · Qwen 19,3885 · clusters 799,8557 · V4-Flash 43 couches 8430,2968** (nouvelle porte permanente) · formats 17/17. P0-P6 faites, P7 constatée, P8 rouverte, P9 mesurée. Objectif laissé actif : le portage de l'engram est maintenant borné (trois fonctions), et V4.1 reste sans référence d'exécution nulle part.
+
+## Introspection
+
+Deux leçons ce round, et la seconde m'a coûté deux rapports à réécrire :
+1. **la mesure tranche mieux qu'un raisonnement** (le goulot I/O, le top-k par métadonnée) ;
+2. **« aucune référence n'existe » se cherche avant de s'écrire** — j'avais conclu de mon disque au monde. La règle que je m'applique désormais : avant d'écrire qu'une porte est infranchissable, chercher la source.
+
+
+## Tour 78
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Exécuter le plan docs/plan-deepseek41-complet.md phase par phase (P0→P9), en autonomie, en respectant pour chaque phase ses deux portes : porte de correction (comparaison étage par étage à llama.cpp sur V4-Flash) et porte Drave (flux : événements/paires par jeton, trace rejouée à l'identique, découpage en grappes, flux lisible par un outil d'analyse). Aucune phase ne passe à la suivante sans ses deux portes. Jamais de forward muet, jamais d'optimisation qui change une sortie sans le dire."
+Round: 4/30
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Round 4 — P8 : je porte l'engram. D'abord la référence Python, transcrite du portage vLLM.
+
+- **write** `{"content": "#!/usr/bin/env python3\n\"\"\"Référence **Python** de l'adressage de l'engram de DeepSeek-V4.1.\n\nTranscription de `vllm/models/deepseek_v4_1/common/engram.py` **via** son portage\n1:1 en C++ (`mudler/vllm.cpp`, `deepseek_v4_1_engram.cpp`) : les noms de\nfonctions et les commentaires c … [8544 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/engram_reference.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/engram_reference.py", "description": "Run the engram reference self-test", "timeoutMs": 300000}`
+
+  ```
+[stderr]
+Traceback (most recent call last):
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/engram_reference.py", line 199, in <module>
+    _auto_test()
+    ~~~~~~~~~~^^
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/engram_reference.py", line 168, in _auto_test
+    a = hachage(tok, primes, offsets, mult, tok, [0, 1, 2, 3], [1, 14], 4, 8, 2)
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/engram_reference.py", line 136, in hachage
+    else token_map[token_ids[i]])
+         ~~~~~~~~~^^^^^^^^^^^^^^
+IndexError: list index out of range
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='tools/engram_reference.py'\ns=open(p).read()\na=\"\"\"    tok = [5, 6, 7, 8]\n    mult = [3, 5, 7, 11, 13, 17, 19, 23]\n    a = hachage(tok, primes, offsets, mult, tok, [0, 1, 2, 3], [1, 14], 4, 8, 2)\n    b = … [598 caractères tronqués]`
+
+  ```
+ok
+auto-test : ok — 48 premiers distincts, adresses bornées, hachage déterministe, défaut d'origine reproduit
+  ```
+
+### 🤖 Assistant
+
+⏵ Le portage Rust : module `engram.rs` (adressage), puis test contre la référence.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c \"\nimport sys; sys.path.insert(0,'tools')\nfrom engram_reference import layout_depuis_metadonnees, hachage\nprimes, offsets = layout_depuis_metadonnees(16_000_000, [1,14], 4, 8, 99_092, 2)\ntokmap = list(range(99_092))\nm … [568 caractères tronqués]`
+
+  ```
+const MULT: [i64; 8] = [3, 5, 7, 11, 13, 17, 19, 23];
+const IDS: [u32; 5] = [5, 6, 7, 8, 9];
+const ADRESSES: [i32; 240 ] = [
+    5, 16000062, 32000141, 48000222, 64000319, 80000440, 96000569, 112000702, 128000891, 144001080, 160001287, 176001498, 192001751, 208002028, 224002317, 240002624, 256002963, 272003302, 288003683, 304004076, 320004475, 336004878, 352005287, 368005734, 99, 16000576, 32001063, 48001562, 64002069, 80002580, 96003153, 112003762, 128004359, 144005026, 160005695, 176006388, 192007085, 208007796, 224008525, 240009284, 256010091, 272010872, 288011671, 304012484, 320013303, 336014144, 352015021, 368015900 ,
+9 /tmp/engram_golden.txt
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\ngolden = open('/tmp/engram_golden.txt').read().strip()\nmodule = '''//! L'**engram** de DeepSeek-V4.1 : deux tables de n-grammes adressées par hachage.\n//!\n//! Le moteur ne les *calcule* pas encore — il les **a … [11624 caractères tronqués]`
+
+  ```
+module écrit
+241
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\n# 1. les 48 premiers du fichier, en constante (pour le test)\nimport struct, sys\nsys.path.insert(0,'tools')\nfrom lire_meta_gguf import Lecteur\np='/home/stephane/FastNVMe/modeles-lourds/DeepSeek-V4.1-Flash-Q2.g … [1669 caractères tronqués]`
+
+  ```
+constante ajoutée
+module déclaré
+
+
+failures:
+    engram::tests::adressage_conforme_a_la_reference
+
+test result: FAILED. 2 passed; 1 failed; 0 ignored; 0 measured; 53 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `--bin drave`
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && cargo test --release adressage_conforme 2>&1 | grep -A 6 \"panicked\" | head -8", "description": "Show the address mismatch", "timeoutMs": 900000}`
+
+  ```
+thread 'engram::tests::adressage_conforme_a_la_reference' (2093920) panicked at src/engram.rs:216:13:
+assertion `left == right` failed: adresse 48 : 12 contre 11
+  left: 12
+ right: 11
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+  ```
+
+### 🤖 Assistant
+
+⏵ Bug dans mon portage : le recul lisait le jeton courant au lieu du jeton reculé.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='drave-core/src/engram.rs'\ns=open(p).read()\na=\"\"\"                if recul >= debut as i64 {\n                    if let Some(i) = token.checked_sub(shift) {\n                        let mort = morts.get(i) … [1421 caractères tronqués]`
+
+  ```
+ok
+test engram::tests::les_adresses_tombent_dans_leur_seau ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 53 filtered out; finished in 0.00s
+  ```
+
+### 🤖 Assistant
+
+⏵ Portage validé. J'ajoute la trace du **flux d'adresses** (rangées, recouvrement) et je le compare sur les données réelles.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"sonder_engram: usize,\" drave-core/src/main.rs | head -2; grep -n '\"--sonder-engram\"' drave-core/src/main.rs | head -2; sed -n \"$(grep -n 'fn run_sonder_engram' drave-core/src/main.rs | cut -d: -f1),+12p\" drave-core/src … [57 caractères tronqués]`
+
+  ```
+552:    sonder_engram: usize,
+99:        (opt.sonder_engram > 0, "--sonder-engram"),
+698:            "--sonder-engram" => { o.sonder_engram = suivant(i).parse().unwrap_or(1000); 2 }
+fn run_sonder_engram(n: usize) {
+    let path = modele_chemin();
+    let t0 = Instant::now();
+    let g = Gguf::open(&path).expect("ouverture du GGUF en mmap");
+    println!("mmap du fichier en {:?} ({} fichiers, {:.1} Go adressés)",
+             t0.elapsed(), g.nb_fichiers(), g.octets_charges() as f64 / 1e9);
+    // Les tables d'engram, par couche.
+    let tables: Vec<(String, usize)> = g.tensors.iter()
+        .filter(|t| t.name.contains("engram_embd"))
+        .map(|t| (t.name.clone(), t.nelem()))
+        .collect();
+    if tables.is_empty() {
+        println!("aucun tenseur engram_embd dans ce modèle");
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='drave-core/src/main.rs'\ns=open(p).read()\nsubs=[]\nsubs.append((\n\"\"\"    sonder_engram: usize,\"\"\",\n\"\"\"    sonder_engram: usize,\n    /// `--engram-adresses F` : écrit la **liste d'adresses** de l'en … [4632 caractères tronqués]`
+
+  ```
+ok
+--- fin ---
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c \"\nimport struct\np='drave-core/src/main.rs'\ns=open(p).read()\nif 'mod engram;' not in s: print('MODULE NON DECLARE')\nelse: print('module ok')\n\" ; timeout 600 ./drave-core/target/release/drave /home/stephane/FastNVMe/ … [177 caractères tronqués]`
+
+  ```
+module ok
+engram : 2 couches [1, 14] · 768022850 rangées · 24 colonnes de hachage (3 reculs × 8 têtes) · vocabulaire compressé 99092
+10000 jetons × 2 couches × 24 colonnes = 480000 adresses en 5.942139ms
+rangées DISTINCTES : 479723 (99.9 % du total) — 0.06 % des 768022850 rangées de la table sont adressées
+recouvrement entre jetons consécutifs : 0 adresses identiques (0.0 %)
+adresses écrites dans /tmp/v41_adresses.bin (i32, 1920000 octets)
+  ```
+
+### 🤖 Assistant
+
+⏵ Comparaison des 480 000 adresses réelles : moteur contre référence Python.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport struct, sys, json\nsys.path.insert(0,'tools')\nfrom lire_meta_gguf import Lecteur\nfrom engram_reference import hachage\n\np='/home/stephane/FastNVMe/modeles-lourds/DeepSeek-V4.1-Flash-Q2.gguf'\nr=Lecteur( … [1393 caractères tronqués]`
+
+  ```
+longueurs : référence 480000 · moteur 480000
+adresses IDENTIQUES : True (0 écarts sur 480000)
+  ```
+
+### 🤖 Assistant
+
+⏵ **480 000 adresses identiques** à la référence. Commit de l'adressage validé.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='tools/portes.sh'\ns=open(p).read()\na=\"\"\"# 7. gpt-oss : `--config` d'abord (gratuit), puis la perplexité (~20 min).\"\"\"\nb=\"\"\"# 6ter. Engram : l'adressage des tables de V4.1 doit tomber dans les bornes … [2952 caractères tronqués]`

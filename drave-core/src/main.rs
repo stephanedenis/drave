@@ -28,6 +28,7 @@ const VARS_LUES: &[&str] = &[
 
 mod clusters;
 mod engine;
+mod engram;
 mod formats;
 mod gguf;
 mod list;
@@ -106,6 +107,7 @@ sont ignorés", modes.len(), modes.join(", "), modes[0]);
     if opt.materiel { run_materiel(&opt); return; }
     if opt.config { run_config(); return; }
     if opt.sonder_engram > 0 { run_sonder_engram(opt.sonder_engram); return; }
+    if let Some(f) = opt.engram_adresses.clone() { run_engram_adresses(&f, &opt); return; }
     if let Some(b) = opt.bloc.clone() { run_bloc(&b); return; }
     if let Some(f) = opt.banc_vision.clone() { run_banc_vision(&f); return; }
     if let Some(adresse) = opt.flux_serveur.clone() { run_serveur_flux(opt, &adresse); return; }
@@ -549,6 +551,10 @@ struct Options {
     /// indices dispersés. Démontre qu'une table de 101 Go s'adresse sans se
     /// charger.
     sonder_engram: usize,
+    /// `--engram-adresses F` : écrit la **liste d'adresses** de l'engram
+    /// (un entier par jeton et par colonne de hachage) et imprime ce qu'elle
+    /// coûte — rangées distinctes, recouvrement entre jetons consécutifs.
+    engram_adresses: Option<String>,
     /// `TENSEUR:INDEX` : déquantifie UN bloc et l'imprime. Sert à confronter
     /// notre déquantification à celle de ggml sur un bloc réel, sans dépendre
     /// d'une réimplémentation en script — c'est le code du moteur qu'on veut
@@ -695,6 +701,7 @@ fn analyser(args: &[String]) -> Options {
             "--materiel" => { o.materiel = true; 1 }
             "--config" => { o.config = true; 1 }
             "--sonder-engram" => { o.sonder_engram = suivant(i).parse().unwrap_or(1000); 2 }
+            "--engram-adresses" => { o.engram_adresses = Some(suivant(i).clone()); 2 }
             "--bloc" if i + 1 < args.len() => { o.bloc = Some(suivant(i).clone()); 2 }
             "--tete-garantie" if i + 1 < args.len() => {
                 o.tete_garantie = Some(suivant(i).clone()); 2 }
@@ -1578,6 +1585,67 @@ fn run_bloc(spec: &str) {
 /// Cette sonde le démontre : elle ouvre le fichier entier en mmap, lit `n`
 /// entrées dispersées, et affiche le temps comme la mémoire. Le noyau ne lit que
 /// les pages touchées.
+/// **La liste d'adresses de l'engram** (P8) : quelles rangées le modèle irait
+/// lire pour une séquence de jetons.
+///
+/// Elle se calcule **sans charger le modèle** — les métadonnées suffisent (48
+/// premiers, 8 multiplicateurs, la table de correspondance des jetons) — et
+/// c'est tout l'intérêt : on peut la comparer à la référence
+/// (`tools/engram_reference.py`) sur un fichier de 365 Go sans lire un poids.
+fn run_engram_adresses(sortie: &str, opt: &Options) {
+    use std::io::Write;
+    let path = modele_chemin();
+    let g = Gguf::open_meta_auto(&path).expect("ouverture des métadonnées");
+    let Some(e) = engram::Engram::depuis_gguf(&g) else {
+        println!("ce modèle n'a pas d'engram (pas d'`engram.layer_ids`)");
+        return;
+    };
+    let n_hash_cols = e.n_hash_cols();
+    println!("engram : {} couches {:?} · {} rangées · {n_hash_cols} colonnes de hachage \
+              ({} reculs × {} têtes) · vocabulaire compressé {}",
+             e.couches.len(), e.couches, e.rangees.iter().sum::<i64>(),
+             e.max_ngram - 1, e.n_heads, e.compressed_vocab);
+    let ids: Vec<u32> = if opt.ids.is_empty() {
+        // Séquence d'essai DÉTERMINISTE, dans les bornes de la table de
+        // correspondance : ce qui compte ici est la forme du flux, pas le texte.
+        (0..10_000u32).map(|i| (i * 7919) % 129_000).collect()
+    } else { opt.ids.clone() };
+    let positions: Vec<usize> = (0..ids.len()).collect();
+    let morts = vec![false; ids.len()];
+    let t0 = std::time::Instant::now();
+    let a = e.adresses(&ids, &positions, &morts);
+    let duree = t0.elapsed();
+    let mut f = std::io::BufWriter::new(std::fs::File::create(sortie)
+        .unwrap_or_else(|e| panic!("création de {sortie} : {e}")));
+    for v in &a { f.write_all(&v.to_le_bytes()).unwrap(); }
+    f.flush().unwrap();
+    // Ce que la liste COÛTE et ce qu'elle dit : c'est la porte Drave de la phase.
+    let total = a.len();
+    let distinctes = {
+        let mut v = a.clone(); v.sort_unstable(); v.dedup(); v.len()
+    };
+    let mut recouvrement = 0usize;
+    for jeton in 1..ids.len() {
+        for layer in 0..e.couches.len() {
+            for col in 0..n_hash_cols {
+                let i = (jeton * e.couches.len() + layer) * n_hash_cols + col;
+                let j = ((jeton - 1) * e.couches.len() + layer) * n_hash_cols + col;
+                if a[i] == a[j] { recouvrement += 1; }
+            }
+        }
+    }
+    println!("{} jetons × {} couches × {n_hash_cols} colonnes = {total} adresses en {:?}",
+             ids.len(), e.couches.len(), duree);
+    println!("rangées DISTINCTES : {distinctes} ({:.1} % du total) — {:.2} % des {} rangées \
+              de la table sont adressées",
+             100.0 * distinctes as f64 / total as f64,
+             100.0 * distinctes as f64 / e.rangees.iter().sum::<i64>() as f64,
+             e.rangees.iter().sum::<i64>());
+    println!("recouvrement entre jetons consécutifs : {recouvrement} adresses identiques \
+              ({:.1} %)", 100.0 * recouvrement as f64 / total as f64);
+    println!("adresses écrites dans {sortie} (i32, {} octets)", total * 4);
+}
+
 fn run_sonder_engram(n: usize) {
     let path = modele_chemin();
     let t0 = Instant::now();

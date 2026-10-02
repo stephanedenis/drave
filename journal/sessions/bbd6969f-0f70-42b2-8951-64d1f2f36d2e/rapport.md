@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 98.5 h |
-| Tours | 77 |
-| Messages | 4930 |
-| Appels d'outils | 4708 |
-| Fichiers touchés | 96 |
-| Commandes | 4070 |
+| Durée | 98.6 h |
+| Tours | 78 |
+| Messages | 4946 |
+| Appels d'outils | 4722 |
+| Fichiers touchés | 97 |
+| Commandes | 4083 |
 | Sous-agents | 29 |
-| Commits | 348 |
+| Commits | 349 |
 | Compactages de contexte | 6 |
 
 ## Objectifs déclarés
@@ -197,6 +197,8 @@
 **Tour 76** — <goal_round> Objective: "Exécuter le plan docs/plan-deepseek41-complet.md phase par phase (P0→P9), en autonomie, en respectant pour chaque phase ses deux portes : porte de correction (comparaison étage par étage à llama.cpp sur V4-Flash) et porte Drave (flux : événements/paires par jeton, trace rejouée à l'identique, découpage en grappes, flux lisible par un outil d'analyse). Aucune phase ne passe … [661 caractères tronqués]
 
 **Tour 77** — <goal_round> Objective: "Exécuter le plan docs/plan-deepseek41-complet.md phase par phase (P0→P9), en autonomie, en respectant pour chaque phase ses deux portes : porte de correction (comparaison étage par étage à llama.cpp sur V4-Flash) et porte Drave (flux : événements/paires par jeton, trace rejouée à l'identique, découpage en grappes, flux lisible par un outil d'analyse). Aucune phase ne passe … [661 caractères tronqués]
+
+**Tour 78** — <goal_round> Objective: "Exécuter le plan docs/plan-deepseek41-complet.md phase par phase (P0→P9), en autonomie, en respectant pour chaque phase ses deux portes : porte de correction (comparaison étage par étage à llama.cpp sur V4-Flash) et porte Drave (flux : événements/paires par jeton, trace rejouée à l'identique, découpage en grappes, flux lisible par un outil d'analyse). Aucune phase ne passe … [661 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -3941,7 +3943,7 @@ V4-Flash contre llama.cpp : perplexité **678,09 contre 548,32** (NLL +0,21 nat)
 
 ### Tour 77 — <goal_round> Objective: "Exécuter le plan docs/plan-deepseek41-complet.md phase par phase (P0→P9), en autonomie, en resp … [941 caractères tronqués]
 
-*95 appels d'outils.* Actions notables :
+*96 appels d'outils.* Actions notables :
 
 - bash — Find the channel-count validation
 - bash — Read the validation and the hidden definition
@@ -3957,11 +3959,52 @@ V4-Flash contre llama.cpp : perplexité **678,09 contre 548,32** (NLL +0,21 nat)
 - bash — Remove the refusal and run distributed
 - bash — Find the pilot's reply validation
 - bash — Fix the pilot reply validation
-- … et 74 autres
+- … et 75 autres
 
 **Synthèse produite :**
 
-⏵ Réécriture du rapport de provenance et de l'état engram avec les sources externes.
+⏵ Round 3 terminé. Bilan.
+
+\## Ce qui a été fait (12 commits)
+
+**P6 — franchie.** Le protocole de flux accepte maintenant les états en **`hc` copies** (16 384 canaux au lieu de 4 096), et le découpage de V4-Flash entre deux processus est **exact** : perplexité **8 311,3347 des deux côtés, écart 0,00e0**. Le modèle **éclaté en 8 grappes** redonne le même chiffre au bit près (8 430,2968), en **39,9 s contre 111,8** — chaque expert routé vit dans un seul fichier. Trois bugs d'outillage corrigés au passage (le convertisseur ne lisait qu'une tranche sur trois, ignorait les grilles IQ, et ses descripteurs d'experts perdaient fichier et base).
+
+**Une mesure qui déplace un arbitrage** : l'état d'un modèle à hyper-connexions est **dense à 99,9 %** → le mode listes ne le compresse pas (65 544 octets contre 65 615 en dense), alors qu'il divise par 2,3 des activations ordinaires. *Là où le flux est dense, la liste ne compresse pas.*
+
+**P5 — sa porte longue est fermée** sans run de 2 048 jetons : `indexer.top_k` ramené de 512 à **1** dans une copie du shard 1 (4 octets, aucune weight touchée). La sélection s'exerce dès 2 blocs, et `l_last-2` concorde à **0,999920-0,999994**.
+
+**P9 — la mesure tranche** : le goulot est la **lecture**, pas le déquant (×2,8 en éclaté, même calcul). Noyaux natifs non justifiés.
+
+\## Et une correction que je dois signaler
+
+J'avais écrit deux conclusions que **la recherche de sources a démenties** — c'est ma faute de méthode : j'avais déduit « aucune référence n'existe » de l'absence *locale*.
+
+**P7** : le fichier de V4.1 **n'est pas incomplet**. Le [patch de conversion](https://huggingface.co/vcruz305/DeepSeek-V4.1-Flash-GGUF/blob/main/llama.cpp/patches/README.md) montre que le jeu de tenseurs `deepseek41` **retire volontairement** `HC_HEAD_{FN,BASE,SCALE}` de celui de V4. Ce qui reste vrai, et que personne n'a résolu : **comment les `hc` copies se réduisent avant la norme finale** — le support d'exécution de V4.1 n'existe pas encore en amont (PR [#28696](https://github.com/ggml-org/llama.cpp/pull/28696)). Le moteur refuse toujours, mais en nommant les bons motifs.
+
+**P8 — la phase est rouverte** : un portage 1:1 de l'engram de vLLM est publié ([`mudler/vllm.cpp`](https://github.com/mudler/vllm.cpp/blob/main/src/vllm/model_executor/models/deepseek_v4_1_engram.cpp)) — la formule (`^=` sur un repli **collant**, modulo **par colonne**), la lecture (e4m3 × e8m0 par bloc de 32) et l'injection (porte `sigmoid(±sqrt(max(|dot|, 1e-6)))`) sont écrites
+… [1065 caractères tronqués]
+
+### Tour 78 — <goal_round> Objective: "Exécuter le plan docs/plan-deepseek41-complet.md phase par phase (P0→P9), en autonomie, en resp … [941 caractères tronqués]
+
+*13 appels d'outils.* Actions notables :
+
+- write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/engram_reference.py`
+- bash — Run the engram reference self-test
+- bash — Fix the self-test and rerun
+- bash — Generate engram golden values
+- bash — Write the Rust engram module
+- bash — Add the primes constant and test the module
+- bash — Show the address mismatch
+- bash — Fix the lookback and retest
+- bash — Read the engram probe wiring
+- bash — Add the address-flux flag and analysis
+- bash — Compute the real V4.1 engram addresses
+- bash — Compare the engine against the reference on real data
+- bash — Commit the validated engram addressing
+
+**Synthèse produite :**
+
+⏵ **480 000 adresses identiques** à la référence. Commit de l'adressage validé.
 
 ## 3. Travail accompli
 
@@ -4065,6 +4108,7 @@ V4-Flash contre llama.cpp : perplexité **678,09 contre 548,32** (NLL +0,21 nat)
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-v4-reparti.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-provenance-v41.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-engram-etat.md` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/engram_reference.py` | 1 | 0 |
 
 ### Sous-agents lancés
 
@@ -4140,7 +4184,7 @@ V4-Flash contre llama.cpp : perplexité **678,09 contre 548,32** (NLL +0,21 nat)
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 4030 autres
+- … et 4043 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4268,7 +4312,7 @@ V4-Flash contre llama.cpp : perplexité **678,09 contre 548,32** (NLL +0,21 nat)
 
 ## 5. Erreurs rencontrées
 
-269 sorties en erreur ou divergentes. Les premières :
+271 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : a8f2635f8 docs: record which models this box is good at, and why src/llama-hparams.cpp:8:void llama_hparams::set_swa_pattern(uint32_t n_pattern, bool dense_first) { src/llama-hparams.h:308:    void se
 - **T1** : 511 tokens notés — perplexité cumulée 247.031  (4.9 tok/s) === perplexité 247.0308 sur 511 tokens (0 événements, 104.5 s) ===  ### B3 harmony assistant 511 --- ref --- 0.0 0.0 0:00 ls: cannot access '
@@ -4636,4 +4680,5 @@ V4-Flash contre llama.cpp : perplexité **678,09 contre 548,32** (NLL +0,21 nat)
 - Plan : plus de titres en double (P6, P7), et P4 dit ce qui est fait (HCA et CSA)" && git log --oneline -1
 - Plan : P6 sans doublon et marquée faite (le modèle tourne, la trace se rejoue, le découpage est exact, les grappes concordent)" && git log --oneline -1
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF' p='docs/plan-deepseek41-complet.md' s=open(p).read() a="""> Conclusion : V4.1 ne peut 
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF' p='tools/portes.sh' s=open(p).read() a="""# 7. gpt-oss : `--config` d'abord (gratuit),
 
