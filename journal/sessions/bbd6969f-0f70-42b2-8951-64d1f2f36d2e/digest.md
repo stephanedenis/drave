@@ -76861,3 +76861,553 @@ warning: method `presents` is never used
 ⏵ Pendant la porte : note du clamp SwiGLU dans le rapport.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='reports/rapport-v4-hca.md'\ns=open(p).read()\na=\"\"\"## 7. Reste à faire\"\"\"\nb=\"\"\"## 7.bis Un manque trouvé en relisant les métadonnées : le **clamp SwiGLU**\n\nV4-Flash déclare `swiglu_clamp_exp = 10.0 … [1007 caractères tronqués]`
+
+  ```
+ok
+d0b7233 V4 : le clamp SwiGLU (swiglu_clamp_exp, par couche) — un manque qui ne se voyait pas dans les premières couches
+  ```
+
+- **job_output** `{"job_id": "bash-144", "timeout_ms": 1200000, "wait": true}`
+
+  ```
+=== perplexité 15.6017 sur 510 tokens (0 événements, 2201.5 s) ===
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Le compresseur étant fait, je retire le manque et teste **V4-Flash en entier**.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='drave-core/src/model.rs'\ns=open(p).read()\na=\"\"\"    // La clé des ratios est `attention.compress_ratios` (liste par couche), pas\n    // `compress_ratios` : la chercher sous le mauvais nom faisait dire\n   … [2081 caractères tronqués]`
+
+  ```
+ok
+DeepSeek-V4-Flash-UD-IQ1_M-00001-of-00   calculable    : oui (passe avant implémentée)
+DeepSeek-V4.1-Flash-Q2.gguf              calculable    : oui (passe avant implémentée)
+  ```
+
+### 🤖 Assistant
+
+⏵ **V4-Flash en entier** : exécution complète et comparaison à llama.cpp.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 3000 ./drave-core/target/release/drave /home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek-V4-Flash-UD-IQ1_M/DeepSeek-V4-Flash-UD-IQ1_M-00001-of-00003.gguf --ppl /tmp/ids_v4flash.txt --ctx 32 --limit 10 --dense --threads 1 … [107 caractères tronqués]`
+
+  ```
+started background job bash-145
+  ```
+
+- **job_output** `{"job_id": "bash-145", "timeout_ms": 1500000, "wait": true}`
+
+  ```
+[modele] 43 couches chargées en 39.133450167s — listes 0.00 Go , 16 threads
+[config] 43 couches, hidden 4096 · racine de softpluséchelle 1.50 routage-table moe 
+[config] mélanges d'experts chargés : 43/43 couches · mapping absent (experts en clair dans le fichier)
+[config] puits appris sur 43/43 couches · n_rot 64 · ffn 0 · experts 256
+[config] fenêtre glissante 128 sur 43/43 couches (motif 0, toutes)
+[config] rotation : RoPE simple (contexte 32 ≤ 65536 initial ; YaRN ×16 prendrait le relais au-delà)
+[tête 4 bits] 129280 × 4096 → 4.50 b/poids, 0 Mo, 0.0 s
+
+thread 'main' (822170) panicked at src/model.rs:3698:53:
+index out of bounds: the len is 4096 but the index is 4096
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+timeout: the monitored command dumped core
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Panique en modèle complet : localisation (ligne 3698) et vérification de `is_swa`.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '3690,3705p' drave-core/src/model.rs; echo \"=== is_swa ===\"; grep -n \"is_swa\" -A 5 /home/stephane/Data13TB/stephane/GitHub/llama.cpp/src/llama-hparams.h | head -12", "description": "Inspect the panic site and is_swa"}`
+
+  ```
+while i < n { s += *pa.add(i) * *pb.add(i); i += 1; }
+        s
+    }
+
+    fn rmsnorm(x: &[f32], w: &[f32], eps: f32, out: &mut [f32]) {
+        let mut ss = 0f32;
+        for &v in x { ss += v * v; }
+        let inv = 1.0 / (ss / x.len() as f32 + eps).sqrt();
+        for i in 0..x.len() { out[i] = x[i] * inv * w[i]; }
+    }
+
+    /// k-WTA par tête : ne garder que la fraction demandée des composantes les
+    /// plus grandes de chaque tête. Appliqué à Q et K, il rend le produit
+    /// scalaire des scores creux.
+    fn creuse_tetes(v: &mut [f32], n_head: usize, head_dim: usize, milliemes: usize) {
+        let k = ((milliemes as f32 / 1000.0) * head_dim as f32).round() as usize;
+=== is_swa ===
+147:    // if is_swa_impl[il] == 1, then layer il is SWA
+148:    // if is_swa_impl[il] == 0, then layer il is dense (i.e. non-SWA)
+149-    // by default, all layers are dense
+150-    // note: using uint32_t type for compatibility reason
+151:    std::array<uint32_t, LLAMA_MAX_LAYERS> is_swa_impl;
+152-
+153-    // for hybrid state space models
+154-    std::array<uint32_t, LLAMA_MAX_LAYERS> is_recr_impl;
+155-
+156-    // for State Space Models
+--
+311:    bool is_swa_any() const;
+  ```
+
+### 🤖 Assistant
+
+⏵ Trace complète pour localiser la panique.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && RUST_BACKTRACE=1 timeout 1200 ./drave-core/target/release/drave /home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek-V4-Flash-UD-IQ1_M/DeepSeek-V4-Flash-UD-IQ1_M-00001-of-00003.gguf --ppl /tmp/ids_v4flash.txt --ctx 32 --limit 3 --d … [149 caractères tronqués]`
+
+  ```
+thread 'main' (829701) panicked at src/model.rs:3698:53:
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && RUST_BACKTRACE=full timeout 1200 ./drave-core/target/release/drave /home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek-V4-Flash-UD-IQ1_M/DeepSeek-V4-Flash-UD-IQ1_M-00001-of-00003.gguf --ppl /tmp/ids_v4flash.txt --ctx 32 --limit 3  … [132 caractères tronqués]`
+
+  ```
+thread 'main' (837126) panicked at src/model.rs:3698:53:
+index out of bounds: the len is 4096 but the index is 4096
+stack backtrace:
+   0:     0x56419ce84136 - <<std[1e3c4ec04c5261a9]::sys::backtrace::BacktraceLock>::print::DisplayBacktrace as core[37f591cfbe66b0b1]::fmt::Display>::fmt
+   1:     0x56419ce6b44a - core[37f591cfbe66b0b1]::fmt::write
+   2:     0x56419ce83365 - <std[1e3c4ec04c5261a9]::sys::stdio::unix::Stderr as std[1e3c4ec04c5261a9]::io::Write>::write_fmt
+   3:     0x56419ce83088 - std[1e3c4ec04c5261a9]::panicking::panic_with_hook
+   4:     0x56419ceab751 - std[1e3c4ec04c5261a9]::panicking::panic_handler::{closure#0}
+   5:     0x56419ceab709 - std[1e3c4ec04c5261a9]::sys::backtrace::__rust_end_short_backtrace::<std[1e3c4ec04c5261a9]::panicking::panic_handler::{closure#0}, !>
+   6:     0x56419ceabbec - __rustc[6ef78fba13ac776c]::rust_begin_unwind
+   7:     0x56419ce6b2db - core[37f591cfbe66b0b1]::panicking::panic_fmt
+   8:     0x56419ce6c047 - core[37f591cfbe66b0b1]::panicking::panic_bounds_check
+   9:     0x56419ce5377b - <drave[f8fbb4645b9258b7]::model::Model>::forward
+  10:     0x56419ce21f33 - <drave[f8fbb4645b9258b7]::model::Model>::forward_lot
+  11:     0x56419cddc
+… [38 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Le panic vient de la norme finale sans mélange de tête. Vérification de `hc_head_*` dans le fichier.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ./drave-core/target/release/drave /home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek-V4-Flash-UD-IQ1_M/DeepSeek-V4-Flash-UD-IQ1_M-00001-of-00003.gguf --tensors 2>/dev/null | grep -i \"hc_head\" | head -4; echo \"--- aucun ? ---\" … [170 caractères tronqués]`
+
+  ```
+--- aucun ? ---
+
+    hc_head_fn    = create_tensor(tn(LLM_TENSOR_HC_HEAD_FN, "weight"),    {hc_dim, hc_mult}, 0);
+    hc_head_base  = create_tensor(tn(LLM_TENSOR_HC_HEAD_BASE, "weight"),  {hc_mult}, 0);
+    hc_head_scale = create_tensor(tn(LLM_TENSOR_HC_HEAD_SCALE, "weight"), {1}, 0);
+
+    for (int i = 0; i < n_layer; ++i) {
+        auto & layer = layers[i];
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ./drave-core/target/release/drave /home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek-V4-Flash-UD-IQ1_M/DeepSeek-V4-Flash-UD-IQ1_M-00001-of-00003.gguf --tensors 2>/dev/null | grep -cE \"weight|bias\"; ./drave-core/target/release/d … [257 caractères tronqués]`
+
+  ```
+1328
+ · block_count 43 · embedding_length 4096 · attention.head_count 64 · attention.head_count_kv 1 · expert_count 256 · expert_used_count 6 · context_length 1048576
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c \"\nimport struct, sys\nsys.path.insert(0,'tools')\nfrom lire_meta_gguf import Lecteur\np='/home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek-V4-Flash-UD-IQ1_M/DeepSeek-V4-Flash-UD-IQ1_M-00002-of-00003.gguf'\nr=Lecteur … [761 caractères tronqués]`
+
+  ```
+tenseurs shard 2 : 784
+hc : ['output_hc_base.weight', 'output_hc_fn.weight', 'output_hc_scale.weight', 'blk.0.hc_attn_base.weight', 'blk.0.hc_attn_fn.weight', 'blk.0.hc_attn_scale.weight', 'blk.0.hc_ffn_base.weight', 'blk.0.hc_ffn_fn.weight']
+head : []
+blk.0 : ['blk.0.attn_kv.weight', 'blk.0.attn_kv_a_norm.weight', 'blk.0.attn_norm.weight', 'blk.0.attn_output_a.weight', 'blk.0.attn_output_b.weight', 'blk.0.attn_q_a.weight']
+  ```
+
+### 🤖 Assistant
+
+⏵ Cause trouvée : la tête s'appelle `output_hc_*` (pas `hc_head_*`). Correction et garde-fou.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/llama.cpp && grep -n \"HC_HEAD_FN\\|HC_HEAD_BASE\\|HC_HEAD_SCALE\" src/llama-arch.cpp | head -4", "description": "Confirm the GGUF tensor names for the head"}`
+
+  ```
+471:    { LLM_TENSOR_HC_HEAD_FN,                             "output_hc_fn" },
+472:    { LLM_TENSOR_HC_HEAD_BASE,                           "output_hc_base" },
+473:    { LLM_TENSOR_HC_HEAD_SCALE,                          "output_hc_scale" },
+673:    {LLM_TENSOR_HC_HEAD_FN,                 {LLM_TENSOR_LAYER_OUTPUT,    GGML_OP_MUL_MAT}},
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='drave-core/src/model.rs'\ns=open(p).read()\nsubs=[]\nsubs.append((\n\"\"\"            let tete = if g.tensor(\"hc_head_fn.weight\").is_some() {\n                Some(Hc {\n                    melange: g.dequan … [2681 caractères tronqués]`
+
+  ```
+ok
+hyper-conn.   : 4 copies · 24 mélanges par couche (pre/post/comb) · Sinkhorn 20 itérations · eps 1e-6
+calculable    : oui (passe avant implémentée)
+  ```
+
+### 🤖 Assistant
+
+⏵ Nouvelle exécution complète de V4-Flash (43 couches) pour comparaison à la référence.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 3000 ./drave-core/target/release/drave /home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek-V4-Flash-UD-IQ1_M/DeepSeek-V4-Flash-UD-IQ1_M-00001-of-00003.gguf --ppl /tmp/ids_v4flash.txt --ctx 32 --limit 10 --dense --threads 1 … [118 caractères tronqués]`
+
+  ```
+started background job bash-146
+  ```
+
+- **job_output** `{"job_id": "bash-146", "timeout_ms": 1500000, "wait": true}`
+
+  ```
+[config] mélanges d'experts chargés : 43/43 couches · mapping absent (experts en clair dans le fichier)
+[config] puits appris sur 43/43 couches · n_rot 64 · ffn 0 · experts 256
+[config] fenêtre glissante 128 sur 43/43 couches (motif 0, toutes)
+[config] rotation : RoPE simple (contexte 32 ≤ 65536 initial ; YaRN ×16 prendrait le relais au-delà)
+[tête 4 bits] 129280 × 4096 → 4.50 b/poids, 0 Mo, 0.0 s
+
+thread 'main' (844702) panicked at src/model.rs:1322:38:
+range end index 81920 out of range for slice of length 65536
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+timeout: the monitored command dumped core
+[status: completed, exit code: 0]
+  ```
+
+### 👤 Utilisateur
+
+continue, en même temps lance un agent de documentation pour le vocabulaire et notions de docs et reports. Produit un document de référence pour tous les acronymes, abbréviations, concepts avec les références externes nécessaires pour qu'un néophyte puisse se familiariser avec le domaine au point de pouvoir lire et comprendre tous les documents.
+
+### 🤖 Assistant
+
+⏵ Deux fronts : agent de documentation (glossaire) en parallèle, et diagnostic de la panique V4.
+
+- **subagent** `{"description": "Glossaire de référence du dépôt", "prompt": "Tu écris un **document de référence** pour le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet : un **glossaire raisonné** de tout le vocabulaire, sigles, abréviations et notions employés dans `docs/` et `reports/`, destiné à un **né … [3513 caractères tronqués]`
+
+  ```
+started subagent 3d5618a0-4e3a-45bb-943d-a72c753fb7da
+  ```
+
+### 🤖 Assistant
+
+⏵ Diagnostic de la panique (ligne 1322) pendant que l'agent documente.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '1305,1330p' drave-core/src/model.rs", "description": "Inspect the panic site at line 1322"}`
+
+  ```
+for d in 0..hc { c[d + src * hc] /= s; }
+        }
+    };
+    norm_src(comb);
+    for _ in 1..iters { norm_dst(comb); norm_src(comb); }
+}
+
+impl Hc {
+    pub fn hc_mix(&self) -> usize { 2 * self.hc + self.hc * self.hc }
+
+    /// Les `24` mélanges d'un jeton : `hc_fn · rms_norm(x aplati)`.
+    pub fn melanges(&self, x: &[f32]) -> Vec<f32> {
+        let hc_dim = self.hc * self.h;
+        let mut plat = vec![0f32; hc_dim];
+        rms_norm_sans_poids(&x[..hc_dim.min(x.len())], 1e-20, &mut plat);
+        let mut out = vec![0f32; self.hc_mix()];
+        for (m, o) in out.iter_mut().enumerate() {
+            let ligne = &self.melange[m * hc_dim..(m + 1) * hc_dim];
+            let mut acc = 0f32;
+            for i in 0..hc_dim { acc += ligne[i] * plat[i]; }
+            *o = acc;
+        }
+        out
+    }
+
+    /// Les trois sorties d'un `hc_pre` : `pre`, `post`, `comb`.
+  ```
+
+### 🤖 Assistant
+
+⏵ Cause : la tête n'a que `hc` sorties (pas 24). Fonction de tête dédiée.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='drave-core/src/model.rs'\ns=open(p).read()\nsubs=[]\nsubs.append((\n\"\"\"    /// `hc_pre` : l'entrée de la sous-couche est le **mélange** des copies.\"\"\",\n\"\"\"    /// **Mélange de tête** (`build_hc_head` … [2088 caractères tronqués]`
+
+  ```
+ok
+    attention : 0.00 M paires (requête, clé) par token
+    projections : 0.0 M événements par token
+    paires (poids × activation) par token : attention 5598.6 M · experts 7214.2 M · partagé 1703.9 M · scores 0 K · total 14516.8 M
+    dont en listes (une paire y est un événement) : 0.0 M — le reste est dense (déquantifié ou f32)
+    part de l'attention dans le flux total : 38.6 %
+    postes (ms/token) : projets-attn 0.00 | rope 0.00 | attention 5847.19 | proj+mlp 45018.04 | somme 50865.22 | reste (tête + échantillonnage) 286.57
+    dont tête de sortie 240.12 | notation log-sum-exp 1.28 (le reste du « reste » n'est pas chronométré)
+    dont attention : scores 0.00 | softmax 0.00 | somme pondérée + écriture KV 5847.19
+  ```
+
+### 🤖 Assistant
+
+⏵ V4-Flash tourne en entier : comparaison de la perplexité à llama.cpp.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 3000 ./drave-core/target/release/drave /home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek-V4-Flash-UD-IQ1_M/DeepSeek-V4-Flash-UD-IQ1_M-00001-of-00003.gguf --ppl /tmp/ids_v4flash.txt --ctx 32 --limit 10 --dense --threads 1 … [238 caractères tronqués]`
+
+  ```
+9 tokens notés — perplexité cumulée 678.087  (0.1 tok/s)
+=== perplexité 678.0873 sur 9 tokens (0 événements, 80.0 s) ===
+--- référence llama.cpp ---
+NLL moy 6.306855 · perplexité 548.317778 (9 positions)
+  ```
+
+### 🤖 Assistant
+
+⏵ Analyse par position : logits Drave vs référence pour localiser l'écart de 0,21 nat.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 3000 ./drave-core/target/release/drave /home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek-V4-Flash-UD-IQ1_M/DeepSeek-V4-Flash-UD-IQ1_M-00001-of-00003.gguf --ppl /tmp/ids_v4flash.txt --ctx 32 --limit 10 --dense --threads 1 … [179 caractères tronqués]`
+
+  ```
+dont tête de sortie 9.78 | notation log-sum-exp 1.33 (le reste du « reste » n'est pas chronométré)
+    dont attention : scores 0.00 | softmax 0.00 | somme pondérée + écriture KV 5871.51
+-rw-r--r--. 1 stephane stephane 4654088  2 oct 15:15 /tmp/drave_v4_logits.bin
+-rw-r--r--. 1 stephane stephane 4654088  2 oct 14:01 /tmp/ref_idx.bin
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c \"\nimport struct, math\nids=[int(x) for x in open('/tmp/ids_v4flash.txt').read().replace(',',' ').split()]\ndef lire(p):\n    b=open(p,'rb').read()\n    nv, npos = struct.unpack('<ii', b[:8])\n    v=struct.unpack(f'<{npos … [575 caractères tronqués]`
+
+  ```
+drave  n_vocab 129280 · 9 positions · NLL moy 6.519276
+       par position : 8.034 15.200 10.352 2.572 4.662 10.057 7.556 0.238 0.002
+ref    n_vocab 129280 · 9 positions · NLL moy 6.306855
+       par position : 7.686 14.871 10.676 2.017 4.288 9.611 7.351 0.258 0.003
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c \"\nimport struct, math\ndef lire(p):\n    b=open(p,'rb').read()\n    nv, npos = struct.unpack('<ii', b[:8])\n    return nv, npos, struct.unpack(f'<{npos*nv}f', b[8:8+4*npos*nv])\nnv,npos,d = lire('/tmp/drave_v4_logits.bin … [588 caractères tronqués]`
+
+  ```
+pos 0: corr 0.987580 · ecart max 2.8488 · argmax drave 5 ref 201 DIFF · top-1 ref 17.020 drave 16.360
+pos 1: corr 0.998431 · ecart max 1.2268 · argmax drave 20971 ref 20971 = · top-1 ref 21.410 drave 21.765
+pos 2: corr 0.998109 · ecart max 2.0433 · argmax drave 201 ref 201 = · top-1 ref 21.427 drave 21.227
+pos 3: corr 0.997878 · ecart max 1.7568 · argmax drave 5983 ref 5983 = · top-1 ref 24.246 drave 23.999
+pos 4: corr 0.998096 · ecart max 1.7990 · argmax drave 201 ref 201 = · top-1 ref 24.687 drave 24.322
+pos 5: corr 0.997455 · ecart max 2.0582 · argmax drave 223 ref 539 DIFF · top-1 ref 20.647 drave 20.426
+pos 6: corr 0.997683 · ecart max 1.7234 · argmax drave 5 ref 5 = · top-1 ref 19.046 drave 18.846
+pos 7: corr 0.998161 · ecart max 1.9337 · argmax drave 102771 ref 102771 = · top-1 ref 24.729 drave 25.011
+pos 8: corr 0.991422 · ecart max 2.6127 · argmax drave 402 ref 402 = · top-1 ref 28.911 drave 29.092
+  ```
+
+### 🤖 Assistant
+
+⏵ Test décisif : comparaison de l'état **après la 42ᵉ couche** (avant la tête).
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && rm -f /tmp/ref_fin-*.bin && LD_LIBRARY_PATH=/home/stephane/Data13TB/stephane/GitHub/llama.cpp/build/bin REF_DUMP=/tmp/ref_fin REF_TENSORS='^l_last-42$' timeout 3000 ./tools/ref_logits /home/stephane/Data13TB/stephane/modeles/gguf/Dee … [626 caractères tronqués]`
+
+  ```
+-rw-r--r--. 1 stephane stephane 655384  2 oct 15:22 /tmp/ref_fin-l_last-42.bin
+# l_last-42 : référence ne=(4096, 4, 10, 1) → 4096 valeurs × 4 copies
+  pos 0 : écart max 2.943e+03 (indice 8362, dynamique 9.189e+03) · corrélation 0.981563 ❌
+  pos 1 : écart max 3.110e+00 (indice 14484, dynamique 1.101e+02) · corrélation 0.998158 ❌
+  pos 2 : écart max 8.242e+00 (indice 14484, dynamique 1.326e+02) · corrélation 0.995250 ❌
+  pos 3 : écart max 9.398e+00 (indice 6835, dynamique 1.127e+02) · corrélation 0.995397 ❌
+  pos 4 : écart max 1.116e+01 (indice 14484, dynamique 1.386e+02) · corrélation 0.993912 ❌
+  pos 5 : écart max 6.849e+00 (indice 9368, dynamique 1.665e+02) · corrélation 0.993984 ❌
+  pos 6 : écart max 6.722e+00 (indice 15365, dynamique 1.916e+02) · corrélation 0.997338 ❌
+  pos 7 : écart max 6.372e+00 (indice 6835, dynamique 1.959e+02) · corrélation 0.995439 ❌
+  pos 8 : écart max 1.620e+01 (indice 15027, dynamique 1.299e+02) · corrélation 0.985235 ❌
+  ```
+
+### 👤 Utilisateur
+
+Agent 3d5618a0-4e3a-45bb-943d-a72c753fb7da sent a message:
+LIVRÉ : `docs/glossaire.md` (nouveau, 1630 lignes, ~14 000 mots). Aucun autre fichier de ma part.
+
+CONTENU : mode d'emploi + parcours de lecture néophyte (vision → histoire → roadmap → format-flux → sprints → rapport-inference → croisement push/pull → contexte-long → format-clusters → plan-deepseek41) ; **187 entrées** réparties en 7 thèmes, classées alphabétiquement (vérifié par script), chacune avec forme développée FR/EN, définition sans prérequis, référence `chemin:ligne` du dépôt et source externe ; index des outils `tools/` + table des drapeaux CLI et des 39 variables `DRAVE_*` ; **21 points relevés non corrigés** avec citations ; **60 liens externes** (tous testés HTTP 200 ; les non vérifiables sont cités par titre sans lien).
+
+MÉTHODE : les 18 documents de `docs/` lus intégralement par moi ; les 60 rapports de `reports/`, les 9 `sprints/`, `tools/` et `drave-core/src/` dépouillés par 4 sous-agents (inventaires A-D avec file:line) ; vérifications directes dans le code (93 drapeaux, 39 variables, `ChargeFlux`, `PLAFOND_FLUX`, `--options-strict`).
+
+LES 3 POINTS LES PLUS IMPORTANTS (tous dans `docs/`, non corrigés) :
+1. `docs/contexte-long.md:399-401` attribue l'écart int8 aux VALEURS (« probablement la quantification des VALEURS et la précision du softmax ») alors que le §4.bis.3 du même fichier (`:176-197`) et `docs/roadmap.md:30` concluent « tout l'écart est dans les CLÉS » (+0,023 % contre +3,01 %).
+2. `docs/vision.md:74` liste `--ppl-profil` comme un outil existant, et `docs/contexte-long.md:520` s'appuie dessus ; or `reports/rapport-drapeaux-ignores.md:97` le classe « jamais lu » et le code n'a qu'un champ mort (`drave-core/src/main.rs:541`, aucune branche CLI) — le drapeau n'existe pas.
+3. `reports/bilan-multi-materiel.md:96` affirme « 8 % plus rapide que le dense (15,8 contre 14,7 tok/s) », exactement le chiffre que `reports/rapport-croisement-push-pull.md:66-71` déclare faux (« C'est faux, et je l'ai mesuré deux fois » ; pull corrigé = 36,4 tok/s).
+Autres points notables : phases P1-P5 écrites deux fois dans `plan-deepseek41-complet.md` (statut « FAIT » puis « à faire ») ; mode 4 dit « à écrire » dans `plan-prefill-reparti.md:421` ; accuracy de 4 971 % dans `rapport-encodage.md:42` ; mmap « pas fait » dans `rapport-lecteur-multifichiers.md:267` contre « mappés » `:171` ; top-k GPU « pas encore branché » `rapport-gpu-topk-selection.md:347` contre « ✅ fait » `:164` ; croisement push/pull à 10 % (`rapport-analyse-flux.md:14`) contre 22 % ; `reports/` contient 60 fichiers, pas « une centaine » ; Hadamard/MTP/speculative decoding/MTok/s/Gbit/s/p50/p95 sont absents du corpus (MTP seulement dans `journal/`).
+
+ATTENTION (hors de mon périmètre) : `git status` montre `drave-core/src/model.rs` modifié (59+/13-, mtime 15:03) et des fichiers `journal/` modifiés/ajoutés — ce n'est PAS moi (je n'ai touché qu'à `docs/glossaire.md`, untracked). Probable travail parallèle du parent ou d'un autre agent ; à vérifier avant commit.
+
+### 👤 Utilisateur
+
+Background subagent 3d5618a0-4e3a-45bb-943d-a72c753fb7da finished and will do no further work unless you send it more.
+Its closing message:
+⏵ Livraison terminée
+
+`docs/glossaire.md` est écrit (1630 lignes, ~14 000 mots) — seul fichier créé, rien d'autre modifié de mon fait.
+
+- **187 entrées**, 7 thèmes classés alphabétiquement : le projet et sa méthode ; modèles et architectures ; formats et quantification ; le moteur Drave ; flux, protocole et transport ; répartition, matériel et énergie ; mesure et méthode. Chaque entrée donne forme développée FR/EN, définition sans prérequis, référence `chemin:ligne`, et source externe (60 liens, tous testés ; les non vérifiables cités par titre).
+- Plus : mode d'emploi, parcours de lecture néophyte en 9 étapes, index des outils `tools/`, table des drapeaux CLI et des variables `DRAVE_*`, **21 points relevés non corrigés**, liste des sources.
+- **Point 1** — `docs/contexte-long.md:399-401` attribue l'écart int8 aux valeurs, alors que `:176-197` du même fichier et `docs/roadmap.md:30` disent « tout l'écart est dans les CLÉS ».
+- **Point 2** — `docs/vision.md:74` liste `--ppl-profil` comme existant ; `reports/rapport-drapeaux-ignores.md:97` le dit « jamais lu » et le code n'a qu'un champ mort (`main.rs:541`) : le drapeau n'existe pas.
+- **Point 3** — `reports/bilan-multi-materiel.md:96` reprend « 8 % plus rapide que le dense (15,8 contre 14,7 tok/s) », le chiffre même que `reports/rapport-croisement-push-pull.md:66-71` déclare faux (pull corrigé : 36,4 tok/s).
+- Autres : phases P1-P5 dupliquées dans `plan-deepseek41-complet.md` (FAIT puis à faire) ; `plan-prefill-reparti.md:421` dit le mode 4 « à écrire » alors qu'il est mesuré ; accuracy de 4 971 % en `rapport-encodage.md:42` ; `reports/` compte 60 fichiers, pas « une centaine ».
+- Signalé au parent : `drave-core/src/model.rs` est modifié dans l'arbre de travail (mtime 15:03) sans que ce soit moi — probable travail parallèle, à vérifier avant commit.
+
+### 🤖 Assistant
+
+⏵ Profil de divergence couche par couche (l'écart est-il cumulatif ou localisé ?).
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && rm -f /tmp/ref_prof-*.bin && LD_LIBRARY_PATH=/home/stephane/Data13TB/stephane/GitHub/llama.cpp/build/bin REF_DUMP=/tmp/ref_prof REF_TENSORS='^l_last-(4|8|12|16|20|24|28|32|36|40|42)$' timeout 3000 ./tools/ref_logits /home/stephane/Da … [727 caractères tronqués]`
+
+  ```
+couche 4  pos 4 : écart max 2.706e-02 (indice 1048, dynamique 1.486e+00) · corrélation 0.999447 ~
+couche 8  pos 4 : écart max 1.046e-01 (indice 4953, dynamique 1.462e+00) · corrélation 0.998420 ❌
+couche 12  pos 4 : écart max 1.734e-01 (indice 11149, dynamique 2.214e+00) · corrélation 0.995734 ❌
+couche 16  pos 4 : écart max 3.851e-01 (indice 4402, dynamique 4.171e+00) · corrélation 0.991351 ❌
+couche 20  pos 4 : écart max 1.443e+00 (indice 5170, dynamique 1.060e+01) · corrélation 0.991455 ❌
+couche 24  pos 4 : écart max 1.097e+00 (indice 5416, dynamique 8.683e+00) · corrélation 0.991923 ❌
+couche 28  pos 4 : écart max 1.176e+00 (indice 5416, dynamique 3.388e+01) · corrélation 0.993912 ❌
+couche 32  pos 4 : écart max 1.439e+00 (indice 6763, dynamique 2.354e+01) · corrélation 0.993363 ❌
+couche 36  pos 4 : écart max 2.205e+00 (indice 6596, dynamique 3.391e+01) · corrélation 0.994285 ❌
+couche 40  pos 4 : écart max 3.764e+00 (indice 6566, dynamique 3.142e+01) · corrélation 0.991530 ❌
+couche 42  pos 4 : écart max 1.116e+01 (indice 14484, dynamique 1.386e+02) · corrélation 0.993912 ❌
+  ```
+
+### 🤖 Assistant
+
+⏵ Mesure du plancher de reproductibilité de la référence (llama.cpp contre lui-même).
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"n_threads\\b\" tools/ref_logits.cpp | head -6", "description": "Find the thread option in ref_logits"}`
+
+  ```
+143:    int n_threads = (int) (hw == 0 ? 4 : (hw > 16 ? 16 : hw));
+144:    cparams.n_threads       = n_threads;
+145:    cparams.n_threads_batch = n_threads;
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '135,146p' tools/ref_logits.cpp", "description": "See how thread count is chosen"}`
+
+  ```
+}
+    cparams.n_batch       = (uint32_t) N;
+    cparams.n_ubatch      = (uint32_t) N;       // un seul batch physique
+    cparams.n_outputs_max = (uint32_t) N;
+    cparams.n_seq_max     = 1;
+    cparams.embeddings    = false;
+    cparams.flash_attn_type = LLAMA_FLASH_ATTN_TYPE_DISABLED;
+    unsigned hw = std::thread::hardware_concurrency();
+    int n_threads = (int) (hw == 0 ? 4 : (hw > 16 ? 16 : hw));
+    cparams.n_threads       = n_threads;
+    cparams.n_threads_batch = n_threads;
+  ```
+
+### 🤖 Assistant
+
+⏵ Ajout de `REF_THREADS` à `ref_logits` pour mesurer sa propre reproductibilité.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='tools/ref_logits.cpp'\ns=open(p).read()\na=\"\"\"    unsigned hw = std::thread::hardware_concurrency();\n    int n_threads = (int) (hw == 0 ? 4 : (hw > 16 ? 16 : hw));\"\"\"\nb=\"\"\"    unsigned hw = std::thr … [2344 caractères tronqués]`
+
+  ```
+ok
+/tmp/ref_t4-l_last-42.bin
+# l_last-42 : référence ne=(4096, 4, 10, 1) → 4096 valeurs × 4 copies
+llama.cpp 4 fils contre 16 fils, couche 42 pos 4 : ecart max 0.0000 · dynamique 138.6 · corr 1.000000
+  ```
+
+### 🤖 Assistant
+
+⏵ La référence est **bit-déterministe** : l'écart vient de nos activations exactes vs quantifiées. Je vérifie d'abord la duplication signalée dans le plan.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"^### P[0-9]\" docs/plan-deepseek41-complet.md", "description": "Check for duplicated phase sections"}`
+
+  ```
+144:### P0 — Le harnais, sur V4-Flash, et le coût d'un jeton (≈ 3 h) — **FAIT** (02/10)
+164:### P1 — Hyper-connexions : les connexions pondérées (≈ ½ journée) — **FAIT** (02/10)
+171:### P1 — Hyper-connexions : les connexions pondérées (≈ ½ journée)
+188:### P2 — Épilogue d'attention : dé-rotation, puits, sortie groupée (≈ 3 h) — **FAIT** (02/10)
+196:### P2 — Épilogue d'attention : dé-rotation, puits, sortie groupée (≈ 3 h)
+208:### P3 — Les couches brutes, de bout en bout (≈ 2 h) — **FAIT pour V4-Flash** (02/10)
+217:### P3 — Les couches brutes, de bout en bout (≈ 2 h)
+226:### P4 — Compresseur et HCA : le premier flux qui n'existe nulle part (≈ ½ journée) — **HCA FAIT** (02/10)
+239:### P4 — Compresseur et HCA : le premier flux qui n'existe nulle part (≈ ½ journée)
+252:### P5 — Indexeur et CSA : la liste de candidats (≈ 1 à 2 journées) — **FAIT** (02/10, sauf porte longue)
+267:### P5 — Indexeur et CSA : la liste de candidats (≈ 1 à 2 journées) — le gros morceau
+287:### P6 — V4-Flash complet, en listes, et **sur plusieurs grappes** (≈ 1 journée)
+303:### P7 — Adaptation à V4.1, et la question de provenance (≈ ½ journée + action externe)
+317:### P8 — Engram : la liste d'adresses, et sa ré
+… [127 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport re\np='docs/plan-deepseek41-complet.md'\nlignes=open(p).read().split('\\n')\nvues={}\na_supprimer=[]\nfor i,l in enumerate(lignes):\n    m=re.match(r'^### (P[0-9]) — ', l)\n    if m:\n        ph=m.group(1) … [442 caractères tronqués]`
+
+  ```
+titres en double à retirer : [(170, '### P1 — Hyper-connexions : les connexions pondérées (≈ ½ jo'), (195, "### P2 — Épilogue d'attention : dé-rotation, puits, sortie g"), (216, '### P3 — Les couches brutes, de bout en bout (≈ 2 h)'), (238, "### P4 — Compresseur et HCA : le premier flux qui n'existe n"), (266, '### P5 — Indexeur et CSA : la liste de candidats (≈ 1 à 2 jo')]
+144:### P0 — Le harnais, sur V4-Flash, et le coût d'un jeton (≈ 3 h) — **FAIT** (02/10)
+164:### P1 — Hyper-connexions : les connexions pondérées (≈ ½ journée) — **FAIT** (02/10)
+187:### P2 — Épilogue d'attention : dé-rotation, puits, sortie groupée (≈ 3 h) — **FAIT** (02/10)
+206:### P3 — Les couches brutes, de bout en bout (≈ 2 h) — **FAIT pour V4-Flash** (02/10)
+223:### P4 — Compresseur et HCA : le premier flux qui n'existe nulle part (≈ ½ journée) — **HCA FAIT** (02/10)
+248:### P5 — Indexeur et CSA : la liste de candidats (≈ 1 à 2 journées) — **FAIT** (02/10, sauf porte longue)
+282:### P6 — V4-Flash complet, en listes, et **sur plusieurs grappes** (≈ 1 journée)
+298:### P7 — Adaptation à V4.1, et la question de provenance (≈ ½ journée + action externe)
+312:### P8 — Engram : la liste d'adresses, et sa référence 
+… [119 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Traitement des trois points documentaires signalés (contradiction KV, drapeau fantôme, chiffre réfuté).
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '396,404p' docs/contexte-long.md; echo \"=== vision:74 ===\"; sed -n '72,76p' docs/vision.md; echo \"=== ppl-profil dans le code ===\"; grep -rn '\"--ppl-profil\"' drave-core/src/main.rs | head -2; grep -rn \"ppl_profil\" drav … [85 caractères tronqués]`
+
+  ```
+« llama.cpp calcule ses clés en f16 avant de les quantifier » a été testée
+(`DRAVE_KV_F16=1`, arrondi à 10 bits de mantisse dans les boucles de
+quantification) — **perplexité identique au chiffre près** (10,6231 avec et sans,
+à 2 048 jetons). L'écart de +3,0 % contre +0,8 % à 8 192 vient donc d'ailleurs :
+probablement la quantification des VALEURS et la précision du softmax, pas
+l'arrondi des clés.
+
+
+## 5. YaRN à retardement : ce que la mesure a dit
+=== vision:74 ===
+| `--profil-neurones` | quels neurones s'activent, couche par couche (le `--profil-experts` d'origine n'existe pas) |
+| `[config]` sur chaque exécution | quel chemin est **réellement** actif (rotation, cache KV, MLA, experts…) |
+| `--ppl-profil` | le temps par poste (projections, rope, attention, FFN, tête) |
+| journal de session | l'historique de tout ce qui a été mesuré, archivé à chaque commit |
+
+=== ppl-profil dans le code ===
+541:    logits_bin: Option<String>, ppl_profil: bool,
+4295:        ppl_profil, lot, profil_neurones, neurones_sortie, trace_flux, trace_couches, flux_forcer,
+4493:    let profil = ppl_profil;
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"ppl-profil\\|ppl_profil\" drave-core/src/main.rs | head -5; echo \"=== bilan-multi 96 ===\"; sed -n '93,99p' reports/bilan-multi-materiel.md", "description": "Check the ppl-profil flag and the refuted figure"}`
+
+  ```
+541:    logits_bin: Option<String>, ppl_profil: bool,
+4295:        ppl_profil, lot, profil_neurones, neurones_sortie, trace_flux, trace_couches, flux_forcer,
+4493:    let profil = ppl_profil;
+=== bilan-multi 96 ===
+| « Fusion divergente au rang 0 » et « 7,53 G évts/s » | **Fausses** — un état partagé à deux contrats de nettoyage ; valeurs réelles 3,66 / 4,99 G |
+| Perplexité 20,29 (harnais Python) | **Invalidée** — `bpe_np.py` s'écarte du vrai pré-tokenizer Qwen2 sur 5 points (5,2 % d'identifiants). Le tokenizer Rust est conforme 737/737 ; la mesure est à reprendre |
+| « 27 PE suffisent, 3 % de la logique » | **Corrigée** — en comptant le lecteur : 51 voies, 41 % de la logique et 41 % de la M20K |
+| « Le mode liste coûte 8 % face au dense » | **Périmée** — après suppression de la liste des destinations touchées, il est **8 % plus rapide** que le dense (15,8 contre 14,7 tok/s) |
+| « Le FPGA n'a pas NVLink / les RTX 5000 non plus » | **Corrigée** — l'utilisateur avait raison, 25,78 Go/s mesurés par lien |
+| « L'architecture convertit la sparsité en vitesse » | **Nuancée** — 10× moins d'événements ne donnent que 2× de vitesse (localité du scatter et taille d'accumulateur) |
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '58,75p' reports/rapport-croisement-push-pull.md", "description": "Read the refutation in the crossing report"}`
+
+  ```
+**Toute la thèse du projet tient donc à une seule question : la densité
+d'activation.** Un LLM dense se place exactement du mauvais côté du croisement,
+et c'est pourquoi le mode événementiel n'a jamais rendu le débit promis. Un
+réseau entraîné à décharger se place du bon côté, avec une marge confortable.
+
+## 3. Correction d'une affirmation antérieure
+
+Le rapport d'inférence annonçait : « le mode liste est maintenant 8 % plus
+rapide que le noyau dense (15,8 contre 14,7 tok/s) ». **C'est faux, et je l'ai
+mesuré deux fois.** Le produit scalaire du noyau dense accumulait en **i64 sur
+toute la ligne**, ce qui empêchait toute vectorisation ; réécrit avec une
+accumulation i32 par tranches de 256 (reportée en i64), il passe de 14,7 à
+**36,4 tok/s** :
+
+| | tok/s | PPL |
+|---|---|---|
+| push (événements) | 15,59 | 24,8995 |
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nedits = {\n'docs/contexte-long.md': [\n (\"\"\"L'écart de +3,0 % contre +0,8 % à 8 192 vient donc d'ailleurs :\nprobablement la quantification des VALEURS et la précision du softmax, pas\nl'arrondi des clés.\"\"\ … [1782 caractères tronqués]`
+
+  ```
+ok docs/contexte-long.md
+ok docs/vision.md
+ok reports/bilan-multi-materiel.md
+  ```
+
+### 🤖 Assistant
+
+⏵ Commit du glossaire, des correctifs et de l'exécution complète de V4-Flash.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && wc -l docs/glossaire.md && bash tools/portes.sh rapide 2>&1 | head -3 && git add -A docs/ reports/ drave-core/src/ tools/ && git commit -q -F - <<'EOF'\nV4-Flash tourne en ENTIER · glossaire de référence · trois points doc corrigés\n … [2394 caractères tronqués]`

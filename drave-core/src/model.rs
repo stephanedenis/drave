@@ -151,14 +151,20 @@ pub fn manques_architecture(g: &Gguf, cfg: &Cfg, ctx: usize, clusters: bool) -> 
     if quelque_part("attn_derope") {
         manques.push("attention V4 : dé-rotation de sortie");
     }
-    // La clé des ratios est `attention.compress_ratios` (liste par couche), pas
-    // `compress_ratios` : la chercher sous le mauvais nom faisait dire
-    // « calculable » à V4-Flash, dont 41 couches sur 44 sont compressées
-    // (21 CSA + 20 HCA, mesuré : `tools/lire_meta_gguf.py`). Un faux « oui » est
-    // pire qu'un refus : il fait calculer faux sans rien dire.
-    if g.cfg_ou(&["attention.compress_ratios", "compress_ratios"]).is_some()
-        || g.json_brut("compress_ratios").is_some() {
-        manques.push("attentions compressées CSA/HCA (compress_ratios, candidate_*)");
+    // Les **attentions compressées** (CSA ratio 4, HCA ratio 128) et leur
+    // **indexeur** sont implémentés : `attn_v4` construit les blocs (softmax
+    // par canal, `ape`, norme, RoPE de bloc), le compresseur CSA chevauche, et
+    // l'indexeur note les blocs puis garde les meilleurs. Validé contre
+    // llama.cpp (`reports/rapport-v4-hca.md`). Ce n'est donc plus un manque.
+    //
+    // Rappel de ce que la lecture de cette clé a coûté : cherchée sous le nom
+    // `compress_ratios` au lieu de `attention.compress_ratios`, elle faisait
+    // dire « calculable » à V4-Flash sans que le moteur voie les 41 couches
+    // compressées sur 44. Un faux « oui » est pire qu'un refus.
+    if (g.cfg_ou(&["attention.compress_ratios", "compress_ratios"]).is_some()
+        || g.json_brut("compress_ratios").is_some())
+        && !quelque_part("attn_compressor_kv.weight") {
+        manques.push("attentions compressées : `attn_compressor_kv` absent du fichier");
     }
     // Ce message décrit le cache LATENT de la MLA « GLM/Kimi »
     // (`attn_kv_a_mqa`) : sur l'attention V4, qui a aussi un `attn_q_a` mais un
@@ -1341,6 +1347,28 @@ impl Hc {
         }
         sinkhorn(&mut comb, hc, self.iters, eps);
         HcSortie { pre, post, comb }
+    }
+
+    /// **Mélange de tête** (`build_hc_head`) : le `fn` de la tête n'a que `hc`
+    /// lignes — une par copie — et non `2·hc + hc²` comme celui d'une
+    /// sous-couche : elle ne produit ni `post` ni `comb`, seulement les poids
+    /// qui réduisent les `hc` copies en UN état. Sa `scale` fait aussi 1 valeur,
+    /// pas 3. Confondre les deux formes fait sortir de la tranche au 5ᵉ mélange
+    /// (c'est le plantage qui l'a dit).
+    pub fn tete(&self, x: &[f32]) -> Vec<f32> {
+        let hc_dim = self.hc * self.h;
+        let mut plat = vec![0f32; hc_dim];
+        rms_norm_sans_poids(&x[..hc_dim.min(x.len())], 1e-20, &mut plat);
+        let mut pre = vec![0f32; self.hc];
+        for (i, p) in pre.iter_mut().enumerate() {
+            let ligne = &self.melange[i * hc_dim..(i + 1) * hc_dim];
+            let mut acc = 0f32;
+            for j in 0..hc_dim { acc += ligne[j] * plat[j]; }
+            *p = 1.0 / (1.0 + (-(acc * self.scale[0] + self.base[i])).exp()) + self.eps;
+        }
+        let mut out = vec![0f32; self.h];
+        Hc::melanger(x, &pre, self.hc, self.h, &mut out);
+        out
     }
 
     /// `hc_pre` : l'entrée de la sous-couche est le **mélange** des copies.
@@ -2810,7 +2838,19 @@ reste non implémenté.");
             // Il est FACULTATIF : V4-Flash n'a pas de `hc_head_*` (le fichier
             // de V4.1 non plus, d'ailleurs), et l'exiger ferait paniquer un
             // modèle dont il ne manque qu'une réduction finale.
-            let tete = if g.tensor("hc_head_fn.weight").is_some() {
+            // Le tenseur s'appelle **`output_hc_*`** dans le GGUF (la variable
+            // de llama.cpp s'appelle `hc_head_*`, et chercher le nom de la
+            // variable fait croire que la tête est absente — le moteur paniquait
+            // alors à la norme finale, sur un état en `hc` copies normé par un
+            // vecteur de `h`).
+            let tete = if g.tensor("output_hc_fn.weight").is_some() {
+                Some(Hc {
+                    melange: g.dequant("output_hc_fn.weight"),
+                    base: g.dequant("output_hc_base.weight"),
+                    scale: g.dequant("output_hc_scale.weight"),
+                    hc: mult, h: cfg.hidden, iters, eps,
+                })
+            } else if g.tensor("hc_head_fn.weight").is_some() {
                 Some(Hc {
                     melange: g.dequant("hc_head_fn.weight"),
                     base: g.dequant("hc_head_base.weight"),
@@ -5175,6 +5215,15 @@ s'applique pas — utilisez --lot 1, ou réenregistrez sans DRAVE_TRACE_BLOCS");
         // Hyper-connexions : l'état résiduel naît en `hc` copies IDENTIQUES de
         // l'embarquement (la référence fait `ggml_repeat_4d(inp, n_embd, hc)`),
         // et chaque sous-couche les remélangera.
+        // Hyper-connexions SANS mélange de tête : le fichier ne dit pas comment
+        // réduire les `hc` copies en un état. Le dire vaut mieux que d'inventer
+        // une moyenne — c'est la question de provenance de V4.1 (P7).
+        if let Some((ha, _)) = self.hc.as_ref().map(|v| &v[0]) {
+            assert!(self.hc_tete.is_some(),
+                    "hyper-connexions sans `output_hc_fn` : le fichier ne dit pas \
+comment réduire les {} copies en un état avant la norme finale",
+                    ha.hc);
+        }
         if let Some((ha, _)) = self.hc.as_ref().map(|v| &v[0]) {
             let mut copies = Vec::with_capacity(ha.hc * h);
             for _ in 0..ha.hc { copies.extend_from_slice(&x); }
@@ -5904,10 +5953,7 @@ dynamique de {dyn_:.3e} (relatif {:.2e})", mx / dyn_.max(1e-9));
         // Mélange de TÊTE : les `hc` copies redeviennent un seul état, qui voit
         // ensuite la norme finale puis les logits (`build_hc_head`).
         if let Some(ht) = self.hc_tete.as_ref() {
-            let s = ht.sortie(&x);
-            let mut mel = vec![0f32; h];
-            Hc::melanger(&x, &s.pre, ht.hc, h, &mut mel);
-            x = mel;
+            x = ht.tete(&x);
         }
         if self.flux_brut || self.couche_fin < cfg.n_layer {
             return x;                       // nœud intermédiaire : flux brut

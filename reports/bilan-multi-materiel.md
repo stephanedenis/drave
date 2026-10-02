@@ -93,7 +93,7 @@ Questa ; chaîne Quartus Prime Standard 21.1.1 opérationnelle sur le vrai devic
 | « Fusion divergente au rang 0 » et « 7,53 G évts/s » | **Fausses** — un état partagé à deux contrats de nettoyage ; valeurs réelles 3,66 / 4,99 G |
 | Perplexité 20,29 (harnais Python) | **Invalidée** — `bpe_np.py` s'écarte du vrai pré-tokenizer Qwen2 sur 5 points (5,2 % d'identifiants). Le tokenizer Rust est conforme 737/737 ; la mesure est à reprendre |
 | « 27 PE suffisent, 3 % de la logique » | **Corrigée** — en comptant le lecteur : 51 voies, 41 % de la logique et 41 % de la M20K |
-| « Le mode liste coûte 8 % face au dense » | **Périmée** — après suppression de la liste des destinations touchées, il est **8 % plus rapide** que le dense (15,8 contre 14,7 tok/s) |
+| « Le mode liste coûte 8 % face au dense » | **Périmée**, mais la correction qui suit l'était aussi : le « 8 % plus rapide que le dense (15,8 contre 14,7 tok/s) » venait d'un noyau dense non vectorisé. Réécrit (accumulation i32 par tranches), le dense passe à **36,4 tok/s** et le push reste à 15,59 — le mode liste est donc **plus lent** sur un modèle dense. Voir `reports/rapport-croisement-push-pull.md` §3 |
 | « Le FPGA n'a pas NVLink / les RTX 5000 non plus » | **Corrigée** — l'utilisateur avait raison, 25,78 Go/s mesurés par lien |
 | « L'architecture convertit la sparsité en vitesse » | **Nuancée** — 10× moins d'événements ne donnent que 2× de vitesse (localité du scatter et taille d'accumulateur) |
 

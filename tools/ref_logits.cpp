@@ -141,6 +141,14 @@ int main(int argc, char ** argv) {
     cparams.flash_attn_type = LLAMA_FLASH_ATTN_TYPE_DISABLED;
     unsigned hw = std::thread::hardware_concurrency();
     int n_threads = (int) (hw == 0 ? 4 : (hw > 16 ? 16 : hw));
+    // REF_THREADS : change l'ORDRE de sommation des produits matriciels, donc
+    // les derniers bits du résultat. C'est ce qui permet de mesurer la
+    // reproductibilité de la référence ELLE-MÊME — sans quoi on ne peut pas
+    // dire si un écart entre deux moteurs est une erreur ou du bruit.
+    if (const char * t = std::getenv("REF_THREADS")) {
+        int v = std::atoi(t);
+        if (v > 0) { n_threads = v; }
+    }
     cparams.n_threads       = n_threads;
     cparams.n_threads_batch = n_threads;
 

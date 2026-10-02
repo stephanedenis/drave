@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 95.8 h |
+| Durée | 96.8 h |
 | Tours | 76 |
-| Messages | 4776 |
-| Appels d'outils | 4559 |
+| Messages | 4812 |
+| Appels d'outils | 4592 |
 | Fichiers touchés | 93 |
-| Commandes | 3938 |
-| Sous-agents | 28 |
-| Commits | 334 |
+| Commandes | 3967 |
+| Sous-agents | 29 |
+| Commits | 335 |
 | Compactages de contexte | 6 |
 
 ## Objectifs déclarés
@@ -3886,7 +3886,7 @@ L'écart résiduel est du **bruit** (49,5 % de signes positifs, plat en position
 
 ### Tour 76 — <goal_round> Objective: "Exécuter le plan docs/plan-deepseek41-complet.md phase par phase (P0→P9), en autonomie, en resp … [941 caractères tronqués]
 
-*118 appels d'outils.* Actions notables :
+*151 appels d'outils.* Actions notables :
 
 - bash — Check state and list compressed-layer tensors
 - bash — Compare HCA layer 3 and CSA layer 4 tensors
@@ -3902,11 +3902,11 @@ L'écart résiduel est du **bruit** (49,5 % de signes positifs, plat en position
 - bash — Read the comp plan (state_pos, n_visible)
 - bash — Confirm block rope positions
 - bash — Read V4-Flash rope parameters
-- … et 95 autres
+- … et 125 autres
 
 **Synthèse produite :**
 
-⏵ Pendant la porte : note du clamp SwiGLU dans le rapport.
+⏵ Commit du glossaire, des correctifs et de l'exécution complète de V4-Flash.
 
 ## 3. Travail accompli
 
@@ -4038,6 +4038,7 @@ L'écart résiduel est du **bruit** (49,5 % de signes positifs, plat en position
 - tour 74 — Audit plans moteur
 - tour 74 — Audit plans lot et modèles
 - tour 74 — Relecture adverse docs corrigés
+- tour 76 — Glossaire de référence du dépôt
 
 ### Commandes exécutées (échantillon)
 
@@ -4081,7 +4082,7 @@ L'écart résiduel est du **bruit** (49,5 % de signes positifs, plat en position
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 3898 autres
+- … et 3927 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4209,7 +4210,7 @@ L'écart résiduel est du **bruit** (49,5 % de signes positifs, plat en position
 
 ## 5. Erreurs rencontrées
 
-264 sorties en erreur ou divergentes. Les premières :
+266 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : a8f2635f8 docs: record which models this box is good at, and why src/llama-hparams.cpp:8:void llama_hparams::set_swa_pattern(uint32_t n_pattern, bool dense_first) { src/llama-hparams.h:308:    void se
 - **T1** : 511 tokens notés — perplexité cumulée 247.031  (4.9 tok/s) === perplexité 247.0308 sur 511 tokens (0 événements, 104.5 s) ===  ### B3 harmony assistant 511 --- ref --- 0.0 0.0 0:00 ls: cannot access '
@@ -4563,4 +4564,5 @@ L'écart résiduel est du **bruit** (49,5 % de signes positifs, plat en position
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && bash tools/portes.sh rapide 2>&1 | head -3; python3 - <<'PYEOF' p='docs/plan-deepseek41-complet.md' s=open
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF' p='reports/rapport-v4-hca.md' s=open(p).read() a="""## 5. Ce qui reste de P5 : l'index
 - V4 : le clamp SwiGLU (swiglu_clamp_exp, par couche) — un manque qui ne se voyait pas dans les premières couches" && git log --oneline -1
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && wc -l docs/glossaire.md && bash tools/portes.sh rapide 2>&1 | head -3 && git add -A docs/ reports/ drave-c
 

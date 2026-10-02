@@ -168,7 +168,6 @@ Une phase qui ne passe pas ses deux portes ne passe pas à la suivante.
 > **Validé contre llama.cpp** : `hc_attn_pre` concorde à **1e-7** (l'arrondi f32)
 > sur quatre positions — `reports/rapport-v4-couches-0-1.md`.
 
-### P1 — Hyper-connexions : les connexions pondérées (≈ ½ journée)
 
 - État résiduel en 4 copies ; par couche `hc_pre` (RMSNorm → `hc_fn` → 24
   mélanges → `pre` sigmoïde, `post` sigmoïde ×2, `comb` **Sinkhorn 20
@@ -193,7 +192,6 @@ Une phase qui ne passe pas ses deux portes ne passe pas à la suivante.
 > sur `attn_derope`. Trois bugs trouvés par la comparaison : `attn_norm` manqué,
 > puits mis à l'échelle, convention RoPE **NORM** (et non NEOX comme GLM/Kimi).
 
-### P2 — Épilogue d'attention : dé-rotation, puits, sortie groupée (≈ 3 h)
 
 - Dé-rotation (`attn_derope`) et sortie groupée (`attn_output_a` →
   `attn_output_b`, `o_groups = 8`). Les **puits par tête** (`attn_sinks`) sont
@@ -214,7 +212,6 @@ Une phase qui ne passe pas ses deux portes ne passe pas à la suivante.
 > « queue » de l'attention brute, sans effet à 4 positions — à traiter avant de
 > dépasser 128 jetons.
 
-### P3 — Les couches brutes, de bout en bout (≈ 2 h)
 
 - La couche 0 et la couche 1 de V4.1 (ratio 0) : toute la chaîne (embarquement,
   MLA, puits, dé-rotation, sortie groupée, experts IQ, résidu HC) **avant**
@@ -236,7 +233,6 @@ Une phase qui ne passe pas ses deux portes ne passe pas à la suivante.
 > **Reste pour P5** : le CSA (ratio 4), son compresseur à chevauchement, son
 > indexeur et le masque top-k.
 
-### P4 — Compresseur et HCA : le premier flux qui n'existe nulle part (≈ ½ journée)
 
 - `attn_compressor_kv` + `attn_compressor_norm` (+ `_ape`, `_gate` sur V4-Flash).
 - **Flux nouveau** : la **liste des blocs gardés** par le gate du compresseur.
@@ -264,7 +260,6 @@ Une phase qui ne passe pas ses deux portes ne passe pas à la suivante.
 > **porte longue** : le top-k ne change rien en deçà de 512 blocs (2 048 jetons),
 > donc sa justesse au-delà n'est pas encore mesurée — c'est écrit comme tel.
 
-### P5 — Indexeur et CSA : la liste de candidats (≈ 1 à 2 journées) — le gros morceau
 
 - `indexer.proj`, `indexer.attn_q_b`, `indexer.attn_k`, `indexer.k_norm`, les
   compresseurs d'indexeur, la sélection (`candidate_topk_blocks = 2048`,

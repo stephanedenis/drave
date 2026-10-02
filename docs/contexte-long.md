@@ -396,9 +396,11 @@ Un mot sur ce qui n'était PAS la cause de l'écart avec llama.cpp : l'hypothès
 « llama.cpp calcule ses clés en f16 avant de les quantifier » a été testée
 (`DRAVE_KV_F16=1`, arrondi à 10 bits de mantisse dans les boucles de
 quantification) — **perplexité identique au chiffre près** (10,6231 avec et sans,
-à 2 048 jetons). L'écart de +3,0 % contre +0,8 % à 8 192 vient donc d'ailleurs :
-probablement la quantification des VALEURS et la précision du softmax, pas
-l'arrondi des clés.
+à 2 048 jetons). L'écart de +3,0 % contre +0,8 % à 8 192 **ne vient pas des valeurs** : le
+§4.bis.3 ci-dessus l'attribue aux **clés** (`DRAVE_KV_K_F32=1` ramène l'écart à
++0,023 %, `DRAVE_KV_V_F32=1` ne change rien : +3,01 %), et `docs/roadmap.md`
+conclut de même. La phrase « probablement les valeurs et le softmax » qui
+figurait ici était une hypothèse d'avant la mesure.
 
 
 ## 5. YaRN à retardement : ce que la mesure a dit
