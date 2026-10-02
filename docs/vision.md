@@ -163,7 +163,16 @@ Ce qu'il faut définir, dans l'ordre :
 5. **les mesures faites** : **1 608 octets** par flux à 256 jetons, 0,25 Mbit/s,
    latence aller-retour jusqu'à 20 ms, attente ≈ calcul distant + 3,2 × latence
    (`docs/roadmap.md`) ; restent la granularité par bloc et le point où le réseau
-   coûte plus que le calcul économisé.
+   coûte plus que le calcul économisé ;
+6. **ce que le flux coûte selon l'architecture** : un modèle à
+   **hyper-connexions** (DeepSeek-V4) porte son état résiduel en `hc` copies —
+   son flux de coupure fait donc **`hc` fois** la taille d'un état ordinaire
+   (4 × 4 096 = 16 384 canaux pour V4-Flash, 64 Ko par flux en f32). Ce n'est
+   pas une hypothèse : réduire les copies au point de coupure change le modèle
+   (perplexité répartie 8 311 → 34 159, écart 3,11 alors que le transport est
+   exact), donc **le découpage d'un tel modèle est refusé** tant que le
+   protocole ne transporte pas les copies. Corollaire pour la suite : à flux
+   égal, un modèle à hyper-connexions se découpe **plus près du calcul**.
 
 Cette section mêle un **acquis** (le transport, fidèle à `0,00e0`) et une
 **hypothèse de travail** (placement, granularité). Elle est écrite

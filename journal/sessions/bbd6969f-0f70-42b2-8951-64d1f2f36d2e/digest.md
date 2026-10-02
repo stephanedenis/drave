@@ -77728,3 +77728,40 @@ ok
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && bash tools/portes.sh rapide 2>&1 | head -4; git add -A drave-core/src/ && git commit -q -F - <<'EOF'\nP6 : la coupure de grappe d'un modèle à hyper-connexions est REFUSÉE, pas approximée\n\nLe flux d'une coupure pour un modèle à hype … [1467 caractères tronqués]`
+
+  ```
+=== Portes ===
+  cargo test --release                       53 verts  ✅
+  Qwen2.5-0.5B ctx 256                       19.3885  ✅
+  Qwen3-30B en clusters (origine : 799,8557) 799.8557  ✅
+3fefbaf P6 : la coupure de grappe d'un modèle à hyper-connexions est REFUSÉE, pas approximée
+  ```
+
+### 🤖 Assistant
+
+⏵ Tenir la promesse du commit : noter dans la vision le coût `hc ×` du flux.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"1 608 octets\\|coût du transport\\|octets par flux\" docs/vision.md | head -5; sed -n '150,175p' docs/vision.md", "description": "Find the transport cost section in the vision"}`
+
+  ```
+163:5. **les mesures faites** : **1 608 octets** par flux à 256 jetons, 0,25 Mbit/s,
+254:| **3. Répartir sur machines** | **transport en place et fidèle** (`0,00e0`, protocole v5, cinq modes) ; mesuré : 1 608 octets/flux, 0,25 Mbit/s, latence ≤ 20 ms | ordonnanceur de placement ; granularité par bloc ; démonstration distante |
+1. **le contrat d'échange** : une tranche de liste = un en-tête (couche, source,
+   échelle, bits) + des paires (destination, valeur). Compact, vérifiable,
+   versionné ;
+2. **la granularité** : par couche ? par bloc de canaux ? par expert ? La mesure
+   dira où le coût de sérialisation rattrape le gain de parallélisme — le
+   croisement push/pull à ~22 % donne déjà l'ordre de grandeur de ce qu'on
+   transporte ;
+3. **le placement** : la même règle qu'à l'axe 2, appliquée entre machines — un
+   opérateur va là où son entrée est déjà, ou là où elle coûte le moins à
+   amener ;
+4. **ce qui ne se parallélise pas** : le décodage est **séquentiel** (un jeton
+   dépend du précédent) ; c'est le **préremplissage** qui est parallèle par
+   nature, et c'est donc là qu'il faut commencer ;
+5. **les mesures faites** : **1 608 octets** par flux à 256 jetons, 0,25 Mbit/s,
+ 
+… [559 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='docs/vision.md'\ns=open(p).read()\na=\"\"\"5. **les mesures faites** : **1 608 octets** par flux à 256 jetons, 0,25 Mbit/s,\n   latence aller-retour jusqu'à 20 ms, attente ≈ calcul distant + 3,2 × latence\n    … [1470 caractères tronqués]`

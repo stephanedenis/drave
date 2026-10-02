@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 97.3 h |
+| Durée | 97.4 h |
 | Tours | 76 |
-| Messages | 4831 |
-| Appels d'outils | 4611 |
+| Messages | 4833 |
+| Appels d'outils | 4613 |
 | Fichiers touchés | 93 |
-| Commandes | 3986 |
+| Commandes | 3988 |
 | Sous-agents | 29 |
-| Commits | 336 |
+| Commits | 337 |
 | Compactages de contexte | 6 |
 
 ## Objectifs déclarés
@@ -3886,7 +3886,7 @@ L'écart résiduel est du **bruit** (49,5 % de signes positifs, plat en position
 
 ### Tour 76 — <goal_round> Objective: "Exécuter le plan docs/plan-deepseek41-complet.md phase par phase (P0→P9), en autonomie, en resp … [941 caractères tronqués]
 
-*170 appels d'outils.* Actions notables :
+*172 appels d'outils.* Actions notables :
 
 - bash — Check state and list compressed-layer tensors
 - bash — Compare HCA layer 3 and CSA layer 4 tensors
@@ -3902,11 +3902,11 @@ L'écart résiduel est du **bruit** (49,5 % de signes positifs, plat en position
 - bash — Read the comp plan (state_pos, n_visible)
 - bash — Confirm block rope positions
 - bash — Read V4-Flash rope parameters
-- … et 144 autres
+- … et 146 autres
 
 **Synthèse produite :**
 
-⏵ Vérification que le modèle complet donne toujours le même chiffre, puis portes et commit.
+⏵ Tenir la promesse du commit : noter dans la vision le coût `hc ×` du flux.
 
 ## 3. Travail accompli
 
@@ -4082,7 +4082,7 @@ L'écart résiduel est du **bruit** (49,5 % de signes positifs, plat en position
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 3946 autres
+- … et 3948 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4566,4 +4566,5 @@ L'écart résiduel est du **bruit** (49,5 % de signes positifs, plat en position
 - V4 : le clamp SwiGLU (swiglu_clamp_exp, par couche) — un manque qui ne se voyait pas dans les premières couches" && git log --oneline -1
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && wc -l docs/glossaire.md && bash tools/portes.sh rapide 2>&1 | head -3 && git add -A docs/ reports/ drave-c
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && bash tools/portes.sh rapide 2>&1 | head -4; git add -A drave-core/src/ && git commit -q -F - <<'EOF' P6 : 
+- Vision : le flux d'un modèle à hyper-connexions coûte hc fois la taille d'un état (mesuré, et refusé tant que le protocole ne le porte pas)" && git log --onelin
 
