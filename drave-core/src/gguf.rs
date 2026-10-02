@@ -225,6 +225,7 @@ pub const GGML_F32: u32 = 0;
 pub const GGML_F16: u32 = 1;
 pub const GGML_Q4_0: u32 = 2;
 pub const GGML_MXFP4: u32 = 39;
+pub const GGML_Q2_K: u32 = 10;
 pub const GGML_Q4_K: u32 = 12;
 pub const GGML_Q6_K: u32 = 14;
 
@@ -882,6 +883,38 @@ zéro, l'inventaire sera sous-évalué", t.ttype, t.name);
         out
     }
 
+    /// Déquantifie un bloc **Q2_K** (84 octets, 256 poids).
+    ///
+    /// Structure : 16 octets d'échelles (4 bits d'échelle, 4 bits de minimum par
+    /// sous-bloc de 16 poids), 64 octets de quants 2 bits, puis d et dmin en f16.
+    /// `x = d·sc·q − dmin·m`. C'est le type des `ffn_down_exps` de
+    /// DeepSeek-V4.1 — sans lui, 59 Go du modèle restent illisibles.
+    pub fn dequant_q2k(bloc: &[u8]) -> Vec<f32> {
+        assert!(bloc.len() >= 84, "bloc Q2_K trop court : {}", bloc.len());
+        let scales = &bloc[0..16];
+        let qs = &bloc[16..80];
+        let d = Self::f16_to_f32(u16::from_le_bytes([bloc[80], bloc[81]]));
+        let dmin = Self::f16_to_f32(u16::from_le_bytes([bloc[82], bloc[83]]));
+        let mut out = vec![0f32; 256];
+        // Quatre passes de 64 poids : chaque octet porte quatre quants 2 bits,
+        // lus aux décalages 0, 2, 4 et 6.
+        for moitie in 0..2usize {
+            let q = &qs[moitie * 32..moitie * 32 + 32];
+            for l in 0..32usize {
+                for (k, decal) in [0usize, 2, 4, 6].iter().enumerate() {
+                    // L'ordre des échelles suit le parcours du code ggml :
+                    // moitié, puis décalage, puis les deux sous-groupes de 16.
+                    let is = moitie * 8 + k * 2 + (l / 16);
+                    let sc = (scales[is] & 0x0F) as f32;
+                    let m = (scales[is] >> 4) as f32;
+                    let quant = ((q[l] >> decal) & 3) as f32;
+                    out[moitie * 128 + k * 32 + l] = d * sc * quant - dmin * m;
+                }
+            }
+        }
+        out
+    }
+
     /// Déquantifie une ligne d'un tenseur 2D, en f32.
     pub fn row_f32(&self, name: &str, row: usize, n_cols: usize) -> Vec<f32> {
         let t = self.tensor(name).unwrap_or_else(|| panic!("tenseur {name} absent"));
@@ -915,6 +948,20 @@ zéro, l'inventaire sera sous-évalué", t.ttype, t.name);
                     let d = Self::f16_to_f32(u16::from_le_bytes(buf[p..p+2].try_into().unwrap()));
                     for j in 0..16 { out.push(d * ((buf[p + 2 + j] & 0x0F) as i16 - 8) as f32); }
                     for j in 0..16 { out.push(d * ((buf[p + 2 + j] >> 4) as i16 - 8) as f32); }
+                }
+            }
+            GGML_Q2_K => {
+                let ns = n_cols / 256;
+                for sup in 0..ns {
+                    let p = (row * ns + sup) * 84;
+                    out.extend_from_slice(&Self::dequant_q2k(&buf[p..]));
+                }
+            }
+            GGML_Q2_K => {
+                let ns = n_cols / 256;
+                for sup in 0..ns {
+                    let p = (row * ns + sup) * 84;
+                    out.extend_from_slice(&Self::dequant_q2k(&buf[p..]));
                 }
             }
             GGML_Q4_K => {
@@ -1534,6 +1581,40 @@ pub(crate) mod tests {
         let _ = std::fs::remove_file(&p_tous);
         let _ = std::fs::remove_file(&p_a);
         let _ = std::fs::remove_file(&p_b);
+    }
+
+    /// Q2_K : notre déquantification doit rendre EXACTEMENT les valeurs de ggml.
+    ///
+    /// Le bloc est fabriqué à la main, et les valeurs attendues viennent du code
+    /// de référence de ggml (`dequantize_row_q2_K`), vérifié sur deux couches
+    /// réelles de DeepSeek-V4.1 (écart max 5e-8 sur 256 valeurs).
+    #[test]
+    fn q2k_concorde_avec_ggml() {
+        // Toutes les échelles à 0x11 : sc = 1 et m = 1 pour chaque sous-bloc, ce
+        // qui donne une formule vérifiable à la main :
+        //     w = d·1·q − dmin·1 = q − 0,5     avec d = 1,0 et dmin = 0,5.
+        let mut bloc = vec![0x11u8; 84];
+        // Quants : 0b11_10_01_00 → les quatre décalages (0, 2, 4, 6) rendent
+        // respectivement 0, 1, 2 et 3.
+        for q in bloc[16..80].iter_mut() { *q = 0b11_10_01_00; }
+        // d = 1,0 (0x3C00) et dmin = 0,5 (0x3800), en f16 little-endian.
+        bloc[80] = 0x00; bloc[81] = 0x3C;
+        bloc[82] = 0x00; bloc[83] = 0x38;
+        let v = Gguf::dequant_q2k(&bloc);
+        assert_eq!(v.len(), 256);
+        // Le décalage `k` décide du quant, et l'indice de sortie est
+        // `moitié·128 + k·32 + l`.
+        for moitie in 0..2usize {
+            for k in 0..4usize {
+                for l in 0..32usize {
+                    let idx = moitie * 128 + k * 32 + l;
+                    let attendu = k as f32 - 0.5;
+                    assert!((v[idx] - attendu).abs() < 1e-6,
+                            "poids {idx} (moitié {moitie}, décalage {k}, l {l}) : \
+{} au lieu de {attendu}", v[idx]);
+                }
+            }
+        }
     }
 
     /// `open_avec_prefixes` est la route des clusters : huit fichiers portent

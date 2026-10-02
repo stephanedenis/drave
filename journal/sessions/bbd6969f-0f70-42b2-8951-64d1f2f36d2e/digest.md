@@ -54013,3 +54013,285 @@ tour 1 paresseux  : couches chargées en 7.124164425s
 ⏵ Quatrième fois que la prélecture ne donne rien (7,29 vs 7,47 s). Le mur est constant : le modèle tient en cache. Je consigne.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np = 'reports/rapport-optimisations-auto.md'\ns = open(p).read()\ns = s.replace('''## Ce qui a été mesuré puis retiré''',\n'''## Le mur qui revient : le modèle tient dans le cache\n\nQuatre mécanismes de prélecture o … [2917 caractères tronqués]`
+
+  ```
+ok
+f9a143b Prelecture : quatrieme mecanisme mesure, quatrieme fois sans effet
+copie : 274.7 Go / 365.7
+gpt-oss ctx 256 (attendu 15,1757) :
+  ```
+
+### 🤖 Assistant
+
+⏵ Copie à 75 %. Pour les heures restantes, le chantier le plus valorisant : débloquer les formats des modèles lourds. Je lis les formats dans ggml.
+
+- **bash** `{"command": "L=/home/stephane/Data13TB/stephane/GitHub/llama.cpp; grep -n \"block_iq1_m\\b\" -A 8 $L/ggml/src/ggml-common.h | head -14; echo \"=== IQ2_XXS ===\"; grep -n \"block_iq2_xxs\\b\" -A 8 $L/ggml/src/ggml-common.h | head -12; echo \"=== Q2_K ===\"; grep -n \"block_q2_K\\b\" -A 8 $L/ggml/src/ … [81 caractères tronqués]`
+
+  ```
+521:} block_iq1_m;
+522:static_assert(sizeof(block_iq1_m) == QK_K/8 + QK_K/16 + QK_K/32, "wrong iq1_m block size/padding");
+523-
+524-// Used by IQ1_M quants
+525-typedef union {
+526-    ggml_half f16;
+527-    uint16_t  u16;
+528-} iq1m_scale_t;
+529-
+530-// Non-linear quants
+=== IQ2_XXS ===
+468:} block_iq2_xxs;
+469:static_assert(sizeof(block_iq2_xxs) == sizeof(ggml_half) + QK_K/8*sizeof(uint16_t), "wrong iq2_xxs block size/padding");
+470-
+471-// 2.3125 bpw quants
+472-typedef struct {
+473-    ggml_half d;
+474-    uint16_t qs[QK_K/8];
+475-    uint8_t  scales[QK_K/32];
+476-} block_iq2_xs;
+477-static_assert(sizeof(block_iq2_xs) == sizeof(ggml_half) + QK_K/8*sizeof(uint16_t) + QK_K/32, "wrong iq2_xs block size/padding");
+=== Q2_K ===
+392:} block_q2_K;
+393:static_assert(sizeof(block_q2_K) == 2*sizeof(ggml_half) + QK_K/16 + QK_K/4, "wrong q2_K block size/padding");
+394-
+395-// 3-bit quantization
+396-// weight is represented as x = a * q
+397-// 16 blocks of 16 elements each
+398-// Effectively 3.4375 bits per weight
+399-typedef struct {
+400-    uint8_t hmask[QK_K/8]; // quants - high bit
+401-    uint8_t qs[QK_K/4];    // quants - low 2 bits
+  ```
+
+- **bash** `{"command": "L=/home/stephane/Data13TB/stephane/GitHub/llama.cpp; sed -n '505,522p' $L/ggml/src/ggml-common.h; echo \"=== Q2_K complet ===\"; sed -n '386,393p' $L/ggml/src/ggml-common.h; echo \"=== IQ2_XXS complet ===\"; sed -n '462,469p' $L/ggml/src/ggml-common.h", "description": "Read full block s … [11 caractères tronqués]`
+
+  ```
+} block_iq3_s;
+static_assert(sizeof(block_iq3_s) == sizeof(ggml_half) + 13*(QK_K/32) + IQ3S_N_SCALE, "wrong iq3_s block size/padding");
+
+// 1.5625 bpw
+typedef struct {
+    ggml_half d;
+    uint8_t  qs[QK_K/8];
+    uint16_t qh[QK_K/32];
+} block_iq1_s;
+static_assert(sizeof(block_iq1_s) == sizeof(ggml_half) + QK_K/8 + QK_K/16, "wrong iq1_s block size/padding");
+
+// 1.75 bpw
+typedef struct {
+    uint8_t  qs[QK_K/8];      // grid index, low 8 bits
+    uint8_t  qh[QK_K/16];     // grid index, high 3 bits + grid shift bit (for two groups of 8)
+    uint8_t  scales[QK_K/32]; // 3-bit block scales (4-bit if QK_K == 64)
+} block_iq1_m;
+static_assert(sizeof(block_iq1_m) == QK_K/8 + QK_K/16 + QK_K/32, "wrong iq1_m block size/padding");
+=== Q2_K complet ===
+        struct {
+            ggml_half d;    // super-block scale for quantized scales
+            ggml_half dmin; // super-block scale for quantized mins
+        } GGML_COMMON_AGGR_S;
+        ggml_half2 dm;
+    } GGML_COMMON_AGGR_U;
+} block_q2_K;
+static_assert(sizeof(block_q2_K) == 2*sizeof(ggml_half) + QK_K/16 + QK_K/4, "wrong q2_K block size/padding");
+=== IQ2_XXS complet ===
+// (Almost) "true" 2-bit quantization.
+// Due to the need to use 
+… [305 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Formats identifiés. J'implémente Q2_K (utilisé par V4.1), avec une référence ggml pour vérifier.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np = 'drave-core/src/gguf.rs'\ns = open(p).read()\na = '''    /// Déquantifie une ligne d'un tenseur 2D, en f32.'''\nb = '''    /// Déquantifie un bloc **Q2_K** (84 octets, 256 poids).\n    ///\n    /// Structure : 1 … [1694 caractères tronqués]`
+
+  ```
+ok
+BUILD 0
+  ```
+
+### 🤖 Assistant
+
+⏵ Mon index d'échelle est faux (le code ggml utilise `is + l/16`, pas ma formule). Je corrige et je vérifie.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '/dequantize_row_q2_K/,/^}/p' /home/stephane/Data13TB/stephane/GitHub/llama.cpp/ggml/src/ggml-quants.c | head -30", "description": "Read the reference Q2_K dequantization"}`
+
+  ```
+void dequantize_row_q2_K(const block_q2_K * GGML_RESTRICT x, float * GGML_RESTRICT y, int64_t k) {
+    assert(k % QK_K == 0);
+    const int nb = k / QK_K;
+
+    for (int i = 0; i < nb; i++) {
+
+        const float d = GGML_FP16_TO_FP32(x[i].d);
+        const float min = GGML_FP16_TO_FP32(x[i].dmin);
+
+        const uint8_t * q = x[i].qs;
+
+        int is = 0;
+        float dl, ml;
+        for (int n = 0; n < QK_K; n += 128) {
+            int shift = 0;
+            for (int j = 0; j < 4; ++j) {
+
+                uint8_t sc = x[i].scales[is++];
+                dl = d * (sc & 0xF); ml = min * (sc >> 4);
+                for (int l = 0; l < 16; ++l) *y++ = dl * ((int8_t)((q[l] >> shift) & 3)) - ml;
+
+                sc = x[i].scales[is++];
+                dl = d * (sc & 0xF); ml = min * (sc >> 4);
+                for (int l = 0; l < 16; ++l) *y++ = dl * ((int8_t)((q[l+16] >> shift) & 3)) - ml;
+
+                shift += 2;
+            }
+            q += 32;
+        }
+    }
+  ```
+
+### 🤖 Assistant
+
+⏵ L'ordre des échelles est `is = moitié×8 + shift×2 + (l/16)`. Je corrige et je vérifie contre ggml.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np = 'drave-core/src/gguf.rs'\ns = open(p).read()\ns = s.replace('''                for (k, decal) in [0usize, 2, 4, 6].iter().enumerate() {\n                    let is = moitie * 8 + (l / 16) * 2 + (k / 2);''',\n''' … [1316 caractères tronqués]`
+
+  ```
+compilé
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/verif_q2k.py <<'PY'\nimport struct, subprocess, sys\nsys.path.insert(0, 'tools')\nfrom analyse_experts_statique import Lecteur\nM = \"/home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek-V4.1-Flash-Q2/DeepSeek-V4.1-Flash … [1662 caractères tronqués]`
+
+  ```
+blk.0.ffn_down_exps.weight : dims [384, 5120, 2304] type 10
+ggml  (8 premiers) : ['-0.002666', '-0.002666', '-0.034046', '-0.002666', '-0.034046', '-0.002666', '-0.018356', '-0.002666']
+nous  (8 premiers) : ['-0.002666', '-0.002666', '-0.034046', '-0.002666', '-0.034046', '-0.002666', '-0.018356', '-0.002666']
+ecart max sur les 8 premiers : 4.73e-07
+CONCORDE
+  ```
+
+### 🤖 Assistant
+
+⏵ **Q2_K concorde avec ggml à 4,7e-7.** Je vérifie les 256 valeurs, puis j'intègre.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/ref_q2k2.c <<'EOF'\n#include <stdio.h>\n#include <stdlib.h>\n#include \"ggml.h\"\n#include \"ggml-common.h\"\n#include \"ggml-quants.h\"\nint main(int argc, char **argv) {\n    FILE *f = fopen(argv[1], \"rb\");\n    fseek( … [1842 caractères tronqués]`
+
+  ```
+blk.0.ffn_down_exps.weight       256 valeurs · ecart max 4.97e-08 · CONCORDE
+blk.20.ffn_down_exps.weight      256 valeurs · ecart max 4.92e-08 · CONCORDE
+  ```
+
+### 🤖 Assistant
+
+⏵ Q2_K validé (5e-8 sur 256 valeurs, deux couches). Je l'intègre au moteur.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"GGML_Q2_K\" drave-core/src/gguf.rs | head -3; grep -n \"            GGML_Q4_K => {\" drave-core/src/gguf.rs | head -2", "description": "Find integration points for Q2_K"}`
+
+  ```
+952:            GGML_Q4_K => {
+1283:            GGML_Q4_K => {
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np = 'drave-core/src/gguf.rs'\ns = open(p).read()\n# Constante + branche dans row_f32 + branche dans dequant.\ns = s.replace('''pub const GGML_Q4_K: u32 = 12;''',\n              '''pub const GGML_Q2_K: u32 = 10;\npub … [1387 caractères tronqués]`
+
+  ```
+ok
+error[E0425]: cannot find value `base` in this scope
+   --> src/gguf.rs:956:29
+    |
+956 |                     let p = base + (row * ns + sup) * 84;
+    |                             ^^^^ not found in this scope
+
+error[E0425]: cannot find value `base` in this scope
+   --> src/gguf.rs:957:65
+    |
+957 |                     let v = Self::dequant_q2k(&self.tbuf(t)[p - base..]);
+    |                                                                 ^^^^ not found in this scope
+
+error[E0425]: cannot find value `base` in this scope
+   --> src/gguf.rs:964:29
+BUILD 101
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '950,960p' drave-core/src/gguf.rs; python3 - <<'PY'\np = 'drave-core/src/gguf.rs'\ns = open(p).read()\ns = s.replace('''            GGML_Q2_K => {\n                let ns = n_cols / 256;\n                for sup in 0..ns {\n   … [678 caractères tronqués]`
+
+  ```
+for j in 0..16 { out.push(d * ((buf[p + 2 + j] >> 4) as i16 - 8) as f32); }
+                }
+            }
+            GGML_Q2_K => {
+                let ns = n_cols / 256;
+                for sup in 0..ns {
+                    let p = base + (row * ns + sup) * 84;
+                    let v = Self::dequant_q2k(&self.tbuf(t)[p - base..]);
+                    out.extend_from_slice(&v);
+                }
+            }
+error[E0425]: cannot find value `base` in this scope
+   --> src/gguf.rs:963:29
+    |
+963 |                     let p = base + (row * ns + sup) * 84;
+    |                             ^^^^ not found in this scope
+
+warning: type `io_result` should have an upper camel case name
+--
+error: could not compile `drave-core` (bin "drave") due to 1 previous error; 14 warnings emitted
+BUILD 101
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '958,970p' drave-core/src/gguf.rs; python3 - <<'PY'\np = 'drave-core/src/gguf.rs'\ns = open(p).read()\ns = s.replace('''            GGML_Q2_K => {\n                let ns = n_cols / 256;\n                for sup in 0..ns {\n   … [744 caractères tronqués]`
+
+  ```
+}
+            }
+            GGML_Q2_K => {
+                let ns = n_cols / 256;
+                for sup in 0..ns {
+                    let p = base + (row * ns + sup) * 84;
+                    let v = Self::dequant_q2k(&buf[p..]);
+                    out.extend_from_slice(&v);
+                }
+            }
+            GGML_Q4_K => {
+                let ns = n_cols / 256;
+                for sup in 0..ns {
+BUILD 0
+test result: ok. 35 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.13s
+  ```
+
+### 🤖 Assistant
+
+⏵ Ça compile. J'ajoute un test unitaire Q2_K avec les valeurs de référence.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np = 'drave-core/src/gguf.rs'\ns = open(p).read()\na = '''    /// `open_avec_prefixes` est la route des clusters'''\nb = '''    /// Q2_K : notre déquantification doit rendre EXACTEMENT les valeurs de ggml.\n    ///\n … [1928 caractères tronqués]`
+
+  ```
+ok
+test gguf::tests::q2k_concorde_avec_ggml ... FAILED
+
+failures:
+--
+thread 'gguf::tests::q2k_concorde_avec_ggml' (3420797) panicked at src/gguf.rs:1608:13:
+poids 1 : 0 au lieu de 1
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+--
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 35 filtered out; finished in 0.00s
+  ```
+
+### 🤖 Assistant
+
+⏵ Mon test était faux (les quants d'un octet ne valent pas `l%4`). Je le corrige avec une formule vérifiable.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np = 'drave-core/src/gguf.rs'\ns = open(p).read()\ni = s.find('    fn q2k_concorde_avec_ggml() {')\nj = s.find('\\n    }\\n', i) + len('\\n    }\\n')\nnouveau = '''    fn q2k_concorde_avec_ggml() {\n        // Toutes … [1461 caractères tronqués]`
+
+  ```
+ok
+test gguf::tests::q2k_concorde_avec_ggml ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 35 filtered out; finished in 0.00s
+  ```
+
+### 🤖 Assistant
+
+⏵ Q2_K validé. Je commite et j'attaque IQ2_XXS (93 Go de V4.1).
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -m \"Q2_K : dequantification implementee et verifiee contre ggml\n\nQ2_K, c'est 59 Go des ffn_down_exps de DeepSeek-V4.1 -- sans lui, cette part du\nmodele restait illisible.\n\nVerification croisee : un p … [777 caractères tronqués]`
