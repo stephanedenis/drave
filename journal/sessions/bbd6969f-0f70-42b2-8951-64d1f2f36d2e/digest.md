@@ -64916,3 +64916,51 @@ HAE 07:49
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat >> reports/rapport-mla-experts.md <<'EOF'\n\n---\n\n## Annexe — l'écart à la position 3 : ce qui est déjà exclu\n\nComparaison étagée des deux moteurs sur la **couche 0** de GLM-5.3, aux\npositions 0 à 3 (`ref_logits --tensors '^ … [1507 caractères tronqués]`
+
+  ```
+9d20a8b Rapport MLA : annexe sur l'écart à la position 3 — ce qui est exclu, ce qui reste
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -E \"couche 0 pos [0-3] x\\[\\.\\.8\\]\" /tmp/glm53_pos.log | head -4; TZ=America/New_York date \"+HAE %H:%M\"; git status --short | grep -v journal | head -3", "description": "Final check before closing the round"}`
+
+  ```
+[mla] couche 0 pos 0 x[..8] 4.01039e-3 1.97871e-4 1.89184e-3 1.61566e-3 -3.03016e-3 -3.91231e-3 3.35817e-4 -5.76782e-4
+HAE 07:49
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in $(seq 1 55); do if grep -q \"couche 0 pos 3 x\" /tmp/glm53_pos.log; then break; fi; sleep 10; done; grep -E \"couche 0 pos [0-3] x\\[\\.\\.8\\]\" /tmp/glm53_pos.log; TZ=America/New_York date \"+HAE %H:%M\"", "description": " … [61 caractères tronqués]`
+
+  ```
+started background job bash-129
+  ```
+
+- **job_output** `{"job_id": "bash-129", "timeout_ms": 600000, "wait": true}`
+
+  ```
+[mla] couche 0 pos 0 x[..8] 4.01039e-3 1.97871e-4 1.89184e-3 1.61566e-3 -3.03016e-3 -3.91231e-3 3.35817e-4 -5.76782e-4
+[mla] couche 0 pos 1 x[..8] 5.20560e-3 8.91249e-3 5.75896e-3 -7.61036e-3 2.93424e-4 -2.68313e-3 4.04114e-3 -7.29419e-3
+[mla] couche 0 pos 2 x[..8] 8.59956e-3 -1.33453e-2 7.03962e-3 -3.56622e-3 -2.22169e-3 -6.14300e-3 4.42034e-3 -2.13772e-3
+[mla] couche 0 pos 3 x[..8] -1.78116e-4 -1.73292e-3 8.42723e-4 -7.82501e-3 -5.82490e-3 -5.21090e-3 3.48883e-3 -5.83589e-3
+HAE 07:56
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nref = {\n 0: [3.958318e-03, 2.302623e-04, 1.874789e-03, 1.564195e-03, -2.974730e-03, -3.872524e-03, 2.699937e-04, -6.190604e-04],\n 1: [5.280178e-03, 8.969897e-03, 5.771323e-03, -7.653554e-03, 1.768130e-04, -2.58997 … [951 caractères tronqués]`
+
+  ```
+position 0 : écart relatif max 24.38 %
+position 1 : écart relatif max 65.95 %
+position 2 : écart relatif max 16.47 %
+position 3 : écart relatif max 148.37 %
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport math\nref = {0:[3.958318e-03,2.302623e-04,1.874789e-03,1.564195e-03,-2.974730e-03,-3.872524e-03,2.699937e-04,-6.190604e-04],\n       1:[5.280178e-03,8.969897e-03,5.771323e-03,-7.653554e-03,1.768130e-04,-2.589 … [990 caractères tronqués]`
+
+  ```
+position 0 : ||écart|| / ||référence|| =   1.9 %
+position 1 : ||écart|| / ||référence|| =   1.3 %
+position 2 : ||écart|| / ||référence|| =   3.8 %
+position 3 : ||écart|| / ||référence|| =   4.0 %
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/rapport-mla-experts.md'; s=open(p).read()\ns = s.replace(\"\"\"| tenseur | position | llama.cpp | nous |\n|---|---|---|---|\n| `l_out-0` | 0 | 3,958318e-03 · 2,302623e-04 · 1,874789e-03 · 1,564195e-03 | 4 … [3022 caractères tronqués]`

@@ -210,19 +210,28 @@ positions 0 à 3 (`ref_logits --tensors '^(kqv_out|ffn_out|l_out)-0$'` imprime
 désormais toutes les positions du lot, et le moteur les imprime avec
 `DRAVE_DEBUG_MLA=1`) :
 
-| tenseur | position | llama.cpp | nous |
-|---|---|---|---|
-| `l_out-0` | 0 | 3,958318e-03 · 2,302623e-04 · 1,874789e-03 · 1,564195e-03 | 4,01039e-03 · 1,97871e-04 · 1,89184e-03 · 1,61566e-03 |
+Écart relatif de norme sur la sortie de la **couche 0** (8 premières valeurs) :
 
-Concordance à 1-3 % à la position 0 — l'ordre de la quantification des
-activations — ce qui **exclut l'embarquement, la première norme, l'attention à
-une clé et la FFN dense de la couche 0**.
+| position | 0 | 1 | 2 | 3 |
+|---|---|---|---|---|
+| ‖nous − llama.cpp‖ / ‖llama.cpp‖ | **1,9 %** | **1,3 %** | **3,8 %** | **4,0 %** |
 
-Ce qui reste à comparer, et qui est maintenant outillé : les mêmes tenseurs aux
-positions 1, 2 et 3. Si `l_out-0` y diverge, l'écart naît dans la couche 0 dès
-qu'il y a plusieurs clés (scores, softmax, somme pondérée) ; s'il y reste
-concordant, il naît plus loin et la même descente s'applique couche par couche.
+**La couche 0 concorde aux quatre positions**, y compris celle où les logits
+finaux divergent de 4 nats. Deux conséquences :
 
-Les valeurs de référence pour ces positions sont dans
-`/tmp/ref_glm_8p.log` (le moteur, lui, met ~190 s par jeton : la comparaison
-complète demande deux passes longues).
+- l'embarquement, la première norme, l'attention MLA (à une clé **et** à
+  plusieurs), la FFN dense et le résidu de la couche 0 sont **hors de cause** ;
+- l'écart naît donc plus loin, et il est **cumulatif** : 4 % sur la couche 0,
+  puis il se compose sur 79 couches — c'est ce que fait une petite erreur de
+  quantification, pas un bug de disposition (un bug de disposition donnait
+  5e-4 au lieu de 1,5e-3 sur `kqv_out`, soit 300 %).
+
+Autrement dit : l'hypothèse la plus probable n'est plus un bug mais un **écart
+numérique qui se compose**, et la façon de le savoir est de comparer la même
+chose à une couche plus profonde (par exemple `l_out-40`) : si l'écart y est
+encore de quelques pour cent, c'est de la quantification ; s'il a explosé, il y
+a un mécanisme à trouver.
+
+Valeurs de référence conservées dans `/tmp/ref_glm_8p.log` ; le moteur met
+~190 s par jeton, donc chaque comparaison est une passe longue (celle-ci a
+demandé deux passes de ~20 minutes).
