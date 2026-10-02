@@ -239,7 +239,41 @@ donc l'équivalence est exacte ici, mais un modèle multimodal demanderait ce
 masque ; et le pas de temps du hachage sur de très longues séquences
 (l'implémentation est O(1) par jeton, le vérificateur O(préfixe)).
 
-## 8. La première passe avant V4.1 **complète**
+## 8. L'indexeur de V4.1 : les clés viennent du latent, et elles sont vérifiées
+
+Dernier manque de code de P7. L'indexeur de V4.1 n'a **pas** de compresseur propre
+(le fichier n'a ni `indexer_compressor_kv` ni `indexer_compressor_gate`) : ses clés
+sont `k_norm(attn_k(latent))`, où `latent` est le **latent du compresseur
+principal** — celui du bloc, avant sa rotation — tournées à la position du premier
+jeton du groupe (`indexer_k_norm_rope_store`, `compressed_pos = (position //
+ratio) * ratio`). Une seule clé de **128 valeurs par bloc**, partagée par les
+32 têtes : les têtes ne concernent que la requête et les poids. Et le cache de
+clés n'est **possédé** que par les couches qui sont à la fois sources de KV et
+d'indexeur ([2, 8, 14, 20]) ; les indexeurs de 24, 28, 32, 36 n'ont que
+`attn_q_b` et `proj` et lisent le cache de leur source de KV — ce que le moteur
+fait en aliasant `idx_cles` sur `comp_source`.
+
+Vérifié sur la couche 2 (ratio 2, source), état injecté, contre la référence
+numpy (`tools/v41_compresseur_reference.py`, écrit depuis les noyaux vLLM) :
+
+| position (groupe) | clé de l'indexeur | scores (1 ou 2 blocs) | dynamique |
+|---|---|---|---|
+| 1 (groupe {0,1}) | 1,678e-06 | 2,336e-07 | 0,123 |
+| 3 (groupe {2,3}) | 1,702e-06 | 2,850e-07 | 0,123 |
+
+Les deux autres positions montrent le reste de la chaîne : `pool` à 5,08e-07,
+`norme+rope` du bloc à 3,04e-06. Donc la construction des clés de l'indexeur, la
+requête (depuis `qr_norm`), les poids par tête et la somme `Σ_h poids_h·relu(q_h·k)`
+sont justes.
+
+Ce qui n'est **pas** exercé ici : la **sélection** elle-même (le top-k), qui ne
+choisit que lorsque le nombre de blocs dépasse `indexer.top_k` (512) — soit un
+contexte de plus de 1 024 jetons en ratio 2. Le code de sélection est celui de
+V4-Flash, validé dans `reports/rapport-v4-hca.md`. Et la clé de l'indexeur est
+tournée selon la convention du moteur (RoPE simple) : comme pour les blocs, la
+question YaRN (§9) s'y applique à l'identique.
+
+## 9. La première passe avant V4.1 **complète**
 
 Avec l'engram branché, la liste des manques de V4.1 est **vide** : le moteur
 exécute les **40 couches** du fichier de 365,7 Go — hyper-connexions retardées,
@@ -266,7 +300,7 @@ les 40 couches s'enchaînent sans incohérence, le flux est compté
 experts — 37,5 % d'attention), et les 203 Go de tables d'engram sont lus sans
 être chargés.
 
-## 9. Ce qui reste, nommé
+## 10. Ce qui reste, nommé
 
 L'inventaire de V4.1 (1 046 tenseurs, 40 couches) donne la liste exacte :
 
@@ -281,13 +315,54 @@ L'inventaire de V4.1 (1 046 tenseurs, 40 couches) donne la liste exacte :
 | YaRN toujours actif | `rope_scaling.factor = 16`, `original_max_position_embeddings = 65536` | le moteur ne l'applique qu'au-delà de 4 × la longueur déclarée (mesure gpt-oss) ; `DRAVE_YARN=1` l'applique partout, comme la référence — le message du chargement le dit désormais |
 | DSpark / MTP | `num_nextn_predict_layers = 3`, `dspark_*` | tête spéculative, hors du chemin d'un modèle autorégressif simple |
 
-Détail cosmétique connu : la ligne `[config] … ffn 2816 …` lit
+### La question du YaRN sur les couches compressées (ouverte, et chiffrée)
+
+> Note ajoutée après la §8 : la clé de l'indexeur et la rotation des blocs sont
+> tournées par le même `rope_norm` du moteur, donc la question ci-dessous les
+> couvre toutes les deux.
+
+`vllm/models/deepseek_v41/common/rope.py:28-46` est sans ambiguïté : pour une
+couche de ratio > 0, `rope_theta = compress_rope_theta` (160 000) **et**
+`rope_type = deepseek_yarn` (facteur 16), appliqué à **toutes** les positions ;
+seules les couches de ratio 0 ont `factor = 1.0` (YaRN identité = RoPE simple).
+Le commentaire de la source le dit : « YaRN applies to all compressed-KV layers
+(compress_ratio > 0); only pure sliding-window layers use plain RoPE ». `mscale`
+est **désactivé** (`mscale = 0`, `mscale_all_dim = 0`).
+
+Le moteur, lui, applique son régime **retardé** : RoPE simple tant que le contexte
+demandé reste sous 4 × la longueur d'origine (262 144 pour V4.1), YaRN au-delà —
+une décision mesurée sur gpt-oss, pas une négligence. Conséquence : sur les
+couches compressées de V4-Flash (déjà livré) **et** de V4.1, la rotation du moteur
+est le RoPE simple là où vLLM interpole.
+
+Ce que ça change, et pourquoi aucune vérification ne l'a vu : YaRN n'interpole que
+les **basses** fréquences (les paires de grande longueur d'onde) ; à une position
+petite, leurs angles sont minuscules (à la position 4, la paire la plus lente
+tourne de 4e-4 rad, contre 2,5e-5 interpolée). Les comparaisons déjà faites contre
+llama.cpp sur des clés compressées tournées à une position **non nulle** (couche 2
+CSA de V4-Flash, positions 8-9, bloc 1 tourné à la position 4 : 0,9999) ne
+pouvaient donc pas trancher. À la position 1 024, l'écart d'angle de la paire la
+plus lente passe à 0,1 rad contre 6,4e-3 — c'est là qu'il se verrait.
+
+Deux inconnues restent, et l'une se mesure : (a) llama.cpp applique-t-il YaRN sur
+la rotation des blocs compressés de V4-Flash (son `rope.scaling.factor = 16` est
+déclaré, mais son implémentation V4 peut ne pas le lire) ? (b) le moteur doit-il,
+pour les couches compressées, suivre la référence plutôt que sa mesure gpt-oss ?
+Le protocole : une passe V4-Flash à contexte ≥ 1 024 sur une couche compressée,
+comparée à llama.cpp **avec et sans** `DRAVE_YARN=1` — l'écart dira laquelle des
+deux rotations est celle de llama.cpp, et donc si le chiffre de la porte
+(8430,2968 à ctx 32) est aveugle à ce choix (il l'est : à ctx 32 les deux
+rotations coïncident presque).
+
+### Détail cosmétique connu
+
+La ligne `[config] … ffn 2816 …` lit
 `intermediate_size` dans le premier bloc JSON qui le contient — pour V4.1 c'est
 celui de `vision_config` (2816) et non le texte (2304). Le champ est **inerte**
 sur un modèle à experts (la largeur du FFN partagé vient de la forme du tenseur),
 mais le chiffre affiché est faux.
 
-## 10. Reproduire
+## 11. Reproduire
 
 ```bash
 # la chaîne, témoins numpy ↔ moteur
@@ -313,9 +388,31 @@ DRAVE_ETAT_ENTREE=/tmp/etat_l2.bin DRAVE_DUMP_COUCHES=/tmp/dump_l20 \
 python3 tools/v41_compresseur_reference.py \
     /home/stephane/FastNVMe/modeles-lourds/DeepSeek-V4.1-Flash-Q2.gguf \
     /tmp/dump_l20 20 /tmp/etat_l2.bin 1 0 1 2 3
+
+# l'indexeur de V4.1 (couche 2, qui POSSÈDE le cache de clés) : clés + scores
+DRAVE_ETAT_ENTREE=/tmp/etat_l2.bin DRAVE_DUMP_COUCHES=/tmp/dump_idx \
+  ./drave-core/target/release/drave \
+    /home/stephane/FastNVMe/modeles-lourds/DeepSeek-V4.1-Flash-Q2.gguf \
+    --couches 2:3 --tete-partielle --ppl /tmp/v41_texte.txt.ids --ctx 8 --limit 4
+python3 tools/v41_compresseur_reference.py \
+    /home/stephane/FastNVMe/modeles-lourds/DeepSeek-V4.1-Flash-Q2.gguf \
+    /tmp/dump_idx 2 /tmp/etat_l2.bin 2 0 1 2 3
+
+# l'engram (couche 1), de bout en bout
+DRAVE_DUMP_COUCHES=/tmp/dump_eng ./drave-core/target/release/drave \
+    /home/stephane/FastNVMe/modeles-lourds/DeepSeek-V4.1-Flash-Q2.gguf \
+    --couches 0:2 --tete-partielle --ppl /tmp/v41_texte.txt.ids --ctx 8 --limit 4
+python3 tools/verifier_v41_engram.py \
+    /home/stephane/FastNVMe/modeles-lourds/DeepSeek-V4.1-Flash-Q2.gguf \
+    /tmp/dump_eng /tmp/v41_texte.txt.ids 1 0 1 2 3
+
+# la passe COMPLÈTE (40 couches) — aucune plage, donc la tête s'applique
+./drave-core/target/release/drave \
+    /home/stephane/FastNVMe/modeles-lourds/DeepSeek-V4.1-Flash-Q2.gguf \
+    --ppl /tmp/v41_texte.txt.ids --ctx 8 --limit 4
 ```
 
-## 11. Sources
+## 12. Sources
 
 - vLLM, `vllm/models/deepseek_v41/nvidia/model.py` (`mhc_shifted_post_pre`,
   `hc_collapse_triton`, `_collapse`, `kv_source_layer_ids`) —

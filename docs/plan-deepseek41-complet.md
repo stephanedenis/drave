@@ -319,7 +319,7 @@ Une phase qui ne passe pas ses deux portes ne passe pas à la suivante.
      clusters 799,8557, 18 formats lisibles dont 17 vérifiés à la porte,
      4 routages).
 
-### P7 — Adaptation à V4.1, et la question de provenance (≈ ½ journée + action externe) — **chaîne mHC, compression et engram faits et vérifiés** (02/10)
+### P7 — Adaptation à V4.1, et la question de provenance (≈ ½ journée + action externe) — **mHC, compression, engram et indexeur faits et vérifiés** (02/10)
 
 > **Les deux manques annoncés étaient faux tous les deux** (02/10, 17:33 → 18:02).
 > La **référence d'exécution existe** : vLLM porte V4.1 en entier
@@ -365,14 +365,27 @@ Une phase qui ne passe pas ses deux portes ne passe pas à la suivante.
 > que l'indexeur garde tous les blocs — exact sous `indexer.top_k` (512), refusé
 > au-delà.
 >
-> **Reste, nommé** : l'**indexeur de V4.1** (clés tirées du latent du compresseur
-> principal, `indexer.attn_k` + `indexer.k_norm` — le moteur garde tous les blocs,
-> exact sous `indexer.top_k`, refusé au-delà) et la **sélection à deux niveaux**
-> (`candidate_*`), le **masque des jetons d'image** de l'engram (sans objet en
-> texte seul), le **pré-mix sur le fil** du protocole DRVF (16 octets/jeton, sans
-> quoi un découpage de V4.1 est refusé), et YaRN appliqué partout comme la
-> référence (le moteur ne l'applique qu'au-delà de 4 × la longueur déclarée, et le
-> dit).
+> **Fait aussi (02/10, 23h) : l'INDEXEUR de V4.1.** Ses clés sont
+> `k_norm(attn_k(latent))` — le latent du compresseur **principal**, une clé de
+> 128 valeurs par bloc partagée par les 32 têtes — et le cache n'est possédé que
+> par les couches [2, 8, 14, 20] ; les indexeurs de 24/28/32/36 lisent celui de
+> leur source de KV. Vérifié contre la référence numpy : clés à 1,7e-06, scores à
+> 2,9e-07 (couche 2, deux groupes). La **sélection** (top-k) ne s'exerce qu'au-delà
+> de 512 blocs — plus de 1 024 jetons en ratio 2 — et le moteur ne refuse plus :
+> il choisit, comme V4-Flash.
+>
+> **Reste, nommé** : la **sélection à deux niveaux** (`candidate_*`, un filtre de
+> candidats qui ne change le résultat qu'au-delà de `indexer.top_k`), le **masque
+> des jetons d'image** de l'engram (sans objet en texte seul), le **pré-mix sur le
+> fil** du protocole DRVF (16 octets/jeton, sans quoi un découpage de V4.1 est
+> refusé), et **YaRN sur les couches compressées** —
+> une question OUVERTE et chiffrée (`reports/rapport-v41-mhc.md`, §9) : vLLM
+> applique YaRN ×16 à toutes les positions des couches de ratio > 0 (mscale
+> désactivé), le moteur applique son régime retardé (RoPE simple sous 4 × la
+> longueur d'origine). Les deux coïncident presque aux positions courtes — d'où
+> des portes stables et des comparaisons à 0,9999 — et divergent au-delà de
+> ~1 024. Protocole de décision : une passe V4-Flash à contexte ≥ 1 024 sur une
+> couche compressée, comparée à llama.cpp avec et sans `DRAVE_YARN=1`.
 
 
 - Code : métadonnées par couche (`compress_ratios` au lieu d'un régime global),

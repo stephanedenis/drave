@@ -75,6 +75,21 @@ def main():
     a_gate = f"blk.{couche}.attn_compressor_gate.weight" in g.tenseurs
     gate_w = (g.lire(f"blk.{couche}.attn_compressor_gate.weight") if a_gate else None)
     a_ape = f"blk.{couche}.attn_compressor_ape.weight" in g.tenseurs
+    # Indexeur de V4.1 : `attn_k` projette le LATENT (pas l'état), `k_norm`
+    # normalise sur `index_head_dim`, et le RoPE ne porte que sur les
+    # `qk_rope_head_dim` dernières composantes.
+    a_idx_k = f"blk.{couche}.indexer.attn_k.weight" in g.tenseurs
+    if a_idx_k:
+        wkv_idx = g.lire(f"blk.{couche}.indexer.attn_k.weight")      # [128, 512]
+        norme_idx = g.lire(f"blk.{couche}.indexer.k_norm.weight").reshape(-1)
+        rope_dim = 64
+    # La REQUÊTE de l'indexeur, elle, vient de `qr_norm` (la requête MLA
+    # normalisée) — c'est la même question posée à une autre résolution.
+    a_idx_q = f"blk.{couche}.indexer.attn_q_b.weight" in g.tenseurs
+    if a_idx_q:
+        wq_idx = g.lire(f"blk.{couche}.indexer.attn_q_b.weight")     # [32*128, 1280]
+        wproj = g.lire(f"blk.{couche}.indexer.proj.weight")          # [32, 5120]
+        n_idx_h = wproj.shape[0]
     print(f"# couche {couche} · ratio {ratio} · hd {hd} · porte "
           f"{'OUI' if a_gate else 'NON'} · ape {'OUI' if a_ape else 'NON'}")
     assert (ratio > 1) == a_gate, "la porte doit exister si et seulement si ratio > 1"
@@ -116,9 +131,79 @@ def main():
         e1 = np.max(np.abs(pool - obtenu_brut))
         e2 = np.max(np.abs(attendu_bloc - obtenu_bloc))
         dyn = np.max(np.abs(obtenu_bloc))
-        ok = max(e1, e2) < 1e-4 * max(dyn, 1e-9) + 1e-6
+        # --- l'INDEXEUR de V4.1 : ses clés viennent du LATENT (pré-rotation) du
+        # compresseur principal, `k_norm(attn_k(latent))`, tournées à la position
+        # du premier jeton du groupe (`indexer_k_norm_rope_store`).
+        e3 = float("nan")
+        import os as _os
+        f_idx = f"{prefixe}-idx_bloc{bloc}-{couche}-{pos}.bin"
+        if a_idx_k and _os.path.exists(f_idx):
+            wk = wkv_idx @ norme
+            kidx = rms_norm(wk, norme_idx, EPS)
+            idxr = min(rope_dim, kidx.size)
+            idxn = kidx.size - idxr
+            kidx = kidx.copy()
+            kidx[idxn:] = rope_norm(kidx[idxn:], debut, BASE_COMP, idxr)
+            e3 = np.max(np.abs(kidx - dump(prefixe, f"idx_bloc{bloc}", couche, pos)))
+        ok = max(e1, e2, 0.0 if np.isnan(e3) else e3) < 1e-4 * max(dyn, 1e-9) + 1e-6
+        suite = "" if np.isnan(e3) else f" · clé indexeur {e3:.3e}"
         print(f"  pos {pos} (bloc {bloc}, début {debut}) : pool {e1:.3e} · "
-              f"norme+rope {e2:.3e}  (dynamique {dyn:.3e})  {'OK ' if ok else 'ÉCART'}")
+              f"norme+rope {e2:.3e}{suite}  (dynamique {dyn:.3e})  {'OK ' if ok else 'ÉCART'}")
+    if a_idx_q and a_idx_k:
+        verifier_scores(g, prefixe, couche, hn, a_idx_q, wq_idx, wproj, n_idx_h,
+                        positions, ratio, a_idx_k, wkv_idx, norme_idx)
+
+
+def verifier_scores(g, prefixe, couche, hn, a_idx_q, wq_idx, wproj, n_idx_h,
+                    positions, ratio, a_idx_k, wkv_idx=None, norme_idx=None):
+    """Les SCORES de l'indexeur : `Σ_h poids_h · relu(q_h · k_bloc)`.
+
+    La requête vient de `qr_norm` (vidé par le moteur), tournée à la position
+    COURANTE ; les clés sont celles des blocs visibles ; les poids par tête
+    viennent de `indexer.proj` appliqué à l'état, divisés par `sqrt(dim × têtes)`.
+    """
+    import os as _os
+    for pos in positions:
+        f = f"{prefixe}-idx_scores-{couche}-{pos}.bin"
+        if not _os.path.exists(f):
+            continue
+        qrn = dump(prefixe, "qr_norm", couche, pos)
+        dim = wq_idx.shape[0] // n_idx_h     # 4096 / 32 = 128
+        q = wq_idx @ qrn
+        q = q.reshape(n_idx_h, dim)
+        rd = 64
+        dn = dim - rd
+        for h in range(n_idx_h):
+            q[h, dn:] = rope_norm(q[h, dn:], pos, BASE_COMP, rd)
+        poids = (wproj @ hn) / np.sqrt(dim * n_idx_h)
+        n_vis = (pos + 1) // ratio
+        obtenu = dump(prefixe, "idx_scores", couche, pos)
+        calc = np.zeros(n_vis)
+        for b in range(n_vis):
+            fk = f"{prefixe}-idx_bloc{b}-{couche}-{pos - ratio * (n_vis - b)}.bin"
+            if not _os.path.exists(fk):
+                # le bloc b a été publié à la fin de SON groupe
+                fk = None
+                for p2 in positions:
+                    if (p2 + 1) % ratio == 0 and p2 // ratio == b:
+                        fk = f"{prefixe}-idx_bloc{b}-{couche}-{p2}.bin"
+                if fk is None or not _os.path.exists(fk):
+                    calc[b] = float("nan")
+                    continue
+            # **Une SEULE clé de 128 valeurs par bloc**, partagée par les têtes :
+            # `indexer.attn_k` [128, 512] projette le latent en UN vecteur, et le
+            # noyau de la référence (`_indexer_k_norm_rope_quant_store_kernel`)
+            # n'a qu'un `HEAD_SIZE = 128`. Les têtes ne concernent que la requête
+            # et les poids.
+            kb = np.fromfile(fk, dtype="<f4").astype(np.float64)
+            s_ = 0.0
+            for h in range(n_idx_h):
+                s_ += poids[h] * max(float(q[h] @ kb), 0.0)
+            calc[b] = s_
+        ecart = np.nanmax(np.abs(calc - obtenu)) if obtenu.size else float("nan")
+        dyn = np.max(np.abs(obtenu)) if obtenu.size else 0.0
+        print(f"  scores pos {pos} ({n_vis} blocs) : écart max {ecart:.3e} "
+              f"(dynamique {dyn:.3e})  {'OK ' if ecart < 1e-3 * max(dyn, 1e-9) + 1e-5 else 'ÉCART'}")
 
 
 if __name__ == "__main__":

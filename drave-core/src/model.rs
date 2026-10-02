@@ -1261,6 +1261,16 @@ pub struct Mla4 {
     pub idx_nh: usize,
     /// Dimension d'une tête d'indexeur (`indexer.key_length`, 128).
     pub idx_hd: usize,
+    /// **Les clés de l'indexeur de V4.1** : `indexer.attn_k` [`idx_hd`, `head_dim`]
+    /// et `indexer.k_norm` [`idx_hd`]. Elles ne projettent pas l'état de la couche
+    /// mais le **latent du compresseur principal** (512 pour V4.1), et n'existent
+    /// QUE sur les couches qui possèdent le cache de clés (`index_source_layer_ids`
+    /// ∩ `kv_source_layer_ids` = [2, 8, 14, 20]). Les indexeurs de 24/28/32/36
+    /// n'ont que `attn_q_b` et `proj` : ils lisent le cache de leur source de KV.
+    pub idx_k: Vec<f32>,
+    pub idx_k_norm: Vec<f32>,
+    /// La couche POSSÈDE-t-elle ce cache (`indexer.attn_k` présent) ?
+    pub a_idx_k: bool,
     /// Compresseur (`None` sur une couche brute) : `coff·head_dim × h` pour la
     /// valeur et la porte, `coff·head_dim × ratio` pour l'`ape`, `head_dim` pour
     /// la norme.
@@ -3023,6 +3033,9 @@ n'est pas dans `index_source_layer_ids` {idx_sources:?} — le fichier se contre
                     idx_comp_norm: g.dequant_optionnel(&p("indexer_compressor_norm.weight")).unwrap_or_default(),
                     idx_nh: dim(&["attention.indexer.head_count"], "index_n_heads").unwrap_or(0),
                     idx_hd: dim(&["attention.indexer.key_length"], "index_head_dim").unwrap_or(0),
+                    idx_k: g.dequant_optionnel(&p("indexer.attn_k.weight")).unwrap_or_default(),
+                    idx_k_norm: g.dequant_optionnel(&p("indexer.k_norm.weight")).unwrap_or_default(),
+                    a_idx_k: g.tensor(&p("indexer.attn_k.weight")).is_some(),
                     q_a: g.dequant(&p("attn_q_a.weight")),
                     q_a_norm: g.dequant(&p("attn_q_a_norm.weight")),
                     q_b: g.dequant(&p("attn_q_b.weight")),
@@ -5215,6 +5228,26 @@ et 4, 128 (V4)", m.ratio);
                 // norme RMS du bloc, puis rotation de sa partie rope
                 let mut norm = vec![0f32; hd];
                 Self::rmsnorm(&cles[bloc * hd..(bloc + 1) * hd], &m.comp_norm, m.eps, &mut norm);
+                // **Les clés de l'indexeur de V4.1** se calculent ICI, sur le
+                // latent du compresseur AVANT sa rotation (`k_norm(attn_k(latent))`,
+                // `indexer_k_norm_rope_store`), et seulement sur les couches qui
+                // possèdent le cache : les autres indexeurs lisent le même tampon.
+                if m.a_idx_k && !m.idx_k.is_empty() {
+                    let idh = m.idx_hd;
+                    let mut k = vec![0f32; idh];
+                    matvec_f32(&m.idx_k, &norm, hd, idh, &mut k);
+                    let mut kn = vec![0f32; idh];
+                    Self::rmsnorm(&k, &m.idx_k_norm, m.eps, &mut kn);
+                    let idr = nr.min(idh);
+                    let idn = idh - idr;
+                    let mut kp = vec![0f32; idr];
+                    kp.copy_from_slice(&kn[idn..]);
+                    Self::rope_norm(&mut kp, 1, idr, debut, base_rope, idr, false);
+                    kn[idn..].copy_from_slice(&kp);
+                    etat.idx_cles[bloc * idh..(bloc + 1) * idh].copy_from_slice(&kn);
+                    *paires += (m.idx_k.len() + idh) as u64;
+                    Self::vider_couche(dump, &format!("idx_bloc{bloc}"), l, pos, &kn);
+                }
                 {
                     let mut kp = vec![0f32; nr];
                     kp.copy_from_slice(&norm[nope..]);
@@ -5231,39 +5264,32 @@ et 4, 128 (V4)", m.ratio);
         // mais suivent exactement la même règle de chevauchement que le CSA.
         let mut blocs_gardes: Option<Vec<u32>> = None;
         // **L'indexeur de V4.1 n'a pas de compresseur propre.** Ses clés viennent
-        // du latent du compresseur PRINCIPAL (`indexer.attn_k` [128,512] puis
-        // `indexer.k_norm`), et il partage le cache de clés de sa source de KV
-        // (`attention.py` : « non-owning index sources share the K cache of the
-        // latest kv source below them »). Ce chemin n'est pas porté : tant qu'il
-        // ne l'est pas, garder TOUS les blocs est **exact** — un top-k qui garde
-        // tout ne choisit rien — et le moteur refuse au-delà de `indexer.top_k`,
-        // exactement comme pour V4 avant l'indexeur.
+        // du latent du compresseur PRINCIPAL (`indexer.attn_k` + `indexer.k_norm`,
+        // construites dans le bloc ci-dessus) et les indexeurs qui n'possèdent pas
+        // le cache (24, 28, 32, 36) lisent celui de leur source de KV — le site
+        // d'appel alias `idx_cles` sur `comp_source` pour tout le monde. Il ne
+        // reste donc ici que la REQUÊTE et les POIDS, qui sont propres à la couche.
         let indexeur_v41 = m.a_indexeur && m.idx_comp_kv.is_empty() && m.idx_comp_norm.is_empty();
-        if indexeur_v41 {
-            if n_vis > m.indexer_top_k {
-                panic!("indexeur de V4.1 (couche {l}) : {n_vis} blocs compressés > \
-`indexer.top_k` {} — ses clés viennent du latent du compresseur principal \
-(`indexer.attn_k`, `indexer.k_norm`), un chemin que ce moteur n'a pas ; garder tous les \
-blocs n'est exact que SOUS ce seuil", m.indexer_top_k);
-            }
-            if n_vis > 0 && !INDEXEUR_V41_DIT.swap(true, std::sync::atomic::Ordering::Relaxed) {
-                eprintln!("[indexeur] V4.1 : les clés de l'indexeur viennent du latent du \
-compresseur principal (`indexer.attn_k` + `indexer.k_norm`) et ce chemin n'est pas porté ; \
-le moteur garde donc TOUS les blocs ({n_vis} ≤ top_k {}) — résultat exact, mais l'indexeur \
-ne sert à rien tant que le seuil n'est pas atteint", m.indexer_top_k);
-            }
+        if indexeur_v41 && etat.idx_cles.is_empty() && n_vis > 0 {
+            panic!("indexeur de V4.1 (couche {l}) : {n_vis} blocs compressés et AUCUNE clé \
+d'indexeur — ni la couche ni sa source de KV n'a `indexer.attn_k`");
         }
-        if m.a_indexeur && !indexeur_v41 {
+        if m.a_indexeur {
             let idh = m.idx_hd;
-            let iw = m.idx_comp_kv.len() / h.max(1);        // 2 × idx_hd
-            matvec_f32(&m.idx_comp_kv, x, h, iw, &mut etat.idx_kv[pos * iw..(pos + 1) * iw]);
-            matvec_f32(&m.idx_comp_gate, x, h, iw, &mut etat.idx_gate[pos * iw..(pos + 1) * iw]);
-            let sp = pos % m.ratio;
-            for c in 0..iw {
-                etat.idx_gate[pos * iw + c] += m.idx_comp_ape[sp * iw + c];
+            // **Le compresseur PROPRE de l'indexeur n'existe qu'en V4.** En V4.1 ses
+            // clés sont construites avec celles du compresseur principal (plus
+            // haut) : il n'y a ici ni projection d'état ni bloc à écrire.
+            let iw = if indexeur_v41 { 0 } else { m.idx_comp_kv.len() / h.max(1) };
+            if !indexeur_v41 {
+                matvec_f32(&m.idx_comp_kv, x, h, iw, &mut etat.idx_kv[pos * iw..(pos + 1) * iw]);
+                matvec_f32(&m.idx_comp_gate, x, h, iw, &mut etat.idx_gate[pos * iw..(pos + 1) * iw]);
+                let sp = pos % m.ratio;
+                for c in 0..iw {
+                    etat.idx_gate[pos * iw + c] += m.idx_comp_ape[sp * iw + c];
+                }
+                *paires += (m.idx_comp_kv.len() + m.idx_comp_gate.len()) as u64;
             }
-            *paires += (m.idx_comp_kv.len() + m.idx_comp_gate.len()) as u64;
-            if (pos + 1) % m.ratio == 0 {
+            if !indexeur_v41 && (pos + 1) % m.ratio == 0 {
                 let bloc = pos / m.ratio;
                 let debut = pos + 1 - m.ratio;
                 let t0 = debut as isize - m.ratio as isize;    // chevauchement CSA

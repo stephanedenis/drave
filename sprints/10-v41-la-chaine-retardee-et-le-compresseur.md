@@ -24,6 +24,7 @@ Trois livraisons, toutes mesurées sur le fichier de **365,7 Go** :
 | cache compressé partagé (34 couches consommatrices) | contrôle positif/négatif sur la couche 3 | sortie 1,30–2,16 d'écart selon que sa source a tourné ; source identique au bit |
 | 4ᵉ égalité : le repli de l'entrée de la FFN | ajoutée après la relecture adverse | 1,0e-08 à 4,9e-08 |
 | **engram** : hachage, lecture des 24 rangées, projection `wkv`, injection | `tools/verifier_v41_engram.py`, adresses recalculées par la référence | projection ~1e-5 (f32 sur 6 144 termes) · injection ~1e-6 · **6 336 octets/jeton/table** |
+| **indexeur de V4.1** : clés tirées du latent, cache partagé, scores | `tools/v41_compresseur_reference.py` (clés + scores) | clés 1,7e-06 · scores 2,9e-07 · une clé de 128 par bloc, partagée par les 32 têtes |
 
 Et trois bugs de configuration trouvés **par** l'exécution, chacun muet :
 `n_expert` relu en GGUF-seul (le modèle partait **sans un seul expert**),
@@ -115,10 +116,11 @@ MoE, parce que le chemin V4 projette en `f32` naïf — un poste de P9.
   consommatrices indexent les tampons de leur source, prouvé par un contrôle
   positif/négatif (et non par relecture). Reste non vérifié : la valeur ABSOLUE
   d'une sortie de couche consommatrice contre une référence externe.
-- **Indexeur de V4.1** : ses clés viennent du latent du compresseur principal
-  (`indexer.attn_k` + `indexer.k_norm`) et il partage le cache de sa source. En
-  attendant, le moteur garde tous les blocs (exact sous `indexer.top_k`, refusé
-  au-delà) — et le dit.
+- **Indexeur de V4.1** : **fait** — clés construites depuis le latent du
+  compresseur principal, cache partagé entre les couches d'un même groupe,
+  requête/poids/scores vérifiés. La *sélection* (top-k) ne s'exerce qu'au-delà de
+  512 blocs (plus de 1 024 jetons en ratio 2) : le code est celui de V4-Flash,
+  validé, mais il n'a pas encore CHOISI sur V4.1.
 - **Softmax par canal du compresseur** : le tableau du rapport ne le prouvait pas
   (l'état injecté était identique à toutes les positions, donc le pool y est
   insensible aux poids) — c'est maintenant un test unitaire à témoin lisible

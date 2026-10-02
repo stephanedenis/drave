@@ -88221,3 +88221,529 @@ bash: line 25: index_source_layer_ids: command not found
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nm = \"\"\"P7 : l'engram de V4.1 branché dans la passe avant — et la première passe COMPLÈTE des 40 couches\n\nLe dernier manque de code de P7 est levé. Sont dans la passe avant, en tête des\ncouches 1 et 14 : le hac … [1874 caractères tronqués]`
+
+  ```
+P7 : l'engram de V4.1 branché dans la passe avant — et la première passe COMPLÈTE des 40 couches
+
+Le dernier manque de code de P7 est levé. Sont dans la passe avant, en tête des
+couches 1 et 14 : le hachage glissant (24 colonnes = 3 reculs × 8 têtes, calculé
+sur la FENÊTRE et non sur tout le préfixe — O(1) par jeton au lieu de
+O(position)), la lecture des 24 rangées de 264 octets (256 e4m3 + 8 échelles
+e8m0) dans les tables de 101 Go, la projection `wkv` [25 600, 6 144] vers `hc`
+clés + une valeur partagée, et l'injection par copie (sigmoïde d'un produit
+scalaire normalisé deux fois, signé, racine d'un maximum avec 1e-6, eps 1e-20).
+
+Vérifié de bout en bout sur le vrai fichier (`tools/verifier_v41_engram.py`) :
+les adresses recalculées par la RÉFÉRENCE (`tools/engram_reference.py`), les
+  ```
+
+### 🤖 Assistant
+
+⏵ Starting the V4.1 indexer: reading the K-store reference
+
+- **bash** `{"command": "curl -s \"https://raw.githubusercontent.com/vllm-project/vllm/main/vllm/models/deepseek_v41/common/ops/indexer_k_store.py\" -o /tmp/v41_idxk.py; wc -l /tmp/v41_idxk.py; grep -n \"def \\|RATIO\\|ratio\" /tmp/v41_idxk.py | head -30", "description": "Fetch the indexer K-store kernel"}`
+
+  ```
+255 /tmp/v41_idxk.py
+13:group-boundary tokens ``(position + 1) % compress_ratio == 0`` produce a key.
+29:def indexer_k_norm_rope_store(
+37:    compress_ratio: int,
+52:        compress_ratio: group size; keys are emitted at group boundaries.
+61:    assert compress_ratio in (1, 2)
+108:        COMPRESS_RATIO=compress_ratio,
+123:def _indexer_k_norm_rope_quant_store_kernel(
+136:    COMPRESS_RATIO: tl.constexpr,
+153:    if (position + 1) % COMPRESS_RATIO != 0:
+167:    # position j * compress_ratio.
+179:    compressed_pos = (position // COMPRESS_RATIO) * COMPRESS_RATIO
+224:        log2_ratio = tl.ceil(tl.log2(amax * (1.0 / 6.0)))
+225:        log2_ratio = tl.minimum(tl.maximum(log2_ratio, -127.0), 127.0)
+226:        inv_scale = tl.exp2(-log2_ratio)
+227:        ue8m0 = (log2_ratio + 127.0).to(tl.uint8)  # [N_QUANT_BLOCKS]
+  ```
+
+- **bash** `{"command": "sed -n '123,200p' /tmp/v41_idxk.py", "description": "Read the indexer K kernel"}`
+
+  ```
+def _indexer_k_norm_rope_quant_store_kernel(
+    k_pre_ptr,
+    k_pre_stride,
+    positions_ptr,
+    rms_norm_weight_ptr,
+    rms_norm_eps,
+    cos_sin_cache_ptr,
+    cos_sin_stride,
+    k_cache_ptr,
+    kv_slot_mapping_ptr,
+    kv_cache_block_size,
+    HEAD_SIZE: tl.constexpr,
+    ROPE_HEAD_DIM: tl.constexpr,
+    COMPRESS_RATIO: tl.constexpr,
+    TOKEN_STRIDE: tl.constexpr,
+    SCALE_DIM: tl.constexpr,
+    KV_BLOCK_STRIDE: tl.constexpr,
+    FP8_MAX: tl.constexpr,
+    USE_FP4: tl.constexpr,
+    SHUFFLE: tl.constexpr,
+    BLOCK_TILE_SIZE: tl.constexpr,
+    HEAD_TILE_SIZE: tl.constexpr,
+):
+    token_idx = tl.program_id(0)
+
+    kv_slot_idx = tl.load(kv_slot_mapping_ptr + token_idx)
+    if kv_slot_idx < 0:
+        return
+    position = tl.load(positions_ptr + token_idx)
+    # Only the last token of a group publishes that group's index key.
+    if (position + 1) % COMPRESS_RATIO != 0:
+        return
+
+    block = tl.arange(0, HEAD_SIZE)
+
+    # ── k_norm (fp32 throughout, bf16 roundtrip like the reference) ────
+    k = tl.load(k_pre_ptr + token_idx * k_pre_stride + block).to(tl.float32)
+    rms_w = tl.load(rms_norm_weight_ptr + block).to(tl.float32)
+    variance = tl.sum(k * k, axis=0) / 
+… [1843 caractères tronqués]
+  ```
+
+- **bash** `{"command": "grep -n \"rotary_emb\\|indexer_k_norm_rope_store\\|compress_rope\\|rope_base\\|DeepseekRotaryEmbedding\" /tmp/v41_attention.py | head -25", "description": "Find the indexer's rotary embedding"}`
+
+  ```
+33:    indexer_k_norm_rope_store,
+409:        self.rotary_emb = build_deepseek_v4_rope(
+416:        self.indexer_rotary_emb = self.rotary_emb
+861:                self.indexer_rotary_emb,
+868:                lambda: compressor.insert_cache(latent, positions, self.rotary_emb),
+1025:        cos_sin_cache = self.rotary_emb.cos_sin_cache
+1381:        rotary_emb: nn.Module,
+1399:        indexer_k_norm_rope_store(
+1402:            rotary_emb.cos_sin_cache,
+1417:        rotary_emb: nn.Module,
+1429:            rotary_emb.cos_sin_cache,
+1448:        rotary_emb: nn.Module,
+1461:                    self._produce_k(latent, positions, rotary_emb)
+1481:            self._produce_k(latent, positions, rotary_emb)
+1483:        return self.forward_q(qr, qr_scale, indexer_weights, positions, rotary_emb)
+  ```
+
+- **bash** `{"command": "sed -n '400,420p' /tmp/v41_attention.py; echo \"=== build_deepseek_v4_rope ===\"; curl -s \"https://raw.githubusercontent.com/vllm-project/vllm/main/vllm/models/deepseek_v41/common/rope.py\" -o /tmp/v41_rope.py; grep -n \"def build_deepseek_v4_rope\" -A 40 /tmp/v41_rope.py | head -50",  … [53 caractères tronqués]`
+
+  ```
+quant_config=quant_config,
+            return_bias=False,
+            prefix=f"{prefix}.wo_b",
+        )
+        # Set by ``bind_gemm_rs`` when the decoder layer runs sequence
+        # parallel and the fused GEMM + reduce-scatter kernel accepts wo_b.
+        self.gemm_rs: GemmRsAr | None = None
+
+        # Initialize rotary embedding before the indexer/compressor consume it.
+        self.rotary_emb = build_deepseek_v4_rope(
+            config,
+            head_dim=self.head_dim,
+            rope_head_dim=self.rope_head_dim,
+            max_position_embeddings=config.max_position_embeddings,
+            compress_ratio=self.compress_ratio,
+        )
+        self.indexer_rotary_emb = self.rotary_emb
+        self.topk_indices_buffer = topk_indices_buffer
+        self.candidate_block_buffer = candidate_block_buffer
+
+        # Register with compilation context for metadata lookup. Done before
+=== build_deepseek_v4_rope ===
+9:def build_deepseek_v4_rope(
+10-    config,
+11-    *,
+12-    head_dim: int,
+13-    rope_head_dim: int,
+14-    max_position_embeddings: int,
+15-    compress_ratio: int,
+16-) -> RotaryEmbedding:
+17-    rope_parameters = config.rope_parameters
+18-    # Newer checkpoints 
+… [1552 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 300 python3 tools/lire_meta_gguf.py /home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek-V4-Flash-UD-IQ1_M/DeepSeek-V4-Flash-UD-IQ1_M-00001-of-00003.gguf 2>/dev/null | grep -oE \"rope\\.scaling\\.[a-z_]* = [0-9.e-]*|attenti … [125 caractères tronqués]`
+
+  ```
+attention.compress_ratios = 
+attention.compress_rope_freq_base = 160000.0
+rope.scaling.factor = 16.0
+rope.scaling.original_context_length = 65536
+rope.scaling.type = 
+rope.scaling.yarn_beta_fast = 32.0
+rope.scaling.yarn_beta_slow = 1.0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"position\\|pos \\|comp_bloc\\|127\" reports/rapport-v4-hca.md | head -20", "description": "Check which positions the HCA report compared"}`
+
+  ```
+18:   (`pos % ratio`), de forme `[512, 128]`.
+23:4. La clé du bloc est normalisée (RMS), puis tournée à la position de son
+26:   **tous les blocs complets** : `n_visible = (pos + 1) / ratio`, ce qui veut
+34:| tenseur | pos 0-3 (aucun bloc) | pos 127-131 (bloc 0 visible) |
+40:La position 127 est celle du **dernier jeton du premier bloc** : à partir de là,
+42:les cinq positions 127-131 concordent prouve trois choses à la fois : la
+75:Résultat sur la couche 2 (première couche CSA), positions 3 à 9, état injecté :
+103:| position | blocs | Drave | référence |
+127:Les deux moteurs lisent cette clé au chargement ; à la position 8, deux blocs
+132:| pos 4 (1 bloc) | 0,999919 | 1,3e-2 |
+133:| pos 8 (**2 blocs, 1 gardé**) | **0,999943** | 1,8e-2 |
+134:| pos 9 (2 blocs, 1 gardé) | **0,999920** | 1,3e-2 |
+  ```
+
+### 🤖 Assistant
+
+⏵ Recording the YaRN-on-compressed-layers finding, then implementing the indexer
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/rapport-v41-mhc.md'\ns=open(p).read()\ns=s.replace(\"\"\"| **YaRN toujours actif** | `rope_scaling.factor = 16`, `original_max_position_embeddings = 65536` | le moteur ne l'applique qu'au-delà de 4 × la l … [3802 caractères tronqués]`
+
+  ```
+(no output)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"YaRN\" docs/plan-deepseek41-complet.md | head -8", "description": "Locate the YaRN text in the plan"}`
+
+  ```
+373:> quoi un découpage de V4.1 est refusé), et YaRN appliqué partout comme la
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/plan-deepseek41-complet.md", "limit": 10, "offset": 366}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/plan-deepseek41-complet.md</path>
+<type>file</type>
+<content>
+366: > au-delà.
+367: >
+368: > **Reste, nommé** : l'**indexeur de V4.1** (clés tirées du latent du compresseur
+369: > principal, `indexer.attn_k` + `indexer.k_norm` — le moteur garde tous les blocs,
+370: > exact sous `indexer.top_k`, refusé au-delà) et la **sélection à deux niveaux**
+371: > (`candidate_*`), le **masque des jetons d'image** de l'engram (sans objet en
+372: > texte seul), le **pré-mix sur le fil** du protocole DRVF (16 octets/jeton, sans
+373: > quoi un découpage de V4.1 est refusé), et YaRN appliqué partout comme la
+374: > référence (le moteur ne l'applique qu'au-delà de 4 × la longueur déclarée, et le
+375: > dit).
+
+(Showing lines 366-375 of 528. Use offset=376 to continue.)
+</content>
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/plan-deepseek41-complet.md", "new_string": "> **Reste, nommé** : l'**indexeur de V4.1** (clés tirées du latent du compresseur\n> principal, `indexer.attn_k` + `indexer.k_norm` — le moteur garde tous les blocs,\n> exact sous `indexer … [1449 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/plan-deepseek41-complet.md has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"pub idx_hd: usize,\" -A 6 drave-core/src/model.rs | head -10", "description": "Find the Mla4 indexer fields"}`
+
+  ```
+1263:    pub idx_hd: usize,
+1264-    /// Compresseur (`None` sur une couche brute) : `coff·head_dim × h` pour la
+1265-    /// valeur et la porte, `coff·head_dim × ratio` pour l'`ape`, `head_dim` pour
+1266-    /// la norme.
+1267-    pub comp_kv: Vec<f32>,
+1268-    pub comp_gate: Vec<f32>,
+1269-    pub comp_ape: Vec<f32>,
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs", "new_string": "    pub idx_hd: usize,\n    /// **Les clés de l'indexeur de V4.1** : `indexer.attn_k` [`idx_hd`, `head_dim`]\n    /// et `indexer.k_norm` [`idx_hd`]. Elles ne projettent pas l'état de la couche\n  … [527 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs", "new_string": "                    idx_nh: dim(&[\"attention.indexer.head_count\"], \"index_n_heads\").unwrap_or(0),\n                    idx_hd: dim(&[\"attention.indexer.key_length\"], \"index_head_dim\").unwr … [520 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs has been updated successfully.
+  ```
+
+### 🤖 Assistant
+
+Now the key construction inside the block builder, and removing the bypass:
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"// norme RMS du bloc, puis rotation de sa partie rope\" -A 14 drave-core/src/model.rs | head -20", "description": "Read the block norm/rope code"}`
+
+  ```
+5228:                // norme RMS du bloc, puis rotation de sa partie rope
+5229-                let mut norm = vec![0f32; hd];
+5230-                Self::rmsnorm(&cles[bloc * hd..(bloc + 1) * hd], &m.comp_norm, m.eps, &mut norm);
+5231-                {
+5232-                    let mut kp = vec![0f32; nr];
+5233-                    kp.copy_from_slice(&norm[nope..]);
+5234-                    Self::rope_norm(&mut kp, 1, nr, debut, base_rope, nr, false);
+5235-                    norm[nope..].copy_from_slice(&kp);
+5236-                }
+5237-                cles[bloc * hd..(bloc + 1) * hd].copy_from_slice(&norm);
+5238-                Self::vider_couche(dump, &format!("comp_bloc{bloc}"), l, pos, &norm);
+5239-                *paires += (hd as u64) * (m.ratio as u64) * 2;
+5240-            }
+5241-        }
+5242-        // ---- indexeur : il NOTE chaque bloc compressé et n'en garde que les
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs", "new_string": "                // norme RMS du bloc, puis rotation de sa partie rope\n                let mut norm = vec![0f32; hd];\n                Self::rmsnorm(&cles[bloc * hd..(bloc + 1) * hd], &m.comp_norm … [1988 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"let indexeur_v41\" -B 14 -A 24 drave-core/src/model.rs | head -45", "description": "Read the indexer bypass block"}`
+
+  ```
+5259-            }
+5260-        }
+5261-        // ---- indexeur : il NOTE chaque bloc compressé et n'en garde que les
+5262-        // `indexer.top_k` meilleurs. Ses blocs sont plus étroits (128 valeurs)
+5263-        // mais suivent exactement la même règle de chevauchement que le CSA.
+5264-        let mut blocs_gardes: Option<Vec<u32>> = None;
+5265-        // **L'indexeur de V4.1 n'a pas de compresseur propre.** Ses clés viennent
+5266-        // du latent du compresseur PRINCIPAL (`indexer.attn_k` [128,512] puis
+5267-        // `indexer.k_norm`), et il partage le cache de clés de sa source de KV
+5268-        // (`attention.py` : « non-owning index sources share the K cache of the
+5269-        // latest kv source below them »). Ce chemin n'est pas porté : tant qu'il
+5270-        // ne l'est pas, garder TOUS les blocs est **exact** — un top-k qui garde
+5271-        // tout ne choisit rien — et le moteur refuse au-delà de `indexer.top_k`,
+5272-        // exactement comme pour V4 avant l'indexeur.
+5273:        let indexeur_v41 = m.a_indexeur && m.idx_comp_kv.is_empty() && m.idx_comp_norm.is_empty();
+5274-        if indexeur_v41 {
+5275-            if n_vis > m.indexer_top_k {
+5276-     
+… [1463 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs", "new_string": "        // **L'indexeur de V4.1 n'a pas de compresseur propre.** Ses clés viennent\n        // du latent du compresseur PRINCIPAL (`indexer.attn_k` + `indexer.k_norm`,\n        // construites dans … [2367 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '/if m.a_indexeur && !indexeur_v41 {/,/^            \\/\\/ La requête de l.indexeur/p' drave-core/src/model.rs | head -20; echo \"...\"; grep -n \"if (pos + 1) % m.ratio == 0 {\" drave-core/src/model.rs | head -4", "descriptio … [42 caractères tronqués]`
+
+  ```
+if m.a_indexeur && !indexeur_v41 {
+            let idh = m.idx_hd;
+            let iw = m.idx_comp_kv.len() / h.max(1);        // 2 × idx_hd
+            matvec_f32(&m.idx_comp_kv, x, h, iw, &mut etat.idx_kv[pos * iw..(pos + 1) * iw]);
+            matvec_f32(&m.idx_comp_gate, x, h, iw, &mut etat.idx_gate[pos * iw..(pos + 1) * iw]);
+            let sp = pos % m.ratio;
+            for c in 0..iw {
+                etat.idx_gate[pos * iw + c] += m.idx_comp_ape[sp * iw + c];
+            }
+            *paires += (m.idx_comp_kv.len() + m.idx_comp_gate.len()) as u64;
+            if (pos + 1) % m.ratio == 0 {
+                let bloc = pos / m.ratio;
+                let debut = pos + 1 - m.ratio;
+                let t0 = debut as isize - m.ratio as isize;    // chevauchement CSA
+                let n_fen = (pos as isize - t0 + 1) as usize;
+                let (portes, valeurs) = (&etat.idx_gate, &etat.idx_kv);
+                let mut brut = vec![0f32; idh];
+                for c in 0..idh {
+                    let mut mx = f32::NEG_INFINITY;
+                    for k in 0..n_fen {
+...
+5286:            if (pos + 1) % m.ratio == 0 {
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/model.rs'\ns=open(p).read()\na = \"\"\"        if m.a_indexeur && !indexeur_v41 {\n            let idh = m.idx_hd;\n            let iw = m.idx_comp_kv.len() / h.max(1);        // 2 × idx_hd\n       … [1686 caractères tronqués]`
+
+  ```
+ok
+error[E0609]: no field `idx_cles` on type `&Mla4`
+    --> src/model.rs:5272:30
+     |
+5272 |         if indexeur_v41 && m.idx_cles.is_empty() && n_vis > 0 {
+     |                              ^^^^^^^^ unknown field
+     |
+     = note: available fields are: `q_a`, `q_a_norm`, `q_b`, `kv`, `kv_norm` ... and 35 others
+
+warning: unused variable: `id`
+--
+error: could not compile `drave-core` (bin "drave") due to 1 previous error; 27 warnings emitted
+BUILD_END
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs", "new_string": "        if indexeur_v41 && etat.idx_cles.is_empty() && n_vis > 0 {", "old_string": "        if indexeur_v41 && m.idx_cles.is_empty() && n_vis > 0 {"}`
+
+  ```
+Error: cannot edit "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs": file changed since it was read — re-read the file, then retry
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/model.rs'\ns=open(p).read()\ns=s.replace(\"if indexeur_v41 && m.idx_cles.is_empty() && n_vis > 0 {\",\n            \"if indexeur_v41 && etat.idx_cles.is_empty() && n_vis > 0 {\",1)\nopen(p,'w').wri … [160 caractères tronqués]`
+
+  ```
+BUILD_END
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/model.rs'\ns=open(p).read()\na = \"\"\"                    etat.idx_cles[bloc * idh..(bloc + 1) * idh].copy_from_slice(&kn);\n                    *paires += (m.idx_k.len() + idh) as u64;\"\"\"\nb = … [926 caractères tronqués]`
+
+  ```
+started background job bash-176
+  ```
+
+- **bash** `{"command": "sleep 45; grep -E \"indexeur|perplexité cumulée|EXIT|idx\" /tmp/v41_idx.log | head -8", "description": "Check the indexer run"}`
+
+  ```
+[config] indexeurs : couches [2, 8, 14, 20, 24, 28, 32, 36] · les quatre premières possèdent le cache de clés, les autres lisent celui de leur source de KV — une couche qui porte `indexer.proj` sans être dans cette liste serait un fichier contradictoire
+       3 tokens notés — perplexité cumulée 4172058.408  (3.2 tok/s)
+EXIT=0
+/tmp/dump_idx-idx_bloc0-2-1.bin
+/tmp/dump_idx-idx_bloc1-2-3.bin
+/tmp/dump_idx-idx_scores-2-1.bin
+/tmp/dump_idx-idx_scores-2-2.bin
+/tmp/dump_idx-idx_scores-2-3.bin
+  ```
+
+### 👤 Utilisateur
+
+background job bash-176 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'
+p='drave-core/src/model.rs'
+s=open(p).read()
+a = """                    etat.idx_cles[bloc * idh..(bloc + 1) * idh].copy_from_slice(&kn);
+                    *paires += (m.idx_k.len() + idh) as u64;"""
+b = """                    etat.idx_cles[bloc * idh..(bloc + 1) * idh].copy_from_slice(&kn);
+                    *paires += (m.idx_k.len() + idh) as u64;
+                    Self::vider_couche(dump, &format!("idx_bloc{bloc}"), l, pos, &kn);"""
+assert s.count(a) == 1
+s = s.replace(a, b)
+open(p,'w').write(s)
+print("ok")
+PY
+cd drave-core && cargo build --release 2>&1 | grep -E "^error" -A 6 | head -10; echo BUILD_END; cd .. && rm -f /tmp/dump_idx-* && (DRAVE_ETAT_ENTREE=/tmp/etat_l2.bin DRAVE_DUMP_COUCHES=/tmp/dump_idx timeout 900 ./drave-core/target/release/drave /home/stephane/FastNVMe/modeles-lourds/DeepSeek-V4.1-Flash-Q2.gguf --couches 2:3 --tete-partielle --ppl /tmp/v41_texte.txt.ids --ctx 8 --limit 4 > /tmp/v41_idx.log 2>&1; echo "EXIT=$?" >> /tmp/v41_idx.log; ls /tmp/dump_idx-idx* >> /tmp/v41_idx.log 2>&1)) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='tools/v41_compresseur_reference.py'\ns=open(p).read()\ns=s.replace('''        e1 = np.max(np.abs(pool - obtenu_brut))\n        e2 = np.max(np.abs(attendu_bloc - obtenu_bloc))\n        dyn = np.max(np.abs(obtenu_b … [2396 caractères tronqués]`
+
+  ```
+ok
+# couche 2 · ratio 2 · hd 512 · porte OUI · ape NON
+# |hn| 2.349359e+00 · |kv| 1.348909e+00
+  pos 0 : pas de bloc (le groupe n'est pas complet)
+  pos 1 (bloc 0, début 0) : pool 5.082e-07 · norme+rope 3.042e-06 · clé indexeur 1.678e-06  (dynamique 1.245e+00)  OK 
+  pos 2 : pas de bloc (le groupe n'est pas complet)
+  pos 3 (bloc 1, début 2) : pool 5.082e-07 · norme+rope 3.042e-06 · clé indexeur 1.702e-06  (dynamique 1.245e+00)  OK
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='tools/v41_compresseur_reference.py'\ns=open(p).read()\ns=s.replace('''    a_idx_k = f\"blk.{couche}.indexer.attn_k.weight\" in g.tenseurs\n    if a_idx_k:\n        wkv_idx = g.lire(f\"blk.{couche}.indexer.attn_k. … [4084 caractères tronqués]`
+
+  ```
+ok
+154:def verifier_scores(g, prefixe, couche, hn, a_idx_q, wq_idx, wproj, n_idx_h,
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='tools/v41_compresseur_reference.py'\ns=open(p).read()\na = \"\"\"            print(f\"  pos {pos} (bloc {bloc}, début {debut}) : pool {e1:.3e} · \"\n                  f\"norme+rope {e2:.3e}{suite}  (dynamique {dy … [551 caractères tronqués]`
+
+  ```
+# couche 2 · ratio 2 · hd 512 · porte OUI · ape NON
+# |hn| 2.349359e+00 · |kv| 1.348909e+00
+  pos 0 : pas de bloc (le groupe n'est pas complet)
+  pos 1 (bloc 0, début 0) : pool 5.082e-07 · norme+rope 3.042e-06 · clé indexeur 1.678e-06  (dynamique 1.245e+00)  OK 
+  pos 2 : pas de bloc (le groupe n'est pas complet)
+  pos 3 (bloc 1, début 2) : pool 5.082e-07 · norme+rope 3.042e-06 · clé indexeur 1.702e-06  (dynamique 1.245e+00)  OK 
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 9, in <module>
+AssertionError
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"norme+rope {e2\" -A 3 tools/v41_compresseur_reference.py | head -8", "description": "Find the exact print block"}`
+
+  ```
+151:              f"norme+rope {e2:.3e}{suite}  (dynamique {dyn:.3e})  {'OK ' if ok else 'ÉCART'}")
+152-
+153-
+154-def verifier_scores(g, prefixe, couche, hn, a_idx_q, wq_idx, wproj, n_idx_h,
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='tools/v41_compresseur_reference.py'\ns=open(p).read()\na = \"\"\"              f\"norme+rope {e2:.3e}{suite}  (dynamique {dyn:.3e})  {'OK ' if ok else 'ÉCART'}\")\n\n\ndef verifier_scores(\"\"\"\nb = \"\"\"       … [619 caractères tronqués]`
+
+  ```
+ok
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                    positions, ratio, a_idx_k, wkv_idx, norme_idx)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/v41_compresseur_reference.py", line 173, in verifier_scores
+    q = q.reshape(n_idx_h, dim)
+ValueError: cannot reshape array of size 4096 into shape (32,40)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='tools/v41_compresseur_reference.py'\ns=open(p).read()\ns=s.replace(\"        dim = wq_idx.shape[1] // n_idx_h\", \"        dim = wq_idx.shape[0] // n_idx_h     # 4096 / 32 = 128\")\nopen(p,'w').write(s)\nPY\npyth … [212 caractères tronqués]`
+
+  ```
+pos 1 (bloc 0, début 0) : pool 5.082e-07 · norme+rope 3.042e-06 · clé indexeur 1.678e-06  (dynamique 1.245e+00)  OK 
+  pos 2 : pas de bloc (le groupe n'est pas complet)
+  pos 3 (bloc 1, début 2) : pool 5.082e-07 · norme+rope 3.042e-06 · clé indexeur 1.702e-06  (dynamique 1.245e+00)  OK 
+  scores pos 1 (1 blocs) : écart max 1.232e-01 (dynamique 1.232e-01)  ÉCART
+  scores pos 2 (1 blocs) : écart max 1.225e-01 (dynamique 1.225e-01)  ÉCART
+  scores pos 3 (2 blocs) : écart max 1.232e-01 (dynamique 1.232e-01)  ÉCART
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='tools/v41_compresseur_reference.py'\ns=open(p).read()\ns=s.replace(\"\"\"            kb = np.fromfile(fk, dtype=\"<f4\").astype(np.float64)\n            s_ = 0.0\n            for h in range(min(n_idx_h, kb.size / … [970 caractères tronqués]`
+
+  ```
+pos 2 : pas de bloc (le groupe n'est pas complet)
+  pos 3 (bloc 1, début 2) : pool 5.082e-07 · norme+rope 3.042e-06 · clé indexeur 1.702e-06  (dynamique 1.245e+00)  OK 
+  scores pos 1 (1 blocs) : écart max 2.336e-07 (dynamique 1.232e-01)  OK 
+  scores pos 2 (1 blocs) : écart max 2.255e-07 (dynamique 1.225e-01)  OK 
+  scores pos 3 (2 blocs) : écart max 2.850e-07 (dynamique 1.232e-01)  OK
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && (timeout 5400 tools/portes.sh rapide > /tmp/portes_rapide6.log 2>&1; echo \"EXIT=$?\" >> /tmp/portes_rapide6.log)", "description": "Gates after the indexer", "run_in_background": true}`
+
+  ```
+started background job bash-177
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/rapport-v41-mhc.md'\ns=open(p).read()\ns=s.replace(\"\"\"## 8. La première passe avant V4.1 **complète**\"\"\",\n\"\"\"## 8. L'indexeur de V4.1 : les clés viennent du latent, et elles sont vérifiées\n\nDe … [2311 caractères tronqués]`
+
+  ```
+195:## 7. L'engram : branché, et vérifié de bout en bout
+242:## 8. L'indexeur de V4.1 : les clés viennent du latent, et elles sont vérifiées
+276:## 9. La première passe avant V4.1 **complète**
+303:## 10. Ce qui reste, nommé
+361:## 11. Reproduire
+389:## 12. Sources
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/rapport-v41-mhc.md'\ns=open(p).read()\ns=s.replace(\"\"\"| **indexeur sans compresseur propre** | `indexer.attn_k` [128,512], `indexer.k_norm` [128], `indexer.attn_q_b`, `indexer.proj` | les clés de l'ind … [3674 caractères tronqués]`
+
+  ```
+368:> **Fait aussi (02/10, 23h) : l'INDEXEUR de V4.1.** Ses clés sont
+=== Portes ===
+  ```
+
+- **bash** `{"command": "sleep 100; tail -6 /tmp/portes_rapide6.log", "description": "Check gates progress"}`
+
+  ```
+(no output)
+[timed out after 60000ms]
+[killed by signal: SIGTERM]
+  ```
+
+- **bash** `{"command": "tail -6 /tmp/portes_rapide6.log", "description": "Read gate log"}`
+
+  ```
+(portes de formats : ignorées en mode rapide)
+  GLM-5.3 : sigmoïde ×2,5                  sigmoïde  ✅
+  Kimi-K2.7 : sigmoïde ×2,827              sigmoïde  ✅
+  V4-Flash : racine de softplus              racine de softplus  ✅
+  Qwen3-235B : softmax                       softmax  ✅
+  V4-Flash : --config le dit calculable      oui  ✅
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/rapport-v41-mhc.md'\ns=open(p).read()\ns=s.replace(\"\"\"python3 tools/v41_compresseur_reference.py \\\\\n    /home/stephane/FastNVMe/modeles-lourds/DeepSeek-V4.1-Flash-Q2.gguf \\\\\n    /tmp/dump_l20 20  … [3144 caractères tronqués]`
+
+  ```
+engram V4.1 : adressage                    rangées DISTINCTES : 479723  ✅
+
+toutes les portes sont vertes
+EXIT=0
+  ```
+
+### 👤 Utilisateur
+
+background job bash-177 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && (timeout 5400 tools/portes.sh rapide > /tmp/portes_rapide6.log 2>&1; echo "EXIT=$?" >> /tmp/portes_rapide6.log)) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -E \"V4-Flash 43|cargo test|Qwen2.5\" /tmp/portes_rapide6.log; python3 - <<'PY'\nm = \"\"\"P7 : l'indexeur de V4.1 — clés tirées du latent, cache partagé, et vérifié\n\nDernier manque de code de P7. L'indexeur de V4.1 n'a PAS de … [2139 caractères tronqués]`
