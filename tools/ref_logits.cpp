@@ -193,6 +193,43 @@ int main(int argc, char ** argv) {
                     for (int i = 0; i < 8; ++i) { std::fprintf(stderr, " %.6e", v[i]); }
                     std::fprintf(stderr, "\n");
                 }
+                // REF_DUMP=<préfixe> : écrit le tenseur ENTIER en binaire, pour
+                // une comparaison exacte et non sur huit valeurs. Format :
+                // « REFD » + int32 ndim + int32 ne[4] + f32 data (ordre ggml).
+                const char * dump = std::getenv("REF_DUMP");
+                if (dump != nullptr) {
+                    std::string nom(t->name);
+                    for (char & c : nom) { if (c == '/' || c == ' ') { c = '_'; } }
+                    char chemin[1024];
+                    std::snprintf(chemin, sizeof(chemin), "%s-%s.bin", dump, nom.c_str());
+                    FILE * f = std::fopen(chemin, "wb");
+                    if (f != nullptr) {
+                        const int32_t ndim = 4;
+                        int32_t ne[4] = { (int32_t) t->ne[0], (int32_t) t->ne[1],
+                                          (int32_t) t->ne[2], (int32_t) t->ne[3] };
+                        std::fwrite("REFD", 1, 4, f);
+                        std::fwrite(&ndim, sizeof(ndim), 1, f);
+                        std::fwrite(ne, sizeof(int32_t), 4, f);
+                        const size_t n = (size_t) t->ne[0] * t->ne[1] * t->ne[2] * t->ne[3];
+                        if (t->type == GGML_TYPE_F32) {
+                            std::vector<float> tout(n);
+                            ggml_backend_tensor_get(t, tout.data(), 0, n * sizeof(float));
+                            std::fwrite(tout.data(), sizeof(float), n, f);
+                        } else if (t->type == GGML_TYPE_F16) {
+                            std::vector<ggml_fp16_t> tout(n);
+                            ggml_backend_tensor_get(t, tout.data(), 0, n * sizeof(ggml_fp16_t));
+                            std::vector<float> tf(n);
+                            for (size_t i = 0; i < n; ++i) { tf[i] = ggml_fp16_to_fp32(tout[i]); }
+                            std::fwrite(tf.data(), sizeof(float), n, f);
+                        } else {
+                            int32_t zero = -1;
+                            std::fwrite(&zero, sizeof(zero), 1, f);
+                        }
+                        std::fclose(f);
+                        std::fprintf(stderr, "[dump] %s (%zu valeurs, type %d)\n",
+                                     chemin, n, (int) t->type);
+                    }
+                }
             }
             return true;
         };

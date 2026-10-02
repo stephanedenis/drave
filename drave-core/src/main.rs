@@ -505,6 +505,10 @@ struct Options {
     ppl_reparti: Option<String>,
     /// Nombre de couches gardées en local par le pilote.
     couches_locales: usize,
+    /// Exécution **bornée** `a:b` — le harnais qui exécute les couches dont les
+    /// mécanismes sont implémentés, pour les comparer à la référence avant que
+    /// le reste du modèle existe.
+    couches: Option<(usize, usize)>,
     /// Couches à tracer (vide = toutes).
     trace_couches: Vec<usize>,
     /// Banc vision : embedding de patchs, écrit en binaire pour comparaison
@@ -614,6 +618,13 @@ fn analyser(args: &[String]) -> Options {
             "--options-strict" => { o.options_strict = true; 1 }
             "--ppl-reparti" => { o.ppl_reparti = Some(suivant(i).clone()); 2 }
             "--couches-locales" => { o.couches_locales = suivant(i).parse().unwrap(); 2 }
+            "--couches" => {
+                let v = suivant(i);
+                let (a, b) = v.split_once(':').unwrap_or_else(||
+                    panic!("--couches attend `a:b` (reçu « {v} »)"));
+                o.couches = Some((a.parse().unwrap(), b.parse().unwrap()));
+                2
+            }
             "--trace-couches" => { o.trace_couches = suivant(i).split(',')
                                      .filter_map(|x| x.trim().parse().ok()).collect(); 2 }
             "--banc-vision" => { o.banc_vision = Some(suivant(i).clone()); 2 }
@@ -763,7 +774,8 @@ fn run_infer(opt: Options) {
     let ctx = if ctx_impose { ctx_opt } else { 512 };
     let n_threads = if threads_impose { threads_opt } else { cpu.max(1) };
     let abits = if abits_impose { abits_opt } else { 8 };
-    let mut mdl = model::Model::load(path, ctx, n_threads, dense, keep, auto, q4, b6);
+    let mut mdl = model::Model::load_partiel(path, ctx, n_threads, dense, keep, auto, q4, b6,
+                                             opt.couches);
     if let Some(f) = &opt.tete_restreinte {
         poser_tete_restreinte(&mut mdl, f);
     }
@@ -4317,7 +4329,8 @@ calculee sur un vocabulaire restreint n'est comparable a rien. Utilisez --infer.
         println!("{idfile} : {} tokens, fenêtres de {ctx}", ids.len());
     }
 
-    let mut mdl = model::Model::load(path, ctx, n_threads, dense, keep, auto, q4, b6);
+    let mut mdl = model::Model::load_partiel(path, ctx, n_threads, dense, keep, auto, q4, b6,
+                                             opt.couches);
     if let Some(chemin) = flux_forcer.as_deref() {
         match model::FluxRelecteur::lire(chemin) {
             Ok(r) => {

@@ -889,6 +889,17 @@ zéro, l'inventaire sera sous-évalué", t.ttype, t.name);
         cles.iter().find_map(|c| self.cfg(c))
     }
 
+    /// **Quelles couches ont une attention compressée** (`attention.compress_ratios`
+    /// ≠ 0). C'est ce qui décide si une exécution BORNÉE est légitime : les
+    /// couches 0 et 1 de V4-Flash n'en ont pas, donc on peut les exécuter —
+    /// et les comparer à la référence — avant que la compression existe.
+    pub fn couches_compressees(&self) -> Vec<usize> {
+        self.cfg_ou(&["attention.compress_ratios", "compress_ratios"])
+            .and_then(|m| m.as_liste_i64())
+            .map(|v| v.iter().enumerate().filter(|(_, r)| **r != 0).map(|(i, _)| i).collect())
+            .unwrap_or_default()
+    }
+
     /// Les trois hyper-paramètres des **hyper-connexions** de DeepSeek-V4 :
     /// `(hc_mult, sinkhorn_iterations, epsilon)`.
     ///

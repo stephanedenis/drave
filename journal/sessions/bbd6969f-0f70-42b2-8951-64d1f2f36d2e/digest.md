@@ -73564,3 +73564,712 @@ toutes les portes sont vertes
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A drave-core/src/ && git commit -q -F - <<'EOF'\nP2 (1/2) : le troisième chemin d'attention — celui de DeepSeek-V4\n\nV4 n'a ni `attn_kv_a_mqa` (GLM/Kimi) ni `k_b`/`attn_v_b` : sa MLA est une AUTRE\narchitecture, et la confo … [1569 caractères tronqués]`
+
+  ```
+567d3b3 P2 (1/2) : le troisième chemin d'attention — celui de DeepSeek-V4
+  ```
+
+### 🤖 Assistant
+
+⏵ P3 : permettre une exécution partielle bornée aux couches non compressées (harnais de correction).
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"refus_architecture\\|manques_architecture\" drave-core/src/*.rs | grep -v \"^drave-core/src/model.rs:8[0-9]:\" | head", "description": "Find where the architecture refusal is applied"}`
+
+  ```
+drave-core/src/main.rs:1716:    let manques = model::manques_architecture(&g, &c, 0, false);
+drave-core/src/model.rs:180:fn refus_architecture(g: &Gguf, cfg: &Cfg, ctx: usize, clusters: bool, manques: Vec<&str>)
+drave-core/src/model.rs:2467:        let manques = manques_architecture(&g, &cfg, ctx, map.is_some());
+drave-core/src/model.rs:2468:        if let Err(raison) = refus_architecture(&g, &cfg, ctx, map.is_some(), manques) {
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs", "limit": 30, "offset": 180}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs</path>
+<type>file</type>
+<content>
+180: fn refus_architecture(g: &Gguf, cfg: &Cfg, ctx: usize, clusters: bool, manques: Vec<&str>)
+181:     -> Result<(), String> {
+182:     if !manques.is_empty() {
+183:         return Err(format!(
+184:             "architecture « {} » non implémentée par ce moteur : {}.\n  \
+185: Ce modèle n'a JAMAIS été exécuté ici : tout chiffre publié à son sujet vient \
+186: d'une analyse statique des tenseurs (inventaire, empreinte, sonde mmap), pas \
+187: d'une passe avant.\n  Tenseurs présents : {}{}{}",
+188:             g.meta.get("general.architecture").and_then(|m| m.as_str()).unwrap_or("?"),
+189:             manques.join(" · "),
+190:             if g.tensors.iter().any(|t| t.name.ends_with("attn_q_a.weight")) { "attn_q_a " } else { "" },
+191:             if g.tensors.iter().any(|t| t.name.ends_with("hc_attn_fn.weight")) { "hc_attn_fn " } else { "" },
+192:             if g.tensors.iter().any(|t| t.name.ends_with("indexer.")) { "indexer " } else { "" }));
+193:     }
+194:     // Modèle à experts dont les tenseurs d'experts sont absents : ce n'est pas
+195:     // une architecture i
+… [931 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n \"$(grep -n 'pub fn load(' drave-core/src/model.rs | head -1 | cut -d: -f1),+14p\" drave-core/src/model.rs; grep -n \"couche_debut\\|couche_fin\" drave-core/src/main.rs | head -8", "description": "Read Model::load signature an … [23 caractères tronqués]`
+
+  ```
+pub fn load(path: &str) -> std::io::Result<Patch> {
+        use std::io::Read;
+        let mut buf = Vec::new();
+        std::fs::File::open(path)?.read_to_end(&mut buf)?;
+        if buf.len() < 16 || &buf[0..4] != b"QPAT" {
+            return Err(std::io::Error::new(std::io::ErrorKind::InvalidData, "magie QPAT absente"));
+        }
+        let g = |o: usize| u32::from_le_bytes(buf[o..o+4].try_into().unwrap()) as usize;
+        let (layer, n) = (g(8), g(12));
+        let f = |base: usize| (0..n).map(|i| {
+            let o = base + 4*i;
+            f32::from_le_bytes(buf[o..o+4].try_into().unwrap())
+        }).collect::<Vec<f32>>();
+        Ok(Patch { layer, u: f(16), v: f(16 + 4*n), d: f(16 + 8*n) })
+    }
+411:             mdl.couche_debut, mdl.couche_fin, mdl.flux_brut,
+2512:                mdl.couche_debut = f.debut as usize;
+2513:                mdl.couche_fin = f.fin as usize;
+2664:    mdl.couche_fin = couches_locales;
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"pub fn charger\\|pub fn load(\" drave-core/src/model.rs | head; grep -n \"fn charger\" drave-core/src/model.rs | head -3; sed -n '2500,2520p' drave-core/src/main.rs", "description": "Find the model loader entry point and ra … [12 caractères tronqués]`
+
+  ```
+1913:    pub fn load(path: &str) -> std::io::Result<Patch> {
+2348:    pub fn load(path: &str, ctx: usize, n_threads: usize, dense: bool, keep: f32,
+499:fn charger_moe(g: &Gguf, l: usize, n_expert: usize, map: Option<&'static crate::clusters::Mapping>)
+                    continue;
+                }
+                if f.pos as usize >= ctx_local
+                   && !(f.mode == MODE_LOT || f.mode == MODE_LOT_LISTES) {
+                    println!("[flux] flux refusé : position {} au-delà du contexte {} — le \
+nœud continue", f.pos, ctx_local);
+                    continue;
+                }
+                // Les réglages du client s'appliquent ICI : les deux nœuds
+                // doivent quantifier les activations pareil, sinon ils ne
+                // calculent pas la même chose.
+                f.act.appliquer(&mut mdl);
+                mdl.couche_debut = f.debut as usize;
+                mdl.couche_fin = f.fin as usize;
+                // Le nœud moteur rend TOUJOURS un flux résiduel brut : la norme
+                // finale appartient au nœud qui a la tête de sortie, et à lui
+                // seul. C'est ce qui manquait — 798,3 au lieu de 18,2.
+                mdl.flux_b
+… [263 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '2348,2360p' drave-core/src/model.rs; grep -n \"couche_debut\\|couche_fin\" drave-core/src/model.rs | head -5", "description": "Read Model::load signature"}`
+
+  ```
+pub fn load(path: &str, ctx: usize, n_threads: usize, dense: bool, keep: f32,
+                auto: bool, q4: u8, b6: u8) -> Model {
+        let t0 = Instant::now();
+        let g = Gguf::open_auto(path).expect("ouverture du GGUF");
+        let arch = g.meta.get("general.architecture").and_then(|m| m.as_str())
+                       .unwrap_or("").to_string();
+        let r = routage_du_gguf(&g);
+        let (n_expert, n_expert_used, ffn_exp) = (r.n_expert, r.n_expert_used, r.ffn_exp);
+        let cfg = Cfg {
+            n_layer: dim_gguf(&g, &["block_count", "num_hidden_layers"], "num_hidden_layers")
+                         .unwrap_or(0) as usize,
+            hidden: dim_gguf(&g, &["embedding_length", "hidden_size"], "hidden_size")
+                        .unwrap_or(0) as usize,
+1851:    pub couche_debut: usize,
+1852:    pub couche_fin: usize,
+1857:    /// flux (`couche_fin >= n_layer`) et le pilote le normait une SECONDE fois :
+2971:            couche_debut: 0, couche_fin: n_layer_total, flux_brut: false,
+3319:        for l in self.couche_debut..self.couche_fin {
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n '\"--couches\"' drave-core/src/main.rs | head -3; grep -n \"couches_locales\" drave-core/src/main.rs | head -5; grep -rn \"Model::load(\" drave-core/src/*.rs | head", "description": "Check existing layer-range flag and load c … [11 caractères tronqués]`
+
+  ```
+507:    couches_locales: usize,
+616:            "--couches-locales" => { o.couches_locales = suivant(i).parse().unwrap(); 2 }
+2595:    let couches_locales = if opt.couches_locales > 0 { opt.couches_locales } else { 12 };
+2631:    println!("[flux] pilote : {couches_locales} couches en local, {} chez le pair, {} jetons",
+2632:             n_layer - couches_locales, ids.len());
+drave-core/src/main.rs:766:    let mut mdl = model::Model::load(path, ctx, n_threads, dense, keep, auto, q4, b6);
+drave-core/src/main.rs:1497:            let mut mdl = model::Model::load(&chemin, 512, 16, true, 1.0, false, 0, 0);
+drave-core/src/main.rs:2468:    let mut mdl = model::Model::load(&chemin, ctx, fils(&opt), true, opt.keep, false, 0, 0);
+drave-core/src/main.rs:2600:    let mut mdl = model::Model::load(&chemin, ctx, fils(&opt), true, opt.keep, false, 0, 0);
+drave-core/src/main.rs:3436:    let mut mdl = model::Model::load(path, 4096, fils(&opt), opt.dense, opt.keep, false, 0, 0);
+drave-core/src/main.rs:4320:    let mut mdl = model::Model::load(path, ctx, n_threads, dense, keep, auto, q4, b6);
+  ```
+
+### 🤖 Assistant
+
+⏵ Ajout du mode d'exécution partielle bornée (`--couches a:b`) et du filtre de manques associé.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='drave-core/src/gguf.rs'\ns=open(p).read()\na=\"\"\"    /// Les trois hyper-paramètres des **hyper-connexions** de DeepSeek-V4 :\"\"\"\nb=\"\"\"    /// **Quelles couches ont une attention compressée** (`attenti … [3884 caractères tronqués]`
+
+  ```
+ok gguf
+ok model
+--- fin ---
+  ```
+
+### 🤖 Assistant
+
+⏵ Harnais de comparaison : `--couches a:b` et vidage des états de couche (`DRAVE_DUMP_COUCHES`).
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='drave-core/src/model.rs'\ns=open(p).read()\nsubs=[]\n# champ\nsubs.append((\n\"\"\"    /// **Attention V4** par couche (DeepSeek-V4 / V4.1), quand elle est\n    /// reconnue (`attn_kv.weight`). Troisième chemi … [4333 caractères tronqués]`
+
+  ```
+ok
+--- fin ---
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='drave-core/src/main.rs'\ns=open(p).read()\nsubs=[]\nsubs.append((\n\"\"\"    couches_locales: usize,\"\"\",\n\"\"\"    couches_locales: usize,\n    /// Exécution **bornée** `a:b` — le harnais qui exécute les c … [1311 caractères tronqués]`
+
+  ```
+--- fin ---
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 26, in <module>
+AssertionError: ('    let mut mdl = model::Model::load(path, ctx, n_', 2)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"let mut mdl = model::Model::load(path\" drave-core/src/main.rs; sed -n '770,780p' drave-core/src/main.rs", "description": "Find the two identical load call sites"}`
+
+  ```
+766:    let mut mdl = model::Model::load(path, ctx, n_threads, dense, keep, auto, q4, b6);
+3436:    let mut mdl = model::Model::load(path, 4096, fils(&opt), opt.dense, opt.keep, false, 0, 0);
+4320:    let mut mdl = model::Model::load(path, ctx, n_threads, dense, keep, auto, q4, b6);
+    if let Some(f) = &opt.tete_garantie {
+        let mut ids: Vec<u32> = Vec::new();
+        if let Ok(t) = std::fs::read_to_string(f) {
+            for x in t.split(|c: char| c == ',' || c.is_whitespace()) {
+                if let Ok(v) = x.trim().parse::<u32>() { ids.push(v); }
+            }
+        }
+        ids.sort_unstable();
+        ids.dedup();
+        if ids.is_empty() {
+            eprintln!("[tete-garantie] {f} ne contient aucun identifiant : rien à faire");
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport re\np='drave-core/src/main.rs'\ns=open(p).read()\nold=\"    let mut mdl = model::Model::load(path, ctx, n_threads, dense, keep, auto, q4, b6);\"\nnew=\"    let mut mdl = model::Model::load_partiel(path, ct … [569 caractères tronqués]`
+
+  ```
+ok
+error[E0609]: no field `couches` on type `Options`
+   --> src/main.rs:767:50
+    |
+767 | ...                   opt.couches);
+    |                           ^^^^^^^ unknown field
+    |
+    = note: available fields are: `infer`, `ppl`, `plan`, `tokenize`, `gpu_banc` ... and 79 others
+
+error[E0609]: no field `couches` on type `Options`
+    --> src/main.rs:4322:50
+     |
+4322 | ...                   opt.couches);
+     |                           ^^^^^^^ unknown field
+     |
+     = note: available fields are: `infer`, `ppl`, `plan`, `tokenize`, `gpu_banc` ... and 79 others
+
+warning: unused variable: `plan`
+   --> src/materiel.rs:381:34
+    |
+--
+error: could not compile `drave-core` (bin "drave") due to 2 previous errors; 28 warnings emitted
+--- fin ---
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='drave-core/src/main.rs'\ns=open(p).read()\nsubs=[\n(\"\"\"    couches_locales: usize,\"\"\",\n \"\"\"    couches_locales: usize,\n    /// Exécution **bornée** `a:b` — le harnais qui exécute les couches dont le … [959 caractères tronqués]`
+
+  ```
+ok
+507:    couches_locales: usize,
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n '\"--couches\" =>' drave-core/src/main.rs | head -2; cd drave-core && cargo build --release 2>&1 | grep -E \"^error\" -A 6 | head -15; echo \"--- fin ---\"", "description": "Verify option wiring and build", "timeoutMs": 60000 … [2 caractères tronqués]`
+
+  ```
+621:            "--couches" => {
+--- fin ---
+  ```
+
+### 🤖 Assistant
+
+⏵ Test du harnais : exécution bornée des couches 0-1 de V4-Flash avec vidage d'état.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && rm -f /tmp/v4flash_l*.bin && DRAVE_DUMP_COUCHES=/tmp/v4flash timeout 900 ./drave-core/target/release/drave /home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek-V4-Flash-UD-IQ1_M/DeepSeek-V4-Flash-UD-IQ1_M-00001-of-00003.gguf --couc … [200 caractères tronqués]`
+
+  ```
+/tmp/ids_glm.txt : 3 tokens, fenêtres de 16
+[partiel] couches 0..2 : aucune n'a d'attention compressée (les couches compressées sont [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42]) — le manque ne s'applique pas à cette plage, le RESTE du modèle reste non implémenté.
+[config] attention V4 : 43 couches · 1 tête latente de 512 (448 nope + 64 rope) · 64 têtes de requête · sortie groupée 8×1024 · puits par tête
+
+thread 'main' (592371) panicked at src/gguf.rs:1638:53:
+tenseur hc_head_fn.weight absent
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+timeout: the monitored command dumped core
+[exit code: 2]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='drave-core/src/model.rs'\ns=open(p).read()\na=\"\"\"            // Mélange de TÊTE : une seule sortie (`hc` poids), donc son `fn`\n            // est `[hc × hc·h]` et sa base `[hc]` — pas de `post` ni de `comb … [2096 caractères tronqués]`
+
+  ```
+ok
+--- build fini ---
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && rm -f /tmp/v4flash_l*.bin && DRAVE_DUMP_COUCHES=/tmp/v4flash timeout 1200 ./drave-core/target/release/drave /home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek-V4-Flash-UD-IQ1_M/DeepSeek-V4-Flash-UD-IQ1_M-00001-of-00003.gguf --cou … [213 caractères tronqués]`
+
+  ```
+[config] attention V4 : 43 couches · 1 tête latente de 512 (448 nope + 64 rope) · 64 têtes de requête · sortie groupée 8×1024 · puits par tête
+[config] hyper-connexions : 4 copies · 24 mélanges par couche (pre 4 + post 4 + comb 16) · Sinkhorn 20 itérations · eps 1e-6 · pas de mélange de tête (absent du fichier)
+[moe] couche 0 : routage par TABLE tid2eid, 6 experts par jeton (129280 jetons de vocabulaire)
+
+thread 'main' (597053) panicked at src/model.rs:970:50:
+tenseur blk.0.attn_q.weight absent
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+timeout: the monitored command dumped core
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='drave-core/src/model.rs'\ns=open(p).read()\nsubs=[\n(\"\"\"                wq: if mla.is_some() { Proj::vide() } else {\"\"\",\n \"\"\"                wq: if mla.is_some() || mla4.is_some() { Proj::vide() } el … [1028 caractères tronqués]`
+
+  ```
+ok
+[config] attention V4 : 43 couches · 1 tête latente de 512 (448 nope + 64 rope) · 64 têtes de requête · sortie groupée 8×1024 · puits par tête
+[config] hyper-connexions : 4 copies · 24 mélanges par couche (pre 4 + post 4 + comb 16) · Sinkhorn 20 itérations · eps 1e-6 · pas de mélange de tête (absent du fichier)
+[moe] couche 0 : routage par TABLE tid2eid, 6 experts par jeton (129280 jetons de vocabulaire)
+
+thread 'main' (605404) panicked at src/model.rs:970:50:
+tenseur blk.0.attn_output.weight absent
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+timeout: the monitored command dumped core
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"attn_output.weight\" drave-core/src/model.rs | head -5; sed -n '985,993p' drave-core/src/model.rs", "description": "Find wo loading site"}`
+
+  ```
+2554:                    wo: g.dequant(&p("attn_output.weight")),
+2689:                wo: Proj::load(&g, &p("attn_output.weight"), Some(&p("attn_output.bias")), dense || q4 != 0, auto, keep, q4 & 2 != 0, b6 & 2 != 0),
+5141:            // `attn_output.weight` à charger, et refaire une projection ici
+            return Proj { gpu: None, m: None, d: None, q4: Some(z), bias };
+        }
+        let (m, d, q4v) = if q4 {
+            // Source déjà en Q4_0 : on importe les blocs tels quels. Sinon on
+            // quantifie depuis les f32 (une seule couche d'erreur, pas deux).
+            // Import VERBATIM quand la source est déjà en 4 bits : MXFP4
+            // (gpt-oss) puis Q4_0 (llama.cpp). Sinon, quantification depuis
+            // les f32 — une seule couche d'erreur, jamais deux.
+            // EMPRUNT, pas copie : on lit les blocs dans le fichier déjà
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='drave-core/src/model.rs'\ns=open(p).read()\na=\"\"\"                wo: Proj::load(&g, &p(\"attn_output.weight\"), Some(&p(\"attn_output.bias\")), dense || q4 != 0, auto, keep, q4 & 2 != 0, b6 & 2 != 0),\"\"\" … [1002 caractères tronqués]`
+
+  ```
+ok
+    attention : 0.00 M paires (requête, clé) par token
+    projections : 0.0 M événements par token
+    paires (poids × activation) par token : attention 321.1 M · experts 453.0 M · partagé 2193.6 M · scores 0 K · total 2967.7 M
+    dont en listes (une paire y est un événement) : 0.0 M — le reste est dense (déquantifié ou f32)
+    part de l'attention dans le flux total : 10.8 %
+    postes (ms/token) : projets-attn 0.00 | rope 0.00 | attention 341.80 | proj+mlp 4292.43 | somme 4634.23 | reste (tête + échantillonnage) 1163.30
+    dont tête de sortie 1132.40 | notation log-sum-exp 1.12 (le reste du « reste » n'est pas chronométré)
+    dont attention : scores 0.00 | softmax 0.00 | somme pondérée + écriture KV 341.80
+  ```
+
+- **bash** `{"command": "ls -la /tmp/v4flash-*.bin 2>/dev/null | head; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c \"\nimport struct,os\nfor l in (0,1):\n    p=f'/tmp/v4flash-{l}.bin'\n    if not os.path.exists(p): print(p,'absent'); continue\n    b=open(p,'rb').read()\n    v=struct.unpack( … [227 caractères tronqués]`
+
+  ```
+-rw-r--r--. 1 stephane stephane 65536  2 oct 11:39 /tmp/v4flash-0.bin
+-rw-r--r--. 1 stephane stephane 65536  2 oct 11:39 /tmp/v4flash-1.bin
+couche 0: 16384 valeurs (4 copies de 4096) · |x| 20.1636 · début [-0.04356, -0.0951, 0.02257, -0.10601]
+couche 1: 16384 valeurs (4 copies de 4096) · |x| 20.6083 · début [-0.04126, -0.1083, 0.01341, -0.06303]
+  ```
+
+### 🤖 Assistant
+
+⏵ Préparation de la porte de correction : ids du tokenizer V4-Flash et référence llama.cpp.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && head -40 tools/ref_logits.cpp; ls -la tools/ref_logits 2>/dev/null", "description": "Read ref_logits interface"}`
+
+  ```
+// ref_logits.cpp — référence externe llama.cpp pour comparer les logits d'un moteur maison.
+//
+// Usage : ref_logits <modele.gguf> <ids.txt> <sortie.bin> [n_max]
+//
+//   - lit la liste d'identifiants (entiers séparés par des virgules et/ou des espaces)
+//   - évalue la séquence EXACTE : positions 0..N-1, aucun BOS ajouté, une seule
+//     séquence, un seul batch (n_ctx = N + marge, n_batch = n_ubatch = N)
+//   - écrit <sortie.bin> en petit-boutiste :
+//         int32 n_vocab
+//         int32 n_pos
+//         n_pos * n_vocab float32, ligne par position
+//     la ligne i contient la distribution qui prédit ids[i+1] (donc n_pos = N-1)
+//   - affiche n_pos, n_vocab, la NLL moyenne et la perplexité (log-softmax sur
+//     les mêmes lignes, cible de la ligne i = ids[i+1])
+//
+// Compilation (voir ref_logits.md) :
+//   g++ -O2 -std=c++17 tools/ref_logits.cpp -o tools/ref_logits \
+//       -I /home/stephane/Data13TB/stephane/GitHub/llama.cpp/include \
+//       -I /home/stephane/Data13TB/stephane/GitHub/llama.cpp/ggml/include \
+//       -L /home/stephane/Data13TB/stephane/GitHub/llama.cpp/build/bin \
+//       -lllama -lggml -lggml-base
+
+#include "llama.h"
+
+#include <cctype>
+#include <cmath>
+… [390 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"tensors\\|regex\\|l_last\\|dump\" tools/ref_logits.cpp | head -20", "description": "Check tensor-dump capability of ref_logits"}`
+
+  ```
+31:#include <regex>
+147:    // `--tensors REGEX` : imprime les premières valeurs des tenseurs dont le nom
+152:    static const char * filtre_tensors = nullptr;
+154:        if (std::strcmp(argv[i], "--tensors") == 0 && i + 1 < argc) { filtre_tensors = argv[i + 1]; }
+156:    if (const char * e = std::getenv("REF_TENSORS")) { filtre_tensors = e; }
+157:    if (filtre_tensors != nullptr) {
+158:        std::fprintf(stderr, "ref_logits: tenseurs filtrés par « %s »\n", filtre_tensors);
+163:    if (filtre_tensors != nullptr) {
+165:            const char * motif = filtre_tensors;
+168:                return std::regex_search(std::string(t->name), std::regex(motif));
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '145,200p' tools/ref_logits.cpp", "description": "Read the tensor-dump callback"}`
+
+  ```
+cparams.n_threads_batch = n_threads;
+
+    // `--tensors REGEX` : imprime les premières valeurs des tenseurs dont le nom
+    // correspond, PENDANT l'évaluation. C'est ce qui localise une divergence :
+    // comparer les logits dit QU'il y a un écart, pas à quelle couche il naît.
+    // Les noms sont ceux des `cb(...)` du graphe (« qr-0 », « kv_cmpr-0 »,
+    // « k_pe-0 », « ffn_moe_out-3 »…).
+    static const char * filtre_tensors = nullptr;
+    for (int i = 1; i < argc; ++i) {
+        if (std::strcmp(argv[i], "--tensors") == 0 && i + 1 < argc) { filtre_tensors = argv[i + 1]; }
+    }
+    if (const char * e = std::getenv("REF_TENSORS")) { filtre_tensors = e; }
+    if (filtre_tensors != nullptr) {
+        std::fprintf(stderr, "ref_logits: tenseurs filtrés par « %s »\n", filtre_tensors);
+    }
+
+    // Le filtre est capturé par la lambda : une variable statique de fichier
+    // suffit, le programme est mono-modèle.
+    if (filtre_tensors != nullptr) {
+        cparams.cb_eval = [](ggml_tensor * t, bool ask, void * /*user*/) -> bool {
+            const char * motif = filtre_tensors;
+            if (t == nullptr || t->name == nullptr) { return false; }
+            if (ask) {
+            
+… [1880 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Vidages par position (hc_pre et état de couche) pour la comparaison étage par étage.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='drave-core/src/model.rs'\ns=open(p).read()\nsubs=[]\nsubs.append((\n\"\"\"    fn vider_couche(prefixe: Option<&str>, l: usize, x: &[f32]) {\n        use std::io::Write;\n        let Some(p) = prefixe else { re … [1823 caractères tronqués]`
+
+  ```
+ok
+--- fin ---
+  ```
+
+### 🤖 Assistant
+
+⏵ Extension de `ref_logits` pour écrire les tenseurs entiers (comparaison exacte).
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='tools/ref_logits.cpp'\ns=open(p).read()\na=\"\"\"                    std::fprintf(stderr, \"          pos %lld =\", pos);\n                    for (int i = 0; i < 8; ++i) { std::fprintf(stderr, \" %.6e\", v[i] … [3255 caractères tronqués]`
+
+  ```
+ok
+-rwxr-xr-x. 1 stephane stephane 207032  2 oct 11:40 tools/ref_logits
+  ```
+
+### 🤖 Assistant
+
+⏵ Génération des identifiants V4-Flash et lancement de la référence llama.cpp (couches 0-1).
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && head -c 20000 data/wikitext2_test.txt > /tmp/wt2_txt.txt && timeout 600 ./drave-core/target/release/drave /home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek-V4-Flash-UD-IQ1_M/DeepSeek-V4-Flash-UD-IQ1_M-00001-of-00003.gguf --token … [287 caractères tronqués]`
+
+  ```
+4527 tokens écrits dans /tmp/ids_v4flash.txt (vocabulaire du modèle : 129280)
+réversibilité : texte reconstruit identique ✅ (20000 octets)
+201,438,10498,102771,402,438,61915,10498,102771,402,344,411,
+n = 1 · premiers ['201,438,10498,102771,402,438,61915,10498,102771,402,344,411,3947,5485,1537,15758,305,31085,22491,1204,1166,936,260,20521,2390,15,34,71132,3615,377,270,15758,4923,455,10987,295,223,20,18,18,18,1204,1162,515,7128,513,260,71132,3615,295,270,1946,5334,1054,4866,513,20923,89127,1537,778,515,7451,295,223,20,18,18,19,509,270,15301,6605,30650,1204,1166,936,260,20521,3615,295,270,15758,4923,25750,3880,1675,284,295,223,20,18,18,20,1204,660,223,20,18,18,22,102771,402,33906,260,3615,412,582,38950,582,295,270,19569,582,93802,905,85,18145,582,294,270,15758,4923,455,9266,49866,3749,468,98410,19930,21180,5101,27290,305,56068,18844,75,1204,1166,515,8733,295,270,223,20,18,18,23,31085,58853,294,270,28551,59059,3429,1946,52493,58703,1537,778,515,7451,509,270,74024,30650,295,78779,305,270,12651,1374,60442,50442,295,6693,1204,1166,515,14717,513,3880,101547,305,98410,19930,7173,2282,994,1649,1537,73908,1653,15674,1537,18881,21324,1537,60048,27626,443,1537,59898,102010,305,95787,10316,1204,
+… [20440 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Référence llama.cpp sur V4-Flash (couches 0-1, positions 0-3) en arrière-plan.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && rm -f /tmp/ref_v4flash-*.bin && REF_DUMP=/tmp/ref_v4flash REF_TENSORS='hc_attn_(pre|post)-[01]|l_last-[01]' timeout 2400 ./tools/ref_logits /home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek-V4-Flash-UD-IQ1_M/DeepSeek-V4-Flash-UD … [198 caractères tronqués]`
+
+  ```
+started background job bash-136
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && rm -f /tmp/v4flash-*.bin && DRAVE_DUMP_COUCHES=/tmp/v4flash timeout 1800 ./drave-core/target/release/drave /home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek-V4-Flash-UD-IQ1_M/DeepSeek-V4-Flash-UD-IQ1_M-00001-of-00003.gguf --couc … [242 caractères tronqués]`
+
+  ```
+[partiel] couches 0..2 : aucune n'a d'attention compressée (les couches compressées sont [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42]) — le manque ne s'applique pas à cette plage, le RESTE du modèle reste non implémenté.
+[config] attention V4 : 43 couches · 1 tête latente de 512 (448 nope + 64 rope) · 64 têtes de requête · sortie groupée 8×1024 · puits par tête
+[config] hyper-connexions : 4 copies · 24 mélanges par couche (pre 4 + post 4 + comb 16) · Sinkhorn 20 itérations · eps 1e-6 · pas de mélange de tête (absent du fichier)
+[config] cache KV : 32 bits, 0.00 Go pour 16 jetons
+[config] 43 couches, hidden 4096 · racine de softpluséchelle 1.50 routage-table moe 
+/tmp/v4flash-hc_attn_pre-0-0.bin
+/tmp/v4flash-hc_attn_pre-0-1.bin
+/tmp/v4flash-hc_attn_pre-0-2.bin
+/tmp/v4flash-hc_attn_pre-0-3.bin
+/tmp/v4flash-hc_attn_pre-1-0.bin
+/tmp/v4flash-hc_attn_pre-1-1.bin
+/tmp/v4flash-hc_attn_pre-1-2.bin
+/tmp/v4flash-hc_attn_pre-1-3.bin
+/tmp/v4flash-l_last-0-0.bin
+/tmp/v4flash-l_last-0-1.bin
+/tmp/v4flash-l_last-0-2.bin
+/tmp/v4flash-l_last-0-3.bin
+/tmp/v4flash-l_last-1-0.bin
+/tmp/v4flash-
+… [70 caractères tronqués]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-136 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && rm -f /tmp/ref_v4flash-*.bin && REF_DUMP=/tmp/ref_v4flash REF_TENSORS='hc_attn_(pre|post)-[01]|l_last-[01]' timeout 2400 ./tools/ref_logits /home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek-V4-Flash-UD-IQ1_M/DeepSeek-V4-Flash-UD-IQ1_M-00001-of-00003.gguf /tmp/ids_v4flash.txt /tmp/ref_v4flash_logits.bin 4 2>&1 | tail -30) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+### 🤖 Assistant
+
+⏵ Comparaison des états de couche Drave ↔ llama.cpp (porte de correction P3).
+
+- **job_output** `{"job_id": "bash-136"}`
+
+  ```
+./tools/ref_logits: error while loading shared libraries: libllama.so.0: cannot open shared object file: No such file or directory
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls /home/stephane/Data13TB/stephane/GitHub/llama.cpp/build/bin/*.so* 2>/dev/null | head -3; grep -rn \"LD_LIBRARY_PATH\" tools/*.sh tools/*.md 2>/dev/null | head -3", "description": "Find llama.cpp shared libraries"}`
+
+  ```
+/home/stephane/Data13TB/stephane/GitHub/llama.cpp/build/bin/libggml-base.so
+/home/stephane/Data13TB/stephane/GitHub/llama.cpp/build/bin/libggml-base.so.0
+/home/stephane/Data13TB/stephane/GitHub/llama.cpp/build/bin/libggml-base.so.0.17.0
+tools/verifier_table_types.sh:53:LD_LIBRARY_PATH="$RACINE/build/bin" "$TMP/tailles" | sort -n > "$TMP/ggml.txt"
+tools/ref_logits.md:24:LD_LIBRARY_PATH=/home/stephane/Data13TB/stephane/GitHub/llama.cpp/build/bin \
+tools/ref_logits.md:36:LD_LIBRARY_PATH=/home/stephane/Data13TB/stephane/GitHub/llama.cpp/build/bin \
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && rm -f /tmp/ref_v4flash-*.bin && LD_LIBRARY_PATH=/home/stephane/Data13TB/stephane/GitHub/llama.cpp/build/bin REF_DUMP=/tmp/ref_v4flash REF_TENSORS='hc_attn_(pre|post)-[01]|l_last-[01]' timeout 2400 ./tools/ref_logits /home/stephane/Da … [282 caractères tronqués]`
+
+  ```
+started background job bash-137
+  ```
+
+### 🤖 Assistant
+
+⏵ Écriture de l'outil de comparaison des états (Drave ↔ llama.cpp).
+
+- **write** `{"content": "#!/usr/bin/env python3\n\"\"\"Compare les états intermédiaires de Drave à ceux de llama.cpp, tenseur par tenseur.\n\nDeux formats en entrée :\n\n* **Drave** — `DRAVE_DUMP_COUCHES=<préfixe>` écrit des f32 bruts :\n  `<préfixe>-<nom>-<couche>-<position>.bin`, sans en-tête.\n* **llama.cpp* … [2726 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/compare_etats.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **job_output** `{"job_id": "bash-137", "timeout_ms": 600000, "wait": true}`
+
+  ```
+[dump] /tmp/ref_v4flash-hc_attn_post-19.bin (65536 valeurs, type 0)
+[tensor] hc_attn_post-19 (reshaped) : type 0 · ne = [16384, 4, 1, 1]
+          pos 0 = 7.151041e+01 5.981387e+01 -4.037631e+01 2.127099e+01 8.869759e+01 -9.948117e+01 2.699338e+00 9.137369e+00
+          pos 1 = -2.998664e-02 -1.304470e-01 -9.306648e-02 -1.215565e-01 -3.555089e-01 -3.303215e-02 2.049143e-01 -7.984535e-02
+          pos 2 = -4.794925e-01 2.784644e-02 1.724193e-01 -1.575309e-01 -1.925731e-01 2.012190e-02 3.419156e-01 1.604380e-01
+          pos 3 = -3.353287e-01 2.665113e-02 1.462586e-01 2.062850e-01 -1.312861e-01 1.222533e-01 -8.059677e-01 7.718378e-02
+[dump] /tmp/ref_v4flash-hc_attn_post-19_(reshaped).bin (65536 valeurs, type 0)
+[tensor] l_last-19 : type 0 · ne = [4096, 4, 4, 1]
+          pos 0 = 7.145880e+01 5.978820e+01 -4.033347e+01 2.125876e+01 8.864250e+01 -9.942021e+01 2.707167e+00 9.125273e+00
+          pos 1 = 1.666030e+01 3.188216e+01 -1.457572e+01 1.101417e+01 3.883315e+01 -4.209858e+01 1.252351e+01 -9.228036e-01
+          pos 2 = 3.557030e+01 4.250354e+01 -8.841312e+00 1.293931e+01 4.953412e+01 -5.558433e+01 7.852633e+00 4.751428e-01
+          pos 3 = -4.301921e-01 -1.279066e+00 -1.421451e-
+… [1061 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Comparaison Drave ↔ llama.cpp sur les couches 0 et 1.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for nom in l_last hc_attn_pre; do for l in 0 1; do python3 tools/compare_etats.py /tmp/v4flash /tmp/ref_v4flash $nom $l 0,1,2,3; done; done 2>&1 | head -30", "description": "Compare layer states Drave vs llama.cpp"}`
+
+  ```
+# l_last-0 : référence ne=(4096, 4, 4, 1) → 4096 valeurs × 4 copies
+  pos 0 : écart max 8.627e-02 (indice 12430, dynamique 9.045e-01) · corrélation 0.996684 ❌
+  pos 1 : écart max 4.862e-01 (indice 14917, dynamique 8.942e-01) · corrélation 0.901138 ❌
+  pos 2 : écart max 2.281e-01 (indice 15395, dynamique 1.161e+00) · corrélation 0.976281 ❌
+  pos 3 : écart max 3.613e-01 (indice 15932, dynamique 1.555e+00) · corrélation 0.978708 ❌
+# l_last-1 : référence ne=(4096, 4, 4, 1) → 4096 valeurs × 4 copies
+  pos 0 : écart max 6.330e-01 (indice 10693, dynamique 3.574e+00) · corrélation 0.996990 ❌
+  pos 1 : écart max 1.048e+00 (indice 10693, dynamique 8.818e-01) · corrélation 0.828506 ❌
+  pos 2 : écart max 4.918e-01 (indice 10693, dynamique 1.036e+00) · corrélation 0.955134 ❌
+  pos 3 : écart max 4.423e-01 (indice 8852, dynamique 1.346e+00) · corrélation 0.953205 ❌
+# hc_attn_pre-0 : référence ne=(4096, 4, 1, 1) → 4096 valeurs × 4 copies
+  pos 0 : LONGUEURS DIFFÉRENTES — Drave 4096, référence 16384
+  pos 1 : LONGUEURS DIFFÉRENTES — Drave 4096, référence 0
+  pos 2 : LONGUEURS DIFFÉRENTES — Drave 4096, référence 0
+  pos 3 : LONGUEURS DIFFÉRENTES — Drave 4096, référence 0
+# hc_attn_pre-1 : référence 
+… [280 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Correction de l'outil (positions en `ne1`) et test de l'étape hyper-connexions seule.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='tools/compare_etats.py'\ns=open(p).read()\na=\"\"\"    ne, ref = lire_ref(f\"{pr}-{nom}-{couche}.bin\")\n    n_embd = ne[0]\n    hc = ne[1] if len(ne) > 1 else 1\n    print(f\"# {nom}-{couche} : référence ne={ … [1480 caractères tronqués]`
+
+  ```
+ok
+# hc_attn_pre-0 : référence ne=(4096, 4, 1, 1) → 4096 valeurs × 1 par position
+  pos 0 : écart max 7.451e-09 (indice 1, dynamique 1.971e-01) · corrélation 1.000000 ✅
+  pos 1 : écart max 1.490e-08 (indice 74, dynamique 3.178e-01) · corrélation 1.000000 ✅
+  pos 2 : écart max 5.960e-08 (indice 777, dynamique 1.367e+00) · corrélation 1.000000 ✅
+  pos 3 : écart max 1.192e-07 (indice 343, dynamique 2.494e+00) · corrélation 1.000000 ✅
+  ```
+
+### 🤖 Assistant
+
+⏵ L'étape hyper-connexions est exacte (1e-7). J'instrumente l'attention pour localiser l'écart.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='drave-core/src/model.rs'\ns=open(p).read()\nsubs=[]\n# signature : + préfixe de vidage et couche\nsubs.append((\n\"\"\"    fn attn_v4(m: &Mla4, cache: &mut Vec<f32>, x: &[f32], pos: usize, att: &mut [f32],\n   … [2278 caractères tronqués]`
+
+  ```
+ok
+--- fin ---
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && rm -f /tmp/ref_v4flash2-*.bin && LD_LIBRARY_PATH=/home/stephane/Data13TB/stephane/GitHub/llama.cpp/build/bin REF_DUMP=/tmp/ref_v4flash2 REF_TENSORS='^(qr_norm|q_norm|kv_norm|attn_derope|attn_out)-0$' timeout 2400 ./tools/ref_logits / … [298 caractères tronqués]`
+
+  ```
+started background job bash-138
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && rm -f /tmp/v4flash-*.bin && DRAVE_DUMP_COUCHES=/tmp/v4flash timeout 1800 ./drave-core/target/release/drave /home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek-V4-Flash-UD-IQ1_M/DeepSeek-V4-Flash-UD-IQ1_M-00001-of-00003.gguf --couc … [199 caractères tronqués]`
+
+  ```
+dont tête de sortie 16.39 | notation log-sum-exp 1.11 (le reste du « reste » n'est pas chronométré)
+    dont attention : scores 0.00 | softmax 0.00 | somme pondérée + écriture KV 149.13
+/tmp/v4flash-attn_derope-0-0.bin
+/tmp/v4flash-attn_derope-0-1.bin
+/tmp/v4flash-attn_derope-0-2.bin
+/tmp/v4flash-attn_derope-0-3.bin
+/tmp/v4flash-attn_out-0-0.bin
+/tmp/v4flash-attn_out-0-1.bin
+/tmp/v4flash-attn_out-0-2.bin
+/tmp/v4flash-attn_out-0-3.bin
+/tmp/v4flash-hc_attn_pre-0-0.bin
+/tmp/v4flash-hc_attn_pre-0-1.bin
+  ```
+
+### 👤 Utilisateur
+
+background job bash-138 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && rm -f /tmp/ref_v4flash2-*.bin && LD_LIBRARY_PATH=/home/stephane/Data13TB/stephane/GitHub/llama.cpp/build/bin REF_DUMP=/tmp/ref_v4flash2 REF_TENSORS='^(qr_norm|q_norm|kv_norm|attn_derope|attn_out)-0$' timeout 2400 ./tools/ref_logits /home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek-V4-Flash-UD-IQ1_M/DeepSeek-V4-Flash-UD-IQ1_M-00001-of-00003.gguf /tmp/ids_v4flash.txt /tmp/ref_v4flash2_logits.bin 4 2>&1 | tail -4) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "ls /tmp/ref_v4flash2-*.bin | head; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for nom in qr_norm q_norm kv_norm attn_derope attn_out; do python3 tools/compare_etats.py /tmp/v4flash /tmp/ref_v4flash2 $nom 0 0,1 2>&1 | head -3; done", "description": "Compare attention intermedi … [6 caractères tronqués]`
+
+  ```
+/tmp/ref_v4flash2-attn_derope-0.bin
+/tmp/ref_v4flash2-attn_out-0.bin
+/tmp/ref_v4flash2-kv_norm-0.bin
+/tmp/ref_v4flash2-q_norm-0.bin
+/tmp/ref_v4flash2-qr_norm-0.bin
+# qr_norm-0 : référence ne=(1024, 4, 1, 1) → 1024 valeurs × 1 par position
+  pos 0 : écart max 8.257e-03 (indice 993, dynamique 1.327e-01) · corrélation 0.998648 ❌
+  pos 1 : écart max 7.409e-03 (indice 993, dynamique 1.215e-01) · corrélation 0.998443 ❌
+# q_norm-0 : référence ne=(512, 64, 4, 1) → 512 valeurs × 64 copies
+  pos 0 : écart max 9.347e-01 (indice 9691, dynamique 1.826e+01) · corrélation 0.998499 ❌
+  pos 1 : écart max 9.099e-01 (indice 10715, dynamique 1.546e+01) · corrélation 0.998251 ❌
+# kv_norm-0 : référence ne=(512, 1, 4, 1) → 512 valeurs × 1 par position
+  pos 0 : écart max 2.264e-01 (indice 474, dynamique 4.941e+00) · corrélation 0.998563 ❌
+  pos 1 : écart max 2.517e+00 (indice 481, dynamique 5.508e+00) · corrélation 0.958770 ❌
+# attn_derope-0 : référence ne=(512, 64, 4, 1) → 512 valeurs × 64 copies
+  pos 0 : écart max 1.584e+00 (indice 11226, dynamique 4.939e+00) · corrélation 0.992121 ❌
+  pos 1 : écart max 2.961e+00 (indice 14784, dynamique 5.504e+00) · corrélation 0.930524 ❌
+# attn_out-0 : référence ne=
+… [171 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ L'écart naît dès `qr_norm` : comparaison des valeurs brutes pour diagnostiquer.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c \"\nimport struct\ndef rd(p):\n    b=open(p,'rb').read(); return list(struct.unpack(f'<{len(b)//4}f', b))\ndef rr(p):\n    b=open(p,'rb').read(); ne=struct.unpack('<4i', b[8:24]); n=1\n    for d in ne: n*=d\n    return ne, … [486 caractères tronqués]`
+
+  ```
+ref ne (1024, 4, 1, 1) drave 1024
+idx   drave        ref          rapport
+    0 -3.484942e-02 -2.912030e-02 +1.1967
+    1 -4.489642e-02 -4.669476e-02 +0.9615
+    2 -1.568403e-02 -7.850576e-03 +1.9978
+    3 +4.663283e-02 +4.566680e-02 +1.0212
+  500 -2.467760e-02 -2.135597e-02 +1.1555
+  993 -1.834826e-02 -2.660525e-02 +0.6896
+ 1023 -1.914804e-02 -1.833353e-02 +1.0444
+normes : drave 1.214125  ref 2.450861
+  ```
+
+### 🤖 Assistant
+
+⏵ Test décisif : vidage de `qr` brut (avant norme) des deux côtés.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='drave-core/src/model.rs'\ns=open(p).read()\na=\"\"\"        let mut qrn = vec![0f32; qr.len()];\n        Self::rmsnorm(&qr, &m.q_a_norm, m.eps, &mut qrn);\n        Self::vider_couche(dump, \"qr_norm\", l, pos, … [703 caractères tronqués]`
+
+  ```
+ok
+deepseek4.rope.freq_base = 10000.0
+deepseek4.attention.layer_norm_rms_epsilon = 9.999999974752427e-07
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && rm -f /tmp/v4flash-*.bin && DRAVE_DUMP_COUCHES=/tmp/v4flash timeout 1800 ./drave-core/target/release/drave /home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek-V4-Flash-UD-IQ1_M/DeepSeek-V4-Flash-UD-IQ1_M-00001-of-00003.gguf --couc … [207 caractères tronqués]`
+
+  ```
+/tmp/v4flash-qr-0-0.bin
+/tmp/v4flash-qr-0-1.bin
+/tmp/v4flash-qr-0-2.bin
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && rm -f /tmp/ref_v4flash3-*.bin && LD_LIBRARY_PATH=/home/stephane/Data13TB/stephane/GitHub/llama.cpp/build/bin REF_DUMP=/tmp/ref_v4flash3 REF_TENSORS='^qr-0$' timeout 2400 ./tools/ref_logits /home/stephane/Data13TB/stephane/modeles/ggu … [279 caractères tronqués]`
+
+  ```
+# qr-0 : référence ne=(1024, 4, 1, 1) → 1024 valeurs × 1 par position
+  pos 0 : écart max 2.659e-01 (indice 955, dynamique 2.886e-01) · corrélation 0.998660 ❌
+  pos 1 : écart max 4.925e-01 (indice 19, dynamique 2.475e-01) · corrélation 0.998442 ❌
+  ```
+
+### 🤖 Assistant
+
+⏵ Bug trouvé : l'attention V4 recevait l'entrée mélangée **avant** `attn_norm`. Correction.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='drave-core/src/model.rs'\ns=open(p).read()\na=\"\"\"                Self::attn_v4(m4, &mut self.mla4_cache[l], &xin, pos, &mut att,\n                              &mut paires[0], self.dump_couches.as_deref(),  … [1262 caractères tronqués]`
+
+  ```
+ok
+# qr-0 : référence ne=(1024, 4, 1, 1) → 1024 valeurs × 1 par position
+  pos 0 : écart max 1.148e-03 (indice 250, dynamique 2.886e-01) · corrélation 0.999993 ~
+  pos 1 : écart max 9.200e-04 (indice 171, dynamique 2.475e-01) · corrélation 0.999994 ~
+  ```
+
+### 🤖 Assistant
+
+⏵ Référence complète (qr, normes, derope, attn_out, états) pour la comparaison finale.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && rm -f /tmp/ref_v4f-*.bin && LD_LIBRARY_PATH=/home/stephane/Data13TB/stephane/GitHub/llama.cpp/build/bin REF_DUMP=/tmp/ref_v4f REF_TENSORS='^(qr|qr_norm|q_norm|kv_norm|attn_derope|attn_out|hc_attn_pre|hc_attn_post|l_last)-[01]$' timeo … [305 caractères tronqués]`
+
+  ```
+started background job bash-139
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A drave-core/src/ tools/ docs/ 2>/dev/null; git commit -q -F - <<'EOF'\nP2/P3 : le harnais de comparaison étage par étage, et le bug qu'il a trouvé\n\nTrois pièces, toutes vérifiables :\n\n1. `--couches a:b` + `Model::load_p … [1601 caractères tronqués]`

@@ -1860,6 +1860,11 @@ pub struct Model {
     pub flux_brut: bool,
     /// Couches MLA, si le modèle en est un (`attn_kv_a_mqa` présent).
     pub mla: Option<Vec<Mla>>,
+    /// Préfixe de vidage des états de couche (`DRAVE_DUMP_COUCHES`) : après
+    /// chaque couche, l'état résiduel est écrit en f32 brut dans
+    /// `<préfixe>-<couche>.bin`. C'est le harnais de la porte de correction —
+    /// `l_last-<il>` chez llama.cpp, les mêmes octets des deux côtés.
+    pub dump_couches: Option<String>,
     /// **Attention V4** par couche (DeepSeek-V4 / V4.1), quand elle est
     /// reconnue (`attn_kv.weight`). Troisième chemin d'attention du moteur.
     pub mla4: Option<Vec<Mla4>>,
@@ -2345,8 +2350,20 @@ pub static TETE_APPELS: std::sync::atomic::AtomicU64 = std::sync::atomic::Atomic
 static LOT_TOPK_IGNORE: std::sync::atomic::AtomicBool = std::sync::atomic::AtomicBool::new(false);
 
 impl Model {
+    /// `couches` : exécution **bornée** `[a, b)` — le harnais qui permet
+    /// d'exécuter et de COMPARER les couches qui n'ont pas besoin de ce qui
+    /// manque encore (les couches 0 et 1 de V4-Flash n'ont pas d'attention
+    /// compressée). Le reste du modèle reste déclaré non implémenté : on ne
+    /// lève pas un manque, on constate qu'il ne s'applique pas à ce qu'on
+    /// exécute — et on le dit.
     pub fn load(path: &str, ctx: usize, n_threads: usize, dense: bool, keep: f32,
                 auto: bool, q4: u8, b6: u8) -> Model {
+        Self::load_partiel(path, ctx, n_threads, dense, keep, auto, q4, b6, None)
+    }
+
+    #[allow(clippy::too_many_arguments)]
+    pub fn load_partiel(path: &str, ctx: usize, n_threads: usize, dense: bool, keep: f32,
+                        auto: bool, q4: u8, b6: u8, couches: Option<(usize, usize)>) -> Model {
         let t0 = Instant::now();
         let g = Gguf::open_auto(path).expect("ouverture du GGUF");
         let arch = g.meta.get("general.architecture").and_then(|m| m.as_str())
@@ -2464,7 +2481,24 @@ impl Model {
         // panne arrive trente lignes plus loin sous la forme « tenseur
         // blk.3.attn_q.weight absent » — qui accuse le fichier au lieu du moteur.
         let map = crate::clusters::actif();
-        let manques = manques_architecture(&g, &cfg, ctx, map.is_some());
+        let mut manques = manques_architecture(&g, &cfg, ctx, map.is_some());
+        // Exécution bornée : le manque « attentions compressées » ne s'applique
+        // que s'il tombe DANS la plage demandée. On le retire en le disant —
+        // jamais en silence, et jamais au-delà de la plage.
+        if let (Some((a, b)), true) = (couches, !manques.is_empty()) {
+            let compressees = g.couches_compressees();
+            let dedans: Vec<usize> = compressees.iter().copied()
+                .filter(|l| *l >= a && *l < b).collect();
+            if dedans.is_empty() {
+                let avant = manques.len();
+                manques.retain(|m| !m.starts_with("attentions compressées"));
+                if manques.len() != avant {
+                    println!("[partiel] couches {a}..{b} : aucune n'a d'attention compressée \
+(les couches compressées sont {:?}) — le manque ne s'applique pas à cette plage, \
+le RESTE du modèle reste non implémenté.", compressees);
+                }
+            }
+        }
         if let Err(raison) = refus_architecture(&g, &cfg, ctx, map.is_some(), manques) {
             panic!("{raison}");
         }
@@ -2610,17 +2644,26 @@ impl Model {
             }
             // Mélange de TÊTE : une seule sortie (`hc` poids), donc son `fn`
             // est `[hc × hc·h]` et sa base `[hc]` — pas de `post` ni de `comb`.
-            let tete = Hc {
-                melange: g.dequant("hc_head_fn.weight"),
-                base: g.dequant("hc_head_base.weight"),
-                scale: g.dequant("hc_head_scale.weight"),
-                hc: mult, h: cfg.hidden, iters, eps,
-            };
+            // Il est FACULTATIF : V4-Flash n'a pas de `hc_head_*` (le fichier
+            // de V4.1 non plus, d'ailleurs), et l'exiger ferait paniquer un
+            // modèle dont il ne manque qu'une réduction finale.
+            let tete = if g.tensor("hc_head_fn.weight").is_some() {
+                Some(Hc {
+                    melange: g.dequant("hc_head_fn.weight"),
+                    base: g.dequant("hc_head_base.weight"),
+                    scale: g.dequant("hc_head_scale.weight"),
+                    hc: mult, h: cfg.hidden, iters, eps,
+                })
+            } else { None };
             let mix = v[0].0.hc_mix();
             println!("[config] hyper-connexions : {} copies · {} mélanges par couche \
-                      (pre {} + post {} + comb {}) · Sinkhorn {} itérations · eps {:e} · tête {} poids",
-                     mult, mix, mult, mult, mult * mult, iters, eps, tete.melange.len());
-            (Some(v), Some(tete))
+                      (pre {} + post {} + comb {}) · Sinkhorn {} itérations · eps {:e} · {}",
+                     mult, mix, mult, mult, mult * mult, iters, eps,
+                     match &tete {
+                         Some(t) => format!("mélange de tête {} poids", t.melange.len()),
+                         None => "pas de mélange de tête (absent du fichier)".to_string(),
+                     });
+            (Some(v), tete)
         } else { (None, None) };
         let mut layers = Vec::with_capacity(cfg.n_layer);
         let mut bytes = 0u64;
@@ -2633,17 +2676,20 @@ impl Model {
                 // calculés par `attn_mla` depuis les projections de rang faible.
                 // Charger `attn_q.weight` ici, c'est chercher un tenseur que le
                 // modèle n'a pas, et refuser 216 Go pour un nom.
-                wq: if mla.is_some() { Proj::vide() } else {
+                wq: if mla.is_some() || mla4.is_some() { Proj::vide() } else {
                     Proj::load(&g, &p("attn_q.weight"), Some(&p("attn_q.bias")), dense || q4 != 0, auto, keep, q4 & 2 != 0, b6 & 2 != 0) },
-                wk: if mla.is_some() { Proj::vide() } else {
+                wk: if mla.is_some() || mla4.is_some() { Proj::vide() } else {
                     Proj::load(&g, &p("attn_k.weight"), Some(&p("attn_k.bias")), dense || q4 != 0, auto, keep, q4 & 2 != 0, b6 & 2 != 0) },
-                wv: if mla.is_some() { Proj::vide() } else {
+                wv: if mla.is_some() || mla4.is_some() { Proj::vide() } else {
                     Proj::load(&g, &p("attn_v.weight"), Some(&p("attn_v.bias")), dense || q4 != 0, auto, keep, q4 & 2 != 0, b6 & 2 != 0) },
                 // gpt-oss porte un biais sur la projection de sortie
                 // (`attention_bias = true` dans sa config : Q, K, V **et** O).
                 // Le passer à `None` l'ignorait silencieusement — un décalage
                 // constant ajouté à chaque couche, donc amplifié 36 fois.
-                wo: Proj::load(&g, &p("attn_output.weight"), Some(&p("attn_output.bias")), dense || q4 != 0, auto, keep, q4 & 2 != 0, b6 & 2 != 0),
+                // L'attention V4 n'a pas d'`attn_output.weight` : sa sortie est
+                // projetée par groupes DANS `attn_v4` (`attn_output_a` + `_b`).
+                wo: if mla4.is_some() { Proj::vide() }
+                    else { Proj::load(&g, &p("attn_output.weight"), Some(&p("attn_output.bias")), dense || q4 != 0, auto, keep, q4 & 2 != 0, b6 & 2 != 0) },
                 // gpt-oss nomme `post_attention_norm` la normale d'entrée du
                 // FFN ; c'est le même tenseur sous un autre nom.
                 ffn_norm: if g.tensor(&p("ffn_norm.weight")).is_some() {
@@ -2968,7 +3014,10 @@ mapping {}",
             normes_tete: None, ordre_normes: None, tete_garantie: None,
             tete_calculees: 0, tete_appels_g: 0,
             sinks_vus, kv_gpu, attn_gpu_part: Vec::new(),
-            couche_debut: 0, couche_fin: n_layer_total, flux_brut: false,
+            dump_couches: std::env::var("DRAVE_DUMP_COUCHES").ok(),
+            couche_debut: couches.map(|(a, _)| a).unwrap_or(0),
+            couche_fin: couches.map(|(_, b)| b).unwrap_or(n_layer_total),
+            flux_brut: false,
             cache_experts, mla, mla_cache, jeton_trace: 0, trace: None, flux_force: None,
             emb_imposee: None, emb_imposee_lot: None, lot: 1,
             patch: None, ffn_gain: None, hebb: None,
@@ -3564,6 +3613,29 @@ mapping {}",
                 t[i] = a * c - b * s;
                 t[i + half] = b * c + a * s;
             }
+        }
+    }
+
+    /// Écrit l'état résiduel d'une couche (f32 brut, machine locale) si le
+    /// vidage est demandé. Le format est volontairement le plus bête possible :
+    /// c'est `llama.cpp` qui produit l'autre fichier, et le seul contrat est
+    /// « mêmes nombres, même ordre » — `n_embd` puis `hc` copies.
+    fn vider_couche(prefixe: Option<&str>, nom: &str, l: usize, pos: usize, x: &[f32]) {
+        use std::io::Write;
+        let Some(p) = prefixe else { return };
+        // Le nom porte le tenseur, la couche ET la position : sans la position,
+        // un fichier par couche ne garderait que le dernier jeton évalué — et
+        // c'est justement au-delà de la position 0 que les écarts apparaissent.
+        let chemin = format!("{p}-{nom}-{l}-{pos}.bin");
+        match std::fs::File::create(&chemin) {
+            Ok(mut f) => {
+                let mut octets = Vec::with_capacity(x.len() * 4);
+                for v in x { octets.extend_from_slice(&v.to_le_bytes()); }
+                if let Err(e) = f.write_all(&octets) {
+                    eprintln!("[dump] {chemin} : {e}");
+                }
+            }
+            Err(e) => eprintln!("[dump] {chemin} : {e}"),
         }
     }
 
@@ -4330,7 +4402,7 @@ s'applique pas — utilisez --lot 1, ou réenregistrez sans DRAVE_TRACE_BLOCS");
     /// softmax, comme le fait `ggml_soft_max_add_sinks`.
     #[allow(clippy::too_many_arguments)]
     fn attn_v4(m: &Mla4, cache: &mut Vec<f32>, x: &[f32], pos: usize, att: &mut [f32],
-               paires: &mut u64) {
+               paires: &mut u64, dump: Option<&str>, l: usize) {
         let (nh, hd, nr) = (m.nh, m.head_dim, m.rope);
         let nope = hd - nr;
         let h = m.h;
@@ -4338,8 +4410,10 @@ s'applique pas — utilisez --lot 1, ou réenregistrez sans DRAVE_TRACE_BLOCS");
         // --- requête : descente, norme, remontée, norme PAR TÊTE sans poids
         let mut qr = vec![0f32; m.q_a.len() / h];
         matvec_f32(&m.q_a, x, h, qr.len(), &mut qr);
+        Self::vider_couche(dump, "qr", l, pos, &qr);
         let mut qrn = vec![0f32; qr.len()];
         Self::rmsnorm(&qr, &m.q_a_norm, m.eps, &mut qrn);
+        Self::vider_couche(dump, "qr_norm", l, pos, &qrn);
         let mut q = vec![0f32; nh * hd];
         matvec_f32(&m.q_b, &qrn, qr.len(), nh * hd, &mut q);
         // `ggml_rms_norm` SEUL, sur chaque tête : la seconde norme de la
@@ -4351,6 +4425,7 @@ s'applique pas — utilisez --lot 1, ou réenregistrez sans DRAVE_TRACE_BLOCS");
                 q[hh * hd..(hh + 1) * hd].copy_from_slice(&t);
             }
         }
+        Self::vider_couche(dump, "q_norm", l, pos, &q);
         // rotation de la partie rope de chaque tête
         {
             let mut qp = vec![0f32; nh * nr];
@@ -4374,6 +4449,7 @@ s'applique pas — utilisez --lot 1, ou réenregistrez sans DRAVE_TRACE_BLOCS");
             Self::rope(&mut kp, 1, nr, pos, m.rope_base, nr);
             kvn[nope..].copy_from_slice(&kp);
         }
+        Self::vider_couche(dump, "kv_norm", l, pos, &kvn);
         *paires += (m.q_a.len() + m.q_b.len() + m.kv.len()) as u64;
         cache[pos * hd..(pos + 1) * hd].copy_from_slice(&kvn);
         // --- scores : `1/sqrt(head_dim)`, puits appris dans le dénominateur
@@ -4428,8 +4504,10 @@ s'applique pas — utilisez --lot 1, ou réenregistrez sans DRAVE_TRACE_BLOCS");
             let entree = &sortie[g * gdim..(g + 1) * gdim];
             matvec_f32(bloc, entree, gdim, m.o_lora, &mut oa[g * m.o_lora..(g + 1) * m.o_lora]);
         }
+        Self::vider_couche(dump, "attn_derope", l, pos, &sortie);
         *paires += (m.wo_a.len() + m.wo_b.len()) as u64;
         matvec_f32(&m.wo_b, &oa, m.n_groups * m.o_lora, h, att);
+        Self::vider_couche(dump, "attn_out", l, pos, att);
     }
 
     /// Passe avant d'un modèle **MLA**, un jeton à la fois, avec le cache
@@ -4657,6 +4735,7 @@ s'applique pas — utilisez --lot 1, ou réenregistrez sans DRAVE_TRACE_BLOCS");
                 }
                 None => xin.copy_from_slice(&x),
             }
+            Self::vider_couche(self.dump_couches.as_deref(), "hc_attn_pre", l, pos, &xin);
             let tm = Instant::now();
             Self::rmsnorm(&xin, &lay.attn_norm, cfg.eps, &mut hn);
             if self.flux_force.is_some() {
@@ -4700,8 +4779,13 @@ dynamique de {dyn_:.3e} (relatif {:.2e})", mx / dyn_.max(1e-9));
                 // Attention V4 : une tête latente, valeurs = clés, sortie
                 // groupée. `att` fait `nh × head_dim` — la même taille que le
                 // chemin dense quand `key_length` est déclaré.
-                Self::attn_v4(m4, &mut self.mla4_cache[l], &xin, pos, &mut att,
-                              &mut paires[0]);
+                // `hn` et non `xin` : l'attention reçoit l'entrée MÉLANGÉE puis
+                // NORMÉE (`hc_attn_pre` → `attn_norm`), comme les deux autres
+                // chemins. Passer `xin` donnait une corrélation de 0,9986 —
+                // « presque juste », le pire des écarts parce qu'il ne se voit
+                // pas sur un coup d'œil.
+                Self::attn_v4(m4, &mut self.mla4_cache[l], &hn, pos, &mut att,
+                              &mut paires[0], self.dump_couches.as_deref(), l);
             } else if let Some(m) = self.mla.as_ref().map(|v| &v[l]) {
                 Self::attn_mla(m, &mut self.mla_cache[l], &hn, pos, cfg.rope_base, &mut att,
                                &mut paires[0], attn_events);
@@ -5234,6 +5318,7 @@ dynamique de {dyn_:.3e} (relatif {:.2e})", mx / dyn_.max(1e-9));
                     }
                     _ => for i in 0..h { x[i] = o[i] + down[i]; },
                 }
+                Self::vider_couche(self.dump_couches.as_deref(), "l_last", l, pos, &x);
                 if debug_etat {
                     let n2: f32 = x.iter().map(|v| v * v).sum();
                     let na: f32 = att.iter().map(|v| v * v).sum();
@@ -5282,6 +5367,7 @@ dynamique de {dyn_:.3e} (relatif {:.2e})", mx / dyn_.max(1e-9));
                 }
                 _ => for i in 0..h { x[i] = o[i] + down[i]; },
             }
+            Self::vider_couche(self.dump_couches.as_deref(), "l_last", l, pos, &x);
             if debug_mla && l == 0 {
                 eprintln!("[mla] couche 0 pos {pos} x[..8] {:.5e} {:.5e} {:.5e} {:.5e} \
 {:.5e} {:.5e} {:.5e} {:.5e}", x[0], x[1], x[2], x[3], x[4], x[5], x[6], x[7]);
