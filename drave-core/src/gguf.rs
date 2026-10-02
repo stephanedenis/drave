@@ -227,8 +227,30 @@ pub const GGML_Q4_0: u32 = 2;
 pub const GGML_MXFP4: u32 = 39;
 pub const GGML_Q2_K: u32 = 10;
 pub const GGML_BF16: u32 = 30;
+pub const GGML_Q3_K: u32 = 11;
 pub const GGML_Q4_K: u32 = 12;
+/// Bloc **Q5_0** (22 octets, 32 poids) et **Q5_1** (24 octets, 32 poids) :
+/// échelle f16 (+ minimum f16 pour Q5_1), 4 octets de bits hauts, 16 octets de
+/// quants 4 bits. Q5_0 est le type de `token_embd` et des `ffn_gate/up` de
+/// Qwen2.5-0.5B en Q4_K_M — 62 % des poids de ce fichier : sans lui, le modèle
+/// ne se charge pas du tout.
+pub const GGML_Q5_0: u32 = 6;
+pub const GGML_Q5_1: u32 = 7;
+pub const GGML_Q5_K: u32 = 13;
 pub const GGML_Q6_K: u32 = 14;
+/// Types des experts de DeepSeek : IQ2_XXS (V4.1), IQ1_M (V4-Flash).
+/// Sans ces constantes, `--bloc` les appelait « type 16 » et le lecteur les
+/// refusait — un numéro en clair ne dit pas de quel encodage il s'agit.
+pub const GGML_IQ2_XXS: u32 = 16;
+/// IQ3_XXS : 98 octets par super-bloc de 256 poids (30 % des poids de Kimi,
+/// GLM-5.3 et V4-Flash).
+pub const GGML_IQ3_XXS: u32 = 18;
+/// IQ1_S : 50 octets par super-bloc de 256 poids (42 à 45 % des poids de GLM).
+pub const GGML_IQ1_S: u32 = 19;
+/// IQ4_XS : 136 octets par super-bloc de 256 poids (2 % de GLM-5.3, mais un
+/// seul type manquant suffit à refuser le modèle entier).
+pub const GGML_IQ4_XS: u32 = 23;
+pub const GGML_IQ1_M: u32 = 29;
 
 /// BF16 : un f32 dont on ne garde que les 16 bits de poids fort. Le convertir
 /// n'est pas une approximation — c'est exactement ce que le format stocke.
@@ -238,6 +260,9 @@ pub fn bf16_to_f32(h: u16) -> f32 { f32::from_bits((h as u32) << 16) }
 /// Octets par super-bloc : Q4_K = 2+2+12+128 (256 poids), Q6_K = 128+64+16+2.
 pub const TAILLE_Q4K: usize = 144;
 pub const TAILLE_Q6K: usize = 210;
+/// Bloc **Q5_K** : 2+2 octets (d, dmin) + 12 d'échelles + 32 de bits hauts
+/// + 128 de quants 4 bits.
+pub const TAILLE_Q5K: usize = 176;
 
 /// Échelles et minima d'un sous-bloc Q4_K : huit paires de 6 bits tassées dans
 /// douze octets. Les quatre premières paires sont dans les octets 0–7, les
@@ -895,6 +920,171 @@ zéro, l'inventaire sera sous-évalué", t.ttype, t.name);
         out
     }
 
+    /// Déquantifie un bloc **MXFP4** (17 octets, 32 poids) : un octet d'exposant
+    /// E8M0 puis 16 octets de nibbles E2M1, moitié basse puis moitié haute.
+    pub fn dequant_mxfp4(bloc: &[u8]) -> Vec<f32> {
+        assert!(bloc.len() >= 17, "bloc MXFP4 trop court : {}", bloc.len());
+        const KV: [f32; 16] = [0.0, 0.5, 1.0, 1.5, 2.0, 3.0, 4.0, 6.0,
+                               0.0, -0.5, -1.0, -1.5, -2.0, -3.0, -4.0, -6.0];
+        let d = Self::echelle_e8m0(bloc[0]);
+        let mut out = vec![0f32; 32];
+        for j in 0..16 {
+            out[j] = KV[(bloc[1 + j] & 0x0F) as usize] * d;
+            out[j + 16] = KV[(bloc[1 + j] >> 4) as usize] * d;
+        }
+        out
+    }
+
+    /// Échelle **E8M0** d'un bloc MXFP4, telle que `ggml_e8m0_to_fp32`.
+    ///
+    /// `e = 0` est dénormalisé et vaut 2^−127 ; tout autre `e` vaut 2^(e−127)
+    /// (`e << 23`). Le piège mesuré : ggml multiplie la grille E2M1 **doublée**
+    /// (entiers 0..12) par `2^(e−128)`, et notre table est la vraie grille — la
+    /// moitié de ces entiers. Mélanger les deux conventions donne des poids
+    /// **deux fois trop petits**, sans rien casser d'autre : la perplexité monte
+    /// un peu, et rien ne le dit. Comparé à libggml, l'écart était exactement
+    /// d'un facteur 2 sur les 256 poids du bloc.
+    #[inline]
+    pub fn echelle_e8m0(e: u8) -> f32 {
+        if e == 0 { f32::from_bits(0x0040_0000) } else { f32::from_bits((e as u32) << 23) }
+    }
+
+    /// Déquantifie un bloc **Q5_0** (22 octets, 32 poids).
+    ///
+    /// Le cinquième bit n'est pas rangé par sous-bloc comme en Q5_K : les 32
+    /// bits vivent dans un mot de 32 bits, le bit `j` servant le poids `j` et le
+    /// bit `j+16` le poids `j+16`. Les 16 premiers poids occupent donc les
+    /// nibbles BAS et les 16 suivants les nibbles HAUTS — pas deux moitiés
+    /// contiguës comme en Q4_0.
+    pub fn dequant_q5_0(bloc: &[u8]) -> Vec<f32> {
+        assert!(bloc.len() >= 22, "bloc Q5_0 trop court : {}", bloc.len());
+        Self::dequant_q5(bloc, false)
+    }
+
+    /// Déquantifie un bloc **Q5_1** (24 octets, 32 poids) : identique à Q5_0
+    /// avec un minimum, et sans recentrage sur 16.
+    pub fn dequant_q5_1(bloc: &[u8]) -> Vec<f32> {
+        assert!(bloc.len() >= 24, "bloc Q5_1 trop court : {}", bloc.len());
+        Self::dequant_q5(bloc, true)
+    }
+
+    fn dequant_q5(bloc: &[u8], avec_min: bool) -> Vec<f32> {
+        let d = Self::f16_to_f32(u16::from_le_bytes([bloc[0], bloc[1]]));
+        let (m, base_qh, base_qs) = if avec_min {
+            (Self::f16_to_f32(u16::from_le_bytes([bloc[2], bloc[3]])), 4usize, 8usize)
+        } else {
+            (0.0, 2usize, 6usize)
+        };
+        let qh = u32::from_le_bytes([bloc[base_qh], bloc[base_qh + 1],
+                                     bloc[base_qh + 2], bloc[base_qh + 3]]);
+        let qs = &bloc[base_qs..base_qs + 16];
+        let mut out = vec![0f32; 32];
+        for j in 0..16usize {
+            let xh0 = (((qh >> j) << 4) & 0x10) as u8;
+            let xh1 = ((qh >> (j + 12)) & 0x10) as u8;
+            let q0 = (qs[j] & 0x0F) | xh0;
+            let q1 = (qs[j] >> 4) | xh1;
+            out[j] = if avec_min { d * q0 as f32 + m }
+                     else { d * (q0 as i32 - 16) as f32 };
+            out[j + 16] = if avec_min { d * q1 as f32 + m }
+                          else { d * (q1 as i32 - 16) as f32 };
+        }
+        out
+    }
+
+    /// Déquantifie un bloc **Q5_K** (176 octets, 256 poids).
+    ///
+    /// Même structure que Q4_K — d, dmin, 12 octets d'échelles, 128 octets de
+    /// quants 4 bits — plus **32 octets de bits hauts** : chaque poids a 5 bits.
+    /// Les bits hauts sont lus avec des masques qui se décalent de deux bits à
+    /// chaque tranche de 64 poids.
+    pub fn dequant_q5k(bloc: &[u8]) -> Vec<f32> {
+        assert!(bloc.len() >= 176, "bloc Q5_K trop court : {}", bloc.len());
+        let d = Self::f16_to_f32(u16::from_le_bytes([bloc[0], bloc[1]]));
+        let dmin = Self::f16_to_f32(u16::from_le_bytes([bloc[2], bloc[3]]));
+        let sc = &bloc[4..16];
+        let qh = &bloc[16..48];
+        let ql = &bloc[48..176];
+        let mut out = vec![0f32; 256];
+        let (mut u1, mut u2) = (1u8, 2u8);
+        for tranche in 0..4usize {
+            // Les 32 octets de bits hauts sont **relus** à chaque tranche : le
+            // masque (`u1` puis `u2`, décalé de deux bits par tranche) désigne
+            // les deux bits de poids fort de la tranche. Seul `ql` avance.
+            for k in 0..2usize {
+                let (haut, u) = if k == 0 { (false, u1) } else { (true, u2) };
+                let (s_, m_) = echelle_min_q4k(sc, 2 * tranche + k);
+                let dl = d * s_ as f32;
+                let ml = dmin * m_ as f32;
+                for l in 0..32usize {
+                    let q4 = if haut { ql[tranche * 32 + l] >> 4 } else { ql[tranche * 32 + l] & 0x0F };
+                    let bit = if qh[l] & u != 0 { 16 } else { 0 };
+                    out[tranche * 64 + k * 32 + l] = dl * (q4 + bit) as f32 - ml;
+                }
+            }
+            u1 <<= 2;
+            u2 <<= 2;
+        }
+        out
+    }
+
+    /// Déquantifie un bloc **Q3_K** (110 octets, 256 poids) : 32 octets de bits
+    /// hauts, 64 octets de quants 2 bits, 12 octets portant **16 échelles de
+    /// 6 bits**, puis l'échelle de super-bloc en f16.
+    ///
+    /// Trois pièges, tous dans la disposition et aucun dans l'arithmétique :
+    /// les 12 octets d'échelles ne sont pas 12 échelles (il y en a 16, dont les
+    /// deux bits de poids fort vivent dans les trois derniers octets) ; un octet
+    /// de quants sert **quatre** poids (un par champ de 2 bits, à 32 poids
+    /// d'écart) ; et le bit haut **retire 4** quand il est ABSENT, la valeur
+    /// signée allant de −4 à 3. C'est le type de 33,5 % des poids de
+    /// Qwen3-235B-A22B.
+    pub fn dequant_q3k(bloc: &[u8]) -> Vec<f32> {
+        assert!(bloc.len() >= 110, "bloc Q3_K trop court : {}", bloc.len());
+        let hm = &bloc[0..32];
+        let qs = &bloc[32..96];
+        let sc = &bloc[96..108];
+        let d_all = Self::f16_to_f32(u16::from_le_bytes([bloc[108], bloc[109]]));
+        // Dépaquetage des échelles, mot pour mot comme ggml : chaque octet des
+        // trois premiers mots porte une échelle de 4 bits, le troisième mot
+        // porte les deux bits hauts des seize.
+        const KMASK1: u32 = 0x0303_0303;
+        const KMASK2: u32 = 0x0f0f_0f0f;
+        let mut aux = [0u32; 4];
+        for i in 0..3 {
+            aux[i] = u32::from_le_bytes([sc[4*i], sc[4*i+1], sc[4*i+2], sc[4*i+3]]);
+        }
+        let tmp = aux[2];
+        aux[2] = ((aux[0] >> 4) & KMASK2) | (((tmp >> 4) & KMASK1) << 4);
+        aux[3] = ((aux[1] >> 4) & KMASK2) | (((tmp >> 6) & KMASK1) << 4);
+        aux[0] = (aux[0] & KMASK2) | ((tmp & KMASK1) << 4);
+        aux[1] = (aux[1] & KMASK2) | (((tmp >> 2) & KMASK1) << 4);
+        let mut scales = [0i8; 16];
+        for (i, valeur) in scales.iter_mut().enumerate() {
+            *valeur = aux[i / 4].to_le_bytes()[i % 4] as i8;
+        }
+        let mut out = vec![0f32; 256];
+        let mut is = 0usize;
+        for n in 0..2usize {
+            for j in 0..4usize {
+                let shift = 2 * j;
+                let m = 1u8 << (4 * n + j);
+                for g in 0..2usize {
+                    let dl = d_all * (scales[is] as i32 - 32) as f32;
+                    is += 1;
+                    for l in 0..16usize {
+                        let octet = qs[n * 32 + g * 16 + l];
+                        let q2 = ((octet >> shift) & 3) as i32;
+                        let haut = hm[g * 16 + l] & m != 0;
+                        out[n * 128 + j * 32 + g * 16 + l] =
+                            dl * (q2 - if haut { 0 } else { 4 }) as f32;
+                    }
+                }
+            }
+        }
+        out
+    }
+
     /// Déquantifie un bloc **Q2_K** (84 octets, 256 poids).
     ///
     /// Structure : 16 octets d'échelles (4 bits d'échelle, 4 bits de minimum par
@@ -968,18 +1158,23 @@ zéro, l'inventaire sera sous-évalué", t.ttype, t.name);
                     for j in 0..16 { out.push(d * ((buf[p + 2 + j] >> 4) as i16 - 8) as f32); }
                 }
             }
-            GGML_Q2_K => {
+            // Super-blocs de 256 poids : le déquantificateur rend les 256
+            // valeurs d'un coup, donc la boucle avance par super-bloc.
+            GGML_Q2_K | GGML_Q3_K | GGML_Q5_K | GGML_IQ2_XXS | GGML_IQ3_XXS
+            | GGML_IQ1_S | GGML_IQ4_XS | GGML_IQ1_M => {
+                let (taille, f): (usize, fn(&[u8]) -> Vec<f32>) = match t.ttype {
+                    GGML_Q2_K => (84, Self::dequant_q2k),
+                    GGML_Q3_K => (110, Self::dequant_q3k),
+                    GGML_Q5_K => (TAILLE_Q5K, Self::dequant_q5k),
+                    GGML_IQ2_XXS => (66, crate::formats::dequant_iq2xxs),
+                    GGML_IQ3_XXS => (98, crate::formats::dequant_iq3xxs),
+                    GGML_IQ1_S => (50, crate::formats::dequant_iq1s),
+                    GGML_IQ4_XS => (136, crate::formats::dequant_iq4xs),
+                    _ => (56, crate::formats::dequant_iq1m),
+                };
                 let ns = n_cols / 256;
                 for sup in 0..ns {
-                    let p = (row * ns + sup) * 84;
-                    out.extend_from_slice(&Self::dequant_q2k(&buf[p..]));
-                }
-            }
-            GGML_Q2_K => {
-                let ns = n_cols / 256;
-                for sup in 0..ns {
-                    let p = (row * ns + sup) * 84;
-                    out.extend_from_slice(&Self::dequant_q2k(&buf[p..]));
+                    out.extend_from_slice(&f(&buf[(row * ns + sup) * taille..]));
                 }
             }
             GGML_Q4_K => {
@@ -1025,6 +1220,24 @@ zéro, l'inventaire sera sous-évalué", t.ttype, t.name);
                         }
                         out.extend_from_slice(&tmp);
                     }
+                }
+            }
+            GGML_Q5_0 | GGML_Q5_1 => {
+                let (taille, f): (usize, fn(&[u8]) -> Vec<f32>) = if t.ttype == GGML_Q5_0 {
+                    (22, Self::dequant_q5_0)
+                } else {
+                    (24, Self::dequant_q5_1)
+                };
+                let nb = n_cols / 32;
+                for b in 0..nb {
+                    out.extend_from_slice(&f(&buf[(row * nb + b) * taille..]));
+                }
+            }
+            GGML_MXFP4 => {
+                // 17 octets par bloc de 32 : exposant E8M0 puis nibbles E2M1.
+                let nb = n_cols / 32;
+                for b in 0..nb {
+                    out.extend_from_slice(&Self::dequant_mxfp4(&buf[(row * nb + b) * 17..]));
                 }
             }
             GGML_Q4_1 => {
@@ -1305,18 +1518,20 @@ zéro, l'inventaire sera sous-évalué", t.ttype, t.name);
                     for j in 0..16 { out.push(d * (buf[p + 4 + j] >> 4) as f32 + m); }
                 }
             }
+            GGML_Q5_0 | GGML_Q5_1 => {
+                let (taille, f): (usize, fn(&[u8]) -> Vec<f32>) = if t.ttype == GGML_Q5_0 {
+                    (22, Self::dequant_q5_0)
+                } else {
+                    (24, Self::dequant_q5_1)
+                };
+                let nb = n / 32;
+                for b in 0..nb { out.extend_from_slice(&f(&buf[b * taille..])); }
+            }
             GGML_MXFP4 => {
                 // 17 octets par bloc de 32 : exposant E8M0 puis nibbles E2M1.
-                // L'échelle vaut 2^(e−127) ; e = 0 et e = 255 sont dégénérés.
-                const KV: [f32; 16] = [0.0, 0.5, 1.0, 1.5, 2.0, 3.0, 4.0, 6.0,
-                                       0.0, -0.5, -1.0, -1.5, -2.0, -3.0, -4.0, -6.0];
                 let nb = n / 32;
                 for b in 0..nb {
-                    let p = b * 17;
-                    let e = buf[p] as u32;
-                    let d = if e == 0 || e == 255 { 0.0 } else { f32::from_bits((e - 1) << 23) };
-                    for j in 0..16 { out.push(KV[(buf[p + 1 + j] & 0x0F) as usize] * d); }
-                    for j in 0..16 { out.push(KV[(buf[p + 1 + j] >> 4) as usize] * d); }
+                    out.extend_from_slice(&Self::dequant_mxfp4(&buf[b * 17..]));
                 }
             }
             GGML_Q4_K => {
@@ -1370,6 +1585,21 @@ zéro, l'inventaire sera sous-évalué", t.ttype, t.name);
                     }
                 }
             }
+            GGML_Q2_K | GGML_Q3_K | GGML_Q5_K | GGML_IQ2_XXS | GGML_IQ3_XXS
+            | GGML_IQ1_S | GGML_IQ4_XS | GGML_IQ1_M => {
+                let (taille, f): (usize, fn(&[u8]) -> Vec<f32>) = match t.ttype {
+                    GGML_Q2_K => (84, Self::dequant_q2k),
+                    GGML_Q3_K => (110, Self::dequant_q3k),
+                    GGML_Q5_K => (TAILLE_Q5K, Self::dequant_q5k),
+                    GGML_IQ2_XXS => (66, crate::formats::dequant_iq2xxs),
+                    GGML_IQ3_XXS => (98, crate::formats::dequant_iq3xxs),
+                    GGML_IQ1_S => (50, crate::formats::dequant_iq1s),
+                    GGML_IQ4_XS => (136, crate::formats::dequant_iq4xs),
+                    _ => (56, crate::formats::dequant_iq1m),
+                };
+                let nb = n / 256;
+                for b in 0..nb { out.extend_from_slice(&f(&buf[b * taille..])); }
+            }
             other => panic!("dequant : type {other} non géré"),
         }
         out
@@ -1380,6 +1610,47 @@ zéro, l'inventaire sera sous-évalué", t.ttype, t.name);
 pub(crate) mod tests {
     use super::*;
     use std::io::Write;
+
+    /// L'échelle E8M0 de MXFP4, cas par cas, valeurs recopiées de
+    /// `ggml_e8m0_to_fp32` (ggml-impl.h) : c'est la convention qui va avec la
+    /// VRAIE grille E2M1. La convention jumelle (grille doublée) utilise
+    /// `2^(e−128)` et se trompe d'un facteur 2 si on la mélange.
+    #[test]
+    fn echelle_e8m0_comme_ggml() {
+        assert_eq!(Gguf::echelle_e8m0(0), f32::from_bits(0x0040_0000)); // 2^−127
+        assert_eq!(Gguf::echelle_e8m0(1), 2f32.powi(-126));
+        assert_eq!(Gguf::echelle_e8m0(2), 2f32.powi(-125));
+        assert_eq!(Gguf::echelle_e8m0(127), 1.0);
+        assert_eq!(Gguf::echelle_e8m0(128), 2.0);
+        assert_eq!(Gguf::echelle_e8m0(255), f32::INFINITY);
+        // Et le rapport exact qui a trahi le bug : la moitié de la convention
+        // doublée vaut 2^(e−128).
+        for e in 2..200u8 {
+            assert_eq!(Gguf::echelle_e8m0(e), 2.0 * f32::from_bits(((e as u32) - 1) << 23));
+        }
+    }
+
+    /// Un bloc MXFP4 complet : `e = 127` (échelle 1,0) et des nibbles connus,
+    /// comparé aux valeurs de la table E2M1. Sans cela, seule la comparaison à
+    /// libggml attrape le facteur 2 — et elle demande un modèle de 60 Go.
+    #[test]
+    fn mxfp4_bloc_dun_facteur_deux() {
+        // 17 octets : e, puis 16 octets de nibbles.
+        let mut bloc = vec![127u8];
+        for j in 0..16u8 { bloc.push(j | (15 - j) << 4); }
+        let v = Gguf::dequant_mxfp4(&bloc);
+        // Grille E2M1 telle qu'elle est écrite dans le code, pour que le test
+        // porte sur la VALEUR et pas sur une seconde copie de la même erreur.
+        let kv: [f32; 16] = [0.0, 0.5, 1.0, 1.5, 2.0, 3.0, 4.0, 6.0,
+                             0.0, -0.5, -1.0, -1.5, -2.0, -3.0, -4.0, -6.0];
+        for j in 0..16usize {
+            assert_eq!(v[j], kv[j], "nibble bas du poids {j}");
+            assert_eq!(v[j + 16], kv[15 - j], "nibble haut du poids {}", j + 16);
+        }
+        // Une échelle de 2^(e−128) donnerait la moitié, une échelle annulée
+        // pour e = 255 donnerait zéro : les deux sont refusées ici.
+        assert_eq!(Gguf::echelle_e8m0(255), f32::INFINITY);
+    }
 
     /// Fabrique un GGUF minimal : `general.architecture` plus des tenseurs F32
     /// dont la valeur de chaque poids est son indice global. Un GGUF de labo,

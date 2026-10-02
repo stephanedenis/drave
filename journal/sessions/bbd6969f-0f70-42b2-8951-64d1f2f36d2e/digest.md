@@ -54833,3 +54833,3299 @@ attendu : -0.003525  0.078613  -0.000587
 ⏵ BF16 concorde. Je commite et j'implémente Q5_K (176 octets).
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -m \"BF16 : lu et verifie (le f32 tronque a ses 16 bits de poids fort, exactement)\n\nDeux modeles lourds l'utilisent (V4-Flash pour ses routeurs, MiniMax-H3).\nVerifie contre une lecture directe : -0,0035 … [2046 caractères tronqués]`
+
+  ```
+f041ce6 BF16 : lu et verifie (le f32 tronque a ses 16 bits de poids fort, exactement)
+ok
+error[E0308]: mismatched types
+   --> src/gguf.rs:920:33
+    |
+920 |                     let q4 = if *haut { (ql[tranche * 32 + l] >> 4) } else { ql[tranche * 32 + l] & 0x0F };
+    |                                 ^^^^^ expected `bool`, found `usize`
+
+error[E0277]: no implementation for `u8 & &(bool, u8)`
+   --> src/gguf.rs:921:55
+    |
+921 |                     let bit = if qh[tranche * 32 + l] & u != 0 { 16 } else { 0 };
+BUILD 101
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np = 'drave-core/src/gguf.rs'\ns = open(p).read()\ns = s.replace('''            for (k, (haut, u)) in [(0usize, (false, u1)), (1, (true, u2))].iter().enumerate() {''',\n              '''            for (k, &(haut, u) … [1418 caractères tronqués]`
+
+  ```
+error[E0308]: mismatched types
+   --> src/gguf.rs:920:33
+    |
+920 |                     let q4 = if haut { ql[tranche * 32 + l] >> 4 } else { ql[tranche * 32 + l] & 0x0F };
+    |                                 ^^^^ expected `bool`, found `usize`
+--
+error[E0277]: no implementation for `u8 & (bool, u8)`
+   --> src/gguf.rs:921:55
+BUILD 101
+error[E0308]: mismatched types
+error[E0277]: no implementation for `u8 & (bool, u8)`
+error: could not compile `drave-core` (bin "drave") due to 2 previous errors; 15 warnings emitted
+[stderr]
+Traceback (most recent call last):
+  File "<string>", line 3, in <module>
+    from analyse_experts_statique import Lecteur
+ModuleNotFoundError: No module named 'analyse_experts_statique'
+[exit code: 1]
+  ```
+
+
+  ```
+bash-11 [bash] completed — cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && cargo build --release 2>&1 | tail -5 && echo "=== TESTS ===" && cargo test --release 2>&1 | tail -25
+bash-12 [bash] completed — cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ./qtrinet-core/target/release/qtrinet-core models/Qwen2.5-0.5B-Q8_0.gguf --ppl /tmp/ids_qwen.txt --ctx 256 --abits 16 --threads 16 --limit 512 --dense 2>&1 | tail -12
+bash-13 [bash] completed — cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo "=== H1 brut 64 jetons, motif 1 (ancien comportement fenêtre) ===" && /usr/bin/time -f "TEMPS %e s, MAXRSS %M Ko" ./qtrinet-core/target/release/qtrinet-core /home/stephane/FastNVMe/models/gpt-oss-120b-MXFP4.gguf --ppl /tmp/ids_oss.txt --ctx 256 --limit 64 --dense --threads 16 --swa-pattern 1 2>&1 | grep -vE "^\[modele\]|listes" | tail -25
+bash-14 [bash] killed — /tmp/mesures_oss.sh 2>&1 | tail -40
+bash-15 [bash] completed — cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && LD_LIBRARY_PATH=/home/stephane/Data13TB/stephane/GitHub/llama.cpp/build/bin ./tools/ref_logits /home/stephane/FastNVMe/models/gpt-oss-120b-MXFP4.gguf /tmp/ids_oss_64.txt /tmp/ref_oss_64.bin
+… [3959 caractères tronqués]
+  ```
+
+
+  ```
+//! Lecteur GGUF minimal (std seul).
+//!
+#![allow(dead_code)] // lecteur générique : tous les formats ne servent pas au moteur
+
+//! Ne lit que ce dont le moteur a besoin : métadonnées, descripteurs de tenseurs,
+//! et les niveaux quantifiés (Q8_0 / Q4_0) ou les flottants (F32 / F16).
+
+use std::collections::HashMap;
+use std::fs::File;
+use std::io::{Read, Seek, SeekFrom};
+use std::path::Path;
+
+#[derive(Debug, Clone)]
+pub enum Meta {
+    U8(u8), I8(i8), U16(u16), I16(i16), U32(u32), I32(i32),
+    F32(f32), Bool(bool), Str(String), Array(Vec<Meta>), U64(u64), I64(i64), F64(f64),
+}
+
+impl Meta {
+    pub fn as_u64(&self) -> Option<u64> {
+        match self {
+            Meta::U32(v) => Some(*v as u64),
+            Meta::U64(v) => Some(*v),
+            Meta::I32(v) => Some(*v as u64),
+            Meta::I64(v) => Some(*v as u64),
+            _ => None,
+        }
+    }
+    pub fn as_f64(&self) -> Option<f64> {
+        match self {
+            Meta::F32(v) => Some(*v as f64),
+            Meta::F64(v) => Some(*v),
+            _ => None,
+        }
+    }
+    pub fn as_str(&self) -> Option<&str> {
+        match self { Meta::Str(s) => Some(s), _ => None }
+    }
+}
+
+#[derive(Debug, Clone)]
+pub struc
+… [3958 caractères tronqués]
+  ```
+
+
+  ```
+total 18168340
+drwxr-xr-x. 1 stephane stephane        290  1 oct 10:06 .
+drwxr-xr-x. 1 stephane stephane         38  1 oct 10:06 ..
+-rw-r--r--. 1 stephane stephane 2200089920  1 oct 10:06 cluster-00.gguf
+-rw-r--r--. 1 stephane stephane 2200089920  1 oct 10:06 cluster-01.gguf
+-rw-r--r--. 1 stephane stephane 2200089920  1 oct 10:06 cluster-02.gguf
+-rw-r--r--. 1 stephane stephane 2200089920  1 oct 10:06 cluster-03.gguf
+-rw-r--r--. 1 stephane stephane 2200089920  1 oct 10:06 cluster-04.gguf
+-rw-r--r--. 1 stephane stephane 2200089920  1 oct 10:06 cluster-05.gguf
+-rw-r--r--. 1 stephane stephane 2200089920  1 oct 10:06 cluster-06.gguf
+=== MANIFESTE (extrait) ===
+clés : ['source', 'mode', 'clusters', 'n_experts', 'fichiers', 'experts']
+  source = /home/stephane/Data13TB/stephane/modeles/gguf/Qwen3-30B-A3B-Instruct-2507-Q4_K_M.gguf
+  mode = experts
+  clusters = 8
+  n_experts = 128
+  fichiers : liste de 9 — exemple [{'fichier': 'commun.gguf', 'role': 'commun', 'octets': 1003513824, 'tenseurs': ['output.weight', 'output_norm.weight', 'token_embd.weight', 'blk.0.attn_k.weight', 'blk.0.attn_k_norm.weight', 'blk.0.attn_norm.weight', 'blk.0.attn_output.weight', 'blk.0.attn_q.weight', 'blk.0.attn_
+… [3958 caractères tronqués]
+  ```
+
+
+  ```
+255 tokens notés — perplexité cumulée NaN  (30.5 tok/s)  [fenêtre 1 : 255 notés, PPL NaN]
+     510 tokens notés — perplexité cumulée NaN  (30.6 tok/s)  [fenêtre 2 : 255 notés, PPL NaN]
+=== perplexité NaN sur 510 tokens (0 événements, 16.7 s) ===
+---
+-rw-r--r--. 1 stephane stephane 21380 30 sep 17:11 /tmp/ids_qwen.txt
+198,284,8397,425,10965,465,284,14731,8397,425,10965,465,374,458,6364,4531,1154,12425,323,33496,12089,659,1260,1030,264,8640,569,12,31,39400,3476,389,279,12425,4013,576,8596,304,220,17,15,15,15,659,1096,572,8110,553,264,39400,3476,304,279,1486,6252,2382,5326,553,21315,75923,1154,892,572,10660,304,220,17,15,15,16,518,279,16194,7154,26221,659,1260,1030,264,8640,3476,304,279,12425,4013,20207,3757,1581,291,304,220,17,15,15,17,659,758,220,17,15,15,19,425,10965,465,26120,264,3476,438,330,28417,330,304,279,9234,330,70066,364,82,15106,330,315,279,12425,4013,576,5724,37625,2587,566,58235,16263,19571,4389,26099,323,42323,15035,18337,659,1260,572,6311,304,279,220,17,15,15,20,33496,53148,315,279,25179,92301,1486,43562,49840,1154,892,572,10660,518,279,45406,26221,304,70998,323,279,11012,1268,38420,16937,304,7148,659,1260,572,15540,553,3757,67473,323,58235,16263,7355,1232,812,672,115
+… [3954 caractères tronqués]
+  ```
+
+
+> **Compactage de contexte** — résumé conservé :
+
+```
+## Primary Request and Intent
+- Standing mandate, verbatim: "Continue en blocs de 2h jusqu'à demain 8h HAE. pour chacun des blocs/sprints tu dois être en autonomie totale… les rétros seront des introspections, les revues seront en mode adverse autonome."
+- Later: "continue jusqu'à 13h HAE" → "il n'est pas tard, et tu peux continuer sans moi tellement on a des choses à faire. utilise l'horloge système en hae" → "continue en autonomie jusqu'à 8h hae".
+- Latest explicit directive: "à moins d'y être explicitement contraint, on doit charger dynamiquement les logits manquants ou faire du JIT" — the restricted head must never change the output unless explicitly asked.
+- Prior feature requests now closed: "peut-on avoir 1 expert par fichier", "peut-on découper par couche et expert", "un arbre de dépendance des experts", "les optimisations d'architecture pour chaque grappe et couche afin de faire le meilleur usage du vram et ram", "implémente toute les optimisation et détection de matériel avec heuristiques de configuration automatique".
+- Repo hygiene rules: measure before concluding; every published figure needs a source; never leave the repo broken; machine returned clean; heavy jobs serialized; adversarial reviews delegated to subagents that may not modify files.
+
+## Key Technical Concepts
+- Rust engine (std only), repo `/home/stephane/Data13TB/stephane/GitHub/Qtrinet`, binary `drave-core/target/release/drave`; env vars `DRAVE_*`.
+- Push/AER architecture, GGUF reader, mmap, cluster format (`commun.gguf` + `cluster-XX.gguf` + `mapping.tsv`), MoE, MLA, KV quantization.
+- Hardware: Xeon E5-2687W v3, **20 physical cores / 40 threads**, 2 NUMA nodes of 66 GB, L1 32 Ko, L2 256 Ko/core, L3 25 Mo/socket; **132 Go RAM**; 2× Quadro RTX 5000 (30,2 Go VRAM libre, **NVLink 25,78 Go/s**); NVMe MAP1602 (DRAM-less) on NUMA node 0; SATA mechanical disk.
+- Measured bandwidths: **VRAM 84,9 Go/s** (warp kernel, 41,9 ligne-par-fil) · **RAM 22,5 Go/s** (20 cores) · **NVMe 31 Go/s at 16 parallel readers** (5,37 at one) · **mechanical random 0,06 Go/s** · PCIe 3.0 ×16 ~12 Go/s.
+- Thread rules: 20 cores = 22,5 Go/s, 40 threads = 18,9 (HT useless when all cores present); 10 cores = 14,7 vs **18,7 with HT pairs (+27 %)**; 3 threads/core regresses (15,0).
+- DeepSeek-V4.1-Flash (`deepseek41`, 40 layers, 384 experts top-6, 365,70 Go): **engram 203,4 Go (55,6 %)** = hash table of n-grams `[384 006 168, 264]` I8 per layer (layers 1, 14), mmappable — 10 000 tokens touch 17 276 entries = 4,6 Mo; experts 152,9 Go; attention MLA 5,4 Go; embeddings+head 2,0 Go.
+- KV cache MLA: 90 Ko/token F16 ⇒ 96,6 Go at 1 M; 48,3 Go int8; 24,2 int4. Threshold where KV equals 71 Go of experts: 0,77 M tokens F16.
+- Per-token cost model for V4.1: **148 ms** = common+head 9,3 Go in VRAM (110 ms) + 1,91 Go experts from 20,1 Go cache (23 ms) + 0,48 Go from NVMe (31 Go/s, 15 ms).
+- Group quantization formats, dequantization validated against libggml: Q2_K (84 o/256), IQ2_XXS (66 o/256, grid 256×8 + ksigns), IQ1_M (56 o/256, grid IQ1_S 2048×8).
+- Gauge/measurement discipline: absurd numbers (2211 Go/s disk, cache allocation 4,1 %, total 4231 Go) signalled instrument errors; O_DIRECT fails here (errno 29); 4 prefetch mechanisms all measured null because test models fit in the 115 Go page cache; the activation threshold destroys the model (×287 at 5 %).
+
+## Files and Code
+- `drave-core/src/materiel.rs` (NEW, 3 tests): `Materiel::detecter()`, `resume()`, `plan(ctx, taille_modele_go, n_experts, mo_par_expert)`, `cout_par_jeton(...)`, `ram_libre_go()`, `liste_cpus()`. Reads `/sys` topology, `nvidia-smi`, `/proc/meminfo`, `df`+`findmnt`. Every heuristic line carries its justifying figure.
+- `drave-core/src/formats.rs` (NEW): tables `IQ2XXS_GRID [u8;8];256`, `KSIGNS_IQ2XS [u8;128]`, `IQ1S_GRID [i8;8];2048` (all programmatically extracted), `dequant_iq2xxs()`, `dequant_iq1m()`, `const IQ1S_DELTA: f32 = 0.125`.
+- `drave-core/src/gguf.rs`: `bufs: Vec<Tampon>`, `starts`, `tbuf()`, `octets_tensor`, `oc
+… [8915 caractères tronqués]
+```
+
+### 👤 Utilisateur
+
+This is an automatically generated checkpoint condensing an earlier span of the conversation to free up context. Treat the captured context as established background and build on it without restating it. Continue the task directly from the messages that follow, without acknowledging this checkpoint.
+
+<compacted-summary>
+## Primary Request and Intent
+- Standing mandate, verbatim: "Continue en blocs de 2h jusqu'à demain 8h HAE. pour chacun des blocs/sprints tu dois être en autonomie totale… les rétros seront des introspections, les revues seront en mode adverse autonome."
+- Later: "continue jusqu'à 13h HAE" → "il n'est pas tard, et tu peux continuer sans moi tellement on a des choses à faire. utilise l'horloge système en hae" → "continue en autonomie jusqu'à 8h hae".
+- Latest explicit directive: "à moins d'y être explicitement contraint, on doit charger dynamiquement les logits manquants ou faire du JIT" — the restricted head must never change the output unless explicitly asked.
+- Prior feature requests now closed: "peut-on avoir 1 expert par fichier", "peut-on découper par couche et expert", "un arbre de dépendance des experts", "les optimisations d'architecture pour chaque grappe et couche afin de faire le meilleur usage du vram et ram", "implémente toute les optimisation et détection de matériel avec heuristiques de configuration automatique".
+- Repo hygiene rules: measure before concluding; every published figure needs a source; never leave the repo broken; machine returned clean; heavy jobs serialized; adversarial reviews delegated to subagents that may not modify files.
+
+## Key Technical Concepts
+- Rust engine (std only), repo `/home/stephane/Data13TB/stephane/GitHub/Qtrinet`, binary `drave-core/target/release/drave`; env vars `DRAVE_*`.
+- Push/AER architecture, GGUF reader, mmap, cluster format (`commun.gguf` + `cluster-XX.gguf` + `mapping.tsv`), MoE, MLA, KV quantization.
+- Hardware: Xeon E5-2687W v3, **20 physical cores / 40 threads**, 2 NUMA nodes of 66 GB, L1 32 Ko, L2 256 Ko/core, L3 25 Mo/socket; **132 Go RAM**; 2× Quadro RTX 5000 (30,2 Go VRAM libre, **NVLink 25,78 Go/s**); NVMe MAP1602 (DRAM-less) on NUMA node 0; SATA mechanical disk.
+- Measured bandwidths: **VRAM 84,9 Go/s** (warp kernel, 41,9 ligne-par-fil) · **RAM 22,5 Go/s** (20 cores) · **NVMe 31 Go/s at 16 parallel readers** (5,37 at one) · **mechanical random 0,06 Go/s** · PCIe 3.0 ×16 ~12 Go/s.
+- Thread rules: 20 cores = 22,5 Go/s, 40 threads = 18,9 (HT useless when all cores present); 10 cores = 14,7 vs **18,7 with HT pairs (+27 %)**; 3 threads/core regresses (15,0).
+- DeepSeek-V4.1-Flash (`deepseek41`, 40 layers, 384 experts top-6, 365,70 Go): **engram 203,4 Go (55,6 %)** = hash table of n-grams `[384 006 168, 264]` I8 per layer (layers 1, 14), mmappable — 10 000 tokens touch 17 276 entries = 4,6 Mo; experts 152,9 Go; attention MLA 5,4 Go; embeddings+head 2,0 Go.
+- KV cache MLA: 90 Ko/token F16 ⇒ 96,6 Go at 1 M; 48,3 Go int8; 24,2 int4. Threshold where KV equals 71 Go of experts: 0,77 M tokens F16.
+- Per-token cost model for V4.1: **148 ms** = common+head 9,3 Go in VRAM (110 ms) + 1,91 Go experts from 20,1 Go cache (23 ms) + 0,48 Go from NVMe (31 Go/s, 15 ms).
+- Group quantization formats, dequantization validated against libggml: Q2_K (84 o/256), IQ2_XXS (66 o/256, grid 256×8 + ksigns), IQ1_M (56 o/256, grid IQ1_S 2048×8).
+- Gauge/measurement discipline: absurd numbers (2211 Go/s disk, cache allocation 4,1 %, total 4231 Go) signalled instrument errors; O_DIRECT fails here (errno 29); 4 prefetch mechanisms all measured null because test models fit in the 115 Go page cache; the activation threshold destroys the model (×287 at 5 %).
+
+## Files and Code
+- `drave-core/src/materiel.rs` (NEW, 3 tests): `Materiel::detecter()`, `resume()`, `plan(ctx, taille_modele_go, n_experts, mo_par_expert)`, `cout_par_jeton(...)`, `ram_libre_go()`, `liste_cpus()`. Reads `/sys` topology, `nvidia-smi`, `/proc/meminfo`, `df`+`findmnt`. Every heuristic line carries its justifying figure.
+- `drave-core/src/formats.rs` (NEW): tables `IQ2XXS_GRID [u8;8];256`, `KSIGNS_IQ2XS [u8;128]`, `IQ1S_GRID [i8;8];2048` (all programmatically extracted), `dequant_iq2xxs()`, `dequant_iq1m()`, `const IQ1S_DELTA: f32 = 0.125`.
+- `drave-core/src/gguf.rs`: `bufs: Vec<Tampon>`, `starts`, `tbuf()`, `octets_tensor`, `octets_de` (bounds both ends), `open_multi`, `open_avec_prefixes`, `open_multi_meta`, `open_meta_avec_prefixes`, `shard_de`, `chemins_du_modele`, `open_auto`/`open_meta_auto` (directory = clusters model), `Mappe`/`Tampon` mmap, `prelire()` + `prelire_active()` (`DRAVE_PRELIRE`), `prelire_tout()` + `prelire_tout_voulu()` (`DRAVE_PRELIRE_TOUT`), `tranche_publique()`, `bf16_to_f32()`, `dequant_q2k()`, **`dequant_q5k()` (just added, does not compile yet)**, `GGML_BF16 = 30`, `GGML_Q2_K = 10`.
+- `drave-core/src/clusters.rs`: `Mapping` (`#[derive(Clone)]`), `lire`, `ou`, `presents`, `ouvrir`, `ouvrir_meta`, `ouvrir_sous_ensemble`, `gardes_du_milieu`, numeric cluster sort with continuity check, `ACTIF` OnceLock published only after success.
+- `drave-core/src/model.rs`: `Moe.gate/up/down: Vec<Vue4>`, `Moe.numeros`, `Moe.ou(e)` (searches by cluster number), `charger_moe(g, l, n_expert, map)`, `KvCache`, `logits` (per token) and `logits_lot` (batched), `tete_restreinte: Option<Vec<u32>>`, density counters `TETE_ACTIFS/TETE_TOTAL/TETE_APPELS`, comment block recording why `TeteBornee` was removed.
+- `drave-core/src/main.rs`: `mod clusters; mod engine; mod formats; mod gguf; mod list; mod materiel; mod model; mod tokenizer;`, `run_materiel`, `run_sonder_engram`, `run_bloc(spec)` (`--bloc TENSEUR:INDEX`), `poser_tete_restreinte`, updated usage text listing `--materiel`, `--sonder-engram`, `--tete-restreinte`, `DRAVE_CLUSTERS`, `DRAVE_MMAP`. Default threads now `engine::coeurs_physiques()` (all 3 `cpu * 3/4` and 2 `cpu / 2` sites fixed).
+- `tools/analyse_empreinte.py` (NEW): replay a routing trace → per-layer footprint curves, allocation, periodicity, extrapolation.
+- `tools/analyse_experts_statique.py` (NEW): static expert analysis (Q4_K, Q6_K, Q8_0, F32, F16 dequantizers, `Lecteur` GGUF class used by other scripts).
+- `tools/portes.sh` (NEW): all gates vs published values; `valeur()` anchors on `=== perplexité`.
+- `tools/verifier_table_types.sh`, `tools/inventaire_modeles_lourds.sh`, `tools/convertir_clusters.py` (now writes `mapping.tsv`), `tools/telecharger_modeles.py`.
+- Reports: `reports/rapport-empreinte-memoire.md`, `reports/rapport-architecture-memoire.md`, `reports/rapport-optimisations-auto.md`, `reports/rapport-tete-restreinte.md`, `reports/rapport-lecteur-multifichiers.md`; `sprints/09-empreinte-memoire-ce-qui-reduit-vraiment.md`; `README.md` (628 l.), `REPRISE.md` (891+ l.).
+- Traces: `/home/stephane/FastNVMe/artefacts/traces/session-01-10/` (34 Mo, replayable).
+- `/home/stephane/FastNVMe/modeles-lourds/` : copy of DeepSeek-V4.1 (365 Go) + README explaining the storage-policy exception.
+
+## Errors and Fixes
+- `q8_dot_at`/`q8_dot_avx2` read 34 bytes early (file-relative vs data-relative offset) → PPL NaN; fixed with `&self.bufs[v.fichier][self.starts[v.fichier]..]`; new test `q8_dot_at_voit_les_bons_octets`, verified by sabotage.
+- Expert tensor name prefixed twice (`blk.0.blk.0.…`) → `charger_moe` returned None for all 48 layers silently; found by adding per-refusal error messages and `mélanges d'experts chargés : 0/48`.
+- Lexicographic cluster sort → numeric sort with continuity check.
+- Mapping published before successful open → published after.
+- `open_multi_meta` ignored prefixes → 3,19 Go instead of 18,55.
+- `octets_tensor` counted unknown types as 0 → now signalled; ggml type table completed with 41–48.
+- `DRAVE_CLUSTERS` covering all clusters on an amputated directory silently lost experts → demanded cluster must exist; incomplete directory refused unless assumed.
+- `--mate` bug: `--tete-bornee` was silently ignored on models without a 4-bit head (missing branch in `q8_view`); also `--infer` goes through `logits`, not `logits_lot` — first patch targeted the wrong function.
+- Cauchy-Schwarz bound never concludes (≤5–20× too loose) → whole-vocabulary line-by-line scan, slower than the parallel full pass; `--tete-bornee` removed.
+- Activation threshold destroys the model: density 85,4 % at threshold 0 → 61,5 %/PPL 22,36 (+15 %), 30,3 %/28,76 (+48 %), 5,1 %/**2073,80 (×107)**.
+- `tools/portes.sh` first version extracted the per-window cumulative PPL (17,431) instead of the total (19,3885) — false positive against the code; fixed by anchoring on `=== perplexité`.
+- IQ2_XXS first version: only first 32-weight sub-block correct (224/256 wrong) because in ggml `qs` is `uint16_t[32]` so `qs + 4*ib32` advances **8 bytes**, not 4; fixed → 0,00e+00.
+- IQ1_M first version: field order in `block_iq1_m` is `qs[32], qh[16], scales[8]` — scales are **last**; reading them first gave 2,4e5 error; fixed → 0,00e+00.
+- Q2_K scale index wrong: correct is `is = moitié*8 + k*2 + (l/16)`; also the first unit test was wrong (expected `l % 4`).
+- Rust format specifiers: `{:.1f}` invalid (should be `{:.1}`); `{arch}` implicit capture clashed with positional args.
+- `env $opt $D` put binary flags into `env` → two of three measurements silently empty.
+- `--sonder-engram` on the mechanical disk: 16 936 µs per 264-byte entry (seek) → copy V4.1 to NVMe.
+- `machine`: 4 prefetch mechanisms measured null (0,3 %, −2 %, etc.) because models fit in page cache.
+
+## Pending Jobs
+- Fix `dequant_q5k` compile errors (tuple iteration misuse, `haut`/`u` types) and verify against libggml.
+- Implement Q3_K (used by Qwen3-235B, GLM), IQ3_XXS (V4-Flash, GLM, Kimi), IQ1_S and IQ4_XS (GLM).
+- Wire IQ2_XXS/IQ1_M/BF16/Q2_K into `row_f32`/`dequant` where not yet done; add `--bloc` branches.
+- Measure the engram probe on the NVMe copy once the copy finishes.
+- Read the gpt-oss gate result (`/tmp/porte_oss3.log`, expected 15,1757).
+- Write `tools/extraire_tables_ggml.sh` (referenced in `formats.rs` comments) for reproducible table extraction.
+- Update `README.md`/`REPRISE.md` with the new format support.
+
+## Current Work
+- Implementing `dequant_q5k` in `drave-core/src/gguf.rs`; build fails with:
+  - `error[E0308]: mismatched types … let q4 = if *haut { … } … expected bool, found usize` (line ~920)
+  - `error[E0277]: no implementation for u8 & &(bool, u8)` (line ~921)
+- Cause: the loop was written as `for (k, (haut, u)) in [(0usize, (false, u1)), (1, (true, u2))].iter().enumerate()` and `haut`/`u` are references inside a tuple reference.
+
+## Next Step
+- Rewrite the Q5_K inner loop with plain indexing (e.g. `for k in 0..2usize { let haut = k == 1; let u = if k == 0 { u1 } else { u2 }; … }`), rebuild, then verify Q5_K against a libggml reference program using `--bloc`.
+
+## Critical Context
+- Gate values that must stay green: Qwen2.5-0.5B Q8_0 ctx 256 `--ppl /tmp/ids_qwen.txt --ctx 256 --abits 16 --threads 16 --limit 512 --dense` = **19,3885**; clusters `qwen3-30b-8clusters-v2` ctx 64 limit 8 `--lot 1` = **799,8557**; gpt-oss-120b MXFP4 ctx 256 `--dense --threads 16 --limit 512` = **15,1757**; `cargo test --release` = **37 tests** (35 before Q2_K/IQ2_XXS/IQ1_M additions).
+- Verification pattern for new formats: build a C program linking `-lggml -lggml-base` with `-I$L/ggml/include -I$L/ggml/src`, tables require `#define GGML_COMMON_IMPL_C` before `#include "ggml-common.h"`; compare `--bloc TENSEUR:INDEX` output against it.
+- Verified format results: Q2_K 4,9e-8; IQ2_XXS 0,00e+00 (256/256); IQ1_M 0,00e+00; BF16 exact.
+- Reference test offsets: V4.1 `blk.0.ffn_gate_exps.weight` at 2190082048 (IQ2_XXS), `blk.0.ffn_down_exps.weight` (Q2_K); V4-Flash shard 2 `blk.0.ffn_gate_exps.weight` at 1537105568 (IQ1_M), `blk.0.ffn_gate_inp.weight` (BF16).
+- Conversation history must be reconstructed from completed turns only; do not use `--allowedTools` or `Task`-tool semantics.
+- Measured architectural conclusions to reuse: mmap opens 365,7 Go in 0,08 s / 47 Mo RSS; model load 6,8 s mmap vs 30,5 s read; loading is I/O-bound not CPU-bound (4 vs 20 threads: 7,10 vs 6,80 s); attention MLA is the top per-token cost and has **no GPU kernel**; IQ2_XXS/Q2_K have no GPU kernel either; head restriction gives +10,5 % (French 13,0 %) to +15 % (English 5,8 %) but changes output, so it is a *constrained generation* tool and is refused under `--ppl` with an explicit message.
+- Structural findings: mirror (extreme layers 4,6× more token-bound: Jaccard 0,259 vs 0,056), periodicity of 12 layers (Jaccard 0,323 at lag 12, 0,210 at 24, 0,035 otherwise, confined to layers 6–39, present in the weights too), experts orthogonal within a layer (max 0,04–0,19), vocabulary saturates at 13 % of tokens (Heaps exponent ≈0,21), true-token rank median 3 / max 4 319.
+- Download queue finished: 1 163 Go across DeepSeek-V4.1 (365,7), Kimi (303,9), GLM-5.3 (216,7), GLM-5.3-Flash (93,08), V4-Flash (86,9), Qwen3-235B (85,68), MiniMax-H3 (11,42 ×2); weights announced match HuggingFace sizes on 1 163 Go; MiniMax-H3 is an audio/vision model (no text forward).
+- No FPGA in this machine (Stratix V is USB-only, 625 Mo/s, no use case: compute is 18× faster than reading).
+- Commits since 10:47: 44+; working tree clean except the regenerating `journal/README.md`.
+</compacted-summary>
+
+### 🤖 Assistant
+
+⏵ Inspecting the real Q5_K loop text before patching
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/gguf.rs", "offset": 890, "limit": 55}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/gguf.rs</path>
+<type>file</type>
+<content>
+890:                     }
+891:                 }
+892:             }
+893:             other => panic!("raw_levels : type {other} non géré"),
+894:         }
+895:         out
+896:     }
+897: 
+898:     /// Déquantifie un bloc **Q5_K** (176 octets, 256 poids).
+899:     ///
+900:     /// Même structure que Q4_K — d, dmin, 12 octets d'échelles, 128 octets de
+901:     /// quants 4 bits — plus **32 octets de bits hauts** : chaque poids a 5 bits.
+902:     /// Les bits hauts sont lus avec des masques qui se décalent de deux bits à
+903:     /// chaque tranche de 64 poids.
+904:     pub fn dequant_q5k(bloc: &[u8]) -> Vec<f32> {
+905:         assert!(bloc.len() >= 176, "bloc Q5_K trop court : {}", bloc.len());
+906:         let d = Self::f16_to_f32(u16::from_le_bytes([bloc[0], bloc[1]]));
+907:         let dmin = Self::f16_to_f32(u16::from_le_bytes([bloc[2], bloc[3]]));
+908:         let sc = &bloc[4..16];
+909:         let qh = &bloc[16..48];
+910:         let ql = &bloc[48..176];
+911:         let mut out = vec![0f32; 256];
+912:         let (mut u1, mut u2) = (1u8, 2u8);
+913:         for tra
+… [1776 caractères tronqués]
+  ```
+
+### 👤 Utilisateur
+
+Current runtime context. This snapshot supersedes earlier runtime-context snapshots.
+
+Current DSH file policy: danger-full-access. The DSH file sandbox does not restrict file modifications by available operations.
+
+Approval prompts are disabled in this session: actions that require approval are rejected automatically — do not request sandbox escalation (do not set `sandbox_permissions`).
+
+### 👤 Utilisateur
+
+<system-reminder>
+The available skill catalog changed. This complete catalog replaces every earlier available-skills list in this session:
+
+<available_skills>
+- `microsoft-foundry`: Deploy, evaluate, fine-tune, and manage Foundry agents end-to-end with azd: hosted agent scaffold/run/deploy, prompt agent create, batch eval, continuous eval, prompt optimizer, Agent Optimizer scaffold, agent.yaml, dataset curation from traces, model fine-tuning (SFT/DPO/RFT). USE FOR: azd ai agent, azd provision/deploy, deploy agent, hosted agent, create agent, add tool to agent, invoke agent, evaluate agent, continuous eval, continuous monitoring, agent CI/CD, optimize prompt, improve prom...
+</available_skills>
+
+Use only names in this replacement catalog. If the user names a listed skill, or the task clearly matches its description, call the `skill` tool with the exact name before acting.
+A user may also invoke a skill directly; its <skill_content> block then appears in this conversation. Follow it, and do not call the `skill` tool again for that skill.
+</system-reminder>
+
+### 🤖 Assistant
+
+⏵ Réécriture de la boucle Q5_K et vérification de la référence ggml
+
+- **bash** `{"command": "ls /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/ | head -30; echo ---; ls -d ~/llama.cpp /opt/llama.cpp 2>/dev/null; find / -name \"ggml-quants.c\" -not -path \"*/node_modules/*\" 2>/dev/null | head -3", "description": "Locate tools dir and ggml source"}`
+
+  ```
+aiguille.py
+analyse_empreinte.py
+analyse_experts_statique.py
+analyse_flux.py
+archive_sessions.py
+clusters_moe.py
+colab_cote_local.sh
+compare_logits.py
+convertir_clusters.py
+diff_flux.py
+flux_codec.py
+harmony_canonique.py
+inventaire_modeles_lourds.sh
+make_patch.py
+manifeste_modeles_lourds.json
+mla_synthetique.py
+pair_factice.py
+portes.sh
+preparer_colab.sh
+profil_flux.py
+proxy_latence.py
+__pycache__
+ref_logits
+ref_logits.cpp
+ref_logits.md
+session_report.py
+sprint.sh
+telecharger_modeles.py
+trace_compacite.py
+verifier_table_types.sh
+---
+[timed out after 60000ms]
+[killed by signal: SIGTERM]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rn \"llama.cpp\\|ggml-common.h\" --include=*.sh --include=*.md -h tools/ *.md 2>/dev/null | grep -o \"/[A-Za-z0-9_./-]*llama[A-Za-z0-9_./-]*\" | sort -u | head -10", "description": "Find llama.cpp reference path"}`
+
+  ```
+/home/stephane/Data13TB/stephane/GitHub/llama.cpp
+/home/stephane/Data13TB/stephane/GitHub/llama.cpp/build/bin
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/llama.cpp && sed -n '/void dequantize_row_q5_K/,/^}/p' ggml/src/ggml-quants.c", "description": "Read ggml Q5_K reference"}`
+
+  ```
+void dequantize_row_q5_K(const block_q5_K * GGML_RESTRICT x, float * GGML_RESTRICT y, int64_t k) {
+    assert(k % QK_K == 0);
+    const int64_t nb = k / QK_K;
+
+    for (int i = 0; i < nb; i++) {
+        const uint8_t * ql = x[i].qs;
+        const uint8_t * qh = x[i].qh;
+
+        const float d = GGML_FP16_TO_FP32(x[i].d);
+        const float min = GGML_FP16_TO_FP32(x[i].dmin);
+
+        int is = 0;
+        uint8_t sc, m;
+        uint8_t u1 = 1, u2 = 2;
+        for (int j = 0; j < QK_K; j += 64) {
+            get_scale_min_k4(is + 0, x[i].scales, &sc, &m);
+            const float d1 = d * sc; const float m1 = min * m;
+            get_scale_min_k4(is + 1, x[i].scales, &sc, &m);
+            const float d2 = d * sc; const float m2 = min * m;
+            for (int l = 0; l < 32; ++l) *y++ = d1 * ((ql[l] & 0xF) + (qh[l] & u1 ? 16 : 0)) - m1;
+            for (int l = 0; l < 32; ++l) *y++ = d2 * ((ql[l]  >> 4) + (qh[l] & u2 ? 16 : 0)) - m2;
+            ql += 32; is += 2;
+            u1 <<= 2; u2 <<= 2;
+        }
+    }
+}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/llama.cpp && grep -n \"block_q5_K\" ggml/src/ggml-common.h | head -5 && sed -n '/typedef struct {/,/} block_q5_K;/p' ggml/src/ggml-common.h | tail -12 && sed -n '/static inline void get_scale_min_k4/,/^}/p' ggml/src/ggml-quants.c", "description … [40 caractères tronqués]`
+
+  ```
+439:} block_q5_K;
+440:static_assert(sizeof(block_q5_K) == 2*sizeof(ggml_half) + K_SCALE_SIZE + QK_K/2 + QK_K/8, "wrong q5_K block size/padding");
+    0x22221122, 0x20202000, 0x20202002, 0x20202200, 0x20202202, 0x20222000, 0x20222002, 0x20222200,
+    0x20222202, 0x21212001, 0x21212100, 0x21212102, 0x21212201, 0x22202000, 0x22202002, 0x22202200,
+    0x22202202, 0x22212101, 0x22222000, 0x22222002, 0x22222200, 0x22222202, 0x20202111, 0x20212110,
+    0x20212211, 0x20222011, 0x20222111, 0x21202011, 0x21212010, 0x21212111, 0x21212212, 0x21222011,
+    0x21222112, 0x21222211, 0x22212010, 0x22212112, 0x20202020, 0x20202022, 0x20202220, 0x20202222,
+    0x20222020, 0x20222022, 0x20222220, 0x20222222, 0x21212021, 0x21212120, 0x21212122, 0x22202020,
+    0x22202022, 0x22202220, 0x22202222, 0x22212121, 0x22222020, 0x22222022, 0x22222220, 0x22222222,
+GGML_TABLE_END()
+#endif
+
+#endif // GGML_COMMON_IMPL
+#endif // GGML_COMMON_IMPL
+static inline void get_scale_min_k4(int j, const uint8_t * GGML_RESTRICT q, uint8_t * GGML_RESTRICT d, uint8_t * GGML_RESTRICT m) {
+    if (j < 4) {
+        *d = q[j] & 63; *m = q[j + 4] & 63;
+    } else {
+        *d = (q[j+4] & 0xF) | ((q[j-4] >> 6) << 4);
+        *m = (q[j
+… [42 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/gguf.rs", "old_string": "        let (mut u1, mut u2) = (1u8, 2u8);\n        for tranche in 0..4usize {\n            for (k, &(haut, u)) in [(0usize, (false, u1)), (1, (true, u2))].iter().enumerate() {\n                let … [1559 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/gguf.rs has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && cargo build --release 2>&1 | grep -E \"^(error|warning: unused)\" -A4 | head -20; echo \"---\"; grep -n \"Q2_K\\|Q5_K\\|13 =>\" src/main.rs | head -20", "description": "Rebuild and inspect main.rs branch"}`
+
+  ```
+warning: unused attribute
+    --> src/model.rs:2080:5
+     |
+2080 |     #[inline]
+     |     ^^^^^^^^^ help: remove this attribute
+--
+warning: unused variable: `plan`
+   --> src/materiel.rs:381:34
+    |
+381 |     pub fn cout_par_jeton(&self, plan: &Plan, go_experts_par_jeton: f64,
+    |                                  ^^^^ help: if this is intentional, prefix it with an underscore: `_plan`
+--
+warning: unused variable: `arch`
+    --> src/model.rs:1613:21
+     |
+1613 |                 let arch = g.meta.get("general.architecture").and_then(|m| m.as_str());
+     |                     ^^^^ help: if this is intentional, prefix it with an underscore: `_arch`
+--
+warning: unused variable: `tk5`
+    --> src/model.rs:2218:37
+---
+1469:        gguf::GGML_Q2_K => 84,
+1470:        13 => 176,                      // Q5_K
+1484:        gguf::GGML_Q2_K => Gguf::dequant_q2k(&buf[base..]),
+1485:        13 => Gguf::dequant_q5k(&buf[base..]),
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c \"\nimport sys; sys.path.insert(0,'/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools')\nfrom analyse_experts_statique import Lecteur\nfor f in ['/home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek-V4-Flash-UD-IQ1_M/ … [372 caractères tronqués]`
+
+  ```
+Q5_K : blk.0.attn_q_a.weight [1024, 4096] debut 669601184
+Q5_K : blk.0.ffn_gate_shexp.weight [2048, 4096] debut 2008964768
+Q5_K : blk.0.ffn_up_shexp.weight [2048, 4096] debut 2487613088
+Q5_K : blk.1.attn_q_a.weight [1024, 4096] debut 2570076064
+total Q5_K 76
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '/fn run_bloc/,/^}/p' drave-core/src/main.rs | head -60", "description": "Read run_bloc implementation"}`
+
+  ```
+fn run_bloc(spec: &str) {
+    let (nom, index) = match spec.rsplit_once(':') {
+        Some((n, i)) => (n.to_string(), i.parse::<usize>().unwrap_or(0)),
+        None => (spec.to_string(), 0),
+    };
+    let g = Gguf::open_auto(&modele_chemin()).expect("ouverture du GGUF");
+    let t = g.tensor(&nom).unwrap_or_else(|| panic!("tenseur « {nom} » absent"));
+    let bloc_octets = match t.ttype {
+        gguf::GGML_Q2_K => 84,
+        13 => 176,                      // Q5_K
+        16 => 66,                       // IQ2_XXS
+        29 => 56,                       // IQ1_M
+        30 => 512,                      // BF16 : « bloc » = 256 poids × 2 octets
+        autre => panic!("type {autre} non géré par --bloc"),
+    };
+    let n_cols = if t.dims.len() > 1 { t.dims[1] as usize } else { 256 };
+    let super_blocs = (n_cols / 256).max(1);
+    // Un bloc par super-bloc de 256 poids : `index` compte les blocs.
+    let ligne = index / super_blocs;
+    let dans_ligne = index % super_blocs;
+    let base = ligne * super_blocs * bloc_octets + dans_ligne * bloc_octets;
+    let buf = g.tranche_publique(&nom).expect("données absentes");
+    let v = match t.ttype {
+        gguf::GGML_Q2_K => Gguf::deq
+… [520 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '/fn modele_chemin/,/^}/p' drave-core/src/main.rs; ls /home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek-V4-Flash-UD-IQ1_M/", "description": "Check model path resolution"}`
+
+  ```
+fn modele_chemin() -> String { MODELE.get().cloned().unwrap_or_default() }
+
+/// **Tableau de bord des réglages en vigueur** (`--options-actives`), lus sur le
+/// MODÈLE après toutes les affectations.
+///
+/// Pourquoi il existe : le défaut le plus coûteux de ce dépôt n'est pas un calcul
+/// faux, c'est un drapeau qui ne fait rien. Huit ont été corrigés en une session
+/// (`--keep` en perplexité, `--ffn-gain` en inférence, les top-k dans les modes
+/// flux, `--trace-flux` en inférence, `--threads` figé…), et chacun était
+/// INVISIBLE : la sortie ne disait nulle part quelle valeur agissait. Ici, elle
+/// le dit — et une valeur qu'on ne voit pas bouger est une valeur qui ne sert à
+/// rien.
+fn options_actives(mdl: &model::Model, mode: &str, ctx_impose: bool, dense: bool, keep: f32) {
+    let oui = |b: bool| if b { "imposé" } else { "défaut" };
+    println!("[options] mode {mode} · contexte {} ({}) · dense {} · keep {:.3}",
+             mdl.ctx, oui(ctx_impose), dense, keep);
+    println!("[options] activation : niveaux {:.0} · seuil {} · k-WTA {} · renorm {}",
+             mdl.act_levels, mdl.act_thresh, mdl.act_topk, mdl.act_renorm);
+    println!("[options] top-k : attn {} · q·k {} ·
+… [2551 caractères tronqués]
+  ```
+
+- **bash** `{"command": "ls -t /tmp/*.c /tmp/ref* 2>/dev/null | head -20; echo ---; ls -t /tmp/*.log 2>/dev/null | head", "description": "Look for existing reference C programs"}`
+
+  ```
+/tmp/ref_iq1m.txt
+/tmp/ref_iq1m
+/tmp/ref_iq1m.c
+/tmp/ref_iq1m.c
+/tmp/extraire_iq1.c
+/tmp/ref_iq2.txt
+/tmp/ref_iq2
+/tmp/ref_iq2.c
+/tmp/ref_iq2.c
+/tmp/extraire2.c
+/tmp/extraire_tables.c
+/tmp/ref_q2k2
+/tmp/ref_q2k2.c
+/tmp/ref_q2k2.c
+/tmp/ref_q2k
+/tmp/ref_q2k.c
+/tmp/ref_q2k.c
+/tmp/noms.c
+/tmp/ggml.c
+/tmp/tailles_ggml.c
+---
+/tmp/porte_oss3.log
+/tmp/verif_iq2.log
+/tmp/verif_q2k.log
+/tmp/prelire_tout.log
+/tmp/chargement2.log
+/tmp/chargement.log
+/tmp/portes.log
+/tmp/choix_threads.log
+/tmp/mmap_taille.log
+/tmp/sonde2.log
+  ```
+
+- **bash** `{"command": "cat /tmp/ref_iq1m.c | head -60; echo \"=== OSS gate ===\"; tail -5 /tmp/porte_oss3.log", "description": "Read IQ1_M reference program and OSS gate log"}`
+
+  ```
+#include <stdio.h>
+#include <stdlib.h>
+#include "ggml.h"
+#include "ggml-common.h"
+#include "ggml-quants.h"
+int main(int argc, char **argv) {
+    FILE *f = fopen(argv[1], "rb");
+    fseek(f, atol(argv[2]), SEEK_SET);
+    block_iq1_m b;
+    if (fread(&b, sizeof(b), 1, f) != 1) return 1;
+    float y[256];
+    dequantize_row_iq1_m(&b, y, 256);
+    for (int i = 0; i < 256; i++) printf("%.7f\n", y[i]);
+    return 0;
+}
+=== OSS gate ===
+gpt-oss ctx 256 (attendu 15,1757) : perplexité 15.1757 sur 510 tokens (0 événements, 2165.6 s)
+=== fin ===
+  ```
+
+- **bash** `{"command": "head -20 /tmp/verif_q2k.log; echo \"=== iq2 ===\"; head -20 /tmp/verif_iq2.log", "description": "Read previous verification logs"}`
+
+  ```
+blk.0.ffn_down_exps.weight : dims [384, 5120, 2304] type 10
+ggml  (8 premiers) : ['-0.002666', '-0.002666', '-0.034046', '-0.002666', '-0.034046', '-0.002666', '-0.018356', '-0.002666']
+nous  (8 premiers) : ['-0.002666', '-0.002666', '-0.034046', '-0.002666', '-0.034046', '-0.002666', '-0.018356', '-0.002666']
+ecart max sur les 8 premiers : 4.73e-07
+CONCORDE
+=== iq2 ===
+blk.0.ffn_gate_exps.weight       type 16 · 256 valeurs · ecart max 9.42e-02 · DIVERGE
+blk.30.ffn_up_exps.weight        type 16 · 256 valeurs · ecart max 8.38e-02 · DIVERGE
+  ```
+
+- **bash** `{"command": "ls -t /tmp/*.py 2>/dev/null | head -12", "description": "List helper python scripts in /tmp"}`
+
+  ```
+/tmp/verif_iq2.py
+/tmp/verif_q2k.py
+/tmp/lecteur_nvme.py
+/tmp/nvme_froid.py
+/tmp/distribution.py
+/tmp/inter_couches.py
+/tmp/analyse_par_couche.py
+/tmp/engram_journal.py
+/tmp/analyse_journal.py
+/tmp/analyse_localite.py
+/tmp/ngrammes.py
+/tmp/analyse_empreinte.py
+  ```
+
+- **bash** `{"command": "cat /tmp/verif_q2k.py", "description": "Read the Q2_K verification script"}`
+
+  ```
+import struct, subprocess, sys
+sys.path.insert(0, 'tools')
+from analyse_experts_statique import Lecteur
+M = "/home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek-V4.1-Flash-Q2/DeepSeek-V4.1-Flash-Q2.gguf"
+g = Lecteur(M)
+nom = "blk.0.ffn_down_exps.weight"
+dims, ttype, offset = g.tenseurs[nom]
+print(f"{nom} : dims {dims} type {ttype}")
+debut = g.debut + offset
+# Premier bloc de 84 octets.
+g.f.seek(debut); bloc = g.f.read(84)
+open('/tmp/bloc_q2k.bin', 'wb').write(bloc)
+ref = subprocess.run(['/tmp/ref_q2k', M, str(debut)], capture_output=True, text=True,
+                     env={'LD_LIBRARY_PATH': '/home/stephane/Data13TB/stephane/GitHub/llama.cpp/build/bin'})
+if ref.returncode != 0:
+    print("reference :", ref.stderr[:200]); sys.exit(1)
+attendu = [float(x) for x in ref.stdout.split()]
+print(f"ggml  (8 premiers) : {[f'{v:.6f}' for v in attendu]}")
+# Et notre calcul, en Rust via le binaire ? On le refait ici en Python pour
+# comparer les deux implementations sur le meme bloc.
+scales = bloc[0:16]; qs = bloc[16:80]
+d = struct.unpack('<e', bloc[80:82])[0]; dmin = struct.unpack('<e', bloc[82:84])[0]
+out = [0.0]*256
+for moitie in range(2):
+    q = qs[moitie*32:(moitie+1)*32]
+    for k, d
+… [459 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"MODELE\" drave-core/src/main.rs | head -12", "description": "Find model env var name"}`
+
+  ```
+60:    let _ = MODELE.set(args[1].clone());
+361:static MODELE: std::sync::OnceLock<String> = std::sync::OnceLock::new();
+362:fn modele_chemin() -> String { MODELE.get().cloned().unwrap_or_default() }
+  ```
+
+- **bash** `{"command": "cat > /tmp/ref_q5k.c <<'EOF'\n#include <stdio.h>\n#include <stdlib.h>\n#include \"ggml.h\"\n#include \"ggml-common.h\"\n#include \"ggml-quants.h\"\nint main(int argc, char **argv) {\n    FILE *f = fopen(argv[1], \"rb\");\n    fseek(f, atol(argv[2]), SEEK_SET);\n    block_q5_K b;\n    if … [479 caractères tronqués]`
+
+  ```
+compil 0
+-rwxr-xr-x. 1 stephane stephane 20336  1 oct 23:08 /tmp/ref_q5k
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/verif_q5k.py <<'EOF'\nimport subprocess, sys\nsys.path.insert(0, '/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools')\nfrom analyse_experts_statique import Lecteur\nD = \"/home/stephane/Data13TB/stephane/modeles/gguf/D … [1296 caractères tronqués]`
+
+  ```
+blk.0.attn_q_a.weight : dims [1024, 4096] type 13 offset fichier 669601184
+ggml 256 valeurs, nous 0
+ggml  8 : ['-0.007586', '-0.031560', '0.024379', '0.024379', '0.016388', '0.000405', '0.011060', '-0.028896']
+nous  8 : []
+Traceback (most recent call last):
+  File "/tmp/verif_q5k.py", line 22, in <module>
+    ecart = max(abs(a - b) for a, b in zip(attendu[:n], vals[:n]))
+ValueError: max() iterable argument is empty
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ./drave-core/target/release/drave /home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek-V4-Flash-UD-IQ1_M --bloc blk.0.attn_q_a.weight:0 2>&1 | head -5", "description": "Run bloc tool manually to see error"}`
+
+  ```
+[attention] QT_IM_SWITCHER est l'ancien nom d'une variable d'environnement : elles s'appellent maintenant DRAVE_* (voir docs/histoire.md). Rien n'a été appliqué.
+
+thread 'main' (3432133) panicked at src/main.rs:1466:47:
+ouverture du GGUF: Custom { kind: NotFound, error: "/home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek-V4-Flash-UD-IQ1_M est un dossier mais ne contient pas commun.gguf" }
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ./drave-core/target/release/drave /home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek-V4-Flash-UD-IQ1_M/DeepSeek-V4-Flash-UD-IQ1_M-00002-of-00003.gguf --bloc blk.0.attn_q_a.weight:0 2>&1 | head -4", "description": "Try bloc with s … [16 caractères tronqués]`
+
+  ```
+[attention] QT_IM_SWITCHER est l'ancien nom d'une variable d'environnement : elles s'appellent maintenant DRAVE_* (voir docs/histoire.md). Rien n'a été appliqué.
+tenseur blk.0.attn_q_a.weight · type Q5_K · bloc 0
+-0.0075860
+-0.0315596
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -i \"s|                       D, '--bloc', nom + ':0'|                       S2, '--bloc', nom + ':0'|\" /tmp/verif_q5k.py && python3 /tmp/verif_q5k.py 2>&1 | tail -8; echo \"=== env ===\"; env | grep -c QT_IM", "description": "R … [31 caractères tronqués]`
+
+  ```
+blk.0.attn_q_a.weight : dims [1024, 4096] type 13 offset fichier 669601184
+ggml 256 valeurs, nous 256
+ggml  8 : ['-0.007586', '-0.031560', '0.024379', '0.024379', '0.016388', '0.000405', '0.011060', '-0.028896']
+nous  8 : ['-0.007586', '-0.031560', '0.024379', '0.024379', '0.016388', '0.000405', '0.011060', '-0.028896']
+ecart max sur 256 valeurs : 0.00e+00
+CONCORDE
+=== env ===
+2
+  ```
+
+### 🤖 Assistant
+
+⏵ Q5_K concorde exactement ; inspection des variables d'environnement parasites
+
+- **bash** `{"command": "env | grep QT_IM; echo ---; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rn \"QT_IM\" drave-core/src/*.rs | head -10", "description": "Inspect legacy env vars and their mapping"}`
+
+  ```
+QT_IM_SWITCHER=imsw-multi
+QT_IM_MODULE=xim
+---
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rn \"ancien nom\" drave-core/src/ | head; echo ---; grep -rn \"QT_\\|\\\"QT\\\"\" drave-core/src/*.rs | head -20", "description": "Find legacy env var handling code"}`
+
+  ```
+drave-core/src/main.rs:53:    // ancien nom encore présent dans un script ne ferait RIEN, en silence. On le
+drave-core/src/main.rs:56:        eprintln!("[attention] {vieux} est l'ancien nom d'une variable d'environnement : \
+---
+drave-core/src/main.rs:52:    // Les variables d'environnement ont été renommées QT_* -> DRAVE_* : un
+drave-core/src/main.rs:55:    if let Some((vieux, _)) = std::env::vars().find(|(k, _)| k.starts_with("QT_")) {
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/main.rs", "offset": 40, "limit": 30}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/main.rs</path>
+<type>file</type>
+<content>
+40:         eprintln!("                                     choix — ne charge pas le modèle");
+41:         eprintln!("       drave <modele> --sonder-engram N   accès mmappé à une table d'engram");
+42:         eprintln!("       drave <modele> --tete-restreinte F  génération CONTRAINTE : la tête ne");
+43:         eprintln!("                                     calcule que les tokens de F. Change la");
+44:         eprintln!("                                     sortie — refusé en perplexité.");
+45:         eprintln!("       (un dossier contenant commun.gguf EST un modèle ; DRAVE_CLUSTERS=0,3");
+46:         eprintln!("        ne charge que certains clusters ; DRAVE_MMAP=0 lit au lieu de mapper)");
+47:         std::process::exit(1);
+48:     }
+49:     // Une seule analyse, puis un aiguillage : `--plan`, `--tokenize`,
+50:     // `--ppl`/`--ppl-texte` et `--infer` partagent désormais la même structure
+51:     // d'options, donc les mêmes drapeaux.
+52:     // Les variables d'environnement ont été renommées QT_* -> DRAVE_* : un
+53:     // ancien nom encore présent dans un script ne
+… [1110 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rho 'DRAVE_[A-Z0-9_]*' drave-core/src/*.rs | sort -u | tr '\\n' ' '; echo; echo \"=== QT legacy in history ===\"; grep -rn \"QT_\" docs/histoire.md 2>/dev/null | head -8", "description": "Enumerate DRAVE env vars and legacy ali … [6 caractères tronqués]`
+
+  ```
+DRAVE_ DRAVE_BANC_KV_DEBUG DRAVE_BANC_KV_GPU_SEUL DRAVE_BANC_KV_GRAD DRAVE_BANC_KV_K0 DRAVE_BANC_KV_KUNIT DRAVE_BANC_KV_UNIT DRAVE_BANC_KV_V1 DRAVE_BANC_SANS_PUITS DRAVE_CLUSTERS DRAVE_DEBUG_FLUX DRAVE_FLUX_VERIF DRAVE_GPU DRAVE_GPU_EXPERTS DRAVE_GPU_EXPERTS_GO DRAVE_GPU_KV DRAVE_GPU_TETE DRAVE_GPU_TOPK DRAVE_HARMONY_TRACE DRAVE_KV_BITS DRAVE_KV_F16 DRAVE_KV_K_F16 DRAVE_KV_K_F32 DRAVE_KV_V_F32 DRAVE_MMAP DRAVE_PRELIRE DRAVE_PRELIRE_TOUT DRAVE_Q8_BLOCS DRAVE_SANS_EMPRUNT DRAVE_TRACE_BLOCS DRAVE_TRACE_EXPERTS DRAVE_VISION_TEXTE DRAVE_YARN DRAVE_YARN_MSCALE DRAVE_YARN_NON DRAVE_YARN_RAMPE 
+=== QT legacy in history ===
+35:| variables `QT_*` | **`DRAVE_*`** (voir le tableau ci-dessous) |
+53:| `QT_GPU` | `DRAVE_GPU` |
+54:| `QT_GPU_TETE` | `DRAVE_GPU_TETE` |
+55:| `QT_GPU_KV` | `DRAVE_GPU_KV` |
+56:| `QT_GPU_EXPERTS`, `QT_GPU_EXPERTS_GO` | `DRAVE_GPU_EXPERTS`, `DRAVE_GPU_EXPERTS_GO` |
+57:| `QT_KV_BITS`, `QT_KV_F16` | `DRAVE_KV_BITS`, `DRAVE_KV_F16` |
+58:| `QT_YARN`, `QT_YARN_NON`, `QT_YARN_MSCALE`, `QT_YARN_RAMPE` | `DRAVE_YARN*` |
+59:| `QT_BANC_KV_*` | `DRAVE_BANC_KV_*` |
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '48,80p' docs/histoire.md; echo \"=== tests dans main.rs ===\"; grep -n \"mod tests\" drave-core/src/*.rs", "description": "Read the legacy name table"}`
+
+  ```
+moteur prévient et s'arrête là plutôt que de laisser croire qu'une option est
+active.
+
+| ancien | nouveau |
+|---|---|
+| `QT_GPU` | `DRAVE_GPU` |
+| `QT_GPU_TETE` | `DRAVE_GPU_TETE` |
+| `QT_GPU_KV` | `DRAVE_GPU_KV` |
+| `QT_GPU_EXPERTS`, `QT_GPU_EXPERTS_GO` | `DRAVE_GPU_EXPERTS`, `DRAVE_GPU_EXPERTS_GO` |
+| `QT_KV_BITS`, `QT_KV_F16` | `DRAVE_KV_BITS`, `DRAVE_KV_F16` |
+| `QT_YARN`, `QT_YARN_NON`, `QT_YARN_MSCALE`, `QT_YARN_RAMPE` | `DRAVE_YARN*` |
+| `QT_BANC_KV_*` | `DRAVE_BANC_KV_*` |
+| `QT_HARMONY_TRACE`, `QT_Q8_BLOCS`, `QT_SANS_EMPRUNT`, `QT_VISION_TEXTE` | `DRAVE_*` |
+
+Et les chemins : `qtrinet-core/target/release/qtrinet-core` devient
+**`drave-core/target/release/drave`**.
+
+Ce qui vit **hors du dépôt** et doit être mis à jour à la main : les scripts
+personnels (par exemple dans `/tmp`), une éventuelle tâche `crontab`, et le
+crochet Git s'il pointait vers un chemin absolu — celui du dépôt
+(`.git/hooks/pre-commit`) appelle `tools/archive_sessions.py` en chemin relatif
+et n'a pas eu besoin d'être touché.
+
+## 5. Une leçon de méthode, gardée ici
+
+Le renommage a été fait « tout, tout de suite », y compris dans les rapports
+datés. C'est un choix : la cohérence de lecture compte plus que l
+… [945 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rn 'env::var\\|env::vars' drave-core/src/*.rs | head -40", "description": "List env::var read sites"}`
+
+  ```
+drave-core/src/clusters.rs:168:    match std::env::var("DRAVE_CLUSTERS") {
+drave-core/src/gguf.rs:91:    matches!(std::env::var("DRAVE_PRELIRE_TOUT").as_deref(), Ok("1") | Ok("oui") | Ok("true"))
+drave-core/src/gguf.rs:95:    match std::env::var("DRAVE_PRELIRE") {
+drave-core/src/gguf.rs:156:    match std::env::var("DRAVE_MMAP") {
+drave-core/src/gpu.rs:1540:        if std::env::var("DRAVE_GPU").is_err() { return None; }
+drave-core/src/gpu.rs:1565:        if std::env::var("DRAVE_GPU").is_err() { return None; }
+drave-core/src/main.rs:55:    if let Some((vieux, _)) = std::env::vars().find(|(k, _)| k.starts_with("QT_")) {
+drave-core/src/main.rs:401:    if std::env::var("DRAVE_GPU_TOPK").map(|v| v != "0" && !v.is_empty()).unwrap_or(false) {
+drave-core/src/main.rs:414:        } else if std::env::var("DRAVE_GPU").is_err() {
+drave-core/src/main.rs:416:        } else if std::env::var("DRAVE_GPU_KV").is_err() {
+drave-core/src/main.rs:1433:        let chemin = std::env::var("DRAVE_VISION_TEXTE").unwrap_or_default();
+drave-core/src/main.rs:2403:                    if std::env::var("DRAVE_DEBUG_FLUX").is_ok() {
+drave-core/src/main.rs:2720:    let bits = std::env::var("DRAVE_KV_BITS").ok().and_th
+… [2758 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Correction du faux avertissement QT_* (variables Qt du bureau)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rho 'env::var(\"DRAVE_[A-Z0-9_]*\")' drave-core/src/*.rs | sed 's/env::var(\"DRAVE_//; s/\")//' | sort -u | awk '{printf \"    \\\"%s\\\",\\n\", $0}'", "description": "Generate the exact list of env vars read"}`
+
+  ```
+"BANC_KV_DEBUG",
+    "BANC_KV_GPU_SEUL",
+    "BANC_KV_GRAD",
+    "BANC_KV_K0",
+    "BANC_KV_KUNIT",
+    "BANC_KV_UNIT",
+    "BANC_KV_V1",
+    "BANC_SANS_PUITS",
+    "CLUSTERS",
+    "DEBUG_FLUX",
+    "FLUX_VERIF",
+    "GPU",
+    "GPU_EXPERTS",
+    "GPU_EXPERTS_GO",
+    "GPU_KV",
+    "GPU_TETE",
+    "GPU_TOPK",
+    "HARMONY_TRACE",
+    "KV_BITS",
+    "KV_F16",
+    "KV_K_F16",
+    "KV_K_F32",
+    "KV_V_F32",
+    "MMAP",
+    "PRELIRE",
+    "PRELIRE_TOUT",
+    "Q8_BLOCS",
+    "SANS_EMPRUNT",
+    "TRACE_BLOCS",
+    "TRACE_EXPERTS",
+    "VISION_TEXTE",
+    "YARN",
+    "YARN_MSCALE",
+    "YARN_NON",
+    "YARN_RAMPE",
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rn \"TRACE_EXPERTS\\|YARN_RAMPE\\|FLUX_VERIF\" drave-core/src/*.rs | head -8", "description": "Check remaining env reads"}`
+
+  ```
+drave-core/src/model.rs:1009:    /// **Trace de routage** (`DRAVE_TRACE_EXPERTS=chemin`) : une ligne par
+drave-core/src/model.rs:2050:            trace_experts: std::env::var("DRAVE_TRACE_EXPERTS").ok().and_then(|c| {
+drave-core/src/model.rs:2562:                // DRAVE_YARN_RAMPE=0 force l'interpolation pure.
+drave-core/src/model.rs:2563:                let rampe = if std::env::var("DRAVE_YARN_RAMPE").map_or(false, |v| v == "0") {
+drave-core/src/model.rs:3375:                let verif = std::env::var("DRAVE_FLUX_VERIF").is_ok();
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rho 'env::var(\"DRAVE_[A-Z0-9_]*\")' drave-core/src/*.rs | sort -u | grep -c . ; grep -rho 'env::var(\"DRAVE_[A-Z0-9_]*\")' drave-core/src/*.rs | sort -u | grep TRACE", "description": "Double-check the env var list"}`
+
+  ```
+35
+env::var("DRAVE_HARMONY_TRACE")
+env::var("DRAVE_TRACE_BLOCS")
+env::var("DRAVE_TRACE_EXPERTS")
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/main.rs", "old_string": "    // Les variables d'environnement ont été renommées QT_* -> DRAVE_* : un\n    // ancien nom encore présent dans un script ne ferait RIEN, en silence. On le\n    // dit, plutôt que de laisser cro … [1410 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/main.rs has been updated successfully.
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/main.rs", "limit": 22}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/main.rs</path>
+<type>file</type>
+<content>
+1: //! drave-core — moteur d'exécution par listes d'événements.
+2: //!
+3: //! Usage :
+4: //!   drave-core <modele.gguf> [--matrix blk.0.ffn_gate.weight] [--threads 8]
+5: //!
+6: //! Mesure sur le VRAI modèle :
+7: //!   1. taille exacte de chaque encodage de liste (bits/poids),
+8: //!   2. débit du moteur d'événements selon la densité des activations,
+9: //!   3. exécution sans multiplieur (décalages + additions) vs multiplication.
+10: 
+11: mod clusters;
+12: mod engine;
+13: mod formats;
+14: mod gguf;
+15: mod list;
+16: mod materiel;
+17: mod model;
+18: mod gpu;
+19: mod tokenizer;
+20: 
+21: use engine::{matvec_dense, matvec_shift_add, Pool, SparseVec};
+22: use gguf::Gguf;
+
+(Showing lines 1-22 of 4814. Use offset=23 to continue.)
+</content>
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/main.rs", "old_string": "mod clusters;\nmod engine;", "new_string": "/// Variables d'environnement que le moteur lit, **sans** le préfixe `DRAVE_`.\n///\n/// Sert à traduire un ancien nom `QT_*` resté dans un script, et à  … [906 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/main.rs has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && tail -20 drave-core/src/main.rs", "description": "Read the end of main.rs"}`
+
+  ```
+tete.extend_from_slice(&127f32.to_le_bytes());
+            tete.extend_from_slice(&0f32.to_le_bytes());
+            tete.extend_from_slice(&0u32.to_le_bytes());
+            tete.push(0);
+            for _ in 0..10 { tete.extend_from_slice(&0u32.to_le_bytes()); }
+            assert_eq!(tete.len(), TAILLE_TETE);
+            sock.write_all(&tete).unwrap();
+            // Pas de lecture ici : le client refuse AVANT de lire le corps, donc
+            // il ne renverra rien — l'ancienne version de ce test se bloquait
+            // pour toujours sur cette lecture (et le test ne finissait jamais).
+        });
+        let mut client = TcpStream::connect(adresse).unwrap();
+        client.set_read_timeout(Some(std::time::Duration::from_secs(5))).unwrap();
+        let r = recevoir_flux(&mut client, 896);
+        assert!(r.is_err(), "un lot de 100 millions d'états doit être refusé");
+        let msg = format!("{}", r.err().unwrap());
+        assert!(msg.contains("plafond"), "le refus doit nommer le plafond : {msg}");
+        serveur.join().unwrap();
+    }
+}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat >> drave-core/src/main.rs <<'EOF'\n\n#[cfg(test)]\nmod tests_vars {\n    use super::VARS_LUES;\n\n    /// Le source de `src/`, concaténé, pour y chercher les noms lus.\n    fn source() -> String {\n        let mut tout = String:: … [2437 caractères tronqués]`
+
+  ```
+failures:
+
+---- tests_vars::les_vars_lues_sont_completes stdout ----
+
+thread 'tests_vars::les_vars_lues_sont_completes' (3432522) panicked at src/main.rs:4869:13:
+DRAVE_XXX est lu dans le source mais absent de VARS_LUES : un ancien nom QT_XXX resterait muet
+
+
+failures:
+    tests_vars::les_vars_lues_sont_completes
+
+test result: FAILED. 38 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.10s
+
+error: test failed, to rerun pass `--bin drave`
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/main.rs'; s=open(p).read()\ns = s.replace(\"\"\"    /// Tout `DRAVE_XXX` cité dans le source doit être dans `VARS_LUES`, et\"\"\",\n              \"\"\"    /// Tout nom `DRAVE_*` cité dans le sourc … [174 caractères tronqués]`
+
+  ```
+test engine::tests_gemm::gemm_bat_le_matvec ... ok
+test materiel::tests::plan_dans_les_bornes ... ok
+test materiel::tests::detection_coherente ... ok
+
+test result: ok. 39 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.10s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && D=./drave-core/target/release/drave; M=/home/stephane/Data13TB/stephane/modeles/gguf/Qwen2.5-0.5B-Instruct-Q8_0.gguf; ls $M >/dev/null 2>&1 || M=$(ls /home/stephane/Data13TB/stephane/modeles/gguf/*qwen2.5*0.5b*.gguf | head -1); echo  … [234 caractères tronqués]`
+
+  ```
+modele /home/stephane/Data13TB/stephane/modeles/gguf/qwen2.5-0.5b-instruct-q4_k_m.gguf
+[attention] QT_IM_SWITCHER est l'ancien nom d'une variable d'environnement : elles s'appellent maintenant DRAVE_* (voir docs/histoire.md). Rien n'a été appliqué.
+
+thread 'main' (3432749) panicked at src/main.rs:1474:18:
+--- avec un vrai nom hérité ---
+[attention] QT_GPU est l'ancien nom d'une variable d'environnement : elles s'appellent maintenant DRAVE_* (voir docs/histoire.md). Rien n'a été appliqué.
+
+thread 'main' (3432759) panicked at src/main.rs:1474:18:
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && cargo build --release 2>&1 | grep -E \"^error\" | head -3; cd .. && D=./drave-core/target/release/drave; M=/home/stephane/Data13TB/stephane/modeles/gguf/qwen2.5-0.5b-instruct-q8_0.gguf; ls $M >/dev/null 2>&1 || M=$(ls /hom … [344 caractères tronqués]`
+
+  ```
+modele 
+
+thread 'main' (3432930) panicked at src/main.rs:147:35:
+--- avec QT_GPU ---
+[attention] QT_GPU est l'ancien nom d'une variable d'environnement : il faut écrire DRAVE_GPU (voir docs/histoire.md). Rien n'a été appliqué.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls /home/stephane/Data13TB/stephane/modeles/gguf/ | grep -i \"0.5b\" | head -5", "description": "List 0.5B model files"}`
+
+  ```
+qwen2.5-0.5b-instruct-q4_k_m.gguf
+qwen2.5-coder-0.5b-instruct-q4_k_m.gguf
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"fn row_f32\\|fn dequant\\|fn ligne\\|fn nom_type\\|fn tranche_publique\\|GGML_Q4_K\\|GGML_Q6_K\\|GGML_Q8_0\" drave-core/src/gguf.rs | head -25", "description": "Find dequant helpers in gguf.rs"}`
+
+  ```
+230:pub const GGML_Q4_K: u32 = 12;
+231:pub const GGML_Q6_K: u32 = 14;
+256:pub const GGML_Q8_0: u32 = 8;
+721:    pub fn nom_type(ttype: u32) -> String {
+798:    pub fn tranche_publique(&self, nom: &str) -> Option<&[u8]> {
+872:            GGML_Q8_0 => {
+904:    pub fn dequant_q5k(bloc: &[u8]) -> Vec<f32> {
+940:    pub fn dequant_q2k(bloc: &[u8]) -> Vec<f32> {
+967:    pub fn row_f32(&self, name: &str, row: usize, n_cols: usize) -> Vec<f32> {
+990:            GGML_Q8_0 => {
+1021:            GGML_Q4_K => {
+1039:            GGML_Q6_K => {
+1087:            GGML_Q8_0 => false,
+1089:            GGML_Q4_K | GGML_Q6_K => true,
+1093:        let bloc = if t.ttype == GGML_Q4_K || t.ttype == GGML_Q6_K { 256 } else { 32 };
+1112:        if t.ttype != GGML_Q8_0 { return None; }
+1120:        if t.ttype != GGML_Q4_K { return None; }
+1127:        if t.ttype != GGML_Q6_K { return None; }
+1157:        if v.ttype == GGML_Q6_K {
+1196:        if v.ttype == GGML_Q4_K {
+1293:    pub fn dequant(&self, name: &str) -> Vec<f32> {
+1315:            GGML_Q8_0 => {
+1358:            GGML_Q4_K => {
+1378:            GGML_Q6_K => {
+1547:        b.extend_from_slice(&GGML_Q8_0.to_le_bytes());
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/gguf.rs", "limit": 60, "offset": 967}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/gguf.rs</path>
+<type>file</type>
+<content>
+967:     pub fn row_f32(&self, name: &str, row: usize, n_cols: usize) -> Vec<f32> {
+968:         let t = self.tensor(name).unwrap_or_else(|| panic!("tenseur {name} absent"));
+969:         let buf = self.tbuf(t);
+970:         let mut out = Vec::with_capacity(n_cols);
+971:         match t.ttype {
+972:             GGML_BF16 => {
+973:                 for i in 0..n_cols {
+974:                     out.push(bf16_to_f32(u16::from_le_bytes(
+975:                         buf[2 * i..2 * i + 2].try_into().unwrap())));
+976:                 }
+977:             }
+978:             GGML_F32 => {
+979:                 let p = row * n_cols * 4;
+980:                 for i in 0..n_cols {
+981:                     out.push(f32::from_le_bytes(buf[p + 4*i..p + 4*i + 4].try_into().unwrap()));
+982:                 }
+983:             }
+984:             GGML_F16 => {
+985:                 let p = row * n_cols * 2;
+986:                 for i in 0..n_cols {
+987:                     out.push(Self::f16_to_f32(u16::from_le_bytes(buf[p + 2*i..p + 2*i + 2].try_into().unwrap())));
+988:                 }
+989:    
+… [2010 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/gguf.rs", "limit": 80, "offset": 1026}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/gguf.rs</path>
+<type>file</type>
+<content>
+1026:                     let dmin = Self::f16_to_f32(u16::from_le_bytes(buf[p+2..p+4].try_into().unwrap()));
+1027:                     let sc = &buf[p + 4..p + 16];
+1028:                     let qs = &buf[p + 16..p + 144];
+1029:                     for g in 0..4 {
+1030:                         let (s0, m0) = echelle_min_q4k(sc, 2 * g);
+1031:                         let (s1, m1) = echelle_min_q4k(sc, 2 * g + 1);
+1032:                         let (d0, n0) = (d * s0 as f32, dmin * m0 as f32);
+1033:                         let (d1, n1) = (d * s1 as f32, dmin * m1 as f32);
+1034:                         for l in 0..32 { out.push(d0 * (qs[g*32 + l] & 0x0F) as f32 - n0); }
+1035:                         for l in 0..32 { out.push(d1 * (qs[g*32 + l] >> 4) as f32 - n1); }
+1036:                     }
+1037:                 }
+1038:             }
+1039:             GGML_Q6_K => {
+1040:                 let ns = n_cols / 256;
+1041:                 for sup in 0..ns {
+1042:                     let p = (row * ns + sup) * TAILLE_Q6K;
+1043:                     let ql = &buf[p..p + 128];
+1044:  
+… [3510 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"dims\" drave-core/src/gguf.rs | sed -n '1,25p'", "description": "Check dims ordering in gguf.rs"}`
+
+  ```
+210:    pub dims: Vec<u64>,     // en convention numpy (le plus lent d'abord)
+221:    pub fn nelem(&self) -> usize { self.dims.iter().product::<u64>() as usize }
+463:                    let meme = v.dims == t.dims && v.ttype == t.ttype
+633:                    if v.dims != t.dims || v.ttype != t.ttype {
+785:            let mut dims: Vec<u64> = (0..nd).map(|_| c.u64()).collect();
+786:            dims.reverse();                       // ggml stocke à l'envers
+791:            tensors.push(TensorInfo { name, dims, ttype, offset, fichier });
+1092:        let n_cols = t.dims[1] as usize;
+1113:        Some((self.tbuf(t), t.dims[1] as usize / 32))
+1121:        Some((self.tbuf(t), t.dims[1] as usize / 256))
+1128:        Some((self.tbuf(t), t.dims[1] as usize / 256))
+1137:        let nb = t.dims[1] as usize / 32;
+1148:        let nb = t.dims[1] as usize / 32;
+1444:        for (_, dims) in tensors {
+1446:            cur += dims.iter().product::<u64>() * 4;
+1448:        for ((nom, dims), off) in tensors.iter().zip(&offsets) {
+1450:            b.extend_from_slice(&(dims.len() as u32).to_le_bytes());
+1451:            for d in dims.iter().rev() {                  // ggml écrit à l'envers
+1458:    
+… [427 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/gguf.rs", "limit": 115, "offset": 1293}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/gguf.rs</path>
+<type>file</type>
+<content>
+1293:     pub fn dequant(&self, name: &str) -> Vec<f32> {
+1294:         let t = self.tensor(name).unwrap_or_else(|| panic!("tenseur {name} absent"));
+1295:         let buf = self.tbuf(t);
+1296:         let n = t.nelem();
+1297:         let mut out = Vec::with_capacity(n);
+1298:         match t.ttype {
+1299:             GGML_BF16 => {
+1300:                 for i in 0..n {
+1301:                     out.push(bf16_to_f32(u16::from_le_bytes(
+1302:                         buf[2 * i..2 * i + 2].try_into().unwrap())));
+1303:                 }
+1304:             }
+1305:             GGML_F32 => {
+1306:                 for i in 0..n {
+1307:                     out.push(f32::from_le_bytes(buf[4*i..4*i + 4].try_into().unwrap()));
+1308:                 }
+1309:             }
+1310:             GGML_F16 => {
+1311:                 for i in 0..n {
+1312:                     out.push(Self::f16_to_f32(u16::from_le_bytes(buf[2*i..2*i + 2].try_into().unwrap())));
+1313:                 }
+1314:             }
+1315:             GGML_Q8_0 => {
+1316:                 let nb = n / 32;
+1317:               
+… [5746 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/gguf.rs", "limit": 30, "offset": 1408}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/gguf.rs</path>
+<type>file</type>
+<content>
+1408:             }
+1409:             other => panic!("dequant : type {other} non géré"),
+1410:         }
+1411:         out
+1412:     }
+1413: }
+1414: 
+1415: #[cfg(test)]
+1416: pub(crate) mod tests {
+1417:     use super::*;
+1418:     use std::io::Write;
+1419: 
+1420:     /// Fabrique un GGUF minimal : `general.architecture` plus des tenseurs F32
+1421:     /// dont la valeur de chaque poids est son indice global. Un GGUF de labo,
+1422:     /// écrit à la main, uniquement pour éprouver le lecteur.
+1423:     pub(crate) fn gguf_synth(tensors: &[(&str, Vec<u64>)], depart: usize, valeur0: f32) -> Vec<u8> {
+1424:         let mut b = Vec::new();
+1425:         let mut s = |b: &mut Vec<u8>, v: &str| {
+1426:             b.extend_from_slice(&(v.len() as u64).to_le_bytes());
+1427:             b.extend_from_slice(v.as_bytes());
+1428:         };
+1429:         b.extend_from_slice(b"GGUF");
+1430:         b.extend_from_slice(&3u32.to_le_bytes());
+1431:         b.extend_from_slice(&(tensors.len() as u64).to_le_bytes());
+1432:         b.extend_from_slice(&2u64.to_le_bytes());        // deux mé
+… [353 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"\\.dequant(\\|row_f32(\\|dequant_q2k\\|dequant_q5k\\|dequant_iq\" drave-core/src/*.rs | grep -v \"^drave-core/src/formats.rs\" | head -20", "description": "Find where dequant paths are used"}`
+
+  ```
+drave-core/src/clusters.rs:408:        let v0 = m.gguf.dequant("cl0/blk.0.ffn_gate_exps.weight");
+drave-core/src/clusters.rs:409:        let v1 = m.gguf.dequant("cl1/blk.0.ffn_gate_exps.weight");
+drave-core/src/gguf.rs:904:    pub fn dequant_q5k(bloc: &[u8]) -> Vec<f32> {
+drave-core/src/gguf.rs:940:    pub fn dequant_q2k(bloc: &[u8]) -> Vec<f32> {
+drave-core/src/gguf.rs:967:    pub fn row_f32(&self, name: &str, row: usize, n_cols: usize) -> Vec<f32> {
+drave-core/src/gguf.rs:1011:                    out.extend_from_slice(&Self::dequant_q2k(&buf[p..]));
+drave-core/src/gguf.rs:1018:                    out.extend_from_slice(&Self::dequant_q2k(&buf[p..]));
+drave-core/src/gguf.rs:1629:            assert_eq!(multi.dequant(&b.name), mono.dequant(&a.name),
+drave-core/src/gguf.rs:1663:        let v = Gguf::dequant_q2k(&bloc);
+drave-core/src/gguf.rs:1701:        let v0 = g.dequant("blk.0.ffn_gate_exps.weight");
+drave-core/src/gguf.rs:1702:        let v1 = g.dequant("cl0/blk.0.ffn_gate_exps.weight");
+drave-core/src/gguf.rs:1703:        let v2 = g.dequant("cl1/blk.0.ffn_gate_exps.weight");
+drave-core/src/main.rs:1160:    let w = g.dequant("v.patch_embd.weight");
+drave-core/src/main.rs:1246:    
+… [526 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"^pub fn dequant_iq2xxs\\|^pub fn dequant_iq1m\\|TAILLE_Q4K\\s*:\\|TAILLE_Q6K\\s*:\\|const TAILLE_Q\" drave-core/src/formats.rs drave-core/src/gguf.rs | head", "description": "Check formats API and block constants"}`
+
+  ```
+drave-core/src/formats.rs:297:pub fn dequant_iq2xxs(bloc: &[u8]) -> Vec<f32> {
+drave-core/src/formats.rs:2387:pub fn dequant_iq1m(bloc: &[u8]) -> Vec<f32> {
+drave-core/src/gguf.rs:239:pub const TAILLE_Q4K: usize = 144;
+drave-core/src/gguf.rs:240:pub const TAILLE_Q6K: usize = 210;
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/gguf.rs'; s=open(p).read()\n\n# 1) taille des blocs\ns = s.replace(\"\"\"pub const TAILLE_Q6K: usize = 210;\"\"\",\n\"\"\"pub const TAILLE_Q6K: usize = 210;\n/// Bloc **Q5_K** : 2+2 octets (d, dmin … [1704 caractères tronqués]`
+
+  ```
+1012:            GGML_Q2_K | GGML_Q5_K | GGML_IQ2_XXS | GGML_IQ1_M => {
+1016:                    GGML_IQ2_XXS => (66, crate::formats::dequant_iq2xxs),
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"^pub const GGML_\\|^pub const TAILLE\" drave-core/src/gguf.rs", "description": "List ggml type constants"}`
+
+  ```
+224:pub const GGML_F32: u32 = 0;
+225:pub const GGML_F16: u32 = 1;
+226:pub const GGML_Q4_0: u32 = 2;
+227:pub const GGML_MXFP4: u32 = 39;
+228:pub const GGML_Q2_K: u32 = 10;
+229:pub const GGML_BF16: u32 = 30;
+230:pub const GGML_Q4_K: u32 = 12;
+231:pub const GGML_Q6_K: u32 = 14;
+239:pub const TAILLE_Q4K: usize = 144;
+240:pub const TAILLE_Q6K: usize = 210;
+243:pub const TAILLE_Q5K: usize = 176;
+258:pub const GGML_Q4_1: u32 = 3;
+259:pub const GGML_Q8_0: u32 = 8;
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/gguf.rs'; s=open(p).read()\ns = s.replace(\"\"\"pub const GGML_Q6_K: u32 = 14;\"\"\",\n\"\"\"pub const GGML_Q6_K: u32 = 14;\n/// Types des experts de DeepSeek : IQ2_XXS (V4.1), IQ1_M (V4-Flash).\n/ … [381 caractères tronqués]`
+
+  ```
+729:    pub fn nom_type(ttype: u32) -> String {
+730-        let n = match ttype {
+731-            0 => "F32", 1 => "F16", 2 => "Q4_0", 3 => "Q4_1", 6 => "Q5_0", 7 => "Q5_1",
+732-            8 => "Q8_0", 9 => "Q8_1", 10 => "Q2_K", 11 => "Q3_K", 12 => "Q4_K",
+733-            13 => "Q5_K", 14 => "Q6_K", 15 => "Q8_K",
+734-            16 => "IQ2_XXS", 17 => "IQ2_XS", 18 => "IQ3_XXS", 19 => "IQ1_S",
+735-            20 => "IQ4_NL", 21 => "IQ3_S", 22 => "IQ2_S", 23 => "IQ4_XS",
+736-            24 => "I8", 25 => "I16", 26 => "I32", 27 => "I64", 28 => "F64",
+737-            29 => "IQ1_M", 30 => "BF16", 34 => "TQ1_0", 35 => "TQ2_0",
+738-            39 => "MXFP4", 40 => "NVFP4",
+739-            41 => "Q1_0", 42 => "Q2_0", 43 => "Q6_0", 44 => "Q6_1",
+740-            45 => "Q3_0", 46 => "Q3_1", 47 => "Q2_0S", 48 => "Q2_1",
+741-            _ => return format!("type {ttype}"),
+742-        };
+743-        n.to_string()
+744-    }
+745-
+746-    /// Somme des tailles de données annoncées par les descripteurs.
+747-    pub fn octets_poids(&self) -> u64 {
+748-        self.tensors.iter().map(Self::octets_tensor).sum()
+749-    }
+750-
+751-    /// Nombre de fichiers de l'assemblage. `starts` fait foi et non `b
+… [198 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/gguf.rs'; s=open(p).read()\nold = \"\"\"            other => panic!(\"dequant : type {other} non géré\"),\"\"\"\nnew = \"\"\"            GGML_Q2_K | GGML_Q5_K | GGML_IQ2_XXS | GGML_IQ1_M => {\n     … [2280 caractères tronqués]`
+
+  ```
+error[E0408]: variable `GGML_Q5_K` is not bound in all patterns
+    --> src/gguf.rs:1017:13
+     |
+1017 |             GGML_Q2_K | GGML_Q5_K | GGML_IQ2_XXS | GGML_IQ1_M => {
+     |             ^^^^^^^^^   ---------   ^^^^^^^^^^^^   ^^^^^^^^^^ pattern doesn't bind `GGML_Q5_K`
+     |             |           |           |
+     |             |           |           pattern doesn't bind `GGML_Q5_K`
+--
+error[E0408]: variable `GGML_Q5_K` is not bound in all patterns
+    --> src/gguf.rs:1417:13
+     |
+1417 |             GGML_Q2_K | GGML_Q5_K | GGML_IQ2_XXS | GGML_IQ1_M => {
+     |             ^^^^^^^^^   ---------   ^^^^^^^^^^^^   ^^^^^^^^^^ pattern doesn't bind `GGML_Q5_K`
+     |             |           |           |
+     |             |           |           pattern doesn't bind `GGML_Q5_K`
+--
+error: could not compile `drave-core` (bin "drave") due to 2 previous errors; 31 warnings emitted
+build ok
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/gguf.rs'; s=open(p).read()\ns = s.replace(\"\"\"pub const GGML_Q6_K: u32 = 14;\"\"\",\n\"\"\"pub const GGML_Q5_K: u32 = 13;\npub const GGML_Q6_K: u32 = 14;\"\"\")\nopen(p,'w').write(s)\nPY\ncd drav … [204 caractères tronqués]`
+
+  ```
+=== verif ===
+ggml 256 valeurs, nous 256
+ggml  8 : ['-0.007586', '-0.031560', '0.024379', '0.024379', '0.016388', '0.000405', '0.011060', '-0.028896']
+nous  8 : ['-0.007586', '-0.031560', '0.024379', '0.024379', '0.016388', '0.000405', '0.011060', '-0.028896']
+ecart max sur 256 valeurs : 0.00e+00
+CONCORDE
+  ```
+
+### 🤖 Assistant
+
+⏵ Généralisation : un outil unique de vérification des formats contre libggml
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/llama.cpp && grep -n \"void dequantize_row_\\(q2_K\\|q4_K\\|q5_K\\|q6_K\\|q8_0\\|q4_0\\|q4_1\\|iq1_m\\|iq2_xxs\\|mxfp4\\)\" ggml/src/ggml-quants.h", "description": "List ggml dequantize entry points"}`
+
+  ```
+53:GGML_API void dequantize_row_q4_0(const block_q4_0 * GGML_RESTRICT x, float * GGML_RESTRICT y, int64_t k);
+54:GGML_API void dequantize_row_q4_1(const block_q4_1 * GGML_RESTRICT x, float * GGML_RESTRICT y, int64_t k);
+63:GGML_API void dequantize_row_q8_0(const block_q8_0 * GGML_RESTRICT x, float * GGML_RESTRICT y, int64_t k);
+66:GGML_API void dequantize_row_mxfp4(const block_mxfp4 * GGML_RESTRICT x, float * GGML_RESTRICT y, int64_t k);
+69:GGML_API void dequantize_row_q2_K(const block_q2_K * GGML_RESTRICT x, float * GGML_RESTRICT y, int64_t k);
+71:GGML_API void dequantize_row_q4_K(const block_q4_K * GGML_RESTRICT x, float * GGML_RESTRICT y, int64_t k);
+72:GGML_API void dequantize_row_q5_K(const block_q5_K * GGML_RESTRICT x, float * GGML_RESTRICT y, int64_t k);
+73:GGML_API void dequantize_row_q6_K(const block_q6_K * GGML_RESTRICT x, float * GGML_RESTRICT y, int64_t k);
+79:GGML_API void dequantize_row_iq2_xxs(const block_iq2_xxs * GGML_RESTRICT x, float * GGML_RESTRICT y, int64_t k);
+84:GGML_API void dequantize_row_iq1_m  (const block_iq1_m   * GGML_RESTRICT x, float * GGML_RESTRICT y, int64_t k);
+  ```
+
+- **write** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/ref_ggml_bloc.c", "content": "// Référence ggml pour un super-bloc : imprime les 256 poids que **libggml**\n// produit pour le bloc demandé.\n//\n//   ref_ggml_bloc <fichier.gguf> <offset octets> <type ggml>\n//\n// Pourquoi ce pro … [3444 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/ref_ggml_bloc.c</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && L=/home/stephane/Data13TB/stephane/GitHub/llama.cpp && gcc -O2 -I$L/ggml/include -I$L/ggml/src tools/ref_ggml_bloc.c -o /tmp/ref_ggml_bloc -L$L/build/bin -lggml -lggml-base -Wl,-rpath,$L/build/bin 2>&1 | head -10; echo \"compil $?\"" … [54 caractères tronqués]`
+
+  ```
+tools/ref_ggml_bloc.c: In function ‘main’:
+tools/ref_ggml_bloc.c:33:20: error: implicit declaration of function ‘dequantize_row_f32’; did you mean ‘dequantize_row_q3_K’? [-Wimplicit-function-declaration]
+   33 |                    dequantize_row_f32(b, y, nb); break; }
+      |                    ^~~~~~~~~~~~~~~~~~
+      |                    dequantize_row_q3_K
+tools/ref_ggml_bloc.c:35:20: error: implicit declaration of function ‘dequantize_row_f16’; did you mean ‘dequantize_row_q1_0’? [-Wimplicit-function-declaration]
+   35 |                    dequantize_row_f16(b, y, nb); break; }
+      |                    ^~~~~~~~~~~~~~~~~~
+      |                    dequantize_row_q1_0
+tools/ref_ggml_bloc.c:55:56: error: implicit declaration of function ‘GGML_BF16_TO_FP32’; did you mean ‘ggml_bf16_to_fp32’? [-Wimplicit-function-declaration]
+compil 0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='tools/ref_ggml_bloc.c'; s=open(p).read()\ns = s.replace(\"\"\"        case 0:  { float b[256];  if (fread(b, sizeof(b), 1, f) != 1) return 1;\n                   dequantize_row_f32(b, y, nb); break; }\n        ca … [1416 caractères tronqués]`
+
+  ```
+tools/ref_ggml_bloc.c: In function ‘main’:
+tools/ref_ggml_bloc.c:36:56: error: implicit declaration of function ‘GGML_FP16_TO_FP32’; did you mean ‘ggml_fp16_to_fp32’? [-Wimplicit-function-declaration]
+   36 |                    for (int i = 0; i < nb; i++) y[i] = GGML_FP16_TO_FP32(b[i]); break; }
+      |                                                        ^~~~~~~~~~~~~~~~~
+      |                                                        ggml_fp16_to_fp32
+[stderr]
+ls: cannot access '/tmp/ref_ggml_bloc': No such file or directory
+[exit code: 2]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -i 's/GGML_FP16_TO_FP32(b\\[i\\])/ggml_fp16_to_fp32(b[i])/' tools/ref_ggml_bloc.c && L=/home/stephane/Data13TB/stephane/GitHub/llama.cpp && gcc -O2 -Wall -I$L/ggml/include -I$L/ggml/src tools/ref_ggml_bloc.c -o /tmp/ref_ggml_bloc … [326 caractères tronqués]`
+
+  ```
+tools/ref_ggml_bloc.c: In function ‘main’:
+tools/ref_ggml_bloc.c:36:20: warning: this ‘for’ clause does not guard... [-Wmisleading-indentation]
+   36 |                    for (int i = 0; i < nb; i++) y[i] = ggml_fp16_to_fp32(b[i]); break; }
+      |                    ^~~
+tools/ref_ggml_bloc.c:36:81: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the ‘for’
+-rwxr-xr-x. 1 stephane stephane 21192  1 oct 23:12 /tmp/ref_ggml_bloc
+-0.0075860
+-0.0315596
+0.0243788
+  ```
+
+- **write** `{"content": "#!/usr/bin/env python3\n\"\"\"Compare notre déquantification d'un super-bloc à celle de **libggml**.\n\n    tools/verifier_formats.py <modele.gguf> <tenseur> [index] [--type N]\n\nLa référence est la bibliothèque ggml elle-même (`tools/ref_ggml_bloc.c`), pas\nune seconde lecture du form … [3756 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/verifier_formats.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/gguf.rs'; s=open(p).read()\nold = \"\"\"            GGML_Q4_1 => {\n                let nb = n_cols / 32;\n                for b in 0..nb {\n                    let p = (row * nb + b) * 20;\"\"\"\n … [1373 caractères tronqués]`
+
+  ```
+=== Q5_K (type 13) ===
+  ggml  8 : ['-0.039014', '-0.026449', '-0.042155', '0.004963', '-0.007602', '-0.026449', '0.004963', '0.008104']
+  nous  8 : ['-0.039014', '-0.026449', '-0.042155', '0.004963', '-0.007602', '-0.026449', '0.004963', '0.008104']
+  256 valeurs · écart max 0.00e+00 (échelle 7.80e-02)
+CONCORDE
+  ```
+
+### 🤖 Assistant
+
+⏵ Batterie de vérification de tous les formats disponibles
+
+- **bash** `{"command": "ls /home/stephane/Data13TB/stephane/modeles/gguf/ | head -30; echo ---; du -sh /home/stephane/Data13TB/stephane/modeles/gguf/* 2>/dev/null | sort -h | tail -8", "description": "List available GGUF models"}`
+
+  ```
+bge-m3-FP16.gguf
+codestral-22b-v0.1-q4_k_m.gguf
+deepseek-r1-distill-qwen-14b-q4_k_m.gguf
+deepseek-r1-distill-qwen-1.5b-q4_k_m.gguf
+DeepSeek-V4.1-Flash-Q2
+DeepSeek-V4-Flash-UD-IQ1_M
+eagle3-gpt-oss-120b-Q8_0.gguf
+GLM-5.3-Flash-UD-IQ1_S
+GLM-5.3-UD-IQ1_S
+gpt-oss-120b-MXFP4.gguf
+Kimi-K2.7-Code-UD-IQ1_M
+MiniMax-H3
+mmproj-Qwen2.5-VL-7B-Instruct-f16.gguf
+Muse-Glimmer-30B-AD-Q4_K_M.gguf
+qwen2.5-0.5b-instruct-q4_k_m.gguf
+qwen2.5-1.5b-instruct-q4_k_m.gguf
+qwen2.5-coder-0.5b-instruct-q4_k_m.gguf
+qwen2.5-coder-32b-instruct-q4_k_m.gguf
+Qwen2.5-VL-7B-Instruct-Q4_K_M.gguf
+Qwen3-235B-A22B-Q2_K
+Qwen3-30B-A3B-Instruct-2507-Q4_K_M.gguf
+---
+22G	/home/stephane/Data13TB/stephane/modeles/gguf/MiniMax-H3
+60G	/home/stephane/Data13TB/stephane/modeles/gguf/gpt-oss-120b-MXFP4.gguf
+80G	/home/stephane/Data13TB/stephane/modeles/gguf/Qwen3-235B-A22B-Q2_K
+81G	/home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek-V4-Flash-UD-IQ1_M
+87G	/home/stephane/Data13TB/stephane/modeles/gguf/GLM-5.3-Flash-UD-IQ1_S
+202G	/home/stephane/Data13TB/stephane/modeles/gguf/GLM-5.3-UD-IQ1_S
+284G	/home/stephane/Data13TB/stephane/modeles/gguf/Kimi-K2.7-Code-UD-IQ1_M
+341G	/home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek-V4.1-Flash-Q2
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport sys, os, collections\nsys.path.insert(0,'tools')\nfrom analyse_experts_statique import Lecteur\nnoms = {0:'F32',1:'F16',2:'Q4_0',3:'Q4_1',8:'Q8_0',10:'Q2_K',12:'Q4_K',13:'Q5_K',14:'Q6_K',16:'IQ2_XXS',29:'IQ1_ … [780 caractères tronqués]`
+
+  ```
+DeepSeek-V4-Flash-UD-IQ1_M                     
+DeepSeek-V4.1-Flash-Q2                         F32:output_norm.weight F16:token_embd.weight Q8_0:output.weight Q2_K:ffn_down_exps IQ2_XXS:ffn_gate_exps
+GLM-5.3-Flash-UD-IQ1_S                         
+GLM-5.3-UD-IQ1_S                               
+Kimi-K2.7-Code-UD-IQ1_M                        
+MiniMax-H3                                     F32:adaln_t_table F16:linear Q4_K:out_proj BF16:norm1
+Muse-Glimmer-30B-AD-Q4_K_M.gguf                F32:output_norm.weight Q8_0:attn_k Q4_K:attn_gate Q5_K:ffn_down Q6_K:output.weight
+Qwen2.5-VL-7B-Instruct-Q4_K_M.gguf             F32:output_norm.weight Q4_K:token_embd.weight Q6_K:output.weight
+Qwen3-235B-A22B-Q2_K                           F32:output_norm.weight Q2_K:token_embd.weight Q4_K:attn_v Q6_K:output.weight
+Qwen3-30B-A3B-Instruct-2507-Q4_K_M.gguf        F32:output_norm.weight Q4_K:token_embd.weight Q6_K:output.weight
+bge-m3-FP16.gguf                               F32:position_embd.weight F16:token_embd.weight
+codestral-22b-v0.1-q4_k_m.gguf                 F32:attn_norm Q4_K:token_embd.weight Q6_K:ffn_down
+deepseek-r1-distill-qwen-1.5b-q4_k_m.gguf      F32:output_norm.weight Q4_K:token_embd
+… [795 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Inventaire des types par modèle, pondéré en octets
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 900 python3 - <<'PY'\nimport sys, os, collections\nsys.path.insert(0,'tools')\nfrom analyse_experts_statique import Lecteur\n# Octets par 256 poids pour les types connus, sinon None.\nT={0:'F32',1:'F16',2:'Q4_0',3:'Q4_1',6:'Q … [1459 caractères tronqués]`
+
+  ```
+DeepSeek-V4-Flash-UD-IQ1_M                  284.33 G poids  IQ1_M:33.2% IQ2_XXS:31.7% IQ3_XXS:31.0% Q8_0:1.7% MXFP4:1.5% Q4_K:0.4% Q5_K:0.3% Q6_K:0.1% BF16:0.0% F32:0.0% I32:0.0%
+DeepSeek-V4.1-Flash-Q2                      754.64 G poids  IQ2_XXS:48.0% I8:26.9% Q2_K:24.0% Q8_0:0.9% F16:0.1% F32:0.0%
+GLM-5.3-Flash-UD-IQ1_S                      320.76 G poids  IQ1_S:42.2% IQ3_XXS:29.4% IQ2_XXS:21.1% IQ4_XS:2.3% Q5_K:2.0% Q2_K:1.5% Q3_K:0.8% Q4_K:0.4% Q8_0:0.3% Q6_K:0.2% F32:0.0%
+GLM-5.3-UD-IQ1_S                            753.86 G poids  IQ1_S:45.3% IQ3_XXS:30.3% IQ2_XXS:18.8% IQ4_XS:1.7% Q5_K:1.5% Q2_K:0.9% Q8_0:0.7% Q3_K:0.4% Q4_K:0.3% Q6_K:0.2% F32:0.0%
+Kimi-K2.7-Code-UD-IQ1_M                    1026.41 G poids  IQ2_XXS:33.0% IQ1_M:33.0% IQ3_XXS:30.8% Q4_0:2.2% Q5_K:0.6% Q4_K:0.2% Q8_0:0.2% Q6_K:0.1% F32:0.0%
+MiniMax-H3                                   40.22 G poids  Q4_K:99.7% F16:0.2% BF16:0.1% F32:0.0%
+Muse-Glimmer-30B-AD-Q4_K_M.gguf              27.85 G poids  Q5_K:74.4% Q4_K:15.3% Q6_K:9.7% Q8_0:0.6% F32:0.0%
+Qwen2.5-VL-7B-Instruct-Q4_K_M.gguf            7.62 G poids  Q4_K:80.0% Q6_K:20.0% F32:0.0%
+Qwen3-235B-A22B-Q2_K                        235.09 G poids  Q2_K:66.1% Q3_K:3
+… [1131 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && M=/home/stephane/Data13TB/stephane/modeles/gguf/qwen2.5-0.5b-instruct-q4_k_m.gguf && ./drave-core/target/release/drave $M --tensors 2>/dev/null | awk '{print $NF}' | sort | uniq -c | sort -rn | head; echo \"=== comment Q5_0/Q5_1 sont … [144 caractères tronqués]`
+
+  ```
+291 0
+      1 97.430803ms
+      1 32768
+=== comment Q5_0/Q5_1 sont lus ===
+drave-core/src/gguf.rs:732:            0 => "F32", 1 => "F16", 2 => "Q4_0", 3 => "Q4_1", 6 => "Q5_0", 7 => "Q5_1",
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && M=/home/stephane/Data13TB/stephane/modeles/gguf/qwen2.5-0.5b-instruct-q4_k_m.gguf && ./drave-core/target/release/drave $M --tensors 2>/dev/null | head -8; echo ...; ./drave-core/target/release/drave $M --tensors 2>/dev/null | awk '{p … [101 caractères tronqués]`
+
+  ```
+qwen2 · 1 fichiers · 291 tenseurs · 0.49 Go de poids · en-têtes lus en 59.591292ms
+ · block_count 24 · embedding_length 896 · feed_forward_length 4864 · attention.head_count 14 · attention.head_count_kv 2 · context_length 32768
+  Q8_0     output.weight                          [151936, 896] · 136.1 M poids · fichier 0
+  Q5_0     token_embd.weight                      [151936, 896] · 136.1 M poids · fichier 0
+  F32      blk.0.attn_norm.weight                 [896] · 0.0 M poids · fichier 0
+  Q6_K     blk.0.ffn_down.weight                  [896, 4864] · 4.4 M poids · fichier 0
+  Q5_0     blk.0.ffn_gate.weight                  [4864, 896] · 4.4 M poids · fichier 0
+  Q5_0     blk.0.ffn_up.weight                    [4864, 896] · 4.4 M poids · fichier 0
+...
+    291 fichier
+      1 en
+      1 context_length
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rn \"Q5_0\\|=> 6\\b\\|ttype == 6\\|6 =>\" drave-core/src/list.rs drave-core/src/model.rs drave-core/src/engine.rs | head -20; echo \"=== ou est charge token_embd ? ===\"; grep -rn \"token_embd\" drave-core/src/*.rs | head -10", … [62 caractères tronqués]`
+
+  ```
+=== ou est charge token_embd ? ===
+drave-core/src/clusters.rs:363:            vec![("blk.0.ffn_gate_inp.weight", vec![4, 3]), ("token_embd.weight", vec![8, 3])];
+drave-core/src/gguf.rs:1639:            vec![("blk.2.ffn_down.weight", vec![5, 2]), ("blk.3.token_embd.weight", vec![3, 3])];
+drave-core/src/gguf.rs:1665:        assert_eq!(multi.tensor("blk.3.token_embd.weight").unwrap().fichier, 1);
+drave-core/src/main.rs:1117:    g.tensor("token_embd.weight").map(|t| t.dims[0] as usize)
+drave-core/src/main.rs:1453:    // (« forward partait toujours de token_embd »). C'est un contrôle de
+drave-core/src/main.rs:3536:    if !mx && nom_q4k != "output.weight" && nom_q4k != "token_embd.weight"
+drave-core/src/main.rs:3542:    } else { "token_embd.weight".to_string() };
+drave-core/src/model.rs:1035:    /// sinon `token_embd.weight` (poids liés). Les modèles non liés — le
+drave-core/src/model.rs:1089:    /// toujours de `token_embd`.
+drave-core/src/model.rs:1602:            vocab: g.tensor("token_embd.weight").map(|t| t.dims[0] as usize).unwrap_or(0),
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '1030,1110p' drave-core/src/model.rs", "description": "Read embedding/head loading code"}`
+
+  ```
+/// `<|end|>` selon le canal.
+    pub stop_id2: Option<u32>,
+    /// Postes de temps cumulés, en secondes (diagnostic).
+    pub prof: [f64; 6],
+    /// Nom du tenseur de la tête de sortie : `output.weight` s'il existe,
+    /// sinon `token_embd.weight` (poids liés). Les modèles non liés — le
+    /// Qwen2.5-1.5B en fait partie — ont une matrice de sortie **différente**
+    /// de la table d'embedding ; lire la mauvaise donne une perplexité de
+    /// 50 000 au lieu de 11,4.
+    pub tete: String,
+    /// Nombre de couches dont les puits appris ont été trouvés (diagnostic).
+    pub sinks_vus: usize,
+    /// Chemin GPU : la tête et les projections y résident en permanence. Les
+    /// poids ne traversent le bus qu'une fois ; seules les activations font
+    /// l'aller-retour à chaque jeton.
+    pub tete_gpu: Option<crate::gpu::MatriceGpu>,
+    /// Tête de sortie en 4 bits (poids liés au plafond d'embedding). C'est la
+    /// plus grosse matrice du modèle — 151 936 × 896 — donc le poste où le
+    /// demi-octet par poids rapporte le plus.
+    pub head4: Option<DenseQ4>,
+    /// Tokens sur lesquels la tête de sortie est calculée. `None` = tout le
+    /// vocabulaire.
+    ///
+    /// Mes
+… [3631 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rn \"type.*non géré\\|non géré.*type\\|ttype\" drave-core/src/model.rs | head -20; echo \"=== list.rs types ===\"; grep -rn \"0u32 =>\\|=> 0\\|GGML\\|Q4_K\\b\" drave-core/src/list.rs | head -15", "description": "Find dense weig … [26 caractères tronqués]`
+
+  ```
+150:            let src = source_de(t.ttype)?;
+152:            let bloc = if t.ttype == crate::gguf::GGML_Q4_K || t.ttype == crate::gguf::GGML_Q6_K { 256 } else { 32 };
+167:        let src = source_de(t.ttype)?;
+169:        let bloc = if t.ttype == crate::gguf::GGML_Q4_K || t.ttype == crate::gguf::GGML_Q6_K { 256 } else { 32 };
+=== list.rs types ===
+572:pub enum Source { Propre, Q4_0, Mxfp4, Q4_K, Q6_K }
+803:    /// **Prête** des super-blocs Q4_K (144 octets pour 256 poids) lus dans le
+813:            src: Source::Q4_K, base, nb_ligne: nb_super,
+895:    /// Produit scalaire **Q4_K en place** (noyau AVX2).
+897:    /// Q4_K est **asymétrique** : chaque sous-bloc de 32 poids a une échelle
+1014:    /// Pas et décalage des blocs dans la source empruntée. (Q4_K a son propre
+1082:            Source::Q4_K | Source::Q6_K | Source::Propre => (0, 0),
+1096:                255 => 0.0,
+1167:                255 => 0.0,
+1182:            Source::Q4_K => self.n_out * self.nb_ligne * crate::gguf::TAILLE_Q4K,
+1198:        if self.src == Source::Q4_K { return self.dot_source_q4k(o, x); }
+1235:                if self.src == Source::Q4_K && sx32.len() * BLOC_Q4 >= self.n_in {
+1244:                if self
+… [134 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '130,200p' drave-core/src/model.rs", "description": "Read the dense tensor source dispatch"}`
+
+  ```
+}
+        let mut out = Vec::with_capacity(noms.len());
+        for nom in &noms {
+            let t = g.tensor(nom)?;
+            if t.dims.len() < 3 { return None; }
+            let ligne_experts = t.dims[0] as usize;
+            // La dimension d'expert du tenseur doit être EXACTEMENT celle que
+            // le mapping annonce : ni le nombre global (ce serait un tenseur non
+            // découpé, dont les lignes locales n'ont pas le même sens), ni autre
+            // chose. Une tolérance ici ferait lire le mauvais expert sans bruit.
+            let attendu = match map { Some(m) => m.par_cluster, None => n_expert };
+            if ligne_experts != attendu {
+                match map {
+                    Some(m) => eprintln!("[moe] couche {l} : « {nom} » a {ligne_experts} \
+experts, le mapping en annonce {} par cluster", m.par_cluster),
+                    None => eprintln!("[moe] couche {l} : « {nom} » a {ligne_experts} experts \
+au lieu de {n_expert}, et aucun mapping n'est actif"),
+                }
+                return None;
+            }
+            let src = source_de(t.ttype)?;
+            let (n_out, n_in) = (t.dims[1] as usize, t.dims[2] as usize);
+            let b
+… [2727 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"fn source_de\" -A 25 drave-core/src/model.rs | head -40", "description": "Read source_de dispatch"}`
+
+  ```
+73:fn source_de(t: u32) -> Option<crate::list::Source> {
+74-    use crate::gguf::{GGML_MXFP4, GGML_Q4_0, GGML_Q4_K, GGML_Q6_K};
+75-    use crate::list::Source;
+76-    match t {
+77-        GGML_Q4_K => Some(Source::Q4_K),
+78-        GGML_Q6_K => Some(Source::Q6_K),
+79-        GGML_MXFP4 => Some(Source::Mxfp4),
+80-        GGML_Q4_0 => Some(Source::Q4_0),
+81-        _ => None,
+82-    }
+83-}
+84-
+85-/// Charge le mélange d'experts d'une couche, s'il existe.
+86-///
+87-/// Les trois tenseurs `ffn_*_exps` sont des tenseurs **3D** dont la première
+88-/// dimension (la plus lente) est l'expert : chaque expert est donc un bloc
+89-/// contigu, et le moteur n'a besoin que d'un pointeur et d'un pas.
+90-fn charger_moe(g: &Gguf, l: usize, n_expert: usize, map: Option<&'static crate::clusters::Mapping>)
+91-    -> Option<Moe> {
+92-    if n_expert == 0 { return None; }
+93-    let p = |s: &str| format!("blk.{l}.{s}");
+94-    // Un tenseur d'experts est soit en clair dans le fichier ouvert, soit dans
+95-    // les fichiers de clusters sous le préfixe `cl{c}/`. Dans le second cas
+96-    // chaque fichier ne porte QUE ses experts locaux : la dimension d'expert
+97-    // du tenseur vaut `experts_par_clust
+… [85 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"ffn_gate\\.\\|ffn_up\\.\\|fn charger_dense\\|Dense {\" drave-core/src/model.rs | head -12", "description": "Find dense FFN loading"}`
+
+  ```
+1726:                    Proj::load(&g, &p("ffn_gate.weight"), None, dense || q4 != 0, auto, keep, q4 & 1 != 0, b6 & 1 != 0) },
+1728:                    Proj::load(&g, &p("ffn_up.weight"), None, dense || q4 != 0, auto, keep, q4 & 1 != 0, b6 & 1 != 0) },
+1979:                    gate: g.dequant(&p("ffn_gate.weight")),
+1980:                    up: g.dequant(&p("ffn_up.weight")),
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"impl Proj\" -A 60 drave-core/src/model.rs | grep -n \"fn load\" -A 45 | head -60", "description": "Read Proj::load"}`
+
+  ```
+8:449-    fn load(g: &Gguf, name: &str, bias: Option<&str>, dense: bool, auto: bool, keep: f32,
+9-450-            q4: bool, bits6: bool) -> Self {
+10-451-        let t = g.tensor(name).unwrap_or_else(|| panic!("tenseur {name} absent"));
+11-452-        let n_out = t.dims[0] as usize;
+12-453-        let n_in = t.dims[1] as usize;
+13-454-        let mut w = g.dequant(name);
+14-455-        if keep < 0.0 { prune_structured(&mut w, n_out, n_in, -keep); }
+15-456-        else { prune_rows(&mut w, n_out, n_in, keep); }
+16-457-        // `auto` charge les DEUX formes : le moteur choisit ensuite, par mesure
+17-458-        // de la densité d'activation, entre dispersion (push) et produit
+18-459-        // scalaire dense (pull). Le croisement mesuré est à 10 %.
+19-460-        // Six bits empaquetés : même déquantification que les autres chemins,
+20-461-        // mais la quantification vise la grille [-32, 31] au lieu de [-8, 7].
+21-462-        if bits6 {
+22-463-            let z = DenseQ4::build6(&w, n_out, n_in);
+23-464-            let bias = bias.filter(|b| g.tensor(b).is_some()).map(|b| g.dequant(b));
+24-465-            return Proj { gpu: None, m: None, d: None, q4: Some(z), bias };
+25-466-
+… [2179 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls -la /tmp/ids_qwen.txt 2>/dev/null; M=/home/stephane/Data13TB/stephane/modeles/gguf/qwen2.5-0.5b-instruct-q4_k_m.gguf; timeout 600 ./drave-core/target/release/drave $M --ppl /tmp/ids_qwen.txt --ctx 256 --abits 16 --threads 16 --lim … [78 caractères tronqués]`
+
+  ```
+-rw-r--r--. 1 stephane stephane 21380 30 sep 17:11 /tmp/ids_qwen.txt
+/tmp/ids_qwen.txt : 512 tokens, fenêtres de 256
+
+thread 'main' (3433718) panicked at src/gguf.rs:1441:22:
+dequant : type 6 non géré
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+timeout: the monitored command dumped core
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"19,3885\\|19.3885\\|ids_qwen\\|0.5b\\|0.5B\" tools/portes.sh | head -12", "description": "Check which model the gate script uses"}`
+
+  ```
+30:# lieu de 19,3885 (total) — un instrument faux qui accuse le code.
+40:# 2. Perplexité Qwen2.5-0.5B, contexte 256.
+41:v=$(timeout 600 $D models/Qwen2.5-0.5B-Q8_0.gguf --ppl /tmp/ids_qwen.txt --ctx 256 \
+43:compare "Qwen2.5-0.5B ctx 256" "19.3885" "$v"
+48:    v=$(timeout 900 $D "$A" --ppl /tmp/ids_qwen.txt --ctx 64 --limit 8 --dense \
+54:v=$($D models/Qwen2.5-0.5B-Q8_0.gguf --materiel 2>/dev/null | grep -oE "^  threads +: [0-9]+" | grep -oE "[0-9]+")
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls -la models/ 2>&1 | head -12", "description": "Check the models directory in the repo"}`
+
+  ```
+total 863324
+drwxr-xr-x. 1 stephane stephane        88 25 sep 17:13 .
+drwxr-xr-x. 1 stephane stephane       612 30 sep 17:59 ..
+-rw-r--r--. 1 stephane stephane 352972352 25 sep 17:13 Qwen2.5-0.5B-Q4_0.gguf
+-rw-r--r--. 1 stephane stephane 531068480 25 sep 16:52 Qwen2.5-0.5B-Q8_0.gguf
+  ```
+
+### 🤖 Assistant
+
+⏵ Fausse alerte sur la porte ; vérification puis ajout de Q5_0
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 600 ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf --ppl /tmp/ids_qwen.txt --ctx 256 --abits 16 --threads 16 --limit 512 --dense 2>&1 | tail -3", "description": "Verify the published 0.5B gate"}`
+
+  ```
+postes (ms/token) : projets-attn 2.47 | rope 0.40 | attention 1.46 | proj+mlp 19.97 | somme 24.31 | reste (tête + échantillonnage) 7.99
+    dont tête de sortie 6.64 | notation log-sum-exp 1.31 (le reste du « reste » n'est pas chronométré)
+    dont attention : scores 0.54 | softmax 0.26 | somme pondérée + écriture KV 0.66
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 600 ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf --ppl /tmp/ids_qwen.txt --ctx 256 --abits 16 --threads 16 --limit 512 --dense 2>&1 | grep -E \"perplexité|tokens\" | tail -3", "description": "Extract the ga … [21 caractères tronqués]`
+
+  ```
+255 tokens notés — perplexité cumulée 17.431  (32.7 tok/s)  [fenêtre 1 : 255 notés, PPL 17.431]
+     510 tokens notés — perplexité cumulée 19.388  (32.4 tok/s)  [fenêtre 2 : 255 notés, PPL 21.565]
+=== perplexité 19.3885 sur 510 tokens (0 événements, 15.7 s) ===
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/llama.cpp && sed -n '/void dequantize_row_q5_0/,/^}/p' ggml/src/ggml-quants.c; sed -n '/void dequantize_row_q5_1/,/^}/p' ggml/src/ggml-quants.c; grep -n \"} block_q5_0;\\|} block_q5_1;\" -B 8 ggml/src/ggml-common.h | grep -E \"typedef|uint8_t|g … [70 caractères tronqués]`
+
+  ```
+void dequantize_row_q5_0(const block_q5_0 * GGML_RESTRICT x, float * GGML_RESTRICT y, int64_t k) {
+    static const int qk = QK5_0;
+
+    assert(k % qk == 0);
+
+    const int nb = k / qk;
+
+    for (int i = 0; i < nb; i++) {
+        const float d = GGML_FP16_TO_FP32(x[i].d);
+
+        uint32_t qh;
+        memcpy(&qh, x[i].qh, sizeof(qh));
+
+        for (int j = 0; j < qk/2; ++j) {
+            const uint8_t xh_0 = ((qh >> (j +  0)) << 4) & 0x10;
+            const uint8_t xh_1 = ((qh >> (j + 12))     ) & 0x10;
+
+            const int32_t x0 = ((x[i].qs[j] & 0x0F) | xh_0) - 16;
+            const int32_t x1 = ((x[i].qs[j] >>   4) | xh_1) - 16;
+
+            y[i*qk + j + 0   ] = x0*d;
+            y[i*qk + j + qk/2] = x1*d;
+        }
+    }
+}
+void dequantize_row_q5_1(const block_q5_1 * GGML_RESTRICT x, float * GGML_RESTRICT y, int64_t k) {
+    static const int qk = QK5_1;
+
+    assert(k % qk == 0);
+
+    const int nb = k / qk;
+
+    for (int i = 0; i < nb; i++) {
+        const float d = GGML_FP16_TO_FP32(x[i].d);
+        const float m = GGML_FP16_TO_FP32(x[i].m);
+
+        uint32_t qh;
+        memcpy(&qh, x[i].qh, sizeof(qh));
+
+        for (int j = 0; j < qk/2; ++j) {
+            const uint8_t xh_0 
+… [850 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/gguf.rs'; s=open(p).read()\n\n# 1) constantes\ns = s.replace(\"\"\"pub const GGML_Q5_K: u32 = 13;\"\"\",\n\"\"\"/// Bloc **Q5_0** (22 octets, 32 poids) et **Q5_1** (24 octets, 32 poids) :\n/// éche … [5619 caractères tronqués]`
+
+  ```
+error[E0425]: cannot find value `n_cols` in this scope
+    --> src/gguf.rs:1433:26
+     |
+1433 |                 let nb = n_cols / 32;
+     |                          ^^^^^^ not found in this scope
+
+error[E0425]: cannot find value `row` in this scope
+    --> src/gguf.rs:1435:52
+     |
+1435 |                     out.extend_from_slice(&f(&buf[(row * nb + b) * taille..]));
+build fini
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"GGML_Q5_0 | GGML_Q5_1\" drave-core/src/gguf.rs", "description": "Locate duplicated Q5 branches"}`
+
+  ```
+1125:            GGML_Q5_0 | GGML_Q5_1 => {
+1427:            GGML_Q5_0 | GGML_Q5_1 => {
+1438:            GGML_Q5_0 | GGML_Q5_1 => {
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/gguf.rs", "limit": 28, "offset": 1425}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/gguf.rs</path>
+<type>file</type>
+<content>
+1425:                 }
+1426:             }
+1427:             GGML_Q5_0 | GGML_Q5_1 => {
+1428:                 let (taille, f): (usize, fn(&[u8]) -> Vec<f32>) = if t.ttype == GGML_Q5_0 {
+1429:                     (22, Self::dequant_q5_0)
+1430:                 } else {
+1431:                     (24, Self::dequant_q5_1)
+1432:                 };
+1433:                 let nb = n_cols / 32;
+1434:                 for b in 0..nb {
+1435:                     out.extend_from_slice(&f(&buf[(row * nb + b) * taille..]));
+1436:                 }
+1437:             }
+1438:             GGML_Q5_0 | GGML_Q5_1 => {
+1439:                 let (taille, f): (usize, fn(&[u8]) -> Vec<f32>) = if t.ttype == GGML_Q5_0 {
+1440:                     (22, Self::dequant_q5_0)
+1441:                 } else {
+1442:                     (24, Self::dequant_q5_1)
+1443:                 };
+1444:                 let nb = n / 32;
+1445:                 for b in 0..nb { out.extend_from_slice(&f(&buf[b * taille..])); }
+1446:             }
+1447:             GGML_MXFP4 => {
+1448:                 // 17 octets par bloc de 3
+… [414 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/gguf.rs", "old_string": "            GGML_Q5_0 | GGML_Q5_1 => {\n                let (taille, f): (usize, fn(&[u8]) -> Vec<f32>) = if t.ttype == GGML_Q5_0 {\n                    (22, Self::dequant_q5_0)\n                }  … [358 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/gguf.rs has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && cargo build --release 2>&1 | grep -E \"^error\" -A5 | head -10; echo \"=== verif Q5_0 ===\"; cd .. && python3 tools/verifier_formats.py /home/stephane/Data13TB/stephane/modeles/gguf/qwen2.5-0.5b-instruct-q4_k_m.gguf token_ … [85 caractères tronqués]`
+
+  ```
+=== verif Q5_0 ===
+drave n'a rien rendu : thread 'main' (3450568) panicked at src/main.rs:1496:5:
+largeur de ligne 896 non multiple de 256
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/main.rs'; s=open(p).read()\ni = s.index(\"fn run_bloc(spec: &str) {\")\nj = s.index(\"\\n}\\n\", s.index(\"for x in v[d..(d + 256).min(v.len())].iter()\")) + 3\nnouveau = '''fn run_bloc(spec: &str) … [2344 caractères tronqués]`
+
+  ```
+ggml  8 : ['-0.010193', '0.040772', '0.010193', '-0.000000', '-0.028030', '-0.002548', '-0.000000', '-0.020386']
+  nous  8 : ['-0.010193', '0.040772', '0.010193', '-0.000000', '-0.028030', '-0.002548', '-0.000000', '-0.020386']
+  256 valeurs · écart max 0.00e+00 (échelle 5.64e-02)
+CONCORDE
+  ```
+
+### 🤖 Assistant
+
+⏵ Batterie format par format : recherche des témoins et mesure
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 600 python3 - <<'PY'\nimport sys, os\nsys.path.insert(0,'tools')\nfrom analyse_experts_statique import Lecteur\nB='/home/stephane/Data13TB/stephane/modeles/gguf'\nT={0:'F32',1:'F16',2:'Q4_0',6:'Q5_0',7:'Q5_1',8:'Q8_0',10:'Q2_ … [1204 caractères tronqués]`
+
+  ```
+qwen2.5-0.5b-instruct-q4_k_m.gguf          F32 blk.0.attn_norm.weight | Q5_0 token_embd.weight | Q8_0 output.weight | Q4_K blk.11.ffn_down.weight | Q6_K blk.0.ffn_down.weight
+codestral-22b-v0.1-q4_k_m.gguf             F32 blk.0.attn_norm.weight | Q4_K token_embd.weight | Q6_K blk.0.ffn_down.weight
+bge-m3-FP16.gguf                           F32 position_embd.weight | F16 token_embd.weight
+gpt-oss-120b-MXFP4.gguf                    F32 output_norm.weight | Q8_0 output.weight | MXFP4 blk.0.ffn_down_exps.weight
+eagle3-gpt-oss-120b-Q8_0.gguf              F32 enc.output_norm.weight | Q8_0 fc.weight
+Muse-Glimmer-30B-AD-Q4_K_M.gguf            F32 output_norm.weight | Q8_0 blk.0.attn_k.weight | Q4_K blk.0.attn_gate.weight | Q5_K blk.0.ffn_down.weight | Q6_K output.weight
+DeepSeek-V4.1-Flash-Q2/k-V4.1-Flash-Q2.gguf   F32 output_norm.weight | F16 token_embd.weight | Q8_0 output.weight | Q2_K blk.0.ffn_down_exps.weight | IQ2_XXS blk.0.ffn_gate_exps.weight
+Qwen3-235B-A22B-Q2_K/-00001-of-00002.gguf   F32 output_norm.weight | Q2_K token_embd.weight | Q3_K blk.0.attn_output.weight | Q4_K blk.0.attn_v.weight | Q6_K output.weight
+Qwen3-235B-A22B-Q2_K/-00002-of-00002.gguf   F32 blk.54.ffn_gate_inp.we
+… [502 caractères tronqués]
+  ```
+
+- **write** `{"content": "#!/usr/bin/env bash\n# Portes des FORMATS : chaque déquantificateur comparé à libggml, bloc par bloc.\n#\n#   tools/portes_formats.sh [type ...]\n#\n# Pourquoi : nos déquantificateurs sont écrits d'après le C de ggml, et les cinq\n# premiers essais se sont tous trompés (IQ2_XXS : pas de … [4167 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/portes_formats.sh</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && chmod +x tools/portes_formats.sh && timeout 1800 bash tools/portes_formats.sh 2>&1 | tail -20", "description": "Run the format gate battery"}`
+
+  ```
+F32        OK       blk.0.attn_norm.weight
+  F16        OK       token_embd.weight
+  Q4_0       OK       token_embd.weight
+  Q5_0       OK       token_embd.weight
+  Q8_0       OK       output.weight
+  Q2_K       ABSENT   /home/stephane/Data13TB/stephane/modeles/gguf/Qwen3-235B-A22B-Q2_K/Qwen3-235B-A22B-Q2_K-00001-of-00002.gguf
+  Q4_K       OK       token_embd.weight
+  Q5_K       OK       blk.0.ffn_down.weight
+  Q6_K       OK       blk.0.ffn_down.weight
+  IQ2_XXS    OK       blk.0.ffn_gate_exps.weight
+  IQ1_M      OK       blk.0.ffn_gate_exps.weight
+  BF16       OK       blk.0.ffn_gate_inp.weight
+  MXFP4      DIVERGE  blk.0.ffn_down_exps.weight : DIVERGE / DIVERGE
+formats : 11 concorde(s), 1 divergence(s), 1 absent(s)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && M=/home/stephane/Data13TB/stephane/modeles/gguf/gpt-oss-120b-MXFP4.gguf && python3 tools/verifier_formats.py $M blk.0.ffn_down_exps.weight 0 2>&1 | tail -6; ls /home/stephane/Data13TB/stephane/modeles/gguf/Qwen3-235B-A22B-Q2_K/", "de … [55 caractères tronqués]`
+
+  ```
+blk.0.ffn_down_exps.weight · dims [128, 2880, 2880] · type 39 · bloc 0
+  ggml  8 : ['-0.011719', '0.011719', '0.011719', '0.007812', '0.031250', '0.031250', '0.003906', '0.031250']
+  nous  8 : ['-0.005859', '0.005859', '0.005859', '0.003906', '0.015625', '0.015625', '0.001953', '0.015625']
+  256 valeurs · écart max 2.34e-02 (échelle 4.69e-02)
+DIVERGE
+Qwen3-235B-A22B-Instruct-2507-Q2_K-00001-of-00002.gguf
+Qwen3-235B-A22B-Instruct-2507-Q2_K-00002-of-00002.gguf
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/llama.cpp && grep -rn \"E8M0_TO_FP32\" ggml/src/ggml-impl.h | head -5; sed -n '/void dequantize_row_mxfp4/,/^}/p' ggml/src/ggml-quants.c; grep -n \"kvalues_mxfp4\\[16\\]\" -A 5 ggml/src/ggml-quants.c | head -10", "description": "Read ggml MXFP4 … [17 caractères tronqués]`
+
+  ```
+498:#define GGML_E8M0_TO_FP32(x) ggml_e8m0_to_fp32(x)
+499:#define GGML_E8M0_TO_FP32_HALF(x) ggml_e8m0_to_fp32_half(x)
+void dequantize_row_mxfp4(const block_mxfp4 * GGML_RESTRICT x, float * GGML_RESTRICT y, int64_t k) {
+    static const int qk = QK_MXFP4;
+
+    assert(k % qk == 0);
+
+    const int nb = k / qk;
+
+    for (int i = 0; i < nb; i++) {
+        const float d = GGML_E8M0_TO_FP32_HALF(x[i].e);
+
+        for (int j = 0; j < qk/2; ++j) {
+            const int8_t x0 = kvalues_mxfp4[x[i].qs[j] & 0x0F];
+            const int8_t x1 = kvalues_mxfp4[x[i].qs[j] >>   4];
+
+            y[i*qk + j + 0   ] = x0*d;
+            y[i*qk + j + qk/2] = x1*d;
+        }
+    }
+}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/llama.cpp && grep -n \"ggml_e8m0_to_fp32_half\" -A 12 ggml/src/ggml.c | head -20; grep -rn \"kvalues_mxfp4\" ggml/src/*.c ggml/src/*.h | head -4", "description": "Read the E8M0 half conversion"}`
+
+  ```
+ggml/src/ggml-quants.c:595:    float best_err = fabsf(kvalues_mxfp4[0]*e - x);
+ggml/src/ggml-quants.c:597:        float err = fabsf(kvalues_mxfp4[i]*e - x);
+ggml/src/ggml-quants.c:961:            const int8_t x0 = kvalues_mxfp4[x[i].qs[j] & 0x0F];
+ggml/src/ggml-quants.c:962:            const int8_t x1 = kvalues_mxfp4[x[i].qs[j] >>   4];
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/llama.cpp && grep -rn \"e8m0_to_fp32_half\" ggml/src/ | head; echo ---; grep -rn \"kvalues_mxfp4\\s*\\[16\\]\" -A 4 ggml/src/ggml-quants.c | head -8", "description": "Locate e8m0 half helper and kvalues table"}`
+
+  ```
+ggml/src/ggml-impl.h:478:static inline float ggml_e8m0_to_fp32_half(uint8_t x) {
+ggml/src/ggml-impl.h:499:#define GGML_E8M0_TO_FP32_HALF(x) ggml_e8m0_to_fp32_half(x)
+---
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/llama.cpp && sed -n '465,495p' ggml/src/ggml-impl.h; grep -rn \"kvalues_mxfp4\" ggml/src/ggml-common.h | head -3; sed -n \"$(grep -n 'kvalues_mxfp4' ggml/src/ggml-common.h | head -1 | cut -d: -f1),+6p\" ggml/src/ggml-common.h", "description": " … [45 caractères tronqués]`
+
+  ```
+// - Mantissa: 0 (implicit leading 1)
+        // Value = 2^(x - 127)
+        bits = (uint32_t) x << 23;
+    }
+
+    float result;  // Final float value
+                   // Safely reinterpret bit pattern as float without type-punning issues
+    memcpy(&result, &bits, sizeof(float));
+    return result;
+}
+
+// Equal to ggml_e8m0_to_fp32/2
+// Useful with MXFP4 quantization since the E0M2 values are doubled
+static inline float ggml_e8m0_to_fp32_half(uint8_t x) {
+    uint32_t bits;
+
+    // For x < 2: use precomputed denormal patterns
+    if (x < 2) {
+        // 0x00200000 = 2^(-128), 0x00400000 = 2^(-127)
+        bits = 0x00200000 << x;
+    }
+    // For x >= 2: normalized exponent adjustment
+    else {
+        // 0.5 * 2^(x-127) = 2^(x-128) = normalized with exponent (x-1)
+        bits = (uint32_t)(x - 1) << 23;
+    }
+    // Note: NaNs are not handled here
+
+    float result;
+    memcpy(&result, &bits, sizeof(float));
+    return result;
+1213:#define kvalues_mxfp4 kvalues_fp4
+#define kvalues_mxfp4 kvalues_fp4
+
+#define NGRID_IQ1S 2048
+#define IQ1S_DELTA 0.125f
+#define IQ1M_DELTA 0.125f
+#if defined(GGML_COMMON_IMPL_C)
+GGML_TABLE_BEGIN(uint64_t, iq1s_grid, NGRID_IQ1S)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/llama.cpp && sed -n '440,470p' ggml/src/ggml-impl.h; echo \"=== table fp4 ===\"; sed -n \"$(grep -n 'GGML_TABLE_BEGIN(int8_t, kvalues_fp4' ggml/src/ggml-common.h | cut -d: -f1),+5p\" ggml/src/ggml-common.h", "description": "Read full E8M0 conve … [21 caractères tronqués]`
+
+  ```
+static inline float ggml_e8m0_to_fp32(uint8_t x) {
+    uint32_t bits;  // Stores the raw bit representation of the float
+
+    // Handle special case for minimum exponent (denormalized float)
+    if (x == 0) {
+        // Bit pattern for 2^(-127):
+        // - Sign bit: 0 (positive)
+        // - Exponent: 0 (denormalized number)
+        // - Mantissa: 0x400000 (0.5 in fractional form)
+        // Value = 0.5 * 2^(-126) = 2^(-127)
+        bits = 0x00400000;
+    }
+    // note: disabled as we don't need to handle NaNs
+    //// Handle special case for NaN (all bits set)
+    //else if (x == 0xFF) {
+    //    // Standard quiet NaN pattern:
+    //    // - Sign bit: 0
+    //    // - Exponent: all 1s (0xFF)
+    //    // - Mantissa: 0x400000 (quiet NaN flag)
+    //    bits = 0x7FC00000;
+    //}
+    // Normalized values (most common case)
+    else {
+        // Construct normalized float by shifting exponent into position:
+        // - Exponent field: 8 bits (positions 30-23)
+        // - Mantissa: 0 (implicit leading 1)
+        // Value = 2^(x - 127)
+        bits = (uint32_t) x << 23;
+    }
+
+    float result;  // Final float value
+=== table fp4 ===
+GGML_TABLE_BEGIN(int8_t, kvalues_fp4, 16)
+    0
+… [131 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"mxfp4\\|Mxfp4\" drave-core/src/list.rs | head -20", "description": "Inspect the MXFP4 import path in list.rs"}`
+
+  ```
+572:pub enum Source { Propre, Q4_0, Mxfp4, Q4_K, Q6_K }
+945:    pub fn import_mxfp4(buf: &[u8], n_out: usize, n_in: usize, nb_ligne: usize) -> Self {
+982:                            nb_ligne: usize, mxfp4: bool) -> Self {
+983:        let (lut, e8m0) = if mxfp4 { (LUT_MXFP4, true) } else { (LUT_INT4, false) };
+987:            src: if mxfp4 { Source::Mxfp4 } else { Source::Q4_0 },
+1081:            Source::Mxfp4 => (17, 1),
+1093:        if self.src == Source::Mxfp4 {
+1181:            Source::Mxfp4 => self.n_out * self.nb_ligne * 17,
+1332:mod tests_mxfp4 {
+1362:        let d4 = DenseQ4::import_mxfp4(&buf, n_out, n_in, nl);
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '1085,1110p' drave-core/src/list.rs; grep -n \"LUT_MXFP4\" -A 6 drave-core/src/list.rs | head -12", "description": "Check the MXFP4 scale in the import kernel"}`
+
+  ```
+/// Échelle d'un bloc **source** (lue dans le fichier).
+    ///
+    /// MXFP4 : l'exposant E8M0 donne `2^(e−127)` ; la table E2M1 étant
+    /// doublée, le multiplicateur est `2^(e−128)`. Q4_0 : une demi-précision
+    /// classique, appliquée telle quelle à la grille `n − 8`.
+    #[inline]
+    unsafe fn echelle_source(&self, p: *const u8) -> f32 {
+        if self.src == Source::Mxfp4 {
+            match *p {
+                0 => f32::from_bits(0x0020_0000),
+                255 => 0.0,
+                e => f32::from_bits(((e as u32) - 1) << 23),
+            }
+        } else {
+            crate::gguf::Gguf::f16_to_f32(u16::from_le_bytes([*p, *p.add(1)]))
+        }
+    }
+
+    /// Produit scalaire sur une matrice **empruntée** au fichier.
+    fn dot_source(&self, o: usize, x: &[i32]) -> f32 {
+        let (pas, decal) = self.pas_source();
+        let mut sum = 0f32;
+        for b in 0..self.nb_ligne {
+            let p = unsafe { self.base.add((o * self.nb_ligne + b) * pas) };
+            let d = unsafe { self.echelle_source(p) };
+547:pub const LUT_MXFP4: [i8; 16] = [0, 1, 2, 3, 4, 6, 8, 12, 0, -1, -2, -3, -4, -6, -8, -12];
+548-
+549-/// Matrice quantifiée sur 4 bits, rangée par ligne de
+… [447 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"GGML_MXFP4 => {\" drave-core/src/gguf.rs", "description": "Locate both MXFP4 sites"}`
+
+  ```
+1136:            GGML_MXFP4 => {
+1436:            GGML_MXFP4 => {
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/gguf.rs'; s=open(p).read()\navant = \"\"\"                let e = buf[p] as u32;\n                let d = if e == 0 || e == 255 { 0.0 } else { f32::from_bits((e - 1) << 23) };\"\"\"\napres = \"\"\" … [1184 caractères tronqués]`
+
+  ```
+MXFP4      DIVERGE  blk.0.ffn_down_exps.weight : DIVERGE / DIVERGE
+formats : 0 concorde(s), 1 divergence(s), 0 absent(s)
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 17, in <module>
+AssertionError: 0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '1136,1150p;1436,1450p' drave-core/src/gguf.rs", "description": "Read both MXFP4 arms exactly"}`
+
+  ```
+GGML_MXFP4 => {
+                // 17 octets par bloc de 32 : exposant E8M0 puis nibbles E2M1.
+                const KV: [f32; 16] = [0.0, 0.5, 1.0, 1.5, 2.0, 3.0, 4.0, 6.0,
+                                       0.0, -0.5, -1.0, -1.5, -2.0, -3.0, -4.0, -6.0];
+                let nb = n_cols / 32;
+                for b in 0..nb {
+                    let p = (row * nb + b) * 17;
+                    let e = buf[p] as u32;
+                    let d = if e == 0 || e == 255 { 0.0 } else { f32::from_bits((e - 1) << 23) };
+                    for j in 0..16 { out.push(KV[(buf[p + 1 + j] & 0x0F) as usize] * d); }
+                    for j in 0..16 { out.push(KV[(buf[p + 1 + j] >> 4) as usize] * d); }
+                }
+            }
+            GGML_Q4_1 => {
+                let nb = n_cols / 32;
+            GGML_MXFP4 => {
+                // 17 octets par bloc de 32 : exposant E8M0 puis nibbles E2M1.
+                // L'échelle vaut 2^(e−127) ; e = 0 et e = 255 sont dégénérés.
+                const KV: [f32; 16] = [0.0, 0.5, 1.0, 1.5, 2.0, 3.0, 4.0, 6.0,
+                                       0.0, -0.5, -1.0, -1.5, -2.0, -3.0, -4.0, -6.0];
+                let nb = n / 32;
+                
+… [432 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/gguf.rs'; s=open(p).read()\navant = \"\"\"                    let e = buf[p] as u32;\n                    let d = if e == 0 || e == 255 { 0.0 } else { f32::from_bits((e - 1) << 23) };\"\"\"\napres  … [1634 caractères tronqués]`
+
+  ```
+MXFP4      OK       blk.0.ffn_down_exps.weight
+formats : 1 concorde(s), 0 divergence(s), 0 absent(s)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/gguf.rs'; s=open(p).read()\n# 1) helper\ns = s.replace(\"\"\"    /// Déquantifie un bloc **Q5_0** (22 octets, 32 poids).\"\"\",\n\"\"\"    /// Échelle **E8M0** d'un bloc MXFP4, telle que `ggml_e8m0 … [1672 caractères tronqués]`
+
+  ```
+build fini
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"mod tests {\" -A 8 drave-core/src/gguf.rs | head -14", "description": "Look at the gguf test module header"}`
+
+  ```
+1551:pub(crate) mod tests {
+1552-    use super::*;
+1553-    use std::io::Write;
+1554-
+1555-    /// Fabrique un GGUF minimal : `general.architecture` plus des tenseurs F32
+1556-    /// dont la valeur de chaque poids est son indice global. Un GGUF de labo,
+1557-    /// écrit à la main, uniquement pour éprouver le lecteur.
+1558-    pub(crate) fn gguf_synth(tensors: &[(&str, Vec<u64>)], depart: usize, valeur0: f32) -> Vec<u8> {
+1559-        let mut b = Vec::new();
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/gguf.rs'; s=open(p).read()\ns = s.replace(\"\"\"pub(crate) mod tests {\n    use super::*;\n    use std::io::Write;\n\"\"\",\n\"\"\"pub(crate) mod tests {\n    use super::*;\n    use std::io::Write; … [5169 caractères tronqués]`
+
+  ```
+error[E0599]: no associated function or constant named `dequant_mxfp4` found for struct `gguf::Gguf` in the current scope
+    --> src/gguf.rs:1582:23
+     |
+ 287 | pub struct Gguf {
+     | --------------- associated function or constant `dequant_mxfp4` not found for this struct
+...
+--
+error: could not compile `drave-core` (bin "drave" test) due to 1 previous error; 20 warnings emitted
+
+For more information about this error, try `rustc --explain E0599`.
+warning: `drave-core` (bin "drave" test) generated 20 warnings
+error: could not compile `drave-core` (bin "drave" test) due to 1 previous error; 20 warnings emitted
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 16, in <module>
+AssertionError
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"GGML_MXFP4 => {\" -A 12 drave-core/src/gguf.rs | head -30", "description": "Read current MXFP4 arms"}`
+
+  ```
+1150:            GGML_MXFP4 => {
+1151-                // 17 octets par bloc de 32 : exposant E8M0 puis nibbles E2M1.
+1152-                const KV: [f32; 16] = [0.0, 0.5, 1.0, 1.5, 2.0, 3.0, 4.0, 6.0,
+1153-                                       0.0, -0.5, -1.0, -1.5, -2.0, -3.0, -4.0, -6.0];
+1154-                let nb = n_cols / 32;
+1155-                for b in 0..nb {
+1156-                    let p = (row * nb + b) * 17;
+1157-                    // Échelle E8M0. Deux écritures équivalentes existent, et
+1158-                    // les MÉLANGER donne des poids deux fois trop petits : c'est
+1159-                    // exactement ce que la comparaison à libggml a montré
+1160-                    // (rapport 2 sur les 256 poids du bloc). ggml associe la
+1161-                    // grille E2M1 **doublée** (entiers 0..12) à `2^(e−128)` ;
+1162-                    // notre table est la vraie grille (la moitié de ces
+--
+1460:            GGML_MXFP4 => {
+1461-                // 17 octets par bloc de 32 : exposant E8M0 puis nibbles E2M1.
+1462-                const KV: [f32; 16] = [0.0, 0.5, 1.0, 1.5, 2.0, 3.0, 4.0, 6.0,
+1463-                                       0.0, -0.5, -1.0, -1.5, -2.0, 
+… [630 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport re\np='drave-core/src/gguf.rs'; s=open(p).read()\n# Remplace les deux corps MXFP4 par un appel au déquantificateur, en gardant un\n# commentaire court.\ndef corps(nom_n, expr_p):\n    return f\"\"\"           … [1517 caractères tronqués]`
+
+  ```
+1150:            GGML_MXFP4 => {
+1151-                // 17 octets par bloc de 32 : exposant E8M0 puis nibbles E2M1.
+1152-                let nb = n_cols / 32;
+1153-                for b in 0..nb {
+1154-                    out.extend_from_slice(&Self::dequant_mxfp4(&buf[(row * nb + b) * 17..]));
+1155-                }
+1156-            }
+1157-            }
+--
+1445:            GGML_MXFP4 => {
+1446-                // 17 octets par bloc de 32 : exposant E8M0 puis nibbles E2M1.
+1447-                let nb = n / 32;
+1448-                for b in 0..nb {
+1449-                    out.extend_from_slice(&Self::dequant_mxfp4(&buf[b * 17..]));
+1450-                }
+1451-            }
+1452-            }
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/gguf.rs'; s=open(p).read()\ns = s.replace(\"\"\"                    out.extend_from_slice(&Self::dequant_mxfp4(&buf[(row * nb + b) * 17..]));\n                }\n            }\n            }\n\"\"\ … [1656 caractères tronqués]`
+
+  ```
+error: test failed, to rerun pass `--bin drave`
+
+test result: FAILED. 40 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.10s
+
+error: test failed, to rerun pass `--bin drave`
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && cargo test --release 2>&1 | grep -B 3 -A 12 \"panicked\" | head -25", "description": "See the failing test detail"}`
+
+  ```
+---- gguf::tests::mxfp4_bloc_dun_facteur_deux stdout ----
+
+thread 'gguf::tests::mxfp4_bloc_dun_facteur_deux' (3452676) panicked at src/gguf.rs:1571:13:
+assertion `left == right` failed: poids 16
+  left: -6.0
+ right: 0.0
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    gguf::tests::mxfp4_bloc_dun_facteur_deux
+
+test result: FAILED. 40 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.11s
+
+error: test failed, to rerun pass `--bin drave`
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/gguf.rs'; s=open(p).read()\ns = s.replace(\"\"\"        let v = Gguf::dequant_mxfp4(&bloc);\n        // Grille E2M1, moitié basse (0..7) puis haute inversée (15−j).\n        let haut = [0.0f32, -0. … [1071 caractères tronqués]`
+
+  ```
+test result: ok. 41 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.10s
+
+  F32        OK       blk.0.attn_norm.weight
+  F16        OK       token_embd.weight
+  Q4_0       OK       token_embd.weight
+  Q5_0       OK       token_embd.weight
+  Q8_0       OK       output.weight
+  Q2_K       OK       token_embd.weight
+  Q4_K       OK       token_embd.weight
+  Q5_K       OK       blk.0.ffn_down.weight
+  Q6_K       OK       blk.0.ffn_down.weight
+  IQ2_XXS    OK       blk.0.ffn_gate_exps.weight
+  IQ1_M      OK       blk.0.ffn_gate_exps.weight
+  BF16       OK       blk.0.ffn_gate_inp.weight
+  MXFP4      OK       blk.0.ffn_down_exps.weight
+formats : 13 concorde(s), 0 divergence(s), 0 absent(s)
+  ```
+
+- **bash** `{"command": "date \"+%H:%M %Z (HAE %H:%M)\"; TZ=America/New_York date \"+HAE %H:%M\"; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && (timeout 3000 ./drave-core/target/release/drave /home/stephane/Data13TB/stephane/modeles/gguf/gpt-oss-120b-MXFP4.gguf --ppl /tmp/ids_oss3.txt --ctx 256 --thread … [250 caractères tronqués]`
+
+  ```
+started background job bash-96
+  ```
+
+- **bash** `{"command": "TZ=America/New_York date \"+HAE %H:%M\"; ls -la /tmp/ids_oss3.txt /tmp/porte_oss3.log 2>/dev/null | head -3; grep -c . /tmp/porte_oss3.log 2>/dev/null", "description": "Check HAE clock and oss gate inputs"}`
+
+  ```
+HAE 23:21
+-rw-r--r--. 1 stephane stephane 110  1 oct 23:04 /tmp/porte_oss3.log
+2
+  ```
+
+### 👤 Utilisateur
+
+background job bash-96 (bash: date "+%H:%M %Z (HAE %H:%M)"; TZ=America/New_York date "+HAE %H:%M"; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && (timeout 3000 ./drave-core/target/release/drave /home/stephane/Data13TB/stephane/modeles/gguf/gpt-oss-120b-MXFP4.gguf --ppl /tmp/ids_oss3.txt --ctx 256 --threads 16 --limit 512 --dense > /tmp/porte_oss4.log 2>&1; echo "fin $?" >> /tmp/porte_oss4.log) &
+sleep 2; ls -la /tmp/ids_oss3.txt 2>/dev/null || echo "ids_oss3 absent") finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "cat /tmp/porte_oss4.log 2>/dev/null | head -5; echo \"---\"; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '55,75p' tools/portes.sh", "description": "Check oss gate log and script command"}`
+
+  ```
+thread 'main' (3453376) panicked at src/main.rs:4185:52:
+fichier d'identifiants illisible: Os { code: 2, kind: NotFound, message: "No such file or directory" }
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+timeout: the monitored command dumped core
+---
+att=$(nproc); att=$((att / 2))
+[ "${v:-0}" -gt 0 ] && [ "${v:-0}" -le "$att" ] \
+    && printf "  %-42s %s  ✅\n" "threads par défaut (physiques)" "$v" \
+    || { printf "  %-42s %s  ❌\n" "threads par défaut" "${v:-—}"; ECHEC=1; }
+
+# 5. gpt-oss : le seul long.
+if [ "$RAPIDE" != "rapide" ]; then
+    echo "  (gpt-oss : ~20 min, ignoré si non demandé)"
+fi
+
+echo ""
+[ "$ECHEC" = 0 ] && echo "toutes les portes sont vertes" || echo "AU MOINS UNE PORTE A DIVERGÉ"
+exit $ECHEC
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"gpt-oss\\|oss\" tools/portes.sh | head -10; ls /tmp/ids_*.txt 2>/dev/null", "description": "Find the gpt-oss gate command and its ids file"}`
+
+  ```
+9:#   tools/portes.sh rapide     sans gpt-oss (le seul qui prenne ~20 min)
+60:# 5. gpt-oss : le seul long.
+62:    echo "  (gpt-oss : ~20 min, ignoré si non demandé)"
+/tmp/ids_30b_wiki.txt
+/tmp/ids_colab_liste.txt
+/tmp/ids_colab.txt
+/tmp/ids_llama.txt
+/tmp/ids_oss_2048.txt
+/tmp/ids_oss_240.txt
+/tmp/ids_oss_4096.txt
+/tmp/ids_oss_512.txt
+/tmp/ids_oss_64.txt
+/tmp/ids_oss_debut.txt
+/tmp/ids_oss_long.txt
+/tmp/ids_oss_mid.txt
+/tmp/ids_oss_prefixe.txt
+/tmp/ids_oss.txt
+/tmp/ids_oss_v2.txt
+/tmp/ids_qwen3.txt
+/tmp/ids_qwen_512.txt
+/tmp/ids_qwen_long.txt
+/tmp/ids_qwen.txt
+/tmp/ids_qwen_v2.txt
+/tmp/ids_refontee.txt
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rn \"15,1757\\|15.1757\" --include=*.md --include=*.sh . | head -8", "description": "Find the published gpt-oss gate command"}`
+
+  ```
+./reports/rapport-coherence-docs.md:116:| 55 | `README.md:344` | gpt-oss-120b : perplexité « **—** » | 15,1757 (REPRISE §2) et 20,8361 à 63 jetons : le chiffre existe | MANQUANT |
+./reports/rapport-session-2026-09-30.md:92:Qwen ctx 256 = **19,3885** · gpt-oss ctx 256 = **15,1757** · gpt-oss avec
+./reports/rapport-coherence-docs-2.md:113:| 49 | `README.md:345` | ligne gpt-oss : `\| … \| MXFP4 \| **blocs lus** \| **15,1757 (ctx 256)** \| 60 Go \|` | la ligne est **décalée d'une colonne** : « blocs lus » occupe la colonne perplexité et 15,1757 la colonne débit ; la référence est 15,1757 (`REPRISE.md:70`) | CONTRADICTOIRE |
+./reports/rapport-coherence-docs-2.md:187:    (« blocs lus » en perplexité, 15,1757 en débit) ; remettre perplexité =
+./reports/rapport-coherence-docs-2.md:188:    15,1757 (ctx 256), débit = « blocs lus » ou la valeur réelle, mémoire = 60 Go.
+./reports/rapport-gpu-topk-selection.md:234:| référence CPU (sans miroir VRAM) | 15,1757 |
+./reports/rapport-gpu-topk-selection.md:295:dense (15,1667), l'écart de 6,6e-5 avec le CPU (15,1757) étant celui, connu et
+./reports/rapport-gpu-topk-selection.md:345:| 6 | portes de non-régression : 19,3885 et 15,1757 | ✅ inchangées, mes
+… [56 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rn \"gpt-oss\" REPRISE.md | grep -i \"ppl\\|ctx 256\" | head -5; grep -rn \"ids_oss\" REPRISE.md reports/rapport-session-2026-09-30.md 2>/dev/null | head -5", "description": "Find the exact gpt-oss gate invocation"}`
+
+  ```
+35:> **19,3885** et gpt-oss ctx 256 = **15,1757**, `cargo test` **17/17**. La porte
+71:| gpt-oss-120b MXFP4 | `--ppl-texte`, `--limit 512` (mêmes jetons) | **15,0757** (509 jetons) |
+159:| 4 | préremplissage par lots | **fait, −20 % et attribué** | tuilage, **attention groupée dans le lot** et **tête en lot** (`logits_lot`) : Qwen ctx 512, **17,1 s → 13,6 s (−20 %)** à perplexité égale (13,1368 → 13,1359) ; gpt-oss ctx 256, ≈ 50 s → **34,4 s** (13,7205 partout). Postes : projections ÷2,6, FFN/wo ÷1,43, attention par lots encore **×1,7** (5,59 contre 3,24 ms/jeton), tête inchangée (5,47 contre 5,63 — noyau lié au calcul, pas à la mémoire). Au passage : pointeur gras sur les sommes par bloc (lot > 90 → blocage muet) corrigé et verrouillé par un test — voir `reports/rapport-prefill-par-lots.md` |
+176:| préremplissage par lots (gpt-oss, ctx 256, MoE groupé) | ≈ 50 s à lot 1 · **34,4 s** à lot 256 (13,7205 dans tous les cas) |
+467:19,3885** · **gpt-oss-120b MXFP4 ctx 256 = 15,1757** · `cargo test --release` =
+REPRISE.md:54:    --tokenize --fichier /tmp/wt2_txt.txt --sortie /tmp/ids_oss.txt
+REPRISE.md:69:| gpt-oss-120b MXFP4 | `--dense --limit 64`, ids_oss | **20,8361** (63 jetons) |
+REP
+… [336 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 3000 ./drave-core/target/release/drave /home/stephane/Data13TB/stephane/modeles/gguf/gpt-oss-120b-MXFP4.gguf --ppl /tmp/ids_oss_512.txt --ctx 256 --dense --threads 16 --limit 512 2>&1 | tail -3", "description": "Run gpt-oss g … [46 caractères tronqués]`
+
+  ```
+started background job bash-97
+  ```
+
+### 🤖 Assistant
+
+⏵ Implémentation de Q3_K (33,5 % de Qwen3-235B), vérifiée contre libggml
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/llama.cpp && sed -n '/void dequantize_row_q3_K/,/^}/p' ggml/src/ggml-quants.c | head -50; grep -n \"block_q3_K;\" -B 8 ggml/src/ggml-common.h | grep -E \"uint8_t|ggml_half|}\"", "description": "Read ggml Q3_K reference"}`
+
+  ```
+void dequantize_row_q3_K(const block_q3_K * GGML_RESTRICT x, float * GGML_RESTRICT y, int64_t k) {
+    assert(k % QK_K == 0);
+    const int nb = k / QK_K;
+
+    const uint32_t kmask1 = 0x03030303;
+    const uint32_t kmask2 = 0x0f0f0f0f;
+
+    uint32_t aux[4];
+    const int8_t * scales = (const int8_t*)aux;
+
+    for (int i = 0; i < nb; i++) {
+
+        const float d_all = GGML_FP16_TO_FP32(x[i].d);
+
+        const uint8_t * GGML_RESTRICT q = x[i].qs;
+        const uint8_t * GGML_RESTRICT hm = x[i].hmask;
+        uint8_t m = 1;
+
+        memcpy(aux, x[i].scales, 12);
+        uint32_t tmp = aux[2];
+        aux[2] = ((aux[0] >> 4) & kmask2) | (((tmp >> 4) & kmask1) << 4);
+        aux[3] = ((aux[1] >> 4) & kmask2) | (((tmp >> 6) & kmask1) << 4);
+        aux[0] = (aux[0] & kmask2) | (((tmp >> 0) & kmask1) << 4);
+        aux[1] = (aux[1] & kmask2) | (((tmp >> 2) & kmask1) << 4);
+
+        int is = 0;
+        float dl;
+        for (int n = 0; n < QK_K; n += 128) {
+            int shift = 0;
+            for (int j = 0; j < 4; ++j) {
+
+                dl = d_all * (scales[is++] - 32);
+                for (int l = 0; l < 16; ++l) {
+                    *y++ = dl * ((int8_t)((q[l+ 0] >> shift) & 3) - 
+… [603 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/gguf.rs'; s=open(p).read()\ns = s.replace(\"\"\"pub const GGML_Q4_K: u32 = 12;\"\"\",\n\"\"\"pub const GGML_Q3_K: u32 = 11;\npub const GGML_Q4_K: u32 = 12;\"\"\")\ns = s.replace(\"\"\"    /// Déqua … [3694 caractères tronqués]`
+
+  ```
+[stderr]
+<stdin>:73: SyntaxWarning: 'int' object is not callable; perhaps you missed a comma?
+Traceback (most recent call last):
+  File "<stdin>", line 73, in <module>
+TypeError: 'int' object is not callable
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/gguf.rs'; s=open(p).read()\ns = s.replace(\"\"\"pub const GGML_Q4_K: u32 = 12;\"\"\",\n\"\"\"pub const GGML_Q3_K: u32 = 11;\npub const GGML_Q4_K: u32 = 12;\"\"\")\ns = s.replace(\"\"\"    /// Déqua … [4918 caractères tronqués]`
+
+  ```
+ok 2
+  Q3_K       OK       blk.0.attn_output.weight
+formats : 1 concorde(s), 0 divergence(s), 0 absent(s)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/llama.cpp && sed -n '/void dequantize_row_iq3_xxs/,/^}/p' ggml/src/ggml-quants.c; grep -n \"block_iq3_xxs;\" -B 6 ggml/src/ggml-common.h | grep -E \"uint8_t|ggml_half|\\}\"", "description": "Read ggml IQ3_XXS reference"}`
+
+  ```
+void dequantize_row_iq3_xxs(const block_iq3_xxs * GGML_RESTRICT x, float * GGML_RESTRICT y, int64_t k) {
+    assert(k % QK_K == 0);
+    const int64_t nb = k / QK_K;
+
+    uint32_t aux32;
+
+    for (int i = 0; i < nb; i++) {
+
+        const float d = GGML_FP16_TO_FP32(x[i].d);
+        const uint8_t * qs = x[i].qs;
+        const uint8_t * scales_and_signs = qs + QK_K/4;
+
+        for (int ib32 = 0; ib32 < QK_K/32; ++ib32) {
+            memcpy(&aux32, scales_and_signs + 4*ib32, sizeof(uint32_t));
+            const float db = d * (0.5f + (aux32 >> 28)) * 0.5f;
+            for (int l = 0; l < 4; ++l) {
+                const uint8_t  signs = ksigns_iq2xs[(aux32 >> 7*l) & 127];
+                const uint8_t * grid1 = (const uint8_t *)(iq3xxs_grid + qs[2*l+0]);
+                const uint8_t * grid2 = (const uint8_t *)(iq3xxs_grid + qs[2*l+1]);
+                for (int j = 0; j < 4; ++j) {
+                    y[j+0] = db * grid1[j] * (signs & kmask_iq2xs[j+0] ? -1.f : 1.f);
+                    y[j+4] = db * grid2[j] * (signs & kmask_iq2xs[j+4] ? -1.f : 1.f);
+                }
+                y += 8;
+            }
+            qs += 8;
+        }
+    }
+}
+492-    ggml_half d;
+493-    uint8_t qs[3*Q
+… [28 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"extraire\\|Table extraite\\|extrait\\|IQ3\\|iq3\" drave-core/src/formats.rs | head -20; echo \"=== ksigs ===\"; grep -n \"KSIGNS_IQ2XS\" -A 3 drave-core/src/formats.rs | head -12", "description": "Inspect formats.rs table p … [20 caractères tronqués]`
+
+  ```
+6://! la table doit être **extraite**, pas recopiée : une seule valeur fausse
+10://! imprime (`tools/extraire_tables_ggml.sh`). La vérification se fait contre
+16:// Tables extraites de ggml-common.h par programme, jamais recopiees a
+324:// Grille IQ1_S : 2048 codes de 8 niveaux signes (extraits de ggml-common.h).
+2445:        // l'être : une grille mal extraite donnerait des zéros.
+=== ksigs ===
+278:pub static KSIGNS_IQ2XS: [u8; 128] = [
+279-    0,129,130,3,132,5,6,135,136,9,10,139,12,141,142,15,
+280-    144,17,18,147,20,149,150,23,24,153,154,27,156,29,30,159,
+281-    160,33,34,163,36,165,166,39,40,169,170,43,172,45,46,175,
+--
+313:            let signes = KSIGNS_IQ2XS[((haut >> (7 * l)) & 127) as usize];
+314-            for j in 0..8usize {
+315-                // `kmask_iq2xs[j]` vaut `1 << j` : le bit de signe du niveau j.
+316-                let s = if signes & (1u8 << j) != 0 { -1.0 } else { 1.0 };
+--
+2450:        assert_eq!(KSIGNS_IQ2XS.len(), 128);
+2451-    }
+  ```
+
+- **bash** `{"command": "head -30 /tmp/extraire_tables.c 2>/dev/null; echo \"=== iq1 ===\"; head -20 /tmp/extraire_iq1.c 2>/dev/null", "description": "Read the previous table extraction program"}`
+
+  ```
+// Imprime les tables d'IQ2_XXS au format Rust, pour les embarquer sans les
+// recopier à la main (une seule erreur de copie ruinerait 93 Go de poids).
+#include <stdio.h>
+#include <stdint.h>
+#include "ggml.h"
+#include "ggml-common.h"
+int main(void) {
+    printf("pub static IQ2XXS_GRID: [[u8; 8]; 256] = [\n");
+    for (int i = 0; i < 256; i++) {
+        printf("    [");
+        for (int j = 0; j < 8; j++) printf("%u,", iq2xxs_grid[i].u8[j]);
+        printf("],\n");
+    }
+    printf("];\n\n");
+    printf("pub static KSIGNS_IQ2XS: [u8; 128] = [\n    ");
+    for (int i = 0; i < 128; i++) {
+        printf("%u,", ksigns_iq2xs[i]);
+        if (i % 16 == 15) printf("\n    ");
+    }
+    printf("\n];\n");
+    return 0;
+}
+=== iq1 ===
+#define GGML_COMMON_IMPL_C
+#include <stdio.h>
+#include <stdint.h>
+#include "ggml.h"
+#include "ggml-common.h"
+int main(void) {
+    printf("// Grille IQ1_S : 2048 codes de 8 niveaux signes (extraits de ggml-common.h).\n");
+    printf("pub static IQ1S_GRID: [[i8; 8]; 2048] = [\n");
+    for (int i = 0; i < NGRID_IQ1S; i++) {
+        uint64_t v = iq1s_grid[i];
+        printf("    [");
+        for (int j = 0; j < 8; j++) printf("%d,", (int)(int8_t)((v >> (8*j)) & 0xFF)
+… [68 caractères tronqués]
+  ```
+
+- **write** `{"content": "// Imprime les tables de ggml au format Rust — celles que le moteur embarque\n// pour déquantifier IQ2_XXS, IQ1_M, IQ1_S et IQ3_XXS.\n//\n// Une seule valeur recopiée à la main qui se trompe ruine des dizaines de Go de\n// poids, et l'erreur est SILENCIEUSE si la table reste plausible ( … [1605 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/extraire_tables_ggml.c</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **write** `{"content": "#!/usr/bin/env bash\n# Extrait les tables de ggml (grilles IQ) au format Rust, ou VÉRIFIE que celles\n# embarquées dans drave-core/src/formats.rs sont bien celles de ggml.\n#\n#   tools/extraire_tables_ggml.sh            imprime le code Rust des tables\n#   tools/extraire_tables_ggml.sh … [2029 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/extraire_tables_ggml.sh</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && chmod +x tools/extraire_tables_ggml.sh && bash tools/extraire_tables_ggml.sh > /tmp/tables.rs 2>/tmp/tables.err; echo \"code $?\"; head -3 /tmp/tables.rs; grep -c . /tmp/tables.rs; grep -n \"IQ3XXS_GRID\" /tmp/tables.rs | head -2; ta … [72 caractères tronqués]`
+
+  ```
+code 1
+0
+tools/extraire_tables_ggml.c:43:65: error: request for member ‘u8’ in something not a structure or union
+   43 |         for (int j = 0; j < 4; j++) printf("%u,", iq3xxs_grid[i].u8[j]);
+      |                                                                 ^
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/llama.cpp && grep -n \"iq3xxs_grid\" ggml/src/ggml-common.h | head -3; sed -n \"$(grep -n 'GGML_TABLE_BEGIN(uint32_t, iq3xxs_grid' ggml/src/ggml-common.h | cut -d: -f1),+2p\" ggml/src/ggml-common.h", "description": "Check iq3xxs_grid type"}`
+
+  ```
+1101:GGML_TABLE_BEGIN(uint32_t, iq3xxs_grid, 256)
+GGML_TABLE_BEGIN(uint32_t, iq3xxs_grid, 256)
+    0x04040404, 0x04040414, 0x04040424, 0x04040c0c, 0x04040c1c, 0x04040c3e, 0x04041404, 0x04041414,
+    0x04041c0c, 0x04042414, 0x04043e1c, 0x04043e2c, 0x040c040c, 0x040c041c, 0x040c0c04, 0x040c0c14,
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='tools/extraire_tables_ggml.c'; s=open(p).read()\ns = s.replace(\"\"\"        for (int j = 0; j < 4; j++) printf(\"%u,\", iq3xxs_grid[i].u8[j]);\"\"\",\n\"\"\"        // `iq3xxs_grid` est un tableau d'uint32_t lu  … [579 caractères tronqués]`
+
+  ```
+code 1
+   19 |         for (int j = 0; j < 8; j++) printf("%u,", iq2xxs_grid[i].u8[j]);
+      |                                                                 ^
+verif code 1
+[stderr]
+tools/extraire_tables_ggml.c: In function ‘main’:
+tools/extraire_tables_ggml.c:19:65: error: request for member ‘u8’ in something not a structure or union
+   19 |         for (int j = 0; j < 8; j++) printf("%u,", iq2xxs_grid[i].u8[j]);
+      |                                                                 ^
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/llama.cpp && grep -n \"GGML_TABLE_BEGIN.*iq2xxs_grid\\|GGML_TABLE_BEGIN.*iq1s_grid\\|GGML_TABLE_BEGIN.*ksigns_iq2xs\" ggml/src/ggml-common.h; git log --oneline -1 2>/dev/null", "description": "Check grid table declarations"}`
+
+  ```
+597:GGML_TABLE_BEGIN(uint8_t, ksigns_iq2xs, 128)
+644:GGML_TABLE_BEGIN(uint64_t, iq2xxs_grid, 256)
+1219:GGML_TABLE_BEGIN(uint64_t, iq1s_grid, NGRID_IQ1S)
+1734:GGML_TABLE_BEGIN(uint32_t, iq1s_grid_gpu, NGRID_IQ1S)
+a8f2635f8 docs: record which models this box is good at, and why
+  ```
+
+### 👤 Utilisateur
+
+background job bash-97 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 3000 ./drave-core/target/release/drave /home/stephane/Data13TB/stephane/modeles/gguf/gpt-oss-120b-MXFP4.gguf --ppl /tmp/ids_oss_512.txt --ctx 256 --dense --threads 16 --limit 512 2>&1 | tail -3) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **job_output** `{"job_id": "bash-97"}`
+
+  ```
+postes (ms/token) : projets-attn 31.28 | rope 2.92 | attention 10.67 | proj+mlp 153.18 | somme 198.05 | reste (tête + échantillonnage) 18.18
+    dont tête de sortie 16.23 | notation log-sum-exp 1.81 (le reste du « reste » n'est pas chronométré)
+    dont attention : scores 1.95 | softmax 0.96 | somme pondérée + écriture KV 7.76
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && nohup timeout 3000 ./drave-core/target/release/drave /home/stephane/Data13TB/stephane/modeles/gguf/gpt-oss-120b-MXFP4.gguf --ppl /tmp/ids_oss_512.txt --ctx 256 --dense --threads 16 --limit 512 > /tmp/porte_oss5.log 2>&1 &\necho \"lan … [98 caractères tronqués]`
+
+  ```
+started background job bash-98
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='tools/extraire_tables_ggml.c'; s=open(p).read()\ns = s.replace(\"\"\"        for (int j = 0; j < 8; j++) printf(\"%u,\", iq2xxs_grid[i].u8[j]);\"\"\",\n\"\"\"        // Grille lue OCTET PAR OCTET par le noyau IQ2 … [431 caractères tronqués]`
+
+  ```
+code 0
+2324:pub static IQ3XXS_GRID: [[u8; 4]; 256] = [
+2325-    [4,4,4,4,],
+2326-    [20,4,4,4,],
+2327-    [36,4,4,4,],
+  ```
+
+### 👤 Utilisateur
+
+background job bash-98 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && nohup timeout 3000 ./drave-core/target/release/drave /home/stephane/Data13TB/stephane/modeles/gguf/gpt-oss-120b-MXFP4.gguf --ppl /tmp/ids_oss_512.txt --ctx 256 --dense --threads 16 --limit 512 > /tmp/porte_oss5.log 2>&1 &
+echo "lance $!") finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && bash tools/extraire_tables_ggml.sh verifier; echo \"code $?\"", "description": "Verify embedded tables against ggml"}`
+
+  ```
+IQ2XXS_GRID    identique (2048 valeurs)
+  KSIGNS_IQ2XS   identique (128 valeurs)
+  IQ1S_GRID      identique (16384 valeurs)
+  IQ3XXS_GRID    MANQUANTE dans drave-core/src/formats.rs
+code 1
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '290,340p' drave-core/src/formats.rs; echo \"=== fin IQ1S_GRID ===\"; grep -n \"^];\" drave-core/src/formats.rs | head -6", "description": "Read formats.rs style and table boundaries"}`
+
+  ```
+/// Déquantifie un bloc **IQ2_XXS** (66 octets, 256 poids).
+///
+/// Structure : 2 octets d'échelle `d`, puis 32 `u16`. Les 8 octets d'un
+/// sous-bloc de 32 poids portent quatre index de grille (un par `u8`) et quatre
+/// paquets de signes de 7 bits, plus 4 bits d'échelle dans le mot de poids fort.
+///
+/// `x = d · (0,5 + échelle) · 0,25 · grille · signe`
+pub fn dequant_iq2xxs(bloc: &[u8]) -> Vec<f32> {
+    assert!(bloc.len() >= 66, "bloc IQ2_XXS trop court : {}", bloc.len());
+    let d = crate::gguf::Gguf::f16_to_f32(u16::from_le_bytes([bloc[0], bloc[1]]));
+    let mut out = vec![0f32; 256];
+    for ib32 in 0..8usize {
+        // ATTENTION : dans ggml, `qs` est un `uint16_t[32]`, donc `qs + 4*ib32`
+        // avance de 4 × 2 = 8 OCTETS. Écrire `2 + 4*ib32` octets laissait le
+        // premier sous-bloc juste et tous les suivants faux — c'est la
+        // comparaison avec ggml qui l'a montré, pas la lecture.
+        let aux = &bloc[2 + 8 * ib32..2 + 8 * ib32 + 8];
+        let bas = u32::from_le_bytes([aux[0], aux[1], aux[2], aux[3]]);
+        let haut = u32::from_le_bytes([aux[4], aux[5], aux[6], aux[7]]);
+        let db = d * (0.5 + ((haut >> 28) as f32)) * 0.25;
+        let ind
+… [1098 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\ngenere = open('/tmp/tables.rs').read()\ni = genere.index(\"pub static IQ3XXS_GRID\")\nbloc = genere[i:].rstrip() + \"\\n\"\np='drave-core/src/formats.rs'; s=open(p).read()\n# La table va juste après IQ1S_GRID (fin l … [4879 caractères tronqués]`
+
+  ```
+BUILD_OK
+  IQ2XXS_GRID    identique (2048 valeurs)
+  KSIGNS_IQ2XS   identique (128 valeurs)
+  IQ1S_GRID      identique (16384 valeurs)
+  IQ3XXS_GRID    identique (1024 valeurs)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && L=/home/stephane/Data13TB/stephane/GitHub/llama.cpp && gcc -O2 -I$L/ggml/include -I$L/ggml/src tools/ref_ggml_bloc.c -o /tmp/ref_ggml_bloc -L$L/build/bin -lggml -lggml-base -Wl,-rpath,$L/build/bin 2>&1|head -3; python3 - <<'PY'\nimpo … [588 caractères tronqués]`
+
+  ```
+Kimi-K2.7-Code-UD-IQ1_M | Kimi-K2.7-Code-UD-IQ1_M-00002-of-00008.gguf | blk.1.ffn_down_exps.weight [384, 7168, 2048]
+Kimi-K2.7-Code-UD-IQ1_M | Kimi-K2.7-Code-UD-IQ1_M-00003-of-00008.gguf | blk.10.ffn_down_exps.weight [384, 7168, 2048]
+Kimi-K2.7-Code-UD-IQ1_M | Kimi-K2.7-Code-UD-IQ1_M-00004-of-00008.gguf | blk.20.ffn_down_exps.weight [384, 7168, 2048]
+Kimi-K2.7-Code-UD-IQ1_M | Kimi-K2.7-Code-UD-IQ1_M-00005-of-00008.gguf | blk.30.ffn_down_exps.weight [384, 7168, 2048]
+Kimi-K2.7-Code-UD-IQ1_M | Kimi-K2.7-Code-UD-IQ1_M-00006-of-00008.gguf | blk.40.ffn_down_exps.weight [384, 7168, 2048]
+Kimi-K2.7-Code-UD-IQ1_M | Kimi-K2.7-Code-UD-IQ1_M-00007-of-00008.gguf | blk.50.ffn_down_exps.weight [384, 7168, 2048]
+GLM-5.3-UD-IQ1_S | GLM-5.3-UD-IQ1_S-00002-of-00006.gguf | blk.3.ffn_down_exps.weight [256, 6144, 2048]
+GLM-5.3-UD-IQ1_S | GLM-5.3-UD-IQ1_S-00003-of-00006.gguf | blk.20.ffn_down_exps.weight [256, 6144, 2048]
+GLM-5.3-UD-IQ1_S | GLM-5.3-UD-IQ1_S-00004-of-00006.gguf | blk.39.ffn_down_exps.weight [256, 6144, 2048]
+GLM-5.3-UD-IQ1_S | GLM-5.3-UD-IQ1_S-00005-of-00006.gguf | blk.56.ffn_down_exps.weight [256, 6144, 2048]
+GLM-5.3-UD-IQ1_S | GLM-5.3-UD-IQ1_S-00006-of-00006.gguf | blk.74.ffn_down_exps
+… [25 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/verifier_formats.py /home/stephane/Data13TB/stephane/modeles/gguf/Kimi-K2.7-Code-UD-IQ1_M/Kimi-K2.7-Code-UD-IQ1_M-00002-of-00008.gguf blk.1.ffn_down_exps.weight 0 2>&1 | tail -4; python3 tools/verifier_formats.py /home/ … [202 caractères tronqués]`
+
+  ```
+ggml  8 : ['-0.032935', '-0.046408', '-0.002994', '0.002994', '0.008982', '0.032935', '0.014970', '-0.002994']
+  nous  8 : ['-0.032935', '-0.046408', '-0.002994', '0.002994', '0.008982', '0.032935', '0.014970', '-0.002994']
+  256 valeurs · écart max 0.00e+00 (échelle 6.85e-02)
+CONCORDE
+  256 valeurs · écart max 0.00e+00 (échelle 4.40e-02)
+CONCORDE
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/llama.cpp && sed -n '/void dequantize_row_iq1_s(/,/^}/p' ggml/src/ggml-quants.c; grep -n \"block_iq1_s;\" -B 6 ggml/src/ggml-common.h | grep -E \"uint|ggml_half|\\}\"; grep -n \"IQ1S_DELTA\" ggml/src/ggml-common.h", "description": "Read ggml IQ … [15 caractères tronqués]`
+
+  ```
+void dequantize_row_iq1_s(const block_iq1_s * GGML_RESTRICT x, float * GGML_RESTRICT y, int64_t k) {
+    assert(k % QK_K == 0);
+    const int64_t nb = k / QK_K;
+
+    for (int i = 0; i < nb; i++) {
+
+        const float d = GGML_FP16_TO_FP32(x[i].d);
+        const uint8_t  * qs = x[i].qs;
+        const uint16_t * qh = x[i].qh;
+
+        for (int ib = 0; ib < QK_K/32; ++ib) {
+            const float dl = d * (2*((qh[ib] >> 12) & 7) + 1);
+            const float delta = qh[ib] & 0x8000 ? -IQ1S_DELTA : IQ1S_DELTA;
+            for (int l = 0; l < 4; ++l) {
+                const int8_t * grid = (const int8_t *)(iq1s_grid + (qs[l] | (((qh[ib] >> 3*l) & 7) << 8)));
+                for (int j = 0; j < 8; ++j) {
+                    y[j] = dl * (grid[j] + delta);
+                }
+                y += 8;
+            }
+            qs += 4;
+        }
+    }
+}
+510-    ggml_half d;
+511-    uint8_t  qs[QK_K/8];
+512-    uint16_t qh[QK_K/32];
+513:} block_iq1_s;
+1216:#define IQ1S_DELTA 0.125f
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/formats.rs'; s=open(p).read()\ns = s.replace(\"\"\"/// Déquantifie un bloc **IQ2_XXS** (66 octets, 256 poids).\"\"\",\n\"\"\"/// Déquantifie un bloc **IQ1_S** (50 octets, 256 poids).\n///\n/// Stru … [4396 caractères tronqués]`
+
+  ```
+306:        let delta = if qh & 0x8000 != 0 { -IQ1S_DELTA } else { IQ1S_DELTA };
+2703:/// `IQ1S_DELTA` de ggml : le décalage appliqué à chaque niveau de la grille.
+2704:const IQ1S_DELTA: f32 = 0.125;
+2743:            if h0 & 0x08 != 0 { -IQ1S_DELTA } else { IQ1S_DELTA },
+2744:            if h0 & 0x80 != 0 { -IQ1S_DELTA } else { IQ1S_DELTA },
+error[E0277]: cannot multiply `{integer}` by `f32`
+   --> src/formats.rs:305:25
+    |
+305 |         let dl = d * (2 * ((qh >> 12) & 7) as f32 + 1.0);
+    |                         ^ no implementation for `{integer} * f32`
+    |
+    = help: the trait `Mul<f32>` is not implemented for `{integer}`
+--
+error: could not compile `drave-core` (bin "drave") due to 1 previous error; 14 warnings emitted
+BUILD
+  ggml  8 : ['-0.001368', '-0.001368', '0.001368', '0.006842', '0.001368', '-0.001368', '-0.009579', '0.004105']
+  nous  8 : ['-0.001368', '-0.001368', '0.001368', '0.006842', '0.001368', '-0.001368', '-0.009579', '0.004105']
+  256 valeurs · écart max 0.00e+00 (échelle 4.41e-02)
+CONCORDE
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -i 's/let dl = d \\* (2 \\* ((qh >> 12) & 7) as f32 + 1.0);/let dl = d * (2.0 * ((qh >> 12) \\& 7) as f32 + 1.0);/' drave-core/src/formats.rs && sed -n '305p' drave-core/src/formats.rs && cd drave-core && cargo build --release 2> … [581 caractères tronqués]`
+
+  ```
+let dl = d * (2.0 * ((qh >> 12) & 7) as f32 + 1.0);
+BUILD
+GLM-5.3-UD-IQ1_S-00002-of-00006.gguf | blk.3.ffn_gate_exps.weight [256, 2048, 6144]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && G=/home/stephane/Data13TB/stephane/modeles/gguf/GLM-5.3-UD-IQ1_S/GLM-5.3-UD-IQ1_S-00002-of-00006.gguf && for i in 0 7; do python3 tools/verifier_formats.py $G blk.3.ffn_gate_exps.weight $i 2>&1 | tail -2; done", "description": "Verif … [25 caractères tronqués]`
+
+  ```
+256 valeurs · écart max 0.00e+00 (échelle 4.59e-04)
+CONCORDE
+  256 valeurs · écart max 0.00e+00 (échelle 3.99e-04)
+CONCORDE
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/llama.cpp && sed -n '/void dequantize_row_iq4_xs(/,/^}/p' ggml/src/ggml-quants.c; grep -n \"block_iq4_xs;\" -B 8 ggml/src/ggml-common.h | grep -E \"uint|ggml_half|\\}\"; grep -n \"kvalues_iq4nl\\s*\\[16\\]\" -A 4 ggml/src/ggml-common.h | head - … [48 caractères tronqués]`
+
+  ```
+void dequantize_row_iq4_xs(const block_iq4_xs * GGML_RESTRICT x, float * GGML_RESTRICT y, int64_t k) {
+    assert(k % QK_K == 0);
+    const int64_t nb = k / QK_K;
+
+    for (int i = 0; i < nb; i++) {
+
+        const uint8_t * qs = x[i].qs;
+
+        const float d = GGML_FP16_TO_FP32(x[i].d);
+
+        for (int ib = 0; ib < QK_K/32; ++ib) {
+            const int ls = ((x[i].scales_l[ib/2] >> 4*(ib%2)) & 0xf) | (((x[i].scales_h >> 2*ib) & 3) << 4);
+            const float dl = d * (ls - 32);
+            for (int j = 0; j < 16; ++j) {
+                y[j+ 0] = dl * kvalues_iq4nl[qs[j] & 0xf];
+                y[j+16] = dl * kvalues_iq4nl[qs[j] >>  4];
+            }
+            y  += 32;
+            qs += 16;
+        }
+    }
+}
+535-} block_iq4_nl;
+536-static_assert(sizeof(block_iq4_nl) == sizeof(ggml_half) + QK4_NL/2, "wrong iq4_nl block size/padding");
+539-    ggml_half d;
+540-    uint16_t scales_h;
+541-    uint8_t  scales_l[QK_K/64];
+542-    uint8_t  qs[QK_K/2];
+543:} block_iq4_xs;
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/llama.cpp && sed -n \"$(grep -n 'GGML_TABLE_BEGIN(int8_t, kvalues_iq4nl' ggml/src/ggml-common.h | cut -d: -f1),+4p\" ggml/src/ggml-common.h", "description": "Read the iq4nl table"}`
+
+  ```
+GGML_TABLE_BEGIN(int8_t, kvalues_iq4nl, 16)
+    -127, -104, -83, -65, -49, -35, -22, -10, 1, 13, 25, 38, 53, 69, 89, 113,
+GGML_TABLE_END()
+
+// e2m1 values (doubled), shared by MXFP4 and NVFP4
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='tools/extraire_tables_ggml.c'; s=open(p).read()\ns = s.replace(\"\"\"    printf(\"pub static IQ3XXS_GRID: [[u8; 4]; 256] = [\\\\n\");\"\"\",\n\"\"\"    printf(\"pub static KVALS_IQ4NL: [i8; 16] = [\\\\n    \");\n … [4637 caractères tronqués]`
+
+  ```
+2324:pub static KVALS_IQ4NL: [i8; 16] = [
+2325-    -127,-104,-83,-65,-49,-35,-22,-10,1,13,25,38,53,69,89,113,
+2326-];
+2327-
+BUILD
+  IQ2XXS_GRID    identique (2048 valeurs)
+  KSIGNS_IQ2XS   identique (128 valeurs)
+  IQ1S_GRID      identique (16384 valeurs)
+  IQ3XXS_GRID    identique (1024 valeurs)
+  KVALS_IQ4NL    identique (16 valeurs)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport sys, os\nsys.path.insert(0,'tools')\nfrom analyse_experts_statique import Lecteur\nd='/home/stephane/Data13TB/stephane/modeles/gguf/GLM-5.3-Flash-UD-IQ1_S'\nfor f in sorted(x for x in os.listdir(d) if x.endsw … [276 caractères tronqués]`
+
+  ```
+GLM-5.3-Flash-UD-IQ1_S-00002-of-00003.gguf | blk.11.ffn_down_exps.weight [288, 4096, 2048]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && G=/home/stephane/Data13TB/stephane/modeles/gguf/GLM-5.3-Flash-UD-IQ1_S/GLM-5.3-Flash-UD-IQ1_S-00002-of-00003.gguf && for i in 0 5; do python3 tools/verifier_formats.py $G blk.11.ffn_down_exps.weight $i 2>&1 | tail -2; done", "descrip … [39 caractères tronqués]`
+
+  ```
+256 valeurs · écart max 0.00e+00 (échelle 5.43e-02)
+CONCORDE
+  256 valeurs · écart max 0.00e+00 (échelle 5.38e-02)
+CONCORDE
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='tools/portes_formats.sh'; s=open(p).read()\ns = s.replace(\"\"\"  \"IQ1_M      |\"\"\",\n\"\"\"  \"IQ3_XXS    | $MODELES/Kimi-K2.7-Code-UD-IQ1_M/Kimi-K2.7-Code-UD-IQ1_M-00002-of-00008.gguf | blk.1.ffn_down_exps.w … [486 caractères tronqués]`
+
+  ```
+syntaxe ok
+    postes (ms/token) : projets-attn 30.42 | rope 2.86 | attention 10.83 | proj+mlp 113.56 | somme 157.67 | reste (tête + échantillonnage) 17.73
+    dont tête de sortie 15.91 | notation log-sum-exp 1.75 (le reste du « reste » n'est pas chronométré)
+    dont attention : scores 2.13 | softmax 0.93 | somme pondérée + écriture KV 7.77
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -E \"=== perplexité\" /tmp/porte_oss5.log || echo \"(en cours)\"; ps aux | grep -c \"[d]rave.*gpt-oss\"", "description": "Extract the gpt-oss gate value"}`
+
+  ```
+=== perplexité 15.1757 sur 510 tokens (0 événements, 89.5 s) ===
+0
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && nohup bash tools/portes_formats.sh > /tmp/portes_formats2.log 2>&1 & sleep 1; ls -la /home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek-V4-Flash-UD-IQ1_M/ | awk '{print $5, $9}'", "description": "Launch battery; inspect V4-Flash  … [7 caractères tronqués]`
+
+  ```
+492 .
+1206 ..
+5256864 DeepSeek-V4-Flash-UD-IQ1_M-00001-of-00003.gguf
+49971881124 DeepSeek-V4-Flash-UD-IQ1_M-00002-of-00003.gguf
+107 DeepSeek-V4-Flash-UD-IQ1_M-00002-of-00003.gguf.etat.json
+7147714 DeepSeek-V4-Flash-UD-IQ1_M-00002-of-00003.gguf.part5
+36924175168 DeepSeek-V4-Flash-UD-IQ1_M-00003-of-00003.gguf
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && D=/home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek-V4-Flash-UD-IQ1_M/DeepSeek-V4-Flash-UD-IQ1_M-00001-of-00003.gguf && timeout 300 ./drave-core/target/release/drave $D --tensors 2>&1 | head -4; echo \"...\"; timeout 300 ./drave … [164 caractères tronqués]`
+
+  ```
+deepseek4 · 3 fichiers · 1328 tenseurs · 86.90 Go de poids · en-têtes lus en 53.100104ms
+  fichier 0 :     0 tenseurs · 0.00 Go
+  fichier 1 :   784 tenseurs · 49.97 Go
+  fichier 2 :   544 tenseurs · 36.92 Go
+...
+    662 F32
+    318 Q8_0
+    126 Q5_K
+     45 Q6_K
+     44 IQ1_M
+     43 BF16
+     42 IQ2_XXS
+     41 IQ3_XXS
+      3 I32
+      3 fichier
+      2 Q4_K
+      2 MXFP4
+      1 deepseek4
+      1 ·
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && D=/home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek-V4-Flash-UD-IQ1_M/DeepSeek-V4-Flash-UD-IQ1_M-00001-of-00003.gguf && ./drave-core/target/release/drave $D --tensors 2>/dev/null | grep -E \"^\\s+I32\" | head -5", "description": … [28 caractères tronqués]`
+
+  ```
+I32      blk.0.ffn_gate_tid2eid.weight          [129280, 6] · 0.8 M poids · fichier 1
+  I32      blk.1.ffn_gate_tid2eid.weight          [129280, 6] · 0.8 M poids · fichier 1
+  I32      blk.2.ffn_gate_tid2eid.weight          [129280, 6] · 0.8 M poids · fichier 1
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rn \"tid2eid\" drave-core/src/*.rs | head -10; echo \"=== I32 count ===\"; D=/home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek-V4-Flash-UD-IQ1_M/DeepSeek-V4-Flash-UD-IQ1_M-00001-of-00003.gguf; ./drave-core/target/release/d … [203 caractères tronqués]`
+
+  ```
+=== I32 count ===
+3
+blk.0.ffn_gate_tid2eid.weight
+blk.1.ffn_gate_tid2eid.weight
+blk.2.ffn_gate_tid2eid.weight
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/llama.cpp && grep -rn \"tid2eid\" src/ --include=*.cpp --include=*.h | head -20; echo \"=== dans convert/gguf-py ===\"; grep -rn \"tid2eid\" gguf-py/ 2>/dev/null | head -5", "description": "Find tid2eid handling in llama.cpp"}`
+
+  ```
+src/models/deepseek4.cpp:135:            layer.ffn_gate_tid2eid = create_tensor(tn(LLM_TENSOR_FFN_GATE_TID2EID, "weight", i), {n_expert_used, n_vocab}, 0);
+src/models/deepseek4.cpp:1197:            selected_experts = ggml_get_rows(ctx0, layer.ffn_gate_tid2eid, res->t_inp_tokens);
+src/llama-model.h:339:    struct ggml_tensor * ffn_gate_tid2eid = nullptr;
+src/llama-quant.cpp:311:    quantize &= name.find("ffn_gate_tid2eid.weight") == std::string::npos;
+src/llama-arch.cpp:617:    { LLM_TENSOR_FFN_GATE_TID2EID,                       "blk.%d.ffn_gate_tid2eid" },
+=== dans convert/gguf-py ===
+gguf-py/gguf/constants.py:1231:    MODEL_TENSOR.FFN_GATE_TID2EID:          "blk.{bid}.ffn_gate_tid2eid",
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/llama.cpp && sed -n '1180,1230p' src/models/deepseek4.cpp", "description": "Read llama.cpp hash-routing implementation"}`
+
+  ```
+model.layers[il].hc_ffn_fn,
+                model.layers[il].hc_ffn_scale,
+                model.layers[il].hc_ffn_base,
+                &post, &comb, il);
+        cb(cur, "hc_ffn_pre", il);
+
+        ggml_build_forward_expand(gf, residual);
+        ggml_build_forward_expand(gf, post);
+        ggml_build_forward_expand(gf, comb);
+
+        cur = build_norm(cur, model.layers[il].ffn_norm, nullptr, LLM_NORM_RMS, il);
+        cb(cur, "ffn_norm", il);
+
+        const auto & layer = model.layers[il];
+        ggml_tensor * selected_experts = nullptr;
+        ggml_tensor * exp_probs_b = layer.ffn_exp_probs_b;
+        if ((uint32_t) il < hparams.dsv4_hash_layer_count) {
+            selected_experts = ggml_get_rows(ctx0, layer.ffn_gate_tid2eid, res->t_inp_tokens);
+            exp_probs_b = nullptr;
+        }
+
+        ggml_tensor * moe_out = build_moe_ffn(cur,
+                layer.ffn_gate_inp,
+                layer.ffn_up_exps,
+                layer.ffn_gate_exps,
+                layer.ffn_down_exps,
+                exp_probs_b,
+                n_expert, hparams.n_expert_used,
+                LLM_FFN_SILU, hparams.expert_weights_norm,
+                hparams.expert_weights_scale,
+            
+… [741 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/llama.cpp && grep -n \"selected_experts\" src/llama-graph.cpp | head -20; echo \"=== hash_layer_count ===\"; grep -rn \"hash_layer_count\" src/*.cpp src/*.h | head -10", "description": "Read build_moe_ffn selected_experts path"}`
+
+  ```
+2153:         ggml_tensor * selected_experts_in) const {
+2174:        selected_experts_in
+2202:         ggml_tensor * selected_experts_in) const {
+2292:    ggml_tensor * selected_experts = selected_experts_in;
+2293:    if (selected_experts == nullptr) {
+2294:        selected_experts = ggml_argsort_top_k(ctx0, selection_probs, n_expert_used); // [n_expert_used, n_tokens]
+2295:        cb(selected_experts->src[0], "ffn_moe_argsort", il);
+2297:    cb(selected_experts, "ffn_moe_topk", il);
+2301:        ggml_tensor * f_sel = ggml_cast(ctx0, selected_experts, GGML_TYPE_F32);
+2302:        selected_experts = ggml_cast(ctx0, ggml_scale(ctx0, f_sel, 1.0f / float(hparams.n_group_experts)), GGML_TYPE_I32);
+2308:    ggml_tensor * weights = ggml_get_rows(ctx0, probs, selected_experts); // [1, n_expert_used, n_tokens]
+2356:        ggml_tensor * gate_up = build_lora_mm_id(gate_up_exps, cur, selected_experts, up_exps_s); // [n_ff*2, n_expert_used, n_tokens]
+2364:            gate_up = ggml_add_id(ctx0, gate_up, gate_up_exps_b, selected_experts);
+2375:        up = build_lora_mm_id(up_exps, cur, selected_experts, up_exps_s); // [n_ff, n_expert_used, n_tokens]
+2383:            up = ggml_add_id(ctx0, up,
+… [650 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && D=/home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek-V4-Flash-UD-IQ1_M/DeepSeek-V4-Flash-UD-IQ1_M-00001-of-00003.gguf && ./drave-core/target/release/drave $D --tensors 2>/dev/null | head -2; python3 - <<'PY'\nimport sys\nsys.path … [436 caractères tronqués]`
+
+  ```
+deepseek4 · 3 fichiers · 1328 tenseurs · 86.90 Go de poids · en-têtes lus en 53.172749ms
+  fichier 0 :     0 tenseurs · 0.00 Go
+deepseek4.attention.head_count = 64
+deepseek4.attention.head_count_kv = 1
+deepseek4.attention.indexer.head_count = 64
+deepseek4.block_count = 43
+deepseek4.expert_count = 256
+deepseek4.expert_feed_forward_length = 2048
+deepseek4.expert_gating_func = 4
+deepseek4.expert_shared_count = 1
+deepseek4.expert_used_count = 6
+deepseek4.expert_weights_norm = True
+deepseek4.expert_weights_scale = 1.5
+deepseek4.hash_layer_count = 3
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/llama.cpp && grep -n \"LLAMA_EXPERT_GATING_FUNC_TYPE\" -A 8 src/llama-hparams.h | head -14; sed -n '2285,2330p' src/llama-graph.cpp", "description": "Read gating func enum and moe weights code"}`
+
+  ```
+13:    LLAMA_EXPERT_GATING_FUNC_TYPE_NONE           = 0,
+14:    LLAMA_EXPERT_GATING_FUNC_TYPE_SOFTMAX        = 1,
+15:    LLAMA_EXPERT_GATING_FUNC_TYPE_SIGMOID        = 2,
+16:    LLAMA_EXPERT_GATING_FUNC_TYPE_SOFTMAX_WEIGHT = 3, // applied to the router weights instead of the logits
+17:    LLAMA_EXPERT_GATING_FUNC_TYPE_SQRT_SOFTPLUS  = 4,
+18-};
+19-
+20-enum llama_swa_type {
+21-    LLAMA_SWA_TYPE_NONE      = 0,
+22-    LLAMA_SWA_TYPE_STANDARD  = 1,
+23-    LLAMA_SWA_TYPE_CHUNKED   = 2,
+24-    LLAMA_SWA_TYPE_SYMMETRIC = 3,
+25-};
+--
+        selection_probs = ggml_get_rows(ctx0, selection_groups, expert_groups); // [n_exp_per_group, n_group_used, n_tokens]
+        selection_probs = ggml_set_rows(ctx0, ggml_fill(ctx0, selection_groups, -INFINITY), selection_probs, expert_groups); // [n_exp_per_group, n_expert_groups, n_tokens]
+        selection_probs = ggml_reshape_2d(ctx0, selection_probs, n_expert, n_tokens); // [n_expert, n_tokens]
+        cb(selection_probs, "ffn_moe_probs_masked", il);
+    }
+
+    // select experts
+    ggml_tensor * selected_experts = selected_experts_in;
+    if (selected_experts == nullptr) {
+        selected_experts = ggml_argsort_top_k(ctx0, selection_probs, n_expert
+… [1739 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rn \"softplus\\|sqrt_softplus\\|expert_weights_scale\\|expert_weights_norm\\|gating_func\" drave-core/src/*.rs | head -15", "description": "Find routing/gating implementation in the engine"}`
+
+  ```
+(no output)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rn \"routeur\\|route\\b\\|topk\" drave-core/src/model.rs | head -25", "description": "Find the MoE routing code"}`
+
+  ```
+49:    pub routeur_topk_softmax: bool,
+192:    let routeur = g.dequant(&p("ffn_gate_inp.weight"));
+193:    assert_eq!(routeur.len(), n_expert * gate[0].n_in, "routeur de taille inattendue");
+216:    let routeur_biais = if g.tensor(&p("ffn_gate_inp.bias")).is_some() {
+229:        routeur, routeur_biais,
+262:    /// Le routeur choisit ses `k` experts avant tout calcul : on connaît donc
+300:/// Mélange d'experts : un routeur (petit, en f32) et trois tenseurs empilés.
+303:    pub routeur: Vec<f32>,
+304:    /// Biais du routeur (gpt-oss en a un) : ajouté aux logits **avant** le
+306:    pub routeur_biais: Option<Vec<f32>>,
+326:    /// Nombre d'experts GLOBAUX : c'est lui qu'indexe le routeur, et lui seul.
+966:    /// vecteur ; `act_topk` ne garde que les k plus grandes. Les deux imitent
+971:    pub act_topk: usize,
+977:    /// 5 = up, 6 = down. La valeur 0 signifie « utiliser act_topk ».
+978:    pub act_topk_proj: [usize; 7],
+983:    pub attn_topk: usize,
+991:    pub qk_topk: usize,
+997:    pub moe_topk: usize,
+1248:    /// que la feuille de route appelle, sans rotation ni échelle par tête.
+1581:/// Un seul message pour `--attn-topk` ignoré en mode lot (voir `forward_lot`).
+1610:        
+… [514 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rn \"fn route\\|fn choisir\\|softmax\" drave-core/src/model.rs | head -20; echo \"=== usage de moe.routeur ===\"; grep -n \"moe.routeur\\|\\.routeur\\[\" drave-core/src/model.rs | head -10", "description": "Locate routing compu … [8 caractères tronqués]`
+
+  ```
+45:    /// Convention de routage. Qwen3-MoE : softmax sur **tous** les experts,
+47:    /// **bruts**, puis softmax sur les seuls retenus — les deux donnent des
+49:    pub routeur_topk_softmax: bool,
+305:    /// softmax.
+367:    /// qu'au dénominateur du softmax — c'est le « drain » que les modèles
+980:    /// 0 = attention dense avec softmax (le modèle d'origine).
+1059:    /// **Ne s'applique pas à la perplexité** : le softmax normalise sur tout le
+1610:            routeur_topk_softmax: g.meta.get("general.architecture").and_then(|m| m.as_str())
+1793:                 if cfg.routeur_topk_softmax { "routeur-topk " } else { "" },
+2538:        // La mise à l'échelle de température compense l'entropie du softmax
+2971:                    if self.cfg.routeur_topk_softmax {
+3659:                // revanche le softmax ET la somme pondérée n'itèrent plus que sur
+3727:                // softmax stable sur les seules clés retenues. Le puits appris
+3730:                // softmax, puis la retire du numérateur). L'oublier ici ne
+3786:                if cfg.routeur_topk_softmax {
+3788:                    // softmax ne porte que sur les retenus.
+3801:                    // Qwen3-MoE : softmax sur 
+… [354 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs", "limit": 60, "offset": 2955}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs</path>
+<type>file</type>
+<content>
+2955:                 let k = k.clamp(1, ne);
+2956:                 let mut x16: Vec<i16> = vec![0i16; t * h];
+2957:                 for (j, &v) in xi.iter().enumerate() { x16[j] = v.clamp(-32767, 32767) as i16; }
+2958:                 let s32: Vec<Vec<i32>> = (0..t)
+2959:                     .map(|i| crate::list::sommes32(&x16[i * h..(i + 1) * h])).collect();
+2960:                 let mut groupes: Vec<Vec<(usize, f32)>> = vec![Vec::new(); ne];
+2961:                 let trace_active = self.trace_experts.is_some();
+2962:                 for i in 0..t {
+2963:                     let hni = &hn[i * h..(i + 1) * h];
+2964:                     let mut sc_e: Vec<f32> = (0..ne).map(|e| {
+2965:                         let r = &moe.routeur[e * h..(e + 1) * h];
+2966:                         let sc: f32 = r.iter().zip(hni.iter()).map(|(a, b)| a * b).sum();
+2967:                         sc + moe.routeur_biais.as_ref().map_or(0.0, |b| b[e])
+2968:                     }).collect();
+2969:                     let mut idx: Vec<u32> = (0..ne as u32).collect();
+2970:                     let m
+… [2935 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/llama.cpp && sed -n '2245,2288p' src/llama-graph.cpp", "description": "Read the gating op application"}`
+
+  ```
+cb(probs, "ffn_moe_probs", il);
+
+    // add experts selection bias - introduced in DeepSeek V3
+    // leave probs unbiased as it's later used to get expert weights
+    ggml_tensor * selection_probs = probs;
+    if (exp_probs_b != nullptr) {
+        selection_probs = ggml_add(ctx0, probs, exp_probs_b);
+        cb(selection_probs, "ffn_moe_probs_biased", il);
+    }
+
+    // llama4 doesn't have exp_probs_b, and sigmoid is only used after top_k
+    // see: https://github.com/meta-llama/llama-models/blob/699a02993512fb36936b1b0741e13c06790bcf98/models/llama4/moe.py#L183-L198
+    if (arch == LLM_ARCH_LLAMA4) {
+        selection_probs = logits;
+    }
+
+    if (arch == LLM_ARCH_GROVEMOE) {
+        selection_probs = ggml_sigmoid(ctx0, logits); // [n_expert, n_tokens]
+        cb(selection_probs, "ffn_moe_probs_biased", il);
+    }
+
+    // select top n_group_used expert groups
+    // https://huggingface.co/deepseek-ai/DeepSeek-V3/blob/e815299b0bcbac849fa540c768ef21845365c9eb/modeling_deepseek.py#L440-L457
+    if (hparams.n_expert_groups > 1 && n_tokens > 0) {
+        const int64_t n_exp_per_group = n_expert / hparams.n_expert_groups;
+
+        // organize experts into n_expert_groups
+        ggml
+… [1544 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/llama.cpp && sed -n '2205,2246p' src/llama-graph.cpp", "description": "Read gating op switch"}`
+
+  ```
+const bool weight_before_ffn = arch == LLM_ARCH_LLAMA4; // for llama4, we apply the sigmoid-ed weights before the FFN
+
+    ggml_tensor * logits = nullptr;
+
+    if (probs_in == nullptr) {
+        logits = build_lora_mm(gate_inp, cur); // [n_expert, n_tokens]
+        if (gating_op == LLAMA_EXPERT_GATING_FUNC_TYPE_SQRT_SOFTPLUS) {
+            ggml_mul_mat_set_prec(logits, GGML_PREC_F32);
+        }
+        cb(logits, "ffn_moe_logits", il);
+    } else {
+        logits = probs_in;
+    }
+
+    if (gate_inp_b) {
+        logits = ggml_add(ctx0, logits, gate_inp_b);
+        cb(logits, "ffn_moe_logits_biased", il);
+    }
+
+    ggml_tensor * probs = nullptr;
+    switch (gating_op) {
+        case LLAMA_EXPERT_GATING_FUNC_TYPE_SOFTMAX:
+            {
+                probs = ggml_soft_max(ctx0, logits); // [n_expert, n_tokens]
+            } break;
+        case LLAMA_EXPERT_GATING_FUNC_TYPE_SIGMOID:
+            {
+                probs = ggml_sigmoid(ctx0, logits); // [n_expert, n_tokens]
+            } break;
+        case LLAMA_EXPERT_GATING_FUNC_TYPE_SOFTMAX_WEIGHT:
+            {
+                probs = logits; // [n_expert, n_tokens]
+            } break;
+        case LLAMA_EXPERT_GATING_FUNC_TYPE_SQ
+… [239 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs", "limit": 65, "offset": 3770}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs</path>
+<type>file</type>
+<content>
+3770:             // ------------------------------------------------------ MoE
+3771:             // Un routeur linéaire choisit `k` experts parmi `n` ; seuls leurs
+3772:             // poids sont lus. C'est la parcimonie **structurelle** — 8 experts
+3773:             // sur 128, soit 6 % du FFN — et c'est le régime où l'architecture
+3774:             // événementielle cesse d'être un coût.
+3775:             if let Some(moe) = lay.moe.as_ref() {
+3776:                 let ne = cfg.n_expert;
+3777:                 let k = if self.moe_topk > 0 { self.moe_topk } else { cfg.n_expert_used };
+3778:                 let k = k.clamp(1, ne);
+3779:                 let mut sc_e: Vec<f32> = (0..ne).map(|e| {
+3780:                     let r = &moe.routeur[e * h..(e + 1) * h];
+3781:                     let s: f32 = r.iter().zip(hn.iter()).map(|(a, b)| a * b).sum();
+3782:                     s + moe.routeur_biais.as_ref().map_or(0.0, |b| b[e])
+3783:                 }).collect();
+3784:                 let mut idx: Vec<u32> = (0..ne as u32).collect();
+3785:                 let mut inv_k = 1
+… [3217 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '1600,1620p' drave-core/src/model.rs; echo \"=== métadonnées ===\"; python3 - <<'PY'\nimport sys, os\nsys.path.insert(0,'tools')\nfrom analyse_experts_statique import Lecteur\nB='/home/stephane/Data13TB/stephane/modeles/gguf'\ … [587 caractères tronqués]`
+
+  ```
+// calcul (64) débordait le tampon de Q.
+            head_dim: g.cfg("attention.key_length").and_then(|m| m.as_u64()).unwrap_or(0) as usize,
+            vocab: g.tensor("token_embd.weight").map(|t| t.dims[0] as usize).unwrap_or(0),
+            n_expert: g.cfg("expert_count").and_then(|m| m.as_u64()).unwrap_or(0) as usize,
+            n_expert_used: g.cfg("expert_used_count").and_then(|m| m.as_u64()).unwrap_or(0) as usize,
+            ffn_exp: g.cfg("expert_feed_forward_length").and_then(|m| m.as_u64()).unwrap_or(0) as usize,
+            // L'architecture « gpt-oss » implique sa propre activation ; elle
+            // n'est pas déclarée dans les métadonnées.
+            ffn_act_oss: g.meta.get("general.architecture").and_then(|m| m.as_str())
+                             == Some("gpt-oss"),
+            routeur_topk_softmax: g.meta.get("general.architecture").and_then(|m| m.as_str())
+                                      == Some("gpt-oss"),
+            n_rot: {
+                let arch = g.meta.get("general.architecture").and_then(|m| m.as_str());
+                let declare = g.cfg("rope.dimension_count").and_then(|m| m.as_u64()).unwrap_or(0) as usize;
+                if declare > 0 
+… [538 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat /tmp/portes_formats2.log | tail -20", "description": "Read the full battery result"}`
+
+  ```
+F32        OK       blk.0.attn_norm.weight
+  F16        OK       token_embd.weight
+  Q4_0       OK       token_embd.weight
+  Q5_0       OK       token_embd.weight
+  Q8_0       OK       output.weight
+  Q2_K       OK       token_embd.weight
+  Q3_K       OK       blk.0.attn_output.weight
+  Q4_K       OK       token_embd.weight
+  Q5_K       OK       blk.0.ffn_down.weight
+  Q6_K       OK       blk.0.ffn_down.weight
+  IQ2_XXS    OK       blk.0.ffn_gate_exps.weight
+  IQ3_XXS    OK       blk.1.ffn_down_exps.weight
+  IQ1_S      OK       blk.3.ffn_gate_exps.weight
+  IQ4_XS     OK       blk.11.ffn_down_exps.weight
+  IQ1_M      OK       blk.0.ffn_gate_exps.weight
+  BF16       OK       blk.0.ffn_gate_inp.weight
+  MXFP4      OK       blk.0.ffn_down_exps.weight
+formats : 17 concorde(s), 0 divergence(s), 0 absent(s)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git status --short | head -20; echo ---; git diff --stat | tail -5", "description": "Review working tree before commit"}`
+
+  ```
+M drave-core/src/formats.rs
+ M drave-core/src/gguf.rs
+ M drave-core/src/main.rs
+ M journal/README.md
+ M journal/sessions/MANIFEST.md
+ M journal/sessions/bbd6969f-0f70-42b2-8951-64d1f2f36d2e/digest.md
+ M journal/sessions/bbd6969f-0f70-42b2-8951-64d1f2f36d2e/rapport.md
+?? tools/extraire_tables_ggml.c
+?? tools/extraire_tables_ggml.sh
+?? tools/portes_formats.sh
+?? tools/ref_ggml_bloc.c
+?? tools/verifier_formats.py
+---
+ journal/README.md                                  |    2 +-
+ journal/sessions/MANIFEST.md                       |    4 +-
+ .../bbd6969f-0f70-42b2-8951-64d1f2f36d2e/digest.md | 1823 ++++++++++++++++++++
+ .../rapport.md                                     |   28 +-
+ 7 files changed, 2605 insertions(+), 60 deletions(-)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add drave-core/src/gguf.rs drave-core/src/formats.rs drave-core/src/main.rs tools/extraire_tables_ggml.c tools/extraire_tables_ggml.sh tools/portes_formats.sh tools/ref_ggml_bloc.c tools/verifier_formats.py && git commit -q -F -  … [2048 caractères tronqués]`

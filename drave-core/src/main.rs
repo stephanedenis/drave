@@ -8,6 +8,23 @@
 //!   2. débit du moteur d'événements selon la densité des activations,
 //!   3. exécution sans multiplieur (décalages + additions) vs multiplication.
 
+/// Variables d'environnement que le moteur lit, **sans** le préfixe `DRAVE_`.
+///
+/// Sert à traduire un ancien nom `QT_*` resté dans un script, et à rien d'autre.
+/// Le test `les_vars_lues_sont_completes` vérifie cette liste contre le source :
+/// une variable lue mais absente d'ici rendrait le message muet, et une variable
+/// listée mais jamais lue annoncerait une option qui n'existe pas.
+const VARS_LUES: &[&str] = &[
+    "BANC_KV_DEBUG", "BANC_KV_GPU_SEUL", "BANC_KV_GRAD", "BANC_KV_K0",
+    "BANC_KV_KUNIT", "BANC_KV_UNIT", "BANC_KV_V1", "BANC_SANS_PUITS",
+    "CLUSTERS", "DEBUG_FLUX", "FLUX_VERIF", "GPU", "GPU_EXPERTS",
+    "GPU_EXPERTS_GO", "GPU_KV", "GPU_TETE", "GPU_TOPK", "HARMONY_TRACE",
+    "KV_BITS", "KV_F16", "KV_K_F16", "KV_K_F32", "KV_V_F32", "MMAP",
+    "PRELIRE", "PRELIRE_TOUT", "Q8_BLOCS", "SANS_EMPRUNT", "TRACE_BLOCS",
+    "TRACE_EXPERTS", "VISION_TEXTE", "YARN", "YARN_MSCALE", "YARN_NON",
+    "YARN_RAMPE",
+];
+
 mod clusters;
 mod engine;
 mod formats;
@@ -52,9 +69,19 @@ fn main() {
     // Les variables d'environnement ont été renommées QT_* -> DRAVE_* : un
     // ancien nom encore présent dans un script ne ferait RIEN, en silence. On le
     // dit, plutôt que de laisser croire que l'option est active.
-    if let Some((vieux, _)) = std::env::vars().find(|(k, _)| k.starts_with("QT_")) {
+    //
+    // Ce qu'on ne fait PLUS : chercher un nom qui « commence par QT_ ». C'était
+    // faux — Qt pose `QT_IM_MODULE=xim` et `QT_IM_SWITCHER=imsw-multi` dans
+    // toute session graphique, donc le binaire avertissait à CHAQUE lancement
+    // d'une variable qui n'a jamais été à nous, et `find` n'en rendant qu'une, un
+    // vrai nom hérité passait inaperçu derrière. On ne signale que la traduction
+    // exacte d'une variable que le moteur lit vraiment.
+    let vieux_nom = std::env::vars().map(|(k, _)| k).find(|k| {
+        k.strip_prefix("QT_").map(|s| VARS_LUES.contains(&s)).unwrap_or(false)
+    });
+    if let Some(vieux) = vieux_nom {
         eprintln!("[attention] {vieux} est l'ancien nom d'une variable d'environnement : \
-elles s'appellent maintenant DRAVE_* (voir docs/histoire.md). Rien n'a été appliqué.");
+il faut écrire DRAVE_{} (voir docs/histoire.md). Rien n'a été appliqué.", &vieux[3..]);
     }
     let opt = analyser(&args);
     let _ = MODELE.set(args[1].clone());
@@ -1465,30 +1492,32 @@ fn run_bloc(spec: &str) {
     };
     let g = Gguf::open_auto(&modele_chemin()).expect("ouverture du GGUF");
     let t = g.tensor(&nom).unwrap_or_else(|| panic!("tenseur « {nom} » absent"));
-    let bloc_octets = match t.ttype {
-        gguf::GGML_Q2_K => 84,
-        16 => 66,                       // IQ2_XXS
-        29 => 56,                       // IQ1_M
-        30 => 512,                      // BF16 : « bloc » = 256 poids × 2 octets
-        autre => panic!("type {autre} non géré par --bloc"),
-    };
-    let n_cols = if t.dims.len() > 1 { t.dims[1] as usize } else { 256 };
-    let super_blocs = (n_cols / 256).max(1);
-    // Un bloc par super-bloc de 256 poids : `index` compte les blocs.
-    let ligne = index / super_blocs;
-    let dans_ligne = index % super_blocs;
-    let base = ligne * super_blocs * bloc_octets + dans_ligne * bloc_octets;
-    let buf = g.tranche_publique(&nom).expect("données absentes");
-    let v = match t.ttype {
-        gguf::GGML_Q2_K => Gguf::dequant_q2k(&buf[base..]),
-        16 => formats::dequant_iq2xxs(&buf[base..]),
-        29 => formats::dequant_iq1m(&buf[base..]),
-        30 => (0..256).map(|i| gguf::bf16_to_f32(u16::from_le_bytes(
-                  [buf[base + 2 * i], buf[base + 2 * i + 1]]))).collect(),
-        autre => panic!("type {autre} non implémenté"),
-    };
-    println!("tenseur {nom} · type {} · bloc {index}", Gguf::nom_type(t.ttype));
-    for x in v.iter().take(256) { println!("{x:.7}"); }
+    // Rangée = dernière dimension (convention numpy : la plus rapide en
+    // dernier). `dims[1]` ne convient que pour un tenseur 2D : sur un tenseur
+    // d'experts 3D, c'est `n_out` et la lecture partait au mauvais endroit.
+    let n_cols = *t.dims.last().unwrap() as usize;
+    let n_lignes = t.nelem() / n_cols.max(1);
+    // Le bloc est une fenêtre de 256 POIDS consécutifs dans l'ordre du fichier,
+    // pas « 256 valeurs de la même rangée » : Qwen2.5-0.5B a des rangées de 896
+    // poids (28 blocs Q5_0 de 32), donc une fenêtre en chevauche deux.
+    let debut_poids = index * 256;
+    assert!(debut_poids < t.nelem(), "bloc {index} hors du tenseur ({} poids)", t.nelem());
+    let mut vals: Vec<f32> = Vec::with_capacity(256);
+    let (mut ligne, mut col) = (debut_poids / n_cols, debut_poids % n_cols);
+    while vals.len() < 256 && ligne < n_lignes {
+        let rangee = g.row_f32(&nom, ligne, n_cols);
+        let fin = (col + (256 - vals.len())).min(n_cols);
+        vals.extend_from_slice(&rangee[col..fin]);
+        ligne += 1;
+        col = 0;
+    }
+    // On déquantifie par `row_f32` — le MÊME chemin que le chargement du modèle.
+    // Un outil de vérification qui déquantifie à part peut être juste pendant que
+    // le moteur est faux : c'est arrivé avec `q8_dot_at`, dont l'offset fautif
+    // vivait dans le chemin de production, pas dans le déquantificateur.
+    println!("tenseur {nom} · type {} · bloc {index} (poids {}..{}, {} rangées)",
+             Gguf::nom_type(t.ttype), debut_poids, debut_poids + vals.len(), n_lignes);
+    for x in &vals { println!("{x:.7}"); }
 }
 
 /// Sonde d'accès mmappé à la table d'engram.
@@ -4798,5 +4827,65 @@ mod tests_plafond {
         let msg = format!("{}", r.err().unwrap());
         assert!(msg.contains("plafond"), "le refus doit nommer le plafond : {msg}");
         serveur.join().unwrap();
+    }
+}
+
+#[cfg(test)]
+mod tests_vars {
+    use super::VARS_LUES;
+
+    /// Le source de `src/`, concaténé, pour y chercher les noms lus.
+    fn source() -> String {
+        let mut tout = String::new();
+        for e in std::fs::read_dir("src").expect("src/ lisible depuis drave-core") {
+            let c = e.unwrap().path();
+            if c.extension().map(|x| x == "rs").unwrap_or(false) {
+                tout.push_str(&std::fs::read_to_string(&c).unwrap());
+                tout.push('\n');
+            }
+        }
+        tout
+    }
+
+    /// Tout nom `DRAVE_*` cité dans le source doit être dans `VARS_LUES`, et
+    /// réciproquement. Sans ce test la liste pourrit en silence : c'est
+    /// exactement ce qui a produit le faux avertissement `QT_IM_MODULE`.
+    #[test]
+    fn les_vars_lues_sont_completes() {
+        let src = source();
+        let mut citees: Vec<String> = Vec::new();
+        let mut reste = src.as_str();
+        while let Some(p) = reste.find("DRAVE_") {
+            let apres = &reste[p + "DRAVE_".len()..];
+            let fin = apres.find(|c: char| !(c.is_ascii_uppercase() || c.is_ascii_digit() || c == '_'))
+                .unwrap_or(apres.len());
+            let nom = &apres[..fin];
+            if !nom.is_empty() && !citees.iter().any(|c| c == nom) {
+                citees.push(nom.to_string());
+            }
+            reste = &apres[fin..];
+        }
+        for c in &citees {
+            assert!(VARS_LUES.contains(&c.as_str()),
+                    "DRAVE_{c} est lu dans le source mais absent de VARS_LUES : \
+un ancien nom QT_{c} resterait muet");
+        }
+        for v in VARS_LUES {
+            assert!(citees.iter().any(|c| c == v),
+                    "VARS_LUES annonce {v} mais aucune lecture DRAVE_{v} dans le source");
+        }
+    }
+
+    /// Le piège qui a motivé ce module : les variables de Qt ne sont pas les
+    /// nôtres, et ne doivent jamais être signalées comme des noms hérités.
+    #[test]
+    fn les_vars_qt_ne_sont_pas_des_notres() {
+        for piege in ["QT_IM_MODULE", "QT_IM_SWITCHER", "QT_QPA_PLATFORM",
+                      "QT_SCALE_FACTOR", "QT_AUTO_SCREEN_SCALE_FACTOR"] {
+            let suffixe = piege.strip_prefix("QT_").unwrap();
+            assert!(!VARS_LUES.contains(&suffixe),
+                    "{piege} appartient à Qt, pas au moteur : le signaler ferait \
+un avertissement à chaque lancement en session graphique");
+        }
     }
 }

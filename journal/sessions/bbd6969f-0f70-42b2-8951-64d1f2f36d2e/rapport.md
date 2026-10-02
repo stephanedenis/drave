@@ -5,15 +5,15 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 80.3 h |
+| Durée | 80.7 h |
 | Tours | 69 |
-| Messages | 3410 |
-| Appels d'outils | 3230 |
-| Fichiers touchés | 74 |
-| Commandes | 2830 |
+| Messages | 3581 |
+| Appels d'outils | 3395 |
+| Fichiers touchés | 79 |
+| Commandes | 2975 |
 | Sous-agents | 22 |
-| Commits | 290 |
-| Compactages de contexte | 4 |
+| Commits | 291 |
+| Compactages de contexte | 5 |
 
 ## Objectifs déclarés
 
@@ -3526,7 +3526,7 @@ Sur cette session, les mesures m
 
 ### Tour 69 — implémente toute les optimisation et détection de matériel avec heuristiques de configuration automatique.
 
-*191 appels d'outils.* Actions notables :
+*356 appels d'outils.* Actions notables :
 
 - bash — Inspect existing GPU detection
 - write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/materiel.rs`
@@ -3542,11 +3542,11 @@ Sur cette session, les mesures m
 - bash — Read KV bits resolution
 - bash — Integrate KV and VRAM heuristics
 - bash — Lighten detection and run gates
-- … et 175 autres
+- … et 331 autres
 
 **Synthèse produite :**
 
-⏵ BF16 concorde. Je commite et j'implémente Q5_K (176 octets).
+⏵ Implémentation de Q3_K (33,5 % de Qwen3-235B), vérifiée contre libggml
 
 ## 3. Travail accompli
 
@@ -3597,7 +3597,7 @@ Sur cette session, les mesures m
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/histoire.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/roadmap.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs` | 0 | 5 |
-| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/main.rs` | 0 | 1 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/main.rs` | 0 | 3 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/gpu.rs` | 0 | 3 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-gpu-topk-selection.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/README.md` | 0 | 1 |
@@ -3613,7 +3613,7 @@ Sur cette session, les mesures m
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/plan-modeles-lourds.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/convertir_clusters.py` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/format-clusters.md` | 1 | 0 |
-| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/gguf.rs` | 0 | 4 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/gguf.rs` | 0 | 6 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/clusters.rs` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/sprints/08-un-modele-eclate-se-lit-comme-un-seul.md` | 2 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-lecteur-multifichiers.md` | 1 | 0 |
@@ -3628,6 +3628,11 @@ Sur cette session, les mesures m
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-tete-restreinte.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-optimisations-auto.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/portes.sh` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/ref_ggml_bloc.c` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/verifier_formats.py` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/portes_formats.sh` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/extraire_tables_ggml.c` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/extraire_tables_ggml.sh` | 1 | 0 |
 
 ### Sous-agents lancés
 
@@ -3696,7 +3701,7 @@ Sur cette session, les mesures m
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 2790 autres
+- … et 2935 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -3824,7 +3829,7 @@ Sur cette session, les mesures m
 
 ## 5. Erreurs rencontrées
 
-171 sorties en erreur ou divergentes. Les premières :
+189 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : a8f2635f8 docs: record which models this box is good at, and why src/llama-hparams.cpp:8:void llama_hparams::set_swa_pattern(uint32_t n_pattern, bool dense_first) { src/llama-hparams.h:308:    void se
 - **T1** : 511 tokens notés — perplexité cumulée 247.031  (4.9 tok/s) === perplexité 247.0308 sur 511 tokens (0 événements, 104.5 s) ===  ### B3 harmony assistant 511 --- ref --- 0.0 0.0 0:00 ls: cannot access '
@@ -4134,4 +4139,5 @@ Sur cette session, les mesures m
 - IQ2_XXS : 93 Go de V4.1 debloques, et un bug que la lecture n'aurait pas vu  Tables de grille EXTRAITES de ggml-common.h par un programme C (GGML_COMMON_IMPL_C)
 - IQ1_M : 61 Go de DeepSeek-V4-Flash debloques (ecart 0,00e+00 avec ggml)  Troisieme format a grille. La grille IQ1_S (2048 codes signes) est extraite de ggml-com
 - BF16 : lu et verifie (le f32 tronque a ses 16 bits de poids fort, exactement)  Deux modeles lourds l'utilisent (V4-Flash pour ses routeurs, MiniMax-H3). Verifie
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add drave-core/src/gguf.rs drave-core/src/formats.rs drave-core/src/main.rs tools/extraire_tables_ggml
 
