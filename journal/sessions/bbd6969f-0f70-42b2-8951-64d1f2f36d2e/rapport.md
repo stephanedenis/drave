@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 79.9 h |
+| Durée | 80.0 h |
 | Tours | 69 |
-| Messages | 3356 |
-| Appels d'outils | 3176 |
+| Messages | 3363 |
+| Appels d'outils | 3183 |
 | Fichiers touchés | 74 |
-| Commandes | 2776 |
+| Commandes | 2783 |
 | Sous-agents | 22 |
-| Commits | 285 |
+| Commits | 286 |
 | Compactages de contexte | 4 |
 
 ## Objectifs déclarés
@@ -3526,7 +3526,7 @@ Sur cette session, les mesures m
 
 ### Tour 69 — implémente toute les optimisation et détection de matériel avec heuristiques de configuration automatique.
 
-*137 appels d'outils.* Actions notables :
+*144 appels d'outils.* Actions notables :
 
 - bash — Inspect existing GPU detection
 - write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/materiel.rs`
@@ -3542,11 +3542,11 @@ Sur cette session, les mesures m
 - bash — Read KV bits resolution
 - bash — Integrate KV and VRAM heuristics
 - bash — Lighten detection and run gates
-- … et 121 autres
+- … et 128 autres
 
 **Synthèse produite :**
 
-⏵ Estimation correcte : **148 ms/jeton pour V4.1**, dominée par le commun (110 ms). Je commite.
+⏵ Quatrième fois que la prélecture ne donne rien (7,29 vs 7,47 s). Le mur est constant : le modèle tient en cache. Je consigne.
 
 ## 3. Travail accompli
 
@@ -3696,7 +3696,7 @@ Sur cette session, les mesures m
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 2736 autres
+- … et 2743 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4129,4 +4129,5 @@ Sur cette session, les mesures m
 - Materiel : distinguer dense et MoE (un modele dense affichait « 0 experts de 9,95 Mo »)" && git log --oneline -1
 - tools/portes.sh : les portes du depot en une commande, comparees a leur valeur publiee  Chaque porte est confrontee a la valeur ATTENDUE et le script sort en er
 - Materiel : estimation du cout par jeton, d'apres les debits mesures  D'abord FAUX : le modele placait en VRAM les experts LUS par jeton, alors qu'ils viennent d
+- Prelecture : quatrieme mecanisme mesure, quatrieme fois sans effet  - madvise sur les experts apres le routage : 25,73 contre 25,80 s (0,3 %) ; - madvise sur to
 

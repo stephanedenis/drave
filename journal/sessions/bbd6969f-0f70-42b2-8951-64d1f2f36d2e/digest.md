@@ -53939,3 +53939,77 @@ Ces valeurs sont des DÉFAUTS : tout drapeau explicite les emporte.
 ⏵ Estimation correcte : **148 ms/jeton pour V4.1**, dominée par le commun (110 ms). Je commite.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && (cd drave-core && cargo test --release 2>&1 | grep -E \"^test result\"); git add -A && git commit -q -m \"Materiel : estimation du cout par jeton, d'apres les debits mesures\n\nD'abord FAUX : le modele placait en VRAM les experts LUS … [833 caractères tronqués]`
+
+  ```
+test result: ok. 35 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.10s
+5ba051f Materiel : estimation du cout par jeton, d'apres les debits mesures
+copie : 235.4 Go / 365.7
+  ```
+
+- **bash** `{"command": "sleep 55; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls -la /home/stephane/FastNVMe/modeles-lourds/*.gguf | awk '{printf \"copie : %.1f Go / 365.7\\n\", $5/1e9}'; cat /tmp/porte_oss3.log; TZ=America/Toronto date", "description": "Monitor progress"}`
+
+  ```
+copie : 242.8 Go / 365.7
+gpt-oss ctx 256 (attendu 15,1757) : jeu 01 oct 2026 22:42:17 EDT
+  ```
+
+### 🤖 Assistant
+
+⏵ Copie à 66 %. J'examine le temps de chargement du modèle (27,8 s) — où passe-t-il ?
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/chargement.sh <<'EOF'\n#!/bin/bash\n# 27,8 s pour charger 48 couches : où passe le temps ? On compare 4 et 20\n# threads, et mmap contre lecture complète.\ncd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\nA=/home/stepha … [633 caractères tronqués]`
+
+  ```
+mmap 4 fils        : couches chargées en 7.655109837s
+  mmap 20 fils       :   lecture 20 fils    : === fin ===
+  ```
+
+- **bash** `{"command": "sleep 55; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat /tmp/chargement.log; ls -la /home/stephane/FastNVMe/modeles-lourds/*.gguf | awk '{printf \"copie : %.1f Go\\n\", $5/1e9}'", "description": "Read loading time comparison"}`
+
+  ```
+mmap 4 fils        : couches chargées en 7.655109837s
+  mmap 20 fils       :   lecture 20 fils    : === fin ===
+copie : 254.0 Go
+  ```
+
+### 🤖 Assistant
+
+⏵ Mon script passe `--threads` à `env` au lieu du binaire. Je corrige.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/chargement2.sh <<'EOF'\n#!/bin/bash\n# Où passe le temps de chargement ? Variables d'environnement d'un côté,\n# arguments du binaire de l'autre — les mélanger faisait échouer deux mesures\n# sur trois en silence.\ncd /hom … [797 caractères tronqués]`
+
+  ```
+mmap, 4 fils         : couches chargées en 7.100186134s
+  mmap, 20 fils        : couches chargées en 6.801922589s
+  lecture, 20 fils     : couches chargées en 30.538809283s
+=== fin ===
+  ```
+
+### 🤖 Assistant
+
+⏵ Le chargement : mmap 6,8 s contre lecture 30,5 s. Je teste un `madvise` global pour paralléliser.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np = 'drave-core/src/gguf.rs'\ns = open(p).read()\na = '''fn prelire_active() -> bool {'''\nb = '''/// Demande au noyau de lancer la lecture du fichier ENTIER, une fois, au\n/// chargement. Le noyau parallélise ses l … [1579 caractères tronqués]`
+
+  ```
+ok
+BUILD 0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/prelire_tout.sh <<'EOF'\n#!/bin/bash\n# La demande de lecture complète au chargement est-elle plus rapide que le mmap\n# paresseux ? Trois tours alternés, mêmes jetons.\ncd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\n … [756 caractères tronqués]`
+
+  ```
+tour 1 paresseux  : couches chargées en 7.124164425s
+  tour 1 tout       : couches chargées en 7.691514655s
+  tour 2 paresseux  : couches chargées en 7.34793194s
+  tour 2 tout       : couches chargées en 7.4876354s
+  tour 3 paresseux  : couches chargées en 7.407564726s
+  tour 3 tout       : couches chargées en 7.238253906s
+=== fin ===
+  ```
+
+### 🤖 Assistant
+
+⏵ Quatrième fois que la prélecture ne donne rien (7,29 vs 7,47 s). Le mur est constant : le modèle tient en cache. Je consigne.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np = 'reports/rapport-optimisations-auto.md'\ns = open(p).read()\ns = s.replace('''## Ce qui a été mesuré puis retiré''',\n'''## Le mur qui revient : le modèle tient dans le cache\n\nQuatre mécanismes de prélecture o … [2917 caractères tronqués]`

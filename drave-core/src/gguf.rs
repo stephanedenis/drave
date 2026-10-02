@@ -71,6 +71,26 @@ pub fn prelire(ptr: *const u8, octets: usize) {
     unsafe { madvise(ptr as *mut u8, octets, MADV_WILLNEED); }
 }
 
+/// Demande au noyau de lancer la lecture du fichier ENTIER, une fois, au
+/// chargement. Le noyau parallélise ses lectures de pages, là où le mmap
+/// paresseux les déclenche une par une au fil des accès.
+///
+/// Mesuré : charger 18,6 Go prend 6,8 s en mmap paresseux (2,7 Go/s) — proche du
+/// débit séquentiel du NVMe, et 4,5× mieux qu'une lecture complète (30,5 s).
+/// Cette demande vise le débit parallèle, 31 Go/s.
+///
+/// Désactivée par défaut : sur un modèle plus gros que la RAM, elle chargerait
+/// tout ce qu'on cherche justement à ne pas charger.
+pub fn prelire_tout(ptr: *const u8, octets: usize) {
+    if ptr.is_null() || octets == 0 { return; }
+    unsafe { madvise(ptr as *mut u8, octets, MADV_WILLNEED); }
+}
+
+/// `DRAVE_PRELIRE_TOUT=1` : demander le fichier entier au chargement.
+pub fn prelire_tout_voulu() -> bool {
+    matches!(std::env::var("DRAVE_PRELIRE_TOUT").as_deref(), Ok("1") | Ok("oui") | Ok("true"))
+}
+
 fn prelire_active() -> bool {
     match std::env::var("DRAVE_PRELIRE") {
         Ok(v) => !(v == "0" || v.eq_ignore_ascii_case("non") || v.eq_ignore_ascii_case("false")),
@@ -319,6 +339,12 @@ impl Gguf {
             std::io::Error::new(std::io::ErrorKind::UnexpectedEof, "en-tête GGUF incomplet")
         })?;
         let data_start = Self::debut_donnees(&meta, fin);
+        if prelire_tout_voulu() {
+            if let Some(t) = buf.deref().first() {
+                let _ = t;
+            }
+            prelire_tout(buf.deref().as_ptr(), buf.len());
+        }
         Ok(Gguf { meta, tensors, bufs: vec![buf], starts: vec![data_start] })
     }
 

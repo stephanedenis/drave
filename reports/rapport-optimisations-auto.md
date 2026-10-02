@@ -69,6 +69,41 @@ ctx 262144 : [config] cache KV en int8 : 51.5 Go en f32 pour 262144 jetons,
 `VRAM libre − 2 Go de réserve CUDA − le commun`. La VRAM lit à 84,9 Go/s contre
 22,5 pour la RAM.
 
+## Le mur qui revient : le modèle tient dans le cache
+
+Quatre mécanismes de prélecture ont été implémentés et mesurés. **Aucun ne donne
+quoi que ce soit**, et toujours pour la même raison.
+
+| mécanisme | mesure | verdict |
+|---|---|---|
+| `madvise(WILLNEED)` après le routage (experts) | 25,73 s contre 25,80 | 0,3 % |
+| `madvise` sur tout le fichier au chargement | 7,29 s contre 7,47 | −2 % |
+| prélecture des experts en parallèle | non implémentée | le mmap ne se parallélise pas depuis l'espace utilisateur |
+| chargement : mmap contre lecture | **6,8 s contre 30,5 s** | le mmap est 4,5× mieux, et c'est déjà le défaut |
+
+**La raison est toujours la même** : le modèle de test (18,6 Go) tient dans les
+115 Go de cache RAM. Les lectures ne vont jamais au disque, donc demander au
+noyau de les lancer d'avance n'a rien à lancer.
+
+**Et le chargement n'est pas limité par le CPU** : 7,10 s à 4 fils contre 6,80 s à
+20 fils. Le mmap paresseux atteint déjà 2,7 Go/s, proche du débit séquentiel du
+NVMe (2,1 à 5,5 Go/s mesurés).
+
+### Ce que ça implique, et qu'on ne peut pas tester
+
+**Toutes ces optimisations de lecture ne valent que pour un modèle plus gros que
+le cache.** C'est exactement le cas de V4.1 (365 Go pour 115 Go de RAM) — et c'est
+précisément le modèle dont on ne peut rien exécuter, faute de `forward`
+`deepseek4`.
+
+Les mécanismes sont donc **en place, désactivés par défaut, et non comptés comme
+des gains** : `DRAVE_PRELIRE=0` et `DRAVE_PRELIRE_TOUT=1` existent, et le jour où
+V4.1 tournera, la comparaison appariée sera refaite sur lui.
+
+Un chiffre, en attendant : la sonde d'engram sur le disque **mécanique** mesure
+16 ms par entrée de 264 octets — là, la prélecture aurait de quoi faire, et c'est
+un accès qu'on *connaît* d'avance dès qu'on a le texte.
+
 ## Ce qui a été mesuré puis retiré
 
 **La prélecture parallèle** (`madvise(MADV_WILLNEED)` après le routage) :
