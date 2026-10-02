@@ -65664,3 +65664,573 @@ calculable    : NON — il manque : hyper-connexions (hc_attn_fn, hc_ffn_fn, hc_
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-execution-v41.md <<'EOF'\n# Rapport — test d'exécution locale de DeepSeek-V4.1-Flash, avec toutes les optimisations\n\n02/10, sur la copie NVMe `/home/stephane/FastNVMe/modeles-lourds/DeepSeek-V4.1-Flash-Q2.gguf … [7728 caractères tronqués]`
+
+  ```
+e3a802d Test d'exécution de DeepSeek-V4.1 : tout ce qui tourne est mesuré, la passe avant est refusée en 0,33 s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 900 bash tools/portes.sh rapide 2>&1 | tail -6; ls -la /home/stephane/Data13TB/stephane/GitHub/FPGA-Stratix-V/docs/ 2>/dev/null | tail -4", "description": "Verify the gates and check the FPGA document"}`
+
+  ```
+GLM-5.3 : sigmoïde ×2,5                  sigmoïde  ✅
+  Kimi-K2.7 : sigmoïde ×2,827              sigmoïde  ✅
+  V4-Flash : racine de softplus              racine de softplus  ✅
+  Qwen3-235B : softmax                       softmax  ✅
+
+toutes les portes sont vertes
+-rw-------. 1 stephane stephane  6342 26 sep 09:43 rapport-lecteur-ddr3.md
+-rw-------. 1 stephane stephane  7517 26 sep 08:10 rapport-pe-evenementiel.md
+-rw-------. 1 stephane stephane 37138  2 oct 08:52 resume-8-pages.md
+-rw-------. 1 stephane stephane 14156 25 sep 13:27 toolchain.md
+  ```
+
+- **bash** `{"command": "D=/home/stephane/Data13TB/stephane/GitHub/FPGA-Stratix-V/docs/resume-8-pages.md; wc -w -l $D; echo \"=== titre + structure ===\"; head -20 $D; echo \"...\"; grep -n \"^#\" $D | head -25", "description": "Check the generated FPGA summary"}`
+
+  ```
+497  4993 /home/stephane/Data13TB/stephane/GitHub/FPGA-Stratix-V/docs/resume-8-pages.md
+=== titre + structure ===
+# Dépôt `FPGA-Stratix-V` — résumé technique (8 pages)
+
+> Document écrit le 2026-09-26 après lecture exhaustive du dépôt. Convention :
+> **[M] = MESURÉ** (rapport de synthèse, journal de simulation ou fichier de données du
+> dépôt) ; **[D] = DÉCLARÉ** (commentaire, README ou document, non recalculable depuis un
+> artefact) ; **[E] = ESTIMÉ / recalculé** à partir du code ou d'un chiffre sourcé.
+>
+> Les bases internes Quartus (`.cdb`, `.hdb`, `.rdb`, `.ddb`, `.ammdb`, `.tdf` compilés,
+> `.qdb`, `incremental_db/`) et les bitstreams `.sof` sont binaires : **non lus**. Tous les
+> rapports **texte** (`.rpt`, `.summary`, `.flow.rpt`, `.qmsg`, `.smsg`, `.lpc.txt`,
+> `.smp_dump.txt`, `.smart_action.txt`) ont été lus ou interrogés.
+
+---
+
+## 1. Ce qu'est le projet, en cinq lignes
+
+1. **Objectif** : fournir la couche hardware (« kernels RTL NIPADA ») du projet
+   Panini-Research — un **moteur d'événements** qui calcule `acc[adresse] += x × poids` à
+   partir de listes compressées, plus deux kernels V14 (distance L2, plus court chemin sur
+   graphe) (`README.md`).
+...
+1:# Dépôt `FPGA
+… [1211 caractères tronqués]
+  ```
+
+- **bash** `{"command": "D=/home/stephane/Data13TB/stephane/GitHub/FPGA-Stratix-V; sed -n '150,200p' $D/docs/resume-8-pages.md", "description": "Read the measured-results section"}`
+
+  ```
+## 3. Résultats MESURÉS (rapports Quartus)
+
+Toutes les valeurs de ce paragraphe viennent des rapports de synthèse **présents sur disque**
+(mais non versionnés, voir §6). Le device est partout `5SGSMD5K1F40C1`, famille Stratix V
+(`syn/eng/output_files/event_engine.fit.rpt`). Les cibles de période diffèrent : **5 ns
+(200 MHz)** pour `nipada_k1`, **4 ns (250 MHz)** pour `event_pe`, `event_engine` et
+`event_reader` (`syn/event_pe.sdc`). La colonne « Fmax » reprend le panneau *Fmax Summary* de
+`quartus_sta`, indépendant de la contrainte.
+
+| Bloc (projet) | ALM | Registres | DSP | M20K | Fmax | Slack setup | Source |
+|---|---|---|---|---|---|---|---|
+| `nipada_k1` (`v14_l2_distance`) | 238 | 131 | 13 | 0 | **124,13 MHz** | **−3,056 ns** (période 5 ns) | `qsf/output_files/nipada_k1.fit.summary`, `.sta.rpt`, `.sta.summary` |
+| `event_pe` `USE_DSP=0` | 176 | 285 | **0** | 5 | **112,52 MHz** | −4,887 ns (période 4 ns) | `syn/output_files_dsp0/event_pe_dsp0.fit.summary`, `.sta.rpt` |
+| `event_pe` `USE_DSP=1` | 115 | 262 | 1 | 5 | **112,17 MHz** | −4,915 ns (période 4 ns) | `syn/output_files_dsp1/event_pe_dsp1.fit.summary`, `.sta.rpt` |
+| `event_engine` (32 PE, `SYNTH=1`) | **6 498** | 7 845 |
+… [2698 caractères tronqués]
+  ```
+
+- **bash** `{"command": "D=/home/stephane/Data13TB/stephane/GitHub/FPGA-Stratix-V; echo \"=== event_engine ===\"; grep -E \"ALMs needed|Total ALMs|Total registers|Total DSP|Total RAM|Fmax\" $D/syn/eng/output_files/event_engine.fit.summary 2>/dev/null | head -6; grep -iE \"fmax\" $D/syn/eng/output_files/event_en … [311 caractères tronqués]`
+
+  ```
+=== event_engine ===
+Total registers : 7845
+Total RAM Blocks : 384 / 2,014 ( 19 % )
+Total DSP Blocks : 0 / 1,590 ( 0 % )
+=== nipada_k1 ===
+Total registers : 131
+  ```
+
+- **bash** `{"command": "D=/home/stephane/Data13TB/stephane/GitHub/FPGA-Stratix-V; ls $D/syn/eng/output_files/ | head; echo \"---\"; grep -iE \"fmax|slow 1100mV\" $D/syn/eng/output_files/*.sta.summary 2>/dev/null | head -4; echo \"--- ALM ---\"; grep -iE \"ALM|Logic utilization\" $D/syn/eng/output_files/event_e … [77 caractères tronqués]`
+
+  ```
+event_engine.asm.rpt
+event_engine.done
+event_engine.fit.rpt
+event_engine.fit.smsg
+event_engine.fit.summary
+event_engine.flow.rpt
+event_engine.jdi
+event_engine.map.rpt
+event_engine.map.summary
+event_engine.pin
+---
+--- ALM ---
+Logic utilization (in ALMs) : 6,498 / 172,600 ( 4 % )
+  * Logic utilization warning : A large number of ALMs contain virtual pins and count towards logic utilization
+  * ALMs containing virtual pins : 1,480 / 172,600 ( < 1 % )
+  ```
+
+- **bash** `{"command": "D=/home/stephane/Data13TB/stephane/GitHub/FPGA-Stratix-V; grep -rl \"177.09\\|177,09\" $D/syn/eng/ 2>/dev/null | head -3; grep -rhoE \"177[.,]09 MHz\" $D/syn/eng/output_files/*.rpt 2>/dev/null | head -2; grep -iE \"^; Fmax|Fmax Summary\" -A 3 $D/syn/eng/output_files/event_engine.sta.rpt … [65 caractères tronqués]`
+
+  ```
+/home/stephane/Data13TB/stephane/GitHub/FPGA-Stratix-V/syn/eng/output_files/event_engine.sta.rpt
+177.09 MHz
+177.09 MHz
+  6. Slow 900mV 85C Model Fmax Summary
+  7. Timing Closure Recommendations
+  8. Slow 900mV 85C Model Setup Summary
+  9. Slow 900mV 85C Model Hold Summary
+--
+ 14. Slow 900mV 0C Model Fmax Summary
+  ```
+
+- **bash** `{"command": "D=/home/stephane/Data13TB/stephane/GitHub/FPGA-Stratix-V; python3 - <<'PY'\np='/home/stephane/Data13TB/stephane/GitHub/FPGA-Stratix-V/docs/resume-8-pages.md'\ns = open(p).read()\ns = s.replace(\"> Document écrit le 2026-09-26 après lecture exhaustive du dépôt.\",\n              \"> Docu … [225 caractères tronqués]`
+
+  ```
+date corrigée
+# Dépôt `FPGA-Stratix-V` — résumé technique (8 pages)
+
+> Document écrit le 02/10/2026, après lecture exhaustive du dépôt. Convention :
+4867 /home/stephane/Data13TB/stephane/GitHub/FPGA-Stratix-V/docs/resume-8-pages.md
+  ```
+
+- **list_agents** `{}`
+
+  ```
+e7dfe34f-d596-4f98-93c2-cad5a92d3b1e [ready] — Harness logits llama.cpp
+c25f97d1-9a4d-41da-b983-004f793afe43 [ready] — Audit ignored CLI flags
+7d0d2578-0048-4998-8494-7d2daef56769 [ready] — Spec batched prefill protocol
+15fd322f-7e9e-48c0-a970-f36335eb622a [ready] — Trace format compaction study
+bcfe0b97-1795-4610-8e8b-b598ca1ba6cb [ready] — Adversarial review of recent commits
+42059fde-f06f-4e2c-9a23-8292d887fb6e [ready] — Docs vs measurements consistency audit
+7c876089-605c-4836-930e-925a66028509 [ready] — Review the afternoon fixes
+da69b1fa-91b0-4c69-bb2b-58bf00e92e28 [ready] — Spec for lot-in-lists mode 4
+aa5f9fc5-9450-4118-b65f-e8b99a28519d [ready] — Docs audit after today's changes
+5ce3f080-2d3d-467a-8ee1-df697f3f3e68 [ready] — Adversarial review of mode 4
+5185ccb1-be24-4716-89df-62621e790444 [ready] — Review the last-hour fixes
+564fbe3a-a859-4b3b-bd17-4da73a2f4e22 [ready] — Adversarial review GPU topk
+8e04c99a-8ba1-4675-9f80-fa3338449b17 [ready] — Vérifier chiffres et cohérence docs
+c776b71f-525a-4bad-b83c-eff1c2d204ff [ready] — Revue adversariale du branchement top-k
+6d0c1d28-76e1-42f8-9e8c-7f88395f9e55 [ready] — Revue adverse du noyau fusionné
+4d7a793b-74d1-4c46-bb53-21953
+… [589 caractères tronqués]
+  ```
+
+- **bash** `{"command": "sleep 45; D=/home/stephane/Data13TB/stephane/GitHub/FPGA-Stratix-V; ls -la --time-style=+%H:%M:%S $D/docs/resume-8-pages.md; echo \"--- cinq chiffres clés ---\"; sed -n '/^## 3. Résultats MESURÉS/,/^### 3.1/p' $D/docs/resume-8-pages.md | grep -E \"^\\| \\`\" | head -6", "description": " … [26 caractères tronqués]`
+
+  ```
+-rw-------. 1 stephane stephane 34641 08:54:30 /home/stephane/Data13TB/stephane/GitHub/FPGA-Stratix-V/docs/resume-8-pages.md
+--- cinq chiffres clés ---
+| `nipada_k1` (`v14_l2_distance`) | 238 | 131 | 13 | 0 | **124,13 MHz** | **−3,056 ns** (période 5 ns) | `qsf/output_files/nipada_k1.fit.summary`, `.sta.rpt`, `.sta.summary` |
+| `event_pe` `USE_DSP=0` | 176 | 285 | **0** | 5 | **112,52 MHz** | −4,887 ns (période 4 ns) | `syn/output_files_dsp0/event_pe_dsp0.fit.summary`, `.sta.rpt` |
+| `event_pe` `USE_DSP=1` | 115 | 262 | 1 | 5 | **112,17 MHz** | −4,915 ns (période 4 ns) | `syn/output_files_dsp1/event_pe_dsp1.fit.summary`, `.sta.rpt` |
+| `event_engine` (32 PE, `SYNTH=1`) | **6 498** | 7 845 | **0** | **384** | **177,09 MHz** | −1,647 ns (période 4 ns) | `syn/eng/output_files/event_engine.fit.summary`, `.sta.rpt` |
+| `event_reader` (`N_READER=1`) | **1 176** | 2 286 | **0** | 4 | **106,42 MHz** | −5,397 ns (période 4 ns) | `syn/reader/output_files/event_reader.fit.summary`, `.sta.rpt` |
+  ```
+
+- **bash** `{"command": "D=/home/stephane/Data13TB/stephane/GitHub/FPGA-Stratix-V; grep -c \"\" $D/docs/resume-8-pages.md; echo \"--- vérif de deux chiffres de plus ---\"; grep -E \"Total ALMs|Logic utilization\" $D/syn/reader/output_files/event_reader.fit.summary | head -2; grep -E \"Fmax\" -A 2 $D/syn/reader/ … [213 caractères tronqués]`
+
+  ```
+474
+--- vérif de deux chiffres de plus ---
+Logic utilization (in ALMs) : 1,176 / 172,600 ( < 1 % )
+; 106.42 MHz ; 106.42 MHz      ; clk        ;      ;
+; 108.48 MHz ; 108.48 MHz      ; clk        ;      ;
+/home/stephane/Data13TB/stephane/GitHub/FPGA-Stratix-V/syn/reader/output_files/event_reader.sta.rpt:; 106.42 MHz ; 106.42 MHz      ; clk        ;      ;
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log --oneline -3 | cat; git status --short | grep -v journal | head -3; echo \"--- portes ---\"; timeout 900 bash tools/portes.sh rapide 2>&1 | tail -4", "description": "Final repository state"}`
+
+  ```
+e3a802d Test d'exécution de DeepSeek-V4.1 : tout ce qui tourne est mesuré, la passe avant est refusée en 0,33 s
+acc3498 L'écart naît APRÈS la couche 0 : 1,9 % / 1,3 % / 3,8 % / 4,0 % aux positions 0-3
+9d20a8b Rapport MLA : annexe sur l'écart à la position 3 — ce qui est exclu, ce qui reste
+--- portes ---
+  V4-Flash : racine de softplus              racine de softplus  ✅
+  Qwen3-235B : softmax                       softmax  ✅
+
+toutes les portes sont vertes
+  ```
+
+- **job_list** `{}`
+
+  ```
+bash-11 [bash] completed — cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core && cargo build --release 2>&1 | tail -5 && echo "=== TESTS ===" && cargo test --release 2>&1 | tail -25
+bash-12 [bash] completed — cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ./qtrinet-core/target/release/qtrinet-core models/Qwen2.5-0.5B-Q8_0.gguf --ppl /tmp/ids_qwen.txt --ctx 256 --abits 16 --threads 16 --limit 512 --dense 2>&1 | tail -12
+bash-13 [bash] completed — cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo "=== H1 brut 64 jetons, motif 1 (ancien comportement fenêtre) ===" && /usr/bin/time -f "TEMPS %e s, MAXRSS %M Ko" ./qtrinet-core/target/release/qtrinet-core /home/stephane/FastNVMe/models/gpt-oss-120b-MXFP4.gguf --ppl /tmp/ids_oss.txt --ctx 256 --limit 64 --dense --threads 16 --swa-pattern 1 2>&1 | grep -vE "^\[modele\]|listes" | tail -25
+bash-14 [bash] killed — /tmp/mesures_oss.sh 2>&1 | tail -40
+bash-15 [bash] completed — cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && LD_LIBRARY_PATH=/home/stephane/Data13TB/stephane/GitHub/llama.cpp/build/bin ./tools/ref_logits /home/stephane/FastNVMe/models/gpt-oss-120b-MXFP4.gguf /tmp/ids_oss_64.txt /tmp/ref_oss_64.bin
+… [44379 caractères tronqués]
+  ```
+
+### 👤 Utilisateur
+
+Agent 8b6d46ab-6ad0-4648-92a8-0bec40a02526 sent a message:
+RÉSULTAT — Résumé 8 pages du dépôt FPGA-Stratix-V
+
+DOCUMENT ÉCRIT (seul fichier créé, aucun fichier existant modifié — `git status` ne montre que `?? docs/resume-8-pages.md`) :
+  /home/stephane/Data13TB/stephane/GitHub/FPGA-Stratix-V/docs/resume-8-pages.md
+  Volume : ~4 570 mots (hors pipes de tableaux) / 4 790 tokens bruts, 475 lignes, tableaux ≤ 8 colonnes, structuré en 8 sections + annexe des fichiers lus.
+
+CONTENU : §1 projet en 5 lignes ; §2 architecture des 5 modules RTL (rôles, ports, paramètres, d'après le code) ; §3 tableau des chiffres MESURÉS avec fichier source par ligne ; §4 testbenches (couvert / non couvert) ; §5 outillage Quartus/licence/JTAG ; §6 état git ; §7 limites et affirmations non étayées ; §8 questions ouvertes. Convention explicite [M] mesuré / [D] déclaré / [E] estimé-recalculé. Les bases binaires Quartus (.cdb/.hdb/.rdb/.ddb, incremental_db) et les .sof n'ont pas été lues — c'est écrit dans le document.
+
+5 CHIFFRES MESURÉS LES PLUS IMPORTANTS (tous extraits des rapports Quartus sur disque, non versionnés) :
+ 1. `nipada_k1` (K1 v14_l2_distance) : 238 ALM, 131 registres, 13 DSP, 0 M20K, Fmax 124,13 MHz, setup slack −3,056 ns (période 5 ns), hold +0,147 ns — qsf/output_files/nipada_k1.fit.summary + .sta.rpt + .sta.summary.
+ 2. `event_engine` 32 PE (SYNTH=1) : 6 498 ALM, 7 845 registres, 0 DSP, 384 M20K (19 %), Fmax 177,09 MHz, slack −1,647 ns — syn/eng/output_files/event_engine.fit.summary + .sta.rpt.
+ 3. `event_pe` sans DSP : 176 ALM, 0 DSP, 5 M20K, Fmax 112,52 MHz (contre 115 ALM / 1 DSP / 112,17 MHz avec DSP) — syn/output_files_dsp0|dsp1/*.fit.summary + .sta.rpt.
+ 4. `event_reader` : 1 176 ALM, 2 286 registres, 0 DSP, 4 M20K, Fmax 106,42 MHz, slack −5,397 ns — syn/reader/output_files/event_reader.fit.summary + .sta.rpt.
+ 5. Temps de compilation K1 : 4 min 09 s au total (Fitter 3 min 33 s, 3 963 Mo crête) — qsf/output_files/nipada_k1.flow.rpt.
+
+POINTS CRITIQUES À CONNAÎTRE (détaillés §7 du document) :
+ - Les résultats de simulation « PASS » (0 divergence, R²=1.000000, err 0,096 %, 0,86 évt/cycle) sont DÉCLARÉS : aucun log iverilog versionné, tb/qrun.log = 0 octet, les deux sim.log Questa s'arrêtent sur une erreur de licence (`intelqsimstarter` absente).
+ - Divergences document/rapport : README (238 ALM/124 MHz) vs device/5SGSKF40I3LNAC.md (251 ALM/129 MHz/−2,762 ns) ; docs/rapport-lecteur-ddr3.md annonce 1 202 ALM/109,9 MHz/16 M20K alors que le rapport disque donne 1 176 ALM/106,42 MHz/4 M20K (le rapport sur disque correspond à la variante écartée par le commit 73801af).
+ - `v14_graph_dijkstra` n'a AUCUN rapport de synthèse (absent du dépôt) ; cocotb jamais exécuté (licence) et les TB Python pointent sur des JSON absents du dépôt ; `tb/tb_event_reader_dbg.sv` est obsolète (module dupliqué, signaux inexistants).
+ - sim/ est dans un état mixte : meta.txt/expect.hex/mem.hex du flux lecteur (pack_lists) mais events.hex/counts.hex/xvals.hex du flux PE (gen_events) → `make sim` échouerait sur le compte d'événements (309 020 attendus vs 308 919). Chemin GGUF par défaut de sim/Makefile erroné (résout vers .../stephane/Qtrinet, inexistant).
+ - Toutes les mesures sont pour le part commercial 5SGSMD5K1F40C1 alors que la puce est un 5SGSKF40I3LNAC industriel → timing optimiste (docs/toolchain.md §7).
+
+- **bash** `{"command": "D=/home/stephane/Data13TB/stephane/GitHub/FPGA-Stratix-V; git -C $D status --short | head -5; echo \"--- doc ---\"; wc -w -l $D/docs/resume-8-pages.md; echo \"--- Qtrinet ---\"; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log --oneline -1 | cat; git status --short | grep - … [72 caractères tronqués]`
+
+  ```
+?? docs/resume-8-pages.md
+--- doc ---
+  475  4790 /home/stephane/Data13TB/stephane/GitHub/FPGA-Stratix-V/docs/resume-8-pages.md
+--- Qtrinet ---
+e3a802d Test d'exécution de DeepSeek-V4.1 : tout ce qui tourne est mesuré, la passe avant est refusée en 0,33 s
+  ```
+
+### 👤 Utilisateur
+
+Background subagent 8b6d46ab-6ad0-4648-92a8-0bec40a02526 finished and will do no further work unless you send it more.
+Its closing message:
+⏵ Terminé : document livré et résultat transmis au parent
+
+**Chemin du document**
+`/home/stephane/Data13TB/stephane/GitHub/FPGA-Stratix-V/docs/resume-8-pages.md`
+(seul fichier écrit ; `git status` ne montre que `?? docs/resume-8-pages.md`, aucun fichier existant modifié)
+
+**Nombre de mots**
+≈ **4 570 mots** (hors séparateurs de tableaux ; 4 790 tokens bruts), 475 lignes, 8 sections + annexe, tableaux ≤ 8 colonnes. Convention explicite dans le document : **[M] mesuré / [D] déclaré / [E] estimé-recalculé**, chaque chiffre suivi de son chemin de fichier source, et « absent du dépôt » quand le chiffre n'existe pas.
+
+**Fichiers lus**
+- *Suivis git* : `README.md`, `.gitignore`, `device/5SGSKF40I3LNAC.md`, les 7 `docs/*.md` (bellman_ford_rtl, carte-storey-peak, journal-bringup, multicartes, rapport-lecteur-ddr3, rapport-pe-evenementiel, toolchain), les 5 `rtl/*.sv` (event_engine, event_pe, event_reader, v14_graph_dijkstra, v14_l2_distance), `tb/{Makefile, ddr3_model.sv, tb_event_engine.sv, tb_event_pe.sv, tb_event_reader.sv, tb_event_reader_dbg.sv, tb_v14_graph_dijkstra.py, tb_v14_l2_distance.py}`, `sim/{Makefile, meta.txt, events.hex, expect.hex, counts.hex, xvals.hex, mem.hex}`, les 9 `tools/*` (fetch_reference_design, gen_events, host_check, install_license, jtag_program_svf, jtag_scan, pack_lists, quartus_env, setup_compat_libs), `qsf/*.qsf|*.qsf.template|*.sdc|*.qpf`, `syn/**/*.qsf|*.sdc|*.qpf`.
+- *Rapports/journaux non suivis* : tous les `*.rpt`, `*.summary`, `*.flow.rpt`, `*.smsg`, `*.pin`, `*.done`, `*.jdi`, `*.sld` des `output_files*` ; les `.lpc.txt`, `.smp_dump.txt`, `.smart_action.txt`, `*.qmsg`, `altsyncram_*.tdf` des `db/` ; `tb/sim_build_k{1,2}/*` (sim.log, stats_log, version, history…), `tb/qrun.log` (0 octet) ; `incremental_db/README`.
+- *Hors dépôt, pour recouper* : `../Panini-Research/nipada/fpga/sim/*` (16 836 paires, graphe 107 nœuds/133 arêtes, 10 sources) et le GGUF `GitHub/Qtrinet/models/Qwen2.5-0.5B-Q8_0.gguf`.
+- *Non lus (binaires)* : `.cdb`, `.hdb`, `.rdb`, `.ddb`, `.ammdb`, `.bpm`, `.idb`, `.logdb`, `.kpt`, `.tdb`, `.hsd`, `.nvd`, `.sci`, `.qdb`, `.qpg`, `.qtl`, `incremental_db/compiled_partitions/*` et les 5 `.sof` — c'est dit dans le document.
+
+**Les 5 chiffres mesurés les plus importants**
+1. **`nipada_k1` (K1 L2)** : 238 ALM, 131 registres, 13 DSP, 0 M20K, **Fmax 124,13 MHz**, setup slack **−3,056 ns** (période 5 ns), hold +0,147 ns — `qsf/output_files/nipada_k1.fit.summary` / `.sta.rpt` / `.sta.summary`.
+2. **`event_engine` 32 PE (`SYNTH=1`)** : **6 498 ALM**, 7 845 registres, **0 DSP**, **384 M20K** (19 %), **Fmax 177,09 MHz**, slack −1,647 ns — `syn/eng/output_files/event_engine.fit.summary` / `.sta.rpt`.
+3. **`event_pe` sans DSP** : **176 ALM, 0 DSP, 5 M20K, 112,52 MHz** (vs 115 ALM / 1 DSP / 112,17 MHz avec DSP) — `syn/output_files_dsp0|dsp1/event_pe_dsp{0,1}.fit.summary` / `.sta.rpt`.
+4. **`event_reader`** : **1 176 ALM**, 2 286 registres, 0 DSP, 4 M20K, **Fmax 106,42 MHz**, slack −5,397 ns — `syn/reader/output_files/event_reader.fit.summary` / `.sta.rpt`.
+5. **Temps de compilation K1** : **4 min 09 s** au total (Fitter 3 min 33 s, 3 963 Mo crête) — `qsf/output_files/nipada_k1.flow.rpt`.
+
+À retenir du §7 : aucun design ne ferme 200 MHz ; les résultats de simulation « PASS » sont **déclarés** sans log (Questa bloqué par la licence `intelqsimstarter`, `tb/qrun.log` vide) ; `v14_graph_dijkstra` n'a **aucun rapport de synthèse** ; le README et `device/5SGSKF40I3LNAC.md` divergent (238 ALM/124 MHz vs 251 ALM/129 MHz) et `docs/rapport-lecteur-ddr3.md` annonce 1 202 ALM/109,9 MHz alors que le rapport sur disque donne 1 176 ALM/106,42 MHz ; toutes les mesures sont pour un part commercial plus rapide que la puce réelle (timing optimiste).
+
+### 🤖 Assistant
+
+Deux livrables, tous les deux mesurés. Voici l'état.
+
+## 1. Test d'exécution locale de DeepSeek-V4.1-Flash
+
+Sur la copie NVMe (`/home/stephane/FastNVMe/modeles-lourds/DeepSeek-V4.1-Flash-Q2.gguf`, 365,71 Go, 1 046 tenseurs, 40 couches, 384 experts top-6), **avec toutes les optimisations** :
+
+| test | résultat mesuré |
+|---|---|
+| `--tensors` (mmap, aucune copie) | 365,70 Go lus en **63,8 ms** |
+| `--config` (en-tête seul) | **74 ms**, aucune donnée lue |
+| `--materiel` | 20 threads · 16 lecteurs disque · cache experts 19,5 Go · KV 32 bits |
+| `--sonder-engram 10000` | 10 000 entrées en **219–524 ms** · 2,6 Mo touchés sur 101,4 Go par table · **RSS max 120 Mo** pour 365,7 Go adressés |
+| `--ppl` (avec `DRAVE_PRELIRE_TOUT=1` et `DRAVE_GPU=1`) | **refusée en 0,33 s**, RSS 47 Mo |
+
+**La passe avant ne peut pas être exécutée, et le moteur le dit maintenant en 74 ms** avec la liste exacte, relevée dans `llama.cpp/src/models/deepseek4.cpp` : hyper-connexions (l'état résiduel est 4 copies mélangées par sigmoïde + Sinkhorn, pas un vecteur), **sortie à rang faible groupée** (`o_groups = 8`), **dé-rotation de sortie + puits par tête**, et surtout **trois attentions compressées** (CSA/HCA/brute) qui cohabitent selon `compress_ratios`. L'engram n'est pas un obstacle : llama.cpp ne le calcule pas non plus, et le moteur sait déjà l'adresser (mesure ci-dessus).
+
+Estimation honnête de la suite : 1 h pour la sortie à rang faible, une demi-journée pour les hyper-connexions (toute erreur y est silencieuse), plusieurs jours pour les attentions compressées — c'est le cœur de ce que V4.1 apporte. Détail et commandes de reproduction : `reports/rapport-execution-v41.md` (commit `e3a802d`).
+
+Corrigé au passage : `--config` et le refus à l'ouverture tenaient **deux listes divergentes** (deux manques annoncés, trois refusés) — il n'en reste qu'une, et les dimensions se lisent aussi dans le JSON `<arch>.config` (V4.1 était décrit « 40 couches » au lieu de zéro).
+
+## 2. Résumé 8 pages de FPGA-Stratix-V
+
+**`/home/stephane/Data13TB/stephane/GitHub/FPGA-Stratix-V/docs/resume-8-pages.md`** — 475 lignes, ≈ 4 570 mots, 8 sections + annexe des fichiers lus. Un seul fichier créé, aucun fichier existant modifié (`git status` ne montre que `?? docs/resume-8-pages.md`). Chaque chiffre porte sa provenance : **[M] mesuré / [D] déclaré / [E] estimé**, avec le chemin du fichier source, et « absent du dépôt » quand le chiffre n'existe pas.
+
+Les cinq chiffres mesurés (rapports Quartus non versionnés) : **nipada_k1** 238 ALM · 13 DSP · Fmax **124,13 MHz** (slack −3,056 ns) · **event_engine 32 PE** 6 498 ALM · 0 DSP · 384 M20K (19 %) · Fmax **177,09 MHz** · **event_pe** 176 ALM / 0 DSP en 112,52 MHz contre 115 ALM / 1 DSP en 112,17 · **event_reader** 1 176 ALM · Fmax **106,42 MHz** · compilation K1 **4 min 09 s**.
+
+J'ai vérifié moi-même trois de ces chiffres dans les rapports sur disque (`event_engine.fit.summary` : 6 498 ALM, 7 845 registres, 384 blocs RAM, 0 DSP ; `event_reader.fit.summary` : 1 176 ALM ; `event_reader.sta.rpt` : 106,42 MHz) — ils concordent exactement.
+
+**À lire avant de vous y fier** (§7 du document) : aucun design ne ferme 200 MHz ; les « PASS » de simulation sont **déclarés sans log** (Questa bloqué par la licence `intelqsimstarter`, `tb/qrun.log` vide) ; `v14_graph_dijkstra` n'a **aucun rapport de synthèse** ; le README et `device/5SGSKF40I3LNAC.md` divergent (238 ALM/124 MHz contre 251 ALM/129 MHz) ; et toutes les mesures sont pour un part **commercial** plus rapide que la puce industrielle réellement montée — timing optimiste. Ces points viennent du document ; je n'ai pas revérifié chacun.
+
+## État
+
+`drave` : portes vertes (48 tests, Qwen 19,3885, clusters 799,8557, 17 formats contre libggml), arbre propre hormis le journal régénéré, dernier commit `e3a802d`. Aucun travail lourd ne tourne.
+
+Si vous voulez que V4.1 tourne vraiment, dites-moi par quoi commencer : je ferais la sortie à rang faible puis les hyper-connexions, chacune validée contre `ref_logits` avant de passer à la suivante.
+
+
+## Tour 72
+
+### 👤 Utilisateur
+
+fais un plan pour compléter drave afin qu'il exécute parfaitement toutes les fonctionnalités requises pour deepseek 4.1 tout en maintenant notre philosophie.
+
+### 🤖 Assistant
+
+⏵ Avant le plan : inventaire exact des tenseurs V4.1 par type de couche
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport sys, re, json, collections\nsys.path.insert(0,'tools')\nfrom analyse_experts_statique import Lecteur\ng = Lecteur('/home/stephane/FastNVMe/modeles-lourds/DeepSeek-V4.1-Flash-Q2.gguf')\ncfg = json.loads(g.meta … [726 caractères tronqués]`
+
+  ```
+num_hidden_layers : 40 · compress_ratios : 43 entrées
+ratios : Counter({1: 20, 2: 18, 0: 5})
+par couche : {0: 0, 1: 0, 2: 2, 3: 2, 4: 2, 5: 2, 40: 0, 41: 0, 42: 0}
+
+--- tenseurs par couche (suffixe × nb de couches) ---
+   40 × hc_attn_fn.weight
+   40 × hc_attn_base.weight
+   40 × hc_attn_scale.weight
+   40 × attn_norm.weight
+   40 × hc_ffn_fn.weight
+   40 × hc_ffn_base.weight
+   40 × hc_ffn_scale.weight
+   40 × ffn_norm.weight
+   40 × attn_sinks.weight
+   40 × attn_q_a.weight
+   40 × attn_q_b.weight
+   40 × attn_q_a_norm.weight
+   40 × attn_kv.weight
+   40 × attn_kv_a_norm.weight
+   40 × attn_output_a.weight
+   40 × attn_output_b.weight
+   40 × ffn_gate_inp.weight
+   40 × exp_probs_b.bias
+   40 × exp_probs_b_vl.bias
+   40 × ffn_gate_shexp.weight
+   40 × ffn_gate_exps.weight
+   40 × ffn_up_shexp.weight
+   40 × ffn_up_exps.weight
+   40 × ffn_down_shexp.weight
+   40 × ffn_down_exps.weight
+    8 × indexer.attn_q_b.weight
+    8 × indexer.proj.weight
+    4 × attn_compressor_kv.weight
+    4 × attn_compressor_norm.weight
+    4 × indexer.attn_k.weight
+    4 × indexer.k_norm.weight
+    3 × attn_compressor_gate.weight
+    2 × engram_q_norm.weight
+    2 × engram_k_norm.weight
+    2 × engram_kv
+… [34 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls docs/ && python3 - <<'PY'\nimport sys, json\nsys.path.insert(0,'tools')\nfrom analyse_experts_statique import Lecteur\ng = Lecteur('/home/stephane/FastNVMe/modeles-lourds/DeepSeek-V4.1-Flash-Q2.gguf')\nT = {0:'F32',1:'F16',8:'Q8_0 … [972 caractères tronqués]`
+
+  ```
+colab-reparti.md
+comparaison-spiking.md
+contexte-long.md
+convertisseur.md
+format-clusters.md
+format-flux.md
+histoire.md
+plan-deepseek-v4-flash.md
+plan-gpu-topk.md
+plan-mla-vision.md
+plan-mode4-lot-listes.md
+plan-modeles-lourds.md
+plan-prefill-reparti.md
+programme-recherche.md
+roadmap.md
+sprints.md
+vision.md
+  blk.0.hc_attn_fn.weight              F16      [24, 20480]
+  blk.0.hc_attn_base.weight            F32      [24]
+  blk.0.hc_attn_scale.weight           F32      [3]
+  blk.0.attn_sinks.weight              F32      [64]
+  blk.0.attn_q_a.weight                Q8_0     [1280, 5120]
+  blk.0.attn_q_b.weight                Q8_0     [32768, 1280]
+  blk.0.attn_kv.weight                 Q8_0     [512, 5120]
+  blk.0.attn_output_a.weight           Q8_0     [8192, 4096]
+  blk.0.attn_output_b.weight           Q8_0     [5120, 8192]
+  blk.2.indexer.proj.weight            F16      [32, 5120]
+  blk.2.indexer.attn_q_b.weight        F16      [4096, 1280]
+  blk.2.indexer.attn_k.weight          F16      [128, 512]
+  blk.2.indexer.k_norm.weight          F32      [128]
+  blk.2.attn_compressor_kv.weight      F16      [512, 5120]
+  blk.2.attn_compressor_norm.weight    F32      [512]
+  blk.3.attn_compress
+… [582 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && head -40 docs/plan-deepseek-v4-flash.md; echo \"...\"; grep -n \"^#\" docs/plan-deepseek-v4-flash.md | head -12; wc -l docs/plan-deepseek-v4-flash.md docs/roadmap.md", "description": "Read the existing V4-Flash plan for style"}`
+
+  ```
+# Chantier — adapter les tests de contexte à DeepSeek-V4-Flash
+
+**État au 01/10 09h40** : le modèle **est téléchargé** dans la bibliothèque du
+disque mécanique (`/home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek-V4-Flash-UD-IQ1_M/`,
+3 shards, 86,9 Go). Le NVMe ne sert plus qu'aux artefacts que nous produisons. Le moteur **lit déjà ses métadonnées** : `--plan` affiche
+« deepseek4, 43 couches, 256 experts (top-6) ». Mais il ne peut pas encore le
+FAIRE TOURNER, pour deux raisons précises, et c'est ce document qui les cadre.
+
+## Ce qui a été téléchargé, et pourquoi celui-là
+
+| nom | nature | poids ouverts ? |
+|---|---|---|
+| **DeepSeek-V4.1-Flash** | modèle d'API ([api-docs](https://api-docs.deepseek.com/news/news260910/), [deepseek.com](https://www.deepseek.com/news/deepseek-v4-1-flash/)) | **non** — aucun GGUF publié |
+| **DeepSeek-V4-Flash** | poids ouverts (base de V4.1) : [unsloth/DeepSeek-V4-Flash-GGUF](https://huggingface.co/unsloth/DeepSeek-V4-Flash-GGUF), [huihui-ai](https://huggingface.co/huihui-ai/Huihui-DeepSeek-V4-Flash-0731-abliterated-GGUF) | oui |
+
+C'est donc **DeepSeek-V4-Flash** (le seul des deux qui se télécharge) qui est
+récupéré, en quantification **UD-IQ1_M**
+… [1977 caractères tronqués]
+  ```
+
+- **write** `{"content": "# Plan — compléter Drave pour exécuter DeepSeek-V4.1, sans trahir la méthode\n\n**État au 02/10 09h00.** Ce document est un plan, pas un compte rendu : il dit ce\nqu'il reste à faire, dans quel ordre, et **comment on saura que c'est fait**. Il\ns'appuie sur l'inventaire mesuré du modèle … [14103 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/plan-deepseek41-complet.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\n# Vérifier les chiffres cités dans le plan contre la réalité du fichier.\nimport sys, json, re, collections\nsys.path.insert(0,'tools')\nfrom analyse_experts_statique import Lecteur\ng = Lecteur('/home/stephane/Fast … [1190 caractères tronqués]`
+
+  ```
+compress_ratios (40 premières) : {0: 2, 2: 18, 1: 20} → HCA: 20 CSA: 18 brutes: 2
+couches CSA : [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19]
+couches HCA : [20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39]
+couches brutes : [0, 1]
+blk.0.hc_head_fn.weight → ABSENT
+hc_head_fn.weight → ABSENT
+hc_head_base.weight → ABSENT
+hc_head_scale.weight → ABSENT
+engram layer_ids : [1, 14]
+o_groups/o_lora_rank : 8 1024 · q_lora: 1280
+index_source_layer_ids : [2, 8, 14, 20, 24, 28, 32, 36] · kv_source: [2, 8, 14, 20]
+candidate_* : 2048 8 20
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport sys\nsys.path.insert(0,'tools')\nfrom analyse_experts_statique import Lecteur\ng = Lecteur('/home/stephane/FastNVMe/modeles-lourds/DeepSeek-V4.1-Flash-Q2.gguf')\nnoms = [k for k in g.tenseurs if 'hc' in k.low … [371 caractères tronqués]`
+
+  ```
+tenseurs hc hors blk.* : []
+
+globaux (sans blk.) : ['output.weight', 'output_norm.weight', 'token_embd.weight']
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && export LD_LIBRARY_PATH=/home/stephane/Data13TB/stephane/GitHub/llama.cpp/build/bin && timeout 900 ./tools/ref_logits /home/stephane/FastNVMe/modeles-lourds/DeepSeek-V4.1-Flash-Q2.gguf /tmp/ids_qwen.txt /tmp/ref_v41_2.bin 2 2>&1 | tai … [61 caractères tronqués]`
+
+  ```
+print_info: file format = GGUF V3 (latest)
+print_info: file type   = (guessed) all F32
+print_info: file size   = 340.59 GiB (3.88 BPW) 
+llama_model_load: error loading model: unknown model architecture: 'deepseek41'
+llama_model_load_from_file_impl: failed to load model
+ref_logits: echec du chargement de /home/stephane/FastNVMe/modeles-lourds/DeepSeek-V4.1-Flash-Q2.gguf
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport sys, json, collections\nsys.path.insert(0,'tools')\nfrom analyse_experts_statique import Lecteur\nprint(\"=== V4-Flash (deepseek4, ouvert) ===\")\ng = Lecteur('/home/stephane/Data13TB/stephane/modeles/gguf/De … [977 caractères tronqués]`
+
+  ```
+=== V4-Flash (deepseek4, ouvert) ===
+  tenseurs globaux : ['output.weight', 'output_hc_base.weight', 'output_hc_fn.weight', 'output_hc_scale.weight', 'output_norm.weight', 'token_embd.weight']
+=== métadonnées V4.1 apparentées ===
+   deepseek41.candidate_block_size = 8
+   deepseek41.candidate_source_layer_id = 20
+   deepseek41.candidate_topk_blocks = 2048
+   deepseek41.compress_ratios = <liste de 40>
+   deepseek41.compress_rope_theta = 160000
+   deepseek41.engram.compressed_vocab_size = 99092
+   deepseek41.engram.encoding = e4m3_e8m0_32_row264
+   deepseek41.engram.layer_ids = <liste de 2>
+   deepseek41.engram.multipliers = <liste de 8>
+   deepseek41.engram.pad_id = 2
+   deepseek41.engram.primes = <liste de 48>
+   deepseek41.engram.rows = <liste de 2>
+   deepseek41.engram.token_map = <liste de 129280>
+   deepseek41.hc_eps = 9.999999974752427e-07
+   deepseek41.hc_mult = 4
+   deepseek41.hc_sinkhorn_iters = 20
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport sys, re, collections\nsys.path.insert(0,'tools')\nfrom analyse_experts_statique import Lecteur\nD='/home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek-V4-Flash-UD-IQ1_M/'\nsuf = collections.Counter()\nfor  … [443 caractères tronqués]`
+
+  ```
+V4-Flash — tenseurs par couche :
+   43 × attn_kv.weight
+   43 × attn_kv_a_norm.weight
+   43 × attn_norm.weight
+   43 × attn_output_a.weight
+   43 × attn_output_b.weight
+   43 × attn_q_a.weight
+   43 × attn_q_a_norm.weight
+   43 × attn_q_b.weight
+   43 × attn_sinks.weight
+   43 × ffn_down_exps.weight
+   43 × ffn_down_shexp.weight
+   43 × ffn_gate_exps.weight
+   43 × ffn_gate_inp.weight
+   43 × ffn_gate_shexp.weight
+   43 × ffn_norm.weight
+   43 × ffn_up_exps.weight
+   43 × ffn_up_shexp.weight
+   43 × hc_attn_base.weight
+   43 × hc_attn_fn.weight
+   43 × hc_attn_scale.weight
+   43 × hc_ffn_base.weight
+   43 × hc_ffn_fn.weight
+   43 × hc_ffn_scale.weight
+   41 × attn_compressor_ape.weight
+   41 × attn_compressor_gate.weight
+   41 × attn_compressor_kv.weight
+   41 × attn_compressor_norm.weight
+   40 × exp_probs_b.bias
+   21 × indexer.attn_q_b.weight
+   21 × indexer.proj.weight
+   21 × indexer_compressor_ape.weight
+   21 × indexer_compressor_gate.weight
+   21 × indexer_compressor_kv.weight
+   21 × indexer_compressor_norm.weight
+    3 × ffn_gate_tid2eid.weight
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && export LD_LIBRARY_PATH=/home/stephane/Data13TB/stephane/GitHub/llama.cpp/build/bin && setsid nohup timeout 1800 ./tools/ref_logits /home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek-V4-Flash-UD-IQ1_M/DeepSeek-V4-Flash-UD-IQ1_M-00 … [252 caractères tronqués]`
+
+  ```
+test llama.cpp sur V4-Flash lancé
+create_tensor: loading tensor blk.42.ffn_down_shexp.weight
+create_tensor: loading tensor blk.42.ffn_up_shexp.weight
+done_getting_tensors: tensor 'token_embd.weight' (q4_K) (and 1324 others) cannot be used with preferred buffer type CPU_REPACK, using CPU instead
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in $(seq 1 60); do if grep -qE \"perplexite|error|echec\" /tmp/ref_v4flash.log; then break; fi; sleep 10; done; grep -E \"perplexite|NLL|fichier|error|echec\" /tmp/ref_v4flash.log | tail -5", "description": "Wait for the V4-Fla … [48 caractères tronqués]`
+
+  ```
+started background job bash-130
+  ```
+
+- **job_output** `{"job_id": "bash-130", "timeout_ms": 600000, "wait": true}`
+
+  ```
+NLL moy  = 11.737136
+perplexite = 125133.462249
+fichier  = /tmp/ref_v4flash_2.bin (1 x 129280 f32 + 8 octets d'en-tete)
+[status: completed, exit code: 0]
+  ```
+
+- **write** `{"content": "# Plan — compléter Drave pour exécuter DeepSeek-V4, sans trahir la méthode\n\n**État au 02/10 09h30.** Ce document est un plan : il dit ce qu'il reste à faire,\ndans quel ordre, **comment on saura que c'est fait** — et **sur quel modèle on le\nprouve**. Il a été écrit après trois vérifi … [14978 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/plan-deepseek41-complet.md</path>
+<type>file</type>
+<content>
+Updated file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -i 's|^# Plan — compléter Drave pour exécuter DeepSeek-V4, sans trahir la méthode|# Plan — compléter Drave pour exécuter DeepSeek-V4.1 (et V4-Flash), sans trahir la méthode|' docs/plan-deepseek41-complet.md && wc -l -w docs/plan- … [870 caractères tronqués]`
+
+  ```
+280  2474 docs/plan-deepseek41-complet.md
+10
+V4.1 : {'ratio 0': 2, 'ratio 1': 20, 'ratio 2': 18} → compressées : 38 /40
+V4-Flash globaux : ['output.weight', 'output_hc_base.weight', 'output_hc_fn.weight', 'output_hc_scale.weight', 'output_norm.weight', 'token_embd.weight']
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\n# Le plan doit être référencé depuis la roadmap et REPRISE, sinon il se perd.\np='REPRISE.md'; s=open(p).read()\ns += \"\"\"\n\n---\n\n## Plan pour exécuter DeepSeek-V4.1 (02/10)\n\n[`docs/plan-deepseek41-complet.md … [2839 caractères tronqués]`

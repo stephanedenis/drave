@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 90.1 h |
-| Tours | 71 |
-| Messages | 4142 |
-| Appels d'outils | 3942 |
-| Fichiers touchés | 81 |
-| Commandes | 3469 |
+| Durée | 90.4 h |
+| Tours | 72 |
+| Messages | 4174 |
+| Appels d'outils | 3970 |
+| Fichiers touchés | 82 |
+| Commandes | 3492 |
 | Sous-agents | 23 |
-| Commits | 318 |
+| Commits | 319 |
 | Compactages de contexte | 5 |
 
 ## Objectifs déclarés
@@ -183,6 +183,8 @@
 **Tour 70** — <goal_round> Objective: "Session autonome jusqu'à 8h HAE (02/10). Mener les optimisations d'architecture mémoire du moteur Drave, par ordre de valeur, chacune mesurée par comparaison appariée et consignée : (1) détection matérielle et heuristiques automatiques — FAIT ; (2) restriction de tête GARANTIE : ne jamais changer la sortie, charger dynamiquement les logits manquants (borne de Cauchy-Schwar … [1037 caractères tronqués]
 
 **Tour 71** — fais un test d'execution locale de deepseek 4.1 avec toutes les optimisation . Cette instance doit lire tout /home/stephane/Data13TB/stephane/GitHub/FPGA-Stratix-V/ et faire un document de résumé en 8 pages.
+
+**Tour 72** — fais un plan pour compléter drave afin qu'il exécute parfaitement toutes les fonctionnalités requises pour deepseek 4.1 tout en maintenant notre philosophie.
 
 ## 2. Déroulé, étape par étape
 
@@ -3626,7 +3628,7 @@ Session close, 08 h HAE.
 
 ### Tour 71 — fais un test d'execution locale de deepseek 4.1 avec toutes les optimisation . Cette instance doit lire tout /home/steph … [87 caractères tronqués]
 
-*28 appels d'outils.* Actions notables :
+*41 appels d'outils.* Actions notables :
 
 - bash — Survey the FPGA-Stratix-V repository
 - bash — List FPGA source files and sizes
@@ -3642,11 +3644,60 @@ Session close, 08 h HAE.
 - bash — Read the rest of hc_pre and its usage
 - bash — Read build_hc_post and the hc tensor shapes
 - bash — Read the hc head and low-rank output usage
-- … et 14 autres
+- … et 27 autres
 
 **Synthèse produite :**
 
-⏵ llama.cpp ignore l'engram : V4.1 n'a besoin que des hyper-connexions et de la sortie à rang faible
+Deux livrables, tous les deux mesurés. Voici l'état.
+
+\## 1. Test d'exécution locale de DeepSeek-V4.1-Flash
+
+Sur la copie NVMe (`/home/stephane/FastNVMe/modeles-lourds/DeepSeek-V4.1-Flash-Q2.gguf`, 365,71 Go, 1 046 tenseurs, 40 couches, 384 experts top-6), **avec toutes les optimisations** :
+
+| test | résultat mesuré |
+|---|---|
+| `--tensors` (mmap, aucune copie) | 365,70 Go lus en **63,8 ms** |
+| `--config` (en-tête seul) | **74 ms**, aucune donnée lue |
+| `--materiel` | 20 threads · 16 lecteurs disque · cache experts 19,5 Go · KV 32 bits |
+| `--sonder-engram 10000` | 10 000 entrées en **219–524 ms** · 2,6 Mo touchés sur 101,4 Go par table · **RSS max 120 Mo** pour 365,7 Go adressés |
+| `--ppl` (avec `DRAVE_PRELIRE_TOUT=1` et `DRAVE_GPU=1`) | **refusée en 0,33 s**, RSS 47 Mo |
+
+**La passe avant ne peut pas être exécutée, et le moteur le dit maintenant en 74 ms** avec la liste exacte, relevée dans `llama.cpp/src/models/deepseek4.cpp` : hyper-connexions (l'état résiduel est 4 copies mélangées par sigmoïde + Sinkhorn, pas un vecteur), **sortie à rang faible groupée** (`o_groups = 8`), **dé-rotation de sortie + puits par tête**, et surtout **trois attentions compressées** (CSA/HCA/brute) qui cohabitent selon `compress_ratios`. L'engram n'est pas un obstacle : llama.cpp ne le calcule pas non plus, et le moteur sait déjà l'adresser (mesure ci-dessus).
+
+Estimation honnête de la suite : 1 h pour la sortie à rang faible, une demi-journée pour les hyper-connexions (toute erreur y est silencieuse), plusieurs jours pour les attentions compressées — c'est le cœur de ce que V4.1 apporte. Détail et commandes de reproduction : `reports/rapport-execution-v41.md` (commit `e3a802d`).
+
+Corrigé au passage : `--config` et le refus à l'ouverture tenaient **deux listes divergentes** (deux manques annoncés, trois refusés) — il n'en reste qu'une, et les dimensions se lisent aussi dans le JSON `<arch>.config` (V4.1 était décrit « 40 couches » au lieu de zéro).
+
+\## 2. Résumé 8 pages de FPGA-Stratix-V
+
+**`/home/stephane/Data13TB/stephane/GitHub/FPGA-Stratix-V/docs/resume-8-pages.md`** — 475 lignes, ≈ 4 570 mots, 8 sections + annexe des fichiers lus. Un seul fichier créé, aucun fichier existant modifié (`git status` ne montre que `?? docs/resume-8-pages.md`). Chaque chiffre porte sa provenance : **[M] mesuré / [D] déclaré / [E] estimé**, avec le chemin du fichier source, et « absent du dépôt » quand le chiffre n'existe pas.
+
+Les cinq chiffres mesurés (rapports Quartus non versionnés) :
+… [1537 caractères tronqués]
+
+### Tour 72 — fais un plan pour compléter drave afin qu'il exécute parfaitement toutes les fonctionnalités requises pour deepseek 4.1  … [37 caractères tronqués]
+
+*15 appels d'outils.* Actions notables :
+
+- bash — Inventory the V4.1 layer types and tensors
+- bash — Collect the exact shapes of the V4.1 mechanism tensors
+- bash — Read the existing V4-Flash plan for style
+- write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/plan-deepseek41-complet.md`
+- bash — Verify every figure quoted in the plan
+- bash — Find the real hyper-connection head tensor names
+- bash — Test whether llama.cpp can load V4.1
+- bash — Compare V4-Flash and V4.1 metadata for HC and compress ratios
+- bash — Inventory V4-Flash's per-layer tensors
+- bash — Test whether llama.cpp can run V4-Flash
+- bash — Wait for the V4-Flash reference result
+- job_output
+- write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/plan-deepseek41-complet.md`
+- bash — Verify the plan's figures once more
+- … et 1 autres
+
+**Synthèse produite :**
+
+⏵ Avant le plan : inventaire exact des tenseurs V4.1 par type de couche
 
 ## 3. Travail accompli
 
@@ -3735,6 +3786,7 @@ Session close, 08 h HAE.
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/extraire_tables_ggml.sh` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-routage-experts.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-mla-experts.md` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/plan-deepseek41-complet.md` | 2 | 0 |
 
 ### Sous-agents lancés
 
@@ -3804,7 +3856,7 @@ Session close, 08 h HAE.
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 3429 autres
+- … et 3452 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4270,4 +4322,5 @@ Session close, 08 h HAE.
 - L'écart naît APRÈS la couche 0 : 1,9 % / 1,3 % / 3,8 % / 4,0 % aux positions 0-3  Comparaison étagée de la sortie de la couche 0 (GLM-5.3, 8 premières valeurs, 
 - REPRISE : l'écart MLA naît après la couche 0 (mesuré aux positions 0-3)" 2>/dev/null; git log --oneline -1
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-execution-v41.md <<'EOF' # Rapport — test d'exécution locale de DeepSeek-V4.1-Flash,
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' # Le plan doit être référencé depuis la roadmap et REPRISE, sinon il se perd. p='REPRISE.
 

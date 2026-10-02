@@ -2693,3 +2693,642 @@ TOTAL 4989
 The file /home/stephane/Data13TB/stephane/GitHub/FPGA-Stratix-V/docs/resume-8-pages.md has been updated successfully.
   ```
 
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/FPGA-Stratix-V/docs/resume-8-pages.md", "new_string": "1. **Fermer le timing.** Le dernier commit écarte l'hypothèse de l'arithmétique d'adresses\n   (`106,4` vs `109,9 MHz`) et pointe la « logique d'état et de FIFO ». Pistes écrites dans\n   `d … [5386 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/FPGA-Stratix-V/docs/resume-8-pages.md has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/FPGA-Stratix-V/ && python3 -c \"\nimport re\nt=open('docs/resume-8-pages.md').read()\nfor s in re.split(r'\\n(?=## )', t):\n    print(f\\\"{len(s.replace('|',' ').split()):5d}  {s.split(chr(10))[0][:55]}\\\")\nprint('TOTAL', len(t.replace('|',' … [72 caractères tronqués]`
+
+  ```
+110  # Dépôt `FPGA-Stratix-V` — résumé technique (8 pages)
+  187  ## 1. Ce qu'est le projet, en cinq lignes
+ 1146  ## 2. Architecture matérielle — d'après le code RTL
+  739  ## 3. Résultats MESURÉS (rapports Quartus)
+  620  ## 4. Vérification : ce que les testbenches couvrent, e
+  470  ## 5. Outillage et flux de build
+  437  ## 6. État du dépôt
+  695  ## 7. Limites et risques — ce que le dépôt ne prouve pa
+  474  ## 8. Questions ouvertes et prochaines étapes
+TOTAL 4878
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/FPGA-Stratix-V/docs/resume-8-pages.md", "new_string": "Machine à états de **12 états** (`S_IDLE`, `S_WAIT`, `S_HDR`, `S_ACT_REQ`, `S_ACT_FILL`,\n`S_ACT_DEC`, `S_TAB_REQ`, `S_TAB`, `S_XLOAD`, `S_LIST_REQ`, `S_LIST_FILL`, `S_DONE`) lisant\ntrois s … [3042 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/FPGA-Stratix-V/docs/resume-8-pages.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/FPGA-Stratix-V/docs/resume-8-pages.md", "new_string": "| Grandeur | Valeur | Nature | Source |\n|---|---|---|---|\n| Débit `event_pe` | 1 événement / cycle / PE | [D] | `rtl/event_pe.sv` |\n| Latence `event_pe` | 3 étages (lecture→addition→écrit … [2271 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/FPGA-Stratix-V/docs/resume-8-pages.md has been updated successfully.
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/FPGA-Stratix-V/docs/resume-8-pages.md", "limit": 45, "offset": 14}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/FPGA-Stratix-V/docs/resume-8-pages.md</path>
+<type>file</type>
+<content>
+14: 
+15: ## 1. Ce qu'est le projet, en cinq lignes
+16: 
+17: 1. **Objectif** : fournir la couche hardware (« kernels RTL NIPADA ») du projet
+18:    Panini-Research — un **moteur d'événements** qui calcule `acc[adresse] += x × poids` à
+19:    partir de listes compressées, plus deux kernels V14 (distance L2, plus court chemin sur
+20:    graphe) (`README.md`).
+21: 2. **Carte cible** : Microsoft « Storey Peak » (Catapult v2), FPGA **Stratix V GS
+22:    `5SGSKF40I3LNAC`** (pièce *custom* Microsoft, absente de la base Quartus), 4 Go DDR3,
+23:    2 Hard IP PCIe Gen3 ×8, 2 ports QSFP+ 40GbE (`device/5SGSKF40I3LNAC.md`,
+24:    `docs/carte-storey-peak.md`).
+25: 3. **Outil** : **Quartus Prime Standard 21.1.1 Build 850** — seule édition installée
+26:    connaissant la famille `stratixv` ; compilation pour le part commercial
+27:    `5SGSMD5K1F40C1` (`docs/toolchain.md` §1 et §7, `qsf/nipada_k1.qsf`).
+28: 4. **Vérification** : deux flux parallèles — **iverilog 13.0** sans licence pour le moteur
+29:    d'événements (`sim/Makefile`, `tb/tb_event_pe.sv`, `tb/tb_event_reader.sv`) et
+
+… [2759 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/FPGA-Stratix-V/docs/resume-8-pages.md", "new_string": "| Banc | Ce qu'il couvre | Ce qu'il ne couvre pas | Source |\n|---|---|---|---|\n| `tb/tb_event_pe.sv` | Échappement dirigé (saut de 299 → `acc[299]`), `n_escapes`, puis **données réelles**  … [3797 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/FPGA-Stratix-V/docs/resume-8-pages.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/FPGA-Stratix-V/docs/resume-8-pages.md", "new_string": "- Derniers commits (du plus récent au plus ancien) : `73801af` « Lecteur : le chemin critique\n  n'est pas l'arithmétique d'adresse » ; `722ca03` (lecteur DDR3) ; `86d343b` (banc multi-PE) ; … [785 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/FPGA-Stratix-V/docs/resume-8-pages.md has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/FPGA-Stratix-V/ && python3 -c \"\nt=open('docs/resume-8-pages.md').read()\nprint('TOTAL', len(t.replace('|',' ').split()))\n\"", "description": "Recount total words"}`
+
+  ```
+TOTAL 4781
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/FPGA-Stratix-V/docs/resume-8-pages.md", "new_string": "| Script | Rôle | Remarque | Source |\n|---|---|---|---|\n| `tools/gen_events.py` | GGUF → `events.hex`, `expect.hex`, `xvals.hex`, `counts.hex`, `meta.txt` | importe `gguf_min` depuis `../. … [2905 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/FPGA-Stratix-V/docs/resume-8-pages.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/FPGA-Stratix-V/docs/resume-8-pages.md", "new_string": "**Fini (adossé à un artefact)** : RTL des 5 modules ; testbench PE autovérifiant ; banc 2 PE +\narbre de réduction ; chaîne lecteur → PE sur image DDR3 simulée ; synthèse de `nipada_k1`,\n`e … [1815 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/FPGA-Stratix-V/docs/resume-8-pages.md has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/FPGA-Stratix-V/ && python3 -c \"\nt=open('docs/resume-8-pages.md').read()\nprint('TOTAL', len(t.replace('|',' ').split()))\n\"", "description": "Recount total words"}`
+
+  ```
+TOTAL 4744
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/FPGA-Stratix-V/docs/resume-8-pages.md", "new_string": "1. **Les résultats de simulation « PASS » ne sont pas prouvés par le dépôt.** Aucun log\n   iverilog n'est versionné, `tb/qrun.log` est vide, les journaux Questa s'arrêtent sur une\n   erreu … [1950 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/FPGA-Stratix-V/docs/resume-8-pages.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/FPGA-Stratix-V/docs/resume-8-pages.md", "new_string": "| Module | Rôle | Paramètres (défauts du code) | Interface principale | Source |\n|---|---|---|---|---|\n| `v14_l2_distance` | Kernel 1 : distance L2 au carré entre deux vecteurs V14 | `DIMS … [2637 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/FPGA-Stratix-V/docs/resume-8-pages.md has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/FPGA-Stratix-V/ && python3 -c \"\nt=open('docs/resume-8-pages.md').read()\nprint('TOTAL', len(t.replace('|',' ').split()))\n\"", "description": "Recount total words"}`
+
+  ```
+TOTAL 4721
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/FPGA-Stratix-V/docs/resume-8-pages.md", "new_string": "### Annexe — fichiers lus\n\n**Suivis par git** : `README.md`, `.gitignore`, `device/*.md`, les 7 fichiers `docs/*.md`,\nles 5 `rtl/*.sv`, les 6 `tb/*.sv`/`*.py` + `tb/Makefile`, `sim/*` (Ma … [2136 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/FPGA-Stratix-V/docs/resume-8-pages.md has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/FPGA-Stratix-V/ && tail -30 docs/resume-8-pages.md", "description": "Show end of document"}`
+
+  ```
+de carte connues sont 125 MHz (`CLK_125M`), 100 MHz (PCIe) et 644,53125 MHz (`CLK_QSFP_OSC`) :
+   le 200 MHz est une hypothèse de conception, pas une horloge de la carte
+   (`docs/carte-storey-peak.md` §3).
+
+---
+
+### Annexe — fichiers lus
+
+**Suivis par git** : `README.md`, `.gitignore`, `device/*.md`, les 7 fichiers `docs/*.md`,
+les 5 `rtl/*.sv`, les 6 `tb/*.sv`/`*.py` + `tb/Makefile`, `sim/*` (Makefile, meta.txt et les
+5 `.hex`), les 9 `tools/*`, `qsf/*.qsf*|*.sdc|*.qpf` et `syn/**/*.qsf|*.sdc|*.qpf`.
+**Rapports et journaux (non suivis)** : tous les `output_files*/*.rpt|*.summary|*.flow.rpt|
+*.smsg|*.pin|*.done|*.jdi|*.sld`, les `.lpc.txt|.smp_dump.txt|.smart_action.txt|*.qmsg` et
+`altsyncram_*.tdf` des dossiers `db/`, `tb/sim_build_k{1,2}/*`, `tb/qrun.log` (0 octet).
+**Hors dépôt, vérifiés** : `../Panini-Research/nipada/fpga/sim/*` et le GGUF de `Qtrinet`.
+**Non lus (binaires)** : `.cdb`, `.hdb`, `.rdb`, `.ddb`, `.ammdb`, `.bpm`, `.idb`, `.logdb`,
+`.kpt`, `.tdb`, `.hsd`, `.nvd`, `.sci`, `.qdb`, `.qpg`, `.qtl`, `incremental_db/` et les `.sof`.
+`syn/reader/output_files/event_reader.*` (idem + `.map.smsg`) ;
+`syn/{db/event_pe_dsp0,syn/eng/db/event_engine,syn/reader/db/event_reader}.
+… [737 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/FPGA-Stratix-V/docs/resume-8-pages.md", "new_string": "`.kpt`, `.tdb`, `.hsd`, `.nvd`, `.sci`, `.qdb`, `.qpg`, `.qtl`, `incremental_db/` et les `.sof`.", "old_string": "`.kpt`, `.tdb`, `.hsd`, `.nvd`, `.sci`, `.qdb`, `.qpg`, `.qtl`, `incremental … [912 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/FPGA-Stratix-V/docs/resume-8-pages.md has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/FPGA-Stratix-V/ && python3 -c \"\nt=open('docs/resume-8-pages.md').read()\nprint('TOTAL', len(t.replace('|',' ').split()))\n\" && echo \"--- fin du fichier ---\" && tail -14 docs/resume-8-pages.md && echo \"--- colonnes max ---\" && awk -F'|' ' … [132 caractères tronqués]`
+
+  ```
+TOTAL 4710
+--- fin du fichier ---
+
+---
+
+### Annexe — fichiers lus
+
+**Suivis par git** : `README.md`, `.gitignore`, `device/*.md`, les 7 fichiers `docs/*.md`,
+les 5 `rtl/*.sv`, les 6 `tb/*.sv`/`*.py` + `tb/Makefile`, `sim/*` (Makefile, meta.txt et les
+5 `.hex`), les 9 `tools/*`, `qsf/*.qsf*|*.sdc|*.qpf` et `syn/**/*.qsf|*.sdc|*.qpf`.
+**Rapports et journaux (non suivis)** : tous les `output_files*/*.rpt|*.summary|*.flow.rpt|
+*.smsg|*.pin|*.done|*.jdi|*.sld`, les `.lpc.txt|.smp_dump.txt|.smart_action.txt|*.qmsg` et
+`altsyncram_*.tdf` des dossiers `db/`, `tb/sim_build_k{1,2}/*`, `tb/qrun.log` (0 octet).
+**Hors dépôt, vérifiés** : `../Panini-Research/nipada/fpga/sim/*` et le GGUF de `Qtrinet`.
+**Non lus (binaires)** : `.cdb`, `.hdb`, `.rdb`, `.ddb`, `.ammdb`, `.bpm`, `.idb`, `.logdb`,
+`.kpt`, `.tdb`, `.hsd`, `.nvd`, `.sci`, `.qdb`, `.qpg`, `.qtl`, `incremental_db/` et les `.sof`.
+--- colonnes max ---
+8
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/FPGA-Stratix-V/ && sed -n '/^### 4.1/,/^### 4.2/p' docs/resume-8-pages.md", "description": "Show section 4.1 text"}`
+
+  ```
+### 4.1 État réel des journaux de simulation [M]
+
+- `tb/sim_build_k1/sim.log` : compilation (`vlog`/`vopt`) **0 erreur**, puis
+  « Unable to find the license file… Vsim is closing. **Error: Invalid license environment** ».
+- `tb/sim_build_k2/sim.log` : « License server does not support this feature
+  (**intelqsimstarter**) », « Invalid host. (`~/.altera.quartus/questa_lic.dat`) », « No such
+  feature exists » → `Error loading design`.
+- `tb/qrun.log` : fichier **vide (0 octet)**, ignoré par git.
+- Aucun journal de simulation **iverilog** n'est versionné : les résultats « aucune
+  divergence » du PE et du lecteur (`docs/rapport-pe-evenementiel.md`,
+  `docs/rapport-lecteur-ddr3.md`) ne sont adossés à **aucun log du dépôt** [D].
+- Les résultats §371 du README (K1 « erreur max = 0,096 %, PASS » ; K2 « R²=1.000000, PASS »)
+  sont **DÉCLARÉS** : aucun `results.xml`, aucun transcript, aucun log ne les atteste
+  (`README.md`, `tb/qrun.log` vide).
+
+### 4.2 Incohérences de données de test relevées
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/FPGA-Stratix-V/docs/resume-8-pages.md", "new_string": "### 4.1 État réel des journaux de simulation [M]\n\n- `tb/sim_build_k1/sim.log` : compilation (`vlog`/`vopt`) **0 erreur**, puis\n  « Unable to find the license file… Vsim is closing. **Erro … [1625 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/FPGA-Stratix-V/docs/resume-8-pages.md has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/FPGA-Stratix-V/ && sed -n '/^### 5.1/,/^### 5.3/p' docs/resume-8-pages.md", "description": "Show sections 5.1-5.2"}`
+
+  ```
+### 5.1 Quartus
+
+- **Édition** : Quartus Prime **Standard 21.1.1 Build 850** (`~/intelFPGA/21.1/quartus/bin`).
+  Les éditions Pro 26.1 et Lite 23.1 installées sur la machine **ne compilent pas** pour
+  Stratix V (famille `stratixv` absente) — constat consigné dans `docs/toolchain.md` §1 et
+  dans `tools/host_check.sh` (test de présence de `common/devinfo/stratixv`).
+- **Bibliothèques** : `tools/setup_compat_libs.sh` extrait `libnsl.so.1` et
+  `libgthread-2.0.so.0` depuis openSUSE Leap 15.6 dans `~/fpga-compat` (sans `sudo`) ;
+  `tools/quartus_env.sh` les ajoute au `LD_LIBRARY_PATH` et exporte `LM_LICENSE_FILE` /
+  `SALT_LICENSE_SERVER`, avec contrôle du **HOSTID** de la licence contre `lmutil lmhostid`.
+- **Licence** : licence d'évaluation 90 jours obtenue le 2026-09-25 pour le NIC
+  `64006A551B60` (valide → **2026-12-24**), installée par `tools/install_license.sh`. La
+  feature **`intelqsimstarter`** (ligne SSLC `SW-QUESTA`) **manque** : c'est la cause directe
+  de l'échec de Questa (`docs/journal-bringup.md` §7, `tools/quartus_env.sh`).
+- **Device** : la pièce réelle `5SGSKF40I3LNAC` n'existe pas dans la base Quartus ; tous les
+  `.qsf` du dépôt utilisent `5SGSMD5K1F40C1` (`qsf/*
+… [1232 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/FPGA-Stratix-V/docs/resume-8-pages.md", "new_string": "- **Édition** : Quartus Prime **Standard 21.1.1 Build 850** (`~/intelFPGA/21.1/quartus/bin`).\n  Les éditions Pro 26.1 et Lite 23.1 installées **ne compilent pas** pour Stratix V (famille\n  … [4218 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/FPGA-Stratix-V/docs/resume-8-pages.md has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/FPGA-Stratix-V/ && python3 -c \"\nt=open('docs/resume-8-pages.md').read()\nprint('TOTAL', len(t.replace('|',' ').split()))\n\" && git status --porcelain", "description": "Recount words and check git status"}`
+
+  ```
+TOTAL 4643
+?? docs/resume-8-pages.md
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/FPGA-Stratix-V/ && sed -n '/^Détails et chiffres secondaires/,/^### 3.1/p' docs/resume-8-pages.md", "description": "Show section 3 bullets"}`
+
+  ```
+Détails et chiffres secondaires, tous [M] :
+
+- **`nipada_k1`** : 548 / 864 pins (63 %), 0 bloc de mémoire, bitstream produit (`.done`
+  horodaté `Fri Sep 25 13:42:26 2026`), *hold* slack **+0,147 ns** — le seul slack positif
+  relevé dans tout le dépôt (`qsf/output_files/nipada_k1.sta.summary`).
+- **`event_pe`** : 0 DSP exigé et obtenu. L'écart entre les deux variantes est **+61 ALM pour
+  la version sans DSP** (176 − 115) [E, différence des deux rapports], pour **−0,35 MHz**
+  (112,52 vs 112,17) [E].
+- **`event_engine`** : 6 498 ALM dont **1 480 ALM comptés à cause des *virtual pins*** (mention
+  du rapport), 2 959 virtual pins, 0 pin réel, 6 291 456 bits de RAM (= 384 × 16 384) : 32 PE
+  et l'arbre de réduction tiennent dans **4 %** des ALM et **19 %** des M20K
+  (`syn/eng/output_files/event_engine.fit.summary`).
+- **`event_reader`** : 193 pins, 4 608 bits de bloc mémoire (4 M20K), un avertissement
+  d'inférence de *latch* sur `wcnt`/`n_events` ligne 124, des objets « assignés mais jamais
+  lus » (`n_src_q`, `n_act_q`, `list_lo_q`, `x_q`) et des pins `n_events[0]`/`n_events[1]`
+  « bloqués à GND » — cohérent avec un compteur qui s'incrémente par pas de 4
+  (`syn/reader/db/event_r
+… [72 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/FPGA-Stratix-V/docs/resume-8-pages.md", "new_string": "Détails secondaires, tous [M] :\n\n- **`nipada_k1`** : 548 / 864 pins (63 %), 0 bloc de mémoire, bitstream produit (`.done`\n  horodaté `Fri Sep 25 13:42:26 2026`), *hold* slack **+0,147 ns* … [2203 caractères tronqués]`
+
+  ```
+Error: cannot edit "/home/stephane/Data13TB/stephane/GitHub/FPGA-Stratix-V/docs/resume-8-pages.md": file changed since it was read — re-read the file, then retry
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/FPGA-Stratix-V/docs/resume-8-pages.md", "new_string": "`qsf/nipada_k1.qsf` (généré depuis le template), `tb/qrun.log` (0 octet),\n`tb/sim_build_k1/`, `tb/sim_build_k2/`, `syn/eng/{db,incremental_db,output_files}/`,\n`syn/reader/{db,incremental_d … [1529 caractères tronqués]`
+
+  ```
+Error: cannot edit "/home/stephane/Data13TB/stephane/GitHub/FPGA-Stratix-V/docs/resume-8-pages.md": file changed since it was read — re-read the file, then retry
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/FPGA-Stratix-V/docs/resume-8-pages.md", "limit": 30, "offset": 205}`
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/FPGA-Stratix-V/docs/resume-8-pages.md", "limit": 25, "offset": 352}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/FPGA-Stratix-V/docs/resume-8-pages.md</path>
+<type>file</type>
+<content>
+205: | Débit `event_pe` | 1 événement / cycle / PE | [D] | `rtl/event_pe.sv` |
+206: | Latence `event_pe` | 3 étages (lecture→addition→écriture) | [D] | `rtl/event_pe.sv` |
+207: | Latence `v14_l2_distance` | 3 cycles (recalculée) contre « 2 » annoncés | [E] | `rtl/v14_l2_distance.sv` |
+208: | Latence `v14_graph_dijkstra` | 28 198 cycles ≈ 141 µs @200 MHz (recalculée) contre 28 462 / ~142 µs annoncés | [E] / [D] | `rtl/v14_graph_dijkstra.sv` |
+209: | Débit lecteur (chaîne complète) | 0,86 évt/cycle sur 309 020 mots ; 359 579 cycles | [D] | `docs/rapport-lecteur-ddr3.md` |
+210: | Débit lecteur avant recouvrement | 446 086 cycles (0,69 évt/cycle) | [D] | `docs/rapport-lecteur-ddr3.md` |
+211: | 32 PE à 177,09 MHz | 5,67 G événements/s | [E] | `syn/eng/output_files/event_engine.sta.rpt` |
+212: | DDR3 lecture / écriture | 9 662 Mo/s / 7 816 Mo/s | [M] hors dépôt (blog cité) | `docs/carte-storey-peak.md` §3 |
+213: | PCIe x8 (un Hard IP) | 6,5 Go/s ; 11–12 Go/s avec les deux | [M] hors dépôt (blog cité) | `docs/journal-bringup.md` §6 |
+214: | NVLink GPU↔GPU | 25,781 Go/s pa
+… [2609 caractères tronqués]
+  ```
+
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/FPGA-Stratix-V/docs/resume-8-pages.md</path>
+<type>file</type>
+<content>
+352: Incohérence inverse, à signaler : quelques artefacts de sortie **sont** versionnés —
+353: `syn/output_files_dsp{0,1}/event_pe_dsp{0,1}.{done,jdi,pin,sld}` — alors que `.gitignore`
+354: exclut par ailleurs `output_files/` et `*.sof` (les `.sof` ne sont, eux, pas suivis).
+355: 
+356: ### 6.3 Fini / en chantier
+357: 
+358: **Fini (adossé à un artefact)** : RTL des 5 modules ; testbench PE autovérifiant ; banc 2 PE +
+359: arbre de réduction ; chaîne lecteur → PE sur image DDR3 simulée ; synthèse de `nipada_k1`,
+360: `event_pe` (2 variantes), `event_engine` (32 PE) et `event_reader`, avec `.sof` pour chacun
+361: (5 fichiers de ~25 Mo) ; documentation carte/outillage/bring-up ; licence d'évaluation ; chaîne
+362: JTAG validée.
+363: 
+364: **En chantier / non fait** : aucun design ne **ferme le timing** (slack setup négatif partout) ;
+365: `v14_graph_dijkstra` **jamais synthétisé** ; les deux testbenches cocotb **jamais exécutés** ;
+366: contrôleur DDR3, IP PCIe, DMA et chemin retour (« accumulateur → activations de la couche
+367: suivante ») **inexistants** ; aucun broc
+… [576 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/FPGA-Stratix-V/docs/resume-8-pages.md", "new_string": "Incohérence inverse : quelques artefacts de sortie **sont** versionnés —\n`syn/output_files_dsp{0,1}/event_pe_dsp{0,1}.{done,jdi,pin,sld}` — alors que `.gitignore`\nexclut par ailleurs `outp … [304 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/FPGA-Stratix-V/docs/resume-8-pages.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/FPGA-Stratix-V/docs/resume-8-pages.md", "new_string": "> Document écrit le 2026-09-26 après lecture exhaustive du dépôt. Convention :\n> **[M] = MESURÉ** (rapport de synthèse, journal de simulation ou fichier de données du\n> dépôt) ; **[D] = DÉ … [1148 caractères tronqués]`
+
+  ```
+Error: old_string was not found in "/home/stephane/Data13TB/stephane/GitHub/FPGA-Stratix-V/docs/resume-8-pages.md"
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/FPGA-Stratix-V/docs/resume-8-pages.md", "new_string": "| Latence `v14_graph_dijkstra` | 28 198 cycles ≈ 141 µs @200 MHz (recalculée) contre 28 462 / ~142 µs annoncés | [E] / [D] | `rtl/v14_graph_dijkstra.sv` |\n| Débit lecteur (chaîne complète)  … [522 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/FPGA-Stratix-V/docs/resume-8-pages.md has been updated successfully.
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/FPGA-Stratix-V/docs/resume-8-pages.md", "limit": 14, "offset": 1}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/FPGA-Stratix-V/docs/resume-8-pages.md</path>
+<type>file</type>
+<content>
+1: # Dépôt `FPGA-Stratix-V` — résumé technique (8 pages)
+2: 
+3: > Document écrit le 02/10/2026, après lecture exhaustive du dépôt. Convention :
+4: > **[M] = MESURÉ** (rapport de synthèse, journal de simulation ou fichier de données du
+5: > dépôt) ; **[D] = DÉCLARÉ** (commentaire, README ou document, non recalculable depuis un
+6: > artefact) ; **[E] = ESTIMÉ / recalculé** à partir du code ou d'un chiffre sourcé.
+7: >
+8: > Les bases internes Quartus (`.cdb`, `.hdb`, `.rdb`, `.ddb`, `.ammdb`, `.tdf` compilés,
+9: > `.qdb`, `incremental_db/`) et les bitstreams `.sof` sont binaires : **non lus**. Tous les
+10: > rapports **texte** (`.rpt`, `.summary`, `.flow.rpt`, `.qmsg`, `.smsg`, `.lpc.txt`,
+11: > `.smp_dump.txt`, `.smart_action.txt`) ont été lus ou interrogés.
+12: 
+13: ---
+14: 
+
+(Showing lines 1-14 of 476. Use offset=15 to continue.)
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/FPGA-Stratix-V/ && python3 -c \"\nt=open('docs/resume-8-pages.md').read()\nprint('TOTAL mots:', len(t.replace('|',' ').split()))\nimport re\nfor s in re.split(r'\\n(?=## )', t):\n    print(f\\\"{len(s.replace('|',' ').split()):5d}  {s.split(chr … [315 caractères tronqués]`
+
+  ```
+TOTAL mots: 4625
+  110  # Dépôt `FPGA-Stratix-V` — résumé technique (8 pag
+  187  ## 1. Ce qu'est le projet, en cinq lignes
+ 1131  ## 2. Architecture matérielle — d'après le code RT
+  719  ## 3. Résultats MESURÉS (rapports Quartus)
+  559  ## 4. Vérification : ce que les testbenches couvre
+  405  ## 5. Outillage et flux de build
+  373  ## 6. État du dépôt
+  678  ## 7. Limites et risques — ce que le dépôt ne prou
+  463  ## 8. Questions ouvertes et prochaines étapes
+--- colonnes max ---
+8
+--- git status ---
+?? docs/resume-8-pages.md
+--- taille ---
+  476 34946 docs/resume-8-pages.md
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/FPGA-Stratix-V/docs/resume-8-pages.md", "limit": 50, "offset": 53}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/FPGA-Stratix-V/docs/resume-8-pages.md</path>
+<type>file</type>
+<content>
+53: ### 2.1 `v14_l2_distance.sv` — Kernel 1 (distance L2)
+54: 
+55: Quatre-vingt-quatre lignes. Pour chacune des `DIMS=14` dimensions, un unique `always_ff`
+56: calcule `diff[d] = a[d] − b[d]` (17 bits signés), l'élève au carré dans `sq[d]` (32 bits,
+57: « inféré sur DSP » d'après le commentaire), puis additionne les 14 carrés dans `o_dist_sq`.
+58: `valid_pipe[LATENCY-1:0]` et `tag_pipe` transportent `i_valid` et `i_tag`.
+59: 
+60: **Contradiction interne** : l'en-tête annonce « pipeline 3 étages » et « **latence réelle :
+61: 2 cycles** (diff[T] → sq[T+1] → sum/out[T+2]) ». Or la somme est écrite dans le **même**
+62: `always_ff` que `sq[d]` : elle consomme les valeurs **précédentes** de `sq`, donc une entrée au
+63: cycle *T* ressort au cycle *T+3* [E, recalculé sur `rtl/v14_l2_distance.sv`]. `o_valid` subit
+64: le même retard, donc **donnée et fanion restent alignés**, mais la latence vaut 3, pas 2. Le
+65: testbench utilise `LATENCY = 16` (`tb/tb_v14_l2_distance.py`), ni la valeur du paramètre (2), ni
+66: la latence recalculée (3). Entrée Q0.16, sortie Q4.28 sur 32 b
+… [2485 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/FPGA-Stratix-V/docs/resume-8-pages.md", "limit": 40, "offset": 386}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/FPGA-Stratix-V/docs/resume-8-pages.md</path>
+<type>file</type>
+<content>
+386: 4. **Divergences entre documents et rapports** (erreurs de documentation, pas des mesures) :
+387:    - `device/5SGSKF40I3LNAC.md` annonce « 251 ALM, setup slack −2,762 ns → fmax ≈ 129 MHz »,
+388:      alors que le rapport donne **238 ALM**, **−3,056 ns**, **124,13 MHz**
+389:      (`qsf/output_files/nipada_k1.fit.summary`, `.sta.summary`, `.sta.rpt`) ; les valeurs
+390:      « 251 / 129 MHz / −2,762 » sont **absentes du dépôt**.
+391:    - `docs/rapport-lecteur-ddr3.md` annonce `event_reader` à **1 202 ALM / 109,9 MHz** et une
+392:      « voie complète » à **1 378 ALM / 16 M20K**. Le rapport présent sur disque (horodaté
+393:      `2026-09-26 09:41`, soit **avant** le commit `73801af` de 09:43 qui dit avoir conservé la
+394:      version validée) donne **1 176 ALM / 106,42 MHz / 4 M20K** ; la somme mesurée PE + lecteur
+395:      est **1 352 ALM et 9 M20K**, pas 1 378 / 16.
+396:    - Le README annonce « 13 DSP » pour K1 (confirmé [M]) mais aussi « ~5 min » de compilation
+397:      (le flow donne 4 min 09 s) ; `docs/rapport-lecteur-ddr3.md` parle de « 309 020 événeme
+… [2528 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/FPGA-Stratix-V/docs/resume-8-pages.md", "new_string": "4. **Divergences entre documents et rapports** (erreurs de documentation, pas des mesures) :\n   - `device/5SGSKF40I3LNAC.md` annonce « 251 ALM, setup slack −2,762 ns → fmax ≈ 129 MHz »,\n   … [2677 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/FPGA-Stratix-V/docs/resume-8-pages.md has been updated successfully.
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/FPGA-Stratix-V/docs/resume-8-pages.md", "limit": 36, "offset": 432}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/FPGA-Stratix-V/docs/resume-8-pages.md</path>
+<type>file</type>
+<content>
+432:    (`106,4` vs `109,9 MHz`) et pointe la « logique d'état et de FIFO ». Pistes écrites dans
+433:    `docs/rapport-lecteur-ddr3.md` §6 : découper la machine à états, sortir le comparateur
+434:    d'occupation du chemin de commande mémoire. Objectif : passer de 106–124 MHz à 200 MHz, ou
+435:    acter une fréquence plus basse et recalculer la roofline.
+436: 2. **Rejouer les rapports avec le part industriel `5SGSMD5K2F40I3L`** (`docs/toolchain.md` §7)
+437:    pour un timing réaliste plutôt qu'optimiste.
+438: 3. **Rendre les résultats reproductibles** : versionner un log de simulation iverilog pour le PE
+439:    et le lecteur, produire un `results.xml` pour les kernels cocotb, corriger le chemin
+440:    `NIPADA_SIM_DIR` des testbenches Python, régénérer `sim/` de façon cohérente (un seul flux à
+441:    la fois), supprimer ou réparer `tb/tb_event_reader_dbg.sv`.
+442: 4. **Débloquer la simulation des kernels** : obtenir la ligne SSLC `SW-QUESTA` (feature
+443:    `intelqsimstarter`) ou basculer les kernels V14 sur iverilog.
+444: 5. **Synthétiser `v14_graph_dijkstra`**
+… [1739 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/FPGA-Stratix-V/docs/resume-8-pages.md", "new_string": "3. **Rendre les résultats reproductibles** : versionner un log iverilog (PE, lecteur), produire\n   un `results.xml` pour les kernels cocotb, corriger le chemin `NIPADA_SIM_DIR`, régénérer\n … [454 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/FPGA-Stratix-V/docs/resume-8-pages.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/FPGA-Stratix-V/docs/resume-8-pages.md", "new_string": "Toutes les valeurs viennent des rapports de synthèse **présents sur disque** (non versionnés,\nvoir §6). Device partout `5SGSMD5K1F40C1`, famille Stratix V\n(`syn/eng/output_files/event_engi … [785 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/FPGA-Stratix-V/docs/resume-8-pages.md has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/FPGA-Stratix-V/ && python3 -c \"\nt=open('docs/resume-8-pages.md').read()\nimport re\nprint('mots hors pipes:', len(t.replace('|',' ').split()))\nprint('mots bruts (wc -w):', len(t.split()))\n\"", "description": "Final word counts"}`
+
+  ```
+mots hors pipes: 4571
+mots bruts (wc -w): 4790
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/FPGA-Stratix-V/docs/resume-8-pages.md", "new_string": "Toutes les valeurs viennent des rapports de synthèse **présents sur disque** (non versionnés,\nvoir §6). Le device est partout `5SGSMD5K1F40C1`, famille Stratix V\n(`syn/eng/output_files/eve … [749 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/FPGA-Stratix-V/docs/resume-8-pages.md has been updated successfully.
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/FPGA-Stratix-V/docs/resume-8-pages.md", "limit": 22, "offset": 331}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/FPGA-Stratix-V/docs/resume-8-pages.md</path>
+<type>file</type>
+<content>
+331:   (« Initial commit — §371 NIPADA Kernels 1+2 (simulation PASS) »).
+332: - Derniers commits (du plus récent au plus ancien) : `73801af` « Lecteur : le chemin critique
+333:   n'est pas l'arithmétique d'adresse » ; `722ca03` (lecteur DDR3) ; `86d343b` (banc multi-PE) ;
+334:   `9296f46` (PE événementiel) ; `9f39302` et `4c1cc3b` (§372, synthèse Stratix V) ; puis la
+335:   série outillage/licence/JTAG (`f151184`, `c2f74e8`, `d22b1b8`, `99c5caa`, `81a3cd2`,
+336:   `a5bf139`).
+337: - Le dernier commit est un **essai d'optimisation écarté** : pré-calcul de
+338:   `lists_ptr + (cur >> 2)` → `106,4 MHz` au lieu de `109,9 MHz`, hypothèse rejetée, « version
+339:   validée conservée » (message de `73801af`, `docs/rapport-lecteur-ddr3.md` §6).
+340: 
+341: ### 6.2 Fichiers non suivis / ignorés (présents sur disque)
+342: 
+343: `qsf/nipada_k1.qsf` (généré depuis le template), `tb/qrun.log` (0 octet),
+344: `tb/sim_build_k1/`, `tb/sim_build_k2/`, `syn/eng/{db,incremental_db,output_files}/`,
+345: `syn/reader/{db,incremental_db,output_files}/`, `qsf/{db,incremental_db,output_files
+… [642 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/FPGA-Stratix-V/docs/resume-8-pages.md", "new_string": "Autrement dit : **toutes les mesures du §3 sont dans des fichiers ignorés par git**\n(`.gitignore` exclut `output_files/`, `db/`, `incremental_db/`, `*.rpt`, `*.summary`, `*.sof`) :\nelles n … [339 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/FPGA-Stratix-V/docs/resume-8-pages.md has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/FPGA-Stratix-V/ && python3 -c \"\nt=open('docs/resume-8-pages.md').read()\nprint('mots hors pipes:', len(t.replace('|',' ').split()))\n\" && echo \"--- colonnes max ---\" && awk -F'|' '/^\\|/{n=NF-2; if(n>max) max=n} END{print max}' docs/resume … [196 caractères tronqués]`
+
+  ```
+mots hors pipes: 4565
+--- colonnes max ---
+8
+--- sections ---
+15:## 1. Ce qu'est le projet, en cinq lignes
+38:## 2. Architecture matérielle — d'après le code RTL
+150:## 3. Résultats MESURÉS (rapports Quartus)
+223:## 4. Vérification : ce que les testbenches couvrent, et ce qu'ils ne couvrent pas
+271:## 5. Outillage et flux de build
+324:## 6. État du dépôt
+372:## 7. Limites et risques — ce que le dépôt ne prouve pas
+429:## 8. Questions ouvertes et prochaines étapes
+--- git ---
+?? docs/resume-8-pages.md
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/FPGA-Stratix-V/docs/resume-8-pages.md", "limit": 14, "offset": 326}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/FPGA-Stratix-V/docs/resume-8-pages.md</path>
+<type>file</type>
+<content>
+326: ### 6.1 Historique et propreté
+327: 
+328: - Branche unique `main`, **arbre de travail propre** (`git status` : « nothing to commit »),
+329:   **62 fichiers suivis**, **13 commits**.
+330: - 12 commits datés du 2026-09-25/26, plus l'initial du **2026-05-28**
+331:   (« Initial commit — §371 NIPADA Kernels 1+2 (simulation PASS) »).
+332: - Derniers commits (du plus récent au plus ancien) : `73801af` « Lecteur : le chemin critique
+333:   n'est pas l'arithmétique d'adresse » ; `722ca03` (lecteur DDR3) ; `86d343b` (banc multi-PE) ;
+334:   `9296f46` (PE événementiel) ; `9f39302` et `4c1cc3b` (§372, synthèse Stratix V) ; puis la
+335:   série outillage/licence/JTAG (`f151184`, `c2f74e8`, `d22b1b8`, `99c5caa`, `81a3cd2`,
+336:   `a5bf139`).
+337: - Le dernier commit est un **essai d'optimisation écarté** : pré-calcul de
+338:   `lists_ptr + (cur >> 2)` → `106,4 MHz` au lieu de `109,9 MHz`, hypothèse rejetée, « version
+339:   validée conservée » (message de `73801af`, `docs/rapport-lecteur-ddr3.md` §6).
+
+(Showing lines 326-339 of 474. Use offset=340 to continue.)
+</content>
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/FPGA-Stratix-V/docs/resume-8-pages.md", "new_string": "- Branche unique `main`, **arbre de travail propre** avant l'ajout de ce document\n  (`git status` : « nothing to commit »), **62 fichiers suivis**, **13 commits**.", "old_string": "- Branch … [129 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/FPGA-Stratix-V/docs/resume-8-pages.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/FPGA-Stratix-V/docs/resume-8-pages.md", "new_string": "**Suivis par git** : `README.md`, `.gitignore`, `device/*.md`, les 7 autres fichiers\n`docs/*.md`,", "old_string": "**Suivis par git** : `README.md`, `.gitignore`, `device/*.md`, les 7 fichi … [18 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/FPGA-Stratix-V/docs/resume-8-pages.md has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/FPGA-Stratix-V/ && python3 -c \"\nt=open('docs/resume-8-pages.md').read()\nprint('mots (hors pipes de tableau):', len(t.replace('|',' ').split()))\nprint('mots (wc -w brut)          :', len(t.split()))\n\" && echo \"--- colonnes max ---\" && aw … [331 caractères tronqués]`
+
+  ```
+mots (hors pipes de tableau): 4571
+mots (wc -w brut)          : 4790
+--- colonnes max ---
+8
+--- git status ---
+?? docs/resume-8-pages.md
+--- vérif présence de tous les chiffres clés ---
+11
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/FPGA-Stratix-V/docs/resume-8-pages.md", "limit": 40, "offset": 150}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/FPGA-Stratix-V/docs/resume-8-pages.md</path>
+<type>file</type>
+<content>
+150: ## 3. Résultats MESURÉS (rapports Quartus)
+151: 
+152: Toutes les valeurs viennent des rapports de synthèse **présents sur disque** (non versionnés,
+153: voir §6). Le device est partout `5SGSMD5K1F40C1`, famille Stratix V
+154: (`syn/eng/output_files/event_engine.fit.rpt`). Cibles de période : **5 ns (200 MHz)** pour
+155: `nipada_k1`, **4 ns (250 MHz)** pour `event_pe`, `event_engine` et `event_reader`
+156: (`syn/event_pe.sdc`). La colonne « Fmax » reprend le panneau *Fmax Summary* de `quartus_sta`,
+157: indépendant de la contrainte.
+158: 
+159: | Bloc (projet) | ALM | Registres | DSP | M20K | Fmax | Slack setup | Source |
+160: |---|---|---|---|---|---|---|---|
+161: | `nipada_k1` (`v14_l2_distance`) | 238 | 131 | 13 | 0 | **124,13 MHz** | **−3,056 ns** (période 5 ns) | `qsf/output_files/nipada_k1.fit.summary`, `.sta.rpt`, `.sta.summary` |
+162: | `event_pe` `USE_DSP=0` | 176 | 285 | **0** | 5 | **112,52 MHz** | −4,887 ns (période 4 ns) | `syn/output_files_dsp0/event_pe_dsp0.fit.summary`, `.sta.rpt` |
+163: | `event_pe` `USE_DSP=1` | 115 | 262 | 1 | 5 | **112,17 MHz
+… [2091 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Envoi du résultat à l'agent parent puis réponse finale
+
+- **send_message** `{"agent_id": "bbd6969f-0f70-42b2-8951-64d1f2f36d2e", "message": "RÉSULTAT — Résumé 8 pages du dépôt FPGA-Stratix-V\n\nDOCUMENT ÉCRIT (seul fichier créé, aucun fichier existant modifié — `git status` ne montre que `?? docs/resume-8-pages.md`) :\n  /home/stephane/Data13TB/stephane/GitHub/FPGA-Stratix- … [3061 caractères tronqués]`
+
+  ```
+message delivered to agent bbd6969f-0f70-42b2-8951-64d1f2f36d2e
+  ```
+
+- **todo_write** `{"todos": [{"content": "Lire README, .gitignore, device/*.md, docs/*.md", "status": "completed"}, {"content": "Lire rtl/*.sv (5 modules) et extraire interfaces/paramètres", "status": "completed"}, {"content": "Lire tb/*.sv, tb/*.py, sim/* (meta.txt, hex, Makefile)", "status": "completed"}, {"content … [476 caractères tronqués]`
+
+  ```
+Updated todo list: 0 pending, 0 in progress, 8 completed.
+  ```
+
+### 🤖 Assistant
+
+⏵ Terminé : document livré et résultat transmis au parent
+
+**Chemin du document**
+`/home/stephane/Data13TB/stephane/GitHub/FPGA-Stratix-V/docs/resume-8-pages.md`
+(seul fichier écrit ; `git status` ne montre que `?? docs/resume-8-pages.md`, aucun fichier existant modifié)
+
+**Nombre de mots**
+≈ **4 570 mots** (hors séparateurs de tableaux ; 4 790 tokens bruts), 475 lignes, 8 sections + annexe, tableaux ≤ 8 colonnes. Convention explicite dans le document : **[M] mesuré / [D] déclaré / [E] estimé-recalculé**, chaque chiffre suivi de son chemin de fichier source, et « absent du dépôt » quand le chiffre n'existe pas.
+
+**Fichiers lus**
+- *Suivis git* : `README.md`, `.gitignore`, `device/5SGSKF40I3LNAC.md`, les 7 `docs/*.md` (bellman_ford_rtl, carte-storey-peak, journal-bringup, multicartes, rapport-lecteur-ddr3, rapport-pe-evenementiel, toolchain), les 5 `rtl/*.sv` (event_engine, event_pe, event_reader, v14_graph_dijkstra, v14_l2_distance), `tb/{Makefile, ddr3_model.sv, tb_event_engine.sv, tb_event_pe.sv, tb_event_reader.sv, tb_event_reader_dbg.sv, tb_v14_graph_dijkstra.py, tb_v14_l2_distance.py}`, `sim/{Makefile, meta.txt, events.hex, expect.hex, counts.hex, xvals.hex, mem.hex}`, les 9 `tools/*` (fetch_reference_design, gen_events, host_check, install_license, jtag_program_svf, jtag_scan, pack_lists, quartus_env, setup_compat_libs), `qsf/*.qsf|*.qsf.template|*.sdc|*.qpf`, `syn/**/*.qsf|*.sdc|*.qpf`.
+- *Rapports/journaux non suivis* : tous les `*.rpt`, `*.summary`, `*.flow.rpt`, `*.smsg`, `*.pin`, `*.done`, `*.jdi`, `*.sld` des `output_files*` ; les `.lpc.txt`, `.smp_dump.txt`, `.smart_action.txt`, `*.qmsg`, `altsyncram_*.tdf` des `db/` ; `tb/sim_build_k{1,2}/*` (sim.log, stats_log, version, history…), `tb/qrun.log` (0 octet) ; `incremental_db/README`.
+- *Hors dépôt, pour recouper* : `../Panini-Research/nipada/fpga/sim/*` (16 836 paires, graphe 107 nœuds/133 arêtes, 10 sources) et le GGUF `GitHub/Qtrinet/models/Qwen2.5-0.5B-Q8_0.gguf`.
+- *Non lus (binaires)* : `.cdb`, `.hdb`, `.rdb`, `.ddb`, `.ammdb`, `.bpm`, `.idb`, `.logdb`, `.kpt`, `.tdb`, `.hsd`, `.nvd`, `.sci`, `.qdb`, `.qpg`, `.qtl`, `incremental_db/compiled_partitions/*` et les 5 `.sof` — c'est dit dans le document.
+
+**Les 5 chiffres mesurés les plus importants**
+1. **`nipada_k1` (K1 L2)** : 238 ALM, 131 registres, 13 DSP, 0 M20K, **Fmax 124,13 MHz**, setup slack **−3,056 ns** (période 5 ns), hold +0,147 ns — `qsf/output_files/nipada_k1.fit.summary` / `.sta.rpt` / `.sta.summary`.
+2. **`event_engine` 32 PE (`SYNTH=1`)** : **6 498 ALM**, 7 845 registres, **0 DSP**, **384 M20K** (19 %), **Fmax 177,09 MHz**, slack −1,647 ns — `syn/eng/output_files/event_engine.fit.summary` / `.sta.rpt`.
+3. **`event_pe` sans DSP** : **176 ALM, 0 DSP, 5 M20K, 112,52 MHz** (vs 115 ALM / 1 DSP / 112,17 MHz avec DSP) — `syn/output_files_dsp0|dsp1/event_pe_dsp{0,1}.fit.summary` / `.sta.rpt`.
+4. **`event_reader`** : **1 176 ALM**, 2 286 registres, 0 DSP, 4 M20K, **Fmax 106,42 MHz**, slack −5,397 ns — `syn/reader/output_files/event_reader.fit.summary` / `.sta.rpt`.
+5. **Temps de compilation K1** : **4 min 09 s** au total (Fitter 3 min 33 s, 3 963 Mo crête) — `qsf/output_files/nipada_k1.flow.rpt`.
+
+À retenir du §7 : aucun design ne ferme 200 MHz ; les résultats de simulation « PASS » sont **déclarés** sans log (Questa bloqué par la licence `intelqsimstarter`, `tb/qrun.log` vide) ; `v14_graph_dijkstra` n'a **aucun rapport de synthèse** ; le README et `device/5SGSKF40I3LNAC.md` divergent (238 ALM/124 MHz vs 251 ALM/129 MHz) et `docs/rapport-lecteur-ddr3.md` annonce 1 202 ALM/109,9 MHz alors que le rapport sur disque donne 1 176 ALM/106,42 MHz ; toutes les mesures sont pour un part commercial plus rapide que la puce réelle (timing optimiste).
+

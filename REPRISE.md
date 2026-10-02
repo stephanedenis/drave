@@ -1166,3 +1166,25 @@ hyper-connexions (4 copies de l'état + Sinkhorn), sortie à rang faible groupé
 compressées CSA/HCA** selon `compress_ratios`. L'engram, lui, n'est pas un
 obstacle : llama.cpp ne le calcule pas non plus.
 Détail et estimation d'effort : [`reports/rapport-execution-v41.md`](reports/rapport-execution-v41.md).
+
+
+---
+
+## Plan pour exécuter DeepSeek-V4.1 (02/10)
+
+[`docs/plan-deepseek41-complet.md`](docs/plan-deepseek41-complet.md) — neuf phases,
+chacune avec une **porte** (commande + résultat attendu), un interdit et un budget.
+Trois faits vérifiés le 02/10 le structurent :
+
+1. **llama.cpp ne connaît pas `deepseek41`** (`unknown model architecture`) : il
+   n'existe aucune référence externe pour V4.1 ;
+2. **llama.cpp exécute V4-Flash** (`deepseek4`, 1 325 tenseurs chargés,
+   NLL 11,737 sur un jeton froid) — c'est donc **V4-Flash le banc d'essai**, avec
+   les mêmes mécanismes (hyper-connexions, MLA, compresseur, indexeur, table) et
+   86,9 Go qui tiennent en RAM ;
+3. **V4.1-Flash-Q2 n'a pas les tenseurs `output_hc_*`** alors qu'il déclare
+   `hc_mult = 4` : fichier incomplet ou converti à tort — question de provenance à
+   trancher avant d'écrire du code (phase P7).
+
+Le contrôle d'architecture est la liste vivante du chantier : il perd une ligne
+par phase franchie (`--config` le montre en 74 ms, sans charger le modèle).

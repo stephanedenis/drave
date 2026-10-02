@@ -5,12 +5,12 @@
 | Identifiant | `8b6d46ab-6ad0-4648-92a8-0bec40a02526` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-02 08:44 |
-| Durée | 0.1 h |
+| Durée | 0.2 h |
 | Tours | 1 |
-| Messages | 63 |
-| Appels d'outils | 106 |
+| Messages | 100 |
+| Appels d'outils | 155 |
 | Fichiers touchés | 1 |
-| Commandes | 48 |
+| Commandes | 61 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -23,7 +23,7 @@
 
 ### Tour 1 — Tu dois LIRE TOUT le dépôt /home/stephane/Data13TB/stephane/GitHub/FPGA-Stratix-V/ (sauf les binaires illisibles de Quar … [3489 caractères tronqués]
 
-*106 appels d'outils.* Actions notables :
+*155 appels d'outils.* Actions notables :
 
 - bash — List all files in the repository
 - bash — Show repo size and file count
@@ -39,11 +39,29 @@
 - bash — Show synthesis QSF and SDC files
 - bash — Check tracked and ignored files
 - bash — Show K1 Quartus summary files
-- … et 54 autres
+- … et 90 autres
 
 **Synthèse produite :**
 
-⏵ Élagage ciblé du document pour atteindre ~4 300 mots
+⏵ Terminé : document livré et résultat transmis au parent
+
+**Chemin du document**
+`/home/stephane/Data13TB/stephane/GitHub/FPGA-Stratix-V/docs/resume-8-pages.md`
+(seul fichier écrit ; `git status` ne montre que `?? docs/resume-8-pages.md`, aucun fichier existant modifié)
+
+**Nombre de mots**
+≈ **4 570 mots** (hors séparateurs de tableaux ; 4 790 tokens bruts), 475 lignes, 8 sections + annexe, tableaux ≤ 8 colonnes. Convention explicite dans le document : **[M] mesuré / [D] déclaré / [E] estimé-recalculé**, chaque chiffre suivi de son chemin de fichier source, et « absent du dépôt » quand le chiffre n'existe pas.
+
+**Fichiers lus**
+- *Suivis git* : `README.md`, `.gitignore`, `device/5SGSKF40I3LNAC.md`, les 7 `docs/*.md` (bellman_ford_rtl, carte-storey-peak, journal-bringup, multicartes, rapport-lecteur-ddr3, rapport-pe-evenementiel, toolchain), les 5 `rtl/*.sv` (event_engine, event_pe, event_reader, v14_graph_dijkstra, v14_l2_distance), `tb/{Makefile, ddr3_model.sv, tb_event_engine.sv, tb_event_pe.sv, tb_event_reader.sv, tb_event_reader_dbg.sv, tb_v14_graph_dijkstra.py, tb_v14_l2_distance.py}`, `sim/{Makefile, meta.txt, events.hex, expect.hex, counts.hex, xvals.hex, mem.hex}`, les 9 `tools/*` (fetch_reference_design, gen_events, host_check, install_license, jtag_program_svf, jtag_scan, pack_lists, quartus_env, setup_compat_libs), `qsf/*.qsf|*.qsf.template|*.sdc|*.qpf`, `syn/**/*.qsf|*.sdc|*.qpf`.
+- *Rapports/journaux non suivis* : tous les `*.rpt`, `*.summary`, `*.flow.rpt`, `*.smsg`, `*.pin`, `*.done`, `*.jdi`, `*.sld` des `output_files*` ; les `.lpc.txt`, `.smp_dump.txt`, `.smart_action.txt`, `*.qmsg`, `altsyncram_*.tdf` des `db/` ; `tb/sim_build_k{1,2}/*` (sim.log, stats_log, version, history…), `tb/qrun.log` (0 octet) ; `incremental_db/README`.
+- *Hors dépôt, pour recouper* : `../Panini-Research/nipada/fpga/sim/*` (16 836 paires, graphe 107 nœuds/133 arêtes, 10 sources) et le GGUF `GitHub/Qtrinet/models/Qwen2.5-0.5B-Q8_0.gguf`.
+- *Non lus (binaires)* : `.cdb`, `.hdb`, `.rdb`, `.ddb`, `.ammdb`, `.bpm`, `.idb`, `.logdb`, `.kpt`, `.tdb`, `.hsd`, `.nvd`, `.sci`, `.qdb`, `.qpg`, `.qtl`, `incremental_db/compiled_partitions/*` et les 5 `.sof` — c'est dit dans le document.
+
+**Les 5 chiffres mesurés les plus importants**
+1. **`nipada_k1` (K1 L2)** : 238 ALM, 131 registres, 13 DSP, 0 M20K, **Fmax 124,13 MHz**, setup slack **−3,056 ns** (période 5 ns), hold +0,147 ns — `qsf/output_files/nipada_k1.fit.summary` / `.sta.rpt` / `.sta.summary`.
+2. **`event_engine` 32 PE 
+… [1228 caractères tronqués]
 
 ## 3. Travail accompli
 
@@ -51,7 +69,7 @@
 
 | Fichier | Écritures | Éditions |
 |---|---|---|
-| `/home/stephane/Data13TB/stephane/GitHub/FPGA-Stratix-V/docs/resume-8-pages.md` | 1 | 17 |
+| `/home/stephane/Data13TB/stephane/GitHub/FPGA-Stratix-V/docs/resume-8-pages.md` | 1 | 41 |
 
 ### Commandes exécutées (échantillon)
 
@@ -95,7 +113,7 @@
 - **T1** Read suppressed message files
 - **T1** Summarize qmsg message counts
 - **T1** Inspect qmsg format
-- … et 8 autres
+- … et 21 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -154,6 +172,15 @@
 - **T1** `; Logic utilization (ALMs needed / total ALMs on device)           ; 1,176 / 172,600       ; < 1 % ;`
 - **T1** `; Logic utilization (ALMs needed / total ALMs on device)      ; 1176 / 172600 ( < 1 % ) ; 0 / 172600 ( 0 % )             ;`
 - **T1** `248:| `tb/tb_v14_graph_dijkstra.py` | 10 sources, comparaison à un oracle Dijkstra Python, seuil d'erreur 0,5 %, R² > 0,9999 | N'a **jamais tourné** (licence) ; lit `sim/graph_sub334_meta.json`, **abs`
+- **T1** `de carte connues sont 125 MHz (`CLK_125M`), 100 MHz (PCIe) et 644,53125 MHz (`CLK_QSFP_OSC`) :`
+- **T1** `le 200 MHz est une hypothèse de conception, pas une horloge de la carte`
+- **T1** `- Les résultats §371 du README (K1 « erreur max = 0,096 %, PASS » ; K2 « R²=1.000000, PASS »)`
+- **T1** `- **`nipada_k1`** : 548 / 864 pins (63 %), 0 bloc de mémoire, bitstream produit (`.done``
+- **T1** `- **`event_pe`** : 0 DSP exigé et obtenu. L'écart entre les deux variantes est **+61 ALM pour`
+- **T1** `la version sans DSP** (176 − 115) [E, différence des deux rapports], pour **−0,35 MHz**`
+- **T1** `du rapport), 2 959 virtual pins, 0 pin réel, 6 291 456 bits de RAM (= 384 × 16 384) : 32 PE`
+- **T1** `et l'arbre de réduction tiennent dans **4 %** des ALM et **19 %** des M20K`
+- **T1** `- **`event_reader`** : 193 pins, 4 608 bits de bloc mémoire (4 M20K), un avertissement`
 
 ## 5. Erreurs rencontrées
 
