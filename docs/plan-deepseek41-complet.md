@@ -373,7 +373,21 @@ Une phase qui ne passe pas ses deux portes ne passe pas à la suivante.
   tracé (rangées touchées, recouvrement entre jetons) ; le changement de sortie
   est **annoncé**.
 
-### P9 — Noyaux natifs et encodage des poids : après la mesure (≈ 1 journée, optionnel)
+### P9 — Noyaux natifs et encodage des poids : après la mesure (≈ 1 journée, optionnel) — **mesure faite, pas justifié** (02/10)
+
+> La mesure que P9 attendait existe, et elle tranche : **le goulot est la
+> LECTURE, pas le déquant**. Preuve directe — le même modèle, le même calcul,
+> seuls les octets lus changent : original 86,9 Go en 3 tranches = **111,8 s** ;
+> éclaté en 8 grappes (chaque expert dans un seul fichier, donc moins d'octets
+> lus par jeton) = **39,9 s** pour la MÊME perplexité, au chiffre près. Un noyau
+> IQ natif économiserait de l'arithmétique sur un chemin déjà borné par les
+> entrées-sorties : ×2,8 sans toucher au calcul est un signal plus fort que
+> n'importe quelle optimisation de noyau.
+> **Décision : ne pas l'écrire maintenant.** Ce qui le justifierait : un modèle
+> dont les poids tiennent en RAM (là, la bande passante cesse d'être la borne),
+> ou une mesure montrant le déquant dans le palmarès des postes — aujourd'hui
+> `proj+mlp` et `attention` sont dominés par la lecture des poids (25 ms par
+> couche-jeton pour 49,7 M poids lus, soit ≈ 2 Go/s effectifs).
 
 - Deux sujets distincts, à ne pas confondre :
   - **noyaux IQ natifs** : aujourd'hui les experts passent par déquantification

@@ -7,12 +7,12 @@
 | Début | 2026-09-28 14:46 |
 | Durée | 98.2 h |
 | Tours | 77 |
-| Messages | 4910 |
-| Appels d'outils | 4688 |
+| Messages | 4911 |
+| Appels d'outils | 4689 |
 | Fichiers touchés | 96 |
-| Commandes | 4053 |
+| Commandes | 4054 |
 | Sous-agents | 29 |
-| Commits | 342 |
+| Commits | 343 |
 | Compactages de contexte | 6 |
 
 ## Objectifs déclarés
@@ -3941,7 +3941,7 @@ V4-Flash contre llama.cpp : perplexité **678,09 contre 548,32** (NLL +0,21 nat)
 
 ### Tour 77 — <goal_round> Objective: "Exécuter le plan docs/plan-deepseek41-complet.md phase par phase (P0→P9), en autonomie, en resp … [941 caractères tronqués]
 
-*75 appels d'outils.* Actions notables :
+*76 appels d'outils.* Actions notables :
 
 - bash — Find the channel-count validation
 - bash — Read the validation and the hidden definition
@@ -3957,11 +3957,11 @@ V4-Flash contre llama.cpp : perplexité **678,09 contre 548,32** (NLL +0,21 nat)
 - bash — Remove the refusal and run distributed
 - bash — Find the pilot's reply validation
 - bash — Fix the pilot reply validation
-- … et 55 autres
+- … et 56 autres
 
 **Synthèse produite :**
 
-⏵ P8 : le format des tables est établi, mais le hachage n'a **aucune référence** — constat écrit.
+⏵ P9 : la mesure tranche déjà — le goulot est la lecture, pas le déquant. Constat écrit.
 
 ## 3. Travail accompli
 
@@ -4140,7 +4140,7 @@ V4-Flash contre llama.cpp : perplexité **678,09 contre 548,32** (NLL +0,21 nat)
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 4013 autres
+- … et 4014 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4630,4 +4630,5 @@ V4-Flash contre llama.cpp : perplexité **678,09 contre 548,32** (NLL +0,21 nat)
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF' p='docs/plan-deepseek41-complet.md' s=open(p).read() a="""### P7 — Adaptation à V4.1, 
 - Portes : V4-Flash entre dans tools/portes.sh (--config calculable + perplexité 8430,2968) — un chiffre de référence qui dérive sans qu'on s'en aperçoive ne vaut
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF' p='docs/plan-deepseek41-complet.md' s=open(p).read() a="""### P8 — Engram : la liste d
+- P9 : la mesure tranche — le goulot est la lecture (×2,8 en éclaté, même calcul), pas le déquant : noyaux natifs non justifiés aujourd'hui" && git log --oneline 
 

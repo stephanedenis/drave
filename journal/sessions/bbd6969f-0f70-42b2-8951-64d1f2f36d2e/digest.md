@@ -79128,3 +79128,14 @@ Created file
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='docs/plan-deepseek41-complet.md'\ns=open(p).read()\na=\"\"\"### P8 — Engram : la liste d'adresses, et sa référence à écrire (≈ 1 à 2 journées)\"\"\"\nb=\"\"\"### P8 — Engram : la liste d'adresses, et sa référe … [2572 caractères tronqués]`
+
+  ```
+ok
+a26d407 P8 : l'engram inventorié, et l'issue (b) retenue — pas d'implémentation sans référence
+  ```
+
+### 🤖 Assistant
+
+⏵ P9 : la mesure tranche déjà — le goulot est la lecture, pas le déquant. Constat écrit.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='docs/plan-deepseek41-complet.md'\ns=open(p).read()\na=\"\"\"### P9 — Noyaux natifs et encodage des poids : après la mesure (≈ 1 journée, optionnel)\"\"\"\nb=\"\"\"### P9 — Noyaux natifs et encodage des poids : … [1409 caractères tronqués]`
