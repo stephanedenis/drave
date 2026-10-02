@@ -324,11 +324,18 @@ Une phase qui ne passe pas ses deux portes ne passe pas à la suivante.
 >    **sans porte ni `ape`** : un régime que llama.cpp **refuse explicitement**
 >    (« only supports compression ratios 0, 4, and 128 »).
 >
-> Conclusion : V4.1 ne peut être validé contre aucune référence aujourd'hui, et
-> l'implémenter sans référence serait deviner. Drave le **refuse à l'ouverture**
-> en nommant les deux motifs (`reports/rapport-provenance-v41.md`).
-> L'action externe (demander à la source si la conversion est complète, ou si la
-> convention a changé) reste à faire — elle n'est pas dans ce dépôt.
+> **Correction (02/10) — l'action externe est faite, et elle corrige le
+> constat** : le dépôt de conversion publie son
+> [patch](https://huggingface.co/vcruz305/DeepSeek-V4.1-Flash-GGUF/blob/main/llama.cpp/patches/README.md),
+> et il dit deux choses décisives. Le fichier **n'est pas incomplet** : le jeu de
+> tenseurs `deepseek41` **retire volontairement** `HC_HEAD_{FN,BASE,SCALE}` de
+> celui de V4. Et le support d'**exécution** de V4.1 **n'existe pas encore**
+> (« a converted file does not load yet… Runtime support is separate work »),
+> pas même en amont (PR [#28696](https://github.com/ggml-org/llama.cpp/pull/28696)).
+> Ce qui reste vrai : le régime de compression en **ratio 2** n'a de référence
+> nulle part, et **comment les `hc` copies se réduisent avant la norme finale**
+> n'est spécifié par aucun moteur. Drave refuse donc à l'ouverture, en nommant
+> ces deux points — plus un défaut de fichier qui n'en est pas un.
 
 
 - Code : métadonnées par couche (`compress_ratios` au lieu d'un régime global),
@@ -343,7 +350,7 @@ Une phase qui ne passe pas ses deux portes ne passe pas à la suivante.
   déclaré incomplet, et l'écart de perplexité V4.1 contre V4-Flash est écrit
   d'avance (seule comparaison possible, llama.cpp ne lisant pas V4.1).
 
-### P8 — Engram : la liste d'adresses, et sa référence à écrire (≈ 1 à 2 journées) — **issue (b) retenue** (02/10)
+### P8 — Engram : la liste d'adresses, et sa référence à écrire (≈ 1 à 2 journées) — **référence trouvée, phase rouverte** (02/10)
 
 > **Inventorié** : deux tables de **101,38 Go** chacune
 > (`blk.{1,14}.engram_embd` I8 [384 006 168, 264]), soit **202,8 Go = 55 % du
@@ -357,9 +364,18 @@ Une phase qui ne passe pas ses deux portes ne passe pas à la suivante.
 > pas, et le code d'entraînement n'est pas dans ce dépôt. Plusieurs formules
 > plausibles donnent des rangées différentes : en choisir une serait deviner, ce
 > que la règle 6 interdit.
-> **Décision : issue (b)** — ne pas l'implémenter, et l'écrire
-> (`reports/rapport-engram-etat.md`), avec ce qui débloquerait la phase (le script
-> de conversion, une spécification, ou une implémentation amont).
+> **Correction (02/10) : la référence EXISTE.** Un portage 1:1 de
+> `vllm/models/deepseek_v4_1/common/engram.py` est publié
+> ([`mudler/vllm.cpp`](https://github.com/mudler/vllm.cpp/blob/main/src/vllm/model_executor/models/deepseek_v4_1_engram.cpp)) :
+> la formule (`^=` sur un repli collant, modulo par colonne), la lecture
+> (e4m3 × e8m0 par bloc de 32) et l'injection (porte `sigmoid(±sqrt(max(|dot|,
+> 1e-6)))`) sont écrites noir sur blanc. **La phase est donc rouverte**, et sa
+> première porte est déjà franchie : les 48 premiers du fichier sont
+> **identiques** à ceux que l'algorithme de la référence recalcule (Miller-Rabin
+> (2,7,61), défaut d'origine compris), la table de correspondance est **dense** et
+> fait exactement `compressed_vocab_size`, et les 8 multiplicateurs sont impairs
+> et sous la borne. Reste à porter les trois fonctions et à les faire concorder
+> avec la référence sur 10 000 entrées (`reports/rapport-engram-etat.md`).
 
 - Deux tables de 101,4 Go (couches 1 et 14) : hachage de n-grammes
   (`engram.primes`, `multipliers`, `token_map`), recherche, injection.

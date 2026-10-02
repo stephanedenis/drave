@@ -1,9 +1,17 @@
 # Engram de DeepSeek-V4.1 : ce qui est établi, ce qui manque, et pourquoi on s'arrête là
 
-**En une ligne** : les deux tables d'engram sont **entièrement décrites** par les
-métadonnées et par la forme de leurs tenseurs — 101,38 Go chacune, 264 octets par
-rangée — mais la **formule d'adressage n'est nulle part**, et **aucune référence
-n'existe** : l'implémenter serait deviner, ce que la règle 6 du plan interdit.
+**En une ligne** : les deux tables d'engram sont **entièrement décrites** (101,38
+Go chacune, 264 octets par rangée), et **une référence existe** — un portage 1:1
+de `vllm/models/deepseek_v4_1/common/engram.py` dans
+[`mudler/vllm.cpp`](https://github.com/mudler/vllm.cpp/blob/main/src/vllm/model_executor/models/deepseek_v4_1_engram.cpp)
+— ce qui **rouvre la phase** : la formule n'est plus à deviner, elle est à
+retrouver.
+
+> **Correction d'une conclusion antérieure.** Ce rapport concluait à l'issue (b)
+> du plan (« pas de référence, ne pas implémenter »). La recherche de sources l'a
+> démenti : la référence existe, et une première vérification a déjà été faite
+> contre elle (voir §2). Le plan prévoyait exactement cette issue (a) : écrire une
+> référence indépendante et la faire concorder.
 
 ## 1. Ce qui est établi (et vérifiable)
 
@@ -21,53 +29,70 @@ n'existe** : l'implémenter serait deviner, ce que la règle 6 du plan interdit.
 Les deux tables pèsent **202,8 Go** à elles seules : c'est 55 % du fichier de
 365,7 Go, et de loin le plus gros poste du modèle.
 
-## 2. Ce qui manque : la formule
+## 1.bis Ce que la référence a déjà confirmé (vérifié, pas supposé)
 
-Les métadonnées donnent les **ingrédients** (48 premiers, 8 multiplicateurs, une
-table de correspondance de vocabulaire) mais **pas la recette**. Un hachage
-modulaire sur les n-grammes est *plausible* — quelque chose comme
-`rangée = (Σᵢ token_map[tᵢ] · multiplierᵢ) mod rows` — et c'est exactement le
-problème : **plusieurs formules plausibles donnent des rangées différentes**, et
-aucune ne se vérifie.
+Le portage de `engram.py` donne la recette **et** les invariants. Trois d'entre
+eux se vérifient **sans charger le modèle**, à partir des seules métadonnées :
 
-Or il n'existe **aucune référence** :
+| invariant de la référence | vérification sur le fichier | résultat |
+|---|---|---|
+| les 48 premiers sont les suivants de `engram_vocab_size - 1`, pris dans l'ordre (couche × groupe × tête) et **jamais réutilisés** — via un Miller-Rabin (2, 7, 61) qui **reproduit le défaut d'origine** (`_is_prime(61) == False`) | recalcul complet de l'algorithme sur `vocab = 16 000 000`, `max_ngram = 4`, `n_heads = 8`, 2 couches | **48 premiers IDENTIQUES** à ceux du fichier |
+| `build_compressed_token_map` émet des identifiants **denses** `[0, compressed_vocab_size)` | `max(token_map) + 1 = 99 092` et `set(token_map) == range(99 092)` | **dense et exact** (99 092 = `compressed_vocab_size`) |
+| les multiplicateurs sont **impairs**, un par (couche, recul), sous la borne `max_int64 / compressed_vocab_size / 2` | 8 multiplicateurs, tous impairs, tous sous la borne | **conformes** |
 
-- `llama.cpp` **ignore l'engram** (il ne le charge ni ne le calcule) ;
-- **V4-Flash ne l'a pas** : il n'y a donc pas de modèle plus petit où l'étudier ;
-- le dépôt ne contient ni le code d'entraînement de DeepSeek, ni un
-  convertisseur qui aurait écrit ces tables.
+La structure du fichier et la référence disent donc la même chose — ce qui est
+déjà une porte : les métadonnées ne sont pas décoratives, elles **déterminent**
+l'adressage.
 
-C'est le cas d'école de la règle 6 du plan : **livrer sans référence violerait la
-règle**. Une formule inventée ne se contenterait pas d'être fausse — elle
-produirait des injectassions *plausibles*, donc invisibles, dans deux couches sur
-quarante.
+## 2. Ce qui reste à faire : la formule, maintenant écrite
 
-## 3. La décision : issue (b), écrite
+La formule, telle que la référence la donne (`NgramHashState::Forward`,
+`engram.py:248-380`) :
 
-Le plan prévoyait deux issues. C'est la seconde :
+```
+pour chaque jeton, position p, couche l :
+  rolling[l] = 0
+  pour shift de 0 à max_ngram-1 :
+      lookback = p - shift
+      source = id compressé du jeton (ou pad / dead / fenêtre de recul)
+      blocked = blocked || lookback < 0 || source == dead     # COLLANT
+      valeur  = blocked ? pad_id : source
+      rolling[l] ^= valeur * multiplier[l][shift]
+      si shift > 0 :
+          pour chaque tête h :
+              col = (shift-1)*n_heads + h
+              rangée = rolling[l] % prime[l][col] + offset[l][col]
+```
 
-> **ne pas le faire, et l'écrire** — ce document.
+Trois détails portent tout le comportement, et aucun n'est devinable :
 
-Ce qui a été fait à la place, et qui a de la valeur : l'engram est **inventorié**
-(forme, taille, format de rangée), sa **sonde** est mesurée, et son **absence de
-référence** est nommée. `--config` ne le compte pas comme un manque bloquant
-(llama.cpp l'ignore : ce n'est pas un obstacle à une comparaison avec lui), mais
-`manques_architecture` le dit à l'ouverture — sans quoi un modèle qui tourne
-laisserait croire qu'il calcule tout.
+1. **`^=` et non `+`** : le repli est un OU exclusif, pas une somme ;
+2. **`blocked` est collant** : dès qu'un n-gramme est cassé (début de séquence,
+   jeton mort), **tous les reculs plus profonds** sont remplacés par le pad — sans
+   quoi un 4-gramme à cheval sur une image hacherait comme si l'image n'existait
+   pas ;
+3. le modulo se fait **par colonne** (prime et offset propres à chaque
+   (couche, groupe, tête)), pas sur la table entière.
 
-## 4. Ce qui débloquerait P8
+S'y ajoutent la lecture (e4m3 × échelle e8m0 par bloc de 32, sortie bf16) et
+l'injection (une porte `sigmoid(±sqrt(max(|dot|, 1e-6)))` — le clamp est **dans**
+la racine et c'est un **maximum**, donc un produit scalaire minuscule est
+*amplifié* — multipliée par une valeur partagée entre les `hc` copies).
 
-Par ordre de coût croissant :
+La suite de P8 est donc bornée : porter ces trois fonctions, les faire concorder
+avec la référence sur les 10 000 entrées de la sonde, et **annoncer** le
+changement de sortie.
 
-1. **le script de conversion** qui a produit ce GGUF, ou son équivalent amont :
-   il nomme la formule, même en une ligne ;
-2. **une note de spécification** de l'engram (les tables sont adressées par
-   n-grammes : la littérature sur les *n-gram embeddings* donne le schéma
-   général, pas les 48 premiers de ce modèle) ;
-3. **une implémentation amont** (llama.cpp ou un autre moteur) : elle servirait
-   alors de porte de correction, et l'engram deviendrait une phase ordinaire —
-   référence d'abord, flux ensuite.
+## 3. Ce qui n'est pas encore fait
 
-Tant qu'aucune des trois n'existe, la seule chose honnête que le moteur puisse
-faire de l'engram est ce qu'il fait : **l'adresser** (`--sonder-engram`), le
-**compter** (202,8 Go, 264 octets par rangée) et **le déclarer non calculé**.
+- **Le portage** des trois fonctions dans le moteur (hachage, lecture, injection).
+- **La porte** : la sonde et la référence doivent concorder sur 10 000 entrées,
+  et le flux d'adresses doit être **tracé** (rangées touchées, recouvrement entre
+  jetons consécutifs) — c'est le flux le plus intéressant du modèle après les
+  candidats de l'indexeur : il dit quels n-grammes le modèle consulte.
+- **L'annonce** : l'engram **change la sortie** ; il devra être dit à l'ouverture,
+  comme le reste.
+
+Tant que ce n'est pas fait, la seule chose honnête que le moteur puisse faire de
+l'engram est ce qu'il fait : **l'adresser** (`--sonder-engram`), le **compter**
+(202,8 Go, 264 octets par rangée) et **le déclarer non calculé**.

@@ -23,13 +23,16 @@ métadonnées portent le `config.json` d'origine (`deepseek41.config`) :
 
 ## 2. Les deux manques, montrés et non supposés
 
-**a) Le mélange de tête est absent.** Les trois seuls tenseurs hors `blk.*` sont
-`token_embd.weight`, `output_norm.weight`, `output.weight` : **aucun
-`output_hc_fn/base/scale`**. Or V4-Flash les a, et llama.cpp les déclare
-**requis** (`create_tensor(..., /*flags=*/0)`), donc il échouerait sur ce fichier
-avec « missing tensor 'output_hc_fn.weight' » (`llama-model-loader.cpp`). C'est
-une question de **provenance** : conversion fautive, ou convention différente
-que personne n'a encore écrite.
+**a) Le mélange de tête n'existe pas dans l'architecture V4.1.** Les trois seuls
+tenseurs hors `blk.*` sont `token_embd.weight`, `output_norm.weight`,
+`output.weight` : aucun `output_hc_fn/base/scale` — **et c'est conforme** : la
+liste des 39 familles de tenseurs `deepseek41` les retire explicitement de la
+liste `DEEPSEEK4` (elle retire aussi `FFN_GATE_TID2EID`, `ATTN_KV_NORM`,
+`ATTN_COMPRESSOR_APE`, `INDEXER_COMPRESSOR_*` et les six `NEXTN_*`, et ajoute
+`ATTN_KV_A_NORM` et les quatre tenseurs d'engram). Ce qui reste ouvert est
+ailleurs : **comment les `hc` copies se réduisent avant la norme finale** dans
+V4.1, et aucun moteur ne le spécifie — le patch de conversion le dit : le fichier
+converti **ne se charge pas encore**.
 
 **b) Le ratio 2 n'a pas de référence.** Une couche compressée de V4.1 porte
 `attn_compressor_kv` [512, 5 120] et `attn_compressor_norm` [512], mais **ni
@@ -57,8 +60,8 @@ conversion fautive (question de provenance, P7)
 
 | question du plan | réponse |
 |---|---|
-| « le GGUF est-il complet ? » | **non**, en l'état : il manque les tenseurs que l'architecture et la référence exigent. La question est de savoir si c'est la conversion ou le modèle |
-| « peut-on valider V4.1 contre llama.cpp ? » | **non**, et pas à cause de Drave : llama.cpp ne connaît pas `deepseek41` et son chargeur refuse le ratio 2 |
+| « le GGUF est-il complet ? » | **oui, conformément au jeu de tenseurs `deepseek41`** — qui n'est pas celui de V4. La question de provenance est tranchée : ce n'est pas un défaut de conversion |
+| « peut-on valider V4.1 contre llama.cpp ? » | **non**, et pas à cause de Drave : `deepseek41` n'est pas encore en amont (une PR est ouverte, [#28696](https://github.com/ggml-org/llama.cpp/pull/28696)), le chargeur refuse le ratio 2, et le patch de conversion précise que le support d'**exécution** est un travail séparé, non fait |
 | « que fait Drave en attendant ? » | il **refuse** à l'ouverture, avec les deux motifs nommés — pas de panique, pas de forward muet |
 
 Ce qui reste faisable **sans** V4.1 tournant :

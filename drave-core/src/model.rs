@@ -178,8 +178,14 @@ pub fn manques_architecture(g: &Gguf, cfg: &Cfg, ctx: usize, clusters: bool) -> 
         v.sort_unstable(); v.dedup(); v
     };
     if !inconnus.is_empty() {
-        manques.push("compression de ratio 2 (V4.1) : ni notre moteur ni la référence \
-ne l'implémentent (llama.cpp n'accepte que 0, 4 et 128)");
+        // V4.1 est en ratio **2**, sans `attn_compressor_ape` ni
+        // `indexer_compressor_*` : c'est son jeu de tenseurs, pas un défaut du
+        // fichier (`patch_llamacpp_v41.py`, qui liste les 39 familles de V4.1).
+        // Le support d'EXÉCUTION de ce régime n'existe nulle part — pas même en
+        // amont (« Runtime support is separate work and is not in this patch »).
+        // L'implémenter sans référence serait deviner.
+        manques.push("compression de ratio 2 (V4.1) : sans référence d'exécution — le \
+support amont de V4.1 n'existe pas encore (llama.cpp n'accepte que 0, 4 et 128)");
     }
     // **Le mélange de tête manquant de V4.1.** Le modèle déclare `hc_mult` mais
     // n'a pas les tenseurs `output_hc_*` : llama.cpp les déclare REQUIS (`flags`
@@ -187,8 +193,15 @@ ne l'implémentent (llama.cpp n'accepte que 0, 4 et 128)");
     // Question de PROVENANCE (P7), pas de code.
     if quelque_part("hc_attn_fn.weight") && g.tensor("output_hc_fn.weight").is_none()
         && g.tensor("hc_head_fn.weight").is_none() {
-        manques.push("mélange de tête des hyper-connexions (`output_hc_fn`) absent — \
-fichier incomplet, ou conversion fautive (question de provenance, P7)");
+        // **Ce n'est PAS un fichier incomplet** : le jeu de tenseurs `deepseek41`
+        // retire explicitement `HC_HEAD_{FN,BASE,SCALE}` de celui de V4 (source :
+        // `llama.cpp/patches/README.md` du dépôt de conversion). V4.1 n'a donc
+        // pas de mélange de tête — reste à savoir comment ses `hc` copies se
+        // réduisent avant la norme finale, et personne ne l'a écrit : le README
+        // le dit lui-même (« a converted file does not load yet… Runtime support
+        // is separate work »).
+        manques.push("réduction des copies avant la norme finale : V4.1 ne déclare \
+pas `output_hc_*` (c'est son jeu de tenseurs) et aucun moteur ne spécifie ce cas");
     }
     // Ce message décrit le cache LATENT de la MLA « GLM/Kimi »
     // (`attn_kv_a_mqa`) : sur l'attention V4, qui a aussi un `attn_q_a` mais un
