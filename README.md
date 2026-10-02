@@ -556,6 +556,30 @@ python3 tools/analyse_empreinte.py /tmp/routage.txt --modele deepseek41
 
 Détail : [`reports/rapport-empreinte-memoire.md`](reports/rapport-empreinte-memoire.md).
 
+## Architecture mémoire : ce qui va en VRAM, en RAM, sur le disque
+
+Débits **mesurés** : VRAM **84,9 Go/s** (noyau warp) · RAM **20,9 Go/s** (CPU 30
+fils) · NVMe aléatoire 5,5 Go/s · PCIe 3.0 ×16 ~12 Go/s. Le noyau GPU `warp par
+ligne` est **4× plus rapide que le CPU**.
+
+| niveau | capacité | contenu |
+|---|---|---|
+| **VRAM** | 30,2 Go | commun 8,0 Go (tête, attention, embeddings) + experts chauds 22,2 Go |
+| **RAM** | 102 Go | jusqu'à 10 247 experts — 90 % des appels tiennent dans 71 Go |
+| **NVMe** | 828 Go | le reste des experts + l'engram mmappé |
+
+**Ce qui manque, par ordre de gain** : un noyau **attention MLA** (−194 ms/jeton,
+c'est le premier poste et il n'est pas déportable) · un noyau **IQ2_XXS/Q2_K**
+pour les experts de V4.1 (−86 ms) · le reste existe déjà (Q4_K, Q6_K, Q8_0,
+MXFP4). Cumul : **499 → ~210 ms par jeton**.
+
+**Et le poste qu'on oublie** : le cache KV fait **96,6 Go en F16 à 1 M de
+contexte** — plus que les 71 Go d'experts. Sa quantification n'est pas une
+optimisation mais une condition : au-delà de 0,77 M de jetons en F16, il ne reste
+plus de place pour les experts.
+
+Détail : [`reports/rapport-architecture-memoire.md`](reports/rapport-architecture-memoire.md).
+
 ## Prochaines étapes
 
 La feuille de route complète est dans [`docs/roadmap.md`](docs/roadmap.md). Ce qui

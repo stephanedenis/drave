@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 77.5 h |
-| Tours | 65 |
-| Messages | 3177 |
-| Appels d'outils | 3006 |
-| Fichiers touchés | 69 |
-| Commandes | 2614 |
+| Durée | 78.1 h |
+| Tours | 66 |
+| Messages | 3187 |
+| Appels d'outils | 3014 |
+| Fichiers touchés | 70 |
+| Commandes | 2621 |
 | Sous-agents | 22 |
-| Commits | 264 |
+| Commits | 265 |
 | Compactages de contexte | 4 |
 
 ## Objectifs déclarés
@@ -165,6 +165,8 @@
 **Tour 64** — utilisons les logs de cette session (journal/session) pour les rejouer localement et analyser le comportement, couche par couche afin d'identifier d'autres pistes d'optimisation de l'empreinte mémoire deepseek 4.1.
 
 **Tour 65** — note bien tout ça et fais une analyse statique du modèle couche par couche pour trouver des regroupements de sources et  destinations afin de trouver des patterns pour de nouveaux clusters à isoler.
+
+**Tour 66** — maintenant, les optimisations d'architecture pour chaque grappe et couche afin de faire le meilleur usage du vram et ram
 
 ## 2. Déroulé, étape par étape
 
@@ -3259,7 +3261,67 @@ Les premières couches veulent presque tout le catalogue ; les médianes se cont
 
 **Synthèse produite :**
 
-⏵ Structure précise trouvée. Je consigne : la périodicité est statique **et** limitée aux couches 6-39.
+Tout est consigné, et l'analyse statique a donné une réponse que les traces seules ne pouvaient pas donner.
+
+\## Ce qui est écrit
+
+| | |
+|---|---|
+| `reports/rapport-empreinte-memoire.md` | 14 sections — les 11 pistes dynamiques, l'engram, le journal, l'analyse statique |
+| `sprints/09-…md` | objectif, verdicts, rétrospective, planning |
+| `tools/analyse_empreinte.py` | rejoue une trace de routage |
+| `tools/analyse_experts_statique.py` | **nouveau** — déquantifie les experts (Q4_K, Q6_K, Q8_0, F32, F16) et compare les poids |
+| `REPRISE.md` · `README.md` | à jour |
+| traces NVMe | 34 Mo, rejouables |
+
+26 commits, dépôt propre, 32 tests verts.
+
+\## L'analyse statique : deux réponses négatives, une positive
+
+**Pas d'experts jumeaux.** Similarité entre experts d'une même couche : maximum **0,04 à 0,19**, médiane ~0,00, **aucune paire au-dessus de 0,9** sur les 6 couches testées. Les experts sont quasi orthogonaux — il n'y a rien à fusionner. Les sources ne sont pas creuses non plus : **78 % des colonnes** portent 80 % du poids, uniformément.
+
+**Mais la périodicité de 12 est dans les POIDS**, pas seulement dans le routage :
+
+| paire | corrélation | paire | corrélation |
+|---|---|---|---|
+| 0/12 | **+0,001** | 12/24 | **+0,343** |
+| 3/15 | +0,003 | 18/30 | **+0,389** |
+| 6/18 | **+0,285** | 24/36 | **+0,312** |
+| | | 30/42 | **+0,003** |
+
+Elle est donc **structurelle** — et **bornée aux couches 6-39** (trois cycles). Cette borne n'était pas visible dans le routage.
+
+**Mais rien à fusionner là non plus** : aucun expert ne dépasse 0,5 de corrélation (max 0,49). Similaires, pas identiques — stocker W(L+12) comme W(L) + résidu laisserait 88 % de l'énergie dans le résidu.
+
+\## La seule piste que ça ouvre
+
+Une **décomposition conjointe des quatre couches d'un cycle** : 35 % de variance partagée à extraire dans une base commune, plus quatre résidus. Le gain dépend du **rang** de cette base — qui n'est pas mesuré.
+
+Je ne le compte donc pas comme un résultat, seulement comme l'expérience suivante. C'est la seule qui reste ouverte après onze pistes dynamiques et trois statiques.
+
+\## Le fil de toute la session
+
+Ce qui a payé : **la décomposition des poids par famille** (l'engram, 56 % du modèle, mmappable), le **cache d'experts**, la **tête restreinte par langue**, et maintenant la **structure en cycles de 12**.
+
+Ce qui n'a pas payé, avec son chiffre : découper sous l'expert (×287), grappes par langue (0,75–0,90 contre 0,805 *interne*), dictionnaire token → experts (0,06), 
+… [354 caractères tronqués]
+
+### Tour 66 — maintenant, les optimisations d'architecture pour chaque grappe et couche afin de faire le meilleur usage du vram et ram
+
+*8 appels d'outils.* Actions notables :
+
+- bash — Inventory GPU kernels and offloadable formats
+- bash — Check GPU memory and cache budget
+- bash — Check PCIe capabilities and run GPU bench
+- bash — Run GPU bench with driver open
+- bash — Compute optimal memory placement
+- write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-architecture-memoire.md`
+- bash — Compute KV cache cost at long context
+- bash — Document architecture and commit
+
+**Synthèse produite :**
+
+⏵ **Le KV devient le premier poste à 1 M** (96,6 Go en F16, 48,3 en int8). Je complète le rapport.
 
 ## 3. Travail accompli
 
@@ -3336,6 +3398,7 @@ Les premières couches veulent presque tout le catalogue ; les médianes se cont
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/analyse_empreinte.py` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/sprints/09-empreinte-memoire-ce-qui-reduit-vraiment.md` | 2 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/analyse_experts_statique.py` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-architecture-memoire.md` | 1 | 0 |
 
 ### Sous-agents lancés
 
@@ -3404,7 +3467,7 @@ Les premières couches veulent presque tout le catalogue ; les médianes se cont
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 2574 autres
+- … et 2581 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -3816,4 +3879,5 @@ Les premières couches veulent presque tout le catalogue ; les médianes se cont
 - Journal" 2>/dev/null; echo "=== LIVRABLES DE LA DEMANDE ==="; for f in reports/rapport-empreinte-memoire.md sprints/09-empreinte-memoire-ce-qui-reduit-vraiment.
 - Analyse statique : les experts sont orthogonaux, mais la periodicite de 12 est dans les POIDS  tools/analyse_experts_statique.py dequantifie les experts (Q4_K, 
 - REPRISE : analyse statique des poids" && echo "=== RÉCAPITULATIF FINAL ==="; echo ""; echo "Rapports :"; ls -la reports/rapport-empreinte-memoire.md | awk '{pri
+- Architecture memoire : ou mettre quoi, et le KV qu'on oubliait  Debits mesures : VRAM 84,9 Go/s (noyau warp) contre 20,9 pour le CPU -- le deport vaut un facteu
 

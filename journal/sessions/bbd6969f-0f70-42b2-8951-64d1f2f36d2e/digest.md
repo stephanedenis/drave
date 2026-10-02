@@ -51003,3 +51003,256 @@ ok
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np = 'REPRISE.md'\ns = open(p).read().rstrip('\\n')\ns += '''\n\n### Analyse STATIQUE des poids (pas des traces)\n\n`tools/analyse_experts_statique.py` déquantifie les experts (Q4_K, Q6_K, Q8_0,\nF32, F16) et compare … [1877 caractères tronqués]`
+
+  ```
+=== RÉCAPITULATIF FINAL ===
+
+Rapports :
+  reports/rapport-empreinte-memoire.md (22221 octets)
+Sprints :
+  sprints/09-empreinte-memoire-ce-qui-reduit-vraiment.md
+Outils :
+  tools/analyse_empreinte.py
+  tools/analyse_experts_statique.py
+
+Traces NVMe : 34M
+Commits session : 26
+Tests : 32 passed
+Fichiers en attente : 0
+  ```
+
+### 🤖 Assistant
+
+Tout est consigné, et l'analyse statique a donné une réponse que les traces seules ne pouvaient pas donner.
+
+## Ce qui est écrit
+
+| | |
+|---|---|
+| `reports/rapport-empreinte-memoire.md` | 14 sections — les 11 pistes dynamiques, l'engram, le journal, l'analyse statique |
+| `sprints/09-…md` | objectif, verdicts, rétrospective, planning |
+| `tools/analyse_empreinte.py` | rejoue une trace de routage |
+| `tools/analyse_experts_statique.py` | **nouveau** — déquantifie les experts (Q4_K, Q6_K, Q8_0, F32, F16) et compare les poids |
+| `REPRISE.md` · `README.md` | à jour |
+| traces NVMe | 34 Mo, rejouables |
+
+26 commits, dépôt propre, 32 tests verts.
+
+## L'analyse statique : deux réponses négatives, une positive
+
+**Pas d'experts jumeaux.** Similarité entre experts d'une même couche : maximum **0,04 à 0,19**, médiane ~0,00, **aucune paire au-dessus de 0,9** sur les 6 couches testées. Les experts sont quasi orthogonaux — il n'y a rien à fusionner. Les sources ne sont pas creuses non plus : **78 % des colonnes** portent 80 % du poids, uniformément.
+
+**Mais la périodicité de 12 est dans les POIDS**, pas seulement dans le routage :
+
+| paire | corrélation | paire | corrélation |
+|---|---|---|---|
+| 0/12 | **+0,001** | 12/24 | **+0,343** |
+| 3/15 | +0,003 | 18/30 | **+0,389** |
+| 6/18 | **+0,285** | 24/36 | **+0,312** |
+| | | 30/42 | **+0,003** |
+
+Elle est donc **structurelle** — et **bornée aux couches 6-39** (trois cycles). Cette borne n'était pas visible dans le routage.
+
+**Mais rien à fusionner là non plus** : aucun expert ne dépasse 0,5 de corrélation (max 0,49). Similaires, pas identiques — stocker W(L+12) comme W(L) + résidu laisserait 88 % de l'énergie dans le résidu.
+
+## La seule piste que ça ouvre
+
+Une **décomposition conjointe des quatre couches d'un cycle** : 35 % de variance partagée à extraire dans une base commune, plus quatre résidus. Le gain dépend du **rang** de cette base — qui n'est pas mesuré.
+
+Je ne le compte donc pas comme un résultat, seulement comme l'expérience suivante. C'est la seule qui reste ouverte après onze pistes dynamiques et trois statiques.
+
+## Le fil de toute la session
+
+Ce qui a payé : **la décomposition des poids par famille** (l'engram, 56 % du modèle, mmappable), le **cache d'experts**, la **tête restreinte par langue**, et maintenant la **structure en cycles de 12**.
+
+Ce qui n'a pas payé, avec son chiffre : découper sous l'expert (×287), grappes par langue (0,75–0,90 contre 0,805 *interne*), dictionnaire token → experts (0,06), pré-remplissage (32 jetons), allocation par couche (+1,2 %), localité temporelle, ordre des experts, préchargement (**18× plus rapide que la lecture**), fusion d'experts jumeaux (orthogonaux).
+
+Le mur qui explique la moitié de ces échecs est le même partout : **le calcul est 18× plus rapide que la lecture, donc aucune prédiction ne peut rien masquer.**
+
+
+## Tour 66
+
+### 👤 Utilisateur
+
+maintenant, les optimisations d'architecture pour chaque grappe et couche afin de faire le meilleur usage du vram et ram
+
+### 🤖 Assistant
+
+⏵ Nouvelle question : la répartition VRAM/RAM/NVMe par grappe et par couche. Je mesure d'abord ce que le moteur sait déporter.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== NOYAUX GPU DISPONIBLES ===\"; grep -oE '\"[a-z_]+\"' drave-core/gpu/drave_gpu.cu 2>/dev/null | sort -u | head -25; echo \"\"; echo \"=== FORMATS QUE LE MOTEUR SAIT ENVOYER AU GPU ===\"; grep -n \"fn charger_\\|MatriceGpu\" … [238 caractères tronqués]`
+
+  ```
+=== NOYAUX GPU DISPONIBLES ===
+"attn_scores"
+"f"
+"r"
+
+=== FORMATS QUE LE MOTEUR SAIT ENVOYER AU GPU ===
+74:pub struct MatriceGpu {
+356:    pub fn charger_tete(&self, blocs: &[u8], n_out: usize, _n_in: usize, nb: usize) -> Option<MatriceGpu> {
+374:            Some(MatriceGpu { poids, x_dev, out_dev, n_out, nb, octets_poids })
+379:    pub fn charger_proj(&self, blocs: &[u8], n_out: usize, nb: usize) -> Option<MatriceGpu> {
+385:    pub fn charger_mxfp4(&self, blocs: &[u8], n_out: usize, nb: usize) -> Option<MatriceGpu> {
+399:            Some(MatriceGpu { poids, x_dev, out_dev, n_out, nb, octets_poids })
+404:    pub fn charger_q4k(&self, blocs: &[u8], n_out: usize, nb: usize) -> Option<MatriceGpu> {
+418:            Some(MatriceGpu { poids, x_dev, out_dev, n_out, nb, octets_poids })
+1288:    pub fn charger_q6k(&self, blocs: &[u8], n_out: usize, nb: usize) -> Option<MatriceGpu> {
+1302:            Some(MatriceGpu { poids, x_dev, out_dev, n_out, nb, octets_poids })
+1307:    pub fn proj_q6k(&self, m: &MatriceGpu, x: &[i32], sx: f32) -> Option<Vec<f32>> {
+1343:    pub fn proj_q4k(&self, m: &MatriceGpu, x: &[i32], sx: f32) -> Option<Vec<f32>> {
+
+=== USAGE VRAM DANS LE MOTEUR ===
+DRAVE_GPU
+DRA
+… [78 caractères tronqués]
+  ```
+
+- **bash** `{"command": "nvidia-smi --query-gpu=index,name,memory.total,memory.used,memory.free,pcie.link.gen.current,pcie.link.width.current --format=csv 2>/dev/null; echo \"=== CPU/RAM ===\"; nproc; free -g | head -2; echo \"=== le cache d'experts GPU ===\"; grep -n \"budget\" drave-core/src/model.rs | head - … [123 caractères tronqués]`
+
+  ```
+index, name, memory.total [MiB], memory.used [MiB], memory.free [MiB], pcie.link.gen.current, pcie.link.width.current
+0, Quadro RTX 5000, 16384 MiB, 1293 MiB, 14629 MiB, 2, 16
+1, Quadro RTX 5000, 16384 MiB, 381 MiB, 15547 MiB, 1, 16
+=== CPU/RAM ===
+40
+               total        used        free      shared  buff/cache   available
+Mem:             125          15           3           4         112         110
+=== le cache d'experts GPU ===
+540:    pub budget: usize,
+549:    pub fn nouveau(budget: usize) -> Self {
+550:        CacheExperts { cartes: std::collections::HashMap::new(), octets: 0, budget,
+559:    /// Évince les entrées les moins récemment utilisées tant que le budget est
+560:    /// dépassé. `None` si même une entrée seule ne tient pas dans le budget.
+572:            while self.octets + octets > self.budget && !self.cartes.is_empty() {
+1928:            let go: f64 = std::env::var("DRAVE_GPU_EXPERTS_GO").ok()
+  ```
+
+### 🤖 Assistant
+
+⏵ PCIe gen 1/2 ×16 — attention, ça change tout. Je vérifie et je mesure le débit réel.
+
+- **bash** `{"command": "nvidia-smi --query-gpu=index,pcie.link.gen.max,pcie.link.gen.current,pcie.link.width.max,pcie.link.width.current --format=csv 2>/dev/null; echo \"=== banc GPU du moteur : exactitude et débit ===\"; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/banc_gpu.sh <<'EOF'\n#!/ … [365 caractères tronqués]`
+
+  ```
+index, pcie.link.gen.max, pcie.link.gen.current, pcie.link.width.max, pcie.link.width.current
+0, 3, 1, 16, 16
+1, 3, 1, 16, 16
+=== banc GPU du moteur : exactitude et débit ===
+[attention] QT_IM_SWITCHER est l'ancien nom d'une variable d'environnement : elles s'appellent maintenant DRAVE_* (voir docs/histoire.md). Rien n'a été appliqué.
+tête token_embd.weight : 151936 × 896 · 144.6 Mo · 28 blocs de 32
+  CPU  30 fils :   847.7 ms  (   0.2 Go/s)
+  GPU absent : banc terminé
+=== fin ===
+  ```
+
+### 🤖 Assistant
+
+⏵ Le banc nécessite `DRAVE_GPU=1`. Je relance et je vérifie le PCIe sous charge.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/banc_gpu2.sh <<'EOF'\n#!/bin/bash\ncd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\nDRAVE_GPU=1 timeout 900 ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf --gpu-banc 2>&1 | tail -18\necho \"=== PCIe sou … [282 caractères tronqués]`
+
+  ```
+[attention] QT_IM_SWITCHER est l'ancien nom d'une variable d'environnement : elles s'appellent maintenant DRAVE_* (voir docs/histoire.md). Rien n'a été appliqué.
+tête token_embd.weight : 151936 × 896 · 144.6 Mo · 28 blocs de 32
+  CPU  30 fils :     6.9 ms  (  20.9 Go/s)
+  GPU 1
+[banc] allocation de 144.6 Mo sur le GPU
+[banc] poids montés, premier lancement
+  GPU  ligne par fil  :     3.4 ms  (  41.9 Go/s)  écart max +1.99e-7 (relatif au plus grand logit)
+  GPU  warp par ligne :     1.7 ms  (  84.9 Go/s)  écart max +1.99e-7 (relatif au plus grand logit)
+=== PCIe sous charge ===
+0, 2
+1, 3
+=== fin ===
+  ```
+
+### 🤖 Assistant
+
+⏵ **GPU warp : 84,9 Go/s contre 20,9 pour le CPU** (4×). PCIe gen 3 sous charge. Je calcule la répartition optimale.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\n# Architecture mémoire pour DeepSeek-V4.1 : que mettre où, et pourquoi.\nVRAM = 30.2      # Go libres (2 x 16 Go, mesures nvidia-smi)\nRAM  = 110.0     # Go disponibles\nDEBIT_VRAM, DEBIT_RAM, DEBIT_NVME = 84.9, 20. … [2306 caractères tronqués]`
+
+  ```
+=== DÉBITS MESURÉS ===
+  VRAM (noyau GPU)          84.9 Go/s
+  RAM (CPU 30 fils)         20.9 Go/s
+  NVMe aléatoire             5.5 Go/s
+  PCIe 3.0 x16 (transfert)  12.0 Go/s
+
+=== CE QUI EST RELU À CHAQUE JETON (V4.1) ===
+poste                   Go/jeton         format  noyau GPU ?   RAM ms  VRAM ms
+tête de sortie              1.32           Q4_K          oui     63.2     15.5
+attention MLA               5.40           Q8_0          NON    258.4     63.6
+embeddings                  1.32            F16          oui     63.2     15.5
+experts (top-6 x 40)        2.39   IQ2_XXS/Q2_K          NON    114.4     28.2
+TOTAL                      10.43                                499.0    403.8
+
+  aujourd'hui (tout CPU) : 499 ms par jeton
+  avec les noyaux actuels : 404 ms par jeton  (tête + embeddings déportés)
+
+=== EMPREINTE : ce qui tient où ===
+  experts V4.1 : 153 Go en IQ2_XXS/Q2_K (2 400 experts pour 22 Go)
+  VRAM restante après tête + attention + embeddings (8.0 Go) : 22.2 Go -> 2227 experts
+  RAM pour les experts : 102.0 Go -> 10247 experts
+  soit 81.1 % de l'empreinte des experts
+
+  Or 90 % des appels tiennent dans 46,3 % de l'empreinte (mesuré) = 71 Go
+  -> 102 Go de RAM suffise
+… [65 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ J'écris l'architecture mémoire : ce qui va où, et ce qui manque pour y arriver.
+
+- **write** `{"content": "# Rapport — architecture mémoire : ce qui va en VRAM, en RAM, et sur le disque\n\nSession du 01/10. Cible : DeepSeek-V4.1-Flash (365,7 Go, 40 couches, 384 experts,\ntop-6). Machine : 2 × Quadro RTX 5000 (**32 Go** de VRAM), **125 Go** de RAM,\n40 CPU, NVMe de 828 Go.\n\nChaque chiffre d … [5017 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-architecture-memoire.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+### 🤖 Assistant
+
+⏵ Un poste que je n'ai pas chiffré : le KV à 1 M de contexte. Je le mesure.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\n# Le KV de MLA n'est PAS la concaténation des têtes : c'est un latent comprimé.\n# V4.1 : attn_kv.weight [512, 5120] -> 512 de dimension latente, + 64 de rope.\nCOUCHES, LATENT, ROPE = 40, 512, 64\nfor bits, nom in  … [1245 caractères tronqués]`
+
+  ```
+KV en F16   :    90.0 Ko par jeton
+      à     4,096 jetons :    0.38 Go
+      à    65,536 jetons :    6.04 Go
+      à 1,048,576 jetons :   96.64 Go
+  KV en int8  :    45.0 Ko par jeton
+      à     4,096 jetons :    0.19 Go
+      à    65,536 jetons :    3.02 Go
+      à 1,048,576 jetons :   48.32 Go
+  KV en int4  :    22.5 Ko par jeton
+      à     4,096 jetons :    0.09 Go
+      à    65,536 jetons :    1.51 Go
+      à 1,048,576 jetons :   24.16 Go
+
+=== CE QUE ÇA CHANGE POUR LA RÉPARTITION (contexte 1 M, KV int8) ===
+  KV à 1 M en int8 : 48.3 Go
+  + commun en VRAM : 8,0 Go
+  + 90 % des experts en RAM : 71 Go
+  = 127 Go  (sur 140 Go de RAM+VRAM)
+
+  -> à 1 M de contexte, le KV devient le PREMIER poste, devant les experts.
+     C'est ce qui justifie DRAVE_GPU_KV et la quantification du cache.
+
+=== À QUELLE LONGUEUR LE KV DÉPASSE-T-IL LES EXPERTS ? ===
+  KV en F16   : le KV égale 71 Go d'experts à   0.77 M de jetons
+  KV en int8  : le KV égale 71 Go d'experts à   1.54 M de jetons
+  KV en int4  : le KV égale 71 Go d'experts à   3.08 M de jetons
+  ```
+
+### 🤖 Assistant
+
+⏵ **Le KV devient le premier poste à 1 M** (96,6 Go en F16, 48,3 en int8). Je complète le rapport.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np = 'reports/rapport-architecture-memoire.md'\ns = open(p).read()\ns = s.replace('''## 6. Ce qui reste à vérifier''',\n'''## 6. Le poste que j'avais oublié : le KV à long contexte\n\nLe KV de MLA n'est pas la concat … [4549 caractères tronqués]`
