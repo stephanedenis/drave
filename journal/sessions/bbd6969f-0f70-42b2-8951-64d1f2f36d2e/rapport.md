@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 84.2 h |
+| Durée | 86.2 h |
 | Tours | 69 |
-| Messages | 3935 |
-| Appels d'outils | 3747 |
+| Messages | 3990 |
+| Appels d'outils | 3798 |
 | Fichiers touchés | 81 |
-| Commandes | 3309 |
+| Commandes | 3347 |
 | Sous-agents | 22 |
-| Commits | 301 |
+| Commits | 302 |
 | Compactages de contexte | 5 |
 
 ## Objectifs déclarés
@@ -3526,7 +3526,7 @@ Sur cette session, les mesures m
 
 ### Tour 69 — implémente toute les optimisation et détection de matériel avec heuristiques de configuration automatique.
 
-*708 appels d'outils.* Actions notables :
+*759 appels d'outils.* Actions notables :
 
 - bash — Inspect existing GPU detection
 - write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/materiel.rs`
@@ -3542,11 +3542,11 @@ Sur cette session, les mesures m
 - bash — Read KV bits resolution
 - bash — Integrate KV and VRAM heuristics
 - bash — Lighten detection and run gates
-- … et 647 autres
+- … et 685 autres
 
 **Synthèse produite :**
 
-⏵ La MLA n'est pas validée : je le rends explicite et je consigne l'état
+⏵ Corrélation 0,999 et top-1 3/3 : la MLA est validée
 
 ## 3. Travail accompli
 
@@ -3703,7 +3703,7 @@ Sur cette session, les mesures m
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 3269 autres
+- … et 3307 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -3831,7 +3831,7 @@ Sur cette session, les mesures m
 
 ## 5. Erreurs rencontrées
 
-231 sorties en erreur ou divergentes. Les premières :
+234 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : a8f2635f8 docs: record which models this box is good at, and why src/llama-hparams.cpp:8:void llama_hparams::set_swa_pattern(uint32_t n_pattern, bool dense_first) { src/llama-hparams.h:308:    void se
 - **T1** : 511 tokens notés — perplexité cumulée 247.031  (4.9 tok/s) === perplexité 247.0308 sur 511 tokens (0 événements, 104.5 s) ===  ### B3 harmony assistant 511 --- ref --- 0.0 0.0 0:00 ls: cannot access '
@@ -4152,4 +4152,5 @@ Sur cette session, les mesures m
 - Portes : formats et routage vérifiés automatiquement ; la comparaison gpt-oss encadrée par le YaRN  - tools/portes.sh vérifie maintenant la convention de routag
 - MLA : dire NON VALIDÉE partout où elle est annoncée  Le moteur écrit maintenant, à l'ouverture et dans --config, que le chemin MLA à rang faible n'est pas valid
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git commit -q --amend -F - <<'EOF' MLA : dire NON VALIDÉE partout où elle est annoncée  Le moteur écrit ma
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p='REPRISE.md'; s=open(p).read() s = s.replace("""### Le piège à ne pas rouvrir : la MLA 
 

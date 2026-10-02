@@ -1020,27 +1020,33 @@ V4-Flash. `--config` montre la convention retenue ET sa provenance :
 ./target/release/drave <modele.gguf> --config     # 50 ms, sans charger le modèle
 ```
 
-### Le piège à ne pas rouvrir : la MLA tourne mais n'est pas validée
+### La MLA à rang faible : trouvée fausse, puis validée
 
-`--config` dit « calculable : oui » pour GLM-5.3 et Kimi-K2.7, et c'est vrai au
-sens où le calcul s'enchaîne sans erreur. Ce n'est PAS vrai au sens du résultat :
-comparé à llama.cpp sur les mêmes jetons et la même fenêtre, le chemin MLA donne
-des logits de **corrélation −0,04** avec la référence et prédit **le même jeton aux
-trois positions**. La perplexité mesurée est de 42,6 M contre 4 286 chez
-llama.cpp.
+Le premier essai était **faux** : corrélation des logits −0,04 avec llama.cpp,
+même jeton prédit à toutes les positions, perplexité 42,6 M contre 4 286. La
+cause est une **asymétrie de disposition** entre les deux remontées KV :
 
-Pistes déjà écartées par lecture du code de référence : les dimensions
-(`qk_nope` 192, `qk_rope` 64, `v` 256, `kv_lora` 512), le type de rotation
-(`LLAMA_ROPE_TYPE_NORM`), la base (8e6), l'indexeur DSA (inutile en deçà de
-`index_topk` = 2048). Piste la plus probable qui reste : le **facteur `mscale`**
-de llama.cpp (`glm-dsa.cpp:219`, `kq_scale = mscale²/√n_embd_head_k`, où
-`mscale` dépend de `freq_scale` et de `rope_yarn_log_mul`) — un facteur ~1,94 sur
-les logits d'attention suffirait à rendre l'attention méconnaissable.
+| tenseur | déclaration llama.cpp | dimension rapide |
+|---|---|---|
+| `attn_k_b` | `{qk_nope, kv_lora, nh}` | la **sortie** (`qk_nope`) |
+| `attn_v_b` | `{kv_lora, v, nh}` | l'**entrée** (`kv_lora`) |
 
-**Premier pas de la prochaine session** : instrumenter la comparaison couche par
-couche (le harnais `tools/mla_synthetique.py` + `--banc-mla` valide déjà la MLA
-*dense* contre numpy ; il faut le faire tourner sur le chemin `forward`/`attn_mla`
-pour isoler la couche où les deux divergent).
+Les écrire toutes deux « sortie rapide » donne des valeurs fausses de la bonne
+forme. Après correction : **corrélation 0,999024**, **top-1 3/3**, perplexité
+5 966 contre 4 286 (3 jetons froids).
+
+Ce qui a permis de le trouver, et qu'il faut réutiliser : `ref_logits` accepte
+maintenant `--tensors REGEX` (il imprime les tenseurs nommés du graphe llama.cpp
+pendant l'évaluation) et le moteur accepte `DRAVE_DEBUG_MLA=1` (mêmes grandeurs).
+La comparaison a montré que `q_a`, `q_a_norm`, `c_kv`, `k_rope`, `q_rope`
+concordaient à 1 % ; `kqv_out-0` a donné l'écart ; et la position 0 l'explique
+en une ligne — à la position 0 l'attention n'a qu'une clé, donc `kqv_out = v_0`,
+c'est-à-dire `wv_b` seul.
+
+**Ce qui reste ouvert sur ce chemin** : la vitesse (l'attention MLA est en
+scalaire et sans SIMD : ~20 s par jeton sur GLM-5.3 à cause des reconstructions
+`k_nope`/`v` refaites pour chaque position), et l'absence de noyau IQ (la
+déquantification domine le coût des experts).
 
 ### Ce que le moteur sait calculer, et ce qu'il ne sait pas
 

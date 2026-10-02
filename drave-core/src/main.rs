@@ -17,7 +17,7 @@
 const VARS_LUES: &[&str] = &[
     "BANC_KV_DEBUG", "BANC_KV_GPU_SEUL", "BANC_KV_GRAD", "BANC_KV_K0",
     "BANC_KV_KUNIT", "BANC_KV_UNIT", "BANC_KV_V1", "BANC_SANS_PUITS",
-    "CLUSTERS", "DEBUG_ETAT", "DEBUG_FLUX", "FLUX_VERIF", "GPU", "GPU_EXPERTS",
+    "CLUSTERS", "DEBUG_ETAT", "DEBUG_FLUX", "DEBUG_MLA", "FLUX_VERIF", "GPU", "GPU_EXPERTS",
     "GPU_EXPERTS_GO", "GPU_KV", "GPU_TETE", "GPU_TOPK", "HARMONY_TRACE",
     "KV_BITS", "KV_F16", "KV_K_F16", "KV_K_F32", "KV_V_F32", "MMAP",
     "PRELIRE", "PRELIRE_TOUT", "Q8_BLOCS", "SANS_EMPRUNT", "TRACE_BLOCS",
@@ -1646,8 +1646,8 @@ fn run_config() {
     let mut manques: Vec<&str> = Vec::new();
     let mla_rang_faible = quelque_part("attn_q_a.weight");
     if mla_rang_faible {
-        println!("attention     : MLA à rang faible (cache latent) — chemin NON VALIDÉ \
-(corrélation −0,04 avec llama.cpp sur GLM-5.3, voir reports/rapport-mla-experts.md)");
+        println!("attention     : MLA à rang faible (cache latent) — validée contre llama.cpp \
+(corrélation 0,999, top-1 3/3 sur GLM-5.3)");
     }
     if quelque_part("hc_attn_fn.weight") { manques.push("hyper-connexions"); }
     let topk = g.cfg("index_topk").and_then(|m| m.as_u64()).unwrap_or(0) as usize;

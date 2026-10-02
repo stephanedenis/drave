@@ -110,12 +110,9 @@ fn verifier_architecture(g: &Gguf, cfg: &Cfg, ctx: usize, clusters: bool) -> Res
         // elle n'a jamais été validée contre une référence sur cette machine —
         // le dire une fois, à l'ouverture, plutôt que de laisser croire qu'un
         // modèle qui tourne est un modèle juste.
-        eprintln!("[mla] attention MLA à rang faible (cache latent c_kv + k_rope) : chemin \
-NON VALIDÉ. Comparé à llama.cpp sur GLM-5.3, mêmes jetons, même fenêtre, ce chemin \
-donne des logits de corrélation −0,04 avec la référence et prédit le même jeton à \
-toutes les positions. Les chiffres qu'il produit ne veulent rien dire tant que ce \
-n'est pas expliqué — voir reports/rapport-mla-experts.md. Q/K/V denses et MLA dense \
-(`--banc-mla`) ne sont pas concernés.");
+        eprintln!("[mla] attention MLA à rang faible : cache LATENT (c_kv + k_rope), pas de \
+fenêtre glissante ni de YaRN sur ce chemin. Validée contre llama.cpp sur GLM-5.3 : \
+corrélation des logits 0,999024, top-1 3/3 (voir reports/rapport-mla-experts.md).");
     }
     if !manques.is_empty() {
         return Err(format!(
@@ -2184,6 +2181,8 @@ impl Model {
                 } else {
                     let k_b = g.dequant(&p("attn_k_b.weight"));
                     let v_b = g.dequant(&p("attn_v_b.weight"));
+                    // `attn_v_b` est `[nh, v, kv_lora]` : la dimension rapide
+                    // est l'ENTRÉE (voir `attn_mla`).
                     let vd = v_b.len() / (nh * kv_lora);
                     (Vec::new(), Some(k_b), Some(v_b), vd)
                 };
@@ -3696,6 +3695,11 @@ s'applique pas — utilisez --lot 1, ou réenregistrez sans DRAVE_TRACE_BLOCS");
     /// l'architecture.
     fn attn_mla(m: &Mla, cache: &mut (Vec<f32>, Vec<f32>), hn: &[f32], pos: usize,
                 rope_base: f32, att: &mut [f32]) {
+        // `DRAVE_DEBUG_MLA=1` : les premières valeurs des projections MLA, à
+        // comparer à `llama-debug --tensor-filter Kcur-0` sur les mêmes jetons.
+        // Une divergence de corrélation sur les LOGITS ne dit pas où elle
+        // commence ; ces quatre lignes le disent.
+        let dbg = std::env::var("DRAVE_DEBUG_MLA").is_ok() && pos < 2;
         let (nh, qkn, qkr, vd, kvl) = (m.nh, m.qkn, m.qkr, m.vd, m.kv_lora);
         let eps = m.eps;
         let h = hn.len();
@@ -3720,6 +3724,14 @@ s'applique pas — utilisez --lot 1, ou réenregistrez sans DRAVE_TRACE_BLOCS");
                 .copy_from_slice(&qb[hh * (qkn + qkr) + qkn..(hh + 1) * (qkn + qkr)]);
         }
         Self::rope(&mut q_rope, nh, qkr, pos, rope_base, qkr);
+        if dbg {
+            eprintln!("[mla] pos {pos} q_a[..4] {:.5e} {:.5e} {:.5e} {:.5e}", qa[0], qa[1], qa[2], qa[3]);
+            eprintln!("[mla] pos {pos} q_a_norm[..4] {:.5e} {:.5e} {:.5e} {:.5e}", qan[0], qan[1], qan[2], qan[3]);
+            eprintln!("[mla] pos {pos} q_b[..4] {:.5e} {:.5e} {:.5e} {:.5e}", qb[0], qb[1], qb[2], qb[3]);
+            eprintln!("[mla] pos {pos} c_kv[..4] {:.5e} {:.5e} {:.5e} {:.5e}", c_n[0], c_n[1], c_n[2], c_n[3]);
+            eprintln!("[mla] pos {pos} k_rope[..4] {:.5e} {:.5e} {:.5e} {:.5e}", k_rope[0], k_rope[1], k_rope[2], k_rope[3]);
+            eprintln!("[mla] pos {pos} q_rope[..4] {:.5e} {:.5e} {:.5e} {:.5e}", q_rope[0], q_rope[1], q_rope[2], q_rope[3]);
+        }
         // --- écriture du cache latent
         {
             let (ckv, krop) = cache;
@@ -3743,16 +3755,28 @@ s'applique pas — utilisez --lot 1, ou réenregistrez sans DRAVE_TRACE_BLOCS");
                     // sortie est le PLUS LENT. L'écrire dans l'autre sens donne
                     // des scores plausibles et faux.
                     (Some(kb), Some(vb)) => {
+                        // ATTENTION à l'asymétrie des deux remontées, qui ne se
+                        // devine pas : llama.cpp déclare
+                        //   wk_b = {qk_nope, kv_lora, nh}  → la dimension RAPIDE
+                        //                                    est la SORTIE ;
+                        //   wv_b = {kv_lora, v,      nh}  → la dimension RAPIDE
+                        //                                    est l'ENTRÉE.
+                        // Les écrire toutes deux « sortie rapide » donne des
+                        // valeurs fausses de la bonne forme — mesuré : `kqv_out`
+                        // de la couche 0 valait 5e-4 au lieu de 1,5e-3 chez
+                        // llama.cpp, et la corrélation des logits tombait à
+                        // −0,04. `k_b` se réduit donc sur la dimension LENTE,
+                        // `v_b` sur la dimension RAPIDE.
                         let bk = &kb[hh * kvl * qkn..(hh + 1) * kvl * qkn];
                         for o in 0..qkn {
                             let mut s = 0f32;
                             for (c_, &cc) in c.iter().enumerate() { s += bk[c_ * qkn + o] * cc; }
                             kn[o] = s;
                         }
-                        let bv = &vb[hh * kvl * vd..(hh + 1) * kvl * vd];
+                        let bv = &vb[hh * vd * kvl..(hh + 1) * vd * kvl];
                         for o in 0..vd {
                             let mut s = 0f32;
-                            for (c_, &cc) in c.iter().enumerate() { s += bv[c_ * vd + o] * cc; }
+                            for (c_, &cc) in c.iter().enumerate() { s += bv[o * kvl + c_] * cc; }
                             vv[o] = s;
                         }
                     }
@@ -3785,10 +3809,10 @@ s'applique pas — utilisez --lot 1, ou réenregistrez sans DRAVE_TRACE_BLOCS");
                 let c = &ckv[t * kvl..(t + 1) * kvl];
                 match (&m.k_b, &m.v_b) {
                     (Some(_), Some(vb)) => {
-                        let bv = &vb[hh * kvl * vd..(hh + 1) * kvl * vd];
+                        let bv = &vb[hh * vd * kvl..(hh + 1) * vd * kvl];
                         for o in 0..vd {
                             let mut s = 0f32;
-                            for (c_, &cc) in c.iter().enumerate() { s += bv[c_ * vd + o] * cc; }
+                            for (c_, &cc) in c.iter().enumerate() { s += bv[o * kvl + c_] * cc; }
                             out[o] += w * s;
                         }
                     }
@@ -3938,6 +3962,7 @@ s'applique pas — utilisez --lot 1, ou réenregistrez sans DRAVE_TRACE_BLOCS");
         // état qui ne dépend plus de l'entrée ; cette ligne dit à quelle couche
         // il cesse d'en dépendre (explosion, effondrement, ou rien du tout).
         let debug_etat = std::env::var("DRAVE_DEBUG_ETAT").is_ok();
+        let debug_mla = std::env::var("DRAVE_DEBUG_MLA").is_ok();
         self.profil_jetons += 1;
         let Model { g, cfg, layers, out_norm, pool, kv, events, attn_events, kv_gpu,
                     attn_gpu_part, emb_imposee, .. } = self;
@@ -4045,6 +4070,10 @@ dynamique de {dyn_:.3e} (relatif {:.2e})", mx / dyn_.max(1e-9));
             let ta = Instant::now();
             if let Some(m) = self.mla.as_ref().map(|v| &v[l]) {
                 Self::attn_mla(m, &mut self.mla_cache[l], &hn, pos, cfg.rope_base, &mut att);
+                if debug_mla && l == 0 {
+                    eprintln!("[mla] couche 0 pos {pos} att[..8] {:.5e} {:.5e} {:.5e} {:.5e} {:.5e} {:.5e} {:.5e} {:.5e}",
+                              att[0], att[1], att[2], att[3], att[4], att[5], att[6], att[7]);
+                }
             } else {
                 Self::matvec(pool, &lay.wq, &hn, &mut q, events, self.act_levels, self.act_thresh, tk(0), self.act_renorm, &mut scratch, self.seuil_push);
                 Self::matvec(pool, &lay.wk, &hn, &mut k, events, self.act_levels, self.act_thresh, tk(1), self.act_renorm, &mut scratch, self.seuil_push);

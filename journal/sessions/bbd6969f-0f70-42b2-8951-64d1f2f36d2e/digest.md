@@ -63122,3 +63122,599 @@ REPRISE gagne les pistes écartées, la piste la plus probable (le facteur
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git commit -q --amend -F - <<'EOF'\nMLA : dire NON VALIDÉE partout où elle est annoncée\n\nLe moteur écrit maintenant, à l'ouverture et dans --config, que le chemin MLA à\nrang faible n'est pas validé — avec le chiffre qui le prouve  … [733 caractères tronqués]`
+
+  ```
+logits d'attention) et le premier pas de la session suivante : faire tourner le
+harnais `tools/mla_synthetique.py` sur le chemin `forward`/`attn_mla` pour
+isoler la couche où il diverge de la MLA dense déjà validée contre numpy.
+  ```
+
+- **bash** `{"command": "TZ=America/New_York date \"+HAE %H:%M\"; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log --oneline -8 | cat; git status --short | head -3", "description": "Check time and commit history"}`
+
+  ```
+HAE 03:00
+44f634e MLA : dire NON VALIDÉE partout où elle est annoncée
+4cc7056 Portes : formats et routage vérifiés automatiquement ; la comparaison gpt-oss encadrée par le YaRN
+78fdc67 README : 18 formats lisibles, portes de formats, et le diagnostic DRAVE_DEBUG_ETAT
+44288ff Rapports : la référence externe (llama.cpp) mesurée — gpt-oss cohérent, MLA fausse
+78e9c94 Expert partagé (2D) et biais de sélection `exp_probs_b` : deux tenseurs lus nulle part
+776409b Déquantification par bloc sans allocation : 253 s/jeton → à remesurer
+0c4bad0 MLA : le lot de lignes indexait sa tranche avec l'indice global
+7674684 MLA à rang faible + formats sans noyau : GLM-5.3 et Kimi deviennent calculables
+ M journal/README.md
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '550,562p' drave-core/src/engine.rs; python3 -c \"\nimport json,sys\nsys.path.insert(0,'tools')\nfrom analyse_experts_statique import Lecteur\ng=Lecteur('/tmp/mla_minuscule.gguf')\nfor k in sorted(g.meta):\n    if not k.starts … [138 caractères tronqués]`
+
+  ```
+let dst = &mut outs[id];
+                        if dst.len() < d.n_out { dst.resize(d.n_out, 0.0); }
+                        // Hors de sa tranche, ce worker doit laisser des ZÉROS :
+                        // `matvec_dense_i8` somme les vecteurs de TOUS les
+                        // workers, et une case non écrite garderait la valeur du
+                        // travail précédent (bug mesuré : PPL 4 361 879 au lieu de
+                        // 19,26 — chaque sortie recevait n-1 restes périmés).
+                        for v in dst[..lo].iter_mut() { *v = 0.0; }
+                        for v in dst[hi..].iter_mut() { *v = 0.0; }
+                        for o in lo..hi {
+                            // Même ordre d'opérations que le chemin par
+                            // événements : `acc × (échelle_poids × échelle_act)`.
+                            // Les sommes entières étant exactes des deux côtés,
+deepseek2.attention.head_count = 4
+deepseek2.attention.head_count_kv = 1
+deepseek2.attention.key_length = 32
+deepseek2.attention.kv_lora_rank = 48
+deepseek2.attention.layer_norm_rms_epsilon = 9.999999747378752e-06
+deepseek2.attention.q_lora_rank = 32
+deepseek2.attention.value_len
+… [264 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ./drave-core/target/release/drave /tmp/mla_minuscule.gguf --ppl /tmp/mla_ids.txt --ctx 16 --limit 8 --logits-bin /tmp/mla_nouveau.bin 2>&1 | tail -3; ls -la /tmp/mla_nouveau.bin 2>/dev/null", "description": "Run the toy model through … [15 caractères tronqués]`
+
+  ```
+thread '<unnamed>' (3829590) panicked at src/engine.rs:557:37:
+range end index 76 out of range for slice of length 64
+-rw-r--r--. 1 stephane stephane 0  2 oct 03:01 /tmp/mla_nouveau.bin
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && awk 'NR>=540 && NR<=560 {printf \"%d: %s\\n\", NR, $0}' drave-core/src/engine.rs", "description": "Read the exact panic line"}`
+
+  ```
+540:                         // Mode dense : chaque worker calcule une tranche
+541:                         // contiguë de sorties, sans dispersion ni réduction.
+542:                         let d = unsafe { &*sh.dense.load(Ordering::Acquire) };
+543:                         let xv = unsafe { std::slice::from_raw_parts(
+544:                             sh.xv.load(Ordering::Acquire), d.n_in) };
+545:                         let sx = f32::from_bits(sh.sx.load(Ordering::Relaxed) as u32);
+546:                         let outs = unsafe { &mut *sh.outs.load(Ordering::Acquire) };
+547:                         let per = (d.n_out + n - 1) / n;
+548:                         let lo = id * per;
+549:                         let hi = (lo + per).min(d.n_out);
+550:                         let dst = &mut outs[id];
+551:                         if dst.len() < d.n_out { dst.resize(d.n_out, 0.0); }
+552:                         // Hors de sa tranche, ce worker doit laisser des ZÉROS :
+553:                         // `matvec_dense_i8` somme les vecteurs de TOUS les
+554:                         // workers, et une case non écrite garderait la valeur du
+555:                         // travail précédent (bug mes
+… [385 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/llama.cpp && export LD_LIBRARY_PATH=build/bin && timeout 60 ./build/bin/llama-debug --help 2>&1 | head -30", "description": "Check llama-debug capabilities"}`
+
+  ```
+----- common params -----
+
+-h,    --help, --usage                  print usage and exit
+--version                               show version and build info
+-cl,   --cache-list                     show list of models in cache
+--completion-bash                       print source-able bash completion script for llama.cpp
+-t,    --threads N                      number of CPU threads to use during generation (default: -1)
+                                        (env: LLAMA_ARG_THREADS)
+-tb,   --threads-batch N                number of threads to use during batch and prompt processing (default:
+                                        same as --threads)
+-C,    --cpu-mask M                     CPU affinity mask: arbitrarily long hex. Complements cpu-range
+                                        (default: "")
+-Cr,   --cpu-range lo-hi                range of CPUs for affinity. Complements --cpu-mask
+--cpu-strict <0|1>                      use strict CPU placement (default: 0)
+--prio N                                set process/thread priority : low(-1), normal(0), medium(1), high(2),
+                                        realtime(3) (default: 0)
+--poll <0...100>                        use 
+… [1170 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/llama.cpp && export LD_LIBRARY_PATH=build/bin && timeout 60 ./build/bin/llama-debug --help 2>&1 | grep -iA 3 \"debug\\|tensor\\|filter\" | tail -20", "description": "Find llama-debug tensor options"}`
+
+  ```
+(env: LLAMA_ARG_LOG_VERBOSITY)
+--
+--tensor-filter REGEX                   filter tensor names for debug output (regex pattern, can be specified
+                                        multiple times)
+
+example usage:
+--
+  Print tensors:
+
+  ./build/bin/llama-debug -m model.gguf -p "Hello my name is" --verbose
+
+  The tensors to be printed can be filtered with --tensor-filter option.
+
+  Save logits/embeddings:
+
+  ./build/bin/llama-debug -m model.gguf -p "Hello my name is" --save-logits
+
+  Add --embedding to save embeddings
+  ```
+
+### 🤖 Assistant
+
+⏵ Comparaison ciblée des projections MLA (Q/K/V) couche 0 contre llama-debug
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/model.rs'; s=open(p).read()\ns = s.replace(\"\"\"    fn attn_mla(m: &Mla, cache: &mut (Vec<f32>, Vec<f32>), hn: &[f32], pos: usize,\n                rope_base: f32, att: &mut [f32]) {\"\"\",\n\"\"\ … [1818 caractères tronqués]`
+
+  ```
+test result: ok. 48 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.10s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && export LD_LIBRARY_PATH=/home/stephane/Data13TB/stephane/GitHub/llama.cpp/build/bin && head -c 30 /tmp/wt2_txt.txt | cat -A | head -3; timeout 300 /home/stephane/Data13TB/stephane/GitHub/llama.cpp/build/bin/llama-tokenize -m /home/ste … [229 caractères tronqués]`
+
+  ```
+$
+ = Robert Boulter = $
+$
+[198, 284, 8396, 425, 10960, 465, 284, 14721, 431, 5923]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/llama.cpp && grep -oE 'cb\\([a-z_]+ ?[a-z_]*\\>?, \"[a-z_0-9]+\"' src/models/glm-dsa.cpp | grep -oE '\"[a-z_0-9]+\"' | sort -u | head -25", "description": "List GLM tensor callback names"}`
+
+  ```
+"attn_norm"
+"ffn_inp"
+"ffn_moe_out"
+"ffn_norm"
+"ffn_out"
+"ffn_shexp"
+"indexer_k"
+"indexer_k_nope"
+"indexer_k_pe"
+"indexer_kq"
+"indexer_q"
+"indexer_q_nope"
+"indexer_q_pe"
+"indexer_score"
+"indexer_weights"
+"k_pe"
+"kv_cmpr"
+"kv_cmpr_pe"
+"kv_cmpr_reshape"
+"l_out"
+"q"
+"q_nope"
+"q_nope_absorbed"
+"q_nope_absorbed_perm"
+"q_nope_perm"
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/llama.cpp && grep -oE 'cb\\([a-z_]+ ?[a-z_]*\\>?, \"[a-z_0-9]+\"' src/models/glm-dsa.cpp | grep -oE '\"[a-z_0-9]+\"' | sort -u | tail -20", "description": "List remaining tensor names"}`
+
+  ```
+"indexer_q"
+"indexer_q_nope"
+"indexer_q_pe"
+"indexer_score"
+"indexer_weights"
+"k_pe"
+"kv_cmpr"
+"kv_cmpr_pe"
+"kv_cmpr_reshape"
+"l_out"
+"q"
+"q_nope"
+"q_nope_absorbed"
+"q_nope_absorbed_perm"
+"q_nope_perm"
+"q_pe"
+"qr"
+"result_norm"
+"result_output"
+"top_k"
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && nohup env LD_LIBRARY_PATH=/home/stephane/Data13TB/stephane/GitHub/llama.cpp/build/bin timeout 2400 /home/stephane/Data13TB/stephane/GitHub/llama.cpp/build/bin/llama-debug -m /home/stephane/Data13TB/stephane/modeles/gguf/GLM-5.3-UD-IQ … [338 caractères tronqués]`
+
+  ```
+llama-debug lancé
+0
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "tail -5 /tmp/llama_debug_glm.log; ps -eo pid,etimes,rss,comm --sort=-rss | head -2", "description": "Check llama-debug progress"}`
+
+  ```
+error: invalid argument: --verbose-prompt
+    PID ELAPSED   RSS COMMAND
+ 710008  572847 2846000 node-MainThread
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && nohup env LD_LIBRARY_PATH=/home/stephane/Data13TB/stephane/GitHub/llama.cpp/build/bin timeout 2400 /home/stephane/Data13TB/stephane/GitHub/llama.cpp/build/bin/llama-debug -m /home/stephane/Data13TB/stephane/modeles/gguf/GLM-5.3-UD-IQ … [337 caractères tronqués]`
+
+  ```
+lancé
+0
+0.00.839.099 W model has unused tensor blk.78.nextn.hnorm.weight (size = 24576 bytes) -- ignoring
+0.00.839.111 W model has unused tensor blk.78.nextn.shared_head_norm.weight (size = 24576 bytes) -- ignoring
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in $(seq 1 300); do if grep -qE \"kv_cmpr-0|q_pe-0|error|failed\" /tmp/llama_debug_glm.log; then break; fi; sleep 10; done; grep -E \"kv_cmpr-0|k_pe-0|qr-0|q_pe-0\" -A 4 /tmp/llama_debug_glm.log | head -30", "description": "Wai … [62 caractères tronqués]`
+
+  ```
+started background job bash-113
+  ```
+
+- **job_output** `{"job_id": "bash-113", "timeout_ms": 900000, "wait": true}`
+
+  ```
+(no new output)
+[status: completed, exit code: 0]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-113 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in $(seq 1 300); do if grep -qE "kv_cmpr-0|q_pe-0|error|failed" /tmp/llama_debug_glm.log; then break; fi; sleep 10; done; grep -E "kv_cmpr-0|k_pe-0|qr-0|q_pe-0" -A 4 /tmp/llama_debug_glm.log | head -30) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "grep -E \"kv_cmpr|k_pe|qr|q_pe\" /tmp/llama_debug_glm.log | head -10; echo \"--- erreurs ---\"; grep -iE \"error|abort|assert\" /tmp/llama_debug_glm.log | head -5; wc -l /tmp/llama_debug_glm.log", "description": "Inspect the llama-debug output"}`
+
+  ```
+--- erreurs ---
+0.00.470.328 W common_fit_params: failed to fit params to free device memory: was unable to fit model into system memory by reducing context, abort
+29 /tmp/llama_debug_glm.log
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"ctx_params\\|llama_context_params\\|cb_eval\\|n_ctx\" tools/ref_logits.cpp | head -12; wc -l tools/ref_logits.cpp", "description": "Inspect ref_logits.cpp"}`
+
+  ```
+7://     séquence, un seul batch (n_ctx = N + marge, n_batch = n_ubatch = N)
+121:    llama_context_params cparams = llama_context_default_params();
+122:    cparams.n_ctx         = (uint32_t) (N + 8); // marge
+238 tools/ref_logits.cpp
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '115,160p' tools/ref_logits.cpp", "description": "Read ref_logits context setup"}`
+
+  ```
+const size_t octets_logits = (size_t) N * (size_t) n_vocab * sizeof(float);
+    if (octets_logits > (size_t) 2 << 30) {
+        std::fprintf(stderr, "ref_logits: attention, %zu octets de logits (N=%d, n_vocab=%d)\n",
+                     octets_logits, N, n_vocab);
+    }
+
+    llama_context_params cparams = llama_context_default_params();
+    cparams.n_ctx         = (uint32_t) (N + 8); // marge
+    // `--sans-yarn` (ou REF_SANS_YARN=1) : force le RoPE simple. gpt-oss déclare
+    // YaRN ×32 ; comme qtrinet-core sait aussi tourner sans, il faut pouvoir
+    // comparer les deux moteurs DANS LA MÊME configuration.
+    for (int i = 1; i < argc; ++i) {
+        if (std::strcmp(argv[i], "--sans-yarn") == 0) {
+            cparams.rope_scaling_type = LLAMA_ROPE_SCALING_TYPE_NONE;
+        }
+    }
+    if (std::getenv("REF_SANS_YARN") != nullptr) {
+        cparams.rope_scaling_type = LLAMA_ROPE_SCALING_TYPE_NONE;
+    }
+    cparams.n_batch       = (uint32_t) N;
+    cparams.n_ubatch      = (uint32_t) N;       // un seul batch physique
+    cparams.n_outputs_max = (uint32_t) N;
+    cparams.n_seq_max     = 1;
+    cparams.embeddings    = false;
+    cparams.flash_attn_type = LLAMA_FLASH_ATTN_TYPE_DISA
+… [820 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='tools/ref_logits.cpp'; s=open(p).read()\ns = s.replace(\"\"\"    cparams.n_threads       = n_threads;\n    cparams.n_threads_batch = n_threads;\"\"\",\n\"\"\"    cparams.n_threads       = n_threads;\n    cparams. … [3239 caractères tronqués]`
+
+  ```
+23:#include "llama.h"
+25:#include <cctype>
+26:#include <cmath>
+27:#include <cstdint>
+28:#include <cstdio>
+29:#include <cstdlib>
+30:#include <cstring>
+31:#include <regex>
+32:#include <vector>
+33:#include <fstream>
+34:#include <string>
+35:#include <thread>
+compil 0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && setsid nohup env LD_LIBRARY_PATH=/home/stephane/Data13TB/stephane/GitHub/llama.cpp/build/bin timeout 2400 ./tools/ref_logits /home/stephane/Data13TB/stephane/modeles/gguf/GLM-5.3-UD-IQ1_S/GLM-5.3-UD-IQ1_S-00001-of-00006.gguf /tmp/ids … [269 caractères tronqués]`
+
+  ```
+référence ciblée lancée
+1904
+  ```
+
+- **bash** `{"command": "sleep 40; grep -E \"^\\[tensor\\] (qr|kv_cmpr|k_pe|q_pe)-0\" -A 1 /tmp/ref_glm_proj.log | head -20; tail -2 /tmp/ref_glm_proj.log", "description": "Read the dumped projections"}`
+
+  ```
+model has unused tensor blk.78.nextn.shared_head_norm.weight (size = 24576 bytes) -- ignoring
+done_getting_tensors: tensor 'token_embd.weight' (q4_K) (and 1781 others) cannot be used with preferred buffer type CPU_REPACK, using CPU instead
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in $(seq 1 400); do if grep -qE \"n_pos|perplexite\" /tmp/ref_glm_proj.log; then break; fi; sleep 10; done; grep -E \"^\\[tensor\\] \" -A 1 /tmp/ref_glm_proj.log | head -24", "description": "Wait and read the tensor dumps", "ru … [23 caractères tronqués]`
+
+  ```
+started background job bash-114
+  ```
+
+- **job_output** `{"job_id": "bash-114", "timeout_ms": 900000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-108 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in $(seq 1 400); do if grep -qE "perplexité|panicked" /tmp/glm53_etat.log; then break; fi; sleep 10; done; echo "=== normes d'état, couches choisies ==="; grep "\[etat\]" /tmp/glm53_etat.log | awk 'NR%10==1' | head -12; echo "..."; grep "\[etat\]" /tmp/glm53_etat.log | tail -4) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **job_output** `{"job_id": "bash-114", "timeout_ms": 600000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "grep -cE \"^\\[tensor\\]\" /tmp/ref_glm_proj.log; grep -E \"n_pos|perplexite\" /tmp/ref_glm_proj.log | head -3; ps -eo pid,etimes,rss,comm --sort=-rss | head -2", "description": "Check the reference dump progress"}`
+
+  ```
+8
+    PID ELAPSED   RSS COMMAND
+3830490    1326 76805684 ref_logits
+  ```
+
+- **bash** `{"command": "grep -E \"^\\[tensor\\] \" -A 1 /tmp/ref_glm_proj.log | head -18", "description": "Read the 8 dumped tensors"}`
+
+  ```
+[tensor] qr-0 : type 0 · ne = [2048, 2, 1, 1]
+          [0..8) = 3.597365e-02 -2.979781e-02 7.040058e-02 -2.712891e-02 -2.219089e-02 1.298277e-02 3.392864e-02 3.396200e-02
+[tensor] qr-0 : type 0 · ne = [2048, 2, 1, 1]
+          [0..8) = 1.272017e-01 -9.942052e-02 1.774455e-01 -7.821739e-02 -8.088068e-02 1.989289e-02 1.359667e-01 1.120827e-01
+[tensor] q_pe-0 : type 0 · ne = [64, 64, 2, 1]
+          [0..8) = 7.573445e-01 1.916112e-01 -5.053254e-01 -1.458269e-01 -5.808928e-01 -7.891041e-02 7.951034e-01 1.582886e-01
+[tensor] q_pe-0 : type 0 · ne = [64, 64, 2, 1]
+          [0..8) = 7.573445e-01 1.916112e-01 -5.053254e-01 -1.458269e-01 -5.808928e-01 -7.891041e-02 7.951034e-01 1.582886e-01
+[tensor] kv_cmpr-0 : type 0 · ne = [512, 2, 1, 1]
+          [0..8) = 1.845030e-01 2.009878e-01 6.346750e-02 -3.036199e-01 3.583650e-02 -1.666243e-01 -2.377575e-01 -2.656581e-02
+[tensor] kv_cmpr-0 : type 0 · ne = [512, 2, 1, 1]
+          [0..8) = 6.350455e-03 5.107136e-03 1.905943e-03 -8.241065e-03 9.230296e-04 -5.619612e-03 -9.062193e-03 -1.135299e-03
+[tensor] k_pe-0 : type 0 · ne = [64, 1, 2, 1]
+          [0..8) = -4.162222e-01 -1.324210e-01 1.173340e-01 -6.583017e-01 3.378466e-01 -3.932796e-01 7.25804
+… [191 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/model.rs'; s=open(p).read()\ns = s.replace(\"\"\"            eprintln!(\"[mla] pos {pos} q_a[..4] {:.5e} {:.5e} {:.5e} {:.5e}\", qa[0], qa[1], qa[2], qa[3]);\"\"\",\n\"\"\"            eprintln!(\"[ … [705 caractères tronqués]`
+
+  ```
+lancé
+Mem:             125          18           0           3         111         107
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in $(seq 1 400); do if grep -qE \"perplexité|panicked\" /tmp/glm53_mla.log; then break; fi; sleep 10; done; echo \"=== nos projections MLA (2 premiers jetons) ===\"; grep \"\\[mla\\]\" /tmp/glm53_mla.log | head -12", "descripti … [67 caractères tronqués]`
+
+  ```
+started background job bash-115
+  ```
+
+- **job_output** `{"job_id": "bash-115", "timeout_ms": 900000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-114 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in $(seq 1 400); do if grep -qE "n_pos|perplexite" /tmp/ref_glm_proj.log; then break; fi; sleep 10; done; grep -E "^\[tensor\] " -A 1 /tmp/ref_glm_proj.log | head -24) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **job_output** `{"job_id": "bash-115", "timeout_ms": 900000, "wait": true}`
+
+  ```
+=== nos projections MLA (2 premiers jetons) ===
+[mla] attention MLA à rang faible (cache latent c_kv + k_rope) : chemin NON VALIDÉ. Comparé à llama.cpp sur GLM-5.3, mêmes jetons, même fenêtre, ce chemin donne des logits de corrélation −0,04 avec la référence et prédit le même jeton à toutes les positions. Les chiffres qu'il produit ne veulent rien dire tant que ce n'est pas expliqué — voir reports/rapport-mla-experts.md. Q/K/V denses et MLA dense (`--banc-mla`) ne sont pas concernés.
+[mla] pos 0 q_a[..4] 3.62886e-2 -2.98980e-2 7.02903e-2 -2.72719e-2
+[mla] pos 0 q_a_norm[..4] 1.28387e-1 -9.98107e-2 1.77267e-1 -7.86736e-2
+[mla] pos 0 q_b[..4] -4.48552e-4 5.43118e-4 1.28062e-3 1.91977e-3
+[mla] pos 0 c_kv[..4] 6.34940e-3 5.10042e-3 1.90948e-3 -8.23661e-3
+[mla] pos 0 k_rope[..4] -4.15946e-1 -1.31165e-1 1.15741e-1 -6.58514e-1
+[mla] pos 0 q_rope[..4] 7.53244e-1 1.91033e-1 -5.04697e-1 -1.51885e-1
+[mla] pos 0 q_a[..4] 4.51328e-2 1.63365e-1 1.01681e-2 1.17450e-2
+[mla] pos 0 q_a_norm[..4] 5.95877e-2 1.97801e-1 1.21150e-2 1.21028e-2
+[mla] pos 0 q_b[..4] 5.83903e-3 -4.44929e-4 2.12582e-2 -2.31633e-3
+[mla] pos 0 c_kv[..4] -1.56371e-3 1.97855e-3 -1.00234e-3 4.31561e-3
+[mla] pos 0 k_rope[..4] 5.33
+… [74 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Les projections MLA concordent à 1 % ; je descends d'un étage (attention, FFN)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && setsid nohup env LD_LIBRARY_PATH=/home/stephane/Data13TB/stephane/GitHub/llama.cpp/build/bin timeout 2400 ./tools/ref_logits /home/stephane/Data13TB/stephane/modeles/gguf/GLM-5.3-UD-IQ1_S/GLM-5.3-UD-IQ1_S-00001-of-00006.gguf /tmp/ids … [314 caractères tronqués]`
+
+  ```
+référence étage 2 lancée
+0
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/model.rs'; s=open(p).read()\n# Dump de la sortie d'attention et de la sortie de couche, couche 0, position 0.\ns = s.replace(\"\"\"            let ta = Instant::now();\n            if let Some(m) = … [1160 caractères tronqués]`
+
+  ```
+3954:        let debug_mla = std::env::var("DRAVE_DEBUG_MLA").is_ok();
+4062:                if debug_mla && l == 0 {
+BUILD
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in $(seq 1 400); do if grep -qE \"^\\[tensor\\]\" /tmp/ref_glm_att.log && grep -q \"perplexite\" /tmp/ref_glm_att.log; then break; fi; sleep 10; done; grep -E \"^\\[tensor\\] \" -A 1 /tmp/ref_glm_att.log | head -20", "descripti … [70 caractères tronqués]`
+
+  ```
+started background job bash-116
+  ```
+
+- **job_output** `{"job_id": "bash-116", "timeout_ms": 900000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "grep -E \"^\\[tensor\\] \" -A 1 /tmp/ref_glm_att.log | head -20; tail -1 /tmp/ref_glm_att.log", "description": "Check the stage-2 dump"}`
+
+  ```
+done_getting_tensors: tensor 'token_embd.weight' (q4_K) (and 1781 others) cannot be used with preferred buffer type CPU_REPACK, using CPU instead
+  ```
+
+- **job_output** `{"job_id": "bash-116", "timeout_ms": 900000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "sleep 40; grep -cE \"^\\[tensor\\]\" /tmp/ref_glm_att.log; grep -E \"^\\[tensor\\] \" -A 1 /tmp/ref_glm_att.log | head -14", "description": "Poll the reference dump"}`
+
+  ```
+3
+[tensor] kqv_out-0 : type 0 · ne = [16384, 2, 1, 1]
+          [0..8) = -1.552319e-04 -2.284382e-03 -1.569172e-03 -8.625589e-04 2.324393e-03 1.588683e-03 3.477836e-04 -1.398706e-03
+[tensor] ffn_out-0 : type 0 · ne = [6144, 2, 1, 1]
+          [0..8) = -9.297418e-04 -2.893236e-04 -2.298555e-03 -1.397638e-03 -1.775885e-03 -1.284966e-04 7.749733e-04 -1.996567e-03
+[tensor] l_out-0 : type 0 · ne = [6144, 2, 1, 1]
+          [0..8) = 3.958318e-03 2.302623e-04 1.874789e-03 1.564195e-03 -2.974730e-03 -3.872524e-03 2.699937e-04 -6.190604e-04
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/model.rs'; s=open(p).read()\ns = s.replace(\"\"\"                if debug_etat {\n                    let n2: f32 = x.iter().map(|v| v * v).sum();\n                    let na: f32 = att.iter().map( … [1018 caractères tronqués]`
+
+  ```
+BUILD
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && setsid nohup env DRAVE_DEBUG_MLA=1 timeout 2400 ./drave-core/target/release/drave /home/stephane/Data13TB/stephane/modeles/gguf/GLM-5.3-UD-IQ1_S/GLM-5.3-UD-IQ1_S-00001-of-00006.gguf --ppl /tmp/ids_glm.txt --ctx 16 --limit 2 --threads … [365 caractères tronqués]`
+
+  ```
+started background job bash-117
+  ```
+
+- **job_output** `{"job_id": "bash-117", "timeout_ms": 900000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-116 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in $(seq 1 400); do if grep -qE "^\[tensor\]" /tmp/ref_glm_att.log && grep -q "perplexite" /tmp/ref_glm_att.log; then break; fi; sleep 10; done; grep -E "^\[tensor\] " -A 1 /tmp/ref_glm_att.log | head -20) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **job_output** `{"job_id": "bash-117", "timeout_ms": 900000, "wait": true}`
+
+  ```
+=== nos sorties couche 0 ===
+[mla] couche 0 pos 0 att[..8] -5.12207e-4 1.24885e-4 -5.82988e-4 6.20521e-4 6.40361e-5 -4.73786e-5 5.07982e-4 2.71791e-4
+[mla] couche 0 pos 1 att[..8] -4.71626e-4 1.44356e-4 -5.95305e-4 6.18800e-4 4.83060e-5 -3.92149e-5 5.01736e-4 2.76565e-4
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/llama.cpp && grep -n \"wk_b\\|wv_b\" src/models/glm-dsa.cpp | head -6; grep -n \"n_embd_head_qk_nope\" src/models/glm-dsa.cpp | head -6", "description": "Check GLM's k_b/wv_b shapes in llama.cpp"}`
+
+  ```
+89:    // note: these are the actual head sizes you get when treating as MHA or after "decompression" using wv_b for MLA
+131:        layer.wk_b = create_tensor(tn(LLM_TENSOR_ATTN_K_B, "weight", i), {n_embd_head_qk_nope, kv_lora_rank, n_head}, flags);
+132:        layer.wv_b = create_tensor(tn(LLM_TENSOR_ATTN_V_B, "weight", i), {kv_lora_rank, n_embd_head_v_mla, n_head}, flags);
+193:    // note: these are the actual head sizes you get when treating as MHA or after "decompression" using wv_b for MLA
+443:                ggml_tensor * q_nope_absorbed = ggml_mul_mat(ctx0, model.layers[il].wk_b, q_nope);
+469:                        Qcur, Kcur, Vcur, nullptr, nullptr, model.layers[il].wv_b, top_k, kq_scale, il);
+94:    const int64_t n_embd_head_qk_nope = n_embd_head_k_mla - n_embd_head_qk_rope;
+131:        layer.wk_b = create_tensor(tn(LLM_TENSOR_ATTN_K_B, "weight", i), {n_embd_head_qk_nope, kv_lora_rank, n_head}, flags);
+199:    const int64_t n_embd_head_qk_nope = n_embd_head_k - n_embd_head_qk_rope;
+397:            // split into {n_embd_head_qk_nope, n_head, n_tokens}
+399:                ggml_view_3d(ctx0, q, n_embd_head_qk_nope, n_head, n_tokens, ggml_row_size(q->type, n_embd_head_k),
+40
+… [111 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ BUG TROUVÉ : `v_b` est rangé à l'envers (l'entrée est la dimension rapide)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/model.rs'; s=open(p).read()\nvieux = \"\"\"                    (Some(kb), Some(vb)) => {\n                        let bk = &kb[hh * kvl * qkn..(hh + 1) * kvl * qkn];\n                        for o  … [3804 caractères tronqués]`
+
+  ```
+BUILD
+test result: ok. 48 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.11s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && setsid nohup env DRAVE_DEBUG_MLA=1 timeout 2400 ./drave-core/target/release/drave /home/stephane/Data13TB/stephane/modeles/gguf/GLM-5.3-UD-IQ1_S/GLM-5.3-UD-IQ1_S-00001-of-00006.gguf --ppl /tmp/ids_glm.txt --ctx 16 --limit 2 --threads … [472 caractères tronqués]`
+
+  ```
+started background job bash-118
+  ```
+
+- **job_output** `{"job_id": "bash-118", "timeout_ms": 900000, "wait": true}`
+
+  ```
+relancé avec v_b corrigé
+[status: running]
+  ```
+
+- **job_output** `{"job_id": "bash-118", "timeout_ms": 900000, "wait": true}`
+
+  ```
+=== nos valeurs couche 0 ===
+[mla] couche 0 pos 0 att[..8] -1.51671e-4 -2.28325e-3 -1.56624e-3 -8.61327e-4 2.32388e-3 1.58774e-3 3.49736e-4 -1.39764e-3
+[mla] couche 0 pos 1 att[..8] -1.49113e-4 -2.29303e-3 -1.57951e-3 -8.65177e-4 2.35958e-3 1.61568e-3 3.32378e-4 -1.39311e-3
+=== perplexité 14537.4663 sur 1 tokens (0 événements, 395.9 s) ===
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && setsid nohup timeout 3000 ./drave-core/target/release/drave /home/stephane/Data13TB/stephane/modeles/gguf/GLM-5.3-UD-IQ1_S/GLM-5.3-UD-IQ1_S-00001-of-00006.gguf --ppl /tmp/ids_glm.txt --ctx 16 --limit 4 --threads 20 --logits-bin /tmp/ … [492 caractères tronqués]`
+
+  ```
+started background job bash-119
+  ```
+
+- **job_output** `{"job_id": "bash-119", "timeout_ms": 900000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **job_output** `{"job_id": "bash-119", "timeout_ms": 900000, "wait": true}`
+
+  ```
+=== GLM-5.3, 3 jetons notés, v_b corrigé ===
+=== perplexité 5966.3384 sur 3 tokens (0 événements, 589.3 s) ===
+    1    8396   11.4020   11.0308  +0.3712      1374      1003    154820    154820     oui
+    2     425    5.0952    4.4837  +0.6115        22        15        64        64     oui
+
+écart |NLL| : moyenne 0.3307 · médiane 0.3712 · p90 0.5634 · max 0.6115
+accord du top-1 : 3/3
+perplexité nous : 5966.3440   référence : 4286.1326   (3 positions comparées)
+corrélation des logits (position 0) : 0.999024
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Corrélation 0,999 et top-1 3/3 : la MLA est validée
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\n# 1) Le message d'ouverture : ce n'est plus « non validé », c'est mesuré.\np='drave-core/src/model.rs'; s=open(p).read()\ns = s.replace(\"\"\"        eprintln!(\"[mla] attention MLA à rang faible (cache latent c_kv  … [3289 caractères tronqués]`
+
+  ```
+test result: ok. 48 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.15s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='REPRISE.md'; s=open(p).read()\ns = s.replace(\"\"\"### Le piège à ne pas rouvrir : la MLA tourne mais n'est pas validée\"\"\",\n\"\"\"### La MLA à rang faible : trouvée fausse, puis validée\"\"\")\ns = s.replace( … [4756 caractères tronqués]`
