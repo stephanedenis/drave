@@ -79852,3 +79852,43 @@ AssertionError
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='docs/plan-deepseek41-complet.md'\ns=open(p).read()\na=\"\"\"> 1e-6)))`) sont écrites noir sur blanc. **La phase est donc rouverte**, et sa\n> première porte est déjà franchie : les 48 premiers du fichier sont\ … [3906 caractères tronqués]`
+
+  ```
+ok
+32bfa3a P8 : l'engram est porté en entier — adressage, lecture, injection — et validé contre la référence
+  ```
+
+### 🤖 Assistant
+
+⏵ P8 : l'outil d'analyse du flux d'adresses (la porte « flux lisible par un outil »).
+
+- **write** `{"content": "#!/usr/bin/env python3\n\"\"\"Analyse du **flux d'adresses** de l'engram (DeepSeek-V4.1).\n\nLit ce que `drave <modele> --engram-adresses F` a écrit — un `i32` par jeton,\npar couche et par colonne de hachage — et dit ce que ce flux **est** :\n\n* combien de rangées il touche, et quelle … [4528 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/analyse_engram.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/analyse_engram.py /tmp/v41_adr3.bin 2>&1 | head -14", "description": "Analyse the engram address flux", "timeoutMs": 600000}`
+
+  ```
+# /tmp/v41_adr3.bin
+10000 jetons × 2 couches × 24 colonnes = 480000 adresses
+rangées distinctes      : 479723 (99.9 % des adresses, 0.0625 % de la table)
+par couche              : 1 → 240000 · 14 → 240000
+écart entre jetons      : médiane 4,693,405 · p95 12,422,629 · max 15,991,458
+identiques au jeton précédent : 0 (0.00 %)
+rangées touchées plus d'une fois : 277 (0.06 % des distinctes) · la plus fréquente : 2 fois
+étendue adressée        : 2,743 … 384,014,597 (50.0001 % de la table)
+
+Ce que ce flux coûte à lire : 264 octets par rangée distincte, soit 126.6 Mo pour ces 10000 jetons (12665 octets par jeton)
+  ```
+
+### 🤖 Assistant
+
+⏵ L'outil révèle le coût du flux : **12,7 ko par jeton**. Je documente, puis commit.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='reports/rapport-engram-etat.md'\ns=open(p).read()\na=\"\"\"**Ce qui n'est PAS fait, et pourquoi**\"\"\"\nb=\"\"\"## 2.ter Ce que le flux coûte, mesuré par l'outil\n\n`tools/analyse_engram.py` relit la liste éc … [2621 caractères tronqués]`

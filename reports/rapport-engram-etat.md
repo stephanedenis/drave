@@ -98,6 +98,34 @@ rangées adressées, et **0 % de recouvrement entre jetons consécutifs** — le
 hachage décorrèle, c'est sa raison d'être. Porte permanente ajoutée à
 `tools/portes.sh`.
 
+## 2.ter Ce que le flux coûte, mesuré par l'outil
+
+`tools/analyse_engram.py` relit la liste écrite par `--engram-adresses` et dit ce
+qu'elle **est** — c'est la porte « flux lisible par un outil » :
+
+| | valeur |
+|---|---|
+| adresses pour 10 000 jetons | 480 000 (2 couches × 24 colonnes) |
+| rangées distinctes | **479 723** (99,9 %) · 0,0625 % de la table |
+| répartition par couche | 240 000 / 240 000 — **équilibrée** |
+| écart médian entre deux jetons | **4,69 million** de rangées (p95 : 12,4 M) |
+| identiques au jeton précédent | **0** |
+| rangées touchées plus d'une fois | 277 (0,06 %), la plus fréquente **2 fois** |
+| étendue adressée | 50,0001 % de la table |
+| **coût de lecture** | **12 665 octets par jeton** (264 octets × 48 rangées) |
+
+Ce dernier chiffre est le plus important du document : **12,7 ko par jeton**, à
+comparer aux **1 608 octets** d'un flux d'activation en listes. L'engram n'est pas
+un flux « en plus » : c'est, de loin, le plus gros poste de transport du modèle —
+et il est **totalement dispersé** (aucune localité, aucun recouvrement entre
+jetons), donc chaque rangée est une page distincte.
+
+Deux conséquences pour la suite, écrites ici pour ne pas les redécouvrir :
+1. l'engram se **précharge** (une table de 101 Go dont 0,06 % des rangées servent
+   ne se lit pas à la demande) ;
+2. sur le fil, il coûte **8 fois** un flux d'activation — sa place dans un
+   découpage en grappes est un choix, pas un détail.
+
 **Ce qui n'est PAS fait, et pourquoi** : l'injection n'est **branchée dans aucune
 passe avant**, parce qu'aucun modèle exécutable ne la porte — V4.1 est le seul à
 avoir un engram, et il reste refusé pour deux raisons indépendantes (compression

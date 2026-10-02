@@ -7,12 +7,12 @@
 | Début | 2026-09-28 14:46 |
 | Durée | 98.7 h |
 | Tours | 78 |
-| Messages | 4960 |
-| Appels d'outils | 4736 |
-| Fichiers touchés | 97 |
-| Commandes | 4097 |
+| Messages | 4963 |
+| Appels d'outils | 4739 |
+| Fichiers touchés | 98 |
+| Commandes | 4099 |
 | Sous-agents | 29 |
-| Commits | 350 |
+| Commits | 351 |
 | Compactages de contexte | 6 |
 
 ## Objectifs déclarés
@@ -3986,7 +3986,7 @@ J'avais écrit deux conclusions que **la recherche de sources a démenties** —
 
 ### Tour 78 — <goal_round> Objective: "Exécuter le plan docs/plan-deepseek41-complet.md phase par phase (P0→P9), en autonomie, en resp … [941 caractères tronqués]
 
-*27 appels d'outils.* Actions notables :
+*30 appels d'outils.* Actions notables :
 
 - write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/engram_reference.py`
 - bash — Run the engram reference self-test
@@ -4002,11 +4002,11 @@ J'avais écrit deux conclusions que **la recherche de sources a démenties** —
 - bash — Compare the engine against the reference on real data
 - bash — Commit the validated engram addressing
 - bash — Inspect the engram table tensor layout
-- … et 13 autres
+- … et 16 autres
 
 **Synthèse produite :**
 
-⏵ P8 : les trois fonctions sont portées et validées. Portes puis commit.
+⏵ L'outil révèle le coût du flux : **12,7 ko par jeton**. Je documente, puis commit.
 
 ## 3. Travail accompli
 
@@ -4111,6 +4111,7 @@ J'avais écrit deux conclusions que **la recherche de sources a démenties** —
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-provenance-v41.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-engram-etat.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/engram_reference.py` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/analyse_engram.py` | 1 | 0 |
 
 ### Sous-agents lancés
 
@@ -4186,7 +4187,7 @@ J'avais écrit deux conclusions que **la recherche de sources a démenties** —
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 4057 autres
+- … et 4059 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4684,4 +4685,5 @@ J'avais écrit deux conclusions que **la recherche de sources a démenties** —
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF' p='docs/plan-deepseek41-complet.md' s=open(p).read() a="""> Conclusion : V4.1 ne peut 
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF' p='tools/portes.sh' s=open(p).read() a="""# 7. gpt-oss : `--config` d'abord (gratuit),
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF' p='docs/plan-deepseek41-complet.md' s=open(p).read() a="""> 1e-6)))`) sont écrites noi
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF' p='reports/rapport-engram-etat.md' s=open(p).read() a="""**Ce qui n'est PAS fait, et p
 
