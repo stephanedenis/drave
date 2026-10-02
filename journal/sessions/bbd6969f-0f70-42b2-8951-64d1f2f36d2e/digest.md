@@ -78357,3 +78357,493 @@ Created file
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='docs/plan-deepseek41-complet.md'\ns=open(p).read()\na=\"\"\"### P6 — V4-Flash complet, en listes, et **sur plusieurs grappes** (≈ 1 journée)\"\"\"\nb=\"\"\"### P6 — V4-Flash complet, en listes, et **sur plusie … [2551 caractères tronqués]`
+
+  ```
+ok
+=== Portes ===
+  cargo test --release                       53 verts  ✅
+  Qwen2.5-0.5B ctx 256                       19.3885  ✅
+  Qwen3-30B en clusters (origine : 799,8557) 799.8557  ✅
+d9ce4bf P6 : le découpage de V4-Flash est EXACT (0,00e0) — et le mode listes n'y gagne rien
+  ```
+
+### 🤖 Assistant
+
+⏵ P6 : découpage en fichiers de grappes pour V4-Flash — vérification de l'espace disque.
+
+- **bash** `{"command": "df -h /home/stephane/FastNVMe /home/stephane/Data13TB | tail -3; ls /home/stephane/FastNVMe/artefacts/modeles-optimises/ 2>/dev/null | head -5; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && head -20 tools/convertir_clusters.py", "description": "Check disk space and the cluster t … [5 caractères tronqués]`
+
+  ```
+Filesystem               Size  Used Avail Use% Mounted on
+/dev/nvme0n1p2           828G  478G  349G  58% /home/stephane/FastNVMe
+/dev/mapper/system-root   11T  7,4T  3,5T  69% /home/stephane/Data13TB
+qwen3-30b-8clusters
+qwen3-30b-8clusters-v2
+#!/usr/bin/env python3
+"""Convertisseur GGUF → « modèle éclaté en clusters », un fichier par cluster.
+
+**Pourquoi.** Notre mode d'opération ne lit que les experts qu'un jeton allume, et
+les modèles MoE publient leurs experts dans UN tenseur par couche
+(`blk.N.ffn_gate_exps.weight [n_experts, …]`). Un nœud qui n'héberge que 16 experts
+sur 128 lit donc un fichier de 18 Go pour en utiliser un huitième. Ici, chaque
+cluster devient un **fichier GGUF autonome** : on l'ouvre seul, en mmap, et on ne
+lit que sa tranche.
+
+**Ce que le convertisseur NE fait pas** : il ne requantifie rien. Les octets des
+poids sont copiés tels quels (les blocs de quantification sont alignés sur l'axe
+des experts, donc une tranche d'expert est une plage d'octets exacte). Aucune perte,
+aucune conversion, aucun choix de format de rechange.
+
+**Sortie** (dans un dossier) :
+
+    commun.gguf          ce qui n'est pas un expert : embeddings, sortie, attention,
+                    
+… [121 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '20,50p' tools/convertir_clusters.py | head -20; grep -n \"argparse\\|add_argument\" tools/convertir_clusters.py | head -8", "description": "Read the cluster converter CLI"}`
+
+  ```
+cluster-00.gguf …    par cluster : les tranches d'experts de TOUTES les couches
+    manifeste.json       rôle de chaque fichier, tenseurs portés, tailles, ordre des
+                         experts, correspondance expert local ↔ identifiant global
+
+Chaque fichier est un GGUF valide et lisible par le lecteur existant ; le champ
+`<arch>.expert_count` y est ajusté au nombre d'experts du fichier, et le manifeste
+porte la traduction vers les identifiants globaux.
+
+Usage :
+    convertir_clusters.py <source.gguf> <dossier> [--clusters 8] [--trace routage.txt]
+                          [--mode experts|couches] [--verifier]
+"""
+import argparse
+import hashlib
+import json
+import os
+import struct
+import sys
+import time
+from collections import defaultdict
+32:import argparse
+354:    ap = argparse.ArgumentParser()
+355:    ap.add_argument("source")
+356:    ap.add_argument("dossier")
+357:    ap.add_argument("--clusters", type=int, default=8)
+358:    ap.add_argument("--trace", default="", help="trace de routage (ordre des experts)")
+359:    ap.add_argument("--mode", choices=["experts", "couches"], default="experts")
+360:    ap.add_argument("--verifier", action="store_true",
+  ```
+
+### 🤖 Assistant
+
+⏵ Conversion de V4-Flash en 8 grappes (copie de 86 Go, en arrière-plan).
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && nohup python3 tools/convertir_clusters.py /home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek-V4-Flash-UD-IQ1_M/DeepSeek-V4-Flash-UD-IQ1_M-00001-of-00003.gguf /home/stephane/FastNVMe/artefacts/modeles-optimises/v4flash-8clusters - … [252 caractères tronqués]`
+
+  ```
+mapping.tsv · 0 entrées · 0 couches · 0 experts · 8 clusters
+
+manifeste.json · 0 fichiers · 0.00 Go · 0.6 s
+total 8
+drwxr-xr-x. 1 stephane stephane  50  2 oct 16:36 .
+drwxr-xr-x. 1 stephane stephane 116  2 oct 16:36 ..
+-rw-r--r--. 1 stephane stephane 222  2 oct 16:36 manifeste.json
+-rw-r--r--. 1 stephane stephane 126  2 oct 16:36 mapping.tsv
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat /tmp/conv_v4.log | head -10; ./drave-core/target/release/drave /home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek-V4-Flash-UD-IQ1_M/DeepSeek-V4-Flash-UD-IQ1_M-00001-of-00003.gguf --tensors 2>/dev/null | grep -E \"blk\\.3\\.ff … [156 caractères tronqués]`
+
+  ```
+DeepSeek-V4-Flash-UD-IQ1_M-00001-of-00003.gguf : 0 tenseurs, 0.0 Go, arch deepseek4, alignement 32
+mapping.tsv · 0 entrées · 0 couches · 0 experts · 8 clusters
+
+manifeste.json · 0 fichiers · 0.00 Go · 0.6 s
+  IQ3_XXS  blk.3.ffn_down_exps.weight             [256, 4096, 2048] · 2147.5 M poids · fichier 1
+  Q6_K     blk.3.ffn_down_shexp.weight            [4096, 2048] · 8.4 M poids · fichier 1
+  IQ1_M    blk.3.ffn_gate_exps.weight             [256, 2048, 4096] · 2147.5 M poids · fichier 1
+  BF16     blk.3.ffn_gate_inp.weight              [256, 4096] · 1.0 M poids · fichier 1
+  Q5_K     blk.3.ffn_gate_shexp.weight            [2048, 4096] · 8.4 M poids · fichier 1
+  F32      blk.3.ffn_norm.weight                  [4096] · 0.0 M poids · fichier 1
+6:(`blk.N.ffn_gate_exps.weight [n_experts, …]`). Un nœud qui n'héberge que 16 experts
+377:        if args.mode == "experts" and "_exps." in t["nom"]:
+496:                    if not t["nom"].endswith("_exps.weight"):
+  ```
+
+### 🤖 Assistant
+
+⏵ Le convertisseur ne lit qu'un seul fichier : ajout du support multi-shards (nécessaire pour V4-Flash).
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"def lire_gguf\\|def main\\|tensors.append\\|def ecrire\" tools/convertir_clusters.py | head -10; sed -n \"$(grep -n 'def lire_gguf' tools/convertir_clusters.py | cut -d: -f1),+24p\" tools/convertir_clusters.py", "descriptio … [39 caractères tronqués]`
+
+  ```
+150:def ecrire_gguf(chemin, kv_brut, tenseurs, source, debut_donnees, alignement,
+308:def ecrire_mapping(dossier, manifeste):
+353:def main():
+[stderr]
+sed: -e expression #1, char 1: unknown command: ','
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"^def \\|^class \" tools/convertir_clusters.py | head -12; sed -n '353,400p' tools/convertir_clusters.py", "description": "Read the converter's main"}`
+
+  ```
+51:def taille_tenseur(ttype, dims):
+62:class Lecteur:
+87:def sauter_valeur(l, ttype):
+108:def lire_entete(chemin):
+150:def ecrire_gguf(chemin, kv_brut, tenseurs, source, debut_donnees, alignement,
+199:def lire_valeur(f, ttype):
+222:def reecrire_kv(kv_brut, remplacements):
+251:def parcourir_kv(kv_brut):
+283:def ordre_experts(trace, couche, ne):
+297:def lire_trace(chemin):
+308:def ecrire_mapping(dossier, manifeste):
+353:def main():
+def main():
+    ap = argparse.ArgumentParser()
+    ap.add_argument("source")
+    ap.add_argument("dossier")
+    ap.add_argument("--clusters", type=int, default=8)
+    ap.add_argument("--trace", default="", help="trace de routage (ordre des experts)")
+    ap.add_argument("--mode", choices=["experts", "couches"], default="experts")
+    ap.add_argument("--verifier", action="store_true",
+                    help="relit chaque fichier produit et compare les empreintes")
+    args = ap.parse_args()
+
+    t0 = time.time()
+    kv_brut, tenseurs, debut_donnees, alignement, n_tensors, version = \
+        lire_entete(args.source)
+    trace = lire_trace(args.trace) if args.trace else None
+    _, arch = parcourir_kv(kv_brut)
+    print(f"{os.path.basename(args.source)} : 
+… [1225 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"debut_donnees\" tools/convertir_clusters.py | head -20", "description": "Find the data-copy sites"}`
+
+  ```
+109:    """→ (kv_brut, tenseurs, debut_donnees, alignement).
+145:    debut_donnees = (fin_entete + alignement - 1) // alignement * alignement
+147:    return kv_brut, tenseurs, debut_donnees, alignement, n_tensors, version
+150:def ecrire_gguf(chemin, kv_brut, tenseurs, source, debut_donnees, alignement,
+184:                    g.seek(debut_donnees + offset)
+365:    kv_brut, tenseurs, debut_donnees, alignement, n_tensors, version = \
+418:        octets = ecrire_gguf(chemin, kv_brut, commun, args.source, debut_donnees,
+453:            octets = ecrire_gguf(chemin, kv_cluster, nouveaux, args.source, debut_donnees,
+465:        octets = ecrire_gguf(chemin, kv_brut, tlist, args.source, debut_donnees,
+498:                        source.seek(debut_donnees + src["offset"])
+511:                            source.seek(debut_donnees + src["offset"] + g * par_expert)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '108,150p' tools/convertir_clusters.py; echo \"=== 175,195 ===\"; sed -n '175,195p' tools/convertir_clusters.py", "description": "Read lire_entete and the write path"}`
+
+  ```
+def lire_entete(chemin):
+    """→ (kv_brut, tenseurs, debut_donnees, alignement).
+
+    `kv_brut` est le bloc d'octets des paires clé/valeur, recopié tel quel dans les
+    fichiers de sortie : les métadonnées du modèle (tokenizer compris) voyagent
+    sans être réencodées.
+    """
+    l = Lecteur(chemin)
+    magic = l.lire(4)
+    if magic != b"GGUF":
+        raise ValueError(f"{chemin} : ce n'est pas un GGUF ({magic!r})")
+    version = l.u32()
+    n_tensors = l.u64()
+    n_kv = l.u64()
+    debut_kv = l.f.tell()
+    alignement = 32
+    for _ in range(n_kv):
+        cle = l.chaine()
+        ttype = l.u32()
+        if cle == "general.alignment" and ttype == 4:
+            alignement = struct.unpack("<I", l.lire(4))[0]
+        else:
+            sauter_valeur(l, ttype)
+    fin_kv = l.f.tell()
+    l.f.seek(debut_kv)
+    kv_brut = l.lire(fin_kv - debut_kv)
+    tenseurs = []
+    for _ in range(n_tensors):
+        nom = l.chaine()
+        nd = l.u32()
+        dims = [l.u64() for _ in range(nd)]
+        dims.reverse()                    # ggml stocke à l'envers
+        ttype = l.u32()
+        offset = l.u64()
+        tenseurs.append({"nom": nom, "dims": dims, "ttype": ttype,
+                 
+… [1367 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Support multi-shards dans le convertisseur (métadonnées du shard 1, tenseurs de tous).
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='tools/convertir_clusters.py'\ns=open(p).read()\nsubs=[]\n# 1. lire_entete : taguer chaque tenseur par son fichier et sa base de données\nsubs.append((\n\"\"\"        tenseurs.append({\"nom\": nom, \"dims\": di … [3134 caractères tronqués]`
+
+  ```
+ok
+def ecrire_gguf(chemin, kv_brut, tenseurs, source, debut_donnees, alignement,
+                morceaux):
+    """Écrit un GGUF autonome.
+
+    `tenseurs` : descripteurs (nom, dims, ttype) dans l'ordre d'écriture.
+    `morceaux` : pour chacun, la liste de (offset_source, longueur) à recopier.
+    """
+    with open(chemin, "wb") as f:
+        f.write(b"GGUF")
+        f.write(struct.pack("<I", 3))                     # version 3, comme la source
+        f.write(struct.pack("<Q", len(tenseurs)))
+        # nombre de paires KV : relu dans le bloc brut (les 8 derniers octets lus
+        # seraient fragiles) — on recompte en reparcourant le bloc.
+        n_kv = parcourir_kv(kv_brut)[0]
+        f.write(struct.pack("<Q", n_kv))
+        f.write(kv_brut)
+        decalage = 0
+        for t in tenseurs:
+            nom = t["nom"].encode("utf-8")
+            f.write(struct.pack("<Q", len(nom)))
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='tools/convertir_clusters.py'\ns=open(p).read()\nsubs=[]\nsubs.append((\n\"\"\"    kv_brut, tenseurs, debut_donnees, alignement, n_tensors, version = \\\\\n        lire_entete(args.source)\"\"\",\n\"\"\"    kv_ … [1489 caractères tronqués]`
+
+  ```
+ok
+            kv_cluster = kv_brut
+            if arch:
+                kv_cluster = reecrire_kv(kv_brut, {f"{arch}.expert_count": len(ids)})
+            octets = ecrire_gguf(chemin, kv_cluster, nouveaux, args.source, debut_donnees,
+                                 alignement, morceaux)
+            manifeste["fichiers"].append({
+                "fichier": os.path.basename(chemin), "role": f"cluster-{c:02d}",
+                "octets": octets, "experts_locaux": len(ids),
+                "experts_globaux_par_couche": {str(l): [ordres[l][e] for e in ids]
+                                               for l in sorted(experts)}})
+            print(f"cluster-{c:02d}.gguf   : {len(nouveaux):4} tenseurs · "
+                  f"{octets / 1e9:7.2f} Go · experts locaux 0..{len(ids) - 1}")
+
+    for c, prises, tlist in ecritures_couches:
+        chemin = os.path.join(args.dossier, f"cluster-{c:02d}.gguf")
+        octets = ecrire_gguf(chemin, kv_brut, tlist, args.source, debut_donnees,
+                             alignement, [[(t["offset"], t["octets"])] for t in tlist])
+        manifeste["fichiers"].append({
+            "fichier": os.path.basename(chemin), "role": f"cluster-{c:02d}",
+         
+… [84 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '525,545p' tools/convertir_clusters.py", "description": "Read the expert-copy block"}`
+
+  ```
+# suffit pas : un décalage d'un bloc passerait inaperçu.
+        print("vérification par empreintes…")
+        source = open(args.source, "rb")
+        erreurs, verifies = [], 0
+        for x in manifeste["fichiers"]:
+            chemin = os.path.join(args.dossier, x["fichier"])
+            kv2, tens2, dd2, _, _, _ = lire_entete(chemin)
+            with open(chemin, "rb") as f:
+                for t in tens2:
+                    f.seek(dd2 + t["offset"])
+                    h_produit = hashlib.sha256(f.read(t["octets"])).hexdigest()
+                    if not t["nom"].endswith("_exps.weight"):
+                        src = next(u for u in tenseurs if u["nom"] == t["nom"])
+                        source.seek(src.get("base", debut_donnees) + src["offset"])
+                        h_source = hashlib.sha256(source.read(src["octets"])).hexdigest()
+                    else:
+                        # tranche d'experts : on compare bloc à bloc dans la source
+                        l = int(t["nom"].split(".")[1])
+                        src = next(u for u in tenseurs if u["nom"] == t["nom"])
+                        globaux = x.get("experts_globaux_par_couche", {}).get(str(l))
+             
+… [26 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='tools/convertir_clusters.py'\ns=open(p).read()\na=\"\"\"        source = open(args.source, \"rb\")\"\"\"\nb=\"\"\"        # La vérification lit chaque tenseur dans SON fichier (modèle en tranches).\n        so … [1139 caractères tronqués]`
+
+  ```
+ok
+554:                            source.seek(src.get("base", debut_donnees) + src["offset"]
+556:                            h.update(source.read(par_expert))
+syntaxe ok
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='tools/convertir_clusters.py'\ns=open(p).read()\na=\"\"\"                            source.seek(src.get(\"base\", debut_donnees) + src[\"offset\"]\n                                        + g * par_expert)\"\" … [1158 caractères tronqués]`
+
+  ```
+ok
+syntaxe ok
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/convertir_clusters.py", line 53, in taille_tenseur
+    nom, octets_bloc, elem_bloc = TYPES[ttype]
+                                  ~~~~~^^^^^^^
+KeyError: 18
+  ```
+
+### 🤖 Assistant
+
+⏵ Le convertisseur ignore IQ3_XXS : j'ajoute les types manquants depuis `list.rs`.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '40,62p' tools/convertir_clusters.py", "description": "Read the converter's type table"}`
+
+  ```
+# Types ggml et leur taille : octets par bloc, et éléments par bloc.
+TYPES = {
+    0:  ("F32", 4, 1), 1: ("F16", 2, 1), 2: ("Q4_0", 18, 32), 3: ("Q4_1", 20, 32),
+    6: ("Q5_0", 22, 32), 7: ("Q5_1", 24, 32), 8: ("Q8_0", 34, 32),
+    9: ("Q8_1", 36, 32), 10: ("Q2_K", 84, 256), 11: ("Q3_K", 110, 256),
+    12: ("Q4_K", 144, 256), 13: ("Q5_K", 176, 256), 14: ("Q6_K", 210, 256),
+    15: ("Q8_K", 292, 256), 39: ("MXFP4", 17, 32),
+}
+
+
+def taille_tenseur(ttype, dims):
+    """Octets exacts d'un tenseur : blocs le long de la DERNIÈRE dimension."""
+    nom, octets_bloc, elem_bloc = TYPES[ttype]
+    n = 1
+    for d in dims:
+        n *= d
+    if len(dims) > 1:
+        n = n // dims[-1] * dims[-1]
+    return n // elem_bloc * octets_bloc
+
+
+class Lecteur:
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='tools/convertir_clusters.py'\ns=open(p).read()\na=\"\"\"    15: (\"Q8_K\", 292, 256), 39: (\"MXFP4\", 17, 32),\n}\"\"\"\nb=\"\"\"    15: (\"Q8_K\", 292, 256), 39: (\"MXFP4\", 17, 32),\n    # Les grilles IQ et  … [1084 caractères tronqués]`
+
+  ```
+ok
+                         alignement, morceaux)
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/convertir_clusters.py", line 234, in ecrire_gguf
+    raise EOFError(f"{source} : lecture courte")
+EOFError: /home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek-V4-Flash-UD-IQ1_M/DeepSeek-V4-Flash-UD-IQ1_M-00001-of-00003.gguf : lecture courte
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '225,245p' tools/convertir_clusters.py", "description": "Check the copy loop"}`
+
+  ```
+for t, morceaux_t in zip(tenseurs, morceaux):
+            with open(t.get("fichier", source), "rb") as g:
+                ecrit = 0
+                for offset, longueur in morceaux_t:
+                    g.seek(t.get("base", debut_donnees) + offset)
+                    reste_a_copier = longueur
+                    while reste_a_copier > 0:
+                        bloc = g.read(min(8 << 20, reste_a_copier))
+                        if not bloc:
+                            raise EOFError(f"{source} : lecture courte")
+                        f.write(bloc)
+                        reste_a_copier -= len(bloc)
+                    ecrit += longueur
+                if ecrit != t["octets"]:
+                    raise ValueError(f"{t['nom']} : {ecrit} octets écrits pour "
+                                     f"{t['octets']} attendus")
+    return os.path.getsize(chemin)
+
+
+def lire_valeur(f, ttype):
+    """Lit une valeur et renvoie ses octets BRUTS (réencodables tels quels)."""
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='tools/convertir_clusters.py'\ns=open(p).read()\na=\"\"\"                        if not bloc:\n                            raise EOFError(f\"{source} : lecture courte\")\"\"\"\nb=\"\"\"                        i … [890 caractères tronqués]`
+
+  ```
+ok
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/convertir_clusters.py", line 234, in ecrire_gguf
+    raise EOFError(
+    ...<3 lines>...
+        f"{reste_a_copier} restants")
+EOFError: blk.0.ffn_down_exps.weight : lecture courte dans /home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek-V4-Flash-UD-IQ1_M/DeepSeek-V4-Flash-UD-IQ1_M-00001-of-00003.gguf — base None, offset 708090176, 3211264 octets demandés, 3211264 restants
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n '\"base\"\\|base=' tools/convertir_clusters.py | head -10; grep -n \"nouveaux.append\\|\\\"offset\\\": \" tools/convertir_clusters.py | head -8", "description": "Find where base becomes None"}`
+
+  ```
+151:                         "fichier": chemin, "base": 0})
+156:        t["base"] = debut_donnees
+229:                    g.seek(t.get("base", debut_donnees) + offset)
+552:                        sx.seek(src.get("base", debut_donnees) + src["offset"])
+566:                                src.get("base", debut_donnees) + src["offset"] + g * par_expert)
+150:                         "offset": offset, "octets": taille_tenseur(ttype, dims),
+497:                    nouveaux.append({"nom": t["nom"], "dims": [len(ids)] + t["dims"][1:],
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '493,505p' tools/convertir_clusters.py", "description": "Read the expert tensor descriptor creation"}`
+
+  ```
+plages = []
+                    for e in ids:
+                        global_id = ordres[l][e] if args.mode == "experts" else e
+                        plages.append((t["offset"] + global_id * par_expert, par_expert))
+                    nouveaux.append({"nom": t["nom"], "dims": [len(ids)] + t["dims"][1:],
+                                     "ttype": t["ttype"], "octets": par_expert * len(ids)})
+                    morceaux.append(plages)
+            chemin = os.path.join(args.dossier, f"cluster-{c:02d}.gguf")
+            kv_cluster = kv_brut
+            if arch:
+                kv_cluster = reecrire_kv(kv_brut, {f"{arch}.expert_count": len(ids)})
+            octets = ecrire_gguf(chemin, kv_cluster, nouveaux, args.source, debut_donnees,
+                                 alignement, morceaux)
+  ```
+
+### 🤖 Assistant
+
+⏵ Bug : les descripteurs d'experts ne portaient pas leur fichier/base d'origine. Correction.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='tools/convertir_clusters.py'\ns=open(p).read()\na=\"\"\"                    nouveaux.append({\"nom\": t[\"nom\"], \"dims\": [len(ids)] + t[\"dims\"][1:],\n                                     \"ttype\": t[\"tt … [1352 caractères tronqués]`
+
+  ```
+ok
+21G	/home/stephane/FastNVMe/artefacts/modeles-optimises/v4flash-8clusters
+  ```
+
+- **bash** `{"command": "sleep 420; tail -3 /tmp/conv_v4d.log; du -sh /home/stephane/FastNVMe/artefacts/modeles-optimises/v4flash-8clusters 2>/dev/null; ls /home/stephane/FastNVMe/artefacts/modeles-optimises/v4flash-8clusters/ 2>/dev/null | head", "description": "Check conversion progress", "timeoutMs": 500000}`
+
+  ```
+mapping.tsv · 11008 entrées · 43 couches · 256 experts · 8 clusters
+
+manifeste.json · 9 fichiers · 86.94 Go · 450.1 s
+81G	/home/stephane/FastNVMe/artefacts/modeles-optimises/v4flash-8clusters
+cluster-00.gguf
+cluster-01.gguf
+cluster-02.gguf
+cluster-03.gguf
+cluster-04.gguf
+cluster-05.gguf
+cluster-06.gguf
+cluster-07.gguf
+commun.gguf
+manifeste.json
+  ```
+
+### 🤖 Assistant
+
+⏵ V4-Flash éclaté en 8 grappes : test du modèle en clusters contre l'original.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 3000 ./drave-core/target/release/drave /home/stephane/FastNVMe/artefacts/modeles-optimises/v4flash-8clusters --ppl /tmp/ids_v4flash.txt --ctx 32 --limit 5 --dense --threads 16 2>&1 | tail -6", "description": "Run the clustere … [34 caractères tronqués]`
+
+  ```
+paires (poids × activation) par token : attention 6225.4 M · experts 8116.0 M · partagé 1850.7 M · scores 0 K · total 16192.1 M
+    dont en listes (une paire y est un événement) : 0.0 M — le reste est dense (déquantifié ou f32)
+    part de l'attention dans le flux total : 38.4 %
+    postes (ms/token) : projets-attn 0.00 | rope 0.00 | attention 6533.06 | proj+mlp 4979.35 | somme 11512.41 | reste (tête + échantillonnage) 57.19
+    dont tête de sortie 31.24 | notation log-sum-exp 1.12 (le reste du « reste » n'est pas chronométré)
+    dont attention : scores 0.00 | softmax 0.00 | somme pondérée + écriture KV 6533.06
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 3000 ./drave-core/target/release/drave /home/stephane/FastNVMe/artefacts/modeles-optimises/v4flash-8clusters --ppl /tmp/ids_v4flash.txt --ctx 32 --limit 5 --dense --threads 16 2>&1 | grep -E \"perplexité [0-9]|clusters|commun … [112 caractères tronqués]`
+
+  ```
+[config] mélanges d'experts chargés : 43/43 couches · mapping actif : 8 clusters × 32 experts
+=== perplexité 8430.2968 sur 4 tokens (0 événements, 39.9 s) ===
+--- original : 8430.2968 ---
+  ```
+
+### 🤖 Assistant
+
+⏵ P6 franchie : le modèle éclaté redonne **exactement** la même perplexité (et 2,8× plus vite).
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='reports/rapport-v4-reparti.md'\ns=open(p).read()\na=\"\"\"## 4. Ce que ce n'est pas\"\"\"\nb=\"\"\"## 4. Le modèle **éclaté en grappes** : même perplexité, au chiffre près\n\n`tools/convertir_clusters.py` a dé … [4483 caractères tronqués]`

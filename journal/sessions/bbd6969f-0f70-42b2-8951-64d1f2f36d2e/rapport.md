@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 97.8 h |
+| Durée | 98.1 h |
 | Tours | 77 |
-| Messages | 4868 |
-| Appels d'outils | 4646 |
+| Messages | 4892 |
+| Appels d'outils | 4670 |
 | Fichiers touchés | 94 |
-| Commandes | 4013 |
+| Commandes | 4037 |
 | Sous-agents | 29 |
-| Commits | 338 |
+| Commits | 339 |
 | Compactages de contexte | 6 |
 
 ## Objectifs déclarés
@@ -3941,7 +3941,7 @@ V4-Flash contre llama.cpp : perplexité **678,09 contre 548,32** (NLL +0,21 nat)
 
 ### Tour 77 — <goal_round> Objective: "Exécuter le plan docs/plan-deepseek41-complet.md phase par phase (P0→P9), en autonomie, en resp … [941 caractères tronqués]
 
-*33 appels d'outils.* Actions notables :
+*57 appels d'outils.* Actions notables :
 
 - bash — Find the channel-count validation
 - bash — Read the validation and the hidden definition
@@ -3957,11 +3957,11 @@ V4-Flash contre llama.cpp : perplexité **678,09 contre 548,32** (NLL +0,21 nat)
 - bash — Remove the refusal and run distributed
 - bash — Find the pilot's reply validation
 - bash — Fix the pilot reply validation
-- … et 13 autres
+- … et 37 autres
 
 **Synthèse produite :**
 
-⏵ P6 : le découpage de V4-Flash est exact — les mesures de transport valent un rapport.
+⏵ P6 franchie : le modèle éclaté redonne **exactement** la même perplexité (et 2,8× plus vite).
 
 ## 3. Travail accompli
 
@@ -4138,7 +4138,7 @@ V4-Flash contre llama.cpp : perplexité **678,09 contre 548,32** (NLL +0,21 nat)
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 3973 autres
+- … et 3997 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4266,7 +4266,7 @@ V4-Flash contre llama.cpp : perplexité **678,09 contre 548,32** (NLL +0,21 nat)
 
 ## 5. Erreurs rencontrées
 
-267 sorties en erreur ou divergentes. Les premières :
+268 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : a8f2635f8 docs: record which models this box is good at, and why src/llama-hparams.cpp:8:void llama_hparams::set_swa_pattern(uint32_t n_pattern, bool dense_first) { src/llama-hparams.h:308:    void se
 - **T1** : 511 tokens notés — perplexité cumulée 247.031  (4.9 tok/s) === perplexité 247.0308 sur 511 tokens (0 événements, 104.5 s) ===  ### B3 harmony assistant 511 --- ref --- 0.0 0.0 0:00 ls: cannot access '
@@ -4624,4 +4624,5 @@ V4-Flash contre llama.cpp : perplexité **678,09 contre 548,32** (NLL +0,21 nat)
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && bash tools/portes.sh rapide 2>&1 | head -4; git add -A drave-core/src/ && git commit -q -F - <<'EOF' P6 : 
 - Vision : le flux d'un modèle à hyper-connexions coûte hc fois la taille d'un état (mesuré, et refusé tant que le protocole ne le porte pas)" && git log --onelin
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF' p='docs/plan-deepseek41-complet.md' s=open(p).read() a="""### P6 — V4-Flash complet, e
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF' p='reports/rapport-v4-reparti.md' s=open(p).read() a="""## 4. Ce que ce n'est pas""" b
 

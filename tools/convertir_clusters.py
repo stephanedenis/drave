@@ -45,6 +45,13 @@ TYPES = {
     9: ("Q8_1", 36, 32), 10: ("Q2_K", 84, 256), 11: ("Q3_K", 110, 256),
     12: ("Q4_K", 144, 256), 13: ("Q5_K", 176, 256), 14: ("Q6_K", 210, 256),
     15: ("Q8_K", 292, 256), 39: ("MXFP4", 17, 32),
+    # Les grilles IQ et les types simples : sans eux, un modèle à experts IQ
+    # (V4-Flash est en IQ1_M/IQ2_XXS/IQ3_XXS) faisait tomber le convertisseur sur
+    # un `KeyError: 18` — le genre d'échec qui ne dit pas quel type manque.
+    16: ("IQ2_XXS", 66, 256), 18: ("IQ3_XXS", 98, 256), 19: ("IQ1_S", 50, 256),
+    23: ("IQ4_XS", 136, 256), 29: ("IQ1_M", 56, 256), 30: ("BF16", 2, 1),
+    24: ("I8", 1, 1), 25: ("I16", 2, 1), 26: ("I32", 4, 1), 27: ("I64", 8, 1),
+    34: ("TQ1_0", 54, 256), 35: ("TQ2_0", 66, 256),
 }
 
 
@@ -140,11 +147,47 @@ def lire_entete(chemin):
         ttype = l.u32()
         offset = l.u64()
         tenseurs.append({"nom": nom, "dims": dims, "ttype": ttype,
-                         "offset": offset, "octets": taille_tenseur(ttype, dims)})
+                         "offset": offset, "octets": taille_tenseur(ttype, dims),
+                         "fichier": chemin, "base": 0})
     fin_entete = l.f.tell()
     debut_donnees = (fin_entete + alignement - 1) // alignement * alignement
     l.f.close()
+    for t in tenseurs:
+        t["base"] = debut_donnees
     return kv_brut, tenseurs, debut_donnees, alignement, n_tensors, version
+
+
+def shards(chemin):
+    """Tous les fichiers d'un modèle découpé, dans l'ordre.
+
+    Un GGUF de plusieurs gigaoctets est publié en tranches
+    (`…-00001-of-00003.gguf`) : le premier ne porte QUE les métadonnées, les
+    suivants portent les tenseurs. Lire le seul premier fichier donne
+    « 0 tenseurs » et un modèle éclaté vide — ce qui est arrivé à V4-Flash
+    (86 Go, 3 tranches) avant que ceci existe.
+    """
+    import re
+    m = re.match(r"^(.*)-(\d{5})-of-(\d{5})\.gguf$", chemin)
+    if not m:
+        return [chemin]
+    prefixe, _, total = m.group(1), m.group(2), int(m.group(3))
+    return [f"{prefixe}-{i:05d}-of-{total:05d}.gguf" for i in range(1, total + 1)]
+
+
+def lire_entetes(chemin):
+    """Comme `lire_entete`, mais pour TOUTES les tranches : les métadonnées
+    viennent de la première (elle les porte), les tenseurs de l'ensemble, chacun
+    gardant son fichier et la base de sa section de données."""
+    fichiers = shards(chemin)
+    kv_brut = tenseurs = None
+    alignement = 32
+    version = 3
+    for f in fichiers:
+        kv, ts, _, al, _, ver = lire_entete(f)
+        if kv_brut is None:
+            kv_brut, alignement, version = kv, al, ver
+        tenseurs = ts if tenseurs is None else tenseurs + ts
+    return kv_brut, tenseurs, alignement, version, fichiers
 
 
 def ecrire_gguf(chemin, kv_brut, tenseurs, source, debut_donnees, alignement,
@@ -177,16 +220,22 @@ def ecrire_gguf(chemin, kv_brut, tenseurs, source, debut_donnees, alignement,
         fin = f.tell()
         reste = (alignement - fin % alignement) % alignement
         f.write(b"\0" * reste)
-        with open(source, "rb") as g:
-            for t, morceaux_t in zip(tenseurs, morceaux):
+        # Chaque tenseur est lu dans SON fichier : un modèle en tranches met ses
+        # tenseurs ailleurs que ses métadonnées.
+        for t, morceaux_t in zip(tenseurs, morceaux):
+            with open(t.get("fichier", source), "rb") as g:
                 ecrit = 0
                 for offset, longueur in morceaux_t:
-                    g.seek(debut_donnees + offset)
+                    g.seek(t.get("base", debut_donnees) + offset)
                     reste_a_copier = longueur
                     while reste_a_copier > 0:
                         bloc = g.read(min(8 << 20, reste_a_copier))
                         if not bloc:
-                            raise EOFError(f"{source} : lecture courte")
+                            raise EOFError(
+                                f"{t['nom']} : lecture courte dans "
+                                f"{t.get('fichier', source)} — base {t.get('base')}, "
+                                f"offset {offset}, {longueur} octets demandés, "
+                                f"{reste_a_copier} restants")
                         f.write(bloc)
                         reste_a_copier -= len(bloc)
                     ecrit += longueur
@@ -362,13 +411,15 @@ def main():
     args = ap.parse_args()
 
     t0 = time.time()
-    kv_brut, tenseurs, debut_donnees, alignement, n_tensors, version = \
-        lire_entete(args.source)
+    kv_brut, tenseurs, alignement, version, fichiers = lire_entetes(args.source)
+    debut_donnees = 0
+    n_tensors = len(tenseurs)
     trace = lire_trace(args.trace) if args.trace else None
     _, arch = parcourir_kv(kv_brut)
+    octets_source = sum(os.path.getsize(f) for f in fichiers)
     print(f"{os.path.basename(args.source)} : {n_tensors} tenseurs, "
-          f"{os.path.getsize(args.source) / 1e9:.1f} Go, arch {arch}, "
-          f"alignement {alignement}")
+          f"{octets_source / 1e9:.1f} Go, arch {arch}, "
+          f"alignement {alignement}, {len(fichiers)} fichier(s)")
 
     # ---- répartition des tenseurs
     experts = defaultdict(list)          # couche → tenseurs d'experts
@@ -443,8 +494,14 @@ def main():
                     for e in ids:
                         global_id = ordres[l][e] if args.mode == "experts" else e
                         plages.append((t["offset"] + global_id * par_expert, par_expert))
+                    # Le descripteur porte AUSSI son fichier et sa base : un
+                    # modèle en tranches met ses tenseurs ailleurs que ses
+                    # métadonnées, et un tenseur créé sans ces deux champs se
+                    # relisait à la base 0 — « lecture courte » sur le shard 1.
                     nouveaux.append({"nom": t["nom"], "dims": [len(ids)] + t["dims"][1:],
-                                     "ttype": t["ttype"], "octets": par_expert * len(ids)})
+                                     "ttype": t["ttype"], "octets": par_expert * len(ids),
+                                     "fichier": t.get("fichier"),
+                                     "base": t.get("base")})
                     morceaux.append(plages)
             chemin = os.path.join(args.dossier, f"cluster-{c:02d}.gguf")
             kv_cluster = kv_brut
@@ -484,7 +541,9 @@ def main():
         # tranche correspondante de la source. Une copie « qui a l'air bonne » ne
         # suffit pas : un décalage d'un bloc passerait inaperçu.
         print("vérification par empreintes…")
-        source = open(args.source, "rb")
+        # La vérification lit chaque tenseur dans SON fichier (modèle en tranches).
+        sources = {f: open(f, "rb") for f in fichiers}
+        source = sources[fichiers[0]]
         erreurs, verifies = [], 0
         for x in manifeste["fichiers"]:
             chemin = os.path.join(args.dossier, x["fichier"])
@@ -495,8 +554,9 @@ def main():
                     h_produit = hashlib.sha256(f.read(t["octets"])).hexdigest()
                     if not t["nom"].endswith("_exps.weight"):
                         src = next(u for u in tenseurs if u["nom"] == t["nom"])
-                        source.seek(debut_donnees + src["offset"])
-                        h_source = hashlib.sha256(source.read(src["octets"])).hexdigest()
+                        sx = sources[src.get("fichier", fichiers[0])]
+                        sx.seek(src.get("base", debut_donnees) + src["offset"])
+                        h_source = hashlib.sha256(sx.read(src["octets"])).hexdigest()
                     else:
                         # tranche d'experts : on compare bloc à bloc dans la source
                         l = int(t["nom"].split(".")[1])
@@ -508,8 +568,9 @@ def main():
                         h = hashlib.sha256()
                         f.seek(dd2 + t["offset"])
                         for g in globaux:
-                            source.seek(debut_donnees + src["offset"] + g * par_expert)
-                            h.update(source.read(par_expert))
+                            sources[src.get("fichier", fichiers[0])].seek(
+                                src.get("base", debut_donnees) + src["offset"] + g * par_expert)
+                            h.update(sources[src.get("fichier", fichiers[0])].read(par_expert))
                         h_source = h.hexdigest()
                     verifies += 1
                     if h_source != h_produit:

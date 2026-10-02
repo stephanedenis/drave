@@ -51,7 +51,36 @@ listes divise le flux par 2,3 à seuil 0,01. Autrement dit :
 > listes — ce qui déplace l'arbitrage : mieux vaut couper **plus près du
 > calcul**, ou après une couche dont la sortie est creuse.
 
-## 4. Ce que ce n'est pas
+## 4. Le modèle **éclaté en grappes** : même perplexité, au chiffre près
+
+`tools/convertir_clusters.py` a découpé les 86,9 Go de V4-Flash en
+`commun.gguf` + 8 `cluster-XX.gguf` (11 008 entrées de mapping : 43 couches ×
+256 experts), en 450 s et **sans requantifier un octet**. Le moteur ouvre le
+dossier, lit le manifeste, et retrouve **exactement** la perplexité de
+l'original :
+
+| | perplexité (4 jetons notés, ctx 32) | temps |
+|---|---|---|
+| original (3 tranches, 86,9 Go) | **8 430,2968** | 111,8 s |
+| éclaté en 8 grappes | **8 430,2968** | **39,9 s** |
+
+Le gain de temps n'est pas un effet de cache : chaque expert routé vit dans UN
+fichier de grappe, donc le nœud ne lit que ce qu'il sert — c'est le mécanisme
+décrit dans `docs/format-clusters.md`, et il vaut ici **2,8×** sur un modèle dont
+les experts pèsent 80 % du fichier.
+
+Trois bugs d'outillage ont été trouvés et corrigés pour y arriver (le
+convertisseur n'avait jamais vu un modèle en tranches) :
+1. il ne lisait que le **premier** fichier — celui qui ne porte que les
+   métadonnées — et annonçait « 0 tenseurs » pour un modèle de 86 Go ;
+2. sa table de types ignorait les **grilles IQ** (`IQ1_M`, `IQ2_XXS`,
+   `IQ3_XXS`, `IQ4_XS`), c'est-à-dire exactement les types des experts de
+   V4-Flash : `KeyError: 18` ;
+3. les descripteurs d'experts qu'il fabrique ne portaient **ni fichier ni
+   base**, donc ils se relisaient à la base 0 — « lecture courte » sur le
+   shard 1.
+
+## 5. Ce que ce n'est pas
 
 - Ce n'est pas une validation du modèle : la perplexité locale (8 311) porte sur
   **4 jetons notés**, et la comparaison à llama.cpp pour le modèle entier donne
@@ -59,5 +88,5 @@ listes divise le flux par 2,3 à seuil 0,01. Autrement dit :
 - Ce n'est pas un débit : 1,11× le calcul local à deux processus sur la MÊME
   machine, avec un chargement de 86 Go de chaque côté. La mesure dit que le
   découpage **fonctionne**, pas qu'il accélère.
-- Ce n'est pas la fin de P6 : restent le découpage en **fichiers de grappes**
-  (`cluster-XX.gguf`) et la mesure du mode blocs sur un état creux.
+- Ce n'est pas la fin de P6 : reste la comparaison à llama.cpp sur **8 à 64
+  jetons** (au-delà des 10 faits) et la mesure du mode blocs sur un état creux.

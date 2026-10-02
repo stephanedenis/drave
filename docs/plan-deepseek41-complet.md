@@ -288,10 +288,13 @@ Une phase qui ne passe pas ses deux portes ne passe pas à la suivante.
 > dense, écart 9,13e-2 en listes — au prix de **4× le transport**, parce que
 > l'état voyage en `hc` copies et qu'il est **dense à 99,9 %** (le mode listes
 > n'y compresse rien). Rapport : `reports/rapport-v4-reparti.md`.
-> **Reste** : le découpage en **fichiers de grappes** (`cluster-XX.gguf`) et la
-> comparaison à llama.cpp sur 8 à 64 jetons, dont on sait déjà ce qu'elle donne
-> pour 10 (corrélation 0,988-0,998, écart expliqué par la quantification des
-> activations de ggml).
+> **Grappes faites aussi** : `commun.gguf` + 8 `cluster-XX.gguf` (86,9 Go,
+> 11 008 entrées de mapping, aucune requantification) et **perplexité identique
+> au chiffre près** (8 430,2968), en **39,9 s contre 111,8** — chaque expert routé
+> vit dans un seul fichier, donc le nœud ne lit que ce qu'il sert.
+> **Reste** : la comparaison à llama.cpp sur 8 à 64 jetons, dont on sait déjà ce
+> qu'elle donne pour 10 (corrélation 0,988-0,998, écart expliqué par la
+> quantification des activations de ggml).
 
 ### P6 — V4-Flash complet, en listes, et **sur plusieurs grappes** (≈ 1 journée)
 
