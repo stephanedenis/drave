@@ -12,6 +12,7 @@ mod clusters;
 mod engine;
 mod gguf;
 mod list;
+mod materiel;
 mod model;
 mod gpu;
 mod tokenizer;
@@ -53,7 +54,7 @@ elles s'appellent maintenant DRAVE_* (voir docs/histoire.md). Rien n'a été app
         (opt.ppl_reparti.is_some(), "--ppl-reparti"),
         (opt.tensors, "--tensors"), (opt.banc_mla.is_some(), "--banc-mla"),
         (opt.banc_kv > 0, "--banc-kv"), (opt.banc_topk > 0, "--banc-topk"),
-        (opt.gpu_banc, "--gpu-banc"),
+        (opt.gpu_banc, "--gpu-banc"), (opt.materiel, "--materiel"),
         (opt.plan, "--plan"), (opt.tokenize, "--tokenize"),
         (opt.ppl, "--ppl"), (opt.infer, "--infer"),
     ].iter().filter(|(v, _)| *v).map(|(_, n)| *n).collect();
@@ -61,6 +62,7 @@ elles s'appellent maintenant DRAVE_* (voir docs/histoire.md). Rien n'a été app
         eprintln!("[modes] {} modes demandés ({}) : c'est {} qui s'exécute — les autres \
 sont ignorés", modes.len(), modes.join(", "), modes[0]);
     }
+    if opt.materiel { run_materiel(&opt); return; }
     if let Some(f) = opt.banc_vision.clone() { run_banc_vision(&f); return; }
     if let Some(adresse) = opt.flux_serveur.clone() { run_serveur_flux(opt, &adresse); return; }
     if let Some(pair) = opt.ppl_reparti.clone() { run_ppl_reparti(opt, &pair); return; }
@@ -488,6 +490,8 @@ struct Options {
     /// Profilage des neurones « chauds » (idée de PowerInfer) et fichier de
     /// sortie du classement.
     profil_neurones: bool, neurones_sortie: Option<String>,
+    /// Détection du matériel et plan de configuration, sans charger de modèle.
+    materiel: bool,
     /// Taille du lot de préremplissage : 1 = jeton par jeton (défaut).
     lot: usize,
     harmony: Option<String>, harmony_contexte: Option<String>,
@@ -610,6 +614,7 @@ fn analyser(args: &[String]) -> Options {
             "--sans-fenetre" => { o.sans_fenetre = true; 1 }
             "--sans-yarn" => { o.sans_yarn = true; 1 }
             "--act-renorm" => { o.act_renorm = true; 1 }
+            "--materiel" => { o.materiel = true; 1 }
             "--ppl-profil" => { o.ppl_profil = true; 1 }
             "--profil-neurones" => { o.profil_neurones = true; 1 }
             "--harmony" => { o.harmony = Some("alterne".into()); 1 }
@@ -1371,6 +1376,32 @@ fn run_banc_vision(sortie: &str) {
 
 /// Liste les tenseurs d'un GGUF : nom, dimensions, type, taille. Utile pour
 /// écrire un chemin de lecture (vision) sans deviner les noms.
+/// Détection du matériel et plan de configuration, **sans charger de modèle**.
+///
+/// Chaque ligne du plan porte le chiffre qui la justifie : un réglage
+/// surprenant doit pouvoir être contesté, pas subi.
+fn run_materiel(opt: &Options) {
+    let m = materiel::Materiel::detecter();
+    print!("{}", m.resume());
+    let ctx = opt.ctx;
+    let plan = m.plan(ctx, 0.0, 384, 9.95);
+    println!();
+    println!("Plan pour un contexte de {ctx} jetons (chiffres de DeepSeek-V4.1) :");
+    println!("  threads          : {}", plan.threads);
+    if let Some(e) = &plan.epinglage {
+        println!("  épinglage        : {} processeurs ({})", e.len(),
+                 if e.len() > 8 { format!("{}..{}", e[0], e[e.len()-1]) } else {
+                     e.iter().map(|c| c.to_string()).collect::<Vec<_>>().join(",") });
+    }
+    println!("  lecteurs disque  : {}", plan.lecteurs);
+    println!("  cache experts    : {:.1} Go en VRAM", plan.cache_experts_go);
+    println!("  cache KV         : {} bits", plan.kv_bits);
+    println!();
+    for r in &plan.raisons { println!("  · {r}"); }
+    println!();
+    println!("Ces valeurs sont des DÉFAUTS : tout drapeau explicite les emporte.");
+}
+
 fn run_tensors() {
     let path = &modele_chemin();
     // `open_meta_auto` : l'inventaire ne lit que les en-têtes. Avec `open`, un

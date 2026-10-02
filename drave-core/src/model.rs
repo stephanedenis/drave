@@ -257,6 +257,18 @@ impl Vue4 {
         }
     }
 
+    /// Demande au noyau de lancer la lecture de l'expert `e` **en avance**.
+    ///
+    /// Le routeur choisit ses `k` experts avant tout calcul : on connaît donc
+    /// les plages à lire une couche entière à l'avance. Les demander d'un coup
+    /// laisse le noyau paralléliser ses lectures de pages, au lieu de les subir
+    /// une par une au fil du calcul.
+    fn prelire_expert(&self, e: usize) {
+        let octets = self.n_out * self.nb * self.pas();
+        let p = unsafe { self.base.add(e * octets) };
+        crate::gguf::prelire(p, octets);
+    }
+
     /// Octets bruts de l'expert `e` (tels qu'ils sont dans le fichier) : c'est
     /// ce qu'il faut copier en VRAM pour que le noyau y travaille.
     fn blocs_expert(&self, e: usize) -> &[u8] {
@@ -1683,10 +1695,31 @@ impl Model {
             layers.push(lay);
         }
         let out_norm = g.dequant("output_norm.weight");
-        // Précision du cache KV : 32 (f32, défaut), 8 ou 4. Le trafic de
-        // relecture est LE mur du contexte long ; la trace le dit au chargement.
-        let kv_bits: u32 = std::env::var("DRAVE_KV_BITS").ok()
-            .and_then(|v| v.parse().ok()).unwrap_or(32);
+        // Précision du cache KV : 32 (f32), 8 ou 4.
+        //
+        // Le défaut est maintenant **choisi** au lieu d'être figé. Le mur du
+        // contexte long n'est pas le calcul mais la place : mesuré sur V4.1, le
+        // KV de MLA pèse 90 Ko par jeton en F16, soit 96,6 Go à 1 M de jetons —
+        // plus que les 71 Go d'experts. En int8, 48,3 Go.
+        //
+        // La règle : on garde le f32 tant qu'il tient dans un tiers de la RAM
+        // libre ; au-delà, on passe en int8. Un tiers et pas la moitié, parce
+        // que les experts et le commun doivent aussi tenir. `DRAVE_KV_BITS`
+        // reste prioritaire — c'est un défaut, pas une décision.
+        let kv_bits: u32 = match std::env::var("DRAVE_KV_BITS").ok().and_then(|v| v.parse().ok()) {
+            Some(v) => v,
+            None => {
+                let octets_f16 = cfg.n_layer as u64 * 2
+                    * (cfg.n_kv_head.max(1) * cfg.head_dim) as u64 * 4 * ctx as u64;
+                let libre = crate::materiel::ram_libre_go() * 1e9;
+                if libre > 0.0 && octets_f16 as f64 > libre / 3.0 {
+                    println!("[config] cache KV en int8 : {:.1} Go en f32 pour {ctx} jetons, \
+soit plus du tiers de la RAM libre ({:.0} Go) — DRAVE_KV_BITS pour forcer",
+                             octets_f16 as f64 / 1e9, libre / 1e9);
+                    8
+                } else { 32 }
+            }
+        };
         let caches_kv: Vec<KvCache> = (0..cfg.n_layer)
             .map(|_| KvCache::new(kv_bits, cfg.n_kv_head, ctx, cfg.head_dim)).collect();
         let kv_octets = cfg.n_layer as u64
@@ -1925,8 +1958,16 @@ mapping {}",
         let cache_experts = if std::env::var("DRAVE_GPU_EXPERTS").is_ok()
                                && crate::gpu::instance().is_some()
                                && cfg.n_expert > 0 {
+            // Budget par défaut : ce que la VRAM peut donner sans étrangler le
+            // reste. Mesuré : la VRAM lit à 84,9 Go/s contre 22,5 pour la RAM,
+            // et un cache de 25 % de l'empreinte sert 80 % des appels.
+            let defaut = {
+                let m = crate::materiel::Materiel::detecter();
+                let libre: f64 = m.gpus.iter().map(|g| g.vram_libre_go).sum();
+                (libre - 2.0).max(1.0)      // 2 Go de réserve pour le contexte CUDA
+            };
             let go: f64 = std::env::var("DRAVE_GPU_EXPERTS_GO").ok()
-                .and_then(|v| v.parse().ok()).unwrap_or(8.0);
+                .and_then(|v| v.parse().ok()).unwrap_or(defaut);
             let budget = (go * 1e9) as usize;
             println!("[gpu] cache d'experts : budget {:.1} Go de VRAM (LRU), éviction par (couche, expert)",
                      go);
@@ -3742,6 +3783,17 @@ dynamique de {dyn_:.3e} (relatif {:.2e})", mx / dyn_.max(1e-9));
                     let _ = writeln!(f, "{} {} {}", l, pos, liste.join(" "));
                 }
                 for v in down.iter_mut() { *v = 0.0; }
+                // Prélecture : on connaît les experts du jeton AVANT de les
+                // calculer. Les demander tous d'un coup laisse le noyau lancer
+                // ses lectures de pages en parallèle — mesuré, le NVMe passe de
+                // 5,4 à 31 Go/s quand les lectures se recouvrent.
+                for &e in &idx {
+                    if let Some((k, loc)) = moe.ou(e as usize) {
+                        moe.gate[k].prelire_expert(loc);
+                        moe.up[k].prelire_expert(loc);
+                        moe.down[k].prelire_expert(loc);
+                    }
+                }
                 for &e in &idx {
                     let w_exp = sc_e[e as usize] * inv_k;
                     // Traduction pour les modèles en clusters : l'expert global

@@ -45,6 +45,39 @@ extern "C" {
 const PROT_READ: i32 = 1;
 const MAP_PRIVATE: i32 = 2;
 
+extern "C" {
+    fn madvise(addr: *mut u8, len: usize, advice: i32) -> i32;
+}
+
+/// `MADV_WILLNEED` : « je vais lire cette plage, lance les lectures ».
+const MADV_WILLNEED: i32 = 3;
+
+/// Demande au noyau de **lancer en avance** les lectures d'une plage mappée.
+///
+/// C'est la seule forme de parallélisme de lecture accessible depuis l'espace
+/// utilisateur quand les poids sont mmappés : on ne peut pas lire soi-même sans
+/// renoncer au mmap. Le noyau, lui, peut lancer plusieurs lectures de pages en
+/// parallèle — et c'est ce qui compte, parce que le NVMe passe de 5,4 Go/s à un
+/// lecteur à **31 Go/s à seize**.
+///
+/// Ne fait rien si la plage n'est pas mappée (modèle lu en mémoire) : l'appel
+/// est alors sans objet, pas faux.
+pub fn prelire(ptr: *const u8, octets: usize) {
+    if ptr.is_null() || octets == 0 { return; }
+    // `DRAVE_PRELIRE=0` la désactive : sans ce témoin, on ne pourrait pas dire
+    // si un gain vient d'elle ou du cache qui se réchauffe d'un passage à
+    // l'autre.
+    if !prelire_active() { return; }
+    unsafe { madvise(ptr as *mut u8, octets, MADV_WILLNEED); }
+}
+
+fn prelire_active() -> bool {
+    match std::env::var("DRAVE_PRELIRE") {
+        Ok(v) => !(v == "0" || v.eq_ignore_ascii_case("non") || v.eq_ignore_ascii_case("false")),
+        Err(_) => true,
+    }
+}
+
 impl Mappe {
     /// Mappe le fichier entier en lecture seule.
     fn ouvrir(f: &File, len: usize) -> std::io::Result<Mappe> {

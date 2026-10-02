@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 78.6 h |
-| Tours | 68 |
-| Messages | 3217 |
-| Appels d'outils | 3039 |
-| Fichiers touchés | 70 |
-| Commandes | 2646 |
+| Durée | 78.8 h |
+| Tours | 69 |
+| Messages | 3242 |
+| Appels d'outils | 3062 |
+| Fichiers touchés | 71 |
+| Commandes | 2667 |
 | Sous-agents | 22 |
-| Commits | 271 |
+| Commits | 272 |
 | Compactages de contexte | 4 |
 
 ## Objectifs déclarés
@@ -33,6 +33,8 @@
 … [321 caractères tronqués]
 - **complete** — Travailler en autonomie jusqu'à 18h00 HAE sur Drave, en couloirs parallèles : (A) noyau GPU de top-k pour l'attention creuse (phase 1.1, le seul poste GPU neuf de la feuille de route), (B) campagne de mesure en fond (frontière du cache KV à un autre contexte, vérifications long contexte), (C) analys
 … [321 caractères tronqués]
+- **create** — Mener à terme, en autonomie, les optimisations d'architecture mémoire du moteur Drave : détection matérielle et heuristiques automatiques (faites), prélecture parallèle des experts (mesurée et validée ou retirée), puis les chantiers suivants par ordre de valeur — chargeur d'experts à la demande, acc
+… [246 caractères tronqués]
 
 ## 1. Ce qui a été demandé
 
@@ -171,6 +173,8 @@
 **Tour 67** — nvme et multi-cpu, cores purs vs hyperthread (cache partagée) as-t-on évalué les impacts
 
 **Tour 68** — peut-on explorer les affinités cpu pour du HT, c'est à dire parallélisation interne de certaines boucles ayant des affinités fines de mémoire pour les tandems de cpu. Pour le FPGS Stratix V, il est branché, mais pas configuré pcie en ce moment, usb seulement. A étudier seulement si on sait quoi lui donner.
+
+**Tour 69** — implémente toute les optimisation et détection de matériel avec heuristiques de configuration automatique.
 
 ## 2. Déroulé, étape par étape
 
@@ -3473,7 +3477,74 @@ Corrigé : `engine::coeurs_physiques()` lit `/sys/devices/system/cpu/cpu*/topolo
 
 **Synthèse produite :**
 
-⏵ Résultat net : **+27 % avec les paires HT quand on n'a que 10 cœurs**, rien avec 20. Je consigne.
+Les deux pistes sont explorées et mesurées.
+
+\## 1. Les paires hyperthread : utiles **quand les cœurs manquent**
+
+Banc mémoire, chaque configuration répétée trois fois :
+
+| cœurs utilisés | fils | Go/s (médiane) |
+|---|---|---|
+| **10 cœurs** | 10 (1 par cœur) | 14,7 |
+| **10 cœurs** | **20 (2 par cœur, HT)** | **18,7** — **+27 %** |
+| 10 cœurs | 30 (3 par cœur) | 15,0 — régression |
+| **20 cœurs** | 20 | **22,5** |
+| 20 cœurs | 40 (HT) | 18,9 — essais 18,6 · 18,9 · 26,3, très bruité |
+| 20 cœurs | 60 | 20,7 |
+
+**Votre hypothèse est validée, avec sa condition** : les hyperthreads d'une paire **partagent le L2 de 256 Ko** et masquent mutuellement la latence mémoire — d'où **+27 % à dix cœurs**. Mais quand on a les vingt cœurs, la bande passante sature à ~22 Go/s et le HT n'ajoute plus rien.
+
+**Trois fils par cœur est une régression** (15,0 contre 18,7) : la contention du cœur dépasse le gain de latence.
+
+**Ce que ça implique au déploiement** : un nœud restreint à dix cœurs doit prendre ses **paires HT** (`0-9,20-29`), pas dix cœurs secs. C'est un réglage de nœud, pas un défaut — le moteur est correct à 20 fils sur 20 cœurs.
+
+**Et une correction appliquée en chemin** : `engine::coeurs_physiques()` lit `/sys/devices/system/cpu/cpu*/topology/` au lieu des threads logiques. Le défaut passe de **30 à 20 fils**, à performance égale, en libérant 10 threads pour le système. Porte Qwen inchangée (19,3885), 32 tests verts.
+
+\## 2. Le FPGA Stratix V : aucun cas d'usage aujourd'hui
+
+Deux raisons, dont une seule suffirait :
+
+- **En USB, il plafonne à 625 Mo/s** — cinquante fois moins que le NVMe parallélisé (31 Go/s).
+- **Il n'y a rien à lui donner.** Le mur de cette architecture n'est pas le calcul :
+
+| | |
+|---|---|
+| lecture d'une couche | 10,9 ms |
+| **calcul de la même couche** | **0,6 ms** |
+| rapport | **18×** |
+
+Un accélérateur de calcul sur un chemin où le calcul pèse **5 %** ne peut rien gagner. Et le déplacement de données est déjà en DMA par le noyau : un FPGA qui lirait le NVMe pour le pousser en VRAM ne battrait pas `pread` à 31 Go/s.
+
+**La condition est consignée** : une tâche où le calcul domine, et en PCIe. Aucune des trois briques du chemin actuel ne l'est — ni le matvec (limité par la mémoire), ni la déquantification (le moteur ne touche que des têtes de tenseurs), ni le routage (384 logits par couche, une fois). Si une charge dense apparaît, la question se rouvre ; en USB, elle est close.
+
+\## Ce qui aura le plus compté
+
+Sur cette session, les mesures m
+… [272 caractères tronqués]
+
+### Tour 69 — implémente toute les optimisation et détection de matériel avec heuristiques de configuration automatique.
+
+*23 appels d'outils.* Actions notables :
+
+- bash — Inspect existing GPU detection
+- write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/materiel.rs`
+- bash — Register materiel module and build
+- bash — Fix format strings for edition compatibility
+- bash — Fix Rust format specifiers
+- bash — Run hardware detection tests
+- bash — Add --materiel command
+- bash — Check df output format and disk layout
+- bash — Identify actual disk mounts and NUMA nodes
+- bash — Fix disk detection
+- bash — Find KV bits and VRAM budget settings
+- bash — Read KV bits resolution
+- bash — Integrate KV and VRAM heuristics
+- bash — Lighten detection and run gates
+- … et 9 autres
+
+**Synthèse produite :**
+
+⏵ La comparaison tourne. Je commite le module matériel pendant ce temps.
 
 ## 3. Travail accompli
 
@@ -3551,6 +3622,7 @@ Corrigé : `engine::coeurs_physiques()` lit `/sys/devices/system/cpu/cpu*/topolo
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/sprints/09-empreinte-memoire-ce-qui-reduit-vraiment.md` | 2 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/analyse_experts_statique.py` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-architecture-memoire.md` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/materiel.rs` | 1 | 0 |
 
 ### Sous-agents lancés
 
@@ -3619,7 +3691,7 @@ Corrigé : `engine::coeurs_physiques()` lit `/sys/devices/system/cpu/cpu*/topolo
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 2606 autres
+- … et 2627 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -3747,7 +3819,7 @@ Corrigé : `engine::coeurs_physiques()` lit `/sys/devices/system/cpu/cpu*/topolo
 
 ## 5. Erreurs rencontrées
 
-159 sorties en erreur ou divergentes. Les premières :
+160 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : a8f2635f8 docs: record which models this box is good at, and why src/llama-hparams.cpp:8:void llama_hparams::set_swa_pattern(uint32_t n_pattern, bool dense_first) { src/llama-hparams.h:308:    void se
 - **T1** : 511 tokens notés — perplexité cumulée 247.031  (4.9 tok/s) === perplexité 247.0308 sur 511 tokens (0 événements, 104.5 s) ===  ### B3 harmony assistant 511 --- ref --- 0.0 0.0 0:00 ls: cannot access '
@@ -4038,4 +4110,5 @@ Corrigé : `engine::coeurs_physiques()` lit `/sys/devices/system/cpu/cpu*/topolo
 - README : la topologie et la conclusion qui se retourne" && echo "=== ÉTAT FINAL ==="; (cd drave-core && cargo test --release 2>&1 | grep -E "^test result"); git
 - Paires hyperthread : +27 % quand les cœurs manquent, rien quand on les a tous  Banc memoire, chaque configuration repetee trois fois : - 10 cœurs, 10 fils (1 pa
 - REPRISE : topologie materielle et affinites" && echo "=== ÉTAT FINAL ==="; (cd drave-core && cargo test --release 2>&1 | grep -E "^test result"); git status --s
+- Detection materielle et heuristiques de configuration automatique  Nouveau module drave-core/src/materiel.rs : detecte CPU (cœurs physiques contre logiques, pai
 

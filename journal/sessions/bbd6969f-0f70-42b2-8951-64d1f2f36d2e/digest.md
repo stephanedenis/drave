@@ -51806,3 +51806,442 @@ ok
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np = 'REPRISE.md'\ns = open(p).read().rstrip('\\n')\ns += '''\n\n### Topologie matérielle et affinités\n\nRelevé : NVMe (02:00.0), **les deux GPU** (03:00.0, 04:00.0) et les CPU 0-9 sont\nsur le **NUMA node 0**. **NV … [2126 caractères tronqués]`
+
+  ```
+=== ÉTAT FINAL ===
+test result: ok. 32 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.08s
+en attente : 0
+commits session : 33
+
+rapport architecture : 16072 octets
+  ```
+
+### 🤖 Assistant
+
+Les deux pistes sont explorées et mesurées.
+
+## 1. Les paires hyperthread : utiles **quand les cœurs manquent**
+
+Banc mémoire, chaque configuration répétée trois fois :
+
+| cœurs utilisés | fils | Go/s (médiane) |
+|---|---|---|
+| **10 cœurs** | 10 (1 par cœur) | 14,7 |
+| **10 cœurs** | **20 (2 par cœur, HT)** | **18,7** — **+27 %** |
+| 10 cœurs | 30 (3 par cœur) | 15,0 — régression |
+| **20 cœurs** | 20 | **22,5** |
+| 20 cœurs | 40 (HT) | 18,9 — essais 18,6 · 18,9 · 26,3, très bruité |
+| 20 cœurs | 60 | 20,7 |
+
+**Votre hypothèse est validée, avec sa condition** : les hyperthreads d'une paire **partagent le L2 de 256 Ko** et masquent mutuellement la latence mémoire — d'où **+27 % à dix cœurs**. Mais quand on a les vingt cœurs, la bande passante sature à ~22 Go/s et le HT n'ajoute plus rien.
+
+**Trois fils par cœur est une régression** (15,0 contre 18,7) : la contention du cœur dépasse le gain de latence.
+
+**Ce que ça implique au déploiement** : un nœud restreint à dix cœurs doit prendre ses **paires HT** (`0-9,20-29`), pas dix cœurs secs. C'est un réglage de nœud, pas un défaut — le moteur est correct à 20 fils sur 20 cœurs.
+
+**Et une correction appliquée en chemin** : `engine::coeurs_physiques()` lit `/sys/devices/system/cpu/cpu*/topology/` au lieu des threads logiques. Le défaut passe de **30 à 20 fils**, à performance égale, en libérant 10 threads pour le système. Porte Qwen inchangée (19,3885), 32 tests verts.
+
+## 2. Le FPGA Stratix V : aucun cas d'usage aujourd'hui
+
+Deux raisons, dont une seule suffirait :
+
+- **En USB, il plafonne à 625 Mo/s** — cinquante fois moins que le NVMe parallélisé (31 Go/s).
+- **Il n'y a rien à lui donner.** Le mur de cette architecture n'est pas le calcul :
+
+| | |
+|---|---|
+| lecture d'une couche | 10,9 ms |
+| **calcul de la même couche** | **0,6 ms** |
+| rapport | **18×** |
+
+Un accélérateur de calcul sur un chemin où le calcul pèse **5 %** ne peut rien gagner. Et le déplacement de données est déjà en DMA par le noyau : un FPGA qui lirait le NVMe pour le pousser en VRAM ne battrait pas `pread` à 31 Go/s.
+
+**La condition est consignée** : une tâche où le calcul domine, et en PCIe. Aucune des trois briques du chemin actuel ne l'est — ni le matvec (limité par la mémoire), ni la déquantification (le moteur ne touche que des têtes de tenseurs), ni le routage (384 logits par couche, une fois). Si une charge dense apparaît, la question se rouvre ; en USB, elle est close.
+
+## Ce qui aura le plus compté
+
+Sur cette session, les mesures matérielles ont produit deux retournements utiles : **le NVMe parallélisé (31 Go/s) dépasse la RAM (22 Go/s)** — donc ne rien cacher devient viable et libère 71 Go pour le KV — et **le HT vaut +27 % précisément là où on l'aurait cru inutile** : sur un nœud pauvre en cœurs.
+
+
+## Tour 69
+
+### 👤 Utilisateur
+
+implémente toute les optimisation et détection de matériel avec heuristiques de configuration automatique.
+
+### 🤖 Assistant
+
+⏵ Gros chantier : détection matérielle + heuristiques. Je regarde d'abord ce que le moteur détecte déjà.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"pub fn ouvrir_auto\\|memoire_libre\\|pub nom\\|nvlink\\|multi\" drave-core/src/gpu.rs | head -12; echo \"=== ce que le moteur sait des GPU ===\"; sed -n '/pub fn ouvrir_auto/,/^    }/p' drave-core/src/gpu.rs | head -30", "d … [46 caractères tronqués]`
+
+  ```
+176:    pub nom: String,
+179:    pub memoire_libre: usize,
+187:    pub fn ouvrir_auto() -> Option<Gpu> {
+347:                       nom: format!("GPU {ordinal}"), memoire_libre: libre })
+453:        if total > self.memoire_libre { return false; }
+567:        // `q` doit être un multiple exact de n_kv × hd : une division tronquée
+655:        if besoin * 4 > self.memoire_libre / 4 {
+658:                      self.memoire_libre as f64 / 1e9);
+=== ce que le moteur sait des GPU ===
+    pub fn ouvrir_auto() -> Option<Gpu> {
+        for ord in [1, 0] {
+            if let Some(g) = Gpu::ouvrir(ord) { return Some(g); }
+            eprintln!("[gpu] périphérique {ord} indisponible, essai du suivant");
+        }
+        None
+    }
+  ```
+
+### 🤖 Assistant
+
+⏵ J'écris le module de détection et d'heuristiques.
+
+- **write** `{"content": "//! Détection du matériel et choix automatique de la configuration.\n//!\n//! Tout ce que ce module décide vient d'une **mesure**, pas d'une intuition.\n//! Chaque heuristique porte le chiffre qui la justifie, et la commande\n//! `--materiel` les affiche toutes avec leur raison — pour q … [18232 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/materiel.rs</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np = 'drave-core/src/main.rs'\ns = open(p).read()\ns = s.replace(\"mod list;\\nmod model;\", \"mod list;\\nmod materiel;\\nmod model;\", 1)\nopen(p, 'w').write(s)\nPY\nhead -14 drave-core/src/main.rs | grep mod; cd d … [163 caractères tronqués]`
+
+  ```
+//!   drave-core <modele.gguf> [--matrix blk.0.ffn_gate.weight] [--threads 8]
+//! Mesure sur le VRAI modèle :
+mod clusters;
+mod engine;
+mod gguf;
+mod list;
+error: unknown format trait `f`
+   --> src/materiel.rs:305:61
+    |
+305 |                 "cache d'experts VRAM = {cache_experts_go:.1f} Go — {vram:.1f} Go libres \
+    |                                                             ^
+    |
+    = note: the only appropriate formatting traits are:
+--
+error: unknown format trait `f`
+   --> src/materiel.rs:305:77
+    |
+305 |                 "cache d'experts VRAM = {cache_experts_go:.1f} Go — {vram:.1f} Go libres \
+    |                                                                             ^
+    |
+    = note: the only appropriate formatting traits are:
+--
+error: unknown format trait `f`
+   --> src/materiel.rs:306:18
+    |
+306 | moins {reserve:.0f} de réserve CUDA et {commun_go:.0f} pour le commun ; la VRAM lit à \
+    |                  ^
+    |
+    = note: the only appropriate formatting traits are:
+--
+error: unknown format trait `f`
+BUILD 101
+  ```
+
+### 🤖 Assistant
+
+⏵ Erreur d'édition Rust : la capture implicite de variables n'est pas supportée. Je passe les arguments explicitement.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"edition\" drave-core/Cargo.toml; python3 - <<'PY'\nimport re\np = 'drave-core/src/materiel.rs'\ns = open(p).read()\n# L'édition du crate ne permet pas la capture implicite `{var}` : on passe les\n# arguments explicitement,  … [3301 caractères tronqués]`
+
+  ```
+4:edition = "2021"
+error: unknown format trait `f`
+   --> src/materiel.rs:305:45
+    |
+305 |                 "cache d'experts VRAM = {:.1f} Go — {:.1f} Go libres moins {:.0f} de \
+    |                                             ^
+--
+error: unknown format trait `f`
+   --> src/materiel.rs:305:57
+    |
+305 |                 "cache d'experts VRAM = {:.1f} Go — {:.1f} Go libres moins {:.0f} de \
+    |                                                         ^
+--
+error: unknown format trait `f`
+   --> src/materiel.rs:305:80
+    |
+305 |                 "cache d'experts VRAM = {:.1f} Go — {:.1f} Go libres moins {:.0f} de \
+    |                                                                                ^
+--
+error: unknown format trait `f`
+   --> src/materiel.rs:306:21
+BUILD 101
+  ```
+
+### 🤖 Assistant
+
+⏵ En Rust, c'est `{:.1}` et non `{:.1f}` — le `f` n'est pas un spécificateur. Je corrige.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport re\np = 'drave-core/src/materiel.rs'\ns = open(p).read()\n# En Rust, la précision s'écrit `{:.1}`, pas `{:.1f}` — `f` y serait lu comme un\n# nom de trait. Python et C acceptent le suffixe, Rust non.\nn = len … [316 caractères tronqués]`
+
+  ```
+17 spécificateurs corrigés
+BUILD 0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && cargo test --release materiel 2>&1 | grep -E \"^test |test result|panicked|assertion\" -A3 | head -12", "description": "Run hardware detection tests"}`
+
+  ```
+test materiel::tests::liste_cpus_lit_les_plages ... ok
+test materiel::tests::detection_coherente ... ok
+test materiel::tests::plan_dans_les_bornes ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 32 filtered out; finished in 0.08s
+  ```
+
+### 🤖 Assistant
+
+⏵ Tests verts. J'ajoute la commande `--materiel` et j'intègre le plan.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np = 'drave-core/src/main.rs'\ns = open(p).read()\ndef rep(a, b):\n    global s\n    assert a in s, f\"ANCRE INTROUVABLE : {a[:70]!r}\"\n    s = s.replace(a, b, 1)\n\n# 1. Option `--materiel`\nrep('''    profil_neuro … [2410 caractères tronqués]`
+
+  ```
+ok
+BUILD 0
+[attention] QT_IM_SWITCHER est l'ancien nom d'une variable d'environnement : elles s'appellent maintenant DRAVE_* (voir docs/histoire.md). Rien n'a été appliqué.
+CPU  20 cœurs physiques · 40 threads logiques · 2 sockets NUMA · caches L1 32 Ko · L2 256 Ko · L3 25600 Ko
+     nœud 0 : 20 CPU · 66 Go
+     nœud 1 : 20 CPU · 66 Go
+RAM  132 Go au total · 116 Go disponibles
+GPU  0 · Quadro RTX 5000 · 14.2/16.0 Go libres · 1 lien(s) NVLink
+GPU  1 · Quadro RTX 5000 · 15.2/16.0 Go libres · 1 lien(s) NVLink
+DISQ /home/stephane/FastNVMe · 0 Go libres · nœud 0
+DISQ /home/stephane/Data13TB · 0 Go libres · nœud 0
+
+Plan pour un contexte de 512 jetons (chiffres de DeepSeek-V4.1) :
+  threads          : 20
+  lecteurs disque  : 16
+  cache experts    : 19.4 Go en VRAM
+  cache KV         : 32 bits
+
+  · threads = 20 cœurs physiques (40 logiques détectés) — au-delà, la bande passante mémoire sature : 20 cœurs = 22,5 Go/s, 20 cœurs + hyperthreads = 18,9
+  · lecteurs disque = 16 — le NVMe passe de 5,4 Go/s (1 lecteur) à 31,1 (16), soit ×6 ; c'est ce qui rend le chargement à la demande viable
+  · cache d'experts VRAM = 19.4 Go — 29.4 Go libres moins 2 de réserve CUDA et 8 pour le commun ; la VRAM l
+… [302 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Deux défauts dans la détection disque : `df` rend 0 et les deux disques héritent du même nœud. Je corrige.
+
+- **bash** `{"command": "df -B G --output=avail /home/stephane/FastNVMe; echo \"---\"; df -B G /home/stephane/FastNVMe | tail -1 | awk '{print $4}'; echo \"--- disques réels ---\"; lsblk -o NAME,SIZE,TYPE,MOUNTPOINT 2>/dev/null | head -12", "description": "Check df output format and disk layout"}`
+
+  ```
+Avail
+ 698G
+---
+698G
+--- disques réels ---
+NAME              SIZE TYPE MOUNTPOINT
+sda              10,9T disk 
+├─sda1              8M part 
+└─sda2           10,9T part 
+  ├─system-swap  62,8G lvm  [SWAP]
+  └─system-root  10,9T lvm  /home/stephane/Data13TB
+nvme0n1         931,5G disk 
+├─nvme0n1p1         2G part /boot/efi
+├─nvme0n1p2       828G part /var/lib/docker
+└─nvme0n1p3         1G part
+  ```
+
+- **bash** `{"command": "df -h /home/stephane/FastNVMe /home/stephane/Data13TB | cat; echo \"=== montages ===\"; findmnt -no SOURCE,TARGET,FSTYPE /home/stephane/FastNVMe 2>/dev/null; findmnt -no SOURCE,TARGET,FSTYPE /home/stephane/Data13TB 2>/dev/null; echo \"=== nœud NUMA des disques ===\"; for d in nvme0n1 sd … [165 caractères tronqués]`
+
+  ```
+Filesystem               Size  Used Avail Use% Mounted on
+/dev/nvme0n1p2           828G  130G  698G  16% /home/stephane/FastNVMe
+/dev/mapper/system-root   11T  7,4T  3,5T  69% /home/stephane/Data13TB
+=== montages ===
+/dev/nvme0n1p2[/@FastNVMe] /home/stephane/FastNVMe btrfs
+/dev/mapper/system-root[/@/home] /home/stephane/Data13TB btrfs
+=== nœud NUMA des disques ===
+nvme0n1   numa=0
+sda       numa=?
+  ```
+
+### 🤖 Assistant
+
+⏵ Je corrige la détection disque : parser `df` et remonter au vrai périphérique.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np = 'drave-core/src/materiel.rs'\ns = open(p).read()\na = '''fn detecter_disques() -> Vec<Disque> {\n    let mut out = Vec::new();\n    for (chemin, artefact) in [(\"/home/stephane/FastNVMe\", true),\n               … [3295 caractères tronqués]`
+
+  ```
+ok
+BUILD 0
+CPU  20 cœurs physiques · 40 threads logiques · 2 sockets NUMA · caches L1 32 Ko · L2 256 Ko · L3 25600 Ko
+RAM  132 Go au total · 115 Go disponibles
+DISQ /home/stephane/FastNVMe · 698 Go libres · nœud 0
+DISQ /home/stephane/Data13TB · 3542 Go libres · nœud ?
+  ```
+
+### 🤖 Assistant
+
+⏵ Détection correcte. J'intègre maintenant les deux heuristiques qui comptent : KV et budget VRAM.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"DRAVE_KV_BITS\\|kv.bits = \\|bits:\" drave-core/src/model.rs | head -8; echo \"=== budget experts ===\"; sed -n '1925,1945p' drave-core/src/model.rs", "description": "Find KV bits and VRAM budget settings"}`
+
+  ```
+1198:    pub bits: u32,          // 32 = f32 (défaut), 8 = i8
+1238:    pub fn new(bits: u32, n_kv: usize, ctx: usize, hd: usize) -> Self {
+1688:        let kv_bits: u32 = std::env::var("DRAVE_KV_BITS").ok()
+3468:            // lancements : `--attn-topk 2048` ou `DRAVE_KV_BITS=4` refaisaient
+=== budget experts ===
+        let cache_experts = if std::env::var("DRAVE_GPU_EXPERTS").is_ok()
+                               && crate::gpu::instance().is_some()
+                               && cfg.n_expert > 0 {
+            let go: f64 = std::env::var("DRAVE_GPU_EXPERTS_GO").ok()
+                .and_then(|v| v.parse().ok()).unwrap_or(8.0);
+            let budget = (go * 1e9) as usize;
+            println!("[gpu] cache d'experts : budget {:.1} Go de VRAM (LRU), éviction par (couche, expert)",
+                     go);
+            Some(CacheExperts::nouveau(budget))
+        } else { None };
+        let head4 = if q4 & 4 != 0 || tete_quantifiee {
+            let t0 = Instant::now();
+            let v = cfg.vocab;
+            let h = cfg.hidden;
+            let d = if let Some((buf, nb)) = g.q6k_blocks(&tete) {
+                unsafe { DenseQ4::emprunter_q6k(buf.as_ptr(), v, h, nb) }
+         
+… [339 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '1685,1700p' drave-core/src/model.rs", "description": "Read KV bits resolution"}`
+
+  ```
+let out_norm = g.dequant("output_norm.weight");
+        // Précision du cache KV : 32 (f32, défaut), 8 ou 4. Le trafic de
+        // relecture est LE mur du contexte long ; la trace le dit au chargement.
+        let kv_bits: u32 = std::env::var("DRAVE_KV_BITS").ok()
+            .and_then(|v| v.parse().ok()).unwrap_or(32);
+        let caches_kv: Vec<KvCache> = (0..cfg.n_layer)
+            .map(|_| KvCache::new(kv_bits, cfg.n_kv_head, ctx, cfg.head_dim)).collect();
+        let kv_octets = cfg.n_layer as u64
+            * KvCache::new(kv_bits, cfg.n_kv_head, ctx, cfg.head_dim).octets();
+        println!("[config] cache KV : {} bits, {:.2} Go pour {ctx} jetons",
+                 if kv_bits >= 32 { 32 } else { kv_bits }, kv_octets as f64 / 1e9);
+        let pool = Pool::new(n_threads, cfg.hidden);
+        eprintln!("[modele] {} couches chargées en {:?} — listes {:.2} Go{} , {} threads",
+                  cfg.n_layer, t0.elapsed(), bytes as f64 / 1e9,
+                  if keep < 0.0 { format!(" (poids gardés : {:.0} % structuré)", -keep * 100.0) }
+                  else if keep < 1.0 { format!(" (poids gardés : {:.0} %)", keep * 100.0) }
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np = 'drave-core/src/model.rs'\ns = open(p).read()\na = '''        // Précision du cache KV : 32 (f32, défaut), 8 ou 4. Le trafic de\n        // relecture est LE mur du contexte long ; la trace le dit au chargement.\ … [2773 caractères tronqués]`
+
+  ```
+ok
+BUILD 0
+test result: ok. 35 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.12s
+  ```
+
+### 🤖 Assistant
+
+⏵ 35 tests verts. J'allège la détection (pas besoin des GPU pour le KV) et je vérifie les portes.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np = 'drave-core/src/materiel.rs'\ns = open(p).read()\ns = s.replace('''fn detecter_ram() -> (f64, f64) {''',\n'''/// RAM libre seule. `detecter()` lance `nvidia-smi` deux fois : le charger pour\n/// connaître la mém … [1760 caractères tronqués]`
+
+  ```
+ok
+[timed out after 60000ms]
+[killed by signal: SIGTERM]
+  ```
+
+- **bash** `{"command": "sleep 30; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat /tmp/portes_finales.log; (cd drave-core && cargo test --release 2>&1 | grep -E \"^test result\")", "description": "Read gates and tests"}`
+
+  ```
+Qwen 0.5B ctx 256 (porte 19,3885) : perplexité 19.3885 sur 510 tokens
+clusters Qwen3-30B (attendu 799,8557) : perplexité 799.8557 sur 7 tokens
+=== fin ===
+test result: ok. 35 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.09s
+  ```
+
+### 🤖 Assistant
+
+⏵ Dernière optimisation : le prélecture parallèle des experts via `madvise`. Je l'implémente.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np = 'drave-core/src/gguf.rs'\ns = open(p).read()\na = '''const PROT_READ: i32 = 1;\nconst MAP_PRIVATE: i32 = 2;'''\nb = '''const PROT_READ: i32 = 1;\nconst MAP_PRIVATE: i32 = 2;\n\nextern \"C\" {\n    fn madvise(add … [3676 caractères tronqués]`
+
+  ```
+gguf.rs ok
+model.rs ok
+BUILD 0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/mesure_prelire.sh <<'EOF'\n#!/bin/bash\n# La prélecture change-t-elle quelque chose ? On compare sur le modèle en\n# clusters, dont les experts sont mmappés depuis le NVMe : c'est le seul cas où\n# elle a un objet.\ncd /ho … [698 caractères tronqués]`
+
+  ```
+passage 1 : perplexité 7.6139 sur 127 tokens (0 événements, 25.5 s)
+passage 2 :
+  ```
+
+### 🤖 Assistant
+
+⏵ Il me faut une comparaison appariée : j'ajoute une variable pour désactiver la prélecture.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np = 'drave-core/src/gguf.rs'\ns = open(p).read()\ns = s.replace('''pub fn prelire(ptr: *const u8, octets: usize) {\n    if ptr.is_null() || octets == 0 { return; }\n    unsafe { madvise(ptr as *mut u8, octets, MADV_ … [1987 caractères tronqués]`
+
+  ```
+passage 1 : perplexité 7.6139 sur 127 tokens (0 événements, 25.5 s)
+passage 2 : perplexité 7.6139 sur 127 tokens (0 événements, 26.0 s)
+passage 3 : 
+[timed out after 60000ms]
+[killed by signal: SIGTERM]
+  ```
+
+- **bash** `{"command": "sleep 55; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat /tmp/compare_prelire.log", "description": "Read paired prefetch comparison"}`
+
+  ```
+tour 1 avec  :
+  ```
+
+### 👤 Utilisateur
+
+il n'est pas tard, et tu peux continuer sans moi tellement on a des choses à faire. utilise l'horloge système en hae
+
+### 🤖 Assistant
+
+⏵ Vérification de l'heure HAE, puis je continue en autonomie.
+
+- **bash** `{"command": "TZ=America/Toronto date; echo \"---\"; cat /tmp/compare_prelire.log; echo \"--- jobs ---\"; pgrep -c -f \"drave|compare_prelire\"", "description": "Check HAE time and running measurements"}`
+
+  ```
+jeu 01 oct 2026 21:36:08 EDT
+---
+tour 1 avec  : --- jobs ---
+0
+[exit code: 1]
+  ```
+
+### 🤖 Assistant
+
+⏵ Il est **21h36 HAE** — la soirée est devant nous. Je relance la mesure et je cadre le travail autonome.
+
+- **create_goal** `{"objective": "Mener à terme, en autonomie, les optimisations d'architecture mémoire du moteur Drave : détection matérielle et heuristiques automatiques (faites), prélecture parallèle des experts (mesurée et validée ou retirée), puis les chantiers suivants par ordre de valeur — chargeur d'experts à  … [286 caractères tronqués]`
+
+> **Objectif** (create) : Mener à terme, en autonomie, les optimisations d'architecture mémoire du moteur Drave : détection matérielle et heuristiques automatiques (faites), prélecture parallèle des experts (mesurée et validée ou retirée), puis les chantiers suivants par ordre de valeur — chargeur d'experts à la demande, accès mmappé à l'engram de DeepSeek, restriction de la tête à la langue d'entrée. Chaque optimisation doit être mesurée par comparaison appariée, consignée dans un rapport, et laisser le dépôt vert (portes Qwen 19,3885, gpt-oss 15,1757, cargo test).
+
+
+  ```
+{"goal":{"id":"goal-e85bbb39-a710-4255-b3ca-87539dc66bc1","revision":1,"objective":"Mener à terme, en autonomie, les optimisations d'architecture mémoire du moteur Drave : détection matérielle et heuristiques automatiques (faites), prélecture parallèle des experts (mesurée et validée ou retirée), puis les chantiers suivants par ordre de valeur — chargeur d'experts à la demande, accès mmappé à l'engram de DeepSeek, restriction de la tête à la langue d'entrée. Chaque optimisation doit être mesurée par comparaison appariée, consignée dans un rapport, et laisser le dépôt vert (portes Qwen 19,3885, gpt-oss 15,1757, cargo test).","phase":"active","roundsStarted":0,"maxGoalRounds":12},"activation":"armed"}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && nohup /tmp/compare_prelire.sh > /dev/null 2>&1 & sleep 50; cat /tmp/compare_prelire.log", "description": "Relaunch prefetch comparison"}`
+
+  ```
+tour 1 avec  : (0 événements, 25.3 s)
+tour 1 sans  :
+  ```
+
+### 🤖 Assistant
+
+⏵ La comparaison tourne. Je commite le module matériel pendant ce temps.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && (cd drave-core && cargo test --release 2>&1 | grep -E \"^test result\"); git add -A && git commit -q -m \"Detection materielle et heuristiques de configuration automatique\n\nNouveau module drave-core/src/materiel.rs : detecte CPU (c … [1671 caractères tronqués]`
