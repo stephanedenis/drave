@@ -166,11 +166,14 @@ pub fn manques_architecture(g: &Gguf, cfg: &Cfg, ctx: usize, clusters: bool) -> 
         && !quelque_part("attn_compressor_kv.weight") {
         manques.push("attentions compressées : `attn_compressor_kv` absent du fichier");
     }
-    // **V4.1 : un troisième ratio.** Ses couches compressées sont en ratio **2**,
-    // avec un `attn_compressor_kv` SANS porte ni `ape` — un régime que la
-    // référence elle-même n'implémente pas (`llama.cpp` refuse : « only supports
-    // compression ratios 0, 4, and 128 »). L'implémenter sans référence serait
-    // deviner : on le refuse en le nommant.
+    // **V4.1 : deux autres ratios (1 et 2).** Ils ont une RÉFÉRENCE
+    // d'exécution, contrairement à ce que ce message disait : vLLM porte
+    // `vllm/models/deepseek_v41/compressor.py` (`DeepseekCompressor`, ratios 1
+    // et 2 ; « ratio-4/128 kernels are v4.0-specific ») et le noyau
+    // `fused_save_compress_norm` donne le calcul exact — softmax **par canal**
+    // sur le groupe (`tl.softmax(score, 0)`), norme RMS du latent, RoPE à la
+    // position du premier jeton du groupe ; ratio 1 = aucun groupe, aucune
+    // porte, aucun `ape`. Ce qui manque n'est donc pas le compresseur :
     let ratios = g.couches_ratios();
     let inconnus: Vec<i64> = {
         let mut v: Vec<i64> = ratios.iter().copied()
@@ -178,30 +181,48 @@ pub fn manques_architecture(g: &Gguf, cfg: &Cfg, ctx: usize, clusters: bool) -> 
         v.sort_unstable(); v.dedup(); v
     };
     if !inconnus.is_empty() {
-        // V4.1 est en ratio **2**, sans `attn_compressor_ape` ni
-        // `indexer_compressor_*` : c'est son jeu de tenseurs, pas un défaut du
-        // fichier (`patch_llamacpp_v41.py`, qui liste les 39 familles de V4.1).
-        // Le support d'EXÉCUTION de ce régime n'existe nulle part — pas même en
-        // amont (« Runtime support is separate work and is not in this patch »).
-        // L'implémenter sans référence serait deviner.
-        manques.push("compression de ratio 2 (V4.1) : sans référence d'exécution — le \
-support amont de V4.1 n'existe pas encore (llama.cpp n'accepte que 0, 4 et 128)");
+        //  · le **partage du cache compressé entre couches**
+        //    (`kv_source_layer_ids = [2,8,14,20]`) : « Compressors and
+        //    compressed-KV caches live only on kv_source_layer_ids; consumers
+        //    reuse the most recently published source below them ». Les couches
+        //    3..7 lisent donc les clés publiées par la 2, 9..13 celles de la 8,
+        //    et 21..39 celles de la 20 — un compresseur calculé couche par couche
+        //    donnerait d'autres clés, donc un résultat faux en silence ;
+        //  · l'**indexeur sans compresseur propre** : V4.1 n'a pas
+        //    `indexer_compressor_*` ; ses clés viennent du latent du compresseur
+        //    principal (`indexer.attn_k` [128,512] puis `indexer.k_norm`), et il
+        //    partage le cache de clés de son `kv_source` ;
+        //  · la **sélection à deux niveaux** (`candidate_source_layer_id = 20`,
+        //    `candidate_topk_blocks = 2048`, `candidate_block_size = 8`).
+        manques.push("compression V4.1 (ratios 1 et 2) : le compresseur est \
+spécifié (vLLM `compressor.py` + `fused_save_compress_norm`) mais le cache compressé est \
+PARTAGÉ entre couches (`kv_source_layer_ids`) et ce partage n'est pas implémenté — le \
+calculer couche par couche donnerait des clés différentes, donc faux sans rien casser");
     }
-    // **Le mélange de tête manquant de V4.1.** Le modèle déclare `hc_mult` mais
-    // n'a pas les tenseurs `output_hc_*` : llama.cpp les déclare REQUIS (`flags`
-    // nul) et refuserait ce fichier — « missing tensor 'output_hc_fn.weight' ».
-    // Question de PROVENANCE (P7), pas de code.
+    // **Le mélange de tête manquant de V4.1** : ce n'est PAS un manque, c'est
+    // une AUTRE chaîne. V4.1 n'a pas de `output_hc_*` parce qu'il n'a pas de
+    // tête apprise : la référence replie le flux final avec la `pre` de la
+    // dernière FFN (`hc_collapse_triton(hidden_states, pre_mix)`, commentaire
+    // « v4.1 has no learned hc_head »), et les coefficients de chaque raccord
+    // servent au raccord SUIVANT (`mhc_shifted_post_pre`). C'est implémenté
+    // (`hc_retarde`), donc ce n'est plus un refus — mais ça reste ANNONCÉ.
     if quelque_part("hc_attn_fn.weight") && g.tensor("output_hc_fn.weight").is_none()
-        && g.tensor("hc_head_fn.weight").is_none() {
-        // **Ce n'est PAS un fichier incomplet** : le jeu de tenseurs `deepseek41`
-        // retire explicitement `HC_HEAD_{FN,BASE,SCALE}` de celui de V4 (source :
-        // `llama.cpp/patches/README.md` du dépôt de conversion). V4.1 n'a donc
-        // pas de mélange de tête — reste à savoir comment ses `hc` copies se
-        // réduisent avant la norme finale, et personne ne l'a écrit : le README
-        // le dit lui-même (« a converted file does not load yet… Runtime support
-        // is separate work »).
-        manques.push("réduction des copies avant la norme finale : V4.1 ne déclare \
-pas `output_hc_*` (c'est son jeu de tenseurs) et aucun moteur ne spécifie ce cas");
+        && g.tensor("hc_head_fn.weight").is_none()
+        && g.meta.get("general.architecture").and_then(|m| m.as_str()) != Some("deepseek41") {
+        manques.push("réduction des copies avant la norme finale : `hc_*` sans \
+`output_hc_*` sur une architecture qui n'est pas `deepseek41` — la chaîne retardée de V4.1 \
+ne s'applique qu'à elle, et pour tout autre fichier le mode de réduction n'est pas écrit");
+    }
+    // **L'engram de V4.1** : ses tables et ses projections sont dans le fichier
+    // (`engram_embd`, `engram_kv`, `engram_q_norm`, `engram_k_norm` sur les
+    // couches 1 et 14), l'ADRESSAGE est porté et validé contre la référence
+    // (`reports/rapport-engram-etat.md`) — mais l'INJECTION n'est branchée sur
+    // aucune passe avant. Exécuter une couche d'engram sans elle donne un
+    // résultat faux en silence : c'est un manque tant que la passe ne l'appelle
+    // pas.
+    if g.cfg_ou(&["engram.layer_ids"]).is_some() || g.json_brut("engram_layer_ids").is_some() {
+        manques.push("engram (V4.1) : l'injection dans la passe avant n'est pas branchée \
+(l'adressage et la lecture des rangées le sont, et l'injection est écrite et testée à part)");
     }
     // Ce message décrit le cache LATENT de la MLA « GLM/Kimi »
     // (`attn_kv_a_mqa`) : sur l'attention V4, qui a aussi un `attn_q_a` mais un
@@ -1220,6 +1241,16 @@ pub struct Mla4 {
     pub indexer_top_k: usize,
     /// La couche a-t-elle un indexeur (`indexer.proj` dans le fichier) ?
     pub a_indexeur: bool,
+    /// **De quelle couche viennent les blocs compressés ?** V4 : la couche
+    /// elle-même (chaque couche compressée a son compresseur). **V4.1 : une
+    /// couche SOURCE**, d'après `kv_source_layer_ids` — « Compressors and
+    /// compressed-KV caches live only on `kv_source_layer_ids`; consumers reuse
+    /// the most recently published source below them » (vLLM,
+    /// `deepseek_v41/attention.py`). Les couches 3..7 lisent donc les clés
+    /// publiées par la 2, 9..13 celles de la 8, et **21..39 celles de la 20**.
+    /// Ne pas le savoir, c'est calculer un compresseur par couche et obtenir
+    /// d'autres clés — un résultat faux qui ne casse rien.
+    pub comp_source: usize,
     /// **Indexeur** (« lightning indexer ») : il note chaque bloc compressé et
     /// n'en garde que les `indexer_top_k` meilleurs. Ses propres tenseurs :
     /// compresseur de 256 valeurs par jeton (deux moitiés de 128, comme le CSA
@@ -1982,6 +2013,13 @@ pub struct Model {
     /// perplexité répartie **798,3** au lieu de **18,2**. La norme finale est
     /// appliquée par le nœud qui possède la tête de sortie — une seule fois.
     pub flux_brut: bool,
+    /// **Sonde de plage** (`--tete-partielle`) : appliquer la tête de sortie à la
+    /// fin d'une plage PARTIELLE. Par défaut une plage qui n'atteint pas la
+    /// dernière couche rend le flux résiduel brut — c'est ce qu'un nœud de
+    /// grappe doit expédier. Avec ce drapeau, elle rend les logits d'un modèle
+    /// TRONQUÉ, ce qui est la seule façon de vérifier une réduction finale dont
+    /// les couches suivantes ne tournent pas encore.
+    pub tete_partielle: bool,
     /// Couches MLA, si le modèle en est un (`attn_kv_a_mqa` présent).
     pub mla: Option<Vec<Mla>>,
     /// Fichier d'état d'ENTRÉE (`DRAVE_ETAT_ENTREE`) : le résidu du premier
@@ -2029,6 +2067,16 @@ pub struct Model {
     /// Mélange de **tête** : réduit les `hc` copies en un seul état avant la
     /// norme finale et les logits (`hc_head_fn/base/scale`).
     pub hc_tete: Option<Hc>,
+    /// **mHC RETARDÉ** (DeepSeek-V4.1 seulement). V4 replie l'entrée d'un
+    /// raccord avec les coefficients de CE raccord ; V4.1 les fait **servir au
+    /// raccord suivant** — l'attention se replie avec la `pre` de la FFN
+    /// précédente, la FFN avec la `pre` de l'attention courante, et la tête avec
+    /// la `pre` de la DERNIÈRE FFN (V4.1 n'a pas de `output_hc_*`).
+    ///
+    /// Source : `vllm/models/deepseek_v41/nvidia/model.py` (`mhc_shifted_post_pre`
+    /// + commentaire « the reference collapses each sublayer's input with the
+    /// *previous* sublayer's pre-mix », `docs/reports/rapport-v41-mhc.md`).
+    pub hc_retarde: bool,
     /// Cache LATENT par couche : `c_kv` (kv_lora) et `k_rope` (qkr) par position.
     pub mla_cache: Vec<(Vec<f32>, Vec<f32>)>,
     /// Cache VRAM des experts MoE (`DRAVE_GPU_EXPERTS=1`).
@@ -2533,7 +2581,14 @@ impl Model {
                                 "num_key_value_heads").unwrap_or(0) as usize,
             ffn: dim_gguf(&g, &["feed_forward_length", "intermediate_size"],
                           "intermediate_size").unwrap_or(0) as usize,
-            eps: g.cfg("attention.layer_norm_rms_epsilon").and_then(|m| m.as_f64()).unwrap_or(1e-6) as f32,
+            // **L'epsilon des normes RMS** : les fichiers convertis depuis
+            // HuggingFace le nomment `rms_norm_eps`, ceux de llama.cpp
+            // `attention.layer_norm_rms_epsilon`. V4.1-Flash n'a QUE le
+            // premier (1e-20) : retomber sur 1e-6 change chaque norme du modèle
+            // d'environ 1e-6 en relatif — le niveau même où l'on prétend
+            // comparer. (`Hc::melanges` a, lui, 1e-20 en dur.)
+            eps: reel_gguf(&g, &["attention.layer_norm_rms_epsilon", "rms_norm_eps"],
+                           "rms_norm_eps").unwrap_or(1e-6) as f32,
             rope_base: reel_gguf(&g, &["rope.freq_base", "rope_theta"], "rope_theta")
                            .unwrap_or(10000.0) as f32,
             // `attention.key_length` donne la dimension de tête réelle. Elle
@@ -2542,9 +2597,14 @@ impl Model {
             // calcul (64) débordait le tampon de Q.
             head_dim: g.cfg("attention.key_length").and_then(|m| m.as_u64()).unwrap_or(0) as usize,
             vocab: g.tensor("token_embd.weight").map(|t| t.dims[0] as usize).unwrap_or(0),
-            n_expert: g.cfg("expert_count").and_then(|m| m.as_u64()).unwrap_or(0) as usize,
-            n_expert_used: g.cfg("expert_used_count").and_then(|m| m.as_u64()).unwrap_or(0) as usize,
-            ffn_exp: g.cfg("expert_feed_forward_length").and_then(|m| m.as_u64()).unwrap_or(0) as usize,
+            // Les trois chiffres du routage viennent de `routage_du_gguf`, qui
+            // lit AUSSI le JSON `<arch>.config` : les relire ici en GGUF-seul
+            // donnait `n_expert = 0` sur V4.1-Flash (dont le convertisseur n'a
+            // écrit que les noms HuggingFace), donc un modèle exécuté SANS un
+            // seul expert — la lecture correcte était déjà là, juste jetée.
+            n_expert,
+            n_expert_used,
+            ffn_exp,
             // L'architecture « gpt-oss » implique sa propre activation ; elle
             // n'est pas déclarée dans les métadonnées.
             ffn_act_oss: g.meta.get("general.architecture").and_then(|m| m.as_str())
@@ -2583,13 +2643,35 @@ impl Model {
             // toutes les paires qui traversent la frontière — c'est un choix de
             // conception, pas une simplification.
             yarn: {
-                let declare = match g.cfg("rope.scaling.type").and_then(|m| m.as_str()) {
+                // **Trois sources, dans cet ordre** (le même schéma que le
+                // routage) : la clef GGUF normalisée, puis le JSON `<arch>.config`
+                // recopié par le convertisseur. V4.1-Flash n'a QUE la seconde —
+                // `"rope_scaling":{"rope_type":"yarn","factor":16,…}` — et s'en
+                // tenir au GGUF faisait dire « le modèle ne déclare pas YaRN »
+                // alors qu'il le déclare, ailleurs. Une rotation fausse ne casse
+                // rien : elle donne des scores plausibles dès la position 1.
+                let type_declare = g.cfg("rope.scaling.type").and_then(|m| m.as_str())
+                    .map(str::to_string)
+                    .or_else(|| match g.json_texte("rope_type") {
+                        Some(t) if t == "yarn" => Some({
+                            println!("[rope] YaRN déclaré par le JSON `<arch>.config` \
+(`rope_scaling`), pas par une clef GGUF — lu là, et ANNONCÉ");
+                            t
+                        }),
+                        _ => None,
+                    });
+                let nombre = |cle_gguf: &str, cle_json: &str, def: f64| -> f64 {
+                    g.cfg(cle_gguf).and_then(|m| m.as_f64())
+                        .or_else(|| g.json_nombre(cle_json))
+                        .unwrap_or(def)
+                };
+                let declare = match type_declare.as_deref() {
                     Some("yarn") => Some((
-                        g.cfg("rope.scaling.factor").and_then(|m| m.as_f64()).unwrap_or(1.0) as f32,
-                        g.cfg("rope.scaling.yarn_beta_fast").and_then(|m| m.as_f64()).unwrap_or(32.0) as f32,
-                        g.cfg("rope.scaling.yarn_beta_slow").and_then(|m| m.as_f64()).unwrap_or(1.0) as f32,
-                        g.cfg("rope.scaling.original_context_length")
-                            .and_then(|m| m.as_u64()).unwrap_or(4096) as f32,
+                        nombre("rope.scaling.factor", "factor", 1.0) as f32,
+                        nombre("rope.scaling.yarn_beta_fast", "beta_fast", 32.0) as f32,
+                        nombre("rope.scaling.yarn_beta_slow", "beta_slow", 1.0) as f32,
+                        nombre("rope.scaling.original_context_length",
+                               "original_max_position_embeddings", 4096.0) as f32,
                         // La mise à l'échelle de température (`mscale`) est la
                         // moitié NUISIBLE de YaRN : mesuré sur gpt-oss, la
                         // retirer fait passer la perplexité de 174,34 à 19,65 à
@@ -2657,6 +2739,35 @@ CSA ratio 4) est implémenté ; l'INDEXEUR (choix des blocs gardés) ne l'est pa
 le résultat n'est exact que tant que le nombre de blocs compressés reste sous \
 `indexer.top_k`, ce que le moteur vérifie et refuse au-delà. Le RESTE du modèle \
 reste non implémenté.");
+                }
+            }
+            // **Un manque qui ne tombe pas dans la plage ne s'applique pas.**
+            // V4.1 : les couches 0 et 1 sont en ratio 0 et la couche 1 est la
+            // seule engram du début du modèle — une plage 0..1 n'exécute NI
+            // compresseur NI engram, donc les manques correspondants ne peuvent
+            // pas la rendre fausse. On les retire en le DISANT : l'inverse
+            // (garder le refus) interdisait la seule passe avant de V4.1 qui
+            // soit fidèle, et l'inverse de l'inverse (retirer sans le dire)
+            // ferait croire que tout V4.1 tourne.
+            let dans = |l: usize| l >= a && l < b;
+            if !(a..b).any(|l| ratios.get(l).copied().unwrap_or(0) != 0) {
+                let avant = manques.len();
+                manques.retain(|m| !m.starts_with("compression V4.1"));
+                if manques.len() != avant {
+                    println!("[partiel] couches {a}..{b} : aucune couche COMPRESSÉE dans la \
+plage (ratios {:?}) — le partage du cache compressé de V4.1 n'est donc pas exercé. \
+Ce qui reste non implémenté n'est PAS contourné : il n'est pas atteint.",
+                             ratios.get(a..b.min(ratios.len())).unwrap_or(&[]));
+                }
+            }
+            let engram: Vec<i64> = g.cfg_ou(&["engram.layer_ids"])
+                .and_then(|m| m.as_liste_i64()).unwrap_or_default();
+            if !engram.is_empty() && !engram.iter().any(|l| *l >= 0 && dans(*l as usize)) {
+                let avant = manques.len();
+                manques.retain(|m| !m.starts_with("engram (V4.1)"));
+                if manques.len() != avant {
+                    println!("[partiel] couches {a}..{b} : aucune couche d'ENGRAM dans la \
+plage (elles sont en {engram:?}) — l'injection n'est pas exercée.");
                 }
             }
         }
@@ -2767,6 +2878,29 @@ reste non implémenté.");
                 .and_then(|m| m.as_u64()).map(|v| v as usize)
                 .or_else(|| g.json_nombre("sliding_window").map(|v| v as usize))
                 .unwrap_or(0);
+            // **Sources du cache compressé** (`kv_source_layer_ids`, V4.1).
+            // V4 ne déclare pas la clé : chaque couche compressée est sa propre
+            // source, ce qui est le comportement d'origine.
+            let sources: Vec<usize> = g.cfg_ou(&["kv_source_layer_ids"])
+                .and_then(|m| m.as_liste_i64())
+                .unwrap_or_default()
+                .into_iter().filter(|s| *s >= 0).map(|s| s as usize).collect();
+            if !sources.is_empty() {
+                let mut groupes: Vec<String> = Vec::new();
+                for (i, &s) in sources.iter().enumerate() {
+                    let fin = sources.get(i + 1).copied().unwrap_or(cfg.n_layer);
+                    if s < cfg.n_layer {
+                        groupes.push(format!("{s}..{} → {s}", fin.saturating_sub(1)));
+                    }
+                }
+                println!("[config] cache compressé PARTAGÉ entre couches \
+(`kv_source_layer_ids`) : {}. Un compresseur par couche donnerait d'autres clés — \
+le moteur refuse les ratios 1 et 2 tant que ce partage n'est pas implémenté",
+                         groupes.join(" · "));
+            }
+            let source_de = |l: usize| -> usize {
+                sources.iter().copied().filter(|s| *s <= l).max().unwrap_or(l)
+            };
             let mut v = Vec::with_capacity(cfg.n_layer);
             for l in 0..cfg.n_layer {
                 let p = |s: &str| format!("blk.{l}.{s}");
@@ -2774,16 +2908,32 @@ reste non implémenté.");
                 // Compresseur : `coff = 2` pour CSA (ratio 4), `1` pour HCA
                 // (ratio 128). La largeur se lit dans le tenseur, pas dans une
                 // constante recopiée : c'est elle qui décide.
+                //
+                // **Lu en OPTIONNEL, y compris l'`ape` et la porte** : V4.1 a
+                // des ratios (1 et 2) où l'un ou l'autre n'existe pas — la
+                // référence vLLM le dit (`has_gate = compress_ratio > 1`) et son
+                // compresseur n'a pas d'`ape` du tout. Un `dequant` obligatoire
+                // faisait paniquer le CHARGEMENT sur un modèle qu'une exécution
+                // bornée (`--couches`) n'aurait jamais fait tourner : refuser au
+                // chargement ce qu'on ne calcule pas est un refus mal placé.
+                // **Lu en OPTIONNEL, y compris la valeur** : V4.1 n'a de
+                // compresseur que sur ses couches SOURCES (`kv_source_layer_ids`
+                // = [2,8,14,20]) — les couches 3..7 n'ont même pas
+                // `attn_compressor_kv`, elles lisent les clés de la 2. Un
+                // `dequant` obligatoire faisait paniquer le CHARGEMENT sur un
+                // modèle qu'une exécution bornée (`--couches`) n'aurait jamais
+                // fait tourner.
                 let (comp_kv, comp_gate, comp_ape, comp_norm) = if ratio != 0 {
-                    (g.dequant(&p("attn_compressor_kv.weight")),
-                     g.dequant(&p("attn_compressor_gate.weight")),
-                     g.dequant(&p("attn_compressor_ape.weight")),
-                     g.dequant(&p("attn_compressor_norm.weight")))
+                    (g.dequant_optionnel(&p("attn_compressor_kv.weight")).unwrap_or_default(),
+                     g.dequant_optionnel(&p("attn_compressor_gate.weight")).unwrap_or_default(),
+                     g.dequant_optionnel(&p("attn_compressor_ape.weight")).unwrap_or_default(),
+                     g.dequant_optionnel(&p("attn_compressor_norm.weight")).unwrap_or_default())
                 } else { (Vec::new(), Vec::new(), Vec::new(), Vec::new()) };
                 v.push(Mla4 {
                     indexer_top_k: dim(&["attention.indexer.top_k", "index_topk"], "index_topk")
                         .unwrap_or(512),
                     a_indexeur: g.tensor(&p("indexer.proj.weight")).is_some(),
+                    comp_source: if ratio != 0 { source_de(l) } else { l },
                     idx_q_b: g.dequant_optionnel(&p("indexer.attn_q_b.weight")).unwrap_or_default(),
                     idx_proj: g.dequant_optionnel(&p("indexer.proj.weight")).unwrap_or_default(),
                     idx_comp_kv: g.dequant_optionnel(&p("indexer_compressor_kv.weight")).unwrap_or_default(),
@@ -2856,6 +3006,13 @@ reste non implémenté.");
         // recopié sous `deepseek41.config` (`hc_mult`, `hc_sinkhorn_iters`,
         // `hc_eps`). Lire une seule des deux donne `hc = 0` — donc un modèle
         // silencieusement traité comme s'il n'avait pas d'hyper-connexions.
+        // **V4.1 = mHC RETARDÉ.** L'architecture se lit dans
+        // `general.architecture` (« deepseek41 » contre « deepseek4 » pour
+        // V4-Flash) : c'est elle qui décide QUELLE chaîne de repliement
+        // s'applique, et se tromper donne des nombres plausibles et faux — le
+        // même genre d'erreur que la base RoPE des couches compressées.
+        let hc_retarde = g.meta.get("general.architecture")
+            .and_then(|m| m.as_str()) == Some("deepseek41");
         let (hc, hc_tete) = if g.tensor("blk.0.hc_attn_fn.weight").is_some() {
             let (mult, iters, eps) = g.hc_params()
                 .unwrap_or_else(|| panic!("hyper-connexions : `hc_mult` introuvable"));
@@ -2897,11 +3054,18 @@ reste non implémenté.");
             } else { None };
             let mix = v[0].0.hc_mix();
             println!("[config] hyper-connexions : {} copies · {} mélanges par couche \
-                      (pre {} + post {} + comb {}) · Sinkhorn {} itérations · eps {:e} · {}",
+                      (pre {} + post {} + comb {}) · Sinkhorn {} itérations · eps {:e} · {} · \
+chaîne {}",
                      mult, mix, mult, mult, mult * mult, iters, eps,
                      match &tete {
                          Some(t) => format!("mélange de tête {} poids", t.melange.len()),
                          None => "pas de mélange de tête (absent du fichier)".to_string(),
+                     },
+                     if hc_retarde {
+                         "RETARDÉE (V4.1) : la `pre` d'un raccord sert au raccord SUIVANT, \
+et la tête se replie avec la `pre` de la dernière FFN"
+                     } else {
+                         "directe (V4) : chaque raccord se replie avec ses propres coefficients"
                      });
             (Some(v), tete)
         } else { (None, None) };
@@ -3076,6 +3240,17 @@ mapping {}",
                           YaRN ×{f} prendrait le relais au-delà)"),
             (None, Some(o), Some(f)) =>
                 println!("[config] rotation : RoPE simple (YaRN ×{f} refusé, contexte {ctx} > {o})"),
+            // **Le modèle DÉCLARE YaRN, le moteur ne l'applique pas** (V4.1 :
+            // `"rope_scaling":{"rope_type":"yarn","factor":16}` dans le JSON).
+            // Le dire au lieu de « le modèle ne déclare pas YaRN » : la rotation
+            // est fausse dès la position 1, et `DRAVE_YARN=1` l'applique à
+            // toutes les positions, comme la référence.
+            (None, _, _) if g.json_texte("rope_type").as_deref() == Some("yarn") =>
+                println!("[config] rotation : RoPE simple — le modèle DÉCLARE YaRN \
+(JSON `rope_scaling`, facteur {}) mais le moteur ne l'applique qu'au-delà de {} jetons ; \
+`DRAVE_YARN=1` l'applique partout, comme la référence",
+                         g.json_nombre("factor").unwrap_or(1.0),
+                         g.json_nombre("original_max_position_embeddings").unwrap_or(0.0)),
             _ => println!("[config] rotation : RoPE simple (le modèle ne déclare pas YaRN)"),
         }
         // Tête en 4 bits : la plus grosse matrice du modèle, donc le plus gros
@@ -3227,7 +3402,7 @@ mapping {}",
             g, cfg, layers, out_norm, pool,
             mla4, mla4_cache, mla4_comp_kv, mla4_comp_gate, mla4_cles_comp,
             mla4_idx_kv, mla4_idx_gate, mla4_idx_cles, mla4_idx_scores,
-            hc, hc_tete,
+            hc, hc_tete, hc_retarde,
             kv: caches_kv,
             ctx, events: 0, paires: [0; 3], act_levels: 127.0, act_thresh: 0.0, act_topk: 0, act_renorm: false,
             act_topk_proj: [0; 7], attn_topk: 0, attn_events: 0, qk_topk: 0,
@@ -3260,7 +3435,7 @@ mapping {}",
             dump_couches: std::env::var("DRAVE_DUMP_COUCHES").ok(),
             couche_debut: couches.map(|(a, _)| a).unwrap_or(0),
             couche_fin: couches.map(|(_, b)| b).unwrap_or(n_layer_total),
-            flux_brut: false,
+            flux_brut: false, tete_partielle: false,
             cache_experts, mla, mla_cache, jeton_trace: 0, trace: None, flux_force: None,
             emb_imposee: None, emb_imposee_lot: None, lot: 1,
             patch: None, ffn_gain: None, hebb: None,
@@ -4460,7 +4635,8 @@ l'attention par lots est DENSE. Utiliser --lot 1 pour l'attention creuse.", self
             }
             self.prof[3] += t_ffn.elapsed().as_secs_f64();
         }
-        if self.flux_brut || self.couche_fin < self.cfg.n_layer {
+        // La tete partielle est une SONDE : elle ne rend pas le flux brut.
+        if self.flux_brut || (self.couche_fin < self.cfg.n_layer && !self.tete_partielle) {
             // Nœud intermédiaire : on rend le flux résiduel brut, sans norme.
             return (0..t).map(|i| x[i * h..(i + 1) * h].to_vec()).collect();
         }
@@ -4774,6 +4950,13 @@ s'applique pas — utilisez --lot 1, ou réenregistrez sans DRAVE_TRACE_BLOCS");
         // jeton du bloc.
         let n_vis = if m.ratio > 0 { (pos + 1) / m.ratio } else { 0 };
         if m.ratio > 0 {
+            // Les ratios 1 et 2 (V4.1) n'ont pas de code ici — et ne doivent pas
+            // en avoir un approximatif : le cache compressé y est PARTAGÉ entre
+            // couches, donc un compresseur calculé couche par couche donnerait
+            // des clés différentes de la référence, sans rien casser.
+            assert!(m.ratio == 4 || m.ratio == 128,
+                    "compression de ratio {} : implémentée pour 4 (CSA) et 128 (HCA) \
+seulement ; V4.1 (1 et 2) est refusé au chargement, avec la raison", m.ratio);
             let coff_hd = m.comp_kv.len() / h.max(1);
             matvec_f32(&m.comp_kv, x, h, coff_hd, &mut etat.comp_kv[pos * coff_hd..(pos + 1) * coff_hd]);
             matvec_f32(&m.comp_gate, x, h, coff_hd, &mut etat.comp_gate[pos * coff_hd..(pos + 1) * coff_hd]);
@@ -5175,7 +5358,7 @@ s'applique pas — utilisez --lot 1, ou réenregistrez sans DRAVE_TRACE_BLOCS");
             matvec_f32(&m.down, &act, m.ffn, h, &mut d);
             for i in 0..h { x[i] += d[i]; }
         }
-        if self.couche_fin >= self.cfg.n_layer && !self.flux_brut {
+        if (self.couche_fin >= self.cfg.n_layer || self.tete_partielle) && !self.flux_brut {
             Self::rmsnorm(&x, &self.out_norm, eps, &mut hn);
             hn
         } else {
@@ -5252,15 +5435,33 @@ s'applique pas — utilisez --lot 1, ou réenregistrez sans DRAVE_TRACE_BLOCS");
         // Hyper-connexions : l'état résiduel naît en `hc` copies IDENTIQUES de
         // l'embarquement (la référence fait `ggml_repeat_4d(inp, n_embd, hc)`),
         // et chaque sous-couche les remélangera.
-        // Hyper-connexions SANS mélange de tête : le fichier ne dit pas comment
-        // réduire les `hc` copies en un état. Le dire vaut mieux que d'inventer
-        // une moyenne — c'est la question de provenance de V4.1 (P7).
+        //
+        // **Sans mélange de tête**, deux cas — et ils ne se confondent pas :
+        //  · V4.1 (`hc_retarde`) : il n'y a PAS de tête apprise, la référence
+        //    replie les copies avec la `pre` de la dernière FFN
+        //    (`hc_collapse_triton(hidden, pre_mix)`), donc rien ne manque ;
+        //  · tout autre modèle à `hc_*` sans `output_hc_*` : le fichier ne dit
+        //    pas comment réduire les copies. Le dire vaut mieux qu'inventer une
+        //    moyenne — c'est la question de provenance qui a ouvert P7.
         if let Some((ha, _)) = self.hc.as_ref().map(|v| &v[0]) {
-            assert!(self.hc_tete.is_some(),
+            assert!(self.hc_tete.is_some() || self.hc_retarde,
                     "hyper-connexions sans `output_hc_fn` : le fichier ne dit pas \
-comment réduire les {} copies en un état avant la norme finale",
+comment réduire les {} copies en un état avant la norme finale (et son architecture \
+n'est pas `deepseek41`, donc la chaîne retardée de V4.1 ne s'applique pas)",
                     ha.hc);
         }
+        // **Chaîne retardée** : le repliement d'un raccord se fait avec les
+        // coefficients PORTÉS depuis le raccord précédent — `None` au premier,
+        // où la référence sélectionne la copie 0 (`residual[:, 0]`).
+        let mut hc_porte: Option<Vec<f32>> = None;
+        // Un nœud qui REPREND à la couche k reçoit un flux brut, mais pas ces
+        // coefficients : V4.1 replierait alors avec la copie 0, c'est-à-dire
+        // faux, et sans le dire. Tant que le flux DRVF ne les transporte pas,
+        // un découpage de V4.1 à une frontière de couche est refusé.
+        assert!(!(self.hc_retarde && self.couche_debut > 0),
+                "V4.1 découpé : la chaîne mHC retardée a besoin de la `pre` portée par \
+le raccord précédent, que le flux ne transporte pas — un nœud qui reprend à la couche {} \
+replierait avec la copie 0 (faux, et muet)", self.couche_debut);
         // Un état reçu d'un autre nœud arrive DÉJÀ en `hc` copies : ne pas les
         // multiplier une seconde fois.
         if let Some((ha, _)) = self.hc.as_ref().map(|v| &v[0]) {
@@ -5328,7 +5529,16 @@ comment réduire les {} copies en un état avant la norme finale",
             match hc_l {
                 Some((ha, _)) => {
                     let s = ha.sortie(&x);
-                    Hc::melanger(&x, &s.pre, ha.hc, h, &mut xin);
+                    // **Quels coefficients replient l'entrée ?** V4 : ceux du
+                    // raccord lui-même. V4.1 (mHC retardé) : ceux PORTÉS par le
+                    // raccord précédent, et la copie 0 au tout premier — la
+                    // référence fait `layer_input = residual[:, 0] if pre_mix is
+                    // None else (pre_mix · residual).sum(1)`.
+                    let poids: &[f32] = if self.hc_retarde {
+                        hc_porte.as_deref().unwrap_or(&[])
+                    } else { &s.pre };
+                    if poids.is_empty() { xin.copy_from_slice(&x[..h]); }
+                    else { Hc::melanger(&x, poids, ha.hc, h, &mut xin); }
                     hc_attn = Some(s);
                 }
                 None => xin.copy_from_slice(&x),
@@ -5786,8 +5996,25 @@ dynamique de {dyn_:.3e} (relatif {:.2e})", mx / dyn_.max(1e-9));
                     Hc::retro(&o, &x, sa, hf.hc, h, &mut nx);
                     let sf = hf.sortie(&nx);
                     let mut mel = vec![0f32; h];
-                    Hc::melanger(&nx, &sf.pre, hf.hc, h, &mut mel);
+                    // Le flux que voit le raccord FFN : c'est sur LUI que la
+                    // référence calcule ses mélanges (`mixes = fn · rms_norm(x)`),
+                    // et c'est ce que la vérification indépendante relit.
+                    Self::vider_couche(self.dump_couches.as_deref(), "hc_ffn_in", l, pos, &nx);
+                    // Idem pour la FFN : V4.1 la replie avec la `pre` de
+                    // l'ATTENTION courante (« the FFN uses this layer's attention
+                    // pre-mix »), et sa propre `pre` part au raccord suivant.
+                    let poids: &[f32] = if self.hc_retarde { &sa.pre } else { &sf.pre };
+                    Hc::melanger(&nx, poids, hf.hc, h, &mut mel);
                     Self::rmsnorm(&mel, &lay.ffn_norm, cfg.eps, &mut hn);
+                    if self.hc_retarde {
+                        // Ce que la chaîne retarde : la `pre` de CE raccord FFN
+                        // part au raccord suivant. La vider permet de vérifier la
+                        // réduction finale contre la référence sans rejouer la
+                        // couche (et c'est le seul endroit où elle existe).
+                        Self::vider_couche(self.dump_couches.as_deref(), "hc_ffn_pre",
+                                           l, pos, &sf.pre);
+                        hc_porte = Some(sf.pre.clone());
+                    }
                     hc_x = Some(nx);
                     hc_ffn = Some(sf);
                 }
@@ -5997,15 +6224,38 @@ dynamique de {dyn_:.3e} (relatif {:.2e})", mx / dyn_.max(1e-9));
         // modèle : mesuré, la perplexité répartie passait de 8 311 à 34 159
         // (écart 3,11) alors que le transport dense est exact. Le flux d'un
         // modèle à hyper-connexions coûte donc `hc` fois plus cher sur le fil.
-        if self.flux_brut || self.couche_fin < cfg.n_layer {
+        if self.flux_brut || (self.couche_fin < cfg.n_layer && !self.tete_partielle) {
             return x;                       // nœud intermédiaire : flux brut
         }
         // Mélange de TÊTE : les `hc` copies redeviennent un seul état, qui voit
         // ensuite la norme finale puis les logits (`build_hc_head`).
         if let Some(ht) = self.hc_tete.as_ref() {
             x = ht.tete(&x);
+        } else if self.hc_retarde {
+            // **V4.1 n'a pas de tête apprise.** La référence replie le flux
+            // final avec la `pre` de la DERNIÈRE FFN, celle qui a été calculée
+            // sur le flux d'avant son `post` puis portée jusqu'ici :
+            // `hc_collapse_triton(hidden_states, pre_mix)` puis `self.norm`.
+            // La calculer ici n'est pas une convention du moteur : c'est la
+            // seule chaîne que le fichier permet (pas de `output_hc_*`).
+            match hc_porte.as_deref() {
+                Some(pm) => {
+                    let (hc, hh) = self.hc.as_ref()
+                        .map(|v| (v[0].0.hc, v[0].0.h))
+                        .expect("`hc_retarde` sans hyper-connexions chargées");
+                    let mut replie = vec![0f32; h];
+                    Hc::melanger(&x, pm, hc, hh, &mut replie);
+                    x = replie;
+                }
+                None => panic!("V4.1 : flux final en `hc` copies sans `pre` portée — \
+le dernier raccord FFN n'a pas été exécuté (plage de couches vide ?)"),
+            }
         }
         Self::rmsnorm(&x, out_norm, cfg.eps, &mut hn);
+        // L'état qui entre dans la tête de sortie : la dernière chose que la
+        // chaîne retardée produit, donc ce qu'une vérification indépendante
+        // recalcule à partir de `l_last` et de `hc_ffn_pre`.
+        Self::vider_couche(self.dump_couches.as_deref(), "hidden_final", 0, pos, &hn);
         hn
     }
 
@@ -6215,6 +6465,17 @@ dynamique de {dyn_:.3e} (relatif {:.2e})", mx / dyn_.max(1e-9));
         let x = if x.len() > self.cfg.hidden {
             match self.hc_tete.as_ref() {
                 Some(ht) => { reduit = ht.tete(x); &reduit[..] }
+                // **V4.1 par le fil : impossible en l'état.** Sa réduction finale
+                // n'est pas apprise, elle est la `pre` de la dernière FFN — un
+                // vecteur de `hc` valeurs par jeton que le protocole DRVF ne
+                // transporte PAS. Normer les `hc·h` valeurs telles quelles
+                // reviendrait à normer la seule copie 0 : un état faux, sans un
+                // mot. Refuser est la seule sortie honnête tant que le flux n'a
+                // pas un champ pour cette `pre` (16 octets par jeton).
+                None if self.hc_retarde => panic!("V4.1 : un état en `hc` copies venu \
+d'un autre nœud ne porte pas la `pre` de la dernière FFN, et sa réduction finale n'est \
+pas apprise — le flux DRVF doit transporter ces {} valeurs par jeton",
+                    self.hc.as_ref().map(|v| v[0].0.hc).unwrap_or(0)),
                 None => x,
             }
         } else { x };
@@ -6954,6 +7215,76 @@ mod tests_hc {
             assert_eq!(&sortie[d * h..(d + 1) * h], &[x[d * h] + y[0], x[d * h + 1] + y[1]]);
         }
     }
+    // ---------------------------------------------------------------------
+    // V4.1 : la chaîne mHC **RETARDÉE** (`tools/mhc_v41_synthetique.py`)
+    // ---------------------------------------------------------------------
+    // Recopiée de `vllm/model_executor/kernels/mhc/torch.py`
+    // (`mhc_pre_delayed_torch`, « coefficients from the previous sublayer ») et
+    // de `vllm/models/deepseek_v41/nvidia/model.py` : `mhc_shifted_post_pre`
+    // (le post d'abord, puis la pre retardée) et la fin de modèle
+    // `hc_collapse_triton(hidden_states, pre_mix)` — « v4.1 has no learned
+    // hc_head ». Mêmes formules, deux langages, une seule source externe.
+    //
+    // Ce que le test FIXE : la `pre` d'un raccord sert au raccord SUIVANT, la
+    // copie 0 au tout premier, et la tête se replie avec la `pre` de la
+    // dernière FFN. Écrite à l'envers (la chaîne de V4), la même entrée donne
+    // une tête qui diffère de 67 % — mesuré par le script.
+    const MEL_A: [f32; 192] = [2.000000000e+00, -2.000000000e+00, -2.000000000e+00, -2.000000000e+00, -1.000000000e+00, -1.000000000e+00, -1.000000000e+00, 1.000000000e+00, -1.000000000e+00, 2.000000000e+00, -2.000000000e+00, 1.000000000e+00, 1.000000000e+00, 0.000000000e+00, 0.000000000e+00, 0.000000000e+00, 2.000000000e+00, 2.000000000e+00, -2.000000000e+00, -1.000000000e+00, -2.000000000e+00, 0.000000000e+00, 2.000000000e+00, 1.000000000e+00, -2.000000000e+00, 2.000000000e+00, 2.000000000e+00, 1.000000000e+00, 2.000000000e+00, 0.000000000e+00, -1.000000000e+00, 1.000000000e+00, 1.000000000e+00, 0.000000000e+00, 2.000000000e+00, -1.000000000e+00, 0.000000000e+00, -1.000000000e+00, 0.000000000e+00, 2.000000000e+00, -2.000000000e+00, -2.000000000e+00, 0.000000000e+00, 2.000000000e+00, 0.000000000e+00, -2.000000000e+00, -1.000000000e+00, -2.000000000e+00, -2.000000000e+00, 2.000000000e+00, -2.000000000e+00, 1.000000000e+00, -2.000000000e+00, -2.000000000e+00, -2.000000000e+00, 2.000000000e+00, -1.000000000e+00, 0.000000000e+00, 1.000000000e+00, 1.000000000e+00, 0.000000000e+00, 1.000000000e+00, -2.000000000e+00, -1.000000000e+00, 0.000000000e+00, -2.000000000e+00, 1.000000000e+00, -1.000000000e+00, -2.000000000e+00, 1.000000000e+00, -1.000000000e+00, -2.000000000e+00, 1.000000000e+00, 2.000000000e+00, 2.000000000e+00, -1.000000000e+00, -1.000000000e+00, -2.000000000e+00, 2.000000000e+00, 2.000000000e+00, -1.000000000e+00, 0.000000000e+00, 0.000000000e+00, -2.000000000e+00, -1.000000000e+00, 2.000000000e+00, 0.000000000e+00, 1.000000000e+00, 2.000000000e+00, 0.000000000e+00, -2.000000000e+00, 1.000000000e+00, -2.000000000e+00, -1.000000000e+00, 1.000000000e+00, -1.000000000e+00, -2.000000000e+00, 0.000000000e+00, -2.000000000e+00, 0.000000000e+00, -1.000000000e+00, 2.000000000e+00, 0.000000000e+00, 1.000000000e+00, 0.000000000e+00, 1.000000000e+00, -2.000000000e+00, -1.000000000e+00, 0.000000000e+00, 2.000000000e+00, -2.000000000e+00, 2.000000000e+00, 2.000000000e+00, -2.000000000e+00, 1.000000000e+00, -2.000000000e+00, -1.000000000e+00, -2.000000000e+00, 0.000000000e+00, -1.000000000e+00, 1.000000000e+00, 0.000000000e+00, 1.000000000e+00, 1.000000000e+00, 1.000000000e+00, -2.000000000e+00, 2.000000000e+00, 1.000000000e+00, -2.000000000e+00, 2.000000000e+00, 2.000000000e+00, 0.000000000e+00, -2.000000000e+00, -1.000000000e+00, 0.000000000e+00, 2.000000000e+00, 0.000000000e+00, -1.000000000e+00, -1.000000000e+00, -1.000000000e+00, 2.000000000e+00, -2.000000000e+00, 0.000000000e+00, 0.000000000e+00, 2.000000000e+00, -2.000000000e+00, -1.000000000e+00, -1.000000000e+00, 2.000000000e+00, 2.000000000e+00, 1.000000000e+00, -1.000000000e+00, -1.000000000e+00, -2.000000000e+00, -1.000000000e+00, -1.000000000e+00, -2.000000000e+00, -1.000000000e+00, -2.000000000e+00, 0.000000000e+00, 2.000000000e+00, 1.000000000e+00, 2.000000000e+00, 0.000000000e+00, 2.000000000e+00, 1.000000000e+00, -2.000000000e+00, -2.000000000e+00, 1.000000000e+00, 0.000000000e+00, 0.000000000e+00, -2.000000000e+00, -2.000000000e+00, 0.000000000e+00, -1.000000000e+00, 2.000000000e+00, 1.000000000e+00, -1.000000000e+00, 2.000000000e+00, 1.000000000e+00, -2.000000000e+00, 0.000000000e+00, -2.000000000e+00, 2.000000000e+00, 0.000000000e+00, 1.000000000e+00, 0.000000000e+00, 1.000000000e+00, 1.000000000e+00, 1.000000000e+00, 2.000000000e+00, -2.000000000e+00];
+    const BASE_A: [f32; 24] = [-2.000000000e+00, 0.000000000e+00, -2.000000000e+00, 2.000000000e+00, 0.000000000e+00, -2.000000000e+00, 0.000000000e+00, 1.000000000e+00, 1.000000000e+00, 1.000000000e+00, 0.000000000e+00, 1.000000000e+00, -1.000000000e+00, 2.000000000e+00, -2.000000000e+00, 0.000000000e+00, 1.000000000e+00, -2.000000000e+00, -2.000000000e+00, -2.000000000e+00, -2.000000000e+00, 1.000000000e+00, 1.000000000e+00, 0.000000000e+00];
+    const SCALE_A: [f32; 3] = [5.000000000e-01, 1.500000000e+00, 2.000000000e+00];
+    const MEL_F: [f32; 192] = [-1.000000000e+00, 2.000000000e+00, -1.000000000e+00, 2.000000000e+00, 2.000000000e+00, -1.000000000e+00, 0.000000000e+00, 1.000000000e+00, 0.000000000e+00, -1.000000000e+00, 2.000000000e+00, -1.000000000e+00, -1.000000000e+00, 2.000000000e+00, 2.000000000e+00, 1.000000000e+00, -2.000000000e+00, -1.000000000e+00, 0.000000000e+00, -2.000000000e+00, 0.000000000e+00, 2.000000000e+00, 2.000000000e+00, 2.000000000e+00, -1.000000000e+00, -1.000000000e+00, -1.000000000e+00, -1.000000000e+00, -2.000000000e+00, -1.000000000e+00, 1.000000000e+00, 1.000000000e+00, 1.000000000e+00, -2.000000000e+00, 1.000000000e+00, -1.000000000e+00, 0.000000000e+00, 0.000000000e+00, 2.000000000e+00, 0.000000000e+00, 0.000000000e+00, -1.000000000e+00, 0.000000000e+00, 0.000000000e+00, 1.000000000e+00, -1.000000000e+00, 2.000000000e+00, -2.000000000e+00, -2.000000000e+00, -2.000000000e+00, 2.000000000e+00, 0.000000000e+00, 0.000000000e+00, 0.000000000e+00, 1.000000000e+00, -1.000000000e+00, 0.000000000e+00, 0.000000000e+00, 1.000000000e+00, 2.000000000e+00, 0.000000000e+00, -1.000000000e+00, -2.000000000e+00, -1.000000000e+00, 0.000000000e+00, 2.000000000e+00, 1.000000000e+00, 1.000000000e+00, -2.000000000e+00, 0.000000000e+00, 2.000000000e+00, 0.000000000e+00, -1.000000000e+00, 2.000000000e+00, 1.000000000e+00, 0.000000000e+00, 1.000000000e+00, 2.000000000e+00, 2.000000000e+00, -1.000000000e+00, 1.000000000e+00, 1.000000000e+00, 0.000000000e+00, 2.000000000e+00, -2.000000000e+00, 1.000000000e+00, -2.000000000e+00, -2.000000000e+00, 1.000000000e+00, 0.000000000e+00, -2.000000000e+00, -1.000000000e+00, -2.000000000e+00, 0.000000000e+00, 0.000000000e+00, 1.000000000e+00, 1.000000000e+00, 1.000000000e+00, 0.000000000e+00, 1.000000000e+00, -1.000000000e+00, 1.000000000e+00, -1.000000000e+00, -1.000000000e+00, -1.000000000e+00, 1.000000000e+00, -1.000000000e+00, 2.000000000e+00, -1.000000000e+00, -1.000000000e+00, 2.000000000e+00, 0.000000000e+00, -2.000000000e+00, -1.000000000e+00, 2.000000000e+00, 1.000000000e+00, -2.000000000e+00, 1.000000000e+00, 1.000000000e+00, 1.000000000e+00, -2.000000000e+00, 0.000000000e+00, -1.000000000e+00, 2.000000000e+00, -2.000000000e+00, -2.000000000e+00, 1.000000000e+00, 1.000000000e+00, -1.000000000e+00, 2.000000000e+00, 1.000000000e+00, 2.000000000e+00, -1.000000000e+00, 2.000000000e+00, -1.000000000e+00, -1.000000000e+00, -1.000000000e+00, 1.000000000e+00, -1.000000000e+00, -1.000000000e+00, 0.000000000e+00, 1.000000000e+00, 2.000000000e+00, -1.000000000e+00, -1.000000000e+00, -1.000000000e+00, -2.000000000e+00, -1.000000000e+00, 1.000000000e+00, -2.000000000e+00, 1.000000000e+00, 1.000000000e+00, 2.000000000e+00, 2.000000000e+00, 1.000000000e+00, 1.000000000e+00, 1.000000000e+00, -2.000000000e+00, 0.000000000e+00, 1.000000000e+00, 2.000000000e+00, 1.000000000e+00, -1.000000000e+00, 1.000000000e+00, -2.000000000e+00, -2.000000000e+00, -2.000000000e+00, 0.000000000e+00, 0.000000000e+00, -2.000000000e+00, 0.000000000e+00, 1.000000000e+00, 2.000000000e+00, -1.000000000e+00, 0.000000000e+00, 0.000000000e+00, -1.000000000e+00, 2.000000000e+00, 2.000000000e+00, 2.000000000e+00, -2.000000000e+00, 0.000000000e+00, 2.000000000e+00, -1.000000000e+00, 1.000000000e+00, 1.000000000e+00, 2.000000000e+00, 0.000000000e+00, 1.000000000e+00, 2.000000000e+00, 2.000000000e+00, -1.000000000e+00];
+    const BASE_F: [f32; 24] = [-2.000000000e+00, -1.000000000e+00, -1.000000000e+00, 1.000000000e+00, 2.000000000e+00, -2.000000000e+00, 2.000000000e+00, 0.000000000e+00, 2.000000000e+00, 1.000000000e+00, -2.000000000e+00, -2.000000000e+00, 0.000000000e+00, 0.000000000e+00, -1.000000000e+00, -1.000000000e+00, 2.000000000e+00, 1.000000000e+00, 1.000000000e+00, 2.000000000e+00, -2.000000000e+00, 0.000000000e+00, 0.000000000e+00, 1.000000000e+00];
+    const SCALE_F: [f32; 3] = [1.000000000e+00, 5.000000000e-01, 2.000000000e+00];
+    const V0: [f32; 2] = [-2.000000000e+00, -2.000000000e+00];
+    const W_A: [f32; 4] = [-2.000000000e+00, -1.000000000e+00, -1.000000000e+00, -2.000000000e+00];
+    const W_F: [f32; 4] = [1.000000000e+00, 0.000000000e+00, 1.000000000e+00, -2.000000000e+00];
+    const NORME_SORTIE: [f32; 2] = [1.000000000e+00, 2.000000000e+00];
+    const PRE_A: [f32; 4] = [7.310595786e-01, 3.775416688e-01, 4.742687318e-02, 3.775416688e-01];
+    const PRE_F: [f32; 4] = [7.718183382e-01, 9.919247579e-01, 9.813363965e-01, 8.958005126e-02];
+    const ENTREE_A: [f32; 2] = [-2.000000000e+00, -2.000000000e+00];
+    const ENTREE_F: [f32; 2] = [6.314459616e+00, 6.314459616e+00];
+    const X2: [f32; 8] = [2.208429824e+01, -2.170500619e+00, -1.853952407e-01, -3.501728174e+00, 2.229741982e+01, -2.304406395e+00, 1.408702338e+01, 4.131784184e+00];
+    const TETE: [f32; 2] = [1.392811111e+00, -4.902130496e-01];
+
+    fn mat(w: &[f32], x: &[f32], n: usize) -> Vec<f32> {
+        (0..n).map(|o| (0..n).map(|i| w[o * n + i] * x[i]).sum()).collect()
+    }
+
+    #[test]
+    fn chaine_retardee_v41() {
+        let (hc, h) = (4usize, 2usize);
+        let attn = Hc { melange: MEL_A.to_vec(), base: BASE_A.to_vec(),
+                         scale: SCALE_A.to_vec(), hc, h, iters: 20, eps: 1e-6 };
+        let ffn = Hc { melange: MEL_F.to_vec(), base: BASE_F.to_vec(),
+                        scale: SCALE_F.to_vec(), hc, h, iters: 20, eps: 1e-6 };
+        // L'état naît en `hc` copies IDENTIQUES (l'embarquement diffusé).
+        let x0: Vec<f32> = (0..hc).flat_map(|_| V0.iter().copied()).collect();
+        let sa = attn.sortie(&x0);
+        proche(&sa.pre, &PRE_A, 1e-6, "pre de l'attention");
+        // 1er raccord : la référence replie avec `residual[:, 0]` — la copie 0,
+        // PAS un mélange. La chaîne de V4 replierait avec `sa.pre`.
+        let entree_a = x0[..h].to_vec();
+        proche(&entree_a, &ENTREE_A, 1e-6, "entrée du 1er raccord (copie 0)");
+        let mut x1 = vec![0f32; hc * h];
+        Hc::retro(&mat(&W_A, &entree_a, h), &x0, &sa, hc, h, &mut x1);
+        let sf = ffn.sortie(&x1);
+        proche(&sf.pre, &PRE_F, 1e-6, "pre de la FFN (celle qui part à la tête)");
+        // La FFN se replie avec la `pre` de l'ATTENTION, pas la sienne.
+        let mut entree_f = vec![0f32; h];
+        Hc::melanger(&x1, &sa.pre, hc, h, &mut entree_f);
+        proche(&entree_f, &ENTREE_F, 1e-6, "entrée de la FFN (pre de l'attention)");
+        let mut x2 = vec![0f32; hc * h];
+        Hc::retro(&mat(&W_F, &entree_f, h), &x1, &sf, hc, h, &mut x2);
+        proche(&x2, &X2, 1e-5, "flux après la FFN");
+        // La tête : repliement par la `pre` de la dernière FFN, puis norme.
+        let mut replie = vec![0f32; h];
+        Hc::melanger(&x2, &sf.pre, hc, h, &mut replie);
+        let mut norme = vec![0f32; h];
+        rms_norm_sans_poids(&replie, 1e-20, &mut norme);
+        for i in 0..h { norme[i] *= NORME_SORTIE[i]; }
+        proche(&norme, &TETE, 1e-5, "tête (aucun poids appris)");
+    }
+
 }
 
 #[cfg(test)]

@@ -49,6 +49,18 @@ cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && cargo build --r
 > changements) : gpt-oss avec `DRAVE_GPU=1` donne **15,1667**, la valeur attendue
 > du pilote, et `--gpu-banc` retrouve l'exactitude des noyaux — 1,6 ms par ligne
 > en warp-par-ligne contre 7,2 ms sur 30 fils CPU, **écart max 1,99e-7**.
+>
+> **Mise à jour du 02/10 (18h) — V4.1 tourne sur ses deux premières couches.**
+> La chaîne **mHC retardée** de V4.1 est implémentée et vérifiée sur le fichier de
+> **365,7 Go** : la copie 0 du premier raccord est **exacte** (0,000e+00), les 24
+> mélanges et la réduction finale (pas de tête apprise) tiennent à ~1e-7, recalculés
+> en numpy hors du moteur (`tools/verifier_v41_mhc.py`,
+> `reports/rapport-v41-mhc.md`). `cargo test --release` = **59**. Deux manques
+> annoncés pour V4.1 étaient **faux** (la référence d'exécution existe : vLLM) et
+> sont remplacés par la liste réelle des manques. Nouveau drapeau :
+> `--tete-partielle`. Trois bugs de configuration corrigés au passage
+> (`n_expert` relu en GGUF-seul, `rms_norm_eps` ignoré, YaRN déclaré dans le JSON
+> et non lu).
 
 Corpus : `/tmp/wt2_txt.txt` = 20 000 premiers octets de `data/wikitext2_test.txt`.
 **Régénérable** (à refaire si `/tmp` a été vidé) :

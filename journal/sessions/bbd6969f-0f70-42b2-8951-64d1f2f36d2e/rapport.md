@@ -5,15 +5,15 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 98.7 h |
-| Tours | 78 |
-| Messages | 4963 |
-| Appels d'outils | 4739 |
-| Fichiers touchés | 98 |
-| Commandes | 4099 |
+| Durée | 99.2 h |
+| Tours | 79 |
+| Messages | 5191 |
+| Appels d'outils | 4984 |
+| Fichiers touchés | 102 |
+| Commandes | 4252 |
 | Sous-agents | 29 |
-| Commits | 351 |
-| Compactages de contexte | 6 |
+| Commits | 352 |
+| Compactages de contexte | 7 |
 
 ## Objectifs déclarés
 
@@ -199,6 +199,8 @@
 **Tour 77** — <goal_round> Objective: "Exécuter le plan docs/plan-deepseek41-complet.md phase par phase (P0→P9), en autonomie, en respectant pour chaque phase ses deux portes : porte de correction (comparaison étage par étage à llama.cpp sur V4-Flash) et porte Drave (flux : événements/paires par jeton, trace rejouée à l'identique, découpage en grappes, flux lisible par un outil d'analyse). Aucune phase ne passe … [661 caractères tronqués]
 
 **Tour 78** — <goal_round> Objective: "Exécuter le plan docs/plan-deepseek41-complet.md phase par phase (P0→P9), en autonomie, en respectant pour chaque phase ses deux portes : porte de correction (comparaison étage par étage à llama.cpp sur V4-Flash) et porte Drave (flux : événements/paires par jeton, trace rejouée à l'identique, découpage en grappes, flux lisible par un outil d'analyse). Aucune phase ne passe … [661 caractères tronqués]
+
+**Tour 79** — <goal_round> Objective: "Exécuter le plan docs/plan-deepseek41-complet.md phase par phase (P0→P9), en autonomie, en respectant pour chaque phase ses deux portes : porte de correction (comparaison étage par étage à llama.cpp sur V4-Flash) et porte Drave (flux : événements/paires par jeton, trace rejouée à l'identique, découpage en grappes, flux lisible par un outil d'analyse). Aucune phase ne passe … [661 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -3986,7 +3988,7 @@ J'avais écrit deux conclusions que **la recherche de sources a démenties** —
 
 ### Tour 78 — <goal_round> Objective: "Exécuter le plan docs/plan-deepseek41-complet.md phase par phase (P0→P9), en autonomie, en resp … [941 caractères tronqués]
 
-*30 appels d'outils.* Actions notables :
+*31 appels d'outils.* Actions notables :
 
 - write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/engram_reference.py`
 - bash — Run the engram reference self-test
@@ -4002,11 +4004,60 @@ J'avais écrit deux conclusions que **la recherche de sources a démenties** —
 - bash — Compare the engine against the reference on real data
 - bash — Commit the validated engram addressing
 - bash — Inspect the engram table tensor layout
-- … et 16 autres
+- … et 17 autres
 
 **Synthèse produite :**
 
-⏵ L'outil révèle le coût du flux : **12,7 ko par jeton**. Je documente, puis commit.
+⏵ Round 4 terminé : l'engram est porté et validé de bout en bout.
+
+\## Ce qui a été fait
+
+**P8 — l'engram, les trois fonctions, validées contre la référence externe.**
+
+Hier, j'avais conclu « aucune référence n'existe → issue (b) ». La recherche de sources a montré le contraire, et ce round l'a exploité : le portage 1:1 de `vllm/models/deepseek_v4_1/common/engram.py` ([`mudler/vllm.cpp`](https://github.com/mudler/vllm.cpp/blob/main/src/vllm/model_executor/models/deepseek_v4_1_engram.cpp)) donne la recette, et `tools/engram_reference.py` en est la transcription Python.
+
+| pièce | preuve |
+|---|---|
+| **adressage** (`^=` sur un repli **collant**, modulo **par colonne**) | 10 000 jetons × 2 couches × 24 colonnes = **480 000 adresses, 0 écart** avec la référence, sur les métadonnées **réelles** du fichier de 365 Go |
+| **lecture d'une rangée** (256 e4m3 + 8 échelles e8m0 = 264 octets) | 2 000 rangées → **512 000 valeurs identiques au bit près** au décodage Python des mêmes octets |
+| **injection** (`sigmoid(±sqrt(max(|dot|, 1e-6)))` × valeur partagée entre les `hc` copies) | testée contre la transcription, plus un test du masque qui doit rendre l'entrée **exactement** |
+
+Les invariants du fichier sont vérifiés au passage : les **48 premiers se recalculent à l'identique** — algorithme de Miller-Rabin (2,7,61) avec son défaut d'origine (61 est déclaré composé) — la table de correspondance est **dense** et vaut exactement 99 092, les 8 multiplicateurs sont impairs et sous la borne.
+
+**Un bug attrapé par la comparaison** : mon premier portage lisait le jeton **courant** au lieu du jeton **reculé** (`token - shift`). Les adresses restaient parfaitement plausibles et bornées — elles étaient fausses dès le 2ᵉ jeton. C'est exactement le type d'erreur qu'un test de forme ne voit pas.
+
+**Le flux, et ce qu'il coûte** (`tools/analyse_engram.py`) : 99,9 % de rangées distinctes, répartition équilibrée entre les couches, écart médian de **4,69 million** de rangées entre deux jetons, **0 recouvrement** entre jetons consécutifs — et **12 665 octets par jeton** à lire, contre 1 608 pour un flux d'activation en listes. L'engram n'est pas un flux « en plus » : c'est **le plus gros poste de transport du modèle**, totalement dispersé, donc à précharger.
+
+\## État
+
+**58 tests verts** (5 de plus), toutes les portes vertes : Qwen 19,3885 · clusters 799,8557 · **V4-Flash 43 couches 8430,2968** · **engram V4.1 : adressage** (nouvelle porte) · formats 17/17.
+
+P0-P6 faites, P8 portée et val
+… [728 caractères tronqués]
+
+### Tour 79 — <goal_round> Objective: "Exécuter le plan docs/plan-deepseek41-complet.md phase par phase (P0→P9), en autonomie, en resp … [941 caractères tronqués]
+
+*244 appels d'outils.* Actions notables :
+
+- web_search
+- web_fetch
+- bash — Full layer-2 tensor list of V4.1
+- bash — Layer-2 attention and indexer tensors of V4.1
+- bash — List vLLM deepseek_v41 directory via GitHub API
+- bash — Fetch vLLM V4.1 nvidia model docs page
+- bash — List V4.1 subdirectories and read init
+- bash — Download and scan vLLM V4.1 attention.py
+- bash — Download and scan vLLM V4.1 nvidia model.py
+- bash — Download V4.1 compressor and sparse_mla references
+- bash — Grep head collapse usage in V4.1 model
+- bash — Locate hc_collapse_triton definition
+- read
+- bash — Read mHC init and pre/post call sites
+- … et 191 autres
+
+**Synthèse produite :**
+
+⏵ Running the gates while writing the report
 
 ## 3. Travail accompli
 
@@ -4025,7 +4076,7 @@ J'avais écrit deux conclusions que **la recherche de sources a démenties** —
 | `/tmp/mesures_oss4.sh` | 2 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-gpt-oss-perplexite.md` | 1 | 4 |
 | `/tmp/controles_oss.sh` | 1 | 0 |
-| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/REPRISE.md` | 0 | 15 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/REPRISE.md` | 0 | 16 |
 | `/tmp/controles2_oss.sh` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/harmony_canonique.py` | 1 | 1 |
 | `/tmp/controles3_oss.sh` | 1 | 0 |
@@ -4056,8 +4107,8 @@ J'avais écrit deux conclusions que **la recherche de sources a démenties** —
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/vision.md` | 1 | 3 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/histoire.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/roadmap.md` | 1 | 0 |
-| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs` | 0 | 10 |
-| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/main.rs` | 0 | 3 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs` | 0 | 38 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/main.rs` | 0 | 11 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/gpu.rs` | 0 | 3 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-gpu-topk-selection.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/README.md` | 0 | 3 |
@@ -4095,7 +4146,7 @@ J'avais écrit deux conclusions que **la recherche de sources a démenties** —
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/extraire_tables_ggml.sh` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-routage-experts.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-mla-experts.md` | 1 | 0 |
-| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/plan-deepseek41-complet.md` | 4 | 1 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/plan-deepseek41-complet.md` | 4 | 2 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/colab-reparti.md` | 0 | 1 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/convertisseur.md` | 0 | 3 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/plan-mode4-lot-listes.md` | 0 | 2 |
@@ -4112,6 +4163,10 @@ J'avais écrit deux conclusions que **la recherche de sources a démenties** —
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-engram-etat.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/engram_reference.py` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/analyse_engram.py` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/mhc_v41_synthetique.py` | 1 | 3 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/verifier_v41_mhc.py` | 1 | 3 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-v41-mhc.md` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/glossaire.md` | 0 | 3 |
 
 ### Sous-agents lancés
 
@@ -4187,7 +4242,7 @@ J'avais écrit deux conclusions que **la recherche de sources a démenties** —
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 4059 autres
+- … et 4212 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4315,7 +4370,7 @@ J'avais écrit deux conclusions que **la recherche de sources a démenties** —
 
 ## 5. Erreurs rencontrées
 
-272 sorties en erreur ou divergentes. Les premières :
+281 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : a8f2635f8 docs: record which models this box is good at, and why src/llama-hparams.cpp:8:void llama_hparams::set_swa_pattern(uint32_t n_pattern, bool dense_first) { src/llama-hparams.h:308:    void se
 - **T1** : 511 tokens notés — perplexité cumulée 247.031  (4.9 tok/s) === perplexité 247.0308 sur 511 tokens (0 événements, 104.5 s) ===  ### B3 harmony assistant 511 --- ref --- 0.0 0.0 0:00 ls: cannot access '
@@ -4686,4 +4741,5 @@ J'avais écrit deux conclusions que **la recherche de sources a démenties** —
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF' p='tools/portes.sh' s=open(p).read() a="""# 7. gpt-oss : `--config` d'abord (gratuit),
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF' p='docs/plan-deepseek41-complet.md' s=open(p).read() a="""> 1e-6)))`) sont écrites noi
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF' p='reports/rapport-engram-etat.md' s=open(p).read() a="""**Ce qui n'est PAS fait, et p
+- P7 : la chaîne mHC RETARDÉE de V4.1 — implémentée, exécutée sur 365,7 Go, vérifiée  Les deux manques que le moteur annonçait pour V4.1 étaient FAUX : la référen
 

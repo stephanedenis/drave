@@ -313,42 +313,51 @@ Une phase qui ne passe pas ses deux portes ne passe pas à la suivante.
      clusters 799,8557, 18 formats lisibles dont 17 vérifiés à la porte,
      4 routages).
 
-### P7 — Adaptation à V4.1, et la question de provenance (≈ ½ journée + action externe) — **constat fait** (02/10)
+### P7 — Adaptation à V4.1, et la question de provenance (≈ ½ journée + action externe) — **chaîne mHC faite et vérifiée ; reste la compression** (02/10)
 
-> **Les deux manques sont établis**, et aucun n'est du code à écrire :
-> 1. le fichier **n'a pas les tenseurs `output_hc_*`** (seuls trois tenseurs hors
->    `blk.*` : `token_embd`, `output_norm`, `output`), que llama.cpp déclare
->    **requis** — il refuserait ce fichier avec « missing tensor
->    'output_hc_fn.weight' » ;
-> 2. ses couches compressées sont en **ratio 2**, avec `attn_compressor_kv` mais
->    **sans porte ni `ape`** : un régime que llama.cpp **refuse explicitement**
->    (« only supports compression ratios 0, 4, and 128 »).
+> **Les deux manques annoncés étaient faux tous les deux** (02/10, 17:33 → 18:02).
+> La **référence d'exécution existe** : vLLM porte V4.1 en entier
+> (`vllm/models/deepseek_v41/`), et elle dit
+> 1. que V4.1 **n'a pas de tête apprise** : le flux final se replie avec la
+>    `pre` de la **dernière FFN** (`hc_collapse_triton(hidden_states, pre_mix)`,
+>    commentaire « v4.1 has no learned hc_head »). Les `output_hc_*` manquent
+>    parce qu'ils n'existent pas — le jeu de tenseurs `deepseek41` les retire ;
+> 2. que les coefficients des hyper-connexions **se retardent d'un raccord** :
+>    l'attention se replie avec la `pre` de la FFN précédente, la FFN avec la
+>    `pre` de l'attention courante, la copie 0 au tout premier raccord
+>    (`mhc_shifted_post_pre`, `mhc_pre_delayed_torch`) ;
+> 3. que le compresseur des ratios **1 et 2** est spécifié
+>    (`DeepseekCompressor` + `fused_save_compress_norm` : softmax **par canal**
+>    sur le groupe, norme du latent, RoPE à la position du premier jeton du
+>    groupe ; ratio 1 : aucune porte, aucun `ape`).
 >
-> **Correction (02/10) — l'action externe est faite, et elle corrige le
-> constat** : le dépôt de conversion publie son
-> [patch](https://huggingface.co/vcruz305/DeepSeek-V4.1-Flash-GGUF/blob/main/llama.cpp/patches/README.md),
-> et il dit deux choses décisives. Le fichier **n'est pas incomplet** : le jeu de
-> tenseurs `deepseek41` **retire volontairement** `HC_HEAD_{FN,BASE,SCALE}` de
-> celui de V4. Et le support d'**exécution** de V4.1 **n'existe pas encore**
-> (« a converted file does not load yet… Runtime support is separate work »),
-> pas même en amont (PR [#28696](https://github.com/ggml-org/llama.cpp/pull/28696)).
-> Ce qui reste vrai : le régime de compression en **ratio 2** n'a de référence
-> nulle part, et **comment les `hc` copies se réduisent avant la norme finale**
-> n'est spécifié par aucun moteur. Drave refuse donc à l'ouverture, en nommant
-> ces deux points — plus un défaut de fichier qui n'en est pas un.
+> **Fait** : la chaîne retardée et la réduction finale sont implémentées
+> (`hc_retarde`), exécutées sur le fichier de **365,7 Go** (couches 0 et 1, les
+> seules en ratio 0) et vérifiées par trois égalités recalculées en numpy depuis
+> les tenseurs du GGUF — la copie 0 **exacte** (0,000e+00), les 24 mélanges et la
+> tête à ~1e-7 (arrondi f32). Rapport :
+> [`reports/rapport-v41-mhc.md`](../reports/rapport-v41-mhc.md).
+>
+> **Reste, nommé** (l'inventaire des 1 046 tenseurs le donne) : le **cache
+> compressé partagé entre couches** (`kv_source_layer_ids = [2,8,14,20]` : les
+> couches 3..7 lisent les clés publiées par la 2, 21..39 celles de la 20 — le
+> calculer couche par couche donnerait d'AUTRES clés), les ratios 1 et 2, la
+> **sélection à deux niveaux** (`candidate_*`), l'**injection de l'engram** dans
+> la passe avant, le **pré-mix sur le fil** du protocole DRVF (16 octets/jeton,
+> sans quoi un découpage de V4.1 est refusé), et YaRN appliqué partout comme la
+> référence (le moteur ne l'applique qu'au-delà de 4 × la longueur déclarée, et
+> le dit désormais).
 
 
 - Code : métadonnées par couche (`compress_ratios` au lieu d'un régime global),
   experts IQ2_XXS/Q2_K, 384 experts, 40 couches, `exp_probs_b_vl`.
-- **Action préalable, non-code** : établir si le GGUF V4.1-Flash-Q2 est complet.
-  Les tenseurs `output_hc_fn/base/scale` manquent alors que `hc_mult = 4` est
-  déclaré. Trois issues : (a) tenseurs perdus à la conversion →
-  retélécharger/reconvertir ; (b) V4.1 ne les utilise pas → le prouver dans le
-  graphe de référence ; (c) quantization communautaire incomplète → le dire dans
-  l'inventaire des modèles lourds.
-- **Porte** : la liste des manques de `--config` est vide **ou** le fichier est
-  déclaré incomplet, et l'écart de perplexité V4.1 contre V4-Flash est écrit
-  d'avance (seule comparaison possible, llama.cpp ne lisant pas V4.1).
+- **Action préalable, non-code** : tranchée — le fichier est complet, et le
+  mode de réduction est écrit dans la référence d'exécution (vLLM).
+- **Porte** : les couches 0 et 1 tournent et les trois égalités de la chaîne mHC
+  tiennent (fait) **et** la liste des manques de `--config` ne contient plus que
+  des manques réels, nommés avec leur référence (fait) ; la comparaison externe
+  de logits viendra quand un runtime saura charger le fichier (llama.cpp n'a
+  qu'un patch de conversion).
 
 ### P8 — Engram : la liste d'adresses, et sa référence à écrire (≈ 1 à 2 journées) — **référence trouvée, phase rouverte** (02/10)
 

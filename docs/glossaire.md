@@ -324,6 +324,38 @@ copies, puis remélangé à chaque couche par des poids (`pre`, `post`, `comb`)
 normalisés par **Sinkhorn** sur 20 itérations. Sans ce mélange, tout ce qui suit a
 la mauvaise entrée — et l'erreur est silencieuse
 (`docs/plan-deepseek41-complet.md:171-186`, `reports/rapport-v4-couches-0-1.md:55`).
+**Où** : `hc_retarde`, `--tete-partielle`.
+
+**mHC retardé (chaîne retardée de V4.1)** — Dans **V4** (`deepseek4`), chaque
+raccord (attention, FFN) replie l'entrée avec **ses propres** coefficients ; dans
+**V4.1** (`deepseek41`), les coefficients servent au raccord **suivant** :
+l'attention se replie avec la `pre` de la FFN précédente, la FFN avec la `pre` de
+l'attention courante, et la **tête** — qui n'a aucun poids appris chez V4.1 — avec
+la `pre` de la dernière FFN. Au tout premier raccord, la copie 0 est prise telle
+quelle. Confondre les deux chaînes change la sortie de 67 % sur un témoin
+synthétique : ce n'est pas une variante d'écriture
+(`reports/rapport-v41-mhc.md:31-48`, `tools/mhc_v41_synthetique.py`).
+**Où** : `general.architecture`, `--tete-partielle`.
+**Réf.** : vLLM, `vllm/models/deepseek_v41/nvidia/model.py` (`hc_collapse_triton`,
+`mhc_shifted_post_pre`), <https://github.com/vllm-project/vllm>.
+
+**Cache compressé partagé (`kv_source_layer_ids`)** — Dans V4.1, seules quelques
+couches (**2, 8, 14, 20**) portent un compresseur et publient les clés compressées ;
+les couches suivantes (3..7, 9..13, 15..19, 21..39) **lisent les mêmes clés** au
+lieu de calculer les leurs. Un compresseur calculé couche par couche donnerait
+d'autres clés — un résultat faux qui ne casse rien
+(`reports/rapport-v41-mhc.md:130-140`).
+**Où** : `comp_source`.
+
+**Compression de contexte (ratio 1, 2, 4, 128)** — Résumer `ratio` jetons en un
+seul latent de clé, afin que l'attention ne croisse plus avec la longueur. V4-Flash
+mélange **CSA** (ratio 4, fenêtre à chevauchement) et **HCA** (ratio 128) ; V4.1
+utilise **2** (softmax par canal sur le groupe, apprise porte) et **1** (un latent
+par jeton, sans porte ni `ape`). Le RoPE du bloc est appliqué à la position du
+**premier** jeton du groupe, avec la base `compress_rope_theta` (160 000)
+(`reports/rapport-v4-hca.md:40-70`, `reports/rapport-v41-mhc.md:120-128`).
+**Où** : `compress_ratios`, `rope_base_compresse`.
+**Réf.** : vLLM, `vllm/models/deepseek_v41/compressor.py` (`DeepseekCompressor`).
 
 **Indexeur (lightning indexer)** — Petit réseau qui note des blocs de clés et n'en
 retient qu'un sous-ensemble (2 048 blocs candidats) avant l'attention proprement
@@ -893,6 +925,9 @@ ce glossaire.
 | `tools/convertir_clusters.py` | GGUF → `commun.gguf` + `cluster-XX.gguf` + `mapping.tsv` | `docs/format-clusters.md:13` |
 | `tools/clusters_moe.py` | découpage MoE : couverture, ventilation, témoins hasard/fréquence | `docs/plan-modeles-lourds.md:70-74` |
 | `tools/portes.sh` | portes de non-régression du dépôt | `docs/sprints.md:40` |
+| `tools/mhc_v41_synthetique.py` | référence numpy de la chaîne **mHC retardée** de V4.1 + témoins du test Rust | `reports/rapport-v41-mhc.md:97` |
+| `tools/verifier_v41_mhc.py` | recalcule hors du moteur la copie 0, les 24 mélanges et la tête de V4.1 depuis les vides et le GGUF | `reports/rapport-v41-mhc.md:85` |
+| `tools/hc_synthetique.py` | référence numpy des hyper-connexions de **V4** (opérations ggml de llama.cpp) | `reports/rapport-v4-couches-0-1.md:55` |
 | `tools/portes_formats.sh` | confronte les déquantificateurs à `libggml` | `docs/format-clusters.md:148` |
 | `tools/verifier_table_types.sh` | compare la table des types ggml à la bibliothèque | `docs/format-clusters.md:148-154` |
 | `tools/extraire_tables_ggml.sh` | relève les grilles IQ dans `libggml` et les compare à `formats.rs` | `tools/extraire_tables_ggml.sh:39` |
@@ -933,7 +968,7 @@ n'existait pas encore, il est aujourd'hui implémenté (`main.rs:619`).
 | trace et rejeu | `--trace-flux`, `--trace-couches`, `--flux-forcer`, `--logits-bin`, `--profil-neurones`, `--neurones-sortie` |
 | transport | `--flux-serveur`, `--ppl-reparti`, `--couches-locales`, `--flux-liste`, `--flux-blocs`, `--lot` |
 | matériel | `--threads`, `--pin`, `--plan`, `--materiel`, `--gpu-banc`, `--banc-kv`, `--banc-mla`, `--banc-topk`, `--banc-vision` |
-| modèles | `--config`, `--tensors`, `--plan`, `--couches`, `--patch`, `--tete-restreinte`, `--tete-garantie`, `--sonder-engram` |
+| modèles | `--config`, `--tensors`, `--plan`, `--couches`, `--tete-partielle`, `--patch`, `--tete-restreinte`, `--tete-garantie`, `--sonder-engram` |
 | GPU | `DRAVE_GPU`, `DRAVE_GPU_TETE`, `DRAVE_GPU_KV`, `DRAVE_GPU_TOPK`, `DRAVE_GPU_EXPERTS`, `DRAVE_GPU_EXPERTS_GO` |
 | cache KV | `DRAVE_KV_BITS`, `DRAVE_KV_F16`, `DRAVE_KV_K_F16`, `DRAVE_KV_K_F32`, `DRAVE_KV_V_F32` |
 | trace et diagnostic | `DRAVE_TRACE_BLOCS`, `DRAVE_TRACE_EXPERTS`, `DRAVE_TRACE_HC`, `DRAVE_FLUX_VERIF`, `DRAVE_DEBUG_FLUX`, `DRAVE_DEBUG_MLA`, `DRAVE_DEBUG_ETAT` |

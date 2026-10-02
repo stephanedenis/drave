@@ -392,6 +392,18 @@ sont ignorés", modes.len(), modes.join(", "), modes[0]);
 static MODELE: std::sync::OnceLock<String> = std::sync::OnceLock::new();
 fn modele_chemin() -> String { MODELE.get().cloned().unwrap_or_default() }
 
+/// **Sonde de plage** (`--tete-partielle`) : appliquer la tête de sortie à la
+/// fin d'une plage `--couches a:b`. Par défaut une plage partielle rend le flux
+/// résiduel brut — ce qu'un nœud de grappe doit expédier — donc la tête ne voit
+/// jamais le jour : impossible de comparer des LOGITS par plage, et impossible
+/// de vérifier une réduction finale dont les couches suivantes ne tournent pas
+/// encore (V4.1, dont la compression est refusée).
+fn poser_tete_partielle(mdl: &mut model::Model) {
+    mdl.tete_partielle = true;
+    eprintln!("[plage] `--tete-partielle` : la tête de sortie est appliquée à la fin de la \
+plage — le résultat est celui d'un modèle TRONQUÉ, pas du modèle entier");
+}
+
 /// **Tableau de bord des réglages en vigueur** (`--options-actives`), lus sur le
 /// MODÈLE après toutes les affectations.
 ///
@@ -551,6 +563,12 @@ struct Options {
     /// indices dispersés. Démontre qu'une table de 101 Go s'adresse sans se
     /// charger.
     sonder_engram: usize,
+    /// **Sonde de plage** : avec `--couches a:b`, appliquer AUSSI la tête de
+    /// sortie. Par défaut une plage partielle rend le flux résiduel brut (ce
+    /// qu'un nœud de grappe expédie) ; ce drapeau dit « je veux les logits d'un
+    /// modèle tronqué », ce qui est la seule façon de vérifier une réduction
+    /// finale dont les couches suivantes ne tournent pas encore.
+    tete_partielle: bool,
     /// `--engram-adresses F` : écrit la **liste d'adresses** de l'engram
     /// (un entier par jeton et par colonne de hachage) et imprime ce qu'elle
     /// coûte — rangées distinctes, recouvrement entre jetons consécutifs.
@@ -623,6 +641,7 @@ fn analyser(args: &[String]) -> Options {
             "--flux-serveur" => { o.flux_serveur = Some(suivant(i).clone()); 2 }
             "--options-actives" => { o.options_actives = true; 1 }
             "--options-strict" => { o.options_strict = true; 1 }
+            "--tete-partielle" => { o.tete_partielle = true; 1 }
             "--ppl-reparti" => { o.ppl_reparti = Some(suivant(i).clone()); 2 }
             "--couches-locales" => { o.couches_locales = suivant(i).parse().unwrap(); 2 }
             "--couches" => {
@@ -784,6 +803,9 @@ fn run_infer(opt: Options) {
     let abits = if abits_impose { abits_opt } else { 8 };
     let mut mdl = model::Model::load_partiel(path, ctx, n_threads, dense, keep, auto, q4, b6,
                                              opt.couches);
+    if opt.tete_partielle {
+        poser_tete_partielle(&mut mdl);
+    }
     if let Some(f) = &opt.tete_restreinte {
         poser_tete_restreinte(&mut mdl, f);
     }
@@ -4461,6 +4483,7 @@ calculee sur un vocabulaire restreint n'est comparable a rien. Utilisez --infer.
 
     let mut mdl = model::Model::load_partiel(path, ctx, n_threads, dense, keep, auto, q4, b6,
                                              opt.couches);
+    if opt.tete_partielle { poser_tete_partielle(&mut mdl); }
     if let Some(chemin) = flux_forcer.as_deref() {
         match model::FluxRelecteur::lire(chemin) {
             Ok(r) => {
