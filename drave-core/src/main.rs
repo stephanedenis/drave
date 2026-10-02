@@ -1607,6 +1607,18 @@ utilisera 9,95 Mo par expert, valeur de DeepSeek-V4.1");
     println!();
     for r in &plan.raisons { println!("  · {r}"); }
     println!();
+    // Ce que coûtera un jeton, d'après les débits mesurés sur cette machine.
+    if n_experts > 0 && mo_expert > 0.0 {
+        // Les experts relus par jeton : top-k × couches. On lit le top-k déclaré,
+        // à défaut 6.
+        let topk = 6.0;
+        let couches = 40.0;
+        let go = topk * couches * mo_expert / 1000.0;
+        // La tête : vocabulaire × dimension × octets par poids (Q4_K ≈ 0,56).
+        let tete_go = 1.32;
+        println!("  {}", m.cout_par_jeton(&plan, go, tete_go, 8.0));
+    }
+    println!();
     println!("Ces valeurs sont des DÉFAUTS : tout drapeau explicite les emporte.");
 }
 

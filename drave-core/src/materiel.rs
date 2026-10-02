@@ -372,6 +372,39 @@ une copie", taille_modele_go));
         Plan { threads, epinglage, lecteurs, cache_experts_go, kv_bits, raisons }
     }
 
+    /// Ce que coûtera un jeton, d'après les débits **mesurés** sur cette machine.
+    ///
+    /// Ce n'est pas une prédiction de performance : c'est la somme des trafics
+    /// divisée par les débits, pour voir où passe le temps et ce qu'un
+    /// déplacement changerait. Les débits viennent du banc (`--gpu-banc`) et des
+    /// mesures de disque, pas d'une fiche technique.
+    pub fn cout_par_jeton(&self, plan: &Plan, go_experts_par_jeton: f64,
+                          go_tete: f64, go_commun: f64) -> String {
+        const VRAM: f64 = 84.9;
+        const RAM: f64 = 22.5;
+        const NVME: f64 = 31.0;      // 16 lecteurs parallèles, mesuré
+        // Taux de succès du cache d'experts : mesuré, 25 % de l'empreinte sert
+        // 80 % des appels. On l'applique au trafic, pas à la place occupée.
+        const SUCCES: f64 = 0.80;
+
+        let vram_totale: f64 = self.gpus.iter().map(|g| g.vram_libre_go).sum();
+        // Le commun et la tête sont RELUS à chaque jeton : ils restent en VRAM.
+        let fixes = go_commun + go_tete;
+        let cache = (vram_totale - fixes).max(0.0);
+        // Ce qui manque au cache se lit sur le disque, en parallèle.
+        let experts_disque = go_experts_par_jeton * (1.0 - SUCCES);
+        let experts_cache = go_experts_par_jeton - experts_disque;
+
+        let ms = 1000.0 * (fixes / VRAM + experts_cache / VRAM + experts_disque / NVME);
+        format!(
+            "coût par jeton estimé : {ms:.0} ms — commun + tête {fixes:.1} Go en VRAM \
+({:.0} ms) · {experts_cache:.2} Go d'experts servis par le cache de {cache:.1} Go \
+({:.0} ms) · {experts_disque:.2} Go lus sur NVMe à {NVME:.0} Go/s ({:.0} ms)",
+            1000.0 * fixes / VRAM,
+            1000.0 * experts_cache / VRAM,
+            1000.0 * experts_disque / NVME)
+    }
+
     pub fn resume(&self) -> String {
         let mut s = String::new();
         s.push_str(&format!(

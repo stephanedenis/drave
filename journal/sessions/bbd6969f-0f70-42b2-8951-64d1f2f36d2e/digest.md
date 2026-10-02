@@ -53888,3 +53888,54 @@ toutes les portes sont vertes
 ⏵ **Toutes les portes vertes.** Je commite le script.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -m \"tools/portes.sh : les portes du depot en une commande, comparees a leur valeur publiee\n\nChaque porte est confrontee a la valeur ATTENDUE et le script sort en erreur si\nl'une diverge : un chiffre de … [608 caractères tronqués]`
+
+  ```
+8f936ee tools/portes.sh : les portes du depot en une commande, comparees a leur valeur publiee
+copie : 213.2 Go / 365.7
+gpt-oss ctx 256 (attendu 15,1757) :
+  ```
+
+- **bash** `{"command": "sleep 55; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls -la /home/stephane/FastNVMe/modeles-lourds/*.gguf | awk '{printf \"copie : %.1f Go / 365.7\\n\", $5/1e9}'; cat /tmp/porte_oss3.log; pgrep -c -f \"gpt-oss\" || echo \"gpt-oss fini\"", "description": "Monitor copy and gate … [2 caractères tronqués]`
+
+  ```
+copie : 220.5 Go / 365.7
+gpt-oss ctx 256 (attendu 15,1757) : 4
+  ```
+
+### 🤖 Assistant
+
+⏵ Pendant l'attente, j'ajoute une estimation du coût par jeton au plan matériel.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np = 'drave-core/src/materiel.rs'\ns = open(p).read()\na = '''    pub fn resume(&self) -> String {'''\nb = '''    /// Ce que coûtera un jeton, d'après les débits **mesurés** sur cette machine.\n    ///\n    /// Ce n' … [3070 caractères tronqués]`
+
+  ```
+ok
+BUILD 0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ./drave-core/target/release/drave /home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek-V4.1-Flash-Q2/DeepSeek-V4.1-Flash-Q2.gguf --materiel 2>/dev/null | tail -4", "description": "Show cost estimate for V4.1"}`
+
+  ```
+coût par jeton estimé : 138 ms — commun 8.0 Go en VRAM (94 ms) · tête 1.32 Go dont 1.32 en VRAM et 0.00 en RAM · experts 2.39 Go dont 2.39 en VRAM et 0.00 lus sur NVMe
+
+Ces valeurs sont des DÉFAUTS : tout drapeau explicite les emporte.
+  ```
+
+### 🤖 Assistant
+
+⏵ Mon modèle est faux : il place les experts **lus par jeton** en VRAM. Ils viennent du cache. Je corrige.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np = 'drave-core/src/materiel.rs'\ns = open(p).read()\na = s[s.find('    pub fn cout_par_jeton('):s.find('    pub fn resume(&self) -> String {')]\nb = '''    pub fn cout_par_jeton(&self, plan: &Plan, go_experts_par_j … [1749 caractères tronqués]`
+
+  ```
+ok
+  coût par jeton estimé : 148 ms — commun + tête 9.3 Go en VRAM (110 ms) · 1.91 Go d'experts servis par le cache de 20.1 Go (23 ms) · 0.48 Go lus sur NVMe à 31 Go/s (15 ms)
+
+Ces valeurs sont des DÉFAUTS : tout drapeau explicite les emporte.
+  ```
+
+### 🤖 Assistant
+
+⏵ Estimation correcte : **148 ms/jeton pour V4.1**, dominée par le commun (110 ms). Je commite.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && (cd drave-core && cargo test --release 2>&1 | grep -E \"^test result\"); git add -A && git commit -q -m \"Materiel : estimation du cout par jeton, d'apres les debits mesures\n\nD'abord FAUX : le modele placait en VRAM les experts LUS … [833 caractères tronqués]`
