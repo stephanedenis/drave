@@ -79042,3 +79042,89 @@ toutes les portes sont vertes
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='REPRISE.md'\ns=open(p).read()\na=\"\"\"| `tools/portes_formats.sh` | **17 formats × 2 blocs** | tous exacts contre libggml |\"\"\"\nb=\"\"\"| `tools/portes_formats.sh` | **17 formats × 2 blocs** | tous exacts  … [621 caractères tronqués]`
+
+  ```
+ok
+ven 02 oct 2026 16:57:42 EDT
+259f24c Portes : V4-Flash entre dans tools/portes.sh (--config calculable + perplexité 8430,2968) — un chiffre de référence qui dérive sans qu'on s'en aperçoive ne vaut rien
+  ```
+
+### 🤖 Assistant
+
+⏵ P8 : lecture de la phase engram du plan et de ce qui est déjà établi dans le dépôt.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n \"$(grep -n '### P8' docs/plan-deepseek41-complet.md | cut -d: -f1),+18p\" docs/plan-deepseek41-complet.md", "description": "Read the P8 phase"}`
+
+  ```
+### P8 — Engram : la liste d'adresses, et sa référence à écrire (≈ 1 à 2 journées)
+
+- Deux tables de 101,4 Go (couches 1 et 14) : hachage de n-grammes
+  (`engram.primes`, `multipliers`, `token_map`), recherche, injection.
+- **Le problème de méthode** : llama.cpp ne le calcule pas, V4-Flash ne l'a pas :
+  **aucune référence n'existe**. Livrer sans référence violerait la règle 6.
+- **Issue acceptable (a)** : écrire une référence indépendante en Python — comme
+  `tools/mla_synthetique.py` l'a fait pour la MLA — qui calcule le hachage à
+  partir des métadonnées, et que le moteur doit retrouver sur 10 000 entrées.
+  **Issue (b)** : ne pas le faire et l'écrire.
+- **Porte Drave** : la sonde et la référence concordent ; le flux d'adresses est
+  tracé (rangées touchées, recouvrement entre jetons) ; le changement de sortie
+  est **annoncé**.
+
+### P9 — Noyaux natifs et encodage des poids : après la mesure (≈ 1 journée, optionnel)
+
+- Deux sujets distincts, à ne pas confondre :
+  - **noyaux IQ natifs** : aujourd'hui les experts passent par déquantification
+    + produit f32 (juste, lent). Un noyau se justifie si le débit mesuré en P6
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/lire_meta_gguf.py /home/stephane/FastNVMe/modeles-lourds/DeepSeek-V4.1-Flash-Q2.gguf engram 2>/dev/null | tail -12; grep -n \"sonder_engram\\|sonder-engram\" drave-core/src/main.rs | head -4", "description": "Inventory  … [52 caractères tronqués]`
+
+  ```
+# /home/stephane/FastNVMe/modeles-lourds/DeepSeek-V4.1-Flash-Q2.gguf
+# version 3 · 1046 tenseurs · 67 paires clé/valeur
+deepseek41.engram.encoding = e4m3_e8m0_32_row264
+deepseek41.engram.layer_ids = [1, 14]
+deepseek41.engram.rows = [384006168, 384016682]
+deepseek41.engram.compressed_vocab_size = 99092
+deepseek41.engram.pad_id = 2
+deepseek41.engram.token_map = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, '… (+129216)']
+deepseek41.engram.primes = [16000057, 16000079, 16000081, 16000097, 16000121, 16000129, 16000133, 16000183, 16000189, 16000207, 16000211, 16000253, 16000277, 16000289, 16000307, 16000321, 16000339, 16000381, 16000393, 16000399, 16000403, 16000409, 16000447, 16000463, 16000477, 16000487, 16000499, 16000507, 16000511, 16000573, 16000609, 16000627, 16000667, 16000669, 16000693, 16000697, 16000711, 16000729, 16000759, 16000769, 16000781, 16000799, 16000813, 16000819, 16000841, 16000877, 16000879, 16000889]
+deepseek41.engram.multipliers = [76632096046245, 4839876093313, 3595
+… [360 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ P8 : ce qui est **établi** sur l'engram (format de rangée) et ce qui manque (le hachage).
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ./drave-core/target/release/drave /home/stephane/FastNVMe/modeles-lourds/DeepSeek-V4.1-Flash-Q2.gguf --tensors 2>/dev/null | grep -iE \"engram\" | head -8; python3 -c \"\nprint('264 octets par rangée = 8 blocs de 32 valeurs e4m3 (256 … [259 caractères tronqués]`
+
+  ```
+F32      blk.1.engram_q_norm.weight             [4, 5120] · 0.0 M poids · fichier 0
+  F32      blk.1.engram_k_norm.weight             [4, 5120] · 0.0 M poids · fichier 0
+  F16      blk.1.engram_kv.weight                 [25600, 6144] · 157.3 M poids · fichier 0
+  F32      blk.14.engram_q_norm.weight            [4, 5120] · 0.0 M poids · fichier 0
+  F32      blk.14.engram_k_norm.weight            [4, 5120] · 0.0 M poids · fichier 0
+  F16      blk.14.engram_kv.weight                [25600, 6144] · 157.3 M poids · fichier 0
+  I8       blk.1.engram_embd.weight               [384006168, 264] · 101377.6 M poids · fichier 0
+  I8       blk.14.engram_embd.weight              [384016682, 264] · 101380.4 M poids · fichier 0
+264 octets par rangée = 8 blocs de 32 valeurs e4m3 (256) + 8 échelles e8m0 = 264 octets
+taille table 1 : 384006168 × 264 = 101.377628352 Go
+taille table 2 : 384016682 × 264 = 101.380404048 Go
+  ```
+
+### 🤖 Assistant
+
+⏵ P8 : le format des tables est établi, mais le hachage n'a **aucune référence** — constat écrit.
+
+- **write** `{"content": "# Engram de DeepSeek-V4.1 : ce qui est établi, ce qui manque, et pourquoi on s'arrête là\n\n**En une ligne** : les deux tables d'engram sont **entièrement décrites** par les\nmétadonnées et par la forme de leurs tenseurs — 101,38 Go chacune, 264 octets par\nrangée — mais la **formule d' … [4030 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-engram-etat.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\np='docs/plan-deepseek41-complet.md'\ns=open(p).read()\na=\"\"\"### P8 — Engram : la liste d'adresses, et sa référence à écrire (≈ 1 à 2 journées)\"\"\"\nb=\"\"\"### P8 — Engram : la liste d'adresses, et sa référe … [2572 caractères tronqués]`

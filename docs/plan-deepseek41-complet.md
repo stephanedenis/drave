@@ -343,7 +343,23 @@ Une phase qui ne passe pas ses deux portes ne passe pas à la suivante.
   déclaré incomplet, et l'écart de perplexité V4.1 contre V4-Flash est écrit
   d'avance (seule comparaison possible, llama.cpp ne lisant pas V4.1).
 
-### P8 — Engram : la liste d'adresses, et sa référence à écrire (≈ 1 à 2 journées)
+### P8 — Engram : la liste d'adresses, et sa référence à écrire (≈ 1 à 2 journées) — **issue (b) retenue** (02/10)
+
+> **Inventorié** : deux tables de **101,38 Go** chacune
+> (`blk.{1,14}.engram_embd` I8 [384 006 168, 264]), soit **202,8 Go = 55 % du
+> fichier**. Le format de rangée est **entièrement déterminé** par les
+> métadonnées : `e4m3_e8m0_32_row264` = 8 blocs de 32 valeurs e4m3 + 8 échelles
+> e8m0 = **264 octets**. La sonde (`--sonder-engram 10000`) touche 2,6 Mo par
+> table en 219-524 ms, à 120 Mo de RSS.
+> **Ce qui manque n'est pas le code, c'est la RECETTE** : les métadonnées donnent
+> 48 nombres premiers et 8 multiplicateurs, mais pas la formule d'adressage ; et
+> il n'existe **aucune référence** — llama.cpp ignore l'engram, V4-Flash ne l'a
+> pas, et le code d'entraînement n'est pas dans ce dépôt. Plusieurs formules
+> plausibles donnent des rangées différentes : en choisir une serait deviner, ce
+> que la règle 6 interdit.
+> **Décision : issue (b)** — ne pas l'implémenter, et l'écrire
+> (`reports/rapport-engram-etat.md`), avec ce qui débloquerait la phase (le script
+> de conversion, une spécification, ou une implémentation amont).
 
 - Deux tables de 101,4 Go (couches 1 et 14) : hachage de n-grammes
   (`engram.primes`, `multipliers`, `token_map`), recherche, injection.
