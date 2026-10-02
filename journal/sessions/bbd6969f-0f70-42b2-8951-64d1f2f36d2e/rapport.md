@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 88.2 h |
-| Tours | 69 |
-| Messages | 4048 |
-| Appels d'outils | 3854 |
+| Durée | 88.3 h |
+| Tours | 70 |
+| Messages | 4067 |
+| Appels d'outils | 3871 |
 | Fichiers touchés | 81 |
-| Commandes | 3390 |
+| Commandes | 3406 |
 | Sous-agents | 22 |
-| Commits | 308 |
+| Commits | 309 |
 | Compactages de contexte | 5 |
 
 ## Objectifs déclarés
@@ -177,6 +177,8 @@
 **Tour 68** — peut-on explorer les affinités cpu pour du HT, c'est à dire parallélisation interne de certaines boucles ayant des affinités fines de mémoire pour les tandems de cpu. Pour le FPGS Stratix V, il est branché, mais pas configuré pcie en ce moment, usb seulement. A étudier seulement si on sait quoi lui donner.
 
 **Tour 69** — implémente toute les optimisation et détection de matériel avec heuristiques de configuration automatique.
+
+**Tour 70** — <goal_round> Objective: "Session autonome jusqu'à 8h HAE (02/10). Mener les optimisations d'architecture mémoire du moteur Drave, par ordre de valeur, chacune mesurée par comparaison appariée et consignée : (1) détection matérielle et heuristiques automatiques — FAIT ; (2) restriction de tête GARANTIE : ne jamais changer la sortie, charger dynamiquement les logits manquants (borne de Cauchy-Schwar … [1037 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -3546,7 +3548,56 @@ Sur cette session, les mesures m
 
 **Synthèse produite :**
 
-⏵ Deuxième bug de la même famille : la quantification lit des valeurs périmées du tampon
+Session terminée à 07 h 05 HAE. Voici le bilan.
+
+\## Ce que la session a trouvé
+
+**1. Le routage des experts était faux pour quatre gros modèles sur cinq.** Le moteur n'avait qu'un booléen là où les GGUF déclarent quatre conventions : Qwen3 (softmax), Kimi et GLM (sigmoïde), DeepSeek-V4 (racine de softplus), gpt-oss (top-k brut + softmax). Trois réglages n'étaient **lus nulle part** : `expert_weights_scale` (1,5 · 2,5 · 2,827), `hash_layer_count` et la table `ffn_gate_tid2eid` (I32) des 3 premières couches de V4-Flash. V4.1-Flash-Q2, qui n'utilise que les noms DeepSeek, était même pris pour un modèle **dense**.
+
+**2. Un bug de facteur 2 dans du code publié.** L'échelle E8M0 de MXFP4 mélangeait la grille doublée de ggml avec la vraie : des poids deux fois trop petits. Trouvé en comparant 256 poids à libggml, pas en relisant.
+
+**3. L'attention MLA à rang faible**, avec deux bugs de disposition — dont `wv_b` rangé à l'envers de `wk_b` (k_b a sa *sortie* en dimension rapide, v_b son *entrée*). Avant : corrélation −0,04 avec llama.cpp et le même jeton prédit partout. Après : **0,999024**, top-1 3/3.
+
+**4. Trois tenseurs lus nulle part** : l'expert partagé (tenseurs 2D, refusés par une vérification « 3 dimensions » — un FFN entier manquait à chaque couche de chaque modèle DeepSeek/GLM/Kimi), le biais de sélection `exp_probs_b`, et `tid2eid`.
+
+\## Ce qui est mesuré
+
+| porte | valeur |
+|---|---|
+| Qwen2.5-0.5B ctx 256 | **19,3885** (inchangée, au bit près) |
+| Qwen3-30B en clusters | **799,8557** (inchangée) |
+| gpt-oss ctx 256 | **15,6017** (15,1757 avant — changement justifié par le code de llama.cpp) |
+| formats contre libggml | **17 × 2 blocs, tous exacts** |
+| `cargo test --release` | **48** (41 avant) |
+
+Et les premiers calculs de deux modèles jamais exécutés ici : **GLM-5.3** (754 G, 76/79 couches à experts) et **Kimi-K2.7** (1 026 G, 161 s de chargement).
+
+\## Ce que je n'ai pas résolu, et qui est écrit partout
+
+La validation MLA **s'arrête à la position 2** : l'écart de NLL à llama.cpp est de +0,009 (pos. 0), +0,611 (pos. 2), puis **+4,07 à la position 3**. Un saut net à une position précise n'est pas une accumulation d'arrondis. La piste testée (quantification lisant des valeurs périmées du tampon) a été corrigée — et **n'a rien changé** : c'est noté comme tel. Le prochain pas est outillé (`ref_logits --tensors` d'un côté, `DRAVE_DEBUG_MLA=1` de l'autre, à la position 3).
+
+Le plus important est peut-être ailleurs : trois des cinq plus gros modèles de cette 
+… [178 caractères tronqués]
+
+### Tour 70 — <goal_round> Objective: "Session autonome jusqu'à 8h HAE (02/10). Mener les optimisations d'architecture mémoire du mote … [1317 caractères tronqués]
+
+*17 appels d'outils.* Actions notables :
+
+- get_goal
+- bash — Check time and the head restriction code
+- bash — Read the logits implementation
+- bash — Read logits_f32's beginning
+- bash — Read the logits entry points
+- bash — Read the q8 view API
+- bash — Implement the guaranteed head restriction
+- bash — Find logits call sites
+- bash — Wire the generation path and CLI flag
+- bash — Read the existing restricted-head wiring
+- bash — Add the --tete-garantie option handling
+- bash — Check where the option block sits
+- bash — Test the guaranteed head on a real generation
+- bash — Generate without the guarantee for comparison
+- … et 3 autres
 
 ## 3. Travail accompli
 
@@ -3703,7 +3754,7 @@ Sur cette session, les mesures m
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 3350 autres
+- … et 3366 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -3831,7 +3882,7 @@ Sur cette session, les mesures m
 
 ## 5. Erreurs rencontrées
 
-234 sorties en erreur ou divergentes. Les premières :
+235 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : a8f2635f8 docs: record which models this box is good at, and why src/llama-hparams.cpp:8:void llama_hparams::set_swa_pattern(uint32_t n_pattern, bool dense_first) { src/llama-hparams.h:308:    void se
 - **T1** : 511 tokens notés — perplexité cumulée 247.031  (4.9 tok/s) === perplexité 247.0308 sur 511 tokens (0 événements, 104.5 s) ===  ### B3 harmony assistant 511 --- ref --- 0.0 0.0 0:00 ls: cannot access '
@@ -4159,4 +4210,5 @@ Sur cette session, les mesures m
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/glm8b.sh <<'EOF' #!/usr/bin/env bash cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet M=/home
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' # 1) README : préciser la portée de la validation. p='README.md'; s=open(p).read() s = s.
 - REPRISE : bilan de la session (16 commits, 5 changements, 5 chantiers ouverts)" && git log --oneline -1; git status --short | head -2
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-tete-garantie.md <<'EOF' # Rapport — restriction de tête GARANTIE : exacte, et sans 
 

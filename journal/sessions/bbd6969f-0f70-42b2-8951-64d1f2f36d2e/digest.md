@@ -64266,3 +64266,329 @@ Mem:             125          11          61           2          56         114
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat >> REPRISE.md <<'EOF'\n\n---\n\n## Bilan de la session « routage, MLA et formats » (01/10 22 h → 02/10 07 h)\n\n**16 commits.** Ce qui a changé, dans l'ordre d'importance :\n\n1. **Le routage des experts était faux pour quatre gr … [2170 caractères tronqués]`
+
+  ```
+eea8f0c REPRISE : bilan de la session (16 commits, 5 changements, 5 chantiers ouverts)
+ M journal/README.md
+  ```
+
+### 🤖 Assistant
+
+Session terminée à 07 h 05 HAE. Voici le bilan.
+
+## Ce que la session a trouvé
+
+**1. Le routage des experts était faux pour quatre gros modèles sur cinq.** Le moteur n'avait qu'un booléen là où les GGUF déclarent quatre conventions : Qwen3 (softmax), Kimi et GLM (sigmoïde), DeepSeek-V4 (racine de softplus), gpt-oss (top-k brut + softmax). Trois réglages n'étaient **lus nulle part** : `expert_weights_scale` (1,5 · 2,5 · 2,827), `hash_layer_count` et la table `ffn_gate_tid2eid` (I32) des 3 premières couches de V4-Flash. V4.1-Flash-Q2, qui n'utilise que les noms DeepSeek, était même pris pour un modèle **dense**.
+
+**2. Un bug de facteur 2 dans du code publié.** L'échelle E8M0 de MXFP4 mélangeait la grille doublée de ggml avec la vraie : des poids deux fois trop petits. Trouvé en comparant 256 poids à libggml, pas en relisant.
+
+**3. L'attention MLA à rang faible**, avec deux bugs de disposition — dont `wv_b` rangé à l'envers de `wk_b` (k_b a sa *sortie* en dimension rapide, v_b son *entrée*). Avant : corrélation −0,04 avec llama.cpp et le même jeton prédit partout. Après : **0,999024**, top-1 3/3.
+
+**4. Trois tenseurs lus nulle part** : l'expert partagé (tenseurs 2D, refusés par une vérification « 3 dimensions » — un FFN entier manquait à chaque couche de chaque modèle DeepSeek/GLM/Kimi), le biais de sélection `exp_probs_b`, et `tid2eid`.
+
+## Ce qui est mesuré
+
+| porte | valeur |
+|---|---|
+| Qwen2.5-0.5B ctx 256 | **19,3885** (inchangée, au bit près) |
+| Qwen3-30B en clusters | **799,8557** (inchangée) |
+| gpt-oss ctx 256 | **15,6017** (15,1757 avant — changement justifié par le code de llama.cpp) |
+| formats contre libggml | **17 × 2 blocs, tous exacts** |
+| `cargo test --release` | **48** (41 avant) |
+
+Et les premiers calculs de deux modèles jamais exécutés ici : **GLM-5.3** (754 G, 76/79 couches à experts) et **Kimi-K2.7** (1 026 G, 161 s de chargement).
+
+## Ce que je n'ai pas résolu, et qui est écrit partout
+
+La validation MLA **s'arrête à la position 2** : l'écart de NLL à llama.cpp est de +0,009 (pos. 0), +0,611 (pos. 2), puis **+4,07 à la position 3**. Un saut net à une position précise n'est pas une accumulation d'arrondis. La piste testée (quantification lisant des valeurs périmées du tampon) a été corrigée — et **n'a rien changé** : c'est noté comme tel. Le prochain pas est outillé (`ref_logits --tensors` d'un côté, `DRAVE_DEBUG_MLA=1` de l'autre, à la position 3).
+
+Le plus important est peut-être ailleurs : trois des cinq plus gros modèles de cette machine **n'ont jamais été exécutés** ici, et tout ce qui a été publié à leur sujet vient d'analyses statiques. Le moteur le dit maintenant lui-même, en 50 ms, avant toute panne.
+
+
+## Tour 70
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Session autonome jusqu'à 8h HAE (02/10). Mener les optimisations d'architecture mémoire du moteur Drave, par ordre de valeur, chacune mesurée par comparaison appariée et consignée : (1) détection matérielle et heuristiques automatiques — FAIT ; (2) restriction de tête GARANTIE : ne jamais changer la sortie, charger dynamiquement les logits manquants (borne de Cauchy-Schwarz sur les lignes hors liste, extension par paliers si la borne ne conclut pas) ; (3) accès mmappé à la table d'engram de DeepSeek-V4.1 (203 Go adressés, 0,4 Go touchés) ; (4) chargeur d'experts à la demande avec lecteurs parallèles ; (5) toute autre optimisation que les mesures feront apparaître. Chaque chantier se termine par un rapport, un commit, et les portes vertes (Qwen 19,3885, gpt-oss 15,1757, cargo test). Règle absolue : aucune optimisation ne doit changer une sortie sans le dire."
+Round: 1/30
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **get_goal** `{}`
+
+  ```
+{"goal":{"id":"goal-e85bbb39-a710-4255-b3ca-87539dc66bc1","revision":2,"objective":"Session autonome jusqu'à 8h HAE (02/10). Mener les optimisations d'architecture mémoire du moteur Drave, par ordre de valeur, chacune mesurée par comparaison appariée et consignée : (1) détection matérielle et heuristiques automatiques — FAIT ; (2) restriction de tête GARANTIE : ne jamais changer la sortie, charger dynamiquement les logits manquants (borne de Cauchy-Schwarz sur les lignes hors liste, extension par paliers si la borne ne conclut pas) ; (3) accès mmappé à la table d'engram de DeepSeek-V4.1 (203 Go adressés, 0,4 Go touchés) ; (4) chargeur d'experts à la demande avec lecteurs parallèles ; (5) toute autre optimisation que les mesures feront apparaître. Chaque chantier se termine par un rapport, un commit, et les portes vertes (Qwen 19,3885, gpt-oss 15,1757, cargo test). Règle absolue : aucune optimisation ne doit changer une sortie sans le dire.","phase":"active","roundsStarted":1,"maxGoalRounds":30},"activation":"armed"}
+  ```
+
+- **bash** `{"command": "TZ=America/New_York date \"+HAE %H:%M\"; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"tete_restreinte\" drave-core/src/model.rs | head -12", "description": "Check time and the head restriction code"}`
+
+  ```
+HAE 07:00
+1509:    pub tete_restreinte: Option<Vec<u32>>,
+2553:            tete_gpu, tete_gpu_q6k, head4, tete_restreinte: None,
+4690:        let lignes: Vec<u32> = match &self.tete_restreinte {
+4884:            let lignes: Vec<u32> = match &self.tete_restreinte {
+4916:        let lignes: Vec<u32> = match &self.tete_restreinte {
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '4905,4960p' drave-core/src/model.rs", "description": "Read the logits implementation"}`
+
+  ```
+self.head4 = Some(d);
+            return out;
+        }
+        // int16 : la troncature en i8 ruinerait une activation quantifiée sur
+        // 32767 niveaux (le corps du modèle, lui, n'est pas concerné : il
+        // transporte des i32 dans le vecteur creux).
+        let mut qx = vec![0i16; h.len()];
+        for (&i, &v) in sv.idx.iter().zip(sv.val.iter()) { qx[i as usize] = v as i16; }
+        let vocab = self.cfg.vocab;
+        let view = self.g.q8_view(&self.tete);
+        let nt = self.pool.threads().max(1);
+        let lignes: Vec<u32> = match &self.tete_restreinte {
+            Some(l) => l.clone(),
+            None => (0..vocab as u32).collect(),
+        };
+        let tranche = lignes.len().div_ceil(nt).max(1);
+        let mut out = vec![0f32; vocab];
+        let g = &self.g;
+        let view = &view;
+        let base_out = out.as_mut_ptr() as usize;
+        std::thread::scope(|s| {
+            for sous in lignes.chunks(tranche) {
+                let qx = &qx;
+                let base_out = base_out;
+                s.spawn(move || {
+                    for &o in sous.iter() {
+                        let v = g.q8_dot_at(view, o as usize, qx) * sx;
+                      
+… [1474 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '4860,4905p' drave-core/src/model.rs", "description": "Read logits_f32's beginning"}`
+
+  ```
+// int8 — et non par le pool. Le pool coûtait 4 ms de plus par jeton pour
+        // 72 Mo lus au lieu de 136 : ses seize tampons de sortie (9,7 Mo) sont
+        // écrits, remis à zéro puis réduits, soit plus de trafic que les poids
+        // économisés.
+        // Densité de l'entrée de la tête : `sv.idx` porte les coordonnées
+        // vivantes après quantification. Si elle est faible, un stockage par
+        // COLONNES permettrait de ne lire que ces colonnes — exactement, sans
+        // borne ni approximation. On la mesure avant de s'engager.
+        TETE_ACTIFS.fetch_add(sv.idx.len() as u64, std::sync::atomic::Ordering::Relaxed);
+        TETE_TOTAL.fetch_add(h.len() as u64, std::sync::atomic::Ordering::Relaxed);
+        TETE_APPELS.fetch_add(1, std::sync::atomic::Ordering::Relaxed);
+        if self.head4.is_some() {
+            let xi: Vec<i16> = sv.idx.iter().zip(sv.val.iter())
+                .fold(vec![0i16; h.len()], |mut a, (&i, &v)| {
+                    a[i as usize] = v.clamp(-32767, 32767) as i16; a
+                });
+            let d = self.head4.take().unwrap();
+            let dref = &d;
+            let vocab = d.n_out;
+
+
+            // Liste restreinte : ne 
+… [1154 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"pub fn logits_f32\\|pub fn logits(\" -A 16 drave-core/src/model.rs | sed -n '1,40p'", "description": "Read the logits entry points"}`
+
+  ```
+3950:    pub fn logits_f32(&self, hn: &[f32]) -> Vec<f32> {
+3951-        let h = self.cfg.hidden;
+3952-        let v = self.cfg.vocab;
+3953-        let mut out = vec![0f32; v];
+3954-        for o in 0..v {
+3955-            let ligne = self.g.row_f32("token_embd.weight", o, h);
+3956-            let mut acc = 0f32;
+3957-            for i in 0..h { acc += ligne[i] * hn[i]; }
+3958-            out[o] = acc;
+3959-        }
+3960-        out
+3961-    }
+3962-
+3963-    /// Un token, une position. Retourne l'état caché après la dernière norme.
+3964-    pub fn forward(&mut self, tok: u32, pos: usize) -> Vec<f32> {
+3965-        assert!(pos < self.ctx, "contexte dépassé ({pos} ≥ {})", self.ctx);
+3966-        self.jeton_trace += 1;
+--
+4845:    pub fn logits(&mut self, h: &[f32]) -> Vec<f32> {
+4846-        let mut scratch = Vec::with_capacity(h.len());
+4847-        let (sv, sx) = match Self::quant_scratch(h, self.act_levels, self.act_thresh,
+4848-                                                self.act_topk, self.act_renorm, &mut scratch) {
+4849-            Some(v) => v,
+4850-            None => return vec![0f32; self.cfg.vocab],
+4851-        };
+4852-        // Chemin GPU : les poids de la tête so
+… [629 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"pub fn q8_blocks\" -A 8 drave-core/src/gguf.rs; grep -n \"pub struct Q8View\" -A 8 drave-core/src/gguf.rs | head -12", "description": "Read the q8 view API"}`
+
+  ```
+1407:    pub fn q8_blocks(&self, name: &str) -> Option<(&[u8], usize)> {
+1408-        let t = self.tensor(name)?;
+1409-        if t.ttype != GGML_Q8_0 { return None; }
+1410-        Some((self.tbuf(t), t.dims[1] as usize / 32))
+1411-    }
+1412-
+1413-    /// Super-blocs **Q4_K** bruts : `(octets, nb de super-blocs de 256 poids par
+1414-    /// ligne)`. C'est le format de toute la famille Qwen/Llama en `Q4_K_M`.
+1415-    pub fn q4k_blocks(&self, name: &str) -> Option<(&[u8], usize)> {
+298:pub struct Q8View {
+299-    /// Fichier qui porte le tenseur (un modèle éclaté en a plusieurs).
+300-    pub fichier: usize,
+301-    pub base: usize,
+302-    pub n_cols: usize,
+303-    pub nb: usize,
+304-    pub q4: bool,
+305-    /// Type ggml d'origine : la tête de sortie peut être Q8_0, Q4_0 ou Q4_K
+306-    /// selon le modèle, et se lit **en place** dans les trois cas.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/model.rs'; s=open(p).read()\n# 1) Champs : normes de lignes, ordre, liste garantie.\ns = s.replace(\"\"\"    /// Nombre de couches dont les puits appris ont été trouvés (diagnostic).\n    pub sinks … [7621 caractères tronqués]`
+
+  ```
+(no output)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"self.logits(&\" drave-core/src/model.rs | head -5", "description": "Find logits call sites"}`
+
+  ```
+4662:        if t == 1 { return vec![self.logits(&hs[0])]; }
+5119:            let mut logits = self.logits(&last);
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/model.rs'; s=open(p).read()\ns = s.replace(\"\"\"            let mut logits = self.logits(&last);\"\"\",\n\"\"\"            // Tête GARANTIE : on ne calcule que les lignes qui peuvent encore\n      … [1973 caractères tronqués]`
+
+  ```
+555:    tete_restreinte: Option<String>,
+685:                o.tete_restreinte = Some(suivant(i).clone()); 2 }
+762:    if let Some(f) = &opt.tete_restreinte {
+763:        poser_tete_restreinte(&mut mdl, f);
+1095:fn poser_tete_restreinte(mdl: &mut model::Model, fichier: &str) -> bool {
+1110:    mdl.tete_restreinte = Some(ids);
+4211:    if let Some(f) = &opt.tete_restreinte {
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '1095,1115p' drave-core/src/main.rs; sed -n '4205,4220p' drave-core/src/main.rs", "description": "Read the existing restricted-head wiring"}`
+
+  ```
+fn poser_tete_restreinte(mdl: &mut model::Model, fichier: &str) -> bool {
+    let mut ids: Vec<u32> = Vec::new();
+    if let Ok(t) = std::fs::read_to_string(fichier) {
+        for x in t.split(|c: char| c == ',' || c.is_whitespace()) {
+            if let Ok(v) = x.trim().parse::<u32>() { ids.push(v); }
+        }
+    }
+    ids.sort_unstable();
+    ids.dedup();
+    if ids.is_empty() {
+        eprintln!("[tete] {fichier} ne contient aucun identifiant utilisable : tête complète");
+        return false;
+    }
+    println!("[tete] restreinte à {} tokens sur {} ({:.1} %) — le routeur, lui, reste global",
+             ids.len(), mdl.cfg.vocab, 100.0 * ids.len() as f64 / mdl.cfg.vocab as f64);
+    mdl.tete_restreinte = Some(ids);
+    true
+}
+
+fn cfg_dims(m: &model::Model) -> usize { m.cfg.hidden }
+
+
+fn run_ppl(opt: Options) {
+    // La restriction de la tête n'a pas de sens ici : le softmax normalise sur
+    // tout le vocabulaire, et retirer des termes en retire aussi de la masse au
+    // dénominateur. Mesuré, la perplexité BAISSE alors artificiellement (24,31
+    // contre 25,37) — elle n'est plus comparable à rien.
+    if let Some(f) = &opt.tete_restreinte {
+        eprintln!("[tete] --t
+… [448 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/main.rs'; s=open(p).read()\ns = s.replace(\"\"\"    tete_restreinte: Option<String>,\"\"\",\n\"\"\"    tete_restreinte: Option<String>,\n    /// `--tete-garantie <fichier>` : liste de candidats pou … [1583 caractères tronqués]`
+
+  ```
+BUILD
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"tete_restreinte\" drave-core/src/main.rs | sed -n '1,12p'; sed -n '770,790p' drave-core/src/main.rs", "description": "Check where the option block sits"}`
+
+  ```
+555:    tete_restreinte: Option<String>,
+690:                o.tete_restreinte = Some(suivant(i).clone()); 2 }
+767:    if let Some(f) = &opt.tete_restreinte {
+768:        poser_tete_restreinte(&mut mdl, f);
+1120:fn poser_tete_restreinte(mdl: &mut model::Model, fichier: &str) -> bool {
+1135:    mdl.tete_restreinte = Some(ids);
+4236:    if let Some(f) = &opt.tete_restreinte {
+    if let Some(f) = &opt.tete_garantie {
+        let mut ids: Vec<u32> = Vec::new();
+        if let Ok(t) = std::fs::read_to_string(f) {
+            for x in t.split(|c: char| c == ',' || c.is_whitespace()) {
+                if let Ok(v) = x.trim().parse::<u32>() { ids.push(v); }
+            }
+        }
+        ids.sort_unstable();
+        ids.dedup();
+        if ids.is_empty() {
+            eprintln!("[tete-garantie] {f} ne contient aucun identifiant : rien à faire");
+        } else {
+            mdl.tete_garantie = Some(ids);
+            mdl.preparer_normes_tete();
+            println!("[tete-garantie] {} candidats sur {} ({:.1} %) — la sortie reste \
+IDENTIQUE, seule la lecture change", mdl.tete_garantie.as_ref().unwrap().len(),
+                     mdl.cfg.vocab, 100.0 * mdl.tete_garantie.as_ref().unwrap().
+… [131 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && head -30 /tmp/ids_qwen.txt | tr ',' '\\n' | head -30 > /tmp/candidats.txt; wc -l /tmp/candidats.txt; timeout 600 ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf --infer --prompt \"Le ciel est bleu parce que\" --n 8 -- … [146 caractères tronqués]`
+
+  ```
+30 /tmp/candidats.txt
+[tete-garantie] 151936 lignes calculées sur 151936 (meilleur hors liste borné à -inf)
+[tete-garantie] 151936 lignes calculées sur 151936 (meilleur hors liste borné à -inf)
+[tete-garantie] 151936 lignes calculées sur 151936 (meilleur hors liste borné à -inf)
+--- texte ---
+Le ciel est bleu parce que le soleil est bleu. C
+--- ids générés : [512, 13309, 321, 1788, 12422, 84, 13, 356]
+
+--- mesure ---
+prompt  : 8 tokens en 0.178 s  (44.9 tok/s, TTFT 22.3 ms)
+généré  : 8 tokens en 0.981 s  (8.15 tok/s)
+événements : 15100852 au total, 943803.2 par token
+postes (ms/token) : matvec-attn 2.4 | rope 0.3 | attention 2.8 | matvec+mlp 19.7 | total mesuré 25.2
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 600 ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf --infer --prompt \"Le ciel est bleu parce que\" --n 8 --ctx 256 --threads 16 --temp 0 2>&1 | grep -E \"ids générés|généré :\"", "description": "Generate with … [34 caractères tronqués]`
+
+  ```
+--- ids générés : [512, 13309, 321, 1788, 12422, 84, 13, 356]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 300 python3 - <<'PY'\nimport sys, struct\nimport numpy as np\nsys.path.insert(0,'tools')\nfrom analyse_experts_statique import Lecteur\ng = Lecteur('models/Qwen2.5-0.5B-Q8_0.gguf')\ndims, ttype, off = g.tenseurs['output.weigh … [1595 caractères tronqués]`
+
+  ```
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 6, in <module>
+KeyError: 'output.weight'
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 300 python3 - <<'PY'\nimport sys\nimport numpy as np\nsys.path.insert(0,'tools')\nfrom analyse_experts_statique import Lecteur\ng = Lecteur('models/Qwen2.5-0.5B-Q8_0.gguf')\nnom = 'token_embd.weight' if 'token_embd.weight' in … [1347 caractères tronqués]`
+
+  ```
+tete token_embd.weight [151936, 896] type 8
+logit max           : +1.4283  (min -1.4090)
+borne globale max   : 18.0381  (×12.6)
+borne par blocs max : 17.6646  (×12.4)
+  globale    : 2048/2048 lignes restent candidates (100.0 %)
+  par blocs  : 2048/2048 lignes restent candidates (100.0 %)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-tete-garantie.md <<'EOF'\n# Rapport — restriction de tête GARANTIE : exacte, et sans gain\n\nChantier 2 de la session. La question posée était précise : peut-on ne pas\ncalculer tous les logits **sans jamais cha … [5320 caractères tronqués]`

@@ -1485,6 +1485,21 @@ pub struct Model {
     pub tete: String,
     /// Nombre de couches dont les puits appris ont été trouvés (diagnostic).
     pub sinks_vus: usize,
+    /// **Normes des lignes de la tête** `||w_i||`, calculées une fois, et
+    /// l'ordre des lignes par norme DÉCROISSANTE. C'est ce qui rend une
+    /// restriction de tête *garantie* : pour tout jeton `i`, `|w_i · h| ≤
+    /// ||w_i|| · ||h||`, donc aucune ligne de norme plus petite que
+    /// `meilleur_logit / ||h||` ne peut battre le meilleur logit déjà calculé.
+    /// On étend la liste par paliers jusqu'à ce que la borne conclue — et
+    /// lorsqu'elle ne conclut pas, on finit par tout calculer, ce qui est la
+    /// réponse juste plutôt qu'une réponse rapide et fausse.
+    pub normes_tete: Option<Vec<f32>>,
+    pub ordre_normes: Option<Vec<u32>>,
+    /// Liste de jetons candidats pour la tête garantie (`--tete-garantie`).
+    pub tete_garantie: Option<Vec<u32>>,
+    /// Compteurs de la tête garantie : lignes calculées et nombre de jetons.
+    pub tete_calculees: u64,
+    pub tete_appels_g: u64,
     /// Chemin GPU : la tête et les projections y résident en permanence. Les
     /// poids ne traversent le bus qu'une fois ; seules les activations font
     /// l'aller-retour à chaque jeton.
@@ -2551,6 +2566,8 @@ mapping {}",
             stop_id: None, stop_id2: None, prof: [0.0; 6],
             tete,
             tete_gpu, tete_gpu_q6k, head4, tete_restreinte: None,
+            normes_tete: None, ordre_normes: None, tete_garantie: None,
+            tete_calculees: 0, tete_appels_g: 0,
             sinks_vus, kv_gpu, attn_gpu_part: Vec::new(),
             couche_debut: 0, couche_fin: n_layer_total, flux_brut: false,
             cache_experts, mla, mla_cache, jeton_trace: 0, trace: None, flux_force: None,
@@ -4937,6 +4954,123 @@ dynamique de {dyn_:.3e} (relatif {:.2e})", mx / dyn_.max(1e-9));
         out
     }
 
+    /// Calcule `||w_i||` pour toutes les lignes de la tête, et l'ordre des
+    /// lignes par norme décroissante. Coût : UNE passe sur la matrice de tête
+    /// (3,4 ms pour 151 936 × 896 en Q8_0), payée une fois.
+    pub fn preparer_normes_tete(&mut self) {
+        if self.normes_tete.is_some() { return; }
+        let vocab = self.cfg.vocab;
+        let view = self.g.q8_view(&self.tete);
+        let (buf, nb) = match self.g.q8_blocks(&self.tete) {
+            Some(v) => v,
+            None => {
+                eprintln!("[tete-garantie] la tête « {} » n'est pas Q8_0 : les normes de \
+lignes ne sont pas calculées, la restriction garantie est indisponible", self.tete);
+                return;
+            }
+        };
+        let mut normes = vec![0f32; vocab];
+        let nt = self.pool.threads().max(1);
+        let tranche = vocab.div_ceil(nt).max(1);
+        let base = buf.as_ptr() as usize;
+        let nb = nb;
+        let out_ptr = normes.as_mut_ptr() as usize;
+        std::thread::scope(|s| {
+            for (t, _) in (0..vocab).collect::<Vec<_>>().chunks(tranche).enumerate() {
+                let (lo, hi) = (t * tranche, ((t + 1) * tranche).min(vocab));
+                s.spawn(move || {
+                    for o in lo..hi {
+                        let mut acc = 0f32;
+                        for b in 0..nb {
+                            let p = unsafe { (base as *const u8).add((o * nb + b) * 34) };
+                            let d = crate::gguf::Gguf::f16_to_f32(u16::from_le_bytes(
+                                [unsafe { *p }, unsafe { *p.add(1) }]));
+                            let mut s2 = 0f32;
+                            for j in 0..32 {
+                                let q = unsafe { *p.add(2 + j) } as i8 as f32;
+                                s2 += q * q;
+                            }
+                            acc += d * d * s2;
+                        }
+                        unsafe { *(out_ptr as *mut f32).add(o) = acc.sqrt(); }
+                    }
+                });
+            }
+        });
+        let _ = view;
+        let mut ordre: Vec<u32> = (0..vocab as u32).collect();
+        ordre.sort_unstable_by(|&a, &b| normes[b as usize].partial_cmp(&normes[a as usize]).unwrap());
+        println!("[tete-garantie] normes de {} lignes : max {:.4e} · médiane {:.4e} · min {:.4e}",
+                 vocab, normes[ordre[0] as usize],
+                 normes[ordre[vocab / 2] as usize],
+                 normes[*ordre.last().unwrap() as usize]);
+        self.normes_tete = Some(normes);
+        self.ordre_normes = Some(ordre);
+    }
+
+    /// **Tête garantie** : les logits calculés suffisent à prouver l'argmax.
+    ///
+    /// On part de la liste de candidats, on borne toutes les autres lignes par
+    /// `||w_i|| · ||h||`, et on étend par paliers tant qu'une ligne non calculée
+    /// peut battre le meilleur logit connu. Rend `(logits, lignes calculées,
+    /// borne du meilleur logit NON calculé)` ; quand la borne est sous le
+    /// meilleur logit, l'argmax est exact — et quand la liste atteint le
+    /// vocabulaire entier, il l'est aussi, par construction.
+    pub fn logits_garanti(&mut self, h: &[f32]) -> (Vec<f32>, usize, f32) {
+        let vocab = self.cfg.vocab;
+        let mut scratch = Vec::with_capacity(h.len());
+        let (sv, sx) = match Self::quant_scratch(h, self.act_levels, self.act_thresh,
+                                                self.act_topk, self.act_renorm, &mut scratch) {
+            Some(v) => v,
+            None => return (vec![0f32; vocab], 0, 0.0),
+        };
+        let mut qx = vec![0i16; h.len()];
+        for (&i, &v) in sv.idx.iter().zip(sv.val.iter()) { qx[i as usize] = v as i16; }
+        // ||h|| dans la MÊME unité que les poids : `logits = Σ d·q·x·sx`, donc la
+        // borne porte sur `||w|| · ||x·sx||`.
+        let norme_h = (qx.iter().map(|&v| (v as f32) * (v as f32)).sum::<f32>()).sqrt() * sx;
+        let normes = self.normes_tete.clone().expect("preparer_normes_tete d'abord");
+        let ordre = self.ordre_normes.clone().unwrap();
+        let view = self.g.q8_view(&self.tete);
+        let mut out = vec![0f32; vocab];
+        let mut calcules = vec![false; vocab];
+        let mut n_calc = 0usize;
+        let mut fait = |o: u32, out: &mut Vec<f32>, calcules: &mut Vec<bool>, n: &mut usize| {
+            if !calcules[o as usize] {
+                out[o as usize] = self.g.q8_dot_at(&view, o as usize, &qx) * sx;
+                calcules[o as usize] = true;
+                *n += 1;
+            }
+        };
+        // Passe 1 : la liste de candidats.
+        let liste = self.tete_garantie.clone().unwrap_or_default();
+        for &o in &liste { fait(o, &mut out, &mut calcules, &mut n_calc); }
+        // Paliers : on ajoute les lignes de plus grande norme tant qu'elles
+        // peuvent battre le meilleur logit connu.
+        let mut palier = 1024usize;
+        loop {
+            let meilleur = out.iter().enumerate().filter(|(i, _)| calcules[*i])
+                               .map(|(_, &v)| v).fold(f32::NEG_INFINITY, f32::max);
+            // Borne du meilleur logit non calculé : les lignes étant triées par
+            // norme décroissante, c'est la première non calculée.
+            let mut borne = f32::NEG_INFINITY;
+            for &o in ordre.iter() {
+                if !calcules[o as usize] {
+                    borne = normes[o as usize] * norme_h;
+                    break;
+                }
+            }
+            if borne <= meilleur || n_calc >= vocab {
+                return (out, n_calc, borne);
+            }
+            let avant = n_calc;
+            for &o in ordre.iter().take(palier) { fait(o, &mut out, &mut calcules, &mut n_calc); }
+            if n_calc == avant { palier *= 2; }
+            if palier > vocab { palier = vocab; }
+            if n_calc >= vocab { return (out, n_calc, f32::NEG_INFINITY); }
+        }
+    }
+
     /// Génère `n_new` tokens après `ids`. `temp` ≤ 0 ⇒ glouton (déterministe).
     /// Génère `n_new` jetons. `flux` reçoit chaque jeton **dès qu'il est
     /// produit**, ce qui permet de l'afficher sans attendre la fin.
@@ -4986,7 +5120,20 @@ premiers sont ABANDONNÉS (troncature, pas de fenêtrage)",
         let mut out = Vec::with_capacity(n_new);
         let t1 = Instant::now();
         for step in 0..n_new {
-            let mut logits = self.logits(&last);
+            // Tête GARANTIE : on ne calcule que les lignes qui peuvent encore
+            // gagner, et on étend par paliers tant que la borne de
+            // Cauchy-Schwarz ne conclut pas. Quand elle conclut, l'argmax est
+            // celui du calcul complet — la sortie est identique, pas approchée.
+            let mut logits = if self.tete_garantie.is_some() {
+                let (lg, n_calc, borne) = self.logits_garanti(&last);
+                self.tete_calculees += n_calc as u64;
+                self.tete_appels_g += 1;
+                if self.tete_appels_g <= 3 {
+                    eprintln!("[tete-garantie] {} lignes calculées sur {} (meilleur hors liste \
+borné à {:.4e})", n_calc, self.cfg.vocab, borne);
+                }
+                lg
+            } else { self.logits(&last) };
             // Historique pour la pénalité : les derniers jetons vus, invite
             // comprise. Sans elle, une génération longue finit en boucle —
             // c'est le mode d'échec le plus visible en usage réel.

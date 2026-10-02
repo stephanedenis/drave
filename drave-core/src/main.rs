@@ -553,6 +553,11 @@ struct Options {
     /// ceux-là. **Génération seulement** — une perplexité calculée sur un
     /// vocabulaire restreint n'est comparable à rien.
     tete_restreinte: Option<String>,
+    /// `--tete-garantie <fichier>` : liste de candidats pour une restriction de
+    /// tête **prouvée exacte** (Cauchy-Schwarz + extension par paliers). La
+    /// sortie est identique au calcul complet ; ce qui change est le nombre de
+    /// lignes lues.
+    tete_garantie: Option<String>,
     /// Taille du lot de préremplissage : 1 = jeton par jeton (défaut).
     lot: usize,
     harmony: Option<String>, harmony_contexte: Option<String>,
@@ -679,6 +684,8 @@ fn analyser(args: &[String]) -> Options {
             "--config" => { o.config = true; 1 }
             "--sonder-engram" => { o.sonder_engram = suivant(i).parse().unwrap_or(1000); 2 }
             "--bloc" if i + 1 < args.len() => { o.bloc = Some(suivant(i).clone()); 2 }
+            "--tete-garantie" if i + 1 < args.len() => {
+                o.tete_garantie = Some(suivant(i).clone()); 2 }
             "--tete-restreinte" if i + 1 < args.len() => {
                 o.tete_restreinte = Some(suivant(i).clone()); 2 }
             "--profil-neurones" => { o.profil_neurones = true; 1 }
@@ -759,6 +766,26 @@ fn run_infer(opt: Options) {
     let mut mdl = model::Model::load(path, ctx, n_threads, dense, keep, auto, q4, b6);
     if let Some(f) = &opt.tete_restreinte {
         poser_tete_restreinte(&mut mdl, f);
+    }
+    if let Some(f) = &opt.tete_garantie {
+        let mut ids: Vec<u32> = Vec::new();
+        if let Ok(t) = std::fs::read_to_string(f) {
+            for x in t.split(|c: char| c == ',' || c.is_whitespace()) {
+                if let Ok(v) = x.trim().parse::<u32>() { ids.push(v); }
+            }
+        }
+        ids.sort_unstable();
+        ids.dedup();
+        if ids.is_empty() {
+            eprintln!("[tete-garantie] {f} ne contient aucun identifiant : rien à faire");
+        } else {
+            mdl.tete_garantie = Some(ids);
+            mdl.preparer_normes_tete();
+            println!("[tete-garantie] {} candidats sur {} ({:.1} %) — la sortie reste \
+IDENTIQUE, seule la lecture change", mdl.tete_garantie.as_ref().unwrap().len(),
+                     mdl.cfg.vocab, 100.0 * mdl.tete_garantie.as_ref().unwrap().len() as f64
+                     / mdl.cfg.vocab as f64);
+        }
     }
     mdl.act_levels = ((1u32 << (abits - 1)) - 1) as f32;
     mdl.moe_topk = moe_topk;
