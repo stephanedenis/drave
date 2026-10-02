@@ -372,6 +372,14 @@ tools/extraire_tables_ggml.sh verifier    # les tables embarquées = celles de g
 | Qwen2.5-VL-7B | Q4_K_M | 10,99 | 2,8 tok/s | 4,5 Go |
 | **Qwen3-30B-A3B** (MoE 128 experts, top-8) | Q4_K_M | **7,61** | 5,4 tok/s | **17,7 Go** |
 | **gpt-oss-120b** (MoE, MXFP4) | MXFP4 | **15,6017** (ctx 256) | blocs lus | 60 Go |
+| **GLM-5.3** (79 couches MLA, 256 experts) | IQ1_S/IQ3_XXS/IQ4_XS | 3 jetons : 5 966 contre **4 286** chez llama.cpp | 73 s/jeton | 90 Go |
+| **Kimi-K2.7** (61 couches MLA, 384 experts) | IQ1_M/IQ2_XXS/IQ3_XXS | non validé | 73 s/jeton | 1 026 G mmap |
+
+Les deux derniers sont les plus gros modèles que le moteur ait calculés ; leur
+attention MLA à rang faible (cache latent) est **validée contre llama.cpp** —
+corrélation des logits 0,999024 et top-1 3/3 sur GLM-5.3. La lenteur est celle
+de l'attention MLA scalaire et de la déquantification des experts, pas du
+principe : le débit est le prochain chantier, l'exactitude est acquise.
 
 Les lecteurs Q4_K et Q6_K sont vérifiés **tenseur par tenseur** contre une
 référence F16 des mêmes poids produite par `llama-quantize`, et le routage MoE

@@ -2629,6 +2629,20 @@ mapping {}",
     fn matvec(pool: &mut Pool, p: &Proj, x: &[f32], out: &mut [f32], events: &mut u64,
               levels: f32, thresh: f32, topk: usize, renorm: bool, scratch: &mut Vec<f32>,
               thresh_auto: f32) {
+        // On ne quantifie QUE la tranche utile de l'activation. Les appelants
+        // passent volontiers un tampon de travail plus large que l'entrée de la
+        // projection (12 288 valeurs pour une descente d'expert qui en lit
+        // 2 048, 36 864 pour une sortie d'attention MLA qui en produit 16 384) :
+        // quantifier le reste fait dépendre l'ÉCHELLE d'activation de valeurs
+        // périmées laissées par la position ou la couche précédente. Mesuré :
+        // l'écart à llama.cpp sur GLM-5.3 passait de 0,33 à 1,69 de NLL entre la
+        // position 0 et la position 6 — une erreur qui grandit avec la position,
+        // donc dans le cache ou dans la quantification, pas dans les poids.
+        let n_in = p.q4.as_ref().map(|q| q.n_in)
+            .or_else(|| p.d.as_ref().map(|d| d.n_in))
+            .or_else(|| p.m.as_ref().map(|m| m.n_in))
+            .unwrap_or(x.len());
+        let x = &x[..n_in.min(x.len())];
         let Some((sv, sx)) = Self::quant_scratch(x, levels, thresh, topk, renorm, scratch) else {
             for (o, v) in out.iter_mut().enumerate() {
                 *v = p.bias.as_ref().map_or(0.0, |b| b[o]);
@@ -2764,12 +2778,14 @@ mapping {}",
             return;
         }
         let d = vue.expert(loc);
-        Self::matvec_q4(pool, &d, x, out, levels, thresh, topk, renorm, scratch, biais);
+        Self::matvec_q4(pool, &d, &x[..vue.n_in.min(x.len())], out, levels, thresh, topk,
+                        renorm, scratch, biais);
     }
 
     fn matvec_q4(pool: &mut Pool, m: &crate::list::DenseQ4, x: &[f32], out: &mut [f32],
                  levels: f32, thresh: f32, topk: usize, renorm: bool,
                  scratch: &mut Vec<f32>, biais: Option<&[f32]>) {
+        let x = &x[..m.n_in.min(x.len())];
         let Some((sv, sx)) = Self::quant_scratch(x, levels, thresh, topk, renorm, scratch) else {
             for v in out[..m.n_out].iter_mut() { *v = 0.0; }
             return;
@@ -4432,7 +4448,14 @@ dynamique de {dyn_:.3e} (relatif {:.2e})", mx / dyn_.max(1e-9));
             // profils entre un modèle MLA et un modèle dense serait fausse.
             self.prof[2] += ta.elapsed().as_secs_f64();
             let tf = Instant::now();
-            Self::matvec(pool, &lay.wo, &att, &mut o, events, self.act_levels, self.act_thresh, tk(3), self.act_renorm, &mut scratch, self.seuil_push);
+            // `att` est dimensionné en `nh × head_dim`, mais un chemin MLA n'en
+            // remplit que `nh × vd` : passer le tampon entier quantifiait des
+            // valeurs périmées (voir `matvec`).
+            let n_att = match self.mla.as_ref().map(|v| &v[l]) {
+                Some(m) => m.nh * m.vd,
+                None => att.len(),
+            };
+            Self::matvec(pool, &lay.wo, &att[..n_att.min(att.len())], &mut o, events, self.act_levels, self.act_thresh, tk(3), self.act_renorm, &mut scratch, self.seuil_push);
             for i in 0..h { o[i] += x[i]; }
             Self::rmsnorm(&o, &lay.ffn_norm, cfg.eps, &mut hn);
             if let Some(r) = self.flux_force.as_mut() {

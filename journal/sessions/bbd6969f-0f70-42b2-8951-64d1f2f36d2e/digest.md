@@ -63864,3 +63864,200 @@ HAE 05:14
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A tools/ref_logits.cpp tools/ref_logits 2>/dev/null; git commit -q -m \"ref_logits : --tensors REGEX, l'outil qui a trouvé le bug MLA\n\nIl imprime les tenseurs NOMMÉS du graphe llama.cpp pendant l'évaluation (les\ncb(...) d … [413 caractères tronqués]`
+
+  ```
+86b403f ref_logits : --tensors REGEX, l'outil qui a trouvé le bug MLA
+ M journal/README.md
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 900 ./drave-core/target/release/drave /home/stephane/Data13TB/stephane/modeles/gguf/gpt-oss-120b-MXFP4.gguf --ppl /tmp/ids_oss_512.txt --ctx 256 --dense --threads 16 --limit 512 2>&1 | grep -E \"=== perplexité\"", "descriptio … [55 caractères tronqués]`
+
+  ```
+(no output)
+[timed out after 60000ms]
+[killed by signal: SIGTERM]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && nohup timeout 900 ./drave-core/target/release/drave /home/stephane/Data13TB/stephane/modeles/gguf/gpt-oss-120b-MXFP4.gguf --ppl /tmp/ids_oss_512.txt --ctx 256 --dense --threads 16 --limit 512 > /tmp/oss_final.log 2>&1 & for i in $(se … [212 caractères tronqués]`
+
+  ```
+started background job bash-122
+  ```
+
+- **job_output** `{"job_id": "bash-122", "timeout_ms": 600000, "wait": true}`
+
+  ```
+=== perplexité 15.6017 sur 510 tokens (0 événements, 540.8 s) ===
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/glm8.sh <<'EOF'\n#!/usr/bin/env bash\ncd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\nexport LD_LIBRARY_PATH=/home/stephane/Data13TB/stephane/GitHub/llama.cpp/build/bin\nM=/home/stephane/Data13TB/stephane/modeles/gguf/ … [787 caractères tronqués]`
+
+  ```
+comparaison 8 jetons lancée
+=== référence llama.cpp, 8 jetons ===
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in $(seq 1 500); do if grep -q \"écart |NLL|\" /tmp/glm8.log; then break; fi; sleep 10; done; cat /tmp/glm8.log", "description": "Wait for the 8-token validation", "run_in_background": true}`
+
+  ```
+started background job bash-123
+  ```
+
+- **job_output** `{"job_id": "bash-123", "timeout_ms": 900000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **job_output** `{"job_id": "bash-123", "timeout_ms": 900000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "cat /tmp/glm8.log; ps -eo pid,etimes,rss,comm --sort=-rss | head -2", "description": "Check the 8-token job progress"}`
+
+  ```
+=== référence llama.cpp, 8 jetons ===
+    PID ELAPSED   RSS COMMAND
+4106492    1240 91585016 ref_logits
+  ```
+
+- **job_output** `{"job_id": "bash-123", "timeout_ms": 900000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "cat /tmp/glm8.log; ps -eo pid,etimes,rss,comm --sort=-rss | head -2; free -g | sed -n 2p", "description": "Poll the 8-token job"}`
+
+  ```
+=== référence llama.cpp, 8 jetons ===
+NLL moy  = 6.791734
+perplexite = 890.455939
+=== drave, 8 jetons ===
+    PID ELAPSED   RSS COMMAND
+4110708     151 68945340 drave
+Mem:             125          67           2           2          59          58
+  ```
+
+- **job_output** `{"job_id": "bash-123", "timeout_ms": 900000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "sleep 55; cat /tmp/glm8.log | tail -4", "description": "Poll the 8-token job"}`
+
+  ```
+=== référence llama.cpp, 8 jetons ===
+NLL moy  = 6.791734
+perplexite = 890.455939
+=== drave, 8 jetons ===
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 55; grep -E \"tokens notés|perplexité\" /tmp/glm8.log | tail -2; ps -eo pid,etimes,rss,comm --sort=-rss | head -2", "description": "Poll the drave 8-token run"}`
+
+  ```
+PID ELAPSED   RSS COMMAND
+4110708     877 98631988 drave
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in $(seq 1 200); do if grep -q \"écart |NLL|\" /tmp/glm8.log; then break; fi; sleep 10; done; cat /tmp/glm8.log", "description": "Wait for the comparison result", "run_in_background": true}`
+
+  ```
+started background job bash-124
+  ```
+
+- **job_output** `{"job_id": "bash-124", "timeout_ms": 900000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "cat /tmp/glm8.log | tail -6; ps -eo pid,etimes,rss,comm --sort=-rss | head -2", "description": "Poll the comparison"}`
+
+  ```
+=== référence llama.cpp, 8 jetons ===
+NLL moy  = 6.791734
+perplexite = 890.455939
+=== drave, 8 jetons ===
+    PID ELAPSED   RSS COMMAND
+4110708    1507 104985092 drave
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '366,378p' README.md", "description": "Read the README model table"}`
+
+  ```
+```
+
+| modèle | format | perplexité | débit | mémoire |
+|---|---|---|---|---|
+| Qwen2.5-0.5B | Q4_0 | 21,01 | 39 tok/s | 0,41 Go |
+| Qwen2.5-1.5B | Q4_K_M | 12,92 | 17 tok/s | 1,1 Go |
+| Qwen2.5-VL-7B | Q4_K_M | 10,99 | 2,8 tok/s | 4,5 Go |
+| **Qwen3-30B-A3B** (MoE 128 experts, top-8) | Q4_K_M | **7,61** | 5,4 tok/s | **17,7 Go** |
+| **gpt-oss-120b** (MoE, MXFP4) | MXFP4 | **15,6017** (ctx 256) | blocs lus | 60 Go |
+
+Les lecteurs Q4_K et Q6_K sont vérifiés **tenseur par tenseur** contre une
+référence F16 des mêmes poids produite par `llama-quantize`, et le routage MoE
+sur `Qwen3-30B-A3B`. Détail : [`docs/convertisseur.md`](docs/convertisseur.md)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='README.md'; s=open(p).read()\ns = s.replace(\"\"\"| **gpt-oss-120b** (MoE, MXFP4) | MXFP4 | **15,6017** (ctx 256) | blocs lus | 60 Go |\n\nLes lecteurs Q4_K et Q6_K sont vérifiés\"\"\",\n\"\"\"| **gpt-oss-120b**  … [869 caractères tronqués]`
+
+  ```
+=== référence llama.cpp, 8 jetons ===
+NLL moy  = 6.791734
+perplexite = 890.455939
+=== drave, 8 jetons ===
+  ```
+
+- **job_output** `{"job_id": "bash-124", "timeout_ms": 900000, "wait": true}`
+
+  ```
+=== référence llama.cpp, 8 jetons ===
+NLL moy  = 6.791734
+perplexite = 890.455939
+=== drave, 8 jetons ===
+=== perplexité 4807.0674 sur 7 tokens (0 événements, 1246.1 s) ===
+=== comparaison ===
+    6   14721   13.0012   11.4191  +1.5821     22205      3904       284       621     NON
+
+écart |NLL| : moyenne 1.6861 · médiane 1.5821 · p90 3.4984 · max 4.0696
+accord du top-1 : 4/7  (3 positions divergentes)
+perplexité nous : 4807.0666   référence : 890.4552   (7 positions comparées)
+corrélation des logits (position 0) : 0.999024
+[status: completed, exit code: 0]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-123 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in $(seq 1 500); do if grep -q "écart |NLL|" /tmp/glm8.log; then break; fi; sleep 10; done; cat /tmp/glm8.log) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+### 🤖 Assistant
+
+⏵ Deuxième bug de la même famille : la quantification lit des valeurs périmées du tampon
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/model.rs'; s=open(p).read()\n# 1) matvec : ne quantifier que la TRANCHE utile de l'activation.\ns = s.replace(\"\"\"    fn matvec(pool: &mut Pool, p: &Proj, x: &[f32], out: &mut [f32], events: &mut … [3712 caractères tronqués]`
+
+  ```
+BUILD
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && cargo test --release 2>&1 | tail -2; cd .. && timeout 600 ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf --ppl /tmp/ids_qwen.txt --ctx 256 --abits 16 --threads 16 --limit 512 --dense 2>&1 | grep -E \"=== p … [289 caractères tronqués]`
+
+  ```
+test result: ok. 48 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.11s
+
+=== perplexité 19.3885 sur 510 tokens (0 événements, 16.1 s) ===
+=== perplexité 799.8557 sur 7 tokens (0 événements, 7.2 s) ===
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/glm8b.sh <<'EOF'\n#!/usr/bin/env bash\ncd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\nM=/home/stephane/Data13TB/stephane/modeles/gguf/GLM-5.3-UD-IQ1_S/GLM-5.3-UD-IQ1_S-00001-of-00006.gguf\necho \"=== drave, 8 jetons,  … [1734 caractères tronqués]`
