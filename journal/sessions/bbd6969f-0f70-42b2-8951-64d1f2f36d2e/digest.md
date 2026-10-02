@@ -53787,3 +53787,104 @@ DeepSeek-V4-Flash-UD-IQ1_M-00001-of-00003. Modèle : deepseek4 · 86.9 Go · 256
 ⏵ Ça marche partout. Un détail : les modèles denses affichent « 0 experts de 9,95 Mo ». Je corrige.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np = 'drave-core/src/main.rs'\ns = open(p).read()\na = '''            println!(\"Modèle : {} · {:.1} Go · {} experts de {:.2} Mo\\\\n\", arch, total, n_exp, mo);'''\nb = '''            if n_exp > 0 {\n                … [911 caractères tronqués]`
+
+  ```
+dense : Modèle : qwen2 · 0.5 Go · dense (aucun expert)
+MoE   : Modèle : qwen3moe · 18.6 Go · 128 experts de 3.06 Mo
+7c8899a Materiel : distinguer dense et MoE (un modele dense affichait « 0 experts de 9,95 Mo »)
+  ```
+
+- **bash** `{"command": "sleep 55; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls -la /home/stephane/FastNVMe/modeles-lourds/*.gguf | awk '{printf \"copie : %.1f Go / 365.7\\n\", $5/1e9}'; cat /tmp/porte_oss3.log; TZ=America/Toronto date", "description": "Check copy and gate progress"}`
+
+  ```
+copie : 190.0 Go / 365.7
+gpt-oss ctx 256 (attendu 15,1757) : jeu 01 oct 2026 22:34:42 EDT
+  ```
+
+### 🤖 Assistant
+
+⏵ Copie à 52 %. Je vérifie la cohérence du dépôt en attendant.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git status --short | grep -v journal | wc -l | sed 's/^/en attente : /'; echo \"--- lignes Rust ---\"; wc -l drave-core/src/*.rs | tail -1; echo \"--- modules ---\"; ls drave-core/src/; echo \"--- rapports de la session ---\"; ls -la … [180 caractères tronqués]`
+
+  ```
+en attente : 0
+--- lignes Rust ---
+ 16415 total
+--- modules ---
+clusters.rs
+engine.rs
+gguf.rs
+gpu.rs
+list.rs
+main.rs
+materiel.rs
+model.rs
+tokenizer.rs
+--- rapports de la session ---
+52
+rapports au total
+--- commits depuis 10h47 ---
+44
+  ```
+
+### 🤖 Assistant
+
+⏵ Je crée un script de portes, pour vérifier l'état complet en une commande.
+
+- **write** `{"content": "#!/bin/bash\n# Les portes du dépôt, en une commande.\n#\n# Un chiffre de référence qui dérive sans qu'on s'en aperçoive ne vaut rien :\n# chaque porte est comparée à la valeur ATTENDUE, et le script sort en erreur si\n# l'une diverge. Les valeurs sont celles publiées dans les rapports.\ … [2457 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/portes.sh</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && chmod +x tools/portes.sh && nohup ./tools/portes.sh rapide > /tmp/portes.log 2>&1 & sleep 55; cat /tmp/portes.log; ls -la /home/stephane/FastNVMe/modeles-lourds/*.gguf | awk '{printf \"copie : %.1f Go / 365.7\\n\", $5/1e9}'", "descri … [31 caractères tronqués]`
+
+  ```
+=== Portes ===
+  cargo test --release                       35 verts  ✅
+  Qwen2.5-0.5B ctx 256                       17.431  ❌ (attendu 19.3885)
+copie : 198.1 Go / 365.7
+  ```
+
+### 🤖 Assistant
+
+⏵ **Alerte : la porte Qwen donne 17,431 au lieu de 19,3885.** Je vérifie immédiatement.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"--- commande exacte du script ---\"; timeout 300 ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf --ppl /tmp/ids_qwen.txt --ctx 256 --abits 16 --threads 16 --limit 512 --dense 2>&1 | grep -E \"perplexité|tokens  … [329 caractères tronqués]`
+
+  ```
+--- commande exacte du script ---
+     255 tokens notés — perplexité cumulée 17.431  (30.7 tok/s)  [fenêtre 1 : 255 notés, PPL 17.431]
+     510 tokens notés — perplexité cumulée 19.388  (30.7 tok/s)  [fenêtre 2 : 255 notés, PPL 21.565]
+=== perplexité 19.3885 sur 510 tokens (0 événements, 16.6 s) ===
+--- extraction du script ---
+17.431
+  ```
+
+### 🤖 Assistant
+
+⏵ Faux positif : mon script prenait la perplexité de la **fenêtre 1** au lieu du total. Je corrige l'instrument.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np = 'tools/portes.sh'\ns = open(p).read()\ns = s.replace('''valeur() { grep -oE \"[0-9]+\\\\.[0-9]+\" | head -1; }''',\n'''# Attention : le moteur affiche AUSSI une perplexité cumulée par fenêtre, avant\n# le total. … [770 caractères tronqués]`
+
+  ```
+ok
+=== Portes ===
+  cargo test --release                       35 verts  ✅
+  Qwen2.5-0.5B ctx 256                       19.3885  ✅
+  Qwen3-30B en clusters (origine : 799,8557) 799.8557  ✅
+  threads par défaut (physiques)            20  ✅
+
+toutes les portes sont vertes
+  ```
+
+### 🤖 Assistant
+
+⏵ **Toutes les portes vertes.** Je commite le script.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -m \"tools/portes.sh : les portes du depot en une commande, comparees a leur valeur publiee\n\nChaque porte est confrontee a la valeur ATTENDUE et le script sort en erreur si\nl'une diverge : un chiffre de … [608 caractères tronqués]`

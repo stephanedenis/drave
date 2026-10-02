@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 79.8 h |
+| Durée | 79.9 h |
 | Tours | 69 |
-| Messages | 3344 |
-| Appels d'outils | 3164 |
-| Fichiers touchés | 73 |
-| Commandes | 2765 |
+| Messages | 3351 |
+| Appels d'outils | 3171 |
+| Fichiers touchés | 74 |
+| Commandes | 2771 |
 | Sous-agents | 22 |
-| Commits | 283 |
+| Commits | 284 |
 | Compactages de contexte | 4 |
 
 ## Objectifs déclarés
@@ -3526,7 +3526,7 @@ Sur cette session, les mesures m
 
 ### Tour 69 — implémente toute les optimisation et détection de matériel avec heuristiques de configuration automatique.
 
-*125 appels d'outils.* Actions notables :
+*132 appels d'outils.* Actions notables :
 
 - bash — Inspect existing GPU detection
 - write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/materiel.rs`
@@ -3542,11 +3542,11 @@ Sur cette session, les mesures m
 - bash — Read KV bits resolution
 - bash — Integrate KV and VRAM heuristics
 - bash — Lighten detection and run gates
-- … et 109 autres
+- … et 116 autres
 
 **Synthèse produite :**
 
-⏵ Ça marche partout. Un détail : les modèles denses affichent « 0 experts de 9,95 Mo ». Je corrige.
+⏵ **Toutes les portes vertes.** Je commite le script.
 
 ## 3. Travail accompli
 
@@ -3627,6 +3627,7 @@ Sur cette session, les mesures m
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/materiel.rs` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-tete-restreinte.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-optimisations-auto.md` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/portes.sh` | 1 | 0 |
 
 ### Sous-agents lancés
 
@@ -3695,7 +3696,7 @@ Sur cette session, les mesures m
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 2725 autres
+- … et 2731 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4126,4 +4127,5 @@ Sur cette session, les mesures m
 - REPRISE : session d'implementation (detection materielle, heuristiques, engram)" && git log --oneline -1; ls -la /home/stephane/FastNVMe/modeles-lourds/*.gguf 2
 - Aide du moteur : les modes recents, et ce que chacun ne fait pas  Usage reecrit : --materiel (avec sa raison d'etre), --sonder-engram, --tete-restreinte (et son
 - Materiel : distinguer dense et MoE (un modele dense affichait « 0 experts de 9,95 Mo »)" && git log --oneline -1
+- tools/portes.sh : les portes du depot en une commande, comparees a leur valeur publiee  Chaque porte est confrontee a la valeur ATTENDUE et le script sort en er
 
