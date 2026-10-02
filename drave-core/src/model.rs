@@ -609,12 +609,14 @@ impl Vue4 {
     fn matvec_dequant(&self, loc: usize, t: u32, x: &[f32], out: &mut [f32], n_fils: usize) {
         let taille = crate::list::octets_grille(t);
         assert!(self.n_in % 256 == 0, "largeur {} non multiple de 256", self.n_in);
-        // Le décalage des super-blocs dans la ligne se lit avec `n_in` : une
-        // activation plus courte que la ligne annoncée dépasserait en silence
-        // (le noyau lit `x[j]` jusqu'à `n_in`). Dire les deux largeurs.
-        assert_eq!(x.len(), self.n_in, "expert de type {} : activation de {} valeurs \
+        // Le noyau lit `x[j]` jusqu'à `n_in` : une activation plus COURTE
+        // dépasserait en silence. Plus longue est normal — l'appelant passe son
+        // tampon de travail entier (12 288 valeurs pour la descente d'un expert
+        // de 2 048 entrées) et seules les `n_in` premières sont lues.
+        assert!(x.len() >= self.n_in, "expert de type {} : activation de {} valeurs \
 pour une projection de {} entrées × {} sorties", crate::gguf::Gguf::nom_type(t),
-                   x.len(), self.n_in, self.n_out);
+                x.len(), self.n_in, self.n_out);
+        let x = &x[..self.n_in];
         let nb = self.n_in / 256;
         // Le pointeur vient d'un mmap qui vit plus longtemps que l'appel ; il
         // est transmis comme entier pour traverser `thread::scope` sans
@@ -623,12 +625,15 @@ pour une projection de {} entrées × {} sorties", crate::gguf::Gguf::nom_type(t
         let n_out = self.n_out;
         let n_in = self.n_in;
         let travail = move |o0: usize, o1: usize, out: &mut [f32]| {
+            // Un tampon par FIL, réutilisé pour tous les blocs : c'est ce qui
+            // fait la différence entre 2,5 µs et 0,3 µs par super-bloc.
+            let mut valeurs = vec![0f32; 256];
             for o in o0..o1 {
                 let mut acc = 0f32;
                 for b in 0..nb {
                     let p = unsafe { (base as *const u8).add((o * nb + b) * taille) };
                     let bloc = unsafe { std::slice::from_raw_parts(p, taille) };
-                    let valeurs = crate::list::dequant_grille(t, bloc);
+                    crate::list::dequant_grille_dans(t, bloc, &mut valeurs);
                     let lo = b * 256;
                     let hi = (lo + 256).min(n_in);
                     let mut s = 0f32;

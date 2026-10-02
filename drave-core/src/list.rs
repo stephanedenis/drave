@@ -589,18 +589,30 @@ pub fn sans_noyau(t: u32) -> bool {
 }
 
 /// Déquantifie un super-bloc de 256 poids d'un format sans noyau dédié.
-pub fn dequant_grille(t: u32, bloc: &[u8]) -> Vec<f32> {
+///
+/// La version `_dans` écrit dans un tampon FOURNI : le produit par expert
+/// déquantifie 49 000 blocs par projection et par expert, et allouer 256 f32 à
+/// chaque fois coûtait plus cher que la déquantification elle-même (mesuré :
+/// 253 s par jeton sur GLM-5.3, dont l'essentiel dans ces allocations).
+pub fn dequant_grille_dans(t: u32, bloc: &[u8], out: &mut [f32]) {
     match t {
-        10 => crate::gguf::Gguf::dequant_q2k(bloc),
-        11 => crate::gguf::Gguf::dequant_q3k(bloc),
-        13 => crate::gguf::Gguf::dequant_q5k(bloc),
-        16 => crate::formats::dequant_iq2xxs(bloc),
-        18 => crate::formats::dequant_iq3xxs(bloc),
-        19 => crate::formats::dequant_iq1s(bloc),
-        23 => crate::formats::dequant_iq4xs(bloc),
-        29 => crate::formats::dequant_iq1m(bloc),
+        10 => crate::gguf::Gguf::dequant_q2k_dans(bloc, out),
+        11 => crate::gguf::Gguf::dequant_q3k_dans(bloc, out),
+        13 => crate::gguf::Gguf::dequant_q5k_dans(bloc, out),
+        16 => crate::formats::dequant_iq2xxs_dans(bloc, out),
+        18 => crate::formats::dequant_iq3xxs_dans(bloc, out),
+        19 => crate::formats::dequant_iq1s_dans(bloc, out),
+        23 => crate::formats::dequant_iq4xs_dans(bloc, out),
+        29 => crate::formats::dequant_iq1m_dans(bloc, out),
         _ => panic!("type {t} n'est pas un format à grille"),
     }
+}
+
+/// Version qui alloue, pour les outils et les tests.
+pub fn dequant_grille(t: u32, bloc: &[u8]) -> Vec<f32> {
+    let mut v = vec![0f32; 256];
+    dequant_grille_dans(t, bloc, &mut v);
+    v
 }
 
 #[derive(Clone, Copy, PartialEq, Eq)]

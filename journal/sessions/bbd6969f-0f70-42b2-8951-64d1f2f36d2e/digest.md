@@ -61881,3 +61881,178 @@ started background job bash-100
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A drave-core/src reports/ && git commit -q -F - <<'EOF'\nMLA : le lot de lignes indexait sa tranche avec l'indice global\n\n`matvec_dequant` découpe les lignes de sortie entre plusieurs fils ; chaque\nfil reçoit une TRANCHE  … [858 caractères tronqués]`
+
+  ```
+0c4bad0 MLA : le lot de lignes indexait sa tranche avec l'indice global
+  ```
+
+- **job_output** `{"job_id": "bash-100", "timeout_ms": 600000, "wait": true}`
+
+  ```
+=== GLM-5.3, essai 5 ===
+[config] mélanges d'experts chargés : 76/79 couches · mapping absent (experts en clair dans le fichier)
+thread 'main' (3548646) panicked at src/model.rs:615:9:
+assertion `left == right` failed: expert de type IQ3_XXS : activation de 12288 valeurs pour une projection de 2048 entrées × 6144 sorties
+ right: 2048
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/model.rs'; s=open(p).read()\ns = s.replace(\"\"\"        // Le décalage des super-blocs dans la ligne se lit avec `n_in` : une\n        // activation plus courte que la ligne annoncée dépasserait e … [1375 caractères tronqués]`
+
+  ```
+-rw-r--r--. 1 stephane stephane 164  2 oct 00:57 /tmp/glm53_essai6.log
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in $(seq 1 400); do if grep -qE \"perplexité|panicked\" /tmp/glm53_essai6.log; then break; fi; sleep 10; done; echo \"=== GLM-5.3, essai 6 ===\"; grep -E \"mélanges|panicked|perplexité|valeurs pour\" /tmp/glm53_essai6.log | tai … [110 caractères tronqués]`
+
+  ```
+started background job bash-101
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"REPRISE\" -m1 README.md >/dev/null 2>&1; head -40 REPRISE.md", "description": "Review REPRISE header for updates"}`
+
+  ```
+# Reprise — état du projet et mode d'emploi pour une nouvelle session
+
+> Rédigé à la fin d'une session longue. Tout ce qui suit est **mesuré**, pas
+> déduit. Les valeurs de perplexité sont des **références de non-régression** :
+> si une modification les change, c'est qu'elle a changé le calcul.
+>
+> **Nom** : le projet s'appelle **Drave** (binaire `drave`, paquet `drave-core`,
+> variables `DRAVE_*`, histoire du renommage dans `docs/histoire.md`). Le dossier
+> de travail, lui, s'appelle encore `Qtrinet` — les chemins ci-dessous sont ceux
+> qui existent.
+
+---
+
+## 1. En une phrase
+
+`drave-core` est un moteur d'inférence Rust (~13 758 lignes, `std` seul) qui
+charge les GGUF **en place** (aucune copie, aucune requantification), exécute les
+projections soit en listes d'événements, soit en produit scalaire dense, gère les
+MoE, tient une conversation, et déporte au GPU ce qui y gagne. Il fait tourner du
+0,5 B au 120 B sur le CPU de cette machine.
+
+```bash
+cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && cargo build --release
+./target/release/drave ../models/Qwen2.5-0.5B-Q8_0.gguf \
+    --infer --chat --flux --prompt "Explique le ciel bleu en une phrase." \
+    --n 64 --ctx 5
+… [589 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"^## \" REPRISE.md | head -30", "description": "List REPRISE sections"}`
+
+  ```
+14:## 1. En une phrase
+31:## 2. Références de non-régression
+90:## 3. Ce qui est implémenté et vérifié
+118:## 4. Pièges de l'environnement (tous rencontrés)
+133:## 5. Règles de méthode (chacune a coûté une erreur)
+152:## 6. Les huit chantiers : où ils en sont
+273:## 6bis. Session « Drave » — le calcul réparti tient debout
+628:## 7. Carte du dépôt
+656:## 8. Premier pas suggéré pour la nouvelle session
+696:## Sprint 08 — un modèle éclaté se lit comme un seul (11:13 → 13:13)
+738:## Inventaire des modèles lourds (01/10 midi)
+763:## Session d'analyse — l'empreinte mémoire de DeepSeek-V4.1 (01/10, 10 h 47 → 18 h)
+929:## Session d'implémentation — détection matérielle et configuration automatique
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat >> REPRISE.md <<'EOF'\n\n---\n\n## Session « routage, MLA et formats » (01/10 22 h → 02/10) — ce qui était faux, et ce qui bloque encore\n\n### Les portes, revérifiées\n\n| porte | valeur | état |\n|---|---|---|\n| Qwen2.5-0.5B Q … [2972 caractères tronqués]`
+
+  ```
+REPRISE complété
+1053 REPRISE.md
+  ```
+
+- **job_output** `{"job_id": "bash-101", "timeout_ms": 600000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "grep -E \"panicked|perplexité|chargées en\" /tmp/glm53_essai6.log | tail -3; ps -eo pid,rss,comm --sort=-rss | head -2", "description": "Check GLM progress"}`
+
+  ```
+[modele] 79 couches chargées en 553.131525224s — listes 25.62 Go , 20 threads
+    PID   RSS COMMAND
+3549935 90406584 drave
+  ```
+
+- **job_output** `{"job_id": "bash-101", "timeout_ms": 600000, "wait": true}`
+
+  ```
+=== GLM-5.3, essai 6 ===
+[config] mélanges d'experts chargés : 76/79 couches · mapping absent (experts en clair dans le fichier)
+       1 tokens notés — perplexité cumulée 12979711.913  (0.0 tok/s)
+=== perplexité 12979711.9126 sur 1 tokens (0 événements, 256.3 s) ===
+    postes (ms/token) : projets-attn 0.00 | rope 0.00 | attention 23102.35 | proj+mlp 230079.23 | somme 253181.58 | reste (tête + échantillonnage) 3075.88
+    dont tête de sortie 3071.62 | notation log-sum-exp 1.97 (le reste du « reste » n'est pas chronométré)
+    dont attention : scores 0.00 | softmax 0.00 | somme pondérée + écriture KV 23102.35
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ GLM-5.3 tourne (253 s/jeton) ; suppression des allocations par bloc
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"let mut out = vec!\\[0f32; 256\\];\\|let mut out = vec!\\[0f32;256\\];\" drave-core/src/formats.rs drave-core/src/gguf.rs | head; grep -n \"pub fn dequant_iq1m\" -A 6 drave-core/src/formats.rs | head -8", "description": "Fi … [42 caractères tronqués]`
+
+  ```
+drave-core/src/formats.rs:305:    let mut out = vec![0f32; 256];
+drave-core/src/formats.rs:331:    let mut out = vec![0f32; 256];
+drave-core/src/formats.rs:357:    let mut out = vec![0f32; 256];
+drave-core/src/formats.rs:398:    let mut out = vec![0f32; 256];
+drave-core/src/formats.rs:2764:    let mut out = vec![0f32; 256];
+drave-core/src/gguf.rs:1085:        let mut out = vec![0f32; 256];
+drave-core/src/gguf.rs:1143:        let mut out = vec![0f32; 256];
+drave-core/src/gguf.rs:1177:        let mut out = vec![0f32; 256];
+2747:pub fn dequant_iq1m(bloc: &[u8]) -> Vec<f32> {
+2748-    assert!(bloc.len() >= 56, "bloc IQ1_M trop court : {}", bloc.len());
+2749-    // L'ORDRE des champs est `qs[32]`, `qh[16]`, `scales[8]` — les échelles sont
+2750-    // EN DERNIER. Les lire en premier donnait une échelle absurde et un écart de
+2751-    // 2,4e5 : c'est la comparaison avec ggml qui l'a montré.
+2752-    let sc: [u16; 4] = [
+2753-        u16::from_le_bytes([bloc[48], bloc[49]]),
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport re\n# 1) formats.rs : variants « _dans » qui écrivent dans un tampon fourni.\np='drave-core/src/formats.rs'; s=open(p).read()\nnoms = {\n    'dequant_iq2xxs': ('bloc: &[u8]', 66),\n    'dequant_iq3xxs': ('blo … [1554 caractères tronqués]`
+
+  ```
+(no output)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/gguf.rs'; s=open(p).read()\nfor nom in ['dequant_q2k', 'dequant_q3k', 'dequant_q5k']:\n    sig = f\"pub fn {nom}(bloc: &[u8]) -> Vec<f32> {{\"\n    i = s.index(sig)\n    s = s[:i] + f\"pub fn {nom} … [1083 caractères tronqués]`
+
+  ```
+(no output)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/list.rs'; s=open(p).read()\ns = s.replace(\"\"\"/// Déquantifie un super-bloc de 256 poids d'un format sans noyau dédié.\npub fn dequant_grille(t: u32, bloc: &[u8]) -> Vec<f32> {\n    match t {\n   … [3206 caractères tronqués]`
+
+  ```
+BUILD
+
+test result: ok. 48 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.12s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && bash tools/portes_formats.sh 2>&1 | tail -3; timeout 600 ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf --ppl /tmp/ids_qwen.txt --ctx 256 --abits 16 --threads 16 --limit 512 --dense 2>&1 | grep -E \"=== perplexité\"" … [56 caractères tronqués]`
+
+  ```
+BF16       OK       blk.0.ffn_gate_inp.weight
+  MXFP4      OK       blk.0.ffn_down_exps.weight
+formats : 17 concorde(s), 0 divergence(s), 0 absent(s)
+=== perplexité 19.3885 sur 510 tokens (0 événements, 15.7 s) ===
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && setsid nohup timeout 3600 ./drave-core/target/release/drave /home/stephane/Data13TB/stephane/modeles/gguf/GLM-5.3-UD-IQ1_S/GLM-5.3-UD-IQ1_S-00001-of-00006.gguf --ppl /tmp/ids_qwen.txt --ctx 16 --limit 4 --threads 20 > /tmp/glm53_essa … [163 caractères tronqués]`
+
+  ```
+lancé (4 jetons, tampon réutilisé)
+Mem:             125          19          80           4          31         106
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A drave-core/src REPRISE.md && git commit -q -F - <<'EOF'\nDéquantification par bloc sans allocation : 253 s/jeton → à remesurer\n\nGLM-5.3 tourne de bout en bout (79 couches MLA, 76/79 mélanges d'experts, 1 jeton\nnoté en 2 … [831 caractères tronqués]`

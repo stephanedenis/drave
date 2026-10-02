@@ -296,13 +296,13 @@ pub static KSIGNS_IQ2XS: [u8; 128] = [
 /// **index** dans la table `kvalues_iq4nl` (−127 … 113), pas une valeur : c'est
 /// une quantification non linéaire, et la lire comme un entier 4 bits donne des
 /// poids faux d'un facteur qui dépend du niveau.
-pub fn dequant_iq4xs(bloc: &[u8]) -> Vec<f32> {
+pub fn dequant_iq4xs_dans(bloc: &[u8], out: &mut [f32]) {
     assert!(bloc.len() >= 136, "bloc IQ4_XS trop court : {}", bloc.len());
     let d = crate::gguf::Gguf::f16_to_f32(u16::from_le_bytes([bloc[0], bloc[1]]));
     let scales_h = u16::from_le_bytes([bloc[2], bloc[3]]);
     let scales_l = &bloc[4..8];
     let qs = &bloc[8..136];
-    let mut out = vec![0f32; 256];
+    assert!(out.len() >= 256, "tampon de sortie trop court : {}", out.len());
     for ib in 0..8usize {
         let ls = (((scales_l[ib / 2] >> (4 * (ib % 2))) & 0x0F) as i32
                   | ((((scales_h >> (2 * ib)) & 3) as i32) << 4)) - 32;
@@ -313,7 +313,14 @@ pub fn dequant_iq4xs(bloc: &[u8]) -> Vec<f32> {
             out[32 * ib + j + 16] = dl * KVALS_IQ4NL[(octet >> 4) as usize] as f32;
         }
     }
-    out
+    
+}
+
+/// Version qui alloue : pour les appelants qui veulent un `Vec` (outils, tests).
+pub fn dequant_iq4xs(bloc: &[u8]) -> Vec<f32> {
+    let mut v = vec![0f32; 256];
+    dequant_iq4xs_dans(bloc, &mut v);
+    v
 }
 
 /// Déquantifie un bloc **IQ1_S** (50 octets, 256 poids).
@@ -324,11 +331,11 @@ pub fn dequant_iq4xs(bloc: &[u8]) -> Vec<f32> {
 /// D'où `x = d · (2·k + 1) · (grille ± 0,125)` avec `k ∈ 0..7`.
 ///
 /// C'est le type de 42 à 45 % des poids de GLM-5.3 et GLM-5.3-Flash.
-pub fn dequant_iq1s(bloc: &[u8]) -> Vec<f32> {
+pub fn dequant_iq1s_dans(bloc: &[u8], out: &mut [f32]) {
     assert!(bloc.len() >= 50, "bloc IQ1_S trop court : {}", bloc.len());
     let d = crate::gguf::Gguf::f16_to_f32(u16::from_le_bytes([bloc[0], bloc[1]]));
     let qs = &bloc[2..34];
-    let mut out = vec![0f32; 256];
+    assert!(out.len() >= 256, "tampon de sortie trop court : {}", out.len());
     for ib in 0..8usize {
         let qh = u16::from_le_bytes([bloc[34 + 2 * ib], bloc[34 + 2 * ib + 1]]);
         let dl = d * (2.0 * ((qh >> 12) & 7) as f32 + 1.0);
@@ -341,7 +348,14 @@ pub fn dequant_iq1s(bloc: &[u8]) -> Vec<f32> {
             }
         }
     }
-    out
+    
+}
+
+/// Version qui alloue : pour les appelants qui veulent un `Vec` (outils, tests).
+pub fn dequant_iq1s(bloc: &[u8]) -> Vec<f32> {
+    let mut v = vec![0f32; 256];
+    dequant_iq1s_dans(bloc, &mut v);
+    v
 }
 
 /// Déquantifie un bloc **IQ2_XXS** (66 octets, 256 poids).
@@ -351,10 +365,10 @@ pub fn dequant_iq1s(bloc: &[u8]) -> Vec<f32> {
 /// paquets de signes de 7 bits, plus 4 bits d'échelle dans le mot de poids fort.
 ///
 /// `x = d · (0,5 + échelle) · 0,25 · grille · signe`
-pub fn dequant_iq2xxs(bloc: &[u8]) -> Vec<f32> {
+pub fn dequant_iq2xxs_dans(bloc: &[u8], out: &mut [f32]) {
     assert!(bloc.len() >= 66, "bloc IQ2_XXS trop court : {}", bloc.len());
     let d = crate::gguf::Gguf::f16_to_f32(u16::from_le_bytes([bloc[0], bloc[1]]));
-    let mut out = vec![0f32; 256];
+    assert!(out.len() >= 256, "tampon de sortie trop court : {}", out.len());
     for ib32 in 0..8usize {
         // ATTENTION : dans ggml, `qs` est un `uint16_t[32]`, donc `qs + 4*ib32`
         // avance de 4 × 2 = 8 OCTETS. Écrire `2 + 4*ib32` octets laissait le
@@ -375,7 +389,14 @@ pub fn dequant_iq2xxs(bloc: &[u8]) -> Vec<f32> {
             }
         }
     }
-    out
+    
+}
+
+/// Version qui alloue : pour les appelants qui veulent un `Vec` (outils, tests).
+pub fn dequant_iq2xxs(bloc: &[u8]) -> Vec<f32> {
+    let mut v = vec![0f32; 256];
+    dequant_iq2xxs_dans(bloc, &mut v);
+    v
 }
 
 /// Déquantifie un bloc **IQ3_XXS** (98 octets, 256 poids).
@@ -390,12 +411,12 @@ pub fn dequant_iq2xxs(bloc: &[u8]) -> Vec<f32> {
 ///
 /// C'est le type de 30 % des poids de Kimi-K2.7, GLM-5.3 et V4-Flash : sans lui,
 /// aucun de ces trois modèles ne se charge.
-pub fn dequant_iq3xxs(bloc: &[u8]) -> Vec<f32> {
+pub fn dequant_iq3xxs_dans(bloc: &[u8], out: &mut [f32]) {
     assert!(bloc.len() >= 98, "bloc IQ3_XXS trop court : {}", bloc.len());
     let d = crate::gguf::Gguf::f16_to_f32(u16::from_le_bytes([bloc[0], bloc[1]]));
     let qs = &bloc[2..98];
     let ech = &qs[64..96];
-    let mut out = vec![0f32; 256];
+    assert!(out.len() >= 256, "tampon de sortie trop court : {}", out.len());
     for ib32 in 0..8usize {
         let aux = u32::from_le_bytes([ech[4 * ib32], ech[4 * ib32 + 1],
                                       ech[4 * ib32 + 2], ech[4 * ib32 + 3]]);
@@ -412,7 +433,14 @@ pub fn dequant_iq3xxs(bloc: &[u8]) -> Vec<f32> {
             }
         }
     }
-    out
+    
+}
+
+/// Version qui alloue : pour les appelants qui veulent un `Vec` (outils, tests).
+pub fn dequant_iq3xxs(bloc: &[u8]) -> Vec<f32> {
+    let mut v = vec![0f32; 256];
+    dequant_iq3xxs_dans(bloc, &mut v);
+    v
 }
 
 // Grille IQ1_S : 2048 codes de 8 niveaux signes (extraits de ggml-common.h).
@@ -2744,7 +2772,7 @@ const IQ1S_DELTA: f32 = 0.125;
 /// Trois bits d'échelle par sous-bloc de 16, un bit de signe du décalage.
 ///
 /// `x = d·(2·e+1)·(grille + ±0,125)`
-pub fn dequant_iq1m(bloc: &[u8]) -> Vec<f32> {
+pub fn dequant_iq1m_dans(bloc: &[u8], out: &mut [f32]) {
     assert!(bloc.len() >= 56, "bloc IQ1_M trop court : {}", bloc.len());
     // L'ORDRE des champs est `qs[32]`, `qh[16]`, `scales[8]` — les échelles sont
     // EN DERNIER. Les lire en premier donnait une échelle absurde et un écart de
@@ -2761,7 +2789,7 @@ pub fn dequant_iq1m(bloc: &[u8]) -> Vec<f32> {
     let d = crate::gguf::Gguf::f16_to_f32(brut);
     let qs = &bloc[0..32];
     let qh = &bloc[32..48];
-    let mut out = vec![0f32; 256];
+    assert!(out.len() >= 256, "tampon de sortie trop court : {}", out.len());
     for ib in 0..8usize {
         let dl1 = d * (2 * ((sc[ib / 2] >> (6 * (ib % 2))) & 0x7) + 1) as f32;
         let dl2 = d * (2 * ((sc[ib / 2] >> (6 * (ib % 2) + 3)) & 0x7) + 1) as f32;
@@ -2787,7 +2815,14 @@ pub fn dequant_iq1m(bloc: &[u8]) -> Vec<f32> {
             }
         }
     }
-    out
+    
+}
+
+/// Version qui alloue : pour les appelants qui veulent un `Vec` (outils, tests).
+pub fn dequant_iq1m(bloc: &[u8]) -> Vec<f32> {
+    let mut v = vec![0f32; 256];
+    dequant_iq1m_dans(bloc, &mut v);
+    v
 }
 
 #[cfg(test)]

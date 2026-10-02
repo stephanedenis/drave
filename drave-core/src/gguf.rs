@@ -1075,14 +1075,21 @@ zéro, l'inventaire sera sous-évalué", t.ttype, t.name);
     /// quants 4 bits — plus **32 octets de bits hauts** : chaque poids a 5 bits.
     /// Les bits hauts sont lus avec des masques qui se décalent de deux bits à
     /// chaque tranche de 64 poids.
+    /// Version qui alloue, pour les appelants qui veulent un `Vec`.
     pub fn dequant_q5k(bloc: &[u8]) -> Vec<f32> {
+        let mut v = vec![0f32; 256];
+        Self::dequant_q5k_dans(bloc, &mut v);
+        v
+    }
+
+    pub fn dequant_q5k_dans(bloc: &[u8], out: &mut [f32]) {
         assert!(bloc.len() >= 176, "bloc Q5_K trop court : {}", bloc.len());
         let d = Self::f16_to_f32(u16::from_le_bytes([bloc[0], bloc[1]]));
         let dmin = Self::f16_to_f32(u16::from_le_bytes([bloc[2], bloc[3]]));
         let sc = &bloc[4..16];
         let qh = &bloc[16..48];
         let ql = &bloc[48..176];
-        let mut out = vec![0f32; 256];
+        assert!(out.len() >= 256, "tampon de sortie trop court");
         let (mut u1, mut u2) = (1u8, 2u8);
         for tranche in 0..4usize {
             // Les 32 octets de bits hauts sont **relus** à chaque tranche : le
@@ -1102,9 +1109,8 @@ zéro, l'inventaire sera sous-évalué", t.ttype, t.name);
             u1 <<= 2;
             u2 <<= 2;
         }
-        out
+        
     }
-
     /// Déquantifie un bloc **Q3_K** (110 octets, 256 poids) : 32 octets de bits
     /// hauts, 64 octets de quants 2 bits, 12 octets portant **16 échelles de
     /// 6 bits**, puis l'échelle de super-bloc en f16.
@@ -1116,7 +1122,14 @@ zéro, l'inventaire sera sous-évalué", t.ttype, t.name);
     /// d'écart) ; et le bit haut **retire 4** quand il est ABSENT, la valeur
     /// signée allant de −4 à 3. C'est le type de 33,5 % des poids de
     /// Qwen3-235B-A22B.
+    /// Version qui alloue, pour les appelants qui veulent un `Vec`.
     pub fn dequant_q3k(bloc: &[u8]) -> Vec<f32> {
+        let mut v = vec![0f32; 256];
+        Self::dequant_q3k_dans(bloc, &mut v);
+        v
+    }
+
+    pub fn dequant_q3k_dans(bloc: &[u8], out: &mut [f32]) {
         assert!(bloc.len() >= 110, "bloc Q3_K trop court : {}", bloc.len());
         let hm = &bloc[0..32];
         let qs = &bloc[32..96];
@@ -1140,7 +1153,7 @@ zéro, l'inventaire sera sous-évalué", t.ttype, t.name);
         for (i, valeur) in scales.iter_mut().enumerate() {
             *valeur = aux[i / 4].to_le_bytes()[i % 4] as i8;
         }
-        let mut out = vec![0f32; 256];
+        assert!(out.len() >= 256, "tampon de sortie trop court");
         let mut is = 0usize;
         for n in 0..2usize {
             for j in 0..4usize {
@@ -1159,22 +1172,28 @@ zéro, l'inventaire sera sous-évalué", t.ttype, t.name);
                 }
             }
         }
-        out
+        
     }
-
     /// Déquantifie un bloc **Q2_K** (84 octets, 256 poids).
     ///
     /// Structure : 16 octets d'échelles (4 bits d'échelle, 4 bits de minimum par
     /// sous-bloc de 16 poids), 64 octets de quants 2 bits, puis d et dmin en f16.
     /// `x = d·sc·q − dmin·m`. C'est le type des `ffn_down_exps` de
     /// DeepSeek-V4.1 — sans lui, 59 Go du modèle restent illisibles.
+    /// Version qui alloue, pour les appelants qui veulent un `Vec`.
     pub fn dequant_q2k(bloc: &[u8]) -> Vec<f32> {
+        let mut v = vec![0f32; 256];
+        Self::dequant_q2k_dans(bloc, &mut v);
+        v
+    }
+
+    pub fn dequant_q2k_dans(bloc: &[u8], out: &mut [f32]) {
         assert!(bloc.len() >= 84, "bloc Q2_K trop court : {}", bloc.len());
         let scales = &bloc[0..16];
         let qs = &bloc[16..80];
         let d = Self::f16_to_f32(u16::from_le_bytes([bloc[80], bloc[81]]));
         let dmin = Self::f16_to_f32(u16::from_le_bytes([bloc[82], bloc[83]]));
-        let mut out = vec![0f32; 256];
+        assert!(out.len() >= 256, "tampon de sortie trop court");
         // Quatre passes de 64 poids : chaque octet porte quatre quants 2 bits,
         // lus aux décalages 0, 2, 4 et 6.
         for moitie in 0..2usize {
@@ -1191,9 +1210,8 @@ zéro, l'inventaire sera sous-évalué", t.ttype, t.name);
                 }
             }
         }
-        out
+        
     }
-
     /// Déquantifie une ligne d'un tenseur 2D, en f32.
     /// Déquantifie un tenseur **s'il existe**, sinon `None`.
     ///

@@ -986,3 +986,68 @@ exception documentée à la politique de stockage) : 698 Go libres, et un NVMe f
 ./drave-core/target/release/drave <modele-v4.1> --sonder-engram 20000
 ```
 
+
+---
+
+## Session « routage, MLA et formats » (01/10 22 h → 02/10) — ce qui était faux, et ce qui bloque encore
+
+### Les portes, revérifiées
+
+| porte | valeur | état |
+|---|---|---|
+| Qwen2.5-0.5B Q8_0 ctx 256 (dense) | **19,3885** | inchangée |
+| Qwen3-30B en clusters ctx 64, 8 jetons | **799,8557** | inchangée |
+| gpt-oss-120b MXFP4 ctx 256 | **15,6017** | **changée** (15,1757 avant) — voir ci-dessous |
+| `cargo test --release` | **48** | 41 avant |
+| `tools/portes_formats.sh` | **17 formats × 2 blocs** | tous exacts contre libggml |
+
+**Pourquoi gpt-oss a changé.** Le moteur mettait le biais du routeur dans le
+softmax des poids ; llama.cpp le met dans la **sélection** seulement
+(`build_moe_ffn` : `weights = probs[selected]`, où `probs = softmax(logits)`
+sans biais). L'ancien chiffre était auto-cohérent mais faux. Détail et
+vérification : `reports/rapport-routage-experts.md`.
+
+### Le routage des experts : quatre conventions, pas une
+
+`expert_gating_func` existe dans les GGUF et n'était pas lu. Le moteur applique
+maintenant la bonne convention par modèle — softmax (Qwen3), **sigmoïde**
+(Kimi-K2.7, GLM-5.3), **racine de softplus** (DeepSeek-V4) — plus
+`expert_weights_scale` (1,5 · 2,5 · 2,827), qui était purement absent, et le
+routage **par table** (`ffn_gate_tid2eid`, I32) des 3 premières couches de
+V4-Flash. `--config` montre la convention retenue ET sa provenance :
+
+```bash
+./target/release/drave <modele.gguf> --config     # 50 ms, sans charger le modèle
+```
+
+### Ce que le moteur sait calculer, et ce qu'il ne sait pas
+
+`--config` le dit avant toute panne. Au 02/10 :
+
+| modèle | poids | calculable |
+|---|---|---|
+| Qwen3-30B-A3B, Qwen3-235B-A22B | 30 / 235 G | **oui** |
+| gpt-oss-120b | 117 G | **oui** |
+| GLM-5.3 (glm-dsa) | 754 G | **oui depuis cette session** (MLA rang faible) |
+| Kimi-K2.7 (deepseek2) | 1 026 G | **oui depuis cette session** |
+| GLM-5.3-Flash | 321 G | non — hyper-connexions |
+| DeepSeek-V4-Flash / V4.1 | 284 / 755 G | non — hyper-connexions, index, sortie à rang faible |
+
+**Aucun modèle DeepSeek-V4 n'a jamais été exécuté ici.** Tous les chiffres
+publiés à leur sujet (empreinte, périodicité, miroir, sonde engram) viennent
+d'analyses **statiques** des tenseurs. C'est écrit dans le message de refus du
+moteur depuis cette session, pour que la distinction ne se perde pas.
+
+### Formats : huit de plus, et un bug de facteur 2
+
+Q5_K, Q5_0, Q5_1, Q3_K, IQ3_XXS, IQ1_S, IQ4_XS sont déquantifiés et comparés à
+libggml **au bit près** ; l'échelle E8M0 de MXFP4 donnait des poids **deux fois
+trop petits** (corrigé, test unitaire). Les formats de super-bloc sans noyau
+(Q2_K, Q3_K, Q5_K, IQ1_S, IQ1_M, IQ2_XXS, IQ3_XXS, IQ4_XS) sont lus par
+déquantification puis produit en f32 : juste par construction, plus lent qu'un
+noyau dédié, et c'est ce qui rend GLM-5.3 et Kimi chargeables.
+
+```bash
+tools/portes_formats.sh          # 17 formats × 2 blocs, contre libggml
+tools/extraire_tables_ggml.sh verifier   # les grilles IQ embarquées = celles de ggml
+```
