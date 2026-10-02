@@ -31,14 +31,14 @@ de la session ; le `digest.md` voisin en donne le verbatim complet.
 | `7d0d2578` | Tu travailles dans le dépôt | 2026-09-30 11:47 | 0.1 h | 1 | 53 | 1 | 0 | [rapport](sessions/7d0d2578-0048-4998-8494-7d2daef56769/rapport.md) |
 | `8288d350` | You are doing an ADVERSARIAL | 2026-10-01 05:52 | 0.1 h | 1 | 51 | 0 | 0 | [rapport](sessions/8288d350-b68e-4245-b903-5ef6d71910b4/rapport.md) |
 | `8549abcb` | Tu travailles dans le dépôt | 2026-10-02 15:03 | 0.1 h | 1 | 28 | 0 | 0 | [rapport](sessions/8549abcb-5d9a-4594-915b-5628c80a2a08/rapport.md) |
-| `8734fc13` | Tu es un relecteur ADVERSARIAL | 2026-10-02 18:10 | 0.1 h | 1 | 66 | 0 | 0 | [rapport](sessions/8734fc13-aeb8-4cdf-b005-c182f77be0dc/rapport.md) |
+| `8734fc13` | Tu es un relecteur ADVERSARIAL | 2026-10-02 18:10 | 0.2 h | 1 | 108 | 0 | 0 | [rapport](sessions/8734fc13-aeb8-4cdf-b005-c182f77be0dc/rapport.md) |
 | `8a0aa6e5` | Tu es un relecteur adverse. | 2026-10-01 11:15 | 0.2 h | 1 | 66 | 0 | 0 | [rapport](sessions/8a0aa6e5-1a5e-450f-a6ea-070eed249d63/rapport.md) |
 | `8b315bb2` | Tu es relecteur ADVERSE. Tu | 2026-10-02 09:51 | 0.1 h | 1 | 30 | 0 | 0 | [rapport](sessions/8b315bb2-abba-4033-b3d4-177d04b4f194/rapport.md) |
 | `8b6d46ab` | Tu dois LIRE TOUT le | 2026-10-02 08:44 | 0.2 h | 1 | 155 | 1 | 0 | [rapport](sessions/8b6d46ab-6ad0-4648-92a8-0bec40a02526/rapport.md) |
 | `8e04c99a` | Tu es VÉRIFICATEUR de documentation | 2026-09-30 18:07 | 0.2 h | 1 | 85 | 0 | 0 | [rapport](sessions/8e04c99a-8ba1-4675-9f80-fa3338449b17/rapport.md) |
 | `aa5f9fc5` | Tu es vérificateur de documentation | 2026-09-30 15:07 | 0.2 h | 1 | 100 | 1 | 0 | [rapport](sessions/aa5f9fc5-9450-4118-b65f-e8b99a28519d/rapport.md) |
 | `b13a6032` | Tu travailles dans le dépôt | 2026-10-02 15:03 | 0.1 h | 1 | 43 | 0 | 0 | [rapport](sessions/b13a6032-4f62-4e86-aa1f-03864a455c83/rapport.md) |
-| `bbd6969f` | Continue avec REPRISE.md | 2026-09-28 14:46 | 99.5 h | 79 | 5068 | 104 | 353 | [rapport](sessions/bbd6969f-0f70-42b2-8951-64d1f2f36d2e/rapport.md) |
+| `bbd6969f` | Continue avec REPRISE.md | 2026-09-28 14:46 | 100.5 h | 79 | 5313 | 106 | 359 | [rapport](sessions/bbd6969f-0f70-42b2-8951-64d1f2f36d2e/rapport.md) |
 | `bcfe0b97` | Tu es relecteur ADVERSARIAL dans | 2026-09-30 12:20 | 0.3 h | 1 | 110 | 0 | 0 | [rapport](sessions/bcfe0b97-1795-4610-8e8b-b598ca1ba6cb/rapport.md) |
 | `c25f97d1` | Tu travailles dans le dépôt | 2026-09-30 11:47 | 0.2 h | 1 | 104 | 1 | 0 | [rapport](sessions/c25f97d1-9a4d-41da-b983-004f793afe43/rapport.md) |
 | `c776b71f` | Tu es relecteur ADVERSARIAL de | 2026-09-30 18:36 | 0.1 h | 1 | 54 | 0 | 0 | [rapport](sessions/c776b71f-525a-4bad-b83c-eff1c2d204ff/rapport.md) |

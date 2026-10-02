@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 100.5 h |
+| Durée | 100.6 h |
 | Tours | 79 |
-| Messages | 5543 |
-| Appels d'outils | 5311 |
-| Fichiers touchés | 106 |
-| Commandes | 4492 |
+| Messages | 5558 |
+| Appels d'outils | 5325 |
+| Fichiers touchés | 107 |
+| Commandes | 4505 |
 | Sous-agents | 30 |
-| Commits | 359 |
+| Commits | 360 |
 | Compactages de contexte | 7 |
 
 ## Objectifs déclarés
@@ -4037,7 +4037,7 @@ P0-P6 faites, P8 portée et val
 
 ### Tour 79 — <goal_round> Objective: "Exécuter le plan docs/plan-deepseek41-complet.md phase par phase (P0→P9), en autonomie, en resp … [941 caractères tronqués]
 
-*571 appels d'outils.* Actions notables :
+*585 appels d'outils.* Actions notables :
 
 - web_search
 - web_fetch
@@ -4053,11 +4053,11 @@ P0-P6 faites, P8 portée et val
 - bash — Locate hc_collapse_triton definition
 - read
 - bash — Read mHC init and pre/post call sites
-- … et 496 autres
+- … et 510 autres
 
 **Synthèse produite :**
 
-⏵ Comparing YaRN vs plain against llama.cpp with the right layout
+⏵ Exercising the V4.1 indexer selection (513 blocks > top_k 512)
 
 ## 3. Travail accompli
 
@@ -4171,6 +4171,7 @@ P0-P6 faites, P8 portée et val
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/sprints/10-v41-la-chaine-retardee-et-le-compresseur.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/verifier_v41_engram.py` | 1 | 1 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-v4-yarn-compresse.md` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/sprints/11-v41-la-passe-complete.md` | 1 | 0 |
 
 ### Sous-agents lancés
 
@@ -4247,7 +4248,7 @@ P0-P6 faites, P8 portée et val
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 4452 autres
+- … et 4465 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4754,4 +4755,5 @@ P0-P6 faites, P8 portée et val
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' m = """P7 : l'engram de V4.1 branché dans la passe avant — et la première passe COMPLÈTE 
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -E "V4-Flash 43|cargo test|Qwen2.5" /tmp/portes_rapide6.log; python3 - <<'PY' m = """P7 : l'indexeur 
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' m = """V4-Flash : la rotation des couches compressées passe au YaRN (et la porte change) 
+- Sprint 11 : le rétro du bloc, et le vide qui rend le CHOIX de l'indexeur vérifiable  Le sprint 11 consigne le bloc 17h30-19h30 : la passe avant V4.1 complète, l
 

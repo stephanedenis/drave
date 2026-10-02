@@ -89652,3 +89652,126 @@ ok
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nm = \"\"\"V4-Flash : la rotation des couches compressées passe au YaRN (et la porte change)\n\nllama.cpp et vLLM le disent tous les deux, dans leur code : dès que\n`compress_ratio > 0`, la rotation est YaRN ×16 (bas … [2469 caractères tronqués]`
+
+  ```
+4594d52 V4-Flash : la rotation des couches compressées passe au YaRN (et la porte change)
+ journal/sessions/MANIFEST.md                       |   4 +-
+ .../bbd6969f-0f70-42b2-8951-64d1f2f36d2e/digest.md | 905 +++++++++++++++++++++
+ .../rapport.md                                     |  26 +-
+ reports/rapport-v4-yarn-compresse.md               | 134 +++
+ tools/portes.sh                                    |   9 +-
+ 7 files changed, 1188 insertions(+), 23 deletions(-)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -E \"perplexité cumulée|EXIT\" /tmp/v41_ctx32.log | tail -2; pgrep -c drave 2>/dev/null || echo \"fini\"", "description": "Check the V4.1 ctx-32 run"}`
+
+  ```
+1
+  ```
+
+- **bash** `{"command": "sleep 90; grep -E \"perplexité cumulée|EXIT\" /tmp/v41_ctx32.log | tail -2; pgrep -c drave 2>/dev/null || echo \"fini\"", "description": "Wait for the V4.1 ctx-32 run"}`
+
+  ```
+(no output)
+[timed out after 60000ms]
+[killed by signal: SIGTERM]
+  ```
+
+- **bash** `{"command": "grep -E \"perplexité cumulée|EXIT|fenêtre\" /tmp/v41_ctx32.log | tail -3; pgrep -c drave 2>/dev/null || echo \"fini\"", "description": "Check the run once more"}`
+
+  ```
+/tmp/v41_texte.txt.ids : 32 tokens, fenêtres de 32
+1
+  ```
+
+- **bash** `{"command": "date; ps -o etime=,pcpu=,rss= -p $(pgrep -f \"drave.*DeepSeek-V4.1\" | head -1) 2>/dev/null", "description": "Check the clock and the run's age"}`
+
+  ```
+ven 02 oct 2026 19:18:08 EDT
+      04:00  0.0  3692
+  ```
+
+- **bash** `{"command": "ps aux | grep -E \"[d]rave|[t]imeout 3000\" | head -5 | cut -c1-150; echo \"=== fin du log ===\"; tail -4 /tmp/v41_ctx32.log", "description": "Inspect the running processes"}`
+
+  ```
+stephane 2717760  0.0  0.0   7692  3692 ?        Ss   19:14   0:00 bash -c cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && (date +%s > /tmp/t32;
+stephane 2717761  0.0  0.0   7824  2164 ?        S    19:14   0:00 bash -c cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && (date +%s > /tmp/t32;
+stephane 2717763  0.0  0.0   5844  2176 ?        S    19:14   0:00 timeout 3000 ./drave-core/target/release/drave /home/stephane/FastNVMe/modeles-lour
+stephane 2717764 1928 34.9 381631608 46030616 ?  Sl   19:14  79:29 ./drave-core/target/release/drave /home/stephane/FastNVMe/modeles-lourds/DeepSeek-V
+=== fin du log ===
+[config] 40 couches, hidden 5120 · racine de softpluséchelle 1.50 moe 
+[config] mélanges d'experts chargés : 40/40 couches · mapping absent (experts en clair dans le fichier)
+[config] puits appris sur 40/40 couches · n_rot 80 · ffn 2816 · experts 384
+[config] rotation : RoPE simple — le modèle DÉCLARE YaRN (JSON `rope_scaling`, facteur 16) mais le moteur ne l'applique qu'au-delà de QUATRE FOIS la longueur d'origine (soit 262144 jetons ici), seuil mesuré sur gpt-oss ; `DRAVE_YARN=1` l'applique partout, comme la référence
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && rm -f /tmp/ref_yr-*.bin && (LD_LIBRARY_PATH=/home/stephane/Data13TB/stephane/GitHub/llama.cpp/build/bin REF_DUMP=/tmp/ref_yr REF_TENSORS='^l_last-[12]$' timeout 3600 ./tools/ref_logits /home/stephane/Data13TB/stephane/modeles/gguf/De … [265 caractères tronqués]`
+
+  ```
+started background job bash-186
+  ```
+
+- **write** `{"content": "# Sprint 11 — V4.1 : la passe complète, et la rotation des couches compressées\n\n- **Début** : 17:30 · **Fin** : 19:30 (bloc de 120 min)\n- **Objectif** : P7 du plan — rendre V4.1 exécutable de bout en bout, et vérifier\n  chaque pièce contre une référence externe.\n- **Engagement de f … [6091 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/sprints/11-v41-la-passe-complete.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -E \"perplexité cumulée|EXIT\" /tmp/v41_ctx32.log | tail -2; tail -2 /tmp/ref_yr.log 2>/dev/null | head -1", "description": "Check both background runs"}`
+
+  ```
+create_tensor: loading tensor blk.42.ffn_up_shexp.weight
+  ```
+
+- **bash** `{"command": "sleep 100; grep -E \"perplexité cumulée|=== perplexité|EXIT\" /tmp/v41_ctx32.log | tail -2; ps -o etime=,pcpu= -p $(pgrep -f \"target/release/drave.*V4.1\" | head -1) 2>/dev/null || echo \"drave fini\"", "description": "Wait for the ctx-32 V4.1 run"}`
+
+  ```
+(no output)
+[timed out after 60000ms]
+[killed by signal: SIGTERM]
+  ```
+
+- **bash** `{"command": "grep -E \"perplexité\" /tmp/v41_ctx32.log | tail -3; ps -o etime=,pcpu=,rss= -p $(pgrep -f \"target/release/drave.*V4.1\" | head -1) 2>/dev/null || echo \"drave fini\"", "description": "Check the run state"}`
+
+  ```
+05:52  0.0  3692
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/model.rs'\ns=open(p).read()\na = \"\"\"                ordre.truncate(k);\n                ordre.sort_unstable();\n                blocs_gardes = Some(ordre);\"\"\"\nb = \"\"\"                ordre … [1089 caractères tronqués]`
+
+  ```
+ok
+BUILD_END
+738 tokens écrits dans /tmp/v41_long.txt.ids (vocabulaire du modèle : 129280)
+réversibilité : texte reconstruit identique ✅ (3000 octets)
+  ```
+
+### 👤 Utilisateur
+
+background job bash-185 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && (date +%s > /tmp/t32; timeout 3000 ./drave-core/target/release/drave /home/stephane/FastNVMe/modeles-lourds/DeepSeek-V4.1-Flash-Q2.gguf --ppl /tmp/v41_texte.txt.ids --ctx 32 --limit 32 > /tmp/v41_ctx32.log 2>&1; echo "EXIT=$?" >> /tmp/v41_ctx32.log; date +%s >> /tmp/v41_ctx32.log)) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -E \"perplexité cumulée|=== perplexité|EXIT\" /tmp/v41_ctx32.log | head -3; tail -1 /tmp/v41_ctx32.log; head -1 /tmp/t32", "description": "Read the V4.1 ctx-32 result"}`
+
+  ```
+31 tokens notés — perplexité cumulée 99973.933  (0.1 tok/s)
+=== perplexité 99973.9331 sur 31 tokens (0 événements, 323.8 s) ===
+EXIT=0
+1790983214
+1790982848
+  ```
+
+### 🤖 Assistant
+
+⏵ Exercising the V4.1 indexer selection (513 blocks > top_k 512)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && rm -rf /tmp/dump_sel && mkdir -p /tmp/dump_sel && (DRAVE_DUMP_COUCHES=/tmp/dump_sel/d timeout 3000 ./drave-core/target/release/drave /home/stephane/FastNVMe/modeles-lourds/DeepSeek-V4.1-Flash-Q2.gguf --couches 20:21 --tete-partielle  … [204 caractères tronqués]`
+
+  ```
+started background job bash-187
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A sprints/11-v41-la-passe-complete.md drave-core/src/model.rs journal && git commit -q -m \"Sprint 11 : le rétro du bloc, et le vide qui rend le CHOIX de l'indexeur vérifiable\n\nLe sprint 11 consigne le bloc 17h30-19h30 : l … [762 caractères tronqués]`

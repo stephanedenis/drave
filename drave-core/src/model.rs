@@ -5503,6 +5503,14 @@ d'indexeur — ni la couche ni sa source de KV n'a `indexer.attn_k`");
                     .partial_cmp(&scores[a as usize]).unwrap_or(std::cmp::Ordering::Equal));
                 ordre.truncate(k);
                 ordre.sort_unstable();
+                // Ce que l'indexeur a RETENU, sous forme de masque : c'est le
+                // « flux qui décide de ce que l'attention voit », et sans ce vide
+                // on ne peut vérifier que les scores, pas le CHOIX.
+                if let Some(pr) = dump {
+                    let mut masque = vec![0f32; n_vis];
+                    for &b in &ordre { masque[b as usize] = 1.0; }
+                    Self::vider_couche(Some(pr), "idx_gardes", l, pos, &masque);
+                }
                 blocs_gardes = Some(ordre);
             }
         }
