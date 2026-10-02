@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 81.8 h |
+| Durée | 82.1 h |
 | Tours | 69 |
-| Messages | 3786 |
-| Appels d'outils | 3600 |
-| Fichiers touchés | 80 |
-| Commandes | 3179 |
+| Messages | 3825 |
+| Appels d'outils | 3638 |
+| Fichiers touchés | 81 |
+| Commandes | 3215 |
 | Sous-agents | 22 |
-| Commits | 293 |
+| Commits | 294 |
 | Compactages de contexte | 5 |
 
 ## Objectifs déclarés
@@ -3526,7 +3526,7 @@ Sur cette session, les mesures m
 
 ### Tour 69 — implémente toute les optimisation et détection de matériel avec heuristiques de configuration automatique.
 
-*561 appels d'outils.* Actions notables :
+*599 appels d'outils.* Actions notables :
 
 - bash — Inspect existing GPU detection
 - write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/materiel.rs`
@@ -3542,7 +3542,7 @@ Sur cette session, les mesures m
 - bash — Read KV bits resolution
 - bash — Integrate KV and VRAM heuristics
 - bash — Lighten detection and run gates
-- … et 530 autres
+- … et 557 autres
 
 **Synthèse produite :**
 
@@ -3634,6 +3634,7 @@ Maintenant le produit scalaire sur les formats IQ (le dernier verrou des gros mo
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/extraire_tables_ggml.c` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/extraire_tables_ggml.sh` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-routage-experts.md` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-mla-experts.md` | 1 | 0 |
 
 ### Sous-agents lancés
 
@@ -3702,7 +3703,7 @@ Maintenant le produit scalaire sur les formats IQ (le dernier verrou des gros mo
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 3139 autres
+- … et 3175 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -3830,7 +3831,7 @@ Maintenant le produit scalaire sur les formats IQ (le dernier verrou des gros mo
 
 ## 5. Erreurs rencontrées
 
-223 sorties en erreur ou divergentes. Les premières :
+227 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : a8f2635f8 docs: record which models this box is good at, and why src/llama-hparams.cpp:8:void llama_hparams::set_swa_pattern(uint32_t n_pattern, bool dense_first) { src/llama-hparams.h:308:    void se
 - **T1** : 511 tokens notés — perplexité cumulée 247.031  (4.9 tok/s) === perplexité 247.0308 sur 511 tokens (0 événements, 104.5 s) ===  ### B3 harmony assistant 511 --- ref --- 0.0 0.0 0:00 ls: cannot access '
@@ -4143,4 +4144,5 @@ Maintenant le produit scalaire sur les formats IQ (le dernier verrou des gros mo
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add drave-core/src/gguf.rs drave-core/src/formats.rs drave-core/src/main.rs tools/extraire_tables_ggml
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A drave-core/src && git commit -q -F - <<'EOF' routage des experts : quatre conventions, facteur 
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A drave-core/src reports/rapport-routage-experts.md && git commit -q -F - <<'EOF' MLA à rang faib
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A drave-core/src reports/ && git commit -q -F - <<'EOF' MLA : le lot de lignes indexait sa tranch
 

@@ -609,6 +609,12 @@ impl Vue4 {
     fn matvec_dequant(&self, loc: usize, t: u32, x: &[f32], out: &mut [f32], n_fils: usize) {
         let taille = crate::list::octets_grille(t);
         assert!(self.n_in % 256 == 0, "largeur {} non multiple de 256", self.n_in);
+        // Le décalage des super-blocs dans la ligne se lit avec `n_in` : une
+        // activation plus courte que la ligne annoncée dépasserait en silence
+        // (le noyau lit `x[j]` jusqu'à `n_in`). Dire les deux largeurs.
+        assert_eq!(x.len(), self.n_in, "expert de type {} : activation de {} valeurs \
+pour une projection de {} entrées × {} sorties", crate::gguf::Gguf::nom_type(t),
+                   x.len(), self.n_in, self.n_out);
         let nb = self.n_in / 256;
         // Le pointeur vient d'un mmap qui vit plus longtemps que l'appel ; il
         // est transmis comme entier pour traverser `thread::scope` sans
@@ -629,7 +635,11 @@ impl Vue4 {
                     for j in lo..hi { s += valeurs[j - lo] * x[j]; }
                     acc += s;
                 }
-                out[o] = acc;
+                // `out` est la TRANCHE de ce fil : l'indexer par le numéro de
+                // ligne GLOBAL lève « len is 256 but the index is 256 » dès le
+                // deuxième fil. Le premier fil (o0 = 0) passait, ce qui rendait
+                // le bug dépendant du nombre de fils.
+                out[o - o0] = acc;
             }
         };
         let n_fils = n_fils.clamp(1, n_out.max(1));
@@ -2179,6 +2189,7 @@ impl Model {
         let mut bytes = 0u64;
         for l in 0..cfg.n_layer {
             let p = |s: &str| format!("blk.{l}.{s}");
+            let moe = charger_moe(&g, l, cfg.n_expert, map);
             let lay = Layer {
                 attn_norm: g.dequant(&p("attn_norm.weight")),
                 // Couche MLA : Q, K et V n'existent pas en dense — ils sont
@@ -2209,13 +2220,18 @@ impl Model {
                     Some(g.dequant(&p("attn_k_norm.weight"))) } else { None },
                 sinks: if g.tensor(&p("attn_sinks.weight")).is_some() {
                     Some(g.dequant(&p("attn_sinks.weight"))) } else { None },
-                wgate: if cfg.n_expert > 0 { Proj::vide() } else {
+                // La FFN dense se charge COUCHE PAR COUCHE : « le modèle a des
+                // experts » ne veut pas dire « toutes ses couches en ont ».
+                // GLM-5.3 a 3 couches denses puis 76 à experts, Kimi 1 puis 60.
+                // Le test global les vidait toutes, et le modèle mourait sur
+                // « projection sans aucun format » à la première couche dense.
+                wgate: if moe.is_some() { Proj::vide() } else {
                     Proj::load(&g, &p("ffn_gate.weight"), None, dense || q4 != 0, auto, keep, q4 & 1 != 0, b6 & 1 != 0) },
-                wup: if cfg.n_expert > 0 { Proj::vide() } else {
+                wup: if moe.is_some() { Proj::vide() } else {
                     Proj::load(&g, &p("ffn_up.weight"), None, dense || q4 != 0, auto, keep, q4 & 1 != 0, b6 & 1 != 0) },
-                wdown: if cfg.n_expert > 0 { Proj::vide() } else {
+                wdown: if moe.is_some() { Proj::vide() } else {
                     Proj::load(&g, &p("ffn_down.weight"), None, dense || q4 != 0, auto, keep, q4 & 1 != 0, b6 & 1 != 0) },
-                moe: charger_moe(&g, l, cfg.n_expert, map),
+                moe,
             };
             for pj in [&lay.wq, &lay.wk, &lay.wv, &lay.wo, &lay.wgate, &lay.wup, &lay.wdown] {
                 if let Some(m) = &pj.m { bytes += m.data.len() as u64; }
