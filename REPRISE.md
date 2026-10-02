@@ -1151,3 +1151,18 @@ lignes hors liste avant de les avoir lues : le seul gain réel reste
 | attention par index (DSA) au-delà de `index_topk` | non implémentée |
 | noyaux IQ | remplacés par déquantification + produit f32 (juste, lent) |
 | vitesse MLA | ~190 s/jeton sur GLM-5.3, attention scalaire |
+
+
+---
+
+## Test d'exécution de DeepSeek-V4.1-Flash (02/10)
+
+365,71 Go sur le NVMe. **Ce qui tourne est mesuré** : en-têtes 63,8 ms, `--config`
+74 ms, plan matériel complet, sonde engram 10 000 entrées en 219-524 ms avec
+**120 Mo de RSS pour 365,7 Go adressés**. **La passe avant est refusée en 0,33 s**
+avec la liste exacte de ce qui manque, établie d'après `llama.cpp/src/models/deepseek4.cpp` :
+hyper-connexions (4 copies de l'état + Sinkhorn), sortie à rang faible groupée
+(`o_groups = 8`), dé-rotation de sortie + puits par tête, et **trois attentions
+compressées CSA/HCA** selon `compress_ratios`. L'engram, lui, n'est pas un
+obstacle : llama.cpp ne le calcule pas non plus.
+Détail et estimation d'effort : [`reports/rapport-execution-v41.md`](reports/rapport-execution-v41.md).

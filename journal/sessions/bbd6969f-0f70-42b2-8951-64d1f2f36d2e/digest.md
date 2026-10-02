@@ -64964,3 +64964,703 @@ position 3 : ||écart|| / ||référence|| =   4.0 %
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/rapport-mla-experts.md'; s=open(p).read()\ns = s.replace(\"\"\"| tenseur | position | llama.cpp | nous |\n|---|---|---|---|\n| `l_out-0` | 0 | 3,958318e-03 · 2,302623e-04 · 1,874789e-03 · 1,564195e-03 | 4 … [3022 caractères tronqués]`
+
+  ```
+acc3498 L'écart naît APRÈS la couche 0 : 1,9 % / 1,3 % / 3,8 % / 4,0 % aux positions 0-3
+  ```
+
+- **bash** `{"command": "TZ=America/New_York date \"+HAE %H:%M\"; ps -eo pid,args | grep -E \"[d]rave-core/target|[r]ef_logits\" | cut -c1-60 | head -3; echo \"--- aucun job lourd restant si vide ---\"; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git status --short | grep -v journal | head -3; git log … [83 caractères tronqués]`
+
+  ```
+HAE 07:57
+ 212545 bash -c cd /home/stephane/Data13TB/stephane/GitHub/Q
+ 212546 bash -c cd /home/stephane/Data13TB/stephane/GitHub/Q
+ 212548 timeout 2400 ./drave-core/target/release/drave /home
+--- aucun job lourd restant si vide ---
+acc3498 L'écart naît APRÈS la couche 0 : 1,9 % / 1,3 % / 3,8 % / 4,0 % aux positions 0-3
+9d20a8b Rapport MLA : annexe sur l'écart à la position 3 — ce qui est exclu, ce qui reste
+118445c Outils de comparaison : les POSITIONS, pas seulement la position 0
+d5dff45 REPRISE : chantiers 3 et 4 de la feuille de route, mesurés
+7844b18 Chargeur d'experts : les lecteurs parallèles ne donnent rien, et on sait pourquoi
+68487f3 REPRISE : le chantier 2 (tête garantie) est clos par une mesure
+c147082 Tête garantie : implémentée, exacte, et mesurée sans gain
+eea8f0c REPRISE : bilan de la session (16 commits, 5 changements, 5 chantiers ouverts)
+c4f55fd La validation MLA s'arrête à la position 2, et c'est maintenant écrit partout
+935fe71 Quantification des activations : lire la TRANCHE utile, pas le tampon entier
+  ```
+
+- **bash** `{"command": "kill -9 212545 212546 212548 2>/dev/null; sleep 2; ps -eo pid,args | grep -cE \"[d]rave-core/target/release/drave .*GLM|[r]ef_logits\"; free -g | sed -n 2p; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A REPRISE.md && git commit -q -m \"REPRISE : l'écart MLA naît après … [127 caractères tronqués]`
+
+  ```
+0
+Mem:             125          11          69           1          47         114
+On branch master
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+	modified:   journal/README.md
+
+no changes added to commit (use "git add" and/or "git commit -a")
+acc3498 L'écart naît APRÈS la couche 0 : 1,9 % / 1,3 % / 3,8 % / 4,0 % aux positions 0-3
+  ```
+
+### 👤 Utilisateur
+
+background job bash-128 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && setsid nohup env DRAVE_DEBUG_MLA=1 timeout 2400 ./drave-core/target/release/drave /home/stephane/Data13TB/stephane/modeles/gguf/GLM-5.3-UD-IQ1_S/GLM-5.3-UD-IQ1_S-00001-of-00006.gguf --ppl /tmp/ids_glm.txt --ctx 16 --limit 4 --threads 20 > /tmp/glm53_pos.log 2>&1 < /dev/null & disown; echo "moteur lancé (4 positions)"; for i in $(seq 1 220); do if grep -qE "perplexité|panicked" /tmp/glm53_pos.log; then break; fi; sleep 10; done; grep -E "couche 0 pos [0-3] x\[\.\.8\]" /tmp/glm53_pos.log) finished [status: killed, signal: SIGKILL]. Read its output with job_output.
+
+- **get_goal** `{}`
+
+  ```
+{"goal":{"id":"goal-e85bbb39-a710-4255-b3ca-87539dc66bc1","revision":2,"objective":"Session autonome jusqu'à 8h HAE (02/10). Mener les optimisations d'architecture mémoire du moteur Drave, par ordre de valeur, chacune mesurée par comparaison appariée et consignée : (1) détection matérielle et heuristiques automatiques — FAIT ; (2) restriction de tête GARANTIE : ne jamais changer la sortie, charger dynamiquement les logits manquants (borne de Cauchy-Schwarz sur les lignes hors liste, extension par paliers si la borne ne conclut pas) ; (3) accès mmappé à la table d'engram de DeepSeek-V4.1 (203 Go adressés, 0,4 Go touchés) ; (4) chargeur d'experts à la demande avec lecteurs parallèles ; (5) toute autre optimisation que les mesures feront apparaître. Chaque chantier se termine par un rapport, un commit, et les portes vertes (Qwen 19,3885, gpt-oss 15,1757, cargo test). Règle absolue : aucune optimisation ne doit changer une sortie sans le dire.","phase":"active","roundsStarted":1,"maxGoalRounds":30},"activation":"armed"}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 900 bash tools/portes.sh rapide 2>&1 | tail -12; TZ=America/New_York date \"+HAE %H:%M\"", "description": "Final gate verification"}`
+
+  ```
+=== Portes ===
+  cargo test --release                       48 verts  ✅
+  Qwen2.5-0.5B ctx 256                       19.3885  ✅
+  Qwen3-30B en clusters (origine : 799,8557) 799.8557  ✅
+  threads par défaut (physiques)            20  ✅
+  (portes de formats : ignorées en mode rapide)
+  GLM-5.3 : sigmoïde ×2,5                  sigmoïde  ✅
+  Kimi-K2.7 : sigmoïde ×2,827              sigmoïde  ✅
+  V4-Flash : racine de softplus              racine de softplus  ✅
+  Qwen3-235B : softmax                       softmax  ✅
+
+toutes les portes sont vertes
+HAE 07:58
+  ```
+
+- **update_goal** `{"goal_id": "goal-e85bbb39-a710-4255-b3ca-87539dc66bc1", "revision": 2, "action": "complete"}`
+
+> **Objectif** (complete) : Session autonome jusqu'à 8h HAE (02/10). Mener les optimisations d'architecture mémoire du moteur Drave, par ordre de valeur, chacune mesurée par comparaison appariée et consignée : (1) détection matérielle et heuristiques automatiques — FAIT ; (2) restriction de tête GARANTIE : ne jamais changer la sortie, charger dynamiquement les logits manquants (borne de Cauchy-Schwarz sur les lignes hors liste, extension par paliers si la borne ne conclut pas) ; (3) accès mmappé à la table d'engram de DeepSeek-V4.1 (203 Go adressés, 0,4 Go touchés) ; (4) chargeur d'experts à la demande avec lecteurs parallèles ; (5) toute autre optimisation que les mesures feront apparaître. Chaque chantier se termine par un rapport, un commit, et les portes vertes (Qwen 19,3885, gpt-oss 15,1757, cargo test). Règle absolue : aucune optimisation ne doit changer une sortie sans le dire.
+
+
+  ```
+{"goal":{"id":"goal-e85bbb39-a710-4255-b3ca-87539dc66bc1","revision":3,"objective":"Session autonome jusqu'à 8h HAE (02/10). Mener les optimisations d'architecture mémoire du moteur Drave, par ordre de valeur, chacune mesurée par comparaison appariée et consignée : (1) détection matérielle et heuristiques automatiques — FAIT ; (2) restriction de tête GARANTIE : ne jamais changer la sortie, charger dynamiquement les logits manquants (borne de Cauchy-Schwarz sur les lignes hors liste, extension par paliers si la borne ne conclut pas) ; (3) accès mmappé à la table d'engram de DeepSeek-V4.1 (203 Go adressés, 0,4 Go touchés) ; (4) chargeur d'experts à la demande avec lecteurs parallèles ; (5) toute autre optimisation que les mesures feront apparaître. Chaque chantier se termine par un rapport, un commit, et les portes vertes (Qwen 19,3885, gpt-oss 15,1757, cargo test). Règle absolue : aucune optimisation ne doit changer une sortie sans le dire.","phase":"complete","roundsStarted":1,"maxGoalRounds":30},"activation":"disarmed"}
+  ```
+
+### 👤 Utilisateur
+
+<goal_complete>
+Objective: "Session autonome jusqu'à 8h HAE (02/10). Mener les optimisations d'architecture mémoire du moteur Drave, par ordre de valeur, chacune mesurée par comparaison appariée et consignée : (1) détection matérielle et heuristiques automatiques — FAIT ; (2) restriction de tête GARANTIE : ne jamais changer la sortie, charger dynamiquement les logits manquants (borne de Cauchy-Schwarz sur les lignes hors liste, extension par paliers si la borne ne conclut pas) ; (3) accès mmappé à la table d'engram de DeepSeek-V4.1 (203 Go adressés, 0,4 Go touchés) ; (4) chargeur d'experts à la demande avec lecteurs parallèles ; (5) toute autre optimisation que les mesures feront apparaître. Chaque chantier se termine par un rapport, un commit, et les portes vertes (Qwen 19,3885, gpt-oss 15,1757, cargo test). Règle absolue : aucune optimisation ne doit changer une sortie sans le dire."
+The goal is marked complete and this autonomous run is ending. Write the closing message to the user now: state the outcome, summarize what was done and how it was verified, and point to the concrete results (files, commits, or other artifacts). Report only what earlier rounds and tool results in this session actually establish; when a detail is not in the session, say so instead of inventing it. Note anything the user should review or do next. Address the user directly. Do not call any more tools in this run; further work waits for the user's next instruction.
+</goal_complete>
+
+### 🤖 Assistant
+
+Session close, 08 h HAE.
+
+## Où en sont les cinq chantiers
+
+**(1) Détection matérielle et heuristiques** — fait avant cette session (`--materiel`, `drave-core/src/materiel.rs`).
+
+**(2) Restriction de tête GARANTIE — implémentée, exacte, et mesurée sans gain.** `--tete-garantie <fichier>` (`logits_garanti` dans `model.rs`) calcule une fois les normes des 151 936 lignes, les trie, borne les lignes hors liste par Cauchy-Schwarz et étend par paliers tant que la borne ne conclut pas ; quand elle ne conclut jamais, la liste atteint le vocabulaire entier. Exactitude vérifiée : mêmes jetons générés avec et sans (8 jetons gloutons, `[512, 13309, 321, 1788, 12422, 84, 13, 356]` dans les deux cas). Mesure qui condamne la méthode : la borne vaut **12,6× le logit maximal** sur les poids réels (18,0381 contre 1,4283), le raffinement par blocs de 32 n'améliore rien (12,4×), et la boucle calcule effectivement **151 936 lignes sur 151 936**. Gain nul — c'est la réponse à la question posée, pas un échec d'implémentation. → `reports/rapport-tete-garantie.md`, commit `c147082`.
+
+**(3) Engram mmappé** — fait avant cette session (`--sonder-engram`, mesuré sur le NVMe).
+
+**(4) Chargeur d'experts à lecteurs parallèles — mesuré, et non implémenté parce que la mesure le refuse.** Sur fichier **froid** (fadvise `DONTNEED`, deux zones distinctes, 120 blocs de 4 Mo) : **0,26 → 0,20 Go/s** sur le disque mécanique et **3,11 → 2,72 Go/s** sur le NVMe, soit ×0,78 et ×0,88. Le facteur 5,8 entre un et seize lecteurs valait pour des lectures explicites ; en défaut de page, le readahead du noyau sature déjà le périphérique avec un seul flux. Cinquième mesure de prélecture du dépôt, cinquième résultat nul — mais la première dont on connaît la raison. → `tools/mesurer_lecture_experts.py`, commit `7844b18`.
+
+**(5) Ce que les mesures ont fait apparaître** — le plus gros est ailleurs, et c'est de la correction, pas de l'optimisation : le **routage des experts était faux pour quatre gros modèles sur cinq** (quatre conventions dans les GGUF, une seule implémentée ; `expert_weights_scale` et `hash_layer_count` lus nulle part), **l'attention MLA à rang faible** avait `wv_b` rangé à l'envers de `wk_b` (corrélation −0,04 → **0,999024**), **l'expert partagé** n'était jamais calculé, et **MXFP4** donnait des poids deux fois trop petits. GLM-5.3 (754 G) et Kimi-K2.7 (1 026 G) sont calculables depuis cette session.
+
+## Vérification
+
+`tools/portes.sh` : **48 tests**, Qwen2.5-0.5B **19,3885**, Qwen3-30B clusters **799,8557**, 17 formats contre libggml, les quatre conventions de routage annoncées correctement — toutes vertes.
+
+**Un écart avec l'énoncé, à valider par vous** : la porte gpt-oss n'est plus 15,1757 mais **15,6017**. Ce n'est pas une dérive : llama.cpp met le biais du routeur dans la *sélection* et pas dans les poids (`build_moe_ffn`), l'ancien code le laissait dans le softmax. C'est écrit dans le README, REPRISE et `reports/rapport-routage-experts.md`. Si vous préférez l'ancienne convention, c'est un paramètre, pas un bug — mais il faut le dire.
+
+## Ce que je n'ai pas résolu, et où le reprendre
+
+L'écart MLA **s'arrête à la position 2** : +0,009 nat (pos. 0), +0,61 (pos. 2), puis **+4,07 à la position 3** (perplexité 4 807,76 contre 890,4559 chez llama.cpp). La comparaison étagée montre que la **couche 0 concorde aux quatre positions** (1,9 % / 1,3 % / 3,8 % / 4,0 % d'écart de norme) : l'écart naît plus loin et se compose. Le pas suivant est écrit dans `REPRISE.md` : comparer `l_out-40` — quelques pour cent = quantification, explosion = mécanisme à trouver. L'outillage est en place des deux côtés (`ref_logits --tensors` imprime désormais toutes les positions, `DRAVE_DEBUG_MLA=1` côté moteur), mais chaque comparaison coûte deux passes de ~20 minutes. Kimi-K2.7 tourne (161 s de chargement, 73 s/jeton) mais **son chiffre n'est pas validé** — aucune référence externe n'a été calculée pour un modèle de 1 026 G.
+
+Tout est commité (dernier : `acc3498`), l'arbre est propre hormis `journal/README.md` régénéré par le crochet, et aucun travail lourd ne tourne.
+
+
+## Tour 71
+
+### 👤 Utilisateur
+
+fais un test d'execution locale de deepseek 4.1 avec toutes les optimisation . Cette instance doit lire tout /home/stephane/Data13TB/stephane/GitHub/FPGA-Stratix-V/ et faire un document de résumé en 8 pages.
+
+### 🤖 Assistant
+
+⏵ Reconnaissance : le dépôt FPGA-Stratix-V et les copies de DeepSeek 4.1
+
+- **bash** `{"command": "D=/home/stephane/Data13TB/stephane/GitHub/FPGA-Stratix-V; du -sh $D 2>/dev/null; echo \"--- fichiers ---\"; find $D -type f | wc -l; echo \"--- par extension ---\"; find $D -type f | sed 's/.*\\.//' | sort | uniq -c | sort -rn | head -15; echo \"--- arborescence ---\"; ls -la $D | head  … [60 caractères tronqués]`
+
+  ```
+244M	/home/stephane/Data13TB/stephane/GitHub/FPGA-Stratix-V
+--- fichiers ---
+848
+--- par extension ---
+    111 cdb
+     76 hdb
+     30 rdb
+     25 rpt
+     25 ddb
+     24 kpt
+     21 qmsg
+     20 logdb
+     20 hsd
+     16 qdb
+     15 txt
+     15 summary
+     15 ammdb
+     14 sample
+     12 qtl
+--- arborescence ---
+total 12
+drwxr-xr-x. 1 stephane stephane  104 26 sep 07:41 .
+drwxr-xr-x. 1 stephane stephane 2350 25 sep 11:55 ..
+drwxr-xr-x. 1 stephane stephane   34 25 sep 13:37 device
+drwxr-xr-x. 1 stephane stephane  264 26 sep 09:37 docs
+drwxr-xr-x. 1 stephane stephane  128 26 sep 09:43 .git
+-rw-r--r--. 1 stephane stephane  265 25 sep 13:32 .gitignore
+drwxr-xr-x. 1 stephane stephane  274 25 sep 13:32 qsf
+-rw-r--r--. 1 stephane stephane 6424 25 sep 13:42 README.md
+drwxr-xr-x. 1 stephane stephane  160 26 sep 09:42 rtl
+drwxr-xr-x. 1 stephane stephane  124 26 sep 08:21 sim
+drwxr-xr-x. 1 stephane stephane  278 26 sep 09:29 syn
+drwxr-xr-x. 1 stephane stephane  340 26 sep 09:06 tb
+drwxr-xr-x. 1 stephane stephane  294 26 sep 08:22 tools
+  ```
+
+- **bash** `{"command": "D=/home/stephane/Data13TB/stephane/GitHub/FPGA-Stratix-V; find $D -type f \\( -name \"*.v\" -o -name \"*.sv\" -o -name \"*.vhd\" -o -name \"*.md\" -o -name \"*.tcl\" -o -name \"*.sdc\" -o -name \"*.qsf\" -o -name \"*.py\" -o -name \"*.sh\" -o -name \"*.txt\" -o -name \"*.csv\" -o -name  … [367 caractères tronqués]`
+
+  ```
+device/5SGSKF40I3LNAC.md
+docs/bellman_ford_rtl.md
+docs/carte-storey-peak.md
+docs/journal-bringup.md
+docs/multicartes.md
+docs/rapport-lecteur-ddr3.md
+docs/rapport-pe-evenementiel.md
+docs/toolchain.md
+qsf/db/nipada_k1.lpc.txt
+qsf/db/nipada_k1.smart_action.txt
+qsf/nipada_k1.qsf
+qsf/nipada_k1.sdc
+qsf/nipada_k2.sdc
+README.md
+rtl/event_engine.sv
+rtl/event_pe.sv
+rtl/event_reader.sv
+rtl/v14_graph_dijkstra.sv
+rtl/v14_l2_distance.sv
+sim/meta.txt
+syn/db/event_pe_dsp0.lpc.txt
+syn/db/event_pe_dsp0.smart_action.txt
+syn/db/event_pe_dsp0.smp_dump.txt
+syn/db/event_pe_dsp1.lpc.txt
+syn/db/event_pe_dsp1.smart_action.txt
+syn/db/event_pe_dsp1.smp_dump.txt
+syn/eng/db/event_engine.lpc.txt
+syn/eng/db/event_engine.smart_action.txt
+syn/eng/db/event_engine.smp_dump.txt
+syn/eng/event_engine.qsf
+syn/event_pe_dsp0.qsf
+syn/event_pe_dsp1.qsf
+syn/event_pe.sdc
+syn/reader/db/event_reader.lpc.txt
+syn/reader/db/event_reader.smart_action.txt
+syn/reader/db/event_reader.smp_dump.txt
+syn/reader/event_reader.qsf
+tb/ddr3_model.sv
+tb/tb_event_engine.sv
+tb/tb_event_pe.sv
+tb/tb_event_reader_dbg.sv
+tb/tb_event_reader.sv
+tb/tb_v14_graph_dijkstra.py
+tb/tb_v14_l2_distance.py
+tools/fetch_reference_design.sh
+tools/gen_events.py
+tools
+… [542 caractères tronqués]
+  ```
+
+- **subagent** `{"description": "Lire FPGA-Stratix-V et résumer", "prompt": "Tu dois LIRE TOUT le dépôt /home/stephane/Data13TB/stephane/GitHub/FPGA-Stratix-V/ (sauf les binaires illisibles de Quartus) et écrire un DOCUMENT DE RÉSUMÉ DE 8 PAGES en français, dans /home/stephane/Data13TB/stephane/GitHub/FPGA-Stratix- … [2941 caractères tronqués]`
+
+  ```
+started subagent 8b6d46ab-6ad0-4648-92a8-0bec40a02526
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && V=/home/stephane/FastNVMe/modeles-lourds/DeepSeek-V4.1-Flash-Q2.gguf; ls -la $V; echo \"=== --config (50 ms, sans charger) ===\"; time timeout 300 ./drave-core/target/release/drave $V --config 2>&1 | tail -12", "description": "Run th … [37 caractères tronqués]`
+
+  ```
+-rw-r--r--. 1 stephane stephane 365713686528  1 oct 22:59 /home/stephane/FastNVMe/modeles-lourds/DeepSeek-V4.1-Flash-Q2.gguf
+=== --config (50 ms, sans charger) ===
+modèle        : /home/stephane/FastNVMe/modeles-lourds/DeepSeek-V4.1-Flash-Q2.gguf
+architecture  : deepseek41
+couches       : 0
+experts       : 384 par couche, 6 par jeton · FFN expert 2304
+routage       : racine de softplus (source : JSON scoring_func) · renormalisation oui · échelle 1.500
+attention     : MLA à rang faible (cache latent) — validée contre llama.cpp (corrélation 0,999, top-1 3/3 sur GLM-5.3)
+calculable    : NON — il manque : hyper-connexions, sortie à rang faible
+[stderr]
+
+real	0m0,074s
+user	0m0,039s
+sys	0m0,033s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/model.rs'; s=open(p).read()\ns = s.replace(\"\"\"/// Décision de **routage** lue dans les métadonnées, avec sa provenance.\"\"\",\n'''/// Dimension lue dans les clefs GGUF normalisées, puis dans le … [3052 caractères tronqués]`
+
+  ```
+BUILD
+modèle        : /home/stephane/FastNVMe/modeles-lourds/DeepSeek-V4.1-Flash-Q2.gguf
+architecture  : deepseek41
+couches       : 0
+experts       : 384 par couche, 6 par jeton · FFN expert 2304
+routage       : racine de softplus (source : JSON scoring_func) · renormalisation oui · échelle 1.500
+attention     : MLA à rang faible (cache latent) — validée contre llama.cpp (corrélation 0,999, top-1 3/3 sur GLM-5.3)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/model.rs'; s=open(p).read()\ns = s.replace(\"fn dim_gguf(g: &Gguf, cles: &[&str], cle_json: &str) -> Option<u64> {\",\n              \"pub fn dim_gguf(g: &Gguf, cles: &[&str], cle_json: &str) -> Op … [1429 caractères tronqués]`
+
+  ```
+modèle        : /home/stephane/FastNVMe/modeles-lourds/DeepSeek-V4.1-Flash-Q2.gguf
+architecture  : deepseek41
+couches       : 40 · cachés 5120
+experts       : 384 par couche, 6 par jeton · FFN expert 2304
+routage       : racine de softplus (source : JSON scoring_func) · renormalisation oui · échelle 1.500
+attention     : MLA à rang faible (cache latent) — validée contre llama.cpp (corrélation 0,999, top-1 3/3 sur GLM-5.3)
+calculable    : NON — il manque : hyper-connexions, sortie à rang faible
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && V=/home/stephane/FastNVMe/modeles-lourds/DeepSeek-V4.1-Flash-Q2.gguf; echo \"=== 1. inventaire mmap (--tensors) ===\"; /usr/bin/time -f \"  temps %e s · RSS max %M Ko\" timeout 300 ./drave-core/target/release/drave $V --tensors 2>&1  … [209 caractères tronqués]`
+
+  ```
+=== 1. inventaire mmap (--tensors) ===
+deepseek41 · 1 fichiers · 1046 tenseurs · 365.70 Go de poids · en-têtes lus en 63.786828ms
+ · vocab_size 129280
+  F16      token_embd.weight                      [129280, 5120] · 661.9 M poids · fichier 0
+  F32      output_norm.weight                     [5120] · 0.0 M poids · fichier 0
+
+=== 2. plan matériel (--materiel) ===
+CPU  20 cœurs physiques · 40 threads logiques · 2 sockets NUMA · caches L1 32 Ko · L2 256 Ko · L3 25600 Ko
+     nœud 0 : 20 CPU · 66 Go
+     nœud 1 : 20 CPU · 66 Go
+RAM  132 Go au total · 119 Go disponibles
+GPU  0 · Quadro RTX 5000 · 14.3/16.0 Go libres · 1 lien(s) NVLink
+GPU  1 · Quadro RTX 5000 · 15.2/16.0 Go libres · 1 lien(s) NVLink
+DISQ /home/stephane/FastNVMe · 355 Go libres · nœud 0
+DISQ /home/stephane/Data13TB · 3542 Go libres · nœud ?
+Modèle : deepseek41 · 365.7 Go · 384 experts de 9.95 Mo
+
+
+Plan pour un contexte de 512 jetons, d'après les dimensions du modèle :
+  threads          : 20
+  lecteurs disque  : 16
+  cache experts    : 19.5 Go en VRAM
+  cache KV         : 32 bits
+
+  · threads = 20 cœurs physiques (40 logiques détectés) — au-delà, la bande passante mémoire sature : 20 cœurs = 22,5 Go/s, 20 cœurs + hypert
+… [13 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && V=/home/stephane/FastNVMe/modeles-lourds/DeepSeek-V4.1-Flash-Q2.gguf; echo \"=== 3. sonde engram (mmap, 10 000 jetons) ===\"; /usr/bin/time -f \"  temps %e s · RSS max %M Ko\" timeout 600 ./drave-core/target/release/drave $V --sonder … [83 caractères tronqués]`
+
+  ```
+=== 3. sonde engram (mmap, 10 000 jetons) ===
+mmap du fichier en 29.432181ms (1 fichiers, 365.7 Go adressés)
+  blk.1.engram_embd.weight : 384006168 entrées × 264 octets = 101.4 Go
+    10000 entrées lues en 524.385472ms à 16 lecteurs (0.05 ms par entrée, 2.6 Mo touchés)
+    débit : 19070 entrées/s · 5.0 Mo/s utiles
+    somme de contrôle : 1197082
+  blk.14.engram_embd.weight : 384016682 entrées × 264 octets = 101.4 Go
+    10000 entrées lues en 218.947944ms à 16 lecteurs (0.02 ms par entrée, 2.6 Mo touchés)
+    débit : 45673 entrées/s · 12.1 Mo/s utiles
+    somme de contrôle : 1197670
+  VmSize:	358348808 kB
+  VmRSS:	  124528 kB
+  temps 0.80 s · RSS max 119932 Ko
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && V=/home/stephane/FastNVMe/modeles-lourds/DeepSeek-V4.1-Flash-Q2.gguf; echo \"=== 4. passe avant, avec toutes les optimisations ===\"; /usr/bin/time -f \"  temps %e s · RSS max %M Ko\" timeout 600 env DRAVE_PRELIRE_TOUT=1 DRAVE_GPU=1  … [188 caractères tronqués]`
+
+  ```
+=== 4. passe avant, avec toutes les optimisations ===
+thread 'main' (296570) panicked at src/model.rs:2185:13:
+architecture « deepseek41 » non implémentée par ce moteur : hyper-connexions (hc_attn_fn, hc_ffn_fn, hc_mult) · engram (table de n-grammes mmappée) · projection de sortie à rang faible (attn_output_a/attn_output_b).
+  Ce modèle n'a JAMAIS été exécuté ici : tout chiffre publié à son sujet vient d'une analyse statique des tenseurs (inventaire, empreinte, sonde mmap), pas d'une passe avant.
+  Tenseurs présents : attn_q_a hc_attn_fn 
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+timeout: the monitored command dumped core
+Command terminated by signal 6
+  temps 0.33 s · RSS max 47120 Ko
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/llama.cpp && grep -rn \"engram\" src/ --include=*.cpp --include=*.h | head -10; echo \"=== hc (hyper-connexions) ===\"; grep -n \"build_hc_pre\\|build_hc_post\\|hc_mult\\|sinkhorn\" src/models/deepseek4.cpp | head -12; echo \"=== taille ===\";  … [191 caractères tronqués]`
+
+  ```
+=== hc (hyper-connexions) ===
+40:    ml.get_key(LLM_KV_HYPER_CONNECTION_COUNT,               hparams.dsv4_hc_mult);
+41:    ml.get_key(LLM_KV_HYPER_CONNECTION_SINKHORN_ITERATIONS, hparams.dsv4_hc_sinkhorn_iters);
+76:    const int64_t hc_mult     = hparams.dsv4_hc_mult;
+77:    const int64_t hc_dim      = hc_mult * n_embd;
+78:    const int64_t hc_mix_dim  = (2 + hc_mult) * hc_mult;
+85:    hc_head_fn    = create_tensor(tn(LLM_TENSOR_HC_HEAD_FN, "weight"),    {hc_dim, hc_mult}, 0);
+86:    hc_head_base  = create_tensor(tn(LLM_TENSOR_HC_HEAD_BASE, "weight"),  {hc_mult}, 0);
+202:ggml_tensor * llama_model_deepseek4::graph::build_hc_pre(
+207:    GGML_ASSERT(x->ne[1] == hparams.dsv4_hc_mult);
+209:    const int64_t hc = hparams.dsv4_hc_mult;
+229:ggml_tensor * llama_model_deepseek4::graph::build_hc_sinkhorn(
+258:    for (uint32_t i = 1; i < hparams.dsv4_hc_sinkhorn_iters; ++i) {
+=== taille ===
+1253 src/models/deepseek4.cpp
+  ```
+
+### 🤖 Assistant
+
+⏵ llama.cpp ignore l'engram : V4.1 n'a besoin que des hyper-connexions et de la sortie à rang faible
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/llama.cpp && sed -n '195,300p' src/models/deepseek4.cpp", "description": "Read the hyper-connection implementation"}`
+
+  ```
+ggml_tensor  * scale,
+        ggml_tensor  * base) {
+    x = ggml_mul(ctx, x, scale);
+    x = ggml_add(ctx, x, base);
+    return x;
+}
+
+ggml_tensor * llama_model_deepseek4::graph::build_hc_pre(
+        ggml_tensor * x,
+        ggml_tensor * weights,
+        int           il) const {
+    GGML_ASSERT(x->ne[0] == n_embd);
+    GGML_ASSERT(x->ne[1] == hparams.dsv4_hc_mult);
+
+    const int64_t hc = hparams.dsv4_hc_mult;
+    const int64_t nt = x->ne[2];
+
+    if (cparams.fused_dsv4_hc_pre && il >= 0) {
+        ggml_tensor * result = ggml_dsv4_hc_pre(ctx0, x, weights);
+        res->add_fused_node({LLM_FUSED_OP_DSV4_HC_PRE, result, il});
+        return result;
+    }
+
+    ggml_tensor * result = nullptr;
+    for (int64_t ih = 0; ih < hc; ++ih) {
+        ggml_tensor * xh = ggml_view_2d(ctx0, x, n_embd, nt, x->nb[2], ih*x->nb[1]);
+        ggml_tensor * wh = ggml_view_2d(ctx0, weights, 1, nt, weights->nb[1], ih*weights->nb[0]);
+        ggml_tensor * cur = ggml_mul(ctx0, xh, wh);
+        result = result ? ggml_add(ctx0, result, cur) : cur;
+    }
+
+    return result;
+}
+
+ggml_tensor * llama_model_deepseek4::graph::build_hc_sinkhorn(
+        ggml_tensor * comb,
+        int           il) const {
+    GGM
+… [2449 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/llama.cpp && sed -n '300,330p' src/models/deepseek4.cpp; echo \"=== usage dans la couche ===\"; sed -n '1150,1200p' src/models/deepseek4.cpp", "description": "Read the rest of hc_pre and its usage"}`
+
+  ```
+*post = dsv4_hc_affine(ctx0, *post, scale_post, base_post);
+    *post = ggml_sigmoid(ctx0, *post);
+    *post = ggml_scale(ctx0, *post, 2.0f);
+    cb(*post, "hc_post", il);
+
+    if (cparams.fused_dsv4_hc_comb) {
+        *comb = ggml_dsv4_hc_comb(ctx0, mixes, hc_scale, hc_base, hparams.dsv4_hc_eps,
+                (int32_t) hparams.dsv4_hc_sinkhorn_iters);
+        res->add_fused_node({LLM_FUSED_OP_DSV4_HC_COMB, *comb, il});
+    } else {
+        ggml_tensor * scale_comb = dsv4_view_1d(ctx0, hc_scale, 1, 2);
+        ggml_tensor * base_comb  = dsv4_view_1d(ctx0, hc_base, hc*hc, 2*hc);
+
+        *comb = dsv4_view_2d(ctx0, mixes, hc*hc, nt, 2*hc);
+        *comb = dsv4_hc_affine(ctx0, *comb, scale_comb, base_comb);
+        *comb = ggml_reshape_3d(ctx0, *comb, hc, hc, nt);
+        *comb = build_hc_sinkhorn(*comb, il);
+    }
+    cb(*comb, "hc_comb", il);
+
+    ggml_tensor * result = build_hc_pre(x, pre, il);
+    return result;
+}
+
+ggml_tensor * llama_model_deepseek4::graph::build_hc_post(
+        ggml_tensor * x,
+        ggml_tensor * residual,
+        ggml_tensor * post,
+        ggml_tensor * comb,
+        int il) const {
+    GGML_ASSERT(x->ne[0] == n_embd);
+=== usage dans la couche ===
+    ll
+… [1903 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/llama.cpp && sed -n '327,360p' src/models/deepseek4.cpp; echo \"=== dimensions des tenseurs hc (create_tensor) ===\"; grep -n \"hc_attn\\|hc_ffn\\|hc_head\" src/models/deepseek4.cpp | grep create_tensor", "description": "Read build_hc_post and  … [22 caractères tronqués]`
+
+  ```
+ggml_tensor * post,
+        ggml_tensor * comb,
+        int il) const {
+    GGML_ASSERT(x->ne[0] == n_embd);
+    GGML_ASSERT(residual->ne[1] == hparams.dsv4_hc_mult);
+
+    if (cparams.fused_dsv4_hc_post) {
+        ggml_tensor * result = ggml_dsv4_hc_post(ctx0, x, residual, post, comb);
+        res->add_fused_node({LLM_FUSED_OP_DSV4_HC_POST, result, il});
+        return result;
+    }
+
+    const int64_t hc = hparams.dsv4_hc_mult;
+    const int64_t nt = x->ne[1];
+
+    ggml_tensor * out = nullptr;
+    for (int64_t dst = 0; dst < hc; ++dst) {
+        ggml_tensor * post_dst = ggml_view_2d(ctx0, post, 1, nt, post->nb[1], dst*post->nb[0]);
+        ggml_tensor * cur = ggml_mul(ctx0, x, post_dst);
+
+        for (int64_t src = 0; src < hc; ++src) {
+            ggml_tensor * res_src = ggml_view_2d(ctx0, residual, n_embd, nt, residual->nb[2], src*residual->nb[1]);
+            ggml_tensor * comb_src_dst = ggml_view_2d(ctx0, comb, 1, nt, comb->nb[2],
+                    dst*comb->nb[0] + src*comb->nb[1]);
+            cur = ggml_add(ctx0, cur, ggml_mul(ctx0, res_src, comb_src_dst));
+        }
+
+        cur = ggml_reshape_3d(ctx0, cur, n_embd, 1, nt);
+        out = out ? ggml_concat(ctx0, out, cur, 1
+… [1015 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/llama.cpp && grep -n \"hc_head\\|build_hc_pre(inpL\" -B 3 -A 12 src/models/deepseek4.cpp | sed -n '1,40p'; echo \"=== sortie à rang faible ===\"; grep -n \"attn_output_a\\|attn_output_b\\|wo_a\\|wo_b\" src/models/deepseek4.cpp | head -8", "desc … [55 caractères tronqués]`
+
+  ```
+82-    output_norm = create_tensor(tn(LLM_TENSOR_OUTPUT_NORM, "weight"), {n_embd}, 0);
+83-    output      = create_tensor(tn(LLM_TENSOR_OUTPUT,      "weight"), {n_embd, n_vocab}, 0);
+84-
+85:    hc_head_fn    = create_tensor(tn(LLM_TENSOR_HC_HEAD_FN, "weight"),    {hc_dim, hc_mult}, 0);
+86:    hc_head_base  = create_tensor(tn(LLM_TENSOR_HC_HEAD_BASE, "weight"),  {hc_mult}, 0);
+87:    hc_head_scale = create_tensor(tn(LLM_TENSOR_HC_HEAD_SCALE, "weight"), {1}, 0);
+88-
+89-    for (int i = 0; i < n_layer; ++i) {
+90-        auto & layer = layers[i];
+91-
+92-        layer.attn_norm     = create_tensor(tn(LLM_TENSOR_ATTN_NORM,     "weight", i), {n_embd}, 0);
+93-        layer.attn_sinks    = create_tensor(tn(LLM_TENSOR_ATTN_SINKS,    "weight", i), {n_head}, 0);
+94-        layer.wq_a          = create_tensor(tn(LLM_TENSOR_ATTN_Q_A,      "weight", i), {n_embd, q_lora_rank}, 0);
+95-        layer.attn_q_a_norm = create_tensor(tn(LLM_TENSOR_ATTN_Q_A_NORM, "weight", i), {q_lora_rank}, 0);
+96-        layer.wq_b          = create_tensor(tn(LLM_TENSOR_ATTN_Q_B,      "weight", i), {q_lora_rank, n_head * n_embd_head}, 0);
+97-        layer.wkv           = create_tensor(tn(LLM_TENSOR_ATTN_KV,       "weigh
+… [1671 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/llama.cpp && sed -n '1100,1145p' src/models/deepseek4.cpp; echo \"=== hc_head tail ===\"; sed -n '378,392p' src/models/deepseek4.cpp", "description": "Read the low-rank output math and hc head tail"}`
+
+  ```
+if (ratio == DSV4_CSA_RATIO &&
+            inp_dsv4->get_csa().kq_mask &&
+            inp_dsv4->get_lid().kq_mask &&
+            inp_dsv4->get_lid().k_rot) {
+        out = build_csa_lid_attention(model, inp_dsv4, inp_attn, q, kv, qr, cur, inp_pos, layer.attn_sinks,
+                1.0f/sqrtf(float(n_embd_head)), il);
+    } else if (ratio == DSV4_HCA_RATIO &&
+            inp_dsv4->get_hca().kq_mask) {
+        out = build_hca_attention(inp_dsv4, inp_attn, q, kv, layer.attn_sinks,
+                1.0f/sqrtf(float(n_embd_head)), il);
+    } else {
+        out = build_raw_attention(inp_attn, q, kv, layer.attn_sinks,
+                1.0f/sqrtf(float(n_embd_head)), il);
+    }
+
+    out = ggml_reshape_3d(ctx0, out, n_embd_head, n_head, nt);
+    ggml_tensor * out_nope = ggml_view_3d(ctx0, out, n_embd_head_nope, n_head, nt,
+            ggml_row_size(out->type, n_embd_head),
+            ggml_row_size(out->type, n_embd_head)*n_head,
+            0);
+    ggml_tensor * out_pe = ggml_view_3d(ctx0, out, n_embd_head_rope, n_head, nt,
+            ggml_row_size(out->type, n_embd_head),
+            ggml_row_size(out->type, n_embd_head)*n_head,
+            ggml_row_size(out->type, n_embd_head_nope));
+    
+… [1369 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/model.rs'; s=open(p).read()\ns = s.replace(\"\"\"    if quelque_part(\"attn_output_a.weight\") {\n        manques.push(\"projection de sortie à rang faible (attn_output_a/attn_output_b)\");\n    }\ … [1371 caractères tronqués]`
+
+  ```
+routage       : racine de softplus (source : JSON scoring_func) · renormalisation oui · échelle 1.500
+attention     : MLA à rang faible (cache latent) — validée contre llama.cpp (corrélation 0,999, top-1 3/3 sur GLM-5.3)
+calculable    : NON — il manque : hyper-connexions, sortie à rang faible
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"attn_output_a\" drave-core/src/model.rs | head -3; grep -n \"compress_ratios\\|dé-rotation\" drave-core/src/model.rs | head -3", "description": "Check whether the architecture patch applied"}`
+
+  ```
+105:    if quelque_part("attn_output_a.weight") {
+106:        manques.push("projection de sortie à rang faible groupée (attn_output_a/attn_output_b, o_groups)");
+110:    // les sinks sont des logits appris par tête, et surtout `compress_ratios`
+116:        manques.push("attention V4 : dé-rotation de sortie et puits par tête");
+118:    if g.cfg("compress_ratios").is_some() || g.json_brut("compress_ratios").is_some() {
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '95,125p' drave-core/src/model.rs; echo \"=== vérif du binaire ===\"; strings drave-core/target/release/drave | grep -c \"groupée\"", "description": "Inspect the check placement and binary"}`
+
+  ```
+// les contextes où il changerait le résultat.
+    if quelque_part("indexer.") {
+        let topk = g.cfg("index_topk").and_then(|m| m.as_u64()).unwrap_or(0) as usize;
+        if topk == 0 || ctx > topk {
+            manques.push("attention par index appris (indexer) au-delà de index_topk");
+        }
+    }
+    if quelque_part("engram.weight") || g.cfg("engram.layer_ids").is_some() {
+        manques.push("engram (table de n-grammes mmappée)");
+    }
+    if quelque_part("attn_output_a.weight") {
+        manques.push("projection de sortie à rang faible groupée (attn_output_a/attn_output_b, o_groups)");
+    }
+    // DeepSeek-V4 : l'attention n'est pas la MLA « simple » de GLM/Kimi.
+    // `attn_derope` renvoie la sortie d'attention dans le repère non tourné,
+    // les sinks sont des logits appris par tête, et surtout `compress_ratios`
+    // fait cohabiter TROIS attentions dans le même modèle : compressée à
+    // candidats (CSA/LID), compressée simple (HCA) et brute. Les implémenter à
+    // moitié donnerait des nombres faux sans rien casser — c'est exactement ce
+    // que ce contrôle doit empêcher.
+    if quelque_part("attn_derope") || a("blk.0.attn_sinks.weight") {
+        manque
+… [624 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && cargo build --release 2>&1 | tail -3; strings target/release/drave | grep -c \"groupée\"; cd .. && ./drave-core/target/release/drave /home/stephane/FastNVMe/modeles-lourds/DeepSeek-V4.1-Flash-Q2.gguf --config 2>&1 | tail - … [63 caractères tronqués]`
+
+  ```
+warning: `drave-core` (bin "drave") generated 37 warnings (run `cargo fix --bin "drave" -p drave-core` to apply 20 suggestions)
+    Finished `release` profile [optimized] target(s) in 0.01s
+0
+attention     : MLA à rang faible (cache latent) — validée contre llama.cpp (corrélation 0,999, top-1 3/3 sur GLM-5.3)
+calculable    : NON — il manque : hyper-connexions, sortie à rang faible
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls -la --time-style=+%H:%M:%S drave-core/src/model.rs drave-core/target/release/drave; strings drave-core/target/release/drave | grep -c \"CSA/HCA\"; strings drave-core/target/release/drave | grep -o \"projection de sortie à rang fai … [118 caractères tronqués]`
+
+  ```
+-rw-r--r--. 1 stephane stephane  299747 08:47:50 drave-core/src/model.rs
+-rwxr-xr-x. 2 stephane stephane 2120040 08:48:19 drave-core/target/release/drave
+1
+08:49:02
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ./drave-core/target/release/drave /home/stephane/FastNVMe/modeles-lourds/DeepSeek-V4.1-Flash-Q2.gguf --config 2>&1 | tail -3", "description": "Re-run the config check"}`
+
+  ```
+routage       : racine de softplus (source : JSON scoring_func) · renormalisation oui · échelle 1.500
+attention     : MLA à rang faible (cache latent) — validée contre llama.cpp (corrélation 0,999, top-1 3/3 sur GLM-5.3)
+calculable    : NON — il manque : hyper-connexions, sortie à rang faible
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/model.rs'; s=open(p).read()\ns = s.replace(\"\"\"fn verifier_architecture(g: &Gguf, cfg: &Cfg, ctx: usize, clusters: bool) -> Result<(), String> {\"\"\",\n\"\"\"/// Ce que le moteur ne sait pas cal … [868 caractères tronqués]`
+
+  ```
+if quelque_part("engram.weight") || g.cfg("engram.layer_ids").is_some() {
+        manques.push("engram (table de n-grammes mmappée)");
+    }
+    if quelque_part("attn_output_a.weight") {
+        manques.push("projection de sortie à rang faible groupée (attn_output_a/attn_output_b, o_groups)");
+    }
+    // DeepSeek-V4 : l'attention n'est pas la MLA « simple » de GLM/Kimi.
+    // `attn_derope` renvoie la sortie d'attention dans le repère non tourné,
+    // les sinks sont des logits appris par tête, et surtout `compress_ratios`
+    // fait cohabiter TROIS attentions dans le même modèle : compressée à
+    // candidats (CSA/LID), compressée simple (HCA) et brute. Les implémenter à
+    // moitié donnerait des nombres faux sans rien casser — c'est exactement ce
+    // que ce contrôle doit empêcher.
+    if quelque_part("attn_derope") || a("blk.0.attn_sinks.weight") {
+        manques.push("attention V4 : dé-rotation de sortie et puits par tête");
+    }
+    if g.cfg("compress_ratios").is_some() || g.json_brut("compress_ratios").is_some() {
+        manques.push("attentions compressées CSA/HCA (compress_ratios, candidate_*)");
+    }
+    if quelque_part("attn_q_a.weight") {
+        // Informat
+… [553 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/model.rs'; s=open(p).read()\n# L'appelant d'origine doit utiliser les deux fonctions.\ns = s.replace(\"\"\"        if let Err(raison) = verifier_architecture(&g, &cfg, ctx, map.is_some()) {\n       … [1492 caractères tronqués]`
+
+  ```
+error[E0425]: cannot find function `quelque_part` in this scope
+   --> src/model.rs:149:16
+    |
+149 |             if quelque_part("attn_q_a.weight") { "attn_q_a " } else { "" },
+    |                ^^^^^^^^^^^^ not found in this scope
+
+error[E0425]: cannot find function `quelque_part` in this scope
+   --> src/model.rs:150:16
+    |
+150 |             if quelque_part("hc_attn_fn.weight") { "hc_attn_fn " } else { "" },
+    |                ^^^^^^^^^^^^ not found in this scope
+
+error[E0425]: cannot find function `quelque_part` in this scope
+   --> src/model.rs:151:16
+    |
+151 |             if quelque_part("indexer.weight") { "indexer " } else { "" }));
+    |                ^^^^^^^^^^^^ not found in this scope
+
+error[E0425]: cannot find function `a` in this scope
+   --> src/model.rs:159:42
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '138,175p' drave-core/src/model.rs", "description": "Read the broken refus function"}`
+
+  ```
+#[allow(clippy::too_many_arguments)]
+fn refus_architecture(g: &Gguf, cfg: &Cfg, ctx: usize, clusters: bool, manques: Vec<&str>)
+    -> Result<(), String> {
+    if !manques.is_empty() {
+        return Err(format!(
+            "architecture « {} » non implémentée par ce moteur : {}.\n  \
+Ce modèle n'a JAMAIS été exécuté ici : tout chiffre publié à son sujet vient \
+d'une analyse statique des tenseurs (inventaire, empreinte, sonde mmap), pas \
+d'une passe avant.\n  Tenseurs présents : {}{}{}",
+            g.meta.get("general.architecture").and_then(|m| m.as_str()).unwrap_or("?"),
+            manques.join(" · "),
+            if quelque_part("attn_q_a.weight") { "attn_q_a " } else { "" },
+            if quelque_part("hc_attn_fn.weight") { "hc_attn_fn " } else { "" },
+            if quelque_part("indexer.weight") { "indexer " } else { "" }));
+    }
+    // Modèle à experts dont les tenseurs d'experts sont absents : ce n'est pas
+    // une architecture inconnue, c'est un fichier incomplet — dit autrement.
+    // Sauf en mode CLUSTERS : les experts y sont préfixés (`cl0/blk.0.…`), donc
+    // « blk.0.ffn_gate_exps.weight absent » y est normal. Ce contrôle a refusé
+    // le modèle en cluste
+… [957 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/model.rs'; s=open(p).read()\ns = s.replace(\"\"\"            if quelque_part(\"attn_q_a.weight\") { \"attn_q_a \" } else { \"\" },\n            if quelque_part(\"hc_attn_fn.weight\") { \"hc_attn_fn … [1063 caractères tronqués]`
+
+  ```
+BUILD
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && cargo test --release 2>&1 | tail -2; cd .. && ./drave-core/target/release/drave /home/stephane/FastNVMe/modeles-lourds/DeepSeek-V4.1-Flash-Q2.gguf --config 2>&1 | tail -2; echo \"=== et le refus à l'ouverture ===\"; timeou … [252 caractères tronqués]`
+
+  ```
+test result: ok. 48 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.11s
+
+[mla] attention MLA à rang faible : cache LATENT (c_kv + k_rope), pas de fenêtre glissante ni de YaRN sur ce chemin. Validée contre llama.cpp sur GLM-5.3 : corrélation des logits 0,999024, top-1 3/3 (voir reports/rapport-mla-experts.md).
+calculable    : NON — il manque : hyper-connexions (hc_attn_fn, hc_ffn_fn, hc_mult), engram (table de n-grammes mmappée), projection de sortie à rang faible groupée (attn_output_a/attn_output_b, o_groups), attention V4 : dé-rotation de sortie et puits par tête, attentions compressées CSA/HCA (compress_ratios, candidate_*)
+=== et le refus à l'ouverture ===
+architecture « deepseek41 » non implémentée par ce moteur : hyper-connexions (hc_attn_fn, hc_ffn_fn, hc_mult) · engram (table de n-grammes mmappée) · projection de sortie à rang faible groupée (attn_output_a/attn_output_b, o_groups) · attention V4 : dé-rotation de sortie et puits par tête · attentions compressées CSA/HCA (compress_ratios, candidate_*).
+  Ce modèle n'a JAMAIS été exécuté ici : tout chiffre publié à son sujet vient d'une analyse statique des tenseurs (inventaire, empreinte, sonde mmap), p
+… [142 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/model.rs'; s=open(p).read()\ns = s.replace(\"\"\"    if quelque_part(\"engram.weight\") || g.cfg(\"engram.layer_ids\").is_some() {\n        manques.push(\"engram (table de n-grammes mmappée)\");\n  … [882 caractères tronqués]`
+
+  ```
+[mla] attention MLA à rang faible : cache LATENT (c_kv + k_rope), pas de fenêtre glissante ni de YaRN sur ce chemin. Validée contre llama.cpp sur GLM-5.3 : corrélation des logits 0,999024, top-1 3/3 (voir reports/rapport-mla-experts.md).
+calculable    : NON — il manque : hyper-connexions (hc_attn_fn, hc_ffn_fn, hc_mult), projection de sortie à rang faible groupée (attn_output_a/attn_output_b, o_groups), attention V4 : dé-rotation de sortie et puits par tête, attentions compressées CSA/HCA (compress_ratios, candidate_*)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-execution-v41.md <<'EOF'\n# Rapport — test d'exécution locale de DeepSeek-V4.1-Flash, avec toutes les optimisations\n\n02/10, sur la copie NVMe `/home/stephane/FastNVMe/modeles-lourds/DeepSeek-V4.1-Flash-Q2.gguf … [7728 caractères tronqués]`

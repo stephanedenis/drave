@@ -79,7 +79,12 @@ impl Gating {
 /// (`hc_*`), attention par index (`indexer`), routage par table (`tid2eid`) et
 /// engram. Aucun n'a jamais été exécuté par ce moteur ; leurs chiffres publiés
 /// viennent d'analyses STATIQUES des tenseurs, pas d'une passe avant.
-fn verifier_architecture(g: &Gguf, cfg: &Cfg, ctx: usize, clusters: bool) -> Result<(), String> {
+/// Ce que le moteur ne sait pas calculer de ce modèle, nommé.
+///
+/// **Une seule liste**, utilisée par le refus à l'ouverture ET par `--config`.
+/// Deux copies de ce contrôle avaient déjà divergé : `--config` annonçait deux
+/// manques quand la passe avant en refusait trois.
+pub fn manques_architecture(g: &Gguf, cfg: &Cfg, ctx: usize, clusters: bool) -> Vec<&'static str> {
     // Le test porte sur TOUTES les couches, pas sur la couche 0 : GLM-5.3 a
     // trois couches denses puis des couches MLA, et regarder la première
     // laissait passer le modèle jusqu'au panic « attn_q absent » de la couche 3.
@@ -99,11 +104,29 @@ fn verifier_architecture(g: &Gguf, cfg: &Cfg, ctx: usize, clusters: bool) -> Res
             manques.push("attention par index appris (indexer) au-delà de index_topk");
         }
     }
-    if quelque_part("engram.weight") || g.cfg("engram.layer_ids").is_some() {
-        manques.push("engram (table de n-grammes mmappée)");
+    // L'engram est une table mmappée que le moteur sait ADRESSER (`--sonder-engram`)
+    // mais pas encore CALCULER. llama.cpp l'ignore aussi : ce n'est donc pas un
+    // obstacle à une exécution comparable à la sienne, et le dire évite de
+    // compter un manque qui n'en est pas un pour la validation croisée.
+    if quelque_part("engram_embd.weight") || quelque_part("engram.weight")
+        || g.cfg("engram.layer_ids").is_some() || g.json_brut("engram_layer_ids").is_some() {
+        // informatif seulement : voir `--sonder-engram`
     }
     if quelque_part("attn_output_a.weight") {
-        manques.push("projection de sortie à rang faible (attn_output_a/attn_output_b)");
+        manques.push("projection de sortie à rang faible groupée (attn_output_a/attn_output_b, o_groups)");
+    }
+    // DeepSeek-V4 : l'attention n'est pas la MLA « simple » de GLM/Kimi.
+    // `attn_derope` renvoie la sortie d'attention dans le repère non tourné,
+    // les sinks sont des logits appris par tête, et surtout `compress_ratios`
+    // fait cohabiter TROIS attentions dans le même modèle : compressée à
+    // candidats (CSA/LID), compressée simple (HCA) et brute. Les implémenter à
+    // moitié donnerait des nombres faux sans rien casser — c'est exactement ce
+    // que ce contrôle doit empêcher.
+    if quelque_part("attn_derope") || a("blk.0.attn_sinks.weight") {
+        manques.push("attention V4 : dé-rotation de sortie et puits par tête");
+    }
+    if g.cfg("compress_ratios").is_some() || g.json_brut("compress_ratios").is_some() {
+        manques.push("attentions compressées CSA/HCA (compress_ratios, candidate_*)");
     }
     if quelque_part("attn_q_a.weight") {
         // Informatif : la MLA à rang faible EST implémentée (`attn_mla`), mais
@@ -114,6 +137,12 @@ fn verifier_architecture(g: &Gguf, cfg: &Cfg, ctx: usize, clusters: bool) -> Res
 fenêtre glissante ni de YaRN sur ce chemin. Validée contre llama.cpp sur GLM-5.3 : \
 corrélation des logits 0,999024, top-1 3/3 (voir reports/rapport-mla-experts.md).");
     }
+    manques
+}
+
+#[allow(clippy::too_many_arguments)]
+fn refus_architecture(g: &Gguf, cfg: &Cfg, ctx: usize, clusters: bool, manques: Vec<&str>)
+    -> Result<(), String> {
     if !manques.is_empty() {
         return Err(format!(
             "architecture « {} » non implémentée par ce moteur : {}.\n  \
@@ -122,9 +151,9 @@ d'une analyse statique des tenseurs (inventaire, empreinte, sonde mmap), pas \
 d'une passe avant.\n  Tenseurs présents : {}{}{}",
             g.meta.get("general.architecture").and_then(|m| m.as_str()).unwrap_or("?"),
             manques.join(" · "),
-            if quelque_part("attn_q_a.weight") { "attn_q_a " } else { "" },
-            if quelque_part("hc_attn_fn.weight") { "hc_attn_fn " } else { "" },
-            if quelque_part("indexer.weight") { "indexer " } else { "" }));
+            if g.tensors.iter().any(|t| t.name.ends_with("attn_q_a.weight")) { "attn_q_a " } else { "" },
+            if g.tensors.iter().any(|t| t.name.ends_with("hc_attn_fn.weight")) { "hc_attn_fn " } else { "" },
+            if g.tensors.iter().any(|t| t.name.ends_with("indexer.")) { "indexer " } else { "" }));
     }
     // Modèle à experts dont les tenseurs d'experts sont absents : ce n'est pas
     // une architecture inconnue, c'est un fichier incomplet — dit autrement.
@@ -132,14 +161,34 @@ d'une passe avant.\n  Tenseurs présents : {}{}{}",
     // « blk.0.ffn_gate_exps.weight absent » y est normal. Ce contrôle a refusé
     // le modèle en clusters de la porte publiée — un garde-fou qui casse une
     // porte verte est un garde-fou mal placé.
-    if !clusters && cfg.n_expert > 0 && !a("blk.0.ffn_gate_exps.weight")
-        && !a("blk.1.ffn_gate_exps.weight") && g.tensor("blk.0.ffn_gate.weight").is_none() {
+    if !clusters && cfg.n_expert > 0 && g.tensor("blk.0.ffn_gate_exps.weight").is_none()
+        && g.tensor("blk.1.ffn_gate_exps.weight").is_none()
+        && g.tensor("blk.0.ffn_gate.weight").is_none() {
         return Err(format!(
             "le modèle déclare {} experts mais aucun tenseur d'experts n'est lisible \
 (blk.0.ffn_gate_exps.weight absent) — fichier tronqué, ou découpage en clusters \
 incomplet", cfg.n_expert));
     }
     Ok(())
+}
+
+/// Dimension lue dans les clefs GGUF normalisées, puis dans les noms d'origine
+/// de DeepSeek, puis dans le JSON `<arch>.config`.
+///
+/// Les trois existent dans la nature, et un modèle qui n'utilise QUE la
+/// troisième était décrit avec des zéros : `--config` annonçait « couches : 0 »
+/// pour DeepSeek-V4.1-Flash, dont tout le bloc `text_config` vit dans le JSON
+/// (num_hidden_layers, hidden_size, num_attention_heads…). Un zéro silencieux
+/// est pire qu'une absence : le plan matériel et les heuristiques s'appuient
+/// dessus.
+pub fn dim_gguf(g: &Gguf, cles: &[&str], cle_json: &str) -> Option<u64> {
+    g.cfg_ou(cles).and_then(|m| m.as_u64())
+        .or_else(|| g.json_nombre(cle_json).map(|v| v as u64))
+}
+
+pub fn reel_gguf(g: &Gguf, cles: &[&str], cle_json: &str) -> Option<f64> {
+    g.cfg_ou(cles).and_then(|m| m.as_f64())
+        .or_else(|| g.json_nombre(cle_json))
 }
 
 /// Décision de **routage** lue dans les métadonnées, avec sa provenance.
@@ -2052,13 +2101,19 @@ impl Model {
         let r = routage_du_gguf(&g);
         let (n_expert, n_expert_used, ffn_exp) = (r.n_expert, r.n_expert_used, r.ffn_exp);
         let cfg = Cfg {
-            n_layer: g.cfg("block_count").and_then(|m| m.as_u64()).unwrap_or(0) as usize,
-            hidden: g.cfg("embedding_length").and_then(|m| m.as_u64()).unwrap_or(0) as usize,
-            n_head: g.cfg("attention.head_count").and_then(|m| m.as_u64()).unwrap_or(0) as usize,
-            n_kv_head: g.cfg("attention.head_count_kv").and_then(|m| m.as_u64()).unwrap_or(0) as usize,
-            ffn: g.cfg("feed_forward_length").and_then(|m| m.as_u64()).unwrap_or(0) as usize,
+            n_layer: dim_gguf(&g, &["block_count", "num_hidden_layers"], "num_hidden_layers")
+                         .unwrap_or(0) as usize,
+            hidden: dim_gguf(&g, &["embedding_length", "hidden_size"], "hidden_size")
+                        .unwrap_or(0) as usize,
+            n_head: dim_gguf(&g, &["attention.head_count", "num_attention_heads"],
+                             "num_attention_heads").unwrap_or(0) as usize,
+            n_kv_head: dim_gguf(&g, &["attention.head_count_kv", "num_key_value_heads"],
+                                "num_key_value_heads").unwrap_or(0) as usize,
+            ffn: dim_gguf(&g, &["feed_forward_length", "intermediate_size"],
+                          "intermediate_size").unwrap_or(0) as usize,
             eps: g.cfg("attention.layer_norm_rms_epsilon").and_then(|m| m.as_f64()).unwrap_or(1e-6) as f32,
-            rope_base: g.cfg("rope.freq_base").and_then(|m| m.as_f64()).unwrap_or(10000.0) as f32,
+            rope_base: reel_gguf(&g, &["rope.freq_base", "rope_theta"], "rope_theta")
+                           .unwrap_or(10000.0) as f32,
             // `attention.key_length` donne la dimension de tête réelle. Elle
             // n'est PAS toujours hidden/n_head : Qwen3-30B-A3B a 2048 cachés,
             // 32 têtes et 128 par tête, soit 4096 en sortie de Q — l'ancien
@@ -2156,7 +2211,8 @@ impl Model {
         // panne arrive trente lignes plus loin sous la forme « tenseur
         // blk.3.attn_q.weight absent » — qui accuse le fichier au lieu du moteur.
         let map = crate::clusters::actif();
-        if let Err(raison) = verifier_architecture(&g, &cfg, ctx, map.is_some()) {
+        let manques = manques_architecture(&g, &cfg, ctx, map.is_some());
+        if let Err(raison) = refus_architecture(&g, &cfg, ctx, map.is_some(), manques) {
             panic!("{raison}");
         }
         assert!(cfg.head_dim > 0, "dimension de tête indéterminée");

@@ -1654,7 +1654,11 @@ fn run_config() {
     let arch = g.meta.get("general.architecture").and_then(|m| m.as_str()).unwrap_or("?");
     println!("modèle        : {}", modele_chemin());
     println!("architecture  : {arch}");
-    println!("couches       : {}", g.cfg("block_count").and_then(|m| m.as_u64()).unwrap_or(0));
+    let n_layer = model::dim_gguf(&g, &["block_count", "num_hidden_layers"], "num_hidden_layers")
+                      .unwrap_or(0);
+    let hidden = model::dim_gguf(&g, &["embedding_length", "hidden_size"], "hidden_size")
+                     .unwrap_or(0);
+    println!("couches       : {n_layer} · cachés {hidden}");
     let r = model::routage_du_gguf(&g);
     println!("experts       : {} par couche, {} par jeton · FFN expert {}",
              r.n_expert, r.n_expert_used, r.ffn_exp);
@@ -1665,22 +1669,20 @@ fn run_config() {
                  if r.echelle == 0.0 { "aucune".to_string() } else { format!("{:.3}", r.echelle) });
         if r.hash_layers > 0 {
             println!("routage table : {}/{} premières couches par `ffn_gate_tid2eid`",
-                     r.hash_layers, g.cfg("block_count").and_then(|m| m.as_u64()).unwrap_or(0));
+                     r.hash_layers, n_layer);
         }
     }
-    // Ce que le moteur ne sait pas calculer, dit avant la panne.
-    let quelque_part = |suffixe: &str| g.tensors.iter().any(|t| t.name.ends_with(suffixe));
-    let mut manques: Vec<&str> = Vec::new();
-    let mla_rang_faible = quelque_part("attn_q_a.weight");
-    if mla_rang_faible {
-        println!("attention     : MLA à rang faible (cache latent) — validée contre llama.cpp \
-(corrélation 0,999, top-1 3/3 sur GLM-5.3)");
-    }
-    if quelque_part("hc_attn_fn.weight") { manques.push("hyper-connexions"); }
-    let topk = g.cfg("index_topk").and_then(|m| m.as_u64()).unwrap_or(0) as usize;
-    if quelque_part("indexer.") && topk > 0 { manques.push("attention par index (inutile si contexte ≤ index_topk)"); }
-    if quelque_part("attn_output_a.weight") { manques.push("sortie à rang faible"); }
-    if quelque_part("engram.weight") { manques.push("engram"); }
+    // Ce que le moteur ne sait pas calculer, dit avant la panne — par la MÊME
+    // fonction que le refus à l'ouverture : deux listes divergentes ont déjà
+    // annoncé deux manques là où la passe avant en refusait trois.
+    let c = model::Cfg {
+        n_layer: n_layer as usize, hidden: hidden as usize, n_head: 0, n_kv_head: 0,
+        head_dim: 0, ffn: 0, eps: 1e-6, rope_base: 10000.0, vocab: 0,
+        n_expert: r.n_expert, n_expert_used: r.n_expert_used, ffn_exp: r.ffn_exp,
+        ffn_act_oss: false, gating: r.gating, expert_norm: r.norm, expert_scale: r.echelle,
+        hash_layers: r.hash_layers, n_rot: 0, yarn: None,
+    };
+    let manques = model::manques_architecture(&g, &c, 0, false);
     if manques.is_empty() {
         println!("calculable    : oui (passe avant implémentée)");
     } else {

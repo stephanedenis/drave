@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 89.2 h |
-| Tours | 70 |
-| Messages | 4105 |
-| Appels d'outils | 3909 |
+| Durée | 90.1 h |
+| Tours | 71 |
+| Messages | 4142 |
+| Appels d'outils | 3942 |
 | Fichiers touchés | 81 |
-| Commandes | 3439 |
-| Sous-agents | 22 |
-| Commits | 316 |
+| Commandes | 3469 |
+| Sous-agents | 23 |
+| Commits | 318 |
 | Compactages de contexte | 5 |
 
 ## Objectifs déclarés
@@ -36,6 +36,8 @@
 - **create** — Mener à terme, en autonomie, les optimisations d'architecture mémoire du moteur Drave : détection matérielle et heuristiques automatiques (faites), prélecture parallèle des experts (mesurée et validée ou retirée), puis les chantiers suivants par ordre de valeur — chargeur d'experts à la demande, acc
 … [246 caractères tronqués]
 - **edit** — Session autonome jusqu'à 8h HAE (02/10). Mener les optimisations d'architecture mémoire du moteur Drave, par ordre de valeur, chacune mesurée par comparaison appariée et consignée : (1) détection matérielle et heuristiques automatiques — FAIT ; (2) restriction de tête GARANTIE : ne jamais changer la
+… [569 caractères tronqués]
+- **complete** — Session autonome jusqu'à 8h HAE (02/10). Mener les optimisations d'architecture mémoire du moteur Drave, par ordre de valeur, chacune mesurée par comparaison appariée et consignée : (1) détection matérielle et heuristiques automatiques — FAIT ; (2) restriction de tête GARANTIE : ne jamais changer la
 … [569 caractères tronqués]
 
 ## 1. Ce qui a été demandé
@@ -179,6 +181,8 @@
 **Tour 69** — implémente toute les optimisation et détection de matériel avec heuristiques de configuration automatique.
 
 **Tour 70** — <goal_round> Objective: "Session autonome jusqu'à 8h HAE (02/10). Mener les optimisations d'architecture mémoire du moteur Drave, par ordre de valeur, chacune mesurée par comparaison appariée et consignée : (1) détection matérielle et heuristiques automatiques — FAIT ; (2) restriction de tête GARANTIE : ne jamais changer la sortie, charger dynamiquement les logits manquants (borne de Cauchy-Schwar … [1037 caractères tronqués]
+
+**Tour 71** — fais un test d'execution locale de deepseek 4.1 avec toutes les optimisation . Cette instance doit lire tout /home/stephane/Data13TB/stephane/GitHub/FPGA-Stratix-V/ et faire un document de résumé en 8 pages.
 
 ## 2. Déroulé, étape par étape
 
@@ -3581,7 +3585,7 @@ Le plus important est peut-être ailleurs : trois des cinq plus gros modèles de
 
 ### Tour 70 — <goal_round> Objective: "Session autonome jusqu'à 8h HAE (02/10). Mener les optimisations d'architecture mémoire du mote … [1317 caractères tronqués]
 
-*55 appels d'outils.* Actions notables :
+*60 appels d'outils.* Actions notables :
 
 - get_goal
 - bash — Check time and the head restriction code
@@ -3597,7 +3601,52 @@ Le plus important est peut-être ailleurs : trois des cinq plus gros modèles de
 - bash — Check where the option block sits
 - bash — Test the guaranteed head on a real generation
 - bash — Generate without the guarantee for comparison
-- … et 37 autres
+- … et 41 autres
+
+**Synthèse produite :**
+
+Session close, 08 h HAE.
+
+\## Où en sont les cinq chantiers
+
+**(1) Détection matérielle et heuristiques** — fait avant cette session (`--materiel`, `drave-core/src/materiel.rs`).
+
+**(2) Restriction de tête GARANTIE — implémentée, exacte, et mesurée sans gain.** `--tete-garantie <fichier>` (`logits_garanti` dans `model.rs`) calcule une fois les normes des 151 936 lignes, les trie, borne les lignes hors liste par Cauchy-Schwarz et étend par paliers tant que la borne ne conclut pas ; quand elle ne conclut jamais, la liste atteint le vocabulaire entier. Exactitude vérifiée : mêmes jetons générés avec et sans (8 jetons gloutons, `[512, 13309, 321, 1788, 12422, 84, 13, 356]` dans les deux cas). Mesure qui condamne la méthode : la borne vaut **12,6× le logit maximal** sur les poids réels (18,0381 contre 1,4283), le raffinement par blocs de 32 n'améliore rien (12,4×), et la boucle calcule effectivement **151 936 lignes sur 151 936**. Gain nul — c'est la réponse à la question posée, pas un échec d'implémentation. → `reports/rapport-tete-garantie.md`, commit `c147082`.
+
+**(3) Engram mmappé** — fait avant cette session (`--sonder-engram`, mesuré sur le NVMe).
+
+**(4) Chargeur d'experts à lecteurs parallèles — mesuré, et non implémenté parce que la mesure le refuse.** Sur fichier **froid** (fadvise `DONTNEED`, deux zones distinctes, 120 blocs de 4 Mo) : **0,26 → 0,20 Go/s** sur le disque mécanique et **3,11 → 2,72 Go/s** sur le NVMe, soit ×0,78 et ×0,88. Le facteur 5,8 entre un et seize lecteurs valait pour des lectures explicites ; en défaut de page, le readahead du noyau sature déjà le périphérique avec un seul flux. Cinquième mesure de prélecture du dépôt, cinquième résultat nul — mais la première dont on connaît la raison. → `tools/mesurer_lecture_experts.py`, commit `7844b18`.
+
+**(5) Ce que les mesures ont fait apparaître** — le plus gros est ailleurs, et c'est de la correction, pas de l'optimisation : le **routage des experts était faux pour quatre gros modèles sur cinq** (quatre conventions dans les GGUF, une seule implémentée ; `expert_weights_scale` et `hash_layer_count` lus nulle part), **l'attention MLA à rang faible** avait `wv_b` rangé à l'envers de `wk_b` (corrélation −0,04 → **0,999024**), **l'expert partagé** n'était jamais calculé, et **MXFP4** donnait des poids deux fois trop petits. GLM-5.3 (754 G) et Kimi-K2.7 (1 026 G) sont calculables depuis cette session.
+
+\## Vérification
+
+`tools/portes.sh` : **48 tests**, Qwen2.5-0.5B **19,3885**, Qwen3-30B clust
+… [1581 caractères tronqués]
+
+### Tour 71 — fais un test d'execution locale de deepseek 4.1 avec toutes les optimisation . Cette instance doit lire tout /home/steph … [87 caractères tronqués]
+
+*28 appels d'outils.* Actions notables :
+
+- bash — Survey the FPGA-Stratix-V repository
+- bash — List FPGA source files and sizes
+- sous-agent — Lire FPGA-Stratix-V et résumer
+- bash — Run the V4.1 config test on the NVMe copy
+- bash — Add dimension fallbacks and retest V4.1 config
+- bash — Fix the config dims display for V4.1
+- bash — Run the mmap inventory and hardware plan on V4.1
+- bash — Run the engram mmap probe on V4.1
+- bash — Attempt the V4.1 forward pass with all optimizations
+- bash — Check llama.cpp's engram and hyper-connection support
+- bash — Read the hyper-connection implementation
+- bash — Read the rest of hc_pre and its usage
+- bash — Read build_hc_post and the hc tensor shapes
+- bash — Read the hc head and low-rank output usage
+- … et 14 autres
+
+**Synthèse produite :**
+
+⏵ llama.cpp ignore l'engram : V4.1 n'a besoin que des hyper-connexions et de la sortie à rang faible
 
 ## 3. Travail accompli
 
@@ -3711,6 +3760,7 @@ Le plus important est peut-être ailleurs : trois des cinq plus gros modèles de
 - tour 48 — Revue de clôture de la nuit
 - tour 51 — Revue adverse du lecteur multi-fichiers
 - tour 51 — Revue adverse mmap et nœud partiel
+- tour 71 — Lire FPGA-Stratix-V et résumer
 
 ### Commandes exécutées (échantillon)
 
@@ -3754,7 +3804,7 @@ Le plus important est peut-être ailleurs : trois des cinq plus gros modèles de
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 3399 autres
+- … et 3429 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -3882,7 +3932,7 @@ Le plus important est peut-être ailleurs : trois des cinq plus gros modèles de
 
 ## 5. Erreurs rencontrées
 
-236 sorties en erreur ou divergentes. Les premières :
+239 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : a8f2635f8 docs: record which models this box is good at, and why src/llama-hparams.cpp:8:void llama_hparams::set_swa_pattern(uint32_t n_pattern, bool dense_first) { src/llama-hparams.h:308:    void se
 - **T1** : 511 tokens notés — perplexité cumulée 247.031  (4.9 tok/s) === perplexité 247.0308 sur 511 tokens (0 événements, 104.5 s) ===  ### B3 harmony assistant 511 --- ref --- 0.0 0.0 0:00 ls: cannot access '
@@ -4218,4 +4268,6 @@ Le plus important est peut-être ailleurs : trois des cinq plus gros modèles de
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git status --short | head -5; git add -A tools/ref_logits.cpp drave-core/src/model.rs && git commit -q -F 
 - Rapport MLA : annexe sur l'écart à la position 3 — ce qui est exclu, ce qui reste  La couche 0 concorde à 1-3 % à la position 0 (embarquement, première norme, a
 - L'écart naît APRÈS la couche 0 : 1,9 % / 1,3 % / 3,8 % / 4,0 % aux positions 0-3  Comparaison étagée de la sortie de la couche 0 (GLM-5.3, 8 premières valeurs, 
+- REPRISE : l'écart MLA naît après la couche 0 (mesuré aux positions 0-3)" 2>/dev/null; git log --oneline -1
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-execution-v41.md <<'EOF' # Rapport — test d'exécution locale de DeepSeek-V4.1-Flash,
 
