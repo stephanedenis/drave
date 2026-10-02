@@ -62605,3 +62605,239 @@ contiguës adressées par un pointeur et un pas.
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A README.md drave-core/src && git commit -q -m \"README : 18 formats lisibles, portes de formats, et le diagnostic DRAVE_DEBUG_ETAT\n\n- La liste des formats passe de 7 à 18, avec la distinction entre noyau dédié et\n  déqua … [431 caractères tronqués]`
+
+  ```
+78fdc67 README : 18 formats lisibles, portes de formats, et le diagnostic DRAVE_DEBUG_ETAT
+  ```
+
+- **bash** `{"command": "sleep 50; grep -cE \"\\[etat\\]\" /tmp/glm53_etat.log; grep -E \"chargées en|perplexité\" /tmp/glm53_etat.log | tail -2; grep -E \"Final estimate|perplexity: calcul\" /tmp/ref_oss_ppl.log | tail -2", "description": "Poll the diagnostics"}`
+
+  ```
+0
+  ```
+
+- **bash** `{"command": "tail -2 /tmp/glm53_etat.log; echo \"=== ref ===\"; tail -2 /tmp/ref_oss_ppl.log; ps -eo pid,etimes,rss,comm --sort=-rss | head -3", "description": "Check both logs and processes"}`
+
+  ```
+[moe] couche 1 : « blk.1.ffn_gate_exps.weight » absent et aucun mapping
+[moe] couche 2 : « blk.2.ffn_gate_exps.weight » absent et aucun mapping
+=== ref ===
+0.01.104.656 W load: setting token '<|channel|>' (200005) attribute to USER_DEFINED (16), old attributes: 8
+0.01.108.856 W load: special_eog_ids contains both '<|return|>' and '<|call|>', or '<|calls|>' and '<|flush|>' tokens, removing '<|end|>' token from EOG list
+    PID ELAPSED   RSS COMMAND
+3722389     749 57483444 drave
+3721826     868 55487620 llama-perplexit
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '1,45p' tools/portes.sh", "description": "Read the portes.sh header"}`
+
+  ```
+#!/bin/bash
+# Les portes du dépôt, en une commande.
+#
+# Un chiffre de référence qui dérive sans qu'on s'en aperçoive ne vaut rien :
+# chaque porte est comparée à la valeur ATTENDUE, et le script sort en erreur si
+# l'une diverge. Les valeurs sont celles publiées dans les rapports.
+#
+#   tools/portes.sh            toutes les portes
+#   tools/portes.sh rapide     sans gpt-oss (le seul qui prenne ~20 min)
+
+set -u
+cd "$(dirname "$0")/.."
+D=./drave-core/target/release/drave
+RAPIDE=${1:-}
+ECHEC=0
+
+[ -x "$D" ] || { echo "compiler d'abord : (cd drave-core && cargo build --release)"; exit 2; }
+
+compare() {  # nom, attendu, obtenu
+    if [ "$2" = "$3" ]; then
+        printf "  %-42s %s  ✅\n" "$1" "$3"
+    else
+        printf "  %-42s %s  ❌ (attendu %s)\n" "$1" "${3:-—}" "$2"
+        ECHEC=1
+    fi
+}
+
+# Attention : le moteur affiche AUSSI une perplexité cumulée par fenêtre, avant
+# le total. Prendre la première occurrence du motif donnait 17,431 (fenêtre 1) au
+# lieu de 19,3885 (total) — un instrument faux qui accuse le code.
+valeur() { grep -oE "=== perplexité [0-9]+\.[0-9]+" | grep -oE "[0-9]+\.[0-9]+" | head -1; }
+
+echo "=== Portes ==="
+
+# 1. Tests unitaires.
+n=$( (cd drave-core && cargo t
+… [556 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='tools/portes.sh'; s=open(p).read()\ns = s.replace(\"\"\"[ \"${n:-0}\" -ge 35 ] && printf \"  %-42s %s  ✅\\\\n\" \"cargo test --release\" \"${n} verts\" \\\\\n                     || { printf \"  %-42s %s  ❌\\\\n\ … [2610 caractères tronqués]`
+
+  ```
+syntaxe ok
+[timed out after 60000ms]
+[killed by signal: SIGTERM]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && nohup timeout 900 bash tools/portes.sh rapide > /tmp/portes_rapide.log 2>&1 & sleep 50; cat /tmp/portes_rapide.log", "description": "Run the fast gates"}`
+
+  ```
+=== Portes ===
+  cargo test --release                       47 verts  ❌
+  Qwen2.5-0.5B ctx 256                       19.3885  ✅
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && cargo test --release 2>&1 | grep -E \"test result|Running|passed\" | head -6", "description": "Check the test suite counts"}`
+
+  ```
+Running unittests src/main.rs (target/release/deps/drave-9a06049b91b56c63)
+test result: FAILED. 47 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.43s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && cargo test --release 2>&1 | grep -B 2 -A 8 \"panicked\\|FAILED\" | head -20", "description": "Find the failing test"}`
+
+  ```
+test tests_plafond::mode4_prefixe_incoherent_est_refuse ... ok
+test tests_plafond::zero_element_est_refuse_seulement_ou_c_est_une_dimension ... ok
+test tests_vars::les_vars_lues_sont_completes ... FAILED
+test gguf::tests::prefixes_distinguent_les_homonymes ... ok
+test materiel::tests::detection_coherente ... ok
+test engine::tests_gemm::gemm_bat_le_matvec ... ok
+test materiel::tests::plan_dans_les_bornes ... ok
+
+failures:
+
+---- tests_vars::les_vars_lues_sont_completes stdout ----
+
+thread 'tests_vars::les_vars_lues_sont_completes' (3741950) panicked at src/main.rs:4918:13:
+DRAVE_DEBUG_ETAT est lu dans le source mais absent de VARS_LUES : un ancien nom QT_DEBUG_ETAT resterait muet
+
+
+failures:
+    tests_vars::les_vars_lues_sont_completes
+
+test result: FAILED. 47 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.81s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/main.rs'; s=open(p).read()\ns = s.replace('''    \"CLUSTERS\", \"DEBUG_FLUX\", \"FLUX_VERIF\", \"GPU\", \"GPU_EXPERTS\",''',\n              '''    \"CLUSTERS\", \"DEBUG_ETAT\", \"DEBUG_FLUX\", \"FL … [174 caractères tronqués]`
+
+  ```
+test result: ok. 48 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.92s
+  ```
+
+- **bash** `{"command": "grep -cE \"\\[etat\\]\" /tmp/glm53_etat.log; grep -E \"chargées en|perplexité\" /tmp/glm53_etat.log | tail -1; grep -E \"Final estimate|^\\[1\\]\" /tmp/ref_oss_ppl.log | tail -2", "description": "Poll the two heavy jobs"}`
+
+  ```
+0
+  ```
+
+- **bash** `{"command": "tail -1 /tmp/glm53_etat.log; tail -1 /tmp/ref_oss_ppl.log; ps -eo pid,etimes,rss,comm --sort=-rss | head -3; free -g | sed -n 2p", "description": "Check job progress and memory"}`
+
+  ```
+[moe] couche 2 : « blk.2.ffn_gate_exps.weight » absent et aucun mapping
+0.01.108.856 W load: special_eog_ids contains both '<|return|>' and '<|call|>', or '<|calls|>' and '<|flush|>' tokens, removing '<|end|>' token from EOG list
+    PID ELAPSED   RSS COMMAND
+3721826    1098 57128644 llama-perplexit
+3722389     978 49150972 drave
+Mem:             125         114           0           3          15          11
+  ```
+
+- **bash** `{"command": "kill -9 3722389 2>/dev/null; pkill -9 -f \"GLM-5.3-UD-IQ1\" 2>/dev/null; sleep 3; free -g | sed -n 2p; ps -eo pid,etimes,rss,comm --sort=-rss | head -2", "description": "Free memory for the reference run"}`
+
+  ```
+(no output)
+[killed by signal: SIGKILL]
+  ```
+
+- **bash** `{"command": "free -g | sed -n 2p; ps -eo pid,etimes,rss,comm --sort=-rss | head -3", "description": "Check memory after killing GLM"}`
+
+  ```
+Mem:             125          67          47           3          15          58
+    PID ELAPSED   RSS COMMAND
+3721826    1110 58624804 llama-perplexit
+ 710008  570647 2648348 node-MainThread
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in $(seq 1 400); do if grep -q \"Final estimate\" /tmp/ref_oss_ppl.log; then break; fi; sleep 10; done; echo \"=== référence gpt-oss, 510 jetons, ctx 256 ===\"; grep -E \"Final estimate|^\\[1\\]|^\\[2\\]\" /tmp/ref_oss_ppl.log  … [98 caractères tronqués]`
+
+  ```
+started background job bash-109
+  ```
+
+- **job_output** `{"job_id": "bash-109", "timeout_ms": 900000, "wait": true}`
+
+  ```
+=== référence gpt-oss, 510 jetons, ctx 256 ===
+[1]120.8624,[2]166.8539,
+19.29.383.833 I Final estimate: PPL = 166.8539 +/- 31.44844
+[status: completed, exit code: 0]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-107 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && export LD_LIBRARY_PATH=/home/stephane/Data13TB/stephane/GitHub/llama.cpp/build/bin && nohup timeout 5400 /home/stephane/Data13TB/stephane/GitHub/llama.cpp/build/bin/llama-perplexity -m /home/stephane/Data13TB/stephane/modeles/gguf/gpt-oss-120b-MXFP4.gguf -f /tmp/wt2_txt.txt -c 256 --chunks 2 -t 20 -ngl 0 > /tmp/ref_oss_ppl.log 2>&1 & echo "llama-perplexity gpt-oss lancé (référence 510 jetons)"; for i in $(seq 1 300); do if grep -q "Final estimate" /tmp/ref_oss_ppl.log; then break; fi; sleep 10; done; grep -E "Final estimate|perplexity:" /tmp/ref_oss_ppl.log | tail -2) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+### 🤖 Assistant
+
+⏵ La référence gpt-oss diverge d'un facteur 10 : vérifier d'abord la tokenisation
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && export LD_LIBRARY_PATH=/home/stephane/Data13TB/stephane/GitHub/llama.cpp/build/bin && ./drave-core/target/release/drave /home/stephane/Data13TB/stephane/modeles/gguf/gpt-oss-120b-MXFP4.gguf --tokenize --fichier /tmp/wt2_txt.txt --sor … [526 caractères tronqués]`
+
+  ```
+réversibilité : texte reconstruit identique ✅ (20000 octets)
+    1 /tmp/ids_oss_drave.txt
+ 4424 /tmp/ids_oss_llama.txt
+  512 /tmp/ids_oss_512.txt
+ 4937 total
+198,314,13169,418,9826,399,314,25980,13169,418,9826,399,382,448,7725,5586,1366,19123,326,42149,19556,887,1679,1458,261,1
+198 314 13169 418 9826 399 314 25980 13169 418 9826 399 382 448 7725 5586 1366 19123 326 42149 19556 887 1679 1458 261 1
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && nohup timeout 900 env DRAVE_YARN=1 ./drave-core/target/release/drave /home/stephane/Data13TB/stephane/modeles/gguf/gpt-oss-120b-MXFP4.gguf --ppl /tmp/ids_oss_512.txt --ctx 256 --dense --threads 16 --limit 512 > /tmp/oss_yarn.log 2>&1 … [130 caractères tronqués]`
+
+  ```
+(en cours)
+  ```
+
+- **bash** `{"command": "sleep 50; grep -E \"=== perplexité\" /tmp/oss_yarn.log || echo \"(en cours)\"", "description": "Poll the YaRN test"}`
+
+  ```
+(en cours)
+  ```
+
+- **bash** `{"command": "sleep 55; grep -E \"=== perplexité\" /tmp/oss_yarn.log || tail -1 /tmp/oss_yarn.log", "description": "Poll the YaRN test"}`
+
+  ```
+[config] rotation : YaRN ×32 (contexte demandé 256 > 4096 initial)
+  ```
+
+- **bash** `{"command": "sleep 55; grep -E \"=== perplexité\" /tmp/oss_yarn.log || tail -1 /tmp/oss_yarn.log", "description": "Poll the YaRN test"}`
+
+  ```
+[config] rotation : YaRN ×32 (contexte demandé 256 > 4096 initial)
+  ```
+
+- **bash** `{"command": "sleep 55; grep -E \"=== perplexité\" /tmp/oss_yarn.log || ps -eo pid,etimes,args | grep \"[o]ss_512\" | cut -c1-60", "description": "Poll the YaRN test"}`
+
+  ```
+3742849     290 bash -c cd /home/stephane/Data13TB/stephane/
+3742851     290 timeout 900 env DRAVE_YARN=1 ./drave-core/ta
+3742852     290 ./drave-core/target/release/drave /home/step
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in $(seq 1 200); do if grep -qE \"=== perplexité\" /tmp/oss_yarn.log; then break; fi; sleep 10; done; echo \"=== gpt-oss avec YaRN forcé (DRAVE_YARN=1) ===\"; grep -E \"=== perplexité|rotation\" /tmp/oss_yarn.log | tail -2", "d … [67 caractères tronqués]`
+
+  ```
+started background job bash-110
+  ```
+
+- **job_output** `{"job_id": "bash-110", "timeout_ms": 900000, "wait": true}`
+
+  ```
+=== gpt-oss avec YaRN forcé (DRAVE_YARN=1) ===
+[config] rotation : YaRN ×32 (contexte demandé 256 > 4096 initial)
+=== perplexité 84.0694 sur 510 tokens (0 événements, 533.0 s) ===
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/rapport-routage-experts.md'; s=open(p).read()\ns = s.replace(\"\"\"Le nouveau est plus proche de la référence en perplexité **et** en corrélation ;\"\"\",\n\"\"\"**Et la comparaison à 510 jetons, elle, ne … [1919 caractères tronqués]`

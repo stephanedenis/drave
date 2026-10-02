@@ -117,6 +117,24 @@ construction) :
 | drave, biais **hors** des poids (nouveau) | **6443,13** | **0,989242** | 0,4364 | 2/4 |
 | drave, biais **dans** le softmax (ancien) | 6625,80 | 0,989142 | 0,4134 | 2/4 |
 
+**Et la comparaison à 510 jetons, elle, ne conclut pas** — mais pour une raison
+qui vaut d'être écrite :
+
+| gpt-oss-120b, ctx 256, 510 jetons | perplexité |
+|---|---|
+| llama.cpp (`llama-perplexity -c 256 --chunks 2`) | **166,85** |
+| drave, YaRN **à retardement** (le défaut) | **15,6017** |
+| drave, YaRN **forcé** (`DRAVE_YARN=1`) | **84,07** |
+
+Les deux moteurs ne suivent pas la même politique de YaRN : llama.cpp applique
+l'étirement déclaré par le modèle dès la première position, drave ne l'applique
+qu'au-delà de 4 × la longueur vue à l'entraînement — un choix mesuré dans une
+session précédente (à ctx 512, YaRN coûtait un facteur 9 : 174,34 contre 18,58).
+La comparaison externe **encadre** donc notre chiffre (84 forcé contre 167 chez
+llama.cpp) sans le valider : elle dit que l'écart est de l'ordre de celui du
+YaRN, pas d'une erreur de calcul. La validation externe qui compte est celle de
+Qwen2.5-0.5B, **sans YaRN** : 19,3885 contre 18,9750 chez llama.cpp (2,2 %).
+
 Le nouveau est plus proche de la référence en perplexité **et** en corrélation ;
 l'ancien a un écart \|NLL\| moyen légèrement plus faible, mais un top-1 identique
 et une corrélation moins bonne. Sur quatre jetons l'écart est trop mince pour

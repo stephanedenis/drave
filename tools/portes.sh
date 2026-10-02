@@ -34,7 +34,7 @@ echo "=== Portes ==="
 
 # 1. Tests unitaires.
 n=$( (cd drave-core && cargo test --release 2>&1) | grep -oE "[0-9]+ passed" | head -1 | cut -d' ' -f1)
-[ "${n:-0}" -ge 35 ] && printf "  %-42s %s  ✅\n" "cargo test --release" "${n} verts" \
+[ "${n:-0}" -ge 48 ] && printf "  %-42s %s  ✅\n" "cargo test --release" "${n} verts" \
                      || { printf "  %-42s %s  ❌\n" "cargo test --release" "${n:-0} verts"; ECHEC=1; }
 
 # 2. Perplexité Qwen2.5-0.5B, contexte 256.
@@ -57,9 +57,40 @@ att=$(nproc); att=$((att / 2))
     && printf "  %-42s %s  ✅\n" "threads par défaut (physiques)" "$v" \
     || { printf "  %-42s %s  ❌\n" "threads par défaut" "${v:-—}"; ECHEC=1; }
 
-# 5. gpt-oss : le seul long.
+# 5. Portes de FORMATS : chaque déquantificateur contre libggml.
+if [ "$RAPIDE" = "rapide" ]; then
+    echo "  (portes de formats : ignorées en mode rapide)"
+else
+    if command -v gcc >/dev/null && [ -f tools/portes_formats.sh ]; then
+        r=$(timeout 1800 bash tools/portes_formats.sh 2>&1 | tail -1)
+        case "$r" in
+            *"0 divergence(s), 0 absent(s)"*)
+                printf "  %-42s %s  ✅\n" "formats contre libggml" "${r#formats : }" ;;
+            *)  printf "  %-42s %s  ❌\n" "formats contre libggml" "$r"; ECHEC=1 ;;
+        esac
+    fi
+fi
+
+# 6. Convention de routage annoncée : elle doit correspondre à ce que le GGUF
+#    déclare. C'est la porte qui manquait quand quatre modèles sur cinq étaient
+#    routés avec la convention d'un cinquième.
+route() {  # nom, modele, motif attendu
+    [ -f "$2" ] || { printf "  %-42s %s\n" "$1" "absent"; return; }
+    v=$($D "$2" --config 2>/dev/null | grep -oE "routage +: .*" | head -1)
+    case "$v" in
+        *"$3"*) printf "  %-42s %s  ✅\n" "$1" "$3" ;;
+        *)      printf "  %-42s %s  ❌ (attendu %s)\n" "$1" "${v:-—}" "$3"; ECHEC=1 ;;
+    esac
+}
+M=/home/stephane/Data13TB/stephane/modeles/gguf
+route "GLM-5.3 : sigmoïde ×2,5" "$M/GLM-5.3-UD-IQ1_S/GLM-5.3-UD-IQ1_S-00001-of-00006.gguf" "sigmoïde"
+route "Kimi-K2.7 : sigmoïde ×2,827" "$M/Kimi-K2.7-Code-UD-IQ1_M/Kimi-K2.7-Code-UD-IQ1_M-00001-of-00008.gguf" "sigmoïde"
+route "V4-Flash : racine de softplus" "$M/DeepSeek-V4-Flash-UD-IQ1_M/DeepSeek-V4-Flash-UD-IQ1_M-00001-of-00003.gguf" "racine de softplus"
+route "Qwen3-235B : softmax" "$M/Qwen3-235B-A22B-Q2_K/Qwen3-235B-A22B-Instruct-2507-Q2_K-00001-of-00002.gguf" "softmax"
+
+# 7. gpt-oss : le seul long.
 if [ "$RAPIDE" != "rapide" ]; then
-    echo "  (gpt-oss : ~20 min, ignoré si non demandé)"
+    echo "  (gpt-oss ~20 min et les portes de formats : lancez-les, ils sont hors de ce script)"
 fi
 
 echo ""
