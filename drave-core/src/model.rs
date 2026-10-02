@@ -22,6 +22,220 @@ use std::time::Instant;
 // Configuration
 // --------------------------------------------------------------------------- //
 
+/// Convention de routage des experts — quatre familles, et une seule
+/// implémentation partagée par le jeton seul et le lot (voir [`router`]).
+#[derive(Clone, Copy, PartialEq, Eq, Debug)]
+pub enum Gating {
+    /// `softmax` sur TOUS les logits, top-k, renormalisation. Qwen3-MoE, et le
+    /// défaut de llama.cpp quand un modèle ne déclare rien.
+    Softmax,
+    /// `sigmoid` sur chaque logit, top-k sur ces scores, renormalisation.
+    /// Kimi-K2.7 (`expert_gating_func = 2`), GLM-5.3 et GLM-5.3-Flash.
+    Sigmoid,
+    /// Top-k sur les logits **bruts** (plus le biais de sélection s'il existe),
+    /// puis `softmax` sur les seuls k retenus — et **pas** de renormalisation
+    /// ensuite, le softmax s'en charge. gpt-oss.
+    SoftmaxPoids,
+    /// `sqrt(softplus(x)) = sqrt(log(1+e^x))` sur chaque logit, top-k,
+    /// renormalisation. DeepSeek V4-Flash (`expert_gating_func = 4`) et V4.1.
+    SqrtSoftplus,
+}
+
+impl Gating {
+    /// Numéro `expert_gating_func` du GGUF, tel que llama.cpp le définit.
+    pub fn du_numero(n: u64) -> Option<Gating> {
+        match n {
+            1 => Some(Gating::Softmax),
+            2 => Some(Gating::Sigmoid),
+            3 => Some(Gating::SoftmaxPoids),
+            4 => Some(Gating::SqrtSoftplus),
+            _ => None,
+        }
+    }
+
+    /// Nom lisible : ce que le moteur dit qu'il applique.
+    pub fn nom(&self) -> &'static str {
+        match self {
+            Gating::Softmax => "softmax",
+            Gating::Sigmoid => "sigmoïde",
+            Gating::SoftmaxPoids => "top-k brut + softmax",
+            Gating::SqrtSoftplus => "racine de softplus",
+        }
+    }
+}
+
+/// **Le moteur sait-il calculer ce modèle ?** — vérifié AVANT de construire
+/// quoi que ce soit, avec la liste de ce qui manque.
+///
+/// Sans ce contrôle, un modèle d'architecture inconnue mourait sur un
+/// « tenseur blk.3.attn_q.weight absent » qui accuse le FICHIER alors que c'est
+/// le MOTEUR qui ne sait pas. Le coût n'est pas la panne, c'est la panne
+/// trompeuse : on cherche le tenseur manquant dans un GGUF de 216 Go au lieu de
+/// lire que l'attention MLA à rang faible n'est pas implémentée.
+///
+/// Trois des cinq plus gros modèles de cette machine sont dans ce cas —
+/// Kimi-K2.7 (1 026 G poids), GLM-5.3 (754 G), DeepSeek-V4-Flash (284 G) et
+/// V4.1 (755 G) : MLA à rang faible (`attn_q_a`/`attn_q_b`), hyper-connexions
+/// (`hc_*`), attention par index (`indexer`), routage par table (`tid2eid`) et
+/// engram. Aucun n'a jamais été exécuté par ce moteur ; leurs chiffres publiés
+/// viennent d'analyses STATIQUES des tenseurs, pas d'une passe avant.
+fn verifier_architecture(g: &Gguf, cfg: &Cfg) -> Result<(), String> {
+    // Le test porte sur TOUTES les couches, pas sur la couche 0 : GLM-5.3 a
+    // trois couches denses puis des couches MLA, et regarder la première
+    // laissait passer le modèle jusqu'au panic « attn_q absent » de la couche 3.
+    let quelque_part = |suffixe: &str| g.tensors.iter().any(|t| t.name.ends_with(suffixe));
+    let a = |n: &str| g.tensor(n).is_some();
+    let mut manques: Vec<&str> = Vec::new();
+    // Attention MLA à rang faible : Q et KV passent par une projection
+    // intermédiaire. Le moteur ne connaît que la MLA dense
+    // (`--mla`, `forward_mla`), sans experts.
+    if quelque_part("attn_q_a.weight") {
+        manques.push("attention MLA à rang faible (attn_q_a/attn_q_b, attn_kv_a_mqa/attn_kv_b)");
+    }
+    if quelque_part("hc_attn_fn.weight") || quelque_part("hc_ffn_fn.weight") {
+        manques.push("hyper-connexions (hc_attn_fn, hc_ffn_fn, hc_mult)");
+    }
+    if quelque_part("indexer.weight") || g.cfg("index_topk").is_some() {
+        manques.push("attention par index appris (indexer, index_topk)");
+    }
+    if quelque_part("engram.weight") || g.cfg("engram.layer_ids").is_some() {
+        manques.push("engram (table de n-grammes mmappée)");
+    }
+    if quelque_part("attn_output_a.weight") {
+        manques.push("projection de sortie à rang faible (attn_output_a/attn_output_b)");
+    }
+    if !manques.is_empty() {
+        return Err(format!(
+            "architecture « {} » non implémentée par ce moteur : {}.\n  \
+Ce modèle n'a JAMAIS été exécuté ici : tout chiffre publié à son sujet vient \
+d'une analyse statique des tenseurs (inventaire, empreinte, sonde mmap), pas \
+d'une passe avant.\n  Tenseurs présents : {}{}{}",
+            g.meta.get("general.architecture").and_then(|m| m.as_str()).unwrap_or("?"),
+            manques.join(" · "),
+            if quelque_part("attn_q_a.weight") { "attn_q_a " } else { "" },
+            if quelque_part("hc_attn_fn.weight") { "hc_attn_fn " } else { "" },
+            if quelque_part("indexer.weight") { "indexer " } else { "" }));
+    }
+    // Modèle à experts dont les tenseurs d'experts sont absents : ce n'est pas
+    // une architecture inconnue, c'est un fichier incomplet — dit autrement.
+    if cfg.n_expert > 0 && !a("blk.0.ffn_gate_exps.weight") && !a("blk.1.ffn_gate_exps.weight")
+        && g.tensor("blk.0.ffn_gate.weight").is_none() {
+        return Err(format!(
+            "le modèle déclare {} experts mais aucun tenseur d'experts n'est lisible \
+(blk.0.ffn_gate_exps.weight absent) — fichier tronqué, ou découpage en clusters \
+incomplet", cfg.n_expert));
+    }
+    Ok(())
+}
+
+/// Calcule `sqrt(softplus(x))` comme llama.cpp : `softplus(x) = log(1+e^x)`,
+/// avec `x` rendu tel quel au-delà de 20 (où `log(1+e^x)` vaut `x` à la
+/// précision du f32 près). Sous −20, `e^x` s'annule : le résultat est 0.
+#[inline]
+fn sqrt_softplus(x: f32) -> f32 {
+    let sp = if x > 20.0 { x } else { (1.0 + x.exp()).ln() };
+    sp.sqrt()
+}
+
+/// **Sélection des experts d'une couche** — une seule implémentation, appelée
+/// par le jeton seul ET par le lot.
+///
+/// Elle existe parce que les deux chemins avaient divergé : le biais du routeur
+/// de gpt-oss était ajouté aux poids dans l'un et pas dans l'autre. Un modèle
+/// dont la porte verte ne couvre qu'un des deux chemins ne dit rien de l'autre.
+///
+/// Quatre conventions coexistent (voir [`Gating`]), et les confondre ne casse
+/// rien de visible : la perplexité monte de quelques pour cent, et les experts
+/// choisis changent en silence.
+///
+/// `tid2eid` : les `hash_layer_count` premières couches de DeepSeek-V4 routent
+/// par **table**, pas par score — l'expert est une fonction de l'identifiant du
+/// jeton. Le biais de sélection ne s'y applique pas (llama.cpp passe
+/// `exp_probs_b = nullptr`), mais les poids, la renormalisation et le facteur
+/// d'échelle, oui.
+///
+/// Rend `(expert, poids)` dans l'ordre de sélection ; les poids somment à 1
+/// (ou à `expert_scale`) et sont déjà multipliés par le facteur.
+fn router(cfg: &Cfg, moe: &Moe, x: &[f32], tid: u32, k: usize) -> Vec<(usize, f32)> {
+    let ne = moe.routeur.len() / x.len().max(1);
+    let h = x.len();
+    let mut logits = vec![0f32; ne];
+    for e in 0..ne {
+        let r = &moe.routeur[e * h..(e + 1) * h];
+        logits[e] = r.iter().zip(x.iter()).map(|(a, b)| a * b).sum();
+    }
+    // Scores servant à la SÉLECTION, et scores servant aux POIDS : ils
+    // diffèrent pour gpt-oss, dont le biais ne départage que la sélection.
+    let biais = moe.routeur_biais.as_ref();
+    let (mut probs, mut sel): (Vec<f32>, Vec<f32>) = match cfg.gating {
+        Gating::Softmax => {
+            let mx = logits.iter().cloned().fold(f32::NEG_INFINITY, f32::max);
+            let mut somme = 0f32;
+            let mut p: Vec<f32> = logits.iter().map(|v| { let e = (v - mx).exp(); somme += e; e }).collect();
+            if somme > 0.0 { for v in p.iter_mut() { *v /= somme; } }
+            (p.clone(), p)
+        }
+        Gating::Sigmoid => {
+            let p: Vec<f32> = logits.iter().map(|v| 1.0 / (1.0 + (-v).exp())).collect();
+            let s = match biais { Some(b) => p.iter().zip(b).map(|(a, c)| a + c).collect(), None => p.clone() };
+            (p, s)
+        }
+        Gating::SoftmaxPoids => {
+            let s = match biais { Some(b) => logits.iter().zip(b).map(|(a, c)| a + c).collect(), None => logits.clone() };
+            (logits.clone(), s)
+        }
+        Gating::SqrtSoftplus => {
+            let p: Vec<f32> = logits.iter().map(|v| sqrt_softplus(*v)).collect();
+            let s = match biais { Some(b) => p.iter().zip(b).map(|(a, c)| a + c).collect(), None => p.clone() };
+            (p, s)
+        }
+    };
+    let k = k.clamp(1, ne);
+    let chosis: Vec<usize> = match moe.tid2eid.as_ref() {
+        Some(t) => {
+            let base = tid as usize * k;
+            (0..k).map(|j| t[base + j].max(0) as usize).collect()
+        }
+        None => {
+            let mut idx: Vec<u32> = (0..ne as u32).collect();
+            if k < ne {
+                idx.select_nth_unstable_by(k, |&a, &b| {
+                    sel[b as usize].partial_cmp(&sel[a as usize]).unwrap()
+                });
+                idx.truncate(k);
+            }
+            idx.into_iter().map(|e| e as usize).collect()
+        }
+    };
+    let mut poids: Vec<f32> = chosis.iter().map(|&e| probs[e]).collect();
+    // gpt-oss : le softmax porte sur les k POIDS retenus, après sélection.
+    // La renormalisation MULTIPLIE par l'inverse au lieu de diviser : c'est ce
+    // que faisait le moteur avant que les deux chemins de routage soient
+    // réunis, et `x * (1/s)` n'est pas `x / s` au dernier bit près. La
+    // différence traverse 48 couches et déplace la porte publiée de 0,03 % —
+    // mesuré, en comparant l'ancien et le nouveau binaire sur le même modèle.
+    if cfg.gating == Gating::SoftmaxPoids {
+        let mx = poids.iter().cloned().fold(f32::NEG_INFINITY, f32::max);
+        let mut somme = 0f32;
+        for v in poids.iter_mut() { *v = (*v - mx).exp(); somme += *v; }
+        if somme > 0.0 {
+            let inv = 1.0 / somme;
+            for v in poids.iter_mut() { *v *= inv; }
+        }
+    } else if cfg.expert_norm {
+        let somme: f32 = poids.iter().sum();
+        if somme > 0.0 {
+            let inv = 1.0 / somme;
+            for v in poids.iter_mut() { *v *= inv; }
+        }
+    }
+    if cfg.expert_scale != 0.0 && cfg.expert_scale != 1.0 {
+        for v in poids.iter_mut() { *v *= cfg.expert_scale; }
+    }
+    let _ = &mut probs;
+    chosis.into_iter().zip(poids).collect()
+}
+
 pub struct Cfg {
     pub n_layer: usize,
     pub hidden: usize,
@@ -42,11 +256,30 @@ pub struct Cfg {
     /// rapide de type GELU, et un décalage de `up` de +1. Prendre SiLU par
     /// défaut donne une perplexité de 1 396 au lieu de la bonne.
     pub ffn_act_oss: bool,
-    /// Convention de routage. Qwen3-MoE : softmax sur **tous** les experts,
-    /// puis top-k, puis renormalisation. gpt-oss : top-k sur les logits
-    /// **bruts**, puis softmax sur les seuls retenus — les deux donnent des
-    /// poids très différents.
-    pub routeur_topk_softmax: bool,
+    /// Convention de routage des experts (voir [`Gating`]).
+    ///
+    /// Elle était implicite et binaire — « softmax sur tous » ou « top-k sur les
+    /// bruts » — ce qui est faux pour trois des cinq gros modèles MoE de cette
+    /// machine : Kimi-K2.7 et GLM-5.3 routent par **sigmoïde**, V4-Flash et
+    /// V4.1 par **racine de softplus**. Confondre les deux conventions ne casse
+    /// rien de visible : la perplexité monte de quelques pour cent et les
+    /// experts choisis changent en silence.
+    pub gating: Gating,
+    /// Renormaliser les poids des k experts retenus pour qu'ils somment à 1
+    /// (`expert_weights_norm`, `norm_topk_prob`). Vrai chez Qwen3-MoE,
+    /// DeepSeek, GLM et Kimi ; faux chez gpt-oss, où le softmax sur les k
+    /// suffit déjà.
+    pub expert_norm: bool,
+    /// Facteur appliqué APRÈS la renormalisation (`expert_weights_scale`,
+    /// `routed_scaling_factor`) : 1,5 pour V4-Flash et V4.1, 2,5 pour GLM-5.3,
+    /// 2,827 pour Kimi-K2.7, 0 (aucun) ailleurs. Il était purement et simplement
+    /// absent du moteur — un facteur d'échelle sur la sortie des experts change
+    /// l'amplitude du flux résiduel, donc toute la suite du réseau.
+    pub expert_scale: f32,
+    /// Nombre de premières couches dont le routage est **donné** par la table
+    /// `ffn_gate_tid2eid` (`hash_layer_count`) : 3 pour V4-Flash. Ces couches
+    /// n'ont pas de top-k : l'expert est une fonction de l'identifiant du jeton.
+    pub hash_layers: usize,
     /// Dimensions réellement tournées par tête. gpt-oss n'en tourne que la
     /// moitié (`partial_rotary_factor = 0,5`), là où Qwen et Llama tournent
     /// toute la tête.
@@ -225,10 +458,23 @@ incohérente entre les trois projections d'experts", gate.len(), up.len(), down.
         panic!("couche {l} : biais d'experts + clusters — le découpage des biais \
 n'est pas implémenté, et les indexer par l'expert global serait faux");
     }
+    // Routage par TABLE (couches `hash_layer_count` de DeepSeek-V4) : la
+    // sélection des experts n'y dépend pas du routeur appris mais de
+    // l'identifiant du jeton. Le tenseur est en I32, et l'ignorer ferait router
+    // ces trois couches au hasard du score — sans erreur, sans message.
+    let tid2eid = match g.tensor(&p("ffn_gate_tid2eid.weight")) {
+        Some(t) => {
+            let n_k = t.dims.get(1).copied().unwrap_or(0) as usize;
+            let v = g.dequant_i32(&p("ffn_gate_tid2eid.weight"));
+            eprintln!("[moe] couche {l} : routage par TABLE tid2eid, {n_k} experts par jeton ({} jetons de vocabulaire)", if n_k > 0 { v.len() / n_k } else { 0 });
+            Some(v)
+        }
+        None => None,
+    };
     Some(Moe {
         routeur, routeur_biais,
         biais_gate: bg, biais_up: bu, biais_down: bd,
-        n_ff, gate, up, down, shexp,
+        n_ff, gate, up, down, shexp, tid2eid,
         couche: l, numeros, n_expert_global: n_expert, local: map,
     })
 }
@@ -329,6 +575,11 @@ pub struct Moe {
     pub local: Option<&'static crate::clusters::Mapping>,
     /// Expert partagé, toujours actif (certains modèles seulement).
     pub shexp: Option<(Vue4, Vue4, Vue4)>,
+    /// Table `ffn_gate_tid2eid.weight` (`[vocabulaire × k]`, entiers 32 bits) :
+    /// le routage des `hash_layer_count` premières couches de DeepSeek-V4 est une
+    /// fonction de l'identifiant du jeton, pas d'un score. `None` partout
+    /// ailleurs.
+    pub tid2eid: Option<Vec<i32>>,
 }
 
 impl Moe {
@@ -1586,6 +1837,49 @@ impl Model {
                 auto: bool, q4: u8, b6: u8) -> Model {
         let t0 = Instant::now();
         let g = Gguf::open_auto(path).expect("ouverture du GGUF");
+        let arch = g.meta.get("general.architecture").and_then(|m| m.as_str())
+                       .unwrap_or("").to_string();
+        // ---- Convention de routage des experts -------------------------
+        // Trois sources, dans cet ordre : la clef normalisée du GGUF, le nom
+        // d'origine de DeepSeek, puis le JSON `<arch>.config` recopié par le
+        // convertisseur. V4.1-Flash-Q2 n'a QUE la troisième : sans elle, il
+        // était pris pour un modèle dense (`n_expert = 0`), donc exécuté sans
+        // un seul expert.
+        let n_expert = g.cfg_ou(&["expert_count", "n_routed_experts"])
+                        .and_then(|m| m.as_u64())
+                        .or_else(|| g.json_nombre("n_routed_experts").map(|v| v as u64))
+                        .unwrap_or(0) as usize;
+        let n_expert_used = g.cfg_ou(&["expert_used_count", "num_experts_per_tok"])
+                        .and_then(|m| m.as_u64())
+                        .or_else(|| g.json_nombre("num_experts_per_tok").map(|v| v as u64))
+                        .unwrap_or(0) as usize;
+        let ffn_exp = g.cfg_ou(&["expert_feed_forward_length", "moe_intermediate_size"])
+                        .and_then(|m| m.as_u64())
+                        .or_else(|| g.json_nombre("moe_intermediate_size").map(|v| v as u64))
+                        .unwrap_or(0) as usize;
+        let gating = g.cfg_ou(&["expert_gating_func"]).and_then(|m| m.as_u64())
+                        .and_then(Gating::du_numero)
+                        .or_else(|| g.json_texte("scoring_func").and_then(|v| match v.as_str() {
+                            "softmax" => Some(Gating::Softmax),
+                            "sigmoid" => Some(Gating::Sigmoid),
+                            "sqrtsoftplus" => Some(Gating::SqrtSoftplus),
+                            _ => None,
+                        }))
+                        .unwrap_or_else(|| if arch == "gpt-oss" { Gating::SoftmaxPoids }
+                                           else { Gating::Softmax });
+        // `expert_weights_norm` : vrai partout sauf gpt-oss, dont le softmax sur
+        // les k sommme déjà à 1. Le défaut « vrai » conserve les portes
+        // publiées (Qwen2.5 dense, Qwen3-MoE, gpt-oss) ; les modèles qui
+        // déclarent explicitement la clef sont lus, eux.
+        let expert_norm = g.cfg_ou(&["expert_weights_norm", "norm_topk_prob"])
+                        .and_then(|m| m.as_bool())
+                        .or_else(|| g.json_bool("norm_topk_prob"))
+                        .unwrap_or(gating != Gating::SoftmaxPoids);
+        let expert_scale = g.cfg_ou(&["expert_weights_scale", "routed_scaling_factor"])
+                        .and_then(|m| m.as_f64())
+                        .or_else(|| g.json_nombre("routed_scaling_factor"))
+                        .unwrap_or(0.0) as f32;
+        let hash_layers = g.cfg("hash_layer_count").and_then(|m| m.as_u64()).unwrap_or(0) as usize;
         let cfg = Cfg {
             n_layer: g.cfg("block_count").and_then(|m| m.as_u64()).unwrap_or(0) as usize,
             hidden: g.cfg("embedding_length").and_then(|m| m.as_u64()).unwrap_or(0) as usize,
@@ -1607,8 +1901,7 @@ impl Model {
             // n'est pas déclarée dans les métadonnées.
             ffn_act_oss: g.meta.get("general.architecture").and_then(|m| m.as_str())
                              == Some("gpt-oss"),
-            routeur_topk_softmax: g.meta.get("general.architecture").and_then(|m| m.as_str())
-                                      == Some("gpt-oss"),
+            gating, expert_norm, expert_scale, hash_layers,
             n_rot: {
                 let arch = g.meta.get("general.architecture").and_then(|m| m.as_str());
                 let declare = g.cfg("rope.dimension_count").and_then(|m| m.as_u64()).unwrap_or(0) as usize;
@@ -1686,6 +1979,13 @@ impl Model {
             if c.head_dim == 0 { c.head_dim = c.hidden / c.n_head.max(1); }
             c
         };
+        // AVANT toute construction : si le moteur ne sait pas calculer cette
+        // architecture, le dire ici, avec la liste de ce qui manque. Sinon la
+        // panne arrive trente lignes plus loin sous la forme « tenseur
+        // blk.3.attn_q.weight absent » — qui accuse le fichier au lieu du moteur.
+        if let Err(raison) = verifier_architecture(&g, &cfg) {
+            panic!("{raison}");
+        }
         assert!(cfg.head_dim > 0, "dimension de tête indéterminée");
         assert!(cfg.head_dim * cfg.n_head >= cfg.hidden,
                 "n_head × head_dim doit couvrir hidden");
@@ -1786,11 +2086,15 @@ soit plus du tiers de la RAM libre ({:.0} Go) — DRAVE_KV_BITS pour forcer",
         // Trace de configuration : une ligne qui dit quelles particularités
         // d'architecture ont été reconnues. Sans elle, on débogue à l'aveugle
         // sur un modèle de 60 Go.
-        println!("[config] {} couches, hidden {} · {}{}{}{}{}{}",
+        let ligne_echelle = if cfg.n_expert > 0 && cfg.expert_scale != 0.0 && cfg.expert_scale != 1.0 {
+            format!("échelle {:.2} ", cfg.expert_scale) } else { String::new() };
+        println!("[config] {} couches, hidden {} · {}{}{}{}{}{}{}{}",
                  cfg.n_layer, cfg.hidden,
                  if cfg.yarn.is_some() { "yarn " } else { "" },
                  if cfg.ffn_act_oss { "activation-oss " } else { "" },
-                 if cfg.routeur_topk_softmax { "routeur-topk " } else { "" },
+                 if cfg.n_expert > 0 { cfg.gating.nom() } else { "" },
+                 ligne_echelle,
+                 if cfg.hash_layers > 0 { "routage-table " } else { "" },
                  if cfg.n_expert > 0 { "moe " } else { "" },
                  if cfg.n_expert > 0 { "" } else { "" },
                  if cfg.head_dim > 0 { "" } else { "" });
@@ -2960,52 +3264,19 @@ l'attention par lots est DENSE. Utiliser --lot 1 pour l'attention creuse.", self
                 let mut groupes: Vec<Vec<(usize, f32)>> = vec![Vec::new(); ne];
                 let trace_active = self.trace_experts.is_some();
                 for i in 0..t {
-                    let hni = &hn[i * h..(i + 1) * h];
-                    let mut sc_e: Vec<f32> = (0..ne).map(|e| {
-                        let r = &moe.routeur[e * h..(e + 1) * h];
-                        let sc: f32 = r.iter().zip(hni.iter()).map(|(a, b)| a * b).sum();
-                        sc + moe.routeur_biais.as_ref().map_or(0.0, |b| b[e])
-                    }).collect();
-                    let mut idx: Vec<u32> = (0..ne as u32).collect();
-                    let mut inv_k = 1.0f32;
-                    if self.cfg.routeur_topk_softmax {
-                        if k < ne {
-                            idx.select_nth_unstable_by(k, |&a, &b| {
-                                sc_e[b as usize].partial_cmp(&sc_e[a as usize]).unwrap()
-                            });
-                            idx.truncate(k);
-                        }
-                        let mx = idx.iter().map(|&e| sc_e[e as usize])
-                                   .fold(f32::NEG_INFINITY, f32::max);
-                        let mut somme = 0f32;
-                        for &e in &idx {
-                            let v = (sc_e[e as usize] - mx).exp(); sc_e[e as usize] = v; somme += v;
-                        }
-                        if somme > 0.0 { inv_k = 1.0 / somme; }
-                    } else {
-                        let mx = sc_e.iter().cloned().fold(f32::NEG_INFINITY, f32::max);
-                        let mut somme = 0f32;
-                        for v in sc_e.iter_mut() { *v = (*v - mx).exp(); somme += *v; }
-                        if somme > 0.0 { for v in sc_e.iter_mut() { *v /= somme; } }
-                        if k < ne {
-                            idx.select_nth_unstable_by(k, |&a, &b| {
-                                sc_e[b as usize].partial_cmp(&sc_e[a as usize]).unwrap()
-                            });
-                            idx.truncate(k);
-                        }
-                        let somme_k: f32 = idx.iter().map(|&e| sc_e[e as usize]).sum();
-                        inv_k = if somme_k > 0.0 { 1.0 / somme_k } else { 0.0 };
-                    }
+                    // Le MÊME routeur que le chemin jeton seul (voir `router`) :
+                    // deux copies avaient divergé sur le biais de gpt-oss.
+                    let choix = router(&self.cfg, moe, &hn[i * h..(i + 1) * h], toks[i], k);
                     if trace_active {
                         use std::io::Write;
-                        let mut ids: Vec<u32> = idx.clone();
+                        let mut ids: Vec<usize> = choix.iter().map(|(e, _)| *e).collect();
                         ids.sort_unstable();
                         let liste: Vec<String> = ids.iter().map(|e| e.to_string()).collect();
                         let f = self.trace_experts.as_mut().unwrap();
                         let jeton = self.jeton_trace.saturating_sub(t as u64) + i as u64;
                         let _ = writeln!(f, "{} {} {}", l, jeton, liste.join(" "));
                     }
-                    for &e in &idx { groupes[e as usize].push((i, sc_e[e as usize] * inv_k)); }
+                    for (e, poids) in choix { groupes[e].push((i, poids)); }
                 }
                 for i in 0..t { down[i * h..(i + 1) * h].iter_mut().for_each(|v| *v = 0.0); }
                 let nff = self.cfg.ffn_exp;
@@ -3776,43 +4047,10 @@ dynamique de {dyn_:.3e} (relatif {:.2e})", mx / dyn_.max(1e-9));
                 let ne = cfg.n_expert;
                 let k = if self.moe_topk > 0 { self.moe_topk } else { cfg.n_expert_used };
                 let k = k.clamp(1, ne);
-                let mut sc_e: Vec<f32> = (0..ne).map(|e| {
-                    let r = &moe.routeur[e * h..(e + 1) * h];
-                    let s: f32 = r.iter().zip(hn.iter()).map(|(a, b)| a * b).sum();
-                    s + moe.routeur_biais.as_ref().map_or(0.0, |b| b[e])
-                }).collect();
-                let mut idx: Vec<u32> = (0..ne as u32).collect();
-                let mut inv_k = 1.0f32;
-                if cfg.routeur_topk_softmax {
-                    // gpt-oss : le top-k se décide sur les logits BRUTS, et le
-                    // softmax ne porte que sur les retenus.
-                    if k < ne {
-                        idx.select_nth_unstable_by(k, |&a, &b| {
-                            sc_e[b as usize].partial_cmp(&sc_e[a as usize]).unwrap()
-                        });
-                        idx.truncate(k);
-                    }
-                    let mx = idx.iter().map(|&e| sc_e[e as usize])
-                               .fold(f32::NEG_INFINITY, f32::max);
-                    let mut somme = 0f32;
-                    for &e in &idx { let v = (sc_e[e as usize] - mx).exp(); sc_e[e as usize] = v; somme += v; }
-                    if somme > 0.0 { inv_k = 1.0 / somme; }
-                } else {
-                    // Qwen3-MoE : softmax sur tous, puis sélection, puis
-                    // renormalisation sur les retenus.
-                    let mx = sc_e.iter().cloned().fold(f32::NEG_INFINITY, f32::max);
-                    let mut somme = 0f32;
-                    for v in sc_e.iter_mut() { *v = (*v - mx).exp(); somme += *v; }
-                    if somme > 0.0 { for v in sc_e.iter_mut() { *v /= somme; } }
-                    if k < ne {
-                        idx.select_nth_unstable_by(k, |&a, &b| {
-                            sc_e[b as usize].partial_cmp(&sc_e[a as usize]).unwrap()
-                        });
-                        idx.truncate(k);
-                    }
-                    let somme_k: f32 = idx.iter().map(|&e| sc_e[e as usize]).sum();
-                    inv_k = if somme_k > 0.0 { 1.0 / somme_k } else { 0.0 };
-                }
+                // Une seule implémentation du routage, partagée avec le lot.
+                let choix = router(cfg, moe, &hn, tok, k);
+                let idx: Vec<usize> = choix.iter().map(|(e, _)| *e).collect();
+                let poids: Vec<f32> = choix.iter().map(|(_, p)| *p).collect();
                 if self.profil_experts.is_some() {
                     let base = l * ne;
                     let p = self.profil_experts.as_mut().unwrap();
@@ -3820,7 +4058,7 @@ dynamique de {dyn_:.3e} (relatif {:.2e})", mx / dyn_.max(1e-9));
                 }
                 if let Some(f) = self.trace_experts.as_mut() {
                     use std::io::Write;
-                    let mut ids: Vec<u32> = idx.clone();
+                    let mut ids: Vec<usize> = idx.clone();
                     ids.sort_unstable();       // l'ordre de `select_nth` est arbitraire
                     let liste: Vec<String> = ids.iter().map(|e| e.to_string()).collect();
                     let _ = writeln!(f, "{} {} {}", l, pos, liste.join(" "));
@@ -3831,17 +4069,17 @@ dynamique de {dyn_:.3e} (relatif {:.2e})", mx / dyn_.max(1e-9));
                 // ses lectures de pages en parallèle — mesuré, le NVMe passe de
                 // 5,4 à 31 Go/s quand les lectures se recouvrent.
                 for &e in &idx {
-                    if let Some((k, loc)) = moe.ou(e as usize) {
+                    if let Some((k, loc)) = moe.ou(e) {
                         moe.gate[k].prelire_expert(loc);
                         moe.up[k].prelire_expert(loc);
                         moe.down[k].prelire_expert(loc);
                     }
                 }
-                for &e in &idx {
-                    let w_exp = sc_e[e as usize] * inv_k;
+                for (&e, &poids_exp) in idx.iter().zip(poids.iter()) {
+                    let w_exp = poids_exp;
                     // Traduction pour les modèles en clusters : l'expert global
                     // `e` n'est pas forcément dans ce nœud.
-                    let Some((kexp, loc)) = moe.ou(e as usize) else { continue; };
+                    let Some((kexp, loc)) = moe.ou(e) else { continue; };
                     // ---- experts MXFP4 sur le GPU ----
                     // Le noyau MXFP4 est BIT À BIT identique au chemin CPU
                     // (écart mesuré 0,00e0 sur un expert) : seule la vitesse
@@ -4570,5 +4808,127 @@ mod tests_noeud_partiel {
         assert!(e.is_err(), "un mapping de 6 experts pour un modèle qui en a 4 doit être \
 refusé, pas suivi en silence");
         let _ = std::fs::remove_dir_all(&d);
+    }
+}
+
+#[cfg(test)]
+mod tests_router {
+    use super::*;
+
+    fn moe_synthetique(routeur: Vec<f32>, biais: Option<Vec<f32>>, tid: Option<Vec<i32>>) -> Moe {
+        Moe {
+            routeur,
+            routeur_biais: biais,
+            biais_gate: None, biais_up: None, biais_down: None,
+            n_ff: 1,
+            gate: Vec::new(), up: Vec::new(), down: Vec::new(),
+            couche: 0, numeros: Vec::new(), n_expert_global: 0, local: None,
+            shexp: None, tid2eid: tid,
+        }
+    }
+
+    fn cfg_synthetique(gating: Gating, norm: bool, echelle: f32, hash: usize) -> Cfg {
+        Cfg {
+            n_layer: 1, hidden: 1, n_head: 1, n_kv_head: 1, head_dim: 1, ffn: 1,
+            eps: 1e-6, rope_base: 10000.0, vocab: 1,
+            n_expert: 4, n_expert_used: 2, ffn_exp: 1,
+            ffn_act_oss: false, gating, expert_norm: norm, expert_scale: echelle,
+            hash_layers: hash, n_rot: 0, yarn: None,
+        }
+    }
+
+    /// Les quatre conventions sur le MÊME vecteur de logits, valeurs calculées à
+    /// la main. Ce test est la définition exécutable du routage : chaque ligne
+    /// correspond à une ligne de `llama-graph.cpp` (`build_moe_ffn`).
+    #[test]
+    fn quatre_conventions_sur_les_memes_logits() {
+        // 4 experts, h = 1 : le logit vaut directement le poids du routeur.
+        let logits = vec![0.0f32, 1.0, 2.0, -1.0];
+        let x = vec![1.0f32];
+
+        // 1. softmax sur tous, top-2, renormalisation.
+        let m = moe_synthetique(logits.clone(), None, None);
+        let r = router(&cfg_synthetique(Gating::Softmax, true, 0.0, 0), &m, &x, 0, 2);
+        assert_eq!(r.iter().map(|(e, _)| *e).collect::<Vec<_>>(), vec![2, 1]);
+        let (e2, e1) = ((2.0f32).exp(), (1.0f32).exp());
+        let (s2, s1) = (e2 / (e2 + e1), e1 / (e2 + e1));
+        assert!((r[0].1 - s2 / (s1 + s2)).abs() < 1e-6);
+
+        // 2. sigmoïde, top-2, renormalisation.
+        let r = router(&cfg_synthetique(Gating::Sigmoid, true, 0.0, 0), &m, &x, 0, 2);
+        assert_eq!(r.iter().map(|(e, _)| *e).collect::<Vec<_>>(), vec![2, 1]);
+        let sig = |v: f32| 1.0 / (1.0 + (-v).exp());
+        let (a, b) = (sig(2.0), sig(1.0));
+        assert!((r[0].1 - a / (a + b)).abs() < 1e-6, "poids sigmoïde : {:?}", r);
+
+        // 3. top-k sur les logits BRUTS, softmax sur les k, aucune
+        //    renormalisation ensuite (le softmax somme déjà à 1).
+        let r = router(&cfg_synthetique(Gating::SoftmaxPoids, false, 0.0, 0), &m, &x, 0, 2);
+        assert_eq!(r.iter().map(|(e, _)| *e).collect::<Vec<_>>(), vec![2, 1]);
+        let (p2, p1) = ((2.0f32).exp(), (1.0f32).exp());
+        assert!((r[0].1 - p2 / (p1 + p2)).abs() < 1e-6);
+
+        // 4. racine de softplus, top-2, renormalisation.
+        let r = router(&cfg_synthetique(Gating::SqrtSoftplus, true, 0.0, 0), &m, &x, 0, 2);
+        assert_eq!(r.iter().map(|(e, _)| *e).collect::<Vec<_>>(), vec![2, 1]);
+        let sp = |v: f32| (1.0 + v.exp()).ln().sqrt();
+        let (a, b) = (sp(2.0), sp(1.0));
+        assert!((r[0].1 - a / (a + b)).abs() < 1e-6, "poids softplus : {:?}", r);
+    }
+
+    /// Le biais de gpt-oss ne départage QUE la sélection : il n'entre pas dans
+    /// les poids. C'est la différence qui a fait passer la porte gpt-oss de
+    /// 15,1757 à 15,6017 — l'ancien code le laissait dans le softmax.
+    #[test]
+    fn biais_de_selection_hors_des_poids() {
+        // Sans biais, l'expert 3 (logit −1) n'est jamais retenu ; avec un biais
+        // de +10 sur lui, il passe premier — mais son poids reste celui du
+        // logit BRUT, donc minuscule.
+        let logits = vec![0.0f32, 1.0, 2.0, -1.0];
+        let m = moe_synthetique(logits.clone(), None, None);
+        let sans = router(&cfg_synthetique(Gating::SoftmaxPoids, false, 0.0, 0), &m, &vec![1.0], 0, 2);
+        assert_eq!(sans.iter().map(|(e, _)| *e).collect::<Vec<_>>(), vec![2, 1]);
+
+        let biais = vec![0.0f32, 0.0, 0.0, 10.0];
+        let m = moe_synthetique(logits.clone(), Some(biais), None);
+        let avec = router(&cfg_synthetique(Gating::SoftmaxPoids, false, 0.0, 0), &m, &vec![1.0], 0, 2);
+        assert_eq!(avec.iter().map(|(e, _)| *e).collect::<Vec<_>>(), vec![3, 2],
+                   "le biais doit changer la SÉLECTION");
+        let (p3, p2) = ((-1.0f32).exp(), (2.0f32).exp());
+        assert!((avec[0].1 - p3 / (p2 + p3)).abs() < 1e-6,
+                "le poids doit venir du logit BRUT (−1), pas du logit biaisé (+9) : {:?}", avec);
+    }
+
+    /// Le facteur d'échelle s'applique APRÈS la renormalisation, et il manquait
+    /// complètement : GLM-5.3 déclare 2,5, Kimi 2,827, V4 1,5.
+    #[test]
+    fn facteur_dechelle_apres_renormalisation() {
+        let logits = vec![0.0f32, 1.0, 2.0, -1.0];
+        let m = moe_synthetique(logits, None, None);
+        let sans = router(&cfg_synthetique(Gating::Sigmoid, true, 0.0, 0), &m, &vec![1.0], 0, 2);
+        let avec = router(&cfg_synthetique(Gating::Sigmoid, true, 2.5, 0), &m, &vec![1.0], 0, 2);
+        for (a, b) in sans.iter().zip(avec.iter()) {
+            assert_eq!(a.0, b.0);
+            assert!((b.1 - a.1 * 2.5).abs() < 1e-6, "{:?} contre {:?}", a, b);
+        }
+    }
+
+    /// Le routage par TABLE : les experts viennent de l'identifiant du jeton, et
+    /// le score ne sert plus qu'aux poids.
+    #[test]
+    fn routage_par_table_des_jetons() {
+        let logits = vec![0.0f32, 1.0, 2.0, -1.0];
+        // Table : jeton 0 → experts 0 et 3 ; jeton 1 → experts 3 et 1.
+        let table = vec![0i32, 3, 3, 1];
+        let m = moe_synthetique(logits.clone(), None, Some(table));
+        let r = router(&cfg_synthetique(Gating::SqrtSoftplus, true, 0.0, 2), &m, &vec![1.0], 0, 2);
+        assert_eq!(r.iter().map(|(e, _)| *e).collect::<Vec<_>>(), vec![0, 3]);
+        let r = router(&cfg_synthetique(Gating::SqrtSoftplus, true, 0.0, 2), &m, &vec![1.0], 1, 2);
+        assert_eq!(r.iter().map(|(e, _)| *e).collect::<Vec<_>>(), vec![3, 1]);
+        // Sans table, le top-k donnerait les experts 2 et 1 : la table CHANGE la
+        // sélection, elle ne la confirme pas.
+        let m2 = moe_synthetique(logits, None, None);
+        let sans = router(&cfg_synthetique(Gating::SqrtSoftplus, true, 0.0, 0), &m2, &vec![1.0], 0, 2);
+        assert_eq!(sans.iter().map(|(e, _)| *e).collect::<Vec<_>>(), vec![2, 1]);
     }
 }

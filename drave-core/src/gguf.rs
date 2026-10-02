@@ -192,6 +192,17 @@ impl Meta {
             _ => None,
         }
     }
+    pub fn as_bool(&self) -> Option<bool> {
+        match self {
+            Meta::Bool(v) => Some(*v),
+            // Certains convertisseurs écrivent 0/1 là où le type GGUF est
+            // BOOL : refuser ces fichiers ferait retomber sur le défaut, en
+            // silence, une option que le modèle déclare explicitement.
+            Meta::U8(v) => Some(*v != 0),
+            Meta::U32(v) => Some(*v != 0),
+            _ => None,
+        }
+    }
     pub fn as_f64(&self) -> Option<f64> {
         match self {
             Meta::F32(v) => Some(*v as f64),
@@ -279,6 +290,9 @@ pub fn echelle_min_q4k(scales: &[u8], j: usize) -> (u8, u8) {
 }
 pub const GGML_Q4_1: u32 = 3;
 pub const GGML_Q8_0: u32 = 8;
+/// I32 : entiers signés 32 bits, sans quantification. Utilisé par la table de
+/// routage `ffn_gate_tid2eid` de DeepSeek-V4.
+pub const GGML_I32: u32 = 26;
 
 /// Pointeur pré-résolu vers les lignes d'un tenseur quantifié (Q8_0 ou Q4_0).
 pub struct Q8View {
@@ -849,6 +863,69 @@ zéro, l'inventaire sera sous-évalué", t.ttype, t.name);
         self.meta.get(&format!("{arch}.{key}"))
     }
 
+    /// Première clef PRÉSENTE parmi plusieurs noms possibles.
+    ///
+    /// Deux conventions de nommage coexistent dans les GGUF de cette machine :
+    /// les clefs normalisées de llama.cpp (`expert_count`, `expert_used_count`)
+    /// et les noms d'origine de DeepSeek, recopiés tels quels par le
+    /// convertisseur (`n_routed_experts`, `num_experts_per_tok`). Lire une seule
+    /// convention ne donne pas une erreur : cela donne `n_expert = 0`, donc un
+    /// modèle **sans experts** — un V4.1 qui tourne en dense et dont la
+    /// perplexité ne veut plus rien dire.
+    pub fn cfg_ou(&self, cles: &[&str]) -> Option<&Meta> {
+        cles.iter().find_map(|c| self.cfg(c))
+    }
+
+    /// Chaîne du bloc `<arch>.config` — le JSON d'origine, recopié par le
+    /// convertisseur. Dernier recours quand ni les clefs normalisées ni les noms
+    /// DeepSeek ne sont présents.
+    fn config_brut(&self) -> Option<&str> {
+        self.cfg("config")?.as_str()
+    }
+
+    /// Valeur d'une clef du JSON `<arch>.config`.
+    ///
+    /// Analyseur minuscule et volontairement limité (nombre, booléen, chaîne) :
+    /// le JSON n'est pas là pour être interprété, seulement pour retrouver six
+    /// scalaires que le convertisseur a recopiés. Il évite d'inventer des
+    /// valeurs par défaut pour un modèle qu'on ne sait pas décrire.
+    pub fn json_brut(&self, cle: &str) -> Option<String> {
+        let texte = self.config_brut()?;
+        let motif = format!("\"{cle}\"");
+        let mut depuis = 0usize;
+        while let Some(p) = texte[depuis..].find(&motif) {
+            let apres = depuis + p + motif.len();
+            let reste = texte[apres..].trim_start();
+            let Some(reste) = reste.strip_prefix(':') else {
+                // `"cle"` apparaît ailleurs (dans une chaîne) : on continue.
+                depuis = apres;
+                continue;
+            };
+            let reste = reste.trim_start();
+            let fin = |pred: &dyn Fn(char) -> bool| reste.find(|c: char| !pred(c));
+            if let Some(r) = reste.strip_prefix('"') {
+                let f = r.find('"')?;
+                return Some(r[..f].to_string());
+            }
+            if reste.starts_with("true") { return Some("true".into()); }
+            if reste.starts_with("false") { return Some("false".into()); }
+            let f = fin(&|c: char| c.is_ascii_digit() || "+-.eE".contains(c)).unwrap_or(reste.len());
+            if f == 0 { return None; }
+            return Some(reste[..f].to_string());
+        }
+        None
+    }
+
+    pub fn json_nombre(&self, cle: &str) -> Option<f64> {
+        self.json_brut(cle).and_then(|v| v.parse().ok())
+    }
+
+    pub fn json_texte(&self, cle: &str) -> Option<String> { self.json_brut(cle) }
+
+    pub fn json_bool(&self, cle: &str) -> Option<bool> {
+        self.json_brut(cle).map(|v| v == "true")
+    }
+
     pub fn tensor(&self, name: &str) -> Option<&TensorInfo> {
         self.tensors.iter().find(|t| t.name == name)
     }
@@ -1118,6 +1195,22 @@ zéro, l'inventaire sera sous-évalué", t.ttype, t.name);
     }
 
     /// Déquantifie une ligne d'un tenseur 2D, en f32.
+    /// Lit un tenseur **I32** (entiers 32 bits signés), tel quel.
+    ///
+    /// Un seul usage dans les modèles de cette machine : la table
+    /// `ffn_gate_tid2eid` de DeepSeek-V4, qui donne les experts d'un jeton par
+    /// son identifiant. La passer par des f32 serait une perte de temps et une
+    /// occasion d'arrondi ; la convertir en f32 puis la relire en entier serait
+    /// pire.
+    pub fn dequant_i32(&self, name: &str) -> Vec<i32> {
+        let t = self.tensor(name).unwrap_or_else(|| panic!("tenseur {name} absent"));
+        assert_eq!(t.ttype, GGML_I32, "tenseur {name} : type {} au lieu d'I32",
+                   Self::nom_type(t.ttype));
+        let buf = self.tbuf(t);
+        let n = t.nelem();
+        (0..n).map(|i| i32::from_le_bytes([buf[4*i], buf[4*i+1], buf[4*i+2], buf[4*i+3]])).collect()
+    }
+
     pub fn row_f32(&self, name: &str, row: usize, n_cols: usize) -> Vec<f32> {
         let t = self.tensor(name).unwrap_or_else(|| panic!("tenseur {name} absent"));
         let buf = self.tbuf(t);
@@ -1610,6 +1703,50 @@ zéro, l'inventaire sera sous-évalué", t.ttype, t.name);
 pub(crate) mod tests {
     use super::*;
     use std::io::Write;
+
+    /// L'analyseur du bloc `<arch>.config` : sur un JSON réel de DeepSeek-V4.1,
+    /// réduit à ce qui sert. Vérifie aussi le piège de la clef qui apparaît
+    /// d'abord dans une chaîne (« scoring_func » dans `architectures`).
+    #[test]
+    fn json_du_config_brut() {
+        let corps = concat!(
+            r#"{"architectures":["DeepseekV41ForCausalLM"],"hidden_size":5120,"#,
+            r#""scoring_func":"sqrtsoftplus","norm_topk_prob":true,"dtype":"bfloat16","#,
+            r#""routed_scaling_factor":1.5,"n_routed_experts":384,"num_experts_per_tok":6,"#,
+            r#""rope_theta":10000,"rope_scaling":{"beta_fast":32,"factor":16},"#,
+            r#""use_cache":false,"sliding_window":128}"#);
+        // GGUF minimal contenant une chaîne de métadonnée `essai.config`.
+        let mut b: Vec<u8> = Vec::new();
+        let mut s = |b: &mut Vec<u8>, v: &str| {
+            b.extend_from_slice(&(v.len() as u64).to_le_bytes());
+            b.extend_from_slice(v.as_bytes());
+        };
+        b.extend_from_slice(b"GGUF");
+        b.extend_from_slice(&3u32.to_le_bytes());
+        b.extend_from_slice(&0u64.to_le_bytes());
+        b.extend_from_slice(&2u64.to_le_bytes());
+        s(&mut b, "general.architecture");
+        b.extend_from_slice(&8u32.to_le_bytes());
+        s(&mut b, "essai");
+        s(&mut b, "essai.config");
+        b.extend_from_slice(&8u32.to_le_bytes());
+        s(&mut b, corps);
+        b.extend_from_slice(&32u64.to_le_bytes());
+        let chemin = std::env::temp_dir().join("drave_config_json.gguf");
+        std::fs::File::create(&chemin).unwrap().write_all(&b).unwrap();
+        let g = Gguf::open(chemin.to_str().unwrap()).unwrap();
+        assert_eq!(g.json_texte("scoring_func").as_deref(), Some("sqrtsoftplus"));
+        assert_eq!(g.json_bool("norm_topk_prob"), Some(true));
+        assert_eq!(g.json_bool("use_cache"), Some(false));
+        assert_eq!(g.json_nombre("routed_scaling_factor"), Some(1.5));
+        assert_eq!(g.json_nombre("n_routed_experts"), Some(384.0));
+        assert_eq!(g.json_nombre("rope_theta"), Some(10000.0));
+        assert_eq!(g.json_nombre("sliding_window"), Some(128.0));
+        assert_eq!(g.json_nombre("clef_absente"), None);
+        // Les clefs normalisées d'abord, les noms DeepSeek ensuite.
+        assert_eq!(g.cfg_ou(&["expert_count", "n_routed_experts"]).and_then(|m| m.as_u64()), None,
+                   "les noms DeepSeek ne sont PAS des clefs GGUF : ils vivent dans le JSON");
+    }
 
     /// L'échelle E8M0 de MXFP4, cas par cas, valeurs recopiées de
     /// `ggml_e8m0_to_fp32` (ggml-impl.h) : c'est la convention qui va avec la
