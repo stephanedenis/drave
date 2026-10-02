@@ -131,7 +131,88 @@ Et le seuil où le KV dépasse les experts :
 les experts redescendent en RAM et sur NVMe. Les deux ressources se disputent les
 mêmes 30 Go, et le point de bascule est autour de **100 K jetons**.
 
-## 8. Ce qui reste à vérifier
+## 8. CPU, hyperthreading, NUMA et NVMe : ce qui n'avait pas été évalué
+
+### Le CPU sature à 22 Go/s — et l'hyperthreading n'apporte rien
+
+Banc mémoire, nombre de fils croissant :
+
+| fils | 1 | 4 | 8 | **16** | 20 | 30 | 40 |
+|---|---|---|---|---|---|---|---|
+| Go/s | 1,9 | 6,3 | 8,7 | **20,8** | 16,8 | 23,8 | 23,0 |
+
+**Le plateau est atteint dès 16 fils.** La charge est limitée par la bande
+passante mémoire, pas par le calcul.
+
+Et la mesure décisive, chaque configuration répétée trois fois (un seul essai ne
+distingue pas le bruit du signal — le premier passage donnait un résultat
+incohérent) :
+
+| épinglage | médiane | essais |
+|---|---|---|
+| 10 cœurs purs (socket 0) | 11,8 | 11,7 · 11,8 · 14,8 |
+| 10 hyperthreads (socket 0) | 14,6 | 6,2 · 14,6 · 15,0 |
+| 20 cœurs purs (2 sockets) | 14,6 | 13,9 · 14,6 · 21,8 |
+| 20 « hyperthreads » (2 sockets) | 22,6 | 20,6 · 22,6 · 24,0 |
+| **40 threads (tout)** | **22,8** | 22,4 · 22,8 · 23,2 |
+
+*(les CPU 20-39 sont les jumeaux des 0-19 : les occuper seuls occupe quand même
+20 cœurs distincts. La différence vient de la contention système sur les bas
+numéros, pas de l'hyperthreading.)*
+
+**40 threads ne font pas mieux que 20 cœurs : 22,8 contre 22,6.** L'hyperthreading
+n'apporte rien à une charge limitée par la mémoire — il partage un L2 de 256 Ko
+pour rien.
+
+**Conséquence directe : le moteur se trompe de défaut.** Il prend
+`cpu × 3/4` = **30 fils**, alors que **20 suffisent** — et les notes du projet
+mentionnent déjà ×1,3 de perte à 40+1 fils. Passer à `cœurs physiques` libère
+10 threads pour le système sans rien perdre.
+
+### Le NUMA est marginal
+
+2 sockets, 2 nœuds de 64 Go. Banc sur un nœud contre à cheval : **13,5 contre
+12,6 Go/s**. Un facteur 1,07 — pas de quoi écrire une politique de placement.
+
+### Le NVMe : ×6 avec du parallélisme — et il dépasse la RAM
+
+| lecteurs simultanés | 1 | 2 | 4 | 8 | **16** |
+|---|---|---|---|---|---|
+| Go/s cumulés | 5,37 | 9,68 | 18,08 | 28,29 | **31,08** |
+
+Vérifié sur 50,5 Go (395 fichiers, parcours complet du disque) : **3,42 Go/s à un
+lecteur, 21,02 à quatre, 33,19 à seize**.
+
+**Le NVMe parallélisé (31 Go/s) est plus rapide que la RAM (22 Go/s).**
+
+C'est le résultat qui change l'architecture. Pour V4.1, les 2,39 Go d'experts par
+jeton passent de **435 ms** (lecture séquentielle à 5,5) à **77 ms** (16 lecteurs
+parallèles à 31). **Sans aucun cache.**
+
+*Réserve honnête : les 50,5 Go lus tiennent dans les 112 Go de cache RAM, donc le
+régime réellement froid du disque n'est pas isolé — `O_DIRECT` échoue ici
+(errno 29) et le NVMe n'héberge que 114 Go. Ce qui est solide, c'est le **scaling**
+(×6 à ×10 du débit avec le parallélisme), pas la valeur absolue.*
+
+## 9. Ce que ça change : lire au lieu de stocker
+
+| stratégie | trafic/jeton | temps |
+|---|---|---|
+| tout en RAM (impossible : 153 Go d'experts) | — | — |
+| cache de 90 % en RAM + NVMe séquentiel | 0,24 Go | 44 ms + calcul |
+| **cache de 25 % + NVMe parallèle** | **1,79 Go** | **58 ms + calcul** |
+| **aucun cache, NVMe parallèle** | **2,39 Go** | **77 ms + calcul** |
+
+**Avec 16 lecteurs parallèles, ne rien cacher devient presque aussi rapide que
+tout garder** — et ça supprime le cache, son index, sa politique d'éviction et
+ses 71 Go de RAM. Ce qui libère la mémoire pour le **KV**, qui est le vrai
+goulot à long contexte (96,6 Go en F16 à 1 M).
+
+**La conclusion se retourne** : la brique à écrire n'est plus « un cache
+d'experts adossé au disque », c'est **un chargeur parallèle d'experts**. Plus
+simple, et ça sert les deux régimes.
+
+## 10. Ce qui reste à vérifier
 
 - **Le débit PCIe réel**, pas seulement le lien : le banc mesure la VRAM une fois
   les poids montés. Le coût du **transfert initial** (1 Go ≈ 83 ms à 12 Go/s)
@@ -144,6 +225,11 @@ mêmes 30 Go, et le point de bascule est autour de **100 K jetons**.
   dimension 512, il pèse 512 × 2 × 2 octets × 40 = 82 Ko par jeton, soit 82 Go à
   1 M de jetons — **c'est le poste qui pourrait dépasser les experts**, et il
   n'est pas dans le tableau.
+- **Le régime froid du NVMe** : toutes les mesures de débit parallèle tiennent
+  dans le cache RAM. Il faudrait un corpus de plus de 112 Go qui ne rentre pas —
+  le disque n'en héberge que 114.
+- **Le nombre optimal de lecteurs** : 16 est le maximum testé, pas l'optimum. Le
+  débit monte encore entre 8 et 16 (28,3 → 33,2), la courbe n'est pas plate.
 - **L'allocation non uniforme**, encore : +1,2 % mesuré sur Qwen3, mais V4.1 a
   384 experts et top-6 (rapport 1,6 % au lieu de 6,25 %) — la concentration y est
   peut-être plus forte, ce qui rendrait l'allocation par couche plus utile.

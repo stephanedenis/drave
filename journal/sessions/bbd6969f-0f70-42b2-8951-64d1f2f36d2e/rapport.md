@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 78.1 h |
-| Tours | 66 |
-| Messages | 3188 |
-| Appels d'outils | 3015 |
+| Durée | 78.4 h |
+| Tours | 67 |
+| Messages | 3201 |
+| Appels d'outils | 3026 |
 | Fichiers touchés | 70 |
-| Commandes | 2622 |
+| Commandes | 2633 |
 | Sous-agents | 22 |
-| Commits | 266 |
+| Commits | 267 |
 | Compactages de contexte | 4 |
 
 ## Objectifs déclarés
@@ -167,6 +167,8 @@
 **Tour 65** — note bien tout ça et fais une analyse statique du modèle couche par couche pour trouver des regroupements de sources et  destinations afin de trouver des patterns pour de nouveaux clusters à isoler.
 
 **Tour 66** — maintenant, les optimisations d'architecture pour chaque grappe et couche afin de faire le meilleur usage du vram et ram
+
+**Tour 67** — nvme et multi-cpu, cores purs vs hyperthread (cache partagée) as-t-on évalué les impacts
 
 ## 2. Déroulé, étape par étape
 
@@ -3322,7 +3324,86 @@ Ce qui n'a pas payé, avec son chiffre : découper sous l'expert (×287), grappe
 
 **Synthèse produite :**
 
-⏵ **Le KV devient le premier poste à 1 M** (96,6 Go en F16, 48,3 en int8). Je complète le rapport.
+Architecture mémoire chiffrée et consignée. Dépôt propre, 32 tests verts, 28 commits sur la session.
+
+\## Les débits, mesurés
+
+| niveau | débit | comment |
+|---|---|---|
+| **VRAM** (noyau `warp par ligne`) | **84,9 Go/s** | banc GPU : tête de 144,6 Mo en 1,7 ms |
+| VRAM (`ligne par fil`) | 41,9 Go/s | 3,4 ms |
+| **RAM** (CPU 30 fils) | **20,9 Go/s** | 6,9 ms |
+| NVMe aléatoire | 5,5 Go/s | |
+| PCIe 3.0 ×16 | ~12 Go/s | le lien monte à gen 3 **sous charge** (gen 1 au repos) |
+
+**Le noyau GPU est 4× plus rapide que le CPU.** Le déport n'est donc pas un gain marginal.
+
+\## Ce qui est relu à chaque jeton
+
+| poste | Go/jeton | noyau GPU ? | RAM | VRAM |
+|---|---|---|---|---|
+| tête | 1,32 | oui | 63 ms | **15,5 ms** |
+| **attention MLA** | **5,40** | **NON** | **258 ms** | 64 ms |
+| embeddings | 1,32 | oui | 63 ms | **15,5 ms** |
+| experts | 2,39 | **NON** | 114 ms | 28 ms |
+| **total** | **10,43** | | **499 ms** | 404 ms |
+
+**L'attention MLA est le premier poste — et c'est exactement ce qui n'est pas déportable.** Le déport actuel ne gagne que 95 ms sur 499.
+
+\## La répartition
+
+| niveau | capacité | contenu |
+|---|---|---|
+| **VRAM** (30,2 Go) | | commun 8,0 Go + **22,2 Go d'experts chauds** (2 227) |
+| **RAM** (102 Go) | | jusqu'à 10 247 experts — 90 % des appels tiennent dans **71 Go** |
+| **NVMe** | | le reste + l'engram mmappé |
+
+**Par couche, l'allocation reste uniforme** : on a mesuré que la non-uniformité vaut +1,2 % au mieux. Le tri par fréquence capture l'essentiel.
+
+\## Les trois noyaux, par ordre de gain
+
+| # | noyau | gain/jeton |
+|---|---|---|
+| 1 | **attention MLA** (Q8_0 : q_a, q_b, kv, output_a, output_b) | **−194 ms** |
+| 2 | **IQ2_XXS / Q2_K** (experts de V4.1) | −86 ms |
+| 3 | *déjà là* (Q4_K, Q6_K, Q8_0, MXFP4) | −95 ms |
+
+**Cumul : 499 → ~210 ms par jeton**, soit 2,4×.
+
+\## Le poste que j'avais oublié
+
+Le KV de MLA n'est pas la concaténation des têtes mais un latent comprimé — et à 1 M de jetons :
+
+| format | à 1 M | total avec 90 % des experts |
+|---|---|---|
+| F16 | **96,6 Go** | **176 Go — ne tient pas** |
+| int8 | 48,3 Go | 127 Go, 13 Go de marge |
+| int4 | 24,2 Go | 103 Go |
+
+**La quantification du KV n'est pas une optimisation, c'est une condition** : au-delà de 0,77 M de jetons en F16, il ne reste plus de place pour les experts. Le moteur sait déjà le faire (`DRAVE_KV_BITS`, +3,0 % de perplexité mesuré en int8).
+
+**Et le point de bascule** : à très long contexte, la VRAM appartient au KV et les experts redescendent en RAM. Les deux se d
+… [429 caractères tronqués]
+
+### Tour 67 — nvme et multi-cpu, cores purs vs hyperthread (cache partagée) as-t-on évalué les impacts
+
+*11 appels d'outils.* Actions notables :
+
+- bash — Inspect CPU topology and caches
+- bash — Measure CPU thread scaling
+- bash — Compare physical cores vs hyperthreads and NUMA
+- bash — Repeat each pinning measurement
+- bash — Read repeated pinning measurements
+- bash — Debug the pinning script
+- bash — Inspect output format precisely
+- bash — Fix grep and rerun pinning test
+- bash — Measure NUMA impact and NVMe parallelism
+- bash — Measure NVMe on the full disk to defeat cache
+- bash — Document CPU/hyperthreading/NVMe findings
+
+**Synthèse produite :**
+
+⏵ **Le NVMe parallélisé (31 Go/s) dépasse la RAM (22 Go/s).** Ça change l'architecture. Je consigne.
 
 ## 3. Travail accompli
 
@@ -3468,7 +3549,7 @@ Ce qui n'a pas payé, avec son chiffre : découper sous l'expert (×287), grappe
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 2582 autres
+- … et 2593 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -3882,4 +3963,5 @@ Ce qui n'a pas payé, avec son chiffre : découper sous l'expert (×287), grappe
 - REPRISE : analyse statique des poids" && echo "=== RÉCAPITULATIF FINAL ==="; echo ""; echo "Rapports :"; ls -la reports/rapport-empreinte-memoire.md | awk '{pri
 - Architecture memoire : ou mettre quoi, et le KV qu'on oubliait  Debits mesures : VRAM 84,9 Go/s (noyau warp) contre 20,9 pour le CPU -- le deport vaut un facteu
 - REPRISE : architecture memoire" && echo "=== ÉTAT FINAL ==="; (cd drave-core && cargo test --release 2>&1 | grep -E "^test result"); git status --short | grep -
+- CPU, hyperthreading, NUMA et NVMe : mesures, et la conclusion qui se retourne  CPU : plateau a 22 Go/s des 16 fils, la charge est limitee par la memoire. Hypert
 

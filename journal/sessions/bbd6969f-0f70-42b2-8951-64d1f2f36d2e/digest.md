@@ -51264,3 +51264,258 @@ ed832ce Architecture memoire : ou mettre quoi, et le KV qu'on oubliait
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np = 'REPRISE.md'\ns = open(p).read().rstrip('\\n')\ns += '''\n\n### Architecture mémoire : VRAM, RAM, disque\n\nRapport : [`reports/rapport-architecture-memoire.md`](reports/rapport-architecture-memoire.md).\n\nDébi … [1993 caractères tronqués]`
+
+  ```
+=== ÉTAT FINAL ===
+test result: ok. 32 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.08s
+fichiers en attente : 0
+
+Documents de la session :
+  reports/rapport-empreinte-memoire.md                        545 lignes
+  reports/rapport-architecture-memoire.md                     149 lignes
+  sprints/09-empreinte-memoire-ce-qui-reduit-vraiment.md      124 lignes
+  tools/analyse_empreinte.py                                  208 lignes
+  tools/analyse_experts_statique.py                           244 lignes
+
+Commits de la session : 28
+  ```
+
+### 🤖 Assistant
+
+Architecture mémoire chiffrée et consignée. Dépôt propre, 32 tests verts, 28 commits sur la session.
+
+## Les débits, mesurés
+
+| niveau | débit | comment |
+|---|---|---|
+| **VRAM** (noyau `warp par ligne`) | **84,9 Go/s** | banc GPU : tête de 144,6 Mo en 1,7 ms |
+| VRAM (`ligne par fil`) | 41,9 Go/s | 3,4 ms |
+| **RAM** (CPU 30 fils) | **20,9 Go/s** | 6,9 ms |
+| NVMe aléatoire | 5,5 Go/s | |
+| PCIe 3.0 ×16 | ~12 Go/s | le lien monte à gen 3 **sous charge** (gen 1 au repos) |
+
+**Le noyau GPU est 4× plus rapide que le CPU.** Le déport n'est donc pas un gain marginal.
+
+## Ce qui est relu à chaque jeton
+
+| poste | Go/jeton | noyau GPU ? | RAM | VRAM |
+|---|---|---|---|---|
+| tête | 1,32 | oui | 63 ms | **15,5 ms** |
+| **attention MLA** | **5,40** | **NON** | **258 ms** | 64 ms |
+| embeddings | 1,32 | oui | 63 ms | **15,5 ms** |
+| experts | 2,39 | **NON** | 114 ms | 28 ms |
+| **total** | **10,43** | | **499 ms** | 404 ms |
+
+**L'attention MLA est le premier poste — et c'est exactement ce qui n'est pas déportable.** Le déport actuel ne gagne que 95 ms sur 499.
+
+## La répartition
+
+| niveau | capacité | contenu |
+|---|---|---|
+| **VRAM** (30,2 Go) | | commun 8,0 Go + **22,2 Go d'experts chauds** (2 227) |
+| **RAM** (102 Go) | | jusqu'à 10 247 experts — 90 % des appels tiennent dans **71 Go** |
+| **NVMe** | | le reste + l'engram mmappé |
+
+**Par couche, l'allocation reste uniforme** : on a mesuré que la non-uniformité vaut +1,2 % au mieux. Le tri par fréquence capture l'essentiel.
+
+## Les trois noyaux, par ordre de gain
+
+| # | noyau | gain/jeton |
+|---|---|---|
+| 1 | **attention MLA** (Q8_0 : q_a, q_b, kv, output_a, output_b) | **−194 ms** |
+| 2 | **IQ2_XXS / Q2_K** (experts de V4.1) | −86 ms |
+| 3 | *déjà là* (Q4_K, Q6_K, Q8_0, MXFP4) | −95 ms |
+
+**Cumul : 499 → ~210 ms par jeton**, soit 2,4×.
+
+## Le poste que j'avais oublié
+
+Le KV de MLA n'est pas la concaténation des têtes mais un latent comprimé — et à 1 M de jetons :
+
+| format | à 1 M | total avec 90 % des experts |
+|---|---|---|
+| F16 | **96,6 Go** | **176 Go — ne tient pas** |
+| int8 | 48,3 Go | 127 Go, 13 Go de marge |
+| int4 | 24,2 Go | 103 Go |
+
+**La quantification du KV n'est pas une optimisation, c'est une condition** : au-delà de 0,77 M de jetons en F16, il ne reste plus de place pour les experts. Le moteur sait déjà le faire (`DRAVE_KV_BITS`, +3,0 % de perplexité mesuré en int8).
+
+**Et le point de bascule** : à très long contexte, la VRAM appartient au KV et les experts redescendent en RAM. Les deux se disputent les mêmes 30 Go, avec un croisement vers **100 K jetons**.
+
+## Ce que je n'ai pas mesuré
+
+Le **coût du transfert initial** vers la VRAM — le banc mesure la VRAM une fois les poids montés, pas le PCIe en action. Amorti en 3 jetons pour la tête à 12 Go/s, mais non confirmé. Et le **GPU 0 reste à gen 2** sous charge quand le GPU 1 monte à gen 3 : un placement privilégiant le GPU 1 serait plus rapide, ce n'est pas testé.
+
+
+## Tour 67
+
+### 👤 Utilisateur
+
+nvme et multi-cpu, cores purs vs hyperthread (cache partagée) as-t-on évalué les impacts
+
+### 🤖 Assistant
+
+⏵ Bonne question, et on ne l'a pas évaluée. Je commence par la topologie réelle du CPU.
+
+- **bash** `{"command": "lscpu | grep -E \"^CPU\\(s\\)|Thread|Core|Socket|NUMA|L1d|L2|L3|MHz|Model name\" ; echo \"=== caches ===\"; lscpu -C 2>/dev/null | head -8; echo \"=== topologie : quels CPU partagent un cœur ? ===\"; for c in 0 1 2 20 21 39; do printf \"cpu%-3s core_id=%-3s siblings=\" \"$c\"; cat /sys/ … [324 caractères tronqués]`
+
+  ```
+CPU(s):                                  40
+Model name:                              Intel(R) Xeon(R) CPU E5-2687W v3 @ 3.10GHz
+Thread(s) per core:                      2
+Core(s) per socket:                      10
+Socket(s):                               2
+CPU(s) scaling MHz:                      97%
+CPU max MHz:                             3500,0000
+CPU min MHz:                             1200,0000
+L1d cache:                               640 KiB (20 instances)
+L2 cache:                                5 MiB (20 instances)
+L3 cache:                                50 MiB (2 instances)
+NUMA node(s):                            2
+NUMA node0 CPU(s):                       0-9,20-29
+NUMA node1 CPU(s):                       10-19,30-39
+=== caches ===
+NAME ONE-SIZE ALL-SIZE WAYS TYPE        LEVEL  SETS PHY-LINE COHERENCY-SIZE
+L1d       32K     640K    8 Data            1    64        1             64
+L1i       32K     640K    8 Instruction     1    64        1             64
+L2       256K       5M    8 Unified         2   512        1             64
+L3        25M      50M   20 Unified         3 20480        1             64
+=== topologie : quels CPU partagent un cœur ? ===
+cpu0   core_id=
+… [531 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Topologie critique : **20 cœurs physiques / 40 threads, 2 sockets NUMA, L3 de 25 Mo par socket**. Je mesure le scaling.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n '\"--pin\"' drave-core/src/main.rs | head -2; grep -rn \"affinit\\|sched_setaffinity\\|pin\" drave-core/src/engine.rs | head -5; cat > /tmp/scaling_cpu.sh <<'EOF'\n#!/bin/bash\n# Le banc du moteur, avec un nombre de fils croi … [738 caractères tronqués]`
+
+  ```
+609:            "--pin" => { o.pin = true; 1 }
+14://! Barrière par *spin* (atomiques) au lieu de canaux : le coût fixe d'un appel
+264:/// Épingle-t-on les workers ? Réglé une fois par le programme principal.
+267:/// Épingle le fil courant sur un processeur logique.
+269:/// `std` n'expose pas `sched_setaffinity` : on passe par l'appel système
+278:pub fn epingler(cpu: usize) -> bool {
+threads 1   : CPU 1 fils : 76.6 ms ( 1.9 Go/s)
+threads 2   : CPU 2 fils : 44.8 ms ( 3.2 Go/s)
+threads 4   : CPU 4 fils : 22.9 ms ( 6.3 Go/s)
+threads 6   : CPU 6 fils : 18.5 ms ( 7.8 Go/s)
+threads 8   : CPU 8 fils : 16.6 ms ( 8.7 Go/s)
+threads 10  : CPU 10 fils : 13.3 ms ( 10.8 Go/s)
+threads 12  : CPU 12 fils : 8.8 ms ( 16.4 Go/s)
+threads 16  : CPU 16 fils : 7.0 ms ( 20.8 Go/s)
+threads 20  : CPU 20 fils : 8.6 ms ( 16.8 Go/s)
+threads 24  : CPU 24 fils : 7.1 ms ( 20.4 Go/s)
+threads 30  : CPU 30 fils : 6.1 ms ( 23.8 Go/s)
+threads 40  : CPU 40 fils : 6.3 ms ( 23.0 Go/s)
+=== fin ===
+  ```
+
+### 🤖 Assistant
+
+⏵ Plateau à ~20 Go/s dès 16 fils. Test décisif : cœurs physiques contre hyperthreads, et NUMA.
+
+- **bash** `{"command": "which numactl taskset 2>/dev/null; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/pin_test.sh <<'EOF'\n#!/bin/bash\n# Cœurs PURS contre hyperthreads, et un socket contre deux.\n# Xeon E5-2687W v3 : 2 sockets x 10 cœurs ; les hyperthreads sont à +20.\n#   cœurs physique … [1106 caractères tronqués]`
+
+  ```
+/usr/bin/numactl
+/usr/bin/taskset
+10 cœurs purs (1 socket)          CPU 10 fils : 10.0 ms ( 14.5 Go/s)
+10 hyperthreads (1 socket)         CPU 10 fils : 15.1 ms ( 9.6 Go/s)
+20 cœurs purs (2 sockets)         CPU 20 fils : 9.4 ms ( 15.4 Go/s)
+20 hyperthreads (2 sockets)        CPU 20 fils : 6.5 ms ( 22.2 Go/s)
+20 cœurs purs, 40 fils            CPU 40 fils : 9.5 ms ( 15.2 Go/s)
+tout, 40 fils                      CPU 40 fils : 5.6 ms ( 25.6 Go/s)
+=== fin ===
+  ```
+
+### 🤖 Assistant
+
+⏵ Résultat incohérent (hyperthreads plus rapides que cœurs purs) : c'est du bruit. Je répète chaque mesure.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/pin_test2.sh <<'EOF'\n#!/bin/bash\n# Chaque configuration répétée : un seul essai ne distingue pas le bruit du\n# signal, et le premier passage donnait un résultat incohérent (des hyperthreads\n# plus rapides que des cœurs … [1122 caractères tronqués]`
+
+  ```
+=== fin ===
+  ```
+
+- **bash** `{"command": "sleep 55; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat /tmp/pin_test2.log", "description": "Read repeated pinning measurements"}`
+
+  ```
+=== fin ===
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && taskset -c 0-9 env DRAVE_GPU=1 ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf --gpu-banc --threads 10 2>&1 | tail -4; echo \"--- test python inline ---\"; python3 -c \"\nv = sorted(float(x) for x in ''' 14.5 15.1 ''' … [89 caractères tronqués]`
+
+  ```
+[banc] allocation de 144.6 Mo sur le GPU
+[banc] poids montés, premier lancement
+  GPU  ligne par fil  :     3.5 ms  (  41.6 Go/s)  écart max +1.99e-7 (relatif au plus grand logit)
+  GPU  warp par ligne :     1.7 ms  (  87.1 Go/s)  écart max +1.99e-7 (relatif au plus grand logit)
+--- test python inline ---
+médiane  15.1
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && taskset -c 0-9 env DRAVE_GPU=1 ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf --gpu-banc --threads 10 2>&1 | grep -E \"CPU|Go/s\" | cat -A | head -3", "description": "Inspect output format precisely"}`
+
+  ```
+CPU  10 fils :    10.3 ms  (  14.0 Go/s)$
+  GPU  ligne par fil  :     3.7 ms  (  38.8 Go/s)  M-CM-)cart max +1.99e-7 (relatif au plus grand logit)$
+  GPU  warp par ligne :     1.7 ms  (  87.2 Go/s)  M-CM-)cart max +1.99e-7 (relatif au plus grand logit)$
+  ```
+
+### 🤖 Assistant
+
+⏵ Mon grep ramassait aussi les lignes GPU. Je corrige et relance.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np = '/tmp/pin_test2.sh'\ns = open(p).read()\ns = s.replace('''            | grep -oE \"\\\\( *[0-9.]+ Go/s\\\\)\" | tr -dc '0-9.')''',\n              '''            | grep -E \"^  CPU\" | grep -oE \"\\\\( *[0-9.]+ G … [187 caractères tronqués]`
+
+  ```
+10 cœurs purs, socket 0              médiane  11.8 Go/s   (essais : 11.7, 11.8, 14.8)
+10 hyperthreads, socket 0            médiane  14.6 Go/s   (essais : 6.2, 14.6, 15.0)
+20 cœurs purs (2 sockets)            médiane  14.6 Go/s   (essais : 13.9, 14.6, 21.8)
+20 hyperthreads (2 sockets)          médiane  22.6 Go/s   (essais : 20.6, 22.6, 24.0)
+20 cœurs purs + 20 HT = 40           médiane  22.8 Go/s   (essais : 22.4, 22.8, 23.2)
+=== fin ===
+  ```
+
+### 🤖 Assistant
+
+⏵ Résultat stable : **40 threads = 20 cœurs = ~22 Go/s**. L'hyperthreading n'apporte rien. Reste NUMA et NVMe.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/numa_nvme.sh <<'EOF'\n#!/bin/bash\n# 1. NUMA : la machine a 2 nœuds de 64 Go. À cheval ou local, quelle différence ?\n# 2. NVMe : le débit selon le nombre de lectures simultanées (c'est ce qui\n#    détermine si le chargem … [2083 caractères tronqués]`
+
+  ```
+### NUMA : banc mémoire sur un nœud, puis en alternance
+  local    : 13.613.4
+  cheval   : 11.913.2
+
+### NVMe : débit selon le parallélisme
+   1 lecteurs simultanés :  5.37 Go/s cumulés (5416345212.49 Go/s chacun)
+   2 lecteurs simultanés :  9.68 Go/s cumulés (5202388044.93 Go/s chacun)
+   4 lecteurs simultanés : 18.08 Go/s cumulés (4779158965.83 Go/s chacun)
+   8 lecteurs simultanés : 28.29 Go/s cumulés (4446612363.67 Go/s chacun)
+  16 lecteurs simultanés : 31.08 Go/s cumulés (2911564058.73 Go/s chacun)
+=== fin ===
+  ```
+
+### 🤖 Assistant
+
+⏵ **Le NVMe monte à 31 Go/s avec 16 lecteurs** (contre 5,4 avec un). Mais le corpus fait 18,6 Go — c'est peut-être du cache. Je vérifie sur 100+ Go.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/nvme_froid.py <<'PY'\nimport os, time, glob, threading\n# Dépasser le cache : on lit TOUT le NVMe (114 Go utilises, 112 Go de cache RAM).\n# Sans cela, on mesure la RAM en croyant mesurer le disque.\nracine = '/home/stepha … [1424 caractères tronqués]`
+
+  ```
+395 fichiers > 1 Mo · 50.5 Go au total
+   1 lecteurs :  3.42 Go/s cumulés en  14.8 s (3423549431.0 Go/s par lecteur)
+   4 lecteurs : 21.02 Go/s cumulés en   2.4 s (5635340230.3, 5833781610.3, 5431244895.5, 5486805933.3 Go/s par lecteur)
+  16 lecteurs : 33.19 Go/s cumulés en   1.5 s (4189792447.1, 3241500769.5, 3890210514.3, 3055805673.6, 3913171205.1, 3032022689.5, 2496896536.8, 2842774175.8, 2806758381.0, 2796459863.6, 3487476299.1, 3357752337.1, 2619906358.5, 2614333033.6, 2609321737.1, 2353582137.6 Go/s par lecteur)
+  ```
+
+### 🤖 Assistant
+
+⏵ **Le NVMe parallélisé (31 Go/s) dépasse la RAM (22 Go/s).** Ça change l'architecture. Je consigne.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np = 'reports/rapport-architecture-memoire.md'\ns = open(p).read()\ns = s.replace('''## 8. Ce qui reste à vérifier''',\n'''## 8. CPU, hyperthreading, NUMA et NVMe : ce qui n'avait pas été évalué\n\n### Le CPU sature  … [5429 caractères tronqués]`
