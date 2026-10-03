@@ -99191,3 +99191,197 @@ Finished `release` profile [optimized] target(s) in 32.82s
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np=\"sprints/17-les-experts-io-ou-calcul.md\"\ns=open(p).read()\na=\"\"\"## Planning du bloc 18 — vectoriser la DÉQUANTIFICATION seule (bit-exact par construction)\"\"\"\nb=\"\"\"### 5. La part exacte de la déquantif … [2564 caractères tronqués]`
+
+  ```
+ok
+1123595 Bloc 17 : la déquantification pèse 25 % de la passe et 45 % du poste d'experts (mesuré par ablation), et clôture du bloc
+ven 02 oct 2026 23:44:37 EDT
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && tools/sprint.sh start \"Vectoriser la DÉQUANTIFICATION des experts (grille Q2_K) sans changer un bit — noyau AVX2 de conversion pure, preuve par vides + portes\" 2>&1 | tail -1; ls sprints/1[78]*; grep -n \"fn dequant_grille_dans\" - … [98 caractères tronqués]`
+
+  ```
+Sprint 1 démarré à 23:44 → 01:44  ·  sprints/01-vectoriser-la-d-quantification-des-exper.md
+sprints/17-les-experts-io-ou-calcul.md
+597:pub fn dequant_grille_dans(t: u32, bloc: &[u8], out: &mut [f32]) {
+598-    match t {
+599-        10 => crate::gguf::Gguf::dequant_q2k_dans(bloc, out),
+600-        11 => crate::gguf::Gguf::dequant_q3k_dans(bloc, out),
+601-        13 => crate::gguf::Gguf::dequant_q5k_dans(bloc, out),
+602-        16 => crate::formats::dequant_iq2xxs_dans(bloc, out),
+603-        18 => crate::formats::dequant_iq3xxs_dans(bloc, out),
+604-        19 => crate::formats::dequant_iq1s_dans(bloc, out),
+605-        23 => crate::formats::dequant_iq4xs_dans(bloc, out),
+606-        29 => crate::formats::dequant_iq1m_dans(bloc, out),
+607-        _ => panic!("type {t} n'est pas un format à grille"),
+608-    }
+609-}
+610-
+611-/// Version qui alloue, pour les outils et les tests.
+612-pub fn dequant_grille(t: u32, bloc: &[u8]) -> Vec<f32> {
+613-    let mut v = vec![0f32; 256];
+614-    dequant_grille_dans(t, bloc, &mut v);
+615-    v
+616-}
+617-
+618-#[derive(Clone, Copy, PartialEq, Eq)]
+619-pub enum Source {
+620-    Propre, Q4_0, Mxfp4, Q4_K, Q6_K,
+621-    /// Super-bloc de 256 poids **sans
+… [1011 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && mv sprints/01-vectoriser-la-d-quantification-des-exper.md sprints/18-vectoriser-la-dequantification-des-experts.md && now=$(date +%s) && printf \"18 %s %s\\n\" \"$now\" \"$((now+7200))\" > sprints/COURANT && sed -n \"$(grep -n 'fn de … [153 caractères tronqués]`
+
+  ```
+pub fn dequant_q2k_dans(bloc: &[u8], out: &mut [f32]) {
+        assert!(bloc.len() >= 84, "bloc Q2_K trop court : {}", bloc.len());
+        let scales = &bloc[0..16];
+        let qs = &bloc[16..80];
+        let d = Self::f16_to_f32(u16::from_le_bytes([bloc[80], bloc[81]]));
+        let dmin = Self::f16_to_f32(u16::from_le_bytes([bloc[82], bloc[83]]));
+        assert!(out.len() >= 256, "tampon de sortie trop court");
+        // Quatre passes de 64 poids : chaque octet porte quatre quants 2 bits,
+        // lus aux décalages 0, 2, 4 et 6.
+        for moitie in 0..2usize {
+            let q = &qs[moitie * 32..moitie * 32 + 32];
+            for l in 0..32usize {
+                for (k, decal) in [0usize, 2, 4, 6].iter().enumerate() {
+                    // L'ordre des échelles suit le parcours du code ggml :
+                    // moitié, puis décalage, puis les deux sous-groupes de 16.
+                    let is = moitie * 8 + k * 2 + (l / 16);
+                    let sc = (scales[is] & 0x0F) as f32;
+                    let m = (scales[is] >> 4) as f32;
+                    let quant = ((q[l] >> decal) & 3) as f32;
+                    out[moitie * 128 + k * 32 + l] = d * sc * quant - d
+… [1246 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np=\"drave-core/src/gguf.rs\"\ns=open(p).read()\na=\"\"\"        for moitie in 0..2usize {\n            let q = &qs[moitie * 32..moitie * 32 + 32];\n            for l in 0..32usize {\n                for (k, decal) i … [2530 caractères tronqués]`
+
+  ```
+ok
+    Finished `release` profile [optimized] target(s) in 33.18s
+=== perplexité 1743713.6243 sur 3 tokens (0 événements, 11.4 s) ===
+    postes (ms/token) : projets-attn 0.00 | rope 0.00 | attention 1136.03 | proj+mlp 2563.79 | somme 3699.82 | reste (tête + échantillonnage) 110.77
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"avx2\\|is_x86_feature_detected\\|target_feature\" drave-core/src/model.rs | head -8; grep -rn \"is_x86_feature_detected\\|avx2\" drave-core/src/list.rs drave-core/src/gguf.rs | head -8", "description": "Check the repo's SIM … [16 caractères tronqués]`
+
+  ```
+4312:    #[target_feature(enable = "avx2,fma")]
+6199:        let simd = std::is_x86_feature_detected!("avx2") && std::is_x86_feature_detected!("fma");
+drave-core/src/list.rs:823:    #[target_feature(enable = "avx2")]
+drave-core/src/list.rs:824:    unsafe fn dot16_q6_avx2(&self, o: usize, x: &[i16], sx32: &[i32]) -> f32 {
+drave-core/src/list.rs:899:    #[target_feature(enable = "avx2")]
+drave-core/src/list.rs:900:    unsafe fn dot16_q6k_avx2(&self, o: usize, x: &[i16]) -> f32 {
+drave-core/src/list.rs:968:    #[target_feature(enable = "avx2")]
+drave-core/src/list.rs:969:    unsafe fn dot16_q4k_avx2(&self, o: usize, x: &[i16], sx32: &[i32]) -> f32 {
+drave-core/src/list.rs:1195:    #[target_feature(enable = "avx2")]
+drave-core/src/list.rs:1196:    unsafe fn dot16_source_avx2(&self, o: usize, x: &[i16]) -> f32 {
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n 818,830p drave-core/src/list.rs; sed -n 6195,6203p drave-core/src/model.rs", "description": "Read the SIMD style used in list.rs"}`
+
+  ```
+/// Produit scalaire **6 bits** par bloc : les deux plans sont recombinés en
+    /// valeurs 0–63 côté scalaire (huit octets par bloc), puis le produit est
+    /// vectorisé. Le biais de 32 se factorise : `Σ(v−32)·x = Σv·x − 32·Σx`, et
+    /// `Σx` est déjà précalculé par bloc.
+    #[cfg(target_arch = "x86_64")]
+    #[target_feature(enable = "avx2")]
+    unsafe fn dot16_q6_avx2(&self, o: usize, x: &[i16], sx32: &[i32]) -> f32 {
+        use std::arch::x86_64::*;
+        let half = self.n_in.div_ceil(2);
+        let n_bloc = self.n_in.div_ceil(BLOC_Q4);
+        let q4 = &self.q[o * half..(o + 1) * half];
+        let q2 = self.plan6.as_ref().expect("plan 6 bits absent");
+        let xp = x.as_ptr();
+        // scores par TÊTE pour le chemin groupé (cf. plus bas) : les têtes
+        // d'un même groupe KV partagent les mêmes clés et valeurs.
+        let mut sc2 = vec![0f32; nh * ctx];
+        #[cfg(target_arch = "x86_64")]
+        let simd = std::is_x86_feature_detected!("avx2") && std::is_x86_feature_detected!("fma");
+        #[cfg(not(target_arch = "x86_64"))]
+        let simd = false;
+        let point = |a: &[f32], b: &[f32]| -> f32 {
+            #[cfg(target_arch = "x86_64")]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np=\"drave-core/src/gguf.rs\"\ns=open(p).read()\na=\"\"\"    pub fn dequant_q2k_dans(bloc: &[u8], out: &mut [f32]) {\"\"\"\nb=\"\"\"    /// Déquantification Q2_K **vectorisée**, identique AU BIT PRÈS à la version\n   … [3877 caractères tronqués]`
+
+  ```
+ok gguf
+ok list
+error[E0624]: associated function `dequant_q2k_avx2` is private
+error: could not compile `drave-core` (bin "drave") due to 1 previous error; 28 warnings emitted
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np=\"drave-core/src/gguf.rs\"\ns=open(p).read()\na=\"\"\"    #[cfg(target_arch = \"x86_64\")]\n    #[target_feature(enable = \"avx2\")]\n    unsafe fn dequant_q2k_avx2(bloc: &[u8], out: &mut [f32]) {\"\"\"\nb=\"\"\"  … [645 caractères tronqués]`
+
+  ```
+ok
+    Finished `release` profile [optimized] target(s) in 33.37s
+=== perplexité 1743713.6243 sur 3 tokens (0 événements, 10.7 s) ===
+    postes (ms/token) : projets-attn 0.00 | rope 0.00 | attention 1173.79 | proj+mlp 2267.69 | somme 3441.49 | reste (tête + échantillonnage) 111.68
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && M=/home/stephane/FastNVMe/modeles-lourds/DeepSeek-V4.1-Flash-Q2.gguf && rm -rf /tmp/davx && mkdir -p /tmp/davx && DRAVE_DUMP_COUCHES=/tmp/davx/l ./drave-core/target/release/drave $M --ppl /tmp/v41_last4.ids --ctx 8 --limit 4 --abits  … [709 caractères tronqués]`
+
+  ```
+noyau AVX2 Q2_K vs scalaire : 2544 tenseurs, 0 différents
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && M=/home/stephane/FastNVMe/modeles-lourds/DeepSeek-V4.1-Flash-Q2.gguf && echo \"=== ctx 32 ===\" && (time ./drave-core/target/release/drave $M --ppl /tmp/v41_texte.txt.ids --ctx 32 --limit 32 --abits 8 --threads 16 > /tmp/v41_avx32.lo … [156 caractères tronqués]`
+
+  ```
+=== ctx 32 ===
+real	1m42,082s
+=== perplexité 115521.8693 sur 31 tokens (0 événements, 88.5 s) ===
+    postes (ms/token) : projets-attn 0.00 | rope 0.00 | attention 928.40 | proj+mlp 1833.91 | somme 2762.30 | reste (tête + échantillonnage) 93.57
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && nohup bash tools/portes.sh rapide > /tmp/porte18.log 2>&1 & sleep 2; echo \"porte du bloc 18 lancee\"; grep -c . /tmp/porte18.log", "description": "Launch the gate for box 18"}`
+
+  ```
+porte du bloc 18 lancee
+1
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > sprints/18-vectoriser-la-dequantification-des-experts.md <<'EOF'\n# Sprint 18 — Vectoriser la DÉQUANTIFICATION des experts (grille Q2_K) sans changer un bit\n\n- **Début** : 23:44 · **Fin prévue** : 01:44 (boxing de 120 min)\n- … [5300 caractères tronqués]`
+
+  ```
+106 sprints/18-vectoriser-la-dequantification-des-experts.md
+  ```
+
+- **bash** `{"command": "sleep 240; tail -6 /tmp/porte18.log; echo \"procs: $(pgrep -x drave | wc -l)\"", "description": "Check the box-18 gate", "timeoutMs": 300000}`
+
+  ```
+mode 1 — listes quantifiées     0.00e0  ✅  (réf 61.9920 / deux nœuds 61.9920)
+  mode 2 — listes par blocs        3.65e-2  ✅  (réf 61.9920 / deux nœuds 64.2535)
+  mode 3 — lot dense f32           0.00e0  ✅  (réf 60.8135 / deux nœuds 60.8135)
+  mode 4 — lot en listes           4.45e-3  ✅  (réf 60.8135 / deux nœuds 60.5427)
+
+toutes les portes sont vertes
+procs: 0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -E \"V4-Flash 43|tests|Qwen2|cargo test\" /tmp/porte18.log; cargo test --release --manifest-path drave-core/Cargo.toml 2>&1 | grep -E \"test result\" | head -2", "description": "Confirm the gate values", "timeoutMs": 300000}`
+
+  ```
+cargo test --release                       63 verts  ✅
+  Qwen2.5-0.5B ctx 256                       19.3885  ✅
+  V4-Flash 43 couches ctx 32                 8430.4966  ✅
+test result: ok. 63 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.11s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && V=/home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek-V4-Flash-UD-IQ1_M/DeepSeek-V4-Flash-UD-IQ1_M-00001-of-00003.gguf && ls -la $V 2>/dev/null | head -1; (time ./drave-core/target/release/drave $V --ppl /tmp/ids_v4flash.txt --ctx … [206 caractères tronqués]`
+
+  ```
+-rw-r--r--. 1 stephane stephane 5256864  1 oct 10:48 /home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek-V4-Flash-UD-IQ1_M/DeepSeek-V4-Flash-UD-IQ1_M-00001-of-00003.gguf
+real	0m23,984s
+=== perplexité 8430.4966 sur 4 tokens (0 événements, 12.8 s) ===
+    postes (ms/token) : projets-attn 0.00 | rope 0.00 | attention 1132.53 | proj+mlp 2024.50 | somme 3157.03 | reste (tête + échantillonnage) 36.49
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np=\"sprints/18-vectoriser-la-dequantification-des-experts.md\"\ns=open(p).read()\na=\"\"\"## Portes\n\n- `tools/portes.sh rapide` : voir le journal du bloc\"\"\"\nb=\"\"\"### 3bis. Et l'autre modèle lourd ? (mesuré, … [4581 caractères tronqués]`

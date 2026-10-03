@@ -1262,6 +1262,54 @@ zéro, l'inventaire sera sous-évalué", t.ttype, t.name);
         v
     }
 
+    /// Déquantification Q2_K **vectorisée**, identique AU BIT PRÈS à la version
+    /// scalaire : chaque valeur reçoit les mêmes opérations dans le même ordre
+    /// (`(d·sc)·quant`, puis soustraction de `dmin·m`), aucune n'est réassociée
+    /// — l'AVX2 ne fait que les traiter huit par huit. **Pas de FMA** :
+    /// `fma(a, b, −c)` n'a pas le même arrondi que `a·b − c`, et le noyau
+    /// changerait des bits pour un gain de vitesse qui n'en vaut pas la peine.
+    ///
+    /// La conversion codebook → f32 est une fonction pure, valeur par valeur :
+    /// c'est le seul endroit du chemin des experts où le SIMD est gratuit en
+    /// exactitude (le produit scalaire, lui, réassocierait la somme).
+    #[cfg(target_arch = "x86_64")]
+    #[target_feature(enable = "avx2")]
+    pub unsafe fn dequant_q2k_avx2(bloc: &[u8], out: &mut [f32]) {
+        use std::arch::x86_64::*;
+        assert!(bloc.len() >= 84, "bloc Q2_K trop court : {}", bloc.len());
+        assert!(out.len() >= 256, "tampon de sortie trop court");
+        let scales = &bloc[0..16];
+        let qs = &bloc[16..80];
+        let d = Self::f16_to_f32(u16::from_le_bytes([bloc[80], bloc[81]]));
+        let dmin = Self::f16_to_f32(u16::from_le_bytes([bloc[82], bloc[83]]));
+        let masque = _mm256_set1_epi32(3);
+        for moitie in 0..2usize {
+            let q = &qs[moitie * 32..moitie * 32 + 32];
+            for k in 0..4usize {
+                let decal = _mm256_set1_epi32((2 * k) as i32);
+                for demi in 0..2usize {
+                    let is = moitie * 8 + k * 2 + demi;
+                    let sc = (scales[is] & 0x0F) as f32;
+                    let m = (scales[is] >> 4) as f32;
+                    let dsc = _mm256_set1_ps(d * sc);
+                    let dm = _mm256_set1_ps(dmin * m);
+                    let base = moitie * 128 + k * 32 + demi * 16;
+                    let src = q.as_ptr().add(demi * 16);
+                    let dst = out.as_mut_ptr().add(base);
+                    for paquet in 0..2usize {
+                        // huit octets → huit entiers 32 bits → huit f32
+                        let huit = _mm_loadl_epi64(src.add(paquet * 8) as *const __m128i);
+                        let q32 = _mm256_cvtepu8_epi32(huit);
+                        let qm = _mm256_and_si256(_mm256_srlv_epi32(q32, decal), masque);
+                        let qf = _mm256_cvtepi32_ps(qm);
+                        let r = _mm256_sub_ps(_mm256_mul_ps(dsc, qf), dm);
+                        _mm256_storeu_ps(dst.add(paquet * 8), r);
+                    }
+                }
+            }
+        }
+    }
+
     pub fn dequant_q2k_dans(bloc: &[u8], out: &mut [f32]) {
         assert!(bloc.len() >= 84, "bloc Q2_K trop court : {}", bloc.len());
         let scales = &bloc[0..16];
@@ -1271,17 +1319,30 @@ zéro, l'inventaire sera sous-évalué", t.ttype, t.name);
         assert!(out.len() >= 256, "tampon de sortie trop court");
         // Quatre passes de 64 poids : chaque octet porte quatre quants 2 bits,
         // lus aux décalages 0, 2, 4 et 6.
+        // Le parcours est celui du code ggml : moitié, puis décalage (k), puis
+        // les deux sous-groupes de 16 valeurs — et l'échelle ne change qu'à ce
+        // dernier niveau. La calculer une fois par groupe de 16 au lieu d'une
+        // fois par valeur est **identique au bit près** : les mêmes opérations
+        // (`(d·sc)·quant`, `dmin·m`, soustraction) dans le même ordre, juste
+        // moins répétées. Mesuré (bloc 18) : la déquantification pesait 25 % de
+        // la passe et 45 % du poste d'experts.
         for moitie in 0..2usize {
             let q = &qs[moitie * 32..moitie * 32 + 32];
-            for l in 0..32usize {
-                for (k, decal) in [0usize, 2, 4, 6].iter().enumerate() {
+            for k in 0..4usize {
+                let decal = 2 * k;
+                for demi in 0..2usize {
                     // L'ordre des échelles suit le parcours du code ggml :
                     // moitié, puis décalage, puis les deux sous-groupes de 16.
-                    let is = moitie * 8 + k * 2 + (l / 16);
+                    let is = moitie * 8 + k * 2 + demi;
                     let sc = (scales[is] & 0x0F) as f32;
                     let m = (scales[is] >> 4) as f32;
-                    let quant = ((q[l] >> decal) & 3) as f32;
-                    out[moitie * 128 + k * 32 + l] = d * sc * quant - dmin * m;
+                    let dsc = d * sc;
+                    let dm = dmin * m;
+                    let base = moitie * 128 + k * 32 + demi * 16;
+                    for l in 0..16usize {
+                        let quant = ((q[demi * 16 + l] >> decal) & 3) as f32;
+                        out[base + l] = dsc * quant - dm;
+                    }
                 }
             }
         }

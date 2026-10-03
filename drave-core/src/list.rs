@@ -595,6 +595,18 @@ pub fn sans_noyau(t: u32) -> bool {
 /// chaque fois coûtait plus cher que la déquantification elle-même (mesuré :
 /// 253 s par jeton sur GLM-5.3, dont l'essentiel dans ces allocations).
 pub fn dequant_grille_dans(t: u32, bloc: &[u8], out: &mut [f32]) {
+    // Q2_K est LE format des experts de V4.1 (25 % de la passe, 45 % du poste
+    // d'experts mesurés au bloc 17) : il a son noyau vectorisé, choisi une fois.
+    #[cfg(target_arch = "x86_64")]
+    {
+        static AVX2: std::sync::OnceLock<bool> = std::sync::OnceLock::new();
+        if t == 10 && *AVX2.get_or_init(|| std::is_x86_feature_detected!("avx2")) {
+            // Sûreté : la détection ci-dessus garantit AVX2, et le noyau borne
+            // comme la version scalaire (bloc ≥ 84, sortie ≥ 256).
+            unsafe { crate::gguf::Gguf::dequant_q2k_avx2(bloc, out) };
+            return;
+        }
+    }
     match t {
         10 => crate::gguf::Gguf::dequant_q2k_dans(bloc, out),
         11 => crate::gguf::Gguf::dequant_q3k_dans(bloc, out),
