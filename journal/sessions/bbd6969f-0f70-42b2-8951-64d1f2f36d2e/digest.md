@@ -110315,3 +110315,65 @@ test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 69 filtered out; fin
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -m \"KimI-K3 : les deux mathématiques neuves implémentées et testées SANS poids (SiTU, attention résiduelle)\n\nsitu(g,u) = beta·tanh(g/beta)·sigmoïde(g) × linear_beta·tanh(u/linear_beta), et\nlinear_beta  … [557 caractères tronqués]`
+
+  ```
+=== Portes ===
+  cargo test --release                       69 verts  ✅
+  Qwen2.5-0.5B ctx 256                       19.3885  ✅
+  Qwen3-30B en clusters (origine : 799,8557) 799.8557  ✅
+  threads par défaut (physiques)            20  ✅
+  (portes de formats : ignorées en mode rapide)
+  GLM-5.3 : sigmoïde ×2,5                  sigmoïde  ✅
+  Kimi-K2.7 : sigmoïde ×2,827              sigmoïde  ✅
+  V4-Flash : racine de softplus              racine de softplus  ✅
+  Qwen3-235B : softmax                       softmax  ✅
+  V4-Flash : --config le dit calculable      oui  ✅
+  V4-Flash 43 couches ctx 32 (archivée)     ARCHIVE=1 pour la lancer
+  engram V4.1 : adressage                    rangées DISTINCTES : 479723  ✅
+  le flux relu par tools/analyse_flux.py     51 lignes  ✅
+  le rejeu de la trace (0 manquante, écart ≤ 1e-5) écart 0.00e+00  ✅
+  porte de correction (llama.cpp, 71 positions) (100.0 % des positions UTILES au-dessus de 0.95, min 0.9959 >= plancher 0.9, top-1 94.4 % sur toutes les positions, 6 saturées exclues de la corrélation)  ✅
+portes tournent
+  ```
+
+- **bash** `{"command": "sleep 240; tail -8 /tmp/portes6.log; pgrep -f \"portes[.]sh\" >/dev/null && echo tournent || echo finies; tail -1 /tmp/dl_k3.log; du -sh /home/stephane/Data13TB/stephane/modeles/gguf/Kimi-K3-UD-Q4_K_XL 2>/dev/null", "description": "Wait for the gates and check the download", "timeoutMs" … [9 caractères tronqués]`
+
+  ```
+=== Découpage (deux nœuds) ===
+  mode 0 — f32 dense               0.00e0  ✅  (réf 61.9920 / deux nœuds 61.9920)
+  mode 1 — listes quantifiées     0.00e0  ✅  (réf 61.9920 / deux nœuds 61.9920)
+  mode 2 — listes par blocs        3.65e-2  ✅  (réf 61.9920 / deux nœuds 64.2535)
+  mode 3 — lot dense f32           0.00e0  ✅  (réf 60.8135 / deux nœuds 60.8135)
+  mode 4 — lot en listes           4.45e-3  ✅  (réf 60.8135 / deux nœuds 60.5427)
+
+toutes les portes sont vertes
+finies
+10:59:54    7.2 Go / 49.0 Go (14.8 %, 104 Mo/s)
+329G	/home/stephane/Data13TB/stephane/modeles/gguf/Kimi-K3-UD-Q4_K_XL
+  ```
+
+### 👤 Utilisateur
+
+background job bash-224 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'
+p='tools/portes.sh'
+s=open(p).read()
+old = """    if [ -s /tmp/ids_v4flash.txt ]; then
+        # 8430,2968 -> 8430,4966 le 02/10"""
+new = """    # La PERPLEXITÉ de V4-Flash est la porte la plus lente du dépôt (82 Go sur un
+    # disque DUR : ~2 min à vide, bien plus quand un téléchargement écrit sur le
+    # même disque — mesuré). V4-Flash étant RETIRÉ du chemin critique (03/10),
+    # elle ne tourne plus par défaut : `ARCHIVE=1 tools/portes.sh` la réveille.
+    # Les portes VIVANTES sont ailleurs (V4.1 pour les hyper-connexions, le petit
+    # modèle pour le flux, Qwen pour la correction).
+    if [ "${ARCHIVE:-0}" != "1" ]; then
+        printf "  %-42s %s\\n" "V4-Flash 43 couches ctx 32 (archivée)" "ARCHIVE=1 pour la lancer"
+    elif [ -s /tmp/ids_v4flash.txt ]; then
+        # 8430,2968 -> 8430,4966 le 02/10"""
+assert old in s
+s = s.replace(old, new, 1)
+open(p,'w').write(s)
+print("patch appliqué :", 'ARCHIVE:-0' in open(p).read())
+PY
+bash -n tools/portes.sh && echo "syntaxe ok" && (t0=$(date +%s); bash tools/portes.sh rapide > /tmp/portes6.log 2>&1; echo "exit=$? en $(( $(date +%s) - t0 )) s"; tail -20 /tmp/portes6.log)) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='sprints/28-la-bascule-vers-kimi-k3-et-deux-defauts-de-tokenizer.md'\ns=open(p).read()\ns=s.replace(\"\"\"## Rétrospective — garder / changer / doute\"\"\",\n\"\"\"### 6. Portes, toutes vertes — et allégées\n\n`to … [1209 caractères tronqués]`

@@ -78,6 +78,21 @@ formats (Q8_0, MXFP4) — acquis. **Ce qui est neuf** : KDA, attention résiduel
 MoE latent, SiTU, redémarrage du flux. Le nouveau **flux de coupure** (la pile de
 points de contrôle, ≤ 8 × 7 168 valeurs) est le sujet de mesure à venir.
 
+### 6. Portes, toutes vertes — et allégées
+
+`tools/portes.sh rapide` : **69 tests** (5 neufs sur le motif kimi), Qwen 19,3885,
+clusters 799,8557, quatre routages, engram V4.1 (479 723 rangées), flux relu (51
+lignes), rejeu (0 manquante, 0,00e0), porte de correction (71 positions, 100 % des
+positions utiles ≥ 0,95), découpage deux nœuds (5 modes). La **perplexité
+V4-Flash** — la porte la plus lente (82 Go sur disque dur) — passe derrière
+`ARCHIVE=1` : un modèle retiré ne doit pas ralentir les portes vivantes.
+
+**Et une leçon d'outillage payée comptant** : deux commandes de ce sprint se sont
+tuées elles-mêmes — `pkill -f portes.sh` et `pgrep -f "bash tools/portes"`
+correspondent à la ligne de commande du shell qui les exécute. Le dépôt le disait
+déjà pour `pkill -f drave` ; il faut la forme `pkill -x drave` ou l'astuce
+`portes[.]sh`. Deux fois plutôt qu'une, donc ça mérite d'être écrit.
+
 ## Rétrospective — garder / changer / doute
 
 **Garder.** Vérifier la **référence** avant le modèle. Les deux défauts de

@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 116.1 h |
+| Durée | 116.2 h |
 | Tours | 90 |
-| Messages | 6932 |
-| Appels d'outils | 6630 |
+| Messages | 6935 |
+| Appels d'outils | 6632 |
 | Fichiers touchés | 136 |
-| Commandes | 5605 |
+| Commandes | 5607 |
 | Sous-agents | 32 |
-| Commits | 450 |
+| Commits | 451 |
 | Compactages de contexte | 9 |
 
 ## Objectifs déclarés
@@ -4475,7 +4475,7 @@ Autrement dit : **la granularité ne compresse pas, elle route** — et elle ach
 
 ### Tour 90 — <goal_round> Objective: "Exécuter le plan docs/plan-deepseek41-complet.md phase par phase (P0→P9), en autonomie, en resp … [942 caractères tronqués]
 
-*192 appels d'outils.* Actions notables :
+*194 appels d'outils.* Actions notables :
 
 - bash — Check the gate suite result
 - bash — Wait for the gates
@@ -4491,7 +4491,7 @@ Autrement dit : **la granularité ne compresse pas, elle route** — et elle ach
 - bash — Find the plan's remaining items
 - bash — Extract each phase's gate claims
 - read
-- … et 173 autres
+- … et 175 autres
 
 **Synthèse produite :**
 
@@ -4717,7 +4717,7 @@ Autrement dit : **la granularité ne compresse pas, elle route** — et elle ach
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 5565 autres
+- … et 5567 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -5315,4 +5315,5 @@ Autrement dit : **la granularité ne compresse pas, elle route** — et elle ach
 - Docs : la cible Kimi-K3, les deux défauts de tokenizer corrigés, et la référence llama.cpp-k3" && git log --oneline -1
 - Spec Kimi-K3 : cadence hybride VÉRIFIÉE sur le fichier (MLA aux couches 3,7,11,15), détail des projections MLA, MoE latent (routeur en pleine largeur) et res_mi
 - KimI-K3 : les deux mathématiques neuves implémentées et testées SANS poids (SiTU, attention résiduelle)  situ(g,u) = beta·tanh(g/beta)·sigmoïde(g) × linear_beta
+- Sprint 28 : portes toutes vertes (69 tests), perplexité V4-Flash derrière ARCHIVE=1, et la leçon des pkill qui se tuent eux-mêmes"; git log --oneline -1
 
