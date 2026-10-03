@@ -147,6 +147,14 @@ Chaque phase porte **deux portes** :
 
 Une phase qui ne passe pas ses deux portes ne passe pas à la suivante.
 
+> **Où en sont les deux portes, phase par phase, avec la preuve** :
+> `reports/rapport-portes-p0-p9.md` (écrit le 03/10, bloc 27). En résumé : P0 à
+> P6 et P8 tenues ; **P1** l'est depuis le 03/10 (sa porte Drave n'avait ni canal
+> ni outil — les 24 poids étaient calculés puis jetés) ; **P7** est la seule porte
+> **impossible**, et c'est nommé (llama.cpp refuse `deepseek41`), avec sa
+> condition de sortie ; **P9** est optionnel et son dernier ajout est *opt-in*
+> avec son écart mesuré.
+
 ### P0 — Le harnais, sur V4-Flash, et le coût d'un jeton (≈ 3 h) — **FAIT** (02/10)
 
 > Bilan dans `reports/rapport-p0-flux.md`. Ce qui est fait : le flux se compte

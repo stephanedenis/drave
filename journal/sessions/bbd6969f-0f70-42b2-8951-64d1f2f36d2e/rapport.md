@@ -7,12 +7,12 @@
 | Début | 2026-09-28 14:46 |
 | Durée | 115.0 h |
 | Tours | 90 |
-| Messages | 6786 |
-| Appels d'outils | 6488 |
+| Messages | 6789 |
+| Appels d'outils | 6491 |
 | Fichiers touchés | 132 |
-| Commandes | 5472 |
+| Commandes | 5475 |
 | Sous-agents | 32 |
-| Commits | 435 |
+| Commits | 436 |
 | Compactages de contexte | 9 |
 
 ## Objectifs déclarés
@@ -4473,7 +4473,7 @@ Autrement dit : **la granularité ne compresse pas, elle route** — et elle ach
 
 ### Tour 90 — <goal_round> Objective: "Exécuter le plan docs/plan-deepseek41-complet.md phase par phase (P0→P9), en autonomie, en resp … [942 caractères tronqués]
 
-*50 appels d'outils.* Actions notables :
+*53 appels d'outils.* Actions notables :
 
 - bash — Check the gate suite result
 - bash — Wait for the gates
@@ -4489,7 +4489,7 @@ Autrement dit : **la granularité ne compresse pas, elle route** — et elle ach
 - bash — Find the plan's remaining items
 - bash — Extract each phase's gate claims
 - read
-- … et 33 autres
+- … et 36 autres
 
 **Synthèse produite :**
 
@@ -4711,7 +4711,7 @@ Autrement dit : **la granularité ne compresse pas, elle route** — et elle ach
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 5432 autres
+- … et 5435 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -5294,4 +5294,5 @@ Autrement dit : **la granularité ne compresse pas, elle route** — et elle ach
 - analyse_hc.py : le test synthétique a trouvé une faute d'axe (sommer les positions au lieu des colonnes) — corrigé, et les deux cas sont vérifiés (bistochastiqu
 - Porte Drave de P1 TENUE : mesurée, et elle révèle une structure — les 16 connexions de V4-Flash sont une PERMUTATION  Le Sinkhorn tient sa promesse sur l'axe qu
 - Audit : les deux portes, phase par phase (P0 à P9) — ce qui est tenu, ce qui est impossible et nommé, ce qui reste à la demande  Tableau vérifiable : P0-P6 et P
+- Plan : renvoi vers l'audit des deux portes, phase par phase"; s=$(stat -c %s /tmp/our_v4f1024.bin); echo "ctx 1024 : $(( (s-8)/517120 )) / 1023"
 

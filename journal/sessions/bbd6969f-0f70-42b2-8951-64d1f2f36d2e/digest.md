@@ -107877,3 +107877,35 @@ Created file
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -m \"Audit : les deux portes, phase par phase (P0 à P9) — ce qui est tenu, ce qui est impossible et nommé, ce qui reste à la demande\n\nTableau vérifiable : P0-P6 et P8 tenues ; P1 désormais fermée (instru … [461 caractères tronqués]`
+
+  ```
+ctx 1024 : 337 / 1023
+09:46
+  ```
+
+- **bash** `{"command": "pid=$(pgrep -x drave | head -1); c1=$(awk '{print $14+$15}' /proc/$pid/stat); s1=$(stat -c %s /tmp/our_v4f1024.bin); t1=$(date +%s); sleep 100; c2=$(awk '{print $14+$15}' /proc/$pid/stat); s2=$(stat -c %s /tmp/our_v4f1024.bin); t2=$(date +%s); python3 -c \"\nw=$((t2-t1)); dp=$(( (s2-s1) … [218 caractères tronqués]`
+
+  ```
+36 positions en 100 s -> 2.78 s/position · CPU 22.5x
+charge average: 26,80, 28,67, 25,28
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '138,150p' docs/plan-deepseek41-complet.md", "description": "Read the plan's gate preamble"}`
+
+  ```
+## 4. Les phases
+
+Chaque phase porte **deux portes** :
+
+- **porte de correction** — la comparaison à llama.cpp sur **V4-Flash**, étage par
+  étage (jamais « ça tourne ») ;
+- **porte Drave** — les flux : nombre d'événements par jeton, trace écrite puis
+  **rejouée à l'identique**, découpage en grappes qui donne la même perplexité,
+  et le flux nouveau lisible par un outil d'analyse.
+
+Une phase qui ne passe pas ses deux portes ne passe pas à la suivante.
+
+### P0 — Le harnais, sur V4-Flash, et le coût d'un jeton (≈ 3 h) — **FAIT** (02/10)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='docs/plan-deepseek41-complet.md'\ns=open(p).read()\nold=\"\"\"Une phase qui ne passe pas ses deux portes ne passe pas à la suivante.\"\"\"\nnew=\"\"\"Une phase qui ne passe pas ses deux portes ne passe pas à la s … [827 caractères tronqués]`
