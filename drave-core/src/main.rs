@@ -125,6 +125,7 @@ sont ignorés", modes.len(), modes.join(", "), modes[0]);
     if opt.banc_kv > 0 { run_banc_kv(opt); return; }
     if opt.banc_topk > 0 { run_banc_topk(opt); return; }
     if opt.gpu_banc { run_gpu_banc(opt); return; }
+    if opt.k3_essai { run_k3_essai(); return; }
     if opt.plan { run_plan(opt); return; }
     if opt.tokenize { run_tokenize(opt); return; }
     if opt.ppl { run_ppl(opt); return; }
@@ -502,7 +503,7 @@ fn fils(opt: &Options) -> usize {
 #[derive(Default)]
 struct Options {
     // --- sélection du mode
-    infer: bool, ppl: bool, plan: bool, tokenize: bool, gpu_banc: bool,
+    infer: bool, ppl: bool, plan: bool, tokenize: bool, gpu_banc: bool, k3_essai: bool,
     /// Banc du KV déporté : nombre de clés à faire tenir en VRAM.
     banc_kv: usize,
     /// Banc des SCORES d'attention : nombre de clés à noter (noyau 1 du top-k).
@@ -647,6 +648,13 @@ fn analyser(args: &[String]) -> Options {
             "--plan" => { o.plan = true; 1 }
             "--tokenize" => { o.tokenize = true; 1 }
             "--gpu-banc" => { o.gpu_banc = true; 1 }
+            // Test de fumée de la couche 0 de Kimi-K3, **sur un modèle même
+            // incomplet** (les tenseurs de la couche 0 arrivent tôt) : c'est ce
+            // qui permet de déboguer la structure avant la fin d'un transfert de
+            // 1,5 To. Ce n'est PAS une vérification (la référence ne tourne pas
+            // sur un modèle incomplet) — juste : ça charge, ça calcule, ça sort
+            // des valeurs finies et plausibles.
+            "--k3-essai" => { o.k3_essai = true; 1 }
             "--banc-kv" => { o.banc_kv = suivant(i).parse().unwrap(); 2 }
             "--banc-topk" => { o.banc_topk = suivant(i).parse().unwrap(); 2 }
             "--banc-mla" => { o.banc_mla = Some(suivant(i).clone()); 2 }
@@ -1831,6 +1839,51 @@ l'en-tête du premier shard présent ; tout « manque » peut n'être qu'un shar
             Gguf::open_meta(chemin).expect("ouverture de l'en-tête du premier shard présent")
         }
         _ => Gguf::open_meta_auto(chemin).expect("ouverture du GGUF (en-tête)"),
+    }
+}
+
+/// Test de fumée de la couche 0 de Kimi-K3 (voir `--k3-essai`).
+fn run_k3_essai() {
+    let chemin = modele_chemin();
+    let chemin = std::path::Path::new(&chemin);
+    // Les shards PRÉSENTS, dans l'ordre — un transfert en cours en laisse
+    // quelques-uns, et la couche 0 est dans les premiers.
+    let dossier = chemin.parent().unwrap_or_else(|| std::path::Path::new("."));
+    let nom = chemin.file_name().and_then(|n| n.to_str()).unwrap_or("");
+    let tete = nom.rsplit_once("-of-").map(|(t, _)| t.rsplit_once('-').map(|(p, _)| p.to_string()));
+    let mut shards: Vec<std::path::PathBuf> = Vec::new();
+    if let Some(Some(pref)) = tete {
+        if let Ok(rd) = std::fs::read_dir(dossier) {
+            for e in rd.flatten() {
+                let n = e.file_name().to_string_lossy().to_string();
+                if n.starts_with(pref.as_str()) && n.ends_with(".gguf") { shards.push(e.path()); }
+            }
+        }
+        shards.sort();
+    }
+    if shards.is_empty() { eprintln!("aucun shard trouvé"); return; }
+    eprintln!("[k3-essai] {} shard(s) présents", shards.len());
+    let g = Gguf::open_multi(&shards).expect("ouverture des shards présents");
+    let mut c0 = match kimi_k3::Couche0::charge(&g) {
+        Ok(c) => c,
+        Err(e) => { eprintln!("[k3-essai] chargement impossible : {e}"); return; }
+    };
+    // L'entrée de la couche 0 est l'embarquement du jeton.
+    let ids = vec![3638u32, 275, 1309];      // « Le ciel est… » (tokenizer du modèle)
+    let embd = g.dequant("token_embd.weight");
+    let h = c0.hauteur();
+    for (i, &t) in ids.iter().enumerate() {
+        let d = t as usize * h;
+        let x = &embd[d..d + h];
+        match c0.avant(x) {
+            Ok(y) => {
+                let n: f32 = y.iter().map(|v| v * v).sum::<f32>().sqrt();
+                let finis = y.iter().all(|v| v.is_finite());
+                println!("  jeton {i} (id {t}) : |l_out| = {n:.4} · finis : {finis} · \
+premiers : {:.5} {:.5} {:.5}", y[0], y[1], y[2]);
+            }
+            Err(e) => { eprintln!("[k3-essai] jeton {i} : {e}"); return; }
+        }
     }
 }
 

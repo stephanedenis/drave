@@ -274,13 +274,32 @@ impl Couche0 {
             Ok(t.dims.iter().map(|d| *d as usize).collect())
         };
         let p = |s: &str| format!("blk.0.{s}");
+        // ⚠️ **Les dimensions du moteur sont INVERSÉES par rapport au fichier** :
+        // `TensorInfo::dims[0]` est `ne1` du GGUF, c'est-à-dire la dimension de
+        // SORTIE (`Proj::load` fait `n_out = dims[0]`, `n_in = dims[1]`). Lire
+        // `dims[1]` là où il faut `dims[0]` a donné `nh = 7168` au lieu de 96 et
+        // fait tomber le produit matriciel — attrapé par le test de fumée, pas
+        // par relecture.
         let h = dims(&p("attn_norm.weight"))?[0];
-        let nh = dims(&p("ssm_beta.weight"))?[1];
+        let nh = dims(&p("ssm_beta.weight"))?[0];
         let hd = dims(&p("ssm_norm.weight"))?[0];
         let d_inner = nh * hd;
-        let d_conv = dims(&p("ssm_conv1d_q.weight"))?[0];
-        let ffn = dims(&p("ffn_gate.weight"))?[1];
+        let dc = dims(&p("ssm_conv1d_q.weight"))?;
+        let d_conv = *dc.last().unwrap_or(&4);          // noyau : dernière dim du moteur
+        let ffn = dims(&p("ffn_gate.weight"))?[0];
         let eps = 1e-5f32;                       // `kimi-k3.attention.layer_norm_rms_epsilon`
+        eprintln!("[k3] h={h} nh={nh} hd={hd} d_inner={d_inner} d_conv={d_conv} ffn={ffn}");
+        for (n, att) in [("attn_q.weight", (d_inner, h)), ("attn_output.weight", (h, d_inner)),
+                         ("ssm_f_a.weight", (hd, h)), ("ssm_f_b.weight", (d_inner, hd)),
+                         ("ssm_g.weight", (d_inner, h)), ("ffn_gate.weight", (ffn, h)),
+                         ("ffn_down.weight", (h, ffn)), ("ssm_beta.weight", (nh, h))] {
+            let t = g.tensor(&p(n)).ok_or_else(|| format!("absent {n}"))?;
+            let vals = t.nelem();
+            if vals != att.0 * att.1 {
+                eprintln!("[k3] ⚠️ {n} : {} valeurs, attendu {}×{} = {}",
+                          vals, att.0, att.1, att.0 * att.1);
+            }
+        }
         let etat_conv = vec![0f32; (d_conv - 1) * d_inner];
         Ok(Couche0 {
             q: lu(&p("attn_q.weight"))?, k: lu(&p("attn_k.weight"))?,
@@ -304,6 +323,9 @@ impl Couche0 {
             pile: Vec::new(), n_ckpt: 0,
         })
     }
+
+    /// Hauteur du flux (pour l'appelant : la rangée d'embarquement fait `h`).
+    pub fn hauteur(&self) -> usize { self.h }
 
     /// L'état (convolution + delta) remis à zéro : entre deux textes, on ne
     /// garde rien — un état oublié ne se voit pas dans les logits du premier

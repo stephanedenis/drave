@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 117.4 h |
+| Durée | 117.6 h |
 | Tours | 95 |
-| Messages | 7047 |
-| Appels d'outils | 6731 |
+| Messages | 7056 |
+| Appels d'outils | 6740 |
 | Fichiers touchés | 145 |
-| Commandes | 5697 |
+| Commandes | 5706 |
 | Sous-agents | 32 |
-| Commits | 468 |
+| Commits | 469 |
 | Compactages de contexte | 9 |
 
 ## Objectifs déclarés
@@ -4702,17 +4702,26 @@ Deux choses valent d'être soulignées :
 
 ### Tour 95 — <goal_round> Objective: "Faire tourner en local les MEILLEURS modèles ouverts, en particulier ceux qui ne tiennent pas e … [1246 caractères tronqués]
 
-*5 appels d'outils.* Actions notables :
+*14 appels d'outils.* Actions notables :
 
 - bash — Find the RMSNorm and activation-quantization helpers
 - bash — Locate the norm and quantization helpers
 - bash — Read the Q8 matvec pattern in the engine
 - bash — Implement the K3 layer-0 forward
 - bash — Fix the conv double-call bug and commit
+- bash — Check the download progress
+- bash — Add the K3 layer-0 smoke test command
+- bash — Run the layer-0 smoke test
+- bash — Locate the failing call and the dims
+- bash — Read the dequant layout convention
+- bash — Find the tensor dequant layout
+- bash — Diagnose the dimension mismatch
+- bash — Fix the dimension convention and re-run the smoke test
+- bash — Commit the working layer-0 forward
 
 **Synthèse produite :**
 
-⏵ J'écris la passe avant de la couche 0 de K3 — d'abord les deux helpers du moteur dont elle dépend
+⏵ Test de fumée de ma couche 0 sur le modèle partiel (les tenseurs de la couche 0 sont déjà là)
 
 ## 3. Travail accompli
 
@@ -4943,7 +4952,7 @@ Deux choses valent d'être soulignées :
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 5657 autres
+- … et 5666 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -5071,7 +5080,7 @@ Deux choses valent d'être soulignées :
 
 ## 5. Erreurs rencontrées
 
-341 sorties en erreur ou divergentes. Les premières :
+343 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : a8f2635f8 docs: record which models this box is good at, and why src/llama-hparams.cpp:8:void llama_hparams::set_swa_pattern(uint32_t n_pattern, bool dense_first) { src/llama-hparams.h:308:    void se
 - **T1** : 511 tokens notés — perplexité cumulée 247.031  (4.9 tok/s) === perplexité 247.0308 sur 511 tokens (0 événements, 104.5 s) ===  ### B3 harmony assistant 511 --- ref --- 0.0 0.0 0:00 ls: cannot access '
@@ -5559,4 +5568,5 @@ Deux choses valent d'être soulignées :
 - Journal (màj automatique)" 2>/dev/null; echo "état propre : $(git status --short | wc -l) fichier(s) modifié(s)"
 - Croisement des maths K3 avec le code PUBLIÉ de Moonshot : SiTU, attention résiduelle, projections, convolution, porte bornée — identiques  Le code officiel (mod
 - K3 : la passe avant de la couche 0 (f32) — structure d'abord, exactitude ensuite  Déquantifiée en f32 (~1,4 Go pour la couche 0, qui est dense), elle suit l'ord
+- K3 : la couche 0 CALCULE sur le vrai fichier (test de fumée --k3-essai), et il a attrapé une convention de dimensions  Le moteur inverse les dimensions par rapp
 

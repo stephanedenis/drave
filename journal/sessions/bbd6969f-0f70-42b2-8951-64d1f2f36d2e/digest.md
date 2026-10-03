@@ -112198,3 +112198,155 @@ drave-core/src/main.rs:4078:                    *o = dref.dot_q8_source(base + j
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/kimi_k3.rs'\ns=open(p).read()\nold = \"\"\"        crate::model::kda_conv_silu(&q, &self.conv_q, &mut self.etat_conv_q, self.d_conv, d_inner, &mut q.clone());\n        // (le clone évite un emprunt … [3500 caractères tronqués]`
+
+  ```
+corrigé : un seul appel de convolution par flux, g2 hors boucle
+test result: ok. 77 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.14s
+c357f9c K3 : la passe avant de la couche 0 (f32) — structure d'abord, exactitude ensuite
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && tail -1 /tmp/dl_k3.log; du -sh /home/stephane/Data13TB/stephane/modeles/gguf/Kimi-K3-UD-Q4_K_XL; ls /home/stephane/Data13TB/stephane/modeles/gguf/Kimi-K3-UD-Q4_K_XL/*.gguf | wc -l; date +%H:%M", "description": "Check the download pro … [7 caractères tronqués]`
+
+  ```
+12:09:15    10.2 Go / 49.1 Go (20.8 %, 102 Mo/s)
+741G	/home/stephane/Data13TB/stephane/modeles/gguf/Kimi-K3-UD-Q4_K_XL
+18
+12:09
+  ```
+
+### 🤖 Assistant
+
+⏵ Test de fumée de ma couche 0 sur le modèle partiel (les tenseurs de la couche 0 sont déjà là)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/main.rs'\ns=open(p).read()\n# 1. une option cachée\ns=s.replace(\"\"\"            \"--gpu-banc\" => { o.gpu_banc = true; 1 }\"\"\",\n\"\"\"            \"--gpu-banc\" => { o.gpu_banc = true; 1 }\n   … [3808 caractères tronqués]`
+
+  ```
+option --k3-essai ajoutée
+accesseur ajouté
+--- build ---
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && K3=/home/stephane/Data13TB/stephane/modeles/gguf/Kimi-K3-UD-Q4_K_XL/Kimi-K3-UD-Q4_K_XL-00001-of-00032.gguf && timeout 900 ./drave-core/target/release/drave \"$K3\" --k3-essai 2>&1 | tail -8", "description": "Run the layer-0 smoke tes … [25 caractères tronqués]`
+
+  ```
+[k3-essai] 18 shard(s) présents
+
+thread 'main' (1401944) panicked at src/kimi_k3.rs:226:5:
+assertion `left == right` failed: matrice 917504×7168 de 88080384 valeurs
+  left: 88080384
+ right: 6576668672
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+timeout: the monitored command dumped core
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '218,232p' drave-core/src/kimi_k3.rs; grep -n \"let h = dims\\|let nh = dims\\|let hd = dims\\|let ffn = dims\\|let d_inner\" drave-core/src/kimi_k3.rs", "description": "Locate the failing call and the dims"}`
+
+  ```
+// viendra après : il donne la tolérance serrée (~1e-6) contre llama.cpp, alors
+// que le f32 déquantifié donne ~1e-3 (les produits ne sont pas quantifiés de la
+// même façon). **On vérifie la structure d'abord, l'exactitude ensuite** — et
+// l'écart entre les deux se mesure, il ne se suppose pas.
+// ===========================================================================
+
+/// Produit matrice-vecteur, `w` en lignes (`[n_out][n_in]`).
+fn mv(w: &[f32], n_out: usize, n_in: usize, x: &[f32], out: &mut [f32]) {
+    assert_eq!(w.len(), n_out * n_in, "matrice {n_out}×{n_in} de {} valeurs", w.len());
+    assert!(x.len() >= n_in && out.len() >= n_out, "dimensions d'activation");
+    for o in 0..n_out {
+        let ligne = &w[o * n_in..(o + 1) * n_in];
+        let mut s = 0f32;
+        for j in 0..n_in { s += ligne[j] * x[j]; }
+        out[o] = s;
+277:        let h = dims(&p("attn_norm.weight"))?[0];
+278:        let nh = dims(&p("ssm_beta.weight"))?[1];
+279:        let hd = dims(&p("ssm_norm.weight"))?[0];
+280:        let d_inner = nh * hd;
+282:        let ffn = dims(&p("ffn_gate.weight"))?[1];
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"pub fn dequant\" -B 12 drave-core/src/gguf.rs | head -24", "description": "Read the dequant layout convention"}`
+
+  ```
+1090-                        let q = buf[p + 2 + j];
+1091-                        out.push(((q >> 4) as i16 - 8) as i8);
+1092-                    }
+1093-                }
+1094-            }
+1095-            other => panic!("raw_levels : type {other} non géré"),
+1096-        }
+1097-        out
+1098-    }
+1099-
+1100-    /// Déquantifie un bloc **MXFP4** (17 octets, 32 poids) : un octet d'exposant
+1101-    /// E8M0 puis 16 octets de nibbles E2M1, moitié basse puis moitié haute.
+1102:    pub fn dequant_mxfp4(bloc: &[u8]) -> Vec<f32> {
+--
+1124-    #[inline]
+1125-    pub fn echelle_e8m0(e: u8) -> f32 {
+1126-        if e == 0 { f32::from_bits(0x0040_0000) } else { f32::from_bits((e as u32) << 23) }
+1127-    }
+1128-
+1129-    /// Déquantifie un bloc **Q5_0** (22 octets, 32 poids).
+1130-    ///
+1131-    /// Le cinquième bit n'est pas rangé par sous-bloc comme en Q5_K : les 32
+1132-    /// bits vivent dans un mot de 32 bits, le bit `j` servant le poids `j` et le
+1133-    /// bit `j+16` le poids `j+16`. Les 16 premiers poids occupent donc les
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"pub fn dequant(&self\" -A 25 drave-core/src/gguf.rs | head -34", "description": "Find the tensor dequant layout"}`
+
+  ```
+1751:    pub fn dequant(&self, name: &str) -> Vec<f32> {
+1752-        let t = self.tensor(name).unwrap_or_else(|| panic!("tenseur {name} absent"));
+1753-        let buf = self.tbuf(t);
+1754-        let n = t.nelem();
+1755-        let mut out = Vec::with_capacity(n);
+1756-        match t.ttype {
+1757-            GGML_BF16 => {
+1758-                for i in 0..n {
+1759-                    out.push(bf16_to_f32(u16::from_le_bytes(
+1760-                        buf[2 * i..2 * i + 2].try_into().unwrap())));
+1761-                }
+1762-            }
+1763-            GGML_F32 => {
+1764-                for i in 0..n {
+1765-                    out.push(f32::from_le_bytes(buf[4*i..4*i + 4].try_into().unwrap()));
+1766-                }
+1767-            }
+1768-            GGML_F16 => {
+1769-                for i in 0..n {
+1770-                    out.push(Self::f16_to_f32(u16::from_le_bytes(buf[2*i..2*i + 2].try_into().unwrap())));
+1771-                }
+1772-            }
+1773-            GGML_Q8_0 => {
+1774-                let nb = n / 32;
+1775-                for b in 0..nb {
+1776-                    let p = b * 34;
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/kimi_k3.rs'\ns=open(p).read()\ns=s.replace(\"\"\"        let eps = 1e-5f32;                       // `kimi-k3.attention.layer_norm_rms_epsilon`\"\"\",\n\"\"\"        let eps = 1e-5f32;              … [1255 caractères tronqués]`
+
+  ```
+diagnostic ajouté
+[k3] ⚠️ ssm_beta.weight : 688128 valeurs, attendu 7168×7168 = 51380224
+
+thread 'main' (1403877) panicked at src/kimi_k3.rs:226:5:
+assertion `left == right` failed: matrice 917504×7168 de 88080384 valeurs
+  left: 88080384
+ right: 6576668672
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+timeout: the monitored command dumped core
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/kimi_k3.rs'\ns=open(p).read()\ns=s.replace(\"\"\"        let h = dims(&p(\"attn_norm.weight\"))?[0];\n        let nh = dims(&p(\"ssm_beta.weight\"))?[1];\n        let hd = dims(&p(\"ssm_norm.weight … [1747 caractères tronqués]`
+
+  ```
+dims corrigées
+[k3-essai] 19 shard(s) présents
+[k3] h=7168 nh=96 hd=128 d_inner=12288 d_conv=4 ffn=33792
+  jeton 0 (id 3638) : |l_out| = 0.9731 · finis : true · premiers : 0.01036 -0.02001 -0.00186
+  jeton 1 (id 275) : |l_out| = 1.4310 · finis : true · premiers : 0.01729 0.00249 0.00578
+  jeton 2 (id 1309) : |l_out| = 1.4958 · finis : true · premiers : -0.00946 0.01135 -0.00460
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cd drave-core && cargo test --release 2>&1 | grep -E \"^test result\"; cd .. && git add -A && git commit -q -m \"K3 : la couche 0 CALCULE sur le vrai fichier (test de fumée --k3-essai), et il a attrapé une convention de dimensions\n\ … [781 caractères tronqués]`
