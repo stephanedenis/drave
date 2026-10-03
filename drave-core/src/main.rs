@@ -1892,6 +1892,28 @@ fn run_k3_essai() {
             for x in e.iter().take(6) { println!("      {x}"); }
         }
     }
+    // Le MoE latent d'une couche (1) : chargement + un jeton, pour vérifier la
+    // chaîne complète (routeur → 16 experts déquantifiés un par un → norme
+    // latente → remontée → partagés).
+    match kimi_k3::MoeK3::charge(&g, 1) {
+        Ok(moe) => {
+            let embd = g.dequant("token_embd.weight");
+            let h = c0.hauteur();
+            let t = 3638usize;
+            let x = &embd[t * h..(t + 1) * h];
+            let t0 = std::time::Instant::now();
+            match moe.avant(x) {
+                Ok(y) => {
+                    let n: f32 = y.iter().map(|v| v * v).sum::<f32>().sqrt();
+                    let finis = y.iter().all(|v| v.is_finite());
+                    println!("  MoE couche 1 : |sortie| = {n:.4} · finis : {finis} · {} ms",
+                             t0.elapsed().as_millis());
+                }
+                Err(e) => println!("  MoE couche 1 : {e}"),
+            }
+        }
+        Err(e) => println!("  MoE couche 1 : chargement impossible ({e})"),
+    }
     // L'entrée de la couche 0 est l'embarquement du jeton.
     let ids = vec![3638u32, 275, 1309];      // « Le ciel est… » (tokenizer du modèle)
     let embd = g.dequant("token_embd.weight");

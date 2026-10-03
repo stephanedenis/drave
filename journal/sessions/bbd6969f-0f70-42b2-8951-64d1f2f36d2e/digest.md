@@ -112642,3 +112642,66 @@ ggml_tensor * llama_model_kimi_k3::graph::build_latent_moe(
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='docs/architecture-kimi-k3.md'\ns=open(p).read()\ns=s.replace(\"\"\"**MoE latent** — les experts travaillent dans un **latent de 3 584**\"\"\",\n\"\"\"**MoE latent — l'ORDRE exact** (lu dans `build_latent_moe`, et … [1475 caractères tronqués]`
+
+  ```
+ordre du MoE consigné
+b34a8e3 Spec Kimi-K3 : l'ordre exact du MoE latent (routeur en pleine largeur, norme DANS le latent avant la remontée, biais en sélection)
+12:31:26    34.6 Go / 49.0 Go (70.6 %, 112 Mo/s)
+  ```
+
+- **bash** `{"command": "sleep 480; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date +%H:%M; tail -1 /tmp/dl_k3.log; ls /home/stephane/Data13TB/stephane/modeles/gguf/Kimi-K3-UD-Q4_K_XL/*.gguf | wc -l", "description": "Wait and check the download", "timeoutMs": 600000}`
+
+  ```
+12:39
+12:39:16    38.1 Go / 49.0 Go (77.8 %, 112 Mo/s)
+21
+  ```
+
+### 🤖 Assistant
+
+⏵ Bloc 34 : j'implémente le MoE latent (92 couches sur 93) avec déquantification par expert
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat >> drave-core/src/kimi_k3.rs <<'RS'\n\n// ===========================================================================\n// Le MoE latent — 92 couches sur 93.\n//\n// Les experts ne sont PAS déquantifiés à l'ouverture : une couche  … [7458 caractères tronqués]`
+
+  ```
+--- build ---
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/main.rs'\ns=open(p).read()\ns=s.replace(\"\"\"    // L'entrée de la couche 0 est l'embarquement du jeton.\"\"\",\n\"\"\"    // Le MoE latent d'une couche (1) : chargement + un jeton, pour vérifier  … [1418 caractères tronqués]`
+
+  ```
+essai MoE branché
+  couche 3 : dimensions conformes
+  couche 4 : dimensions conformes
+  MoE couche 1 : |sortie| = 0.7316 · finis : true · 25709 ms
+  jeton 0 (id 3638) : |l_out| = 0.9731 · finis : true · premiers : 0.01036 -0.02001 -0.00186
+  jeton 1 (id 275) : |l_out| = 1.4310 · finis : true · premiers : 0.01729 0.00249 0.00578
+  jeton 2 (id 1309) : |l_out| = 1.4958 · finis : true · premiers : -0.00946 0.01135 -0.00460
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '/pub fn dequant_mxfp4(bloc/,/^    }/p' drave-core/src/gguf.rs | head -22", "description": "Read the MXFP4 dequant to inline it"}`
+
+  ```
+pub fn dequant_mxfp4(bloc: &[u8]) -> Vec<f32> {
+        assert!(bloc.len() >= 17, "bloc MXFP4 trop court : {}", bloc.len());
+        const KV: [f32; 16] = [0.0, 0.5, 1.0, 1.5, 2.0, 3.0, 4.0, 6.0,
+                               0.0, -0.5, -1.0, -1.5, -2.0, -3.0, -4.0, -6.0];
+        let d = Self::echelle_e8m0(bloc[0]);
+        let mut out = vec![0f32; 32];
+        for j in 0..16 {
+            out[j] = KV[(bloc[1 + j] & 0x0F) as usize] * d;
+            out[j + 16] = KV[(bloc[1 + j] >> 4) as usize] * d;
+        }
+        out
+    }
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/kimi_k3.rs'\ns=open(p).read()\ns=s.replace(\"\"\"/// Déquantifie **un** expert d'un tenseur MXFP4 emprunté : `n_out × n_in` poids,\n/// blocs de 32 (17 octets). Aucune copie du reste du tenseur.\nf … [3719 caractères tronqués]`
+
+  ```
+déquantification sans allocation par bloc
+  MoE couche 1 : |sortie| = 0.7316 · finis : true · 1361 ms
+  jeton 0 (id 3638) : |l_out| = 0.9731 · finis : true · premiers : 0.01036 -0.02001 -0.00186
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cd drave-core && cargo test --release 2>&1 | grep -E \"^test result\"; cd .. && git add -A && git commit -q -m \"K3 : le MoE latent fonctionne — et 25,7 s/jeton sont devenus 1,36 s (×18,9) sans changer un chiffre\n\nLa première versi … [677 caractères tronqués]`

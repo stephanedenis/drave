@@ -536,3 +536,162 @@ pub fn verifie_dims(g: &Gguf, l: usize) -> Vec<String> {
     }
     ecarts
 }
+
+// ===========================================================================
+// Le MoE latent — 92 couches sur 93.
+//
+// Les experts ne sont PAS déquantifiés à l'ouverture : une couche pèse 15,7 Go en
+// MXFP4, et un jeton n'en lit que 16 sur 896 (~300 Mo). On déquantifie donc **par
+// expert, à la demande** — c'est le geste qui rend un modèle de 1,5 To
+// seulement lisible, et c'est aussi ce qui rend la réutilisation mesurable.
+// ===========================================================================
+
+/// Les parties denses d'un MoE (déquantifiées une fois) + les experts empruntés.
+pub struct MoeK3 {
+    gate_inp: Vec<f32>,      // [n_exp × h]   : le routeur (F32 dans le fichier)
+    biais: Vec<f32>,         // [n_exp]       : biais de SÉLECTION
+    rout_down: Vec<f32>,     // [latent × h]
+    rout_up: Vec<f32>,       // [h × latent]
+    rout_norm: Vec<f32>,     // [latent]
+    sh_gate: Vec<f32>, sh_up: Vec<f32>, sh_down: Vec<f32>,   // partagés, [*6144*]
+    // experts empruntés : pointeur + forme
+    ptr_gate: *const u8, ptr_up: *const u8, ptr_down: *const u8,
+    n_out_gate: usize, n_in_gate: usize,
+    n_out_up: usize, n_in_up: usize,
+    n_out_down: usize, n_in_down: usize,
+    n_exp: usize, k: usize,
+    h: usize, latent: usize, moe_ff: usize,
+    situ_beta: f32, situ_lin: f32, eps: f32,
+}
+
+/// Déquantifie **un** expert d'un tenseur MXFP4 emprunté : `n_out × n_in` poids,
+/// blocs de 32 (17 octets), **dans un tampon fourni**.
+///
+/// ⚠️ La première version appelait `Gguf::dequant_mxfp4` par bloc, donc
+/// **allouait un `Vec` par bloc** : 16 experts × 3 matrices × 344 064 blocs =
+/// 16,5 millions d'allocations par jeton, mesuré à **25,7 s**. La même
+/// déquantification écrite dans un tampon ne fait plus qu'une allocation par
+/// matrice. La leçon est celle du dépôt : ce n'est pas le calcul qui coûtait,
+/// c'était l'allocation.
+fn expert_mxfp4_dans(ptr: *const u8, n_out: usize, n_in: usize, e: usize, out: &mut [f32]) {
+    const KV: [f32; 16] = [0.0, 0.5, 1.0, 1.5, 2.0, 3.0, 4.0, 6.0,
+                           0.0, -0.5, -1.0, -1.5, -2.0, -3.0, -4.0, -6.0];
+    let nb = n_in / 32;
+    let base = unsafe { ptr.add(e * n_out * nb * 17) };
+    for o in 0..n_out {
+        for b in 0..nb {
+            let bloc = unsafe { std::slice::from_raw_parts(base.add((o * nb + b) * 17), 17) };
+            let d = crate::gguf::Gguf::echelle_e8m0(bloc[0]);
+            let dst = &mut out[o * n_in + b * 32..o * n_in + b * 32 + 32];
+            for j in 0..16 {
+                dst[j] = KV[(bloc[1 + j] & 0x0F) as usize] * d;
+                dst[j + 16] = KV[(bloc[1 + j] >> 4) as usize] * d;
+            }
+        }
+    }
+}
+
+impl MoeK3 {
+    pub fn charge(g: &Gguf, l: usize) -> Result<MoeK3, String> {
+        let p = |s: &str| format!("blk.{l}.{s}");
+        let lu = |nom: &str| -> Result<Vec<f32>, String> {
+            if g.tensor(nom).is_none() { return Err(format!("tenseur absent : {nom}")); }
+            Ok(g.dequant(nom))
+        };
+        let dims = |nom: &str| -> Result<Vec<usize>, String> {
+            g.tensor(nom).map(|t| t.dims.iter().map(|d| *d as usize).collect())
+                .ok_or_else(|| format!("tenseur absent : {nom}"))
+        };
+        let dg = dims(&p("ffn_gate_exps.weight"))?;    // moteur : [n_exp, moe_ff, latent]
+        let du = dims(&p("ffn_up_exps.weight"))?;
+        let dd = dims(&p("ffn_down_exps.weight"))?;    // [n_exp, latent, moe_ff]
+        let (n_exp, moe_ff, latent) = (dg[0], dg[1], dg[2]);
+        if du[0] != n_exp || du[1] != moe_ff || du[2] != latent
+            || dd[0] != n_exp || dd[1] != latent || dd[2] != moe_ff {
+            return Err(format!("formes d'experts incohérentes : {dg:?} {du:?} {dd:?}"));
+        }
+        let h = dims(&p("ffn_gate_inp.weight"))?[1];
+        let n_shared_ff = dims(&p("ffn_gate_shexp.weight"))?[0];
+        let lire = |cle: &str, def: usize| g.meta.get(cle).and_then(|m| m.as_u64())
+            .map(|v| v as usize).unwrap_or(def);
+        let ptr = |nom: &str| -> Result<*const u8, String> {
+            g.data_ptr(nom).ok_or_else(|| format!("données absentes : {nom}"))
+        };
+        Ok(MoeK3 {
+            gate_inp: lu(&p("ffn_gate_inp.weight"))?,
+            biais: lu(&p("exp_probs_b.bias"))?,
+            rout_down: lu(&p("ffn_routed_down.weight"))?,
+            rout_up: lu(&p("ffn_routed_up.weight"))?,
+            rout_norm: lu(&p("ffn_routed_norm.weight"))?,
+            sh_gate: lu(&p("ffn_gate_shexp.weight"))?,
+            sh_up: lu(&p("ffn_up_shexp.weight"))?,
+            sh_down: lu(&p("ffn_down_shexp.weight"))?,
+            ptr_gate: ptr(&p("ffn_gate_exps.weight"))?,
+            ptr_up: ptr(&p("ffn_up_exps.weight"))?,
+            ptr_down: ptr(&p("ffn_down_exps.weight"))?,
+            n_out_gate: dg[1], n_in_gate: dg[2],
+            n_out_up: du[1], n_in_up: du[2],
+            n_out_down: dd[1], n_in_down: dd[2],
+            n_exp, k: lire("kimi-k3.expert_used_count", 16),
+            h, latent, moe_ff: n_shared_ff,
+            situ_beta: 4.0, situ_lin: 25.0, eps: 1e-5,
+        })
+    }
+
+    /// La passe avant du MoE, dans l'ordre de la référence.
+    pub fn avant(&self, cur: &[f32]) -> Result<Vec<f32>, String> {
+        let (h, latent, n_exp, k) = (self.h, self.latent, self.n_exp, self.k);
+        if cur.len() != h { return Err(format!("entrée de {} au lieu de {h}", cur.len())); }
+        // 1. logits du routeur, sur la PLEINE largeur
+        let mut logits = vec![0f32; n_exp];
+        mv(&self.gate_inp, n_exp, h, cur, &mut logits);
+        // 2. sigmoïde, puis SÉLECTION avec le biais (le biais ne va pas aux poids)
+        let probs: Vec<f32> = logits.iter().map(|v| 1.0 / (1.0 + (-v).exp())).collect();
+        let mut choix: Vec<usize> = (0..n_exp).collect();
+        choix.sort_by(|&a, &b| {
+            let (pa, pb) = (probs[a] + self.biais[a], probs[b] + self.biais[b]);
+            pb.partial_cmp(&pa).unwrap_or(std::cmp::Ordering::Equal)
+        });
+        let choisis = &choix[..k.min(n_exp)];
+        let somme: f32 = choisis.iter().map(|&e| probs[e]).sum();
+        let poids: Vec<f32> = choisis.iter().map(|&e| probs[e] / somme.max(1e-20)).collect();
+        // 3. le latent
+        let mut rin = vec![0f32; latent];
+        mv(&self.rout_down, latent, h, cur, &mut rin);
+        // 4. les k experts, déquantifiés UN PAR UN
+        let mut acc = vec![0f32; latent];
+        for (i, &e) in choisis.iter().enumerate() {
+            // trois tampons réutilisés d'un expert à l'autre : une allocation
+            // par matrice, pas une par bloc.
+            let mut g_e = vec![0f32; self.n_out_gate * self.n_in_gate];
+            let mut u_e = vec![0f32; self.n_out_up * self.n_in_up];
+            let mut d_e = vec![0f32; self.n_out_down * self.n_in_down];
+            expert_mxfp4_dans(self.ptr_gate, self.n_out_gate, self.n_in_gate, e, &mut g_e);
+            expert_mxfp4_dans(self.ptr_up, self.n_out_up, self.n_in_up, e, &mut u_e);
+            expert_mxfp4_dans(self.ptr_down, self.n_out_down, self.n_in_down, e, &mut d_e);
+            let mut ge = vec![0f32; self.n_out_gate];
+            let mut ue = vec![0f32; self.n_out_up];
+            mv(&g_e, self.n_out_gate, self.n_in_gate, &rin, &mut ge);
+            mv(&u_e, self.n_out_up, self.n_in_up, &rin, &mut ue);
+            for j in 0..ge.len() { ge[j] = crate::model::situ(ge[j], ue[j], self.situ_beta, self.situ_lin); }
+            let mut de = vec![0f32; self.n_out_down];
+            mv(&d_e, self.n_out_down, self.n_in_down, &ge, &mut de);
+            for j in 0..latent { acc[j] += poids[i] * de[j]; }
+        }
+        // 5. norme DANS le latent, puis remontée
+        let mut norme = vec![0f32; latent];
+        rms_norm_poids(&acc, &self.rout_norm, self.eps, &mut norme);
+        let mut sortie = vec![0f32; h];
+        mv(&self.rout_up, h, latent, &norme, &mut sortie);
+        // 6. les experts partagés (toujours actifs), ajoutés
+        let mut gs = vec![0f32; self.moe_ff];
+        let mut us = vec![0f32; self.moe_ff];
+        mv(&self.sh_gate, self.moe_ff, h, cur, &mut gs);
+        mv(&self.sh_up, self.moe_ff, h, cur, &mut us);
+        for j in 0..self.moe_ff { gs[j] = crate::model::situ(gs[j], us[j], self.situ_beta, self.situ_lin); }
+        let mut sh = vec![0f32; h];
+        mv(&self.sh_down, h, self.moe_ff, &gs, &mut sh);
+        for j in 0..h { sortie[j] += sh[j]; }
+        Ok(sortie)
+    }
+}

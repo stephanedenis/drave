@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 117.7 h |
+| Durée | 118.0 h |
 | Tours | 98 |
-| Messages | 7073 |
-| Appels d'outils | 6751 |
+| Messages | 7079 |
+| Appels d'outils | 6757 |
 | Fichiers touchés | 145 |
-| Commandes | 5717 |
+| Commandes | 5723 |
 | Sous-agents | 32 |
-| Commits | 472 |
+| Commits | 473 |
 | Compactages de contexte | 9 |
 
 ## Objectifs déclarés
@@ -4816,15 +4816,21 @@ python3 tools/compare_etats.py /tmp/notrek3 /tmp/refk3 l_out 0 0,1,2       # ver
 
 ### Tour 98 — <goal_round> Objective: "Faire tourner en local les MEILLEURS modèles ouverts, en particulier ceux qui ne tiennent pas e … [1246 caractères tronqués]
 
-*3 appels d'outils.* Actions notables :
+*9 appels d'outils.* Actions notables :
 
 - bash — Check download state
 - bash — Read the latent MoE reference
 - bash — Document the exact MoE order
+- bash — Wait and check the download
+- bash — Implement the latent MoE
+- bash — Test the MoE on layer 1
+- bash — Read the MXFP4 dequant to inline it
+- bash — Remove the per-block allocations and re-measure
+- bash — Commit the MoE with its measured optimization
 
 **Synthèse produite :**
 
-⏵ Point sur le téléchargement avant de décider du prochain travail
+⏵ Bloc 34 : j'implémente le MoE latent (92 couches sur 93) avec déquantification par expert
 
 ## 3. Travail accompli
 
@@ -5055,7 +5061,7 @@ python3 tools/compare_etats.py /tmp/notrek3 /tmp/refk3 l_out 0 0,1,2       # ver
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 5677 autres
+- … et 5683 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -5675,4 +5681,5 @@ python3 tools/compare_etats.py /tmp/notrek3 /tmp/refk3 l_out 0 0,1,2       # ver
 - K3 : les dimensions des quatre types de couches sont CONFORMES au fichier (0 dense, 1 MoE+KDA, 3 MoE+MLA, 4 KDA)  Le contrôle tensor par tensor compare les dime
 - K3 : la couche 0 vide ses sorties au format du moteur — la comparaison tenseur par tenseur n'attend plus que la référence  Trois jetons, trois fichiers de 28 67
 - Spec Kimi-K3 : l'ordre exact du MoE latent (routeur en pleine largeur, norme DANS le latent avant la remontée, biais en sélection)  Trois pièges consignés avec 
+- K3 : le MoE latent fonctionne — et 25,7 s/jeton sont devenus 1,36 s (×18,9) sans changer un chiffre  La première version appelait Gguf::dequant_mxfp4 PAR BLOC, 
 
