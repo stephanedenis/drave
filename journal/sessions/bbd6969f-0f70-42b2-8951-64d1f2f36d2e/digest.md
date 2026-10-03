@@ -107909,3 +107909,53 @@ Une phase qui ne passe pas ses deux portes ne passe pas à la suivante.
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='docs/plan-deepseek41-complet.md'\ns=open(p).read()\nold=\"\"\"Une phase qui ne passe pas ses deux portes ne passe pas à la suivante.\"\"\"\nnew=\"\"\"Une phase qui ne passe pas ses deux portes ne passe pas à la s … [827 caractères tronqués]`
+
+  ```
+ok
+ctx 1024 : 391 / 1023
+  ```
+
+### 🤖 Assistant
+
+⏵ V4.1 : la structure « permutation » des hyper-connexions tient-elle aussi ?
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && rm -f /tmp/hc41-* && V41=/home/stephane/FastNVMe/modeles-lourds/DeepSeek-V4.1-Flash-Q2.gguf && DRAVE_DUMP_COUCHES=/tmp/hc41 timeout 1200 ./drave-core/target/release/drave \"$V41\" --ppl /tmp/ids_v41_8.txt --ctx 16 --limit 4 --dense - … [261 caractères tronqués]`
+
+  ```
+dont attention V4 (attn_v4) : projets q/kv 680.72 | compresseur 12.87 | indexeur 22.71 | scores + softmax + somme 18.14 | dé-rotation + sortie groupée 1054.31
+160
+     30  1.09e-06  4.19e-02        4/16     0.691      1.000    0.271     1.323
+     39  1.08e-06  2.52e-02        4/16     0.288      1.000    0.256     1.242
+
+  connexions significatives (≥ 0.05) : 53/128 (41 %)
+  Sinkhorn, axe SOURCES (garanti) : écart max |Σsrc−1| = 1.09e-06 ✅
+  Sinkhorn, axe DESTINATIONS (résidu mesuré, non jugé) : 7.77e-02
+  stabilité entre positions consécutives : corrélation moyenne 0.9756 (min 0.8236)
+  variabilité par entrée : CV moyen 0.524 (max 0.691)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport sys, glob\nsys.path.insert(0,'tools'); import numpy as np, analyse_hc as A\nfor nom, motif in ((\"V4-Flash\", '/tmp/hc-hc_attn-*-0.bin'), (\"V4.1\", '/tmp/hc41-hc_attn-*-0.bin')):\n    fs = glob.glob(motif)\n … [683 caractères tronqués]`
+
+  ```
+V4-Flash : 43 couches · permutations 43/43 · masse diagonale moyenne 3.526/4 (min 1.025)
+   couches non identitaires (9) : [(42, [0, 2, 1, 3], 2.92), (40, [1, 0, 2, 3], 2.0), (34, [0, 3, 1, 2], 1.03), (33, [0, 3, 2, 1], 1.99), (29, [0, 2, 1, 3], 2.02), (28, [0, 1, 3, 2], 1.95), (27, [0, 1, 3, 2], 2.0), (5, [0, 3, 2, 1], 2.01), (2, [2, 1, 0, 3], 2.02)]
+V4.1 : 40 couches · permutations 40/40 · masse diagonale moyenne 3.713/4 (min 2.164)
+   couches non identitaires (2) : [(6, [1, 0, 2, 3], 2.24), (1, [1, 3, 2, 0], 2.16)]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport sys, glob\nsys.path.insert(0,'tools'); import numpy as np, analyse_hc as A\nfor nom, motif in ((\"V4-Flash\", '/tmp/hc-hc_attn'), (\"V4.1\", '/tmp/hc41-hc_attn')):\n    print(f\"--- {nom} : la permutation tie … [667 caractères tronqués]`
+
+  ```
+--- V4-Flash : la permutation tient-elle à toutes les positions ? ---
+   position 0 : 43 couches · permutations 43/43 · identités 34/43 · diagonale moyenne 3.526/4
+   position 1 : 43 couches · permutations 43/43 · identités 41/43 · diagonale moyenne 3.811/4
+   position 2 : 43 couches · permutations 43/43 · identités 41/43 · diagonale moyenne 3.799/4
+   position 3 : 43 couches · permutations 43/43 · identités 42/43 · diagonale moyenne 3.847/4
+--- V4.1 : la permutation tient-elle à toutes les positions ? ---
+   position 0 : 40 couches · permutations 40/40 · identités 38/40 · diagonale moyenne 3.713/4
+   position 1 : 40 couches · permutations 40/40 · identités 39/40 · diagonale moyenne 3.813/4
+   position 2 : 40 couches · permutations 40/40 · identités 39/40 · diagonale moyenne 3.819/4
+   position 3 : 40 couches · permutations 40/40 · identités 39/40 · diagonale moyenne 3.806/4
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/rapport-hc-permutation.md'\ns=open(p).read()\nold = \"\"\"## 3. Ce que ça change, et ce que ça ne dit pas encore\"\"\"\nnew = \"\"\"## 2bis. Confirmé sur V4.1, et à toutes les positions\n\nLe même vidage  … [2567 caractères tronqués]`

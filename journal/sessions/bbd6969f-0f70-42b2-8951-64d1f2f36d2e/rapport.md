@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 115.0 h |
+| Durée | 115.1 h |
 | Tours | 90 |
-| Messages | 6789 |
-| Appels d'outils | 6491 |
+| Messages | 6793 |
+| Appels d'outils | 6495 |
 | Fichiers touchés | 132 |
-| Commandes | 5475 |
+| Commandes | 5479 |
 | Sous-agents | 32 |
-| Commits | 436 |
+| Commits | 437 |
 | Compactages de contexte | 9 |
 
 ## Objectifs déclarés
@@ -4473,7 +4473,7 @@ Autrement dit : **la granularité ne compresse pas, elle route** — et elle ach
 
 ### Tour 90 — <goal_round> Objective: "Exécuter le plan docs/plan-deepseek41-complet.md phase par phase (P0→P9), en autonomie, en resp … [942 caractères tronqués]
 
-*53 appels d'outils.* Actions notables :
+*57 appels d'outils.* Actions notables :
 
 - bash — Check the gate suite result
 - bash — Wait for the gates
@@ -4489,11 +4489,11 @@ Autrement dit : **la granularité ne compresse pas, elle route** — et elle ach
 - bash — Find the plan's remaining items
 - bash — Extract each phase's gate claims
 - read
-- … et 36 autres
+- … et 40 autres
 
 **Synthèse produite :**
 
-⏵ Audit des deux portes, phase par phase (P0→P9) — la exigence centrale de l'objectif
+⏵ V4.1 : la structure « permutation » des hyper-connexions tient-elle aussi ?
 
 ## 3. Travail accompli
 
@@ -4711,7 +4711,7 @@ Autrement dit : **la granularité ne compresse pas, elle route** — et elle ach
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 5435 autres
+- … et 5439 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -5295,4 +5295,5 @@ Autrement dit : **la granularité ne compresse pas, elle route** — et elle ach
 - Porte Drave de P1 TENUE : mesurée, et elle révèle une structure — les 16 connexions de V4-Flash sont une PERMUTATION  Le Sinkhorn tient sa promesse sur l'axe qu
 - Audit : les deux portes, phase par phase (P0 à P9) — ce qui est tenu, ce qui est impossible et nommé, ce qui reste à la demande  Tableau vérifiable : P0-P6 et P
 - Plan : renvoi vers l'audit des deux portes, phase par phase"; s=$(stat -c %s /tmp/our_v4f1024.bin); echo "ctx 1024 : $(( (s-8)/517120 )) / 1023"
+- HC : la permutation tient sur V4.1 et à toutes les positions (332/332), et V4.1 est encore plus proche de l'identité  V4-Flash 43/43 couches en permutation à ch
 

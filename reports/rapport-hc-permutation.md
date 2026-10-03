@@ -62,6 +62,26 @@ Les couches 0, 1 et 42 sont les plus « mélangeantes » (5 à 7 entrées
 significatives) : le premier et le dernier raccord brassent plus que le corps du
 réseau.
 
+## 2bis. Confirmé sur V4.1, et à toutes les positions
+
+Le même vidage a été fait sur **V4.1** (chaîne retardée, mêmes tenseurs) et à
+quatre positions :
+
+| modèle | couches | permutations (pos 0 / 1 / 2 / 3) | identités | diagonale moyenne |
+|---|---|---|---|---|
+| V4-Flash | 43 | **43/43 · 43/43 · 43/43 · 43/43** | 34 · 41 · 41 · 42 | 3,53 · 3,81 · 3,80 · 3,85 (sur 4) |
+| V4.1 | 40 | **40/40 · 40/40 · 40/40 · 40/40** | 38 · 39 · 39 · 39 | 3,71 · 3,81 · 3,82 · 3,81 (sur 4) |
+
+**332 couches-position sur 332** ont leurs quatre connexions dominantes en
+permutation. V4.1 est encore plus proche de l'identité que V4-Flash (2 couches
+non identitaires contre 9, et aucune proche d'un 4-cycle : la couche 34 de
+V4-Flash, à 1,03/4 de masse diagonale, n'a pas d'équivalent chez V4.1). La
+stabilité entre positions est aussi meilleure sur V4.1 (0,9756 contre 0,9212).
+
+La position 0 est la plus « brassante » des deux modèles (9 et 2 couches non
+identitaires, contre 1 à 2 aux positions suivantes) : le premier jeton n'a pas de
+contexte, et cela se voit jusque dans les coefficients de connexion.
+
 ## 3. Ce que ça change, et ce que ça ne dit pas encore
 
 - **Le plan demandait** : « combien des 16 poids sont significatifs, et sont-ils
@@ -73,7 +93,9 @@ réseau.
   flux (`comb` passe de 16 à 4 valeurs par raccord, soit 24 → 12 par couche) —
   **à condition** que la mesure tienne sur d'autres positions et sur V4.1. C'est
   une hypothèse, pas encore une simplification.
-- **Ce que ça ne dit pas** : la mesure porte sur **position 0** pour les 43
-  couches et sur 4 positions pour 9 couches ; la variance entre positions
-  (CV 0,84) montre que le `comb` bouge. Une vérification sur 32 positions et
-  sur V4.1 est la suite naturelle, et elle est peu coûteuse (un vidage + l'outil).
+- **Ce que ça ne dit pas** : la mesure porte sur **quatre positions** (332
+  couches-position, toutes en permutation) ; la variance entre positions
+  (CV 0,84 sur V4-Flash, 0,52 sur V4.1) montre que le `comb` bouge, même si sa
+  *structure* reste une permutation. Une vérification sur 32 positions — et
+  l'essai d'un raccord réduit à 4 coefficients, mesuré comme les autres (perte de
+  perplexité contre temps gagné) — est la suite naturelle.
