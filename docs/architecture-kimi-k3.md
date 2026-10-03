@@ -223,6 +223,27 @@ et la norme `ssm_o_norm` en sortie.
   coupure (≤ 8 × 7 168 f32 = 229 Ko par jeton), à mesurer comme les copies `hc`
   de V4 l'ont été.
 
+## 4quater. Croisement avec le code PUBLIÉ (et ce qu'il confirme)
+
+Les maths ci-dessus venaient de `llama.cpp-k3`. Elles ont été **recroisées avec le
+code de Moonshot** (`modeling_kimi_linear.py`, `configuration_kimi_k3.py`, dans le
+dépôt officiel) — un contrôle indépendant de notre transcription :
+
+| pièce | code publié | notre implémentation |
+|---|---|---|
+| SiTU | `SituAndMul` : `beta·tanh(gate/beta)·sigmoid(gate) · up`, et `up = linear_beta·tanh(up/linear_beta)` si `linear_beta` est fixé | **identique** (`situ`) |
+| attention résiduelle | `_apply_attn_res` : `v = cat(block_residual, prefix_sum)`, `k = v·rsqrt(mean(v²)+eps)`, `scores = (k·score_weight).sum(-1)`, `probs = softmax`, `sortie = probs @ v` (les **brutes**) | **identique** (`res_mix`), y compris le détail « scores sur les normalisées, somme sur les brutes » |
+| projections du KDA | `q/k_proj → head_dim×num_k_heads` (128×96), `v_proj → head_dim×num_heads`, `f_a → head_dim`, `f_b → projection`, `dt_bias`, `b_proj → num_heads`, `g_proj` **plein rang** (`use_full_rank_gate`), `o_norm = RMSNormGated(…, activation='sigmoid')` | **correspondance nom par nom** avec `attn_q/k/v`, `ssm_f_a/f_b`, `ssm_dt`, `ssm_beta`, `ssm_g`, `ssm_norm` |
+| convolution courte | `ShortConvolution(kernel_size=4, activation='silu')` sur q, k et v | **identique** (`kda_conv_silu`) |
+| porte bornée | `safe_gate=True`, `lower_bound=-5`, `use_beta_sigmoid_in_kernel=True` | **identique** (`kda_porte`) |
+
+**Ce que le code publié ne donne PAS** : la récurrence elle-même. Elle est dans des
+noyaux externes (`chunk_kda`, `fused_recurrent_kda`) qui ne sont pas livrés avec le
+modèle. La seule implémentation lisible est donc celle de `llama.cpp` — et c'est
+celle qui a été transcrite puis **vérifiée contre une référence NumPy en f64**
+(`kda_pas`, état *et* sortie). Le croisement avec le code publié porte donc sur les
+**formes et les sémantiques**, pas sur l'algèbre de la récurrence : c'est écrit.
+
 ## 5. Ce que notre moteur a déjà, et ce qui manque
 
 | brique | chez nous | état |

@@ -6,13 +6,13 @@
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
 | Durée | 117.3 h |
-| Tours | 93 |
-| Messages | 7032 |
-| Appels d'outils | 6720 |
+| Tours | 94 |
+| Messages | 7040 |
+| Appels d'outils | 6726 |
 | Fichiers touchés | 145 |
-| Commandes | 5686 |
+| Commandes | 5692 |
 | Sous-agents | 32 |
-| Commits | 466 |
+| Commits | 467 |
 | Compactages de contexte | 9 |
 
 ## Objectifs déclarés
@@ -231,6 +231,8 @@
 **Tour 92** — <goal_round> Objective: "Faire tourner en local les MEILLEURS modèles ouverts, en particulier ceux qui ne tiennent pas en local (classe Kimi-K3 Q4 : 1,5 To de poids, ~35 Go de poids par jeton), et étudier/implémenter ce qui nous distingue sur cette classe : découpage par experts et en grappes (chaque nœud ne lit que ce qu'il sert), réutilisation des experts entre jetons, transport de flux compact  … [966 caractères tronqués]
 
 **Tour 93** — <goal_round> Objective: "Faire tourner en local les MEILLEURS modèles ouverts, en particulier ceux qui ne tiennent pas en local (classe Kimi-K3 Q4 : 1,5 To de poids, ~35 Go de poids par jeton), et étudier/implémenter ce qui nous distingue sur cette classe : découpage par experts et en grappes (chaque nœud ne lit que ce qu'il sert), réutilisation des experts entre jetons, transport de flux compact  … [966 caractères tronqués]
+
+**Tour 94** — <goal_round> Objective: "Faire tourner en local les MEILLEURS modèles ouverts, en particulier ceux qui ne tiennent pas en local (classe Kimi-K3 Q4 : 1,5 To de poids, ~35 Go de poids par jeton), et étudier/implémenter ce qui nous distingue sur cette classe : découpage par experts et en grappes (chaque nœud ne lit que ce qu'il sert), réutilisation des experts entre jetons, transport de flux compact  … [966 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -4641,7 +4643,44 @@ Et ce qu'un **cache LRU** rendrait, mesuré : **un quart des experts en cache se
 
 **Synthèse produite :**
 
-⏵ L'inventaire mesuré est complet ; j'implémente sa vérification dans le moteur (testable dès maintenant)
+⏵ Bloc 31 livré : l'inventaire de Kimi-K3 est vérifié sur le fichier (77 tests verts)
+
+**Ce qui est fait pendant que le transfert tourne (705 Go / 1 508, ~109 Mo/s, fin vers 14h45) :**
+
+**L'inventaire des tenseurs, vérifié — c'est le garde-fou contre le défaut silencieux.** Un tenseur attendu chargé *vide* donnerait un calcul faux sans un mot ; le module `drave-core/src/kimi_k3.rs` vérifie donc, couche par couche, que chaque type porte **exactement** ses tenseurs. Résultat sur le fichier, à l'instant :
+
+```
+49 couches vues sur 93 déclarées · 1 dense · 36 KDA · 12 MLA
+  · 896 experts (16 par jeton) · latent 3584
+  inventaire : 12 tenseur(s) attendu(s) manquant(s)
+    couche 48 : ssm_conv1d_q.weight, ssm_f_a.weight, …  ← le shard en cours
+```
+
+Deux choses valent d'être soulignées :
+- **la cadence est lue dans le fichier**, pas supposée : `attention.head_count_kv` vaut 1 sur les couches MLA et 0 ailleurs, et sur **49 couches il n'y a aucun écart** avec la règle `il % 4 == 3` — la spécification est confirmée par le fichier ;
+- l'inventaire lit les en-têtes de **tous les shards présents** (le premier ne porte que les métadonnées : 0 tenseur, mesuré) — il est donc utilisable *pendant* le téléchargement, et il distingue « manque parce qu'un shard arrive » de « manque parce que le moteur l'attend à tort ».
+
+**Les notes d'exécution sont écrites** dans la spec : poids **empruntés** (jamais recopiés — 1,5 To en f32 serait absurde), activations quantifiées pour `dot_q8_source`, tailles d'état du KDA (convolution 147 Ko, delta **6,3 Mo** par couche → ~590 Mo pour 93), et l'**ordre exact de la couche 0** avec le point qui se rate facilement : à la couche 0 le flux résiduel **redémarre** (`prefix = out`, pas `x + out`), et la pile de points de contrôle contient déjà `x`, empilé *avant* l'attention.
+
+**Rappel de ce que le bloc précédent a établi et qui commande la suite** : la réutilisation des experts est **mesurée** (47-49 % immédiate, un quart de cache sert 80-87 %), les couches ne se ressemblent pas (18 % à 69 % selon la couche → cache dimensionné par couche), et le routage est concentré (10 % des experts servent 57 % des lectures → les chauds se placent ensemble).
+
+**Prêt pour la minute où le transfert tombe** : `tools/apres-telechargement-k3.sh` (5 étapes ordonnées, testées sur l'état partiel — il détecte l'incomplétude et s'arrête), le protocole de vérification à 13 points (`docs/verification-kimi-k3.md`), et la référence `llama.cpp-k3` déjà construite avec `ref_lo
+… [180 caractères tronqués]
+
+### Tour 94 — <goal_round> Objective: "Faire tourner en local les MEILLEURS modèles ouverts, en particulier ceux qui ne tiennent pas e … [1246 caractères tronqués]
+
+*6 appels d'outils.* Actions notables :
+
+- bash — Locate the official math in the published code
+- bash — Fetch the official text model implementation
+- bash — Read the official SiTU and residual attention
+- bash — Read the official KDA implementation
+- bash — Find the official recurrence call
+- bash — Document the cross-check against the published code
+
+**Synthèse produite :**
+
+⏵ Contrôle croisé des maths K3 contre le code OFFICIEL de Moonshot (pas ma transcription)
 
 ## 3. Travail accompli
 
@@ -4872,7 +4911,7 @@ Et ce qu'un **cache LRU** rendrait, mesuré : **un quart des experts en cache se
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 5646 autres
+- … et 5652 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -5486,4 +5525,5 @@ Et ce qu'un **cache LRU** rendrait, mesuré : **un quart des experts en cache se
 - Kimi-K3 : l'inventaire des tenseurs, vérifié sur le fichier (49 couches vues, cadence KDA/MLA confirmée)  Le module drave-core/src/kimi_k3.rs vérifie que CHAQUE
 - Spec Kimi-K3 : notes d'exécution (poids empruntés, activations quantifiées, tailles d'état, ordre exact de la couche 0)" && git log --oneline -1
 - Journal (màj automatique)" 2>/dev/null; echo "état propre : $(git status --short | wc -l) fichier(s) modifié(s)"
+- Croisement des maths K3 avec le code PUBLIÉ de Moonshot : SiTU, attention résiduelle, projections, convolution, porte bornée — identiques  Le code officiel (mod
 

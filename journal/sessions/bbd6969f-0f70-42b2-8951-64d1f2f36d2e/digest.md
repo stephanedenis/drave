@@ -111897,3 +111897,215 @@ d541216 Protocole de vérification de Kimi-K3 : les 13 points de comparaison de 
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && cargo test --release 2>&1 | grep -E \"^test result\"; cd .. && git add -A && git commit -q -m \"Journal (màj automatique)\" 2>/dev/null; echo \"état propre : $(git status --short | wc -l) fichier(s) modifié(s)\"", "descrip … [57 caractères tronqués]`
+
+  ```
+test result: ok. 77 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.11s
+état propre : 1 fichier(s) modifié(s)
+  ```
+
+### 🤖 Assistant
+
+⏵ Bloc 31 livré : l'inventaire de Kimi-K3 est vérifié sur le fichier (77 tests verts)
+
+**Ce qui est fait pendant que le transfert tourne (705 Go / 1 508, ~109 Mo/s, fin vers 14h45) :**
+
+**L'inventaire des tenseurs, vérifié — c'est le garde-fou contre le défaut silencieux.** Un tenseur attendu chargé *vide* donnerait un calcul faux sans un mot ; le module `drave-core/src/kimi_k3.rs` vérifie donc, couche par couche, que chaque type porte **exactement** ses tenseurs. Résultat sur le fichier, à l'instant :
+
+```
+49 couches vues sur 93 déclarées · 1 dense · 36 KDA · 12 MLA
+  · 896 experts (16 par jeton) · latent 3584
+  inventaire : 12 tenseur(s) attendu(s) manquant(s)
+    couche 48 : ssm_conv1d_q.weight, ssm_f_a.weight, …  ← le shard en cours
+```
+
+Deux choses valent d'être soulignées :
+- **la cadence est lue dans le fichier**, pas supposée : `attention.head_count_kv` vaut 1 sur les couches MLA et 0 ailleurs, et sur **49 couches il n'y a aucun écart** avec la règle `il % 4 == 3` — la spécification est confirmée par le fichier ;
+- l'inventaire lit les en-têtes de **tous les shards présents** (le premier ne porte que les métadonnées : 0 tenseur, mesuré) — il est donc utilisable *pendant* le téléchargement, et il distingue « manque parce qu'un shard arrive » de « manque parce que le moteur l'attend à tort ».
+
+**Les notes d'exécution sont écrites** dans la spec : poids **empruntés** (jamais recopiés — 1,5 To en f32 serait absurde), activations quantifiées pour `dot_q8_source`, tailles d'état du KDA (convolution 147 Ko, delta **6,3 Mo** par couche → ~590 Mo pour 93), et l'**ordre exact de la couche 0** avec le point qui se rate facilement : à la couche 0 le flux résiduel **redémarre** (`prefix = out`, pas `x + out`), et la pile de points de contrôle contient déjà `x`, empilé *avant* l'attention.
+
+**Rappel de ce que le bloc précédent a établi et qui commande la suite** : la réutilisation des experts est **mesurée** (47-49 % immédiate, un quart de cache sert 80-87 %), les couches ne se ressemblent pas (18 % à 69 % selon la couche → cache dimensionné par couche), et le routage est concentré (10 % des experts servent 57 % des lectures → les chauds se placent ensemble).
+
+**Prêt pour la minute où le transfert tombe** : `tools/apres-telechargement-k3.sh` (5 étapes ordonnées, testées sur l'état partiel — il détecte l'incomplétude et s'arrête), le protocole de vérification à 13 points (`docs/verification-kimi-k3.md`), et la référence `llama.cpp-k3` déjà construite avec `ref_logits_k3` lié contre elle.
+
+77 tests verts. Prochain jalon : le budget **mesuré** sur le fichier complet, la baseline de la référence, puis la couche 0 comparée tenseur par tenseur.
+
+
+## Tour 94
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Faire tourner en local les MEILLEURS modèles ouverts, en particulier ceux qui ne tiennent pas en local (classe Kimi-K3 Q4 : 1,5 To de poids, ~35 Go de poids par jeton), et étudier/implémenter ce qui nous distingue sur cette classe : découpage par experts et en grappes (chaque nœud ne lit que ce qu'il sert), réutilisation des experts entre jetons, transport de flux compact (listes DRVF), noyaux rapides (SIMD, déquantification bit-exacte), et mesure systématique (octets par jeton, débits, seuils). Les modèles périmés (DeepSeek-V4-Flash) sortent du chemin critique : leurs acquis sont conservés dans les rapports, leurs portes archivées. Règles inchangées : jamais de forward muet, jamais d'optimisation qui change une sortie sans le dire, une affirmation sans mesure n'est pas une affirmation."
+Round: 20/30
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Contrôle croisé des maths K3 contre le code OFFICIEL de Moonshot (pas ma transcription)
+
+- **bash** `{"command": "cd /tmp/k3ref && grep -nE \"def |class \" modeling_kimi_k3.py | head -30; echo \"=== où sont les maths ? ===\"; grep -rln \"situ\\|delta\\|res_mix\\|res_score\" /tmp/k3ref/*.py", "description": "Locate the official math in the published code"}`
+
+  ```
+59:def multihead_attention(
+102:def eager_attention(
+142:def _apply_rope_input_validation(x, freqs_cis):
+149:def get_rope_shape_decorate(func):
+152:    def wrapper(org, interpolation_mode, shape):
+164:def get_rope_shape(org, interpolation_mode, shape):
+172:def apply_rope(xq: torch.Tensor, xk: torch.Tensor,
+196:def get_1d_sincos_pos_embed_from_grid(embed_dim, pos):
+219:def get_1d_sincos_pos_embed(embed_dim, t_size, cls_token=False):
+233:class Learnable2DInterpPosEmbDivided_fixed(nn.Module):
+235:    def __init__(self,
+257:    def reset_parameters(self):
+260:    def forward(self, x: torch.Tensor,
+286:class MoonVision3dPatchEmbed(nn.Module):
+288:    def __init__(self,
+325:    def forward(self, x: torch.Tensor,
+341:class Rope2DPosEmbRepeated(nn.Module):
+344:    This class is intended to be used in the following way:
+363:    def __init__(self,
+375:    def extra_repr(self):
+378:    def _precompute_freqs_cis(self, device: torch.device) -> torch.Tensor:
+406:    def get_freqs_cis(self, grid_thws: torch.Tensor,
+437:class MLP2(nn.Module):
+444:    def __init__(self, dims: list[int], activation, bias=True):
+455:    def forward(self, x: torch.Tensor) -> torch.Tensor:
+461:class MoonViTEncoderLayer
+… [191 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /tmp/k3ref && curl -s -L --max-time 90 -o modeling_kimi_linear.py \"https://huggingface.co/moonshotai/Kimi-K3/resolve/main/modeling_kimi_linear.py\" && wc -l modeling_kimi_linear.py && grep -nE \"class |def .*(situ|delta|mix|moe|attn|step)\" modeling_kimi_linear.py | head -30", "desc … [78 caractères tronqués]`
+
+  ```
+1314 modeling_kimi_linear.py
+64:class SituAndMul(nn.Module):
+88:def _get_situ_activation_params(config: KimiLinearConfig):
+120:class KimiDynamicCache:
+226:class KimiRMSNorm(nn.Module):
+242:class KimiBlockSparseMLP(nn.Module):
+273:class KimiMLP(nn.Module):
+335:class KimiMLAAttention(nn.Module):
+477:class KimiDeltaAttention(nn.Module):
+666:class KimiMoEGate(nn.Module):
+762:class KimiSparseMoeBlock(nn.Module):
+841:    def moe_infer(self, x, topk_ids, topk_weight):
+877:class KimiDecoderLayer(nn.Module):
+973:    def _forward_attn_residual(
+1049:class KimiPreTrainedModel(PreTrainedModel):
+1050:    config_class = KimiLinearConfig
+1075:def _apply_attn_res(prefix_sum, block_residual, proj, norm):
+1090:class KimiLinearModel(KimiPreTrainedModel):
+1124:    def _update_linear_attn_mask(self, attention_mask, cache_position):
+1226:    def _apply_output_attn_res(self, hidden_states, block_residual):
+1236:class KimiLinearForCausalLM(KimiPreTrainedModel, GenerationMixin):
+  ```
+
+- **bash** `{"command": "cd /tmp/k3ref && sed -n '64,120p' modeling_kimi_linear.py; echo \"=== _apply_attn_res ===\"; sed -n '1075,1090p' modeling_kimi_linear.py", "description": "Read the official SiTU and residual attention"}`
+
+  ```
+class SituAndMul(nn.Module):
+    """
+    SituAndMul activation: beta * tanh(gate / beta) * sigmoid(gate) * up
+    When linear_beta is set, up is also transformed by linear_beta * tanh(up / linear_beta).
+    """
+
+    def __init__(self, beta: float = 1.0, linear_beta: float | None = None):
+        super().__init__()
+        self.beta = beta
+        self.linear_beta = linear_beta
+
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        d = x.shape[-1] // 2
+        gate = x[..., :d].to(torch.float32)
+        up = x[..., d:].to(torch.float32)
+        situ_a = self.beta * torch.tanh(gate / self.beta) * torch.sigmoid(gate)
+        if self.linear_beta is not None:
+            up = self.linear_beta * torch.tanh(up / self.linear_beta)
+        return (situ_a * up).to(x.dtype)
+
+
+ACT2FN["situ"] = SituAndMul
+
+
+def _get_situ_activation_params(config: KimiLinearConfig):
+    beta = getattr(config, "activation_situ_beta", None)
+    linear_beta = getattr(config, "activation_situ_linear_beta", None)
+    return beta or 1.0, linear_beta
+
+
+def index_first_axis(x, indices):
+    return x[indices]
+
+
+@tensor_cache
+def get_unpad_data(
+    attention_mask: torch.Tensor,
+) -> tuple[torch.Tensor, torch.Te
+… [1360 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /tmp/k3ref && sed -n '477,560p' modeling_kimi_linear.py", "description": "Read the official KDA implementation"}`
+
+  ```
+class KimiDeltaAttention(nn.Module):
+    def __init__(self, config: KimiLinearConfig, layer_idx: int):
+        super().__init__()
+        self.config = config
+        self.mode = "chunk"
+
+        self.hidden_size = config.hidden_size
+        self.conv_size = config.linear_attn_config["short_conv_kernel_size"]
+        self.head_dim = config.linear_attn_config["head_dim"]
+        self.num_heads = config.linear_attn_config["num_heads"]
+        self.head_k_dim = self.head_dim
+        self.num_k_heads = self.num_heads
+
+        self.layer_idx = layer_idx
+
+        assert self.mode in [
+            'chunk', 'fused_recurrent'], f"Not supported mode `{self.mode}`."
+
+        projection_k_size = self.head_k_dim * self.num_k_heads
+        projection_size = self.head_dim * self.num_heads
+
+        self.q_proj = nn.Linear(
+            self.hidden_size, projection_k_size, bias=False)
+        self.k_proj = nn.Linear(
+            self.hidden_size, projection_k_size, bias=False)
+        self.v_proj = nn.Linear(self.hidden_size, projection_size, bias=False)
+
+        self.q_conv1d = ShortConvolution(
+            hidden_size=projection_k_size,
+            kernel_size=self.conv_size,
+            activatio
+… [2289 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /tmp/k3ref && sed -n '560,666p' modeling_kimi_linear.py | grep -nE \"chunk|recurrent|def |gate|sigmoid|softplus|exp|lower_bound\" | head -20", "description": "Find the official recurrence call"}`
+
+  ```
+2:        mode = 'fused_recurrent' if use_cache and q_len == 1 else self.mode
+4:            assert mode == 'chunk', "Only chunk mode is supported in training."
+14:        recurrent_state = None
+19:            recurrent_state = cache_params.recurrent_states[self.layer_idx]
+50:        if mode == 'chunk':
+51:            o, recurrent_state = chunk_kda(
+59:                initial_state=recurrent_state,
+62:                use_gate_in_kernel=True,
+63:                use_beta_sigmoid_in_kernel=True,
+64:                safe_gate=self.gate_lower_bound is not None,
+65:                lower_bound=self.gate_lower_bound,
+70:            o, recurrent_state = fused_recurrent_kda(
+78:                initial_state=recurrent_state,
+81:                use_gate_in_kernel=True,
+82:                use_beta_sigmoid_in_kernel=True,
+83:                lower_bound=self.gate_lower_bound,
+88:            cache_params.recurrent_states[self.layer_idx] = recurrent_state
+92:        if self.use_full_rank_gate:
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='docs/architecture-kimi-k3.md'\ns=open(p).read()\ns=s.replace(\"\"\"## 5. Ce que notre moteur a déjà, et ce qui manque\"\"\",\n\"\"\"## 4quater. Croisement avec le code PUBLIÉ (et ce qu'il confirme)\n\nLes maths c … [2668 caractères tronqués]`
