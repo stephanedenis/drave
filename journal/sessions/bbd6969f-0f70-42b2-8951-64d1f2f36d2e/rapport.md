@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 109.6 h |
-| Tours | 85 |
-| Messages | 6429 |
-| Appels d'outils | 6159 |
+| Durée | 109.7 h |
+| Tours | 86 |
+| Messages | 6435 |
+| Appels d'outils | 6163 |
 | Fichiers touchés | 118 |
-| Commandes | 5223 |
+| Commandes | 5227 |
 | Sous-agents | 32 |
-| Commits | 411 |
+| Commits | 412 |
 | Compactages de contexte | 8 |
 
 ## Objectifs déclarés
@@ -213,6 +213,8 @@
 **Tour 84** — <goal_round> Objective: "Exécuter le plan docs/plan-deepseek41-complet.md phase par phase (P0→P9), en autonomie, en respectant pour chaque phase ses deux portes : porte de correction (comparaison étage par étage à llama.cpp sur V4-Flash) et porte Drave (flux : événements/paires par jeton, trace rejouée à l'identique, découpage en grappes, flux lisible par un outil d'analyse). Aucune phase ne passe … [662 caractères tronqués]
 
 **Tour 85** — <goal_round> Objective: "Exécuter le plan docs/plan-deepseek41-complet.md phase par phase (P0→P9), en autonomie, en respectant pour chaque phase ses deux portes : porte de correction (comparaison étage par étage à llama.cpp sur V4-Flash) et porte Drave (flux : événements/paires par jeton, trace rejouée à l'identique, découpage en grappes, flux lisible par un outil d'analyse). Aucune phase ne passe … [662 caractères tronqués]
+
+**Tour 86** — <goal_round> Objective: "Exécuter le plan docs/plan-deepseek41-complet.md phase par phase (P0→P9), en autonomie, en respectant pour chaque phase ses deux portes : porte de correction (comparaison étage par étage à llama.cpp sur V4-Flash) et porte Drave (flux : événements/paires par jeton, trace rejouée à l'identique, découpage en grappes, flux lisible par un outil d'analyse). Aucune phase ne passe … [662 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -4264,6 +4266,35 @@ Raison de fond, écrite dans le commit : **un outil d'analyse qu'on ne peut pas 
 - bash — Wire the replay gate and test it
 - bash — Commit the replay definition and gate
 
+**Synthèse produite :**
+
+**Ronde 11 — la porte Drave de P6 est tenue sur ses quatre points**
+
+**Le rejeu, mesuré et défini.** Trace **complète** (688 listes) : le moteur annonce « **688 listes servies, 0 manquante** » — donc les « 672 manquantes » de la ronde précédente venaient de **ma** trace partielle (`--trace-couches 0,20`), pas du rejeu. L'écart de perplexité, lui, ne tombe pas à zéro : V4-Flash ctx 32 → **4 221,0901** (passe) contre **4 221,071** (rejeu), soit **4,5e-06 relatif**, et la cause est mesurée : la trace porte des activations **déjà quantifiées** que le rejeu **requantifie** — une seconde quantification, donc un écart qui ne peut pas être nul sans un chemin de rejeu qui court-circuite la quantification.
+
+**La définition est écrite, et vérifiée par une porte neuve** (`portes.sh` 7quater) : « rejouée à l'identique » = **aucune liste manquante** et **écart ≤ 1e-5**, mesuré à 4,5e-06 sur V4-Flash et 1,6e-06 sur Qwen 0,5B (la porte tourne sur le petit modèle pour ne pas coûter une minute de plus à chaque passage).
+
+**Bilan de la porte Drave (P6), quatre points sur quatre :**
+| point | état |
+|---|---|
+| paires/événements par jeton | ✅ au profil (attention · experts · partagé · scores) |
+| découpage en grappes | ✅ `portes.sh`, clusters Qwen3-30B = 799,8557 |
+| flux lisible par un outil d'analyse | ✅ **corrigé** (v1→v2/v3, échelle par bloc) + **branché** en porte |
+| trace rejouée à l'identique | ✅ **défini et vérifié** (0 manquante, écart ≤ 1e-5) |
+
+Les deux derniers points étaient **mesurés non tenus** il y a deux rondes ; les voilà tenus, avec leurs critères dans les portes plutôt que dans une intention.
+
+**Objectif actif.** Ce qui reste, nommé : la **porte de correction** de P7 (impossible en l'état — llama.cpp refuse `deepseek41`, et le plan le dit avec sa condition de sortie), la **composition sur 40 couches** de V4.1 (pas d'oracle), et les phases P8/P9 dont les portes, elles, sont disponibles.
+
+### Tour 86 — <goal_round> Objective: "Exécuter le plan docs/plan-deepseek41-complet.md phase par phase (P0→P9), en autonomie, en resp … [942 caractères tronqués]
+
+*4 appels d'outils.* Actions notables :
+
+- bash — Run llama.cpp reference logits on V4-Flash
+- bash — Run the matched logits comparison
+- bash — Compare the logits against llama.cpp
+- bash — Record the correction gate measurement
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -4466,7 +4497,7 @@ Raison de fond, écrite dans le commit : **un outil d'analyse qu'on ne peut pas 
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 5183 autres
+- … et 5187 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -5025,4 +5056,5 @@ Raison de fond, écrite dans le commit : **un outil d'analyse qu'on ne peut pas 
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p="docs/plan-deepseek41-complet.md" s=open(p).read() a="""### P7 — Adaptation à V4.1, et 
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p="docs/plan-deepseek41-complet.md" s=open(p).read() a="""> 1. **Le flux n'est PAS lisibl
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p="docs/plan-deepseek41-complet.md" s=open(p).read() a="""> 2. **Le rejeu n'est pas ident
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p="docs/plan-deepseek41-complet.md" s=open(p).read() a="""### P7 — Adaptation à V4.1, et 
 

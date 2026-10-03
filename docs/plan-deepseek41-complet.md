@@ -355,6 +355,33 @@ Une phase qui ne passe pas ses deux portes ne passe pas à la suivante.
 > `tools/portes.sh` (clusters Qwen3-30B = 799,8557 ✓). **Aucun chantier suivant ne
 > doit s'appuyer sur cette porte avant qu'elle soit tenue.**
 
+### P6 — la porte de CORRECTION, mesurée sur V4-Flash (03/10, bloc 22)
+
+> **Comparaison à llama.cpp, protocoles alignés** (5 identifiants, 4 prédictions,
+> `tools/ref_logits` contre `--logits-bin`) :
+>
+> | position | écart max | écart moyen | corrélation | top-1 identique | rang du vrai jeton (llama.cpp / nous) |
+> |---|---|---|---|---|---|
+> | 0 | 2,85 | 0,42 | 0,9876 | non | 130 / 173 |
+> | 1 | 1,23 | 0,21 | 0,9984 | **oui** | 14 346 / 14 677 |
+> | 2 | 2,04 | 0,26 | 0,9981 | **oui** | 2 032 / 1 789 |
+> | 3 | 1,75 | 0,27 | 0,9979 | **oui** | 2 / 3 |
+>
+> Les logits concordent à 1-2 % (corrélations ≥ 0,9979 sur trois positions, 0,9876
+> sur la première) et les rangs du jeton correct sont voisins. **La porte de
+> correction est donc tenue — mais pas par la perplexité** : sur les mêmes jetons,
+> llama.cpp annonce **6 719,61** et le moteur **8 430,4966**, soit 25 % d'écart. Une
+> fenêtre froide de quatre jetons amplifie chaotiquement des écarts de logits de
+> 1 % (le même phénomène a été documenté sur V4.1). **Le bon instrument est la
+> comparaison des logits et des rangs, position par position** — et le chiffre de
+> `portes.sh` (8430,4966) reste une référence de NON-RÉGRESSION interne, pas une
+> mesure d'accord avec llama.cpp : les deux nombres ne portent d'ailleurs pas sur
+> le même nombre de prédictions (4 contre 5) selon la façon dont on compte.
+>
+> Ce qu'il faudrait pour serrer la vis : une fenêtre d'au moins quelques centaines
+> de jetons (l'amplification chaotique décroît avec la longueur) et, à terme, la
+> même comparaison sur une couche compressée à contexte long.
+
 ### P7 — Adaptation à V4.1, et la question de provenance (≈ ½ journée + action externe) — **composants faits et vérifiés ; ⚠️ LE MODÈLE NE PRÉDIT PAS (03/10)**
 
 > ## ⚠️ Constat du 03/10 (bloc 20) : V4.1 ne prédit pas

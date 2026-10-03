@@ -102384,3 +102384,79 @@ rejeu    :       11 tokens notés — perplexité cumulée 125.865  (26.2 tok/s)
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np=\"docs/plan-deepseek41-complet.md\"\ns=open(p).read()\na=\"\"\"> 2. **Le rejeu n'est pas identique** : passe tracée sur 8 jetons (ctx 32,\n>    perplexité **4 221,0901**), rejouée avec `--flux-forcer` → **4 220,69 … [3009 caractères tronqués]`
+
+  ```
+ok
+6faea8f Porte Drave de P6, point 2 : le rejeu est DÉFINI et VÉRIFIÉ — 0 liste manquante, écart ≤ 1e-5, et la cause de l'écart est mesurée
+sam 03 oct 2026 04:22:07 EDT
+  ```
+
+### 🤖 Assistant
+
+**Ronde 11 — la porte Drave de P6 est tenue sur ses quatre points**
+
+**Le rejeu, mesuré et défini.** Trace **complète** (688 listes) : le moteur annonce « **688 listes servies, 0 manquante** » — donc les « 672 manquantes » de la ronde précédente venaient de **ma** trace partielle (`--trace-couches 0,20`), pas du rejeu. L'écart de perplexité, lui, ne tombe pas à zéro : V4-Flash ctx 32 → **4 221,0901** (passe) contre **4 221,071** (rejeu), soit **4,5e-06 relatif**, et la cause est mesurée : la trace porte des activations **déjà quantifiées** que le rejeu **requantifie** — une seconde quantification, donc un écart qui ne peut pas être nul sans un chemin de rejeu qui court-circuite la quantification.
+
+**La définition est écrite, et vérifiée par une porte neuve** (`portes.sh` 7quater) : « rejouée à l'identique » = **aucune liste manquante** et **écart ≤ 1e-5**, mesuré à 4,5e-06 sur V4-Flash et 1,6e-06 sur Qwen 0,5B (la porte tourne sur le petit modèle pour ne pas coûter une minute de plus à chaque passage).
+
+**Bilan de la porte Drave (P6), quatre points sur quatre :**
+| point | état |
+|---|---|
+| paires/événements par jeton | ✅ au profil (attention · experts · partagé · scores) |
+| découpage en grappes | ✅ `portes.sh`, clusters Qwen3-30B = 799,8557 |
+| flux lisible par un outil d'analyse | ✅ **corrigé** (v1→v2/v3, échelle par bloc) + **branché** en porte |
+| trace rejouée à l'identique | ✅ **défini et vérifié** (0 manquante, écart ≤ 1e-5) |
+
+Les deux derniers points étaient **mesurés non tenus** il y a deux rondes ; les voilà tenus, avec leurs critères dans les portes plutôt que dans une intention.
+
+**Objectif actif.** Ce qui reste, nommé : la **porte de correction** de P7 (impossible en l'état — llama.cpp refuse `deepseek41`, et le plan le dit avec sa condition de sortie), la **composition sur 40 couches** de V4.1 (pas d'oracle), et les phases P8/P9 dont les portes, elles, sont disponibles.
+
+
+## Tour 86
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Exécuter le plan docs/plan-deepseek41-complet.md phase par phase (P0→P9), en autonomie, en respectant pour chaque phase ses deux portes : porte de correction (comparaison étage par étage à llama.cpp sur V4-Flash) et porte Drave (flux : événements/paires par jeton, trace rejouée à l'identique, découpage en grappes, flux lisible par un outil d'analyse). Aucune phase ne passe à la suivante sans ses deux portes. Jamais de forward muet, jamais d'optimisation qui change une sortie sans le dire."
+Round: 12/30
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && V=/home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek-V4-Flash-UD-IQ1_M/DeepSeek-V4-Flash-UD-IQ1_M-00001-of-00003.gguf && LC=/home/stephane/Data13TB/stephane/GitHub/llama.cpp && LD_LIBRARY_PATH=$LC/build/bin timeout 900 ./tools/re … [154 caractères tronqués]`
+
+  ```
+n_vocab  = 129280
+NLL moy  = 7.907907
+perplexite = 2718.693072
+fichier  = /tmp/ref_v4f.bin (5 x 129280 f32 + 8 octets d'en-tete)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && V=/home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek-V4-Flash-UD-IQ1_M/DeepSeek-V4-Flash-UD-IQ1_M-00001-of-00003.gguf && LC=/home/stephane/Data13TB/stephane/GitHub/llama.cpp && LD_LIBRARY_PATH=$LC/build/bin timeout 900 ./tools/re … [425 caractères tronqués]`
+
+  ```
+n_pos    = 4
+NLL moy  = 8.812786
+perplexite = 6719.614909
+=== le nôtre (mêmes 5 identifiants = 4 prédictions) ===
+       4 tokens notés — perplexité cumulée 8430.497  (0.2 tok/s)
+=== perplexité 8430.4966 sur 4 tokens (0 événements, 24.8 s) ===
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport numpy as np\ndef lire(p):\n    h=np.fromfile(p,dtype='<i4',count=2); return int(h[0]), int(h[1]), np.fromfile(p,dtype='<f4',offset=8)\nvr,nr,ref = lire('/tmp/ref_v4f4.bin')\nvo,no,our = lire('/tmp/our_v4f.bin … [892 caractères tronqués]`
+
+  ```
+llama.cpp : 4 positions × 129280 · nous : 4 × 129280
+pos  écart max  écart moy  corrélation  top-1 identiques
+  0  2.849e+00  4.198e-01     0.987580             False
+  1  1.229e+00  2.074e-01     0.998431              True
+  2  2.044e+00  2.625e-01     0.998111              True
+  3  1.754e+00  2.680e-01     0.997878              True
+jetons : [201, 438, 10498, 102771, 402]
+  pos 0 : rang du jeton 438 — llama.cpp 130 · nous 173
+  pos 1 : rang du jeton 10498 — llama.cpp 14346 · nous 14677
+  pos 2 : rang du jeton 102771 — llama.cpp 2032 · nous 1789
+  pos 3 : rang du jeton 402 — llama.cpp 2 · nous 3
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np=\"docs/plan-deepseek41-complet.md\"\ns=open(p).read()\na=\"\"\"### P7 — Adaptation à V4.1, et la question de provenance\"\"\"\nb=\"\"\"### P6 — la porte de CORRECTION, mesurée sur V4-Flash (03/10, bloc 22)\n\n> ** … [3233 caractères tronqués]`
