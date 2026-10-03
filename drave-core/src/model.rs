@@ -700,8 +700,28 @@ incohérente entre les trois projections d'experts", gate.len(), up.len(), down.
     //     pour la sélection SEULEMENT.
     // Les confondre ou en oublier un change les experts choisis — et rien
     // d'autre : la perplexité part en vrille sans qu'aucun tenseur ne manque.
-    let routeur_biais = if g.tensor(&p("exp_probs_b.bias")).is_some() {
-        Some(g.dequant(&p("exp_probs_b.bias")))
+    // **Deux biais de routeur dans le fichier de V4.1** (`exp_probs_b.bias` et
+    // `exp_probs_b_vl.bias`, valeurs très différentes : ~9,8 contre ~21,2 sur la
+    // couche 0) et le biais DOMINE la sélection (les scores `sqrt(softplus)` sont
+    // de l'ordre de 0 à 5). Prendre le mauvais change donc les experts choisis —
+    // et rien d'autre : la perplexité part en vrille sans qu'aucun tenseur ne
+    // manque. Le texte seul doit prendre `exp_probs_b` ; `DRAVE_BIAIS_VL=1`
+    // force l'autre, pour MESURER lequel des deux fait prédire le modèle.
+    static BIAIS_VL: std::sync::OnceLock<bool> = std::sync::OnceLock::new();
+    let biais_vl = *BIAIS_VL.get_or_init(|| {
+        let actif = std::env::var("DRAVE_BIAIS_VL").map(|v| v != "0" && !v.is_empty())
+                        .unwrap_or(false);
+        if actif {
+            eprintln!("[moe] DRAVE_BIAIS_VL est actif : le routeur sélectionne avec \
+`exp_probs_b_vl.bias` au lieu de `exp_probs_b.bias` — ablation de diagnostic.");
+        }
+        actif
+    });
+    let nom_biais = if biais_vl && g.tensor(&p("exp_probs_b_vl.bias")).is_some() {
+        "exp_probs_b_vl.bias"
+    } else { "exp_probs_b.bias" };
+    let routeur_biais = if g.tensor(&p(nom_biais)).is_some() {
+        Some(g.dequant(&p(nom_biais)))
     } else if g.tensor(&p("ffn_gate_inp.bias")).is_some() {
         Some(g.dequant(&p("ffn_gate_inp.bias")))
     } else { None };

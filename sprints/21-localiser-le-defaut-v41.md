@@ -43,6 +43,20 @@ et le résultat est sans ambiguïté :
 - Le **SwiGLU n'était pas borné** pour V4.1 (`swiglu_limit` scalaire ignoré) :
   défaut réel, corrigé, sans effet mesurable ici.
 
+### 2bis. Deux vérifications de plus, et deux hypothèses de plus éliminées
+
+- **L'embarquement est exact** : `l-hc_attn_pre-0-pos` (le vide de l'entrée de la
+  couche 0) comparé aux lignes F16 de `token_embd.weight`, pour quatre positions →
+  **écart 0,000e+00** · normes identiques. La porte d'entrée du modèle est juste.
+- **Le biais de routeur** : V4.1 est le seul modèle du dépôt à en avoir DEUX
+  (`exp_probs_b.bias` ≈ 9,83 et `exp_probs_b_vl.bias` ≈ 21,21 sur la couche 0 — des
+  valeurs très différentes). Mesuré : avec le biais VL, la perplexité passe de
+  12 889 à **535 688** (41× pire) → **le biais du texte est le bon**, et le
+  routage est bien gouverné par le biais (ce qui est le principe du « noaux_tc » :
+  le biais équilibre la charge, le contenu tranche à la marge). Le comportement du
+  routeur est par ailleurs sain : 11 à 13 ensembles d'experts distincts sur 13
+  jetons, aucun expert commun à tous.
+
 ### 3. La piste qui reste, et elle est étroite
 
 Le défaut survit à tout ce qui est propre à V4.1 **sauf** ce qui touche à
@@ -92,7 +106,25 @@ sans être bonne pour autant.
   sain — et llama.cpp ne sait pas le charger, donc il n'existe aucune référence
   exécutable pour trancher.
 
-## Planning du bloc 22 — la règle du retard, relue à la source
+## Planning du bloc 22 — la composition, vérifiée contre numpy
+
+Dix hypothèses sont éliminées et le défaut survit. Ce qui n'a JAMAIS été vérifié
+pour V4.1, c'est la **composition** d'une couche : chaque pièce a été comparée à
+une transcription, jamais l'ensemble. La suite, dans l'ordre :
+
+1. **Une couche complète en numpy** (couche 0 : attention + MoE + mHC, sans
+   compresseur) recalculée depuis les tenseurs du fichier, comparée aux vides du
+   moteur (`hc_attn_pre`, `q_rope`, `kv_rope`, `attn_out`, `hc_ffn_in`,
+   `hc_mel_ffn`, `l_last`). C'est la seule vérification qui peut encore trouver
+   une erreur de *composition* — celle que dix ablations ont manquée.
+2. **Relire la règle du retard dans la source publiée** — FAIT au bloc 21 (vLLM
+   `nvidia/model.py`, lignes 600-620 et 1015-1018) : notre chaîne et notre tête y
+   sont conformes, mot pour mot. Ce point est donc clos.
+3. **Les noms de tenseurs `hc_*`** — vérifiés : les 24 noms de la couche 0 de
+   V4.1 et de V4-Flash sont identiques (deux biais de routeur en plus), aucun
+   tenseur manquant.
+
+## (Ancien) planning — la règle du retard, relue à la source
 
 1. **Relire la règle mHC retardée dans la source publiée** (vLLM
    `deepseek_v4_1/nvidia/model.py`, et le portage `mudler/vllm.cpp` pour
