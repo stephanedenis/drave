@@ -1,0 +1,251 @@
+# Digeste des comparaisons tenseur par tenseur — découpage V4.1 (02/10, sprint 13)
+
+Les `DRAVE_DUMP_COUCHES` qui ont produit ces chiffres vivaient dans `/tmp` (2 544
+fichiers par passe, ~50 Mo) : ils ne sont pas versionnables. Ce digeste l'est, et
+il porte ce qui compte — **combien de tenseurs sont comparés, combien diffèrent,
+et de combien au maximum** — famille par famille.
+
+Reproduire (modèle de 365,7 Go, ~4 min par passe) :
+
+    D=./drave-core/target/release/drave
+    M=/home/stephane/FastNVMe/modeles-lourds/DeepSeek-V4.1-Flash-Q2.gguf
+    # 1. la passe complète, à un seul nœud (référence), 4 jetons
+    DRAVE_DUMP_COUCHES=/tmp/ref/l $D "$M" --ppl /tmp/v41_last4.ids --ctx 8 --limit 4 --threads 20
+    # 2. la même chose en deux nœuds, et les couches 20-39 chez le pair
+    DRAVE_DUMP_COUCHES=/tmp/srv/l $D "$M" --flux-serveur 47161 --ctx 8 --threads 20 &
+    DRAVE_DUMP_COUCHES=/tmp/pil/l $D "$M" --ppl-reparti 127.0.0.1:47161 \
+        --couches-locales 20 --limit 4 --ctx 8 --ids "$(cat /tmp/v41_texte.txt.ids)" --threads 20
+
+`/tmp/v41_last4.ids` = les quatre derniers jetons de `/tmp/v41_texte.txt.ids`
+(`270,15301,6605,223`). Comparer les familles `l-<nom>-<couche>-<position>.bin`.
+
+**Piège de comparaison, mesuré** : `--ppl` quantifie les activations sur 16 bits
+(32 767 niveaux) et les modes flux sur 8 (127 niveaux). Les deux passes ne sont
+comparables qu'à réglage égal — d'où la ligne `--ppl --abits 8` ci-dessous.
+
+== pilote (couches 0-19, positions 0-3) vs passe complète — APRÈS correctif ==
+tenseurs comparés : 2544 · somme des écarts max : 0.000e+00
+famille                   n différents    écart max
+l-attn_brut             160          0    0.000e+00
+l-attn_derope           160          0    0.000e+00
+l-attn_out              160          0    0.000e+00
+l-comp_bloc0              4          0    0.000e+00
+l-comp_bloc1              4          0    0.000e+00
+l-comp_bloc2              1          0    0.000e+00
+l-comp_bloc3              1          0    0.000e+00
+l-comp_brut0              4          0    0.000e+00
+l-comp_brut1              4          0    0.000e+00
+l-comp_brut2              1          0    0.000e+00
+l-comp_brut3              1          0    0.000e+00
+l-comp_state_gate        16          0    0.000e+00
+l-comp_state_kv          16          0    0.000e+00
+l-engram_kv               8          0    0.000e+00
+l-engram_sortie           8          0    0.000e+00
+l-etat_impose             4          0    0.000e+00
+l-hc_attn_pre           160          0    0.000e+00
+l-hc_ffn_in             160          0    0.000e+00
+l-hc_ffn_pre            160          0    0.000e+00
+l-hc_mel_ffn            160          0    0.000e+00
+l-hc_pre_attn           160          0    0.000e+00
+l-hidden_final            4          0    0.000e+00
+l-idx_bloc0               4          0    0.000e+00
+l-idx_bloc1               4          0    0.000e+00
+l-idx_bloc2               1          0    0.000e+00
+l-idx_bloc3               1          0    0.000e+00
+l-idx_gardes             29          0    0.000e+00
+l-idx_scores             29          0    0.000e+00
+l-kv_norm               160          0    0.000e+00
+l-kv_rope               160          0    0.000e+00
+l-l_last                160          0    0.000e+00
+l-q_norm                160          0    0.000e+00
+l-q_rope                160          0    0.000e+00
+l-qr                    160          0    0.000e+00
+l-qr_norm               160          0    0.000e+00
+
+== nœud moteur (couches 20-39) vs passe complète — APRÈS correctif ==
+tenseurs comparés : 945 · somme des écarts max : 0.000e+00
+famille                   n différents    écart max
+l-attn_brut              60          0    0.000e+00
+l-attn_derope            60          0    0.000e+00
+l-attn_out               60          0    0.000e+00
+l-comp_bloc0              1          0    0.000e+00
+l-comp_bloc1              1          0    0.000e+00
+l-comp_bloc2              1          0    0.000e+00
+l-comp_brut0              1          0    0.000e+00
+l-comp_brut1              1          0    0.000e+00
+l-comp_brut2              1          0    0.000e+00
+l-comp_state_gate         3          0    0.000e+00
+l-comp_state_kv           3          0    0.000e+00
+l-hc_attn_pre            60          0    0.000e+00
+l-hc_ffn_in              60          0    0.000e+00
+l-hc_ffn_pre             60          0    0.000e+00
+l-hc_mel_ffn             60          0    0.000e+00
+l-hc_pre_attn            60          0    0.000e+00
+l-idx_bloc0               1          0    0.000e+00
+l-idx_bloc1               1          0    0.000e+00
+l-idx_bloc2               1          0    0.000e+00
+l-idx_gardes             15          0    0.000e+00
+l-idx_scores             15          0    0.000e+00
+l-kv_norm                60          0    0.000e+00
+l-kv_rope                60          0    0.000e+00
+l-l_last                 60          0    0.000e+00
+l-q_norm                 60          0    0.000e+00
+l-q_rope                 60          0    0.000e+00
+l-qr                     60          0    0.000e+00
+l-qr_norm                60          0    0.000e+00
+
+== pilote AVANT correctif (mêmes dumps) ==
+tenseurs comparés : 2544 · somme des écarts max : 1.132e+02
+famille                   n différents    écart max
+l-attn_brut             160         40    7.278e-01
+l-attn_derope           160         40    7.278e-01
+l-attn_out              160         40    1.120e+00
+l-comp_bloc0              4          3    1.237e-01
+l-comp_bloc1              4          0    0.000e+00
+l-comp_bloc2              1          0    0.000e+00
+l-comp_bloc3              1          0    0.000e+00
+l-comp_brut0              4          3    1.248e-02
+l-comp_brut1              4          0    0.000e+00
+l-comp_brut2              1          0    0.000e+00
+l-comp_brut3              1          0    0.000e+00
+l-comp_state_gate        16          6    1.061e-01
+l-comp_state_kv          16          6    2.823e-02
+l-engram_kv               8          0    0.000e+00
+l-engram_sortie           8          4    2.470e-01
+l-etat_impose             4          0    0.000e+00
+l-hc_attn_pre           160         40    1.733e+00
+l-hc_ffn_in             160         40    2.085e+00
+l-hc_ffn_pre            160         40    9.203e-02
+l-hc_mel_ffn            160         40    1.213e+00
+l-hc_pre_attn           160         38    1.504e-01
+l-hidden_final            4          0    0.000e+00
+l-idx_bloc0               4          3    1.029e-01
+l-idx_bloc1               4          0    0.000e+00
+l-idx_bloc2               1          0    0.000e+00
+l-idx_bloc3               1          0    0.000e+00
+l-idx_gardes             29          0    0.000e+00
+l-idx_scores             29          6    2.648e-02
+l-kv_norm               160         40    8.404e-01
+l-kv_rope               160         40    8.404e-01
+l-l_last                160         40    1.956e+00
+l-q_norm                160         40    2.153e+00
+l-q_rope                160         40    2.153e+00
+l-qr                    160         40    7.906e-02
+l-qr_norm               160         40    2.186e+00
+
+== --ppl --abits 8 vs référence du harnais (8 bits) ==
+tenseurs comparés : 2544 · somme des écarts max : 0.000e+00
+famille                   n différents    écart max
+l-attn_brut             160          0    0.000e+00
+l-attn_derope           160          0    0.000e+00
+l-attn_out              160          0    0.000e+00
+l-comp_bloc0              4          0    0.000e+00
+l-comp_bloc1              4          0    0.000e+00
+l-comp_bloc2              1          0    0.000e+00
+l-comp_bloc3              1          0    0.000e+00
+l-comp_brut0              4          0    0.000e+00
+l-comp_brut1              4          0    0.000e+00
+l-comp_brut2              1          0    0.000e+00
+l-comp_brut3              1          0    0.000e+00
+l-comp_state_gate        16          0    0.000e+00
+l-comp_state_kv          16          0    0.000e+00
+l-engram_kv               8          0    0.000e+00
+l-engram_sortie           8          0    0.000e+00
+l-etat_impose             4          0    0.000e+00
+l-hc_attn_pre           160          0    0.000e+00
+l-hc_ffn_in             160          0    0.000e+00
+l-hc_ffn_pre            160          0    0.000e+00
+l-hc_mel_ffn            160          0    0.000e+00
+l-hc_pre_attn           160          0    0.000e+00
+l-hidden_final            4          0    0.000e+00
+l-idx_bloc0               4          0    0.000e+00
+l-idx_bloc1               4          0    0.000e+00
+l-idx_bloc2               1          0    0.000e+00
+l-idx_bloc3               1          0    0.000e+00
+l-idx_gardes             29          0    0.000e+00
+l-idx_scores             29          0    0.000e+00
+l-kv_norm               160          0    0.000e+00
+l-kv_rope               160          0    0.000e+00
+l-l_last                160          0    0.000e+00
+l-q_norm                160          0    0.000e+00
+l-q_rope                160          0    0.000e+00
+l-qr                    160          0    0.000e+00
+l-qr_norm               160          0    0.000e+00
+
+== --ppl (16 bits) vs référence du harnais (8 bits) ==
+tenseurs comparés : 2544 · somme des écarts max : 4.334e+03
+famille                   n différents    écart max
+l-attn_brut             160        156    3.938e+00
+l-attn_derope           160        156    3.938e+00
+l-attn_out              160        156    2.933e+01
+l-comp_bloc0              4          4    6.613e-01
+l-comp_bloc1              4          4    1.291e+00
+l-comp_bloc2              1          1    1.071e+00
+l-comp_bloc3              1          1    1.629e+00
+l-comp_brut0              4          4    6.526e-02
+l-comp_brut1              4          4    1.265e-01
+l-comp_brut2              1          1    8.962e-02
+l-comp_brut3              1          1    7.094e-01
+l-comp_state_gate        16         12    2.474e-01
+l-comp_state_kv          16         16    7.094e-01
+l-engram_kv               8          0    0.000e+00
+l-engram_sortie           8          8    5.073e-01
+l-etat_impose             4          0    0.000e+00
+l-hc_attn_pre           160        156    2.159e+01
+l-hc_ffn_in             160        156    5.664e+01
+l-hc_ffn_pre            160        156    4.856e-01
+l-hc_mel_ffn            160        156    3.464e+01
+l-hc_pre_attn           160        156    5.176e-01
+l-hidden_final            4          4    1.773e+00
+l-idx_bloc0               4          4    4.659e-01
+l-idx_bloc1               4          4    1.012e+00
+l-idx_bloc2               1          1    6.823e-01
+l-idx_bloc3               1          1    1.135e+00
+l-idx_gardes             29          0    0.000e+00
+l-idx_scores             29         29    1.032e+00
+l-kv_norm               160        156    4.040e+00
+l-kv_rope               160        156    4.040e+00
+l-l_last                160        160    6.137e+01
+l-q_norm                160        156    6.793e+00
+l-q_rope                160        156    7.703e+00
+l-qr                    160        156    3.129e-01
+l-qr_norm               160        156    4.785e+00
+
+== --ppl --dense vs --ppl ==
+tenseurs comparés : 2544 · somme des écarts max : 0.000e+00
+famille                   n différents    écart max
+l-attn_brut             160          0    0.000e+00
+l-attn_derope           160          0    0.000e+00
+l-attn_out              160          0    0.000e+00
+l-comp_bloc0              4          0    0.000e+00
+l-comp_bloc1              4          0    0.000e+00
+l-comp_bloc2              1          0    0.000e+00
+l-comp_bloc3              1          0    0.000e+00
+l-comp_brut0              4          0    0.000e+00
+l-comp_brut1              4          0    0.000e+00
+l-comp_brut2              1          0    0.000e+00
+l-comp_brut3              1          0    0.000e+00
+l-comp_state_gate        16          0    0.000e+00
+l-comp_state_kv          16          0    0.000e+00
+l-engram_kv               8          0    0.000e+00
+l-engram_sortie           8          0    0.000e+00
+l-etat_impose             4          0    0.000e+00
+l-hc_attn_pre           160          0    0.000e+00
+l-hc_ffn_in             160          0    0.000e+00
+l-hc_ffn_pre            160          0    0.000e+00
+l-hc_mel_ffn            160          0    0.000e+00
+l-hc_pre_attn           160          0    0.000e+00
+l-hidden_final            4          0    0.000e+00
+l-idx_bloc0               4          0    0.000e+00
+l-idx_bloc1               4          0    0.000e+00
+l-idx_bloc2               1          0    0.000e+00
+l-idx_bloc3               1          0    0.000e+00
+l-idx_gardes             29          0    0.000e+00
+l-idx_scores             29          0    0.000e+00
+l-kv_norm               160          0    0.000e+00
+l-kv_rope               160          0    0.000e+00
+l-l_last                160          0    0.000e+00
+l-q_norm                160          0    0.000e+00
+l-q_rope                160          0    0.000e+00
+l-qr                    160          0    0.000e+00
+l-qr_norm               160          0    0.000e+00

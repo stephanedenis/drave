@@ -266,10 +266,23 @@ Les deux autres positions montrent le reste de la chaîne : `pool` à 5,08e-07,
 requête (depuis `qr_norm`), les poids par tête et la somme `Σ_h poids_h·relu(q_h·k)`
 sont justes.
 
-Ce qui n'est **pas** exercé ici : la **sélection** elle-même (le top-k), qui ne
-choisit que lorsque le nombre de blocs dépasse `indexer.top_k` (512) — soit un
-contexte de plus de 1 024 jetons en ratio 2. Le code de sélection est celui de
-V4-Flash, validé dans `reports/rapport-v4-hca.md`. Et la clé de l'indexeur est
+### La sélection, exercée pour de vrai
+
+Le top-k ne **choisit** que lorsque le nombre de blocs dépasse `indexer.top_k`
+(512). En ratio 2 il faudrait 1 024 jetons ; en **ratio 1 il en faut 513**, donc
+une seule couche suffit : `--couches 20:21 --ctx 520 --limit 520` sur les tables
+de 101 Go. Mesuré :
+
+| positions | blocs | gardés | séparation des scores |
+|---|---|---|---|
+| 0 … 511 | 1 … 512 | **tous** | aucun choix à faire |
+| 512 | 513 | **512** | min gardé −3,9012e-02 ≥ max écarté −4,2384e-02 |
+| 519 | 520 | **512** | min gardé −8,6683e-02 ≥ max écarté −8,6710e-02 |
+
+Le vide `idx_gardes` (le masque des blocs retenus) rend ce choix vérifiable, et le
+cas de la position 519 est serré à 2,7e-05 : c'est précisément ce qui donne sa
+force au contrôle. **Le flux qui décide de ce que l'attention voit a donc choisi,
+sur V4.1, et le choix est le top-k de ses propres scores.** Et la clé de l'indexeur est
 tournée selon la convention du moteur (RoPE simple) : comme pour les blocs, la
 question YaRN (§9) s'y applique à l'identique.
 

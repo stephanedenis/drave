@@ -8,6 +8,17 @@ mesuré ; la passe avant est refusée en 0,33 s avec la liste exacte de ce qui
 manque. Aucun chiffre de calcul sur V4.1 n'existe, ici ou ailleurs dans ce
 dépôt — uniquement des mesures statiques.**
 
+> **Périmé depuis le 02/10 au soir — conservé comme état des lieux du matin.**
+> Les quatre mécanismes manquants listés au §2 sont **implémentés et vérifiés** :
+> chaîne mHC retardée, compresseur, cache compressé partagé, indexeur, engram. Une
+> passe avant V4.1 **complète** tourne (40 couches) et un V4.1 **découpé sur deux
+> nœuds** rend le même état au bit près qu'une passe à un seul nœud. État courant :
+> [`rapport-v41-mhc.md`](rapport-v41-mhc.md),
+> [`rapport-decoupage-v41.md`](rapport-decoupage-v41.md), et les sprints 10 à 13.
+> Ce qui reste vrai ici : les mesures *statiques* (mmap sans copie, sonde engram,
+> plan matériel) et le fait qu'aucun runtime externe ne sait encore charger ce
+> fichier (llama.cpp n'a qu'un patch de conversion).
+
 ## 1. Ce qui tourne, avec les optimisations
 
 | test | commande | résultat mesuré |

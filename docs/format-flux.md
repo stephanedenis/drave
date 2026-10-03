@@ -122,6 +122,15 @@ corps     TOUS modes, en tête : np (u8) puis np × hc f32
                          n_blocs_j × f32 (échelles) · longueur_j octets de paires ]
 ```
 
+**Corrigé le 02/10 (sprint 13) : les modes 3 et 4 n'écrivaient PAS ce préfixe.**
+Le chemin « un jeton » (modes 0-2) l'écrivait, les deux émetteurs de lots non —
+alors que le décodeur, lui, le lit pour **tous** les modes : le premier octet du
+premier état passait pour le compte `np` et tout le corps était décalé de quatre
+octets. Un mode entier, faux et muet. Un seul encodeur les sert désormais
+(`prefixe_premix`), et le mode 3 vérifie à **0,00e0** sur deux nœuds réels
+(Qwen2.5-0.5B Q8_0, 24 jetons, `--lot 4`) ; le mode 4 donne 4,45e-3, du même ordre
+que la perte de son codec (mode 2 sur le même modèle : 3,65e-2).
+
 Le **mode 4 est le même lot, en listes** : chaque état est encodé comme le mode 2
 (indices par écarts, valeurs i8, une échelle f32 par bloc de 32 canaux) et
 auto-délimité par ses trois tailles, lues avant toute allocation. Mesuré à 256

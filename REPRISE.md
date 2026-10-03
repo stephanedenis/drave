@@ -67,6 +67,40 @@ cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && cargo build --r
 > c'est la comparaison par tenseur qui tranche). Les chiffres V4-Flash antérieurs
 > sont à revérifier.
 >
+> **Mise à jour du 02/10 (23h) — le découpage V4.1 est exact au bit près, et
+> « l'instrument qui mentait » ne mentait pas.** Deux énigmes du sprint 12 sont
+> fermées.
+>
+> 1. **Le V4.1 découpé à la couche 20 donnait 514 722,06 au lieu de 1 743
+>    713,62.** Cause : la `pre` reçue du pair pour le jeton *p* restait en place
+>    au `forward` du jeton *p+1* — le nœud qui commence à la couche 0 amorçait sa
+>    chaîne retardée sur les coefficients de la dernière FFN du pair **au jeton
+>    précédent**. Mesuré par tenseur : 629 tenseurs divergents, **tous aux
+>    positions 1 et 2, aucun à la position 0**. Correctif : `forward` ne consomme
+>    la `pre` reçue que si le nœud **reprend au milieu du modèle**
+>    (`couche_debut > 0`), et `norme_finale` prend `&mut self` et la **consomme**
+>    (elle appartient à la réduction de ce flux-là). Après : écart **0,00e0**, et
+>    **2 544 tenseurs du pilote + 945 du nœud moteur identiques au bit près** à
+>    une passe complète. Le V4-Flash ne pouvait pas le voir : sa réduction finale
+>    est apprise, donc `np = 0` chez lui.
+> 2. **La référence du harnais (1 743 713,62) différait de `--ppl`
+>    (208 411,867).** Ce ne sont pas les mêmes réglages : `--ppl` quantifie les
+>    activations sur **16 bits** (32 767 niveaux, sa référence de non-régression),
+>    les modes flux sur **8 bits** (127 niveaux, `appliquer_quantification`).
+>    Preuve : `--ppl --abits 8` donne **1 743 713,6243** et **2 544 tenseurs
+>    identiques au bit près** à la référence du harnais. `--dense` n'y est pour
+>    rien (`--ppl --dense` = `--ppl`, 0 tenseur différent). Le premier tenseur qui
+>    diverge entre 127 et 32 767 niveaux est `l_last-0-*` — le **MoE** —, pas
+>    l'attention, qui est en f32 et n'est pas quantifiée.
+>
+> **Corrigé aussi** : les émetteurs de LOTS (modes 3 et 4) n'écrivaient pas le
+> préfixe v6 `np` que le décodeur lit pour tous les modes — corps décalé de quatre
+> octets. Un seul encodeur (`prefixe_premix`) les sert ; mesuré sur deux nœuds
+> (Qwen2.5-0.5B Q8_0, 24 jetons, `--lot 4`) : mode 3 = **0,00e0**, mode 4 =
+> 4,45e-3 (avec perte, comme son codec : mode 2 = 3,65e-2).
+>
+> Sprint : [`sprints/13-les-deux-enigmes-du-decoupage-v41.md`](sprints/13-les-deux-enigmes-du-decoupage-v41.md).
+>
 > **Mise à jour du 02/10 (22h) — l'ENGRAM de V4.1 est branché, et une passe avant
 > V4.1 COMPLÈTE devient possible.** Le hachage glissant (O(1) par jeton : la
 > fenêtre de `max_ngram − 1` suffit), la lecture des 24 rangées de 264 octets dans

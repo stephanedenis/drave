@@ -176,6 +176,18 @@ if [ "$RAPIDE" != "rapide" ]; then
     fi
 fi
 
+# 8. Le DÉCOUPAGE : deux nœuds, cinq modes de flux, un petit modèle (~20 s).
+#    Elle manquait, et c'est exactement pour cela que la fuite de la `pre` reçue
+#    (sprint 13) a vécu si longtemps : aucun test n'exerçait un COUPLE de nœuds.
+#    Les modes exacts (0, 1, 3) doivent rendre 0,00e0 ; les modes à codec
+#    quantifié (2, 4) ont une perte assumée, plafonnée à ce qui a été mesuré.
+if [ -x tools/porte-flux.sh ]; then
+    printf "\n=== Découpage (deux nœuds) ===\n"
+    sortie_flux=$(timeout 900 tools/porte-flux.sh 2>&1)
+    printf '%s\n' "$sortie_flux"
+    printf '%s\n' "$sortie_flux" | grep -q "❌" && ECHEC=1
+fi
+
 echo ""
 [ "$ECHEC" = 0 ] && echo "toutes les portes sont vertes" || echo "AU MOINS UNE PORTE A DIVERGÉ"
 exit $ECHEC

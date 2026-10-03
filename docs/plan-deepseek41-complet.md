@@ -390,15 +390,41 @@ Une phase qui ne passe pas ses deux portes ne passe pas à la suivante.
 > place de la valeur. Porte V4-Flash 8430,2968 → 8430,4966 ; chiffres antérieurs à
 > revérifier (`reports/rapport-v4-yarn-compresse.md`).
 >
+> **Le DÉCOUPAGE de V4.1 est exact au bit près (02/10, 23h).** Le pré-mix sur le
+> fil (protocole v6) était bien transporté, mais il était **consommé deux fois** :
+> la `pre` reçue du pair pour le jeton *p* restait posée sur le modèle et le
+> `forward` du jeton *p+1* la reprenait pour amorcer sa chaîne retardée. Mesuré
+> par tenseur : 629 tenseurs divergents, **tous aux positions 1 et 2, aucun à la
+> position 0** — la signature exacte d'une fuite d'un jeton sur le suivant.
+> Correctif : `forward` ne consomme la `pre` reçue que si le nœud reprend au
+> milieu du modèle (`couche_debut > 0`), et `norme_finale` prend `&mut self` et
+> la consomme. Résultat : V4.1 découpé à la couche 20 = **écart 0,00e0**, et
+> **2 544 tenseurs du pilote + 945 du nœud moteur identiques au bit près** à une
+> passe complète à un seul nœud (transport aller, pré-mix retour et réduction
+> finale compris). Le V4-Flash ne pouvait pas montrer le défaut : sa réduction
+> finale est apprise (`np = 0` sur le fil).
+>
+> **Et l'« instrument qui mentait » ne mentait pas** : la référence locale du
+> harnais (1 743 713,62) différait de `--ppl` (208 411,867) parce que les deux
+> modes ne règlent pas la même quantification d'activation — **16 bits** par
+> défaut en `--ppl` (32 767 niveaux, sa référence de non-régression), **8 bits**
+> dans les modes flux (127 niveaux). `--ppl --abits 8` donne **1 743 713,6243** et
+> 2 544 tenseurs identiques au bit près à la référence du harnais ; `--dense` n'y
+> change rien. Les « écarts » publiés par `--ppl-reparti` sont donc valides — et le
+> 7,05e-1 en était un vrai.
+>
 > **Reste, nommé** : le **masque des jetons d'image** de l'engram (sans objet en
-> texte seul), le **pré-mix sur le fil** du protocole DRVF (16 octets/jeton, sans
-> quoi un découpage de V4.1 est refusé), et —
-> une question OUVERTE et chiffrée (`reports/rapport-v41-mhc.md`, §9) : vLLM
-> applique YaRN ×16 à toutes les positions des couches de ratio > 0 (mscale
-> désactivé), le moteur applique son régime retardé (RoPE simple sous 4 × la
-> longueur d'origine). Les deux coïncident presque aux positions courtes — d'où
-> des portes stables et des comparaisons à 0,9999 — et divergent au-delà de
-> ~1 024. Protocole de décision : une passe V4-Flash à contexte ≥ 1 024 sur une
+> texte seul), et un **test automatique de couple de nœuds** (le mode lot 3/4 est
+> vérifié à la main sur 0,5 B ; aucun `tools/porte-flux.sh` ne le couvre).
+
+> **Fermée, la question du YaRN des couches compressées** (02/10, 20h30) : vLLM
+> applique bien YaRN ×16 à toutes les positions dès que `compress_ratio > 0`
+> (mscale désactivé), et le moteur fait désormais comme lui — validé tenseur par
+> tenseur contre llama.cpp à la position 127 (4,515e-03 d'écart contre 5,376e-03
+> en RoPE simple, `reports/rapport-v4-yarn-compresse.md`). Ce qui reste ouvert
+> n'est plus la convention mais le **régime** : aux positions courtes les deux
+> lectures coïncident presque, et c'est au-delà de ~1 024 que le choix se voit.
+> Protocole de décision inchangé : une passe V4-Flash à contexte ≥ 1 024 sur une
 > couche compressée, comparée à llama.cpp avec et sans `DRAVE_YARN=1`.
 
 

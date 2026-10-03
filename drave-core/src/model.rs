@@ -5899,6 +5899,12 @@ sur un ensemble plus large que la référence donnerait un autre choix", m.candi
         // (chaque fenêtre de perplexité est une séquence neuve), puis complété.
         // Sans cela, le hachage d'un n-gramme lirait les jetons d'une AUTRE
         // fenêtre — des adresses plausibles et fausses.
+        // Ce qui ARRIVE du flux, vidé tel quel : sans ce vide, un état reçu
+        // « presque juste » est indiscernable d'un état reçu juste, et la couture
+        // entre deux nœuds devient impossible à localiser (mesuré : la couche 20
+        // d'un V4.1 découpé diffère de la passe complète, et il faut savoir si
+        // c'est l'état reçu ou la `pre` reçue qui est en cause).
+        Self::vider_couche(self.dump_couches.as_deref(), "etat_impose", 0, pos, &x);
         if pos == 0 { self.historique.clear(); }
         if self.historique.len() == pos { self.historique.push(tok); }
         else if self.historique.len() > pos { self.historique.truncate(pos); self.historique.push(tok); }
@@ -5927,8 +5933,28 @@ n'est pas `deepseek41`, donc la chaîne retardée de V4.1 ne s'applique pas)",
         // La chaîne retardée s'amorce sur la `pre` REÇUE si le flux en portait
         // une (protocole v6), sinon sur rien — c'est-à-dire la copie 0, la
         // convention du tout premier raccord du modèle.
-        let recue = self.hc_porte_imposee.is_some();
-        let mut hc_porte: Option<Vec<f32>> = self.hc_porte_imposee.take();
+        //
+        // **Elle ne s'amorce sur la `pre` reçue que si CE nœud REPREND au
+        // milieu du modèle** (`--couches a:b` avec a > 0, ou nœud moteur d'un
+        // flux) : lui seul a besoin d'un chaînon précédent pour son premier
+        // raccord, qui n'est pas celui du modèle. Un nœud qui commence à la
+        // couche 0 voit un jeton NEUF entrer par l'embarquement : sa chaîne
+        // repart de la copie 0, exactement comme la référence — et la `pre`
+        // qu'il a reçue du pair appartient à la RÉDUCTION FINALE de ce jeton-là
+        // (elle est lue par `norme_finale`, qui ne la consomme pas).
+        //
+        // La prendre ici la faisait consommer par le jeton SUIVANT : mesuré, le
+        // pilote V4.1 de `--ppl-reparti` gardait la `pre` du pair au titre du
+        // jeton 0, la réinjectait dans la chaîne du jeton 1, et rendait une
+        // perplexité de 514 722,06 au lieu de 1 743 713,62 — la position 0
+        // exacte au bit près, les suivantes fausses, sans un mot. Un défaut
+        // muet de plus, et il ne pouvait apparaître que sur un modèle à chaîne
+        // retardée (V4.1) : V4-Flash, dont la réduction finale est apprise,
+        // ignore ce champ et restait exact.
+        let reprend = self.couche_debut > 0;
+        let recue = reprend && self.hc_porte_imposee.is_some();
+        let mut hc_porte: Option<Vec<f32>> =
+            if reprend { self.hc_porte_imposee.take() } else { None };
         // Un nœud qui REPREND à la couche k reçoit un flux brut : s'il ne porte
         // pas ces coefficients (protocole < v6), V4.1 replierait avec la copie 0
         // — faux, et muet. Depuis la v6 le flux les transporte (16 octets par
@@ -7027,7 +7053,14 @@ le dernier raccord FFN n'a pas été exécuté (plage de couches vide ?)"),
 
     /// Norme finale, pour un état venu d'un AUTRE nœud : le nœud distant rend le
     /// flux résiduel brut, c'est le dernier qui norme.
-    pub fn norme_finale(&self, x: &[f32]) -> Vec<f32> {
+    ///
+    /// `&mut self` parce que la réduction CONSOMME la `pre` reçue du pair
+    /// (V4.1) : elle appartient à ce flux-là et à lui seul. La laisser en place
+    /// faisait reprendre la chaîne du jeton SUIVANT sur les coefficients du
+    /// précédent — mesuré, `--ppl-reparti` rendait 514 722,06 au lieu de
+    /// 1 743 713,62, la position 0 exacte au bit près et les suivantes fausses,
+    /// sans un mot.
+    pub fn norme_finale(&mut self, x: &[f32]) -> Vec<f32> {
         // Un état venu d'un autre nœud peut être en `hc` copies (modèle à
         // hyper-connexions) : c'est ICI que la réduction a lieu, une fois, sur
         // le nœud qui possède la tête — comme la norme finale.
@@ -7046,12 +7079,12 @@ le dernier raccord FFN n'a pas été exécuté (plage de couches vide ?)"),
                 // de V4.1 n'est pas apprise, c'est la `pre` du dernier raccord FFN
                 // exécuté — celui du pair, qui la transporte. Un flux v5 ou un
                 // émetteur qui ne l'envoie pas : refus, pas de repli muet.
-                None if self.hc_retarde => match self.hc_porte_imposee.as_deref() {
+                None if self.hc_retarde => match self.hc_porte_imposee.take() {
                     Some(pm) => {
                         let (hc, h) = self.hc.as_ref()
                             .map(|v| (v[0].0.hc, v[0].0.h)).expect("`hc_retarde` sans HC");
                         let mut replie = vec![0f32; h];
-                        Hc::melanger(x, pm, hc, h, &mut replie);
+                        Hc::melanger(x, &pm, hc, h, &mut replie);
                         reduit = replie;
                         &reduit[..]
                     }

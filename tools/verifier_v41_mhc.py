@@ -32,39 +32,69 @@ F16, F32, Q8_0 = 1, 0, 8
 TYPES_OCTETS = {0: 4, 1: 2, 2: 18, 3: 20, 8: 34}   # F32, F16, Q4_0, Q4_1, Q8_0
 
 
+def _shards(chemin):
+    """Les fichiers d'un modèle découpé : `...-00001-of-00003.gguf` → les trois.
+
+    Sans cela, un lecteur qui n'ouvre que le premier fragment ne voit que SES
+    tenseurs : `blk.2.attn_compressor_norm.weight` vit dans le deuxième, et le
+    chercher donne un « tenseur absent » qui accuse le fichier. Le moteur, lui,
+    lit tous les fragments depuis le début.
+    """
+    import re
+    m = re.match(r"^(.*)-(\d{5})-of-(\d{5})\.gguf$", chemin)
+    if not m:
+        return [chemin]
+    base, _, n = m.group(1), m.group(2), int(m.group(3))
+    return [f"{base}-{i:05d}-of-{n:05d}.gguf" for i in range(1, n + 1)]
+
+
 class Gguf:
+    """Lecteur GGUF minimal (F32/F16), **avec les modèles découpés**.
+
+    Un lecteur qui n'ouvre que le premier fragment ne voit que SES tenseurs :
+    `blk.2.attn_compressor_norm.weight` de V4-Flash vit dans le deuxième, et le
+    chercher donne un « tenseur absent » qui accuse le fichier. Le moteur, lui,
+    lit tous les fragments depuis le début — le vérificateur doit en faire autant.
+    """
+
     def __init__(self, chemin):
-        self.f = open(chemin, "rb", buffering=0)
-        if self.f.read(4) != b"GGUF":
-            raise SystemExit("ce n'est pas un GGUF")
-        self.version = struct.unpack("<I", self.f.read(4))[0]
-        n_tensors, n_kv = struct.unpack("<QQ", self.f.read(16))
-        self.alignement = 32
-        # Les métadonnées sont GARDÉES : `verifier_v41_engram.py` a besoin des
-        # listes de l'engram (premiers, multiplicateurs, `token_map`) pour
-        # recalculer les adresses depuis la référence.
+        self.fragments = []          # [(fichier, décalage de la section de données)]
+        self.tenseurs = {}           # nom -> (dims, type, offset, indice de fragment)
         self.metadonnees = {}
+        self.alignement = 32
+        for f in _shards(chemin):
+            self._ouvrir(f)
+        self.f, self.donnees = self.fragments[0]
+
+    def _ouvrir(self, chemin):
+        f = open(chemin, "rb", buffering=0)
+        self._courant = f
+        if f.read(4) != b"GGUF":
+            raise SystemExit(f"{chemin} : ce n'est pas un GGUF")
+        self.version = struct.unpack("<I", f.read(4))[0]
+        n_tensors, n_kv = struct.unpack("<QQ", f.read(16))
         for _ in range(n_kv):
             cle = self._chaine()
-            t = struct.unpack("<I", self.f.read(4))[0]
+            t = struct.unpack("<I", f.read(4))[0]
             v = self._valeur(t)
-            self.metadonnees[cle] = v
+            if cle not in self.metadonnees or cle == "general.alignment":
+                self.metadonnees[cle] = v
             if cle == "general.alignment":
                 self.alignement = int(v)
-        self.tenseurs = {}
+        idx = len(self.fragments)
         for _ in range(n_tensors):
             nom = self._chaine()
-            nd = struct.unpack("<I", self.f.read(4))[0]
-            dims = [struct.unpack("<Q", self.f.read(8))[0] for _ in range(nd)]
-            ttype = struct.unpack("<I", self.f.read(4))[0]
-            off = struct.unpack("<Q", self.f.read(8))[0]
-            self.tenseurs[nom] = (dims, ttype, off)
-        fin = self.f.tell()
-        self.donnees = (fin + self.alignement - 1) // self.alignement * self.alignement
+            nd = struct.unpack("<I", f.read(4))[0]
+            dims = [struct.unpack("<Q", f.read(8))[0] for _ in range(nd)]
+            ttype = struct.unpack("<I", f.read(4))[0]
+            off = struct.unpack("<Q", f.read(8))[0]
+            self.tenseurs[nom] = (dims, ttype, off, idx)
+        fin = f.tell()
+        self.fragments.append((f, (fin + self.alignement - 1) // self.alignement * self.alignement))
 
     def _chaine(self):
-        n = struct.unpack("<Q", self.f.read(8))[0]
-        return self.f.read(n).decode("utf-8", "replace")
+        n = struct.unpack("<Q", self._courant.read(8))[0]
+        return self._courant.read(n).decode("utf-8", "replace")
 
     def _valeur(self, t):
         tailles = {0: 1, 1: 1, 2: 2, 3: 2, 4: 4, 5: 4, 6: 4, 7: 1, 10: 8, 11: 8, 12: 8}
@@ -73,22 +103,21 @@ class Gguf:
         if t == 8:
             return self._chaine()
         if t == 9:
-            et = struct.unpack("<I", self.f.read(4))[0]
-            n = struct.unpack("<Q", self.f.read(8))[0]
+            et = struct.unpack("<I", self._courant.read(4))[0]
+            n = struct.unpack("<Q", self._courant.read(8))[0]
             return [self._valeur(et) for _ in range(n)]
-        return struct.unpack(fmt[t], self.f.read(tailles[t]))[0]
+        return struct.unpack(fmt[t], self._courant.read(tailles[t]))[0]
 
     def lire(self, nom, lignes=None):
-        """Rend le tenseur en f32 (F32 et F16 seulement). `lignes=(a,b)` ne lit
-        que ces lignes — indispensable pour `token_embd` (129 280 × 5 120)."""
-        dims, ttype, off = self.tenseurs[nom]
+        """Rend le tenseur en f64 (F32 et F16). `lignes=(a,b)` pour un extrait."""
+        dims, ttype, off, idx = self.tenseurs[nom]
+        f, donnees = self.fragments[idx]
         n_in = dims[0]
-        # Un tenseur 1-D (base, scale, norme) n'a qu'une « ligne » de `dims[0]` :
-        # c'est le cas de `blk.0.hc_ffn_base.weight` [24].
+        # Un tenseur 1-D (base, scale, norme) n'a qu'une « ligne » de `dims[0]`.
         a, b = lignes if lignes else (0, dims[1] if len(dims) > 1 else 1)
         n = n_in * (b - a)
-        self.f.seek(self.donnees + off + TYPES_OCTETS[ttype] * n_in * a)
-        brut = self.f.read(TYPES_OCTETS[ttype] * n)
+        f.seek(donnees + off + TYPES_OCTETS[ttype] * n_in * a)
+        brut = f.read(TYPES_OCTETS[ttype] * n)
         if ttype == F32:
             return np.frombuffer(brut, dtype="<f4").astype(np.float64).reshape(b - a, n_in)
         if ttype == F16:

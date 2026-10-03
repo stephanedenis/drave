@@ -2358,21 +2358,39 @@ fn envoyer_flux(s: &mut std::net::TcpStream, debut: u32, fin: u32, pos: u32,
     // modes 0-2 envoient UN jeton, les modes 3-4 un LOT d'états — et un modèle à
     // hyper-connexions ne prend jamais le chemin des lots (il est refusé), donc
     // `np` vaut 0 ou 1 en pratique ; l'écrire par état laisse la porte ouverte.
-    let premix: Vec<f32> = mdl.and_then(|m| m.hc_porte_flux.clone()).unwrap_or_default();
-    let hc = mdl.map(|m| m.hc.as_ref().map(|v| v[0].0.hc).unwrap_or(1)).unwrap_or(1);
-    let np: u8 = if premix.is_empty() { 0 } else { 1 };
-    assert!(premix.len() == np as usize * hc,
-            "pré-mix de {} valeurs pour {np} état(s) × {hc} copies", premix.len());
-    let mut corps = corps;
-    let mut prefixe = Vec::with_capacity(1 + premix.len() * 4);
-    prefixe.push(np);
-    for v in &premix { prefixe.extend_from_slice(&v.to_le_bytes()); }
-    prefixe.extend_from_slice(&corps);
-    corps = prefixe;
+    let charge = corps;
+    let mut corps = prefixe_premix(mdl, 1);
+    corps.extend_from_slice(&charge);
     s.write_all(&tete)?;
     s.write_all(&corps)?;
     s.flush()?;
     Ok((TAILLE_TETE + corps.len(), n))
+}
+
+/// Le préfixe de corps du protocole v6 : un octet `np`, puis `np × hc` f32.
+///
+/// Un SEUL encodeur pour les trois émetteurs (jeton, lot dense, lot en listes).
+/// Ils écrivaient le même en-tête mais un seul avait reçu ce préfixe : les modes
+/// 3 et 4 (lots) envoyaient donc un corps que le décodeur v6 lisait de travers —
+/// le premier octet du premier état passait pour le compte `np`, et la suite
+/// était décalée de 4 octets. Un mode entier, faux et muet.
+///
+/// `t` est le nombre d'états du flux : la `pre` portée appartient à UN état, donc
+/// un lot de plus d'un état ne peut pas en porter une (et n'en porte pas : le
+/// chemin des lots refuse les modèles à hyper-connexions).
+fn prefixe_premix(mdl: Option<&model::Model>, t: usize) -> Vec<u8> {
+    let premix: Vec<f32> = mdl.and_then(|m| m.hc_porte_flux.clone()).unwrap_or_default();
+    let hc = mdl.map(|m| m.hc.as_ref().map(|v| v[0].0.hc).unwrap_or(1)).unwrap_or(1);
+    assert!(t == 1 || premix.is_empty(),
+            "un flux de {t} états ne peut pas porter la `pre` d'un seul : le préremplissage \
+réparti est refusé aux modèles à chaîne mHC retardée");
+    let np: u8 = if premix.is_empty() { 0 } else { 1 };
+    assert!(premix.len() == np as usize * hc,
+            "pré-mix de {} valeurs pour {np} état(s) × {hc} copies", premix.len());
+    let mut p = Vec::with_capacity(1 + premix.len() * 4);
+    p.push(np);
+    for v in &premix { p.extend_from_slice(&v.to_le_bytes()); }
+    p
 }
 
 /// Envoie un LOT d'états (`t × hidden`, aplati) dans un seul flux.
@@ -2384,9 +2402,13 @@ fn envoyer_lot(s: &mut std::net::TcpStream, debut: u32, fin: u32, pos0: u32,
                etats: &[f32], t: usize, mdl: &model::Model) -> std::io::Result<usize> {
     use std::io::Write;
     let tete = tete_flux(MODE_LOT, debut, fin, pos0, t, 0.0, Some(mdl));
-    s.write_all(&tete)?;
-    let mut corps = Vec::with_capacity(etats.len() * 4);
+    // Le préfixe v6 (`np` + `pre`) manquait ICI : le décodeur du pair le lisait
+    // dans le premier état du lot et décalait tout le reste de quatre octets.
+    let prefixe = prefixe_premix(Some(mdl), t);
+    let mut corps = Vec::with_capacity(prefixe.len() + etats.len() * 4);
+    corps.extend_from_slice(&prefixe);
     for v in etats { corps.extend_from_slice(&v.to_le_bytes()); }
+    s.write_all(&tete)?;
     s.write_all(&corps)?;
     s.flush()?;
     Ok(TAILLE_TETE + corps.len())
@@ -2415,7 +2437,9 @@ fn envoyer_lot_listes(s: &mut std::net::TcpStream, debut: u32, fin: u32, pos0: u
                       -> std::io::Result<usize> {
     use std::io::Write;
     let h = mdl.cfg.hidden;
-    let mut corps: Vec<u8> = Vec::new();
+    let prefixe = prefixe_premix(Some(mdl), t);
+    let mut corps: Vec<u8> = Vec::with_capacity(prefixe.len() + t * 64);
+    corps.extend_from_slice(&prefixe);
     for i in 0..t {
         corps.extend_from_slice(&encoder_etat_blocs(mdl, &etats[i * h..(i + 1) * h]));
     }
@@ -3052,7 +3076,12 @@ attendus — pair incohérent. Rien n'a été calculé.", rep.n, mdl.cfg.hidden,
         // recalculer, il n'a pas exécuté ces couches.
         mdl.hc_porte_imposee = if rep.premix.is_empty() { None } else { Some(rep.premix.clone()) };
         if pos + 1 < ids.len() {
-            nll += nll_logits(&mdl.logits(&mdl.norme_finale(&final_)), ids[pos + 1]);
+            // Deux temps : la réduction CONSOMME la `pre` reçue (V4.1), donc elle
+            // emprunte le modèle en écriture, et la tête le reprend ensuite. Les
+            // imbriquer ne compilerait pas — et c'est tant mieux : l'ordre
+            // (réduire, puis noter) reste ainsi visible.
+            let reduit = mdl.norme_finale(&final_);
+            nll += nll_logits(&mdl.logits(&reduit), ids[pos + 1]);
         }
     }
     }
