@@ -98318,3 +98318,12 @@ test result: ok. 63 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; fin
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np=\"sprints/15-p9-le-poste-d-attention-v4-1-profiler-le.md\"\ns=open(p).read()\na=\"\"\"### 4. Ce que la mesure laisse sur la table, et pourquoi on s'arrête là\"\"\"\nb=\"\"\"### 4. Le profil dit maintenant ce qu'il … [3639 caractères tronqués]`
+
+  ```
+ok
+a0ea42d Sprint 15 : le profil V4 dit maintenant où passent les 1 003 ms/token d'attention (4,5 % seulement dans le calcul)
+417f8f2 P9 : le matvec f32 de V4.1 parallélisé par LIGNES — ×9,34 sur l'attention, ×3 sur la passe, zéro bit changé
+4263407 Sprint 14 : clôture (50 min utiles) — les trois chantiers sont livrés et mesurés
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np=\"sprints/15-p9-le-poste-d-attention-v4-1-profiler-le.md\"\ns=open(p).read()\na=\"- **Début** : 22:01 · **Fin prévue** : 00:01 (boxing de 120 min)\"\nb=\"\"\"- **Début** : 22:01 · **Fin** : 23:48 (107 min utiles — … [383 caractères tronqués]`

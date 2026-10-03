@@ -1,6 +1,7 @@
 # Sprint 15 — P9 — le poste d'attention V4.1 : profiler les 12,4 s par jeton, puis accélérer SANS changer un chiffre (preuve d'égalité au bit près sur les vides)
 
-- **Début** : 22:01 · **Fin prévue** : 00:01 (boxing de 120 min)
+- **Début** : 22:01 · **Fin** : 23:48 (107 min utiles — la boîte s'arrête quand les
+  trois chantiers sont livrés, mesurés et commités)
 - **Objectif** : P9 — le poste d'attention V4.1 : profiler les 12,4 s par jeton, puis accélérer SANS changer un chiffre (preuve d'égalité au bit près sur les vides)
 - **Engagement de fin** : dépôt vert (tests + portes), machine rendue, tout commité.
 
