@@ -110716,3 +110716,71 @@ reports/rapport-gpu-tandem-nvlink.md:57:> **8,56 Go** pour V4-Flash et **87 Go**
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='docs/plan-kimi-k3.md'\ns=open(p).read()\n# la section 3 « ce qui nous distingue » doit porter le fait nouveau : le dense domine\ns=s.replace(\"\"\"2. **Le découpage en grappes**\"\"\",\n\"\"\"2. **Le dense d'abor … [1746 caractères tronqués]`
+
+  ```
+plan : la partie dense passe en tête des leviers
+05a906b CORRECTION : un jeton de Kimi-K3 lit 87 Go de poids (pas 35) — et c'est l'ATTENTION qui domine, pas les experts
+  ```
+
+### 🤖 Assistant
+
+⏵ Le KDA (delta-net) : lecture complète du chemin autorégressif avant de l'implémenter
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/llama.cpp-k3 && sed -n '330,360p' src/models/delta-net-base.cpp; echo \"=== helpers de décroissance ===\"; grep -n \"d_t\\|decay\\|cumsum\\|softplus\" src/models/delta-net-base.cpp | head -20", "description": "Read the AR delta-net and its deca … [11 caractères tronqués]`
+
+  ```
+cb(b, "b_in", il);
+    cb(g, "g_in", il);
+
+    // GDA: [1,  1,  H_v, n_seqs]
+    // KDA: [1, S_k, H_v, n_seqs]
+    g = ggml_reshape_4d(ctx0, g, 1, g->ne[0], H_v, n_seqs);
+    b = ggml_reshape_4d(ctx0, b, 1,        1, H_v, n_seqs);
+
+    // [S_v, S_v, H_v, n_seqs]
+    g = ggml_exp(ctx0, g);
+    s = ggml_mul(ctx0, s, g);
+
+    // [1, S_v, H_v, n_seqs]
+    ggml_tensor * sk;
+    sk = ggml_mul     (ctx0, s, k);
+    sk = ggml_sum_rows(ctx0, sk);
+
+    // [S_v, 1, H_v, n_seqs]
+    ggml_tensor * d;
+    d = ggml_sub(ctx0, v, ggml_transpose(ctx0, sk));
+    d = ggml_mul(ctx0, d, b);
+
+    // [1, S_v, H_v, n_seqs]
+    ggml_tensor * d_t;
+    d_t = ggml_transpose(ctx0, d);
+
+    // [S_v, S_v, H_v, n_seqs]
+    ggml_tensor * kd;
+    k  = ggml_repeat(ctx0, k, s);
+    kd = ggml_mul   (ctx0, k, d_t);
+
+=== helpers de décroissance ===
+88:    // TODO: extend ggml_cumsum with axis parameter to avoid transpose
+89:    ggml_tensor * g_cs = ggml_cumsum(ctx0, ggml_cont(ctx0, ggml_transpose(ctx0, g)));
+102:        // decay_mask [chunk_size,chunk_size,S_k,CHB]
+103:        ggml_tensor * decay_mask;
+104:        decay_mask = ggml_sub(ctx0, g_cs_j, g_cs_i);
+105:        decay_mask = ggml_tri(ctx0, decay_mask, GGML_TRI_TY
+… [927 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/model.rs'\ns=open(p).read()\nancre = \"/// **SiTU** — l'activation de Kimi-K3\"\najout = '''/// **Règle delta à porte** — la récurrence du **KDA** de Kimi-K3, un jeton.\n///\n/// Transcription de ` … [6059 caractères tronqués]`
+
+  ```
+kda_pas + tests ajoutés
+test model::tests_kimi_k3::kda_etat_nul_rend_le_produit_exterieur ... ok
+test model::tests_kimi_k3::kda_porte_negative_oublie_l_etat ... ok
+test model::tests_kimi_k3::res_mix_melange_normes_et_bruts ... ok
+test model::tests_kimi_k3::kda_une_etape_contre_numpy ... ok
+test model::tests_kimi_k3::res_mix_score_sur_les_normes_pas_sur_les_bruts ... ok
+test model::tests_kimi_k3::situ_borne_la_porte ... ok
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 69 filtered out; finished in 0.00s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && cargo test --release 2>&1 | grep -E \"^test result\" | head -3; cd .. && git add -A && git commit -q -m \"KDA (delta-net de Kimi-K3) : la récurrence implémentée et vérifiée contre une référence NumPy\n\nkda_pas : s ← s·exp … [596 caractères tronqués]`

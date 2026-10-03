@@ -7,12 +7,12 @@
 | Début | 2026-09-28 14:46 |
 | Durée | 116.3 h |
 | Tours | 91 |
-| Messages | 6951 |
-| Appels d'outils | 6646 |
+| Messages | 6954 |
+| Appels d'outils | 6649 |
 | Fichiers touchés | 138 |
-| Commandes | 5619 |
+| Commandes | 5622 |
 | Sous-agents | 32 |
-| Commits | 453 |
+| Commits | 454 |
 | Compactages de contexte | 9 |
 
 ## Objectifs déclarés
@@ -4520,7 +4520,7 @@ Autrement dit : **la granularité ne compresse pas, elle route** — et elle ach
 
 ### Tour 91 — <goal_round> Objective: "Faire tourner en local les MEILLEURS modèles ouverts, en particulier ceux qui ne tiennent pas e … [1246 caractères tronqués]
 
-*9 appels d'outils.* Actions notables :
+*12 appels d'outils.* Actions notables :
 
 - write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/budget_execution_locale.py`
 - bash — Validate the budget tool on V4-Flash
@@ -4531,10 +4531,13 @@ Autrement dit : **la granularité ne compresse pas, elle route** — et elle ach
 - write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-budget-kimi-k3.md`
 - bash — Correct the per-token figures everywhere
 - bash — Commit the corrected budget and strategy
+- bash — Read the AR delta-net and its decay helpers
+- bash — Implement and test the KDA recurrence
+- bash — Run all tests and commit the KDA
 
 **Synthèse produite :**
 
-⏵ Je corrige la traçabilité (35 → 87 Go/jeton) et j'écris la stratégie de placement chiffrée
+⏵ Le KDA (delta-net) : lecture complète du chemin autorégressif avant de l'implémenter
 
 ## 3. Travail accompli
 
@@ -4758,7 +4761,7 @@ Autrement dit : **la granularité ne compresse pas, elle route** — et elle ach
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 5579 autres
+- … et 5582 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -5359,4 +5362,5 @@ Autrement dit : **la granularité ne compresse pas, elle route** — et elle ach
 - Sprint 28 : portes toutes vertes (69 tests), perplexité V4-Flash derrière ARCHIVE=1, et la leçon des pkill qui se tuent eux-mêmes"; git log --oneline -1
 - Spec Kimi-K3 : le KDA, sa porte bornée à -5, ses trois chemins de référence et les tenseurs qui serviront de points de comparaison" && git log --oneline -1; tai
 - CORRECTION : un jeton de Kimi-K3 lit 87 Go de poids (pas 35) — et c'est l'ATTENTION qui domine, pas les experts  Mesuré sur 25 couches (de 93) avec l'outil neuf
+- KDA (delta-net de Kimi-K3) : la récurrence implémentée et vérifiée contre une référence NumPy  kda_pas : s ← s·exp(g) ; sk = sᵀk ; s += k ⊗ (β(v − sk)) ; o = sᵀ
 

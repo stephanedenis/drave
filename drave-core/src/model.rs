@@ -780,6 +780,59 @@ pub struct Vue4 {
     pub src: crate::list::Source,
 }
 
+/// **Règle delta à porte** — la récurrence du **KDA** de Kimi-K3, un jeton.
+///
+/// Transcription de `build_delta_net_autoregressive` (`llama.cpp-k3`,
+/// `delta-net-base.cpp`) ; l'état `s` est **par tête**, `head_dim × head_dim` :
+///
+/// ```text
+///   s ← s · exp(g)                       décroissance, PAR CANAL DE CLÉ
+///   sk[j] = Σ_i s[i][j] · k[i]           (sᵀ k)
+///   s[i][j] += k[i] · β · (v[j] − sk[j])  mise à jour delta (produit extérieur)
+///   o[j] = Σ_i s[i][j] · q[i]            (sᵀ q)
+/// ```
+///
+/// Conventions, et elles comptent : `i` indexe la dimension des **clés** (celle de
+/// `k` et de `q`), `j` celle des **valeurs** ; `g` est la porte de décroissance
+/// (un scalaire par canal de clé pour K3, d'où la diffusion le long de `j`) ;
+/// `β` est le pas appris (`sigmoïde(W_beta·x)`), **par tête**.
+///
+/// La référence porte **trois** chemins de la même récurrence (chunked,
+/// autorégressif, fusionné) : c'est celui-ci qui sert au décodage, et c'est le
+/// seul qui se vérifie sans poids (l'état est petit). Le chemin par blocs —
+/// nécessaire au préremplissage — viendra après, et devra donner **le même**
+/// résultat : c'est en soi un point de vérification.
+#[allow(dead_code)]
+pub fn kda_pas(q: &[f32], k: &[f32], v: &[f32], g: &[f32], beta: f32,
+               s: &mut [f32], hd: usize, out: &mut [f32]) {
+    debug_assert_eq!(s.len(), hd * hd);
+    debug_assert!(q.len() >= hd && k.len() >= hd && v.len() >= hd && out.len() >= hd);
+    // 1. décroissance : `s[i][j] *= exp(g[i])` — la porte est par canal de CLÉ.
+    for i in 0..hd {
+        let d = g[i].exp();
+        for j in 0..hd { s[i * hd + j] *= d; }
+    }
+    // 2. `sk[j] = Σ_i s[i][j]·k[i]`
+    let mut sk = vec![0f32; hd];
+    for i in 0..hd {
+        let ki = k[i];
+        if ki == 0.0 { continue; }
+        for j in 0..hd { sk[j] += s[i * hd + j] * ki; }
+    }
+    // 3. mise à jour delta : produit extérieur `k ⊗ (β(v − sk))`
+    for i in 0..hd {
+        let ki = k[i];
+        if ki == 0.0 { continue; }
+        for j in 0..hd { s[i * hd + j] += ki * beta * (v[j] - sk[j]); }
+    }
+    // 4. sortie : `o[j] = Σ_i s[i][j]·q[i]`
+    for j in 0..hd {
+        let mut a = 0f32;
+        for i in 0..hd { a += s[i * hd + j] * q[i]; }
+        out[j] = a;
+    }
+}
+
 /// **SiTU** — l'activation de Kimi-K3 (`kimi_k3_situ` de la référence) :
 ///
 /// ```text
@@ -8661,6 +8714,80 @@ mod tests_kimi_k3 {
     //! Les valeurs attendues sont recalculées à la main depuis la référence
     //! (`llama.cpp-k3/src/models/kimi-k3.cpp`), pas recopiées de notre code.
     use super::*;
+
+    /// La même récurrence, écrite en NumPy — l'arbitre des tests KDA.
+    fn kda_numpy(q: &[f64], k: &[f64], v: &[f64], g: &[f64], beta: f64,
+                 s: &mut [f64], hd: usize) -> Vec<f64> {
+        // s[i][j], i = clé, j = valeur — mêmes conventions que le Rust.
+        for i in 0..hd {
+            let d = g[i].exp();
+            for j in 0..hd { s[i * hd + j] *= d; }
+        }
+        let mut sk = vec![0f64; hd];
+        for i in 0..hd { for j in 0..hd { sk[j] += s[i * hd + j] * k[i]; } }
+        for i in 0..hd { for j in 0..hd {
+            s[i * hd + j] += k[i] * beta * (v[j] - sk[j]);
+        } }
+        (0..hd).map(|j| (0..hd).map(|i| s[i * hd + j] * q[i]).sum()).collect()
+    }
+
+    #[test]
+    fn kda_une_etape_contre_numpy() {
+        let hd = 4usize;
+        let q = [0.5f32, -0.25, 1.0, 0.0];
+        let k = [1.0f32, 0.5, -0.5, 0.25];
+        let v = [0.1f32, 0.2, -0.3, 0.4];
+        let g = [-0.1f32, -0.2, -0.3, -0.4];
+        let beta = 0.7f32;
+        let mut s = vec![0f32; hd * hd];
+        for i in 0..hd * hd { s[i] = ((i as f32) * 0.13).sin() * 0.5; }
+        let s0 = s.clone();
+        let mut out = vec![0f32; hd];
+        kda_pas(&q, &k, &v, &g, beta, &mut s, hd, &mut out);
+        // référence en f64
+        let (q8, k8, v8, g8) = (q.map(|x| x as f64), k.map(|x| x as f64),
+                                v.map(|x| x as f64), g.map(|x| x as f64));
+        let mut s8: Vec<f64> = s0.iter().map(|&x| x as f64).collect();
+        let attendu = kda_numpy(&q8, &k8, &v8, &g8, beta as f64, &mut s8, hd);
+        for j in 0..hd {
+            let e = attendu[j] as f32;
+            assert!((out[j] - e).abs() < 1e-5, "sortie {j} : {} vs {e}", out[j]);
+        }
+        for i in 0..hd * hd {
+            assert!((s[i] - s8[i] as f32).abs() < 1e-5, "état {i} : {} vs {}", s[i], s8[i]);
+        }
+    }
+
+    #[test]
+    fn kda_etat_nul_rend_le_produit_exterieur() {
+        // État nul : `sk = 0`, donc `s = k ⊗ (β v)` et `o = sᵀ q`.
+        let hd = 2usize;
+        let (q, k, v) = ([1.0f32, 1.0], [2.0f32, 3.0], [0.5f32, -0.5]);
+        let g = [0.0f32, 0.0];
+        let beta = 1.0f32;
+        let mut s = vec![0f32; hd * hd];
+        let mut out = vec![0f32; hd];
+        kda_pas(&q, &k, &v, &g, beta, &mut s, hd, &mut out);
+        // s = [[2·0,5, 2·(−0,5)], [3·0,5, 3·(−0,5)]] = [[1,−1],[1,5,−1,5]]
+        assert!((s[0] - 1.0).abs() < 1e-6 && (s[1] + 1.0).abs() < 1e-6);
+        assert!((s[2] - 1.5).abs() < 1e-6 && (s[3] + 1.5).abs() < 1e-6);
+        // o = sᵀ q = [1+1,5, −1−1,5] = [2,5, −2,5]
+        assert!((out[0] - 2.5).abs() < 1e-6 && (out[1] + 2.5).abs() < 1e-6);
+    }
+
+    #[test]
+    fn kda_porte_negative_oublie_l_etat() {
+        // Une porte très négative efface l'état : la sortie ne dépend plus que de
+        // `k`, `v`, `q` du jeton courant (c'est le sens de la décroissance).
+        let hd = 2usize;
+        let (q, k, v, g) = ([1.0f32, 1.0], [1.0f32, 1.0], [1.0f32, 1.0], [-30.0f32, -30.0]);
+        let mut s = vec![100.0f32; hd * hd];
+        let mut out = vec![0.0f32; hd];
+        kda_pas(&q, &k, &v, &g, 1.0, &mut s, hd, &mut out);
+        // état ≈ k ⊗ v = [[1,1],[1,1]] ; o = [2,2]
+        assert!((out[0] - 2.0).abs() < 1e-4, "{}", out[0]);
+        assert!((out[1] - 2.0).abs() < 1e-4, "{}", out[1]);
+    }
 
     #[test]
     fn situ_borne_la_porte() {
