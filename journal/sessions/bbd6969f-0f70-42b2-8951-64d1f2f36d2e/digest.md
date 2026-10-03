@@ -103500,3 +103500,58 @@ corrélation des logits (position 0) : 0.987580
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -m \"compare_logits.py : un diagnostic par TRANCHES, pour distinguer une erreur de position d'une erreur de tête\n\nUne erreur de RoPE, de blocs compressés ou de fenêtre glissante fait CROÎTRE\nl'écart ave … [329 caractères tronqués]`
+
+  ```
+fce7f49 compare_logits.py : un diagnostic par TRANCHES, pour distinguer une erreur de position d'une erreur de tête
+      10:59 02:24:28
+≤ 65536 initial ; YaRN ×16 prendrait le relais au-delà)
+[tête 4 bits] 129280 × 4096 → 4.50 b/poids, 0 Mo, 0.0 s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && pid=$(pgrep -x drave | head -1) && grep -E \"read_bytes|rchar\" /proc/$pid/io && free -g | head -2", "description": "Inspect engine I/O to estimate progress"}`
+
+  ```
+rchar: 17860994
+read_bytes: 316928000
+               total        used        free      shared  buff/cache   available
+Mem:             125          34           3           4          93          91
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/plan-deepseek41-complet.md", "limit": 60, "offset": 383}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/plan-deepseek41-complet.md</path>
+<type>file</type>
+<content>
+383: > même comparaison sur une couche compressée à contexte long.
+384: 
+385: #### P6 — la porte de correction SERRÉE, sur 63 positions (03/10, bloc 23)
+386: 
+387: > L'hypothèse ci-dessus est maintenant **mesurée**, et elle est juste : l'écart de
+388: > perplexité vient de la longueur de la fenêtre, pas d'un défaut du moteur.
+389: >
+390: > Protocole : mêmes identifiants, 64 positions, `--ctx 256 --limit 64 --dense
+391: > --threads 16 --logits-bin`, contre `tools/ref_logits` (llama.cpp, même ctx).
+392: >
+393: > | mesure | llama.cpp | Drave | écart |
+394: > |---|---|---|---|
+395: > | perplexité (63 prédictions) | **16,2931** | **15,2520** | **6,4 % relatif** |
+396: > | NLL moyenne | 2,7907 | 2,7249 | 0,066 nat |
+397: >
+398: > Contre **25 %** sur la fenêtre de 4 jetons : **l'amplification chaotique décroît
+399: > bien avec la longueur**, exactement comme annoncé. Sur les logits eux-mêmes,
+400: > position par position (63 positions, 129 280 logits chacune) :
+401: >
+402: > | mesure | valeur |
+403: > |---|---|
+404: > | corrélation de Pearson | min **0,95500** · moyenne
+… [2429 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/plan-deepseek41-complet.md", "new_string": "> publier (c'est voulu : un critère qu'on applique hors de son domaine est un\n> critère qui ment). La passe longue de 1 023 prédictions, plus bas, juge les quatre.", "old_string": "> publ … [159 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/plan-deepseek41-complet.md has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -m \"Plan P6 : la fenêtre de 63 prédictions ne juge pas la perplexité (seuil à 64), et elle le dit\" && sleep 300; ps -o etime=,time= -C drave | head -2; tail -c 200 /tmp/our_v4f1024.log; ls -la /tmp/our_v … [91 caractères tronqués]`

@@ -418,8 +418,8 @@ Une phase qui ne passe pas ses deux portes ne passe pas à la suivante.
 > Mesuré : 0,955 / 0,9852 / 88,9 % / 6,4 % → **les quatre critères passent** — à une
 > position près sur le quatrième : la fenêtre donne **63** prédictions et le seuil
 > est à 64, donc l'outil **refuse de juger la perplexité** et se contente de la
-> publier (c'est voulu : un critère qu'on juge hors de son domaine est un critère
-> qui mentira). La passe longue de 1 023 prédictions, plus bas, juge les quatre.
+> publier (c'est voulu : un critère qu'on applique hors de son domaine est un
+> critère qui ment). La passe longue de 1 023 prédictions, plus bas, juge les quatre.
 > La porte de correction de P6 est donc tenue **par un instrument défini**, et non
 > plus par une impression sur quatre jetons. Le chiffre de `portes.sh` (8430,4966)
 > reste ce qu'il était : une référence de non-régression interne.
