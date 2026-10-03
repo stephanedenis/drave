@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 116.3 h |
+| Durée | 116.4 h |
 | Tours | 91 |
-| Messages | 6957 |
-| Appels d'outils | 6652 |
+| Messages | 6961 |
+| Appels d'outils | 6656 |
 | Fichiers touchés | 139 |
-| Commandes | 5624 |
+| Commandes | 5628 |
 | Sous-agents | 32 |
-| Commits | 455 |
+| Commits | 456 |
 | Compactages de contexte | 9 |
 
 ## Objectifs déclarés
@@ -4520,7 +4520,7 @@ Autrement dit : **la granularité ne compresse pas, elle route** — et elle ach
 
 ### Tour 91 — <goal_round> Objective: "Faire tourner en local les MEILLEURS modèles ouverts, en particulier ceux qui ne tiennent pas e … [1246 caractères tronqués]
 
-*15 appels d'outils.* Actions notables :
+*19 appels d'outils.* Actions notables :
 
 - write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/budget_execution_locale.py`
 - bash — Validate the budget tool on V4-Flash
@@ -4536,7 +4536,7 @@ Autrement dit : **la granularité ne compresse pas, elle route** — et elle ach
 - bash — Run all tests and commit the KDA
 - bash — Check the download progress
 - write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/sprints/29-87-go-par-jeton-et-la-recurrence-du-kda.md`
-- … et 1 autres
+- … et 5 autres
 
 **Synthèse produite :**
 
@@ -4765,7 +4765,7 @@ Autrement dit : **la granularité ne compresse pas, elle route** — et elle ach
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 5584 autres
+- … et 5588 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -5368,4 +5368,5 @@ Autrement dit : **la granularité ne compresse pas, elle route** — et elle ach
 - CORRECTION : un jeton de Kimi-K3 lit 87 Go de poids (pas 35) — et c'est l'ATTENTION qui domine, pas les experts  Mesuré sur 25 couches (de 93) avec l'outil neuf
 - KDA (delta-net de Kimi-K3) : la récurrence implémentée et vérifiée contre une référence NumPy  kda_pas : s ← s·exp(g) ; sk = sᵀk ; s += k ⊗ (β(v − sk)) ; o = sᵀ
 - Sprint 29 : 87 Go par jeton (l'attention dépasse les experts), outils qui disent leur périmètre, et la récurrence du KDA vérifiée" && git log --oneline -1; echo
+- KDA : porte bornée et convolution courte implémentées et testées — le test a attrapé une inversion de disposition d'état  kda_porte : g = -5·sigma(exp(A_log)·z)
 

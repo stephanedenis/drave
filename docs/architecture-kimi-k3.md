@@ -181,6 +181,14 @@ Ce que la référence nomme, et qui sera nos points de comparaison (les `cb(...)
 `beta` diffère ne se voit **pas** dans les logits à court terme : on compare donc
 ces tenseurs **avant** de regarder la perplexité, comme on l'a fait pour V4.
 
+**Ce qui est déjà implémenté et testé (sans poids)** : la **porte de décroissance**
+(`kda_porte` : `g = −5·σ(exp(A_log)·z)` ; le fichier stocke **`−exp(A_log)`** dans
+`ssm_a` — se tromper de signe donne une porte positive, donc un état qui *croît*),
+la **convolution courte** (`kda_conv_silu` : noyau 4 causal, état canal-majeur
+`etat[k + 3·canal]` — les poids, eux, ont le noyau contigu — puis SiLU), et la
+**récurrence** (`kda_pas`, vérifiée contre NumPy). Le chemin par blocs reste à
+faire.
+
 Le contrat de la couche, tel que la référence le montre :
 `q,k,v` = convolutions courtes (noyau 4) sur les projections, `q,k` normalisés en
 L2, `beta = sigmoïde(W_beta·x)` par tête, porte de décroissance `g` bornée à

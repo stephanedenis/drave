@@ -110812,3 +110812,74 @@ Created file
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -m \"Sprint 29 : 87 Go par jeton (l'attention dépasse les experts), outils qui disent leur périmètre, et la récurrence du KDA vérifiée\" && git log --oneline -1; echo \"=== suite : le reste de la couche KD … [216 caractères tronqués]`
+
+  ```
+69cbff0 Sprint 29 : 87 Go par jeton (l'attention dépasse les experts), outils qui disent leur périmètre, et la récurrence du KDA vérifiée
+=== suite : le reste de la couche KDA (conv1d, L2, porte) ===
+358:static ggml_tensor * kimi_k3_conv1d(ggml_cgraph * gf, ggml_context * ctx0,
+359-                                    ggml_tensor * conv_states_all, ggml_tensor * conv_state_all,
+360-                                    int64_t qkv, ggml_tensor * x, ggml_tensor * proj_w, ggml_tensor * conv_w,
+361-                                    int64_t d_conv, int64_t head_dim, int64_t n_head,
+362-                                    int64_t n_seq_tokens, int64_t n_seqs, int64_t n_tokens, int64_t kv_head,
+363-                                    int64_t mem_size, int64_t K_rs) {
+364-    const int64_t d_inner         = head_dim * n_head;
+365-    const int64_t conv_state_size = (d_conv - 1) * d_inner;
+366-    const int64_t n_embd_r_total  = 3 * conv_state_size;
+367-
+368-    ggml_tensor * conv_state_x = ggml_view_3d(ctx0, conv_state_all, d_conv - 1, d_inner, n_seqs,
+369-        (d_conv - 1)   * ggml_element_size(conv_state_all),
+370-        n_embd_r_total * ggml_element_size(conv_state_all),
+371-       
+… [2041 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/llama.cpp-k3 && sed -n '390,412p' src/models/kimi-k3.cpp", "description": "Read the exact conv1d application"}`
+
+  ```
+ggml_tensor * conv_weight = ggml_reshape_2d(ctx0, conv_w, d_conv, d_inner);
+    ggml_tensor * Xcur = ggml_ssm_conv(ctx0, conv_x, conv_weight);
+    Xcur = ggml_reshape_2d(ctx0, Xcur, d_inner, n_tokens);
+    Xcur = ggml_silu(ctx0, Xcur);
+
+    return ggml_reshape_4d(ctx0, Xcur, head_dim, n_head, n_seq_tokens, n_seqs);
+}
+
+ggml_tensor * llama_model_kimi_k3::graph::build_kda_layer(
+        ggml_tensor * cur, const llama_layer & layer, llm_graph_input_rs * inp_rs,
+        int64_t d_conv, int64_t head_dim, int64_t n_head_kda,
+        int64_t d_inner, int64_t n_seq_tokens, int64_t n_seqs, int il) {
+
+    const auto * mctx_cur = inp_rs->mctx;
+    const auto   kv_head  = mctx_cur->get_head();
+
+    ggml_tensor * conv_states_all = mctx_cur->get_r_l(il);
+    ggml_tensor * conv_state_all  = build_rs(inp_rs, conv_states_all, hparams.n_embd_r(), n_seqs);
+
+    const int64_t mem_size = mctx_cur->get_size();
+    const int64_t K_rs     = (int64_t) cparams.n_rs_seq + 1;
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/model.rs'\ns=open(p).read()\nancre = \"/// **Règle delta à porte** — la récurrence du **KDA** de Kimi-K3, un jeton.\"\najout = '''/// **Porte de décroissance du KDA** — variante **K3** (`kda_gate_l … [5484 caractères tronqués]`
+
+  ```
+kda_porte + kda_conv_silu + tests
+test model::tests_kimi_k3::conv_kda_glisse_la_fenetre_et_applique_silu ... FAILED
+test model::tests_kimi_k3::kda_etat_nul_rend_le_produit_exterieur ... ok
+test model::tests_kimi_k3::porte_kda_toujours_negative_et_bornée ... ok
+test model::tests_kimi_k3::kda_une_etape_contre_numpy ... ok
+test model::tests_kimi_k3::kda_porte_negative_oublie_l_etat ... ok
+test model::tests_kimi_k3::res_mix_melange_normes_et_bruts ... ok
+test model::tests_kimi_k3::res_mix_score_sur_les_normes_pas_sur_les_bruts ... ok
+test model::tests_kimi_k3::situ_borne_la_porte ... ok
+assertion failed: (out2[1] - silu(2.0)).abs() < 1e-6
+test result: FAILED. 7 passed; 1 failed; 0 ignored; 0 measured; 69 filtered out; finished in 0.00s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/model.rs'\ns=open(p).read()\n# 1. disposition de l'état : comme la référence (temps contigu DANS un canal)\ns=s.replace(\"\"\"/// `etat` porte les `d_conv − 1` entrées **précédentes** de chaque can … [3738 caractères tronqués]`
+
+  ```
+disposition de l'état corrigée (canal-majeur, comme la référence)
+test result: ok. 77 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.14s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='docs/architecture-kimi-k3.md'\ns=open(p).read()\ns=s.replace(\"\"\"Le contrat de la couche, tel que la référence le montre :\"\"\",\n\"\"\"**Ce qui est déjà implémenté et testé (sans poids)** : la **porte de décr … [1267 caractères tronqués]`

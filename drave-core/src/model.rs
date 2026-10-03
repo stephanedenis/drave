@@ -780,6 +780,71 @@ pub struct Vue4 {
     pub src: crate::list::Source,
 }
 
+/// **Porte de décroissance du KDA** — variante **K3** (`kda_gate_lower_bound = −5`) :
+///
+/// ```text
+/// g = borne · sigmoïde( exp(A_log) · (f_b(f_a(x)) + dt_bias) )
+/// ```
+///
+/// Le fichier stocke **`-exp(A_log)`** dans `ssm_a` (repli fait à la conversion),
+/// donc `exp(A_log) = -ssm_a` — c'est la note de la référence, et se tromper de
+/// signe donne une porte **positive**, c'est-à-dire une croissance exponentielle
+/// de l'état au lieu d'une décroissance : des scores plausibles et faux.
+///
+/// Avec `borne = −5`, la porte est **toujours dans (−5, 0)** donc `exp(g)` dans
+/// (0, 1] : l'état ne peut que décroître. Kimi-Linear utilise l'autre variante
+/// (`-exp(A_log)·softplus(…)`), sans borne : deux modèles, deux formules.
+#[allow(dead_code)]
+#[inline]
+pub fn kda_porte(z: f32, ssm_a: f32, borne: f32) -> f32 {
+    let exp_a_log = -ssm_a;                       // le fichier stocke -exp(A_log)
+    borne * (1.0 / (1.0 + (-(exp_a_log * z)).exp()))
+}
+
+/// **Convolution courte causale du KDA** (noyau 4) par canal, suivie de **SiLU**.
+///
+/// `etat` porte les `d_conv − 1` entrées **précédentes** de chaque canal (la plus
+/// ancienne d'abord) ; il est **mis à jour** par l'appel.
+///
+/// **Deux dispositions, et il ne faut pas les confondre** :
+/// - l'ÉTAT est **canal-majeur** (les temps d'un même canal sont contigus),
+///   `etat[k + (d_conv−1)·canal]` — c'est la disposition de la référence
+///   (`ggml_view_3d(conv_state, d_conv-1, d_inner, …)`, `ne0` = temps) ; elle rend
+///   aussi la fenêtre d'un canal contiguë en mémoire ;
+/// - les POIDS sont `poids[k + d_conv·canal]`, parce que le tenseur GGUF a
+///   `dims[0] = d_conv` (le noyau contigu).
+///
+/// La première version de ce code utilisait la même formule pour les deux : le
+/// test l'a attrapée.
+///
+/// La référence fait `ggml_ssm_conv` puis `ggml_silu` : la fenêtre est
+/// `[état (3), x (1)]` dans l'ordre chronologique, **sans retournement**.
+#[allow(dead_code)]
+pub fn kda_conv_silu(x: &[f32], poids: &[f32], etat: &mut [f32], d_conv: usize,
+                     d_inner: usize, out: &mut [f32]) {
+    debug_assert_eq!(etat.len(), (d_conv - 1) * d_inner);
+    debug_assert!(x.len() >= d_inner && out.len() >= d_inner);
+    debug_assert!(poids.len() >= d_conv * d_inner);
+    for c in 0..d_inner {
+        let mut acc = 0f32;
+        for k in 0..d_conv - 1 {
+            acc += poids[k + d_conv * c] * etat[k + (d_conv - 1) * c];
+        }
+        acc += poids[(d_conv - 1) + d_conv * c] * x[c];
+        // SiLU : `x · sigmoïde(x)`
+        out[c] = acc * (1.0 / (1.0 + (-acc).exp()));
+    }
+    // décalage de l'état : on jette la plus ancienne, on pousse la nouvelle
+    for c in 0..d_inner {
+        for k in 0..d_conv.saturating_sub(2) {
+            etat[k + (d_conv - 1) * c] = etat[(k + 1) + (d_conv - 1) * c];
+        }
+    }
+    if d_conv >= 2 {
+        for c in 0..d_inner { etat[(d_conv - 2) + (d_conv - 1) * c] = x[c]; }
+    }
+}
+
 /// **Règle delta à porte** — la récurrence du **KDA** de Kimi-K3, un jeton.
 ///
 /// Transcription de `build_delta_net_autoregressive` (`llama.cpp-k3`,
@@ -8729,6 +8794,56 @@ mod tests_kimi_k3 {
             s[i * hd + j] += k[i] * beta * (v[j] - sk[j]);
         } }
         (0..hd).map(|j| (0..hd).map(|i| s[i * hd + j] * q[i]).sum()).collect()
+    }
+
+    #[test]
+    fn porte_kda_toujours_negative_et_bornée() {
+        // Quelle que soit l'entrée, avec la borne −5 la porte est dans (−5, 0) :
+        // `exp(g) ∈ (0, 1]`, donc l'état DÉCROÎT. Un signe inversé donnerait une
+        // porte positive (croissance) — c'est le piège que la référence signale.
+        for z in [-8.0f32, -1.0, 0.0, 1.0, 8.0] {
+            let g = kda_porte(z, -1.0, -5.0);   // ssm_a = -exp(A_log) = -1
+            assert!(g < 0.0 && g >= -5.0, "z={z} → g={g}");
+        }
+        // z = 0 → sigmoïde(0) = 0,5 → g = −2,5
+        assert!((kda_porte(0.0, -1.0, -5.0) + 2.5).abs() < 1e-6);
+        // exp(A_log) = 2 (ssm_a = −2) : g = −5·σ(0) = −2,5 aussi à z = 0
+        assert!((kda_porte(0.0, -2.0, -5.0) + 2.5).abs() < 1e-6);
+        // et une pente double pour z > 0
+        let a = kda_porte(1.0, -1.0, -5.0);
+        let b = kda_porte(1.0, -2.0, -5.0);
+        assert!(b < a, "exp(A_log) plus grand décroît plus vite : {b} vs {a}");
+    }
+
+    #[test]
+    fn conv_kda_glisse_la_fenetre_et_applique_silu() {
+        let (d_conv, d_inner) = (4usize, 2usize);
+        // noyau = 1 sur la DERNIÈRE position, 0 ailleurs → la sortie est la SiLU
+        // de l'entrée courante, et l'état doit glisser.
+        let mut poids = vec![0f32; d_conv * d_inner];
+        for c in 0..d_inner { poids[(d_conv - 1) + d_conv * c] = 1.0; }
+        // état CANAL-majeur : canal 0 = [0,1 ; 0,3 ; 0,5], canal 1 = [0,2 ; 0,4 ; 0,6]
+        let mut etat = vec![0.1f32, 0.3, 0.5, 0.2, 0.4, 0.6];
+        let x = [2.0f32, -2.0];
+        let mut out = vec![0f32; d_inner];
+        kda_conv_silu(&x, &poids, &mut etat, d_conv, d_inner, &mut out);
+        let silu = |v: f32| v * (1.0 / (1.0 + (-v).exp()));
+        assert!((out[0] - silu(2.0)).abs() < 1e-6);
+        assert!((out[1] - silu(-2.0)).abs() < 1e-6);
+        // l'état a glissé : canal 0 = [0,3 ; 0,5 ; 2,0], canal 1 = [0,4 ; 0,6 ; −2,0]
+        assert!((etat[0] - 0.3).abs() < 1e-6 && (etat[1] - 0.5).abs() < 1e-6
+                && (etat[2] - 2.0).abs() < 1e-6, "état canal 0 : {etat:?}");
+        assert!((etat[3] - 0.4).abs() < 1e-6 && (etat[4] - 0.6).abs() < 1e-6
+                && (etat[5] + 2.0).abs() < 1e-6, "état canal 1 : {etat:?}");
+        // noyau = 1 sur la PREMIÈRE position → sortie = SiLU(plus ancien état)
+        let mut poids2 = vec![0f32; d_conv * d_inner];
+        for c in 0..d_inner { poids2[0 + d_conv * c] = 1.0; }
+        // canal 0 = [0,5 ; 1,5 ; 2,5], canal 1 = [1,0 ; 2,0 ; 3,0]
+        let mut etat2 = vec![0.5f32, 1.5, 2.5, 1.0, 2.0, 3.0];
+        let mut out2 = vec![0f32; d_inner];
+        kda_conv_silu(&x, &poids2, &mut etat2, d_conv, d_inner, &mut out2);
+        assert!((out2[0] - silu(0.5)).abs() < 1e-6, "{}", out2[0]);
+        assert!((out2[1] - silu(1.0)).abs() < 1e-6, "{}", out2[1]);
     }
 
     #[test]
