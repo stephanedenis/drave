@@ -99464,3 +99464,22 @@ V4-Flash : noyau AVX2 IQ1_M vs scalaire : 3126 tenseurs, 0 différents
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && nohup bash tools/portes.sh rapide > /tmp/porte18b.log 2>&1 & sleep 2; python3 - <<'PY'\np=\"sprints/18-vectoriser-la-dequantification-des-experts.md\"\ns=open(p).read()\na=\"\"\"## Portes\n\n- `tools/portes.sh rapide` : voir le journ … [5577 caractères tronqués]`
+
+  ```
+ok
+dfbd6ea Noyau AVX2 pour IQ1_M (les experts de V4-Flash) : ×1,07, et la raison du plafond
+  ```
+
+- **bash** `{"command": "sleep 200; tail -4 /tmp/porte18b.log; grep -E \"V4-Flash 43|cargo test\" /tmp/porte18b.log; echo \"procs: $(pgrep -x drave | wc -l)\"", "description": "Check the gate after the IQ1_M kernel", "timeoutMs": 260000}`
+
+  ```
+mode 3 — lot dense f32           0.00e0  ✅  (réf 60.8135 / deux nœuds 60.8135)
+  mode 4 — lot en listes           4.45e-3  ✅  (réf 60.8135 / deux nœuds 60.5427)
+
+toutes les portes sont vertes
+  cargo test --release                       63 verts  ✅
+  V4-Flash 43 couches ctx 32                 8430.4966  ✅
+procs: 0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np=\"sprints/18-vectoriser-la-dequantification-des-experts.md\"\ns=open(p).read()\na=\"\"\"- `tools/portes.sh rapide` : voir le journal du bloc — la porte **V4-Flash\n  8430,4966** est celle qui compte ici\"\"\"\nb=\ … [772 caractères tronqués]`

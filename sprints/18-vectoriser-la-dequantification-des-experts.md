@@ -1,6 +1,6 @@
 # Sprint 18 — Vectoriser la DÉQUANTIFICATION des experts (grille Q2_K) sans changer un bit
 
-- **Début** : 23:44 · **Fin prévue** : 01:44 (boxing de 120 min)
+- **Début** : 23:44 · **Fin** : 00:12 (28 min — le noyau, sa preuve et les portes)
 - **Objectif** : la déquantification des experts de V4.1 (Q2_K) pèse 25 % de la
   passe et 45 % du poste d'experts (mesuré par ablation au bloc 17). La
   vectoriser — c'est une **conversion pure, valeur par valeur**, donc le seul
@@ -89,7 +89,7 @@ que **le plafond d'un noyau se mesure avant de l'écrire**, et qu'ici il était 
 
 ## Portes
 
-- `tools/portes.sh rapide` : voir le journal du bloc — la porte **V4-Flash
+- `tools/portes.sh rapide` : **toutes vertes** — et la porte **V4-Flash
   8430,4966** est celle qui compte ici (si ses experts sont en Q2_K, le noyau
   vectorisé les déquantifie aussi), avec 63 tests, Qwen 19,3885, clusters
   799,8557, engram et les cinq modes du découpage.

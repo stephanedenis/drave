@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 105.2 h |
+| Durée | 105.3 h |
 | Tours | 79 |
-| Messages | 6209 |
-| Appels d'outils | 5952 |
+| Messages | 6211 |
+| Appels d'outils | 5954 |
 | Fichiers touchés | 117 |
-| Commandes | 5021 |
+| Commandes | 5023 |
 | Sous-agents | 32 |
-| Commits | 386 |
+| Commits | 387 |
 | Compactages de contexte | 8 |
 
 ## Objectifs déclarés
@@ -4037,7 +4037,7 @@ P0-P6 faites, P8 portée et val
 
 ### Tour 79 — <goal_round> Objective: "Exécuter le plan docs/plan-deepseek41-complet.md phase par phase (P0→P9), en autonomie, en resp … [941 caractères tronqués]
 
-*1212 appels d'outils.* Actions notables :
+*1214 appels d'outils.* Actions notables :
 
 - web_search
 - web_fetch
@@ -4053,7 +4053,7 @@ P0-P6 faites, P8 portée et val
 - bash — Locate hc_collapse_triton definition
 - read
 - bash — Read mHC init and pre/post call sites
-- … et 1082 autres
+- … et 1084 autres
 
 **Synthèse produite :**
 
@@ -4260,7 +4260,7 @@ P0-P6 faites, P8 portée et val
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 4981 autres
+- … et 4983 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4794,4 +4794,5 @@ P0-P6 faites, P8 portée et val
 - Bloc 17 : la déquantification pèse 25 % de la passe et 45 % du poste d'experts (mesuré par ablation), et clôture du bloc  Deux builds temporaires (jamais commit
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p="sprints/18-vectoriser-la-dequantification-des-experts.md" s=open(p).read() a="""## Por
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && nohup bash tools/portes.sh rapide > /tmp/porte18b.log 2>&1 & sleep 2; python3 - <<'PY' p="sprints/18-vecto
+- Sprint 18 : clôture (28 min) — deux noyaux AVX2 bit-exacts (Q2_K et IQ1_M), portes toutes vertes" && now=$(date +%s) && printf "19 %s %s\n" "$now" "$((now+7200)
 
