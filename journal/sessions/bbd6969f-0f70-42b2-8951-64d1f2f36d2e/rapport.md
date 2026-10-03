@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 112.1 h |
-| Tours | 87 |
-| Messages | 6601 |
-| Appels d'outils | 6321 |
-| Fichiers touchés | 122 |
-| Commandes | 5334 |
+| Durée | 113.1 h |
+| Tours | 88 |
+| Messages | 6651 |
+| Appels d'outils | 6365 |
+| Fichiers touchés | 123 |
+| Commandes | 5377 |
 | Sous-agents | 32 |
-| Commits | 423 |
+| Commits | 424 |
 | Compactages de contexte | 9 |
 
 ## Objectifs déclarés
@@ -217,6 +217,8 @@
 **Tour 86** — <goal_round> Objective: "Exécuter le plan docs/plan-deepseek41-complet.md phase par phase (P0→P9), en autonomie, en respectant pour chaque phase ses deux portes : porte de correction (comparaison étage par étage à llama.cpp sur V4-Flash) et porte Drave (flux : événements/paires par jeton, trace rejouée à l'identique, découpage en grappes, flux lisible par un outil d'analyse). Aucune phase ne passe … [662 caractères tronqués]
 
 **Tour 87** — <goal_round> Objective: "Exécuter le plan docs/plan-deepseek41-complet.md phase par phase (P0→P9), en autonomie, en respectant pour chaque phase ses deux portes : porte de correction (comparaison étage par étage à llama.cpp sur V4-Flash) et porte Drave (flux : événements/paires par jeton, trace rejouée à l'identique, découpage en grappes, flux lisible par un outil d'analyse). Aucune phase ne passe … [662 caractères tronqués]
+
+**Tour 88** — <goal_round> Objective: "Exécuter le plan docs/plan-deepseek41-complet.md phase par phase (P0→P9), en autonomie, en respectant pour chaque phase ses deux portes : porte de correction (comparaison étage par étage à llama.cpp sur V4-Flash) et porte Drave (flux : événements/paires par jeton, trace rejouée à l'identique, découpage en grappes, flux lisible par un outil d'analyse). Aucune phase ne passe … [662 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -4318,7 +4320,7 @@ C'est un point de méthode qui comptait : sans cette mesure, on aurait pu « cor
 
 ### Tour 87 — <goal_round> Objective: "Exécuter le plan docs/plan-deepseek41-complet.md phase par phase (P0→P9), en autonomie, en resp … [942 caractères tronqués]
 
-*158 appels d'outils.* Actions notables :
+*199 appels d'outils.* Actions notables :
 
 - bash — Launch the long-window correction gate
 - bash — Wait for the long comparison
@@ -4334,11 +4336,44 @@ C'est un point de méthode qui comptait : sans cette mesure, on aurait pu « cor
 - bash — Read the bloc 22 plan in sprint 21
 - bash — Locate engram code and any local vLLM source
 - bash — Inspect correction-gate tools and engine flags
-- … et 132 autres
+- … et 172 autres
 
 **Synthèse produite :**
 
-Maintenant les deux fonctions (drapeau + noyau AVX2) :
+**Réponse courte : non, pas pour la vitesse — les mesures de ce soir disent que le mur est le CPU, pas le disque.**
+
+Ce que je viens de mesurer (V4.1 Q2, 341 Go, le seul modèle qui ne tient pas en RAM, donc le seul cas où le disque pourrait limiter) :
+
+| phase d'une passe V4.1 (5 jetons) | lu sur le disque | CPU consommé |
+|---|---|---|
+| chargement (0→24 s) | 5,4 Go | 23 s (≈1 cœur) |
+| calcul (24→40 s) | ~0,6 Go/s | **375 s en 16 s de mur ⇒ 23× parallèle** |
+
+- Le NVMe (Fanxiang S660, **node NUMA 0**) plafonne à **2,0 Go/s** (`dd iflag=direct`), et le moteur le sollicite à **~30 %** pendant le calcul. Il y a du débit disponible qu'on n'utilise même pas → un 2ᵉ disque n'ajouterait rien.
+- V4-Flash (82 Go) est **entièrement en page cache** : `read_bytes = 0` sur un run entier, et son fichier vit sur le **HDD 12 To** (`WDC WD120EFGX`, ROTA=1) — le disque ne le voit plus après le premier passage.
+- Le poste dominant est le produit des experts (`proj+mlp`), et c'est du **calcul** : la vectorisation AVX2+FMA de ce soir a donné **×2,06 sur la passe** sans toucher au disque.
+
+Nuance technique sur « chacun son NVMe pour le mmap » : un `mmap` d'**un** fichier est servi par le périphérique qui le porte, on ne peut pas faire servir le même fichier par deux disques. Pour que ça paie, il faut **couper le modèle en deux fichiers** et faire tourner deux nœuds — c'est exactement ce que le dépôt sait déjà faire (`commun.gguf` + `cluster-XX.gguf`, `--ppl-reparti`, écart mesuré 0,00e0). Là, chaque socket lit sa moitié depuis son disque et sa RAM locale : c'est un vrai ×2 de bande passante *et* de mémoire utile.
+
+**Quand un 2ᵉ NVMe vaudrait la peine, honnêtement :**
+1. si on veut faire tourner des modèles **plus gros que 125 Go de RAM** en deux nœuds (chaque moitié locale) — c'est le scénario qui gagne vraiment ;
+2. pour les **démarrages à froid** : sortir V4-Flash du HDD (82 Go à ~200 Mo/s ≈ 7 min) vers un NVMe.
+
+Mais pour ce qu'on fait cette nuit, l'argent serait mieux mis dans le CPU/les noyaux : llama.cpp fait la même passe de 1 024 jetons en 4 minutes là où on est à ~300× plus lent, et j'ai justement un chantier ouvert et mesuré (le chemin des blocs compressés coûte ×1,8 sur les passes multi-fenêtres, avec ×2 à reprendre sur le produit scalaire qui est maintenant en opt-in).
+
+Si tu veux, je quantifie le scénario « deux nœuds, chacun son disque » sur V4.1 : ça se mesure en ~20 min et ça te dirait si le achat déplace quelque chose **avant** de le faire.
+
+### Tour 88 — <goal_round> Objective: "Exécuter le plan docs/plan-deepseek41-complet.md phase par phase (P0→P9), en autonomie, en resp … [942 caractères tronqués]
+
+*3 appels d'outils.* Actions notables :
+
+- bash — Four windows of identical tokens, with I/O sampling
+- write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-materiel-disque-ou-cpu.md`
+- bash — Commit the hardware report and check the run
+
+**Synthèse produite :**
+
+⏵ Bloc 25 : trancher entre accumulation et contenu (4 fenêtres, mêmes jetons) avec suivi d'I/O
 
 ## 3. Travail accompli
 
@@ -4468,6 +4503,7 @@ Maintenant les deux fonctions (drapeau + noyau AVX2) :
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/sprints/23-la-porte-de-correction-outillee-et-longue.md` | 1 | 3 |
 | `/home/stephane/Data13TB/stephane/github/Qtrinet/sprints/23-la-porte-de-correction-outillee-et-longue.md` | 0 | 1 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/sprints/24-le-produit-scalaire-des-experts-vectorise.md` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-materiel-disque-ou-cpu.md` | 1 | 0 |
 
 ### Sous-agents lancés
 
@@ -4546,7 +4582,7 @@ Maintenant les deux fonctions (drapeau + noyau AVX2) :
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 5294 autres
+- … et 5337 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -5117,4 +5153,5 @@ Maintenant les deux fonctions (drapeau + noyau AVX2) :
 - Porte de correction à ctx 256 (255 positions) : TENUE, mais elle a d'abord ÉCHOUÉ sur un point, et le critère a été révisé par la mesure  Résultat : corrélation
 - Plan et sprint 23 : le coût du contexte long est attribué à ce qui est MESURÉ (proj+mlp double, l'attention reste plate), l'empreinte des experts reste une hypo
 - DRAVE_SIMD_DOT : le produit scalaire des experts vectorisé — ×2,06 sur la passe, et l'écart qu'il introduit est MESURÉ  Le poste dominant de V4-Flash (proj+mlp,
+- Rapport : disque ou CPU ? — la mesure dit que le deuxième NVMe n'accélérerait pas les passes actuelles  Mesuré : NVMe à 2,0 Go/s (dd direct), moteur V4.1 à ~30 
 

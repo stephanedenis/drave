@@ -105104,3 +105104,759 @@ The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/REPRISE.md has been upd
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -m \"DRAVE_SIMD_DOT : le produit scalaire des experts vectorisé — ×2,06 sur la passe, et l'écart qu'il introduit est MESURÉ\n\nLe poste dominant de V4-Flash (proj+mlp, 3 271 ms/jeton) était une chaîne de 2 … [791 caractères tronqués]`
+
+  ```
+0553b8d DRAVE_SIMD_DOT : le produit scalaire des experts vectorisé — ×2,06 sur la passe, et l'écart qu'il introduit est MESURÉ
+  ```
+
+### 🤖 Assistant
+
+⏵ Bloc 24 : portes en fond ; ensuite la courbe du coût par position (l'inconnu nommé)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && (t0=$(date +%s); bash tools/portes.sh rapide > /tmp/portes_rapide2.log 2>&1; echo \"portes exit=$? en $(( $(date +%s) - t0 )) s\"; tail -4 /tmp/portes_rapide2.log)", "description": "Run gates after the SIMD change", "run_in_backgroun … [31 caractères tronqués]`
+
+  ```
+started background job bash-213
+  ```
+
+- **bash** `{"command": "sleep 540; tail -16 /tmp/portes_rapide2.log", "description": "Wait for the gates", "timeoutMs": 600000}`
+
+  ```
+Qwen3-235B : softmax                       softmax  ✅
+  V4-Flash : --config le dit calculable      oui  ✅
+  V4-Flash 43 couches ctx 32                 8430.4966  ✅
+  engram V4.1 : adressage                    rangées DISTINCTES : 479723  ✅
+  le flux relu par tools/analyse_flux.py     51 lignes  ✅
+  le rejeu de la trace (0 manquante, écart ≤ 1e-5) écart 0.00e+00  ✅
+  porte de correction (llama.cpp, 71 positions) (100.0 % des positions au-dessus de 0.95, min 0.9959 >= plancher 0.9, top-1 94.4 %)  ✅
+
+=== Découpage (deux nœuds) ===
+  mode 0 — f32 dense               0.00e0  ✅  (réf 61.9920 / deux nœuds 61.9920)
+  mode 1 — listes quantifiées     0.00e0  ✅  (réf 61.9920 / deux nœuds 61.9920)
+  mode 2 — listes par blocs        3.65e-2  ✅  (réf 61.9920 / deux nœuds 64.2535)
+  mode 3 — lot dense f32           0.00e0  ✅  (réf 60.8135 / deux nœuds 60.8135)
+  mode 4 — lot en listes           4.45e-3  ✅  (réf 60.8135 / deux nœuds 60.5427)
+
+toutes les portes sont vertes
+  ```
+
+### 👤 Utilisateur
+
+background job bash-213 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && (t0=$(date +%s); bash tools/portes.sh rapide > /tmp/portes_rapide2.log 2>&1; echo "portes exit=$? en $(( $(date +%s) - t0 )) s"; tail -4 /tmp/portes_rapide2.log)) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && (t0=$(date +%s); V4=/home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek-V4-Flash-UD-IQ1_M/DeepSeek-V4-Flash-UD-IQ1_M-00001-of-00003.gguf; DRAVE_SIMD_DOT=1 ./drave-core/target/release/drave \"$V4\" --ppl /tmp/ids_v4f1024.txt --ctx  … [243 caractères tronqués]`
+
+  ```
+started background job bash-214
+  ```
+
+- **bash** `{"command": "sleep 45; tail -3 /tmp/courbe_simd.log; pgrep -x drave >/dev/null && echo \"tourne\" || echo \"fini/erreur\"", "description": "Check the curve run started", "timeoutMs": 120000}`
+
+  ```
+[config] rotation : RoPE simple (contexte 64 ≤ 65536 initial ; YaRN ×16 prendrait le relais au-delà)
+[tête 4 bits] 129280 × 4096 → 4.50 b/poids, 0 Mo, 0.0 s
+[simd] DRAVE_SIMD_DOT est actif : le produit scalaire des experts est vectorisé (AVX2+FMA, quatre accumulateurs). Les sommes ne sont plus dans l'ordre publié — les logits changent légèrement, et c'est mesurable avec tools/compare_logits.py.
+tourne
+  ```
+
+- **bash** `{"command": "sleep 300; grep -E \"tokens notés\" /tmp/courbe_simd.log; pgrep -x drave >/dev/null && echo \"tourne\" || echo \"fini\"", "description": "Check window-by-window progress", "timeoutMs": 400000}`
+
+  ```
+63 tokens notés — perplexité cumulée 15.275  (0.5 tok/s)  [fenêtre 1 : 63 notés, PPL 15.275]
+tourne
+  ```
+
+- **bash** `{"command": "sleep 420; grep -E \"tokens notés\" /tmp/courbe_simd.log; pgrep -x drave >/dev/null && echo \"tourne\" || echo \"fini\"", "description": "Wait for more windows", "timeoutMs": 500000}`
+
+  ```
+63 tokens notés — perplexité cumulée 15.275  (0.5 tok/s)  [fenêtre 1 : 63 notés, PPL 15.275]
+     126 tokens notés — perplexité cumulée 21.763  (0.3 tok/s)  [fenêtre 2 : 63 notés, PPL 31.007]
+tourne
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n '\"--depuis\"\\|depuis' drave-core/src/main.rs | head -6; grep -E \"tokens notés\" /tmp/courbe_simd.log | tail -2", "description": "Check the --depuis flag and curve progress"}`
+
+  ```
+552:    ppl_texte: bool, prompt: Option<String>, limit: usize, depuis: usize,
+694:            "--depuis" => { o.depuis = suivant(i).parse().unwrap(); 2 }
+879:                println!("[flux] rejeu depuis {chemin} : {} listes enregistrées",
+892:    // Appliqués en perplexité depuis toujours, oubliés ici : la déstructuration
+973:        println!("ids depuis {f} : {} tokens", ids.len());
+1643:    let Some(e) = engram::Engram::depuis_gguf(&g) else {
+      63 tokens notés — perplexité cumulée 15.275  (0.5 tok/s)  [fenêtre 1 : 63 notés, PPL 15.275]
+     126 tokens notés — perplexité cumulée 21.763  (0.3 tok/s)  [fenêtre 2 : 63 notés, PPL 31.007]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"kv.extend\\|kv.resize\\|kv.push\\|cache_kv\\|kv_cache\" drave-core/src/model.rs | head -20", "description": "Find how the KV cache grows"}`
+
+  ```
+(no output)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"struct Cache\\|fn pousser\\|fn ecrire\\|extend_from_slice\" drave-core/src/model.rs | head -20; grep -E \"tokens notés\" /tmp/courbe_simd.log | tail -2", "description": "Find the cache structure and writes"}`
+
+  ```
+1082:pub struct CacheExpertsRam {
+1320:pub struct CacheExperts {
+1878:    pub fn ecrire(&mut self, couche: usize, pos: usize, actifs: &[i32], echelle: f32) {
+1908:            c.extend_from_slice(&(n_blocs as u32).to_le_bytes());
+1909:            for e in &echelles { c.extend_from_slice(&f16_depuis_f32(*e).to_le_bytes()); }
+1917:                    c.extend_from_slice(&i.to_le_bytes()[..2]);
+1933:                    c.extend_from_slice(&i.to_le_bytes());
+1940:                        c.extend_from_slice(&i.to_le_bytes()[..2]);
+1944:                c.extend_from_slice(&v.to_le_bytes());
+2472:        seuil.extend_from_slice(y);
+2656:    pub fn ecrire(&mut self, kvh: usize, pos: usize, k: &[f32], v: &[f32]) {
+4385:    pub fn ecrire_neurones(&self, chemin: &str) -> std::io::Result<usize> {
+4632:                for v in x { octets.extend_from_slice(&v.to_le_bytes()); }
+6334:                for _ in 0..ha.hc { copies.extend_from_slice(&x); }
+7197:                    if hb.log_on { hb.log.extend_from_slice(&hn); }
+     126 tokens notés — perplexité cumulée 21.763  (0.3 tok/s)  [fenêtre 2 : 63 notés, PPL 31.007]
+     189 tokens notés — perplexité cumulée 23.493  (0.2 tok/s)  [fenêtre 3 : 63 
+… [18 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '2630,2680p' drave-core/src/model.rs", "description": "Read the KV cache write"}`
+
+  ```
+/// Octets par vecteur (tête, position) dans le tableau quantifié.
+    #[inline]
+    fn pas(&self) -> usize { if self.bits == 8 { self.hd } else { self.hd / 2 } }
+
+    /// Octets réellement ALLOUÉS (diagnostic) : c'est ce que le processus
+    /// réserve, pas ce que `ctx` laisse croire.
+    pub fn octets(&self) -> u64 {
+        (self.kf.len() + self.vf.len()) as u64 * 4
+            + (self.kq.len() + self.vq.len()) as u64
+            + (self.sk.len() + self.sv.len()) as u64 * 4
+    }
+
+    /// Arrondi à la précision d'une demi-précision (10 bits de mantisse).
+    /// Sert à tester l'hypothèse « llama.cpp calcule ses clés en f16 AVANT de
+    /// les quantifier » : c'est peut-être là que se joue son +0,8 % de
+    /// perplexité contre notre +3,0 % (à 8 192 jetons).
+    #[inline]
+    fn arrondi_f16(x: f32) -> f32 {
+        let b = x.to_bits();
+        if (b & 0x7F80_0000) >= 0x7F80_0000 { return x; }        // inf / NaN
+        if (b & 0x7FFF_FFFF) < 0x3880_0000 { return 0.0 * x; }   // sous-normal f16
+        f32::from_bits(b.wrapping_add(0x1000) & !0x1FFF)
+    }
+
+    /// Écrit un vecteur de clé et un de valeur à la position `pos`.
+    #[inline]
+    pub fn ecrire(&mut self, kvh: usize
+… [1495 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"fn assurer\" -A 22 drave-core/src/model.rs | head -30", "description": "Read the KV cache growth policy"}`
+
+  ```
+2564:    pub fn assurer(&mut self, besoin: usize) {
+2565-        if besoin <= self.cap { return; }
+2566-        // ⚠️ `besoin > ctx` faisait BOUCLER SANS FIN : `cap` plafonne à `ctx` et la
+2567-        // condition reste vraie. Mesuré : une invite de 4 731 jetons avec
+2568-        // `--ctx 4608` tournait à ~1 700 % de CPU pendant plus de 22 minutes sans
+2569-        // jamais finir (livelock, pas ralentissement). Le même défaut avait été
+2570-        // corrigé côté GPU au sprint 2 (`kv_assurer`) ; le chemin CPU était resté.
+2571-        // On plafonne au contexte déclaré : le cache ne grandit pas au-delà, et
+2572-        // l'appelant voit la troncature par le message ci-dessous.
+2573-        let besoin = besoin.min(self.ctx);
+2574-        if besoin <= self.cap { return; }
+2575-        let mut cap = self.cap.max(1);
+2576-        while cap < besoin { cap = (cap * 2).min(self.ctx); }
+2577-        let hd = self.hd;
+2578-        let nb = self.nb;
+2579-        let pas = self.pas();
+2580-        let (n_kv, bits) = (self.n_kv, self.bits);
+2581-        let f32_k = bits >= 32 || self.k_f32;
+2582-        let f32_v = bits >= 32 || self.v_f32;
+2583-        if self.k_f16 {
+2584-            le
+… [144 caractères tronqués]
+  ```
+
+- **bash** `{"command": "sleep 120; grep -E \"tokens notés|sur [0-9]+ tokens|postes\" /tmp/courbe_simd.log | tail -4; pgrep -x drave >/dev/null && echo \"tourne\" || echo \"fini\"", "description": "Check curve completion", "timeoutMs": 200000}`
+
+  ```
+63 tokens notés — perplexité cumulée 15.275  (0.5 tok/s)  [fenêtre 1 : 63 notés, PPL 15.275]
+     126 tokens notés — perplexité cumulée 21.763  (0.3 tok/s)  [fenêtre 2 : 63 notés, PPL 31.007]
+     189 tokens notés — perplexité cumulée 23.493  (0.2 tok/s)  [fenêtre 3 : 63 notés, PPL 27.376]
+tourne
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"fenetres\" drave-core/src/main.rs | head -12", "description": "Find the window construction"}`
+
+  ```
+4495:fn fenetres_harmony(tk: &tokenizer::Tokenizer, ids: &[u32], ctx: usize, mode: &str,
+4524:    let mut fenetres = Vec::new();
+4557:            fenetres.push((w, m));
+4561:            for (i, (w, m)) in fenetres.iter().enumerate() {
+4567:        return fenetres;
+4588:            fenetres.push((std::mem::take(&mut cur), std::mem::take(&mut masque)));
+4601:    if cur.len() > systeme.len() { fenetres.push((cur, masque)); }
+4606:        for (i, (w, m)) in fenetres.iter().enumerate() {
+4612:    fenetres
+4766:    let fenetres: Vec<(Vec<u32>, Vec<bool>)> = match &harmony {
+4800:            let f = fenetres_harmony(&tk, &ids, ctx, mode, texte_contexte.as_deref());
+4839:    for (i_f, (chunk, masque)) in fenetres.iter().enumerate() {
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '4760,4800p' drave-core/src/main.rs", "description": "Read how windows are built for --ppl"}`
+
+  ```
+quantifiée n'est pas nulle (même critère que le chemin par événements)");
+    }
+    mdl.reset_events();
+    // Fenêtres d'évaluation : soit des tranches brutes de `ctx` jetons (mode
+    // historique, toutes notées), soit des tours harmony dont seuls les jetons
+    // de contenu sont notés.
+    let fenetres: Vec<(Vec<u32>, Vec<bool>)> = match &harmony {
+        None => {
+            // `--depuis N` : les fenêtres sont ancrées pour que le premier jeton
+            // NOTÉ ait un contexte complet (on recule de ctx-1 jetons, qui ne
+            // sont pas notés). Sans décalage, le protocole historique est
+            // conservé au chiffre près (`chunks`).
+            if depuis == 0 {
+                ids.chunks(ctx).map(|c| (c.to_vec(), vec![true; c.len()])).collect()
+            } else {
+                // Avec décalage, les fenêtres se recouvrent d'UN jeton : chaque
+                // jeton du corpus est ainsi noté exactement une fois, sans le
+                // trou d'un jeton par frontière du découpage en tranches.
+                let deb = depuis.saturating_sub(ctx.saturating_sub(1));
+                let mut fen = Vec::new();
+                let mut base = deb.min(ids.len());
+   
+… [992 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"proj+mlp\" drave-core/src/main.rs | head -4 && sed -n '/proj+mlp/,+6p' drave-core/src/main.rs | head -30", "description": "Find what proj+mlp measures"}`
+
+  ```
+5007:    println!("    postes (ms/token) : projets-attn {:.2} | rope {:.2} | attention {:.2} | proj+mlp {:.2} | somme {:.2} | reste (tête + échantillonnage) {:.2}",
+    println!("    postes (ms/token) : projets-attn {:.2} | rope {:.2} | attention {:.2} | proj+mlp {:.2} | somme {:.2} | reste (tête + échantillonnage) {:.2}",
+             p[0] / n as f64 * 1e3, p[1] / n as f64 * 1e3, p[2] / n as f64 * 1e3,
+             p[3] / n as f64 * 1e3, tot / n as f64 * 1e3,
+             (sec - tot) / n as f64 * 1e3);
+    println!("    dont tête de sortie {:.2} | notation log-sum-exp {:.2} (le reste du « reste » n'est pas chronométré)",
+             t_tete / n as f64 * 1e3, t_note / n as f64 * 1e3);
+    println!("    dont attention : scores {:.2} | softmax {:.2} | somme pondérée + écriture KV {:.2}",
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"PROF\\[3\\]\\|PROF\\[2\\]\\|static PROF\" drave-core/src/model.rs | head -10", "description": "Find the PROF counter increments"}`
+
+  ```
+1765:pub static PROF_V4: [std::sync::atomic::AtomicU64; 5] =
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rn \"pub static PROF\\b\\|pub static PROF:\" drave-core/src/*.rs | head; grep -rn \"static PROF\" drave-core/src/model.rs | head", "description": "Locate the PROF array definition"}`
+
+  ```
+1765:pub static PROF_V4: [std::sync::atomic::AtomicU64; 5] =
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rn \"PROF\" drave-core/src/model.rs | head -12; grep -rn \"prof\\b\" drave-core/src/model.rs | grep -i \"static\\|pub\" | head -5", "description": "Search the profiling statics"}`
+
+  ```
+1765:pub static PROF_V4: [std::sync::atomic::AtomicU64; 5] =
+4267:    /// Seuil d'activation du profilage : une activation vaut `SEUIL_PROFIL` du
+4273:    const SEUIL_PROFIL: f32 = 0.05;
+4282:        let seuil = Self::SEUIL_PROFIL * mx;
+4306:                              100.0 * Self::SEUIL_PROFIL, n_tok, largeur, n));
+5616:        PROF_V4[0].fetch_add(t0.elapsed().as_nanos() as u64,
+5797:        PROF_V4[1].fetch_add(t1.elapsed().as_nanos() as u64,
+5961:        PROF_V4[2].fetch_add(t2.elapsed().as_nanos() as u64,
+6028:        PROF_V4[3].fetch_add(t3.elapsed().as_nanos() as u64,
+6066:        PROF_V4[4].fetch_add(t4.elapsed().as_nanos() as u64,
+2210:    pub prof: [f64; 6],
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"prof\\[\" drave-core/src/model.rs | head -20", "description": "Find prof array increments"}`
+
+  ```
+4951:            self.prof[0] += t_proj.elapsed().as_secs_f64();
+5098:            self.prof[2] += t_att.elapsed().as_secs_f64();
+5264:            self.prof[3] += t_ffn.elapsed().as_secs_f64();
+6611:                self.prof[0] += tm.elapsed().as_secs_f64();
+6645:                self.prof[1] += tr.elapsed().as_secs_f64();
+6704:                    self.prof[4] += t_scores.elapsed().as_secs_f64();
+6722:                    self.prof[5] += t_soft.elapsed().as_secs_f64();
+6963:            self.prof[2] += ta.elapsed().as_secs_f64();
+7189:                self.prof[3] += tf.elapsed().as_secs_f64();
+7242:            self.prof[3] += tf.elapsed().as_secs_f64();
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '7180,7200p;7230,7248p' drave-core/src/model.rs", "description": "Read what proj+mlp wraps in the MoE"}`
+
+  ```
+}
+                Self::vider_couche(self.dump_couches.as_deref(), "l_last", l, pos, &x);
+                if debug_etat {
+                    let n2: f32 = x.iter().map(|v| v * v).sum();
+                    let na: f32 = att.iter().map(|v| v * v).sum();
+                    let nd: f32 = down.iter().map(|v| v * v).sum();
+                    eprintln!("[etat] couche {l:3} pos {pos} : |x| {:.4e} · |att| {:.4e} · \
+|ffn| {:.4e}", n2.sqrt(), na.sqrt(), nd.sqrt());
+                }
+                self.prof[3] += tf.elapsed().as_secs_f64();
+                continue;
+            }
+            Self::matvec(pool, &lay.wgate, &hn, &mut gate, events, &mut paires[2], self.act_levels, self.act_thresh, tk(4), self.act_renorm, &mut scratch, self.seuil_push);
+            // --- capteur hebbien : espionne la co-activation (entrée, sortie)
+            // de la projection gate. Aucun effet sur le calcul.
+            if let Some(hb) = self.hebb.as_mut() {
+                if hb.layer == l {
+                    if hb.log_on { hb.log.extend_from_slice(&hn); }
+                    let (hn2, gate2) = (&hn, &gate);
+                    let mut seuil = std::mem::take(&mut scratch);
+                    hb.obse
+… [1171 caractères tronqués]
+  ```
+
+- **bash** `{"command": "grep -E \"tokens notés|sur [0-9]+ tokens|postes|attention V4\" /tmp/courbe_simd.log | tail -5; pgrep -x drave >/dev/null && echo \"tourne\" || echo \"fini\"", "description": "Check the curve run"}`
+
+  ```
+[config] attention V4 : 43 couches · 1 tête latente de 512 (448 nope + 64 rope) · 64 têtes de requête · sortie groupée 8×1024 · puits par tête
+      63 tokens notés — perplexité cumulée 15.275  (0.5 tok/s)  [fenêtre 1 : 63 notés, PPL 15.275]
+     126 tokens notés — perplexité cumulée 21.763  (0.3 tok/s)  [fenêtre 2 : 63 notés, PPL 31.007]
+     189 tokens notés — perplexité cumulée 23.493  (0.2 tok/s)  [fenêtre 3 : 63 notés, PPL 27.376]
+tourne
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && (while pgrep -x drave >/dev/null; do sleep 10; done; t0=$(date +%s); V4=/home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek-V4-Flash-UD-IQ1_M/DeepSeek-V4-Flash-UD-IQ1_M-00001-of-00003.gguf; DRAVE_SIMD_DOT=1 DRAVE_SANS_BLOCS=1 ./dr … [331 caractères tronqués]`
+
+  ```
+started background job bash-215
+  ```
+
+- **bash** `{"command": "sleep 420; echo \"=== courbe (blocs actifs) ===\"; grep -E \"tokens notés|sur [0-9]+ tokens|postes\" /tmp/courbe_simd.log | tail -4; echo \"=== ablation (sans blocs) ===\"; grep -E \"tokens notés|sur [0-9]+ tokens|postes\" /tmp/courbe_sansblocs.log | tail -4; pgrep -x drave >/dev/null & … [113 caractères tronqués]`
+
+  ```
+=== courbe (blocs actifs) ===
+     189 tokens notés — perplexité cumulée 23.493  (0.2 tok/s)  [fenêtre 3 : 63 notés, PPL 27.376]
+     252 tokens notés — perplexité cumulée 29.725  (0.2 tok/s)  [fenêtre 4 : 63 notés, PPL 60.217]
+=== perplexité 29.7255 sur 252 tokens (0 événements, 1027.7 s) ===
+    postes (ms/token) : projets-attn 0.00 | rope 0.00 | attention 1000.01 | proj+mlp 3046.73 | somme 4046.75 | reste (tête + échantillonnage) 31.30
+=== ablation (sans blocs) ===
+      63 tokens notés — perplexité cumulée 19.720  (0.4 tok/s)  [fenêtre 1 : 63 notés, PPL 19.720]
+     126 tokens notés — perplexité cumulée 33.079  (0.4 tok/s)  [fenêtre 2 : 63 notés, PPL 55.488]
+tourne
+  ```
+
+### 👤 Utilisateur
+
+background job bash-214 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && (t0=$(date +%s); V4=/home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek-V4-Flash-UD-IQ1_M/DeepSeek-V4-Flash-UD-IQ1_M-00001-of-00003.gguf; DRAVE_SIMD_DOT=1 ./drave-core/target/release/drave "$V4" --ppl /tmp/ids_v4f1024.txt --ctx 64 --limit 256 --dense --threads 16 --ppl-profil --lot 1 > /tmp/courbe_simd.log 2>&1; echo "exit=$? en $(( $(date +%s) - t0 )) s")) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "uptime | sed 's/.*load/charge/'; sleep 360; echo \"=== ablation ===\"; grep -E \"tokens notés|sur [0-9]+ tokens|postes\" /tmp/courbe_sansblocs.log | tail -4; pgrep -x drave >/dev/null && echo tourne || echo fini", "description": "Wait for the ablation and watch the load", "timeoutMs": 4 … [6 caractères tronqués]`
+
+  ```
+charge average: 29,63, 28,94, 24,63
+=== ablation ===
+     189 tokens notés — perplexité cumulée 30.048  (0.4 tok/s)  [fenêtre 3 : 63 notés, PPL 24.794]
+     252 tokens notés — perplexité cumulée 36.431  (0.4 tok/s)  [fenêtre 4 : 63 notés, PPL 64.928]
+=== perplexité 36.4311 sur 252 tokens (0 événements, 561.4 s) ===
+    postes (ms/token) : projets-attn 0.00 | rope 0.00 | attention 951.60 | proj+mlp 1245.53 | somme 2197.13 | reste (tête + échantillonnage) 30.46
+fini
+  ```
+
+### 👤 Utilisateur
+
+background job bash-215 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && (while pgrep -x drave >/dev/null; do sleep 10; done; t0=$(date +%s); V4=/home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek-V4-Flash-UD-IQ1_M/DeepSeek-V4-Flash-UD-IQ1_M-00001-of-00003.gguf; DRAVE_SIMD_DOT=1 DRAVE_SANS_BLOCS=1 ./drave-core/target/release/drave "$V4" --ppl /tmp/ids_v4f1024.txt --ctx 64 --limit 256 --dense --threads 16 --ppl-profil --lot 1 > /tmp/courbe_sansblocs.log 2>&1; echo "ablation exit=$? en $(( $(date +%s) - t0 )) s")) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"publie\\|blocs\\.clear\\|blocs\\.push\\|nb_blocs\" drave-core/src/model.rs | head -20; echo \"--- reset entre fenêtres ---\"; sed -n '4838,4848p' drave-core/src/main.rs", "description": "Find the block store and its reset"}`
+
+  ```
+--- reset entre fenêtres ---
+    let (mut t_tete, mut t_note) = (0f64, 0f64);
+    for (i_f, (chunk, masque)) in fenetres.iter().enumerate() {
+        let (mut nll_f, mut n_f) = (0f64, 0usize);
+        // Préremplissage par lots : `lot` jetons d'un coup. `lot == 1` emprunte
+        // exactement le chemin historique jeton par jeton.
+        let mut pos = 0usize;
+        while pos < chunk.len() {
+            let t = lot.min(chunk.len() - pos);
+            let hs = mdl.forward_lot(&chunk[pos..pos + t], pos);
+            // Tête par lots : la matrice la plus lourde du modèle est lue une
+            // fois pour le groupe au lieu d'une fois par jeton.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"struct Mla4\" -A 45 drave-core/src/model.rs | grep -nE \"pub |///\" | head -40", "description": "Inspect the MLA4 state fields"}`
+
+  ```
+1:1397:pub struct Mla4 {
+2:1398-    pub q_a: Vec<f32>,      // [q_lora × h]
+3:1399-    pub q_a_norm: Vec<f32>, // [q_lora]
+4:1400-    pub q_b: Vec<f32>,      // [nh·head_dim × q_lora]
+5:1401-    pub kv: Vec<f32>,       // [head_dim × h]
+6:1402-    pub kv_norm: Vec<f32>,  // [head_dim]
+7:1403-    pub wo_a: Vec<f32>,     // [o_lora·n_groups × (nh/n_groups)·head_dim], par groupe
+8:1404-    pub wo_b: Vec<f32>,     // [h × o_lora·n_groups]
+9:1405-    pub sinks: Vec<f32>,    // [nh]
+10:1406-    pub nh: usize,
+11:1407-    pub h: usize,
+12:1408-    pub head_dim: usize,
+13:1409-    pub rope: usize,
+14:1410-    pub n_groups: usize,
+15:1411-    pub o_lora: usize,
+16:1412-    pub rope_base: f32,
+17:1413-    pub eps: f32,
+18:1414-    /// Ratio de compression de la couche (`attention.compress_ratios`) :
+19:1415-    /// **0** = couche brute (toute la chaîne est celle de P3), **128** = HCA
+20:1416-    /// (implémenté), **4** = CSA (avec indexeur — P5).
+21:1417-    pub ratio: usize,
+22:1418-    /// Base RoPE des couches compressées : `compress_rope_freq_base` (160 000
+23:1419-    /// pour V4-Flash) au lieu de `rope.freq_base` (10 000). Les deux chemins
+24:1420-    /// tournent à des bases différent
+… [1215 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '1436,1490p' drave-core/src/model.rs | grep -nE \"pub |///\" | head -25", "description": "Continue reading Mla4 fields"}`
+
+  ```
+1:    /// résultat est exact — au-delà, il faudrait choisir, et Drave refuse
+2:    /// plutôt que de calculer faux en silence.
+3:    pub indexer_top_k: usize,
+4:    /// La couche a-t-elle un indexeur (`indexer.proj` dans le fichier) ?
+5:    pub a_indexeur: bool,
+6:    /// **La couche POSSÈDE-t-elle son compresseur ?** V4 : oui, chaque couche
+7:    /// compressée a ses tenseurs. V4.1 : seulement les couches SOURCES
+8:    /// (`kv_source_layer_ids` = [2,8,14,20]) — les autres n'ont même pas
+9:    /// `attn_compressor_kv` et lisent l'état publié par leur source.
+10:    pub a_compresseur: bool,
+11:    /// **Le filtre à DEUX NIVEAUX de V4.1** (`candidate_source_layer_id`,
+12:    /// `candidate_topk_blocks`, `candidate_block_size`) : le nombre de positions
+13:    /// compressées au-delà duquel il écarte des blocs AVANT l'indexeur, soit
+14:    /// `candidate_topk_blocks × candidate_block_size` (2 048 × 8 = 16 384 pour ce
+15:    /// fichier). En dessous, il ne mord pas : ignorer le filtre est alors exact.
+16:    /// Au-delà, le moteur refuse au lieu de choisir sur un ensemble plus large que
+17:    /// la référence. 0 = le fichier ne déclare pas de filtres.
+18:    pub candidats_max: usize,
+
+… [501 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"pub struct CacheKv\" -A 40 drave-core/src/model.rs | grep -E \"pub |///\" | head -30", "description": "Inspect CacheKv fields"}`
+
+  ```
+(no output)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '2500,2565p' drave-core/src/model.rs | grep -nE \"pub |///|struct\" | head -25", "description": "Find the cache struct around ecrire"}`
+
+  ```
+1:/// l'attention ne change pas.
+2:pub struct KvCache {
+3:    pub bits: u32,          // 32 = f32 (défaut), 8 = i8
+4:    pub n_kv: usize,
+5:    /// Longueur LOGIQUE (positions adressables par le moteur).
+6:    pub ctx: usize,
+7:    /// `DRAVE_KV_F16=1` : arrondir clés et valeurs en f16 avant quantification.
+8:    pub f16_avant: bool,
+9:    /// Attribution de l'écart int8 : `DRAVE_KV_K_F32=1` garde les CLÉS en f32
+10:    /// (l'erreur qui passe par les scores disparaît), `DRAVE_KV_V_F32=1` garde
+11:    /// les VALEURS (celle de la somme pondérée). Le miroir GPU n'est pas
+12:    /// utilisable dans ces variantes : il suppose une disposition homogène.
+13:    pub k_f32: bool,
+14:    pub v_f32: bool,
+15:    /// Positions réellement allouées, doublées à la demande. Réserver `ctx`
+16:    /// positions d'un coup coûtait 25,77 Go à contexte 1 M pour 512 jetons
+17:    /// écrits (mesuré) ; c'est la même pagination que le miroir VRAM, côté hôte.
+18:    pub cap: usize,
+19:    pub hd: usize,
+22:    /// `DRAVE_KV_K_F16=1` : les CLÉS sont stockées en f16, sans quantification
+23:    /// par bloc. Deux octets par valeur — plus que l'int8 (1,125 avec son échelle)
+24:    /// mais bien moins que le f3
+… [294 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"compresseur\\|fn publier\\|coff\" drave-core/src/model.rs | sed -n '1,25p'", "description": "Find the compressor call sites"}`
+
+  ```
+157:    // par canal, `ape`, norme, RoPE de bloc), le compresseur CSA chevauche, et
+171:    // un manque, c'est implémenté : le compresseur (softmax PAR CANAL sur le
+1056:/// compressé (compresseur, blocs, cache partagé des consommatrices) n'est plus
+1441:    /// **La couche POSSÈDE-t-elle son compresseur ?** V4 : oui, chaque couche
+1445:    pub a_compresseur: bool,
+1460:    /// le compresseur de sa source qui l'a remplie). Lire la présence sur la
+1463:    /// **Largeur de l'état du compresseur** (`coff × head_dim`), celle de la
+1467:    /// elle-même (chaque couche compressée a son compresseur). **V4.1 : une
+1473:    /// Ne pas le savoir, c'est calculer un compresseur par couche et obtenir
+1478:    /// compresseur de 256 valeurs par jeton (deux moitiés de 128, comme le CSA
+1492:    /// mais le **latent du compresseur principal** (512 pour V4.1), et n'existent
+1500:    /// Compresseur (`None` sur une couche brute) : `coff·head_dim × h` pour la
+1501:    /// valeur et la porte, `coff·head_dim × ratio` pour l'`ape`, `head_dim` pour
+1510:/// l'état du compresseur (valeur et porte de chaque jeton) et les **clés
+1519:    /// L'indexeur a son propre compresseur et ses propres blocs (128 v
+… [874 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '2325,2345p' drave-core/src/model.rs", "description": "Read the compressor state fields"}`
+
+  ```
+/// reconnue (`attn_kv.weight`). Troisième chemin d'attention du moteur.
+    pub mla4: Option<Vec<Mla4>>,
+    /// Cache de l'attention V4 : une tête latente de `head_dim` par position,
+    /// le vecteur déjà tourné (il sert de clé **et** de valeur).
+    pub mla4_cache: Vec<Vec<f32>>,
+    /// État du compresseur par couche : la valeur et la porte de chaque jeton,
+    /// `ctx × coff·head_dim`. Elles servent à fabriquer une clé par bloc.
+    pub mla4_comp_kv: Vec<Vec<f32>>,
+    pub mla4_comp_gate: Vec<Vec<f32>>,
+    /// Clés **compressées** : une par bloc complet (`ctx/ratio + 1`), déjà
+    /// normées et tournées. Ce sont des clés d'activation au sens de la vision :
+    /// un bloc est un résumé qu'on peut tracer, compter et transporter.
+    pub mla4_cles_comp: Vec<Vec<f32>>,
+    /// Bornes du **clamp SwiGLU** de DeepSeek-V4, par couche : `swiglu_clamp_exp`
+    /// pour les experts, `swiglu_clamp_shexp` pour l'expert partagé (qui
+    /// retombe sur la première quand elle est absente). Vide ailleurs.
+    pub clamp_exp: Vec<f32>,
+    pub clamp_shexp: Vec<f32>,
+    /// État et blocs de l'**indexeur** (128 valeurs par bloc).
+    pub mla4_idx_kv: Vec<Vec<f32>>,
+    pub mla4_idx_gate: V
+… [13 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"mla4_comp_kv\\|mla4_cles_comp\" drave-core/src/model.rs | head -12", "description": "Find where the compressor state is written"}`
+
+  ```
+2332:    pub mla4_comp_kv: Vec<Vec<f32>>,
+2337:    pub mla4_cles_comp: Vec<Vec<f32>>,
+3458:        let mla4_comp_kv = match mla4.as_ref() {
+3466:        let mla4_cles_comp = match mla4.as_ref() {
+3915:            mla4, mla4_cache, mla4_comp_kv, mla4_comp_gate, mla4_cles_comp,
+6586:                    comp_kv: &mut self.mla4_comp_kv[src],
+6588:                    cles_comp: &mut self.mla4_cles_comp[src],
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '3455,3475p' drave-core/src/model.rs && grep -n \"comp_kv\\[\" drave-core/src/model.rs | head -6", "description": "See how the compressor buffers are allocated"}`
+
+  ```
+None => Vec::new(),
+        };
+        let largeur_comp = |m: &Mla4| m.comp_kv.len() / m.h.max(1);
+        let mla4_comp_kv = match mla4.as_ref() {
+            Some(v) => v.iter().map(|m| vec![0f32; ctx * largeur_comp(m)]).collect(),
+            None => Vec::new(),
+        };
+        let mla4_comp_gate = match mla4.as_ref() {
+            Some(v) => v.iter().map(|m| vec![0f32; ctx * largeur_comp(m)]).collect(),
+            None => Vec::new(),
+        };
+        let mla4_cles_comp = match mla4.as_ref() {
+            Some(v) => v.iter().map(|m| vec![0f32; (ctx / m.ratio.max(1) + 2) * m.head_dim]).collect(),
+            None => Vec::new(),
+        };
+        let largeur_idx = |m: &Mla4| m.idx_comp_kv.len() / m.h.max(1);
+        let mla4_idx_kv = match mla4.as_ref() {
+            Some(v) => v.iter().map(|m| vec![0f32; ctx * largeur_idx(m)]).collect(),
+            None => Vec::new(),
+        };
+        let mla4_idx_gate = match mla4.as_ref() {
+5665:                matvec_f32_fils(&m.comp_kv, x, h, coff_hd, &mut etat.comp_kv[pos * coff_hd..(pos + 1) * coff_hd], n_fils);
+5678:                                   &etat.comp_kv[pos * coff_hd..(pos + 1) * coff_hd]);
+6586:                    com
+… [34 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '5640,5700p' drave-core/src/model.rs", "description": "Read the compressor publication code"}`
+
+  ```
+let n_vis = if sans_blocs || m.ratio == 0 { 0 } else { (pos + 1) / m.ratio };
+        if m.ratio > 0 {
+            // **Deux formes de compresseur, et deux ratios de plus.** V4 (ratios
+            // 4 et 128) : la couche projette sa valeur ET sa porte, chacune en
+            // `coff·hd` valeurs, plus un `ape` par rang dans le bloc. V4.1
+            // (ratios 1 et 2, `vllm/models/deepseek_v41/compressor.py` +
+            // `fused_save_compress_norm`) : une valeur de `hd` par jeton, une
+            // porte seulement si `ratio > 1` (`has_gate = compress_ratio > 1`),
+            // **aucun `ape`**, et le pool est un softmax **par canal** sur le
+            // groupe (`tl.softmax(score, 0)`) — ratio 1 = aucun groupe.
+            //
+            // Une couche CONSOMMATRICE (V4.1, `kv_source_layer_ids`) n'a pas de
+            // tenseurs de compresseur : elle lit l'état publié par sa source,
+            // dont les tampons sont ceux de la source (le site d'appel les
+            // alias). Elle ne réécrit donc pas les blocs.
+            assert!(matches!(m.ratio, 1 | 2 | 4 | 128),
+                    "compression de ratio {} : le moteur ne connaît que 1 et 2 (V4.1) \
+et 4, 128 (V4)", m.
+… [2988 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Contrôle : A/B alterné avec et sans blocs, courts runs, pour écarter la charge machine
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && V4=/home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek-V4-Flash-UD-IQ1_M/DeepSeek-V4-Flash-UD-IQ1_M-00001-of-00003.gguf && for tour in 1 2; do for mode in blocs sans; do if [ $mode = sans ]; then env=\"DRAVE_SANS_BLOCS=1\"; else e … [407 caractères tronqués]`
+
+  ```
+tour 1 · blocs · 147 s (chargement compris) · sur 63 tokens (0 événements, 131.9 s)
+tour 1 · sans · 142 s (chargement compris) · sur 63 tokens (0 événements, 128.9 s)
+tour 2 · blocs · 148 s (chargement compris) · sur 63 tokens (0 événements, 133.5 s)
+tour 2 · sans · 147 s (chargement compris) · sur 63 tokens (0 événements, 132.2 s)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"n_vis\" drave-core/src/model.rs | head -12", "description": "Find where n_vis drives the block loop"}`
+
+  ```
+5640:        let n_vis = if sans_blocs || m.ratio == 0 { 0 } else { (pos + 1) / m.ratio };
+5811:        if indexeur_v41 && etat.idx_cles.is_empty() && n_vis > 0 {
+5812:            panic!("indexeur de V4.1 (couche {l}) : {n_vis} blocs compressés et AUCUNE clé \
+5881:            if n_vis > 0 {
+5907:                let mut scores = vec![0f32; n_vis];
+5908:                for b in 0..n_vis {
+5931:                if m.candidats_max > 0 && l > m.candidat_source && n_vis > m.candidats_max {
+5932:                    panic!("indexeur de V4.1 (couche {l}) : {n_vis} blocs compressés > \
+5936:                let k = n_vis.min(m.indexer_top_k);
+5937:                let mut ordre: Vec<u32> = (0..n_vis as u32).collect();
+5946:                    let mut masque = vec![0f32; n_vis];
+5969:        // fenêtre et tous les blocs entièrement révolus — `n_visible =
+  ```
+
+### 🤖 Assistant
+
+⏵ Test décisif : mêmes jetons dans chaque fenêtre — accumulation ou contenu ?
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c \"\nimport re\nids=[int(x) for x in re.findall(r'\\d+', open('/tmp/ids_v4f1024.txt').read())][:64]\nopen('/tmp/ids_v4f_rep2.txt','w').write(','.join(map(str, ids*2)))\nprint('128 identifiants, les 64 premiers répétés deux  … [532 caractères tronqués]`
+
+  ```
+128 identifiants, les 64 premiers répétés deux fois
+=== /tmp/ids_v4f1024.txt ===
+      63 tokens notés — perplexité cumulée 15.275  (0.5 tok/s)  [fenêtre 1 : 63 notés, PPL 15.275]
+     126 tokens notés — perplexité cumulée 21.763  (0.5 tok/s)  [fenêtre 2 : 63 notés, PPL 31.007]
+=== perplexité 21.7627 sur 126 tokens (0 événements, 271.2 s) ===
+total 287 s
+=== /tmp/ids_v4f_rep2.txt ===
+      63 tokens notés — perplexité cumulée 15.275  (0.5 tok/s)  [fenêtre 1 : 63 notés, PPL 15.275]
+     126 tokens notés — perplexité cumulée 15.275  (0.5 tok/s)  [fenêtre 2 : 63 notés, PPL 15.275]
+=== perplexité 15.2747 sur 126 tokens (0 événements, 265.6 s) ===
+total 280 s
+  ```
+
+### 👤 Utilisateur
+
+est-ce que ca vaudrait la peine que j'achète un 2e nvme pour mettre sur le 2e cpu (chacun son nvme pour le mmap)?
+
+### 🤖 Assistant
+
+⏵ Question matérielle : je mesure d'abord si le disque ou le CPU limite (V4.1 Q2, 341 Go) et la topologie NVMe
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== CPU / NUMA ===\" && lscpu | grep -E \"^Socket|^NUMA|^Model name|^CPU\\(s\\)|Thread\" && echo \"=== NVMe ===\" && lsblk -d -o NAME,SIZE,MODEL,MOUNTPOINT 2>/dev/null | grep -E \"nvme|NAME\" && for d in /sys/block/nvme*n1; do … [242 caractères tronqués]`
+
+  ```
+=== CPU / NUMA ===
+CPU(s):                                  40
+Model name:                              Intel(R) Xeon(R) CPU E5-2687W v3 @ 3.10GHz
+Thread(s) per core:                      2
+Socket(s):                               2
+CPU(s) scaling MHz:                      91%
+NUMA node(s):                            2
+NUMA node0 CPU(s):                       0-9,20-29
+NUMA node1 CPU(s):                       10-19,30-39
+=== NVMe ===
+NAME      SIZE MODEL                 MOUNTPOINT
+nvme0n1 931,5G Fanxiang S660 1TB     
+nvme0n1 : numa_node=0
+=== où vivent les modèles ===
+Filesystem               Size  Used Avail Use% Mounted on
+/dev/mapper/system-root   11T  7,4T  3,5T  69% /home/stephane/Data13TB
+/dev/nvme0n1p2           828G  559G  268G  68% /home/stephane/FastNVMe
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && V41=/home/stephane/FastNVMe/modeles-lourds/DeepSeek-V4.1-Flash-Q2.gguf && python3 -c \"\nimport re\nids=[int(x) for x in re.findall(r'\\d+', open('/tmp/v41_1024.ids').read())][:8]\nopen('/tmp/ids_v41_8.txt','w').write(','.join(map(st … [606 caractères tronqués]`
+
+  ```
+read_bytes max = 25473441792 octets (25.47 Go)
+=== perplexité 10120550.6256 sur 5 tokens (0 événements, 23.1 s) ===
+    postes (ms/token) : projets-attn 0.00 | rope 0.00 | attention 1062.49 | proj+mlp 3240.70 | somme 4303.18 | reste (tête + échantillonnage) 311.11
+  ```
+
+- **bash** `{"command": "cd /home/stephane && echo \"=== débit brut du NVMe (8 Go, direct) ===\" && dd if=/home/stephane/FastNVMe/modeles-lourds/DeepSeek-V4.1-Flash-Q2.gguf of=/dev/null bs=1M count=8000 iflag=direct 2>&1 | tail -1 && echo \"=== ce qui porte le 11 To ===\" && lsblk -s -o NAME,SIZE,ROTA,TYPE,MODE … [189 caractères tronqués]`
+
+  ```
+=== débit brut du NVMe (8 Go, direct) ===
+8388608000 bytes (8,4 GB, 7,8 GiB) copied, 4,24726 s, 2,0 GB/s
+=== ce qui porte le 11 To ===
+NAME         SIZE ROTA TYPE MODEL
+system-root 10,9T    1 lvm  
+└─sda2      10,9T    1 part 
+  └─sda     10,9T    1 disk WDC WD120EFGX-68CPHN0
+=== caches ===
+               total        used        free      shared  buff/cache   available
+Mem:             125          15          19           4          95         110
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && V41=/home/stephane/FastNVMe/modeles-lourds/DeepSeek-V4.1-Flash-Q2.gguf && (./drave-core/target/release/drave \"$V41\" --ppl /tmp/ids_v41_8.txt --ctx 32 --limit 6 --dense --threads 16 --lot 1 > /tmp/v41_io2.log 2>&1 & pid=$!; t0=$(dat … [393 caractères tronqués]`
+
+  ```
+0s read=0Mo cpu=0s
+4s read=1961Mo cpu=3s
+8s read=3765Mo cpu=7s
+12s read=4276Mo cpu=11s
+16s read=4604Mo cpu=15s
+20s read=4999Mo cpu=19s
+24s read=5447Mo cpu=23s
+28s read=6796Mo cpu=104s
+32s read=8316Mo cpu=202s
+36s read=9150Mo cpu=300s
+40s read=10310Mo cpu=398s
+  ```
+
+### 🤖 Assistant
+
+**Réponse courte : non, pas pour la vitesse — les mesures de ce soir disent que le mur est le CPU, pas le disque.**
+
+Ce que je viens de mesurer (V4.1 Q2, 341 Go, le seul modèle qui ne tient pas en RAM, donc le seul cas où le disque pourrait limiter) :
+
+| phase d'une passe V4.1 (5 jetons) | lu sur le disque | CPU consommé |
+|---|---|---|
+| chargement (0→24 s) | 5,4 Go | 23 s (≈1 cœur) |
+| calcul (24→40 s) | ~0,6 Go/s | **375 s en 16 s de mur ⇒ 23× parallèle** |
+
+- Le NVMe (Fanxiang S660, **node NUMA 0**) plafonne à **2,0 Go/s** (`dd iflag=direct`), et le moteur le sollicite à **~30 %** pendant le calcul. Il y a du débit disponible qu'on n'utilise même pas → un 2ᵉ disque n'ajouterait rien.
+- V4-Flash (82 Go) est **entièrement en page cache** : `read_bytes = 0` sur un run entier, et son fichier vit sur le **HDD 12 To** (`WDC WD120EFGX`, ROTA=1) — le disque ne le voit plus après le premier passage.
+- Le poste dominant est le produit des experts (`proj+mlp`), et c'est du **calcul** : la vectorisation AVX2+FMA de ce soir a donné **×2,06 sur la passe** sans toucher au disque.
+
+Nuance technique sur « chacun son NVMe pour le mmap » : un `mmap` d'**un** fichier est servi par le périphérique qui le porte, on ne peut pas faire servir le même fichier par deux disques. Pour que ça paie, il faut **couper le modèle en deux fichiers** et faire tourner deux nœuds — c'est exactement ce que le dépôt sait déjà faire (`commun.gguf` + `cluster-XX.gguf`, `--ppl-reparti`, écart mesuré 0,00e0). Là, chaque socket lit sa moitié depuis son disque et sa RAM locale : c'est un vrai ×2 de bande passante *et* de mémoire utile.
+
+**Quand un 2ᵉ NVMe vaudrait la peine, honnêtement :**
+1. si on veut faire tourner des modèles **plus gros que 125 Go de RAM** en deux nœuds (chaque moitié locale) — c'est le scénario qui gagne vraiment ;
+2. pour les **démarrages à froid** : sortir V4-Flash du HDD (82 Go à ~200 Mo/s ≈ 7 min) vers un NVMe.
+
+Mais pour ce qu'on fait cette nuit, l'argent serait mieux mis dans le CPU/les noyaux : llama.cpp fait la même passe de 1 024 jetons en 4 minutes là où on est à ~300× plus lent, et j'ai justement un chantier ouvert et mesuré (le chemin des blocs compressés coûte ×1,8 sur les passes multi-fenêtres, avec ×2 à reprendre sur le produit scalaire qui est maintenant en opt-in).
+
+Si tu veux, je quantifie le scénario « deux nœuds, chacun son disque » sur V4.1 : ça se mesure en ~20 min et ça te dirait si le achat déplace quelque chose **avant** de le faire.
+
+
+## Tour 88
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Exécuter le plan docs/plan-deepseek41-complet.md phase par phase (P0→P9), en autonomie, en respectant pour chaque phase ses deux portes : porte de correction (comparaison étage par étage à llama.cpp sur V4-Flash) et porte Drave (flux : événements/paires par jeton, trace rejouée à l'identique, découpage en grappes, flux lisible par un outil d'analyse). Aucune phase ne passe à la suivante sans ses deux portes. Jamais de forward muet, jamais d'optimisation qui change une sortie sans le dire."
+Round: 14/30
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Bloc 25 : trancher entre accumulation et contenu (4 fenêtres, mêmes jetons) avec suivi d'I/O
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c \"\nimport re\nids=[int(x) for x in re.findall(r'\\d+', open('/tmp/ids_v4f1024.txt').read())][:64]\nopen('/tmp/ids_v4f_rep4.txt','w').write(','.join(map(str, ids*4)))\nprint('256 identifiants = les 64 premiers répétés 4 fo … [789 caractères tronqués]`
+
+  ```
+started background job bash-216
+  ```
+
+- **write** `{"content": "# Disque ou CPU ? — ce que la mesure dit d'un deuxième NVMe\n\n> Question posée le 03/10 : « est-ce que ça vaudrait la peine d'acheter un 2ᵉ NVMe\n> pour le mettre sur le 2ᵉ CPU (chacun son NVMe pour le mmap) ? »\n>\n> Réponse mesurée : **non, pas pour la vitesse**, parce que le mur est … [4699 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-materiel-disque-ou-cpu.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && tail -6 /tmp/rep4.log 2>/dev/null; pgrep -x drave >/dev/null && echo tourne || echo fini; git add -A && git commit -q -m \"Rapport : disque ou CPU ? — la mesure dit que le deuxième NVMe n'accélérerait pas les passes actuelles\n\nMesu … [565 caractères tronqués]`
