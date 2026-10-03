@@ -30,14 +30,20 @@ Deux surprises, et les deux comptent :
 
 ## 2. Les planchers, avec les débits mesurés
 
+**Les débits ont été remesurés le 03/10 (bloc 30)** : le « 20 Go/s » de RAM venait
+du dépôt, sans méthode. Mesuré : **9,6 Go/s à un fil, 40,3 Go/s à huit fils** (la
+somme d'un tableau de 32 Go) ; et le NVMe passe de **2,26 Go/s à un flux à 3,39
+Go/s à quatre**. C'est le débit agrégé qui compte pour un moteur à 16 fils.
+
 | placement | débit | s/jeton | commentaire |
 |---|---|---|---|
-| tout sur disque dur (200 Mo/s) | 0,2 Go/s | **435 s** | hors de question |
-| tout sur NVMe (2,0 Go/s) | 2,0 Go/s | **43,5 s** | le modèle fait 1,5 To : il ne tient pas en cache |
-| **dense en RAM, experts sur NVMe** | 20 Go/s + 2,0 Go/s | **2,4 + 12,4 = 14,8 s** | le partage « dense résident » ne suffit pas |
-| tout en RAM (impossible ici : 1,5 To) | 20 Go/s | 4,4 s | borne inférieure absolue |
-| deux nœuds, dense résident, experts sur 2 NVMe | 20 + 4 Go/s | **2,4 + 6,2 = 8,6 s** | le découpage divise la partie routée |
-| bus PCIe vers GPU (6,5 Go/s) | 6,5 Go/s | 13,4 s | déplacer les poids à chaque jeton |
+| tout sur disque dur | 0,2 Go/s | **443 s** | hors de question |
+| tout sur NVMe (1 flux) | 2,3 Go/s | **38,5 s** | le modèle fait 1,5 To : il ne tient pas en cache |
+| tout sur NVMe (4 flux) | 3,4 Go/s | 26,1 s | |
+| dense en RAM, experts streamés | 40 + 3,4 Go/s | 1,6 + 7,4 = **9,0 s** | le partage dense résident ne suffit pas |
+| **dense en RAM + cache d'experts (80 %)** | 40 + 3,4 Go/s | 1,6 + 1,5 = **3,1 s** | c'est le scénario que la mesure du bloc 30 rend crédible |
+| tout en RAM (impossible : 1,5 To) | 40 Go/s | 2,2 s | borne inférieure absolue |
+| bus PCIe vers GPU | 6,5 Go/s | 13,6 s | déplacer les poids à chaque jeton |
 
 **Aucune de ces lignes n'est interactive** — et c'est le vrai résultat : pour un
 modèle de cette classe, **le placement ne suffit pas, il faut de la

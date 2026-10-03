@@ -66,6 +66,19 @@ réutilisation se lirait **sans rien calculer**. Mesuré : **3 couches sur 43**
 portent cette table (0, 1, 2) — les 40 autres utilisent le routeur appris. Le
 contrôle croisé est donc possible mais étroit ; il est noté, pas fait.
 
+### 6. Et deux débits remesurés au passage
+
+Le budget de Kimi-K3 s'appuyait sur « 20 Go/s » pour la RAM — un chiffre du dépôt,
+sans méthode. Mesuré (somme d'un tableau de 32 Go) : **9,6 Go/s à UN fil** et
+**40,3 Go/s à seize** ; et le NVMe passe de **2,26 Go/s (1 flux) à 3,39 (4)**.
+Le budget est refait avec ces chiffres : le scénario « dense résident + cache
+d'experts » tombe à **≈ 3,1 s/jeton** (au lieu de 9 s sans cache), et la borne
+« tout en RAM » à 2,2 s. `tools/budget_execution_locale.py` porte les débits
+mesurés **et** leur méthode ; il extrapole désormais des couches vues aux couches
+**déclarées** par le fichier (`block_count`), parce qu'un modèle en cours de
+téléchargement n'a que 43 couches sur 93 et que son « par jeton » se lirait
+comme un total.
+
 ## Rétrospective — garder / changer / doute
 
 **Garder.** Mesurer la réutilisation **avant** d'écrire un cache. L'historique du

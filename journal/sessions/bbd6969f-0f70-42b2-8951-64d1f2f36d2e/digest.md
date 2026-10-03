@@ -111383,3 +111383,175 @@ Created file
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -m \"Protocole de vérification de Kimi-K3 : les 13 points de comparaison de la référence, l'ordre, les tolérances, et le premier jalon (couche 0)\n\nLes deux outils existent déjà (ref_logits_k3 lié contre  … [232 caractères tronqués]`
+
+  ```
+d541216 Protocole de vérification de Kimi-K3 : les 13 points de comparaison de la référence, l'ordre, les tolérances, et le premier jalon (couche 0)
+11:45:05    0.3 Go / 49.2 Go (0.5 %, 27 Mo/s)
+  ```
+
+### 🤖 Assistant
+
+⏵ Calibrer le chiffre « 20 Go/s de RAM » du budget (emprunté au dépôt) par une mesure
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && LD_PRELOAD=/usr/lib64/libopenblas.so.0 python3 - <<'PY'\nimport numpy as np, time\nfor go in (4, 16, 48):\n    n = go * (1 << 30) // 4\n    a = np.ones(n, dtype=np.float32)\n    a[::4096] = 1.0000001          # évite une lecture opti … [262 caractères tronqués]`
+
+  ```
+4 Go : somme en   0.42 s ->    9.6 Go/s lus (s=1.074e+09)
+   16 Go : somme en   1.72 s ->    9.3 Go/s lus (s=4.295e+09)
+   48 Go : somme en   5.20 s ->    9.2 Go/s lus (s=1.288e+10)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && LD_PRELOAD=/usr/lib64/libopenblas.so.0 python3 - <<'PY'\nimport numpy as np, time\nfrom concurrent.futures import ThreadPoolExecutor\ngo = 32\nn = go * (1 << 30) // 4\na = np.ones(n, dtype=np.float32); a[::4096] = 1.0000001\nfor fils … [390 caractères tronqués]`
+
+  ```
+1 fil(s) :   3.34 s ->    9.6 Go/s   (somme 8.5899e+09)
+   4 fil(s) :   1.04 s ->   30.8 Go/s   (somme 8.5899e+09)
+   8 fil(s) :   0.80 s ->   39.9 Go/s   (somme 8.5899e+09)
+  16 fil(s) :   0.79 s ->   40.3 Go/s   (somme 8.5899e+09)
+  ```
+
+### 🤖 Assistant
+
+⏵ La RAM fait 40 Go/s à 8 fils (pas 20) — je mesure aussi le NVMe en parallèle avant de corriger le budget
+
+- **bash** `{"command": "cd /tmp && F=/home/stephane/FastNVMe/modeles-lourds/DeepSeek-V4.1-Flash-Q2.gguf && for n in 1 4; do t0=$(date +%s.%N); for i in $(seq 0 $((n-1))); do off=$((i * 3000)); dd if=$F of=/dev/null bs=1M count=3000 skip=$off iflag=direct 2>/dev/null & done; wait; t1=$(date +%s.%N); python3 -c  … [188 caractères tronqués]`
+
+  ```
+1 flux : 2.9 Go en 1.3 s -> 2.26 Go/s
+  4 flux : 11.7 Go en 3.5 s -> 3.39 Go/s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='tools/budget_execution_locale.py'\ns=open(p).read()\ns=s.replace(\"\"\"Les débits sont ceux **mesurés sur cette machine** (02-03/10) :\n    disque dur 12 To (WDC WD120EFGX, ROTATEUR)   ~200 Mo/s, aléatoire bien p … [2138 caractères tronqués]`
+
+  ```
+outil : débits remesurés
+    partagé + attention + tête  29.255 Go
+    TOTAL                  40.953 Go
+  ⚠️ Tout ce qui est lu à chaque jeton est compté (attention, tête, experts partagés) ; l'embarquement ne l'est pas. Les chiffres « experts seuls » d'un rapport antérieur ne sont PAS ce total.
+
+placement                               débit   s/jeton  jetons/s
+disque dur 12 To (0,2 Go/s)             0.2 Go/s    204.77     0.005
+NVMe, 1 flux (2,3 Go/s)                 2.3 Go/s     17.81     0.056
+NVMe, 4 flux (3,4 Go/s)                 3.4 Go/s     12.05     0.083
+RAM, 1 fil (9,6 Go/s)                   9.6 Go/s      4.27     0.234
+RAM, 8+ fils (40 Go/s)                 40.0 Go/s      1.02     0.977
+bus PCIe x8 (6,5 Go/s)                  6.5 Go/s      6.30     0.159
+NVLink entre GPU (25,8 Go/s)           25.8 Go/s      1.59     0.630
+deux nœuds, disque dur 12 To (0,2 Go/s)      0.4 Go/s    102.38     0.010
+deux nœuds, NVMe, 1 flux (2,3 Go/s)      4.6 Go/s      8.90     0.112
+
+  un expert pèse  17.00 Mo PAR COUCHE ( 731.1 Mo sur les 43 couches)
+  un jeton lit 688 experts-fois, soit 688 experts d'une couche (1.7 % du modèle)
+      32 Go de RAM portent 43/896 experts par couche
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='tools/budget_execution_locale.py'\ns=open(p).read()\ns=s.replace(\"\"\"    n_experts = n_experts or 896\"\"\",\n\"\"\"    n_experts = n_experts or 896\n    # Nombre de couches DÉCLARÉ par le fichier (un modèle en … [2190 caractères tronqués]`
+
+  ```
+extrapolation ajoutée
+Kimi-K3-UD-Q4_K_XL-00001-of-00032.gguf — 15 shard(s) lus, 43 couches vues
+  poids lus : 685.6 Go sur les shards présents
+  formats   : MXFP4 655.1 Go · Q8_0 29.3 Go · F32 1.2 Go
+  routage   : 16 experts sur 896
+  (embarquement NON compté : 1.25 Go — une rangée par jeton ; tête de sortie comptée : 1.25 Go)
+
+  PAR JETON (sur les 43 couches vues) :
+    experts routés         11.698 Go
+    partagé + attention + tête  29.255 Go
+    TOTAL                  40.953 Go
+  ⚠️ Tout ce qui est lu à chaque jeton est compté (attention, tête, experts partagés) ; l'embarquement ne l'est pas. Les chiffres « experts seuls » d'un rapport antérieur ne sont PAS ce total.
+
+placement                               débit   s/jeton  jetons/s
+disque dur 12 To (0,2 Go/s)             0.2 Go/s    204.77     0.005
+NVMe, 1 flux (2,3 Go/s)                 2.3 Go/s     17.81     0.056
+NVMe, 4 flux (3,4 Go/s)                 3.4 Go/s     12.05     0.083
+RAM, 1 fil (9,6 Go/s)                   9.6 Go/s      4.27     0.234
+RAM, 8+ fils (40 Go/s)                 40.0 Go/s      1.02     0.977
+bus PCIe x8 (6,5 Go/s)                  6.5 Go/s      6.30     0.159
+NVLink entre GPU (25,8 Go/s)           2
+… [172 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport sys, struct\nsys.path.insert(0,'tools')\nimport analyse_octets_par_jeton as A\nf='/home/stephane/Data13TB/stephane/modeles/gguf/Kimi-K3-UD-Q4_K_XL/Kimi-K3-UD-Q4_K_XL-00001-of-00032.gguf'\ntry:\n    l = A.Lect … [511 caractères tronqués]`
+
+  ```
+magie b'GGUF'
+ver 3 tensors 0 kv 64
+  TROUVÉ kimi-k3.block_count 93
+  TROUVÉ kimi-k3.leading_dense_block_count 1
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"declare\" tools/budget_execution_locale.py | head -12; sed -n '/n_experts = n_experts or 896/,/break$/p' tools/budget_execution_locale.py | head -30", "description": "Inspect the patched extrapolation code"}`
+
+  ```
+104:    declare = 0
+122:                    declare = int(v)
+129:    declare = None
+151:    if declare and declare > n_couches:
+152:        f = declare / n_couches
+153:        print(f"\n  (extrapolation ×{f:.2f} : {n_couches} couches vues sur {declare} déclarées)")
+162:    if declare and declare > n_couches:
+163:        par_jeton *= declare / n_couches
+164:        print(f"  (les lignes ci-dessous portent sur les {declare} couches déclarées)")
+    n_experts = n_experts or 896
+    # Nombre de couches DÉCLARÉ par le fichier (un modèle en cours de
+    # téléchargement n'a que quelques shards) : sans lui, le « par jeton »
+    # annoncé porterait sur les couches vues et serait lu comme le total.
+    declare = 0
+    for f in fichiers:
+        try:
+            l = A.Lecteur(f)
+            magie = l.lire(4)
+            if magie != b"GGUF":
+                continue
+            import struct as _s
+            _s.unpack("<I", l.lire(4))[0]
+            n_t, n_kv = _s.unpack("<QQ", l.lire(16))
+            for _ in range(n_kv):
+                cle = l.chaine()
+                t = _s.unpack("<I", l.lire(4))[0]
+                v = l.valeur(t)
+                if cle in ("kimi-k3.block_count", "deeps
+… [295 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '126,136p' tools/budget_execution_locale.py", "description": "See the stale lines to remove"}`
+
+  ```
+n_couches = max(max(exps), max(denses or {0: 0})) + 1
+    # Un modèle en cours de téléchargement n'a que quelques couches : on annonce
+    # ce qu'on a vu ET l'extrapolation, plutôt que de laisser croire au total.
+    declare = None
+    for f in fichiers:
+        try:
+            _, m = A.lire_entete(f), None
+        except Exception:
+            continue
+    couches_totales = n_couches
+    par_jeton_exps = sum((k / n_experts) * o for o in exps.values())
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='tools/budget_execution_locale.py'\ns=open(p).read()\ns=s.replace(\"\"\"    # Un modèle en cours de téléchargement n'a que quelques couches : on annonce\n    # ce qu'on a vu ET l'extrapolation, plutôt que de laiss … [552 caractères tronqués]`
+
+  ```
+lignes mortes retirées
+
+  (extrapolation ×2.16 : 43 couches vues sur 93 déclarées)
+
+  PAR JETON (sur les 43 couches vues) :
+    experts routés         11.698 Go
+    partagé + attention + tête  29.255 Go
+    TOTAL                  40.953 Go
+  ⚠️ Tout ce qui est lu à chaque jeton est compté (attention, tête, experts partagés) ; l'embarquement ne l'est pas. Les chiffres « experts seuls » d'un rapport antérieur ne sont PAS ce total.
+
+placement                               débit   s/jeton  jetons/s
+  (les lignes ci-dessous portent sur les 93 couches déclarées)
+disque dur 12 To (0,2 Go/s)             0.2 Go/s    442.86     0.002
+NVMe, 1 flux (2,3 Go/s)                 2.3 Go/s     38.51     0.026
+NVMe, 4 flux (3,4 Go/s)                 3.4 Go/s     26.05     0.038
+RAM, 1 fil (9,6 Go/s)                   9.6 Go/s      9.23     0.108
+RAM, 8+ fils (40 Go/s)                 40.0 Go/s      2.21     0.452
+bus PCIe x8 (6,5 Go/s)                  6.5 Go/s     13.63     0.073
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/rapport-budget-kimi-k3.md'\ns=open(p).read()\ns=s.replace(\"\"\"| placement | débit | s/jeton | commentaire |\n|---|---|---|---|\n| tout sur disque dur (200 Mo/s) | 0,2 Go/s | **435 s** | hors de question … [4488 caractères tronqués]`

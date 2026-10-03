@@ -54,10 +54,15 @@ courbe de réutilisation y sera **différente**, et c'est le jalon M6 de la
 mesurer sur le modèle lui-même. Mais l'ordre de grandeur, lui, change tout :
 
 - trafic d'experts sans cache : **24,7 Go/jeton** ;
-- avec un cache qui capte 75 % (le quart le plus chaud) : **6,2 Go/jeton** ;
-- à 2 Go/s (NVMe), cela fait 3,1 s/jeton au lieu de 12,4 — et la partie dense
-  (62 Go, résidente) reste à 3,1 s/jeton à 20 Go/s : **≈ 6 s/jeton** au lieu de
-  15 s, sans rien changer au moteur qu'un cache.
+- avec un cache qui capte 80 % (le quart le plus chaud) : **5,1 Go/jeton** ;
+- à 3,4 Go/s (NVMe, 4 flux **mesurés**), cela fait 1,5 s/jeton au lieu de 7,3 ;
+- et la partie dense (62 Go, résidente) coûte 1,6 s/jeton à 40 Go/s (RAM à
+  8 fils, **mesurée**) : **≈ 3,1 s/jeton** au lieu de 9 s, sans rien changer au
+  moteur qu'un cache.
+
+> Les deux débits utilisés ici ont été **remesurés** au bloc 30 : le dépôt citait
+> « 20 Go/s » pour la RAM ; la mesure donne 9,6 Go/s à un fil et **40,3 Go/s** à
+> huit — et 2,26 → 3,39 Go/s pour le NVMe selon le nombre de flux.
 
 Autrement dit : **la réutilisation est le levier**, et le chiffre à vérifier en
 premier sur Kimi-K3 est le même que celui-ci — pas la peine d'écrire un cache

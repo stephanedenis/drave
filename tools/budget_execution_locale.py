@@ -8,11 +8,17 @@ les octets de poids lus par jeton, puis ce que chaque placement permet :
     · grappes dimensionnées pour tenir en RAM
 
 Les débits sont ceux **mesurés sur cette machine** (02-03/10) :
-    disque dur 12 To (WDC WD120EFGX, ROTATEUR)   ~200 Mo/s, aléatoire bien pire
-    NVMe Fanxiang S660 (node NUMA 0)             2,0 Go/s (dd iflag=direct)
-    RAM (lecture CPU)                            20 Go/s (chiffre du dépôt)
-    bus PCIe x8                                 6,5 Go/s (chiffre du dépôt)
+    disque dur 12 To (WDC WD120EFGX, ROTATEUR)   ~0,2 Go/s, aléatoire bien pire
+    NVMe Fanxiang S660 (node NUMA 0)             2,3 Go/s à 1 flux · **3,4 Go/s à 4**
+    RAM                                          9,6 Go/s à 1 fil · **40 Go/s à 8 fils**
+    bus PCIe x8                                 6,5 Go/s (chiffre du dépôt, non remesuré)
     NVLink entre les deux GPU                    25,8 Go/s (nvidia-smi nvlink)
+
+Les chiffres de RAM et de NVMe ont été **remesurés** le 03/10 (bloc 30) parce que
+celui de la RAM (« 20 Go/s ») venait du dépôt, sans méthode : la somme d'un
+tableau de 32 Go donne 9,6 Go/s à UN fil et **40,3 Go/s à 16 fils** — c'est le
+débit agrégé qui compte pour un moteur à 16 fils. Le NVMe, lui, passe de 2,26 à
+3,39 Go/s quand on ouvre 4 flux.
 
 Usage :
     budget_execution_locale.py <modele.gguf> [--experts-par-jeton N] [--jetons N]
@@ -25,9 +31,11 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import analyse_octets_par_jeton as A
 
 DEBITS = [
-    ("disque dur 12 To (200 Mo/s)", 200e6),
-    ("NVMe local (2,0 Go/s)", 2.0e9),
-    ("RAM / page cache (20 Go/s)", 20e9),
+    ("disque dur 12 To (0,2 Go/s)", 0.2e9),
+    ("NVMe, 1 flux (2,3 Go/s)", 2.3e9),
+    ("NVMe, 4 flux (3,4 Go/s)", 3.4e9),
+    ("RAM, 1 fil (9,6 Go/s)", 9.6e9),
+    ("RAM, 8+ fils (40 Go/s)", 40e9),
     ("bus PCIe x8 (6,5 Go/s)", 6.5e9),
     ("NVLink entre GPU (25,8 Go/s)", 25.8e9),
 ]
@@ -90,16 +98,32 @@ def main():
         print("aucun tenseur d'experts")
         return 2
     n_experts = n_experts or 896
-    n_couches = max(max(exps), max(denses or {0: 0})) + 1
-    # Un modèle en cours de téléchargement n'a que quelques couches : on annonce
-    # ce qu'on a vu ET l'extrapolation, plutôt que de laisser croire au total.
-    declare = None
+    # Nombre de couches DÉCLARÉ par le fichier (un modèle en cours de
+    # téléchargement n'a que quelques shards) : sans lui, le « par jeton »
+    # annoncé porterait sur les couches vues et serait lu comme le total.
+    declare = 0
     for f in fichiers:
         try:
-            _, m = A.lire_entete(f), None
+            l = A.Lecteur(f)
+            magie = l.lire(4)
+            if magie != b"GGUF":
+                continue
+            import struct as _s
+            _s.unpack("<I", l.lire(4))[0]
+            n_t, n_kv = _s.unpack("<QQ", l.lire(16))
+            for _ in range(n_kv):
+                cle = l.chaine()
+                t = _s.unpack("<I", l.lire(4))[0]
+                v = l.valeur(t)
+                if cle in ("kimi-k3.block_count", "deepseek4.block_count",
+                           "deepseek2.block_count", "qwen3moe.block_count",
+                           "llama.block_count", "gpt-oss.block_count",
+                           "glm-dsa.block_count", "glm5next.block_count"):
+                    declare = int(v)
+            break
         except Exception:
             continue
-    couches_totales = n_couches
+    n_couches = max(max(exps), max(denses or {0: 0})) + 1
     par_jeton_exps = sum((k / n_experts) * o for o in exps.values())
     par_jeton_dense = sum(shexp.values()) + sum(denses.values()) + hors_couche
     par_jeton = par_jeton_exps + par_jeton_dense
@@ -115,6 +139,9 @@ def main():
     print(f"  routage   : {k} experts sur {n_experts}")
     print(f"  (embarquement NON compté : {embarq/1e9:.2f} Go — une rangée par jeton ; "
           f"tête de sortie comptée : {hors_couche/1e9:.2f} Go)")
+    if declare and declare > n_couches:
+        f = declare / n_couches
+        print(f"\n  (extrapolation ×{f:.2f} : {n_couches} couches vues sur {declare} déclarées)")
     print(f"\n  PAR JETON (sur les {n_couches} couches vues) :")
     print(f"    experts routés        {par_jeton_exps/1e9:7.3f} Go")
     print(f"    partagé + attention + tête {par_jeton_dense/1e9:7.3f} Go")
@@ -123,6 +150,9 @@ def main():
           f"partagés) ; l'embarquement ne l'est pas. Les chiffres « experts seuls » "
           f"d'un rapport antérieur ne sont PAS ce total.\n")
     print(f"{'placement':<34} {'débit':>10} {'s/jeton':>9} {'jetons/s':>9}")
+    if declare and declare > n_couches:
+        par_jeton *= declare / n_couches
+        print(f"  (les lignes ci-dessous portent sur les {declare} couches déclarées)")
     for nom, debit in DEBITS:
         s = par_jeton / debit
         print(f"{nom:<34} {debit/1e9:8.1f} Go/s {s:9.2f} {1/s:9.3f}")
