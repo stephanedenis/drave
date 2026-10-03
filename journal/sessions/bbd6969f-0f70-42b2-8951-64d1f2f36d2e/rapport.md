@@ -7,12 +7,12 @@
 | Début | 2026-09-28 14:46 |
 | Durée | 116.2 h |
 | Tours | 90 |
-| Messages | 6935 |
-| Appels d'outils | 6632 |
+| Messages | 6939 |
+| Appels d'outils | 6636 |
 | Fichiers touchés | 136 |
-| Commandes | 5607 |
+| Commandes | 5611 |
 | Sous-agents | 32 |
-| Commits | 451 |
+| Commits | 452 |
 | Compactages de contexte | 9 |
 
 ## Objectifs déclarés
@@ -4475,7 +4475,7 @@ Autrement dit : **la granularité ne compresse pas, elle route** — et elle ach
 
 ### Tour 90 — <goal_round> Objective: "Exécuter le plan docs/plan-deepseek41-complet.md phase par phase (P0→P9), en autonomie, en resp … [942 caractères tronqués]
 
-*194 appels d'outils.* Actions notables :
+*198 appels d'outils.* Actions notables :
 
 - bash — Check the gate suite result
 - bash — Wait for the gates
@@ -4491,7 +4491,7 @@ Autrement dit : **la granularité ne compresse pas, elle route** — et elle ach
 - bash — Find the plan's remaining items
 - bash — Extract each phase's gate claims
 - read
-- … et 175 autres
+- … et 179 autres
 
 **Synthèse produite :**
 
@@ -4717,7 +4717,7 @@ Autrement dit : **la granularité ne compresse pas, elle route** — et elle ach
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 5567 autres
+- … et 5571 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -5316,4 +5316,5 @@ Autrement dit : **la granularité ne compresse pas, elle route** — et elle ach
 - Spec Kimi-K3 : cadence hybride VÉRIFIÉE sur le fichier (MLA aux couches 3,7,11,15), détail des projections MLA, MoE latent (routeur en pleine largeur) et res_mi
 - KimI-K3 : les deux mathématiques neuves implémentées et testées SANS poids (SiTU, attention résiduelle)  situ(g,u) = beta·tanh(g/beta)·sigmoïde(g) × linear_beta
 - Sprint 28 : portes toutes vertes (69 tests), perplexité V4-Flash derrière ARCHIVE=1, et la leçon des pkill qui se tuent eux-mêmes"; git log --oneline -1
+- Spec Kimi-K3 : le KDA, sa porte bornée à -5, ses trois chemins de référence et les tenseurs qui serviront de points de comparaison" && git log --oneline -1; tai
 

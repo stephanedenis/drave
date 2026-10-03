@@ -110377,3 +110377,112 @@ PY
 bash -n tools/portes.sh && echo "syntaxe ok" && (t0=$(date +%s); bash tools/portes.sh rapide > /tmp/portes6.log 2>&1; echo "exit=$? en $(( $(date +%s) - t0 )) s"; tail -20 /tmp/portes6.log)) finished [status: completed, exit code: 0]. Read its output with job_output.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='sprints/28-la-bascule-vers-kimi-k3-et-deux-defauts-de-tokenizer.md'\ns=open(p).read()\ns=s.replace(\"\"\"## Rétrospective — garder / changer / doute\"\"\",\n\"\"\"### 6. Portes, toutes vertes — et allégées\n\n`to … [1209 caractères tronqués]`
+
+  ```
+sprint complété
+556739d Sprint 28 : portes toutes vertes (69 tests), perplexité V4-Flash derrière ARCHIVE=1, et la leçon des pkill qui se tuent eux-mêmes
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/llama.cpp-k3 && grep -rn \"build_gdn\\|delta_net\\|gated_delta\" src/models/*.cpp src/*.cpp src/*.h 2>/dev/null | grep -v \"kimi-linear.cpp\" | head -8; ls src/models/ | head -20", "description": "Find the delta-net recurrence in the reference" … [1 caractères tronqués]`
+
+  ```
+src/models/bailingmoe3.cpp:220:    llm_build_delta_net_base(params), model(model) {
+src/models/bailingmoe3.cpp:288:            q = build_gdn_l2_norm(ctx0, q, hparams.f_norm_rms_eps);
+src/models/bailingmoe3.cpp:289:            k = build_gdn_l2_norm(ctx0, k, hparams.f_norm_rms_eps);
+src/models/clef.cpp:240:    llm_build_delta_net_base(params), model(static_cast<const llama_model_clef &>(model_base)) {
+src/models/clef.cpp:441:    q_conv = build_gdn_l2_norm(ctx0, q_conv, hparams.f_norm_rms_eps);
+src/models/clef.cpp:442:    k_conv = build_gdn_l2_norm(ctx0, k_conv, hparams.f_norm_rms_eps);
+src/models/clef.cpp:453:    ggml_tensor * output = build_delta_net(q_conv, k_conv, v_conv, gate, beta, state, il).first;
+src/models/delta-net-base.cpp:14:llm_build_delta_net_base::llm_build_delta_net_base(const llm_graph_params & params) : llm_graph_context(params) {}
+afmoe.cpp
+apertus.cpp
+arcee.cpp
+arctic.cpp
+arwkv7.cpp
+baichuan.cpp
+bailingmoe2.cpp
+bailingmoe3.cpp
+bailingmoe.cpp
+bert.cpp
+bitnet.cpp
+bloom.cpp
+chameleon.cpp
+chatglm.cpp
+clef.cpp
+clip.cpp
+codeshell.cpp
+cogvlm.cpp
+cohere2.cpp
+cohere2moe.cpp
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/llama.cpp-k3 && grep -n \"build_delta_net\" -A 40 src/models/delta-net-base.cpp | head -55", "description": "Read the delta-net recurrence"}`
+
+  ```
+14:llm_build_delta_net_base::llm_build_delta_net_base(const llm_graph_params & params) : llm_graph_context(params) {}
+15-
+16:std::pair<ggml_tensor *, ggml_tensor *> llm_build_delta_net_base::build_delta_net_chunking(
+17-        ggml_tensor * q,
+18-        ggml_tensor * k,
+19-        ggml_tensor * v,
+20-        ggml_tensor * g,
+21-        ggml_tensor * b,
+22-        ggml_tensor * s,
+23-        int           il) {
+24-    const int64_t S_k      = q->ne[0];
+25-    const int64_t H_k      = q->ne[1];
+26-    const int64_t n_tokens = q->ne[2];
+27-    const int64_t n_seqs   = q->ne[3];
+28-
+29-    const int64_t S_v = v->ne[0];
+30-    const int64_t H_v = v->ne[1];
+31-    const bool kda = (g->ne[0] == S_k && g->ne[1] == H_k);
+32-
+33-    GGML_ASSERT(S_k == S_v);
+34-    GGML_ASSERT(H_v % H_k == 0);
+35-
+36-    GGML_ASSERT(q->ne[0] == S_k && q->ne[1] == H_k && q->ne[2] == n_tokens && q->ne[3] == n_seqs);
+37-    GGML_ASSERT(k->ne[0] == S_k && k->ne[1] == H_k && k->ne[2] == n_tokens && k->ne[3] == n_seqs);
+38-    GGML_ASSERT(v->ne[0] == S_v && v->ne[1] == H_v && v->ne[2] == n_tokens && v->ne[3] == n_seqs);
+39-
+40-    GGML_ASSERT(g->ne[0] == 1   || g->ne[0] == S_v);
+41-    GGML_ASSERT(               
+… [1115 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/llama.cpp-k3 && sed -n '289,330p;355,400p' src/models/delta-net-base.cpp", "description": "Read the autoregressive delta-net path"}`
+
+  ```
+std::pair<ggml_tensor *, ggml_tensor *> llm_build_delta_net_base::build_delta_net_autoregressive(
+        ggml_tensor * q,
+        ggml_tensor * k,
+        ggml_tensor * v,
+        ggml_tensor * g,
+        ggml_tensor * b, // beta
+        ggml_tensor * s, // state
+        int           il) {
+    const int64_t S_k      = q->ne[0];
+    const int64_t H_k      = q->ne[1];
+    const int64_t n_tokens = q->ne[2];
+    const int64_t n_seqs   = q->ne[3];
+
+    const int64_t S_v = v->ne[0];
+    const int64_t H_v = v->ne[1];
+
+    GGML_ASSERT(n_tokens == 1);
+
+    GGML_ASSERT(S_k == S_v);
+    GGML_ASSERT(H_v % H_k == 0);
+
+    GGML_ASSERT(q->ne[0] == S_k && q->ne[1] == H_k && q->ne[2] == n_tokens && q->ne[3] == n_seqs);
+    GGML_ASSERT(k->ne[0] == S_k && k->ne[1] == H_k && k->ne[2] == n_tokens && k->ne[3] == n_seqs);
+    GGML_ASSERT(v->ne[0] == S_v && v->ne[1] == H_v && v->ne[2] == n_tokens && v->ne[3] == n_seqs);
+
+    GGML_ASSERT(g->ne[0] == 1   || g->ne[0] == S_v);
+    GGML_ASSERT(                   g->ne[1] == H_v && g->ne[2] == n_tokens && g->ne[3] == n_seqs);
+    GGML_ASSERT(b->ne[0] == 1   && b->ne[1] == H_v && b->ne[2] == n_tokens && b->ne[3] == n_seqs);
+    GGML_ASSERT(s->ne[0] == S_v && s
+… [2062 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='docs/architecture-kimi-k3.md'\ns=open(p).read()\nold = \"\"\"## 5. Ce que notre moteur a déjà, et ce qui manque\"\"\"\nnew = \"\"\"## 4bis. Le KDA : la pièce la plus lourde, et comment on la vérifiera\n\n`build_k … [1761 caractères tronqués]`

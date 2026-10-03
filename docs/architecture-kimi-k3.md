@@ -166,6 +166,29 @@ sortie.
 
 **SiTU (activation)** : `situ(g,u) = 4·tanh(g/4)·sigmoid(g) · 25·tanh(u/25)`.
 
+## 4bis. Le KDA : la pièce la plus lourde, et comment on la vérifiera
+
+`build_kda_layer` s'appuie sur `llm_build_delta_net_base`, qui porte **trois
+chemins** de la même récurrence : `build_delta_net_chunking` (préremplissage
+parallèle), `build_delta_net_autoregressive` (un jeton) et `build_delta_net_fused`.
+Les trois doivent donner le **même** résultat — c'est en soi un point de
+vérification, et pas le plus facile.
+
+Ce que la référence nomme, et qui sera nos points de comparaison (les `cb(...)`) :
+`q_in`, `k_in`, `v_in`, `b_in`, `g_in`, `dnet_add_ar_state`, puis la sortie
+`kda_*` de la couche (`kda_q_conv`, `kda_k_conv`, `kda_v_conv`, `kda_g1`,
+`kda_beta`). Une implémentation qui « a l'air de tourner » mais dont le `g1` ou le
+`beta` diffère ne se voit **pas** dans les logits à court terme : on compare donc
+ces tenseurs **avant** de regarder la perplexité, comme on l'a fait pour V4.
+
+Le contrat de la couche, tel que la référence le montre :
+`q,k,v` = convolutions courtes (noyau 4) sur les projections, `q,k` normalisés en
+L2, `beta = sigmoïde(W_beta·x)` par tête, porte de décroissance `g` bornée à
+**−5** (variante K3 — la variante Kimi-Linear utilise `−exp(A_log)·softplus(…)`,
+et confondre les deux donne des scores plausibles et faux), puis la récurrence
+delta avec un état **par tête** (`head_dim × head_dim`), et enfin la porte `ssm_g`
+et la norme `ssm_o_norm` en sortie.
+
 ## 5. Ce que notre moteur a déjà, et ce qui manque
 
 | brique | chez nous | état |
