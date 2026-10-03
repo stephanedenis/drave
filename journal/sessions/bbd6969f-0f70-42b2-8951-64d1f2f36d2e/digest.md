@@ -112839,3 +112839,36 @@ Continue working toward the objective in this same session. Treat the current wo
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -m \"K3 : le KDA extrait en pièce réutilisable (couches 1, 2, 4, 5, 6, 8…), avec sa remise à zéro d'état\n\nLa composition (couche 0 -> 1) exige de charger l'attention KDA SEULE, pour\nn'importe quelle cou … [255 caractères tronqués]`
+
+  ```
+2514e76 K3 : le KDA extrait en pièce réutilisable (couches 1, 2, 4, 5, 6, 8…), avec sa remise à zéro d'état
+12:53
+12:52:56    31.4 Go / 49.2 Go (63.9 %, 112 Mo/s)
+992G	/home/stephane/Data13TB/stephane/modeles/gguf/Kimi-K3-UD-Q4_K_XL
+  ```
+
+### 🤖 Assistant
+
+⏵ Bloc 36 (suite) : les pièces manquantes de la composition (normes par couche, FFN dense)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat >> drave-core/src/kimi_k3.rs <<'RS'\n\n// ===========================================================================\n// Les pièces qui manquaient pour COMPOSER des couches : les quatre petits\n// tenseurs de norme/score de chaq … [6691 caractères tronqués]`
+
+  ```
+--- build ---
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='drave-core/src/main.rs'\ns=open(p).read()\ns=s.replace(\"\"\"    // L'entrée de la couche 0 est l'embarquement du jeton.\"\"\",\n\"\"\"    // **La composition** : quatre couches enchaînées (0 dense, 1 MoE, 2 MoE, … [2361 caractères tronqués]`
+
+  ```
+composition branchée
+  composition 0-3, jeton 0 : |l_out| = 8.7757 · finis : true
+  composition 0-3, jeton 1 : |l_out| = 5.2909 · finis : true
+  composition 0-3, jeton 2 : |l_out| = 5.2559 · finis : true
+  composition 0-3, jeton 3 : |l_out| = 5.4735 · finis : true
+  composition : 114377 ms au total
+  jeton 0 (id 3638) : |l_out| = 0.9731 · finis : true · premiers : 0.01036 -0.02001 -0.00186
+  jeton 1 (id 275) : |l_out| = 1.4310 · finis : true · premiers : 0.01729 0.00249 0.00578
+  jeton 2 (id 1309) : |l_out| = 1.4958 · finis : true · premiers : -0.00946 0.01135 -0.00460
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cd drave-core && cargo test --release 2>&1 | grep -E \"^test result\"; cd .. && git add -A && git commit -q -m \"K3 : les quatre premières couches COMPOSÉES (0 dense, 1-2 MoE, 3 MLA) — la chaîne vérifiée, pas seulement les pièces\n\n … [538 caractères tronqués]`

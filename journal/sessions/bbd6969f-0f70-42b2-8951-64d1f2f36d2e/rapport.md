@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 118.1 h |
+| Durée | 118.2 h |
 | Tours | 100 |
-| Messages | 7089 |
-| Appels d'outils | 6763 |
+| Messages | 7092 |
+| Appels d'outils | 6766 |
 | Fichiers touchés | 145 |
-| Commandes | 5729 |
+| Commandes | 5732 |
 | Sous-agents | 32 |
-| Commits | 475 |
+| Commits | 476 |
 | Compactages de contexte | 9 |
 
 ## Objectifs déclarés
@@ -4889,14 +4889,17 @@ Et le geste qui rend un modèle de 1,5 To seulement *lisible* : les experts sont
 
 ### Tour 100 — <goal_round> Objective: "Faire tourner en local les MEILLEURS modèles ouverts, en particulier ceux qui ne tiennent pas e … [1246 caractères tronqués]
 
-*2 appels d'outils.* Actions notables :
+*5 appels d'outils.* Actions notables :
 
 - bash — Extract the KDA into a reusable piece
 - bash — Commit the KDA extraction and check the download
+- bash — Implement the layer composition
+- bash — Test the four-layer composition
+- bash — Commit the composition test
 
 **Synthèse produite :**
 
-⏵ Bloc 36 : j'extrais le KDA en pièce réutilisable, puis je compose les couches 0 → 1 (le premier test de composition)
+⏵ Bloc 36 (suite) : les pièces manquantes de la composition (normes par couche, FFN dense)
 
 ## 3. Travail accompli
 
@@ -5127,7 +5130,7 @@ Et le geste qui rend un modèle de 1,5 To seulement *lisible* : les experts sont
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 5689 autres
+- … et 5692 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -5750,4 +5753,5 @@ Et le geste qui rend un modèle de 1,5 To seulement *lisible* : les experts sont
 - K3 : le MoE latent fonctionne — et 25,7 s/jeton sont devenus 1,36 s (×18,9) sans changer un chiffre  La première version appelait Gguf::dequant_mxfp4 PAR BLOC, 
 - K3 : la couche MLA calcule (couches 3, 7, 11…) — absorption par tête, nope sans rotation, porte sigmoïde pleine largeur  Mesuré : trois jetons à la suite, cache
 - K3 : le KDA extrait en pièce réutilisable (couches 1, 2, 4, 5, 6, 8…), avec sa remise à zéro d'état  La composition (couche 0 -> 1) exige de charger l'attention
+- K3 : les quatre premières couches COMPOSÉES (0 dense, 1-2 MoE, 3 MLA) — la chaîne vérifiée, pas seulement les pièces  Attention résiduelle, banque tous les 12, 
 

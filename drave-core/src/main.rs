@@ -1941,6 +1941,41 @@ fn run_k3_essai() {
         }
         Err(e) => println!("  MLA couche 3 : chargement impossible ({e})"),
     }
+    // **La composition** : quatre couches enchaînées (0 dense, 1 MoE, 2 MoE,
+    // 3 MLA), avec l'attention résiduelle et la banque. C'est ce qui vérifie la
+    // CHAÎNE — les pièces étaient déjà vérifiées séparément.
+    match kimi_k3::PetitesK3::charge(&g, 4) {
+        Ok(mut petites) => {
+            let embd = g.dequant("token_embd.weight");
+            let h = petites.h;
+            let t0 = std::time::Instant::now();
+            let mut ok = true;
+            for (i, t) in [3638usize, 275, 1309, 3140].iter().enumerate() {
+                let x = &embd[t * h..(t + 1) * h];
+                match petites.avant(x, i) {
+                    Ok(y) => {
+                        let n: f32 = y.iter().map(|v| v * v).sum::<f32>().sqrt();
+                        let finis = y.iter().all(|v| v.is_finite());
+                        println!("  composition 0-3, jeton {i} : |l_out| = {n:.4} · finis : {finis}");
+                        if !finis { ok = false; }
+                        if let Ok(prefixe) = std::env::var("DRAVE_DUMP_COUCHES") {
+                            if !prefixe.is_empty() {
+                                use std::io::Write;
+                                if let Ok(mut f) = std::fs::File::create(format!("{prefixe}-l_out-3-{i}.bin")) {
+                                    let mut o = Vec::with_capacity(y.len() * 4);
+                                    for v in &y { o.extend_from_slice(&v.to_le_bytes()); }
+                                    let _ = f.write_all(&o);
+                                }
+                            }
+                        }
+                    }
+                    Err(e) => { println!("  composition 0-3 : {e}"); ok = false; break; }
+                }
+            }
+            if ok { println!("  composition : {} ms au total", t0.elapsed().as_millis()); }
+        }
+        Err(e) => println!("  composition 0-3 : chargement impossible ({e})"),
+    }
     // L'entrée de la couche 0 est l'embarquement du jeton.
     let ids = vec![3638u32, 275, 1309];      // « Le ciel est… » (tokenizer du modèle)
     let embd = g.dequant("token_embd.weight");

@@ -956,3 +956,154 @@ impl KdaK3 {
         self.etat_delta.iter_mut().for_each(|v| *v = 0.0);
     }
 }
+
+// ===========================================================================
+// Les pièces qui manquaient pour COMPOSER des couches : les quatre petits
+// tenseurs de norme/score de chaque couche, et le FFN dense de la couche 0.
+// ===========================================================================
+
+/// `attn_norm`, `attn_res_score`, `ffn_norm`, `ffn_res_score` d'une couche.
+pub struct NormesK3 {
+    pub attn: Vec<f32>, pub attn_score: Vec<f32>,
+    pub ffn: Vec<f32>, pub ffn_score: Vec<f32>,
+}
+
+impl NormesK3 {
+    pub fn charge(g: &Gguf, l: usize) -> Result<NormesK3, String> {
+        let p = |s: &str| format!("blk.{l}.{s}");
+        let lu = |nom: String| -> Result<Vec<f32>, String> {
+            if g.tensor(&nom).is_none() { return Err(format!("tenseur absent : {nom}")); }
+            Ok(g.dequant(&nom))
+        };
+        Ok(NormesK3 {
+            attn: lu(p("attn_norm.weight"))?, attn_score: lu(p("attn_res_score.weight"))?,
+            ffn: lu(p("ffn_norm.weight"))?, ffn_score: lu(p("ffn_res_score.weight"))?,
+        })
+    }
+}
+
+/// Le FFN **dense** de la couche 0 (SiTU), séparé de son attention KDA.
+pub struct FfnDenseK3 {
+    gate: Vec<f32>, up: Vec<f32>, down: Vec<f32>,
+    h: usize, ffn: usize, beta: f32, lin: f32,
+}
+
+impl FfnDenseK3 {
+    pub fn charge(g: &Gguf, l: usize) -> Result<FfnDenseK3, String> {
+        let p = |s: &str| format!("blk.{l}.{s}");
+        let lu = |nom: String| -> Result<Vec<f32>, String> {
+            if g.tensor(&nom).is_none() { return Err(format!("tenseur absent : {nom}")); }
+            Ok(g.dequant(&nom))
+        };
+        let h = g.tensor(&p("ffn_norm.weight")).map(|t| t.dims[0] as usize)
+            .ok_or_else(|| "ffn_norm absent".to_string())?;
+        let ffn = g.tensor(&p("ffn_gate.weight")).map(|t| t.dims[0] as usize)
+            .ok_or_else(|| "ffn_gate absent".to_string())?;
+        Ok(FfnDenseK3 {
+            gate: lu(p("ffn_gate.weight"))?, up: lu(p("ffn_up.weight"))?,
+            down: lu(p("ffn_down.weight"))?,
+            h, ffn, beta: 4.0, lin: 25.0,
+        })
+    }
+
+    pub fn avant(&self, x: &[f32]) -> Result<Vec<f32>, String> {
+        if x.len() != self.h { return Err(format!("entrée de {} au lieu de {}", x.len(), self.h)); }
+        let mut g = vec![0f32; self.ffn];
+        let mut u = vec![0f32; self.ffn];
+        mv(&self.gate, self.ffn, self.h, x, &mut g);
+        mv(&self.up, self.ffn, self.h, x, &mut u);
+        for j in 0..self.ffn { g[j] = crate::model::situ(g[j], u[j], self.beta, self.lin); }
+        let mut out = vec![0f32; self.h];
+        mv(&self.down, self.h, self.ffn, &g, &mut out);
+        Ok(out)
+    }
+}
+
+/// **Composition des premières couches** — l'instrument qui vérifie la CHAÎNE
+/// (attention résiduelle, banque tous les 12, redémarrage du flux) et pas
+/// seulement les pièces. Les états sont remis à zéro par `zero()`.
+pub struct PetitesK3 {
+    pub normes: Vec<NormesK3>,
+    pub kda: Vec<Option<KdaK3>>,
+    pub mla: Vec<Option<MlaK3>>,
+    pub ffn_dense: Vec<Option<FfnDenseK3>>,
+    pub moe: Vec<Option<MoeK3>>,
+    pub pile: Vec<f32>, pub n_ckpt: usize,
+    pub h: usize, pub eps: f32, pub bloc: usize,
+}
+
+impl PetitesK3 {
+    /// Charge les couches `0..n` (les tenseurs doivent être présents).
+    pub fn charge(g: &Gguf, n: usize) -> Result<PetitesK3, String> {
+        let h = g.tensor("blk.0.attn_norm.weight").map(|t| t.dims[0] as usize)
+            .ok_or_else(|| "blk.0.attn_norm absent".to_string())?;
+        let mut s = PetitesK3 { normes: Vec::new(), kda: Vec::new(), mla: Vec::new(),
+                                ffn_dense: Vec::new(), moe: Vec::new(),
+                                pile: Vec::new(), n_ckpt: 0, h, eps: 1e-5, bloc: 12 };
+        for l in 0..n {
+            s.normes.push(NormesK3::charge(g, l)?);
+            let mla = g.tensor(&format!("blk.{l}.attn_kv_a_mqa.weight")).is_some();
+            if mla {
+                s.kda.push(None);
+                s.mla.push(Some(MlaK3::charge(g, l)?));
+            } else {
+                s.kda.push(Some(KdaK3::charge(g, l)?));
+                s.mla.push(None);
+            }
+            if l == 0 {
+                s.ffn_dense.push(Some(FfnDenseK3::charge(g, l)?));
+                s.moe.push(None);
+            } else {
+                s.ffn_dense.push(None);
+                s.moe.push(Some(MoeK3::charge(g, l)?));
+            }
+        }
+        Ok(s)
+    }
+
+    /// Un jeton, à la position `pos`, à travers les `n` couches chargées.
+    pub fn avant(&mut self, x0: &[f32], pos: usize) -> Result<Vec<f32>, String> {
+        let h = self.h;
+        let mut x = x0.to_vec();
+        for l in 0..self.normes.len() {
+            let n = &self.normes[l];
+            // 1. attention résiduelle sur le flux courant
+            let mut cur = vec![0f32; h];
+            if self.n_ckpt == 0 { cur.copy_from_slice(&x); }
+            else {
+                crate::model::res_mix(&self.pile, self.n_ckpt, h, &x, &n.attn_score, self.eps, &mut cur);
+            }
+            // 2. banque : on empile l'entrée BRUTE, avant l'attention
+            let banque = l % self.bloc == 0;
+            if banque { self.pile.extend_from_slice(&x); self.n_ckpt += 1; }
+            // 3. norme puis attention (KDA ou MLA)
+            let mut xn = vec![0f32; h];
+            rms_norm_poids(&cur, &n.attn, self.eps, &mut xn);
+            let attn = if let Some(kda) = self.kda[l].as_mut() {
+                kda.avant(&xn)?
+            } else {
+                self.mla[l].as_mut().unwrap().avant(&xn, &xn, pos)?
+            };
+            // 4. le flux reprend : redémarrage si la couche est une banque
+            let mut prefix = if banque { vec![0f32; h] } else { x.clone() };
+            for i in 0..h { prefix[i] += attn[i]; }
+            // 5. attention résiduelle avant la FFN, puis norme
+            let mut cur2 = vec![0f32; h];
+            crate::model::res_mix(&self.pile, self.n_ckpt, h, &prefix, &n.ffn_score, self.eps, &mut cur2);
+            let mut xn2 = vec![0f32; h];
+            rms_norm_poids(&cur2, &n.ffn, self.eps, &mut xn2);
+            // 6. FFN dense (couche 0) ou MoE latent
+            let ffn = if let Some(f) = self.ffn_dense[l].as_ref() { f.avant(&xn2)? }
+                      else { self.moe[l].as_ref().unwrap().avant(&xn2)? };
+            for i in 0..h { prefix[i] += ffn[i]; }
+            x = prefix;
+        }
+        Ok(x)
+    }
+
+    pub fn zero(&mut self) {
+        self.pile.clear();
+        self.n_ckpt = 0;
+        for k in self.kda.iter_mut().flatten() { k.zero(); }
+    }
+}
