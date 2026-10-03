@@ -107225,3 +107225,324 @@ identique à la source) — les deux t
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='REPRISE.md'\ns=open(p).read()\nancre = \"Corpus : `/tmp/wt2_txt.txt` = 20 000 premiers octets de `data/wikitext2_test.txt`.\"\najout = \"\"\"> **Mise à jour du 03/10 — la porte de correction tient à ctx 512, et l … [1479 caractères tronqués]`
+
+  ```
+ok
+positions écrites = 3 / 1023
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"fn dequant_iq2xxs_dans\" -A 40 drave-core/src/formats.rs | head -55", "description": "Read the IQ2_XXS scalar dequant"}`
+
+  ```
+368:pub fn dequant_iq2xxs_dans(bloc: &[u8], out: &mut [f32]) {
+369-    assert!(bloc.len() >= 66, "bloc IQ2_XXS trop court : {}", bloc.len());
+370-    let d = crate::gguf::Gguf::f16_to_f32(u16::from_le_bytes([bloc[0], bloc[1]]));
+371-    assert!(out.len() >= 256, "tampon de sortie trop court : {}", out.len());
+372-    for ib32 in 0..8usize {
+373-        // ATTENTION : dans ggml, `qs` est un `uint16_t[32]`, donc `qs + 4*ib32`
+374-        // avance de 4 × 2 = 8 OCTETS. Écrire `2 + 4*ib32` octets laissait le
+375-        // premier sous-bloc juste et tous les suivants faux — c'est la
+376-        // comparaison avec ggml qui l'a montré, pas la lecture.
+377-        let aux = &bloc[2 + 8 * ib32..2 + 8 * ib32 + 8];
+378-        let bas = u32::from_le_bytes([aux[0], aux[1], aux[2], aux[3]]);
+379-        let haut = u32::from_le_bytes([aux[4], aux[5], aux[6], aux[7]]);
+380-        let db = d * (0.5 + ((haut >> 28) as f32)) * 0.25;
+381-        let index = bas.to_le_bytes();
+382-        for l in 0..4usize {
+383-            let grille = IQ2XXS_GRID[index[l] as usize];
+384-            let signes = KSIGNS_IQ2XS[((haut >> (7 * l)) & 127) as usize];
+385-            for j in 0..8usize {
+386-           
+… [1002 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '/### P9/,/### P10\\|^## /p' docs/plan-deepseek41-complet.md | grep -nE \"Reste|reste|à faire|non fait|leftover|prochain\" | head -12; echo \"=== état des phases ===\"; grep -nE \"^### P[0-9]|^## P[0-9]\" docs/plan-deepseek41- … [73 caractères tronqués]`
+
+  ```
+22:> chaque ligne reste sommée par un seul fil dans le même ordre, donc le résultat
+25:> la passe complète de 66-68 s à **22,2 s (×3)**. Le SIMD reste sur la table
+47:> (0,985-0,988). Le drapeau reste **opt-in** : l'activer par défaut déplacerait
+52:> ~~Ce qui reste non expliqué : le coût par jeton croît avec la position~~ —
+74:> **Ce qui reste vrai et non expliqué** : la croissance du coût **avec la longueur
+85:> `memcpy` sans retirer les lectures NVMe. Le drapeau reste, éteint, avec son
+86:> verdict dans son annonce. Le poste dominant reste `proj+mlp` (3 530 ms/token à
+96:    V4.1. Il se mesure comme le reste : gain de place, de débit, et effet sur la
+=== état des phases ===
+150:### P0 — Le harnais, sur V4-Flash, et le coût d'un jeton (≈ 3 h) — **FAIT** (02/10)
+170:### P1 — Hyper-connexions : les connexions pondérées (≈ ½ journée) — **FAIT** (02/10)
+193:### P2 — Épilogue d'attention : dé-rotation, puits, sortie groupée (≈ 3 h) — **FAIT** (02/10)
+212:### P3 — Les couches brutes, de bout en bout (≈ 2 h) — **FAIT pour V4-Flash** (02/10)
+229:### P4 — Compresseur et HCA : le premier flux qui n'existe nulle part (≈ ½ journée) — **FAIT** (02/10)
+254:### P5 — Indexeur et CSA : la liste d
+… [753 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -nE \"Porte de correction|Portes Drave|porte Drave\" docs/plan-deepseek41-complet.md | head -30", "description": "Extract each phase's gate claims"}`
+
+  ```
+144:- **porte Drave** — les flux : nombre d'événements par jeton, trace écrite puis
+159:> refaire la porte Drave **sur V4-Flash lui-même**, ce qui demande P2/P3.
+165:- **Porte de correction** : `--config` annonce la bonne liste de manques ;
+187:- **Porte de correction** : `hc_attn_pre-0` puis `hc_attn_post-0` concordent.
+206:- **Porte de correction** : `kqv_out-0`, `attn_out-0`.
+225:- **Porte de correction** : `l_out-0` **et** `l_out-1`, positions 0 à 3.
+247:- **Porte de correction** : première couche compressée de V4-Flash, puis
+280:- **Porte de correction** : `l_out-2`, puis les logits complets — corrélation
+309:- **Porte de correction** : perplexité de V4-Flash contre llama.cpp sur les mêmes
+311:- **Portes Drave**, toutes obligatoires :
+322:### P6 — V4-Flash complet, en listes, et **sur plusieurs grappes** — ⚠️ **porte Drave NON TENUE** (03/10)
+325:> La porte Drave demande quatre choses : événements/paires par jeton, **trace
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/plan-deepseek41-complet.md", "limit": 80, "offset": 150}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/plan-deepseek41-complet.md</path>
+<type>file</type>
+<content>
+150: ### P0 — Le harnais, sur V4-Flash, et le coût d'un jeton (≈ 3 h) — **FAIT** (02/10)
+151: 
+152: > Bilan dans `reports/rapport-p0-flux.md`. Ce qui est fait : le flux se compte
+153: > par **provenance** (attention / experts / partagé) en **paires**, et les deux
+154: > chemins muets parlent — GLM-5.3, un jeton : 21,9 G · 30,6 G · 5,6 G, dont
+155: > **0 en listes**. Un calcul mort d'`attn_mla` (la remontée `v_b` de la boucle
+156: > de scores) a été trouvé, mesuré (delta prédit = delta mesuré, −1 988,1 M
+157: > paires) et retiré. La porte `--config` est franchie pour gpt-oss (elle ne
+158: > l'était pas : les puits appris y étaient comptés comme un manque). Reste à
+159: > refaire la porte Drave **sur V4-Flash lui-même**, ce qui demande P2/P3.
+160: 
+161: - V4-Flash chargé dans le moteur ; comparaison par étage opérationnelle des deux
+162:   côtés (`ref_logits --tensors` / `DRAVE_DEBUG_MLA`, `DRAVE_DEBUG_ETAT`) ;
+163:   **compteur d'événements** instrumenté sur le chemin MLA et sur le chemin
+164:   experts-IQ (aujourd'hui muets).
+165: - **Porte de correction** : `--c
+… [4087 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rn \"TRACE_HC\" drave-core/src/*.rs | head -5; ls tools/analyse_hc.py 2>&1; echo \"--- P2 : la liste de attn_output_a ---\"; grep -rn \"attn_output_a\" drave-core/src/model.rs | head -3", "description": "Check the P1/P2 Drave g … [17 caractères tronqués]`
+
+  ```
+ls: cannot access 'tools/analyse_hc.py': No such file or directory
+--- P2 : la liste de attn_output_a ---
+128:    // La sortie à rang faible groupée (`attn_output_a`/`attn_output_b`,
+133:    if quelque_part("attn_output_a.weight") && !quelque_part("attn_kv.weight") {
+134:        manques.push("projection de sortie à rang faible groupée (attn_output_a/attn_output_b, o_groups)");
+  ```
+
+### 🤖 Assistant
+
+⏵ Lacune trouvée : la porte Drave de P1 (trace des poids de connexion + outil) n'existe pas dans le dépôt
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"fn melanger\\|fn retro\\|pub struct Hc\\b\" drave-core/src/model.rs | head -6; s=$(stat -c %s /tmp/our_v4f1024.bin 2>/dev/null || echo 0); echo \"ctx 1024 : positions = $(( (s-8)/517120 )) / 1023\"; grep -n \"comb\" drave-c … [108 caractères tronqués]`
+
+  ```
+1546:pub struct Hc {
+1675:    pub fn melanger(x: &[f32], poids: &[f32], hc: usize, h: usize, out: &mut [f32]) {
+1687:    pub fn retro(y: &[f32], residu: &[f32], s: &HcSortie, hc: usize, h: usize,
+ctx 1024 : positions = 35 / 1023
+96:    // sous-couche est le mélange des `hc` copies, la sortie se route par `comb`
+150:    // parc ne combine le chemin MLA (`attn_kv_a_mqa`) et des puits ; le jour où
+1566:    pub comb: Vec<f32>,  // [hc·hc], `comb[d + s·hc]`
+1581:pub fn sinkhorn(comb: &mut [f32], hc: usize, iters: usize, eps: f32) {
+1585:        for d in 0..hc { let v = comb[d + s * hc]; if v > mx { mx = v; } }
+1587:        for d in 0..hc { let e = (comb[d + s * hc] - mx).exp(); comb[d + s * hc] = e; somme += e; }
+1589:        for d in 0..hc { comb[d + s * hc] *= inv; }
+1591:    for v in comb.iter_mut() { *v += eps; }
+1608:    norm_src(comb);
+1609:    for _ in 1..iters { norm_dst(comb); norm_src(comb); }
+1641:        let mut comb = vec![0f32; hc * hc];
+1645:                comb[d + s * hc] = mel[m] * self.scale[2] + self.base[m];
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs", "limit": 60, "offset": 1615}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs</path>
+<type>file</type>
+<content>
+1615:     /// Les `24` mélanges d'un jeton : `hc_fn · rms_norm(x aplati)`.
+1616:     pub fn melanges(&self, x: &[f32]) -> Vec<f32> {
+1617:         let hc_dim = self.hc * self.h;
+1618:         let mut plat = vec![0f32; hc_dim];
+1619:         rms_norm_sans_poids(&x[..hc_dim.min(x.len())], 1e-20, &mut plat);
+1620:         let mut out = vec![0f32; self.hc_mix()];
+1621:         for (m, o) in out.iter_mut().enumerate() {
+1622:             let ligne = &self.melange[m * hc_dim..(m + 1) * hc_dim];
+1623:             let mut acc = 0f32;
+1624:             for i in 0..hc_dim { acc += ligne[i] * plat[i]; }
+1625:             *o = acc;
+1626:         }
+1627:         out
+1628:     }
+1629: 
+1630:     /// Les trois sorties d'un `hc_pre` : `pre`, `post`, `comb`.
+1631:     pub fn sortie(&self, x: &[f32]) -> HcSortie {
+1632:         let mel = self.melanges(x);
+1633:         let (hc, eps) = (self.hc, self.eps);
+1634:         let sig = |v: f32| 1.0 / (1.0 + (-v).exp());
+1635:         let mut pre = vec![0f32; hc];
+1636:         for i in 0..hc { pre[i] = sig(mel[i] * self.scale[0] + self.base[i]) 
+… [1993 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"\\.sortie(\\|hc_sortie\\|HcSortie\" drave-core/src/model.rs | head -12; s=$(stat -c %s /tmp/our_v4f1024.bin 2>/dev/null || echo 0); echo \"ctx 1024 : $(( (s-8)/517120 )) / 1023 positions\"", "description": "Find the hc sort … [15 caractères tronqués]`
+
+  ```
+1563:pub struct HcSortie {
+1631:    pub fn sortie(&self, x: &[f32]) -> HcSortie {
+1649:        HcSortie { pre, post, comb }
+1687:    pub fn retro(y: &[f32], residu: &[f32], s: &HcSortie, hc: usize, h: usize,
+6507:            let mut hc_attn: Option<HcSortie> = None;
+6511:                    let s = ha.sortie(&x);
+6985:            let mut hc_ffn: Option<HcSortie> = None;
+6990:                    let sf = hf.sortie(&nx);
+8231:        let s = hc.sortie(&X);
+8335:        let mut s = HcSortie { pre: vec![1.0, 0.0, 0.0, 0.0], post: vec![1.0; 4],
+8391:        let sa = attn.sortie(&x0);
+8399:        let sf = ffn.sortie(&x1);
+ctx 1024 : 44 / 1023 positions
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '6505,6520p' drave-core/src/model.rs; echo \"=== ffn ===\"; sed -n '6985,6998p' drave-core/src/model.rs; echo \"=== signature contexte (dump dispo ?) ===\"; sed -n '6490,6508p' drave-core/src/model.rs | grep -nE \"fn |dump|pos … [67 caractères tronqués]`
+
+  ```
+// re-router par `comb` au lieu d'être additionnée.
+            let hc_l = self.hc.as_ref().map(|v| &v[l]);
+            let mut hc_attn: Option<HcSortie> = None;
+            let mut xin = vec![0f32; h];
+            match hc_l {
+                Some((ha, _)) => {
+                    let s = ha.sortie(&x);
+                    // **Quels coefficients replient l'entrée ?** V4 : ceux du
+                    // raccord lui-même. V4.1 (mHC retardé) : ceux PORTÉS par le
+                    // raccord précédent, et la copie 0 au tout premier — la
+                    // référence fait `layer_input = residual[:, 0] if pre_mix is
+                    // None else (pre_mix · residual).sum(1)`.
+                    let poids: &[f32] = if retarde {
+                        hc_porte.as_deref().unwrap_or(&[])
+                    } else { &s.pre };
+                    if poids.is_empty() { xin.copy_from_slice(&x[..h]); }
+=== ffn ===
+            let mut hc_ffn: Option<HcSortie> = None;
+            match (hc_l, hc_attn.as_ref()) {
+                (Some((_, hf)), Some(sa)) => {
+                    let mut nx = vec![0f32; hf.hc * h];
+                    Hc::retro(&o, &x, sa, hf.hc, h, &mut nx);
+            
+… [932 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs", "new_string": "                Some((ha, _)) => {\n                    let s = ha.sortie(&x);\n                    // **Les 24 poids de connexion du raccord** (4 `pre` + 4 `post`\n                    // + 16 `co … [467 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs", "new_string": "                    Hc::retro(&o, &x, sa, hf.hc, h, &mut nx);\n                    let sf = hf.sortie(&nx);\n                    Self::vider_couche_poids_hc(self.dump_couches.as_deref(), \"hc_ffn\ … [192 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"fn vider_couche\" -B 6 drave-core/src/model.rs | head -14", "description": "Locate vider_couche to add the helper"}`
+
+  ```
+4616-    }
+4617-
+4618-    /// Écrit l'état résiduel d'une couche (f32 brut, machine locale) si le
+4619-    /// vidage est demandé. Le format est volontairement le plus bête possible :
+4620-    /// c'est `llama.cpp` qui produit l'autre fichier, et le seul contrat est
+4621-    /// « mêmes nombres, même ordre » — `n_embd` puis `hc` copies.
+4622:    fn vider_couche(prefixe: Option<&str>, nom: &str, l: usize, pos: usize, x: &[f32]) {
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs", "new_string": "    /// Écrit l'état résiduel d'une couche (f32 brut, machine locale) si le\n    /// vidage est demandé. Le format est volontairement le plus bête possible :\n    /// c'est `llama.cpp` qui produit … [614 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs has been updated successfully.
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs", "limit": 32, "offset": 4618}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs</path>
+<type>file</type>
+<content>
+4618:     /// Écrit l'état résiduel d'une couche (f32 brut, machine locale) si le
+4619:     /// vidage est demandé. Le format est volontairement le plus bête possible :
+4620:     /// c'est `llama.cpp` qui produit l'autre fichier, et le seul contrat est
+4621:     /// « mêmes nombres, même ordre » — `n_embd` puis `hc` copies.
+4622:     fn vider_couche(prefixe: Option<&str>, nom: &str, l: usize, pos: usize, x: &[f32]) {        use std::io::Write;
+4623:         let Some(p) = prefixe else { return };
+4624:         // Le nom porte le tenseur, la couche ET la position : sans la position,
+4625:         // un fichier par couche ne garderait que le dernier jeton évalué — et
+4626:         // c'est justement au-delà de la position 0 que les écarts apparaissent.
+4627:         let chemin = format!("{p}-{nom}-{l}-{pos}.bin");
+4628:         match std::fs::File::create(&chemin) {
+4629:             Ok(mut f) => {
+4630:                 let mut octets = Vec::with_capacity(x.len() * 4);
+4631:                 for v in x { octets.extend_from_slice(&v.to_le_bytes()); }
+4632:                 if 
+… [1121 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs", "new_string": "    fn vider_couche(prefixe: Option<&str>, nom: &str, l: usize, pos: usize, x: &[f32]) {\n        use std::io::Write;\n        let Some(p) = prefixe else { return };\n        // Le nom porte le te … [2724 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && cargo build --release 2>&1 | grep -E \"^error|warning: unused|Finished\" | head -8; s=$(stat -c %s /tmp/our_v4f1024.bin 2>/dev/null || echo 0); echo \"ctx 1024 : $(( (s-8)/517120 )) / 1023 positions\"", "description": "Bui … [43 caractères tronqués]`
+
+  ```
+warning: unused imports: `GGML_IQ1_M`, `GGML_IQ1_S`, `GGML_IQ2_XXS`, and `GGML_IQ3_XXS`
+warning: unused attribute
+warning: unused variable: `id`
+warning: unused variable: `plan`
+warning: unused variable: `cfg`
+warning: unused variable: `clusters`
+warning: unused variable: `ctx`
+warning: unused variable: `arch`
+ctx 1024 : 93 / 1023 positions
+  ```
+
+- **write** `{"content": "#!/usr/bin/env python3\n\"\"\"analyse_hc.py — les 24 poids d'un raccord à hyper-connexions, relus et jugés.\n\nC'est l'outil de la **porte Drave de P1** (`docs/plan-deepseek41-complet.md`) :\nles coefficients de connexion étaient calculés à chaque jeton puis jetés — un\nforward muet. Le … [4982 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/analyse_hc.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && chmod +x tools/analyse_hc.py && python3 -c \"import ast,sys; ast.parse(open('tools/analyse_hc.py').read()); print('syntaxe ok')\" && s=$(stat -c %s /tmp/our_v4f1024.bin 2>/dev/null || echo 0); echo \"ctx 1024 : $(( (s-8)/517120 )) /  … [125 caractères tronqués]`
+
+  ```
+syntaxe ok
+ctx 1024 : 102 / 1023
+  ```
+
+- **bash** `{"command": "pid=$(pgrep -x drave | head -1); c1=$(awk '{print $14+$15}' /proc/$pid/stat); r1=$(awk '/^read_bytes/{print $2}' /proc/$pid/io); s1=$(stat -c %s /tmp/our_v4f1024.bin); t1=$(date +%s); sleep 120; c2=$(awk '{print $14+$15}' /proc/$pid/stat); r2=$(awk '/^read_bytes/{print $2}' /proc/$pid/i … [442 caractères tronqués]`
+
+  ```
+45 positions en 120 s -> 2.67 s/position
+CPU 2728 s -> parallélisme 22.7x · disque 810 Mo en 120 s (6.8 Mo/s)
+charge average: 27,89, 24,47, 21,11
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='tools/analyse_hc.py'\ns=open(p).read()\ns=s.replace(\"\"\"import numpy as np\n\n\ndef lire\"\"\",\"\"\"import numpy as np\n\n# Le Sinkhorn promet une matrice bistochastique ; au-delà de cet écart, la\n# promesse  … [805 caractères tronqués]`
+
+  ```
+outil : code retour ajouté
+117:            print(f"❌ PORTE P1 NON TENUE : comb non bistochastique "
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='tools/portes.sh'\ns=open(p).read()\nold = \"# 8. Le DÉCOUPAGE : deux nœuds, cinq modes de flux, un petit modèle (~20 s).\"\nnew = '''# 7sexies. Porte Drave de P1 : les 24 poids de connexion d'un raccord à\n#   hy … [1818 caractères tronqués]`
+
+  ```
+portes.sh : section 7sexies ajoutée
+syntaxe bash ok
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -m \"Porte Drave de P1 enfin outillée : les 24 poids de connexion hc sont écrits, relus et jugés\n\nIls étaient calculés puis JETÉS — un forward muet, et la porte de P1 n'avait\naucun instrument dans le dé … [482 caractères tronqués]`

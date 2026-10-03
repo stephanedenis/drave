@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 114.7 h |
+| Durée | 114.9 h |
 | Tours | 90 |
-| Messages | 6746 |
-| Appels d'outils | 6448 |
-| Fichiers touchés | 129 |
-| Commandes | 5443 |
+| Messages | 6768 |
+| Appels d'outils | 6470 |
+| Fichiers touchés | 130 |
+| Commandes | 5457 |
 | Sous-agents | 32 |
-| Commits | 431 |
+| Commits | 432 |
 | Compactages de contexte | 9 |
 
 ## Objectifs déclarés
@@ -4473,7 +4473,7 @@ Autrement dit : **la granularité ne compresse pas, elle route** — et elle ach
 
 ### Tour 90 — <goal_round> Objective: "Exécuter le plan docs/plan-deepseek41-complet.md phase par phase (P0→P9), en autonomie, en resp … [942 caractères tronqués]
 
-*10 appels d'outils.* Actions notables :
+*32 appels d'outils.* Actions notables :
 
 - bash — Check the gate suite result
 - bash — Wait for the gates
@@ -4485,10 +4485,15 @@ Autrement dit : **la granularité ne compresse pas, elle route** — et elle ach
 - bash — Read the reference-values section of REPRISE
 - bash — Find the end of section 2
 - bash — Update REPRISE and check the ctx-1024 progress
+- bash — Read the IQ2_XXS scalar dequant
+- bash — Find the plan's remaining items
+- bash — Extract each phase's gate claims
+- read
+- … et 16 autres
 
 **Synthèse produite :**
 
-⏵ Portes toutes vertes ; je lance le palier ctx 1 024 (référence puis moteur)
+⏵ Lacune trouvée : la porte Drave de P1 (trace des poids de connexion + outil) n'existe pas dans le dépôt
 
 ## 3. Travail accompli
 
@@ -4538,7 +4543,7 @@ Autrement dit : **la granularité ne compresse pas, elle route** — et elle ach
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/vision.md` | 1 | 4 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/histoire.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/roadmap.md` | 1 | 0 |
-| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs` | 0 | 104 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/model.rs` | 0 | 108 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/main.rs` | 0 | 34 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/gpu.rs` | 0 | 3 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-gpu-topk-selection.md` | 1 | 0 |
@@ -4625,6 +4630,7 @@ Autrement dit : **la granularité ne compresse pas, elle route** — et elle ach
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/granularite_flux.py` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-granularite-flux.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/sprints/26-la-porte-a-512-et-la-granularite-qui-route.md` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/analyse_hc.py` | 1 | 0 |
 
 ### Sous-agents lancés
 
@@ -4703,7 +4709,7 @@ Autrement dit : **la granularité ne compresse pas, elle route** — et elle ach
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 5403 autres
+- … et 5417 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -5282,4 +5288,5 @@ Autrement dit : **la granularité ne compresse pas, elle route** — et elle ach
 - Plan P6 : porte de correction TENUE à ctx 512 (511 positions, top-1 93,0 %, +4,3 % de PPL) et le coût par jeton ne croît presque pas avec le contexte (2,58 s/je
 - Sprint 26 : porte de correction TENUE à ctx 512, coût par jeton quasi constant, granularité qui route — portes toutes vertes" && V4=/home/stephane/FastNVMe/mode
 - REPRISE : état du 03/10 (porte à ctx 512, coût plat, SIMD corrigé, granularité)"; grep -E "positions|sur [0-9]+ tokens" /tmp/our_v4f1024_clean.log 2>/dev/null |
+- Porte Drave de P1 enfin outillée : les 24 poids de connexion hc sont écrits, relus et jugés  Ils étaient calculés puis JETÉS — un forward muet, et la porte de P
 

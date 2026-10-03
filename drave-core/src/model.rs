@@ -4638,6 +4638,25 @@ PLUS LENT que le cache de pages du noyau (ctx 32 : +4 % à 4 Go, +21 % à 32 Go 
         }
     }
 
+    /// **Les 24 poids d'un raccord à hyper-connexions** (4 `pre` + 4 `post` +
+    /// 16 `comb`), écrits dans CET ordre — c'est le contrat que lit
+    /// `tools/analyse_hc.py`. Ils étaient calculés puis jetés : la porte Drave de
+    /// P1 demande qu'ils soient tracés par jeton, et que l'outil dise la
+    /// **sparsité** des 16 connexions et leur **stabilité** d'un jeton à l'autre.
+    ///
+    /// `comb` sort du Sinkhorn : ses lignes et ses colonnes somment à 1 (à `eps`
+    /// près), ce que l'outil vérifie — un raccord dont le `comb` n'est pas
+    /// bistochastique signalerait que le Sinkhorn n'a pas convergé.
+    fn vider_couche_poids_hc(prefixe: Option<&str>, nom: &str, l: usize, pos: usize,
+                             s: &HcSortie) {
+        if prefixe.is_none() { return; }
+        let mut v = Vec::with_capacity(s.pre.len() + s.post.len() + s.comb.len());
+        v.extend_from_slice(&s.pre);
+        v.extend_from_slice(&s.post);
+        v.extend_from_slice(&s.comb);
+        Self::vider_couche(prefixe, nom, l, pos, &v);
+    }
+
     /// **RoPE « NORM »** — l'autre convention d'appariement, celle des modèles
     /// Llama et **DeepSeek-V4** (`LLAMA_ROPE_TYPE_NORM` dans llama.cpp) :
     /// les paires sont `(2i, 2i+1)`. Celle de Drave (`rope`) apparie
@@ -6509,6 +6528,12 @@ hors de la table ({} rangées)", eng.rangees[*ti]));
             match hc_l {
                 Some((ha, _)) => {
                     let s = ha.sortie(&x);
+                    // **Les 24 poids de connexion du raccord** (4 `pre` + 4 `post`
+                    // + 16 `comb`) : c'est le flux de P1 — ils étaient calculés
+                    // puis JETÉS, donc muets. La porte Drave de P1 demande qu'ils
+                    // soient écrits, relus et analysés (`tools/analyse_hc.py`).
+                    Self::vider_couche_poids_hc(self.dump_couches.as_deref(), "hc_attn",
+                                                l, pos, &s);
                     // **Quels coefficients replient l'entrée ?** V4 : ceux du
                     // raccord lui-même. V4.1 (mHC retardé) : ceux PORTÉS par le
                     // raccord précédent, et la copie 0 au tout premier — la
@@ -6988,6 +7013,8 @@ dynamique de {dyn_:.3e} (relatif {:.2e})", mx / dyn_.max(1e-9));
                     let mut nx = vec![0f32; hf.hc * h];
                     Hc::retro(&o, &x, sa, hf.hc, h, &mut nx);
                     let sf = hf.sortie(&nx);
+                    Self::vider_couche_poids_hc(self.dump_couches.as_deref(), "hc_ffn",
+                                                l, pos, &sf);
                     let mut mel = vec![0f32; h];
                     // Le flux que voit le raccord FFN : c'est sur LUI que la
                     // référence calcule ses mélanges (`mixes = fn · rms_norm(x)`),

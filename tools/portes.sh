@@ -264,6 +264,35 @@ if [ -x tools/compare_logits.py ] && [ -x tools/ref_logits ] \
     fi
 fi
 
+# 7sexies. Porte Drave de P1 : les 24 poids de connexion d'un raccord à
+#   hyper-connexions (4 pre + 4 post + 16 comb) doivent être ÉCRITS et RELUS par
+#   l'outil. Ils étaient calculés puis JETÉS — un forward muet, exactement ce que
+#   le mandat interdit — et la porte de P1 n'avait donc pas d'instrument. Le
+#   contrôle coûte un chargement de V4-Flash (~40 s) : il est fait une fois, avec
+#   3 jetons sur 3 couches, et l'outil vérifie en plus que le Sinkhorn tient sa
+#   promesse (lignes et colonnes de `comb` somment à 1).
+if [ -x tools/analyse_hc.py ] && [ -f "$V4" ]; then
+    rm -f /tmp/porte_hc-*
+    DRAVE_DUMP_COUCHES=/tmp/porte_hc timeout 600 $D "$V4" --ppl /tmp/ids_v4flash.txt \
+        --ctx 16 --limit 3 --dense --threads 8 --lot 1 >/dev/null 2>&1
+    if ls /tmp/porte_hc-hc_attn-*-*.bin >/dev/null 2>&1; then
+        sortie_hc=$(python3 tools/analyse_hc.py /tmp/porte_hc --couches 0,1,2 \
+            --positions 0,1,2 2>&1)
+        code_hc=$?
+        res=$(printf '%s' "$sortie_hc" | grep -oE "connexions significatives.*" | head -1)
+        if [ "$code_hc" = "0" ] && [ -n "$res" ]; then
+            printf "  %-42s %s  ✅\n" "poids de connexion hc écrits et relus" "$res"
+        else
+            printf "  %-42s %s  ❌\n" "poids de connexion hc écrits et relus" "échec"
+            printf '%s\n' "$sortie_hc" | tail -3 | sed 's/^/      /'
+            ECHEC=1
+        fi
+    else
+        printf "  %-42s %s  ❌\n" "poids de connexion hc écrits et relus" "aucun vidage écrit"
+        ECHEC=1
+    fi
+fi
+
 # 8. Le DÉCOUPAGE : deux nœuds, cinq modes de flux, un petit modèle (~20 s).
 #    Elle manquait, et c'est exactement pour cela que la fuite de la `pre` reçue
 #    (sprint 13) a vécu si longtemps : aucun test n'exerçait un COUPLE de nœuds.
