@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 103.8 h |
+| Durée | 104.3 h |
 | Tours | 79 |
-| Messages | 6127 |
-| Appels d'outils | 5870 |
-| Fichiers touchés | 116 |
-| Commandes | 4942 |
+| Messages | 6159 |
+| Appels d'outils | 5902 |
+| Fichiers touchés | 117 |
+| Commandes | 4971 |
 | Sous-agents | 32 |
-| Commits | 376 |
+| Commits | 377 |
 | Compactages de contexte | 8 |
 
 ## Objectifs déclarés
@@ -4037,7 +4037,7 @@ P0-P6 faites, P8 portée et val
 
 ### Tour 79 — <goal_round> Objective: "Exécuter le plan docs/plan-deepseek41-complet.md phase par phase (P0→P9), en autonomie, en resp … [941 caractères tronqués]
 
-*1130 appels d'outils.* Actions notables :
+*1162 appels d'outils.* Actions notables :
 
 - web_search
 - web_fetch
@@ -4053,7 +4053,7 @@ P0-P6 faites, P8 portée et val
 - bash — Locate hc_collapse_triton definition
 - read
 - bash — Read mHC init and pre/post call sites
-- … et 1003 autres
+- … et 1034 autres
 
 **Synthèse produite :**
 
@@ -4181,6 +4181,7 @@ P0-P6 faites, P8 portée et val
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/sprints/14-p8-la-vivacit-de-l-engram-interrupteur-d.md` | 2 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/sprints/15-p9-le-poste-d-attention-v4-1-profiler-le.md` | 2 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-matvec-f32-parallele.md` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/sprints/16-les-experts-sur-nvme-la-reutilisation.md` | 2 | 0 |
 
 ### Sous-agents lancés
 
@@ -4259,7 +4260,7 @@ P0-P6 faites, P8 portée et val
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 4902 autres
+- … et 4931 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4387,7 +4388,7 @@ P0-P6 faites, P8 portée et val
 
 ## 5. Erreurs rencontrées
 
-314 sorties en erreur ou divergentes. Les premières :
+315 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : a8f2635f8 docs: record which models this box is good at, and why src/llama-hparams.cpp:8:void llama_hparams::set_swa_pattern(uint32_t n_pattern, bool dense_first) { src/llama-hparams.h:308:    void se
 - **T1** : 511 tokens notés — perplexité cumulée 247.031  (4.9 tok/s) === perplexité 247.0308 sur 511 tokens (0 événements, 104.5 s) ===  ### B3 harmony assistant 511 --- ref --- 0.0 0.0 0:00 ls: cannot access '
@@ -4783,4 +4784,5 @@ P0-P6 faites, P8 portée et val
 - Sprint 15 : le profil V4 dit maintenant où passent les 1 003 ms/token d'attention (4,5 % seulement dans le calcul)  Cinq sous-compteurs (statiques PROF_V4) remp
 - Sprint 15 : clôture (107 min) — ×9,34 sur l'attention sans changer un bit, et le profil complété" && git log --oneline -1 && date
 - Sprint 15 : l'heure de clôture réelle (31 min, pas 107 — mesurée sur l'horloge)" && grep -n '"--trace-experts"' drave-core/src/main.rs | head -3; free -g | head
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cargo test --release --manifest-path drave-core/Cargo.toml 2>&1 | grep -E "test result|FAILED" | head -2; 
 

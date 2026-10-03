@@ -98335,3 +98335,537 @@ ven 02 oct 2026 22:32:19 EDT
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np=\"sprints/15-p9-le-poste-d-attention-v4-1-profiler-le.md\"\ns=open(p).read()\na=\"\"\"- **Début** : 22:01 · **Fin** : 23:48 (107 min utiles — la boîte s'arrête quand les\n  trois chantiers sont livrés, mesurés et  … [792 caractères tronqués]`
+
+  ```
+ok
+               total        used        free      shared  buff/cache   available
+Mem:             125          12          20           2          95         112
+Sprint 1 démarré à 22:32 → 00:32  ·  sprints/01-le-poste-dominant-de-v4-1-les-experts-su.md
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && mv sprints/01-le-poste-dominant-de-v4-1-les-experts-su.md sprints/16-les-experts-sur-nvme-la-reutilisation.md && now=$(date +%s) && printf \"16 %s %s\\n\" \"$now\" \"$((now+7200))\" > sprints/COURANT && grep -rn \"TRACE_EXPERTS\" dra … [162 caractères tronqués]`
+
+  ```
+26:    "TRACE_EXPERTS", "VISION_TEXTE", "YARN", "YARN_MSCALE", "YARN_NON",
+1991:    pub trace_experts: Option<std::io::BufWriter<std::fs::File>>,
+3696:            trace_experts: std::env::var("DRAVE_TRACE_EXPERTS").ok().and_then(|c| {
+4885:                let trace_active = self.trace_experts.is_some();
+4895:                        let f = self.trace_experts.as_mut().unwrap();
+6748:                if let Some(f) = self.trace_experts.as_mut() {
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && rm -f /tmp/exp_trace.txt && nohup env DRAVE_TRACE_EXPERTS=/tmp/exp_trace.txt ./drave-core/target/release/drave /home/stephane/FastNVMe/modeles-lourds/DeepSeek-V4.1-Flash-Q2.gguf --ppl /tmp/v41_texte.txt.ids --ctx 64 --limit 64 --abit … [184 caractères tronqués]`
+
+  ```
+trace lancee (64 jetons)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > sprints/16-les-experts-sur-nvme-la-reutilisation.md <<'EOF'\n# Sprint 16 — Le poste dominant de V4.1 : les experts sur NVMe — mesurer la réutilisation, garder en RAM ce qui se répète, publier le gain\n\n- **Début** : 22:32 · ** … [771 caractères tronqués]`
+
+  ```
+sprint 16 ecrit
+[config] rotation : RoPE simple sur les couches BRUTES (régime retardé : YaRN au-delà de quatre fois la longueur d'origine, seuil mesuré sur gpt-oss) — mais les couches COMPRESSÉES sont en YaRN ×16 à TOUTES les positions, comme llama.cpp (`deepseek4.cpp:872-879`) et vLLM (`rope.py:28-46`) ; `DRAVE_YARN=1`/`--sans-yarn` forcent l'un ou l'autre partout
+[moe] trace de routage des experts → /tmp/exp_trace.txt
+302 /tmp/exp_trace.txt
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n \"$(grep -n 'pub struct Vue4' drave-core/src/model.rs | cut -d: -f1),+30p\" drave-core/src/model.rs; grep -n \"fn expert(\" drave-core/src/model.rs", "description": "Read the Vue4 struct"}`
+
+  ```
+pub struct Vue4 {
+    pub base: *const u8,
+    pub n_out: usize,
+    pub n_in: usize,
+    pub nb: usize,
+    pub src: crate::list::Source,
+}
+
+impl Vue4 {
+    fn pas(&self) -> usize {
+        use crate::list::Source::*;
+        match self.src {
+            Q4_K => crate::gguf::TAILLE_Q4K,
+            Q6_K => crate::gguf::TAILLE_Q6K,
+            Mxfp4 => 17,
+            Q4_0 => 18,
+            Propre => 0,
+            Dequant(t) => crate::list::octets_grille(t),
+        }
+    }
+
+    /// Produit matrice-vecteur sur une source **sans noyau** : déquantifie
+    /// chaque super-bloc de 256 poids et accumule en f32.
+    ///
+    /// Le travail est découpé par LIGNES de sortie entre `n_fils` fils : les
+    /// super-blocs d'une ligne sont indépendants, et la déquantification domine
+    /// le coût (recherches dans les grilles), donc le parallélisme paie.
+    fn matvec_dequant(&self, loc: usize, t: u32, x: &[f32], out: &mut [f32], n_fils: usize) {
+        let taille = crate::list::octets_grille(t);
+        assert!(self.n_in % 256 == 0, "largeur {} non multiple de 256", self.n_in);
+        // Le noyau lit `x[j]` jusqu'à `n_in` : une activation plus COURTE
+852:    fn expert(&self, e: usize) ->
+… [23 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n \"$(grep -n 'fn ou(&self, e: usize)' drave-core/src/model.rs | cut -d: -f1),+25p\" drave-core/src/model.rs | head -35; grep -n \"fn expert(&self, e\" drave-core/src/model.rs; grep -n \"moe.gate\\[kexp\\].expert(loc)\" drave-co … [79 caractères tronqués]`
+
+  ```
+pub fn ou(&self, e: usize) -> Option<(usize, usize)> {
+        match self.local {
+            None => if e < self.n_expert_global { Some((0, e)) } else { None },
+            Some(m) => {
+                let (cluster, ligne) = m.ou(self.couche, e)?;
+                // Le cluster de l'expert n'est pas forcément chargé ici : c'est
+                // exactement ce que veut dire « nœud partiel », et ce n'est pas
+                // une erreur.
+                let k = self.numeros.iter().position(|c| *c == cluster)?;
+                Some((k, ligne))
+            }
+        }
+    }
+}
+
+pub struct Layer {
+    pub attn_norm: Vec<f32>,
+    pub wq: Proj,
+    pub wk: Proj,
+    pub wv: Proj,
+    pub wo: Proj,
+    pub ffn_norm: Vec<f32>,
+    /// RMSNorm appliquée à chaque tête de Q et de K après projection
+    /// (Qwen3, Gemma 3…). Absente ailleurs.
+    pub q_norm: Option<Vec<f32>>,
+    pub k_norm: Option<Vec<f32>>,
+852:    fn expert(&self, e: usize) -> crate::list::DenseQ4 {
+6797:                    let mg = moe.gate[kexp].expert(loc);
+  ```
+
+- **bash** `{"command": "sleep 180; tail -2 /tmp/v41_trace.log; wc -l /tmp/exp_trace.txt 2>/dev/null; echo \"procs: $(pgrep -x drave | wc -l)\"", "description": "Check the trace run", "timeoutMs": 240000}`
+
+  ```
+[config] rotation : RoPE simple sur les couches BRUTES (régime retardé : YaRN au-delà de quatre fois la longueur d'origine, seuil mesuré sur gpt-oss) — mais les couches COMPRESSÉES sont en YaRN ×16 à TOUTES les positions, comme llama.cpp (`deepseek4.cpp:872-879`) et vLLM (`rope.py:28-46`) ; `DRAVE_YARN=1`/`--sans-yarn` forcent l'un ou l'autre partout
+[moe] trace de routage des experts → /tmp/exp_trace.txt
+2057 /tmp/exp_trace.txt
+procs: 1
+  ```
+
+- **bash** `{"command": "sleep 150; tail -3 /tmp/v41_trace.log | head -2; wc -l /tmp/exp_trace.txt; echo \"procs: $(pgrep -x drave | wc -l)\"", "description": "Wait for the trace to complete", "timeoutMs": 200000}`
+
+  ```
+dont tête de sortie 24.65 | notation log-sum-exp 1.61 (le reste du « reste » n'est pas chronométré)
+    dont attention : scores 0.00 | softmax 0.00 | somme pondérée + écriture KV 1047.43
+2560 /tmp/exp_trace.txt
+procs: 0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -E \"perplexité|postes|dont attention V4\" /tmp/v41_trace.log; python3 - <<'PY'\nimport collections, statistics\nlignes=[]\nfor l in open(\"/tmp/exp_trace.txt\"):\n    p=l.split()\n    if len(p)<3: continue\n    lignes.append((i … [1734 caractères tronqués]`
+
+  ```
+63 tokens notés — perplexité cumulée 44774.378  (0.2 tok/s)
+=== perplexité 44774.3783 sur 63 tokens (0 événements, 293.3 s) ===
+    postes (ms/token) : projets-attn 0.00 | rope 0.00 | attention 1047.43 | proj+mlp 3442.72 | somme 4490.15 | reste (tête + échantillonnage) 165.67
+    dont attention V4 (attn_v4) : projets q/kv 375.09 | compresseur 6.75 | indexeur 12.22 | scores + softmax + somme 87.82 | dé-rotation + sortie groupée 565.31
+
+lignes[0][0]=0 lignes : 2560 (couches × positions)
+couches 0..39 (40) · positions 0..63
+experts choisis par (couche, jeton) : {6: 2560}
+
+total de lectures d'experts : 15360 · experts DISTINCTS touchés : 3817 sur 15360
+  25% des lectures tiennent dans 106 experts (2.8% des experts touchés)
+  50% des lectures tiennent dans 394 experts (10.3% des experts touchés)
+  75% des lectures tiennent dans 1177 experts (30.8% des experts touchés)
+  90% des lectures tiennent dans 2281 experts (59.8% des experts touchés)
+
+réutilisation entre jetons CONSÉCUTIFS (même couche) : 31.9% des lectures
+taille approximative d'un expert (MoE ≈ 330 Go / (40 × 384)) : 21.5 Mo
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n 6790,6830p drave-core/src/model.rs; echo \"=== DenseQ4 ===\"; sed -n \"$(grep -n 'pub struct DenseQ4' drave-core/src/list.rs | cut -d: -f1),+20p\" drave-core/src/list.rs; echo \"=== matvec4_ou_iq ===\"; sed -n \"$(grep -n 'fn  … [134 caractères tronqués]`
+
+  ```
+}
+                    }
+                    if fait {
+                        Self::compter_neurones(&mut self.profil_neurones, largeur_profil,
+                                               l, &gate[..cfg.ffn_exp]);
+                        continue;
+                    }
+                    let mg = moe.gate[kexp].expert(loc);
+                    Self::matvec4_ou_iq(pool, &moe.gate[kexp], loc, &hn, &mut gate, &mut paires[1],
+                                        self.act_levels,
+                                        self.act_thresh, tk(4), self.act_renorm, &mut scratch,
+                                        moe.biais_gate.as_ref().map(|b| &b[e as usize * moe.n_ff..]),
+                                        threads_iq);
+                    let mu = moe.up[kexp].expert(loc);
+                    Self::matvec4_ou_iq(pool, &moe.up[kexp], loc, &hn, &mut up, &mut paires[1],
+                                        self.act_levels,
+                                        self.act_thresh, tk(5), self.act_renorm, &mut scratch,
+                                        moe.biais_up.as_ref().map(|b| &b[e as usize * moe.n_ff..]),
+                                        threads_iq);
+       
+… [4207 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n 5908,5930p drave-core/src/model.rs; grep -n \"pub cache_experts\" drave-core/src/model.rs; grep -n \"impl Clone for Vue4\\|derive.*Vue4\\|pub struct Vue4\" drave-core/src/model.rs", "description": "Read the forward destructuri … [4 caractères tronqués]`
+
+  ```
+let mut out = vec![0f32; v];
+        for o in 0..v {
+            let ligne = self.g.row_f32("token_embd.weight", o, h);
+            let mut acc = 0f32;
+            for i in 0..h { acc += ligne[i] * hn[i]; }
+            out[o] = acc;
+        }
+        out
+    }
+
+    /// Un token, une position. Retourne l'état caché après la dernière norme.
+    pub fn forward(&mut self, tok: u32, pos: usize) -> Vec<f32> {
+        assert!(pos < self.ctx, "contexte dépassé ({pos} ≥ {})", self.ctx);
+        self.jeton_trace += 1;
+        // lus AVANT l'emprunt destructuré : la parcimonie par projection
+        let tkp = self.act_topk_proj;
+        let tkg = self.act_topk;
+        let tk = |p: usize| if tkp[p] > 0 { tkp[p] } else { tkg };
+        // Lus AVANT l'emprunt destructuré (comme la parcimonie par projection).
+        let largeur_profil = self.cfg.ffn.max(self.cfg.ffn_exp);
+        // Fils à donner à la déquantification des experts IQ. Lus avant
+        // l'emprunt destructuré, comme le reste.
+        let threads_iq = self.pool.threads().clamp(1, 8);
+2194:    pub cache_experts: Option<CacheExperts>,
+742:pub struct Vue4 {
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n 735,745p drave-core/src/model.rs; sed -n 5931,5950p drave-core/src/model.rs", "description": "Read Vue4's declaration and the Model destructuring"}`
+
+  ```
+})
+}
+
+/// Vue sur un tenseur déjà quantifié, découpable **par expert**. Les experts
+/// sont empilés dans un tenseur 3D et **contigus** : l'expert `e` commence à
+/// `base + e × n_out × nb × pas`. Aucune copie, aucun découpage préalable.
+#[derive(Clone, Copy)]
+pub struct Vue4 {
+    pub base: *const u8,
+    pub n_out: usize,
+    pub n_in: usize,
+        // Diagnostic `DRAVE_DEBUG_ETAT=1` : la norme de l'état résiduel à chaque
+        // couche. Un modèle qui prédit le MÊME jeton à toutes les positions a un
+        // état qui ne dépend plus de l'entrée ; cette ligne dit à quelle couche
+        // il cesse d'en dépendre (explosion, effondrement, ou rien du tout).
+        let debug_etat = std::env::var("DRAVE_DEBUG_ETAT").is_ok();
+        let debug_mla = std::env::var("DRAVE_DEBUG_MLA").is_ok();
+        self.profil_jetons += 1;
+        let Model { g, cfg, layers, out_norm, pool, kv, events, attn_events, kv_gpu,
+                    attn_gpu_part, emb_imposee, paires, clamp_exp, clamp_shexp, .. } = self;
+        // Borne du clamp SwiGLU de la couche : celle des experts, ou celle de
+        // l'expert partagé (qui retombe sur la première si le modèle ne déclare
+        // que `swiglu_cl
+… [420 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"cache_experts:\" drave-core/src/model.rs | head -3; sed -n \"$(grep -n 'cache_experts:' drave-core/src/model.rs | head -1 | cut -d: -f1),+4p\" drave-core/src/model.rs", "description": "Find the Model literal for cache_exper … [4 caractères tronqués]`
+
+  ```
+2194:    pub cache_experts: Option<CacheExperts>,
+    pub cache_experts: Option<CacheExperts>,
+    /// Taille du lot de PRÉREMPLISSAGE en inférence (1 = jeton par jeton).
+    /// Le préremplissage par lots n'était branché que sur la perplexité : une
+    /// invite de 4 000 jetons se payait donc jeton par jeton en génération.
+    pub lot: usize,
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"cache_experts: None\\|cache_experts,\" drave-core/src/model.rs drave-core/src/main.rs | head -5; grep -n \"cache_experts\" drave-core/src/model.rs | sed -n 3,8p", "description": "Find where cache_experts is initialized"}`
+
+  ```
+drave-core/src/model.rs:3719:            cache_experts, mla, mla_cache, jeton_trace: 0, trace: None, flux_force: None,
+3719:            cache_experts, mla, mla_cache, jeton_trace: 0, trace: None, flux_force: None,
+6781:                                (crate::gpu::instance(), self.cache_experts.as_mut()) {
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n 3700,3730p drave-core/src/model.rs", "description": "Read the Model literal region"}`
+
+  ```
+})
+            }),
+            profil_jetons: 0,
+            attn_window: fenetre,
+            swa_pattern,
+            attn_sinks: if fenetre > 0 { 0 } else { 4 },
+            seuil_push: 0.22,
+            stop_id: None, stop_id2: None, prof: [0.0; 6],
+            tete,
+            tete_gpu, tete_gpu_q6k, head4, tete_restreinte: None,
+            normes_tete: None, ordre_normes: None, tete_garantie: None,
+            tete_calculees: 0, tete_appels_g: 0,
+            sinks_vus, kv_gpu, attn_gpu_part: Vec::new(),
+            clamp_exp, clamp_shexp,
+            etat_entree: std::env::var("DRAVE_ETAT_ENTREE").ok(),
+            dump_couches: std::env::var("DRAVE_DUMP_COUCHES").ok(),
+            couche_debut: couches.map(|(a, _)| a).unwrap_or(0),
+            couche_fin: couches.map(|(_, b)| b).unwrap_or(n_layer_total),
+            flux_brut: false, tete_partielle: false,
+            cache_experts, mla, mla_cache, jeton_trace: 0, trace: None, flux_force: None,
+            emb_imposee: None, emb_imposee_lot: None, lot: 1,
+            patch: None, ffn_gain: None, hebb: None,
+        }
+    }
+
+    // ----------------------------------------------------------------------- //
+    // Briques de 
+… [168 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np=\"drave-core/src/model.rs\"\ns=open(p).read()\n\n# 1) la structure et sa politique, après l'impl de Vue4 (juste avant `pub struct Layer`)\na = \"\"\"pub struct Layer {\n    pub attn_norm: Vec<f32>,\"\"\"\nb = \"\" … [4108 caractères tronqués]`
+
+  ```
+ok
+2256:    pub cache_ram: Option<CacheExpertsRam>,
+3782:            cache_ram: match std::env::var("DRAVE_EXPERTS_RAM").ok()
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np=\"drave-core/src/model.rs\"\ns=open(p).read()\na = \"\"\"                    let mg = moe.gate[kexp].expert(loc);\n                    Self::matvec4_ou_iq(pool, &moe.gate[kexp], loc, &hn, &mut gate, &mut paires[1] … [4479 caractères tronqués]`
+
+  ```
+ok
+ok VARS
+    Finished `release` profile [optimized] target(s) in 32.41s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && rm -rf /tmp/dcache && mkdir -p /tmp/dcache && DRAVE_EXPERTS_RAM=32768 DRAVE_DUMP_COUCHES=/tmp/dcache/l ./drave-core/target/release/drave /home/stephane/FastNVMe/modeles-lourds/DeepSeek-V4.1-Flash-Q2.gguf --ppl /tmp/v41_last4.ids --ct … [164 caractères tronqués]`
+
+  ```
+[experts] cache RAM des experts : 32768 Mo (lecture NVMe une fois, résidence explicite — aucun octet du calcul ne change)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && DRAVE_EXPERTS_RAM=32768 ./drave-core/target/release/drave /home/stephane/FastNVMe/modeles-lourds/DeepSeek-V4.1-Flash-Q2.gguf --ppl /tmp/v41_last4.ids --ctx 8 --limit 4 --abits 8 --threads 20 2>&1 | tail -12", "description": "Diagnose … [37 caractères tronqués]`
+
+  ```
+[config] engram : tables sur les couches [1, 14] (rangées [384006168, 384016682]) · 24 colonnes de hachage (3 reculs × 8 têtes) · injection BRANCHÉE · 6336 octets lus par jeton et par table (24 rangées de 264)
+[config] cache KV : 32 bits, 0.00 Go pour 8 jetons
+[modele] 40 couches chargées en 14.120728122s — listes 0.00 Go , 20 threads
+[config] 40 couches, hidden 5120 · racine de softpluséchelle 1.50 moe 
+[config] mélanges d'experts chargés : 40/40 couches · mapping absent (experts en clair dans le fichier)
+[config] puits appris sur 40/40 couches · n_rot 80 · ffn 2816 · experts 384
+[config] rotation : RoPE simple sur les couches BRUTES (régime retardé : YaRN au-delà de quatre fois la longueur d'origine, seuil mesuré sur gpt-oss) — mais les couches COMPRESSÉES sont en YaRN ×16 à TOUTES les positions, comme llama.cpp (`deepseek4.cpp:872-879`) et vLLM (`rope.py:28-46`) ; `DRAVE_YARN=1`/`--sans-yarn` forcent l'un ou l'autre partout
+[experts] cache RAM des experts : 32768 Mo (lecture NVMe une fois, résidence explicite — aucun octet du calcul ne change)
+
+thread 'main' (2418102) panicked at src/model.rs:421:67:
+called `Option::unwrap()` on a `None` value
+note: run with `RUST_BACKTRACE=1` e
+… [42 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n 405,430p drave-core/src/model.rs", "description": "Inspect the panic site"}`
+
+  ```
+Gating::SqrtSoftplus => {
+            let p: Vec<f32> = logits.iter().map(|v| sqrt_softplus(*v)).collect();
+            let s = match biais { Some(b) => p.iter().zip(b).map(|(a, c)| a + c).collect(), None => p.clone() };
+            (p, s)
+        }
+    };
+    let k = k.clamp(1, ne);
+    let chosis: Vec<usize> = match moe.tid2eid.as_ref() {
+        Some(t) => {
+            let base = tid as usize * k;
+            (0..k).map(|j| t[base + j].max(0) as usize).collect()
+        }
+        None => {
+            let mut idx: Vec<u32> = (0..ne as u32).collect();
+            if k < ne {
+                idx.select_nth_unstable_by(k, |&a, &b| {
+                    sel[b as usize].partial_cmp(&sel[a as usize]).unwrap()
+                });
+                idx.truncate(k);
+            }
+            idx.into_iter().map(|e| e as usize).collect()
+        }
+    };
+    let mut poids: Vec<f32> = chosis.iter().map(|&e| probs[e]).collect();
+    // gpt-oss : le softmax porte sur les k POIDS retenus, après sélection.
+    // La renormalisation MULTIPLIE par l'inverse au lieu de diviser : c'est ce
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"Vue4 {\" drave-core/src/model.rs | head; grep -n \"fn expert(&self, e\" -A 20 drave-core/src/model.rs | grep -n \"Vue4\\|nb\\|pas()\" | head", "description": "Find Vue4 construction sites"}`
+
+  ```
+630:            out.push(Vue4 { base: ptr, n_out, n_in, nb: n_in / bloc, src });
+651:        Some(Vue4 { base: g.data_ptr(nom)?, n_out, n_in, nb: n_in / bloc, src })
+742:pub struct Vue4 {
+750:impl Vue4 {
+868:unsafe impl Send for Vue4 {}
+869:unsafe impl Sync for Vue4 {}
+4013:            Some(p) => (Vue4 { base: p, ..*vue }, 0),
+2:853-        let base = unsafe { self.base.add(e * self.n_out * self.nb * self.pas()) };
+6:857-                    crate::list::DenseQ4::emprunter_q4k(base, self.n_out, self.n_in, self.nb),
+8:859-                    crate::list::DenseQ4::emprunter_q6k(base, self.n_out, self.n_in, self.nb),
+10:861-                    crate::list::DenseQ4::emprunter(base, self.n_out, self.n_in, self.nb, true),
+11:862-                _ => crate::list::DenseQ4::emprunter(base, self.n_out, self.n_in, self.nb, false),
+17:868-unsafe impl Send for Vue4 {}
+18:869-unsafe impl Sync for Vue4 {}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n 620,655p drave-core/src/model.rs", "description": "Read the Vue4 construction with bloc"}`
+
+  ```
+let (n_out, n_in) = (t.dims[1] as usize, t.dims[2] as usize);
+            let bloc = if t.ttype == crate::gguf::GGML_Q4_K || t.ttype == crate::gguf::GGML_Q6_K { 256 } else { 32 };
+            if n_in % bloc != 0 {
+                eprintln!("[moe] couche {l} : « {nom} » a {n_in} entrées, non multiple de {bloc}");
+                return None;
+            }
+            let Some(ptr) = g.data_ptr(nom) else {
+                eprintln!("[moe] couche {l} : données de « {nom} » introuvables");
+                return None;
+            };
+            out.push(Vue4 { base: ptr, n_out, n_in, nb: n_in / bloc, src });
+        }
+        Some((numeros, out))
+    };
+    // Vue d'un tenseur 3D NON découpé (l'expert partagé, qui reste dans le
+    // fichier commun) : aucune traduction d'index n'est nécessaire.
+    // Vue d'un tenseur NON découpé : l'expert partagé, qui reste dans le
+    // fichier commun. Il est en 2D (`[n_ff, hidden]`) — exiger 3 dimensions le
+    // refusait en silence, et l'expert partagé des modèles DeepSeek/GLM/Kimi
+    // n'était donc jamais calculé. Sa contribution n'est pas un détail : c'est
+    // un FFN entier, toujours actif, ajouté à la sortie des experts routés.
+    let 
+… [745 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np=\"drave-core/src/model.rs\"\ns=open(p).read()\na = \"\"\"    fn pas(&self) -> usize {\"\"\"\nb = \"\"\"    /// Octets d'UN expert, **tels que le chemin de lecture les parcourt**.\n    ///\n    /// `nb`/`pas()` ne  … [2469 caractères tronqués]`
+
+  ```
+ok
+760:    fn octets_expert(&self) -> usize {
+856:        let octets = self.octets_expert();
+864:        let octets = self.octets_expert();
+871:        let base = unsafe { self.base.add(e * self.octets_expert()) };
+989:        let taille = vue.octets_expert();
+    Finished `release` profile [optimized] target(s) in 36.24s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n \"$(grep -n 'fn source_de' drave-core/src/model.rs | cut -d: -f1),+25p\" drave-core/src/model.rs; grep -n \"GGML_Q2_K\\|Q2_K\" drave-core/src/list.rs | head -5", "description": "Check the source mapping for Q2_K"}`
+
+  ```
+fn source_de(t: u32) -> Option<crate::list::Source> {
+    use crate::gguf::{GGML_IQ1_M, GGML_IQ1_S, GGML_IQ2_XXS, GGML_IQ3_XXS,
+                      GGML_MXFP4, GGML_Q4_0, GGML_Q4_K, GGML_Q6_K};
+    use crate::list::Source;
+    match t {
+        GGML_Q4_K => Some(Source::Q4_K),
+        GGML_Q6_K => Some(Source::Q6_K),
+        GGML_MXFP4 => Some(Source::Mxfp4),
+        GGML_Q4_0 => Some(Source::Q4_0),
+        // Super-blocs de 256 poids SANS noyau dédié : déquantification puis
+        // produit en f32. La liste est celle de `list::sans_noyau` — un test
+        // vérifie que les deux ne peuvent pas diverger.
+        _ if crate::list::sans_noyau(t) => Some(Source::Dequant(t)),
+        _ => None,
+    }
+}
+
+/// Charge le mélange d'experts d'une couche, s'il existe.
+///
+/// Les trois tenseurs `ffn_*_exps` sont des tenseurs **3D** dont la première
+/// dimension (la plus lente) est l'expert : chaque expert est donc un bloc
+/// contigu, et le moteur n'a besoin que d'un pointeur et d'un pas.
+fn charger_moe(g: &Gguf, l: usize, n_expert: usize, map: Option<&'static crate::clusters::Mapping>)
+    -> Option<Moe> {
+    if n_expert == 0 { return None; }
+    let p = |s: &str| format!("blk.{l}.{s}
+… [177 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np=\"drave-core/src/model.rs\"\ns=open(p).read()\na = \"\"\"            Q4_K | Q6_K => self.n_out * (self.n_in / 256) * self.pas(),\n            Mxfp4 | Q4_0 | Dequant(_) => self.n_out * (self.n_in / 32) * self.pas() … [972 caractères tronqués]`
+
+  ```
+ok
+    Finished `release` profile [optimized] target(s) in 32.18s
+[experts] cache RAM des experts : 32768 Mo (lecture NVMe une fois, résidence explicite — aucun octet du calcul ne change)
+       3 tokens notés — perplexité cumulée 1743713.624  (0.1 tok/s)
+=== perplexité 1743713.6243 sur 3 tokens (0 événements, 23.5 s) ===
+    postes (ms/token) : projets-attn 0.00 | rope 0.00 | attention 1318.14 | proj+mlp 6269.83 | somme 7587.97 | reste (tête + échantillonnage) 229.60
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport numpy as np, os\ndef lire(p): return np.fromfile(p, dtype=\"<f4\").astype(np.float64)\ntot=0; diff=[]\nfor f in sorted(os.listdir(\"/tmp/dcache\")):\n    if not f.endswith(\".bin\"): continue\n    p2=os.path. … [489 caractères tronqués]`
+
+  ```
+cache RAM d'experts vs sans cache : 2544 tenseurs, 0 différents
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && M=/home/stephane/FastNVMe/modeles-lourds/DeepSeek-V4.1-Flash-Q2.gguf && echo \"=== 32 Go ===\" && (time DRAVE_EXPERTS_RAM=32768 ./drave-core/target/release/drave $M --ppl /tmp/v41_texte.txt.ids --ctx 32 --limit 32 --abits 8 --threads … [186 caractères tronqués]`
+
+  ```
+=== 32 Go ===
+real	3m8,900s
+=== perplexité 115521.8693 sur 31 tokens (0 événements, 175.5 s) ===
+    postes (ms/token) : projets-attn 0.00 | rope 0.00 | attention 1029.23 | proj+mlp 4429.72 | somme 5458.94 | reste (tête + échantillonnage) 203.57
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && M=/home/stephane/FastNVMe/modeles-lourds/DeepSeek-V4.1-Flash-Q2.gguf && echo \"=== 4 Go ===\" && (time DRAVE_EXPERTS_RAM=4096 ./drave-core/target/release/drave $M --ppl /tmp/v41_texte.txt.ids --ctx 32 --limit 32 --abits 8 --threads 2 … [176 caractères tronqués]`
+
+  ```
+=== 4 Go ===
+real	2m45,196s
+=== perplexité 115521.8693 sur 31 tokens (0 événements, 151.2 s) ===
+    postes (ms/token) : projets-attn 0.00 | rope 0.00 | attention 1011.36 | proj+mlp 3765.74 | somme 4777.10 | reste (tête + échantillonnage) 98.71
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np=\"drave-core/src/model.rs\"\ns=open(p).read()\na = \"\"\"/// **Ce que ça ne fait pas** : aucun octet n'est modifié, aucun ordre de\n/// sommation ne change — un expert lu en RAM rend exactement ce que le mmap\n/// … [2098 caractères tronqués]`
+
+  ```
+ok
+    Finished `release` profile [optimized] target(s) in 32.29s
+  ```
+
+- **write** `{"content": "# Sprint 16 — Le poste dominant de V4.1 : les experts sur NVMe — mesurer la réutilisation, garder en RAM ce qui se répète, publier le gain\n\n- **Début** : 22:32 · **Fin** : 00:12 · **Objectif** : le poste `proj+mlp`\n  (3 530 ms/token à ctx 32) est de la lecture d'experts — mesurer la  … [6803 caractères tronqués]`
+
+  ```
+Error: cannot overwrite existing "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/sprints/16-les-experts-sur-nvme-la-reutilisation.md" without reading it first — read the file, then retry
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/sprints/16-les-experts-sur-nvme-la-reutilisation.md"}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/sprints/16-les-experts-sur-nvme-la-reutilisation.md</path>
+<type>file</type>
+<content>
+1: # Sprint 16 — Le poste dominant de V4.1 : les experts sur NVMe — mesurer la réutilisation, garder en RAM ce qui se répète, publier le gain
+2: 
+3: - **Début** : 22:32 · **Fin prévue** : 00:32 (boxing de 120 min)
+4: - **Objectif** : le poste `proj+mlp` (3 530 ms/token à ctx 32) est de la lecture
+5:   d'experts : ~6 experts par couche sur 384, pris au hasard dans ~330 Go, 40
+6:   couches par jeton. Mesurer la réutilisation, garder en RAM ce qui se répète
+7:   **sans changer un chiffre**, publier le gain.
+8: - **Engagement de fin** : dépôt vert (tests + portes), machine rendue, tout commité.
+9: 
+10: ## Revue — ce qui est livré, mesuré
+11: 
+12: _(en cours)_
+13: 
+14: ## Rétrospective — garder / changer / doute
+15: 
+16: _(en cours)_
+17: 
+18: ## Planning du bloc 17
+19: 
+20: _(en cours)_
+
+(End of file - total 20 lines)
+</content>
+  ```
+
+- **write** `{"content": "# Sprint 16 — Le poste dominant de V4.1 : les experts sur NVMe — mesurer la réutilisation, garder en RAM ce qui se répète, publier le gain\n\n- **Début** : 22:32 · **Fin** : 00:12 · **Objectif** : le poste `proj+mlp`\n  (3 530 ms/token à ctx 32) est de la lecture d'experts — mesurer la  … [6604 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/sprints/16-les-experts-sur-nvme-la-reutilisation.md</path>
+<type>file</type>
+<content>
+Updated file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cargo test --release --manifest-path drave-core/Cargo.toml 2>&1 | grep -E \"test result|FAILED\" | head -2; now=$(date +%s); printf \"16 %s %s\\n\" \"$((now-3600))\" \"$now\" > sprints/COURANT; git add -A && git commit -q -F - <<'MSG … [2043 caractères tronqués]`

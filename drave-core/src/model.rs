@@ -748,6 +748,27 @@ pub struct Vue4 {
 }
 
 impl Vue4 {
+    /// Octets d'UN expert, **tels que le chemin de lecture les parcourt**.
+    ///
+    /// `nb`/`pas()` ne suffisent pas : `nb` compte des blocs de 32 pour tous les
+    /// formats sauf Q4_K/Q6_K, alors que `pas()` d'une grille (`Dequant`) est la
+    /// taille d'un **super-bloc de 256**. Le produit `n_out × nb × pas()`
+    /// surestimait donc l'expert d'un facteur 8 pour les formats quantifiés par
+    /// grille (tous ceux de V4.1) : la PRÉLECTURE et `expert()` visaient huit
+    /// experts plus loin, et le cache RAM copiait le mauvais. Relevé en écrivant
+    /// le cache RAM (l'expert 0 était juste, les suivants étaient du bruit).
+    fn octets_expert(&self) -> usize {
+        use crate::list::Source::*;
+        match self.src {
+            Propre => 0,
+            // Super-blocs de 256 poids : `DenseQ4` pour Q4_K/Q6_K, et
+            // `matvec_dequant` (`nb = n_in / 256`) pour les grilles.
+            Q4_K | Q6_K | Dequant(_) => self.n_out * (self.n_in / 256) * self.pas(),
+            // Blocs de 32 poids (4,25 et 4,5 bits par poids).
+            Mxfp4 | Q4_0 => self.n_out * (self.n_in / 32) * self.pas(),
+        }
+    }
+
     fn pas(&self) -> usize {
         use crate::list::Source::*;
         match self.src {
@@ -835,7 +856,7 @@ pour une projection de {} entrées × {} sorties", crate::gguf::Gguf::nom_type(t
     /// laisse le noyau paralléliser ses lectures de pages, au lieu de les subir
     /// une par une au fil du calcul.
     fn prelire_expert(&self, e: usize) {
-        let octets = self.n_out * self.nb * self.pas();
+        let octets = self.octets_expert();
         let p = unsafe { self.base.add(e * octets) };
         crate::gguf::prelire(p, octets);
     }
@@ -843,14 +864,14 @@ pour une projection de {} entrées × {} sorties", crate::gguf::Gguf::nom_type(t
     /// Octets bruts de l'expert `e` (tels qu'ils sont dans le fichier) : c'est
     /// ce qu'il faut copier en VRAM pour que le noyau y travaille.
     fn blocs_expert(&self, e: usize) -> &[u8] {
-        let octets = self.n_out * self.nb * self.pas();
+        let octets = self.octets_expert();
         let p = unsafe { self.base.add(e * octets) };
         unsafe { std::slice::from_raw_parts(p, octets) }
     }
 
     /// Matrice 4 bits de l'expert `e`, **empruntée** au fichier.
     fn expert(&self, e: usize) -> crate::list::DenseQ4 {
-        let base = unsafe { self.base.add(e * self.n_out * self.nb * self.pas()) };
+        let base = unsafe { self.base.add(e * self.octets_expert()) };
         unsafe {
             match self.src {
                 crate::list::Source::Q4_K =>
@@ -924,6 +945,71 @@ impl Moe {
                 Some((k, ligne))
             }
         }
+    }
+}
+
+/// **Cache RAM des experts** (`DRAVE_EXPERTS_RAM` en Mo).
+///
+/// Les octets d'un expert sont lus une fois depuis le NVMe et gardés en
+/// mémoire. Le noyau en garde déjà une partie en `buff/cache`, mais il les
+/// évince au rythme des ~330 Go lus par passe ; ici la résidence est explicite
+/// et bornée.
+///
+/// **Ce que ça ne fait pas** : aucun octet n'est modifié, aucun ordre de
+/// sommation ne change — un expert lu en RAM rend exactement ce que le mmap
+/// rendait. Vérifié : 2 544 vides identiques au bit près, perplexité inchangée.
+///
+/// **MESURÉ PLUS LENT, et c'est le résultat qui compte.** La trace de routage
+/// rendait l'idée plausible (63 jetons de wiki réel : 15 360 lectures, 3 817
+/// experts distincts, 50 % des lectures dans 394 experts, 31,9 % de réutilisation
+/// entre jetons consécutifs) — mais le noyau fait DÉJÀ ce travail : `buff/cache`
+/// garde ~95 Go de pages du fichier, donc la copie ajoute un second exemplaire et
+/// du trafic mémoire sans retirer les lectures NVMe. Mesuré, passe ctx 32
+/// (31 jetons) : **145,1 s sans cache, 151,2 s à 4 Go (+4 %), 175,5 s à 32 Go
+/// (+21 %)** — plus le cache est grand, plus il coûte. Le drapeau reste, éteint
+/// par défaut, pour re-mesurer là où le cache de pages est petit.
+pub struct CacheExpertsRam {
+    budget: usize,
+    octets: usize,
+    horloge: u64,
+    table: std::collections::HashMap<(u8, usize, usize), (Box<[u8]>, u64)>,
+}
+
+impl CacheExpertsRam {
+    pub fn nouveau(budget: usize) -> Self {
+        CacheExpertsRam { budget, octets: 0, horloge: 0,
+                          table: std::collections::HashMap::new() }
+    }
+
+    /// L'expert est-il en RAM ? Si oui, son adresse (stable : la `Box` ne bouge
+    /// pas, même quand la table se réorganise) et il rajeunit.
+    fn pointeur(&mut self, quoi: u8, l: usize, e: usize) -> Option<*const u8> {
+        self.horloge += 1;
+        let h = self.horloge;
+        match self.table.get_mut(&(quoi, l, e)) {
+            Some((octets, age)) => { *age = h; Some(octets.as_ptr()) }
+            None => None,
+        }
+    }
+
+    /// Copie l'expert en RAM s'il n'y est pas et si le budget le permet.
+    fn garder(&mut self, quoi: u8, l: usize, e: usize, vue: &Vue4, loc: usize) {
+        let taille = vue.octets_expert();
+        if taille == 0 || taille > self.budget { return; }
+        if self.table.contains_key(&(quoi, l, e)) { return; }
+        while self.octets + taille > self.budget && !self.table.is_empty() {
+            // Le plus ancien part. Balayage linéaire : la table fait quelques
+            // milliers d'entrées et une éviction est rare (une par lecture
+            // manquée au plus).
+            let vieux = self.table.iter().min_by_key(|(_, (_, age))| *age)
+                            .map(|(c, _)| *c).unwrap();
+            if let Some((o, _)) = self.table.remove(&vieux) { self.octets -= o.len(); }
+        }
+        let src = unsafe { vue.base.add(loc * taille) };
+        let copie = unsafe { std::slice::from_raw_parts(src, taille) }.to_vec().into_boxed_slice();
+        self.octets += copie.len();
+        self.horloge += 1;
+        self.table.insert((quoi, l, e), (copie, self.horloge));
     }
 }
 
@@ -2192,6 +2278,8 @@ pub struct Model {
     pub mla_cache: Vec<(Vec<f32>, Vec<f32>)>,
     /// Cache VRAM des experts MoE (`DRAVE_GPU_EXPERTS=1`).
     pub cache_experts: Option<CacheExperts>,
+    /// Cache RAM des experts (`DRAVE_EXPERTS_RAM`), voir `CacheExpertsRam`.
+    pub cache_ram: Option<CacheExpertsRam>,
     /// Taille du lot de PRÉREMPLISSAGE en inférence (1 = jeton par jeton).
     /// Le préremplissage par lots n'était branché que sur la perplexité : une
     /// invite de 4 000 jetons se payait donc jeton par jeton en génération.
@@ -3716,7 +3804,18 @@ forcent l'un ou l'autre partout",
             couche_debut: couches.map(|(a, _)| a).unwrap_or(0),
             couche_fin: couches.map(|(_, b)| b).unwrap_or(n_layer_total),
             flux_brut: false, tete_partielle: false,
-            cache_experts, mla, mla_cache, jeton_trace: 0, trace: None, flux_force: None,
+            cache_experts,
+            cache_ram: match std::env::var("DRAVE_EXPERTS_RAM").ok()
+                            .and_then(|v| v.parse::<usize>().ok()) {
+                Some(mo) if mo > 0 => {
+                    println!("[experts] cache RAM des experts : {mo} Mo — ATTENTION, mesuré \
+PLUS LENT que le cache de pages du noyau (ctx 32 : +4 % à 4 Go, +21 % à 32 Go ; voir \
+`CacheExpertsRam`). Aucun octet du calcul ne change, mais le temps, si.");
+                    Some(CacheExpertsRam::nouveau(mo << 20))
+                }
+                _ => None,
+            },
+            mla, mla_cache, jeton_trace: 0, trace: None, flux_force: None,
             emb_imposee: None, emb_imposee_lot: None, lot: 1,
             patch: None, ffn_gain: None, hebb: None,
         }
@@ -3931,6 +4030,18 @@ forcent l'un ou l'autre partout",
     /// Kimi-K2.7, GLM-5.3 et DeepSeek-V4. Ils n'ont pas de noyau ici, et les
     /// refuser rendait ces modèles inchargeables — « mélanges d'experts
     /// chargés : 0/79 » était la seule trace, sans dire pourquoi.
+    /// Redirige une vue d'expert vers le cache RAM s'il la connaît, et l'y met
+    /// sinon. Retourne la vue à employer et le `loc` qui va avec (0 quand la
+    /// base pointe déjà sur l'expert).
+    fn resident(cache: &mut Option<CacheExpertsRam>, quoi: u8, l: usize, e: usize,
+                vue: &Vue4, loc: usize) -> (Vue4, usize) {
+        let Some(c) = cache.as_mut() else { return (*vue, loc); };
+        match c.pointeur(quoi, l, e) {
+            Some(p) => (Vue4 { base: p, ..*vue }, 0),
+            None => { c.garder(quoi, l, e, vue, loc); (*vue, loc) }
+        }
+    }
+
     fn matvec4_ou_iq(pool: &mut Pool, vue: &Vue4, loc: usize, x: &[f32], out: &mut [f32],
                      paires: &mut u64,
                      levels: f32, thresh: f32, topk: usize, renorm: bool,
@@ -6795,13 +6906,20 @@ dynamique de {dyn_:.3e} (relatif {:.2e})", mx / dyn_.max(1e-9));
                         continue;
                     }
                     let mg = moe.gate[kexp].expert(loc);
-                    Self::matvec4_ou_iq(pool, &moe.gate[kexp], loc, &hn, &mut gate, &mut paires[1],
+                    // Cache RAM : si l'expert y est, on lit SES octets (base
+                    // redirigée, loc = 0) au lieu du mmap ; sinon on lit le
+                    // mmap comme avant, puis on le recopie.
+                    let (vg, loc_g) = Self::resident(&mut self.cache_ram, 0, l, e as usize,
+                                                     &moe.gate[kexp], loc);
+                    Self::matvec4_ou_iq(pool, &vg, loc_g, &hn, &mut gate, &mut paires[1],
                                         self.act_levels,
                                         self.act_thresh, tk(4), self.act_renorm, &mut scratch,
                                         moe.biais_gate.as_ref().map(|b| &b[e as usize * moe.n_ff..]),
                                         threads_iq);
                     let mu = moe.up[kexp].expert(loc);
-                    Self::matvec4_ou_iq(pool, &moe.up[kexp], loc, &hn, &mut up, &mut paires[1],
+                    let (vu, loc_u) = Self::resident(&mut self.cache_ram, 1, l, e as usize,
+                                                     &moe.up[kexp], loc);
+                    Self::matvec4_ou_iq(pool, &vu, loc_u, &hn, &mut up, &mut paires[1],
                                         self.act_levels,
                                         self.act_thresh, tk(5), self.act_renorm, &mut scratch,
                                         moe.biais_up.as_ref().map(|b| &b[e as usize * moe.n_ff..]),
@@ -6811,7 +6929,9 @@ dynamique de {dyn_:.3e} (relatif {:.2e})", mx / dyn_.max(1e-9));
                     Self::compter_neurones(&mut self.profil_neurones, largeur_profil,
                                            l, &gate[..cfg.ffn_exp]);
                     let md = moe.down[kexp].expert(loc);
-                    Self::matvec4_ou_iq(pool, &moe.down[kexp], loc, &gate, &mut exp_out, &mut paires[1],
+                    let (vd, loc_d) = Self::resident(&mut self.cache_ram, 2, l, e as usize,
+                                                     &moe.down[kexp], loc);
+                    Self::matvec4_ou_iq(pool, &vd, loc_d, &gate, &mut exp_out, &mut paires[1],
                                     self.act_levels, self.act_thresh, tk(6), self.act_renorm, &mut scratch,
                                     // Le biais de descente se découpe par la
                                     // largeur de SORTIE (h), pas par n_ff : les
