@@ -5,14 +5,14 @@
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
-| Durée | 110.9 h |
+| Durée | 111.3 h |
 | Tours | 87 |
-| Messages | 6530 |
-| Appels d'outils | 6252 |
+| Messages | 6545 |
+| Appels d'outils | 6266 |
 | Fichiers touchés | 120 |
-| Commandes | 5292 |
+| Commandes | 5298 |
 | Sous-agents | 32 |
-| Commits | 420 |
+| Commits | 421 |
 | Compactages de contexte | 9 |
 
 ## Objectifs déclarés
@@ -4318,7 +4318,7 @@ C'est un point de méthode qui comptait : sans cette mesure, on aurait pu « cor
 
 ### Tour 87 — <goal_round> Objective: "Exécuter le plan docs/plan-deepseek41-complet.md phase par phase (P0→P9), en autonomie, en resp … [942 caractères tronqués]
 
-*89 appels d'outils.* Actions notables :
+*103 appels d'outils.* Actions notables :
 
 - bash — Launch the long-window correction gate
 - bash — Wait for the long comparison
@@ -4334,11 +4334,11 @@ C'est un point de méthode qui comptait : sans cette mesure, on aurait pu « cor
 - bash — Read the bloc 22 plan in sprint 21
 - bash — Locate engram code and any local vLLM source
 - bash — Inspect correction-gate tools and engine flags
-- … et 68 autres
+- … et 82 autres
 
 **Synthèse produite :**
 
-⏵ Writing sprint 23 while the ctx-256 pass runs (~10 s/token measured)
+⏵ Refining the criterion after a real failure: 1 position out of 255, sole artifact of Pearson
 
 ## 3. Travail accompli
 
@@ -4351,7 +4351,7 @@ C'est un point de méthode qui comptait : sans cette mesure, on aurait pu « cor
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/qtrinet-core/src/main.rs` | 0 | 43 |
 | `/tmp/mesures_oss.sh` | 2 | 0 |
 | `/tmp/mesures_oss2.sh` | 1 | 0 |
-| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/compare_logits.py` | 3 | 3 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/compare_logits.py` | 3 | 7 |
 | `/tmp/mesures_oss3.sh` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/ref_logits.cpp` | 0 | 3 |
 | `/tmp/mesures_oss4.sh` | 2 | 0 |
@@ -4427,7 +4427,7 @@ C'est un point de méthode qui comptait : sans cette mesure, on aurait pu « cor
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/extraire_tables_ggml.sh` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-routage-experts.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-mla-experts.md` | 1 | 0 |
-| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/plan-deepseek41-complet.md` | 4 | 12 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/plan-deepseek41-complet.md` | 4 | 14 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/colab-reparti.md` | 0 | 1 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/convertisseur.md` | 0 | 3 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/plan-mode4-lot-listes.md` | 0 | 2 |
@@ -4465,7 +4465,7 @@ C'est un point de méthode qui comptait : sans cette mesure, on aurait pu « cor
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/sprints/16-les-experts-sur-nvme-la-reutilisation.md` | 2 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-vitesse-v41.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/sprints/22-la-composition-verifiee-et-les-deux-portes.md` | 1 | 0 |
-| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/sprints/23-la-porte-de-correction-outillee-et-longue.md` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/sprints/23-la-porte-de-correction-outillee-et-longue.md` | 1 | 2 |
 
 ### Sous-agents lancés
 
@@ -4544,7 +4544,7 @@ C'est un point de méthode qui comptait : sans cette mesure, on aurait pu « cor
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 5252 autres
+- … et 5258 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -5112,4 +5112,5 @@ C'est un point de méthode qui comptait : sans cette mesure, on aurait pu « cor
 - Glossaire : la porte de correction a maintenant des critères mesurés, et le rejeu une définition vérifiée" && sleep 420; ps -o etime=,time= -C drave | head -2; 
 - Sprint 23 : la porte de correction serrée (63 positions, 6,4 % au lieu de 25 %), outillée (verdict + code retour), et le coût du contexte long mesuré  Mesuré en
 - Plan P6 : le coût du contexte long est mesuré (60 s/jeton à ctx 1024), et --dense est inerte pour V4-Flash" && sleep 420; s=$(stat -c %s /tmp/our_v4f256.bin); e
+- Porte de correction à ctx 256 (255 positions) : TENUE, mais elle a d'abord ÉCHOUÉ sur un point, et le critère a été révisé par la mesure  Résultat : corrélation
 
