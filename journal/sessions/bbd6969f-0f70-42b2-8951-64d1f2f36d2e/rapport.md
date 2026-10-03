@@ -6,13 +6,13 @@
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-09-28 14:46 |
 | Durée | 109.5 h |
-| Tours | 82 |
-| Messages | 6408 |
-| Appels d'outils | 6144 |
+| Tours | 83 |
+| Messages | 6416 |
+| Appels d'outils | 6150 |
 | Fichiers touchés | 118 |
-| Commandes | 5208 |
+| Commandes | 5214 |
 | Sous-agents | 32 |
-| Commits | 408 |
+| Commits | 409 |
 | Compactages de contexte | 8 |
 
 ## Objectifs déclarés
@@ -207,6 +207,8 @@
 **Tour 81** — <goal_round> Objective: "Exécuter le plan docs/plan-deepseek41-complet.md phase par phase (P0→P9), en autonomie, en respectant pour chaque phase ses deux portes : porte de correction (comparaison étage par étage à llama.cpp sur V4-Flash) et porte Drave (flux : événements/paires par jeton, trace rejouée à l'identique, découpage en grappes, flux lisible par un outil d'analyse). Aucune phase ne passe … [661 caractères tronqués]
 
 **Tour 82** — <goal_round> Objective: "Exécuter le plan docs/plan-deepseek41-complet.md phase par phase (P0→P9), en autonomie, en respectant pour chaque phase ses deux portes : porte de correction (comparaison étage par étage à llama.cpp sur V4-Flash) et porte Drave (flux : événements/paires par jeton, trace rejouée à l'identique, découpage en grappes, flux lisible par un outil d'analyse). Aucune phase ne passe … [661 caractères tronqués]
+
+**Tour 83** — <goal_round> Objective: "Exécuter le plan docs/plan-deepseek41-complet.md phase par phase (P0→P9), en autonomie, en respectant pour chaque phase ses deux portes : porte de correction (comparaison étage par étage à llama.cpp sur V4-Flash) et porte Drave (flux : événements/paires par jeton, trace rejouée à l'identique, découpage en grappes, flux lisible par un outil d'analyse). Aucune phase ne passe … [661 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -4170,6 +4172,40 @@ Dis-moi si je poursuis sur le bloc 22 (la composition des experts en numpy, plan
 - bash — Commit the attention core verification and the balance
 - bash — Record the named blocker in the plan
 
+**Synthèse produite :**
+
+**Ronde 8 — la traque est allée au bout de ce qui est vérifiable, et le point qui reste est nommé**
+
+**Deux instruments neufs, deux vérifications de plus — les dernières pièces de l'attention :**
+| vérification | écart max | dynamique |
+|---|---|---|
+| `attn_brut` couche 0 pos 5 (scores + puits + somme) | **8,5e-07** | 2,9 |
+| `attn_out` couche 0 pos 5 (dé-rotation + wo_a groupé + wo_b) | **5,7e-06** | 3,7 |
+| `attn_brut` couche 2 pos 5 — **9 clés = 6 fenêtre + 3 blocs compressés** | **7,1e-07** | 1,9 |
+
+La dernière ligne vérifie **la règle de visibilité** (`n_visible = (pos+1)/ratio`, bloc publié à `(b+1)·ratio − 1`) et tout le **chemin des blocs** — la dernière pièce de l'attention jamais comparée.
+
+**Bilan : douze vérifications, toutes les pièces et compositions sans oracle externe** — tokenizer (llama.cpp, identifiants identiques), embarquement (**0,000e+00** vs le fichier), attention complète (1e-06), compresseur (référence du noyau vLLM publié), indexeur, chemin des experts (**4e-05** en numpy), routeur (sélection identique), chaîne mHC retardée + tête (source vLLM, **mot pour mot**), formats (libggml). Et **V4-Flash est validé de bout en bout par llama.cpp** (1,875 contre 1,844).
+
+**Et V4.1 ne prédit toujours pas.** Ce qui reste est désormais écrit noir sur blanc dans le plan plutôt que supposé :
+1. **la composition sur 40 couches** — chaque pièce est juste, la chaîne n'a pas d'oracle ;
+2. **le fichier Q2 lui-même** — sa référence est fp8/MXFP4, et une conversion fausse serait indiscernable pièce par pièce.
+
+**La porte de correction de P7 est donc IMPOSSIBLE en l'état, et c'est nommé** : llama.cpp refuse l'architecture (« unknown model architecture: 'deepseek41' »). Condition de sortie : qu'un runtime sache charger `deepseek41`, ou qu'on produise nous-mêmes une conversion et qu'on la compare — deux chantiers, pas des vérifications.
+
+**Portes** : toutes vertes (64 tests, Qwen 19,3885, clusters 799,8557, V4-Flash 8430,4966, engram, cinq modes de flux). Objectif **laissé actif** : la prochaine étape utile n'est plus une vérification de plus, mais soit une **conversion du fichier** (le seul oracle atteignable), soit la reprise des phases qui n'attendent pas V4.1 (P6 : le découpage multi-grappes, dont les deux portes sont, elles, disponibles).
+
+### Tour 83 — <goal_round> Objective: "Exécuter le plan docs/plan-deepseek41-complet.md phase par phase (P0→P9), en autonomie, en resp … [941 caractères tronqués]
+
+*6 appels d'outils.* Actions notables :
+
+- bash — Check the trace and cluster flags
+- bash — Run a traced pass on V4-Flash
+- bash — Replay the trace and analyze it
+- bash — Compare the trace writer and the analysis tool
+- bash — Read the current trace writer format
+- bash — Record the two failed Drave gates
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -4372,7 +4408,7 @@ Dis-moi si je poursuis sur le bloc 22 (la composition des experts en numpy, plan
 - **T1** Check tokenize binary and memory
 - **T1** Check llama-tokenize usage
 - **T1** Tokenize corpus with llama.cpp o200k
-- … et 5168 autres
+- … et 5174 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4928,4 +4964,5 @@ Dis-moi si je poursuis sur le bloc 22 (la composition des experts en numpy, plan
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p="sprints/21-localiser-le-defaut-v41.md" s=open(p).read() a="""Les deux tentatives d'inv
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p="sprints/21-localiser-le-defaut-v41.md" s=open(p).read() a="""## Portes""" b="""## 3qua
 - Plan P7 : la porte de correction est IMPOSSIBLE en l'état et c'est nommé — llama.cpp refuse l'architecture deepseek41 ; ce qui est vérifiable sans référence exé
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' p="docs/plan-deepseek41-complet.md" s=open(p).read() a="""### P7 — Adaptation à V4.1, et 
 

@@ -102044,3 +102044,112 @@ sam 03 oct 2026 04:14:34 EDT
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np=\"docs/plan-deepseek41-complet.md\"\ns=open(p).read()\na=\"\"\"> Localisation : bloc 21 (`sprints/20-la-passe-longue-instrumentee.md`).\"\"\"\nb=\"\"\"> Localisation : bloc 21 (`sprints/20-la-passe-longue-instrume … [2607 caractères tronqués]`
+
+  ```
+ok
+e79cb2d Plan P7 : la porte de correction est IMPOSSIBLE en l'état et c'est nommé — llama.cpp refuse l'architecture deepseek41 ; ce qui est vérifiable sans référence exécutable l'est (tableau des douze vérifications)
+7401db8 Le cœur de l'attention V4.1 est vérifié — blocs compressés et règle de visibilité compris (7e-07)
+3dfa69e Attention V4.1, premiers étages TOUS vérifiés à 1e-6 — l'écart sur q_rope était une faute de MON script
+sam 03 oct 2026 04:15:00 EDT
+  ```
+
+### 🤖 Assistant
+
+**Ronde 8 — la traque est allée au bout de ce qui est vérifiable, et le point qui reste est nommé**
+
+**Deux instruments neufs, deux vérifications de plus — les dernières pièces de l'attention :**
+| vérification | écart max | dynamique |
+|---|---|---|
+| `attn_brut` couche 0 pos 5 (scores + puits + somme) | **8,5e-07** | 2,9 |
+| `attn_out` couche 0 pos 5 (dé-rotation + wo_a groupé + wo_b) | **5,7e-06** | 3,7 |
+| `attn_brut` couche 2 pos 5 — **9 clés = 6 fenêtre + 3 blocs compressés** | **7,1e-07** | 1,9 |
+
+La dernière ligne vérifie **la règle de visibilité** (`n_visible = (pos+1)/ratio`, bloc publié à `(b+1)·ratio − 1`) et tout le **chemin des blocs** — la dernière pièce de l'attention jamais comparée.
+
+**Bilan : douze vérifications, toutes les pièces et compositions sans oracle externe** — tokenizer (llama.cpp, identifiants identiques), embarquement (**0,000e+00** vs le fichier), attention complète (1e-06), compresseur (référence du noyau vLLM publié), indexeur, chemin des experts (**4e-05** en numpy), routeur (sélection identique), chaîne mHC retardée + tête (source vLLM, **mot pour mot**), formats (libggml). Et **V4-Flash est validé de bout en bout par llama.cpp** (1,875 contre 1,844).
+
+**Et V4.1 ne prédit toujours pas.** Ce qui reste est désormais écrit noir sur blanc dans le plan plutôt que supposé :
+1. **la composition sur 40 couches** — chaque pièce est juste, la chaîne n'a pas d'oracle ;
+2. **le fichier Q2 lui-même** — sa référence est fp8/MXFP4, et une conversion fausse serait indiscernable pièce par pièce.
+
+**La porte de correction de P7 est donc IMPOSSIBLE en l'état, et c'est nommé** : llama.cpp refuse l'architecture (« unknown model architecture: 'deepseek41' »). Condition de sortie : qu'un runtime sache charger `deepseek41`, ou qu'on produise nous-mêmes une conversion et qu'on la compare — deux chantiers, pas des vérifications.
+
+**Portes** : toutes vertes (64 tests, Qwen 19,3885, clusters 799,8557, V4-Flash 8430,4966, engram, cinq modes de flux). Objectif **laissé actif** : la prochaine étape utile n'est plus une vérification de plus, mais soit une **conversion du fichier** (le seul oracle atteignable), soit la reprise des phases qui n'attendent pas V4.1 (P6 : le découpage multi-grappes, dont les deux portes sont, elles, disponibles).
+
+
+## Tour 83
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Exécuter le plan docs/plan-deepseek41-complet.md phase par phase (P0→P9), en autonomie, en respectant pour chaque phase ses deux portes : porte de correction (comparaison étage par étage à llama.cpp sur V4-Flash) et porte Drave (flux : événements/paires par jeton, trace rejouée à l'identique, découpage en grappes, flux lisible par un outil d'analyse). Aucune phase ne passe à la suivante sans ses deux portes. Jamais de forward muet, jamais d'optimisation qui change une sortie sans le dire."
+Round: 9/30
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n '\"--trace-couches\"\\|\"--trace-flux\"\\|\"--flux-forcer\"\\|\"--clusters\"\\|\"--trace-experts\"' drave-core/src/main.rs | head -6; ls tools/analyse_flux.py tools/clusters_moe.py 2>/dev/null", "description": "Check the trac … [21 caractères tronqués]`
+
+  ```
+652:            "--trace-flux" => { o.trace_flux = Some(suivant(i).clone()); 2 }
+653:            "--flux-forcer" => { o.flux_forcer = Some(suivant(i).clone()); 2 }
+667:            "--trace-couches" => { o.trace_couches = suivant(i).split(',')
+tools/analyse_flux.py
+tools/clusters_moe.py
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && V=/home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek-V4-Flash-UD-IQ1_M/DeepSeek-V4-Flash-UD-IQ1_M-00001-of-00003.gguf && echo \"=== 1. passe de référence (ctx 32, 8 jetons) + trace ===\" && ./drave-core/target/release/drave $V -- … [283 caractères tronqués]`
+
+  ```
+=== 1. passe de référence (ctx 32, 8 jetons) + trace ===
+[trace] flux enregistré dans /tmp/tf.drvf
+[trace] 16 listes · 65480 neurones actifs · 0 Mo
+=== perplexité 4221.0901 sur 7 tokens (0 événements, 88.0 s) ===
+    attention : 0.00 M paires (requête, clé) par token
+-rw-r--r--. 1 stephane stephane 196680  3 oct 04:17 /tmp/tf.drvf
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && V=/home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek-V4-Flash-UD-IQ1_M/DeepSeek-V4-Flash-UD-IQ1_M-00001-of-00003.gguf && echo \"=== 2. rejeu de la trace (--flux-forcer) ===\" && ./drave-core/target/release/drave $V --ppl /tmp/ids … [354 caractères tronqués]`
+
+  ```
+=== 2. rejeu de la trace (--flux-forcer) ===
+[flux] rejeu depuis /tmp/tf.drvf : 16 listes enregistrées
+  rejeu             : 16 listes servies, 672 manquantes  ← la moitié au moins n'a pas servi : vérifier la trace
+=== perplexité 4220.6935 sur 7 tokens (0 événements, 19.6 s) ===
+=== 3. la trace est-elle lisible par un outil d'analyse ? ===
+Traceback (most recent call last):
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/analyse_flux.py", line 95, in <module>
+    sys.exit(main())
+             ~~~~^^
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/analyse_flux.py", line 86, in main
+    n_layer, hidden, listes = lire(chemin)
+                              ~~~~^^^^^^^^
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/analyse_flux.py", line 38, in lire
+    i, v = struct.unpack("<Ih", f.read(6))
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+struct.error: unpack requires a buffer of 6 bytes
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && head -40 tools/analyse_flux.py | grep -n \"format\\|version\\|magic\\|u32\\|u16\\|i16\" | head -8; grep -n \"MAGIE_TRACE\\|fn nouveau\" drave-core/src/model.rs | head -5", "description": "Compare the trace writer and the analysis too … [3 caractères tronqués]`
+
+  ```
+1008:    pub fn nouveau(budget: usize) -> Self {
+1253:    pub fn nouveau(budget: usize) -> Self {
+1770:    pub fn nouveau(chemin: &str, couches: Vec<usize>, hidden: usize, n_layer: usize)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n 1770,1810p drave-core/src/model.rs | grep -n \"write\\|magic\\|MAGIE\\|u32\\|i16\\|i32\\|push\" | head -12", "description": "Read the current trace writer format"}`
+
+  ```
+5:        f.write_all(b"DRVF")?;
+6:        // Version 2 par défaut : indices par ÉCARTS, valeurs i16 — sans perte.
+11:        f.write_all(&version.to_le_bytes())?;
+12:        f.write_all(&(n_layer as u32).to_le_bytes())?;
+13:        f.write_all(&(hidden as u32).to_le_bytes())?;
+23:    /// compte : `n` est le nombre d'entiers i16 (v1/v2) ou de valeurs i8 (v3), et
+27:    pub fn ecrire(&mut self, couche: usize, pos: usize, actifs: &[i32], echelle: f32) {
+31:        let (n, ech_liste, corps): (u32, f32, Vec<u8>) = if self.version == 3 {
+37:            let mut idx: Vec<u32> = Vec::new();
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np=\"docs/plan-deepseek41-complet.md\"\ns=open(p).read()\na=\"\"\"### P7 — Adaptation à V4.1, et la question de provenance\"\"\"\nb=\"\"\"### P6 — V4-Flash complet, en listes, et **sur plusieurs grappes** — ⚠️ **port … [3180 caractères tronqués]`

@@ -319,6 +319,32 @@ Une phase qui ne passe pas ses deux portes ne passe pas à la suivante.
      clusters 799,8557, 18 formats lisibles dont 17 vérifiés à la porte,
      4 routages).
 
+### P6 — V4-Flash complet, en listes, et **sur plusieurs grappes** — ⚠️ **porte Drave NON TENUE** (03/10)
+
+> **Mesuré au bloc 22, sur V4-Flash (le modèle dont les deux portes sont disponibles).**
+> La porte Drave demande quatre choses : événements/paires par jeton, **trace
+> rejouée à l'identique**, découpage en grappes, et **flux lisible par un outil
+> d'analyse**. Deux sur quatre ne tiennent pas :
+>
+> 1. **Le flux n'est PAS lisible par l'outil d'analyse** : `tools/analyse_flux.py`
+>    lit `<Ih` (indice u32 + valeur i16 = la version 1 du format DRVF) alors que le
+>    moteur écrit la **version 2** (indices par écarts, i16) ou la **3** (i8) —
+>    plantage immédiat (`unpack requires a buffer of 6 bytes`). L'outil est resté
+>    à la v1 ; le format, lui, est documenté dans `model.rs` (`TraceFlux::nouveau`).
+> 2. **Le rejeu n'est pas identique** : passe tracée sur 8 jetons (ctx 32,
+>    perplexité **4 221,0901**), rejouée avec `--flux-forcer` → **4 220,6935**
+>    (écart 9,4e-05 relatif) et le moteur ANNONCE lui-même « 16 listes servies,
+>    **672 manquantes** : la moitié au moins n'a pas servi ». La trace ne portait
+>    que deux couches (`--trace-couches 0,20`) : à refaire avec une trace complète
+>    pour savoir si l'écart vient de la couverture ou de la quantification des
+>    listes (le flux est quantifié, la passe ne l'est pas) — et alors DIRE ce que
+>    « identique » veut dire pour cette porte.
+>
+> Les deux autres points tiennent : le profil imprime les paires par jeton
+> (attention · experts · partagé · scores) et le découpage en grappes est dans
+> `tools/portes.sh` (clusters Qwen3-30B = 799,8557 ✓). **Aucun chantier suivant ne
+> doit s'appuyer sur cette porte avant qu'elle soit tenue.**
+
 ### P7 — Adaptation à V4.1, et la question de provenance (≈ ½ journée + action externe) — **composants faits et vérifiés ; ⚠️ LE MODÈLE NE PRÉDIT PAS (03/10)**
 
 > ## ⚠️ Constat du 03/10 (bloc 20) : V4.1 ne prédit pas
